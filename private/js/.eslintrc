@@ -1,0 +1,8 @@
+{
+  "env": {
+    "jquery": true
+  },
+  "ecmaFeatures": {
+    "jsx": true
+  }
+}

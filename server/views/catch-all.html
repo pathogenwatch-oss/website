@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block head %}
+  <link href="/vendor/jquery-ui/jquery-ui.min.css" rel="stylesheet">
+
+  <style>
+    html, body {
+      width: 100%;
+      height: 100%;
+      background-color: #fff;
+    }
+    button:focus {
+      color: #555;
+      outline: 5px auto -webkit-focus-ring-color !important;
+    }
+    .dropzone:hover {
+      cursor: pointer
+    }
+    .container:hover {
+      cursor: auto;
+    }
+    .form-inline .form-control {
+        width: auto;
+    }
+    .form-inline .form-group {
+        display: inline-block;
+    }
+    a, a:hover {
+      color: #e74c3c
+    }
+    a.active {
+      color: #000;
+      text-decoration: none;
+    }
+
+  </style>
+{% endblock %}
+
+{% block content %}{% endblock %}
+
+{% block script %}
+  <script src="/vendor/jquery/jquery-1.11.2.min.js"></script>
+  <script src="/vendor/jquery/jquery-migrate-1.2.1.min.js"></script>
+  <script src="/vendor/jquery-ui/jquery-ui.min.js"></script>
+  <script src="/vendor/jquery.knob.min.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?v=3.20"></script>
+  <script src="/js/microreact.js"></script>
+{% endblock %}

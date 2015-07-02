@@ -1,0 +1,54 @@
+{
+  "name": "macroreact",
+  "version": "0.0.1",
+  "description": "Macroreact",
+  "main": "index.js",
+  "scripts": {
+    "start": "node start.js",
+    "test": "mocha test/*.test.js test/**/*.test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ImperialCollegeLondon/macroreact.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ImperialCollegeLondon/macroreact/issues"
+  },
+  "homepage": "https://github.com/ImperialCollegeLondon/macroreact",
+  "devDependencies": {
+    "browserify": "^9.0.3",
+    "cgps-style": "git://github.com/imperialcollegelondon/javascript.git#cgps-0.0.5",
+    "gulp": "^3.8.11",
+    "gulp-streamify": "0.0.5",
+    "gulp-uglify": "^1.2.0",
+    "mocha": "^2.2.1",
+    "mocha-jsdom": "^0.2.1",
+    "reactify": "^1.1.0",
+    "sinon": "^1.14.1",
+    "supertest": "^0.15.0",
+    "vinyl-source-stream": "^1.1.0"
+  },
+  "dependencies": {
+    "PhyloCanvas": "git://github.com/ImperialCollegeLondon/PhyloCanvas.git#v1.7.3",
+    "biojs-io-newick": "^1.5.0",
+    "body-parser": "^1.12.2",
+    "express": "^4.12.2",
+    "flux": "^2.0.3",
+    "moment": "^2.10.3",
+    "mongoose": "3.8.26",
+    "node-uuid": "^1.4.3",
+    "nprogress": "^0.1.6",
+    "object-assign": "^3.0.0",
+    "ouch": "0.1.0-alpha",
+    "papaparse": "^4.1.1",
+    "react": "0.13.3",
+    "react-file-drag-and-drop": "^0.1.4",
+    "react-router": "^0.13.2",
+    "shortid": "^2.2.1",
+    "swig": "^1.4.2",
+    "validator": "^3.39.0",
+    "vis": "^3.12.0"
+  }
+}
