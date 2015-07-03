@@ -2,6 +2,7 @@ var React = require('react');
 
 var Map = require('./Map.react');
 var Tree = require('./Tree.react');
+var SpeciesTree = require('./SpeciesTree.react');
 var Data = require('./Data.react');
 var Timeline = require('./Timeline.react');
 var Api = require('../utils/Api');
@@ -21,6 +22,8 @@ var LayoutDivider = require('./layout/LayoutDivider.react');
 
 var LayoutUtils = require('../utils/Layout');
 var DataUtils = require('../utils/Data');
+
+var SpeciesTreeStore = require('../stores/SpeciesTreeStore');
 
 var DEFAULT = require('../defaults.js');
 
@@ -229,17 +232,17 @@ var Layout = React.createClass({
 
   render: function () {
 
-    var projectTree = {
+    var speciesTree = {
       width: this.state.layoutEastWidth,
       height: this.state.layoutNorthHeight,
-      tree: this.props.projectTree,
+      tree: SpeciesTreeStore.getSpeciesTree(),
       isolates: this.props.isolates,
       selectIsolatesOnTree: this.props.selectIsolatesOnTree,
       handleSelectTreeData: this.props.handleSelectTreeData,
       nodeLabel: this.props.treeNodeLabel,
       handleFilterMapAndTableData: this.props.handleFilterMapAndTableData,
       colourDataByDataField: this.props.colourDataByDataField,
-      treeId: 'projectTree'
+      treeId: 'speciesTree'
     };
 
     var analysisTree = {
@@ -284,17 +287,14 @@ var Layout = React.createClass({
 
           <LayoutWest width={this.state.layoutWestWidth}>
 
-            <Tree
+            <SpeciesTree
               width={this.state.layoutWestWidth}
-              height={projectTree.height}
-              tree={projectTree.tree}
-              isolates={projectTree.isolates}
-              selectIsolates={projectTree.selectIsolatesOnTree}
-              handleSelectTreeData={projectTree.handleSelectTreeData}
-              nodeLabel={projectTree.nodeLabel}
-              handleFilterMapAndTableData={projectTree.handleFilterMapAndTableData}
-              colourDataByDataField={projectTree.colourDataByDataField}
-              treeId={projectTree.treeId} />
+              height={speciesTree.height}
+              selectIsolates={speciesTree.selectIsolatesOnTree}
+              handleSelectTreeData={speciesTree.handleSelectTreeData}
+              nodeLabel={speciesTree.nodeLabel}
+              handleFilterMapAndTableData={speciesTree.handleFilterMapAndTableData}
+              colourDataByDataField={speciesTree.colourDataByDataField} />
 
           </LayoutWest>
 

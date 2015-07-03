@@ -4,6 +4,8 @@ var Layout = require('./Layout.react');
 var DataUtils = require('../utils/Data');
 var TimelineUtils = require('../utils/Timeline');
 
+var SpeciesTreeActionCreators = require('../actions/SpeciesTreeActionCreators');
+
 var ProjectViewer = React.createClass({
 
   propTypes: {
@@ -34,6 +36,10 @@ var ProjectViewer = React.createClass({
   },
 
   componentWillMount: function () {
+
+    SpeciesTreeActionCreators.setSpeciesTree();
+    SpeciesTreeActionCreators.setSpeciesSubtrees();
+
     var data = this.state.data;
     data = DataUtils.sanitize(data);
 

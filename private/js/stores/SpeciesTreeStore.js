@@ -3,31 +3,32 @@ var EventEmitter = require('events').EventEmitter;
 var assign = require('object-assign');
 
 var CHANGE_EVENT = 'change';
-var STATIC_DATA_PATH = '../../static_data/';
 
-var SPECIES_TREE = 'species_tree.nwk';
-var SPECIES_SUBTREES = {
-  MRSA252: 'MRSA252.nwk',
-  MW2: 'MW2.nwk',
-  N315: 'N315.nwk',
-  NCTC8325: 'NCTC8325.nwk',
-  Newman: 'Newman.nwk',
-  T0131: 'T0131.nwk',
-  TCH60: 'TCH60.nwk',
-  TCH1516: 'TCH1516.nwk'
+var STATIC_DATA = {
+  SPECIES_TREE: require('../../static_data/species_tree.json').tree,
+  SPECIES_SUBTREES: {
+    MRSA252: require('../../static_data/MRSA252.json').tree,
+    MW2: require('../../static_data/MW2.json').tree,
+    N315: require('../../static_data/N315.json').tree,
+    NCTC8325: require('../../static_data/NCTC8325.json').tree,
+    Newman: require('../../static_data/Newman.json').tree,
+    T0131: require('../../static_data/T0131.json').tree,
+    TCH60: require('../../static_data/TCH60.json').tree,
+    TCH1516: require('../../static_data/TCH1516.json').tree
+  }
 };
 
 var speciesTree = '';
 var speciesSubtrees = {};
 
 function setSpeciesTree() {
-  speciesTree = require(STATIC_DATA_PATH + SPECIES_TREE);
+  speciesTree = STATIC_DATA.SPECIES_TREE;
 }
 
 function setSpeciesSubtrees() {
-  Object.keys(SPECIES_SUBTREES).forEach(function (speciesSubtreeId) {
-    speciesSubtrees[speciesSubtreeId] = require(STATIC_DATA_PATH + speciesSubtreeId + '.nwk');
-  });
+  speciesSubtrees = STATIC_DATA.SPECIES_SUBTREES
+
+  console.dir(STATIC_DATA);
 }
 
 function emitChange() {
