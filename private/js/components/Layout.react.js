@@ -1,11 +1,11 @@
 var React = require('react');
 
 var Map = require('./Map.react');
-var Tree = require('./Tree.react');
 var SpeciesTree = require('./SpeciesTree.react');
+var SpeciesSubtree = require('./SpeciesSubtree.react');
+
 var Data = require('./Data.react');
 var Timeline = require('./Timeline.react');
-var Api = require('../utils/Api');
 
 var LayoutContainer = require('./layout/LayoutContainer.react');
 var LayoutWest = require('./layout/LayoutWest.react');
@@ -15,6 +15,10 @@ var LayoutEast = require('./layout/LayoutEast.react');
 var LayoutNorth = require('./layout/LayoutNorth.react');
 var LayoutSouth = require('./layout/LayoutSouth.react');
 
+var WestContent = require('./WestContent.react');
+var MiddleContent = require('./MiddleContent.react');
+var EastContent = require('./EastContent.react');
+
 var LayoutWestMiddleDivider = require('./layout/LayoutWestMiddleDivider.react');
 var LayoutMiddleEastDivider = require('./layout/LayoutMiddleEastDivider.react');
 var LayoutNorthSouthDivider = require('./layout/LayoutNorthSouthDivider.react');
@@ -22,8 +26,11 @@ var LayoutDivider = require('./layout/LayoutDivider.react');
 
 var LayoutUtils = require('../utils/Layout');
 var DataUtils = require('../utils/Data');
+var Api = require('../utils/Api');
 
 var SpeciesTreeStore = require('../stores/SpeciesTreeStore');
+var SpeciesSubtreeStore = require('../stores/SpeciesSubtreeStore');
+var UploadedCollectionStore = require('../stores/UploadedCollectionStore');
 
 var DEFAULT = require('../defaults.js');
 
@@ -83,7 +90,9 @@ var Layout = React.createClass({
       layoutSouthTop: 0,
       layoutSouthHeight: 0,
 
-      layoutNavigation: 'table'
+      layoutNavigation: 'table',
+
+      activeAnalysisTreeId: 'CORE_TREE_RESULT_e0ce1b47-9928-43fb-9a38-981813b609bc'
     };
   },
 
@@ -230,6 +239,43 @@ var Layout = React.createClass({
     return DataUtils.dataHasDateMetaFields(dataObjects);
   },
 
+  // getAnalysisTree: function () {
+  //
+  //   var analysisTree = {
+  //     width: this.state.layoutMiddleWidth,
+  //     height: this.state.layoutNorthHeight,
+  //     tree: this.props.analysisTree,
+  //     isolates: this.props.isolates,
+  //     selectIsolatesOnTree: this.props.selectIsolatesOnTree,
+  //     handleSelectTreeData: this.props.handleSelectTreeData,
+  //     nodeLabel: this.props.treeNodeLabel,
+  //     handleFilterMapAndTableData: this.props.handleFilterMapAndTableData,
+  //     colourDataByDataField: this.props.colourDataByDataField,
+  //     treeId: 'analysisTree'
+  //   };
+  //
+  //   if (this.state.activeAnalysisTreeId === 'CORE_TREE_RESULT_e0ce1b47-9928-43fb-9a38-981813b609bc') {
+  //
+  //     return (
+  //
+  //       <CollectionTree
+  //         width={this.state.layoutMiddleWidth}
+  //         height={analysisTree.height}
+  //         isolates={analysisTree.isolates}
+  //         selectIsolates={analysisTree.selectIsolatesOnTree}
+  //         handleSelectTreeData={analysisTree.handleSelectTreeData}
+  //         nodeLabel={analysisTree.nodeLabel}
+  //         handleFilterMapAndTableData={analysisTree.handleFilterMapAndTableData}
+  //         colourDataByDataField={analysisTree.colourDataByDataField}
+  //         treeId={analysisTree.treeId} />
+  //
+  //     );
+  //
+  //   } else {
+  //     return this.speciesSubtreeElements[this.state.activeAnalysisTreeId];
+  //   }
+  // },
+
   render: function () {
 
     var speciesTree = {
@@ -287,14 +333,9 @@ var Layout = React.createClass({
 
           <LayoutWest width={this.state.layoutWestWidth}>
 
-            <SpeciesTree
+            <WestContent
               width={this.state.layoutWestWidth}
-              height={speciesTree.height}
-              selectIsolates={speciesTree.selectIsolatesOnTree}
-              handleSelectTreeData={speciesTree.handleSelectTreeData}
-              nodeLabel={speciesTree.nodeLabel}
-              handleFilterMapAndTableData={speciesTree.handleFilterMapAndTableData}
-              colourDataByDataField={speciesTree.colourDataByDataField} />
+              height={this.state.layoutNorthHeight} />
 
           </LayoutWest>
 
@@ -306,17 +347,9 @@ var Layout = React.createClass({
 
           <LayoutMiddle left={this.state.layoutMiddleLeft} width={this.state.layoutMiddleWidth}>
 
-            <Tree
+            <MiddleContent
               width={this.state.layoutMiddleWidth}
-              height={analysisTree.height}
-              tree={analysisTree.tree}
-              isolates={analysisTree.isolates}
-              selectIsolates={analysisTree.selectIsolatesOnTree}
-              handleSelectTreeData={analysisTree.handleSelectTreeData}
-              nodeLabel={analysisTree.nodeLabel}
-              handleFilterMapAndTableData={analysisTree.handleFilterMapAndTableData}
-              colourDataByDataField={analysisTree.colourDataByDataField}
-              treeId={analysisTree.treeId} />
+              height={this.state.layoutNorthHeight} />
 
           </LayoutMiddle>
 

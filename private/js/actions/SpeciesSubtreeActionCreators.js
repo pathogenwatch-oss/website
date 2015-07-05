@@ -2,15 +2,6 @@ var AppDispatcher = require('../dispatcher/AppDispatcher');
 
 module.exports = {
 
-  setSpeciesTree: function () {
-
-    var action = {
-      type: 'set_species_tree'
-    };
-
-    AppDispatcher.dispatch(action);
-  },
-
   setSpeciesSubtrees: function () {
 
     var action = {
@@ -20,11 +11,11 @@ module.exports = {
     AppDispatcher.dispatch(action);
   },
 
-  setActiveSpeciesSubtree: function (speciesSubtree) {
+  setActiveSpeciesSubtreeId: function (activeSpeciesSubtreeId) {
 
     var action = {
-      type: 'set_active_species_subtree',
-      speciesSubtree: speciesSubtree
+      type: 'set_active_species_subtree_id',
+      activeSpeciesSubtreeId: activeSpeciesSubtreeId
     };
 
     AppDispatcher.dispatch(action);

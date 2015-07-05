@@ -17,7 +17,8 @@ var LayoutMiddle = React.createClass({
       width: width + 'px',
       height: '100%',
       top: 0,
-      left: left + 'px'
+      left: left + 'px',
+      overflow: 'hidden'
     };
 
     return (

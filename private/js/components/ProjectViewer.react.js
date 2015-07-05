@@ -5,6 +5,7 @@ var DataUtils = require('../utils/Data');
 var TimelineUtils = require('../utils/Timeline');
 
 var SpeciesTreeActionCreators = require('../actions/SpeciesTreeActionCreators');
+var UploadedCollectionActionCreators = require('../actions/UploadedCollectionActionCreators');
 
 var ProjectViewer = React.createClass({
 
@@ -39,6 +40,8 @@ var ProjectViewer = React.createClass({
 
     SpeciesTreeActionCreators.setSpeciesTree();
     SpeciesTreeActionCreators.setSpeciesSubtrees();
+    UploadedCollectionActionCreators.setUploadedCollection();
+    UploadedCollectionActionCreators.setUploadedCollectionTree();
 
     var data = this.state.data;
     data = DataUtils.sanitize(data);

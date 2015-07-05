@@ -4,9 +4,7 @@ var PhyloCanvas = require('PhyloCanvas');
 var TimelineUtils = require('../utils/Timeline');
 var DEFAULT = require('../defaults');
 
-var SpeciesTreeStore = require('../stores/SpeciesTreeStore');
-var SpeciesTreeActionCreators = require('../actions/SpeciesTreeActionCreators');
-var SpeciesSubtreeActionCreators = require('../actions/SpeciesSubtreeActionCreators');
+var SpeciesSubtreeStore = require('../stores/SpeciesSubtreeStore');
 
 var DEFAULT_TREE_SETTINGS = {
   SHOW_TREE_LABELS: true,
@@ -39,30 +37,128 @@ var SHOW_TREE_LABELS_SETTING_OPTIONS = {
 var Tree = React.createClass({
 
   tree: null,
-  treeId: null,
+  treeId: 'species-subtree',
   phylocanvas: null,
 
   propTypes: {
+    colourDataByDataField: React.PropTypes.string,
+    isolates: React.PropTypes.object.isRequired,
+    selectIsolates: React.PropTypes.array.isRequired,
     width: React.PropTypes.number.isRequired,
-    height: React.PropTypes.number.isRequired
+    height: React.PropTypes.number.isRequired,
+    treeId: React.PropTypes.string.isRequired,
+    filterStartDate: React.PropTypes.object,
+    filterEndDate: React.PropTypes.object,
+    settings: React.PropTypes.object.isRequired
   },
 
   getInitialState: function () {
     return ({
       isHighlightingBranch: false,
       isTreeControlsOn: false,
-      treeType: DEFAULT.TREE_TYPE,
-      nodeSize: DEFAULT.NODE_SIZE,
-      labelSize: DEFAULT.LABEL_SIZE
+      treeType: this.getInitialTreeTypeSetting(),
+      nodeSize: this.getInitialNodeSizeSetting(),
+      labelSize: this.getInitialTextSizeSetting()
     });
   },
 
+  getInitialNodeSizeSetting: function () {
+
+    if (! this.props.settings) {
+      return DEFAULT.NODE_SIZE;
+    }
+
+    var nodeSizeSetting = this.props.settings[TREE_SETTINGS.NODE_SIZE];
+
+    if (nodeSizeSetting) {
+      nodeSizeSetting = parseInt(nodeSizeSetting, 10);
+
+      if (nodeSizeSetting !== NaN) {
+        if (nodeSizeSetting >= DEFAULT_TREE_SETTINGS.MINIMUM_NODE_SIZE && nodeSizeSetting <= DEFAULT_TREE_SETTINGS.MAXIMUM_NODE_SIZE) {
+          return nodeSizeSetting;
+        }
+      }
+    }
+
+    return DEFAULT.NODE_SIZE;
+  },
+
+  getInitialTextSizeSetting: function () {
+
+    if (! this.props.settings) {
+      return DEFAULT.LABEL_SIZE;
+    }
+
+    var textSizeSetting = this.props.settings[TREE_SETTINGS.TEXT_SIZE];
+
+    if (textSizeSetting) {
+      textSizeSetting = parseInt(textSizeSetting, 10);
+
+      if (textSizeSetting !== NaN) {
+        if (textSizeSetting >= DEFAULT_TREE_SETTINGS.MINIMUM_TEXT_SIZE && textSizeSetting <= DEFAULT_TREE_SETTINGS.MAXIMUM_TEXT_SIZE) {
+          return textSizeSetting;
+        }
+      }
+    }
+
+    return DEFAULT.LABEL_SIZE;
+  },
+
+  getInitialTreeTypeSetting: function () {
+
+    if (! this.props.settings) {
+      return DEFAULT.TREE_TYPE;
+    }
+
+    var treeTypeSetting = this.props.settings[TREE_SETTINGS.TREE_TYPE];
+
+    if (treeTypeSetting && TREE_TYPE_SETTING_OPTIONS[treeTypeSetting]) {
+      return TREE_TYPE_SETTING_OPTIONS[treeTypeSetting];
+    }
+
+    return DEFAULT.TREE_TYPE;
+  },
+
+  getInitialShowTreeLabelsSetting: function () {
+
+    if (! this.props.settings) {
+      return DEFAULT_TREE_SETTINGS.SHOW_TREE_LABELS;
+    }
+
+    var showTreeLabelsSetting = this.props.settings[TREE_SETTINGS.SHOW_TREE_LABELS];
+
+    if (showTreeLabelsSetting && typeof SHOW_TREE_LABELS_SETTING_OPTIONS[showTreeLabelsSetting] !== 'undefined') {
+      return SHOW_TREE_LABELS_SETTING_OPTIONS[showTreeLabelsSetting];
+    }
+
+    return DEFAULT_TREE_SETTINGS.SHOW_TREE_LABELS;
+  },
+
+  componentWillUpdate: function () {
+    console.log('4');
+  },
+
   componentWillMount: function () {
-    this.tree = SpeciesTreeStore.getSpeciesTree();
-    this.treeId = 'species-tree';
+    this.tree = SpeciesSubtreeStore.getActiveSpeciesSubtree();
+  },
+
+  componentWillUnmount: function () {
+    console.log(5);
   },
 
   componentDidMount: function () {
+    this.renderTree();
+  },
+
+  destroyTree: function () {
+    
+  },
+
+  componentDidUpdate: function () {
+    this.renderTree();
+  },
+
+  renderTree: function () {
     var phylocanvas = new PhyloCanvas.Tree(this.treeId, {
       history: {
         collapsed: true
@@ -70,7 +166,7 @@ var Tree = React.createClass({
     });
     phylocanvas.dangerouslySetData(this.tree);
 
-    phylocanvas.showLabels = DEFAULT_TREE_SETTINGS.SHOW_TREE_LABELS;
+    phylocanvas.showLabels = this.getInitialShowTreeLabelsSetting();
     phylocanvas.hoverLabel = true;
     phylocanvas.nodeAlign = false;
     phylocanvas.setTreeType(this.state.treeType);
@@ -84,7 +180,7 @@ var Tree = React.createClass({
     this.phylocanvas.on('subtree', this.handleRedrawSubtree);
     this.phylocanvas.on('historytoggle', this.handleHistoryToggle);
 
-    //this.setNodeShapeAndColour();
+    this.setNodeShapeAndColour();
   },
 
   handleRedrawSubtree: function () {
@@ -96,16 +192,16 @@ var Tree = React.createClass({
 
     this.phylocanvas.resizeToContainer();
 
-    // if (!this.state.isHighlightingBranch) {
-    //   this.phylocanvas.selectNodes(this.props.selectIsolates);
-    //   this.previouslySelectedNodes = this.props.selectIsolates;
-    // }
-    //
-    // if (this.props.nodeLabel) {
-    //   this.setNodeLabel(this.props.nodeLabel);
-    // }
+    if (!this.state.isHighlightingBranch) {
+      this.phylocanvas.selectNodes(this.props.selectIsolates);
+      this.previouslySelectedNodes = this.props.selectIsolates;
+    }
 
-    //this.setNodeShapeAndColour();
+    if (this.props.nodeLabel) {
+      this.setNodeLabel(this.props.nodeLabel);
+    }
+
+    this.setNodeShapeAndColour();
     this.phylocanvas.draw();
   },
 
@@ -250,35 +346,30 @@ var Tree = React.createClass({
   handleTreeBranchSelected: function (event) {
 
     var selectedNodeIds = event.nodeIds;
+    var allCurrentTreeNodeIds;
 
-    if (selectedNodeIds.length === 1) {
-      SpeciesSubtreeActionCreators.setActiveSpeciesSubtreeId(selectedNodeIds[0]);
+    /**
+     * Unfortunately selectedNodeIds can return string
+     * if only one node has been selected.
+     *
+     * In that case convert it to array.
+     */
+    if (typeof selectedNodeIds === 'string') {
+      selectedNodeIds = [ selectedNodeIds ];
     }
 
-    // var allCurrentTreeNodeIds;
-    //
-    // /**
-    //  * Unfortunately selectedNodeIds can return string
-    //  * if only one node has been selected.
-    //  *
-    //  * In that case convert it to array.
-    //  */
-    // if (typeof selectedNodeIds === 'string') {
-    //   selectedNodeIds = [ selectedNodeIds ];
-    // }
-    //
-    // if (selectedNodeIds.length < 2) {
-    //   this.setState({
-    //     isHighlightingBranch: false
-    //   });
-    // } else {
-    //   this.setState({
-    //     isHighlightingBranch: true
-    //   });
-    // }
-    //
-    // allCurrentTreeNodeIds = this.getCurrentTreeAllIsolateIds();
-    // this.props.handleSelectTreeData(selectedNodeIds, allCurrentTreeNodeIds);
+    if (selectedNodeIds.length < 2) {
+      this.setState({
+        isHighlightingBranch: false
+      });
+    } else {
+      this.setState({
+        isHighlightingBranch: true
+      });
+    }
+
+    allCurrentTreeNodeIds = this.getCurrentTreeAllIsolateIds();
+    this.props.handleSelectTreeData(selectedNodeIds, allCurrentTreeNodeIds);
   },
 
   getCurrentTreeAllIsolateIds: function () {
@@ -338,22 +429,22 @@ var Tree = React.createClass({
   render: function () {
 
     var sectionStyle = {
-      position: 'relative',
-      width: '100%',
-      height: '100%'
+      position: 'relative'
     };
 
     var phylocanvasStyle = {
       position: 'relative',
-      width: '100%',
-      height: '100%'
+      width: this.props.width,
+      height: this.props.height,
+      visibility: (this.props.width > DEFAULT.LAYOUT.MINIMUM_CONTAINER_WIDTH ? 'visible' : 'hidden')
     };
 
     var treeControlsToggleButton = {
       position: 'absolute',
       bottom: 5,
       right: 5,
-      zIndex: 999
+      zIndex: 999,
+      visibility: (this.props.width > DEFAULT.LAYOUT.MINIMUM_CONTAINER_WIDTH ? 'visible' : 'hidden')
     };
 
     return (

@@ -16,7 +16,8 @@ var LayoutWest = React.createClass({
       width: width + 'px',
       height: height + 'px',
       top: 0,
-      left: 0
+      left: 0,
+      overflow: 'hidden'
     };
 
     return (

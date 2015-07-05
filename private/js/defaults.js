@@ -1,7 +1,7 @@
 module.exports = {
   SHAPE: 'circle',
   COLOUR: '#555555',
-  TREE_TYPE: 'radial',
+  TREE_TYPE: 'rectangular',
   NODE_SIZE: 10,
   LABEL_SIZE: 10,
   LAYOUT: {

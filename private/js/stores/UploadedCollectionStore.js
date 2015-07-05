@@ -3,19 +3,21 @@ var EventEmitter = require('events').EventEmitter;
 var assign = require('object-assign');
 
 var CHANGE_EVENT = 'change';
-var STATIC_DATA_PATH = '../../static_data/';
-// var UPLOADED_COLLECTION: 'e0ce1b47-9928-43fb-9a38-981813b609bc.json';
-// var UPLOADED_COLLECTION_TREE: 'CORE_TREE_RESULT_e0ce1b47-9928-43fb-9a38-981813b609bc.json';
+
+var STATIC_DATA = {
+  UPLOADED_COLLECTION: require('../../static_data/e0ce1b47-9928-43fb-9a38-981813b609bc.json'),
+  UPLOADED_COLLECTION_TREE: require('../../static_data/CORE_TREE_RESULT_e0ce1b47-9928-43fb-9a38-981813b609bc.json')
+};
 
 var uploadedCollection = {};
-var uploadedCollectionTree = {};
+var uploadedCollectionTree = null;
 
 function setUploadedCollection(collectionId) {
-  uploadedCollection = JSON.parse(require(STATIC_DATA_PATH + collectionId + '.json'));
+  uploadedCollection = STATIC_DATA.UPLOADED_COLLECTION;
 }
 
 function setUploadedCollectionTree(collectionId) {
-  uploadedCollectionTree = JSON.parse(require(STATIC_DATA_PATH + 'CORE_TREE_RESULT_' + collectionId + '.json'));
+  uploadedCollectionTree = STATIC_DATA.UPLOADED_COLLECTION_TREE.newickTree;
 }
 
 function emitChange() {

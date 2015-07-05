@@ -4,9 +4,7 @@ var PhyloCanvas = require('PhyloCanvas');
 var TimelineUtils = require('../utils/Timeline');
 var DEFAULT = require('../defaults');
 
-var SpeciesTreeStore = require('../stores/SpeciesTreeStore');
-var SpeciesTreeActionCreators = require('../actions/SpeciesTreeActionCreators');
-var SpeciesSubtreeActionCreators = require('../actions/SpeciesSubtreeActionCreators');
+var UploadedCollectionStore = require('../stores/UploadedCollectionStore');
 
 var DEFAULT_TREE_SETTINGS = {
   SHOW_TREE_LABELS: true,
@@ -39,12 +37,19 @@ var SHOW_TREE_LABELS_SETTING_OPTIONS = {
 var Tree = React.createClass({
 
   tree: null,
-  treeId: null,
+  treeId: 'uploaded-collection-tree',
   phylocanvas: null,
 
   propTypes: {
+    colourDataByDataField: React.PropTypes.string,
+    isolates: React.PropTypes.object.isRequired,
+    selectIsolates: React.PropTypes.array.isRequired,
     width: React.PropTypes.number.isRequired,
-    height: React.PropTypes.number.isRequired
+    height: React.PropTypes.number.isRequired,
+    treeId: React.PropTypes.string.isRequired,
+    filterStartDate: React.PropTypes.object,
+    filterEndDate: React.PropTypes.object,
+    settings: React.PropTypes.object.isRequired
   },
 
   getInitialState: function () {
@@ -58,8 +63,17 @@ var Tree = React.createClass({
   },
 
   componentWillMount: function () {
-    this.tree = SpeciesTreeStore.getSpeciesTree();
-    this.treeId = 'species-tree';
+    this.tree = UploadedCollectionStore.getUploadedCollectionTree();
+  },
+
+  getInitialShowTreeLabelsSetting: function () {
+    // var showTreeLabelsSetting = this.props.settings[TREE_SETTINGS.SHOW_TREE_LABELS];
+    //
+    // if (showTreeLabelsSetting && typeof SHOW_TREE_LABELS_SETTING_OPTIONS[showTreeLabelsSetting] !== 'undefined') {
+    //   return SHOW_TREE_LABELS_SETTING_OPTIONS[showTreeLabelsSetting];
+    // }
+
+    return DEFAULT_TREE_SETTINGS.SHOW_TREE_LABELS;
   },
 
   componentDidMount: function () {
@@ -70,7 +84,7 @@ var Tree = React.createClass({
     });
     phylocanvas.dangerouslySetData(this.tree);
 
-    phylocanvas.showLabels = DEFAULT_TREE_SETTINGS.SHOW_TREE_LABELS;
+    phylocanvas.showLabels = this.getInitialShowTreeLabelsSetting();
     phylocanvas.hoverLabel = true;
     phylocanvas.nodeAlign = false;
     phylocanvas.setTreeType(this.state.treeType);
@@ -84,7 +98,7 @@ var Tree = React.createClass({
     this.phylocanvas.on('subtree', this.handleRedrawSubtree);
     this.phylocanvas.on('historytoggle', this.handleHistoryToggle);
 
-    //this.setNodeShapeAndColour();
+    this.setNodeShapeAndColour();
   },
 
   handleRedrawSubtree: function () {
@@ -105,7 +119,7 @@ var Tree = React.createClass({
     //   this.setNodeLabel(this.props.nodeLabel);
     // }
 
-    //this.setNodeShapeAndColour();
+    this.setNodeShapeAndColour();
     this.phylocanvas.draw();
   },
 
@@ -124,55 +138,55 @@ var Tree = React.createClass({
   },
 
   setNodeShapeAndColour: function () {
-    var isolates = this.props.isolates;
-    var isolateIds = Object.keys(isolates);
-    var colourDataByDataField = this.props.colourDataByDataField;
-    var isolate;
-    var branch;
-    var shape;
-    var colour;
-
-    isolateIds.forEach(function (isolateId) {
-      isolate = isolates[isolateId];
-      branch = this.phylocanvas.branches[isolateId];
-
-      if (branch && branch.leaf) {
-
-        if (this.props.filterStartDate && this.props.filterEndDate && TimelineUtils.doesDataObjectHaveTimelineDate(isolate)) {
-          if (! TimelineUtils.isDataObjectWithinDateRange(this.props.filterStartDate, this.props.filterEndDate, isolate)) {
-
-            branch.colour = DEFAULT.COLOUR;
-            branch.nodeShape = DEFAULT.SHAPE;
-            return;
-          }
-        }
-
-        if (! colourDataByDataField) {
-
-          shape = DEFAULT.SHAPE;
-          colour = DEFAULT.COLOUR;
-
-        } else {
-
-          if (typeof isolate[colourDataByDataField + '__shape'] === 'undefined') {
-            shape = DEFAULT.SHAPE;
-          } else {
-            shape = isolate[colourDataByDataField + '__shape'].toLowerCase();
-          }
-
-          if (typeof isolate[colourDataByDataField + '__colour'] === 'undefined' && typeof isolate[colourDataByDataField + '__color'] === 'undefined') {
-            colour = DEFAULT.COLOUR;
-          } else {
-            colour = isolate[colourDataByDataField + '__colour'] || isolate[colourDataByDataField + '__color'];
-          }
-        }
-
-        branch.nodeShape = shape;
-        branch.colour = colour;
-      }
-    }.bind(this));
-
-    this.phylocanvas.draw();
+    // var isolates = this.props.isolates;
+    // var isolateIds = Object.keys(isolates);
+    // var colourDataByDataField = this.props.colourDataByDataField;
+    // var isolate;
+    // var branch;
+    // var shape;
+    // var colour;
+    //
+    // isolateIds.forEach(function (isolateId) {
+    //   isolate = isolates[isolateId];
+    //   branch = this.phylocanvas.branches[isolateId];
+    //
+    //   if (branch && branch.leaf) {
+    //
+    //     if (this.props.filterStartDate && this.props.filterEndDate && TimelineUtils.doesDataObjectHaveTimelineDate(isolate)) {
+    //       if (! TimelineUtils.isDataObjectWithinDateRange(this.props.filterStartDate, this.props.filterEndDate, isolate)) {
+    //
+    //         branch.colour = DEFAULT.COLOUR;
+    //         branch.nodeShape = DEFAULT.SHAPE;
+    //         return;
+    //       }
+    //     }
+    //
+    //     if (! colourDataByDataField) {
+    //
+    //       shape = DEFAULT.SHAPE;
+    //       colour = DEFAULT.COLOUR;
+    //
+    //     } else {
+    //
+    //       if (typeof isolate[colourDataByDataField + '__shape'] === 'undefined') {
+    //         shape = DEFAULT.SHAPE;
+    //       } else {
+    //         shape = isolate[colourDataByDataField + '__shape'].toLowerCase();
+    //       }
+    //
+    //       if (typeof isolate[colourDataByDataField + '__colour'] === 'undefined' && typeof isolate[colourDataByDataField + '__color'] === 'undefined') {
+    //         colour = DEFAULT.COLOUR;
+    //       } else {
+    //         colour = isolate[colourDataByDataField + '__colour'] || isolate[colourDataByDataField + '__color'];
+    //       }
+    //     }
+    //
+    //     branch.nodeShape = shape;
+    //     branch.colour = colour;
+    //   }
+    // }.bind(this));
+    //
+    // this.phylocanvas.draw();
   },
 
   redrawOriginalTree: function () {
@@ -249,36 +263,33 @@ var Tree = React.createClass({
 
   handleTreeBranchSelected: function (event) {
 
-    var selectedNodeIds = event.nodeIds;
+    return;
 
-    if (selectedNodeIds.length === 1) {
-      SpeciesSubtreeActionCreators.setActiveSpeciesSubtreeId(selectedNodeIds[0]);
+    var selectedNodeIds = event.nodeIds;
+    var allCurrentTreeNodeIds;
+
+    /**
+     * Unfortunately selectedNodeIds can return string
+     * if only one node has been selected.
+     *
+     * In that case convert it to array.
+     */
+    if (typeof selectedNodeIds === 'string') {
+      selectedNodeIds = [ selectedNodeIds ];
     }
 
-    // var allCurrentTreeNodeIds;
-    //
-    // /**
-    //  * Unfortunately selectedNodeIds can return string
-    //  * if only one node has been selected.
-    //  *
-    //  * In that case convert it to array.
-    //  */
-    // if (typeof selectedNodeIds === 'string') {
-    //   selectedNodeIds = [ selectedNodeIds ];
-    // }
-    //
-    // if (selectedNodeIds.length < 2) {
-    //   this.setState({
-    //     isHighlightingBranch: false
-    //   });
-    // } else {
-    //   this.setState({
-    //     isHighlightingBranch: true
-    //   });
-    // }
-    //
-    // allCurrentTreeNodeIds = this.getCurrentTreeAllIsolateIds();
-    // this.props.handleSelectTreeData(selectedNodeIds, allCurrentTreeNodeIds);
+    if (selectedNodeIds.length < 2) {
+      this.setState({
+        isHighlightingBranch: false
+      });
+    } else {
+      this.setState({
+        isHighlightingBranch: true
+      });
+    }
+
+    allCurrentTreeNodeIds = this.getCurrentTreeAllIsolateIds();
+    this.props.handleSelectTreeData(selectedNodeIds, allCurrentTreeNodeIds);
   },
 
   getCurrentTreeAllIsolateIds: function () {
@@ -353,7 +364,8 @@ var Tree = React.createClass({
       position: 'absolute',
       bottom: 5,
       right: 5,
-      zIndex: 999
+      zIndex: 999,
+      visibility: (this.props.width > DEFAULT.LAYOUT.MINIMUM_CONTAINER_WIDTH ? 'visible' : 'hidden')
     };
 
     return (
