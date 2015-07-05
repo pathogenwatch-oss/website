@@ -23,9 +23,9 @@ var Map = React.createClass({
   },
 
   componentDidMount: function () {
-    this.setData();
-    this.initializeMap();
-    this.dangerouslyListenToInfoWindowIsolateClick();
+    // this.setData();
+    // this.initializeMap();
+    // this.dangerouslyListenToInfoWindowIsolateClick();
   },
 
   shouldComponentUpdate: function (nextProps) {
@@ -74,9 +74,9 @@ var Map = React.createClass({
   },
 
   componentDidUpdate: function () {
-    this.setData();
-    this.resizeMap();
-    this.createMarkers();
+    // this.setData();
+    // this.resizeMap();
+    // this.createMarkers();
   },
 
   setData: function () {

@@ -1,9 +1,5 @@
 var React = require('react');
 
-var Map = require('./Map.react');
-var SpeciesTree = require('./SpeciesTree.react');
-var SpeciesSubtree = require('./SpeciesSubtree.react');
-
 var Data = require('./Data.react');
 var Timeline = require('./Timeline.react');
 
@@ -26,11 +22,6 @@ var LayoutDivider = require('./layout/LayoutDivider.react');
 
 var LayoutUtils = require('../utils/Layout');
 var DataUtils = require('../utils/Data');
-var Api = require('../utils/Api');
-
-var SpeciesTreeStore = require('../stores/SpeciesTreeStore');
-var SpeciesSubtreeStore = require('../stores/SpeciesSubtreeStore');
-var UploadedCollectionStore = require('../stores/UploadedCollectionStore');
 
 var DEFAULT = require('../defaults.js');
 
@@ -90,9 +81,7 @@ var Layout = React.createClass({
       layoutSouthTop: 0,
       layoutSouthHeight: 0,
 
-      layoutNavigation: 'table',
-
-      activeAnalysisTreeId: 'CORE_TREE_RESULT_e0ce1b47-9928-43fb-9a38-981813b609bc'
+      layoutNavigation: 'table'
     };
   },
 
@@ -239,79 +228,7 @@ var Layout = React.createClass({
     return DataUtils.dataHasDateMetaFields(dataObjects);
   },
 
-  // getAnalysisTree: function () {
-  //
-  //   var analysisTree = {
-  //     width: this.state.layoutMiddleWidth,
-  //     height: this.state.layoutNorthHeight,
-  //     tree: this.props.analysisTree,
-  //     isolates: this.props.isolates,
-  //     selectIsolatesOnTree: this.props.selectIsolatesOnTree,
-  //     handleSelectTreeData: this.props.handleSelectTreeData,
-  //     nodeLabel: this.props.treeNodeLabel,
-  //     handleFilterMapAndTableData: this.props.handleFilterMapAndTableData,
-  //     colourDataByDataField: this.props.colourDataByDataField,
-  //     treeId: 'analysisTree'
-  //   };
-  //
-  //   if (this.state.activeAnalysisTreeId === 'CORE_TREE_RESULT_e0ce1b47-9928-43fb-9a38-981813b609bc') {
-  //
-  //     return (
-  //
-  //       <CollectionTree
-  //         width={this.state.layoutMiddleWidth}
-  //         height={analysisTree.height}
-  //         isolates={analysisTree.isolates}
-  //         selectIsolates={analysisTree.selectIsolatesOnTree}
-  //         handleSelectTreeData={analysisTree.handleSelectTreeData}
-  //         nodeLabel={analysisTree.nodeLabel}
-  //         handleFilterMapAndTableData={analysisTree.handleFilterMapAndTableData}
-  //         colourDataByDataField={analysisTree.colourDataByDataField}
-  //         treeId={analysisTree.treeId} />
-  //
-  //     );
-  //
-  //   } else {
-  //     return this.speciesSubtreeElements[this.state.activeAnalysisTreeId];
-  //   }
-  // },
-
   render: function () {
-
-    var speciesTree = {
-      width: this.state.layoutEastWidth,
-      height: this.state.layoutNorthHeight,
-      tree: SpeciesTreeStore.getSpeciesTree(),
-      isolates: this.props.isolates,
-      selectIsolatesOnTree: this.props.selectIsolatesOnTree,
-      handleSelectTreeData: this.props.handleSelectTreeData,
-      nodeLabel: this.props.treeNodeLabel,
-      handleFilterMapAndTableData: this.props.handleFilterMapAndTableData,
-      colourDataByDataField: this.props.colourDataByDataField,
-      treeId: 'speciesTree'
-    };
-
-    var analysisTree = {
-      width: this.state.layoutMiddleWidth,
-      height: this.state.layoutNorthHeight,
-      tree: this.props.analysisTree,
-      isolates: this.props.isolates,
-      selectIsolatesOnTree: this.props.selectIsolatesOnTree,
-      handleSelectTreeData: this.props.handleSelectTreeData,
-      nodeLabel: this.props.treeNodeLabel,
-      handleFilterMapAndTableData: this.props.handleFilterMapAndTableData,
-      colourDataByDataField: this.props.colourDataByDataField,
-      treeId: 'analysisTree'
-    };
-
-    var map = {
-      width: this.state.layoutWestWidth,
-      height: this.state.layoutNorthHeight,
-      filteredMapData: this.props.filteredMapData,
-      handleFilterTableData: this.props.handleFilterTableData,
-      handleInfoWindowIsolateClick: this.props.handleInfoWindowIsolateClick,
-      colourDataByDataField: this.props.colourDataByDataField
-    };
 
     var data = {
       isolates: this.props.isolates,
@@ -361,13 +278,9 @@ var Layout = React.createClass({
 
           <LayoutEast left={this.state.layoutEastLeft} width={this.state.layoutEastWidth}>
 
-            <Map
+            <EastContent
               width={this.state.layoutEastWidth}
-              height={map.height}
-              filteredMapData={map.filteredMapData}
-              handleFilterData={map.handleFilterTableData}
-              handleInfoWindowIsolateClick={map.handleInfoWindowIsolateClick}
-              colourDataByDataField={map.colourDataByDataField} />
+              height={this.state.layoutNorthHeight} />
 
           </LayoutEast>
 

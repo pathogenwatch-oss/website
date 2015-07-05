@@ -37,19 +37,12 @@ var SHOW_TREE_LABELS_SETTING_OPTIONS = {
 var Tree = React.createClass({
 
   tree: null,
-  treeId: 'uploaded-collection-tree',
+  treeId: null,
   phylocanvas: null,
 
   propTypes: {
-    colourDataByDataField: React.PropTypes.string,
-    isolates: React.PropTypes.object.isRequired,
-    selectIsolates: React.PropTypes.array.isRequired,
     width: React.PropTypes.number.isRequired,
-    height: React.PropTypes.number.isRequired,
-    treeId: React.PropTypes.string.isRequired,
-    filterStartDate: React.PropTypes.object,
-    filterEndDate: React.PropTypes.object,
-    settings: React.PropTypes.object.isRequired
+    height: React.PropTypes.number.isRequired
   },
 
   getInitialState: function () {
@@ -64,6 +57,7 @@ var Tree = React.createClass({
 
   componentWillMount: function () {
     this.tree = UploadedCollectionStore.getUploadedCollectionTree();
+    this.treeId = 'uploaded-collection-tree';
   },
 
   getInitialShowTreeLabelsSetting: function () {
