@@ -3,7 +3,12 @@ var InfoWindow = require('./InfoWindow.react');
 var MapUtils = require('../utils/Map');
 var TimelineUtils = require('../utils/Timeline');
 var DataUtils = require('../utils/Data');
+var TreeUtils = require('../utils/Tree');
 var DEFAULT = require('../defaults');
+
+var SpeciesSubtreeStore = require('../stores/SpeciesSubtreeStore');
+var PublicCollectionStore = require('../stores/PublicCollectionStore');
+var UploadedCollectionStore = require('../stores/UploadedCollectionStore');
 
 var Map = React.createClass({
 
@@ -22,71 +27,108 @@ var Map = React.createClass({
     filterEndDate: React.PropTypes.object
   },
 
+  getInitialState: function () {
+    return {
+      assemblyIds: []
+    };
+  },
+
   componentDidMount: function () {
     // this.setData();
     this.initializeMap();
     // this.dangerouslyListenToInfoWindowIsolateClick();
+
+    this.setAssemblyIdsFromActiveSpeciesSubtree();
+
+    SpeciesSubtreeStore.addChangeListener(this.setAssemblyIdsFromActiveSpeciesSubtree);
   },
 
-  shouldComponentUpdate: function (nextProps) {
-    var currentFilteredMapData = this.props.filteredMapData;
-    var nextFilteredMapData = nextProps.filteredMapData;
+  setAssemblyIdsFromActiveSpeciesSubtree: function () {
+    var activeSpeciesSubtreeId = SpeciesSubtreeStore.getActiveSpeciesSubtreeId();
+    var activeSpeciesSubtree = SpeciesSubtreeStore.getActiveSpeciesSubtree();
+    var assemblyIdsFromSpeciesSubtree = [];
 
-    var currentWidthHeightObject = {
-      width: this.props.width,
-      height: this.props.height
-    };
-    var nextWidthHeightObject = {
-      width: nextProps.width,
-      height: nextProps.height
-    };
+    var uploadedCollectionId = UploadedCollectionStore.getUploadedCollection().collectionId;
 
-    var currentColourDataByDataField = this.props.colourDataByDataField;
-    var nextColourDataByDataField = nextProps.colourDataByDataField;
+    if (activeSpeciesSubtreeId === uploadedCollectionId) {
 
-    var currentFilterStartDate = this.props.filterStartDate;
-    var nextFilterStartDate = nextProps.filterStartDate;
+      assemblyIdsFromSpeciesSubtree = TreeUtils.extractIdsFromNewick(UploadedCollectionStore.getUploadedCollectionTree());
 
-    var currentFilterEndDate = this.props.filterEndDate;
-    var nextFilterEndDate = nextProps.filterEndDate;
+    } else if (activeSpeciesSubtree) {
 
-    if (! this.isEqualObjects(currentFilteredMapData, nextFilteredMapData)) {
-      return true;
+      assemblyIdsFromSpeciesSubtree = TreeUtils.extractIdsFromNewick(activeSpeciesSubtree);
+
+    } else {
+
+      assemblyIdsFromSpeciesSubtree = [];
+
     }
 
-    if (! this.isEqualObjects(currentWidthHeightObject, nextWidthHeightObject)) {
-      return true;
-    }
-
-    if (currentColourDataByDataField !== nextColourDataByDataField) {
-      return true;
-    }
-
-    if (currentFilterStartDate !== nextFilterStartDate) {
-      return true;
-    }
-
-    if (currentFilterEndDate !== nextFilterEndDate) {
-      return true;
-    }
-
-    return false;
+    this.setState({
+      assemblyIds: assemblyIdsFromSpeciesSubtree
+    });
   },
+
+  // shouldComponentUpdate: function (nextProps) {
+  //   var currentFilteredMapData = this.props.filteredMapData;
+  //   var nextFilteredMapData = nextProps.filteredMapData;
+  //
+  //   var currentWidthHeightObject = {
+  //     width: this.props.width,
+  //     height: this.props.height
+  //   };
+  //   var nextWidthHeightObject = {
+  //     width: nextProps.width,
+  //     height: nextProps.height
+  //   };
+  //
+  //   var currentColourDataByDataField = this.props.colourDataByDataField;
+  //   var nextColourDataByDataField = nextProps.colourDataByDataField;
+  //
+  //   var currentFilterStartDate = this.props.filterStartDate;
+  //   var nextFilterStartDate = nextProps.filterStartDate;
+  //
+  //   var currentFilterEndDate = this.props.filterEndDate;
+  //   var nextFilterEndDate = nextProps.filterEndDate;
+  //
+  //   if (! this.isEqualObjects(currentFilteredMapData, nextFilteredMapData)) {
+  //     return true;
+  //   }
+  //
+  //   if (! this.isEqualObjects(currentWidthHeightObject, nextWidthHeightObject)) {
+  //     return true;
+  //   }
+  //
+  //   if (currentColourDataByDataField !== nextColourDataByDataField) {
+  //     return true;
+  //   }
+  //
+  //   if (currentFilterStartDate !== nextFilterStartDate) {
+  //     return true;
+  //   }
+  //
+  //   if (currentFilterEndDate !== nextFilterEndDate) {
+  //     return true;
+  //   }
+  //
+  //   return false;
+  // },
 
   componentDidUpdate: function () {
+
     // this.setData();
-    // this.resizeMap();
-    // this.createMarkers();
+    this.resizeMap();
+    this.createMarkers();
   },
 
-  setData: function () {
-    var startDate = this.props.filterStartDate;
-    var endDate = this.props.filterEndDate;
-
-    this.data = this.props.filteredMapData;
-    this.data = MapUtils.getDataObjectsWithCoordinates(this.data);
-    this.data = TimelineUtils.getDataObjectsWithinDateRange(startDate, endDate, this.data);
-  },
+  // setData: function () {
+  //   var startDate = this.props.filterStartDate;
+  //   var endDate = this.props.filterEndDate;
+  //
+  //   this.data = this.props.filteredMapData;
+  //   this.data = MapUtils.getDataObjectsWithCoordinates(this.data);
+  //   this.data = TimelineUtils.getDataObjectsWithinDateRange(startDate, endDate, this.data);
+  // },
 
   isEqualObjects: function (firstObject, secondObject) {
     return (JSON.stringify(firstObject) === JSON.stringify(secondObject));
@@ -127,7 +169,7 @@ var Map = React.createClass({
 
     this.map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 
-    //this.createMarkers();
+    this.createMarkers();
     //this.fitAllMarkers();
     //this.createInfoWindow();
   },
@@ -157,6 +199,8 @@ var Map = React.createClass({
     var markerIds = Object.keys(markers);
 
     markerIds.forEach(this.clearMarker);
+
+    this.markers = {};
   },
 
   clearMarker: function (markerId) {
@@ -166,6 +210,57 @@ var Map = React.createClass({
   },
 
   createMarkers: function () {
+
+    this.clearMarkers();
+
+    var markers = [];
+    var publicCollection = PublicCollectionStore.getPublicCollection();
+    var uploadedCollection = UploadedCollectionStore.getUploadedCollection();
+    var assembly;
+    var latitude;
+    var longitude;
+    var shape;
+    var colour;
+    var marker;
+
+    this.state.assemblyIds.forEach(function (assemblyId) {
+
+      assembly = publicCollection.assemblies[assemblyId];
+
+      if (! assembly) {
+        return;
+      }
+
+      latitude = parseFloat(assembly.latitude);
+      longitude = parseFloat(assembly.longitude);
+      shape = 'square';
+      colour = '#ffffff';
+
+      marker = this.createMarker(assemblyId, latitude, longitude, shape, colour);
+
+      this.markers[assemblyId] = marker;
+    }.bind(this));
+
+    this.state.assemblyIds.forEach(function (assemblyId) {
+
+      assembly = uploadedCollection.assemblies[assemblyId];
+
+      if (! assembly) {
+        return;
+      }
+
+      latitude = parseFloat(assembly.latitude);
+      longitude = parseFloat(assembly.longitude);
+      shape = 'square';
+      colour = '#000000';
+
+      marker = this.createMarker(assemblyId, latitude, longitude, shape, colour);
+
+      this.markers[assemblyId] = marker;
+    }.bind(this));
+  },
+
+  __createMarkers: function () {
     var isolates = this.data;
 
     var isolatesGroupedByPosition = MapUtils.groupDataObjectsByPosition(isolates);

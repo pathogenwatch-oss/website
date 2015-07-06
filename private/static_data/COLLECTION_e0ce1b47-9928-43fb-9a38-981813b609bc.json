@@ -1,0 +1,215 @@
+{
+  "collectionId": "e0ce1b47-9928-43fb-9a38-981813b609bc",
+  "assemblies": {
+    "0c68a6e8-bcf0-42ae-a838-aec7e2649ac3": {
+      "assemblyId": "0c68a6e8-bcf0-42ae-a838-aec7e2649ac3",
+      "fileAssemblyId": "4238_1_5.fas",
+      "latitude": "-19.015438",
+      "longitude": "29.154857",
+      "country": "Zimbabwe"
+    },
+    "b6ec451c-5083-4109-a191-ca50f4713324": {
+      "assemblyId": "b6ec451c-5083-4109-a191-ca50f4713324",
+      "fileAssemblyId": "6133_3_7.fas",
+      "latitude": "-30.559482",
+      "longitude": "22.937506",
+      "country": "South Africa"
+    },
+    "10d469d5-1f20-4b9f-9c9a-9a0a910de124": {
+      "assemblyId": "10d469d5-1f20-4b9f-9c9a-9a0a910de124",
+      "fileAssemblyId": "4414_3_10.fas",
+      "latitude": "15.552727",
+      "longitude": "48.516388",
+      "country": "Yemen"
+    },
+    "87e8861f-425d-4120-8981-488b5d0412dc": {
+      "assemblyId": "87e8861f-425d-4120-8981-488b5d0412dc",
+      "fileAssemblyId": "6133_3_4.fas",
+      "latitude": "-13.759029",
+      "longitude": "-172.104629",
+      "country": "Samoa"
+    },
+    "1ef5e3e9-ae32-47b8-8d98-bbc0214f3b33": {
+      "assemblyId": "1ef5e3e9-ae32-47b8-8d98-bbc0214f3b33",
+      "fileAssemblyId": "4238_1_7.fas",
+      "latitude": "-15.376706",
+      "longitude": "166.959158",
+      "country": "Vanuatu"
+    },
+    "af86dcde-9b08-4beb-a73a-9148722b6cdf": {
+      "assemblyId": "af86dcde-9b08-4beb-a73a-9148722b6cdf",
+      "fileAssemblyId": "4414_3_12.fas",
+      "latitude": "18.335765",
+      "longitude": "-64.896335",
+      "country": "U.S. Virgin Islands"
+    },
+    "955591f7-2014-4184-ae0d-d20ef640eb5e": {
+      "assemblyId": "955591f7-2014-4184-ae0d-d20ef640eb5e",
+      "fileAssemblyId": "4238_1_6.fas",
+      "latitude": "6.42375",
+      "longitude": "-66.58973",
+      "country": "Venezuela"
+    },
+    "aecf717a-1749-4170-a6a1-4541e8a9f846": {
+      "assemblyId": "aecf717a-1749-4170-a6a1-4541e8a9f846",
+      "fileAssemblyId": "4238_1_4.fas",
+      "latitude": "41.902916",
+      "longitude": "12.453389",
+      "country": "Vatican City"
+    },
+    "8fbb0f43-6575-4cfb-88cd-a10f6eec7851": {
+      "assemblyId": "8fbb0f43-6575-4cfb-88cd-a10f6eec7851",
+      "fileAssemblyId": "4414_3_3.fas",
+      "latitude": "-32.522779",
+      "longitude": "-55.765835",
+      "country": "Uruguay"
+    },
+    "21c2df4f-91bd-4714-aef4-f42ab4abe229": {
+      "assemblyId": "21c2df4f-91bd-4714-aef4-f42ab4abe229",
+      "fileAssemblyId": "6133_3_5.fas",
+      "latitude": "",
+      "longitude": "",
+      "country": "U.S. Minor Outlying Islands"
+    },
+    "e90d35e9-8564-497c-b6d6-63b9dae8d83c": {
+      "assemblyId": "e90d35e9-8564-497c-b6d6-63b9dae8d83c",
+      "fileAssemblyId": "6133_3_1.fas",
+      "latitude": "48.379433",
+      "longitude": "31.16558",
+      "country": "Ukraine"
+    },
+    "b3a70544-2d7f-4b74-840d-fec6ab1e8390": {
+      "assemblyId": "b3a70544-2d7f-4b74-840d-fec6ab1e8390",
+      "fileAssemblyId": "4238_1_11.fas",
+      "latitude": "23.69781",
+      "longitude": "120.960515",
+      "country": "Taiwan"
+    },
+    "cc21ce83-b2b0-4748-8d36-a1af9a71465f": {
+      "assemblyId": "cc21ce83-b2b0-4748-8d36-a1af9a71465f",
+      "fileAssemblyId": "4238_1_8.fas",
+      "latitude": "10.691803",
+      "longitude": "-61.222503",
+      "country": "Trinidad and Tobago"
+    },
+    "3b5358f5-7003-4fb1-84a0-f2148c5e7c4a": {
+      "assemblyId": "3b5358f5-7003-4fb1-84a0-f2148c5e7c4a",
+      "fileAssemblyId": "4414_3_8.fas",
+      "latitude": "-21.178986",
+      "longitude": "-175.198242",
+      "country": "Tonga"
+    },
+    "6c16579b-4855-4e5a-aa1d-01bd79d8a9eb": {
+      "assemblyId": "6c16579b-4855-4e5a-aa1d-01bd79d8a9eb",
+      "fileAssemblyId": "4414_3_5.fas",
+      "latitude": "38.969719",
+      "longitude": "59.556278",
+      "country": "Turkmenistan"
+    },
+    "dcdbe566-4b68-4f0d-8a62-b66e77c0d919": {
+      "assemblyId": "dcdbe566-4b68-4f0d-8a62-b66e77c0d919",
+      "fileAssemblyId": "4414_3_4.fas",
+      "latitude": "-8.967363",
+      "longitude": "-171.855881",
+      "country": "Tokelau"
+    },
+    "fe468482-3e96-4799-967c-ef8c7404e54a": {
+      "assemblyId": "fe468482-3e96-4799-967c-ef8c7404e54a",
+      "fileAssemblyId": "4238_1_10.fas",
+      "latitude": "15.870032",
+      "longitude": "100.992541",
+      "country": "Thailand"
+    },
+    "951a4c74-f291-4369-8d25-d663060a268e": {
+      "assemblyId": "951a4c74-f291-4369-8d25-d663060a268e",
+      "fileAssemblyId": "4414_3_6.fas",
+      "latitude": "-49.280366",
+      "longitude": "69.348557",
+      "country": "French Southern Territories"
+    },
+    "a4073119-2d86-475a-8552-10342187607a": {
+      "assemblyId": "a4073119-2d86-475a-8552-10342187607a",
+      "fileAssemblyId": "6133_3_8.fas",
+      "latitude": "21.694025",
+      "longitude": "-71.797928",
+      "country": "Turks and Caicos Islands"
+    },
+    "522c9432-9c11-49bc-822c-3ea9f3b0bdef": {
+      "assemblyId": "522c9432-9c11-49bc-822c-3ea9f3b0bdef",
+      "fileAssemblyId": "6133_3_9.fas",
+      "latitude": "34.802075",
+      "longitude": "38.996815",
+      "country": "Syria"
+    },
+    "a4f5bc5d-72c1-42fe-8e62-50b7de690719": {
+      "assemblyId": "a4f5bc5d-72c1-42fe-8e62-50b7de690719",
+      "fileAssemblyId": "4414_3_1.fas",
+      "latitude": "0.18636",
+      "longitude": "6.613081",
+      "country": "São Tomé and Príncipe"
+    },
+    "a73088a3-7a8a-4dc7-ad7b-0ea99e0f9544": {
+      "assemblyId": "a73088a3-7a8a-4dc7-ad7b-0ea99e0f9544",
+      "fileAssemblyId": "4350_1_9.fas",
+      "latitude": "5.152149",
+      "longitude": "46.199616",
+      "country": "Somalia"
+    },
+    "4cbac757-9c6d-4896-9825-4c5faaac3937": {
+      "assemblyId": "4cbac757-9c6d-4896-9825-4c5faaac3937",
+      "fileAssemblyId": "4238_1_12.fas",
+      "latitude": "43.94236",
+      "longitude": "12.457777",
+      "country": "San Marino"
+    },
+    "c5384b8a-06b1-410c-bb39-b4f8e14e3d23": {
+      "assemblyId": "c5384b8a-06b1-410c-bb39-b4f8e14e3d23",
+      "fileAssemblyId": "4414_3_9.fas",
+      "latitude": "48.669026",
+      "longitude": "19.699024",
+      "country": "Slovakia"
+    },
+    "0e12a9a3-9268-449e-b464-5d05c0799912": {
+      "assemblyId": "0e12a9a3-9268-449e-b464-5d05c0799912",
+      "fileAssemblyId": "4238_1_1.fas",
+      "latitude": "46.151241",
+      "longitude": "14.995463",
+      "country": "Slovenia"
+    },
+    "c6213cb2-1313-441f-a2e6-5e02387089cc": {
+      "assemblyId": "c6213cb2-1313-441f-a2e6-5e02387089cc",
+      "fileAssemblyId": "4414_3_2.fas",
+      "latitude": "1.352083",
+      "longitude": "103.819836",
+      "country": "Singapore"
+    },
+    "8e06651a-49ed-4707-864a-231c4decbbad": {
+      "assemblyId": "8e06651a-49ed-4707-864a-231c4decbbad",
+      "fileAssemblyId": "4414_3_7.fas",
+      "latitude": "12.862807",
+      "longitude": "30.217636",
+      "country": "Sudan"
+    },
+    "f0b8d114-38d9-4ceb-9499-65b28ede3bfc": {
+      "assemblyId": "f0b8d114-38d9-4ceb-9499-65b28ede3bfc",
+      "fileAssemblyId": "4414_3_11.fas",
+      "latitude": "-9.64571",
+      "longitude": "160.156194",
+      "country": "Solomon Islands"
+    },
+    "45babbb0-0930-44d3-a137-50f4ae88e2ef": {
+      "assemblyId": "45babbb0-0930-44d3-a137-50f4ae88e2ef",
+      "fileAssemblyId": "6133_3_2.fas",
+      "latitude": "-1.940278",
+      "longitude": "29.873888",
+      "country": "Rwanda"
+    },
+    "fa72253a-4444-49ff-b112-06026282aa0f": {
+      "assemblyId": "fa72253a-4444-49ff-b112-06026282aa0f",
+      "fileAssemblyId": "6133_3_10.fas",
+      "latitude": "44.016521",
+      "longitude": "21.005859",
+      "country": "Serbia"
+    }
+  }
+}

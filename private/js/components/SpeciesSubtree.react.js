@@ -6,6 +6,7 @@ var DEFAULT = require('../defaults');
 var SpeciesSubtreeStore = require('../stores/SpeciesSubtreeStore');
 var PublicCollectionStore = require('../stores/PublicCollectionStore');
 var UploadedCollectionStore = require('../stores/UploadedCollectionStore');
+var MapActionCreators = require('../actions/MapActionCreators');
 
 var DEFAULT_TREE_SETTINGS = {
   SHOW_TREE_LABELS: true,
@@ -62,6 +63,12 @@ var Tree = React.createClass({
 
   componentDidMount: function () {
     this.renderTree();
+
+    var branch;
+    var assemblyIds = Object.keys(this.phylocanvas.branches).filter(function (branchId) {
+      branch = this.phylocanvas.branches[branchId];
+      return branch.leaf;
+    });
   },
 
   renderTree: function () {

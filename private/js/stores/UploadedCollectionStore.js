@@ -5,7 +5,7 @@ var assign = require('object-assign');
 var CHANGE_EVENT = 'change';
 
 var STATIC_DATA = {
-  UPLOADED_COLLECTION: require('../../static_data/e0ce1b47-9928-43fb-9a38-981813b609bc.json'),
+  UPLOADED_COLLECTION: require('../../static_data/COLLECTION_e0ce1b47-9928-43fb-9a38-981813b609bc.json'),
   UPLOADED_COLLECTION_TREE: require('../../static_data/CORE_TREE_RESULT_e0ce1b47-9928-43fb-9a38-981813b609bc.json')
 };
 
@@ -43,7 +43,7 @@ var UploadedCollectionStore = assign({}, EventEmitter.prototype, {
   },
 
   getUploadedCollectionAssemblyIds: function () {
-    return Object.keys(uploadedCollection.assemblyIdMap);
+    return Object.keys(uploadedCollection.assemblies);
   },
 
   getUploadedCollectionTree: function () {

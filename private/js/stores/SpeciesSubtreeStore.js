@@ -18,7 +18,7 @@ var STATIC_DATA = {
 };
 
 var speciesSubtrees = null;
-var activeSpeciesSubtreeId = null;
+var activeSpeciesSubtreeId = 'e0ce1b47-9928-43fb-9a38-981813b609bc';
 
 function setSpeciesSubtrees() {
   speciesSubtrees = STATIC_DATA.SPECIES_SUBTREES
@@ -55,7 +55,7 @@ var Store = assign({}, EventEmitter.prototype, {
   },
 
   getActiveSpeciesSubtree: function () {
-    return speciesSubtrees[activeSpeciesSubtreeId];
+    return speciesSubtrees[activeSpeciesSubtreeId] || null;
   },
 
   getActiveSpeciesSubtreeId: function () {
