@@ -5,7 +5,6 @@ var TimelineUtils = require('../utils/Timeline');
 var DEFAULT = require('../defaults');
 
 var SpeciesTreeStore = require('../stores/SpeciesTreeStore');
-var SpeciesTreeActionCreators = require('../actions/SpeciesTreeActionCreators');
 var SpeciesSubtreeActionCreators = require('../actions/SpeciesSubtreeActionCreators');
 
 var DEFAULT_TREE_SETTINGS = {

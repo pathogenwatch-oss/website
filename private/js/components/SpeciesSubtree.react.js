@@ -4,6 +4,7 @@ var TreeControls = require('./TreeControls.react');
 var DEFAULT = require('../defaults');
 
 var SpeciesSubtreeStore = require('../stores/SpeciesSubtreeStore');
+var PublicCollectionStore = require('../stores/PublicCollectionStore');
 
 var DEFAULT_TREE_SETTINGS = {
   SHOW_TREE_LABELS: true,
@@ -84,7 +85,27 @@ var Tree = React.createClass({
     this.phylocanvas.on('subtree', this.handleRedrawSubtree);
     this.phylocanvas.on('historytoggle', this.handleHistoryToggle);
 
-    this.setNodeShapeAndColour();
+    this.setNodeLabelsToAssemblyFileName();
+    //this.setNodeShapeAndColour();
+  },
+
+  setNodeLabelsToAssemblyFileName: function () {
+    var publicCollection = PublicCollectionStore.getPublicCollection();
+    var assemblyIdToAssemblyFileNameMap = publicCollection.assemblyIdMap;
+    var assemblyIds = Object.keys(assemblyIdToAssemblyFileNameMap);
+    var assemblyFileName;
+    var branch;
+
+    assemblyIds.forEach(function (assemblyId) {
+      assemblyFileName = assemblyIdToAssemblyFileNameMap[assemblyId] || '';
+      branch = this.phylocanvas.branches[assemblyId];
+
+      if (branch && branch.leaf) {
+        branch.label = assemblyFileName;
+      }
+    }.bind(this));
+
+    this.phylocanvas.draw();
   },
 
   handleRedrawSubtree: function () {

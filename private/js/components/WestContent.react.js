@@ -3,10 +3,6 @@ var DEFAULT = require('../defaults');
 
 var SpeciesTree = require('./SpeciesTree.react');
 
-var SpeciesTreeStore = require('../stores/SpeciesTreeStore');
-var SpeciesTreeActionCreators = require('../actions/SpeciesTreeActionCreators');
-var SpeciesSubtreeActionCreators = require('../actions/SpeciesSubtreeActionCreators');
-
 var WestContent = React.createClass({
 
   propTypes: {

@@ -60,16 +60,6 @@ var Tree = React.createClass({
     this.treeId = 'uploaded-collection-tree';
   },
 
-  getInitialShowTreeLabelsSetting: function () {
-    // var showTreeLabelsSetting = this.props.settings[TREE_SETTINGS.SHOW_TREE_LABELS];
-    //
-    // if (showTreeLabelsSetting && typeof SHOW_TREE_LABELS_SETTING_OPTIONS[showTreeLabelsSetting] !== 'undefined') {
-    //   return SHOW_TREE_LABELS_SETTING_OPTIONS[showTreeLabelsSetting];
-    // }
-
-    return DEFAULT_TREE_SETTINGS.SHOW_TREE_LABELS;
-  },
-
   componentDidMount: function () {
     var phylocanvas = new PhyloCanvas.Tree(this.treeId, {
       history: {
@@ -78,7 +68,7 @@ var Tree = React.createClass({
     });
     phylocanvas.dangerouslySetData(this.tree);
 
-    phylocanvas.showLabels = this.getInitialShowTreeLabelsSetting();
+    phylocanvas.showLabels = DEFAULT_TREE_SETTINGS.SHOW_TREE_LABELS;
     phylocanvas.hoverLabel = true;
     phylocanvas.nodeAlign = false;
     phylocanvas.setTreeType(this.state.treeType);
@@ -92,7 +82,28 @@ var Tree = React.createClass({
     this.phylocanvas.on('subtree', this.handleRedrawSubtree);
     this.phylocanvas.on('historytoggle', this.handleHistoryToggle);
 
-    this.setNodeShapeAndColour();
+    this.setNodeLabelsToAssemblyFileName();
+
+    //this.setNodeShapeAndColour();
+  },
+
+  setNodeLabelsToAssemblyFileName: function () {
+    var uploadedCollection = UploadedCollectionStore.getUploadedCollection();
+    var assemblyIdToAssemblyFileNameMap = uploadedCollection.assemblyIdMap;
+    var assemblyIds = Object.keys(assemblyIdToAssemblyFileNameMap);
+    var assemblyFileName;
+    var branch;
+
+    assemblyIds.forEach(function (assemblyId) {
+      assemblyFileName = assemblyIdToAssemblyFileNameMap[assemblyId] || '';
+      branch = this.phylocanvas.branches[assemblyId];
+
+      if (branch && branch.leaf) {
+        branch.label = assemblyFileName;
+      }
+    }.bind(this));
+
+    this.phylocanvas.draw();
   },
 
   handleRedrawSubtree: function () {
@@ -129,6 +140,8 @@ var Tree = React.createClass({
         this.phylocanvas.branches[isolateId].label = isolate[nodeLabel] || '';
       }
     }.bind(this));
+
+    this.phylocanvas.draw();
   },
 
   setNodeShapeAndColour: function () {
