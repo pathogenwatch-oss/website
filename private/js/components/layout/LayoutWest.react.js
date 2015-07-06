@@ -9,12 +9,11 @@ var LayoutWest = React.createClass({
 
   render: function () {
     var width = this.props.width;
-    var height = LayoutUtils.getNorthHeight();
 
     var style = {
       position: 'absolute',
       width: width + 'px',
-      height: height + 'px',
+      height: '100%',
       top: 0,
       left: 0,
       overflow: 'hidden'
