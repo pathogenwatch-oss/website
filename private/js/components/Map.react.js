@@ -170,7 +170,6 @@ var Map = React.createClass({
     this.map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 
     this.createMarkers();
-    //this.fitAllMarkers();
     //this.createInfoWindow();
   },
 
@@ -258,6 +257,8 @@ var Map = React.createClass({
 
       this.markers[assemblyId] = marker;
     }.bind(this));
+
+    this.fitAllMarkers();
   },
 
   __createMarkers: function () {

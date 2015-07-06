@@ -47,10 +47,12 @@ var LayoutNorthSouthDivider = React.createClass({
           direction={'horizontal'}
           className={'northSouthDivider'}>
 
+          {/*
           <LayoutNavigation
             showTimeline={this.props.showTimeline}
             shortProjectId={this.props.shortProjectId}
             onLayoutNavigationChange={this.props.onLayoutNavigationChange} />
+          */}
 
         </LayoutDivider>
       </div>
