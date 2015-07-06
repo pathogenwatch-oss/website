@@ -38,6 +38,10 @@ var UploadedCollectionStore = assign({}, EventEmitter.prototype, {
     return uploadedCollection;
   },
 
+  getUploadedCollectionId: function () {
+    return uploadedCollection.collectionId;
+  },
+
   getUploadedCollectionTree: function () {
     return uploadedCollectionTree;
   }

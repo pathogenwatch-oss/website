@@ -8,6 +8,7 @@ var SpeciesTreeStore = require('../stores/SpeciesTreeStore');
 var SpeciesSubtreeStore = require('../stores/SpeciesSubtreeStore');
 var SpeciesSubtreeActionCreators = require('../actions/SpeciesSubtreeActionCreators');
 var PublicCollectionStore = require('../stores/PublicCollectionStore');
+var UploadedCollectionStore = require('../stores/UploadedCollectionStore');
 
 var DEFAULT_TREE_SETTINGS = {
   SHOW_TREE_LABELS: true,
@@ -266,8 +267,14 @@ var Tree = React.createClass({
 
     var selectedNodeIds = event.nodeIds;
 
-    if (selectedNodeIds.length === 1) {
+    if (selectedNodeIds.length === 0) {
+
+      SpeciesSubtreeActionCreators.setActiveSpeciesSubtreeId(UploadedCollectionStore.getUploadedCollectionId());
+
+    } else if (selectedNodeIds.length === 1) {
+
       SpeciesSubtreeActionCreators.setActiveSpeciesSubtreeId(selectedNodeIds[0]);
+
     }
 
     // var allCurrentTreeNodeIds;

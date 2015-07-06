@@ -24,7 +24,7 @@ var Map = React.createClass({
 
   componentDidMount: function () {
     // this.setData();
-    // this.initializeMap();
+    this.initializeMap();
     // this.dangerouslyListenToInfoWindowIsolateClick();
   },
 
@@ -127,9 +127,9 @@ var Map = React.createClass({
 
     this.map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 
-    this.createMarkers();
-    this.fitAllMarkers();
-    this.createInfoWindow();
+    //this.createMarkers();
+    //this.fitAllMarkers();
+    //this.createInfoWindow();
   },
 
   fitAllMarkers: function () {

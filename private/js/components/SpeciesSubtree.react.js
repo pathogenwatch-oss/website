@@ -91,13 +91,12 @@ var Tree = React.createClass({
 
   setNodeLabelsToAssemblyFileName: function () {
     var publicCollection = PublicCollectionStore.getPublicCollection();
-    var assemblyIdToAssemblyFileNameMap = publicCollection.assemblyIdMap;
-    var assemblyIds = Object.keys(assemblyIdToAssemblyFileNameMap);
+    var assemblyIds = Object.keys(publicCollection.assemblies);
     var assemblyFileName;
     var branch;
 
     assemblyIds.forEach(function (assemblyId) {
-      assemblyFileName = assemblyIdToAssemblyFileNameMap[assemblyId] || '';
+      assemblyFileName = publicCollection.assemblies[assemblyId].fileAssemblyId || '';
       branch = this.phylocanvas.branches[assemblyId];
 
       if (branch && branch.leaf) {

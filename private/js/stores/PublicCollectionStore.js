@@ -5,7 +5,7 @@ var assign = require('object-assign');
 var CHANGE_EVENT = 'change';
 
 var STATIC_DATA = {
-  PUBLIC_COLLECTION: require('../../static_data/dc1027d0-5f1c-4197-b987-26fecf151b47.json'),
+  PUBLIC_COLLECTION: require('../../static_data/COLLECTION_dc1027d0-5f1c-4197-b987-26fecf151b47.json'),
 };
 
 var publicCollection = null;
@@ -30,6 +30,10 @@ var PublicCollectionStore = assign({}, EventEmitter.prototype, {
 
   getPublicCollection: function () {
     return publicCollection;
+  },
+
+  getPublicCollectionId: function () {
+    return publicCollection.collectionId;
   }
 
 });
