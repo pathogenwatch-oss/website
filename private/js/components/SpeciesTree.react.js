@@ -5,7 +5,9 @@ var TimelineUtils = require('../utils/Timeline');
 var DEFAULT = require('../defaults');
 
 var SpeciesTreeStore = require('../stores/SpeciesTreeStore');
+var SpeciesSubtreeStore = require('../stores/SpeciesSubtreeStore');
 var SpeciesSubtreeActionCreators = require('../actions/SpeciesSubtreeActionCreators');
+var PublicCollectionStore = require('../stores/PublicCollectionStore');
 
 var DEFAULT_TREE_SETTINGS = {
   SHOW_TREE_LABELS: true,
@@ -83,7 +85,21 @@ var Tree = React.createClass({
     this.phylocanvas.on('subtree', this.handleRedrawSubtree);
     this.phylocanvas.on('historytoggle', this.handleHistoryToggle);
 
-    //this.setNodeShapeAndColour();
+    this.setNodeShapeAndColour();
+    this.emphasizeShapeAndColourForNodesThatHaveSubtrees();
+  },
+
+  setNodeShapeAndColour: function () {
+    var branches = this.phylocanvas.branches;
+    var branchIds = Object.keys(branches);
+
+    this.phylocanvas.setNodeColourAndShape(branchIds, '#ffffff', 's');
+  },
+
+  emphasizeShapeAndColourForNodesThatHaveSubtrees: function () {
+    var subtreeIds = SpeciesSubtreeStore.getSpeciesSubtreeIds();
+
+    this.phylocanvas.setNodeColourAndShape(subtreeIds, '#000000', 's');
   },
 
   handleRedrawSubtree: function () {
@@ -122,7 +138,7 @@ var Tree = React.createClass({
     }.bind(this));
   },
 
-  setNodeShapeAndColour: function () {
+  __setNodeShapeAndColour: function () {
     var isolates = this.props.isolates;
     var isolateIds = Object.keys(isolates);
     var colourDataByDataField = this.props.colourDataByDataField;
