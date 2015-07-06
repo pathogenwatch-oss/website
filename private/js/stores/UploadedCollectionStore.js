@@ -42,6 +42,10 @@ var UploadedCollectionStore = assign({}, EventEmitter.prototype, {
     return uploadedCollection.collectionId;
   },
 
+  getUploadedCollectionAssemblyIds: function () {
+    return Object.keys(uploadedCollection.assemblyIdMap);
+  },
+
   getUploadedCollectionTree: function () {
     return uploadedCollectionTree;
   }
