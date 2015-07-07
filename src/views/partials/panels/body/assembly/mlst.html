@@ -1,0 +1,20 @@
+{% raw %}
+
+    <table>
+        <tbody>
+            <tr>
+                <td class="row-title">Locus Id</td>
+                {{#each mlstData}}
+                    <td>{{locusId}}</td>
+                {{/each}}
+            </tr>
+            <tr>
+                <td class="row-title">Allele Id</td>
+                {{#each mlstData}}
+                    <td>{{alleleId}}</td>
+                {{/each}}
+            </tr>
+        </tbody>
+    </table>
+
+{% endraw %}

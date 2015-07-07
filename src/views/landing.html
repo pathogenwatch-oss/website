@@ -1,0 +1,203 @@
+{% extends 'layout.html' %}
+
+{% block head %}
+  <link href="/css/landing.css" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block content %}
+
+<section class="wgst-page wgst-page__landing">
+  
+  <div class="ribbon-wrapper-green">
+    <div class="ribbon-green">Early Preview Version</div>
+  </div>
+
+  <header class="wgst-page-section wgst-page-section__header">
+    <img src="/images/wgsa_logo.png" class="wgst-logo"/>
+    <h1>Whole Genome Sequence Analysis (WGSA)</h1>
+    <!--<h2>Microbial pathogen genome collection analysis and global comparison platform.</h2>-->
+    <div class="container">
+      <h3 class="col-xs-12 col-sm-12 col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2">
+        WGSA.net aims to provide easy to use interpretation tools for the analysis of whole microbial genome sequence datasets.
+      </h3>
+    </div>
+
+    <div class="wgst-landing-buttons container">
+
+      <!--
+      <section class="wgst-landing-collection wgst-landing-collection---focus">
+        <a href="/collection/new" class="btn btn-default btn-lg wgst-button__create-new-collection">Create new collection</a>  
+      </section>
+      -->
+
+      <div class="row">
+
+        <section class="wgst-landing-collection col-xs-12 col-sm-6 col-md-4">
+          <h4>
+            <a href="/collection/b8d3aab1-625f-49aa-9857-a5e97f5d6be5" class="btn btn-default btn-lg wgst-button__open-sample-collection" data-mixpanel-open-collection="Reference"><i class="fa fa-list-alt"></i>Explore reference collection</a>
+          </h4>
+          <p>
+            Sanger sequenced <em>Staphylococcus aureus</em> references.
+          </p>
+        </section>
+
+        <section class="wgst-landing-collection col-xs-12 col-sm-6 col-md-4">
+          <h4>
+            <a href="/collection/2ebc9003-9299-4254-8758-9d1680837c9d" class="btn btn-default btn-lg wgst-button__open-sample-collection" data-mixpanel-open-collection="ST239"><i class="fa fa-list-alt"></i>Explore ST239 collection</a>
+          </h4>
+          <p>
+            Harris SR <em>et al.</em>
+            Evolution of MRSA during hospital transmission and intercontinental spread.
+            <small><a href="http://www.ncbi.nlm.nih.gov/pubmed/20093474" target="_blank">PubMed</a></small>
+          </p>
+        </section>
+
+        <section class="wgst-landing-collection col-xs-12 col-sm-6 col-md-4">
+          <h4>
+            <a href="/collection/5324c298-4cd0-4329-848b-30d7fe28a560" class="btn btn-default btn-lg wgst-button__open-sample-collection" data-mixpanel-open-collection="EMRSA15"><i class="fa fa-list-alt"></i>Explore EMRSA15 collection</a>
+          </h4>
+          <p>
+            Holden MT <em>et al.</em>
+            A genomic portrait of the emergence, evolution, and global spread of a methicillin-resistant <em>Staphylococcus aureus</em> pandemic.
+            <small><a href="http://www.ncbi.nlm.nih.gov/pubmed/23299977" target="_blank">PubMed</a></small>
+          </p>
+
+        </section>
+
+      </div>
+    </div>
+    <div class="wgst-chrome-only wgst--hide-this container">
+      <span class="wgst-chrome-only-message">WGSA.net is optimised for <a href="http://google.com/chrome">Google Chrome</a>.</span>
+    </div>
+  </header>
+
+  <section class="wgst-page-section wgst-page-section__features">
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <h3>Features</h3>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row">
+
+        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+          <div class="wgst-project-feature wgst-project-feature__tree">
+            <h4><i class="fa fa-tree"></i>Tree Viewer</h4>
+            <ul>
+              <li><!-- <i class="fa fa-chevron-right"> --></i><span>View Genomic clustering of isolate sequences.</span></li>
+              <li><!-- <i class="fa fa-chevron-right"> --></i><span>Overlay metadata.</span></li>
+              <li><!-- <i class="fa fa-chevron-right"></i> --><span>Highlight branches.</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+          <div class="wgst-project-feature wgst-project-feature__data">
+            <h4><i class="fa fa-bar-chart"></i>Data</h4>
+            <ul>
+              <li><!-- <i class="fa fa-chevron-right"></i> --><span>Containing results of resistance predictions and MLST.</span></li>
+              <li><!-- <i class="fa fa-chevron-right"></i> --><span>Merge Collections together.</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+          <div class="wgst-project-feature wgst-project-feature__map">
+            <h4><i class="fa fa-map-marker"></i>Maps</h4>
+            <ul>
+              <li><!-- <i class="fa fa-chevron-right"></i> --><span>Geographic origin of isolates.</span></li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="wgst-page-section wgst-page-section__coming-features">
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <h3>Coming</h3>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row">
+
+        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+          <div class="wgst-project-coming-feature">
+            <h4><i class="fa fa-plus"></i>Create new Collection(s)</h4>
+            <ul>
+              <li><!-- <i class="fa fa-chevron-right"></i> --><span>Add single or multiple genome assemblies.</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+          <div class="wgst-project-coming-feature">
+            <h4><i class="fa fa-cubes"></i>Merge multiple Collections</h4>
+            <ul>
+              <li><!-- <i class="fa fa-chevron-right"></i> --><span>Combine to view relationships (trees).</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+          <div class="wgst-project-coming-feature">
+            <h4><i class="fa fa-download"></i>Download Collection(s)</h4>
+            <ul>
+              <li><!-- <i class="fa fa-chevron-right"></i> --><span>Download Assembly and metadata/results.</span></li>
+            </ul>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </section>
+
+  <section class="wgst-page-section wgst-page-section__action">
+  
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 col-lg-6 col-lg-offset-3 action-box">
+          <h3>Use</h3>
+          <h4>Interested in using WGSA?</h4>
+          <p>We are releasing this demo version containing published <em>Staphylococcus aureus</em> genomes and detailing some of the functionality available and coming soon.</p>
+          <p>For further information please register interest below or feedback within the collection pages.</p>
+          <form role="form" data-form="subscribe">
+            <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter your email address" data-input="email">
+            <button type="submit" class="btn btn-default" data-mixpanel-button="subscribe">
+              <div class="wgst-spinner wgst--hide-this"></div>
+              <span>I am interested</span>
+            </button>
+            <p class="wgst-subscribe-success-message wgst--hide-this">Thank you! We'll keep you updated.</p>
+          </form>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <section class="wgst-page-section wgst-page-section__partners">
+    <p>Funded by <img src="/images/wellcome_trust_logo.png" class="wgst-supporter-logo wgst-supporter-logo__wellcome-trust" /></p>
+    <p>Developed at <img src="/images/imperial_logo.png" class="wgst-supporter-logo wgst-supporter-logo__imperial" /></p>
+    <p>
+      <a href="https://mixpanel.com/f/partner"><img src="//cdn.mxpnl.com/site_media/images/partner/badge_light.png" alt="Mobile Analytics" /></a>
+    </p>
+  </section>
+
+<!--   
+  <footer class="wgst-page-section wgst-page-section__footer">
+  </footer>
+-->
+
+</section>
+    
+{% endblock %}
+
+{% block script %}
+    <script src="/js/landing.js"></script>
+{% endblock %}

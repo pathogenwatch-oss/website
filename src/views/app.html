@@ -1,0 +1,117 @@
+{% extends 'layout.html' %}
+
+{% block head %}
+
+    <link href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" rel="stylesheet" type="text/css">
+    <link href="/css/app.css" rel="stylesheet" type="text/css">
+
+    <style>
+    .wgst-spinner {
+      content: "";
+      display: block;
+      width: 0;
+      height: 0;
+      border: solid 8px;
+      border-radius: 5em;
+      border-color: #0099ff transparent #0099ff transparent;
+      -webkit-animation: spin 1s linear infinite;
+    }
+    </style>
+    
+{% endblock %}
+
+{% block content %}
+
+    <section class="wgst-page wgst-page__app wgst--hide-this" data-wgst-drag-and-drop-zone>
+
+        {% include "partials/init.html" %}    
+        {% include "partials/header.html" %}
+
+        <div class="wgst-layout-container">
+            {% include "partials/backgrounds/drag_and_drop.html" %}
+            {% include "partials/sidebar.html" %}
+            {% include "partials/backgrounds/uploading.html" %}
+            {% include "partials/backgrounds/get_collection.html" %}
+            <div class="wgst-workspace">
+            </div>
+        </div>
+
+    </section>
+
+  {% include "partials/fullscreens/assembly.html" %}
+  {% include "partials/fullscreens/collection_map.html" %}
+  {% include "partials/fullscreens/collection_data.html" %}
+  {% include "partials/fullscreens/collection_tree.html" %}
+  {% include "partials/fullscreens/assembly_upload_progress.html" %}
+
+  {% include "partials/panels/panel.html" %}
+
+  {% include "partials/panels/body/collection_data.html" %}
+  {% include "partials/panels/body/collection_data/tree_button.html" %}
+  {% include "partials/panels/body/collection_data/assemblies.html" %}
+  {% include "partials/panels/body/collection_data/assemblies/assembly.html" %}
+  {% include "partials/panels/body/collection_tree.html" %}
+  {% include "partials/panels/body/collection_map.html" %}
+  {% include "partials/panels/body/assembly.html" %}
+  {% include "partials/panels/body/assembly_upload/analytics.html" %}
+  {% include "partials/panels/body/assembly_upload/analytics/assembly_analytics_item.html" %}
+  {% include "partials/panels/body/assembly_upload/metadata.html" %}
+  {% include "partials/panels/body/assembly_upload/metadata/assembly_metadata_form.html" %}
+  {% include "partials/panels/body/assembly_upload/navigation.html" %}
+  {% include "partials/panels/body/assembly_upload/progress.html" %}
+
+  {% include "partials/panels/header/collection_data.html" %}
+  {% include "partials/panels/header/collection_tree.html" %}
+  {% include "partials/panels/header/collection_map.html" %}
+  {% include "partials/panels/header/assembly.html" %}
+  {% include "partials/panels/header/assembly_upload/analytics.html" %}
+  {% include "partials/panels/header/assembly_upload/metadata.html" %}
+  {% include "partials/panels/header/assembly_upload/navigation.html" %}
+  {% include "partials/panels/header/assembly_upload/progress.html" %}
+
+  {% include "partials/feedback_overlay.html" %}
+
+  {% include "partials/hidable.html" %}
+
+  {% include "partials/info_window.html" %}
+
+{% endblock %}
+
+{% block script %}
+
+    <script>
+    'use strict';
+
+    //
+    // WGST namespace
+    //
+    window.WGST = window.WGST || {};
+    window.WGST.exports = {};
+    window.WGST.state = {
+      panels: {}
+    };
+
+    {% if appConfig %}
+    window.WGST.config = {{appConfig | safe}};
+    {% endif %}
+
+    //
+    // /collection/new
+    //
+    {% if newCollection %}
+      window.WGST.isNewCollection = true;
+    {% else %}
+      window.WGST.isNewCollection = false;
+    {% endif %}
+
+    //
+    // If user requested collection, e.g.: /collection/<collection_id>
+    //
+    {% if requestedCollectionId %}
+      window.WGST.requestedCollectionId = '{{requestedCollectionId}}';
+    {% endif %}
+    </script>
+
+    <script src="/js/wgsa.js"></script>
+
+{% endblock %}

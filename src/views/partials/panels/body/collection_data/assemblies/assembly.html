@@ -1,0 +1,43 @@
+{% raw %}
+
+<script type="text/x-handlebars-template"
+        class="wgst-template"
+        data-template-id="panel-body__collection-data__assemblies__assembly">
+
+	    <div class="wgst-collection-data-assembly">
+	    	<div class="wgst-assembly-data wgst-assembly-data__map">
+	        	<input type="checkbox"
+	        			class="wgst-assembly-show-on-map"
+	        			data-reference-id="{{topScore.referenceId}}"
+	        			data-assembly-id="{{assemblyId}}"
+	        			data-latitude="{{metadata.latitude}}"
+	        			data-longitude="{{metadata.longitude}}">
+	    	</div>
+	    	<div class="wgst-assembly-data wgst-assembly-data__assembly-user-id">
+	         	<a href="#" 
+	         		class="open-assembly-button"
+	         		data-assembly-id="{{assemblyId}}"
+	         		title="{{assemblyUserId}}"
+	         		data-mixpanel-open-assembly-panel="{{assemblyUserId}}">
+
+	         		{{assemblyUserId}}
+	         	</a>
+	    	</div>
+	    	<div class="wgst-assembly-data wgst-assembly-data__top-score">
+	         	{{topScore.referenceId}} ({{topScorePercentage}}%)
+	    	</div>
+	    	<div class="wgst-assembly-data wgst-assembly-data__sequence-type">
+				{{sequenceTypeData}}
+	    	</div>
+	    	<div class="wgst-assembly-data wgst-assembly-data__resistance-profile">
+	            <div class="wgst-assembly-resistance-profile-container">
+				    {{#each antibioticResistanceData}}
+				      {% endraw %}{% include "assembly/antibiotic_class.html" %}{% raw %}
+				    {{/each}}
+	             </div>
+	    	</div>
+	    </div>
+
+</script>
+
+{% endraw %}

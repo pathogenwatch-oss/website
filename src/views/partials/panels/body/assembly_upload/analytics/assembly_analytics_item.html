@@ -1,0 +1,42 @@
+{% raw %}
+
+<script type="text/x-handlebars-template" class="wgst-template" data-template-id="droppedAssemblyAnalytics">
+
+  <li class="assembly-item wgst-upload-assembly__analytics wgst--hide-this"
+        data-assembly-file-id="{{assemblyFileId}}">
+
+    <div class="assembly-overview">
+        <div class="assembly-stats-container">
+            <div class="assembly-stats-label">total nt</div>
+            <div class="assembly-stats-number">{{totalNumberOfNucleotidesInDnaStrings}}</div>
+        </div>
+        <div class="assembly-stats-container">
+            <div class="assembly-stats-label">total contigs</div>
+            <div class="assembly-stats-number assembly-stats-number-contigs">{{totalNumberOfContigs}}</div>
+        </div>
+        <div class="assembly-stats-container">
+            <div class="assembly-stats-label">min contig</div>
+            <div class="assembly-stats-number">{{smallestNumberOfNucleotidesInDnaStrings}}<small>nt</small></div>
+        </div>
+        <div class="assembly-stats-container">
+            <div class="assembly-stats-label">mean contig</div>
+            <div class="assembly-stats-number">{{averageNumberOfNucleotidesInDnaStrings}}<small>nt</small></div>
+        </div>
+        <div class="assembly-stats-container">
+            <div class="assembly-stats-label">max contig</div>
+            <div class="assembly-stats-number">{{biggestNumberOfNucleotidesInDnaStrings}}<small>nt</small></div>
+        </div>
+        <div class="assembly-stats-container">
+            <div class="assembly-stats-label">contig N50</div>
+            <div class="assembly-stats-number assembly-stats-n50-number">{{contigN50}}<small>nt</small></div>
+        </div>
+    </div>
+
+    <div class="assembly-content-data">
+        <div class="sequence-length-distribution-chart" data-assembly-file-id="{{assemblyFileId}}"></div>
+    </div>
+  </li>
+
+</script>
+
+{% endraw %}

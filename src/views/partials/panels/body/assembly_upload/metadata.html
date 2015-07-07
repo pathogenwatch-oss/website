@@ -1,0 +1,36 @@
+{% raw %}
+
+<script type="text/x-handlebars-template"
+        class="wgst-template" 
+        data-template-id="panel-body__assembly-upload-metadata">
+
+  <div class="wgst-assembly-upload__metadata">
+    <ul></ul>
+  </div>
+
+  <div class="adding-metadata-progress-container">
+
+    <div class="progress-container">
+      <div class="progress-label">
+        <span class="progress-percentage-label">Your progress is </span>
+        <span class="progress-percentage">0%</span>
+        <span class="progress-hint">(Hint: fill in metadata for this assembly.)</span>
+      </div>
+      <div class="progress progress-striped">
+        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+          <span class="sr-only">0% Complete (success)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="upload-controls-container">
+      Ready?
+      <button type="button" class="btn btn-success assemblies-upload-ready-button">Upload sequences and metadata</button>
+      <button type="button" class="btn btn-success assemblies-upload-metadata-ready-button">Upload metadata only</button>
+    </div>
+
+  </div>
+
+</script>
+
+{% endraw %}

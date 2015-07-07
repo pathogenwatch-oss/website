@@ -1,0 +1,48 @@
+{
+  "name": "macroreact-middle",
+  "version": "1.0.0",
+  "description": "Middle layer for Macroreact",
+  "main": "app.js",
+  "dependencies": {
+    "amqp": "^0.2.0",
+    "async": "^0.9.0",
+    "babyparse": "^0.2.1",
+    "body-parser": "^1.10.1",
+    "bunyan": "^1.3.2",
+    "couchbase": "^2.0.5",
+    "express": "^4.10.7",
+    "extend": "^2.0.0",
+    "longjohn": "^0.2.4",
+    "morgan": "^1.5.1",
+    "node-uuid": "^1.4.2",
+    "serve-favicon": "^2.2.0",
+    "socket.io": "^1.2.1",
+    "swig": "^1.4.2"
+  },
+  "devDependencies": {
+    "cgps-style": "imperialcollegelondon/javascript#cgps-0.0.5",
+    "eslint": "^0.24.0",
+    "lodash": "^3.3.1",
+    "mocha": "^2.1.0",
+    "rewire": "^2.1.4",
+    "sinon": "^1.12.2",
+    "supertest": "^0.15.0"
+  },
+  "nodepath": "./src",
+  "testcmd": "NODE_PATH=$npm_package_nodepath NODE_ENV='testing' mocha --reporter spec",
+  "scripts": {
+    "start": "NODE_PATH=$npm_package_nodepath node start.js | bunyan -o short",
+    "test": "eval $npm_package_testcmd 'test/unit/**/*.test.js'",
+    "test-example": "eval $npm_package_testcmd 'test/example.test.js'",
+    "e2e": "eval $npm_package_testcmd 'test/integration/**/*.test.js'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ImperialCollegeLondon/wgst-front.git"
+  },
+  "author": "Imperial College London",
+  "bugs": {
+    "url": "https://github.com/ImperialCollegeLondon/wgst-front/issues"
+  },
+  "homepage": "https://github.com/ImperialCollegeLondon/wgst-front"
+}

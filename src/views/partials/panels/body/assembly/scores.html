@@ -1,0 +1,20 @@
+{% raw %}
+
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Reference Id</th>
+                <th>Score</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each scoresData}}
+                <tr> 
+                    <td>{{referenceId}}</td>
+                    <td>{{text}}</td>
+                </tr>
+            {{/each}}
+        </tbody>
+    </table>
+
+{% endraw %}

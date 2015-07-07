@@ -1,0 +1,24 @@
+{% raw %}
+
+<script type="text/x-handlebars-template" class="wgst-template" data-template-id="droppedAssemblyMetadataForm">
+
+    <li class="assembly-item wgst-upload-assembly__metadata wgst--hide-this"
+    	data-assembly-file-id="{{assemblyFileId}}">
+
+		<div class="assembly-metadata">
+			<h4>Please provide mandatory assembly metadata:</h4>
+
+			<div>
+				{% endraw %}
+			    {% include "assembly_metadata_form/date.html" %}
+			    {% include "assembly_metadata_form/location.html" %}
+			    {% include "assembly_metadata_form/source.html" %}
+			    {% include "assembly_metadata_form/controls.html" %}
+			    {% raw %}
+			</div>
+		</div>
+    </li>
+
+</script>
+
+{% endraw %}

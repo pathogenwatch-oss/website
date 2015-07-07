@@ -1,0 +1,27 @@
+{% extends 'layout.html' %}
+
+{% block head %}
+  <link href="/css/404.css" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block content %}
+
+<section class="wgst-page wgst-page__404">
+
+  <header class="wgst-page-section wgst-page-section__header">
+    <img src="/images/wgsa_logo.png" class="wgst-logo"/>
+    <h1>The page was not found (404).</h1>
+    <div class="container">
+      <h3 class="col-xs-8 col-xs-offset-2 col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2">
+        Return to <a href="/" data-mixpanel-go-landing-page>homepage</a>?
+      </h3>
+    </div>
+  </header>
+
+</section>
+    
+{% endblock %}
+
+{% block script %}
+  <script src="/js/lib/wgsa_mixpanel.js"></script>
+{% endblock %}

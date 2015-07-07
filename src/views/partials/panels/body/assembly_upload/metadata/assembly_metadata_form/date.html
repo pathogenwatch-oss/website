@@ -1,0 +1,61 @@
+{% raw %}
+    
+    <div class="form-block wgst-assembly-metadata-block"
+            data-assembly-file-id="{{assemblyFileId}}">
+
+        <div class="form-group form-horizontal">
+
+            <label for="assemblyTimestampInput__{{assemblyFileId}}">When this assembly was sampled?</label>
+
+            {{!-- Year --}}
+            <div class="assembly-metadata-timestamp-block assembly-metadata-timestamp-year"
+                    data-assembly-file-id="{{assemblyFileId}}">
+
+                <select name="select" 
+                    class="form-control assembly-timestamp-input assembly-timestamp-input-year"
+                    data-timestamp-input="year"
+                    data-assembly-file-id="{{assemblyFileId}}"
+                    id="assemblyTimestampInput__{{assemblyFileId}}">
+
+                    <option value="-1">Choose year</option>
+                    {{#each listOfYears}}
+                        <option value="{{this}}">{{this}}</option>
+                    {{/each}}
+                </select>
+            </div>
+
+            {{!-- Month --}}
+            <div class="assembly-metadata-timestamp-block assembly-metadata-timestamp-month wgst--hide-this"
+                    data-assembly-file-id="{{assemblyFileId}}">
+
+                <select name="select" 
+                    class="form-control assembly-timestamp-input assembly-timestamp-input-month"
+                    data-timestamp-input="month"
+                    data-assembly-file-id="{{assemblyFileId}}">
+
+                    <option value="-1">Choose month</option>
+                    {{#each listOfMonths}}
+                        <option value="{{number}}">{{name}}</option>
+                    {{/each}}
+                </select>
+            </div>
+
+            {{!-- Day --}}
+            <div class="assembly-metadata-timestamp-block assembly-metadata-timestamp-day wgst--hide-this"
+                    data-assembly-file-id="{{assemblyFileId}}">
+
+                <select name="select"
+                    class="form-control assembly-timestamp-input assembly-timestamp-input-day" 
+                    data-timestamp-input="day"
+                    data-assembly-file-id="{{assemblyFileId}}">
+
+                    <option value="-1">Choose day</option>
+                    {{#each listOfDays}}
+                        <option value="{{this}}">{{this}}</option>
+                    {{/each}}
+                </select>
+            </div>
+        </div>
+    </div>
+
+{% endraw %}

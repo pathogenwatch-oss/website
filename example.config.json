@@ -1,0 +1,35 @@
+{
+	"server": {
+		"node": {
+			"port": "80"
+		},
+		"couchbase": {
+			"ip": "127.0.0.1",
+			"buckets": {
+				"main": {
+					"name": "wgsa",
+					"password": ""
+				},
+				"resources": {
+					"name": "wgsa_resources",
+					"password": ""
+				},
+				"feedback": {
+					"name": "feedback",
+					"password": ""
+				}
+			}
+		},
+		"rabbit": {
+			"on": true,
+			"ip": "129.31.26.152",
+			"port": "5672"
+		}
+	},
+	"client": {
+		"allowUpload": true,
+		"socketAddress": "127.0.0.1",
+		"referenceCollectionId": "b8d3aab1-625f-49aa-9857-a5e97f5d6be5",
+		"version": "0.1.5"
+	}
+}
