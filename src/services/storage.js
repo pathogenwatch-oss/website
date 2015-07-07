@@ -53,9 +53,9 @@ Storage.prototype.retrieve = retrieve;
 Storage.prototype.retrieveMany = retrieveMany;
 
 var STORAGE_TYPES = {
-  main: new Storage('main'),
-  resources: new Storage('resources'),
-  feedback: new Storage('feedback')
+  main: new Storage('main')
+  // sequences: new Storage('sequences'),
+  // feedback: new Storage('feedback')
 };
 
 module.exports = function (type) {

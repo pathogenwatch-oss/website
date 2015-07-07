@@ -7,7 +7,9 @@ var appConfig = require('configuration');
 var LOGGER = require('utils/logging').createLogger('Message Queue');
 var CONNECTION_OPTIONS = {
   host: appConfig.server.rabbit.ip,
-  port: appConfig.server.rabbit.port
+  port: appConfig.server.rabbit.port,
+  login: appConfig.server.rabbit.login,
+  password: appConfig.server.rabbit.password
 };
 var IMPLEMENTATION_OPTIONS = {
   reconnect: false,
@@ -74,6 +76,7 @@ function createExchange(connection, exchangeKey, callback) {
 
 function connect(callback) {
   if (appConfig.server.rabbit.on) {
+    LOGGER.debug(CONNECTION_OPTIONS);
     connection =
       amqp.createConnection(CONNECTION_OPTIONS, IMPLEMENTATION_OPTIONS);
 

@@ -23,7 +23,9 @@
 		"rabbit": {
 			"on": true,
 			"ip": "129.31.26.152",
-			"port": "5672"
+			"port": "5672",
+			"login": "login",
+			"password": "password"
 		}
 	},
 	"client": {
