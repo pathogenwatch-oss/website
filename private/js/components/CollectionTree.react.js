@@ -5,6 +5,8 @@ var TimelineUtils = require('../utils/Timeline');
 var DEFAULT = require('../defaults');
 
 var UploadedCollectionStore = require('../stores/UploadedCollectionStore');
+var MapActionCreators = require('../actions/MapActionCreators');
+var SpeciesSubtreeActionCreators = require('../actions/SpeciesSubtreeActionCreators');
 
 var DEFAULT_TREE_SETTINGS = {
   SHOW_TREE_LABELS: true,
@@ -94,7 +96,7 @@ var Tree = React.createClass({
     var branch;
 
     assemblyIds.forEach(function (assemblyId) {
-      assemblyFileName = uploadedCollection.assemblies[assemblyId] || '';
+      assemblyFileName = uploadedCollection.assemblies[assemblyId].fileAssemblyId || '';
       branch = this.phylocanvas.branches[assemblyId];
 
       if (branch && branch.leaf) {
@@ -269,10 +271,7 @@ var Tree = React.createClass({
 
   handleTreeBranchSelected: function (event) {
 
-    return;
-
     var selectedNodeIds = event.nodeIds;
-    var allCurrentTreeNodeIds;
 
     /**
      * Unfortunately selectedNodeIds can return string
@@ -284,18 +283,13 @@ var Tree = React.createClass({
       selectedNodeIds = [ selectedNodeIds ];
     }
 
-    if (selectedNodeIds.length < 2) {
-      this.setState({
-        isHighlightingBranch: false
-      });
-    } else {
-      this.setState({
-        isHighlightingBranch: true
-      });
-    }
+    if (selectedNodeIds.length === 0) {
 
-    allCurrentTreeNodeIds = this.getCurrentTreeAllIsolateIds();
-    this.props.handleSelectTreeData(selectedNodeIds, allCurrentTreeNodeIds);
+
+      SpeciesSubtreeActionCreators.setActiveSpeciesSubtreeId(UploadedCollectionStore.getUploadedCollectionId());
+    } else {
+      MapActionCreators.setAssemblyIds(selectedNodeIds);
+    }
   },
 
   getCurrentTreeAllIsolateIds: function () {

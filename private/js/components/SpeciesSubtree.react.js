@@ -7,6 +7,7 @@ var SpeciesSubtreeStore = require('../stores/SpeciesSubtreeStore');
 var PublicCollectionStore = require('../stores/PublicCollectionStore');
 var UploadedCollectionStore = require('../stores/UploadedCollectionStore');
 var MapActionCreators = require('../actions/MapActionCreators');
+var SpeciesSubtreeActionCreators = require('../actions/SpeciesSubtreeActionCreators');
 
 var DEFAULT_TREE_SETTINGS = {
   SHOW_TREE_LABELS: true,
@@ -291,12 +292,7 @@ var Tree = React.createClass({
 
   handleTreeBranchSelected: function (event) {
 
-    return;
-
-    console.log('???');
-
     var selectedNodeIds = event.nodeIds;
-    var allCurrentTreeNodeIds;
 
     /**
      * Unfortunately selectedNodeIds can return string
@@ -308,18 +304,11 @@ var Tree = React.createClass({
       selectedNodeIds = [ selectedNodeIds ];
     }
 
-    if (selectedNodeIds.length < 2) {
-      this.setState({
-        isHighlightingBranch: false
-      });
+    if (selectedNodeIds.length === 0) {
+      SpeciesSubtreeActionCreators.setActiveSpeciesSubtreeId(SpeciesSubtreeStore.getActiveSpeciesSubtreeId());
     } else {
-      this.setState({
-        isHighlightingBranch: true
-      });
+      MapActionCreators.setAssemblyIds(selectedNodeIds);
     }
-
-    allCurrentTreeNodeIds = this.getCurrentTreeAllIsolateIds();
-    this.props.handleSelectTreeData(selectedNodeIds, allCurrentTreeNodeIds);
   },
 
   getCurrentTreeAllIsolateIds: function () {

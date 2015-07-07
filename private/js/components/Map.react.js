@@ -9,6 +9,7 @@ var DEFAULT = require('../defaults');
 var SpeciesSubtreeStore = require('../stores/SpeciesSubtreeStore');
 var PublicCollectionStore = require('../stores/PublicCollectionStore');
 var UploadedCollectionStore = require('../stores/UploadedCollectionStore');
+var MapStore = require('../stores/MapStore');
 
 var Map = React.createClass({
 
@@ -41,6 +42,13 @@ var Map = React.createClass({
     this.setAssemblyIdsFromActiveSpeciesSubtree();
 
     SpeciesSubtreeStore.addChangeListener(this.setAssemblyIdsFromActiveSpeciesSubtree);
+    MapStore.addChangeListener(this.filterAssembliesOnMapAndTable);
+  },
+
+  filterAssembliesOnMapAndTable: function () {
+    this.setState({
+      assemblyIds: MapStore.getAssemblyIds()
+    });
   },
 
   setAssemblyIdsFromActiveSpeciesSubtree: function () {
