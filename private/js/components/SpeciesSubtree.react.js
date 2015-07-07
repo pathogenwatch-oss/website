@@ -96,7 +96,6 @@ var Tree = React.createClass({
 
     this.setNodeLabelsToAssemblyFileName();
     this.setNodeShapeAndColour();
-    this.emphasizeShapeAndColourForNodesThatHaveSubtrees();
   },
 
   setNodeLabelsToAssemblyFileName: function () {
@@ -118,6 +117,11 @@ var Tree = React.createClass({
   },
 
   setNodeShapeAndColour: function () {
+    this.setDefaultNodeShapeAndColour();
+    this.emphasizeShapeAndColourForNodesThatHaveSubtrees();
+  },
+
+  setDefaultNodeShapeAndColour: function () {
     var branches = this.phylocanvas.branches;
     var branchIds = Object.keys(branches);
 
@@ -125,6 +129,7 @@ var Tree = React.createClass({
   },
 
   emphasizeShapeAndColourForNodesThatHaveSubtrees: function () {
+
     var uploadedCollectionAssemblyIds = UploadedCollectionStore.getUploadedCollectionAssemblyIds();
 
     this.phylocanvas.setNodeColourAndShape(uploadedCollectionAssemblyIds, '#000000', 'o');
