@@ -15,7 +15,7 @@ var app = express();
 
 app.set('port', process.env.PORT || appConfig.server.node.port);
 app.engine('html', swig.renderFile);
-app.set('views', path.join(__dirname, 'server', 'views'));
+app.set('views', path.join(__dirname, 'src', 'views'));
 app.set('view engine', 'html');
 // http://stackoverflow.com/a/19965089
 app.use(bodyParser.json({ limit: '500mb' }));

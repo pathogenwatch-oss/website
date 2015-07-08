@@ -9,10 +9,13 @@ describe('Collection Routes', function () {
     request
       .post('/collection')
       .send({ collectionId: 'b8d3aab1-625f-49aa-9857-a5e97f5d6be5' })
-      .expect(200, fixture, done);
+      .expect(200, fixture, function (error, res) {
+        if (error) { error.showDiff = false; }
+        done(error, res);
+      });
   });
 
-  it.only('POST /collection [Error]', function (done) {
+  it('POST /collection [Error]', function (done) {
     request
       .post('/collection')
       .send({ collectionId: uuid.v4() })
@@ -20,7 +23,7 @@ describe('Collection Routes', function () {
   });
 
   it('POST /collection/add', function (done) {
-    var userAssemblyIds = ['123.fa', '456.fa', '789.fa'];
+    var userAssemblyIds = [ '123.fa', '456.fa', '789.fa' ];
     request
       .post('/collection/add')
       .send({

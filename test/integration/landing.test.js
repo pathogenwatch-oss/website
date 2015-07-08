@@ -1,4 +1,4 @@
-describe('Landing Routes', function () {
+describe.skip('Landing Routes', function () {
 
   it('GET /', function (done) {
     request

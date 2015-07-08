@@ -1,6 +1,6 @@
 var async = require('async');
 
-var resourceStorage = require('services/storage')('resources');
+var mainStorage = require('services/storage')('main');
 
 var LOGGER = require('utils/logging').createLogger('sequenceType');
 var UNKNOWN_ST = 'New';
@@ -25,7 +25,7 @@ function getMlstAllelesData(assembly, callback) {
     return callback(new Error('Assembly or MLST result missing'));
   }
   LOGGER.info('Getting MLST alleles data');
-  resourceStorage.retrieveMany(queryKeys, function (error, mlstAllelesData) {
+  mainStorage.retrieveMany(queryKeys, function (error, mlstAllelesData) {
     if (error) {
       return callback(error, null);
     }
@@ -66,7 +66,7 @@ function getSequenceType(assembly, callback) {
     LOGGER.warn('Skipping ST query for assembly ' + assembly.assemblyId);
     return callback(null, UNKNOWN_ST);
   }
-  resourceStorage.retrieve(stQueryKey, function (error, result) {
+  mainStorage.retrieve(stQueryKey, function (error, result) {
     if (error) {
       if (error.code === 13) {
         LOGGER.warn('No ST key found: ' + stQueryKey);
@@ -136,7 +136,7 @@ function addSequenceTypeDataToMany(assemblies, callback) {
       allAssembliesMlstAllelesQueryKeys.concat(mlstQueryKeys);
   });
 
-  resourceStorage.retrieveMany(allAssembliesMlstAllelesQueryKeys,
+  mainStorage.retrieveMany(allAssembliesMlstAllelesQueryKeys,
     function (error, mlstAllelesData) {
       if (error) {
         return callback(error, null);
@@ -174,7 +174,7 @@ function addSequenceTypeDataToMany(assemblies, callback) {
         }
       });
 
-      resourceStorage.retrieveMany(Object.keys(assemblyIdsByStQueryKeyMap),
+      mainStorage.retrieveMany(Object.keys(assemblyIdsByStQueryKeyMap),
         function (error, allStData) {
           if (error) {
             callback(error, null);

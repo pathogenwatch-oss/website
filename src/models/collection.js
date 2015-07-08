@@ -3,7 +3,6 @@ var async = require('async');
 var assemblyModel = require('models/assembly');
 var antibioticModel = require('models/antibiotic');
 var mainStorage = require('services/storage')('main');
-var resourceStorage = require('services/storage')('resource');
 var messageQueueService = require('services/messageQueue');
 var socketService = require('services/socket');
 
@@ -115,7 +114,7 @@ function get(collectionId, callback) {
 function getRepresentativeCollection(callback) {
   LOGGER.info('Getting representative collection');
 
-  resourceStorage.retrieve('REP_METADATA_1280',
+  mainStorage.retrieve('REP_METADATA_1280',
     function (error, representativeCollectionMetadata) {
       if (error) {
         return callback(error, null);

@@ -1,11 +1,11 @@
-var resourcesStorage = require('services/storage')('resources');
+var mainStorage = require('services/storage')('main');
 
 var logger = require('utils/logging').createLogger('Antibiotic model');
 
 function getAll(callback) {
   logger.info('Getting list of all antibiotics');
 
-  resourcesStorage.retrieve('ANTIMICROBIALS_ALL', function (error, result) {
+  mainStorage.retrieve('ANTIMICROBIALS_ALL', function (error, result) {
     if (error) {
       return callback(error, result);
     }

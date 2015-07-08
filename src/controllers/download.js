@@ -24,7 +24,7 @@ var convertJsonToCsv = function (flatJson) {
       'longitude',
       'source'
     ],
-    data: [flatJson]
+    data: [ flatJson ]
   });
 };
 

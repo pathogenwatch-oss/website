@@ -6,7 +6,6 @@ var antibioticModel = require('models/antibiotic');
 var LOGGER = require('utils/logging').createLogger('Assembly ctrl');
 
 function addAssembly(req, res) {
-
   var ids = {
     collectionId: req.body.collectionId,
     socketRoomId: req.body.socketRoomId,
@@ -41,11 +40,12 @@ function addAssembly(req, res) {
 
 function getAssembly(req, res) {
   assemblyModel.get(req.params.id, function (error, result) {
+    var assembly;
     if (error) {
       LOGGER.error(error, result);
       return res.sendStatus(500);
     }
-    var assembly = result.value;
+    assembly = result.value;
     LOGGER.info(assembly);
     res.render('app', { requestedAssemblyObject: JSON.stringify(assembly) });
   });
@@ -93,7 +93,7 @@ function getAssemblyTableData(req, res) {
   var assemblyIds = req.body.assemblyIds;
   assemblyModel.getTableData(assemblyIds, function (error, tableData) {
     if (error) {
-      return res.json(500, { error: error });
+      return res.status(500).json({ error: error });
     }
     res.json(tableData);
   });
