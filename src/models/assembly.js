@@ -25,7 +25,6 @@ var ASSEMBLY_ANALYSES = {
 var TOTAL_ANALYSES = Object.keys(ASSEMBLY_ANALYSES).length;
 
 function beginUpload(ids, metadata, sequences) {
-
   socketService.notifyAssemblyUpload(ids, 'UPLOAD_OK');
   messageQueueService.newAssemblyNotificationQueue(
     ids,

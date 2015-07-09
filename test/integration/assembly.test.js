@@ -1,3 +1,8 @@
+var fs = require('fs');
+var path = require('path');
+
+var wsClient = require('socket.io-client');
+
 describe('Assembly Routes', function () {
 
   it('POST /api/assembly', function (done) {
@@ -34,19 +39,40 @@ describe('Assembly Routes', function () {
       .expect(200, fixture, done);
   });
 
-  // TODO: needs a fixture (and potentially a WS client)
-  it.skip('POST /assembly/add', function (done) {
-    request
-      .post('/assembly/add')
-      .send({
-        collectionId: 'b8d3aab1-625f-49aa-9857-a5e97f5d6be5',
-        socketRoomId: '123',
-        userAssemblyId: '5119_1_9.fa',
-        assemblyId: 'a1de6463-a6b8-4810-bbe4-94d782d452c5',
-        metadata: {},
-        sequences: []
-      })
-      .expect(200, done);
+  it.only('POST /assembly/add', function (done) {
+    var socket = wsClient('http://localhost:3000');
+
+    socket.on('connect', function () {
+      socket.emit('getRoomId');
+    });
+
+    socket.on('roomId', function (roomId) {
+      var fileName = 'JH1.fna';
+      request
+        .post('/assembly/add')
+        .send({
+          collectionId: 'b8d3aab1-625f-49aa-9857-a5e97f5d6be5',
+          socketRoomId: roomId,
+          userAssemblyId: fileName,
+          assemblyId: 'a1de6463-a6b8-4810-bbe4-94d782d452c5',
+          metadata: {},
+          sequences: [
+            fs.readFileSync(path.join(__dirname, 'fixtures', fileName), { encoding: 'utf-8' })
+          ]
+        })
+        .expect(200)
+        .end(function (err) {
+          if (err) throw err;
+        });
+    });
+
+    socket.on('assemblyUploadNotification', function (message) {
+      console.log(message);
+      // if (message.result === 'METADATA_OK') {
+      //   done();
+      // }
+    });
+
   });
 
   it('POST /api/assembly/resistance-profile', function (done) {
