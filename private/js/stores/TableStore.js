@@ -7,14 +7,14 @@ var SpeciesSubtreeStore = require('./SpeciesSubtreeStore');
 var CHANGE_EVENT = 'change';
 
 var assemblyIds = null;
-var selectedTableColumn = 'Assembly Id';
+var selectedTableColumnName = 'Assembly Id';
 
 function setAssemblyIds(ids) {
   assemblyIds = ids;
 }
 
-function setSelectedTableColumn(tableColumn) {
-  selectedTableColumn = tableColumn;
+function setSelectedTableColumnName(tableColumnName) {
+  selectedTableColumnName = tableColumnName;
 }
 
 function emitChange() {
@@ -35,8 +35,8 @@ var TableStore = assign({}, EventEmitter.prototype, {
     return assemblyIds;
   },
 
-  getSelectedTableColumn: function () {
-    return selectedTableColumn;
+  getSelectedTableColumnName: function () {
+    return selectedTableColumnName;
   }
 
 });
@@ -51,7 +51,7 @@ function handleAction(action) {
       break;
 
     case 'set_selected_table_column':
-      setSelectedTableColumn(action.selectedTableColumn);
+      setSelectedTableColumnName(action.selectedTableColumnName);
       emitChange();
       break;
 

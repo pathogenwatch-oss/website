@@ -1,7 +1,8 @@
 var React = require('react');
 var TableStore = require('../stores/TableStore');
 var ANTIBIOTICS = require('../../static_data/antibiotics.json');
-
+var assign = require('object-assign');
+var TableStore = require('../stores/TableStore');
 var TableActionCreators = require('../actions/TableActionCreators');
 
 var headerStyle = {
@@ -13,29 +14,52 @@ var headerStyle = {
 
 var MetadataTableHeader = React.createClass({
 
+  getTableHeaderCellStyle: function (header) {
+    var selectedTableColumnName = TableStore.getSelectedTableColumnName();
+    var selectedTableColumnStyle;
+
+    if (header === selectedTableColumnName) {
+      selectedTableColumnStyle = {
+        backgroundColor: '#e0efff'
+      };
+    } else {
+      selectedTableColumnStyle = {
+        backgroundColor: 'inherit'
+      };
+    }
+
+    return assign({}, headerStyle, selectedTableColumnStyle);
+  },
+
   getTableHeaderCellElement: function (header) {
-    return (<th key={'table-header-cell_' + header} style={headerStyle} onClick={this.handleSelectTableColumn.bind(this, header)}>{header}</th>);
+    var style = this.getTableHeaderCellStyle(header);
+
+    return (<th key={'table-header-cell_' + header} style={style} onClick={this.handleSelectTableColumn.bind(this, header)}>{header}</th>);
+  },
+
+  getTableHeaderCellElements: function () {
+    return this.getListOfTableHeaderNames().map(this.getTableHeaderCellElement);
   },
 
   handleSelectTableColumn: function (header) {
-    TableActionCreators.setSelectedTableColumn(header);
+    TableActionCreators.setSelectedTableColumnName(header);
   },
 
   getListOfAntibioticNames: function () {
     return Object.keys(ANTIBIOTICS);
   },
 
-  render: function () {
+  getListOfTableHeaderNames: function () {
     var metadataNames = ['Assembly Id', 'Country', 'Source', 'Date', 'ST'];
-    var antibioticNames = this.getListOfAntibioticNames();
-    var headers = metadataNames.concat(antibioticNames);
+    var antibioticNames = this.getListOfAntibioticNames().sort();
+    return metadataNames.concat(antibioticNames);
+  },
 
-    var tableHeaderCellElements = headers.map(this.getTableHeaderCellElement);
-
+  render: function () {
     return (
       <thead>
         <tr>
-          {tableHeaderCellElements}
+          {this.getTableHeaderCellElements()}
         </tr>
       </thead>
     );

@@ -11,10 +11,10 @@ module.exports = {
     AppDispatcher.dispatch(action);
   },
 
-  setSelectedTableColumn: function (selectedTableColumn) {
+  setSelectedTableColumnName: function (selectedTableColumnName) {
     var action = {
       type: 'set_selected_table_column',
-      selectedTableColumn: selectedTableColumn
+      selectedTableColumnName: selectedTableColumnName
     };
 
     AppDispatcher.dispatch(action);

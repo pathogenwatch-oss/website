@@ -58,7 +58,7 @@ var Tree = React.createClass({
       treeType: DEFAULT.TREE_TYPE,
       nodeSize: DEFAULT.NODE_SIZE,
       labelSize: DEFAULT.LABEL_SIZE,
-      nodeLabel: TableStore.getSelectedTableColumn()
+      nodeLabel: TableStore.getSelectedTableColumnName()
     });
   },
 
@@ -78,7 +78,7 @@ var Tree = React.createClass({
 
   handleTableStoreChange: function () {
     this.setState({
-      nodeLabel: TableStore.getSelectedTableColumn()
+      nodeLabel: TableStore.getSelectedTableColumnName()
     });
   },
 
@@ -128,7 +128,7 @@ var Tree = React.createClass({
       } else if (nodeLabel === 'ST') {
         nodeLabelValue = publicCollection.assemblies[assemblyId].analysis.st || '';
       } else {
-        nodeLabelValue = publicCollection.assemblies[assemblyId].analysis.resistanceProfile[nodeLabel].resistanceResult || '';
+        nodeLabelValue = nodeLabel + ': ' + publicCollection.assemblies[assemblyId].analysis.resistanceProfile[nodeLabel].resistanceResult || '';
       }
 
       branch = this.phylocanvas.branches[assemblyId];
