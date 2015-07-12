@@ -17,7 +17,8 @@ var LayoutNorth = React.createClass({
       height: height + 'px',
       top: 0,
       left: 0,
-      zIndex: 1
+      zIndex: 1,
+      overflow: 'hidden'
     };
 
     return (

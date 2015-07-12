@@ -251,8 +251,6 @@ var Tree = React.createClass({
 
     return;
 
-    console.log('???');
-
     var selectedNodeIds = event.nodeIds;
     var allCurrentTreeNodeIds;
 

@@ -6,8 +6,12 @@ var DEFAULT = require('../defaults');
 var SpeciesSubtreeStore = require('../stores/SpeciesSubtreeStore');
 var PublicCollectionStore = require('../stores/PublicCollectionStore');
 var UploadedCollectionStore = require('../stores/UploadedCollectionStore');
+var TableStore = require('../stores/TableStore');
 var MapActionCreators = require('../actions/MapActionCreators');
+var TableActionCreators = require('../actions/TableActionCreators');
 var SpeciesSubtreeActionCreators = require('../actions/SpeciesSubtreeActionCreators');
+
+var DataUtils = require('../utils/Data');
 
 var DEFAULT_TREE_SETTINGS = {
   SHOW_TREE_LABELS: true,
@@ -53,7 +57,8 @@ var Tree = React.createClass({
       isTreeControlsOn: false,
       treeType: DEFAULT.TREE_TYPE,
       nodeSize: DEFAULT.NODE_SIZE,
-      labelSize: DEFAULT.LABEL_SIZE
+      labelSize: DEFAULT.LABEL_SIZE,
+      nodeLabel: TableStore.getSelectedTableColumn()
     });
   },
 
@@ -64,11 +69,16 @@ var Tree = React.createClass({
 
   componentDidMount: function () {
     this.renderTree();
+    TableStore.addChangeListener(this.handleTableStoreChange);
+  },
 
-    var branch;
-    var assemblyIds = Object.keys(this.phylocanvas.branches).filter(function (branchId) {
-      branch = this.phylocanvas.branches[branchId];
-      return branch.leaf;
+  componentWillUnmount: function () {
+    TableStore.removeChangeListener(this.handleTableStoreChange);
+  },
+
+  handleTableStoreChange: function () {
+    this.setState({
+      nodeLabel: TableStore.getSelectedTableColumn()
     });
   },
 
@@ -94,22 +104,37 @@ var Tree = React.createClass({
     this.phylocanvas.on('subtree', this.handleRedrawSubtree);
     this.phylocanvas.on('historytoggle', this.handleHistoryToggle);
 
-    this.setNodeLabelsToAssemblyFileName();
+    this.setNodeLabels();
     this.setNodeShapeAndColour();
   },
 
-  setNodeLabelsToAssemblyFileName: function () {
+  setNodeLabels: function () {
     var publicCollection = PublicCollectionStore.getPublicCollection();
     var assemblyIds = Object.keys(publicCollection.assemblies);
-    var assemblyFileName;
+    var nodeLabel = this.state.nodeLabel;
+    var nodeLabelValue;
     var branch;
 
     assemblyIds.forEach(function (assemblyId) {
-      assemblyFileName = publicCollection.assemblies[assemblyId].fileAssemblyId || '';
+
+      if (nodeLabel === 'Assembly Id') {
+        nodeLabelValue = publicCollection.assemblies[assemblyId].metadata.fileAssemblyId || '';
+      } else if (nodeLabel === 'Country') {
+        nodeLabelValue = publicCollection.assemblies[assemblyId].metadata.geography.location.country || '';
+      } else if (nodeLabel === 'Source') {
+        nodeLabelValue = publicCollection.assemblies[assemblyId].metadata.source || '';
+      } else if (nodeLabel === 'Date') {
+        nodeLabelValue = DataUtils.getFormattedDateString(publicCollection.assemblies[assemblyId].metadata.date) || '';
+      } else if (nodeLabel === 'ST') {
+        nodeLabelValue = publicCollection.assemblies[assemblyId].analysis.st || '';
+      } else {
+        nodeLabelValue = publicCollection.assemblies[assemblyId].analysis.resistanceProfile[nodeLabel].resistanceResult || '';
+      }
+
       branch = this.phylocanvas.branches[assemblyId];
 
       if (branch && branch.leaf) {
-        branch.label = assemblyFileName;
+        branch.label = nodeLabelValue;
       }
     }.bind(this));
 
@@ -142,6 +167,7 @@ var Tree = React.createClass({
 
   componentDidUpdate: function () {
 
+    this.setNodeLabels();
     this.phylocanvas.resizeToContainer();
 
     // if (!this.state.isHighlightingBranch) {
@@ -313,6 +339,7 @@ var Tree = React.createClass({
       SpeciesSubtreeActionCreators.setActiveSpeciesSubtreeId(SpeciesSubtreeStore.getActiveSpeciesSubtreeId());
     } else {
       MapActionCreators.setAssemblyIds(selectedNodeIds);
+      TableActionCreators.setAssemblyIds(selectedNodeIds);
     }
   },
 

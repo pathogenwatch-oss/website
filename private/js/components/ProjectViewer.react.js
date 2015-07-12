@@ -5,8 +5,12 @@ var DataUtils = require('../utils/Data');
 var TimelineUtils = require('../utils/Timeline');
 
 var SpeciesTreeActionCreators = require('../actions/SpeciesTreeActionCreators');
+var SpeciesSubtreeActionCreators = require('../actions/SpeciesSubtreeActionCreators');
 var UploadedCollectionActionCreators = require('../actions/UploadedCollectionActionCreators');
 var PublicCollectionActionCreators = require('../actions/PublicCollectionActionCreators');
+var TableActionCreators = require('../actions/TableActionCreators');
+
+var SpeciesSubtreeStore = require('../stores/SpeciesSubtreeStore');
 
 var ProjectViewer = React.createClass({
 
@@ -39,27 +43,36 @@ var ProjectViewer = React.createClass({
 
   componentWillMount: function () {
 
+    // SpeciesSubtreeStore.addChangeListener(function () {
+    //   var assemblyIds = SpeciesSubtreeStore.getActiveSpeciesSubtreeAssemblyIds();
+    //   TableActionCreators.setAssemblyIds(assemblyIds);
+    // });
+
     SpeciesTreeActionCreators.setSpeciesTree();
     SpeciesTreeActionCreators.setSpeciesSubtrees();
     UploadedCollectionActionCreators.setUploadedCollection();
     UploadedCollectionActionCreators.setUploadedCollectionTree();
     PublicCollectionActionCreators.setPublicCollection();
 
-    var data = this.state.data;
-    data = DataUtils.sanitize(data);
+    // var data = this.state.data;
+    // data = DataUtils.sanitize(data);
+    //
+    // var dataObjects = DataUtils.convertDataObjectToArray(data);
+    // var minimumDate = TimelineUtils.getMinimumDateFromData(dataObjects);
+    // var maximumDate = TimelineUtils.getMaximumDateFromData(dataObjects);
+    //
+    // this.setState({
+    //   data: data,
+    //   filteredMapData: data,
+    //   filteredTableData: data,
+    //   filterStartDate: minimumDate,
+    //   filterEndDate: maximumDate,
+    //   colourDataByDataField: this.getInitialDataFieldThatFiltersMapMarkers(data)
+    // });
+  },
 
-    var dataObjects = DataUtils.convertDataObjectToArray(data);
-    var minimumDate = TimelineUtils.getMinimumDateFromData(dataObjects);
-    var maximumDate = TimelineUtils.getMaximumDateFromData(dataObjects);
-
-    this.setState({
-      data: data,
-      filteredMapData: data,
-      filteredTableData: data,
-      filterStartDate: minimumDate,
-      filterEndDate: maximumDate,
-      colourDataByDataField: this.getInitialDataFieldThatFiltersMapMarkers(data)
-    });
+  componentDidMount: function () {
+    SpeciesSubtreeActionCreators.setActiveSpeciesSubtreeId('e0ce1b47-9928-43fb-9a38-981813b609bc');
   },
 
   getInitialDataFieldThatFiltersMapMarkers: function () {

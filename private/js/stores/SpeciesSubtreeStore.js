@@ -2,6 +2,9 @@ var AppDispatcher = require('../dispatcher/AppDispatcher');
 var EventEmitter = require('events').EventEmitter;
 var assign = require('object-assign');
 
+var UploadedCollectionStore = require('./UploadedCollectionStore');
+var TreeUtils = require('../utils/Tree');
+
 var CHANGE_EVENT = 'change';
 
 var STATIC_DATA = {
@@ -18,7 +21,7 @@ var STATIC_DATA = {
 };
 
 var speciesSubtrees = null;
-var activeSpeciesSubtreeId = 'e0ce1b47-9928-43fb-9a38-981813b609bc';
+var activeSpeciesSubtreeId = null;
 
 function setSpeciesSubtrees() {
   speciesSubtrees = STATIC_DATA.SPECIES_SUBTREES
@@ -55,11 +58,31 @@ var Store = assign({}, EventEmitter.prototype, {
   },
 
   getActiveSpeciesSubtree: function () {
-    return speciesSubtrees[activeSpeciesSubtreeId] || null;
+    var activeSpeciesSubtree = speciesSubtrees[activeSpeciesSubtreeId];
+    var uplodedCollectionId;
+
+    if (! activeSpeciesSubtree) {
+      uplodedCollectionId = UploadedCollectionStore.getUploadedCollectionId();
+
+      if (activeSpeciesSubtreeId === uplodedCollectionId) {
+        activeSpeciesSubtree = UploadedCollectionStore.getUploadedCollectionTree();
+      }
+    }
+
+    return activeSpeciesSubtree || null;
   },
 
   getActiveSpeciesSubtreeId: function () {
     return activeSpeciesSubtreeId;
+  },
+
+  getActiveSpeciesSubtreeAssemblyIds: function () {
+    var activeSpeciesSubtree = this.getActiveSpeciesSubtree();
+    var activeSpeciesSubtreeAssemblyIds = [];
+    if (activeSpeciesSubtree) {
+      activeSpeciesSubtreeAssemblyIds = TreeUtils.extractIdsFromNewick(activeSpeciesSubtree);
+    }
+    return activeSpeciesSubtreeAssemblyIds;
   }
 
 });

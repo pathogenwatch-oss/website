@@ -22,10 +22,10 @@ var Map = React.createClass({
 
   propTypes: {
     width: React.PropTypes.number.isRequired,
-    height: React.PropTypes.number.isRequired,
-    filteredMapData: React.PropTypes.object.isRequired,
-    filterStartDate: React.PropTypes.object,
-    filterEndDate: React.PropTypes.object
+    height: React.PropTypes.number.isRequired
+    // filteredMapData: React.PropTypes.object.isRequired,
+    // filterStartDate: React.PropTypes.object,
+    // filterEndDate: React.PropTypes.object
   },
 
   getInitialState: function () {
@@ -39,43 +39,51 @@ var Map = React.createClass({
     this.initializeMap();
     // this.dangerouslyListenToInfoWindowIsolateClick();
 
-    this.setAssemblyIdsFromActiveSpeciesSubtree();
+    MapStore.addChangeListener(this.handleMapStoreChange);
 
-    SpeciesSubtreeStore.addChangeListener(this.setAssemblyIdsFromActiveSpeciesSubtree);
-    MapStore.addChangeListener(this.filterAssembliesOnMapAndTable);
+    // this.setAssemblyIdsFromActiveSpeciesSubtree();
+    //
+    // SpeciesSubtreeStore.addChangeListener(this.setAssemblyIdsFromActiveSpeciesSubtree);
+    // MapStore.addChangeListener(this.filterAssembliesOnMapAndTable);
   },
 
-  filterAssembliesOnMapAndTable: function () {
+  handleMapStoreChange: function () {
     this.setState({
       assemblyIds: MapStore.getAssemblyIds()
     });
   },
 
-  setAssemblyIdsFromActiveSpeciesSubtree: function () {
-    var activeSpeciesSubtreeId = SpeciesSubtreeStore.getActiveSpeciesSubtreeId();
-    var activeSpeciesSubtree = SpeciesSubtreeStore.getActiveSpeciesSubtree();
-    var assemblyIdsFromSpeciesSubtree = [];
+  // filterAssembliesOnMapAndTable: function () {
+  //   this.setState({
+  //     assemblyIds: MapStore.getAssemblyIds()
+  //   });
+  // },
 
-    var uploadedCollectionId = UploadedCollectionStore.getUploadedCollection().collectionId;
-
-    if (activeSpeciesSubtreeId === uploadedCollectionId) {
-
-      assemblyIdsFromSpeciesSubtree = TreeUtils.extractIdsFromNewick(UploadedCollectionStore.getUploadedCollectionTree());
-
-    } else if (activeSpeciesSubtree) {
-
-      assemblyIdsFromSpeciesSubtree = TreeUtils.extractIdsFromNewick(activeSpeciesSubtree);
-
-    } else {
-
-      assemblyIdsFromSpeciesSubtree = [];
-
-    }
-
-    this.setState({
-      assemblyIds: assemblyIdsFromSpeciesSubtree
-    });
-  },
+  // setAssemblyIdsFromActiveSpeciesSubtree: function () {
+  //   var activeSpeciesSubtreeId = SpeciesSubtreeStore.getActiveSpeciesSubtreeId();
+  //   var activeSpeciesSubtree = SpeciesSubtreeStore.getActiveSpeciesSubtree();
+  //   var assemblyIdsFromSpeciesSubtree = [];
+  //
+  //   var uploadedCollectionId = UploadedCollectionStore.getUploadedCollection().collectionId;
+  //
+  //   if (activeSpeciesSubtreeId === uploadedCollectionId) {
+  //
+  //     assemblyIdsFromSpeciesSubtree = TreeUtils.extractIdsFromNewick(UploadedCollectionStore.getUploadedCollectionTree());
+  //
+  //   } else if (activeSpeciesSubtree) {
+  //
+  //     assemblyIdsFromSpeciesSubtree = TreeUtils.extractIdsFromNewick(activeSpeciesSubtree);
+  //
+  //   } else {
+  //
+  //     assemblyIdsFromSpeciesSubtree = [];
+  //
+  //   }
+  //
+  //   this.setState({
+  //     assemblyIds: assemblyIdsFromSpeciesSubtree
+  //   });
+  // },
 
   // shouldComponentUpdate: function (nextProps) {
   //   var currentFilteredMapData = this.props.filteredMapData;
@@ -238,8 +246,8 @@ var Map = React.createClass({
         return;
       }
 
-      latitude = parseFloat(assembly.latitude);
-      longitude = parseFloat(assembly.longitude);
+      latitude = parseFloat(assembly.metadata.geography.position.latitude);
+      longitude = parseFloat(assembly.metadata.geography.position.longitude);
       shape = 'square';
       colour = '#ffffff';
 
@@ -256,8 +264,8 @@ var Map = React.createClass({
         return;
       }
 
-      latitude = parseFloat(assembly.latitude);
-      longitude = parseFloat(assembly.longitude);
+      latitude = parseFloat(assembly.metadata.geography.position.latitude);
+      longitude = parseFloat(assembly.metadata.geography.position.longitude);
       shape = 'square';
       colour = '#000000';
 
@@ -267,78 +275,6 @@ var Map = React.createClass({
     }.bind(this));
 
     this.fitAllMarkers();
-  },
-
-  __createMarkers: function () {
-    var isolates = this.data;
-
-    var isolatesGroupedByPosition = MapUtils.groupDataObjectsByPosition(isolates);
-    var isolatePositionKeys = Object.keys(isolatesGroupedByPosition);
-
-    var columnName = this.props.colourDataByDataField;
-    var isolateIds = Object.keys(isolates);
-    var markers = {};
-    var marker;
-    var latitude;
-    var longitude;
-    var shape;
-    var colour;
-    var isolate;
-    var isolateId;
-    var isolatePositionKey;
-    var isolateGroup;
-    var isolateGroupHasManyItems;
-
-    this.clearMarkers();
-
-    isolatePositionKeys.forEach(function (isolatePositionKey) {
-
-      isolateGroup = isolatesGroupedByPosition[isolatePositionKey];
-      isolate = isolateGroup[0];
-      isolateId = DataUtils.getDataObject__Id(isolate);
-
-      latitude = isolate.__latitude;
-      longitude = isolate.__longitude;
-
-      isolateGroupHasManyItems = (isolateGroup.length > 1);
-
-      if (! columnName) {
-
-        shape = DEFAULT.SHAPE;
-        colour = DEFAULT.COLOUR;
-
-      } else {
-
-        if (isolateGroupHasManyItems) {
-
-          if (isolate[columnName + '__groupcolour'] || isolate[columnName + '__groupcolor']) {
-
-            colour = isolate[columnName + '__groupcolour'] || isolate[columnName + '__groupcolor'];
-
-          } else {
-
-            colour = isolate[columnName + '__colour'] || isolate[columnName + '__color'];
-
-          }
-
-        } else {
-
-          colour = isolate[columnName + '__colour'] || isolate[columnName + '__color'];
-        }
-
-        shape = isolate[columnName + '__shape'];
-      }
-
-      marker = this.createMarker(isolateId, latitude, longitude, shape, colour);
-      isolatePositionKey = MapUtils.getPositionKey(latitude, longitude);
-
-      markers[isolatePositionKey] = marker;
-
-      this.listenToMarkerClick(marker, latitude, longitude);
-
-    }.bind(this));
-
-    this.markers = markers;
   },
 
   listenToMarkerClick: function (marker, latitude, longitude) {

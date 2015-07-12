@@ -134,24 +134,20 @@ var Tree = React.createClass({
     return DEFAULT_TREE_SETTINGS.SHOW_TREE_LABELS;
   },
 
-  componentWillUpdate: function () {
-    console.log('4');
-  },
+  componentWillUpdate: function () {},
 
   componentWillMount: function () {
     this.tree = SpeciesSubtreeStore.getActiveSpeciesSubtree();
   },
 
-  componentWillUnmount: function () {
-    console.log(5);
-  },
+  componentWillUnmount: function () {},
 
   componentDidMount: function () {
     this.renderTree();
   },
 
   destroyTree: function () {
-    
+
   },
 
   componentDidUpdate: function () {

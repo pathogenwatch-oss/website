@@ -34,6 +34,10 @@ var PublicCollectionStore = assign({}, EventEmitter.prototype, {
 
   getPublicCollectionId: function () {
     return publicCollection.collectionId;
+  },
+
+  getPublicCollectionAssemblies: function () {
+    return this.getPublicCollection().assemblies;
   }
 
 });

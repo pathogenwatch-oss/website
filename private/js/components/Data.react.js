@@ -7,18 +7,21 @@ var DownloadProject = require('./DownloadProject.react');
 
 var Data = React.createClass({
 
-  propTypes: {
-    isolates: React.PropTypes.object.isRequired,
-    shortId: React.PropTypes.string.isRequired,
-    metadata: React.PropTypes.object.isRequired,
-    filteredTableData: React.PropTypes.object.isRequired,
-    colourDataByDataField: React.PropTypes.string,
-    layoutSouthHeight: React.PropTypes.number.isRequired,
-    onTimelineFilterChange: React.PropTypes.func.isRequired,
-    layoutNavigation: React.PropTypes.string.isRequired
-  },
+  // propTypes: {
+  //   isolates: React.PropTypes.object.isRequired,
+  //   shortId: React.PropTypes.string.isRequired,
+  //   metadata: React.PropTypes.object.isRequired,
+  //   filteredTableData: React.PropTypes.object.isRequired,
+  //   colourDataByDataField: React.PropTypes.string,
+  //   layoutSouthHeight: React.PropTypes.number.isRequired,
+  //   onTimelineFilterChange: React.PropTypes.func.isRequired,
+  //   layoutNavigation: React.PropTypes.string.isRequired
+  // },
 
   getTimeline: function () {
+
+    return null;
+
     if (this.props.filterStartDate && this.props.filterEndDate) {
       return (
         <Timeline
@@ -54,11 +57,15 @@ var Data = React.createClass({
     return (
       <section style={sectionStyle}>
 
-        <div style={ this.props.layoutNavigation === 'table' ? showStyle : hideStyle }>
+        <div style={ 'table' === 'table' ? showStyle : hideStyle }>
 
+          <Table />
+
+          {/*
           <Table
             data={this.props.isolates}
             filteredTableData={this.props.filteredTableData} />
+          */}
 
         </div>
 
@@ -67,26 +74,29 @@ var Data = React.createClass({
         </div>
 
         <div style={ this.props.layoutNavigation === 'display' ? showStyle : hideStyle }>
-
+          {/*
           <Filters
             data={this.props.isolates}
             handleColourDataByDataField={this.props.handleColourDataByDataField}
             handleChangeNodeLabel={this.props.handleChangeNodeLabel}
             colourDataByDataField={this.props.colourDataByDataField}
             setNodeLabelToDataField={this.props.setNodeLabelToDataField} />
+            */}
 
         </div>
 
         <div style={ this.props.layoutNavigation === 'download' ? showStyle : hideStyle }>
 
+          {/*
           <DownloadProject projectId={this.props.shortId} />
-
+          */}
         </div>
 
         <div style={ this.props.layoutNavigation === 'about' ? showStyle : hideStyle }>
 
+          {/*
           <AboutProject metadata={this.props.metadata} />
-
+          */}
         </div>
 
       </section>

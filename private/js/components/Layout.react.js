@@ -291,7 +291,7 @@ var Layout = React.createClass({
           onDragEnd={this.handleLayoutNorthSourthDividerDragEnd} />
 
         <LayoutSouth top={this.state.layoutSouthTop}>
-          {/*
+          {
           <Data
             isolates={this.state.isolates}
             metadata={this.state.metadata}
@@ -302,7 +302,7 @@ var Layout = React.createClass({
             handleChangeNodeLabel={this.handleChangeNodeLabel}
             colourDataByDataField={this.state.colourDataByDataField}
             setNodeLabelToDataField={this.state.treeNodeLabel} />
-          */}
+          }
         </LayoutSouth>
 
       </LayoutContainer>

@@ -6,6 +6,7 @@ var DEFAULT = require('../defaults');
 
 var UploadedCollectionStore = require('../stores/UploadedCollectionStore');
 var MapActionCreators = require('../actions/MapActionCreators');
+var TableActionCreators = require('../actions/TableActionCreators');
 var SpeciesSubtreeActionCreators = require('../actions/SpeciesSubtreeActionCreators');
 
 var DEFAULT_TREE_SETTINGS = {
@@ -96,7 +97,7 @@ var Tree = React.createClass({
     var branch;
 
     assemblyIds.forEach(function (assemblyId) {
-      assemblyFileName = uploadedCollection.assemblies[assemblyId].fileAssemblyId || '';
+      assemblyFileName = uploadedCollection.assemblies[assemblyId].metadata.fileAssemblyId || '';
       branch = this.phylocanvas.branches[assemblyId];
 
       if (branch && branch.leaf) {
@@ -284,11 +285,10 @@ var Tree = React.createClass({
     }
 
     if (selectedNodeIds.length === 0) {
-
-
       SpeciesSubtreeActionCreators.setActiveSpeciesSubtreeId(UploadedCollectionStore.getUploadedCollectionId());
     } else {
       MapActionCreators.setAssemblyIds(selectedNodeIds);
+      TableActionCreators.setAssemblyIds(selectedNodeIds);
     }
   },
 

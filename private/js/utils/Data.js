@@ -1,5 +1,6 @@
 var Papa = require('papaparse');
 var newickParser = require('biojs-io-newick');
+var moment = require('moment');
 
 var DATA_OBJECT_ID_REGEX = /[.'"]/g;
 var MAXIMUM_OBJECT_ID_LENGTH = 100;
@@ -540,7 +541,12 @@ function sanitize(data) {
   return sanitizedData;
 }
 
+function getFormattedDateString(date) {
+  return moment(date.year + '-' + date.month + '-' + date.day, 'YYYY-MM-DD').format('MMMM Do YYYY');
+}
+
 module.exports = {
+  getFormattedDateString: getFormattedDateString,
   sanitize: sanitize,
   validateCsvIds: validateCsvIds,
   getColor: getColor,
