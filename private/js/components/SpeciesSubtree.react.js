@@ -107,11 +107,41 @@ var Tree = React.createClass({
     this.phylocanvas.on('subtree', this.handleRedrawSubtree);
     this.phylocanvas.on('historytoggle', this.handleHistoryToggle);
 
-    this.setNodeLabels();
-    this.setNodeShapeAndColour();
+    this.setNodesLabel();
+    this.setNodesShapeAndColour();
   },
 
-  setNodeLabels: function () {
+  getNodeShapeForAssembly: function (assembly) {
+    return 'square';
+  },
+
+  getNodeColourForAssembly: function (assembly) {
+    var selectedTableColumnName = TableStore.getSelectedTableColumnName();
+    var resistanceProfileResult;
+    var colour = '#ffffff';
+
+    if (this.selectedTableColumnNameIsAntibiotic()) {
+      resistanceProfileResult = assembly.analysis.resistanceProfile[selectedTableColumnName].resistanceResult;
+
+      if (resistanceProfileResult === 'RESISTANT') {
+        colour = '#ff0000';
+      } else {
+        colour = '#ffffff';
+      }
+
+    } else if (this.isAssemblyInPublicCollection(assembly.metadata.assemblyId)) {
+
+      colour = '#ffffff';
+
+    } else if (this.isAssemblyInUploadedCollection(assembly.metadata.assemblyId)) {
+
+      colour = '#000000';
+    }
+
+    return colour;
+  },
+
+  setNodesLabel: function () {
     var publicCollection = PublicCollectionStore.getPublicCollection();
     var assemblyIds = Object.keys(publicCollection.assemblies);
     var nodeLabel = this.state.nodeLabel;
@@ -151,63 +181,113 @@ var Tree = React.createClass({
     this.phylocanvas.draw();
   },
 
-  setNodeShapeAndColour: function () {
-    this.setDefaultNodeShapeAndColour();
-    this.emphasizeShapeAndColourForNodesThatHaveSubtrees();
-    this.setResistanceProfileNodeShapeAndColour();
+  getCombinedPublicAndUploadedCollectionAssemblies: function () {
+    var publicCollectionAssemblies = PublicCollectionStore.getPublicCollectionAssemblies();
+    var uploadedCollectionAssemblies = UploadedCollectionStore.getUploadedCollectionAssemblies();
+    return assign({}, publicCollectionAssemblies, uploadedCollectionAssemblies);
   },
 
-  setDefaultNodeShapeAndColour: function () {
-    var branches = this.phylocanvas.branches;
-    var branchIds = Object.keys(branches);
-
-    this.phylocanvas.setNodeColourAndShape(branchIds, '#ffffff', 'o');
-  },
-
-  setResistanceProfileNodeShapeAndColour: function () {
+  selectedTableColumnNameIsAntibiotic: function () {
     var selectedTableColumnName = TableStore.getSelectedTableColumnName();
     var listOfAntibiotics = Object.keys(ANTIBIOTICS);
 
-    if (listOfAntibiotics.indexOf(selectedTableColumnName) > -1) {
+    return (listOfAntibiotics.indexOf(selectedTableColumnName) > -1);
+  },
 
-      var publicCollectionAssemblies = PublicCollectionStore.getPublicCollectionAssemblies();
-      var uploadedCollectionAssemblies = UploadedCollectionStore.getUploadedCollectionAssemblies();
+  isAssemblyInPublicCollection: function (assemblyId) {
+    var publicCollectionAssemblyIds = PublicCollectionStore.getPublicCollectionAssemblyIds();
 
-      var combinedAssemblies = assign({}, publicCollectionAssemblies, uploadedCollectionAssemblies);
-      var combinedAssemblyIds = Object.keys(combinedAssemblies);
+    return (publicCollectionAssemblyIds.indexOf(assemblyId) > -1);
+  },
 
-      var branch;
-      var assembly;
-      var resistanceProfileResult;
-      var resistanceProfileColour;
+  isAssemblyInUploadedCollection: function (assemblyId) {
+    var uploadedCollectionAssemblyIds = UploadedCollectionStore.getUploadedCollectionAssemblyIds();
 
-      combinedAssemblyIds.forEach(function (assemblyId) {
-        branch = this.phylocanvas.branches[assemblyId];
+    return (uploadedCollectionAssemblyIds.indexOf(assemblyId) > -1);
+  },
 
-        if (branch && branch.leaf) {
+  setNodeShapeAndColour: function (assembly, shape, colour) {
+    var branch = this.phylocanvas.branches[assembly.metadata.assemblyId];
 
-          assembly = combinedAssemblies[assemblyId];
-          resistanceProfileResult = assembly.analysis.resistanceProfile[selectedTableColumnName].resistanceResult;
-
-          if (resistanceProfileResult === 'RESISTANT') {
-            resistanceProfileColour = '#ff0000';
-          } else {
-            resistanceProfileColour = '#ffffff';
-          }
-
-          branch.colour = resistanceProfileColour;
-        }
-
-      }.bind(this));
+    if (branch && branch.leaf) {
+      branch.shape = shape;
+      branch.colour = colour;
     }
   },
 
-  emphasizeShapeAndColourForNodesThatHaveSubtrees: function () {
+  setNodesShapeAndColour: function () {
+    var combinedAssemblies = this.getCombinedPublicAndUploadedCollectionAssemblies();
+    var combinedAssemblyIds = Object.keys(combinedAssemblies);
+    var assembly;
+    var shape;
+    var colour;
 
-    var uploadedCollectionAssemblyIds = UploadedCollectionStore.getUploadedCollectionAssemblyIds();
+    combinedAssemblyIds.forEach(function (assemblyId) {
 
-    this.phylocanvas.setNodeColourAndShape(uploadedCollectionAssemblyIds, '#000000', 'o');
+      assembly = combinedAssemblies[assemblyId];
+
+      if (! assembly) {
+        return;
+      }
+
+      shape = this.getNodeShapeForAssembly(assembly);
+      colour = this.getNodeColourForAssembly(assembly);
+
+      this.setNodeShapeAndColour(assembly, shape, colour);
+    }.bind(this));
   },
+
+  // setDefaultNodeShapeAndColour: function () {
+  //   var branches = this.phylocanvas.branches;
+  //   var branchIds = Object.keys(branches);
+  //
+  //   this.phylocanvas.setNodeColourAndShape(branchIds, '#ffffff', 'o');
+  // },
+
+  // setResistanceProfileNodeShapeAndColour: function () {
+  //   var selectedTableColumnName = TableStore.getSelectedTableColumnName();
+  //   var listOfAntibiotics = Object.keys(ANTIBIOTICS);
+  //
+  //   if (listOfAntibiotics.indexOf(selectedTableColumnName) > -1) {
+  //
+  //     var publicCollectionAssemblies = PublicCollectionStore.getPublicCollectionAssemblies();
+  //     var uploadedCollectionAssemblies = UploadedCollectionStore.getUploadedCollectionAssemblies();
+  //
+  //     var combinedAssemblies = assign({}, publicCollectionAssemblies, uploadedCollectionAssemblies);
+  //     var combinedAssemblyIds = Object.keys(combinedAssemblies);
+  //
+  //     var branch;
+  //     var assembly;
+  //     var resistanceProfileResult;
+  //     var resistanceProfileColour;
+  //
+  //     combinedAssemblyIds.forEach(function (assemblyId) {
+  //       branch = this.phylocanvas.branches[assemblyId];
+  //
+  //       if (branch && branch.leaf) {
+  //
+  //         assembly = combinedAssemblies[assemblyId];
+  //         resistanceProfileResult = assembly.analysis.resistanceProfile[selectedTableColumnName].resistanceResult;
+  //
+  //         if (resistanceProfileResult === 'RESISTANT') {
+  //           resistanceProfileColour = '#ff0000';
+  //         } else {
+  //           resistanceProfileColour = '#ffffff';
+  //         }
+  //
+  //         branch.colour = resistanceProfileColour;
+  //       }
+  //
+  //     }.bind(this));
+  //   }
+  // },
+  //
+  // emphasizeShapeAndColourForNodesThatHaveSubtrees: function () {
+  //
+  //   var uploadedCollectionAssemblyIds = UploadedCollectionStore.getUploadedCollectionAssemblyIds();
+  //
+  //   this.phylocanvas.setNodeColourAndShape(uploadedCollectionAssemblyIds, '#000000', 'o');
+  // },
 
   handleRedrawSubtree: function () {
     var isolateIds = this.getCurrentTreeAllIsolateIds();
@@ -215,87 +295,10 @@ var Tree = React.createClass({
   },
 
   componentDidUpdate: function () {
-
-    this.setNodeLabels();
+    this.setNodesLabel();
     this.phylocanvas.resizeToContainer();
-
-    // if (!this.state.isHighlightingBranch) {
-    //   this.phylocanvas.selectNodes(this.props.selectIsolates);
-    //   this.previouslySelectedNodes = this.props.selectIsolates;
-    // }
-
-    // if (this.props.nodeLabel) {
-    //   this.setNodeLabel(this.props.nodeLabel);
-    // }
-
-    this.setNodeShapeAndColour();
+    this.setNodesShapeAndColour();
     this.phylocanvas.draw();
-  },
-
-  setNodeLabel: function (nodeLabel) {
-    // var isolates = this.props.isolates;
-    // var isolateIds = Object.keys(isolates);
-    // var isolate;
-    //
-    // isolateIds.forEach(function (isolateId) {
-    //   isolate = isolates[isolateId];
-    //
-    //   if (this.phylocanvas.branches[isolateId] && this.phylocanvas.branches[isolateId].leaf) {
-    //     this.phylocanvas.branches[isolateId].label = isolate[nodeLabel] || '';
-    //   }
-    // }.bind(this));
-  },
-
-  __setNodeShapeAndColour: function () {
-    // var isolates = this.props.isolates;
-    // var isolateIds = Object.keys(isolates);
-    // var colourDataByDataField = this.props.colourDataByDataField;
-    // var isolate;
-    // var branch;
-    // var shape;
-    // var colour;
-    //
-    // isolateIds.forEach(function (isolateId) {
-    //   isolate = isolates[isolateId];
-    //   branch = this.phylocanvas.branches[isolateId];
-    //
-    //   if (branch && branch.leaf) {
-    //
-    //     if (this.props.filterStartDate && this.props.filterEndDate && TimelineUtils.doesDataObjectHaveTimelineDate(isolate)) {
-    //       if (! TimelineUtils.isDataObjectWithinDateRange(this.props.filterStartDate, this.props.filterEndDate, isolate)) {
-    //
-    //         branch.colour = DEFAULT.COLOUR;
-    //         branch.nodeShape = DEFAULT.SHAPE;
-    //         return;
-    //       }
-    //     }
-    //
-    //     if (! colourDataByDataField) {
-    //
-    //       shape = DEFAULT.SHAPE;
-    //       colour = DEFAULT.COLOUR;
-    //
-    //     } else {
-    //
-    //       if (typeof isolate[colourDataByDataField + '__shape'] === 'undefined') {
-    //         shape = DEFAULT.SHAPE;
-    //       } else {
-    //         shape = isolate[colourDataByDataField + '__shape'].toLowerCase();
-    //       }
-    //
-    //       if (typeof isolate[colourDataByDataField + '__colour'] === 'undefined' && typeof isolate[colourDataByDataField + '__color'] === 'undefined') {
-    //         colour = DEFAULT.COLOUR;
-    //       } else {
-    //         colour = isolate[colourDataByDataField + '__colour'] || isolate[colourDataByDataField + '__color'];
-    //       }
-    //     }
-    //
-    //     branch.nodeShape = shape;
-    //     branch.colour = colour;
-    //   }
-    // }.bind(this));
-    //
-    // this.phylocanvas.draw();
   },
 
   redrawOriginalTree: function () {
