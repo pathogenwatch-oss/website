@@ -53,7 +53,6 @@ var UploadedCollectionStore = assign({}, EventEmitter.prototype, {
   getUploadedCollectionTree: function () {
     return uploadedCollectionTree;
   }
-
 });
 
 function handleAction(action) {

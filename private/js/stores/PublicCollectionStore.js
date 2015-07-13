@@ -38,8 +38,11 @@ var PublicCollectionStore = assign({}, EventEmitter.prototype, {
 
   getPublicCollectionAssemblies: function () {
     return this.getPublicCollection().assemblies;
-  }
+  },
 
+  getPublicCollectionAssemblyIds: function () {
+    return Object.keys(this.getPublicCollection().assemblies);
+  }
 });
 
 function handleAction(action) {

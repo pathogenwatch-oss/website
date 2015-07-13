@@ -545,7 +545,12 @@ function getFormattedDateString(date) {
   return moment(date.year + '-' + date.month + '-' + date.day, 'YYYY-MM-DD').format('MMMM Do YYYY');
 }
 
+function isEqualObjects(firstObject, secondObject) {
+  return (JSON.stringify(firstObject) === JSON.stringify(secondObject));
+}
+
 module.exports = {
+  isEqualObjects: isEqualObjects,
   getFormattedDateString: getFormattedDateString,
   sanitize: sanitize,
   validateCsvIds: validateCsvIds,

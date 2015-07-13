@@ -5,16 +5,17 @@ var TimelineUtils = require('../utils/Timeline');
 var DataUtils = require('../utils/Data');
 var TreeUtils = require('../utils/Tree');
 var DEFAULT = require('../defaults');
+var ANTIBIOTICS = require('../../static_data/antibiotics.json');
 
 var SpeciesSubtreeStore = require('../stores/SpeciesSubtreeStore');
 var PublicCollectionStore = require('../stores/PublicCollectionStore');
 var UploadedCollectionStore = require('../stores/UploadedCollectionStore');
 var MapStore = require('../stores/MapStore');
+var TableStore = require('../stores/TableStore');
+
+var assign = require('object-assign');
 
 var Map = React.createClass({
-
-  data: null,
-
   map: null,
   markers: {},
   infoWindow: null,
@@ -23,9 +24,6 @@ var Map = React.createClass({
   propTypes: {
     width: React.PropTypes.number.isRequired,
     height: React.PropTypes.number.isRequired
-    // filteredMapData: React.PropTypes.object.isRequired,
-    // filterStartDate: React.PropTypes.object,
-    // filterEndDate: React.PropTypes.object
   },
 
   getInitialState: function () {
@@ -35,16 +33,10 @@ var Map = React.createClass({
   },
 
   componentDidMount: function () {
-    // this.setData();
     this.initializeMap();
-    // this.dangerouslyListenToInfoWindowIsolateClick();
 
     MapStore.addChangeListener(this.handleMapStoreChange);
-
-    // this.setAssemblyIdsFromActiveSpeciesSubtree();
-    //
-    // SpeciesSubtreeStore.addChangeListener(this.setAssemblyIdsFromActiveSpeciesSubtree);
-    // MapStore.addChangeListener(this.filterAssembliesOnMapAndTable);
+    TableStore.addChangeListener(this.handleTableStoreChange);
   },
 
   handleMapStoreChange: function () {
@@ -53,116 +45,13 @@ var Map = React.createClass({
     });
   },
 
-  // filterAssembliesOnMapAndTable: function () {
-  //   this.setState({
-  //     assemblyIds: MapStore.getAssemblyIds()
-  //   });
-  // },
-
-  // setAssemblyIdsFromActiveSpeciesSubtree: function () {
-  //   var activeSpeciesSubtreeId = SpeciesSubtreeStore.getActiveSpeciesSubtreeId();
-  //   var activeSpeciesSubtree = SpeciesSubtreeStore.getActiveSpeciesSubtree();
-  //   var assemblyIdsFromSpeciesSubtree = [];
-  //
-  //   var uploadedCollectionId = UploadedCollectionStore.getUploadedCollection().collectionId;
-  //
-  //   if (activeSpeciesSubtreeId === uploadedCollectionId) {
-  //
-  //     assemblyIdsFromSpeciesSubtree = TreeUtils.extractIdsFromNewick(UploadedCollectionStore.getUploadedCollectionTree());
-  //
-  //   } else if (activeSpeciesSubtree) {
-  //
-  //     assemblyIdsFromSpeciesSubtree = TreeUtils.extractIdsFromNewick(activeSpeciesSubtree);
-  //
-  //   } else {
-  //
-  //     assemblyIdsFromSpeciesSubtree = [];
-  //
-  //   }
-  //
-  //   this.setState({
-  //     assemblyIds: assemblyIdsFromSpeciesSubtree
-  //   });
-  // },
-
-  // shouldComponentUpdate: function (nextProps) {
-  //   var currentFilteredMapData = this.props.filteredMapData;
-  //   var nextFilteredMapData = nextProps.filteredMapData;
-  //
-  //   var currentWidthHeightObject = {
-  //     width: this.props.width,
-  //     height: this.props.height
-  //   };
-  //   var nextWidthHeightObject = {
-  //     width: nextProps.width,
-  //     height: nextProps.height
-  //   };
-  //
-  //   var currentColourDataByDataField = this.props.colourDataByDataField;
-  //   var nextColourDataByDataField = nextProps.colourDataByDataField;
-  //
-  //   var currentFilterStartDate = this.props.filterStartDate;
-  //   var nextFilterStartDate = nextProps.filterStartDate;
-  //
-  //   var currentFilterEndDate = this.props.filterEndDate;
-  //   var nextFilterEndDate = nextProps.filterEndDate;
-  //
-  //   if (! this.isEqualObjects(currentFilteredMapData, nextFilteredMapData)) {
-  //     return true;
-  //   }
-  //
-  //   if (! this.isEqualObjects(currentWidthHeightObject, nextWidthHeightObject)) {
-  //     return true;
-  //   }
-  //
-  //   if (currentColourDataByDataField !== nextColourDataByDataField) {
-  //     return true;
-  //   }
-  //
-  //   if (currentFilterStartDate !== nextFilterStartDate) {
-  //     return true;
-  //   }
-  //
-  //   if (currentFilterEndDate !== nextFilterEndDate) {
-  //     return true;
-  //   }
-  //
-  //   return false;
-  // },
-
-  componentDidUpdate: function () {
-
-    // this.setData();
-    this.resizeMap();
+  handleTableStoreChange: function () {
     this.createMarkers();
   },
 
-  // setData: function () {
-  //   var startDate = this.props.filterStartDate;
-  //   var endDate = this.props.filterEndDate;
-  //
-  //   this.data = this.props.filteredMapData;
-  //   this.data = MapUtils.getDataObjectsWithCoordinates(this.data);
-  //   this.data = TimelineUtils.getDataObjectsWithinDateRange(startDate, endDate, this.data);
-  // },
-
-  isEqualObjects: function (firstObject, secondObject) {
-    return (JSON.stringify(firstObject) === JSON.stringify(secondObject));
-  },
-
-  dangerouslyListenToInfoWindowIsolateClick: function () {
-    var _this = this;
-
-    $('body').on('click', '[data-info-window-isolate]', function (event) {
-      event.preventDefault();
-
-      var isolateId = $(this).attr('data-info-window-isolate-id');
-      _this.handleInfoWindowIsolateClick(isolateId);
-    });
-  },
-
-  handleInfoWindowIsolateClick: function (isolateId) {
-    this.props.handleInfoWindowIsolateClick(isolateId);
+  componentDidUpdate: function () {
+    this.resizeMap();
+    this.createMarkers();
   },
 
   resizeMap: function () {
@@ -186,7 +75,6 @@ var Map = React.createClass({
     this.map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 
     this.createMarkers();
-    //this.createInfoWindow();
   },
 
   fitAllMarkers: function () {
@@ -224,23 +112,73 @@ var Map = React.createClass({
     marker.setMap(null);
   },
 
-  createMarkers: function () {
+  getCombinedPublicAndUploadedCollectionAssemblies: function () {
+    var publicCollectionAssemblies = PublicCollectionStore.getPublicCollectionAssemblies();
+    var uploadedCollectionAssemblies = UploadedCollectionStore.getUploadedCollectionAssemblies();
+    return assign({}, publicCollectionAssemblies, uploadedCollectionAssemblies);
+  },
 
+  selectedTableColumnNameIsAntibiotic: function () {
+    var selectedTableColumnName = TableStore.getSelectedTableColumnName();
+    var listOfAntibiotics = Object.keys(ANTIBIOTICS);
+
+    return (listOfAntibiotics.indexOf(selectedTableColumnName) > -1);
+  },
+
+  isAssemblyInPublicCollection: function (assemblyId) {
+    var publicCollectionAssemblyIds = PublicCollectionStore.getPublicCollectionAssemblyIds();
+
+    return (publicCollectionAssemblyIds.indexOf(assemblyId) > -1);
+  },
+
+  isAssemblyInUploadedCollection: function (assemblyId) {
+    var uploadedCollectionAssemblyIds = UploadedCollectionStore.getUploadedCollectionAssemblyIds();
+
+    return (uploadedCollectionAssemblyIds.indexOf(assemblyId) > -1);
+  },
+
+  getMarkerShapeForAssembly: function (assembly) {
+    return 'square';
+  },
+
+  getMarkerColourForAssembly: function (assembly) {
+    var selectedTableColumnName = TableStore.getSelectedTableColumnName();
+    var resistanceProfileResult;
+    var colour = '#ffffff';
+
+    if (this.selectedTableColumnNameIsAntibiotic()) {
+      resistanceProfileResult = assembly.analysis.resistanceProfile[selectedTableColumnName].resistanceResult;
+
+      if (resistanceProfileResult === 'RESISTANT') {
+        colour = '#ff0000';
+      } else {
+        colour = '#ffffff';
+      }
+
+    } else if (this.isAssemblyInPublicCollection(assembly.metadata.assemblyId)) {
+
+      colour = '#ffffff';
+
+    } else if (this.isAssemblyInUploadedCollection(assembly.metadata.assemblyId)) {
+
+      colour = '#000000';
+    }
+
+    return colour;
+  },
+
+  createMarkers: function () {
     this.clearMarkers();
 
-    var markers = [];
-    var publicCollection = PublicCollectionStore.getPublicCollection();
-    var uploadedCollection = UploadedCollectionStore.getUploadedCollection();
+    var combinedAssemblies = this.getCombinedPublicAndUploadedCollectionAssemblies();
     var assembly;
     var latitude;
     var longitude;
     var shape;
     var colour;
-    var marker;
 
     this.state.assemblyIds.forEach(function (assemblyId) {
-
-      assembly = publicCollection.assemblies[assemblyId];
+      assembly = combinedAssemblies[assemblyId];
 
       if (! assembly) {
         return;
@@ -248,65 +186,17 @@ var Map = React.createClass({
 
       latitude = parseFloat(assembly.metadata.geography.position.latitude);
       longitude = parseFloat(assembly.metadata.geography.position.longitude);
-      shape = 'square';
-      colour = '#ffffff';
+
+      shape = this.getMarkerShapeForAssembly(assembly);
+      colour = this.getMarkerColourForAssembly(assembly);
 
       marker = this.createMarker(assemblyId, latitude, longitude, shape, colour);
 
       this.markers[assemblyId] = marker;
-    }.bind(this));
 
-    this.state.assemblyIds.forEach(function (assemblyId) {
-
-      assembly = uploadedCollection.assemblies[assemblyId];
-
-      if (! assembly) {
-        return;
-      }
-
-      latitude = parseFloat(assembly.metadata.geography.position.latitude);
-      longitude = parseFloat(assembly.metadata.geography.position.longitude);
-      shape = 'square';
-      colour = '#000000';
-
-      marker = this.createMarker(assemblyId, latitude, longitude, shape, colour);
-
-      this.markers[assemblyId] = marker;
     }.bind(this));
 
     this.fitAllMarkers();
-  },
-
-  listenToMarkerClick: function (marker, latitude, longitude) {
-    google.maps.event.addListener(marker, 'click', function () {
-      this.handleMarkerClick(latitude, longitude);
-    }.bind(this));
-  },
-
-  handleMarkerClick: function (latitude, longitude) {
-    var isolatePositionKey = MapUtils.getPositionKey(latitude, longitude);
-    var isolatesGroupedByPosition = MapUtils.groupDataObjectsByPosition(this.data);
-    var isolates = isolatesGroupedByPosition[isolatePositionKey];
-    var isolateIds = isolates.map(function (isolate) {
-      return DataUtils.getDataObject__Id(isolate);
-    });
-
-    this.openInfoWindow(latitude, longitude);
-    this.props.handleFilterData(isolateIds);
-  },
-
-  openInfoWindow: function (latitude, longitude) {
-    var isolatePositionKey = MapUtils.getPositionKey(latitude, longitude);
-    var isolatesGroupedByPosition = MapUtils.groupDataObjectsByPosition(this.data);
-    var isolates = isolatesGroupedByPosition[isolatePositionKey];
-    var marker = this.markers[isolatePositionKey];
-    var infoWindow = this.infoWindow;
-    var infoWindowContent = this.getInfoWindowContent(isolates);
-
-    this.infoWindowIsolates = isolates;
-
-    infoWindow.setContent(infoWindowContent);
-    infoWindow.open(this.map, marker);
   },
 
   createMarker: function (dataObjectId, latitude, longitude, shape, colour) {
@@ -345,31 +235,6 @@ var Map = React.createClass({
     });
 
     return marker;
-  },
-
-  createInfoWindow: function () {
-    var infoWindow = new google.maps.InfoWindow({
-      content: ''
-    });
-
-    google.maps.event.addListener(infoWindow, 'closeclick', this.handleCloseInfoWindow);
-
-    this.infoWindow = infoWindow;
-  },
-
-  handleCloseInfoWindow: function () {
-    this.syncTableDataWithMapData();
-  },
-
-  syncTableDataWithMapData: function () {
-    var isolates = this.props.filteredMapData;
-    var isolateIds = Object.keys(isolates);
-
-    this.props.handleFilterData(isolateIds);
-  },
-
-  getInfoWindowContent: function (isolates) {
-    return (React.renderToString(<InfoWindow isolates={isolates} />));
   },
 
   render: function () {

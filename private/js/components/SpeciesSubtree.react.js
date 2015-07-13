@@ -2,6 +2,7 @@ var React = require('react');
 var PhyloCanvas = require('PhyloCanvas');
 var TreeControls = require('./TreeControls.react');
 var DEFAULT = require('../defaults');
+var ANTIBIOTICS = require('../../static_data/antibiotics.json');
 
 var SpeciesSubtreeStore = require('../stores/SpeciesSubtreeStore');
 var PublicCollectionStore = require('../stores/PublicCollectionStore');
@@ -12,6 +13,8 @@ var TableActionCreators = require('../actions/TableActionCreators');
 var SpeciesSubtreeActionCreators = require('../actions/SpeciesSubtreeActionCreators');
 
 var DataUtils = require('../utils/Data');
+
+var assign = require('object-assign');
 
 var DEFAULT_TREE_SETTINGS = {
   SHOW_TREE_LABELS: true,
@@ -115,20 +118,26 @@ var Tree = React.createClass({
     var nodeLabelValue;
     var branch;
 
-    assemblyIds.forEach(function (assemblyId) {
+    var publicCollectionAssemblies = PublicCollectionStore.getPublicCollectionAssemblies();
+    var uploadedCollectionAssemblies = UploadedCollectionStore.getUploadedCollectionAssemblies();
+
+    var combinedAssemblies = assign({}, publicCollectionAssemblies, uploadedCollectionAssemblies);
+    var combinedAssemblyIds = Object.keys(combinedAssemblies);
+
+    combinedAssemblyIds.forEach(function (assemblyId) {
 
       if (nodeLabel === 'Assembly Id') {
-        nodeLabelValue = publicCollection.assemblies[assemblyId].metadata.fileAssemblyId || '';
+        nodeLabelValue = combinedAssemblies[assemblyId].metadata.fileAssemblyId || '';
       } else if (nodeLabel === 'Country') {
-        nodeLabelValue = publicCollection.assemblies[assemblyId].metadata.geography.location.country || '';
+        nodeLabelValue = combinedAssemblies[assemblyId].metadata.geography.location.country || '';
       } else if (nodeLabel === 'Source') {
-        nodeLabelValue = publicCollection.assemblies[assemblyId].metadata.source || '';
+        nodeLabelValue = combinedAssemblies[assemblyId].metadata.source || '';
       } else if (nodeLabel === 'Date') {
-        nodeLabelValue = DataUtils.getFormattedDateString(publicCollection.assemblies[assemblyId].metadata.date) || '';
+        nodeLabelValue = DataUtils.getFormattedDateString(combinedAssemblies[assemblyId].metadata.date) || '';
       } else if (nodeLabel === 'ST') {
-        nodeLabelValue = publicCollection.assemblies[assemblyId].analysis.st || '';
+        nodeLabelValue = combinedAssemblies[assemblyId].analysis.st || '';
       } else {
-        nodeLabelValue = nodeLabel + ': ' + publicCollection.assemblies[assemblyId].analysis.resistanceProfile[nodeLabel].resistanceResult || '';
+        nodeLabelValue = nodeLabel + ': ' + combinedAssemblies[assemblyId].analysis.resistanceProfile[nodeLabel].resistanceResult || '';
       }
 
       branch = this.phylocanvas.branches[assemblyId];
@@ -136,6 +145,7 @@ var Tree = React.createClass({
       if (branch && branch.leaf) {
         branch.label = nodeLabelValue;
       }
+
     }.bind(this));
 
     this.phylocanvas.draw();
@@ -144,6 +154,7 @@ var Tree = React.createClass({
   setNodeShapeAndColour: function () {
     this.setDefaultNodeShapeAndColour();
     this.emphasizeShapeAndColourForNodesThatHaveSubtrees();
+    this.setResistanceProfileNodeShapeAndColour();
   },
 
   setDefaultNodeShapeAndColour: function () {
@@ -151,6 +162,44 @@ var Tree = React.createClass({
     var branchIds = Object.keys(branches);
 
     this.phylocanvas.setNodeColourAndShape(branchIds, '#ffffff', 'o');
+  },
+
+  setResistanceProfileNodeShapeAndColour: function () {
+    var selectedTableColumnName = TableStore.getSelectedTableColumnName();
+    var listOfAntibiotics = Object.keys(ANTIBIOTICS);
+
+    if (listOfAntibiotics.indexOf(selectedTableColumnName) > -1) {
+
+      var publicCollectionAssemblies = PublicCollectionStore.getPublicCollectionAssemblies();
+      var uploadedCollectionAssemblies = UploadedCollectionStore.getUploadedCollectionAssemblies();
+
+      var combinedAssemblies = assign({}, publicCollectionAssemblies, uploadedCollectionAssemblies);
+      var combinedAssemblyIds = Object.keys(combinedAssemblies);
+
+      var branch;
+      var assembly;
+      var resistanceProfileResult;
+      var resistanceProfileColour;
+
+      combinedAssemblyIds.forEach(function (assemblyId) {
+        branch = this.phylocanvas.branches[assemblyId];
+
+        if (branch && branch.leaf) {
+
+          assembly = combinedAssemblies[assemblyId];
+          resistanceProfileResult = assembly.analysis.resistanceProfile[selectedTableColumnName].resistanceResult;
+
+          if (resistanceProfileResult === 'RESISTANT') {
+            resistanceProfileColour = '#ff0000';
+          } else {
+            resistanceProfileColour = '#ffffff';
+          }
+
+          branch.colour = resistanceProfileColour;
+        }
+
+      }.bind(this));
+    }
   },
 
   emphasizeShapeAndColourForNodesThatHaveSubtrees: function () {
