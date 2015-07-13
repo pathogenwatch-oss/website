@@ -1,9 +1,7 @@
 var React = require('react');
 var DEFAULT = require('../defaults');
 
-var CollectionTree = require('./CollectionTree.react');
 var SpeciesSubtree = require('./SpeciesSubtree.react');
-
 var SpeciesSubtreeStore = require('../stores/SpeciesSubtreeStore');
 var SpeciesSubtreeActionCreators = require('../actions/SpeciesTreeActionCreators');
 var UploadedCollectionStore = require('../stores/UploadedCollectionStore');
@@ -25,7 +23,7 @@ var MiddleContent = React.createClass({
 
   componentWillMount: function () {
     this.setState({
-      activeAnalysisTreeId: UploadedCollectionStore.getUploadedCollectionId()
+      activeAnalysisTreeId: SpeciesSubtreeStore.getActiveSpeciesSubtreeId()
     });
     this.createSpeciesSubtreeElements();
   },
@@ -62,16 +60,7 @@ var MiddleContent = React.createClass({
   },
 
   render: function () {
-    if (this.state.activeAnalysisTreeId === UploadedCollectionStore.getUploadedCollectionId()) {
-      return (
-        <CollectionTree
-          width={this.props.width}
-          height={this.props.height} />
-      );
-
-    } else {
-      return this.getSpeciesSubtreeElement();
-    }
+    return this.getSpeciesSubtreeElement();
   }
 });
 

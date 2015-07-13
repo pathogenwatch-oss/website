@@ -16,7 +16,8 @@ var STATIC_DATA = {
     Newman: require('../../static_data/Newman.json').tree,
     T0131: require('../../static_data/T0131.json').tree,
     TCH60: require('../../static_data/TCH60.json').tree,
-    TCH1516: require('../../static_data/TCH1516.json').tree
+    TCH1516: require('../../static_data/TCH1516.json').tree,
+    'e0ce1b47-9928-43fb-9a38-981813b609bc': require('../../static_data/CORE_TREE_RESULT_e0ce1b47-9928-43fb-9a38-981813b609bc.json').newickTree
   }
 };
 
@@ -24,7 +25,7 @@ var speciesSubtrees = null;
 var activeSpeciesSubtreeId = null;
 
 function setSpeciesSubtrees() {
-  speciesSubtrees = STATIC_DATA.SPECIES_SUBTREES
+  speciesSubtrees = STATIC_DATA.SPECIES_SUBTREES;
 }
 
 function setActiveSpeciesSubtreeId(speciesSubtreeId) {
@@ -59,15 +60,6 @@ var Store = assign({}, EventEmitter.prototype, {
 
   getActiveSpeciesSubtree: function () {
     var activeSpeciesSubtree = speciesSubtrees[activeSpeciesSubtreeId];
-    var uplodedCollectionId;
-
-    if (! activeSpeciesSubtree) {
-      uplodedCollectionId = UploadedCollectionStore.getUploadedCollectionId();
-
-      if (activeSpeciesSubtreeId === uplodedCollectionId) {
-        activeSpeciesSubtree = UploadedCollectionStore.getUploadedCollectionTree();
-      }
-    }
 
     return activeSpeciesSubtree || null;
   },
