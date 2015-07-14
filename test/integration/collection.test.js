@@ -1,5 +1,4 @@
 var assert = require('assert');
-var _ = require('lodash');
 var uuid = require('node-uuid');
 
 describe('Collection Routes', function () {
@@ -33,7 +32,7 @@ describe('Collection Routes', function () {
       .expect(function (res) {
         assert(res.body.hasOwnProperty('collectionId'));
         userAssemblyIds.forEach(function (id) {
-          assert(_.includes(res.body.userAssemblyIdToAssemblyIdMap, id));
+          assert(res.body.userAssemblyIdToAssemblyIdMap.hasOwnProperty(id));
         });
       })
       .end(done);

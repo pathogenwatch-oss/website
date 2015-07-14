@@ -42,6 +42,8 @@ describe('Assembly Routes', function () {
   it.only('POST /assembly/add', function (done) {
     var socket = wsClient('http://localhost:3000');
 
+    this.timeout(60000);
+
     socket.on('connect', function () {
       socket.emit('getRoomId');
     });
@@ -51,14 +53,11 @@ describe('Assembly Routes', function () {
       request
         .post('/assembly/add')
         .send({
-          collectionId: 'b8d3aab1-625f-49aa-9857-a5e97f5d6be5',
+          collectionId: 'a8b5e6bb-913f-4afa-895c-4fa431083670',
           socketRoomId: roomId,
-          userAssemblyId: fileName,
-          assemblyId: 'a1de6463-a6b8-4810-bbe4-94d782d452c5',
+          assemblyId: 'b0003004-9abe-48cf-9fda-330312835103',
           metadata: {},
-          sequences: [
-            fs.readFileSync(path.join(__dirname, 'fixtures', fileName), { encoding: 'utf-8' })
-          ]
+          sequences: fs.readFileSync(path.join(__dirname, 'fixtures', fileName), { encoding: 'utf-8' })
         })
         .expect(200)
         .end(function (err) {

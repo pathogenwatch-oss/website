@@ -7,15 +7,18 @@ var messageQueueService = require('services/messageQueue');
 var socketService = require('services/socket');
 
 var LOGGER = require('utils/logging').createLogger('Collection');
-var NEW_COLLECTION_TASK_ID = 'new';
+var IDENTIFIER_TYPES = {
+  COLLECTION: 'Collection',
+  ASSEMBLY: 'Assembly'
+};
+var COLLECTION_OPERATIONS = {
+  INITIATE: 'INITIATE_COLLECTION',
+  EXTEND: 'EXTEND_COLLECTION',
+  DELETE: 'DELETE_COLLECTION',
+  DELETE_ASSEMBLIES: 'DELETE_ASSEMBLIES'
+};
 
-function add(collectionId, userAssemblyIds, callback) {
-  var collectionRequest = {
-    taskId: collectionId || NEW_COLLECTION_TASK_ID,
-    inputData: userAssemblyIds
-  };
-  LOGGER.info('Collection request taskId: ' + collectionRequest.taskId);
-  LOGGER.info('Collection request inputData: ' + collectionRequest.inputData);
+function requestIDs(request, callback) {
   messageQueueService.newCollectionAddQueue(function (queue) {
     queue.subscribe(function (error, message) {
       if (error) {
@@ -23,14 +26,69 @@ function add(collectionId, userAssemblyIds, callback) {
         return callback(error, null);
       }
       LOGGER.info('Received response');
-      callback(null, {
-        collectionId: message.uuid,
-        userAssemblyIdToAssemblyIdMap: message.idMap
-      });
+      callback(null, message);
     });
 
     messageQueueService.getCollectionIdExchange()
-      .publish('id-request', collectionRequest, { replyTo: queue.name });
+      .publish('id-request', request, { replyTo: queue.name });
+  });
+}
+
+function manageCollection(request, callback) {
+  messageQueueService.newCollectionAddQueue(function (queue) {
+    queue.subscribe(function (error, message) {
+      if (error) {
+        LOGGER.error(error);
+        return callback(error, null);
+      }
+      LOGGER.info('Received response', message);
+      callback(null, message);
+    });
+
+    messageQueueService.getCollectionIdExchange()
+      .publish('manage-collection', request, { replyTo: queue.name });
+  });
+}
+
+function add(collectionId, userAssemblyIds, callback) {
+  var collectionRequest = {
+    identifierType: IDENTIFIER_TYPES.COLLECTION,
+    count: 1
+  };
+  var assemblyRequest = {
+    identifierType: IDENTIFIER_TYPES.ASSEMBLY,
+    count: userAssemblyIds.length
+  };
+  LOGGER.info('Collection ids requested: ' + collectionRequest.count);
+  LOGGER.info('Assembly ids requested: ' + assemblyRequest.count);
+
+  async.parallel({
+    collection: requestIDs.bind(null, collectionRequest),
+    assembly: requestIDs.bind(null, assemblyRequest)
+  }, function (error, results) {
+    if (error) {
+      LOGGER.error(error);
+      return callback(error, null);
+    }
+    LOGGER.info('Received IDs successfully:', results);
+    manageCollection({
+      collectionId: results.collection.identifiers[0],
+      assemblyIds: results.assembly.identifiers,
+      collectionOperation: COLLECTION_OPERATIONS.INITIATE
+    }, function (initiateError) {
+      if (initiateError) {
+        LOGGER.error(initiateError);
+        return callback(initiateError, null);
+      }
+      callback(null, {
+        collectionId: results.collection.identifiers[0],
+        userAssemblyIdToAssemblyIdMap:
+          results.assembly.identifiers.reduce(function (map, newId) {
+            map[userAssemblyIds.shift()] = newId;
+            return map;
+          }, {})
+      });
+    });
   });
 }
 

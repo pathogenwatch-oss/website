@@ -74,8 +74,6 @@ function beginUpload(ids, metadata, sequences) {
       );
 
       var assembly = {
-        taskId: ids.assemblyId,
-        inputData: sequences,
         speciesId: '1280',
         assemblyId: ids.assemblyId,
         collectionId: ids.collectionId,

@@ -22,7 +22,6 @@
   "devDependencies": {
     "cgps-style": "imperialcollegelondon/javascript#cgps-0.0.5",
     "eslint": "^0.24.0",
-    "lodash": "^3.3.1",
     "mocha": "^2.1.0",
     "rewire": "^2.1.4",
     "sinon": "^1.12.2",
@@ -30,7 +29,7 @@
     "supertest": "^0.15.0"
   },
   "nodepath": "./src",
-  "testcmd": "NODE_PATH=$npm_package_nodepath NODE_ENV='testing' mocha -t 10000 --reporter spec",
+  "testcmd": "NODE_PATH=$npm_package_nodepath NODE_ENV='test' mocha -t 10000 --reporter spec",
   "scripts": {
     "start": "NODE_PATH=$npm_package_nodepath node start.js | bunyan -o short",
     "test": "eval $npm_package_testcmd 'test/unit/**/*.test.js'",

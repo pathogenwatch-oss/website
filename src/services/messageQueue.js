@@ -53,15 +53,12 @@ function newAssemblyNotificationQueue(ids, callback) {
       // binding routing key
       queue.bind(
         exchanges.NOTIFICATION.name,
-        '*.ASSEMBLY.' + ids.assemblyId
+        '1280.*.ASSEMBLY.' + ids.assemblyId
       );
+
       queue.bind(
         exchanges.NOTIFICATION.name,
-        'CORE_TREE_RESULT.COLLECTION.' + ids.collectionId
-      );
-      queue.bind(
-        exchanges.NOTIFICATION.name,
-        'COLLECTION_TREE.COLLECTION.' + ids.collectionId
+        '1280.*.COLLECTION.' + ids.collectionId
       );
 
       parseMessagesAsJson(queue);
