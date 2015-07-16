@@ -7,5 +7,5 @@ module.exports = function (callback) {
     socket.emit('getRoomId');
   });
 
-  socket.on('roomId', callback.bind(socket));
+  socket.on('roomId', callback.bind(null, socket));
 };

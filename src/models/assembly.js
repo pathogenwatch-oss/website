@@ -22,14 +22,13 @@ var ASSEMBLY_ANALYSES = {
   CORE: 'CORE_RESULT',
   SCCMEC: 'SCCMEC'
 };
-var TOTAL_ANALYSES = Object.keys(ASSEMBLY_ANALYSES).length;
 
 function beginUpload(ids, metadata, sequences) {
   socketService.notifyAssemblyUpload(ids, 'UPLOAD_OK');
   messageQueueService.newAssemblyNotificationQueue(
     ids,
     function (notificationQueue) {
-      var uploadResults = [];
+      var expectedResults = Object.keys(ASSEMBLY_ANALYSES);
       notificationQueue.subscribe(function (error, message) {
         if (error) {
           return LOGGER.error(error);
@@ -40,16 +39,20 @@ function beginUpload(ids, metadata, sequences) {
           return LOGGER.warn('Skipping task: ' + message.taskType);
         }
 
-        socketService.notifyAssemblyUpload(ids, result);
-        uploadResults.push(message.taskType);
-
         LOGGER.info(
-          'Done Tasks for assembly ' + ids.assemblyId + ': ' + uploadResults
+          'Received notification for assembly ' + ids.assemblyId + ': ' + message.taskType
         );
 
-        if (uploadResults.length === TOTAL_ANALYSES) {
+        socketService.notifyAssemblyUpload(ids, result);
+        expectedResults.splice(message.taskType, 1);
+
+        LOGGER.info(
+          'Remaining tasks for assembly ' + ids.assemblyId + ': ' + expectedResults
+        );
+
+        if (expectedResults.length === 0) {
           LOGGER.info(
-            uploadResults.length + ' tasks completed, destroying ' +
+            'Assembly ' + ids.assemblyId + ' tasks completed, destroying ' +
               notificationQueue.name
           );
           notificationQueue.destroy();
