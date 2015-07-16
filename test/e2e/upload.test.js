@@ -9,7 +9,7 @@ describe('Full Upload Test', function () {
   it('should complete a full upload', function (done) {
     this.timeout(1000 * 60 * 5);
 
-    var assemblyFilenames = [ 'JH1.fna', 'JH9.fa', 'MW2.fna' ];
+    var assemblyFilenames = [ 'JH1.fna', 'JH9.fna', 'MW2.fna' ];
 
     registerCollection(assemblyFilenames)
       .end(function (err, res) {
@@ -21,9 +21,9 @@ describe('Full Upload Test', function () {
             uploadAssembly(request, {
               socketRoomId: roomId,
               collectionId: collectionId,
-              assemblyId: assemblyIds[fileName],
+              assemblyId: assemblyIds[filename],
               fileName: filename
-            }, this, callback)
+            }, socket, callback)
             .expect(200)
             .end(function (error) {
               if (error) callback(error);

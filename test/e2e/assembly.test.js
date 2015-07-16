@@ -37,24 +37,6 @@ describe('Assembly Routes', function () {
       .expect(200, fixture, done);
   });
 
-  it.only('POST /assembly/add', function (done) {
-    this.timeout(1000 * 60 * 2);
-
-    connectWsClient(function (socket, roomId) {
-      uploadAssembly(request, {
-        socketRoomId: roomId,
-        collectionId: 'fefec50d-b7ad-4046-8431-d1e5f28c8387',
-        assemblyId: 'c4abd5a8-08de-43e0-988f-3554a20facf4',
-        fileName: 'MW2.fna'
-      }, socket, done)
-      .expect(200)
-      .end(function (err) {
-        if (err) done(err);
-      });
-    });
-
-  });
-
   it('POST /api/assembly/resistance-profile', function (done) {
     var fixture = require('./fixtures/resistance-profiles.json');
     var assemblyIds = [
@@ -73,6 +55,24 @@ describe('Assembly Routes', function () {
     request
       .get('/api/assembly/a1de6463-a6b8-4810-bbe4-94d782d452c5/core-result')
       .expect(200, fixture, done);
+  });
+
+  it.skip('POST /assembly/add', function (done) {
+    this.timeout(1000 * 60 * 2);
+
+    connectWsClient(function (socket, roomId) {
+      uploadAssembly(request, {
+        socketRoomId: roomId,
+        collectionId: 'fefec50d-b7ad-4046-8431-d1e5f28c8387',
+        assemblyId: 'c4abd5a8-08de-43e0-988f-3554a20facf4',
+        fileName: 'MW2.fna'
+      }, socket, done)
+      .expect(200)
+      .end(function (err) {
+        if (err) done(err);
+      });
+    });
+
   });
 
 });
