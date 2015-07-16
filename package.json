@@ -34,7 +34,7 @@
     "start": "NODE_PATH=$npm_package_nodepath node start.js | bunyan -o short",
     "test": "eval $npm_package_testcmd 'test/unit/**/*.test.js'",
     "test-example": "eval $npm_package_testcmd 'test/example.test.js'",
-    "e2e": "eval $npm_package_testcmd 'test/integration/**/*.test.js'"
+    "e2e": "eval $npm_package_testcmd 'test/e2e/**/*.test.js'"
   },
   "repository": {
     "type": "git",

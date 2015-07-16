@@ -1,6 +1,8 @@
 var assert = require('assert');
 var uuid = require('node-uuid');
 
+var registerCollection = require('./features/register-collection');
+
 describe('Collection Routes', function () {
 
   it('POST /collection', function (done) {
@@ -23,11 +25,7 @@ describe('Collection Routes', function () {
 
   it('POST /collection/add', function (done) {
     var userAssemblyIds = [ '123.fa', '456.fa', '789.fa' ];
-    request
-      .post('/collection/add')
-      .send({
-        userAssemblyIds: userAssemblyIds
-      })
+    registerCollection(request, userAssemblyIds)
       .expect(200)
       .expect(function (res) {
         assert(res.body.hasOwnProperty('collectionId'));

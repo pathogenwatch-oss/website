@@ -1,7 +1,8 @@
 var fs = require('fs');
 var path = require('path');
 
-var wsClient = require('socket.io-client');
+var connectWsClient = require('./features/ws-client');
+var uploadAssembly = require('./features/upload-assembly');
 
 describe('Assembly Routes', function () {
 
@@ -40,38 +41,52 @@ describe('Assembly Routes', function () {
   });
 
   it.only('POST /assembly/add', function (done) {
-    var socket = wsClient('http://localhost:3000');
+    this.timeout(1000 * 60 * 2);
 
-    this.timeout(60000);
+    var expectedResults = [
+      // confirmations
+      'UPLOAD_OK',
+      'METADATA_OK',
+      // analysis results
+      'FP_COMP',
+      'MLST_RESULT',
+      'PAARSNP_RESULT',
+      'CORE_RESULT',
+      'SCCMEC'
+    ];
 
-    socket.on('connect', function () {
-      socket.emit('getRoomId');
+    connectWsClient(function (roomId) {
+      var fileName = 'MW2.fna';
+      uploadAssembly(request, {
+        collectionId: 'fefec50d-b7ad-4046-8431-d1e5f28c8387',
+        socketRoomId: roomId,
+        assemblyId: 'c4abd5a8-08de-43e0-988f-3554a20facf4',
+        metadata: {},
+        sequences: fs.readFileSync(path.join(__dirname, 'fixtures', fileName), { encoding: 'utf-8' })
+      })
+      .expect(200)
+      .end(function (err) {
+        if (err) throw err;
+      });
+
+      this.on('assemblyUploadNotification', function (message) {
+        var taskType = message.taskType || message.result;
+        console.log('Received: ' + taskType);
+
+        if (expectedResults.indexOf(taskType) === -1) {
+          console.log('Unexpected task type: ' + taskType);
+          return;
+        }
+
+        expectedResults.splice(expectedResults.indexOf(taskType), 1);
+
+        if (!expectedResults.length) {
+          return done();
+        }
+
+        console.log('Remaining results: ' + expectedResults);
+      });
     });
-
-    socket.on('roomId', function (roomId) {
-      var fileName = 'JH1.fna';
-      request
-        .post('/assembly/add')
-        .send({
-          collectionId: 'a8b5e6bb-913f-4afa-895c-4fa431083670',
-          socketRoomId: roomId,
-          assemblyId: 'b0003004-9abe-48cf-9fda-330312835103',
-          metadata: {},
-          sequences: fs.readFileSync(path.join(__dirname, 'fixtures', fileName), { encoding: 'utf-8' })
-        })
-        .expect(200)
-        .end(function (err) {
-          if (err) throw err;
-        });
-    });
-
-    socket.on('assemblyUploadNotification', function (message) {
-      console.log(message);
-      // if (message.result === 'METADATA_OK') {
-      //   done();
-      // }
-    });
-
   });
 
   it('POST /api/assembly/resistance-profile', function (done) {

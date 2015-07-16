@@ -35,6 +35,7 @@ function requestIDs(request, callback) {
 }
 
 function manageCollection(request, callback) {
+  LOGGER.info(JSON.stringify(request));
   messageQueueService.newCollectionAddQueue(function (queue) {
     queue.subscribe(function (error, message) {
       if (error) {
