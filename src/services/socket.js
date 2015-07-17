@@ -11,7 +11,6 @@ function connect(server) {
 }
 
 function notifyAssemblyUpload(ids, result) {
-
   LOGGER.info(
     'Emitting ' + result + ' message for socketRoomId: ' + ids.socketRoomId
   );
@@ -20,6 +19,18 @@ function notifyAssemblyUpload(ids, result) {
     collectionId: ids.collectionId,
     assemblyId: ids.assemblyId,
     userAssemblyId: ids.userAssemblyId,
+    result: result,
+    socketRoomId: ids.socketRoomId
+  });
+}
+
+function notifyCollectionUpload(ids, result) {
+  LOGGER.info(
+    'Emitting ' + result + ' message for socketRoomId: ' + ids.socketRoomId
+  );
+
+  io.sockets.in(ids.socketRoomId).emit('assemblyUploadNotification', {
+    collectionId: ids.collectionId,
     result: result,
     socketRoomId: ids.socketRoomId
   });
@@ -63,5 +74,6 @@ function notifyTreeMerge(ids, mergeTree) {
 
 module.exports.connect = connect;
 module.exports.notifyAssemblyUpload = notifyAssemblyUpload;
+module.exports.notifyCollectionUpload = notifyCollectionUpload;
 module.exports.notifyTreeMergeRequest = notifyTreeMergeRequest;
 module.exports.notifyTreeMerge = notifyTreeMerge;

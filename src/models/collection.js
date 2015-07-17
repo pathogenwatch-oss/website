@@ -17,6 +17,9 @@ var COLLECTION_OPERATIONS = {
   DELETE: 'DELETE_COLLECTION',
   DELETE_ASSEMBLIES: 'DELETE_ASSEMBLIES'
 };
+var COLLECTION_TREE_TASKS = [
+  'PHYLO_MATRIX', 'SUBMATRIX', 'CORE_MUTANT_TREE'
+];
 
 function requestIDs(request, callback) {
   messageQueueService.newCollectionAddQueue(function (queue) {
@@ -26,6 +29,7 @@ function requestIDs(request, callback) {
         return callback(error, null);
       }
       LOGGER.info('Received response');
+      queue.destroy();
       callback(null, message);
     });
 
@@ -43,6 +47,7 @@ function manageCollection(request, callback) {
         return callback(error, null);
       }
       LOGGER.info('Received response', message);
+      queue.destroy();
       callback(null, message);
     });
 
@@ -51,7 +56,9 @@ function manageCollection(request, callback) {
   });
 }
 
-function add(collectionId, userAssemblyIds, callback) {
+function add(ids, callback) {
+  var userAssemblyIds = ids.userAssemblyIds;
+
   var collectionRequest = {
     identifierType: IDENTIFIER_TYPES.COLLECTION,
     count: 1
@@ -81,13 +88,52 @@ function add(collectionId, userAssemblyIds, callback) {
         LOGGER.error(initiateError);
         return callback(initiateError, null);
       }
-      callback(null, {
-        collectionId: results.collection.identifiers[0],
-        userAssemblyIdToAssemblyIdMap:
-          results.assembly.identifiers.reduce(function (map, newId) {
-            map[userAssemblyIds.shift()] = newId;
-            return map;
-          }, {})
+      var collectionId = results.collection.identifiers[0];
+      var userAssemblyIdToAssemblyIdMap =
+        results.assembly.identifiers.reduce(function (map, newId) {
+          map[userAssemblyIds.shift()] = newId;
+          return map;
+        }, {});
+
+      ids.collectionId = collectionId;
+
+      messageQueueService.newCollectionNotificationQueue(ids, function (queue) {
+        var expectedResults = COLLECTION_TREE_TASKS.map(function (task) { return task; });
+
+        queue.subscribe(function (error, message) {
+          if (error) {
+            return LOGGER.error(error);
+          }
+
+          var taskType = message.taskType;
+          if (expectedResults.indexOf(taskType) === -1) {
+            return LOGGER.warn('Skipping task: ' + taskType);
+          }
+
+          LOGGER.info(
+            'Received notification for collection ' + collectionId + ': ' + taskType
+          );
+
+          socketService.notifyCollectionUpload(ids, taskType);
+          expectedResults.splice(message.taskType, 1);
+
+          LOGGER.info(
+            'Remaining tasks for collection ' + collectionId + ': ' + expectedResults
+          );
+
+          if (expectedResults.length === 0) {
+            LOGGER.info(
+              'Collection ' + collectionId + ' tasks completed, destroying ' +
+                queue.name
+            );
+            queue.destroy();
+          }
+        });
+
+        callback(null, {
+          collectionId: collectionId,
+          userAssemblyIdToAssemblyIdMap: userAssemblyIdToAssemblyIdMap
+        });
       });
     });
   });

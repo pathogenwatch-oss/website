@@ -1,7 +1,8 @@
-module.exports = function (userAssemblyIds) {
+module.exports = function (userAssemblyIds, roomId) {
   return request
     .post('/collection/add')
     .send({
-      userAssemblyIds: userAssemblyIds
+      userAssemblyIds: userAssemblyIds,
+      socketRoomId: roomId
     });
 };

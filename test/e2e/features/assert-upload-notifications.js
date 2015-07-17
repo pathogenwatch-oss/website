@@ -1,4 +1,4 @@
-var EXPECTED_RESULTS = [
+var EXPECTED_ASSEMBLY_RESULTS = [
   // confirmations
   'UPLOAD_OK',
   'METADATA_OK',
@@ -9,6 +9,13 @@ var EXPECTED_RESULTS = [
   'CORE_RESULT',
   'SCCMEC'
 ];
+var EXPECTED_COLLECTION_RESULTS = [
+  'PHYLO_MATRIX', 'SUBMATRIX', 'CORE_MUTANT_TREE'
+];
+
+function identity(value) {
+  return value;
+}
 
 function allResultsReceived(allExpectedResults) {
   return (
@@ -18,19 +25,23 @@ function allResultsReceived(allExpectedResults) {
   );
 }
 
-module.exports = function (socket, assemblyIds, done) {
+module.exports = function (socket, ids, done) {
+  var collectionId = ids.collectionId;
+  var assemblyIdMap = ids.userAssemblyIdToAssemblyIdMap;
+  var allExpectedResults = {};
 
-  var allExpectedResults =
-    Object.keys(assemblyIds).reduce(function (all, filename) {
-      all[assemblyIds[filename]] = EXPECTED_RESULTS.map(function (taskType) { return taskType; });
-      return all;
-    }, {});
+  allExpectedResults[collectionId] = EXPECTED_COLLECTION_RESULTS.map(identity);
+
+  Object.keys(assemblyIdMap).reduce(function (all, filename) {
+    all[assemblyIdMap[filename]] = EXPECTED_ASSEMBLY_RESULTS.map(identity);
+    return all;
+  }, allExpectedResults);
 
   console.log('***', allExpectedResults);
 
   socket.on('assemblyUploadNotification', function (message) {
     var taskType = message.taskType || message.result;
-    var expectedResults = allExpectedResults[message.assemblyId];
+    var expectedResults = allExpectedResults[message.assemblyId || message.collectionId];
     console.log('*** Received: ' + taskType);
 
     if (expectedResults.indexOf(taskType) === -1) {
@@ -47,7 +58,5 @@ module.exports = function (socket, assemblyIds, done) {
       return done();
     }
   });
-
-  return allExpectedResults;
 
 };

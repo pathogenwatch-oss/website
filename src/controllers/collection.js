@@ -13,8 +13,7 @@ function addCollection(req, res, next) {
   LOGGER.info(message);
 
   collectionModel.add(
-    req.body.collectionId,
-    req.body.userAssemblyIds,
+    req.body,
     function (error, result) {
       if (error) {
         return next(error);

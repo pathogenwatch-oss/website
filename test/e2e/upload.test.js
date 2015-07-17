@@ -12,28 +12,25 @@ describe('Full Upload Test', function () {
 
     var assemblyFilenames = [ 'JH1.fna', 'JH9.fna', 'MW2.fna' ];
 
-    registerCollection(assemblyFilenames)
-      .end(function (err, res) {
+    connectWsClient(function (socket, roomId) {
+      registerCollection(assemblyFilenames, roomId).end(function (err, res) {
         var collectionId = res.body.collectionId;
         var assemblyIds = res.body.userAssemblyIdToAssemblyIdMap;
 
-        connectWsClient(function (socket, roomId) {
+        assertUploadNotifications(socket, res.body, done);
 
-          assertUploadNotifications(socket, assemblyIds, done);
-
-          async.each(assemblyFilenames, function (filename, callback) {
-            uploadAssembly({
-              socketRoomId: roomId,
-              collectionId: collectionId,
-              assemblyId: assemblyIds[filename],
-              fileName: filename
-            })
-            .expect(200)
-            .end(callback);
-          });
+        async.each(assemblyFilenames, function (filename, callback) {
+          uploadAssembly({
+            socketRoomId: roomId,
+            collectionId: collectionId,
+            assemblyId: assemblyIds[filename],
+            fileName: filename
+          })
+          .expect(200)
+          .end(callback);
         });
-
       });
+    });
   });
 
 });

@@ -43,6 +43,24 @@ function generateQueueId(prefix) {
   return (prefix + uuid.v4());
 }
 
+function newCollectionNotificationQueue(ids, callback) {
+  connection.queue(
+    'ART_NOTIFICATION_' + ids.collectionId,
+    { exclusive: true },
+    function (queue) {
+      LOGGER.info('Notification queue "' + queue.name + '" is open');
+
+      queue.bind(
+        exchanges.NOTIFICATION.name,
+        '1280.*.COLLECTION.' + ids.collectionId
+      );
+
+      parseMessagesAsJson(queue);
+      callback(queue);
+    }
+  );
+}
+
 function newAssemblyNotificationQueue(ids, callback) {
   connection.queue(
     'ART_NOTIFICATION_' + ids.assemblyId,
@@ -50,15 +68,9 @@ function newAssemblyNotificationQueue(ids, callback) {
     function (queue) {
       LOGGER.info('Notification queue "' + queue.name + '" is open');
 
-      // binding routing key
       queue.bind(
         exchanges.NOTIFICATION.name,
         '1280.*.ASSEMBLY.' + ids.assemblyId
-      );
-
-      queue.bind(
-        exchanges.NOTIFICATION.name,
-        '1280.*.COLLECTION.' + ids.collectionId
       );
 
       parseMessagesAsJson(queue);
@@ -129,6 +141,7 @@ function getTasksExchange() {
   return exchanges.TASKS;
 }
 
+module.exports.newCollectionNotificationQueue = newCollectionNotificationQueue;
 module.exports.newAssemblyNotificationQueue = newAssemblyNotificationQueue;
 module.exports.newAssemblyUploadQueue = newAssemblyUploadQueue;
 module.exports.newCollectionAddQueue = newCollectionAddQueue;
