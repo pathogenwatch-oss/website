@@ -25,7 +25,7 @@ describe('Collection Routes', function () {
 
   it('POST /collection/add', function (done) {
     var userAssemblyIds = [ '123.fa', '456.fa', '789.fa' ];
-    registerCollection(request, userAssemblyIds)
+    registerCollection(userAssemblyIds)
       .expect(200)
       .expect(function (res) {
         assert(res.body.hasOwnProperty('collectionId'));

@@ -1,4 +1,4 @@
-module.exports = function (request, userAssemblyIds) {
+module.exports = function (userAssemblyIds) {
   return request
     .post('/collection/add')
     .send({

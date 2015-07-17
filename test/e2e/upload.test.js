@@ -2,11 +2,12 @@ var async = require('async');
 
 var registerCollection = require('./features/register-collection');
 var connectWsClient = require('./features/ws-client');
+var assertUploadNotifications = require('./features/assert-upload-notifications');
 var uploadAssembly = require('./features/upload-assembly');
 
 describe('Full Upload Test', function () {
 
-  it('should complete a full upload', function (done) {
+  it.only('should complete a full upload', function (done) {
     this.timeout(1000 * 60 * 5);
 
     var assemblyFilenames = [ 'JH1.fna', 'JH9.fna', 'MW2.fna' ];
@@ -17,18 +18,19 @@ describe('Full Upload Test', function () {
         var assemblyIds = res.body.userAssemblyIdToAssemblyIdMap;
 
         connectWsClient(function (socket, roomId) {
+
+          assertUploadNotifications(socket, assemblyIds, done);
+
           async.each(assemblyFilenames, function (filename, callback) {
-            uploadAssembly(request, {
+            uploadAssembly({
               socketRoomId: roomId,
               collectionId: collectionId,
               assemblyId: assemblyIds[filename],
               fileName: filename
-            }, socket, callback)
+            })
             .expect(200)
-            .end(function (error) {
-              if (error) callback(error);
-            });
-          }, done);
+            .end(callback);
+          });
         });
 
       });
