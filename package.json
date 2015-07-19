@@ -44,7 +44,7 @@
     "ouch": "0.1.0-alpha",
     "papaparse": "^4.1.1",
     "react": "0.13.3",
-    "react-file-drag-and-drop": "^0.1.4",
+    "react-file-drag-and-drop": "^0.1.5",
     "react-router": "^0.13.2",
     "shortid": "^2.2.1",
     "swig": "^1.4.2",

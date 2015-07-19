@@ -1,8 +1,11 @@
 var React = require('react');
 var Home = require('./components/home/Home.react');
+
 var InstructionsPage = require('./components/home/InstructionsPage.react');
 var ShowcasePage = require('./components/home/ShowcasePage.react');
 var AboutPage = require('./components/home/AboutPage.react');
+var UploadCollectionPage = require('./components/collection/UploadCollectionPage.react');
+
 var NotFound = require('./components/NotFound.react');
 var Project = require('./components/Project.react');
 var Router = require('react-router');
@@ -20,6 +23,9 @@ var Application = React.createClass({
 var routes = (
   <Route name="application" path="/" handler={Application}>
     <DefaultRoute name="upload" handler={Home} />
+    <Route name="collection" path="collection" handler={UploadCollectionPage}>
+
+    </Route>
     <Route name="instructions" path="instructions" handler={InstructionsPage} />
     <Route name="showcase" path="showcase" handler={ShowcasePage} />
     <Route name="about" path="about" handler={AboutPage} />
