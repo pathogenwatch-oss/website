@@ -7,50 +7,48 @@ var NextAssemblyButton = require('./navigation/NextAssemblyButton.react');
 var UploadButton = require('./navigation/UploadButton.react');
 
 var containerStyle = {
-  borderBottom: '1px solid #bbb'
+  borderBottom: '1px solid #cecece',
+  padding: '10px 0'
 };
 
-var fullWidthAndHeightStyle = {
-  width: '100%',
-  height: '100%'
+var listStyle = {
+  marginRight: '10px'
 };
 
 var Component = React.createClass({
   render: function () {
     return (
-      <div className="container-fliud" style={containerStyle}>
-        <div className="row">
-          <div className="col-sm-12">
+      <div style={containerStyle}>
+        <div className="container">
+          <div className="row">
+            <div className="col-sm-10">
 
-            <form className="form-inline">
+              <form className="form-inline">
+                <div className="form-group" style={listStyle}>
 
-              <div className="form-group">
-
-                <AssemblyList />
-
-              </div>
-
-              <div className="form-group">
-                <div className="btn-group" role="group" aria-label="...">
-
-                  <PreviousAssemblyButton />
-                  <NextAssemblyButton />
+                  <AssemblyList />
 
                 </div>
-              </div>
 
-              <div className="form-group">
+                <div className="form-group">
+                  <div className="btn-group" role="group" aria-label="...">
 
-                  <UploadButton />
+                    <PreviousAssemblyButton />
+                    <NextAssemblyButton />
 
-              </div>
+                  </div>
+                </div>
+              </form>
 
-            </form>
+            </div>
 
+            <div className="col-sm-2 text-right">
+              <UploadButton />
+            </div>
+
+          </div>
         </div>
       </div>
-    </div>
-
     );
   }
 });

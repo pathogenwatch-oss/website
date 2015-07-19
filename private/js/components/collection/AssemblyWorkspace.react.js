@@ -6,6 +6,11 @@ var UploadStore = require('../../stores/UploadStore');
 
 var AssemblyMetadata = require('./AssemblyMetadata.react');
 var AssemblyAnalysis = require('./AssemblyAnalysis.react');
+var AssemblyWorkspaceHeader = require('./AssemblyWorkspaceHeader.react');
+
+var containerStyle = {
+  padding: '10px 0'
+};
 
 var AssemblyWorkspace = React.createClass({
 
@@ -15,17 +20,24 @@ var AssemblyWorkspace = React.createClass({
 
   render: function () {
     return (
-      <div className="row">
-        <div className="col-md-6">
+      <div style={containerStyle}>
+        <div className="container">
+          <div className="row">
 
-          <AssemblyMetadata assembly={this.props.assembly} />
+            <div className="col-md-6">
 
-        </div>
+              <AssemblyWorkspaceHeader text="Metadata" />
+              <AssemblyMetadata assembly={this.props.assembly} />
 
-        <div className="col-md-6">
+            </div>
 
-          <AssemblyAnalysis assembly={this.props.assembly} />
+            <div className="col-md-6">
 
+              <AssemblyWorkspaceHeader text="Analysis" />
+              <AssemblyAnalysis assembly={this.props.assembly} />
+
+            </div>
+          </div>
         </div>
       </div>
     );

@@ -4,6 +4,12 @@ var UploadWorkspaceNavigationStore = require('../../stores/UploadWorkspaceNaviga
 var AssemblyWorkspace = require('./AssemblyWorkspace.react');
 var UploadWorkspaceNavigation = require('./UploadWorkspaceNavigation.react');
 
+var containerStyle = {
+  width: '100%',
+  height: '100%',
+  background: '-webkit-gradient(linear,left top,left bottom,color-stop(0,#f7f7f7),color-stop(1,#ebebeb))'
+};
+
 var UploadWorkspace = React.createClass({
   getInitialState: function () {
     return this.getFileAssemblyId();
@@ -48,17 +54,9 @@ var UploadWorkspace = React.createClass({
 
   render: function () {
     return (
-      <div>
+      <div style={containerStyle}>
         <UploadWorkspaceNavigation />
-
-        <div className="container-fliud">
-          <div className="row">
-            <div className="col-sm-12">
-              {this.getAssemblyWorkspaceElement()}
-            </div>
-          </div>
-        </div>
-
+        {this.getAssemblyWorkspaceElement()}
       </div>
     );
   }

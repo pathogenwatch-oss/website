@@ -1,5 +1,6 @@
 var React = require('react');
 var SourceInput = require('./SourceInput.react');
+var Header = require('./Header.react');
 
 var Source = React.createClass({
 
@@ -10,7 +11,7 @@ var Source = React.createClass({
   render: function () {
     return (
       <div>
-        <label>Source</label>
+        <Header text="Source" />
         <form className="form-inline">
           <SourceInput assembly={this.props.assembly} />
         </form>

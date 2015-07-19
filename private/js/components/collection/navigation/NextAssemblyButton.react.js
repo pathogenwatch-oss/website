@@ -19,7 +19,7 @@ var Component = React.createClass({
 
   render: function () {
     return (
-      <button type="button" className="btn btn-default" disabled={this.isButtonDisabled()} onClick={this.handleClick}>
+      <button type="button" className="btn btn-primary" disabled={this.isButtonDisabled()} onClick={this.handleClick}>
         <i className="fa fa-chevron-right"></i>
       </button>
     );

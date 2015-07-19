@@ -2,20 +2,22 @@ var React = require('react');
 var assign = require('object-assign');
 
 var containerStyle = {
-  margin: '25px 25px 0 25px',
+  margin: '0 0 25px 0',
   verticalAlign: 'top',
   textAlign: 'left'
 };
 
 var labelStyle = {
-  fontSize: '11px',
-  lineHeight: '14px',
-  textTransform: 'uppercase'
+  fontSize: '15px',
+  fontWeight: '300',
+  lineHeight: '20px',
+  textTransform: 'uppercase',
+  color: '#777'
 };
 
 var numberStyle = {
   fontWeight: '400',
-  fontSize: '22px'
+  fontSize: '24px'
 };
 
 var Component = React.createClass({
