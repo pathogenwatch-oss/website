@@ -17,13 +17,19 @@ var UploadWorkspace = React.createClass({
 
   componentDidMount: function () {
     UploadWorkspaceNavigationStore.addChangeListener(this.handleUploadWorkspaceNavigationStoreChange);
+    UploadStore.addChangeListener(this.handleUploadStoreChange);
   },
 
   componentWillUnmount: function () {
     UploadWorkspaceNavigationStore.removeChangeListener(this.handleUploadWorkspaceNavigationStoreChange);
+    UploadStore.removeChangeListener(this.handleUploadStoreChange);
   },
 
   handleUploadWorkspaceNavigationStoreChange: function () {
+    this.setState(this.getFileAssemblyId());
+  },
+
+  handleUploadStoreChange: function () {
     this.setState(this.getFileAssemblyId());
   },
 
@@ -43,6 +49,8 @@ var UploadWorkspace = React.createClass({
   render: function () {
     return (
       <div>
+        <UploadWorkspaceNavigation />
+
         <div className="container-fliud">
           <div className="row">
             <div className="col-sm-12">
@@ -51,7 +59,6 @@ var UploadWorkspace = React.createClass({
           </div>
         </div>
 
-        <UploadWorkspaceNavigation />
       </div>
     );
   }

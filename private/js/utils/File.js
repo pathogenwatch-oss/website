@@ -1,5 +1,6 @@
 var DataUtils = require('./Data');
 var AnalysisUtils = require('./Analysis');
+var assign = require('object-assign');
 
 var FASTA_FILE_NAME_REGEX = /^.+(.fa|.fas|.fna|.ffn|.faa|.frn|.fasta|.contig)$/i;
 var CSV_FILE_NAME_REGEX = /^.+(.csv)$/i;
@@ -96,22 +97,33 @@ function initialiseAssemblyObject(fileAssemblyId, assemblies) {
     return assemblies;
   }
 
-  assemblies[fileAssemblyId] = {
+  var ASSEMBLY_OBJECT = {
     fasta: {
-      name: fileAssemblyId,
-      assembly: ''
+      name: null,
+      assembly: null
     },
     metadata: {
-      fileAssemblyId: fileAssemblyId,
-      latitude: null,
-      longitude: null,
-      year: null,
-      month: null,
-      day: null,
-      source: null
+      fileAssemblyId: null,
+      date: {
+        year: null,
+        month: null,
+        day: null
+      },
+      source: null,
+      geography: {
+        location: null,
+        position: {
+          latitude: null,
+          longitude: null
+        }
+      }
     },
     analysis: {}
   };
+
+  assemblies[fileAssemblyId] = ASSEMBLY_OBJECT;
+  assemblies[fileAssemblyId].fasta.name = fileAssemblyId;
+  assemblies[fileAssemblyId].metadata.fileAssemblyId = fileAssemblyId;
 
   return assemblies;
 }
@@ -146,7 +158,7 @@ function parseFastaFile(file, rawFiles, assemblies) {
   assemblies[fileAssemblyId].analysis = analyseFasta(fileAssemblyId, fileContent);
 }
 
-function parseCsvFile(file, files, fastaAndMetadata) {
+function parseCsvFile(file, rawFiles, assemblies) {
   var csvString = file.content;
   var csvJson = DataUtils.parseCsvToJson(csvString);
   var dataRows;
@@ -168,30 +180,30 @@ function parseCsvFile(file, files, fastaAndMetadata) {
 
     fileAssemblyId = dataRow.filename;
 
-    fastaAndMetadata = initialiseAssemblyObject(fileAssemblyId, fastaAndMetadata);
+    assemblies = initialiseAssemblyObject(fileAssemblyId, assemblies);
 
     if (dataRow.latitude) {
-      fastaAndMetadata[fileAssemblyId].metadata.latitude = dataRow.latitude;
+      assemblies[fileAssemblyId].metadata.geography.position.latitude = parseFloat(dataRow.latitude);
     }
 
     if (dataRow.longitude) {
-      fastaAndMetadata[fileAssemblyId].metadata.longitude = dataRow.longitude;
+      assemblies[fileAssemblyId].metadata.geography.position.longitude = parseFloat(dataRow.longitude);
     }
 
     if (dataRow.year) {
-      fastaAndMetadata[fileAssemblyId].metadata.year = dataRow.year;
+      assemblies[fileAssemblyId].metadata.date.year = parseInt(dataRow.year, 10);
     }
 
     if (dataRow.month) {
-      fastaAndMetadata[fileAssemblyId].metadata.month = dataRow.month;
+      assemblies[fileAssemblyId].metadata.date.month = parseInt(dataRow.month, 10);
     }
 
     if (dataRow.day) {
-      fastaAndMetadata[fileAssemblyId].metadata.day = dataRow.day;
+      assemblies[fileAssemblyId].metadata.date.day = parseInt(dataRow.day, 10);
     }
 
     if (dataRow.source) {
-      fastaAndMetadata[fileAssemblyId].metadata.source = dataRow.source;
+      assemblies[fileAssemblyId].metadata.source = parseInt(dataRow.source, 10);
     }
   });
 }

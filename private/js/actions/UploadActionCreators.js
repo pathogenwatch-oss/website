@@ -3,7 +3,7 @@ var FileUtils = require('../utils/File');
 
 module.exports = {
 
-  addFiles: function (files) {
+  addFiles: function addFiles(files) {
     var startProcessingFilesAction = {
       type: 'start_processing_files'
     };

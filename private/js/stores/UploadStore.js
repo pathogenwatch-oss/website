@@ -12,6 +12,22 @@ function addFiles(newRawFiles, newAssemblies) {
   assign(assemblies, newAssemblies);
 }
 
+function setMetadataYear(fileAssemblyId, year) {
+  assemblies[fileAssemblyId].metadata.date.year = year;
+}
+
+function setMetadataMonth(fileAssemblyId, month) {
+  assemblies[fileAssemblyId].metadata.date.month = month;
+}
+
+function setMetadataDay(fileAssemblyId, day) {
+  assemblies[fileAssemblyId].metadata.date.day = day;
+}
+
+function setMetadataSource(fileAssemblyId, source) {
+  assemblies[fileAssemblyId].metadata.source = source;
+}
+
 function emitChange() {
   Store.emit(CHANGE_EVENT);
 }
@@ -48,6 +64,26 @@ function handleAction(action) {
 
     case 'add_files':
       addFiles(action.rawFiles, action.assemblies);
+      emitChange();
+      break;
+
+    case 'set_metadata_year':
+      setMetadataYear(action.fileAssemblyId, action.year);
+      emitChange();
+      break;
+
+    case 'set_metadata_month':
+      setMetadataMonth(action.fileAssemblyId, action.month);
+      emitChange();
+      break;
+
+    case 'set_metadata_day':
+      setMetadataDay(action.fileAssemblyId, action.day);
+      emitChange();
+      break;
+
+    case 'set_metadata_source':
+      setMetadataSource(action.fileAssemblyId, action.source);
       emitChange();
       break;
 

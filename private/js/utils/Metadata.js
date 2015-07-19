@@ -17,7 +17,7 @@ function generateMonths() {
   listOfMonths = listOfMonths.map(function iife(monthName, index, array) {
     return {
       name: monthName,
-      number: index
+      number: index + 1
     };
   });
 
@@ -43,6 +43,9 @@ function generateDays(year, month) {
 }
 
 function getTotalNumberOfDaysInMonth(year, month) {
+  // Date() object counts months from 0 to 11
+  month = month - 1;
+
   // http://www.dzone.com/snippets/determining-number-days-month
   return (32 - new Date(year, month, 32).getDate());
 }

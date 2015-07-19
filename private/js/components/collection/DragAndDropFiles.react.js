@@ -41,6 +41,8 @@ var featureStyle = {
 };
 
 var FA_CLOUD_UPLOAD_CLASS = 'fa fa-cloud-upload';
+var FA_COG_CLASS = 'fa fa-cog';
+var FA_SPIN_CLASS = 'fa-spin';
 
 var ANIMATION_CLASSES = {
   BOUNCE: 'animated bounce infinite',
@@ -81,6 +83,10 @@ var DragAndDropFiles = React.createClass({
 
   render: function () {
     var iconClasses = FA_CLOUD_UPLOAD_CLASS + ' ' + ANIMATION_CLASSES.PULSE;
+
+    if (this.state.isProcessing) {
+      iconClasses = FA_COG_CLASS + ' ' + FA_SPIN_CLASS;
+    }
 
     return (
       <FileDragAndDrop onDrop={this.handleDrop}>
