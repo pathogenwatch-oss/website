@@ -2,7 +2,11 @@ var React = require('react');
 var FileDragAndDrop = require('react-file-drag-and-drop');
 var assign = require('object-assign');
 var UploadActionCreators = require('../../actions/UploadActionCreators');
+var SocketActionCreators = require('../../actions/SocketActionCreators');
 var FileProcessingStore = require('../../stores/FileProcessingStore');
+var SocketStore = require('../../stores/SocketStore');
+var io = require('socket.io-client');
+var SocketUtils = require('../../utils/Socket');
 
 var fullWidthAndHeightStyle = {
   width: '100%',
@@ -63,6 +67,27 @@ var DragAndDropFiles = React.createClass({
 
   componentDidMount: function () {
     FileProcessingStore.addChangeListener(this.handleFileProcessingStoreChange);
+
+    var socket = SocketUtils.socketConnect();
+
+    SocketStore.addChangeListener(this.handleSocketStoreChange);
+    SocketActionCreators.setSocketConnection(socket);
+  },
+
+  handleSocketStoreChange: function () {
+    if (! SocketStore.getRoomId()) {
+
+      SocketStore.getSocketConnection().on('roomId', function iife(roomId) {
+        SocketActionCreators.setRoomId(roomId);
+      });
+
+      SocketStore.getSocketConnection().on('assemblyUploadNotification', function iife(notification) {
+        console.log('Notification:');
+        console.dir(notification);
+      });
+
+      SocketStore.getSocketConnection().emit('getRoomId');
+    }
   },
 
   handleFileProcessingStoreChange: function () {

@@ -1,7 +1,9 @@
 var React = require('react');
 var UploadStore = require('../../../stores/UploadStore');
+var UploadActionCreators = require('../../../actions/UploadActionCreators');
 
 var UploadButton = React.createClass({
+
   isAllMetadataProvided: function () {
     var assemblies = UploadStore.getAssemblies();
     var fileAssemblyIds = UploadStore.getFileAssemblyIds();
@@ -27,6 +29,7 @@ var UploadButton = React.createClass({
   },
 
   handleClick: function () {
+    UploadActionCreators.getCollectionId();
     //UploadWorkspaceNavigationActionCreators.navigateToNextAssembly();
   },
 

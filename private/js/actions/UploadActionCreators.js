@@ -1,5 +1,8 @@
 var AppDispatcher = require('../dispatcher/AppDispatcher');
 var FileUtils = require('../utils/File');
+var ApiUtils = require('../utils/Api');
+var UploadStore = require('../stores/UploadStore');
+var SocketStore = require('../stores/SocketStore');
 
 module.exports = {
 
@@ -30,5 +33,42 @@ module.exports = {
       AppDispatcher.dispatch(finishProcessingFilesAction);
       AppDispatcher.dispatch(addFilesAction);
     });
+  },
+
+  getCollectionId: function getCollectionId() {
+    var fileAssemblyIds = UploadStore.getFileAssemblyIds();
+    var roomId = SocketStore.getRoomId();
+
+    var data = {
+      userAssemblyIds: fileAssemblyIds,
+      socketRoomId: roomId
+    };
+
+    ApiUtils.getCollectionId(data, function iife(error, data) {
+      if (error) {
+        console.error(error);
+        return;
+      }
+
+      var userAssemblyIdToAssemblyIdMap = data.userAssemblyIdToAssemblyIdMap;
+      var userAssemblyIds = Object.keys(userAssemblyIdToAssemblyIdMap);
+
+      userAssemblyIds.forEach(function sendAssembly(userAssemblyId) {
+        var roomId = SocketStore.getRoomId();
+        var assemblyData = {
+          socketRoomId: roomId,
+          collectionId: data.collectionId,
+          assemblyId: userAssemblyIdToAssemblyIdMap[userAssemblyId],
+          metadata: UploadStore.getAssembly(userAssemblyId).metadata,
+          sequences: UploadStore.getAssembly(userAssemblyId).fasta.assembly
+        };
+
+        ApiUtils.postAssembly(assemblyData, function iife(error, data) {
+          console.log('OK');
+          console.dir(data);
+        });
+      });
+    });
   }
+
 };
