@@ -6,6 +6,14 @@ var fullWidthAndHeightStyle = {
   height: '100%'
 };
 
+var labelStyle = {
+  fontSize: '15px',
+  fontWeight: '300',
+  lineHeight: '20px',
+  textTransform: 'uppercase',
+  color: '#777'
+};
+
 var AssemblyAnalysis = React.createClass({
 
   propTypes: {
@@ -14,6 +22,19 @@ var AssemblyAnalysis = React.createClass({
 
   render: function () {
     var assembly = this.props.assembly;
+
+    if (
+      ! assembly.analysis.totalNumberOfNucleotidesInDnaStrings
+      || ! assembly.analysis.totalNumberOfContigs
+      || ! assembly.analysis.smallestNumberOfNucleotidesInDnaStrings
+      || ! assembly.analysis.averageNumberOfNucleotidesInDnaStrings
+      || ! assembly.analysis.biggestNumberOfNucleotidesInDnaStrings
+      || ! assembly.analysis.contigN50
+    ) {
+      return (
+        <div style={labelStyle}>No assembly information</div>
+      );
+    }
 
     return (
       <div className="container-fliud">

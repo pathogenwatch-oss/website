@@ -20,7 +20,7 @@ var numberStyle = {
   fontSize: '24px'
 };
 
-var Component = React.createClass({
+var AssemblyAnalysisItem = React.createClass({
 
   propTypes: {
     label: React.PropTypes.string.isRequired,
@@ -43,4 +43,4 @@ var Component = React.createClass({
   }
 });
 
-module.exports = Component;
+module.exports = AssemblyAnalysisItem;
