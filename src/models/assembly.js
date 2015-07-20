@@ -60,7 +60,7 @@ function beginUpload(ids, metadata, sequences) {
       });
 
       var assemblyMetadata = {
-        datetime: metadata.datetime,
+        date: metadata.date,
         geography: metadata.geography,
         source: metadata.source
       };

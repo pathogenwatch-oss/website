@@ -5,18 +5,19 @@
 		},
 		"couchbase": {
 			"ip": "127.0.0.1",
+			"port": "8091",
 			"buckets": {
 				"main": {
 					"name": "wgsa",
-					"password": ""
+					"password": "4wgstuse"
 				},
 				"resources": {
 					"name": "wgsa_resources",
-					"password": ""
+					"password": "4wgstuse"
 				},
 				"feedback": {
 					"name": "feedback",
-					"password": ""
+					"password": "4wgstuse"
 				}
 			}
 		},
@@ -24,8 +25,8 @@
 			"on": true,
 			"ip": "129.31.26.152",
 			"port": "5672",
-			"login": "login",
-			"password": "password"
+			"login": "wgsa",
+			"password": "wgsa"
 		}
 	},
 	"client": {
