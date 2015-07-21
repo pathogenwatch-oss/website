@@ -4,15 +4,21 @@ var assertUploadNotifications = require('./features/assert-upload-notifications'
 
 describe('Assembly Routes', function () {
 
-  it('POST /api/assembly', function (done) {
+  it('GET /api/v1/assembly/:id', function (done) {
     var fixture = require('./fixtures/assembly.json');
     request
-      .post('/api/assembly')
-      .send({ assemblyId: 'a1de6463-a6b8-4810-bbe4-94d782d452c5' })
+      .get('/api/v1/assembly/a1de6463-a6b8-4810-bbe4-94d782d452c5')
       .expect(200, fixture, done);
   });
 
-  it('POST /api/assemblies', function (done) {
+  it('GET /api/v1/assembly/:id/core-result', function (done) {
+    var fixture = require('./fixtures/core-result.json');
+    request
+      .get('/api/v1/assembly/a1de6463-a6b8-4810-bbe4-94d782d452c5/core-result')
+      .expect(200, fixture, done);
+  });
+
+  it('GET /api/v1/assemblies', function (done) {
     var fixture = require('./fixtures/assemblies.json');
     var assemblyIds = [
       'a1de6463-a6b8-4810-bbe4-94d782d452c5',
@@ -20,25 +26,11 @@ describe('Assembly Routes', function () {
     ];
 
     request
-      .post('/api/assemblies')
-      .send({ assemblyIds: assemblyIds })
+      .get('/api/v1/assemblies?ids=' + assemblyIds.join(','))
       .expect(200, fixture, done);
   });
 
-  it('POST /api/assembly/table-data', function (done) {
-    var fixture = require('./fixtures/assembly-table-data.json');
-    var assemblyIds = [
-      'a1de6463-a6b8-4810-bbe4-94d782d452c5',
-      '85974b89-fb99-4035-8eb6-74770d2dc794'
-    ];
-
-    request
-      .post('/api/assembly/table-data')
-      .send({ assemblyIds: assemblyIds })
-      .expect(200, fixture, done);
-  });
-
-  it('POST /api/assembly/resistance-profile', function (done) {
+  it('GET /api/v1/assemblies/resistance-profile', function (done) {
     var fixture = require('./fixtures/resistance-profiles.json');
     var assemblyIds = [
       'a1de6463-a6b8-4810-bbe4-94d782d452c5',
@@ -46,18 +38,22 @@ describe('Assembly Routes', function () {
     ];
 
     request
-      .post('/api/assembly/resistance-profile')
+      .post('/api/v1/assemblies/resistance-profile?ids=' + assemblyIds.join(','))
       .send({ assemblyIds: assemblyIds })
       .expect(200, fixture, done);
   });
 
-  it('GET /api/assembly/:id/core-result', function (done) {
-    var fixture = require('./fixtures/core-result.json');
+  it('GET /api/v1/assemblies/table-data', function (done) {
+    var fixture = require('./fixtures/assembly-table-data.json');
+    var assemblyIds = [
+      'a1de6463-a6b8-4810-bbe4-94d782d452c5',
+      '85974b89-fb99-4035-8eb6-74770d2dc794'
+    ];
+
     request
-      .get('/api/assembly/a1de6463-a6b8-4810-bbe4-94d782d452c5/core-result')
+      .get('/api/v1/assemblies/table-data?ids=' + assemblyIds.join(','))
       .expect(200, fixture, done);
   });
-
 
   it.skip('POST /assembly/add', function (done) {
     this.timeout(1000 * 60 * 2);

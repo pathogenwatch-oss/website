@@ -38,22 +38,9 @@ function addAssembly(req, res) {
   assemblyModel.beginUpload(ids, req.body.metadata, req.body.sequences);
 }
 
-function getAssembly(req, res) {
-  assemblyModel.get(req.params.id, function (error, result) {
-    var assembly;
-    if (error) {
-      LOGGER.error(error, result);
-      return res.sendStatus(500);
-    }
-    assembly = result.value;
-    LOGGER.info(assembly);
-    res.render('app', { requestedAssemblyObject: JSON.stringify(assembly) });
-  });
-}
-
 function getCompleteAssembly(req, res) {
   async.parallel({
-    assembly: assemblyModel.getComplete.bind(null, req.body.assemblyId),
+    assembly: assemblyModel.getComplete.bind(null, req.params.id),
     antibiotics: antibioticModel.getAll
   },
   function (error, result) {
@@ -66,7 +53,11 @@ function getCompleteAssembly(req, res) {
 }
 
 function getMultipleAssemblies(req, res) {
-  assemblyModel.getMany(req.body.assemblyIds, function (error, assemblies) {
+  var assemblyIds = req.query.ids && req.query.ids.split(',');
+  if (!assemblyIds || !assemblyIds.length) {
+    return res.sendStatus(400);
+  }
+  assemblyModel.getMany(assemblyIds, function (error, assemblies) {
     if (error) {
       LOGGER.error(error);
       return res.sendStatus(500);
@@ -76,7 +67,11 @@ function getMultipleAssemblies(req, res) {
 }
 
 function getResistanceProfile(req, res) {
-  assemblyModel.getResistanceProfile(req.body.assemblyIds,
+  var assemblyIds = req.query.ids && req.query.ids.split(',');
+  if (!assemblyIds || !assemblyIds.length) {
+    return res.sendStatus(400);
+  }
+  assemblyModel.getResistanceProfile(assemblyIds,
     function (error, resistanceProfile) {
       if (error) {
         LOGGER.error(error, resistanceProfile);
@@ -90,7 +85,10 @@ function getResistanceProfile(req, res) {
 }
 
 function getAssemblyTableData(req, res) {
-  var assemblyIds = req.body.assemblyIds;
+  var assemblyIds = req.query.ids && req.query.ids.split(',');
+  if (!assemblyIds || !assemblyIds.length) {
+    return res.sendStatus(400);
+  }
   assemblyModel.getTableData(assemblyIds, function (error, tableData) {
     if (error) {
       return res.status(500).json({ error: error });
@@ -109,7 +107,6 @@ function getCoreResult(req, res, next) {
 }
 
 module.exports.addAssembly = addAssembly;
-module.exports.getAssembly = getAssembly;
 module.exports.getMultipleAssemblies = getMultipleAssemblies;
 module.exports.getCompleteAssembly = getCompleteAssembly;
 module.exports.getResistanceProfile = getResistanceProfile;
