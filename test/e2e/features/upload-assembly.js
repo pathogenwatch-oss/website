@@ -8,7 +8,7 @@ module.exports = function (requestData) {
   var fileName = requestData.fileName;
 
   return request
-    .post('/assembly/add')
+    .post('/api/v1/assembly/add')
     .send({
       collectionId: collectionId,
       socketRoomId: roomId,
