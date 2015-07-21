@@ -248,7 +248,7 @@ function mergeCollectionTrees(ids) {
   var mergeRequest = {
     assemblies: [],
     targetCollectionId: ids.collectionId, // Your collection id
-    inputData: [ids.mergeWithCollectionId], // e.g.: EARSS collection, etc.
+    inputData: [ ids.mergeWithCollectionId ], // e.g.: EARSS collection, etc.
     dataSource: 'CORE'
   };
 

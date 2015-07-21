@@ -1,5 +1,4 @@
 var collectionModel = require('models/collection');
-var appConfig = require('configuration');
 
 var LOGGER = require('utils/logging').createLogger('Collection ctrl');
 
@@ -24,7 +23,7 @@ function addCollection(req, res, next) {
 }
 
 function getCollection(req, res, next) {
-  var collectionId = req.body.collectionId;
+  var collectionId = req.params.id;
   collectionModel.get(collectionId, function (error, result) {
     if (error) {
       return next(error);
@@ -43,24 +42,6 @@ function getRepresentativeCollection(req, res, next) {
   });
 }
 
-function renderExistingCollection(req, res) {
-  var collectionId = req.params.id;
-
-  LOGGER.info('Requested ' + collectionId + ' collection');
-
-  res.render('app', {
-    appConfig: JSON.stringify(appConfig.client),
-    requestedCollectionId: collectionId
-  });
-}
-
-function renderNewCollection(req, res) {
-  res.render('app', {
-    appConfig: JSON.stringify(appConfig.client),
-    newCollection: true
-  });
-}
-
 function mergeCollectionTrees(req, res) {
   res.json({});
   collectionModel.mergeCollectionTrees(req.body);
@@ -74,7 +55,5 @@ function getMergeTree(req, res) {
 module.exports.addCollection = addCollection;
 module.exports.getCollection = getCollection;
 module.exports.getRepresentativeCollection = getRepresentativeCollection;
-module.exports.renderExistingCollection = renderExistingCollection;
-module.exports.renderNewCollection = renderNewCollection;
 module.exports.mergeCollectionTrees = mergeCollectionTrees;
 module.exports.getMergeTree = getMergeTree;

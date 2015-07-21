@@ -1,11 +1,10 @@
 module.exports = function (app) {
-  app.use(require('routes/landing'));
-  app.use(require('routes/collection'));
-  app.use(require('routes/assembly'));
-  app.use(require('routes/antibiotic'));
-  app.use(require('routes/download'));
-  // TODO:
-  //app.use(require('./routes/user.js'));
+  app.use('/api/v1/', [
+    require('routes/collection'),
+    require('routes/assembly'),
+    require('routes/antibiotic'),
+    require('routes/download')
+  ]);
 
   // must be registered last
   app.use(require('routes/notFound'));

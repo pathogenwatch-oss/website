@@ -5,7 +5,7 @@ var antibioticModel = require('models/antibiotic');
 
 var logger = require('utils/logging').createLogger('Antibiotics');
 
-router.get('/api/all-antibiotics', function (req, res) {
+router.get('/antibiotics', function (req, res) {
   antibioticModel.getAll(function (error, antibiotics) {
     if (error) {
       logger.error(error, antibiotics);

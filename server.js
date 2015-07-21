@@ -2,7 +2,6 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var http = require('http');
 var path = require('path');
-var swig = require('swig');
 var async = require('async');
 
 var appConfig = require('configuration');
@@ -14,9 +13,6 @@ var LOGGER = logging.getBaseLogger();
 var app = express();
 
 app.set('port', process.env.PORT || appConfig.server.node.port);
-app.engine('html', swig.renderFile);
-app.set('views', path.join(__dirname, 'src', 'views'));
-app.set('view engine', 'html');
 // http://stackoverflow.com/a/19965089
 app.use(bodyParser.json({ limit: '500mb' }));
 app.use(bodyParser.urlencoded({
@@ -26,9 +22,12 @@ app.use(bodyParser.urlencoded({
 
 logging.initHttpLogging(app, process.env.NODE_ENV || 'development');
 
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+app.use(function (req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept'
+  );
   next();
 });
 
