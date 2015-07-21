@@ -8,5 +8,6 @@ Built on top of [Microreact](https://github.com/ImperialCollegeLondon/microreact
 1. `git clone https://github.com/ImperialCollegeLondon/macroreact.git`
 2. `cd macroreact`
 3. `cp example.config.json config.json`
-4. `npm install`
-5. `npm start`
+4. Edit `config.json`
+5. `npm install`
+6. `npm start`
