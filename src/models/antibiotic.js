@@ -1,17 +1,37 @@
 var mainStorage = require('services/storage')('main');
 
-var logger = require('utils/logging').createLogger('Antibiotic model');
+var LOGGER = require('utils/logging').createLogger('Antibiotic model');
+
+function flattenStructureForFrontend(document) {
+  return (
+    Object.keys(document).
+      map(function (antibioticClassname) {
+        var antibioticClass = document[antibioticClassname];
+        return (
+          Object.keys(antibioticClass).map(function (antibioticKey) {
+            return antibioticClass[antibioticKey];
+          })
+        );
+      }).
+      reduce(function (flattenedObject, antibiotics) {
+        antibiotics.forEach(function (antibiotic) {
+          flattenedObject[antibiotic.antibioticName] = antibiotic.antibioticClass;
+        });
+        return flattenedObject;
+      }, {})
+  );
+}
 
 function getAll(callback) {
-  logger.info('Getting list of all antibiotics');
+  LOGGER.info('Getting list of all antibiotics');
 
   mainStorage.retrieve('ANTIMICROBIALS_ALL', function (error, result) {
     if (error) {
       return callback(error, result);
     }
-    var antibiotics = result.antibiotics;
-    logger.info('Got the list of all antibiotics');
-    callback(null, antibiotics);
+
+    LOGGER.info('Got the list of all antibiotics');
+    callback(null, flattenStructureForFrontend(result.antibiotics));
   });
 }
 

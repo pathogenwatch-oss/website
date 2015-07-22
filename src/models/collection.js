@@ -183,15 +183,10 @@ function getTree(collectionId, callback) {
     if (error) {
       return callback(error, null);
     }
-    var tree = {};
     LOGGER.info(
       'Got ' + treeData.type + ' data for ' + collectionId + ' collection'
     );
-    tree[treeData.type] = {
-      name: 'Core Mutations Tree',
-      data: treeData.newickTree
-    };
-    callback(null, tree);
+    callback(null, treeData.newickTree);
   });
 }
 
@@ -209,7 +204,7 @@ function get(collectionId, callback) {
     callback(null, {
       collection: {
         assemblies: result.assemblies,
-        tree: result.tree
+        newickTree: result.tree
       },
       antibiotics: result.antibiotics
     });
