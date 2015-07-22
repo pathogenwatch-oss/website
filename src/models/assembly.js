@@ -55,6 +55,7 @@ function beginUpload(ids, metadata, sequences) {
             'Assembly ' + ids.assemblyId + ' tasks completed, destroying ' +
               notificationQueue.name
           );
+          socketService.notifyAssemblyUpload(ids, 'ALL_DONE');
           notificationQueue.destroy();
         }
       });
