@@ -5,10 +5,10 @@ var registerCollection = require('./features/register-collection');
 
 describe('Collection Routes', function () {
 
-  it('GET /api/v1/collection/:id', function (done) {
+  it.only('GET /api/v1/collection/:id', function (done) {
     var fixture = require('./fixtures/collection.json');
     request
-      .get('/api/v1/collection/b8d3aab1-625f-49aa-9857-a5e97f5d6be5')
+      .get('/api/v1/collection/e20ff5ce-bda0-40db-a5a5-641a8c65ea68')
       .expect(200, fixture, function (error, res) {
         if (error) { error.showDiff = false; }
         done(error, res);
@@ -28,7 +28,7 @@ describe('Collection Routes', function () {
       .expect(200, fixture, done);
   });
 
-  it('POST /api/v1/collection/add', function (done) {
+  it('POST /api/v1/collection', function (done) {
     var userAssemblyIds = [ '123.fa', '456.fa', '789.fa' ];
     registerCollection(userAssemblyIds)
       .expect(200)
