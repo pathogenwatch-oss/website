@@ -28,7 +28,7 @@ Built on top of [Microreact](https://github.com/ImperialCollegeLondon/microreact
   + `CORE_MUTANT_TREE`
   + `SUBMATRIX`
 
-### How to get the latest back end?
+### How to update the backend service executables?
 
 1. Navigate to your local directory with JAR files.
 2. `rsync -v -e "ssh -p 2222" ./*.jar wgst_admin@localhost:/nfs/wgst/jarchive/`
