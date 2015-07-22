@@ -12,7 +12,7 @@ Built on top of [Microreact](https://github.com/ImperialCollegeLondon/microreact
 5. `npm install`
 6. `npm start`
 
-## Notes
+## Q/A
 
 ### What results front end expects from middle end when uploading assemblies?
 + Per __assembly__:
@@ -27,3 +27,11 @@ Built on top of [Microreact](https://github.com/ImperialCollegeLondon/microreact
   + `PHYLO_MATRIX`
   + `CORE_MUTANT_TREE`
   + `SUBMATRIX`
+
+### How to get the latest back end?
+
+1. Navigate to your local directory with JAR files.
+2. `rsync -v -e "ssh -p 2222" ./*.jar wgst_admin@localhost:/nfs/wgst/jarchive/`
+3. SSH to your VM: `ssh -p 2222 wgst_admin@localhost`
+4. `sudo supervisorctl`
+5. `restart all`
