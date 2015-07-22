@@ -11,3 +11,19 @@ Built on top of [Microreact](https://github.com/ImperialCollegeLondon/microreact
 4. Edit `config.json`
 5. `npm install`
 6. `npm start`
+
+## Notes
+
+### What results front end expects from middle end when uploading assemblies?
++ Per __assembly__:
+  + `UPLOAD_OK`
+  + `METADATA_OK`
+  + `SCCMEC`
+  + `PAARSNP_RESULT`
+  + `MLST_RESULT`
+  + `CORE_RESULT`
+  + `FP_COMP`
++ Per __collection__:
+  + `PHYLO_MATRIX`
+  + `CORE_MUTANT_TREE`
+  + `SUBMATRIX`
