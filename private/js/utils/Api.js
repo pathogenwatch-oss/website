@@ -3,7 +3,7 @@ var request = require('./Http');
 function getCollectionId(collectionData, callback) {
   $.ajax({
     type: 'POST',
-    url: 'http://127.0.0.1:8080/collection/add',
+    url: 'http://127.0.0.1:8080/api/v1/collection/add',
     contentType: 'application/json; charset=UTF-8',
     data: JSON.stringify(collectionData, null, 4),
     dataType: 'json'
@@ -35,7 +35,7 @@ function getCollection(assemblyData, callback) {
 function postAssembly(assemblyData, callback) {
   $.ajax({
     type: 'POST',
-    url: 'http://127.0.0.1:8080/assembly/add',
+    url: 'http://127.0.0.1:8080/api/v1/assembly/add',
     contentType: 'application/json; charset=UTF-8',
     data: JSON.stringify(assemblyData, null, 4),
     dataType: 'json'
@@ -50,7 +50,7 @@ function postAssembly(assemblyData, callback) {
 
 function getProject(projectId, callback) {
   var options = {
-    url: '/api/1.0/project/' + projectId
+    url: 'http://127.0.0.1:8080/api/v1/project/' + projectId
   };
 
   if (!projectId) {
@@ -69,7 +69,7 @@ function getProject(projectId, callback) {
 function postProject(projectData, callback) {
   $.ajax({
     type: 'POST',
-    url: '/api/1.0/project',
+    url: '/api/v1/project',
     contentType: 'application/json; charset=UTF-8',
     data: JSON.stringify(projectData, null, 4),
     dataType: 'json'

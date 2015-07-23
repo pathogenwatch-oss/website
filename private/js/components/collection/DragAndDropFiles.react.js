@@ -81,11 +81,6 @@ var DragAndDropFiles = React.createClass({
         SocketActionCreators.setRoomId(roomId);
       });
 
-      SocketStore.getSocketConnection().on('assemblyUploadNotification', function iife(notification) {
-        console.log('Notification:');
-        console.dir(notification);
-      });
-
       SocketStore.getSocketConnection().emit('getRoomId');
     }
   },

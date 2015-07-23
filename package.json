@@ -36,6 +36,7 @@
     "body-parser": "^1.12.2",
     "express": "^4.12.2",
     "flux": "^2.0.3",
+    "keymirror": "^0.1.1",
     "moment": "^2.10.3",
     "mongoose": "3.8.26",
     "node-uuid": "^1.4.3",

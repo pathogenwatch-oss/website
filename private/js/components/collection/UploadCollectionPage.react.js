@@ -1,7 +1,10 @@
 var React = require('react');
+var Router = require('react-router');
 var DragAndDropFiles = require('./DragAndDropFiles.react');
+var UploadingFiles = require('./UploadingFiles.react');
 var UploadWorkspace = require('./UploadWorkspace.react');
 var UploadStore = require('../../stores/UploadStore');
+var FileUploadingStore = require('../../stores/FileUploadingStore');
 
 var UploadCollectionPage = React.createClass({
 
@@ -11,12 +14,15 @@ var UploadCollectionPage = React.createClass({
 
   getInitialState: function () {
     return {
-      hasFiles: false
+      hasFiles: false,
+      isUploading: false,
+      isCollection: false
     };
   },
 
   componentDidMount: function () {
     UploadStore.addChangeListener(this.handleUploadStoreChange);
+    FileUploadingStore.addChangeListener(this.handleFileUploadingStoreChange);
   },
 
   handleUploadStoreChange: function () {
@@ -25,7 +31,32 @@ var UploadCollectionPage = React.createClass({
     });
   },
 
+  handleFileUploadingStoreChange: function () {
+    var fileUploadingResult = FileUploadingStore.getFileUploadingResult();
+
+    if (fileUploadingResult === FileUploadingStore.getFileUploadingResults().NONE) {
+      this.setState({
+        isUploading: FileUploadingStore.getFileUploadingState()
+      });
+
+      return;
+    }
+
+    if (fileUploadingResult === FileUploadingStore.getFileUploadingResults().SUCCESS) {
+
+      this.context.router.transitionTo('/project/' + FileUploadingStore.getCollectionId());
+
+      return;
+    }
+  },
+
   render: function () {
+    if (this.state.isUploading) {
+      return (
+        <UploadingFiles />
+      );
+    }
+
     if (this.state.hasFiles) {
       return (
         <UploadWorkspace />

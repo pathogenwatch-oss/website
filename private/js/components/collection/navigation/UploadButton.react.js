@@ -30,7 +30,6 @@ var UploadButton = React.createClass({
 
   handleClick: function () {
     UploadActionCreators.getCollectionId();
-    //UploadWorkspaceNavigationActionCreators.navigateToNextAssembly();
   },
 
   render: function () {

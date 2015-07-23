@@ -23,9 +23,7 @@ var Application = React.createClass({
 var routes = (
   <Route name="application" path="/" handler={Application}>
     <DefaultRoute name="upload" handler={Home} />
-    <Route name="collection" path="collection" handler={UploadCollectionPage}>
-
-    </Route>
+    <Route name="collection" path="collection" handler={UploadCollectionPage} />
     <Route name="instructions" path="instructions" handler={InstructionsPage} />
     <Route name="showcase" path="showcase" handler={ShowcasePage} />
     <Route name="about" path="about" handler={AboutPage} />
