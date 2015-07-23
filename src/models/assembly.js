@@ -62,7 +62,7 @@ function beginUpload(ids, metadata, sequences) {
 
       var assemblyMetadata = {
         assemblyId: ids.assemblyId,
-        fileAssemblyId: ids.fileAssemblyId,
+        fileAssemblyId: metadata.fileAssemblyId,
         date: metadata.date,
         geography: metadata.geography,
         source: metadata.source
