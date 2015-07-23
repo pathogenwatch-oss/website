@@ -202,6 +202,30 @@ function getSubtrees(assemblyIdToTaxonMap, collectionId, callback) {
     }, callback);
 }
 
+function formatForFrontend(assemblies) {
+  return Object.keys(assemblies).reduce(function (memo, assemblyId) {
+    var assemblyData = assemblies[assemblyId];
+    memo[assemblyId] = {
+      metadata: assemblyData.ASSEMBLY_METADATA,
+      analysis: {
+        st: assemblyData.MLST_RESULT.stType,
+        resistanceProfile:
+          Object.keys(assemblyData.PAARSNP_RESULT.resistanceProfile).reduce(function (profile, className) {
+            var antibioticClass = assemblyData.PAARSNP_RESULT.resistanceProfile[className];
+            Object.keys(antibioticClass).forEach(function (antibiotic) {
+              profile[antibiotic] = {
+                antibioticClass: className,
+                resistanceResult: antibioticClass[antibiotic]
+              };
+            });
+            return profile;
+          }, {})
+      }
+    };
+    return memo;
+  }, {});
+}
+
 function get(collectionId, callback) {
   LOGGER.info('Getting list of assemblies for collection ' + collectionId);
 
@@ -227,7 +251,7 @@ function get(collectionId, callback) {
     }
     callback(null, {
       collection: {
-        assemblies: result.assemblies,
+        assemblies: formatForFrontend(result.assemblies),
         tree: result.tree,
         assemblyIdMap: result.assemblyIdToTaxonMap,
         subtrees: result.subtrees
