@@ -1,5 +1,3 @@
-var extend = require('extend');
-
 var sequenceTypeModel = require('models/sequenceType');
 var socketService = require('services/socket');
 var messageQueueService = require('services/messageQueue');
@@ -55,7 +53,6 @@ function beginUpload(ids, metadata, sequences) {
             'Assembly ' + ids.assemblyId + ' tasks completed, destroying ' +
               notificationQueue.name
           );
-          socketService.notifyAssemblyUpload(ids, 'ALL_DONE');
           notificationQueue.destroy();
         }
       });
@@ -289,6 +286,33 @@ function mapAssembliesToTaxa(assemblies) {
   }, {});
 }
 
+function getReference(speciesId, assemblyId, callback) {
+  var metadataKey = 'ASSEMBLY_METADATA_' + assemblyId;
+  var mlstKey = 'MLST_RESULT_' + speciesId + '_' + assemblyId;
+  var paarsnpKey = 'PAARSNP_RESULT_' + speciesId + '_' + assemblyId;
+  var assemblyQueryKeys = [ mlstKey, paarsnpKey, metadataKey ];
+  LOGGER.info('Assembly ' + assemblyId + ' query keys:');
+  LOGGER.info(assemblyQueryKeys);
+
+  mainStorage.retrieveMany(assemblyQueryKeys, function (error, assemblyData) {
+    if (error) {
+      return callback(error, null);
+    }
+    LOGGER.info('Got assembly ' + assemblyId + ' data');
+    var assembly = {
+      ASSEMBLY_METADATA: assemblyData[metadataKey],
+      MLST_RESULT: assemblyData[mlstKey],
+      PAARSNP_RESULT: assemblyData[paarsnpKey]
+    };
+    sequenceTypeModel.addSequenceTypeData(assembly, function (stError, result) {
+      if (stError) {
+        return callback(stError, null);
+      }
+      callback(null, result);
+    });
+  });
+}
+
 module.exports.get = get;
 module.exports.getComplete = getComplete;
 module.exports.getMany = getMany;
@@ -298,3 +322,4 @@ module.exports.getResistanceProfile = getResistanceProfile;
 module.exports.getCoreResult = getCoreResult;
 module.exports.getMetadata = getMetadata;
 module.exports.mapAssembliesToTaxa = mapAssembliesToTaxa;
+module.exports.getReference = getReference;

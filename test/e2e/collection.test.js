@@ -22,6 +22,17 @@ describe('Collection Routes', function () {
       .expect(404, done);
   });
 
+  it.only('GET /api/v1/collection/reference/:id', function (done) {
+    var fixture = require('./fixtures/collection.json');
+    request
+      .get('/api/v1/collection/reference/1280')
+      .expect(200, {}, function (error, res) {
+        if (error) { error.showDiff = false; }
+        console.log(JSON.stringify(error.actual, null, ' '));
+        done(error, res);
+      });
+  });
+
   it.skip('GET /api/v1/collection/representative/metadata', function (done) {
     var fixture = require('./fixtures/representative-metadata.json');
     request
