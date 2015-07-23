@@ -7,6 +7,6 @@ router.get('/assembly/:id/core-result', controller.getCoreResult);
 router.get('/assemblies', controller.getMultipleAssemblies);
 router.get('/assemblies/resistance-profile', controller.getResistanceProfile);
 router.get('/assemblies/table-data', controller.getAssemblyTableData);
-router.post('/assembly/add', controller.addAssembly);
+router.post('/assembly', controller.addAssembly);
 
 module.exports = router;

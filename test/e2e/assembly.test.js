@@ -55,7 +55,7 @@ describe('Assembly Routes', function () {
       .expect(200, fixture, done);
   });
 
-  it.skip('POST /assembly/add', function (done) {
+  it.skip('POST /api/v1/assembly', function (done) {
     this.timeout(1000 * 60 * 2);
 
     connectWsClient(function (socket, roomId) {
@@ -68,8 +68,8 @@ describe('Assembly Routes', function () {
         socketRoomId: roomId,
         collectionId: 'fefec50d-b7ad-4046-8431-d1e5f28c8387',
         assemblyId: 'c4abd5a8-08de-43e0-988f-3554a20facf4',
-        fileName: 'MW2.fna'
       })
+        fileName: 'MW2.fna'
       .expect(200)
       .end(function (err) {
         if (err) done(err);
