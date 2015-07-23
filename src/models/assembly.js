@@ -61,18 +61,16 @@ function beginUpload(ids, metadata, sequences) {
       });
 
       var assemblyMetadata = {
+        assemblyId: ids.assemblyId,
+        fileAssemblyId: ids.fileAssemblyId,
         date: metadata.date,
         geography: metadata.geography,
-        source: metadata.source,
-        fileAssemblyId: ids.userAssemblyId
+        source: metadata.source
       };
 
       mainStorage.store(
         METADATA_KEY_PREFIX + ids.assemblyId,
-        extend(assemblyMetadata, {
-          assemblyId: ids.assemblyId,
-          userAssemblyId: ids.userAssemblyId
-        }),
+        assemblyMetadata,
         function () {
           socketService.notifyAssemblyUpload(ids, 'METADATA_OK');
         }

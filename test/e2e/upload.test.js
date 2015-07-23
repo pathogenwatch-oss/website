@@ -7,7 +7,7 @@ var uploadAssembly = require('./features/upload-assembly');
 
 describe('Full Upload Test', function () {
 
-  it('should complete a full upload', function (done) {
+  it.only('should complete a full upload', function (done) {
     this.timeout(1000 * 60 * 5);
 
     var assemblyFilenames = [ 'JH1.fna', 'JH9.fna', 'MW2.fna' ];

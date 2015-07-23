@@ -9,7 +9,7 @@ function addAssembly(req, res) {
   var ids = {
     collectionId: req.body.collectionId,
     socketRoomId: req.body.socketRoomId,
-    userAssemblyId: req.body.userAssemblyId,
+    fileAssemblyId: req.body.fileAssemblyId,
     assemblyId: req.body.assemblyId
   };
 
