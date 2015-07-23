@@ -1,6 +1,7 @@
 var async = require('async');
 
 var mainStorage = require('services/storage')('main');
+var sequencesStorage = require('services/storage')('sequences');
 
 var LOGGER = require('utils/logging').createLogger('sequenceType');
 var UNKNOWN_ST = 'New';
@@ -25,7 +26,7 @@ function getMlstAllelesData(assembly, callback) {
     return callback(new Error('Assembly or MLST result missing'));
   }
   LOGGER.info('Getting MLST alleles data');
-  mainStorage.retrieveMany(queryKeys, function (error, mlstAllelesData) {
+  sequencesStorage.retrieveMany(queryKeys, function (error, mlstAllelesData) {
     if (error) {
       return callback(error, null);
     }

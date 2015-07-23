@@ -137,9 +137,9 @@ function getComplete(assemblyId, callback) {
     }
     LOGGER.info('Got assembly ' + assemblyId + ' data');
     var assembly = mergeAssemblyData(assemblyData, assemblyId);
-    sequenceTypeModel.addSequenceTypeData(assembly, function (error, result) {
-      if (error) {
-        return callback(error, null);
+    sequenceTypeModel.addSequenceTypeData(assembly, function (stError, result) {
+      if (stError) {
+        return callback(stError, null);
       }
       callback(null, result);
     });
@@ -283,6 +283,13 @@ function getCoreResult(id, callback) {
   });
 }
 
+function mapAssembliesToTaxa(assemblies) {
+  return Object.keys(assemblies).reduce(function (map, assemblyId) {
+    map[assemblyId] = assemblies[assemblyId].FP_COMP.subTypeAssignment;
+    return map;
+  }, {});
+}
+
 module.exports.get = get;
 module.exports.getComplete = getComplete;
 module.exports.getMany = getMany;
@@ -291,3 +298,4 @@ module.exports.beginUpload = beginUpload;
 module.exports.getResistanceProfile = getResistanceProfile;
 module.exports.getCoreResult = getCoreResult;
 module.exports.getMetadata = getMetadata;
+module.exports.mapAssembliesToTaxa = mapAssembliesToTaxa;

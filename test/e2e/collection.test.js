@@ -11,6 +11,7 @@ describe('Collection Routes', function () {
       .get('/api/v1/collection/e20ff5ce-bda0-40db-a5a5-641a8c65ea68')
       .expect(200, fixture, function (error, res) {
         if (error) { error.showDiff = false; }
+        console.log(error.actual);
         done(error, res);
       });
   });

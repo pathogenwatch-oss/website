@@ -150,7 +150,8 @@ function getAssemblies(collectionId, callback) {
       LOGGER.info('Got list of assemblies for collection ' + collectionId);
       async.each(
         assemblyIds,
-        function (assemblyId, finishIteration) {
+        function (assemblyIdWrapper, finishIteration) {
+          var assemblyId = assemblyIdWrapper.assemblyId;
           assemblyModel.getComplete(assemblyId, function (error, assembly) {
             if (error) {
               return finishIteration(error);
@@ -175,36 +176,61 @@ function getAssemblies(collectionId, callback) {
   );
 }
 
-function getTree(collectionId, callback) {
-  LOGGER.info('Getting tree for collection id: ' + collectionId);
-  var treeQueryKey = 'CORE_TREE_RESULT_' + collectionId;
+function getTree(suffix, callback) {
+  LOGGER.info('Getting tree with suffix: ' + suffix);
+  var treeQueryKey = 'CORE_TREE_RESULT_' + suffix;
 
   mainStorage.retrieve(treeQueryKey, function (error, treeData) {
     if (error) {
       return callback(error, null);
     }
     LOGGER.info(
-      'Got ' + treeData.type + ' data for ' + collectionId + ' collection'
+      'Got ' + treeData.type + ' data with suffix ' + suffix
     );
     callback(null, treeData.newickTree);
   });
 }
 
+function getSubtrees(assemblyIdToTaxonMap, collectionId, callback) {
+  async.reduce(Object.keys(assemblyIdToTaxonMap), {},
+    function (memo, assemblyId, done) {
+      var taxon = assemblyIdToTaxonMap[assemblyId];
+      getTree(collectionId + '_' + taxon, function (error, newickTree) {
+        memo[taxon] = newickTree;
+        done(error, memo);
+      });
+    }, callback);
+}
+
 function get(collectionId, callback) {
   LOGGER.info('Getting list of assemblies for collection ' + collectionId);
 
-  async.parallel({
-    assemblies: getAssemblies.bind(null, collectionId),
-    tree: getTree.bind(null, collectionId),
-    antibiotics: antibioticModel.getAll
-  }, function (error, result) {
+  async.waterfall([
+    function (done) {
+      async.parallel({
+        assemblies: getAssemblies.bind(null, collectionId),
+        tree: getTree.bind(null, collectionId),
+        antibiotics: antibioticModel.getAll
+      }, done);
+    },
+    function (result, done) {
+      var assemblyIdToTaxonMap = assemblyModel.mapAssembliesToTaxa(result.assemblies);
+      getSubtrees(assemblyIdToTaxonMap, collectionId, function (error, subtrees) {
+        result.assemblyIdToTaxonMap = assemblyIdToTaxonMap;
+        result.subtrees = subtrees;
+        done(error, result);
+      });
+    }
+  ], function (error, result) {
     if (error) {
       return callback(error, null);
     }
     callback(null, {
       collection: {
         assemblies: result.assemblies,
-        newickTree: result.tree
+        tree: result.tree,
+        assemblyIdMap: result.assemblyIdToTaxonMap,
+        subtrees: result.subtrees
       },
       antibiotics: result.antibiotics
     });

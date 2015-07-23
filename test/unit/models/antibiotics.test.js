@@ -2,7 +2,7 @@ var assert = require('assert');
 var rewire = require('rewire');
 var sinon = require('sinon');
 
-describe.only('Model: Antibiotics', function () {
+describe('Model: Antibiotics', function () {
 
   it('should return a flattened structure for the front end', function () {
     var antibioticModel = rewire('models/antibiotic');
