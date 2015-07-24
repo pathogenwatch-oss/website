@@ -3,7 +3,7 @@
 Ex-WGSA Front End.
 Built on top of [Microreact](https://github.com/ImperialCollegeLondon/microreact).
 
-## How to deploy
+### How to deploy `Macroreact` locally?
 
 1. `git clone https://github.com/ImperialCollegeLondon/macroreact.git`
 2. `cd macroreact`
@@ -12,7 +12,25 @@ Built on top of [Microreact](https://github.com/ImperialCollegeLondon/microreact
 5. `npm install`
 6. `npm start`
 
-## Q/A
+### How to deploy `Macroreact` on a remote server?
+
+1. `git clone https://github.com/ImperialCollegeLondon/macroreact.git`
+2. `cd macroreact`
+3. `cp example.config.json config.json`
+4. Edit `config.json`
+5. `npm install`
+6. `npm install -g pm2`
+7. `pm2 start start.js --name macroreact`
+
+### How to deploy `Macroreact Middle` on a remote server?
+
+1. `git clone https://github.com/ImperialCollegeLondon/macroreact-middle.git`
+2. `cd macroreact`
+3. `cp example.config.json config.json`
+4. Edit `config.json`
+5. `npm install`
+6. `npm install -g pm2`
+7. `NODE_PATH=./src pm2 start start.js --name macroreact-middle`
 
 ### What results front end expects from middle end when uploading assemblies?
 + Per __assembly__:
