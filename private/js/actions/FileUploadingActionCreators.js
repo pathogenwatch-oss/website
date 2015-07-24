@@ -11,10 +11,6 @@ module.exports = {
   },
 
   finishUploadingFiles: function (result) {
-
-    console.log('finishUploadingFiles:');
-    console.dir(result);
-
     var action = {
       type: 'finish_uploading_files',
       result: result

@@ -10,7 +10,7 @@ module.exports = {
     var numberOfAssembliesToUpload = UploadStore.getFileAssemblyIds().length;
     var numberOfResultsPerAssembly = Object.keys(FileUploadingStore.getAssemblyProcessingResults()).length;
     var numberOfResultsPerCollection = Object.keys(FileUploadingStore.getCollectionProcessingResults()).length;
-    var numberOfExpectedResults = numberOfAssembliesToUpload * numberOfResultsPerAssembly + numberOfResultsPerCollection - 1;
+    var numberOfExpectedResults = numberOfAssembliesToUpload * numberOfResultsPerAssembly + numberOfResultsPerCollection;
 
     var action = {
       type: 'set_number_of_expected_results',
@@ -32,10 +32,8 @@ module.exports = {
     var numberOfReceivedResults = FileUploadingProgressStore.getNumberOfReceivedResults();
 
     if (numberOfExpectedResults === numberOfReceivedResults) {
-      console.log('+++ Received ALL results!');
+      console.log('[Macroreact] Received all results');
       FileUploadingActionCreators.finishUploadingFiles(FileUploadingStore.getFileUploadingResults().SUCCESS);
     }
-
   }
-
 };

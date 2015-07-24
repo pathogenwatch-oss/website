@@ -3,7 +3,7 @@ var request = require('./Http');
 function getCollectionId(collectionData, callback) {
   $.ajax({
     type: 'POST',
-    url: 'http://127.0.0.1:8080/api/v1/collection/add',
+    url: 'http://127.0.0.1:8080/api/v1/collection',
     contentType: 'application/json; charset=UTF-8',
     data: JSON.stringify(collectionData, null, 4),
     dataType: 'json'
@@ -35,7 +35,7 @@ function getCollection(assemblyData, callback) {
 function postAssembly(assemblyData, callback) {
   $.ajax({
     type: 'POST',
-    url: 'http://127.0.0.1:8080/api/v1/assembly/add',
+    url: 'http://127.0.0.1:8080/api/v1/assembly',
     contentType: 'application/json; charset=UTF-8',
     data: JSON.stringify(assemblyData, null, 4),
     dataType: 'json'
@@ -48,9 +48,10 @@ function postAssembly(assemblyData, callback) {
   });
 }
 
-function getProject(projectId, callback) {
+function getReferenceProject(callback) {
+
   var options = {
-    url: 'http://127.0.0.1:8080/api/v1/project/' + projectId
+    url: 'http://127.0.0.1:8080/api/v1/collection/reference/1280'
   };
 
   if (!projectId) {
@@ -59,10 +60,43 @@ function getProject(projectId, callback) {
 
   $.get(options.url)
     .done(function (project) {
-      callback(null, project);
+
+      console.log('[Macroreact] Received reference project:');
+      console.dir(project);
+
+      //callback(null, project);
     })
     .fail(function (error) {
-      callback(error, null);
+
+      console.error(error);
+
+      //callback(error, null);
+    });
+}
+
+function getProject(projectId, callback) {
+
+  var options = {
+    url: 'http://127.0.0.1:8080/api/v1/collection/' + projectId
+  };
+
+  if (!projectId) {
+    return callback(new Error('Missing project ID'), null);
+  }
+
+  $.get(options.url)
+    .done(function (project) {
+
+      console.log('[Macroreact] Received project:');
+      console.dir(project);
+
+      //callback(null, project);
+    })
+    .fail(function (error) {
+
+      console.error(error);
+
+      //callback(error, null);
     });
 }
 

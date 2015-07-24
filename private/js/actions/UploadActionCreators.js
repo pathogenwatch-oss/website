@@ -17,11 +17,6 @@ module.exports = {
     AppDispatcher.dispatch(startProcessingFilesAction);
 
     FileUtils.parseFiles(files, function iife(error, rawFiles, assemblies) {
-      console.log('[Macroreact dev] rawFiles:');
-      console.dir(rawFiles);
-
-      console.log('[Macroreact dev] assemblies:');
-      console.dir(assemblies);
 
       var finishProcessingFilesAction = {
         type: 'finish_processing_files'
@@ -42,28 +37,12 @@ module.exports = {
     FileUploadingActionCreators.startUploadingFiles();
     FileUploadingProgressActionCreators.setNumberOfExpectedResults();
 
-    //var numberOfExpectedResults = UploadStore.getFileAssemblyIds().length * Object.keys(FileUploadingStore.getAssemblyProcessingResults()).length + Object.keys(FileUploadingStore.getCollectionProcessingResults()).length - 1;
-    //var receivedResults = {};
-
     SocketStore.getSocketConnection().on('assemblyUploadNotification', function iife(data) {
 
-      var receivedResult = data.assemblyId + '__' + data.result;
-
-      FileUploadingProgressActionCreators.addReceivedResult(receivedResult);
-
-      console.log('Notification:');
+      console.log('[Macroreact] Received notification:');
       console.dir(data);
 
-      //receivedResults[data.assemblyId + '__' + data.result] = true;
-
-      // console.log('Number of received results: ' + Object.keys(receivedResults).length);
-      // console.log('Number of expected results: ' + numberOfExpectedResults);
-
-      // if (Object.keys(receivedResults).length === numberOfExpectedResults) {
-      //   console.log('+++ Received ALL results!');
-      //
-      //   FileUploadingActionCreators.finishUploadingFiles(FileUploadingStore.getFileUploadingResults().SUCCESS);
-      // }
+      FileUploadingProgressActionCreators.addReceivedResult(data);
 
     });
 
@@ -99,8 +78,11 @@ module.exports = {
           sequences: UploadStore.getAssembly(userAssemblyId).fasta.assembly
         };
 
+        console.log('[Macroreact] Prepared assembly data to upload:');
+        console.dir(assemblyData);
+
         ApiUtils.postAssembly(assemblyData, function iife(error, data) {
-          console.log('OK');
+          console.log('[Macroreact] Uploaded assembly data:');
           console.dir(data);
         });
       });

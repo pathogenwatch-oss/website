@@ -6,13 +6,29 @@ var CHANGE_EVENT = 'change';
 
 var numberOfExpectedResults = null;
 var receivedResults = {};
+var receivedAssemblyResults = {};
 
 function setNumberOfExpectedResults(number) {
   numberOfExpectedResults = number;
 }
 
 function setReceivedResult(result) {
-  receivedResults[result] = true;
+  var resultString = result.assemblyId + '__' + result.result;
+
+  receivedResults[resultString] = true;
+
+  if (result.assemblyId) {
+    receivedAssemblyResults[result.assemblyId] = receivedAssemblyResults[result.assemblyId] || {};
+    receivedAssemblyResults[result.assemblyId][result.result] = result.result;
+
+    console.log('[Macroreact][Assembly Result] ' + result.assemblyId + ' ' + result.result);
+    console.dir(receivedAssemblyResults);
+
+    return;
+  }
+
+  console.log('[Macroreact][Collection Result] ' + result.collectionId + ' ' + result.result);
+  console.dir(receivedAssemblyResults);
 }
 
 function emitChange() {

@@ -7,7 +7,8 @@ var UploadWorkspaceNavigation = require('./UploadWorkspaceNavigation.react');
 var containerStyle = {
   width: '100%',
   height: '100%',
-  background: '-webkit-gradient(linear,left top,left bottom,color-stop(0,#f7f7f7),color-stop(1,#ebebeb))'
+  background: '-webkit-gradient(linear,left top,left bottom,color-stop(0,#f7f7f7),color-stop(1,#ebebeb))',
+  overflow: 'scroll'
 };
 
 var UploadWorkspace = React.createClass({

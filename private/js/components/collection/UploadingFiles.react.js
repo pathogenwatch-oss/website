@@ -16,7 +16,8 @@ var fullWidthAndHeightStyle = {
 
 var dropZoneStyle = assign({}, fullWidthAndHeightStyle, {
   background: '-webkit-gradient(linear,left top,left bottom,color-stop(0,#f7f7f7),color-stop(1,#ebebeb))',
-  padding: '30px'
+  padding: '30px',
+  overflow: 'scroll'
 });
 
 var dropTargetContainerStyle = assign({}, fullWidthAndHeightStyle, {
@@ -55,7 +56,7 @@ var UploadingFiles = React.createClass({
         <div style={dropTargetContainerStyle}>
           <div style={dropTargetStyle}>
             <i className={ICON_CLASS} style={iconStyle}></i>
-            <h2 style={headerStyle}><span style={featureStyle}>Uploading and analysing</span> your files.</h2>
+            <h2 style={headerStyle}><span style={featureStyle}>Uploading</span> and <span style={featureStyle}>analysing</span> your files.</h2>
 
             <div className="row">
               <div className="col-sm-8 col-sm-offset-2">

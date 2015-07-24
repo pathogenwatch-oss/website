@@ -15,7 +15,8 @@ var fullWidthAndHeightStyle = {
 
 var dropZoneStyle = assign({}, fullWidthAndHeightStyle, {
   background: '-webkit-gradient(linear,left top,left bottom,color-stop(0,#f7f7f7),color-stop(1,#ebebeb))',
-  padding: '30px'
+  padding: '30px',
+  overflow: 'scroll'
 });
 
 var dropTargetContainerStyle = assign({}, fullWidthAndHeightStyle, {
