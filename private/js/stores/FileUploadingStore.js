@@ -17,8 +17,8 @@ var ASSEMBLY_PROCESSING_RESULTS = keyMirror({
 
 var COLLECTION_PROCESSING_RESULTS = keyMirror({
   PHYLO_MATRIX: null,
-  CORE_MUTANT_TREE: null,
-  SUBMATRIX: null
+  CORE_MUTANT_TREE: null//,
+  //SUBMATRIX: null
 });
 
 var STATES = keyMirror({

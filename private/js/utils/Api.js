@@ -16,21 +16,21 @@ function getCollectionId(collectionData, callback) {
   });
 }
 
-function getCollection(assemblyData, callback) {
-  $.ajax({
-    type: 'POST',
-    url: 'http://127.0.0.1:8080/collection',
-    contentType: 'application/json; charset=UTF-8',
-    data: JSON.stringify(assemblyData, null, 4),
-    dataType: 'json'
-  })
-  .done(function (data) {
-    callback(null, data);
-  })
-  .fail(function (error) {
-    callback(error, null);
-  });
-}
+// function getCollection(assemblyData, callback) {
+//   $.ajax({
+//     type: 'POST',
+//     url: 'http://127.0.0.1:8080/collection',
+//     contentType: 'application/json; charset=UTF-8',
+//     data: JSON.stringify(assemblyData, null, 4),
+//     dataType: 'json'
+//   })
+//   .done(function (data) {
+//     callback(null, data);
+//   })
+//   .fail(function (error) {
+//     callback(error, null);
+//   });
+// }
 
 function postAssembly(assemblyData, callback) {
   $.ajax({
@@ -120,7 +120,7 @@ function postProject(projectData, callback) {
 module.exports = {
   postAssembly: postAssembly,
   getCollectionId: getCollectionId,
-  getCollection: getCollection,
+  //getCollection: getCollection,
   getProject: getProject,
   postProject: postProject
 };

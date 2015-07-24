@@ -33,7 +33,9 @@ module.exports = {
 
     if (numberOfExpectedResults === numberOfReceivedResults) {
       console.log('[Macroreact] Received all results');
-      FileUploadingActionCreators.finishUploadingFiles(FileUploadingStore.getFileUploadingResults().SUCCESS);
+      setTimeout(function () {
+        FileUploadingActionCreators.finishUploadingFiles(FileUploadingStore.getFileUploadingResults().SUCCESS);
+      }, 1000);
     }
   }
 };

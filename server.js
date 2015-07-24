@@ -38,21 +38,8 @@ require('./routes')(app);
 //require('./error')(app);
 
 module.exports = function (callback) {
-  var db;
 
-  mongoose.connect(
-    'mongodb://' + config.mongodb.hostname + ':' + config.mongodb.port + '/' + config.mongodb.collection
-  );
+  app.listen(port, hostname);
+  callback(null, app);
 
-  db = mongoose.connection;
-
-  db.on('error', function (error) {
-    console.error('Mongo ' + error);
-    callback(error);
-  });
-
-  db.once('open', function () {
-    app.listen(port, hostname);
-    callback(null, app);
-  });
 };
