@@ -9,5 +9,11 @@
       "port": 27017,
       "collection": "microreact"
     }
+  },
+  "client": {
+    "api": {
+      "hostname": "localhost",
+      "port": 8080
+    },
   }
 }

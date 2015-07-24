@@ -1,9 +1,10 @@
 var request = require('./Http');
+var CONFIG = require('../../../config.json').client;
 
 function getCollectionId(collectionData, callback) {
   $.ajax({
     type: 'POST',
-    url: 'http://127.0.0.1:8080/api/v1/collection',
+    url: 'http://' + CONFIG.api.hostname + ':' + CONFIG.api.port + '/api/v1/collection',
     contentType: 'application/json; charset=UTF-8',
     data: JSON.stringify(collectionData, null, 4),
     dataType: 'json'
@@ -35,7 +36,7 @@ function getCollectionId(collectionData, callback) {
 function postAssembly(assemblyData, callback) {
   $.ajax({
     type: 'POST',
-    url: 'http://127.0.0.1:8080/api/v1/assembly',
+    url: 'http://' + CONFIG.api.hostname + ':' + CONFIG.api.port + '/api/v1/assembly',
     contentType: 'application/json; charset=UTF-8',
     data: JSON.stringify(assemblyData, null, 4),
     dataType: 'json'
@@ -51,7 +52,7 @@ function postAssembly(assemblyData, callback) {
 function getReferenceProject(callback) {
 
   var options = {
-    url: 'http://127.0.0.1:8080/api/v1/collection/reference/1280'
+    url: 'http://' + CONFIG.api.hostname + ':' + CONFIG.api.port + '/api/v1/collection/reference/1280'
   };
 
   if (!projectId) {
@@ -77,7 +78,7 @@ function getReferenceProject(callback) {
 function getProject(projectId, callback) {
 
   var options = {
-    url: 'http://127.0.0.1:8080/api/v1/collection/' + projectId
+    url: 'http://' + CONFIG.api.hostname + ':' + CONFIG.api.port + '/api/v1/collection/' + projectId
   };
 
   if (!projectId) {

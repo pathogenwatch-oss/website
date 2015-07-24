@@ -1,7 +1,8 @@
 var io = require('socket.io-client');
+var CONFIG = require('../../../config.json').client;
 
 function socketConnect() {
-  return io.connect('127.0.0.1:8080');
+  return io.connect(CONFIG.api.hostname + ':' + CONFIG.api.port);
 }
 
 module.exports = {

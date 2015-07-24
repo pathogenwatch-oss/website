@@ -71,6 +71,10 @@ var DragAndDropFiles = React.createClass({
 
     var socket = SocketUtils.socketConnect();
 
+    socket.on('connect', function iife() {
+      console.log('[Macroreact] Socket connected');
+    });
+
     SocketStore.addChangeListener(this.handleSocketStoreChange);
     SocketActionCreators.setSocketConnection(socket);
   },
@@ -79,6 +83,7 @@ var DragAndDropFiles = React.createClass({
     if (! SocketStore.getRoomId()) {
 
       SocketStore.getSocketConnection().on('roomId', function iife(roomId) {
+        console.log('[Macroreact] Got socket room id ' + roomId);
         SocketActionCreators.setRoomId(roomId);
       });
 
