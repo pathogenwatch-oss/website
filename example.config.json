@@ -14,6 +14,6 @@
     "api": {
       "hostname": "localhost",
       "port": 8080
-    },
+    }
   }
 }
