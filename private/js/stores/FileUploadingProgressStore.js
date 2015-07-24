@@ -6,7 +6,10 @@ var CHANGE_EVENT = 'change';
 
 var numberOfExpectedResults = null;
 var receivedResults = {};
-var receivedAssemblyResults = {};
+var receivedAssemblyResults = {
+  assemblies: {},
+  collection: {}
+};
 
 function setNumberOfExpectedResults(number) {
   numberOfExpectedResults = number;
@@ -18,14 +21,16 @@ function setReceivedResult(result) {
   receivedResults[resultString] = true;
 
   if (result.assemblyId) {
-    receivedAssemblyResults[result.assemblyId] = receivedAssemblyResults[result.assemblyId] || {};
-    receivedAssemblyResults[result.assemblyId][result.result] = result.result;
+    receivedAssemblyResults.assemblies[result.assemblyId] = receivedAssemblyResults.assemblies[result.assemblyId] || {};
+    receivedAssemblyResults.assemblies[result.assemblyId][result.result] = true;
 
     console.log('[Macroreact][Assembly Result] ' + result.assemblyId + ' ' + result.result);
     console.dir(receivedAssemblyResults);
 
     return;
   }
+
+  receivedAssemblyResults.collection[result.result] = true;
 
   console.log('[Macroreact][Collection Result] ' + result.collectionId + ' ' + result.result);
   console.dir(receivedAssemblyResults);

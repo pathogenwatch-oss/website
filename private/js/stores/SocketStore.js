@@ -44,10 +44,6 @@ function handleAction(action) {
   switch (action.type) {
 
     case 'set_socket_connection':
-
-      console.log('action.socketConnection:');
-      console.dir(action.socketConnection);
-
       setSocketConnection(action.socketConnection);
       emitChange();
       break;

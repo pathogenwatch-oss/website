@@ -8,8 +8,6 @@ module.exports = {
       socketConnection: socketConnection
     };
 
-    console.log(1);
-
     AppDispatcher.dispatch(action);
   },
 
