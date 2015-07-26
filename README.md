@@ -57,6 +57,17 @@ Built on top of [Microreact](https://github.com/ImperialCollegeLondon/microreact
 4. `sudo supervisorctl`
 5. `restart all`
 
-### Reference collection files?
+### Where can I find reference collection files?
 
 [Here](https://drive.google.com/drive/folders/0B5jx-9ZvRjnYU0NoQlFEZU5mdFU)
+
+## Architecture
+
+### Actions
+### Stores
+### Components
+### Utils
+### Config
+
+
+
