@@ -55,9 +55,9 @@ function getReferenceProject(callback) {
     url: 'http://' + CONFIG.api.hostname + ':' + CONFIG.api.port + '/api/v1/collection/reference/1280'
   };
 
-  if (!projectId) {
-    return callback(new Error('Missing project ID'), null);
-  }
+  // if (!projectId) {
+  //   return callback(new Error('Missing project ID'), null);
+  // }
 
   $.get(options.url)
     .done(function (project) {
@@ -65,17 +65,16 @@ function getReferenceProject(callback) {
       console.log('[Macroreact] Received reference project:');
       console.dir(project);
 
-      //callback(null, project);
+      callback(null, project);
     })
     .fail(function (error) {
-
-      console.error(error);
-
-      //callback(error, null);
+      callback(error, null);
     });
 }
 
 function getProject(projectId, callback) {
+
+  console.log('[Macroreact] Getting project ' + projectId);
 
   var options = {
     url: 'http://' + CONFIG.api.hostname + ':' + CONFIG.api.port + '/api/v1/collection/' + projectId
@@ -88,16 +87,13 @@ function getProject(projectId, callback) {
   $.get(options.url)
     .done(function (project) {
 
-      console.log('[Macroreact] Received project:');
+      console.log('[Macroreact] Received project ' + project.collection.collectionId + ':');
       console.dir(project);
 
-      //callback(null, project);
+      callback(null, project);
     })
     .fail(function (error) {
-
-      console.error(error);
-
-      //callback(error, null);
+      callback(error, null);
     });
 }
 
@@ -123,5 +119,6 @@ module.exports = {
   getCollectionId: getCollectionId,
   //getCollection: getCollection,
   getProject: getProject,
-  postProject: postProject
+  postProject: postProject,
+  getReferenceProject: getReferenceProject
 };

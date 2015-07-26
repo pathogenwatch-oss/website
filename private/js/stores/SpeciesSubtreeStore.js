@@ -2,30 +2,15 @@ var AppDispatcher = require('../dispatcher/AppDispatcher');
 var EventEmitter = require('events').EventEmitter;
 var assign = require('object-assign');
 
-var UploadedCollectionStore = require('./UploadedCollectionStore');
 var TreeUtils = require('../utils/Tree');
 
 var CHANGE_EVENT = 'change';
 
-var STATIC_DATA = {
-  SPECIES_SUBTREES: {
-    MRSA252: require('../../static_data/MRSA252.json').tree,
-    MW2: require('../../static_data/MW2.json').tree,
-    N315: require('../../static_data/N315.json').tree,
-    NCTC8325: require('../../static_data/NCTC8325.json').tree,
-    Newman: require('../../static_data/Newman.json').tree,
-    T0131: require('../../static_data/T0131.json').tree,
-    TCH60: require('../../static_data/TCH60.json').tree,
-    TCH1516: require('../../static_data/TCH1516.json').tree,
-    'e0ce1b47-9928-43fb-9a38-981813b609bc': require('../../static_data/CORE_TREE_RESULT_e0ce1b47-9928-43fb-9a38-981813b609bc.json').newickTree
-  }
-};
-
 var speciesSubtrees = null;
 var activeSpeciesSubtreeId = null;
 
-function setSpeciesSubtrees() {
-  speciesSubtrees = STATIC_DATA.SPECIES_SUBTREES;
+function setSpeciesSubtrees(subtrees) {
+  speciesSubtrees = subtrees;
 }
 
 function setActiveSpeciesSubtreeId(speciesSubtreeId) {
@@ -71,6 +56,7 @@ var Store = assign({}, EventEmitter.prototype, {
   getActiveSpeciesSubtreeAssemblyIds: function () {
     var activeSpeciesSubtree = this.getActiveSpeciesSubtree();
     var activeSpeciesSubtreeAssemblyIds = [];
+
     if (activeSpeciesSubtree) {
       activeSpeciesSubtreeAssemblyIds = TreeUtils.extractIdsFromNewick(activeSpeciesSubtree);
     }
@@ -90,6 +76,14 @@ function handleAction(action) {
 
     case 'set_active_species_subtree_id':
       setActiveSpeciesSubtreeId(action.activeSpeciesSubtreeId);
+      emitChange();
+      break;
+
+    case 'set_collection':
+      var subtrees = action.collection.collection.subtrees;
+      subtrees[action.collection.collection.collectionId] = action.collection.collection.tree;
+      setSpeciesSubtrees(subtrees);
+      setActiveSpeciesSubtreeId(action.collection.collection.collectionId);
       emitChange();
       break;
 

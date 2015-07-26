@@ -50,9 +50,51 @@ function getTotalNumberOfDaysInMonth(year, month) {
   return (32 - new Date(year, month, 32).getDate());
 }
 
+function getCountry(isolate) {
+  if (isolate.metadata.geography.location && isolate.metadata.geography.location.country) {
+    return isolate.metadata.geography.location.country;
+  }
+
+  return '';
+}
+
+function convertDataObjectToCustomObject(date) {
+  var year = date.getFullYear();
+  var month = date.getMonth() + 1;
+  var day = date.getDate();
+
+  return {
+    year: year,
+    month: month,
+    day: day
+  };
+}
+
+function fixMetadataDateFormatInCollection(collection) {
+  var assemblies = collection.collection.assemblies;
+  var assemblyIds = Object.keys(assemblies);
+  var assembly;
+
+  assemblyIds.forEach(function iife(assemblyId) {
+    assembly = assemblies[assemblyId];
+
+    if (assembly.metadata.datetime) {
+      assembly.metadata.date = convertDataObjectToCustomObject(new Date(assembly.metadata.datetime));
+    }
+
+    assemblies[assemblyId] = assembly;
+  });
+
+  collection.assemblies = assemblies;
+
+  return collection;
+}
+
 module.exports = {
   generateYears: generateYears,
   generateMonths: generateMonths,
   generateDays: generateDays,
-  getTotalNumberOfDaysInMonth: getTotalNumberOfDaysInMonth
+  getTotalNumberOfDaysInMonth: getTotalNumberOfDaysInMonth,
+  getCountry: getCountry,
+  fixMetadataDateFormatInCollection: fixMetadataDateFormatInCollection
 };

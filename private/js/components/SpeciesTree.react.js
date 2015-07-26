@@ -38,6 +38,25 @@ var SHOW_TREE_LABELS_SETTING_OPTIONS = {
   1: true
 };
 
+var sectionStyle = {
+  position: 'relative',
+  width: '100%',
+  height: '100%'
+};
+
+var phylocanvasStyle = {
+  position: 'relative',
+  width: '100%',
+  height: '100%'
+};
+
+var treeControlsToggleButton = {
+  position: 'absolute',
+  bottom: 5,
+  right: 5,
+  zIndex: 999
+};
+
 var Tree = React.createClass({
 
   tree: null,
@@ -65,6 +84,12 @@ var Tree = React.createClass({
   },
 
   componentDidMount: function () {
+    this.initializeTree();
+    this.setNodeShapeAndColour();
+    this.emphasizeShapeAndColourForNodesThatHaveSubtrees();
+  },
+
+  initializeTree: function () {
     var phylocanvas = new PhyloCanvas.Tree(this.treeId, {
       history: {
         collapsed: true
@@ -85,9 +110,6 @@ var Tree = React.createClass({
     this.phylocanvas.on('selected', this.handleTreeBranchSelected);
     this.phylocanvas.on('subtree', this.handleRedrawSubtree);
     this.phylocanvas.on('historytoggle', this.handleHistoryToggle);
-
-    this.setNodeShapeAndColour();
-    this.emphasizeShapeAndColourForNodesThatHaveSubtrees();
   },
 
   setNodeShapeAndColour: function () {
@@ -109,19 +131,7 @@ var Tree = React.createClass({
   },
 
   componentDidUpdate: function () {
-
     this.phylocanvas.resizeToContainer();
-
-    // if (!this.state.isHighlightingBranch) {
-    //   this.phylocanvas.selectNodes(this.props.selectIsolates);
-    //   this.previouslySelectedNodes = this.props.selectIsolates;
-    // }
-    //
-    // if (this.props.nodeLabel) {
-    //   this.setNodeLabel(this.props.nodeLabel);
-    // }
-
-    //this.setNodeShapeAndColour();
     this.phylocanvas.draw();
   },
 
@@ -137,58 +147,6 @@ var Tree = React.createClass({
         this.phylocanvas.branches[isolateId].label = isolate[nodeLabel] || '';
       }
     }.bind(this));
-  },
-
-  __setNodeShapeAndColour: function () {
-    var isolates = this.props.isolates;
-    var isolateIds = Object.keys(isolates);
-    var colourDataByDataField = this.props.colourDataByDataField;
-    var isolate;
-    var branch;
-    var shape;
-    var colour;
-
-    isolateIds.forEach(function (isolateId) {
-      isolate = isolates[isolateId];
-      branch = this.phylocanvas.branches[isolateId];
-
-      if (branch && branch.leaf) {
-
-        if (this.props.filterStartDate && this.props.filterEndDate && TimelineUtils.doesDataObjectHaveTimelineDate(isolate)) {
-          if (! TimelineUtils.isDataObjectWithinDateRange(this.props.filterStartDate, this.props.filterEndDate, isolate)) {
-
-            branch.colour = DEFAULT.COLOUR;
-            branch.nodeShape = DEFAULT.SHAPE;
-            return;
-          }
-        }
-
-        if (! colourDataByDataField) {
-
-          shape = DEFAULT.SHAPE;
-          colour = DEFAULT.COLOUR;
-
-        } else {
-
-          if (typeof isolate[colourDataByDataField + '__shape'] === 'undefined') {
-            shape = DEFAULT.SHAPE;
-          } else {
-            shape = isolate[colourDataByDataField + '__shape'].toLowerCase();
-          }
-
-          if (typeof isolate[colourDataByDataField + '__colour'] === 'undefined' && typeof isolate[colourDataByDataField + '__color'] === 'undefined') {
-            colour = DEFAULT.COLOUR;
-          } else {
-            colour = isolate[colourDataByDataField + '__colour'] || isolate[colourDataByDataField + '__color'];
-          }
-        }
-
-        branch.nodeShape = shape;
-        branch.colour = colour;
-      }
-    }.bind(this));
-
-    this.phylocanvas.draw();
   },
 
   redrawOriginalTree: function () {
@@ -264,43 +222,26 @@ var Tree = React.createClass({
   },
 
   handleTreeBranchSelected: function (event) {
-
     var selectedNodeIds = event.nodeIds;
 
     if (selectedNodeIds.length === 0) {
 
-      SpeciesSubtreeActionCreators.setActiveSpeciesSubtreeId(UploadedCollectionStore.getUploadedCollectionId());
+      this.showUploadedCollectionTree();
 
     } else if (selectedNodeIds.length === 1) {
 
-      SpeciesSubtreeActionCreators.setActiveSpeciesSubtreeId(selectedNodeIds[0]);
+      var subtreeId = selectedNodeIds[0];
+      this.showUploadedCollectionSubtree(subtreeId);
 
     }
+  },
 
-    // var allCurrentTreeNodeIds;
-    //
-    // /**
-    //  * Unfortunately selectedNodeIds can return string
-    //  * if only one node has been selected.
-    //  *
-    //  * In that case convert it to array.
-    //  */
-    // if (typeof selectedNodeIds === 'string') {
-    //   selectedNodeIds = [ selectedNodeIds ];
-    // }
-    //
-    // if (selectedNodeIds.length < 2) {
-    //   this.setState({
-    //     isHighlightingBranch: false
-    //   });
-    // } else {
-    //   this.setState({
-    //     isHighlightingBranch: true
-    //   });
-    // }
-    //
-    // allCurrentTreeNodeIds = this.getCurrentTreeAllIsolateIds();
-    // this.props.handleSelectTreeData(selectedNodeIds, allCurrentTreeNodeIds);
+  showUploadedCollectionTree: function () {
+    SpeciesSubtreeActionCreators.setActiveSpeciesSubtreeId(UploadedCollectionStore.getUploadedCollectionId());
+  },
+
+  showUploadedCollectionSubtree: function (subtreeId) {
+    SpeciesSubtreeActionCreators.setActiveSpeciesSubtreeId(subtreeId);
   },
 
   getCurrentTreeAllIsolateIds: function () {
@@ -358,26 +299,6 @@ var Tree = React.createClass({
   },
 
   render: function () {
-
-    var sectionStyle = {
-      position: 'relative',
-      width: '100%',
-      height: '100%'
-    };
-
-    var phylocanvasStyle = {
-      position: 'relative',
-      width: '100%',
-      height: '100%'
-    };
-
-    var treeControlsToggleButton = {
-      position: 'absolute',
-      bottom: 5,
-      right: 5,
-      zIndex: 999
-    };
-
     return (
       <section style={sectionStyle}>
         <div id={this.treeId} style={phylocanvasStyle}></div>

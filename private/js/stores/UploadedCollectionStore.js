@@ -4,20 +4,20 @@ var assign = require('object-assign');
 
 var CHANGE_EVENT = 'change';
 
-var STATIC_DATA = {
-  UPLOADED_COLLECTION: require('../../static_data/COLLECTION_e0ce1b47-9928-43fb-9a38-981813b609bc.json'),
-  UPLOADED_COLLECTION_TREE: require('../../static_data/CORE_TREE_RESULT_e0ce1b47-9928-43fb-9a38-981813b609bc.json')
-};
+// var STATIC_DATA = {
+//   UPLOADED_COLLECTION: require('../../static_data/COLLECTION_e0ce1b47-9928-43fb-9a38-981813b609bc.json'),
+//   UPLOADED_COLLECTION_TREE: require('../../static_data/CORE_TREE_RESULT_e0ce1b47-9928-43fb-9a38-981813b609bc.json')
+// };
 
 var uploadedCollection = null;
 var uploadedCollectionTree = null;
 
-function setUploadedCollection(collectionId) {
-  uploadedCollection = STATIC_DATA.UPLOADED_COLLECTION;
+function setUploadedCollection(collection) {
+  uploadedCollection = collection; // STATIC_DATA.UPLOADED_COLLECTION;
 }
 
-function setUploadedCollectionTree(collectionId) {
-  uploadedCollectionTree = STATIC_DATA.UPLOADED_COLLECTION_TREE.newickTree;
+function setUploadedCollectionTree(tree) {
+  uploadedCollectionTree = tree; // STATIC_DATA.UPLOADED_COLLECTION_TREE.newickTree;
 }
 
 function emitChange() {
@@ -66,6 +66,15 @@ function handleAction(action) {
 
     case 'set_uploaded_collection_tree':
       setUploadedCollectionTree(action.collectionId);
+      emitChange();
+      break;
+
+    case 'set_collection':
+      setUploadedCollection({
+        collectionId: action.collection.collection.collectionId,
+        assemblies: action.collection.collection.assemblies
+      });
+      setUploadedCollectionTree(action.collection.collection.tree);
       emitChange();
       break;
 

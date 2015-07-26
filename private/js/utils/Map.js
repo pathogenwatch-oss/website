@@ -1,3 +1,5 @@
+var MapStylesUtils = require('../utils/MapStyles');
+
 var MARKER = {
   SIZE: {
     WIDTH: 12,
@@ -188,5 +190,6 @@ module.exports = {
   getDataObjectsWithCoordinates: getDataObjectsWithCoordinates,
   isDataObjectHasCoordinates: isDataObjectHasCoordinates,
   groupDataObjectsByPosition: groupDataObjectsByPosition,
-  getMarkerIcon: getMarkerIcon
+  getMarkerIcon: getMarkerIcon,
+  STYLES: MapStylesUtils
 };

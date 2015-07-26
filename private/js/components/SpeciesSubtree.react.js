@@ -13,6 +13,7 @@ var TableActionCreators = require('../actions/TableActionCreators');
 var SpeciesSubtreeActionCreators = require('../actions/SpeciesSubtreeActionCreators');
 
 var DataUtils = require('../utils/Data');
+var MetadataUtils = require('../utils/Metadata');
 
 var assign = require('object-assign');
 
@@ -42,6 +43,25 @@ var TREE_TYPE_SETTING_OPTIONS = {
 var SHOW_TREE_LABELS_SETTING_OPTIONS = {
   0: false,
   1: true
+};
+
+var sectionStyle = {
+  position: 'relative',
+  width: '100%',
+  height: '100%'
+};
+
+var phylocanvasStyle = {
+  position: 'relative',
+  width: '100%',
+  height: '100%'
+};
+
+var treeControlsToggleButton = {
+  position: 'absolute',
+  bottom: 5,
+  right: 5,
+  zIndex: 999
 };
 
 var Tree = React.createClass({
@@ -157,9 +177,9 @@ var Tree = React.createClass({
     combinedAssemblyIds.forEach(function (assemblyId) {
 
       if (nodeLabel === 'Assembly Id') {
-        nodeLabelValue = combinedAssemblies[assemblyId].metadata.fileAssemblyId || '';
+        nodeLabelValue = combinedAssemblies[assemblyId].metadata.fileAssemblyId || combinedAssemblies[assemblyId].metadata.userAssemblyId || '';
       } else if (nodeLabel === 'Country') {
-        nodeLabelValue = combinedAssemblies[assemblyId].metadata.geography.location.country || '';
+        nodeLabelValue = MetadataUtils.getCountry(combinedAssemblies[assemblyId]);
       } else if (nodeLabel === 'Source') {
         nodeLabelValue = combinedAssemblies[assemblyId].metadata.source || '';
       } else if (nodeLabel === 'Date') {
@@ -450,26 +470,6 @@ var Tree = React.createClass({
   },
 
   render: function () {
-
-    var sectionStyle = {
-      position: 'relative',
-      width: '100%',
-      height: '100%'
-    };
-
-    var phylocanvasStyle = {
-      position: 'relative',
-      width: '100%',
-      height: '100%'
-    };
-
-    var treeControlsToggleButton = {
-      position: 'absolute',
-      bottom: 5,
-      right: 5,
-      zIndex: 999
-    };
-
     return (
       <section style={sectionStyle}>
         <div id={this.treeId} style={phylocanvasStyle}></div>

@@ -2,10 +2,11 @@ var AppDispatcher = require('../dispatcher/AppDispatcher');
 
 module.exports = {
 
-  setSpeciesTree: function () {
+  setSpeciesTree: function (tree) {
 
     var action = {
-      type: 'set_species_tree'
+      type: 'set_species_tree',
+      tree: tree
     };
 
     AppDispatcher.dispatch(action);

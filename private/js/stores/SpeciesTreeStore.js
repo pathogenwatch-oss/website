@@ -4,14 +4,10 @@ var assign = require('object-assign');
 
 var CHANGE_EVENT = 'change';
 
-var STATIC_DATA = {
-  SPECIES_TREE: require('../../static_data/species_tree.json').tree
-};
-
 var speciesTree = null;
 
-function setSpeciesTree() {
-  speciesTree = STATIC_DATA.SPECIES_TREE;
+function setSpeciesTree(tree) {
+  speciesTree = tree;
 }
 
 function emitChange() {
@@ -39,7 +35,12 @@ function handleAction(action) {
   switch (action.type) {
 
     case 'set_species_tree':
-      setSpeciesTree();
+      setSpeciesTree(action.tree);
+      emitChange();
+      break;
+
+    case 'set_collection':
+      setSpeciesTree(action.referenceCollection.collection.tree);
       emitChange();
       break;
 

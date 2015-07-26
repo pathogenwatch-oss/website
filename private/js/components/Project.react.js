@@ -2,8 +2,10 @@ var React = require('react');
 var Loading = require('./Loading.react');
 var ProjectViewer = require('./ProjectViewer.react');
 var NotFound = require('./NotFound.react');
-var Api = require('../utils/Api');
+var ApiUtils = require('../utils/Api');
 var Data = require('../utils/Data');
+var ProjectActionCreators = require('../actions/ProjectActionCreators');
+var ProjectStore = require('../stores/ProjectStore');
 
 var Project = React.createClass({
 
@@ -14,24 +16,17 @@ var Project = React.createClass({
     };
   },
 
-  handleGetProject: function (error, project) {
-    if (error) {
-      this.setState({
-        error: error
-      });
-
-      return;
-    }
-
+  handleProjectStoreChange: function () {
     this.setState({
-      project: project
+      project: 'LOADED'
     });
   },
 
   componentDidMount: function () {
-    var projectId = this.props.params.projectId;
+    ProjectStore.addChangeListener(this.handleProjectStoreChange);
 
-    Api.getProject(projectId, this.handleGetProject);
+    var projectId = this.props.params.projectId;
+    ProjectActionCreators.getProject(projectId);
   },
 
   render: function () {
@@ -47,9 +42,7 @@ var Project = React.createClass({
     } else if (this.state.project) {
 
       return (
-        <ProjectViewer
-          project={this.state.project}
-          query={this.props.query} />
+        <ProjectViewer query={this.props.query} />
       );
 
     } else {

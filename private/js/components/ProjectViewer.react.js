@@ -16,42 +16,7 @@ var UploadedCollectionStore = require('../stores/UploadedCollectionStore');
 var ProjectViewer = React.createClass({
 
   propTypes: {
-    project: React.PropTypes.object.isRequired,
     query: React.PropTypes.object.isRequired
-  },
-
-  getInitialState: function () {
-    return {
-      shortId: this.props.project.shortId,
-      tree: this.props.project.tree,
-      data: this.props.project.data,
-      metadata: this.props.project.metadata,
-
-      filteredMapData: this.props.project.data,
-      filteredTableData: this.props.project.data,
-
-      filterStartDate: null,
-      filterEndDate: null,
-
-      selectIsolatesOnTree: [],
-
-      colourDataByDataField: null,
-      treeNodeLabel: null,
-
-      updateLinkError: null
-    };
-  },
-
-  componentWillMount: function () {
-    SpeciesTreeActionCreators.setSpeciesTree();
-    SpeciesTreeActionCreators.setSpeciesSubtrees();
-    UploadedCollectionActionCreators.setUploadedCollection();
-    UploadedCollectionActionCreators.setUploadedCollectionTree();
-    PublicCollectionActionCreators.setPublicCollection();
-  },
-
-  componentDidMount: function () {
-    SpeciesSubtreeActionCreators.setActiveSpeciesSubtreeId(UploadedCollectionStore.getUploadedCollectionId());
   },
 
   getInitialDataFieldThatFiltersMapMarkers: function () {
@@ -144,28 +109,7 @@ var ProjectViewer = React.createClass({
 
   render: function () {
     return (
-
-      <Layout
-        projectTree={this.state.tree}
-        analysisTree={this.state.tree}
-        isolates={this.state.data}
-        selectIsolatesOnTree={this.state.selectIsolatesOnTree}
-        handleSelectTreeData={this.handleSelectTreeData}
-        treeNodeLabel={this.state.treeNodeLabel}
-        handleFilterMapAndTableData={this.handleFilterMapAndTableData}
-        colourDataByDataField={this.state.colourDataByDataField}
-        handleColourDataByDataField={this.handleColourDataByDataField}
-        filteredMapData={this.state.filteredMapData}
-        handleFilterTableData={this.handleFilterTableData}
-        handleInfoWindowIsolateClick={this.handleInfoWindowIsolateClick}
-        metadata={this.state.metadata}
-        shortId={this.state.shortId}
-        filteredTableData={this.state.filteredTableData}
-        handleChangeNodeLabel={this.handleChangeNodeLabel}
-        filterStartDate={this.state.filterStartDate}
-        filterEndDate={this.state.filterEndDate}
-        onTimelineFilterChange={this.handleTimelineFilterChange}
-        settings={this.props.query} />
+      <Layout />
     );
   }
 });

@@ -4,14 +4,10 @@ var assign = require('object-assign');
 
 var CHANGE_EVENT = 'change';
 
-var STATIC_DATA = {
-  PUBLIC_COLLECTION: require('../../static_data/COLLECTION_dc1027d0-5f1c-4197-b987-26fecf151b47.json'),
-};
-
 var publicCollection = null;
 
-function setPublicCollection(collectionId) {
-  publicCollection = STATIC_DATA.PUBLIC_COLLECTION;
+function setPublicCollection(collection) {
+  publicCollection = collection;
 }
 
 function emitChange() {
@@ -51,6 +47,14 @@ function handleAction(action) {
 
     case 'set_public_collection':
       setPublicCollection(action.collectionId);
+      emitChange();
+      break;
+
+    case 'set_collection':
+      setPublicCollection({
+        collectionId: action.referenceCollection.collection.collectioId,
+        assemblies: action.referenceCollection.collection.assemblies
+      });
       emitChange();
       break;
 

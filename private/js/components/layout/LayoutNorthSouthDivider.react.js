@@ -7,7 +7,6 @@ var LayoutNorthSouthDivider = React.createClass({
 
   propTypes: {
     top: React.PropTypes.number.isRequired,
-    showTimeline: React.PropTypes.bool.isRequired,
     onDragEnd: React.PropTypes.func.isRequired
   },
 

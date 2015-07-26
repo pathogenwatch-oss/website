@@ -1,5 +1,6 @@
 var React = require('react');
 var DataUtils = require('../utils/Data');
+var MetadataUtils = require('../utils/Metadata');
 var TableStore = require('../stores/TableStore');
 
 var resistantStyle = {
@@ -14,11 +15,11 @@ var TableRow = React.createClass({
     this.rowData = {
       assemblyId: {
         name: 'Assembly Id',
-        value: isolate.metadata.fileAssemblyId
+        value: isolate.metadata.fileAssemblyId || isolate.metadata.userAssemblyId
       },
       country: {
         name: 'Country',
-        value: isolate.metadata.geography.location.country,
+        value: MetadataUtils.getCountry(isolate)
       },
       source: {
         name: 'Source',

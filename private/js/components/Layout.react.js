@@ -27,39 +27,6 @@ var DEFAULT = require('../defaults.js');
 
 var Layout = React.createClass({
 
-  propTypes: {
-
-    // Tree
-
-    projectTree: React.PropTypes.string.isRequired,
-    analysisTree: React.PropTypes.string.isRequired,
-    isolates: React.PropTypes.object.isRequired,
-    selectIsolatesOnTree: React.PropTypes.array.isRequired,
-    handleSelectTreeData: React.PropTypes.func.isRequired,
-    treeNodeLabel: React.PropTypes.string,
-    handleFilterMapAndTableData: React.PropTypes.func.isRequired,
-    colourDataByDataField: React.PropTypes.string,
-
-    // Map
-
-    filteredMapData: React.PropTypes.object.isRequired,
-    handleFilterTableData: React.PropTypes.func.isRequired,
-    handleInfoWindowIsolateClick: React.PropTypes.func.isRequired,
-
-    // Data
-
-    metadata: React.PropTypes.object.isRequired,
-    shortId: React.PropTypes.string.isRequired,
-    filteredTableData: React.PropTypes.object.isRequired,
-    handleColourDataByDataField: React.PropTypes.func.isRequired,
-    handleChangeNodeLabel: React.PropTypes.func.isRequired,
-    onTimelineFilterChange: React.PropTypes.func.isRequired,
-
-    // Other
-
-    settings: React.PropTypes.object.isRequired
-  },
-
   getInitialState: function () {
     return {
       layoutWestWidth: 0,
@@ -229,19 +196,6 @@ var Layout = React.createClass({
   },
 
   render: function () {
-
-    var data = {
-      isolates: this.props.isolates,
-      metadata:this.props.metadata,
-      shortId: this.props.shortId,
-      filteredTableData: this.props.filteredTableData,
-      handleColourDataByDataField: this.props.handleColourDataByDataField,
-      handleChangeNodeLabel: this.props.handleChangeNodeLabel,
-      colourDataByDataField: this.props.colourDataByDataField,
-      treeNodeLabel: this.props.treeNodeLabel,
-      onTimelineFilterChange: this.props.onTimelineFilterChange
-    };
-
     return (
 
       <LayoutContainer>
@@ -291,18 +245,9 @@ var Layout = React.createClass({
           onDragEnd={this.handleLayoutNorthSourthDividerDragEnd} />
 
         <LayoutSouth top={this.state.layoutSouthTop}>
-          {
-          <Data
-            isolates={this.state.isolates}
-            metadata={this.state.metadata}
-            shortId={this.state.shortId}
-            updateLinkError={this.state.updateLinkError}
-            filteredTableData={this.state.filteredTableData}
-            handleColourDataByDataField={this.handleColourDataByDataField}
-            handleChangeNodeLabel={this.handleChangeNodeLabel}
-            colourDataByDataField={this.state.colourDataByDataField}
-            setNodeLabelToDataField={this.state.treeNodeLabel} />
-          }
+
+          <Data />
+
         </LayoutSouth>
 
       </LayoutContainer>

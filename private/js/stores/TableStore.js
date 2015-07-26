@@ -55,6 +55,7 @@ function handleAction(action) {
       emitChange();
       break;
 
+    case 'set_collection':
     case 'set_active_species_subtree_id':
       AppDispatcher.waitFor([SpeciesSubtreeStore.dispatchToken]);
       setAssemblyIds(SpeciesSubtreeStore.getActiveSpeciesSubtreeAssemblyIds());
