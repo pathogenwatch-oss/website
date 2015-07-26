@@ -61,6 +61,10 @@ Built on top of [Microreact](https://github.com/ImperialCollegeLondon/microreact
 
 [Here](https://drive.google.com/drive/folders/0B5jx-9ZvRjnYU0NoQlFEZU5mdFU)
 
+## TODO
+
+- [ ] Refactor `userAssemblyId` to `fileAssemblyId` or other way around.
+
 ## Architecture
 
 ### Actions
