@@ -22,16 +22,6 @@ app.use(bodyParser.urlencoded({
 
 logging.initHttpLogging(app, process.env.NODE_ENV || 'development');
 
-app.use(function (req, res, next) {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
-  res.header(
-    'Access-Control-Allow-Headers',
-    'Origin, X-Requested-With, Content-Type, Accept'
-  );
-  next();
-});
-
 module.exports = function (callback) {
   var server;
 
@@ -48,6 +38,17 @@ module.exports = function (callback) {
     // Set our own x-powered-by header
     app.use(function (req, res, next) {
       res.header('X-powered-by', 'Blood, sweat, and tears');
+      next();
+    });
+
+    // CORS
+    app.use(function (req, res, next) {
+      res.header('Access-Control-Allow-Origin', '*');
+      res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
+      res.header(
+        'Access-Control-Allow-Headers',
+        'Origin, X-Requested-With, Content-Type, Accept'
+      );
       next();
     });
 
