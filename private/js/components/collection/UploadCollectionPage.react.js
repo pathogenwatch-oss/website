@@ -36,8 +36,20 @@ var UploadCollectionPage = React.createClass({
     });
   },
 
+  setProjectIdInUrl: function () {
+    var projectId = FileUploadingStore.getCollectionId();
+
+    if (! projectId) {
+      return;
+    }
+
+    history.pushState({}, 'Macroreact', '/project/' + projectId);
+  },
+
   handleFileUploadingStoreChange: function () {
     var fileUploadingResult = FileUploadingStore.getFileUploadingResult();
+
+    this.setProjectIdInUrl();
 
     if (fileUploadingResult === FileUploadingStore.getFileUploadingResults().NONE) {
       this.setState({
