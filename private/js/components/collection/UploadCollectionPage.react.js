@@ -25,6 +25,11 @@ var UploadCollectionPage = React.createClass({
     FileUploadingStore.addChangeListener(this.handleFileUploadingStoreChange);
   },
 
+  componentWillUnmount: function () {
+    UploadStore.removeChangeListener(this.handleUploadStoreChange);
+    FileUploadingStore.removeChangeListener(this.handleFileUploadingStoreChange);
+  },
+
   handleUploadStoreChange: function () {
     this.setState({
       hasFiles: true

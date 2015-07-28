@@ -1,104 +1,77 @@
 var React = require('react');
-var Table = require('./Table.react');
-var Timeline = require('./Timeline.react');
-var Filters = require('./Filters.react');
-var AboutProject = require('./AboutProject.react');
-var DownloadProject = require('./DownloadProject.react');
+var TableMetadata = require('./table/metadata/Table.react');
+var TableResistanceProfile = require('./table/resistance-profile/Table.react');
+
+// var Filters = require('./Filters.react');
+// var AboutProject = require('./AboutProject.react');
+// var DownloadProject = require('./DownloadProject.react');
+
+var ProjectNavigationStore = require('../stores/ProjectNavigationStore');
+
+var sectionStyle = {
+  width: '100%',
+  height: '100%'
+};
+
+// var showStyle = {
+//   display: 'block',
+//   width: '100%',
+//   height: '100%'
+// };
+//
+// var hideStyle = {
+//   display: 'none'
+// };
 
 var Data = React.createClass({
 
-  // propTypes: {
-  //   isolates: React.PropTypes.object.isRequired,
-  //   shortId: React.PropTypes.string.isRequired,
-  //   metadata: React.PropTypes.object.isRequired,
-  //   filteredTableData: React.PropTypes.object.isRequired,
-  //   colourDataByDataField: React.PropTypes.string,
-  //   layoutSouthHeight: React.PropTypes.number.isRequired,
-  //   onTimelineFilterChange: React.PropTypes.func.isRequired,
-  //   layoutNavigation: React.PropTypes.string.isRequired
-  // },
+  getInitialState: function () {
+    return {
+      activeProjectNavigation: null
+    };
+  },
 
-  getTimeline: function () {
+  componentDidMount: function () {
+    ProjectNavigationStore.addChangeListener(this.handleProjectNavigationStoreChange);
 
-    return null;
+    this.setState({
+      activeProjectNavigation: ProjectNavigationStore.getProjectNavigation()
+    });
+  },
 
-    if (this.props.filterStartDate && this.props.filterEndDate) {
-      return (
-        <Timeline
-          data={this.props.isolates}
-          height={this.props.layoutSouthHeight}
-          colourDataByDataField={this.props.colourDataByDataField}
-          onTimelineFilterChange={this.props.onTimelineFilterChange}
-          filterStartDate={this.props.filterStartDate}
-          filterEndDate={this.props.filterEndDate} />
-      );
+  componentWillUnmount: function () {
+    ProjectNavigationStore.removeChangeListener(this.handleProjectNavigationStoreChange);
+  },
+
+  handleProjectNavigationStoreChange: function () {
+    this.setState({
+      activeProjectNavigation: ProjectNavigationStore.getProjectNavigation()
+    });
+  },
+
+  getProjectDataComponent: function () {
+    var activeProjectNavigation = this.state.activeProjectNavigation;
+    var PROJECT_NAVIGATION_STATES = ProjectNavigationStore.getProjectNavigationStates();
+
+    if (! activeProjectNavigation) {
+      return null;
     }
 
-    return null;
+    if (activeProjectNavigation === PROJECT_NAVIGATION_STATES.TABLE_METADATA) {
+
+      return <TableMetadata />;
+
+    } else if (activeProjectNavigation === PROJECT_NAVIGATION_STATES.TABLE_RESISTANCE_PROFILE) {
+
+      return <TableResistanceProfile />;
+
+    }
   },
 
   render: function () {
-
-    var sectionStyle = {
-      width: '100%',
-      height: '100%'
-    };
-
-    var showStyle = {
-      display: 'block',
-      width: '100%',
-      height: '100%'
-    };
-
-    var hideStyle = {
-      display: 'none'
-    };
-
     return (
       <section style={sectionStyle}>
-
-        <div style={ 'table' === 'table' ? showStyle : hideStyle }>
-
-          <Table />
-
-          {/*
-          <Table
-            data={this.props.isolates}
-            filteredTableData={this.props.filteredTableData} />
-          */}
-
-        </div>
-
-        <div style={ this.props.layoutNavigation === 'timeline' ? showStyle : hideStyle }>
-          { this.getTimeline() }
-        </div>
-
-        <div style={ this.props.layoutNavigation === 'display' ? showStyle : hideStyle }>
-          {/*
-          <Filters
-            data={this.props.isolates}
-            handleColourDataByDataField={this.props.handleColourDataByDataField}
-            handleChangeNodeLabel={this.props.handleChangeNodeLabel}
-            colourDataByDataField={this.props.colourDataByDataField}
-            setNodeLabelToDataField={this.props.setNodeLabelToDataField} />
-            */}
-
-        </div>
-
-        <div style={ this.props.layoutNavigation === 'download' ? showStyle : hideStyle }>
-
-          {/*
-          <DownloadProject projectId={this.props.shortId} />
-          */}
-        </div>
-
-        <div style={ this.props.layoutNavigation === 'about' ? showStyle : hideStyle }>
-
-          {/*
-          <AboutProject metadata={this.props.metadata} />
-          */}
-        </div>
-
+        {this.getProjectDataComponent()}
       </section>
     );
   }

@@ -43,6 +43,11 @@ var Map = React.createClass({
     });
   },
 
+  componentWillUnmount: function () {
+    MapStore.removeChangeListener(this.handleMapStoreChange);
+    TableStore.removeChangeListener(this.handleTableStoreChange);
+  },
+
   handleMapStoreChange: function () {
     this.setState({
       assemblyIds: MapStore.getAssemblyIds()
@@ -123,7 +128,7 @@ var Map = React.createClass({
   },
 
   selectedTableColumnNameIsAntibiotic: function () {
-    var selectedTableColumnName = TableStore.getSelectedTableColumnName();
+    var selectedTableColumnName = TableStore.getColourTableColumnName();
     var listOfAntibiotics = Object.keys(ANTIBIOTICS);
 
     return (listOfAntibiotics.indexOf(selectedTableColumnName) > -1);
@@ -146,7 +151,7 @@ var Map = React.createClass({
   },
 
   getMarkerColourForAssembly: function (assembly) {
-    var selectedTableColumnName = TableStore.getSelectedTableColumnName();
+    var selectedTableColumnName = TableStore.getColourTableColumnName();
     var resistanceProfileResult;
     var colour = '#ffffff';
 

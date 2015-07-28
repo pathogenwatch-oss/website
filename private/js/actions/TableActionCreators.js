@@ -11,10 +11,19 @@ module.exports = {
     AppDispatcher.dispatch(action);
   },
 
-  setSelectedTableColumnName: function (selectedTableColumnName) {
+  setLabelTableColumnName: function (labelTableColumnName) {
     var action = {
-      type: 'set_selected_table_column',
-      selectedTableColumnName: selectedTableColumnName
+      type: 'set_label_table_column',
+      labelTableColumnName: labelTableColumnName
+    };
+
+    AppDispatcher.dispatch(action);
+  },
+
+  setColourTableColumnName: function (colourTableColumnName) {
+    var action = {
+      type: 'set_colour_table_column',
+      colourTableColumnName: colourTableColumnName
     };
 
     AppDispatcher.dispatch(action);

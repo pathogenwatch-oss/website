@@ -7,14 +7,19 @@ var SpeciesSubtreeStore = require('./SpeciesSubtreeStore');
 var CHANGE_EVENT = 'change';
 
 var assemblyIds = null;
-var selectedTableColumnName = 'Assembly Id';
+var labelTableColumnName = 'Assembly Id';
+var colourTableColumnName = 'Assembly Id';
 
 function setAssemblyIds(ids) {
   assemblyIds = ids;
 }
 
-function setSelectedTableColumnName(tableColumnName) {
-  selectedTableColumnName = tableColumnName;
+function setLabelTableColumnName(tableColumnName) {
+  labelTableColumnName = tableColumnName;
+}
+
+function setColourTableColumnName(tableColumnName) {
+  colourTableColumnName = tableColumnName;
 }
 
 function emitChange() {
@@ -35,8 +40,12 @@ var TableStore = assign({}, EventEmitter.prototype, {
     return assemblyIds;
   },
 
-  getSelectedTableColumnName: function () {
-    return selectedTableColumnName;
+  getLabelTableColumnName: function () {
+    return labelTableColumnName;
+  },
+
+  getColourTableColumnName: function () {
+    return colourTableColumnName;
   }
 
 });
@@ -50,8 +59,13 @@ function handleAction(action) {
       emitChange();
       break;
 
-    case 'set_selected_table_column':
-      setSelectedTableColumnName(action.selectedTableColumnName);
+    case 'set_label_table_column':
+      setLabelTableColumnName(action.labelTableColumnName);
+      emitChange();
+      break;
+
+    case 'set_colour_table_column':
+      setColourTableColumnName(action.colourTableColumnName);
       emitChange();
       break;
 

@@ -29,6 +29,10 @@ var Project = React.createClass({
     ProjectActionCreators.getProject(projectId);
   },
 
+  componentWillUnmount: function () {
+    ProjectStore.removeChangeListener(this.handleProjectStoreChange);
+  },
+
   render: function () {
 
     if (this.state.error) {

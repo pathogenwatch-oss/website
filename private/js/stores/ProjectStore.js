@@ -36,7 +36,7 @@ var Store = assign({}, EventEmitter.prototype, {
   },
 
   getProjectState: function () {
-    return
+    return state;
   }
 });
 

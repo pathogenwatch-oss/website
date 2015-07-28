@@ -81,7 +81,7 @@ var Tree = React.createClass({
       treeType: DEFAULT.TREE_TYPE,
       nodeSize: DEFAULT.NODE_SIZE,
       labelSize: DEFAULT.LABEL_SIZE,
-      nodeLabel: TableStore.getSelectedTableColumnName()
+      nodeLabel: TableStore.getLabelTableColumnName()
     });
   },
 
@@ -101,7 +101,7 @@ var Tree = React.createClass({
 
   handleTableStoreChange: function () {
     this.setState({
-      nodeLabel: TableStore.getSelectedTableColumnName()
+      nodeLabel: TableStore.getLabelTableColumnName()
     });
   },
 
@@ -136,7 +136,7 @@ var Tree = React.createClass({
   },
 
   getNodeColourForAssembly: function (assembly) {
-    var selectedTableColumnName = TableStore.getSelectedTableColumnName();
+    var selectedTableColumnName = TableStore.getColourTableColumnName();
     var resistanceProfileResult;
     var colour = '#ffffff';
 
@@ -208,7 +208,7 @@ var Tree = React.createClass({
   },
 
   selectedTableColumnNameIsAntibiotic: function () {
-    var selectedTableColumnName = TableStore.getSelectedTableColumnName();
+    var selectedTableColumnName = TableStore.getColourTableColumnName();
     var listOfAntibiotics = Object.keys(ANTIBIOTICS);
 
     return (listOfAntibiotics.indexOf(selectedTableColumnName) > -1);

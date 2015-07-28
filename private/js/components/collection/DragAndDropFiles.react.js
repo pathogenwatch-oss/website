@@ -79,6 +79,11 @@ var DragAndDropFiles = React.createClass({
     SocketActionCreators.setSocketConnection(socket);
   },
 
+  componentWillUnmount: function () {
+    FileProcessingStore.removeChangeListener(this.handleFileProcessingStoreChange);
+    SocketStore.removeChangeListener(this.handleSocketStoreChange);
+  },
+
   handleSocketStoreChange: function () {
     if (! SocketStore.getRoomId()) {
 

@@ -3,6 +3,11 @@ var LayoutUtils = require('../../utils/Layout');
 var LayoutDivider = require('./LayoutDivider.react');
 var LayoutNavigation = require('../LayoutNavigation.react');
 
+var style = {
+  width: '100%',
+  height: '100%'
+};
+
 var LayoutNorthSouthDivider = React.createClass({
 
   propTypes: {
@@ -29,11 +34,6 @@ var LayoutNorthSouthDivider = React.createClass({
 
   render: function () {
 
-    var style = {
-      width: '100%',
-      height: '100%'
-    };
-
     return (
       <div style={style}>
         <LayoutDivider
@@ -46,12 +46,10 @@ var LayoutNorthSouthDivider = React.createClass({
           direction={'horizontal'}
           className={'northSouthDivider'}>
 
-          {/*
           <LayoutNavigation
             showTimeline={this.props.showTimeline}
             shortProjectId={this.props.shortProjectId}
             onLayoutNavigationChange={this.props.onLayoutNavigationChange} />
-          */}
 
         </LayoutDivider>
       </div>

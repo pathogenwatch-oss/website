@@ -32,6 +32,10 @@ var MiddleContent = React.createClass({
     SpeciesSubtreeStore.addChangeListener(this.onSpeciesSubtreeChange);
   },
 
+  componentWillUnmount: function () {
+    SpeciesSubtreeStore.removeChangeListener(this.onSpeciesSubtreeChange);
+  },
+
   onSpeciesSubtreeChange: function () {
     this.setState({
       activeAnalysisTreeId: SpeciesSubtreeStore.getActiveSpeciesSubtreeId()
