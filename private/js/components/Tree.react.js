@@ -89,7 +89,6 @@ var Tree = React.createClass({
 
   handleRedrawSubtree: function () {
     var isolateIds = this.getCurrentTreeAllIsolateIds();
-    this.props.handleFilterMapAndTableData(isolateIds);
   },
 
   componentDidUpdate: function () {
