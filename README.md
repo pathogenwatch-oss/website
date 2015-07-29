@@ -66,13 +66,5 @@ Built on top of [Microreact](https://github.com/ImperialCollegeLondon/microreact
 - [ ] Refactor `userAssemblyId` to `fileAssemblyId` or other way around.
 - [ ] Refactor `assembly` to `isolate` or other way around.
 
-## Architecture
-
-### Actions
-### Stores
-### Components
-### Utils
-### Config
-
 
 
