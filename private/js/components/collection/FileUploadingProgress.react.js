@@ -4,7 +4,7 @@ var assign = require('object-assign');
 var FileUploadingProgressStore = require('../../stores/FileUploadingProgressStore');
 
 var containerStyle = {
-  margin: '40px 0 0 0'
+  margin: '20px 0 0 0'
 };
 
 var FileUploadingProgress = React.createClass({

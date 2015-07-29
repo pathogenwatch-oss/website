@@ -1,7 +1,7 @@
 var React = require('react');
 var Router = require('react-router');
 var DragAndDropFiles = require('./DragAndDropFiles.react');
-var UploadingFiles = require('./UploadingFiles.react');
+var UploadingFilesDetailed = require('./UploadingFilesDetailed.react');
 var UploadWorkspace = require('./UploadWorkspace.react');
 var UploadStore = require('../../stores/UploadStore');
 var FileUploadingStore = require('../../stores/FileUploadingStore');
@@ -70,7 +70,7 @@ var UploadCollectionPage = React.createClass({
   render: function () {
     if (this.state.isUploading) {
       return (
-        <UploadingFiles />
+        <UploadingFilesDetailed />
       );
     }
 

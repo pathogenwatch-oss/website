@@ -19,13 +19,14 @@ module.exports = {
     AppDispatcher.dispatch(action);
   },
 
-  setCollectionId: function (collectionId) {
+  setCollectionId: function (collection) {
     var action = {
       type: 'set_collection_id',
-      collectionId: collectionId
+      collectionId: collection.collectionId,
+      fileAssemblyIdToAssemblyIdMap: collection.fileAssemblyIdToAssemblyIdMap
     };
 
     AppDispatcher.dispatch(action);
-  },
+  }
 
 };

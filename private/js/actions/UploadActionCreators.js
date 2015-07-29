@@ -63,7 +63,10 @@ module.exports = {
         return;
       }
 
-      FileUploadingActionCreators.setCollectionId(data.collectionId);
+      FileUploadingActionCreators.setCollectionId({
+        collectionId: data.collectionId,
+        fileAssemblyIdToAssemblyIdMap: data.userAssemblyIdToAssemblyIdMap
+      });
 
       var userAssemblyIdToAssemblyIdMap = data.userAssemblyIdToAssemblyIdMap;
       var userAssemblyIds = Object.keys(userAssemblyIdToAssemblyIdMap);

@@ -7,8 +7,8 @@ var CHANGE_EVENT = 'change';
 var numberOfExpectedResults = null;
 var receivedResults = {};
 var receivedAssemblyResults = {
-  assemblies: {},
-  collection: {}
+  assemblies: null,
+  collection: null
 };
 
 function setNumberOfExpectedResults(number) {
@@ -21,6 +21,7 @@ function setReceivedResult(result) {
   receivedResults[resultString] = true;
 
   if (result.assemblyId) {
+    receivedAssemblyResults.assemblies = receivedAssemblyResults.assemblies || {};
     receivedAssemblyResults.assemblies[result.assemblyId] = receivedAssemblyResults.assemblies[result.assemblyId] || {};
     receivedAssemblyResults.assemblies[result.assemblyId][result.result] = true;
 
@@ -30,6 +31,7 @@ function setReceivedResult(result) {
     return;
   }
 
+  receivedAssemblyResults.collection = receivedAssemblyResults.collection || {};
   receivedAssemblyResults.collection[result.result] = true;
 
   console.log('[Macroreact][Collection Result] ' + result.collectionId + ' ' + result.result);
@@ -59,6 +61,10 @@ var Store = assign({}, EventEmitter.prototype, {
 
   getProgressPercentage: function () {
     return Math.floor(this.getNumberOfReceivedResults() * 100 / this.getNumberOfExpectedResults());
+  },
+
+  getReceivedAssemblyResults: function () {
+    return receivedAssemblyResults;
   }
 
 });

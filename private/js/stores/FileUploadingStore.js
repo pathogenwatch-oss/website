@@ -36,6 +36,7 @@ var RESULTS = keyMirror({
 var fileUploadingState = STATES.NOT_UPLOADING_FILES;
 var fileUploadingResult = RESULTS.NONE;
 var collectionId = null;
+var fileAssemblyIdToAssemblyIdMap = null;
 
 function setFileUploadingState(state) {
   fileUploadingState = state;
@@ -47,6 +48,10 @@ function setFileUploadingResult(result) {
 
 function setCollectionId(id) {
   collectionId = id;
+}
+
+function setFileAssemblyIdToAssemblyIdMap(idToIdMap) {
+  fileAssemblyIdToAssemblyIdMap = idToIdMap;
 }
 
 function emitChange() {
@@ -84,6 +89,10 @@ var Store = assign({}, EventEmitter.prototype, {
 
   getCollectionId: function () {
     return collectionId;
+  },
+
+  getFileAssemblyIdToAssemblyIdMap: function () {
+    return fileAssemblyIdToAssemblyIdMap;
   }
 });
 
@@ -104,6 +113,7 @@ function handleAction(action) {
 
     case 'set_collection_id':
       setCollectionId(action.collectionId);
+      setFileAssemblyIdToAssemblyIdMap(action.fileAssemblyIdToAssemblyIdMap);
       emitChange();
       break;
 
