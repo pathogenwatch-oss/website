@@ -2,7 +2,7 @@
   "server": {
     "node": {
       "hostname": "localhost",
-      "port": 80
+      "port": 8008
     },
     "mongodb": {
       "hostname": "localhost",
