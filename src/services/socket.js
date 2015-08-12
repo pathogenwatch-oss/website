@@ -7,7 +7,7 @@ var LOGGER = require('utils/logging').createLogger('Socket');
 var io; // module-wide variable because initialisation and usage are separate
 function connect(server) {
   io = socketio.listen(server);
-  io.set('origins', '*');
+  // io.set('origins', '*');
   io.sockets.on('connection', socketConnection.initialise);
 }
 
