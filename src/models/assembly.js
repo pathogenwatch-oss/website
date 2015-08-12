@@ -1,5 +1,3 @@
-var extend = require('extend');
-
 var sequenceTypeModel = require('models/sequenceType');
 var socketService = require('services/socket');
 var messageQueueService = require('services/messageQueue');
@@ -60,6 +58,8 @@ function beginUpload(ids, metadata, sequences) {
       });
 
       var assemblyMetadata = {
+        assemblyId: ids.assemblyId,
+        fileAssemblyId: metadata.fileAssemblyId,
         date: metadata.date,
         geography: metadata.geography,
         source: metadata.source
@@ -67,10 +67,7 @@ function beginUpload(ids, metadata, sequences) {
 
       mainStorage.store(
         METADATA_KEY_PREFIX + ids.assemblyId,
-        extend(assemblyMetadata, {
-          assemblyId: ids.assemblyId,
-          userAssemblyId: ids.userAssemblyId
-        }),
+        assemblyMetadata,
         function () {
           socketService.notifyAssemblyUpload(ids, 'METADATA_OK');
         }
@@ -136,9 +133,9 @@ function getComplete(assemblyId, callback) {
     }
     LOGGER.info('Got assembly ' + assemblyId + ' data');
     var assembly = mergeAssemblyData(assemblyData, assemblyId);
-    sequenceTypeModel.addSequenceTypeData(assembly, function (error, result) {
-      if (error) {
-        return callback(error, null);
+    sequenceTypeModel.addSequenceTypeData(assembly, function (stError, result) {
+      if (stError) {
+        return callback(stError, null);
       }
       callback(null, result);
     });
@@ -282,6 +279,40 @@ function getCoreResult(id, callback) {
   });
 }
 
+function mapAssembliesToTaxa(assemblies) {
+  return Object.keys(assemblies).reduce(function (map, assemblyId) {
+    map[assemblyId] = assemblies[assemblyId].FP_COMP.subTypeAssignment;
+    return map;
+  }, {});
+}
+
+function getReference(speciesId, assemblyId, callback) {
+  var metadataKey = 'ASSEMBLY_METADATA_' + assemblyId;
+  var mlstKey = 'MLST_RESULT_' + speciesId + '_' + assemblyId;
+  var paarsnpKey = 'PAARSNP_RESULT_' + speciesId + '_' + assemblyId;
+  var assemblyQueryKeys = [ mlstKey, paarsnpKey, metadataKey ];
+  LOGGER.info('Assembly ' + assemblyId + ' query keys:');
+  LOGGER.info(assemblyQueryKeys);
+
+  mainStorage.retrieveMany(assemblyQueryKeys, function (error, assemblyData) {
+    if (error) {
+      return callback(error, null);
+    }
+    LOGGER.info('Got assembly ' + assemblyId + ' data');
+    var assembly = {
+      ASSEMBLY_METADATA: assemblyData[metadataKey],
+      MLST_RESULT: assemblyData[mlstKey],
+      PAARSNP_RESULT: assemblyData[paarsnpKey]
+    };
+    sequenceTypeModel.addSequenceTypeData(assembly, function (stError, result) {
+      if (stError) {
+        return callback(stError, null);
+      }
+      callback(null, result);
+    });
+  });
+}
+
 module.exports.get = get;
 module.exports.getComplete = getComplete;
 module.exports.getMany = getMany;
@@ -290,3 +321,5 @@ module.exports.beginUpload = beginUpload;
 module.exports.getResistanceProfile = getResistanceProfile;
 module.exports.getCoreResult = getCoreResult;
 module.exports.getMetadata = getMetadata;
+module.exports.mapAssembliesToTaxa = mapAssembliesToTaxa;
+module.exports.getReference = getReference;

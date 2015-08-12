@@ -53,8 +53,8 @@ Storage.prototype.retrieve = retrieve;
 Storage.prototype.retrieveMany = retrieveMany;
 
 var STORAGE_TYPES = {
-  main: new Storage('main')
-  // sequences: new Storage('sequences'),
+  main: new Storage('main'),
+  sequences: new Storage('sequences')
   // feedback: new Storage('feedback')
 };
 

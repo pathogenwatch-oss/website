@@ -52,8 +52,19 @@ function getMergeTree(req, res) {
   collectionModel.getMergeTree(req.body);
 }
 
+function getReferenceCollection(req, res, next) {
+  LOGGER.info('Getting representative collection');
+  collectionModel.getReferenceCollection(req.params.id, function (error, result) {
+    if (error) {
+      return next(error);
+    }
+    res.json(result);
+  });
+}
+
 module.exports.addCollection = addCollection;
 module.exports.getCollection = getCollection;
 module.exports.getRepresentativeCollection = getRepresentativeCollection;
 module.exports.mergeCollectionTrees = mergeCollectionTrees;
 module.exports.getMergeTree = getMergeTree;
+module.exports.getReferenceCollection = getReferenceCollection;

@@ -55,7 +55,7 @@ describe('Assembly Routes', function () {
       .expect(200, fixture, done);
   });
 
-  it.skip('POST /assembly/add', function (done) {
+  it.skip('POST /api/v/assembly', function (done) {
     this.timeout(1000 * 60 * 2);
 
     connectWsClient(function (socket, roomId) {

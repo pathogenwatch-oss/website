@@ -60,4 +60,15 @@ describe('Model: Assembly', function () {
     reset();
   });
 
+  it.only('should map assembly IDs to taxa', function () {
+    var assemblyModel = require('models/assembly');
+    var assemblies = {
+      assembly1: { FP_COMP: { subTypeAssignment: 'taxon1' } },
+      assembly2: { FP_COMP: { subTypeAssignment: 'taxon2' } }
+    };
+    var assemblyIdToTaxonMap = assemblyModel.mapAssembliesToTaxa(assemblies);
+    assert.equal(assemblyIdToTaxonMap.assembly1, 'taxon1');
+    assert.equal(assemblyIdToTaxonMap.assembly2, 'taxon2');
+  });
+
 });
