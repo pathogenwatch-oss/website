@@ -1,80 +1,63 @@
-var React = require('react');
-var TableMetadata = require('./table/metadata/Table.react');
-var TableResistanceProfile = require('./table/resistance-profile/Table.react');
+import React from 'react';
+import TableMetadata from './table/metadata/Table.react';
+import TableResistanceProfile from './table/resistance-profile/Table.react';
 
-// var Filters = require('./Filters.react');
-// var AboutProject = require('./AboutProject.react');
-// var DownloadProject = require('./DownloadProject.react');
-
-var ProjectNavigationStore = require('../stores/ProjectNavigationStore');
+import CollectionNavigationStore from '../stores/CollectionNavigationStore';
 
 var sectionStyle = {
   width: '100%',
-  height: '100%'
+  height: '100%',
 };
-
-// var showStyle = {
-//   display: 'block',
-//   width: '100%',
-//   height: '100%'
-// };
-//
-// var hideStyle = {
-//   display: 'none'
-// };
 
 var Data = React.createClass({
 
   getInitialState: function () {
     return {
-      activeProjectNavigation: null
+      activeCollectionNavigation: null,
     };
   },
 
   componentDidMount: function () {
-    ProjectNavigationStore.addChangeListener(this.handleProjectNavigationStoreChange);
+    CollectionNavigationStore.addChangeListener(this.handleCollectionNavigationStoreChange);
 
     this.setState({
-      activeProjectNavigation: ProjectNavigationStore.getProjectNavigation()
+      activeCollectionNavigation: CollectionNavigationStore.getCollectionNavigation(),
     });
   },
 
   componentWillUnmount: function () {
-    ProjectNavigationStore.removeChangeListener(this.handleProjectNavigationStoreChange);
+    CollectionNavigationStore.removeChangeListener(this.handleCollectionNavigationStoreChange);
   },
 
-  handleProjectNavigationStoreChange: function () {
+  handleCollectionNavigationStoreChange: function () {
     this.setState({
-      activeProjectNavigation: ProjectNavigationStore.getProjectNavigation()
+      activeCollectionNavigation: CollectionNavigationStore.getCollectionNavigation(),
     });
   },
 
-  getProjectDataComponent: function () {
-    var activeProjectNavigation = this.state.activeProjectNavigation;
-    var PROJECT_NAVIGATION_STATES = ProjectNavigationStore.getProjectNavigationStates();
+  getCollectionDataComponent: function () {
+    var activeCollectionNavigation = this.state.activeCollectionNavigation;
+    var COLLECTION_NAVIGATION_STATES = CollectionNavigationStore.getCollectionNavigationStates();
 
-    if (! activeProjectNavigation) {
+    if (! activeCollectionNavigation) {
       return null;
     }
 
-    if (activeProjectNavigation === PROJECT_NAVIGATION_STATES.TABLE_METADATA) {
-
+    if (activeCollectionNavigation === COLLECTION_NAVIGATION_STATES.TABLE_METADATA) {
       return <TableMetadata />;
-
-    } else if (activeProjectNavigation === PROJECT_NAVIGATION_STATES.TABLE_RESISTANCE_PROFILE) {
-
+    } else if (activeCollectionNavigation === COLLECTION_NAVIGATION_STATES.TABLE_RESISTANCE_PROFILE) {
       return <TableResistanceProfile />;
-
     }
   },
 
   render: function () {
     return (
       <section style={sectionStyle}>
-        {this.getProjectDataComponent()}
+        {this.getCollectionDataComponent()}
       </section>
     );
-  }
+  },
+
 });
 
 module.exports = Data;

@@ -1,7 +1,7 @@
-var React = require('react');
-var NProgress = require('nprogress');
+import React from 'react';
+import NProgress from 'nprogress';
 
-var LoadingProject = React.createClass({
+const Loading = React.createClass({
 
   componentDidMount: function () {
     NProgress.start();
@@ -12,15 +12,9 @@ var LoadingProject = React.createClass({
   },
 
   render: function () {
-
-    var headerStyle = {
+    const headerStyle = {
       fontWeight: '100',
-      fontSize: '25px'
-    };
-
-    var projectIdStyle = {
-      fontWeight: '400',
-      textTransform: 'uppercase'
+      fontSize: '25px',
     };
 
     return (
@@ -30,7 +24,8 @@ var LoadingProject = React.createClass({
         </h1>
       </div>
     );
-  }
+  },
+
 });
 
-module.exports = LoadingProject;
+module.exports = Loading;

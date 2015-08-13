@@ -1,11 +1,11 @@
-var React = require('react');
+import React from 'react';
 
-var CreateProjectButton = React.createClass({
+const CreateCollectionButton = React.createClass({
   render: function () {
     return (
-      <button className="btn btn-success" onClick={this.props.handleCreateProject}>Create Project</button>
+      <button className="btn btn-success" onClick={this.props.handleCreateCollection}>Create Collection</button>
     );
-  }
+  },
 });
 
-module.exports = CreateProjectButton;
+module.exports = CreateCollectionButton;

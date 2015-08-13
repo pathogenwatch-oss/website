@@ -1,10 +1,10 @@
 import React from 'react';
 
 import Loading from './Loading.react';
-import ProjectViewer from './ProjectViewer.react';
+import CollectionExplorer from './CollectionExplorer.react';
 import NotFound from './NotFound.react';
-import ProjectActionCreators from '../actions/ProjectActionCreators';
-import ProjectStore from '../stores/ProjectStore';
+import CollectionActionCreators from '../actions/CollectionActionCreators';
+import CollectionStore from '../stores/CollectionStore';
 
 export default class Collection extends React.Component {
 
@@ -12,43 +12,47 @@ export default class Collection extends React.Component {
     super(props);
     this.state = {
       error: null,
-      project: null,
+      collection: null,
     };
   }
 
-  handleProjectStoreChange() {
+  handleCollectionStoreChange() {
     this.setState({
-      project: 'LOADED',
+      collection: 'LOADED',
     });
   }
 
   componentDidMount() {
-    ProjectStore.addChangeListener(this.handleProjectStoreChange.bind(this));
-    ProjectActionCreators.getProject(this.props.params.id);
+    CollectionStore.addChangeListener(this.handleCollectionStoreChange.bind(this));
+    CollectionActionCreators.getCollection(this.props.params.id);
   }
 
   componentWillUnmount() {
-    ProjectStore.removeChangeListener(this.handleProjectStoreChange.bind(this));
+    CollectionStore.removeChangeListener(this.handleCollectionStoreChange.bind(this));
   }
 
   render() {
+    let component;
+
     if (this.state.error) {
-      return (
+      component = (
         <NotFound>
-          Project not found.
+          Collection not found.
         </NotFound>
       );
-    } else if (this.state.project) {
-      return (
-        <ProjectViewer query={this.props.query} />
+    } else if (this.state.collection) {
+      component = (
+        <CollectionExplorer query={this.props.query} />
       );
     } else {
-      return (
+      component = (
         <Loading>
-          Loading project...
+          Loading collection...
         </Loading>
       );
     }
+
+    return component;
   }
 
 }

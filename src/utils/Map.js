@@ -1,16 +1,16 @@
-var MapStylesUtils = require('../utils/MapStyles');
+import MapStylesUtils from '../utils/MapStyles';
 
-var MARKER = {
+const MARKER = {
   SIZE: {
     WIDTH: 12,
-    HEIGHT: 12
+    HEIGHT: 12,
   },
   SHAPES: {
     CIRCLE: 'circle',
     SQUARE: 'square',
     STAR: 'star',
-    TRIANGLE: 'triangle'
-  }
+    TRIANGLE: 'triangle',
+  },
 };
 
 function drawSquare(fillColour) {

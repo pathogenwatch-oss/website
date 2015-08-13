@@ -1,22 +1,22 @@
-var React = require('react');
-var Router = require('react-router');
-var DragAndDropFiles = require('./DragAndDropFiles.react');
-var UploadingFilesDetailed = require('./UploadingFilesDetailed.react');
-var UploadWorkspace = require('./UploadWorkspace.react');
-var UploadStore = require('../../stores/UploadStore');
-var FileUploadingStore = require('../../stores/FileUploadingStore');
+import React from 'react';
 
-var UploadCollectionPage = React.createClass({
+import DragAndDropFiles from './DragAndDropFiles.react';
+import UploadingFilesDetailed from './UploadingFilesDetailed.react';
+import UploadWorkspace from './UploadWorkspace.react';
+import UploadStore from '../../stores/UploadStore';
+import FileUploadingStore from '../../stores/FileUploadingStore';
+
+const UploadCollectionPage = React.createClass({
 
   contextTypes: {
-    router: React.PropTypes.func
+    router: React.PropTypes.func,
   },
 
   getInitialState: function () {
     return {
       hasFiles: false,
       isUploading: false,
-      isCollection: false
+      isCollection: false,
     };
   },
 
@@ -32,33 +32,33 @@ var UploadCollectionPage = React.createClass({
 
   handleUploadStoreChange: function () {
     this.setState({
-      hasFiles: true
+      hasFiles: true,
     });
   },
 
-  setProjectIdInUrl: function () {
-    var projectId = FileUploadingStore.getCollectionId();
+  setCollectionIdInUrl: function () {
+    const collectionId = FileUploadingStore.getCollectionId();
 
-    if (! projectId) {
+    if (!collectionId) {
       return;
     }
 
-    history.pushState({}, 'Macroreact', '/project/' + projectId);
+    history.pushState({}, 'Macroreact', `/collection/${collectionId}`);
   },
 
   handleFileUploadingStoreChange: function () {
-    var fileUploadingResult = FileUploadingStore.getFileUploadingResult();
-    this.setProjectIdInUrl();
+    const fileUploadingResult = FileUploadingStore.getFileUploadingResult();
+    this.setCollectionIdInUrl();
 
     if (fileUploadingResult === FileUploadingStore.getFileUploadingResults().NONE) {
       this.setState({
-        isUploading: FileUploadingStore.getFileUploadingState()
+        isUploading: FileUploadingStore.getFileUploadingState(),
       });
       return;
     }
 
     if (fileUploadingResult === FileUploadingStore.getFileUploadingResults().SUCCESS) {
-      this.context.router.transitionTo('/project/' + FileUploadingStore.getCollectionId());
+      this.context.router.transitionTo(`/collection/${FileUploadingStore.getCollectionId()}`);
       return;
     }
   },
@@ -79,7 +79,8 @@ var UploadCollectionPage = React.createClass({
     return (
       <DragAndDropFiles />
     );
-  }
+  },
+
 });
 
 module.exports = UploadCollectionPage;

@@ -6,7 +6,6 @@ var TableStore = require('../../../stores/TableStore');
 
 var TableHeader = require('./TableHeader.react');
 var TableRow = require('./TableRow.react');
-// var DataUtils = require('../utils/Data');
 
 var tableStyle = {
   border: 0

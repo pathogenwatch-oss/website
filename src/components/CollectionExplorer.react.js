@@ -1,19 +1,9 @@
-var React = require('react');
+import React from 'react';
 
-var Layout = require('./Layout.react');
-var DataUtils = require('../utils/Data');
-var TimelineUtils = require('../utils/Timeline');
+import Layout from './Layout.react';
+import DataUtils from '../utils/Data';
 
-var SpeciesTreeActionCreators = require('../actions/SpeciesTreeActionCreators');
-var SpeciesSubtreeActionCreators = require('../actions/SpeciesSubtreeActionCreators');
-var UploadedCollectionActionCreators = require('../actions/UploadedCollectionActionCreators');
-var PublicCollectionActionCreators = require('../actions/PublicCollectionActionCreators');
-var TableActionCreators = require('../actions/TableActionCreators');
-
-var SpeciesSubtreeStore = require('../stores/SpeciesSubtreeStore');
-var UploadedCollectionStore = require('../stores/UploadedCollectionStore');
-
-var ProjectViewer = React.createClass({
+const CollectionExplorer = React.createClass({
 
   propTypes: {
     query: React.PropTypes.object.isRequired
@@ -111,7 +101,8 @@ var ProjectViewer = React.createClass({
     return (
       <Layout />
     );
-  }
+  },
+
 });
 
-module.exports = ProjectViewer;
+module.exports = CollectionExplorer;

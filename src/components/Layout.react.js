@@ -1,31 +1,29 @@
-var React = require('react');
+import React from 'react';
 
-var Data = require('./Data.react');
-var Timeline = require('./Timeline.react');
+import Data from './Data.react';
 
-var LayoutContainer = require('./layout/LayoutContainer.react');
-var LayoutWest = require('./layout/LayoutWest.react');
-var LayoutMiddle = require('./layout/LayoutMiddle.react');
+import LayoutContainer from './layout/LayoutContainer.react';
+import LayoutWest from './layout/LayoutWest.react';
+import LayoutMiddle from './layout/LayoutMiddle.react';
 
-var LayoutEast = require('./layout/LayoutEast.react');
-var LayoutNorth = require('./layout/LayoutNorth.react');
-var LayoutSouth = require('./layout/LayoutSouth.react');
+import LayoutEast from './layout/LayoutEast.react';
+import LayoutNorth from './layout/LayoutNorth.react';
+import LayoutSouth from './layout/LayoutSouth.react';
 
-var WestContent = require('./WestContent.react');
-var MiddleContent = require('./MiddleContent.react');
-var EastContent = require('./EastContent.react');
+import WestContent from './WestContent.react';
+import MiddleContent from './MiddleContent.react';
+import EastContent from './EastContent.react';
 
-var LayoutWestMiddleDivider = require('./layout/LayoutWestMiddleDivider.react');
-var LayoutMiddleEastDivider = require('./layout/LayoutMiddleEastDivider.react');
-var LayoutNorthSouthDivider = require('./layout/LayoutNorthSouthDivider.react');
-var LayoutDivider = require('./layout/LayoutDivider.react');
+import LayoutWestMiddleDivider from './layout/LayoutWestMiddleDivider.react';
+import LayoutMiddleEastDivider from './layout/LayoutMiddleEastDivider.react';
+import LayoutNorthSouthDivider from './layout/LayoutNorthSouthDivider.react';
 
-var LayoutUtils = require('../utils/Layout');
-var DataUtils = require('../utils/Data');
+import LayoutUtils from '../utils/Layout';
+import DataUtils from '../utils/Data';
 
-var DEFAULT = require('../defaults.js');
+import DEFAULT from '../defaults.js';
 
-var Layout = React.createClass({
+const Layout = React.createClass({
 
   getInitialState: function () {
     return {
@@ -48,7 +46,7 @@ var Layout = React.createClass({
       layoutSouthTop: 0,
       layoutSouthHeight: 0,
 
-      layoutNavigation: 'table'
+      layoutNavigation: 'table',
     };
   },
 
@@ -89,7 +87,7 @@ var Layout = React.createClass({
 
       // South
       layoutSouthTop: LayoutUtils.getSouthTop(),
-      layoutSouthHeight: LayoutUtils.getSouthHeight()
+      layoutSouthHeight: LayoutUtils.getSouthHeight(),
 
     });
   },
@@ -104,7 +102,6 @@ var Layout = React.createClass({
   },
 
   handleLayoutWestMiddleDividerSnapsToLayoutContainer: function (westMiddleDividerLeft) {
-
     var minimumWestMiddleDividerLeft = 0;
 
     if (westMiddleDividerLeft > 1 && westMiddleDividerLeft < DEFAULT.LAYOUT.MINIMUM_CONTAINER_WIDTH) {
@@ -113,12 +110,11 @@ var Layout = React.createClass({
   },
 
   handleLayoutWestMiddleDividerDragEnd: function (westMiddleDividerLeft) {
-
     this.setState({
       layoutWestWidth: westMiddleDividerLeft,
       layoutWestMiddleDividerLeft: westMiddleDividerLeft,
       layoutMiddleLeft: westMiddleDividerLeft + LayoutUtils.getDividerSize(),
-      layoutMiddleWidth: this.state.layoutMiddleEastDividerLeft - westMiddleDividerLeft - LayoutUtils.getDividerSize()
+      layoutMiddleWidth: this.state.layoutMiddleEastDividerLeft - westMiddleDividerLeft - LayoutUtils.getDividerSize(),
     });
 
     this.handleLayoutWestMiddleDividerSnapsToMiddleEastDivider(westMiddleDividerLeft);
@@ -134,7 +130,6 @@ var Layout = React.createClass({
   },
 
   handleLayoutMiddleEastDividerSnapsToLayoutContainer: function (middleEastDividerLeft) {
-
     var maximumMiddleEastDividerLeft = LayoutUtils.getViewportWidth() - LayoutUtils.getDividerSize();
 
     if (maximumMiddleEastDividerLeft - middleEastDividerLeft > 1 && maximumMiddleEastDividerLeft - middleEastDividerLeft < DEFAULT.LAYOUT.MINIMUM_CONTAINER_WIDTH) {
@@ -143,12 +138,11 @@ var Layout = React.createClass({
   },
 
   handleLayoutMiddleEastDividerDragEnd: function (middleEastDividerLeft) {
-
     this.setState({
       layoutMiddleWidth: middleEastDividerLeft - this.state.layoutMiddleLeft,
       layoutMiddleEastDividerLeft: middleEastDividerLeft,
       layoutEastLeft: middleEastDividerLeft + LayoutUtils.getDividerSize(),
-      layoutEastWidth: LayoutUtils.getViewportWidth() - (middleEastDividerLeft + LayoutUtils.getDividerSize())
+      layoutEastWidth: LayoutUtils.getViewportWidth() - (middleEastDividerLeft + LayoutUtils.getDividerSize()),
     });
 
     this.handleLayoutMiddleEastDividerSnapsToWestMiddleDivider(middleEastDividerLeft);
@@ -156,7 +150,6 @@ var Layout = React.createClass({
   },
 
   handleLayoutNorthSouthDividerSnapsToLayoutContainer: function (northSouthDividerTop) {
-
     var minimumNorthSouthDividerTop = 0;
     var maximumNorthSouthDividerTop = LayoutUtils.getViewportHeight() - LayoutUtils.getDividerSize();
 
@@ -168,25 +161,22 @@ var Layout = React.createClass({
     if (northSouthDividerTop < maximumNorthSouthDividerTop && northSouthDividerTop > maximumNorthSouthDividerTop - DEFAULT.LAYOUT.MINIMUM_CONTAINER_HEIGHT) {
       this.handleLayoutNorthSourthDividerDragEnd(maximumNorthSouthDividerTop);
     }
-
   },
 
   handleLayoutNorthSourthDividerDragEnd: function (northSouthDividerTop) {
-
     this.setState({
       layoutNorthHeight: northSouthDividerTop,
       layoutNorthSouthDividerTop: northSouthDividerTop,
       layoutSouthTop: northSouthDividerTop + LayoutUtils.getDividerSize(),
-      layoutSouthHeight: LayoutUtils.getViewportHeight() - (northSouthDividerTop + LayoutUtils.getDividerSize())
+      layoutSouthHeight: LayoutUtils.getViewportHeight() - (northSouthDividerTop + LayoutUtils.getDividerSize()),
     });
 
     this.handleLayoutNorthSouthDividerSnapsToLayoutContainer(northSouthDividerTop);
-
   },
 
   handleLayoutNavigationChange: function (layoutNavigation) {
     this.setState({
-      layoutNavigation: layoutNavigation
+      layoutNavigation: layoutNavigation,
     });
   },
 
@@ -197,62 +187,44 @@ var Layout = React.createClass({
 
   render: function () {
     return (
-
       <LayoutContainer>
-
         <LayoutNorth height={this.state.layoutNorthHeight}>
-
           <LayoutWest width={this.state.layoutWestWidth}>
-
             <WestContent
               width={this.state.layoutWestWidth}
               height={this.state.layoutNorthHeight} />
-
           </LayoutWest>
-
           <LayoutWestMiddleDivider
             left={this.state.layoutWestMiddleDividerLeft}
             containmentRight={this.state.layoutMiddleEastDividerLeft}
             layoutMiddleEastDividerLeft={this.state.layoutMiddleEastDividerLeft}
             onDragEnd={this.handleLayoutWestMiddleDividerDragEnd} />
-
           <LayoutMiddle left={this.state.layoutMiddleLeft} width={this.state.layoutMiddleWidth}>
-
             <MiddleContent
               width={this.state.layoutMiddleWidth}
               height={this.state.layoutNorthHeight} />
-
           </LayoutMiddle>
-
           <LayoutMiddleEastDivider
             left={this.state.layoutMiddleEastDividerLeft}
             containmentLeft={this.state.layoutMiddleLeft}
             layoutWestMiddleDividerLeft={this.state.layoutWestMiddleDividerLeft}
             onDragEnd={this.handleLayoutMiddleEastDividerDragEnd} />
-
           <LayoutEast left={this.state.layoutEastLeft} width={this.state.layoutEastWidth}>
-
             <EastContent
               width={this.state.layoutEastWidth}
               height={this.state.layoutNorthHeight} />
-
           </LayoutEast>
-
         </LayoutNorth>
-
         <LayoutNorthSouthDivider
           top={this.state.layoutNorthSouthDividerTop}
           onDragEnd={this.handleLayoutNorthSourthDividerDragEnd} />
-
         <LayoutSouth top={this.state.layoutSouthTop}>
-
           <Data />
-
         </LayoutSouth>
-
       </LayoutContainer>
     );
-  }
+  },
+
 });
 
 module.exports = Layout;
