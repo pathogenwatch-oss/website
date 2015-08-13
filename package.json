@@ -4,7 +4,7 @@
   "description": "Macroreact",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server",
+    "start": "node dev-server.js",
     "build": "NODE_ENV=production webpack"
   },
   "repository": {
@@ -12,7 +12,6 @@
     "url": "https://github.com/ImperialCollegeLondon/macroreact.git"
   },
   "author": "The Center for Genomic Pathogen Surveillance",
-  "license": "Proprietary?",
   "bugs": {
     "url": "https://github.com/ImperialCollegeLondon/macroreact/issues"
   },
@@ -22,6 +21,8 @@
     "babel-loader": "^5.3.2",
     "cgps-style": "git://github.com/imperialcollegelondon/javascript.git#v0.1.1",
     "css-loader": "^0.15.6",
+    "json-loader": "^0.5.2",
+    "react-hot-loader": "^1.2.8",
     "webpack": "^1.11.0",
     "webpack-dev-server": "^1.10.1"
   },

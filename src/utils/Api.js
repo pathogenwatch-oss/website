@@ -1,5 +1,5 @@
 var request = require('./Http');
-var CONFIG = require('../../../config.json').client;
+var CONFIG = require('../../config.json').client;
 
 function getCollectionId(collectionData, callback) {
   $.ajax({

@@ -130,7 +130,7 @@ var DragAndDropFiles = React.createClass({
               { this.state.isProcessing ?
                 <h2 style={headerStyle}><span style={featureStyle}>Processing</span> your files.</h2>
               :
-                <h2 style={headerStyle}>Drop your files here for <span style={featureStyle}>quick analysis</span> and <span style={featureStyle}>easy upload</span>.</h2>
+                <h2 style={headerStyle}>Drop your assemblies here for <span style={featureStyle}>quick analysis</span> and <span style={featureStyle}>easy upload</span>.</h2>
               }
             </div>
           </div>

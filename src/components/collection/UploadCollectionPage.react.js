@@ -48,21 +48,17 @@ var UploadCollectionPage = React.createClass({
 
   handleFileUploadingStoreChange: function () {
     var fileUploadingResult = FileUploadingStore.getFileUploadingResult();
-
     this.setProjectIdInUrl();
 
     if (fileUploadingResult === FileUploadingStore.getFileUploadingResults().NONE) {
       this.setState({
         isUploading: FileUploadingStore.getFileUploadingState()
       });
-
       return;
     }
 
     if (fileUploadingResult === FileUploadingStore.getFileUploadingResults().SUCCESS) {
-
       this.context.router.transitionTo('/project/' + FileUploadingStore.getCollectionId());
-
       return;
     }
   },

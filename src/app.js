@@ -1,38 +1,23 @@
-var React = require('react');
-var Home = require('./components/home/Home.react');
+import React from 'react';
+import Router, { Route, RouteHandler, Redirect, NotFoundRoute } from 'react-router';
 
-var InstructionsPage = require('./components/home/InstructionsPage.react');
-var ShowcasePage = require('./components/home/ShowcasePage.react');
-var AboutPage = require('./components/home/AboutPage.react');
-var UploadCollectionPage = require('./components/collection/UploadCollectionPage.react');
+import UploadCollectionPage from './components/collection/UploadCollectionPage.react';
+import NotFound from './components/NotFound.react';
 
-var NotFound = require('./components/NotFound.react');
-var Project = require('./components/Project.react');
-var Router = require('react-router');
-var Link = Router.Link;
-var Route = Router.Route;
-var RouteHandler = Router.RouteHandler;
-var DefaultRoute = Router.DefaultRoute;
-var NotFoundRoute = Router.NotFoundRoute;
-var Application = React.createClass({
-  render: function () {
+class Application extends React.Component {
+  render() {
     return <RouteHandler params={this.props.params} />;
   }
-});
+}
 
-var routes = (
+const routes = (
   <Route name="application" path="/" handler={Application}>
-    <DefaultRoute name="upload" handler={Home} />
-    <Route name="collection" path="collection" handler={UploadCollectionPage} />
-    <Route name="instructions" path="instructions" handler={InstructionsPage} />
-    <Route name="showcase" path="showcase" handler={ShowcasePage} />
-    <Route name="about" path="about" handler={AboutPage} />
-    <Route name="project" path="project/:projectId" handler={Project} />
+    <Redirect from="/" to="/collection" />
+    <Route name="collection" path="/collection/?" handler={UploadCollectionPage} />
     <NotFoundRoute handler={NotFound}/>
   </Route>
 );
 
 Router.run(routes, Router.HistoryLocation, function (Handler, state) {
-  var params = state.params;
-  React.render(<Handler params={params} />, document.body);
+  React.render(<Handler params={state.params} />, document.body);
 });
