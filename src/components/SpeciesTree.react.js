@@ -95,7 +95,7 @@ var Tree = React.createClass({
         collapsed: true
       }
     });
-    phylocanvas.dangerouslySetData(this.tree);
+    phylocanvas.load(this.tree);
 
     phylocanvas.showLabels = DEFAULT_TREE_SETTINGS.SHOW_TREE_LABELS;
     phylocanvas.hoverLabel = true;
@@ -107,7 +107,7 @@ var Tree = React.createClass({
     window.phylocanvas = phylocanvas;
     this.phylocanvas = phylocanvas;
 
-    this.phylocanvas.on('selected', this.handleTreeBranchSelected);
+    this.phylocanvas.on('updated', this.handleTreeBranchSelected);
     this.phylocanvas.on('subtree', this.handleRedrawSubtree);
     this.phylocanvas.on('historytoggle', this.handleHistoryToggle);
   },
@@ -116,13 +116,13 @@ var Tree = React.createClass({
     var branches = this.phylocanvas.branches;
     var branchIds = Object.keys(branches);
 
-    this.phylocanvas.setNodeColourAndShape(branchIds, '#ffffff', 's');
+    this.phylocanvas.setNodeDisplay(branchIds, { colour: '#ffffff', shape: 's' });
   },
 
   emphasizeShapeAndColourForNodesThatHaveSubtrees: function () {
     var subtreeIds = SpeciesSubtreeStore.getSpeciesSubtreeIds();
 
-    this.phylocanvas.setNodeColourAndShape(subtreeIds, '#000000', 's');
+    this.phylocanvas.setNodeDisplay(subtreeIds, { colour: '#000000', shape: 's' });
   },
 
   handleRedrawSubtree: function () {

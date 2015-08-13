@@ -199,9 +199,7 @@ var Map = React.createClass({
       shape = this.getMarkerShapeForAssembly(assembly);
       colour = this.getMarkerColourForAssembly(assembly);
 
-      marker = this.createMarker(assemblyId, latitude, longitude, shape, colour);
-
-      this.markers[assemblyId] = marker;
+      this.markers[assemblyId] = this.createMarker(assemblyId, latitude, longitude, shape, colour);
 
     }.bind(this));
 
@@ -210,28 +208,20 @@ var Map = React.createClass({
 
   createMarker: function (dataObjectId, latitude, longitude, shape, colour) {
 
-    if (typeof latitude === 'undefined') {
-      throw new Error("Can't create map marker because latitude is missing in " + dataObjectId + " data object.");
+    if (!latitude) {
+      throw new Error(`Can't create map marker because latitude is missing in ${dataObjectId} data object :(`);
     }
 
-    if (typeof latitude !== 'number') {
-      throw new Error("__latitude in data object with id " + dataObjectId + " is not a number, but a " + typeof latitude + '.');
+    if (!longitude) {
+      throw new Error(`Can't create map marker because longitude is missing in ${dataObjectId} data object :(`);
     }
 
-    if (typeof longitude === 'undefined') {
-      throw new Error("Can't create map marker because longitude is missing in " + dataObjectId + " data object.");
-    }
-
-    if (typeof longitude !== 'number') {
-      throw new Error("__longitude in data object with id " + dataObjectId + " is not a number.");
-    }
-
-    if (! shape) {
+    if (!shape) {
       shape = DEFAULT.SHAPE;
       console.warn("Shape is missing in " + dataObjectId + " data object - using " + DEFAULT.SHAPE + ".");
     }
 
-    if (! colour) {
+    if (!colour) {
       colour = DEFAULT.COLOUR;
       console.warn("Colour is missing in " + dataObjectId + " data object - using " + DEFAULT.COLOUR + ".");
     }

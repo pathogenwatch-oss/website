@@ -111,7 +111,7 @@ var Tree = React.createClass({
         collapsed: true
       }
     });
-    phylocanvas.dangerouslySetData(this.tree);
+    phylocanvas.load(this.tree);
 
     phylocanvas.showLabels = DEFAULT_TREE_SETTINGS.SHOW_TREE_LABELS;
     phylocanvas.hoverLabel = true;
@@ -123,7 +123,7 @@ var Tree = React.createClass({
     window.phylocanvas = phylocanvas;
     this.phylocanvas = phylocanvas;
 
-    this.phylocanvas.on('selected', this.handleTreeBranchSelected);
+    this.phylocanvas.on('updated', this.handleTreeBranchSelected);
     this.phylocanvas.on('subtree', this.handleRedrawSubtree);
     this.phylocanvas.on('historytoggle', this.handleHistoryToggle);
 
@@ -150,11 +150,9 @@ var Tree = React.createClass({
       }
 
     } else if (this.isAssemblyInPublicCollection(assembly.metadata.assemblyId)) {
-
       colour = '#ffffff';
 
     } else if (this.isAssemblyInUploadedCollection(assembly.metadata.assemblyId)) {
-
       colour = '#000000';
     }
 

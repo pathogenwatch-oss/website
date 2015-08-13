@@ -4,7 +4,6 @@ var path = require('path');
 var webpack = require('webpack');
 
 var devConfig = {
-  debug: true,
   devtool: '#eval-source-map',
   entry: [
     'webpack-dev-server/client?http://localhost:8080',
@@ -14,6 +13,7 @@ var devConfig = {
   output: {
     path: __dirname,
     filename: 'macroreact.js',
+    publicPath: '/'
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),

@@ -1,15 +1,4 @@
 {
-  "server": {
-    "node": {
-      "hostname": "localhost",
-      "port": 8008
-    },
-    "mongodb": {
-      "hostname": "localhost",
-      "port": 27017,
-      "collection": "microreact"
-    }
-  },
   "client": {
     "api": {
       "hostname": "localhost",
