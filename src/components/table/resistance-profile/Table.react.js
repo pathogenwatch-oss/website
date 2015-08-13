@@ -41,16 +41,16 @@ var DataTable = React.createClass({
       return null;
     }
 
-    publicCollectionAsseblies = PublicCollectionStore.getPublicCollectionAssemblies();
-    uploadedCollectionAsseblies = UploadedCollectionStore.getUploadedCollectionAssemblies();
+    const publicCollectionAssemblies = PublicCollectionStore.getPublicCollectionAssemblies();
+    const uploadedCollectionAssemblies = UploadedCollectionStore.getUploadedCollectionAssemblies();
 
-    var tableRowElements = tableAssemblyIds.map(this.getTableRowElement.bind(null, publicCollectionAsseblies, uploadedCollectionAsseblies));
+    var tableRowElements = tableAssemblyIds.map(this.getTableRowElement.bind(null, publicCollectionAssemblies, uploadedCollectionAssemblies));
 
     return tableRowElements;
   },
 
   getTableRowElement: function (publicCollectionAssemblies, uploadedCollectionAssemblies, tableAssemblyId) {
-    var tableAssembly = publicCollectionAsseblies[tableAssemblyId] || uploadedCollectionAsseblies[tableAssemblyId];
+    var tableAssembly = publicCollectionAssemblies[tableAssemblyId] || uploadedCollectionAssemblies[tableAssemblyId];
     return (<TableRow isolate={tableAssembly} key={tableAssembly.metadata.assemblyId} />);
   },
 

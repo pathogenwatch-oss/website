@@ -33,7 +33,7 @@ var devConfig = {
 var prodConfig = {
   entry: './src/app',
   output: {
-    path: '.',
+    path: __dirname,
     filename: 'macroreact.js',
   },
   plugins: [

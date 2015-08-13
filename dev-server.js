@@ -10,17 +10,15 @@ var server = new WebpackDevServer(webpack(config), {
   hot: true
 });
 
-if (process.env.NODE_ENV !== 'production') {
-  server.use('/api/v1/collection/reference', function (req, res) {
-    res.sendFile(__dirname + '/static_data/reference.json');
-  });
+server.use('/api/v1/collection/reference', function (req, res) {
+  res.sendFile(__dirname + '/static_data/reference.json');
+});
 
-  server.use('/api/v1/collection/:id', function (req, res) {
-    res.sendFile(__dirname + '/static_data/collection.json');
-  });
-}
+server.use('/api/v1/collection/:id', function (req, res) {
+  res.sendFile(__dirname + '/static_data/collection.json');
+});
 
-server.use( '/', function (req, res) {
+server.use('/', function (req, res) {
   res.sendFile(__dirname + '/index.html');
 });
 
