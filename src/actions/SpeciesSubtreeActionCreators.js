@@ -1,11 +1,11 @@
-var AppDispatcher = require('../dispatcher/AppDispatcher');
+import AppDispatcher from '../dispatcher/AppDispatcher';
 
 module.exports = {
 
   setActiveSpeciesSubtreeId: function (activeSpeciesSubtreeId) {
-    var action = {
+    const action = {
       type: 'set_active_species_subtree_id',
-      activeSpeciesSubtreeId: activeSpeciesSubtreeId
+      activeSpeciesSubtreeId: activeSpeciesSubtreeId,
     };
 
     AppDispatcher.dispatch(action);

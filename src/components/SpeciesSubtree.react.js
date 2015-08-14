@@ -1,77 +1,57 @@
-var React = require('react');
-var PhyloCanvas = require('PhyloCanvas');
-var TreeControls = require('./TreeControls.react');
-var DEFAULT = require('../defaults');
-var ANTIBIOTICS = require('../../static_data/antibiotics.json');
+import React from 'react';
+import PhyloCanvas from 'PhyloCanvas';
+import assign from 'object-assign';
 
-var SpeciesSubtreeStore = require('../stores/SpeciesSubtreeStore');
-var PublicCollectionStore = require('../stores/PublicCollectionStore');
-var UploadedCollectionStore = require('../stores/UploadedCollectionStore');
-var TableStore = require('../stores/TableStore');
-var MapActionCreators = require('../actions/MapActionCreators');
-var TableActionCreators = require('../actions/TableActionCreators');
-var SpeciesSubtreeActionCreators = require('../actions/SpeciesSubtreeActionCreators');
+import TreeControls from './TreeControls.react';
+import DEFAULT from '../defaults';
+import ANTIBIOTICS from '../../static_data/antibiotics.json';
 
-var DataUtils = require('../utils/Data');
-var MetadataUtils = require('../utils/Metadata');
+import SpeciesSubtreeStore from '../stores/SpeciesSubtreeStore';
+import PublicCollectionStore from '../stores/PublicCollectionStore';
+import UploadedCollectionStore from '../stores/UploadedCollectionStore';
+import TableStore from '../stores/TableStore';
+import MapActionCreators from '../actions/MapActionCreators';
+import TableActionCreators from '../actions/TableActionCreators';
+import SpeciesSubtreeActionCreators from '../actions/SpeciesSubtreeActionCreators';
 
-var assign = require('object-assign');
+import DataUtils from '../utils/Data';
+import MetadataUtils from '../utils/Metadata';
 
-var DEFAULT_TREE_SETTINGS = {
+const DEFAULT_TREE_SETTINGS = {
   SHOW_TREE_LABELS: true,
   MINIMUM_NODE_SIZE: 1,
   MAXIMUM_NODE_SIZE: 200,
   MINIMUM_TEXT_SIZE: 1,
-  MAXIMUM_TEXT_SIZE: 200
+  MAXIMUM_TEXT_SIZE: 200,
 };
 
-var TREE_SETTINGS = {
-  TREE_TYPE: 'tt',
-  NODE_SIZE: 'tns',
-  TEXT_SIZE: 'tts',
-  SHOW_TREE_LABELS: 'tl',
-};
-
-var TREE_TYPE_SETTING_OPTIONS = {
-  rd: 'radial',
-  rc: 'rectangular',
-  cr: 'circular',
-  dg: 'diagonal',
-  hr: 'hierarchy'
-};
-
-var SHOW_TREE_LABELS_SETTING_OPTIONS = {
-  0: false,
-  1: true
-};
-
-var sectionStyle = {
+const sectionStyle = {
   position: 'relative',
   width: '100%',
-  height: '100%'
+  height: '100%',
 };
 
-var phylocanvasStyle = {
+const phylocanvasStyle = {
   position: 'relative',
   width: '100%',
-  height: '100%'
+  height: '100%',
 };
 
-var treeControlsToggleButton = {
+const treeControlsToggleButton = {
   position: 'absolute',
   bottom: 5,
   right: 5,
-  zIndex: 999
+  zIndex: 999,
 };
 
-var Tree = React.createClass({
+const Tree = React.createClass({
 
   tree: null,
   treeId: null,
   phylocanvas: null,
 
   propTypes: {
-    treeId: React.PropTypes.string.isRequired
+    treeId: React.PropTypes.string.isRequired,
   },
 
   getInitialState: function () {
@@ -81,7 +61,7 @@ var Tree = React.createClass({
       treeType: DEFAULT.TREE_TYPE,
       nodeSize: DEFAULT.NODE_SIZE,
       labelSize: DEFAULT.LABEL_SIZE,
-      nodeLabel: TableStore.getLabelTableColumnName()
+      nodeLabel: TableStore.getLabelTableColumnName(),
     });
   },
 
@@ -106,10 +86,10 @@ var Tree = React.createClass({
   },
 
   renderTree: function () {
-    var phylocanvas = new PhyloCanvas.Tree(this.treeId, {
+    const phylocanvas = PhyloCanvas.createTree(this.treeId, {
       history: {
-        collapsed: true
-      }
+        collapsed: true,
+      },
     });
     phylocanvas.load(this.tree);
 
@@ -120,7 +100,6 @@ var Tree = React.createClass({
     phylocanvas.setNodeSize(this.state.nodeSize);
     phylocanvas.setTextSize(this.state.labelSize);
 
-    window.phylocanvas = phylocanvas;
     this.phylocanvas = phylocanvas;
 
     this.phylocanvas.on('updated', this.handleTreeBranchSelected);
@@ -131,7 +110,7 @@ var Tree = React.createClass({
     this.setNodesShapeAndColour();
   },
 
-  getNodeShapeForAssembly: function (assembly) {
+  getNodeShapeForAssembly: function () {
     return 'square';
   },
 
@@ -153,7 +132,7 @@ var Tree = React.createClass({
       colour = '#ffffff';
 
     } else if (this.isAssemblyInUploadedCollection(assembly.metadata.assemblyId)) {
-      colour = '#000000';
+      colour = DEFAULT.CGPS.COLOURS.PURPLE;
     }
 
     return colour;
@@ -255,58 +234,6 @@ var Tree = React.createClass({
     }.bind(this));
   },
 
-  // setDefaultNodeShapeAndColour: function () {
-  //   var branches = this.phylocanvas.branches;
-  //   var branchIds = Object.keys(branches);
-  //
-  //   this.phylocanvas.setNodeColourAndShape(branchIds, '#ffffff', 'o');
-  // },
-
-  // setResistanceProfileNodeShapeAndColour: function () {
-  //   var selectedTableColumnName = TableStore.getSelectedTableColumnName();
-  //   var listOfAntibiotics = Object.keys(ANTIBIOTICS);
-  //
-  //   if (listOfAntibiotics.indexOf(selectedTableColumnName) > -1) {
-  //
-  //     var publicCollectionAssemblies = PublicCollectionStore.getPublicCollectionAssemblies();
-  //     var uploadedCollectionAssemblies = UploadedCollectionStore.getUploadedCollectionAssemblies();
-  //
-  //     var combinedAssemblies = assign({}, publicCollectionAssemblies, uploadedCollectionAssemblies);
-  //     var combinedAssemblyIds = Object.keys(combinedAssemblies);
-  //
-  //     var branch;
-  //     var assembly;
-  //     var resistanceProfileResult;
-  //     var resistanceProfileColour;
-  //
-  //     combinedAssemblyIds.forEach(function (assemblyId) {
-  //       branch = this.phylocanvas.branches[assemblyId];
-  //
-  //       if (branch && branch.leaf) {
-  //
-  //         assembly = combinedAssemblies[assemblyId];
-  //         resistanceProfileResult = assembly.analysis.resistanceProfile[selectedTableColumnName].resistanceResult;
-  //
-  //         if (resistanceProfileResult === 'RESISTANT') {
-  //           resistanceProfileColour = '#ff0000';
-  //         } else {
-  //           resistanceProfileColour = '#ffffff';
-  //         }
-  //
-  //         branch.colour = resistanceProfileColour;
-  //       }
-  //
-  //     }.bind(this));
-  //   }
-  // },
-  //
-  // emphasizeShapeAndColourForNodesThatHaveSubtrees: function () {
-  //
-  //   var uploadedCollectionAssemblyIds = UploadedCollectionStore.getUploadedCollectionAssemblyIds();
-  //
-  //   this.phylocanvas.setNodeColourAndShape(uploadedCollectionAssemblyIds, '#000000', 'o');
-  // },
-
   handleRedrawSubtree: function () {
     var isolateIds = this.getCurrentTreeAllIsolateIds();
 
@@ -394,7 +321,6 @@ var Tree = React.createClass({
   },
 
   handleTreeBranchSelected: function (event) {
-
     var selectedNodeIds = event.nodeIds;
 
     /**
@@ -446,9 +372,8 @@ var Tree = React.createClass({
   },
 
   handleToggleTreeControls: function () {
-    //this.phylocanvas.history.collapse();
     this.setState({
-      isTreeControlsOn: !this.state.isTreeControlsOn
+      isTreeControlsOn: !this.state.isTreeControlsOn,
     });
   },
 
@@ -464,7 +389,7 @@ var Tree = React.createClass({
   handleHistoryToggle: function (event) {
     if (event.isOpen) {
       this.setState({
-        isTreeControlsOn: false
+        isTreeControlsOn: false,
       });
     }
   },
@@ -492,7 +417,8 @@ var Tree = React.createClass({
         <button className="btn btn-default btn-sm" style={treeControlsToggleButton} onClick={this.handleToggleTreeControls}>{this.state.isTreeControlsOn ? 'Hide controls' : 'Show controls'}</button>
       </section>
     );
-  }
+  },
+
 });
 
 module.exports = Tree;

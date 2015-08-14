@@ -1,20 +1,20 @@
-var React = require('react');
+import React from 'react';
 
-var ProjectNavigationStore = require('../../../stores/ProjectNavigationStore');
-var ProjectNavigationActionCreators = require('../../../actions/ProjectNavigationActionCreators');
+import CollectionNavigationStore from '../../../stores/CollectionNavigationStore';
+import CollectionNavigationActionCreators from '../../../actions/CollectionNavigationActionCreators';
 
-var style = {
+const style = {
   display: 'inline-block',
   margin: '0 5px',
   lineHeight: '24px',
-  cursor: 'pointer'
+  cursor: 'pointer',
 };
 
-var TableResistanceProfile = React.createClass({
+const TableResistanceProfile = React.createClass({
 
   handleClick: function () {
-    var PROJECT_NAVIGATION_STATES = ProjectNavigationStore.getProjectNavigationStates();
-    ProjectNavigationActionCreators.setProjectNavigation(PROJECT_NAVIGATION_STATES.TABLE_RESISTANCE_PROFILE);
+    const COLLECTION_NAVIGATION_STATES = CollectionNavigationStore.getCollectionNavigationStates();
+    CollectionNavigationActionCreators.setCollectionNavigation(COLLECTION_NAVIGATION_STATES.TABLE_RESISTANCE_PROFILE);
   },
 
   render: function () {

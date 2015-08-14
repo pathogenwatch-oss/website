@@ -45,7 +45,6 @@ var Store = assign({}, EventEmitter.prototype, {
 
   getActiveSpeciesSubtree: function () {
     var activeSpeciesSubtree = speciesSubtrees[activeSpeciesSubtreeId];
-
     return activeSpeciesSubtree || null;
   },
 
@@ -61,7 +60,7 @@ var Store = assign({}, EventEmitter.prototype, {
       activeSpeciesSubtreeAssemblyIds = TreeUtils.extractIdsFromNewick(activeSpeciesSubtree);
     }
     return activeSpeciesSubtreeAssemblyIds;
-  }
+  },
 
 });
 

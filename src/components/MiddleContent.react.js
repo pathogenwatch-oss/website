@@ -1,14 +1,11 @@
-var React = require('react');
-var DEFAULT = require('../defaults');
+import React from 'react';
 
-var SpeciesSubtree = require('./SpeciesSubtree.react');
-var SpeciesSubtreeStore = require('../stores/SpeciesSubtreeStore');
-var SpeciesSubtreeActionCreators = require('../actions/SpeciesTreeActionCreators');
-var UploadedCollectionStore = require('../stores/UploadedCollectionStore');
+import SpeciesSubtree from './SpeciesSubtree.react';
+import SpeciesSubtreeStore from '../stores/SpeciesSubtreeStore';
 
-var MiddleContent = React.createClass({
+const MiddleContent = React.createClass({
 
-  speciesSubtreeElements: [],
+  speciesSubtreeElements: {},
 
   propTypes: {
     width: React.PropTypes.number.isRequired,
@@ -17,13 +14,13 @@ var MiddleContent = React.createClass({
 
   getInitialState: function () {
     return {
-      activeAnalysisTreeId: null
+      activeAnalysisTreeId: null,
     };
   },
 
   componentWillMount: function () {
     this.setState({
-      activeAnalysisTreeId: SpeciesSubtreeStore.getActiveSpeciesSubtreeId()
+      activeAnalysisTreeId: SpeciesSubtreeStore.getActiveSpeciesSubtreeId(),
     });
     this.createSpeciesSubtreeElements();
   },
@@ -38,7 +35,7 @@ var MiddleContent = React.createClass({
 
   onSpeciesSubtreeChange: function () {
     this.setState({
-      activeAnalysisTreeId: SpeciesSubtreeStore.getActiveSpeciesSubtreeId()
+      activeAnalysisTreeId: SpeciesSubtreeStore.getActiveSpeciesSubtreeId(),
     });
   },
 
@@ -46,11 +43,11 @@ var MiddleContent = React.createClass({
     var speciesSubtrees = SpeciesSubtreeStore.getSpeciesSubtrees();
     var speciesSubtreeIds = Object.keys(speciesSubtrees);
 
-    speciesSubtreeIds.forEach(function (speciesSubtreeId) {
+    speciesSubtreeIds.forEach((speciesSubtreeId) => {
       this.speciesSubtreeElements[speciesSubtreeId] = (
         <SpeciesSubtree treeId={speciesSubtreeId} key={speciesSubtreeId} />
       );
-    }.bind(this));
+    });
   },
 
   getSpeciesSubtreeElement: function () {

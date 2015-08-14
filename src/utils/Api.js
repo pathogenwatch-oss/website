@@ -1,13 +1,14 @@
-var request = require('./Http');
-var CONFIG = require('../../config.json').client;
+import { client as CONFIG } from '../../config.json';
+
+const API_PATH = `http://${CONFIG.api.hostname}:${CONFIG.api.port}/api/v1`;
 
 function getCollectionId(collectionData, callback) {
   $.ajax({
     type: 'POST',
-    url: 'http://' + CONFIG.api.hostname + ':' + CONFIG.api.port + '/api/v1/collection',
+    url: `${API_PATH}/collection`,
     contentType: 'application/json; charset=UTF-8',
     data: JSON.stringify(collectionData, null, 4),
-    dataType: 'json'
+    dataType: 'json',
   })
   .done(function (data) {
     callback(null, data);
@@ -16,30 +17,14 @@ function getCollectionId(collectionData, callback) {
     callback(error, null);
   });
 }
-
-// function getCollection(assemblyData, callback) {
-//   $.ajax({
-//     type: 'POST',
-//     url: 'http://127.0.0.1:8080/collection',
-//     contentType: 'application/json; charset=UTF-8',
-//     data: JSON.stringify(assemblyData, null, 4),
-//     dataType: 'json'
-//   })
-//   .done(function (data) {
-//     callback(null, data);
-//   })
-//   .fail(function (error) {
-//     callback(error, null);
-//   });
-// }
 
 function postAssembly(assemblyData, callback) {
   $.ajax({
     type: 'POST',
-    url: 'http://' + CONFIG.api.hostname + ':' + CONFIG.api.port + '/api/v1/assembly',
+    url: `${API_PATH}/assembly`,
     contentType: 'application/json; charset=UTF-8',
     data: JSON.stringify(assemblyData, null, 4),
-    dataType: 'json'
+    dataType: 'json',
   })
   .done(function (data) {
     callback(null, data);
@@ -49,76 +34,49 @@ function postAssembly(assemblyData, callback) {
   });
 }
 
-function getReferenceProject(callback) {
-
-  var options = {
-    url: 'http://' + CONFIG.api.hostname + ':' + CONFIG.api.port + '/api/v1/collection/reference/1280'
+function getReferenceCollection(callback) {
+  const options = {
+    url: `${API_PATH}/collection/reference/1280`,
   };
 
-  // if (!projectId) {
-  //   return callback(new Error('Missing project ID'), null);
-  // }
-
   $.get(options.url)
-    .done(function (project) {
+    .done(function (collection) {
+      console.log('[Macroreact] Received reference collection:');
+      console.dir(collection);
 
-      console.log('[Macroreact] Received reference project:');
-      console.dir(project);
-
-      callback(null, project);
+      callback(null, collection);
     })
     .fail(function (error) {
       callback(error, null);
     });
 }
 
-function getProject(projectId, callback) {
+function getCollection(collectionId, callback) {
+  console.log(`[Macroreact] Getting collection ${collectionId}`);
 
-  console.log('[Macroreact] Getting project ' + projectId);
-
-  var options = {
-    url: 'http://' + CONFIG.api.hostname + ':' + CONFIG.api.port + '/api/v1/collection/' + projectId
+  const options = {
+    url: `${API_PATH}/collection/${collectionId}`,
   };
 
-  if (!projectId) {
-    return callback(new Error('Missing project ID'), null);
+  if (!collectionId) {
+    return callback(new Error('Missing collection ID'), null);
   }
 
   $.get(options.url)
-    .done(function (project) {
+    .done(function (response) {
+      console.log(`[Macroreact] Received collection ${response.collection.collectionId}:`);
+      console.dir(response);
 
-      console.log('[Macroreact] Received project ' + project.collection.collectionId + ':');
-      console.dir(project);
-
-      callback(null, project);
+      callback(null, response);
     })
     .fail(function (error) {
       callback(error, null);
     });
-}
-
-function postProject(projectData, callback) {
-  $.ajax({
-    type: 'POST',
-    url: '/api/v1/project',
-    contentType: 'application/json; charset=UTF-8',
-    data: JSON.stringify(projectData, null, 4),
-    dataType: 'json'
-  })
-  .done(function (projectMetadata) {
-    var project = $.extend(projectData, projectMetadata);
-    callback(null, project);
-  })
-  .fail(function (error) {
-    callback(error, null);
-  });
 }
 
 module.exports = {
   postAssembly: postAssembly,
   getCollectionId: getCollectionId,
-  //getCollection: getCollection,
-  getProject: getProject,
-  postProject: postProject,
-  getReferenceProject: getReferenceProject
+  getCollection: getCollection,
+  getReferenceCollection: getReferenceCollection,
 };

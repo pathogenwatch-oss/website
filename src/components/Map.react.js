@@ -1,21 +1,18 @@
-var React = require('react');
-var InfoWindow = require('./InfoWindow.react');
-var MapUtils = require('../utils/Map');
-var TimelineUtils = require('../utils/Timeline');
-var DataUtils = require('../utils/Data');
-var TreeUtils = require('../utils/Tree');
-var DEFAULT = require('../defaults');
-var ANTIBIOTICS = require('../../static_data/antibiotics.json');
+import React from 'react';
+import assign from 'object-assign';
 
-var SpeciesSubtreeStore = require('../stores/SpeciesSubtreeStore');
-var PublicCollectionStore = require('../stores/PublicCollectionStore');
-var UploadedCollectionStore = require('../stores/UploadedCollectionStore');
-var MapStore = require('../stores/MapStore');
-var TableStore = require('../stores/TableStore');
+import MapUtils from '../utils/Map';
 
-var assign = require('object-assign');
+import DEFAULT from '../defaults';
+import ANTIBIOTICS from '../../static_data/antibiotics.json';
 
-var Map = React.createClass({
+
+import PublicCollectionStore from '../stores/PublicCollectionStore';
+import UploadedCollectionStore from '../stores/UploadedCollectionStore';
+import MapStore from '../stores/MapStore';
+import TableStore from '../stores/TableStore';
+
+const Map = React.createClass({
   map: null,
   markers: {},
   infoWindow: null,
@@ -23,12 +20,12 @@ var Map = React.createClass({
 
   propTypes: {
     width: React.PropTypes.number.isRequired,
-    height: React.PropTypes.number.isRequired
+    height: React.PropTypes.number.isRequired,
   },
 
   getInitialState: function () {
     return {
-      assemblyIds: []
+      assemblyIds: [],
     };
   },
 
@@ -39,7 +36,7 @@ var Map = React.createClass({
     TableStore.addChangeListener(this.handleTableStoreChange);
 
     this.setState({
-      assemblyIds: MapStore.getAssemblyIds()
+      assemblyIds: MapStore.getAssemblyIds(),
     });
   },
 
@@ -50,7 +47,7 @@ var Map = React.createClass({
 
   handleMapStoreChange: function () {
     this.setState({
-      assemblyIds: MapStore.getAssemblyIds()
+      assemblyIds: MapStore.getAssemblyIds(),
     });
   },
 
@@ -75,10 +72,10 @@ var Map = React.createClass({
     var mapOptions = {
       zoom: 4,
       center: center,
-      styles: MapUtils.STYLES,
+      // styles: MapUtils.STYLES,
       streetViewControl: false,
       scaleControl: true,
-      mapTypeId: google.maps.MapTypeId.TERRAIN
+      mapTypeId: google.maps.MapTypeId.TERRAIN,
     };
 
     this.map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
@@ -87,7 +84,6 @@ var Map = React.createClass({
   },
 
   fitAllMarkers: function () {
-
     if (Object.keys(this.markers).length === 0) {
       return;
     }
@@ -147,7 +143,7 @@ var Map = React.createClass({
   },
 
   getMarkerShapeForAssembly: function (assembly) {
-    return 'square';
+    return 'circle';
   },
 
   getMarkerColourForAssembly: function (assembly) {
@@ -163,14 +159,10 @@ var Map = React.createClass({
       } else {
         colour = '#ffffff';
       }
-
     } else if (this.isAssemblyInPublicCollection(assembly.metadata.assemblyId)) {
-
       colour = '#ffffff';
-
     } else if (this.isAssemblyInUploadedCollection(assembly.metadata.assemblyId)) {
-
-      colour = '#000000';
+      colour = DEFAULT.CGPS.COLOURS.PURPLE;
     }
 
     return colour;
@@ -186,7 +178,7 @@ var Map = React.createClass({
     var shape;
     var colour;
 
-    this.state.assemblyIds.forEach(function (assemblyId) {
+    this.state.assemblyIds.forEach((assemblyId) => {
       assembly = combinedAssemblies[assemblyId];
 
       if (! assembly) {
@@ -200,14 +192,12 @@ var Map = React.createClass({
       colour = this.getMarkerColourForAssembly(assembly);
 
       this.markers[assemblyId] = this.createMarker(assemblyId, latitude, longitude, shape, colour);
-
-    }.bind(this));
+    });
 
     this.fitAllMarkers();
   },
 
-  createMarker: function (dataObjectId, latitude, longitude, shape, colour) {
-
+  createMarker: function (dataObjectId, latitude, longitude, shape = DEFAULT.SHAPE, colour = DEFAULT.COLOUR) {
     if (!latitude) {
       throw new Error(`Can't create map marker because latitude is missing in ${dataObjectId} data object :(`);
     }
@@ -216,36 +206,35 @@ var Map = React.createClass({
       throw new Error(`Can't create map marker because longitude is missing in ${dataObjectId} data object :(`);
     }
 
-    if (!shape) {
-      shape = DEFAULT.SHAPE;
-      console.warn("Shape is missing in " + dataObjectId + " data object - using " + DEFAULT.SHAPE + ".");
+    if (shape === DEFAULT.SHAPE) {
+      console.warn(`Shape is missing in ${dataObjectId} data object - using ${DEFAULT.SHAPE}.`);
     }
 
     if (!colour) {
-      colour = DEFAULT.COLOUR;
-      console.warn("Colour is missing in " + dataObjectId + " data object - using " + DEFAULT.COLOUR + ".");
+      console.warn(`Colour is missing in ${dataObjectId} data object - using ${DEFAULT.COLOUR}.`);
     }
 
-    var marker = new google.maps.Marker({
+    const marker = new google.maps.Marker({
       position: new google.maps.LatLng(latitude, longitude),
       map: this.map,
       icon: MapUtils.getMarkerIcon(shape, colour),
-      optimized: false
+      optimized: false,
     });
 
     return marker;
   },
 
   render: function () {
-    var mapStyle = {
+    const mapStyle = {
       width: this.props.width,
-      height: this.props.height
+      height: this.props.height,
     };
 
     return (
       <section id="map-canvas" style={mapStyle}></section>
     );
-  }
+  },
+
 });
 
 module.exports = Map;

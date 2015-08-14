@@ -26,7 +26,7 @@ var devConfig = {
         include: path.join(__dirname, 'src')
       },
       { test: /.json$/, loaders: [ 'json' ] },
-      { test: /.css$/, loaders: [ 'style', 'css'] }
+      { test: /.css$/, loaders: [ 'style', 'css' ] }
     ]
   }
 };

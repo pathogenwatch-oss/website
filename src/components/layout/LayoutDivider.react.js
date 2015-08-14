@@ -1,15 +1,15 @@
-var React = require('react');
-var LayoutUtils = require('../../utils/Layout');
-var DragIcon = require('./DragIcon.react');
+import React from 'react';
+import LayoutUtils from '../../utils/Layout';
+import DragIcon from './DragIcon.react';
 
-var LayoutDivider = React.createClass({
+const LayoutDivider = React.createClass({
 
   propTypes: {
     direction: React.PropTypes.string.isRequired,
     isStatic: React.PropTypes.bool,
     top: React.PropTypes.number,
     left: React.PropTypes.number,
-    className: React.PropTypes.string
+    className: React.PropTypes.string,
   },
 
   getWidth: function () {
@@ -100,40 +100,24 @@ var LayoutDivider = React.createClass({
   },
 
   render: function () {
-
-    var top = this.props.top || 0;
-    var left = this.props.left || 0;
-    var width = this.getWidth();
-    var height = this.getHeight();
-    var cursor = this.getStyleCursor();
-    var borderTop = this.getBorderTopOrBottom();
-    var borderRight = this.getBorderLeftOrRight();
-    var borderBottom = this.getBorderTopOrBottom();
-    var borderLeft = this.getBorderLeftOrRight();
-    var backgroundColor = this.getBackgroundColor();
-    var className = this.props.className || '';
-
-    var style = {
-      backgroundColor: backgroundColor,
-      cursor: cursor,
+    const style = {
+      backgroundColor: this.getBackgroundColor(),
+      cursor: this.getStyleCursor(),
       position: 'absolute',
-      top: top,
-      left: left,
-      width: width,
-      height: height,
+      top: this.props.top || 0,
+      left: this.props.left || 0,
+      width: this.getWidth(),
+      height: this.getHeight(),
       zIndex: '999',
-      borderTop: borderTop,
-      borderRight: borderRight,
-      borderBottom: borderBottom,
-      borderLeft: borderLeft
+      boxShadow: this.props.direction === 'horizontal' ?
+        '0 -1px 0 0 rgba(0,0,0,.14), 0 -2px 3px 0 rgba(0,0,0,.12)' :
+        '1px 0px 0 rgba(0,0,0,.14), 2px 0px 3px 0 rgba(0,0,0,.12)',
     };
-
-    var direction = this.props.direction;
-    var isStatic = this.props.isStatic || false;
+    const isStatic = this.props.isStatic || false;
 
     return (
-      <div className={className} style={style}>
-        {isStatic ? null : <DragIcon direction={direction} />}
+      <div className={this.props.className || ''} style={style}>
+        {isStatic ? null : <DragIcon direction={this.props.direction} />}
         {this.props.children}
       </div>
     );
