@@ -1,27 +1,27 @@
 {
   "collection":{
-    "collectionId":"5e6892c9-0891-4512-b5c7-daf47273eddb",
+    "collectionId":"229c3b1e-957c-4d19-a2e4-87a43ce0f3bb",
     "assemblies":{
-      "19fe6ca8-7196-45b0-bf4d-4ee282903a35":{
+      "21518149-8b93-47bc-920d-7f1fd55caf61":{
         "metadata":{
-          "assemblyId":"19fe6ca8-7196-45b0-bf4d-4ee282903a35",
-          "fileAssemblyId":"JH9.fna",
+          "assemblyId":"21518149-8b93-47bc-920d-7f1fd55caf61",
+          "fileAssemblyId":"Patient5.fas",
           "date":{
-            "year":2015,
-            "month":1,
-            "day":1
+            "year":2014,
+            "month":10,
+            "day":5
           },
           "geography":{
-            "location": "Wellcome Trust Conference Centre",
+            "location":"Wellcome Trust Conference Centre",
             "position":{
-              "latitude": 52.0806431,
-              "longitude": 0.1861249
+              "latitude":52.0806431,
+              "longitude":0.1861249
             }
           },
           "source":1
         },
         "analysis":{
-          "st":"105",
+          "st":"22",
           "resistanceProfile":{
             "Levofloxacin":{
               "antibioticClass":"Fluoroquinolones",
@@ -41,7 +41,7 @@
             },
             "Telithromycin":{
               "antibioticClass":"Ketolides",
-              "resistanceResult":"RESISTANT"
+              "resistanceResult":"UNKNOWN"
             },
             "Dyes":{
               "antibioticClass":"Antiseptics",
@@ -69,27 +69,27 @@
             },
             "Kanamycin":{
               "antibioticClass":"Aminoglycosides",
-              "resistanceResult":"RESISTANT"
+              "resistanceResult":"UNKNOWN"
             },
             "Streptomycin":{
               "antibioticClass":"Aminoglycosides",
-              "resistanceResult":"RESISTANT"
+              "resistanceResult":"UNKNOWN"
             },
             "Tobramycin":{
               "antibioticClass":"Aminoglycosides",
-              "resistanceResult":"RESISTANT"
+              "resistanceResult":"UNKNOWN"
             },
             "Amikacin":{
               "antibioticClass":"Aminoglycosides",
-              "resistanceResult":"RESISTANT"
+              "resistanceResult":"UNKNOWN"
             },
             "Gentamicin":{
               "antibioticClass":"Aminoglycosides",
-              "resistanceResult":"RESISTANT"
+              "resistanceResult":"UNKNOWN"
             },
             "Neomycin":{
               "antibioticClass":"Aminoglycosides",
-              "resistanceResult":"RESISTANT"
+              "resistanceResult":"UNKNOWN"
             },
             "Chloramphenicol":{
               "antibioticClass":"Chloramphenicol",
@@ -105,7 +105,7 @@
             },
             "Rifampicin":{
               "antibioticClass":"Rifamycin",
-              "resistanceResult":"RESISTANT"
+              "resistanceResult":"UNKNOWN"
             },
             "Lead":{
               "antibioticClass":"Heavy metals",
@@ -133,7 +133,7 @@
             },
             "Linezolid":{
               "antibioticClass":"Oxazolidinone",
-              "resistanceResult":"RESISTANT"
+              "resistanceResult":"UNKNOWN"
             },
             "Minocycline":{
               "antibioticClass":"Tetracyclines",
@@ -165,7 +165,7 @@
             },
             "Penicillin":{
               "antibioticClass":"Beta-Lactam",
-              "resistanceResult":"UNKNOWN"
+              "resistanceResult":"RESISTANT"
             },
             "Vancomycin":{
               "antibioticClass":"Glycopeptides",
@@ -190,26 +190,26 @@
           }
         }
       },
-      "feb3de31-9af6-455e-95d4-82db9846a74d":{
+      "cc76533f-4c3a-494e-84d6-609da864454d":{
         "metadata":{
-          "assemblyId":"feb3de31-9af6-455e-95d4-82db9846a74d",
-          "fileAssemblyId":"MW2.fna",
+          "assemblyId":"cc76533f-4c3a-494e-84d6-609da864454d",
+          "fileAssemblyId":"Patient6.fas",
           "date":{
-            "year":2015,
-            "month":1,
-            "day":1
+            "year":2010,
+            "month":11,
+            "day":2
           },
           "geography":{
-            "location": "The European Bioinformatics Institute",
+            "location":"The European Bioinformatics Institute",
             "position":{
-              "latitude": 52.0803398,
-              "longitude": 0.1868759
+              "latitude":52.0803398,
+              "longitude":0.1868759
             }
           },
-          "source":1
+          "source":2
         },
         "analysis":{
-          "st":"1",
+          "st":"22",
           "resistanceProfile":{
             "Levofloxacin":{
               "antibioticClass":"Fluoroquinolones",
@@ -229,7 +229,7 @@
             },
             "Telithromycin":{
               "antibioticClass":"Ketolides",
-              "resistanceResult":"RESISTANT"
+              "resistanceResult":"UNKNOWN"
             },
             "Dyes":{
               "antibioticClass":"Antiseptics",
@@ -257,27 +257,27 @@
             },
             "Kanamycin":{
               "antibioticClass":"Aminoglycosides",
-              "resistanceResult":"RESISTANT"
+              "resistanceResult":"UNKNOWN"
             },
             "Streptomycin":{
               "antibioticClass":"Aminoglycosides",
-              "resistanceResult":"RESISTANT"
+              "resistanceResult":"UNKNOWN"
             },
             "Tobramycin":{
               "antibioticClass":"Aminoglycosides",
-              "resistanceResult":"RESISTANT"
+              "resistanceResult":"UNKNOWN"
             },
             "Amikacin":{
               "antibioticClass":"Aminoglycosides",
-              "resistanceResult":"RESISTANT"
+              "resistanceResult":"UNKNOWN"
             },
             "Gentamicin":{
               "antibioticClass":"Aminoglycosides",
-              "resistanceResult":"RESISTANT"
+              "resistanceResult":"UNKNOWN"
             },
             "Neomycin":{
               "antibioticClass":"Aminoglycosides",
-              "resistanceResult":"RESISTANT"
+              "resistanceResult":"UNKNOWN"
             },
             "Chloramphenicol":{
               "antibioticClass":"Chloramphenicol",
@@ -321,7 +321,7 @@
             },
             "Linezolid":{
               "antibioticClass":"Oxazolidinone",
-              "resistanceResult":"RESISTANT"
+              "resistanceResult":"UNKNOWN"
             },
             "Minocycline":{
               "antibioticClass":"Tetracyclines",
@@ -353,7 +353,7 @@
             },
             "Penicillin":{
               "antibioticClass":"Beta-Lactam",
-              "resistanceResult":"UNKNOWN"
+              "resistanceResult":"RESISTANT"
             },
             "Vancomycin":{
               "antibioticClass":"Glycopeptides",
@@ -378,26 +378,26 @@
           }
         }
       },
-      "3650a346-5143-4026-985a-b88a574c6fc3":{
+      "0e3a37f1-17bb-4bca-bb3b-e101684f3167":{
         "metadata":{
-          "assemblyId":"3650a346-5143-4026-985a-b88a574c6fc3",
-          "fileAssemblyId":"JH1.fna",
+          "assemblyId":"0e3a37f1-17bb-4bca-bb3b-e101684f3167",
+          "fileAssemblyId":"Patient7.fas",
           "date":{
-            "year":2015,
-            "month":1,
-            "day":1
+            "year":2005,
+            "month":3,
+            "day":11
           },
           "geography":{
-            "location": "Wellcome Trust Sanger Institute",
+            "location":"Wellcome Trust Sanger Institute",
             "position":{
-              "latitude": 52.0794681,
-              "longitude": 0.1846919
+              "latitude":52.0794681,
+              "longitude":0.1846919
             }
           },
-          "source":1
+          "source":3
         },
         "analysis":{
-          "st":"105",
+          "st":"22",
           "resistanceProfile":{
             "Levofloxacin":{
               "antibioticClass":"Fluoroquinolones",
@@ -485,23 +485,23 @@
             },
             "Lead":{
               "antibioticClass":"Heavy metals",
-              "resistanceResult":"UNKNOWN"
+              "resistanceResult":"RESISTANT"
             },
             "Cadmium":{
               "antibioticClass":"Heavy metals",
-              "resistanceResult":"UNKNOWN"
+              "resistanceResult":"RESISTANT"
             },
             "Arsenic":{
               "antibioticClass":"Heavy metals",
-              "resistanceResult":"UNKNOWN"
+              "resistanceResult":"RESISTANT"
             },
             "Copper":{
               "antibioticClass":"Heavy metals",
-              "resistanceResult":"UNKNOWN"
+              "resistanceResult":"RESISTANT"
             },
             "Mercury":{
               "antibioticClass":"Heavy metals",
-              "resistanceResult":"UNKNOWN"
+              "resistanceResult":"RESISTANT"
             },
             "Trimethoprim":{
               "antibioticClass":"Trimethoprim & Sulfonamides",
@@ -537,7 +537,7 @@
             },
             "Methicillin":{
               "antibioticClass":"Beta-Lactam",
-              "resistanceResult":"RESISTANT"
+              "resistanceResult":"UNKNOWN"
             },
             "Penicillin":{
               "antibioticClass":"Beta-Lactam",
@@ -567,16 +567,14 @@
         }
       }
     },
-    "tree":"(3650a346-5143-4026-985a-b88a574c6fc3:0.003585234266,feb3de31-9af6-455e-95d4-82db9846a74d:0.1905503978,19fe6ca8-7196-45b0-bf4d-4ee282903a35:0.003857708971);",
+    "tree":"(0e3a37f1-17bb-4bca-bb3b-e101684f3167:0.03156877206,cc76533f-4c3a-494e-84d6-609da864454d:0.0007845663608,21518149-8b93-47bc-920d-7f1fd55caf61:0.0007649477329);",
     "assemblyIdMap":{
-      "19fe6ca8-7196-45b0-bf4d-4ee282903a35":"JH9",
-      "feb3de31-9af6-455e-95d4-82db9846a74d":"MW2",
-      "3650a346-5143-4026-985a-b88a574c6fc3":"JH1"
+      "21518149-8b93-47bc-920d-7f1fd55caf61":"EMRSA15",
+      "cc76533f-4c3a-494e-84d6-609da864454d":"EMRSA15",
+      "0e3a37f1-17bb-4bca-bb3b-e101684f3167":"EMRSA15"
     },
     "subtrees":{
-      "JH9":"JH9:19fe6ca8-7196-45b0-bf4d-4ee282903a35=0.0",
-      "MW2":"MW2:feb3de31-9af6-455e-95d4-82db9846a74d=0.0",
-      "JH1":"JH1:3650a346-5143-4026-985a-b88a574c6fc3=0.0"
+      "EMRSA15":"(21518149-8b93-47bc-920d-7f1fd55caf61:0.0007737376369,cc76533f-4c3a-494e-84d6-609da864454d:0.0007757764569,(EMRSA15:1.969359354,0e3a37f1-17bb-4bca-bb3b-e101684f3167:0.01170051731):0.01986825475);"
     }
   },
   "antibiotics":{
