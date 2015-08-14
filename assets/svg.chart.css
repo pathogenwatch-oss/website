@@ -1,0 +1,39 @@
+.axis {
+  fill: none;
+  stroke: #000;
+}
+text {
+  font-size: 11px;
+  font-weight: 100;
+}
+text.axis-label {
+  stroke: #888;
+  stroke-width: 0.05em;
+  letter-spacing: 0.03em;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+circle {
+  stroke-width: 0.5px;
+  fill: #908CFF;
+  opacity: 0.5;
+}
+path {
+  stroke: #aaa;
+  fill: none;
+}
+path.n50-path {
+  fill: none;
+}
+.n50-group circle {
+  fill: #000;
+  opacity: 1;
+}
+.n50-group text {
+  fill: #000;
+  font-weight: 400;
+  font-size: 11px;
+}
+.n50-group path {
+  stroke: #000;
+}
