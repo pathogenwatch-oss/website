@@ -1,17 +1,9 @@
-var React = require('react');
-var assign = require('object-assign');
-var ANTIBIOTICS = require('../../../../static_data/antibiotics.json');
+import React from 'react';
 
-var TableStore = require('../../../stores/TableStore');
-var TableStore = require('../../../stores/TableStore');
-var TableActionCreators = require('../../../actions/TableActionCreators');
+import TableStore from '../../../stores/TableStore';
+import TableActionCreators from '../../../actions/TableActionCreators';
 
-var headerStyle = {
-  borderBottomColor: '#ddd',
-  verticalAlign: 'top',
-  whiteSpace: 'nowrap',
-  cursor: 'pointer'
-};
+import ANTIBIOTICS from '../../../../static_data/antibiotics.json';
 
 var MetadataTableHeader = React.createClass({
 
@@ -29,13 +21,13 @@ var MetadataTableHeader = React.createClass({
       };
     }
 
-    return assign({}, headerStyle, selectedTableColumnStyle);
+    return selectedTableColumnStyle;
   },
 
   getTableHeaderCellElement: function (header) {
     var style = this.getTableHeaderCellStyle(header);
 
-    return (<th key={'table-header-cell_' + header} style={style} onClick={this.handleSelectTableColumn.bind(this, header)}>{header}</th>);
+    return (<th key={'table-header-cell_' + header} className="mdl-data-table__cell--non-numeric" style={style} onClick={this.handleSelectTableColumn.bind(this, header)}>{header}</th>);
   },
 
   getTableHeaderCellElements: function () {

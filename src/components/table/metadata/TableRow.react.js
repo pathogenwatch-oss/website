@@ -25,16 +25,18 @@ var TableRow = React.createClass({
       },
       source: {
         name: 'Source',
-        value: isolate.metadata.source
+        value: isolate.metadata.source,
+        numeric: true,
       },
       date: {
         name: 'Date',
-        value: DataUtils.getFormattedDateString(isolate.metadata.date)
+        value: DataUtils.getFormattedDateString(isolate.metadata.date),
       },
       st: {
         name: 'ST',
-        value: isolate.analysis.st
-      }
+        value: isolate.analysis.st,
+        numeric: true,
+      },
     };
   },
 
@@ -47,24 +49,17 @@ var TableRow = React.createClass({
   },
 
   getIsolateMetadataTableCellElements: function () {
-    var selectedTableColumnName = TableStore.getLabelTableColumnName();
-    var dataItemValue;
+    const selectedTableColumnName = TableStore.getLabelTableColumnName();
 
-    var metadataTableCellElements = Object.keys(this.rowData).map(function (dataItemKey) {
-      dataItemValue = this.rowData[dataItemKey].value;
+    const metadataTableCellElements = Object.keys(this.rowData).map((dataItemKey) => {
+      const dataItem = this.rowData[dataItemKey];
 
-      var cellStyle = {
-        whiteSpace: 'nowrap'
+      const cellStyle = {
+        whiteSpace: 'nowrap',
       };
 
-      if (this.rowData[dataItemKey].name === selectedTableColumnName) {
-        cellStyle.backgroundColor = '#e0efff';
-      } else {
-        cellStyle.backgroundColor = 'inherit';
-      }
-
-      return (<td key={this.rowData.assemblyId.value + '_' + dataItemKey} style={cellStyle}>{dataItemValue}</td>);
-    }.bind(this));
+      return (<td key={this.rowData.assemblyId.value + '_' + dataItemKey} style={cellStyle} className={dataItem.numeric ? '' : 'mdl-data-table__cell--non-numeric'}>{dataItem.value}</td>);
+    });
 
     return metadataTableCellElements;
   },

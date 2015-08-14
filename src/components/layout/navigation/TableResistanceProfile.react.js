@@ -19,7 +19,7 @@ const TableResistanceProfile = React.createClass({
 
   render: function () {
     return (
-      <i className="fa fa-circle" onClick={this.handleClick} title="Colour" style={style}></i>
+      <i className="material-icons" onClick={this.handleClick} title="Colour" style={style}>security</i>
     );
   }
 });

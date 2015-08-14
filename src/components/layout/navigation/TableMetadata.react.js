@@ -19,7 +19,7 @@ const TableMetadata = React.createClass({
 
   render: function () {
     return (
-      <i className="fa fa-font" onClick={this.handleClick} title="Label" style={style}></i>
+      <i className="material-icons" onClick={this.handleClick} title="Label" style={style}>list</i>
     );
   }
 });

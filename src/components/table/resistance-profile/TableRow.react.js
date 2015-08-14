@@ -23,11 +23,12 @@ var TableRow = React.createClass({
   },
 
   getFormattedResistanceResult: function (resistanceResult) {
-    if (resistanceResult === 'RESISTANT') {
-      return (<i className="fa fa-square" style={resistantStyle}></i>);
-    } else {
-      return (<i className="fa fa-square-o"></i>);
-    }
+    const isResistant = resistanceResult === 'RESISTANT';
+    const icon = isResistant ? 'add' : 'remove';
+
+    return (
+      <i className="material-icons" style={ isResistant ? resistantStyle : {}}>{icon}</i>
+    );
   },
 
   getIsolateMetadataTableCellElements: function () {
@@ -41,13 +42,7 @@ var TableRow = React.createClass({
         whiteSpace: 'nowrap'
       };
 
-      if (this.rowData[dataItemKey].name === selectedTableColumnName) {
-        cellStyle.backgroundColor = '#e0efff';
-      } else {
-        cellStyle.backgroundColor = 'inherit';
-      }
-
-      return (<td key={this.rowData.assemblyId.value + '_' + dataItemKey} style={cellStyle}>{dataItemValue}</td>);
+      return (<td key={this.rowData.assemblyId.value + '_' + dataItemKey} className="mdl-data-table__cell--non-numeric" style={cellStyle}>{dataItemValue}</td>);
     }.bind(this));
 
     return metadataTableCellElements;
@@ -62,17 +57,12 @@ var TableRow = React.createClass({
     var antibioticResistanceTableCellElements = Object.keys(resistanceProfile).sort().map(function (dataItemKey) {
       dataItemValue = resistanceProfile[dataItemKey].resistanceResult;
 
-      var cellStyle = {
-        whiteSpace: 'nowrap'
+      const cellStyle = {
+        whiteSpace: 'nowrap',
+        textAlign: 'center',
       };
 
-      if (dataItemKey === selectedTableColumnName) {
-        cellStyle.backgroundColor = '#e0efff';
-      } else {
-        cellStyle.backgroundColor = 'inherit';
-      }
-
-      return (<td key={this.rowData.assemblyId.value + '_' + dataItemKey} className="text-center" style={cellStyle}>{this.getFormattedResistanceResult(dataItemValue)}</td>);
+      return (<td key={this.rowData.assemblyId.value + '_' + dataItemKey} style={cellStyle}>{this.getFormattedResistanceResult(dataItemValue)}</td>);
     }.bind(this));
 
     return antibioticResistanceTableCellElements;

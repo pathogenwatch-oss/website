@@ -1,18 +1,12 @@
-var React = require('react');
-var TableStore = require('../../../stores/TableStore');
-var ANTIBIOTICS = require('../../../../static_data/antibiotics.json');
-var assign = require('object-assign');
-var TableStore = require('../../../stores/TableStore');
-var TableActionCreators = require('../../../actions/TableActionCreators');
+import React from 'react';
+import assign from 'object-assign';
 
-var headerStyle = {
-  borderBottomColor: '#ddd',
-  verticalAlign: 'top',
-  whiteSpace: 'nowrap',
-  cursor: 'pointer'
-};
+import TableStore from '../../../stores/TableStore';
+import TableActionCreators from '../../../actions/TableActionCreators';
 
-var MetadataTableHeader = React.createClass({
+import ANTIBIOTICS from '../../../../static_data/antibiotics.json';
+
+const MetadataTableHeader = React.createClass({
 
   getTableHeaderCellStyle: function (header) {
     var selectedTableColumnName = TableStore.getColourTableColumnName();
@@ -20,21 +14,21 @@ var MetadataTableHeader = React.createClass({
 
     if (header === selectedTableColumnName) {
       selectedTableColumnStyle = {
-        backgroundColor: '#e0efff'
+        backgroundColor: '#e0efff',
       };
     } else {
       selectedTableColumnStyle = {
-        backgroundColor: 'inherit'
+        backgroundColor: 'inherit',
       };
     }
 
-    return assign({}, headerStyle, selectedTableColumnStyle);
+    return selectedTableColumnStyle;
   },
 
   getTableHeaderCellElement: function (header) {
     var style = this.getTableHeaderCellStyle(header);
 
-    return (<th key={'table-header-cell_' + header} style={style} onClick={this.handleSelectTableColumn.bind(this, header)}>{header}</th>);
+    return (<th key={'table-header-cell_' + header} style={style} className="mdl-data-table__cell--non-numeric" onClick={this.handleSelectTableColumn.bind(this, header)}>{header}</th>);
   },
 
   getTableHeaderCellElements: function () {
@@ -63,7 +57,7 @@ var MetadataTableHeader = React.createClass({
         </tr>
       </thead>
     );
-  }
+  },
 });
 
 module.exports = MetadataTableHeader;

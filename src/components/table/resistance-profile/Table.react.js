@@ -1,21 +1,17 @@
-var React = require('react');
+import React from 'react';
 
-var PublicCollectionStore = require('../../../stores/PublicCollectionStore');
-var UploadedCollectionStore = require('../../../stores/UploadedCollectionStore');
-var TableStore = require('../../../stores/TableStore');
+import PublicCollectionStore from '../../../stores/PublicCollectionStore';
+import UploadedCollectionStore from '../../../stores/UploadedCollectionStore';
+import TableStore from '../../../stores/TableStore';
 
-var TableHeader = require('./TableHeader.react');
-var TableRow = require('./TableRow.react');
+import TableHeader from './TableHeader.react';
+import TableRow from './TableRow.react';
 
-var tableStyle = {
-  border: 0
-};
-
-var DataTable = React.createClass({
+const DataTable = React.createClass({
 
   getInitialState: function () {
     return {
-      assemblyIds: TableStore.getAssemblyIds()
+      assemblyIds: TableStore.getAssemblyIds(),
     };
   },
 
@@ -29,7 +25,7 @@ var DataTable = React.createClass({
 
   handleTableStoreChange: function () {
     this.setState({
-      assemblyIds: TableStore.getAssemblyIds()
+      assemblyIds: TableStore.getAssemblyIds(),
     });
   },
 
@@ -55,7 +51,7 @@ var DataTable = React.createClass({
 
   render: function () {
     return (
-      <table className="table table-bordered table-striped table-condensed table-hover" style={tableStyle}>
+      <table className="mdl-data-table mdl-data-table--selectable">
         <TableHeader />
         <tbody>
           { this.getTableRowElements() }
