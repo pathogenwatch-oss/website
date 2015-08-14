@@ -132,7 +132,7 @@ const Tree = React.createClass({
       colour = '#ffffff';
 
     } else if (this.isAssemblyInUploadedCollection(assembly.metadata.assemblyId)) {
-      colour = '#000000';
+      colour = DEFAULT.CGPS.COLOURS.PURPLE;
     }
 
     return colour;

@@ -72,7 +72,7 @@ const Map = React.createClass({
     var mapOptions = {
       zoom: 4,
       center: center,
-      styles: MapUtils.STYLES,
+      // styles: MapUtils.STYLES,
       streetViewControl: false,
       scaleControl: true,
       mapTypeId: google.maps.MapTypeId.TERRAIN,
@@ -143,7 +143,7 @@ const Map = React.createClass({
   },
 
   getMarkerShapeForAssembly: function (assembly) {
-    return 'square';
+    return 'circle';
   },
 
   getMarkerColourForAssembly: function (assembly) {
@@ -162,7 +162,7 @@ const Map = React.createClass({
     } else if (this.isAssemblyInPublicCollection(assembly.metadata.assemblyId)) {
       colour = '#ffffff';
     } else if (this.isAssemblyInUploadedCollection(assembly.metadata.assemblyId)) {
-      colour = '#000000';
+      colour = DEFAULT.CGPS.COLOURS.PURPLE;
     }
 
     return colour;

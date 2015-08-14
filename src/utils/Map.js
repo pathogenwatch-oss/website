@@ -191,5 +191,5 @@ module.exports = {
   isDataObjectHasCoordinates: isDataObjectHasCoordinates,
   groupDataObjectsByPosition: groupDataObjectsByPosition,
   getMarkerIcon: getMarkerIcon,
-  STYLES: MapStylesUtils
+  STYLES: MapStylesUtils,
 };

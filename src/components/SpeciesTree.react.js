@@ -94,13 +94,13 @@ const Tree = React.createClass({
     var branches = this.phylocanvas.branches;
     var branchIds = Object.keys(branches);
 
-    this.phylocanvas.setNodeDisplay(branchIds, { colour: '#ffffff', shape: 's' });
+    this.phylocanvas.setNodeDisplay(branchIds, { colour: '#ffffff' });
   },
 
   emphasizeShapeAndColourForNodesThatHaveSubtrees: function () {
     var subtreeIds = SpeciesSubtreeStore.getSpeciesSubtreeIds();
 
-    this.phylocanvas.setNodeDisplay(subtreeIds, { colour: '#000000', shape: 's' });
+    this.phylocanvas.setNodeDisplay(subtreeIds, { colour: DEFAULT.CGPS.COLOURS.PURPLE });
   },
 
   handleRedrawSubtree: function () {
