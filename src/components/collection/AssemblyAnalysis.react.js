@@ -1,5 +1,6 @@
 var React = require('react');
 var AssemblyAnalysisItem = require('./AssemblyAnalysisItem.react');
+var AssemblyAnalysisChart = require('./AssemblyAnalysisChart.react');
 
 var fullWidthAndHeightStyle = {
   width: '100%',
@@ -65,6 +66,13 @@ var AssemblyAnalysis = React.createClass({
             <AssemblyAnalysisItem label="contig n50" value={assembly.analysis.contigN50} />
           </div>
         </div>
+
+        <div className="row">
+          <div className="col-md-4">
+            <AssemblyAnalysisChart label="Analytics Chart" analysis={assembly.analysis} />
+          </div>
+        </div>
+
       </div>
     );
   }

@@ -288,6 +288,8 @@ function validateContigs(contigs) {
 
 function drawN50Chart(chartData, assemblyN50, appendToClass) {
 
+  var d3 = require('d3');
+
   var chartWidth = 460,
   chartHeight = 312;
 
@@ -322,6 +324,8 @@ function drawN50Chart(chartData, assemblyN50, appendToClass) {
   .orient('left')
   // http://stackoverflow.com/a/18822793
   .ticks(10);
+
+  d3.select("svg").remove();
 
   // Append SVG to DOM
   var svg = d3.select(appendToClass)
