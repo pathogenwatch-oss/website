@@ -26,13 +26,12 @@ North and West container sizes.
 
 */
 
-var DEFAULT = require('../defaults');
-
-var DIVIDER_THICKNESS = 24;
-var DIVIDER_BORDER_THICKNESS = 2;
-var NUMBER_OF_BORDERS_PER_DIVIDER = 2;
-var NUMBER_OF_CONTAINERS_INSIDE_OF_NORTH_CONTAINER = 3;
-var NORTH_SOUTH_CONTAINERS_RATIO = 1.45;
+const DIVIDER_THICKNESS = 2;
+const DIVIDER_BORDER_THICKNESS = 2;
+const NUMBER_OF_BORDERS_PER_DIVIDER = 0;
+const NUMBER_OF_CONTAINERS_INSIDE_OF_NORTH_CONTAINER = 3;
+const NORTH_SOUTH_CONTAINERS_RATIO = 1.45;
+const HEADER_BAR_HEIGHT = 56;
 
 function getDividerSize() {
   return (DIVIDER_THICKNESS + DIVIDER_BORDER_THICKNESS * NUMBER_OF_BORDERS_PER_DIVIDER);
@@ -43,7 +42,7 @@ function getViewportWidth() {
 }
 
 function getViewportHeight() {
-  return $(window).height() - 80;
+  return $(window).height() - HEADER_BAR_HEIGHT;
 }
 
 function getNumberOfDividers() {
@@ -52,10 +51,6 @@ function getNumberOfDividers() {
 
 function getAvailableWidth() {
   return (getViewportWidth() - (getDividerSize() * getNumberOfDividers()));
-}
-
-function getAvailableHeight() {
-  return (getViewportHeight() - getNorthSouthDividerWidth());
 }
 
 // West
@@ -99,13 +94,13 @@ function getNorthHeight() {
 }
 
 function getNorthSouthDividerTop() {
-  return getNorthHeight();
+  return (HEADER_BAR_HEIGHT + getNorthHeight());
 }
 
 // South
 
 function getSouthTop() {
-  return (getNorthHeight() + getDividerSize());
+  return (HEADER_BAR_HEIGHT + getNorthHeight() + getDividerSize());
 }
 
 function getSouthHeight() {
@@ -155,5 +150,5 @@ module.exports = {
   // South
 
   getSouthTop: getSouthTop,
-  getSouthHeight: getSouthHeight
+  getSouthHeight: getSouthHeight,
 };

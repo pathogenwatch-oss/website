@@ -2,12 +2,13 @@ import React from 'react';
 
 import CollectionNavigationStore from '../../../stores/CollectionNavigationStore';
 import CollectionNavigationActionCreators from '../../../actions/CollectionNavigationActionCreators';
+import { CGPS } from '../../../defaults';
 
 const style = {
-  display: 'inline-block',
-  margin: '0 5px',
-  lineHeight: '24px',
-  cursor: 'pointer',
+  background: CGPS.COLOURS.PURPLE,
+  position: 'relative',
+  top: '-20px',
+  marginLeft: '8px',
 };
 
 const TableMetadata = React.createClass({
@@ -19,7 +20,12 @@ const TableMetadata = React.createClass({
 
   render: function () {
     return (
-      <i className="material-icons" onClick={this.handleClick} title="Label" style={style}>list</i>
+      <button
+        className="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect"
+        style={style}
+        onClick={this.handleClick}>
+        <i className="material-icons" title="Label" style={{ color: '#fff' }}>list</i>
+      </button>
     );
   }
 });

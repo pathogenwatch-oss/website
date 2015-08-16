@@ -9,10 +9,8 @@ var Navigation = React.createClass({
   render: function () {
     return (
       <div data-layout="navigation">
-        <MenuLabel />
         <TableMetadata />
         <TableResistanceProfile />
-        <DevelopedAtImperialCollegeLondon />
       </div>
     );
   }

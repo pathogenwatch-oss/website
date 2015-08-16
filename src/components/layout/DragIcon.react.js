@@ -8,8 +8,8 @@ const background = '#fff';
 
 const buttonRadius = 20;
 
-const vButtonOffset = `${buttonRadius / 2}px`;
 const hButtonOffset = `-${buttonRadius}px`;
+const vButtonOffset = `-${buttonRadius - 2}px`;
 
 const buttonStyle = {
   position: 'absolute',
@@ -26,7 +26,7 @@ const DragIcon = React.createClass({
   render: function () {
     const direction = this.props.direction;
     const horizontalLeft = (LayoutUtils.getViewportWidth() / 2) - buttonRadius;
-    const verticalTop = (LayoutUtils.getNorthHeight() / 2) - buttonRadius * 2;
+    const verticalTop = (LayoutUtils.getNorthHeight() / 2) - buttonRadius;
 
     const horizontalStyle = assign({
       top: hButtonOffset,
