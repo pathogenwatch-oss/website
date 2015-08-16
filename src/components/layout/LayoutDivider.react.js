@@ -110,8 +110,10 @@ const LayoutDivider = React.createClass({
       height: this.getHeight(),
       zIndex: '999',
       boxShadow: this.props.direction === 'horizontal' ?
-        '0 -1px 0 0 rgba(0,0,0,.14), 0 -2px 3px 0 rgba(0,0,0,.12)' :
-        '1px 0px 0 rgba(0,0,0,.14), 2px 0px 3px 0 rgba(0,0,0,.12)',
+        '0 -1px 1.5px 0 rgba(0,0,0,.12), 0 -4px 4px 0 rgba(0,0,0,.06)' :
+        // '0 -1px 0 0 rgba(0,0,0,.14), 0 -2px 3px 0 rgba(0,0,0,.12)' :
+        '1px 0 1.5px 0 rgba(0,0,0,.12), 4px 0px 4px 0 rgba(0,0,0,.06)',
+        // '1px 0px 0 rgba(0,0,0,.14), 2px 0px 3px 0 rgba(0,0,0,.12)',
     };
     const isStatic = this.props.isStatic || false;
 
