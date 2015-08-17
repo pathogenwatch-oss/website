@@ -7,6 +7,11 @@ import TableStore from '../../../stores/TableStore';
 import TableHeader from './TableHeader.react';
 import TableRow from './TableRow.react';
 
+const style = {
+  borderTop: 0,
+  width: '100%',
+};
+
 const DataTable = React.createClass({
 
   getInitialState: function () {
@@ -51,7 +56,7 @@ const DataTable = React.createClass({
 
   render: function () {
     return (
-      <table className="mdl-data-table mdl-data-table--selectable">
+      <table className="mdl-data-table mdl-data-table--selectable" style={style}>
         <TableHeader />
         <tbody>
           { this.getTableRowElements() }

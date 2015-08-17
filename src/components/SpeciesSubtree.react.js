@@ -72,6 +72,7 @@ const Tree = React.createClass({
 
   componentDidMount: function () {
     this.renderTree();
+    this.phylocanvas.draw();
     TableStore.addChangeListener(this.handleTableStoreChange);
   },
 
@@ -81,7 +82,7 @@ const Tree = React.createClass({
 
   handleTableStoreChange: function () {
     this.setState({
-      nodeLabel: TableStore.getLabelTableColumnName()
+      nodeLabel: TableStore.getLabelTableColumnName(),
     });
   },
 
@@ -259,7 +260,7 @@ const Tree = React.createClass({
   setTreeType: function (treeType) {
     this.phylocanvas.setTreeType(treeType);
     this.setState({
-      treeType: treeType
+      treeType: treeType,
     });
   },
 

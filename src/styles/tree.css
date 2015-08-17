@@ -1,0 +1,21 @@
+.wgsa-tree-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 64px;
+  padding: 16px;
+}
+
+.wgsa-tree-heading {
+  line-height: 32px;
+  font-size: 20px;
+  margin: 0;
+  float: left;
+  padding-left: 8px;
+  color: #673c90;
+}
+
+.wgsa-tree-actions {
+  color: #673c90;
+}

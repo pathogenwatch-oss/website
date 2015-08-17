@@ -4,6 +4,7 @@ import TableStore from '../../../stores/TableStore';
 import TableActionCreators from '../../../actions/TableActionCreators';
 
 import ANTIBIOTICS from '../../../../static_data/antibiotics.json';
+import { CGPS } from '../../../defaults';
 
 var MetadataTableHeader = React.createClass({
 
@@ -13,7 +14,8 @@ var MetadataTableHeader = React.createClass({
 
     if (header === selectedTableColumnName) {
       selectedTableColumnStyle = {
-        backgroundColor: '#e0efff'
+        backgroundColor: CGPS.COLOURS.GREEN_LIGHT,
+        color: CGPS.COLOURS.PURPLE,
       };
     } else {
       selectedTableColumnStyle = {
