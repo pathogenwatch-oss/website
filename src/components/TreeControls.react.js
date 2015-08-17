@@ -60,11 +60,11 @@ export default React.createClass({
   render: function () {
     return (
       <div style={treeSizeControlsStyle}>
-        <div style={sizeControlStyle}>
+        <div className="wgsa-tree-control" style={sizeControlStyle}>
           <label>Node Size</label>
           <input type="text" data-dial-node-size defaultValue={this.props.nodeSize} style={noUserSelectStyle} />
         </div>
-        <div style={sizeControlStyle}>
+        <div className="wgsa-tree-control" style={sizeControlStyle}>
           <label>Label Size</label>
           <input type="text" data-dial-label-size defaultValue={this.props.labelSize} style={noUserSelectStyle} />
         </div>

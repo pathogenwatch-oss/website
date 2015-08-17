@@ -3,8 +3,9 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 64px;
+  height: 32px;
   padding: 16px;
+  z-index: 10;
 }
 
 .wgsa-tree-heading {
@@ -18,4 +19,8 @@
 
 .wgsa-tree-actions {
   color: #673c90;
+}
+
+.wgsa-tree-control label {
+  font-size: 13px;
 }

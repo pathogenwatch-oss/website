@@ -34,7 +34,6 @@ const phylocanvasStyle = {
 const menuWrapperStyle = {
   position: 'absolute',
   right: '8px',
-  zIndex: 10,
 };
 
 const Tree = React.createClass({
@@ -80,13 +79,13 @@ const Tree = React.createClass({
 
     phylocanvas.showLabels = DEFAULT_TREE_SETTINGS.SHOW_TREE_LABELS;
     phylocanvas.hoverLabel = true;
-    phylocanvas.nodeAlign = false;
+    phylocanvas.highlightColour = phylocanvas.selectedColour = CGPS.COLOURS.PURPLE;
+
     phylocanvas.setTreeType(this.state.treeType);
     phylocanvas.setNodeSize(this.state.nodeSize);
     phylocanvas.setTextSize(this.state.labelSize);
 
     this.phylocanvas = phylocanvas;
-    console.log(this.phylocanvas);
     this.phylocanvas.on('updated', this.handleTreeBranchSelected);
     this.phylocanvas.on('subtree', this.handleRedrawSubtree);
     this.phylocanvas.on('historytoggle', this.handleHistoryToggle);
@@ -102,7 +101,7 @@ const Tree = React.createClass({
   emphasizeShapeAndColourForNodesThatHaveSubtrees: function () {
     var subtreeIds = SpeciesSubtreeStore.getSpeciesSubtreeIds();
 
-    this.phylocanvas.setNodeDisplay(subtreeIds, { colour: DEFAULT.CGPS.COLOURS.PURPLE });
+    this.phylocanvas.setNodeDisplay(subtreeIds, { colour: CGPS.COLOURS.PURPLE_LIGHT });
   },
 
   handleRedrawSubtree: function () {
@@ -131,6 +130,8 @@ const Tree = React.createClass({
 
   redrawOriginalTree: function () {
     this.phylocanvas.redrawOriginalTree();
+    this.setNodeShapeAndColour();
+    this.emphasizeShapeAndColourForNodesThatHaveSubtrees();
   },
 
   toggleTreeLabels: function () {
@@ -155,7 +156,7 @@ const Tree = React.createClass({
     anchor.target = '_blank';
 
     if (isDownloadSupported) {
-      anchor.download = 'microreact.png';
+      anchor.download = 'wgsa-saureus.png';
     }
 
     event = document.createEvent('Event');
@@ -261,7 +262,7 @@ const Tree = React.createClass({
   },
 
   toggleNodeAlign: function () {
-    this.phylocanvas.nodeAlign = !this.phylocanvas.nodeAlign;
+    this.phylocanvas.alignLabels = !this.phylocanvas.alignLabels;
     this.phylocanvas.draw();
   },
 
@@ -277,7 +278,7 @@ const Tree = React.createClass({
     return (
       <section style={sectionStyle}>
         <div className="wgsa-tree-header">
-          <h2 className="wgsa-tree-heading">Population Tree</h2>
+          <h2 className="wgsa-tree-heading">General Population</h2>
           <div style={menuWrapperStyle}>
             <button id="tree-options" className="wgsa-tree-actions mdl-button mdl-js-button mdl-button--icon">
               <i className="material-icons">more_vert</i>

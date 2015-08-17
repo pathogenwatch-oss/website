@@ -162,7 +162,7 @@ const Map = React.createClass({
     } else if (this.isAssemblyInPublicCollection(assembly.metadata.assemblyId)) {
       colour = '#ffffff';
     } else if (this.isAssemblyInUploadedCollection(assembly.metadata.assemblyId)) {
-      colour = DEFAULT.CGPS.COLOURS.PURPLE;
+      colour = DEFAULT.CGPS.COLOURS.PURPLE_LIGHT;
     }
 
     return colour;

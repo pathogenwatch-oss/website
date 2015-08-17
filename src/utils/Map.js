@@ -1,5 +1,7 @@
 import MapStylesUtils from '../utils/MapStyles';
 
+import { CGPS } from '../defaults';
+
 const MARKER = {
   SIZE: {
     WIDTH: 12,
@@ -43,8 +45,8 @@ function drawCircle(fillColour) {
   context.arc(centerX, centerY, radius, startAngle, endAngle, isAnticlockwise);
   context.fillStyle = fillColour;
   context.fill();
-  context.lineWidth = 1;
-  context.strokeStyle = '#000';
+  context.lineWidth = 2;
+  context.strokeStyle = CGPS.COLOURS.PURPLE;
   context.stroke();
 
   return canvas.toDataURL();
