@@ -2,35 +2,35 @@ import React from 'react';
 
 import DEFAULT from '../../defaults';
 
+const navBarHeight = '56px';
+
+const style = {
+  width: '100%',
+  height: '100%',
+  overflow: 'hidden',
+};
+
+const headerStyle = {
+  background: DEFAULT.CGPS.COLOURS.PURPLE,
+  maxHeight: navBarHeight,
+  minHeight: navBarHeight,
+};
+
+const headerRowStyle = {
+  height: navBarHeight,
+};
+
+const iconLinkStyle = {
+  lineHeight: navBarHeight,
+};
+
+const iconStyle = {
+  verticalAlign: 'middle',
+  marginRight: '4px',
+};
+
 const LayoutContainer = React.createClass({
   render: function () {
-    const style = {
-      width: '100%',
-      height: '100%',
-      overflow: 'hidden',
-    };
-
-    const navBarHeight = '56px';
-
-    const headerStyle = {
-      background: DEFAULT.CGPS.COLOURS.PURPLE,
-      maxHeight: navBarHeight,
-      minHeight: navBarHeight,
-    };
-
-    const headerRowStyle = {
-      height: navBarHeight,
-    };
-
-    const iconLinkStyle = {
-      lineHeight: navBarHeight,
-    };
-
-    const iconStyle = {
-      verticalAlign: 'middle',
-      marginRight: '4px',
-    };
-
     return (
       <div style={style} className="mdl-layout mdl-js-layout mdl-layout--fixed-header" data-mr-layout="container">
         <header style={headerStyle} className="mdl-layout__header">

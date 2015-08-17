@@ -107,48 +107,49 @@ function getSouthHeight() {
   return (getViewportHeight() - getSouthTop());
 }
 
-module.exports = {
+export default {
 
-  DIVIDER_THICKNESS: DIVIDER_THICKNESS,
-  DIVIDER_BORDER_THICKNESS: DIVIDER_BORDER_THICKNESS,
+  DIVIDER_THICKNESS,
+  DIVIDER_BORDER_THICKNESS,
+  HEADER_BAR_HEIGHT,
 
-  getDividerSize: getDividerSize,
+  getDividerSize,
 
-  getViewportWidth: getViewportWidth,
-  getViewportHeight: getViewportHeight,
+  getViewportWidth,
+  getViewportHeight,
 
   // West
 
-  getWestWidth: getWestWidth,
+  getWestWidth,
 
   // West Middle Divider
 
-  getWestMiddleDividerLeft: getWestMiddleDividerLeft,
+  getWestMiddleDividerLeft,
 
   // Middle
 
-  getMiddleLeft: getMiddleLeft,
-  getMiddleWidth: getMiddleWidth,
+  getMiddleLeft,
+  getMiddleWidth,
 
   // Middle East
 
-  getMiddleEastDividerLeft: getMiddleEastDividerLeft,
+  getMiddleEastDividerLeft,
 
   // East
 
-  getEastLeft: getEastLeft,
-  getEastWidth: getEastWidth,
+  getEastLeft,
+  getEastWidth,
 
   // North
 
-  getNorthHeight: getNorthHeight,
+  getNorthHeight,
 
   // North South
 
-  getNorthSouthDividerTop: getNorthSouthDividerTop,
+  getNorthSouthDividerTop,
 
   // South
 
-  getSouthTop: getSouthTop,
-  getSouthHeight: getSouthHeight,
+  getSouthTop,
+  getSouthHeight,
 };

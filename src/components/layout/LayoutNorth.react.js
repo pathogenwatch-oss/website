@@ -1,24 +1,24 @@
-var React = require('react');
-var LayoutUtils = require('../../utils/Layout');
+import React from 'react';
+import LayoutUtils from '../../utils/Layout';
 
-var LayoutNorth = React.createClass({
+export default React.createClass({
 
   propTypes: {
-    height: React.PropTypes.number.isRequired
+    height: React.PropTypes.number.isRequired,
   },
 
   render: function () {
-    var width = LayoutUtils.getViewportWidth();
-    var height = this.props.height;
+    const width = LayoutUtils.getViewportWidth();
+    const height = this.props.height;
 
-    var style = {
+    const style = {
       position: 'absolute',
       width: width + 'px',
       height: height + 'px',
       top: '56px',
       left: 0,
       zIndex: 1,
-      overflow: 'hidden'
+      overflow: 'hidden',
     };
 
     return (
@@ -26,7 +26,6 @@ var LayoutNorth = React.createClass({
         {this.props.children}
       </div>
     );
-  }
-});
+  },
 
-module.exports = LayoutNorth;
+});

@@ -1,0 +1,21 @@
+/* drag handles */
+
+/*.wgsa-drag-handle--vertical:hover,
+.wgsa-drag-handle--vertical:active {
+  cursor: ew-resize
+}
+
+.wgsa-drag-handle--horizontal:hover,
+.wgsa-drag-handle--horizontal:active {
+  cursor: ns-resize
+}*/
+
+.wgsa-drag-handle:hover {
+  cursor: -webkit-grab;
+  cursor: grab;
+}
+
+.wgsa-drag-handle:active {
+  cursor: -webkit-grabbing;
+  cursor: grabbing;
+}

@@ -22,9 +22,10 @@ const TableMetadata = React.createClass({
     return (
       <button
         className="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect"
+        title="Data"
         style={style}
         onClick={this.handleClick}>
-        <i className="material-icons" title="Label" style={{ color: '#fff' }}>list</i>
+        <i className="material-icons" style={{ color: '#fff' }}>list</i>
       </button>
     );
   }

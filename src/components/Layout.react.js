@@ -92,23 +92,6 @@ const Layout = React.createClass({
     });
   },
 
-  handleLayoutWestMiddleDividerSnapsToMiddleEastDivider: function (westMiddleDividerLeft) {
-    var maximumWestMiddleDividerLeft = this.state.layoutMiddleEastDividerLeft - LayoutUtils.getDividerSize();
-    var westMiddleDividerRight = westMiddleDividerLeft + LayoutUtils.getDividerSize();
-
-    if (maximumWestMiddleDividerLeft - westMiddleDividerRight > 1 && maximumWestMiddleDividerLeft - westMiddleDividerRight < DEFAULT.LAYOUT.MINIMUM_CONTAINER_WIDTH) {
-      this.handleLayoutWestMiddleDividerDragEnd(maximumWestMiddleDividerLeft);
-    }
-  },
-
-  handleLayoutWestMiddleDividerSnapsToLayoutContainer: function (westMiddleDividerLeft) {
-    var minimumWestMiddleDividerLeft = 0;
-
-    if (westMiddleDividerLeft > 1 && westMiddleDividerLeft < DEFAULT.LAYOUT.MINIMUM_CONTAINER_WIDTH) {
-      this.handleLayoutWestMiddleDividerDragEnd(minimumWestMiddleDividerLeft);
-    }
-  },
-
   handleLayoutWestMiddleDividerDragEnd: function (westMiddleDividerLeft) {
     this.setState({
       layoutWestWidth: westMiddleDividerLeft,
@@ -116,25 +99,6 @@ const Layout = React.createClass({
       layoutMiddleLeft: westMiddleDividerLeft + LayoutUtils.getDividerSize(),
       layoutMiddleWidth: this.state.layoutMiddleEastDividerLeft - westMiddleDividerLeft - LayoutUtils.getDividerSize(),
     });
-
-    this.handleLayoutWestMiddleDividerSnapsToMiddleEastDivider(westMiddleDividerLeft);
-    this.handleLayoutWestMiddleDividerSnapsToLayoutContainer(westMiddleDividerLeft);
-  },
-
-  handleLayoutMiddleEastDividerSnapsToWestMiddleDivider: function (middleEastDividerLeft) {
-    var minimumMiddleEastDividerLeft = this.state.layoutWestMiddleDividerLeft + LayoutUtils.getDividerSize();
-
-    if (middleEastDividerLeft - minimumMiddleEastDividerLeft > 1 && middleEastDividerLeft - minimumMiddleEastDividerLeft < DEFAULT.LAYOUT.MINIMUM_CONTAINER_WIDTH) {
-      this.handleLayoutMiddleEastDividerDragEnd(minimumMiddleEastDividerLeft);
-    }
-  },
-
-  handleLayoutMiddleEastDividerSnapsToLayoutContainer: function (middleEastDividerLeft) {
-    var maximumMiddleEastDividerLeft = LayoutUtils.getViewportWidth() - LayoutUtils.getDividerSize();
-
-    if (maximumMiddleEastDividerLeft - middleEastDividerLeft > 1 && maximumMiddleEastDividerLeft - middleEastDividerLeft < DEFAULT.LAYOUT.MINIMUM_CONTAINER_WIDTH) {
-      this.handleLayoutMiddleEastDividerDragEnd(maximumMiddleEastDividerLeft);
-    }
   },
 
   handleLayoutMiddleEastDividerDragEnd: function (middleEastDividerLeft) {
@@ -144,34 +108,15 @@ const Layout = React.createClass({
       layoutEastLeft: middleEastDividerLeft + LayoutUtils.getDividerSize(),
       layoutEastWidth: LayoutUtils.getViewportWidth() - (middleEastDividerLeft + LayoutUtils.getDividerSize()),
     });
-
-    this.handleLayoutMiddleEastDividerSnapsToWestMiddleDivider(middleEastDividerLeft);
-    this.handleLayoutMiddleEastDividerSnapsToLayoutContainer(middleEastDividerLeft);
-  },
-
-  handleLayoutNorthSouthDividerSnapsToLayoutContainer: function (northSouthDividerTop) {
-    var minimumNorthSouthDividerTop = 0;
-    var maximumNorthSouthDividerTop = LayoutUtils.getViewportHeight() - LayoutUtils.getDividerSize();
-
-    if (northSouthDividerTop > 1 && northSouthDividerTop < minimumNorthSouthDividerTop + DEFAULT.LAYOUT.MINIMUM_CONTAINER_HEIGHT) {
-      this.handleLayoutNorthSourthDividerDragEnd(minimumNorthSouthDividerTop);
-      return;
-    }
-
-    if (northSouthDividerTop < maximumNorthSouthDividerTop && northSouthDividerTop > maximumNorthSouthDividerTop - DEFAULT.LAYOUT.MINIMUM_CONTAINER_HEIGHT) {
-      this.handleLayoutNorthSourthDividerDragEnd(maximumNorthSouthDividerTop);
-    }
   },
 
   handleLayoutNorthSourthDividerDragEnd: function (northSouthDividerTop) {
     this.setState({
-      layoutNorthHeight: northSouthDividerTop,
+      layoutNorthHeight: northSouthDividerTop - LayoutUtils.HEADER_BAR_HEIGHT,
       layoutNorthSouthDividerTop: northSouthDividerTop,
       layoutSouthTop: northSouthDividerTop + LayoutUtils.getDividerSize(),
       layoutSouthHeight: LayoutUtils.getViewportHeight() - (northSouthDividerTop + LayoutUtils.getDividerSize()),
     });
-
-    this.handleLayoutNorthSouthDividerSnapsToLayoutContainer(northSouthDividerTop);
   },
 
   handleLayoutNavigationChange: function (layoutNavigation) {

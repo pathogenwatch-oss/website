@@ -1,12 +1,13 @@
-var React = require('react');
-var LayoutUtils = require('../../utils/Layout');
-var LayoutDivider = require('./LayoutDivider.react');
+import React from 'react';
 
-var LayoutWestMiddleDivider = React.createClass({
+import LayoutUtils from '../../utils/Layout';
+import LayoutDivider from './LayoutDivider.react';
+
+const LayoutWestMiddleDivider = React.createClass({
 
   propTypes: {
     left: React.PropTypes.number.isRequired,
-    onDragEnd: React.PropTypes.func.isRequired
+    onDragEnd: React.PropTypes.func.isRequired,
   },
 
   componentDidMount: function () {
@@ -14,7 +15,6 @@ var LayoutWestMiddleDivider = React.createClass({
   },
 
   initialize: function () {
-
     var middleWestDividerLeft = this.props.left;
     var containmentRight = this.props.containmentRight - LayoutUtils.getDividerSize();
 
@@ -60,10 +60,9 @@ var LayoutWestMiddleDivider = React.createClass({
   },
 
   render: function () {
-
-    var style = {
+    const style = {
       width: '100%',
-      height: '100%'
+      height: '100%',
     };
 
     return (

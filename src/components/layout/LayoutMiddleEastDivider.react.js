@@ -1,12 +1,13 @@
-var React = require('react');
-var LayoutUtils = require('../../utils/Layout');
-var LayoutDivider = require('./LayoutDivider.react');
+import React from 'react';
 
-var LayoutMiddleEastDivider = React.createClass({
+import LayoutUtils from '../../utils/Layout';
+import LayoutDivider from './LayoutDivider.react';
+
+export default React.createClass({
 
   propTypes: {
     left: React.PropTypes.number.isRequired,
-    onDragEnd: React.PropTypes.func.isRequired
+    onDragEnd: React.PropTypes.func.isRequired,
   },
 
   componentDidMount: function () {
@@ -14,8 +15,7 @@ var LayoutMiddleEastDivider = React.createClass({
   },
 
   initialize: function () {
-
-    var containment = [
+    const containment = [
       // x1
       LayoutUtils.getMiddleLeft(),
       // y1
@@ -23,26 +23,22 @@ var LayoutMiddleEastDivider = React.createClass({
       // x2
       LayoutUtils.getViewportWidth() - LayoutUtils.getDividerSize(),
       // y2
-      0
+      0,
     ];
 
     $('.middleEastDivider').draggable({
       containment: containment,
       axis: 'x',
       scroll: false,
-      cursor: 'ew-resize',
-      stop: function (event, ui) {
-        var left = ui.offset.left;
-        this.props.onDragEnd(left);
-      }.bind(this)
+      stop: (event, ui) => {
+        this.props.onDragEnd(ui.offset.left);
+      },
     });
   },
 
   componentDidUpdate: function () {
-
-    var layoutWestMiddleDividerLeft = this.props.layoutWestMiddleDividerLeft;
-
-    var containment = [
+    const layoutWestMiddleDividerLeft = this.props.layoutWestMiddleDividerLeft;
+    const containment = [
       // x1
       layoutWestMiddleDividerLeft + LayoutUtils.getDividerSize(),
       // y1
@@ -50,17 +46,16 @@ var LayoutMiddleEastDivider = React.createClass({
       // x2
       LayoutUtils.getViewportWidth() - LayoutUtils.getDividerSize(),
       // y2
-      0
+      0,
     ];
 
-    $('.middleEastDivider').draggable( 'option', 'containment', containment );
+    $('.middleEastDivider').draggable('option', 'containment', containment);
   },
 
   render: function () {
-
-    var style = {
+    const style = {
       width: '100%',
-      height: '100%'
+      height: '100%',
     };
 
     return (
@@ -76,7 +71,6 @@ var LayoutMiddleEastDivider = React.createClass({
           className={'middleEastDivider'} />
       </div>
     );
-  }
-});
+  },
 
-module.exports = LayoutMiddleEastDivider;
+});
