@@ -190,6 +190,10 @@ function parseCsvFile(file, rawFiles, assemblies) {
       assemblies[fileAssemblyId].metadata.geography.position.longitude = parseFloat(dataRow.longitude);
     }
 
+    if (dataRow.location) {
+      assemblies[fileAssemblyId].metadata.geography.location = dataRow.location;
+    }
+
     if (dataRow.year) {
       assemblies[fileAssemblyId].metadata.date.year = parseInt(dataRow.year, 10);
     }

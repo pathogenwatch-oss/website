@@ -1,3 +1,28 @@
+/**** UploadReview - Navigation Left Pane ****/
+
+.uploadWorkspaceDiv {
+  /*width: 200px;*/
+}
+
+.assemblyNavTitle {
+  text-align: center;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.assemblyListSelectInput {
+  margin: 0.5rem 0 1rem 0;
+  border: 0px;
+  border-radius: 0px;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  outline: none
+
+}
+
+/*********************************************/
+
+/**** SVG Chart CSS ****/
 .axis {
   fill: none;
   stroke: #000;
@@ -15,7 +40,7 @@ text.axis-label {
 }
 circle {
   stroke-width: 0.5px;
-  fill: #908CFF;
+  fill: #673c90;
   opacity: 0.5;
 }
 path {
@@ -37,3 +62,4 @@ path.n50-path {
 .n50-group path {
   stroke: #000;
 }
+/**************************/

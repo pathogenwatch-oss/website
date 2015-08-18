@@ -1,6 +1,14 @@
 var React = require('react');
 var UploadStore = require('../../../stores/UploadStore');
 var UploadActionCreators = require('../../../actions/UploadActionCreators');
+var DEFAULT = require('../../../defaults.js');
+
+var uploadButtonStyle = {
+  right: '10px',
+  top: '30px',
+  position: 'absolute',
+  'background': DEFAULT.CGPS.COLOURS.PURPLE
+};
 
 var UploadButton = React.createClass({
 
@@ -35,10 +43,11 @@ var UploadButton = React.createClass({
   render: function () {
     return (
       <button
-        className="btn btn-success"
-        type="button"
+        style={uploadButtonStyle} className="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored"
         disabled={this.isButtonDisabled()}
-        onClick={this.handleClick}>Upload</button>
+        onClick={this.handleClick}>
+          <i className="material-icons">cloud_upload</i>
+        </button>
     );
   }
 });

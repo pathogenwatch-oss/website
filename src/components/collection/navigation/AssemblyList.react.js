@@ -3,6 +3,7 @@ var UploadStore = require('../../../stores/UploadStore');
 var UploadWorkspaceNavigationStore = require('../../../stores/UploadWorkspaceNavigationStore');
 var UploadWorkspaceNavigationActionCreators = require('../../../actions/UploadWorkspaceNavigationActionCreators');
 var AssemblyListOption = require('./AssemblyListOption.react');
+import '../../../css/UploadReview.css';
 
 var AssemblyList = React.createClass({
 
@@ -42,9 +43,10 @@ var AssemblyList = React.createClass({
   },
 
   render: function () {
+    var listOptionElements = this.getListOptionElements();
     return (
-      <select className="form-control" value={this.state.selectedOption} onChange={this.handleSelectAssembly}>
-        {this.getListOptionElements()}
+      <select size={listOptionElements.length} className="assemblyListSelectInput form-control" value={this.state.selectedOption} onChange={this.handleSelectAssembly}>
+        {listOptionElements}
       </select>
     );
   }

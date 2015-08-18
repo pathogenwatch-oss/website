@@ -45,6 +45,10 @@ var Store = assign({}, EventEmitter.prototype, {
     return assemblies;
   },
 
+  getAssembliesCount: function () {
+    return Object.keys(assemblies).length;
+  },
+
   getAssembly: function (fileAssemblyId) {
     return (assemblies[fileAssemblyId] || null);
   },

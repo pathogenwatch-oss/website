@@ -21,6 +21,7 @@ module.exports = {
       GREEN_MID: '#87c7a6',
       PURPLE_LIGHT: '#a386bd',
       PURPLE: '#673c90',
+      GREY: '#e5e5e5'
     },
   },
 };

@@ -3,6 +3,14 @@ var MetadataUtils = require('../../../utils/Metadata');
 var MetadataActionCreators = require('../../../actions/MetadataActionCreators');
 
 var DEFAULT_VALUE = '-1';
+var optionsStyle = {
+  'backgroundColor': '#eee',
+  'height': '40px',
+  fontSize: '15px',
+  fontWeight: '300',
+  lineHeight: '30px',
+  cursor: 'pointer'
+}
 
 var MonthInput = React.createClass({
 
@@ -41,7 +49,7 @@ var MonthInput = React.createClass({
 
   render: function () {
     return (
-      <select
+      <select style={optionsStyle}
         className="form-control"
         value={this.state.selectedValue}
         onChange={this.handleSelect}>

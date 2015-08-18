@@ -17,7 +17,6 @@ var AssemblyMetadata = React.createClass({
     return (
       <div>
         <MetadataDate assembly={this.props.assembly} />
-        <MetadataSource assembly={this.props.assembly} />
       </div>
     );
   }

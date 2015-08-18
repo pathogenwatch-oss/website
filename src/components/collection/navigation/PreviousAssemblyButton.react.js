@@ -18,8 +18,9 @@ var Component = React.createClass({
 
   render: function () {
     return (
-      <button type="button" className="btn btn-primary" disabled={this.isButtonDisabled()} onClick={this.handleClick}>
-        <i className="fa fa-chevron-left"></i>
+      <button type="button" className="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab"
+        disabled={this.isButtonDisabled()} onClick={this.handleClick}>
+        <i className="material-icons">navigate_before</i>
       </button>
     );
   }

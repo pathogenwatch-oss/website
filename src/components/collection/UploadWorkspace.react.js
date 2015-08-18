@@ -2,7 +2,6 @@ var React = require('react');
 var UploadStore = require('../../stores/UploadStore');
 var UploadWorkspaceNavigationStore = require('../../stores/UploadWorkspaceNavigationStore');
 var AssemblyWorkspace = require('./AssemblyWorkspace.react');
-var UploadWorkspaceNavigation = require('./UploadWorkspaceNavigation.react');
 
 var containerStyle = {
   width: '100%',
@@ -43,20 +42,20 @@ var UploadWorkspace = React.createClass({
   getAssemblyWorkspaceElement: function () {
     var fileAssemblyId = this.state.fileAssemblyId;
     var assembly = UploadStore.getAssembly(fileAssemblyId);
+    var totalAssemblies = UploadStore.getAssembliesCount();
 
     if (! assembly) {
       return null;
     }
 
     return (
-      <AssemblyWorkspace assembly={assembly} />
+      <AssemblyWorkspace assembly={assembly} totalAssemblies={totalAssemblies}/>
     );
   },
 
   render: function () {
     return (
       <div style={containerStyle}>
-        <UploadWorkspaceNavigation />
         {this.getAssemblyWorkspaceElement()}
       </div>
     );

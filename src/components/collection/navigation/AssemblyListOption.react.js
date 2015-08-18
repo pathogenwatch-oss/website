@@ -1,4 +1,15 @@
 var React = require('react');
+var css = require('../../../css/UploadReview.css');
+
+var optionsStyle = {
+  'backgroundColor': '#fff',
+  'lineHeight': '1.5rem',
+  'padding': '10px 20px',
+  'margin': '0',
+  'borderBottom': '1px solid #e0e0e0',
+  'width': '100%',
+  cursor: 'pointer'
+}
 
 var Component = React.createClass({
   propTypes: {
@@ -7,7 +18,7 @@ var Component = React.createClass({
 
   render: function () {
     return (
-      <option value={this.props.fileAssemblyId}>{this.props.fileAssemblyId}</option>
+      <option className='assemblyListOption' style={optionsStyle} value={this.props.fileAssemblyId}>{this.props.fileAssemblyId}</option>
     );
   }
 });

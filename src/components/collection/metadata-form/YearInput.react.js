@@ -4,6 +4,14 @@ var MetadataActionCreators = require('../../../actions/MetadataActionCreators');
 
 var MINIMUM_YEAR = 1950;
 var DEFAULT_VALUE = '-1';
+var optionsStyle = {
+  'backgroundColor': '#eee',
+  'height': '40px',
+  fontSize: '15px',
+  fontWeight: '300',
+  lineHeight: '30px',
+  cursor: 'pointer'
+}
 
 var YearInput = React.createClass({
 
@@ -47,7 +55,7 @@ var YearInput = React.createClass({
 
   render: function () {
     return (
-      <select
+      <select style={optionsStyle}
         className="form-control"
         value={this.state.selectedValue}
         onChange={this.handleSelect}>

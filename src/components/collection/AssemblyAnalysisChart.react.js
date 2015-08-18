@@ -1,6 +1,6 @@
 var React = require('react');
 var AnalysisUtils = require('../../utils/Analysis');
-import '../../../assets/svg.chart.css';
+import '../../css/UploadReview.css';
 
 var containerStyle = {
   margin: '0 0 25px 0',
@@ -21,10 +21,10 @@ var numberStyle = {
   fontSize: '24px'
 };
 
-var AssemblyAnalysisItem = React.createClass({
+var AssemblyAnalysisChart = React.createClass({
 
   propTypes: {
-    label: React.PropTypes.string.isRequired,
+    label: React.PropTypes.string,
     analysis: React.PropTypes.object.isRequired
   },
 
@@ -52,4 +52,4 @@ var AssemblyAnalysisItem = React.createClass({
   }
 });
 
-module.exports = AssemblyAnalysisItem;
+module.exports = AssemblyAnalysisChart;

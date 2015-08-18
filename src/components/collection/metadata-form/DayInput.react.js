@@ -3,7 +3,14 @@ var MetadataUtils = require('../../../utils/Metadata');
 var MetadataActionCreators = require('../../../actions/MetadataActionCreators');
 
 var DEFAULT_VALUE = '-1';
-
+var optionsStyle = {
+  'backgroundColor': '#eee',
+  'height': '40px',
+  fontSize: '15px',
+  fontWeight: '300',
+  lineHeight: '30px',
+  cursor: 'pointer'
+}
 var DayInput = React.createClass({
 
   propTypes: {
@@ -44,7 +51,7 @@ var DayInput = React.createClass({
 
   render: function () {
     return (
-      <select
+      <select style={optionsStyle}
         className="form-control"
         value={this.state.selectedValue}
         onChange={this.handleSelect}>

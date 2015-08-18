@@ -1,6 +1,5 @@
 var React = require('react');
 var AssemblyAnalysisItem = require('./AssemblyAnalysisItem.react');
-var AssemblyAnalysisChart = require('./AssemblyAnalysisChart.react');
 
 var fullWidthAndHeightStyle = {
   width: '100%',
@@ -38,41 +37,42 @@ var AssemblyAnalysis = React.createClass({
     }
 
     return (
-      <div className="container-fliud">
-        <div className="row">
-          <div className="col-md-4">
-            <AssemblyAnalysisItem label="total nt" value={assembly.analysis.totalNumberOfNucleotidesInDnaStrings} />
-          </div>
+      <div className="mdl-grid mdl-grid--no-spacing">
+        <div className="mdl-cell mdl-cell--12-col">
+          <div className="mdl-grid mdl-grid--no-spacing">
+            <div className="mdl-cell mdl-cell--6-col">
+              <AssemblyAnalysisItem label="total nt" value={assembly.analysis.totalNumberOfNucleotidesInDnaStrings} />
+            </div>
 
-          <div className="col-md-4">
-            <AssemblyAnalysisItem label="total contigs" value={assembly.analysis.totalNumberOfContigs} />
-          </div>
-
-          <div className="col-md-4">
-            <AssemblyAnalysisItem label="min contig" value={assembly.analysis.smallestNumberOfNucleotidesInDnaStrings} />
+            <div className="mdl-cell mdl-cell--6-col">
+              <AssemblyAnalysisItem label="total contigs" value={assembly.analysis.totalNumberOfContigs} />
+            </div>
           </div>
         </div>
 
-        <div className="row">
-          <div className="col-md-4">
-            <AssemblyAnalysisItem label="mean contig" value={assembly.analysis.averageNumberOfNucleotidesInDnaStrings} />
-          </div>
+        <div className="mdl-cell mdl-cell--12-col">
+          <div className="mdl-grid mdl-grid--no-spacing">
+            <div className="mdl-cell mdl-cell--6-col">
+              <AssemblyAnalysisItem label="min contig" value={assembly.analysis.smallestNumberOfNucleotidesInDnaStrings} />
+            </div>
 
-          <div className="col-md-4">
-            <AssemblyAnalysisItem label="max contig" value={assembly.analysis.biggestNumberOfNucleotidesInDnaStrings} />
-          </div>
-
-          <div className="col-md-4">
-            <AssemblyAnalysisItem label="contig n50" value={assembly.analysis.contigN50} />
+            <div className="mdl-cell mdl-cell--6-col">
+              <AssemblyAnalysisItem label="max contig" value={assembly.analysis.biggestNumberOfNucleotidesInDnaStrings} />
+            </div>
           </div>
         </div>
 
-        <div className="row">
-          <div className="col-md-4">
-            <AssemblyAnalysisChart label="Analytics Chart" analysis={assembly.analysis} />
+        <div className="mdl-cell mdl-cell--12-col">
+          <div className="mdl-grid mdl-grid--no-spacing">
+            <div className="mdl-cell mdl-cell--6-col">
+              <AssemblyAnalysisItem label="mean contig" value={assembly.analysis.averageNumberOfNucleotidesInDnaStrings} />
+            </div>
+
+            <div className="mdl-cell mdl-cell--6-col">
+              <AssemblyAnalysisItem label="contig n50" value={assembly.analysis.contigN50} />
+            </div>
           </div>
         </div>
-
       </div>
     );
   }
