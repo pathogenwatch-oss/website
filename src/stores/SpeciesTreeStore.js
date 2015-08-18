@@ -1,51 +1,66 @@
-var AppDispatcher = require('../dispatcher/AppDispatcher');
-var EventEmitter = require('events').EventEmitter;
-var assign = require('object-assign');
+import { EventEmitter } from 'events';
+import assign from 'object-assign';
 
-var CHANGE_EVENT = 'change';
+import AppDispatcher from '../dispatcher/AppDispatcher';
 
-var speciesTree = null;
+const CHANGE_EVENT = 'change';
+
+let speciesTree = null;
+let subspeciesMap = null;
 
 function setSpeciesTree(tree) {
   speciesTree = tree;
 }
 
-function emitChange() {
-  Store.emit(CHANGE_EVENT);
+function setSubspeciesMap(assemblyIdMap) {
+  subspeciesMap = Object.keys(assemblyIdMap).reduce(function (map, assemblyId) {
+    const speciesTreeTaxon = assemblyIdMap[assemblyId];
+    const taxonAssemblyIds = map[speciesTreeTaxon] || [];
+
+    taxonAssemblyIds.push(assemblyId);
+    map[speciesTreeTaxon] = taxonAssemblyIds;
+
+    return map;
+  }, {});
 }
 
-var Store = assign({}, EventEmitter.prototype, {
+const Store = assign({}, EventEmitter.prototype, {
 
-  addChangeListener: function (callback) {
+  emitChange() {
+    this.emit(CHANGE_EVENT);
+  },
+
+  addChangeListener(callback) {
     this.on(CHANGE_EVENT, callback);
   },
 
-  removeChangeListener: function (callback) {
+  removeChangeListener(callback) {
     this.removeListener(CHANGE_EVENT, callback);
   },
 
-  getSpeciesTree: function () {
+  getSpeciesTree() {
     return speciesTree;
-  }
+  },
+
+  getSubspeciesMap() {
+    return subspeciesMap;
+  },
 
 });
 
 function handleAction(action) {
-
   switch (action.type) {
-
-    case 'set_species_tree':
-      setSpeciesTree(action.tree);
-      emitChange();
-      break;
-
-    case 'set_collection':
-      setSpeciesTree(action.referenceCollection.collection.tree);
-      emitChange();
-      break;
-
-    default: // ... do nothing
-
+  case 'set_species_tree':
+    setSpeciesTree(action.tree);
+    Store.emitChange();
+    break;
+  case 'set_collection':
+    setSpeciesTree(action.referenceCollection.collection.tree);
+    setSubspeciesMap(action.collection.collection.assemblyIdMap);
+    Store.emitChange();
+    break;
+  default:
+    // ... do nothing
   }
 }
 

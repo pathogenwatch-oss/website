@@ -9,7 +9,6 @@ import DEFAULT, { CGPS } from '../defaults';
 import SpeciesTreeStore from '../stores/SpeciesTreeStore';
 import SpeciesSubtreeStore from '../stores/SpeciesSubtreeStore';
 import SpeciesSubtreeActionCreators from '../actions/SpeciesSubtreeActionCreators';
-import UploadedCollectionStore from '../stores/UploadedCollectionStore';
 
 const DEFAULT_TREE_SETTINGS = {
   SHOW_TREE_LABELS: true,
@@ -31,13 +30,9 @@ const sectionStyle = {
 
 const phylocanvasStyle = {
   position: 'relative',
-  width: '100%',
+  width: `calc(100% - ${sectionHeaderHeight}px)`,
   height: `calc(100% - ${sectionFooterHeight}px)`,
-};
-
-const menuWrapperStyle = {
-  position: 'absolute',
-  right: '8px',
+  margin: '0 auto',
 };
 
 const Tree = React.createClass({
@@ -67,10 +62,13 @@ const Tree = React.createClass({
   },
 
   componentDidMount: function () {
+    componentHandler.upgradeDom();
+
     this.initializeTree();
     this.setNodeShapeAndColour();
     this.emphasizeShapeAndColourForNodesThatHaveSubtrees();
-    componentHandler.upgradeDom();
+
+    this.phylocanvas.draw();
   },
 
   initializeTree: function () {
@@ -103,8 +101,17 @@ const Tree = React.createClass({
   },
 
   emphasizeShapeAndColourForNodesThatHaveSubtrees: function () {
-    var subtreeIds = SpeciesSubtreeStore.getSpeciesSubtreeIds();
+    const subtreeIds = SpeciesSubtreeStore.getSpeciesSubtreeIds();
+    const subspeciesMap = SpeciesTreeStore.getSubspeciesMap()
+
     this.phylocanvas.setNodeDisplay(subtreeIds, { colour: CGPS.COLOURS.PURPLE_LIGHT });
+
+    subtreeIds.forEach((id) => {
+      const branch = this.phylocanvas.branches[id];
+      if (branch) {
+        branch.label = `${branch.label} (${subspeciesMap[id].length})`;
+      }
+    });
   },
 
   handleRedrawSubtree: function () {
@@ -217,11 +224,10 @@ const Tree = React.createClass({
   },
 
   showUploadedCollectionTree: function () {
-    SpeciesSubtreeActionCreators.setActiveSpeciesSubtreeId(UploadedCollectionStore.getUploadedCollectionId());
+    // SpeciesSubtreeActionCreators.setActiveSpeciesSubtreeId(UploadedCollectionStore.getUploadedCollectionId());
   },
 
   showUploadedCollectionSubtree: function (subtreeId) {
-    console.log(subtreeId);
     SpeciesSubtreeActionCreators.setActiveSpeciesSubtreeId(subtreeId);
   },
 
@@ -281,9 +287,9 @@ const Tree = React.createClass({
   render: function () {
     return (
       <section style={sectionStyle}>
-        <div className="wgsa-tree-header">
-          <h2 className="wgsa-tree-heading">General Population</h2>
-          <div style={menuWrapperStyle}>
+        <header className="wgsa-tree-header">
+          <h2 className="wgsa-tree-heading">Population</h2>
+          <div className="wgsa-tree-menu">
             <button id="tree-options" className="wgsa-tree-actions mdl-button mdl-js-button mdl-button--icon">
               <i className="material-icons">more_vert</i>
             </button>
@@ -294,7 +300,7 @@ const Tree = React.createClass({
               <li className="mdl-menu__item" onClick={this.handleExportCurrentView}>Export Current View</li>
             </ul>
           </div>
-        </div>
+        </header>
         <div id={this.treeId} style={phylocanvasStyle}></div>
         <TreeControls
           treeType={this.state.treeType}

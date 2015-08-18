@@ -31,17 +31,14 @@ const sectionStyle = {
   height: '100%',
 };
 
+const sectionHeaderHeight = 64;
+const sectionFooterHeight = 80;
+
 const phylocanvasStyle = {
   position: 'relative',
-  width: '100%',
-  height: '100%',
-};
-
-const treeControlsToggleButton = {
-  position: 'absolute',
-  bottom: 5,
-  right: 5,
-  zIndex: 999,
+  width: `calc(100% - ${sectionHeaderHeight}px)`,
+  height: `calc(100% - ${sectionFooterHeight}px)`,
+  margin: '0 auto',
 };
 
 const Tree = React.createClass({
@@ -71,6 +68,7 @@ const Tree = React.createClass({
   },
 
   componentDidMount: function () {
+    componentHandler.upgradeDom();
     this.renderTree();
     this.phylocanvas.draw();
     TableStore.addChangeListener(this.handleTableStoreChange);
@@ -342,6 +340,10 @@ const Tree = React.createClass({
     }
   },
 
+  handleReturnToPopulationTree() {
+    SpeciesSubtreeActionCreators.setActiveSpeciesSubtreeId(null);
+  },
+
   getCurrentTreeAllIsolateIds: function () {
     return this.phylocanvas.leaves.map(function (leaf) {
       return leaf.id;
@@ -398,24 +400,35 @@ const Tree = React.createClass({
   render: function () {
     return (
       <section style={sectionStyle}>
+        <header className="wgsa-tree-header">
+          <button className="wgsa-tree-return mdl-button mdl-js-button mdl-button--icon" onClick={this.handleReturnToPopulationTree}>
+            <i className="material-icons">arrow_back</i>
+          </button>
+          <h2 className="wgsa-tree-heading">{this.treeId}</h2>
+          <div className="wgsa-tree-menu">
+            <button id="tree-options" className="wgsa-tree-actions mdl-button mdl-js-button mdl-button--icon">
+              <i className="material-icons">more_vert</i>
+            </button>
+            <ul className="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" htmlFor="tree-options">
+              <li className="mdl-menu__item" onClick={this.handleToggleNodeLabels}>Toggle Labels</li>
+              <li className="mdl-menu__item" onClick={this.handleToggleNodeAlign}>Toggle Label Align</li>
+              <li className="mdl-menu__item" onClick={this.handleRedrawOriginalTree}>Redraw Original Tree</li>
+              <li className="mdl-menu__item" onClick={this.handleExportCurrentView}>Export Current View</li>
+            </ul>
+          </div>
+        </header>
         <div id={this.treeId} style={phylocanvasStyle}></div>
-
-        {this.state.isTreeControlsOn
-          ?
-          <TreeControls
-            treeType={this.state.treeType}
-            nodeSize={this.state.nodeSize}
-            labelSize={this.state.labelSize}
-            handleToggleNodeLabels={this.handleToggleNodeLabels}
-            handleExportCurrentView={this.handleExportCurrentView}
-            handleRedrawOriginalTree={this.handleRedrawOriginalTree}
-            handleTreeTypeChange={this.handleTreeTypeChange}
-            handleNodeSizeChange={this.handleNodeSizeChange}
-            handleLabelSizeChange={this.handleLabelSizeChange}
-            handleToggleNodeAlign={this.handleToggleNodeAlign} />
-          : null}
-
-        <button className="btn btn-default btn-sm" style={treeControlsToggleButton} onClick={this.handleToggleTreeControls}>{this.state.isTreeControlsOn ? 'Hide controls' : 'Show controls'}</button>
+        <TreeControls
+          treeType={this.state.treeType}
+          nodeSize={this.state.nodeSize}
+          labelSize={this.state.labelSize}
+          handleToggleNodeLabels={this.handleToggleNodeLabels}
+          handleExportCurrentView={this.handleExportCurrentView}
+          handleRedrawOriginalTree={this.handleRedrawOriginalTree}
+          handleTreeTypeChange={this.handleTreeTypeChange}
+          handleNodeSizeChange={this.handleNodeSizeChange}
+          handleLabelSizeChange={this.handleLabelSizeChange}
+          handleToggleNodeAlign={this.handleToggleNodeAlign} />
       </section>
     );
   },

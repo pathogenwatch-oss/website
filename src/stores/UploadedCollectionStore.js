@@ -4,20 +4,15 @@ var assign = require('object-assign');
 
 var CHANGE_EVENT = 'change';
 
-// var STATIC_DATA = {
-//   UPLOADED_COLLECTION: require('../../static_data/COLLECTION_e0ce1b47-9928-43fb-9a38-981813b609bc.json'),
-//   UPLOADED_COLLECTION_TREE: require('../../static_data/CORE_TREE_RESULT_e0ce1b47-9928-43fb-9a38-981813b609bc.json')
-// };
-
 var uploadedCollection = null;
 var uploadedCollectionTree = null;
 
 function setUploadedCollection(collection) {
-  uploadedCollection = collection; // STATIC_DATA.UPLOADED_COLLECTION;
+  uploadedCollection = collection;
 }
 
 function setUploadedCollectionTree(tree) {
-  uploadedCollectionTree = tree; // STATIC_DATA.UPLOADED_COLLECTION_TREE.newickTree;
+  uploadedCollectionTree = tree;
 }
 
 function emitChange() {

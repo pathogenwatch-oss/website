@@ -1,13 +1,14 @@
-var AppDispatcher = require('../dispatcher/AppDispatcher');
-var EventEmitter = require('events').EventEmitter;
-var assign = require('object-assign');
+import { EventEmitter }  from 'events';
+import assign from 'object-assign';
 
-var TreeUtils = require('../utils/Tree');
+import AppDispatcher from '../dispatcher/AppDispatcher';
+import TreeUtils from '../utils/Tree';
 
-var CHANGE_EVENT = 'change';
+const CHANGE_EVENT = 'change';
 
-var speciesSubtrees = null;
-var activeSpeciesSubtreeId = null;
+let collectionId = null;
+let speciesSubtrees = null;
+let activeSpeciesSubtreeId = null;
 
 function setSpeciesSubtrees(subtrees) {
   speciesSubtrees = subtrees;
@@ -21,7 +22,7 @@ function emitChange() {
   Store.emit(CHANGE_EVENT);
 }
 
-var Store = assign({}, EventEmitter.prototype, {
+const Store = assign({}, EventEmitter.prototype, {
 
   addChangeListener: function (callback) {
     this.on(CHANGE_EVENT, callback);
@@ -44,7 +45,7 @@ var Store = assign({}, EventEmitter.prototype, {
   },
 
   getActiveSpeciesSubtree: function () {
-    var activeSpeciesSubtree = speciesSubtrees[activeSpeciesSubtreeId];
+    const activeSpeciesSubtree = speciesSubtrees[activeSpeciesSubtreeId];
     return activeSpeciesSubtree || null;
   },
 
@@ -53,11 +54,13 @@ var Store = assign({}, EventEmitter.prototype, {
   },
 
   getActiveSpeciesSubtreeAssemblyIds: function () {
-    var activeSpeciesSubtree = this.getActiveSpeciesSubtree();
-    var activeSpeciesSubtreeAssemblyIds = [];
+    const activeSpeciesSubtree = this.getActiveSpeciesSubtree();
+    let activeSpeciesSubtreeAssemblyIds = [];
 
     if (activeSpeciesSubtree) {
       activeSpeciesSubtreeAssemblyIds = TreeUtils.extractIdsFromNewick(activeSpeciesSubtree);
+    } else {
+      activeSpeciesSubtreeAssemblyIds = TreeUtils.extractIdsFromNewick(speciesSubtrees[collectionId]);
     }
     return activeSpeciesSubtreeAssemblyIds;
   },
@@ -65,29 +68,28 @@ var Store = assign({}, EventEmitter.prototype, {
 });
 
 function handleAction(action) {
-
   switch (action.type) {
+  case 'set_species_subtrees':
+    setSpeciesSubtrees();
+    emitChange();
+    break;
 
-    case 'set_species_subtrees':
-      setSpeciesSubtrees();
-      emitChange();
-      break;
+  case 'set_active_species_subtree_id':
+    setActiveSpeciesSubtreeId(action.activeSpeciesSubtreeId);
+    emitChange();
+    break;
 
-    case 'set_active_species_subtree_id':
-      setActiveSpeciesSubtreeId(action.activeSpeciesSubtreeId);
-      emitChange();
-      break;
+  case 'set_collection':
+    const subtrees = action.collection.collection.subtrees;
+    collectionId = action.collection.collection.collectionId;
+    subtrees[collectionId] = action.collection.collection.tree;
+    setSpeciesSubtrees(subtrees);
+    setActiveSpeciesSubtreeId(action.collection.collection.collectionId);
+    emitChange();
+    break;
 
-    case 'set_collection':
-      var subtrees = action.collection.collection.subtrees;
-      subtrees[action.collection.collection.collectionId] = action.collection.collection.tree;
-      setSpeciesSubtrees(subtrees);
-      setActiveSpeciesSubtreeId(action.collection.collection.collectionId);
-      emitChange();
-      break;
-
-    default: // ... do nothing
-
+  default:
+    // ... do nothing
   }
 }
 
