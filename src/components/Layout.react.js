@@ -16,9 +16,6 @@ import LayoutWestEastDivider from './layout/LayoutWestEastDivider.react';
 import LayoutNorthSouthDivider from './layout/LayoutNorthSouthDivider.react';
 
 import LayoutUtils from '../utils/Layout';
-import DataUtils from '../utils/Data';
-
-import DEFAULT from '../defaults.js';
 
 const Layout = React.createClass({
 

@@ -19,16 +19,20 @@ const DEFAULT_TREE_SETTINGS = {
   MAXIMUM_TEXT_SIZE: 200,
 };
 
+const sectionHeaderHeight = 64;
+const sectionFooterHeight = 80;
+
 const sectionStyle = {
   position: 'relative',
   width: '100%',
-  height: '100%',
+  height: `calc(100% - ${sectionHeaderHeight}px)`,
+  paddingTop: `${sectionHeaderHeight}px`,
 };
 
 const phylocanvasStyle = {
   position: 'relative',
   width: '100%',
-  height: '100%',
+  height: `calc(100% - ${sectionFooterHeight}px)`,
 };
 
 const menuWrapperStyle = {
@@ -100,7 +104,6 @@ const Tree = React.createClass({
 
   emphasizeShapeAndColourForNodesThatHaveSubtrees: function () {
     var subtreeIds = SpeciesSubtreeStore.getSpeciesSubtreeIds();
-
     this.phylocanvas.setNodeDisplay(subtreeIds, { colour: CGPS.COLOURS.PURPLE_LIGHT });
   },
 
@@ -111,6 +114,7 @@ const Tree = React.createClass({
 
   componentDidUpdate: function () {
     this.phylocanvas.resizeToContainer();
+    this.phylocanvas.fitInPanel();
     this.phylocanvas.draw();
   },
 
@@ -119,13 +123,13 @@ const Tree = React.createClass({
     var isolateIds = Object.keys(isolates);
     var isolate;
 
-    isolateIds.forEach(function (isolateId) {
+    isolateIds.forEach((isolateId) => {
       isolate = isolates[isolateId];
 
       if (this.phylocanvas.branches[isolateId] && this.phylocanvas.branches[isolateId].leaf) {
         this.phylocanvas.branches[isolateId].label = isolate[nodeLabel] || '';
       }
-    }.bind(this));
+    });
   },
 
   redrawOriginalTree: function () {

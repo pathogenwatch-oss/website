@@ -1,22 +1,20 @@
-var React = require('react');
-var LayoutUtils = require('../../utils/Layout');
+import React from 'react';
 
-var LayoutWest = React.createClass({
+export default React.createClass({
 
   propTypes: {
-    width: React.PropTypes.number.isRequired
+    width: React.PropTypes.number.isRequired,
   },
 
   render: function () {
-    var width = this.props.width;
-
-    var style = {
+    const width = this.props.width;
+    const style = {
       position: 'absolute',
       width: width + 'px',
       height: '100%',
       top: 0,
       left: 0,
-      overflow: 'hidden'
+      overflow: 'hidden',
     };
 
     return (
@@ -24,7 +22,6 @@ var LayoutWest = React.createClass({
         {this.props.children}
       </div>
     );
-  }
-});
+  },
 
-module.exports = LayoutWest;
+});

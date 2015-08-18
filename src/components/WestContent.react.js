@@ -1,13 +1,12 @@
-var React = require('react');
-var DEFAULT = require('../defaults');
+import React from 'react';
 
-var SpeciesTree = require('./SpeciesTree.react');
+import SpeciesTree from './SpeciesTree.react';
 
-var WestContent = React.createClass({
+export default React.createClass({
 
   propTypes: {
     width: React.PropTypes.number.isRequired,
-    height: React.PropTypes.number.isRequired
+    height: React.PropTypes.number.isRequired,
   },
 
   render: function () {
@@ -16,7 +15,6 @@ var WestContent = React.createClass({
         width={this.props.width}
         height={this.props.height} />
     );
-  }
-});
+  },
 
-module.exports = WestContent;
+});
