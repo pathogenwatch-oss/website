@@ -29,9 +29,10 @@ North and West container sizes.
 const DIVIDER_THICKNESS = 2;
 const DIVIDER_BORDER_THICKNESS = 2;
 const NUMBER_OF_BORDERS_PER_DIVIDER = 0;
-const NUMBER_OF_CONTAINERS_INSIDE_OF_NORTH_CONTAINER = 3;
+const NUMBER_OF_CONTAINERS_INSIDE_OF_NORTH_CONTAINER = 2;
 const NORTH_SOUTH_CONTAINERS_RATIO = 1.45;
 const HEADER_BAR_HEIGHT = 56;
+const EAST_WEST_CONTAINERS_RATIO = 0.666;
 
 function getDividerSize() {
   return (DIVIDER_THICKNESS + DIVIDER_BORDER_THICKNESS * NUMBER_OF_BORDERS_PER_DIVIDER);
@@ -42,7 +43,7 @@ function getViewportWidth() {
 }
 
 function getViewportHeight() {
-  return $(window).height() - HEADER_BAR_HEIGHT;
+  return $(window).height();
 }
 
 function getNumberOfDividers() {
@@ -56,45 +57,31 @@ function getAvailableWidth() {
 // West
 
 function getWestWidth() {
-  return (getAvailableWidth() / NUMBER_OF_CONTAINERS_INSIDE_OF_NORTH_CONTAINER);
+  return (getAvailableWidth() * (1 - EAST_WEST_CONTAINERS_RATIO));
 }
 
-function getWestMiddleDividerLeft() {
+function getWestEastDividerLeft() {
   return getWestWidth();
-}
-
-// Middle
-
-function getMiddleLeft() {
-  return (getWestWidth() + getDividerSize());
-}
-
-function getMiddleWidth() {
-  return (getAvailableWidth() / NUMBER_OF_CONTAINERS_INSIDE_OF_NORTH_CONTAINER);
 }
 
 // East
 
-function getMiddleEastDividerLeft() {
-  return (getMiddleLeft() + getMiddleWidth());
-}
-
 function getEastLeft() {
-  return (getMiddleEastDividerLeft() + getDividerSize());
+  return (getWestEastDividerLeft() + getDividerSize());
 }
 
 function getEastWidth() {
-  return (getAvailableWidth() / NUMBER_OF_CONTAINERS_INSIDE_OF_NORTH_CONTAINER);
+  return (getAvailableWidth() * EAST_WEST_CONTAINERS_RATIO);
 }
 
 // North
 
 function getNorthHeight() {
-  return (getViewportHeight() / NORTH_SOUTH_CONTAINERS_RATIO);
+  return ((getViewportHeight() - HEADER_BAR_HEIGHT) / NORTH_SOUTH_CONTAINERS_RATIO);
 }
 
 function getNorthSouthDividerTop() {
-  return (HEADER_BAR_HEIGHT + getNorthHeight());
+  return HEADER_BAR_HEIGHT + getNorthHeight();
 }
 
 // South
@@ -107,7 +94,7 @@ function getSouthHeight() {
   return (getViewportHeight() - getSouthTop());
 }
 
-export default {
+module.exports = {
 
   DIVIDER_THICKNESS,
   DIVIDER_BORDER_THICKNESS,
@@ -122,18 +109,9 @@ export default {
 
   getWestWidth,
 
-  // West Middle Divider
+  // West East Divider
 
-  getWestMiddleDividerLeft,
-
-  // Middle
-
-  getMiddleLeft,
-  getMiddleWidth,
-
-  // Middle East
-
-  getMiddleEastDividerLeft,
+  getWestEastDividerLeft,
 
   // East
 
