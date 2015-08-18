@@ -1,4 +1,4 @@
-import '../../styles/drag-handle.css';
+import '../../css/drag-handle.css';
 
 import React from 'react';
 import assign from 'object-assign';

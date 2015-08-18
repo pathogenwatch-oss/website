@@ -1,4 +1,4 @@
-import '../styles/tree.css';
+import '../css/tree.css';
 
 import React from 'react';
 import TreeControls from './TreeControls.react';
