@@ -279,9 +279,14 @@ function getCoreResult(id, callback) {
   });
 }
 
-function mapAssembliesToTaxa(assemblies) {
+function mapTaxaToAssembly(assemblies) {
   return Object.keys(assemblies).reduce(function (map, assemblyId) {
-    map[assemblyId] = assemblies[assemblyId].FP_COMP.subTypeAssignment;
+    var taxon = assemblies[assemblyId].FP_COMP.subTypeAssignment;
+    if (taxon in map) {
+      map[taxon].assemblyIds.push(assemblyId);
+    } else {
+      map[taxon] = { assemblyIds: [ assemblyId ] };
+    }
     return map;
   }, {});
 }
@@ -321,5 +326,5 @@ module.exports.beginUpload = beginUpload;
 module.exports.getResistanceProfile = getResistanceProfile;
 module.exports.getCoreResult = getCoreResult;
 module.exports.getMetadata = getMetadata;
-module.exports.mapAssembliesToTaxa = mapAssembliesToTaxa;
+module.exports.mapTaxaToAssembly = mapTaxaToAssembly;
 module.exports.getReference = getReference;

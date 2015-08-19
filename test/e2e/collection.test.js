@@ -5,10 +5,10 @@ var registerCollection = require('./features/register-collection');
 
 describe('Collection Routes', function () {
 
-  it('GET /api/v1/collection/:id', function (done) {
+  it.only('GET /api/v1/collection/:id', function (done) {
     var fixture = require('./fixtures/collection.json');
     request
-      .get('/api/v1/collection/e20ff5ce-bda0-40db-a5a5-641a8c65ea68')
+      .get('/api/v1/collection/1bd2dee3-e32c-4fb4-8d29-cb7be28f0028')
       .expect(200, fixture, function (error, res) {
         if (error) { error.showDiff = false; }
         console.log(JSON.stringify(error.actual, null, ' '));
@@ -22,7 +22,7 @@ describe('Collection Routes', function () {
       .expect(404, done);
   });
 
-  it.only('GET /api/v1/collection/reference/:id', function (done) {
+  it('GET /api/v1/collection/reference/:id', function (done) {
     var fixture = require('./fixtures/collection.json');
     request
       .get('/api/v1/collection/reference/1280')

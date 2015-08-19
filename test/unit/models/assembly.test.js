@@ -66,9 +66,9 @@ describe('Model: Assembly', function () {
       assembly1: { FP_COMP: { subTypeAssignment: 'taxon1' } },
       assembly2: { FP_COMP: { subTypeAssignment: 'taxon2' } }
     };
-    var assemblyIdToTaxonMap = assemblyModel.mapAssembliesToTaxa(assemblies);
-    assert.equal(assemblyIdToTaxonMap.assembly1, 'taxon1');
-    assert.equal(assemblyIdToTaxonMap.assembly2, 'taxon2');
+    var taxonToAssemblyMap = assemblyModel.mapTaxaToAssembly(assemblies);
+    assert.equal(taxonToAssemblyMap.taxon1.assemblyIds[0], 'assembly1');
+    assert.equal(taxonToAssemblyMap.taxon2.assemblyIds[0], 'assembly2');
   });
 
 });
