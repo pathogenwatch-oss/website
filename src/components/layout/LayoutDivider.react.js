@@ -36,19 +36,9 @@ const LayoutDivider = React.createClass({
     return 'normal';
   },
 
-  getBackgroundColor: function () {
-    var isStatic = this.props.isStatic || false;
-
-    if (isStatic) {
-      return '#ccc';
-    }
-
-    return '#fff';
-  },
-
   render: function () {
     const style = {
-      backgroundColor: this.getBackgroundColor(),
+      backgroundColor: '#fff',
       position: 'absolute',
       top: this.props.top || 0,
       left: this.props.left || 0,

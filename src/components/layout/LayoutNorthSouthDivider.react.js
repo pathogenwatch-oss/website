@@ -8,7 +8,7 @@ const style = {
   height: '100%',
 };
 
-var LayoutNorthSouthDivider = React.createClass({
+export default React.createClass({
 
   propTypes: {
     top: React.PropTypes.number.isRequired,
@@ -31,28 +31,23 @@ var LayoutNorthSouthDivider = React.createClass({
   },
 
   render: function () {
-
     return (
       <div style={style}>
         <LayoutDivider
           top={this.props.top}
           direction={'horizontal'}
           isStatic={true} />
-
         <LayoutDivider
           top={this.props.top}
           direction={'horizontal'}
-          className={'northSouthDivider'}>
-
-          <LayoutNavigation
-            showTimeline={this.props.showTimeline}
-            shortCollectionId={this.props.shortCollectionId}
-            onLayoutNavigationChange={this.props.onLayoutNavigationChange} />
-
-        </LayoutDivider>
+          className={'northSouthDivider'} />
+        <LayoutNavigation
+          top={this.props.top}
+          showTimeline={this.props.showTimeline}
+          shortCollectionId={this.props.shortCollectionId}
+          onLayoutNavigationChange={this.props.onLayoutNavigationChange} />
       </div>
     );
-  }
-});
+  },
 
-module.exports = LayoutNorthSouthDivider;
+});

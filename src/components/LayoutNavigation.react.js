@@ -5,10 +5,13 @@ import TableResistanceProfile from './layout/navigation/TableResistanceProfile.r
 
 const style = {
   height: 0,
+  position: 'absolute',
+  zIndex: 999,
 };
 
 export default React.createClass({
   render: function () {
+    style.top = this.props.top;
     return (
       <div data-layout="navigation" style={style}>
         <TableMetadata />
