@@ -57,7 +57,7 @@ function setDefaultPublishOptions(exchange) {
   };
 }
 
-function createExchange(connection, exchangeKey, callback) {
+function createExchange(exchangeKey, callback) {
   var config = EXCHANGE_CONFIG[exchangeKey];
   connection.exchange(config.name, {
     type: config.type,
@@ -91,12 +91,11 @@ function connect(callback) {
       async.each(
         Object.keys(EXCHANGE_CONFIG),
         function (exchangeKey, finishIteration) {
-          createExchange(connection, exchangeKey, finishIteration);
+          createExchange(exchangeKey, finishIteration);
         },
         callback
       );
     });
-
   } else {
     callback();
   }

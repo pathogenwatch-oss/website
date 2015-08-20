@@ -54,7 +54,6 @@ function downloadAssemblyMetadata(req, res, next) {
           'attachment; filename=assembly_metadata_' + assemblyId + '.csv'
         );
         res.send(assemblyMetadataCsv);
-
       } else {
         LOGGER.info('Returning JSON file');
 

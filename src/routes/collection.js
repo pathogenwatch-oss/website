@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 var collectionModel = require('models/collection');
+var assemblyModel = require('models/assembly');
 
 var LOGGER = require('utils/logging').createLogger('Collection requests');
 

@@ -5,22 +5,22 @@ var mainStorage = require('services/storage')('main');
 
 var LOGGER = require('utils/logging').createLogger('Assembly');
 
-var METADATA_KEY_PREFIX = 'ASSEMBLY_METADATA_';
-var PAARSNP_KEY_PREFIX = 'PAARSNP_RESULT_';
-var MLST_KEY_PREFIX = 'MLST_RESULT_';
-var ASSEMBLY_KEY_PREFIXES = [
-  'FP_COMP_',
-  METADATA_KEY_PREFIX,
-  PAARSNP_KEY_PREFIX,
-  MLST_KEY_PREFIX
-];
+var METADATA_KEY = 'ASSEMBLY_METADATA';
+var PAARSNP_KEY = 'PAARSNP_RESULT';
+var MLST_KEY = 'MLST_RESULT';
+var FP_COMP_KEY = 'FP_COMP';
+
 var ASSEMBLY_ANALYSES = {
-  FP: 'FP_COMP',
-  MLST: 'MLST_RESULT',
-  PAARSNP: 'PAARSNP_RESULT',
+  FP: FP_COMP_KEY,
+  MLST: MLST_KEY,
+  PAARSNP: PAARSNP_KEY,
   CORE: 'CORE_RESULT',
   SCCMEC: 'SCCMEC'
 };
+
+function createKey(id, prefix) {
+  return prefix + '_' + id;
+}
 
 function beginUpload(ids, metadata, sequences) {
   socketService.notifyAssemblyUpload(ids, 'UPLOAD_OK');
@@ -46,7 +46,7 @@ function beginUpload(ids, metadata, sequences) {
     };
 
     mainStorage.store(
-      METADATA_KEY_PREFIX + ids.assemblyId,
+      createKey(ids.assemblyId, METADATA_KEY),
       assemblyMetadata,
       function () {
         socketService.notifyAssemblyUpload(ids, 'METADATA_OK');
@@ -62,22 +62,15 @@ function beginUpload(ids, metadata, sequences) {
   });
 }
 
-function removeTrailingUnderscore(key) {
-  return key.slice(0, -1);
+function constructQueryKeys(prefixes, assemblyId) {
+  return prefixes.map(createKey.bind(null, assemblyId));
 }
 
 function mergeQueryResults(data, queryKeyPrefixes, assemblyId) {
   return queryKeyPrefixes.reduce(function (assembly, key) {
-    var partName = removeTrailingUnderscore(key);
-    assembly[partName] = data[key + assemblyId];
+    assembly[key] = data[createKey(assemblyId, key)];
     return assembly;
   }, { assemblyId: assemblyId });
-}
-
-function constructQueryKeys(prefixes, assemblyId) {
-  return prefixes.map(function (key) {
-    return key + assemblyId;
-  });
 }
 
 function get(assemblyId, queryKeyPrefixes, callback) {
@@ -105,13 +98,20 @@ function get(assemblyId, queryKeyPrefixes, callback) {
 
 function getComplete(assemblyId, callback) {
   LOGGER.info('Getting assembly ' + assemblyId);
-  get(assemblyId, ASSEMBLY_KEY_PREFIXES, callback);
+  get(assemblyId, [
+    METADATA_KEY,
+    PAARSNP_KEY,
+    MLST_KEY,
+    FP_COMP_KEY
+  ], callback);
 }
 
 function getReference(speciesId, assemblyId, callback) {
   LOGGER.info('Getting reference assembly ' + assemblyId);
   get(assemblyId, [
-    METADATA_KEY_PREFIX, PAARSNP_KEY_PREFIX, MLST_KEY_PREFIX
+    METADATA_KEY,
+    PAARSNP_KEY,
+    MLST_KEY
   ], callback);
 }
 

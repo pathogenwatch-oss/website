@@ -106,11 +106,11 @@ function add(ids, callback) {
 
       messageQueueService.newCollectionNotificationQueue(ids, {
         tasks: COLLECTION_TREE_TASKS,
-        loggingId: 'Collection ' + collectionId,
+        loggingId: 'Collection ' + ids.collectionId,
         notifyFn: socketService.notifyCollectionUpload.bind(socketService, ids)
       }, function () {
         done(null, {
-          collectionId: collectionId,
+          collectionId: ids.collectionId,
           userAssemblyIdToAssemblyIdMap: userAssemblyIdToAssemblyIdMap
         });
       });
@@ -147,11 +147,11 @@ function getAssemblies(collectionId, callback) {
         });
       }, done);
     }
-  ], function (error) {
+  ], function (error, result) {
     if (error) {
       return callback(error, null);
     }
-    callback(null, assemblies);
+    callback(null, result);
   });
 }
 
