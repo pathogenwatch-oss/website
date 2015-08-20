@@ -10,7 +10,7 @@ function notAServerError(error) {
   );
 }
 
-function handleErrors(app) {
+module.exports = function handleErrors(app) {
   app.use(function (error, req, res, next) {
     LOGGER.error(error);
     if (notAServerError(error)) {
@@ -19,6 +19,4 @@ function handleErrors(app) {
     }
     res.sendStatus(500);
   });
-}
-
-module.exports.handleErrors = handleErrors;
+};

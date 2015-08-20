@@ -4,7 +4,7 @@ var http = require('http');
 var path = require('path');
 var async = require('async');
 
-var appConfig = require('configuration');
+var appConfig = require('configuration.js');
 var logging = require('utils/logging');
 var storageConnection = require('utils/storageConnection');
 var messageQueueConnection = require('utils/messageQueueConnection');
@@ -35,9 +35,8 @@ module.exports = function (callback) {
 
     app.use(express.static(path.join(__dirname, 'public')));
 
-    // Set our own x-powered-by header
     app.use(function (req, res, next) {
-      res.header('X-powered-by', 'Blood, sweat, and tears');
+      res.header('X-Clacks-Overhead', 'GNU Terry Pratchett');
       next();
     });
 
@@ -53,7 +52,7 @@ module.exports = function (callback) {
     });
 
     require('routes.js')(app);
-    require('controllers/error').handleErrors(app);
+    require('errors.js')(app);
 
     server = http.createServer(app).listen(app.get('port'), function () {
       LOGGER.info('✔ Express server listening on port ' + app.get('port'));

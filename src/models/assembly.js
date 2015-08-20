@@ -4,7 +4,7 @@ var messageQueueService = require('services/messageQueue');
 var mainStorage = require('services/storage')('main');
 
 var LOGGER = require('utils/logging').createLogger('Assembly');
-var TABLE_DATA_KEY_PREFIX = 'CORE_RESULT_';
+
 var METADATA_KEY_PREFIX = 'ASSEMBLY_METADATA_';
 var PAARSNP_KEY_PREFIX = 'PAARSNP_RESULT_';
 var ASSEMBLY_KEY_PREFIXES = [
@@ -23,81 +23,41 @@ var ASSEMBLY_ANALYSES = {
 
 function beginUpload(ids, metadata, sequences) {
   socketService.notifyAssemblyUpload(ids, 'UPLOAD_OK');
-  messageQueueService.newAssemblyNotificationQueue(
-    ids,
-    function (notificationQueue) {
-      var expectedResults = Object.keys(ASSEMBLY_ANALYSES);
-      notificationQueue.subscribe(function (error, message) {
-        if (error) {
-          return LOGGER.error(error);
-        }
+  messageQueueService.newAssemblyNotificationQueue(ids, {
+    tasks: Object.keys(ASSEMBLY_ANALYSES),
+    loggingId: 'Assembly ' + ids.assemblyId,
+    notifyFn: socketService.notifyAssemblyUpload.bind(socketService, ids)
+  }, function () {
+    var assemblyMetadata = {
+      assemblyId: ids.assemblyId,
+      assemblyFilename: metadata.assemblyFilename,
+      date: metadata.date,
+      geography: metadata.geography,
+      source: metadata.source
+    };
 
-        var result = ASSEMBLY_ANALYSES[message.taskType];
-        if (!result) {
-          return LOGGER.warn('Skipping task: ' + message.taskType);
-        }
+    mainStorage.store(
+      METADATA_KEY_PREFIX + ids.assemblyId,
+      assemblyMetadata,
+      function () {
+        socketService.notifyAssemblyUpload(ids, 'METADATA_OK');
+      }
+    );
 
-        LOGGER.info(
-          'Received notification for assembly ' + ids.assemblyId + ': ' + message.taskType
-        );
+    var assembly = {
+      speciesId: ids.speciesId,
+      assemblyId: ids.assemblyId,
+      collectionId: ids.collectionId,
+      sequences: sequences
+    };
 
-        socketService.notifyAssemblyUpload(ids, result);
-        expectedResults.splice(message.taskType, 1);
-
-        LOGGER.info(
-          'Remaining tasks for assembly ' + ids.assemblyId + ': ' + expectedResults
-        );
-
-        if (expectedResults.length === 0) {
-          LOGGER.info(
-            'Assembly ' + ids.assemblyId + ' tasks completed, destroying ' +
-              notificationQueue.name
-          );
-          notificationQueue.destroy();
-        }
-      });
-
-      var assemblyMetadata = {
-        assemblyId: ids.assemblyId,
-        fileAssemblyId: metadata.fileAssemblyId,
-        date: metadata.date,
-        geography: metadata.geography,
-        source: metadata.source
-      };
-
-      mainStorage.store(
-        METADATA_KEY_PREFIX + ids.assemblyId,
-        assemblyMetadata,
-        function () {
-          socketService.notifyAssemblyUpload(ids, 'METADATA_OK');
-        }
-      );
-
-      var assembly = {
-        speciesId: ids.speciesId,
-        assemblyId: ids.assemblyId,
-        collectionId: ids.collectionId,
-        sequences: sequences
-      };
-
-      messageQueueService.newAssemblyUploadQueue(ids.assemblyId,
-        function (uploadQueue) {
-          messageQueueService.getUploadExchange()
-            .publish('upload', assembly, { replyTo: uploadQueue.name });
-        }
-      );
-    }
-  );
-}
-
-function get(assemblyId, callback) {
-  LOGGER.info('Requested assembly id: ' + assemblyId);
-  mainStorage.retrieve(assemblyId, callback);
-}
-
-function getMetadata(assemblyId, callback) {
-  LOGGER.info('Requested assembly id: ' + assemblyId);
-  mainStorage.retrieve(METADATA_KEY_PREFIX + assemblyId, callback);
+    messageQueueService.newAssemblyUploadQueue(ids.assemblyId,
+      function (uploadQueue) {
+        messageQueueService.getUploadExchange()
+          .publish('upload', assembly, { replyTo: uploadQueue.name });
+      }
+    );
+  });
 }
 
 function removeTrailingUnderscore(key) {
@@ -142,143 +102,6 @@ function getComplete(assemblyId, callback) {
   });
 }
 
-function flatten(keys) {
-  return keys.reduce(function (previous, current) {
-    return previous.concat(current);
-  }, []);
-}
-
-function matchQueryKeyPrefix(queryKey) {
-  return ASSEMBLY_KEY_PREFIXES.filter(function (prefix) {
-    return queryKey.indexOf(prefix) === 0;
-  })[0];
-}
-
-function reconstructAssemblies(assemblyParts) {
-  var assemblies = {};
-  Object.keys(assemblyParts).forEach(function (queryKey) {
-    var assemblyPart = assemblyParts[queryKey];
-
-    var queryKeyPrefix = matchQueryKeyPrefix(queryKey);
-    var assemblyId = queryKey.replace(queryKeyPrefix, '');
-    var assemblyPartKey = removeTrailingUnderscore(queryKeyPrefix);
-    var assembly;
-
-    if (!assemblies.hasOwnProperty(assemblyId)) {
-      assemblies[assemblyId] = {};
-    }
-    assembly = assemblies[assemblyId];
-    assembly[assemblyPartKey] = assemblyPart;
-  });
-
-  Object.keys(assemblies).forEach(function (assemblyId) {
-    assemblies[assemblyId].assemblyId = assemblyId;
-  });
-
-  return assemblies;
-}
-
-function getMany(assemblyIds, callback) {
-  LOGGER.info('Getting assemblies with ids:');
-  LOGGER.info(assemblyIds);
-
-  // Merge all assembly ids
-  var assemblyIdQueryKeys = flatten(
-    assemblyIds.map(constructAssemblyQueryKeys)
-  );
-
-  LOGGER.info('Querying keys:');
-  LOGGER.info(assemblyIdQueryKeys);
-
-  mainStorage.retrieveMany(assemblyIdQueryKeys, function (error, assemblyParts) {
-    if (error) {
-      return callback(error, null);
-    }
-
-    LOGGER.info('Got assemblies data');
-
-    var assemblies = reconstructAssemblies(assemblyParts);
-
-    LOGGER.info('Assemblies with merged ' + ASSEMBLY_KEY_PREFIXES + ' data: ');
-    LOGGER.info(assemblies);
-
-    sequenceTypeModel.addSequenceTypeDataToMany(assemblies,
-      function (error) {
-        if (error) {
-          return callback(error, null);
-        }
-        callback(null, assemblies);
-      }
-    );
-  });
-}
-
-function getResistanceProfile(assemblyIds, callback) {
-  LOGGER.info('Getting resistance profile for assembly ids: ' + assemblyIds);
-
-  var queryKeys = assemblyIds.map(function (assemblyId) {
-    return PAARSNP_KEY_PREFIX + assemblyId;
-  });
-
-  LOGGER.info('Resistance profile query keys: ' + queryKeys);
-
-  mainStorage.retrieveMany(queryKeys, function (error, results) {
-    if (error) {
-      return callback(error, null);
-    }
-    LOGGER.info('Got resistance profile data:');
-    LOGGER.info(results);
-
-    callback(null, results);
-  });
-}
-
-function projectTableData(assemblyData) {
-  var projectedData = {};
-  Object.keys(assemblyData).forEach(function (key) {
-    var assembly = assemblyData[key];
-    var newKey = key.replace(TABLE_DATA_KEY_PREFIX, '');
-    projectedData[newKey] = {
-      assemblyId: assembly.assemblyId,
-      completeAlleles: assembly.completeAlleles
-    };
-  });
-  return projectedData;
-}
-
-function getTableData(assemblyIds, callback) {
-  LOGGER.info('Getting table data for assemblies: ' + assemblyIds.join(', '));
-
-  var tableQueryKeys = assemblyIds.map(function (assemblyId) {
-    return (TABLE_DATA_KEY_PREFIX + assemblyId);
-  });
-
-  LOGGER.info('Prepared query keys: ' + tableQueryKeys.join(', '));
-
-  mainStorage.retrieveMany(tableQueryKeys, function (error, tableData) {
-    if (error) {
-      return callback(error, null);
-    }
-
-    LOGGER.info('Got table data for assemblies ' + assemblyIds.join(', '));
-    LOGGER.info(tableData);
-
-    callback(null, projectTableData(tableData));
-  });
-}
-
-function getCoreResult(id, callback) {
-  mainStorage.retrieve('CORE_RESULT_' + id, function (error, result) {
-    if (error) {
-      return callback(error, null);
-    }
-    callback(null, {
-      totalCompleteCoreMatches: result.totalCompleteCoreMatches,
-      totalCompleteAlleleMatches: result.totalCompleteAlleleMatches
-    });
-  });
-}
-
 function mapTaxaToAssembly(assemblies) {
   return Object.keys(assemblies).reduce(function (map, assemblyId) {
     var taxon = assemblies[assemblyId].FP_COMP.subTypeAssignment;
@@ -318,13 +141,7 @@ function getReference(speciesId, assemblyId, callback) {
   });
 }
 
-module.exports.get = get;
 module.exports.getComplete = getComplete;
-module.exports.getMany = getMany;
-module.exports.getTableData = getTableData;
 module.exports.beginUpload = beginUpload;
-module.exports.getResistanceProfile = getResistanceProfile;
-module.exports.getCoreResult = getCoreResult;
-module.exports.getMetadata = getMetadata;
 module.exports.mapTaxaToAssembly = mapTaxaToAssembly;
 module.exports.getReference = getReference;

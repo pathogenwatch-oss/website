@@ -1,5 +1,6 @@
 var uuid = require('node-uuid');
 
+var notificationService = require('services/notification');
 var messageQueueConnection = require('utils/messageQueueConnection');
 
 var connection = messageQueueConnection.getConnection();
@@ -43,42 +44,9 @@ function generateQueueId(prefix) {
   return (prefix + uuid.v4());
 }
 
-function notifyResults(queue, options) {
-  var tasks = options.tasks;
-  var loggingId = options.loggingId;
-  var notifyFn = options.notifyFn;
-
-  var expectedResults = tasks.map(function (task) { return task; });
-
-  queue.subscribe(function (error, message) {
-    var taskType;
-
-    if (error) {
-      return LOGGER.error(error);
-    }
-
-    taskType = message.taskType;
-    if (expectedResults.indexOf(taskType) === -1) {
-      return LOGGER.warn('Skipping task: ' + taskType);
-    }
-
-    LOGGER.info('Received notification for ' + loggingId + ': ' + taskType);
-
-    notifyFn(taskType);
-    expectedResults.splice(message.taskType, 1);
-
-    LOGGER.info('Remaining tasks for ' + loggingId + ': ' + expectedResults);
-
-    if (expectedResults.length === 0) {
-      LOGGER.info(loggingId + ' tasks completed, destroying ' + queue.name);
-      queue.destroy();
-    }
-  });
-}
-
 function newCollectionNotificationQueue(ids, notifyOptions, callback) {
   connection.queue(
-    'ART_NOTIFICATION_' + ids.collectionId,
+    'NOTIFICATION_' + ids.collectionId,
     { exclusive: true },
     function (queue) {
       LOGGER.info('Notification queue "' + queue.name + '" is open');
@@ -89,15 +57,15 @@ function newCollectionNotificationQueue(ids, notifyOptions, callback) {
       );
 
       parseMessagesAsJson(queue);
-      notifyResults(queue, notifyOptions);
+      notificationService.notifyResults(queue, notifyOptions);
       callback(queue);
     }
   );
 }
 
-function newAssemblyNotificationQueue(ids, callback) {
+function newAssemblyNotificationQueue(ids, notifyOptions, callback) {
   connection.queue(
-    'ART_NOTIFICATION_' + ids.assemblyId,
+    'NOTIFICATION_' + ids.assemblyId,
     { exclusive: true },
     function (queue) {
       LOGGER.info('Notification queue "' + queue.name + '" is open');
@@ -108,6 +76,7 @@ function newAssemblyNotificationQueue(ids, callback) {
       );
 
       parseMessagesAsJson(queue);
+      notificationService.notifyResults(queue, notifyOptions);
       callback(queue);
     }
   );
@@ -115,7 +84,7 @@ function newAssemblyNotificationQueue(ids, callback) {
 
 function newAssemblyUploadQueue(assemblyId, callback) {
   connection.queue(
-    'ART_ASSEMBLY_UPLOAD_' + assemblyId, {
+    'ASSEMBLY_UPLOAD_' + assemblyId, {
       passive: false,
       durable: false,
       exclusive: true,
@@ -133,7 +102,7 @@ function newAssemblyUploadQueue(assemblyId, callback) {
 }
 
 function newCollectionAddQueue(callback) {
-  var queueId = generateQueueId('ART_CREATE_COLLECTION_');
+  var queueId = generateQueueId('CREATE_COLLECTION_');
   return connection.queue(queueId, {
     passive: false,
     durable: false,
@@ -143,21 +112,6 @@ function newCollectionAddQueue(callback) {
     closeChannelOnUnsubscribe: false
   }, function (queue) {
     LOGGER.info('Queue "' + queue.name + '" is open');
-    parseMessagesAsJson(queue);
-    callback(queue);
-  });
-}
-
-function newMergeTreesNotificationQueue(collectionId, callback) {
-  var queueId = generateQueueId('ART_NOTIFICATION_MERGE_TREES_');
-  connection.queue(queueId, {
-    exclusive: true
-  }, function (queue) {
-    LOGGER.info('Notification queue "' + queue.name + '" is open');
-    queue.bind(
-      exchanges.NOTIFICATION.name,
-      'MERGE_TREE.COLLECTION.' + collectionId
-    );
     parseMessagesAsJson(queue);
     callback(queue);
   });
@@ -179,7 +133,6 @@ module.exports.newCollectionNotificationQueue = newCollectionNotificationQueue;
 module.exports.newAssemblyNotificationQueue = newAssemblyNotificationQueue;
 module.exports.newAssemblyUploadQueue = newAssemblyUploadQueue;
 module.exports.newCollectionAddQueue = newCollectionAddQueue;
-module.exports.newMergeTreesNotificationQueue = newMergeTreesNotificationQueue;
 module.exports.getUploadExchange = getUploadExchange;
 module.exports.getCollectionIdExchange = getCollectionIdExchange;
 module.exports.getTasksExchange = getTasksExchange;

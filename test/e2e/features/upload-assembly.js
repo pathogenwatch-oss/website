@@ -13,7 +13,7 @@ module.exports = function (requestData) {
       collectionId: collectionId,
       socketRoomId: roomId,
       assemblyId: assemblyId,
-      fileAssemblyId: fileName,
+      assemblyFilename: fileName,
       metadata: {},
       sequences: fs.readFileSync(path.resolve(__dirname, '..', 'fixtures', fileName), { encoding: 'utf-8' })
     });

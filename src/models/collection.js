@@ -76,6 +76,7 @@ function add(ids, callback) {
     identifierType: IDENTIFIER_TYPES.ASSEMBLY,
     count: userAssemblyIds.length
   };
+
   LOGGER.info('Collection ids requested: ' + collectionRequest.count);
   LOGGER.info('Assembly ids requested: ' + assemblyRequest.count);
 
@@ -187,16 +188,17 @@ function formatForFrontend(assemblies) {
       analysis: {
         st: assemblyData.MLST_RESULT.stType,
         resistanceProfile:
-          Object.keys(assemblyData.PAARSNP_RESULT.resistanceProfile).reduce(function (profile, className) {
-            var antibioticClass = assemblyData.PAARSNP_RESULT.resistanceProfile[className];
-            Object.keys(antibioticClass).forEach(function (antibiotic) {
-              profile[antibiotic] = {
-                antibioticClass: className,
-                resistanceResult: antibioticClass[antibiotic]
-              };
-            });
-            return profile;
-          }, {})
+          Object.keys(assemblyData.PAARSNP_RESULT.resistanceProfile).
+            reduce(function (profile, className) {
+              var antibioticClass = assemblyData.PAARSNP_RESULT.resistanceProfile[className];
+              Object.keys(antibioticClass).forEach(function (antibiotic) {
+                profile[antibiotic] = {
+                  antibioticClass: className,
+                  resistanceResult: antibioticClass[antibiotic]
+                };
+              });
+              return profile;
+            }, {})
       }
     };
     return memo;
@@ -226,86 +228,11 @@ function get(collectionId, callback) {
       return callback(error, null);
     }
     callback(null, {
-      collection: {
-        collectionId: collectionId,
-        assemblies: formatForFrontend(result.assemblies),
-        tree: result.tree,
-        subtrees: result.subtrees
-      },
-      antibiotics: result.antibiotics
+      collectionId: collectionId,
+      assemblies: formatForFrontend(result.assemblies),
+      tree: result.tree,
+      subtrees: result.subtrees
     });
-  });
-}
-
-function getRepresentativeCollection(callback) {
-  LOGGER.info('Getting representative collection');
-
-  mainStorage.retrieve('REP_METADATA_1280',
-    function (error, representativeCollectionMetadata) {
-      if (error) {
-        return callback(error, null);
-      }
-      LOGGER.info('Got representative collection');
-      callback(null, representativeCollectionMetadata);
-    }
-  );
-}
-
-function getMergedCollectionTree(mergedTreeId, callback) {
-  LOGGER.info('Getting merged tree ' + mergedTreeId);
-
-  mainStorage.retrieve(mergedTreeId, function (error, treeData) {
-    if (error) {
-      return callback(error, null);
-    }
-    LOGGER.info('Got merged tree ' + mergedTreeId);
-    callback(null, treeData);
-  });
-}
-
-function mergeCollectionTrees(ids) {
-  LOGGER.info('Merging trees');
-
-  var mergeRequest = {
-    assemblies: [],
-    targetCollectionId: ids.collectionId, // Your collection id
-    inputData: [ ids.mergeWithCollectionId ], // e.g.: EARSS collection, etc.
-    dataSource: 'CORE'
-  };
-
-  messageQueueService.newMergeTreesNotificationQueue(ids.collectionId,
-    function (queue) {
-      queue.subscribe(function (error, message) {
-        LOGGER.info('Received notification message: ' + message);
-        queue.destroy();
-
-        ids.mergedTreeId = message.documentKeys[0];
-
-        getMergedCollectionTree(ids.mergedTreeId, function (error, mergedTree) {
-          if (error) {
-            LOGGER.error(error);
-            return;
-          }
-          if (message.taskType === 'MERGE') {
-            socketService.notifyTreeMergeRequest(ids, mergedTree, mergeRequest);
-          }
-        });
-      });
-
-      messageQueueService.getTasksExchange()
-        .publish('merge-trees', mergeRequest, { replyTo: 'noQueueId' });
-    }
-  );
-}
-
-function getMergeTree(ids) {
-  var mergeTreeKey = 'MERGE_TREE_' + ids.mergeTreeId;
-  getMergedCollectionTree(mergeTreeKey, function (error, mergeTree) {
-    if (error) {
-      LOGGER.error(error);
-      return;
-    }
-    socketService.notifyTreeMerge(ids, mergeTree);
   });
 }
 
@@ -318,8 +245,7 @@ function getReferenceAssemblies(speciesId, callback) {
       }
       var assemblyIds = result.assemblyIdentifiers;
       LOGGER.info('Got list of assemblies for species ' + speciesId);
-      async.eachSeries(
-        assemblyIds,
+      async.eachSeries(assemblyIds,
         function (assemblyId, finishIteration) {
           assemblyModel.getReference(speciesId, assemblyId, function (error, assembly) {
             if (error) {
@@ -345,13 +271,6 @@ function getReferenceAssemblies(speciesId, callback) {
   );
 }
 
-function mapReferenceAssembliesToTaxa(assemblies) {
-  return Object.keys(assemblies).reduce(function (map, assemblyId) {
-    map[assemblyId] = assemblyId;
-    return map;
-  }, {});
-}
-
 function getReferenceCollection(speciesId, callback) {
   LOGGER.info('Getting list of assemblies for species ' + speciesId);
 
@@ -372,7 +291,4 @@ function getReferenceCollection(speciesId, callback) {
 
 module.exports.add = add;
 module.exports.get = get;
-module.exports.getRepresentativeCollection = getRepresentativeCollection;
-module.exports.mergeCollectionTrees = mergeCollectionTrees;
-module.exports.getMergeTree = getMergeTree;
 module.exports.getReferenceCollection = getReferenceCollection;

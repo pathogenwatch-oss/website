@@ -3,12 +3,12 @@ var router = express.Router();
 
 var antibioticModel = require('models/antibiotic');
 
-var logger = require('utils/logging').createLogger('Antibiotics');
+var LOGGER = require('utils/logging').createLogger('Antibiotics');
 
 router.get('/antibiotics', function (req, res) {
   antibioticModel.getAll(function (error, antibiotics) {
     if (error) {
-      logger.error(error, antibiotics);
+      LOGGER.error(error, antibiotics);
       return res.sendStatus(500);
     }
     res.json(antibiotics);

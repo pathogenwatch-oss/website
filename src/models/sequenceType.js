@@ -72,9 +72,9 @@ function getSequenceType(assembly, callback) {
       if (error.code === 13) {
         LOGGER.warn('No ST key found: ' + stQueryKey);
         return callback(null, UNKNOWN_ST);
-      } else {
-        return callback(error, null);
       }
+
+      return callback(error, null);
     }
     LOGGER.info('St Type result: ' + result.stType);
     callback(null, result.stType);
@@ -83,122 +83,20 @@ function getSequenceType(assembly, callback) {
 
 function addSequenceTypeData(assembly, callback) {
   async.waterfall([
-    function (callback) {
-      getMlstAllelesData(assembly, callback);
+    function (next) {
+      getMlstAllelesData(assembly, next);
     },
-    function (mlstAlleles, callback) {
+    function (mlstAlleles, next) {
       LOGGER.info('Got assembly MLST alleles data');
       addMlstAlleleToAssembly(assembly, mlstAlleles);
-      getSequenceType(assembly, callback);
+      getSequenceType(assembly, next);
     },
-    function (sequenceType, callback) {
+    function (sequenceType, next) {
       LOGGER.info('Got assembly ST data');
       assembly.MLST_RESULT.stType = sequenceType;
-      callback();
+      next(asssembly);
     }
-  ],
-  function (error) {
-    if (error) {
-      return callback(error, null);
-    }
-    callback(null, assembly);
-  });
-}
-
-function mapMlstDataToKeys(mlstData, mlstKeys) {
-  return mlstKeys.reduce(function (map, key) {
-    map[key] = mlstData[key];
-    return map;
-  }, {});
-}
-
-/**
- * Steps:
- *   - get a flat list of all MLST allele keys in all assemblies
- *   - index MLST allele keys by assembly ID
- *   - retrieve the allele data for each key
- *   - add allele data back to each assembly
- *   - get an ST key for each assembly
- *   - index assembly ids by ST Key
- *   - return the ST for each key
- *   - add ST to each assembly
- */
-function addSequenceTypeDataToMany(assemblies, callback) {
-  var allAssembliesMlstAllelesQueryKeys = [];
-  var mlstQueryKeysByAssemblyIdMap = {};
-
-  Object.keys(assemblies).forEach(function (assemblyId) {
-    var mlstQueryKeys = getMlstQueryKeys(assemblies[assemblyId]);
-    if (!mlstQueryKeys) {
-      return callback(new Error('Missing assembly or MLST result'));
-    }
-    mlstQueryKeysByAssemblyIdMap[assemblyId] = mlstQueryKeys;
-    allAssembliesMlstAllelesQueryKeys =
-      allAssembliesMlstAllelesQueryKeys.concat(mlstQueryKeys);
-  });
-
-  mainStorage.retrieveMany(allAssembliesMlstAllelesQueryKeys,
-    function (error, mlstAllelesData) {
-      if (error) {
-        return callback(error, null);
-      }
-
-      Object.keys(mlstQueryKeysByAssemblyIdMap).forEach(function (assemblyId) {
-        var mlstQueryKeys = mlstQueryKeysByAssemblyIdMap[assemblyId];
-        addMlstAlleleToAssembly(
-          assemblies[assemblyId],
-          mapMlstDataToKeys(mlstAllelesData, mlstQueryKeys)
-        );
-      });
-
-      var assemblyAlleles = Object.keys(assemblies).map(function (assemblyId) {
-        var assembly = assemblies[assemblyId];
-        return {
-          assemblyId: assemblyId,
-          assemblyAlleles: assembly.MLST_RESULT.alleles
-        };
-      });
-
-      var assemblyIdsByStQueryKeyMap = {};
-      var assemblyIdsWithNewST = [];
-      assemblyAlleles.forEach(function (assembly) {
-        var stQueryKey = generateStQueryKey(assembly.assemblyAlleles);
-        // Do not query empty keys
-        if (stQueryKey === null) {
-          LOGGER.warn('Skipping ST query for assembly ' + assembly.assemblyId);
-          assemblyIdsWithNewST.push(assembly.assemblyId);
-        } else {
-          if (!assemblyIdsByStQueryKeyMap.hasOwnProperty(stQueryKey)) {
-            assemblyIdsByStQueryKeyMap[stQueryKey] = [];
-          }
-          assemblyIdsByStQueryKeyMap[stQueryKey].push(assembly.assemblyId);
-        }
-      });
-
-      mainStorage.retrieveMany(Object.keys(assemblyIdsByStQueryKeyMap),
-        function (error, allStData) {
-          if (error) {
-            callback(error, null);
-          }
-
-          Object.keys(allStData).forEach(function (key) {
-            var sequenceType = allStData[key].stType || UNKNOWN_ST;
-            assemblyIdsByStQueryKeyMap[key].forEach(function (assemblyId) {
-              assemblies[assemblyId].MLST_RESULT.stType = sequenceType;
-            });
-          });
-
-          // resolve skipped ST queries
-          assemblyIdsWithNewST.forEach(function (assemblyId) {
-            assemblies[assemblyId].MLST_RESULT.stType = UNKNOWN_ST;
-          });
-
-          callback(null, assemblies);
-        }
-      );
-    }
-  );
+  ], callback);
 }
 
 module.exports.addSequenceTypeData = addSequenceTypeData;
-module.exports.addSequenceTypeDataToMany = addSequenceTypeDataToMany;
