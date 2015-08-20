@@ -43,7 +43,40 @@ function generateQueueId(prefix) {
   return (prefix + uuid.v4());
 }
 
-function newCollectionNotificationQueue(ids, callback) {
+function notifyResults(queue, options) {
+  var tasks = options.tasks;
+  var loggingId = options.loggingId;
+  var notifyFn = options.notifyFn;
+
+  var expectedResults = tasks.map(function (task) { return task; });
+
+  queue.subscribe(function (error, message) {
+    var taskType;
+
+    if (error) {
+      return LOGGER.error(error);
+    }
+
+    taskType = message.taskType;
+    if (expectedResults.indexOf(taskType) === -1) {
+      return LOGGER.warn('Skipping task: ' + taskType);
+    }
+
+    LOGGER.info('Received notification for ' + loggingId + ': ' + taskType);
+
+    notifyFn(taskType);
+    expectedResults.splice(message.taskType, 1);
+
+    LOGGER.info('Remaining tasks for ' + loggingId + ': ' + expectedResults);
+
+    if (expectedResults.length === 0) {
+      LOGGER.info(loggingId + ' tasks completed, destroying ' + queue.name);
+      queue.destroy();
+    }
+  });
+}
+
+function newCollectionNotificationQueue(ids, notifyOptions, callback) {
   connection.queue(
     'ART_NOTIFICATION_' + ids.collectionId,
     { exclusive: true },
@@ -52,10 +85,11 @@ function newCollectionNotificationQueue(ids, callback) {
 
       queue.bind(
         exchanges.NOTIFICATION.name,
-        '1280.*.COLLECTION.' + ids.collectionId
+        ids.speciesId + '.*.COLLECTION.' + ids.collectionId
       );
 
       parseMessagesAsJson(queue);
+      notifyResults(queue, notifyOptions);
       callback(queue);
     }
   );
@@ -70,7 +104,7 @@ function newAssemblyNotificationQueue(ids, callback) {
 
       queue.bind(
         exchanges.NOTIFICATION.name,
-        '1280.*.ASSEMBLY.' + ids.assemblyId
+        ids.speciesId + '.*.ASSEMBLY.' + ids.assemblyId
       );
 
       parseMessagesAsJson(queue);

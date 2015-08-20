@@ -74,7 +74,7 @@ function beginUpload(ids, metadata, sequences) {
       );
 
       var assembly = {
-        speciesId: '1280',
+        speciesId: ids.speciesId,
         assemblyId: ids.assemblyId,
         collectionId: ids.collectionId,
         sequences: sequences

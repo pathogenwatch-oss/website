@@ -24,8 +24,8 @@ function addAssembly(req, res) {
   if (!ids.socketRoomId) {
     LOGGER.error('Missing socket room id');
   }
-  if (!ids.userAssemblyId) {
-    LOGGER.error('Missing user assembly id');
+  if (!ids.fileAssemblyId) {
+    LOGGER.error('Missing file assembly id');
   }
   if (!ids.assemblyId) {
     LOGGER.error('Missing assembly id');
