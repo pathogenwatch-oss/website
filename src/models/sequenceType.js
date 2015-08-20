@@ -43,26 +43,30 @@ function addMlstAlleleToAssembly(assembly, mlstAlleles) {
   });
 }
 
-function generateStQueryKey(alleles) {
-  LOGGER.info('Generating ST Query key');
-  // Prepare ST query key
-  // 'ST_' + species id + allele ids
-  var stQueryKey = 'ST_1280';
+
+// 'ST_' + species id + allele ids
+function generateStQueryKey(speciesId, alleles) {
+  var stQueryKey;
   var queryKeyIsComplete = true;
-  Object.keys(alleles).forEach(function (key) {
-    var allele = alleles[key];
+
+  LOGGER.info('Generating ST Query key');
+  stQueryKey = Object.keys(alleles).reduce(function (memo, alleleKey) {
+    var allele = alleles[alleleKey];
     if (!allele || !allele.alleleId || allele.alleleId === UNKNOWN_ST) {
       queryKeyIsComplete = false;
-      return;
+      return memo;
     }
-    stQueryKey += '_' + allele.alleleId;
-  });
+    return memo + '_' + allele.alleleId;
+  }, 'ST_' + speciesId);
   return queryKeyIsComplete ? stQueryKey : null;
 }
 
 function getSequenceType(assembly, callback) {
   LOGGER.info('Getting assembly ST data');
-  var stQueryKey = generateStQueryKey(assembly.MLST_RESULT.alleles);
+  var stQueryKey = generateStQueryKey(
+    assembly.ASSEMBLY_METADATA.speciesId,
+    assembly.MLST_RESULT.alleles
+  );
   if (stQueryKey === null) {
     LOGGER.warn('Skipping ST query for assembly ' + assembly.assemblyId);
     return callback(null, UNKNOWN_ST);

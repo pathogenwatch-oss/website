@@ -7,11 +7,12 @@ var LOGGER = require('utils/logging').createLogger('Assembly');
 
 var METADATA_KEY_PREFIX = 'ASSEMBLY_METADATA_';
 var PAARSNP_KEY_PREFIX = 'PAARSNP_RESULT_';
+var MLST_KEY_PREFIX = 'MLST_RESULT_';
 var ASSEMBLY_KEY_PREFIXES = [
   'FP_COMP_',
   METADATA_KEY_PREFIX,
   PAARSNP_KEY_PREFIX,
-  'MLST_RESULT_'
+  MLST_KEY_PREFIX
 ];
 var ASSEMBLY_ANALYSES = {
   FP: 'FP_COMP',
@@ -31,9 +32,17 @@ function beginUpload(ids, metadata, sequences) {
     var assemblyMetadata = {
       assemblyId: ids.assemblyId,
       assemblyFilename: metadata.assemblyFilename,
+      speciesId: ids.speciesId,
       date: metadata.date,
       geography: metadata.geography,
       source: metadata.source
+    };
+
+    var assembly = {
+      speciesId: ids.speciesId,
+      assemblyId: ids.assemblyId,
+      collectionId: ids.collectionId,
+      sequences: sequences
     };
 
     mainStorage.store(
@@ -43,13 +52,6 @@ function beginUpload(ids, metadata, sequences) {
         socketService.notifyAssemblyUpload(ids, 'METADATA_OK');
       }
     );
-
-    var assembly = {
-      speciesId: ids.speciesId,
-      assemblyId: ids.assemblyId,
-      collectionId: ids.collectionId,
-      sequences: sequences
-    };
 
     messageQueueService.newAssemblyUploadQueue(ids.assemblyId,
       function (uploadQueue) {
@@ -64,35 +66,34 @@ function removeTrailingUnderscore(key) {
   return key.slice(0, -1);
 }
 
-function mergeAssemblyData(data, assemblyId) {
-  var assembly = {};
-  ASSEMBLY_KEY_PREFIXES.forEach(function (key) {
+function mergeQueryResults(data, queryKeyPrefixes, assemblyId) {
+  return queryKeyPrefixes.reduce(function (assembly, key) {
     var partName = removeTrailingUnderscore(key);
     assembly[partName] = data[key + assemblyId];
-  });
-  assembly.assemblyId = assemblyId;
-  return assembly;
+    return assembly;
+  }, { assemblyId: assemblyId });
 }
 
-function constructAssemblyQueryKeys(assemblyId) {
-  return ASSEMBLY_KEY_PREFIXES.map(function (key) {
+function constructQueryKeys(prefixes, assemblyId) {
+  return prefixes.map(function (key) {
     return key + assemblyId;
   });
 }
 
-function getComplete(assemblyId, callback) {
-  LOGGER.info('Getting assembly ' + assemblyId);
-
-  var assemblyQueryKeys = constructAssemblyQueryKeys(assemblyId);
+function get(assemblyId, queryKeyPrefixes, callback) {
+  var queryKeys = constructQueryKeys(queryKeyPrefixes, assemblyId);
   LOGGER.info('Assembly ' + assemblyId + ' query keys:');
-  LOGGER.info(assemblyQueryKeys);
+  LOGGER.info(queryKeys);
 
-  mainStorage.retrieveMany(assemblyQueryKeys, function (error, assemblyData) {
+  mainStorage.retrieveMany(queryKeys, function (error, assemblyData) {
+    var assembly;
+
     if (error) {
       return callback(error, null);
     }
+
     LOGGER.info('Got assembly ' + assemblyId + ' data');
-    var assembly = mergeAssemblyData(assemblyData, assemblyId);
+    assembly = mergeQueryResults(assemblyData, queryKeyPrefixes, assemblyId);
     sequenceTypeModel.addSequenceTypeData(assembly, function (stError, result) {
       if (stError) {
         return callback(stError, null);
@@ -100,6 +101,18 @@ function getComplete(assemblyId, callback) {
       callback(null, result);
     });
   });
+}
+
+function getComplete(assemblyId, callback) {
+  LOGGER.info('Getting assembly ' + assemblyId);
+  get(assemblyId, ASSEMBLY_KEY_PREFIXES, callback);
+}
+
+function getReference(speciesId, assemblyId, callback) {
+  LOGGER.info('Getting reference assembly ' + assemblyId);
+  get(assemblyId, [
+    METADATA_KEY_PREFIX, PAARSNP_KEY_PREFIX, MLST_KEY_PREFIX
+  ], callback);
 }
 
 function mapTaxaToAssembly(assemblies) {
@@ -114,34 +127,7 @@ function mapTaxaToAssembly(assemblies) {
   }, {});
 }
 
-function getReference(speciesId, assemblyId, callback) {
-  var metadataKey = 'ASSEMBLY_METADATA_' + assemblyId;
-  var mlstKey = 'MLST_RESULT_' + speciesId + '_' + assemblyId;
-  var paarsnpKey = 'PAARSNP_RESULT_' + speciesId + '_' + assemblyId;
-  var assemblyQueryKeys = [ mlstKey, paarsnpKey, metadataKey ];
-  LOGGER.info('Assembly ' + assemblyId + ' query keys:');
-  LOGGER.info(assemblyQueryKeys);
-
-  mainStorage.retrieveMany(assemblyQueryKeys, function (error, assemblyData) {
-    if (error) {
-      return callback(error, null);
-    }
-    LOGGER.info('Got assembly ' + assemblyId + ' data');
-    var assembly = {
-      ASSEMBLY_METADATA: assemblyData[metadataKey],
-      MLST_RESULT: assemblyData[mlstKey],
-      PAARSNP_RESULT: assemblyData[paarsnpKey]
-    };
-    sequenceTypeModel.addSequenceTypeData(assembly, function (stError, result) {
-      if (stError) {
-        return callback(stError, null);
-      }
-      callback(null, result);
-    });
-  });
-}
-
-module.exports.getComplete = getComplete;
 module.exports.beginUpload = beginUpload;
-module.exports.mapTaxaToAssembly = mapTaxaToAssembly;
+module.exports.getComplete = getComplete;
 module.exports.getReference = getReference;
+module.exports.mapTaxaToAssembly = mapTaxaToAssembly;
