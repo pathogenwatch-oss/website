@@ -1,11 +1,11 @@
-var AppDispatcher = require('../dispatcher/AppDispatcher');
-var EventEmitter = require('events').EventEmitter;
-var assign = require('object-assign');
+import AppDispatcher from '../dispatcher/AppDispatcher';
+import { EventEmitter } from 'events';
+import assign from 'object-assign';
 
-var CHANGE_EVENT = 'change';
+const CHANGE_EVENT = 'change';
 
-var rawFiles = {};
-var assemblies = {};
+const rawFiles = {};
+const assemblies = {};
 
 function addFiles(newRawFiles, newAssemblies) {
   assign(rawFiles, newRawFiles);
@@ -32,7 +32,8 @@ function emitChange() {
   Store.emit(CHANGE_EVENT);
 }
 
-var Store = assign({}, EventEmitter.prototype, {
+const Store = assign({}, EventEmitter.prototype, {
+
   addChangeListener: function (callback) {
     this.on(CHANGE_EVENT, callback);
   },
@@ -55,39 +56,40 @@ var Store = assign({}, EventEmitter.prototype, {
 
   getFirstFileAssemblyId: function () {
     return this.getFileAssemblyIds()[0] || null;
-  }
+  },
+
 });
 
 function handleAction(action) {
-
   switch (action.type) {
 
-    case 'add_files':
-      addFiles(action.rawFiles, action.assemblies);
-      emitChange();
-      break;
+  case 'add_files':
+    addFiles(action.rawFiles, action.assemblies);
+    emitChange();
+    break;
 
-    case 'set_metadata_year':
-      setMetadataYear(action.fileAssemblyId, action.year);
-      emitChange();
-      break;
+  case 'set_metadata_year':
+    setMetadataYear(action.fileAssemblyId, action.year);
+    emitChange();
+    break;
 
-    case 'set_metadata_month':
-      setMetadataMonth(action.fileAssemblyId, action.month);
-      emitChange();
-      break;
+  case 'set_metadata_month':
+    setMetadataMonth(action.fileAssemblyId, action.month);
+    emitChange();
+    break;
 
-    case 'set_metadata_day':
-      setMetadataDay(action.fileAssemblyId, action.day);
-      emitChange();
-      break;
+  case 'set_metadata_day':
+    setMetadataDay(action.fileAssemblyId, action.day);
+    emitChange();
+    break;
 
-    case 'set_metadata_source':
-      setMetadataSource(action.fileAssemblyId, action.source);
-      emitChange();
-      break;
+  case 'set_metadata_source':
+    setMetadataSource(action.fileAssemblyId, action.source);
+    emitChange();
+    break;
 
-    default: // ... do nothing
+  default:
+    // ... do nothing
   }
 }
 

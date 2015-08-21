@@ -52,8 +52,8 @@ function handleAction(action) {
 
     case 'set_collection':
       setPublicCollection({
-        collectionId: action.referenceCollection.collection.collectioId,
-        assemblies: action.referenceCollection.collection.assemblies
+        collectionId: action.referenceCollection.collectioId,
+        assemblies: action.referenceCollection.assemblies
       });
       emitChange();
       break;

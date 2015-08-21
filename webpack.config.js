@@ -50,7 +50,8 @@ var prodConfig = {
         loaders: [ 'babel' ],
         include: path.join(__dirname, 'src')
       },
-      { test: /.json$/, loaders: [ 'json' ] }
+      { test: /.json$/, loaders: [ 'json' ] },
+      { test: /.css$/, loaders: [ 'style', 'css' ] }
     ]
   }
 };

@@ -55,8 +55,8 @@ function handleAction(action) {
     Store.emitChange();
     break;
   case 'set_collection':
-    setSpeciesTree(action.referenceCollection.collection.tree);
-    setSubspeciesMap(action.collection.collection.assemblyIdMap);
+    setSpeciesTree(action.referenceCollection.tree);
+    setSubspeciesMap(action.collection.assemblyIdMap);
     Store.emitChange();
     break;
   default:

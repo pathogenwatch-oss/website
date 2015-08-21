@@ -66,10 +66,10 @@ function handleAction(action) {
 
     case 'set_collection':
       setUploadedCollection({
-        collectionId: action.collection.collection.collectionId,
-        assemblies: action.collection.collection.assemblies
+        collectionId: action.collection.collectionId,
+        assemblies: action.collection.assemblies
       });
-      setUploadedCollectionTree(action.collection.collection.tree);
+      setUploadedCollectionTree(action.collection.tree);
       emitChange();
       break;
 

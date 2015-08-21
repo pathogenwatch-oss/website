@@ -18,10 +18,11 @@ function getCollectionId(collectionData, callback) {
   });
 }
 
-function postAssembly(assemblyData, callback) {
+function postAssembly(urlParams, assemblyData, callback) {
+  const { collectionId, assemblyId } = urlParams;
   $.ajax({
     type: 'POST',
-    url: `${API_PATH}/assembly`,
+    url: `${API_PATH}/collection/${collectionId}/assembly/${assemblyId}`,
     contentType: 'application/json; charset=UTF-8',
     data: JSON.stringify(assemblyData, null, 4),
     dataType: 'json',
@@ -64,7 +65,7 @@ function getCollection(collectionId, callback) {
 
   $.get(options.url)
     .done(function (response) {
-      console.log(`[Macroreact] Received collection ${response.collection.collectionId}:`);
+      console.log(`[Macroreact] Received collection ${response.collectionId}:`);
       console.dir(response);
 
       callback(null, response);

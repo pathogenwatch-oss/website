@@ -10,6 +10,10 @@ let collectionId = null;
 let speciesSubtrees = null;
 let activeSpeciesSubtreeId = null;
 
+function setCollectionId(id) {
+  collectionId = id;
+}
+
 function setSpeciesSubtrees(subtrees) {
   speciesSubtrees = subtrees;
 }
@@ -80,11 +84,14 @@ function handleAction(action) {
     break;
 
   case 'set_collection':
-    const subtrees = action.collection.collection.subtrees;
-    collectionId = action.collection.collection.collectionId;
-    subtrees[collectionId] = action.collection.collection.tree;
+    setCollectionId(action.collection.collectionId);
+
+    const subtrees = action.collection.subtrees;
+    subtrees[collectionId] = action.collection.tree;
     setSpeciesSubtrees(subtrees);
-    setActiveSpeciesSubtreeId(action.collection.collection.collectionId);
+
+    setActiveSpeciesSubtreeId(collectionId);
+
     emitChange();
     break;
 
