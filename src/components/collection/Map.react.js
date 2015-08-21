@@ -75,7 +75,7 @@ var Map = React.createClass({
     });
 
     this.map.fitBounds(bounds);
-    this.map.setZoom(3);
+    // this.map.setZoom(3);
   },
 
   clearMarkers: function () {

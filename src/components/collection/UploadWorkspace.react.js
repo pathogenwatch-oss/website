@@ -44,9 +44,9 @@ var UploadWorkspace = React.createClass({
     var assembly = UploadStore.getAssembly(fileAssemblyId);
     var totalAssemblies = UploadStore.getAssembliesCount();
 
-    if (! assembly) {
-      return null;
-    }
+    // if (! assembly) {
+    //   return null;
+    // }
 
     return (
       <AssemblyWorkspace assembly={assembly} totalAssemblies={totalAssemblies}/>

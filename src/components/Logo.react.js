@@ -9,7 +9,7 @@ var Logo = React.createClass({
   render: function () {
     return (
       <div style={logoStyle}>
-        <img src="../../../assets/img/cGPS.logo.png" width="60px"/>
+        <img src="../../assets/img/WGSA_logo.png" width="30px"/>
       </div>
     );
   }

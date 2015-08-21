@@ -100,6 +100,7 @@ var DragAndDropFiles = React.createClass({
     this.setState({
       isProcessing: FileProcessingStore.getFileProcessingState()
     });
+    console.log(this.state)
   },
 
   hasDroppedFiles: function (event) {

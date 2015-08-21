@@ -13,8 +13,8 @@ class Application extends React.Component {
 
 const routes = (
   <Route name="application" path="/" handler={Application}>
-    <Redirect from="/" to="/collection" />
-    <Route name="collection" path="/collection/?" handler={UploadCollectionPage} />
+    <Redirect from="/" to="/upload" />
+    <Route name="upload" path="/upload/?" handler={UploadCollectionPage} />
     <Route name="collectionExplorer" path="/collection/:id/?" handler={Collection} />
     <NotFoundRoute handler={NotFound}/>
   </Route>

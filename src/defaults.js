@@ -17,8 +17,9 @@ module.exports = {
   },
   CGPS: {
     COLOURS: {
-      GREEN_LIGHT: '#d0e9dc',
-      GREEN_MID: '#87c7a6',
+      GREEN_LIGHT: '#9bc7c7',
+      GREEN_MID: '#556d6d',
+      GREEN_DARK: '#3f6565',
       PURPLE_LIGHT: '#a386bd',
       PURPLE: '#673c90',
       GREY: '#e5e5e5'

@@ -22,12 +22,12 @@ const AssemblyOverviewButton = React.createClass({
   }
 });
 
-
 const Component = React.createClass({
 
   componentDidMount: function() {
     const container = this.getDOMNode('uploadWorkspaceNavigationContainer');
-    container.style.height = window.innerHeight;
+    const newHeight = window.innerHeight - container.offsetTop;
+    container.setAttribute('height', newHeight);
   },
 
   render: function () {
@@ -38,7 +38,10 @@ const Component = React.createClass({
             <div className="uploadWorkspaceNavigationTitle mdl-badge" data-badge={this.props.totalAssemblies}>
               <span>Assemblies</span>
             </div>
-            <AssemblyOverviewButton />
+            {
+              this.props.assembliesUploaded &&
+                <AssemblyOverviewButton />
+            }
             <div className="btn-group" role="group" aria-label="...">
 
             </div>

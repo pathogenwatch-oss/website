@@ -18,7 +18,6 @@ var UploadReviewHeader = React.createClass({
     return (
       <header style={headerStyle} className="mdl-layout__header">
         <div style={headerStyle} className="mdl-layout__header-row">
-          <Logo/>
           <span style={headerStyle} className="mdl-layout-title">{this.props.title}</span>
           <UploadButton />
         </div>

@@ -70,15 +70,20 @@ const UploadCollectionPage = React.createClass({
       );
     }
 
-    if (this.state.hasFiles) {
-      return (
-        <UploadWorkspace />
-      );
-    }
-
     return (
-      <DragAndDropFiles />
+      <UploadWorkspace />
     );
+
+
+    // if (this.state.hasFiles) {
+    //   return (
+    //     <UploadWorkspace />
+    //   );
+    // }
+
+    // return (
+    //   <DragAndDropFiles />
+    // );
   },
 
 });
