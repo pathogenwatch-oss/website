@@ -73,6 +73,27 @@ function mergeQueryResults(data, queryKeyPrefixes, assemblyId) {
   }, { assemblyId: assemblyId });
 }
 
+function formatForFrontend(assembly) {
+  return {
+    metadata: assembly.ASSEMBLY_METADATA,
+    analysis: {
+      st: assembly.MLST_RESULT.stType,
+      resistanceProfile:
+        Object.keys(assembly.PAARSNP_RESULT.resistanceProfile).
+          reduce(function (profile, className) {
+            var antibioticClass = assembly.PAARSNP_RESULT.resistanceProfile[className];
+            Object.keys(antibioticClass).forEach(function (antibiotic) {
+              profile[antibiotic] = {
+                antibioticClass: className,
+                resistanceResult: antibioticClass[antibiotic]
+              };
+            });
+            return profile;
+          }, {})
+    }
+  };
+}
+
 function get(assemblyId, queryKeyPrefixes, callback) {
   var queryKeys = constructQueryKeys(queryKeyPrefixes, assemblyId);
   LOGGER.info('Assembly ' + assemblyId + ' query keys:');
@@ -91,7 +112,7 @@ function get(assemblyId, queryKeyPrefixes, callback) {
       if (stError) {
         return callback(stError, null);
       }
-      callback(null, result);
+      callback(null, formatForFrontend(result));
     });
   });
 }
@@ -115,7 +136,7 @@ function getReference(speciesId, assemblyId, callback) {
   ], callback);
 }
 
-function mapTaxaToAssembly(assemblies) {
+function mapTaxaToAssemblies(assemblies) {
   return Object.keys(assemblies).reduce(function (map, assemblyId) {
     var taxon = assemblies[assemblyId].FP_COMP.subTypeAssignment;
     if (taxon in map) {
@@ -130,4 +151,4 @@ function mapTaxaToAssembly(assemblies) {
 module.exports.beginUpload = beginUpload;
 module.exports.getComplete = getComplete;
 module.exports.getReference = getReference;
-module.exports.mapTaxaToAssembly = mapTaxaToAssembly;
+module.exports.mapTaxaToAssemblies = mapTaxaToAssemblies;

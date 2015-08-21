@@ -1,7 +1,7 @@
 var async = require('async');
 
 var assemblyModel = require('models/assembly');
-var antibioticModel = require('models/antibiotic');
+
 var mainStorage = require('services/storage')('main');
 var messageQueueService = require('services/messageQueue');
 var socketService = require('services/socket');
@@ -125,7 +125,7 @@ function add(ids, callback) {
   });
 }
 
-function getAssemblies(collectionId, callback) {
+function getAssemblies(collectionId, assemblyGetFn, callback) {
   async.waterfall([
     function (done) {
       mainStorage.retrieve('COLLECTION_LIST_' + collectionId, done);
@@ -135,7 +135,7 @@ function getAssemblies(collectionId, callback) {
       LOGGER.info('Got list of assemblies for collection ' + collectionId);
       async.reduce(assemblyIds, {}, function (memo, assemblyIdWrapper, next) {
         var assemblyId = assemblyIdWrapper.assemblyId;
-        assemblyModel.getComplete(assemblyId, function (error, assembly) {
+        assemblyGetFn(assemblyId, function (error, assembly) {
           if (error) {
             return next(error);
           }
@@ -180,40 +180,14 @@ function getSubtrees(taxonToSubtreeMap, collectionId, callback) {
     }, callback);
 }
 
-function formatForFrontend(assemblies) {
-  return Object.keys(assemblies).reduce(function (memo, assemblyId) {
-    var assemblyData = assemblies[assemblyId];
-    memo[assemblyId] = {
-      metadata: assemblyData.ASSEMBLY_METADATA,
-      analysis: {
-        st: assemblyData.MLST_RESULT.stType,
-        resistanceProfile:
-          Object.keys(assemblyData.PAARSNP_RESULT.resistanceProfile).
-            reduce(function (profile, className) {
-              var antibioticClass = assemblyData.PAARSNP_RESULT.resistanceProfile[className];
-              Object.keys(antibioticClass).forEach(function (antibiotic) {
-                profile[antibiotic] = {
-                  antibioticClass: className,
-                  resistanceResult: antibioticClass[antibiotic]
-                };
-              });
-              return profile;
-            }, {})
-      }
-    };
-    return memo;
-  }, {});
-}
-
 function get(collectionId, callback) {
   LOGGER.info('Getting list of assemblies for collection ' + collectionId);
 
   async.waterfall([
     function (done) {
       async.parallel({
-        assemblies: getAssemblies.bind(null, collectionId),
-        tree: getTree.bind(null, collectionId),
-        antibiotics: antibioticModel.getAll
+        assemblies: getAssemblies.bind(null, collectionId, assemblyModel.getComplete),
+        tree: getTree.bind(null, collectionId)
       }, done);
     },
     function (result, done) {
@@ -236,59 +210,26 @@ function get(collectionId, callback) {
   });
 }
 
-function getReferenceAssemblies(speciesId, callback) {
-  var assemblies = {};
-  mainStorage.retrieve('COLLECTION_LIST_' + speciesId,
-    function (error, result) {
+function getReference(speciesId, callback) {
+  LOGGER.info('Getting list of assemblies for species ' + speciesId);
+
+  getAssemblies(speciesId, assemblyModel.getReferenceAssemblies,
+    function (error, assemblies) {
       if (error) {
         return callback(error, null);
       }
-      var assemblyIds = result.assemblyIdentifiers;
-      LOGGER.info('Got list of assemblies for species ' + speciesId);
-      async.eachSeries(assemblyIds,
-        function (assemblyId, finishIteration) {
-          assemblyModel.getReference(speciesId, assemblyId, function (error, assembly) {
-            if (error) {
-              return finishIteration(error);
-            }
-            LOGGER.info('Got assembly ' + assemblyId);
-            assemblies[assemblyId] = assembly;
 
-            var numRemaining =
-              assemblyIds.length - Object.keys(assemblies).length;
-            LOGGER.info(numRemaining + ' assemblies left');
-            finishIteration();
-          });
-        },
-        function (error) {
-          if (error) {
-            return callback(error, null);
-          }
-          callback(null, assemblies);
+      callback(null, {
+        collection: {
+          collectionId: speciesId,
+          assemblies: formatForFrontend(assemblies),
+          tree: SPECIES_TREES[speciesId]
         }
-      );
+      });
     }
   );
 }
 
-function getReferenceCollection(speciesId, callback) {
-  LOGGER.info('Getting list of assemblies for species ' + speciesId);
-
-  getReferenceAssemblies(speciesId, function (error, assemblies) {
-    if (error) {
-      return callback(error, null);
-    }
-
-    callback(null, {
-      collection: {
-        collectionId: speciesId,
-        assemblies: formatForFrontend(assemblies),
-        tree: SPECIES_TREES[speciesId]
-      }
-    });
-  });
-}
-
 module.exports.add = add;
 module.exports.get = get;
-module.exports.getReferenceCollection = getReferenceCollection;
+module.exports.getReference = getReference;
