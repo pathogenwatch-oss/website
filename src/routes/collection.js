@@ -51,7 +51,7 @@ router.post('/collection/:collectionId/assembly/:assemblyId',
       collectionId: req.params.collectionId,
       assemblyId: req.params.assemblyId,
       socketRoomId: req.body.socketRoomId,
-      assemblyFilename: req.body.assemblyFilename
+      speciesId: req.body.speciesId
     };
 
     LOGGER.info(
@@ -65,11 +65,11 @@ router.post('/collection/:collectionId/assembly/:assemblyId',
     if (!ids.socketRoomId) {
       LOGGER.error('Missing socket room id');
     }
-    if (!ids.assemblyFilename) {
-      LOGGER.error('Missing assembly filename');
-    }
     if (!ids.assemblyId) {
       LOGGER.error('Missing assembly id');
+    }
+    if (!ids.speciesId) {
+      LOGGER.error('Missing species id');
     }
 
     res.json({

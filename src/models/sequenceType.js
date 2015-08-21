@@ -98,7 +98,7 @@ function addSequenceTypeData(assembly, callback) {
     function (sequenceType, next) {
       LOGGER.info('Got assembly ST data');
       assembly.MLST_RESULT.stType = sequenceType;
-      next(assembly);
+      next(null, assembly);
     }
   ], callback);
 }

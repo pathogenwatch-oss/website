@@ -5,34 +5,22 @@
 		},
 		"couchbase": {
 			"ip": "127.0.0.1",
-			"port": "8091",
 			"buckets": {
 				"main": {
 					"name": "wgsa",
 					"password": "4wgstuse"
 				},
-				"resources": {
-					"name": "wgsa_resources",
-					"password": "4wgstuse"
-				},
-				"feedback": {
-					"name": "feedback",
+				"sequences": {
+					"name": "wgsa_sequences",
 					"password": "4wgstuse"
 				}
 			}
 		},
 		"rabbit": {
-			"on": true,
-			"ip": "129.31.26.152",
+			"ip": "127.0.0.1",
 			"port": "5672",
 			"login": "wgsa",
 			"password": "wgsa"
 		}
-	},
-	"client": {
-		"allowUpload": true,
-		"socketAddress": "127.0.0.1",
-		"referenceCollectionId": "b8d3aab1-625f-49aa-9857-a5e97f5d6be5",
-		"version": "0.1.5"
 	}
 }

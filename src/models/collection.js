@@ -134,7 +134,7 @@ function getAssemblies(collectionId, assemblyGetFn, callback) {
       var assemblyIds = result.assemblyIdentifiers;
       LOGGER.info('Got list of assemblies for collection ' + collectionId);
       async.reduce(assemblyIds, {}, function (memo, assemblyIdWrapper, next) {
-        var assemblyId = assemblyIdWrapper.assemblyId;
+        var assemblyId = assemblyIdWrapper.assemblyId || assemblyIdWrapper; // List format not yet defined
         assemblyGetFn(assemblyId, function (error, assembly) {
           if (error) {
             return next(error);
@@ -191,7 +191,7 @@ function get(collectionId, callback) {
       }, done);
     },
     function (result, done) {
-      var subtreeMap = assemblyModel.mapTaxaToAssembly(result.assemblies);
+      var subtreeMap = assemblyModel.mapTaxaToAssemblies(result.assemblies);
       getSubtrees(subtreeMap, collectionId, function (error) {
         result.subtrees = subtreeMap;
         done(error, result);
@@ -203,7 +203,7 @@ function get(collectionId, callback) {
     }
     callback(null, {
       collectionId: collectionId,
-      assemblies: formatForFrontend(result.assemblies),
+      assemblies: result.assemblies,
       tree: result.tree,
       subtrees: result.subtrees
     });
@@ -213,7 +213,7 @@ function get(collectionId, callback) {
 function getReference(speciesId, callback) {
   LOGGER.info('Getting list of assemblies for species ' + speciesId);
 
-  getAssemblies(speciesId, assemblyModel.getReferenceAssemblies,
+  getAssemblies(speciesId, assemblyModel.getReference.bind(null, speciesId),
     function (error, assemblies) {
       if (error) {
         return callback(error, null);
@@ -222,7 +222,7 @@ function getReference(speciesId, callback) {
       callback(null, {
         collection: {
           collectionId: speciesId,
-          assemblies: formatForFrontend(assemblies),
+          assemblies: assemblies,
           tree: SPECIES_TREES[speciesId]
         }
       });

@@ -75,30 +75,26 @@ function createExchange(exchangeKey, callback) {
 }
 
 function connect(callback) {
-  if (appConfig.server.rabbit.on) {
-    LOGGER.debug(CONNECTION_OPTIONS);
-    connection =
-      amqp.createConnection(CONNECTION_OPTIONS, IMPLEMENTATION_OPTIONS);
+  LOGGER.debug(CONNECTION_OPTIONS);
+  connection =
+    amqp.createConnection(CONNECTION_OPTIONS, IMPLEMENTATION_OPTIONS);
 
-    connection.on('error', function (error) {
-      LOGGER.error(error);
-      callback(error);
-    });
+  connection.on('error', function (error) {
+    LOGGER.error(error);
+    callback(error);
+  });
 
-    connection.on('ready', function () {
-      LOGGER.info('✔ Connection is ready');
+  connection.on('ready', function () {
+    LOGGER.info('✔ Connection is ready');
 
-      async.each(
-        Object.keys(EXCHANGE_CONFIG),
-        function (exchangeKey, finishIteration) {
-          createExchange(exchangeKey, finishIteration);
-        },
-        callback
-      );
-    });
-  } else {
-    callback();
-  }
+    async.each(
+      Object.keys(EXCHANGE_CONFIG),
+      function (exchangeKey, finishIteration) {
+        createExchange(exchangeKey, finishIteration);
+      },
+      callback
+    );
+  });
 }
 
 function getConnection() {

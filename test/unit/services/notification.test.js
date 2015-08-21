@@ -13,7 +13,7 @@ describe.only('Service: Notification', function () {
     };
   }
 
-  it('should count down the provided tasks', function () {
+  it('should count down the expected results', function () {
     var notificationService = require('services/notification');
     var queue = createSynchronousQueue();
 

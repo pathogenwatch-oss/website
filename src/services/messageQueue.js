@@ -34,10 +34,13 @@ function parseMessagesAsJson(queue) {
   };
 }
 
-// bind this function to a queue to give access to "name"
-function logMessages(message) {
-  LOGGER.info('Received message from ' + this.name + ':');
-  LOGGER.info(message);
+// bind this function to a queue
+function destroyOnResponse(error) {
+  if (error) {
+    return LOGGER.error(error);
+  }
+  LOGGER.info('Received response from ' + this.name + ', destroying.');
+  this.destroy();
 }
 
 function generateQueueId(prefix) {
@@ -45,6 +48,7 @@ function generateQueueId(prefix) {
 }
 
 function newCollectionNotificationQueue(ids, notifyOptions, callback) {
+  LOGGER.debug(ids);
   connection.queue(
     'NOTIFICATION_' + ids.collectionId,
     { exclusive: true },
@@ -95,7 +99,7 @@ function newAssemblyUploadQueue(assemblyId, callback) {
     function (queue) {
       LOGGER.info('Upload queue "' + queue.name + '" is open');
       parseMessagesAsJson(queue);
-      queue.subscribe(logMessages.bind(queue));
+      queue.subscribe(destroyOnResponse.bind(queue));
       callback(queue);
     }
   );

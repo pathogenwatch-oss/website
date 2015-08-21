@@ -75,6 +75,7 @@ function mergeQueryResults(data, queryKeyPrefixes, assemblyId) {
 
 function formatForFrontend(assembly) {
   return {
+    populationSubtype: assembly.FP_COMP.subTypeAssignment,
     metadata: assembly.ASSEMBLY_METADATA,
     analysis: {
       st: assembly.MLST_RESULT.stType,
@@ -138,7 +139,7 @@ function getReference(speciesId, assemblyId, callback) {
 
 function mapTaxaToAssemblies(assemblies) {
   return Object.keys(assemblies).reduce(function (map, assemblyId) {
-    var taxon = assemblies[assemblyId].FP_COMP.subTypeAssignment;
+    var taxon = assemblies[assemblyId].populationSubtype;
     if (taxon in map) {
       map[taxon].assemblyIds.push(assemblyId);
     } else {
