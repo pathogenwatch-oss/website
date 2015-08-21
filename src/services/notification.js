@@ -1,4 +1,4 @@
-var LOGGER = require('utils/logging').createLogger('Message Queue');
+var LOGGER = require('utils/logging').createLogger('Notification');
 
 function notifyResults(queue, options) {
   var tasks = options.tasks;
@@ -9,20 +9,23 @@ function notifyResults(queue, options) {
 
   queue.subscribe(function (error, message) {
     var taskType;
+    var taskIndex;
 
     if (error) {
       return LOGGER.error(error);
     }
 
     taskType = message.taskType;
-    if (expectedResults.indexOf(taskType) === -1) {
+    taskIndex = expectedResults.indexOf(taskType);
+
+    if (taskIndex === -1) {
       return LOGGER.warn('Skipping task: ' + taskType);
     }
 
     LOGGER.info('Received notification for ' + loggingId + ': ' + taskType);
 
     notifyFn(taskType);
-    expectedResults.splice(message.taskType, 1);
+    expectedResults.splice(taskIndex, 1);
 
     LOGGER.info('Remaining tasks for ' + loggingId + ': ' + expectedResults);
 

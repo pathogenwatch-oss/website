@@ -60,7 +60,7 @@ describe('Model: Assembly', function () {
     reset();
   });
 
-  it.only('should map assembly IDs to taxa', function () {
+  it('should map assembly IDs to taxa', function () {
     var assemblyModel = require('models/assembly');
     var assemblies = {
       assembly1: { FP_COMP: { subTypeAssignment: 'taxon1' } },
