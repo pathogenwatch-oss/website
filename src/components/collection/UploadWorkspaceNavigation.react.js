@@ -1,51 +1,51 @@
-var React = require('react');
-var assign = require('object-assign');
+import React from 'react';
+import assign from 'object-assign';
 
-var AssemblyList = require('./navigation/AssemblyList.react');
-var PreviousAssemblyButton = require('./navigation/PreviousAssemblyButton.react');
-var NextAssemblyButton = require('./navigation/NextAssemblyButton.react');
+import AssemblyList from './navigation/AssemblyList.react';
+import PreviousAssemblyButton from './navigation/PreviousAssemblyButton.react';
+import NextAssemblyButton from './navigation/NextAssemblyButton.react';
+import UploadStore from '../../stores/UploadStore';
+import UploadOverview from './UploadOverview.react.js';
 import '../../css/UploadReview.css';
 
-var containerStyle = {
-  borderBottom: '1px solid #cecece',
-  background: '#fff',
-  margin: '0px',
-  height: '1000px'
-};
+const AssemblyOverviewButton = React.createClass({
+  handleClick: function () {
+    const allAssemblyN50s = UploadStore.getAllAssemblyN50Data();
+  },
 
-var listStyle = {
-  // marginRight: '10px'
-};
-
-var title = {
-  fontSize: '25px',
-  fontWeight: '300',
-  lineHeight: '30px',
-  margin: '20px 0px 10px 0px',
-  textAlign: 'center'
-}
-
-var Component = React.createClass({
   render: function () {
     return (
-      <div style={containerStyle}>
-        <div className="mdl-grid mdl-grid--no-spacing">
-          <div className="mdl-cell mdl-cell--12-col">
-            <form className="assemblyNavTitle form-inline">
-              <div className="form-group">
-                <div style={title} className="mdl-badge" data-badge={this.props.totalAssemblies}>
-                  <span>Assemblies</span>
-                </div>
-                <div className="btn-group" role="group" aria-label="...">
-                </div>
-              </div>
-            </form>
+      <button type="button" className="mdl-button mdl-js-button" onClick={this.handleClick}>
+        Overview
+      </button>
+    );
+  }
+});
 
-            <div className="form-group" style={listStyle}>
-              <AssemblyList />
+
+const Component = React.createClass({
+
+  componentDidMount: function() {
+    const container = this.getDOMNode('uploadWorkspaceNavigationContainer');
+    container.style.height = window.innerHeight;
+  },
+
+  render: function () {
+    return (
+      <div className='uploadWorkspaceNavigationContainer'>
+        <form className="assemblyNavTitle form-inline">
+          <div className="form-group">
+            <div className="uploadWorkspaceNavigationTitle mdl-badge" data-badge={this.props.totalAssemblies}>
+              <span>Assemblies</span>
             </div>
+            <AssemblyOverviewButton />
+            <div className="btn-group" role="group" aria-label="...">
 
+            </div>
           </div>
+        </form>
+        <div className="form-group">
+          <AssemblyList />
         </div>
       </div>
     );

@@ -22,31 +22,23 @@ const numberStyle = {
   fontSize: '24px'
 };
 
-const AssemblyAnalysisChart = React.createClass({
+const AssemblyAnalysisOverviewChart = React.createClass({
 
   propTypes: {
     label: React.PropTypes.string,
     analysis: React.PropTypes.object.isRequired
   },
 
-  getChartDataWithN50Data: function(N50Data) {
-    const chartData = [];
-    for (const id in N50Data) {
-      chartData.push(N50Data[id].sum);
-    }
-    return chartData;
-  },
 
   draw: function() {
-    var divElement = document.getElementsByClassName('fasta-analytics-chart')[0];
+    var divElement = document.getElementsByClassName('n50-overview-chart')[0];
     var svgElement = divElement.childNodes[0];
     if (svgElement) {
       svgElement.parentNode.removeChild(svgElement);
     }
 
-    const fastaChartData = this.props.analysis.sumsOfNucleotidesInDnaStrings;
-    const assemblyN50 = this.props.analysis.assemblyN50Data;
-    AnalysisUtils.drawN50Chart(fastaChartData, assemblyN50, '.fasta-analytics-chart');
+    const n50Data =  UploadStore.getAllContigN50Data();
+    AnalysisUtils.drawN50OverviewChart(n50Data, '.n50-overview-chart');
   },
 
   componentDidUpdate: function() {
@@ -61,10 +53,10 @@ const AssemblyAnalysisChart = React.createClass({
     return (
       <div style={containerStyle}>
         <label className='analysisItemLabel'>{this.props.label}</label>
-        <div className="fasta-analytics-chart"></div>
+        <div className="n50-overview-chart"></div>
       </div>
     );
   }
 });
 
-module.exports = AssemblyAnalysisChart;
+module.exports = AssemblyAnalysisOverviewChart;

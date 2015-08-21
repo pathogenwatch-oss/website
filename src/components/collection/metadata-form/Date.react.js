@@ -1,29 +1,28 @@
-var React = require('react');
-var YearInput = require('./YearInput.react');
-var MonthInput = require('./MonthInput.react');
-var DayInput = require('./DayInput.react');
-var Header = require('./Header.react');
-var mui = require('material-ui'),
-DatePicker = mui.DatePicker;
-var ThemeManager = require('material-ui/lib/styles/theme-manager')();
-var injectTapEventPlugin = require("react-tap-event-plugin");
+import React from 'react';
+import { DatePicker } from 'material-ui';
+import createThemeManager from 'material-ui/lib/styles/theme-manager';
+import injectTapEventPlugin from "react-tap-event-plugin";
+
+import YearInput from './YearInput.react';
+import MonthInput from './MonthInput.react';
+import DayInput from './DayInput.react';
+import Header from './Header.react';
+
+import MetadataActionCreators from '../../../actions/MetadataActionCreators';
+
+
+const ThemeManager = createThemeManager();
 injectTapEventPlugin();
 
-var metadataStyle = {
+const metadataStyle = {
   display: 'inline-block',
   marginRight: '5px'
 };
 
-var dateStyle = {
+const dateStyle = {
 };
 
-var MetadataDate = React.createClass({
-
-  metadataDate: null,
-
-  propTypes: {
-    assembly: React.PropTypes.object.isRequired
-  },
+const MetadataDate = React.createClass({
 
   childContextTypes: {
     muiTheme: React.PropTypes.object
@@ -35,21 +34,11 @@ var MetadataDate = React.createClass({
     };
   },
 
-  componentDidMount: function() {
-    this.componentDidUpdate();
-  },
-
-  componentDidUpdate: function() {
-    var metadataDate = this.props.assembly.metadata.date.month+'/'+this.props.assembly.metadata.date.day+'/'+this.props.assembly.metadata.date.year;
-    var dateObj = new Date(metadataDate);
-    // DatePicker.setDate(this.metadataDate);
+  handleDateChange: function(nil, date) {
+    MetadataActionCreators.setMetadataDate(this.props.assemblyId, date);
   },
 
   render: function () {
-    var metadataDate = this.props.assembly.metadata.date.month+'/'+this.props.assembly.metadata.date.day+'/'+this.props.assembly.metadata.date.year;
-    var dateObj = new Date(metadataDate);
-    // this.setState({ metadataDate: dateObj });
-
     return (
       <div>
         <Header text="Date" />
@@ -57,8 +46,11 @@ var MetadataDate = React.createClass({
           <DatePicker
             hintText="Date"
             autoOk={true}
+            maxDate={new Date()}
+            showYearSelector={true}
             style={dateStyle}
-            defaultDate={dateObj}
+            value={this.props.date}
+            onChange={this.handleDateChange}
             mode="landscape"/>
         </form>
       </div>

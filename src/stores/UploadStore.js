@@ -1,6 +1,7 @@
-var AppDispatcher = require('../dispatcher/AppDispatcher');
-var EventEmitter = require('events').EventEmitter;
-var assign = require('object-assign');
+import AppDispatcher from '../dispatcher/AppDispatcher';
+import { EventEmitter } from 'events';
+import assign from 'object-assign';
+import moment from 'moment';
 
 var CHANGE_EVENT = 'change';
 
@@ -24,12 +25,24 @@ function setMetadataDay(fileAssemblyId, day) {
   assemblies[fileAssemblyId].metadata.date.day = day;
 }
 
+function setMetadataDate(fileAssemblyId, date) {
+  var m = moment(date);
+  setMetadataYear(fileAssemblyId, m.year());
+  setMetadataMonth(fileAssemblyId, m.month() + 1);
+  setMetadataDay(fileAssemblyId, m.date());
+}
+
 function setMetadataSource(fileAssemblyId, source) {
   assemblies[fileAssemblyId].metadata.source = source;
 }
 
 function emitChange() {
   Store.emit(CHANGE_EVENT);
+}
+
+function deleteAssembly(fileAssemblyId) {
+  delete assemblies[fileAssemblyId];
+
 }
 
 var Store = assign({}, EventEmitter.prototype, {
@@ -59,7 +72,26 @@ var Store = assign({}, EventEmitter.prototype, {
 
   getFirstFileAssemblyId: function () {
     return this.getFileAssemblyIds()[0] || null;
+  },
+
+  getAllContigN50Data: function() {
+    const n50Data = {};
+    const assemblies = this.getAssemblies();
+    for (const id in assemblies) {
+      n50Data[id] = assemblies[id].analysis.contigN50;
+    }
+    return n50Data;
+  },
+
+  getAllMetadataLocations: function() {
+    const locations = {};
+    const assemblies = this.getAssemblies();
+    for (const id in assemblies) {
+      locations[id] = assemblies[id].metadata.geography.position;
+    }
+    return locations;
   }
+
 });
 
 function handleAction(action) {
@@ -86,8 +118,18 @@ function handleAction(action) {
       emitChange();
       break;
 
+    case 'set_metadata_date':
+      setMetadataDate(action.fileAssemblyId, action.date);
+      emitChange();
+      break;
+
     case 'set_metadata_source':
       setMetadataSource(action.fileAssemblyId, action.source);
+      emitChange();
+      break;
+
+    case 'delete_assembly':
+      deleteAssembly(action.fileAssemblyId);
       emitChange();
       break;
 

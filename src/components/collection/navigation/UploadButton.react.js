@@ -46,8 +46,8 @@ var UploadButton = React.createClass({
         style={uploadButtonStyle} className="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored"
         disabled={this.isButtonDisabled()}
         onClick={this.handleClick}>
-          <i className="material-icons">cloud_upload</i>
-        </button>
+        <i className="material-icons">cloud_upload</i>
+      </button>
     );
   }
 });

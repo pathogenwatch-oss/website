@@ -99,17 +99,17 @@ var Map = React.createClass({
     var longitude;
     var shape;
     var colour;
+    const locations = this.props.locations;
 
-    this.props.location.forEach((location) => {
-      if (! location) {
+    for (const id in locations) {
+      if (! locations[id]) {
         return;
       }
 
-      latitude = parseFloat(location.latitude);
-      longitude = parseFloat(location.longitude);
-
-      this.markers[location] = this.createMarker(location, latitude, longitude);
-    });
+      latitude = parseFloat(locations[id].latitude);
+      longitude = parseFloat(locations[id].longitude);
+      this.markers[id] = this.createMarker(locations[id], latitude, longitude);
+    };
 
     this.fitAllMarkers();
   },

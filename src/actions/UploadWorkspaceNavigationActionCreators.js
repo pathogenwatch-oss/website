@@ -60,4 +60,13 @@ module.exports = {
     AppDispatcher.dispatch(action);
   },
 
+  deleteAssembly: function(fileAssemblyId) {
+    var action = {
+      type: 'delete_assembly',
+      fileAssemblyId: fileAssemblyId
+    };
+
+    AppDispatcher.dispatch(action);
+  }
+
 };

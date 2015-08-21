@@ -1,26 +1,41 @@
-var React = require('react');
-var css = require('../../../css/UploadReview.css');
+import React from 'react';
+import css from '../../../css/UploadReview.css';
 
-var optionsStyle = {
-  'backgroundColor': '#fff',
-  'lineHeight': '1.5rem',
-  'padding': '10px 20px',
-  'margin': '0',
-  'borderBottom': '1px solid #e0e0e0',
-  'width': '100%',
-  cursor: 'pointer'
-}
+import { ListItem, FontIcon } from 'material-ui';
+import createThemeManager from 'material-ui/lib/styles/theme-manager';
+import UploadWorkspaceNavigationActionCreators from '../../../actions/UploadWorkspaceNavigationActionCreators';
 
-var Component = React.createClass({
+const ThemeManager = createThemeManager();
+
+const Component = React.createClass({
   propTypes: {
     fileAssemblyId: React.PropTypes.string.isRequired
   },
 
+  childContextTypes: {
+    muiTheme: React.PropTypes.object
+  },
+
+  getChildContext: function() {
+    return {
+      muiTheme: ThemeManager.getCurrentTheme()
+    };
+  },
+
+  handleSelectAssembly: function (event) {
+    console.log(event.target.value);
+    var selectedFileAssemblyId = event.target.value;
+    UploadWorkspaceNavigationActionCreators.navigateToAssembly(selectedFileAssemblyId);
+  },
+
   render: function () {
     return (
-      <option className='assemblyListOption' style={optionsStyle} value={this.props.fileAssemblyId}>{this.props.fileAssemblyId}</option>
+      <ListItem onClick={this.handleSelectAssembly} value={this.props.fileAssemblyId} primaryText={this.props.fileAssemblyId} rightIcon={<FontIcon className='material-icons' color='purple'>done</FontIcon>}></ListItem>
     );
   }
 });
 
 module.exports = Component;
+      // <option className='assemblyListOption' value={this.props.fileAssemblyId}>
+      //   {this.props.fileAssemblyId}
+      // </option>

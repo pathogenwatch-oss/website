@@ -50,6 +50,14 @@ module.exports = {
     AppDispatcher.dispatch(setMetadataDayAction);
   },
 
+  setMetadataDate: function setMetadataDate(fileAssemblyId, date) {
+    AppDispatcher.dispatch({
+      type: 'set_metadata_date',
+      fileAssemblyId: fileAssemblyId,
+      date: date
+    });
+  },
+
   setMetadataSource: function setMetadataDay(fileAssemblyId, source) {
     source = parseInt(source, 10);
 

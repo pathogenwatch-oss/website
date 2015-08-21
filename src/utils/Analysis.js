@@ -485,6 +485,208 @@ function drawN50Chart(chartData, assemblyN50, appendToClass) {
 
   // N50 path
   n50Group.append('path').attr('d', d50Line(d50LinesData));
+  // console.log(assemblyN50)
+}
+
+function drawN50OverviewChart(contigsN50Data, appendToClass) {
+
+  var d3 = require('d3');
+
+  var chartWidth = 460;
+  var chartHeight = 312;
+
+  var chartData = [];
+  for (const id in contigsN50Data) {
+    chartData.push(contigsN50Data[id]);
+  }
+
+  var chartXAxis = Object.keys(contigsN50Data);
+
+  // Scales
+  // console.log(chartData)
+  // X
+  var xScale = d3.scale.linear()
+  .domain([0, chartData.length])
+  .range([40, chartWidth - 50]); // the pixels to map, i.e. the width of the diagram
+
+  // Y
+  var yScale = d3.scale.linear()
+  .domain([Math.max(...chartData), 0])
+  .range([30, chartHeight - 52]);
+
+  // Axes
+
+  // X
+  var xAxis = d3.svg.axis()
+  .scale(xScale)
+  .orient('bottom')
+  .ticks(chartXAxis.length);
+
+  // Y
+  var yAxis = d3.svg.axis()
+  .scale(yScale)
+  .orient('left')
+  // http://stackoverflow.com/a/18822793
+  .ticks(10);
+
+  // Append SVG to DOM
+  var svg = d3.select(appendToClass)
+  .append('svg')
+  .attr('width', chartWidth)
+  .attr('height', chartHeight);
+
+  // Append axis
+
+  // X
+  svg.append('g')
+  .attr('class', 'x axis')
+  .attr('transform', 'translate(20, 260)')
+  .call(xAxis);
+
+  // Y
+  svg.append('g')
+  .attr('class', 'y axis')
+  .attr('transform', 'translate(60, 0)')
+  .call(yAxis);
+
+  // Axis labels
+
+  // X
+  svg.select('.x.axis')
+  .append('text')
+  .text('Assemblies')
+  .attr('class', 'axis-label')
+  .attr('text-anchor', 'end')
+  .attr('x', (chartWidth / 2) + 49)
+  .attr('y', 45);
+
+  // Y
+  svg.select('.y.axis')
+  .append('text')
+  .text('contig n50')
+  .attr('class', 'axis-label')
+  .attr('transform', 'rotate(-90)')
+  .attr('x', -(chartHeight / 2) - 44)
+  .attr('y', 398);
+
+  // Circles
+  svg.selectAll('circle')
+  .data(chartData)
+  .enter()
+  .append('circle')
+  .attr('cx', function(datum, index){
+    return xScale(index + 1) + 20;
+  })
+  .attr('cy', function(datum){
+    return yScale(datum);
+  })
+  .attr('r', 5);
+
+  // // Line
+  // var line = d3.svg.line()
+  // //.interpolate("basis")
+  // .x(function(datum, index) {
+  //   return xScale(index + 1) + 20;
+  // })
+  // .y(function(datum) {
+  //   return yScale(datum);
+  // });
+
+  // svg.append('path')
+  // .attr('d', line(chartData));
+
+  // // Draw line from (0,0) to d3.max(data)
+  // var rootLineData = [{
+  //   'x': xScale(0) + 20,
+  //   'y': yScale(0)
+  // },
+  // {
+  //   'x': xScale(1) + 20,
+  //   'y': yScale(chartData[0])
+  // }];
+
+  // var rootLine = d3.svg.line()
+  // .x(function(datum) {
+  //   return datum.x;
+  // })
+  // .y(function(datum) {
+  //   return datum.y;
+  // })
+  // .interpolate("linear");
+
+  // var rootPath = svg.append('path')
+  // .attr('d', rootLine(rootLineData));
+
+  // Draw N50
+
+  /*          svg.selectAll('.n50-circle')
+  .data([n50])
+  .enter()
+  .append('circle')
+  .attr('cx', function(datum){
+  return xScale(datum.index) + 20;
+  })
+  .attr('cy', function(datum){
+  return yScale(datum.sum);
+  })
+  .attr('r', 6)
+  .attr('class', 'n50-circle')*/
+
+  // Group circle and text elements
+  // var n50Group = svg.selectAll('.n50-circle')
+  // .data([assemblyN50])
+  // .enter()
+  // .append('g')
+  // .attr('class', 'n50-group');
+
+  // // Append circle to group
+  // var n50Circle = n50Group.append('circle')
+  // .attr('cx', function(datum){
+  //   return xScale(datum.sequenceNumber) + 20;
+  // })
+  // .attr('cy', function(datum){
+  //   return yScale(datum.sum);
+  // })
+  // .attr('r', 6);
+  // //.attr('class', 'n50-circle');
+
+  // // Append text to group
+  // n50Group.append('text')
+  // .attr('dx', function(datum){
+  //   return xScale(datum.sequenceNumber) + 20 + 9;
+  // })
+  // .attr('dy', function(datum){
+  //   return yScale(datum.sum) + 5;
+  // })
+  // .attr("text-anchor", 'right')
+  // .text('N50');
+  // //.attr('class', 'n50-text');
+
+  // // Draw N50 lines
+  // var d50LinesData = [{
+  //   'x': 54,
+  //   'y': yScale(assemblyN50.sum)
+  // },
+  // {
+  //   'x': xScale(assemblyN50.sequenceNumber) + 20,
+  //   'y': yScale(assemblyN50.sum)
+  // },
+  // {
+  //   'x': xScale(assemblyN50.sequenceNumber) + 20,
+  //   'y': chartHeight - 46
+  // }];
+
+  // var d50Line = d3.svg.line()
+  // .x(function(datum) {
+  //   return datum.x;
+  // })
+  // .y(function(datum) {
+  //   return datum.y;
+  // })
+  // .interpolate("linear");
+
+  // // N50 path
+  // n50Group.append('path').attr('d', d50Line(d50LinesData));
 }
 
 module.exports = {
@@ -502,5 +704,6 @@ module.exports = {
   calculateBiggestNumberOfNucleotidesInDnaStrings: calculateBiggestNumberOfNucleotidesInDnaStrings,
   calculateSumsOfNucleotidesInDnaStrings: calculateSumsOfNucleotidesInDnaStrings,
   validateContigs: validateContigs,
-  drawN50Chart: drawN50Chart
+  drawN50Chart: drawN50Chart,
+  drawN50OverviewChart: drawN50OverviewChart
 };

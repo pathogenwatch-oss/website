@@ -3,6 +3,7 @@ var React = require('react');
 var style = {
   margin: '25px 0',
   fontSize: '24px',
+  fontWeight: '300',
   textShadow: '1px 1px #fff'
 };
 

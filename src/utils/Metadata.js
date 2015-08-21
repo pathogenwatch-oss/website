@@ -90,11 +90,18 @@ function fixMetadataDateFormatInCollection(collection) {
   return collection;
 }
 
+function validateMetadata(collection) {
+  var assemblies = collection;
+  // console.log(assemblies);
+}
+
 module.exports = {
   generateYears: generateYears,
   generateMonths: generateMonths,
   generateDays: generateDays,
   getTotalNumberOfDaysInMonth: getTotalNumberOfDaysInMonth,
   getCountry: getCountry,
-  fixMetadataDateFormatInCollection: fixMetadataDateFormatInCollection
+  fixMetadataDateFormatInCollection: fixMetadataDateFormatInCollection,
+  validateMetadata: validateMetadata
 };
+
