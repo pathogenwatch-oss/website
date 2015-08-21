@@ -128,7 +128,7 @@ function getComplete(assemblyId, callback) {
   ], callback);
 }
 
-function getReference(speciesId, assemblyId, callback) {
+function getReference(assemblyId, callback) {
   LOGGER.info('Getting reference assembly ' + assemblyId);
   get(assemblyId, [
     METADATA_KEY,

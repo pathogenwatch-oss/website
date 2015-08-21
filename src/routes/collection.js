@@ -8,14 +8,12 @@ var LOGGER = require('utils/logging').createLogger('Collection requests');
 
 router.get('/collection/reference/:id', function (req, res, next) {
   LOGGER.info('Getting reference collection: ' + req.params.id);
-  collectionModel.getReference(req.params.id,
-    function (error, result) {
-      if (error) {
-        return next(error);
-      }
-      res.json(result);
+  collectionModel.getReference(req.params.id, function (error, result) {
+    if (error) {
+      return next(error);
     }
-  );
+    res.json(result);
+  });
 });
 
 router.get('/collection/:id', function (req, res, next) {

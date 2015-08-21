@@ -2,7 +2,7 @@ var fs = require('fs');
 var path = require('path');
 var storageConnection = require('utils/storageConnection');
 
-var DOCUMENT_PATH = '/Users/artemij/ref';
+var DOCUMENT_PATH = '/home/richard/Desktop/Reference Annotation Data';
 
 storageConnection.connect(function (error) {
   if (error) throw error;

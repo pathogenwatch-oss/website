@@ -213,7 +213,7 @@ function get(collectionId, callback) {
 function getReference(speciesId, callback) {
   LOGGER.info('Getting list of assemblies for species ' + speciesId);
 
-  getAssemblies(speciesId, assemblyModel.getReference.bind(null, speciesId),
+  getAssemblies(speciesId, assemblyModel.getReference,
     function (error, assemblies) {
       if (error) {
         return callback(error, null);
