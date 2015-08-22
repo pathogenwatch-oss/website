@@ -56,10 +56,10 @@ module.exports = {
     const data = {
       userAssemblyIds: fileAssemblyIds,
       socketRoomId: roomId,
-      speciesId: '1280', // TODO: Make this dynamic
     };
 
-    ApiUtils.getCollectionId(data, function (idError, ids) {
+    // TODO: Make species Id dynamic
+    ApiUtils.getCollectionId('1280', data, function (idError, ids) {
       if (idError) {
         console.error(idError);
         return;
@@ -78,10 +78,10 @@ module.exports = {
         const urlParams = {
           collectionId: ids.collectionId,
           assemblyId: userAssemblyIdToAssemblyIdMap[userAssemblyId],
+          speciesId: '1280', // TODO: Make this dynamic
         };
         const assemblyData = {
           socketRoomId: roomId,
-          speciesId: '1280', // TODO: Make this dynamic
           metadata: metadata,
           sequences: fasta.assembly,
         };

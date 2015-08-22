@@ -63,7 +63,7 @@ const Tree = React.createClass({
   },
 
   componentWillMount: function () {
-    this.tree = SpeciesSubtreeStore.getActiveSpeciesSubtree();
+    this.tree = SpeciesSubtreeStore.getActiveSpeciesSubtree().newick;
     this.treeId = this.props.treeId;
   },
 

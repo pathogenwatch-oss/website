@@ -44,10 +44,6 @@ const Store = assign({}, EventEmitter.prototype, {
     return speciesSubtrees;
   },
 
-  getSpeciesSubtreeIds: function () {
-    return Object.keys(speciesSubtrees);
-  },
-
   getActiveSpeciesSubtree: function () {
     const activeSpeciesSubtree = speciesSubtrees[activeSpeciesSubtreeId];
     return activeSpeciesSubtree || null;
@@ -62,9 +58,9 @@ const Store = assign({}, EventEmitter.prototype, {
     let activeSpeciesSubtreeAssemblyIds = [];
 
     if (activeSpeciesSubtree) {
-      activeSpeciesSubtreeAssemblyIds = TreeUtils.extractIdsFromNewick(activeSpeciesSubtree);
+      activeSpeciesSubtreeAssemblyIds = activeSpeciesSubtree.assemblyIds;
     } else {
-      activeSpeciesSubtreeAssemblyIds = TreeUtils.extractIdsFromNewick(speciesSubtrees[collectionId]);
+      activeSpeciesSubtreeAssemblyIds = speciesSubtrees[collectionId].assemblyIds;
     }
     return activeSpeciesSubtreeAssemblyIds;
   },
@@ -87,7 +83,11 @@ function handleAction(action) {
     setCollectionId(action.collection.collectionId);
 
     const subtrees = action.collection.subtrees;
-    subtrees[collectionId] = action.collection.tree;
+    // TODO: Remove hack
+    subtrees[collectionId] = {
+      newick: action.collection.tree,
+      assemblyIds: Object.keys(action.collection.assemblies),
+    };
     setSpeciesSubtrees(subtrees);
 
     setActiveSpeciesSubtreeId(collectionId);

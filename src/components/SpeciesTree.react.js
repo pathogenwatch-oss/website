@@ -101,15 +101,15 @@ const Tree = React.createClass({
   },
 
   emphasizeShapeAndColourForNodesThatHaveSubtrees: function () {
-    const subtreeIds = SpeciesSubtreeStore.getSpeciesSubtreeIds();
-    const subspeciesMap = SpeciesTreeStore.getSubspeciesMap()
+    const subtrees = SpeciesSubtreeStore.getSpeciesSubtrees();
+    const subtreeIds = Object.keys(subtrees);
 
     this.phylocanvas.setNodeDisplay(subtreeIds, { colour: CGPS.COLOURS.PURPLE_LIGHT });
 
     subtreeIds.forEach((id) => {
       const branch = this.phylocanvas.branches[id];
       if (branch) {
-        branch.label = `${branch.label} (${subspeciesMap[id].length})`;
+        branch.label = `${branch.label} (${subtrees[id].assemblyIds.length})`;
       }
     });
   },

@@ -24,7 +24,8 @@ export default class Collection extends React.Component {
 
   componentDidMount() {
     CollectionStore.addChangeListener(this.handleCollectionStoreChange.bind(this));
-    CollectionActionCreators.getCollection(this.props.params.id);
+    // TODO: Make species id dynamic
+    CollectionActionCreators.getCollection('1280', this.props.params.id);
   }
 
   componentWillUnmount() {

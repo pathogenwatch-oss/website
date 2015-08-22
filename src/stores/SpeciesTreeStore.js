@@ -6,22 +6,9 @@ import AppDispatcher from '../dispatcher/AppDispatcher';
 const CHANGE_EVENT = 'change';
 
 let speciesTree = null;
-let subspeciesMap = null;
 
 function setSpeciesTree(tree) {
   speciesTree = tree;
-}
-
-function setSubspeciesMap(assemblyIdMap) {
-  subspeciesMap = Object.keys(assemblyIdMap).reduce(function (map, assemblyId) {
-    const speciesTreeTaxon = assemblyIdMap[assemblyId];
-    const taxonAssemblyIds = map[speciesTreeTaxon] || [];
-
-    taxonAssemblyIds.push(assemblyId);
-    map[speciesTreeTaxon] = taxonAssemblyIds;
-
-    return map;
-  }, {});
 }
 
 const Store = assign({}, EventEmitter.prototype, {
@@ -42,10 +29,6 @@ const Store = assign({}, EventEmitter.prototype, {
     return speciesTree;
   },
 
-  getSubspeciesMap() {
-    return subspeciesMap;
-  },
-
 });
 
 function handleAction(action) {
@@ -56,7 +39,6 @@ function handleAction(action) {
     break;
   case 'set_collection':
     setSpeciesTree(action.referenceCollection.tree);
-    setSubspeciesMap(action.collection.assemblyIdMap);
     Store.emitChange();
     break;
   default:

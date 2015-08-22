@@ -4,14 +4,14 @@ import MetadataUtils from '../utils/Metadata';
 
 export default {
 
-  getCollection: function (collectionId) {
-    ApiUtils.getCollection(collectionId, function getCollection(error, collection) {
+  getCollection: function (speciesId, collectionId) {
+    ApiUtils.getCollection(speciesId, collectionId, function getCollection(error, collection) {
       if (error) {
         console.error('[Macroreact] ' + error);
         return;
       }
 
-      ApiUtils.getReferenceCollection(function getReferenceCollection(error, referenceCollection) {
+      ApiUtils.getReferenceCollection(speciesId, function getReferenceCollection(error, referenceCollection) {
         if (error) {
           console.error('[Macroreact] ' + error);
           return;

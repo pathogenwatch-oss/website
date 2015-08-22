@@ -71,7 +71,7 @@ function convertDataObjectToCustomObject(date) {
 }
 
 function fixMetadataDateFormatInCollection(collection) {
-  var assemblies = collection.collection.assemblies;
+  var assemblies = collection.assemblies;
   var assemblyIds = Object.keys(assemblies);
   var assembly;
 

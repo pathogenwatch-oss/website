@@ -1,11 +1,11 @@
 import { client as CONFIG } from '../../config.json';
 
-const API_PATH = `http://${CONFIG.api.hostname}:${CONFIG.api.port}/api/v1`;
+const API_PATH = `http://${CONFIG.api.hostname}:${CONFIG.api.port}/api`;
 
-function getCollectionId(collectionData, callback) {
+function getCollectionId(speciesId, collectionData, callback) {
   $.ajax({
     type: 'POST',
-    url: `${API_PATH}/collection`,
+    url: `${API_PATH}/species/${speciesId}/collection`,
     contentType: 'application/json; charset=UTF-8',
     data: JSON.stringify(collectionData, null, 4),
     dataType: 'json',
@@ -18,11 +18,10 @@ function getCollectionId(collectionData, callback) {
   });
 }
 
-function postAssembly(urlParams, assemblyData, callback) {
-  const { collectionId, assemblyId } = urlParams;
+function postAssembly({ speciesId, collectionId, assemblyId }, assemblyData, callback) {
   $.ajax({
     type: 'POST',
-    url: `${API_PATH}/collection/${collectionId}/assembly/${assemblyId}`,
+    url: `${API_PATH}/species/${speciesId}/collection/${collectionId}/assembly/${assemblyId}`,
     contentType: 'application/json; charset=UTF-8',
     data: JSON.stringify(assemblyData, null, 4),
     dataType: 'json',
@@ -35,9 +34,9 @@ function postAssembly(urlParams, assemblyData, callback) {
   });
 }
 
-function getReferenceCollection(callback) {
+function getReferenceCollection(speciesId, callback) {
   const options = {
-    url: `${API_PATH}/collection/reference/1280`,
+    url: `${API_PATH}/species/${speciesId}/reference`,
   };
 
   $.get(options.url)
@@ -52,11 +51,11 @@ function getReferenceCollection(callback) {
     });
 }
 
-function getCollection(collectionId, callback) {
+function getCollection(speciesId, collectionId, callback) {
   console.log(`[Macroreact] Getting collection ${collectionId}`);
 
   const options = {
-    url: `${API_PATH}/collection/${collectionId}`,
+    url: `${API_PATH}/species/${speciesId}/collection/${collectionId}`,
   };
 
   if (!collectionId) {
