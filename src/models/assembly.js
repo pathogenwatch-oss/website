@@ -75,7 +75,7 @@ function mergeQueryResults(data, queryKeyPrefixes, assemblyId) {
 
 function formatForFrontend(assembly) {
   return {
-    populationSubtype: assembly.FP_COMP.subTypeAssignment,
+    populationSubtype: assembly.FP_COMP ? assembly.FP_COMP.subTypeAssignment : null,
     metadata: assembly.ASSEMBLY_METADATA,
     analysis: {
       st: assembly.MLST_RESULT.stType,
@@ -95,8 +95,11 @@ function formatForFrontend(assembly) {
   };
 }
 
-function get(assemblyId, queryKeyPrefixes, callback) {
+function get(params, queryKeyPrefixes, callback) {
+  var assemblyId = params.assemblyId;
+  var speciesId = params.speciesId;
   var queryKeys = constructQueryKeys(queryKeyPrefixes, assemblyId);
+
   LOGGER.info('Assembly ' + assemblyId + ' query keys:');
   LOGGER.info(queryKeys);
 
@@ -109,7 +112,7 @@ function get(assemblyId, queryKeyPrefixes, callback) {
 
     LOGGER.info('Got assembly ' + assemblyId + ' data');
     assembly = mergeQueryResults(assemblyData, queryKeyPrefixes, assemblyId);
-    sequenceTypeModel.addSequenceTypeData(assembly, function (stError, result) {
+    sequenceTypeModel.addSequenceTypeData(assembly, speciesId, function (stError, result) {
       if (stError) {
         return callback(stError, null);
       }
@@ -118,9 +121,9 @@ function get(assemblyId, queryKeyPrefixes, callback) {
   });
 }
 
-function getComplete(assemblyId, callback) {
-  LOGGER.info('Getting assembly ' + assemblyId);
-  get(assemblyId, [
+function getComplete(params, callback) {
+  LOGGER.info('Getting assembly ' + params.assemblyId);
+  get(params, [
     METADATA_KEY,
     PAARSNP_KEY,
     MLST_KEY,
@@ -128,9 +131,9 @@ function getComplete(assemblyId, callback) {
   ], callback);
 }
 
-function getReference(assemblyId, callback) {
-  LOGGER.info('Getting reference assembly ' + assemblyId);
-  get(assemblyId, [
+function getReference(params, callback) {
+  LOGGER.info('Getting reference assembly ' + params.assemblyId);
+  get(params, [
     METADATA_KEY,
     PAARSNP_KEY,
     MLST_KEY

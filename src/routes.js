@@ -1,5 +1,5 @@
 module.exports = function (app) {
-  app.use('/api/v1/', [
+  app.use('/api/', [
     require('routes/collection'),
     require('routes/antibiotic'),
     require('routes/download')

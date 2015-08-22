@@ -6,7 +6,7 @@ var assemblyModel = require('models/assembly');
 
 var LOGGER = require('utils/logging').createLogger('Collection requests');
 
-router.get('/collection/reference/:id', function (req, res, next) {
+router.get('/species/:id/reference', function (req, res, next) {
   LOGGER.info('Getting reference collection: ' + req.params.id);
   collectionModel.getReference(req.params.id, function (error, result) {
     if (error) {
@@ -16,9 +16,9 @@ router.get('/collection/reference/:id', function (req, res, next) {
   });
 });
 
-router.get('/collection/:id', function (req, res, next) {
-  LOGGER.info('Getting collection: ' + req.params.id);
-  collectionModel.get(req.params.id, function (error, result) {
+router.get('/species/:speciesId/collection/:collectionId', function (req, res, next) {
+  LOGGER.info('Getting collection: ' + req.params.collectionId);
+  collectionModel.get(req.params, function (error, result) {
     if (error) {
       return next(error);
     }
@@ -26,16 +26,10 @@ router.get('/collection/:id', function (req, res, next) {
   });
 });
 
-router.post('/collection', function (req, res, next) {
-  var collectionId = req.body.collectionId;
-  var message =
-    (collectionId && collectionId.length > 0 ?
-    'Received request for collection id: ' + collectionId :
-    'Received request for new collection id');
+router.post('/species/:id/collection', function (req, res, next) {
+  LOGGER.info('Received request for new collection id');
 
-  LOGGER.info(message);
-
-  collectionModel.add(req.body, function (error, result) {
+  collectionModel.add(req.params.id, req.body, function (error, result) {
     if (error) {
       return next(error);
     }
@@ -43,13 +37,13 @@ router.post('/collection', function (req, res, next) {
   });
 });
 
-router.post('/collection/:collectionId/assembly/:assemblyId',
+router.post('/species/:speciesId/collection/:collectionId/assembly/:assemblyId',
   function (req, res) {
     var ids = {
       collectionId: req.params.collectionId,
       assemblyId: req.params.assemblyId,
+      speciesId: req.params.speciesId,
       socketRoomId: req.body.socketRoomId,
-      speciesId: req.body.speciesId
     };
 
     LOGGER.info(

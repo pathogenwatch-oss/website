@@ -65,7 +65,8 @@ function manageCollection(request, callback) {
   });
 }
 
-function add(ids, callback) {
+function add(speciesId, ids, callback) {
+  LOGGER.debug(speciesId, ids);
   var userAssemblyIds = ids.userAssemblyIds;
 
   var collectionRequest = {
@@ -103,6 +104,7 @@ function add(ids, callback) {
         }, {});
 
       ids.collectionId = results.collectionId;
+      ids.speciesId = speciesId;
 
       messageQueueService.newCollectionNotificationQueue(ids, {
         tasks: COLLECTION_TREE_TASKS,
@@ -125,7 +127,10 @@ function add(ids, callback) {
   });
 }
 
-function getAssemblies(collectionId, assemblyGetFn, callback) {
+function getAssemblies(params, assemblyGetFn, callback) {
+  var collectionId = params.collectionId;
+  var speciesId = params.speciesId;
+
   async.waterfall([
     function (done) {
       mainStorage.retrieve('COLLECTION_LIST_' + collectionId, done);
@@ -135,7 +140,11 @@ function getAssemblies(collectionId, assemblyGetFn, callback) {
       LOGGER.info('Got list of assemblies for collection ' + collectionId);
       async.reduce(assemblyIds, {}, function (memo, assemblyIdWrapper, next) {
         var assemblyId = assemblyIdWrapper.assemblyId || assemblyIdWrapper; // List format not yet defined
-        assemblyGetFn(assemblyId, function (error, assembly) {
+        var assemblyParams = {
+          assemblyId: assemblyId,
+          speciesId: speciesId
+        };
+        assemblyGetFn(assemblyParams, function (error, assembly) {
           if (error) {
             return next(error);
           }
@@ -180,13 +189,14 @@ function getSubtrees(taxonToSubtreeMap, collectionId, callback) {
     }, callback);
 }
 
-function get(collectionId, callback) {
+function get(params, callback) {
+  var collectionId = params.collectionId;
   LOGGER.info('Getting list of assemblies for collection ' + collectionId);
 
   async.waterfall([
     function (done) {
       async.parallel({
-        assemblies: getAssemblies.bind(null, collectionId, assemblyModel.getComplete),
+        assemblies: getAssemblies.bind(null, params, assemblyModel.getComplete),
         tree: getTree.bind(null, collectionId)
       }, done);
     },
@@ -211,20 +221,22 @@ function get(collectionId, callback) {
 }
 
 function getReference(speciesId, callback) {
-  LOGGER.info('Getting list of assemblies for species ' + speciesId);
+  var params = {
+    collectionId: speciesId,
+    speciesId: speciesId
+  };
 
-  getAssemblies(speciesId, assemblyModel.getReference,
+  LOGGER.info('Getting list of assemblies for species ' + speciesId);
+  getAssemblies(params, assemblyModel.getReference,
     function (error, assemblies) {
       if (error) {
         return callback(error, null);
       }
 
       callback(null, {
-        collection: {
-          collectionId: speciesId,
-          assemblies: assemblies,
-          tree: SPECIES_TREES[speciesId]
-        }
+        collectionId: speciesId,
+        assemblies: assemblies,
+        tree: SPECIES_TREES[speciesId]
       });
     }
   );

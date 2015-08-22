@@ -7,10 +7,13 @@ var LOGGER = require('utils/logging').createLogger('sequenceType');
 var UNKNOWN_ST = 'New';
 
 function getMlstQueryKeys(assembly) {
+  var mlstAllelesQueryKeys;
+
   if (!assembly || !assembly.MLST_RESULT) {
     return false;
   }
-  var mlstAllelesQueryKeys = [];
+
+  mlstAllelesQueryKeys = [];
   Object.keys(assembly.MLST_RESULT.alleles).forEach(function (key) {
     var alleleQueryKey = assembly.MLST_RESULT.alleles[key];
     if (alleleQueryKey !== null) {
@@ -43,7 +46,6 @@ function addMlstAlleleToAssembly(assembly, mlstAlleles) {
   });
 }
 
-
 // 'ST_' + species id + allele ids
 function generateStQueryKey(speciesId, alleles) {
   var stQueryKey;
@@ -58,26 +60,30 @@ function generateStQueryKey(speciesId, alleles) {
     }
     return memo + '_' + allele.alleleId;
   }, 'ST_' + speciesId);
+  LOGGER.info('ST Query Key: ' + stQueryKey);
   return queryKeyIsComplete ? stQueryKey : null;
 }
 
-function getSequenceType(assembly, callback) {
+function getSequenceType(assembly, speciesId, callback) {
+  var stQueryKey;
+
   LOGGER.info('Getting assembly ST data');
-  var stQueryKey = generateStQueryKey(
-    assembly.ASSEMBLY_METADATA.speciesId,
+  stQueryKey = generateStQueryKey(
+    speciesId,
     assembly.MLST_RESULT.alleles
   );
+
   if (stQueryKey === null) {
     LOGGER.warn('Skipping ST query for assembly ' + assembly.assemblyId);
     return callback(null, UNKNOWN_ST);
   }
+
   mainStorage.retrieve(stQueryKey, function (error, result) {
     if (error) {
       if (error.code === 13) {
         LOGGER.warn('No ST key found: ' + stQueryKey);
         return callback(null, UNKNOWN_ST);
       }
-
       return callback(error, null);
     }
     LOGGER.info('St Type result: ' + result.stType);
@@ -85,7 +91,7 @@ function getSequenceType(assembly, callback) {
   });
 }
 
-function addSequenceTypeData(assembly, callback) {
+function addSequenceTypeData(assembly, speciesId, callback) {
   async.waterfall([
     function (next) {
       getMlstAllelesData(assembly, next);
@@ -93,7 +99,7 @@ function addSequenceTypeData(assembly, callback) {
     function (mlstAlleles, next) {
       LOGGER.info('Got assembly MLST alleles data');
       addMlstAlleleToAssembly(assembly, mlstAlleles);
-      getSequenceType(assembly, next);
+      getSequenceType(assembly, speciesId, next);
     },
     function (sequenceType, next) {
       LOGGER.info('Got assembly ST data');
