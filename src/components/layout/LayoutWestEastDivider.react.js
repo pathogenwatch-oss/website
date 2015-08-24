@@ -26,15 +26,14 @@ var LayoutMiddleEastDivider = React.createClass({
       0
     ];
 
-    $('.middleEastDivider').draggable({
+    $('.westEastDivider').draggable({
       containment: containment,
       axis: 'x',
       scroll: false,
-      cursor: 'ew-resize',
-      stop: function (event, ui) {
-        var left = ui.offset.left;
-        this.props.onDragEnd(left);
-      }.bind(this)
+      cursor: 'grabbing',
+      stop: (event, ui) => {
+        this.props.onDragEnd(ui.offset.left);
+      },
     });
   },
 
@@ -53,7 +52,7 @@ var LayoutMiddleEastDivider = React.createClass({
       0
     ];
 
-    $('.middleEastDivider').draggable( 'option', 'containment', containment );
+    $('.westEastDivider').draggable( 'option', 'containment', containment );
   },
 
   render: function () {
@@ -73,7 +72,7 @@ var LayoutMiddleEastDivider = React.createClass({
         <LayoutDivider
           left={this.props.left}
           direction={'vertical'}
-          className={'middleEastDivider'} />
+          className={'westEastDivider'} />
       </div>
     );
   }

@@ -24,6 +24,7 @@ export default React.createClass({
       containment: 'body',
       axis: 'y',
       scroll: false,
+      cursor: 'grabbing',
       stop: (event, ui) => {
         this.props.onDragEnd(ui.offset.top);
       },
