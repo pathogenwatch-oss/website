@@ -2,22 +2,21 @@
 
 .welcome-card-wide.mdl-card {
   max-width: auto;
-  width: auto;
+  width: 500px;
   background: transparent;
 }
 .welcome-card-wide > .mdl-card__title {
   color: #ccc;
-  height: 350px;
-
-/*  background: url('../../assets/img/WGSA_logo.png') center no-repeat;
+  height: 200px;
+  background: url('../../assets/img/WGSA_logo.png') center no-repeat;
   background-position: -40px -40px;
-*/}
+}
 
 .welcome-card-wide > .mdl-card__title h2{
-  font-size: 36px;
+  font-size: 26px;
   font-weight: 300;
 }
-.welcome-card-wide > .mdl-progress {
+#loadingAnimation.mdl-progress {
   width: auto;
 }
 .uploadReviewAnalysisStyle input {
@@ -83,10 +82,11 @@
   width: 100%;
   border-bottom: 1px solid #e0e0e0;
   display: inline-block;
+  /*position: absolute;*/
+  float: left;
 }
 
 .assemblyListItem a {
-  background-color: #fff;
   font-size: 12px;
   font-weight: 100;
   color: #444;
@@ -95,8 +95,8 @@
   text-align: left;
   text-transform: none;
   /*width: 100%;*/
-  /*float: left !important;*/
   display: block;
+  float: left;
 }
 
 .assemblyListItem a:hover {
@@ -113,6 +113,7 @@
 }
 .assemblyListItem .utilityButton {
   float: right;
+  right: 10px;
   color: #777;
 }
 .assemblyListItem .utilityButton i:hover{

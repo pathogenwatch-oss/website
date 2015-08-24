@@ -27,6 +27,7 @@ var Store = assign({}, EventEmitter.prototype, {
   getFileAssemblyId: function () {
     return fileAssemblyId;
   }
+
 });
 
 function handleAction(action) {

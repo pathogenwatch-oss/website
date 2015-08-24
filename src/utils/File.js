@@ -45,7 +45,7 @@ function readFile(file, callback) {
   var fileReader = new FileReader();
 
   fileReader.onload = function handleLoad(event) {
-    console.log('[Macroreact] Loaded dropped file: ' + file.name);
+    // console.log('[Macroreact] Loaded dropped file: ' + file.name);
 
     callback(null, event.target.result);
   };
@@ -226,12 +226,12 @@ function analyseFasta(fileAssemblyId, fastaFileString) {
 
   //AnalysisUtils.validateContigs(contigs);
 
-  console.log('[WGST] * dev * dnaStrings:');
-  console.dir(dnaStrings);
-  console.log('[WGST] * dev * totalNumberOfNucleotidesInDnaStrings: ' + totalNumberOfNucleotidesInDnaStrings);
-  console.log('[WGST] * dev * averageNumberOfNucleotidesInDnaStrings: ' + averageNumberOfNucleotidesInDnaStrings);
-  console.log('[WGST] * dev * smallestNumberOfNucleotidesInDnaStrings: ' + smallestNumberOfNucleotidesInDnaStrings);
-  console.log('[WGST] * dev * biggestNumberOfNucleotidesInDnaStrings: ' + biggestNumberOfNucleotidesInDnaStrings);
+  // console.log('[WGST] * dev * dnaStrings:');
+  // console.dir(dnaStrings);
+  // console.log('[WGST] * dev * totalNumberOfNucleotidesInDnaStrings: ' + totalNumberOfNucleotidesInDnaStrings);
+  // console.log('[WGST] * dev * averageNumberOfNucleotidesInDnaStrings: ' + averageNumberOfNucleotidesInDnaStrings);
+  // console.log('[WGST] * dev * smallestNumberOfNucleotidesInDnaStrings: ' + smallestNumberOfNucleotidesInDnaStrings);
+  // console.log('[WGST] * dev * biggestNumberOfNucleotidesInDnaStrings: ' + biggestNumberOfNucleotidesInDnaStrings);
 
   //window.WGST.upload.stats.totalNumberOfContigs = window.WGST.upload.stats.totalNumberOfContigs + contigs.length;
 

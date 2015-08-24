@@ -42,7 +42,6 @@ function emitChange() {
 
 function deleteAssembly(fileAssemblyId) {
   delete assemblies[fileAssemblyId];
-
 }
 
 var Store = assign({}, EventEmitter.prototype, {
@@ -87,7 +86,7 @@ var Store = assign({}, EventEmitter.prototype, {
     const locations = {};
     const assemblies = this.getAssemblies();
     for (const id in assemblies) {
-      locations[id] = assemblies[id].metadata.geography.position;
+      locations[id] = assemblies[id].metadata.geography;
     }
     return locations;
   }

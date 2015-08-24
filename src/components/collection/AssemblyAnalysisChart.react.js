@@ -46,6 +46,7 @@ const AssemblyAnalysisChart = React.createClass({
 
     const fastaChartData = this.props.analysis.sumsOfNucleotidesInDnaStrings;
     const assemblyN50 = this.props.analysis.assemblyN50Data;
+    // console.log(this.props.analysis);
     AnalysisUtils.drawN50Chart(fastaChartData, assemblyN50, '.fasta-analytics-chart');
   },
 

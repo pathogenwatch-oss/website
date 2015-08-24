@@ -84,7 +84,7 @@ const Tree = React.createClass({
     phylocanvas.setTextSize(this.state.labelSize);
 
     this.phylocanvas = phylocanvas;
-    console.log(this.phylocanvas);
+    // console.log(this.phylocanvas);
     this.phylocanvas.on('updated', this.handleTreeBranchSelected);
     this.phylocanvas.on('subtree', this.handleRedrawSubtree);
     this.phylocanvas.on('historytoggle', this.handleHistoryToggle);
@@ -214,7 +214,7 @@ const Tree = React.createClass({
   },
 
   showUploadedCollectionSubtree: function (subtreeId) {
-    console.log(subtreeId);
+    // console.log(subtreeId);
     SpeciesSubtreeActionCreators.setActiveSpeciesSubtreeId(subtreeId);
   },
 

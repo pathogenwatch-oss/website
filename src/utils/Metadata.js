@@ -91,8 +91,22 @@ function fixMetadataDateFormatInCollection(collection) {
 }
 
 function validateMetadata(collection) {
-  var assemblies = collection;
+  var isValidMap = {};
+  for (var id in collection) {
+    console.log(collection[id])
+    if (!collection[id].fasta.assembly ||
+        !collection[id].metadata.date.year ||
+        !collection[id].metadata.geography.position.longitude ||
+        !collection[id].metadata.geography.position.latitude
+      ) {
+      isValidMap[id] = false;
+    }
+    else {
+      isValidMap[id] = true;
+    }
+  }
   // console.log(assemblies);
+  return isValidMap;
 }
 
 module.exports = {

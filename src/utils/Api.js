@@ -41,8 +41,8 @@ function getReferenceCollection(callback) {
 
   $.get(options.url)
     .done(function (collection) {
-      console.log('[Macroreact] Received reference collection:');
-      console.dir(collection);
+      // console.log('[Macroreact] Received reference collection:');
+      // console.dir(collection);
 
       callback(null, collection);
     })
@@ -64,8 +64,8 @@ function getCollection(collectionId, callback) {
 
   $.get(options.url)
     .done(function (response) {
-      console.log(`[Macroreact] Received collection ${response.collection.collectionId}:`);
-      console.dir(response);
+      // console.log(`[Macroreact] Received collection ${response.collection.collectionId}:`);
+      // console.dir(response);
 
       callback(null, response);
     })

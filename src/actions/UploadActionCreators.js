@@ -81,12 +81,12 @@ module.exports = {
           sequences: UploadStore.getAssembly(userAssemblyId).fasta.assembly
         };
 
-        console.log('[Macroreact] Prepared assembly data to upload:');
-        console.dir(assemblyData);
+        // console.log('[Macroreact] Prepared assembly data to upload:');
+        // console.dir(assemblyData);
 
         ApiUtils.postAssembly(assemblyData, function iife(error, data) {
-          console.log('[Macroreact] Uploaded assembly data:');
-          console.dir(data);
+          // console.log('[Macroreact] Uploaded assembly data:');
+          // console.dir(data);
         });
       });
     });

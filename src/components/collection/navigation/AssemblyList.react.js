@@ -3,16 +3,14 @@ import UploadStore from '../../../stores/UploadStore';
 import UploadWorkspaceNavigationStore from '../../../stores/UploadWorkspaceNavigationStore';
 import UploadWorkspaceNavigationActionCreators from '../../../actions/UploadWorkspaceNavigationActionCreators';
 import { validateMetadata } from '../../../utils/Metadata.js';
-
+import DEFAULT from '../../../defaults.js';
 import '../../../css/UploadReview.css';
 
 const AssemblyList = React.createClass({
 
   getInitialState: function () {
     return {
-      selectedOption: null,
-      validated_icon: 'remove',
-      validated_icon_color: {color: '#888'}
+      selectedOption: null
     };
   },
 
@@ -30,9 +28,35 @@ const AssemblyList = React.createClass({
     });
   },
 
-  handleDeleteAssembly: function(fileAssemblyId) {
-    console.log('a')
-    UploadWorkspaceNavigationActionCreators.deleteAssembly(fileAssemblyId);
+  handleDeleteAssembly: function(fileAssemblyIdForDelete) {
+    const currentAssemblyIdOnDisplay = UploadWorkspaceNavigationStore.getFileAssemblyId();
+    const allAssemblyIds = UploadStore.getFileAssemblyIds();
+    const indexOfFileAssemblyIdForDelete = allAssemblyIds.indexOf(fileAssemblyIdForDelete);
+    const totalNoAssemblyIds = allAssemblyIds.length;
+    var nextAssemblyIdForDisplay = null;
+    // Check next index is a valid fileId for traverse
+    if (allAssemblyIds.length > 0) {
+      if (indexOfFileAssemblyIdForDelete + 1 < totalNoAssemblyIds) {
+        nextAssemblyIdForDisplay = allAssemblyIds[indexOfFileAssemblyIdForDelete + 1];
+      }
+      else {
+        nextAssemblyIdForDisplay = allAssemblyIds[indexOfFileAssemblyIdForDelete - 1];
+      }
+    }
+
+    if (currentAssemblyIdOnDisplay === fileAssemblyIdForDelete) {
+      console.log('Deleting file and navigate to', nextAssemblyIdForDisplay)
+      UploadWorkspaceNavigationActionCreators.navigateToAssembly(nextAssemblyIdForDisplay);
+      // console.log(currentAssemblyIdOnDisplay, nextAssemblyIdForDisplay);
+      this.setState({
+        selectedOption: nextAssemblyIdForDisplay
+      })
+    }
+    else {
+      console.log('Deleting file silently')
+    }
+
+    UploadWorkspaceNavigationActionCreators.deleteAssembly(fileAssemblyIdForDelete);
   },
 
   toggleUtilityButtons: function(event) {
@@ -48,27 +72,52 @@ const AssemblyList = React.createClass({
   getListOptionElements: function () {
     const fileAssemblyIds = UploadStore.getFileAssemblyIds();
     const assemblies = UploadStore.getAssemblies();
-    const isValid = validateMetadata(assemblies);
+    const isValidMap = validateMetadata(assemblies);
+    var validated_icon = {
+        color: { color: '#888' },
+        icon: 'remove'
+      };
 
+    var style = {};
     return fileAssemblyIds.map((fileAssemblyId) => {
+
+      if (this.state.selectedOption == fileAssemblyId) {
+        style = {
+          'backgroundColor': DEFAULT.CGPS.COLOURS.GREY
+        }
+      }
+      else {
+        style = {};
+      }
+
+      if (isValidMap) {
+        if(isValidMap[fileAssemblyId]) {
+          validated_icon.color.color = 'green';
+          validated_icon.icon = 'check';
+        }
+        else {
+          validated_icon.color.color = 'red';
+        }
+
+      }
+console.log(fileAssemblyId, isValidMap[fileAssemblyId], validated_icon.color.color)
+
       return (
-        <div className='assemblyListItem' key={fileAssemblyId}>
+        <div style={style} className='assemblyListItem' key={fileAssemblyId}>
           <a className='mdl-button mdl-js-button mdl-js-ripple-effect'
             onClick={this.handleSelectAssembly.bind(this, fileAssemblyId)}
-            key={fileAssemblyId}
             >
             {fileAssemblyId}
           </a>
 
           <button className="utilityButton mdl-button mdl-js-button mdl-button--icon" disabled>
-            <i style={this.state.validated_icon_color} className='material-icons'>{this.state.validated_icon}</i>
+            <i style={validated_icon.color} className='material-icons'>{validated_icon.icon}</i>
           </button>
 
           <button className="deleteButton utilityButton mdl-button mdl-js-button mdl-button--icon mdl-button--colored"
             onClick={this.handleDeleteAssembly.bind(this, fileAssemblyId)}>
             <i className="material-icons">delete</i>
           </button>
-
         </div>
       );
     });

@@ -25,7 +25,7 @@ var Map = React.createClass({
   propTypes: {
     width: React.PropTypes.number.isRequired,
     height: React.PropTypes.number.isRequired,
-    location: React.PropTypes.array.isRequired
+    locations: React.PropTypes.object.isRequired
   },
 
   componentDidMount: function () {
@@ -75,7 +75,7 @@ var Map = React.createClass({
     });
 
     this.map.fitBounds(bounds);
-    // this.map.setZoom(3);
+    this.map.setZoom(3);
   },
 
   clearMarkers: function () {
@@ -106,9 +106,11 @@ var Map = React.createClass({
         return;
       }
 
-      latitude = parseFloat(locations[id].latitude);
-      longitude = parseFloat(locations[id].longitude);
-      this.markers[id] = this.createMarker(locations[id], latitude, longitude);
+      if (locations[id].position.latitude && locations[id].position.longitude) {
+        latitude = parseFloat(locations[id].position.latitude);
+        longitude = parseFloat(locations[id].position.longitude);
+        this.markers[id] = this.createMarker(locations[id], latitude, longitude);
+      }
     };
 
     this.fitAllMarkers();

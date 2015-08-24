@@ -288,6 +288,10 @@ function validateContigs(contigs) {
 
 function drawN50Chart(chartData, assemblyN50, appendToClass) {
 
+  if (!chartData) {
+    return;
+  }
+
   var d3 = require('d3');
 
   var chartWidth = 460,
@@ -490,6 +494,10 @@ function drawN50Chart(chartData, assemblyN50, appendToClass) {
 
 function drawN50OverviewChart(contigsN50Data, appendToClass) {
 
+  if (!contigsN50Data) {
+    return;
+  }
+
   var d3 = require('d3');
 
   var chartWidth = 460;
@@ -497,7 +505,9 @@ function drawN50OverviewChart(contigsN50Data, appendToClass) {
 
   var chartData = [];
   for (const id in contigsN50Data) {
-    chartData.push(contigsN50Data[id]);
+    if (contigsN50Data[id]) {
+      chartData.push(contigsN50Data[id]);
+    }
   }
 
   var chartXAxis = Object.keys(contigsN50Data);

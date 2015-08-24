@@ -25,6 +25,10 @@ const welcomeText = {
   color: DEFAULT.CGPS.COLOURS.GREEN_MID
 };
 
+var loadingAnimationStyle = {
+  display: 'block'
+};
+
 const AssemblyWorkspace = React.createClass({
 
   // location: this.props.assembly.location,
@@ -65,7 +69,7 @@ const AssemblyWorkspace = React.createClass({
     if (! SocketStore.getRoomId()) {
 
       SocketStore.getSocketConnection().on('roomId', function iife(roomId) {
-        console.log('[Macroreact] Got socket room id ' + roomId);
+        // console.log('[Macroreact] Got socket room id ' + roomId);
         SocketActionCreators.setRoomId(roomId);
       });
 
@@ -90,12 +94,19 @@ const AssemblyWorkspace = React.createClass({
   },
 
   render: function () {
+    loadingAnimationStyle.display = this.state.isProcessing ? 'block' : 'none';
     const locations = {};
+    var label = null;
     if (this.props.assembly) {
-      locations[this.props.assembly.fasta.name] = this.props.assembly.metadata.geography.position;
+      locations[this.props.assembly.fasta.name] = this.props.assembly.metadata.geography;
+      label = locations[this.props.assembly.fasta.name].location;
     }
+    // console.log(label)
     const allLocations = UploadStore.getAllMetadataLocations();
-    console.log('All Locations: ', allLocations);
+    // console.log('single location', label);
+    // console.log('All Locations: ', allLocations);
+    // console.log('rendering: isProcessing: ', this.state.isProcessing)
+    // console.log(this.props.assembly)
     return (
       <div className='mdl-layout mdl-js-layout mdl-layout--fixed-header'>
         {
@@ -105,6 +116,8 @@ const AssemblyWorkspace = React.createClass({
             <UploadReviewHeader title='Macroreact' />
         }
         <FileDragAndDrop onDrop={this.handleDrop}>
+          <div id="loadingAnimation" style={loadingAnimationStyle} className="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
+
           <UploadWorkspaceNavigation assembliesUploaded={this.props.assembly?true:false} totalAssemblies={this.props.totalAssemblies}/>
 
           {
@@ -118,6 +131,7 @@ const AssemblyWorkspace = React.createClass({
                   </div>
 
                   <div className='mdl-cell mdl-cell--6-col'>
+                    <Map width={300} height={200} label={label} locations={locations}/>
                   </div>
 
                   <div className='mdl-cell mdl-cell--6-col'>
@@ -136,7 +150,6 @@ const AssemblyWorkspace = React.createClass({
                   </div>
 
                   <div className='mdl-cell mdl-cell--6-col'>
-                    <Map width={500} height={400} label='Global Map' locations={allLocations}/>
                   </div>
                 </div>
               </div>
@@ -146,16 +159,12 @@ const AssemblyWorkspace = React.createClass({
 
             <main className='assemblyWorkspaceContainer mdl-layout__content'>
               <div className="welcomeContainer">
-                <div className="welcome-card-wide mdl-card mdl-shadow--0dp">
+                <div className="welcome-card-wide mdl-card mdl-shadow--2dp">
                   <div className="mdl-card__title">
                     <h2 style={welcomeText} className="mdl-card__title-text">Drop your assemblies here for quick analysis and easy upload!</h2>
                   </div>
                   <div className="mdl-card__supporting-text">
                   </div>
-                  {
-                    this.state.isProcessing &&
-                      <div id="loadingAnimation" className="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
-                  }
                 </div>
                 <h4></h4>
               </div>
@@ -168,3 +177,4 @@ const AssemblyWorkspace = React.createClass({
 });
 
 module.exports = AssemblyWorkspace;
+//                     <Map width={500} height={400} label='Global Map' locations={allLocations}/>

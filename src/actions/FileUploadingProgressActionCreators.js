@@ -32,7 +32,7 @@ module.exports = {
     var numberOfReceivedResults = FileUploadingProgressStore.getNumberOfReceivedResults();
 
     if (numberOfExpectedResults === numberOfReceivedResults) {
-      console.log('[Macroreact] Received all results');
+      // console.log('[Macroreact] Received all results');
 
       //FileUploadingActionCreators.finishUploadingFiles(FileUploadingStore.getFileUploadingResults().SUCCESS);
 
