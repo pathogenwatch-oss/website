@@ -10,11 +10,11 @@ var server = new WebpackDevServer(webpack(config), {
   hot: true
 });
 
-server.use('/api/v1/collection/reference', function (req, res) {
+server.use('/api/species/:speciesId/reference', function (req, res) {
   res.sendFile(__dirname + '/static_data/reference.json');
 });
 
-server.use('/api/v1/collection/:id', function (req, res) {
+server.use('/api/species/:speciesId/collection/:id', function (req, res) {
   res.sendFile(__dirname + '/static_data/collection.json');
 });
 
