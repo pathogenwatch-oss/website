@@ -1,10 +1,11 @@
 import React from 'react';
 
 import DragAndDropFiles from './DragAndDropFiles.react';
-import UploadingFilesDetailed from './UploadingFilesDetailed.react';
 import UploadWorkspace from './UploadWorkspace.react';
 import UploadStore from '../../stores/UploadStore';
 import FileUploadingStore from '../../stores/FileUploadingStore';
+
+import Species from '../../species';
 
 const UploadCollectionPage = React.createClass({
 
@@ -36,39 +37,18 @@ const UploadCollectionPage = React.createClass({
     });
   },
 
-  setCollectionIdInUrl: function () {
-    const collectionId = FileUploadingStore.getCollectionId();
-
-    if (!collectionId) {
-      return;
-    }
-
-    history.pushState({}, 'Macroreact', `/collection/${collectionId}`);
-  },
-
   handleFileUploadingStoreChange: function () {
-    const fileUploadingResult = FileUploadingStore.getFileUploadingResult();
-    this.setCollectionIdInUrl();
+    const id = FileUploadingStore.getCollectionId();
 
-    if (fileUploadingResult === FileUploadingStore.getFileUploadingResults().NONE) {
-      this.setState({
-        isUploading: FileUploadingStore.getFileUploadingState(),
-      });
+    if (!id) {
       return;
     }
 
-    if (fileUploadingResult === FileUploadingStore.getFileUploadingResults().SUCCESS) {
-      this.context.router.transitionTo(`/collection/${FileUploadingStore.getCollectionId()}`);
-      return;
-    }
+    const { transitionTo, makePath } = this.context.router;
+    transitionTo(makePath('collection', { species: Species.nickname, id }));
   },
 
   render: function () {
-    if (this.state.isUploading) {
-      return (
-        <UploadingFilesDetailed />
-      );
-    }
 
     if (this.state.hasFiles) {
       return (

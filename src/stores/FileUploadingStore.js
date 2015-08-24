@@ -12,25 +12,25 @@ var ASSEMBLY_PROCESSING_RESULTS = keyMirror({
   PAARSNP_RESULT: null,
   MLST_RESULT: null,
   CORE_RESULT: null,
-  FP_COMP: null
+  FP_COMP: null,
 });
 
 var COLLECTION_PROCESSING_RESULTS = keyMirror({
   PHYLO_MATRIX: null,
-  CORE_MUTANT_TREE: null//,
-  //SUBMATRIX: null
+  CORE_MUTANT_TREE: null,
+  SUBMATRIX: null,
 });
 
 var STATES = keyMirror({
   NOT_UPLOADING_FILES: null,
-  UPLOADING_FILES: null
+  UPLOADING_FILES: null,
 });
 
 var RESULTS = keyMirror({
   NONE: null,
   SUCCESS: null,
   ERROR: null,
-  ABORT: null
+  ABORT: null,
 });
 
 var fileUploadingState = STATES.NOT_UPLOADING_FILES;

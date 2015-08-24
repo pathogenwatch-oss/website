@@ -40,4 +40,8 @@ export default {
     return currentSpecies.name;
   },
 
+  get nickname() {
+    return currentSpecies.nickname;
+  },
+
 };
