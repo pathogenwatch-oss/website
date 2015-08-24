@@ -235,7 +235,10 @@ function getReference(speciesId, callback) {
 
       callback(null, {
         collectionId: speciesId,
-        assemblies: assemblies,
+        assemblies: Object.keys(assemblies).reduce(function (memo, assemblyId) {
+          memo[assemblyId.replace(speciesId + '_', '')] = assemblies[assemblyId];
+          return memo;
+        }, {}),
         tree: SPECIES_TREES[speciesId]
       });
     }
