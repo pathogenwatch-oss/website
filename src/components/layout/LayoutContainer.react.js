@@ -1,6 +1,7 @@
 import React from 'react';
 
-import DEFAULT from '../../defaults';
+import { CGPS } from '../../defaults';
+import Species from '../../species';
 
 const navBarHeight = '56px';
 
@@ -11,7 +12,7 @@ const style = {
 };
 
 const headerStyle = {
-  background: DEFAULT.CGPS.COLOURS.PURPLE,
+  background: CGPS.COLOURS.PURPLE,
   maxHeight: navBarHeight,
   minHeight: navBarHeight,
 };
@@ -35,7 +36,7 @@ const LayoutContainer = React.createClass({
       <div style={style} className="mdl-layout mdl-js-layout mdl-layout--fixed-header" data-mr-layout="container">
         <header style={headerStyle} className="mdl-layout__header">
           <div style={headerRowStyle} className="mdl-layout__header-row">
-            <span className="mdl-layout-title">WGSA - <em>S. aureus</em></span>
+            <span className="mdl-layout-title">WGSA - <em>{Species.name}</em></span>
             <div className="mdl-layout-spacer"></div>
             <nav className="mdl-navigation">
               <a className="mdl-navigation__link" style={iconLinkStyle} href="#">

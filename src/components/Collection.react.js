@@ -6,6 +6,8 @@ import NotFound from './NotFound.react';
 import CollectionActionCreators from '../actions/CollectionActionCreators';
 import CollectionStore from '../stores/CollectionStore';
 
+import Species from '../species';
+
 export default class Collection extends React.Component {
 
   constructor(props) {
@@ -24,8 +26,7 @@ export default class Collection extends React.Component {
 
   componentDidMount() {
     CollectionStore.addChangeListener(this.handleCollectionStoreChange.bind(this));
-    // TODO: Make species id dynamic
-    CollectionActionCreators.getCollection('1280', this.props.params.id);
+    CollectionActionCreators.getCollection(Species.id, this.props.params.id);
   }
 
   componentWillUnmount() {

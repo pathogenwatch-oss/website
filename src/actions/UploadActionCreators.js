@@ -8,7 +8,7 @@ import FileUploadingProgressActionCreators from '../actions/FileUploadingProgres
 
 import FileUtils from '../utils/File';
 import ApiUtils from '../utils/Api';
-
+import Species from '../species';
 
 module.exports = {
 
@@ -58,8 +58,7 @@ module.exports = {
       socketRoomId: roomId,
     };
 
-    // TODO: Make species Id dynamic
-    ApiUtils.getCollectionId('1280', data, function (idError, ids) {
+    ApiUtils.getCollectionId(Species.id, data, function (idError, ids) {
       if (idError) {
         console.error(idError);
         return;
@@ -78,7 +77,7 @@ module.exports = {
         const urlParams = {
           collectionId: ids.collectionId,
           assemblyId: userAssemblyIdToAssemblyIdMap[userAssemblyId],
-          speciesId: '1280', // TODO: Make this dynamic
+          speciesId: Species.id,
         };
         const assemblyData = {
           socketRoomId: roomId,

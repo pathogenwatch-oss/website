@@ -1,13 +1,14 @@
 import 'material-design-lite/material.min.css';
 
 import React from 'react';
-import Router, { Route, RouteHandler, NotFoundRoute } from 'react-router';
+import Router, { Route, RouteHandler, DefaultRoute, NotFoundRoute } from 'react-router';
 
+import Home from './components/Home.react';
 import UploadCollection from './components/collection/UploadCollectionPage.react';
 import ExploreCollection from './components/Collection.react';
 import NotFound from './components/NotFound.react';
 
-import speciesData from './species';
+import Species from './species';
 
 class Application extends React.Component {
   render() {
@@ -17,6 +18,7 @@ class Application extends React.Component {
 
 const routes = (
   <Route name="application" path="/" handler={Application}>
+    <DefaultRoute handler={Home}/>
     <Route name="upload" path=":species/upload/?" handler={UploadCollection} />
     <Route name="collection" path=":species/collection/:id/?" handler={ExploreCollection} />
     <NotFoundRoute handler={NotFound}/>
@@ -24,9 +26,13 @@ const routes = (
 );
 
 Router.run(routes, Router.HistoryLocation, function (Handler, state) {
-  const speciesDef = speciesData[state.params.species];
-  if (speciesDef) {
-    React.render(<Handler species={speciesDef}/>, document.body);
+  if (!state.params.species) {
+    return React.render(<Handler />, document.body);
+  }
+
+  if (Species.isSupported(state.params.species)) {
+    Species.current = state.params.species;
+    React.render(<Handler />, document.body);
   } else {
     React.render(<NotFound />, document.body);
   }

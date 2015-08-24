@@ -1,22 +1,29 @@
-var React = require('react');
+import React from 'react';
 
-var NotFound = React.createClass({
+import { Link } from 'react-router';
+
+import { CGPS } from '../defaults';
+
+const titleStyle = {
+  textAlign: 'center',
+  color: CGPS.COLOURS.PURPLE,
+};
+
+export default React.createClass({
 
   render: function () {
-
-    var h2Style = {
-      fontSize: '28px',
-      fontWeight: '300'
-    };
-
     return (
-      <div className="container text-center">
-        <h2 style={h2Style}>
-          {this.props.children ? this.props.children : 'Not found.'}
-        </h2>
+      <div className="mdl-layout">
+        <div className="mdl-grid">
+          <h1 style={titleStyle}>
+            These are not the bacteria you're looking for.
+          </h1>
+        </div>
+        <div className="mdl-grid">
+          <Link style={titleStyle} to="/">Homepage</Link>
+        </div>
       </div>
     );
-  }
-});
+  },
 
-module.exports = NotFound;
+});
