@@ -9,7 +9,7 @@ const definitions = {
   salty: {
     id: '90370',
     nickname: 'salty',
-    name: 'Salmonella typhimurium',
+    name: 'Salmonella typhi',
   },
 
 };
