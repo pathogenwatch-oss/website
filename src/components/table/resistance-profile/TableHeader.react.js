@@ -45,7 +45,7 @@ const MetadataTableHeader = React.createClass({
   },
 
   getListOfTableHeaderNames: function () {
-    var metadataNames = ['Assembly Id'];
+    var metadataNames = ['Assembly Filename'];
     var antibioticNames = this.getListOfAntibioticNames().sort();
     return metadataNames.concat(antibioticNames);
   },

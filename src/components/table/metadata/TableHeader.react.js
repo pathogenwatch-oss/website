@@ -45,7 +45,7 @@ var MetadataTableHeader = React.createClass({
   },
 
   getListOfTableHeaderNames: function () {
-    var metadataNames = ['Assembly Id', 'Country', 'Source', 'Date', 'ST'];
+    var metadataNames = ['Assembly Filename', 'Country', 'Source', 'Date', 'ST'];
     return metadataNames;
   },
 

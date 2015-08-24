@@ -17,7 +17,7 @@ var TableRow = React.createClass({
     this.rowData = {
       assemblyId: {
         name: 'Assembly Id',
-        value: isolate.metadata.fileAssemblyId || isolate.metadata.userAssemblyId
+        value: isolate.metadata.assemblyFilename,
       },
       country: {
         name: 'Country',
