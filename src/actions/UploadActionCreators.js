@@ -17,7 +17,6 @@ module.exports = {
     AppDispatcher.dispatch(startProcessingFilesAction);
 
     FileUtils.parseFiles(files, function iife(error, rawFiles, assemblies) {
-
       var finishProcessingFilesAction = {
         type: 'finish_processing_files'
       };

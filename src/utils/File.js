@@ -1,6 +1,7 @@
 var DataUtils = require('./Data');
 var AnalysisUtils = require('./Analysis');
 var assign = require('object-assign');
+import UploadStore from '../stores/UploadStore.js';
 
 var FASTA_FILE_NAME_REGEX = /^.+(.fa|.fas|.fna|.ffn|.faa|.frn|.fasta|.contig)$/i;
 var CSV_FILE_NAME_REGEX = /^.+(.csv)$/i;
@@ -75,7 +76,7 @@ function sortFilesByName(files) {
 
 function parseFiles(files, callback) {
   var rawFiles = {};
-  var assemblies = {};
+  var assemblies = UploadStore.getAssemblies();
 
   var validatedFiles = validateFiles(files);
 

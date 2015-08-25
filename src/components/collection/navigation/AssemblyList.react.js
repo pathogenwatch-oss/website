@@ -53,7 +53,7 @@ const AssemblyList = React.createClass({
       })
     }
     else {
-      console.log('Deleting file silently')
+      console.log('Deleting file silently', fileAssemblyIdForDelete)
     }
 
     UploadWorkspaceNavigationActionCreators.deleteAssembly(fileAssemblyIdForDelete);
@@ -73,11 +73,14 @@ const AssemblyList = React.createClass({
     const fileAssemblyIds = UploadStore.getFileAssemblyIds();
     const assemblies = UploadStore.getAssemblies();
     const isValidMap = validateMetadata(assemblies);
-    var validated_icon = {
-        color: { color: '#888' },
-        icon: 'remove'
-      };
+    var validatedIconStyle = {
+      color: '#888'
+    };
+    var validatedIcon = {
+      icon: 'remove'
+    };
 
+// console.log(isValidMap)
     var style = {};
     return fileAssemblyIds.map((fileAssemblyId) => {
 
@@ -92,16 +95,16 @@ const AssemblyList = React.createClass({
 
       if (isValidMap) {
         if(isValidMap[fileAssemblyId]) {
-          validated_icon.color.color = 'green';
-          validated_icon.icon = 'check';
+          validatedIconStyle = { color: 'green' };
+          validatedIcon = 'check';
         }
         else {
-          validated_icon.color.color = 'red';
+          validatedIconStyle = { color: 'red' };
+          validatedIcon = 'error_outline';
         }
 
       }
-console.log(fileAssemblyId, isValidMap[fileAssemblyId], validated_icon.color.color)
-
+// console.log(fileAssemblyId, isValidMap[fileAssemblyId], validatedIcon, validatedIconStyle)
       return (
         <div style={style} className='assemblyListItem' key={fileAssemblyId}>
           <a className='mdl-button mdl-js-button mdl-js-ripple-effect'
@@ -110,9 +113,9 @@ console.log(fileAssemblyId, isValidMap[fileAssemblyId], validated_icon.color.col
             {fileAssemblyId}
           </a>
 
-          <button className="utilityButton mdl-button mdl-js-button mdl-button--icon" disabled>
-            <i style={validated_icon.color} className='material-icons'>{validated_icon.icon}</i>
-          </button>
+          <div className="utilityButton mdl-button mdl-js-button mdl-button--icon" disabled>
+            <i style={validatedIconStyle} className='material-icons'>{validatedIcon}</i>
+          </div>
 
           <button className="deleteButton utilityButton mdl-button mdl-js-button mdl-button--icon mdl-button--colored"
             onClick={this.handleDeleteAssembly.bind(this, fileAssemblyId)}>

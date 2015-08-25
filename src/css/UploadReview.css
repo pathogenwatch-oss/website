@@ -122,8 +122,8 @@
 }
 
 
-.assemblyListItem .material-icons {
-  font-size: 14px;  /* Preferred icon size */
+.assemblyListItem .deleteButton .material-icons {
+  font-size: 16px;  /* Preferred icon size */
 }
 
 /*********************************************/
@@ -131,7 +131,7 @@
 /**** SVG Chart CSS ****/
 .axis {
   fill: none;
-  stroke: #000;
+  stroke: rgba(0,0,0,0.6);
 }
 text {
   font-size: 11px;
