@@ -23,13 +23,13 @@ var Map = React.createClass({
   infoWindowIsolates: null,
 
   propTypes: {
-    width: React.PropTypes.number.isRequired,
-    height: React.PropTypes.number.isRequired,
     locations: React.PropTypes.object.isRequired
   },
 
   componentDidMount: function () {
     this.initializeMap();
+    this.createMarkers();
+    this.resizeMap();
   },
 
   componentDidUpdate: function () {
@@ -47,16 +47,15 @@ var Map = React.createClass({
     var center = new google.maps.LatLng(DEFAULT.MAP.CENTER.LATITUDE, DEFAULT.MAP.CENTER.LONGITUDE);
 
     var mapOptions = {
-      zoom: 3,
       center: center,
       // styles: MapUtils.STYLES,
       streetViewControl: false,
       scaleControl: true,
       mapTypeId: google.maps.MapTypeId.TERRAIN,
+      zoom: 3,
     };
 
     this.map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-    this.createMarkers();
   },
 
   fitAllMarkers: function () {
@@ -109,14 +108,14 @@ var Map = React.createClass({
       if (locations[id].position.latitude && locations[id].position.longitude) {
         latitude = parseFloat(locations[id].position.latitude);
         longitude = parseFloat(locations[id].position.longitude);
-        this.markers[id] = this.createMarker(locations[id], latitude, longitude);
+        this.markers[id] = this.createMarker(id, locations[id].location, latitude, longitude);
       }
     };
 
     this.fitAllMarkers();
   },
 
-  createMarker: function (dataObjectId, latitude, longitude, shape = DEFAULT.SHAPE, colour = DEFAULT.COLOUR) {
+  createMarker: function (dataObjectId, location = '', latitude, longitude, shape = DEFAULT.SHAPE, colour = DEFAULT.COLOUR) {
     if (!latitude) {
       throw new Error(`Can't create map marker because latitude is missing in ${dataObjectId} data object :(`);
     }
@@ -139,7 +138,13 @@ var Map = React.createClass({
       // icon: MapUtils.getMarkerIcon(shape, colour),
       optimized: false,
     });
-
+    var html = '<b>'+location+'</b>';
+    var infowindow = new google.maps.InfoWindow({
+      content: html
+    });
+    marker.addListener('click', function() {
+      infowindow.open(this.map, marker);
+    });
     return marker;
   },
 

@@ -23,7 +23,8 @@ module.exports = {
       PURPLE_LIGHT: '#e0d8e8',
       PURPLE_MID: '#9476b1',
       PURPLE: '#673c90',
-      GREY: '#e5e5e5'
+      GREY: '#e5e5e5',
+      LIGHT_GREY: '#efefef'
     },
   },
 };

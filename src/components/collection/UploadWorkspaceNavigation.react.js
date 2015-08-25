@@ -6,7 +6,6 @@ import assign from 'object-assign';
 import AssemblyList from './navigation/AssemblyList.react';
 import PreviousAssemblyButton from './navigation/PreviousAssemblyButton.react';
 import NextAssemblyButton from './navigation/NextAssemblyButton.react';
-import UploadOverview from './UploadOverview.react.js';
 
 import UploadWorkspaceNavigationActionCreators from '../../actions/UploadWorkspaceNavigationActionCreators.js';
 
@@ -28,7 +27,7 @@ const Component = React.createClass({
 
   render: function () {
     return (
-      <aside className='mdl-layout__drawer mdl-shadow--4dp'>
+      <aside className='mdl-layout__drawer'>
         <div className="uploadWorkspaceNavigationTitle">
           <span className="mdl-badge" data-badge={this.props.totalAssemblies}>Assemblies</span>
         </div>

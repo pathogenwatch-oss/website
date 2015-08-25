@@ -1,3 +1,9 @@
+
+/**** Upload Overview ****/
+.overview-card-wide.mdl-card  {
+  width: 100%;
+}
+
 /**** Upload Review - Header ****/
 
 .mdl-layout__drawer-button {
@@ -35,6 +41,7 @@
   font-size: 26px;
   font-weight: 300;
 }
+
 #loadingAnimation.mdl-progress {
   width: auto;
 }
@@ -63,22 +70,9 @@
 
 }
 
-.assemblyWorkspaceDataDisplayContainer {
-  width: 80%;
-  overflow: auto;
-}
 /*********************************/
 
 /**** UploadReview - Navigation Left Pane ****/
-
-.uploadWorkspaceNavigationContainer {
-  width: 20%;
-  min-width: 200px;
-  float: left;
-  background: #fff;
-  overflow: auto;
-  height: 100%;
-}
 
 .uploadWorkspaceNavigationTitle {
   font-size: 25px;

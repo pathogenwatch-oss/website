@@ -14,6 +14,7 @@ const labelStyle = {
   fontSize: '15px',
   fontWeight: '300',
   lineHeight: '20px',
+  textTransform: 'uppercase',
   color: '#777'
 };
 
@@ -27,6 +28,12 @@ const AssemblyAnalysisChart = React.createClass({
   propTypes: {
     label: React.PropTypes.string,
     analysis: React.PropTypes.object.isRequired
+  },
+
+  getInitialState: function() {
+    return {
+      isChartDataAvailable: false
+    };
   },
 
   getChartDataWithN50Data: function(N50Data) {
@@ -46,7 +53,6 @@ const AssemblyAnalysisChart = React.createClass({
 
     const fastaChartData = this.props.analysis.sumsOfNucleotidesInDnaStrings;
     const assemblyN50 = this.props.analysis.assemblyN50Data;
-    // console.log(this.props.analysis);
     AnalysisUtils.drawN50Chart(fastaChartData, assemblyN50, '.fasta-analytics-chart');
   },
 
@@ -55,15 +61,26 @@ const AssemblyAnalysisChart = React.createClass({
   },
 
   componentDidMount: function() {
+    if (Object.keys(this.props.analysis).length > 0) {
+      this.setState({
+        isChartDataAvailable: true
+      })
+    }
     this.draw();
   },
 
   render: function () {
+    if (this.state.isChartDataAvailable) {
+      return (
+        <div style={containerStyle}>
+          <label className='analysisItemLabel'>{this.props.label}</label>
+          <div className="fasta-analytics-chart"></div>
+        </div>
+      );
+    }
+
     return (
-      <div style={containerStyle}>
-        <label className='analysisItemLabel'>{this.props.label}</label>
-        <div className="fasta-analytics-chart"></div>
-      </div>
+      <div style={labelStyle}>No data available</div>
     );
   }
 });

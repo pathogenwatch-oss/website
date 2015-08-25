@@ -25,8 +25,7 @@ const numberStyle = {
 const AssemblyAnalysisOverviewChart = React.createClass({
 
   propTypes: {
-    label: React.PropTypes.string,
-    analysis: React.PropTypes.object.isRequired
+    label: React.PropTypes.string
   },
 
 

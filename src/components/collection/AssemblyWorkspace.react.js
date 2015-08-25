@@ -27,10 +27,10 @@ var loadingAnimationStyle = {
 };
 
 var layoutContentStyle = {
-  background: DEFAULT.CGPS.COLOURS.GREY
+  background: DEFAULT.CGPS.COLOURS.LIGHT_GREY
 }
 
-const AssemblyWorkspace = React.createClass({
+var AssemblyWorkspace = React.createClass({
 
   // location: this.props.assembly.location,
 
@@ -57,7 +57,7 @@ const AssemblyWorkspace = React.createClass({
     SocketStore.addChangeListener(this.handleSocketStoreChange);
     SocketActionCreators.setSocketConnection(socket);
 
-    const container = this.getDOMNode('assemblyWorkspaceContainer');
+    var container = this.getDOMNode('assemblyWorkspaceContainer');
     container.style.height = window.innerHeight;
   },
 
@@ -96,7 +96,7 @@ const AssemblyWorkspace = React.createClass({
 
   render: function () {
     loadingAnimationStyle.display = this.state.isProcessing ? 'block' : 'none';
-    const locations = {};
+    var locations = {};
     var label = null;
     if (this.props.assembly) {
       locations[this.props.assembly.fasta.name] = this.props.assembly.metadata.geography;
@@ -118,33 +118,40 @@ const AssemblyWorkspace = React.createClass({
 
             <main className="mdl-layout__content" style={layoutContentStyle}>
               { this.props.assembly &&
-                <div className='assemblyWorkspaceDataDisplayContainer'>
+                <div>
                   <div className='mdl-grid'>
-                    <div className='mdl-cell mdl-cell--6-col'>
-                      <AssemblyWorkspaceHeader text='Metadata' />
-                      <AssemblyMetadata assembly={this.props.assembly} />
-                    </div>
+                    <div className='mdl-cell mdl-cell--12-col'>
+                      <div className="overview-card-wide mdl-card mdl-shadow--2dp">
+                        <div className="mdl-card--title mdl-card--expand">
+                          <div className='mdl-grid'>
+                            <div className='mdl-cell mdl-cell--6-col'>
+                              <AssemblyWorkspaceHeader text='Metadata' />
+                              <AssemblyMetadata assembly={this.props.assembly} />
+                            </div>
 
-                    <div className='mdl-cell mdl-cell--6-col'>
-                      <Map width={300} height={200} label={label} locations={locations}/>
+                            <div className='mdl-cell mdl-cell--6-col'>
+                              <Map width={400} height={200} locations={locations}/>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
+                    <div className='mdl-cell mdl-cell--12-col'>
+                      <div className="overview-card-wide mdl-card mdl-shadow--2dp">
+                        <div className="mdl-card--title mdl-card--expand">
+                          <div className='mdl-grid'>
+                            <div className='mdl-cell mdl-cell--6-col'>
+                              <AssemblyWorkspaceHeader text='Analysis' />
+                              <AssemblyAnalysis assembly={this.props.assembly} />
+                            </div>
 
-                    <div className='mdl-cell mdl-cell--6-col'>
-                      <AssemblyWorkspaceHeader text='Analysis' />
-                      <AssemblyAnalysis assembly={this.props.assembly} />
-                    </div>
-
-                    <div className='mdl-cell mdl-cell--6-col'>
-                      <AssemblyWorkspaceHeader text='Chart' />
-                      <AssemblyAnalysisChart analysis={this.props.assembly.analysis} />
-                    </div>
-
-                    <div className='mdl-cell mdl-cell--6-col'>
-                      <AssemblyWorkspaceHeader text='Overview Chart' />
-                      <AssemblyAnalysisOverviewChart analysis={this.props.assembly.analysis} />
-                    </div>
-
-                    <div className='mdl-cell mdl-cell--6-col'>
+                            <div className='mdl-cell mdl-cell--6-col'>
+                              <AssemblyWorkspaceHeader text='Chart' />
+                              <AssemblyAnalysisChart analysis={this.props.assembly.analysis} />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>

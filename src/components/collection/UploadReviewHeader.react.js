@@ -14,7 +14,7 @@ var UploadReviewHeader = React.createClass({
     title: React.PropTypes.string.isRequired
   },
 
-  componentDidMount() {
+  componentDidMount: function() {
     componentHandler.upgradeDom();
   },
 
@@ -24,7 +24,6 @@ var UploadReviewHeader = React.createClass({
         <div className="mdl-layout-icon"></div>
         <div style={headerStyle} className="mdl-layout__header-row">
           <span style={headerStyle} className="mdl-layout-title">{this.props.title}</span>
-          <div class="mdl-layout-spacer"></div>
           <UploadButton />
         </div>
       </header>
