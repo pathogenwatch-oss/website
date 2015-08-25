@@ -1,70 +1,51 @@
-var React = require('react');
-var assign = require('object-assign');
+import React from 'react';
+import assign from 'object-assign';
 
-var FileUploadingProgress = require('./FileUploadingProgress.react');
-var UploadingAssembliesProgress = require('./UploadingAssembliesProgress.react');
+import FileUploadingProgress from './FileUploadingProgress.react';
+import UploadingAssembliesProgress from './UploadingAssembliesProgress.react';
 
-var fullWidthAndHeightStyle = {
+const fullWidthAndHeightStyle = {
   width: '100%',
-  height: '100%'
+  height: '100%',
 };
 
-var dropZoneStyle = assign({}, fullWidthAndHeightStyle, {
-  background: '-webkit-gradient(linear,left top,left bottom,color-stop(0,#f7f7f7),color-stop(1,#ebebeb))',
-  padding: '30px',
-  overflow: 'scroll'
-});
-
-var dropTargetContainerStyle = assign({}, fullWidthAndHeightStyle, {
-  // display: 'table',
-  textAlign: 'center'
-});
-
-var dropTargetStyle = {
-  // display: 'table-cell',
-  // verticalAlign: 'middle'
+const dropZoneStyle = {
+  textAlign: 'center',
 };
 
-var iconStyle = {
-  fontSize: '40px',
-  color: '#bbb',
-  textShadow: '1px 1px #fff'
-};
-
-var headerStyle = {
+const headerStyle = {
   fontWeight: '300',
   fontSize: '20px',
-  textShadow: '1px 1px #fff'
+  textShadow: '1px 1px #fff',
 };
 
-var featureStyle = {
-  fontWeight: '500'
+const featureStyle = {
+  fontWeight: 'bold',
 };
 
-var FA_SPIN_CLASS = 'fa-spin';
-var FA_COG_CLASS = 'fa fa-cog';
-var ICON_CLASS = FA_COG_CLASS + ' ' + FA_SPIN_CLASS;
+const UploadingFiles = React.createClass({
 
-var UploadingFiles = React.createClass({
-  render: function () {
+  componentDidMount() {
+    componentHandler.upgradeElement(React.findDOMNode(this.refs.spinner));
+  },
+
+  render() {
     return (
-      <div style={dropZoneStyle}>
-        <div style={dropTargetContainerStyle}>
-          <div style={dropTargetStyle}>
-            <i className={ICON_CLASS} style={iconStyle}></i>
-            <h2 style={headerStyle}><span style={featureStyle}>Uploading</span> and <span style={featureStyle}>analysing</span> your files.</h2>
-
-            <div className="row">
-              <div className="col-sm-8 col-sm-offset-2">
-                <FileUploadingProgress />
-                <UploadingAssembliesProgress />
-              </div>
+      <div className="mdl-layout mdl-js-layout">
+        <main className="mdl-layout__content">
+          <div className="mdl-grid">
+            <div className="mdl-cell mdl-cell--12-col" style={dropZoneStyle}>
+              <div ref="spinner" className="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active"></div>
+              <h2 style={headerStyle}><span style={featureStyle}>Uploading</span> and <span style={featureStyle}>analysing</span> your files.</h2>
+              <FileUploadingProgress />
+              <UploadingAssembliesProgress />
             </div>
           </div>
-        </div>
+        </main>
       </div>
     );
-  }
+  },
+
 });
 
 module.exports = UploadingFiles;

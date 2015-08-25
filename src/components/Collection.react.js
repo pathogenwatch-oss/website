@@ -39,7 +39,6 @@ export default class Collection extends React.Component {
   }
 
   render() {
-    console.dir(this.state);
     if (this.state.isUploading) {
       return (
         <UploadingFilesDetailed />
