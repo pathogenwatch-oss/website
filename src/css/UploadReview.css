@@ -1,9 +1,28 @@
+/**** Upload Review - Header ****/
+
+.mdl-layout__drawer-button {
+  color: #673c90 !important;
+}
+
+@media (max-width: 1024px) {
+
+  .mdl-layout__header-row {
+    padding-left: 60px !important;
+  }
+
+}
+
 /**** UploadReview - Analysis ****/
 
 .welcome-card-wide.mdl-card {
   max-width: auto;
   width: 500px;
-  background: transparent;
+  background: #fff;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  text-align: center;
 }
 .welcome-card-wide > .mdl-card__title {
   color: #ccc;
@@ -40,10 +59,8 @@
   display: flex;             /* NEW, Spec - Opera 12.1, Firefox 20+ */
 }
 
-.assemblyWorkspaceContainer .welcomeContainer {
-  margin: auto;
-  text-align: center;
-  margin-top: 200px;
+.welcomeContainer {
+
 }
 
 .assemblyWorkspaceDataDisplayContainer {

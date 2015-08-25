@@ -4,7 +4,7 @@ var Logo = require('../Logo.react.js');
 var DEFAULT = require('../../defaults.js');
 
 var headerStyle = {
-  'background': DEFAULT.CGPS.COLOURS.GREY,
+  'background': '#fff',
    color: DEFAULT.CGPS.COLOURS.PURPLE
 };
 
@@ -14,11 +14,17 @@ var UploadReviewHeader = React.createClass({
     title: React.PropTypes.string.isRequired
   },
 
+  componentDidMount() {
+    componentHandler.upgradeDom();
+  },
+
   render: function () {
     return (
       <header style={headerStyle} className="mdl-layout__header">
+        <div className="mdl-layout-icon"></div>
         <div style={headerStyle} className="mdl-layout__header-row">
           <span style={headerStyle} className="mdl-layout-title">{this.props.title}</span>
+          <div class="mdl-layout-spacer"></div>
           <UploadButton />
         </div>
       </header>

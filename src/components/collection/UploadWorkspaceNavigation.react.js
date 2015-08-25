@@ -1,21 +1,23 @@
+import '../../css/UploadReview.css';
+
 import React from 'react';
 import assign from 'object-assign';
 
 import AssemblyList from './navigation/AssemblyList.react';
 import PreviousAssemblyButton from './navigation/PreviousAssemblyButton.react';
 import NextAssemblyButton from './navigation/NextAssemblyButton.react';
-import UploadStore from '../../stores/UploadStore';
 import UploadOverview from './UploadOverview.react.js';
-import '../../css/UploadReview.css';
+
+import UploadWorkspaceNavigationActionCreators from '../../actions/UploadWorkspaceNavigationActionCreators.js';
 
 const AssemblyOverviewButton = React.createClass({
   handleClick: function () {
-    const allAssemblyN50s = UploadStore.getAllAssemblyN50Data();
+    UploadWorkspaceNavigationActionCreators.navigateToAssembly(null);
   },
 
   render: function () {
     return (
-      <button type="button" className="mdl-button mdl-js-button" onClick={this.handleClick}>
+      <button type="button" disabled={!this.props.enabled} className="mdl-button mdl-js-button" onClick={this.handleClick}>
         Overview
       </button>
     );
@@ -24,33 +26,15 @@ const AssemblyOverviewButton = React.createClass({
 
 const Component = React.createClass({
 
-  componentDidMount: function() {
-    const container = this.getDOMNode('uploadWorkspaceNavigationContainer');
-    const newHeight = window.innerHeight - container.offsetTop;
-    container.setAttribute('height', newHeight);
-  },
-
   render: function () {
     return (
-      <div className='uploadWorkspaceNavigationContainer'>
-        <form className="assemblyNavTitle form-inline">
-          <div className="form-group">
-            <div className="uploadWorkspaceNavigationTitle mdl-badge" data-badge={this.props.totalAssemblies}>
-              <span>Assemblies</span>
-            </div>
-            {
-              this.props.assembliesUploaded &&
-                <AssemblyOverviewButton />
-            }
-            <div className="btn-group" role="group" aria-label="...">
-
-            </div>
-          </div>
-        </form>
-        <div className="form-group">
-          <AssemblyList />
+      <aside className='mdl-layout__drawer mdl-shadow--4dp'>
+        <div className="uploadWorkspaceNavigationTitle">
+          <span className="mdl-badge" data-badge={this.props.totalAssemblies}>Assemblies</span>
         </div>
-      </div>
+        <AssemblyOverviewButton enabled={this.props.assembliesUploaded}/>
+        <AssemblyList />
+      </aside>
     );
   }
 });

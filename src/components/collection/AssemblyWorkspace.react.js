@@ -12,6 +12,7 @@ import AssemblyAnalysisOverviewChart from './AssemblyAnalysisOverviewChart.react
 import UploadWorkspaceNavigation from './UploadWorkspaceNavigation.react';
 import UploadReviewHeader from './UploadReviewHeader.react.js';
 import UploadStore from '../../stores/UploadStore.js';
+import Overview from './Overview.react';
 
 import UploadActionCreators from '../../actions/UploadActionCreators';
 import SocketActionCreators from '../../actions/SocketActionCreators';
@@ -21,13 +22,13 @@ import SocketUtils from '../../utils/Socket';
 import DEFAULT from '../../defaults.js';
 import '../../css/UploadReview.css';
 
-const welcomeText = {
-  color: DEFAULT.CGPS.COLOURS.GREEN_MID
-};
-
 var loadingAnimationStyle = {
   display: 'block'
 };
+
+var layoutContentStyle = {
+  background: DEFAULT.CGPS.COLOURS.GREY
+}
 
 const AssemblyWorkspace = React.createClass({
 
@@ -108,70 +109,53 @@ const AssemblyWorkspace = React.createClass({
     // console.log('rendering: isProcessing: ', this.state.isProcessing)
     // console.log(this.props.assembly)
     return (
-      <div className='mdl-layout mdl-js-layout mdl-layout--fixed-header'>
-        {
-          this.props.assembly &&
-            <UploadReviewHeader title='Macroreact: Upload Preview' />
-          ||
-            <UploadReviewHeader title='Macroreact' />
-        }
-        <FileDragAndDrop onDrop={this.handleDrop}>
-          <div id="loadingAnimation" style={loadingAnimationStyle} className="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
+      <FileDragAndDrop onDrop={this.handleDrop}>
+        <div className='mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-drawer'>
+            <UploadReviewHeader title='WGSA' />
+            <div id="loadingAnimation" style={loadingAnimationStyle} className="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
 
-          <UploadWorkspaceNavigation assembliesUploaded={this.props.assembly?true:false} totalAssemblies={this.props.totalAssemblies}/>
+            <UploadWorkspaceNavigation assembliesUploaded={this.props.assembly?true:false} totalAssemblies={this.props.totalAssemblies}/>
 
-          {
-            this.props.assembly &&
-            <main className='assemblyWorkspaceContainer mdl-layout__content'>
-              <div className='assemblyWorkspaceDataDisplayContainer'>
-                <div className='mdl-grid'>
-                  <div className='mdl-cell mdl-cell--6-col'>
-                    <AssemblyWorkspaceHeader text='Metadata' />
-                    <AssemblyMetadata assembly={this.props.assembly} />
-                  </div>
+            <main className="mdl-layout__content" style={layoutContentStyle}>
+              { this.props.assembly &&
+                <div className='assemblyWorkspaceDataDisplayContainer'>
+                  <div className='mdl-grid'>
+                    <div className='mdl-cell mdl-cell--6-col'>
+                      <AssemblyWorkspaceHeader text='Metadata' />
+                      <AssemblyMetadata assembly={this.props.assembly} />
+                    </div>
 
-                  <div className='mdl-cell mdl-cell--6-col'>
-                    <Map width={300} height={200} label={label} locations={locations}/>
-                  </div>
+                    <div className='mdl-cell mdl-cell--6-col'>
+                      <Map width={300} height={200} label={label} locations={locations}/>
+                    </div>
 
-                  <div className='mdl-cell mdl-cell--6-col'>
-                    <AssemblyWorkspaceHeader text='Analysis' />
-                    <AssemblyAnalysis assembly={this.props.assembly} />
-                  </div>
+                    <div className='mdl-cell mdl-cell--6-col'>
+                      <AssemblyWorkspaceHeader text='Analysis' />
+                      <AssemblyAnalysis assembly={this.props.assembly} />
+                    </div>
 
-                  <div className='mdl-cell mdl-cell--6-col'>
-                    <AssemblyWorkspaceHeader text='Chart' />
-                    <AssemblyAnalysisChart analysis={this.props.assembly.analysis} />
-                  </div>
+                    <div className='mdl-cell mdl-cell--6-col'>
+                      <AssemblyWorkspaceHeader text='Chart' />
+                      <AssemblyAnalysisChart analysis={this.props.assembly.analysis} />
+                    </div>
 
-                  <div className='mdl-cell mdl-cell--6-col'>
-                    <AssemblyWorkspaceHeader text='Overview Chart' />
-                    <AssemblyAnalysisOverviewChart analysis={this.props.assembly.analysis} />
-                  </div>
+                    <div className='mdl-cell mdl-cell--6-col'>
+                      <AssemblyWorkspaceHeader text='Overview Chart' />
+                      <AssemblyAnalysisOverviewChart analysis={this.props.assembly.analysis} />
+                    </div>
 
-                  <div className='mdl-cell mdl-cell--6-col'>
+                    <div className='mdl-cell mdl-cell--6-col'>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </main>
 
-            ||
+                ||
 
-            <main className='assemblyWorkspaceContainer mdl-layout__content'>
-              <div className="welcomeContainer">
-                <div className="welcome-card-wide mdl-card mdl-shadow--2dp">
-                  <div className="mdl-card__title">
-                    <h2 style={welcomeText} className="mdl-card__title-text">Drop your assemblies here for quick analysis and easy upload!</h2>
-                  </div>
-                  <div className="mdl-card__supporting-text">
-                  </div>
-                </div>
-                <h4></h4>
-              </div>
+                <Overview />
+              }
             </main>
-          }
-        </FileDragAndDrop>
-      </div>
+        </div>
+      </FileDragAndDrop>
     );
   }
 });
