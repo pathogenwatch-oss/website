@@ -27,12 +27,13 @@ const routes = (
 );
 
 Router.run(routes, Router.HistoryLocation, function (Handler, state) {
-  if (!state.params.species) {
+  const requestedSpecies = state.params.species;
+  if (!requestedSpecies) {
     return React.render(<Handler />, document.body);
   }
 
-  if (Species.isSupported(state.params.species)) {
-    Species.current = state.params.species;
+  if (Species.isSupported(requestedSpecies)) {
+    Species.current = requestedSpecies;
     React.render(<Handler />, document.body);
   } else {
     React.render(<NotFound />, document.body);

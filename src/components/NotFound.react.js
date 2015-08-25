@@ -1,7 +1,5 @@
 import React from 'react';
 
-import { Link } from 'react-router';
-
 import { CGPS } from '../defaults';
 
 const titleStyle = {
@@ -20,7 +18,7 @@ export default React.createClass({
           </h1>
         </div>
         <div className="mdl-grid">
-          <Link style={titleStyle} to="/">Homepage</Link>
+          <a style={titleStyle} href="/">Homepage</a>
         </div>
       </div>
     );

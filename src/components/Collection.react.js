@@ -19,7 +19,7 @@ export default class Collection extends React.Component {
       isUploading: FileUploadingStore.getFileUploadingState(),
       collection: null,
     };
-    this.getCollection = this.getCollection.bind(this);
+    this.checkGetCollection = this.checkGetCollection.bind(this);
   }
 
   componentDidMount() {
