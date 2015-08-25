@@ -1,7 +1,7 @@
 import 'material-design-lite/material.min.css';
 
 import React from 'react';
-import Router, { Route, RouteHandler, DefaultRoute, NotFoundRoute } from 'react-router';
+import Router, { Route, RouteHandler, DefaultRoute, NotFoundRoute, Redirect } from 'react-router';
 
 import Home from './components/Home.react';
 import UploadCollection from './components/collection/UploadCollectionPage.react';
@@ -19,6 +19,7 @@ class Application extends React.Component {
 const routes = (
   <Route name="application" path="/" handler={Application}>
     <DefaultRoute handler={Home}/>
+    <Redirect from=":species/?" to="upload" />
     <Route name="upload" path=":species/upload/?" handler={UploadCollection} />
     <Route name="collection" path=":species/collection/:id/?" handler={ExploreCollection} />
     <NotFoundRoute handler={NotFound}/>

@@ -10,23 +10,27 @@ var server = new WebpackDevServer(webpack(config), {
   hot: true
 });
 
-server.use('/api/species/:speciesId/reference', function (req, res) {
-  res.sendFile(__dirname + '/static_data/reference.json');
-});
-
 server.app.post('/api/species/:speciesId/collection', function (req, res) {
   res.json({
     collectionId: '123',
-    fileAssemblyIdToAssemblyIdMap: {
+    userAssemblyIdToAssemblyIdMap: {
       'JH1.fna': '123',
       'JH9.fna': '456',
-      'MW2.fna': '789',
+      'MW2.fna': '789'
     }
   });
 });
 
-server.use('/api/species/:speciesId/collection/:id', function (req, res) {
+server.app.post('/api/species/:speciesId/collection/:collectionId/assembly/:id', function (req, res) {
+  res.json({ assemblyId: req.params.id });
+});
+
+server.app.get('/api/species/:speciesId/collection/:id', function (req, res) {
   res.sendFile(__dirname + '/static_data/collection.json');
+});
+
+server.app.get('/api/species/:speciesId/reference', function (req, res) {
+  res.sendFile(__dirname + '/static_data/reference.json');
 });
 
 server.use('/', function (req, res) {

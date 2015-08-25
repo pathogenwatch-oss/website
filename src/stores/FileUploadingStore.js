@@ -33,7 +33,7 @@ var RESULTS = keyMirror({
   ABORT: null,
 });
 
-var fileUploadingState = STATES.NOT_UPLOADING_FILES;
+var fileUploadingState = null;
 var fileUploadingResult = RESULTS.NONE;
 var collectionId = null;
 var fileAssemblyIdToAssemblyIdMap = null;
@@ -93,31 +93,32 @@ var Store = assign({}, EventEmitter.prototype, {
 
   getFileAssemblyIdToAssemblyIdMap: function () {
     return fileAssemblyIdToAssemblyIdMap;
-  }
+  },
+
 });
 
 function handleAction(action) {
-
   switch (action.type) {
 
-    case 'start_uploading_files':
-      setFileUploadingState(STATES.UPLOADING_FILES);
-      emitChange();
-      break;
+  case 'start_uploading_files':
+    setFileUploadingState(STATES.UPLOADING_FILES);
+    emitChange();
+    break;
 
-    case 'finish_uploading_files':
-      setFileUploadingState(STATES.NOT_UPLOADING_FILES);
-      setFileUploadingResult(action.result);
-      emitChange();
-      break;
+  case 'finish_uploading_files':
+    setFileUploadingState(null);
+    setFileUploadingResult(action.result);
+    emitChange();
+    break;
 
-    case 'set_collection_id':
-      setCollectionId(action.collectionId);
-      setFileAssemblyIdToAssemblyIdMap(action.fileAssemblyIdToAssemblyIdMap);
-      emitChange();
-      break;
+  case 'set_collection_id':
+    setCollectionId(action.collectionId);
+    setFileAssemblyIdToAssemblyIdMap(action.fileAssemblyIdToAssemblyIdMap);
+    emitChange();
+    break;
 
-    default: // ... do nothing
+  default:
+    // ... do nothing
 
   }
 }

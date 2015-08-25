@@ -25,7 +25,7 @@ const TableResistanceProfile = React.createClass({
         title="Resistance"
         style={style}
         onClick={this.handleClick}>
-        <i className="material-icons" style={{ color: '#fff' }}>security</i>
+        <i className="material-icons" style={{ color: '#fff' }}>local_pharmacy</i>
       </button>
     );
   }

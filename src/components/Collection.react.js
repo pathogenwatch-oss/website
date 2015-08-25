@@ -19,29 +19,27 @@ export default class Collection extends React.Component {
       isUploading: FileUploadingStore.getFileUploadingState(),
       collection: null,
     };
-    console.log('in a state', FileUploadingStore.getFileUploadingState());
-  }
-
-  handleCollectionStoreChange() {
-    this.setState({
-      collection: 'LOADED',
-    });
-  }
-
-  componentWillMount() {
-
+    this.getCollection = this.getCollection.bind(this);
   }
 
   componentDidMount() {
     CollectionStore.addChangeListener(this.handleCollectionStoreChange.bind(this));
-    CollectionActionCreators.getCollection(Species.id, this.props.params.id);
+    FileUploadingStore.addChangeListener(this.handleFileUploadingStoreChange.bind(this));
+
+    this.checkGetCollection();
+  }
+
+  componentDidUpdate() {
+    this.checkGetCollection();
   }
 
   componentWillUnmount() {
     CollectionStore.removeChangeListener(this.handleCollectionStoreChange.bind(this));
+    FileUploadingStore.removeChangeListener(this.handleFileUploadingStoreChange.bind(this));
   }
 
   render() {
+    console.dir(this.state);
     if (this.state.isUploading) {
       return (
         <UploadingFilesDetailed />
@@ -61,4 +59,23 @@ export default class Collection extends React.Component {
     );
   }
 
+  handleCollectionStoreChange() {
+    this.setState({
+      collection: 'LOADED',
+    });
+  }
+
+  handleFileUploadingStoreChange() {
+    if (FileUploadingStore.getFileUploadingResult() === FileUploadingStore.getFileUploadingResults().SUCCESS) {
+      this.setState({
+        isUploading: false,
+      });
+    }
+  }
+
+  checkGetCollection() {
+    if (!this.state.isUploading && !this.state.collection) {
+      CollectionActionCreators.getCollection(Species.id, this.props.params.id);
+    }
+  }
 }
