@@ -22,7 +22,7 @@ export default React.createClass({
   handleSubtreeStoreChange() {
     const id = SpeciesSubtreeStore.getActiveSpeciesSubtreeId();
     this.setState({
-      subtree: (id === this.collectionId) ? null : id,
+      subtree: (id === this.collectionId) ? 'Collection' : id,
     });
   },
 

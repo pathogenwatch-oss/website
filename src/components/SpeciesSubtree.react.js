@@ -401,7 +401,7 @@ const Tree = React.createClass({
       <section style={sectionStyle}>
         <header className="wgsa-tree-header">
           <button className="wgsa-tree-return mdl-button mdl-js-button mdl-button--icon" onClick={this.handleReturnToPopulationTree}>
-            <i className="material-icons">arrow_back</i>
+            <i className="material-icons">{ this.treeId === 'Collection' ? 'nature_people' : 'arrow_back' }</i>
           </button>
           <h2 className="wgsa-tree-heading">{this.treeId}</h2>
           <div className="wgsa-tree-menu">

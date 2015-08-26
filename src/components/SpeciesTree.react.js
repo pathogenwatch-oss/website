@@ -8,6 +8,7 @@ import DEFAULT, { CGPS } from '../defaults';
 
 import SpeciesTreeStore from '../stores/SpeciesTreeStore';
 import SpeciesSubtreeStore from '../stores/SpeciesSubtreeStore';
+import UploadedCollectionStore from '../stores/UploadedCollectionStore';
 import SpeciesSubtreeActionCreators from '../actions/SpeciesSubtreeActionCreators';
 
 const DEFAULT_TREE_SETTINGS = {
@@ -59,6 +60,7 @@ const Tree = React.createClass({
   componentWillMount: function () {
     this.tree = SpeciesTreeStore.getSpeciesTree();
     this.treeId = 'species-tree';
+    this.collectionId = UploadedCollectionStore.getUploadedCollectionId();
   },
 
   componentDidMount: function () {
@@ -217,15 +219,13 @@ const Tree = React.createClass({
   handleTreeBranchSelected: function (event) {
     var selectedNodeIds = event.nodeIds;
 
-    if (selectedNodeIds.length === 0) {
-      this.showUploadedCollectionTree();
-    } else if (selectedNodeIds.length === 1) {
+    if (selectedNodeIds.length === 1) {
       this.showUploadedCollectionSubtree(selectedNodeIds[0]);
     }
   },
 
   showUploadedCollectionTree: function () {
-    // SpeciesSubtreeActionCreators.setActiveSpeciesSubtreeId(UploadedCollectionStore.getUploadedCollectionId());
+    SpeciesSubtreeActionCreators.setActiveSpeciesSubtreeId(this.collectionId);
   },
 
   showUploadedCollectionSubtree: function (subtreeId) {
@@ -289,6 +289,9 @@ const Tree = React.createClass({
     return (
       <section style={sectionStyle}>
         <header className="wgsa-tree-header">
+        <button className="wgsa-tree-return mdl-button mdl-js-button mdl-button--icon" onClick={this.showUploadedCollectionTree}>
+          <i className="material-icons">nature</i>
+        </button>
           <h2 className="wgsa-tree-heading">Population</h2>
           <div className="wgsa-tree-menu">
             <button ref="menu_button" id="tree-options" className="wgsa-tree-actions mdl-button mdl-js-button mdl-button--icon">
