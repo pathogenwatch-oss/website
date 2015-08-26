@@ -104,44 +104,37 @@
 }
 
 .assemblyListItem {
-  background-color: #fff;
-  margin: 2px 0px;
   width: 100%;
-  border-bottom: 1px solid #e0e0e0;
-  display: inline-block;
-  /*position: absolute;*/
-  float: left;
+  display: inline;
+  text-align: left;
 }
 
-.assemblyListItem a {
+.assemblyListItem span.filename {
   font-size: 12px;
   font-weight: 100;
-  color: #444;
-  margin: 0;
-  cursor: pointer;
-  text-align: left;
   text-transform: none;
-  /*width: 100%;*/
-  display: block;
-  float: left;
+  left: 10px;
+  padding: 0px;
+  overflow: none;
+  height: auto;
 }
 
-.assemblyListItem a:hover {
-  color: inherit;
+.assemblyListItem.mdl-button {
+  /*border: 1px solid black;*/
+  padding: 0px 0 0 4px;
+  margin: 0px;
+  height: auto;
 }
-
-/*.assemblyListItem span {
-  padding: 7px 0px 0px 0px;
-}
-*/
 
 .assemblyListItem .deleteButton {
-  color: #ec0974;
+  color: #777;
+  right: 0px;
 }
 .assemblyListItem .utilityButton {
+  /*position: absolute;*/
   float: right;
-  right: 10px;
-  color: #777;
+  /*right: 0px;*/
+  z-index: 9;
 }
 .assemblyListItem .utilityButton i:hover{
 /*  font-size: 20px;
@@ -149,7 +142,7 @@
 }
 
 
-.assemblyListItem .deleteButton .material-icons {
+.assemblyListItem .utilityButton .material-icons {
   font-size: 16px;  /* Preferred icon size */
 }
 

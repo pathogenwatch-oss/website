@@ -5,7 +5,7 @@ import DEFAULT from '../../../defaults.js';
 import { validateMetadata } from '../../../utils/Metadata.js';
 
 var uploadButtonStyle = {
-  right: '10px',
+  right: '30px',
   top: '30px',
   position: 'absolute',
   'background': DEFAULT.CGPS.COLOURS.PURPLE,

@@ -7,6 +7,11 @@ import AssemblyList from './navigation/AssemblyList.react';
 import PreviousAssemblyButton from './navigation/PreviousAssemblyButton.react';
 import NextAssemblyButton from './navigation/NextAssemblyButton.react';
 import UploadWorkspaceNavigationActionCreators from '../../actions/UploadWorkspaceNavigationActionCreators.js';
+import DEFAULT from '../../defaults';
+
+var buttonStyle = {
+  'backgroundColor': DEFAULT.CGPS.COLOURS.GREY
+}
 
 const AssemblyOverviewButton = React.createClass({
   handleClick: function () {
@@ -14,8 +19,16 @@ const AssemblyOverviewButton = React.createClass({
   },
 
   render: function () {
+
+    if (this.props.enabled) {
+      buttonStyle.backgroundColor = '#fff';
+    }
+    else {
+      buttonStyle.backgroundColor = DEFAULT.CGPS.COLOURS.GREY;
+    }
+
     return (
-      <button type="button" disabled={!this.props.enabled} className="mdl-button mdl-js-button" onClick={this.handleClick}>
+      <button type="button" className="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" onClick={this.handleClick}>
         Overview
       </button>
     );
