@@ -1,50 +1,37 @@
-var React = require('react');
-var UploadStore = require('../../../stores/UploadStore');
-var UploadActionCreators = require('../../../actions/UploadActionCreators');
-var DEFAULT = require('../../../defaults.js');
+import React from 'react';
+import UploadStore from '../../../stores/UploadStore';
+import UploadActionCreators from '../../../actions/UploadActionCreators';
+import DEFAULT from '../../../defaults.js';
+import { validateMetadata } from '../../../utils/Metadata.js';
 
 var uploadButtonStyle = {
   right: '10px',
   top: '30px',
   position: 'absolute',
-  'background': DEFAULT.CGPS.COLOURS.PURPLE
+  'background': DEFAULT.CGPS.COLOURS.PURPLE,
+  'color': '#fff'
 };
 
+var active = 'false';
+
 var UploadButton = React.createClass({
-
-  isAllMetadataProvided: function () {
-    var assemblies = UploadStore.getAssemblies();
-    var fileAssemblyIds = UploadStore.getFileAssemblyIds();
-    var metadata;
-
-    return fileAssemblyIds.every(function iife(fileAssemblyId) {
-      metadata = assemblies[fileAssemblyId].metadata;
-
-      if (! metadata.date.year || ! metadata.date.month || ! metadata.date.day) {
-        return false;
-      }
-
-      if (! metadata.source) {
-        return false;
-      }
-
-      return true;
-    });
-  },
-
-  isButtonDisabled: function () {
-    return ! this.isAllMetadataProvided();
-  },
 
   handleClick: function () {
     UploadActionCreators.getCollectionId();
   },
 
   render: function () {
+    if (!this.props.activateButton) {
+      uploadButtonStyle.background = DEFAULT.CGPS.COLOURS.GREY;
+    }
+    else {
+      uploadButtonStyle.background = DEFAULT.CGPS.COLOURS.PURPLE;
+    }
+
     return (
       <button
-        style={uploadButtonStyle} className="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored"
-        disabled={this.isButtonDisabled()}
+        style={uploadButtonStyle} className="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--4dp"
+        disabled={!this.active}
         onClick={this.handleClick}>
         <i className="material-icons">cloud_upload</i>
       </button>

@@ -34,15 +34,6 @@ function handleAction(action) {
 
   switch (action.type) {
 
-    case 'add_files':
-      AppDispatcher.waitFor([
-        UploadStore.dispatchToken
-      ]);
-
-      setFileAssemblyId(UploadStore.getFirstFileAssemblyId());
-      emitChange();
-      break;
-
     case 'navigate_to_assembly':
       setFileAssemblyId(action.fileAssemblyId);
       emitChange();

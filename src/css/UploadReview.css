@@ -49,27 +49,43 @@
   outline: none;
 }
 .uploadReviewAnalysisStyle, .mdl-textfield {
-  padding-right: 10px;
+  padding: 0px 10px 20px 0;
 }
 
 .analysisItemLabel {
   color: #777;
   font-weight: 100;
   text-transform: lowercase;
+  padding: 10px 0px;
 }
 
-.assemblyWorkspaceContainer {
-  display: -webkit-box;      /* OLD - iOS 6-, Safari 3.1-6 */
-  display: -moz-box;         /* OLD - Firefox 19- (buggy but mostly works) */
-  display: -ms-flexbox;      /* TWEENER - IE 10 */
-  display: -webkit-flex;     /* NEW - Chrome */
-  display: flex;             /* NEW, Spec - Opera 12.1, Firefox 20+ */
+.assemblyWorkspaceContainer .mdl-cell {
+  background-color: #fff;
+  margin: 30px;
 }
 
-.welcomeContainer {
-
+.assemblyWorkspaceContainer .increase-cell-gutter.mdl-cell--6-col {
+  width: calc(50% - 60px);
 }
 
+.card-style {
+  background: #fff;
+  padding: 16px;
+}
+
+.card-style--no-padding {
+  background: #fff;
+}
+
+.heading {
+  background: transparent;
+  font-size: 20px;
+  font-weight: 300;
+  color: #666;
+  line-height: 40px;
+  border-bottom: 1px solid #eee;
+  margin: 16px 0px;
+}
 /*********************************/
 
 /**** UploadReview - Navigation Left Pane ****/
@@ -89,7 +105,7 @@
 
 .assemblyListItem {
   background-color: #fff;
-  margin: 0;
+  margin: 2px 0px;
   width: 100%;
   border-bottom: 1px solid #e0e0e0;
   display: inline-block;

@@ -6,7 +6,6 @@ import assign from 'object-assign';
 import AssemblyList from './navigation/AssemblyList.react';
 import PreviousAssemblyButton from './navigation/PreviousAssemblyButton.react';
 import NextAssemblyButton from './navigation/NextAssemblyButton.react';
-
 import UploadWorkspaceNavigationActionCreators from '../../actions/UploadWorkspaceNavigationActionCreators.js';
 
 const AssemblyOverviewButton = React.createClass({

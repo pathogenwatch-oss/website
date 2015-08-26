@@ -65,8 +65,8 @@ const AssemblyAnalysisChart = React.createClass({
       this.setState({
         isChartDataAvailable: true
       })
+      this.draw();
     }
-    this.draw();
   },
 
   render: function () {

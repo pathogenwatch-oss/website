@@ -20,19 +20,19 @@ import FileProcessingStore from '../../stores/FileProcessingStore';
 import SocketStore from '../../stores/SocketStore';
 import SocketUtils from '../../utils/Socket';
 import DEFAULT from '../../defaults.js';
+import { validateMetadata } from '../../utils/Metadata.js';
+
 import '../../css/UploadReview.css';
 
 var loadingAnimationStyle = {
   display: 'block'
 };
 
-var layoutContentStyle = {
-  background: DEFAULT.CGPS.COLOURS.LIGHT_GREY
+const layoutContentStyle = {
+  background: DEFAULT.CGPS.COLOURS.GREY_LIGHT
 }
 
 var AssemblyWorkspace = React.createClass({
-
-  // location: this.props.assembly.location,
 
   propTypes: {
     assembly: React.PropTypes.object,
@@ -47,6 +47,7 @@ var AssemblyWorkspace = React.createClass({
 
   componentDidMount: function() {
     FileProcessingStore.addChangeListener(this.handleFileProcessingStoreChange);
+    UploadStore.addChangeListener(this.activateUploadButton);
 
     const socket = SocketUtils.socketConnect();
 
@@ -57,8 +58,6 @@ var AssemblyWorkspace = React.createClass({
     SocketStore.addChangeListener(this.handleSocketStoreChange);
     SocketActionCreators.setSocketConnection(socket);
 
-    var container = this.getDOMNode('assemblyWorkspaceContainer');
-    container.style.height = window.innerHeight;
   },
 
   componentWillUnmount: function () {
@@ -94,6 +93,17 @@ var AssemblyWorkspace = React.createClass({
     }
   },
 
+  activateUploadButton: function() {
+    const assemblies = UploadStore.getAssemblies();
+    const isValidMap = validateMetadata(assemblies);
+    for (var id in isValidMap) {
+      if (!isValidMap[id]) {
+        return false;
+      }
+    }
+    return true;
+  },
+
   render: function () {
     loadingAnimationStyle.display = this.state.isProcessing ? 'block' : 'none';
     var locations = {};
@@ -102,16 +112,11 @@ var AssemblyWorkspace = React.createClass({
       locations[this.props.assembly.fasta.name] = this.props.assembly.metadata.geography;
       label = locations[this.props.assembly.fasta.name].location;
     }
-    // console.log(label)
-    const allLocations = UploadStore.getAllMetadataLocations();
-    // console.log('single location', label);
-    // console.log('All Locations: ', allLocations);
-    // console.log('rendering: isProcessing: ', this.state.isProcessing)
-    // console.log(this.props.assembly)
+
     return (
       <FileDragAndDrop onDrop={this.handleDrop}>
-        <div className='mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-drawer'>
-            <UploadReviewHeader title='WGSA' />
+        <div className='assemblyWorkspaceContainer mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-drawer'>
+            <UploadReviewHeader title='WGSA' activateUploadButton={this.activateUploadButton()} />
             <div id="loadingAnimation" style={loadingAnimationStyle} className="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
 
             <UploadWorkspaceNavigation assembliesUploaded={this.props.assembly?true:false} totalAssemblies={this.props.totalAssemblies}/>
@@ -120,39 +125,34 @@ var AssemblyWorkspace = React.createClass({
               { this.props.assembly &&
                 <div>
                   <div className='mdl-grid'>
-                    <div className='mdl-cell mdl-cell--12-col'>
-                      <div className="overview-card-wide mdl-card mdl-shadow--2dp">
-                        <div className="mdl-card--title mdl-card--expand">
-                          <div className='mdl-grid'>
-                            <div className='mdl-cell mdl-cell--6-col'>
-                              <AssemblyWorkspaceHeader text='Metadata' />
-                              <AssemblyMetadata assembly={this.props.assembly} />
-                            </div>
-
-                            <div className='mdl-cell mdl-cell--6-col'>
-                              <Map width={400} height={200} locations={locations}/>
-                            </div>
-                          </div>
-                        </div>
+                    <div className='mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp'>
+                      <div className='card-style'>
+                        <div className='heading'> Metadata </div>
+                        <AssemblyMetadata assembly={this.props.assembly} />
                       </div>
                     </div>
-                    <div className='mdl-cell mdl-cell--12-col'>
-                      <div className="overview-card-wide mdl-card mdl-shadow--2dp">
-                        <div className="mdl-card--title mdl-card--expand">
-                          <div className='mdl-grid'>
-                            <div className='mdl-cell mdl-cell--6-col'>
-                              <AssemblyWorkspaceHeader text='Analysis' />
-                              <AssemblyAnalysis assembly={this.props.assembly} />
-                            </div>
 
-                            <div className='mdl-cell mdl-cell--6-col'>
-                              <AssemblyWorkspaceHeader text='Chart' />
-                              <AssemblyAnalysisChart analysis={this.props.assembly.analysis} />
-                            </div>
-                          </div>
-                        </div>
+                    <div className='mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp'>
+                      <div className='cardStyle--no-padding'>
+                        <Map width={'100%'} height={200} locations={locations}/>
                       </div>
                     </div>
+
+
+                    <div className='mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp'>
+                      <div className='card-style'>
+                        <div className='heading'> Analysis </div>
+                        <AssemblyAnalysis assembly={this.props.assembly} />
+                      </div>
+                    </div>
+
+                    <div className='mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp'>
+                      <div className='card-style'>
+                        <div className='heading'> Chart </div>
+                        <AssemblyAnalysisChart analysis={this.props.assembly.analysis} />
+                      </div>
+                    </div>
+
                   </div>
                 </div>
 
@@ -168,4 +168,3 @@ var AssemblyWorkspace = React.createClass({
 });
 
 module.exports = AssemblyWorkspace;
-//                     <Map width={500} height={400} label='Global Map' locations={allLocations}/>
