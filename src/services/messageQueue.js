@@ -122,7 +122,7 @@ function newCollectionAddQueue(callback) {
 }
 
 function newFileRequestQueue(callback) {
-  var queueId = generateQueueId('REQUEST_FILE_');
+  var queueId = generateQueueId('FILE_REQUEST_');
   return connection.queue(queueId, {
     passive: false,
     durable: false,
