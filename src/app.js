@@ -1,5 +1,3 @@
-import 'material-design-lite/material.min.css';
-
 import React from 'react';
 import Router, { Route, RouteHandler, DefaultRoute, NotFoundRoute, Redirect } from 'react-router';
 

@@ -2,13 +2,17 @@
 
 var WebpackDevServer = require("webpack-dev-server");
 var webpack = require("webpack");
+var express = require("express");
 
 var config = require('./webpack.config.js');
 
 var server = new WebpackDevServer(webpack(config), {
+  contentBase: '/public',
   stats: { colors: true, cached: false },
   hot: true
 });
+
+server.use(express.static('public'));
 
 server.app.post('/api/species/:speciesId/collection', function (req, res) {
   res.json({
@@ -34,7 +38,7 @@ server.app.get('/api/species/:speciesId/reference', function (req, res) {
 });
 
 server.use('/', function (req, res) {
-  res.sendFile(__dirname + '/index.html');
+  res.sendFile(__dirname + '/public/index.html');
 });
 
 server.listen(8080, "localhost");

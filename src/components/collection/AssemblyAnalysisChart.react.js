@@ -1,6 +1,6 @@
 var React = require('react');
 var AnalysisUtils = require('../../utils/Analysis');
-import '../../../assets/svg.chart.css';
+import '../../css/svg.chart.css';
 
 var containerStyle = {
   margin: '0 0 25px 0',
