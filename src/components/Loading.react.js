@@ -1,11 +1,11 @@
-import React from 'react';
+import '../css/progress-bar.css';
 
-import { CGPS } from '../defaults'
+import React from 'react';
 
 const Loading = React.createClass({
 
   componentDidMount: function () {
-    componentHandler.upgradeDom();
+    componentHandler.upgradeElement(React.findDOMNode(this.refs.loader));
   },
 
   render: function () {
@@ -20,7 +20,7 @@ const Loading = React.createClass({
 
     return (
       <div className="container text-center">
-        <div style={loaderStyle} className="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
+        <div ref="loader" style={loaderStyle} className="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
         <h1 style={headerStyle}>
           {this.props.children}
         </h1>

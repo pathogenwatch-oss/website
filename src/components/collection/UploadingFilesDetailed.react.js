@@ -1,16 +1,17 @@
 import React from 'react';
-import assign from 'object-assign';
 
 import FileUploadingProgress from './FileUploadingProgress.react';
 import UploadingAssembliesProgress from './UploadingAssembliesProgress.react';
 
-const fullWidthAndHeightStyle = {
-  width: '100%',
-  height: '100%',
+const layoutStyle = {
+  alignItems: 'center',
+  justifyContent: 'center',
 };
 
-const dropZoneStyle = {
+const contentStyle = {
+  maxWidth: '960px',
   textAlign: 'center',
+  flexGrow: 0,
 };
 
 const headerStyle = {
@@ -31,16 +32,12 @@ const UploadingFiles = React.createClass({
 
   render() {
     return (
-      <div className="mdl-layout mdl-js-layout">
-        <main className="mdl-layout__content">
-          <div className="mdl-grid">
-            <div className="mdl-cell mdl-cell--12-col" style={dropZoneStyle}>
-              <div ref="spinner" className="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active"></div>
-              <h2 style={headerStyle}><span style={featureStyle}>Uploading</span> and <span style={featureStyle}>analysing</span> your files.</h2>
-              <FileUploadingProgress />
-              <UploadingAssembliesProgress />
-            </div>
-          </div>
+      <div className="mdl-layout mdl-js-layout" style={layoutStyle}>
+        <main className="mdl-layout__content" style={contentStyle}>
+          <div ref="spinner" className="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active"></div>
+          <h2 style={headerStyle}><span style={featureStyle}>Uploading</span> and <span style={featureStyle}>analysing</span> your files.</h2>
+          <FileUploadingProgress />
+          <UploadingAssembliesProgress />
         </main>
       </div>
     );

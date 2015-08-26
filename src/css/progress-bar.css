@@ -1,0 +1,8 @@
+.mdl-progress > .progressbar,
+.mdl-progress__indeterminate > .auxbar {
+  background: #673c90 !important;
+}
+
+.mdl-progress > .bufferbar {
+  background: linear-gradient(to right,rgba(255,255,255,.7),rgba(255,255,255,.7)),linear-gradient(to right,#a386bd ,#a386bd);
+}

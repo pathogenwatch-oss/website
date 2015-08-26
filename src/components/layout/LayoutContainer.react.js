@@ -31,9 +31,14 @@ const iconStyle = {
 };
 
 const LayoutContainer = React.createClass({
-  render: function () {
+
+  componentDidMount() {
+    componentHandler.upgradeElement(React.findDOMNode(this.refs.container));
+  },
+
+  render() {
     return (
-      <div style={style} className="mdl-layout mdl-js-layout mdl-layout--fixed-header" data-mr-layout="container">
+      <div ref="container" style={style} className="mdl-layout mdl-js-layout mdl-layout--fixed-header" data-mr-layout="container">
         <header style={headerStyle} className="mdl-layout__header">
           <div style={headerRowStyle} className="mdl-layout__header-row">
             <span className="mdl-layout-title">WGSA - <em>{Species.name}</em></span>

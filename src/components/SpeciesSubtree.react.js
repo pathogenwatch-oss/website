@@ -68,7 +68,6 @@ const Tree = React.createClass({
   },
 
   componentDidMount: function () {
-    componentHandler.upgradeDom();
     this.renderTree();
     this.phylocanvas.draw();
     TableStore.addChangeListener(this.handleTableStoreChange);

@@ -4,37 +4,39 @@ import UploadStore from '../../stores/UploadStore';
 import FileUploadingProgressStore from '../../stores/FileUploadingProgressStore';
 import FileUploadingStore from '../../stores/FileUploadingStore';
 
+import { CGPS } from '../../defaults';
+
 const ICON_STYLE = {
   fontSize: '16px',
+  color: CGPS.COLOURS.PURPLE,
 };
 
 const TABLE_STYLE = {
-  marginTop: '20px',
+  marginTop: '16px',
   width: '100%',
 };
 
 const HEADER_STYLE = {
-  fontSize: '16px',
-  textShadow: '1px 1px #fff',
+  textAlign: 'center',
 };
 
 const CELL_STYLE = {
+  textAlign: 'center',
   fontSize: '16px',
-  textShadow: '1px 1px #fff',
 };
 
 const FILE_ASSEMBLY_ID_STYLE = {
+  textAlign: 'center',
   fontWeight: '600',
-  textShadow: '1px 1px #fff',
 };
 
 const resultColumns = [
   'UPLOAD_OK',
   'SCCMEC',
-  'PAARSNP_RESULT',
-  'MLST_RESULT',
-  'CORE_RESULT',
-  'FP_COMP',
+  'PAARSNP',
+  'MLST',
+  'CORE',
+  'FP',
 ];
 
 const UploadingAssembliesProgress = React.createClass({
@@ -82,13 +84,15 @@ const UploadingAssembliesProgress = React.createClass({
         <tr key={fileAssemblyId}>
           <td style={FILE_ASSEMBLY_ID_STYLE} className="mdl-data-table__cell--non-numeric">{fileAssemblyId}</td>
           { resultColumns.map((resultName) => {
-            <td style={CELL_STYLE} className="mdl-data-table__cell--non-numeric">
-              <i style={ICON_STYLE} className="material-icons">
-              { assemblyResult[resultName] ?
-                  'radio_button_unchecked' :
-                  'check-circle' }
-              </i>
-            </td>;
+            return (
+              <td style={CELL_STYLE} key={`${fileAssemblyId}-${resultName}`}>
+                <i style={ICON_STYLE} className="material-icons">
+                { assemblyResult[resultName] ?
+                    'check_circle' :
+                    'radio_button_unchecked' }
+                </i>
+              </td>
+            );
           }) }
         </tr>
       );
@@ -97,10 +101,10 @@ const UploadingAssembliesProgress = React.createClass({
 
   render: function () {
     return (
-      <table ref="table" className="mdl-data-table mdl-js-data-table" style={TABLE_STYLE}>
+      <table ref="table" className="mdl-data-table mdl-shadow--2dp" style={TABLE_STYLE}>
         <thead>
           <tr>
-            <td style={HEADER_STYLE}>ASSEMBLY</td>
+            <td style={CELL_STYLE}></td>
             <td style={HEADER_STYLE}>UPLOAD</td>
             <td style={HEADER_STYLE}>SCCMEC</td>
             <td style={HEADER_STYLE}>PAARSNP</td>

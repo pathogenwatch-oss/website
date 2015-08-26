@@ -62,7 +62,8 @@ const Tree = React.createClass({
   },
 
   componentDidMount: function () {
-    componentHandler.upgradeDom();
+    componentHandler.upgradeElement(React.findDOMNode(this.refs.menu_button));
+    componentHandler.upgradeElement(React.findDOMNode(this.refs.menu));
 
     this.initializeTree();
     this.setNodeShapeAndColour();
@@ -290,10 +291,10 @@ const Tree = React.createClass({
         <header className="wgsa-tree-header">
           <h2 className="wgsa-tree-heading">Population</h2>
           <div className="wgsa-tree-menu">
-            <button id="tree-options" className="wgsa-tree-actions mdl-button mdl-js-button mdl-button--icon">
+            <button ref="menu_button" id="tree-options" className="wgsa-tree-actions mdl-button mdl-js-button mdl-button--icon">
               <i className="material-icons">more_vert</i>
             </button>
-            <ul className="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" htmlFor="tree-options">
+            <ul ref="menu" className="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" htmlFor="tree-options">
               <li className="mdl-menu__item" onClick={this.handleToggleNodeLabels}>Toggle Labels</li>
               <li className="mdl-menu__item" onClick={this.handleToggleNodeAlign}>Toggle Label Align</li>
               <li className="mdl-menu__item" onClick={this.handleRedrawOriginalTree}>Redraw Original Tree</li>

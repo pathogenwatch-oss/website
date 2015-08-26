@@ -27,8 +27,7 @@ export default React.createClass({
             return (
               <div className="mdl-cell mdl-cell--6-col">
                 <div className="mdl-card mdl-shadow--2dp">
-                  <div className="mdl-card__title mdl-card--expand" style={cardStyle}>
-                  </div>
+                  <div className="mdl-card__title mdl-card--expand" style={cardStyle}></div>
                   <div className="mdl-card__actions mdl-card--border">
                     <Link
                       to={`/${speciesDef.nickname}/upload`}
