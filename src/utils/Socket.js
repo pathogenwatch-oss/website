@@ -1,10 +1,10 @@
-var io = require('socket.io-client');
-var CONFIG = require('../../config.json').client;
+import io from 'socket.io-client';
+import CONFIG from '../config';
 
 function socketConnect() {
   return io.connect(CONFIG.api.hostname + ':' + CONFIG.api.port);
 }
 
 module.exports = {
-  socketConnect: socketConnect
+  socketConnect: socketConnect,
 };

@@ -1,8 +1,0 @@
-{
-  "client": {
-    "api": {
-      "hostname": "localhost",
-      "port": 8008
-    }
-  }
-}

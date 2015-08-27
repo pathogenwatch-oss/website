@@ -1,4 +1,4 @@
-import { client as CONFIG } from '../../config.json';
+import CONFIG from '../config';
 
 const API_PATH = `http://${CONFIG.api.hostname}:${CONFIG.api.port}/api`;
 
