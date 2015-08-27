@@ -2,17 +2,29 @@ var assert = require('assert');
 
 describe('Download Routes', function () {
 
-  it('GET /api/v1/download/assembly/:id/metadata/json', function (done) {
-    var fixture = require('./fixtures/downloaded-metadata.json');
-    var url = '/api/download/assembly' +
-              '/a1de6463-a6b8-4810-bbe4-94d782d452c5/metadata/json';
+  it('GET /api/download/type/:idType/format/:fileFormat', function (done) {
+    var url = '/api/download/type/assembly/format/fasta';
+    request
+      .post(url)
+      .send({
+        '4ac4e326-6db3-410f-80c9-31eefe082d38': 'CT18'
+      })
+      .end(function (error, result) {
+        if (error) return done(error);
+        console.log(result.text);
+        done();
+      });
+  });
+
+  it.only('GET /api/download/file/:fileName', function (done) {
+    var url = '/api/download/file/CT18.fsa';
     request
       .get(url)
       .end(function (error, result) {
         if (error) return done(error);
-        assert.deepEqual(JSON.parse(result.text), fixture);
+        console.log(result.text);
         done();
       });
-  });
+  })
 
 });

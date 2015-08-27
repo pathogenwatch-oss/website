@@ -8,12 +8,9 @@ module.exports = function (requestData) {
   var fileName = requestData.fileName;
 
   return request
-    .post('/api/v1/assembly')
+    .post('/api/species/1280/collection/' + collectionId + '/assembly/' + assemblyId)
     .send({
-      collectionId: collectionId,
       socketRoomId: roomId,
-      assemblyId: assemblyId,
-      assemblyFilename: fileName,
       metadata: {},
       sequences: fs.readFileSync(path.resolve(__dirname, '..', 'fixtures', fileName), { encoding: 'utf-8' })
     });

@@ -1,11 +1,13 @@
 var express = require('express');
 var router = express.Router();
+var path = require('path');
 
 var fileModel = require('models/file');
 
 var LOGGER = require('utils/logging').createLogger('Download requests');
+var config = require('configuration').server;
 
-router.get(
+router.post(
   '/download/type/:idType/format/:fileFormat', function (req, res, next) {
     var downloadRequest = {
       idType: req.params.idType,
@@ -24,7 +26,12 @@ router.get(
 router.get(
   '/download/file/:fileName', function (req, res, next) {
     LOGGER.info('Received request for file: ' + req.params.fileName);
-    fileModel.getFile(req.params.fileName, function (error, result) {
+    res.set({
+      'Content-Disposition': 'attachment; filename="' + req.params.fileName + '"',
+      'Content-type': 'text/plain'
+    });
+    res.sendFile(path.join(config.fileDirectory,req.params.fileName));
+    /*fileModel.getFile(req.params.fileName, function (error, result) {
       if (error) {
         return next(error);
       }
@@ -33,7 +40,7 @@ router.get(
         'Content-type': 'text/plain'
       });
       res.send(result);
-    })
+    })*/
   }
 );
 
