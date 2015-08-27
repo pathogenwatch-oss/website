@@ -2,7 +2,6 @@
 
 var path = require('path');
 var webpack = require('webpack');
-var extractTextPlugin = require("extract-text-webpack-plugin");
 
 var devConfig = {
   devtool: '#eval-source-map',
@@ -43,8 +42,7 @@ var prodConfig = {
       compressor: {
         warnings: false
       }
-    }),
-    new extractTextPlugin('wgsa.css')
+    })
   ],
   module: {
     loaders: [
@@ -53,7 +51,7 @@ var prodConfig = {
         include: path.join(__dirname, 'src')
       },
       { test: /.json$/, loaders: [ 'json' ] },
-      { test: /.css$/, loader: extractTextPlugin.extract('style', 'css') }
+      { test: /.css$/, loaders: [ 'style', 'css' ] }
     ]
   }
 };
