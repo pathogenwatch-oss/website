@@ -29,8 +29,14 @@ export default React.createClass({
     UploadStore.removeChangeListener(this.handleUploadStoreChange);
   },
 
-  render() {
+  handleUploadStoreChange() {
+    this.setState({
+      assemblies: UploadStore.getAssemblies(),
+      assemblyCount: UploadStore.getAssembliesCount()
+    });
+  },
 
+  render() {
     if (this.state.assemblyCount) {
       const allLocations = UploadStore.getAllMetadataLocations();
       return (
@@ -40,6 +46,8 @@ export default React.createClass({
             <div className='card-style'>
               <div className='heading'> Statistics </div>
               <AssemblyAnalysisItem label="Total Assemblies" value={this.state.assemblyCount} />
+              <AssemblyAnalysisItem label="Mean Contigs" value={200} />
+              <AssemblyAnalysisItem label="Total nt" value={2000000} />
             </div>
           </div>
 
@@ -73,13 +81,6 @@ export default React.createClass({
         <h4></h4>
       </div>
     )
-  },
-
-  handleUploadStoreChange() {
-    this.setState({
-      assemblies: UploadStore.getAssemblies(),
-      assemblyCount: UploadStore.getAssembliesCount()
-    });
   }
 
 });

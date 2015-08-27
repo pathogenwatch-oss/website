@@ -12,8 +12,6 @@ var uploadButtonStyle = {
   'color': '#fff'
 };
 
-var active = 'false';
-
 var UploadButton = React.createClass({
 
   handleClick: function () {
@@ -31,7 +29,7 @@ var UploadButton = React.createClass({
     return (
       <button
         style={uploadButtonStyle} className="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--4dp"
-        disabled={!this.active}
+        disabled={!this.props.activateButton}
         onClick={this.handleClick}>
         <i className="material-icons">cloud_upload</i>
       </button>

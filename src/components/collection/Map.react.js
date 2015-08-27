@@ -125,7 +125,7 @@ var Map = React.createClass({
     }
 
     if (shape === DEFAULT.SHAPE) {
-      console.warn(`Shape is missing in ${dataObjectId} data object - using ${DEFAULT.SHAPE}.`);
+      // console.warn(`Shape is missing in ${dataObjectId} data object - using ${DEFAULT.SHAPE}.`);
     }
 
     if (!colour) {
@@ -142,8 +142,11 @@ var Map = React.createClass({
     var infowindow = new google.maps.InfoWindow({
       content: html
     });
-    marker.addListener('click', function() {
+    marker.addListener('mouseover', function() {
       infowindow.open(this.map, marker);
+    });
+    marker.addListener('mouseout', function() {
+      infowindow.close(this.map, marker);
     });
     return marker;
   },

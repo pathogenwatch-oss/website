@@ -2,9 +2,11 @@ var React = require('react');
 
 var textStyle = {
   fontSize: '16px',
-  fontWeight: '400',
+  fontWeight: '300',
   lineHeight: '20px',
-  margin: '25px 0 10px 0'
+  margin: '20px 0 10px 0',
+  textTransform: 'lowercase',
+  color: '#777'
 };
 
 var Header = React.createClass({

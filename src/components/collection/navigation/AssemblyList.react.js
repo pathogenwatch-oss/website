@@ -28,6 +28,10 @@ const AssemblyList = React.createClass({
     });
   },
 
+  handleDeleteConfirm: function() {
+    return <ConfirmDelete />;
+  },
+
   handleDeleteAssembly: function(fileAssemblyIdForDelete) {
     const currentAssemblyIdOnDisplay = UploadWorkspaceNavigationStore.getFileAssemblyId();
     const allAssemblyIds = UploadStore.getFileAssemblyIds();
@@ -47,10 +51,6 @@ const AssemblyList = React.createClass({
     if (currentAssemblyIdOnDisplay === fileAssemblyIdForDelete) {
       console.log('Deleting file and navigate to', nextAssemblyIdForDisplay)
       UploadWorkspaceNavigationActionCreators.navigateToAssembly(nextAssemblyIdForDisplay);
-      // console.log(currentAssemblyIdOnDisplay, nextAssemblyIdForDisplay);
-      this.setState({
-        selectedOption: nextAssemblyIdForDisplay
-      })
     }
     else {
       console.log('Deleting file silently', fileAssemblyIdForDelete)
@@ -105,21 +105,20 @@ const AssemblyList = React.createClass({
       }
 
       return (
-        <button className='assemblyListItem mdl-button mdl-js-button mdl-js-ripple-effect mdl-shadow--1dp' key={fileAssemblyId} onClick={this.handleSelectAssembly.bind(this, fileAssemblyId)}>
-          <span className='filename'>
-            {fileAssemblyId}
-          </span>
-
-          <span className="utilityButton mdl-button mdl-js-button mdl-button--icon" disabled>
-            <i style={validatedIconStyle} className='material-icons'>{validatedIcon}</i>
-          </span>
-
-          <span className="deleteButton utilityButton mdl-button mdl-js-button mdl-button--icon mdl-button--colored"
+        <li className={`assemblyListItem mdl-shadow--2dp${this.state.selectedOption === fileAssemblyId ? ' selected' : ''}`}>
+          <button className="deleteButton utilityButton mdl-button mdl-js-button mdl-button--icon mdl-button--colored"
             onClick={this.handleDeleteAssembly.bind(this, fileAssemblyId)}>
             <i className="material-icons">delete</i>
-          </span>
-
-        </button>
+          </button>
+          <button className='selectButton mdl-button mdl-js-button mdl-js-ripple-effect' key={fileAssemblyId} onClick={this.handleSelectAssembly.bind(this, fileAssemblyId)}>
+            <span className='filename'>
+              {fileAssemblyId}
+            </span>
+            <span className="utilityButton mdl-button mdl-js-button mdl-button--icon" disabled>
+              <i style={validatedIconStyle} className='material-icons'>{validatedIcon}</i>
+            </span>
+          </button>
+        </li>
       );
     });
   },
@@ -131,11 +130,25 @@ const AssemblyList = React.createClass({
   render: function () {
     const listOptionElements = this.getListOptionElements();
     return (
-      <div className='assemblyListContainer'>
+      <ul className='assemblyListContainer'>
         {listOptionElements}
-      </div>
+      </ul>
     );
   }
 });
+
+
+var ConfirmDelete = React.createClass({
+
+  render() {
+    return (
+      <button className='confirm-delete-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect'
+        >
+        Confirm Delete?
+      </button>
+    );
+  }
+})
+
 
 module.exports = AssemblyList;

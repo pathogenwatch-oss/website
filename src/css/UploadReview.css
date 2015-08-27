@@ -26,7 +26,7 @@
   background: #fff;
   position: absolute;
   top: 50%;
-  left: 50%;
+  left: 60%;
   transform: translateX(-50%) translateY(-50%);
   text-align: center;
 }
@@ -105,8 +105,18 @@
 
 .assemblyListItem {
   width: 100%;
-  display: inline;
+  display: block;
   text-align: left;
+}
+
+.assemblyListItem:hover,
+.assemblyListItem:focus,
+.assemblyListItem:active {
+  background-color: rgba(158,158,158,.2);
+}
+
+.assemblyListItem.selected {
+  background-color: rgba(158,158,158,.5);
 }
 
 .assemblyListItem span.filename {
@@ -121,7 +131,7 @@
 
 .assemblyListItem.mdl-button {
   /*border: 1px solid black;*/
-  padding: 0px 0 0 4px;
+  padding: 0px;
   margin: 0px;
   height: auto;
 }
@@ -136,14 +146,19 @@
   /*right: 0px;*/
   z-index: 9;
 }
-.assemblyListItem .utilityButton i:hover{
-/*  font-size: 20px;
-  padding: 2px;*/
-}
 
+.assemblyListItem .selectButton:hover,
+.assemblyListItem .selectButton:focus,
+.assemblyListItem .selectButton:active  {
+  background-color: transparent;
+}
 
 .assemblyListItem .utilityButton .material-icons {
   font-size: 16px;  /* Preferred icon size */
+}
+
+.confirm-delete-button {
+  position: absolute;
 }
 
 /*********************************************/

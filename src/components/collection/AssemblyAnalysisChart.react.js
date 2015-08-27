@@ -46,9 +46,12 @@ const AssemblyAnalysisChart = React.createClass({
 
   draw: function() {
     var divElement = document.getElementsByClassName('fasta-analytics-chart')[0];
-    var svgElement = divElement.childNodes[0];
-    if (svgElement) {
-      svgElement.parentNode.removeChild(svgElement);
+    var svgElement;
+    if(divElement) {
+      svgElement = divElement.childNodes[0];
+      if (svgElement) {
+        svgElement.parentNode.removeChild(svgElement);
+      }
     }
 
     const fastaChartData = this.props.analysis.sumsOfNucleotidesInDnaStrings;
@@ -70,7 +73,7 @@ const AssemblyAnalysisChart = React.createClass({
   },
 
   render: function () {
-    if (this.state.isChartDataAvailable) {
+    if (Object.keys(this.props.analysis).length > 0) {
       return (
         <div style={containerStyle}>
           <label className='analysisItemLabel'>{this.props.label}</label>

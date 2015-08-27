@@ -41,7 +41,8 @@ var AssemblyWorkspace = React.createClass({
 
   getInitialState: function () {
     return {
-      isProcessing: false
+      isProcessing: false,
+      uploadButtonActive: false
     };
   },
 
@@ -96,27 +97,39 @@ var AssemblyWorkspace = React.createClass({
   activateUploadButton: function() {
     const assemblies = UploadStore.getAssemblies();
     const isValidMap = validateMetadata(assemblies);
+    var isValid = true;
+
+    if (!Object.keys(isValidMap)) {
+      isValid = false;
+    }
+
     for (var id in isValidMap) {
       if (!isValidMap[id]) {
-        return false;
+        isValid = false;
+        break;
       }
     }
-    return true;
+
+    this.setState({
+      uploadButtonActive: isValid
+    });
   },
 
   render: function () {
     loadingAnimationStyle.display = this.state.isProcessing ? 'block' : 'none';
     var locations = {};
     var label = null;
+    var metadataTitle = 'Metadata';
     if (this.props.assembly) {
       locations[this.props.assembly.fasta.name] = this.props.assembly.metadata.geography;
       label = locations[this.props.assembly.fasta.name].location;
+      metadataTitle += ' - ' + this.props.assembly.fasta.name;
     }
 
     return (
       <FileDragAndDrop onDrop={this.handleDrop}>
         <div className='assemblyWorkspaceContainer mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-drawer'>
-            <UploadReviewHeader title='WGSA' activateUploadButton={this.activateUploadButton()} />
+            <UploadReviewHeader title='WGSA' activateUploadButton={this.state.uploadButtonActive} />
             <div id="loadingAnimation" style={loadingAnimationStyle} className="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
 
             <UploadWorkspaceNavigation assembliesUploaded={this.props.assembly?true:false} totalAssemblies={this.props.totalAssemblies}/>
@@ -127,7 +140,7 @@ var AssemblyWorkspace = React.createClass({
                   <div className='mdl-grid'>
                     <div className='mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp'>
                       <div className='card-style'>
-                        <div className='heading'> Metadata </div>
+                        <div className='heading'> {metadataTitle} </div>
                         <AssemblyMetadata assembly={this.props.assembly} />
                       </div>
                     </div>
