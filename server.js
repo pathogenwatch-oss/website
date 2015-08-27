@@ -56,7 +56,12 @@ module.exports = function (callback) {
     require('routes.js')(app);
     require('errors.js')(app);
 
-    app.use('/', function (req, res) {
+    app.use('/', function (req, res, next) {
+      // crude file matching
+      if (req.path.match(/\.[a-z]{1,4}$/)) {
+        return next();
+      }
+
       return res.sendFile(path.join(clientPath, 'index.html'));
     });
 
