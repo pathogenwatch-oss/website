@@ -289,9 +289,9 @@ const Tree = React.createClass({
     return (
       <section style={sectionStyle}>
         <header className="wgsa-tree-header">
-        <button className="wgsa-tree-return mdl-button mdl-js-button mdl-button--icon" onClick={this.showUploadedCollectionTree}>
-          <i className="material-icons">nature</i>
-        </button>
+          <button id="tree-switcher" className="wgsa-tree-return mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab " onClick={this.showUploadedCollectionTree}>
+            <i className="material-icons">nature_people</i>
+          </button>
           <h2 className="wgsa-tree-heading">Population</h2>
           <div className="wgsa-tree-menu">
             <button ref="menu_button" id="tree-options" className="wgsa-tree-actions mdl-button mdl-js-button mdl-button--icon">
