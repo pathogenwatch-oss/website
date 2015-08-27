@@ -23,7 +23,7 @@ module.exports = {
     var action = {
       type: 'set_collection_id',
       collectionId: collection.collectionId,
-      fileAssemblyIdToAssemblyIdMap: collection.fileAssemblyIdToAssemblyIdMap
+      fileAssemblyIdToAssemblyIdMap: collection.fileAssemblyIdToAssemblyIdMap,
     };
 
     AppDispatcher.dispatch(action);

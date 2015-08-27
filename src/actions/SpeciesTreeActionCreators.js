@@ -1,34 +1,25 @@
-var AppDispatcher = require('../dispatcher/AppDispatcher');
+import AppDispatcher from '../dispatcher/AppDispatcher';
 
-module.exports = {
+export default {
 
   setSpeciesTree: function (tree) {
-
-    var action = {
+    AppDispatcher.dispatch({
       type: 'set_species_tree',
-      tree: tree
-    };
-
-    AppDispatcher.dispatch(action);
+      tree: tree,
+    });
   },
 
   setSpeciesSubtrees: function () {
-
-    var action = {
-      type: 'set_species_subtrees'
-    };
-
-    AppDispatcher.dispatch(action);
+    AppDispatcher.dispatch({
+      type: 'set_species_subtrees',
+    });
   },
 
   setActiveSpeciesSubtree: function (speciesSubtree) {
-
-    var action = {
+    AppDispatcher.dispatch({
       type: 'set_active_species_subtree',
-      speciesSubtree: speciesSubtree
-    };
-
-    AppDispatcher.dispatch(action);
-  }
+      speciesSubtree: speciesSubtree,
+    });
+  },
 
 };

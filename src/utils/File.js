@@ -183,6 +183,8 @@ function parseCsvFile(file, rawFiles, assemblies) {
 
     assemblies = initialiseAssemblyObject(fileAssemblyId, assemblies);
 
+    assemblies[fileAssemblyId].metadata.assemblyFilename = fileAssemblyId;
+
     if (dataRow.latitude) {
       assemblies[fileAssemblyId].metadata.geography.position.latitude = parseFloat(dataRow.latitude);
     }

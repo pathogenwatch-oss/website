@@ -3,10 +3,10 @@ import { EventEmitter } from 'events';
 import assign from 'object-assign';
 import moment from 'moment';
 
-var CHANGE_EVENT = 'change';
+const CHANGE_EVENT = 'change';
 
-var rawFiles = {};
-var assemblies = {};
+const rawFiles = {};
+const assemblies = {};
 
 function addFiles(newRawFiles, newAssemblies) {
   assign(rawFiles, newRawFiles);
@@ -36,15 +36,16 @@ function setMetadataSource(fileAssemblyId, source) {
   assemblies[fileAssemblyId].metadata.source = source;
 }
 
-function emitChange() {
-  Store.emit(CHANGE_EVENT);
-}
-
 function deleteAssembly(fileAssemblyId) {
   delete assemblies[fileAssemblyId];
 }
 
-var Store = assign({}, EventEmitter.prototype, {
+function emitChange() {
+  Store.emit(CHANGE_EVENT);
+}
+
+const Store = assign({}, EventEmitter.prototype, {
+
   addChangeListener: function (callback) {
     this.on(CHANGE_EVENT, callback);
   },
@@ -89,12 +90,11 @@ var Store = assign({}, EventEmitter.prototype, {
       locations[id] = assemblies[id].metadata.geography;
     }
     return locations;
-  }
+  },
 
 });
 
 function handleAction(action) {
-
   switch (action.type) {
 
     case 'add_files':
@@ -133,6 +133,7 @@ function handleAction(action) {
       break;
 
     default: // ... do nothing
+
   }
 }
 

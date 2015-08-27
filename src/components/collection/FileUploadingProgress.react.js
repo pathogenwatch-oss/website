@@ -1,22 +1,36 @@
-var React = require('react');
-var FileDragAndDrop = require('react-file-drag-and-drop');
-var assign = require('object-assign');
-var FileUploadingProgressStore = require('../../stores/FileUploadingProgressStore');
+import '../../css/progress-bar.css';
 
-var containerStyle = {
-  margin: '20px 0 0 0'
+import React from 'react';
+
+import FileUploadingProgressStore from '../../stores/FileUploadingProgressStore';
+
+const containerStyle = {
+  margin: '16px 0 0 0',
 };
 
-var FileUploadingProgress = React.createClass({
+const progressBarStyle = {
+  width: '80%',
+  margin: '0 10% 16px',
+};
+
+const FileUploadingProgress = React.createClass({
 
   getInitialState: function () {
     return {
-      progressPercentage: FileUploadingProgressStore.getProgressPercentage()
+      progressPercentage: 0,
     };
   },
 
   componentDidMount: function () {
     FileUploadingProgressStore.addChangeListener(this.handleFileUploadingProgressStoreChange);
+
+    const progressElement = React.findDOMNode(this.refs.progressBar);
+
+    progressElement.addEventListener('mdl-componentupgraded', (event) => {
+      this.progressBar = event.target.MaterialProgress;
+    });
+
+    componentHandler.upgradeElement(progressElement);
   },
 
   componentWillUnmount: function () {
@@ -24,24 +38,22 @@ var FileUploadingProgress = React.createClass({
   },
 
   handleFileUploadingProgressStoreChange: function () {
+    const percentage = FileUploadingProgressStore.getProgressPercentage();
+    this.progressBar.setProgress(percentage);
     this.setState({
-      progressPercentage: FileUploadingProgressStore.getProgressPercentage()
+      progressPercentage: percentage,
     });
   },
 
   render: function () {
-    var style = {
-      width: this.state.progressPercentage + '%'
-    };
-
     return (
-      <div className="progress" style={containerStyle}>
-        <div className="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow={this.state.progressPercentage} aria-valuemin="0" aria-valuemax="100" style={style}>
-          <span className="sr-only">{this.state.progressPercentage + '% Complete'}</span>
-        </div>
+      <div style={containerStyle}>
+        <div ref="progressBar" className="mdl-progress mdl-js-progress" style={progressBarStyle}></div>
+        <p>{this.state.progressPercentage + '% Complete'}</p>
       </div>
     );
-  }
+  },
+
 });
 
 module.exports = FileUploadingProgress;

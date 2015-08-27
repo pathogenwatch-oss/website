@@ -1,13 +1,12 @@
+import '../../css/UploadReview.css';
+
 import React from 'react';
 import AnalysisUtils from '../../utils/Analysis';
-import UploadStore from '../../stores/UploadStore';
-
-import '../../css/UploadReview.css';
 
 const containerStyle = {
   margin: '0 0 25px 0',
   verticalAlign: 'top',
-  textAlign: 'left'
+  textAlign: 'left',
 };
 
 const labelStyle = {
@@ -15,19 +14,14 @@ const labelStyle = {
   fontWeight: '300',
   lineHeight: '20px',
   textTransform: 'uppercase',
-  color: '#777'
-};
-
-const numberStyle = {
-  fontWeight: '400',
-  fontSize: '24px'
+  color: '#777',
 };
 
 const AssemblyAnalysisChart = React.createClass({
 
   propTypes: {
     label: React.PropTypes.string,
-    analysis: React.PropTypes.object.isRequired
+    analysis: React.PropTypes.object.isRequired,
   },
 
   getInitialState: function() {

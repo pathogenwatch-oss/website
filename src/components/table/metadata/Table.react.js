@@ -8,7 +8,7 @@ import TableHeader from './TableHeader.react';
 import TableRow from './TableRow.react';
 
 const tableStyle = {
-  // border: 0,
+  borderTop: 0,
   width: '100%',
 };
 

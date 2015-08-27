@@ -21,24 +21,23 @@ module.exports = {
   },
 
   addReceivedResult: function (result) {
-    var action = {
+    const action = {
       type: 'add_received_result',
-      result: result
+      result: result,
     };
 
     AppDispatcher.dispatch(action);
 
-    var numberOfExpectedResults = FileUploadingProgressStore.getNumberOfExpectedResults();
-    var numberOfReceivedResults = FileUploadingProgressStore.getNumberOfReceivedResults();
+    const numberOfExpectedResults = FileUploadingProgressStore.getNumberOfExpectedResults();
+    const numberOfReceivedResults = FileUploadingProgressStore.getNumberOfReceivedResults();
+
+    console.log(`Expected: ${numberOfExpectedResults}, Received: ${numberOfReceivedResults}`);
 
     if (numberOfExpectedResults === numberOfReceivedResults) {
       // console.log('[Macroreact] Received all results');
 
-      //FileUploadingActionCreators.finishUploadingFiles(FileUploadingStore.getFileUploadingResults().SUCCESS);
-
-      setTimeout(function () {
-        FileUploadingActionCreators.finishUploadingFiles(FileUploadingStore.getFileUploadingResults().SUCCESS);
-      }, 1000);
+      FileUploadingActionCreators.finishUploadingFiles(FileUploadingStore.getFileUploadingResults().SUCCESS);
     }
-  }
+  },
+
 };

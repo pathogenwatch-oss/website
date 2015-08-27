@@ -1,13 +1,15 @@
+import '../css/tree.css';
+
 import React from 'react';
 import TreeControls from './TreeControls.react';
 import PhyloCanvas from 'PhyloCanvas';
 
-import DEFAULT from '../defaults';
+import DEFAULT, { CGPS } from '../defaults';
 
 import SpeciesTreeStore from '../stores/SpeciesTreeStore';
 import SpeciesSubtreeStore from '../stores/SpeciesSubtreeStore';
-import SpeciesSubtreeActionCreators from '../actions/SpeciesSubtreeActionCreators';
 import UploadedCollectionStore from '../stores/UploadedCollectionStore';
+import SpeciesSubtreeActionCreators from '../actions/SpeciesSubtreeActionCreators';
 
 const DEFAULT_TREE_SETTINGS = {
   SHOW_TREE_LABELS: true,
@@ -17,23 +19,21 @@ const DEFAULT_TREE_SETTINGS = {
   MAXIMUM_TEXT_SIZE: 200,
 };
 
+const sectionHeaderHeight = 64;
+const sectionFooterHeight = 80;
+
 const sectionStyle = {
   position: 'relative',
   width: '100%',
-  height: '100%',
+  height: `calc(100% - ${sectionHeaderHeight}px)`,
+  paddingTop: `${sectionHeaderHeight}px`,
 };
 
 const phylocanvasStyle = {
   position: 'relative',
-  width: '100%',
-  height: '100%',
-};
-
-const treeControlsToggleButton = {
-  position: 'absolute',
-  bottom: 5,
-  right: 5,
-  zIndex: 999,
+  width: `calc(100% - ${sectionHeaderHeight}px)`,
+  height: `calc(100% - ${sectionFooterHeight}px)`,
+  margin: '0 auto',
 };
 
 const Tree = React.createClass({
@@ -60,12 +60,18 @@ const Tree = React.createClass({
   componentWillMount: function () {
     this.tree = SpeciesTreeStore.getSpeciesTree();
     this.treeId = 'species-tree';
+    this.collectionId = UploadedCollectionStore.getUploadedCollectionId();
   },
 
   componentDidMount: function () {
+    componentHandler.upgradeElement(React.findDOMNode(this.refs.menu_button));
+    componentHandler.upgradeElement(React.findDOMNode(this.refs.menu));
+
     this.initializeTree();
     this.setNodeShapeAndColour();
     this.emphasizeShapeAndColourForNodesThatHaveSubtrees();
+
+    this.phylocanvas.draw();
   },
 
   initializeTree: function () {
@@ -78,13 +84,14 @@ const Tree = React.createClass({
 
     phylocanvas.showLabels = DEFAULT_TREE_SETTINGS.SHOW_TREE_LABELS;
     phylocanvas.hoverLabel = true;
-    phylocanvas.nodeAlign = false;
+    phylocanvas.highlightColour = phylocanvas.selectedColour = CGPS.COLOURS.PURPLE;
+
     phylocanvas.setTreeType(this.state.treeType);
     phylocanvas.setNodeSize(this.state.nodeSize);
     phylocanvas.setTextSize(this.state.labelSize);
 
     this.phylocanvas = phylocanvas;
-    // console.log(this.phylocanvas);
+
     this.phylocanvas.on('updated', this.handleTreeBranchSelected);
     this.phylocanvas.on('subtree', this.handleRedrawSubtree);
     this.phylocanvas.on('historytoggle', this.handleHistoryToggle);
@@ -98,9 +105,17 @@ const Tree = React.createClass({
   },
 
   emphasizeShapeAndColourForNodesThatHaveSubtrees: function () {
-    var subtreeIds = SpeciesSubtreeStore.getSpeciesSubtreeIds();
+    const subtrees = SpeciesSubtreeStore.getSpeciesSubtrees();
+    const subtreeIds = Object.keys(subtrees);
 
-    this.phylocanvas.setNodeDisplay(subtreeIds, { colour: DEFAULT.CGPS.COLOURS.PURPLE });
+    this.phylocanvas.setNodeDisplay(subtreeIds, { colour: CGPS.COLOURS.PURPLE_LIGHT });
+
+    subtreeIds.forEach((id) => {
+      const branch = this.phylocanvas.branches[id];
+      if (branch) {
+        branch.label = `${branch.label} (${subtrees[id].assemblyIds.length})`;
+      }
+    });
   },
 
   handleRedrawSubtree: function () {
@@ -110,6 +125,7 @@ const Tree = React.createClass({
 
   componentDidUpdate: function () {
     this.phylocanvas.resizeToContainer();
+    this.phylocanvas.fitInPanel();
     this.phylocanvas.draw();
   },
 
@@ -118,17 +134,19 @@ const Tree = React.createClass({
     var isolateIds = Object.keys(isolates);
     var isolate;
 
-    isolateIds.forEach(function (isolateId) {
+    isolateIds.forEach((isolateId) => {
       isolate = isolates[isolateId];
 
       if (this.phylocanvas.branches[isolateId] && this.phylocanvas.branches[isolateId].leaf) {
         this.phylocanvas.branches[isolateId].label = isolate[nodeLabel] || '';
       }
-    }.bind(this));
+    });
   },
 
   redrawOriginalTree: function () {
     this.phylocanvas.redrawOriginalTree();
+    this.setNodeShapeAndColour();
+    this.emphasizeShapeAndColourForNodesThatHaveSubtrees();
   },
 
   toggleTreeLabels: function () {
@@ -153,7 +171,7 @@ const Tree = React.createClass({
     anchor.target = '_blank';
 
     if (isDownloadSupported) {
-      anchor.download = 'microreact.png';
+      anchor.download = 'wgsa-saureus.png';
     }
 
     event = document.createEvent('Event');
@@ -202,19 +220,16 @@ const Tree = React.createClass({
   handleTreeBranchSelected: function (event) {
     var selectedNodeIds = event.nodeIds;
 
-    if (selectedNodeIds.length === 0) {
-      this.showUploadedCollectionTree();
-    } else if (selectedNodeIds.length === 1) {
+    if (selectedNodeIds.length === 1) {
       this.showUploadedCollectionSubtree(selectedNodeIds[0]);
     }
   },
 
   showUploadedCollectionTree: function () {
-    SpeciesSubtreeActionCreators.setActiveSpeciesSubtreeId(UploadedCollectionStore.getUploadedCollectionId());
+    SpeciesSubtreeActionCreators.setActiveSpeciesSubtreeId(this.collectionId);
   },
 
   showUploadedCollectionSubtree: function (subtreeId) {
-    // console.log(subtreeId);
     SpeciesSubtreeActionCreators.setActiveSpeciesSubtreeId(subtreeId);
   },
 
@@ -249,7 +264,6 @@ const Tree = React.createClass({
   },
 
   handleToggleTreeControls: function () {
-    //this.phylocanvas.history.collapse();
     this.setState({
       isTreeControlsOn: !this.state.isTreeControlsOn,
     });
@@ -260,7 +274,7 @@ const Tree = React.createClass({
   },
 
   toggleNodeAlign: function () {
-    this.phylocanvas.nodeAlign = !this.phylocanvas.nodeAlign;
+    this.phylocanvas.alignLabels = !this.phylocanvas.alignLabels;
     this.phylocanvas.draw();
   },
 
@@ -275,24 +289,35 @@ const Tree = React.createClass({
   render: function () {
     return (
       <section style={sectionStyle}>
+        <header className="wgsa-tree-header">
+          <button title="Collection tree" className="wgsa-tree-return mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab " onClick={this.showUploadedCollectionTree}>
+            <i className="material-icons">nature_people</i>
+          </button>
+          <h2 className="wgsa-tree-heading">Population</h2>
+          <div className="wgsa-tree-menu">
+            <button ref="menu_button" id="tree-options" className="wgsa-tree-actions mdl-button mdl-js-button mdl-button--icon">
+              <i className="material-icons">more_vert</i>
+            </button>
+            <ul ref="menu" className="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" htmlFor="tree-options">
+              <li className="mdl-menu__item" onClick={this.handleToggleNodeLabels}>Toggle Labels</li>
+              <li className="mdl-menu__item" onClick={this.handleToggleNodeAlign}>Toggle Label Align</li>
+              <li className="mdl-menu__item" onClick={this.handleRedrawOriginalTree}>Redraw Original Tree</li>
+              <li className="mdl-menu__item" onClick={this.handleExportCurrentView}>Export Current View</li>
+            </ul>
+          </div>
+        </header>
         <div id={this.treeId} style={phylocanvasStyle}></div>
-
-        {this.state.isTreeControlsOn
-          ?
-          <TreeControls
-            treeType={this.state.treeType}
-            nodeSize={this.state.nodeSize}
-            labelSize={this.state.labelSize}
-            handleToggleNodeLabels={this.handleToggleNodeLabels}
-            handleExportCurrentView={this.handleExportCurrentView}
-            handleRedrawOriginalTree={this.handleRedrawOriginalTree}
-            handleTreeTypeChange={this.handleTreeTypeChange}
-            handleNodeSizeChange={this.handleNodeSizeChange}
-            handleLabelSizeChange={this.handleLabelSizeChange}
-            handleToggleNodeAlign={this.handleToggleNodeAlign} />
-          : null}
-
-        <button className="btn btn-default btn-sm" style={treeControlsToggleButton} onClick={this.handleToggleTreeControls}>{this.state.isTreeControlsOn ? 'Hide controls' : 'Show controls'}</button>
+        <TreeControls
+          treeType={this.state.treeType}
+          nodeSize={this.state.nodeSize}
+          labelSize={this.state.labelSize}
+          handleToggleNodeLabels={this.handleToggleNodeLabels}
+          handleExportCurrentView={this.handleExportCurrentView}
+          handleRedrawOriginalTree={this.handleRedrawOriginalTree}
+          handleTreeTypeChange={this.handleTreeTypeChange}
+          handleNodeSizeChange={this.handleNodeSizeChange}
+          handleLabelSizeChange={this.handleLabelSizeChange}
+          handleToggleNodeAlign={this.handleToggleNodeAlign} />
       </section>
     );
   },

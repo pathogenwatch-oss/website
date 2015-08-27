@@ -1,51 +1,48 @@
-var AppDispatcher = require('../dispatcher/AppDispatcher');
-var EventEmitter = require('events').EventEmitter;
-var assign = require('object-assign');
+import { EventEmitter } from 'events';
+import assign from 'object-assign';
 
-var CHANGE_EVENT = 'change';
+import AppDispatcher from '../dispatcher/AppDispatcher';
 
-var speciesTree = null;
+const CHANGE_EVENT = 'change';
+
+let speciesTree = null;
 
 function setSpeciesTree(tree) {
   speciesTree = tree;
 }
 
-function emitChange() {
-  Store.emit(CHANGE_EVENT);
-}
+const Store = assign({}, EventEmitter.prototype, {
 
-var Store = assign({}, EventEmitter.prototype, {
+  emitChange() {
+    this.emit(CHANGE_EVENT);
+  },
 
-  addChangeListener: function (callback) {
+  addChangeListener(callback) {
     this.on(CHANGE_EVENT, callback);
   },
 
-  removeChangeListener: function (callback) {
+  removeChangeListener(callback) {
     this.removeListener(CHANGE_EVENT, callback);
   },
 
-  getSpeciesTree: function () {
+  getSpeciesTree() {
     return speciesTree;
-  }
+  },
 
 });
 
 function handleAction(action) {
-
   switch (action.type) {
-
-    case 'set_species_tree':
-      setSpeciesTree(action.tree);
-      emitChange();
-      break;
-
-    case 'set_collection':
-      setSpeciesTree(action.referenceCollection.collection.tree);
-      emitChange();
-      break;
-
-    default: // ... do nothing
-
+  case 'set_species_tree':
+    setSpeciesTree(action.tree);
+    Store.emitChange();
+    break;
+  case 'set_collection':
+    setSpeciesTree(action.referenceCollection.tree);
+    Store.emitChange();
+    break;
+  default:
+    // ... do nothing
   }
 }
 

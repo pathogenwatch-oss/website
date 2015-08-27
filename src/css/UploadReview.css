@@ -33,7 +33,7 @@
 .welcome-card-wide > .mdl-card__title {
   color: #ccc;
   height: 200px;
-  background: url('../../assets/img/WGSA_logo.png') center no-repeat;
+  background: url('/assets/img/WGSA_logo.png') center no-repeat;
   background-position: -40px -40px;
 }
 

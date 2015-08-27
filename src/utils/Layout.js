@@ -26,13 +26,13 @@ North and West container sizes.
 
 */
 
-var DEFAULT = require('../defaults');
-
-var DIVIDER_THICKNESS = 24;
-var DIVIDER_BORDER_THICKNESS = 2;
-var NUMBER_OF_BORDERS_PER_DIVIDER = 2;
-var NUMBER_OF_CONTAINERS_INSIDE_OF_NORTH_CONTAINER = 3;
-var NORTH_SOUTH_CONTAINERS_RATIO = 1.45;
+const DIVIDER_THICKNESS = 2;
+const DIVIDER_BORDER_THICKNESS = 2;
+const NUMBER_OF_BORDERS_PER_DIVIDER = 0;
+const NUMBER_OF_CONTAINERS_INSIDE_OF_NORTH_CONTAINER = 2;
+const NORTH_SOUTH_CONTAINERS_RATIO = 1.45;
+const HEADER_BAR_HEIGHT = 56;
+const EAST_WEST_CONTAINERS_RATIO = 0.666;
 
 function getDividerSize() {
   return (DIVIDER_THICKNESS + DIVIDER_BORDER_THICKNESS * NUMBER_OF_BORDERS_PER_DIVIDER);
@@ -43,7 +43,7 @@ function getViewportWidth() {
 }
 
 function getViewportHeight() {
-  return $(window).height() - 80;
+  return $(window).height();
 }
 
 function getNumberOfDividers() {
@@ -54,58 +54,40 @@ function getAvailableWidth() {
   return (getViewportWidth() - (getDividerSize() * getNumberOfDividers()));
 }
 
-function getAvailableHeight() {
-  return (getViewportHeight() - getNorthSouthDividerWidth());
-}
-
 // West
 
 function getWestWidth() {
-  return (getAvailableWidth() / NUMBER_OF_CONTAINERS_INSIDE_OF_NORTH_CONTAINER);
+  return (getAvailableWidth() * (1 - EAST_WEST_CONTAINERS_RATIO));
 }
 
-function getWestMiddleDividerLeft() {
+function getWestEastDividerLeft() {
   return getWestWidth();
-}
-
-// Middle
-
-function getMiddleLeft() {
-  return (getWestWidth() + getDividerSize());
-}
-
-function getMiddleWidth() {
-  return (getAvailableWidth() / NUMBER_OF_CONTAINERS_INSIDE_OF_NORTH_CONTAINER);
 }
 
 // East
 
-function getMiddleEastDividerLeft() {
-  return (getMiddleLeft() + getMiddleWidth());
-}
-
 function getEastLeft() {
-  return (getMiddleEastDividerLeft() + getDividerSize());
+  return (getWestEastDividerLeft() + getDividerSize());
 }
 
 function getEastWidth() {
-  return (getAvailableWidth() / NUMBER_OF_CONTAINERS_INSIDE_OF_NORTH_CONTAINER);
+  return (getAvailableWidth() * EAST_WEST_CONTAINERS_RATIO);
 }
 
 // North
 
 function getNorthHeight() {
-  return (getViewportHeight() / NORTH_SOUTH_CONTAINERS_RATIO);
+  return ((getViewportHeight() - HEADER_BAR_HEIGHT) / NORTH_SOUTH_CONTAINERS_RATIO);
 }
 
 function getNorthSouthDividerTop() {
-  return getNorthHeight();
+  return HEADER_BAR_HEIGHT + getNorthHeight();
 }
 
 // South
 
 function getSouthTop() {
-  return (getNorthHeight() + getDividerSize());
+  return (HEADER_BAR_HEIGHT + getNorthHeight() + getDividerSize());
 }
 
 function getSouthHeight() {
@@ -114,46 +96,38 @@ function getSouthHeight() {
 
 module.exports = {
 
-  DIVIDER_THICKNESS: DIVIDER_THICKNESS,
-  DIVIDER_BORDER_THICKNESS: DIVIDER_BORDER_THICKNESS,
+  DIVIDER_THICKNESS,
+  DIVIDER_BORDER_THICKNESS,
+  HEADER_BAR_HEIGHT,
 
-  getDividerSize: getDividerSize,
+  getDividerSize,
 
-  getViewportWidth: getViewportWidth,
-  getViewportHeight: getViewportHeight,
+  getViewportWidth,
+  getViewportHeight,
 
   // West
 
-  getWestWidth: getWestWidth,
+  getWestWidth,
 
-  // West Middle Divider
+  // West East Divider
 
-  getWestMiddleDividerLeft: getWestMiddleDividerLeft,
-
-  // Middle
-
-  getMiddleLeft: getMiddleLeft,
-  getMiddleWidth: getMiddleWidth,
-
-  // Middle East
-
-  getMiddleEastDividerLeft: getMiddleEastDividerLeft,
+  getWestEastDividerLeft,
 
   // East
 
-  getEastLeft: getEastLeft,
-  getEastWidth: getEastWidth,
+  getEastLeft,
+  getEastWidth,
 
   // North
 
-  getNorthHeight: getNorthHeight,
+  getNorthHeight,
 
   // North South
 
-  getNorthSouthDividerTop: getNorthSouthDividerTop,
+  getNorthSouthDividerTop,
 
   // South
 
-  getSouthTop: getSouthTop,
-  getSouthHeight: getSouthHeight
+  getSouthTop,
+  getSouthHeight,
 };

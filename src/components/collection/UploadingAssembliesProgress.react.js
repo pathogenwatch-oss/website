@@ -1,33 +1,45 @@
-var React = require('react');
+import React from 'react';
 
-var UploadStore = require('../../stores/UploadStore');
-var FileUploadingProgressStore = require('../../stores/FileUploadingProgressStore');
-var FileUploadingStore = require('../../stores/FileUploadingStore');
+import UploadStore from '../../stores/UploadStore';
+import FileUploadingProgressStore from '../../stores/FileUploadingProgressStore';
+import FileUploadingStore from '../../stores/FileUploadingStore';
 
-var ICON_STYLE = {
-  fontSize: '16px'
-};
+import { CGPS } from '../../defaults';
 
-var TABLE_STYLE = {
-  marginTop: '20px'
-};
-
-var HEADER_STYLE = {
+const ICON_STYLE = {
   fontSize: '16px',
-  textShadow: '1px 1px #fff'
+  color: CGPS.COLOURS.PURPLE,
 };
 
-var CELL_STYLE = {
+const TABLE_STYLE = {
+  marginTop: '16px',
+  width: '100%',
+};
+
+const HEADER_STYLE = {
+  textAlign: 'center',
+};
+
+const CELL_STYLE = {
+  textAlign: 'center',
   fontSize: '16px',
-  textShadow: '1px 1px #fff'
 };
 
-var FILE_ASSEMBLY_ID_STYLE = {
+const FILE_ASSEMBLY_ID_STYLE = {
+  textAlign: 'center',
   fontWeight: '600',
-  textShadow: '1px 1px #fff'
 };
 
-var UploadingAssembliesProgress = React.createClass({
+const resultColumns = [
+  'UPLOAD_OK',
+  'SCCMEC',
+  'PAARSNP',
+  'MLST',
+  'CORE',
+  'FP',
+];
+
+const UploadingAssembliesProgress = React.createClass({
 
   getInitialState: function () {
     return {
@@ -37,6 +49,8 @@ var UploadingAssembliesProgress = React.createClass({
 
   componentDidMount: function () {
     FileUploadingProgressStore.addChangeListener(this.handleFileUploadingProgressStoreChange);
+
+    componentHandler.upgradeElement(React.findDOMNode(this.refs.table));
   },
 
   componentWillUnmount: function () {
@@ -50,19 +64,16 @@ var UploadingAssembliesProgress = React.createClass({
   },
 
   getAssemblyResultElements: function () {
-    var fileAssemblyIdToAssemblyIdMap = FileUploadingStore.getFileAssemblyIdToAssemblyIdMap();
-    var fileAssemblyIds = UploadStore.getFileAssemblyIds();
-    var assemblyResults = this.state.assemblyResults; //FileUploadingProgressStore.getReceivedAssemblyResults().assemblies;
-    var assemblyResult;
-    var assemblyId;
+    const fileAssemblyIdToAssemblyIdMap = FileUploadingStore.getFileAssemblyIdToAssemblyIdMap();
+    const fileAssemblyIds = UploadStore.getFileAssemblyIds();
+    const assemblyResults = this.state.assemblyResults;
 
     return fileAssemblyIds.map(function createAssemblyResultElement(fileAssemblyId) {
-
-      assemblyResult = {};
+      let assemblyResult = {};
 
       // This logic needs to be refactored:
       if (fileAssemblyIdToAssemblyIdMap && assemblyResults) {
-        assemblyId = fileAssemblyIdToAssemblyIdMap[fileAssemblyId];
+        const assemblyId = fileAssemblyIdToAssemblyIdMap[fileAssemblyId];
 
         if (assemblyResults[assemblyId]) {
           assemblyResult = assemblyResults[assemblyId];
@@ -71,13 +82,18 @@ var UploadingAssembliesProgress = React.createClass({
 
       return (
         <tr key={fileAssemblyId}>
-          <td style={FILE_ASSEMBLY_ID_STYLE}>{fileAssemblyId}</td>
-          <td style={CELL_STYLE}>{assemblyResult['UPLOAD_OK'] ? <i className="fa fa-check-square-o" style={ICON_STYLE}></i> : <i className="fa fa-square-o" style={ICON_STYLE}></i>}</td>
-          <td style={CELL_STYLE}>{assemblyResult['SCCMEC'] ? <i className="fa fa-check-square-o" style={ICON_STYLE}></i> : <i className="fa fa-square-o" style={ICON_STYLE}></i>}</td>
-          <td style={CELL_STYLE}>{assemblyResult['PAARSNP_RESULT'] ? <i className="fa fa-check-square-o" style={ICON_STYLE}></i> : <i className="fa fa-square-o" style={ICON_STYLE}></i>}</td>
-          <td style={CELL_STYLE}>{assemblyResult['MLST_RESULT'] ? <i className="fa fa-check-square-o" style={ICON_STYLE}></i> : <i className="fa fa-square-o" style={ICON_STYLE}></i>}</td>
-          <td style={CELL_STYLE}>{assemblyResult['CORE_RESULT'] ? <i className="fa fa-check-square-o" style={ICON_STYLE}></i> : <i className="fa fa-square-o" style={ICON_STYLE}></i>}</td>
-          <td style={CELL_STYLE}>{assemblyResult['FP_COMP'] ? <i className="fa fa-check-square-o" style={ICON_STYLE}></i> : <i className="fa fa-square-o" style={ICON_STYLE}></i>}</td>
+          <td style={FILE_ASSEMBLY_ID_STYLE} className="mdl-data-table__cell--non-numeric">{fileAssemblyId}</td>
+          { resultColumns.map((resultName) => {
+            return (
+              <td style={CELL_STYLE} key={`${fileAssemblyId}-${resultName}`}>
+                <i style={ICON_STYLE} className="material-icons">
+                { assemblyResult[resultName] ?
+                    'check_circle' :
+                    'radio_button_unchecked' }
+                </i>
+              </td>
+            );
+          }) }
         </tr>
       );
     });
@@ -85,10 +101,10 @@ var UploadingAssembliesProgress = React.createClass({
 
   render: function () {
     return (
-      <table className="table table-hover" style={TABLE_STYLE}>
+      <table ref="table" className="mdl-data-table mdl-shadow--2dp" style={TABLE_STYLE}>
         <thead>
           <tr>
-            <td style={HEADER_STYLE}>ASSEMBLY</td>
+            <td style={CELL_STYLE}></td>
             <td style={HEADER_STYLE}>UPLOAD</td>
             <td style={HEADER_STYLE}>SCCMEC</td>
             <td style={HEADER_STYLE}>PAARSNP</td>

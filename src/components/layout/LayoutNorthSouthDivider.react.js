@@ -1,18 +1,18 @@
-var React = require('react');
-var LayoutUtils = require('../../utils/Layout');
-var LayoutDivider = require('./LayoutDivider.react');
-var LayoutNavigation = require('../LayoutNavigation.react');
+import React from 'react';
 
-var style = {
+import LayoutDivider from './LayoutDivider.react';
+import LayoutNavigation from '../LayoutNavigation.react';
+
+const style = {
   width: '100%',
-  height: '100%'
+  height: '100%',
 };
 
-var LayoutNorthSouthDivider = React.createClass({
+export default React.createClass({
 
   propTypes: {
     top: React.PropTypes.number.isRequired,
-    onDragEnd: React.PropTypes.func.isRequired
+    onDragEnd: React.PropTypes.func.isRequired,
   },
 
   componentDidMount: function () {
@@ -24,37 +24,31 @@ var LayoutNorthSouthDivider = React.createClass({
       containment: 'body',
       axis: 'y',
       scroll: false,
-      cursor: 'ns-resize',
-      stop: function (event, ui) {
-        var top = ui.offset.top;
-        this.props.onDragEnd(top);
-      }.bind(this)
+      cursor: 'grabbing',
+      stop: (event, ui) => {
+        this.props.onDragEnd(ui.offset.top);
+      },
     });
   },
 
   render: function () {
-
     return (
       <div style={style}>
         <LayoutDivider
           top={this.props.top}
           direction={'horizontal'}
           isStatic={true} />
-
         <LayoutDivider
           top={this.props.top}
           direction={'horizontal'}
-          className={'northSouthDivider'}>
-
-          <LayoutNavigation
-            showTimeline={this.props.showTimeline}
-            shortCollectionId={this.props.shortCollectionId}
-            onLayoutNavigationChange={this.props.onLayoutNavigationChange} />
-
-        </LayoutDivider>
+          className={'northSouthDivider'} />
+        <LayoutNavigation
+          top={this.props.top}
+          showTimeline={this.props.showTimeline}
+          shortCollectionId={this.props.shortCollectionId}
+          onLayoutNavigationChange={this.props.onLayoutNavigationChange} />
       </div>
     );
-  }
-});
+  },
 
-module.exports = LayoutNorthSouthDivider;
+});

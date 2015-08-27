@@ -1,30 +1,37 @@
-var AppDispatcher = require('../dispatcher/AppDispatcher');
-var FileUtils = require('../utils/File');
-var ApiUtils = require('../utils/Api');
-var UploadStore = require('../stores/UploadStore');
-var SocketStore = require('../stores/SocketStore');
-var FileUploadingStore = require('../stores/FileUploadingStore');
-var FileUploadingActionCreators = require('../actions/FileUploadingActionCreators');
-var FileUploadingProgressActionCreators = require('../actions/FileUploadingProgressActionCreators');
+import AppDispatcher from '../dispatcher/AppDispatcher';
+
+import UploadStore from '../stores/UploadStore';
+import SocketStore from '../stores/SocketStore';
+
+import FileUploadingActionCreators from '../actions/FileUploadingActionCreators';
+import FileUploadingProgressActionCreators from '../actions/FileUploadingProgressActionCreators';
+
+import FileUtils from '../utils/File';
+import ApiUtils from '../utils/Api';
+import Species from '../species';
 
 module.exports = {
 
   addFiles: function addFiles(files) {
-    var startProcessingFilesAction = {
-      type: 'start_processing_files'
+    const startProcessingFilesAction = {
+      type: 'start_processing_files',
     };
 
     AppDispatcher.dispatch(startProcessingFilesAction);
 
-    FileUtils.parseFiles(files, function iife(error, rawFiles, assemblies) {
-      var finishProcessingFilesAction = {
-        type: 'finish_processing_files'
-      };
+    FileUtils.parseFiles(files, function (error, rawFiles, assemblies) {
+      if (error) {
+        console.error(error);
+        return;
+      }
 
-      var addFilesAction = {
+      const finishProcessingFilesAction = {
+        type: 'finish_processing_files',
+      };
+      const addFilesAction = {
         type: 'add_files',
         rawFiles: rawFiles,
-        assemblies: assemblies
+        assemblies: assemblies,
       };
 
       AppDispatcher.dispatch(finishProcessingFilesAction);
@@ -36,59 +43,61 @@ module.exports = {
     FileUploadingActionCreators.startUploadingFiles();
     FileUploadingProgressActionCreators.setNumberOfExpectedResults();
 
-    SocketStore.getSocketConnection().on('assemblyUploadNotification', function iife(data) {
-
+    SocketStore.getSocketConnection().on('assemblyUploadNotification', function (data) {
       console.log('[Macroreact] Received notification:');
       console.dir(data);
 
       FileUploadingProgressActionCreators.addReceivedResult(data);
-
     });
 
-    var fileAssemblyIds = UploadStore.getFileAssemblyIds();
-    var roomId = SocketStore.getRoomId();
+    const fileAssemblyIds = UploadStore.getFileAssemblyIds();
+    const roomId = SocketStore.getRoomId();
 
-    var data = {
+    const data = {
       userAssemblyIds: fileAssemblyIds,
-      socketRoomId: roomId
+      socketRoomId: roomId,
     };
 
-    var assemblyProcessingResults = FileUploadingStore.getAssemblyProcessingResults();
-    var collectionProcessingResults = FileUploadingStore.getCollectionProcessingResults();
-
-    ApiUtils.getCollectionId(data, function iife(error, data) {
-      if (error) {
-        console.error(error);
+    ApiUtils.getCollectionId(Species.id, data, function (idError, ids) {
+      if (idError) {
+        console.error(idError);
         return;
       }
 
       FileUploadingActionCreators.setCollectionId({
-        collectionId: data.collectionId,
-        fileAssemblyIdToAssemblyIdMap: data.userAssemblyIdToAssemblyIdMap
+        collectionId: ids.collectionId,
+        fileAssemblyIdToAssemblyIdMap: ids.userAssemblyIdToAssemblyIdMap,
       });
 
-      var userAssemblyIdToAssemblyIdMap = data.userAssemblyIdToAssemblyIdMap;
-      var userAssemblyIds = Object.keys(userAssemblyIdToAssemblyIdMap);
+      const userAssemblyIdToAssemblyIdMap = ids.userAssemblyIdToAssemblyIdMap;
+      const userAssemblyIds = Object.keys(userAssemblyIdToAssemblyIdMap);
 
       userAssemblyIds.forEach(function sendAssembly(userAssemblyId) {
-        var roomId = SocketStore.getRoomId();
-        var assemblyData = {
-          socketRoomId: roomId,
-          collectionId: data.collectionId,
+        const { metadata, fasta } = UploadStore.getAssembly(userAssemblyId);
+        const urlParams = {
+          collectionId: ids.collectionId,
           assemblyId: userAssemblyIdToAssemblyIdMap[userAssemblyId],
-          metadata: UploadStore.getAssembly(userAssemblyId).metadata,
-          sequences: UploadStore.getAssembly(userAssemblyId).fasta.assembly
+          speciesId: Species.id,
+        };
+        const assemblyData = {
+          socketRoomId: roomId,
+          metadata: metadata,
+          sequences: fasta.assembly,
         };
 
         // console.log('[Macroreact] Prepared assembly data to upload:');
         // console.dir(assemblyData);
 
-        ApiUtils.postAssembly(assemblyData, function iife(error, data) {
+        ApiUtils.postAssembly(urlParams, assemblyData, function (assemblyError) {
+          if (assemblyError) {
+            console.error(assemblyError);
+            return;
+          }
           // console.log('[Macroreact] Uploaded assembly data:');
-          // console.dir(data);
+          // console.dir(assemblyResult);
         });
       });
     });
-  }
+  },
 
 };

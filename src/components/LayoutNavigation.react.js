@@ -1,21 +1,22 @@
-var React = require('react');
+import React from 'react';
 
-var MenuLabel = require('./MenuLabel.react');
-var TableMetadata = require('./layout/navigation/TableMetadata.react');
-var TableResistanceProfile = require('./layout/navigation/TableResistanceProfile.react');
-var DevelopedAtImperialCollegeLondon = require('./DevelopedAtImperialCollegeLondon.react');
+import TableMetadata from './layout/navigation/TableMetadata.react';
+import TableResistanceProfile from './layout/navigation/TableResistanceProfile.react';
 
-var Navigation = React.createClass({
+const style = {
+  height: 0,
+  position: 'absolute',
+  zIndex: 999,
+};
+
+export default React.createClass({
   render: function () {
+    style.top = this.props.top;
     return (
-      <div data-layout="navigation">
-        <MenuLabel />
+      <div data-layout="navigation" style={style}>
         <TableMetadata />
         <TableResistanceProfile />
-        <DevelopedAtImperialCollegeLondon />
       </div>
     );
-  }
+  },
 });
-
-module.exports = Navigation;

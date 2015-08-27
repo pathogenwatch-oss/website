@@ -1,0 +1,41 @@
+.wgsa-tree-header {
+  position: absolute;
+  top: 8px;
+  left: 0;
+  right: 0;
+  height: 32px;
+  padding: 16px;
+  z-index: 10;
+}
+
+.wgsa-tree-heading {
+  line-height: 32px;
+  font-size: 20px;
+  margin: 0;
+  float: left;
+  padding-top: 4px;
+  padding-left: 52px;
+  color: #673c90;
+}
+
+.wgsa-tree-return {
+  color: #673c90;
+  background-color: #fff;
+  position: absolute;
+  left: 16px;
+  border: 1px solid #a386bd;
+}
+
+.wgsa-tree-menu {
+  position: absolute;
+  top: 20px;
+  right: 16px;
+}
+
+.wgsa-tree-actions {
+  color: #673c90;
+}
+
+.wgsa-tree-control label {
+  font-size: 13px;
+}

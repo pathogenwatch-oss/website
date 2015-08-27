@@ -12,7 +12,7 @@ var devConfig = {
   ],
   output: {
     path: __dirname,
-    filename: 'macroreact.js',
+    filename: 'wgsa.js',
     publicPath: '/'
   },
   plugins: [
@@ -27,7 +27,7 @@ var devConfig = {
       },
       { test: /.json$/, loaders: [ 'json' ] },
       { test: /.css$/, loaders: [ 'style', 'css' ] },
-      { test: /\.(png|jpg|jpeg|gif)$/, loader: "file-loader" }
+      { test: /\.(png|jpg|jpeg|gif)$/, loader: "file" }
     ]
   }
 };
@@ -35,8 +35,8 @@ var devConfig = {
 var prodConfig = {
   entry: './src/app',
   output: {
-    path: __dirname,
-    filename: 'macroreact.js',
+    path: path.join(__dirname, 'public'),
+    filename: 'wgsa.js'
   },
   plugins: [
     new webpack.optimize.UglifyJsPlugin({
@@ -51,7 +51,9 @@ var prodConfig = {
         loaders: [ 'babel' ],
         include: path.join(__dirname, 'src')
       },
-      { test: /.json$/, loaders: [ 'json' ] }
+      { test: /.json$/, loaders: [ 'json' ] },
+      { test: /.css$/, loaders: [ 'style', 'css' ] },
+      { test: /\.(png|jpg|jpeg|gif)$/, loader: "file" }
     ]
   }
 };

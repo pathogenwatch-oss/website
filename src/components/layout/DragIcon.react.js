@@ -1,45 +1,68 @@
-var React = require('react');
-var LayoutUtils = require('../../utils/Layout');
+import '../../css/drag-handle.css';
 
-var DragIcon = React.createClass({
+import React from 'react';
+import assign from 'object-assign';
+
+import { CGPS } from '../../defaults';
+
+const background = '#fff';
+
+const buttonRadius = 20;
+const buttonPosition = `calc(50% - ${buttonRadius}px)`;
+const hButtonOffset = `-${buttonRadius}px`;
+const vButtonOffset = `-${buttonRadius - 2}px`;
+
+const buttonStyle = {
+  position: 'absolute',
+  background,
+};
+const buttonClasses = 'mdl-button mdl-button--fab mdl-button--mini-fab';
+
+const arrowStyle = { color: CGPS.COLOURS.PURPLE };
+const upArrowStyle = assign({ top: '37.5%' }, arrowStyle);
+const downArrowStyle = assign({ top: '62.5%' }, arrowStyle);
+const leftArrowStyle = assign({ left: '37.5%', transform: 'translate(-12px, -12px) rotate(-90deg)' }, arrowStyle);
+const rightArrowStyle = assign({ left: '62.5%', transform: 'translate(-12px, -12px) rotate(-90deg)' }, arrowStyle);
+
+
+
+const DragIcon = React.createClass({
   render: function () {
+    const direction = this.props.direction;
 
-    var direction = this.props.direction;
-    var color = '#aaa';
-    var fontSize = '20px';
+    const horizontalStyle = assign({
+      top: hButtonOffset,
+      left: buttonPosition,
+    }, buttonStyle);
 
-    var dragIconWidth = 22;
-    var horizontalLeft = (LayoutUtils.getViewportWidth() / 2) - (dragIconWidth / 2);
+    const verticalStyle = assign({
+      top: buttonPosition,
+      left: vButtonOffset,
+    }, buttonStyle);
 
-    var horizontalStyle = {
-      position: 'absolute',
-      top: '3px',
-      left: horizontalLeft,
-      fontSize: fontSize,
-      color: color
-    };
-
-    var dragIconHeight = 24;
-    var verticalTop = (LayoutUtils.getNorthHeight() / 2) - (dragIconHeight / 2);
-
-    var verticalStyle = {
-      position: 'absolute',
-      top: verticalTop,
-      left: '3px',
-      fontSize: fontSize,
-      color: color
-    };
+    const className = `${buttonClasses} wgsa-drag-handle wgsa-drag-handle--${direction}`;
 
     if (direction === 'horizontal') {
       return (
-        <span className="glyphicon glyphicon-option-horizontal" aria-hidden="true" style={horizontalStyle}></span>
+        <a
+          className={className}
+          style={horizontalStyle}>
+          <i className="material-icons" style={upArrowStyle}>arrow_drop_up</i>
+          <i className="material-icons" style={downArrowStyle}>arrow_drop_down</i>
+        </a>
       );
     } else if (direction === 'vertical') {
       return (
-        <span className="glyphicon glyphicon-option-vertical" aria-hidden="true" style={verticalStyle}></span>
+        <a
+          className={className}
+          style={verticalStyle}>
+          <i className="material-icons" style={leftArrowStyle}>arrow_drop_up</i>
+          <i className="material-icons" style={rightArrowStyle}>arrow_drop_down</i>
+        </a>
       );
     }
-  }
+  },
+
 });
 
 module.exports = DragIcon;
