@@ -39,6 +39,8 @@ export default React.createClass({
   render() {
     if (this.state.assemblyCount) {
       const allLocations = UploadStore.getAllMetadataLocations();
+      const locationsToAssembliesMap = UploadStore.getLocationToAssembliesMap();
+
       return (
         <div className='mdl-grid'>
 
@@ -60,7 +62,7 @@ export default React.createClass({
 
           <div className='mdl-cell mdl-cell--12-col increase-cell-gutter mdl-shadow--4dp'>
             <div className='card-style--no-padding'>
-              <Map width='100%' height='400' locations={allLocations}/>
+              <Map width='100%' height='400' locations={allLocations} locationAssemblyMap={locationsToAssembliesMap}/>
             </div>
           </div>
 

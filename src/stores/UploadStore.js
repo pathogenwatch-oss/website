@@ -92,6 +92,31 @@ const Store = assign({}, EventEmitter.prototype, {
     return locations;
   },
 
+  getLocationToAssembliesMap: function() {
+    const locations = {};
+    const assemblies = this.getAssemblies();
+    var latlng = null;
+    for (const id in assemblies) {
+      // locations[id] = assemblies[id].metadata.geography;
+      if (assemblies[id].metadata.geography.position.latitude != null) {
+        latlng = assemblies[id].metadata.geography.position.latitude + ',' + assemblies[id].metadata.geography.position.longitude;
+        if (!locations[latlng]) {
+          locations[latlng] = {};
+          locations[latlng]['fileAssemblyId'] = new Array();
+          locations[latlng]['location'] = null;
+        }
+        if (assemblies[id].metadata.fileAssemblyId) {
+          locations[latlng]['fileAssemblyId'].push(assemblies[id].metadata.fileAssemblyId);
+        }
+        if (assemblies[id].metadata.geography.location) {
+          locations[latlng]['location'] = assemblies[id].metadata.geography.location;
+        }
+      }
+    }
+    return locations;
+  },
+
+
 });
 
 function handleAction(action) {
