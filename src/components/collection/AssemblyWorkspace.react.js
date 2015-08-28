@@ -22,29 +22,30 @@ import SocketUtils from '../../utils/Socket';
 import DEFAULT from '../../defaults.js';
 import { validateMetadata } from '../../utils/Metadata.js';
 
-var loadingAnimationStyle = {
-  display: 'block'
+const loadingAnimationStyle = {
+  display: 'block',
 };
 
 const layoutContentStyle = {
-  background: DEFAULT.CGPS.COLOURS.GREY_LIGHT
-}
+  background: DEFAULT.CGPS.COLOURS.GREY_LIGHT,
+  position: 'relative',
+};
 
-var AssemblyWorkspace = React.createClass({
+const AssemblyWorkspace = React.createClass({
 
   propTypes: {
     assembly: React.PropTypes.object,
-    totalAssemblies: React.PropTypes.number
+    totalAssemblies: React.PropTypes.number,
   },
 
   getInitialState: function () {
     return {
       isProcessing: false,
-      uploadButtonActive: false
+      uploadButtonActive: false,
     };
   },
 
-  componentDidMount: function() {
+  componentDidMount: function () {
     FileProcessingStore.addChangeListener(this.handleFileProcessingStoreChange);
     UploadStore.addChangeListener(this.activateUploadButton);
 
@@ -56,7 +57,6 @@ var AssemblyWorkspace = React.createClass({
 
     SocketStore.addChangeListener(this.handleSocketStoreChange);
     SocketActionCreators.setSocketConnection(socket);
-
   },
 
   componentWillUnmount: function () {
@@ -65,8 +65,7 @@ var AssemblyWorkspace = React.createClass({
   },
 
   handleSocketStoreChange: function () {
-    if (! SocketStore.getRoomId()) {
-
+    if (!SocketStore.getRoomId()) {
       SocketStore.getSocketConnection().on('roomId', function iife(roomId) {
         // console.log('[Macroreact] Got socket room id ' + roomId);
         SocketActionCreators.setRoomId(roomId);
@@ -78,7 +77,7 @@ var AssemblyWorkspace = React.createClass({
 
   handleFileProcessingStoreChange: function () {
     this.setState({
-      isProcessing: FileProcessingStore.getFileProcessingState()
+      isProcessing: FileProcessingStore.getFileProcessingState(),
     });
   },
 
@@ -92,16 +91,16 @@ var AssemblyWorkspace = React.createClass({
     }
   },
 
-  activateUploadButton: function() {
+  activateUploadButton: function () {
     const assemblies = UploadStore.getAssemblies();
     const isValidMap = validateMetadata(assemblies);
-    var isValid = true;
+    let isValid = true;
 
     if (!Object.keys(isValidMap)) {
       isValid = false;
     }
 
-    for (var id in isValidMap) {
+    for (const id in isValidMap) {
       if (!isValidMap[id]) {
         isValid = false;
         break;
@@ -109,73 +108,72 @@ var AssemblyWorkspace = React.createClass({
     }
 
     this.setState({
-      uploadButtonActive: isValid
+      uploadButtonActive: isValid,
     });
   },
 
   render: function () {
     loadingAnimationStyle.display = this.state.isProcessing ? 'block' : 'none';
-    var locations = {};
-    var label = null;
-    var metadataTitle = 'Metadata';
+    const locations = {};
+    let metadataTitle = 'Metadata';
     if (this.props.assembly) {
       locations[this.props.assembly.fasta.name] = this.props.assembly.metadata.geography;
-      label = locations[this.props.assembly.fasta.name].location;
       metadataTitle += ' - ' + this.props.assembly.fasta.name;
     }
 
     return (
       <FileDragAndDrop onDrop={this.handleDrop}>
-        <div className='assemblyWorkspaceContainer mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-drawer'>
-            <UploadReviewHeader title='WGSA' activateUploadButton={this.state.uploadButtonActive} />
-            <div id="loadingAnimation" style={loadingAnimationStyle} className="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
+        <div className="assemblyWorkspaceContainer mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-drawer">
+          <UploadReviewHeader title="WGSA - Upload" activateUploadButton={this.state.uploadButtonActive} />
+          <div id="loadingAnimation" style={loadingAnimationStyle} className="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
 
-            <UploadWorkspaceNavigation assembliesUploaded={this.props.assembly?true:false} totalAssemblies={this.props.totalAssemblies}/>
+          <UploadWorkspaceNavigation assembliesUploaded={this.props.assembly ? true : false} totalAssemblies={this.props.totalAssemblies}/>
 
-            <main className="mdl-layout__content" style={layoutContentStyle}>
-              { this.props.assembly &&
-                <div>
-                  <div className='mdl-grid'>
-                    <div className='mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp'>
-                      <div className='card-style'>
-                        <div className='heading'> {metadataTitle} </div>
-                        <AssemblyMetadata assembly={this.props.assembly} />
-                      </div>
+          <main className="mdl-layout__content" style={layoutContentStyle}>
+            { this.props.assembly &&
+              <div>
+                <div className="mdl-grid">
+                  <div className="mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
+                    <div className="card-style">
+                      <div className="heading"> {metadataTitle} </div>
+                      <AssemblyMetadata assembly={this.props.assembly} />
                     </div>
-
-                    <div className='mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp'>
-                      <div className='cardStyle--no-padding'>
-                        <Map width={'100%'} height={200} locations={locations}/>
-                      </div>
-                    </div>
-
-
-                    <div className='mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp'>
-                      <div className='card-style'>
-                        <div className='heading'> Analysis </div>
-                        <AssemblyAnalysis assembly={this.props.assembly} />
-                      </div>
-                    </div>
-
-                    <div className='mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp'>
-                      <div className='card-style'>
-                        <div className='heading'> Chart </div>
-                        <AssemblyAnalysisChart analysis={this.props.assembly.analysis} />
-                      </div>
-                    </div>
-
                   </div>
+
+                  <div className="mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
+                    <div className="cardStyle--no-padding">
+                      <Map width={"100%"} height={200} locations={locations}/>
+                    </div>
+                  </div>
+
+
+                  <div className="mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
+                    <div className="card-style">
+                      <div className="heading"> Analysis </div>
+                      <AssemblyAnalysis assembly={this.props.assembly} />
+                    </div>
+                  </div>
+
+                  <div className="mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
+                    <div className="card-style">
+                      <div className="heading"> Chart </div>
+                      <AssemblyAnalysisChart analysis={this.props.assembly.analysis} />
+                    </div>
+                  </div>
+
                 </div>
+              </div>
 
-                ||
+              ||
 
-                <Overview />
-              }
-            </main>
+              <Overview />
+            }
+          </main>
         </div>
       </FileDragAndDrop>
     );
-  }
+  },
+
 });
 
 module.exports = AssemblyWorkspace;

@@ -21,40 +21,64 @@
 /**** UploadReview - Analysis ****/
 
 .welcome-container {
-  display: flex;
   position: absolute;
-  height: 100%;
+  top: -56px;
+  bottom: 0;
   width: 100%;
+  display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
 }
 
-.welcome-card-wide {
+.welcome-intro {
+  font-size: 24px;
+  line-height: 32px;
+  color: #a386bd;
+  margin-bottom: 32px;
+}
+
+.welcome-card {
   width: 500px;
-  height: 200px;
-  background: url('/assets/img/WGSA_logo.png') #fff center no-repeat;
+  min-height: 200px;
+  padding: 0 24px;
+  margin-bottom: 32px;
+  box-sizing: border-box;
+  background: url('/assets/img/WGSA_logo.png') #fff no-repeat;
   background-size: 80px;
   background-position: -20px -20px;
 }
 
-.welcome-card-content {
-  padding: 0 24px;
+.welcome-card:last-child {
+  margin-bottom: 0;
 }
 
-.welcome-card-title {
+.welcome-card--reverse {
+  background-position: calc(100% + 20px) -20px;
+}
+
+.welcome-card__title {
   font-size: 20px;
   text-align: right;
   color: #673c90;
   line-height: 1;
   margin-left: 56px;
+  margin-bottom: 32px;
+}
+
+.welcome-card--reverse .welcome-card__title {
+  text-align: left;
+  margin-left: 0px;
 }
 
 #loadingAnimation.mdl-progress {
   width: auto;
 }
+
 .uploadReviewAnalysisStyle input {
   outline: none;
 }
+
 .uploadReviewAnalysisStyle, .mdl-textfield {
   padding: 0px 10px 20px 0;
 }
@@ -103,6 +127,10 @@
   line-height: 30px;
   margin: 20px 0px 10px 0px;
   text-align: center;
+}
+
+.uploadWorkspaceNavigationTitle > .mdl-badge:after {
+  background: #a386bd;
 }
 
 .assemblyNavTitle {

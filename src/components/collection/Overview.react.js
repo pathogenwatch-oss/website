@@ -5,11 +5,6 @@ import AssemblyAnalysisOverviewChart from '../../components/collection/AssemblyA
 import AssemblyAnalysisItem from './AssemblyAnalysisItem.react';
 
 import Map from './Map.react';
-import DEFAULT from '../../defaults';
-
-const welcomeText = {
-  color: DEFAULT.CGPS.COLOURS.GREEN_MID,
-};
 
 export default React.createClass({
 
@@ -39,27 +34,27 @@ export default React.createClass({
     if (this.state.assemblyCount) {
       const allLocations = UploadStore.getAllMetadataLocations();
       return (
-        <div className='mdl-grid'>
+        <div className="mdl-grid">
 
-          <div className='mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp'>
-            <div className='card-style'>
-              <div className='heading'> Statistics </div>
+          <div className="mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
+            <div className="card-style">
+              <div className="heading"> Statistics </div>
               <AssemblyAnalysisItem label="Total Assemblies" value={this.state.assemblyCount} />
               <AssemblyAnalysisItem label="Mean Contigs" value={200} />
               <AssemblyAnalysisItem label="Total nt" value={2000000} />
             </div>
           </div>
 
-          <div className='mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp'>
-            <div className='card-style'>
-              <div className='heading'> Overview N50 contigs Chart </div>
+          <div className="mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
+            <div className="card-style">
+              <div className="heading"> Overview N50 contigs Chart </div>
               <AssemblyAnalysisOverviewChart />
             </div>
           </div>
 
-          <div className='mdl-cell mdl-cell--12-col increase-cell-gutter mdl-shadow--4dp'>
-            <div className='card-style--no-padding'>
-              <Map width='100%' height='400' locations={allLocations}/>
+          <div className="mdl-cell mdl-cell--12-col increase-cell-gutter mdl-shadow--4dp">
+            <div className="card-style--no-padding">
+              <Map width="100%" height="400" locations={allLocations}/>
             </div>
           </div>
 
@@ -70,11 +65,20 @@ export default React.createClass({
 
     return (
       <div className="welcome-container">
-        <div className="welcome-card-wide mdl-shadow--2dp">
-          <div className="welcome-card-content">
-            <h2 className="welcome-card-title">Fasta Files</h2>
-            <p style={welcomeText} className="">Drop your assemblies here for quick analysis and easy upload.</p>
-          </div>
+        <p className="welcome-intro">
+          Drag and drop files to begin.
+        </p>
+        <div className="welcome-card mdl-shadow--2dp">
+          <h2 className="welcome-card__title">Fasta Files</h2>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec efficitur purus eleifend lacus pretium tincidunt. In hac habitasse platea dictumst. Quisque eu tincidunt tortor, id vehicula risus. Aliquam dignissim nisi et sem porttitor vestibulum.
+          </p>
+        </div>
+        <div className="welcome-card welcome-card--reverse mdl-shadow--2dp">
+          <h2 className="welcome-card__title">CSV Files</h2>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec efficitur purus eleifend lacus pretium tincidunt. In hac habitasse platea dictumst. Quisque eu tincidunt tortor, id vehicula risus. Aliquam dignissim nisi et sem porttitor vestibulum.
+          </p>
         </div>
       </div>
     );
