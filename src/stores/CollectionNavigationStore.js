@@ -33,7 +33,7 @@ const Store = assign({}, EventEmitter.prototype, {
 
   getCollectionNavigationStates: function () {
     return COLLECTION_NAVIGATION_STATES;
-  }
+  },
 
 });
 

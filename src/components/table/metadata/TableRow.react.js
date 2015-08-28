@@ -1,18 +1,41 @@
-var React = require('react');
-var DataUtils = require('../../../utils/Data');
-var MetadataUtils = require('../../../utils/Metadata');
-var TableStore = require('../../../stores/TableStore');
+import '../../../css/spinner.css';
 
-var resistantStyle = {
-  color: '#ff0000'
+import React from 'react';
+
+import DownloadStore from '../../../stores/DownloadStore';
+import DownloadActionCreators from '../../../actions/DownloadActionCreators';
+
+import DataUtils from '../../../utils/Data';
+import MetadataUtils from '../../../utils/Metadata';
+
+import { CGPS } from '../../../defaults';
+
+const resistantStyle = {
+  color: '#ff0000',
 };
 
-var TableRow = React.createClass({
+const iconStyle = {
+  color: CGPS.COLOURS.PURPLE,
+};
+
+const buttonCellStyle = {
+  paddingTop: 0,
+  verticalAlign: 'middle',
+};
+
+const TableRow = React.createClass({
 
   rowData: null,
 
-  componentWillMount: function () {
-    var isolate = this.props.isolate;
+  getInitialState() {
+    return {
+      loading: false,
+      link: null,
+    };
+  },
+
+  componentWillMount() {
+    const isolate = this.props.isolate;
 
     this.rowData = {
       assemblyId: {
@@ -21,7 +44,7 @@ var TableRow = React.createClass({
       },
       country: {
         name: 'Country',
-        value: MetadataUtils.getCountry(isolate)
+        value: MetadataUtils.getCountry(isolate),
       },
       source: {
         name: 'Source',
@@ -40,17 +63,34 @@ var TableRow = React.createClass({
     };
   },
 
-  getFormattedResistanceResult: function (resistanceResult) {
-    if (resistanceResult === 'RESISTANT') {
-      return (<i className="fa fa-square" style={resistantStyle}></i>);
-    } else {
-      return (<i className="fa fa-square-o"></i>);
+  componentDidMount() {
+    DownloadStore.addChangeListener(this.handleDownloadStoreChange);
+  },
+
+  componentWillUnmount() {
+    DownloadStore.removeChangeListener(this.handleDownloadStoreChange);
+  },
+
+  handleDownloadStoreChange() {
+    const link = DownloadStore.getLink(this.props.isolate.metadata.assemblyId);
+    console.log(link);
+    if (link) {
+      this.setState({
+        loading: false,
+        link,
+      });
     }
   },
 
-  getIsolateMetadataTableCellElements: function () {
-    const selectedTableColumnName = TableStore.getLabelTableColumnName();
+  getFormattedResistanceResult(resistanceResult) {
+    if (resistanceResult === 'RESISTANT') {
+      return (<i className="fa fa-square" style={resistantStyle}></i>);
+    }
 
+    return (<i className="fa fa-square-o"></i>);
+  },
+
+  getIsolateMetadataTableCellElements() {
     const metadataTableCellElements = Object.keys(this.rowData).map((dataItemKey) => {
       const dataItem = this.rowData[dataItemKey];
 
@@ -64,17 +104,48 @@ var TableRow = React.createClass({
     return metadataTableCellElements;
   },
 
-  getTableRowElements: function () {
+  getTableRowElements() {
     return this.getIsolateMetadataTableCellElements();
   },
 
-  render: function () {
+  render() {
     return (
       <tr>
         {this.getTableRowElements()}
+        <td style={buttonCellStyle}>
+          { this.state.loading ?
+              <div className="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active"></div>
+              :
+              this.getDownloadElement()
+          }
+        </td>
       </tr>
     );
-  }
+  },
+
+  getDownloadElement() {
+    if (this.state.link) {
+      return (
+        <a className="mdl-button mdl-button--icon" href={this.state.link}>
+          <i style={iconStyle} className="material-icons">insert_drive_file</i>
+        </a>
+      );
+    }
+
+    return (
+      <button className="mdl-button mdl-button--icon" onClick={this.handleDownloadFasta} title="Download Assembly">
+        <i style={iconStyle} className="material-icons">file_download</i>
+      </button>
+    );
+  },
+
+  handleDownloadFasta() {
+    this.setState({
+      loading: true,
+    });
+    DownloadActionCreators.requestFile(this.props.isolate, 'assembly', 'fasta');
+  },
+
 });
 
 module.exports = TableRow;

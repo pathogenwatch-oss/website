@@ -151,8 +151,8 @@ const Tree = React.createClass({
 
     combinedAssemblyIds.forEach(function (assemblyId) {
 
-      if (nodeLabel === 'Assembly Id') {
-        nodeLabelValue = combinedAssemblies[assemblyId].metadata.fileAssemblyId || combinedAssemblies[assemblyId].metadata.userAssemblyId || '';
+      if (nodeLabel === 'Assembly') {
+        nodeLabelValue = combinedAssemblies[assemblyId].metadata.assemblyFilename || combinedAssemblies[assemblyId].metadata.userAssemblyId || '';
       } else if (nodeLabel === 'Country') {
         nodeLabelValue = MetadataUtils.getCountry(combinedAssemblies[assemblyId]);
       } else if (nodeLabel === 'Source') {

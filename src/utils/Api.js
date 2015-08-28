@@ -1,16 +1,21 @@
 import CONFIG from '../config';
 
-const API_PATH = `http://${CONFIG.api.hostname}:${CONFIG.api.port}/api`;
+const API_ROOT = `http://${CONFIG.api.hostname}:${CONFIG.api.port}/api`;
+
+function postJson(path, data) {
+  return {
+    type: 'POST',
+    url: `${API_ROOT}${path}`,
+    contentType: 'application/json; charset=UTF-8',
+    data: JSON.stringify(data),
+    dataType: 'json',
+  };
+}
 
 function getCollectionId(speciesId, collectionData, callback) {
-  $.ajax({
-    type: 'POST',
-    url: `${API_PATH}/species/${speciesId}/collection`,
-    contentType: 'application/json; charset=UTF-8',
-    data: JSON.stringify(collectionData, null, 4),
-    dataType: 'json',
-  })
-  .done(function (data) {
+  $.ajax(
+    postJson(`/species/${speciesId}/collection`, collectionData)
+  ).done(function (data) {
     callback(null, data);
   })
   .fail(function (error) {
@@ -19,14 +24,12 @@ function getCollectionId(speciesId, collectionData, callback) {
 }
 
 function postAssembly({ speciesId, collectionId, assemblyId }, assemblyData, callback) {
-  $.ajax({
-    type: 'POST',
-    url: `${API_PATH}/species/${speciesId}/collection/${collectionId}/assembly/${assemblyId}`,
-    contentType: 'application/json; charset=UTF-8',
-    data: JSON.stringify(assemblyData, null, 4),
-    dataType: 'json',
-  })
-  .done(function (data) {
+  $.ajax(
+    postJson(
+      `/species/${speciesId}/collection/${collectionId}/assembly/${assemblyId}`,
+      assemblyData
+    )
+  ).done(function (data) {
     callback(null, data);
   })
   .fail(function (error) {
@@ -35,15 +38,8 @@ function postAssembly({ speciesId, collectionId, assemblyId }, assemblyData, cal
 }
 
 function getReferenceCollection(speciesId, callback) {
-  const options = {
-    url: `${API_PATH}/species/${speciesId}/reference`,
-  };
-
-  $.get(options.url)
+  $.get(`${API_ROOT}/species/${speciesId}/reference`)
     .done(function (collection) {
-      // console.log('[Macroreact] Received reference collection:');
-      // console.dir(collection);
-
       callback(null, collection);
     })
     .fail(function (error) {
@@ -54,19 +50,12 @@ function getReferenceCollection(speciesId, callback) {
 function getCollection(speciesId, collectionId, callback) {
   console.log(`[Macroreact] Getting collection ${collectionId}`);
 
-  const options = {
-    url: `${API_PATH}/species/${speciesId}/collection/${collectionId}`,
-  };
-
   if (!collectionId) {
     return callback(new Error('Missing collection ID'), null);
   }
 
-  $.get(options.url)
+  $.get(`${API_ROOT}/species/${speciesId}/collection/${collectionId}`)
     .done(function (response) {
-      // console.log(`[Macroreact] Received collection ${response.collection.collectionId}:`);
-      // console.dir(response);
-
       callback(null, response);
     })
     .fail(function (error) {
@@ -74,9 +63,27 @@ function getCollection(speciesId, collectionId, callback) {
     });
 }
 
-module.exports = {
-  postAssembly: postAssembly,
-  getCollectionId: getCollectionId,
-  getCollection: getCollection,
-  getReferenceCollection: getReferenceCollection,
+function requestFile({ assembly, idType, fileType }, callback) {
+  const requestBody = {
+    [assembly.metadata.assemblyId]: assembly.metadata.assemblyFilename,
+  };
+
+  $.ajax(
+    postJson(`/download/type/${idType}/format/${fileType}`, requestBody)
+  ).done(function (response) {
+    console.log(response);
+    callback(null, response);
+  })
+  .fail(function (error) {
+    console.log(error);
+    callback(error, null);
+  });
+}
+
+export default {
+  postAssembly,
+  getCollectionId,
+  getCollection,
+  getReferenceCollection,
+  requestFile,
 };
