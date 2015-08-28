@@ -14,34 +14,34 @@ router.post(
       format: req.params.fileFormat,
       idToUserNameMap: req.body
     };
-    LOGGER.info('Received request for download: ' + downloadRequest.idType + ', ' + downloadRequest.fileFormat);
-    fileModel.requestDownload(downloadRequest, function (error, result){
-      if (error){
+
+    LOGGER.info(
+      'Received request for download: ' + downloadRequest.idType + ', ' +
+        downloadRequest.fileFormat
+    );
+
+    fileModel.requestDownload(downloadRequest, function (error, result) {
+      if (error) {
         return next(error);
       }
       res.json(result);
     });
-});
-
-router.get(
-  '/download/file/:fileName', function (req, res, next) {
-    LOGGER.info('Received request for file: ' + req.params.fileName);
-    res.set({
-      'Content-Disposition': 'attachment; filename="' + req.params.fileName + '"',
-      'Content-type': 'text/plain'
-    });
-    res.sendFile(path.join(config.fileDirectory,req.params.fileName));
-    /*fileModel.getFile(req.params.fileName, function (error, result) {
-      if (error) {
-        return next(error);
-      }
-      res.set({
-        'Content-Disposition': 'attachment; filename="' + req.params.fileName + '"',
-        'Content-type': 'text/plain'
-      });
-      res.send(result);
-    })*/
   }
 );
+
+router.get('/download/file/:fileName', function (req, res) {
+  var fileName = req.params.fileName;
+  LOGGER.info('Received request for file: ' + fileName);
+
+  if (fileName.match(/(\\|\/)/gm)) {
+    return res.sendStatus(400);
+  }
+
+  res.set({
+    'Content-Disposition': 'attachment; filename="' + fileName + '"',
+    'Content-type': 'text/plain'
+  });
+  res.sendFile(path.join(config.fileDirectory, fileName));
+});
 
 module.exports = router;

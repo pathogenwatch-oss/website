@@ -3,13 +3,11 @@ var fileStorage = require('services/storage')('cache');
 
 var LOGGER = require('utils/logging').createLogger('File');
 
-
-function getFile(fileName, callback){
+function getFile(fileName, callback) {
   fileStorage.retrieve(fileName, callback);
 }
 
 function requestDownload(request, callback) {
-
   messageQueueService.newFileRequestQueue(function (queue) {
     queue.subscribe(function (error, message) {
       if (error) {
@@ -22,7 +20,7 @@ function requestDownload(request, callback) {
     });
 
     messageQueueService.getUploadExchange()
-      .publish('file', request, {replyTo: queue.name});
+      .publish('file', request, { replyTo: queue.name });
   });
 }
 

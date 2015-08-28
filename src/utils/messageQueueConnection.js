@@ -28,7 +28,7 @@ var EXCHANGE_CONFIG = {
     name: 'grid-ex',
     type: 'direct'
   },
-  TASKS: { //TODO: should not be used by the middle end
+  TASKS: { // TODO: should not be used by the middle end
     name: 'wgst-tasks-ex',
     type: 'topic'
   }
