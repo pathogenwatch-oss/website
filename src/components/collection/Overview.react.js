@@ -1,7 +1,6 @@
 import React from 'react';
 
 import UploadStore from '../../stores/UploadStore.js';
-import AssemblyMetadata from './AssemblyMetadata.react';
 import AssemblyAnalysisOverviewChart from '../../components/collection/AssemblyAnalysisOverviewChart.react';
 import AssemblyAnalysisItem from './AssemblyAnalysisItem.react';
 
@@ -9,7 +8,7 @@ import Map from './Map.react';
 import DEFAULT from '../../defaults';
 
 const welcomeText = {
-  color: DEFAULT.CGPS.COLOURS.GREEN_MID
+  color: DEFAULT.CGPS.COLOURS.GREEN_MID,
 };
 
 export default React.createClass({
@@ -17,7 +16,7 @@ export default React.createClass({
   getInitialState() {
     return {
       assemblies: UploadStore.getAssemblies(),
-      assemblyCount: UploadStore.getAssembliesCount()
+      assemblyCount: UploadStore.getAssembliesCount(),
     };
   },
 
@@ -32,7 +31,7 @@ export default React.createClass({
   handleUploadStoreChange() {
     this.setState({
       assemblies: UploadStore.getAssemblies(),
-      assemblyCount: UploadStore.getAssembliesCount()
+      assemblyCount: UploadStore.getAssembliesCount(),
     });
   },
 
@@ -70,17 +69,15 @@ export default React.createClass({
     }
 
     return (
-      <div className="welcomeContainer">
-        <div className="welcome-card-wide mdl-card mdl-shadow--2dp">
-          <div className="mdl-card__title">
-            <h2 style={welcomeText} className="mdl-card__title-text">Drop your assemblies here for quick analysis and easy upload.</h2>
-          </div>
-          <div className="mdl-card__supporting-text">
+      <div className="welcome-container">
+        <div className="welcome-card-wide mdl-shadow--2dp">
+          <div className="welcome-card-content">
+            <h2 className="welcome-card-title">Fasta Files</h2>
+            <p style={welcomeText} className="">Drop your assemblies here for quick analysis and easy upload.</p>
           </div>
         </div>
-        <h4></h4>
       </div>
-    )
-  }
+    );
+  },
 
 });

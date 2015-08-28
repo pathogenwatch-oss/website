@@ -2,7 +2,7 @@ import React from 'react';
 import UploadStore from '../../../stores/UploadStore';
 import UploadWorkspaceNavigationStore from '../../../stores/UploadWorkspaceNavigationStore';
 import UploadWorkspaceNavigationActionCreators from '../../../actions/UploadWorkspaceNavigationActionCreators';
-import '../../../css/UploadReview.css';
+import '../../../css/upload-review.css';
 import { List, ListItem, FontIcon } from 'material-ui';
 import createThemeManager from 'material-ui/lib/styles/theme-manager';
 

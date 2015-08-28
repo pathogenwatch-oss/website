@@ -4,7 +4,7 @@ import UploadWorkspaceNavigationStore from '../../../stores/UploadWorkspaceNavig
 import UploadWorkspaceNavigationActionCreators from '../../../actions/UploadWorkspaceNavigationActionCreators';
 import { validateMetadata } from '../../../utils/Metadata.js';
 import DEFAULT from '../../../defaults.js';
-import '../../../css/UploadReview.css';
+import '../../../css/upload-review.css';
 
 const AssemblyList = React.createClass({
 

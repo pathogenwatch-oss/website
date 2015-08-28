@@ -1,14 +1,14 @@
+import '../../css/upload-review.css';
+
 import React from 'react';
-import assign from 'object-assign';
 import FileDragAndDrop from 'react-file-drag-and-drop';
-import io from 'socket.io-client';
 
 import AssemblyMetadata from './AssemblyMetadata.react';
 import AssemblyAnalysis from './AssemblyAnalysis.react';
-import AssemblyWorkspaceHeader from './AssemblyWorkspaceHeader.react';
+
 import Map from './Map.react';
 import AssemblyAnalysisChart from './AssemblyAnalysisChart.react';
-import AssemblyAnalysisOverviewChart from './AssemblyAnalysisOverviewChart.react';
+
 import UploadWorkspaceNavigation from './UploadWorkspaceNavigation.react';
 import UploadReviewHeader from './UploadReviewHeader.react.js';
 import UploadStore from '../../stores/UploadStore.js';
@@ -21,8 +21,6 @@ import SocketStore from '../../stores/SocketStore';
 import SocketUtils from '../../utils/Socket';
 import DEFAULT from '../../defaults.js';
 import { validateMetadata } from '../../utils/Metadata.js';
-
-import '../../css/UploadReview.css';
 
 var loadingAnimationStyle = {
   display: 'block'

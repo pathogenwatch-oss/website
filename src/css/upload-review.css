@@ -20,26 +20,33 @@
 
 /**** UploadReview - Analysis ****/
 
-.welcome-card-wide.mdl-card {
-  max-width: auto;
-  width: 500px;
-  background: #fff;
+.welcome-container {
+  display: flex;
   position: absolute;
-  top: 50%;
-  left: 60%;
-  transform: translateX(-50%) translateY(-50%);
-  text-align: center;
-}
-.welcome-card-wide > .mdl-card__title {
-  color: #ccc;
-  height: 200px;
-  background: url('/assets/img/WGSA_logo.png') center no-repeat;
-  background-position: -40px -40px;
+  height: 100%;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
 }
 
-.welcome-card-wide > .mdl-card__title h2{
-  font-size: 26px;
-  font-weight: 300;
+.welcome-card-wide {
+  width: 500px;
+  height: 200px;
+  background: url('/assets/img/WGSA_logo.png') #fff center no-repeat;
+  background-size: 80px;
+  background-position: -20px -20px;
+}
+
+.welcome-card-content {
+  padding: 0 24px;
+}
+
+.welcome-card-title {
+  font-size: 20px;
+  text-align: right;
+  color: #673c90;
+  line-height: 1;
+  margin-left: 56px;
 }
 
 #loadingAnimation.mdl-progress {

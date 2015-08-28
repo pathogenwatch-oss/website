@@ -2,7 +2,7 @@ import React from 'react';
 import AnalysisUtils from '../../utils/Analysis';
 import UploadStore from '../../stores/UploadStore';
 
-import '../../css/UploadReview.css';
+import '../../css/upload-review.css';
 
 const containerStyle = {
   margin: '0 0 25px 0',

@@ -1,4 +1,4 @@
-import '../../css/UploadReview.css';
+import '../../css/upload-review.css';
 
 import React from 'react';
 import assign from 'object-assign';
