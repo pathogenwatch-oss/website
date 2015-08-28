@@ -106,17 +106,17 @@ const AssemblyList = React.createClass({
 
       return (
         <li className={`assemblyListItem mdl-shadow--2dp${this.state.selectedOption === fileAssemblyId ? ' selected' : ''}`}>
-          <button className="deleteButton utilityButton mdl-button mdl-js-button mdl-button--icon mdl-button--colored"
-            onClick={this.handleDeleteAssembly.bind(this, fileAssemblyId)}>
-            <i className="material-icons">delete</i>
-          </button>
           <button className='selectButton mdl-button mdl-js-button mdl-js-ripple-effect' key={fileAssemblyId} onClick={this.handleSelectAssembly.bind(this, fileAssemblyId)}>
             <span className='filename'>
               {fileAssemblyId}
             </span>
-            <span className="utilityButton mdl-button mdl-js-button mdl-button--icon" disabled>
-              <i style={validatedIconStyle} className='material-icons'>{validatedIcon}</i>
-            </span>
+          </button>
+          <button className="validateButton utilityButton mdl-button mdl-js-button mdl-button--icon" disabled>
+            <i style={validatedIconStyle} className='material-icons'>{validatedIcon}</i>
+          </button>
+          <button className="deleteButton utilityButton mdl-button mdl-js-button mdl-button--icon mdl-button--colored"
+            onClick={this.handleDeleteAssembly.bind(this, fileAssemblyId)}>
+            <i className="material-icons">delete</i>
           </button>
         </li>
       );

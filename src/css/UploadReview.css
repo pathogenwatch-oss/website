@@ -103,10 +103,28 @@
   border-bottom: 1px solid #e0e0e0;
 }
 
+.assemblyListContainer {
+  padding: 0px;
+}
+
 .assemblyListItem {
-  width: 100%;
-  display: block;
-  text-align: left;
+  /*height: 100px;*/
+}
+
+.assemblyListItem .selectButton {
+  width: 160px;
+  height: auto;
+  padding: 0px 5px;
+  overflow: none;
+  height: 50px;
+
+}
+
+.assemblyListItem .deleteButton {
+  color: #777;
+}
+
+.assemblyListItem .validateButton {
 }
 
 .assemblyListItem:hover,
@@ -119,32 +137,19 @@
   background-color: rgba(158,158,158,.5);
 }
 
-.assemblyListItem span.filename {
+.assemblyListItem .selectButton span.filename {
   font-size: 12px;
   font-weight: 100;
   text-transform: none;
-  left: 10px;
   padding: 0px;
-  overflow: none;
-  height: auto;
+  overflow: auto;
+  white-space: wrap;
 }
 
 .assemblyListItem.mdl-button {
-  /*border: 1px solid black;*/
   padding: 0px;
   margin: 0px;
   height: auto;
-}
-
-.assemblyListItem .deleteButton {
-  color: #777;
-  right: 0px;
-}
-.assemblyListItem .utilityButton {
-  /*position: absolute;*/
-  float: right;
-  /*right: 0px;*/
-  z-index: 9;
 }
 
 .assemblyListItem .selectButton:hover,
