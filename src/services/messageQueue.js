@@ -121,6 +121,22 @@ function newCollectionAddQueue(callback) {
   });
 }
 
+function newFileRequestQueue(callback) {
+  var queueId = generateQueueId('FILE_REQUEST_');
+  return connection.queue(queueId, {
+    passive: false,
+    durable: false,
+    exclusive: true,
+    autoDelete: true,
+    noDeclare: false,
+    closeChannelOnUnsubscribe: false
+  }, function (queue) {
+    LOGGER.info('Queue "' + queue.name + '" is open');
+    parseMessagesAsJson(queue);
+    callback(queue);
+  });
+}
+
 function getUploadExchange() {
   return exchanges.UPLOAD;
 }
@@ -140,3 +156,4 @@ module.exports.newCollectionAddQueue = newCollectionAddQueue;
 module.exports.getUploadExchange = getUploadExchange;
 module.exports.getCollectionIdExchange = getCollectionIdExchange;
 module.exports.getTasksExchange = getTasksExchange;
+module.exports.newFileRequestQueue = newFileRequestQueue;

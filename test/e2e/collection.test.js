@@ -5,7 +5,7 @@ var registerCollection = require('./features/register-collection');
 
 describe('Collection Routes', function () {
 
-  it.only('GET /api/v1/collection/:id', function (done) {
+  it('GET /api/v1/collection/:id', function (done) {
     var fixture = require('./fixtures/collection.json');
     request
       .get('/api/v1/collection/1bd2dee3-e32c-4fb4-8d29-cb7be28f0028')

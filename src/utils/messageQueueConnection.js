@@ -22,15 +22,15 @@ var EXCHANGE_CONFIG = {
   },
   UPLOAD: {
     name: 'wgst-ex',
-    type: 'topic'
+    type: 'direct'
   },
   COLLECTION_ID: {
     name: 'grid-ex',
     type: 'direct'
   },
-  TASKS: {
+  TASKS: { // TODO: should not be used by the middle end
     name: 'wgst-tasks-ex',
-    type: 'direct'
+    type: 'topic'
   }
 };
 var connection;

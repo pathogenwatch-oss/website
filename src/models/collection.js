@@ -66,9 +66,7 @@ function manageCollection(request, callback) {
 }
 
 function add(speciesId, ids, callback) {
-  LOGGER.debug(speciesId, ids);
   var userAssemblyIds = ids.userAssemblyIds;
-
   var collectionRequest = {
     identifierType: IDENTIFIER_TYPES.COLLECTION,
     count: 1

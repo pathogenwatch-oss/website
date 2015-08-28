@@ -18,7 +18,7 @@ describe('Example tests', function () {
       var profile = { methicillin: true };
 
       // This would usually override a private method with rewire's `__set__`,
-      // but I didn't want to change the controller module
+      // but I didn't want to change the downloadController module
       assemblyController.getResistanceProfile =
         sinon.stub().yields(null, profile);
 
