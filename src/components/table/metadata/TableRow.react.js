@@ -71,9 +71,14 @@ const TableRow = React.createClass({
     DownloadStore.removeChangeListener(this.handleDownloadStoreChange);
   },
 
+  componentDidUpdate() {
+    if (this.state.loading) {
+      componentHandler.upgradeElement(React.findDOMNode(this.refs.spinner));
+    }
+  },
+
   handleDownloadStoreChange() {
     const link = DownloadStore.getLink(this.props.isolate.metadata.assemblyId);
-    console.log(link);
     if (link) {
       this.setState({
         loading: false,
@@ -114,7 +119,7 @@ const TableRow = React.createClass({
         {this.getTableRowElements()}
         <td style={buttonCellStyle}>
           { this.state.loading ?
-              <div className="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active"></div>
+              <div ref="spinner" className="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active"></div>
               :
               this.getDownloadElement()
           }
@@ -126,7 +131,7 @@ const TableRow = React.createClass({
   getDownloadElement() {
     if (this.state.link) {
       return (
-        <a className="mdl-button mdl-button--icon" href={this.state.link}>
+        <a className="mdl-button mdl-button--icon" target="_blank" href={this.state.link}>
           <i style={iconStyle} className="material-icons">insert_drive_file</i>
         </a>
       );

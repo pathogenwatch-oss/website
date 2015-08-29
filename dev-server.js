@@ -51,8 +51,8 @@ apiRouter.post('/download/type/:idType/format/:fileFormat', function (req, res) 
   res.json(req.body[assemblyId]);
 });
 
-apiRouter.post('/download/file/:fileName', function (req, res) {
-  return res.sendFile('./static_data/' + req.params.fileName);
+apiRouter.get('/download/file/:fileName', function (req, res) {
+  return res.sendFile(__dirname + '/static_data/' + req.params.fileName);
 });
 
 server.use('/api', apiRouter);
