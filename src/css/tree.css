@@ -19,10 +19,13 @@
 }
 
 .wgsa-tree-return {
-  color: #673c90;
-  background-color: #fff;
   position: absolute;
   left: 16px;
+}
+
+.wgsa-tree-return.mdl-button--fab {
+  color: #673c90;
+  background-color: #fff;
   border: 1px solid #a386bd;
 }
 

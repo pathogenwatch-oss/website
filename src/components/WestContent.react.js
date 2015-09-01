@@ -1,7 +1,6 @@
 import React from 'react';
 
 import SpeciesTree from './SpeciesTree.react';
-import SpeciesSubtree from './SpeciesSubtree.react';
 
 import SpeciesSubtreeStore from '../stores/SpeciesSubtreeStore';
 import UploadedCollectionStore from '../stores/UploadedCollectionStore';
@@ -36,11 +35,9 @@ export default React.createClass({
   },
 
   render: function () {
-    const TreeComponent = this.state.subtree ? SpeciesSubtree : SpeciesTree;
-
     return (
-      <TreeComponent
-        treeId={this.state.subtree}
+      <SpeciesTree
+        title={this.state.subtree || 'Population'}
         width={this.props.width}
         height={this.props.height} />
     );

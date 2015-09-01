@@ -39,7 +39,6 @@ const phylocanvasStyle = {
 const Tree = React.createClass({
 
   tree: null,
-  treeId: null,
   phylocanvas: null,
 
   propTypes: {
@@ -59,7 +58,6 @@ const Tree = React.createClass({
 
   componentWillMount: function () {
     this.tree = SpeciesTreeStore.getSpeciesTree();
-    this.treeId = 'species-tree';
     this.collectionId = UploadedCollectionStore.getUploadedCollectionId();
   },
 
@@ -74,8 +72,25 @@ const Tree = React.createClass({
     this.phylocanvas.draw();
   },
 
+  componentDidUpdate: function () {
+    this.phylocanvas.resizeToContainer();
+    this.phylocanvas.fitInPanel();
+
+    const subtree = SpeciesSubtreeStore.getActiveSpeciesSubtree();
+    const tree = subtree ? subtree.newick : SpeciesTreeStore.getSpeciesTree();
+
+    if (tree !== this.tree) {
+      this.phylocanvas.load(tree);
+      this.setNodeShapeAndColour();
+      this.emphasizeShapeAndColourForNodesThatHaveSubtrees();
+      this.tree = tree;
+    }
+
+    this.phylocanvas.draw();
+  },
+
   initializeTree: function () {
-    const phylocanvas = PhyloCanvas.createTree(this.treeId, {
+    const phylocanvas = PhyloCanvas.createTree('phylocanvas-container', {
       history: {
         collapsed: true,
       },
@@ -98,9 +113,7 @@ const Tree = React.createClass({
   },
 
   setNodeShapeAndColour: function () {
-    var branches = this.phylocanvas.branches;
-    var branchIds = Object.keys(branches);
-
+    const branchIds = Object.keys(this.phylocanvas.branches);
     this.phylocanvas.setNodeDisplay(branchIds, { colour: '#ffffff' });
   },
 
@@ -119,23 +132,12 @@ const Tree = React.createClass({
   },
 
   handleRedrawSubtree: function () {
-    var isolateIds = this.getCurrentTreeAllIsolateIds();
-    this.props.handleFilterMapAndTableData(isolateIds);
-  },
-
-  componentDidUpdate: function () {
-    this.phylocanvas.resizeToContainer();
-    this.phylocanvas.fitInPanel();
-    this.phylocanvas.draw();
+    this.props.handleFilterMapAndTableData(this.getCurrentTreeAllIsolateIds());
   },
 
   setNodeLabel: function (nodeLabel) {
-    var isolates = this.props.isolates;
-    var isolateIds = Object.keys(isolates);
-    var isolate;
-
-    isolateIds.forEach((isolateId) => {
-      isolate = isolates[isolateId];
+    Object.keys(this.props.isolates).forEach((isolateId) => {
+      const isolate = this.props.isolates[isolateId];
 
       if (this.phylocanvas.branches[isolateId] && this.phylocanvas.branches[isolateId].leaf) {
         this.phylocanvas.branches[isolateId].label = isolate[nodeLabel] || '';
@@ -188,8 +190,7 @@ const Tree = React.createClass({
   },
 
   changeTextSizeByAmount: function (amount) {
-    var currentSize = this.phylocanvas.textSize;
-    this.setTextSize(currentSize + amount);
+    this.setTextSize(this.phylocanvas.textSize + amount);
   },
 
   incrementLabelSize: function () {
@@ -205,8 +206,7 @@ const Tree = React.createClass({
   },
 
   changeNodeSizeByAmount: function (amount) {
-    var currentSize = this.phylocanvas.baseNodeSize;
-    this.setNodeSize(currentSize + amount);
+    this.setNodeSize(this.phylocanvas.baseNodeSize + amount);
   },
 
   incrementNodeSize: function () {
@@ -217,20 +217,14 @@ const Tree = React.createClass({
     this.changeNodeSizeByAmount(-1);
   },
 
-  handleTreeBranchSelected: function (event) {
-    var selectedNodeIds = event.nodeIds;
-
-    if (selectedNodeIds.length === 1) {
-      this.showUploadedCollectionSubtree(selectedNodeIds[0]);
+  handleTreeBranchSelected: function ({ nodeIds }) {
+    if (nodeIds.length === 1) {
+      this.setActiveSubtree(nodeIds[0]);
     }
   },
 
-  showUploadedCollectionTree: function () {
-    SpeciesSubtreeActionCreators.setActiveSpeciesSubtreeId(this.collectionId);
-  },
-
-  showUploadedCollectionSubtree: function (subtreeId) {
-    SpeciesSubtreeActionCreators.setActiveSpeciesSubtreeId(subtreeId);
+  setActiveSubtree: function (key) {
+    SpeciesSubtreeActionCreators.setActiveSpeciesSubtreeId(key);
   },
 
   getCurrentTreeAllIsolateIds: function () {
@@ -290,10 +284,8 @@ const Tree = React.createClass({
     return (
       <section style={sectionStyle}>
         <header className="wgsa-tree-header">
-          <button title="Collection tree" className="wgsa-tree-return mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab " onClick={this.showUploadedCollectionTree}>
-            <i className="material-icons">nature_people</i>
-          </button>
-          <h2 className="wgsa-tree-heading">Population</h2>
+          {this.getNavButton(this.props.title)}
+          <h2 className="wgsa-tree-heading">{this.props.title}</h2>
           <div className="wgsa-tree-menu">
             <button ref="menu_button" id="tree-options" className="wgsa-tree-actions mdl-button mdl-js-button mdl-button--icon">
               <i className="material-icons">more_vert</i>
@@ -306,19 +298,39 @@ const Tree = React.createClass({
             </ul>
           </div>
         </header>
-        <div id={this.treeId} style={phylocanvasStyle}></div>
+        <div id="phylocanvas-container" style={phylocanvasStyle}></div>
         <TreeControls
           treeType={this.state.treeType}
           nodeSize={this.state.nodeSize}
           labelSize={this.state.labelSize}
-          handleToggleNodeLabels={this.handleToggleNodeLabels}
-          handleExportCurrentView={this.handleExportCurrentView}
-          handleRedrawOriginalTree={this.handleRedrawOriginalTree}
           handleTreeTypeChange={this.handleTreeTypeChange}
           handleNodeSizeChange={this.handleNodeSizeChange}
-          handleLabelSizeChange={this.handleLabelSizeChange}
-          handleToggleNodeAlign={this.handleToggleNodeAlign} />
+          handleLabelSizeChange={this.handleLabelSizeChange} />
       </section>
+    );
+  },
+
+  getNavButton(title) {
+    if (title === 'Population') {
+      return (
+        <button title="View collection tree" className="wgsa-tree-return mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab" onClick={this.setActiveSubtree.bind(null, this.collectionId)}>
+          <i className="material-icons">nature</i>
+        </button>
+      );
+    }
+
+    if (title === 'Collection') {
+      return (
+        <button title="View population tree" className="wgsa-tree-return mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab" onClick={this.setActiveSubtree.bind(null, null)}>
+          <i className="material-icons">nature_people</i>
+        </button>
+      );
+    }
+
+    return (
+      <button title="Return to population tree" className="wgsa-tree-return mdl-button mdl-js-button mdl-button--icon" onClick={this.setActiveSubtree.bind(null, null)}>
+        <i className="material-icons">arrow_back</i>
+      </button>
     );
   },
 
