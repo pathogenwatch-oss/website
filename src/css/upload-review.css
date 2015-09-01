@@ -103,11 +103,6 @@
 
 .assemblyWorkspaceContainer .mdl-cell {
   background-color: #fff;
-  margin: 30px;
-}
-
-.assemblyWorkspaceContainer .increase-cell-gutter.mdl-cell--6-col {
-  width: calc(50% - 60px);
 }
 
 .card-style {
