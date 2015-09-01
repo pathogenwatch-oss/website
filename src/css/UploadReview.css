@@ -26,7 +26,7 @@
   background: #fff;
   position: absolute;
   top: 50%;
-  left: 60%;
+  left: 59%;
   transform: translateX(-50%) translateY(-50%);
   text-align: center;
 }
@@ -109,22 +109,26 @@
 
 .assemblyListItem {
   /*height: 100px;*/
+  margin: 0;
+  padding: 0;
+  position: relative;
+  list-style: none;
 }
 
 .assemblyListItem .selectButton {
-  width: 160px;
   height: auto;
-  padding: 0px 5px;
   overflow: none;
-  height: 50px;
-
 }
 
 .assemblyListItem .deleteButton {
   color: #777;
 }
 
-.assemblyListItem .validateButton {
+.assembly-list-item__validate-icon {
+  position: absolute;
+  /*padding: 7px 10px 0px 0px;*/
+  top: 7px;
+  left: -15px;
 }
 
 .assemblyListItem:hover,
@@ -142,8 +146,10 @@
   font-weight: 100;
   text-transform: none;
   padding: 0px;
-  overflow: auto;
-  white-space: wrap;
+  overflow: hidden;
+  width: 160px;
+  display: block;
+  text-overflow: ellipsis;
 }
 
 .assemblyListItem.mdl-button {
@@ -162,8 +168,10 @@
   font-size: 16px;  /* Preferred icon size */
 }
 
-.confirm-delete-button {
+.assembly-list-item__utils {
   position: absolute;
+  top: 2px;
+  right: 0;
 }
 
 /*********************************************/

@@ -145,8 +145,9 @@ var Map = React.createClass({
     var html = '';
     if (dataObject.length) {
       dataObject.map(function(data) {
-        html += createLink(data);
+        html = createLink(data);
       });
+      console.log(html)
 
       infowindow = new google.maps.InfoWindow({
         content: html
@@ -182,15 +183,24 @@ var Map = React.createClass({
 });
 
 function handleSelectAssembly(selectedFileAssemblyId) {
+  console.log(selectedFileAssemblyId)
   UploadWorkspaceNavigationActionCreators.navigateToAssembly(selectedFileAssemblyId);
 };
 
 var createLink = function(fileAssemblyId) {
-  return `
-    <a className='mdl-button mdl-js-button mdl-js-ripple-effect'
-      onClick={handleSelectAssembly(fileAssemblyId)}>
-      ${fileAssemblyId}
-    </a><br>`;
+
+    var a = document.createElement('a');
+    a.href = '#';
+    a.onclick = handleSelectAssembly.bind(null, fileAssemblyId);
+    a.innerHTML = fileAssemblyId;
+    console.log(a)
+    return a;
+
+  // `
+  //   <a className='mdl-button mdl-js-button mdl-js-ripple-effect'
+  //     onClick={handleSelectAssembly(fileAssemblyId)} href="#">
+  //     ${fileAssemblyId}
+  //   </a><br>`;
 }
 
 module.exports = Map;

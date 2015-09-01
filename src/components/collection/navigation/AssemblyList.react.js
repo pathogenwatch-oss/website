@@ -105,19 +105,21 @@ const AssemblyList = React.createClass({
       }
 
       return (
-        <li className={`assemblyListItem mdl-shadow--2dp${this.state.selectedOption === fileAssemblyId ? ' selected' : ''}`}>
+        <li className={`assemblyListItem mdl-shadow--2dp${this.state.selectedOption === fileAssemblyId ? ' selected' : ''}`} title={fileAssemblyId}>
           <button className='selectButton mdl-button mdl-js-button mdl-js-ripple-effect' key={fileAssemblyId} onClick={this.handleSelectAssembly.bind(this, fileAssemblyId)}>
             <span className='filename'>
               {fileAssemblyId}
             </span>
           </button>
-          <button className="validateButton utilityButton mdl-button mdl-js-button mdl-button--icon" disabled>
-            <i style={validatedIconStyle} className='material-icons'>{validatedIcon}</i>
-          </button>
-          <button className="deleteButton utilityButton mdl-button mdl-js-button mdl-button--icon mdl-button--colored"
-            onClick={this.handleDeleteAssembly.bind(this, fileAssemblyId)}>
-            <i className="material-icons">delete</i>
-          </button>
+          <span className="assembly-list-item__utils">
+            <span className="assembly-list-item__validate-icon utilityButton">
+              <i style={validatedIconStyle} className='material-icons'>{validatedIcon}</i>
+            </span>
+            <button className="deleteButton utilityButton mdl-button mdl-js-button mdl-button--icon mdl-button--colored"
+              onClick={this.handleDeleteAssembly.bind(this, fileAssemblyId)}>
+              <i className="material-icons">delete</i>
+            </button>
+          </span>
         </li>
       );
     });
