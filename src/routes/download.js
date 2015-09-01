@@ -12,7 +12,8 @@ router.post(
     var downloadRequest = {
       idType: req.params.idType,
       format: req.params.fileFormat,
-      idToUserNameMap: req.body
+      idToUserNameMap: req.body.idToFilenameMap,
+      speciesId: req.body.speciesId
     };
 
     LOGGER.info(

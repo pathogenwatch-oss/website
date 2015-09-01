@@ -28,7 +28,7 @@
     "supertest": "^1.0.1"
   },
   "nodepath": "./src",
-  "testcmd": "NODE_PATH=$npm_package_nodepath NODE_ENV='test' mocha -t 10000 --reporter spec",
+  "testcmd": "NODE_PATH=$npm_package_nodepath NODE_ENV='test' mocha -t 60000 --reporter spec",
   "scripts": {
     "start": "NODE_PATH=$npm_package_nodepath node start.js | bunyan -o short",
     "test": "eval $npm_package_testcmd 'test/unit/**/*.test.js'",

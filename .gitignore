@@ -27,3 +27,5 @@ node_modules
 # Client repository
 ###################
 wgst-web-client
+
+.idea
