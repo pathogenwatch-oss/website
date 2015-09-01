@@ -1,3 +1,5 @@
+import UploadWorkspaceNavigationActionCreators from '../actions/UploadWorkspaceNavigationActionCreators.js';
+
 var DNA_SEQUENCE_REGEX = /^[CTAGNUX]+$/i;
 
 function extractContigsFromFastaFileString(fastaFileString) {
@@ -371,6 +373,17 @@ function drawN50Chart(chartData, assemblyN50, appendToClass) {
   .attr('x', -(chartHeight / 2) - 44)
   .attr('y', chartWidth - 120);
 
+  var tooltip = d3.select("body")
+  .append("div")
+  .style("position", "absolute")
+  .style("background", "white")
+  .style("border", "1px solid")
+  .style("border-color", "#ccc")
+  .style("padding", "10px")
+  .style("z-index", "10")
+  .style("visibility", "hidden")
+  .text("tooltip");
+
   // Circles
   svg.selectAll('circle')
   .data(chartData)
@@ -382,7 +395,10 @@ function drawN50Chart(chartData, assemblyN50, appendToClass) {
   .attr('cy', function(datum){
     return yScale(datum);
   })
-  .attr('r', 5);
+  .attr('r', 5)
+  .on("mouseover", function(datum, index){return tooltip.style("visibility", "visible").html('Sum: <b>' + datum + '</b>');})
+  .on("mousemove", function(){return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");})
+  .on("mouseout", function(){return tooltip.style("visibility", "hidden");})
 
   // Line
   var line = d3.svg.line()
@@ -449,8 +465,11 @@ function drawN50Chart(chartData, assemblyN50, appendToClass) {
   .attr('cy', function(datum){
     return yScale(datum.sum);
   })
-  .attr('r', 6);
-  //.attr('class', 'n50-circle');
+  .attr('r', 6)
+  .attr('class', 'n50-circle')
+  .on("mouseover", function(datum, index){return tooltip.style("visibility", "visible").html('Sum: <b>' + datum.sum + '</b>' );})
+  .on("mousemove", function(){return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");})
+  .on("mouseout", function(){return tooltip.style("visibility", "hidden");})
 
   // Append text to group
   n50Group.append('text')
@@ -500,7 +519,8 @@ function drawN50OverviewChart(contigsN50Data, appendToClass) {
 
   var d3 = require('d3');
 
-  var chartWidth = 460;
+  var className = appendToClass.replace(/^\./,"");
+  var chartWidth = document.getElementsByClassName(className)[0].parentElement.offsetWidth;
   var chartHeight = 312;
 
   var chartData = [];
@@ -579,6 +599,17 @@ function drawN50OverviewChart(contigsN50Data, appendToClass) {
   .attr('x', -(chartHeight / 2) - 44)
   .attr('y', chartWidth - 120);
 
+  var tooltip = d3.select("body")
+  .append("div")
+  .style("position", "absolute")
+  .style("background", "white")
+  .style("border", "1px solid")
+  .style("border-color", "#ccc")
+  .style("padding", "10px")
+  .style("z-index", "10")
+  .style("visibility", "hidden")
+  .text("tooltip");
+
   // Circles
   svg.selectAll('circle')
   .data(chartData)
@@ -590,7 +621,11 @@ function drawN50OverviewChart(contigsN50Data, appendToClass) {
   .attr('cy', function(datum){
     return yScale(datum);
   })
-  .attr('r', 5);
+  .attr('r', 5)
+  .on("mouseover", function(datum, index){return tooltip.style("visibility", "visible").html('Filename: <b>' + chartXAxis[index] + '</b><br>' + 'N50 Contig: <b>' + datum + '</b>');})
+  .on("mousemove", function(){return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");})
+  .on("mouseout", function(){return tooltip.style("visibility", "hidden");})
+  .on("click", function(datum, index){UploadWorkspaceNavigationActionCreators.navigateToAssembly(chartXAxis[index]); return tooltip.style("visibility", "hidden");});
 
   // // Line
   // var line = d3.svg.line()

@@ -29,12 +29,12 @@ var Map = React.createClass({
 
   componentDidMount: function () {
     this.initializeMap();
-    this.createMarkers();
+    this.initializeAndCreateMarkers();
     this.resizeMap();
   },
 
   componentDidUpdate: function () {
-    this.createMarkers();
+    this.initializeAndCreateMarkers();
     this.resizeMap();
   },
 
@@ -92,14 +92,52 @@ var Map = React.createClass({
     marker.setMap(null);
   },
 
-  createMarkers: function () {
+  initializeAndCreateMarkers: function() {
+    var locations = {};
+    if (this.props.locations) {
+      locations = this.props.locations;
+      this.createMarkers(locations);
+    }
+    else if (this.props.locationAssemblyMap) {
+      locations = this.props.locationAssemblyMap;
+      this.createMarkersOverview(locations);
+    }
+  },
+
+  createMarkers: function (locations) {
     this.clearMarkers();
 
     var latitude;
     var longitude;
     var shape;
     var colour;
-    const locations = this.props.locationAssemblyMap;
+
+    for (const id in locations) {
+      if (! locations[id]) {
+        return;
+      }
+
+      latitude = locations[id].position.latitude;
+      longitude = locations[id].position.longitude;
+
+      if (latitude && longitude) {
+        latitude = parseFloat(latitude);
+        longitude = parseFloat(longitude);
+        this.markers[id] = this.createMarker(locations[id].fileAssemblyId, locations[id].location, latitude, longitude);
+      }
+    };
+
+    this.fitAllMarkers();
+  },
+
+  createMarkersOverview: function (locations) {
+    this.clearMarkers();
+
+    var latitude;
+    var longitude;
+    var shape;
+    var colour;
+
     var temp_loc;
     for (const id in locations) {
       if (! locations[id]) {
@@ -107,7 +145,7 @@ var Map = React.createClass({
       }
       temp_loc = id.split(',');
       latitude = temp_loc[0];
-      longitude = temp_loc[1]
+      longitude = temp_loc[1];
 
       if (latitude && longitude) {
         latitude = parseFloat(latitude);
@@ -138,17 +176,13 @@ var Map = React.createClass({
       map: this.map,
       // icon: MapUtils.getMarkerIcon(shape, colour),
       optimized: false,
-      animation: google.maps.Animation.DROP
+      // animation: google.maps.Animation.DROP
     });
 
     var infowindow;
     var html = '';
     if (dataObject.length) {
-      dataObject.map(function(data) {
-        html = createLink(data);
-      });
-      console.log(html)
-
+      html = createLink(dataObject);
       infowindow = new google.maps.InfoWindow({
         content: html
       });
@@ -183,24 +217,24 @@ var Map = React.createClass({
 });
 
 function handleSelectAssembly(selectedFileAssemblyId) {
-  console.log(selectedFileAssemblyId)
   UploadWorkspaceNavigationActionCreators.navigateToAssembly(selectedFileAssemblyId);
 };
 
-var createLink = function(fileAssemblyId) {
-
-    var a = document.createElement('a');
-    a.href = '#';
-    a.onclick = handleSelectAssembly.bind(null, fileAssemblyId);
-    a.innerHTML = fileAssemblyId;
-    console.log(a)
-    return a;
-
-  // `
-  //   <a className='mdl-button mdl-js-button mdl-js-ripple-effect'
-  //     onClick={handleSelectAssembly(fileAssemblyId)} href="#">
-  //     ${fileAssemblyId}
-  //   </a><br>`;
+var createLink = function(dataObject) {
+  var div = document.createElement('div');
+  var br = document.createElement('br');
+  dataObject.map(function(fileAssemblyId) {
+    var button = document.createElement('button');
+    var textNode = document.createTextNode(fileAssemblyId);
+    var br = document.createElement('br');
+    button.appendChild(textNode);
+    button.className = 'mdl-button mdl-js-button mdl-js-ripple-effect';
+    button.onclick = handleSelectAssembly.bind(null, fileAssemblyId);
+    componentHandler.upgradeElement(button);
+    div.appendChild(button);
+    div.appendChild(br);
+  });
+  return div;
 }
 
 module.exports = Map;

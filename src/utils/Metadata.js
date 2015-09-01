@@ -93,11 +93,7 @@ function fixMetadataDateFormatInCollection(collection) {
 function validateMetadata(collection) {
   var isValidMap = {};
   for (var id in collection) {
-    if (!collection[id].fasta.assembly ||
-        !collection[id].metadata.date.year ||
-        !collection[id].metadata.geography.position.longitude ||
-        !collection[id].metadata.geography.position.latitude
-      ) {
+    if (!collection[id].fasta.assembly) {
       isValidMap[id] = false;
     }
     else {
