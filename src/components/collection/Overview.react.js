@@ -33,12 +33,13 @@ export default React.createClass({
   render() {
     if (this.state.assemblyCount) {
       const allLocations = UploadStore.getAllMetadataLocations();
+      const locationsToAssembliesMap = UploadStore.getLocationToAssembliesMap();
+
       return (
         <div className="mdl-grid">
-
           <div className="mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
             <div className="card-style">
-              <div className="heading"> Statistics </div>
+              <div className="heading"> Overview </div>
               <AssemblyAnalysisItem label="Total Assemblies" value={this.state.assemblyCount} />
               <AssemblyAnalysisItem label="Mean Contigs" value={200} />
               <AssemblyAnalysisItem label="Total nt" value={2000000} />
@@ -47,14 +48,14 @@ export default React.createClass({
 
           <div className="mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
             <div className="card-style">
-              <div className="heading"> Overview N50 contigs Chart </div>
+              <div className="heading"> N50 contigs Chart </div>
               <AssemblyAnalysisOverviewChart />
             </div>
           </div>
 
           <div className="mdl-cell mdl-cell--12-col increase-cell-gutter mdl-shadow--4dp">
             <div className="card-style--no-padding">
-              <Map width="100%" height="400" locations={allLocations}/>
+              <Map width="100%" height="400" locations={allLocations} locationAssemblyMap={locationsToAssembliesMap}/>
             </div>
           </div>
 

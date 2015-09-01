@@ -162,12 +162,29 @@
   bottom: 0;
   left: 0;
   right: 0;
+  padding: 0px;
 }
 
 .assemblyListItem {
-  width: 100%;
-  display: block;
-  text-align: left;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  list-style: none;
+}
+
+.assemblyListItem .selectButton {
+  height: auto;
+  overflow: none;
+}
+
+.assemblyListItem .deleteButton {
+  color: #777;
+}
+
+.assembly-list-item__validate-icon {
+  position: absolute;
+  top: 7px;
+  left: -15px;
 }
 
 .assemblyListItem:hover,
@@ -180,32 +197,21 @@
   background-color: rgba(158,158,158,.5);
 }
 
-.assemblyListItem span.filename {
+.assemblyListItem .selectButton span.filename {
   font-size: 12px;
   font-weight: 100;
   text-transform: none;
-  left: 10px;
   padding: 0px;
-  overflow: none;
-  height: auto;
+  overflow: hidden;
+  width: 160px;
+  display: block;
+  text-overflow: ellipsis;
 }
 
 .assemblyListItem.mdl-button {
-  /*border: 1px solid black;*/
   padding: 0px;
   margin: 0px;
   height: auto;
-}
-
-.assemblyListItem .deleteButton {
-  color: #777;
-  right: 0px;
-}
-.assemblyListItem .utilityButton {
-  /*position: absolute;*/
-  float: right;
-  /*right: 0px;*/
-  z-index: 9;
 }
 
 .assemblyListItem .selectButton:hover,
@@ -218,8 +224,10 @@
   font-size: 16px;  /* Preferred icon size */
 }
 
-.confirm-delete-button {
+.assembly-list-item__utils {
   position: absolute;
+  top: 2px;
+  right: 0;
 }
 
 .wgsa-upload-navigation__footer {

@@ -307,7 +307,7 @@ function drawN50Chart(chartData, assemblyN50, appendToClass) {
   // X
   var xScale = d3.scale.linear()
   .domain([0, chartData.length])
-  .range([40, chartWidth - 50]); // the pixels to map, i.e. the width of the diagram
+  .range([40, chartWidth - 100]); // the pixels to map, i.e. the width of the diagram
 
   // Y
   var yScale = d3.scale.linear()
@@ -334,7 +334,7 @@ function drawN50Chart(chartData, assemblyN50, appendToClass) {
   // Append SVG to DOM
   var svg = d3.select(appendToClass)
   .append('svg')
-  .attr('width', chartWidth)
+  .attr('width', '100%')
   .attr('height', chartHeight);
 
   // Append axis
@@ -359,7 +359,7 @@ function drawN50Chart(chartData, assemblyN50, appendToClass) {
   .text('Ordered contigs')
   .attr('class', 'axis-label')
   .attr('text-anchor', 'end')
-  .attr('x', (chartWidth / 2) + 49)
+  .attr('x', (chartWidth / 2))
   .attr('y', 45);
 
   // Y
@@ -369,7 +369,7 @@ function drawN50Chart(chartData, assemblyN50, appendToClass) {
   .attr('class', 'axis-label')
   .attr('transform', 'rotate(-90)')
   .attr('x', -(chartHeight / 2) - 44)
-  .attr('y', 398);
+  .attr('y', chartWidth - 120);
 
   // Circles
   svg.selectAll('circle')
@@ -517,7 +517,7 @@ function drawN50OverviewChart(contigsN50Data, appendToClass) {
   // X
   var xScale = d3.scale.linear()
   .domain([0, chartData.length])
-  .range([40, chartWidth - 50]); // the pixels to map, i.e. the width of the diagram
+  .range([40, chartWidth - 100]); // the pixels to map, i.e. the width of the diagram
 
   // Y
   var yScale = d3.scale.linear()
@@ -542,7 +542,7 @@ function drawN50OverviewChart(contigsN50Data, appendToClass) {
   // Append SVG to DOM
   var svg = d3.select(appendToClass)
   .append('svg')
-  .attr('width', chartWidth)
+  .attr('width', '100%')
   .attr('height', chartHeight);
 
   // Append axis
@@ -567,7 +567,7 @@ function drawN50OverviewChart(contigsN50Data, appendToClass) {
   .text('Assemblies')
   .attr('class', 'axis-label')
   .attr('text-anchor', 'end')
-  .attr('x', (chartWidth / 2) + 49)
+  .attr('x', (chartWidth / 2))
   .attr('y', 45);
 
   // Y
@@ -577,7 +577,7 @@ function drawN50OverviewChart(contigsN50Data, appendToClass) {
   .attr('class', 'axis-label')
   .attr('transform', 'rotate(-90)')
   .attr('x', -(chartHeight / 2) - 44)
-  .attr('y', 398);
+  .attr('y', chartWidth - 120);
 
   // Circles
   svg.selectAll('circle')
