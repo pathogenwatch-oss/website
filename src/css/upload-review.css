@@ -64,6 +64,7 @@
 }
 
 .welcome-card--reverse {
+  background-image: url('/assets/img/WGSA_logo_flipped.png');
   background-position: calc(100% + 20px) -20px;
 }
 
