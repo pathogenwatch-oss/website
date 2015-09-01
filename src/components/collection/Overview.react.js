@@ -64,9 +64,9 @@ export default React.createClass({
     }
 
     return (
-      <div className="welcome-container">
+      <div className="welcome-container wgsa-workspace-click-area" onClick={this.props.clickHandler}>
         <p className="welcome-intro">
-          Drag and drop files to begin.
+          Drag and drop files or click anywhere to begin.
         </p>
         <div className="welcome-card mdl-shadow--2dp">
           <h2 className="welcome-card__title">Fasta Files</h2>

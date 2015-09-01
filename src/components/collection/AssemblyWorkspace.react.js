@@ -31,6 +31,12 @@ const layoutContentStyle = {
   position: 'relative',
 };
 
+const fileInputStyle = {
+  position: 'absolute',
+  zIndex: -1,
+  opacity: 0,
+};
+
 const AssemblyWorkspace = React.createClass({
 
   propTypes: {
@@ -81,14 +87,18 @@ const AssemblyWorkspace = React.createClass({
     });
   },
 
-  hasDroppedFiles: function (event) {
-    return (event.files.length > 0);
-  },
-
   handleDrop: function (event) {
-    if (this.hasDroppedFiles(event)) {
+    if (event.files.length > 0) {
       UploadActionCreators.addFiles(event.files);
     }
+  },
+
+  handleClick() {
+    React.findDOMNode(this.refs.fileInput).click();
+  },
+
+  handleFileInputChange(event) {
+    this.handleDrop(event.target);
   },
 
   activateUploadButton: function () {
@@ -127,7 +137,13 @@ const AssemblyWorkspace = React.createClass({
           <UploadReviewHeader title="WGSA - Upload" activateUploadButton={this.state.uploadButtonActive} />
           <div id="loadingAnimation" style={loadingAnimationStyle} className="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
 
-          <UploadWorkspaceNavigation assembliesUploaded={this.props.assembly ? true : false} totalAssemblies={this.props.totalAssemblies}/>
+          <UploadWorkspaceNavigation assembliesUploaded={this.props.assembly ? true : false} totalAssemblies={this.props.totalAssemblies}>
+            <footer className="wgsa-upload-navigation__footer mdl-shadow--4dp">
+              <button className="mdl-button mdl-button--raised" title="" onClick={this.handleClick}>
+                Add files
+              </button>
+            </footer>
+          </UploadWorkspaceNavigation>
 
           <main className="mdl-layout__content" style={layoutContentStyle}>
             { this.props.assembly &&
@@ -166,10 +182,12 @@ const AssemblyWorkspace = React.createClass({
 
               ||
 
-              <Overview />
+              <Overview clickHandler={this.handleClick} />
+
             }
           </main>
         </div>
+        <input type="file" multiple="multiple" accept={DEFAULT.SUPPORTED_FILE_EXTENSIONS} ref="fileInput" style={fileInputStyle} onChange={this.handleFileInputChange} />
       </FileDragAndDrop>
     );
   },

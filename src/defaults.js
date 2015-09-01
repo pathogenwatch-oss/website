@@ -15,6 +15,7 @@ module.exports = {
       LONGITUDE: 5.85082183,
     },
   },
+  SUPPORTED_FILE_EXTENSIONS: '.csv,.fasta,.fa,.fna',
   CGPS: {
     COLOURS: {
       GREEN_LIGHT: '#d0e9dc',
