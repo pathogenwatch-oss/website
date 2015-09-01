@@ -63,9 +63,12 @@ function getCollection(speciesId, collectionId, callback) {
     });
 }
 
-function requestFile({ assembly, idType, fileType }, callback) {
+function requestFile({ assembly, idType, fileType, speciesId }, callback) {
   const requestBody = {
-    [assembly.metadata.assemblyId]: assembly.metadata.assemblyFilename,
+    speciesId,
+    idToFilenameMap: {
+      [assembly.metadata.assemblyId]: assembly.metadata.assemblyFilename,
+    },
   };
 
   $.ajax(

@@ -10,11 +10,11 @@ const requestedFiles = {};
 
 const Store = assign({}, EventEmitter.prototype, {
 
-  addChangeListener: function (callback) {
+  addChangeListener(callback) {
     this.on(CHANGE_EVENT, callback);
   },
 
-  removeChangeListener: function (callback) {
+  removeChangeListener(callback) {
     this.removeListener(CHANGE_EVENT, callback);
   },
 
@@ -22,7 +22,8 @@ const Store = assign({}, EventEmitter.prototype, {
     if (!requestedFiles[assemblyId] || !requestedFiles[assemblyId][fileType]) {
       return null;
     }
-    return `/api/download/file/${requestedFiles[assemblyId][fileType]}`;
+    const encodedFilename = encodeURIComponent(requestedFiles[assemblyId][fileType]);
+    return `/api/download/file/${encodedFilename}`;
   },
 
 });

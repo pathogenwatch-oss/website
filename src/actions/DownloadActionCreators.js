@@ -1,5 +1,7 @@
 import AppDispatcher from '../dispatcher/AppDispatcher';
 
+import Species from '../species';
+
 export default {
 
   requestFile: function (assembly, idType, fileType) {
@@ -8,6 +10,7 @@ export default {
       assembly,
       idType,
       fileType,
+      speciesId: Species.id,
     });
   },
 
