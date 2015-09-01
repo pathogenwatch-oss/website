@@ -18,8 +18,9 @@ router.post(
 
     LOGGER.info(
       'Received request for download: ' + downloadRequest.idType + ', ' +
-        downloadRequest.fileFormat
+        downloadRequest.format
     );
+    LOGGER.debug(downloadRequest);
 
     fileModel.requestDownload(downloadRequest, function (error, result) {
       if (error) {
