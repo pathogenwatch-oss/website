@@ -1,6 +1,7 @@
 var React = require('react');
 import MapUtils from '../../utils/Map';
 import DEFAULT from '../../defaults';
+import UploadWorkspaceNavigationActionCreators from '../../actions/UploadWorkspaceNavigationActionCreators.js';
 
 var containerStyle = {
   margin: '0 0 25px 0',
@@ -98,38 +99,38 @@ var Map = React.createClass({
     var longitude;
     var shape;
     var colour;
-    const locations = this.props.locations;
-
+    const locations = this.props.locationAssemblyMap;
+    var temp_loc;
     for (const id in locations) {
       if (! locations[id]) {
         return;
       }
+      temp_loc = id.split(',');
+      latitude = temp_loc[0];
+      longitude = temp_loc[1]
 
-      if (locations[id].position.latitude && locations[id].position.longitude) {
-        latitude = parseFloat(locations[id].position.latitude);
-        longitude = parseFloat(locations[id].position.longitude);
-        this.markers[id] = this.createMarker(id, locations[id].location, latitude, longitude);
+      if (latitude && longitude) {
+        latitude = parseFloat(latitude);
+        longitude = parseFloat(longitude);
+        this.markers[id] = this.createMarker(locations[id].fileAssemblyId, locations[id].location, latitude, longitude);
       }
     };
 
     this.fitAllMarkers();
   },
 
-  createMarker: function (dataObjectId, location = '', latitude, longitude, shape = DEFAULT.SHAPE, colour = DEFAULT.COLOUR) {
-    if (!latitude) {
-      throw new Error(`Can't create map marker because latitude is missing in ${dataObjectId} data object :(`);
-    }
+  createMarker: function (dataObject = [], location = '', latitude, longitude, shape = DEFAULT.SHAPE, colour = DEFAULT.COLOUR) {
 
-    if (!longitude) {
-      throw new Error(`Can't create map marker because longitude is missing in ${dataObjectId} data object :(`);
+    if (!latitude && !longitude) {
+      throw new Error(`Can't create map marker because latitude and longitude is missing in ${location} data object :(`);
     }
 
     if (shape === DEFAULT.SHAPE) {
-      // console.warn(`Shape is missing in ${dataObjectId} data object - using ${DEFAULT.SHAPE}.`);
+      // console.warn(`Shape is missing in ${location} data object - using ${DEFAULT.SHAPE}.`);
     }
 
     if (!colour) {
-      console.warn(`Colour is missing in ${dataObjectId} data object - using ${DEFAULT.COLOUR}.`);
+      console.warn(`Colour is missing in ${location} data object - using ${DEFAULT.COLOUR}.`);
     }
 
     const marker = new google.maps.Marker({
@@ -137,16 +138,30 @@ var Map = React.createClass({
       map: this.map,
       // icon: MapUtils.getMarkerIcon(shape, colour),
       optimized: false,
+      animation: google.maps.Animation.DROP
     });
-    var html = '<b>'+location+'</b>';
-    var infowindow = new google.maps.InfoWindow({
-      content: html
-    });
-    marker.addListener('mouseover', function() {
+
+    var infowindow;
+    var html = '';
+    if (dataObject.length) {
+      dataObject.map(function(data) {
+        html = createLink(data);
+      });
+      console.log(html)
+
+      infowindow = new google.maps.InfoWindow({
+        content: html
+      });
+    }
+    else if (location) {
+      html = '<b>'+location+'</b>';
+      infowindow = new google.maps.InfoWindow({
+        content: html
+      });
+    }
+
+    marker.addListener('click', function() {
       infowindow.open(this.map, marker);
-    });
-    marker.addListener('mouseout', function() {
-      infowindow.close(this.map, marker);
     });
     return marker;
   },
@@ -166,5 +181,26 @@ var Map = React.createClass({
   },
 
 });
+
+function handleSelectAssembly(selectedFileAssemblyId) {
+  console.log(selectedFileAssemblyId)
+  UploadWorkspaceNavigationActionCreators.navigateToAssembly(selectedFileAssemblyId);
+};
+
+var createLink = function(fileAssemblyId) {
+
+    var a = document.createElement('a');
+    a.href = '#';
+    a.onclick = handleSelectAssembly.bind(null, fileAssemblyId);
+    a.innerHTML = fileAssemblyId;
+    console.log(a)
+    return a;
+
+  // `
+  //   <a className='mdl-button mdl-js-button mdl-js-ripple-effect'
+  //     onClick={handleSelectAssembly(fileAssemblyId)} href="#">
+  //     ${fileAssemblyId}
+  //   </a><br>`;
+}
 
 module.exports = Map;

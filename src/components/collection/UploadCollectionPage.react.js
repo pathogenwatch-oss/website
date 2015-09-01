@@ -1,6 +1,5 @@
 import React from 'react';
 
-import DragAndDropFiles from './DragAndDropFiles.react';
 import UploadWorkspace from './UploadWorkspace.react';
 import UploadStore from '../../stores/UploadStore';
 import FileUploadingStore from '../../stores/FileUploadingStore';

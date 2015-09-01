@@ -1,23 +1,17 @@
 import React from 'react';
 
 import UploadStore from '../../stores/UploadStore.js';
-import AssemblyMetadata from './AssemblyMetadata.react';
 import AssemblyAnalysisOverviewChart from '../../components/collection/AssemblyAnalysisOverviewChart.react';
 import AssemblyAnalysisItem from './AssemblyAnalysisItem.react';
 
 import Map from './Map.react';
-import DEFAULT from '../../defaults';
-
-const welcomeText = {
-  color: DEFAULT.CGPS.COLOURS.GREEN_MID
-};
 
 export default React.createClass({
 
   getInitialState() {
     return {
       assemblies: UploadStore.getAssemblies(),
-      assemblyCount: UploadStore.getAssembliesCount()
+      assemblyCount: UploadStore.getAssembliesCount(),
     };
   },
 
@@ -32,35 +26,36 @@ export default React.createClass({
   handleUploadStoreChange() {
     this.setState({
       assemblies: UploadStore.getAssemblies(),
-      assemblyCount: UploadStore.getAssembliesCount()
+      assemblyCount: UploadStore.getAssembliesCount(),
     });
   },
 
   render() {
     if (this.state.assemblyCount) {
       const allLocations = UploadStore.getAllMetadataLocations();
-      return (
-        <div className='mdl-grid'>
+      const locationsToAssembliesMap = UploadStore.getLocationToAssembliesMap();
 
-          <div className='mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp'>
-            <div className='card-style'>
-              <div className='heading'> Statistics </div>
+      return (
+        <div className="mdl-grid">
+          <div className="mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
+            <div className="card-style">
+              <div className="heading"> Overview </div>
               <AssemblyAnalysisItem label="Total Assemblies" value={this.state.assemblyCount} />
               <AssemblyAnalysisItem label="Mean Contigs" value={200} />
               <AssemblyAnalysisItem label="Total nt" value={2000000} />
             </div>
           </div>
 
-          <div className='mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp'>
-            <div className='card-style'>
-              <div className='heading'> Overview N50 contigs Chart </div>
+          <div className="mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
+            <div className="card-style">
+              <div className="heading"> N50 contigs Chart </div>
               <AssemblyAnalysisOverviewChart />
             </div>
           </div>
 
-          <div className='mdl-cell mdl-cell--12-col increase-cell-gutter mdl-shadow--4dp'>
-            <div className='card-style--no-padding'>
-              <Map width='100%' height='400' locations={allLocations}/>
+          <div className="mdl-cell mdl-cell--12-col increase-cell-gutter mdl-shadow--4dp">
+            <div className="card-style--no-padding">
+              <Map width="100%" height="400" locations={allLocations} locationAssemblyMap={locationsToAssembliesMap}/>
             </div>
           </div>
 
@@ -70,17 +65,24 @@ export default React.createClass({
     }
 
     return (
-      <div className="welcomeContainer">
-        <div className="welcome-card-wide mdl-card mdl-shadow--2dp">
-          <div className="mdl-card__title">
-            <h2 style={welcomeText} className="mdl-card__title-text">Drop your assemblies here for quick analysis and easy upload.</h2>
-          </div>
-          <div className="mdl-card__supporting-text">
-          </div>
+      <div className="welcome-container wgsa-workspace-click-area" onClick={this.props.clickHandler}>
+        <p className="welcome-intro">
+          Drag and drop files or click anywhere to begin.
+        </p>
+        <div className="welcome-card mdl-shadow--2dp">
+          <h2 className="welcome-card__title">Fasta Files</h2>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec efficitur purus eleifend lacus pretium tincidunt. In hac habitasse platea dictumst. Quisque eu tincidunt tortor, id vehicula risus. Aliquam dignissim nisi et sem porttitor vestibulum.
+          </p>
         </div>
-        <h4></h4>
+        <div className="welcome-card welcome-card--reverse mdl-shadow--2dp">
+          <h2 className="welcome-card__title">CSV Files</h2>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec efficitur purus eleifend lacus pretium tincidunt. In hac habitasse platea dictumst. Quisque eu tincidunt tortor, id vehicula risus. Aliquam dignissim nisi et sem porttitor vestibulum.
+          </p>
+        </div>
       </div>
-    )
-  }
+    );
+  },
 
 });

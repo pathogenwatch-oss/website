@@ -1,5 +1,5 @@
 import React from 'react';
-import css from '../../../css/UploadReview.css';
+import css from '../../../css/upload-review.css';
 
 import { ListItem, FontIcon } from 'material-ui';
 import createThemeManager from 'material-ui/lib/styles/theme-manager';

@@ -1,6 +1,6 @@
 var React = require('react');
 var assign = require('object-assign');
-import '../../css/UploadReview.css'
+import '../../css/upload-review.css'
 
 var containerStyle = {
   margin: '0 0 25px 0',

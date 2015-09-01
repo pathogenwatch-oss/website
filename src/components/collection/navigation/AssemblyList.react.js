@@ -4,7 +4,7 @@ import UploadWorkspaceNavigationStore from '../../../stores/UploadWorkspaceNavig
 import UploadWorkspaceNavigationActionCreators from '../../../actions/UploadWorkspaceNavigationActionCreators';
 import { validateMetadata } from '../../../utils/Metadata.js';
 import DEFAULT from '../../../defaults.js';
-import '../../../css/UploadReview.css';
+import '../../../css/upload-review.css';
 
 const AssemblyList = React.createClass({
 
@@ -105,19 +105,21 @@ const AssemblyList = React.createClass({
       }
 
       return (
-        <li className={`assemblyListItem mdl-shadow--2dp${this.state.selectedOption === fileAssemblyId ? ' selected' : ''}`}>
-          <button className="deleteButton utilityButton mdl-button mdl-js-button mdl-button--icon mdl-button--colored"
-            onClick={this.handleDeleteAssembly.bind(this, fileAssemblyId)}>
-            <i className="material-icons">delete</i>
-          </button>
+        <li className={`assemblyListItem mdl-shadow--2dp${this.state.selectedOption === fileAssemblyId ? ' selected' : ''}`} title={fileAssemblyId}>
           <button className='selectButton mdl-button mdl-js-button mdl-js-ripple-effect' key={fileAssemblyId} onClick={this.handleSelectAssembly.bind(this, fileAssemblyId)}>
             <span className='filename'>
               {fileAssemblyId}
             </span>
-            <span className="utilityButton mdl-button mdl-js-button mdl-button--icon" disabled>
+          </button>
+          <span className="assembly-list-item__utils">
+            <span className="assembly-list-item__validate-icon utilityButton">
               <i style={validatedIconStyle} className='material-icons'>{validatedIcon}</i>
             </span>
-          </button>
+            <button className="deleteButton utilityButton mdl-button mdl-js-button mdl-button--icon mdl-button--colored"
+              onClick={this.handleDeleteAssembly.bind(this, fileAssemblyId)}>
+              <i className="material-icons">delete</i>
+            </button>
+          </span>
         </li>
       );
     });
