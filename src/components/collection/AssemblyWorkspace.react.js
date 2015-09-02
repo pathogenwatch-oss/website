@@ -2,9 +2,8 @@ import '../../css/upload-review.css';
 
 import React from 'react';
 import FileDragAndDrop from 'react-file-drag-and-drop';
-import { Dialog } from 'material-ui';
 import createThemeManager from 'material-ui/lib/styles/theme-manager';
-import injectTapEventPlugin from "react-tap-event-plugin";
+import injectTapEventPlugin from 'react-tap-event-plugin';
 
 import AssemblyMetadata from './AssemblyMetadata.react';
 import AssemblyAnalysis from './AssemblyAnalysis.react';
@@ -21,6 +20,7 @@ import UploadActionCreators from '../../actions/UploadActionCreators';
 import SocketActionCreators from '../../actions/SocketActionCreators';
 import FileProcessingStore from '../../stores/FileProcessingStore';
 import SocketStore from '../../stores/SocketStore';
+
 import SocketUtils from '../../utils/Socket';
 import DEFAULT from '../../defaults.js';
 import { validateMetadata } from '../../utils/Metadata.js';
@@ -50,25 +50,25 @@ const AssemblyWorkspace = React.createClass({
     totalAssemblies: React.PropTypes.number,
   },
 
-  getInitialState: function () {
+  childContextTypes: {
+    muiTheme: React.PropTypes.object,
+  },
+
+  getInitialState() {
     return {
       isProcessing: false,
       uploadButtonActive: false,
-      confirmedMultipleMetadataDrop: false
+      confirmedMultipleMetadataDrop: false,
     };
   },
 
-  childContextTypes: {
-    muiTheme: React.PropTypes.object
-  },
-
-  getChildContext: function() {
+  getChildContext() {
     return {
-      muiTheme: ThemeManager.getCurrentTheme()
+      muiTheme: ThemeManager.getCurrentTheme(),
     };
   },
 
-  componentDidMount: function () {
+  componentDidMount() {
     FileProcessingStore.addChangeListener(this.handleFileProcessingStoreChange);
     UploadStore.addChangeListener(this.activateUploadButton);
 
@@ -82,12 +82,12 @@ const AssemblyWorkspace = React.createClass({
     SocketActionCreators.setSocketConnection(socket);
   },
 
-  componentWillUnmount: function () {
+  componentWillUnmount() {
     FileProcessingStore.removeChangeListener(this.handleFileProcessingStoreChange);
     SocketStore.removeChangeListener(this.handleSocketStoreChange);
   },
 
-  handleSocketStoreChange: function () {
+  handleSocketStoreChange() {
     if (!SocketStore.getRoomId()) {
       SocketStore.getSocketConnection().on('roomId', function iife(roomId) {
         // console.log('[Macroreact] Got socket room id ' + roomId);
@@ -98,31 +98,26 @@ const AssemblyWorkspace = React.createClass({
     }
   },
 
-  handleFileProcessingStoreChange: function () {
+  handleFileProcessingStoreChange() {
     this.setState({
       isProcessing: FileProcessingStore.getFileProcessingState(),
     });
   },
 
-  confirmDrop: function (event) {
+  handleDrop(event) {
     if (event.files.length > 0) {
       if (!this.state.confirmedMultipleMetadataDrop && this.props.totalAssemblies > 0) {
         var multipleDropConfirm = confirm('Duplicate records will be overwritten');
         if (multipleDropConfirm) {
           this.setState({
-            confirmedMultipleMetadataDrop: true
-          })
+            confirmedMultipleMetadataDrop: true,
+          });
           UploadActionCreators.addFiles(event.files);
         }
-      }
-      else {
+      } else {
         UploadActionCreators.addFiles(event.files);
       }
     }
-  },
-
-  handleDrop: function (event) {
-    UploadActionCreators.addFiles(event.files);
   },
 
   handleClick() {
@@ -133,7 +128,7 @@ const AssemblyWorkspace = React.createClass({
     this.handleDrop(event.target);
   },
 
-  activateUploadButton: function () {
+  activateUploadButton() {
     const assemblies = UploadStore.getAssemblies();
     const isValidMap = validateMetadata(assemblies);
     let isValid = true;
@@ -154,22 +149,18 @@ const AssemblyWorkspace = React.createClass({
     });
   },
 
-  render: function () {
+  render() {
     loadingAnimationStyle.display = this.state.isProcessing ? 'block' : 'none';
     const locations = {};
     let metadataTitle = 'Metadata';
-    let standardActions = [
-      { text: 'Cancel' },
-      { text: 'Submit', onTouchTap: this._onDialogSubmit, ref: 'submit' }
-    ];
 
     if (this.props.assembly) {
       locations[this.props.assembly.fasta.name] = this.props.assembly.metadata.geography;
       metadataTitle += ' - ' + this.props.assembly.fasta.name;
     }
-    console.log(this.state.confirmedMultipleMetadataDrop)
+
     return (
-      <FileDragAndDrop onDrop={this.confirmDrop}>
+      <FileDragAndDrop onDrop={this.handleDrop}>
         <div className="assemblyWorkspaceContainer mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-drawer">
           <UploadReviewHeader title="WGSA - Upload" activateUploadButton={this.state.uploadButtonActive} />
           <div id="loadingAnimation" style={loadingAnimationStyle} className="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>

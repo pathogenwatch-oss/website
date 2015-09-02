@@ -1,11 +1,11 @@
-var AppDispatcher = require('../dispatcher/AppDispatcher');
-var EventEmitter = require('events').EventEmitter;
-var assign = require('object-assign');
-var UploadStore = require('./UploadStore');
+import AppDispatcher from '../dispatcher/AppDispatcher';
+import { EventEmitter }  from 'events';
+import assign from 'object-assign';
+import UploadStore from './UploadStore';
 
-var CHANGE_EVENT = 'change';
+const CHANGE_EVENT = 'change';
 
-var fileAssemblyId = null;
+let fileAssemblyId = null;
 
 function setFileAssemblyId(id) {
   fileAssemblyId = id;
@@ -15,49 +15,48 @@ function emitChange() {
   Store.emit(CHANGE_EVENT);
 }
 
-var Store = assign({}, EventEmitter.prototype, {
-  addChangeListener: function (callback) {
+const Store = assign({}, EventEmitter.prototype, {
+  addChangeListener(callback) {
     this.on(CHANGE_EVENT, callback);
   },
 
-  removeChangeListener: function (callback) {
+  removeChangeListener(callback) {
     this.removeListener(CHANGE_EVENT, callback);
   },
 
-  getFileAssemblyId: function () {
+  getFileAssemblyId() {
     return fileAssemblyId;
   },
 
-  getNextFileAssemblyIdOnDelete: function(fileAssemblyIdForDelete) {
+  getNextFileAssemblyIdOnDelete(fileAssemblyIdForDelete) {
     const allAssemblyIds = UploadStore.getFileAssemblyIds();
     const indexOfFileAssemblyIdForDelete = allAssemblyIds.indexOf(fileAssemblyIdForDelete);
     const totalNoAssemblyIds = allAssemblyIds.length;
-    var nextAssemblyIdForDisplay = null;
+    let nextAssemblyIdForDisplay = null;
     // Check next index is a valid fileId for traverse
     if (allAssemblyIds.length > 0) {
       if (indexOfFileAssemblyIdForDelete + 1 < totalNoAssemblyIds) {
         nextAssemblyIdForDisplay = allAssemblyIds[indexOfFileAssemblyIdForDelete + 1];
-      }
-      else {
+      } else {
         nextAssemblyIdForDisplay = allAssemblyIds[indexOfFileAssemblyIdForDelete - 1];
       }
     }
 
     return nextAssemblyIdForDisplay;
-  }
+  },
 
 });
 
 function handleAction(action) {
-
   switch (action.type) {
 
-    case 'navigate_to_assembly':
-      setFileAssemblyId(action.fileAssemblyId);
-      emitChange();
-      break;
+  case 'navigate_to_assembly':
+    setFileAssemblyId(action.fileAssemblyId);
+    emitChange();
+    break;
 
-    default: // ... do nothing
+  default:
+    // ... do nothing
 
   }
 }
