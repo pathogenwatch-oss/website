@@ -136,7 +136,7 @@
 }
 
 .uploadWorkspaceNavigationTitle > .mdl-badge:after {
-  background: #a386bd;
+  background: #AB538A;
 }
 
 .assemblyNavTitle {
@@ -179,7 +179,7 @@
 .assembly-list-item__validate-icon {
   position: absolute;
   top: 7px;
-  left: -15px;
+  left: -18px;
 }
 
 .assemblyListItem:hover,
@@ -230,6 +230,15 @@
   text-align: center;
 }
 
+.confirm-delete-button {
+  padding-top: 6px;
+  color: #777;
+  width: 50%;
+}
+
+.mdl-button--accent.mdl-button--accent {
+  color: #9476b1;
+}
 
 /*********************************************/
 
