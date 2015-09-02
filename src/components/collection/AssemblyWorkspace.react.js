@@ -2,6 +2,9 @@ import '../../css/upload-review.css';
 
 import React from 'react';
 import FileDragAndDrop from 'react-file-drag-and-drop';
+import { Dialog } from 'material-ui';
+import createThemeManager from 'material-ui/lib/styles/theme-manager';
+import injectTapEventPlugin from "react-tap-event-plugin";
 
 import AssemblyMetadata from './AssemblyMetadata.react';
 import AssemblyAnalysis from './AssemblyAnalysis.react';
@@ -21,6 +24,9 @@ import SocketStore from '../../stores/SocketStore';
 import SocketUtils from '../../utils/Socket';
 import DEFAULT from '../../defaults.js';
 import { validateMetadata } from '../../utils/Metadata.js';
+
+const ThemeManager = createThemeManager();
+injectTapEventPlugin();
 
 const loadingAnimationStyle = {
   display: 'block',
@@ -48,6 +54,17 @@ const AssemblyWorkspace = React.createClass({
     return {
       isProcessing: false,
       uploadButtonActive: false,
+      confirmedMultipleMetadataDrop: false
+    };
+  },
+
+  childContextTypes: {
+    muiTheme: React.PropTypes.object
+  },
+
+  getChildContext: function() {
+    return {
+      muiTheme: ThemeManager.getCurrentTheme()
     };
   },
 
@@ -87,10 +104,25 @@ const AssemblyWorkspace = React.createClass({
     });
   },
 
-  handleDrop: function (event) {
+  confirmDrop: function (event) {
     if (event.files.length > 0) {
-      UploadActionCreators.addFiles(event.files);
+      if (!this.state.confirmedMultipleMetadataDrop && this.props.totalAssemblies > 0) {
+        var multipleDropConfirm = confirm('Duplicate records will be overwritten');
+        if (multipleDropConfirm) {
+          this.setState({
+            confirmedMultipleMetadataDrop: true
+          })
+          UploadActionCreators.addFiles(event.files);
+        }
+      }
+      else {
+        UploadActionCreators.addFiles(event.files);
+      }
     }
+  },
+
+  handleDrop: function (event) {
+    UploadActionCreators.addFiles(event.files);
   },
 
   handleClick() {
@@ -126,13 +158,18 @@ const AssemblyWorkspace = React.createClass({
     loadingAnimationStyle.display = this.state.isProcessing ? 'block' : 'none';
     const locations = {};
     let metadataTitle = 'Metadata';
+    let standardActions = [
+      { text: 'Cancel' },
+      { text: 'Submit', onTouchTap: this._onDialogSubmit, ref: 'submit' }
+    ];
+
     if (this.props.assembly) {
       locations[this.props.assembly.fasta.name] = this.props.assembly.metadata.geography;
       metadataTitle += ' - ' + this.props.assembly.fasta.name;
     }
-
+    console.log(this.state.confirmedMultipleMetadataDrop)
     return (
-      <FileDragAndDrop onDrop={this.handleDrop}>
+      <FileDragAndDrop onDrop={this.confirmDrop}>
         <div className="assemblyWorkspaceContainer mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-drawer">
           <UploadReviewHeader title="WGSA - Upload" activateUploadButton={this.state.uploadButtonActive} />
           <div id="loadingAnimation" style={loadingAnimationStyle} className="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
