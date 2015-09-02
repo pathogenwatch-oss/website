@@ -9,13 +9,6 @@ import '../../../css/upload-review.css';
 
 const AssemblyList = React.createClass({
 
-  getInitialState: function () {
-    return {
-      selectedOption: null,
-      deleteConfirm: null
-    };
-  },
-
   getListOptionElements: function () {
     const fileAssemblyIds = UploadStore.getFileAssemblyIds();
     const assemblies = UploadStore.getAssemblies();
@@ -23,16 +16,6 @@ const AssemblyList = React.createClass({
 
     var style = {};
     return fileAssemblyIds.map((fileAssemblyId) => {
-
-      if (this.state.selectedOption == fileAssemblyId) {
-        style = {
-          'backgroundColor': DEFAULT.CGPS.COLOURS.GREY
-        }
-      }
-      else {
-        style = {};
-      }
-
       return (
         <AssemblyListItem fileAssemblyId={fileAssemblyId} isValidMap={isValidMap} />
       );

@@ -53,7 +53,6 @@ function handleAction(action) {
   switch (action.type) {
 
     case 'navigate_to_assembly':
-      console.log(action);
       setFileAssemblyId(action.fileAssemblyId);
       emitChange();
       break;
