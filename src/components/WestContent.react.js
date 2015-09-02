@@ -1,8 +1,10 @@
 import React from 'react';
 
-import SpeciesTree from './SpeciesTree.react';
+// import SpeciesTree from './SpeciesTree.react';
+import Tree from './Tree.react';
 
 import SpeciesSubtreeStore from '../stores/SpeciesSubtreeStore';
+import SpeciesTreeStore from '../stores/SpeciesTreeStore';
 import UploadedCollectionStore from '../stores/UploadedCollectionStore';
 
 export default React.createClass({
@@ -18,13 +20,6 @@ export default React.createClass({
     };
   },
 
-  handleSubtreeStoreChange() {
-    const id = SpeciesSubtreeStore.getActiveSpeciesSubtreeId();
-    this.setState({
-      subtree: (id === this.collectionId) ? 'Collection' : id,
-    });
-  },
-
   componentDidMount() {
     SpeciesSubtreeStore.addChangeListener(this.handleSubtreeStoreChange);
     this.collectionId = UploadedCollectionStore.getUploadedCollectionId();
@@ -35,12 +30,20 @@ export default React.createClass({
   },
 
   render: function () {
+    const subtrees = SpeciesSubtreeStore.getSpeciesSubtrees();
+    const treeId = Object.keys(subtrees)[0];
     return (
-      <SpeciesTree
+      <Tree
         title={this.state.subtree || 'Population'}
-        width={this.props.width}
-        height={this.props.height} />
+        newick={subtrees[treeId].newick} />
     );
+  },
+
+  handleSubtreeStoreChange() {
+    const id = SpeciesSubtreeStore.getActiveSpeciesSubtreeId();
+    this.setState({
+      subtree: (id === this.collectionId) ? 'Collection' : id,
+    });
   },
 
 });

@@ -73,9 +73,6 @@ const Tree = React.createClass({
   },
 
   componentDidUpdate: function () {
-    this.phylocanvas.resizeToContainer();
-    this.phylocanvas.fitInPanel();
-
     const subtree = SpeciesSubtreeStore.getActiveSpeciesSubtree();
     const tree = subtree ? subtree.newick : SpeciesTreeStore.getSpeciesTree();
 
@@ -86,15 +83,13 @@ const Tree = React.createClass({
       this.tree = tree;
     }
 
+    this.phylocanvas.resizeToContainer();
+    this.phylocanvas.fitInPanel();
     this.phylocanvas.draw();
   },
 
   initializeTree: function () {
-    const phylocanvas = PhyloCanvas.createTree('phylocanvas-container', {
-      history: {
-        collapsed: true,
-      },
-    });
+    const phylocanvas = PhyloCanvas.createTree('phylocanvas-container');
     phylocanvas.load(this.tree);
 
     phylocanvas.showLabels = DEFAULT_TREE_SETTINGS.SHOW_TREE_LABELS;
