@@ -12,6 +12,8 @@ var messageQueueConnection = require('utils/messageQueueConnection');
 var LOGGER = logging.getBaseLogger();
 var app = express();
 
+var clientPath = path.join(__dirname, 'node_modules', 'macroreact', 'public');
+
 app.set('port', process.env.PORT || appConfig.server.node.port);
 // http://stackoverflow.com/a/19965089
 app.use(bodyParser.json({ limit: '500mb' }));
@@ -33,12 +35,12 @@ module.exports = function (callback) {
       return callback(error, null);
     }
 
-    app.use(express.static(path.join(__dirname, 'public')));
-
     app.use(function (req, res, next) {
       res.header('X-Clacks-Overhead', 'GNU Terry Pratchett');
       next();
     });
+
+    app.use(express.static(clientPath));
 
     // CORS
     app.use(function (req, res, next) {
@@ -53,6 +55,17 @@ module.exports = function (callback) {
 
     require('routes.js')(app);
     require('errors.js')(app);
+
+    app.use('/', function (req, res, next) {
+      // crude file matching
+      if (req.path.match(/\.[a-z]{1,4}$/)) {
+        return next();
+      }
+
+      return res.sendFile(path.join(clientPath, 'index.html'));
+    });
+
+    app.use(require('routes/notFound'));
 
     server = http.createServer(app).listen(app.get('port'), function () {
       LOGGER.info('✔ Express server listening on port ' + app.get('port'));

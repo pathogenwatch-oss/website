@@ -21,6 +21,7 @@
   },
   "devDependencies": {
     "cgps-style": "imperialcollegelondon/javascript#v1.0.1",
+    "macroreact": "imperialcollegelondon/macroreact#fasta-download",
     "mocha": "^2.1.0",
     "rewire": "^2.1.4",
     "sinon": "^1.12.2",
