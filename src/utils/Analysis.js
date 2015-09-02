@@ -382,7 +382,9 @@ function drawN50Chart(chartData, assemblyN50, appendToClass) {
   .style("padding", "10px")
   .style("z-index", "10")
   .style("visibility", "hidden")
-  .text("tooltip");
+  .style("width", "auto")
+  .text("tooltip")
+  .attr('class', 'mdl-card__supporting-text');
 
   // Circles
   svg.selectAll('circle')
@@ -541,7 +543,7 @@ function drawN50OverviewChart(contigsN50Data, appendToClass) {
 
   // Y
   var yScale = d3.scale.linear()
-  .domain([Math.max(...chartData), 0])
+  .domain([Math.max(...chartData)*1.5, 0])
   .range([30, chartHeight - 52]);
 
   // Axes
@@ -550,8 +552,8 @@ function drawN50OverviewChart(contigsN50Data, appendToClass) {
   var xAxis = d3.svg.axis()
   .scale(xScale)
   .orient('bottom')
-  .ticks(chartXAxis.length);
-
+  .ticks(chartXAxis.length)
+  .tickFormat(function (d) {return ''; });
   // Y
   var yAxis = d3.svg.axis()
   .scale(yScale)
@@ -607,8 +609,10 @@ function drawN50OverviewChart(contigsN50Data, appendToClass) {
   .style("border-color", "#ccc")
   .style("padding", "10px")
   .style("z-index", "10")
-  .style("visibility", "hidden")
-  .text("tooltip");
+  .style("display", "none")
+  .style("width", "auto")
+  .text("tooltip")
+  .attr('class', 'mdl-card__supporting-text');
 
   // Circles
   svg.selectAll('circle')
@@ -622,10 +626,12 @@ function drawN50OverviewChart(contigsN50Data, appendToClass) {
     return yScale(datum);
   })
   .attr('r', 5)
-  .on("mouseover", function(datum, index){return tooltip.style("visibility", "visible").html('Filename: <b>' + chartXAxis[index] + '</b><br>' + 'N50 Contig: <b>' + datum + '</b>');})
+  .on("mouseover", function(datum, index){
+    return tooltip.style("display", "block")
+                  .html('Filename: <b>' + chartXAxis[index] + '</b><br>' + 'N50 Contig: <b>' + datum + '</b>');})
   .on("mousemove", function(){return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");})
-  .on("mouseout", function(){return tooltip.style("visibility", "hidden");})
-  .on("click", function(datum, index){UploadWorkspaceNavigationActionCreators.navigateToAssembly(chartXAxis[index]); return tooltip.style("visibility", "hidden");});
+  .on("mouseout", function(){return tooltip.style("display", "none");})
+  .on("click", function(datum, index){UploadWorkspaceNavigationActionCreators.navigateToAssembly(chartXAxis[index]); return tooltip.style("display", "none");});
 
   // // Line
   // var line = d3.svg.line()

@@ -26,6 +26,24 @@ var Store = assign({}, EventEmitter.prototype, {
 
   getFileAssemblyId: function () {
     return fileAssemblyId;
+  },
+
+  getNextFileAssemblyIdOnDelete: function(fileAssemblyIdForDelete) {
+    const allAssemblyIds = UploadStore.getFileAssemblyIds();
+    const indexOfFileAssemblyIdForDelete = allAssemblyIds.indexOf(fileAssemblyIdForDelete);
+    const totalNoAssemblyIds = allAssemblyIds.length;
+    var nextAssemblyIdForDisplay = null;
+    // Check next index is a valid fileId for traverse
+    if (allAssemblyIds.length > 0) {
+      if (indexOfFileAssemblyIdForDelete + 1 < totalNoAssemblyIds) {
+        nextAssemblyIdForDisplay = allAssemblyIds[indexOfFileAssemblyIdForDelete + 1];
+      }
+      else {
+        nextAssemblyIdForDisplay = allAssemblyIds[indexOfFileAssemblyIdForDelete - 1];
+      }
+    }
+
+    return nextAssemblyIdForDisplay;
   }
 
 });

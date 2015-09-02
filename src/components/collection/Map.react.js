@@ -23,10 +23,6 @@ var Map = React.createClass({
   infoWindow: null,
   infoWindowIsolates: null,
 
-  propTypes: {
-    locations: React.PropTypes.object.isRequired
-  },
-
   componentDidMount: function () {
     this.initializeMap();
     this.initializeAndCreateMarkers();
@@ -229,6 +225,7 @@ var createLink = function(dataObject) {
     var br = document.createElement('br');
     button.appendChild(textNode);
     button.className = 'mdl-button mdl-js-button mdl-js-ripple-effect';
+    button.style.textTransform = 'none';
     button.onclick = handleSelectAssembly.bind(null, fileAssemblyId);
     componentHandler.upgradeElement(button);
     div.appendChild(button);
