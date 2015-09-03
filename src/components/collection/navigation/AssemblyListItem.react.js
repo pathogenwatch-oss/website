@@ -59,7 +59,6 @@ const Component = React.createClass({
     }
 
     UploadWorkspaceNavigationActionCreators.deleteAssembly(this.props.fileAssemblyId);
-    this.resetDeleteState();
   },
 
   render() {
