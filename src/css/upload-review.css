@@ -170,6 +170,7 @@
 .assemblyListItem .selectButton {
   height: auto;
   overflow: none;
+  width: 100%;
 }
 
 .assemblyListItem .deleteButton {

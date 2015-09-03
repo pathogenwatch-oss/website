@@ -14,7 +14,7 @@ const AssemblyList = React.createClass({
 
     return fileAssemblyIds.map((fileAssemblyId) => {
       return (
-        <AssemblyListItem fileAssemblyId={fileAssemblyId} isValidMap={isValidMap} />
+        <AssemblyListItem key={fileAssemblyId} fileAssemblyId={fileAssemblyId} isValidMap={isValidMap} />
       );
     });
   },

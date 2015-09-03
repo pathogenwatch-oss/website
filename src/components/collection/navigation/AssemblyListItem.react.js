@@ -13,48 +13,56 @@ const Component = React.createClass({
     fileAssemblyId: React.PropTypes.string.isRequired
   },
 
-  getInitialState: function () {
+  getInitialState() {
     return {
       selectedOption: null,
       deleteConfirm: null
     };
   },
 
-  componentDidMount: function () {
+  componentDidMount() {
     UploadWorkspaceNavigationStore.addChangeListener(this.handleUploadWorkspaceNavigationStoreChange);
   },
 
-  componentWillUnmount: function () {
+  componentWillUnmount() {
     UploadWorkspaceNavigationStore.removeChangeListener(this.handleUploadWorkspaceNavigationStoreChange);
   },
 
-  resetDeleteState: function() {
+  resetDeleteState() {
     this.setState({
       deleteConfirm: null
     });
   },
 
-  handleUploadWorkspaceNavigationStoreChange: function () {
+  handleUploadWorkspaceNavigationStoreChange() {
     this.setState({
       selectedOption: UploadWorkspaceNavigationStore.getFileAssemblyId()
     });
   },
 
-  handleDeleteConfirm: function(fileAssemblyIdForDelete) {
-    this.setState({
-      deleteConfirm: null
-    });
+  handleDeleteConfirm(fileAssemblyIdForDelete) {
     this.setState({
       deleteConfirm: fileAssemblyIdForDelete
     });
   },
 
-  handleSelectAssembly: function (selectedFileAssemblyId) {
+  handleSelectAssembly(selectedFileAssemblyId) {
     this.resetDeleteState();
     UploadWorkspaceNavigationActionCreators.navigateToAssembly(selectedFileAssemblyId);
   },
 
-  render: function () {
+  handleDeleteAssembly() {
+    const currentAssemblyIdOnDisplay = UploadWorkspaceNavigationStore.getFileAssemblyId();
+    if (currentAssemblyIdOnDisplay === this.props.fileAssemblyId) {
+      var nextAssemblyIdForDisplay = UploadWorkspaceNavigationStore.getNextFileAssemblyIdOnDelete(this.props.fileAssemblyId);
+      UploadWorkspaceNavigationActionCreators.navigateToAssembly(nextAssemblyIdForDisplay);
+    }
+
+    UploadWorkspaceNavigationActionCreators.deleteAssembly(this.props.fileAssemblyId);
+    this.resetDeleteState();
+  },
+
+  render() {
     const fileAssemblyId = this.props.fileAssemblyId;
     const isValidMap = this.props.isValidMap;
     var validatedIconStyle = {
@@ -75,58 +83,41 @@ const Component = React.createClass({
       }
     }
 
-    if (this.state.deleteConfirm) {
-      return (
-        <ConfirmDelete fileAssemblyId={this.state.deleteConfirm} resetDeleteState={this.resetDeleteState}/>
-      );
-    }
-    else {
-      return (
-        <li key={fileAssemblyId} ref={fileAssemblyId} className={`assemblyListItem mdl-shadow--2dp${this.state.selectedOption === fileAssemblyId ? ' selected' : ''}`} title={fileAssemblyId}>
-          <button className='selectButton mdl-button mdl-js-button mdl-js-ripple-effect' onClick={this.handleSelectAssembly.bind(this, fileAssemblyId)}>
+    return (
+      <li ref={fileAssemblyId} className={`assemblyListItem mdl-shadow--2dp${this.state.selectedOption === fileAssemblyId ? ' selected' : ''}`} title={fileAssemblyId}>
+        { this.state.deleteConfirm ?
+          <ConfirmDelete title={fileAssemblyId} handleDeleteAssembly={this.handleDeleteAssembly} resetDeleteState={this.resetDeleteState}/>
+          :
+          <div>
+            <button className='selectButton mdl-button mdl-js-button mdl-js-ripple-effect' onClick={this.handleSelectAssembly.bind(this, fileAssemblyId)}>
             <span className='filename'>
-              {fileAssemblyId}
-            </span>
-          </button>
-          <span className="assembly-list-item__utils">
-            <span className="assembly-list-item__validate-icon utilityButton">
-              <i style={validatedIconStyle} className='material-icons'>{validatedIcon}</i>
-            </span>
-            <button className="deleteButton utilityButton mdl-button mdl-js-button mdl-button--icon mdl-button--colored"
-              onClick={this.handleDeleteConfirm.bind(this, fileAssemblyId)}>
-              <i className="material-icons">delete</i>
+                {fileAssemblyId}
+              </span>
             </button>
-          </span>
-        </li>
-      );
-    }
+            <span className="assembly-list-item__utils">
+              <span className="assembly-list-item__validate-icon utilityButton">
+                <i style={validatedIconStyle} className='material-icons'>{validatedIcon}</i>
+              </span>
+              <button className="deleteButton utilityButton mdl-button mdl-js-button mdl-button--icon mdl-button--colored"
+                onClick={this.handleDeleteConfirm.bind(this, fileAssemblyId)}>
+                <i className="material-icons">delete</i>
+              </button>
+            </span>
+          </div>
+        }
+      </li>
+    );
   }
 });
 
 var ConfirmDelete = React.createClass({
 
-  handleDeleteAssembly: function(fileAssemblyIdForDelete) {
-    const currentAssemblyIdOnDisplay = UploadWorkspaceNavigationStore.getFileAssemblyId();
-
-    if (currentAssemblyIdOnDisplay === fileAssemblyIdForDelete) {
-      var nextAssemblyIdForDisplay = UploadWorkspaceNavigationStore.getNextFileAssemblyIdOnDelete(fileAssemblyIdForDelete);
-      console.log('Deleting file and navigate to', nextAssemblyIdForDisplay)
-      UploadWorkspaceNavigationActionCreators.navigateToAssembly(nextAssemblyIdForDisplay);
-    }
-    else {
-      console.log('Deleting file silently', fileAssemblyIdForDelete)
-    }
-
-    UploadWorkspaceNavigationActionCreators.deleteAssembly(fileAssemblyIdForDelete);
-    this.props.resetDeleteState();
-  },
-
   render() {
     return (
       <div>
         <button className="confirm-delete-button mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--accent"
-          title="Delete"
-          onClick={this.handleDeleteAssembly.bind(this, this.props.fileAssemblyId)}>
+          title={"Confirm Delete - " + this.props.title}
+          onClick={this.props.handleDeleteAssembly}>
           <i className="material-icons">delete</i>
         </button>
         <button className="confirm-delete-button mdl-button mdl-js-button mdl-js-ripple-effect"
