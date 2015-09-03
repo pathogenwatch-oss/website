@@ -1,0 +1,43 @@
+.wgsa-menu {
+  position: absolute;
+  left: 100%;
+  bottom: 100%;
+  background-color: #fff;
+  z-index: 2;
+  transition: transform .35s ease-in-out;
+  will-change: transform;
+  margin: 0;
+  padding: 16px;
+  list-style: none;
+}
+
+.wgsa-menu--is-open {
+  transform: translate(-100%, calc(100% + 56px));
+}
+
+.wgsa-menu__item {
+  white-space: nowrap;
+}
+
+.wgsa-menu__item > button + span {
+  margin-left: 8px;
+}
+
+.wgsa-menu-button {
+  background-color: #673c90;
+  color: #fff;
+  padding-right: 12px;
+}
+
+.wgsa-menu-button:hover,
+.wgsa-menu-button:focus:not(:active),
+.wgsa-menu-button:active,
+.wgsa-menu-button.active {
+  background-color: rgba(255, 255, 255, 0.12);
+  text-shadow: 1px 1px 1px #673c90;
+}
+
+.wgsa-button-icon {
+  vertical-align: middle;
+  margin-right: 4px;
+}
