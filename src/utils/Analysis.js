@@ -381,7 +381,7 @@ function drawN50Chart(chartData, assemblyN50, appendToClass) {
   .style("border-color", "#ccc")
   .style("padding", "10px")
   .style("z-index", "10")
-  .style("visibility", "hidden")
+  .style("display", "none")
   .style("width", "auto")
   .text("tooltip")
   .attr('class', 'mdl-card__supporting-text');
@@ -398,9 +398,9 @@ function drawN50Chart(chartData, assemblyN50, appendToClass) {
     return yScale(datum);
   })
   .attr('r', 5)
-  .on("mouseover", function(datum, index){return tooltip.style("visibility", "visible").html('Sum: <b>' + datum + '</b>');})
+  .on("mouseover", function(datum, index){return tooltip.style("display", "block").html('Sum: <b>' + datum + '</b>');})
   .on("mousemove", function(){return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");})
-  .on("mouseout", function(){return tooltip.style("visibility", "hidden");})
+  .on("mouseout", function(){return tooltip.style("display", "none");})
 
   // Line
   var line = d3.svg.line()
@@ -469,9 +469,9 @@ function drawN50Chart(chartData, assemblyN50, appendToClass) {
   })
   .attr('r', 6)
   .attr('class', 'n50-circle')
-  .on("mouseover", function(datum, index){return tooltip.style("visibility", "visible").html('Sum: <b>' + datum.sum + '</b>' );})
+  .on("mouseover", function(datum, index){return tooltip.style("display", "block").html('Sum: <b>' + datum.sum + '</b>' );})
   .on("mousemove", function(){return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");})
-  .on("mouseout", function(){return tooltip.style("visibility", "hidden");})
+  .on("mouseout", function(){return tooltip.style("display", "none");})
 
   // Append text to group
   n50Group.append('text')
