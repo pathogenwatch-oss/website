@@ -2,7 +2,6 @@ import { EventEmitter }  from 'events';
 import assign from 'object-assign';
 
 import AppDispatcher from '../dispatcher/AppDispatcher';
-import TreeUtils from '../utils/Tree';
 
 const CHANGE_EVENT = 'change';
 
