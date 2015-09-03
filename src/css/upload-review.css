@@ -263,6 +263,7 @@ circle {
   stroke-width: 0.5px;
   fill: #673c90;
   opacity: 0.5;
+  cursor: pointer;
 }
 path {
   stroke: #aaa;
