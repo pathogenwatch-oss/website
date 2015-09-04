@@ -48,7 +48,9 @@ apiRouter.get('/species/:speciesId/reference', function (req, res) {
 
 apiRouter.post('/download/type/:idType/format/:fileFormat', function (req, res) {
   var assemblyId = Object.keys(req.body)[0];
-  res.json(req.body[assemblyId]);
+  setTimeout(function () {
+    res.json(req.body[assemblyId]);
+  }, 2000);
 });
 
 apiRouter.get('/download/file/:fileName', function (req, res) {

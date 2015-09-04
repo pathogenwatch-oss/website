@@ -35,7 +35,7 @@ export default React.createClass({
               <button className="mdl-button mdl-button--icon">
                 <i className="wgsa-button-icon material-icons">file_download</i>
               </button>
-              Concatenated Gene Family Alignments
+              Gene Family Alignments
             </li>
             <li className="wgsa-menu__item">
               <button className="mdl-button mdl-button--icon">

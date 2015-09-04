@@ -118,37 +118,10 @@ const TableRow = React.createClass({
       <tr>
         {this.getTableRowElements()}
         <td style={buttonCellStyle}>
-          { this.state.loading ?
-              <div ref="spinner" className="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active"></div>
-              :
-              this.getDownloadElement()
-          }
+          <DownloadButton />
         </td>
       </tr>
     );
-  },
-
-  getDownloadElement() {
-    if (this.state.link) {
-      return (
-        <a className="mdl-button mdl-button--icon" target="_blank" href={this.state.link}>
-          <i style={iconStyle} className="material-icons">insert_drive_file</i>
-        </a>
-      );
-    }
-
-    return (
-      <button className="mdl-button mdl-button--icon" onClick={this.handleDownloadFasta} title="Download Assembly">
-        <i style={iconStyle} className="material-icons">file_download</i>
-      </button>
-    );
-  },
-
-  handleDownloadFasta() {
-    this.setState({
-      loading: true,
-    });
-    DownloadActionCreators.requestFile(this.props.isolate, 'assembly', 'fasta');
   },
 
 });

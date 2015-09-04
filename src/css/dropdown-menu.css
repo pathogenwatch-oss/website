@@ -1,23 +1,58 @@
 .wgsa-menu {
   position: absolute;
-  left: 100%;
-  bottom: 100%;
+  right: 0;
+  bottom: calc(100% - 52px);
   background-color: #fff;
   z-index: 2;
-  transition: transform .35s ease-in-out;
+  transition: transform .28s cubic-bezier(.4,0,.2,1);
   will-change: transform;
   margin: 0;
-  padding: 8px 16px;
+  padding: 0;
   list-style: none;
 }
 
-.wgsa-menu--is-open {
-  transform: translate(-100%, calc(100% + 56px));
+@media (min-width: 1024px) {
+  .wgsa-menu {
+    right: 24px;
+  }
 }
+
+.wgsa-menu--is-open {
+  transform: translateY(calc(100% + 4px));
+}
+
+.wgsa-submenu {
+  list-style: none;
+  margin: 0;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.wgsa-menu > li:last-child > .wgsa-submenu {
+  border: none;
+}
+
+.wgsa-menu-heading {
+  font-size: 12px;
+  letter-spacing: 0;
+  font-weight: bold;
+  color: rgba(0, 0, 0, 0.54);
+  padding: 12px 16px 4px;
+  display: block;
+}
+
 
 .wgsa-menu__item {
   white-space: nowrap;
   font-size: 13px;
+  padding: 4px 16px;
+  transition: background .28s cubic-bezier(.4,0,.2,1);
+}
+
+.wgsa-menu__item:hover,
+.wgsa-menu__item:focus,
+.wgsa-menu__item:active {
+  background: rgba(0, 0, 0, 0.1);
 }
 
 .wgsa-menu__item > button + span {
@@ -41,18 +76,4 @@
 .wgsa-button-icon {
   vertical-align: middle;
   margin-right: 4px;
-}
-
-.wgsa-submenu {
-  list-style: none;
-  margin: 0;
-  padding: 8px 0;
-}
-
-.wgsa-menu-heading {
-  font-size: 12px;
-  letter-spacing: 0;
-  font-weight: bold;
-  line-height: 40px;
-  color: rgba(0, 0, 0, 0.54);
 }
