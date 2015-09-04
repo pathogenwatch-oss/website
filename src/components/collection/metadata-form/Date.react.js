@@ -39,71 +39,46 @@ const MetadataDate = React.createClass({
     componentHandler.upgradeElement(yearElement);
   },
 
-  handleDateChange(nil, date) {
-    MetadataActionCreators.setMetadataDate(this.props.assemblyId, date);
-  },
+  // handleDateChange(nil, date) {
+  //   MetadataActionCreators.setMetadataDate(this.props.assemblyId, date);
+  // },
 
-  handleDayChange() {
-    MetadataActionCreators.setMetadataDay(this.props.assemblyId, event.target.value);
-  },
-
-  handleMonthChange() {
-    MetadataActionCreators.setMetadataMonth(this.props.assemblyId, event.target.value);
-  },
-
-  handleYearChange() {
-    MetadataActionCreators.setMetadataYear(this.props.assemblyId, event.target.value);
+  handleDateChange() {
+    if (event.target.id === 'dd') {
+      MetadataActionCreators.setMetadataDay(this.props.assemblyId, event.target.value);
+    }
+    else if (event.target.id === 'mm') {
+      MetadataActionCreators.setMetadataMonth(this.props.assemblyId, event.target.value);
+    }
+    else if (event.target.id === 'yyyy') {
+      MetadataActionCreators.setMetadataYear(this.props.assemblyId, event.target.value);
+    }
   },
 
   render () {
     return (
       <form className="metadata-fields">
         <label className="mdl-card__supporting-text">date</label>
-        <Day ref="day_input" handleChange={this.handleDayChange} date={this.props.date}/>
-        <Month ref="month_input" handleChange={this.handleMonthChange} date={this.props.date}/>
-        <Year ref="year_input" handleChange={this.handleYearChange} date={this.props.date}/>
+        <DateInput ref="day_input" dateType="dd" handleChange={this.handleDateChange} value={this.props.date.day}/>
+        <DateInput ref="month_input" dateType="mm" handleChange={this.handleMonthChange} value={this.props.date.month}/>
+        <DateInput ref="year_input" dateType="yyyy" handleChange={this.handleYearChange} value={this.props.date.year}/>
       </form>
     );
   }
 });
 
-var Day = React.createClass({
+var DateInput = React.createClass({
   render() {
     return (
       <div className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-        <input className="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="day"
-          value={this.props.date.day}
+        <input className="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id={this.props.dateType}
+          value={this.props.value}
           onChange={this.props.handleChange} />
-        <label className="mdl-textfield__label" htmlFor="day">{this.props.date.day ? '' : 'dd'}</label>
+        <label className="mdl-textfield__label" htmlFor={this.props.dateType}> {this.props.value ? '' : this.props.dateType} </label>
       </div>
     );
   }
 });
 
-var Month = React.createClass({
-  render() {
-    return (
-      <div className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-        <input className="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="month"
-          value={this.props.date.month}
-          onChange={this.props.handleChange} />
-        <label className="mdl-textfield__label" htmlFor="month">{this.props.date.month ? '' : 'mm'}</label>
-      </div>
-    );
-  }
-});
-
-var Year = React.createClass({
-  render() {
-    return (
-      <div className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-        <input className="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="year"
-          value={this.props.date.year}
-          onChange={this.props.handleChange} />
-        <label className="mdl-textfield__label" htmlFor="year">{this.props.date.year ? '' : 'yyyy'}</label>
-      </div>
-    );
-  }
-});
 
 module.exports = MetadataDate;
