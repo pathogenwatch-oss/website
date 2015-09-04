@@ -18,14 +18,9 @@ var AssemblyMetadata = React.createClass({
   render: function () {
     const { fasta, metadata } = this.props.assembly;
 
-    // Set date to 1st day of the year if day or month is missing
-    metadata.date.day = metadata.date.day || null;
-    metadata.date.month = metadata.date.month || null;
-    metadata.date.year = metadata.date.year || null;
-
     return (
       <div>
-        <MetadataDate assemblyId={fasta.name} date={metadata.date} />
+        <MetadataDate key={fasta.name} assemblyId={fasta.name} date={metadata.date} />
       </div>
     );
   }
