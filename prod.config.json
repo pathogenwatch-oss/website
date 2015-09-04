@@ -1,6 +1,6 @@
 {
   "api": {
-    "hostname": "localhost",
+    "hostname": "172.20.25.83",
     "port": 8080
   }
 }

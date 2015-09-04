@@ -91,7 +91,7 @@
 }
 
 .uploadReviewAnalysisStyle, .mdl-textfield {
-  padding: 0px 10px 20px 0;
+
 }
 
 .analysisItemLabel {
@@ -123,6 +123,12 @@
   border-bottom: 1px solid #eee;
   margin: 16px 0px;
 }
+
+.metadata-fields div {
+  margin: 10px;
+  width: 50px;
+}
+
 /*********************************/
 
 /**** UploadReview - Navigation Left Pane ****/
@@ -170,6 +176,7 @@
 .assemblyListItem .selectButton {
   height: auto;
   overflow: none;
+  width: 100%;
 }
 
 .assemblyListItem .deleteButton {
@@ -262,6 +269,7 @@ circle {
   stroke-width: 0.5px;
   fill: #673c90;
   opacity: 0.5;
+  cursor: pointer;
 }
 path {
   stroke: #aaa;

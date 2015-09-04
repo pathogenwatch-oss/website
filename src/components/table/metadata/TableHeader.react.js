@@ -6,7 +6,7 @@ import TableActionCreators from '../../../actions/TableActionCreators';
 import ANTIBIOTICS from '../../../../static_data/antibiotics.json';
 import { CGPS } from '../../../defaults';
 
-var MetadataTableHeader = React.createClass({
+const MetadataTableHeader = React.createClass({
 
   getTableHeaderCellStyle: function (header) {
     var selectedTableColumnName = TableStore.getLabelTableColumnName();
@@ -45,8 +45,7 @@ var MetadataTableHeader = React.createClass({
   },
 
   getListOfTableHeaderNames: function () {
-    var metadataNames = ['Assembly', 'Country', 'Source', 'Date', 'ST'];
-    return metadataNames;
+    return [ 'Assembly', 'Country', 'Source', 'Date', 'ST', '' ];
   },
 
   render: function () {
