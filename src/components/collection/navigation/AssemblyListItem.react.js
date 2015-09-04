@@ -3,7 +3,7 @@ import css from '../../../css/upload-review.css';
 
 import { ListItem, FontIcon } from 'material-ui';
 import createThemeManager from 'material-ui/lib/styles/theme-manager';
-import UploadWorkspaceNavigationStore from '../../../stores/UploadWorkspaceNavigationStore';
+
 import UploadWorkspaceNavigationActionCreators from '../../../actions/UploadWorkspaceNavigationActionCreators';
 
 const ThemeManager = createThemeManager();
@@ -15,28 +15,13 @@ const Component = React.createClass({
 
   getInitialState() {
     return {
-      selectedOption: null,
       deleteConfirm: null
     };
-  },
-
-  componentDidMount() {
-    UploadWorkspaceNavigationStore.addChangeListener(this.handleUploadWorkspaceNavigationStoreChange);
-  },
-
-  componentWillUnmount() {
-    UploadWorkspaceNavigationStore.removeChangeListener(this.handleUploadWorkspaceNavigationStoreChange);
   },
 
   resetDeleteState() {
     this.setState({
       deleteConfirm: null
-    });
-  },
-
-  handleUploadWorkspaceNavigationStoreChange() {
-    this.setState({
-      selectedOption: UploadWorkspaceNavigationStore.getFileAssemblyId()
     });
   },
 
@@ -83,7 +68,7 @@ const Component = React.createClass({
     }
 
     return (
-      <li ref={fileAssemblyId} className={`assemblyListItem mdl-shadow--2dp${this.state.selectedOption === fileAssemblyId ? ' selected' : ''}`} title={fileAssemblyId}>
+      <li ref={fileAssemblyId} className={`assemblyListItem mdl-shadow--2dp${this.props.selected ? ' selected' : ''}`} title={fileAssemblyId}>
         { this.state.deleteConfirm ?
           <ConfirmDelete title={fileAssemblyId} handleDeleteAssembly={this.handleDeleteAssembly} resetDeleteState={this.resetDeleteState}/>
           :

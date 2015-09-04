@@ -2,10 +2,32 @@ import React from 'react';
 
 import AssemblyListItem from '../navigation/AssemblyListItem.react.js';
 
+import UploadWorkspaceNavigationStore from '../../../stores/UploadWorkspaceNavigationStore';
 import UploadStore from '../../../stores/UploadStore';
 import { validateMetadata } from '../../../utils/Metadata.js';
 
 const AssemblyList = React.createClass({
+
+
+  getInitialState() {
+    return {
+      selectedOption: null,
+    };
+  },
+
+  componentDidMount() {
+    UploadWorkspaceNavigationStore.addChangeListener(this.handleUploadWorkspaceNavigationStoreChange);
+  },
+
+  componentWillUnmount() {
+    UploadWorkspaceNavigationStore.removeChangeListener(this.handleUploadWorkspaceNavigationStoreChange);
+  },
+
+  handleUploadWorkspaceNavigationStoreChange() {
+    this.setState({
+      selectedOption: UploadWorkspaceNavigationStore.getFileAssemblyId()
+    });
+  },
 
   getListOptionElements: function () {
     const fileAssemblyIds = UploadStore.getFileAssemblyIds();
@@ -14,7 +36,7 @@ const AssemblyList = React.createClass({
 
     return fileAssemblyIds.map((fileAssemblyId) => {
       return (
-        <AssemblyListItem key={fileAssemblyId} fileAssemblyId={fileAssemblyId} isValidMap={isValidMap} />
+        <AssemblyListItem key={fileAssemblyId} fileAssemblyId={fileAssemblyId} isValidMap={isValidMap} selected={fileAssemblyId === this.state.selectedOption}/>
       );
     });
   },
