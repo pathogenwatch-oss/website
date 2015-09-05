@@ -2,6 +2,7 @@
 
 var webpack = require("webpack");
 var express = require("express");
+var bodyParser = require('body-parser');
 
 var config = require('./webpack.config.js');
 var compiler = webpack(config);
@@ -16,9 +17,14 @@ app.use(require('webpack-dev-middleware')(compiler, {
 
 app.use(require('webpack-hot-middleware')(compiler));
 
+app.use(bodyParser.json());
+
 app.use(express.static('public'));
 
-app.post('/api/species/:speciesId/collection', function (req, res) {
+
+var apiRouter = express.Router();
+
+apiRouter.post('/species/:speciesId/collection', function (req, res) {
   res.json({
     collectionId: '123',
     userAssemblyIdToAssemblyIdMap: {
@@ -29,17 +35,33 @@ app.post('/api/species/:speciesId/collection', function (req, res) {
   });
 });
 
-app.post('/api/species/:speciesId/collection/:collectionId/assembly/:id', function (req, res) {
+apiRouter.post('/species/:speciesId/collection/:collectionId/assembly/:id', function (req, res) {
   res.json({ assemblyId: req.params.id });
 });
 
-app.get('/api/species/:speciesId/collection/:id', function (req, res) {
+apiRouter.get('/species/:speciesId/collection/:id', function (req, res) {
   res.sendFile(__dirname + '/static_data/collection.json');
 });
 
-app.get('/api/species/:speciesId/reference', function (req, res) {
+apiRouter.get('/species/:speciesId/reference', function (req, res) {
   res.sendFile(__dirname + '/static_data/reference.json');
 });
+
+apiRouter.get('/species/:speciesId/reference', function (req, res) {
+  res.sendFile(__dirname + '/static_data/reference.json');
+});
+
+apiRouter.post('/download/type/:idType/format/:fileFormat', function (req, res) {
+  var assemblyId = Object.keys(req.body)[0];
+  res.json(req.body[assemblyId]);
+});
+
+apiRouter.get('/download/file/:fileName', function (req, res) {
+  return res.sendFile(__dirname + '/static_data/' + req.params.fileName);
+});
+
+app.use('/api', apiRouter);
+
 
 app.use('/', function (req, res) {
   res.sendFile(__dirname + '/public/index.html');

@@ -1,61 +1,61 @@
 import React from 'react';
-import { DatePicker } from 'material-ui';
-import createThemeManager from 'material-ui/lib/styles/theme-manager';
-import injectTapEventPlugin from "react-tap-event-plugin";
-
-import YearInput from './YearInput.react';
-import MonthInput from './MonthInput.react';
-import DayInput from './DayInput.react';
-import Header from './Header.react';
-
 import MetadataActionCreators from '../../../actions/MetadataActionCreators';
-
-
-const ThemeManager = createThemeManager();
-injectTapEventPlugin();
 
 const metadataStyle = {
   display: 'inline-block',
   marginRight: '5px'
 };
 
-const dateStyle = {
-};
-
 const MetadataDate = React.createClass({
 
-  childContextTypes: {
-    muiTheme: React.PropTypes.object
+  componentDidMount() {
+    var dayElement = React.findDOMNode(this.refs.day_input)
+    var monthElement = React.findDOMNode(this.refs.month_input)
+    var yearElement = React.findDOMNode(this.refs.year_input)
+    componentHandler.upgradeElement(dayElement);
+    componentHandler.upgradeElement(monthElement);
+    componentHandler.upgradeElement(yearElement);
   },
 
-  getChildContext: function() {
-    return {
-      muiTheme: ThemeManager.getCurrentTheme()
-    };
+  handleDateChange() {
+    if (event.target.id === 'dd') {
+      MetadataActionCreators.setMetadataDay(this.props.assemblyId, event.target.value);
+    }
+    else if (event.target.id === 'mm') {
+      MetadataActionCreators.setMetadataMonth(this.props.assemblyId, event.target.value);
+    }
+    else if (event.target.id === 'yyyy') {
+      MetadataActionCreators.setMetadataYear(this.props.assemblyId, event.target.value);
+    }
   },
 
-  handleDateChange: function(nil, date) {
-    MetadataActionCreators.setMetadataDate(this.props.assemblyId, date);
-  },
-
-  render: function () {
+  render () {
+    var dateObj = new Date();
+    var year = dateObj.getFullYear();
     return (
-      <div>
-        <Header text="Date" />
-        <form className="form-inline">
-          <DatePicker
-            hintText="Date"
-            autoOk={true}
-            maxDate={new Date()}
-            showYearSelector={true}
-            style={dateStyle}
-            value={this.props.date}
-            onChange={this.handleDateChange}
-            mode="landscape"/>
-        </form>
+      <form className="metadata-fields">
+        <label className="mdl-card__supporting-text">date</label>
+        <DateInput ref="day_input" dateType="dd" handleChange={this.handleDateChange} min="1" max="31"  value={this.props.date.day}/>
+        <DateInput ref="month_input" dateType="mm" handleChange={this.handleDateChange} min="1" max="12" value={this.props.date.month}/>
+        <DateInput ref="year_input" dateType="yyyy" handleChange={this.handleDateChange} min="1900" max={year} value={this.props.date.year}/>
+      </form>
+    );
+  }
+});
+
+var DateInput = React.createClass({
+  render() {
+    return (
+      <div className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <input className="mdl-textfield__input" type="number" id={this.props.dateType}
+          value={this.props.value}
+          onChange={this.props.handleChange}
+          min={this.props.min || 0} max={this.props.max || 0}/>
+        <label className="mdl-textfield__label" htmlFor={this.props.dateType}> {this.props.value ? '' : this.props.dateType} </label>
       </div>
     );
   }
 });
+
 
 module.exports = MetadataDate;
