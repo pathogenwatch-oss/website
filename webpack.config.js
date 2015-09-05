@@ -10,11 +10,12 @@ var devConfig = {
     './src/app'
   ],
   output: {
-    path: path.join(__dirname, 'public'),
+    path: __dirname,
     filename: 'wgsa.js',
     publicPath: '/'
   },
   plugins: [
+    new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin()
   ],
@@ -54,6 +55,7 @@ var prodConfig = {
     filename: 'wgsa.js'
   },
   plugins: [
+    new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.optimize.UglifyJsPlugin({
       compressor: {
         warnings: false

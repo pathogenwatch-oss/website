@@ -9,6 +9,7 @@ var compiler = webpack(config);
 var app = express();
 
 app.use(require('webpack-dev-middleware')(compiler, {
+  contentBase: '/public',
   publicPath: config.output.publicPath,
   stats: { colors: true, cached: false }
 }));
