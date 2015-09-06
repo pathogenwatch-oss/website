@@ -6,8 +6,7 @@ var webpack = require('webpack');
 var devConfig = {
   devtool: '#eval-source-map',
   entry: [
-    'webpack-dev-server/client?http://localhost:8080',
-    'webpack/hot/only-dev-server',
+    'webpack-hot-middleware/client',
     './src/app'
   ],
   output: {
@@ -16,14 +15,31 @@ var devConfig = {
     publicPath: '/'
   },
   plugins: [
+    new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin()
   ],
   module: {
     loaders: [
       { test: /\.js$/,
-        loaders: [ 'react-hot', 'babel' ],
-        include: path.join(__dirname, 'src')
+        loader: 'babel',
+        include: path.join(__dirname, 'src'),
+        query: {
+          "stage": 0,
+          "plugins": [
+            "react-transform"
+          ],
+          "extra": {
+            "react-transform": [{
+              "target": "react-transform-webpack-hmr",
+              "imports": ["react"],
+              "locals": ["module"]
+            }, {
+              "target": "react-transform-catch-errors",
+              "imports": ["react", "redbox-react"]
+            }]
+          }
+        }
       },
       { test: /.json$/, loaders: [ 'json' ] },
       { test: /.css$/, loaders: [ 'style', 'css' ] },
@@ -39,11 +55,17 @@ var prodConfig = {
     filename: 'wgsa.js'
   },
   plugins: [
+    new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.optimize.UglifyJsPlugin({
       compressor: {
         warnings: false
       }
-    })
+    }),
+    new webpack.DefinePlugin({
+      "process.env": {
+        NODE_ENV: JSON.stringify("production")
+      }
+    }),
   ],
   module: {
     loaders: [

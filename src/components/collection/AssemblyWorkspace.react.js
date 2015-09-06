@@ -2,6 +2,8 @@ import '../../css/upload-review.css';
 
 import React from 'react';
 import FileDragAndDrop from 'react-file-drag-and-drop';
+import createThemeManager from 'material-ui/lib/styles/theme-manager';
+import injectTapEventPlugin from 'react-tap-event-plugin';
 
 import AssemblyMetadata from './AssemblyMetadata.react';
 import AssemblyAnalysis from './AssemblyAnalysis.react';
@@ -18,9 +20,13 @@ import UploadActionCreators from '../../actions/UploadActionCreators';
 import SocketActionCreators from '../../actions/SocketActionCreators';
 import FileProcessingStore from '../../stores/FileProcessingStore';
 import SocketStore from '../../stores/SocketStore';
+
 import SocketUtils from '../../utils/Socket';
 import DEFAULT from '../../defaults.js';
 import { validateMetadata } from '../../utils/Metadata.js';
+
+const ThemeManager = createThemeManager();
+injectTapEventPlugin();
 
 const loadingAnimationStyle = {
   display: 'block',
@@ -44,14 +50,25 @@ const AssemblyWorkspace = React.createClass({
     totalAssemblies: React.PropTypes.number,
   },
 
-  getInitialState: function () {
+  childContextTypes: {
+    muiTheme: React.PropTypes.object,
+  },
+
+  getInitialState() {
     return {
       isProcessing: false,
       uploadButtonActive: false,
+      confirmedMultipleMetadataDrop: false,
     };
   },
 
-  componentDidMount: function () {
+  getChildContext() {
+    return {
+      muiTheme: ThemeManager.getCurrentTheme(),
+    };
+  },
+
+  componentDidMount() {
     FileProcessingStore.addChangeListener(this.handleFileProcessingStoreChange);
     UploadStore.addChangeListener(this.activateUploadButton);
 
@@ -65,12 +82,12 @@ const AssemblyWorkspace = React.createClass({
     SocketActionCreators.setSocketConnection(socket);
   },
 
-  componentWillUnmount: function () {
+  componentWillUnmount() {
     FileProcessingStore.removeChangeListener(this.handleFileProcessingStoreChange);
     SocketStore.removeChangeListener(this.handleSocketStoreChange);
   },
 
-  handleSocketStoreChange: function () {
+  handleSocketStoreChange() {
     if (!SocketStore.getRoomId()) {
       SocketStore.getSocketConnection().on('roomId', function iife(roomId) {
         // console.log('[Macroreact] Got socket room id ' + roomId);
@@ -81,15 +98,25 @@ const AssemblyWorkspace = React.createClass({
     }
   },
 
-  handleFileProcessingStoreChange: function () {
+  handleFileProcessingStoreChange() {
     this.setState({
       isProcessing: FileProcessingStore.getFileProcessingState(),
     });
   },
 
-  handleDrop: function (event) {
+  handleDrop(event) {
     if (event.files.length > 0) {
-      UploadActionCreators.addFiles(event.files);
+      if (!this.state.confirmedMultipleMetadataDrop && this.props.totalAssemblies > 0) {
+        var multipleDropConfirm = confirm('Duplicate records will be overwritten');
+        if (multipleDropConfirm) {
+          this.setState({
+            confirmedMultipleMetadataDrop: true,
+          });
+          UploadActionCreators.addFiles(event.files);
+        }
+      } else {
+        UploadActionCreators.addFiles(event.files);
+      }
     }
   },
 
@@ -101,7 +128,7 @@ const AssemblyWorkspace = React.createClass({
     this.handleDrop(event.target);
   },
 
-  activateUploadButton: function () {
+  activateUploadButton() {
     const assemblies = UploadStore.getAssemblies();
     const isValidMap = validateMetadata(assemblies);
     let isValid = true;
@@ -122,10 +149,11 @@ const AssemblyWorkspace = React.createClass({
     });
   },
 
-  render: function () {
+  render() {
     loadingAnimationStyle.display = this.state.isProcessing ? 'block' : 'none';
     const locations = {};
     let metadataTitle = 'Metadata';
+
     if (this.props.assembly) {
       locations[this.props.assembly.fasta.name] = this.props.assembly.metadata.geography;
       metadataTitle += ' - ' + this.props.assembly.fasta.name;

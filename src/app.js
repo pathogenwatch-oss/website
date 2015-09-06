@@ -24,16 +24,18 @@ const routes = (
   </Route>
 );
 
+const rootElement = document.getElementById('wgsa');
+
 Router.run(routes, Router.HistoryLocation, function (Handler, state) {
   const requestedSpecies = state.params.species;
   if (!requestedSpecies) {
-    return React.render(<Handler />, document.body);
+    return React.render(<Handler />, rootElement);
   }
 
   if (Species.isSupported(requestedSpecies)) {
     Species.current = requestedSpecies;
-    React.render(<Handler />, document.body);
+    React.render(<Handler />, rootElement);
   } else {
-    React.render(<NotFound />, document.body);
+    React.render(<NotFound />, rootElement);
   }
 });
