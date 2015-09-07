@@ -38,8 +38,8 @@ export default React.createClass({
       return (
         <div className="mdl-grid">
           <div className="mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
+            <div className="heading"> Overview </div>
             <div className="card-style">
-              <div className="heading"> Overview </div>
               <AssemblyAnalysisItem label="Total Assemblies" value={this.state.assemblyCount} />
               <AssemblyAnalysisItem label="Mean Contigs" value={200} />
               <AssemblyAnalysisItem label="Total nt" value={2000000} />
@@ -47,8 +47,8 @@ export default React.createClass({
           </div>
 
           <div className="mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
+            <div className="heading"> N50 contigs Chart </div>
             <div className="card-style">
-              <div className="heading"> N50 contigs Chart </div>
               <AssemblyAnalysisOverviewChart />
             </div>
           </div>

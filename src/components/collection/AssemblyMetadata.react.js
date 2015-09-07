@@ -1,13 +1,9 @@
-var React = require('react');
-var FileDragAndDrop = require('react-file-drag-and-drop');
-var assign = require('object-assign');
-var moment = require('moment');
+import React from 'react';
+import assign from 'object-assign';
 
-var UploadActionCreators = require('../../actions/UploadActionCreators');
-var UploadStore = require('../../stores/UploadStore');
-var MetadataUtils = require('../../utils/Metadata');
-var MetadataDate = require('./metadata-form/Date.react');
-var MetadataSource = require('./metadata-form/Source.react');
+import MetadataUtils from '../../utils/Metadata';
+import MetadataDate from './metadata-form/Date.react';
+import MetadataActionCreators from '../../actions/MetadataActionCreators';
 
 var AssemblyMetadata = React.createClass({
 
@@ -15,12 +11,55 @@ var AssemblyMetadata = React.createClass({
     assembly: React.PropTypes.object.isRequired
   },
 
+  handleMetadataChange() {
+    var columnName = event.target.id;
+    var value = event.target.value;
+    MetadataActionCreators.setMetadataColumn(this.props.assembly.metadata.fileAssemblyId, columnName, value)
+  },
+
+  getMetadataFieldComponents(metadata) {
+    var components = [];
+    for (var columnName in metadata) {
+      if (columnName === 'fileAssemblyId' ||
+          columnName === 'assemblyFilename' ||
+          columnName === 'geography' ||
+          columnName === 'date') {
+        continue;
+      }
+
+      var inputFieldComponent = <MetadataField ref={columnName} key={columnName} columnName={columnName} value={metadata[columnName]} handleChange={this.handleMetadataChange}/>;
+      components.push(inputFieldComponent);
+    };
+    return components;
+  },
+
   render: function () {
     const { fasta, metadata } = this.props.assembly;
-
+    var metadataFields = this.getMetadataFieldComponents(metadata);
     return (
-      <div>
+      <div className="metadata-fields-container">
         <MetadataDate key={fasta.name} assemblyId={fasta.name} date={metadata.date} />
+        {metadataFields}
+      </div>
+    );
+  }
+});
+
+var MetadataField = React.createClass({
+
+  componentDidMount() {
+    var inputDomElement = this.getDOMNode();
+    componentHandler.upgradeElement(inputDomElement);
+  },
+
+  render() {
+    return (
+      <div className="metadata-field mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <label className="mdl-card__supporting-text">{this.props.columnName}</label>
+        <input className="mdl-textfield__input" type="text" id={this.props.columnName}
+          value={this.props.value}
+          onChange={this.props.handleChange} />
+        <label className="mdl-textfield__label" htmlFor={this.props.columnName}></label>
       </div>
     );
   }

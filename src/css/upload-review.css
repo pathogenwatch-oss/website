@@ -90,8 +90,17 @@
   outline: none;
 }
 
-.uploadReviewAnalysisStyle, .mdl-textfield {
+.metadata-field {
+  max-width: 20%;
+  margin-right: 20px;
+}
 
+.mdl-card__supporting-text {
+  padding: 0px;
+}
+
+.mdl-textfield {
+  color: #666;
 }
 
 .analysisItemLabel {
@@ -101,6 +110,9 @@
   padding: 10px 0px;
 }
 
+.assemblyWorkspaceContainer  .mdl-grid{
+  padding: 20px;
+}
 .assemblyWorkspaceContainer .mdl-cell {
   background-color: #fff;
 }
@@ -121,7 +133,7 @@
   color: #666;
   line-height: 40px;
   border-bottom: 1px solid #eee;
-  margin: 16px 0px;
+  padding: 10px 16px;
 }
 
 .metadata-fields div {
@@ -129,6 +141,19 @@
   width: 50px;
 }
 
+.overview-fields {
+  margin-right: 10px;
+  width: 50%;
+}
+
+.metadata-fields-container {
+  max-height: 200px;
+  overflow: auto;
+}
+
+.mapDivStyle {
+  height: 100%;
+}
 /*********************************/
 
 /**** UploadReview - Navigation Left Pane ****/

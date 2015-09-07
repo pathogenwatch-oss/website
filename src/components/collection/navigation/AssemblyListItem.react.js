@@ -3,7 +3,7 @@ import css from '../../../css/upload-review.css';
 
 import { ListItem, FontIcon } from 'material-ui';
 import createThemeManager from 'material-ui/lib/styles/theme-manager';
-
+import UploadWorkspaceNavigationStore from '../../../stores/UploadWorkspaceNavigationStore.js';
 import UploadWorkspaceNavigationActionCreators from '../../../actions/UploadWorkspaceNavigationActionCreators';
 
 const ThemeManager = createThemeManager();

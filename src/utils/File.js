@@ -110,7 +110,6 @@ function initialiseAssemblyObject(fileAssemblyId, assemblies) {
         month: null,
         day: null
       },
-      source: null,
       geography: {
         location: null,
         position: {
@@ -171,7 +170,6 @@ function parseCsvFile(file, rawFiles, assemblies) {
   }
 
   dataRows = csvJson.data;
-
   dataRows.forEach(function iife(dataRow) {
 
     if (! dataRow.filename) {
@@ -180,59 +178,29 @@ function parseCsvFile(file, rawFiles, assemblies) {
     }
 
     fileAssemblyId = dataRow.filename;
-
     assemblies = initialiseAssemblyObject(fileAssemblyId, assemblies);
-
     assemblies[fileAssemblyId].metadata.assemblyFilename = fileAssemblyId;
 
-    if (dataRow.latitude) {
-      assemblies[fileAssemblyId].metadata.geography.position.latitude = parseFloat(dataRow.latitude);
-    }
-    else {
-      assemblies[fileAssemblyId].metadata.geography.position.latitude = null;
+    for (var colName in dataRow) {
+
+      if (colName === 'filename') {
+        continue;
+      }
+
+      if (colName === "latitude" || colName === "longitude" || colName === "location" || colName === "year" || colName === "month" || colName === "day") {
+
+        assemblies[fileAssemblyId].metadata.geography.position.latitude = parseFloat(dataRow.latitude) || null ;
+        assemblies[fileAssemblyId].metadata.geography.position.longitude = parseFloat(dataRow.longitude) || null ;
+        assemblies[fileAssemblyId].metadata.geography.location = dataRow.location || null ;
+        assemblies[fileAssemblyId].metadata.date.year = parseInt(dataRow.year, 10) || null ;
+        assemblies[fileAssemblyId].metadata.date.month = parseInt(dataRow.month, 10) || null ;
+        assemblies[fileAssemblyId].metadata.date.day = parseInt(dataRow.day, 10) || null ;
+      }
+      else {
+        assemblies[fileAssemblyId].metadata[colName] = dataRow[colName] || null ;
+      }
     }
 
-    if (dataRow.longitude) {
-      assemblies[fileAssemblyId].metadata.geography.position.longitude = parseFloat(dataRow.longitude);
-    }
-    else {
-      assemblies[fileAssemblyId].metadata.geography.position.longitude = null;
-    }
-
-    if (dataRow.location) {
-      assemblies[fileAssemblyId].metadata.geography.location = dataRow.location;
-    }
-    else {
-      assemblies[fileAssemblyId].metadata.geography.location = null;
-    }
-
-    if (dataRow.year) {
-      assemblies[fileAssemblyId].metadata.date.year = parseInt(dataRow.year, 10);
-    }
-    else {
-      assemblies[fileAssemblyId].metadata.date.year = null;
-    }
-
-    if (dataRow.month) {
-      assemblies[fileAssemblyId].metadata.date.month = parseInt(dataRow.month, 10);
-    }
-    else {
-      assemblies[fileAssemblyId].metadata.date.month = null;
-    }
-
-    if (dataRow.day) {
-      assemblies[fileAssemblyId].metadata.date.day = parseInt(dataRow.day, 10);
-    }
-    else {
-      assemblies[fileAssemblyId].metadata.date.day = null;
-    }
-
-    if (dataRow.source) {
-      assemblies[fileAssemblyId].metadata.source = parseInt(dataRow.source, 10);
-    }
-    else {
-      assemblies[fileAssemblyId].metadata.source = null;
-    }
   });
 }
 
