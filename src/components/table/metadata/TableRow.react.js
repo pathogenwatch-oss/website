@@ -2,20 +2,21 @@ import '../../../css/spinner.css';
 
 import React from 'react';
 
+import DownloadButton from '../../DownloadButton.react.js';
+
 import DownloadStore from '../../../stores/DownloadStore';
-import DownloadActionCreators from '../../../actions/DownloadActionCreators';
 
 import DataUtils from '../../../utils/Data';
 import MetadataUtils from '../../../utils/Metadata';
 
-import { CGPS } from '../../../defaults';
+const downloadButtonProps = {
+  type: 'assembly',
+  format: 'fasta',
+  title: 'Assembly Fasta',
+};
 
 const resistantStyle = {
   color: '#ff0000',
-};
-
-const iconStyle = {
-  color: CGPS.COLOURS.PURPLE,
 };
 
 const buttonCellStyle = {
@@ -71,12 +72,6 @@ const TableRow = React.createClass({
     DownloadStore.removeChangeListener(this.handleDownloadStoreChange);
   },
 
-  componentDidUpdate() {
-    if (this.state.loading) {
-      componentHandler.upgradeElement(React.findDOMNode(this.refs.spinner));
-    }
-  },
-
   handleDownloadStoreChange() {
     const link = DownloadStore.getLink(this.props.isolate.metadata.assemblyId);
     if (link) {
@@ -118,7 +113,8 @@ const TableRow = React.createClass({
       <tr>
         {this.getTableRowElements()}
         <td style={buttonCellStyle}>
-          <DownloadButton />
+          <DownloadButton
+            isolate={this.props.isolate} {...downloadButtonProps} />
         </td>
       </tr>
     );
