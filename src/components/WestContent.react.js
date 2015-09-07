@@ -1,7 +1,6 @@
 import React from 'react';
 
-// import SpeciesTree from './SpeciesTree.react';
-import Tree from './Tree.react';
+import SpeciesTree from './SpeciesTree.react';
 
 import SpeciesSubtreeStore from '../stores/SpeciesSubtreeStore';
 import SpeciesTreeStore from '../stores/SpeciesTreeStore';
@@ -32,10 +31,14 @@ export default React.createClass({
   render: function () {
     const subtrees = SpeciesSubtreeStore.getSpeciesSubtrees();
     const treeId = Object.keys(subtrees)[0];
+
+    const navButton = {
+      title: 'View Collection Tree',
+      icon: 'nature',
+    };
+
     return (
-      <Tree
-        title={this.state.subtree || 'Population'}
-        newick={subtrees[treeId].newick} />
+      <SpeciesTree />
     );
   },
 

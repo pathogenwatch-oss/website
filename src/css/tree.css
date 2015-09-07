@@ -35,10 +35,34 @@
   right: 16px;
 }
 
+.wgsa-tree-menu a {
+  text-decoration: none;
+  color: inherit;
+}
+
 .wgsa-tree-actions {
   color: #673c90;
 }
 
+.wgsa-tree-control .mdl-slider {
+  display: none;
+}
+
+.wgsa-tree-control .mdl-slider.is-upgraded {
+  display: block;
+}
+
+.wgsa-tree-control .mdl-slider::thumb,
+.mdl-slider__background-lower {
+  background: #673c90;
+}
+
+.wgsa-tree-control .mdl-slider:active::thumb {
+  background: #a386bd;
+}
+
 .wgsa-tree-control label {
-  font-size: 13px;
+  font-size: 12px;
+  font-weight: 700;
+  color: rgba(0, 0, 0, 0.54);
 }

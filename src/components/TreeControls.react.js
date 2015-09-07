@@ -1,72 +1,53 @@
 import React from 'react';
-import assign from 'object-assign';
-
-import { CGPS } from '../defaults';
-
-const knobWidth = 60;
-const knobPadding = 20;
-const knobStyle = {
-  min: 1,
-  max: 50,
-  width: knobWidth,
-  angleOffset: -125,
-  angleArc: 250,
-  displayInput: false,
-  fgColor: CGPS.COLOURS.PURPLE_LIGHT,
-};
 
 const treeSizeControlsStyle = {
   position: 'absolute',
-  bottom: 8,
-  left: `calc(50% - ${knobWidth + knobPadding}px)`,
+  bottom: 4,
+  right: 0,
+  width: '128px',
   textAlign: 'left',
   zIndex: '999',
   userSelect: 'none',
 };
 
 const sizeControlStyle = {
-  width: `${knobWidth + knobPadding}px`,
-  height: `${knobWidth + knobPadding}px`,
+  width: `128px`,
+  height: `40px`,
   textAlign: 'center',
   display: 'inline-block',
   overflow: 'hidden',
   userSelect: 'none',
 };
 
-const noUserSelectStyle = {
-  userSelect: 'none',
-};
-
 export default React.createClass({
 
-  componentDidMount: function () {
-    $('[data-dial-node-size]').knob(
-      assign(knobStyle, {
-        'change': (nodeSize) => {
-          this.props.handleNodeSizeChange(nodeSize);
-        },
-      })
-    );
+  propTypes: {
+    nodeSize: true,
+    labelSize: true,
+    handleNodeSizeChange: true,
+    handleLabelSizeChange: true,
+  },
 
-    $('[data-dial-label-size]').knob(
-      assign(knobStyle, {
-        'change': (labelSize) => {
-          this.props.handleLabelSizeChange(labelSize);
-        },
-      })
-    );
+  componentDidMount: function () {
+    componentHandler.upgradeElement(React.findDOMNode(this.refs.controls));
   },
 
   render: function () {
     return (
-      <div style={treeSizeControlsStyle}>
+      <div ref="controls" style={treeSizeControlsStyle}>
         <div className="wgsa-tree-control" style={sizeControlStyle}>
-          <label>Node Size</label>
-          <input type="text" data-dial-node-size defaultValue={this.props.nodeSize} style={noUserSelectStyle} />
+          <label>Node Size
+            <input type="range" onChange={this.props.handleNodeSizeChange}
+              min="1" max="50" defaultValue={this.props.nodeSize}
+              className="mdl-slider mdl-js-slider" tabIndex="0"/>
+          </label>
         </div>
         <div className="wgsa-tree-control" style={sizeControlStyle}>
-          <label>Label Size</label>
-          <input type="text" data-dial-label-size defaultValue={this.props.labelSize} style={noUserSelectStyle} />
+          <label>Label Size
+            <input type="range" onChange={this.props.handleLabelSizeChange}
+              min="1" max="50" defaultValue={this.props.labelSize}
+              className="mdl-slider mdl-js-slider" tabIndex="0"/>
+          </label>
         </div>
       </div>
     );

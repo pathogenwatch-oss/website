@@ -3,6 +3,17 @@
 var path = require('path');
 var webpack = require('webpack');
 
+var postcssPlugins = [
+  require('autoprefixer')({ browsers: ['last 2 versions'] }),
+  require('postcss-input-style')
+];
+
+var commonLoaders = [
+  { test: /.json$/, loaders: [ 'json' ] },
+  { test: /.css$/, loaders: [ 'style', 'css', 'postcss' ] },
+  { test: /\.(png|jpg|jpeg|gif)$/, loader: "file" }
+];
+
 var devConfig = {
   devtool: '#eval-source-map',
   entry: [
@@ -25,27 +36,25 @@ var devConfig = {
         loader: 'babel',
         include: path.join(__dirname, 'src'),
         query: {
-          "stage": 0,
-          "plugins": [
-            "react-transform"
+          'stage': 0,
+          'plugins': [
+            'react-transform'
           ],
-          "extra": {
-            "react-transform": [{
-              "target": "react-transform-webpack-hmr",
-              "imports": ["react"],
-              "locals": ["module"]
+          'extra': {
+            'react-transform': [ {
+              'target': 'react-transform-webpack-hmr',
+              'imports': [ 'react' ],
+              'locals': [ 'module' ]
             }, {
-              "target": "react-transform-catch-errors",
-              "imports": ["react", "redbox-react"]
+              'target': 'react-transform-catch-errors',
+              'imports': [ 'react', 'redbox-react' ]
             }]
           }
         }
-      },
-      { test: /.json$/, loaders: [ 'json' ] },
-      { test: /.css$/, loaders: [ 'style', 'css' ] },
-      { test: /\.(png|jpg|jpeg|gif)$/, loader: "file" }
-    ]
-  }
+      }
+    ].concat(commonLoaders)
+  },
+  postcss: postcssPlugins
 };
 
 var prodConfig = {
@@ -70,14 +79,12 @@ var prodConfig = {
   module: {
     loaders: [
       { test: /\.js$/,
-        loaders: [ 'babel' ],
+        loader: 'babel',
         include: path.join(__dirname, 'src')
-      },
-      { test: /.json$/, loaders: [ 'json' ] },
-      { test: /.css$/, loaders: [ 'style', 'css' ] },
-      { test: /\.(png|jpg|jpeg|gif)$/, loader: "file" }
-    ]
-  }
+      }
+    ].concat(commonLoaders)
+  },
+  postcss: postcssPlugins
 };
 
 module.exports = process.env.NODE_ENV === 'production' ? prodConfig : devConfig;
