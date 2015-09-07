@@ -1,9 +1,9 @@
 import React from 'react';
 
 import SpeciesTree from './SpeciesTree.react';
+// import Subtree from './Subtree.react';
 
 import SpeciesSubtreeStore from '../stores/SpeciesSubtreeStore';
-import SpeciesTreeStore from '../stores/SpeciesTreeStore';
 import UploadedCollectionStore from '../stores/UploadedCollectionStore';
 
 export default React.createClass({
@@ -29,13 +29,11 @@ export default React.createClass({
   },
 
   render: function () {
-    const subtrees = SpeciesSubtreeStore.getSpeciesSubtrees();
-    const treeId = Object.keys(subtrees)[0];
-
-    const navButton = {
-      title: 'View Collection Tree',
-      icon: 'nature',
-    };
+    // if (this.state.subtree) {
+    //   return (
+    //     <Subtree tree={this.state.subtree} />
+    //   );
+    // }
 
     return (
       <SpeciesTree />
@@ -45,7 +43,7 @@ export default React.createClass({
   handleSubtreeStoreChange() {
     const id = SpeciesSubtreeStore.getActiveSpeciesSubtreeId();
     this.setState({
-      subtree: (id === this.collectionId) ? 'Collection' : id,
+      subtree: id,
     });
   },
 

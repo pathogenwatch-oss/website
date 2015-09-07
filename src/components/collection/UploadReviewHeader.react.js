@@ -32,4 +32,3 @@ var UploadReviewHeader = React.createClass({
 });
 
 module.exports = UploadReviewHeader;
-

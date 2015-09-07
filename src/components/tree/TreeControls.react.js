@@ -2,17 +2,17 @@ import React from 'react';
 
 const treeSizeControlsStyle = {
   position: 'absolute',
-  bottom: 4,
-  right: 0,
-  width: '128px',
+  bottom: 16,
+  right: 16,
+  display: 'flex',
   textAlign: 'left',
   zIndex: '999',
   userSelect: 'none',
 };
 
 const sizeControlStyle = {
-  width: `128px`,
-  height: `40px`,
+  width: '128px',
+  height: '40px',
   textAlign: 'center',
   display: 'inline-block',
   overflow: 'hidden',

@@ -1,11 +1,11 @@
-import '../css/tree.css';
+import '../../css/tree.css';
 
 import React from 'react';
 import PhyloCanvas from 'PhyloCanvas';
 
 import TreeControls from './TreeControls.react';
 
-import DEFAULT, { CGPS } from '../defaults';
+import DEFAULT, { CGPS } from '../../defaults';
 
 const fullWidthHeight = {
   height: '100%',
@@ -17,7 +17,8 @@ export default React.createClass({
   propTypes: {
     newick: true,
     title: true,
-    navButton: true,
+    NavButton: true,
+    navOnChange: true,
     styleTree: true,
   },
 
@@ -33,6 +34,7 @@ export default React.createClass({
 
   componentDidMount() {
     componentHandler.upgradeElement(React.findDOMNode(this.refs.menu));
+    componentHandler.upgradeElement(React.findDOMNode(this.refs.navButton));
 
     const phylocanvas = PhyloCanvas.createTree('phylocanvas-container');
 
@@ -49,32 +51,30 @@ export default React.createClass({
     phylocanvas.on('subtree', this.handleRedrawSubtree);
     phylocanvas.on('historytoggle', this.handleHistoryToggle);
 
-    phylocanvas.load(this.props.newick, () => {
-      this.props.styleTree(phylocanvas);
-      phylocanvas.draw();
-    });
-
     this.phylocanvas = phylocanvas;
+
+    this.loadTree();
   },
 
   componentDidUpdate() {
     this.phylocanvas.resizeToContainer();
-    this.phylocanvas.fitInPanel();
-    this.phylocanvas.draw();
+
+    if (this.props.newick && this.props.newick !== this.phylocanvas.stringRepresentation) {
+      this.loadTree();
+    } else {
+      this.phylocanvas.fitInPanel();
+      this.phylocanvas.draw();
+    }
   },
 
   render() {
-    const { navButton } = this.props;
+    const { title, NavButton, navOnChange } = this.props;
 
     return (
       <section style={fullWidthHeight}>
         <header className="wgsa-tree-header">
-          { navButton &&
-              <button title={navButton.title} className="wgsa-tree-return mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab" onClick={navButton.onClick}>
-                <i className="material-icons">{navButton.icon}</i>
-              </button>
-          }
-          <h2 className="wgsa-tree-heading">{this.props.title}</h2>
+          <NavButton ref="navButton" onChange={navOnChange}/>
+          <h2 className="wgsa-tree-heading">{title}</h2>
           <div className="wgsa-tree-menu" ref="menu">
             <button id="tree-options" className="wgsa-tree-actions mdl-button mdl-js-button mdl-button--icon">
               <i className="material-icons">more_vert</i>
@@ -84,7 +84,7 @@ export default React.createClass({
               <li className="mdl-menu__item" onClick={this.handleToggleNodeAlign}>Toggle Label Align</li>
               <li className="mdl-menu__item" onClick={this.handleRedrawOriginalTree}>Redraw Original Tree</li>
               <li className="mdl-menu__item">
-                <a href={this.phylocanvas ? this.phylocanvas.getPngUrl() : '#'} download={`${this.props.title}.png`} target="_blank">
+                <a href={this.phylocanvas ? this.phylocanvas.getPngUrl() : '#'} download={`${title}.png`} target="_blank">
                   Export Current View
                 </a>
               </li>
@@ -104,6 +104,13 @@ export default React.createClass({
   },
 
   phylocanvas: null,
+
+  loadTree() {
+    this.phylocanvas.load(this.props.newick, () => {
+      this.props.styleTree(this.phylocanvas);
+      this.phylocanvas.draw();
+    });
+  },
 
   handleNodeSizeChange(event) {
     this.phylocanvas.setNodeSize(event.target.value);
