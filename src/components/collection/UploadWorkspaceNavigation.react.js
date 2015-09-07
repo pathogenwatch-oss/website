@@ -34,7 +34,7 @@ export default React.createClass({
 
   render: function () {
     return (
-      <aside className="mdl-layout__drawer">
+      <aside className="navigation-container mdl-layout__drawer">
         <div className="uploadWorkspaceNavigationTitle">
           <span className="mdl-badge" style={titleStyle} data-badge={this.props.totalAssemblies}>Assemblies</span>
         </div>

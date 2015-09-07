@@ -1,6 +1,7 @@
 var React = require('react');
 var assign = require('object-assign');
 import '../../css/upload-review.css'
+import InputField from './InputField.react';
 
 var containerStyle = {
   margin: '0 0 25px 0',
@@ -28,21 +29,10 @@ var AssemblyAnalysisItem = React.createClass({
     value: React.PropTypes.number.isRequired
   },
 
-  prettifyValue: function (value) {
-    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-  },
-
   render: function () {
-    var value = this.prettifyValue(this.props.value);
 
     return (
-      <div>
-        <div className='analysisItemLabel'>{this.props.label}</div>
-        <div className='uploadReviewAnalysisStyle mdl-textfield mdl-js-textfield'>
-          <input className='mdl-textfield__input' type='text' pattern='-?[0-9]*(\.[0-9]+)?' value={value} readOnly={true}/>
-          <span className='mdl-textfield__error'>Input is not a number!</span>
-        </div>
-      </div>
+      <InputField type="text" label={this.props.label} value={this.props.value} />
     );
   }
 });

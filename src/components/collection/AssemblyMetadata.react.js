@@ -4,6 +4,7 @@ import assign from 'object-assign';
 import MetadataUtils from '../../utils/Metadata';
 import MetadataDate from './metadata-form/Date.react';
 import MetadataActionCreators from '../../actions/MetadataActionCreators';
+import InputField from './InputField.react';
 
 var AssemblyMetadata = React.createClass({
 
@@ -27,7 +28,7 @@ var AssemblyMetadata = React.createClass({
         continue;
       }
 
-      var inputFieldComponent = <MetadataField ref={columnName} key={columnName} columnName={columnName} value={metadata[columnName]} handleChange={this.handleMetadataChange}/>;
+      var inputFieldComponent = <InputField ref={columnName} key={columnName} type="text" label={columnName} value={metadata[columnName]} handleChange={this.handleMetadataChange}/>;
       components.push(inputFieldComponent);
     };
     return components;
@@ -39,27 +40,9 @@ var AssemblyMetadata = React.createClass({
     return (
       <div className="metadata-fields-container">
         <MetadataDate key={fasta.name} assemblyId={fasta.name} date={metadata.date} />
-        {metadataFields}
-      </div>
-    );
-  }
-});
-
-var MetadataField = React.createClass({
-
-  componentDidMount() {
-    var inputDomElement = this.getDOMNode();
-    componentHandler.upgradeElement(inputDomElement);
-  },
-
-  render() {
-    return (
-      <div className="metadata-field mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-        <label className="mdl-card__supporting-text">{this.props.columnName}</label>
-        <input className="mdl-textfield__input" type="text" id={this.props.columnName}
-          value={this.props.value}
-          onChange={this.props.handleChange} />
-        <label className="mdl-textfield__label" htmlFor={this.props.columnName}></label>
+        <div className="metadata-field">
+          {metadataFields}
+        </div>
       </div>
     );
   }

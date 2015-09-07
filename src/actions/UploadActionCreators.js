@@ -71,7 +71,6 @@ module.exports = {
 
       const userAssemblyIdToAssemblyIdMap = ids.userAssemblyIdToAssemblyIdMap;
       const userAssemblyIds = Object.keys(userAssemblyIdToAssemblyIdMap);
-
       userAssemblyIds.forEach(function sendAssembly(userAssemblyId) {
         const { metadata, fasta } = UploadStore.getAssembly(userAssemblyId);
         const urlParams = {

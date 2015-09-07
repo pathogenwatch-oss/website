@@ -33,7 +33,7 @@ const MetadataDate = React.createClass({
     var dateObj = new Date();
     var year = dateObj.getFullYear();
     return (
-      <form className="metadata-fields">
+      <form className="metadata-field__date">
         <label className="mdl-card__supporting-text">date</label>
         <DateInput ref="day_input" dateType="dd" handleChange={this.handleDateChange} min="1" max="31"  value={this.props.date.day}/>
         <DateInput ref="month_input" dateType="mm" handleChange={this.handleDateChange} min="1" max="12" value={this.props.date.month}/>
