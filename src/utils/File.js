@@ -94,6 +94,10 @@ function parseFiles(files, callback) {
 }
 
 function initialiseAssemblyObject(fileAssemblyId, assemblies) {
+  if (assemblies[fileAssemblyId]) {
+    return assemblies;
+  }
+
   var ASSEMBLY_OBJECT = {
     fasta: {
       name: null,
@@ -106,7 +110,6 @@ function initialiseAssemblyObject(fileAssemblyId, assemblies) {
         month: null,
         day: null
       },
-      source: null,
       geography: {
         location: null,
         position: {
@@ -186,31 +189,12 @@ function parseCsvFile(file, rawFiles, assemblies) {
 
       if (colName === "latitude" || colName === "longitude" || colName === "location" || colName === "year" || colName === "month" || colName === "day") {
 
-        if (dataRow.latitude) {
-          assemblies[fileAssemblyId].metadata.geography.position.latitude = parseFloat(dataRow.latitude);
-        }
-
-        if (dataRow.longitude) {
-          assemblies[fileAssemblyId].metadata.geography.position.longitude = parseFloat(dataRow.longitude);
-        }
-
-        if (dataRow.location) {
-          assemblies[fileAssemblyId].metadata.geography.location = dataRow.location;
-        }
-
-        if (dataRow.year) {
-          assemblies[fileAssemblyId].metadata.date.year = parseInt(dataRow.year, 10);
-        }
-
-        if (dataRow.month) {
-          assemblies[fileAssemblyId].metadata.date.month = parseInt(dataRow.month, 10);
-        }
-
-        if (dataRow.day) {
-          assemblies[fileAssemblyId].metadata.date.day = parseInt(dataRow.day, 10);
-        }
-      }
-      else {
+        assemblies[fileAssemblyId].metadata.geography.position.latitude = parseFloat(dataRow.latitude) || null ;
+        assemblies[fileAssemblyId].metadata.geography.position.longitude = parseFloat(dataRow.longitude) || null ;
+        assemblies[fileAssemblyId].metadata.geography.location = dataRow.location || null ;
+        assemblies[fileAssemblyId].metadata.date.year = parseInt(dataRow.year, 10) || null ;
+        assemblies[fileAssemblyId].metadata.date.month = parseInt(dataRow.month, 10) || null ;
+        assemblies[fileAssemblyId].metadata.date.day = parseInt(dataRow.day, 10) || null ;
         assemblies[fileAssemblyId].metadata[colName] = dataRow[colName] || null ;
       }
     }
