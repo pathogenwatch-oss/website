@@ -59,7 +59,7 @@ const AssemblyWorkspace = React.createClass({
       isProcessing: false,
       uploadButtonActive: false,
       confirmedMultipleMetadataDrop: false,
-      mapHeight: 200
+      pageTitleAppend: 'Upload'
     };
   },
 
@@ -118,6 +118,9 @@ const AssemblyWorkspace = React.createClass({
       } else {
         UploadActionCreators.addFiles(event.files);
       }
+      this.setState({
+        pageTitleAppend: 'Overview'
+      })
     }
   },
 
@@ -150,26 +153,25 @@ const AssemblyWorkspace = React.createClass({
     });
   },
 
-  setMapHeight() {
-    // console.log(React.findDOMNode(this.refs.mapDiv).offsetHeight)
-  },
-
   render() {
     loadingAnimationStyle.display = this.state.isProcessing ? 'block' : 'none';
     const locations = {};
-    let metadataTitle = 'Metadata';
+    let pageTitle = 'WGSA';
 
     if (this.props.assembly) {
       locations[this.props.assembly.fasta.name] = this.props.assembly.metadata.geography;
-      metadataTitle += ' - ' + this.props.assembly.fasta.name;
+      pageTitle += ' - ' + this.props.assembly.fasta.name;
+    }
+    else {
+      pageTitle = 'WGSA - ' + this.state.pageTitleAppend;
     }
 
-    this.setMapHeight();
+
 
     return (
       <FileDragAndDrop onDrop={this.handleDrop}>
         <div className="assemblyWorkspaceContainer mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-drawer">
-          <UploadReviewHeader title="WGSA - Upload" activateUploadButton={this.state.uploadButtonActive} />
+          <UploadReviewHeader title={pageTitle} activateUploadButton={this.state.uploadButtonActive} />
           <div id="loadingAnimation" style={loadingAnimationStyle} className="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
 
           <UploadWorkspaceNavigation assembliesUploaded={this.props.assembly ? true : false} totalAssemblies={this.props.totalAssemblies}>
@@ -185,7 +187,7 @@ const AssemblyWorkspace = React.createClass({
               <div>
                 <div className="mdl-grid">
                   <div className="mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
-                    <div className="heading"> {metadataTitle} </div>
+                    <div className="heading"> Metadata </div>
 
                     <div className="card-style">
                       <AssemblyMetadata key={this.props.assembly.metadata.fileAssemblyId} assembly={this.props.assembly} />
