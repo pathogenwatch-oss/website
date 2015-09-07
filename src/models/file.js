@@ -3,8 +3,23 @@ var fileStorage = require('services/storage')('cache');
 
 var LOGGER = require('utils/logging').createLogger('File');
 
+function constructFileFromParts(keys, parts) {
+  return Object.keys(keys).reduce(function (file, partKey) {
+    var step = file + parts[partKey];
+    LOGGER.info('File Length: ' + step.length);
+    return step;
+  }, '');
+}
+
 function getFile(fileName, callback) {
-  fileStorage.retrieve(fileName, callback);
+  fileStorage.retrieve(fileName, function (error, partKeys) {
+    if (error) callback(error);
+    LOGGER.info(partKeys);
+    fileStorage.retrieveMany(partKeys, function (error, parts) {
+      if (error) callback(error);
+      callback(null, constructFileFromParts(keys, parts));
+    });
+  });
 }
 
 function requestDownload(request, callback) {

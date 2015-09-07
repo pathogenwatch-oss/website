@@ -9,7 +9,7 @@ describe.only('Download Routes', function () {
       .send({
         speciesId: '1280',
         idToFilenameMap: {
-          '4ac4e326-6db3-410f-80c9-31eefe082d38': 'CT18'
+          'e746908e-bad1-41c0-b74d-6364c7f0e681': 'CT18'
         }
       })
       .end(function (error, result) {
@@ -20,12 +20,12 @@ describe.only('Download Routes', function () {
   });
 
   it('GET /api/download/file/:fileName', function (done) {
-    var url = '/api/download/file/CT18.fsa';
+    var url = '/api/download/file/QKN+LXimcfJwgGmQbenLRRh1EYE=.fsa?prettyFileName=assembly.fa';
     request
       .get(url)
       .end(function (error, result) {
         if (error) return done(error);
-        console.log(result.text);
+        //console.log(result.text);
         done();
       });
   })
