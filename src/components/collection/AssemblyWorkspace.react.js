@@ -59,6 +59,7 @@ const AssemblyWorkspace = React.createClass({
       isProcessing: false,
       uploadButtonActive: false,
       confirmedMultipleMetadataDrop: false,
+      mapHeight: 200
     };
   },
 
@@ -149,6 +150,10 @@ const AssemblyWorkspace = React.createClass({
     });
   },
 
+  setMapHeight() {
+    // console.log(React.findDOMNode(this.refs.mapDiv).offsetHeight)
+  },
+
   render() {
     loadingAnimationStyle.display = this.state.isProcessing ? 'block' : 'none';
     const locations = {};
@@ -158,6 +163,8 @@ const AssemblyWorkspace = React.createClass({
       locations[this.props.assembly.fasta.name] = this.props.assembly.metadata.geography;
       metadataTitle += ' - ' + this.props.assembly.fasta.name;
     }
+
+    this.setMapHeight();
 
     return (
       <FileDragAndDrop onDrop={this.handleDrop}>
@@ -178,29 +185,29 @@ const AssemblyWorkspace = React.createClass({
               <div>
                 <div className="mdl-grid">
                   <div className="mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
+                    <div className="heading"> {metadataTitle} </div>
+
                     <div className="card-style">
-                      <div className="heading"> {metadataTitle} </div>
-                      <AssemblyMetadata assembly={this.props.assembly} />
+                      <AssemblyMetadata key={this.props.assembly.metadata.fileAssemblyId} assembly={this.props.assembly} />
                     </div>
                   </div>
 
-                  <div className="mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
+                  <div ref="mapDiv" className="mapDivStyle mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
                     <div className="cardStyle--no-padding">
-                      <Map width={"100%"} height={200} locations={locations}/>
+                      <Map width={"100%"} height={300} locations={locations}/>
                     </div>
                   </div>
 
-
                   <div className="mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
+                    <div className="heading"> Analysis </div>
                     <div className="card-style">
-                      <div className="heading"> Analysis </div>
                       <AssemblyAnalysis assembly={this.props.assembly} />
                     </div>
                   </div>
 
                   <div className="mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
+                    <div className="heading"> Chart </div>
                     <div className="card-style">
-                      <div className="heading"> Chart </div>
                       <AssemblyAnalysisChart analysis={this.props.assembly.analysis} />
                     </div>
                   </div>

@@ -58,6 +58,15 @@ module.exports = {
     });
   },
 
+  setMetadataColumn: function setMetadataColumn(fileAssemblyId, columnName, value) {
+    AppDispatcher.dispatch({
+      type: 'set_metadata_column',
+      fileAssemblyId: fileAssemblyId,
+      columnName: columnName,
+      value: value
+    });
+  },
+
   setMetadataSource: function setMetadataDay(fileAssemblyId, source) {
     source = parseInt(source, 10);
 

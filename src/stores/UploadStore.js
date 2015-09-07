@@ -25,6 +25,11 @@ function setMetadataDay(fileAssemblyId, day) {
   assemblies[fileAssemblyId].metadata.date.day = day;
 }
 
+function setMetadataColumn(fileAssemblyId, columnName, value) {
+  assemblies[fileAssemblyId].metadata[columnName] = value;
+  console.log(columnName, value, assemblies[fileAssemblyId].metadata);
+}
+
 function setMetadataDate(fileAssemblyId, date) {
   var m = moment(date);
   setMetadataYear(fileAssemblyId, m.year());
@@ -139,6 +144,11 @@ function handleAction(action) {
 
     case 'set_metadata_day':
       setMetadataDay(action.fileAssemblyId, action.day);
+      emitChange();
+      break;
+
+    case 'set_metadata_column':
+      setMetadataColumn(action.fileAssemblyId, action.columnName, action.value);
       emitChange();
       break;
 
