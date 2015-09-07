@@ -195,6 +195,8 @@ function parseCsvFile(file, rawFiles, assemblies) {
         assemblies[fileAssemblyId].metadata.date.year = parseInt(dataRow.year, 10) || null ;
         assemblies[fileAssemblyId].metadata.date.month = parseInt(dataRow.month, 10) || null ;
         assemblies[fileAssemblyId].metadata.date.day = parseInt(dataRow.day, 10) || null ;
+      }
+      else {
         assemblies[fileAssemblyId].metadata[colName] = dataRow[colName] || null ;
       }
     }
