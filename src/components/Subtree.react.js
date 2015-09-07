@@ -41,7 +41,7 @@ const phylocanvasStyle = {
   margin: '0 auto',
 };
 
-const Tree = React.createClass({
+export default React.createClass({
 
   tree: null,
   treeId: null,
@@ -433,5 +433,3 @@ const Tree = React.createClass({
   },
 
 });
-
-module.exports = Tree;
