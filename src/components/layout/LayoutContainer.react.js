@@ -1,4 +1,8 @@
+import '../../css/dropdown-menu.css';
+
 import React from 'react';
+
+import DownloadsMenu from '../DownloadsMenu.react';
 
 import { CGPS } from '../../defaults';
 import Species from '../../species';
@@ -21,19 +25,16 @@ const headerRowStyle = {
   height: navBarHeight,
 };
 
-const iconLinkStyle = {
-  lineHeight: navBarHeight,
-};
-
-const iconStyle = {
-  verticalAlign: 'middle',
-  marginRight: '4px',
-};
-
 const LayoutContainer = React.createClass({
 
   componentDidMount() {
     componentHandler.upgradeElement(React.findDOMNode(this.refs.container));
+  },
+
+  getInitialState() {
+    return {
+      downloadsOpen: false,
+    };
   },
 
   render() {
@@ -44,16 +45,23 @@ const LayoutContainer = React.createClass({
             <span className="mdl-layout-title">WGSA - {Species.formattedName}</span>
             <div className="mdl-layout-spacer"></div>
             <nav className="mdl-navigation">
-              <a className="mdl-navigation__link" style={iconLinkStyle} href="#">
-                <i className="material-icons" style={iconStyle}>file_download</i>
-                <span>Download</span>
-              </a>
+              <button className={`wgsa-menu-button mdl-button ${this.state.downloadsOpen ? 'active' : ''}`} onClick={this.handleDownloadsButtonClick}>
+                <i className="wgsa-button-icon material-icons">file_download</i>
+                <span>Downloads</span>
+              </button>
             </nav>
           </div>
         </header>
+        <DownloadsMenu active={this.state.downloadsOpen} />
         {this.props.children}
       </div>
     );
+  },
+
+  handleDownloadsButtonClick() {
+    this.setState({
+      downloadsOpen: !this.state.downloadsOpen,
+    });
   },
 
 });

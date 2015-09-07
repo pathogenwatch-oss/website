@@ -6,26 +6,24 @@ import DataUtils from '../utils/Data';
 const CollectionExplorer = React.createClass({
 
   propTypes: {
-    query: React.PropTypes.object.isRequired
+    query: React.PropTypes.object.isRequired,
   },
 
   getInitialDataFieldThatFiltersMapMarkers: function () {
-    var dataObjects = this.state.data;
+    const dataObjects = this.state.data;
 
-    var dataFieldsThatFilterMapMarkers = DataUtils.findWhichDataFieldsShouldFilterMapMarkers(dataObjects);
-    var firstDataFieldThatFiltersMapMarkers;
+    const dataFieldsThatFilterMapMarkers = DataUtils.findWhichDataFieldsShouldFilterMapMarkers(dataObjects);
 
     if (dataFieldsThatFilterMapMarkers.length > 0) {
-      firstDataFieldThatFiltersMapMarkers = dataFieldsThatFilterMapMarkers[0];
-      return firstDataFieldThatFiltersMapMarkers;
+      return dataFieldsThatFilterMapMarkers[0];
     }
 
     return null;
   },
 
   getFilteredIsolates: function (isolateIds) {
-    var filteredIsolates = {};
-    var unfilteredIsolates = this.state.data;
+    const filteredIsolates = {};
+    const unfilteredIsolates = this.state.data;
 
     isolateIds.forEach(function (isolateId) {
       filteredIsolates[isolateId] = unfilteredIsolates[isolateId];
@@ -35,15 +33,13 @@ const CollectionExplorer = React.createClass({
   },
 
   handleFilterTableData: function (isolateIds) {
-    var filteredIsolates = this.getFilteredIsolates(isolateIds);
-
     this.setState({
-      filteredTableData: filteredIsolates
+      filteredTableData: this.getFilteredIsolates(isolateIds),
     });
   },
 
   handleFilterMapAndTableData: function (isolateIds, allCurrentTreeNodeIds) {
-    var filteredIsolates;
+    let filteredIsolates;
 
     if (isolateIds.length === 0) {
       filteredIsolates = this.getFilteredIsolates(allCurrentTreeNodeIds);
@@ -53,7 +49,7 @@ const CollectionExplorer = React.createClass({
 
     this.setState({
       filteredMapData: filteredIsolates,
-      filteredTableData: filteredIsolates
+      filteredTableData: filteredIsolates,
     });
   },
 
@@ -65,11 +61,11 @@ const CollectionExplorer = React.createClass({
   selectIsolatesOnTree: function (isolateIds) {
     if (isolateIds.length > 1) {
       this.setState({
-        selectIsolatesOnTree: []
+        selectIsolatesOnTree: [],
       });
     } else {
       this.setState({
-        selectIsolatesOnTree: isolateIds
+        selectIsolatesOnTree: isolateIds,
       });
     }
   },
@@ -80,20 +76,20 @@ const CollectionExplorer = React.createClass({
 
   handleColourDataByDataField: function (dataField) {
     this.setState({
-      colourDataByDataField: dataField
+      colourDataByDataField: dataField,
     });
   },
 
   handleChangeNodeLabel: function (nodeLabel) {
     this.setState({
-      treeNodeLabel: nodeLabel
+      treeNodeLabel: nodeLabel,
     });
   },
 
   handleTimelineFilterChange: function (filterStartDate, filterEndDate) {
     this.setState({
       filterStartDate: filterStartDate,
-      filterEndDate: filterEndDate
+      filterEndDate: filterEndDate,
     });
   },
 
