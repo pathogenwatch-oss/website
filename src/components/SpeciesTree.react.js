@@ -77,6 +77,10 @@ export default React.createClass({
     trees[COLLECTION].newick = SpeciesSubtreeStore.getSpeciesSubtree(collectionId).newick;
   },
 
+  componentDidMount() {
+    componentHandler.upgradeDom();
+  },
+
   render() {
     return (
       <Tree
