@@ -11,7 +11,7 @@ const definitions = {
   salty: {
     id: '90370',
     nickname: 'salty',
-    formattedName: (<span><em>Salmonella</em> typhi</span>),
+    formattedName: (<span><em>Salmonella</em> Typhi</span>),
   },
 
 };

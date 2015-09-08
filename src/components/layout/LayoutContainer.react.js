@@ -1,4 +1,8 @@
+import '../../css/dropdown-menu.css';
+
 import React from 'react';
+
+import DownloadsMenu from '../DownloadsMenu.react';
 
 import { CGPS } from '../../defaults';
 import Species from '../../species';
@@ -21,15 +25,6 @@ const headerRowStyle = {
   height: navBarHeight,
 };
 
-const iconLinkStyle = {
-  lineHeight: navBarHeight,
-};
-
-const iconStyle = {
-  verticalAlign: 'middle',
-  marginRight: '4px',
-};
-
 const LayoutContainer = React.createClass({
 
   componentDidMount() {
@@ -44,10 +39,7 @@ const LayoutContainer = React.createClass({
             <span className="mdl-layout-title">WGSA - {Species.formattedName}</span>
             <div className="mdl-layout-spacer"></div>
             <nav className="mdl-navigation">
-              <a className="mdl-navigation__link" style={iconLinkStyle} href="#">
-                <i className="material-icons" style={iconStyle}>file_download</i>
-                <span>Download</span>
-              </a>
+              <DownloadsMenu />
             </nav>
           </div>
         </header>

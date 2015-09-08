@@ -1,0 +1,94 @@
+.wgsa-menu {
+  position: relative;
+}
+
+.wgsa-menu__list {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  background-color: #fff;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: none;
+}
+
+.wgsa-menu__list::after {
+  border-color: transparent transparent #FFF;
+  border-style: dashed dashed solid;
+  border-width: 0px 8.5px 8.5px;
+  display: block;
+  position: absolute;
+  right: 25%;
+  top: -8.5px;
+  z-index: 1;
+  height: 0px;
+  width: 0px;
+  content: '';
+}
+
+.wgsa-menu--is-open .wgsa-menu__list {
+  display: block;
+}
+
+.wgsa-submenu {
+  list-style: none;
+  margin: 0;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.wgsa-menu > li:last-child > .wgsa-submenu {
+  border: none;
+}
+
+.wgsa-menu-heading {
+  font-size: 12px;
+  letter-spacing: 0;
+  font-weight: bold;
+  color: rgba(0, 0, 0, 0.54);
+  padding: 12px 16px 4px;
+  display: block;
+}
+
+.wgsa-menu__item {
+  white-space: nowrap;
+  font-size: 13px;
+  padding: 4px 16px;
+  transition: background .28s cubic-bezier(.4,0,.2,1);
+  color: rgba(0,0,0,.87);
+}
+
+.wgsa-menu__item:hover,
+.wgsa-menu__item:focus,
+.wgsa-menu__item:active {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.wgsa-menu__item > button + span {
+  margin-left: 8px;
+}
+
+.wgsa-menu__item > a {
+  color: #673c90;
+  margin-right: 8px;
+}
+
+.wgsa-menu-button {
+  background-color: #673c90;
+  color: #fff;
+  padding-right: 12px;
+}
+
+.wgsa-menu-button:hover,
+.wgsa-menu-button:focus:not(:active),
+.wgsa-menu-button:active,
+.wgsa-menu-button.active {
+  background-color: rgba(255, 255, 255, 0.12);
+  text-shadow: 1px 1px 1px #673c90;
+}
+
+.wgsa-button-icon {
+  vertical-align: middle;
+  margin-right: 4px;
+}

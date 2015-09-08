@@ -2,20 +2,19 @@ import '../../../css/spinner.css';
 
 import React from 'react';
 
-import DownloadStore from '../../../stores/DownloadStore';
-import DownloadActionCreators from '../../../actions/DownloadActionCreators';
+import DownloadButton from '../../DownloadButton.react.js';
 
 import DataUtils from '../../../utils/Data';
 import MetadataUtils from '../../../utils/Metadata';
 
-import { CGPS } from '../../../defaults';
+const downloadButtonProps = {
+  type: 'assembly',
+  format: 'fasta',
+  description: 'Assembly Fasta',
+};
 
 const resistantStyle = {
   color: '#ff0000',
-};
-
-const iconStyle = {
-  color: CGPS.COLOURS.PURPLE,
 };
 
 const buttonCellStyle = {
@@ -63,30 +62,6 @@ const TableRow = React.createClass({
     };
   },
 
-  componentDidMount() {
-    DownloadStore.addChangeListener(this.handleDownloadStoreChange);
-  },
-
-  componentWillUnmount() {
-    DownloadStore.removeChangeListener(this.handleDownloadStoreChange);
-  },
-
-  componentDidUpdate() {
-    if (this.state.loading) {
-      componentHandler.upgradeElement(React.findDOMNode(this.refs.spinner));
-    }
-  },
-
-  handleDownloadStoreChange() {
-    const link = DownloadStore.getLink(this.props.isolate.metadata.assemblyId);
-    if (link) {
-      this.setState({
-        loading: false,
-        link,
-      });
-    }
-  },
-
   getFormattedResistanceResult(resistanceResult) {
     if (resistanceResult === 'RESISTANT') {
       return (<i className="fa fa-square" style={resistantStyle}></i>);
@@ -118,37 +93,11 @@ const TableRow = React.createClass({
       <tr>
         {this.getTableRowElements()}
         <td style={buttonCellStyle}>
-          { this.state.loading ?
-              <div ref="spinner" className="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active"></div>
-              :
-              this.getDownloadElement()
-          }
+          <DownloadButton
+            id={this.props.isolate.metadata.assemblyId} {...downloadButtonProps} />
         </td>
       </tr>
     );
-  },
-
-  getDownloadElement() {
-    if (this.state.link) {
-      return (
-        <a className="mdl-button mdl-button--icon" target="_blank" href={this.state.link}>
-          <i style={iconStyle} className="material-icons">insert_drive_file</i>
-        </a>
-      );
-    }
-
-    return (
-      <button className="mdl-button mdl-button--icon" onClick={this.handleDownloadFasta} title="Download Assembly">
-        <i style={iconStyle} className="material-icons">file_download</i>
-      </button>
-    );
-  },
-
-  handleDownloadFasta() {
-    this.setState({
-      loading: true,
-    });
-    DownloadActionCreators.requestFile(this.props.isolate, 'assembly', 'fasta');
   },
 
 });
