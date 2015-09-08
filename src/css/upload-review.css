@@ -131,24 +131,24 @@
   padding: 10px 16px;
 }
 
-.metadata-field div{
+.metadata-fields {
+  max-height: 200px;
+  overflow: auto;
+}
+
+.metadata-fields__other .mdl-textfield {
   max-width: 20%;
   margin-right: 20px;
 }
 
-.metadata-field__date div {
-  margin: 10px;
-  width: 50px;
+.metadata-field__date .mdl-textfield {
+  margin-right: 10px;
+  width: 54px;
 }
 
 .overview-fields {
   margin-right: 10px;
   width: 50%;
-}
-
-.metadata-fields-container {
-  max-height: 200px;
-  overflow: auto;
 }
 
 .mapDivStyle {

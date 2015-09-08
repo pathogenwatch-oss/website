@@ -1,53 +1,20 @@
-var AppDispatcher = require('../dispatcher/AppDispatcher');
+import AppDispatcher from '../dispatcher/AppDispatcher';
 
 module.exports = {
 
-  setMetadataYear: function setMetadataYear(fileAssemblyId, year) {
-    year = parseInt(year, 10);
+  setMetadataDateComponent(fileAssemblyId, component, value) {
+    let valueInt = parseInt(value, 10);
 
-    if (typeof year !== 'number' || year === -1 || isNaN(year)) {
-      year = null;
+    if (typeof valueInt !== 'number' || valueInt === -1 || isNaN(valueInt)) {
+      valueInt = null;
     }
 
-    var setMetadataYearAction = {
-      type: 'set_metadata_year',
-      fileAssemblyId: fileAssemblyId,
-      year: year
-    };
-
-    AppDispatcher.dispatch(setMetadataYearAction);
-  },
-
-  setMetadataMonth: function setMetadataMonth(fileAssemblyId, month) {
-    month = parseInt(month, 10);
-
-    if (typeof month !== 'number' || month === -1 || isNaN(month)) {
-      month = null;
-    }
-
-    var setMetadataMonthAction = {
-      type: 'set_metadata_month',
-      fileAssemblyId: fileAssemblyId,
-      month: month
-    };
-
-    AppDispatcher.dispatch(setMetadataMonthAction);
-  },
-
-  setMetadataDay: function setMetadataDay(fileAssemblyId, day) {
-    day = parseInt(day, 10);
-
-    if (typeof day !== 'number' || day === -1 || isNaN(day)) {
-      day = null;
-    }
-
-    var setMetadataDayAction = {
-      type: 'set_metadata_day',
-      fileAssemblyId: fileAssemblyId,
-      day: day
-    };
-
-    AppDispatcher.dispatch(setMetadataDayAction);
+    AppDispatcher.dispatch({
+      type: 'set_metadata_date_component',
+      fileAssemblyId,
+      component,
+      value: valueInt,
+    });
   },
 
   setMetadataDate: function setMetadataDate(fileAssemblyId, date) {

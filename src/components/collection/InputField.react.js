@@ -1,6 +1,8 @@
 import React from 'react';
 
-var InputField = React.createClass({
+export default React.createClass({
+
+  displayName: 'InputField',
 
   componentDidMount() {
     var inputDomElement = this.getDOMNode();
@@ -9,15 +11,14 @@ var InputField = React.createClass({
 
   render: function () {
     return (
-      <div className="mdl-textfield mdl-js-textfield">
-        <label className="mdl-card__supporting-text">{this.props.label}</label>
+      <div className={`mdl-textfield mdl-js-textfield mdl-textfield--floating-label ${this.props.readonly ? 'wgsa-textfield-readonly' : ''}`}>
         <input className="mdl-textfield__input" type={this.props.type} id={this.props.label}
           value={this.props.value}
-          onChange={this.props.handleChange} />
-        <label className="mdl-textfield__label" htmlFor={this.props.label}></label>
+          onChange={this.props.handleChange}
+          readOnly={this.props.readonly} />
+        <label className="mdl-textfield__label" htmlFor={this.props.label}>{this.props.label}</label>
       </div>
     );
-  }
-});
+  },
 
-module.exports = InputField;
+});
