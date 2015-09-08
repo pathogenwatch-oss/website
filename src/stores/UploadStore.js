@@ -79,13 +79,15 @@ const Store = assign({}, EventEmitter.prototype, {
     return this.getFileAssemblyIds()[0] || null;
   },
 
-  getAllContigN50Data: function() {
-    const n50Data = {};
+  getOverviewChartData: function(chartType) {
+    const chartData = {};
     const assemblies = this.getAssemblies();
     for (const id in assemblies) {
-      n50Data[id] = assemblies[id].analysis.contigN50;
+      if (assemblies[id].analysis[chartType]) {
+        chartData[id] = assemblies[id].analysis[chartType];
+      }
     }
-    return n50Data;
+    return chartData;
   },
 
   getAllMetadataLocations: function() {

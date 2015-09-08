@@ -513,9 +513,9 @@ function drawN50Chart(chartData, assemblyN50, appendToClass) {
   // console.log(assemblyN50)
 }
 
-function drawN50OverviewChart(contigsN50Data, appendToClass) {
+function drawOverviewChart(data, appendToClass, xLabel = '', yLabel = '') {
 
-  if (!contigsN50Data) {
+  if (!data) {
     return;
   }
 
@@ -526,13 +526,13 @@ function drawN50OverviewChart(contigsN50Data, appendToClass) {
   var chartHeight = 312;
 
   var chartData = [];
-  for (const id in contigsN50Data) {
-    if (contigsN50Data[id]) {
-      chartData.push(contigsN50Data[id]);
+  for (const id in data) {
+    if (data[id]) {
+      chartData.push(data[id]);
     }
   }
 
-  var chartXAxis = Object.keys(contigsN50Data);
+  var chartXAxis = Object.keys(data);
 
   // Scales
   // console.log(chartData)
@@ -586,7 +586,7 @@ function drawN50OverviewChart(contigsN50Data, appendToClass) {
   // X
   svg.select('.x.axis')
   .append('text')
-  .text('Assemblies')
+  .text(xLabel)
   .attr('class', 'axis-label')
   .attr('text-anchor', 'end')
   .attr('x', (chartWidth / 2))
@@ -595,7 +595,7 @@ function drawN50OverviewChart(contigsN50Data, appendToClass) {
   // Y
   svg.select('.y.axis')
   .append('text')
-  .text('contig n50')
+  .text(yLabel)
   .attr('class', 'axis-label')
   .attr('transform', 'rotate(-90)')
   .attr('x', -(chartHeight / 2) - 44)
@@ -756,5 +756,5 @@ module.exports = {
   calculateSumsOfNucleotidesInDnaStrings: calculateSumsOfNucleotidesInDnaStrings,
   validateContigs: validateContigs,
   drawN50Chart: drawN50Chart,
-  drawN50OverviewChart: drawN50OverviewChart
+  drawOverviewChart: drawOverviewChart
 };

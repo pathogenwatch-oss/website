@@ -6,12 +6,30 @@ import AssemblyAnalysisItem from './AssemblyAnalysisItem.react';
 
 import Map from './Map.react';
 
+var chartTypes = [
+  {
+    type: 'contigN50',
+    title: 'N50 Contigs'
+  },
+  {
+    type: 'totalNumberOfContigs',
+    title: 'Total Contigs'
+  },
+  {
+    type: 'totalNumberOfNucleotidesInDnaStrings',
+    title: 'Total Nucleotides'
+  }
+];
+
 export default React.createClass({
 
   getInitialState() {
     return {
       assemblies: UploadStore.getAssemblies(),
       assemblyCount: UploadStore.getAssembliesCount(),
+      currentChart: chartTypes[0],
+      prevButtonDisabled: false,
+      nextButtonDisabled: false
     };
   },
 
@@ -30,10 +48,38 @@ export default React.createClass({
     });
   },
 
+  showNextChart() {
+    console.log(this.state.currentChart)
+    var indexOfNextChartType = chartTypes.indexOf(this.state.currentChart) + 1;
+    if (indexOfNextChartType < chartTypes.length) {
+      this.setState({
+        currentChart: chartTypes[indexOfNextChartType],
+      });
+    }
+    else {
+      this.setState({
+      });
+    }
+  },
+
+  showPreviousChart() {
+    var indexOfNextChartType = chartTypes.indexOf(this.state.currentChart) - 1;
+    if (indexOfNextChartType >= 0) {
+      this.setState({
+        currentChart: chartTypes[indexOfNextChartType],
+      });
+    }
+    else {
+      this.setState({
+      });
+    }
+  },
+
   render() {
     if (this.state.assemblyCount) {
       const allLocations = UploadStore.getAllMetadataLocations();
       const locationsToAssembliesMap = UploadStore.getLocationToAssembliesMap();
+      var prevButtonDisabled, nextButtonDisabled = false;
 
       return (
         <div className="mdl-grid">
@@ -47,9 +93,23 @@ export default React.createClass({
           </div>
 
           <div className="mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
-            <div className="heading"> N50 contigs Chart </div>
+            <div className="heading">
+              {this.state.currentChart.title}
+            </div>
+            <div className="chart-navigation-div">
+              <button type="button" className="mdl-button mdl-js-button"
+                disabled={this.state.prevButtonDisabled}
+                onClick={this.showPreviousChart}>
+                <i className="material-icons">navigate_before</i>
+              </button>
+              <button type="button" className="mdl-button mdl-js-button"
+                disabled={this.state.nextButtonDisabled}
+                onClick={this.showNextChart}>
+                <i className="material-icons">navigate_next</i>
+              </button>
+            </div>
             <div className="card-style">
-              <AssemblyAnalysisOverviewChart />
+              <AssemblyAnalysisOverviewChart chartTitle={this.state.currentChart.title} chartType={this.state.currentChart.type}/>
             </div>
           </div>
 

@@ -134,6 +134,14 @@
   line-height: 40px;
   border-bottom: 1px solid #eee;
   padding: 10px 16px;
+  overflow: hidden;
+  display: block;
+  text-overflow: ellipsis;
+}
+
+.chart-navigation-div {
+  float: right;
+  top: 10px;
 }
 
 .metadata-fields div {

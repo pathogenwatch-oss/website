@@ -28,31 +28,30 @@ const AssemblyAnalysisOverviewChart = React.createClass({
     label: React.PropTypes.string
   },
 
-
-  draw: function() {
-    var divElement = document.getElementsByClassName('n50-overview-chart')[0];
+  draw() {
+    var divElement = document.getElementsByClassName('overview-chart')[0];
     var svgElement = divElement.childNodes[0];
     if (svgElement) {
       svgElement.parentNode.removeChild(svgElement);
     }
 
-    const n50Data =  UploadStore.getAllContigN50Data();
-    AnalysisUtils.drawN50OverviewChart(n50Data, '.n50-overview-chart');
+    const chartData =  UploadStore.getOverviewChartData(this.props.chartType);
+    AnalysisUtils.drawOverviewChart(chartData, '.overview-chart', 'assemblies', this.props.chartTitle);
   },
 
-  componentDidUpdate: function() {
+  componentDidUpdate() {
     this.draw();
   },
 
-  componentDidMount: function() {
+  componentDidMount() {
     this.draw();
   },
 
-  render: function () {
+  render () {
     return (
       <div style={containerStyle}>
         <label className='analysisItemLabel'>{this.props.label}</label>
-        <div className="n50-overview-chart"></div>
+        <div className="overview-chart"></div>
       </div>
     );
   }
