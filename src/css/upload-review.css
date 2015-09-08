@@ -90,11 +90,6 @@
   outline: none;
 }
 
-.metadata-field {
-  max-width: 20%;
-  margin-right: 20px;
-}
-
 .mdl-card__supporting-text {
   padding: 0px;
 }
@@ -110,7 +105,7 @@
   padding: 10px 0px;
 }
 
-.assemblyWorkspaceContainer  .mdl-grid{
+.assemblyWorkspaceContainer .mdl-layout__content{
   padding: 20px;
 }
 .assemblyWorkspaceContainer .mdl-cell {
@@ -136,19 +131,24 @@
   padding: 10px 16px;
 }
 
-.metadata-fields div {
-  margin: 10px;
-  width: 50px;
+.metadata-fields {
+  max-height: 200px;
+  overflow: auto;
+}
+
+.metadata-fields__other .mdl-textfield {
+  max-width: 20%;
+  margin-right: 20px;
+}
+
+.metadata-field__date .mdl-textfield {
+  margin-right: 10px;
+  width: 54px;
 }
 
 .overview-fields {
   margin-right: 10px;
   width: 50%;
-}
-
-.metadata-fields-container {
-  max-height: 200px;
-  overflow: auto;
 }
 
 .mapDivStyle {
@@ -157,12 +157,17 @@
 /*********************************/
 
 /**** UploadReview - Navigation Left Pane ****/
+.navigation-container {
+  background: url('/assets/img/WGSA_logo.png') #fff no-repeat;
+  background-size: 80px;
+  background-position: -20px -20px;
+}
 
 .uploadWorkspaceNavigationTitle {
   font-size: 25px;
   font-weight: 300;
   line-height: 30px;
-  margin: 20px 0px 10px 0px;
+  margin: 50px 0px 10px 0px;
   text-align: center;
 }
 
