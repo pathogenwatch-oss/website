@@ -49,15 +49,10 @@ export default React.createClass({
   },
 
   showNextChart() {
-    console.log(this.state.currentChart)
     var indexOfNextChartType = chartTypes.indexOf(this.state.currentChart) + 1;
     if (indexOfNextChartType < chartTypes.length) {
       this.setState({
         currentChart: chartTypes[indexOfNextChartType],
-      });
-    }
-    else {
-      this.setState({
       });
     }
   },
@@ -67,10 +62,6 @@ export default React.createClass({
     if (indexOfNextChartType >= 0) {
       this.setState({
         currentChart: chartTypes[indexOfNextChartType],
-      });
-    }
-    else {
-      this.setState({
       });
     }
   },
