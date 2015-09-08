@@ -18,13 +18,13 @@ const MetadataDate = React.createClass({
   },
 
   handleDateChange() {
-    if (event.target.id === 'dd') {
+    if (event.target.id === 'day') {
       MetadataActionCreators.setMetadataDay(this.props.assemblyId, event.target.value);
     }
-    else if (event.target.id === 'mm') {
+    else if (event.target.id === 'month') {
       MetadataActionCreators.setMetadataMonth(this.props.assemblyId, event.target.value);
     }
-    else if (event.target.id === 'yyyy') {
+    else if (event.target.id === 'year') {
       MetadataActionCreators.setMetadataYear(this.props.assemblyId, event.target.value);
     }
   },
@@ -35,9 +35,9 @@ const MetadataDate = React.createClass({
     return (
       <form className="metadata-fields">
         <label className="mdl-card__supporting-text">date</label>
-        <DateInput ref="day_input" dateType="dd" handleChange={this.handleDateChange} min="1" max="31"  value={this.props.date.day}/>
-        <DateInput ref="month_input" dateType="mm" handleChange={this.handleDateChange} min="1" max="12" value={this.props.date.month}/>
-        <DateInput ref="year_input" dateType="yyyy" handleChange={this.handleDateChange} min="1900" max={year} value={this.props.date.year}/>
+        <DateInput ref="day_input" dateType="day" handleChange={this.handleDateChange} min="1" max="31"  value={this.props.date.day}/>
+        <DateInput ref="month_input" dateType="month" handleChange={this.handleDateChange} min="1" max="12" value={this.props.date.month}/>
+        <DateInput ref="year_input" dateType="year" handleChange={this.handleDateChange} min="1900" max={year} value={this.props.date.year}/>
       </form>
     );
   }
@@ -51,7 +51,7 @@ var DateInput = React.createClass({
           value={this.props.value}
           onChange={this.props.handleChange}
           min={this.props.min || 0} max={this.props.max || 0}/>
-        <label className="mdl-textfield__label" htmlFor={this.props.dateType}> {this.props.value ? '' : this.props.dateType} </label>
+        <label className="mdl-textfield__label" htmlFor={this.props.dateType}>{this.props.dateType}</label>
       </div>
     );
   }
