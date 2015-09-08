@@ -12,14 +12,14 @@ fs.readFile(filePath, 'utf8', function (error, file) {
   var data = lines.slice(1).map(function (line) {
     var values = line.split(',');
     return keys.reduce(function (memo, key, index) {
-      memo[key] = values[index];
+      memo[key.toLowerCase()] = values[index];
     }, {});
   });
 
   data.forEach(function (object) {
     var ids = {
-      assemblyId: object.assemblyId,
-      speciesId: object.speciesId
+      assemblyId: object.original_isolate_id,
+      speciesId: object.species
     };
     var metadata = assemblyModel.createMetadataRecord(ids, object);
     fs.writeFileSync('ASSEMBLY_METADATA_' + ids.speciesId + '_' + ids.assemblyId + '.json', JSON.stringify(metadata));
