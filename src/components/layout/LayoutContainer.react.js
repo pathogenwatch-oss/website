@@ -31,12 +31,6 @@ const LayoutContainer = React.createClass({
     componentHandler.upgradeElement(React.findDOMNode(this.refs.container));
   },
 
-  getInitialState() {
-    return {
-      downloadsOpen: false,
-    };
-  },
-
   render() {
     return (
       <div ref="container" style={style} className="mdl-layout mdl-js-layout mdl-layout--fixed-header" data-mr-layout="container">
@@ -45,23 +39,13 @@ const LayoutContainer = React.createClass({
             <span className="mdl-layout-title">WGSA - {Species.formattedName}</span>
             <div className="mdl-layout-spacer"></div>
             <nav className="mdl-navigation">
-              <button className={`wgsa-menu-button mdl-button ${this.state.downloadsOpen ? 'active' : ''}`} onClick={this.handleDownloadsButtonClick}>
-                <i className="wgsa-button-icon material-icons">file_download</i>
-                <span>Downloads</span>
-              </button>
+              <DownloadsMenu />
             </nav>
           </div>
         </header>
-        <DownloadsMenu active={this.state.downloadsOpen} />
         {this.props.children}
       </div>
     );
-  },
-
-  handleDownloadsButtonClick() {
-    this.setState({
-      downloadsOpen: !this.state.downloadsOpen,
-    });
   },
 
 });

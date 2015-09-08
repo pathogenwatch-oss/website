@@ -4,15 +4,13 @@ import React from 'react';
 
 import DownloadButton from '../../DownloadButton.react.js';
 
-import DownloadStore from '../../../stores/DownloadStore';
-
 import DataUtils from '../../../utils/Data';
 import MetadataUtils from '../../../utils/Metadata';
 
 const downloadButtonProps = {
   type: 'assembly',
   format: 'fasta',
-  title: 'Assembly Fasta',
+  description: 'Assembly Fasta',
 };
 
 const resistantStyle = {
@@ -64,24 +62,6 @@ const TableRow = React.createClass({
     };
   },
 
-  componentDidMount() {
-    DownloadStore.addChangeListener(this.handleDownloadStoreChange);
-  },
-
-  componentWillUnmount() {
-    DownloadStore.removeChangeListener(this.handleDownloadStoreChange);
-  },
-
-  handleDownloadStoreChange() {
-    const link = DownloadStore.getLink(this.props.isolate.metadata.assemblyId);
-    if (link) {
-      this.setState({
-        loading: false,
-        link,
-      });
-    }
-  },
-
   getFormattedResistanceResult(resistanceResult) {
     if (resistanceResult === 'RESISTANT') {
       return (<i className="fa fa-square" style={resistantStyle}></i>);
@@ -114,7 +94,7 @@ const TableRow = React.createClass({
         {this.getTableRowElements()}
         <td style={buttonCellStyle}>
           <DownloadButton
-            isolate={this.props.isolate} {...downloadButtonProps} />
+            id={this.props.isolate.metadata.assemblyId} {...downloadButtonProps} />
         </td>
       </tr>
     );

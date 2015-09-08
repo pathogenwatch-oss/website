@@ -1,5 +1,6 @@
 import React from 'react';
 
+import DownloadStore from '../stores/DownloadStore';
 import DownloadActionCreators from '../actions/DownloadActionCreators';
 
 import { CGPS } from '../defaults';
@@ -11,10 +12,10 @@ const iconStyle = {
 export default React.createClass({
 
   propTypes: {
-    isolate: true,
+    description: true,
+    id: true,
     type: true,
     format: true,
-    title: true,
   },
 
   getInitialState() {
@@ -22,6 +23,14 @@ export default React.createClass({
       loading: false,
       link: null,
     };
+  },
+
+  componentDidMount() {
+    DownloadStore.addChangeListener(this.handleDownloadStoreChange);
+  },
+
+  componentWillUnmount() {
+    DownloadStore.removeChangeListener(this.handleDownloadStoreChange);
   },
 
   componentDidUpdate() {
@@ -41,14 +50,14 @@ export default React.createClass({
   getDownloadElement() {
     if (this.state.link) {
       return (
-        <a className="mdl-button mdl-button--icon" target="_blank" href={this.state.link} title={`Download ${this.props.title}`}>
+        <a className="mdl-button mdl-button--icon" target="_blank" href={this.state.link} title={`Download ${this.props.description}`}>
           <i style={iconStyle} className="wgsa-button-icon material-icons">file_download</i>
         </a>
       );
     }
 
     return (
-      <button className="mdl-button mdl-button--icon" onClick={this.handleGenerateFile} title={`Generate ${this.props.title}`}>
+      <button className="mdl-button mdl-button--icon" onClick={this.handleGenerateFile} title={`Generate ${this.props.description}`}>
         <i style={iconStyle} className="wgsa-button-icon material-icons">insert_drive_file</i>
       </button>
     );
@@ -58,7 +67,18 @@ export default React.createClass({
     this.setState({
       loading: true,
     });
-    DownloadActionCreators.requestFile(this.props.isolate, this.props.type, this.props.format);
+
+    DownloadActionCreators.requestFile(this.props.id, this.props.type, this.props.format);
+  },
+
+  handleDownloadStoreChange() {
+    const link = DownloadStore.getLink(this.props.id, this.props.type);
+    if (link) {
+      this.setState({
+        loading: false,
+        link,
+      });
+    }
   },
 
 });

@@ -18,11 +18,11 @@ const Store = assign({}, EventEmitter.prototype, {
     this.removeListener(CHANGE_EVENT, callback);
   },
 
-  getLink(assemblyId, fileType = 'fasta') {
-    if (!requestedFiles[assemblyId] || !requestedFiles[assemblyId][fileType]) {
+  getLink(id, fileType = 'fasta') {
+    if (!requestedFiles[id] || !requestedFiles[id][fileType]) {
       return null;
     }
-    const encodedFilename = encodeURIComponent(requestedFiles[assemblyId][fileType]);
+    const encodedFilename = encodeURIComponent(requestedFiles[id][fileType]);
     return `/api/download/file/${encodedFilename}`;
   },
 
@@ -36,18 +36,17 @@ function handleAction(action) {
   switch (action.type) {
 
   case 'request_file':
-    const { assembly, fileType } = action;
-    const assemblyId = assembly.metadata.assemblyId;
-    const requestedFilesForAssembly = requestedFiles[assemblyId] || {};
+    const { id, idType, fileType, speciesId } = action;
+    const requestedFilesForId = requestedFiles[id] || {};
 
     // ensures map is updated on first request
-    requestedFiles[assemblyId] = requestedFilesForAssembly;
+    requestedFiles[id] = requestedFilesForId;
 
-    Api.requestFile(action, function (error, fileName) {
+    Api.requestFile({ speciesId }, idType, fileType, function (error, fileName) {
       if (error) {
         throw error;
       }
-      requestedFilesForAssembly[fileType] = fileName;
+      requestedFilesForId[fileType] = fileName;
       console.log(requestedFiles);
       emitChange();
     });

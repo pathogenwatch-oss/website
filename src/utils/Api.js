@@ -63,14 +63,7 @@ function getCollection(speciesId, collectionId, callback) {
     });
 }
 
-function requestFile({ assembly, idType, fileType, speciesId }, callback) {
-  const requestBody = {
-    speciesId,
-    idToFilenameMap: {
-      [assembly.metadata.assemblyId]: assembly.metadata.assemblyFilename,
-    },
-  };
-
+function requestFile(requestBody, idType, fileType, callback) {
   $.ajax(
     postJson(`/download/type/${idType}/format/${fileType}`, requestBody)
   ).done(function (response) {
