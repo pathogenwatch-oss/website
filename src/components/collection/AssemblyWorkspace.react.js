@@ -161,13 +161,10 @@ const AssemblyWorkspace = React.createClass({
 
     if (this.props.assembly) {
       locations[this.props.assembly.fasta.name] = this.props.assembly.metadata.geography;
-      pageTitle += ' - ' + this.props.assembly.fasta.name;
+      pageTitle = `WGSA | ${this.props.assembly.fasta.name}`;
+    } else {
+      pageTitle = `WGSA | ${this.state.pageTitleAppend}`;
     }
-    else {
-      pageTitle = 'WGSA - ' + this.state.pageTitleAppend;
-    }
-
-
 
     return (
       <FileDragAndDrop onDrop={this.handleDrop}>

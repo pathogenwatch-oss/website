@@ -36,7 +36,7 @@ const LayoutContainer = React.createClass({
       <div ref="container" style={style} className="mdl-layout mdl-js-layout mdl-layout--fixed-header" data-mr-layout="container">
         <header style={headerStyle} className="mdl-layout__header">
           <div style={headerRowStyle} className="mdl-layout__header-row">
-            <span className="mdl-layout-title">WGSA - {Species.formattedName}</span>
+            <span className="mdl-layout-title">WGSA | {Species.formattedName}</span>
             <div className="mdl-layout-spacer"></div>
             <nav className="mdl-navigation">
               <DownloadsMenu />
