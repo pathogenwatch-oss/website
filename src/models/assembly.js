@@ -22,6 +22,26 @@ function createKey(id, prefix) {
   return prefix + '_' + id;
 }
 
+function createMetadataRecord(ids, metadata) {
+  return {
+    assemblyId: ids.assemblyId,
+    assemblyFilename: metadata.assemblyFilename,
+    speciesId: ids.speciesId,
+    date: metadata.date || {
+      year: metadata.year,
+      month: metadata.month,
+      day: metadata.day,
+    },
+    geography: metadata.geography || {
+      position: {
+        latitude: metadata.latitude,
+        longitude: metadata.longitude
+      },
+      location: metadata.location
+    }
+  };
+}
+
 function beginUpload(ids, metadata, sequences) {
   socketService.notifyAssemblyUpload(ids, 'UPLOAD_OK');
   messageQueueService.newAssemblyNotificationQueue(ids, {
@@ -29,14 +49,7 @@ function beginUpload(ids, metadata, sequences) {
     loggingId: 'Assembly ' + ids.assemblyId,
     notifyFn: socketService.notifyAssemblyUpload.bind(socketService, ids)
   }, function () {
-    var assemblyMetadata = {
-      assemblyId: ids.assemblyId,
-      assemblyFilename: metadata.assemblyFilename,
-      speciesId: ids.speciesId,
-      date: metadata.date,
-      geography: metadata.geography,
-      source: metadata.source
-    };
+    var assemblyMetadata = createMetadataRecord(ids, metadata);
 
     var assembly = {
       speciesId: ids.speciesId,
@@ -156,3 +169,4 @@ module.exports.beginUpload = beginUpload;
 module.exports.getComplete = getComplete;
 module.exports.getReference = getReference;
 module.exports.mapTaxaToAssemblies = mapTaxaToAssemblies;
+module.exports.createMetadataRecord = createMetadataRecord;
