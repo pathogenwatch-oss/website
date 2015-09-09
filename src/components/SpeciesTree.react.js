@@ -78,6 +78,7 @@ export default React.createClass({
   },
 
   componentDidMount() {
+    // TODO: Un-hack this
     componentHandler.upgradeDom();
   },
 

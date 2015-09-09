@@ -2,9 +2,16 @@ import '../../css/tree.css';
 
 import React from 'react';
 import PhyloCanvas from 'PhyloCanvas';
+import assign from 'object-assign';
 
 import TreeControls from './TreeControls.react';
 
+import TableStore from '../../stores/TableStore';
+import PublicCollectionStore from '../../stores/PublicCollectionStore';
+import UploadedCollectionStore from '../../stores/UploadedCollectionStore';
+
+import MetadataUtils from '../../utils/Metadata';
+import DataUtils from '../../utils/Data';
 import DEFAULT, { CGPS } from '../../defaults';
 
 const fullWidthHeight = {
@@ -29,12 +36,15 @@ export default React.createClass({
       treeType: DEFAULT.TREE_TYPE,
       nodeSize: DEFAULT.NODE_SIZE,
       labelSize: DEFAULT.LABEL_SIZE,
+      labelProperty: 'Assembly',
     });
   },
 
   componentDidMount() {
     componentHandler.upgradeElement(React.findDOMNode(this.refs.menu));
     componentHandler.upgradeElement(React.findDOMNode(this.refs.navButton));
+
+    TableStore.addChangeListener(this.handleTableStoreChange);
 
     const phylocanvas = PhyloCanvas.createTree('phylocanvas-container');
 
@@ -62,9 +72,13 @@ export default React.createClass({
     if (this.props.newick && this.props.newick !== this.phylocanvas.stringRepresentation) {
       this.loadTree();
     } else {
-      this.phylocanvas.fitInPanel();
+      this.setNodeLabels();
       this.phylocanvas.draw();
     }
+  },
+
+  componentWillUnmount() {
+    TableStore.removeChangeListener(this.handleTableStoreChange);
   },
 
   render() {
@@ -108,8 +122,46 @@ export default React.createClass({
   loadTree() {
     this.phylocanvas.load(this.props.newick, () => {
       this.props.styleTree(this.phylocanvas);
+      this.setNodeLabels();
       this.phylocanvas.draw();
     });
+  },
+
+  setNodeLabels() {
+    const publicCollectionAssemblies = PublicCollectionStore.getPublicCollectionAssemblies();
+    const uploadedCollectionAssemblies = UploadedCollectionStore.getUploadedCollectionAssemblies();
+
+    const combinedAssemblies = assign({}, publicCollectionAssemblies, uploadedCollectionAssemblies);
+
+    console.log(Object.keys(combinedAssemblies));
+
+    Object.keys(combinedAssemblies).forEach((assemblyId) => {
+      const labelProperty = this.state.labelProperty;
+      let labelValue;
+
+      if (labelProperty === 'Assembly') {
+        labelValue = combinedAssemblies[assemblyId].metadata.assemblyName || '';
+      } else if (labelProperty === 'Country') {
+        labelValue = MetadataUtils.getCountry(combinedAssemblies[assemblyId]);
+      } else if (labelProperty === 'Date') {
+        labelValue = DataUtils.getFormattedDateString(combinedAssemblies[assemblyId].metadata.date) || '';
+      } else if (labelProperty === 'ST') {
+        labelValue = combinedAssemblies[assemblyId].analysis.st || '';
+      } else {
+        labelValue = assemblyId;
+      }
+
+      const branch = this.phylocanvas.branches[assemblyId];
+
+      if (branch && branch.leaf) {
+        branch.label = labelValue;
+        if (assemblyId === 'Bovine RF122') {
+
+        }
+      }
+    });
+
+    this.phylocanvas.fitInPanel();
   },
 
   handleNodeSizeChange(event) {
@@ -133,6 +185,12 @@ export default React.createClass({
   handleToggleNodeAlign() {
     this.phylocanvas.alignLabels = !this.phylocanvas.alignLabels;
     this.phylocanvas.draw();
+  },
+
+  handleTableStoreChange() {
+    this.setState({
+      labelProperty: TableStore.getLabelTableColumnName(),
+    });
   },
 
 });

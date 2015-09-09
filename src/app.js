@@ -1,3 +1,5 @@
+import 'PhyloCanvas/polyfill';
+
 import React from 'react';
 import Router, { Route, RouteHandler, DefaultRoute, NotFoundRoute, Redirect } from 'react-router';
 
