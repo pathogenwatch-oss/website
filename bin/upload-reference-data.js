@@ -1,30 +1,42 @@
 var fs = require('fs');
 var path = require('path');
+var async = require('async');
+
 var storageConnection = require('utils/storageConnection');
 
-var DOCUMENT_PATH = '/home/dg24/Desktop/';
+var DOCUMENT_PATH = process.argv[2];
 
-storageConnection.connect(function (error) {
-  if (error) throw error;
-  var mainStorage = require('services/storage')('main');
-  fs.readdir(DOCUMENT_PATH, function (err, files) {
-    if (err) {
-      throw err;
-    }
-
-    files.map(function (file) {
+async.waterfall([
+  function (next) {
+    storageConnection.connect(next);
+  },
+  function (next) {
+    var mainStorage = require('services/storage')('main');
+    fs.readdir(DOCUMENT_PATH, next);
+  },
+  function (files, next) {
+    var filesToProcess = files.map(function (file) {
       return path.join(DOCUMENT_PATH, file);
     }).filter(function (file) {
       return fs.statSync(file).isFile();
-    }).forEach(function (file, i) {
+    });
+
+    async.eachSeries(filesToProcess, function (file, done) {
       var string = fs.readFileSync(file, 'utf-8');
       var contents = JSON.parse(string);
-      var key = files[i].replace('.txt', '');
+      var key = file.replace(DOCUMENT_PATH, '').replace(/\.\w+$/, '');
       console.log('inserting', key);
       mainStorage.store(key, contents, function (storeError) {
-        if (storeError) return console.log(storeError);
+        if (storeError) done(storeError)
         console.log('success:', key);
+        done();
       });
-    });
-  });
+    }, next);
+  }
+], function (error) {
+  if (error) {
+    console.err(error);
+    return process.exit(1);
+  }
+  process.exit(0);
 });
