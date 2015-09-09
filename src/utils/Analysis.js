@@ -628,7 +628,7 @@ function drawOverviewChart(data, appendToClass, xLabel = '', yLabel = '') {
   .attr('r', 5)
   .on("mouseover", function(datum, index){
     return tooltip.style("display", "block")
-                  .html('Filename: <b>' + chartXAxis[index] + '</b><br>' + 'N50 Contig: <b>' + datum + '</b>');})
+                  .html('Assembly: <b>' + chartXAxis[index] + '</b><br>' + yLabel + ': <b>' + datum + '</b>');})
   .on("mousemove", function(){return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");})
   .on("mouseout", function(){return tooltip.style("display", "none");})
   .on("click", function(datum, index){UploadWorkspaceNavigationActionCreators.navigateToAssembly(chartXAxis[index]); return tooltip.style("display", "none");});

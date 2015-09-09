@@ -6,30 +6,16 @@ import AssemblyAnalysisItem from './AssemblyAnalysisItem.react';
 
 import Map from './Map.react';
 
-var chartTypes = [
-  {
-    type: 'contigN50',
-    title: 'N50 Contigs'
-  },
-  {
-    type: 'totalNumberOfContigs',
-    title: 'Total Contigs'
-  },
-  {
-    type: 'totalNumberOfNucleotidesInDnaStrings',
-    title: 'Total Nucleotides'
-  }
-];
-
 export default React.createClass({
 
   getInitialState() {
     return {
       assemblies: UploadStore.getAssemblies(),
       assemblyCount: UploadStore.getAssembliesCount(),
-      currentChart: chartTypes[0],
-      prevButtonDisabled: false,
-      nextButtonDisabled: false
+      currentChart: {
+        title: 'N50 Contigs',
+        type: 'contigN50'
+      },
     };
   },
 
@@ -48,22 +34,20 @@ export default React.createClass({
     });
   },
 
-  showNextChart() {
-    var indexOfNextChartType = chartTypes.indexOf(this.state.currentChart) + 1;
-    if (indexOfNextChartType < chartTypes.length) {
-      this.setState({
-        currentChart: chartTypes[indexOfNextChartType],
-      });
+  componentDidUpdate() {
+    if (this.refs.tabs) {
+      // componentHandler.upgradeElement(React.findDOMNode(this.refs.tabs));
     }
   },
 
-  showPreviousChart() {
-    var indexOfNextChartType = chartTypes.indexOf(this.state.currentChart) - 1;
-    if (indexOfNextChartType >= 0) {
-      this.setState({
-        currentChart: chartTypes[indexOfNextChartType],
-      });
-    }
+
+  showChart() {
+    this.setState({
+      currentChart: {
+        type: event.target.id,
+        text: event.target.id
+      }
+    });
   },
 
   render() {
@@ -84,23 +68,17 @@ export default React.createClass({
           </div>
 
           <div className="mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
-            <div className="heading">
-              {this.state.currentChart.title}
-            </div>
-            <div className="chart-navigation-div">
-              <button type="button" className="mdl-button mdl-js-button"
-                disabled={this.state.prevButtonDisabled}
-                onClick={this.showPreviousChart}>
-                <i className="material-icons">navigate_before</i>
-              </button>
-              <button type="button" className="mdl-button mdl-js-button"
-                disabled={this.state.nextButtonDisabled}
-                onClick={this.showNextChart}>
-                <i className="material-icons">navigate_next</i>
-              </button>
-            </div>
-            <div className="card-style">
-              <AssemblyAnalysisOverviewChart chartTitle={this.state.currentChart.title} chartType={this.state.currentChart.type}/>
+
+            <div ref="tabs" className="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+              <div className="mdl-tabs__tab-bar">
+                  <a id="contigN50" className="mdl-tabs__tab is-active" onClick={this.showChart}>N50 Contigs</a>
+                  <a id="totalNumberOfContigs" className="mdl-tabs__tab" onClick={this.showChart}>Total Contigs</a>
+                  <a id="totalNumberOfNucleotidesInDnaStrings" className="mdl-tabs__tab" onClick={this.showChart}>Total Nucleotides</a>
+              </div>
+
+              <div className="mdl-tabs__panel is-active" id="overview-chart-panel">
+                <AssemblyAnalysisOverviewChart chartTitle={this.state.currentChart.title} chartType={this.state.currentChart.type}/>
+              </div>
             </div>
           </div>
 
