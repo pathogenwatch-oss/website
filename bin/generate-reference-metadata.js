@@ -29,6 +29,7 @@ fs.readFile(filePath, 'utf8', function (error, file) {
         assemblyId: object.original_isolate_id,
         speciesId: object.tax_id
       };
+      object.assemblyName = ids.assemblyId;
       var metadata = assemblyModel.createMetadataRecord(ids, object);
       var filename = 'ASSEMBLY_METADATA_' + ids.speciesId + '_' + ids.assemblyId + '.json';
       console.log('Writing file ' + filename);

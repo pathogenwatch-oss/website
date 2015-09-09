@@ -25,7 +25,7 @@ function createKey(id, prefix) {
 function createMetadataRecord(ids, metadata) {
   return {
     assemblyId: ids.assemblyId,
-    assemblyFilename: metadata.assemblyFilename,
+    assemblyName: metadata.assemblyName,
     speciesId: ids.speciesId,
     date: metadata.date || {
       year: metadata.year,
@@ -92,7 +92,7 @@ function formatForFrontend(assembly) {
     metadata: assembly.ASSEMBLY_METADATA,
     analysis: {
       st: assembly.MLST_RESULT.stType,
-      resistanceProfile:
+      resistanceProfile: assembly.PAARSNP_RESULT ?
         Object.keys(assembly.PAARSNP_RESULT.resistanceProfile).
           reduce(function (profile, className) {
             var antibioticClass = assembly.PAARSNP_RESULT.resistanceProfile[className];
@@ -103,7 +103,7 @@ function formatForFrontend(assembly) {
               };
             });
             return profile;
-          }, {})
+          }, {}) : null
     }
   };
 }

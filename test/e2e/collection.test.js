@@ -41,13 +41,13 @@ describe('Collection Routes', function () {
   });
 
   it('POST /api/v1/collection', function (done) {
-    var userAssemblyIds = [ '123.fa', '456.fa', '789.fa' ];
-    registerCollection(userAssemblyIds)
+    var assemblyNames = [ '123.fa', '456.fa', '789.fa' ];
+    registerCollection(assemblyNames)
       .expect(200)
       .expect(function (res) {
         assert(res.body.hasOwnProperty('collectionId'));
-        userAssemblyIds.forEach(function (id) {
-          assert(res.body.userAssemblyIdToAssemblyIdMap.hasOwnProperty(id));
+        assemblyNames.forEach(function (id) {
+          assert(res.body.assemblyNameToAssemblyIdMap.hasOwnProperty(id));
         });
       })
       .end(done);

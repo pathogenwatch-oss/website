@@ -19,7 +19,7 @@ async.waterfall([
     }).filter(function (file) {
       return fs.statSync(file).isFile();
     });
-    
+
     var mainStorage = require('services/storage')('main');
     async.eachSeries(filesToProcess, function (file, done) {
       var string = fs.readFileSync(file, 'utf-8');
