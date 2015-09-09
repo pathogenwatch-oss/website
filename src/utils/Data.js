@@ -542,7 +542,7 @@ function sanitize(data) {
 }
 
 function getFormattedDateString(date) {
-  return moment(date.year + '-' + date.month + '-' + date.day, 'YYYY-MM-DD').format('MMMM Do YYYY');
+  return moment(date.year + '-' + date.month + '-' + date.day, 'YYYY-MM-DD').format('Do MMMM YYYY');
 }
 
 function isEqualObjects(firstObject, secondObject) {

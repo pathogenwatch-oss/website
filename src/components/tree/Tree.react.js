@@ -22,11 +22,12 @@ const fullWidthHeight = {
 export default React.createClass({
 
   propTypes: {
-    newick: true,
-    title: true,
-    NavButton: true,
-    navOnChange: true,
-    styleTree: true,
+    newick: React.PropTypes.string,
+    title: React.PropTypes.string,
+    navButton: React.PropTypes.element,
+    navOnChange: React.PropTypes.function,
+    styleTree: React.PropTypes.function,
+    leafSelected: React.PropTypes.function,
   },
 
   getInitialState() {
@@ -41,8 +42,8 @@ export default React.createClass({
   },
 
   componentDidMount() {
-    componentHandler.upgradeElement(React.findDOMNode(this.refs.menu));
-    componentHandler.upgradeElement(React.findDOMNode(this.refs.navButton));
+    // TODO: Un-hack this
+    componentHandler.upgradeDom();
 
     TableStore.addChangeListener(this.handleTableStoreChange);
 
@@ -57,7 +58,7 @@ export default React.createClass({
     phylocanvas.setNodeSize(this.state.nodeSize);
     phylocanvas.setTextSize(this.state.labelSize);
 
-    phylocanvas.on('updated', this.handleTreeBranchSelected);
+    phylocanvas.on('updated', this.props.leafSelected);
     phylocanvas.on('subtree', this.handleRedrawSubtree);
     phylocanvas.on('historytoggle', this.handleHistoryToggle);
 
@@ -66,14 +67,19 @@ export default React.createClass({
     this.loadTree();
   },
 
+  componentWillUpdate() {
+    this.phylocanvas.canvasEl.removeEventListener('updated', this.props.leafSelected);
+  },
+
   componentDidUpdate() {
     this.phylocanvas.resizeToContainer();
+
+    this.phylocanvas.on('updated', this.props.leafSelected);
 
     if (this.props.newick && this.props.newick !== this.phylocanvas.stringRepresentation) {
       this.loadTree();
     } else {
-      this.setNodeLabels();
-      this.phylocanvas.draw();
+      this.styleTree();
     }
   },
 
@@ -82,12 +88,12 @@ export default React.createClass({
   },
 
   render() {
-    const { title, NavButton, navOnChange } = this.props;
+    const { title, navButton, navOnChange } = this.props;
 
     return (
       <section style={fullWidthHeight}>
         <header className="wgsa-tree-header">
-          <NavButton ref="navButton" onChange={navOnChange}/>
+          { navButton }
           <h2 className="wgsa-tree-heading">{title}</h2>
           <div className="wgsa-tree-menu" ref="menu">
             <button id="tree-options" className="wgsa-tree-actions mdl-button mdl-js-button mdl-button--icon">
@@ -121,10 +127,14 @@ export default React.createClass({
 
   loadTree() {
     this.phylocanvas.load(this.props.newick, () => {
-      this.props.styleTree(this.phylocanvas);
-      this.setNodeLabels();
-      this.phylocanvas.draw();
+      this.styleTree();
     });
+  },
+
+  styleTree() {
+    this.setNodeLabels();
+    this.props.styleTree(this.phylocanvas);
+    this.phylocanvas.draw();
   },
 
   setNodeLabels() {
@@ -132,8 +142,6 @@ export default React.createClass({
     const uploadedCollectionAssemblies = UploadedCollectionStore.getUploadedCollectionAssemblies();
 
     const combinedAssemblies = assign({}, publicCollectionAssemblies, uploadedCollectionAssemblies);
-
-    console.log(Object.keys(combinedAssemblies));
 
     Object.keys(combinedAssemblies).forEach((assemblyId) => {
       const labelProperty = this.state.labelProperty;
@@ -155,9 +163,6 @@ export default React.createClass({
 
       if (branch && branch.leaf) {
         branch.label = labelValue;
-        if (assemblyId === 'Bovine RF122') {
-
-        }
       }
     });
 

@@ -1,7 +1,7 @@
 import React from 'react';
 
 import SpeciesTree from './SpeciesTree.react';
-// import Subtree from './Subtree.react';
+import Subtree from './Subtree.react';
 
 import SpeciesSubtreeStore from '../stores/SpeciesSubtreeStore';
 import UploadedCollectionStore from '../stores/UploadedCollectionStore';
@@ -29,11 +29,11 @@ export default React.createClass({
   },
 
   render: function () {
-    // if (this.state.subtree) {
-    //   return (
-    //     <Subtree tree={this.state.subtree} />
-    //   );
-    // }
+    if (this.state.subtree) {
+      return (
+        <Subtree tree={this.state.subtree} />
+      );
+    }
 
     return (
       <SpeciesTree />
@@ -41,9 +41,9 @@ export default React.createClass({
   },
 
   handleSubtreeStoreChange() {
-    const id = SpeciesSubtreeStore.getActiveSpeciesSubtreeId();
+    console.log(SpeciesSubtreeStore.getActiveSpeciesSubtreeId());
     this.setState({
-      subtree: id,
+      subtree: SpeciesSubtreeStore.getActiveSpeciesSubtreeId(),
     });
   },
 

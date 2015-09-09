@@ -9,27 +9,24 @@ import { CGPS } from '../../../defaults';
 const MetadataTableHeader = React.createClass({
 
   getTableHeaderCellStyle: function (header) {
-    var selectedTableColumnName = TableStore.getLabelTableColumnName();
-    var selectedTableColumnStyle;
+    const selectedTableColumnName = TableStore.getLabelTableColumnName();
+    const style = {
+      cursor: 'pointer',
+    };
 
     if (header === selectedTableColumnName) {
-      selectedTableColumnStyle = {
-        backgroundColor: CGPS.COLOURS.GREEN_LIGHT,
-        color: CGPS.COLOURS.PURPLE,
-      };
-    } else {
-      selectedTableColumnStyle = {
-        backgroundColor: 'inherit'
-      };
+      style.color = CGPS.COLOURS.PURPLE;
     }
 
-    return selectedTableColumnStyle;
+    return style;
   },
 
   getTableHeaderCellElement: function (header) {
-    var style = this.getTableHeaderCellStyle(header);
+    const style = this.getTableHeaderCellStyle(header);
 
-    return (<th key={'table-header-cell_' + header} className="mdl-data-table__cell--non-numeric" style={style} onClick={this.handleSelectTableColumn.bind(this, header)}>{header}</th>);
+    return (
+      <th key={'table-header-cell_' + header} className="mdl-data-table__cell--non-numeric" style={style} onClick={this.handleSelectTableColumn.bind(this, header)}>{header}</th>
+    );
   },
 
   getTableHeaderCellElements: function () {
@@ -56,7 +53,8 @@ const MetadataTableHeader = React.createClass({
         </tr>
       </thead>
     );
-  }
+  },
+
 });
 
 module.exports = MetadataTableHeader;

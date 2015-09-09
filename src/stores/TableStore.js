@@ -7,8 +7,8 @@ var SpeciesSubtreeStore = require('./SpeciesSubtreeStore');
 var CHANGE_EVENT = 'change';
 
 var assemblyIds = null;
-var labelTableColumnName = 'Assembly Id';
-var colourTableColumnName = 'Assembly Id';
+var labelTableColumnName = 'Assembly';
+var colourTableColumnName = 'Assembly';
 
 function setAssemblyIds(ids) {
   assemblyIds = ids;

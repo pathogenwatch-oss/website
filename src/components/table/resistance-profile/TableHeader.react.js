@@ -9,21 +9,16 @@ import { CGPS } from '../../../defaults';
 const MetadataTableHeader = React.createClass({
 
   getTableHeaderCellStyle: function (header) {
-    var selectedTableColumnName = TableStore.getColourTableColumnName();
-    var selectedTableColumnStyle;
+    const selectedTableColumnName = TableStore.getColourTableColumnName();
+    const style = {
+      cursor: 'pointer',
+    };
 
     if (header === selectedTableColumnName) {
-      selectedTableColumnStyle = {
-        backgroundColor: CGPS.COLOURS.GREEN_LIGHT,
-        color: CGPS.COLOURS.PURPLE,
-      };
-    } else {
-      selectedTableColumnStyle = {
-        backgroundColor: 'inherit',
-      };
+      style.color = CGPS.COLOURS.PURPLE;
     }
 
-    return selectedTableColumnStyle;
+    return style;
   },
 
   getTableHeaderCellElement: function (header) {

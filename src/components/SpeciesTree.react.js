@@ -46,6 +46,19 @@ const trees = {
         }
       });
     },
+    leafSelected(event) {
+      console.log(event);
+      if (event.property !== 'selected') {
+        return;
+      }
+
+      const { nodeIds } = event;
+
+      if (nodeIds.length === 1) {
+        console.log(nodeIds);
+        SpeciesSubtreeActionCreators.setActiveSpeciesSubtreeId(nodeIds[0]);
+      }
+    },
   },
   [COLLECTION]: {
     title: 'Collection',
@@ -77,17 +90,11 @@ export default React.createClass({
     trees[COLLECTION].newick = SpeciesSubtreeStore.getSpeciesSubtree(collectionId).newick;
   },
 
-  componentDidMount() {
-    // TODO: Un-hack this
-    componentHandler.upgradeDom();
-  },
-
   render() {
     return (
       <Tree
         { ...this.state.tree }
-        NavButton={TreeSwitcher}
-        navOnChange={this.handleTreeSwitch} />
+        navButton={<TreeSwitcher onChange={this.handleTreeSwitch}/>} />
     );
   },
 
@@ -95,10 +102,6 @@ export default React.createClass({
     this.setState({
       tree: checked ? trees[COLLECTION] : trees[POPULATION],
     });
-  },
-
-  setActiveSubtree(key) {
-    SpeciesSubtreeActionCreators.setActiveSpeciesSubtreeId(key);
   },
 
 });
