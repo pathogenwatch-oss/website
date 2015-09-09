@@ -1,3 +1,5 @@
+import '../css/spinner.css';
+
 import React from 'react';
 
 import DownloadStore from '../stores/DownloadStore';

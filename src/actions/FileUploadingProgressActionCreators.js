@@ -7,7 +7,7 @@ var FileUploadingActionCreators = require('../actions/FileUploadingActionCreator
 module.exports = {
 
   setNumberOfExpectedResults: function () {
-    var numberOfAssembliesToUpload = UploadStore.getFileAssemblyIds().length;
+    var numberOfAssembliesToUpload = UploadStore.getAssemblyNames().length;
     var numberOfResultsPerAssembly = Object.keys(FileUploadingStore.getAssemblyProcessingResults()).length;
     var numberOfResultsPerCollection = Object.keys(FileUploadingStore.getCollectionProcessingResults()).length;
     var numberOfExpectedResults = numberOfAssembliesToUpload * numberOfResultsPerAssembly + numberOfResultsPerCollection;

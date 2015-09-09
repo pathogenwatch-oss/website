@@ -13,7 +13,7 @@ var containerStyle = {
 var UploadWorkspace = React.createClass({
   getInitialState: function () {
     return {
-      fileAssemblyId: null
+      assemblyName: null
     }
   },
 
@@ -27,14 +27,14 @@ var UploadWorkspace = React.createClass({
 
   handleUploadWorkspaceNavigationStoreChange: function () {
     this.setState({
-      fileAssemblyId: UploadWorkspaceNavigationStore.getFileAssemblyId()
+      assemblyName: UploadWorkspaceNavigationStore.getAssemblyName()
     });
   },
 
 
   getAssemblyWorkspaceElement: function () {
-    var fileAssemblyId = this.state.fileAssemblyId;
-    var assembly = UploadStore.getAssembly(fileAssemblyId);
+    var assemblyName = this.state.assemblyName;
+    var assembly = UploadStore.getAssembly(assemblyName);
     var totalAssemblies = UploadStore.getAssembliesCount();
 
     // if (! assembly) {

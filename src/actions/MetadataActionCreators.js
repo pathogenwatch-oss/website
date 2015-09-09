@@ -2,7 +2,7 @@ import AppDispatcher from '../dispatcher/AppDispatcher';
 
 module.exports = {
 
-  setMetadataDateComponent(fileAssemblyId, component, value) {
+  setMetadataDateComponent(assemblyName, component, value) {
     let valueInt = parseInt(value, 10);
 
     if (typeof valueInt !== 'number' || valueInt === -1 || isNaN(valueInt)) {
@@ -11,30 +11,30 @@ module.exports = {
 
     AppDispatcher.dispatch({
       type: 'set_metadata_date_component',
-      fileAssemblyId,
+      assemblyName,
       component,
       value: valueInt,
     });
   },
 
-  setMetadataDate: function setMetadataDate(fileAssemblyId, date) {
+  setMetadataDate: function setMetadataDate(assemblyName, date) {
     AppDispatcher.dispatch({
       type: 'set_metadata_date',
-      fileAssemblyId: fileAssemblyId,
+      assemblyName: assemblyName,
       date: date
     });
   },
 
-  setMetadataColumn: function setMetadataColumn(fileAssemblyId, columnName, value) {
+  setMetadataColumn: function setMetadataColumn(assemblyName, columnName, value) {
     AppDispatcher.dispatch({
       type: 'set_metadata_column',
-      fileAssemblyId: fileAssemblyId,
+      assemblyName: assemblyName,
       columnName: columnName,
       value: value
     });
   },
 
-  setMetadataSource: function setMetadataDay(fileAssemblyId, source) {
+  setMetadataSource: function setMetadataDay(assemblyName, source) {
     source = parseInt(source, 10);
 
     if (typeof source !== 'number' || source === -1 || isNaN(source)) {
@@ -43,7 +43,7 @@ module.exports = {
 
     var setMetadataSourceAction = {
       type: 'set_metadata_source',
-      fileAssemblyId: fileAssemblyId,
+      assemblyName: assemblyName,
       source: source
     };
 

@@ -152,7 +152,7 @@ export default React.createClass({
     combinedAssemblyIds.forEach(function (assemblyId) {
 
       if (nodeLabel === 'Assembly') {
-        nodeLabelValue = combinedAssemblies[assemblyId].metadata.assemblyFilename || combinedAssemblies[assemblyId].metadata.userAssemblyId || '';
+        nodeLabelValue = combinedAssemblies[assemblyId].metadata.assemblyName || '';
       } else if (nodeLabel === 'Country') {
         nodeLabelValue = MetadataUtils.getCountry(combinedAssemblies[assemblyId]);
       } else if (nodeLabel === 'Source') {

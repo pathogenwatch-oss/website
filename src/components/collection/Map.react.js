@@ -119,7 +119,7 @@ var Map = React.createClass({
       if (latitude && longitude) {
         latitude = parseFloat(latitude);
         longitude = parseFloat(longitude);
-        this.markers[id] = this.createMarker(locations[id].fileAssemblyId, locations[id].location, latitude, longitude);
+        this.markers[id] = this.createMarker(locations[id].assemblyName, locations[id].location, latitude, longitude);
       }
     };
 
@@ -146,7 +146,7 @@ var Map = React.createClass({
       if (latitude && longitude) {
         latitude = parseFloat(latitude);
         longitude = parseFloat(longitude);
-        this.markers[id] = this.createMarker(locations[id].fileAssemblyId, locations[id].location, latitude, longitude);
+        this.markers[id] = this.createMarker(locations[id].assemblyName, locations[id].location, latitude, longitude);
       }
     };
 
@@ -212,21 +212,21 @@ var Map = React.createClass({
 
 });
 
-function handleSelectAssembly(selectedFileAssemblyId) {
-  UploadWorkspaceNavigationActionCreators.navigateToAssembly(selectedFileAssemblyId);
+function handleSelectAssembly(selectedassemblyName) {
+  UploadWorkspaceNavigationActionCreators.navigateToAssembly(selectedassemblyName);
 };
 
 var createLink = function(dataObject) {
   var div = document.createElement('div');
   var br = document.createElement('br');
-  dataObject.map(function(fileAssemblyId) {
+  dataObject.map(function(assemblyName) {
     var button = document.createElement('button');
-    var textNode = document.createTextNode(fileAssemblyId);
+    var textNode = document.createTextNode(assemblyName);
     var br = document.createElement('br');
     button.appendChild(textNode);
     button.className = 'mdl-button mdl-js-button mdl-js-ripple-effect';
     button.style.textTransform = 'none';
-    button.onclick = handleSelectAssembly.bind(null, fileAssemblyId);
+    button.onclick = handleSelectAssembly.bind(null, assemblyName);
     componentHandler.upgradeElement(button);
     div.appendChild(button);
     div.appendChild(br);

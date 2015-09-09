@@ -21,8 +21,8 @@ var metadata = {
   }
 };
 
-function setFileAssemblyId(id) {
-  fileAssemblyId = id;
+function setassemblyName(id) {
+  assemblyName = id;
 }
 
 function emitChange() {
@@ -38,8 +38,8 @@ var Store = assign({}, EventEmitter.prototype, {
     this.removeListener(CHANGE_EVENT, callback);
   },
 
-  getFileAssemblyId: function () {
-    return fileAssemblyId;
+  getAssemblyName: function () {
+    return assemblyName;
   }
 });
 
@@ -52,12 +52,12 @@ function handleAction(action) {
         UploadStore.dispatchToken
       ]);
 
-      setFileAssemblyId(UploadStore.getFirstFileAssemblyId());
+      setassemblyName(UploadStore.getFirstassemblyName());
       emitChange();
       break;
 
     case 'navigate_to_assembly':
-      setFileAssemblyId(action.fileAssemblyId);
+      setassemblyName(action.assemblyName);
       emitChange();
       break;
 

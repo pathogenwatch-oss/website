@@ -64,16 +64,16 @@ const UploadingAssembliesProgress = React.createClass({
   },
 
   getAssemblyResultElements: function () {
-    const fileAssemblyIdToAssemblyIdMap = FileUploadingStore.getFileAssemblyIdToAssemblyIdMap();
-    const fileAssemblyIds = UploadStore.getFileAssemblyIds();
+    const assemblyNameToAssemblyIdMap = FileUploadingStore.getAssemblyNameToAssemblyIdMap();
+    const assemblyNames = UploadStore.getAssemblyNames();
     const assemblyResults = this.state.assemblyResults;
 
-    return fileAssemblyIds.map(function createAssemblyResultElement(fileAssemblyId) {
+    return assemblyNames.map(function createAssemblyResultElement(assemblyName) {
       let assemblyResult = {};
 
       // This logic needs to be refactored:
-      if (fileAssemblyIdToAssemblyIdMap && assemblyResults) {
-        const assemblyId = fileAssemblyIdToAssemblyIdMap[fileAssemblyId];
+      if (assemblyNameToAssemblyIdMap && assemblyResults) {
+        const assemblyId = assemblyNameToAssemblyIdMap[assemblyName];
 
         if (assemblyResults[assemblyId]) {
           assemblyResult = assemblyResults[assemblyId];
@@ -81,11 +81,11 @@ const UploadingAssembliesProgress = React.createClass({
       }
 
       return (
-        <tr key={fileAssemblyId}>
-          <td style={FILE_ASSEMBLY_ID_STYLE} className="mdl-data-table__cell--non-numeric">{fileAssemblyId}</td>
+        <tr key={assemblyName}>
+          <td style={FILE_ASSEMBLY_ID_STYLE} className="mdl-data-table__cell--non-numeric">{assemblyName}</td>
           { resultColumns.map((resultName) => {
             return (
-              <td style={CELL_STYLE} key={`${fileAssemblyId}-${resultName}`}>
+              <td style={CELL_STYLE} key={`${assemblyName}-${resultName}`}>
                 <i style={ICON_STYLE} className="material-icons">
                 { assemblyResult[resultName] ?
                     'check_circle' :

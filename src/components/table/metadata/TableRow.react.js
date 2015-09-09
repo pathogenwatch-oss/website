@@ -1,5 +1,3 @@
-import '../../../css/spinner.css';
-
 import React from 'react';
 
 import DownloadButton from '../../DownloadButton.react.js';
@@ -39,16 +37,11 @@ const TableRow = React.createClass({
     this.rowData = {
       assemblyId: {
         name: 'Assembly',
-        value: isolate.metadata.assemblyFilename,
+        value: isolate.metadata.assemblyName,
       },
       country: {
         name: 'Country',
         value: MetadataUtils.getCountry(isolate),
-      },
-      source: {
-        name: 'Source',
-        value: isolate.metadata.source,
-        numeric: true,
       },
       date: {
         name: 'Date',

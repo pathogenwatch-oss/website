@@ -16,15 +16,15 @@ export default React.createClass({
     const columnName = event.target.id;
     const value = event.target.value;
     MetadataActionCreators.setMetadataColumn(
-      this.props.assembly.metadata.fileAssemblyId, columnName, value
+      this.props.assembly.metadata.assemblyName, columnName, value
     );
   },
 
   getMetadataFieldComponents(metadata) {
     return Object.keys(metadata)
       .filter((columnName) => {
-        return (columnName !== 'fileAssemblyId' &&
-                columnName !== 'assemblyFilename' &&
+        return (columnName !== 'assemblyName' &&
+                columnName !== 'name' &&
                 columnName !== 'geography' &&
                 columnName !== 'date');
       })

@@ -10,7 +10,7 @@ const ThemeManager = createThemeManager();
 
 const Component = React.createClass({
   propTypes: {
-    fileAssemblyId: React.PropTypes.string.isRequired
+    assemblyName: React.PropTypes.string.isRequired
   },
 
   getInitialState() {
@@ -25,29 +25,29 @@ const Component = React.createClass({
     });
   },
 
-  handleDeleteConfirm(fileAssemblyIdForDelete) {
+  handleDeleteConfirm(assemblyNameForDelete) {
     this.setState({
-      deleteConfirm: fileAssemblyIdForDelete
+      deleteConfirm: assemblyNameForDelete
     });
   },
 
-  handleSelectAssembly(selectedFileAssemblyId) {
+  handleSelectAssembly(selectedassemblyName) {
     this.resetDeleteState();
-    UploadWorkspaceNavigationActionCreators.navigateToAssembly(selectedFileAssemblyId);
+    UploadWorkspaceNavigationActionCreators.navigateToAssembly(selectedassemblyName);
   },
 
   handleDeleteAssembly() {
-    const currentAssemblyIdOnDisplay = UploadWorkspaceNavigationStore.getFileAssemblyId();
-    if (currentAssemblyIdOnDisplay === this.props.fileAssemblyId) {
-      var nextAssemblyIdForDisplay = UploadWorkspaceNavigationStore.getNextFileAssemblyIdOnDelete(this.props.fileAssemblyId);
+    const currentAssemblyIdOnDisplay = UploadWorkspaceNavigationStore.getAssemblyName();
+    if (currentAssemblyIdOnDisplay === this.props.assemblyName) {
+      var nextAssemblyIdForDisplay = UploadWorkspaceNavigationStore.getNextAssemblyNameOnDelete(this.props.assemblyName);
       UploadWorkspaceNavigationActionCreators.navigateToAssembly(nextAssemblyIdForDisplay);
     }
 
-    UploadWorkspaceNavigationActionCreators.deleteAssembly(this.props.fileAssemblyId);
+    UploadWorkspaceNavigationActionCreators.deleteAssembly(this.props.assemblyName);
   },
 
   render() {
-    const fileAssemblyId = this.props.fileAssemblyId;
+    const assemblyName = this.props.assemblyName;
     const isValidMap = this.props.isValidMap;
     var validatedIconStyle = {
       color: '#888'
@@ -57,7 +57,7 @@ const Component = React.createClass({
     };
 
     if (isValidMap) {
-      if(isValidMap[fileAssemblyId]) {
+      if(isValidMap[assemblyName]) {
         validatedIconStyle = { color: 'green' };
         validatedIcon = 'check';
       }
@@ -68,14 +68,14 @@ const Component = React.createClass({
     }
 
     return (
-      <li ref={fileAssemblyId} className={`assemblyListItem mdl-shadow--2dp${this.props.selected ? ' selected' : ''}`} title={fileAssemblyId}>
+      <li ref={assemblyName} className={`assemblyListItem mdl-shadow--2dp${this.props.selected ? ' selected' : ''}`} title={assemblyName}>
         { this.state.deleteConfirm ?
-          <ConfirmDelete title={fileAssemblyId} handleDeleteAssembly={this.handleDeleteAssembly} resetDeleteState={this.resetDeleteState}/>
+          <ConfirmDelete title={assemblyName} handleDeleteAssembly={this.handleDeleteAssembly} resetDeleteState={this.resetDeleteState}/>
           :
           <div>
-            <button className='selectButton mdl-button mdl-js-button mdl-js-ripple-effect' onClick={this.handleSelectAssembly.bind(this, fileAssemblyId)}>
+            <button className='selectButton mdl-button mdl-js-button mdl-js-ripple-effect' onClick={this.handleSelectAssembly.bind(this, assemblyName)}>
             <span className='filename'>
-                {fileAssemblyId}
+                {assemblyName}
               </span>
             </button>
             <span className="assembly-list-item__utils">
@@ -83,7 +83,7 @@ const Component = React.createClass({
                 <i style={validatedIconStyle} className='material-icons'>{validatedIcon}</i>
               </span>
               <button className="deleteButton utilityButton mdl-button mdl-js-button mdl-button--icon mdl-button--colored"
-                onClick={this.handleDeleteConfirm.bind(this, fileAssemblyId)}>
+                onClick={this.handleDeleteConfirm.bind(this, assemblyName)}>
                 <i className="material-icons">delete</i>
               </button>
             </span>

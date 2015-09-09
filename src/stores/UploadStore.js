@@ -13,28 +13,28 @@ function addFiles(newRawFiles, newAssemblies) {
   assign(assemblies, newAssemblies);
 }
 
-function setMetadataDateComponent(fileAssemblyId, component, value) {
-  assemblies[fileAssemblyId].metadata.date[component] = value;
+function setMetadataDateComponent(assemblyName, component, value) {
+  assemblies[assemblyName].metadata.date[component] = value;
 }
 
-function setMetadataColumn(fileAssemblyId, columnName, value) {
-  assemblies[fileAssemblyId].metadata[columnName] = value;
-  console.log(columnName, value, assemblies[fileAssemblyId].metadata);
+function setMetadataColumn(assemblyName, columnName, value) {
+  assemblies[assemblyName].metadata[columnName] = value;
+  console.log(columnName, value, assemblies[assemblyName].metadata);
 }
 
-function setMetadataDate(fileAssemblyId, date) {
+function setMetadataDate(assemblyName, date) {
   const m = moment(date);
-  setMetadataDateComponent(fileAssemblyId, 'year', m.year());
-  setMetadataDateComponent(fileAssemblyId, 'month', m.month() + 1);
-  setMetadataDateComponent(fileAssemblyId, 'day', m.date());
+  setMetadataDateComponent(assemblyName, 'year', m.year());
+  setMetadataDateComponent(assemblyName, 'month', m.month() + 1);
+  setMetadataDateComponent(assemblyName, 'day', m.date());
 }
 
-function setMetadataSource(fileAssemblyId, source) {
-  assemblies[fileAssemblyId].metadata.source = source;
+function setMetadataSource(assemblyName, source) {
+  assemblies[assemblyName].metadata.source = source;
 }
 
-function deleteAssembly(fileAssemblyId) {
-  delete assemblies[fileAssemblyId];
+function deleteAssembly(assemblyName) {
+  delete assemblies[assemblyName];
 }
 
 function emitChange() {
@@ -55,20 +55,20 @@ const Store = assign({}, EventEmitter.prototype, {
     return assemblies;
   },
 
-  getAssembly: function (fileAssemblyId) {
-    return (assemblies[fileAssemblyId] || null);
+  getAssembly: function (assemblyName) {
+    return (assemblies[assemblyName] || null);
   },
 
   getAssembliesCount: function () {
     return Object.keys(assemblies).length;
   },
 
-  getFileAssemblyIds: function () {
+  getAssemblyNames: function () {
     return Object.keys(this.getAssemblies());
   },
 
-  getFirstFileAssemblyId: function () {
-    return this.getFileAssemblyIds()[0] || null;
+  getFirstassemblyName: function () {
+    return this.getAssemblyNames()[0] || null;
   },
 
   getAllContigN50Data: function() {
@@ -99,11 +99,11 @@ const Store = assign({}, EventEmitter.prototype, {
         latlng = assemblies[id].metadata.geography.position.latitude + ',' + assemblies[id].metadata.geography.position.longitude;
         if (!locations[latlng]) {
           locations[latlng] = {};
-          locations[latlng]['fileAssemblyId'] = new Array();
+          locations[latlng]['assemblyName'] = new Array();
           locations[latlng]['location'] = null;
         }
-        if (assemblies[id].metadata.fileAssemblyId) {
-          locations[latlng]['fileAssemblyId'].push(assemblies[id].metadata.fileAssemblyId);
+        if (assemblies[id].metadata.assemblyName) {
+          locations[latlng]['assemblyName'].push(assemblies[id].metadata.assemblyName);
         }
         if (assemblies[id].metadata.geography.location) {
           locations[latlng]['location'] = assemblies[id].metadata.geography.location;
@@ -124,27 +124,27 @@ function handleAction(action) {
     break;
 
   case 'set_metadata_date_component':
-    setMetadataDateComponent(action.fileAssemblyId, action.component, action.value);
+    setMetadataDateComponent(action.assemblyName, action.component, action.value);
     emitChange();
     break;
 
   case 'set_metadata_column':
-    setMetadataColumn(action.fileAssemblyId, action.columnName, action.value);
+    setMetadataColumn(action.assemblyName, action.columnName, action.value);
     emitChange();
     break;
 
   case 'set_metadata_date':
-    setMetadataDate(action.fileAssemblyId, action.date);
+    setMetadataDate(action.assemblyName, action.date);
     emitChange();
     break;
 
   case 'set_metadata_source':
-    setMetadataSource(action.fileAssemblyId, action.source);
+    setMetadataSource(action.assemblyName, action.source);
     emitChange();
     break;
 
   case 'delete_assembly':
-    deleteAssembly(action.fileAssemblyId);
+    deleteAssembly(action.assemblyName);
     emitChange();
     break;
 

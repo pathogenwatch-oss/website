@@ -45,7 +45,7 @@ const MetadataTableHeader = React.createClass({
   },
 
   getListOfTableHeaderNames: function () {
-    return [ 'Assembly', 'Country', 'Source', 'Date', 'ST', '' ];
+    return [ 'Assembly', 'Country', 'Date', 'ST', '' ];
   },
 
   render: function () {

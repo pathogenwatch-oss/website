@@ -25,18 +25,18 @@ const AssemblyList = React.createClass({
 
   handleUploadWorkspaceNavigationStoreChange() {
     this.setState({
-      selectedOption: UploadWorkspaceNavigationStore.getFileAssemblyId()
+      selectedOption: UploadWorkspaceNavigationStore.getAssemblyName()
     });
   },
 
   getListOptionElements: function () {
-    const fileAssemblyIds = UploadStore.getFileAssemblyIds();
+    const assemblyNames = UploadStore.getAssemblyNames();
     const assemblies = UploadStore.getAssemblies();
     const isValidMap = validateMetadata(assemblies);
 
-    return fileAssemblyIds.map((fileAssemblyId) => {
+    return assemblyNames.map((assemblyName) => {
       return (
-        <AssemblyListItem key={fileAssemblyId} fileAssemblyId={fileAssemblyId} isValidMap={isValidMap} selected={fileAssemblyId === this.state.selectedOption}/>
+        <AssemblyListItem key={assemblyName} assemblyName={assemblyName} isValidMap={isValidMap} selected={assemblyName === this.state.selectedOption}/>
       );
     });
   },

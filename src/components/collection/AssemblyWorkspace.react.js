@@ -188,7 +188,7 @@ const AssemblyWorkspace = React.createClass({
                     <div className="heading"> Metadata </div>
 
                     <div className="card-style">
-                      <AssemblyMetadata key={this.props.assembly.metadata.fileAssemblyId} assembly={this.props.assembly} />
+                      <AssemblyMetadata key={this.props.assembly.metadata.assemblyName} assembly={this.props.assembly} />
                     </div>
                   </div>
 

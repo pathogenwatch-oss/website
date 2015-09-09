@@ -2,68 +2,68 @@ var AppDispatcher = require('../dispatcher/AppDispatcher');
 var UploadStore = require('../stores/UploadStore');
 var UploadWorkspaceNavigationStore = require('../stores/UploadWorkspaceNavigationStore');
 
-function getPreviousFileAssemblyId() {
-  var currentFileAssemblyId = UploadWorkspaceNavigationStore.getFileAssemblyId();
-  var fileAssemblyIds = UploadStore.getFileAssemblyIds();
-  var indexOfCurrentFileAssemblyId = fileAssemblyIds.indexOf(currentFileAssemblyId);
+function getPreviousAssemblyName() {
+  var currentassemblyName = UploadWorkspaceNavigationStore.getAssemblyName();
+  var assemblyNames = UploadStore.getAssemblyNames();
+  var indexOfCurrentassemblyName = assemblyNames.indexOf(currentassemblyName);
 
-  if (indexOfCurrentFileAssemblyId === 0) {
+  if (indexOfCurrentassemblyName === 0) {
     return 0;
   }
 
-  return fileAssemblyIds[indexOfCurrentFileAssemblyId - 1];
+  return assemblyNames[indexOfCurrentassemblyName - 1];
 }
 
-function getNextFileAssemblyId() {
-  var currentFileAssemblyId = UploadWorkspaceNavigationStore.getFileAssemblyId();
-  var fileAssemblyIds = UploadStore.getFileAssemblyIds();
-  var indexOfCurrentFileAssemblyId = fileAssemblyIds.indexOf(currentFileAssemblyId);
-  var maximumIndex = fileAssemblyIds.length - 1;
+function getNextAssemblyName() {
+  var currentassemblyName = UploadWorkspaceNavigationStore.getAssemblyName();
+  var assemblyNames = UploadStore.getAssemblyNames();
+  var indexOfCurrentassemblyName = assemblyNames.indexOf(currentassemblyName);
+  var maximumIndex = assemblyNames.length - 1;
 
-  if (indexOfCurrentFileAssemblyId === maximumIndex) {
-    return indexOfCurrentFileAssemblyId;
+  if (indexOfCurrentassemblyName === maximumIndex) {
+    return indexOfCurrentassemblyName;
   }
 
-  return fileAssemblyIds[indexOfCurrentFileAssemblyId + 1];
+  return assemblyNames[indexOfCurrentassemblyName + 1];
 }
 
 module.exports = {
 
-  navigateToAssembly: function (fileAssemblyId) {
+  navigateToAssembly: function (assemblyName) {
     var action = {
       type: 'navigate_to_assembly',
-      fileAssemblyId: fileAssemblyId
+      assemblyName: assemblyName
     };
 
     AppDispatcher.dispatch(action);
   },
 
   navigateToPreviousAssembly: function () {
-    var previousFileAssemblyId = getPreviousFileAssemblyId();
+    var previousassemblyName = getPreviousAssemblyName();
 
     var action = {
       type: 'navigate_to_assembly',
-      fileAssemblyId: previousFileAssemblyId
+      assemblyName: previousassemblyName
     };
 
     AppDispatcher.dispatch(action);
   },
 
   navigateToNextAssembly: function () {
-    var nextFileAssemblyId = getNextFileAssemblyId();
+    var nextassemblyName = getNextAssemblyName();
 
     var action = {
       type: 'navigate_to_assembly',
-      fileAssemblyId: nextFileAssemblyId
+      assemblyName: nextassemblyName
     };
 
     AppDispatcher.dispatch(action);
   },
 
-  deleteAssembly: function(fileAssemblyId) {
+  deleteAssembly: function(assemblyName) {
     var action = {
       type: 'delete_assembly',
-      fileAssemblyId: fileAssemblyId
+      assemblyName: assemblyName
     };
 
     AppDispatcher.dispatch(action);

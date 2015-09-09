@@ -23,11 +23,11 @@ function getCollectionId(speciesId, collectionData, callback) {
   });
 }
 
-function postAssembly({ speciesId, collectionId, assemblyId }, assemblyData, callback) {
+function postAssembly({ speciesId, collectionId, assemblyId }, requestBody, callback) {
   $.ajax(
     postJson(
       `/species/${speciesId}/collection/${collectionId}/assembly/${assemblyId}`,
-      assemblyData
+      requestBody
     )
   ).done(function (data) {
     callback(null, data);

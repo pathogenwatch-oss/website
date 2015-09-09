@@ -4,7 +4,7 @@
     "21518149-8b93-47bc-920d-7f1fd55caf61":{
       "metadata":{
         "assemblyId":"21518149-8b93-47bc-920d-7f1fd55caf61",
-        "assemblyFilename":"Patient5.fas",
+        "assemblyName":"Patient5.fas",
         "date":{
           "year":2014,
           "month":10,
@@ -192,7 +192,7 @@
     "cc76533f-4c3a-494e-84d6-609da864454d":{
       "metadata":{
         "assemblyId":"cc76533f-4c3a-494e-84d6-609da864454d",
-        "assemblyFilename":"Patient6.fas",
+        "assemblyName":"Patient6.fas",
         "date":{
           "year":2010,
           "month":11,
@@ -380,7 +380,7 @@
     "0e3a37f1-17bb-4bca-bb3b-e101684f3167":{
       "metadata":{
         "assemblyId":"0e3a37f1-17bb-4bca-bb3b-e101684f3167",
-        "assemblyFilename":"Patient7.fas",
+        "assemblyName":"Patient7.fas",
         "date":{
           "year":2005,
           "month":3,
