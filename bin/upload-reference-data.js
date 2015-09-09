@@ -11,7 +11,6 @@ async.waterfall([
     storageConnection.connect(next);
   },
   function (next) {
-    var mainStorage = require('services/storage')('main');
     fs.readdir(DOCUMENT_PATH, next);
   },
   function (files, next) {
@@ -20,11 +19,12 @@ async.waterfall([
     }).filter(function (file) {
       return fs.statSync(file).isFile();
     });
-
+    
+    var mainStorage = require('services/storage')('main');
     async.eachSeries(filesToProcess, function (file, done) {
       var string = fs.readFileSync(file, 'utf-8');
       var contents = JSON.parse(string);
-      var key = file.replace(DOCUMENT_PATH, '').replace(/\.\w+$/, '');
+      var key = path.basename(file).replace(path.extname(file), '');
       console.log('inserting', key);
       mainStorage.store(key, contents, function (storeError) {
         if (storeError) done(storeError)
