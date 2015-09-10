@@ -8,19 +8,27 @@ import Map from './Map.react';
 
 export default React.createClass({
 
+  propTypes: {
+    clickHandler: React.PropTypes.function,
+  },
+
   getInitialState() {
     return {
       assemblies: UploadStore.getAssemblies(),
       assemblyCount: UploadStore.getAssembliesCount(),
       currentChart: {
         title: 'N50 Contigs',
-        type: 'contigN50'
+        type: 'contigN50',
       },
     };
   },
 
   componentDidMount() {
     UploadStore.addChangeListener(this.handleUploadStoreChange);
+  },
+
+  componentDidUpdate() {
+    componentHandler.upgradeDom();
   },
 
   componentWillUnmount() {
@@ -34,23 +42,17 @@ export default React.createClass({
     });
   },
 
-  componentDidUpdate() {
-    componentHandler.upgradeDom();
-  },
-
-
   showChart(type = 'NO DATA FOUND', title = '') {
     this.setState({
       currentChart: {
         type: type,
-        title: title
-      }
+        title: title,
+      },
     });
   },
 
   render() {
     if (this.state.assemblyCount) {
-      const allLocations = UploadStore.getAllMetadataLocations();
       const locationsToAssembliesMap = UploadStore.getLocationToAssembliesMap();
 
       return (
@@ -76,7 +78,7 @@ export default React.createClass({
 
           <div className="mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
 
-            <div className="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+            <div className="wgsa-chart-select mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
               <div className="mdl-tabs__tab-bar">
                   <a href="#overview-chart-panel" className="mdl-tabs__tab is-active" onClick={this.showChart.bind(this, 'contigN50', 'N50 Contigs')}>N50 Contigs</a>
                   <a href="#overview-chart-panel" className="mdl-tabs__tab" onClick={this.showChart.bind(this, 'totalNumberOfContigs', 'Total Contigs')}>Total Contigs</a>

@@ -134,11 +134,6 @@
   text-overflow: ellipsis;
 }
 
-.chart-navigation-div {
-  float: right;
-  top: 10px;
-}
-
 .metadata-fields {
   max-height: 200px;
   overflow: auto;
@@ -163,19 +158,13 @@
   height: 100%;
 }
 
-.mdl-tabs__tab {
+.wgsa-chart-select .mdl-tabs__tab {
   flex-grow: 1;
   font-size: 13px;
   padding: 0px;
   white-space: nowrap;
 }
-.mdl-tabs__tab .mdl-tabs__ripple-container .mdl-ripple {
-  background: #673c90 !important;
-}
-.mdl-tabs.is-upgraded .mdl-tabs__tab.is-active:after {
-  background-color: #673c90;
-  background: #673c90;
-}
+
 /*********************************/
 
 /**** UploadReview - Navigation Left Pane ****/

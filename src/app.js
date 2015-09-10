@@ -1,3 +1,5 @@
+import './css/cgps-mdl-theme.css';
+
 import React from 'react';
 import Router, { Route, RouteHandler, DefaultRoute, NotFoundRoute, Redirect } from 'react-router';
 

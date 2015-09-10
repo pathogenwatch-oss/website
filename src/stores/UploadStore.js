@@ -43,78 +43,72 @@ function emitChange() {
 
 const Store = assign({}, EventEmitter.prototype, {
 
-  addChangeListener: function (callback) {
+  addChangeListener(callback) {
     this.on(CHANGE_EVENT, callback);
   },
 
-  removeChangeListener: function (callback) {
+  removeChangeListener(callback) {
     this.removeListener(CHANGE_EVENT, callback);
   },
 
-  getAssemblies: function () {
+  getAssemblies() {
     return assemblies;
   },
 
-  getAssembly: function (fileAssemblyId) {
+  getAssembly(fileAssemblyId) {
     return (assemblies[fileAssemblyId] || null);
   },
 
-  getAssembliesCount: function () {
+  getAssembliesCount() {
     return Object.keys(assemblies).length;
   },
 
-  getFileAssemblyIds: function () {
+  getFileAssemblyIds() {
     return Object.keys(this.getAssemblies());
   },
 
-  getFirstFileAssemblyId: function () {
+  getFirstFileAssemblyId() {
     return this.getFileAssemblyIds()[0] || null;
   },
 
-  getOverviewChartData: function(chartType) {
-    const chartData = {};
-    const assemblies = this.getAssemblies();
-    for (const id in assemblies) {
+  getOverviewChartData(chartType) {
+    return Object.keys(assemblies).reduce((memo, id) => {
       if (assemblies[id].analysis[chartType]) {
-        chartData[id] = assemblies[id].analysis[chartType];
+        memo[id] = assemblies[id].analysis[chartType];
       }
-    }
-    return chartData;
+      return memo;
+    }, {});
   },
 
-  getAllMetadataLocations: function() {
-    const locations = {};
-    const assemblies = this.getAssemblies();
-    for (const id in assemblies) {
-      locations[id] = assemblies[id].metadata.geography;
-    }
-    return locations;
+  getAllMetadataLocations() {
+    return Object.keys(assemblies).reduce((memo, id) => {
+      memo[id] = assemblies[id].metadata.geography;
+      return memo;
+    }, {});
   },
 
-  getLocationToAssembliesMap: function() {
-    const locations = {};
-    const assemblies = this.getAssemblies();
-    var latlng = null;
-    for (const id in assemblies) {
-      // locations[id] = assemblies[id].metadata.geography;
-      if (assemblies[id].metadata.geography.position.latitude != null) {
-        latlng = assemblies[id].metadata.geography.position.latitude + ',' + assemblies[id].metadata.geography.position.longitude;
-        if (!locations[latlng]) {
-          locations[latlng] = {};
-          locations[latlng]['fileAssemblyId'] = new Array();
-          locations[latlng]['location'] = null;
+  getLocationToAssembliesMap() {
+    return Object.keys(assemblies).reduce((memo, id) => {
+      const { assemblyName, geography } =  assemblies[id].metadata;
+      if (geography.position.latitude !== null) {
+        const latlng =
+          geography.position.latitude + ',' + geography.position.longitude;
+        if (!memo[latlng]) {
+          memo[latlng] = {
+            assemblyName: [],
+            location: null,
+          };
         }
-        if (assemblies[id].metadata.fileAssemblyId) {
-          locations[latlng]['fileAssemblyId'].push(assemblies[id].metadata.fileAssemblyId);
+        if (assemblyName) {
+          memo[latlng].assemblyName.push(assemblyName);
         }
-        if (assemblies[id].metadata.geography.location) {
-          locations[latlng]['location'] = assemblies[id].metadata.geography.location;
+        if (geography.location) {
+          memo[latlng].location = geography.location;
         }
       }
-    }
-    return locations;
+      return memo;
+    }, {});
   },
-
 
 });
 
