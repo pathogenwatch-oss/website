@@ -70,8 +70,8 @@ export default React.createClass({
                   id={this.collectionId}
                   type="collection"
                   format="kernel_checksum_distribution"
-                  description="Kernal Checksum Distribution" />
-                Kernal Checksum Distribution
+                  description="Kernel Checksum Distribution" />
+                Kernel Checksum Distribution
               </li>
               <li className="wgsa-menu__item">
                 <DownloadButton
