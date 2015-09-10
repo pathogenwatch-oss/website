@@ -25,9 +25,8 @@ export default React.createClass({
     newick: React.PropTypes.string,
     title: React.PropTypes.string,
     navButton: React.PropTypes.element,
-    navOnChange: React.PropTypes.function,
-    styleTree: React.PropTypes.function,
-    leafSelected: React.PropTypes.function,
+    styleTree: React.PropTypes.func,
+    leafSelected: React.PropTypes.func,
   },
 
   getInitialState() {

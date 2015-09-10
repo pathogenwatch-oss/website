@@ -14,10 +14,10 @@ const iconStyle = {
 export default React.createClass({
 
   propTypes: {
-    description: true,
-    id: true,
-    type: true,
-    format: true,
+    description: React.PropTypes.string,
+    id: React.PropTypes.string,
+    type: React.PropTypes.string,
+    format: React.PropTypes.string,
   },
 
   getInitialState() {

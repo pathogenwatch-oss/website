@@ -5,7 +5,7 @@ export default React.createClass({
   displayName: 'TreeSwitcher',
 
   propTypes: {
-    onChange: React.PropTypes.function,
+    onChange: React.PropTypes.func,
   },
 
   getInitialState() {

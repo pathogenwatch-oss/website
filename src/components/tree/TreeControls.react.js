@@ -22,10 +22,10 @@ const sizeControlStyle = {
 export default React.createClass({
 
   propTypes: {
-    nodeSize: true,
-    labelSize: true,
-    handleNodeSizeChange: true,
-    handleLabelSizeChange: true,
+    nodeSize: React.PropTypes.number,
+    labelSize: React.PropTypes.number,
+    handleNodeSizeChange: React.PropTypes.func,
+    handleLabelSizeChange: React.PropTypes.func,
   },
 
   componentDidMount: function () {

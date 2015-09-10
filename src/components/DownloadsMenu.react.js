@@ -16,7 +16,7 @@ function createBlobUrl(data, type = 'text/plain;charset=utf-8') {
 export default React.createClass({
 
   propTypes: {
-    active: true,
+    active: React.PropTypes.bool,
   },
 
   getInitialState() {
