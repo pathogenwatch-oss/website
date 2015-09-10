@@ -29,11 +29,8 @@ const AssemblyAnalysisOverviewChart = React.createClass({
   },
 
   draw() {
-    var divElement = document.getElementsByClassName('overview-chart')[0];
-    var svgElement = divElement.childNodes[0];
-    if (svgElement) {
-      svgElement.parentNode.removeChild(svgElement);
-    }
+    var chartDiv = React.findDOMNode(this.refs.chartDiv);
+    chartDiv.innerHTML = '';
 
     const chartData =  UploadStore.getOverviewChartData(this.props.chartType);
     AnalysisUtils.drawOverviewChart(chartData, '.overview-chart', 'assemblies', this.props.chartTitle);
@@ -47,11 +44,11 @@ const AssemblyAnalysisOverviewChart = React.createClass({
     this.draw();
   },
 
-  render () {
+  render() {
     return (
       <div style={containerStyle}>
         <label className='analysisItemLabel'>{this.props.label}</label>
-        <div className="overview-chart"></div>
+        <div ref="chartDiv" className="overview-chart"></div>
       </div>
     );
   }
