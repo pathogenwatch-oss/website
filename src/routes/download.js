@@ -13,6 +13,7 @@ router.post(
       idType: req.params.idType,
       format: req.params.fileFormat,
       idToUserNameMap: req.body.idToFilenameMap,
+      idList: Object.keys(req.body.idToFilenameMap),
       speciesId: req.body.speciesId
     };
 
