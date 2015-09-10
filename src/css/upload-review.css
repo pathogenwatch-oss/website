@@ -128,7 +128,10 @@
   color: #666;
   line-height: 40px;
   border-bottom: 1px solid #eee;
-  padding: 10px 16px;
+  padding: 4px 16px;
+  overflow: hidden;
+  display: block;
+  text-overflow: ellipsis;
 }
 
 .metadata-fields {
@@ -154,6 +157,14 @@
 .mapDivStyle {
   height: 100%;
 }
+
+.wgsa-chart-select .mdl-tabs__tab {
+  flex-grow: 1;
+  font-size: 13px;
+  padding: 0px;
+  white-space: nowrap;
+}
+
 /*********************************/
 
 /**** UploadReview - Navigation Left Pane ****/
@@ -226,7 +237,7 @@
 }
 
 .assemblyListItem.selected {
-  background-color: rgba(158,158,158,.5);
+  background-color: rgba(158,158,158,.4);
 }
 
 .assemblyListItem .selectButton span.filename {
@@ -268,7 +279,6 @@
 }
 
 .confirm-delete-button {
-  padding-top: 6px;
   color: #777;
   width: 50%;
 }

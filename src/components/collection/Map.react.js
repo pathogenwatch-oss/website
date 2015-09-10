@@ -1,23 +1,18 @@
-var React = require('react');
-import MapUtils from '../../utils/Map';
-import DEFAULT from '../../defaults';
+import React from 'react';
+
 import UploadWorkspaceNavigationActionCreators from '../../actions/UploadWorkspaceNavigationActionCreators.js';
 
-var containerStyle = {
-  margin: '0 0 25px 0',
-  verticalAlign: 'top',
-  textAlign: 'left'
-};
+import DEFAULT from '../../defaults';
 
-var labelStyle = {
+const labelStyle = {
   fontSize: '15px',
   fontWeight: '300',
   lineHeight: '20px',
   textTransform: 'uppercase',
-  color: '#777'
+  color: '#777',
 };
 
-var Map = React.createClass({
+const Map = React.createClass({
   map: null,
   markers: {},
   infoWindow: null,
@@ -218,7 +213,8 @@ function handleSelectAssembly(selectedFileAssemblyId) {
 
 var createLink = function(dataObject) {
   var div = document.createElement('div');
-  var br = document.createElement('br');
+  // div.style.overflowX = 'hidden'
+  div.style.paddingRight = '15px';
   dataObject.map(function(fileAssemblyId) {
     var button = document.createElement('button');
     var textNode = document.createTextNode(fileAssemblyId);
