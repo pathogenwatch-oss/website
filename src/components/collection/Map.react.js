@@ -1,23 +1,18 @@
-var React = require('react');
-import MapUtils from '../../utils/Map';
-import DEFAULT from '../../defaults';
+import React from 'react';
+
 import UploadWorkspaceNavigationActionCreators from '../../actions/UploadWorkspaceNavigationActionCreators.js';
 
-var containerStyle = {
-  margin: '0 0 25px 0',
-  verticalAlign: 'top',
-  textAlign: 'left'
-};
+import DEFAULT from '../../defaults';
 
-var labelStyle = {
+const labelStyle = {
   fontSize: '15px',
   fontWeight: '300',
   lineHeight: '20px',
   textTransform: 'uppercase',
-  color: '#777'
+  color: '#777',
 };
 
-var Map = React.createClass({
+const Map = React.createClass({
   map: null,
   markers: {},
   infoWindow: null,
@@ -214,15 +209,15 @@ var Map = React.createClass({
 
 function handleSelectAssembly(selectedassemblyName) {
   UploadWorkspaceNavigationActionCreators.navigateToAssembly(selectedassemblyName);
-};
+}
 
-var createLink = function(dataObject) {
-  var div = document.createElement('div');
-  var br = document.createElement('br');
-  dataObject.map(function(assemblyName) {
-    var button = document.createElement('button');
-    var textNode = document.createTextNode(assemblyName);
-    var br = document.createElement('br');
+function createLink(dataObject) {
+  const div = document.createElement('div');
+  div.style.paddingRight = '15px';
+  dataObject.map(function (assemblyName) {
+    const button = document.createElement('button');
+    const textNode = document.createTextNode(assemblyName);
+    const br = document.createElement('br');
     button.appendChild(textNode);
     button.className = 'mdl-button mdl-js-button mdl-js-ripple-effect';
     button.style.textTransform = 'none';

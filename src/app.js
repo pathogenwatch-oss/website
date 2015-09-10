@@ -1,3 +1,4 @@
+import './css/cgps-mdl-theme.css';
 import 'PhyloCanvas/polyfill';
 
 import React from 'react';

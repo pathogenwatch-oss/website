@@ -52,7 +52,7 @@ function handleAction(action) {
         UploadStore.dispatchToken
       ]);
 
-      setassemblyName(UploadStore.getFirstassemblyName());
+      setassemblyName(UploadStore.getFirstAssemblyName());
       emitChange();
       break;
 
