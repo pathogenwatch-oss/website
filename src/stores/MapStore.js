@@ -1,22 +1,19 @@
-var AppDispatcher = require('../dispatcher/AppDispatcher');
-var EventEmitter = require('events').EventEmitter;
-var assign = require('object-assign');
+import AppDispatcher from '../dispatcher/AppDispatcher';
+import { EventEmitter } from 'events';
+import assign from 'object-assign';
 
-var SpeciesSubtreeStore = require('./SpeciesSubtreeStore');
+import SubtreeStore from './SubtreeStore';
+import UploadedCollectionStore from './UploadedCollectionStore.js';
 
-var CHANGE_EVENT = 'change';
+const CHANGE_EVENT = 'change';
 
-var assemblyIds = null;
-
-function setAssemblyIds(ids) {
-  assemblyIds = ids;
-}
+let assemblyIds = null;
 
 function emitChange() {
   MapStore.emit(CHANGE_EVENT);
 }
 
-var MapStore = assign({}, EventEmitter.prototype, {
+const MapStore = assign({}, EventEmitter.prototype, {
 
   addChangeListener: function (callback) {
     this.on(CHANGE_EVENT, callback);
@@ -33,22 +30,28 @@ var MapStore = assign({}, EventEmitter.prototype, {
 });
 
 function handleAction(action) {
-
   switch (action.type) {
 
-    case 'set_map_assembly_ids':
-      setAssemblyIds(action.assemblyIds);
-      emitChange();
-      break;
+  case 'set_map_assembly_ids':
+    assemblyIds = action.assemblyIds;
+    emitChange();
+    break;
 
-    case 'set_collection':
-    case 'set_active_species_subtree_id':
-      AppDispatcher.waitFor([SpeciesSubtreeStore.dispatchToken]);
-      setAssemblyIds(SpeciesSubtreeStore.getActiveSpeciesSubtreeAssemblyIds());
-      emitChange();
-      break;
+  case 'set_collection':
+  case 'set_active_species_subtree_id':
+    AppDispatcher.waitFor([
+      SubtreeStore.dispatchToken,
+      UploadedCollectionStore.dispatchToken,
+    ]);
+    if (!this.activeSubtreeId) {
+      assemblyIds = Object.keys(UploadedCollectionStore.getAssemblies());
+    } else {
+      assemblyIds = SubtreeStore.getActiveSubtreeAssemblyIds();
+    }
+    emitChange();
+    break;
 
-    default: // ... do nothing
+  default: // ... do nothing
 
   }
 }

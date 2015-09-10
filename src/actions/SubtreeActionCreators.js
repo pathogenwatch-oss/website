@@ -2,10 +2,10 @@ import AppDispatcher from '../dispatcher/AppDispatcher';
 
 module.exports = {
 
-  setActiveSpeciesSubtreeId: function (activeSpeciesSubtreeId) {
+  setActiveSubtreeId: function (activeSubtreeId) {
     const action = {
       type: 'set_active_species_subtree_id',
-      activeSpeciesSubtreeId: activeSpeciesSubtreeId,
+      activeSubtreeId: activeSubtreeId,
     };
 
     AppDispatcher.dispatch(action);

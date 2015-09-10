@@ -1,6 +1,6 @@
 import React from 'react';
 
-import PublicCollectionStore from '../../../stores/PublicCollectionStore';
+import ReferenceCollectionStore from '../../../stores/ReferenceCollectionStore';
 import UploadedCollectionStore from '../../../stores/UploadedCollectionStore';
 import TableStore from '../../../stores/TableStore';
 
@@ -42,8 +42,8 @@ const DataTable = React.createClass({
       return null;
     }
 
-    const publicCollectionAssemblies = PublicCollectionStore.getPublicCollectionAssemblies();
-    const uploadedCollectionAssemblies = UploadedCollectionStore.getUploadedCollectionAssemblies();
+    const publicCollectionAssemblies = ReferenceCollectionStore.getAssemblies();
+    const uploadedCollectionAssemblies = UploadedCollectionStore.getAssemblies();
 
     var tableRowElements = tableAssemblyIds.map(this.getTableRowElement.bind(null, publicCollectionAssemblies, uploadedCollectionAssemblies));
 

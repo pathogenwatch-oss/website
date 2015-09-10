@@ -7,10 +7,10 @@ const CHANGE_EVENT = 'change';
 let collection = null;
 
 function emitChange() {
-  UploadedCollectionStore.emit(CHANGE_EVENT);
+  ReferenceCollectionStore.emit(CHANGE_EVENT);
 }
 
-const UploadedCollectionStore = assign({}, EventEmitter.prototype, {
+const ReferenceCollectionStore = assign({}, EventEmitter.prototype, {
 
   addChangeListener: function (callback) {
     this.on(CHANGE_EVENT, callback);
@@ -20,20 +20,16 @@ const UploadedCollectionStore = assign({}, EventEmitter.prototype, {
     this.removeListener(CHANGE_EVENT, callback);
   },
 
-  getUploadedCollection: function () {
+  getReferenceCollection: function () {
     return collection;
   },
 
-  getCollectionId: function () {
+  getReferenceCollectionId: function () {
     return collection.collectionId;
   },
 
   getAssemblies: function () {
-    return this.getUploadedCollection().assemblies;
-  },
-
-  getTree: function () {
-    return collection.tree;
+    return this.getReferenceCollection().assemblies;
   },
 
   contains(assemblyId) {
@@ -42,13 +38,17 @@ const UploadedCollectionStore = assign({}, EventEmitter.prototype, {
     );
   },
 
+  getTree() {
+    return collection.tree;
+  },
+
 });
 
 function handleAction(action) {
   switch (action.type) {
 
   case 'set_collection':
-    collection = action.collection;
+    collection = action.referenceCollection;
     emitChange();
     break;
 
@@ -58,6 +58,6 @@ function handleAction(action) {
   }
 }
 
-UploadedCollectionStore.dispatchToken = AppDispatcher.register(handleAction);
+ReferenceCollectionStore.dispatchToken = AppDispatcher.register(handleAction);
 
-module.exports = UploadedCollectionStore;
+module.exports = ReferenceCollectionStore;

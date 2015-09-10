@@ -7,7 +7,7 @@ import assign from 'object-assign';
 import TreeControls from './TreeControls.react';
 
 import TableStore from '../../stores/TableStore';
-import PublicCollectionStore from '../../stores/PublicCollectionStore';
+import ReferenceCollectionStore from '../../stores/ReferenceCollectionStore';
 import UploadedCollectionStore from '../../stores/UploadedCollectionStore';
 
 import MetadataUtils from '../../utils/Metadata';
@@ -138,25 +138,24 @@ export default React.createClass({
   },
 
   setNodeLabels() {
-    const publicCollectionAssemblies = PublicCollectionStore.getPublicCollectionAssemblies();
-    const uploadedCollectionAssemblies = UploadedCollectionStore.getUploadedCollectionAssemblies();
+    const publicCollectionAssemblies = ReferenceCollectionStore.getAssemblies();
+    const uploadedCollectionAssemblies = UploadedCollectionStore.getAssemblies();
 
     const combinedAssemblies = assign({}, publicCollectionAssemblies, uploadedCollectionAssemblies);
 
     Object.keys(combinedAssemblies).forEach((assemblyId) => {
       const labelProperty = this.state.labelProperty;
+      const assembly = combinedAssemblies[assemblyId];
       let labelValue;
 
-      if (labelProperty === 'Assembly') {
-        labelValue = combinedAssemblies[assemblyId].metadata.assemblyName || '';
-      } else if (labelProperty === 'Country') {
-        labelValue = MetadataUtils.getCountry(combinedAssemblies[assemblyId]);
+      if (labelProperty === 'Country') {
+        labelValue = MetadataUtils.getCountry(assembly);
       } else if (labelProperty === 'Date') {
-        labelValue = DataUtils.getFormattedDateString(combinedAssemblies[assemblyId].metadata.date) || '';
+        labelValue = DataUtils.getFormattedDateString(assembly.metadata.date) || '';
       } else if (labelProperty === 'ST') {
-        labelValue = combinedAssemblies[assemblyId].analysis.st || '';
+        labelValue = assembly.analysis.st || '';
       } else {
-        labelValue = assemblyId;
+        labelValue = labelValue = assembly.metadata.assemblyName || assemblyId;
       }
 
       const branch = this.phylocanvas.branches[assemblyId];

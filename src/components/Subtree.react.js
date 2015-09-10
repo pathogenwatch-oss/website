@@ -2,9 +2,11 @@ import React from 'react';
 
 import Tree from './tree/Tree.react';
 
-import SpeciesSubtreeStore from '../stores/SpeciesSubtreeStore';
-import SpeciesSubtreeActionCreators from '../actions/SpeciesSubtreeActionCreators';
+import UploadedCollectionStore from '../stores/UploadedCollectionStore';
+import SubtreeStore from '../stores/SubtreeStore';
+import SubtreeActionCreators from '../actions/SubtreeActionCreators';
 
+import ResistanceUtils from '../utils/Resistance';
 import { CGPS } from '../defaults';
 
 const nodeLabelStyle = {
@@ -16,18 +18,15 @@ const iconStyle = {
 };
 
 function styleTree(tree) {
-  const branchIds = Object.keys(tree.branches);
-  tree.setNodeDisplay(branchIds, { colour: CGPS.COLOURS.PURPLE_LIGHT });
-  branchIds.forEach((id) => {
-    const branch = tree.branches[id];
-    if (branch) {
-      branch.labelStyle = nodeLabelStyle;
-    }
+  tree.leaves.forEach((leaf) => {
+    const assembly = UploadedCollectionStore.getAssemblies()[leaf.id];
+    tree.setNodeDisplay([ leaf.id ], { colour: ResistanceUtils.getColour(assembly) });
+    leaf.labelStyle = nodeLabelStyle;
   });
 }
 
 function handleBackButton() {
-  SpeciesSubtreeActionCreators.setActiveSpeciesSubtreeId(null);
+  SubtreeActionCreators.setActiveSubtreeId(null);
 }
 
 const backButton = (
@@ -46,7 +45,7 @@ export default React.createClass({
     return (
       <Tree
         title={this.props.tree}
-        newick={SpeciesSubtreeStore.getSpeciesSubtree(this.props.tree).newick}
+        newick={SubtreeStore.getSubtree(this.props.tree).newick}
         navButton={backButton}
         styleTree={styleTree} />
     );

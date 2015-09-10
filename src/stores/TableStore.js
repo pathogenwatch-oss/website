@@ -1,24 +1,33 @@
-var AppDispatcher = require('../dispatcher/AppDispatcher');
-var EventEmitter = require('events').EventEmitter;
-var assign = require('object-assign');
+import AppDispatcher from '../dispatcher/AppDispatcher';
+import { EventEmitter } from 'events';
+import assign from 'object-assign';
 
-var SpeciesSubtreeStore = require('./SpeciesSubtreeStore');
+import UploadedCollectionStore from './UploadedCollectionStore.js';
+import SubtreeStore from './SubtreeStore';
 
-var CHANGE_EVENT = 'change';
+const CHANGE_EVENT = 'change';
 
-var assemblyIds = null;
-var labelTableColumnName = 'Assembly';
-var colourTableColumnName = 'Assembly';
+let assemblyIds = null;
+let labelTableColumnName = null;
+let colourTableColumnName = null;
 
 function setAssemblyIds(ids) {
   assemblyIds = ids;
 }
 
 function setLabelTableColumnName(tableColumnName) {
+  if (tableColumnName === labelTableColumnName) {
+    labelTableColumnName = null;
+    return;
+  }
   labelTableColumnName = tableColumnName;
 }
 
 function setColourTableColumnName(tableColumnName) {
+  if (tableColumnName === colourTableColumnName) {
+    colourTableColumnName = null;
+    return;
+  }
   colourTableColumnName = tableColumnName;
 }
 
@@ -51,32 +60,39 @@ var TableStore = assign({}, EventEmitter.prototype, {
 });
 
 function handleAction(action) {
-
   switch (action.type) {
 
-    case 'set_table_assembly_ids':
-      setAssemblyIds(action.assemblyIds);
-      emitChange();
-      break;
+  case 'set_table_assembly_ids':
+    setAssemblyIds(action.assemblyIds);
+    emitChange();
+    break;
 
-    case 'set_label_table_column':
-      setLabelTableColumnName(action.labelTableColumnName);
-      emitChange();
-      break;
+  case 'set_label_table_column':
+    setLabelTableColumnName(action.labelTableColumnName);
+    emitChange();
+    break;
 
-    case 'set_colour_table_column':
-      setColourTableColumnName(action.colourTableColumnName);
-      emitChange();
-      break;
+  case 'set_colour_table_column':
+    setColourTableColumnName(action.colourTableColumnName);
+    emitChange();
+    break;
 
-    case 'set_collection':
-    case 'set_active_species_subtree_id':
-      AppDispatcher.waitFor([SpeciesSubtreeStore.dispatchToken]);
-      setAssemblyIds(SpeciesSubtreeStore.getActiveSpeciesSubtreeAssemblyIds());
-      emitChange();
-      break;
+  case 'set_collection':
+  case 'set_active_species_subtree_id':
+    AppDispatcher.waitFor([
+      SubtreeStore.dispatchToken,
+      UploadedCollectionStore.dispatchToken,
+    ]);
+    if (!this.activeSubtreeId) {
+      assemblyIds = Object.keys(UploadedCollectionStore.getAssemblies());
+    } else {
+      assemblyIds = SubtreeStore.getActiveSubtreeAssemblyIds();
+    }
+    emitChange();
+    break;
 
-    default: // ... do nothing
+  default:
+    // ... do nothing
 
   }
 }

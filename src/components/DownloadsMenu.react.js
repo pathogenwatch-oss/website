@@ -5,8 +5,7 @@ import React from 'react';
 import DownloadButton from './DownloadButton.react';
 
 import UploadedCollectionStore from '../stores/UploadedCollectionStore';
-import SpeciesTreeStore from '../stores/SpeciesTreeStore';
-import SpeciesSubtreeStore from '../stores/SpeciesSubtreeStore';
+import ReferenceCollectionStore from '../stores/ReferenceCollectionStore';
 
 const windowURL = window.URL || window.webkitURL;
 function createBlobUrl(data, type = 'text/plain;charset=utf-8') {
@@ -27,9 +26,9 @@ export default React.createClass({
   },
 
   componentWillMount() {
-    this.collectionId = UploadedCollectionStore.getUploadedCollectionId();
-    this.populationTreeLink = createBlobUrl(SpeciesTreeStore.getSpeciesTree());
-    this.collectionTreeLink = createBlobUrl(SpeciesSubtreeStore.getSpeciesSubtree(this.collectionId).newick);
+    this.collectionId = UploadedCollectionStore.getCollectionId();
+    this.populationTreeLink = createBlobUrl(UploadedCollectionStore.getTree());
+    this.collectionTreeLink = createBlobUrl(ReferenceCollectionStore.getTree());
   },
 
   render() {

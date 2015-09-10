@@ -3,7 +3,7 @@ import React from 'react';
 import SpeciesTree from './SpeciesTree.react';
 import Subtree from './Subtree.react';
 
-import SpeciesSubtreeStore from '../stores/SpeciesSubtreeStore';
+import SubtreeStore from '../stores/SubtreeStore';
 import UploadedCollectionStore from '../stores/UploadedCollectionStore';
 
 export default React.createClass({
@@ -20,12 +20,12 @@ export default React.createClass({
   },
 
   componentDidMount() {
-    SpeciesSubtreeStore.addChangeListener(this.handleSubtreeStoreChange);
-    this.collectionId = UploadedCollectionStore.getUploadedCollectionId();
+    SubtreeStore.addChangeListener(this.handleSubtreeStoreChange);
+    this.collectionId = UploadedCollectionStore.getCollectionId();
   },
 
   componentWillUnmount() {
-    SpeciesSubtreeStore.removeChangeListener(this.handleSubtreeStoreChange);
+    SubtreeStore.removeChangeListener(this.handleSubtreeStoreChange);
   },
 
   render: function () {
@@ -41,9 +41,9 @@ export default React.createClass({
   },
 
   handleSubtreeStoreChange() {
-    console.log(SpeciesSubtreeStore.getActiveSpeciesSubtreeId());
+    console.log(SubtreeStore.getActiveSubtreeId());
     this.setState({
-      subtree: SpeciesSubtreeStore.getActiveSpeciesSubtreeId(),
+      subtree: SubtreeStore.getActiveSubtreeId(),
     });
   },
 

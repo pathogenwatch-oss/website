@@ -1,16 +1,15 @@
 import React from 'react';
 import assign from 'object-assign';
 
-import MapUtils from '../utils/Map';
-
-import DEFAULT from '../defaults';
-import ANTIBIOTICS from '../../static_data/antibiotics.json';
-
-
-import PublicCollectionStore from '../stores/PublicCollectionStore';
+import ReferenceCollectionStore from '../stores/ReferenceCollectionStore';
 import UploadedCollectionStore from '../stores/UploadedCollectionStore';
 import MapStore from '../stores/MapStore';
 import TableStore from '../stores/TableStore';
+
+import MapUtils from '../utils/Map';
+import ResistanceUtils from '../utils/Resistance';
+
+import DEFAULT from '../defaults';
 
 const Map = React.createClass({
   map: null,
@@ -118,28 +117,9 @@ const Map = React.createClass({
   },
 
   getCombinedPublicAndUploadedCollectionAssemblies: function () {
-    var publicCollectionAssemblies = PublicCollectionStore.getPublicCollectionAssemblies();
-    var uploadedCollectionAssemblies = UploadedCollectionStore.getUploadedCollectionAssemblies();
-    return assign({}, publicCollectionAssemblies, uploadedCollectionAssemblies);
-  },
-
-  selectedTableColumnNameIsAntibiotic: function () {
-    var selectedTableColumnName = TableStore.getColourTableColumnName();
-    var listOfAntibiotics = Object.keys(ANTIBIOTICS);
-
-    return (listOfAntibiotics.indexOf(selectedTableColumnName) > -1);
-  },
-
-  isAssemblyInPublicCollection: function (assemblyId) {
-    var publicCollectionAssemblyIds = PublicCollectionStore.getPublicCollectionAssemblyIds();
-
-    return (publicCollectionAssemblyIds.indexOf(assemblyId) > -1);
-  },
-
-  isAssemblyInUploadedCollection: function (assemblyId) {
-    var uploadedCollectionAssemblyIds = UploadedCollectionStore.getUploadedCollectionAssemblyIds();
-
-    return (uploadedCollectionAssemblyIds.indexOf(assemblyId) > -1);
+    var referenceCollectionAssemblies = ReferenceCollectionStore.getAssemblies();
+    var uploadedCollectionAssemblies = UploadedCollectionStore.getAssemblies();
+    return assign({}, referenceCollectionAssemblies, uploadedCollectionAssemblies);
   },
 
   getMarkerShapeForAssembly: function (assembly) {
@@ -147,25 +127,7 @@ const Map = React.createClass({
   },
 
   getMarkerColourForAssembly: function (assembly) {
-    var selectedTableColumnName = TableStore.getColourTableColumnName();
-    var resistanceProfileResult;
-    var colour = '#ffffff';
-
-    if (this.selectedTableColumnNameIsAntibiotic()) {
-      resistanceProfileResult = assembly.analysis.resistanceProfile[selectedTableColumnName].resistanceResult;
-
-      if (resistanceProfileResult === 'RESISTANT') {
-        colour = '#ff0000';
-      } else {
-        colour = '#ffffff';
-      }
-    } else if (this.isAssemblyInPublicCollection(assembly.metadata.assemblyId)) {
-      colour = '#ffffff';
-    } else if (this.isAssemblyInUploadedCollection(assembly.metadata.assemblyId)) {
-      colour = DEFAULT.CGPS.COLOURS.PURPLE_LIGHT;
-    }
-
-    return colour;
+    return ResistanceUtils.getColour(assembly);
   },
 
   createMarkers: function () {

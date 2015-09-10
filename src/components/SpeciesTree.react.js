@@ -3,11 +3,12 @@ import React from 'react';
 import Tree from './tree/Tree.react';
 import TreeSwitcher from './tree/TreeSwitcher.react';
 
-import SpeciesTreeStore from '../stores/SpeciesTreeStore';
-import SpeciesSubtreeStore from '../stores/SpeciesSubtreeStore';
+import ReferenceCollectionStore from '../stores/ReferenceCollectionStore';
+import SubtreeStore from '../stores/SubtreeStore';
 import UploadedCollectionStore from '../stores/UploadedCollectionStore';
-import SpeciesSubtreeActionCreators from '../actions/SpeciesSubtreeActionCreators';
+import SubtreeActionCreators from '../actions/SubtreeActionCreators';
 
+import ResistanceUtils from '../utils/Resistance';
 import { CGPS } from '../defaults';
 
 const POPULATION = Symbol('population');
@@ -32,7 +33,7 @@ const trees = {
       tree.setNodeDisplay(branchIds, { colour: 'rgba(0, 0, 0, 0.54)' });
       tree.root.cascadeFlag('interactive', false);
 
-      const subtrees = SpeciesSubtreeStore.getSpeciesSubtrees();
+      const subtrees = SubtreeStore.getSubtrees();
       const subtreeIds = Object.keys(subtrees);
 
       tree.setNodeDisplay(subtreeIds, { colour: CGPS.COLOURS.PURPLE_LIGHT });
@@ -47,16 +48,13 @@ const trees = {
       });
     },
     leafSelected(event) {
-      console.log(event);
       if (event.property !== 'selected') {
         return;
       }
 
       const { nodeIds } = event;
-
       if (nodeIds.length === 1) {
-        console.log(nodeIds);
-        SpeciesSubtreeActionCreators.setActiveSpeciesSubtreeId(nodeIds[0]);
+        SubtreeActionCreators.setActiveSubtreeId(nodeIds[0]);
       }
     },
   },
@@ -64,13 +62,10 @@ const trees = {
     title: 'Collection',
     newick: '',
     styleTree(tree) {
-      const branchIds = Object.keys(tree.branches);
-      tree.setNodeDisplay(branchIds, { colour: CGPS.COLOURS.PURPLE_LIGHT });
-      branchIds.forEach((id) => {
-        const branch = tree.branches[id];
-        if (branch) {
-          branch.labelStyle = collectionNodeLabelStyle;
-        }
+      tree.leaves.forEach((leaf) => {
+        const assembly = UploadedCollectionStore.getAssemblies()[leaf.id];
+        tree.setNodeDisplay([ leaf.id ], { colour: ResistanceUtils.getColour(assembly) });
+        leaf.labelStyle = collectionNodeLabelStyle;
       });
     },
   },
@@ -85,9 +80,8 @@ export default React.createClass({
   },
 
   componentWillMount() {
-    trees[POPULATION].newick = SpeciesTreeStore.getSpeciesTree();
-    const collectionId = UploadedCollectionStore.getUploadedCollectionId();
-    trees[COLLECTION].newick = SpeciesSubtreeStore.getSpeciesSubtree(collectionId).newick;
+    trees[POPULATION].newick = ReferenceCollectionStore.getTree();
+    trees[COLLECTION].newick = UploadedCollectionStore.getTree();
   },
 
   render() {
