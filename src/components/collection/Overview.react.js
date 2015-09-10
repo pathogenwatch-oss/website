@@ -35,17 +35,15 @@ export default React.createClass({
   },
 
   componentDidUpdate() {
-    if (this.refs.tabs) {
-      // componentHandler.upgradeElement(React.findDOMNode(this.refs.tabs));
-    }
+    componentHandler.upgradeDom();
   },
 
 
-  showChart() {
+  showChart(type = 'NO DATA FOUND', title = '') {
     this.setState({
       currentChart: {
-        type: event.target.id,
-        text: event.target.id
+        type: type,
+        title: title
       }
     });
   },
@@ -54,7 +52,6 @@ export default React.createClass({
     if (this.state.assemblyCount) {
       const allLocations = UploadStore.getAllMetadataLocations();
       const locationsToAssembliesMap = UploadStore.getLocationToAssembliesMap();
-      var prevButtonDisabled, nextButtonDisabled = false;
 
       return (
         <div className="mdl-grid">
@@ -79,14 +76,14 @@ export default React.createClass({
 
           <div className="mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
 
-            <div ref="tabs" className="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+            <div className="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
               <div className="mdl-tabs__tab-bar">
-                  <a id="contigN50" className="mdl-tabs__tab is-active" onClick={this.showChart}>N50 Contigs</a>
-                  <a id="totalNumberOfContigs" className="mdl-tabs__tab" onClick={this.showChart}>Total Contigs</a>
-                  <a id="totalNumberOfNucleotidesInDnaStrings" className="mdl-tabs__tab" onClick={this.showChart}>Total Nucleotides</a>
+                  <a href="#overview-chart-panel" className="mdl-tabs__tab is-active" onClick={this.showChart.bind(this, 'contigN50', 'N50 Contigs')}>N50 Contigs</a>
+                  <a href="#overview-chart-panel" className="mdl-tabs__tab" onClick={this.showChart.bind(this, 'totalNumberOfContigs', 'Total Contigs')}>Total Contigs</a>
+                  <a href="#overview-chart-panel" className="mdl-tabs__tab" onClick={this.showChart.bind(this, 'totalNumberOfNucleotidesInDnaStrings', 'Total Nucleotides')}>Total Nucleotides</a>
               </div>
 
-              <div className="mdl-tabs__panel is-active" id="overview-chart-panel">
+              <div className="card-style mdl-tabs__panel is-active" id="overview-chart-panel">
                 <AssemblyAnalysisOverviewChart chartTitle={this.state.currentChart.title} chartType={this.state.currentChart.type}/>
               </div>
             </div>
