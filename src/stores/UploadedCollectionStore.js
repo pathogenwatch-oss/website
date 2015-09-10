@@ -20,7 +20,7 @@ const UploadedCollectionStore = assign({}, EventEmitter.prototype, {
     this.removeListener(CHANGE_EVENT, callback);
   },
 
-  getUploadedCollection: function () {
+  getCollection: function () {
     return collection;
   },
 
@@ -29,11 +29,19 @@ const UploadedCollectionStore = assign({}, EventEmitter.prototype, {
   },
 
   getAssemblies: function () {
-    return this.getUploadedCollection().assemblies;
+    return this.getCollection().assemblies;
   },
 
   getTree: function () {
     return collection.tree;
+  },
+
+  getUserTree: function () {
+    const assemblies = this.getAssemblies();
+    return Object.keys(assemblies).reduce(function (tree, assemblyId) {
+      const { assemblyName } = assemblies[assemblyId].metadata;
+      return tree.replace(assemblyId, assemblyName);
+    }, this.getTree());
   },
 
   contains(assemblyId) {

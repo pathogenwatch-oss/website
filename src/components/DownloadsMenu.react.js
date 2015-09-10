@@ -6,6 +6,7 @@ import DownloadButton from './DownloadButton.react';
 
 import UploadedCollectionStore from '../stores/UploadedCollectionStore';
 import ReferenceCollectionStore from '../stores/ReferenceCollectionStore';
+import BodyClickStore from '../stores/BodyClickStore';
 
 const windowURL = window.URL || window.webkitURL;
 function createBlobUrl(data, type = 'text/plain;charset=utf-8') {
@@ -16,7 +17,7 @@ function createBlobUrl(data, type = 'text/plain;charset=utf-8') {
 export default React.createClass({
 
   propTypes: {
-    active: true,
+    active: React.PropTypes.bool,
   },
 
   getInitialState() {
@@ -27,14 +28,22 @@ export default React.createClass({
 
   componentWillMount() {
     this.collectionId = UploadedCollectionStore.getCollectionId();
-    this.populationTreeLink = createBlobUrl(UploadedCollectionStore.getTree());
-    this.collectionTreeLink = createBlobUrl(ReferenceCollectionStore.getTree());
+    this.populationTreeLink = createBlobUrl(ReferenceCollectionStore.getTree());
+    this.collectionTreeLink = createBlobUrl(UploadedCollectionStore.getUserTree());
+  },
+
+  componentDidMount() {
+    BodyClickStore.addChangeListener(this.handleBodyClickStoreChange);
+  },
+
+  componentWillUnmount() {
+    BodyClickStore.removeChangeListener(this.handleBodyClickStoreChange);
   },
 
   render() {
     return (
       <div className={`wgsa-menu ${this.state.active ? 'wgsa-menu--is-open' : ''}`}>
-        <button className="wgsa-menu-button mdl-button" onClick={this.handleButtonClick}>
+        <button ref="button" className="wgsa-menu-button mdl-button" onClick={this.handleButtonClick}>
           <i className="wgsa-button-icon material-icons">file_download</i>
           <span>Downloads</span>
         </button>
@@ -61,8 +70,8 @@ export default React.createClass({
                   id={this.collectionId}
                   type="collection"
                   format="kernel_checksum_distribution"
-                  description="Kernal Checksum Distribution" />
-                Kernal Checksum Distribution
+                  description="Kernel Checksum Distribution" />
+                Kernel Checksum Distribution
               </li>
               <li className="wgsa-menu__item">
                 <DownloadButton
@@ -91,6 +100,17 @@ export default React.createClass({
   handleButtonClick() {
     this.setState({
       active: !this.state.active,
+    });
+  },
+
+  handleBodyClickStoreChange() {
+    const button = React.findDOMNode(this.refs.button);
+    if (!this.state.active || BodyClickStore.getEvent().target === button) {
+      return;
+    }
+
+    this.setState({
+      active: false,
     });
   },
 

@@ -9,7 +9,7 @@ import Map from './Map.react';
 export default React.createClass({
 
   propTypes: {
-    clickHandler: React.PropTypes.function,
+    clickHandler: React.PropTypes.func,
   },
 
   getInitialState() {

@@ -5,6 +5,7 @@ import PhyloCanvas from 'PhyloCanvas';
 import assign from 'object-assign';
 
 import TreeControls from './TreeControls.react';
+import TreeMenu from './TreeMenu.react';
 
 import TableStore from '../../stores/TableStore';
 import ReferenceCollectionStore from '../../stores/ReferenceCollectionStore';
@@ -25,9 +26,8 @@ export default React.createClass({
     newick: React.PropTypes.string,
     title: React.PropTypes.string,
     navButton: React.PropTypes.element,
-    navOnChange: React.PropTypes.function,
-    styleTree: React.PropTypes.function,
-    leafSelected: React.PropTypes.function,
+    styleTree: React.PropTypes.func,
+    leafSelected: React.PropTypes.func,
   },
 
   getInitialState() {
@@ -38,6 +38,7 @@ export default React.createClass({
       nodeSize: DEFAULT.NODE_SIZE,
       labelSize: DEFAULT.LABEL_SIZE,
       labelProperty: 'Assembly',
+      treeLoaded: false,
     });
   },
 
@@ -95,21 +96,12 @@ export default React.createClass({
         <header className="wgsa-tree-header">
           { navButton }
           <h2 className="wgsa-tree-heading">{title}</h2>
-          <div className="wgsa-tree-menu" ref="menu">
-            <button id="tree-options" className="wgsa-tree-actions mdl-button mdl-js-button mdl-button--icon">
-              <i className="material-icons">more_vert</i>
-            </button>
-            <ul className="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" htmlFor="tree-options">
-              <li className="mdl-menu__item" onClick={this.handleToggleNodeLabels}>Toggle Labels</li>
-              <li className="mdl-menu__item" onClick={this.handleToggleNodeAlign}>Toggle Label Align</li>
-              <li className="mdl-menu__item" onClick={this.handleRedrawOriginalTree}>Redraw Original Tree</li>
-              <li className="mdl-menu__item">
-                <a href={this.phylocanvas ? this.phylocanvas.getPngUrl() : '#'} download={`${title}.png`} target="_blank">
-                  Export Current View
-                </a>
-              </li>
-            </ul>
-          </div>
+          <TreeMenu
+            tree={this.phylocanvas}
+            exportFilename={`${title}.png`}
+            handleToggleNodeLabels={this.handleToggleNodeLabels}
+            handleToggleNodeAlign={this.handleToggleNodeAlign}
+            handleRedrawOriginalTree={this.handleRedrawOriginalTree} />
         </header>
         <div id="phylocanvas-container" style={fullWidthHeight}></div>
         <TreeControls
@@ -128,6 +120,9 @@ export default React.createClass({
   loadTree() {
     this.phylocanvas.load(this.props.newick, () => {
       this.styleTree();
+      this.setState({
+        treeLoaded: true,
+      });
     });
   },
 
