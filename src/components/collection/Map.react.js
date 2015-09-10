@@ -218,7 +218,8 @@ function handleSelectAssembly(selectedFileAssemblyId) {
 
 var createLink = function(dataObject) {
   var div = document.createElement('div');
-  var br = document.createElement('br');
+  // div.style.overflowX = 'hidden'
+  div.style.paddingRight = '15px';
   dataObject.map(function(fileAssemblyId) {
     var button = document.createElement('button');
     var textNode = document.createTextNode(fileAssemblyId);
