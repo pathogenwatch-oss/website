@@ -20,16 +20,16 @@ const ReferenceCollectionStore = assign({}, EventEmitter.prototype, {
     this.removeListener(CHANGE_EVENT, callback);
   },
 
-  getReferenceCollection: function () {
+  getCollection: function () {
     return collection;
   },
 
-  getReferenceCollectionId: function () {
+  getCollectionId: function () {
     return collection.collectionId;
   },
 
   getAssemblies: function () {
-    return this.getReferenceCollection().assemblies;
+    return this.getCollection().assemblies;
   },
 
   contains(assemblyId) {

@@ -28,8 +28,8 @@ export default React.createClass({
 
   componentWillMount() {
     this.collectionId = UploadedCollectionStore.getCollectionId();
-    this.populationTreeLink = createBlobUrl(UploadedCollectionStore.getTree());
-    this.collectionTreeLink = createBlobUrl(ReferenceCollectionStore.getTree());
+    this.populationTreeLink = createBlobUrl(ReferenceCollectionStore.getTree());
+    this.collectionTreeLink = createBlobUrl(UploadedCollectionStore.getUserTree());
   },
 
   componentDidMount() {
