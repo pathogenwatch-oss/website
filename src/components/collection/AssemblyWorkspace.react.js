@@ -1,4 +1,5 @@
 import '../../css/upload-review.css';
+import '../../css/forms.css';
 
 import React from 'react';
 import FileDragAndDrop from 'react-file-drag-and-drop';

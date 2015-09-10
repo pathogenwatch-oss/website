@@ -59,11 +59,21 @@ export default React.createClass({
       return (
         <div className="mdl-grid">
           <div className="mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
-            <div className="heading"> Overview </div>
+            <div className="heading"> Summary </div>
             <div className="card-style">
-              <AssemblyAnalysisItem label="Total Assemblies" value={this.state.assemblyCount} />
-              <AssemblyAnalysisItem label="Mean Contigs" value={200} />
-              <AssemblyAnalysisItem label="Total nt" value={2000000} />
+              <div className="mdl-grid mdl-grid--no-spacing">
+                <div className="mdl-cell mdl-cell--6-col">
+                  <AssemblyAnalysisItem label="Total Assemblies" value={this.state.assemblyCount} />
+                </div>
+
+                <div className="mdl-cell mdl-cell--6-col">
+                  <AssemblyAnalysisItem label="Mean Contigs" value={200} />
+                </div>
+
+                <div className="mdl-cell mdl-cell--6-col">
+                  <AssemblyAnalysisItem label="Total nt" value={2000000} />
+                </div>
+              </div>
             </div>
           </div>
 

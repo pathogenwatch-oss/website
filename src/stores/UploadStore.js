@@ -13,16 +13,8 @@ function addFiles(newRawFiles, newAssemblies) {
   assign(assemblies, newAssemblies);
 }
 
-function setMetadataYear(fileAssemblyId, year) {
-  assemblies[fileAssemblyId].metadata.date.year = year;
-}
-
-function setMetadataMonth(fileAssemblyId, month) {
-  assemblies[fileAssemblyId].metadata.date.month = month;
-}
-
-function setMetadataDay(fileAssemblyId, day) {
-  assemblies[fileAssemblyId].metadata.date.day = day;
+function setMetadataDateComponent(fileAssemblyId, component, value) {
+  assemblies[fileAssemblyId].metadata.date[component] = value;
 }
 
 function setMetadataColumn(fileAssemblyId, columnName, value) {
@@ -31,10 +23,10 @@ function setMetadataColumn(fileAssemblyId, columnName, value) {
 }
 
 function setMetadataDate(fileAssemblyId, date) {
-  var m = moment(date);
-  setMetadataYear(fileAssemblyId, m.year());
-  setMetadataMonth(fileAssemblyId, m.month() + 1);
-  setMetadataDay(fileAssemblyId, m.date());
+  const m = moment(date);
+  setMetadataDateComponent(fileAssemblyId, 'year', m.year());
+  setMetadataDateComponent(fileAssemblyId, 'month', m.month() + 1);
+  setMetadataDateComponent(fileAssemblyId, 'day', m.date());
 }
 
 function setMetadataSource(fileAssemblyId, source) {
@@ -128,49 +120,38 @@ const Store = assign({}, EventEmitter.prototype, {
 
 function handleAction(action) {
   switch (action.type) {
+  case 'add_files':
+    addFiles(action.rawFiles, action.assemblies);
+    emitChange();
+    break;
 
-    case 'add_files':
-      addFiles(action.rawFiles, action.assemblies);
-      emitChange();
-      break;
+  case 'set_metadata_date_component':
+    setMetadataDateComponent(action.fileAssemblyId, action.component, action.value);
+    emitChange();
+    break;
 
-    case 'set_metadata_year':
-      setMetadataYear(action.fileAssemblyId, action.year);
-      emitChange();
-      break;
+  case 'set_metadata_column':
+    setMetadataColumn(action.fileAssemblyId, action.columnName, action.value);
+    emitChange();
+    break;
 
-    case 'set_metadata_month':
-      setMetadataMonth(action.fileAssemblyId, action.month);
-      emitChange();
-      break;
+  case 'set_metadata_date':
+    setMetadataDate(action.fileAssemblyId, action.date);
+    emitChange();
+    break;
 
-    case 'set_metadata_day':
-      setMetadataDay(action.fileAssemblyId, action.day);
-      emitChange();
-      break;
+  case 'set_metadata_source':
+    setMetadataSource(action.fileAssemblyId, action.source);
+    emitChange();
+    break;
 
-    case 'set_metadata_column':
-      setMetadataColumn(action.fileAssemblyId, action.columnName, action.value);
-      emitChange();
-      break;
+  case 'delete_assembly':
+    deleteAssembly(action.fileAssemblyId);
+    emitChange();
+    break;
 
-    case 'set_metadata_date':
-      setMetadataDate(action.fileAssemblyId, action.date);
-      emitChange();
-      break;
-
-    case 'set_metadata_source':
-      setMetadataSource(action.fileAssemblyId, action.source);
-      emitChange();
-      break;
-
-    case 'delete_assembly':
-      deleteAssembly(action.fileAssemblyId);
-      emitChange();
-      break;
-
-    default: // ... do nothing
-
+  default:
+    // ... do nothing
   }
 }
 

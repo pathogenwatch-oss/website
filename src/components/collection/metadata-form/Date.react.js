@@ -1,60 +1,55 @@
 import React from 'react';
 import MetadataActionCreators from '../../../actions/MetadataActionCreators';
 
-const metadataStyle = {
-  display: 'inline-block',
-  marginRight: '5px'
-};
+const CURRENT_YEAR = new Date().getFullYear();
 
 const MetadataDate = React.createClass({
 
   componentDidMount() {
-    var dayElement = React.findDOMNode(this.refs.day_input)
-    var monthElement = React.findDOMNode(this.refs.month_input)
-    var yearElement = React.findDOMNode(this.refs.year_input)
-    componentHandler.upgradeElement(dayElement);
-    componentHandler.upgradeElement(monthElement);
-    componentHandler.upgradeElement(yearElement);
+    componentHandler.upgradeElement(React.findDOMNode(this.refs.day_input));
+    componentHandler.upgradeElement(React.findDOMNode(this.refs.month_input));
+    componentHandler.upgradeElement(React.findDOMNode(this.refs.year_input));
   },
 
-  handleDateChange() {
-    if (event.target.id === 'day') {
-      MetadataActionCreators.setMetadataDay(this.props.assemblyId, event.target.value);
-    }
-    else if (event.target.id === 'month') {
-      MetadataActionCreators.setMetadataMonth(this.props.assemblyId, event.target.value);
-    }
-    else if (event.target.id === 'year') {
-      MetadataActionCreators.setMetadataYear(this.props.assemblyId, event.target.value);
-    }
-  },
-
-  render () {
-    var dateObj = new Date();
-    var year = dateObj.getFullYear();
+  render() {
+    const { day, month, year } = this.props.date;
     return (
-      <form className="metadata-fields">
-        <label className="mdl-card__supporting-text">date</label>
-        <DateInput ref="day_input" dateType="day" handleChange={this.handleDateChange} min="1" max="31"  value={this.props.date.day}/>
-        <DateInput ref="month_input" dateType="month" handleChange={this.handleDateChange} min="1" max="12" value={this.props.date.month}/>
-        <DateInput ref="year_input" dateType="year" handleChange={this.handleDateChange} min="1900" max={year} value={this.props.date.year}/>
-      </form>
+      <fieldset className="metadata-field__date">
+        <legend>Date</legend>
+        <DateInput ref="day_input" onChange={this.updateDateComponent} component="day" min="1" max="31"  value={day}/>
+        <DateInput ref="month_input" onChange={this.updateDateComponent} component="month" min="1" max="12" value={month}/>
+        <DateInput ref="year_input" onChange={this.updateDateComponent} component="year" min="1900" max={CURRENT_YEAR} value={year}/>
+      </fieldset>
     );
-  }
+  },
+
+  updateDateComponent(component, value) {
+    MetadataActionCreators.setMetadataDateComponent(
+      this.props.assemblyId, component, value
+    );
+  },
+
 });
 
-var DateInput = React.createClass({
+const DateInput = React.createClass({
+
   render() {
+    const { component, min, max, value } = this.props;
     return (
       <div className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-        <input className="mdl-textfield__input" type="number" id={this.props.dateType}
-          value={this.props.value}
-          onChange={this.props.handleChange}
-          min={this.props.min || 0} max={this.props.max || 0}/>
-        <label className="mdl-textfield__label" htmlFor={this.props.dateType}>{this.props.dateType}</label>
+        <input className="mdl-textfield__input" type="number" id={component}
+          value={value}
+          onChange={this.handleChange}
+          min={min || 0} max={max || 0}/>
+        <label className="mdl-textfield__label" htmlFor={component}>{component}</label>
       </div>
     );
-  }
+  },
+
+  handleChange(event) {
+    this.props.onChange(this.props.component, event.target.value);
+  },
+
 });
 
 

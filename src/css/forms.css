@@ -1,0 +1,27 @@
+fieldset > legend {
+  display: block;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.54);
+  margin-bottom: 8px;
+}
+
+.mdl-textfield__label {
+  text-transform: capitalize;
+}
+
+.mdl-textfield.is-focused .mdl-textfield__label,
+.mdl-textfield.is-dirty .mdl-textfield__label {
+  color: rgba(0, 0, 0, 0.54) !important;
+}
+
+.mdl-textfield__label::after {
+  background-color: #673c90;
+}
+
+.wgsa-textfield-readonly .mdl-textfield__input {
+  border: none;
+}
+
+.wgsa-textfield-readonly .mdl-textfield__label::after {
+  display: none;
+}
