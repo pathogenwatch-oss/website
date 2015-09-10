@@ -6,6 +6,7 @@ import DownloadButton from './DownloadButton.react';
 
 import UploadedCollectionStore from '../stores/UploadedCollectionStore';
 import ReferenceCollectionStore from '../stores/ReferenceCollectionStore';
+import BodyClickStore from '../stores/BodyClickStore';
 
 const windowURL = window.URL || window.webkitURL;
 function createBlobUrl(data, type = 'text/plain;charset=utf-8') {
@@ -31,10 +32,18 @@ export default React.createClass({
     this.collectionTreeLink = createBlobUrl(ReferenceCollectionStore.getTree());
   },
 
+  componentDidMount() {
+    BodyClickStore.addChangeListener(this.handleBodyClickStoreChange);
+  },
+
+  componentWillUnmount() {
+    BodyClickStore.removeChangeListener(this.handleBodyClickStoreChange);
+  },
+
   render() {
     return (
       <div className={`wgsa-menu ${this.state.active ? 'wgsa-menu--is-open' : ''}`}>
-        <button className="wgsa-menu-button mdl-button" onClick={this.handleButtonClick}>
+        <button ref="button" className="wgsa-menu-button mdl-button" onClick={this.handleButtonClick}>
           <i className="wgsa-button-icon material-icons">file_download</i>
           <span>Downloads</span>
         </button>
@@ -91,6 +100,17 @@ export default React.createClass({
   handleButtonClick() {
     this.setState({
       active: !this.state.active,
+    });
+  },
+
+  handleBodyClickStoreChange() {
+    const button = React.findDOMNode(this.refs.button);
+    if (!this.state.active || BodyClickStore.getEvent().target === button) {
+      return;
+    }
+
+    this.setState({
+      active: false,
     });
   },
 
