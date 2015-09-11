@@ -38,14 +38,33 @@ const backButton = (
 export default React.createClass({
 
   propTypes: {
-    tree: React.PropTypes.string,
+    treeName: React.PropTypes.string,
   },
 
   render() {
+    const { treeName } = this.props;
+    const subtreeAssemblyIds = SubtreeStore.getActiveSubtreeAssemblyIds();
+    if (subtreeAssemblyIds.length === 1) {
+      const assembly = UploadedCollectionStore.getAssemblies()[subtreeAssemblyIds[0]];
+      return (
+        <section className="wgsa-tree">
+          <header className="wgsa-tree-header">
+            { backButton }
+            <h2 className="wgsa-tree-heading">{treeName}</h2>
+          </header>
+          <div className="wgsa-no-subtree">
+            <i className="material-icons">nature</i>
+            <h3>{assembly.metadata.assemblyName}</h3>
+            <p><em>n differences</em></p>
+          </div>
+        </section>
+      );
+    }
+
     return (
       <Tree
-        title={this.props.tree}
-        newick={SubtreeStore.getSubtree(this.props.tree).newick}
+        title={treeName}
+        newick={SubtreeStore.getActiveSubtree().newick}
         navButton={backButton}
         styleTree={styleTree} />
     );

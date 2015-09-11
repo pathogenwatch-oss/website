@@ -31,7 +31,7 @@ export default React.createClass({
   render: function () {
     if (this.state.subtree) {
       return (
-        <Subtree tree={this.state.subtree} />
+        <Subtree treeName={this.state.subtree} />
       );
     }
 

@@ -92,7 +92,7 @@ export default React.createClass({
     const { title, navButton, navOnChange } = this.props;
 
     return (
-      <section style={fullWidthHeight}>
+      <section className="wgsa-tree">
         <header className="wgsa-tree-header">
           { navButton }
           <h2 className="wgsa-tree-heading">{title}</h2>
