@@ -10,16 +10,16 @@ describe('Full Upload Test', function () {
   it('should complete a full upload', function (done) {
     this.timeout(1000 * 60 * 5);
 
-    var assemblyFilenames = [ 'JH1.fna', 'JH9.fna', 'MW2.fna' ];
+    var assemblyNames = [ 'JH1.fna', 'JH9.fna', 'MW2.fna' ];
 
     connectWsClient(function (socket, roomId) {
-      registerCollection(assemblyFilenames, roomId).end(function (err, res) {
+      registerCollection(assemblyNames, roomId).end(function (err, res) {
         var collectionId = res.body.collectionId;
-        var assemblyIds = res.body.userAssemblyIdToAssemblyIdMap;
+        var assemblyIds = res.body.assemblyNameToAssemblyIdMap;
 
         assertUploadNotifications(socket, res.body, done);
 
-        async.each(assemblyFilenames, function (filename, callback) {
+        async.each(assemblyNames, function (filename, callback) {
           uploadAssembly({
             socketRoomId: roomId,
             collectionId: collectionId,

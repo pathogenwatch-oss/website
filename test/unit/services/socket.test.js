@@ -55,13 +55,13 @@ describe('Service: Socket', function () {
         socketRoomId: 0,
         collectionId: 1,
         assemblyId: 2,
-        userAssemblyId: 3
+        assemblyName: 3
       };
       var RESULT = 'result';
       var MESSAGE = {
         collectionId: MESSAGE_IDS.collectionId,
         assemblyId: MESSAGE_IDS.assemblyId,
-        userAssemblyId: MESSAGE_IDS.userAssemblyId,
+        assemblyName: MESSAGE_IDS.assemblyName,
         result: RESULT,
         socketRoomId: MESSAGE_IDS.socketRoomId
       };

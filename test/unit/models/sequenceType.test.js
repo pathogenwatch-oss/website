@@ -12,13 +12,14 @@ describe('Model: Sequence Type', function () {
       var generateStQueryKey =
         rewire('models/sequenceType').__get__('generateStQueryKey');
 
+      var sequenceType = '1280';
       var alleles = {
         one: { alleleId: 1 },
         two: { alleleId: 2 },
         three: { alleleId: 3 }
       };
 
-      var stQueryKey = generateStQueryKey(alleles);
+      var stQueryKey = generateStQueryKey(sequenceType, alleles);
       assert.equal(stQueryKey, 'ST_1280_1_2_3');
     }
   );
@@ -34,7 +35,7 @@ describe('Model: Sequence Type', function () {
         three: { alleleId: 3 }
       };
 
-      var stQueryKey = generateStQueryKey(alleles);
+      var stQueryKey = generateStQueryKey('1280', alleles);
       assert.equal(stQueryKey, null);
     }
   );

@@ -1,7 +1,7 @@
 var assert = require('assert');
 var sinon = require('sinon');
 
-describe.only('Service: Notification', function () {
+describe('Service: Notification', function () {
 
   function createSynchronousQueue() {
     return {

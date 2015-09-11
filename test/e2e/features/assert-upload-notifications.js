@@ -27,7 +27,7 @@ function allResultsReceived(allExpectedResults) {
 
 module.exports = function (socket, ids, done) {
   var collectionId = ids.collectionId;
-  var assemblyIdMap = ids.userAssemblyIdToAssemblyIdMap;
+  var assemblyIdMap = ids.assemblyNameToAssemblyIdMap;
   var allExpectedResults = {};
 
   allExpectedResults[collectionId] = EXPECTED_COLLECTION_RESULTS.map(identity);

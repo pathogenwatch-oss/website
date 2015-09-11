@@ -34,29 +34,23 @@ describe('Service: Message Queue', function () {
     it('should bind to the correct messages', function (done) {
       var messageQueueService = rewire('services/messageQueue');
 
-      var queueSpy = { bind: sinon.spy() };
+      var queueSpy = { bind: sinon.spy(), subscribe: sinon.spy() };
       mockConnectionQueue(messageQueueService, queueSpy);
 
       var NOTIFICATION_IDS = {
         assemblyId: 'assembly1',
-        collectionId: 'collection1'
+        collectionId: 'collection1',
+        speciesId: '1280'
       };
       messageQueueService.newAssemblyNotificationQueue(
-        NOTIFICATION_IDS,
-        function (queue) {
+        NOTIFICATION_IDS, {
+          tasks: [],
+          loggingId: 'Assembly',
+          notifyFn: function () {}
+        }, function (queue) {
           assert(queue.bind.calledWith(
             NOTIFICATION_EXCHANGE_NAME,
-            '*.ASSEMBLY.' + NOTIFICATION_IDS.assemblyId
-          ));
-
-          assert(queue.bind.calledWith(
-            NOTIFICATION_EXCHANGE_NAME,
-            'CORE_TREE_RESULT.COLLECTION.' + NOTIFICATION_IDS.collectionId
-          ));
-
-          assert(queue.bind.calledWith(
-            NOTIFICATION_EXCHANGE_NAME,
-            'COLLECTION_TREE.COLLECTION.'  + NOTIFICATION_IDS.collectionId
+            NOTIFICATION_IDS.speciesId + '.*.ASSEMBLY.' + NOTIFICATION_IDS.assemblyId
           ));
 
           done();
@@ -73,8 +67,11 @@ describe('Service: Message Queue', function () {
       var NOTIFICATION_IDS = {};
       var MESSAGE = { hello: 'world' };
       messageQueueService.newAssemblyNotificationQueue(
-        NOTIFICATION_IDS,
-        function (queue) {
+        NOTIFICATION_IDS, {
+          tasks: [],
+          loggingId: 'Assembly',
+          notifyFn: function () {}
+        }, function (queue) {
           queue.subscribe(function (error, message) {
             assert(error === null);
             assert(sinon.match(message, MESSAGE));
@@ -94,8 +91,11 @@ describe('Service: Message Queue', function () {
       var NOTIFICATION_IDS = {};
       var INVALID_JSON = '{ hello: world }';
       messageQueueService.newAssemblyNotificationQueue(
-        NOTIFICATION_IDS,
-        function (queue) {
+        NOTIFICATION_IDS, {
+          tasks: [],
+          loggingId: 'Assembly',
+          notifyFn: function () {}
+        }, function (queue) {
           queue.subscribe(function (error, value) {
             assert(error);
             assert(!value);

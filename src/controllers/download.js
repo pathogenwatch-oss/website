@@ -17,7 +17,7 @@ var convertJsonToCsv = function (flatJson) {
   return BabyParse.unparse({
     fields: [
       'assemblyId',
-      'userAssemblyId',
+      'assemblyName',
       'datetime',
       'location',
       'latitude',

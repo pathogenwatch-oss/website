@@ -19,7 +19,7 @@ function notifyAssemblyUpload(ids, result) {
   io.sockets.in(ids.socketRoomId).emit('assemblyUploadNotification', {
     collectionId: ids.collectionId,
     assemblyId: ids.assemblyId,
-    userAssemblyId: ids.userAssemblyId,
+    assemblyName: ids.assemblyName,
     result: result,
     socketRoomId: ids.socketRoomId
   });
