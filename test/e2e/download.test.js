@@ -1,6 +1,6 @@
 var assert = require('assert');
 
-describe('Download Routes', function () {
+describe.only('Download Routes', function () {
 
   it('GET /api/download/type/:idType/format/:fileFormat', function (done) {
     var url = '/api/download/type/assembly/format/fasta';
@@ -30,7 +30,7 @@ describe('Download Routes', function () {
       });
   });
 
-  it.only('GET /api/download/file/:fileName [ERROR]', function (done) {
+  it('GET /api/download/file/:fileName [ERROR]', function (done) {
     var url = '/api/download/file/QKN+LXimcfJwgGmQbenLRRh1EYE=.fsa';
     request
       .get(url)
