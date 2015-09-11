@@ -91,7 +91,8 @@ function formatForFrontend(assembly) {
     populationSubtype: assembly.FP_COMP ? assembly.FP_COMP.subTypeAssignment : null,
     metadata: assembly.ASSEMBLY_METADATA,
     analysis: {
-      st: assembly.MLST_RESULT.stType,
+      st: assembly.MLST_RESULT.sequenceType,
+      mlst: assembly.MLST_RESULT.code,
       resistanceProfile: assembly.PAARSNP_RESULT ?
         Object.keys(assembly.PAARSNP_RESULT.resistanceProfile).
           reduce(function (profile, className) {
