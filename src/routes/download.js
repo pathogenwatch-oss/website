@@ -1,11 +1,9 @@
 var express = require('express');
 var router = express.Router();
-var path = require('path');
 
 var fileModel = require('models/file');
 
 var LOGGER = require('utils/logging').createLogger('Download requests');
-var config = require('configuration').server;
 
 router.post(
   '/download/type/:idType/format/:fileFormat', function (req, res, next) {
@@ -13,6 +11,7 @@ router.post(
       idType: req.params.idType,
       format: req.params.fileFormat,
       idToUserNameMap: req.body.idToFilenameMap,
+      idList: Object.keys(req.body.idToFilenameMap),
       speciesId: req.body.speciesId
     };
 
@@ -33,16 +32,21 @@ router.post(
 
 router.get('/download/file/:fileName', function (req, res) {
   LOGGER.info('Received request for files: ' + req.params.fileName);
-  fileModel.getFile(req.params.fileName, function (error, result) {
-    if (error){
+  fileModel.getFile(req.params.fileName, function (error, result, next) {
+    if (error) {
       return next(error);
     }
+
+    if (!req.query.prettyFileName) {
+      return res.status(400).send('`prettyFileName` query parameter is required.');
+    }
+
     res.set({
       'Content-Disposition': 'attachment; filename="' + req.query.prettyFileName + '"',
       'Content-type': 'text/plain'
     });
     res.send(result);
-  })
+  });
 });
 
 module.exports = router;

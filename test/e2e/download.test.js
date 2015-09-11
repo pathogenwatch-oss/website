@@ -1,6 +1,6 @@
 var assert = require('assert');
 
-describe.only('Download Routes', function () {
+describe('Download Routes', function () {
 
   it('GET /api/download/type/:idType/format/:fileFormat', function (done) {
     var url = '/api/download/type/assembly/format/fasta';
@@ -9,7 +9,7 @@ describe.only('Download Routes', function () {
       .send({
         speciesId: '1280',
         idToFilenameMap: {
-          'e746908e-bad1-41c0-b74d-6364c7f0e681': 'CT18'
+          'c3b35122-3625-4638-9091-2d73ad675e6d': 'DAVID_ASSEMBLY_1'
         }
       })
       .end(function (error, result) {
@@ -28,6 +28,13 @@ describe.only('Download Routes', function () {
         //console.log(result.text);
         done();
       });
-  })
+  });
+
+  it.only('GET /api/download/file/:fileName [ERROR]', function (done) {
+    var url = '/api/download/file/QKN+LXimcfJwgGmQbenLRRh1EYE=.fsa';
+    request
+      .get(url)
+      .expect(400, done);
+  });
 
 });
