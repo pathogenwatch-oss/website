@@ -16,10 +16,6 @@
 
 /**** Upload Review - Header ****/
 
-.mdl-layout__drawer-button {
-  color: #673c90 !important;
-}
-
 @media (max-width: 1024px) {
 
   .mdl-layout__header-row {
@@ -47,6 +43,7 @@
   line-height: 32px;
   color: #a386bd;
   margin-bottom: 32px;
+  font-weight: 100;
 }
 
 .welcome-card {
@@ -56,8 +53,8 @@
   margin-bottom: 32px;
   box-sizing: border-box;
   background: url('/assets/img/WGSA_logo.png') #fff no-repeat;
-  background-size: 80px;
-  background-position: -20px -20px;
+  background-size: 60px;
+  background-position: -15px -15px;
 }
 
 .welcome-card:last-child {
@@ -66,7 +63,7 @@
 
 .welcome-card--reverse {
   background-image: url('/assets/img/WGSA_logo_flipped.png');
-  background-position: calc(100% + 20px) -20px;
+  background-position: calc(100% + 15px) -15px;
 }
 
 .welcome-card__title {
@@ -136,7 +133,7 @@
 }
 
 .metadata-fields {
-  max-height: 200px;
+  /*max-height: 200px;*/
   overflow: auto;
 }
 
@@ -173,14 +170,16 @@
   background: url('/assets/img/WGSA_logo.png') #fff no-repeat;
   background-size: 80px;
   background-position: -20px -20px;
+  text-align: center;
 }
 
 .uploadWorkspaceNavigationTitle {
-  font-size: 25px;
+  font-size: 24px;
   font-weight: 300;
-  line-height: 30px;
-  margin: 50px 0px 10px 0px;
+  line-height: 64px;
+  margin: 40px 0px 0px 0px;
   text-align: center;
+  border-bottom: 1px solid rgba(0, 0, 0, .12);
 }
 
 .uploadWorkspaceNavigationTitle > .mdl-badge:after {
@@ -190,6 +189,9 @@
 .assemblyNavTitle {
   text-align: center;
   border-bottom: 1px solid #e0e0e0;
+}
+
+.overview-button {
 }
 
 .wgsa-assembly-list-wrapper {
@@ -206,6 +208,7 @@
   left: 0;
   right: 0;
   padding: 0px;
+  margin: 0px;
 }
 
 .assemblyListItem {
@@ -277,6 +280,12 @@
 .wgsa-upload-navigation__footer {
   padding: 16px 0;
   text-align: center;
+  display: inline-flex;
+  justify-content: center;
+}
+
+.wgsa-upload-navigation__footer button {
+  margin: 0px 10px;
 }
 
 .confirm-delete-button {

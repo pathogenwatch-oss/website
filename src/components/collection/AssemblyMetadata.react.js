@@ -3,6 +3,11 @@ import React from 'react';
 import MetadataDate from './metadata-form/Date.react';
 import MetadataActionCreators from '../../actions/MetadataActionCreators';
 import InputField from './InputField.react';
+import Map from './Map.react.js';
+
+var style = {
+  float: 'right'
+};
 
 export default React.createClass({
 
@@ -37,10 +42,21 @@ export default React.createClass({
 
   render: function () {
     const { fasta, metadata } = this.props.assembly;
+    const locations = {};
+    if (this.props.assembly) {
+      locations[this.props.assembly.fasta.name] = this.props.assembly.metadata.geography;
+    }
 
     return (
       <form className="metadata-fields">
-        <MetadataDate key={fasta.name} assemblyId={fasta.name} date={metadata.date} />
+        <div className="mdl-grid mdl-grid--no-spacing">
+          <div className="mdl-cell mdl-cell--6-col">
+            <MetadataDate key={fasta.name} assemblyId={fasta.name} date={metadata.date} />
+          </div>
+          <div className="mdl-cell mdl-cell--6-col">
+            <Map style={style} width={"100%"} height={100} locations={locations}/>
+          </div>
+        </div>
         <fieldset className="metadata-fields__other">
           <legend>Other</legend>
           {this.getMetadataFieldComponents(metadata)}

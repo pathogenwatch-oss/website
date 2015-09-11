@@ -8,8 +8,11 @@ var uploadButtonStyle = {
   right: '30px',
   top: '30px',
   position: 'absolute',
-  'background': DEFAULT.CGPS.COLOURS.PURPLE,
-  'color': '#fff'
+  color: '#fff'
+};
+
+var iconStyle = {
+  color: '#fff'
 };
 
 var UploadButton = React.createClass({
@@ -23,7 +26,8 @@ var UploadButton = React.createClass({
       uploadButtonStyle.background = DEFAULT.CGPS.COLOURS.GREY;
     }
     else {
-      uploadButtonStyle.background = DEFAULT.CGPS.COLOURS.PURPLE;
+      uploadButtonStyle.background = DEFAULT.CGPS.COLOURS.GREY;
+      iconStyle.color = DEFAULT.CGPS.COLOURS.PURPLE;
     }
 
     return (
@@ -31,7 +35,7 @@ var UploadButton = React.createClass({
         style={uploadButtonStyle} className="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--4dp"
         disabled={!this.props.activateButton}
         onClick={this.handleClick}>
-        <i className="material-icons">cloud_upload</i>
+        <i style={iconStyle} className="material-icons">cloud_upload</i>
       </button>
     );
   }

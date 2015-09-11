@@ -4,8 +4,8 @@ var Logo = require('../Logo.react.js');
 var DEFAULT = require('../../defaults.js');
 
 var headerStyle = {
-  'background': '#fff',
-   color: DEFAULT.CGPS.COLOURS.PURPLE
+  'background': DEFAULT.CGPS.COLOURS.PURPLE,
+   color: '#fff'
 };
 
 var UploadReviewHeader = React.createClass({

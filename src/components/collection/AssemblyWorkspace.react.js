@@ -9,7 +9,6 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 import AssemblyMetadata from './AssemblyMetadata.react';
 import AssemblyAnalysis from './AssemblyAnalysis.react';
 
-import Map from './Map.react';
 import AssemblyAnalysisChart from './AssemblyAnalysisChart.react';
 
 import UploadWorkspaceNavigation from './UploadWorkspaceNavigation.react';
@@ -19,6 +18,7 @@ import Overview from './Overview.react';
 
 import UploadActionCreators from '../../actions/UploadActionCreators';
 import SocketActionCreators from '../../actions/SocketActionCreators';
+import UploadWorkspaceNavigationActionCreators from '../../actions/UploadWorkspaceNavigationActionCreators';
 import FileProcessingStore from '../../stores/FileProcessingStore';
 import SocketStore from '../../stores/SocketStore';
 
@@ -156,11 +156,9 @@ const AssemblyWorkspace = React.createClass({
 
   render() {
     loadingAnimationStyle.display = this.state.isProcessing ? 'block' : 'none';
-    const locations = {};
     let pageTitle = 'WGSA';
 
     if (this.props.assembly) {
-      locations[this.props.assembly.fasta.name] = this.props.assembly.metadata.geography;
       pageTitle = `WGSA | ${this.props.assembly.fasta.name}`;
     } else {
       pageTitle = `WGSA | ${this.state.pageTitleAppend}`;
@@ -174,8 +172,9 @@ const AssemblyWorkspace = React.createClass({
 
           <UploadWorkspaceNavigation assembliesUploaded={this.props.assembly ? true : false} totalAssemblies={this.props.totalAssemblies}>
             <footer className="wgsa-upload-navigation__footer mdl-shadow--4dp">
-              <button className="mdl-button mdl-button--raised" title="" onClick={this.handleClick}>
-                Add files
+              <AssemblyOverviewButton enabled={this.props.assembliesUploaded}/>
+              <button type="button" className="mdl-button mdl-js-button mdl-button--raised mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect" onClick={this.handleClick}>
+                <i className="material-icons">add</i>
               </button>
             </footer>
           </UploadWorkspaceNavigation>
@@ -186,32 +185,27 @@ const AssemblyWorkspace = React.createClass({
                 <div className="mdl-grid">
                   <div className="mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
                     <div className="heading"> Metadata </div>
-
                     <div className="card-style">
                       <AssemblyMetadata key={this.props.assembly.metadata.assemblyName} assembly={this.props.assembly} />
                     </div>
                   </div>
 
-                  <div ref="mapDiv" className="mapDivStyle mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
-                    <div className="cardStyle--no-padding">
-                      <Map width={"100%"} height={300} locations={locations}/>
-                    </div>
-                  </div>
-
                   <div className="mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
-                    <div className="heading"> Analysis </div>
-                    <div className="card-style">
-                      <AssemblyAnalysis assembly={this.props.assembly} />
+                    <div className="mdl-grid mdl-grid--no-spacing">
+                      <div className="mdl-cell mdl-cell--12-col">
+                        <div className="heading"> Analysis </div>
+                        <div className="card-style">
+                          <AssemblyAnalysis assembly={this.props.assembly} />
+                        </div>
+                      </div>
+                      <div className="mdl-cell mdl-cell--12-col">
+                        <div className="heading"> N50 Contigs </div>
+                        <div className="card-style">
+                          <AssemblyAnalysisChart analysis={this.props.assembly.analysis} />
+                        </div>
+                      </div>
                     </div>
                   </div>
-
-                  <div className="mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
-                    <div className="heading"> Chart </div>
-                    <div className="card-style">
-                      <AssemblyAnalysisChart analysis={this.props.assembly.analysis} />
-                    </div>
-                  </div>
-
                 </div>
               </div>
 
@@ -229,4 +223,21 @@ const AssemblyWorkspace = React.createClass({
 
 });
 
+const AssemblyOverviewButton = React.createClass({
+
+  render() {
+    return (
+      <div className="overview-button">
+        <button type="button" title="Overview" className="mdl-button mdl-js-button mdl-button--raised mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect" onClick={this.handleClick}>
+          <i className="material-icons">account_balance</i>
+        </button>
+      </div>
+    );
+  },
+
+  handleClick() {
+    UploadWorkspaceNavigationActionCreators.navigateToAssembly(null);
+  },
+
+});
 module.exports = AssemblyWorkspace;
