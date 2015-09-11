@@ -4,6 +4,8 @@ import assign from 'object-assign';
 import Api from '../utils/Api';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 
+import UploadedCollectionStore from './UploadedCollectionStore.js';
+
 const CHANGE_EVENT = 'change';
 
 const requestedFiles = {};
@@ -32,24 +34,37 @@ function emitChange() {
   Store.emit(CHANGE_EVENT);
 }
 
+function createIdToNameMap(id) {
+  const assemblies = UploadedCollectionStore.getAssemblies();
+  const collectionId = UploadedCollectionStore.getCollectionId();
+  const assemblyIds = (id === collectionId) ? Object.keys(assemblies) : [ id ];
+  console.log(assemblyIds);
+  return assemblyIds.reduce((memo, assemblyId) => {
+    memo[assemblyId] = assemblies[assemblyId].metadata.assemblyName;
+    return memo;
+  }, {});
+}
+
 function handleAction(action) {
   switch (action.type) {
 
   case 'request_file':
-    const { id, idType, fileType, speciesId } = action;
+    const { id, fileType, speciesId } = action;
     const requestedFilesForId = requestedFiles[id] || {};
 
     // ensures map is updated on first request
     requestedFiles[id] = requestedFilesForId;
 
-    Api.requestFile({ speciesId }, idType, fileType, function (error, fileName) {
-      if (error) {
-        throw error;
+    Api.requestFile(fileType, { speciesId, idToFilenameMap: createIdToNameMap(id) },
+      function (error, fileName) {
+        if (error) {
+          throw error;
+        }
+        requestedFilesForId[fileType] = fileName;
+        console.log(requestedFiles);
+        emitChange();
       }
-      requestedFilesForId[fileType] = fileName;
-      console.log(requestedFiles);
-      emitChange();
-    });
+    );
     break;
 
   default:

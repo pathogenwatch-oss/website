@@ -8,6 +8,8 @@ import UploadedCollectionStore from '../stores/UploadedCollectionStore';
 import ReferenceCollectionStore from '../stores/ReferenceCollectionStore';
 import BodyClickStore from '../stores/BodyClickStore';
 
+import Species from '../species';
+
 const windowURL = window.URL || window.webkitURL;
 function createBlobUrl(data, type = 'text/plain;charset=utf-8') {
   const blob = new Blob([ data ], { type });
@@ -49,12 +51,12 @@ export default React.createClass({
         </button>
         <ul className="wgsa-menu__list mdl-shadow--2dp">
           <li>
-            <span className="wgsa-menu-heading">Species Downloads</span>
+            <span className="wgsa-menu-heading">Population Downloads</span>
             <ul className="wgsa-submenu">
               <li className="wgsa-menu__item">
                 <a href={this.populationTreeLink}
                   target="_blank"
-                  download={`${this.collectionId}_population_tree.nwk`}
+                  download={`${Species.nickname}_population_tree.nwk`}
                   className="mdl-button mdl-button--icon">
                   <i className="wgsa-button-icon material-icons">file_download</i>
                 </a>
@@ -67,18 +69,16 @@ export default React.createClass({
             <ul className="wgsa-submenu">
               <li className="wgsa-menu__item">
                 <DownloadButton
+                  description="Kernel Checksum Distribution"
                   id={this.collectionId}
-                  type="collection"
-                  format="kernel_checksum_distribution"
-                  description="Kernel Checksum Distribution" />
+                  format="kernel_checksum_distribution" />
                 Kernel Checksum Distribution
               </li>
               <li className="wgsa-menu__item">
                 <DownloadButton
+                  description="Concatenated Gene Family"
                   id={this.collectionId}
-                  type="collection"
-                  format="extended_kernel_fasta"
-                  description="Concatenated Gene Family" />
+                  format="extended_kernel_fasta" />
                 Concatenated Gene Family
               </li>
               <li className="wgsa-menu__item">

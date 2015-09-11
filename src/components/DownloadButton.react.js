@@ -16,7 +16,6 @@ export default React.createClass({
   propTypes: {
     description: React.PropTypes.string,
     id: React.PropTypes.string,
-    type: React.PropTypes.string,
     format: React.PropTypes.string,
   },
 
@@ -70,11 +69,11 @@ export default React.createClass({
       loading: true,
     });
 
-    DownloadActionCreators.requestFile(this.props.id, this.props.type, this.props.format);
+    DownloadActionCreators.requestFile(this.props.id, this.props.format);
   },
 
   handleDownloadStoreChange() {
-    const link = DownloadStore.getLink(this.props.id, this.props.type);
+    const link = DownloadStore.getLink(this.props.id, this.props.format);
     if (link) {
       this.setState({
         loading: false,
