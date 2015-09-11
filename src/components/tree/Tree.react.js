@@ -2,14 +2,13 @@ import '../../css/tree.css';
 
 import React from 'react';
 import PhyloCanvas from 'PhyloCanvas';
-import assign from 'object-assign';
 
 import TreeControls from './TreeControls.react';
 import TreeMenu from './TreeMenu.react';
 
 import TableStore from '../../stores/TableStore';
-import ReferenceCollectionStore from '../../stores/ReferenceCollectionStore';
 import UploadedCollectionStore from '../../stores/UploadedCollectionStore';
+import ReferenceCollectionStore from '../../stores/ReferenceCollectionStore';
 
 import MetadataUtils from '../../utils/Metadata';
 import DataUtils from '../../utils/Data';
@@ -37,7 +36,7 @@ export default React.createClass({
       treeType: DEFAULT.TREE_TYPE,
       nodeSize: DEFAULT.NODE_SIZE,
       labelSize: DEFAULT.LABEL_SIZE,
-      labelProperty: 'Assembly',
+      labelProperty: TableStore.getLabelTableColumnName(),
       treeLoaded: false,
     });
   },
@@ -89,7 +88,7 @@ export default React.createClass({
   },
 
   render() {
-    const { title, navButton, navOnChange } = this.props;
+    const { title, navButton } = this.props;
 
     return (
       <section style={fullWidthHeight}>
@@ -133,32 +132,28 @@ export default React.createClass({
   },
 
   setNodeLabels() {
-    const publicCollectionAssemblies = ReferenceCollectionStore.getAssemblies();
-    const uploadedCollectionAssemblies = UploadedCollectionStore.getAssemblies();
+    const labelProperty = this.state.labelProperty;
 
-    const combinedAssemblies = assign({}, publicCollectionAssemblies, uploadedCollectionAssemblies);
-
-    Object.keys(combinedAssemblies).forEach((assemblyId) => {
-      const labelProperty = this.state.labelProperty;
-      const assembly = combinedAssemblies[assemblyId];
-      let labelValue;
-
-      if (labelProperty === 'Country') {
-        labelValue = MetadataUtils.getCountry(assembly);
-      } else if (labelProperty === 'Date') {
-        labelValue = DataUtils.getFormattedDateString(assembly.metadata.date) || '';
-      } else if (labelProperty === 'ST') {
-        labelValue = assembly.analysis.st || '';
+    for (const leaf of this.phylocanvas.leaves) {
+      if (UploadedCollectionStore.contains(leaf.id)) {
+        const assembly = UploadedCollectionStore.getAssemblies()[leaf.id];
+        let labelValue;
+        if (labelProperty === 'Country') {
+          labelValue = MetadataUtils.getCountry(assembly);
+        } else if (labelProperty === 'Date') {
+          labelValue = DataUtils.getFormattedDateString(assembly.metadata.date) || '';
+        } else if (labelProperty === 'ST') {
+          labelValue = assembly.analysis.st || '';
+        } else {
+          labelValue =
+            assembly.metadata.assemblyName || assembly.metatdata.assemblyId;
+        }
+        leaf.label = labelValue;
       } else {
-        labelValue = labelValue = assembly.metadata.assemblyName || assemblyId;
+        const assembly = ReferenceCollectionStore.getAssemblies()[leaf.id];
+        leaf.label = `${leaf.id}_${assembly.analysis.st}`;
       }
-
-      const branch = this.phylocanvas.branches[assemblyId];
-
-      if (branch && branch.leaf) {
-        branch.label = labelValue;
-      }
-    });
+    }
 
     this.phylocanvas.fitInPanel();
   },
@@ -177,7 +172,7 @@ export default React.createClass({
 
   handleRedrawOriginalTree() {
     this.phylocanvas.redrawOriginalTree();
-    this.props.styleTree(this.phylocanvas);
+    this.styleTree(this.phylocanvas);
     this.phylocanvas.draw();
   },
 
