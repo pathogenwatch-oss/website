@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Tree from './tree/Tree.react';
-import TreeSwitcher from './tree/TreeSwitcher.react';
+import Switch from './Switch.react';
 
 import ReferenceCollectionStore from '../stores/ReferenceCollectionStore';
 import SubtreeStore from '../stores/SubtreeStore';
@@ -86,7 +86,13 @@ export default React.createClass({
     return (
       <Tree
         { ...this.state.treeProps }
-        navButton={<TreeSwitcher onChange={this.handleTreeSwitch}/>} />
+        navButton={
+          <Switch
+            id="tree-switcher"
+            left={{ title: 'Population Tree', icon: 'nature' }}
+            right={{ title: 'Collection Tree', icon: 'nature_people' }}
+            onChange={this.handleTreeSwitch} />
+        } />
     );
   },
 
