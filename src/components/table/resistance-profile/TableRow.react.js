@@ -1,7 +1,7 @@
 var React = require('react');
 var DataUtils = require('../../../utils/Data');
 var MetadataUtils = require('../../../utils/Metadata');
-var TableStore = require('../../../stores/TableStore');
+var FilteredDataStore = require('../../../stores/FilteredDataStore');
 
 var resistantStyle = {
   color: '#ff0000'
@@ -32,7 +32,7 @@ var TableRow = React.createClass({
   },
 
   getIsolateMetadataTableCellElements: function () {
-    var selectedTableColumnName = TableStore.getColourTableColumnName();
+    var selectedTableColumnName = FilteredDataStore.getColourTableColumnName();
     var dataItemValue;
 
     var metadataTableCellElements = Object.keys(this.rowData).map(function (dataItemKey) {
@@ -51,7 +51,7 @@ var TableRow = React.createClass({
   getIsolateResistanceProfileTableCellElements: function () {
     var isolate = this.props.isolate;
     var resistanceProfile = isolate.analysis.resistanceProfile;
-    var selectedTableColumnName = TableStore.getColourTableColumnName();
+    var selectedTableColumnName = FilteredDataStore.getColourTableColumnName();
     var dataItemValue;
 
     var antibioticResistanceTableCellElements = Object.keys(resistanceProfile).sort().map(function (dataItemKey) {

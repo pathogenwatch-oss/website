@@ -31,38 +31,38 @@ function setColourTableColumnName(tableColumnName) {
   colourTableColumnName = tableColumnName;
 }
 
-function emitChange() {
-  TableStore.emit(CHANGE_EVENT);
-}
+const FilteredDataStore = assign({}, EventEmitter.prototype, {
 
-var TableStore = assign({}, EventEmitter.prototype, {
-
-  addChangeListener: function (callback) {
+  addChangeListener(callback) {
     this.on(CHANGE_EVENT, callback);
   },
 
-  removeChangeListener: function (callback) {
+  removeChangeListener(callback) {
     this.removeListener(CHANGE_EVENT, callback);
   },
 
-  getAssemblyIds: function () {
+  getAssemblyIds() {
     return assemblyIds;
   },
 
-  getLabelTableColumnName: function () {
+  getLabelTableColumnName() {
     return labelTableColumnName;
   },
 
-  getColourTableColumnName: function () {
+  getColourTableColumnName() {
     return colourTableColumnName;
-  }
+  },
 
 });
+
+function emitChange() {
+  FilteredDataStore.emit(CHANGE_EVENT);
+}
 
 function handleAction(action) {
   switch (action.type) {
 
-  case 'set_table_assembly_ids':
+  case 'set_filtered_assembly_ids':
     setAssemblyIds(action.assemblyIds);
     emitChange();
     break;
@@ -97,6 +97,6 @@ function handleAction(action) {
   }
 }
 
-TableStore.dispatchToken = AppDispatcher.register(handleAction);
+FilteredDataStore.dispatchToken = AppDispatcher.register(handleAction);
 
-module.exports = TableStore;
+module.exports = FilteredDataStore;

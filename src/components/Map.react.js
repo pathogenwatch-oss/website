@@ -3,11 +3,10 @@ import assign from 'object-assign';
 
 import ReferenceCollectionStore from '../stores/ReferenceCollectionStore';
 import UploadedCollectionStore from '../stores/UploadedCollectionStore';
-import MapStore from '../stores/MapStore';
-import TableStore from '../stores/TableStore';
+import FilteredDataStore from '../stores/FilteredDataStore';
 
 import MapUtils from '../utils/Map';
-import ResistanceUtils from '../utils/Resistance';
+import FilteredDataUtils from '../utils/FilteredData';
 
 import DEFAULT from '../defaults';
 
@@ -24,39 +23,29 @@ const Map = React.createClass({
 
   getInitialState: function () {
     return {
-      assemblyIds: [],
+      assemblyIds: FilteredDataStore.getAssemblyIds(),
     };
   },
 
   componentDidMount: function () {
     this.initializeMap();
 
-    MapStore.addChangeListener(this.handleMapStoreChange);
-    TableStore.addChangeListener(this.handleTableStoreChange);
-
-    this.setState({
-      assemblyIds: MapStore.getAssemblyIds(),
-    });
-  },
-
-  componentWillUnmount: function () {
-    MapStore.removeChangeListener(this.handleMapStoreChange);
-    TableStore.removeChangeListener(this.handleTableStoreChange);
-  },
-
-  handleMapStoreChange: function () {
-    this.setState({
-      assemblyIds: MapStore.getAssemblyIds(),
-    });
-  },
-
-  handleTableStoreChange: function () {
-    this.createMarkers();
+    FilteredDataStore.addChangeListener(this.handleFilteredDataStoreChange);
   },
 
   componentDidUpdate: function () {
     this.resizeMap();
     this.createMarkers();
+  },
+
+  componentWillUnmount: function () {
+    FilteredDataStore.removeChangeListener(this.handleFilteredDataStoreChange);
+  },
+
+  handleFilteredDataStoreChange: function () {
+    this.setState({
+      assemblyIds: FilteredDataStore.getAssemblyIds(),
+    });
   },
 
   resizeMap: function () {
@@ -127,7 +116,7 @@ const Map = React.createClass({
   },
 
   getMarkerColourForAssembly: function (assembly) {
-    return ResistanceUtils.getColour(assembly);
+    return FilteredDataUtils.getColour(assembly);
   },
 
   createMarkers: function () {
@@ -160,12 +149,8 @@ const Map = React.createClass({
   },
 
   createMarker: function (dataObjectId, latitude, longitude, shape = DEFAULT.SHAPE, colour = DEFAULT.COLOUR) {
-    if (!latitude) {
-      throw new Error(`Can't create map marker because latitude is missing in ${dataObjectId} data object :(`);
-    }
-
-    if (!longitude) {
-      throw new Error(`Can't create map marker because longitude is missing in ${dataObjectId} data object :(`);
+    if (!latitude || !longitude) {
+      return null;
     }
 
     if (shape === DEFAULT.SHAPE) {
