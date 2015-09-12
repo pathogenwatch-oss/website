@@ -40,30 +40,20 @@
   color: inherit;
 }
 
-.wgsa-tree-switcher i {
-  color: rgba(0, 0, 0, 0.39);
-}
-
-.wgsa-tree-actions,
-.wgsa-tree-switcher i.active {
+.wgsa-tree-actions {
   color: #673c90;
 }
 
-.wgsa-tree-control .mdl-slider,
-.wgsa-tree-switcher .mdl-switch__input,
-.wgsa-tree-switcher .mdl-switch__ripple-container {
+.wgsa-tree-control .mdl-slider {
   display: none;
 }
 
-.wgsa-tree-control .mdl-slider.is-upgraded,
-.wgsa-tree-switcher .mdl-switch.is-upgraded {
+.wgsa-tree-control .mdl-slider.is-upgraded {
   display: block;
 }
 
 .wgsa-tree-control .mdl-slider::thumb,
-.mdl-slider__background-lower,
-.wgsa-tree-switcher .mdl-switch__thumb,
-.wgsa-tree-switcher .is-checked .mdl-switch__thumb {
+.mdl-slider__background-lower {
   background: #673c90;
 }
 
@@ -79,17 +69,4 @@
   font-size: 12px;
   font-weight: 700;
   color: rgba(0, 0, 0, 0.54);
-}
-
-.wgsa-tree-switcher {
-  display: flex;
-  width: 88px;
-}
-
-.wgsa-tree-switcher:hover {
-  cursor: pointer;
-}
-
-.wgsa-tree-switcher .is-checked .mdl-switch__track {
-  background: rgba(0, 0, 0, 0.26);
 }
