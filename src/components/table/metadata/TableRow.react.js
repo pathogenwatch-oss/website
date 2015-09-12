@@ -6,7 +6,6 @@ import DataUtils from '../../../utils/Data';
 import MetadataUtils from '../../../utils/Metadata';
 
 const downloadButtonProps = {
-  type: 'assembly',
   format: 'fasta',
   description: 'Assembly Fasta',
 };

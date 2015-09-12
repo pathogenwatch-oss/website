@@ -63,9 +63,9 @@ function getCollection(speciesId, collectionId, callback) {
     });
 }
 
-function requestFile(requestBody, idType, fileType, callback) {
+function requestFile(fileType, requestBody, callback) {
   $.ajax(
-    postJson(`/download/type/${idType}/format/${fileType}`, requestBody)
+    postJson(`/download/type/assembly/format/${fileType}`, requestBody)
   ).done(function (response) {
     console.log(response);
     callback(null, response);
