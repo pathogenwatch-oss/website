@@ -21,6 +21,8 @@
       },
       "analysis":{
         "st":"22",
+        "mlst":"1_2_3_4_5",
+        "totalCompleteMatches":1,
         "resistanceProfile":{
           "Levofloxacin":{
             "antibioticClass":"Fluoroquinolones",
@@ -209,6 +211,8 @@
       },
       "analysis":{
         "st":"22",
+        "mlst":"1_2_3_4_5",
+        "totalCompleteMatches":2,
         "resistanceProfile":{
           "Levofloxacin":{
             "antibioticClass":"Fluoroquinolones",
@@ -397,6 +401,8 @@
       },
       "analysis":{
         "st":"22",
+        "mlst":"1_2_3_4_5",
+        "totalCompleteMatches":3,
         "resistanceProfile":{
           "Levofloxacin":{
             "antibioticClass":"Fluoroquinolones",
