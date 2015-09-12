@@ -18,8 +18,23 @@ var ASSEMBLY_ANALYSES = {
   SCCMEC: 'SCCMEC'
 };
 
+var systemMetadataColumns = [
+  'assemblyId', 'soeciesId', 'assemblyName',
+  'date', 'year', 'month', 'day',
+  'geography', 'latitude', 'longitude', 'location'
+];
+
 function createKey(id, prefix) {
   return prefix + '_' + id;
+}
+
+function filterUserDefinedMetadata(metadata) {
+  return Object.keys(metadata).reduce(function (memo, key) {
+    if (systemMetadataColumns.indexOf(key) === -1) {
+      memo[key] = metadata[key];
+    }
+    return memo;
+  }, {});
 }
 
 function createMetadataRecord(ids, metadata) {
@@ -38,7 +53,8 @@ function createMetadataRecord(ids, metadata) {
         longitude: metadata.longitude
       },
       location: metadata.location
-    }
+    },
+    userDefined: filterUserDefinedMetadata(metadata)
   };
 }
 
