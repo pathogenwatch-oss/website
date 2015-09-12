@@ -69,4 +69,7 @@ app.use('/', function (req, res) {
   res.sendFile(__dirname + '/public/index.html');
 });
 
-app.listen(8080, "localhost");
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
+
+server.listen(8080);
