@@ -2,7 +2,7 @@ import React from 'react';
 
 import ReferenceCollectionStore from '../../../stores/ReferenceCollectionStore';
 import UploadedCollectionStore from '../../../stores/UploadedCollectionStore';
-import TableStore from '../../../stores/TableStore';
+import FilteredDataStore from '../../../stores/FilteredDataStore';
 
 import TableHeader from './TableHeader.react';
 import TableRow from './TableRow.react';
@@ -16,26 +16,26 @@ const DataTable = React.createClass({
 
   getInitialState: function () {
     return {
-      assemblyIds: TableStore.getAssemblyIds(),
+      assemblyIds: FilteredDataStore.getAssemblyIds(),
     };
   },
 
   componentDidMount: function () {
-    TableStore.addChangeListener(this.handleTableStoreChange);
+    FilteredDataStore.addChangeListener(this.handleFilteredDataStoreChange);
   },
 
   componentWillUnmount: function () {
-    TableStore.removeChangeListener(this.handleTableStoreChange);
+    FilteredDataStore.removeChangeListener(this.handleFilteredDataStoreChange);
   },
 
-  handleTableStoreChange: function () {
+  handleFilteredDataStoreChange: function () {
     this.setState({
-      assemblyIds: TableStore.getAssemblyIds(),
+      assemblyIds: FilteredDataStore.getAssemblyIds(),
     });
   },
 
   getTableRowElements: function () {
-    var tableAssemblyIds = TableStore.getAssemblyIds();
+    var tableAssemblyIds = FilteredDataStore.getAssemblyIds();
 
     if (! tableAssemblyIds) {
       return null;

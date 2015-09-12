@@ -1,6 +1,6 @@
 import ANTIBIOTICS from '../../static_data/antibiotics.json';
 
-import TableStore from '../stores/TableStore';
+import FilteredDataStore from '../stores/FilteredDataStore';
 import ReferenceCollectionStore from '../stores/ReferenceCollectionStore';
 import UploadedCollectionStore from '../stores/UploadedCollectionStore';
 
@@ -14,7 +14,7 @@ function columnNameIsAntibiotic(columnName) {
 }
 
 function getColour(assembly) {
-  const selectedTableColumnName = TableStore.getColourTableColumnName();
+  const selectedTableColumnName = FilteredDataStore.getColourTableColumnName();
   let colour = '#ffffff';
 
   if (!assembly) {

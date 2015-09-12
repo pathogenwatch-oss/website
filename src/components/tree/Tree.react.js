@@ -7,7 +7,7 @@ import assign from 'object-assign';
 import TreeControls from './TreeControls.react';
 import TreeMenu from './TreeMenu.react';
 
-import TableStore from '../../stores/TableStore';
+import FilteredDataStore from '../../stores/FilteredDataStore';
 import ReferenceCollectionStore from '../../stores/ReferenceCollectionStore';
 import UploadedCollectionStore from '../../stores/UploadedCollectionStore';
 
@@ -46,7 +46,7 @@ export default React.createClass({
     // TODO: Un-hack this
     componentHandler.upgradeDom();
 
-    TableStore.addChangeListener(this.handleTableStoreChange);
+    FilteredDataStore.addChangeListener(this.handleFilteredDataStoreChange);
 
     const phylocanvas = PhyloCanvas.createTree('phylocanvas-container');
 
@@ -85,7 +85,7 @@ export default React.createClass({
   },
 
   componentWillUnmount() {
-    TableStore.removeChangeListener(this.handleTableStoreChange);
+    FilteredDataStore.removeChangeListener(this.handleFilteredDataStoreChange);
   },
 
   render() {
@@ -186,9 +186,9 @@ export default React.createClass({
     this.phylocanvas.draw();
   },
 
-  handleTableStoreChange() {
+  handleFilteredDataStoreChange() {
     this.setState({
-      labelProperty: TableStore.getLabelTableColumnName(),
+      labelProperty: FilteredDataStore.getLabelTableColumnName(),
     });
   },
 
