@@ -3,8 +3,6 @@ import '../../css/forms.css';
 
 import React from 'react';
 import FileDragAndDrop from 'react-file-drag-and-drop';
-import createThemeManager from 'material-ui/lib/styles/theme-manager';
-import injectTapEventPlugin from 'react-tap-event-plugin';
 
 import AssemblyMetadata from './AssemblyMetadata.react';
 import AssemblyAnalysis from './AssemblyAnalysis.react';
@@ -25,9 +23,6 @@ import SocketStore from '../../stores/SocketStore';
 import SocketUtils from '../../utils/Socket';
 import DEFAULT from '../../defaults.js';
 import { validateMetadata } from '../../utils/Metadata.js';
-
-const ThemeManager = createThemeManager();
-injectTapEventPlugin();
 
 const loadingAnimationStyle = {
   display: 'block',
@@ -51,22 +46,12 @@ const AssemblyWorkspace = React.createClass({
     totalAssemblies: React.PropTypes.number,
   },
 
-  childContextTypes: {
-    muiTheme: React.PropTypes.object,
-  },
-
   getInitialState() {
     return {
       isProcessing: false,
       uploadButtonActive: false,
       confirmedMultipleMetadataDrop: false,
       pageTitleAppend: 'Upload'
-    };
-  },
-
-  getChildContext() {
-    return {
-      muiTheme: ThemeManager.getCurrentTheme(),
     };
   },
 
@@ -183,7 +168,7 @@ const AssemblyWorkspace = React.createClass({
             { this.props.assembly &&
               <div>
                 <div className="mdl-grid">
-                  <div className="metadata-container mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
+                  <div className="mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
                     <div className="heading"> Metadata </div>
                     <div className="card-style">
                       <AssemblyMetadata key={this.props.assembly.metadata.assemblyName} assembly={this.props.assembly} />
