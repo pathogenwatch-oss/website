@@ -193,13 +193,13 @@ const AssemblyWorkspace = React.createClass({
                   <div className="mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
                     <div className="mdl-grid mdl-grid--no-spacing">
                       <div className="mdl-cell mdl-cell--12-col">
-                        <div className="heading"> Analysis </div>
+                        <div className="heading"> Assembly Metrics </div>
                         <div className="card-style">
                           <AssemblyAnalysis assembly={this.props.assembly} />
                         </div>
                       </div>
                       <div className="mdl-cell mdl-cell--12-col">
-                        <div className="heading"> N50 Contigs </div>
+                        <div className="heading"> N50 Chart </div>
                         <div className="card-style">
                           <AssemblyAnalysisChart analysis={this.props.assembly.analysis} />
                         </div>
@@ -229,7 +229,7 @@ const AssemblyOverviewButton = React.createClass({
     return (
       <div className="overview-button">
         <button type="button" title="Overview" className="mdl-button mdl-js-button mdl-button--raised mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect" onClick={this.handleClick}>
-          <i className="material-icons">account_balance</i>
+          <i className="material-icons">home</i>
         </button>
       </div>
     );

@@ -110,6 +110,24 @@ const Store = assign({}, EventEmitter.prototype, {
     }, {});
   },
 
+  getMinMaxNoContigsForAllAssemblies() {
+    var noContigsArray = [];
+    for (var assemblyId in assemblies) {
+      noContigsArray.push(assemblies[assemblyId].analysis.totalNumberOfContigs);
+    }
+
+    return [Math.min(...noContigsArray), Math.max(...noContigsArray)];
+  },
+
+  getAverageAssemblyLengthForAllAssemblies() {
+    var totalAssemblyLength = 0;
+    var noAssemblies = Object.keys(assemblies).length;
+    for (var assemblyId in assemblies) {
+      totalAssemblyLength += assemblies[assemblyId].analysis.totalNumberOfNucleotidesInDnaStrings || 0;
+    }
+    return Math.round(totalAssemblyLength / noAssemblies);
+  }
+
 });
 
 function handleAction(action) {
