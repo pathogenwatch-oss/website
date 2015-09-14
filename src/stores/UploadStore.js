@@ -113,9 +113,13 @@ const Store = assign({}, EventEmitter.prototype, {
   getMinMaxNoContigsForAllAssemblies() {
     var noContigsArray = [];
     for (var assemblyId in assemblies) {
-      noContigsArray.push(assemblies[assemblyId].analysis.totalNumberOfContigs);
+      if (assemblies[assemblyId].analysis.totalNumberOfContigs) {
+        noContigsArray.push(assemblies[assemblyId].analysis.totalNumberOfContigs);
+      }
     }
-
+    if (noContigsArray.length <= 0) {
+      return [0, 0];
+    }
     return [Math.min(...noContigsArray), Math.max(...noContigsArray)];
   },
 

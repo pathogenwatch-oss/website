@@ -183,7 +183,7 @@ const AssemblyWorkspace = React.createClass({
             { this.props.assembly &&
               <div>
                 <div className="mdl-grid">
-                  <div className="mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
+                  <div className="metadata-container mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
                     <div className="heading"> Metadata </div>
                     <div className="card-style">
                       <AssemblyMetadata key={this.props.assembly.metadata.assemblyName} assembly={this.props.assembly} />

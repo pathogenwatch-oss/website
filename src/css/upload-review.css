@@ -22,6 +22,24 @@
     padding-left: 60px !important;
   }
 
+  .metadata-fields__other .mdl-textfield {
+    width: 95% !important;
+    margin-right: 0px !important;
+  }
+
+}
+
+@media (max-width: 1400px) {
+
+  .mdl-layout__header-row {
+    padding-left: 60px !important;
+  }
+
+  .metadata-fields__other .mdl-textfield {
+    width: 95% !important;
+    margin-right: 0px !important;
+  }
+
 }
 
 /**** UploadReview - Analysis ****/
@@ -126,7 +144,7 @@
   color: #666;
   line-height: 40px;
   border-bottom: 1px solid #eee;
-  padding: 4px 16px;
+  padding: 4px 32px;
   overflow: hidden;
   display: block;
   text-overflow: ellipsis;
@@ -137,9 +155,15 @@
   overflow: auto;
 }
 
+.metadata-fields__other {
+  max-height: 620px;
+  margin: 20px 0px;
+  overflow: auto;
+}
+
 .metadata-fields__other .mdl-textfield {
-  max-width: 20%;
-  margin-right: 20px;
+  margin-right: 40px;
+  width: auto;
 }
 
 .metadata-field__date .mdl-textfield {
@@ -156,6 +180,9 @@
   height: 100%;
 }
 
+.assembly-map {
+  padding-bottom: 30px;
+}
 .wgsa-chart-select .mdl-tabs__tab {
   flex-grow: 1;
   font-size: 13px;

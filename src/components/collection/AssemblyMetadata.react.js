@@ -5,10 +5,6 @@ import MetadataActionCreators from '../../actions/MetadataActionCreators';
 import InputField from './InputField.react';
 import Map from './Map.react.js';
 
-var style = {
-  float: 'right'
-};
-
 export default React.createClass({
 
   displayName: 'AssemblyMetadata',
@@ -54,7 +50,7 @@ export default React.createClass({
             <MetadataDate key={fasta.name} assemblyId={fasta.name} date={metadata.date} />
           </div>
           <div className="mdl-cell mdl-cell--6-col">
-            <Map style={style} width={"100%"} height={100} locations={locations}/>
+            <Map width={"100%"} height={100} locations={locations} label="Location" />
           </div>
         </div>
         <fieldset className="metadata-fields__other">

@@ -4,14 +4,6 @@ import UploadWorkspaceNavigationActionCreators from '../../actions/UploadWorkspa
 
 import DEFAULT from '../../defaults';
 
-const labelStyle = {
-  fontSize: '15px',
-  fontWeight: '300',
-  lineHeight: '20px',
-  textTransform: 'uppercase',
-  color: '#777',
-};
-
 const Map = React.createClass({
   map: null,
   markers: {},
@@ -198,10 +190,10 @@ const Map = React.createClass({
     };
 
     return (
-      <div>
-        <div style={labelStyle}>{this.props.label}</div>
+      <fieldset className="metadata-field__map">
+        <legend>{this.props.label}</legend>
         <section id="map-canvas" style={mapStyle}></section>
-      </div>
+      </fieldset>
     );
   },
 
