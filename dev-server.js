@@ -52,15 +52,18 @@ apiRouter.get('/species/:speciesId/reference', function (req, res) {
 });
 
 apiRouter.post('/download/type/assembly/format/fasta', function (req, res) {
-  var assemblyId = Object.keys(req.body.idToFilenameMap)[0];
   setTimeout(function () {
-    res.json(req.body.idToFilenameMap[assemblyId] + '.fa');
+    res.json({
+      'gobbledegook': req.body.idList[0] + '.fa'
+    });
   }, 2000);
 });
 
 apiRouter.post('/download/type/:idType/format/:fileFormat', function (req, res) {
   setTimeout(function () {
-    res.json(req.params.fileFormat);
+    res.json({
+      'gobbledegook': req.params.fileFormat
+    });
   }, 2000);
 });
 

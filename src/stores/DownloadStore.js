@@ -24,8 +24,9 @@ const Store = assign({}, EventEmitter.prototype, {
     if (!requestedFiles[id] || !requestedFiles[id][fileType]) {
       return null;
     }
-    const encodedFilename = encodeURIComponent(requestedFiles[id][fileType]);
-    return `/api/download/file/${encodedFilename}`;
+    const keyToFilenameMap = requestedFiles[id][fileType];
+    const key = Object.keys(keyToFilenameMap)[0];
+    return `/api/download/file/${encodeURIComponent(key)}?prettyFileName=${encodeURIComponent(keyToFilenameMap[key])}`;
   },
 
 });
@@ -34,15 +35,10 @@ function emitChange() {
   Store.emit(CHANGE_EVENT);
 }
 
-function createIdToNameMap(id) {
+function createIdList(id) {
   const assemblies = UploadedCollectionStore.getAssemblies();
   const collectionId = UploadedCollectionStore.getCollectionId();
-  const assemblyIds = (id === collectionId) ? Object.keys(assemblies) : [ id ];
-  console.log(assemblyIds);
-  return assemblyIds.reduce((memo, assemblyId) => {
-    memo[assemblyId] = assemblies[assemblyId].metadata.assemblyName;
-    return memo;
-  }, {});
+  return (id === collectionId) ? Object.keys(assemblies) : [ id ];
 }
 
 function handleAction(action) {
@@ -55,12 +51,12 @@ function handleAction(action) {
     // ensures map is updated on first request
     requestedFiles[id] = requestedFilesForId;
 
-    Api.requestFile(fileType, { speciesId, idToFilenameMap: createIdToNameMap(id) },
-      function (error, fileName) {
+    Api.requestFile(fileType, { speciesId, idList: createIdList(id) },
+      function (error, keyToFilenameMap) {
         if (error) {
           throw error;
         }
-        requestedFilesForId[fileType] = fileName;
+        requestedFilesForId[fileType] = keyToFilenameMap;
         console.log(requestedFiles);
         emitChange();
       }
