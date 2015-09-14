@@ -4,25 +4,26 @@ import TableResistanceProfile from './table/resistance-profile/Table.react';
 
 import CollectionNavigationStore from '../stores/CollectionNavigationStore';
 
-var sectionStyle = {
+const sectionStyle = {
   width: '100%',
   height: '100%',
 };
 
-var Data = React.createClass({
+export default React.createClass({
+
+  propTypes: {
+    height: React.PropTypes.number,
+    width: React.PropTypes.number,
+  },
 
   getInitialState: function () {
     return {
-      activeCollectionNavigation: null,
+      activeCollectionNavigation: CollectionNavigationStore.getCollectionNavigation(),
     };
   },
 
   componentDidMount: function () {
     CollectionNavigationStore.addChangeListener(this.handleCollectionNavigationStoreChange);
-
-    this.setState({
-      activeCollectionNavigation: CollectionNavigationStore.getCollectionNavigation(),
-    });
   },
 
   componentWillUnmount: function () {
@@ -36,15 +37,15 @@ var Data = React.createClass({
   },
 
   getCollectionDataComponent: function () {
-    var activeCollectionNavigation = this.state.activeCollectionNavigation;
-    var COLLECTION_NAVIGATION_STATES = CollectionNavigationStore.getCollectionNavigationStates();
+    const activeCollectionNavigation = this.state.activeCollectionNavigation;
+    const COLLECTION_NAVIGATION_STATES = CollectionNavigationStore.getCollectionNavigationStates();
 
     if (! activeCollectionNavigation) {
       return null;
     }
 
     if (activeCollectionNavigation === COLLECTION_NAVIGATION_STATES.TABLE_METADATA) {
-      return <TableMetadata />;
+      return <TableMetadata { ...this.props }/>;
     } else if (activeCollectionNavigation === COLLECTION_NAVIGATION_STATES.TABLE_RESISTANCE_PROFILE) {
       return <TableResistanceProfile />;
     }
@@ -59,5 +60,3 @@ var Data = React.createClass({
   },
 
 });
-
-module.exports = Data;
