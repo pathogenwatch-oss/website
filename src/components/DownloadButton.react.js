@@ -7,6 +7,11 @@ import DownloadActionCreators from '../actions/DownloadActionCreators';
 
 import { CGPS } from '../defaults';
 
+const buttonStyle = {
+  display: 'inline-block',
+  verticalAlign: 'middle',
+};
+
 const iconStyle = {
   color: CGPS.COLOURS.PURPLE,
 };
@@ -30,22 +35,14 @@ export default React.createClass({
     DownloadStore.addChangeListener(this.handleDownloadStoreChange);
   },
 
-  componentWillUnmount() {
-    DownloadStore.removeChangeListener(this.handleDownloadStoreChange);
-  },
-
   componentDidUpdate() {
     if (this.state.loading) {
       componentHandler.upgradeElement(React.findDOMNode(this.refs.spinner));
     }
   },
 
-  render() {
-    return this.state.loading ? (
-      <div ref="spinner" className="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active"></div>
-    ) : (
-      this.getDownloadElement()
-    );
+  componentWillUnmount() {
+    DownloadStore.removeChangeListener(this.handleDownloadStoreChange);
   },
 
   getDownloadElement() {
@@ -61,6 +58,17 @@ export default React.createClass({
       <button className="mdl-button mdl-button--icon" onClick={this.handleGenerateFile} title={`Generate ${this.props.description}`}>
         <i style={iconStyle} className="wgsa-button-icon material-icons">insert_drive_file</i>
       </button>
+    );
+  },
+
+  render() {
+    return (
+      <div className="wgsa-download-button" style={buttonStyle}>
+        { this.state.loading ?
+            <div ref="spinner" className="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active"></div>
+            :
+            this.getDownloadElement() }
+      </div>
     );
   },
 

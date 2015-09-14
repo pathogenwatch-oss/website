@@ -51,10 +51,16 @@ apiRouter.get('/species/:speciesId/reference', function (req, res) {
   res.sendFile(__dirname + '/static_data/reference.json');
 });
 
-apiRouter.post('/download/type/:idType/format/:fileFormat', function (req, res) {
-  var assemblyId = Object.keys(req.body)[0];
+apiRouter.post('/download/type/assembly/format/fasta', function (req, res) {
+  var assemblyId = Object.keys(req.body.idToFilenameMap)[0];
   setTimeout(function () {
-    res.json(req.body[assemblyId]);
+    res.json(req.body.idToFilenameMap[assemblyId] + '.fa');
+  }, 2000);
+});
+
+apiRouter.post('/download/type/:idType/format/:fileFormat', function (req, res) {
+  setTimeout(function () {
+    res.json(req.params.fileFormat);
   }, 2000);
 });
 

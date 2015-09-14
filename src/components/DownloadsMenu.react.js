@@ -49,7 +49,7 @@ export default React.createClass({
           <i className="wgsa-button-icon material-icons">file_download</i>
           <span>Downloads</span>
         </button>
-        <ul className="wgsa-menu__list mdl-shadow--2dp">
+        <ul className="wgsa-menu__list mdl-shadow--2dp" onClick={this.handleMenuCicks}>
           <li>
             <span className="wgsa-menu-heading">Population Downloads</span>
             <ul className="wgsa-submenu">
@@ -95,6 +95,10 @@ export default React.createClass({
         </ul>
       </div>
     );
+  },
+
+  handleMenuCicks(event) {
+    event.stopImmediatePropagation();
   },
 
   handleButtonClick() {
