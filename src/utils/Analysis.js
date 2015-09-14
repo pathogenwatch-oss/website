@@ -262,8 +262,9 @@ function drawN50Chart(chartData, assemblyN50, appendToClass) {
     return;
   }
 
-  const chartWidth = 460;
-  const chartHeight = 312;
+  var className = appendToClass.replace(/^\./,"");
+  const chartWidth = document.getElementsByClassName(className)[0].parentElement.offsetWidth;
+  const chartHeight = 412;
 
   // Scales
 
@@ -305,7 +306,7 @@ function drawN50Chart(chartData, assemblyN50, appendToClass) {
   // X
   svg.append('g')
     .attr('class', 'x axis')
-    .attr('transform', 'translate(20, 260)')
+    .attr('transform', 'translate(20, 360)')
     .call(xAxis);
 
   // Y
@@ -319,16 +320,16 @@ function drawN50Chart(chartData, assemblyN50, appendToClass) {
   // X
   svg.select('.x.axis')
     .append('text')
-    .text('Ordered contigs')
+    .text('No. Contigs (ordered by length)')
     .attr('class', 'axis-label')
-    .attr('text-anchor', 'end')
+    .attr('text-anchor', 'middle')
     .attr('x', (chartWidth / 2))
     .attr('y', 45);
 
   // Y
   svg.select('.y.axis')
     .append('text')
-    .text('Nucleotides sum')
+    .text('Assembly Length (nt)')
     .attr('class', 'axis-label')
     .attr('transform', 'rotate(-90)')
     .attr('x', -(chartHeight / 2) - 44)
