@@ -32,7 +32,6 @@ const FILE_ASSEMBLY_ID_STYLE = {
 
 const resultColumns = [
   'UPLOAD_OK',
-  'SCCMEC',
   'PAARSNP',
   'MLST',
   'CORE',
@@ -106,7 +105,6 @@ const UploadingAssembliesProgress = React.createClass({
           <tr>
             <td style={CELL_STYLE}></td>
             <td style={HEADER_STYLE}>UPLOAD</td>
-            <td style={HEADER_STYLE}>SCCMEC</td>
             <td style={HEADER_STYLE}>PAARSNP</td>
             <td style={HEADER_STYLE}>MLST</td>
             <td style={HEADER_STYLE}>CORE</td>
