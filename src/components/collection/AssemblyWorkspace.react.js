@@ -25,7 +25,7 @@ import DEFAULT from '../../defaults.js';
 import { validateMetadata } from '../../utils/Metadata.js';
 
 const loadingAnimationStyle = {
-  display: 'block',
+  visibility: 'visible'
 };
 
 const layoutContentStyle = {
@@ -39,6 +39,8 @@ const fileInputStyle = {
   opacity: 0,
 };
 
+var isProcessing = false;
+
 const AssemblyWorkspace = React.createClass({
 
   propTypes: {
@@ -48,7 +50,6 @@ const AssemblyWorkspace = React.createClass({
 
   getInitialState() {
     return {
-      isProcessing: false,
       uploadButtonActive: false,
       confirmedMultipleMetadataDrop: false,
       pageTitleAppend: 'Upload'
@@ -86,9 +87,17 @@ const AssemblyWorkspace = React.createClass({
   },
 
   handleFileProcessingStoreChange() {
-    this.setState({
-      isProcessing: FileProcessingStore.getFileProcessingState(),
-    });
+    isProcessing = FileProcessingStore.getFileProcessingState();
+    if (isProcessing) {
+      this.setState({
+        pageTitleAppend: 'Processing...'
+      });
+    }
+    else {
+      this.setState({
+        pageTitleAppend: 'Overview'
+      });
+    }
   },
 
   handleDrop(event) {
@@ -104,9 +113,6 @@ const AssemblyWorkspace = React.createClass({
       } else {
         UploadActionCreators.addFiles(event.files);
       }
-      this.setState({
-        pageTitleAppend: 'Overview'
-      })
     }
   },
 
@@ -140,7 +146,6 @@ const AssemblyWorkspace = React.createClass({
   },
 
   render() {
-    loadingAnimationStyle.display = this.state.isProcessing ? 'block' : 'none';
     let pageTitle = 'WGSA';
 
     if (this.props.assembly) {
@@ -152,8 +157,7 @@ const AssemblyWorkspace = React.createClass({
     return (
       <FileDragAndDrop onDrop={this.handleDrop}>
         <div className="assemblyWorkspaceContainer mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-drawer">
-          <UploadReviewHeader title={pageTitle} activateUploadButton={this.state.uploadButtonActive} />
-          <div id="loadingAnimation" style={loadingAnimationStyle} className="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
+          <UploadReviewHeader title={pageTitle} isProcessing={isProcessing} activateUploadButton={this.state.uploadButtonActive} />
 
           <UploadWorkspaceNavigation assembliesUploaded={this.props.assembly ? true : false} totalAssemblies={this.props.totalAssemblies}>
             <footer className="wgsa-upload-navigation__footer mdl-shadow--4dp">
@@ -164,30 +168,28 @@ const AssemblyWorkspace = React.createClass({
             </footer>
           </UploadWorkspaceNavigation>
 
-          <main className="mdl-layout__content" style={layoutContentStyle}>
+          <main className="mdl-layout__content assemblyWorkspaceContent" style={layoutContentStyle}>
             { this.props.assembly &&
-              <div>
-                <div className="mdl-grid">
-                  <div className="mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
-                    <div className="heading"> Metadata </div>
-                    <div className="card-style">
-                      <AssemblyMetadata key={this.props.assembly.metadata.assemblyName} assembly={this.props.assembly} />
-                    </div>
+              <div className="mdl-grid">
+                <div className="mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp" style={{ overflowY: 'auto' }}>
+                  <div className="heading"> Metadata </div>
+                  <div className="card-style">
+                    <AssemblyMetadata key={this.props.assembly.metadata.assemblyName} assembly={this.props.assembly} />
                   </div>
+                </div>
 
-                  <div className="mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
-                    <div className="mdl-grid mdl-grid--no-spacing">
-                      <div className="mdl-cell mdl-cell--12-col">
-                        <div className="heading"> Assembly Metrics </div>
-                        <div className="card-style">
-                          <AssemblyAnalysis assembly={this.props.assembly} />
-                        </div>
+                <div className="mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
+                  <div className="mdl-grid mdl-grid--no-spacing">
+                    <div className="mdl-cell mdl-cell--12-col">
+                      <div className="heading"> Assembly Statistics </div>
+                      <div className="card-style">
+                        <AssemblyAnalysis assembly={this.props.assembly} />
                       </div>
-                      <div className="mdl-cell mdl-cell--12-col">
-                        <div className="heading"> N50 Chart </div>
-                        <div className="card-style">
-                          <AssemblyAnalysisChart analysis={this.props.assembly.analysis} />
-                        </div>
+                    </div>
+                    <div className="mdl-cell mdl-cell--12-col">
+                      <div className="heading"> N50 Chart </div>
+                      <div className="card-style">
+                        <AssemblyAnalysisChart analysis={this.props.assembly.analysis} />
                       </div>
                     </div>
                   </div>

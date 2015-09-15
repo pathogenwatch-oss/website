@@ -185,13 +185,15 @@ const Map = React.createClass({
 
   render: function () {
     const mapStyle = {
-      width: this.props.width,
-      height: this.props.height,
+      position: 'absolute',
+      top: 0,
+      bottom: 0,
+      left: 0,
+      right: 0,
     };
 
     return (
       <fieldset className="metadata-field__map">
-        <legend>{this.props.label}</legend>
         <section id="map-canvas" style={mapStyle}></section>
       </fieldset>
     );

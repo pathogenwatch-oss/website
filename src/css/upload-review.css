@@ -22,22 +22,8 @@
     padding-left: 60px !important;
   }
 
-  .metadata-fields__other .mdl-textfield {
-    width: 95% !important;
-    margin-right: 0px !important;
-  }
-
-}
-
-@media (max-width: 1400px) {
-
-  .mdl-layout__header-row {
-    padding-left: 60px !important;
-  }
-
-  .metadata-fields__other .mdl-textfield {
-    width: 95% !important;
-    margin-right: 0px !important;
+  .mdl-layout__header .mdl-layout__drawer-button {
+    color: #673c90;
   }
 
 }
@@ -128,6 +114,14 @@
   background-color: #fff;
 }
 
+.assemblyWorkspaceContent > .mdl-grid {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+}
+
 .card-style {
   background: #fff;
   padding: 32px;
@@ -151,19 +145,16 @@
 }
 
 .metadata-fields {
-  /*max-height: 200px;*/
-  overflow: auto;
+  overflow: hidden;
 }
 
 .metadata-fields__other {
-  max-height: 620px;
-  margin: 20px 0px;
-  overflow: auto;
+  margin: 16px 0px;
+  overflow-y: auto;
 }
 
 .metadata-fields__other .mdl-textfield {
-  margin-right: 40px;
-  width: auto;
+  margin: 20px;
 }
 
 .metadata-field__date .mdl-textfield {

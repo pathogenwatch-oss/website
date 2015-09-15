@@ -63,44 +63,47 @@ export default React.createClass({
       const locationsToAssembliesMap = UploadStore.getLocationToAssembliesMap();
 
       return (
-        <div className="mdl-grid">
-          <div className="mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
-            <div className="heading"> Summary </div>
-            <div className="card-style">
-              <div className="mdl-grid mdl-grid--no-spacing">
-                <div className="mdl-cell mdl-cell--6-col">
-                  <AssemblyAnalysisItem label="Total Assemblies" value={this.state.assemblyCount} />
-                </div>
+        <div className="mdl-grid" style={{ flexDirection: 'column'}}>
+          <div className="mdl-cell mdl-cell--12-col" style={{ position: 'relative', background: 'none', flexGrow: 1 }}>
+            <div className="mdl-grid" style={{ position: 'absolute', top: 0, left: 0, bottom: 0, right: 0, margin: '-16px' }}>
+              <div className="mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
+                <div className="heading"> Summary </div>
+                <div className="card-style">
+                  <div className="mdl-grid mdl-grid--no-spacing">
+                    <div className="mdl-cell mdl-cell--6-col">
+                      <AssemblyAnalysisItem label="Total Assemblies" value={this.state.assemblyCount} />
+                    </div>
 
-                <div className="mdl-cell mdl-cell--6-col">
-                  <AssemblyAnalysisItem label="No. Contigs Range" value={noContigsRange.min + ' - ' + noContigsRange.max} />
-                </div>
+                    <div className="mdl-cell mdl-cell--6-col">
+                      <AssemblyAnalysisItem label="No. Contigs Range" value={noContigsRange.min + ' - ' + noContigsRange.max} />
+                    </div>
 
-                <div className="mdl-cell mdl-cell--6-col">
-                  <AssemblyAnalysisItem label="Average Assembly Length" value={averageAssemblyLength} />
+                    <div className="mdl-cell mdl-cell--6-col">
+                      <AssemblyAnalysisItem label="Average Assembly Length" value={averageAssemblyLength} />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
+
+                <div className="wgsa-chart-select mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+                  <div className="mdl-tabs__tab-bar">
+                      <a href="#overview-chart-panel" className="mdl-tabs__tab is-active" onClick={this.showChart.bind(this, 'contigN50', 'N50')}>N50</a>
+                      <a href="#overview-chart-panel" className="mdl-tabs__tab" onClick={this.showChart.bind(this, 'totalNumberOfContigs', 'No. Contigs')}>No. Contigs</a>
+                      <a href="#overview-chart-panel" className="mdl-tabs__tab" onClick={this.showChart.bind(this, 'totalNumberOfNucleotidesInDnaStrings', 'Assembly Length')}>Assembly Length</a>
+                  </div>
+
+                  <div className="card-style mdl-tabs__panel is-active" id="overview-chart-panel">
+                    <AssemblyAnalysisOverviewChart chartTitle={this.state.currentChart.title} chartType={this.state.currentChart.type}/>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-
-          <div className="mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
-
-            <div className="wgsa-chart-select mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
-              <div className="mdl-tabs__tab-bar">
-                  <a href="#overview-chart-panel" className="mdl-tabs__tab is-active" onClick={this.showChart.bind(this, 'contigN50', 'N50')}>N50</a>
-                  <a href="#overview-chart-panel" className="mdl-tabs__tab" onClick={this.showChart.bind(this, 'totalNumberOfContigs', 'No. Contigs')}>No. Contigs</a>
-                  <a href="#overview-chart-panel" className="mdl-tabs__tab" onClick={this.showChart.bind(this, 'totalNumberOfNucleotidesInDnaStrings', 'Assembly Length')}>Assembly Length</a>
-              </div>
-
-              <div className="card-style mdl-tabs__panel is-active" id="overview-chart-panel">
-                <AssemblyAnalysisOverviewChart chartTitle={this.state.currentChart.title} chartType={this.state.currentChart.type}/>
-              </div>
-            </div>
-          </div>
-
-          <div className="mdl-cell mdl-cell--12-col increase-cell-gutter mdl-shadow--4dp">
+          <div className="mdl-cell mdl-cell--12-col increase-cell-gutter mdl-shadow--4dp" style={{ position: 'relative', flexGrow: 1 }}>
             <div className="card-style--no-padding">
-              <Map width="100%" height="400" locationAssemblyMap={locationsToAssembliesMap}/>
+              <Map locationAssemblyMap={locationsToAssembliesMap}/>
             </div>
           </div>
         </div>

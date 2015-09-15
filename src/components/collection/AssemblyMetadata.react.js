@@ -49,7 +49,7 @@ export default React.createClass({
           <div className="mdl-cell mdl-cell--6-col">
             <MetadataDate key={fasta.name} assemblyId={fasta.name} date={metadata.date} />
           </div>
-          <div className="mdl-cell mdl-cell--6-col">
+          <div className="mdl-cell mdl-cell--6-col" style={{ position: 'relative' }}>
             <Map width={"100%"} height={100} locations={locations} label="Location" />
           </div>
         </div>

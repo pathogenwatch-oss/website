@@ -23,9 +23,9 @@ export default React.createClass({
   render() {
     return (
       <aside ref="sidebar" className="navigation-container mdl-layout__drawer">
-        <div className="uploadWorkspaceNavigationTitle">
+        <h2 className="uploadWorkspaceNavigationTitle">
           <span className="mdl-badge" style={titleStyle} data-badge={this.props.totalAssemblies}>Assemblies</span>
-        </div>
+        </h2>
         <div className="wgsa-assembly-list-wrapper">
           <AssemblyList />
         </div>
