@@ -14,10 +14,6 @@ var UploadReviewHeader = React.createClass({
     title: React.PropTypes.string.isRequired
   },
 
-  componentDidMount: function() {
-    componentHandler.upgradeDom();
-  },
-
   render: function () {
     return (
       <header style={headerStyle} className="mdl-layout__header">
