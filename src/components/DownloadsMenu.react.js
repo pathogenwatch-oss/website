@@ -68,6 +68,15 @@ export default React.createClass({
             <span className="wgsa-menu-heading">Collection Downloads</span>
             <ul className="wgsa-submenu">
               <li className="wgsa-menu__item">
+                <a href={this.collectionTreeLink}
+                  target="_blank"
+                  download={`${this.collectionId}_collection_tree.nwk`}
+                  className="mdl-button mdl-button--icon">
+                  <i className="wgsa-button-icon material-icons">file_download</i>
+                </a>
+                Collection Tree (.nwk)
+              </li>
+              <li className="wgsa-menu__item">
                 <DownloadButton
                   description="Kernel Checksum Distribution"
                   id={this.collectionId}
@@ -82,13 +91,18 @@ export default React.createClass({
                 Concatenated Gene Family
               </li>
               <li className="wgsa-menu__item">
-                <a href={this.collectionTreeLink}
-                  target="_blank"
-                  download={`${this.collectionId}_collection_tree.nwk`}
-                  className="mdl-button mdl-button--icon">
-                  <i className="wgsa-button-icon material-icons">file_download</i>
-                </a>
-                Collection Tree (.nwk)
+                <DownloadButton
+                  description="Concatenated Gene Family"
+                  id={this.collectionId}
+                  format="score_matrix" />
+                Score Matrix
+              </li>
+              <li className="wgsa-menu__item">
+                <DownloadButton
+                  description="Concatenated Gene Family"
+                  id={this.collectionId}
+                  format="differences_matrix" />
+                Differences Matrix
               </li>
             </ul>
           </li>
