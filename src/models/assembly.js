@@ -9,13 +9,14 @@ var METADATA_KEY = 'ASSEMBLY_METADATA';
 var PAARSNP_KEY = 'PAARSNP_RESULT';
 var MLST_KEY = 'MLST_RESULT';
 var FP_COMP_KEY = 'FP_COMP';
+var CORE_RESULT_KEY = 'CORE_RESULT';
+
 
 var ASSEMBLY_ANALYSES = {
   FP: FP_COMP_KEY,
   MLST: MLST_KEY,
   PAARSNP: PAARSNP_KEY,
-  CORE: 'CORE_RESULT',
-  SCCMEC: 'SCCMEC'
+  CORE: 'CORE_RESULT'
 };
 
 var systemMetadataColumns = [
@@ -103,15 +104,24 @@ function mergeQueryResults(data, queryKeyPrefixes, assemblyId) {
 }
 
 function formatForFrontend(assembly) {
+  var paarsnp = assembly.PAARSNP_RESULT;
   return {
     populationSubtype: assembly.FP_COMP ? assembly.FP_COMP.subTypeAssignment : null,
     metadata: assembly.ASSEMBLY_METADATA,
     analysis: {
-      st: assembly.MLST_RESULT.stType,
-      resistanceProfile: assembly.PAARSNP_RESULT ?
-        Object.keys(assembly.PAARSNP_RESULT.resistanceProfile).
+      st: assembly.MLST_RESULT.sequenceType,
+      mlst: assembly.MLST_RESULT.code,
+      totalCompleteMatches: assembly.CORE_RESULT.totalCompleteMatches,
+      snpar: paarsnp.snparResult.completeSets.map(function (set) {
+        return { repSequenceId: set.repSequenceId, setId: set.setId };
+      }),
+      paar: paarsnp.paarResult.completeResistanceSets.map(function (set) {
+        return set.resistanceSetName;
+      }),
+      resistanceProfile: paarsnp ?
+        Object.keys(paarsnp.resistanceProfile).
           reduce(function (profile, className) {
-            var antibioticClass = assembly.PAARSNP_RESULT.resistanceProfile[className];
+            var antibioticClass = paarsnp.resistanceProfile[className];
             Object.keys(antibioticClass).forEach(function (antibiotic) {
               profile[antibiotic] = {
                 antibioticClass: className,
@@ -156,7 +166,8 @@ function getComplete(params, callback) {
     METADATA_KEY,
     PAARSNP_KEY,
     MLST_KEY,
-    FP_COMP_KEY
+    FP_COMP_KEY,
+    CORE_RESULT_KEY
   ], callback);
 }
 

@@ -38,40 +38,42 @@ function getMlstAllelesData(assembly, callback) {
   });
 }
 
-function addMlstAlleleToAssembly(assembly, mlstAlleles) {
+function addMlstAllelesToAssembly(assembly, mlstAlleles) {
+  var alleles = assembly.MLST_RESULT.alleles;
+  var locusIds = Object.keys(alleles);
+  var firstAllele = alleles[locusIds[0]];
+
   Object.keys(mlstAlleles).forEach(function (key) {
     var mlstAllele = mlstAlleles[key];
     var locusId = mlstAllele.locusId;
-    assembly.MLST_RESULT.alleles[locusId] = mlstAllele;
+    alleles[locusId] = mlstAllele;
   });
-}
 
-// 'ST_' + species id + allele ids
-function generateStQueryKey(speciesId, alleles) {
-  var stQueryKey;
-  var queryKeyIsComplete = true;
-
-  LOGGER.info('Generating ST Query key');
-  stQueryKey = Object.keys(alleles).reduce(function (memo, alleleKey) {
-    var allele = alleles[alleleKey];
+  assembly.MLST_RESULT.code = locusIds.slice(1).reduce(function (memo, locusId) {
+    var allele = alleles[locusId];
     if (!allele || !allele.alleleId || allele.alleleId === UNKNOWN_ST) {
-      queryKeyIsComplete = false;
       return memo;
     }
     return memo + '_' + allele.alleleId;
-  }, 'ST_' + speciesId);
-  LOGGER.info('ST Query Key: ' + stQueryKey);
-  return queryKeyIsComplete ? stQueryKey : null;
+  }, firstAllele.alleleId);
+}
+
+function isMlstComplete(mlstResult) {
+  return (
+    mlstResult.code.split('_').length === Object.keys(mlstResult.alleles).length
+  );
+}
+
+// 'ST_' + species id + mlst code
+function generateStQueryKey(speciesId, mlstResult) {
+  return isMlstComplete(mlstResult) ? 'ST_' + speciesId + '_' + mlstResult.code : null;
 }
 
 function getSequenceType(assembly, speciesId, callback) {
   var stQueryKey;
 
   LOGGER.info('Getting assembly ST data');
-  stQueryKey = generateStQueryKey(
-    speciesId,
-    assembly.MLST_RESULT.alleles
-  );
+  stQueryKey = generateStQueryKey(speciesId, assembly.MLST_RESULT);
 
   if (stQueryKey === null) {
     LOGGER.warn('Skipping ST query for assembly ' + assembly.assemblyId);
@@ -86,7 +88,7 @@ function getSequenceType(assembly, speciesId, callback) {
       }
       return callback(error, null);
     }
-    LOGGER.info('St Type result: ' + result.stType);
+    LOGGER.info('Sequence Type result: ' + result.stType);
     callback(null, result.stType);
   });
 }
@@ -98,12 +100,12 @@ function addSequenceTypeData(assembly, speciesId, callback) {
     },
     function (mlstAlleles, next) {
       LOGGER.info('Got assembly MLST alleles data');
-      addMlstAlleleToAssembly(assembly, mlstAlleles);
+      addMlstAllelesToAssembly(assembly, mlstAlleles);
       getSequenceType(assembly, speciesId, next);
     },
     function (sequenceType, next) {
       LOGGER.info('Got assembly ST data');
-      assembly.MLST_RESULT.stType = sequenceType;
+      assembly.MLST_RESULT.sequenceType = sequenceType;
       next(null, assembly);
     }
   ], callback);

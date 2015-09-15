@@ -22,10 +22,10 @@ function flattenStructureForFrontend(document) {
   );
 }
 
-function getAll(callback) {
-  LOGGER.info('Getting list of all antibiotics');
+function get(speciesId, callback) {
+  LOGGER.info('Getting list of antibiotics for species: ' + speciesId);
 
-  mainStorage.retrieve('ANTIMICROBIALS_ALL', function (error, result) {
+  mainStorage.retrieve('ANTIBIOTICS_LIST_' + speciesId, function (error, result) {
     if (error) {
       return callback(error, result);
     }
@@ -35,4 +35,4 @@ function getAll(callback) {
   });
 }
 
-module.exports.getAll = getAll;
+module.exports.get = get;

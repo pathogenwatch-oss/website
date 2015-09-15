@@ -4,6 +4,20 @@ var sinon = require('sinon');
 
 describe('Model: Antibiotics', function () {
 
+  it('should request antibiotics for the specified species id', function () {
+    var antibioticModel = rewire('models/antibiotic');
+    var mockMainStorage = {
+      retrieve: sinon.stub()
+    };
+    var reset = antibioticModel.__set__('mainStorage', mockMainStorage);
+
+    antibioticModel.get('1280');
+
+    assert(mockMainStorage.retrieve.calledWith('ANTIBIOTICS_LIST_1280'));
+
+    reset();
+  });
+
   it('should return a flattened structure for the front end', function () {
     var antibioticModel = rewire('models/antibiotic');
     var antibiotics = {
@@ -20,7 +34,7 @@ describe('Model: Antibiotics', function () {
     };
     var reset = antibioticModel.__set__('mainStorage', mockMainStorage);
 
-    antibioticModel.getAll(function (_, flattenedResult) {
+    antibioticModel.get('1280', function (_, flattenedResult) {
       assert('name1' in flattenedResult);
       assert('name2' in flattenedResult);
       assert('name3' in flattenedResult);

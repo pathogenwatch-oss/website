@@ -40,11 +40,10 @@ function retrieveMany(keys, callback) {
       return callback(createMultiError(errorCount, result), null);
     }
     LOGGER.info('Successfully retrieved ' + keys);
-    var values = {};
-    Object.keys(result).forEach(function (key) {
-      values[key] = result[key].value;
-    });
-    callback(null, values);
+    callback(null, Object.keys(result).reduce(function (memo, key) {
+      memo[key] = result[key].value;
+      return memo;
+    }, {}));
   });
 }
 
