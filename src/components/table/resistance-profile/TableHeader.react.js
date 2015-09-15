@@ -1,9 +1,10 @@
 import React from 'react';
 
+import AntibioticsStore from '../../../stores/AntibioticsStore';
 import FilteredDataStore from '../../../stores/FilteredDataStore';
+
 import FilteredDataActionCreators from '../../../actions/FilteredDataActionCreators';
 
-import ANTIBIOTICS from '../../../../static_data/antibiotics.json';
 import { CGPS } from '../../../defaults';
 
 const MetadataTableHeader = React.createClass({
@@ -36,7 +37,7 @@ const MetadataTableHeader = React.createClass({
   },
 
   getListOfAntibioticNames: function () {
-    return Object.keys(ANTIBIOTICS);
+    return Object.keys(AntibioticsStore.get());
   },
 
   getListOfTableHeaderNames: function () {

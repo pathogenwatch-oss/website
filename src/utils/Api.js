@@ -76,10 +76,21 @@ function requestFile(fileType, requestBody, callback) {
   });
 }
 
+function getAntibiotics(speciesId, callback) {
+  $.get(`${API_ROOT}/species/${speciesId}/antibiotics`)
+    .done(function (antibiotics) {
+      callback(null, antibiotics);
+    })
+    .fail(function (error) {
+      callback(error, null);
+    });
+}
+
 export default {
   postAssembly,
   getCollectionId,
   getCollection,
   getReferenceCollection,
   requestFile,
+  getAntibiotics,
 };

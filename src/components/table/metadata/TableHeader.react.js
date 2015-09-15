@@ -3,7 +3,6 @@ import React from 'react';
 import FilteredDataStore from '../../../stores/FilteredDataStore';
 import FilteredDataActionCreators from '../../../actions/FilteredDataActionCreators';
 
-import ANTIBIOTICS from '../../../../static_data/antibiotics.json';
 import { CGPS } from '../../../defaults';
 
 const MetadataTableHeader = React.createClass({
@@ -35,10 +34,6 @@ const MetadataTableHeader = React.createClass({
 
   handleSelectTableColumn: function (header) {
     FilteredDataActionCreators.setLabelTableColumnName(header);
-  },
-
-  getListOfAntibioticNames: function () {
-    return Object.keys(ANTIBIOTICS);
   },
 
   getListOfTableHeaderNames: function () {

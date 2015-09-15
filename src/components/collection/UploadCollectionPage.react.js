@@ -48,21 +48,9 @@ const UploadCollectionPage = React.createClass({
   },
 
   render: function () {
-
     return (
       <UploadWorkspace />
     );
-
-
-    // if (this.state.hasFiles) {
-    //   return (
-    //     <UploadWorkspace />
-    //   );
-    // }
-
-    // return (
-    //   <DragAndDropFiles />
-    // );
   },
 
 });

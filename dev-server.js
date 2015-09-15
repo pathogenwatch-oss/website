@@ -51,6 +51,10 @@ apiRouter.get('/species/:speciesId/reference', function (req, res) {
   res.sendFile(__dirname + '/static_data/reference.json');
 });
 
+apiRouter.get('/species/:speciesId/antibiotics', function (req, res) {
+  res.sendFile(__dirname + '/static_data/antibiotics.json');
+});
+
 apiRouter.post('/download/type/:idType/format/:fileFormat', function (req, res) {
   var assemblyId = Object.keys(req.body)[0];
   setTimeout(function () {
@@ -63,7 +67,6 @@ apiRouter.get('/download/file/:fileName', function (req, res) {
 });
 
 app.use('/api', apiRouter);
-
 
 app.use('/', function (req, res) {
   res.sendFile(__dirname + '/public/index.html');
