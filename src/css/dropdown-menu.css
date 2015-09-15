@@ -71,7 +71,15 @@
 
 .wgsa-menu__item > a {
   color: #673c90;
+}
+
+.wgsa-menu__item > .wgsa-download-button {
   margin-right: 8px;
+}
+
+.wgsa-menu__item .mdl-spinner {
+  margin-right: 4px;
+  margin-bottom: -4px;
 }
 
 .wgsa-menu-button {
