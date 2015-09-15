@@ -1,0 +1,31 @@
+.wgsa-table-header {
+  vertical-align: bottom;
+  text-overflow: ellipsis;
+  font-weight: 700;
+  line-height: 24px;
+  letter-spacing: 0px;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.54);
+  padding: 0 18px 8px;
+  box-sizing: border-box;
+  background: #fff !important;
+  border-right: none;
+}
+
+.wgsa-table-cell {
+  vertical-align: top;
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+  border-right: none;
+  padding: 0 18px;
+  box-sizing: border-box;
+  font-size: 13px;
+}
+
+
+/* fixed-data-table overrides */
+
+.fixedDataTableLayout_main,
+.public_fixedDataTableRow_main,
+.public_fixedDataTableRow_fixedColumnsDivider {
+  border: none;
+}

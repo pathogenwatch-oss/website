@@ -30,6 +30,7 @@
     "express": "^4.12.2",
     "extract-text-webpack-plugin": "^0.8.2",
     "file-loader": "^0.8.4",
+    "fixed-data-table": "^0.4.6",
     "flux": "^2.0.3",
     "json-loader": "^0.5.2",
     "keymirror": "^0.1.1",

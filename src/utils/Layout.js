@@ -94,6 +94,10 @@ function getSouthHeight() {
   return (getViewportHeight() - getSouthTop());
 }
 
+function getSouthWidth() {
+  return getViewportWidth();
+}
+
 module.exports = {
 
   DIVIDER_THICKNESS,
@@ -130,4 +134,5 @@ module.exports = {
 
   getSouthTop,
   getSouthHeight,
+  getSouthWidth,
 };

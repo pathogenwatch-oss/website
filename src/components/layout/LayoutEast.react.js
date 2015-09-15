@@ -22,7 +22,7 @@ var LayoutEast = React.createClass({
     };
 
     return (
-      <div style={style} data-layout="east">
+      <div style={style}>
         {this.props.children}
       </div>
     );

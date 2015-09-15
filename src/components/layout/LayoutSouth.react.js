@@ -1,32 +1,28 @@
-var React = require('react');
-var LayoutUtils = require('../../utils/Layout');
+import React from 'react';
 
-var LayoutSouth = React.createClass({
+const style = {
+  position: 'absolute',
+  width: '100%',
+  bottom: 0,
+  backgroundColor: '#ffffff',
+  zIndex: 2,
+};
+
+export default React.createClass({
 
   propTypes: {
-    top: React.PropTypes.number.isRequired
+    top: React.PropTypes.number.isRequired,
+    children: React.PropTypes.element,
   },
 
-  render: function () {
-    var top = this.props.top;
-
-    var style = {
-      position: 'absolute',
-      width: '100%',
-      // height: this.state.southHeight + 'px',
-      top: top,
-      bottom: 0,
-      overflow: 'scroll',
-      backgroundColor: '#ffffff',
-      zIndex: 2
-    };
+  render() {
+    style.top = this.props.top;
 
     return (
-      <div style={style} data-layout="south">
+      <div style={style}>
         {this.props.children}
       </div>
     );
-  }
-});
+  },
 
-module.exports = LayoutSouth;
+});

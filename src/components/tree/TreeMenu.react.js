@@ -7,9 +7,9 @@ export default React.createClass({
   propTypes: {
     tree: React.PropTypes.object,
     exportFilename: React.PropTypes.string,
-    handleToggleNodeLabels: React.PropTypes.string,
-    handleToggleNodeAlign: React.PropTypes.string,
-    handleRedrawOriginalTree: React.PropTypes.string,
+    handleToggleNodeLabels: React.PropTypes.func,
+    handleToggleNodeAlign: React.PropTypes.func,
+    handleRedrawOriginalTree: React.PropTypes.func,
   },
 
   getInitialState() {
