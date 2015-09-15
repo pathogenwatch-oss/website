@@ -12,7 +12,8 @@ import FilteredDataStore from '../../../stores/FilteredDataStore';
 
 import DataUtils from '../../../utils/Data';
 
-const initialColumnWidth = 175;
+const canvas = document.createElement('canvas').getContext('2d');
+
 const columnProps = [
   { label: 'Assembly',
     dataKey: 'name',
@@ -20,7 +21,6 @@ const columnProps = [
   },
   { label: 'Location',
     dataKey: 'location',
-    width: initialColumnWidth * 2,
   },
   { label: 'Date',
     dataKey: 'date',
@@ -32,16 +32,16 @@ const columnProps = [
   { label: 'MLST',
     dataKey: 'mlst',
   },
-  { label: 'Total Complete Matches',
+  { label: 'Complete Matches',
     dataKey: 'tcm',
     // align: 'right',
   },
 ];
 
 function getAssembly(assemblyId) {
-  const publicCollectionAssemblies = ReferenceCollectionStore.getAssemblies();
+  const referenceCollectionAssemblies = ReferenceCollectionStore.getAssemblies();
   const uploadedCollectionAssemblies = UploadedCollectionStore.getAssemblies();
-  return publicCollectionAssemblies[assemblyId] || uploadedCollectionAssemblies[assemblyId];
+  return referenceCollectionAssemblies[assemblyId] || uploadedCollectionAssemblies[assemblyId];
 }
 
 function mapAssemblyIdToTableRow(assemblyId) {
@@ -57,6 +57,19 @@ function mapAssemblyIdToTableRow(assemblyId) {
   };
 }
 
+
+function calculateColumnWidths(currentWidths, data) {
+  return Object.keys(data).reduce(function (memo, columnKey) {
+    if (columnKey === 'id') return memo;
+
+    const width = canvas.measureText(data[columnKey] || '').width;
+    if (!memo[columnKey] || width > memo[columnKey] ) {
+      memo[columnKey] = width;
+    }
+    return memo;
+  }, currentWidths);
+}
+
 const DataTable = React.createClass({
 
   propTypes: {
@@ -65,8 +78,10 @@ const DataTable = React.createClass({
   },
 
   getInitialState() {
+    const data = FilteredDataStore.getAssemblyIds().map(mapAssemblyIdToTableRow);
     return {
-      data: FilteredDataStore.getAssemblyIds().map(mapAssemblyIdToTableRow),
+      data,
+      columnWidths: data.reduce(calculateColumnWidths, {}),
     };
   },
 
@@ -95,15 +110,17 @@ const DataTable = React.createClass({
     return (
       <Table
         rowHeight={48}
-        headerHeight={48}
+        headerHeight={64}
         rowGetter={this.getRow}
         rowsCount={this.state.data.length}
         height={this.props.height}
-        width={this.props.width}>
+        width={this.props.width}
+        isColumnResixing={this.isColumnResizing}
+        onColumnResizeEndCallback={this.handleColumnResize}>
         <Column
           headerClassName={'wgsa-table-header'}
           cellClassName={'wgsa-table-cell'}
-          width={initialColumnWidth / 3}
+          width={48}
           label={''}
           fixed={true}
           cellRenderer={this.getDownloadButton} />
@@ -112,7 +129,8 @@ const DataTable = React.createClass({
               key={props.dataKey}
               headerClassName={'wgsa-table-header'}
               cellClassName={'wgsa-table-cell'}
-              width={initialColumnWidth}
+              width={this.state.columnWidths[props.dataKey]}
+              flexGrow={1}
               { ...props }
             />
         )}
@@ -120,9 +138,20 @@ const DataTable = React.createClass({
     );
   },
 
+  isColumnResizing: false,
+
   handleFilteredDataStoreChange() {
     this.setState({
       data: FilteredDataStore.getAssemblyIds().map(mapAssemblyIdToTableRow),
+    });
+  },
+
+  handleColumnResize(newWidth, dataKey) {
+    const { columnWidths } = this.state;
+    columnWidths[dataKey] = newWidth;
+    this.isColumnResizing = false;
+    this.setState({
+      columnWidths,
     });
   },
 

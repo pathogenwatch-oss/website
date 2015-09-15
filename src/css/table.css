@@ -1,12 +1,12 @@
 .wgsa-table-header {
-  vertical-align: bottom;
+  vertical-align: top;
   text-overflow: ellipsis;
   font-weight: 700;
   line-height: 24px;
   letter-spacing: 0px;
   font-size: 12px;
   color: rgba(0, 0, 0, 0.54);
-  padding: 0 18px 8px;
+  padding: 0 18px 0;
   box-sizing: border-box;
   background: #fff !important;
   border-right: none;
@@ -28,4 +28,8 @@
 .public_fixedDataTableRow_main,
 .public_fixedDataTableRow_fixedColumnsDivider {
   border: none;
+}
+
+.wgsa-table-header .fixedDataTableCellLayout_wrap3 {
+  vertical-align: bottom;
 }
