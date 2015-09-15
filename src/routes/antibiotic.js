@@ -5,8 +5,8 @@ var antibioticModel = require('models/antibiotic');
 
 var LOGGER = require('utils/logging').createLogger('Antibiotics');
 
-router.get('/antibiotics', function (req, res) {
-  antibioticModel.getAll(function (error, antibiotics) {
+router.get('/species/:id/antibiotics', function (req, res) {
+  antibioticModel.get(req.params.id, function (error, antibiotics) {
     if (error) {
       LOGGER.error(error, antibiotics);
       return res.sendStatus(500);
