@@ -19,7 +19,9 @@ const AssemblyAnalysisOverviewChart = React.createClass({
 
   draw() {
     const chartDiv = React.findDOMNode(this.refs.chartDiv);
-    chartDiv.innerHTML = '';
+    if (chartDiv) {
+      chartDiv.innerHTML = '';
+    }
 
     const chartData =  UploadStore.getOverviewChartData(this.props.chartType);
     AnalysisUtils.drawOverviewChart(chartData, '.overview-chart', 'assemblies', this.props.chartTitle);

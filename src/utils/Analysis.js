@@ -284,14 +284,14 @@ function drawN50Chart(chartData, assemblyN50, appendToClass) {
   const xAxis = d3.svg.axis()
     .scale(xScale)
     .orient('bottom')
-    .ticks(10);
+    .ticks(chartWidth/40);
 
   // Y
   const yAxis = d3.svg.axis()
     .scale(yScale)
     .orient('left')
     // http://stackoverflow.com/a/18822793
-    .ticks(10);
+    .ticks(chartHeight/40);
 
   d3.select('svg').remove();
 

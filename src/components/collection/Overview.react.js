@@ -28,6 +28,7 @@ export default React.createClass({
 
   componentDidMount() {
     UploadStore.addChangeListener(this.handleUploadStoreChange);
+    componentHandler.upgradeDom();
   },
 
   componentDidUpdate() {
