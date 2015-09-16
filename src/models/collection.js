@@ -220,18 +220,13 @@ function getReference(speciesId, callback) {
     assemblies: getAssemblies.bind(null, params, assemblyModel.getReference),
     tree: getTree.bind(null, speciesId)
   }, function (error, result) {
-      var assemblies = result.assemblies;
-
       if (error) {
         return callback(error, null);
       }
 
       callback(null, {
         collectionId: speciesId,
-        assemblies: Object.keys(assemblies).reduce(function (memo, assemblyId) {
-          memo[assemblyId.replace(speciesId + '_', '')] = assemblies[assemblyId];
-          return memo;
-        }, {}),
+        assemblies: result.assemblies,
         tree: result.tree
       });
     }
