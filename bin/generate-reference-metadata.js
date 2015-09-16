@@ -2,7 +2,7 @@ var fs = require('fs');
 
 var assemblyModel = require('models/assembly');
 
-var speciesId = process.argv[2]
+var speciesId = process.argv[2];
 var filePath = process.argv[3];
 var outputPath = process.argv[4];
 

@@ -104,14 +104,14 @@ function mergeQueryResults(data, queryKeyPrefixes, assemblyId) {
 }
 
 function formatForFrontend(assembly) {
-  var paarsnp = assembly.PAARSNP_RESULT;
+  var paarsnp = assembly[PAARSNP_KEY];
   return {
-    populationSubtype: assembly.FP_COMP ? assembly.FP_COMP.subTypeAssignment : null,
-    metadata: assembly.ASSEMBLY_METADATA,
+    populationSubtype: assembly[FP_COMP_KEY] ? assembly[FP_COMP_KEY].subTypeAssignment : null,
+    metadata: assembly[METADATA_KEY],
     analysis: {
-      st: assembly.MLST_RESULT.sequenceType,
-      mlst: assembly.MLST_RESULT.code,
-      totalCompleteMatches: assembly.CORE_RESULT.totalCompleteMatches,
+      st: assembly[MLST_KEY].sequenceType,
+      mlst: assembly[MLST_KEY].code,
+      totalCompleteMatches: assembly[CORE_KEY].totalCompleteMatches,
       snpar: paarsnp.snparResult.completeSets.map(function (set) {
         return { repSequenceId: set.repSequenceId, setId: set.setId };
       }),
@@ -142,11 +142,19 @@ function get(params, queryKeyPrefixes, callback) {
   LOGGER.info(queryKeys);
 
   mainStorage.retrieveMany(queryKeys, function (error, assemblyData) {
+    var assembly;
+
     if (error) {
       return callback(error);
     }
     LOGGER.info('Got assembly ' + assemblyId + ' data');
-    callback(null, mergeQueryResults(assemblyData, queryKeyPrefixes, assemblyId));
+    assembly = mergeQueryResults(assemblyData, queryKeyPrefixes, assemblyId);
+    sequenceTypeModel.addSequenceTypeData(assembly, params.speciesId, function (stError, result) {
+      if (stError) {
+        return callback(stError);
+      }
+      callback(null, result);
+    });
   });
 }
 
@@ -162,12 +170,7 @@ function getComplete(params, callback) {
     if (error) {
       return callback(error);
     }
-    sequenceTypeModel.addSequenceTypeData(assembly, params.speciesId, function (stError, result) {
-      if (stError) {
-        return callback(stError);
-      }
-      callback(null, formatForFrontend(result));
-    });
+    callback(null, formatForFrontend(assembly));
   });
 }
 
@@ -175,11 +178,17 @@ function getReference(params, callback) {
   LOGGER.info('Getting reference assembly ' + params.assemblyId);
   get(params, [
     METADATA_KEY,
+    MLST_KEY,
   ], function (error, assembly) {
     if (error) {
       return callback(error, null);
     }
-    callback(null, { metadata: assembly[METADATA_KEY] });
+    callback(null, {
+      metadata: assembly[METADATA_KEY],
+      analysis: {
+        st: assembly[MLST_KEY].sequenceType
+      }
+    });
   });
 }
 
