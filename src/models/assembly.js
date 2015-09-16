@@ -9,14 +9,14 @@ var METADATA_KEY = 'ASSEMBLY_METADATA';
 var PAARSNP_KEY = 'PAARSNP_RESULT';
 var MLST_KEY = 'MLST_RESULT';
 var FP_COMP_KEY = 'FP_COMP';
-var CORE_RESULT_KEY = 'CORE_RESULT';
+var CORE_KEY = 'CORE_RESULT';
 
 
 var ASSEMBLY_ANALYSES = {
   FP: FP_COMP_KEY,
   MLST: MLST_KEY,
   PAARSNP: PAARSNP_KEY,
-  CORE: 'CORE_RESULT'
+  CORE: CORE_KEY
 };
 
 var systemMetadataColumns = [
@@ -136,27 +136,17 @@ function formatForFrontend(assembly) {
 
 function get(params, queryKeyPrefixes, callback) {
   var assemblyId = params.assemblyId;
-  var speciesId = params.speciesId;
   var queryKeys = constructQueryKeys(queryKeyPrefixes, assemblyId);
 
   LOGGER.info('Assembly ' + assemblyId + ' query keys:');
   LOGGER.info(queryKeys);
 
   mainStorage.retrieveMany(queryKeys, function (error, assemblyData) {
-    var assembly;
-
     if (error) {
-      return callback(error, null);
+      return callback(error);
     }
-
     LOGGER.info('Got assembly ' + assemblyId + ' data');
-    assembly = mergeQueryResults(assemblyData, queryKeyPrefixes, assemblyId);
-    sequenceTypeModel.addSequenceTypeData(assembly, speciesId, function (stError, result) {
-      if (stError) {
-        return callback(stError, null);
-      }
-      callback(null, formatForFrontend(result));
-    });
+    callback(null, mergeQueryResults(assemblyData, queryKeyPrefixes, assemblyId));
   });
 }
 
@@ -167,17 +157,30 @@ function getComplete(params, callback) {
     PAARSNP_KEY,
     MLST_KEY,
     FP_COMP_KEY,
-    CORE_RESULT_KEY
-  ], callback);
+    CORE_KEY
+  ], function (error, assembly) {
+    if (error) {
+      return callback(error);
+    }
+    sequenceTypeModel.addSequenceTypeData(assembly, params.speciesId, function (stError, result) {
+      if (stError) {
+        return callback(stError);
+      }
+      callback(null, formatForFrontend(result));
+    });
+  });
 }
 
 function getReference(params, callback) {
   LOGGER.info('Getting reference assembly ' + params.assemblyId);
   get(params, [
     METADATA_KEY,
-    PAARSNP_KEY,
-    MLST_KEY
-  ], callback);
+  ], function (error, assembly) {
+    if (error) {
+      return callback(error, null);
+    }
+    callback(null, { metadata: assembly[METADATA_KEY] });
+  });
 }
 
 function mapTaxaToAssemblies(assemblies) {
