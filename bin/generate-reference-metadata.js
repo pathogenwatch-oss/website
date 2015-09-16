@@ -4,6 +4,7 @@ var assemblyModel = require('models/assembly');
 
 var speciesId = process.argv[2]
 var filePath = process.argv[3];
+var outputPath = process.argv[4];
 
 fs.readFile(filePath, 'utf8', function (error, file) {
   if (error) throw error;
@@ -13,6 +14,10 @@ fs.readFile(filePath, 'utf8', function (error, file) {
 
   var keys = lines[0].split(',');
   console.log('Keys:', keys);
+
+  if (outputPath) {
+    process.chdir(outputPath);
+  }
 
   lines.slice(1).
     filter(function (line) {
