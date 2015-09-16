@@ -11,7 +11,7 @@ export default React.createClass({
 
   render: function () {
     return (
-      <div className={`mdl-textfield mdl-js-textfield mdl-textfield--floating-label ${this.props.readonly ? 'wgsa-textfield-readonly' : ''}`}>
+      <div className={`metadata-input-field mdl-textfield mdl-js-textfield mdl-textfield--floating-label ${this.props.readonly ? 'wgsa-textfield-readonly' : ''}`}>
         <input className="mdl-textfield__input" type={this.props.type} id={this.props.label}
           value={this.props.value}
           onChange={this.props.handleChange}

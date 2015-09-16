@@ -185,11 +185,13 @@ const Map = React.createClass({
 
   render: function () {
     const mapStyle = {
-      position: 'absolute',
+      // position: 'absolute',
       top: 0,
       bottom: 0,
       left: 0,
       right: 0,
+      height: this.props.height || '200px',
+      width: this.props.width || '200px',
     };
 
     return (

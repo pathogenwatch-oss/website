@@ -168,17 +168,17 @@ const AssemblyWorkspace = React.createClass({
             </footer>
           </UploadWorkspaceNavigation>
 
-          <main className="mdl-layout__content assemblyWorkspaceContent" style={layoutContentStyle}>
+          <main className="mdl-layout__content" style={layoutContentStyle}>
             { this.props.assembly &&
-              <div className="mdl-grid">
-                <div className="mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp" style={{ overflowY: 'auto' }}>
+              <div className="mdl-grid assemblyWorkspaceContent">
+                <div className="overflow-y--auto mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
                   <div className="heading"> Metadata </div>
                   <div className="card-style">
                     <AssemblyMetadata key={this.props.assembly.metadata.assemblyName} assembly={this.props.assembly} />
                   </div>
                 </div>
 
-                <div className="mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
+                <div className="overflow-y--auto mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
                   <div className="mdl-grid mdl-grid--no-spacing">
                     <div className="mdl-cell mdl-cell--12-col">
                       <div className="heading"> Assembly Statistics </div>

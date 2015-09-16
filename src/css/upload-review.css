@@ -28,6 +28,17 @@
 
 }
 
+@media (max-width: 839px) and (min-width: 480px) {
+  .mdl-cell--6-col, .mdl-cell--6-col-tablet.mdl-cell--6-col-tablet {
+      width: calc(100% - 16px);
+  }
+}
+
+@media (max-width: 839px) and (min-width: 480px) {
+  .mdl-grid--no-spacing>.mdl-cell--6-col, .mdl-grid--no-spacing>.mdl-cell--6-col-tablet.mdl-cell--6-col-tablet {
+      width: 50%;
+  }
+}
 /**** UploadReview - Analysis ****/
 
 .welcome-container {
@@ -108,20 +119,57 @@
 }
 
 .assemblyWorkspaceContainer .mdl-layout__content{
-  padding: 20px;
+  padding: 32px;
 }
 .assemblyWorkspaceContainer .mdl-cell {
   background-color: #fff;
 }
 
-.assemblyWorkspaceContent > .mdl-grid {
+.assemblyWorkspaceContent {
   position: absolute;
   left: 0;
   top: 0;
   bottom: 0;
   right: 0;
+  /*padding: 32px;*/
+  justify-content: space-around;
+  margin: 8px;
 }
 
+.overviewContent {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  justify-content: space-around;
+  margin: 8px;
+}
+
+
+/*.assemblyWorkspaceContent .mdl-cell{
+  width: calc(50% - 32px);
+}
+
+.overviewContent {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  justify-content: space-around;
+  margin: 8px;
+}
+
+.overview-cell{
+  width: calc(50% - 32px);
+}
+
+.over-view-map-cell {
+  margin: 16px;
+  width: calc(100% - 32px);
+}
+*/
 .card-style {
   background: #fff;
   padding: 32px;
@@ -151,15 +199,24 @@
 .metadata-fields__other {
   margin: 16px 0px;
   overflow-y: auto;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.metadata-input-field {
+  text-align: center;
+  /*width: auto;*/
 }
 
 .metadata-fields__other .mdl-textfield {
-  margin: 20px;
+  margin: 16px 0px;
 }
 
 .metadata-field__date .mdl-textfield {
-  margin-right: 10px;
-  width: 54px;
+  margin-right: 8px;
+  width: 56px;
 }
 
 .overview-fields {
@@ -176,11 +233,25 @@
 }
 .wgsa-chart-select .mdl-tabs__tab {
   flex-grow: 1;
-  font-size: 13px;
   padding: 0px;
   white-space: nowrap;
 }
 
+
+.overflow-y--auto {
+  overflow-y: auto;
+}
+
+.wgsa-overview-container {
+/*  display: flex;
+  flex-direction: column;
+*/}
+
+.wgsa-overview-container > .mdl-cell{
+/*  position: relative;
+  flex-grow: 1;
+  flex-basis: 0;*/
+}
 /*********************************/
 
 /**** UploadReview - Navigation Left Pane ****/

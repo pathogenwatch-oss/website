@@ -19,7 +19,6 @@ function setMetadataDateComponent(assemblyName, component, value) {
 
 function setMetadataColumn(assemblyName, columnName, value) {
   assemblies[assemblyName].metadata[columnName] = value;
-  console.log(columnName, value, assemblies[assemblyName].metadata);
 }
 
 function setMetadataDate(assemblyName, date) {
