@@ -10,7 +10,6 @@ import FilteredDataStore from '../../stores/FilteredDataStore';
 import ReferenceCollectionStore from '../../stores/ReferenceCollectionStore';
 import UploadedCollectionStore from '../../stores/UploadedCollectionStore';
 
-import Species from '../../species';
 import MetadataUtils from '../../utils/Metadata';
 import DataUtils from '../../utils/Data';
 import DEFAULT, { CGPS } from '../../defaults';
@@ -134,7 +133,6 @@ export default React.createClass({
 
   setNodeLabels() {
     const labelProperty = this.state.labelProperty;
-
     for (const leaf of this.phylocanvas.leaves) {
       if (UploadedCollectionStore.contains(leaf.id)) {
         const assembly = UploadedCollectionStore.getAssemblies()[leaf.id];
@@ -151,9 +149,14 @@ export default React.createClass({
         }
         leaf.label = labelValue;
       } else {
-        leaf.label = `${leaf.id.replace(`${Species.id}_`, '')}`;
         const assembly = ReferenceCollectionStore.getAssemblies()[leaf.id];
-        if (assembly && assembly.analysis) {
+        if (!assembly) {
+          leaf.label = leaf.id;
+          continue;
+        }
+
+        leaf.label = assembly.metadata.assemblyName;
+        if (assembly.analysis) {
           leaf.label += `_${assembly.analysis.st}`;
         }
       }
