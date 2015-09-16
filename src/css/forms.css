@@ -34,9 +34,3 @@ fieldset > legend {
 .wgsa-download-button .wgsa-button-icon {
   color: #673c90;
 }
-
-.wgsa-download-button > .mdl-button--icon:hover,
-.wgsa-download-button > .mdl-button--icon:focus,
-.wgsa-download-button > .mdl-button--icon:active {
-  background-color: rgba(255, 255, 255, 0.74);
-}
