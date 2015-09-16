@@ -263,7 +263,10 @@ function drawN50Chart(chartData, assemblyN50, appendToClass) {
   }
 
   var className = appendToClass.replace(/^\./,"");
-  const chartWidth = document.getElementsByClassName(className)[0].parentElement.offsetWidth;
+  var chartWidth = 0;
+  if (document.getElementsByClassName(className)[0]) {
+    chartWidth = document.getElementsByClassName(className)[0].parentElement.offsetWidth;
+  }
   const chartHeight = 412;
 
   // Scales
@@ -486,7 +489,10 @@ function drawOverviewChart(data, appendToClass, xLabel = '', yLabel = '') {
   }
 
   var className = appendToClass.replace(/^\./,"");
-  var chartWidth = document.getElementsByClassName(className)[0].parentElement.offsetWidth;
+  var chartWidth = 0;
+  if (document.getElementsByClassName(className)[0]) {
+    chartWidth = document.getElementsByClassName(className)[0].parentElement.offsetWidth;
+  }
   var chartHeight = 312;
 
   var chartData = [];
