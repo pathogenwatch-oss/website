@@ -2,7 +2,8 @@ var fs = require('fs');
 
 var assemblyModel = require('models/assembly');
 
-var filePath = process.argv[2];
+var speciesId = process.argv[2]
+var filePath = process.argv[3];
 
 fs.readFile(filePath, 'utf8', function (error, file) {
   if (error) throw error;
@@ -26,12 +27,12 @@ fs.readFile(filePath, 'utf8', function (error, file) {
     }).
     forEach(function (object) {
       var ids = {
-        assemblyId: object.original_isolate_id,
-        speciesId: object.tax_id
+        assemblyId: speciesId + '_' + object.original_isolate_id,
+        speciesId: speciesId
       };
-      object.assemblyName = ids.assemblyId;
+      object.assemblyName = object.original_isolate_id;
       var metadata = assemblyModel.createMetadataRecord(ids, object);
-      var filename = 'ASSEMBLY_METADATA_' + ids.speciesId + '_' + ids.assemblyId + '.json';
+      var filename = 'ASSEMBLY_METADATA_' + ids.assemblyId + '.json';
       console.log('Writing file ' + filename);
       fs.writeFileSync(filename, JSON.stringify(metadata));
     });
