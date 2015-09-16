@@ -10,6 +10,7 @@ import FilteredDataStore from '../../stores/FilteredDataStore';
 import ReferenceCollectionStore from '../../stores/ReferenceCollectionStore';
 import UploadedCollectionStore from '../../stores/UploadedCollectionStore';
 
+import Species from '../../species';
 import MetadataUtils from '../../utils/Metadata';
 import DataUtils from '../../utils/Data';
 import DEFAULT, { CGPS } from '../../defaults';
@@ -150,8 +151,11 @@ export default React.createClass({
         }
         leaf.label = labelValue;
       } else {
+        leaf.label = `${leaf.id.replace(`${Species.id}_`, '')}`;
         const assembly = ReferenceCollectionStore.getAssemblies()[leaf.id];
-        leaf.label = `${leaf.id}_${assembly.analysis.st}`;
+        if (assembly && assembly.analysis) {
+          leaf.label += `_${assembly.analysis.st}`;
+        }
       }
     }
 

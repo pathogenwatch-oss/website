@@ -6,6 +6,7 @@ import UploadedCollectionStore from '../stores/UploadedCollectionStore';
 import SubtreeStore from '../stores/SubtreeStore';
 import SubtreeActionCreators from '../actions/SubtreeActionCreators';
 
+import Species from '../species';
 import FilteredDataUtils from '../utils/FilteredData';
 import { CGPS } from '../defaults';
 
@@ -50,7 +51,7 @@ export default React.createClass({
         <section className="wgsa-tree">
           <header className="wgsa-tree-header">
             { backButton }
-            <h2 className="wgsa-tree-heading">{treeName}</h2>
+            <h2 className="wgsa-tree-heading">{treeName.replace(`${Species.id}_`, '')}</h2>
           </header>
           <div className="wgsa-no-subtree">
             <i className="material-icons">nature</i>
