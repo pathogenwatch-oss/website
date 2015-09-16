@@ -53,6 +53,10 @@ const AssemblyAnalysisChart = React.createClass({
     AnalysisUtils.drawN50Chart(fastaChartData, assemblyN50, '.fasta-analytics-chart');
   },
 
+  handleResize(e) {
+    this.draw();
+  },
+
   componentDidUpdate: function() {
     this.draw();
   },
@@ -64,6 +68,7 @@ const AssemblyAnalysisChart = React.createClass({
       })
       this.draw();
     }
+    window.addEventListener('resize', this.handleResize);
   },
 
   render: function () {

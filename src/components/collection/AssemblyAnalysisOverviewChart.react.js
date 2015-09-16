@@ -27,9 +27,14 @@ const AssemblyAnalysisOverviewChart = React.createClass({
 
   componentDidMount() {
     this.draw();
+    window.addEventListener('resize', this.handleResize);
   },
 
   componentDidUpdate() {
+    this.draw();
+  },
+
+  handleResize(e) {
     this.draw();
   },
 
