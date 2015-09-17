@@ -11,6 +11,7 @@ import FileUploadingStore from '../stores/FileUploadingStore';
 import CollectionStore from '../stores/CollectionStore';
 
 import CollectionActionCreators from '../actions/CollectionActionCreators';
+import AntibioticsActionCreators from '../actions/AntibioticsActionCreators';
 
 import Species from '../species';
 
@@ -23,6 +24,10 @@ export default class Collection extends React.Component {
       collection: null,
     };
     this.checkGetCollection = this.checkGetCollection.bind(this);
+  }
+
+  componentWillMount() {
+    AntibioticsActionCreators.fetch(Species.id);
   }
 
   componentDidMount() {

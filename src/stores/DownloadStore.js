@@ -4,6 +4,8 @@ import assign from 'object-assign';
 import Api from '../utils/Api';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 
+import UploadedCollectionStore from './UploadedCollectionStore.js';
+
 const CHANGE_EVENT = 'change';
 
 const requestedFiles = {};
@@ -22,8 +24,9 @@ const Store = assign({}, EventEmitter.prototype, {
     if (!requestedFiles[id] || !requestedFiles[id][fileType]) {
       return null;
     }
-    const encodedFilename = encodeURIComponent(requestedFiles[id][fileType]);
-    return `/api/download/file/${encodedFilename}`;
+    const keyToFilenameMap = requestedFiles[id][fileType];
+    const key = Object.keys(keyToFilenameMap)[0];
+    return `/api/download/file/${encodeURIComponent(key)}?prettyFileName=${encodeURIComponent(keyToFilenameMap[key])}`;
   },
 
 });
@@ -32,24 +35,32 @@ function emitChange() {
   Store.emit(CHANGE_EVENT);
 }
 
+function createIdList(id) {
+  const assemblies = UploadedCollectionStore.getAssemblies();
+  const collectionId = UploadedCollectionStore.getCollectionId();
+  return (id === collectionId) ? Object.keys(assemblies) : [ id ];
+}
+
 function handleAction(action) {
   switch (action.type) {
 
   case 'request_file':
-    const { id, idType, fileType, speciesId } = action;
+    const { id, fileType, speciesId } = action;
     const requestedFilesForId = requestedFiles[id] || {};
 
     // ensures map is updated on first request
     requestedFiles[id] = requestedFilesForId;
 
-    Api.requestFile({ speciesId }, idType, fileType, function (error, fileName) {
-      if (error) {
-        throw error;
+    Api.requestFile(fileType, { speciesId, idList: createIdList(id) },
+      function (error, keyToFilenameMap) {
+        if (error) {
+          throw error;
+        }
+        requestedFilesForId[fileType] = keyToFilenameMap;
+        console.log(requestedFiles);
+        emitChange();
       }
-      requestedFilesForId[fileType] = fileName;
-      console.log(requestedFiles);
-      emitChange();
-    });
+    );
     break;
 
   default:

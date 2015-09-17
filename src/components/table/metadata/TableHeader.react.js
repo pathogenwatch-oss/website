@@ -1,15 +1,14 @@
 import React from 'react';
 
-import TableStore from '../../../stores/TableStore';
-import TableActionCreators from '../../../actions/TableActionCreators';
+import FilteredDataStore from '../../../stores/FilteredDataStore';
+import FilteredDataActionCreators from '../../../actions/FilteredDataActionCreators';
 
-import ANTIBIOTICS from '../../../../static_data/antibiotics.json';
 import { CGPS } from '../../../defaults';
 
 const MetadataTableHeader = React.createClass({
 
   getTableHeaderCellStyle: function (header) {
-    const selectedTableColumnName = TableStore.getLabelTableColumnName();
+    const selectedTableColumnName = FilteredDataStore.getLabelTableColumnName();
     const style = {
       cursor: 'pointer',
     };
@@ -34,15 +33,11 @@ const MetadataTableHeader = React.createClass({
   },
 
   handleSelectTableColumn: function (header) {
-    TableActionCreators.setLabelTableColumnName(header);
-  },
-
-  getListOfAntibioticNames: function () {
-    return Object.keys(ANTIBIOTICS);
+    FilteredDataActionCreators.setLabelTableColumnName(header);
   },
 
   getListOfTableHeaderNames: function () {
-    return [ 'Assembly', 'Country', 'Date', 'ST', '' ];
+    return [ 'Assembly', 'Location', 'Date', 'ST', 'MLST', 'Total Complete Matches', '' ];
   },
 
   render: function () {

@@ -25,3 +25,12 @@ fieldset > legend {
 .wgsa-textfield-readonly .mdl-textfield__label::after {
   display: none;
 }
+
+.wgsa-download-button {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.wgsa-download-button .wgsa-button-icon {
+  color: #673c90;
+}

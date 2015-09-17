@@ -2,12 +2,11 @@ import '../../css/tree.css';
 
 import React from 'react';
 import PhyloCanvas from 'PhyloCanvas';
-import assign from 'object-assign';
 
 import TreeControls from './TreeControls.react';
 import TreeMenu from './TreeMenu.react';
 
-import TableStore from '../../stores/TableStore';
+import FilteredDataStore from '../../stores/FilteredDataStore';
 import ReferenceCollectionStore from '../../stores/ReferenceCollectionStore';
 import UploadedCollectionStore from '../../stores/UploadedCollectionStore';
 
@@ -37,7 +36,7 @@ export default React.createClass({
       treeType: DEFAULT.TREE_TYPE,
       nodeSize: DEFAULT.NODE_SIZE,
       labelSize: DEFAULT.LABEL_SIZE,
-      labelProperty: 'Assembly',
+      labelProperty: FilteredDataStore.getLabelTableColumnName(),
       treeLoaded: false,
     });
   },
@@ -46,7 +45,7 @@ export default React.createClass({
     // TODO: Un-hack this
     componentHandler.upgradeDom();
 
-    TableStore.addChangeListener(this.handleTableStoreChange);
+    FilteredDataStore.addChangeListener(this.handleFilteredDataStoreChange);
 
     const phylocanvas = PhyloCanvas.createTree('phylocanvas-container');
 
@@ -85,14 +84,14 @@ export default React.createClass({
   },
 
   componentWillUnmount() {
-    TableStore.removeChangeListener(this.handleTableStoreChange);
+    FilteredDataStore.removeChangeListener(this.handleFilteredDataStoreChange);
   },
 
   render() {
-    const { title, navButton, navOnChange } = this.props;
+    const { title, navButton } = this.props;
 
     return (
-      <section style={fullWidthHeight}>
+      <section className="wgsa-tree">
         <header className="wgsa-tree-header">
           { navButton }
           <h2 className="wgsa-tree-heading">{title}</h2>
@@ -133,32 +132,35 @@ export default React.createClass({
   },
 
   setNodeLabels() {
-    const publicCollectionAssemblies = ReferenceCollectionStore.getAssemblies();
-    const uploadedCollectionAssemblies = UploadedCollectionStore.getAssemblies();
-
-    const combinedAssemblies = assign({}, publicCollectionAssemblies, uploadedCollectionAssemblies);
-
-    Object.keys(combinedAssemblies).forEach((assemblyId) => {
-      const labelProperty = this.state.labelProperty;
-      const assembly = combinedAssemblies[assemblyId];
-      let labelValue;
-
-      if (labelProperty === 'Country') {
-        labelValue = MetadataUtils.getCountry(assembly);
-      } else if (labelProperty === 'Date') {
-        labelValue = DataUtils.getFormattedDateString(assembly.metadata.date) || '';
-      } else if (labelProperty === 'ST') {
-        labelValue = assembly.analysis.st || '';
+    const labelProperty = this.state.labelProperty;
+    for (const leaf of this.phylocanvas.leaves) {
+      if (UploadedCollectionStore.contains(leaf.id)) {
+        const assembly = UploadedCollectionStore.getAssemblies()[leaf.id];
+        let labelValue;
+        if (labelProperty === 'Country') {
+          labelValue = MetadataUtils.getCountry(assembly);
+        } else if (labelProperty === 'Date') {
+          labelValue = DataUtils.getFormattedDateString(assembly.metadata.date) || '';
+        } else if (labelProperty === 'ST') {
+          labelValue = assembly.analysis.st || '';
+        } else {
+          labelValue =
+            assembly.metadata.assemblyName || assembly.metatdata.assemblyId;
+        }
+        leaf.label = labelValue;
       } else {
-        labelValue = labelValue = assembly.metadata.assemblyName || assemblyId;
-      }
+        const assembly = ReferenceCollectionStore.getAssemblies()[leaf.id];
+        if (!assembly) {
+          leaf.label = leaf.id;
+          continue;
+        }
 
-      const branch = this.phylocanvas.branches[assemblyId];
-
-      if (branch && branch.leaf) {
-        branch.label = labelValue;
+        leaf.label = assembly.metadata.assemblyName;
+        if (assembly.analysis) {
+          leaf.label += `_${assembly.analysis.st}`;
+        }
       }
-    });
+    }
 
     this.phylocanvas.fitInPanel();
   },
@@ -177,7 +179,7 @@ export default React.createClass({
 
   handleRedrawOriginalTree() {
     this.phylocanvas.redrawOriginalTree();
-    this.props.styleTree(this.phylocanvas);
+    this.styleTree(this.phylocanvas);
     this.phylocanvas.draw();
   },
 
@@ -186,9 +188,9 @@ export default React.createClass({
     this.phylocanvas.draw();
   },
 
-  handleTableStoreChange() {
+  handleFilteredDataStoreChange() {
     this.setState({
-      labelProperty: TableStore.getLabelTableColumnName(),
+      labelProperty: FilteredDataStore.getLabelTableColumnName(),
     });
   },
 

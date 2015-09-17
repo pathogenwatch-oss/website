@@ -1,20 +1,16 @@
-import ANTIBIOTICS from '../../static_data/antibiotics.json';
-
-import TableStore from '../stores/TableStore';
+import AntibioticsStore from '../stores/AntibioticsStore';
+import FilteredDataStore from '../stores/FilteredDataStore';
 import ReferenceCollectionStore from '../stores/ReferenceCollectionStore';
 import UploadedCollectionStore from '../stores/UploadedCollectionStore';
 
 import { CGPS } from '../defaults';
 
-
-const listOfAntibiotics = Object.keys(ANTIBIOTICS);
-
 function columnNameIsAntibiotic(columnName) {
-  return (listOfAntibiotics.indexOf(columnName) > -1);
+  return (Object.keys(AntibioticsStore.get()).indexOf(columnName) > -1);
 }
 
 function getColour(assembly) {
-  const selectedTableColumnName = TableStore.getColourTableColumnName();
+  const selectedTableColumnName = FilteredDataStore.getColourTableColumnName();
   let colour = '#ffffff';
 
   if (!assembly) {

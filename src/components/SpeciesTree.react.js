@@ -1,14 +1,14 @@
 import React from 'react';
 
 import Tree from './tree/Tree.react';
-import TreeSwitcher from './tree/TreeSwitcher.react';
+import Switch from './Switch.react';
 
 import ReferenceCollectionStore from '../stores/ReferenceCollectionStore';
 import SubtreeStore from '../stores/SubtreeStore';
 import UploadedCollectionStore from '../stores/UploadedCollectionStore';
 import SubtreeActionCreators from '../actions/SubtreeActionCreators';
 
-import ResistanceUtils from '../utils/Resistance';
+import FilteredDataUtils from '../utils/FilteredData';
 import { CGPS } from '../defaults';
 
 const POPULATION = Symbol('population');
@@ -23,7 +23,7 @@ const collectionNodeLabelStyle = {
   colour: 'rgba(0, 0, 0, 0.87)',
 };
 
-const trees = {
+const treeProps = {
   [POPULATION]: {
     title: 'Population',
     newick: '',
@@ -38,14 +38,14 @@ const trees = {
 
       tree.setNodeDisplay(subtreeIds, { colour: CGPS.COLOURS.PURPLE_LIGHT });
 
-      subtreeIds.forEach((id) => {
-        const branch = tree.branches[id];
-        if (branch) {
-          branch.interactive = true;
-          branch.label = `${branch.label} (${subtrees[id].assemblyIds.length})`;
-          branch.labelStyle = emphasizedNodeLabelStyle;
+      for (const subtreeId of subtreeIds) {
+        const leaf = tree.branches[subtreeId];
+        if (leaf) {
+          leaf.interactive = true;
+          leaf.label = `${leaf.label} (${subtrees[leaf.id].assemblyIds.length})`;
+          leaf.labelStyle = emphasizedNodeLabelStyle;
         }
-      });
+      }
     },
     leafSelected(event) {
       if (event.property !== 'selected') {
@@ -64,7 +64,7 @@ const trees = {
     styleTree(tree) {
       tree.leaves.forEach((leaf) => {
         const assembly = UploadedCollectionStore.getAssemblies()[leaf.id];
-        tree.setNodeDisplay([ leaf.id ], { colour: ResistanceUtils.getColour(assembly) });
+        tree.setNodeDisplay([ leaf.id ], { colour: FilteredDataUtils.getColour(assembly) });
         leaf.labelStyle = collectionNodeLabelStyle;
       });
     },
@@ -75,26 +75,32 @@ export default React.createClass({
 
   getInitialState() {
     return {
-      tree: trees[POPULATION],
+      treeProps: treeProps[POPULATION],
     };
   },
 
   componentWillMount() {
-    trees[POPULATION].newick = ReferenceCollectionStore.getTree();
-    trees[COLLECTION].newick = UploadedCollectionStore.getTree();
+    treeProps[POPULATION].newick = ReferenceCollectionStore.getTree();
+    treeProps[COLLECTION].newick = UploadedCollectionStore.getTree();
   },
 
   render() {
     return (
       <Tree
-        { ...this.state.tree }
-        navButton={<TreeSwitcher onChange={this.handleTreeSwitch}/>} />
+        { ...this.state.treeProps }
+        navButton={
+          <Switch
+            id="tree-switcher"
+            left={{ title: 'Population Tree', icon: 'nature' }}
+            right={{ title: 'Collection Tree', icon: 'nature_people' }}
+            onChange={this.handleTreeSwitch} />
+        } />
     );
   },
 
   handleTreeSwitch(checked) {
     this.setState({
-      tree: checked ? trees[COLLECTION] : trees[POPULATION],
+      treeProps: checked ? treeProps[COLLECTION] : treeProps[POPULATION],
     });
   },
 

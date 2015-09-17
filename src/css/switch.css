@@ -1,0 +1,35 @@
+.wgsa-switch {
+  display: flex;
+  width: 88px;
+}
+
+.wgsa-switch:hover {
+  cursor: pointer;
+}
+
+.wgsa-switch .mdl-switch__input,
+.wgsa-switch .mdl-switch__ripple-container {
+  display: none;
+}
+
+.wgsa-switch .mdl-switch.is-upgraded {
+  display: block;
+  margin-left: 1px;
+}
+
+.wgsa-switch .mdl-switch__thumb,
+.wgsa-switch .is-checked .mdl-switch__thumb {
+  background: #673c90;
+}
+
+.wgsa-switch .is-checked .mdl-switch__track {
+  background: rgba(0, 0, 0, 0.26);
+}
+
+.wgsa-switch i {
+  color: rgba(0, 0, 0, 0.39);
+}
+
+.wgsa-switch i.active {
+  color: #673c90;
+}

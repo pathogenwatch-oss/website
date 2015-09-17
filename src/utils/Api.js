@@ -63,9 +63,9 @@ function getCollection(speciesId, collectionId, callback) {
     });
 }
 
-function requestFile(requestBody, idType, fileType, callback) {
+function requestFile(fileType, requestBody, callback) {
   $.ajax(
-    postJson(`/download/type/${idType}/format/${fileType}`, requestBody)
+    postJson(`/download/type/assembly/format/${fileType}`, requestBody)
   ).done(function (response) {
     console.log(response);
     callback(null, response);
@@ -76,10 +76,21 @@ function requestFile(requestBody, idType, fileType, callback) {
   });
 }
 
+function getAntibiotics(speciesId, callback) {
+  $.get(`${API_ROOT}/species/${speciesId}/antibiotics`)
+    .done(function (antibiotics) {
+      callback(null, antibiotics);
+    })
+    .fail(function (error) {
+      callback(error, null);
+    });
+}
+
 export default {
   postAssembly,
   getCollectionId,
   getCollection,
   getReferenceCollection,
   requestFile,
+  getAntibiotics,
 };

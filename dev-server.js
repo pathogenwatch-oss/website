@@ -47,14 +47,23 @@ apiRouter.get('/species/:speciesId/reference', function (req, res) {
   res.sendFile(__dirname + '/static_data/reference.json');
 });
 
-apiRouter.get('/species/:speciesId/reference', function (req, res) {
-  res.sendFile(__dirname + '/static_data/reference.json');
+apiRouter.get('/species/:speciesId/antibiotics', function (req, res) {
+  res.sendFile(__dirname + '/static_data/antibiotics.json');
+});
+
+apiRouter.post('/download/type/assembly/format/fasta', function (req, res) {
+  setTimeout(function () {
+    res.json({
+      'gobbledegook': req.body.idList[0] + '.fa'
+    });
+  }, 2000);
 });
 
 apiRouter.post('/download/type/:idType/format/:fileFormat', function (req, res) {
-  var assemblyId = Object.keys(req.body)[0];
   setTimeout(function () {
-    res.json(req.body[assemblyId]);
+    res.json({
+      'gobbledegook': req.params.fileFormat
+    });
   }, 2000);
 });
 
@@ -64,9 +73,11 @@ apiRouter.get('/download/file/:fileName', function (req, res) {
 
 app.use('/api', apiRouter);
 
-
 app.use('/', function (req, res) {
   res.sendFile(__dirname + '/public/index.html');
 });
 
-app.listen(8080, "localhost");
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
+
+server.listen(8080);

@@ -1,15 +1,16 @@
 import React from 'react';
 
-import TableStore from '../../../stores/TableStore';
-import TableActionCreators from '../../../actions/TableActionCreators';
+import AntibioticsStore from '../../../stores/AntibioticsStore';
+import FilteredDataStore from '../../../stores/FilteredDataStore';
 
-import ANTIBIOTICS from '../../../../static_data/antibiotics.json';
+import FilteredDataActionCreators from '../../../actions/FilteredDataActionCreators';
+
 import { CGPS } from '../../../defaults';
 
 const MetadataTableHeader = React.createClass({
 
   getTableHeaderCellStyle: function (header) {
-    const selectedTableColumnName = TableStore.getColourTableColumnName();
+    const selectedTableColumnName = FilteredDataStore.getColourTableColumnName();
     const style = {
       cursor: 'pointer',
     };
@@ -32,11 +33,11 @@ const MetadataTableHeader = React.createClass({
   },
 
   handleSelectTableColumn: function (header) {
-    TableActionCreators.setColourTableColumnName(header);
+    FilteredDataActionCreators.setColourTableColumnName(header);
   },
 
   getListOfAntibioticNames: function () {
-    return Object.keys(ANTIBIOTICS);
+    return Object.keys(AntibioticsStore.get());
   },
 
   getListOfTableHeaderNames: function () {

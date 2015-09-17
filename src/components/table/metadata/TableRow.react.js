@@ -6,7 +6,6 @@ import DataUtils from '../../../utils/Data';
 import MetadataUtils from '../../../utils/Metadata';
 
 const downloadButtonProps = {
-  type: 'assembly',
   format: 'fasta',
   description: 'Assembly Fasta',
 };
@@ -39,9 +38,9 @@ const TableRow = React.createClass({
         name: 'Assembly',
         value: isolate.metadata.assemblyName,
       },
-      country: {
-        name: 'Country',
-        value: MetadataUtils.getCountry(isolate),
+      location: {
+        name: 'Location',
+        value: isolate.metadata.geography.location,
       },
       date: {
         name: 'Date',
@@ -50,6 +49,15 @@ const TableRow = React.createClass({
       st: {
         name: 'ST',
         value: isolate.analysis.st,
+        numeric: true,
+      },
+      mlst: {
+        name: 'ST',
+        value: isolate.analysis.mlst,
+      },
+      totalCompleteMatches: {
+        name: 'Total Complete Matches',
+        value: isolate.analysis.totalCompleteMatches,
         numeric: true,
       },
     };

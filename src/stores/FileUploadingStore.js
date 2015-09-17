@@ -8,7 +8,6 @@ var CHANGE_EVENT = 'change';
 var ASSEMBLY_PROCESSING_RESULTS = keyMirror({
   UPLOAD_OK: null,
   METADATA_OK: null,
-  SCCMEC: null,
   PAARSNP_RESULT: null,
   MLST_RESULT: null,
   CORE_RESULT: null,
