@@ -28,7 +28,7 @@ import Species from '../../species';
 import DEFAULT from '../../defaults';
 import { validateMetadata } from '../../utils/Metadata';
 
-const loadingAnimationStyle = {
+var loadingAnimationStyle = {
   visibility: 'visible'
 };
 
@@ -193,10 +193,12 @@ const AssemblyWorkspace = React.createClass({
 
   render() {
     let pageTitle = 'WGSA';
+    loadingAnimationStyle.visibility = isProcessing ? 'visible' : 'hidden';
+
     return (
       <FileDragAndDrop onDrop={this.handleDrop}>
         <div className="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-drawer">
-          <UploadReviewHeader title={pageTitle} isProcessing={isProcessing} activateUploadButton={this.state.uploadButtonActive} isUploading={this.state.isUploading} />
+          <UploadReviewHeader title={pageTitle} activateUploadButton={this.state.uploadButtonActive} isUploading={this.state.isUploading} />
 
           <UploadWorkspaceNavigation assembliesUploaded={this.props.assembly ? true : false} totalAssemblies={this.props.totalAssemblies}>
             <footer className="wgsa-upload-navigation__footer mdl-shadow--4dp">
@@ -215,6 +217,8 @@ const AssemblyWorkspace = React.createClass({
           </UploadWorkspaceNavigation>
 
           <main className="mdl-layout__content" style={layoutContentStyle}>
+            <div id="loadingAnimation" style={loadingAnimationStyle} className="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
+
             {
               (() => {
                 switch (this.state.viewPage) {

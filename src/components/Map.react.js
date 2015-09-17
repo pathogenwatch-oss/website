@@ -17,8 +17,8 @@ const Map = React.createClass({
   infoWindowIsolates: null,
 
   propTypes: {
-    width: React.PropTypes.number.isRequired,
-    height: React.PropTypes.number.isRequired,
+    width: React.PropTypes.any.isRequired,
+    height: React.PropTypes.any.isRequired,
   },
 
   getInitialState: function () {
