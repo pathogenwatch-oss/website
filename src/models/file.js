@@ -4,7 +4,7 @@ var fileStorage = require('services/storage')('cache');
 var LOGGER = require('utils/logging').createLogger('File');
 
 function constructFileFromParts(keys, parts) {
-  return Object.keys(keys).reduce(function (file, partKey) {
+  return keys.reduce(function (file, partKey) {
     var step = file + parts[partKey];
     LOGGER.info('File Length: ' + step.length);
     return step;
@@ -17,7 +17,7 @@ function getFile(fileName, callback) {
     LOGGER.info(partKeys);
     fileStorage.retrieveMany(partKeys, function (error, parts) {
       if (error) callback(error);
-      callback(null, constructFileFromParts(keys, parts));
+      callback(null, constructFileFromParts(partKeys, parts));
     });
   });
 }
@@ -31,7 +31,7 @@ function requestDownload(request, callback) {
       }
       LOGGER.info('Received response', message);
       queue.destroy();
-      callback(null, message.fileNames);
+      callback(null, message.fileNamesMap);
     });
 
     messageQueueService.getUploadExchange()
