@@ -15,12 +15,6 @@ const progressBarStyle = {
 
 const FileUploadingProgress = React.createClass({
 
-  getInitialState: function () {
-    return {
-      progressPercentage: 30,
-    };
-  },
-
   componentDidMount: function () {
     FileUploadingProgressStore.addChangeListener(this.handleFileUploadingProgressStoreChange);
 
@@ -40,9 +34,6 @@ const FileUploadingProgress = React.createClass({
   handleFileUploadingProgressStoreChange: function () {
     const percentage = FileUploadingProgressStore.getProgressPercentage();
     this.progressBar.setProgress(percentage);
-    this.setState({
-      progressPercentage: percentage,
-    });
   },
 
   render: function () {

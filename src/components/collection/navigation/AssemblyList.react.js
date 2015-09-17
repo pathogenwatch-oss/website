@@ -43,7 +43,6 @@ const AssemblyList = React.createClass({
     const assemblyNames = UploadStore.getAssemblyNames();
     const assemblies = UploadStore.getAssemblies();
     const isValidMap = validateMetadata(assemblies);
-    console.log(this.state.isUploading)
     return assemblyNames.map((assemblyName) => {
       return (
         <AssemblyListItem

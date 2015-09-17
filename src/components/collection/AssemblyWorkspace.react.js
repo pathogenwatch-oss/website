@@ -21,6 +21,7 @@ import UploadWorkspaceNavigationActionCreators from '../../actions/UploadWorkspa
 import UploadWorkspaceNavigationStore from '../../stores/UploadWorkspaceNavigationStore';
 import FileProcessingStore from '../../stores/FileProcessingStore';
 import FileUploadingStore from '../../stores/FileUploadingStore';
+import FileUploadingProgressStore from '../../stores/FileUploadingProgressStore';
 import SocketStore from '../../stores/SocketStore';
 
 import SocketUtils from '../../utils/Socket';
@@ -62,13 +63,15 @@ const AssemblyWorkspace = React.createClass({
       confirmedMultipleMetadataDrop: false,
       pageTitleAppend: 'Upload',
       isUploading: FileUploadingStore.getFileUploadingState(),
-      viewPage: 'overview'
+      viewPage: 'overview',
+      uploadProgressPercentage: 0,
     };
   },
 
   componentDidMount() {
     FileProcessingStore.addChangeListener(this.handleFileProcessingStoreChange);
     FileUploadingStore.addChangeListener(this.handleFileUploadingStoreChange);
+    FileUploadingProgressStore.addChangeListener(this.handleFileUploadingProgressStoreChange);
     UploadWorkspaceNavigationStore.addChangeListener(this.handleUploadWorkspaceNavigationStoreChange);
     UploadStore.addChangeListener(this.activateUploadButton);
 
@@ -85,6 +88,7 @@ const AssemblyWorkspace = React.createClass({
   componentWillUnmount() {
     FileProcessingStore.removeChangeListener(this.handleFileProcessingStoreChange);
     FileUploadingStore.removeChangeListener(this.handleFileUploadingStoreChange);
+    FileUploadingProgressStore.removeChangeListener(this.handleFileUploadingProgressStoreChange);
     SocketStore.removeChangeListener(this.handleSocketStoreChange);
   },
 
@@ -129,6 +133,13 @@ const AssemblyWorkspace = React.createClass({
       viewPage: 'upload_progress'
     });
     componentHandler.upgradeDom();
+  },
+
+  handleFileUploadingProgressStoreChange: function () {
+    const percentage = FileUploadingProgressStore.getProgressPercentage();
+    this.setState({
+      uploadProgressPercentage: percentage,
+    });
   },
 
   handleUploadWorkspaceNavigationStoreChange() {
@@ -207,11 +218,15 @@ const AssemblyWorkspace = React.createClass({
                 <i className="material-icons">home</i>
               </button>
 
-              <button ref="spinner_button" type="button" className="mdl-button mdl-js-button mdl-button--raised mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect"
+              <button ref="spinner_button" type="button" className="uploadprogress-spinner-button mdl-button mdl-js-button mdl-button--raised mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect"
                 onClick={this.handleClick}>
-                <i className="material-icons">{this.state.isUploading ? "cloud_upload" : "add"}</i>
                 { this.state.isUploading &&
-                  <i className="progress-spinner mdl-spinner mdl-js-spinner mdl-spinner--single-color is-active"></i>
+                  <div>
+                    {this.state.uploadProgressPercentage}%
+                    <i className="progress-spinner mdl-spinner mdl-js-spinner mdl-spinner--single-color is-active"></i>
+                  </div>
+                  ||
+                  <i className="material-icons">add</i>
                 }
               </button>
             </footer>

@@ -389,21 +389,36 @@
   color: #9476b1;
 }
 
+/***************** Upload Progress *******************/
+
+.wgsa-fileupload-progressbar.mdl-progress {
+  width: 100%;
+  background: red;
+}
+
 .progress-spinner {
   width: 40px;
   height: 40px;
-  margin-top: 0.4px;
+  position: absolute;
+  left: 0;
+  top: 0;
 }
 
-/***************** Upload Progress *******************/
+.uploadprogress-spinner-button {
+  font-size: 10px;
+}
 
-.wgsa-fileupload-progressbar {
-  background: red;
-  position: relative;
+.wgsa-upload-progress-container {
+  position: absolute;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  overflow: auto
 }
 
 /*****************************************************/
