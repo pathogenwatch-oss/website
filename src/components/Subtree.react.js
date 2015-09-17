@@ -3,6 +3,7 @@ import React from 'react';
 import Tree from './tree/Tree.react';
 
 import UploadedCollectionStore from '../stores/UploadedCollectionStore';
+import ReferenceCollectionStore from '../stores/ReferenceCollectionStore';
 import SubtreeStore from '../stores/SubtreeStore';
 import SubtreeActionCreators from '../actions/SubtreeActionCreators';
 
@@ -43,7 +44,9 @@ export default React.createClass({
   },
 
   render() {
-    const { treeName } = this.props;
+    const referenceAssembly = ReferenceCollectionStore.getAssemblies()[this.props.treeName];
+    const title = referenceAssembly.metadata.assemblyName;
+
     const subtreeAssemblyIds = SubtreeStore.getActiveSubtreeAssemblyIds();
     if (subtreeAssemblyIds.length === 1) {
       const assembly = UploadedCollectionStore.getAssemblies()[subtreeAssemblyIds[0]];
@@ -51,7 +54,7 @@ export default React.createClass({
         <section className="wgsa-tree">
           <header className="wgsa-tree-header">
             { backButton }
-            <h2 className="wgsa-tree-heading">{treeName.replace(`${Species.id}_`, '')}</h2>
+            <h2 className="wgsa-tree-heading">{title}</h2>
           </header>
           <div className="wgsa-no-subtree">
             <i className="material-icons">nature</i>
@@ -64,7 +67,7 @@ export default React.createClass({
 
     return (
       <Tree
-        title={treeName}
+        title={title}
         newick={SubtreeStore.getActiveSubtree().newick}
         navButton={backButton}
         styleTree={styleTree} />
