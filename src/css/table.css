@@ -28,12 +28,17 @@
   border-right: 1px solid #efefef;
 }
 
-.wgsa-table-header--resistance {
-  display: flex !important;
-  justify-content: center;
-}
-
+.wgsa-table-header--resistance .fixedDataTableCellLayout_wrap1,
+.wgsa-table-header--resistance .fixedDataTableCellLayout_wrap2,
+.wgsa-table-header--resistance .fixedDataTableCellLayout_wrap3,
 .wgsa-table-header--resistance .public_fixedDataTableCell_cellContent {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+.wgsa-table-header--resistance .public_fixedDataTableCell_cellContent {
+
   transform: rotate(-90deg);
   margin-bottom: 50%;
   white-space: nowrap;
