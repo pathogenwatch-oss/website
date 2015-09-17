@@ -124,7 +124,7 @@ const AssemblyWorkspace = React.createClass({
   },
 
   handleDrop(event) {
-    if (event.files.length > 0) {
+    if (event.files.length > 0 && !this.state.isUploading) {
       if (!this.state.confirmedMultipleMetadataDrop && this.props.totalAssemblies > 0) {
         var multipleDropConfirm = confirm('Duplicate records will be overwritten');
         if (multipleDropConfirm) {
