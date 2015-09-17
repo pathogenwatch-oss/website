@@ -24,6 +24,7 @@ import FileUploadingStore from '../../stores/FileUploadingStore';
 import SocketStore from '../../stores/SocketStore';
 
 import SocketUtils from '../../utils/Socket';
+import Species from '../../species';
 import DEFAULT from '../../defaults';
 import { validateMetadata } from '../../utils/Metadata';
 
@@ -49,6 +50,10 @@ const AssemblyWorkspace = React.createClass({
   propTypes: {
     assembly: React.PropTypes.object,
     totalAssemblies: React.PropTypes.number,
+  },
+
+  contextTypes: {
+    router: React.PropTypes.func,
   },
 
   getInitialState() {
@@ -109,6 +114,15 @@ const AssemblyWorkspace = React.createClass({
   },
 
   handleFileUploadingStoreChange() {
+    const uploadingResult = FileUploadingStore.getFileUploadingResult();
+    console.log('result', uploadingResult);
+    if (uploadingResult === FileUploadingStore.getFileUploadingResults().SUCCESS) {
+      const id = FileUploadingStore.getCollectionId();
+      const { transitionTo, makePath } = this.context.router;
+      transitionTo(makePath('collection', { species: Species.nickname, id }));
+      return;
+    }
+
     this.setState({
       isUploading: FileUploadingStore.getFileUploadingState(),
       uploadButtonActive: false,
@@ -208,43 +222,43 @@ const AssemblyWorkspace = React.createClass({
               (() => {
                 switch (this.state.viewPage) {
                   case "assembly":  return (
-                                      <div className="assemblyWorkspaceContainer mdl-grid assemblyWorkspaceContent">
-                                        <div className="overflow-y--auto mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
-                                          <div className="heading"> Metadata </div>
-                                          <div className="card-style">
-                                            <AssemblyMetadata key={this.props.assembly.metadata.assemblyName} assembly={this.props.assembly} />
-                                          </div>
-                                        </div>
+                    <div className="assemblyWorkspaceContainer mdl-grid assemblyWorkspaceContent">
+                      <div className="overflow-y--auto mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
+                        <div className="heading"> Metadata </div>
+                        <div className="card-style">
+                          <AssemblyMetadata key={this.props.assembly.metadata.assemblyName} assembly={this.props.assembly} />
+                        </div>
+                      </div>
 
-                                        <div className="overflow-y--auto mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
-                                          <div className="mdl-grid mdl-grid--no-spacing">
-                                            <div className="mdl-cell mdl-cell--12-col">
-                                              <div className="heading"> Assembly Statistics </div>
-                                              <div className="card-style">
-                                                <AssemblyAnalysis assembly={this.props.assembly} />
-                                              </div>
-                                            </div>
-                                            <div className="mdl-cell mdl-cell--12-col">
-                                              <div className="heading"> N50 Chart </div>
-                                              <div className="card-style">
-                                                <AssemblyAnalysisChart analysis={this.props.assembly.analysis} />
-                                              </div>
-                                            </div>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    );
+                      <div className="overflow-y--auto mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
+                        <div className="mdl-grid mdl-grid--no-spacing">
+                          <div className="mdl-cell mdl-cell--12-col">
+                            <div className="heading"> Assembly Statistics </div>
+                            <div className="card-style">
+                              <AssemblyAnalysis assembly={this.props.assembly} />
+                            </div>
+                          </div>
+                          <div className="mdl-cell mdl-cell--12-col">
+                            <div className="heading"> N50 Chart </div>
+                            <div className="card-style">
+                              <AssemblyAnalysisChart analysis={this.props.assembly.analysis} />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
                   case "overview":  return (
-                                     <Overview clickHandler={this.handleClick} />
-                                    );
+                   <Overview clickHandler={this.handleClick} />
+                  );
                   case "upload_progress": return (
-                                      <div>
-                                        <UploadingFilesDetailed />
-                                      </div>
-                                    );
+                    <div>
+                      <UploadingFilesDetailed />
+                    </div>
+                  );
                   default: return (
-                                    <Overview clickHandler={this.handleClick} />
-                                  );
+                    <Overview clickHandler={this.handleClick} />
+                  );
                 }
               }) ()}
           </main>
