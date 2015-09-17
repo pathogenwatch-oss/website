@@ -32,7 +32,7 @@ fs.readFile(filePath, 'utf8', function (error, file) {
     }).
     forEach(function (object) {
       var ids = {
-        assemblyId: speciesId + '_' + object.original_isolate_id,
+        assemblyId: speciesId + '_' + object.filename,
         speciesId: speciesId
       };
       object.assemblyName = object.original_isolate_id;
