@@ -103,7 +103,7 @@ const AssemblyWorkspace = React.createClass({
     isProcessing = FileProcessingStore.getFileProcessingState();
     if (isProcessing) {
       this.setState({
-        pageTitleAppend: 'Processing...'
+        pageTitleAppend: 'Processing your files...'
       });
     }
     else {
@@ -115,7 +115,6 @@ const AssemblyWorkspace = React.createClass({
 
   handleFileUploadingStoreChange() {
     const uploadingResult = FileUploadingStore.getFileUploadingResult();
-    console.log('result', uploadingResult);
     if (uploadingResult === FileUploadingStore.getFileUploadingResults().SUCCESS) {
       const id = FileUploadingStore.getCollectionId();
       const { transitionTo, makePath } = this.context.router;
@@ -194,6 +193,13 @@ const AssemblyWorkspace = React.createClass({
   render() {
     let pageTitle = 'WGSA';
     loadingAnimationStyle.visibility = isProcessing ? 'visible' : 'hidden';
+    switch (this.state.viewPage) {
+      case 'assembly': pageTitle = `WGSA | ${this.props.assembly.fasta.name}`;
+        break;
+      case 'upload_progress': pageTitle = 'WGSA | Uploading and Analysing your files...';
+        break;
+      default: pageTitle = `WGSA | ${this.state.pageTitleAppend}`;
+    }
 
     return (
       <FileDragAndDrop onDrop={this.handleDrop}>
@@ -249,14 +255,17 @@ const AssemblyWorkspace = React.createClass({
                       </div>
                     </div>
                   );
+                  break;
                   case "overview":  return (
                    <Overview clickHandler={this.handleClick} />
                   );
+                  break;
                   case "upload_progress": return (
                     <div>
                       <UploadingFilesDetailed />
                     </div>
                   );
+                  break;
                   default: return (
                     <Overview clickHandler={this.handleClick} />
                   );
