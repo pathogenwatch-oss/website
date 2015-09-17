@@ -12,8 +12,8 @@ const ICON_STYLE = {
 };
 
 const TABLE_STYLE = {
-  marginTop: '16px',
-  width: '100%',
+  width: 'auto',
+  border: 'none'
 };
 
 const HEADER_STYLE = {
@@ -32,11 +32,10 @@ const FILE_ASSEMBLY_ID_STYLE = {
 
 const resultColumns = [
   'UPLOAD_OK',
-  'SCCMEC',
   'PAARSNP',
   'MLST',
   'CORE',
-  'FP',
+  'FP'
 ];
 
 const UploadingAssembliesProgress = React.createClass({
@@ -64,16 +63,16 @@ const UploadingAssembliesProgress = React.createClass({
   },
 
   getAssemblyResultElements: function () {
-    const fileAssemblyIdToAssemblyIdMap = FileUploadingStore.getFileAssemblyIdToAssemblyIdMap();
-    const fileAssemblyIds = UploadStore.getFileAssemblyIds();
+    const assemblyNameToAssemblyIdMap = FileUploadingStore.getAssemblyNameToAssemblyIdMap();
+    const assemblyNames = UploadStore.getAssemblyNames();
     const assemblyResults = this.state.assemblyResults;
 
-    return fileAssemblyIds.map(function createAssemblyResultElement(fileAssemblyId) {
+    return assemblyNames.map(function createAssemblyResultElement(assemblyName) {
       let assemblyResult = {};
 
       // This logic needs to be refactored:
-      if (fileAssemblyIdToAssemblyIdMap && assemblyResults) {
-        const assemblyId = fileAssemblyIdToAssemblyIdMap[fileAssemblyId];
+      if (assemblyNameToAssemblyIdMap && assemblyResults) {
+        const assemblyId = assemblyNameToAssemblyIdMap[assemblyName];
 
         if (assemblyResults[assemblyId]) {
           assemblyResult = assemblyResults[assemblyId];
@@ -81,11 +80,11 @@ const UploadingAssembliesProgress = React.createClass({
       }
 
       return (
-        <tr key={fileAssemblyId}>
-          <td style={FILE_ASSEMBLY_ID_STYLE} className="mdl-data-table__cell--non-numeric">{fileAssemblyId}</td>
+        <tr key={assemblyName}>
+          <td style={FILE_ASSEMBLY_ID_STYLE} className="mdl-data-table__cell--non-numeric">{assemblyName}</td>
           { resultColumns.map((resultName) => {
             return (
-              <td style={CELL_STYLE} key={`${fileAssemblyId}-${resultName}`}>
+              <td style={CELL_STYLE} key={`${assemblyName}-${resultName}`}>
                 <i style={ICON_STYLE} className="material-icons">
                 { assemblyResult[resultName] ?
                     'check_circle' :
@@ -106,7 +105,6 @@ const UploadingAssembliesProgress = React.createClass({
           <tr>
             <td style={CELL_STYLE}></td>
             <td style={HEADER_STYLE}>UPLOAD</td>
-            <td style={HEADER_STYLE}>SCCMEC</td>
             <td style={HEADER_STYLE}>PAARSNP</td>
             <td style={HEADER_STYLE}>MLST</td>
             <td style={HEADER_STYLE}>CORE</td>

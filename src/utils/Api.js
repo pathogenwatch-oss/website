@@ -23,11 +23,11 @@ function getCollectionId(speciesId, collectionData, callback) {
   });
 }
 
-function postAssembly({ speciesId, collectionId, assemblyId }, assemblyData, callback) {
+function postAssembly({ speciesId, collectionId, assemblyId }, requestBody, callback) {
   $.ajax(
     postJson(
       `/species/${speciesId}/collection/${collectionId}/assembly/${assemblyId}`,
-      assemblyData
+      requestBody
     )
   ).done(function (data) {
     callback(null, data);
@@ -63,16 +63,9 @@ function getCollection(speciesId, collectionId, callback) {
     });
 }
 
-function requestFile({ assembly, idType, fileType, speciesId }, callback) {
-  const requestBody = {
-    speciesId,
-    idToFilenameMap: {
-      [assembly.metadata.assemblyId]: assembly.metadata.assemblyFilename,
-    },
-  };
-
+function requestFile(fileType, requestBody, callback) {
   $.ajax(
-    postJson(`/download/type/${idType}/format/${fileType}`, requestBody)
+    postJson(`/download/type/assembly/format/${fileType}`, requestBody)
   ).done(function (response) {
     console.log(response);
     callback(null, response);
@@ -83,10 +76,21 @@ function requestFile({ assembly, idType, fileType, speciesId }, callback) {
   });
 }
 
+function getAntibiotics(speciesId, callback) {
+  $.get(`${API_ROOT}/species/${speciesId}/antibiotics`)
+    .done(function (antibiotics) {
+      callback(null, antibiotics);
+    })
+    .fail(function (error) {
+      callback(error, null);
+    });
+}
+
 export default {
   postAssembly,
   getCollectionId,
   getCollection,
   getReferenceCollection,
   requestFile,
+  getAntibiotics,
 };

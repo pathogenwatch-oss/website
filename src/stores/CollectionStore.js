@@ -5,9 +5,8 @@ import keyMirror from 'keymirror';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 
 import UploadedCollectionStore from './UploadedCollectionStore';
-import SpeciesTreeStore from './SpeciesTreeStore';
-import SpeciesSubtreeStore from './SpeciesSubtreeStore';
-import PublicCollectionStore from './PublicCollectionStore';
+import SubtreeStore from './SubtreeStore';
+import ReferenceCollectionStore from './ReferenceCollectionStore';
 
 const CHANGE_EVENT = 'change';
 
@@ -43,9 +42,8 @@ function handleAction(action) {
 
   case 'set_collection':
     AppDispatcher.waitFor([
-      PublicCollectionStore.dispatchToken,
-      SpeciesSubtreeStore.dispatchToken,
-      SpeciesTreeStore.dispatchToken,
+      ReferenceCollectionStore.dispatchToken,
+      SubtreeStore.dispatchToken,
       UploadedCollectionStore.dispatchToken,
     ]);
     emitChange();

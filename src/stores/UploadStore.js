@@ -13,31 +13,27 @@ function addFiles(newRawFiles, newAssemblies) {
   assign(assemblies, newAssemblies);
 }
 
-function setMetadataYear(fileAssemblyId, year) {
-  assemblies[fileAssemblyId].metadata.date.year = year;
+function setMetadataDateComponent(assemblyName, component, value) {
+  assemblies[assemblyName].metadata.date[component] = value;
 }
 
-function setMetadataMonth(fileAssemblyId, month) {
-  assemblies[fileAssemblyId].metadata.date.month = month;
+function setMetadataColumn(assemblyName, columnName, value) {
+  assemblies[assemblyName].metadata[columnName] = value;
 }
 
-function setMetadataDay(fileAssemblyId, day) {
-  assemblies[fileAssemblyId].metadata.date.day = day;
+function setMetadataDate(assemblyName, date) {
+  const m = moment(date);
+  setMetadataDateComponent(assemblyName, 'year', m.year());
+  setMetadataDateComponent(assemblyName, 'month', m.month() + 1);
+  setMetadataDateComponent(assemblyName, 'day', m.date());
 }
 
-function setMetadataDate(fileAssemblyId, date) {
-  var m = moment(date);
-  setMetadataYear(fileAssemblyId, m.year());
-  setMetadataMonth(fileAssemblyId, m.month() + 1);
-  setMetadataDay(fileAssemblyId, m.date());
+function setMetadataSource(assemblyName, source) {
+  assemblies[assemblyName].metadata.source = source;
 }
 
-function setMetadataSource(fileAssemblyId, source) {
-  assemblies[fileAssemblyId].metadata.source = source;
-}
-
-function deleteAssembly(fileAssemblyId) {
-  delete assemblies[fileAssemblyId];
+function deleteAssembly(assemblyName) {
+  delete assemblies[assemblyName];
 }
 
 function emitChange() {
@@ -46,119 +42,131 @@ function emitChange() {
 
 const Store = assign({}, EventEmitter.prototype, {
 
-  addChangeListener: function (callback) {
+  addChangeListener(callback) {
     this.on(CHANGE_EVENT, callback);
   },
 
-  removeChangeListener: function (callback) {
+  removeChangeListener(callback) {
     this.removeListener(CHANGE_EVENT, callback);
   },
 
-  getAssemblies: function () {
+  getAssemblies() {
     return assemblies;
   },
 
-  getAssembly: function (fileAssemblyId) {
+  getAssembly(fileAssemblyId) {
     return (assemblies[fileAssemblyId] || null);
   },
 
-  getAssembliesCount: function () {
+  getAssembliesCount() {
     return Object.keys(assemblies).length;
   },
 
-  getFileAssemblyIds: function () {
+  getAssemblyNames() {
     return Object.keys(this.getAssemblies());
   },
 
-  getFirstFileAssemblyId: function () {
-    return this.getFileAssemblyIds()[0] || null;
+  getFirstAssemblyName() {
+    return this.getAssemblyNames()[0] || null;
   },
 
-  getAllContigN50Data: function() {
-    const n50Data = {};
-    const assemblies = this.getAssemblies();
-    for (const id in assemblies) {
-      n50Data[id] = assemblies[id].analysis.contigN50;
-    }
-    return n50Data;
+  getOverviewChartData(chartType) {
+    return Object.keys(assemblies).reduce((memo, id) => {
+      if (assemblies[id].analysis[chartType]) {
+        memo[id] = assemblies[id].analysis[chartType];
+      }
+      return memo;
+    }, {});
   },
 
-  getAllMetadataLocations: function() {
-    const locations = {};
-    const assemblies = this.getAssemblies();
-    for (const id in assemblies) {
-      locations[id] = assemblies[id].metadata.geography;
-    }
-    return locations;
+  getAllMetadataLocations() {
+    return Object.keys(assemblies).reduce((memo, id) => {
+      memo[id] = assemblies[id].metadata.geography;
+      return memo;
+    }, {});
   },
 
-  getLocationToAssembliesMap: function() {
-    const locations = {};
-    const assemblies = this.getAssemblies();
-    var latlng = null;
-    for (const id in assemblies) {
-      // locations[id] = assemblies[id].metadata.geography;
-      if (assemblies[id].metadata.geography.position.latitude != null) {
-        latlng = assemblies[id].metadata.geography.position.latitude + ',' + assemblies[id].metadata.geography.position.longitude;
-        if (!locations[latlng]) {
-          locations[latlng] = {};
-          locations[latlng]['fileAssemblyId'] = new Array();
-          locations[latlng]['location'] = null;
+  getLocationToAssembliesMap() {
+    return Object.keys(assemblies).reduce((memo, id) => {
+      const { assemblyName, geography } =  assemblies[id].metadata;
+      if (geography.position.latitude !== null) {
+        const latlng =
+          geography.position.latitude + ',' + geography.position.longitude;
+        if (!memo[latlng]) {
+          memo[latlng] = {
+            assemblyName: [],
+            location: null,
+          };
         }
-        if (assemblies[id].metadata.fileAssemblyId) {
-          locations[latlng]['fileAssemblyId'].push(assemblies[id].metadata.fileAssemblyId);
+        if (assemblyName) {
+          memo[latlng].assemblyName.push(assemblyName);
         }
-        if (assemblies[id].metadata.geography.location) {
-          locations[latlng]['location'] = assemblies[id].metadata.geography.location;
+        if (geography.location) {
+          memo[latlng].location = geography.location;
         }
       }
-    }
-    return locations;
+      return memo;
+    }, {});
   },
 
+  getMinMaxNoContigsForAllAssemblies() {
+    var noContigsArray = [];
+    for (var assemblyId in assemblies) {
+      if (assemblies[assemblyId].analysis.totalNumberOfContigs) {
+        noContigsArray.push(assemblies[assemblyId].analysis.totalNumberOfContigs);
+      }
+    }
+    if (noContigsArray.length <= 0) {
+      return [0, 0];
+    }
+    return [Math.min(...noContigsArray), Math.max(...noContigsArray)];
+  },
+
+  getAverageAssemblyLengthForAllAssemblies() {
+    var totalAssemblyLength = 0;
+    var noAssemblies = Object.keys(assemblies).length;
+    for (var assemblyId in assemblies) {
+      totalAssemblyLength += assemblies[assemblyId].analysis.totalNumberOfNucleotidesInDnaStrings || 0;
+    }
+    return Math.round(totalAssemblyLength / noAssemblies);
+  }
 
 });
 
 function handleAction(action) {
   switch (action.type) {
+  case 'add_files':
+    addFiles(action.rawFiles, action.assemblies);
+    emitChange();
+    break;
 
-    case 'add_files':
-      addFiles(action.rawFiles, action.assemblies);
-      emitChange();
-      break;
+  case 'set_metadata_date_component':
+    setMetadataDateComponent(action.assemblyName, action.component, action.value);
+    emitChange();
+    break;
 
-    case 'set_metadata_year':
-      setMetadataYear(action.fileAssemblyId, action.year);
-      emitChange();
-      break;
+  case 'set_metadata_column':
+    setMetadataColumn(action.assemblyName, action.columnName, action.value);
+    emitChange();
+    break;
 
-    case 'set_metadata_month':
-      setMetadataMonth(action.fileAssemblyId, action.month);
-      emitChange();
-      break;
+  case 'set_metadata_date':
+    setMetadataDate(action.assemblyName, action.date);
+    emitChange();
+    break;
 
-    case 'set_metadata_day':
-      setMetadataDay(action.fileAssemblyId, action.day);
-      emitChange();
-      break;
+  case 'set_metadata_source':
+    setMetadataSource(action.assemblyName, action.source);
+    emitChange();
+    break;
 
-    case 'set_metadata_date':
-      setMetadataDate(action.fileAssemblyId, action.date);
-      emitChange();
-      break;
+  case 'delete_assembly':
+    deleteAssembly(action.assemblyName);
+    emitChange();
+    break;
 
-    case 'set_metadata_source':
-      setMetadataSource(action.fileAssemblyId, action.source);
-      emitChange();
-      break;
-
-    case 'delete_assembly':
-      deleteAssembly(action.fileAssemblyId);
-      emitChange();
-      break;
-
-    default: // ... do nothing
-
+  default:
+    // ... do nothing
   }
 }
 

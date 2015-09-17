@@ -1,4 +1,10 @@
+import '../../css/dropdown-menu.css';
+
 import React from 'react';
+
+import DownloadsMenu from '../DownloadsMenu.react';
+
+import BodyClickActionCreators from '../../actions/BodyClickActionCreators';
 
 import { CGPS } from '../../defaults';
 import Species from '../../species';
@@ -21,15 +27,6 @@ const headerRowStyle = {
   height: navBarHeight,
 };
 
-const iconLinkStyle = {
-  lineHeight: navBarHeight,
-};
-
-const iconStyle = {
-  verticalAlign: 'middle',
-  marginRight: '4px',
-};
-
 const LayoutContainer = React.createClass({
 
   componentDidMount() {
@@ -38,22 +35,23 @@ const LayoutContainer = React.createClass({
 
   render() {
     return (
-      <div ref="container" style={style} className="mdl-layout mdl-js-layout mdl-layout--fixed-header" data-mr-layout="container">
+      <div ref="container" style={style} className="mdl-layout mdl-js-layout mdl-layout--fixed-header" onClick={this.handleBodyClick}>
         <header style={headerStyle} className="mdl-layout__header">
           <div style={headerRowStyle} className="mdl-layout__header-row">
-            <span className="mdl-layout-title">WGSA - {Species.formattedName}</span>
+            <span className="mdl-layout-title">WGSA | {Species.formattedName}</span>
             <div className="mdl-layout-spacer"></div>
             <nav className="mdl-navigation">
-              <a className="mdl-navigation__link" style={iconLinkStyle} href="#">
-                <i className="material-icons" style={iconStyle}>file_download</i>
-                <span>Download</span>
-              </a>
+              <DownloadsMenu />
             </nav>
           </div>
         </header>
         {this.props.children}
       </div>
     );
+  },
+
+  handleBodyClick(event) {
+    BodyClickActionCreators.clicked(event);
   },
 
 });

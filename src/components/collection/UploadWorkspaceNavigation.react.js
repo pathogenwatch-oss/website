@@ -3,48 +3,39 @@ import '../../css/upload-review.css';
 import React from 'react';
 
 import AssemblyList from './navigation/AssemblyList.react';
-import UploadWorkspaceNavigationActionCreators from '../../actions/UploadWorkspaceNavigationActionCreators.js';
-import DEFAULT from '../../defaults';
+
+import UploadWorkspaceNavigationStore from '../../stores/UploadWorkspaceNavigationStore';
 
 const titleStyle = {
   margin: 0,
 };
 
-const overflowWrapperStyle = {
-  position: 'relative',
-};
-
-const AssemblyOverviewButton = React.createClass({
-
-  handleClick: function () {
-    UploadWorkspaceNavigationActionCreators.navigateToAssembly(null);
-  },
-
-  render: function () {
-    return (
-      <button type="button" className="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" onClick={this.handleClick}>
-        Overview
-      </button>
-    );
-  },
-
-});
-
 export default React.createClass({
 
-  render: function () {
+  componentDidMount() {
+    UploadWorkspaceNavigationStore.addChangeListener(this.handleNavigationChange);
+  },
+
+  componentWillUnmount() {
+    UploadWorkspaceNavigationStore.removeChangeListener(this.handleNavigationChange);
+  },
+
+  render() {
     return (
-      <aside className="mdl-layout__drawer">
-        <div className="uploadWorkspaceNavigationTitle">
+      <aside ref="sidebar" className="navigation-container mdl-layout__drawer mdl-shadow--2dp">
+        <h2 className="uploadWorkspaceNavigationTitle">
           <span className="mdl-badge" style={titleStyle} data-badge={this.props.totalAssemblies}>Assemblies</span>
-        </div>
-        <AssemblyOverviewButton enabled={this.props.assembliesUploaded}/>
+        </h2>
         <div className="wgsa-assembly-list-wrapper">
           <AssemblyList />
         </div>
         { this.props.children && this.props.children }
       </aside>
     );
+  },
+
+  handleNavigationChange() {
+    React.findDOMNode(this.refs.sidebar).classList.remove('is-visible');
   },
 
 });

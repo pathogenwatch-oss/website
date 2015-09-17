@@ -8,7 +8,6 @@ var CHANGE_EVENT = 'change';
 var ASSEMBLY_PROCESSING_RESULTS = keyMirror({
   UPLOAD_OK: null,
   METADATA_OK: null,
-  SCCMEC: null,
   PAARSNP_RESULT: null,
   MLST_RESULT: null,
   CORE_RESULT: null,
@@ -36,7 +35,7 @@ var RESULTS = keyMirror({
 var fileUploadingState = null;
 var fileUploadingResult = RESULTS.NONE;
 var collectionId = null;
-var fileAssemblyIdToAssemblyIdMap = null;
+var assemblyNameToAssemblyIdMap = null;
 
 function setFileUploadingState(state) {
   fileUploadingState = state;
@@ -50,8 +49,8 @@ function setCollectionId(id) {
   collectionId = id;
 }
 
-function setFileAssemblyIdToAssemblyIdMap(idToIdMap) {
-  fileAssemblyIdToAssemblyIdMap = idToIdMap;
+function setassemblyNameToAssemblyIdMap(idToIdMap) {
+  assemblyNameToAssemblyIdMap = idToIdMap;
 }
 
 function emitChange() {
@@ -91,8 +90,8 @@ var Store = assign({}, EventEmitter.prototype, {
     return collectionId;
   },
 
-  getFileAssemblyIdToAssemblyIdMap: function () {
-    return fileAssemblyIdToAssemblyIdMap;
+  getAssemblyNameToAssemblyIdMap: function () {
+    return assemblyNameToAssemblyIdMap;
   },
 
 });
@@ -113,7 +112,7 @@ function handleAction(action) {
 
   case 'set_collection_id':
     setCollectionId(action.collectionId);
-    setFileAssemblyIdToAssemblyIdMap(action.fileAssemblyIdToAssemblyIdMap);
+    setassemblyNameToAssemblyIdMap(action.assemblyNameToAssemblyIdMap);
     emitChange();
     break;
 

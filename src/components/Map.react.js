@@ -1,16 +1,14 @@
 import React from 'react';
 import assign from 'object-assign';
 
+import ReferenceCollectionStore from '../stores/ReferenceCollectionStore';
+import UploadedCollectionStore from '../stores/UploadedCollectionStore';
+import FilteredDataStore from '../stores/FilteredDataStore';
+
 import MapUtils from '../utils/Map';
+import FilteredDataUtils from '../utils/FilteredData';
 
 import DEFAULT from '../defaults';
-import ANTIBIOTICS from '../../static_data/antibiotics.json';
-
-
-import PublicCollectionStore from '../stores/PublicCollectionStore';
-import UploadedCollectionStore from '../stores/UploadedCollectionStore';
-import MapStore from '../stores/MapStore';
-import TableStore from '../stores/TableStore';
 
 const Map = React.createClass({
   map: null,
@@ -19,45 +17,35 @@ const Map = React.createClass({
   infoWindowIsolates: null,
 
   propTypes: {
-    width: React.PropTypes.number.isRequired,
-    height: React.PropTypes.number.isRequired,
+    width: React.PropTypes.any.isRequired,
+    height: React.PropTypes.any.isRequired,
   },
 
   getInitialState: function () {
     return {
-      assemblyIds: [],
+      assemblyIds: FilteredDataStore.getAssemblyIds(),
     };
   },
 
   componentDidMount: function () {
     this.initializeMap();
 
-    MapStore.addChangeListener(this.handleMapStoreChange);
-    TableStore.addChangeListener(this.handleTableStoreChange);
-
-    this.setState({
-      assemblyIds: MapStore.getAssemblyIds(),
-    });
-  },
-
-  componentWillUnmount: function () {
-    MapStore.removeChangeListener(this.handleMapStoreChange);
-    TableStore.removeChangeListener(this.handleTableStoreChange);
-  },
-
-  handleMapStoreChange: function () {
-    this.setState({
-      assemblyIds: MapStore.getAssemblyIds(),
-    });
-  },
-
-  handleTableStoreChange: function () {
-    this.createMarkers();
+    FilteredDataStore.addChangeListener(this.handleFilteredDataStoreChange);
   },
 
   componentDidUpdate: function () {
     this.resizeMap();
     this.createMarkers();
+  },
+
+  componentWillUnmount: function () {
+    FilteredDataStore.removeChangeListener(this.handleFilteredDataStoreChange);
+  },
+
+  handleFilteredDataStoreChange: function () {
+    this.setState({
+      assemblyIds: FilteredDataStore.getAssemblyIds(),
+    });
   },
 
   resizeMap: function () {
@@ -95,8 +83,9 @@ const Map = React.createClass({
 
     markerIds.forEach(function (markerId) {
       marker = markers[markerId];
-
-      bounds.extend(marker.getPosition());
+      if (marker) {
+        bounds.extend(marker.getPosition());
+      }
     });
 
     this.map.fitBounds(bounds);
@@ -118,28 +107,9 @@ const Map = React.createClass({
   },
 
   getCombinedPublicAndUploadedCollectionAssemblies: function () {
-    var publicCollectionAssemblies = PublicCollectionStore.getPublicCollectionAssemblies();
-    var uploadedCollectionAssemblies = UploadedCollectionStore.getUploadedCollectionAssemblies();
-    return assign({}, publicCollectionAssemblies, uploadedCollectionAssemblies);
-  },
-
-  selectedTableColumnNameIsAntibiotic: function () {
-    var selectedTableColumnName = TableStore.getColourTableColumnName();
-    var listOfAntibiotics = Object.keys(ANTIBIOTICS);
-
-    return (listOfAntibiotics.indexOf(selectedTableColumnName) > -1);
-  },
-
-  isAssemblyInPublicCollection: function (assemblyId) {
-    var publicCollectionAssemblyIds = PublicCollectionStore.getPublicCollectionAssemblyIds();
-
-    return (publicCollectionAssemblyIds.indexOf(assemblyId) > -1);
-  },
-
-  isAssemblyInUploadedCollection: function (assemblyId) {
-    var uploadedCollectionAssemblyIds = UploadedCollectionStore.getUploadedCollectionAssemblyIds();
-
-    return (uploadedCollectionAssemblyIds.indexOf(assemblyId) > -1);
+    var referenceCollectionAssemblies = ReferenceCollectionStore.getAssemblies();
+    var uploadedCollectionAssemblies = UploadedCollectionStore.getAssemblies();
+    return assign({}, referenceCollectionAssemblies, uploadedCollectionAssemblies);
   },
 
   getMarkerShapeForAssembly: function (assembly) {
@@ -147,25 +117,7 @@ const Map = React.createClass({
   },
 
   getMarkerColourForAssembly: function (assembly) {
-    var selectedTableColumnName = TableStore.getColourTableColumnName();
-    var resistanceProfileResult;
-    var colour = '#ffffff';
-
-    if (this.selectedTableColumnNameIsAntibiotic()) {
-      resistanceProfileResult = assembly.analysis.resistanceProfile[selectedTableColumnName].resistanceResult;
-
-      if (resistanceProfileResult === 'RESISTANT') {
-        colour = '#ff0000';
-      } else {
-        colour = '#ffffff';
-      }
-    } else if (this.isAssemblyInPublicCollection(assembly.metadata.assemblyId)) {
-      colour = '#ffffff';
-    } else if (this.isAssemblyInUploadedCollection(assembly.metadata.assemblyId)) {
-      colour = DEFAULT.CGPS.COLOURS.PURPLE_LIGHT;
-    }
-
-    return colour;
+    return FilteredDataUtils.getColour(assembly);
   },
 
   createMarkers: function () {
@@ -191,19 +143,18 @@ const Map = React.createClass({
       shape = this.getMarkerShapeForAssembly(assembly);
       colour = this.getMarkerColourForAssembly(assembly);
 
-      this.markers[assemblyId] = this.createMarker(assemblyId, latitude, longitude, shape, colour);
+      const marker = this.createMarker(assemblyId, latitude, longitude, shape, colour);
+      if (marker) {
+        this.markers[assemblyId] = marker;
+      }
     });
 
     this.fitAllMarkers();
   },
 
   createMarker: function (dataObjectId, latitude, longitude, shape = DEFAULT.SHAPE, colour = DEFAULT.COLOUR) {
-    if (!latitude) {
-      throw new Error(`Can't create map marker because latitude is missing in ${dataObjectId} data object :(`);
-    }
-
-    if (!longitude) {
-      throw new Error(`Can't create map marker because longitude is missing in ${dataObjectId} data object :(`);
+    if (!latitude || !longitude) {
+      return null;
     }
 
     if (shape === DEFAULT.SHAPE) {

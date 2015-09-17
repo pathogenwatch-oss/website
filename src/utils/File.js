@@ -1,18 +1,18 @@
-var DataUtils = require('./Data');
-var AnalysisUtils = require('./Analysis');
-var assign = require('object-assign');
+import DataUtils from './Data';
+import AnalysisUtils from './Analysis';
+
 import UploadStore from '../stores/UploadStore.js';
 
-var FASTA_FILE_NAME_REGEX = /^.+(.fa|.fas|.fna|.ffn|.faa|.frn|.fasta|.contig)$/i;
-var CSV_FILE_NAME_REGEX = /^.+(.csv)$/i;
+const FASTA_FILE_NAME_REGEX = /^.+(.fa|.fas|.fna|.ffn|.faa|.frn|.fasta|.contig)$/i;
+const CSV_FILE_NAME_REGEX = /^.+(.csv)$/i;
 
 function isFastaFile(file) {
   return file.name.match(FASTA_FILE_NAME_REGEX);
-};
+}
 
 function isCsvFile(file) {
   return file.name.match(CSV_FILE_NAME_REGEX);
-};
+}
 
 function isValidFile(file) {
   return (isFastaFile(file) || isCsvFile(file));
@@ -72,7 +72,7 @@ function sortFilesByName(files) {
   });
 
   return files;
-};
+}
 
 function parseFiles(files, callback) {
   var rawFiles = {};
@@ -93,39 +93,35 @@ function parseFiles(files, callback) {
   });
 }
 
-function initialiseAssemblyObject(fileAssemblyId, assemblies) {
-  if (assemblies[fileAssemblyId]) {
+function initialiseAssemblyObject(assemblyName, assemblies) {
+  if (assemblies[assemblyName]) {
     return assemblies;
   }
 
-  var ASSEMBLY_OBJECT = {
+  const ASSEMBLY_OBJECT = {
     fasta: {
-      name: null,
-      assembly: null
+      name: assemblyName,
+      assembly: null,
     },
     metadata: {
-      fileAssemblyId: null,
+      assemblyName: assemblyName,
       date: {
         year: null,
         month: null,
-        day: null
+        day: null,
       },
-      source: null,
       geography: {
         location: null,
         position: {
           latitude: null,
-          longitude: null
-        }
-      }
+          longitude: null,
+        },
+      },
     },
-    analysis: {}
+    analysis: {},
   };
 
-  assemblies[fileAssemblyId] = ASSEMBLY_OBJECT;
-  assemblies[fileAssemblyId].fasta.name = fileAssemblyId;
-  assemblies[fileAssemblyId].metadata.fileAssemblyId = fileAssemblyId;
-
+  assemblies[assemblyName] = ASSEMBLY_OBJECT;
   return assemblies;
 }
 
@@ -146,24 +142,24 @@ function handleFilesContent(filesContent, rawFiles, assemblies) {
 }
 
 function parseFastaFile(file, rawFiles, assemblies) {
-  var fileAssemblyId = file.name;
+  var assemblyName = file.name.replace(/\.\w+$/, '');
   var fileContent = file.content;
 
-  rawFiles[fileAssemblyId] = {
-    name: fileAssemblyId,
+  rawFiles[assemblyName] = {
+    name: assemblyName,
     content: fileContent
   };
 
-  assemblies = initialiseAssemblyObject(fileAssemblyId, assemblies);
-  assemblies[fileAssemblyId].fasta.assembly = fileContent;
-  assemblies[fileAssemblyId].analysis = analyseFasta(fileAssemblyId, fileContent);
+  assemblies = initialiseAssemblyObject(assemblyName, assemblies);
+  assemblies[assemblyName].fasta.assembly = fileContent;
+  assemblies[assemblyName].analysis = analyseFasta(assemblyName, fileContent);
 }
 
 function parseCsvFile(file, rawFiles, assemblies) {
   var csvString = file.content;
   var csvJson = DataUtils.parseCsvToJson(csvString);
   var dataRows;
-  var fileAssemblyId;
+  var assemblyName;
 
   if (csvJson.errors.length > 0) {
     console.error('[Macroreact] Filed to parse CSV file ' + file.name);
@@ -171,7 +167,6 @@ function parseCsvFile(file, rawFiles, assemblies) {
   }
 
   dataRows = csvJson.data;
-
   dataRows.forEach(function iife(dataRow) {
 
     if (! dataRow.filename) {
@@ -179,64 +174,34 @@ function parseCsvFile(file, rawFiles, assemblies) {
       return;
     }
 
-    fileAssemblyId = dataRow.filename;
+    assemblyName = dataRow.filename.replace(/\.\w+$/, '');
+    assemblies = initialiseAssemblyObject(assemblyName, assemblies);
+    assemblies[assemblyName].metadata.assemblyName = assemblyName;
 
-    assemblies = initialiseAssemblyObject(fileAssemblyId, assemblies);
+    for (var colName in dataRow) {
 
-    assemblies[fileAssemblyId].metadata.assemblyFilename = fileAssemblyId;
+      if (colName === 'filename') {
+        continue;
+      }
 
-    if (dataRow.latitude) {
-      assemblies[fileAssemblyId].metadata.geography.position.latitude = parseFloat(dataRow.latitude);
-    }
-    else {
-      assemblies[fileAssemblyId].metadata.geography.position.latitude = null;
-    }
+      if (colName === "latitude" || colName === "longitude" || colName === "location" || colName === "year" || colName === "month" || colName === "day") {
 
-    if (dataRow.longitude) {
-      assemblies[fileAssemblyId].metadata.geography.position.longitude = parseFloat(dataRow.longitude);
-    }
-    else {
-      assemblies[fileAssemblyId].metadata.geography.position.longitude = null;
-    }
-
-    if (dataRow.location) {
-      assemblies[fileAssemblyId].metadata.geography.location = dataRow.location;
-    }
-    else {
-      assemblies[fileAssemblyId].metadata.geography.location = null;
+        assemblies[assemblyName].metadata.geography.position.latitude = parseFloat(dataRow.latitude) || null ;
+        assemblies[assemblyName].metadata.geography.position.longitude = parseFloat(dataRow.longitude) || null ;
+        assemblies[assemblyName].metadata.geography.location = dataRow.location || null ;
+        assemblies[assemblyName].metadata.date.year = parseInt(dataRow.year, 10) || null ;
+        assemblies[assemblyName].metadata.date.month = parseInt(dataRow.month, 10) || null ;
+        assemblies[assemblyName].metadata.date.day = parseInt(dataRow.day, 10) || null ;
+      }
+      else {
+        assemblies[assemblyName].metadata[colName] = dataRow[colName] || null ;
+      }
     }
 
-    if (dataRow.year) {
-      assemblies[fileAssemblyId].metadata.date.year = parseInt(dataRow.year, 10);
-    }
-    else {
-      assemblies[fileAssemblyId].metadata.date.year = null;
-    }
-
-    if (dataRow.month) {
-      assemblies[fileAssemblyId].metadata.date.month = parseInt(dataRow.month, 10);
-    }
-    else {
-      assemblies[fileAssemblyId].metadata.date.month = null;
-    }
-
-    if (dataRow.day) {
-      assemblies[fileAssemblyId].metadata.date.day = parseInt(dataRow.day, 10);
-    }
-    else {
-      assemblies[fileAssemblyId].metadata.date.day = null;
-    }
-
-    if (dataRow.source) {
-      assemblies[fileAssemblyId].metadata.source = parseInt(dataRow.source, 10);
-    }
-    else {
-      assemblies[fileAssemblyId].metadata.source = null;
-    }
   });
 }
 
-function analyseFasta(fileAssemblyId, fastaFileString) {
+function analyseFasta(assemblyName, fastaFileString) {
   var contigs = AnalysisUtils.extractContigsFromFastaFileString(fastaFileString);
   var totalNumberOfContigs = contigs.length;
   var dnaStrings = AnalysisUtils.extractDnaStringsFromContigs(contigs);

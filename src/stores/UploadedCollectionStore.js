@@ -1,25 +1,16 @@
-var AppDispatcher = require('../dispatcher/AppDispatcher');
-var EventEmitter = require('events').EventEmitter;
-var assign = require('object-assign');
+import AppDispatcher from '../dispatcher/AppDispatcher';
+import { EventEmitter } from 'events';
+import assign from 'object-assign';
 
-var CHANGE_EVENT = 'change';
+const CHANGE_EVENT = 'change';
 
-var uploadedCollection = null;
-var uploadedCollectionTree = null;
-
-function setUploadedCollection(collection) {
-  uploadedCollection = collection;
-}
-
-function setUploadedCollectionTree(tree) {
-  uploadedCollectionTree = tree;
-}
+let collection = null;
 
 function emitChange() {
   UploadedCollectionStore.emit(CHANGE_EVENT);
 }
 
-var UploadedCollectionStore = assign({}, EventEmitter.prototype, {
+const UploadedCollectionStore = assign({}, EventEmitter.prototype, {
 
   addChangeListener: function (callback) {
     this.on(CHANGE_EVENT, callback);
@@ -29,51 +20,48 @@ var UploadedCollectionStore = assign({}, EventEmitter.prototype, {
     this.removeListener(CHANGE_EVENT, callback);
   },
 
-  getUploadedCollection: function () {
-    return uploadedCollection;
+  getCollection: function () {
+    return collection;
   },
 
-  getUploadedCollectionId: function () {
-    return uploadedCollection.collectionId;
+  getCollectionId: function () {
+    return collection.collectionId;
   },
 
-  getUploadedCollectionAssemblies: function () {
-    return this.getUploadedCollection().assemblies;
+  getAssemblies: function () {
+    return this.getCollection().assemblies;
   },
 
-  getUploadedCollectionAssemblyIds: function () {
-    return Object.keys(uploadedCollection.assemblies);
+  getTree: function () {
+    return collection.tree;
   },
 
-  getUploadedCollectionTree: function () {
-    return uploadedCollectionTree;
-  }
+  getUserTree: function () {
+    const assemblies = this.getAssemblies();
+    return Object.keys(assemblies).reduce(function (tree, assemblyId) {
+      const { assemblyName } = assemblies[assemblyId].metadata;
+      return tree.replace(assemblyId, assemblyName);
+    }, this.getTree());
+  },
+
+  contains(assemblyId) {
+    return (
+      Object.keys(this.getAssemblies()).indexOf(assemblyId) > -1
+    );
+  },
+
 });
 
 function handleAction(action) {
-
   switch (action.type) {
 
-    case 'set_uploaded_collection':
-      setUploadedCollection(action.collectionId);
-      emitChange();
-      break;
+  case 'set_collection':
+    collection = action.collection;
+    emitChange();
+    break;
 
-    case 'set_uploaded_collection_tree':
-      setUploadedCollectionTree(action.collectionId);
-      emitChange();
-      break;
-
-    case 'set_collection':
-      setUploadedCollection({
-        collectionId: action.collection.collectionId,
-        assemblies: action.collection.assemblies
-      });
-      setUploadedCollectionTree(action.collection.tree);
-      emitChange();
-      break;
-
-    default: // ... do nothing
+  default:
+    // ... do nothing
 
   }
 }

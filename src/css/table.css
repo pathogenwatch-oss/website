@@ -1,0 +1,68 @@
+.wgsa-table-header {
+  vertical-align: top;
+  text-overflow: ellipsis;
+  font-weight: 700;
+  line-height: 24px;
+  letter-spacing: 0px;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.54);
+  padding: 0 18px 0;
+  box-sizing: border-box;
+  background: #fff !important;
+  border-right: none;
+}
+
+.wgsa-table-cell {
+  vertical-align: top;
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+  border-right: none;
+  padding: 0 18px;
+  box-sizing: border-box;
+  font-size: 13px;
+}
+
+.wgsa-table-header--resistance,
+.wgsa-table-cell--resistance {
+  padding: 0;
+  border-left: 1px solid #efefef;
+  border-right: 1px solid #efefef;
+}
+
+.wgsa-table-header--resistance {
+  display: flex !important;
+  justify-content: center;
+}
+
+.wgsa-table-header--resistance .public_fixedDataTableCell_cellContent {
+  transform: rotate(-90deg);
+  margin-bottom: 50%;
+  white-space: nowrap;
+  padding: 0;
+}
+
+.wgsa-resistance-icon {
+  position: absolute;
+  left: 0;
+  top: calc(50% - 11px);
+  right: 0;
+  font-size: 20px;
+  padding: 2px;
+  text-align: center;
+}
+
+.wgsa-resistance-icon--resistant {
+  color: #d11b1b;
+}
+
+
+/* fixed-data-table overrides */
+
+.fixedDataTableLayout_main,
+.public_fixedDataTableRow_main,
+.public_fixedDataTableRow_fixedColumnsDivider {
+  border: none;
+}
+
+.wgsa-table-header .fixedDataTableCellLayout_wrap3 {
+  vertical-align: bottom;
+}

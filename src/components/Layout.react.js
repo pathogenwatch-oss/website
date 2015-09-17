@@ -34,8 +34,7 @@ const Layout = React.createClass({
 
       layoutSouthTop: 0,
       layoutSouthHeight: 0,
-
-      layoutNavigation: 'table',
+      layoutSouthWidth: 0,
     };
   },
 
@@ -71,6 +70,7 @@ const Layout = React.createClass({
       // South
       layoutSouthTop: LayoutUtils.getSouthTop(),
       layoutSouthHeight: LayoutUtils.getSouthHeight(),
+      layoutSouthWidth: LayoutUtils.getSouthWidth(),
 
     });
   },
@@ -90,12 +90,6 @@ const Layout = React.createClass({
       layoutNorthSouthDividerTop: northSouthDividerTop,
       layoutSouthTop: northSouthDividerTop + LayoutUtils.getDividerSize(),
       layoutSouthHeight: LayoutUtils.getViewportHeight() - (northSouthDividerTop + LayoutUtils.getDividerSize()),
-    });
-  },
-
-  handleLayoutNavigationChange: function (layoutNavigation) {
-    this.setState({
-      layoutNavigation: layoutNavigation,
     });
   },
 
@@ -122,7 +116,7 @@ const Layout = React.createClass({
           top={this.state.layoutNorthSouthDividerTop}
           onDragEnd={this.handleLayoutNorthSourthDividerDragEnd} />
         <LayoutSouth top={this.state.layoutSouthTop}>
-          <Data />
+          <Data height={this.state.layoutSouthHeight} width={this.state.layoutSouthWidth}/>
         </LayoutSouth>
       </LayoutContainer>
     );

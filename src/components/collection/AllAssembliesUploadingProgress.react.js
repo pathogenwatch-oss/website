@@ -30,19 +30,19 @@ var FileUploadingProgress = React.createClass({
   },
 
   createAssemblyElements: function () {
-    var fileAssemblyIds = UploadStore.getFileAssemblyIds();
+    var assemblyNames = UploadStore.getAssemblyNames();
 
-    return fileAssemblyIds.map(function iife(fileAssemblyId) {
+    return assemblyNames.map(function iife(assemblyName) {
       return (
         <tr>
-          <td>{fileAssemblyId}</td>
-          {this.createAssemblyResultElements(fileAssemblyId)}
+          <td>{assemblyName}</td>
+          {this.createAssemblyResultElements(assemblyName)}
         </tr>
       );
     }.bind(this));
   },
 
-  createAssemblyResultElements: function (fileAssemblyId) {
+  createAssemblyResultElements: function (assemblyName) {
     var assemblyResults = FileUploadingStore.getAssemblyProcessingResults();
 
     return assemblyResults.map(function iife(assemblyResult) {

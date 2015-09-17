@@ -4,11 +4,10 @@ import Species from '../species';
 
 export default {
 
-  requestFile: function (assembly, idType, fileType) {
+  requestFile: function (id, fileType) {
     AppDispatcher.dispatch({
       type: 'request_file',
-      assembly,
-      idType,
+      id,
       fileType,
       speciesId: Species.id,
     });

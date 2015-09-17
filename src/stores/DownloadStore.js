@@ -4,6 +4,8 @@ import assign from 'object-assign';
 import Api from '../utils/Api';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 
+import UploadedCollectionStore from './UploadedCollectionStore.js';
+
 const CHANGE_EVENT = 'change';
 
 const requestedFiles = {};
@@ -18,12 +20,13 @@ const Store = assign({}, EventEmitter.prototype, {
     this.removeListener(CHANGE_EVENT, callback);
   },
 
-  getLink(assemblyId, fileType = 'fasta') {
-    if (!requestedFiles[assemblyId] || !requestedFiles[assemblyId][fileType]) {
+  getLink(id, fileType = 'fasta') {
+    if (!requestedFiles[id] || !requestedFiles[id][fileType]) {
       return null;
     }
-    const encodedFilename = encodeURIComponent(requestedFiles[assemblyId][fileType]);
-    return `/api/download/file/${encodedFilename}`;
+    const keyToFilenameMap = requestedFiles[id][fileType];
+    const key = Object.keys(keyToFilenameMap)[0];
+    return `/api/download/file/${encodeURIComponent(key)}?prettyFileName=${encodeURIComponent(keyToFilenameMap[key])}`;
   },
 
 });
@@ -32,25 +35,32 @@ function emitChange() {
   Store.emit(CHANGE_EVENT);
 }
 
+function createIdList(id) {
+  const assemblies = UploadedCollectionStore.getAssemblies();
+  const collectionId = UploadedCollectionStore.getCollectionId();
+  return (id === collectionId) ? Object.keys(assemblies) : [ id ];
+}
+
 function handleAction(action) {
   switch (action.type) {
 
   case 'request_file':
-    const { assembly, fileType } = action;
-    const assemblyId = assembly.metadata.assemblyId;
-    const requestedFilesForAssembly = requestedFiles[assemblyId] || {};
+    const { id, fileType, speciesId } = action;
+    const requestedFilesForId = requestedFiles[id] || {};
 
     // ensures map is updated on first request
-    requestedFiles[assemblyId] = requestedFilesForAssembly;
+    requestedFiles[id] = requestedFilesForId;
 
-    Api.requestFile(action, function (error, fileName) {
-      if (error) {
-        throw error;
+    Api.requestFile(fileType, { speciesId, idList: createIdList(id) },
+      function (error, keyToFilenameMap) {
+        if (error) {
+          throw error;
+        }
+        requestedFilesForId[fileType] = keyToFilenameMap;
+        console.log(requestedFiles);
+        emitChange();
       }
-      requestedFilesForAssembly[fileType] = fileName;
-      console.log(requestedFiles);
-      emitChange();
-    });
+    );
     break;
 
   default:

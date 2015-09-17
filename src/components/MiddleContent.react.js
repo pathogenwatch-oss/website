@@ -1,11 +1,11 @@
 import React from 'react';
 
-import SpeciesSubtree from './SpeciesSubtree.react';
-import SpeciesSubtreeStore from '../stores/SpeciesSubtreeStore';
+import Subtree from './Subtree.react';
+import SubtreeStore from '../stores/SubtreeStore';
 
 const MiddleContent = React.createClass({
 
-  speciesSubtreeElements: {},
+  SubtreeElements: {},
 
   propTypes: {
     width: React.PropTypes.number.isRequired,
@@ -20,48 +20,48 @@ const MiddleContent = React.createClass({
 
   componentWillMount: function () {
     this.setState({
-      activeAnalysisTreeId: SpeciesSubtreeStore.getActiveSpeciesSubtreeId(),
+      activeAnalysisTreeId: SubtreeStore.getActiveSubtreeId(),
     });
-    this.createSpeciesSubtreeElements();
+    this.createSubtreeElements();
   },
 
   componentDidMount: function () {
-    SpeciesSubtreeStore.addChangeListener(this.onSpeciesSubtreeChange);
+    SubtreeStore.addChangeListener(this.onSubtreeChange);
   },
 
   componentWillUnmount: function () {
-    SpeciesSubtreeStore.removeChangeListener(this.onSpeciesSubtreeChange);
+    SubtreeStore.removeChangeListener(this.onSubtreeChange);
   },
 
-  onSpeciesSubtreeChange: function () {
+  onSubtreeChange: function () {
     this.setState({
-      activeAnalysisTreeId: SpeciesSubtreeStore.getActiveSpeciesSubtreeId(),
+      activeAnalysisTreeId: SubtreeStore.getActiveSubtreeId(),
     });
   },
 
-  createSpeciesSubtreeElements: function () {
-    var speciesSubtrees = SpeciesSubtreeStore.getSpeciesSubtrees();
-    var speciesSubtreeIds = Object.keys(speciesSubtrees);
+  createSubtreeElements: function () {
+    var Subtrees = SubtreeStore.getSubtrees();
+    var SubtreeIds = Object.keys(Subtrees);
 
-    speciesSubtreeIds.forEach((speciesSubtreeId) => {
-      this.speciesSubtreeElements[speciesSubtreeId] = (
-        <SpeciesSubtree treeId={speciesSubtreeId} key={speciesSubtreeId} />
+    SubtreeIds.forEach((SubtreeId) => {
+      this.SubtreeElements[SubtreeId] = (
+        <Subtree treeId={SubtreeId} key={SubtreeId} />
       );
     });
   },
 
-  getSpeciesSubtreeElement: function () {
-    var speciesSubtreeElement = this.speciesSubtreeElements[this.state.activeAnalysisTreeId];
+  getSubtreeElement: function () {
+    var SubtreeElement = this.SubtreeElements[this.state.activeAnalysisTreeId];
 
-    if (speciesSubtreeElement) {
-      return speciesSubtreeElement;
+    if (SubtreeElement) {
+      return SubtreeElement;
     }
 
     return null;
   },
 
   render: function () {
-    return this.getSpeciesSubtreeElement();
+    return this.getSubtreeElement();
   }
 });
 

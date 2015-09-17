@@ -1,8 +1,11 @@
+import './css/cgps-mdl-theme.css';
+import 'PhyloCanvas/polyfill';
+
 import React from 'react';
 import Router, { Route, RouteHandler, DefaultRoute, NotFoundRoute, Redirect } from 'react-router';
 
 import Home from './components/Home.react';
-import UploadCollection from './components/collection/UploadCollectionPage.react';
+import UploadCollection from './components/collection/UploadWorkspace.react';
 import ExploreCollection from './components/Collection.react';
 import NotFound from './components/NotFound.react';
 
@@ -24,16 +27,18 @@ const routes = (
   </Route>
 );
 
+const rootElement = document.getElementById('wgsa');
+
 Router.run(routes, Router.HistoryLocation, function (Handler, state) {
   const requestedSpecies = state.params.species;
   if (!requestedSpecies) {
-    return React.render(<Handler />, document.body);
+    return React.render(<Handler />, rootElement);
   }
 
   if (Species.isSupported(requestedSpecies)) {
     Species.current = requestedSpecies;
-    React.render(<Handler />, document.body);
+    React.render(<Handler />, rootElement);
   } else {
-    React.render(<NotFound />, document.body);
+    React.render(<NotFound />, rootElement);
   }
 });

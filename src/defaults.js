@@ -18,12 +18,12 @@ module.exports = {
   SUPPORTED_FILE_EXTENSIONS: '.csv,.fasta,.fa,.fna',
   CGPS: {
     COLOURS: {
-      GREEN_LIGHT: '#d0e9dc',
-      GREEN_MID: '#87c7a6',
-      GREEN_DARK: '#3f6565',
-      PURPLE_LIGHT: '#a386bd',
-      PURPLE_MID: '#9476b1',
-      PURPLE: '#673c90',
+      GREEN_LIGHT: '#d0e9dc', // 149° 36% 86%
+      GREEN_MID: '#87c7a6', // 149° 36% 65%
+      GREEN: '#48996F', // 149° 36% 44%
+      PURPLE_LIGHT: '#a386bd', // 272° 29% 63%
+      PURPLE_WARM: '#AC65A6', // 305° 30%, 54%
+      PURPLE: '#673c90', // 271° 41% 40%
       GREY: '#e5e5e5',
       GREY_LIGHT: '#efefef',
     },

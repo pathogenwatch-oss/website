@@ -50,11 +50,11 @@ module.exports = {
       FileUploadingProgressActionCreators.addReceivedResult(data);
     });
 
-    const fileAssemblyIds = UploadStore.getFileAssemblyIds();
+    const assemblyNames = UploadStore.getAssemblyNames();
     const roomId = SocketStore.getRoomId();
 
     const data = {
-      userAssemblyIds: fileAssemblyIds,
+      assemblyNames: assemblyNames,
       socketRoomId: roomId,
     };
 
@@ -66,35 +66,29 @@ module.exports = {
 
       FileUploadingActionCreators.setCollectionId({
         collectionId: ids.collectionId,
-        fileAssemblyIdToAssemblyIdMap: ids.userAssemblyIdToAssemblyIdMap,
+        assemblyNameToAssemblyIdMap: ids.assemblyNameToAssemblyIdMap,
       });
 
-      const userAssemblyIdToAssemblyIdMap = ids.userAssemblyIdToAssemblyIdMap;
-      const userAssemblyIds = Object.keys(userAssemblyIdToAssemblyIdMap);
-
-      userAssemblyIds.forEach(function sendAssembly(userAssemblyId) {
-        const { metadata, fasta } = UploadStore.getAssembly(userAssemblyId);
+      const assemblyNameToAssemblyIdMap = ids.assemblyNameToAssemblyIdMap;
+      const assemblyNames = Object.keys(assemblyNameToAssemblyIdMap);
+      assemblyNames.forEach(function sendAssembly(assemblyName) {
+        const { metadata, fasta } = UploadStore.getAssembly(assemblyName);
         const urlParams = {
           collectionId: ids.collectionId,
-          assemblyId: userAssemblyIdToAssemblyIdMap[userAssemblyId],
+          assemblyId: assemblyNameToAssemblyIdMap[assemblyName],
           speciesId: Species.id,
         };
-        const assemblyData = {
+        const requestBody = {
           socketRoomId: roomId,
           metadata: metadata,
           sequences: fasta.assembly,
         };
 
-        // console.log('[Macroreact] Prepared assembly data to upload:');
-        // console.dir(assemblyData);
-
-        ApiUtils.postAssembly(urlParams, assemblyData, function (assemblyError) {
+        ApiUtils.postAssembly(urlParams, requestBody, function (assemblyError) {
           if (assemblyError) {
             console.error(assemblyError);
             return;
           }
-          // console.log('[Macroreact] Uploaded assembly data:');
-          // console.dir(assemblyResult);
         });
       });
     });

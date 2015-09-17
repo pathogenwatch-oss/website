@@ -1,23 +1,10 @@
-var React = require('react');
-import MapUtils from '../../utils/Map';
-import DEFAULT from '../../defaults';
+import React from 'react';
+
 import UploadWorkspaceNavigationActionCreators from '../../actions/UploadWorkspaceNavigationActionCreators.js';
 
-var containerStyle = {
-  margin: '0 0 25px 0',
-  verticalAlign: 'top',
-  textAlign: 'left'
-};
+import DEFAULT from '../../defaults';
 
-var labelStyle = {
-  fontSize: '15px',
-  fontWeight: '300',
-  lineHeight: '20px',
-  textTransform: 'uppercase',
-  color: '#777'
-};
-
-var Map = React.createClass({
+const Map = React.createClass({
   map: null,
   markers: {},
   infoWindow: null,
@@ -119,7 +106,7 @@ var Map = React.createClass({
       if (latitude && longitude) {
         latitude = parseFloat(latitude);
         longitude = parseFloat(longitude);
-        this.markers[id] = this.createMarker(locations[id].fileAssemblyId, locations[id].location, latitude, longitude);
+        this.markers[id] = this.createMarker(locations[id].assemblyName, locations[id].location, latitude, longitude);
       }
     };
 
@@ -146,7 +133,7 @@ var Map = React.createClass({
       if (latitude && longitude) {
         latitude = parseFloat(latitude);
         longitude = parseFloat(longitude);
-        this.markers[id] = this.createMarker(locations[id].fileAssemblyId, locations[id].location, latitude, longitude);
+        this.markers[id] = this.createMarker(locations[id].assemblyName, locations[id].location, latitude, longitude);
       }
     };
 
@@ -198,35 +185,39 @@ var Map = React.createClass({
 
   render: function () {
     const mapStyle = {
-      width: this.props.width,
-      height: this.props.height,
+      // position: 'absolute',
+      top: 0,
+      bottom: 0,
+      left: 0,
+      right: 0,
+      height: this.props.height || '200px',
+      width: this.props.width || '200px',
     };
 
     return (
-      <div>
-        <div style={labelStyle}>{this.props.label}</div>
+      <fieldset className="metadata-field__map">
         <section id="map-canvas" style={mapStyle}></section>
-      </div>
+      </fieldset>
     );
   },
 
 });
 
-function handleSelectAssembly(selectedFileAssemblyId) {
-  UploadWorkspaceNavigationActionCreators.navigateToAssembly(selectedFileAssemblyId);
-};
+function handleSelectAssembly(selectedassemblyName) {
+  UploadWorkspaceNavigationActionCreators.navigateToAssembly(selectedassemblyName);
+}
 
-var createLink = function(dataObject) {
-  var div = document.createElement('div');
-  var br = document.createElement('br');
-  dataObject.map(function(fileAssemblyId) {
-    var button = document.createElement('button');
-    var textNode = document.createTextNode(fileAssemblyId);
-    var br = document.createElement('br');
+function createLink(dataObject) {
+  const div = document.createElement('div');
+  div.style.paddingRight = '15px';
+  dataObject.map(function (assemblyName) {
+    const button = document.createElement('button');
+    const textNode = document.createTextNode(assemblyName);
+    const br = document.createElement('br');
     button.appendChild(textNode);
     button.className = 'mdl-button mdl-js-button mdl-js-ripple-effect';
     button.style.textTransform = 'none';
-    button.onclick = handleSelectAssembly.bind(null, fileAssemblyId);
+    button.onclick = handleSelectAssembly.bind(null, assemblyName);
     componentHandler.upgradeElement(button);
     div.appendChild(button);
     div.appendChild(br);

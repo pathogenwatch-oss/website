@@ -5,10 +5,15 @@ import UploadStore from './UploadStore';
 
 const CHANGE_EVENT = 'change';
 
-let fileAssemblyId = null;
+let assemblyName = null;
+let viewPage = null;
 
-function setFileAssemblyId(id) {
-  fileAssemblyId = id;
+function setassemblyName(id) {
+  assemblyName = id;
+}
+
+function setViewPage(page) {
+  viewPage = page;
 }
 
 function emitChange() {
@@ -24,21 +29,25 @@ const Store = assign({}, EventEmitter.prototype, {
     this.removeListener(CHANGE_EVENT, callback);
   },
 
-  getFileAssemblyId() {
-    return fileAssemblyId;
+  getCurrentViewPage() {
+    return viewPage;
   },
 
-  getNextFileAssemblyIdOnDelete(fileAssemblyIdForDelete) {
-    const allAssemblyIds = UploadStore.getFileAssemblyIds();
-    const indexOfFileAssemblyIdForDelete = allAssemblyIds.indexOf(fileAssemblyIdForDelete);
+  getAssemblyName() {
+    return assemblyName;
+  },
+
+  getNextAssemblyNameOnDelete(assemblyNameForDelete) {
+    const allAssemblyIds = UploadStore.getAssemblyNames();
+    const indexOfassemblyNameForDelete = allAssemblyIds.indexOf(assemblyNameForDelete);
     const totalNoAssemblyIds = allAssemblyIds.length;
     let nextAssemblyIdForDisplay = null;
     // Check next index is a valid fileId for traverse
     if (allAssemblyIds.length > 0) {
-      if (indexOfFileAssemblyIdForDelete + 1 < totalNoAssemblyIds) {
-        nextAssemblyIdForDisplay = allAssemblyIds[indexOfFileAssemblyIdForDelete + 1];
+      if (indexOfassemblyNameForDelete + 1 < totalNoAssemblyIds) {
+        nextAssemblyIdForDisplay = allAssemblyIds[indexOfassemblyNameForDelete + 1];
       } else {
-        nextAssemblyIdForDisplay = allAssemblyIds[indexOfFileAssemblyIdForDelete - 1];
+        nextAssemblyIdForDisplay = allAssemblyIds[indexOfassemblyNameForDelete - 1];
       }
     }
 
@@ -51,7 +60,13 @@ function handleAction(action) {
   switch (action.type) {
 
   case 'navigate_to_assembly':
-    setFileAssemblyId(action.fileAssemblyId);
+    setassemblyName(action.assemblyName);
+    setViewPage('assembly');
+    emitChange();
+    break;
+
+  case 'set_view_page':
+    setViewPage(action.page);
     emitChange();
     break;
 

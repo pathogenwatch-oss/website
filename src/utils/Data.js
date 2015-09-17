@@ -107,8 +107,20 @@ function getColor(colourDataByDataField, dataObject) {
   return color;
 }
 
-function getFormattedDateString(date) {
-  return moment(date.year + '-' + date.month + '-' + date.day, 'YYYY-MM-DD').format('MMMM Do YYYY');
+function getFormattedDateString({ year, month, day }) {
+  if (year && !month && !day) {
+    return year;
+  }
+
+  if (year && month && !day) {
+    return moment(`${year}-${month}`, 'YYYY-MM').format('MMMM YYYY');
+  }
+
+  if (year && month && day) {
+    return moment(`${year}-${month}-${day}`, 'YYYY-MM-DD').format('Do MMMM YYYY');
+  }
+
+  return '';
 }
 
 export default {

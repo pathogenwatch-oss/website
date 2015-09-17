@@ -22,7 +22,7 @@ export default React.createClass({
     };
 
     return (
-      <div style={style} data-layout="north">
+      <div style={style}>
         {this.props.children}
       </div>
     );

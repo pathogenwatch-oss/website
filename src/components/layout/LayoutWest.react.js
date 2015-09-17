@@ -18,7 +18,7 @@ export default React.createClass({
     };
 
     return (
-      <div style={style} data-mr-layout="west">
+      <div style={style}>
         {this.props.children}
       </div>
     );

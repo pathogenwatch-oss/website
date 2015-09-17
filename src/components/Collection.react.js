@@ -4,12 +4,14 @@ import React from 'react';
 
 import Loading from './Loading.react';
 import CollectionExplorer from './CollectionExplorer.react';
-import UploadingFilesDetailed from './collection/UploadingFilesDetailed.react';
+// import UploadingFilesDetailed from './collection/UploadingFilesDetailed.react';
+import UploadWorkspace from './collection/UploadWorkspace.react';
 
 import FileUploadingStore from '../stores/FileUploadingStore';
 import CollectionStore from '../stores/CollectionStore';
 
 import CollectionActionCreators from '../actions/CollectionActionCreators';
+import AntibioticsActionCreators from '../actions/AntibioticsActionCreators';
 
 import Species from '../species';
 
@@ -22,6 +24,10 @@ export default class Collection extends React.Component {
       collection: null,
     };
     this.checkGetCollection = this.checkGetCollection.bind(this);
+  }
+
+  componentWillMount() {
+    AntibioticsActionCreators.fetch(Species.id);
   }
 
   componentDidMount() {
@@ -43,7 +49,7 @@ export default class Collection extends React.Component {
   render() {
     if (this.state.isUploading) {
       return (
-        <UploadingFilesDetailed />
+        <UploadWorkspace />
       );
     }
 

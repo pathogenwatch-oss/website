@@ -13,36 +13,39 @@ var containerStyle = {
 var UploadWorkspace = React.createClass({
   getInitialState: function () {
     return {
-      fileAssemblyId: null
+      assemblyName: null,
+      totalAssemblies: 0
     }
   },
 
   componentDidMount: function () {
     UploadWorkspaceNavigationStore.addChangeListener(this.handleUploadWorkspaceNavigationStoreChange);
+    UploadStore.addChangeListener(this.handleUploadStoreChange);
   },
 
   componentWillUnmount: function () {
     UploadWorkspaceNavigationStore.removeChangeListener(this.handleUploadWorkspaceNavigationStoreChange);
+    UploadStore.removeChangeListener(this.handleUploadStoreChange);
   },
 
   handleUploadWorkspaceNavigationStoreChange: function () {
     this.setState({
-      fileAssemblyId: UploadWorkspaceNavigationStore.getFileAssemblyId()
+      assemblyName: UploadWorkspaceNavigationStore.getAssemblyName()
     });
   },
 
+  handleUploadStoreChange() {
+    this.setState({
+      totalAssemblies: UploadStore.getAssembliesCount()
+    });
+  },
 
   getAssemblyWorkspaceElement: function () {
-    var fileAssemblyId = this.state.fileAssemblyId;
-    var assembly = UploadStore.getAssembly(fileAssemblyId);
-    var totalAssemblies = UploadStore.getAssembliesCount();
-
-    // if (! assembly) {
-    //   return null;
-    // }
+    var assemblyName = this.state.assemblyName;
+    var assembly = UploadStore.getAssembly(assemblyName);
 
     return (
-      <AssemblyWorkspace assembly={assembly} totalAssemblies={totalAssemblies}/>
+      <AssemblyWorkspace assembly={assembly} totalAssemblies={this.state.totalAssemblies}/>
     );
   },
 

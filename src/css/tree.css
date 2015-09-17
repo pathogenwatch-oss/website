@@ -1,41 +1,99 @@
+.wgsa-tree {
+  width: 100%;
+  height: 100%;
+}
+
 .wgsa-tree-header {
   position: absolute;
   top: 8px;
-  left: 0;
-  right: 0;
+  left: 16px;
+  right: 16px;
   height: 32px;
-  padding: 16px;
+  padding: 16px 0;
   z-index: 10;
+  display: flex;
+  align-items: center;
 }
 
 .wgsa-tree-heading {
-  line-height: 32px;
+  line-height: 1;
   font-size: 20px;
-  margin: 0;
-  float: left;
-  padding-top: 4px;
-  padding-left: 52px;
+  margin: 0px;
+  padding-left: 16px;
   color: #673c90;
+  flex-grow: 1;
 }
 
-.wgsa-tree-return {
+.wgsa-tree-return.mdl-button--fab {
   color: #673c90;
   background-color: #fff;
-  position: absolute;
-  left: 16px;
   border: 1px solid #a386bd;
 }
 
 .wgsa-tree-menu {
-  position: absolute;
-  top: 20px;
-  right: 16px;
+  align-self: flex-end;
+}
+
+.wgsa-tree-menu .mdl-menu__item {
+  font-size: 13px;
+  height: 40px;
+  line-height: 40px;
+}
+
+.wgsa-tree-menu a {
+  text-decoration: none;
+  color: inherit;
 }
 
 .wgsa-tree-actions {
   color: #673c90;
 }
 
+.wgsa-tree-control .mdl-slider {
+  display: none;
+}
+
+.wgsa-tree-control .mdl-slider.is-upgraded {
+  display: block;
+}
+
+.wgsa-tree-control .mdl-slider::thumb,
+.mdl-slider__background-lower {
+  background: #673c90;
+}
+
+.wgsa-tree-control .mdl-slider:active::thumb {
+  background: #a386bd;
+}
+
+.wgsa-tree-control {
+  margin: 0 -20px;
+}
+
 .wgsa-tree-control label {
-  font-size: 13px;
+  font-size: 12px;
+  font-weight: 700;
+  color: rgba(0, 0, 0, 0.54);
+}
+
+.wgsa-no-subtree {
+  position: absolute;
+  top: 64px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #673c90;
+}
+
+.wgsa-no-subtree i {
+  font-size: 45px;
+  color: #a386bd;
+}
+
+.wgsa-no-subtree p {
+  font-size: 20px;
 }

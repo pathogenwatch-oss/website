@@ -3,11 +3,21 @@
 var path = require('path');
 var webpack = require('webpack');
 
+var postcssPlugins = [
+  require('autoprefixer')({ browsers: ['last 2 versions'] }),
+  require('postcss-input-style')
+];
+
+var commonLoaders = [
+  { test: /.json$/, loaders: [ 'json' ] },
+  { test: /.css$/, loaders: [ 'style', 'css', 'postcss' ] },
+  { test: /\.(png|jpg|jpeg|gif)$/, loader: "file" }
+];
+
 var devConfig = {
   devtool: '#eval-source-map',
   entry: [
-    'webpack-dev-server/client?http://localhost:8080',
-    'webpack/hot/only-dev-server',
+    'webpack-hot-middleware/client',
     './src/app'
   ],
   output: {
@@ -16,20 +26,35 @@ var devConfig = {
     publicPath: '/'
   },
   plugins: [
+    new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin()
   ],
   module: {
     loaders: [
       { test: /\.js$/,
-        loaders: [ 'react-hot', 'babel' ],
-        include: path.join(__dirname, 'src')
-      },
-      { test: /.json$/, loaders: [ 'json' ] },
-      { test: /.css$/, loaders: [ 'style', 'css' ] },
-      { test: /\.(png|jpg|jpeg|gif)$/, loader: "file" }
-    ]
-  }
+        loader: 'babel',
+        include: path.join(__dirname, 'src'),
+        query: {
+          'stage': 0,
+          'plugins': [
+            'react-transform'
+          ],
+          'extra': {
+            'react-transform': [ {
+              'target': 'react-transform-webpack-hmr',
+              'imports': [ 'react' ],
+              'locals': [ 'module' ]
+            }, {
+              'target': 'react-transform-catch-errors',
+              'imports': [ 'react', 'redbox-react' ]
+            }]
+          }
+        }
+      }
+    ].concat(commonLoaders)
+  },
+  postcss: postcssPlugins
 };
 
 var prodConfig = {
@@ -39,6 +64,7 @@ var prodConfig = {
     filename: 'wgsa.js'
   },
   plugins: [
+    new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.optimize.UglifyJsPlugin({
       compressor: {
         warnings: false
@@ -53,14 +79,12 @@ var prodConfig = {
   module: {
     loaders: [
       { test: /\.js$/,
-        loaders: [ 'babel' ],
+        loader: 'babel',
         include: path.join(__dirname, 'src')
-      },
-      { test: /.json$/, loaders: [ 'json' ] },
-      { test: /.css$/, loaders: [ 'style', 'css' ] },
-      { test: /\.(png|jpg|jpeg|gif)$/, loader: "file" }
-    ]
-  }
+      }
+    ].concat(commonLoaders)
+  },
+  postcss: postcssPlugins
 };
 
 module.exports = process.env.NODE_ENV === 'production' ? prodConfig : devConfig;

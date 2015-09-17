@@ -6,17 +6,37 @@ import AssemblyAnalysisItem from './AssemblyAnalysisItem.react';
 
 import Map from './Map.react';
 
+var noContigsRange = {};
+var averageAssemblyLength = null;
+
 export default React.createClass({
+
+  propTypes: {
+    clickHandler: React.PropTypes.func,
+  },
 
   getInitialState() {
     return {
       assemblies: UploadStore.getAssemblies(),
       assemblyCount: UploadStore.getAssembliesCount(),
+      currentChart: {
+        title: 'N50 Contigs',
+        type: 'contigN50',
+      },
     };
   },
 
   componentDidMount() {
     UploadStore.addChangeListener(this.handleUploadStoreChange);
+    componentHandler.upgradeDom();
+  },
+
+  componentDidUpdate() {
+    var range = UploadStore.getMinMaxNoContigsForAllAssemblies();
+    noContigsRange.min = range[0];
+    noContigsRange.max = range[1];
+    averageAssemblyLength = UploadStore.getAverageAssemblyLengthForAllAssemblies();
+    componentHandler.upgradeDom();
   },
 
   componentWillUnmount() {
@@ -30,26 +50,52 @@ export default React.createClass({
     });
   },
 
+  showChart(type = 'NO DATA FOUND', title = '') {
+    this.setState({
+      currentChart: {
+        type: type,
+        title: title,
+      },
+    });
+  },
+
   render() {
     if (this.state.assemblyCount) {
-      const allLocations = UploadStore.getAllMetadataLocations();
       const locationsToAssembliesMap = UploadStore.getLocationToAssembliesMap();
 
       return (
-        <div className="mdl-grid">
+        <div className="mdl-grid overviewContent">
           <div className="mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
+            <div className="heading"> Summary </div>
             <div className="card-style">
-              <div className="heading"> Overview </div>
-              <AssemblyAnalysisItem label="Total Assemblies" value={this.state.assemblyCount} />
-              <AssemblyAnalysisItem label="Mean Contigs" value={200} />
-              <AssemblyAnalysisItem label="Total nt" value={2000000} />
+              <div className="mdl-grid mdl-grid--no-spacing">
+                <div className="mdl-cell mdl-cell--6-col">
+                  <AssemblyAnalysisItem label="Total Assemblies" value={this.state.assemblyCount} />
+                </div>
+
+                <div className="mdl-cell mdl-cell--6-col">
+                  <AssemblyAnalysisItem label="No. Contigs Range" value={noContigsRange.min + ' - ' + noContigsRange.max} />
+                </div>
+
+                <div className="mdl-cell mdl-cell--6-col">
+                  <AssemblyAnalysisItem label="Average Assembly Length" value={averageAssemblyLength} />
+                </div>
+              </div>
             </div>
           </div>
 
           <div className="mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
-            <div className="card-style">
-              <div className="heading"> N50 contigs Chart </div>
-              <AssemblyAnalysisOverviewChart />
+
+            <div className="wgsa-chart-select mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+              <div className="mdl-tabs__tab-bar">
+                  <a href="#overview-chart-panel" className="mdl-tabs__tab is-active" onClick={this.showChart.bind(this, 'contigN50', 'N50')}>N50</a>
+                  <a href="#overview-chart-panel" className="mdl-tabs__tab" onClick={this.showChart.bind(this, 'totalNumberOfContigs', 'No. Contigs')}>No. Contigs</a>
+                  <a href="#overview-chart-panel" className="mdl-tabs__tab" onClick={this.showChart.bind(this, 'totalNumberOfNucleotidesInDnaStrings', 'Assembly Length')}>Assembly Length</a>
+              </div>
+
+              <div className="card-style mdl-tabs__panel is-active" id="overview-chart-panel">
+                <AssemblyAnalysisOverviewChart chartTitle={this.state.currentChart.title} chartType={this.state.currentChart.type}/>
+              </div>
             </div>
           </div>
 

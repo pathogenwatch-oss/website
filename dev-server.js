@@ -1,23 +1,28 @@
 /* eslint es6: false */
 
-var WebpackDevServer = require('webpack-dev-server');
-var webpack = require('webpack');
-var express = require('express');
+var webpack = require("webpack");
+var express = require("express");
 var bodyParser = require('body-parser');
 
 var config = require('./webpack.config.js');
+var compiler = webpack(config);
 
-var server = new WebpackDevServer(webpack(config), {
+var app = express();
+
+app.use(require('webpack-dev-middleware')(compiler, {
   contentBase: '/public',
-  stats: { colors: true, cached: false },
-  hot: true
-});
+  publicPath: config.output.publicPath,
+  stats: { colors: true, cached: false }
+}));
+
+app.use(require('webpack-hot-middleware')(compiler));
+
+app.use(bodyParser.json());
+
+app.use(express.static('public'));
+
 
 var apiRouter = express.Router();
-
-server.use(bodyParser.json());
-
-server.use(express.static('public'));
 
 apiRouter.post('/species/:speciesId/collection', function (req, res) {
   res.json({
@@ -42,23 +47,37 @@ apiRouter.get('/species/:speciesId/reference', function (req, res) {
   res.sendFile(__dirname + '/static_data/reference.json');
 });
 
-apiRouter.get('/species/:speciesId/reference', function (req, res) {
-  res.sendFile(__dirname + '/static_data/reference.json');
+apiRouter.get('/species/:speciesId/antibiotics', function (req, res) {
+  res.sendFile(__dirname + '/static_data/antibiotics.json');
+});
+
+apiRouter.post('/download/type/assembly/format/fasta', function (req, res) {
+  setTimeout(function () {
+    res.json({
+      'gobbledegook': req.body.idList[0] + '.fa'
+    });
+  }, 2000);
 });
 
 apiRouter.post('/download/type/:idType/format/:fileFormat', function (req, res) {
-  var assemblyId = Object.keys(req.body)[0];
-  res.json(req.body[assemblyId]);
+  setTimeout(function () {
+    res.json({
+      'gobbledegook': req.params.fileFormat
+    });
+  }, 2000);
 });
 
 apiRouter.get('/download/file/:fileName', function (req, res) {
   return res.sendFile(__dirname + '/static_data/' + req.params.fileName);
 });
 
-server.use('/api', apiRouter);
+app.use('/api', apiRouter);
 
-server.use('/', function (req, res) {
+app.use('/', function (req, res) {
   res.sendFile(__dirname + '/public/index.html');
 });
 
-server.listen(8080, "localhost");
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
+
+server.listen(8080);
