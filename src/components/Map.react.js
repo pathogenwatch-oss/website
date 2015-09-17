@@ -17,8 +17,8 @@ const Map = React.createClass({
   infoWindowIsolates: null,
 
   propTypes: {
-    width: React.PropTypes.number.isRequired,
-    height: React.PropTypes.number.isRequired,
+    width: React.PropTypes.any.isRequired,
+    height: React.PropTypes.any.isRequired,
   },
 
   getInitialState: function () {
@@ -83,8 +83,9 @@ const Map = React.createClass({
 
     markerIds.forEach(function (markerId) {
       marker = markers[markerId];
-
-      bounds.extend(marker.getPosition());
+      if (marker) {
+        bounds.extend(marker.getPosition());
+      }
     });
 
     this.map.fitBounds(bounds);
@@ -142,7 +143,10 @@ const Map = React.createClass({
       shape = this.getMarkerShapeForAssembly(assembly);
       colour = this.getMarkerColourForAssembly(assembly);
 
-      this.markers[assemblyId] = this.createMarker(assemblyId, latitude, longitude, shape, colour);
+      const marker = this.createMarker(assemblyId, latitude, longitude, shape, colour);
+      if (marker) {
+        this.markers[assemblyId] = marker;
+      }
     });
 
     this.fitAllMarkers();

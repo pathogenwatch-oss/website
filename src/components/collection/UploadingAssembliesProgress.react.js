@@ -12,8 +12,8 @@ const ICON_STYLE = {
 };
 
 const TABLE_STYLE = {
-  marginTop: '16px',
-  width: '100%',
+  width: 'auto',
+  border: 'none'
 };
 
 const HEADER_STYLE = {
@@ -35,7 +35,7 @@ const resultColumns = [
   'PAARSNP',
   'MLST',
   'CORE',
-  'FP',
+  'FP'
 ];
 
 const UploadingAssembliesProgress = React.createClass({

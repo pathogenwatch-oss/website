@@ -40,9 +40,11 @@ const treeProps = {
 
       for (const subtreeId of subtreeIds) {
         const leaf = tree.branches[subtreeId];
-        leaf.interactive = true;
-        leaf.label = `${leaf.label} (${subtrees[leaf.id].assemblyIds.length})`;
-        leaf.labelStyle = emphasizedNodeLabelStyle;
+        if (leaf) {
+          leaf.interactive = true;
+          leaf.label = `${leaf.label} (${subtrees[leaf.id].assemblyIds.length})`;
+          leaf.labelStyle = emphasizedNodeLabelStyle;
+        }
       }
     },
     leafSelected(event) {

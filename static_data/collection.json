@@ -1,40 +1,141 @@
 {
-  "collectionId":"229c3b1e-957c-4d19-a2e4-87a43ce0f3bb",
+  "collectionId":"287b8b25-c9ce-45ca-bd5e-9089d5c6798d",
   "assemblies":{
-    "21518149-8b93-47bc-920d-7f1fd55caf61":{
+    "36c407d9-67b4-42c3-9e6a-dc8e341d21da":{
+      "populationSubtype":"1280_EMRSA15_HO50960412",
       "metadata":{
-        "assemblyId":"21518149-8b93-47bc-920d-7f1fd55caf61",
-        "assemblyName":"Patient 5",
+        "assemblyId":"36c407d9-67b4-42c3-9e6a-dc8e341d21da",
+        "assemblyName":"EMRSA15",
+        "speciesId":"1280",
         "date":{
-          "year":2014,
-          "month":10,
-          "day":5
+          "year":null,
+          "month":null,
+          "day":null
         },
         "geography":{
-          "location":"Wellcome Trust Conference Centre",
+          "location":null,
           "position":{
-            "latitude":52.0806431,
-            "longitude":0.1861249
+            "latitude":null,
+            "longitude":null
           }
         },
-        "source":1
+        "userDefined":{
+
+        }
       },
       "analysis":{
         "st":"22",
-        "mlst":"1_2_3_4_5",
-        "totalCompleteMatches":1,
+        "mlst":"7_6_1_5_8_8_6",
+        "snpar":[
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          }
+        ],
+        "paar":[
+
+        ],
         "resistanceProfile":{
           "Levofloxacin":{
             "antibioticClass":"Fluoroquinolones",
-            "resistanceResult":"RESISTANT"
+            "resistanceResult":"UNKNOWN"
           },
           "Moxifloxacin":{
             "antibioticClass":"Fluoroquinolones",
-            "resistanceResult":"RESISTANT"
+            "resistanceResult":"UNKNOWN"
           },
           "Ciprofloxacin":{
             "antibioticClass":"Fluoroquinolones",
-            "resistanceResult":"RESISTANT"
+            "resistanceResult":"UNKNOWN"
           },
           "Sitafloxacin":{
             "antibioticClass":"Fluoroquinolones",
@@ -42,15 +143,15 @@
           },
           "Telithromycin":{
             "antibioticClass":"Ketolides",
-            "resistanceResult":"UNKNOWN"
+            "resistanceResult":"RESISTANT"
           },
           "Dyes":{
             "antibioticClass":"Antiseptics",
-            "resistanceResult":"RESISTANT"
+            "resistanceResult":"UNKNOWN"
           },
           "Biocides":{
             "antibioticClass":"Antiseptics",
-            "resistanceResult":"RESISTANT"
+            "resistanceResult":"UNKNOWN"
           },
           "Quartenary ammonium compounds":{
             "antibioticClass":"Antiseptics",
@@ -70,27 +171,27 @@
           },
           "Kanamycin":{
             "antibioticClass":"Aminoglycosides",
-            "resistanceResult":"UNKNOWN"
+            "resistanceResult":"RESISTANT"
           },
           "Streptomycin":{
             "antibioticClass":"Aminoglycosides",
-            "resistanceResult":"UNKNOWN"
+            "resistanceResult":"RESISTANT"
           },
           "Tobramycin":{
             "antibioticClass":"Aminoglycosides",
-            "resistanceResult":"UNKNOWN"
+            "resistanceResult":"RESISTANT"
           },
           "Amikacin":{
             "antibioticClass":"Aminoglycosides",
-            "resistanceResult":"UNKNOWN"
+            "resistanceResult":"RESISTANT"
           },
           "Gentamicin":{
             "antibioticClass":"Aminoglycosides",
-            "resistanceResult":"UNKNOWN"
+            "resistanceResult":"RESISTANT"
           },
           "Neomycin":{
             "antibioticClass":"Aminoglycosides",
-            "resistanceResult":"UNKNOWN"
+            "resistanceResult":"RESISTANT"
           },
           "Chloramphenicol":{
             "antibioticClass":"Chloramphenicol",
@@ -106,7 +207,7 @@
           },
           "Rifampicin":{
             "antibioticClass":"Rifamycin",
-            "resistanceResult":"UNKNOWN"
+            "resistanceResult":"RESISTANT"
           },
           "Lead":{
             "antibioticClass":"Heavy metals",
@@ -134,7 +235,7 @@
           },
           "Linezolid":{
             "antibioticClass":"Oxazolidinone",
-            "resistanceResult":"UNKNOWN"
+            "resistanceResult":"RESISTANT"
           },
           "Minocycline":{
             "antibioticClass":"Tetracyclines",
@@ -158,15 +259,15 @@
           },
           "Fusidic acid":{
             "antibioticClass":"Fusidic Acid",
-            "resistanceResult":"UNKNOWN"
+            "resistanceResult":"RESISTANT"
           },
           "Methicillin":{
             "antibioticClass":"Beta-Lactam",
-            "resistanceResult":"RESISTANT"
+            "resistanceResult":"UNKNOWN"
           },
           "Penicillin":{
             "antibioticClass":"Beta-Lactam",
-            "resistanceResult":"RESISTANT"
+            "resistanceResult":"UNKNOWN"
           },
           "Vancomycin":{
             "antibioticClass":"Glycopeptides",
@@ -191,40 +292,141 @@
         }
       }
     },
-    "cc76533f-4c3a-494e-84d6-609da864454d":{
+    "bbd32eec-dfbc-4c0f-ab22-74bb3730b1c4":{
+      "populationSubtype":"1280_LGA251",
       "metadata":{
-        "assemblyId":"cc76533f-4c3a-494e-84d6-609da864454d",
-        "assemblyName":"Patient 6",
+        "assemblyId":"bbd32eec-dfbc-4c0f-ab22-74bb3730b1c4",
+        "assemblyName":"FR821779",
+        "speciesId":"1280",
         "date":{
-          "year":2010,
-          "month":11,
-          "day":2
+          "year":null,
+          "month":null,
+          "day":null
         },
         "geography":{
-          "location":"The European Bioinformatics Institute",
+          "location":null,
           "position":{
-            "latitude":52.0803398,
-            "longitude":0.1868759
+            "latitude":null,
+            "longitude":null
           }
         },
-        "source":2
+        "userDefined":{
+
+        }
       },
       "analysis":{
-        "st":"22",
-        "mlst":"1_2_3_4_5",
-        "totalCompleteMatches":2,
+        "st":"425",
+        "mlst":"18_33_6_20_7_50_48",
+        "snpar":[
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          }
+        ],
+        "paar":[
+
+        ],
         "resistanceProfile":{
           "Levofloxacin":{
             "antibioticClass":"Fluoroquinolones",
-            "resistanceResult":"RESISTANT"
+            "resistanceResult":"UNKNOWN"
           },
           "Moxifloxacin":{
             "antibioticClass":"Fluoroquinolones",
-            "resistanceResult":"RESISTANT"
+            "resistanceResult":"UNKNOWN"
           },
           "Ciprofloxacin":{
             "antibioticClass":"Fluoroquinolones",
-            "resistanceResult":"RESISTANT"
+            "resistanceResult":"UNKNOWN"
           },
           "Sitafloxacin":{
             "antibioticClass":"Fluoroquinolones",
@@ -232,15 +434,15 @@
           },
           "Telithromycin":{
             "antibioticClass":"Ketolides",
-            "resistanceResult":"UNKNOWN"
+            "resistanceResult":"RESISTANT"
           },
           "Dyes":{
             "antibioticClass":"Antiseptics",
-            "resistanceResult":"RESISTANT"
+            "resistanceResult":"UNKNOWN"
           },
           "Biocides":{
             "antibioticClass":"Antiseptics",
-            "resistanceResult":"RESISTANT"
+            "resistanceResult":"UNKNOWN"
           },
           "Quartenary ammonium compounds":{
             "antibioticClass":"Antiseptics",
@@ -260,27 +462,27 @@
           },
           "Kanamycin":{
             "antibioticClass":"Aminoglycosides",
-            "resistanceResult":"UNKNOWN"
+            "resistanceResult":"RESISTANT"
           },
           "Streptomycin":{
             "antibioticClass":"Aminoglycosides",
-            "resistanceResult":"UNKNOWN"
+            "resistanceResult":"RESISTANT"
           },
           "Tobramycin":{
             "antibioticClass":"Aminoglycosides",
-            "resistanceResult":"UNKNOWN"
+            "resistanceResult":"RESISTANT"
           },
           "Amikacin":{
             "antibioticClass":"Aminoglycosides",
-            "resistanceResult":"UNKNOWN"
+            "resistanceResult":"RESISTANT"
           },
           "Gentamicin":{
             "antibioticClass":"Aminoglycosides",
-            "resistanceResult":"UNKNOWN"
+            "resistanceResult":"RESISTANT"
           },
           "Neomycin":{
             "antibioticClass":"Aminoglycosides",
-            "resistanceResult":"UNKNOWN"
+            "resistanceResult":"RESISTANT"
           },
           "Chloramphenicol":{
             "antibioticClass":"Chloramphenicol",
@@ -296,7 +498,7 @@
           },
           "Rifampicin":{
             "antibioticClass":"Rifamycin",
-            "resistanceResult":"UNKNOWN"
+            "resistanceResult":"RESISTANT"
           },
           "Lead":{
             "antibioticClass":"Heavy metals",
@@ -324,7 +526,7 @@
           },
           "Linezolid":{
             "antibioticClass":"Oxazolidinone",
-            "resistanceResult":"UNKNOWN"
+            "resistanceResult":"RESISTANT"
           },
           "Minocycline":{
             "antibioticClass":"Tetracyclines",
@@ -348,15 +550,15 @@
           },
           "Fusidic acid":{
             "antibioticClass":"Fusidic Acid",
-            "resistanceResult":"UNKNOWN"
+            "resistanceResult":"RESISTANT"
           },
           "Methicillin":{
             "antibioticClass":"Beta-Lactam",
-            "resistanceResult":"RESISTANT"
+            "resistanceResult":"UNKNOWN"
           },
           "Penicillin":{
             "antibioticClass":"Beta-Lactam",
-            "resistanceResult":"RESISTANT"
+            "resistanceResult":"UNKNOWN"
           },
           "Vancomycin":{
             "antibioticClass":"Glycopeptides",
@@ -381,40 +583,129 @@
         }
       }
     },
-    "0e3a37f1-17bb-4bca-bb3b-e101684f3167":{
+    "917936aa-0a90-47e4-95bc-e603de771d87":{
+      "populationSubtype":"1280_TW20",
       "metadata":{
-        "assemblyId":"0e3a37f1-17bb-4bca-bb3b-e101684f3167",
-        "assemblyName":"Patient 7",
+        "assemblyId":"917936aa-0a90-47e4-95bc-e603de771d87",
+        "assemblyName":"FN433596",
+        "speciesId":"1280",
         "date":{
-          "year":2005,
-          "month":3,
-          "day":11
+          "year":null,
+          "month":null,
+          "day":null
         },
         "geography":{
-          "location":"Wellcome Trust Sanger Institute",
+          "location":null,
           "position":{
-            "latitude":52.0794681,
-            "longitude":0.1846919
+            "latitude":null,
+            "longitude":null
           }
         },
-        "source":3
+        "userDefined":{
+
+        }
       },
       "analysis":{
-        "st":"22",
-        "mlst":"1_2_3_4_5",
-        "totalCompleteMatches":3,
+        "st":"239",
+        "mlst":"2_3_1_1_4_4_3",
+        "snpar":[
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          }
+        ],
+        "paar":[
+
+        ],
         "resistanceProfile":{
           "Levofloxacin":{
             "antibioticClass":"Fluoroquinolones",
-            "resistanceResult":"RESISTANT"
+            "resistanceResult":"UNKNOWN"
           },
           "Moxifloxacin":{
             "antibioticClass":"Fluoroquinolones",
-            "resistanceResult":"RESISTANT"
+            "resistanceResult":"UNKNOWN"
           },
           "Ciprofloxacin":{
             "antibioticClass":"Fluoroquinolones",
-            "resistanceResult":"RESISTANT"
+            "resistanceResult":"UNKNOWN"
           },
           "Sitafloxacin":{
             "antibioticClass":"Fluoroquinolones",
@@ -426,11 +717,11 @@
           },
           "Dyes":{
             "antibioticClass":"Antiseptics",
-            "resistanceResult":"RESISTANT"
+            "resistanceResult":"UNKNOWN"
           },
           "Biocides":{
             "antibioticClass":"Antiseptics",
-            "resistanceResult":"RESISTANT"
+            "resistanceResult":"UNKNOWN"
           },
           "Quartenary ammonium compounds":{
             "antibioticClass":"Antiseptics",
@@ -486,27 +777,27 @@
           },
           "Rifampicin":{
             "antibioticClass":"Rifamycin",
-            "resistanceResult":"UNKNOWN"
+            "resistanceResult":"RESISTANT"
           },
           "Lead":{
             "antibioticClass":"Heavy metals",
-            "resistanceResult":"RESISTANT"
+            "resistanceResult":"UNKNOWN"
           },
           "Cadmium":{
             "antibioticClass":"Heavy metals",
-            "resistanceResult":"RESISTANT"
+            "resistanceResult":"UNKNOWN"
           },
           "Arsenic":{
             "antibioticClass":"Heavy metals",
-            "resistanceResult":"RESISTANT"
+            "resistanceResult":"UNKNOWN"
           },
           "Copper":{
             "antibioticClass":"Heavy metals",
-            "resistanceResult":"RESISTANT"
+            "resistanceResult":"UNKNOWN"
           },
           "Mercury":{
             "antibioticClass":"Heavy metals",
-            "resistanceResult":"RESISTANT"
+            "resistanceResult":"UNKNOWN"
           },
           "Trimethoprim":{
             "antibioticClass":"Trimethoprim & Sulfonamides",
@@ -538,7 +829,286 @@
           },
           "Fusidic acid":{
             "antibioticClass":"Fusidic Acid",
+            "resistanceResult":"RESISTANT"
+          },
+          "Methicillin":{
+            "antibioticClass":"Beta-Lactam",
             "resistanceResult":"UNKNOWN"
+          },
+          "Penicillin":{
+            "antibioticClass":"Beta-Lactam",
+            "resistanceResult":"UNKNOWN"
+          },
+          "Vancomycin":{
+            "antibioticClass":"Glycopeptides",
+            "resistanceResult":"UNKNOWN"
+          },
+          "Teicoplanin":{
+            "antibioticClass":"Glycopeptides",
+            "resistanceResult":"UNKNOWN"
+          },
+          "Lincomycin":{
+            "antibioticClass":"Lincosamides",
+            "resistanceResult":"UNKNOWN"
+          },
+          "Clindamycin":{
+            "antibioticClass":"Lincosamides",
+            "resistanceResult":"UNKNOWN"
+          },
+          "Daptomycin":{
+            "antibioticClass":"Lipopeptides",
+            "resistanceResult":"UNKNOWN"
+          }
+        }
+      }
+    },
+    "d11c58d7-5e0c-47b1-aee0-0df52de9ab5f":{
+      "populationSubtype":"1280_ECT_R2",
+      "metadata":{
+        "assemblyId":"d11c58d7-5e0c-47b1-aee0-0df52de9ab5f",
+        "assemblyName":"FR714927",
+        "speciesId":"1280",
+        "date":{
+          "year":null,
+          "month":null,
+          "day":null
+        },
+        "geography":{
+          "location":null,
+          "position":{
+            "latitude":null,
+            "longitude":null
+          }
+        },
+        "userDefined":{
+
+        }
+      },
+      "analysis":{
+        "st":"5",
+        "mlst":"1_4_1_4_12_1_10",
+        "snpar":[
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          }
+        ],
+        "paar":[
+
+        ],
+        "resistanceProfile":{
+          "Levofloxacin":{
+            "antibioticClass":"Fluoroquinolones",
+            "resistanceResult":"UNKNOWN"
+          },
+          "Moxifloxacin":{
+            "antibioticClass":"Fluoroquinolones",
+            "resistanceResult":"UNKNOWN"
+          },
+          "Ciprofloxacin":{
+            "antibioticClass":"Fluoroquinolones",
+            "resistanceResult":"UNKNOWN"
+          },
+          "Sitafloxacin":{
+            "antibioticClass":"Fluoroquinolones",
+            "resistanceResult":"UNKNOWN"
+          },
+          "Telithromycin":{
+            "antibioticClass":"Ketolides",
+            "resistanceResult":"RESISTANT"
+          },
+          "Dyes":{
+            "antibioticClass":"Antiseptics",
+            "resistanceResult":"UNKNOWN"
+          },
+          "Biocides":{
+            "antibioticClass":"Antiseptics",
+            "resistanceResult":"UNKNOWN"
+          },
+          "Quartenary ammonium compounds":{
+            "antibioticClass":"Antiseptics",
+            "resistanceResult":"UNKNOWN"
+          },
+          "Clarithromycin":{
+            "antibioticClass":"Macrolides",
+            "resistanceResult":"RESISTANT"
+          },
+          "Erythromycin":{
+            "antibioticClass":"Macrolides",
+            "resistanceResult":"RESISTANT"
+          },
+          "Azithromycin":{
+            "antibioticClass":"Macrolides",
+            "resistanceResult":"RESISTANT"
+          },
+          "Kanamycin":{
+            "antibioticClass":"Aminoglycosides",
+            "resistanceResult":"RESISTANT"
+          },
+          "Streptomycin":{
+            "antibioticClass":"Aminoglycosides",
+            "resistanceResult":"RESISTANT"
+          },
+          "Tobramycin":{
+            "antibioticClass":"Aminoglycosides",
+            "resistanceResult":"RESISTANT"
+          },
+          "Amikacin":{
+            "antibioticClass":"Aminoglycosides",
+            "resistanceResult":"RESISTANT"
+          },
+          "Gentamicin":{
+            "antibioticClass":"Aminoglycosides",
+            "resistanceResult":"RESISTANT"
+          },
+          "Neomycin":{
+            "antibioticClass":"Aminoglycosides",
+            "resistanceResult":"RESISTANT"
+          },
+          "Chloramphenicol":{
+            "antibioticClass":"Chloramphenicol",
+            "resistanceResult":"UNKNOWN"
+          },
+          "Florfenicol":{
+            "antibioticClass":"Chloramphenicol",
+            "resistanceResult":"UNKNOWN"
+          },
+          "Mupirocin":{
+            "antibioticClass":"Mupirocin",
+            "resistanceResult":"UNKNOWN"
+          },
+          "Rifampicin":{
+            "antibioticClass":"Rifamycin",
+            "resistanceResult":"RESISTANT"
+          },
+          "Lead":{
+            "antibioticClass":"Heavy metals",
+            "resistanceResult":"UNKNOWN"
+          },
+          "Cadmium":{
+            "antibioticClass":"Heavy metals",
+            "resistanceResult":"UNKNOWN"
+          },
+          "Arsenic":{
+            "antibioticClass":"Heavy metals",
+            "resistanceResult":"UNKNOWN"
+          },
+          "Copper":{
+            "antibioticClass":"Heavy metals",
+            "resistanceResult":"UNKNOWN"
+          },
+          "Mercury":{
+            "antibioticClass":"Heavy metals",
+            "resistanceResult":"UNKNOWN"
+          },
+          "Trimethoprim":{
+            "antibioticClass":"Trimethoprim & Sulfonamides",
+            "resistanceResult":"UNKNOWN"
+          },
+          "Linezolid":{
+            "antibioticClass":"Oxazolidinone",
+            "resistanceResult":"RESISTANT"
+          },
+          "Minocycline":{
+            "antibioticClass":"Tetracyclines",
+            "resistanceResult":"UNKNOWN"
+          },
+          "Doxycycline":{
+            "antibioticClass":"Tetracyclines",
+            "resistanceResult":"UNKNOWN"
+          },
+          "Tetracycline":{
+            "antibioticClass":"Tetracyclines",
+            "resistanceResult":"UNKNOWN"
+          },
+          "Streptogramin A":{
+            "antibioticClass":"Streptogramins",
+            "resistanceResult":"UNKNOWN"
+          },
+          "Streptogramin B":{
+            "antibioticClass":"Streptogramins",
+            "resistanceResult":"UNKNOWN"
+          },
+          "Fusidic acid":{
+            "antibioticClass":"Fusidic Acid",
+            "resistanceResult":"RESISTANT"
           },
           "Methicillin":{
             "antibioticClass":"Beta-Lactam",
@@ -572,21 +1142,31 @@
       }
     }
   },
-  "tree":"(0e3a37f1-17bb-4bca-bb3b-e101684f3167:0.03156877206,cc76533f-4c3a-494e-84d6-609da864454d:0.0007845663608,21518149-8b93-47bc-920d-7f1fd55caf61:0.0007649477329);",
+  "tree":"(d11c58d7-5e0c-47b1-aee0-0df52de9ab5f:6956.184741,917936aa-0a90-47e4-95bc-e603de771d87:7765.15632,(36c407d9-67b4-42c3-9e6a-dc8e341d21da:12298.38438,bbd32eec-dfbc-4c0f-ab22-74bb3730b1c4:13756.3726):1919.204161);",
   "subtrees":{
-    "EMRSA15": {
-      "assemblyIds": [
-        "21518149-8b93-47bc-920d-7f1fd55caf61",
-        "cc76533f-4c3a-494e-84d6-609da864454d",
-        "0e3a37f1-17bb-4bca-bb3b-e101684f3167"
+    "1280_EMRSA15":{
+      "assemblyIds":[
+        "36c407d9-67b4-42c3-9e6a-dc8e341d21da"
       ],
-      "newick": "(21518149-8b93-47bc-920d-7f1fd55caf61:0.0007737376369,cc76533f-4c3a-494e-84d6-609da864454d:0.0007757764569,(EMRSA15:1.969359354,0e3a37f1-17bb-4bca-bb3b-e101684f3167:0.01170051731):0.01986825475);"
+      "newick":"36c407d9-67b4-42c3-9e6a-dc8e341d21da:1280_EMRSA15=0.0"
     },
-    "MW2": {
-      "assemblyIds": [
-        "21518149-8b93-47bc-920d-7f1fd55caf61"
+    "1280_LGA251":{
+      "assemblyIds":[
+        "bbd32eec-dfbc-4c0f-ab22-74bb3730b1c4"
       ],
-      "newick": null
+      "newick":"bbd32eec-dfbc-4c0f-ab22-74bb3730b1c4:1280_LGA251=0.0"
+    },
+    "1280_TW20":{
+      "assemblyIds":[
+        "917936aa-0a90-47e4-95bc-e603de771d87"
+      ],
+      "newick":"917936aa-0a90-47e4-95bc-e603de771d87:1280_TW20=0.0"
+    },
+    "1280_ECT_R2":{
+      "assemblyIds":[
+        "d11c58d7-5e0c-47b1-aee0-0df52de9ab5f"
+      ],
+      "newick":"d11c58d7-5e0c-47b1-aee0-0df52de9ab5f:1280_ECT_R2=0.0"
     }
   }
 }

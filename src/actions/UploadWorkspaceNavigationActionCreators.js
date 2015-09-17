@@ -67,6 +67,14 @@ module.exports = {
     };
 
     AppDispatcher.dispatch(action);
-  }
+  },
 
+  setViewPage: function(page) {
+    var action = {
+      type: 'set_view_page',
+      page: page
+    };
+
+    AppDispatcher.dispatch(action);
+  }
 };

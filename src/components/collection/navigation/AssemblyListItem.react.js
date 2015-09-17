@@ -1,12 +1,8 @@
 import React from 'react';
 import css from '../../../css/upload-review.css';
 
-import { ListItem, FontIcon } from 'material-ui';
-import createThemeManager from 'material-ui/lib/styles/theme-manager';
 import UploadWorkspaceNavigationStore from '../../../stores/UploadWorkspaceNavigationStore.js';
 import UploadWorkspaceNavigationActionCreators from '../../../actions/UploadWorkspaceNavigationActionCreators';
-
-const ThemeManager = createThemeManager();
 
 const Component = React.createClass({
   propTypes: {
@@ -15,7 +11,7 @@ const Component = React.createClass({
 
   getInitialState() {
     return {
-      deleteConfirm: null
+      deleteConfirm: null,
     };
   },
 
@@ -78,15 +74,17 @@ const Component = React.createClass({
                 {assemblyName}
               </span>
             </button>
-            <span className="assembly-list-item__utils">
-              <span className="assembly-list-item__validate-icon utilityButton">
-                <i style={validatedIconStyle} className='material-icons'>{validatedIcon}</i>
-              </span>
-              <button className="deleteButton utilityButton mdl-button mdl-js-button mdl-button--icon mdl-button--colored"
-                onClick={this.handleDeleteConfirm.bind(this, assemblyName)}>
-                <i className="material-icons">delete</i>
-              </button>
-            </span>
+              { !this.props.isUploading &&
+                <span className="assembly-list-item__utils">
+                  <span className="assembly-list-item__validate-icon utilityButton">
+                    <i style={validatedIconStyle} className='material-icons'>{validatedIcon}</i>
+                  </span>
+                  <button className="deleteButton utilityButton mdl-button mdl-js-button mdl-button--icon mdl-button--colored"
+                    onClick={this.handleDeleteConfirm.bind(this, assemblyName)}>
+                    <i className="material-icons">delete</i>
+                  </button>
+                </span>
+              }
           </div>
         }
       </li>

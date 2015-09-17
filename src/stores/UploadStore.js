@@ -19,7 +19,6 @@ function setMetadataDateComponent(assemblyName, component, value) {
 
 function setMetadataColumn(assemblyName, columnName, value) {
   assemblies[assemblyName].metadata[columnName] = value;
-  console.log(columnName, value, assemblies[assemblyName].metadata);
 }
 
 function setMetadataDate(assemblyName, date) {
@@ -109,6 +108,28 @@ const Store = assign({}, EventEmitter.prototype, {
       return memo;
     }, {});
   },
+
+  getMinMaxNoContigsForAllAssemblies() {
+    var noContigsArray = [];
+    for (var assemblyId in assemblies) {
+      if (assemblies[assemblyId].analysis.totalNumberOfContigs) {
+        noContigsArray.push(assemblies[assemblyId].analysis.totalNumberOfContigs);
+      }
+    }
+    if (noContigsArray.length <= 0) {
+      return [0, 0];
+    }
+    return [Math.min(...noContigsArray), Math.max(...noContigsArray)];
+  },
+
+  getAverageAssemblyLengthForAllAssemblies() {
+    var totalAssemblyLength = 0;
+    var noAssemblies = Object.keys(assemblies).length;
+    for (var assemblyId in assemblies) {
+      totalAssemblyLength += assemblies[assemblyId].analysis.totalNumberOfNucleotidesInDnaStrings || 0;
+    }
+    return Math.round(totalAssemblyLength / noAssemblies);
+  }
 
 });
 

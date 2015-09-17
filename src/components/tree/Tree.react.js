@@ -133,7 +133,6 @@ export default React.createClass({
 
   setNodeLabels() {
     const labelProperty = this.state.labelProperty;
-
     for (const leaf of this.phylocanvas.leaves) {
       if (UploadedCollectionStore.contains(leaf.id)) {
         const assembly = UploadedCollectionStore.getAssemblies()[leaf.id];
@@ -151,7 +150,15 @@ export default React.createClass({
         leaf.label = labelValue;
       } else {
         const assembly = ReferenceCollectionStore.getAssemblies()[leaf.id];
-        leaf.label = `${leaf.id}_${assembly.analysis.st}`;
+        if (!assembly) {
+          leaf.label = leaf.id;
+          continue;
+        }
+
+        leaf.label = assembly.metadata.assemblyName;
+        if (assembly.analysis) {
+          leaf.label += `_${assembly.analysis.st}`;
+        }
       }
     }
 

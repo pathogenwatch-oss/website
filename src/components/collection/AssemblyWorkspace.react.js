@@ -3,34 +3,33 @@ import '../../css/forms.css';
 
 import React from 'react';
 import FileDragAndDrop from 'react-file-drag-and-drop';
-import createThemeManager from 'material-ui/lib/styles/theme-manager';
-import injectTapEventPlugin from 'react-tap-event-plugin';
 
 import AssemblyMetadata from './AssemblyMetadata.react';
 import AssemblyAnalysis from './AssemblyAnalysis.react';
 
-import Map from './Map.react';
 import AssemblyAnalysisChart from './AssemblyAnalysisChart.react';
 
 import UploadWorkspaceNavigation from './UploadWorkspaceNavigation.react';
-import UploadReviewHeader from './UploadReviewHeader.react.js';
-import UploadStore from '../../stores/UploadStore.js';
+import UploadReviewHeader from './UploadReviewHeader.react';
 import Overview from './Overview.react';
+import UploadingFilesDetailed from './UploadingFilesDetailed.react';
 
 import UploadActionCreators from '../../actions/UploadActionCreators';
+import UploadStore from '../../stores/UploadStore';
 import SocketActionCreators from '../../actions/SocketActionCreators';
+import UploadWorkspaceNavigationActionCreators from '../../actions/UploadWorkspaceNavigationActionCreators';
+import UploadWorkspaceNavigationStore from '../../stores/UploadWorkspaceNavigationStore';
 import FileProcessingStore from '../../stores/FileProcessingStore';
+import FileUploadingStore from '../../stores/FileUploadingStore';
 import SocketStore from '../../stores/SocketStore';
 
 import SocketUtils from '../../utils/Socket';
-import DEFAULT from '../../defaults.js';
-import { validateMetadata } from '../../utils/Metadata.js';
+import Species from '../../species';
+import DEFAULT from '../../defaults';
+import { validateMetadata } from '../../utils/Metadata';
 
-const ThemeManager = createThemeManager();
-injectTapEventPlugin();
-
-const loadingAnimationStyle = {
-  display: 'block',
+var loadingAnimationStyle = {
+  visibility: 'visible'
 };
 
 const layoutContentStyle = {
@@ -44,6 +43,8 @@ const fileInputStyle = {
   opacity: 0,
 };
 
+var isProcessing = false;
+
 const AssemblyWorkspace = React.createClass({
 
   propTypes: {
@@ -51,27 +52,24 @@ const AssemblyWorkspace = React.createClass({
     totalAssemblies: React.PropTypes.number,
   },
 
-  childContextTypes: {
-    muiTheme: React.PropTypes.object,
+  contextTypes: {
+    router: React.PropTypes.func,
   },
 
   getInitialState() {
     return {
-      isProcessing: false,
       uploadButtonActive: false,
       confirmedMultipleMetadataDrop: false,
-      pageTitleAppend: 'Upload'
-    };
-  },
-
-  getChildContext() {
-    return {
-      muiTheme: ThemeManager.getCurrentTheme(),
+      pageTitleAppend: 'Upload',
+      isUploading: FileUploadingStore.getFileUploadingState(),
+      viewPage: 'overview',
     };
   },
 
   componentDidMount() {
     FileProcessingStore.addChangeListener(this.handleFileProcessingStoreChange);
+    FileUploadingStore.addChangeListener(this.handleFileUploadingStoreChange);
+    UploadWorkspaceNavigationStore.addChangeListener(this.handleUploadWorkspaceNavigationStoreChange);
     UploadStore.addChangeListener(this.activateUploadButton);
 
     const socket = SocketUtils.socketConnect();
@@ -86,6 +84,7 @@ const AssemblyWorkspace = React.createClass({
 
   componentWillUnmount() {
     FileProcessingStore.removeChangeListener(this.handleFileProcessingStoreChange);
+    FileUploadingStore.removeChangeListener(this.handleFileUploadingStoreChange);
     SocketStore.removeChangeListener(this.handleSocketStoreChange);
   },
 
@@ -101,13 +100,42 @@ const AssemblyWorkspace = React.createClass({
   },
 
   handleFileProcessingStoreChange() {
+    isProcessing = FileProcessingStore.getFileProcessingState();
+    if (isProcessing) {
+      this.setState({
+        pageTitleAppend: 'Processing your files...'
+      });
+    }
+    else {
+      this.setState({
+        pageTitleAppend: 'Overview'
+      });
+    }
+  },
+
+  handleFileUploadingStoreChange() {
+    const uploadingResult = FileUploadingStore.getFileUploadingResult();
+    if (uploadingResult === FileUploadingStore.getFileUploadingResults().SUCCESS) {
+      const id = FileUploadingStore.getCollectionId();
+      const { transitionTo, makePath } = this.context.router;
+      transitionTo(makePath('collection', { species: Species.nickname, id }));
+      return;
+    }
+
     this.setState({
-      isProcessing: FileProcessingStore.getFileProcessingState(),
+      isUploading: FileUploadingStore.getFileUploadingState(),
+      viewPage: 'upload_progress'
+    });
+  },
+
+  handleUploadWorkspaceNavigationStoreChange() {
+    this.setState({
+      viewPage: UploadWorkspaceNavigationStore.getCurrentViewPage()
     });
   },
 
   handleDrop(event) {
-    if (event.files.length > 0) {
+    if (event.files.length > 0 && !this.state.isUploading) {
       if (!this.state.confirmedMultipleMetadataDrop && this.props.totalAssemblies > 0) {
         var multipleDropConfirm = confirm('Duplicate records will be overwritten');
         if (multipleDropConfirm) {
@@ -119,14 +147,22 @@ const AssemblyWorkspace = React.createClass({
       } else {
         UploadActionCreators.addFiles(event.files);
       }
-      this.setState({
-        pageTitleAppend: 'Overview'
-      })
     }
   },
 
   handleClick() {
-    React.findDOMNode(this.refs.fileInput).click();
+    if (this.state.isUploading) {
+      UploadWorkspaceNavigationActionCreators.setViewPage('upload_progress');
+    }
+    else {
+      React.findDOMNode(this.refs.fileInput).click();
+    }
+
+  },
+
+  handleOverviewClick() {
+    // UploadWorkspaceNavigationActionCreators.navigateToAssembly(null);
+    UploadWorkspaceNavigationActionCreators.setViewPage('overview');
   },
 
   handleFileInputChange(event) {
@@ -155,71 +191,86 @@ const AssemblyWorkspace = React.createClass({
   },
 
   render() {
-    loadingAnimationStyle.display = this.state.isProcessing ? 'block' : 'none';
-    const locations = {};
     let pageTitle = 'WGSA';
-
-    if (this.props.assembly) {
-      locations[this.props.assembly.fasta.name] = this.props.assembly.metadata.geography;
-      pageTitle = `WGSA | ${this.props.assembly.fasta.name}`;
-    } else {
-      pageTitle = `WGSA | ${this.state.pageTitleAppend}`;
+    loadingAnimationStyle.visibility = isProcessing ? 'visible' : 'hidden';
+    switch (this.state.viewPage) {
+      case 'assembly': pageTitle = `WGSA | ${this.props.assembly.fasta.name}`;
+        break;
+      case 'upload_progress': pageTitle = 'WGSA | Uploading and Analysing your files...';
+        break;
+      default: pageTitle = `WGSA | ${this.state.pageTitleAppend}`;
     }
 
     return (
       <FileDragAndDrop onDrop={this.handleDrop}>
-        <div className="assemblyWorkspaceContainer mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-drawer">
-          <UploadReviewHeader title={pageTitle} activateUploadButton={this.state.uploadButtonActive} />
-          <div id="loadingAnimation" style={loadingAnimationStyle} className="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
+        <div className="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-drawer">
+          <UploadReviewHeader title={pageTitle} activateUploadButton={this.state.uploadButtonActive} isUploading={this.state.isUploading} />
 
           <UploadWorkspaceNavigation assembliesUploaded={this.props.assembly ? true : false} totalAssemblies={this.props.totalAssemblies}>
             <footer className="wgsa-upload-navigation__footer mdl-shadow--4dp">
-              <button className="mdl-button mdl-button--raised" title="" onClick={this.handleClick}>
-                Add files
+              <button type="button" title="Overview" className="mdl-button mdl-js-button mdl-button--raised mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect"
+                onClick={this.handleOverviewClick}>
+                <i className="material-icons">home</i>
               </button>
+
+              { !this.state.isUploading &&
+                <button ref="spinner_button" type="button" className="uploadprogress-spinner-button mdl-button mdl-js-button mdl-button--raised mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect"
+                  onClick={this.handleClick}>
+                  <i className="material-icons">add</i>
+                </button>
+              }
             </footer>
           </UploadWorkspaceNavigation>
 
           <main className="mdl-layout__content" style={layoutContentStyle}>
-            { this.props.assembly &&
-              <div>
-                <div className="mdl-grid">
-                  <div className="mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
-                    <div className="heading"> Metadata </div>
+            <div id="loadingAnimation" style={loadingAnimationStyle} className="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
 
-                    <div className="card-style">
-                      <AssemblyMetadata key={this.props.assembly.metadata.assemblyName} assembly={this.props.assembly} />
+            {
+              (() => {
+                switch (this.state.viewPage) {
+                  case "assembly":  return (
+                    <div className="assemblyWorkspaceContainer mdl-grid assemblyWorkspaceContent">
+                      <div className="overflow-y--auto mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
+                        <div className="heading"> Metadata </div>
+                        <div className="card-style">
+                          <AssemblyMetadata key={this.props.assembly.metadata.assemblyName} assembly={this.props.assembly} />
+                        </div>
+                      </div>
+
+                      <div className="overflow-y--auto mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
+                        <div className="mdl-grid mdl-grid--no-spacing">
+                          <div className="mdl-cell mdl-cell--12-col">
+                            <div className="heading"> Assembly Statistics </div>
+                            <div className="card-style">
+                              <AssemblyAnalysis assembly={this.props.assembly} />
+                            </div>
+                          </div>
+                          <div className="mdl-cell mdl-cell--12-col">
+                            <div className="heading"> N50 Chart </div>
+                            <div className="card-style">
+                              <AssemblyAnalysisChart analysis={this.props.assembly.analysis} />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-
-                  <div ref="mapDiv" className="mapDivStyle mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
-                    <div className="cardStyle--no-padding">
-                      <Map width={"100%"} height={300} locations={locations}/>
+                  );
+                  break;
+                  case "overview":  return (
+                   <Overview clickHandler={this.handleClick} />
+                  );
+                  break;
+                  case "upload_progress": return (
+                    <div>
+                      <UploadingFilesDetailed />
                     </div>
-                  </div>
-
-                  <div className="mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
-                    <div className="heading"> Analysis </div>
-                    <div className="card-style">
-                      <AssemblyAnalysis assembly={this.props.assembly} />
-                    </div>
-                  </div>
-
-                  <div className="mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
-                    <div className="heading"> Chart </div>
-                    <div className="card-style">
-                      <AssemblyAnalysisChart analysis={this.props.assembly.analysis} />
-                    </div>
-                  </div>
-
-                </div>
-              </div>
-
-              ||
-
-              <Overview clickHandler={this.handleClick} />
-
-            }
+                  );
+                  break;
+                  default: return (
+                    <Overview clickHandler={this.handleClick} />
+                  );
+                }
+              }) ()}
           </main>
         </div>
         <input type="file" multiple="multiple" accept={DEFAULT.SUPPORTED_FILE_EXTENSIONS} ref="fileInput" style={fileInputStyle} onChange={this.handleFileInputChange} />
@@ -229,4 +280,19 @@ const AssemblyWorkspace = React.createClass({
 
 });
 
+const AssemblyOverviewButton = React.createClass({
+
+  render() {
+    return (
+      <div className="overview-button">
+
+      </div>
+    );
+  },
+
+  handleClick() {
+    UploadWorkspaceNavigationActionCreators.navigateToAssembly(null);
+  },
+
+});
 module.exports = AssemblyWorkspace;

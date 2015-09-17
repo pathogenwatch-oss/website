@@ -120,7 +120,7 @@ const DataTable = React.createClass({
         <Column
           headerClassName={'wgsa-table-header'}
           cellClassName={'wgsa-table-cell'}
-          width={48}
+          width={50}
           label={''}
           fixed={true}
           cellRenderer={this.getDownloadButton} />

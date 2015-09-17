@@ -5,3 +5,11 @@
   background-color: #673c90;
   background: #673c90;
 }
+
+.mdl-layout__header {
+    min-height: 56px;
+}
+
+.mdl-layout__header-row {
+    height: 56px;
+}

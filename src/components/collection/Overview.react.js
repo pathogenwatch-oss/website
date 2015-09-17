@@ -6,6 +6,9 @@ import AssemblyAnalysisItem from './AssemblyAnalysisItem.react';
 
 import Map from './Map.react';
 
+var noContigsRange = {};
+var averageAssemblyLength = null;
+
 export default React.createClass({
 
   propTypes: {
@@ -25,9 +28,14 @@ export default React.createClass({
 
   componentDidMount() {
     UploadStore.addChangeListener(this.handleUploadStoreChange);
+    componentHandler.upgradeDom();
   },
 
   componentDidUpdate() {
+    var range = UploadStore.getMinMaxNoContigsForAllAssemblies();
+    noContigsRange.min = range[0];
+    noContigsRange.max = range[1];
+    averageAssemblyLength = UploadStore.getAverageAssemblyLengthForAllAssemblies();
     componentHandler.upgradeDom();
   },
 
@@ -56,7 +64,7 @@ export default React.createClass({
       const locationsToAssembliesMap = UploadStore.getLocationToAssembliesMap();
 
       return (
-        <div className="mdl-grid">
+        <div className="mdl-grid overviewContent">
           <div className="mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
             <div className="heading"> Summary </div>
             <div className="card-style">
@@ -66,11 +74,11 @@ export default React.createClass({
                 </div>
 
                 <div className="mdl-cell mdl-cell--6-col">
-                  <AssemblyAnalysisItem label="Mean Contigs" value={200} />
+                  <AssemblyAnalysisItem label="No. Contigs Range" value={noContigsRange.min + ' - ' + noContigsRange.max} />
                 </div>
 
                 <div className="mdl-cell mdl-cell--6-col">
-                  <AssemblyAnalysisItem label="Total nt" value={2000000} />
+                  <AssemblyAnalysisItem label="Average Assembly Length" value={averageAssemblyLength} />
                 </div>
               </div>
             </div>
@@ -80,9 +88,9 @@ export default React.createClass({
 
             <div className="wgsa-chart-select mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
               <div className="mdl-tabs__tab-bar">
-                  <a href="#overview-chart-panel" className="mdl-tabs__tab is-active" onClick={this.showChart.bind(this, 'contigN50', 'N50 Contigs')}>N50 Contigs</a>
-                  <a href="#overview-chart-panel" className="mdl-tabs__tab" onClick={this.showChart.bind(this, 'totalNumberOfContigs', 'Total Contigs')}>Total Contigs</a>
-                  <a href="#overview-chart-panel" className="mdl-tabs__tab" onClick={this.showChart.bind(this, 'totalNumberOfNucleotidesInDnaStrings', 'Total Nucleotides')}>Total Nucleotides</a>
+                  <a href="#overview-chart-panel" className="mdl-tabs__tab is-active" onClick={this.showChart.bind(this, 'contigN50', 'N50')}>N50</a>
+                  <a href="#overview-chart-panel" className="mdl-tabs__tab" onClick={this.showChart.bind(this, 'totalNumberOfContigs', 'No. Contigs')}>No. Contigs</a>
+                  <a href="#overview-chart-panel" className="mdl-tabs__tab" onClick={this.showChart.bind(this, 'totalNumberOfNucleotidesInDnaStrings', 'Assembly Length')}>Assembly Length</a>
               </div>
 
               <div className="card-style mdl-tabs__panel is-active" id="overview-chart-panel">

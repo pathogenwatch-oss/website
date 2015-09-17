@@ -39,27 +39,27 @@ var AssemblyAnalysis = React.createClass({
     return (
       <div className="mdl-grid mdl-grid--no-spacing">
         <div className="mdl-cell mdl-cell--6-col">
-          <AssemblyAnalysisItem label="total nt" value={assembly.analysis.totalNumberOfNucleotidesInDnaStrings} />
+          <AssemblyAnalysisItem label="Assembly Length" value={assembly.analysis.totalNumberOfNucleotidesInDnaStrings} />
         </div>
 
         <div className="mdl-cell mdl-cell--6-col">
-          <AssemblyAnalysisItem label="total contigs" value={assembly.analysis.totalNumberOfContigs} />
+          <AssemblyAnalysisItem label="No. Contigs" value={assembly.analysis.totalNumberOfContigs} />
         </div>
 
         <div className="mdl-cell mdl-cell--6-col">
-          <AssemblyAnalysisItem label="min contig" value={assembly.analysis.smallestNumberOfNucleotidesInDnaStrings} />
+          <AssemblyAnalysisItem label="Smallest Contig" value={assembly.analysis.smallestNumberOfNucleotidesInDnaStrings} />
         </div>
 
         <div className="mdl-cell mdl-cell--6-col">
-          <AssemblyAnalysisItem label="max contig" value={assembly.analysis.biggestNumberOfNucleotidesInDnaStrings} />
+          <AssemblyAnalysisItem label="Largest Contig" value={assembly.analysis.biggestNumberOfNucleotidesInDnaStrings} />
         </div>
 
         <div className="mdl-cell mdl-cell--6-col">
-          <AssemblyAnalysisItem label="mean contig" value={assembly.analysis.averageNumberOfNucleotidesInDnaStrings} />
+          <AssemblyAnalysisItem label="Average Contig Length" value={assembly.analysis.averageNumberOfNucleotidesInDnaStrings} />
         </div>
 
         <div className="mdl-cell mdl-cell--6-col">
-          <AssemblyAnalysisItem label="contig n50" value={assembly.analysis.contigN50} />
+          <AssemblyAnalysisItem label="N50" value={assembly.analysis.contigN50} />
         </div>
       </div>
     );

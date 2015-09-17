@@ -8,7 +8,7 @@ const AssemblyAnalysisItem = React.createClass({
 
   propTypes: {
     label: React.PropTypes.string.isRequired,
-    value: React.PropTypes.number.isRequired,
+    value: React.PropTypes.any.isRequired,
   },
 
   render: function () {

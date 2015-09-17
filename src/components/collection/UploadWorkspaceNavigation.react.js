@@ -4,28 +4,11 @@ import React from 'react';
 
 import AssemblyList from './navigation/AssemblyList.react';
 
-import UploadWorkspaceNavigationActionCreators from '../../actions/UploadWorkspaceNavigationActionCreators';
 import UploadWorkspaceNavigationStore from '../../stores/UploadWorkspaceNavigationStore';
 
 const titleStyle = {
   margin: 0,
 };
-
-const AssemblyOverviewButton = React.createClass({
-
-  render() {
-    return (
-      <button type="button" className="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" onClick={this.handleClick}>
-        Overview
-      </button>
-    );
-  },
-
-  handleClick() {
-    UploadWorkspaceNavigationActionCreators.navigateToAssembly(null);
-  },
-
-});
 
 export default React.createClass({
 
@@ -39,11 +22,10 @@ export default React.createClass({
 
   render() {
     return (
-      <aside ref="sidebar" className="navigation-container mdl-layout__drawer">
-        <div className="uploadWorkspaceNavigationTitle">
+      <aside ref="sidebar" className="navigation-container mdl-layout__drawer mdl-shadow--2dp">
+        <h2 className="uploadWorkspaceNavigationTitle">
           <span className="mdl-badge" style={titleStyle} data-badge={this.props.totalAssemblies}>Assemblies</span>
-        </div>
-        <AssemblyOverviewButton enabled={this.props.assembliesUploaded}/>
+        </h2>
         <div className="wgsa-assembly-list-wrapper">
           <AssemblyList />
         </div>
