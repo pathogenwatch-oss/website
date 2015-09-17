@@ -46,10 +46,13 @@ export default React.createClass({
   getMetadataFieldComponents(metadata) {
     return Object.keys(metadata)
       .filter((columnName) => {
-        return (columnName !== 'assemblyName' &&
-                columnName !== 'name' &&
-                columnName !== 'geography' &&
-                columnName !== 'date');
+        return (
+          columnName !== 'assemblyName' &&
+          columnName !== 'name' &&
+          columnName !== 'geography' &&
+          columnName !== 'date' &&
+          (this.state.isUploading && metadata[columnName])
+        );
       })
       .map((columnName) => {
         return (
