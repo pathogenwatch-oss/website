@@ -7,7 +7,6 @@ import ReferenceCollectionStore from '../stores/ReferenceCollectionStore';
 import SubtreeStore from '../stores/SubtreeStore';
 import SubtreeActionCreators from '../actions/SubtreeActionCreators';
 
-import Species from '../species';
 import FilteredDataUtils from '../utils/FilteredData';
 import { CGPS } from '../defaults';
 

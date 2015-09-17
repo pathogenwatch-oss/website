@@ -94,7 +94,21 @@ export default React.createClass({
                   description="Concatenated Gene Family"
                   id={this.collectionId}
                   format="extended_kernel_fasta" />
-                Concatenated Gene Family
+                Kernel Matches
+              </li>
+              <li className="wgsa-menu__item">
+                <DownloadButton
+                  description="Kernel Sequence Fasta"
+                  id={this.collectionId}
+                  format="kernel_fasta" />
+                Kernel Sequence (.fa)
+              </li>
+              <li className="wgsa-menu__item">
+                <DownloadButton
+                  description="Kernel CSV"
+                  id={this.collectionId}
+                  format="kernel_csv" />
+                Kernel Sequence (.csv)
               </li>
               <li className="wgsa-menu__item">
                 <DownloadButton
