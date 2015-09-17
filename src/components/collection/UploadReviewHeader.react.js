@@ -27,7 +27,7 @@ var UploadReviewHeader = React.createClass({
         <div className="mdl-layout-icon"></div>
         <div style={headerStyle} className="mdl-layout__header-row">
           <span style={headerStyle} className="mdl-layout-title">{this.props.title}</span>
-          <UploadButton activateButton={this.props.activateUploadButton} />
+          <UploadButton activateButton={this.props.activateUploadButton} isUploading={this.props.isUploading} />
         </div>
         <div id="loadingAnimation" style={loadingAnimationStyle} className="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
       </header>
