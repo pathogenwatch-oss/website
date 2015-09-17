@@ -26,12 +26,17 @@ const featureStyle = {
 
 const UploadingFiles = React.createClass({
 
+  componentDidMount() {
+    componentHandler.upgradeElement(React.findDOMNode(this.refs.spinner));
+  },
+
   render() {
     return (
-      <div>
-          <h2 style={headerStyle}><span style={featureStyle}>Uploading</span> and <span style={featureStyle}>analysing</span> your files.</h2>
-          <FileUploadingProgress />
-          <UploadingAssembliesProgress />
+      <div className="mdl-layout mdl-js-layout" style={layoutStyle}>
+        <FileUploadingProgress />
+          <main className="mdl-layout__content" style={contentStyle}>
+            <UploadingAssembliesProgress />
+          </main>
       </div>
     );
   },

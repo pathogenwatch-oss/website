@@ -9,7 +9,7 @@ const containerStyle = {
 };
 
 const progressBarStyle = {
-  width: '100%',
+  // width: '100%',
   // margin: '0 10% 16px',
 };
 
@@ -17,7 +17,7 @@ const FileUploadingProgress = React.createClass({
 
   getInitialState: function () {
     return {
-      progressPercentage: 0,
+      progressPercentage: 30,
     };
   },
 
@@ -48,8 +48,7 @@ const FileUploadingProgress = React.createClass({
   render: function () {
     return (
       <div style={containerStyle}>
-        <div ref="progressBar" className="mdl-progress mdl-js-progress" style={progressBarStyle}></div>
-        <p>{this.state.progressPercentage + '% Complete'}</p>
+        <div ref="progressBar" className="wgsa-fileupload-progressbar mdl-progress mdl-js-progress" style={progressBarStyle}></div>
       </div>
     );
   },

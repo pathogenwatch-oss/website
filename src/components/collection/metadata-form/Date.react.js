@@ -33,7 +33,6 @@ const MetadataDate = React.createClass({
 
 const DateInput = React.createClass({
   render() {
-  console.log(this.props.disabled)
     const { component, min, max, value } = this.props;
     return (
       <div className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">

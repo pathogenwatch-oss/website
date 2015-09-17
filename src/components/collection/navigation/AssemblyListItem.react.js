@@ -1,13 +1,8 @@
 import React from 'react';
 import css from '../../../css/upload-review.css';
 
-import { ListItem, FontIcon } from 'material-ui';
-import createThemeManager from 'material-ui/lib/styles/theme-manager';
 import UploadWorkspaceNavigationStore from '../../../stores/UploadWorkspaceNavigationStore.js';
 import UploadWorkspaceNavigationActionCreators from '../../../actions/UploadWorkspaceNavigationActionCreators';
-import FileUploadingStore from '../../../stores/FileUploadingStore.js';
-
-const ThemeManager = createThemeManager();
 
 const Component = React.createClass({
   propTypes: {
@@ -17,22 +12,7 @@ const Component = React.createClass({
   getInitialState() {
     return {
       deleteConfirm: null,
-      isUploading: null
     };
-  },
-
-  componentDidMount() {
-    FileUploadingStore.addChangeListener(this.handleFileUploadingStoreChange);
-  },
-
-  componentWillUnmount() {
-    FileUploadingStore.removeChangeListener(this.handleFileUploadingStoreChange);
-  },
-
-  handleFileUploadingStoreChange() {
-    this.setState({
-      isUploading: FileUploadingStore.getFileUploadingState(),
-    })
   },
 
   resetDeleteState() {
@@ -98,7 +78,7 @@ const Component = React.createClass({
               <span className="assembly-list-item__validate-icon utilityButton">
                 <i style={validatedIconStyle} className='material-icons'>{validatedIcon}</i>
               </span>
-              { !this.state.isUploading &&
+              { !this.props.isUploading &&
                 <button className="deleteButton utilityButton mdl-button mdl-js-button mdl-button--icon mdl-button--colored"
                   onClick={this.handleDeleteConfirm.bind(this, assemblyName)}>
                   <i className="material-icons">delete</i>

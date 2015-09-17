@@ -183,7 +183,7 @@ const AssemblyWorkspace = React.createClass({
     let pageTitle = 'WGSA';
     return (
       <FileDragAndDrop onDrop={this.handleDrop}>
-        <div className="assemblyWorkspaceContainer mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-drawer">
+        <div className="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-drawer">
           <UploadReviewHeader title={pageTitle} isProcessing={isProcessing} activateUploadButton={this.state.uploadButtonActive} />
 
           <UploadWorkspaceNavigation assembliesUploaded={this.props.assembly ? true : false} totalAssemblies={this.props.totalAssemblies}>
@@ -208,7 +208,7 @@ const AssemblyWorkspace = React.createClass({
               (() => {
                 switch (this.state.viewPage) {
                   case "assembly":  return (
-                                      <div className="mdl-grid assemblyWorkspaceContent">
+                                      <div className="assemblyWorkspaceContainer mdl-grid assemblyWorkspaceContent">
                                         <div className="overflow-y--auto mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
                                           <div className="heading"> Metadata </div>
                                           <div className="card-style">

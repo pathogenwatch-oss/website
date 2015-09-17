@@ -146,6 +146,9 @@
   margin: 8px;
 }
 
+.overviewContent .mdl-cell {
+  background-color: #fff;
+}
 
 /*.assemblyWorkspaceContent .mdl-cell{
   width: calc(50% - 32px);
@@ -392,9 +395,21 @@
   margin-top: 0.4px;
 }
 
-/*********************************************/
+/***************** Upload Progress *******************/
 
-/**** SVG Chart CSS ****/
+.wgsa-fileupload-progressbar {
+  background: red;
+  position: relative;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+/*****************************************************/
+
+
+/******************** SVG Chart CSS ******************/
 .axis {
   fill: none;
   stroke: rgba(0,0,0,0.6);
