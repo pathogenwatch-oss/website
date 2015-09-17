@@ -6,9 +6,14 @@ import UploadStore from './UploadStore';
 const CHANGE_EVENT = 'change';
 
 let assemblyName = null;
+let viewPage = null;
 
 function setassemblyName(id) {
   assemblyName = id;
+}
+
+function setViewPage(page) {
+  viewPage = page;
 }
 
 function emitChange() {
@@ -22,6 +27,10 @@ const Store = assign({}, EventEmitter.prototype, {
 
   removeChangeListener(callback) {
     this.removeListener(CHANGE_EVENT, callback);
+  },
+
+  getCurrentViewPage() {
+    return viewPage;
   },
 
   getAssemblyName() {
@@ -52,6 +61,12 @@ function handleAction(action) {
 
   case 'navigate_to_assembly':
     setassemblyName(action.assemblyName);
+    setViewPage('assembly');
+    emitChange();
+    break;
+
+  case 'set_view_page':
+    setViewPage(action.page);
     emitChange();
     break;
 

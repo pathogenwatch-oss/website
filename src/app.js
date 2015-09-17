@@ -5,7 +5,7 @@ import React from 'react';
 import Router, { Route, RouteHandler, DefaultRoute, NotFoundRoute, Redirect } from 'react-router';
 
 import Home from './components/Home.react';
-import UploadCollection from './components/collection/UploadCollectionPage.react';
+import UploadCollection from './components/collection/UploadWorkspace.react';
 import ExploreCollection from './components/Collection.react';
 import NotFound from './components/NotFound.react';
 

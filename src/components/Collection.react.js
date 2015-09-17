@@ -4,7 +4,8 @@ import React from 'react';
 
 import Loading from './Loading.react';
 import CollectionExplorer from './CollectionExplorer.react';
-import UploadingFilesDetailed from './collection/UploadingFilesDetailed.react';
+// import UploadingFilesDetailed from './collection/UploadingFilesDetailed.react';
+import UploadWorkspace from './collection/UploadWorkspace.react';
 
 import FileUploadingStore from '../stores/FileUploadingStore';
 import CollectionStore from '../stores/CollectionStore';
@@ -43,7 +44,7 @@ export default class Collection extends React.Component {
   render() {
     if (this.state.isUploading) {
       return (
-        <UploadingFilesDetailed />
+        <UploadWorkspace />
       );
     }
 

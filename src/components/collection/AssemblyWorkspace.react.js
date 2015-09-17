@@ -10,19 +10,22 @@ import AssemblyAnalysis from './AssemblyAnalysis.react';
 import AssemblyAnalysisChart from './AssemblyAnalysisChart.react';
 
 import UploadWorkspaceNavigation from './UploadWorkspaceNavigation.react';
-import UploadReviewHeader from './UploadReviewHeader.react.js';
-import UploadStore from '../../stores/UploadStore.js';
+import UploadReviewHeader from './UploadReviewHeader.react';
 import Overview from './Overview.react';
+import UploadingFilesDetailed from './UploadingFilesDetailed.react';
 
 import UploadActionCreators from '../../actions/UploadActionCreators';
+import UploadStore from '../../stores/UploadStore';
 import SocketActionCreators from '../../actions/SocketActionCreators';
 import UploadWorkspaceNavigationActionCreators from '../../actions/UploadWorkspaceNavigationActionCreators';
+import UploadWorkspaceNavigationStore from '../../stores/UploadWorkspaceNavigationStore';
 import FileProcessingStore from '../../stores/FileProcessingStore';
+import FileUploadingStore from '../../stores/FileUploadingStore';
 import SocketStore from '../../stores/SocketStore';
 
 import SocketUtils from '../../utils/Socket';
-import DEFAULT from '../../defaults.js';
-import { validateMetadata } from '../../utils/Metadata.js';
+import DEFAULT from '../../defaults';
+import { validateMetadata } from '../../utils/Metadata';
 
 const loadingAnimationStyle = {
   visibility: 'visible'
@@ -52,12 +55,16 @@ const AssemblyWorkspace = React.createClass({
     return {
       uploadButtonActive: false,
       confirmedMultipleMetadataDrop: false,
-      pageTitleAppend: 'Upload'
+      pageTitleAppend: 'Upload',
+      isUploading: FileUploadingStore.getFileUploadingState(),
+      viewPage: 'overview'
     };
   },
 
   componentDidMount() {
     FileProcessingStore.addChangeListener(this.handleFileProcessingStoreChange);
+    FileUploadingStore.addChangeListener(this.handleFileUploadingStoreChange);
+    UploadWorkspaceNavigationStore.addChangeListener(this.handleUploadWorkspaceNavigationStoreChange);
     UploadStore.addChangeListener(this.activateUploadButton);
 
     const socket = SocketUtils.socketConnect();
@@ -72,6 +79,7 @@ const AssemblyWorkspace = React.createClass({
 
   componentWillUnmount() {
     FileProcessingStore.removeChangeListener(this.handleFileProcessingStoreChange);
+    FileUploadingStore.removeChangeListener(this.handleFileUploadingStoreChange);
     SocketStore.removeChangeListener(this.handleSocketStoreChange);
   },
 
@@ -100,6 +108,21 @@ const AssemblyWorkspace = React.createClass({
     }
   },
 
+  handleFileUploadingStoreChange() {
+    this.setState({
+      isUploading: FileUploadingStore.getFileUploadingState(),
+      uploadButtonActive: false,
+      viewPage: 'upload_progress'
+    });
+    componentHandler.upgradeDom();
+  },
+
+  handleUploadWorkspaceNavigationStoreChange() {
+    this.setState({
+      viewPage: UploadWorkspaceNavigationStore.getCurrentViewPage()
+    });
+  },
+
   handleDrop(event) {
     if (event.files.length > 0) {
       if (!this.state.confirmedMultipleMetadataDrop && this.props.totalAssemblies > 0) {
@@ -117,7 +140,18 @@ const AssemblyWorkspace = React.createClass({
   },
 
   handleClick() {
-    React.findDOMNode(this.refs.fileInput).click();
+    if (this.state.isUploading) {
+      UploadWorkspaceNavigationActionCreators.setViewPage('upload_progress');
+    }
+    else {
+      React.findDOMNode(this.refs.fileInput).click();
+    }
+
+  },
+
+  handleOverviewClick() {
+    // UploadWorkspaceNavigationActionCreators.navigateToAssembly(null);
+    UploadWorkspaceNavigationActionCreators.setViewPage('overview');
   },
 
   handleFileInputChange(event) {
@@ -147,13 +181,6 @@ const AssemblyWorkspace = React.createClass({
 
   render() {
     let pageTitle = 'WGSA';
-
-    if (this.props.assembly) {
-      pageTitle = `WGSA | ${this.props.assembly.fasta.name}`;
-    } else {
-      pageTitle = `WGSA | ${this.state.pageTitleAppend}`;
-    }
-
     return (
       <FileDragAndDrop onDrop={this.handleDrop}>
         <div className="assemblyWorkspaceContainer mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-drawer">
@@ -161,46 +188,65 @@ const AssemblyWorkspace = React.createClass({
 
           <UploadWorkspaceNavigation assembliesUploaded={this.props.assembly ? true : false} totalAssemblies={this.props.totalAssemblies}>
             <footer className="wgsa-upload-navigation__footer mdl-shadow--4dp">
-              <AssemblyOverviewButton enabled={this.props.assembliesUploaded}/>
-              <button type="button" className="mdl-button mdl-js-button mdl-button--raised mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect" onClick={this.handleClick}>
-                <i className="material-icons">add</i>
+              <button type="button" title="Overview" className="mdl-button mdl-js-button mdl-button--raised mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect"
+                onClick={this.handleOverviewClick}>
+                <i className="material-icons">home</i>
+              </button>
+
+              <button ref="spinner_button" type="button" className="mdl-button mdl-js-button mdl-button--raised mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect"
+                onClick={this.handleClick}>
+                <i className="material-icons">{this.state.isUploading ? "cloud_upload" : "add"}</i>
+                { this.state.isUploading &&
+                  <i className="progress-spinner mdl-spinner mdl-js-spinner mdl-spinner--single-color is-active"></i>
+                }
               </button>
             </footer>
           </UploadWorkspaceNavigation>
 
           <main className="mdl-layout__content" style={layoutContentStyle}>
-            { this.props.assembly &&
-              <div className="mdl-grid assemblyWorkspaceContent">
-                <div className="overflow-y--auto mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
-                  <div className="heading"> Metadata </div>
-                  <div className="card-style">
-                    <AssemblyMetadata key={this.props.assembly.metadata.assemblyName} assembly={this.props.assembly} />
-                  </div>
-                </div>
+            {
+              (() => {
+                switch (this.state.viewPage) {
+                  case "assembly":  return (
+                                      <div className="mdl-grid assemblyWorkspaceContent">
+                                        <div className="overflow-y--auto mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
+                                          <div className="heading"> Metadata </div>
+                                          <div className="card-style">
+                                            <AssemblyMetadata key={this.props.assembly.metadata.assemblyName} assembly={this.props.assembly} />
+                                          </div>
+                                        </div>
 
-                <div className="overflow-y--auto mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
-                  <div className="mdl-grid mdl-grid--no-spacing">
-                    <div className="mdl-cell mdl-cell--12-col">
-                      <div className="heading"> Assembly Statistics </div>
-                      <div className="card-style">
-                        <AssemblyAnalysis assembly={this.props.assembly} />
-                      </div>
-                    </div>
-                    <div className="mdl-cell mdl-cell--12-col">
-                      <div className="heading"> N50 Chart </div>
-                      <div className="card-style">
-                        <AssemblyAnalysisChart analysis={this.props.assembly.analysis} />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              ||
-
-              <Overview clickHandler={this.handleClick} />
-
-            }
+                                        <div className="overflow-y--auto mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
+                                          <div className="mdl-grid mdl-grid--no-spacing">
+                                            <div className="mdl-cell mdl-cell--12-col">
+                                              <div className="heading"> Assembly Statistics </div>
+                                              <div className="card-style">
+                                                <AssemblyAnalysis assembly={this.props.assembly} />
+                                              </div>
+                                            </div>
+                                            <div className="mdl-cell mdl-cell--12-col">
+                                              <div className="heading"> N50 Chart </div>
+                                              <div className="card-style">
+                                                <AssemblyAnalysisChart analysis={this.props.assembly.analysis} />
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    );
+                  case "overview":  return (
+                                     <Overview clickHandler={this.handleClick} />
+                                    );
+                  case "upload_progress": return (
+                                      <div>
+                                        <UploadingFilesDetailed />
+                                      </div>
+                                    );
+                  default: return (
+                                    <Overview clickHandler={this.handleClick} />
+                                  );
+                }
+              }) ()}
           </main>
         </div>
         <input type="file" multiple="multiple" accept={DEFAULT.SUPPORTED_FILE_EXTENSIONS} ref="fileInput" style={fileInputStyle} onChange={this.handleFileInputChange} />
@@ -215,9 +261,7 @@ const AssemblyOverviewButton = React.createClass({
   render() {
     return (
       <div className="overview-button">
-        <button type="button" title="Overview" className="mdl-button mdl-js-button mdl-button--raised mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect" onClick={this.handleClick}>
-          <i className="material-icons">home</i>
-        </button>
+
       </div>
     );
   },

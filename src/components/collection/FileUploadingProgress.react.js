@@ -5,12 +5,12 @@ import React from 'react';
 import FileUploadingProgressStore from '../../stores/FileUploadingProgressStore';
 
 const containerStyle = {
-  margin: '16px 0 0 0',
+  // margin: '16px 0 0 0',
 };
 
 const progressBarStyle = {
-  width: '80%',
-  margin: '0 10% 16px',
+  width: '100%',
+  // margin: '0 10% 16px',
 };
 
 const FileUploadingProgress = React.createClass({
