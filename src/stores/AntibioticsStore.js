@@ -20,6 +20,10 @@ const AntibioticsStore = assign({}, EventEmitter.prototype, {
     return antibiotics;
   },
 
+  list() {
+    return Object.keys(antibiotics);
+  },
+
 });
 
 function emitChange() {

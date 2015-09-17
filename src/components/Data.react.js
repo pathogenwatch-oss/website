@@ -1,6 +1,6 @@
 import React from 'react';
-import TableMetadata from './table/metadata/Table.react';
-import TableResistanceProfile from './table/resistance-profile/Table.react';
+import Metadata from './table/Metadata.react';
+import ResistanceProfile from './table/ResistanceProfile.react';
 
 import CollectionNavigationStore from '../stores/CollectionNavigationStore';
 
@@ -45,16 +45,17 @@ export default React.createClass({
     }
 
     if (activeCollectionNavigation === COLLECTION_NAVIGATION_STATES.TABLE_METADATA) {
-      return <TableMetadata { ...this.props }/>;
+      return Metadata;
     } else if (activeCollectionNavigation === COLLECTION_NAVIGATION_STATES.TABLE_RESISTANCE_PROFILE) {
-      return <TableResistanceProfile />;
+      return ResistanceProfile;
     }
   },
 
   render: function () {
+    const Component = this.getCollectionDataComponent();
     return (
       <section style={sectionStyle}>
-        {this.getCollectionDataComponent()}
+        <Component { ...this.props }/>
       </section>
     );
   },

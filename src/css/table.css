@@ -21,6 +21,39 @@
   font-size: 13px;
 }
 
+.wgsa-table-header--resistance,
+.wgsa-table-cell--resistance {
+  padding: 0;
+  border-left: 1px solid #efefef;
+  border-right: 1px solid #efefef;
+}
+
+.wgsa-table-header--resistance {
+  display: flex !important;
+  justify-content: center;
+}
+
+.wgsa-table-header--resistance .public_fixedDataTableCell_cellContent {
+  transform: rotate(-90deg);
+  margin-bottom: 50%;
+  white-space: nowrap;
+  padding: 0;
+}
+
+.wgsa-resistance-icon {
+  position: absolute;
+  left: 0;
+  top: calc(50% - 11px);
+  right: 0;
+  font-size: 20px;
+  padding: 2px;
+  text-align: center;
+}
+
+.wgsa-resistance-icon--resistant {
+  color: #d11b1b;
+}
+
 
 /* fixed-data-table overrides */
 
