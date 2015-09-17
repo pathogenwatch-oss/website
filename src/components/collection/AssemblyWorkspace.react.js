@@ -119,7 +119,7 @@ const AssemblyWorkspace = React.createClass({
     if (uploadingResult === FileUploadingStore.getFileUploadingResults().SUCCESS) {
       const id = FileUploadingStore.getCollectionId();
       const { transitionTo, makePath } = this.context.router;
-        // transitionTo(makePath('collection', { species: Species.nickname, id }));
+      transitionTo(makePath('collection', { species: Species.nickname, id }));
       return;
     }
 
