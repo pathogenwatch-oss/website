@@ -41,8 +41,7 @@ function getMlstAllelesData(assembly, callback) {
 function addMlstAllelesToAssembly(assembly, mlstAlleles) {
   var alleles = assembly.MLST_RESULT.alleles;
   var locusIds = Object.keys(alleles);
-  var firstAllele = alleles[locusIds[0]];
-
+ 
   Object.keys(mlstAlleles).forEach(function (key) {
     var mlstAllele = mlstAlleles[key];
     var locusId = mlstAllele.locusId;
@@ -55,7 +54,7 @@ function addMlstAllelesToAssembly(assembly, mlstAlleles) {
       return memo;
     }
     return memo + '_' + allele.alleleId;
-  }, firstAllele.alleleId);
+  }, alleles[locusIds[0]].alleleId);
 }
 
 function isMlstComplete(mlstResult) {
