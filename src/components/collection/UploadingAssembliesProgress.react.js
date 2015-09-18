@@ -100,7 +100,7 @@ const UploadingAssembliesProgress = React.createClass({
 
   render: function () {
     return (
-      <table ref="table" className="mdl-data-table mdl-shadow--2dp" style={TABLE_STYLE}>
+      <table ref="table" className="mdl-data-table mdl-shadow--4dp" style={TABLE_STYLE}>
         <thead>
           <tr>
             <td style={CELL_STYLE}></td>
