@@ -112,3 +112,4 @@ module.exports = {
   fixMetadataDateFormatInCollection: fixMetadataDateFormatInCollection,
   validateMetadata: validateMetadata
 };
+

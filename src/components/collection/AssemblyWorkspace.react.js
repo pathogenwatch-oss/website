@@ -63,6 +63,7 @@ const AssemblyWorkspace = React.createClass({
       pageTitleAppend: 'Upload',
       isUploading: FileUploadingStore.getFileUploadingState(),
       viewPage: 'overview',
+      totalAssemblies: 0,
     };
   },
 
@@ -70,7 +71,7 @@ const AssemblyWorkspace = React.createClass({
     FileProcessingStore.addChangeListener(this.handleFileProcessingStoreChange);
     FileUploadingStore.addChangeListener(this.handleFileUploadingStoreChange);
     UploadWorkspaceNavigationStore.addChangeListener(this.handleUploadWorkspaceNavigationStoreChange);
-    UploadStore.addChangeListener(this.activateUploadButton);
+    UploadStore.addChangeListener(this.handleUploadStoreChange);
 
     const socket = SocketUtils.socketConnect();
 
@@ -86,6 +87,8 @@ const AssemblyWorkspace = React.createClass({
     FileProcessingStore.removeChangeListener(this.handleFileProcessingStoreChange);
     FileUploadingStore.removeChangeListener(this.handleFileUploadingStoreChange);
     SocketStore.removeChangeListener(this.handleSocketStoreChange);
+    UploadWorkspaceNavigationStore.removeChangeListener(this.handleUploadWorkspaceNavigationStoreChange);
+    UploadStore.removeChangeListener(this.handleUploadStoreChange);
   },
 
   handleSocketStoreChange() {
@@ -136,7 +139,7 @@ const AssemblyWorkspace = React.createClass({
 
   handleDrop(event) {
     if (event.files.length > 0 && !this.state.isUploading) {
-      if (!this.state.confirmedMultipleMetadataDrop && this.props.totalAssemblies > 0) {
+      if (!this.state.confirmedMultipleMetadataDrop && this.state.totalAssemblies > 0) {
         var multipleDropConfirm = confirm('Duplicate records will be overwritten');
         if (multipleDropConfirm) {
           this.setState({
@@ -169,12 +172,21 @@ const AssemblyWorkspace = React.createClass({
     this.handleDrop(event.target);
   },
 
-  activateUploadButton() {
+  handleUploadStoreChange() {
+
+    this.setState({
+      totalAssemblies: UploadStore.getAssembliesCount()
+    });
+
     const assemblies = UploadStore.getAssemblies();
     const isValidMap = validateMetadata(assemblies);
     let isValid = true;
 
     if (!Object.keys(isValidMap)) {
+      isValid = false;
+    }
+
+    if (this.state.totalAssemblies < 3) {
       isValid = false;
     }
 
@@ -202,7 +214,7 @@ const AssemblyWorkspace = React.createClass({
       case 'upload_progress': pageTitle = 'WGSA | Uploading and Analysing...';
         break;
       case 'overview':
-        overviewButtonActive = this.props.totalAssemblies && true;
+        overviewButtonActive = this.state.totalAssemblies && true;
         break;
       default: pageTitle = `WGSA | ${this.state.pageTitleAppend}`;
     }
@@ -212,7 +224,7 @@ const AssemblyWorkspace = React.createClass({
         <div className="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-drawer">
           <UploadReviewHeader title={pageTitle} activateUploadButton={this.state.uploadButtonActive} isUploading={this.state.isUploading} />
 
-          <UploadWorkspaceNavigation assembliesUploaded={this.props.assembly ? true : false} totalAssemblies={this.props.totalAssemblies}>
+          <UploadWorkspaceNavigation assembliesUploaded={this.props.assembly ? true : false} totalAssemblies={this.state.totalAssemblies}>
             <footer className="wgsa-upload-navigation__footer mdl-shadow--4dp">
               <button type="button" title="Overview"
                 className={`${overviewButtonActive && "wgsa-overview-button-active"} mdl-button mdl-js-button mdl-button--raised mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect`}
