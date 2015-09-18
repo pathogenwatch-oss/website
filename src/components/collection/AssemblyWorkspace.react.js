@@ -103,7 +103,7 @@ const AssemblyWorkspace = React.createClass({
     isProcessing = FileProcessingStore.getFileProcessingState();
     if (isProcessing) {
       this.setState({
-        pageTitleAppend: 'Processing your files...'
+        pageTitleAppend: 'Processing...'
       });
     }
     else {
@@ -192,11 +192,17 @@ const AssemblyWorkspace = React.createClass({
 
   render() {
     let pageTitle = 'WGSA';
+    let overviewButtonActive = false;
+
     loadingAnimationStyle.visibility = isProcessing ? 'visible' : 'hidden';
     switch (this.state.viewPage) {
-      case 'assembly': pageTitle = `WGSA | ${this.props.assembly.fasta.name}`;
+      case 'assembly':
+        pageTitle = `WGSA | ${this.props.assembly.fasta.name}`;
         break;
-      case 'upload_progress': pageTitle = 'WGSA | Uploading and Analysing your files...';
+      case 'upload_progress': pageTitle = 'WGSA | Uploading and Analysing...';
+        break;
+      case 'overview':
+        overviewButtonActive = this.props.totalAssemblies && true;
         break;
       default: pageTitle = `WGSA | ${this.state.pageTitleAppend}`;
     }
@@ -208,13 +214,14 @@ const AssemblyWorkspace = React.createClass({
 
           <UploadWorkspaceNavigation assembliesUploaded={this.props.assembly ? true : false} totalAssemblies={this.props.totalAssemblies}>
             <footer className="wgsa-upload-navigation__footer mdl-shadow--4dp">
-              <button type="button" title="Overview" className="mdl-button mdl-js-button mdl-button--raised mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect"
+              <button type="button" title="Overview"
+                className={`${overviewButtonActive && "wgsa-overview-button-active"} mdl-button mdl-js-button mdl-button--raised mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect`}
                 onClick={this.handleOverviewClick}>
                 <i className="material-icons">home</i>
               </button>
 
               { !this.state.isUploading &&
-                <button ref="spinner_button" type="button" className="uploadprogress-spinner-button mdl-button mdl-js-button mdl-button--raised mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect"
+                <button type="button" className="uploadprogress-spinner-button mdl-button mdl-js-button mdl-button--raised mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect"
                   onClick={this.handleClick}>
                   <i className="material-icons">add</i>
                 </button>

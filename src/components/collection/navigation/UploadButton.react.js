@@ -12,7 +12,7 @@ import { validateMetadata } from '../../../utils/Metadata.js';
 
 var uploadButtonStyle = {
   right: '30px',
-  top: '30px',
+  top: '24px',
   position: 'absolute',
   color: '#fff',
   fontSize: '18px',

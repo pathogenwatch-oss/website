@@ -39,6 +39,7 @@
       width: 50%;
   }
 }
+
 /**** UploadReview - Analysis ****/
 
 .welcome-container {
@@ -284,7 +285,22 @@
   border-bottom: 1px solid #e0e0e0;
 }
 
-.overview-button {
+.wgsa-upload-navigation__footer button i{
+  color: #673c90;
+}
+
+.wgsa-overview-button-active {
+  background: #673c90;
+}
+.wgsa-overview-button-active:hover {
+  background: #673c90;
+}
+.wgsa-overview-button-active i {
+  color: #fff !important;
+}
+
+.wgsa-overview-button-active .mdl-button__ripple-container .mdl-ripple{
+  background: #fff;
 }
 
 .wgsa-assembly-list-wrapper {
@@ -394,7 +410,7 @@
 
 .wgsa-fileupload-progressbar.mdl-progress {
   width: 100%;
-  background: red;
+  top: -4px;
 }
 
 .uploadprogress-spinner-button {
