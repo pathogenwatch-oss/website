@@ -2,7 +2,10 @@ import io from 'socket.io-client';
 import CONFIG from '../config';
 
 function socketConnect() {
-  return io.connect(CONFIG.api.hostname + ':' + CONFIG.api.port);
+  if (CONFIG.api) {
+    return io.connect(CONFIG.api.hostname + ':' + CONFIG.api.port);
+  }
+  return io.connect();
 }
 
 module.exports = {
