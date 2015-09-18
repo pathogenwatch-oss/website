@@ -14,6 +14,12 @@ const definitions = {
     formattedName: (<span><em>Salmonella</em> Typhi</span>),
   },
 
+  salen: {
+    id: '149539',
+    nickname: 'salen',
+    formattedName: (<span><em>Salmonella</em> Enteritidis</span>),
+  },
+
 };
 
 const definitionsAsList = Object.keys(definitions).map(key => definitions[key]);
