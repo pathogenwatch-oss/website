@@ -25,7 +25,7 @@ function flattenStructureForFrontend(document) {
 function get(speciesId, callback) {
   LOGGER.info('Getting list of antibiotics for species: ' + speciesId);
 
-  mainStorage.retrieve('ANTIBIOTICS_LIST_' + speciesId, function (error, result) {
+  mainStorage.retrieve('ANTIMICROBIALS_' + speciesId, function (error, result) {
     if (error) {
       return callback(error, result);
     }
