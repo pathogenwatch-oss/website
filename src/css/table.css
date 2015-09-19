@@ -1,5 +1,6 @@
 .wgsa-table-header {
   vertical-align: top;
+  text-transform: capitalize;
   text-overflow: ellipsis;
   font-weight: 700;
   line-height: 24px;

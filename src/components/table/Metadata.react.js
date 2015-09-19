@@ -1,4 +1,5 @@
 import React from 'react';
+import assign from 'object-assign';
 
 import FixedTable from './FixedTable.react';
 import DownloadButton from '../DownloadButton.react';
@@ -9,9 +10,9 @@ import FilteredDataStore from '../../stores/FilteredDataStore';
 
 import DataUtils from '../../utils/Data';
 
-const columnProps = [
+let columnProps = [
   { label: '',
-    dataKey: 'download',
+    dataKey: '__download',
     width: 50,
     flexGrow: 0,
     fixed: true,
@@ -25,25 +26,23 @@ const columnProps = [
     },
   },
   { label: 'Assembly',
-    dataKey: 'name',
+    dataKey: '__name',
     fixed: true,
   },
   { label: 'Location',
-    dataKey: 'location',
+    dataKey: '__location',
   },
   { label: 'Date',
-    dataKey: 'date',
+    dataKey: '__date',
   },
   { label: 'Sequence Type',
-    dataKey: 'st',
-    // align: 'right',
+    dataKey: '__st',
   },
   { label: 'MLST',
-    dataKey: 'mlst',
+    dataKey: '__mlst',
   },
   { label: 'Complete Matches',
-    dataKey: 'tcm',
-    // align: 'right',
+    dataKey: '__tcm',
   },
 ];
 
@@ -55,15 +54,16 @@ function getAssembly(assemblyId) {
 
 function mapAssemblyIdToTableRow(assemblyId) {
   const { metadata, analysis } = getAssembly(assemblyId);
-  return {
-    id: metadata.assemblyId,
-    name: metadata.assemblyName,
-    location: metadata.geography.location,
-    date: DataUtils.getFormattedDateString(metadata.date),
-    st: analysis.st,
-    mlst: analysis.mlst,
-    tcm: analysis.totalCompleteMatches,
-  };
+  const { userDefined } = metadata;
+  return assign({
+    __id: metadata.assemblyId,
+    __name: metadata.assemblyName,
+    __location: metadata.geography.location,
+    __date: DataUtils.getFormattedDateString(metadata.date),
+    __st: analysis.st,
+    __mlst: analysis.mlst,
+    __tcm: analysis.totalCompleteMatches,
+  }, userDefined || {});
 }
 
 export default React.createClass({
@@ -73,6 +73,21 @@ export default React.createClass({
   propTypes: {
     height: React.PropTypes.number,
     width: React.PropTypes.number,
+  },
+
+  getInitialState() {
+    columnProps = columnProps.concat(
+      FilteredDataStore.getUserDefinedColumns().map((column) => {
+        return {
+          label: column,
+          dataKey: column,
+        };
+      })
+    );
+
+    return {
+      data: FilteredDataStore.getAssemblyIds().map(mapAssemblyIdToTableRow),
+    };
   },
 
   componentDidMount() {
@@ -86,7 +101,7 @@ export default React.createClass({
   render() {
     return (
       <FixedTable
-        data={FilteredDataStore.getAssemblyIds().map(mapAssemblyIdToTableRow)}
+        data={this.state.data}
         columns={columnProps}
         { ...this.props }
       />
@@ -94,6 +109,7 @@ export default React.createClass({
   },
 
   handleFilteredDataStoreChange() {
+    console.log('filtered');
     this.setState({
       data: FilteredDataStore.getAssemblyIds().map(mapAssemblyIdToTableRow),
     });

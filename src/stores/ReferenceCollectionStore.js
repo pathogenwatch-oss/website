@@ -49,7 +49,6 @@ function handleAction(action) {
 
   case 'set_collection':
     collection = action.referenceCollection;
-    console.log(collection);
     emitChange();
     break;
 

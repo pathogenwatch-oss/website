@@ -8,11 +8,17 @@ import SubtreeStore from './SubtreeStore';
 const CHANGE_EVENT = 'change';
 
 let assemblyIds = null;
+let userDefinedColumns = [];
 let labelTableColumnName = null;
 let colourTableColumnName = null;
 
 function setAssemblyIds(ids) {
   assemblyIds = ids;
+}
+
+function setUserDefinedColumns() {
+  const { userDefined } = UploadedCollectionStore.getAssemblies()[assemblyIds[0]].metadata;
+  userDefinedColumns = userDefined ? Object.keys(userDefined) : [];
 }
 
 function setLabelTableColumnName(tableColumnName) {
@@ -43,6 +49,10 @@ const FilteredDataStore = assign({}, EventEmitter.prototype, {
 
   getAssemblyIds() {
     return assemblyIds;
+  },
+
+  getUserDefinedColumns() {
+    return userDefinedColumns;
   },
 
   getLabelTableColumnName() {
@@ -88,6 +98,7 @@ function handleAction(action) {
     } else {
       assemblyIds = SubtreeStore.getActiveSubtreeAssemblyIds();
     }
+    setUserDefinedColumns();
     emitChange();
     break;
 
