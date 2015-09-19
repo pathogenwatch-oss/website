@@ -8,6 +8,8 @@ import ReferenceCollectionStore from '../../stores/ReferenceCollectionStore';
 import UploadedCollectionStore from '../../stores/UploadedCollectionStore';
 import FilteredDataStore from '../../stores/FilteredDataStore';
 
+import FilteredDataActionCreators from '../../actions/FilteredDataActionCreators';
+
 let columnProps = [
   { label: 'Assembly',
     dataKey: 'name',
@@ -32,9 +34,16 @@ function mapAssemblyIdToTableRow(assemblyId) {
     id: metadata.assemblyId,
     name: metadata.assemblyName,
   }, AntibioticsStore.list().reduce(function (memo, antibiotic) {
+    if (!analysis.resistanceProfile[antibiotic]) {
+      return memo;
+    }
     memo[antibiotic] = analysis.resistanceProfile[antibiotic].resistanceResult;
     return memo;
   }, {}));
+}
+
+function setColourTableColumnName({ dataKey }) {
+  FilteredDataActionCreators.setColourTableColumnName(dataKey);
 }
 
 export default React.createClass({
@@ -92,6 +101,7 @@ export default React.createClass({
         columns={columnProps}
         calculatedColumnWidths={[ 'name' ]}
         tableProps={tableProps}
+        headerClickHandler={setColourTableColumnName}
         { ...this.props }
       />
     );

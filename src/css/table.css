@@ -1,16 +1,37 @@
 .wgsa-table-header {
   vertical-align: top;
-  text-transform: capitalize;
-  text-overflow: ellipsis;
-  font-weight: 700;
-  line-height: 24px;
-  letter-spacing: 0px;
-  font-size: 12px;
-  color: rgba(0, 0, 0, 0.54);
   padding: 0 18px 0;
   box-sizing: border-box;
   background: #fff !important;
   border-right: none;
+}
+
+.wgsa-table-header button {
+  background: none;
+  color: rgba(0, 0, 0, 0.54);
+  border: none;
+  padding: 0;
+  font-weight: 700;
+  line-height: 24px;
+  letter-spacing: 0px;
+  font-size: 12px;
+  text-transform: capitalize;
+  text-overflow: ellipsis;
+}
+
+.wgsa-table-header button:hover,
+.wgsa-table-header button:focus,
+.wgsa-table-header button:active {
+  border: none;
+  outline: none;
+}
+
+.wgsa-table-header button:hover {
+  cursor: pointer;
+}
+
+.wgsa-table-header button.active {
+  color: #673c90;
 }
 
 .wgsa-table-cell {
@@ -34,16 +55,20 @@
 .wgsa-table-header--resistance .fixedDataTableCellLayout_wrap3,
 .wgsa-table-header--resistance .public_fixedDataTableCell_cellContent {
   position: absolute;
+  top: 0;
   bottom: 0;
   left: 0;
   right: 0;
-}
-.wgsa-table-header--resistance .public_fixedDataTableCell_cellContent {
-
-  transform: rotate(-90deg);
-  margin-bottom: 50%;
-  white-space: nowrap;
   padding: 0;
+}
+
+.wgsa-table-header--resistance button {
+  transform: rotate(-90deg);
+  transform-origin: left;
+  white-space: nowrap;
+  position: absolute;
+  bottom: 0;
+  margin-left: 50%;
 }
 
 .wgsa-resistance-icon {

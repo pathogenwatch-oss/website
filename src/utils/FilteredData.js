@@ -21,7 +21,7 @@ function getColour(assembly) {
     const resistanceProfileResult = assembly.analysis.resistanceProfile[selectedTableColumnName].resistanceResult;
 
     if (resistanceProfileResult === 'RESISTANT') {
-      colour = '#ff0000';
+      colour = '#d11b1b';
     } else {
       colour = '#ffffff';
     }

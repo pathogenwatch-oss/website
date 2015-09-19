@@ -10,8 +10,6 @@ import FilteredDataStore from '../../stores/FilteredDataStore';
 import ReferenceCollectionStore from '../../stores/ReferenceCollectionStore';
 import UploadedCollectionStore from '../../stores/UploadedCollectionStore';
 
-import MetadataUtils from '../../utils/Metadata';
-import DataUtils from '../../utils/Data';
 import DEFAULT, { CGPS } from '../../defaults';
 
 const fullWidthHeight = {
@@ -36,7 +34,7 @@ export default React.createClass({
       treeType: DEFAULT.TREE_TYPE,
       nodeSize: DEFAULT.NODE_SIZE,
       labelSize: DEFAULT.LABEL_SIZE,
-      labelProperty: FilteredDataStore.getLabelTableColumnName(),
+      labelGetter: FilteredDataStore.getLabelGetter(),
       treeLoaded: false,
     });
   },
@@ -132,22 +130,10 @@ export default React.createClass({
   },
 
   setNodeLabels() {
-    const labelProperty = this.state.labelProperty;
     for (const leaf of this.phylocanvas.leaves) {
       if (UploadedCollectionStore.contains(leaf.id)) {
         const assembly = UploadedCollectionStore.getAssemblies()[leaf.id];
-        let labelValue;
-        if (labelProperty === 'Country') {
-          labelValue = MetadataUtils.getCountry(assembly);
-        } else if (labelProperty === 'Date') {
-          labelValue = DataUtils.getFormattedDateString(assembly.metadata.date) || '';
-        } else if (labelProperty === 'ST') {
-          labelValue = assembly.analysis.st || '';
-        } else {
-          labelValue =
-            assembly.metadata.assemblyName || assembly.metatdata.assemblyId;
-        }
-        leaf.label = labelValue;
+        leaf.label = this.state.labelGetter(assembly);
       } else {
         const assembly = ReferenceCollectionStore.getAssemblies()[leaf.id];
         if (!assembly) {
@@ -194,7 +180,7 @@ export default React.createClass({
 
   handleFilteredDataStoreChange() {
     this.setState({
-      labelProperty: FilteredDataStore.getLabelTableColumnName(),
+      labelGetter: FilteredDataStore.getLabelGetter(),
     });
   },
 

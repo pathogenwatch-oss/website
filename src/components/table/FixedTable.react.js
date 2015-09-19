@@ -27,6 +27,7 @@ export default React.createClass({
     columns: React.PropTypes.object,
     data: React.PropTypes.array,
     calculatedColumnWidths: React.PropTypes.array,
+    headerClickHandler: React.PropTypes.func,
   },
 
   getInitialState() {
@@ -40,6 +41,15 @@ export default React.createClass({
 
   getRow(index) {
     return this.props.data[index];
+  },
+
+  renderClickableHeader(label, dataKey, columnProps) {
+    return (
+      <div>
+        <button data-column={dataKey}
+          onClick={this.handleHeaderClick.bind(null, columnProps)}>{label}</button>
+      </div>
+    );
   },
 
   render() {
@@ -58,6 +68,8 @@ export default React.createClass({
             <Column
               key={props.dataKey}
               headerClassName={'wgsa-table-header'}
+              headerRenderer={this.renderClickableHeader}
+              columnData={props}
               cellClassName={'wgsa-table-cell'}
               width={this.state.columnWidths[props.dataKey] || 96}
               flexGrow={1}
@@ -66,6 +78,13 @@ export default React.createClass({
         )}
       </Table>
     );
+  },
+
+  handleHeaderClick(columnProps) {
+    this.props.headerClickHandler(columnProps);
+    // header not re-rendered by state, need to do it the old-fashioned way
+    $(`button[data-column=${columnProps.dataKey}]`).toggleClass('active');
+    // this.refs[columnProps.dataKey].getDOMNode().classList.toggle('active');
   },
 
   isColumnResizing: false,
