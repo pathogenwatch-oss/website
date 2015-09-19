@@ -28,8 +28,8 @@ import Species from '../../species';
 import DEFAULT from '../../defaults';
 import { validateMetadata } from '../../utils/Metadata';
 
-var loadingAnimationStyle = {
-  visibility: 'visible'
+const loadingAnimationStyle = {
+  visibility: 'visible',
 };
 
 const layoutContentStyle = {
@@ -43,7 +43,7 @@ const fileInputStyle = {
   opacity: 0,
 };
 
-var isProcessing = false;
+let isProcessing = false;
 
 const AssemblyWorkspace = React.createClass({
 
@@ -75,8 +75,12 @@ const AssemblyWorkspace = React.createClass({
 
     const socket = SocketUtils.socketConnect();
 
-    socket.on('connect', function iife() {
+    socket.on('connect', function () {
       console.log('[Macroreact] Socket connected');
+    });
+
+    socket.on('disconnect', function () {
+      console.error('[Macroreact] Socket connection lost');
     });
 
     SocketStore.addChangeListener(this.handleSocketStoreChange);
@@ -94,7 +98,6 @@ const AssemblyWorkspace = React.createClass({
   handleSocketStoreChange() {
     if (!SocketStore.getRoomId()) {
       SocketStore.getSocketConnection().on('roomId', function iife(roomId) {
-        // console.log('[Macroreact] Got socket room id ' + roomId);
         SocketActionCreators.setRoomId(roomId);
       });
 
@@ -104,16 +107,9 @@ const AssemblyWorkspace = React.createClass({
 
   handleFileProcessingStoreChange() {
     isProcessing = FileProcessingStore.getFileProcessingState();
-    if (isProcessing) {
-      this.setState({
-        pageTitleAppend: 'Processing...'
-      });
-    }
-    else {
-      this.setState({
-        pageTitleAppend: 'Overview'
-      });
-    }
+    this.setState({
+      pageTitleAppend: isProcessing ? 'Processing...' : 'Overview',
+    });
   },
 
   handleFileUploadingStoreChange() {
@@ -127,13 +123,13 @@ const AssemblyWorkspace = React.createClass({
 
     this.setState({
       isUploading: FileUploadingStore.getFileUploadingState(),
-      viewPage: 'upload_progress'
+      viewPage: 'upload_progress',
     });
   },
 
   handleUploadWorkspaceNavigationStoreChange() {
     this.setState({
-      viewPage: UploadWorkspaceNavigationStore.getCurrentViewPage()
+      viewPage: UploadWorkspaceNavigationStore.getCurrentViewPage(),
     });
   },
 
@@ -156,11 +152,9 @@ const AssemblyWorkspace = React.createClass({
   handleClick() {
     if (this.state.isUploading) {
       UploadWorkspaceNavigationActionCreators.setViewPage('upload_progress');
-    }
-    else {
+    } else {
       React.findDOMNode(this.refs.fileInput).click();
     }
-
   },
 
   handleOverviewClick() {
@@ -173,11 +167,7 @@ const AssemblyWorkspace = React.createClass({
   },
 
   handleUploadStoreChange() {
-
-    this.setState({
-      totalAssemblies: UploadStore.getAssembliesCount()
-    });
-
+    const totalAssemblies = UploadStore.getAssembliesCount();
     const assemblies = UploadStore.getAssemblies();
     const isValidMap = validateMetadata(assemblies);
     let isValid = true;
@@ -186,7 +176,7 @@ const AssemblyWorkspace = React.createClass({
       isValid = false;
     }
 
-    if (this.state.totalAssemblies < 3) {
+    if (totalAssemblies < 3) {
       isValid = false;
     }
 
@@ -198,25 +188,23 @@ const AssemblyWorkspace = React.createClass({
     }
 
     this.setState({
+      totalAssemblies,
       uploadButtonActive: isValid,
     });
   },
 
   render() {
     let pageTitle = 'WGSA';
-    let overviewButtonActive = false;
 
     loadingAnimationStyle.visibility = isProcessing ? 'visible' : 'hidden';
     switch (this.state.viewPage) {
-      case 'assembly':
-        pageTitle = `WGSA | ${this.props.assembly.fasta.name}`;
-        break;
-      case 'upload_progress': pageTitle = 'WGSA | Uploading and Analysing...';
-        break;
-      case 'overview':
-        overviewButtonActive = this.state.totalAssemblies && true;
-        break;
-      default: pageTitle = `WGSA | ${this.state.pageTitleAppend}`;
+    case 'assembly':
+      pageTitle = `WGSA | ${this.props.assembly.fasta.name}`;
+      break;
+    case 'upload_progress':
+      pageTitle = 'WGSA | Uploading...';
+      break;
+    default: pageTitle = `WGSA | ${this.state.pageTitleAppend}`;
     }
 
     return (
@@ -227,13 +215,14 @@ const AssemblyWorkspace = React.createClass({
           <UploadWorkspaceNavigation assembliesUploaded={this.props.assembly ? true : false} totalAssemblies={this.state.totalAssemblies}>
             <footer className="wgsa-upload-navigation__footer mdl-shadow--4dp">
               <button type="button" title="Overview"
-                className={`${overviewButtonActive && "wgsa-overview-button-active"} mdl-button mdl-js-button mdl-button--raised mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect`}
+                className="wgsa-upload-review-button mdl-button mdl-js-button mdl-button--raised mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect"
                 onClick={this.handleOverviewClick}>
                 <i className="material-icons">home</i>
               </button>
 
               { !this.state.isUploading &&
-                <button type="button" className="uploadprogress-spinner-button mdl-button mdl-js-button mdl-button--raised mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect"
+                <button type="button" title="Add files"
+                  className="wgsa-upload-review-button mdl-button mdl-js-button mdl-button--raised mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect"
                   onClick={this.handleClick}>
                   <i className="material-icons">add</i>
                 </button>
@@ -299,19 +288,4 @@ const AssemblyWorkspace = React.createClass({
 
 });
 
-const AssemblyOverviewButton = React.createClass({
-
-  render() {
-    return (
-      <div className="overview-button">
-
-      </div>
-    );
-  },
-
-  handleClick() {
-    UploadWorkspaceNavigationActionCreators.navigateToAssembly(null);
-  },
-
-});
 module.exports = AssemblyWorkspace;

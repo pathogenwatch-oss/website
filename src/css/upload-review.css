@@ -285,21 +285,25 @@
   border-bottom: 1px solid #e0e0e0;
 }
 
-.wgsa-upload-navigation__footer button i{
-  color: #673c90;
+.wgsa-upload-review-button {
+  background: #673c90 !important;
 }
 
-.wgsa-overview-button-active {
-  background: #673c90;
-}
-.wgsa-overview-button-active:hover {
-  background: #673c90;
-}
-.wgsa-overview-button-active i {
-  color: #fff !important;
+.wgsa-upload-review-button:hover,
+.wgsa-upload-review-button:focus,
+.wgsa-upload-review-button:active {
+  background: #a386bd !important;
 }
 
-.wgsa-overview-button-active .mdl-button__ripple-container .mdl-ripple{
+.wgsa-upload-review-button:disabled {
+  background: #e5e5e5 !important;
+}
+
+.wgsa-upload-navigation__footer .material-icons {
+  color: #fff;
+}
+
+.wgsa-upload-review-button .mdl-button__ripple-container .mdl-ripple {
   background: #fff;
 }
 
