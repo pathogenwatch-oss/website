@@ -97,15 +97,15 @@ var ConfirmDelete = React.createClass({
   render() {
     return (
       <div>
-        <button className="confirm-delete-button mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--accent"
-          title={"Confirm Delete - " + this.props.title}
-          onClick={this.props.handleDeleteAssembly}>
-          <i className="material-icons">delete</i>
-        </button>
         <button className="confirm-delete-button mdl-button mdl-js-button mdl-js-ripple-effect"
           title="Cancel"
           onClick={this.props.resetDeleteState}>
           <i className="material-icons">clear</i>
+        </button>
+        <button className="confirm-delete-button mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--accent"
+          title={"Confirm Delete - " + this.props.title}
+          onClick={this.props.handleDeleteAssembly}>
+          <i className="material-icons">delete</i>
         </button>
       </div>
     );

@@ -20,8 +20,6 @@ canvas.font = 'Bold 12px "Helvetica","Arial",sans-serif';
 
 let tableProps;
 
-console.log(tableProps);
-
 function getAssembly(assemblyId) {
   const referenceCollectionAssemblies = ReferenceCollectionStore.getAssemblies();
   const uploadedCollectionAssemblies = UploadedCollectionStore.getAssemblies();

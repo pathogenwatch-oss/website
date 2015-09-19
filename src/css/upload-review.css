@@ -39,6 +39,7 @@
       width: 50%;
   }
 }
+
 /**** UploadReview - Analysis ****/
 
 .welcome-container {
@@ -284,7 +285,26 @@
   border-bottom: 1px solid #e0e0e0;
 }
 
-.overview-button {
+.wgsa-upload-review-button {
+  background: #673c90 !important;
+}
+
+.wgsa-upload-review-button:hover,
+.wgsa-upload-review-button:focus,
+.wgsa-upload-review-button:active {
+  background: #a386bd !important;
+}
+
+.wgsa-upload-review-button:disabled {
+  background: #e5e5e5 !important;
+}
+
+.wgsa-upload-navigation__footer .material-icons {
+  color: #fff;
+}
+
+.wgsa-upload-review-button .mdl-button__ripple-container .mdl-ripple {
+  background: #fff;
 }
 
 .wgsa-assembly-list-wrapper {
@@ -394,7 +414,7 @@
 
 .wgsa-fileupload-progressbar.mdl-progress {
   width: 100%;
-  background: red;
+  top: -4px;
 }
 
 .uploadprogress-spinner-button {
@@ -403,15 +423,14 @@
 
 .wgsa-upload-progress-container {
   position: absolute;
-  top: 0;
-  bottom: 0;
   left: 0;
   right: 0;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  overflow: auto
+  overflow: visible;
+  margin: 16px;
 }
 
 /*****************************************************/
