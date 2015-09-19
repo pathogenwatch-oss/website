@@ -97,3 +97,22 @@
 .wgsa-no-subtree p {
   font-size: 20px;
 }
+
+.wgsa-select-tree-type {
+  text-transform: capitalize;
+  display: block;
+  margin-bottom: 8px;
+  background: #fff;
+  border: none;
+  font-size: 12px;
+  font-weight: 700;
+  color: rgba(0, 0, 0, 0.54);
+  flex-shrink: 1;
+}
+
+.wgsa-select-tree-type:hover,
+.wgsa-select-tree-type:focus,
+.wgsa-select-tree-type:active {
+  outline: none;
+  background: #fff;
+}

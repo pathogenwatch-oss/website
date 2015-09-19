@@ -173,6 +173,10 @@ export default React.createClass({
     this.phylocanvas.setTextSize(event.target.value);
   },
 
+  handleTreeTypeChange(event) {
+    this.phylocanvas.setTreeType(event.target.value);
+  },
+
   handleToggleNodeLabels() {
     this.phylocanvas.toggleLabels();
   },
