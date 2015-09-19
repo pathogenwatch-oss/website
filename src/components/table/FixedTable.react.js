@@ -83,6 +83,7 @@ export default React.createClass({
   handleHeaderClick(columnProps) {
     this.props.headerClickHandler(columnProps);
     // header not re-rendered by state, need to do it the old-fashioned way
+    $(`button[data-column]`).removeClass('active');
     $(`button[data-column=${columnProps.dataKey}]`).toggleClass('active');
     // this.refs[columnProps.dataKey].getDOMNode().classList.toggle('active');
   },
