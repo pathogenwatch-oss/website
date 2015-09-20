@@ -40,29 +40,19 @@ export default React.createClass({
   render() {
     const referenceAssembly = ReferenceCollectionStore.getAssemblies()[this.props.treeName];
     const title = referenceAssembly.metadata.assemblyName;
+    let newick;
 
     const subtreeAssemblyIds = SubtreeStore.getActiveSubtreeAssemblyIds();
     if (subtreeAssemblyIds.length === 1) {
-      const assembly = UploadedCollectionStore.getAssemblies()[subtreeAssemblyIds[0]];
-      return (
-        <section className="wgsa-tree">
-          <header className="wgsa-tree-header">
-            { backButton }
-            <h2 className="wgsa-tree-heading">{title}</h2>
-          </header>
-          <div className="wgsa-no-subtree">
-            <i className="material-icons">nature</i>
-            <h3>{assembly.metadata.assemblyName}</h3>
-            <p><em>n differences</em></p>
-          </div>
-        </section>
-      );
+      newick = `(${this.props.treeName}:0.5,${subtreeAssemblyIds[0]}:0.5);`;
+    } else {
+      newick = SubtreeStore.getActiveSubtree().newick;
     }
 
     return (
       <Tree
         title={title}
-        newick={SubtreeStore.getActiveSubtree().newick}
+        newick={newick}
         navButton={backButton}
         styleTree={styleTree} />
     );
