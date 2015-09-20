@@ -1,30 +1,33 @@
-var React = require('react');
-var UploadButton = require('./navigation/UploadButton.react');
-var Logo = require('../Logo.react.js');
-var DEFAULT = require('../../defaults.js');
+import React from 'react';
 
-var headerStyle = {
+import FileUploadingProgress from './FileUploadingProgress.react';
+import UploadButton from './navigation/UploadButton.react';
+
+import DEFAULT from '../../defaults.js';
+
+const headerStyle = {
   'background': '#fff',
-   color: DEFAULT.CGPS.COLOURS.PURPLE
+  color: DEFAULT.CGPS.COLOURS.PURPLE,
+  position: 'relative',
 };
 
-var UploadReviewHeader = React.createClass({
+export default React.createClass({
 
   propTypes: {
-    title: React.PropTypes.string.isRequired
+    title: React.PropTypes.string.isRequired,
   },
 
-  render: function () {
+  render() {
     return (
-      <header style={headerStyle} className="mdl-layout__header">
-        <div className="mdl-layout-icon"></div>
-        <div style={headerStyle} className="mdl-layout__header-row">
-          <span style={headerStyle} className="mdl-layout-title">{this.props.title}</span>
-          <UploadButton activateButton={this.props.activateUploadButton} isUploading={this.props.isUploading} />
-        </div>
-      </header>
+        <header style={headerStyle} className="mdl-layout__header">
+          <div className="mdl-layout-icon"></div>
+          <div style={headerStyle} className="mdl-layout__header-row">
+            <span style={headerStyle} className="mdl-layout-title">{this.props.title}</span>
+            <UploadButton activateButton={this.props.activateUploadButton} isUploading={this.props.isUploading} />
+          </div>
+          <FileUploadingProgress />
+        </header>
     );
-  }
-});
+  },
 
-module.exports = UploadReviewHeader;
+});

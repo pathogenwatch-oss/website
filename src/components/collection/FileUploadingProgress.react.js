@@ -5,7 +5,9 @@ import React from 'react';
 import FileUploadingProgressStore from '../../stores/FileUploadingProgressStore';
 
 const containerStyle = {
-  // margin: '16px 0 0 0',
+  position: 'absolute',
+  left: 0,
+  right: 0,
 };
 
 const progressBarStyle = {
