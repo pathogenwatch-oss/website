@@ -11,7 +11,7 @@ import FilteredDataActionCreators from '../../actions/FilteredDataActionCreators
 
 import DataUtils from '../../utils/Data';
 
-let columnProps = [
+const systemColumnProps = [
   { label: '',
     dataKey: '__download',
     width: 50,
@@ -65,6 +65,12 @@ let columnProps = [
   },
 ];
 
+let userDefinedColumnProps = [];
+
+function allColumnProps() {
+  return systemColumnProps.concat(userDefinedColumnProps);
+}
+
 function getAssembly(assemblyId) {
   const referenceCollectionAssemblies = ReferenceCollectionStore.getAssemblies();
   const uploadedCollectionAssemblies = UploadedCollectionStore.getAssemblies();
@@ -74,12 +80,12 @@ function getAssembly(assemblyId) {
 function mapAssemblyIdToTableRow(assemblyId) {
   const assembly = getAssembly(assemblyId);
 
-  return columnProps.reduce(function (memo, { dataKey, labelGetter }) {
-    if (labelGetter) {
-      memo[dataKey] = labelGetter(assembly);
-    }
-    return memo;
-  }, {});
+  return allColumnProps().reduce(function (memo, { dataKey, labelGetter }) {
+      if (labelGetter) {
+        memo[dataKey] = labelGetter(assembly);
+      }
+      return memo;
+    }, {});
 }
 
 function setLabelGetter({ labelGetter }) {
@@ -96,21 +102,24 @@ export default React.createClass({
   },
 
   getInitialState() {
-    columnProps = columnProps.concat(
-      FilteredDataStore.getUserDefinedColumns().map((column) => {
-        return {
-          label: column,
-          dataKey: column,
-          labelGetter({ metadata }) {
-            return metadata.userDefined[column];
-          },
-        };
-      })
-    );
-
     return {
       data: FilteredDataStore.getAssemblyIds().map(mapAssemblyIdToTableRow),
     };
+  },
+
+  componentWillMount() {
+    if (!userDefinedColumnProps.length) {
+      userDefinedColumnProps =
+        FilteredDataStore.getUserDefinedColumns().map((column) => {
+          return {
+            label: column,
+            dataKey: column,
+            labelGetter({ metadata }) {
+              return metadata.userDefined[column];
+            },
+          };
+        });
+    }
   },
 
   componentDidMount() {
@@ -125,7 +134,7 @@ export default React.createClass({
     return (
       <FixedTable
         data={this.state.data}
-        columns={columnProps}
+        columns={allColumnProps()}
         headerClickHandler={setLabelGetter}
         { ...this.props }
       />
@@ -133,7 +142,6 @@ export default React.createClass({
   },
 
   handleFilteredDataStoreChange() {
-    console.log('filtered');
     this.setState({
       data: FilteredDataStore.getAssemblyIds().map(mapAssemblyIdToTableRow),
     });
