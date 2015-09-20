@@ -27,7 +27,7 @@ const systemColumnProps = [
     },
   },
   { label: 'Assembly',
-    dataKey: '__name',
+    dataKey: '__assembly',
     fixed: true,
     labelGetter({ metadata }) {
       return metadata.assemblyName;
@@ -45,7 +45,7 @@ const systemColumnProps = [
       return DataUtils.getFormattedDateString(metadata.date);
     },
   },
-  { label: 'Sequence Type',
+  { label: 'ST',
     dataKey: '__st',
     labelGetter({ analysis }) {
       return analysis.st;
@@ -58,7 +58,7 @@ const systemColumnProps = [
     },
   },
   { label: 'Complete Matches',
-    dataKey: '__tcm',
+    dataKey: '__complete_matches',
     labelGetter({ analysis }) {
       return analysis.totalCompleteMatches;
     },
@@ -102,12 +102,6 @@ export default React.createClass({
   },
 
   getInitialState() {
-    return {
-      data: FilteredDataStore.getAssemblyIds().map(mapAssemblyIdToTableRow),
-    };
-  },
-
-  componentWillMount() {
     if (!userDefinedColumnProps.length) {
       userDefinedColumnProps =
         FilteredDataStore.getUserDefinedColumns().map((column) => {
@@ -120,6 +114,10 @@ export default React.createClass({
           };
         });
     }
+
+    return {
+      data: FilteredDataStore.getAssemblyIds().map(mapAssemblyIdToTableRow),
+    };
   },
 
   componentDidMount() {
