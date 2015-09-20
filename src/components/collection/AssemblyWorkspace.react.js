@@ -236,49 +236,49 @@ const AssemblyWorkspace = React.createClass({
             {
               (() => {
                 switch (this.state.viewPage) {
-                  case "assembly":  return (
-                    <div className="assemblyWorkspaceContainer mdl-grid assemblyWorkspaceContent">
-                      <div className="overflow-y--auto mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
-                        <div className="heading"> Metadata </div>
-                        <div className="card-style">
-                          <AssemblyMetadata key={this.props.assembly.metadata.assemblyName} assembly={this.props.assembly} />
-                        </div>
+                case 'assembly':  return (
+                  <div className="assemblyWorkspaceContainer mdl-grid assemblyWorkspaceContent">
+                    <div className="overflow-y--auto mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
+                      <div className="heading"> Metadata </div>
+                      <div className="card-style">
+                        <AssemblyMetadata assembly={this.props.assembly} />
                       </div>
+                    </div>
 
-                      <div className="overflow-y--auto mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
-                        <div className="mdl-grid mdl-grid--no-spacing">
-                          <div className="mdl-cell mdl-cell--12-col">
-                            <div className="heading"> Assembly Statistics </div>
-                            <div className="card-style">
-                              <AssemblyAnalysis assembly={this.props.assembly} />
-                            </div>
+                    <div className="overflow-y--auto mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
+                      <div className="mdl-grid mdl-grid--no-spacing">
+                        <div className="mdl-cell mdl-cell--12-col">
+                          <div className="heading"> Assembly Statistics </div>
+                          <div className="card-style">
+                            <AssemblyAnalysis assembly={this.props.assembly} />
                           </div>
-                          <div className="mdl-cell mdl-cell--12-col">
-                            <div className="heading"> N50 Chart </div>
-                            <div className="card-style">
-                              <AssemblyAnalysisChart analysis={this.props.assembly.analysis} />
-                            </div>
+                        </div>
+                        <div className="mdl-cell mdl-cell--12-col">
+                          <div className="heading"> N50 Chart </div>
+                          <div className="card-style">
+                            <AssemblyAnalysisChart analysis={this.props.assembly.analysis} />
                           </div>
                         </div>
                       </div>
                     </div>
-                  );
-                  break;
-                  case "overview":  return (
-                   <Overview clickHandler={this.handleClick} />
-                  );
-                  break;
-                  case "upload_progress": return (
-                    <div>
-                      <UploadingFilesDetailed />
-                    </div>
-                  );
-                  break;
-                  default: return (
-                    <Overview clickHandler={this.handleClick} />
-                  );
+                  </div>
+                );
+                break;
+                case 'overview':  return (
+                 <Overview clickHandler={this.handleClick} />
+                );
+                break;
+                case 'upload_progress': return (
+                  <div>
+                    <UploadingFilesDetailed />
+                  </div>
+                );
+                break;
+                default: return (
+                  <Overview clickHandler={this.handleClick} />
+                );
                 }
-              }) ()}
+              })() }
           </main>
         </div>
         <input type="file" multiple="multiple" accept={DEFAULT.SUPPORTED_FILE_EXTENSIONS} ref="fileInput" style={fileInputStyle} onChange={this.handleFileInputChange} />

@@ -32,7 +32,7 @@ export default React.createClass({
   handleFileUploadingStoreChange() {
     this.setState({
       isUploading: FileUploadingStore.getFileUploadingState(),
-    })
+    });
   },
 
   handleMetadataChange(event) {
@@ -51,7 +51,7 @@ export default React.createClass({
           columnName !== 'name' &&
           columnName !== 'geography' &&
           columnName !== 'date' &&
-          (this.state.isUploading && metadata[columnName])
+          (this.state.isUploading ? metadata[columnName] : true)
         );
       })
       .map((columnName) => {
