@@ -8,20 +8,15 @@ import SubtreeStore from '../stores/SubtreeStore';
 import SubtreeActionCreators from '../actions/SubtreeActionCreators';
 
 import FilteredDataUtils from '../utils/FilteredData';
-import { CGPS } from '../defaults';
 
 const nodeLabelStyle = {
   colour: 'rgba(0, 0, 0, 0.87)',
 };
 
-const iconStyle = {
-  color: CGPS.COLOURS.PURPLE,
-};
-
 function styleTree(tree) {
   tree.leaves.forEach((leaf) => {
     const assembly = UploadedCollectionStore.getAssemblies()[leaf.id];
-    tree.setNodeDisplay([ leaf.id ], { colour: FilteredDataUtils.getColour(assembly) });
+    leaf.setDisplay({ colour: FilteredDataUtils.getColour(assembly) });
     leaf.labelStyle = nodeLabelStyle;
   });
 }
@@ -31,8 +26,8 @@ function handleBackButton() {
 }
 
 const backButton = (
-  <button className="mdl-button mdl-button--icon" onClick={handleBackButton}>
-    <i className="material-icons" style={iconStyle}>arrow_back</i>
+  <button className="wgsa-tree-return mdl-button mdl-button--icon" onClick={handleBackButton}>
+    <i className="material-icons">arrow_back</i>
   </button>
 );
 

@@ -41,6 +41,7 @@ export default React.createClass({
   },
 
   handleSubtreeStoreChange() {
+    console.log(SubtreeStore.getActiveSubtreeId());
     this.setState({
       subtree: SubtreeStore.getActiveSubtreeId(),
     });

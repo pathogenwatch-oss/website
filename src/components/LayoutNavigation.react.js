@@ -9,10 +9,7 @@ const style = {
   position: 'absolute',
   zIndex: 999,
   transform: 'translateY(-50%)',
-  background: '#fff',
   left: 16,
-  padding: '4px 8px',
-  borderRadius: 24,
 };
 
 export default React.createClass({
@@ -24,7 +21,7 @@ export default React.createClass({
   render: function () {
     style.top = this.props.top;
     return (
-      <div style={style} className="mdl-shadow--2dp">
+      <div style={style} className="wgsa-switch-background mdl-shadow--2dp">
         <Switch
           id="table-switcher"
           left={{ title: 'Metadata', icon: 'list' }}

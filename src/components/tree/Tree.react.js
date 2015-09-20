@@ -92,7 +92,9 @@ export default React.createClass({
       <section className="wgsa-tree">
         <header className="wgsa-tree-header">
           { navButton }
-          <h2 className="wgsa-tree-heading">{title}</h2>
+          <h2 className="wgsa-tree-heading">
+            <span>{title}</span>
+          </h2>
           <TreeMenu
             tree={this.phylocanvas}
             exportFilename={`${title}.png`}
