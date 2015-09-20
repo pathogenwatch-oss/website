@@ -26,20 +26,20 @@ const systemColumnProps = [
       );
     },
   },
-  { label: 'Assembly',
+  { label: 'ASSEMBLY',
     dataKey: '__assembly',
     fixed: true,
     labelGetter({ metadata }) {
       return metadata.assemblyName;
     },
   },
-  { label: 'Location',
+  { label: 'LOCATION',
     dataKey: '__location',
     labelGetter({ metadata }) {
       return metadata.geography.location;
     },
   },
-  { label: 'Date',
+  { label: 'DATE',
     dataKey: '__date',
     labelGetter({ metadata }) {
       return DataUtils.getFormattedDateString(metadata.date);
@@ -57,7 +57,7 @@ const systemColumnProps = [
       return analysis.mlst;
     },
   },
-  { label: 'Complete Matches',
+  { label: 'COMPLETE MATCHES',
     dataKey: '__complete_matches',
     labelGetter({ analysis }) {
       return analysis.totalCompleteMatches;
@@ -106,7 +106,7 @@ export default React.createClass({
       userDefinedColumnProps =
         FilteredDataStore.getUserDefinedColumns().map((column) => {
           return {
-            label: column,
+            label: column.toUpperCase(),
             dataKey: column,
             labelGetter({ metadata }) {
               return metadata.userDefined[column];

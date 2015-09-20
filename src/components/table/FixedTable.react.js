@@ -10,7 +10,7 @@ canvas.font = '13px "Helvetica","Arial",sans-serif';
 const cellPadding = 36;
 function calculateColumnWidths(columns, data) {
   return columns.reduce((widths, column) => {
-    const columnLabelWidth = canvas.measureText(column).width + cellPadding;
+    const columnLabelWidth = canvas.measureText(column.toUpperCase()).width + cellPadding;
     widths[column] = data.reduce((maxWidth, row) => {
       return Math.max(
         maxWidth,
