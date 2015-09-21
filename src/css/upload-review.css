@@ -1,3 +1,36 @@
+/********* Home page species list ***********/
+.wgsa-home-header {
+  background: url(/assets/img/WGSA_logo.png) no-repeat 20px;
+  background-size: 40px;
+  margin: 0px;
+}
+.wgsa-welcome-card-square {
+  margin: 40px;
+}
+
+.wgsa-species-list-container {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+}
+
+.wgsa-welcome-card-square.mdl-card {
+  width: 320px;
+  height: 320px;
+}
+.wgsa-welcome-card-square.mdl-card .mdl-card__title-text {
+  color: #fff;
+  text-transform: none;
+}
+.wgsa-welcome-card-square.mdl-card .mdl-card__supporting-text {
+  color: rgba(0,0,0,.54);
+  font-size: 13px;
+  line-height: 18px;
+  overflow: hidden;
+  padding: 16px;
+  width: 90%;
+}
+/*******************************************/
 
 /**** Upload Overview ****/
 
@@ -19,7 +52,7 @@
 @media (max-width: 1024px) {
 
   .mdl-layout__header-row {
-    padding-left: 60px !important;
+    /*padding-left: 60px !important;*/
   }
 
   .mdl-layout__header .mdl-layout__drawer-button {
@@ -70,7 +103,10 @@
   box-sizing: border-box;
   background: url('/assets/img/WGSA_logo.png') #fff no-repeat;
   background-size: 60px;
-  background-position: -15px -15px;
+  background-position: -15px -14px;
+}
+
+.welcome-species-container {
 }
 
 .welcome-card:last-child {
