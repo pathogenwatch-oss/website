@@ -412,6 +412,16 @@
 
 /***************** Upload Progress *******************/
 
+.wgsa-fileupload-progressbar-container {
+  position: absolute;
+  left: 0;
+  right: 0;
+}
+
+.mdl-layout--fixed-drawer:not(.is-small-screen) .wgsa-fileupload-progressbar-container {
+  left: 240px;
+}
+
 .wgsa-fileupload-progressbar.mdl-progress {
   width: 100%;
 }

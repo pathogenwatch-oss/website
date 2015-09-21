@@ -8,7 +8,6 @@ import DEFAULT from '../../defaults.js';
 const headerStyle = {
   'background': '#fff',
   color: DEFAULT.CGPS.COLOURS.PURPLE,
-  position: 'relative',
 };
 
 export default React.createClass({
