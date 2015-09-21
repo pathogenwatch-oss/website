@@ -6,12 +6,11 @@ import FileUploadingProgressStore from '../../../stores/FileUploadingProgressSto
 import UploadWorkspaceNavigationActionCreators from '../../../actions/UploadWorkspaceNavigationActionCreators';
 
 
-import DEFAULT from '../../../defaults.js';
-
 const uploadButtonStyle = {
   right: '30px',
   top: '24px',
   position: 'absolute',
+  zIndex: 1,
   color: '#fff',
   fontSize: '18px',
   fontWeight: '400',

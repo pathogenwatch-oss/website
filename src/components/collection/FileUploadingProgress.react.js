@@ -4,15 +4,6 @@ import React from 'react';
 
 import FileUploadingProgressStore from '../../stores/FileUploadingProgressStore';
 
-const containerStyle = {
-  // margin: '16px 0 0 0',
-};
-
-const progressBarStyle = {
-  // width: '100%',
-  // margin: '0 10% 16px',
-};
-
 const FileUploadingProgress = React.createClass({
 
   componentDidMount: function () {
@@ -38,8 +29,8 @@ const FileUploadingProgress = React.createClass({
 
   render: function () {
     return (
-      <div style={containerStyle}>
-        <div ref="progressBar" className="wgsa-fileupload-progressbar mdl-progress mdl-js-progress" style={progressBarStyle}></div>
+      <div className="wgsa-fileupload-progressbar-container">
+        <div ref="progressBar" className="wgsa-fileupload-progressbar mdl-progress mdl-js-progress"></div>
       </div>
     );
   },
