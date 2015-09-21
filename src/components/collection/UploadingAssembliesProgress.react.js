@@ -35,7 +35,7 @@ const resultColumns = [
   'METADATA_OK',
   'PAARSNP',
   'MLST',
-  'KERNEL',
+  'CORE',
   'FP',
 ];
 
