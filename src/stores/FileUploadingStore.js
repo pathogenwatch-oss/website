@@ -1,18 +1,21 @@
-var AppDispatcher = require('../dispatcher/AppDispatcher');
-var EventEmitter = require('events').EventEmitter;
-var assign = require('object-assign');
-var keyMirror = require('keymirror');
+import { EventEmitter } from 'events';
+import assign from 'object-assign';
+import keyMirror from 'keymirror';
 
-var CHANGE_EVENT = 'change';
+import AppDispatcher from '../dispatcher/AppDispatcher';
 
-var ASSEMBLY_PROCESSING_RESULTS = keyMirror({
-  UPLOAD_OK: null,
-  METADATA_OK: null,
-  PAARSNP_RESULT: null,
-  MLST_RESULT: null,
-  CORE_RESULT: null,
-  FP_COMP: null,
-});
+import Species from '../species';
+
+const CHANGE_EVENT = 'change';
+
+const ASSEMBLY_PROCESSING_RESULTS = [
+  'UPLOAD_OK',
+  'METADATA_OK',
+  'CORE',
+  'FP',
+  'MLST',
+  'PAARSNP',
+];
 
 var COLLECTION_PROCESSING_RESULTS = keyMirror({
   PHYLO_MATRIX: null,
@@ -79,7 +82,9 @@ var Store = assign({}, EventEmitter.prototype, {
   },
 
   getAssemblyProcessingResults: function () {
-    return ASSEMBLY_PROCESSING_RESULTS;
+    return ASSEMBLY_PROCESSING_RESULTS.filter(
+      (result) => Species.missingAnalyses.indexOf(result) === -1
+    );
   },
 
   getCollectionProcessingResults: function () {

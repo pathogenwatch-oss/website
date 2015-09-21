@@ -30,40 +30,35 @@ const FILE_ASSEMBLY_ID_STYLE = {
   fontWeight: '600',
 };
 
-const resultColumns = [
-  'UPLOAD_OK',
-  'METADATA_OK',
-  'PAARSNP',
-  'MLST',
-  'CORE',
-  'FP',
-];
-
 const UploadingAssembliesProgress = React.createClass({
 
-  getInitialState: function () {
+  getInitialState() {
     return {
       assemblyResults: FileUploadingProgressStore.getReceivedAssemblyResults().assemblies,
     };
   },
 
-  componentDidMount: function () {
+  componentWillMount() {
+    this.resultColumns = FileUploadingStore.getAssemblyProcessingResults();
+  },
+
+  componentDidMount() {
     FileUploadingProgressStore.addChangeListener(this.handleFileUploadingProgressStoreChange);
 
     componentHandler.upgradeElement(React.findDOMNode(this.refs.table));
   },
 
-  componentWillUnmount: function () {
+  componentWillUnmount() {
     FileUploadingProgressStore.removeChangeListener(this.handleFileUploadingProgressStoreChange);
   },
 
-  handleFileUploadingProgressStoreChange: function () {
+  handleFileUploadingProgressStoreChange() {
     this.setState({
       assemblyResults: FileUploadingProgressStore.getReceivedAssemblyResults().assemblies,
     });
   },
 
-  getAssemblyResultElements: function () {
+  getAssemblyResultElements() {
     const assemblyNameToAssemblyIdMap = FileUploadingStore.getAssemblyNameToAssemblyIdMap();
     const assemblyNames = UploadStore.getAssemblyNames();
     const assemblyResults = this.state.assemblyResults;
@@ -83,7 +78,7 @@ const UploadingAssembliesProgress = React.createClass({
       return (
         <tr key={assemblyName}>
           <td style={FILE_ASSEMBLY_ID_STYLE} className="mdl-data-table__cell--non-numeric">{assemblyName}</td>
-          { resultColumns.map((resultName) => {
+          { this.resultColumns.map((resultName) => {
             return (
               <td style={CELL_STYLE} key={`${assemblyName}-${resultName}`}>
                 <i style={ICON_STYLE} className="material-icons">
@@ -99,7 +94,7 @@ const UploadingAssembliesProgress = React.createClass({
     });
   },
 
-  render: function () {
+  render() {
     return (
       <table ref="table" className="mdl-data-table mdl-shadow--4dp" style={TABLE_STYLE}>
         <thead>
@@ -107,10 +102,14 @@ const UploadingAssembliesProgress = React.createClass({
             <td style={CELL_STYLE}></td>
             <td style={HEADER_STYLE}>UPLOAD</td>
             <td style={HEADER_STYLE}>METADATA</td>
-            <td style={HEADER_STYLE}>PAARSNP</td>
-            <td style={HEADER_STYLE}>MLST</td>
             <td style={HEADER_STYLE}>KERNEL</td>
-            <td style={HEADER_STYLE}>FP</td>
+            <td style={HEADER_STYLE}>FP</td> {
+              this.resultColumns.indexOf('MLST') !== -1 ?
+                <td style={HEADER_STYLE}>MLST</td> : null
+            } {
+              this.resultColumns.indexOf('PAARSNP') !== -1 ?
+                <td style={HEADER_STYLE}>PAARSNP</td> : null
+            }
           </tr>
         </thead>
         <tbody>
@@ -118,7 +117,8 @@ const UploadingAssembliesProgress = React.createClass({
         </tbody>
       </table>
     );
-  }
+  },
+
 });
 
 module.exports = UploadingAssembliesProgress;

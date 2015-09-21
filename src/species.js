@@ -7,7 +7,7 @@ const definitions = {
     nickname: 'saureus',
     formattedName: (<span><em>Staphylococcus aureus</em></span>),
     imagePath: '/assets/img/saureus.jpg',
-    'definitionText': (<span><em><b>Staphylococcus aureus</b></em> is a gram-positive coccal bacterium</span>)
+    definitionText: (<span><strong><em>Staphylococcus aureus</em></strong> is a gram-positive coccal bacterium</span>),
   },
 
   salty: {
@@ -15,7 +15,7 @@ const definitions = {
     nickname: 'salty',
     formattedName: (<span><em>Salmonella</em> Typhi</span>),
     imagePath: '/assets/img/salty.jpg',
-    'definitionText': (<span><em><b>Salmonella enterica</b></em> subsp. <em><b>enterica</b></em> is a subspecies of Salmonella enterica</span>)
+    definitionText: (<span><strong><em>Salmonella enterica</em></strong> subsp. <strong><em>enterica</em></strong> is a subspecies of Salmonella enterica</span>),
   },
 
   salen: {
@@ -23,7 +23,7 @@ const definitions = {
     nickname: 'salen',
     formattedName: (<span><em>Salmonella</em> Enteritidis</span>),
     imagePath: '/assets/img/salen.jpg',
-    'definitionText': (<span><em><b>Salmonella</b></em> serotype Enteritidis (SE) is one of the most common serotypes of Salmonella bacteria</span>)
+    definitionText: (<span><strong><em>Salmonella</em></strong> serotype Enteritidis (SE) is one of the most common serotypes of Salmonella bacteria</span>),
   },
 
   lismn: {
@@ -31,7 +31,8 @@ const definitions = {
     nickname: 'lismn',
     formattedName: (<span><em>Listeria monocytogenes</em></span>),
     imagePath: '/assets/img/lismn.jpg',
-    'definitionText': (<span><em><b>Listeria monocytogenes</b></em> is the bacterium that causes the infection listeriosis</span>)
+    definitionText: (<span><strong><em>Listeria monocytogenes</em></strong> is the bacterium that causes the infection listeriosis</span>),
+    missingAnalyses: [ 'PAARSNP' ],
   },
 
 };
@@ -64,6 +65,10 @@ export default {
 
   get nickname() {
     return currentSpecies.nickname;
+  },
+
+  get missingAnalyses() {
+    return currentSpecies.missingAnalyses || [];
   },
 
 };
