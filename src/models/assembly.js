@@ -9,8 +9,7 @@ var METADATA_KEY = 'ASSEMBLY_METADATA';
 var PAARSNP_KEY = 'PAARSNP_RESULT';
 var MLST_KEY = 'MLST_RESULT';
 var FP_COMP_KEY = 'FP_COMP';
-var CORE_KEY = 'CORE_RESULT';
-
+var CORE_KEY = 'CORE_SLIM';
 
 var ASSEMBLY_ANALYSES = {
   FP: FP_COMP_KEY,
@@ -111,13 +110,13 @@ function formatForFrontend(assembly) {
     analysis: {
       st: assembly[MLST_KEY].sequenceType,
       mlst: assembly[MLST_KEY].code,
-      totalCompleteMatches: assembly[CORE_KEY].totalCompleteMatches,
-      snpar: paarsnp.snparResult.completeSets.map(function (set) {
-        return { repSequenceId: set.repSequenceId, setId: set.setId };
-      }),
-      paar: paarsnp.paarResult.completeResistanceSets.map(function (set) {
-        return set.resistanceSetName;
-      }),
+      kernelSize: assembly[CORE_KEY].kernelSize,
+      // snpar: paarsnp.snparResult.completeSets.map(function (set) {
+      //   return { repSequenceId: set.repSequenceId, setId: set.setId };
+      // }),
+      // paar: paarsnp.paarResult.completeResistanceSets.map(function (set) {
+      //   return set.resistanceSetName;
+      // }),
       resistanceProfile: paarsnp ?
         Object.keys(paarsnp.resistanceProfile).
           reduce(function (profile, className) {
@@ -195,6 +194,11 @@ function getReference(params, callback) {
 function mapTaxaToAssemblies(assemblies) {
   return Object.keys(assemblies).reduce(function (map, assemblyId) {
     var taxon = assemblies[assemblyId].populationSubtype;
+
+    if (!taxon || taxon.toLowerCase() === 'none') {
+      return map;
+    }
+
     if (taxon in map) {
       map[taxon].assemblyIds.push(assemblyId);
     } else {
