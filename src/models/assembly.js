@@ -161,10 +161,11 @@ function getComplete(params, callback) {
   LOGGER.info('Getting assembly ' + params.assemblyId);
   get(params, [
     METADATA_KEY,
-    PAARSNP_KEY,
-    MLST_KEY,
+    CORE_KEY,
     FP_COMP_KEY,
-    CORE_KEY
+    MLST_KEY,
+    // HACK: skip for listeria!
+    params.speciesId !== '1639' ? PAARSNP_KEY : null,
   ], function (error, assembly) {
     if (error) {
       return callback(error);
