@@ -63,13 +63,16 @@ export default React.createClass({
 
   render: function () {
     const { fasta, metadata } = this.props.assembly;
+    const { assemblyName } = metadata;
     const locations = {};
+
     if (this.props.assembly) {
       locations[this.props.assembly.fasta.name] = this.props.assembly.metadata.geography;
     }
 
     return (
       <form className="metadata-fields">
+        <InputField ref="assemblyName" key="assemblyName" type="text" label="Assembly Name" value={assemblyName} handleChange={this.handleMetadataChange} readonly={this.state.isUploading}/>
         <div className="mdl-grid mdl-grid--no-spacing">
           <div className="mdl-cell mdl-cell--6-col">
             <MetadataDate key={fasta.name} assemblyId={fasta.name} date={metadata.date} disabled={this.state.isUploading}/>

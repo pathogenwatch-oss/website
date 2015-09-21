@@ -146,6 +146,8 @@ const AssemblyWorkspace = React.createClass({
       } else {
         UploadActionCreators.addFiles(event.files);
       }
+      // allows the same file to be uploaded consecutively
+      React.findDOMNode(this.refs.fileInput).value = '';
     }
   },
 

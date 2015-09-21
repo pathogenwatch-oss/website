@@ -27,10 +27,10 @@ var apiRouter = express.Router();
 apiRouter.post('/species/:speciesId/collection', function (req, res) {
   res.json({
     collectionId: '123',
-    userAssemblyIdToAssemblyIdMap: {
-      'JH1.fna': '123',
-      'JH9.fna': '456',
-      'MW2.fna': '789'
+    assemblyNameToAssemblyIdMap: {
+      '7065_8#1_scaffolded': '123',
+      '7065_8#2_scaffolded': '456',
+      '7065_8#3_scaffolded': '789'
     }
   });
 });

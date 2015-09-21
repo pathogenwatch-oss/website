@@ -3,6 +3,7 @@ fieldset > legend {
   font-size: 14px;
   color: rgba(0, 0, 0, 0.54);
   margin-bottom: 8px;
+  padding: 0;
 }
 
 .mdl-textfield__label {
