@@ -128,7 +128,7 @@ function getAssemblies(params, assemblyGetFn, callback) {
       var assemblyIds = result.assemblyIdentifiers;
       LOGGER.info('Got list of assemblies for collection ' + collectionId);
       async.reduce(assemblyIds, {}, function (memo, assemblyIdWrapper, next) {
-        var assemblyId = assemblyIdWrapper.assemblyId || assemblyIdWrapper; // List format not yet defined
+        var assemblyId = assemblyIdWrapper.assemblyId || assemblyIdWrapper; // List format varies between wrapped and raw value
         var assemblyParams = {
           assemblyId: assemblyId,
           speciesId: speciesId

@@ -11,12 +11,7 @@ var MLST_KEY = 'MLST_RESULT';
 var FP_COMP_KEY = 'FP_COMP';
 var CORE_KEY = 'CORE_SLIM';
 
-var ASSEMBLY_ANALYSES = {
-  FP: FP_COMP_KEY,
-  MLST: MLST_KEY,
-  PAARSNP: PAARSNP_KEY,
-  CORE: CORE_KEY
-};
+var ASSEMBLY_ANALYSES = [ 'FP', 'MLST', 'PAARSNP', 'KERNEL' ];
 
 var systemMetadataColumns = [
   'assemblyId', 'soeciesId', 'assemblyName',
@@ -28,7 +23,7 @@ function createKey(id, prefix) {
   return prefix + '_' + id;
 }
 
-function filterUserDefinedMetadata(metadata) {
+function filterUserDefinedColumns(metadata) {
   return Object.keys(metadata).reduce(function (memo, key) {
     if (systemMetadataColumns.indexOf(key) === -1) {
       memo[key] = metadata[key];
@@ -54,14 +49,13 @@ function createMetadataRecord(ids, metadata) {
       },
       location: metadata.location
     },
-    userDefined: filterUserDefinedMetadata(metadata)
+    userDefined: filterUserDefinedColumns(metadata)
   };
 }
 
 function beginUpload(ids, metadata, sequences) {
-  socketService.notifyAssemblyUpload(ids, 'UPLOAD_OK');
   messageQueueService.newAssemblyNotificationQueue(ids, {
-    tasks: Object.keys(ASSEMBLY_ANALYSES),
+    tasks: ASSEMBLY_ANALYSES,
     loggingId: 'Assembly ' + ids.assemblyId,
     notifyFn: socketService.notifyAssemblyUpload.bind(socketService, ids)
   }, function () {
@@ -84,6 +78,12 @@ function beginUpload(ids, metadata, sequences) {
 
     messageQueueService.newAssemblyUploadQueue(ids.assemblyId,
       function (uploadQueue) {
+        uploadQueue.subscribe(function () {
+          LOGGER.info('Received response from ' + this.name + ', destroying.');
+          uploadQueue.destroy();
+          socketService.notifyAssemblyUpload(ids, 'UPLOAD_OK');
+        });
+
         messageQueueService.getUploadExchange()
           .publish('upload', assembly, { replyTo: uploadQueue.name });
       }

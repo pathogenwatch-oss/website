@@ -34,15 +34,6 @@ function parseMessagesAsJson(queue) {
   };
 }
 
-// bind this function to a queue
-function destroyOnResponse(error) {
-  if (error) {
-    return LOGGER.error(error);
-  }
-  LOGGER.info('Received response from ' + this.name + ', destroying.');
-  this.destroy();
-}
-
 function generateQueueId(prefix) {
   return (prefix + uuid.v4());
 }
@@ -99,7 +90,6 @@ function newAssemblyUploadQueue(assemblyId, callback) {
     function (queue) {
       LOGGER.info('Upload queue "' + queue.name + '" is open');
       parseMessagesAsJson(queue);
-      queue.subscribe(destroyOnResponse.bind(queue));
       callback(queue);
     }
   );
