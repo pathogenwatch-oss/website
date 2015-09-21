@@ -1,7 +1,7 @@
 var assert = require('assert');
 var rewire = require('rewire');
 
-describe.only('Model: Sequence Type', function () {
+describe('Model: Sequence Type', function () {
 
   it('should generate a query key',
     function () {
@@ -44,5 +44,30 @@ describe.only('Model: Sequence Type', function () {
       assert.equal(stQueryKey, null);
     }
   );
+
+  it.only('should handle null alleles', function (done) {
+    var sequenceTypeModel = rewire('models/sequenceType');
+
+    var assembly = {
+      MLST_RESULT: {
+        alleles: {
+          arcc: null,
+          aroe: null,
+          glpf: null,
+          gmk_: null,
+          pta_: null,
+          tpi_: null,
+          yqil: null
+        },
+        stCode: 'Not determined'
+      }
+    };
+
+    sequenceTypeModel.addSequenceTypeData(assembly, '1234', function (_, result) {
+      assert.equal(result.sequenceType, assembly.stCode);
+      done();
+    });
+
+  });
 
 });

@@ -25,8 +25,8 @@ function getMlstQueryKeys(assembly) {
 
 function getMlstAllelesData(assembly, callback) {
   var queryKeys = getMlstQueryKeys(assembly);
-  if (!queryKeys) {
-    return callback(new Error('Assembly or MLST result missing'));
+  if (!queryKeys || !queryKeys.length) {
+    return callback(null, null);
   }
   LOGGER.info('Getting MLST alleles data');
   sequencesStorage.retrieveMany(queryKeys, function (error, mlstAllelesData) {
@@ -44,8 +44,9 @@ function addMlstAllelesToAssembly(assembly, mlstAlleles) {
 
   Object.keys(mlstAlleles).forEach(function (key) {
     var mlstAllele = mlstAlleles[key];
-    var locusId = mlstAllele.locusId;
-    alleles[locusId] = mlstAllele;
+    if (mlstAllele && mlstAllele.locusId) {
+      alleles[mlstAllele.locusId] = mlstAllele;
+    }
   });
 
   assembly.MLST_RESULT.code = locusIds.slice(1).reduce(function (memo, locusId) {
@@ -101,6 +102,9 @@ function addSequenceTypeData(assembly, speciesId, callback) {
       getMlstAllelesData(assembly, next);
     },
     function (mlstAlleles, next) {
+      if (!mlstAlleles) {
+        return next(null, assembly.MLST_RESULT.stCode || UNKNOWN_ST);
+      }
       LOGGER.info('Got assembly MLST alleles data');
       addMlstAllelesToAssembly(assembly, mlstAlleles);
       getSequenceType(assembly, speciesId, next);
