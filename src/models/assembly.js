@@ -11,7 +11,7 @@ var MLST_KEY = 'MLST_RESULT';
 var FP_COMP_KEY = 'FP_COMP';
 var CORE_KEY = 'CORE_SLIM';
 
-var ASSEMBLY_ANALYSES = [ 'FP', 'MLST', 'PAARSNP', 'KERNEL' ];
+var ASSEMBLY_ANALYSES = [ 'FP', 'MLST', 'PAARSNP', 'CORE' ];
 
 var systemMetadataColumns = [
   'assemblyId', 'soeciesId', 'assemblyName',
