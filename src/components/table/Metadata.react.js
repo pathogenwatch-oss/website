@@ -57,10 +57,10 @@ const systemColumnProps = [
       return analysis.mlst;
     },
   },
-  { label: 'COMPLETE MATCHES',
-    dataKey: '__complete_matches',
+  { label: 'KERNEL SIZE',
+    dataKey: '__kernel_size',
     labelGetter({ analysis }) {
-      return analysis.totalCompleteMatches;
+      return analysis.kernelSize;
     },
   },
 ];

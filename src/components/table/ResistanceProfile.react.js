@@ -11,8 +11,8 @@ import FilteredDataStore from '../../stores/FilteredDataStore';
 import FilteredDataActionCreators from '../../actions/FilteredDataActionCreators';
 
 let columnProps = [
-  { label: 'Assembly',
-    dataKey: 'name',
+  { label: 'ASSEMBLY',
+    dataKey: '__assembly',
     fixed: true,
   },
 ];
@@ -32,7 +32,7 @@ function mapAssemblyIdToTableRow(assemblyId) {
   const { metadata, analysis } = getAssembly(assemblyId);
   return assign({
     id: metadata.assemblyId,
-    name: metadata.assemblyName,
+    __assembly: metadata.assemblyName,
   }, AntibioticsStore.list().reduce(function (memo, antibiotic) {
     if (!analysis.resistanceProfile[antibiotic]) {
       return memo;
@@ -63,7 +63,7 @@ export default React.createClass({
     columnProps = columnProps.concat(
       AntibioticsStore.list().map(function (antibiotic) {
         return {
-          label: antibiotic,
+          label: antibiotic.toUpperCase(),
           dataKey: antibiotic,
           headerClassName: 'wgsa-table-header wgsa-table-header--resistance',
           cellClassName: 'wgsa-table-cell wgsa-table-cell--resistance',
@@ -81,7 +81,7 @@ export default React.createClass({
 
     tableProps = {
       headerHeight: AntibioticsStore.list().reduce((maxWidth, antibiotic) => {
-        return Math.max(maxWidth, canvas.measureText(antibiotic).width + 32);
+        return Math.max(maxWidth, canvas.measureText(antibiotic.toUpperCase()).width + 32);
       }, 0),
     };
   },
@@ -99,7 +99,7 @@ export default React.createClass({
       <FixedTable
         data={FilteredDataStore.getAssemblyIds().map(mapAssemblyIdToTableRow)}
         columns={columnProps}
-        calculatedColumnWidths={[ 'name' ]}
+        calculatedColumnWidths={[ '__assembly' ]}
         tableProps={tableProps}
         headerClickHandler={setColourTableColumnName}
         { ...this.props }

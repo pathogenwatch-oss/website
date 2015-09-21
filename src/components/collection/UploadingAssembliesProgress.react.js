@@ -13,7 +13,7 @@ const ICON_STYLE = {
 
 const TABLE_STYLE = {
   width: 'auto',
-  border: 'none'
+  border: 'none',
 };
 
 const HEADER_STYLE = {
@@ -32,17 +32,18 @@ const FILE_ASSEMBLY_ID_STYLE = {
 
 const resultColumns = [
   'UPLOAD_OK',
+  'METADATA_OK',
   'PAARSNP',
   'MLST',
-  'CORE',
-  'FP'
+  'KERNEL',
+  'FP',
 ];
 
 const UploadingAssembliesProgress = React.createClass({
 
   getInitialState: function () {
     return {
-      assemblyResults: FileUploadingProgressStore.getReceivedAssemblyResults().assemblies
+      assemblyResults: FileUploadingProgressStore.getReceivedAssemblyResults().assemblies,
     };
   },
 
@@ -58,7 +59,7 @@ const UploadingAssembliesProgress = React.createClass({
 
   handleFileUploadingProgressStoreChange: function () {
     this.setState({
-      assemblyResults: FileUploadingProgressStore.getReceivedAssemblyResults().assemblies
+      assemblyResults: FileUploadingProgressStore.getReceivedAssemblyResults().assemblies,
     });
   },
 
@@ -105,9 +106,10 @@ const UploadingAssembliesProgress = React.createClass({
           <tr>
             <td style={CELL_STYLE}></td>
             <td style={HEADER_STYLE}>UPLOAD</td>
+            <td style={HEADER_STYLE}>METADATA</td>
             <td style={HEADER_STYLE}>PAARSNP</td>
             <td style={HEADER_STYLE}>MLST</td>
-            <td style={HEADER_STYLE}>CORE</td>
+            <td style={HEADER_STYLE}>KERNEL</td>
             <td style={HEADER_STYLE}>FP</td>
           </tr>
         </thead>

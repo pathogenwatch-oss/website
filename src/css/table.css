@@ -65,6 +65,7 @@
 .wgsa-table-header--resistance button {
   transform: rotate(-90deg);
   transform-origin: left;
+  text-transform: uppercase;
   white-space: nowrap;
   position: absolute;
   bottom: 0;

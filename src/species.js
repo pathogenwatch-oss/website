@@ -20,6 +20,12 @@ const definitions = {
     formattedName: (<span><em>Salmonella</em> Enteritidis</span>),
   },
 
+  lismn: {
+    id: '1639',
+    nickname: 'lismn',
+    formattedName: (<span><em>Listeria monocytogenes</em></span>),
+  },
+
 };
 
 const definitionsAsList = Object.keys(definitions).map(key => definitions[key]);
