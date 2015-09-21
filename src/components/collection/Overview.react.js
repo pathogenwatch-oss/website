@@ -20,8 +20,8 @@ export default React.createClass({
       assemblies: UploadStore.getAssemblies(),
       assemblyCount: UploadStore.getAssembliesCount(),
       currentChart: {
-        title: 'N50 Contigs',
-        type: 'contigN50',
+        title: 'Assembly Length',
+        type: 'totalNumberOfNucleotidesInDnaStrings',
       },
     };
   },
@@ -88,9 +88,9 @@ export default React.createClass({
 
             <div className="wgsa-chart-select mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
               <div className="mdl-tabs__tab-bar">
-                  <a href="#overview-chart-panel" className="mdl-tabs__tab is-active" onClick={this.showChart.bind(this, 'contigN50', 'N50')}>N50</a>
-                  <a href="#overview-chart-panel" className="mdl-tabs__tab" onClick={this.showChart.bind(this, 'totalNumberOfContigs', 'No. Contigs')}>No. Contigs</a>
-                  <a href="#overview-chart-panel" className="mdl-tabs__tab" onClick={this.showChart.bind(this, 'totalNumberOfNucleotidesInDnaStrings', 'Assembly Length')}>Assembly Length</a>
+                <a href="#overview-chart-panel" className="mdl-tabs__tab  is-active" onClick={this.showChart.bind(this, 'totalNumberOfNucleotidesInDnaStrings', 'Assembly Length')}>Assembly Length</a>
+                <a href="#overview-chart-panel" className="mdl-tabs__tab" onClick={this.showChart.bind(this, 'contigN50', 'N50')}>N50</a>
+                <a href="#overview-chart-panel" className="mdl-tabs__tab" onClick={this.showChart.bind(this, 'totalNumberOfContigs', 'No. Contigs')}>No. Contigs</a>
               </div>
 
               <div className="card-style mdl-tabs__panel is-active" id="overview-chart-panel">
