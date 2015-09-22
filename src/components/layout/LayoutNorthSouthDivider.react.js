@@ -3,6 +3,8 @@ import React from 'react';
 import LayoutDivider from './LayoutDivider.react';
 import LayoutNavigation from '../LayoutNavigation.react';
 
+import Species from '../../species';
+
 const style = {
   width: '100%',
   height: '100%',
@@ -42,11 +44,14 @@ export default React.createClass({
           top={this.props.top}
           direction={'horizontal'}
           className={'northSouthDivider'} />
-        <LayoutNavigation
-          top={this.props.top}
-          showTimeline={this.props.showTimeline}
-          shortCollectionId={this.props.shortCollectionId}
-          onLayoutNavigationChange={this.props.onLayoutNavigationChange} />
+        { Species.missingAnalyses.indexOf('PAARSNP') === -1 ?
+          <LayoutNavigation
+            top={this.props.top}
+            showTimeline={this.props.showTimeline}
+            shortCollectionId={this.props.shortCollectionId}
+            onLayoutNavigationChange={this.props.onLayoutNavigationChange} />
+          : null
+        }
       </div>
     );
   },
