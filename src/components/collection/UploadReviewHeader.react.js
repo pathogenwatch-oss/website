@@ -22,7 +22,7 @@ export default React.createClass({
           <div className="mdl-layout-icon"></div>
           <div style={headerStyle} className="mdl-layout__header-row">
             <span style={headerStyle} className="mdl-layout-title">{this.props.title}</span>
-            <UploadButton activateButton={this.props.activateUploadButton} isUploading={this.props.isUploading} />
+            <UploadButton activateButton={this.props.activateUploadButton} uploadProgressPercentage={this.props.uploadProgressPercentage} isUploading={this.props.isUploading} />
           </div>
           <FileUploadingProgress />
         </header>

@@ -2,7 +2,8 @@ import React from 'react';
 
 import UploadStore from '../../stores/UploadStore.js';
 import AssemblyAnalysisOverviewChart from '../../components/collection/AssemblyAnalysisOverviewChart.react';
-import AssemblyAnalysisItem from './AssemblyAnalysisItem.react';
+import OverviewStatisticsItem from './OverviewStatisticsItem.react';
+import DEFAULT from '../../defaults';
 
 import Map from './Map.react';
 
@@ -62,6 +63,10 @@ export default React.createClass({
   render() {
     if (this.state.assemblyCount) {
       const locationsToAssembliesMap = UploadStore.getLocationToAssembliesMap();
+      console.log(this.props.isReadyToUpload)
+      var iconStyle = {
+        color: this.props.isUploading ? DEFAULT.CGPS.COLOURS.PURPLE : (this.props.isReadyToUpload ? 'green' : '#d11b1b')
+      };
 
       return (
         <div className="mdl-grid overviewContent">
@@ -70,15 +75,32 @@ export default React.createClass({
             <div className="card-style">
               <div className="mdl-grid mdl-grid--no-spacing">
                 <div className="mdl-cell mdl-cell--6-col">
-                  <AssemblyAnalysisItem label="Total Assemblies" value={this.state.assemblyCount} />
+                  <OverviewStatisticsItem label="Total Assemblies" value={this.state.assemblyCount} />
                 </div>
-
                 <div className="mdl-cell mdl-cell--6-col">
-                  <AssemblyAnalysisItem label="No. Contigs Range" value={noContigsRange.min + ' - ' + noContigsRange.max} />
+                  <OverviewStatisticsItem label="No. Contigs Range" value={noContigsRange.min + ' - ' + noContigsRange.max} />
                 </div>
-
                 <div className="mdl-cell mdl-cell--6-col">
-                  <AssemblyAnalysisItem label="Average Assembly Length" value={averageAssemblyLength} />
+                  <OverviewStatisticsItem label="Average Assembly Length" value={averageAssemblyLength} />
+                </div>
+                <div className="mdl-cell mdl-cell--6-col">
+                  <div className="wgsa-overview-upload-ready-card mdl-card mdl-shadow--2dp">
+                    { this.props.isUploading &&
+                        <div style={iconStyle} className="mdl-card__title mdl-card--expand">
+                          {this.props.uploadProgressPercentage + '%'}
+                        </div>
+                      ||
+                        <div className="mdl-card__title mdl-card--expand">
+                          <i style={iconStyle} className="material-icons">{this.props.isReadyToUpload && "check_circle" || "error"}</i>
+                        </div>
+                    }
+                    <span className="mdl-card__actions mdl-card--border">
+                      { this.props.isUploading && "Upload In Progress..."
+                        ||
+                          ( this.props.isReadyToUpload &&  "Ready To Upload" || "Not Ready To Upload")
+                      }
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
