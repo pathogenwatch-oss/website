@@ -50,7 +50,7 @@ const AssemblyList = React.createClass({
         <AssemblyListItem
           key={assemblyName}
           assemblyName={assemblyName}
-          isValidMap={isValidMap}
+          isValid={isValidMap[assemblyName]}
           selected={assemblyName === this.state.selectedOption && this.state.isItemSelected}
           isUploading={this.state.isUploading} />
       );

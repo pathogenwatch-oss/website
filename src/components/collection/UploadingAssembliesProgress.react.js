@@ -63,7 +63,7 @@ const UploadingAssembliesProgress = React.createClass({
     const assemblyNames = UploadStore.getAssemblyNames();
     const assemblyResults = this.state.assemblyResults;
 
-    return assemblyNames.map(function createAssemblyResultElement(assemblyName) {
+    return assemblyNames.map((assemblyName) => {
       let assemblyResult = {};
 
       // This logic needs to be refactored:
