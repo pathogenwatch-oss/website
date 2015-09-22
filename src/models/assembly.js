@@ -128,7 +128,7 @@ function formatForFrontend(assembly) {
               };
             });
             return profile;
-          }, {}) : null
+          }, {}) : {}
     }
   };
 }
@@ -159,14 +159,20 @@ function get(params, queryKeyPrefixes, callback) {
 
 function getComplete(params, callback) {
   LOGGER.info('Getting assembly ' + params.assemblyId);
-  get(params, [
+
+  var keys = [
     METADATA_KEY,
     CORE_KEY,
     FP_COMP_KEY,
     MLST_KEY,
-    // HACK: skip for listeria!
-    params.speciesId !== '1639' ? PAARSNP_KEY : null,
-  ], function (error, assembly) {
+  ];
+
+  // HACK: skip PAARSNP for listeria
+  if (params.speciesId !== '1639') {
+    keys.push(PAARSNP_KEY);
+  }
+
+  get(params, keys, function (error, assembly) {
     if (error) {
       return callback(error);
     }
