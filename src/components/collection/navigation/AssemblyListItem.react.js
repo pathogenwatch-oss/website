@@ -44,7 +44,6 @@ const Component = React.createClass({
 
   render() {
     const assemblyName = this.props.assemblyName;
-    const isValidMap = this.props.isValidMap;
     var validatedIconStyle = {
       color: '#888'
     };
@@ -52,15 +51,13 @@ const Component = React.createClass({
       icon: 'remove'
     };
 
-    if (isValidMap) {
-      if(isValidMap[assemblyName]) {
-        validatedIconStyle = { color: 'green' };
-        validatedIcon = 'check';
-      }
-      else {
-        validatedIconStyle = { color: 'red' };
-        validatedIcon = 'error_outline';
-      }
+    if(this.props.isValid) {
+      validatedIconStyle = { color: 'green' };
+      validatedIcon = 'check';
+    }
+    else {
+      validatedIconStyle = { color: 'red' };
+      validatedIcon = 'error_outline';
     }
 
     return (
