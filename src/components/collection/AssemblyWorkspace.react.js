@@ -21,6 +21,7 @@ import UploadWorkspaceNavigationActionCreators from '../../actions/UploadWorkspa
 import UploadWorkspaceNavigationStore from '../../stores/UploadWorkspaceNavigationStore';
 import FileProcessingStore from '../../stores/FileProcessingStore';
 import FileUploadingStore from '../../stores/FileUploadingStore';
+import FileUploadingProgressStore from '../../stores/FileUploadingProgressStore';
 import SocketStore from '../../stores/SocketStore';
 
 import SocketUtils from '../../utils/Socket';
@@ -64,12 +65,14 @@ const AssemblyWorkspace = React.createClass({
       isUploading: FileUploadingStore.getFileUploadingState(),
       viewPage: 'overview',
       totalAssemblies: 0,
+      uploadProgressPercentage: 0,
     };
   },
 
   componentDidMount() {
     FileProcessingStore.addChangeListener(this.handleFileProcessingStoreChange);
     FileUploadingStore.addChangeListener(this.handleFileUploadingStoreChange);
+    FileUploadingProgressStore.addChangeListener(this.handleFileUploadingProgressStoreChange);
     UploadWorkspaceNavigationStore.addChangeListener(this.handleUploadWorkspaceNavigationStoreChange);
     UploadStore.addChangeListener(this.handleUploadStoreChange);
 
@@ -90,6 +93,7 @@ const AssemblyWorkspace = React.createClass({
   componentWillUnmount() {
     FileProcessingStore.removeChangeListener(this.handleFileProcessingStoreChange);
     FileUploadingStore.removeChangeListener(this.handleFileUploadingStoreChange);
+    FileUploadingProgressStore.removeChangeListener(this.handleFileUploadingProgressStoreChange);
     SocketStore.removeChangeListener(this.handleSocketStoreChange);
     UploadWorkspaceNavigationStore.removeChangeListener(this.handleUploadWorkspaceNavigationStoreChange);
     UploadStore.removeChangeListener(this.handleUploadStoreChange);
@@ -195,6 +199,14 @@ const AssemblyWorkspace = React.createClass({
     });
   },
 
+  handleFileUploadingProgressStoreChange() {
+    const percentage = FileUploadingProgressStore.getProgressPercentage();
+    this.setState({
+      uploadProgressPercentage: percentage,
+    });
+
+  },
+
   render() {
     let pageTitle = 'WGSA';
 
@@ -212,7 +224,7 @@ const AssemblyWorkspace = React.createClass({
     return (
       <FileDragAndDrop onDrop={this.handleDrop}>
         <div className="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-drawer">
-          <UploadReviewHeader title={pageTitle} activateUploadButton={this.state.uploadButtonActive} isUploading={this.state.isUploading} />
+          <UploadReviewHeader title={pageTitle} activateUploadButton={this.state.uploadButtonActive} uploadProgressPercentage={this.state.uploadProgressPercentage} isUploading={this.state.isUploading} />
 
           <UploadWorkspaceNavigation assembliesUploaded={this.props.assembly ? true : false} totalAssemblies={this.state.totalAssemblies}>
             <footer className="wgsa-upload-navigation__footer mdl-shadow--4dp">
@@ -267,7 +279,7 @@ const AssemblyWorkspace = React.createClass({
                 );
                 break;
                 case 'overview':  return (
-                 <Overview clickHandler={this.handleClick} />
+                 <Overview clickHandler={this.handleClick} uploadProgressPercentage={this.state.uploadProgressPercentage} isUploading={this.state.isUploading} isReadyToUpload={this.state.uploadButtonActive} />
                 );
                 break;
                 case 'upload_progress': return (
@@ -277,7 +289,7 @@ const AssemblyWorkspace = React.createClass({
                 );
                 break;
                 default: return (
-                  <Overview clickHandler={this.handleClick} />
+                  <Overview clickHandler={this.handleClick} uploadProgressPercentage={this.state.uploadProgressPercentage} isUploading={this.state.isUploading} isReadyToUpload={this.state.uploadButtonActive} />
                 );
                 }
               })() }

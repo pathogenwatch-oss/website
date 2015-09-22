@@ -2,7 +2,6 @@ import '../../../css/sonar.css';
 
 import React from 'react';
 import UploadActionCreators from '../../../actions/UploadActionCreators';
-import FileUploadingProgressStore from '../../../stores/FileUploadingProgressStore';
 import UploadWorkspaceNavigationActionCreators from '../../../actions/UploadWorkspaceNavigationActionCreators';
 
 
@@ -22,27 +21,6 @@ const iconStyle = {
 
 const UploadButton = React.createClass({
 
-  getInitialState() {
-    return {
-      uploadProgressPercentage: 0,
-    };
-  },
-
-  componentDidMount() {
-    FileUploadingProgressStore.addChangeListener(this.handleFileUploadingProgressStoreChange);
-  },
-
-  componentWillUnmount() {
-    FileUploadingProgressStore.removeChangeListener(this.handleFileUploadingProgressStoreChange);
-  },
-
-  handleFileUploadingProgressStoreChange: function () {
-    const percentage = FileUploadingProgressStore.getProgressPercentage();
-    this.setState({
-      uploadProgressPercentage: percentage,
-    });
-  },
-
   handleClick: function () {
     !this.props.isUploading && UploadActionCreators.getCollectionId();
     this.props.isUploading && UploadWorkspaceNavigationActionCreators.setViewPage('upload_progress');
@@ -56,7 +34,7 @@ const UploadButton = React.createClass({
         onClick={this.handleClick}>
         { this.props.isUploading &&
           <div>
-            {this.state.uploadProgressPercentage}%
+            {this.props.uploadProgressPercentage}%
           </div>
           ||
           <i style={iconStyle} className="material-icons">cloud_upload</i>
