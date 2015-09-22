@@ -10,8 +10,6 @@ import FilteredDataStore from '../../stores/FilteredDataStore';
 import ReferenceCollectionStore from '../../stores/ReferenceCollectionStore';
 import UploadedCollectionStore from '../../stores/UploadedCollectionStore';
 
-import FilteredDataActionCreators from '../../actions/FilteredDataActionCreators';
-
 import DEFAULT, { CGPS } from '../../defaults';
 
 const fullWidthHeight = {

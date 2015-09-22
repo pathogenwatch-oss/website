@@ -48,13 +48,14 @@ export default React.createClass({
   },
 
   render() {
-    const referenceAssembly = ReferenceCollectionStore.getAssemblies()[this.props.treeName];
-    const title = referenceAssembly.metadata.assemblyName;
+    const { treeName } = this.props;
+    const referenceAssembly = ReferenceCollectionStore.getAssemblies()[treeName];
+    const title = referenceAssembly ? referenceAssembly.metadata.assemblyName : treeName;
     let newick;
 
     const subtreeAssemblyIds = SubtreeStore.getActiveSubtreeAssemblyIds();
     if (subtreeAssemblyIds.length === 1) {
-      newick = `(${this.props.treeName}:0.5,${subtreeAssemblyIds[0]}:0.5);`;
+      newick = `(${treeName}:0.5,${subtreeAssemblyIds[0]}:0.5);`;
     } else {
       newick = SubtreeStore.getActiveSubtree().newick;
     }

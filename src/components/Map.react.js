@@ -47,7 +47,6 @@ const Map = React.createClass({
   },
 
   handleFilteredDataStoreChange: function () {
-    console.log(FilteredDataStore.getAssemblyIds());
     this.setState({
       assemblyIds: FilteredDataStore.getAssemblyIds(),
     });
