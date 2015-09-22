@@ -37,6 +37,7 @@ export default React.createClass({
       nodeSize: DEFAULT.NODE_SIZE,
       labelSize: DEFAULT.LABEL_SIZE,
       labelGetter: FilteredDataStore.getLabelGetter(),
+      colourColumnName: FilteredDataStore.getColourTableColumnName(),
       treeLoaded: false,
     });
   },
@@ -181,12 +182,19 @@ export default React.createClass({
   },
 
   handleFilteredDataStoreChange() {
+    const newState = {};
     const labelGetter = FilteredDataStore.getLabelGetter();
+    const colourTableColumn = FilteredDataStore.getColourTableColumnName();
+
     if (labelGetter !== this.state.labelGetter) {
-      this.setState({
-        labelGetter: FilteredDataStore.getLabelGetter(),
-      });
+      newState.labelGetter = labelGetter;
     }
+
+    if (colourTableColumn !== this.state.colourTableColumn) {
+      newState.colourTableColumn = colourTableColumn;
+    }
+
+    this.setState(newState);
   },
 
 });
