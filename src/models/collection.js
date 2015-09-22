@@ -127,7 +127,7 @@ function getAssemblies(params, assemblyGetFn, callback) {
     function (result, done) {
       var assemblyIds = result.assemblyIdentifiers;
       LOGGER.info('Got list of assemblies for collection ' + collectionId);
-      async.reduce(assemblyIds, {}, function (memo, assemblyIdWrapper, next) {
+      async.mapLimit(assemblyIds, 10, function (assemblyIdWrapper, callback) {
         var assemblyId = assemblyIdWrapper.assemblyId || assemblyIdWrapper; // List format varies between wrapped and raw value
         var assemblyParams = {
           assemblyId: assemblyId,
@@ -135,13 +135,10 @@ function getAssemblies(params, assemblyGetFn, callback) {
         };
         assemblyGetFn(assemblyParams, function (error, assembly) {
           if (error) {
-            return next(error);
+            return callback(error);
           }
           LOGGER.info('Got assembly ' + assemblyId);
-          memo[assemblyId] = assembly;
-
-          LOGGER.info((assemblyIds.length - Object.keys(memo).length) + ' assemblies left');
-          next(null, memo);
+          callback(null, assembly);
         });
       }, done);
     }
@@ -149,7 +146,10 @@ function getAssemblies(params, assemblyGetFn, callback) {
     if (error) {
       return callback(error, null);
     }
-    callback(null, result);
+    callback(null, result.reduce(function (memo, assembly) {
+      memo[assembly.metadata.assemblyId] = assembly;
+      return memo;
+    }, {}));
   });
 }
 
@@ -166,7 +166,8 @@ function getTree(suffix, callback) {
 }
 
 function getSubtrees(taxonToSubtreeMap, collectionId, callback) {
-  async.forEachOf(taxonToSubtreeMap,
+  async.forEachOfLimit(
+    taxonToSubtreeMap, 10,
     function (subtree, taxon, done) {
       getTree(collectionId + '_' + taxon, function (error, newickTree) {
         if (error) {
