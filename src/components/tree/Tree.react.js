@@ -10,6 +10,8 @@ import FilteredDataStore from '../../stores/FilteredDataStore';
 import ReferenceCollectionStore from '../../stores/ReferenceCollectionStore';
 import UploadedCollectionStore from '../../stores/UploadedCollectionStore';
 
+import FilteredDataActionCreators from '../../actions/FilteredDataActionCreators';
+
 import DEFAULT, { CGPS } from '../../defaults';
 
 const fullWidthHeight = {
@@ -24,7 +26,7 @@ export default React.createClass({
     title: React.PropTypes.string,
     navButton: React.PropTypes.element,
     styleTree: React.PropTypes.func,
-    leafSelected: React.PropTypes.func,
+    onUpdated: React.PropTypes.func,
   },
 
   getInitialState() {
@@ -56,7 +58,6 @@ export default React.createClass({
     phylocanvas.setNodeSize(this.state.nodeSize);
     phylocanvas.setTextSize(this.state.labelSize);
 
-    phylocanvas.on('updated', this.props.leafSelected);
     phylocanvas.on('subtree', this.handleRedrawSubtree);
     phylocanvas.on('historytoggle', this.handleHistoryToggle);
 
@@ -66,13 +67,13 @@ export default React.createClass({
   },
 
   componentWillUpdate() {
-    this.phylocanvas.canvasEl.removeEventListener('updated', this.props.leafSelected);
+    this.phylocanvas.canvasEl.removeEventListener('updated', this.props.onUpdated);
   },
 
   componentDidUpdate() {
     this.phylocanvas.resizeToContainer();
 
-    this.phylocanvas.on('updated', this.props.leafSelected);
+    this.phylocanvas.on('updated', this.props.onUpdated);
 
     if (this.props.newick && this.props.newick !== this.phylocanvas.stringRepresentation) {
       this.loadTree();
@@ -119,6 +120,7 @@ export default React.createClass({
   loadTree() {
     this.phylocanvas.load(this.props.newick, () => {
       this.styleTree();
+      this.phylocanvas.fitInPanel();
       this.setState({
         treeLoaded: true,
       });
@@ -149,8 +151,6 @@ export default React.createClass({
         }
       }
     }
-
-    this.phylocanvas.fitInPanel();
   },
 
   handleNodeSizeChange(event) {
@@ -181,9 +181,12 @@ export default React.createClass({
   },
 
   handleFilteredDataStoreChange() {
-    this.setState({
-      labelGetter: FilteredDataStore.getLabelGetter(),
-    });
+    const labelGetter = FilteredDataStore.getLabelGetter();
+    if (labelGetter !== this.state.labelGetter) {
+      this.setState({
+        labelGetter: FilteredDataStore.getLabelGetter(),
+      });
+    }
   },
 
 });

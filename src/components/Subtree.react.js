@@ -5,7 +5,9 @@ import Tree from './tree/Tree.react';
 import UploadedCollectionStore from '../stores/UploadedCollectionStore';
 import ReferenceCollectionStore from '../stores/ReferenceCollectionStore';
 import SubtreeStore from '../stores/SubtreeStore';
+
 import SubtreeActionCreators from '../actions/SubtreeActionCreators';
+import FilteredDataActionCreators from '../actions/FilteredDataActionCreators';
 
 import FilteredDataUtils from '../utils/FilteredData';
 
@@ -31,6 +33,14 @@ const backButton = (
   </button>
 );
 
+function onUpdated(event) {
+  if (event.property !== 'selected') {
+    return;
+  }
+  const { nodeIds } = event;
+  FilteredDataActionCreators.setAssemblyIds(nodeIds.length ? nodeIds : SubtreeStore.getActiveSubtreeAssemblyIds());
+}
+
 export default React.createClass({
 
   propTypes: {
@@ -54,7 +64,8 @@ export default React.createClass({
         title={title}
         newick={newick}
         navButton={backButton}
-        styleTree={styleTree} />
+        styleTree={styleTree}
+        onUpdated={onUpdated} />
     );
   },
 

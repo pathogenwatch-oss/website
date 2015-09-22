@@ -9,6 +9,12 @@ module.exports = {
     });
   },
 
+  clearAssemblyFilter() {
+    AppDispatcher.dispatch({
+      type: 'clear_assembly_filter',
+    });
+  },
+
   setLabelGetter(labelGetter) {
     AppDispatcher.dispatch({
       type: 'set_label_getter',

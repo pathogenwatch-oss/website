@@ -11,6 +11,7 @@ function defaultLabelGetter(assembly) {
   return assembly.metadata.assemblyName;
 }
 
+let collectionAssemblyIds = null;
 let assemblyIds = null;
 let userDefinedColumns = [];
 let labelGetter = defaultLabelGetter;
@@ -77,8 +78,25 @@ function handleAction(action) {
   switch (action.type) {
 
   case 'set_filtered_assembly_ids':
-    setAssemblyIds(action.assemblyIds);
-    emitChange();
+    const newAssemblyIds =
+      action.assemblyIds.length ?
+        action.assemblyIds :
+        collectionAssemblyIds;
+
+    if (newAssemblyIds !== assemblyIds) {
+      assemblyIds = newAssemblyIds;
+      emitChange();
+    }
+    break;
+
+  case 'clear_assembly_filter':
+    const unfilteredAssemblyIds =
+      SubtreeStore.getActiveSubtreeId() ?
+        SubtreeStore.getActiveSubtreeAssemblyIds() : collectionAssemblyIds;
+    if (unfilteredAssemblyIds !== assemblyIds) {
+      assemblyIds = unfilteredAssemblyIds;
+      emitChange();
+    }
     break;
 
   case 'set_label_getter':
@@ -92,17 +110,21 @@ function handleAction(action) {
     break;
 
   case 'set_collection':
+    AppDispatcher.waitFor([
+      UploadedCollectionStore.dispatchToken,
+    ]);
+    collectionAssemblyIds = Object.keys(UploadedCollectionStore.getAssemblies());
+    assemblyIds = collectionAssemblyIds;
+    setUserDefinedColumns();
+    emitChange();
+    break;
+
   case 'set_active_species_subtree_id':
     AppDispatcher.waitFor([
       SubtreeStore.dispatchToken,
-      UploadedCollectionStore.dispatchToken,
     ]);
-    if (!this.activeSubtreeId) {
-      assemblyIds = Object.keys(UploadedCollectionStore.getAssemblies());
-    } else {
-      assemblyIds = SubtreeStore.getActiveSubtreeAssemblyIds();
-    }
-    setUserDefinedColumns();
+
+    assemblyIds = action.activeSubtreeId ? SubtreeStore.getActiveSubtreeAssemblyIds() : collectionAssemblyIds;
     emitChange();
     break;
 

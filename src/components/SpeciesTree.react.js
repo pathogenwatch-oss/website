@@ -6,7 +6,9 @@ import Switch from './Switch.react';
 import ReferenceCollectionStore from '../stores/ReferenceCollectionStore';
 import SubtreeStore from '../stores/SubtreeStore';
 import UploadedCollectionStore from '../stores/UploadedCollectionStore';
+
 import SubtreeActionCreators from '../actions/SubtreeActionCreators';
+import FilteredDataActionCreators from '../actions/FilteredDataActionCreators';
 
 import FilteredDataUtils from '../utils/FilteredData';
 import { CGPS } from '../defaults';
@@ -64,7 +66,7 @@ const treeProps = {
         }
       }
     },
-    leafSelected(event) {
+    onUpdated(event) {
       if (event.property !== 'selected') {
         return;
       }
@@ -86,6 +88,17 @@ const treeProps = {
         leaf.labelStyle = collectionNodeLabelStyle;
       });
     },
+    onUpdated(event) {
+      if (event.property !== 'selected') {
+        return;
+      }
+      const { nodeIds } = event;
+      if (nodeIds.length) {
+        FilteredDataActionCreators.setAssemblyIds(nodeIds);
+      } else {
+        FilteredDataActionCreators.clearAssemblyFilter();
+      }
+    },
   },
 };
 
@@ -100,6 +113,10 @@ export default React.createClass({
   componentWillMount() {
     treeProps[POPULATION].newick = ReferenceCollectionStore.getTree();
     treeProps[COLLECTION].newick = UploadedCollectionStore.getTree();
+  },
+
+  componentDidUpdate() {
+    FilteredDataActionCreators.clearAssemblyFilter();
   },
 
   render() {
