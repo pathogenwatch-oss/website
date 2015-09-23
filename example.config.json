@@ -13,6 +13,10 @@
 				"sequences": {
 					"name": "wgsa_sequences",
 					"password": "4wgstuse"
+				},
+				"cache": {
+					"name": "wgsa_cache",
+					"password": "4wgstuse"
 				}
 			}
 		},
