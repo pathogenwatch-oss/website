@@ -132,7 +132,8 @@ export default React.createClass({
   },
 
   handleMenuCicks(event) {
-    event.stopImmediatePropagation();
+    console.log(event);
+    event.stopPropagation();
   },
 
   handleButtonClick() {

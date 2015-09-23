@@ -5,7 +5,11 @@ import React from 'react';
 import DownloadStore from '../stores/DownloadStore';
 import DownloadActionCreators from '../actions/DownloadActionCreators';
 
-import { CGPS } from '../defaults';
+import DEFAULT from '../defaults';
+
+const errorStyle = {
+  color: DEFAULT.DANGER_COLOUR,
+};
 
 export default React.createClass({
 
@@ -18,6 +22,7 @@ export default React.createClass({
   getInitialState() {
     return {
       loading: false,
+      error: null,
       link: null,
     };
   },
@@ -47,7 +52,7 @@ export default React.createClass({
 
     return (
       <button className="mdl-button mdl-button--icon" onClick={this.handleGenerateFile} title={`Generate ${this.props.description}`}>
-        <i className="wgsa-button-icon material-icons">insert_drive_file</i>
+        <i style={this.state.error ? errorStyle : {}} className="wgsa-button-icon material-icons">insert_drive_file</i>
       </button>
     );
   },
@@ -72,11 +77,12 @@ export default React.createClass({
   },
 
   handleDownloadStoreChange() {
-    const link = DownloadStore.getLink(this.props.id, this.props.format);
-    if (link) {
+    const status = DownloadStore.getDownloadStatus(this.props.id, this.props.format);
+    if (status) {
       this.setState({
         loading: false,
-        link,
+        error: status.error,
+        link: status.link,
       });
     }
   },
