@@ -51,7 +51,7 @@ function handleAction(action) {
     // ensures map is updated on first request
     requestedFiles[id] = requestedFilesForId;
 
-    Api.requestFile(fileType, { speciesId, idList: createIdList(id) },
+    Api.requestFile(fileType, { speciesId, idList: id },
       function (error, keyToFilenameMap) {
         if (error) {
           throw error;
