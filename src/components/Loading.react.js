@@ -1,33 +1,32 @@
+import '../css/loading.css';
 import '../css/progress-bar.css';
 
 import React from 'react';
 
+import Species from '../species';
+import { CGPS } from '../defaults';
+
+const backgroundStyle = {
+  background: CGPS.COLOURS.GREY_LIGHT,
+};
+
 const Loading = React.createClass({
 
   componentDidMount: function () {
-    componentHandler.upgradeElement(React.findDOMNode(this.refs.loader));
+    componentHandler.upgradeElement(this.refs.spinner.getDOMNode());
   },
 
   render: function () {
-    const headerStyle = {
-      fontWeight: '100',
-      fontSize: '25px',
-    };
-
-    const loaderStyle = {
-      width: '100%',
-    };
-
     return (
-      <div className="container text-center">
-        <div ref="loader" style={loaderStyle} className="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
-        <h1 style={headerStyle}>
-          {this.props.children}
-        </h1>
-      </div>
+      <main style={backgroundStyle} className="wgsa-loading-container">
+        <div ref="spinner" className="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active"></div>
+        <h1>Loading collection...</h1>
+      </main>
     );
   },
 
 });
+
+
 
 module.exports = Loading;

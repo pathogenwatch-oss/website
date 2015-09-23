@@ -40,7 +40,9 @@ apiRouter.post('/species/:speciesId/collection/:collectionId/assembly/:id', func
 });
 
 apiRouter.get('/species/:speciesId/collection/:id', function (req, res) {
-  res.sendFile(__dirname + '/static_data/collection.json');
+  setTimeout(function () {
+    res.sendFile(__dirname + '/static_data/collection.json');
+  }, 2000);
 });
 
 apiRouter.get('/species/:speciesId/reference', function (req, res) {
