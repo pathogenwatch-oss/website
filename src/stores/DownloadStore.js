@@ -25,7 +25,6 @@ const Store = assign({}, EventEmitter.prototype, {
       return null;
     }
 
-    console.log('requested files', requestedFiles)
     const keyToFilenameMap = requestedFiles[id][fileType];
     const key = Object.keys(keyToFilenameMap)[0];
     console.log('key', key);
@@ -54,7 +53,7 @@ function handleAction(action) {
     // ensures map is updated on first request
     requestedFiles[id] = requestedFilesForId;
 
-    Api.requestFile(fileType, { speciesId, idList: id },
+    Api.requestFile(fileType, { speciesId, idList: [ id ] },
       function (error, keyToFilenameMap) {
         if (error) {
           throw error;
