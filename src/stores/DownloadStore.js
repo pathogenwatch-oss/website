@@ -24,8 +24,11 @@ const Store = assign({}, EventEmitter.prototype, {
     if (!requestedFiles[id] || !requestedFiles[id][fileType]) {
       return null;
     }
+
+    console.log('requested files', requestedFiles)
     const keyToFilenameMap = requestedFiles[id][fileType];
     const key = Object.keys(keyToFilenameMap)[0];
+    console.log('key', key);
     return `/api/download/file/${encodeURIComponent(key)}?prettyFileName=${encodeURIComponent(keyToFilenameMap[key])}`;
   },
 
@@ -57,7 +60,7 @@ function handleAction(action) {
           throw error;
         }
         requestedFilesForId[fileType] = keyToFilenameMap;
-        console.log(requestedFiles);
+        console.log('ajax request files', requestedFiles);
         emitChange();
       }
     );

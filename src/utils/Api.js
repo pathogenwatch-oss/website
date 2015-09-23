@@ -65,10 +65,11 @@ function getCollection(speciesId, collectionId, callback) {
 }
 
 function requestFile(fileType, requestBody, callback) {
+  console.log(`request url /download/type/collection/format/${fileType}`)
   $.ajax(
     postJson(`/download/type/collection/format/${fileType}`, requestBody)
   ).done(function (response) {
-    console.log(response);
+    console.log('req response', response);
     callback(null, response);
   })
   .fail(function (error) {
