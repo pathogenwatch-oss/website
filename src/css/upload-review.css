@@ -488,6 +488,7 @@
 
 .wgsa-fileupload-progressbar.mdl-progress {
   width: 100%;
+  z-index: -1;
 }
 
 .uploadprogress-spinner-button {
