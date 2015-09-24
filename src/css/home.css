@@ -1,0 +1,120 @@
+.wgsa-home-header {
+  /*background: url(/assets/img/WGSA_logo.png) no-repeat 20px;*/
+  /*background-size: 40px;*/
+  margin: 0px;
+  padding: 20px;
+  background-color: #673c90;
+  color: #fff;
+}
+
+.wgsa-home-header a,
+.wgsa-home-header a:hover,
+.wgsa-home-header a:focus,
+.wgsa-home-header a:active,
+.wgsa-home-header a:visited {
+  color: #fff;
+  text-decoration: none;
+}
+
+.wgsa-home-section1 {
+  height: auto;
+  background: url(/assets/img/WGSA_logo.png) no-repeat;
+  background-position: center 32px;
+  background-size: 120px;
+  background-color: #fff;
+  border-bottom: 1px solid #ccc;
+}
+
+.wgsa-home-content {
+  text-align: center;
+  padding-top: 150px;
+}
+
+.wgsa-home-content h2 {
+  font-size: 48px;
+  font-weight: 400;
+}
+
+.wgsa-home-content p {
+  text-align: center;
+  max-width: 50%;
+  margin: 0 auto 32px;
+  font-size: 20px;
+  line-height: 34px;
+  color: #666;
+  font-weight: 300;
+}
+
+.wgsa-header {
+  color: #673c90;
+}
+
+.wgsa-home-section3 {
+  background-color: #d0e9dc;
+  padding: 32px 0px;
+}
+
+.wgsa-instructions {
+  padding: 48px 10%;
+}
+
+.wgsa-instructions p {
+  font-size: 25px;
+  line-height: 36px;
+  color: #555;
+}
+
+.wgsa-instructions ul {
+
+}
+
+.wgsa-instructions ol li {
+  line-height: 36px;
+  font-size: 20px;
+  font-weight: 300;
+}
+
+.wgsa-home-section4 {
+  background-color: #673c90;
+}
+
+.wgsa-nb {
+  text-align: center;
+  font-size: 20px;
+  font-weight: 300;
+  padding: 100px 50px;
+  color: #fff !important;
+}
+
+/********* Home page species list ***********/
+.wgsa-home-section2 {
+  background-color: #efefef;
+}
+
+.wgsa-species-list-container {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+}
+
+.wgsa-welcome-card-square {
+  width: 320px;
+  height: 320px;
+  margin-left: 32px;
+  margin-bottom: 32px;
+}
+
+.wgsa-welcome-card-square.mdl-card .mdl-card__title-text {
+  color: #fff;
+  text-transform: none;
+}
+
+.wgsa-welcome-card-square.mdl-card .mdl-card__supporting-text {
+  color: rgba(0,0,0,.54);
+  font-size: 13px;
+  line-height: 18px;
+  overflow: hidden;
+  padding: 16px;
+  width: 90%;
+}
+/*******************************************/
