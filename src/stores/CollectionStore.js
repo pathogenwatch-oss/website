@@ -10,25 +10,29 @@ import ReferenceCollectionStore from './ReferenceCollectionStore';
 
 const CHANGE_EVENT = 'change';
 
-const COLLECTION_STATES = keyMirror({
-  NO_COLLECTION_LOADED: null,
-  COLLECTION_LOADED: null,
+const STATES = keyMirror({
+  LOADED: null,
+  ERROR: null,
 });
 
-const state = COLLECTION_STATES.NO_COLLECTION_LOADED;
+let state = null;
 
 const Store = assign({}, EventEmitter.prototype, {
 
-  addChangeListener: function (callback) {
+  addChangeListener(callback) {
     this.on(CHANGE_EVENT, callback);
   },
 
-  removeChangeListener: function (callback) {
+  removeChangeListener(callback) {
     this.removeListener(CHANGE_EVENT, callback);
   },
 
-  getCollectionState: function () {
+  status() {
     return state;
+  },
+
+  get states() {
+    return STATES;
   },
 
 });
@@ -46,6 +50,12 @@ function handleAction(action) {
       SubtreeStore.dispatchToken,
       UploadedCollectionStore.dispatchToken,
     ]);
+    state = STATES.LOADED;
+    emitChange();
+    break;
+
+  case 'collection_error':
+    state = STATES.ERROR;
     emitChange();
     break;
 

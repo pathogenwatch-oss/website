@@ -15,3 +15,14 @@
   font-size: 36px;
   color: #a386bd;
 }
+
+.wgsa-loading-container a {
+  color: #673c90;
+}
+
+.wgsa-loading-container a:hover,
+.wgsa-loading-container a:focus,
+.wgsa-loading-container a:active,
+.wgsa-loading-container a:visited {
+  color: #a386bd;
+}
