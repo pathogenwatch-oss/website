@@ -29,14 +29,14 @@ router.post(
   }
 );
 
-router.get('/download/file/:fileName', function (req, res) {
+router.get('/download/file/:fileName', function (req, res, next) {
   LOGGER.info('Received request for files: ' + req.params.fileName);
 
   if (!req.query.prettyFileName) {
     return res.status(400).send('`prettyFileName` query parameter is required.');
   }
 
-  fileModel.getFile(req.params.fileName, function (error, result, next) {
+  fileModel.getFile(req.params.fileName, function (error, result) {
     if (error) {
       return next(error);
     }
