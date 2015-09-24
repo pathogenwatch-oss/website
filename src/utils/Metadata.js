@@ -101,7 +101,7 @@ function validateMetadata(collection) {
     }
     else if (collection[id].metadata.date.day && !(collection[id].metadata.date.day >= 1 && collection[id].metadata.date.day <= 31) ||
              collection[id].metadata.date.month && !(collection[id].metadata.date.month >= 1 && collection[id].metadata.date.month <= 12) ||
-             collection[id].metadata.date.year && !(collection[id].metadata.date.year > 1990 && collection[id].metadata.date.year <= year)) {
+             collection[id].metadata.date.year && !(collection[id].metadata.date.year > 1900 && collection[id].metadata.date.year <= year)) {
       isValidMap[id] = false;
     }
     else {
