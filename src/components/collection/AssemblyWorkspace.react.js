@@ -66,6 +66,7 @@ const AssemblyWorkspace = React.createClass({
       viewPage: 'overview',
       totalAssemblies: 0,
       uploadProgressPercentage: 0,
+      collectionUrl: null,
     };
   },
 
@@ -117,12 +118,20 @@ const AssemblyWorkspace = React.createClass({
   },
 
   handleFileUploadingStoreChange() {
+
     const uploadingResult = FileUploadingStore.getFileUploadingResult();
+    const id = FileUploadingStore.getCollectionId();
+    const { transitionTo, makePath } = this.context.router;
     if (uploadingResult === FileUploadingStore.getFileUploadingResults().SUCCESS) {
-      const id = FileUploadingStore.getCollectionId();
-      const { transitionTo, makePath } = this.context.router;
       transitionTo(makePath('collection', { species: Species.nickname, id }));
       return;
+    }
+    else {
+      if (id) {
+        this.setState({
+          collectionUrl: window.location.origin + makePath('collection', { species: Species.nickname, id })
+        })
+      }
     }
 
     this.setState({
@@ -284,7 +293,7 @@ const AssemblyWorkspace = React.createClass({
                 break;
                 case 'upload_progress': return (
                   <div>
-                    <UploadingFilesDetailed />
+                    <UploadingFilesDetailed collectionUrl={this.state.collectionUrl}/>
                   </div>
                 );
                 break;
