@@ -13,10 +13,10 @@ function constructFileFromParts(keys, parts) {
 
 function getFile(fileName, callback) {
   fileStorage.retrieve(fileName, function (error, partKeys) {
-    if (error) callback(error);
+    if (error) return callback(error);
     LOGGER.info(partKeys);
     fileStorage.retrieveMany(partKeys, function (error, parts) {
-      if (error) callback(error);
+      if (error) return callback(error);
       callback(null, constructFileFromParts(partKeys, parts));
     });
   });
@@ -31,6 +31,11 @@ function requestDownload(request, callback) {
       }
       LOGGER.info('Received response', message);
       queue.destroy();
+
+      if (message.status === 'FAILURE') {
+        return callback(new Error('File generation failed'));
+      }
+
       callback(null, message.fileNamesMap);
     });
 
