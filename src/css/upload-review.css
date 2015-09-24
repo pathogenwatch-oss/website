@@ -507,6 +507,20 @@
   margin: 16px;
 }
 
+.wgsa-collection-url-display {
+  margin-bottom: 16px;
+  padding: 16px;
+  text-align: center;
+}
+.wgsa-collection-url-display .mdl-card__supporting-text {
+  width: 100%;
+}
+.wgsa-collection-url {
+  padding-top: 16px;
+  color: #673c90;
+  font-size: 16px;
+}
+
 /*****************************************************/
 
 
