@@ -20,15 +20,11 @@ const Store = assign({}, EventEmitter.prototype, {
     this.removeListener(CHANGE_EVENT, callback);
   },
 
-  getLink(id, fileType = 'fasta') {
+  getDownloadStatus(id, fileType = 'fasta') {
     if (!requestedFiles[id] || !requestedFiles[id][fileType]) {
       return null;
     }
-
-    const keyToFilenameMap = requestedFiles[id][fileType];
-    const key = Object.keys(keyToFilenameMap)[0];
-    console.log('key', key);
-    return `/api/download/file/${encodeURIComponent(key)}?prettyFileName=${encodeURIComponent(keyToFilenameMap[key])}`;
+    return requestedFiles[id][fileType];
   },
 
 });
@@ -43,6 +39,14 @@ function createIdList(id) {
   return (id === collectionId) ? Object.keys(assemblies) : [ id ];
 }
 
+function createLink(keyToFilenameMap = {}) {
+  const key = Object.keys(keyToFilenameMap)[0];
+  if (!key) {
+    return '';
+  }
+  return `/api/download/file/${encodeURIComponent(key)}?prettyFileName=${encodeURIComponent(keyToFilenameMap[key])}`;
+}
+
 function handleAction(action) {
   switch (action.type) {
 
@@ -55,11 +59,10 @@ function handleAction(action) {
 
     Api.requestFile(fileType, { speciesId, idList: [ id ] },
       function (error, keyToFilenameMap) {
-        if (error) {
-          throw error;
-        }
-        requestedFilesForId[fileType] = keyToFilenameMap;
-        console.log('ajax request files', requestedFiles);
+        requestedFilesForId[fileType] = {
+          error,
+          link: createLink(keyToFilenameMap),
+        };
         emitChange();
       }
     );
