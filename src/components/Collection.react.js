@@ -18,10 +18,8 @@ export default class Collection extends React.Component {
     super(props);
 
     this.state = {
-      collection: null,
+      collectionStatus: null,
     };
-
-    this.checkGetCollection = this.checkGetCollection.bind(this);
   }
 
   componentWillMount() {
@@ -30,12 +28,7 @@ export default class Collection extends React.Component {
 
   componentDidMount() {
     CollectionStore.addChangeListener(this.handleCollectionStoreChange.bind(this));
-
-    this.checkGetCollection();
-  }
-
-  componentDidUpdate() {
-    this.checkGetCollection();
+    CollectionActionCreators.getCollection(Species.id, this.props.params.id);
   }
 
   componentWillUnmount() {
@@ -43,26 +36,21 @@ export default class Collection extends React.Component {
   }
 
   render() {
-    if (this.state.collection) {
+    if (this.state.collectionStatus === CollectionStore.states.LOADED) {
       return (
         <CollectionExplorer query={this.props.query} />
       );
     }
 
     return (
-      <Loading />
+      <Loading error={this.state.collectionStatus} />
     );
   }
 
   handleCollectionStoreChange() {
     this.setState({
-      collection: 'LOADED',
+      collectionStatus: CollectionStore.status(),
     });
   }
 
-  checkGetCollection() {
-    if (!this.state.isUploading && !this.state.collection) {
-      CollectionActionCreators.getCollection(Species.id, this.props.params.id);
-    }
-  }
 }

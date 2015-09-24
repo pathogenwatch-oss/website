@@ -3,7 +3,6 @@ import '../css/progress-bar.css';
 
 import React from 'react';
 
-import Species from '../species';
 import { CGPS } from '../defaults';
 
 const backgroundStyle = {
@@ -12,12 +11,17 @@ const backgroundStyle = {
 
 const Loading = React.createClass({
 
-  componentDidMount: function () {
+  componentDidMount() {
     componentHandler.upgradeElement(this.refs.spinner.getDOMNode());
   },
 
-  render: function () {
-    return (
+  render() {
+    return this.props.error ? (
+      <main style={backgroundStyle} className="wgsa-loading-container">
+        <h1>We're sorry, this collection is currently unavailable.</h1>
+        <p>Please try again later, or contact <a href="mailto:cgps@sanger.ac.uk">cgps@sanger.ac.uk</a> if problems persist.</p>
+      </main>
+    ) : (
       <main style={backgroundStyle} className="wgsa-loading-container">
         <div ref="spinner" className="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active"></div>
         <h1>Loading collection...</h1>
