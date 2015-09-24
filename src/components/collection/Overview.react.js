@@ -138,30 +138,31 @@ export default React.createClass({
         <div className="welcome-card mdl-shadow--2dp">
           <h2 className="welcome-card__title">FASTA Files: Genome Assemblies</h2>
           <p className="mdl-card__supporting-text">
-            Drag and drop your assemblies onto this browser window or click anywhere on the page to open the file upload dialog.
+            Drag and drop assemblies onto the page or click anywhere to open the file upload dialog.
           </p>
           <p className="mdl-card__supporting-text">
-            Assembled data must be in multi-FASTA format (one per genome), with the filename referenced in your metadata CSV file.
+            Assembled data must be in multi-FASTA format and should be one file per genome.
           </p>
         </div>
         <div className="welcome-card welcome-card--reverse mdl-shadow--2dp">
           <h2 className="welcome-card__title">CSV File: Metadata</h2>
           <p className="mdl-card__supporting-text">
-            To upload metadata, drag and drop a CSV file onto this browser window or click anywhere on the page to open the file upload dialog.
+            To include metadata, drag and drop a CSV file onto the page or click anywhere to open the file upload dialog.
           </p>
           <p className="mdl-card__supporting-text">
-            Your CSV file MUST contain a column <span className="wgsa-highlight-text">filename</span> including the name of each assembly file.  We strongly recommend you also add at least the following columns -
-            <span className="wgsa-highlight-text">
-              Day, Month, Year, Latitude, Longitude
-            </span>
+            Your CSV file MUST contain a column <span className="wgsa-highlight-text">filename</span> with values matching the name of each assembly file.  We strongly recommend you also include the following columns:
+            <br />
+             <ul className="wgsa-highlight-text">
+               <li>day</li>
+               <li>month</li>
+               <li>year</li>
+               <li>latitude</li>
+               <li>longitude</li>
+            </ul>
           </p>
-
           <p className="mdl-card__supporting-text">
-            You can add any other columns containing metadata you wish to explore within you genome data set.
+            You can add any other columns containing metadata you wish to explore within your genome data set.
           </p>
-
-
-
         </div>
       </div>
     );

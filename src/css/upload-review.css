@@ -109,12 +109,8 @@
 /**** Upload Overview ****/
 
 .wgsa-highlight-text {
-  color: #AC65A6;
-  /*font-weight: 00*/
-}
-
-.welcome-card p {
-  font-size: 14px;
+  color: #673c90;
+  font-weight: 700;
 }
 
 .wgsa-workspace-click-area {
@@ -174,23 +170,29 @@
   font-size: 24px;
   line-height: 32px;
   color: #a386bd;
-  margin-bottom: 16px;
+  margin-bottom: 32px;
   font-weight: 100;
 }
 
 .welcome-card {
-  width: 500px;
-  min-height: 200px;
-  padding: 0 24px;
+  width: 480px;
+  padding: 0 24px 16px;
   text-align: justify;
-  margin-bottom: 16px;
+  margin-bottom: 24px;
   box-sizing: border-box;
   background: url('/assets/img/WGSA_logo.png') #fff no-repeat;
   background-size: 60px;
   background-position: -15px -14px;
 }
 
-.welcome-species-container {
+.welcome-card p {
+  font-size: 14px;
+  text-align: left;
+  width: 100%;
+}
+
+.welcome-card ul {
+  margin-bottom: 0;
 }
 
 .welcome-card:last-child {
@@ -208,7 +210,7 @@
   color: #673c90;
   line-height: 1;
   margin-left: 56px;
-  margin-bottom: 16px;
+  margin-bottom: 24px;
 }
 
 .welcome-card--reverse .welcome-card__title {
