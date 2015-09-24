@@ -1,8 +1,11 @@
 /********* Home page species list ***********/
 .wgsa-home-header {
-  background: url(/assets/img/WGSA_logo.png) no-repeat 20px;
-  background-size: 40px;
+  /*background: url(/assets/img/WGSA_logo.png) no-repeat 20px;*/
+  /*background-size: 40px;*/
   margin: 0px;
+  padding: 20px;
+  background-color: #673c90;
+  color: #fff;
 }
 .wgsa-welcome-card-square {
   margin: 40px;
@@ -12,6 +15,7 @@
   display: flex;
   flex-flow: row wrap;
   justify-content: center;
+  background-color: #efefef;
 }
 
 .wgsa-welcome-card-square.mdl-card {
@@ -30,9 +34,88 @@
   padding: 16px;
   width: 90%;
 }
+
+.section1 {
+  height: auto;
+  background: url(/assets/img/WGSA_logo.png) no-repeat;
+  background-position: center 32px;
+  background-size: 120px;
+  background-color: #fff;
+  border-bottom: 1px solid #ccc;
+}
+
+.wgsa-home-content {
+  text-align: center;
+  padding-top: 150px;
+}
+
+.wgsa-home-content h2 {
+  font-size: 48px;
+  font-weight: 400;
+}
+
+.wgsa-home-content p {
+  text-align: center;
+  margin: 48px 64px;
+  font-size: 20px;
+  line-height: 34px;
+  color: #666;
+  font-weight: 300;
+}
+
+.wgsa-header {
+  color: #673c90;
+}
+
+.section3 {
+  background-color: #d0e9dc;
+  padding: 32px 0px;
+}
+
+.wgsa-instructions {
+  padding: 48px 10%;
+}
+
+.wgsa-instructions p {
+  font-size: 25px;
+  line-height: 36px;
+  color: #555;
+}
+
+.wgsa-instructions ul {
+
+}
+.wgsa-instructions ol li {
+  line-height: 36px;
+  font-size: 20px;
+  font-weight: 300;
+}
+.wgsa-text {
+
+}
+
+.section4 {
+  background-color: #673c90;
+}
+.wgsa-nb {
+  text-align: center;
+  font-size: 20px;
+  font-weight: 300;
+  padding: 100px 50px;
+  color: #fff !important;
+}
 /*******************************************/
 
 /**** Upload Overview ****/
+
+.wgsa-highlight-text {
+  color: #AC65A6;
+  /*font-weight: 00*/
+}
+
+.welcome-card p {
+  font-size: 14px;
+}
 
 .wgsa-workspace-click-area {
   height: 100%;
@@ -91,7 +174,7 @@
   font-size: 24px;
   line-height: 32px;
   color: #a386bd;
-  margin-bottom: 32px;
+  margin-bottom: 16px;
   font-weight: 100;
 }
 
@@ -99,7 +182,8 @@
   width: 500px;
   min-height: 200px;
   padding: 0 24px;
-  margin-bottom: 32px;
+  text-align: justify;
+  margin-bottom: 16px;
   box-sizing: border-box;
   background: url('/assets/img/WGSA_logo.png') #fff no-repeat;
   background-size: 60px;
@@ -124,7 +208,7 @@
   color: #673c90;
   line-height: 1;
   margin-left: 56px;
-  margin-bottom: 32px;
+  margin-bottom: 16px;
 }
 
 .welcome-card--reverse .welcome-card__title {
