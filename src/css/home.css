@@ -16,16 +16,27 @@
 }
 
 .wgsa-home-header {
-  background: url(/assets/img/WGSA_logo.png) no-repeat 20px;
-  background-size: 40px;
   margin: 0px;
-  padding: 20px;
+  padding: 32px 32px 0;
   color: #673c90;
 }
 
 .wgsa-home-header a {
-  padding-left: 48px;
   text-decoration: none;
+}
+
+.wgsa-home-header a > img,
+.wgsa-home-header a > span {
+  vertical-align: middle;
+}
+
+.wgsa-home-header a > img {
+  width: 40px;
+  margin-right: 8px;
+}
+
+.cgps-logo {
+  height: 40px;
 }
 
 .wgsa-home-section1 {
@@ -70,6 +81,7 @@
 }
 
 .wgsa-home-section2 h2 {
+  color: #a386bd;
   text-align: center;
   margin: 16px auto;
 }
@@ -150,7 +162,44 @@
   margin-top: 8px;
 }
 
+.wgsa-home footer {
+  background-color: #a386bd;
+  padding: 64px 0 16px;
+  text-align: center;
+  color: #fff;
+}
 
-.wgsa-home-section4 {
-  background-color: #673c90;
+.wgsa-home footer a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.wgsa-home footer a:hover,
+.wgsa-home footer a:focus,
+.wgsa-home footer a:active,
+.wgsa-home footer a:visited {
+  color: #673c90;
+}
+
+.wgsa-footer-content {
+  max-width: 732px;
+  margin: 0 auto;
+}
+
+.wgsa-footer-content img {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0 32px 32px;
+  max-width: 320px;
+}
+
+.contact-email {
+  font-size: 24px;
+  line-height: 1;
+  display: block;
+  padding: 24px 0;
+}
+
+.copyright {
+  font-size: 13px;
 }

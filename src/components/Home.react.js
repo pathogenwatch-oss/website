@@ -17,16 +17,20 @@ export default React.createClass({
     return (
       <section className="wgsa-home">
         <div className="wgsa-home-header mdl-layout__header-row">
-          <a href="/" className="mdl-layout-title">WGSA</a>
+          <a href="/" className="mdl-layout-title">
+            <img src="/assets/img/WGSA_logo.png" />WGSA
+          </a>
+          <div className="mdl-layout-spacer"></div>
+          <img className="cgps-logo" src="/assets/img/cgps-logo.svg" />
         </div>
         <div className="wgsa-home-section1">
           <div className="wgsa-home-content">
             <h1><span className="accent">W</span>hole <span className="accent">G</span>enome <span className="accent">S</span>equence <span className="accent">A</span>nalysis</h1>
             <p>
-              A web application for the upload, processing, clustering and exploration of microbial genome assemblies.
+              A web application for the processing, clustering and exploration of microbial genome assemblies.
             </p>
             <p className="wgsa-nb">
-              WGSA is in final <em>beta</em> testing prior to a full release in December 2015.<br/><a href="mailto:cgps@sanger.ac.uk">Your feedback</a> is appreciated.
+              WGSA is in final <em>beta</em> testing prior to full release in December 2015.<br/><a href="mailto:cgps@sanger.ac.uk">Your feedback</a> is appreciated.
             </p>
           </div>
         </div>
@@ -84,13 +88,11 @@ export default React.createClass({
         </div>
         <footer>
           <div className="wgsa-footer-content">
-            <img className="associate-logo" src="./assets/wellcome_trust_logo.png" />
-            <img className="associate-logo" src="./assets/imperial_logo.png" />
-            <div>
-              <a className="contact-email footer-link" href="mailto:cgps@sanger.ac.uk">cgps@sanger.ac.uk</a>
-              <p className="copyright">© 2015 Centre for Genomic Pathogen Surveillance</p>
-            </div>
+            <img className="associate-logo" src="/assets/img/wellcome_trust_logo.png" />
+            <img className="associate-logo" src="/assets/img/imperial_logo.png" />
           </div>
+          <a className="contact-email" href="mailto:cgps@sanger.ac.uk">cgps@sanger.ac.uk</a>
+          <p className="copyright">© 2015 Centre for Genomic Pathogen Surveillance</p>
         </footer>
       </section>
     );
