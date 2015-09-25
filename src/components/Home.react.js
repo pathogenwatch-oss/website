@@ -15,15 +15,18 @@ export default React.createClass({
 
   render() {
     return (
-      <section>
-        <div className="wgsa-home-header mdl-layout__header-row mdl-shadow--2dp">
+      <section className="wgsa-home">
+        <div className="wgsa-home-header mdl-layout__header-row">
           <a href="/" className="mdl-layout-title">WGSA</a>
         </div>
         <div className="wgsa-home-section1">
           <div className="wgsa-home-content">
-            <h1 style={textStyle}>WGSA</h1>
+            <h1><span className="accent">W</span>hole <span className="accent">G</span>enome <span className="accent">S</span>equence <span className="accent">A</span>nalysis</h1>
             <p>
-              Whole Genome Sequence Analysis (WGSA) is a web application for the upload, processing, clustering and exploration of microbial genome assemblies.
+              A web application for the upload, processing, clustering and exploration of microbial genome assemblies.
+            </p>
+            <p className="wgsa-nb">
+              WGSA is in final <em>beta</em> testing prior to a full release in December 2015.<br/><a href="mailto:cgps@sanger.ac.uk">Your feedback</a> is appreciated.
             </p>
           </div>
         </div>
@@ -32,7 +35,7 @@ export default React.createClass({
           <ul className="wgsa-species-list-container mdl-grid">
             { Species.list.map((speciesDef) => {
               return (
-                <li className="wgsa-welcome-card-square mdl-card mdl-shadow--2dp">
+                <li key={speciesDef.nickname} className="wgsa-welcome-card-square mdl-card mdl-shadow--2dp">
                   <div ref={speciesDef.nickname} style={{ backgroundImage: `url(${speciesDef.imagePath})` }} className="mdl-card__title mdl-card--expand">
                   </div>
                   <div className="mdl-card__supporting-text">
@@ -55,13 +58,11 @@ export default React.createClass({
           </ul>
         </div>
         <div className="wgsa-home-section3">
-          <div className="wgsa-instructions">
-            <p className="wgsa-heading">
-              Species - specific instances are listed above.
-            </p>
+          <div className="wgsa-features-card mdl-shadow--2dp">
+            <h2 className="wgsa-heading">Features</h2>
             <ol>
               <li>
-                Upload genome assemblies + metadata
+                Upload genome assemblies and metadata.
               </li>
               <li>
                 Results generated include:
@@ -73,19 +74,24 @@ export default React.createClass({
                 </ul>
               </li>
               <li>
-                Your genomes are placed within a ‘species population reference tree’ allowing comparison to other publicly available genomes.
+                Genomes placed within a ‘species population reference tree’ allowing comparison to other publicly available genomes.
               </li>
               <li>
-                Download processed results/ trees etc for further analysis.
+                Download processed results and trees for further analysis.
               </li>
             </ol>
           </div>
         </div>
-        <div className="wgsa-home-section4">
-          <p className="wgsa-nb">
-            NOTE: We are in final BETA testing prior to a full release in December 2015 and appreciate your feedback.
-          </p>
-        </div>
+        <footer>
+          <div className="wgsa-footer-content">
+            <img className="associate-logo" src="./assets/wellcome_trust_logo.png" />
+            <img className="associate-logo" src="./assets/imperial_logo.png" />
+            <div>
+              <a className="contact-email footer-link" href="mailto:cgps@sanger.ac.uk">cgps@sanger.ac.uk</a>
+              <p className="copyright">© 2015 Centre for Genomic Pathogen Surveillance</p>
+            </div>
+          </div>
+        </footer>
       </section>
     );
   },
