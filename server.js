@@ -58,7 +58,7 @@ module.exports = function (callback) {
 
     app.use('/', function (req, res, next) {
       // crude file matching
-      if (req.path.match(/\.[a-z]{1,4}$/)) {
+      if (req.path.match(/\.[a-z]{1,4}$/) || req.xhr) {
         return next();
       }
 
