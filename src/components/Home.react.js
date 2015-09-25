@@ -74,7 +74,7 @@ export default React.createClass({
                   <li>MLST</li>
                   <li>AMR predictions</li>
                   <li>Clustering of genomes</li>
-                  <li>Visualise and interact with metadata (Google Maps / Trees etc)</li>
+                  <li>Visualisation of metadata on interactive trees and Google Maps</li>
                 </ul>
               </li>
               <li>
