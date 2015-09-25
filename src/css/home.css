@@ -1,0 +1,205 @@
+.wgsa-home h2 {
+  font-size: 34px;
+  line-height: 40px;
+  color: #673c90;
+}
+
+.wgsa-home a {
+  color: #673c90;
+}
+
+.wgsa-home a:hover,
+.wgsa-home a:focus,
+.wgsa-home a:active,
+.wgsa-home a:visited {
+  color: #a386bd;
+}
+
+.wgsa-home-header {
+  margin: 0px;
+  padding: 32px 32px 0;
+  color: #673c90;
+}
+
+.wgsa-home-header a {
+  text-decoration: none;
+}
+
+.wgsa-home-header a > img,
+.wgsa-home-header a > span {
+  vertical-align: middle;
+}
+
+.wgsa-home-header a > img {
+  width: 40px;
+  margin-right: 8px;
+}
+
+.cgps-logo {
+  height: 40px;
+}
+
+.wgsa-home-section1 {
+  height: auto;
+  background-color: #fff;
+  border-bottom: 1px solid #ccc;
+}
+
+.wgsa-home-content {
+  text-align: center;
+}
+
+.wgsa-home-content h1 {
+  color: #a386bd;
+}
+
+.wgsa-home-content h1 > .accent {
+  color: #673c90;
+}
+
+.wgsa-home-content p {
+  text-align: center;
+  margin: 0 auto 32px;
+  padding: 0 16px;
+  /*max-width: 720px;*/
+  font-size: 20px;
+  line-height: 34px;
+  color: #666;
+  font-weight: 300;
+}
+
+.wgsa-nb {
+  padding: 100px 50px;
+  color: #673c90 !important;
+}
+
+/********* Home page species list ***********/
+
+.wgsa-home-section2 {
+  background-color: #efefef;
+  padding: 16px 0;
+}
+
+.wgsa-home-section2 h2 {
+  color: #a386bd;
+  text-align: center;
+  margin: 16px auto;
+}
+
+.wgsa-species-list-container {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  margin: 0 auto 16px;
+}
+
+.wgsa-welcome-card-square {
+  height: 320px;
+  margin: 8px;
+}
+
+@media (max-width: 1424px) {
+
+  .wgsa-species-list-container {
+    max-width: 692px;
+  }
+
+}
+
+.wgsa-welcome-card-square.mdl-card .mdl-card__title-text {
+  color: #fff;
+  text-transform: none;
+}
+
+.wgsa-welcome-card-square.mdl-card .mdl-card__supporting-text {
+  color: rgba(0,0,0,.54);
+  font-size: 13px;
+  line-height: 18px;
+  overflow: hidden;
+  padding: 16px;
+}
+/*******************************************/
+
+
+.wgsa-home-section3 {
+  padding: 0px 16px 48px;
+  background-color: #efefef;
+}
+
+.wgsa-features-card {
+  background: #fff;
+  color: #555;
+  max-width: 676px;
+  box-sizing: border-box;
+  margin: 0 auto;
+  padding: 32px;
+  background-image: url('/assets/img/WGSA_logo_flipped.png');
+  background-size: 90px;
+  background-position: calc(100% + 22.5px) -22.5px;
+  background-repeat: no-repeat;
+}
+
+.wgsa-features-card h2 {
+  margin-top: 0;
+}
+
+.wgsa-home-section3 ol {
+  margin-bottom: 0;
+}
+
+.wgsa-home-section3 li {
+  line-height: 20px;
+  font-size: 14px;
+  font-weight: 300;
+  margin-bottom: 8px;
+}
+
+.wgsa-home-section3 li li {
+  margin-bottom: 8px;
+}
+
+.wgsa-home-section3 li ul {
+  margin-top: 8px;
+}
+
+.wgsa-home footer {
+  background-color: #a386bd;
+  padding: 64px 0 16px;
+  text-align: center;
+  color: #fff;
+}
+
+.wgsa-home footer a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.wgsa-home footer a:hover,
+.wgsa-home footer a:focus,
+.wgsa-home footer a:active,
+.wgsa-home footer a:visited {
+  color: #673c90;
+}
+
+.wgsa-footer-content {
+  max-width: 732px;
+  margin: 0 auto;
+}
+
+.wgsa-footer-content img {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0 32px 32px;
+  max-width: 320px;
+}
+
+.contact-email {
+  font-size: 24px;
+  line-height: 1;
+  display: block;
+  padding: 24px 0;
+}
+
+.copyright {
+  font-size: 13px;
+}
