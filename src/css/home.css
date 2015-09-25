@@ -37,8 +37,9 @@
 
 .wgsa-home-content p {
   text-align: center;
-  max-width: 50%;
   margin: 0 auto 32px;
+  padding: 0 16px;
+  max-width: 720px;
   font-size: 20px;
   line-height: 34px;
   color: #666;
@@ -64,10 +65,6 @@
   color: #555;
 }
 
-.wgsa-instructions ul {
-
-}
-
 .wgsa-instructions ol li {
   line-height: 36px;
   font-size: 20px;
@@ -87,21 +84,38 @@
 }
 
 /********* Home page species list ***********/
+
 .wgsa-home-section2 {
   background-color: #efefef;
+  padding: 16px 0 32px;
+}
+
+.wgsa-home-section2 h2 {
+  text-align: center;
+  margin: 0px auto;
+  font-size: 24px;
+  color: #673c90;
 }
 
 .wgsa-species-list-container {
   display: flex;
   flex-flow: row wrap;
   justify-content: center;
+  margin: 0 auto;
 }
 
 .wgsa-welcome-card-square {
-  width: 320px;
+  /*width: 320px;*/
   height: 320px;
-  margin-left: 32px;
-  margin-bottom: 32px;
+  margin: 8px;
+}
+
+@media (max-width: 1424px) {
+
+  .wgsa-species-list-container {
+    max-width: 692px;
+  }
+
 }
 
 .wgsa-welcome-card-square.mdl-card .mdl-card__title-text {
@@ -115,6 +129,5 @@
   line-height: 18px;
   overflow: hidden;
   padding: 16px;
-  width: 90%;
 }
 /*******************************************/

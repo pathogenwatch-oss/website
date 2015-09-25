@@ -13,13 +13,6 @@ const textStyle = {
 
 export default React.createClass({
 
-  // componentDidMount() {
-  //   Species.list.map((speciesDef) => {
-  //     var element = React.findDOMNode(this.refs[speciesDef.nickname]);
-  //     element.style.backgroundImage = ;
-  //   });
-  // },
-
   render() {
     return (
       <section>
@@ -28,9 +21,7 @@ export default React.createClass({
         </div>
         <div className="wgsa-home-section1">
           <div className="wgsa-home-content">
-            <h1 style={textStyle}>
-              WGSA
-            </h1>
+            <h1 style={textStyle}>WGSA</h1>
             <p>
               Whole Genome Sequence Analysis (WGSA) is a web application for the upload, processing, clustering and exploration of microbial genome assemblies.
             </p>
@@ -38,10 +29,10 @@ export default React.createClass({
         </div>
         <div className="wgsa-home-section2">
           <h2>Species</h2>
-          <div className="wgsa-species-list-container">
+          <ul className="wgsa-species-list-container mdl-grid">
             { Species.list.map((speciesDef) => {
               return (
-                <div className="wgsa-welcome-card-square mdl-card mdl-shadow--2dp">
+                <li className="wgsa-welcome-card-square mdl-card mdl-shadow--2dp">
                   <div ref={speciesDef.nickname} style={{ backgroundImage: `url(${speciesDef.imagePath})` }} className="mdl-card__title mdl-card--expand">
                   </div>
                   <div className="mdl-card__supporting-text">
@@ -55,13 +46,13 @@ export default React.createClass({
                         style={textStyle}>
                         Upload
                       </Link> :
-                      <a href="#" className="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" disabled >Coming soon</a>
+                      <a className="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" disabled >Coming soon</a>
                     }
                   </div>
-                </div>
+                </li>
               );
             }) }
-          </div>
+          </ul>
         </div>
         <div className="wgsa-home-section3">
           <div className="wgsa-instructions">

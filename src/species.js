@@ -7,7 +7,7 @@ const definitions = {
     nickname: 'lismn',
     formattedName: (<span><em>Listeria monocytogenes</em></span>),
     imagePath: '/assets/img/lismn.jpg',
-    definitionText: (<span><strong><em>Listeria monocytogenes</em></strong> is the bacterium that causes the infection listeriosis.</span>),
+    definitionText: (<span><strong><em>Listeria monocytogenes</em></strong>, a bacterium causing the infection Listeriosis.</span>),
     missingAnalyses: [ 'PAARSNP' ],
     active: true,
   },
@@ -17,7 +17,7 @@ const definitions = {
     nickname: 'saureus',
     formattedName: (<span><em>Staphylococcus aureus</em></span>),
     imagePath: '/assets/img/saureus.jpg',
-    definitionText: (<span><strong><em>Staphylococcus aureus</em></strong> is a gram-positive coccal bacterium.</span>),
+    definitionText: (<span><strong><em>Staphylococcus aureus</em></strong>, a gram-positive coccal bacterium.</span>),
     active: false,
   },
 
@@ -26,7 +26,7 @@ const definitions = {
     nickname: 'salty',
     formattedName: (<span><em>Salmonella</em> Typhi</span>),
     imagePath: '/assets/img/salty.jpg',
-    definitionText: (<span><strong><em>Salmonella enterica</em></strong> subsp. <strong><em>enterica</em></strong> is a subspecies of Salmonella enterica.</span>),
+    definitionText: (<span><strong><em>Salmonella enterica</em></strong> subsp. <strong><em>enterica</em></strong>, a subspecies of Salmonella enterica.</span>),
     active: false,
   },
 
@@ -35,7 +35,7 @@ const definitions = {
     nickname: 'salen',
     formattedName: (<span><em>Salmonella</em> Enteritidis</span>),
     imagePath: '/assets/img/salen.jpg',
-    definitionText: (<span><strong><em>Salmonella</em></strong> serotype Enteritidis (SE) is one of the most common serotypes of Salmonella bacteria.</span>),
+    definitionText: (<span><strong><em>Salmonella</em></strong> serotype Enteritidis (SE), a common serotype of Salmonella bacteria.</span>),
     active: false,
   },
 
