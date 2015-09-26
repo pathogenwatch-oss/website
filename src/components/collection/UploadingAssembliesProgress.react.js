@@ -58,7 +58,7 @@ const UploadingAssembliesProgress = React.createClass({
     for (const assemblyName of Object.keys(FileUploadingStore.getAssemblyNameToAssemblyIdMap())) {
       const assemblyId = FileUploadingStore.getAssemblyNameToAssemblyIdMap()[assemblyName];
       const results = assemblyResults[assemblyId];
-      if (results && results.progress) {
+      if (results && results.progress && !results.UPLOAD_OK) {
         this.refs[`progress_${assemblyName}`].getDOMNode()
           .MaterialProgress.setProgress(results.progress);
       }
