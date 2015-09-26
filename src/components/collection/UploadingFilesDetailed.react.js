@@ -14,8 +14,8 @@ const UploadingFiles = React.createClass({
         <main className="wgsa-upload-progress-container">
           <div className="wgsa-collection-url-display card-style mdl-shadow--2dp">
             <div className="mdl-card__supporting-text">
-              Your final collection will be available at the below URL <br/>
-              If the upload appears to freeze, please try this URL later
+              Final results will be available at the below URL, <br/>
+              if upload fails to progress, please try this URL later.
             </div>
             <div className="mdl-card__supporting-text wgsa-collection-url">
               {this.props.collectionUrl || <div className="mdl-spinner mdl-js-spinner is-active"></div>}

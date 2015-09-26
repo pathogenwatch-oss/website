@@ -48,6 +48,23 @@ const UploadingAssembliesProgress = React.createClass({
     componentHandler.upgradeElement(React.findDOMNode(this.refs.table));
   },
 
+  componentDidUpdate() {
+    const { assemblyResults } = this.state;
+
+    if (!assemblyResults) {
+      return;
+    }
+
+    for (const assemblyName of Object.keys(FileUploadingStore.getAssemblyNameToAssemblyIdMap())) {
+      const assemblyId = FileUploadingStore.getAssemblyNameToAssemblyIdMap()[assemblyName];
+      const results = assemblyResults[assemblyId];
+      if (results && results.progress) {
+        this.refs[`progress_${assemblyName}`].getDOMNode()
+          .MaterialProgress.setProgress(results.progress);
+      }
+    }
+  },
+
   componentWillUnmount() {
     FileUploadingProgressStore.removeChangeListener(this.handleFileUploadingProgressStoreChange);
   },
@@ -65,10 +82,11 @@ const UploadingAssembliesProgress = React.createClass({
 
     return assemblyNames.map((assemblyName) => {
       let assemblyResult = {};
+      let assemblyId;
 
       // This logic needs to be refactored:
       if (assemblyNameToAssemblyIdMap && assemblyResults) {
-        const assemblyId = assemblyNameToAssemblyIdMap[assemblyName];
+        assemblyId = assemblyNameToAssemblyIdMap[assemblyName];
 
         if (assemblyResults[assemblyId]) {
           assemblyResult = assemblyResults[assemblyId];
@@ -81,11 +99,15 @@ const UploadingAssembliesProgress = React.createClass({
           { this.resultColumns.map((resultName) => {
             return (
               <td style={CELL_STYLE} key={`${assemblyName}-${resultName}`}>
-                <i style={ICON_STYLE} className="material-icons">
-                { assemblyResult[resultName] ?
-                    'check_circle' :
-                    'radio_button_unchecked' }
-                </i>
+                { resultName === 'UPLOAD_OK' && !assemblyResult[resultName] ?
+                  <div style={{ width: '80px', marginTop: '8px' }} ref={`progress_${assemblyName}`} className="mdl-progress mdl-js-progress"></div>
+                  :
+                  <i style={ICON_STYLE} className="material-icons">
+                  { assemblyResult[resultName] ?
+                      'check_circle' :
+                      'radio_button_unchecked' }
+                  </i>
+                }
               </td>
             );
           }) }

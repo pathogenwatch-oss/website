@@ -1,14 +1,14 @@
-var AppDispatcher = require('../dispatcher/AppDispatcher');
-var EventEmitter = require('events').EventEmitter;
-var assign = require('object-assign');
+import AppDispatcher from '../dispatcher/AppDispatcher';
+import { EventEmitter } from 'events';
+import assign from 'object-assign';
 
-var CHANGE_EVENT = 'change';
+const CHANGE_EVENT = 'change';
 
-var numberOfExpectedResults = null;
-var receivedResults = {};
-var receivedAssemblyResults = {
+let numberOfExpectedResults = null;
+const receivedResults = {};
+const receivedAssemblyResults = {
   assemblies: null,
-  collection: null
+  collection: null,
 };
 
 function setNumberOfExpectedResults(number) {
@@ -16,7 +16,7 @@ function setNumberOfExpectedResults(number) {
 }
 
 function setReceivedResult(result) {
-  var resultString = result.assemblyId + '__' + result.result;
+  const resultString = result.assemblyId + '__' + result.result;
 
   receivedResults[resultString] = true;
 
@@ -38,52 +38,65 @@ function setReceivedResult(result) {
   console.dir(receivedAssemblyResults);
 }
 
+function setAssemblyProgress(assemblyId, progress) {
+  receivedAssemblyResults.assemblies = receivedAssemblyResults.assemblies || {};
+  receivedAssemblyResults.assemblies[assemblyId] = receivedAssemblyResults.assemblies[assemblyId] || {};
+  receivedAssemblyResults.assemblies[assemblyId].progress = progress;
+  console.log(receivedResults);
+}
+
+const Store = assign({}, EventEmitter.prototype, {
+
+  addChangeListener(callback) {
+    this.on(CHANGE_EVENT, callback);
+  },
+
+  removeChangeListener(callback) {
+    this.removeListener(CHANGE_EVENT, callback);
+  },
+
+  getNumberOfExpectedResults() {
+    return numberOfExpectedResults;
+  },
+
+  getNumberOfReceivedResults() {
+    return Object.keys(receivedResults).length;
+  },
+
+  getProgressPercentage() {
+    return Math.floor(this.getNumberOfReceivedResults() * 100 / this.getNumberOfExpectedResults());
+  },
+
+  getReceivedAssemblyResults() {
+    return receivedAssemblyResults;
+  },
+
+});
+
 function emitChange() {
   Store.emit(CHANGE_EVENT);
 }
 
-var Store = assign({}, EventEmitter.prototype, {
-  addChangeListener: function (callback) {
-    this.on(CHANGE_EVENT, callback);
-  },
-
-  removeChangeListener: function (callback) {
-    this.removeListener(CHANGE_EVENT, callback);
-  },
-
-  getNumberOfExpectedResults: function () {
-    return numberOfExpectedResults;
-  },
-
-  getNumberOfReceivedResults: function () {
-    return Object.keys(receivedResults).length;
-  },
-
-  getProgressPercentage: function () {
-    return Math.floor(this.getNumberOfReceivedResults() * 100 / this.getNumberOfExpectedResults());
-  },
-
-  getReceivedAssemblyResults: function () {
-    return receivedAssemblyResults;
-  }
-
-});
-
 function handleAction(action) {
-
   switch (action.type) {
 
-    case 'set_number_of_expected_results':
-      setNumberOfExpectedResults(action.numberOfExpectedResults);
-      emitChange();
-      break;
+  case 'set_number_of_expected_results':
+    setNumberOfExpectedResults(action.numberOfExpectedResults);
+    emitChange();
+    break;
 
-    case 'add_received_result':
-      setReceivedResult(action.result);
-      emitChange();
-      break;
+  case 'set_assembly_progress':
+    setAssemblyProgress(action.assemblyId, action.progress);
+    emitChange();
+    break;
 
-    default: // ... do nothing
+  case 'add_received_result':
+    setReceivedResult(action.result);
+    emitChange();
+    break;
+
+  default:
+    // ... do nothing
 
   }
 }
