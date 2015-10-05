@@ -12,7 +12,7 @@ function createBucketConnection(config, cluster, callback) {
   var bucketName = config.name;
   var password = config.password;
 
-  LOGGER.info('Connecting to bucket: ' + bucketName + ' ' + password);
+  LOGGER.info('Connecting to bucket: ' + bucketName);
   var bucket = cluster.openBucket(bucketName, password,
     function (error) {
       if (error) {
