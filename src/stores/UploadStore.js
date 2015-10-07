@@ -88,7 +88,8 @@ const Store = assign({}, EventEmitter.prototype, {
 
   getLocationToAssembliesMap() {
     return Object.keys(assemblies).reduce((memo, id) => {
-      const { assemblyName, geography } =  assemblies[id].metadata;
+      const { geography } = assemblies[id].metadata;
+      const filename = assemblies[id].fasta.name;
       if (geography.position.latitude !== null) {
         const latlng =
           geography.position.latitude + ',' + geography.position.longitude;
@@ -98,8 +99,8 @@ const Store = assign({}, EventEmitter.prototype, {
             location: null,
           };
         }
-        if (assemblyName) {
-          memo[latlng].assemblyName.push(assemblyName);
+        if (filename) {
+          memo[latlng].assemblyName.push(filename);
         }
         if (geography.location) {
           memo[latlng].location = geography.location;
