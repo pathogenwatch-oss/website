@@ -213,7 +213,6 @@ const AssemblyWorkspace = React.createClass({
     this.setState({
       uploadProgressPercentage: percentage,
     });
-
   },
 
   render() {
