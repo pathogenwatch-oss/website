@@ -200,7 +200,8 @@ const AssemblyWorkspace = React.createClass({
         this.setState({
           toastMessage: {
             message: 'Maximum upload limit is set to 100',
-            type: 'warn'
+            type: 'warn',
+            sticky: true
           }
         });
       }
@@ -300,7 +301,7 @@ const AssemblyWorkspace = React.createClass({
             <div id="loadingAnimation" style={loadingAnimationStyle} className="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
 
             { this.state.toastMessage &&
-              <Toast ref="toast" message={this.state.toastMessage.message} title={this.state.toastMessage.title || ""} type={this.state.toastMessage.type || "info"} handleClose={this.handleToastClose} sticky={this.state.toastMessage.sticky}/>
+              <Toast ref="toast" message={this.state.toastMessage.message} title={this.state.toastMessage.title || ""} type={this.state.toastMessage.type || "info"} handleClose={this.handleToastClose} sticky={this.state.toastMessage.sticky || false}/>
             }
 
             {

@@ -8,18 +8,19 @@
   color: white;
   z-index: 1;
   width: 100%;
-  line-height: 60px;
+  line-height: 25px;
   display: flex;
   flex-direction: row;
 }
 
 .wgsa-toast-icon {
-  width: 60px;
+  /*width: 60px;*/
   /*background-color: #fff;*/
   display: flex;
   align-items: center;
   justify-content: center;
   border-right: 1px solid #ccc;
+  padding: 0px 15px;
 }
 .wgsa-toast-icon i, .wgsa-toast-close i{
   font-size: 40px;
@@ -38,7 +39,8 @@
 }
 
 .wgsa-toast-message{
-  padding: 0px 16px;
+  padding: 16px 32px 16px 16px;
+  font-size: 16px;
   font-weight: 100;
 }
 
