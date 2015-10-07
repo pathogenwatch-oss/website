@@ -1,7 +1,7 @@
 import CONFIG from '../config';
 
 const API_ROOT =
-  CONFIG.api ? `http://${CONFIG.api.hostname}:${CONFIG.api.port}/api` : '/api';
+  CONFIG.api ? `http://${CONFIG.api.address}/api` : '/api';
 
 function postJson(path, data) {
   return {
