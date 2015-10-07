@@ -63,7 +63,6 @@ export default React.createClass({
   render() {
     if (this.state.assemblyCount) {
       const locationsToAssembliesMap = UploadStore.getLocationToAssembliesMap();
-      console.log(this.props.isReadyToUpload)
       var iconStyle = {
         color: this.props.isUploading ? DEFAULT.CGPS.COLOURS.PURPLE : (this.props.isReadyToUpload ? 'green' : '#d11b1b')
       };

@@ -213,7 +213,6 @@ const AssemblyWorkspace = React.createClass({
     this.setState({
       uploadProgressPercentage: percentage,
     });
-
   },
 
   render() {
@@ -259,47 +258,45 @@ const AssemblyWorkspace = React.createClass({
             {
               (() => {
                 switch (this.state.viewPage) {
-                case 'assembly':  return (
-                  <div className="assemblyWorkspaceContainer mdl-grid assemblyWorkspaceContent">
-                    <div className="overflow-y--auto mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
-                      <div className="heading"> Metadata </div>
-                      <div className="card-style">
-                        <AssemblyMetadata assembly={this.props.assembly} />
-                      </div>
-                    </div>
-
-                    <div className="overflow-y--auto mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
-                      <div className="mdl-grid mdl-grid--no-spacing">
-                        <div className="mdl-cell mdl-cell--12-col">
-                          <div className="heading"> Assembly Statistics </div>
-                          <div className="card-style">
-                            <AssemblyAnalysis assembly={this.props.assembly} />
-                          </div>
-                        </div>
-                        <div className="mdl-cell mdl-cell--12-col">
-                          <div className="heading"> N50 Chart </div>
-                          <div className="card-style">
-                            <AssemblyAnalysisChart analysis={this.props.assembly.analysis} />
-                          </div>
+                case 'assembly':
+                  return (
+                    <div className="assemblyWorkspaceContainer mdl-grid assemblyWorkspaceContent">
+                      <div className="overflow-y--auto mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
+                        <div className="heading"> Metadata </div>
+                        <div className="card-style">
+                          <AssemblyMetadata assembly={this.props.assembly} />
                         </div>
                       </div>
+                      <div className="overflow-y--auto mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
+                        <div className="mdl-grid mdl-grid--no-spacing">
+                          <div className="mdl-cell mdl-cell--12-col">
+                            <div className="heading"> Assembly Statistics </div>
+                            <div className="card-style">
+                              <AssemblyAnalysis assembly={this.props.assembly} />
+                            </div>
+                          </div>
+                          <div className="mdl-cell mdl-cell--12-col">
+                            <div className="heading"> N50 Chart </div>
+                            <div className="card-style">
+                              <AssemblyAnalysisChart analysis={this.props.assembly.analysis} />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                );
-                break;
-                case 'overview':  return (
-                 <Overview clickHandler={this.handleClick} uploadProgressPercentage={this.state.uploadProgressPercentage} isUploading={this.state.isUploading} isReadyToUpload={this.state.uploadButtonActive} />
-                );
-                break;
-                case 'upload_progress': return (
-                  <div>
-                    <UploadingFilesDetailed collectionUrl={this.state.collectionUrl}/>
-                  </div>
-                );
-                break;
-                default: return (
-                  <Overview clickHandler={this.handleClick} uploadProgressPercentage={this.state.uploadProgressPercentage} isUploading={this.state.isUploading} isReadyToUpload={this.state.uploadButtonActive} />
-                );
+                  );
+                case 'overview':
+                  return (
+                   <Overview clickHandler={this.handleClick} uploadProgressPercentage={this.state.uploadProgressPercentage} isUploading={this.state.isUploading} isReadyToUpload={this.state.uploadButtonActive} />
+                  );
+                case 'upload_progress':
+                  return (
+                    <div>
+                      <UploadingFilesDetailed collectionUrl={this.state.collectionUrl}/>
+                    </div>
+                  );
+                default:
+                  // should never hit default
                 }
               })() }
           </main>
