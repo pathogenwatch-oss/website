@@ -100,7 +100,10 @@ const UploadingAssembliesProgress = React.createClass({
             return (
               <td style={CELL_STYLE} key={`${assemblyName}-${resultName}`}>
                 { resultName === 'UPLOAD_OK' && !assemblyResult[resultName] ?
-                  <div style={{ width: '80px', marginTop: '8px' }} ref={`progress_${assemblyName}`} className="mdl-progress mdl-js-progress"></div>
+                  <div>
+                    <p style={{ margin: 0, fontSize: '12px' }}>{`${assemblyResult.progress || 0}%`}</p>
+                    <div style={{ width: '80px', marginTop: '8px' }} ref={`progress_${assemblyName}`} className="mdl-progress mdl-js-progress"></div>
+                  </div>
                   :
                   <i style={ICON_STYLE} className="material-icons">
                   { assemblyResult[resultName] ?

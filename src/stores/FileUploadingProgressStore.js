@@ -41,7 +41,7 @@ function setReceivedResult(result) {
 function setAssemblyProgress(assemblyId, progress) {
   receivedAssemblyResults.assemblies = receivedAssemblyResults.assemblies || {};
   receivedAssemblyResults.assemblies[assemblyId] = receivedAssemblyResults.assemblies[assemblyId] || {};
-  receivedAssemblyResults.assemblies[assemblyId].progress = progress;
+  receivedAssemblyResults.assemblies[assemblyId].progress = Math.floor(progress);
   console.log(receivedResults);
 }
 
