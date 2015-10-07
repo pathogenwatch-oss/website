@@ -26,7 +26,7 @@ const collectionNodeLabelStyle = {
 };
 
 const defaultLeafStyle = {
-  colour: 'rgba(0, 0, 0, 0.54)',
+  colour: '#6B6B6B',
 };
 
 const emphasizedLeafStyle = {
