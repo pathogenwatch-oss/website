@@ -6,7 +6,7 @@ import FileDragAndDrop from 'react-file-drag-and-drop';
 
 import AssemblyMetadata from './AssemblyMetadata.react';
 import AssemblyAnalysis from './AssemblyAnalysis.react';
-
+import Toast from '../Toast.react';
 import AssemblyAnalysisChart from './AssemblyAnalysisChart.react';
 
 import UploadWorkspaceNavigation from './UploadWorkspaceNavigation.react';
@@ -67,6 +67,7 @@ const AssemblyWorkspace = React.createClass({
       totalAssemblies: 0,
       uploadProgressPercentage: 0,
       collectionUrl: null,
+      toastMessage: null,
     };
   },
 
@@ -150,6 +151,7 @@ const AssemblyWorkspace = React.createClass({
     if (event.files.length > 0 && !this.state.isUploading) {
       if (!this.state.confirmedMultipleMetadataDrop && this.state.totalAssemblies > 0) {
         var multipleDropConfirm = confirm('Duplicate records will be overwritten');
+
         if (multipleDropConfirm) {
           this.setState({
             confirmedMultipleMetadataDrop: true,
@@ -191,13 +193,41 @@ const AssemblyWorkspace = React.createClass({
       isValid = false;
     }
 
-    if (totalAssemblies < 3) {
+    if (totalAssemblies < 3 || totalAssemblies > 100) {
       isValid = false;
+
+      {totalAssemblies > 100 &&
+        this.setState({
+          toastMessage: {
+            message: 'Maximum upload limit is set to 100',
+            type: 'warn'
+          }
+        });
+      }
     }
 
     for (const id in isValidMap) {
       if (!isValidMap[id]) {
         isValid = false;
+
+        if(!assemblies[id].fasta.assembly) {
+          this.setState({
+            toastMessage: {
+              message: 'Assembly missing for ' + id,
+              type: 'warn',
+              sticky: true
+            }
+          });
+        }
+        else {
+          this.setState({
+            toastMessage: {
+              message: 'Please review the metadata for ' + id,
+              type: 'warn',
+              sticky: true
+            }
+          });
+        }
         break;
       }
     }
@@ -206,6 +236,13 @@ const AssemblyWorkspace = React.createClass({
       totalAssemblies,
       uploadButtonActive: isValid,
     });
+
+    {isValid &&
+      this.setState({
+        toastMessage: null
+      });
+    }
+
   },
 
   handleFileUploadingProgressStoreChange() {
@@ -214,6 +251,12 @@ const AssemblyWorkspace = React.createClass({
       uploadProgressPercentage: percentage,
     });
 
+  },
+
+  handleToastClose() {
+    this.setState({
+      toastMessage: null
+    });
   },
 
   render() {
@@ -255,6 +298,10 @@ const AssemblyWorkspace = React.createClass({
 
           <main className="mdl-layout__content" style={layoutContentStyle}>
             <div id="loadingAnimation" style={loadingAnimationStyle} className="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
+
+            { this.state.toastMessage &&
+              <Toast ref="toast" message={this.state.toastMessage.message} title={this.state.toastMessage.title || ""} type={this.state.toastMessage.type || "info"} handleClose={this.handleToastClose} sticky={this.state.toastMessage.sticky}/>
+            }
 
             {
               (() => {
