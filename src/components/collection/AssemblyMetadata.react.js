@@ -71,13 +71,13 @@ export default React.createClass({
 
     return (
       <form className="metadata-fields">
-        <InputField key="assemblyName" type="text" columnName="assemblyName" label="Assembly Name" value={assemblyName} handleChange={this.handleMetadataChange} readonly={this.state.isUploading}/>
-        <div className="mdl-grid mdl-grid--no-spacing">
-          <div className="mdl-cell mdl-cell--6-col">
+        <div className="mdl-grid mdl-grid--no-spacing" style={{ justifyContent: 'flexstart' }}>
+          <div className="mdl-cell mdl-cell--6-col" style={{ paddingRight: '16px' }}>
+            <InputField key="assemblyName" type="text" columnName="assemblyName" label="Assembly Name" value={assemblyName} handleChange={this.handleMetadataChange} readonly={this.state.isUploading}/>
             <MetadataDate key={fasta.name} assemblyId={fasta.name} date={metadata.date} disabled={this.state.isUploading}/>
           </div>
-          <div className="mdl-cell mdl-cell--6-col">
-            <Map width={"100%"} height={100} locations={locations} label="Location" />
+          <div className="mdl-cell mdl-cell--6-col" style={{ position: 'relative', height: '160px'}}>
+            <Map locations={locations} label="Location" />
           </div>
         </div>
         <div className="metadata-fields__other">
