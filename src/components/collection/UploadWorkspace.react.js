@@ -181,8 +181,8 @@ export default React.createClass({
     const totalAssemblies = UploadStore.getAssembliesCount();
     const assemblies = UploadStore.getAssemblies();
     const isValidMap = validateMetadata(assemblies);
-    let isValid = true;
 
+    let isValid = true;
     if (!Object.keys(isValidMap)) {
       isValid = false;
     }

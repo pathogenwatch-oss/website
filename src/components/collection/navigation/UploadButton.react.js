@@ -30,6 +30,7 @@ const UploadButton = React.createClass({
     return (
       <button
         style={uploadButtonStyle} className={`${this.props.activateButton && "wgsa-sonar-effect"} wgsa-upload-review-button mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--6dp`}
+        disabled={!this.props.activateButton}
         onClick={this.handleClick}>
         { this.props.isUploading &&
           <div>
