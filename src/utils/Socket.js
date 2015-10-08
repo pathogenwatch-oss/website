@@ -3,7 +3,7 @@ import CONFIG from '../config';
 
 function socketConnect() {
   if (CONFIG.api) {
-    return io.connect(CONFIG.api.hostname + ':' + CONFIG.api.port);
+    return io.connect(CONFIG.api.address);
   }
   return io.connect();
 }

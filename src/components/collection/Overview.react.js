@@ -63,7 +63,6 @@ export default React.createClass({
   render() {
     if (this.state.assemblyCount) {
       const locationsToAssembliesMap = UploadStore.getLocationToAssembliesMap();
-      console.log(this.props.isReadyToUpload)
       var iconStyle = {
         color: this.props.isUploading ? DEFAULT.CGPS.COLOURS.PURPLE : (this.props.isReadyToUpload ? 'green' : '#d11b1b')
       };
@@ -121,9 +120,9 @@ export default React.createClass({
             </div>
           </div>
 
-          <div className="mdl-cell mdl-cell--12-col increase-cell-gutter mdl-shadow--4dp">
-            <div className="card-style--no-padding">
-              <Map width="100%" height="400" locationAssemblyMap={locationsToAssembliesMap}/>
+          <div key="map" className="mdl-cell mdl-cell--12-col increase-cell-gutter mdl-shadow--4dp" style={{ height: '50%' }}>
+            <div className="card-style--no-padding" style={{ height: '100%', position: 'relative' }}>
+              <Map width="100%" height="100%" locationAssemblyMap={locationsToAssembliesMap}/>
             </div>
           </div>
         </div>

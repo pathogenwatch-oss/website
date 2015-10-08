@@ -1,15 +1,31 @@
+import { setAssemblyProgress } from '../actions/FileUploadingProgressActionCreators';
+
 import CONFIG from '../config';
 
 const API_ROOT =
-  CONFIG.api ? `http://${CONFIG.api.hostname}:${CONFIG.api.port}/api` : '/api';
+  CONFIG.api ? `http://${CONFIG.api.address}/api` : '/api';
 
-function postJson(path, data) {
+function postJson(path, data, progressFn) {
   return {
     type: 'POST',
     url: `${API_ROOT}${path}`,
     contentType: 'application/json; charset=UTF-8',
     data: JSON.stringify(data),
     dataType: 'json',
+    xhr() {
+      const xhr = new window.XMLHttpRequest();
+
+      if (progressFn) {
+        xhr.upload.addEventListener('progress', function (evt) {
+          if (evt.lengthComputable) {
+            const percentComplete = (evt.loaded / evt.total) * 100;
+            progressFn(percentComplete);
+          }
+        }, false);
+      }
+
+      return xhr;
+    },
   };
 }
 
@@ -28,7 +44,8 @@ function postAssembly({ speciesId, collectionId, assemblyId }, requestBody, call
   $.ajax(
     postJson(
       `/species/${speciesId}/collection/${collectionId}/assembly/${assemblyId}`,
-      requestBody
+      requestBody,
+      setAssemblyProgress.bind(null, assemblyId)
     )
   ).done(function (data) {
     callback(null, data);

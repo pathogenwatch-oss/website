@@ -1,12 +1,12 @@
-var AppDispatcher = require('../dispatcher/AppDispatcher');
-var UploadStore = require('../stores/UploadStore');
-var FileUploadingProgressStore = require('../stores/FileUploadingProgressStore');
-var FileUploadingStore = require('../stores/FileUploadingStore');
-var FileUploadingActionCreators = require('../actions/FileUploadingActionCreators');
+import AppDispatcher from '../dispatcher/AppDispatcher';
+import UploadStore from '../stores/UploadStore';
+import FileUploadingProgressStore from '../stores/FileUploadingProgressStore';
+import FileUploadingStore from '../stores/FileUploadingStore';
+import FileUploadingActionCreators from '../actions/FileUploadingActionCreators';
 
-module.exports = {
+export default {
 
-  setNumberOfExpectedResults: function () {
+  setNumberOfExpectedResults() {
     var numberOfAssembliesToUpload = UploadStore.getAssemblyNames().length;
     var numberOfResultsPerAssembly = FileUploadingStore.getAssemblyProcessingResults().length;
     var numberOfResultsPerCollection = Object.keys(FileUploadingStore.getCollectionProcessingResults()).length;
@@ -14,13 +14,21 @@ module.exports = {
 
     var action = {
       type: 'set_number_of_expected_results',
-      numberOfExpectedResults: numberOfExpectedResults
+      numberOfExpectedResults: numberOfExpectedResults,
     };
 
     AppDispatcher.dispatch(action);
   },
 
-  addReceivedResult: function (result) {
+  setAssemblyProgress(assemblyId, progress) {
+    AppDispatcher.dispatch({
+      type: 'set_assembly_progress',
+      assemblyId,
+      progress,
+    });
+  },
+
+  addReceivedResult(result) {
     const action = {
       type: 'add_received_result',
       result: result,

@@ -30,6 +30,17 @@ const FILE_ASSEMBLY_ID_STYLE = {
   fontWeight: '600',
 };
 
+const ASSEMBLY_PERCENT_STYLE = {
+  margin: 0,
+  fontSize: '12px',
+  lineHeight: '1',
+};
+
+const ASSEMBLY_PROGRESS_BAR_STYLE = {
+  width: '80px',
+  marginTop: '4px',
+};
+
 const UploadingAssembliesProgress = React.createClass({
 
   getInitialState() {
@@ -46,6 +57,23 @@ const UploadingAssembliesProgress = React.createClass({
     FileUploadingProgressStore.addChangeListener(this.handleFileUploadingProgressStoreChange);
 
     componentHandler.upgradeElement(React.findDOMNode(this.refs.table));
+  },
+
+  componentDidUpdate() {
+    const { assemblyResults } = this.state;
+
+    if (!assemblyResults) {
+      return;
+    }
+
+    for (const assemblyName of Object.keys(FileUploadingStore.getAssemblyNameToAssemblyIdMap())) {
+      const assemblyId = FileUploadingStore.getAssemblyNameToAssemblyIdMap()[assemblyName];
+      const results = assemblyResults[assemblyId];
+      if (results && results.progress && !results.UPLOAD_OK) {
+        this.refs[`progress_${assemblyName}`].getDOMNode()
+          .MaterialProgress.setProgress(results.progress);
+      }
+    }
   },
 
   componentWillUnmount() {
@@ -65,10 +93,11 @@ const UploadingAssembliesProgress = React.createClass({
 
     return assemblyNames.map((assemblyName) => {
       let assemblyResult = {};
+      let assemblyId;
 
       // This logic needs to be refactored:
       if (assemblyNameToAssemblyIdMap && assemblyResults) {
-        const assemblyId = assemblyNameToAssemblyIdMap[assemblyName];
+        assemblyId = assemblyNameToAssemblyIdMap[assemblyName];
 
         if (assemblyResults[assemblyId]) {
           assemblyResult = assemblyResults[assemblyId];
@@ -81,11 +110,18 @@ const UploadingAssembliesProgress = React.createClass({
           { this.resultColumns.map((resultName) => {
             return (
               <td style={CELL_STYLE} key={`${assemblyName}-${resultName}`}>
-                <i style={ICON_STYLE} className="material-icons">
-                { assemblyResult[resultName] ?
-                    'check_circle' :
-                    'radio_button_unchecked' }
-                </i>
+                { resultName === 'UPLOAD_OK' && !assemblyResult[resultName] ?
+                  <div>
+                    <p style={ASSEMBLY_PERCENT_STYLE}>{`${assemblyResult.progress || 0}%`}</p>
+                    <div style={ASSEMBLY_PROGRESS_BAR_STYLE} ref={`progress_${assemblyName}`} className="mdl-progress mdl-js-progress"></div>
+                  </div>
+                  :
+                  <i style={ICON_STYLE} className="material-icons">
+                  { assemblyResult[resultName] ?
+                      'check_circle' :
+                      'radio_button_unchecked' }
+                  </i>
+                }
               </td>
             );
           }) }
