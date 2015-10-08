@@ -147,17 +147,31 @@ const AssemblyWorkspace = React.createClass({
     });
   },
 
+  handleConfirmDuplicateOverwrite(files, confirmed) {
+    if (confirmed) {
+      this.setState({
+        confirmedMultipleMetadataDrop: true,
+        toastMessage: null
+      });
+      UploadActionCreators.addFiles(files);
+    }
+    else {
+      this.setState({
+        toastMessage: null
+      });
+    }
+  },
+
   handleDrop(event) {
     if (event.files.length > 0 && !this.state.isUploading) {
       if (!this.state.confirmedMultipleMetadataDrop && this.state.totalAssemblies > 0) {
-        var multipleDropConfirm = confirm('Duplicate records will be overwritten');
-
-        if (multipleDropConfirm) {
-          this.setState({
-            confirmedMultipleMetadataDrop: true,
-          });
-          UploadActionCreators.addFiles(event.files);
-        }
+        this.setState({
+          toastMessage: {
+            message: <ConfirmDuplicate confirmHandler={this.handleConfirmDuplicateOverwrite.bind(this, event.files)} />,
+            type: 'warn',
+            sticky: true
+          }
+        });
       } else {
         UploadActionCreators.addFiles(event.files);
       }
@@ -279,6 +293,10 @@ const AssemblyWorkspace = React.createClass({
         <div className="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-drawer">
           <UploadReviewHeader title={pageTitle} activateUploadButton={this.state.uploadButtonActive} uploadProgressPercentage={this.state.uploadProgressPercentage} isUploading={this.state.isUploading} />
 
+          { this.state.toastMessage &&
+            <Toast ref="toast" message={this.state.toastMessage.message} title={this.state.toastMessage.title || ""} type={this.state.toastMessage.type || "info"} handleClose={this.handleToastClose} sticky={this.state.toastMessage.sticky || false}/>
+          }
+
           <UploadWorkspaceNavigation assembliesUploaded={this.props.assembly ? true : false} totalAssemblies={this.state.totalAssemblies}>
             <footer className="wgsa-upload-navigation__footer mdl-shadow--4dp">
               <button type="button" title="Overview"
@@ -299,10 +317,6 @@ const AssemblyWorkspace = React.createClass({
 
           <main className="mdl-layout__content" style={layoutContentStyle}>
             <div id="loadingAnimation" style={loadingAnimationStyle} className="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
-
-            { this.state.toastMessage &&
-              <Toast ref="toast" message={this.state.toastMessage.message} title={this.state.toastMessage.title || ""} type={this.state.toastMessage.type || "info"} handleClose={this.handleToastClose} sticky={this.state.toastMessage.sticky || false}/>
-            }
 
             {
               (() => {
@@ -357,6 +371,24 @@ const AssemblyWorkspace = React.createClass({
     );
   },
 
+});
+
+const ConfirmDuplicate = React.createClass({
+  render() {
+    return (
+      <div className="wgsa-confirm-duplicate-button">
+        Any duplicate records encountered will be overwritten.
+        <button className="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
+          onClick={this.props.confirmHandler.bind(this, true)}>
+          Confirm
+        </button>
+        <button className="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
+          onClick={this.props.confirmHandler.bind(this, false)}>
+          Cancel
+        </button>
+      </div>
+    );
+  }
 });
 
 module.exports = AssemblyWorkspace;

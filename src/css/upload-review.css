@@ -1,16 +1,17 @@
 /**** Upload Overview ****/
 
 .wgsa-toast-container {
-  position: absolute;
+  position: fixed;
   right: 0px;
   bottom: 0px;
-  background-color: rgba(103, 60, 144, 0.8);
+  background-color: rgba(103, 60, 144, 0.9);
   color: white;
   z-index: 1;
   width: 100%;
   line-height: 25px;
   display: flex;
   flex-direction: row;
+  overflow: none;
 }
 
 .wgsa-toast-icon {
@@ -33,7 +34,7 @@
 .wgsa-toast-close {
   position: absolute;
   right: 0px;
-  padding: 10px;
+  padding: 14px;
   color: white;
   cursor: pointer
 }
@@ -94,6 +95,11 @@
   -webkit-animation-delay: 0;
   -webkit-animation-play-state: running;
   -webkit-animation-fill-mode: forwards;
+}
+
+.wgsa-confirm-duplicate-button button{
+  background: #ccc;
+  margin: 0px 8px;
 }
 
 .wgsa-highlight-text {
