@@ -12,7 +12,7 @@ var messageQueueConnection = require('utils/messageQueueConnection');
 var LOGGER = logging.getBaseLogger();
 var app = express();
 
-var clientPath = path.join(__dirname, 'node_modules', 'macroreact', 'public');
+var clientPath = path.join(__dirname, 'node_modules', 'wgsa_front-end', 'public');
 
 app.set('port', process.env.PORT || appConfig.server.node.port);
 // http://stackoverflow.com/a/19965089
