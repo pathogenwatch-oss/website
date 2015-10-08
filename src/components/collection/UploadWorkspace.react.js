@@ -6,13 +6,13 @@ import FileDragAndDrop from 'react-file-drag-and-drop';
 
 import AssemblyMetadata from './AssemblyMetadata.react';
 import AssemblyAnalysis from './AssemblyAnalysis.react';
-
 import AssemblyAnalysisChart from './AssemblyAnalysisChart.react';
 
 import UploadWorkspaceNavigation from './UploadWorkspaceNavigation.react';
 import UploadReviewHeader from './UploadReviewHeader.react';
 import Overview from './Overview.react';
 import UploadingFilesDetailed from './UploadingFilesDetailed.react';
+import Toast from '../Toast.react'
 
 import UploadActionCreators from '../../actions/UploadActionCreators';
 import UploadStore from '../../stores/UploadStore';
@@ -63,6 +63,7 @@ export default React.createClass({
       assemblyName: null,
       uploadProgressPercentage: 0,
       collectionUrl: null,
+      toastMessage: null,
     };
   },
 
@@ -142,16 +143,31 @@ export default React.createClass({
     });
   },
 
+  handleConfirmDuplicateOverwrite(files, confirmed) {
+    if (confirmed) {
+      this.setState({
+        confirmedMultipleMetadataDrop: true,
+        toastMessage: null
+      });
+      UploadActionCreators.addFiles(files);
+    }
+    else {
+      this.setState({
+        toastMessage: null
+      });
+    }
+  },
+
   handleDrop(event) {
     if (event.files.length > 0 && !this.state.isUploading) {
       if (!this.state.confirmedMultipleMetadataDrop && this.state.totalAssemblies > 0) {
-        var multipleDropConfirm = confirm('Duplicate records will be overwritten');
-        if (multipleDropConfirm) {
-          this.setState({
-            confirmedMultipleMetadataDrop: true,
-          });
-          UploadActionCreators.addFiles(event.files);
-        }
+        this.setState({
+          toastMessage: {
+            message: <ConfirmDuplicate confirmHandler={this.handleConfirmDuplicateOverwrite.bind(this, event.files)} />,
+            type: 'warn',
+            sticky: true
+          }
+        });
       } else {
         UploadActionCreators.addFiles(event.files);
       }
@@ -187,13 +203,42 @@ export default React.createClass({
       isValid = false;
     }
 
-    if (totalAssemblies < 3) {
+    if (totalAssemblies < 3 || totalAssemblies > 100) {
       isValid = false;
+
+      {totalAssemblies > 100 &&
+        this.setState({
+          toastMessage: {
+            message: 'Maximum upload limit is set to 100',
+            type: 'warn',
+            sticky: true
+          }
+        });
+      }
     }
 
     for (const id in isValidMap) {
       if (!isValidMap[id]) {
         isValid = false;
+
+        if(!assemblies[id].fasta.assembly) {
+          this.setState({
+            toastMessage: {
+              message: 'Assembly missing for ' + id,
+              type: 'warn',
+              sticky: true
+            }
+          });
+        }
+        else {
+          this.setState({
+            toastMessage: {
+              message: 'Please review the metadata for ' + id,
+              type: 'warn',
+              sticky: true
+            }
+          });
+        }
         break;
       }
     }
@@ -201,6 +246,18 @@ export default React.createClass({
     this.setState({
       totalAssemblies,
       uploadButtonActive: isValid,
+    });
+
+    { isValid &&
+      this.setState({
+        toastMessage: null
+      });
+    }
+  },
+
+  handleToastClose() {
+    this.setState({
+      toastMessage: null
     });
   },
 
@@ -299,8 +356,30 @@ export default React.createClass({
           </main>
         </div>
         <input type="file" multiple="multiple" accept={DEFAULT.SUPPORTED_FILE_EXTENSIONS} ref="fileInput" style={fileInputStyle} onChange={this.handleFileInputChange} />
+
+        { this.state.toastMessage &&
+          <Toast ref="toast" message={this.state.toastMessage.message} title={this.state.toastMessage.title || ""} type={this.state.toastMessage.type || "info"} handleClose={this.handleToastClose} sticky={this.state.toastMessage.sticky || false}/>
+        }
+
       </FileDragAndDrop>
     );
   },
+});
 
+const ConfirmDuplicate = React.createClass({
+  render() {
+    return (
+      <div className="wgsa-confirm-duplicate-button">
+        Any duplicate records encountered will be overwritten.
+        <button className="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
+          onClick={this.props.confirmHandler.bind(this, true)}>
+          Confirm
+        </button>
+        <button className="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
+          onClick={this.props.confirmHandler.bind(this, false)}>
+          Cancel
+        </button>
+      </div>
+    );
+  }
 });
