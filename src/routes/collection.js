@@ -27,7 +27,13 @@ router.get('/species/:speciesId/collection/:collectionId', function (req, res, n
 });
 
 router.post('/species/:id/collection', function (req, res, next) {
+  var assemblyNames = req.body.assemblyNames; // waiting for destructuring
+
   LOGGER.info('Received request for new collection id');
+
+  if (!assemblyNames || !assemblyNames.length || assemblyNames.length > 100) {
+    return res.sendStatus(400);
+  }
 
   collectionModel.add(req.params.id, req.body, function (error, result) {
     if (error) {
