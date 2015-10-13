@@ -4,11 +4,10 @@ import Species from '../species';
 
 export default {
 
-  requestFile: function (id, fileType) {
+  requestFile: function (format) {
     AppDispatcher.dispatch({
       type: 'request_file',
-      id,
-      fileType,
+      format,
       speciesId: Species.id,
     });
   },

@@ -17,10 +17,6 @@ let userDefinedColumns = [];
 let labelGetter = defaultLabelGetter;
 let colourTableColumnName = null;
 
-function setAssemblyIds(ids) {
-  assemblyIds = ids;
-}
-
 function setUserDefinedColumns() {
   const { userDefined } = UploadedCollectionStore.getAssemblies()[assemblyIds[0]].metadata;
   userDefinedColumns = userDefined ? Object.keys(userDefined) : [];
