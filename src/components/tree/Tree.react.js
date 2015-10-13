@@ -2,15 +2,20 @@ import '../../css/tree.css';
 
 import React from 'react';
 import PhyloCanvas from 'PhyloCanvas';
+import contextMenuPlugin from 'phylocanvas-plugin-context-menu';
 
 import TreeControls from './TreeControls.react';
 import TreeMenu from './TreeMenu.react';
+
+import FilteredDataActionCreators from '../../actions/FilteredDataActionCreators';
 
 import FilteredDataStore from '../../stores/FilteredDataStore';
 import ReferenceCollectionStore from '../../stores/ReferenceCollectionStore';
 import UploadedCollectionStore from '../../stores/UploadedCollectionStore';
 
 import DEFAULT, { CGPS } from '../../defaults';
+
+PhyloCanvas.plugin(contextMenuPlugin);
 
 const fullWidthHeight = {
   height: '100%',
@@ -58,7 +63,11 @@ export default React.createClass({
     phylocanvas.setTextSize(this.state.labelSize);
 
     phylocanvas.on('subtree', this.handleRedrawSubtree);
-    phylocanvas.on('historytoggle', this.handleHistoryToggle);
+    phylocanvas.on('original-tree', () => {
+      this.styleTree();
+      this.phylocanvas.fitInPanel();
+      this.phylocanvas.draw();
+    });
 
     this.phylocanvas = phylocanvas;
 
@@ -78,6 +87,7 @@ export default React.createClass({
       this.loadTree();
     } else {
       this.styleTree();
+      this.phylocanvas.draw();
     }
   },
 
@@ -120,6 +130,7 @@ export default React.createClass({
     this.phylocanvas.load(this.props.newick, () => {
       this.styleTree();
       this.phylocanvas.fitInPanel();
+      this.phylocanvas.draw();
       this.setState({
         treeLoaded: true,
       });
@@ -129,7 +140,6 @@ export default React.createClass({
   styleTree() {
     this.setNodeLabels();
     this.props.styleTree(this.phylocanvas);
-    this.phylocanvas.draw();
   },
 
   setNodeLabels() {
@@ -152,6 +162,12 @@ export default React.createClass({
     }
   },
 
+  handleRedrawSubtree() {
+    FilteredDataActionCreators.setAssemblyIds(
+      this.phylocanvas.leaves.map(_ => _.id)
+    );
+  },
+
   handleNodeSizeChange(event) {
     this.phylocanvas.setNodeSize(event.target.value);
   },
@@ -169,9 +185,8 @@ export default React.createClass({
   },
 
   handleRedrawOriginalTree() {
+    FilteredDataActionCreators.clearAssemblyFilter();
     this.phylocanvas.redrawOriginalTree();
-    this.styleTree(this.phylocanvas);
-    this.phylocanvas.draw();
   },
 
   handleToggleNodeAlign() {

@@ -115,8 +115,10 @@ export default React.createClass({
     treeProps[COLLECTION].newick = UploadedCollectionStore.getTree();
   },
 
-  componentDidUpdate() {
-    FilteredDataActionCreators.clearAssemblyFilter();
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.treeProps !== this.state.treeProps) {
+      FilteredDataActionCreators.clearAssemblyFilter();
+    }
   },
 
   render() {
