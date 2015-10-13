@@ -67,6 +67,8 @@ export default React.createClass({
       this.styleTree();
       this.phylocanvas.fitInPanel();
       this.phylocanvas.draw();
+
+      FilteredDataActionCreators.clearAssemblyFilter();
     });
 
     this.phylocanvas = phylocanvas;
@@ -185,7 +187,6 @@ export default React.createClass({
   },
 
   handleRedrawOriginalTree() {
-    FilteredDataActionCreators.clearAssemblyFilter();
     this.phylocanvas.redrawOriginalTree();
   },
 
