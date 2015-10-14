@@ -196,15 +196,21 @@ export default React.createClass({
 
   handleFilteredDataStoreChange() {
     const newState = {};
-    const labelGetter = FilteredDataStore.getLabelGetter();
-    const colourTableColumn = FilteredDataStore.getColourTableColumnName();
 
+    const labelGetter = FilteredDataStore.getLabelGetter();
     if (labelGetter !== this.state.labelGetter) {
       newState.labelGetter = labelGetter;
     }
 
+    const colourTableColumn = FilteredDataStore.getColourTableColumnName();
     if (colourTableColumn !== this.state.colourTableColumn) {
       newState.colourTableColumn = colourTableColumn;
+    }
+
+    const assemblyIds = FilteredDataStore.getAssemblyIds();
+    const hasTextFilter = FilteredDataStore.hasTextFilter();
+    for (const leaf of this.phylocanvas.leaves) {
+      leaf.highlighted = (hasTextFilter && assemblyIds.indexOf(leaf.id) !== -1);
     }
 
     this.setState(newState);

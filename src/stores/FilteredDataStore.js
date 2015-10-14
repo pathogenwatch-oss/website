@@ -16,6 +16,7 @@ let assemblyIds = null;
 let userDefinedColumns = [];
 let labelGetter = defaultLabelGetter;
 let colourTableColumnName = null;
+let hasTextFilter = false;
 
 function setUserDefinedColumns() {
   const { userDefined } = UploadedCollectionStore.getAssemblies()[assemblyIds[0]].metadata;
@@ -63,6 +64,10 @@ const FilteredDataStore = assign({}, EventEmitter.prototype, {
   getColourTableColumnName() {
     return colourTableColumnName;
   },
+
+  hasTextFilter() {
+    return hasTextFilter;
+  }
 
 });
 
@@ -130,6 +135,20 @@ function handleAction(action) {
       assemblyIds = unfilteredAssemblyIds;
       emitChange();
     }
+    break;
+
+  case 'set_text_filter':
+    if (!action.text) {
+      assemblyIds = unfilteredAssemblyIds;
+      hasTextFilter = false;
+    } else {
+      assemblyIds = unfilteredAssemblyIds.filter((id) => {
+        const assembly = UploadedCollectionStore.getAssemblies()[id];
+        return labelGetter(assembly).match(new RegExp(action.text, 'i'));
+      });
+      hasTextFilter = true;
+    }
+    emitChange();
     break;
 
   default:

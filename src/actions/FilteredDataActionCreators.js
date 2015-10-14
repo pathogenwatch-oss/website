@@ -36,4 +36,11 @@ module.exports = {
     });
   },
 
+  setTextFilter(text) {
+    AppDispatcher.dispatch({
+      type: 'set_text_filter',
+      text,
+    });
+  },
+
 };
