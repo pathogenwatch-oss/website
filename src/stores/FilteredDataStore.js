@@ -144,7 +144,7 @@ function handleAction(action) {
     } else {
       assemblyIds = unfilteredAssemblyIds.filter((id) => {
         const assembly = UploadedCollectionStore.getAssemblies()[id];
-        const value = '' + labelGetter(assembly); // cheap string coersion
+        const value = '' + labelGetter(assembly); // cheap string coercion
         return value && value.match(new RegExp(action.text, 'i'));
       });
       hasTextFilter = true;

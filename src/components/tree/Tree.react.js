@@ -31,6 +31,7 @@ export default React.createClass({
     styleTree: React.PropTypes.func,
     onUpdated: React.PropTypes.func,
     onRedrawOriginalTree: React.PropTypes.func,
+    highlightFilteredNodes: React.PropTypes.func,
   },
 
   getInitialState() {
@@ -207,13 +208,23 @@ export default React.createClass({
       newState.colourTableColumn = colourTableColumn;
     }
 
-    const assemblyIds = FilteredDataStore.getAssemblyIds();
-    const hasTextFilter = FilteredDataStore.hasTextFilter();
-    for (const leaf of this.phylocanvas.leaves) {
-      leaf.highlighted = (hasTextFilter && assemblyIds.indexOf(leaf.id) !== -1);
+    this.setState(newState);
+
+    if (!FilteredDataStore.hasTextFilter()) {
+      for (const leaf of this.phylocanvas.leaves) {
+        leaf.highlighted = false;
+      }
+      return;
     }
 
-    this.setState(newState);
+    if (this.props.highlightFilteredNodes) {
+      this.props.highlightFilteredNodes(this.phylocanvas);
+    } else {
+      const assemblyIds = FilteredDataStore.getAssemblyIds();
+      for (const leaf of this.phylocanvas.leaves) {
+        leaf.highlighted = (assemblyIds.indexOf(leaf.id) !== -1);
+      }
+    }
   },
 
 });
