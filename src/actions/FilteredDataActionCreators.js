@@ -29,4 +29,11 @@ module.exports = {
     });
   },
 
+  setBaseAssemblyIds(assemblyIds) {
+    AppDispatcher.dispatch({
+      type: 'set_base_assembly_ids',
+      assemblyIds,
+    });
+  },
+
 };

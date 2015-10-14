@@ -41,6 +41,10 @@ function onUpdated(event) {
   FilteredDataActionCreators.setAssemblyIds(nodeIds.length ? nodeIds : SubtreeStore.getActiveSubtreeAssemblyIds());
 }
 
+function onRedrawOriginalTree() {
+  FilteredDataActionCreators.setBaseAssemblyIds(SubtreeStore.getActiveSubtreeAssemblyIds());
+}
+
 export default React.createClass({
 
   propTypes: {
@@ -66,7 +70,8 @@ export default React.createClass({
         newick={newick}
         navButton={backButton}
         styleTree={styleTree}
-        onUpdated={onUpdated} />
+        onUpdated={onUpdated}
+        onRedrawOriginalTree={onRedrawOriginalTree} />
     );
   },
 

@@ -99,6 +99,11 @@ const treeProps = {
         FilteredDataActionCreators.clearAssemblyFilter();
       }
     },
+    onRedrawOriginalTree() {
+      FilteredDataActionCreators.setBaseAssemblyIds(
+        UploadedCollectionStore.getAssemblyIds()
+      );
+    },
   },
 };
 
@@ -117,7 +122,9 @@ export default React.createClass({
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.treeProps !== this.state.treeProps) {
-      FilteredDataActionCreators.clearAssemblyFilter();
+      FilteredDataActionCreators.setBaseAssemblyIds(
+        UploadedCollectionStore.getAssemblyIds()
+      );
     }
   },
 

@@ -30,6 +30,7 @@ export default React.createClass({
     navButton: React.PropTypes.element,
     styleTree: React.PropTypes.func,
     onUpdated: React.PropTypes.func,
+    onRedrawOriginalTree: React.PropTypes.func,
   },
 
   getInitialState() {
@@ -62,13 +63,17 @@ export default React.createClass({
     phylocanvas.setNodeSize(this.state.nodeSize);
     phylocanvas.setTextSize(this.state.labelSize);
 
-    phylocanvas.on('subtree', this.handleRedrawSubtree);
+    phylocanvas.on('subtree', () => {
+      FilteredDataActionCreators.setBaseAssemblyIds(
+        this.phylocanvas.leaves.map(_ => _.id)
+      );
+    });
     phylocanvas.on('original-tree', () => {
       this.styleTree();
       this.phylocanvas.fitInPanel();
       this.phylocanvas.draw();
 
-      FilteredDataActionCreators.clearAssemblyFilter();
+      this.props.onRedrawOriginalTree();
     });
 
     this.phylocanvas = phylocanvas;
@@ -162,12 +167,6 @@ export default React.createClass({
         }
       }
     }
-  },
-
-  handleRedrawSubtree() {
-    FilteredDataActionCreators.setAssemblyIds(
-      this.phylocanvas.leaves.map(_ => _.id)
-    );
   },
 
   handleNodeSizeChange(event) {

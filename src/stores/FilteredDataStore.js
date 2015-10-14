@@ -11,7 +11,7 @@ function defaultLabelGetter(assembly) {
   return assembly.metadata.assemblyName;
 }
 
-let collectionAssemblyIds = null;
+let unfilteredAssemblyIds = null;
 let assemblyIds = null;
 let userDefinedColumns = [];
 let labelGetter = defaultLabelGetter;
@@ -77,7 +77,7 @@ function handleAction(action) {
     const newAssemblyIds =
       action.assemblyIds.length ?
         action.assemblyIds :
-        collectionAssemblyIds;
+        unfilteredAssemblyIds;
 
     if (newAssemblyIds !== assemblyIds) {
       assemblyIds = newAssemblyIds;
@@ -86,9 +86,6 @@ function handleAction(action) {
     break;
 
   case 'clear_assembly_filter':
-    const unfilteredAssemblyIds =
-      SubtreeStore.getActiveSubtreeId() ?
-        SubtreeStore.getActiveSubtreeAssemblyIds() : collectionAssemblyIds;
     if (unfilteredAssemblyIds !== assemblyIds) {
       assemblyIds = unfilteredAssemblyIds;
       emitChange();
@@ -109,8 +106,8 @@ function handleAction(action) {
     AppDispatcher.waitFor([
       UploadedCollectionStore.dispatchToken,
     ]);
-    collectionAssemblyIds = Object.keys(UploadedCollectionStore.getAssemblies());
-    assemblyIds = collectionAssemblyIds;
+    unfilteredAssemblyIds = UploadedCollectionStore.getAssemblyIds();
+    assemblyIds = unfilteredAssemblyIds;
     setUserDefinedColumns();
     emitChange();
     break;
@@ -120,8 +117,19 @@ function handleAction(action) {
       SubtreeStore.dispatchToken,
     ]);
 
-    assemblyIds = action.activeSubtreeId ? SubtreeStore.getActiveSubtreeAssemblyIds() : collectionAssemblyIds;
+    unfilteredAssemblyIds = action.activeSubtreeId ?
+      SubtreeStore.getActiveSubtreeAssemblyIds() :
+      UploadedCollectionStore.getAssemblyIds();
+    assemblyIds = unfilteredAssemblyIds;
     emitChange();
+    break;
+
+  case 'set_base_assembly_ids':
+    if (unfilteredAssemblyIds !== action.assemblyIds) {
+      unfilteredAssemblyIds = action.assemblyIds;
+      assemblyIds = unfilteredAssemblyIds;
+      emitChange();
+    }
     break;
 
   default:
