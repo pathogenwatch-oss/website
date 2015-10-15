@@ -5,7 +5,7 @@ import AssemblyAnalysisOverviewChart from '../../components/collection/AssemblyA
 import OverviewStatisticsItem from './OverviewStatisticsItem.react';
 import DEFAULT from '../../defaults';
 
-import Map from './Map.react';
+import Map from '../map/UploadMap.react';
 
 var noContigsRange = {};
 var averageAssemblyLength = null;

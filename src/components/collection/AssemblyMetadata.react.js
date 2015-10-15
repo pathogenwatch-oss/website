@@ -5,7 +5,7 @@ import FileUploadingStore from '../../stores/FileUploadingStore.js';
 
 import MetadataDate from './metadata-form/Date.react';
 import InputField from './InputField.react';
-import Map from './Map.react.js';
+import Map from '../map/UploadMap.react.js';
 
 export default React.createClass({
 

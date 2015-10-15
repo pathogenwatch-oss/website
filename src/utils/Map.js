@@ -104,20 +104,8 @@ function drawTriangle(fillColour) {
   return canvas.toDataURL();
 }
 
-function getMarkerIcon(shape, fillColour) {
-  shape = shape.toLowerCase();
-
-  if (shape === 'square') {
-    return drawSquare(fillColour);
-  } else if (shape === 'circle') {
-    return drawCircle(fillColour);
-  } else if (shape === 'star') {
-    return drawStar(fillColour);
-  } else if (shape === 'triangle') {
-    return drawTriangle(fillColour);
-  } else {
-    throw new Error("Can't draw this shape: " + shape + ". I can draw: 'square', 'circle', 'star' and 'triangle'.");
-  }
+function getMarkerIcon(assembly) {
+  return drawCircle(CGPS.COLOURS.PURPLE_LIGHT);
 }
 
 function isNewDataObjectPositionGroup(DataObjectPositionGroup) {
