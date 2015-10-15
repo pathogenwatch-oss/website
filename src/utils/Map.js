@@ -1,41 +1,69 @@
-import MapStylesUtils from '../utils/MapStyles';
+import FilteredDataUtils from './FilteredData';
+import { COLOUR, CGPS } from '../defaults';
 
-import { CGPS } from '../defaults';
+const MARKER_SIZE = 16;
+const LINE_WIDTH = 2;
 
-const MARKER = {
-  SIZE: {
-    WIDTH: 12,
-    HEIGHT: 12,
-  },
-};
+const canvas = document.createElement('canvas');
+canvas.width = MARKER_SIZE;
+canvas.height = MARKER_SIZE;
 
-function drawCircle(fillColour) {
-  var canvas = document.createElement("canvas");
-  canvas.width = MARKER.SIZE.WIDTH;
-  canvas.height = MARKER.SIZE.HEIGHT;
-  var context = canvas.getContext('2d');
-  var centerX = canvas.width / 2;
-  var centerY = canvas.height / 2;
-  var radius = MARKER.SIZE.WIDTH / 2 - 1;
-  var startAngle = 0;
-  var endAngle = Math.PI * 2;
-  var isAnticlockwise = false;
+const context = canvas.getContext('2d');
+context.lineWidth = LINE_WIDTH;
+
+const centerX = canvas.width / 2;
+const centerY = canvas.height / 2;
+
+const radius = MARKER_SIZE / 2 - LINE_WIDTH;
+
+function drawSingleColourMarker(fillColour, strokeColour = COLOUR) {
+  context.clearRect(0, 0, MARKER_SIZE, MARKER_SIZE);
 
   context.beginPath();
-  context.arc(centerX, centerY, radius, startAngle, endAngle, isAnticlockwise);
+  context.arc(centerX, centerY, radius, 0, Math.PI * 2, false);
   context.fillStyle = fillColour;
   context.fill();
-  context.lineWidth = 2;
-  context.strokeStyle = CGPS.COLOURS.PURPLE;
+  context.strokeStyle = strokeColour;
   context.stroke();
+  context.closePath();
 
   return canvas.toDataURL();
 }
 
-const standardMarkerIcon = drawCircle(CGPS.COLOURS.PURPLE_LIGHT)
+const standardMarkerIcon = drawSingleColourMarker(CGPS.COLOURS.PURPLE_LIGHT);
+
+function drawDoubleColourMarker([ colour1, colour2 ], strokeColour = COLOUR) {
+  context.clearRect(0, 0, MARKER_SIZE, MARKER_SIZE);
+
+  context.beginPath();
+  context.arc(centerX, centerY, radius, Math.PI * 0.5, Math.PI * 1.5, false);
+  context.fillStyle = colour1;
+  context.fill();
+  context.closePath();
+
+  context.beginPath();
+  context.arc(centerX, centerY, radius, Math.PI * 1.5, Math.PI * 0.5, false);
+  context.fillStyle = colour2;
+  context.fill();
+  context.closePath();
+
+  context.beginPath();
+  context.arc(centerX, centerY, radius, 0, Math.PI * 2, false);
+  context.strokeStyle = strokeColour;
+  context.stroke();
+  context.closePath();
+
+  return canvas.toDataURL();
+}
 
 function resistanceMarkerIcon(assemblies) {
-  // TODO
+  const colours = new Set();
+  for (const assembly of assemblies) {
+    colours.add(FilteredDataUtils.getColour(assembly));
+  }
+  return colours.size === 2 ?
+    drawDoubleColourMarker(Array.from(colours).sort()) :
+    drawSingleColourMarker(Array.from(colours)[0]);
 }
 
 function getMarkerDefinitions(assemblies, {

@@ -34,6 +34,7 @@ function getMarkerDefs(assemblyIds) {
   return MapUtils.getMarkerDefinitions(
     assemblyIds.map(id => combinedAssemblies[id]), {
       onClick: onMarkerClick,
+      getIcon: FilteredDataStore.getColourTableColumnName() ? MapUtils.resistanceMarkerIcon : undefined,
     }
   );
 }
@@ -73,10 +74,7 @@ export default React.createClass({
   },
 
   handleFilteredDataStoreChange() {
-    const assemblyIds = FilteredDataStore.getAssemblyIds();
-    if (this.state.assemblyIds !== assemblyIds) {
-      this.setState({ assemblyIds });
-    }
+    this.setState({ assemblyIds: FilteredDataStore.getAssemblyIds() });
   },
 
 });
