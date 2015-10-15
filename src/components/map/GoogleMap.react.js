@@ -69,7 +69,9 @@ function createMarker({ latitude, longitude }, icon, onClick) {
   }
 
   const marker = new google.maps.Marker({
-    position: new google.maps.LatLng(latitude, longitude),
+    position: new google.maps.LatLng(
+      parseFloat(latitude), parseFloat(longitude)
+    ),
     map,
     icon,
     optimized: false,
@@ -85,6 +87,7 @@ function createMarkers(assemblyIds, onClick) {
 
   const combinedAssemblies = getAllAssemblies();
 
+  const positionMap = new Map();
   for (const assemblyId of assemblyIds) {
     const assembly = combinedAssemblies[assemblyId];
 
@@ -92,13 +95,21 @@ function createMarkers(assemblyIds, onClick) {
       return;
     }
 
-    const latitude = parseFloat(assembly.metadata.geography.position.latitude);
-    const longitude = parseFloat(assembly.metadata.geography.position.longitude);
+    const position = JSON.stringify(assembly.metadata.geography.position);
+    if (positionMap.has(position)) {
+      const ids = positionMap.get(position);
+      ids.push(assemblyId);
+    } else {
+      positionMap.set(position, [ assemblyId ])
+    }
+  }
 
+  const retrieveAssembly = (id) => combinedAssemblies[id];
+  for (const [ position, ids ] of positionMap) {
     const marker = createMarker(
-      { latitude, longitude },
-      MapUtils.getMarkerIcon(assembly),
-      onClick.bind(null, assemblyId)
+      JSON.parse(position),
+      MapUtils.getMarkerIcon(ids.map(retrieveAssembly)),
+      onClick.bind(null, ids)
     );
 
     if (marker) {

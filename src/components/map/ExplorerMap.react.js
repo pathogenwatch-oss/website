@@ -16,8 +16,8 @@ function onMapClick() {
   FilteredDataActionCreators.clearAssemblyFilter();
 }
 
-function onMarkerClick(assemblyId) {
-  FilteredDataActionCreators.setAssemblyIds([ assemblyId ]);
+function onMarkerClick(assemblyIds) {
+  FilteredDataActionCreators.setAssemblyIds(assemblyIds);
 }
 
 export default React.createClass({
