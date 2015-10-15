@@ -5,7 +5,7 @@ import AssemblyAnalysisOverviewChart from '../../components/collection/AssemblyA
 import OverviewStatisticsItem from './OverviewStatisticsItem.react';
 import DEFAULT from '../../defaults';
 
-import Map from '../map/UploadMap.react';
+import Map from '../map/UploadOverviewMap.react';
 
 var noContigsRange = {};
 var averageAssemblyLength = null;
@@ -62,8 +62,7 @@ export default React.createClass({
 
   render() {
     if (this.state.assemblyCount) {
-      const locationsToAssembliesMap = UploadStore.getLocationToAssembliesMap();
-      var iconStyle = {
+      const iconStyle = {
         color: this.props.isUploading ? DEFAULT.CGPS.COLOURS.PURPLE : (this.props.isReadyToUpload ? 'green' : '#d11b1b')
       };
 
@@ -122,7 +121,7 @@ export default React.createClass({
 
           <div key="map" className="mdl-cell mdl-cell--12-col increase-cell-gutter mdl-shadow--4dp" style={{ height: '50%' }}>
             <div className="card-style--no-padding" style={{ height: '100%', position: 'relative' }}>
-              <Map width="100%" height="100%" locationAssemblyMap={locationsToAssembliesMap}/>
+              <Map assemblies={this.state.assemblies}/>
             </div>
           </div>
         </div>

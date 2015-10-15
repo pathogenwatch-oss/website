@@ -1,12 +1,17 @@
 /* global google */
 
 import React from 'react';
+import assign from 'object-assign';
 
 import GoogleMap from './GoogleMap.react';
 
 import FilteredDataStore from '../../stores/FilteredDataStore';
+import ReferenceCollectionStore from '../../stores/ReferenceCollectionStore';
+import UploadedCollectionStore from '../../stores/UploadedCollectionStore';
 
 import FilteredDataActionCreators from '../../actions/FilteredDataActionCreators';
+
+import MapUtils from '../../utils/Map';
 
 const style = {
   position: 'relative',
@@ -18,6 +23,19 @@ function onMapClick() {
 
 function onMarkerClick(assemblyIds) {
   FilteredDataActionCreators.setAssemblyIds(assemblyIds);
+}
+
+function getCombinedAssemblies() {
+  return assign({}, ReferenceCollectionStore.getAssemblies(), UploadedCollectionStore.getAssemblies());
+}
+
+function getMarkerDefs(assemblyIds) {
+  const combinedAssemblies = getCombinedAssemblies();
+  return MapUtils.getMarkerDefinitions(
+    assemblyIds.map(id => combinedAssemblies[id]), {
+      onClick: onMarkerClick,
+    }
+  );
 }
 
 export default React.createClass({
@@ -48,17 +66,17 @@ export default React.createClass({
     return (
       <section style={style}>
         <GoogleMap
-          assemblyIds={this.state.assemblyIds}
-          onMapClick={onMapClick}
-          onMarkerClick={onMarkerClick} />
+          markerDefs={getMarkerDefs(this.state.assemblyIds)}
+          onMapClick={onMapClick} />
       </section>
     );
   },
 
   handleFilteredDataStoreChange() {
-    this.setState({
-      assemblyIds: FilteredDataStore.getAssemblyIds(),
-    });
+    const assemblyIds = FilteredDataStore.getAssemblyIds();
+    if (this.state.assemblyIds !== assemblyIds) {
+      this.setState({ assemblyIds });
+    }
   },
 
 });

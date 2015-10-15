@@ -1,13 +1,8 @@
 /* global google */
 
 import React from 'react';
-import assign from 'object-assign';
-
-import ReferenceCollectionStore from '../../stores/ReferenceCollectionStore';
-import UploadedCollectionStore from '../../stores/UploadedCollectionStore';
 
 import MapUtils from '../../utils/Map';
-
 import DEFAULT from '../../defaults';
 
 const mapStyle = {
@@ -21,8 +16,7 @@ const mapStyle = {
 // module state
 let map = null;
 const markers = [];
-let infoWindow = null;
-let infoWindowIsolates = null;
+let currentInfoWindow = null;
 
 function resizeMap() {
   const center = map.getCenter();
@@ -32,6 +26,11 @@ function resizeMap() {
 
 function fitAllMarkers() {
   if (markers.length === 0) {
+    return;
+  }
+
+  if (markers.length === 1) {
+    map.setCenter(markers[0].getPosition());
     return;
   }
 
@@ -56,14 +55,17 @@ function clearMarkers() {
   markers.length = 0;
 }
 
-function getAllAssemblies() {
-  return assign({},
-    ReferenceCollectionStore.getAssemblies(),
-    UploadedCollectionStore.getAssemblies()
-  );
+// bound to a marker
+function openInfoWindow(infoWindow) {
+  if (currentInfoWindow) {
+    currentInfoWindow.close();
+  }
+  infoWindow.open(map, this);
+  currentInfoWindow = infoWindow;
 }
 
-function createMarker({ latitude, longitude }, icon, onClick) {
+function createMarker({ position, icon = MapUtils.standardMarkerIcon, onClick, infoWindow }) {
+  const { latitude, longitude } = position;
   if (!latitude || !longitude) {
     return null;
   }
@@ -77,41 +79,22 @@ function createMarker({ latitude, longitude }, icon, onClick) {
     optimized: false,
   });
 
-  marker.addListener('click', onClick);
+  if (infoWindow) {
+    marker.addListener('click', openInfoWindow.bind(
+      marker, new google.maps.InfoWindow({ content: infoWindow })
+    ));
+  } else if (onClick) {
+    marker.addListener('click', onClick);
+  }
 
   return marker;
 }
 
-function createMarkers(assemblyIds, onClick) {
+function createMarkers(markerDefs) {
   clearMarkers();
 
-  const combinedAssemblies = getAllAssemblies();
-
-  const positionMap = new Map();
-  for (const assemblyId of assemblyIds) {
-    const assembly = combinedAssemblies[assemblyId];
-
-    if (!assembly) {
-      return;
-    }
-
-    const position = JSON.stringify(assembly.metadata.geography.position);
-    if (positionMap.has(position)) {
-      const ids = positionMap.get(position);
-      ids.push(assemblyId);
-    } else {
-      positionMap.set(position, [ assemblyId ])
-    }
-  }
-
-  const retrieveAssembly = (id) => combinedAssemblies[id];
-  for (const [ position, ids ] of positionMap) {
-    const marker = createMarker(
-      JSON.parse(position),
-      MapUtils.getMarkerIcon(ids.map(retrieveAssembly)),
-      onClick.bind(null, ids)
-    );
-
+  for (const definition of markerDefs) {
+    const marker = createMarker(definition);
     if (marker) {
       markers.push(marker);
     }
@@ -122,10 +105,17 @@ function createMarkers(assemblyIds, onClick) {
 
 export default React.createClass({
 
+  displayName: 'GoogleMap',
+
   propTypes: {
-    assemblyIds: React.PropTypes.array,
+    markerDefs: React.PropTypes.arrayOf(
+      React.PropTypes.shape({
+        position: React.PropTypes.object,
+        icon: React.PropTypes.string,
+        onClick: React.PropTypes.func,
+      })
+    ),
     onMapClick: React.PropTypes.func,
-    onMarkerClick: React.PropTypes.func,
   },
 
   componentDidMount() {
@@ -134,23 +124,24 @@ export default React.createClass({
     );
 
     map = new google.maps.Map(document.getElementById('map-canvas'), {
-      zoom: 4,
       center,
       streetViewControl: false,
       scaleControl: true,
+      mapTypeControl: false,
       mapTypeId: google.maps.MapTypeId.TERRAIN,
+      zoom: 4,
     });
 
     if (this.props.onMapClick) {
       map.addListener('click', this.props.onMapClick);
     }
 
-    createMarkers(this.props.assemblyIds, this.props.onMarkerClick);
+    createMarkers(this.props.markerDefs);
   },
 
   componentDidUpdate() {
     resizeMap();
-    createMarkers(this.props.assemblyIds, this.props.onMarkerClick);
+    createMarkers(this.props.markerDefs);
   },
 
   render() {

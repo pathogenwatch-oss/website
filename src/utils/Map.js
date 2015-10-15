@@ -7,27 +7,7 @@ const MARKER = {
     WIDTH: 12,
     HEIGHT: 12,
   },
-  SHAPES: {
-    CIRCLE: 'circle',
-    SQUARE: 'square',
-    STAR: 'star',
-    TRIANGLE: 'triangle',
-  },
 };
-
-function drawSquare(fillColour) {
-  var canvas = document.createElement("canvas");
-  canvas.width = MARKER.SIZE.WIDTH;
-  canvas.height = MARKER.SIZE.HEIGHT;
-  var context = canvas.getContext('2d');
-
-  context.fillStyle = fillColour;
-  context.fillRect(0, 0, canvas.width, canvas.height);
-  context.fillStyle = '#000';
-  context.strokeRect(0, 0, canvas.width, canvas.height);
-
-  return canvas.toDataURL();
-}
 
 function drawCircle(fillColour) {
   var canvas = document.createElement("canvas");
@@ -52,134 +32,45 @@ function drawCircle(fillColour) {
   return canvas.toDataURL();
 }
 
-function drawStar(fillColour) {
-  var canvas = document.createElement("canvas");
-  canvas.width = MARKER.SIZE.WIDTH;
-  canvas.height = MARKER.SIZE.HEIGHT;
-  var context = canvas.getContext('2d');
-  var centerX = canvas.width / 2;
-  var centerY = canvas.height / 2;
-  var radius = MARKER.SIZE.WIDTH / 2 - 1;
-  var numberOfPoints = 5;
-  var fractionOfRadiusForInset = 0.5;
+const standardMarkerIcon = drawCircle(CGPS.COLOURS.PURPLE_LIGHT)
 
-  context.beginPath();
-  context.translate(centerX, centerY);
-  context.moveTo(0, 0 - radius);
-  for (var i = 0; i < numberOfPoints; i++) {
-    context.rotate(Math.PI / numberOfPoints);
-    context.lineTo(0, 0 - (radius * fractionOfRadiusForInset));
-    context.rotate(Math.PI / numberOfPoints);
-    context.lineTo(0, 0 - radius);
+function resistanceMarkerIcon(assemblies) {
+  // TODO
+}
+
+function getMarkerDefinitions(assemblies, {
+  getIcon = () => standardMarkerIcon,
+  onClick,
+  createInfoWindow,
+} = {}) {
+  const positionMap = new Map();
+
+  for (const assembly of assemblies) {
+    const { position } = assembly.metadata.geography;
+    if (!position || !position.latitude || !position.longitude) {
+      continue;
+    }
+
+    const positionKey = JSON.stringify(position);
+    if (positionMap.has(positionKey)) {
+      positionMap.get(positionKey).push(assembly);
+    } else {
+      positionMap.set(positionKey, [ assembly ]);
+    }
   }
-  context.fillStyle = fillColour;
-  context.fill();
-  context.lineWidth = 1;
-  context.strokeStyle = '#000';
-  context.stroke();
 
-  return canvas.toDataURL();
-}
-
-function drawTriangle(fillColour) {
-  var canvas = document.createElement("canvas");
-  canvas.width = MARKER.SIZE.WIDTH;
-  canvas.height = MARKER.SIZE.HEIGHT;
-  var context = canvas.getContext('2d');
-  var topX = canvas.width / 2;
-  var topY = 0;
-  var height = MARKER.SIZE.WIDTH * (Math.sqrt(3)/2);
-
-  context.beginPath();
-  context.moveTo(topX, topY);
-  context.lineTo(topX + height / 2, topY + height);
-  context.lineTo(topX - height / 2, topY + height);
-  context.lineTo(topX, topY);
-  context.fillStyle = fillColour;
-  context.fill();
-  context.lineWidth = 1;
-  context.strokeStyle = '#000';
-  context.stroke();
-
-  return canvas.toDataURL();
-}
-
-function getMarkerIcon(assembly) {
-  return drawCircle(CGPS.COLOURS.PURPLE_LIGHT);
-}
-
-function isNewDataObjectPositionGroup(DataObjectPositionGroup) {
-  return (typeof DataObjectPositionGroup === 'undefined');
-}
-
-function groupDataObjectsByPosition(dataObjects) {
-  var dataObjectIds = Object.keys(dataObjects);
-  var dataObjectsGroupedByPosition = {};
-  var dataObjectPositionKey;
-  var dataObjectPositionGroup;
-  var dataObject;
-  var latitude;
-  var longitude;
-
-  dataObjectIds.forEach(function (dataObjectId) {
-    dataObject = dataObjects[dataObjectId];
-
-    if (isDataObjectHasCoordinates(dataObject)) {
-
-      latitude = dataObject.__latitude;
-      longitude = dataObject.__longitude;
-
-      dataObjectPositionKey = this.getPositionKey(latitude, longitude);
-      dataObjectPositionGroup = dataObjectsGroupedByPosition[dataObjectPositionKey];
-
-      if (isNewDataObjectPositionGroup(dataObjectPositionGroup)) {
-        dataObjectsGroupedByPosition[dataObjectPositionKey] = [ dataObject ];
-      } else {
-        dataObjectsGroupedByPosition[dataObjectPositionKey].push(dataObject);
-      }
-    }
-  }.bind(this));
-
-  return dataObjectsGroupedByPosition;
-}
-
-function getPositionKey(latitude, longitude) {
-  return (latitude + ',' + longitude);
-}
-
-function isDataObjectHasLatitude(dataObject) {
-  return (typeof dataObject.__latitude !== 'undefined' && dataObject.__latitude !== '');
-}
-
-function isDataObjectHasLongitude(dataObject) {
-  return (typeof dataObject.__longitude !== 'undefined' && dataObject.__longitude !== '');
-}
-
-function isDataObjectHasCoordinates(dataObject) {
-  return (isDataObjectHasLatitude(dataObject) && isDataObjectHasLongitude(dataObject));
-}
-
-function getDataObjectsWithCoordinates(dataObjects) {
-  var dataObjectIds = Object.keys(dataObjects);
-  var dataObjectWithCoordinates = [];
-  var dataObject;
-
-  dataObjectIds.forEach(function (dataObjectId) {
-    dataObject = dataObjects[dataObjectId];
-
-    if (isDataObjectHasCoordinates(dataObject)) {
-      dataObjectWithCoordinates.push(dataObject);
-    }
+  return Array.from(positionMap).map(function ([ positionKey, positionAssemblies ]) {
+    return {
+      position: JSON.parse(positionKey),
+      icon: getIcon(positionAssemblies),
+      onClick: onClick ? onClick.bind(null, positionAssemblies.map(_ => _.metadata.assemblyId)) : null,
+      infoWindow: createInfoWindow ? createInfoWindow(positionAssemblies) : null,
+    };
   });
-
-  return dataObjectWithCoordinates;
 }
 
-module.exports = {
-  getPositionKey: getPositionKey,
-  getDataObjectsWithCoordinates: getDataObjectsWithCoordinates,
-  isDataObjectHasCoordinates: isDataObjectHasCoordinates,
-  groupDataObjectsByPosition: groupDataObjectsByPosition,
-  getMarkerIcon: getMarkerIcon,
-  STYLES: MapStylesUtils,
+export default {
+  getMarkerDefinitions,
+  standardMarkerIcon,
+  resistanceMarkerIcon,
 };
