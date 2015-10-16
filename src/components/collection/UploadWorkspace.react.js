@@ -12,22 +12,23 @@ import UploadWorkspaceNavigation from './UploadWorkspaceNavigation.react';
 import UploadReviewHeader from './UploadReviewHeader.react';
 import Overview from './Overview.react';
 import UploadingFilesDetailed from './UploadingFilesDetailed.react';
-import Toast from '../Toast.react'
 
 import UploadActionCreators from '../../actions/UploadActionCreators';
 import UploadStore from '../../stores/UploadStore';
 import SocketActionCreators from '../../actions/SocketActionCreators';
 import UploadWorkspaceNavigationActionCreators from '../../actions/UploadWorkspaceNavigationActionCreators';
+import ToastActionCreators from '../../actions/ToastActionCreators'
+
 import UploadWorkspaceNavigationStore from '../../stores/UploadWorkspaceNavigationStore';
 import FileProcessingStore from '../../stores/FileProcessingStore';
 import FileUploadingStore from '../../stores/FileUploadingStore';
 import FileUploadingProgressStore from '../../stores/FileUploadingProgressStore';
 import SocketStore from '../../stores/SocketStore';
+import ToastStore from '../../stores/ToastStore';
 
 import SocketUtils from '../../utils/Socket';
 import Species from '../../species';
 import DEFAULT from '../../defaults';
-import { validateMetadata } from '../../utils/Metadata';
 
 const loadingAnimationStyle = {
   visibility: 'visible',
@@ -63,7 +64,6 @@ export default React.createClass({
       assemblyName: null,
       uploadProgressPercentage: 0,
       collectionUrl: null,
-      toastMessage: null,
     };
   },
 
@@ -146,28 +146,26 @@ export default React.createClass({
   handleConfirmDuplicateOverwrite(files, confirmed) {
     if (confirmed) {
       this.setState({
-        confirmedMultipleMetadataDrop: true,
-        toastMessage: null
+        confirmedMultipleMetadataDrop: true
       });
       UploadActionCreators.addFiles(files);
     }
-    else {
-      this.setState({
-        toastMessage: null
-      });
-    }
+
+    UploadStore.hideToast();
+
   },
 
   handleDrop(event) {
     if (event.files.length > 0 && !this.state.isUploading) {
       if (!this.state.confirmedMultipleMetadataDrop && this.state.totalAssemblies > 0) {
-        this.setState({
-          toastMessage: {
-            message: <ConfirmDuplicate confirmHandler={this.handleConfirmDuplicateOverwrite.bind(this, event.files)} />,
-            type: 'warn',
-            sticky: true
-          }
-        });
+        var toast = {
+          message: <ConfirmDuplicate confirmHandler={this.handleConfirmDuplicateOverwrite.bind(this, event.files)} />,
+          type: 'warn',
+          sticky: true
+        }
+
+        // ToastActionCreators.fireToast(toast);
+
       } else {
         UploadActionCreators.addFiles(event.files);
       }
@@ -194,70 +192,8 @@ export default React.createClass({
   },
 
   handleUploadStoreChange() {
-    const totalAssemblies = UploadStore.getAssembliesCount();
-    const assemblies = UploadStore.getAssemblies();
-    const isValidMap = validateMetadata(assemblies);
-    let isValid = true;
-
-    if (!Object.keys(isValidMap)) {
-      isValid = false;
-    }
-
-    if (totalAssemblies < 3 || totalAssemblies > 100) {
-      isValid = false;
-
-      {totalAssemblies > 100 &&
-        this.setState({
-          toastMessage: {
-            message: 'Maximum upload limit is set to 100',
-            type: 'warn',
-            sticky: true
-          }
-        });
-      }
-    }
-
-    for (const id in isValidMap) {
-      if (!isValidMap[id]) {
-        isValid = false;
-
-        if(!assemblies[id].fasta.assembly) {
-          this.setState({
-            toastMessage: {
-              message: 'Assembly missing for ' + id,
-              type: 'warn',
-              sticky: true
-            }
-          });
-        }
-        else {
-          this.setState({
-            toastMessage: {
-              message: 'Please review the metadata for ' + id,
-              type: 'warn',
-              sticky: true
-            }
-          });
-        }
-        break;
-      }
-    }
-
     this.setState({
-      totalAssemblies,
-      uploadButtonActive: isValid,
-    });
-
-    { isValid &&
-      this.setState({
-        toastMessage: null
-      });
-    }
-  },
-
-  handleToastClose() {
-    this.setState({
-      toastMessage: null
+      uploadButtonActive: UploadStore.isReadyToUpload(),
     });
   },
 
@@ -356,10 +292,6 @@ export default React.createClass({
           </main>
         </div>
         <input type="file" multiple="multiple" accept={DEFAULT.SUPPORTED_FILE_EXTENSIONS} ref="fileInput" style={fileInputStyle} onChange={this.handleFileInputChange} />
-
-        { this.state.toastMessage &&
-          <Toast ref="toast" message={this.state.toastMessage.message} title={this.state.toastMessage.title || ""} type={this.state.toastMessage.type || "info"} handleClose={this.handleToastClose} sticky={this.state.toastMessage.sticky || false}/>
-        }
 
       </FileDragAndDrop>
     );

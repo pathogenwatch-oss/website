@@ -2,11 +2,14 @@ import AppDispatcher from '../dispatcher/AppDispatcher';
 import { EventEmitter } from 'events';
 import assign from 'object-assign';
 import moment from 'moment';
+import ToastActionCreators from '../actions/ToastActionCreators';
 
 const CHANGE_EVENT = 'change';
 
 const rawFiles = {};
 const assemblies = {};
+let readyToUpload = false;
+let errors = {};
 
 function addFiles(newRawFiles, newAssemblies) {
   assign(rawFiles, newRawFiles);
@@ -39,6 +42,7 @@ function deleteAssembly(assemblyName) {
 function emitChange() {
   Store.emit(CHANGE_EVENT);
 }
+
 
 const Store = assign({}, EventEmitter.prototype, {
 
@@ -130,6 +134,97 @@ const Store = assign({}, EventEmitter.prototype, {
       totalAssemblyLength += assemblies[assemblyId].analysis.totalNumberOfNucleotidesInDnaStrings || 0;
     }
     return Math.round(totalAssemblyLength / noAssemblies);
+  },
+
+  validateMetadata() {
+    var isValidMap = {};
+    var currentTime = new Date();
+    var year = currentTime.getFullYear();
+    readyToUpload = true;
+
+    for (var id in assemblies) {
+      if (!assemblies[id].fasta.assembly) {
+        isValidMap[id] = false;
+        readyToUpload = false;
+      }
+      else if (assemblies[id].metadata.date.day && !(assemblies[id].metadata.date.day >= 1 && assemblies[id].metadata.date.day <= 31) ||
+               assemblies[id].metadata.date.month && !(assemblies[id].metadata.date.month >= 1 && assemblies[id].metadata.date.month <= 12) ||
+               assemblies[id].metadata.date.year && !(assemblies[id].metadata.date.year > 1900 && assemblies[id].metadata.date.year <= year)) {
+        isValidMap[id] = false;
+        readyToUpload = false;
+      }
+      else {
+        isValidMap[id] = true;
+      }
+    }
+    return isValidMap;
+  },
+
+  isReadyToUpload() {
+    return readyToUpload;
+  },
+
+  hasError() {
+    errors = [];
+    for (var id in assemblies) {
+      // console.log()
+      if (!assemblies[id].fasta.assembly) {
+        errors.push({
+          'id': id,
+          'message': 'Assembly missing'
+        })
+        break;
+      }
+      else if (assemblies[id].metadata.date.day && !(assemblies[id].metadata.date.day >= 1 && assemblies[id].metadata.date.day <= 31) ||
+               assemblies[id].metadata.date.month && !(assemblies[id].metadata.date.month >= 1 && assemblies[id].metadata.date.month <= 12) ||
+               assemblies[id].metadata.date.year && !(assemblies[id].metadata.date.year > 1900 && assemblies[id].metadata.date.year <= year)) {
+        errors.push({
+          'id': id,
+          'message': 'Please review metadata'
+        })
+        break;
+      }
+    }
+
+    const totalAssemblies = this.getAssembliesCount();
+    if (totalAssemblies < 3 || totalAssemblies > 100) {
+      if (totalAssemblies > 100) {
+        errors.push({
+          'message': 'Maximum upload limit is set to 100'
+        })
+      }
+    }
+
+    return errors;
+  },
+
+  warn(message) {
+    var toast = {
+      message: message,
+      type: 'warn',
+      sticky: true
+    };
+
+    ToastActionCreators.fireToast(toast);
+
+        // if(!assemblies[id].fasta.assembly) {
+        //   var toast = {
+        //     message: 'Assembly missing for ' + id,
+        //     type: 'warn',
+        //     sticky: true
+        //   };
+        //   // ToastActionCreators.fireToast(toast);
+        // }
+        // else {
+        //   var toast = {
+        //     message: 'Please review the metadata for ' + id,
+        //     type: 'warn',
+        //     sticky: true
+        //   };
+
+        //   // ToastActionCreators.fireToast(toast);
+        // }
+
   }
 
 });

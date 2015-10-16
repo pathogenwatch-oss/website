@@ -90,27 +90,6 @@ function fixMetadataDateFormatInCollection(collection) {
   return collection;
 }
 
-function validateMetadata(collection) {
-  var isValidMap = {};
-  var currentTime = new Date();
-  var year = currentTime.getFullYear();
-
-  for (var id in collection) {
-    if (!collection[id].fasta.assembly) {
-      isValidMap[id] = false;
-    }
-    else if (collection[id].metadata.date.day && !(collection[id].metadata.date.day >= 1 && collection[id].metadata.date.day <= 31) ||
-             collection[id].metadata.date.month && !(collection[id].metadata.date.month >= 1 && collection[id].metadata.date.month <= 12) ||
-             collection[id].metadata.date.year && !(collection[id].metadata.date.year > 1900 && collection[id].metadata.date.year <= year)) {
-      isValidMap[id] = false;
-    }
-    else {
-      isValidMap[id] = true;
-    }
-  }
-  return isValidMap;
-}
-
 module.exports = {
   generateYears: generateYears,
   generateMonths: generateMonths,
@@ -118,6 +97,5 @@ module.exports = {
   getTotalNumberOfDaysInMonth: getTotalNumberOfDaysInMonth,
   getCountry: getCountry,
   fixMetadataDateFormatInCollection: fixMetadataDateFormatInCollection,
-  validateMetadata: validateMetadata
 };
 

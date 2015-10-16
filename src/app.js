@@ -7,13 +7,19 @@ import Router, { Route, RouteHandler, DefaultRoute, NotFoundRoute, Redirect } fr
 import Home from './components/Home.react';
 import UploadCollection from './components/collection/UploadWorkspace.react';
 import ExploreCollection from './components/Collection.react';
+import Toast from './components/Toast.react';
 import NotFound from './components/NotFound.react';
 
 import Species from './species';
 
 class Application extends React.Component {
   render() {
-    return <RouteHandler />;
+    return (
+      <div>
+        <RouteHandler />
+        <Toast />
+      </div>
+    );
   }
 }
 

@@ -4,7 +4,7 @@
   position: fixed;
   right: 0px;
   bottom: 0px;
-  background-color: rgba(103, 60, 144, 0.9);
+  background-color: rgba(50, 50, 50, 1  );
   color: white;
   z-index: 1;
   width: 100%;
@@ -20,8 +20,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border-right: 1px solid #ccc;
-  padding: 0px 15px;
+  /*border-right: 1px solid #ccc;*/
+  padding: 0px 16px;
 }
 .wgsa-toast-icon i, .wgsa-toast-close i{
   font-size: 40px;
@@ -40,7 +40,7 @@
 }
 
 .wgsa-toast-message{
-  padding: 16px 32px 16px 16px;
+  padding: 16px 48px 16px 16px;
   font-size: 16px;
   font-weight: 100;
 }

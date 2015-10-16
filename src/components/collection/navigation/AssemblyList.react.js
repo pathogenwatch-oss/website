@@ -5,7 +5,6 @@ import AssemblyListItem from '../navigation/AssemblyListItem.react';
 import UploadWorkspaceNavigationStore from '../../../stores/UploadWorkspaceNavigationStore';
 import UploadStore from '../../../stores/UploadStore';
 import FileUploadingStore from '../../../stores/FileUploadingStore';
-import { validateMetadata } from '../../../utils/Metadata';
 
 const AssemblyList = React.createClass({
 
@@ -44,7 +43,7 @@ const AssemblyList = React.createClass({
   getListOptionElements: function () {
     const assemblyNames = UploadStore.getAssemblyNames();
     const assemblies = UploadStore.getAssemblies();
-    const isValidMap = validateMetadata(assemblies);
+    const isValidMap = UploadStore.validateMetadata(assemblies);
     return assemblyNames.map((assemblyName) => {
       return (
         <AssemblyListItem
