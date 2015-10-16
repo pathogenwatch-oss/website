@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Map from './Map.react';
+import ExplorerMap from './map/ExplorerMap.react';
 
 const EastContent = React.createClass({
 
@@ -11,7 +11,7 @@ const EastContent = React.createClass({
 
   render: function () {
     return (
-      <Map
+      <ExplorerMap
         width={this.props.width}
         height={this.props.height} />
     );

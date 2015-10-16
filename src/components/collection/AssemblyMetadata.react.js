@@ -5,7 +5,7 @@ import FileUploadingStore from '../../stores/FileUploadingStore.js';
 
 import MetadataDate from './metadata-form/Date.react';
 import InputField from './InputField.react';
-import Map from './Map.react.js';
+import GoogleMap from '../map/GoogleMap.react';
 
 export default React.createClass({
 
@@ -62,12 +62,11 @@ export default React.createClass({
 
   render() {
     const { fasta, metadata } = this.props.assembly;
-    const { assemblyName } = metadata;
-    const locations = {};
+    const { assemblyName, geography } = metadata;
 
-    if (fasta && metadata) {
-      locations[fasta.name] = metadata.geography;
-    }
+    const markerDef = {
+      position: geography.position,
+    };
 
     return (
       <form className="metadata-fields">
@@ -77,7 +76,7 @@ export default React.createClass({
             <MetadataDate key={fasta.name} assemblyId={fasta.name} date={metadata.date} disabled={this.state.isUploading}/>
           </div>
           <div className="mdl-cell mdl-cell--6-col" style={{ position: 'relative', height: '160px'}}>
-            <Map locations={locations} label="Location" />
+            <GoogleMap markerDefs={[ markerDef ]} />
           </div>
         </div>
         <div className="metadata-fields__other">

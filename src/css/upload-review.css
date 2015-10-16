@@ -200,20 +200,12 @@
   color: #777;
 }
 
-.overview-input-field {
-  padding-right: 10px;
-  display: flex;
-  justify-content: space-around;
-  margin: 16px 0px;
+.wgsa-info-window-button {
+  text-transform: none;
 }
 
-.overview-input-field .mdl-text-field {
-  width: auto;
-}
-
-.overview-input-field input {
-  font-size: 30px;
-  font-weight: 300;
+.wgsa-info-window-button + .wgsa-info-window-button {
+  margin-top: 8px;
 }
 
 .card-style {
