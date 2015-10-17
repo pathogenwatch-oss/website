@@ -17,14 +17,13 @@ import UploadActionCreators from '../../actions/UploadActionCreators';
 import UploadStore from '../../stores/UploadStore';
 import SocketActionCreators from '../../actions/SocketActionCreators';
 import UploadWorkspaceNavigationActionCreators from '../../actions/UploadWorkspaceNavigationActionCreators';
-import ToastActionCreators from '../../actions/ToastActionCreators'
+import ToastActionCreators from '../../actions/ToastActionCreators';
 
 import UploadWorkspaceNavigationStore from '../../stores/UploadWorkspaceNavigationStore';
 import FileProcessingStore from '../../stores/FileProcessingStore';
 import FileUploadingStore from '../../stores/FileUploadingStore';
 import FileUploadingProgressStore from '../../stores/FileUploadingProgressStore';
 import SocketStore from '../../stores/SocketStore';
-import ToastStore from '../../stores/ToastStore';
 
 import SocketUtils from '../../utils/Socket';
 import Species from '../../species';
@@ -122,17 +121,11 @@ export default React.createClass({
       transitionTo(makePath('collection', { species: Species.nickname, id }));
       return;
     }
-    else {
-      if (id) {
-        this.setState({
-          collectionUrl: window.location.origin + makePath('collection', { species: Species.nickname, id })
-        })
-      }
-    }
 
     this.setState({
       isUploading: FileUploadingStore.getFileUploadingState(),
       viewPage: 'upload_progress',
+      collectionUrl: id ? window.location.origin + makePath('collection', { species: Species.nickname, id }) : null,
     });
   },
 
@@ -146,26 +139,22 @@ export default React.createClass({
   handleConfirmDuplicateOverwrite(files, confirmed) {
     if (confirmed) {
       this.setState({
-        confirmedMultipleMetadataDrop: true
+        confirmedMultipleMetadataDrop: true,
       });
       UploadActionCreators.addFiles(files);
     }
 
     UploadStore.hideToast();
-
   },
 
   handleDrop(event) {
     if (event.files.length > 0 && !this.state.isUploading) {
       if (!this.state.confirmedMultipleMetadataDrop && this.state.totalAssemblies > 0) {
-        var toast = {
+        ToastActionCreators.fireToast({
           message: <ConfirmDuplicate confirmHandler={this.handleConfirmDuplicateOverwrite.bind(this, event.files)} />,
           type: 'warn',
-          sticky: true
-        }
-
-        // ToastActionCreators.fireToast(toast);
-
+          sticky: true,
+        });
       } else {
         UploadActionCreators.addFiles(event.files);
       }
@@ -313,5 +302,5 @@ const ConfirmDuplicate = React.createClass({
         </button>
       </div>
     );
-  }
+  },
 });

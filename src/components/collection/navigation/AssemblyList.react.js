@@ -8,7 +8,6 @@ import FileUploadingStore from '../../../stores/FileUploadingStore';
 
 const AssemblyList = React.createClass({
 
-
   getInitialState() {
     return {
       selectedOption: null,
@@ -40,7 +39,7 @@ const AssemblyList = React.createClass({
     });
   },
 
-  getListOptionElements: function () {
+  getListOptionElements() {
     const assemblyNames = UploadStore.getAssemblyNames();
     const assemblies = UploadStore.getAssemblies();
     const isValidMap = UploadStore.validateMetadata(assemblies);
@@ -56,7 +55,7 @@ const AssemblyList = React.createClass({
     });
   },
 
-  render: function () {
+  render() {
     const listOptionElements = this.getListOptionElements();
     return (
       <div>

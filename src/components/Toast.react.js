@@ -1,3 +1,5 @@
+import '../css/toast.css';
+
 import React from 'react';
 import ToastStore from '../stores/ToastStore';
 
@@ -7,8 +9,8 @@ export default React.createClass({
 
   getInitialState() {
     return {
-      data: ToastStore.getToastData(),
-      active: ToastStore.toastActive(),
+      data: null,
+      active: null,
     };
   },
 
@@ -20,62 +22,38 @@ export default React.createClass({
     ToastStore.removeChangeListener(this.handleToastStoreChange);
   },
 
+  render() {
+    const { data, active } = this.state;
+    return (
+      <div className="wgsa-toast-container">
+      { active &&
+        <aside className={`wgsa-toast wgsa-toast--${data.sticky ? 'sticky' : 'nonsticky'}`}>
+          <span className="wgsa-toast__message">
+            {data.message && data.message}
+          </span>
+          { data.action &&
+            <button onClick={this.action.onClick} className="wgsa-toast__action">
+              {this.action.label}
+            </button>
+          }
+        </aside>
+      }
+      </div>
+    );
+  },
+
   handleToastStoreChange() {
+    const toast = ToastStore.getToast();
     this.setState({
-      data: ToastStore.getToastData(),
-      active: ToastStore.toastActive()
+      data: toast,
+      active: toast ? true : false,
     });
   },
 
   handleClose() {
     this.setState({
-      active: false
+      active: false,
     });
-  },
-
-  render() {
-    var data = this.state.data.data;
-    var toastIcon = {
-      style: {
-        color: '#fff'
-      }
-    };
-
-    if (data) {
-      switch (data.type) {
-        case 'warn':
-          toastIcon.type = 'warning';
-          break;
-        case 'error':
-          toastIcon.type = 'error_outline';
-          break;
-        case 'success':
-          toastIcon.type = 'done';
-          break;
-        default:
-          toastIcon.type = 'info';
-      }
-    }
-
-    return (
-      <div>
-      { this.state.active &&
-        <div className={`wgsa-toast-container ${data.sticky ? "wgsa-toast-sticky" : "wgsa-toast-nonsticky"}`}>
-          <div className="wgsa-toast-icon">
-            <i style={toastIcon.style} className="material-icons">{toastIcon.type}</i>
-          </div>
-          <div className="wgsa-toast-message">
-            {data.message && data.message}
-          </div>
-          { data.sticky &&
-            <a onClick={this.handleClose} className="wgsa-toast-close">
-              <i className="material-icons">close</i>
-            </a>
-          }
-        </div>
-      }
-      </div>
-    );
   },
 
 });

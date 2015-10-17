@@ -44,7 +44,6 @@ export default React.createClass({
   getMetadataFieldComponents(metadata) {
     return Object.keys(metadata)
       .filter((columnName) => {
-        console.log(columnName);
         return (
           columnName !== 'assemblyName' &&
           columnName !== 'name' &&

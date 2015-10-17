@@ -1,0 +1,99 @@
+.wgsa-toast-container {
+  position: fixed;
+  bottom: 0px;
+  z-index: 1;
+  width: 100%;
+  min-height: 48px;
+  display: flex;
+  justify-content: center;
+  overflow: none;
+}
+
+.wgsa-toast {
+  background-color: #323232;
+  color: white;
+  min-width: 288px;
+  max-width: 568px;
+  border-radius: 2px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.wgsa-toast__icon {
+  padding: 0px 16px;
+}
+
+.wgsa-toast__icon i, .wgsa-toast__action i {
+  font-size: 40px;
+  font-weight: 100;
+}
+
+.wgsa-toast__icon i, .wgsa-toast__action i {
+  font-size: 30px;
+}
+
+.wgsa-toast__action {
+  padding: 14px;
+  text-transform: uppercase;
+  color: white;
+  cursor: pointer
+}
+
+.wgsa-toast__message {
+  padding: 0 16px;
+  font-size: 14px;
+  flex-grow: 1;
+}
+
+@keyframes toast-slide-nonsticky {
+  0% {
+      bottom: -100%;
+  }
+  10% {
+      bottom: 0px;
+      z-index: 1000000;
+      opacity: 1;
+  }
+  80% {
+      bottom: 0px;
+      z-index: 1000000;
+      opacity: 1;
+  }
+  100% {
+      bottom: -100%;
+  }
+}
+
+.wgsa-toast--nonsticky {
+  animation-name: toast-slide-nonsticky;
+  animation-duration: 5s;
+  animation-timing-function: ease;
+  animation-iteration-count: 1;
+  animation-direction: normal;
+  animation-delay: 0;
+  animation-play-state: running;
+  animation-fill-mode: forwards;
+}
+
+@keyframes toast-slide-sticky {
+  0% {
+      bottom: -100%;
+  }
+  100% {
+      bottom: 0px;
+      z-index: 1000000;
+      opacity: 1;
+  }
+}
+
+.wgsa-toast--sticky {
+  animation-name: toast-slide-sticky;
+  animation-duration: .5s;
+  animation-timing-function: ease;
+  animation-iteration-count: 1;
+  animation-direction: normal;
+  animation-delay: 0;
+  animation-play-state: running;
+  animation-fill-mode: forwards;
+}

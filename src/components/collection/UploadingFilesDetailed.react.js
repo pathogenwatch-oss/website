@@ -4,6 +4,10 @@ import UploadingAssembliesProgress from './UploadingAssembliesProgress.react';
 
 const UploadingFiles = React.createClass({
 
+  propTypes: {
+    collectionUrl: React.PropTypes.string,
+  },
+
   componentDidMount() {
     componentHandler.upgradeDom();
   },
@@ -18,7 +22,10 @@ const UploadingFiles = React.createClass({
               if upload fails to progress, please try this URL later.
             </div>
             <div className="mdl-card__supporting-text wgsa-collection-url">
-              {this.props.collectionUrl || <div className="mdl-spinner mdl-js-spinner is-active"></div>}
+              { this.props.collectionUrl ?
+                  <a href={this.props.collectionUrl}>{this.props.collectionUrl}</a> :
+                  <div className="mdl-spinner mdl-js-spinner is-active"></div>
+              }
             </div>
           </div>
           <UploadingAssembliesProgress />

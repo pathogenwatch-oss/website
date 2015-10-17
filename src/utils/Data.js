@@ -291,8 +291,7 @@ function isDataObjectIdTooLong(dataObject) {
 }
 
 function doesDataObjectHaveValidId(dataObject) {
-
-  if (! doesDataObjectHaveAnyId(dataObject)) {
+  if (!doesDataObjectHaveAnyId(dataObject)) {
     return false;
   }
 

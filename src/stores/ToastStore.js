@@ -1,27 +1,21 @@
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import { EventEmitter }  from 'events';
 import assign from 'object-assign';
+
 import UploadStore from './UploadStore';
+
+import UploadWorkspaceNavigationActionCreators from '../actions/UploadWorkspaceNavigationActionCreators';
 
 const CHANGE_EVENT = 'change';
 
-let toast = {
-  data: null,
-  active: false
-};
+let toast = null;
 
 function showToast(data) {
-  toast.data = data;
-  toast.active = true;
+  toast = data;
 }
 
 function hideToast() {
-  toast.data = {};
-  toast.active = false;
-}
-
-function emitChange() {
-  Store.emit(CHANGE_EVENT);
+  toast = null;
 }
 
 const Store = assign({}, EventEmitter.prototype, {
@@ -33,14 +27,14 @@ const Store = assign({}, EventEmitter.prototype, {
     this.removeListener(CHANGE_EVENT, callback);
   },
 
-  toastActive() {
-    return toast.active;
-  },
-
-  getToastData() {
+  getToast() {
     return toast;
-  }
+  },
 });
+
+function emitChange() {
+  Store.emit(CHANGE_EVENT);
+}
 
 function handleAction(action) {
   switch (action.type) {
@@ -49,16 +43,20 @@ function handleAction(action) {
     AppDispatcher.waitFor([
       UploadStore.dispatchToken,
     ]);
-    var errors = UploadStore.hasError();
-    console.log(errors)
+    const errors = UploadStore.hasError();
     if (errors.length) {
-      showToast({ message: errors[0].message, sticky: true });
+      const [ { message, id } ] = errors;
+      const actionDef = id ? {
+        label: 'review',
+        onClick: UploadWorkspaceNavigationActionCreators.navigateToAssembly.bind(null, id),
+      } : null;
+      showToast({ message, action: actionDef });
       emitChange();
     }
     break;
 
   case 'show_toast':
-    showToast({ message: 'Hello world', sticky: true });
+    showToast(action.toast);
     emitChange();
     break;
 

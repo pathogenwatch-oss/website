@@ -2,6 +2,7 @@ import AppDispatcher from '../dispatcher/AppDispatcher';
 import { EventEmitter } from 'events';
 import assign from 'object-assign';
 import moment from 'moment';
+
 import ToastActionCreators from '../actions/ToastActionCreators';
 
 const CHANGE_EVENT = 'change';
@@ -38,11 +39,6 @@ function setMetadataSource(assemblyName, source) {
 function deleteAssembly(assemblyName) {
   delete assemblies[assemblyName];
 }
-
-function emitChange() {
-  Store.emit(CHANGE_EVENT);
-}
-
 
 const Store = assign({}, EventEmitter.prototype, {
 
@@ -166,32 +162,29 @@ const Store = assign({}, EventEmitter.prototype, {
 
   hasError() {
     errors = [];
-    for (var id in assemblies) {
-      // console.log()
-      if (!assemblies[id].fasta.assembly) {
-        errors.push({
-          'id': id,
-          'message': 'Assembly missing'
-        })
-        break;
-      }
-      else if (assemblies[id].metadata.date.day && !(assemblies[id].metadata.date.day >= 1 && assemblies[id].metadata.date.day <= 31) ||
-               assemblies[id].metadata.date.month && !(assemblies[id].metadata.date.month >= 1 && assemblies[id].metadata.date.month <= 12) ||
-               assemblies[id].metadata.date.year && !(assemblies[id].metadata.date.year > 1900 && assemblies[id].metadata.date.year <= year)) {
-        errors.push({
-          'id': id,
-          'message': 'Please review metadata'
-        })
-        break;
-      }
-    }
 
     const totalAssemblies = this.getAssembliesCount();
     if (totalAssemblies < 3 || totalAssemblies > 100) {
       if (totalAssemblies > 100) {
         errors.push({
-          'message': 'Maximum upload limit is set to 100'
+          message: 'Please upload 100 or fewer assemblies.',
+        });
+      }
+    }
+
+    for (const id of Object.keys(assemblies)) {
+      const { fasta, metadata } = assemblies[id];
+      if (!fasta.assembly) {
+        errors.push({
+          message: `${id}: assembly not provided.`
         })
+        break;
+      } else if (!hasValidDate(metadata)) {
+        errors.push({
+          id,
+          message: `${id}: metadata not valid.`,
+        });
+        break;
       }
     }
 
@@ -199,35 +192,18 @@ const Store = assign({}, EventEmitter.prototype, {
   },
 
   warn(message) {
-    var toast = {
+    ToastActionCreators.fireToast({
       message: message,
       type: 'warn',
-      sticky: true
-    };
-
-    ToastActionCreators.fireToast(toast);
-
-        // if(!assemblies[id].fasta.assembly) {
-        //   var toast = {
-        //     message: 'Assembly missing for ' + id,
-        //     type: 'warn',
-        //     sticky: true
-        //   };
-        //   // ToastActionCreators.fireToast(toast);
-        // }
-        // else {
-        //   var toast = {
-        //     message: 'Please review the metadata for ' + id,
-        //     type: 'warn',
-        //     sticky: true
-        //   };
-
-        //   // ToastActionCreators.fireToast(toast);
-        // }
-
-  }
+      sticky: true,
+    });
+  },
 
 });
+
+function emitChange() {
+  Store.emit(CHANGE_EVENT);
+}
 
 function handleAction(action) {
   switch (action.type) {
