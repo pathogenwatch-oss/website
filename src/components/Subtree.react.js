@@ -5,23 +5,20 @@ import Tree from './tree/Tree.react';
 import UploadedCollectionStore from '../stores/UploadedCollectionStore';
 import ReferenceCollectionStore from '../stores/ReferenceCollectionStore';
 import SubtreeStore from '../stores/SubtreeStore';
+
 import SubtreeActionCreators from '../actions/SubtreeActionCreators';
+import FilteredDataActionCreators from '../actions/FilteredDataActionCreators';
 
 import FilteredDataUtils from '../utils/FilteredData';
-import { CGPS } from '../defaults';
 
 const nodeLabelStyle = {
   colour: 'rgba(0, 0, 0, 0.87)',
 };
 
-const iconStyle = {
-  color: CGPS.COLOURS.PURPLE,
-};
-
 function styleTree(tree) {
   tree.leaves.forEach((leaf) => {
     const assembly = UploadedCollectionStore.getAssemblies()[leaf.id];
-    tree.setNodeDisplay([ leaf.id ], { colour: FilteredDataUtils.getColour(assembly) });
+    leaf.setDisplay({ colour: FilteredDataUtils.getColour(assembly) });
     leaf.labelStyle = nodeLabelStyle;
   });
 }
@@ -31,10 +28,18 @@ function handleBackButton() {
 }
 
 const backButton = (
-  <button className="mdl-button mdl-button--icon" onClick={handleBackButton}>
-    <i className="material-icons" style={iconStyle}>arrow_back</i>
+  <button className="wgsa-tree-return mdl-button mdl-button--icon" onClick={handleBackButton}>
+    <i className="material-icons">arrow_back</i>
   </button>
 );
+
+function onUpdated(event) {
+  if (event.property !== 'selected') {
+    return;
+  }
+  const { nodeIds } = event;
+  FilteredDataActionCreators.setAssemblyIds(nodeIds.length ? nodeIds : SubtreeStore.getActiveSubtreeAssemblyIds());
+}
 
 export default React.createClass({
 
@@ -43,33 +48,25 @@ export default React.createClass({
   },
 
   render() {
-    const referenceAssembly = ReferenceCollectionStore.getAssemblies()[this.props.treeName];
-    const title = referenceAssembly.metadata.assemblyName;
+    const { treeName } = this.props;
+    const referenceAssembly = ReferenceCollectionStore.getAssemblies()[treeName];
+    const title = referenceAssembly ? referenceAssembly.metadata.assemblyName : treeName;
+    let newick;
 
     const subtreeAssemblyIds = SubtreeStore.getActiveSubtreeAssemblyIds();
     if (subtreeAssemblyIds.length === 1) {
-      const assembly = UploadedCollectionStore.getAssemblies()[subtreeAssemblyIds[0]];
-      return (
-        <section className="wgsa-tree">
-          <header className="wgsa-tree-header">
-            { backButton }
-            <h2 className="wgsa-tree-heading">{title}</h2>
-          </header>
-          <div className="wgsa-no-subtree">
-            <i className="material-icons">nature</i>
-            <h3>{assembly.metadata.assemblyName}</h3>
-            <p><em>n differences</em></p>
-          </div>
-        </section>
-      );
+      newick = `(${treeName}:0.5,${subtreeAssemblyIds[0]}:0.5);`;
+    } else {
+      newick = SubtreeStore.getActiveSubtree().newick;
     }
 
     return (
       <Tree
         title={title}
-        newick={SubtreeStore.getActiveSubtree().newick}
+        newick={newick}
         navButton={backButton}
-        styleTree={styleTree} />
+        styleTree={styleTree}
+        onUpdated={onUpdated} />
     );
   },
 

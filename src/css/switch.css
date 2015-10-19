@@ -1,6 +1,7 @@
 .wgsa-switch {
   display: flex;
   width: 88px;
+  user-select: none;
 }
 
 .wgsa-switch:hover {
@@ -32,4 +33,14 @@
 
 .wgsa-switch i.active {
   color: #673c90;
+}
+
+.wgsa-switch-background {
+  background: #fff;
+  padding: 4px 8px;
+  border-radius: 24px;
+}
+
+.wgsa-switch-background--see-through {
+  background: rgba(255, 255, 255, 0.87);
 }

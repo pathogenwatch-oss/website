@@ -4,7 +4,7 @@ import css from '../../../css/upload-review.css';
 import UploadWorkspaceNavigationStore from '../../../stores/UploadWorkspaceNavigationStore.js';
 import UploadWorkspaceNavigationActionCreators from '../../../actions/UploadWorkspaceNavigationActionCreators';
 
-const Component = React.createClass({
+const overviewStatisticsItem = React.createClass({
   propTypes: {
     assemblyName: React.PropTypes.string.isRequired
   },

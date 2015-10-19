@@ -1,61 +1,306 @@
-var React = require('react');
-var UploadStore = require('../../stores/UploadStore');
-var UploadWorkspaceNavigationStore = require('../../stores/UploadWorkspaceNavigationStore');
-var AssemblyWorkspace = require('./AssemblyWorkspace.react');
+import '../../css/upload-review.css';
+import '../../css/forms.css';
 
-var containerStyle = {
-  width: '100%',
-  height: '100%',
-  background: '-webkit-gradient(linear,left top,left bottom,color-stop(0,#f7f7f7),color-stop(1,#ebebeb))',
-  overflow: 'scroll'
+import React from 'react';
+import FileDragAndDrop from 'react-file-drag-and-drop';
+
+import AssemblyMetadata from './AssemblyMetadata.react';
+import AssemblyAnalysis from './AssemblyAnalysis.react';
+
+import AssemblyAnalysisChart from './AssemblyAnalysisChart.react';
+
+import UploadWorkspaceNavigation from './UploadWorkspaceNavigation.react';
+import UploadReviewHeader from './UploadReviewHeader.react';
+import Overview from './Overview.react';
+import UploadingFilesDetailed from './UploadingFilesDetailed.react';
+
+import UploadActionCreators from '../../actions/UploadActionCreators';
+import UploadStore from '../../stores/UploadStore';
+import SocketActionCreators from '../../actions/SocketActionCreators';
+import UploadWorkspaceNavigationActionCreators from '../../actions/UploadWorkspaceNavigationActionCreators';
+import UploadWorkspaceNavigationStore from '../../stores/UploadWorkspaceNavigationStore';
+import FileProcessingStore from '../../stores/FileProcessingStore';
+import FileUploadingStore from '../../stores/FileUploadingStore';
+import FileUploadingProgressStore from '../../stores/FileUploadingProgressStore';
+import SocketStore from '../../stores/SocketStore';
+
+import SocketUtils from '../../utils/Socket';
+import Species from '../../species';
+import DEFAULT from '../../defaults';
+import { validateMetadata } from '../../utils/Metadata';
+
+const loadingAnimationStyle = {
+  visibility: 'visible',
 };
 
-var UploadWorkspace = React.createClass({
-  getInitialState: function () {
-    return {
-      assemblyName: null,
-      totalAssemblies: 0
-    }
+const layoutContentStyle = {
+  background: DEFAULT.CGPS.COLOURS.GREY_LIGHT,
+  position: 'relative',
+};
+
+const fileInputStyle = {
+  position: 'absolute',
+  zIndex: -1,
+  opacity: 0,
+};
+
+let isProcessing = false;
+
+export default React.createClass({
+
+  contextTypes: {
+    router: React.PropTypes.func,
   },
 
-  componentDidMount: function () {
+  getInitialState() {
+    return {
+      uploadButtonActive: false,
+      confirmedMultipleMetadataDrop: false,
+      pageTitleAppend: 'Upload',
+      isUploading: FileUploadingStore.getFileUploadingState(),
+      viewPage: 'overview',
+      totalAssemblies: 0,
+      assemblyName: null,
+      uploadProgressPercentage: 0,
+      collectionUrl: null,
+    };
+  },
+
+  componentDidMount() {
+    FileProcessingStore.addChangeListener(this.handleFileProcessingStoreChange);
+    FileUploadingStore.addChangeListener(this.handleFileUploadingStoreChange);
+    FileUploadingProgressStore.addChangeListener(this.handleFileUploadingProgressStoreChange);
     UploadWorkspaceNavigationStore.addChangeListener(this.handleUploadWorkspaceNavigationStoreChange);
     UploadStore.addChangeListener(this.handleUploadStoreChange);
+
+    const socket = SocketUtils.socketConnect();
+
+    socket.on('connect', function () {
+      console.log('[Macroreact] Socket connected');
+    });
+
+    socket.on('disconnect', function () {
+      console.error('[Macroreact] Socket connection lost');
+    });
+
+    SocketStore.addChangeListener(this.handleSocketStoreChange);
+    SocketActionCreators.setSocketConnection(socket);
   },
 
-  componentWillUnmount: function () {
+  componentWillUnmount() {
+    FileProcessingStore.removeChangeListener(this.handleFileProcessingStoreChange);
+    FileUploadingStore.removeChangeListener(this.handleFileUploadingStoreChange);
+    FileUploadingProgressStore.removeChangeListener(this.handleFileUploadingProgressStoreChange);
+    SocketStore.removeChangeListener(this.handleSocketStoreChange);
     UploadWorkspaceNavigationStore.removeChangeListener(this.handleUploadWorkspaceNavigationStoreChange);
     UploadStore.removeChangeListener(this.handleUploadStoreChange);
   },
 
-  handleUploadWorkspaceNavigationStoreChange: function () {
+  handleSocketStoreChange() {
+    if (!SocketStore.getRoomId()) {
+      SocketStore.getSocketConnection().on('roomId', function iife(roomId) {
+        SocketActionCreators.setRoomId(roomId);
+      });
+
+      SocketStore.getSocketConnection().emit('getRoomId');
+    }
+  },
+
+  handleFileProcessingStoreChange() {
+    isProcessing = FileProcessingStore.getFileProcessingState();
     this.setState({
-      assemblyName: UploadWorkspaceNavigationStore.getAssemblyName()
+      pageTitleAppend: isProcessing ? 'Processing...' : 'Overview',
     });
+  },
+
+  handleFileUploadingStoreChange() {
+    const uploadingResult = FileUploadingStore.getFileUploadingResult();
+    const id = FileUploadingStore.getCollectionId();
+    const { transitionTo, makePath } = this.context.router;
+    if (uploadingResult === FileUploadingStore.getFileUploadingResults().SUCCESS) {
+      transitionTo(makePath('collection', { species: Species.nickname, id }));
+      return;
+    }
+    else {
+      if (id) {
+        this.setState({
+          collectionUrl: window.location.origin + makePath('collection', { species: Species.nickname, id })
+        })
+      }
+    }
+
+    this.setState({
+      isUploading: FileUploadingStore.getFileUploadingState(),
+      viewPage: 'upload_progress',
+    });
+  },
+
+  handleUploadWorkspaceNavigationStoreChange() {
+    this.setState({
+      viewPage: UploadWorkspaceNavigationStore.getCurrentViewPage(),
+      assemblyName: UploadWorkspaceNavigationStore.getAssemblyName(),
+    });
+  },
+
+  handleDrop(event) {
+    if (event.files.length > 0 && !this.state.isUploading) {
+      if (!this.state.confirmedMultipleMetadataDrop && this.state.totalAssemblies > 0) {
+        var multipleDropConfirm = confirm('Duplicate records will be overwritten');
+        if (multipleDropConfirm) {
+          this.setState({
+            confirmedMultipleMetadataDrop: true,
+          });
+          UploadActionCreators.addFiles(event.files);
+        }
+      } else {
+        UploadActionCreators.addFiles(event.files);
+      }
+      // allows the same file to be uploaded consecutively
+      React.findDOMNode(this.refs.fileInput).value = '';
+    }
+  },
+
+  handleClick() {
+    if (this.state.isUploading) {
+      UploadWorkspaceNavigationActionCreators.setViewPage('upload_progress');
+    } else {
+      React.findDOMNode(this.refs.fileInput).click();
+    }
+  },
+
+  handleOverviewClick() {
+    // UploadWorkspaceNavigationActionCreators.navigateToAssembly(null);
+    UploadWorkspaceNavigationActionCreators.setViewPage('overview');
+  },
+
+  handleFileInputChange(event) {
+    this.handleDrop(event.target);
   },
 
   handleUploadStoreChange() {
+    const totalAssemblies = UploadStore.getAssembliesCount();
+    const assemblies = UploadStore.getAssemblies();
+    const isValidMap = validateMetadata(assemblies);
+
+    let isValid = true;
+    if (!Object.keys(isValidMap)) {
+      isValid = false;
+    }
+
+    if (totalAssemblies < 3) {
+      isValid = false;
+    }
+
+    for (const id in isValidMap) {
+      if (!isValidMap[id]) {
+        isValid = false;
+        break;
+      }
+    }
+
     this.setState({
-      totalAssemblies: UploadStore.getAssembliesCount()
+      totalAssemblies,
+      uploadButtonActive: isValid,
     });
   },
 
-  getAssemblyWorkspaceElement: function () {
-    var assemblyName = this.state.assemblyName;
-    var assembly = UploadStore.getAssembly(assemblyName);
+  handleFileUploadingProgressStoreChange() {
+    const percentage = FileUploadingProgressStore.getProgressPercentage();
+    this.setState({
+      uploadProgressPercentage: percentage,
+    });
+  },
+
+  render() {
+    let pageTitle = 'WGSA';
+    const assembly = UploadStore.getAssembly(this.state.assemblyName);
+
+    loadingAnimationStyle.visibility = isProcessing ? 'visible' : 'hidden';
+    switch (this.state.viewPage) {
+    case 'assembly':
+      pageTitle = `WGSA | ${assembly && assembly.fasta.name}`;
+      break;
+    case 'upload_progress':
+      pageTitle = 'WGSA | Uploading...';
+      break;
+    default: pageTitle = `WGSA | ${this.state.pageTitleAppend}`;
+    }
 
     return (
-      <AssemblyWorkspace assembly={assembly} totalAssemblies={this.state.totalAssemblies}/>
+      <FileDragAndDrop onDrop={this.handleDrop}>
+        <div className="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-drawer">
+          <UploadReviewHeader title={pageTitle} activateUploadButton={this.state.uploadButtonActive} uploadProgressPercentage={this.state.uploadProgressPercentage} isUploading={this.state.isUploading} />
+
+          <UploadWorkspaceNavigation assembliesUploaded={assembly ? true : false} totalAssemblies={this.state.totalAssemblies}>
+            <footer className="wgsa-upload-navigation__footer mdl-shadow--4dp">
+              <button type="button" title="Overview"
+                className="wgsa-upload-review-button mdl-button mdl-js-button mdl-button--raised mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect"
+                onClick={this.handleOverviewClick}>
+                <i className="material-icons">home</i>
+              </button>
+
+              { !this.state.isUploading &&
+                <button type="button" title="Add files"
+                  className="wgsa-upload-review-button mdl-button mdl-js-button mdl-button--raised mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect"
+                  onClick={this.handleClick}>
+                  <i className="material-icons">add</i>
+                </button>
+              }
+            </footer>
+          </UploadWorkspaceNavigation>
+
+          <main className="mdl-layout__content" style={layoutContentStyle}>
+            <div id="loadingAnimation" style={loadingAnimationStyle} className="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
+
+            {
+              (() => {
+                switch (this.state.viewPage) {
+                case 'assembly':
+                  return (
+                    <div className="assemblyWorkspaceContainer mdl-grid assemblyWorkspaceContent">
+                      <div className="overflow-y--auto mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
+                        <div className="heading"> Metadata </div>
+                        <div className="card-style">
+                          <AssemblyMetadata assembly={assembly} />
+                        </div>
+                      </div>
+                      <div className="overflow-y--auto mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
+                        <div className="mdl-grid mdl-grid--no-spacing">
+                          <div className="mdl-cell mdl-cell--12-col">
+                            <div className="heading"> Assembly Statistics </div>
+                            <div className="card-style">
+                              <AssemblyAnalysis assembly={assembly} />
+                            </div>
+                          </div>
+                          <div className="mdl-cell mdl-cell--12-col">
+                            <div className="heading"> N50 Chart </div>
+                            <div className="card-style">
+                              <AssemblyAnalysisChart analysis={assembly && assembly.analysis} />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                case 'overview':
+                  return (
+                   <Overview clickHandler={this.handleClick} uploadProgressPercentage={this.state.uploadProgressPercentage} isUploading={this.state.isUploading} isReadyToUpload={this.state.uploadButtonActive} />
+                  );
+                case 'upload_progress':
+                  return (
+                    <div>
+                      <UploadingFilesDetailed collectionUrl={this.state.collectionUrl}/>
+                    </div>
+                  );
+                default:
+                  // should never hit default
+                }
+              })() }
+          </main>
+        </div>
+        <input type="file" multiple="multiple" accept={DEFAULT.SUPPORTED_FILE_EXTENSIONS} ref="fileInput" style={fileInputStyle} onChange={this.handleFileInputChange} />
+      </FileDragAndDrop>
     );
   },
 
-  render: function () {
-    return (
-      <div style={containerStyle}>
-        {this.getAssemblyWorkspaceElement()}
-      </div>
-    );
-  }
 });
-
-module.exports = UploadWorkspace;

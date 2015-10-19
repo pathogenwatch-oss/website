@@ -1,9 +1,13 @@
+/* global google */
+
 import React from 'react';
 import assign from 'object-assign';
 
 import ReferenceCollectionStore from '../stores/ReferenceCollectionStore';
 import UploadedCollectionStore from '../stores/UploadedCollectionStore';
 import FilteredDataStore from '../stores/FilteredDataStore';
+
+import FilteredDataActionCreators from '../actions/FilteredDataActionCreators';
 
 import MapUtils from '../utils/Map';
 import FilteredDataUtils from '../utils/FilteredData';
@@ -67,6 +71,8 @@ const Map = React.createClass({
     };
 
     this.map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+
+    this.map.addListener('click', FilteredDataActionCreators.clearAssemblyFilter);
 
     this.createMarkers();
   },
@@ -157,20 +163,14 @@ const Map = React.createClass({
       return null;
     }
 
-    if (shape === DEFAULT.SHAPE) {
-      console.warn(`Shape is missing in ${dataObjectId} data object - using ${DEFAULT.SHAPE}.`);
-    }
-
-    if (!colour) {
-      console.warn(`Colour is missing in ${dataObjectId} data object - using ${DEFAULT.COLOUR}.`);
-    }
-
     const marker = new google.maps.Marker({
       position: new google.maps.LatLng(latitude, longitude),
       map: this.map,
       icon: MapUtils.getMarkerIcon(shape, colour),
       optimized: false,
     });
+
+    marker.addListener('click', FilteredDataActionCreators.setAssemblyIds.bind(null, [ dataObjectId ]));
 
     return marker;
   },

@@ -41,14 +41,16 @@ var devConfig = {
             'react-transform'
           ],
           'extra': {
-            'react-transform': [ {
-              'target': 'react-transform-webpack-hmr',
-              'imports': [ 'react' ],
-              'locals': [ 'module' ]
-            }, {
-              'target': 'react-transform-catch-errors',
-              'imports': [ 'react', 'redbox-react' ]
-            }]
+            'react-transform': {
+              transforms: [ {
+                'transform': 'react-transform-hmr',
+                'imports': [ 'react' ],
+                'locals': [ 'module' ]
+              }, {
+                'transform': 'react-transform-catch-errors',
+                'imports': [ 'react', 'redbox-react' ]
+              } ]
+            }
           }
         }
       }

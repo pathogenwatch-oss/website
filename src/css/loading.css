@@ -1,0 +1,28 @@
+.wgsa-loading-container {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.wgsa-loading-container h1 {
+  font-family: Roboto, Arial, sans-serif;
+  font-size: 36px;
+  color: #a386bd;
+}
+
+.wgsa-loading-container a {
+  color: #673c90;
+}
+
+.wgsa-loading-container a:hover,
+.wgsa-loading-container a:focus,
+.wgsa-loading-container a:active,
+.wgsa-loading-container a:visited {
+  color: #a386bd;
+}

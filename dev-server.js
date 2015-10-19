@@ -27,10 +27,10 @@ var apiRouter = express.Router();
 apiRouter.post('/species/:speciesId/collection', function (req, res) {
   res.json({
     collectionId: '123',
-    userAssemblyIdToAssemblyIdMap: {
-      'JH1.fna': '123',
-      'JH9.fna': '456',
-      'MW2.fna': '789'
+    assemblyNameToAssemblyIdMap: {
+      '7065_8#1_scaffolded': '123',
+      '7065_8#2_scaffolded': '456',
+      '7065_8#3_scaffolded': '789'
     }
   });
 });
@@ -40,7 +40,9 @@ apiRouter.post('/species/:speciesId/collection/:collectionId/assembly/:id', func
 });
 
 apiRouter.get('/species/:speciesId/collection/:id', function (req, res) {
-  res.sendFile(__dirname + '/static_data/collection.json');
+  setTimeout(function () {
+    res.sendFile(__dirname + '/static_data/collection.json');
+  }, 2000);
 });
 
 apiRouter.get('/species/:speciesId/reference', function (req, res) {

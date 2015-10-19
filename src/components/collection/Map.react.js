@@ -2,6 +2,7 @@ import React from 'react';
 
 import UploadWorkspaceNavigationActionCreators from '../../actions/UploadWorkspaceNavigationActionCreators.js';
 
+import MapUtils from '../../utils/Map';
 import DEFAULT from '../../defaults';
 
 const Map = React.createClass({
@@ -140,14 +141,10 @@ const Map = React.createClass({
     this.fitAllMarkers();
   },
 
-  createMarker: function (dataObject = [], location = '', latitude, longitude, shape = DEFAULT.SHAPE, colour = DEFAULT.COLOUR) {
+  createMarker: function (dataObject = [], location = '', latitude, longitude, shape = DEFAULT.SHAPE, colour = DEFAULT.CGPS.COLOURS.PURPLE_LIGHT) {
 
     if (!latitude && !longitude) {
       throw new Error(`Can't create map marker because latitude and longitude is missing in ${location} data object :(`);
-    }
-
-    if (shape === DEFAULT.SHAPE) {
-      // console.warn(`Shape is missing in ${location} data object - using ${DEFAULT.SHAPE}.`);
     }
 
     if (!colour) {
@@ -157,7 +154,7 @@ const Map = React.createClass({
     const marker = new google.maps.Marker({
       position: new google.maps.LatLng(latitude, longitude),
       map: this.map,
-      // icon: MapUtils.getMarkerIcon(shape, colour),
+      icon: MapUtils.getMarkerIcon(shape, colour),
       optimized: false,
       // animation: google.maps.Animation.DROP
     });
@@ -171,7 +168,7 @@ const Map = React.createClass({
       });
     }
     else if (location) {
-      html = '<b>'+location+'</b>';
+      html = '<strong>' + location + '</strong>';
       infowindow = new google.maps.InfoWindow({
         content: html
       });
@@ -185,13 +182,13 @@ const Map = React.createClass({
 
   render: function () {
     const mapStyle = {
-      // position: 'absolute',
+      position: 'absolute',
       top: 0,
       bottom: 0,
       left: 0,
       right: 0,
-      height: this.props.height || '200px',
-      width: this.props.width || '200px',
+      // height: this.props.height || '200px',
+      // width: this.props.width || '200px',
     };
 
     return (

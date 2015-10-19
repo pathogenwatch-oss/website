@@ -2,24 +2,30 @@ import AppDispatcher from '../dispatcher/AppDispatcher';
 
 module.exports = {
 
-  setAssemblyIds: function (assemblyIds) {
+  setAssemblyIds(assemblyIds) {
     AppDispatcher.dispatch({
       type: 'set_filtered_assembly_ids',
-      assemblyIds: assemblyIds,
+      assemblyIds,
     });
   },
 
-  setLabelTableColumnName: function (labelTableColumnName) {
+  clearAssemblyFilter() {
     AppDispatcher.dispatch({
-      type: 'set_label_table_column',
-      labelTableColumnName: labelTableColumnName,
+      type: 'clear_assembly_filter',
     });
   },
 
-  setColourTableColumnName: function (colourTableColumnName) {
+  setLabelGetter(labelGetter) {
+    AppDispatcher.dispatch({
+      type: 'set_label_getter',
+      labelGetter,
+    });
+  },
+
+  setColourTableColumnName(colourTableColumnName) {
     AppDispatcher.dispatch({
       type: 'set_colour_table_column',
-      colourTableColumnName: colourTableColumnName,
+      colourTableColumnName,
     });
   },
 

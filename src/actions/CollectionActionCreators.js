@@ -2,29 +2,43 @@ import AppDispatcher from '../dispatcher/AppDispatcher';
 import ApiUtils from '../utils/Api';
 import MetadataUtils from '../utils/Metadata';
 
+const collectionErrorAction = {
+  type: 'collection_error',
+};
+
 export default {
 
-  getCollection: function (speciesId, collectionId) {
-    ApiUtils.getCollection(speciesId, collectionId, function getCollection(error, collection) {
+  getCollection(speciesId, collectionId) {
+    const action = {
+      type: 'set_collection',
+      collection: null,
+      referenceCollection: null,
+    };
+
+    ApiUtils.getCollection(speciesId, collectionId, function (error, collection) {
       if (error) {
         console.error('[Macroreact]', error);
-        return;
+        return AppDispatcher.dispatch(collectionErrorAction);
       }
 
-      ApiUtils.getReferenceCollection(speciesId, function getReferenceCollection(error, referenceCollection) {
-        if (error) {
-          console.error('[Macroreact]', error);
-          return;
-        }
+      action.collection = collection;
 
-        const action = {
-          type: 'set_collection',
-          collection: collection,
-          referenceCollection: MetadataUtils.fixMetadataDateFormatInCollection(referenceCollection),
-        };
-
+      if (action.collection && action.referenceCollection) {
         AppDispatcher.dispatch(action);
-      });
+      }
+    });
+
+    ApiUtils.getReferenceCollection(speciesId, function (error, referenceCollection) {
+      if (error) {
+        console.error('[Macroreact]', error);
+        return AppDispatcher.dispatch(collectionErrorAction);
+      }
+
+      action.referenceCollection = MetadataUtils.fixMetadataDateFormatInCollection(referenceCollection);
+
+      if (action.collection && action.referenceCollection) {
+        AppDispatcher.dispatch(action);
+      }
     });
   },
 

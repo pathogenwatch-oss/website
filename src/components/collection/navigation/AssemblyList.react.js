@@ -13,7 +13,8 @@ const AssemblyList = React.createClass({
   getInitialState() {
     return {
       selectedOption: null,
-      isUploading: null
+      isUploading: null,
+      isItemSelected: null,
     };
   },
 
@@ -35,7 +36,8 @@ const AssemblyList = React.createClass({
 
   handleUploadWorkspaceNavigationStoreChange() {
     this.setState({
-      selectedOption: UploadWorkspaceNavigationStore.getAssemblyName()
+      selectedOption: UploadWorkspaceNavigationStore.getAssemblyName(),
+      isItemSelected: (UploadWorkspaceNavigationStore.getCurrentViewPage() === 'assembly')
     });
   },
 
@@ -48,8 +50,8 @@ const AssemblyList = React.createClass({
         <AssemblyListItem
           key={assemblyName}
           assemblyName={assemblyName}
-          isValidMap={isValidMap}
-          selected={assemblyName === this.state.selectedOption}
+          isValid={isValidMap[assemblyName]}
+          selected={assemblyName === this.state.selectedOption && this.state.isItemSelected}
           isUploading={this.state.isUploading} />
       );
     });

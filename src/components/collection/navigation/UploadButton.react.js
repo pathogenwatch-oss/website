@@ -1,50 +1,25 @@
 import '../../../css/sonar.css';
 
 import React from 'react';
-import UploadStore from '../../../stores/UploadStore';
 import UploadActionCreators from '../../../actions/UploadActionCreators';
-import FileUploadingProgressStore from '../../../stores/FileUploadingProgressStore';
 import UploadWorkspaceNavigationActionCreators from '../../../actions/UploadWorkspaceNavigationActionCreators';
 
 
-import DEFAULT from '../../../defaults.js';
-import { validateMetadata } from '../../../utils/Metadata.js';
-
-var uploadButtonStyle = {
+const uploadButtonStyle = {
   right: '30px',
-  top: '30px',
+  top: '24px',
   position: 'absolute',
+  zIndex: 1,
   color: '#fff',
   fontSize: '18px',
-  fontWeight: '400'
+  fontWeight: '400',
 };
 
-var iconStyle = {
-  color: '#fff'
+const iconStyle = {
+  color: '#fff',
 };
 
-var UploadButton = React.createClass({
-
-  getInitialState() {
-    return {
-      uploadProgressPercentage: 0
-    };
-  },
-
-  componentDidMount() {
-    FileUploadingProgressStore.addChangeListener(this.handleFileUploadingProgressStoreChange);
-  },
-
-  componentDidUnmount() {
-    FileUploadingProgressStore.removeChangeListener(this.handleFileUploadingProgressStoreChange);
-  },
-
-  handleFileUploadingProgressStoreChange: function () {
-    const percentage = FileUploadingProgressStore.getProgressPercentage();
-    this.setState({
-      uploadProgressPercentage: percentage,
-    });
-  },
+const UploadButton = React.createClass({
 
   handleClick: function () {
     !this.props.isUploading && UploadActionCreators.getCollectionId();
@@ -52,21 +27,14 @@ var UploadButton = React.createClass({
   },
 
   render: function () {
-    if (!this.props.activateButton) {
-      uploadButtonStyle.background = DEFAULT.CGPS.COLOURS.GREY;
-    }
-    else {
-      uploadButtonStyle.background = DEFAULT.CGPS.COLOURS.PURPLE;
-    }
-
     return (
       <button
-        style={uploadButtonStyle} className={`${this.props.activateButton && "wgsa-sonar-effect"} mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--6dp`}
+        style={uploadButtonStyle} className={`${this.props.activateButton && "wgsa-sonar-effect"} wgsa-upload-review-button mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--6dp`}
         disabled={!this.props.activateButton}
         onClick={this.handleClick}>
         { this.props.isUploading &&
           <div>
-            {this.state.uploadProgressPercentage}%
+            {this.props.uploadProgressPercentage}%
           </div>
           ||
           <i style={iconStyle} className="material-icons">cloud_upload</i>

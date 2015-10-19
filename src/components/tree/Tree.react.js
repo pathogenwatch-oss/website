@@ -10,8 +10,6 @@ import FilteredDataStore from '../../stores/FilteredDataStore';
 import ReferenceCollectionStore from '../../stores/ReferenceCollectionStore';
 import UploadedCollectionStore from '../../stores/UploadedCollectionStore';
 
-import MetadataUtils from '../../utils/Metadata';
-import DataUtils from '../../utils/Data';
 import DEFAULT, { CGPS } from '../../defaults';
 
 const fullWidthHeight = {
@@ -26,7 +24,7 @@ export default React.createClass({
     title: React.PropTypes.string,
     navButton: React.PropTypes.element,
     styleTree: React.PropTypes.func,
-    leafSelected: React.PropTypes.func,
+    onUpdated: React.PropTypes.func,
   },
 
   getInitialState() {
@@ -36,7 +34,8 @@ export default React.createClass({
       treeType: DEFAULT.TREE_TYPE,
       nodeSize: DEFAULT.NODE_SIZE,
       labelSize: DEFAULT.LABEL_SIZE,
-      labelProperty: FilteredDataStore.getLabelTableColumnName(),
+      labelGetter: FilteredDataStore.getLabelGetter(),
+      colourColumnName: FilteredDataStore.getColourTableColumnName(),
       treeLoaded: false,
     });
   },
@@ -58,7 +57,6 @@ export default React.createClass({
     phylocanvas.setNodeSize(this.state.nodeSize);
     phylocanvas.setTextSize(this.state.labelSize);
 
-    phylocanvas.on('updated', this.props.leafSelected);
     phylocanvas.on('subtree', this.handleRedrawSubtree);
     phylocanvas.on('historytoggle', this.handleHistoryToggle);
 
@@ -68,13 +66,13 @@ export default React.createClass({
   },
 
   componentWillUpdate() {
-    this.phylocanvas.canvasEl.removeEventListener('updated', this.props.leafSelected);
+    this.phylocanvas.canvasEl.removeEventListener('updated', this.props.onUpdated);
   },
 
   componentDidUpdate() {
     this.phylocanvas.resizeToContainer();
 
-    this.phylocanvas.on('updated', this.props.leafSelected);
+    this.phylocanvas.on('updated', this.props.onUpdated);
 
     if (this.props.newick && this.props.newick !== this.phylocanvas.stringRepresentation) {
       this.loadTree();
@@ -94,7 +92,9 @@ export default React.createClass({
       <section className="wgsa-tree">
         <header className="wgsa-tree-header">
           { navButton }
-          <h2 className="wgsa-tree-heading">{title}</h2>
+          <h2 className="wgsa-tree-heading">
+            <span>{title}</span>
+          </h2>
           <TreeMenu
             tree={this.phylocanvas}
             exportFilename={`${title}.png`}
@@ -119,6 +119,7 @@ export default React.createClass({
   loadTree() {
     this.phylocanvas.load(this.props.newick, () => {
       this.styleTree();
+      this.phylocanvas.fitInPanel();
       this.setState({
         treeLoaded: true,
       });
@@ -132,22 +133,10 @@ export default React.createClass({
   },
 
   setNodeLabels() {
-    const labelProperty = this.state.labelProperty;
     for (const leaf of this.phylocanvas.leaves) {
       if (UploadedCollectionStore.contains(leaf.id)) {
         const assembly = UploadedCollectionStore.getAssemblies()[leaf.id];
-        let labelValue;
-        if (labelProperty === 'Country') {
-          labelValue = MetadataUtils.getCountry(assembly);
-        } else if (labelProperty === 'Date') {
-          labelValue = DataUtils.getFormattedDateString(assembly.metadata.date) || '';
-        } else if (labelProperty === 'ST') {
-          labelValue = assembly.analysis.st || '';
-        } else {
-          labelValue =
-            assembly.metadata.assemblyName || assembly.metatdata.assemblyId;
-        }
-        leaf.label = labelValue;
+        leaf.label = this.state.labelGetter(assembly);
       } else {
         const assembly = ReferenceCollectionStore.getAssemblies()[leaf.id];
         if (!assembly) {
@@ -161,8 +150,6 @@ export default React.createClass({
         }
       }
     }
-
-    this.phylocanvas.fitInPanel();
   },
 
   handleNodeSizeChange(event) {
@@ -171,6 +158,10 @@ export default React.createClass({
 
   handleLabelSizeChange(event) {
     this.phylocanvas.setTextSize(event.target.value);
+  },
+
+  handleTreeTypeChange(event) {
+    this.phylocanvas.setTreeType(event.target.value);
   },
 
   handleToggleNodeLabels() {
@@ -189,9 +180,19 @@ export default React.createClass({
   },
 
   handleFilteredDataStoreChange() {
-    this.setState({
-      labelProperty: FilteredDataStore.getLabelTableColumnName(),
-    });
+    const newState = {};
+    const labelGetter = FilteredDataStore.getLabelGetter();
+    const colourTableColumn = FilteredDataStore.getColourTableColumnName();
+
+    if (labelGetter !== this.state.labelGetter) {
+      newState.labelGetter = labelGetter;
+    }
+
+    if (colourTableColumn !== this.state.colourTableColumn) {
+      newState.colourTableColumn = colourTableColumn;
+    }
+
+    this.setState(newState);
   },
 
 });

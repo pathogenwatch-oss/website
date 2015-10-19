@@ -32,50 +32,52 @@ export default React.createClass({
   handleFileUploadingStoreChange() {
     this.setState({
       isUploading: FileUploadingStore.getFileUploadingState(),
-    })
+    });
   },
 
-  handleMetadataChange(event) {
-    const columnName = event.target.id;
-    const value = event.target.value;
+  handleMetadataChange(columnName, value) {
     MetadataActionCreators.setMetadataColumn(
-      this.props.assembly.metadata.assemblyName, columnName, value
+      this.props.assembly.fasta.name, columnName, value
     );
   },
 
   getMetadataFieldComponents(metadata) {
     return Object.keys(metadata)
       .filter((columnName) => {
+        console.log(columnName);
         return (
           columnName !== 'assemblyName' &&
           columnName !== 'name' &&
           columnName !== 'geography' &&
           columnName !== 'date' &&
-          (this.state.isUploading && metadata[columnName])
+          (this.state.isUploading ? metadata[columnName] : true)
         );
       })
       .map((columnName) => {
         return (
-          <InputField ref={columnName} key={columnName} type="text" label={columnName} value={metadata[columnName]} handleChange={this.handleMetadataChange} readonly={this.state.isUploading}/>
+          <InputField key={columnName} type="text" label={columnName} value={metadata[columnName]} handleChange={this.handleMetadataChange} readonly={this.state.isUploading}/>
         );
       });
   },
 
-  render: function () {
+  render() {
     const { fasta, metadata } = this.props.assembly;
+    const { assemblyName } = metadata;
     const locations = {};
-    if (this.props.assembly) {
-      locations[this.props.assembly.fasta.name] = this.props.assembly.metadata.geography;
+
+    if (fasta && metadata) {
+      locations[fasta.name] = metadata.geography;
     }
 
     return (
       <form className="metadata-fields">
-        <div className="mdl-grid mdl-grid--no-spacing">
-          <div className="mdl-cell mdl-cell--6-col">
+        <div className="mdl-grid mdl-grid--no-spacing" style={{ justifyContent: 'flexstart' }}>
+          <div className="mdl-cell mdl-cell--6-col" style={{ paddingRight: '16px' }}>
+            <InputField key="assemblyName" type="text" columnName="assemblyName" label="Assembly Name" value={assemblyName} handleChange={this.handleMetadataChange} readonly={this.state.isUploading}/>
             <MetadataDate key={fasta.name} assemblyId={fasta.name} date={metadata.date} disabled={this.state.isUploading}/>
           </div>
-          <div className="mdl-cell mdl-cell--6-col">
-            <Map width={"100%"} height={100} locations={locations} label="Location" />
+          <div className="mdl-cell mdl-cell--6-col" style={{ position: 'relative', height: '160px'}}>
+            <Map locations={locations} label="Location" />
           </div>
         </div>
         <div className="metadata-fields__other">

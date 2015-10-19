@@ -1,6 +1,7 @@
 module.exports = {
   SHAPE: 'circle',
   COLOUR: '#555555',
+  DANGER_COLOUR: '#d11b1b',
   TREE_TYPE: 'rectangular',
   NODE_SIZE: 10,
   LABEL_SIZE: 10,

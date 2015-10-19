@@ -7,11 +7,13 @@ import ReferenceCollectionStore from '../../stores/ReferenceCollectionStore';
 import UploadedCollectionStore from '../../stores/UploadedCollectionStore';
 import FilteredDataStore from '../../stores/FilteredDataStore';
 
+import FilteredDataActionCreators from '../../actions/FilteredDataActionCreators';
+
 import DataUtils from '../../utils/Data';
 
-const columnProps = [
+const systemColumnProps = [
   { label: '',
-    dataKey: 'download',
+    dataKey: '__download',
     width: 50,
     flexGrow: 0,
     fixed: true,
@@ -24,28 +26,50 @@ const columnProps = [
       );
     },
   },
-  { label: 'Assembly',
-    dataKey: 'name',
+  { label: 'ASSEMBLY',
+    dataKey: '__assembly',
     fixed: true,
+    labelGetter({ metadata }) {
+      return metadata.assemblyName;
+    },
   },
-  { label: 'Location',
-    dataKey: 'location',
+  { label: 'LOCATION',
+    dataKey: '__location',
+    labelGetter({ metadata }) {
+      return metadata.geography.location;
+    },
   },
-  { label: 'Date',
-    dataKey: 'date',
+  { label: 'DATE',
+    dataKey: '__date',
+    labelGetter({ metadata }) {
+      return DataUtils.getFormattedDateString(metadata.date);
+    },
   },
-  { label: 'Sequence Type',
-    dataKey: 'st',
-    // align: 'right',
+  { label: 'ST',
+    dataKey: '__st',
+    labelGetter({ analysis }) {
+      return analysis.st;
+    },
   },
   { label: 'MLST',
-    dataKey: 'mlst',
+    dataKey: '__mlst',
+    labelGetter({ analysis }) {
+      return analysis.mlst;
+    },
   },
-  { label: 'Complete Matches',
-    dataKey: 'tcm',
-    // align: 'right',
+  { label: 'KERNEL SIZE',
+    dataKey: '__kernel_size',
+    labelGetter({ analysis }) {
+      return analysis.kernelSize;
+    },
   },
 ];
+
+let userDefinedColumnProps = [];
+
+function allColumnProps() {
+  return systemColumnProps.concat(userDefinedColumnProps);
+}
 
 function getAssembly(assemblyId) {
   const referenceCollectionAssemblies = ReferenceCollectionStore.getAssemblies();
@@ -54,16 +78,18 @@ function getAssembly(assemblyId) {
 }
 
 function mapAssemblyIdToTableRow(assemblyId) {
-  const { metadata, analysis } = getAssembly(assemblyId);
-  return {
-    id: metadata.assemblyId,
-    name: metadata.assemblyName,
-    location: metadata.geography.location,
-    date: DataUtils.getFormattedDateString(metadata.date),
-    st: analysis.st,
-    mlst: analysis.mlst,
-    tcm: analysis.totalCompleteMatches,
-  };
+  const assembly = getAssembly(assemblyId);
+
+  return allColumnProps().reduce(function (memo, { dataKey, labelGetter }) {
+      if (labelGetter) {
+        memo[dataKey] = labelGetter(assembly);
+      }
+      return memo;
+    }, {});
+}
+
+function setLabelGetter({ labelGetter }) {
+  FilteredDataActionCreators.setLabelGetter(labelGetter);
 }
 
 export default React.createClass({
@@ -73,6 +99,25 @@ export default React.createClass({
   propTypes: {
     height: React.PropTypes.number,
     width: React.PropTypes.number,
+  },
+
+  getInitialState() {
+    if (!userDefinedColumnProps.length) {
+      userDefinedColumnProps =
+        FilteredDataStore.getUserDefinedColumns().map((column) => {
+          return {
+            label: column.toUpperCase(),
+            dataKey: column,
+            labelGetter({ metadata }) {
+              return metadata.userDefined[column];
+            },
+          };
+        });
+    }
+
+    return {
+      data: FilteredDataStore.getAssemblyIds().map(mapAssemblyIdToTableRow),
+    };
   },
 
   componentDidMount() {
@@ -86,8 +131,9 @@ export default React.createClass({
   render() {
     return (
       <FixedTable
-        data={FilteredDataStore.getAssemblyIds().map(mapAssemblyIdToTableRow)}
-        columns={columnProps}
+        data={this.state.data}
+        columns={allColumnProps()}
+        headerClickHandler={setLabelGetter}
         { ...this.props }
       />
     );

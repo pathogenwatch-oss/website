@@ -3,8 +3,8 @@ import AnalysisUtils from './Analysis';
 
 import UploadStore from '../stores/UploadStore.js';
 
-const FASTA_FILE_NAME_REGEX = /^.+(.fa|.fas|.fna|.ffn|.faa|.frn|.fasta|.contig)$/i;
-const CSV_FILE_NAME_REGEX = /^.+(.csv)$/i;
+const FASTA_FILE_NAME_REGEX = /(.fa|.fas|.fna|.ffn|.faa|.frn|.fasta|.contig)$/i;
+const CSV_FILE_NAME_REGEX = /(.csv)$/i;
 
 function isFastaFile(file) {
   return file.name.match(FASTA_FILE_NAME_REGEX);
@@ -128,13 +128,9 @@ function initialiseAssemblyObject(assemblyName, assemblies) {
 function handleFilesContent(filesContent, rawFiles, assemblies) {
   filesContent.forEach(function parseFileContent(file) {
     if (isCsvFile(file)) {
-
       parseCsvFile(file, rawFiles, assemblies);
-
     } else if (isFastaFile(file)) {
-
       parseFastaFile(file, rawFiles, assemblies);
-
     } else {
       console.warn('[Macroreact] Unsupported file type: ' + file.name);
     }
@@ -142,62 +138,57 @@ function handleFilesContent(filesContent, rawFiles, assemblies) {
 }
 
 function parseFastaFile(file, rawFiles, assemblies) {
-  var assemblyName = file.name.replace(/\.\w+$/, '');
-  var fileContent = file.content;
+  const fileName = file.name.replace(FASTA_FILE_NAME_REGEX, '');
+  const fileContent = file.content;
 
-  rawFiles[assemblyName] = {
-    name: assemblyName,
-    content: fileContent
+  rawFiles[fileName] = {
+    name: fileName,
+    content: fileContent,
   };
 
-  assemblies = initialiseAssemblyObject(assemblyName, assemblies);
-  assemblies[assemblyName].fasta.assembly = fileContent;
-  assemblies[assemblyName].analysis = analyseFasta(assemblyName, fileContent);
+  initialiseAssemblyObject(fileName, assemblies);
+  assemblies[fileName].fasta.assembly = fileContent;
+  assemblies[fileName].analysis = analyseFasta(fileName, fileContent);
 }
 
 function parseCsvFile(file, rawFiles, assemblies) {
-  var csvString = file.content;
-  var csvJson = DataUtils.parseCsvToJson(csvString);
-  var dataRows;
-  var assemblyName;
+  const csvJson = DataUtils.parseCsvToJson(file.content);
 
   if (csvJson.errors.length > 0) {
     console.error('[Macroreact] Filed to parse CSV file ' + file.name);
     return;
   }
 
-  dataRows = csvJson.data;
-  dataRows.forEach(function iife(dataRow) {
-
-    if (! dataRow.filename) {
-      console.error('[Macroreact] Invalid assembly filename in metadata file ' + file.name);
+  csvJson.data.forEach(function (dataRow) {
+    if (!dataRow.filename) {
+      console.error('[Macroreact] Missing assembly filename in metadata file ' + file.name);
       return;
     }
 
-    assemblyName = dataRow.filename.replace(/\.\w+$/, '');
-    assemblies = initialiseAssemblyObject(assemblyName, assemblies);
-    assemblies[assemblyName].metadata.assemblyName = assemblyName;
+    const filename = dataRow.filename.replace(FASTA_FILE_NAME_REGEX, '');
+    initialiseAssemblyObject(filename, assemblies);
 
-    for (var colName in dataRow) {
+    const assemblyName = dataRow.assembly_name || dataRow.original_isolate_id || filename;
+    assemblies[filename].metadata.assemblyName = assemblyName;
 
-      if (colName === 'filename') {
+    for (const colName of Object.keys(dataRow)) {
+      if (colName === 'filename' ||
+          colName === 'assembly_name' ||
+          colName === 'original_isolate_id') {
         continue;
       }
 
-      if (colName === "latitude" || colName === "longitude" || colName === "location" || colName === "year" || colName === "month" || colName === "day") {
-
-        assemblies[assemblyName].metadata.geography.position.latitude = parseFloat(dataRow.latitude) || null ;
-        assemblies[assemblyName].metadata.geography.position.longitude = parseFloat(dataRow.longitude) || null ;
-        assemblies[assemblyName].metadata.geography.location = dataRow.location || null ;
-        assemblies[assemblyName].metadata.date.year = parseInt(dataRow.year, 10) || null ;
-        assemblies[assemblyName].metadata.date.month = parseInt(dataRow.month, 10) || null ;
-        assemblies[assemblyName].metadata.date.day = parseInt(dataRow.day, 10) || null ;
-      }
-      else {
-        assemblies[assemblyName].metadata[colName] = dataRow[colName] || null ;
+      if (colName === 'latitude' || colName === 'longitude' || colName === 'location' || colName === 'year' || colName === 'month' || colName === 'day') {
+        assemblies[filename].metadata.geography.position.latitude = parseFloat(dataRow.latitude) || null;
+        assemblies[filename].metadata.geography.position.longitude = parseFloat(dataRow.longitude) || null;
+        assemblies[filename].metadata.geography.location = dataRow.location || null;
+        assemblies[filename].metadata.date.year = parseInt(dataRow.year, 10) || null;
+        assemblies[filename].metadata.date.month = parseInt(dataRow.month, 10) || null;
+        assemblies[filename].metadata.date.day = parseInt(dataRow.day, 10) || null;
+      } else {
+        assemblies[filename].metadata[colName] = dataRow[colName] || null;
       }
     }
-
   });
 }
 
@@ -250,7 +241,7 @@ function readFiles(files, callback) {
 
       results.push({
         name: file.name,
-        content: fileContent
+        content: fileContent,
       });
 
       if (results.length === files.length) {
@@ -258,7 +249,7 @@ function readFiles(files, callback) {
       }
     });
   });
-};
+}
 
 module.exports = {
   parseFiles: parseFiles,
@@ -266,5 +257,5 @@ module.exports = {
   isCsvFile: isCsvFile,
   validateFiles: validateFiles,
   readFile: readFile,
-  sortFilesByName: sortFilesByName
+  sortFilesByName: sortFilesByName,
 };

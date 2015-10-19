@@ -3,11 +3,15 @@
   height: 100%;
 }
 
+#phylocanvas-container {
+  user-select: none;
+}
+
 .wgsa-tree-header {
   position: absolute;
   top: 8px;
-  left: 16px;
-  right: 16px;
+  left: 8px;
+  right: 8px;
   height: 32px;
   padding: 16px 0;
   z-index: 10;
@@ -19,15 +23,21 @@
   line-height: 1;
   font-size: 20px;
   margin: 0px;
-  padding-left: 16px;
+  padding-left: 4px;
   color: #673c90;
   flex-grow: 1;
 }
 
-.wgsa-tree-return.mdl-button--fab {
+.wgsa-tree-heading > span {
+  padding: 4px 8px;
+  background: rgba(255, 255, 255, 0.87);
+  border-radius: 24px;
+}
+
+.wgsa-tree-return {
   color: #673c90;
-  background-color: #fff;
-  border: 1px solid #a386bd;
+  background: rgba(255, 255, 255, 0.87);
+  margin-left: 8px;
 }
 
 .wgsa-tree-menu {
@@ -47,6 +57,7 @@
 
 .wgsa-tree-actions {
   color: #673c90;
+  background: rgba(255, 255, 255, 0.87);
 }
 
 .wgsa-tree-control .mdl-slider {
@@ -70,10 +81,13 @@
   margin: 0 -20px;
 }
 
-.wgsa-tree-control label {
+.wgsa-tree-control label > span {
   font-size: 12px;
   font-weight: 700;
   color: rgba(0, 0, 0, 0.54);
+  background: rgba(255, 255, 255, 0.87);
+  padding: 4px 8px;
+  border-radius: 16px;
 }
 
 .wgsa-no-subtree {
@@ -96,4 +110,25 @@
 
 .wgsa-no-subtree p {
   font-size: 20px;
+}
+
+.wgsa-select-tree-type {
+  text-transform: capitalize;
+  display: block;
+  margin-bottom: 8px;
+  padding: 2px 4px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.87);
+  border: none;
+  font-size: 12px;
+  font-weight: 700;
+  color: rgba(0, 0, 0, 0.54);
+  flex-shrink: 1;
+}
+
+.wgsa-select-tree-type:hover,
+.wgsa-select-tree-type:focus,
+.wgsa-select-tree-type:active {
+  outline: none;
+  background: rgba(255, 255, 255, 0.87);
 }
