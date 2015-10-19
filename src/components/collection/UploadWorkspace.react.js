@@ -54,12 +54,12 @@ export default React.createClass({
 
   getInitialState() {
     return {
-      uploadButtonActive: false,
+      readyToUpload: false,
       confirmedMultipleMetadataDrop: false,
       pageTitleAppend: 'Upload',
       isUploading: FileUploadingStore.getFileUploadingState(),
+      numberOfAssemblies: UploadStore.getAssembliesCount(),
       viewPage: 'overview',
-      totalAssemblies: 0,
       assemblyName: null,
       uploadProgressPercentage: 0,
       collectionUrl: null,
@@ -136,23 +136,22 @@ export default React.createClass({
     });
   },
 
-  handleConfirmDuplicateOverwrite(files, confirmed) {
-    if (confirmed) {
-      this.setState({
-        confirmedMultipleMetadataDrop: true,
-      });
-      UploadActionCreators.addFiles(files);
-    }
-
-    UploadStore.hideToast();
+  confirmDuplicateOverwrite(files) {
+    this.setState({
+      confirmedMultipleMetadataDrop: true,
+    });
+    UploadActionCreators.addFiles(files);
   },
 
   handleDrop(event) {
     if (event.files.length > 0 && !this.state.isUploading) {
-      if (!this.state.confirmedMultipleMetadataDrop && this.state.totalAssemblies > 0) {
+      if (!this.state.confirmedMultipleMetadataDrop && this.state.numberOfAssemblies > 0) {
         ToastActionCreators.fireToast({
-          message: <ConfirmDuplicate confirmHandler={this.handleConfirmDuplicateOverwrite.bind(this, event.files)} />,
-          type: 'warn',
+          message: 'Duplicate records will be overwritten.',
+          action: {
+            label: 'confirm',
+            onClick: this.confirmDuplicateOverwrite.bind(this, Array.from(event.files)),
+          },
           sticky: true,
         });
       } else {
@@ -181,7 +180,8 @@ export default React.createClass({
 
   handleUploadStoreChange() {
     this.setState({
-      uploadButtonActive: UploadStore.isReadyToUpload(),
+      readyToUpload: UploadStore.isReadyToUpload(),
+      numberOfAssemblies: UploadStore.getAssembliesCount(),
     });
   },
 
@@ -210,9 +210,9 @@ export default React.createClass({
     return (
       <FileDragAndDrop onDrop={this.handleDrop}>
         <div className="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-drawer">
-          <UploadReviewHeader title={pageTitle} activateUploadButton={this.state.uploadButtonActive} uploadProgressPercentage={this.state.uploadProgressPercentage} isUploading={this.state.isUploading} />
+          <UploadReviewHeader title={pageTitle} activateUploadButton={this.state.readyToUpload} uploadProgressPercentage={this.state.uploadProgressPercentage} isUploading={this.state.isUploading} />
 
-          <UploadWorkspaceNavigation assembliesUploaded={assembly ? true : false} totalAssemblies={this.state.totalAssemblies}>
+          <UploadWorkspaceNavigation assembliesUploaded={assembly ? true : false} totalAssemblies={this.state.numberOfAssemblies}>
             <footer className="wgsa-upload-navigation__footer mdl-shadow--4dp">
               <button type="button" title="Overview"
                 className="wgsa-upload-review-button mdl-button mdl-js-button mdl-button--raised mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect"
@@ -265,7 +265,7 @@ export default React.createClass({
                   );
                 case 'overview':
                   return (
-                   <Overview clickHandler={this.handleClick} uploadProgressPercentage={this.state.uploadProgressPercentage} isUploading={this.state.isUploading} isReadyToUpload={this.state.uploadButtonActive} />
+                   <Overview clickHandler={this.handleClick} uploadProgressPercentage={this.state.uploadProgressPercentage} isUploading={this.state.isUploading} isReadyToUpload={this.state.readyToUpload} />
                   );
                 case 'upload_progress':
                   return (
@@ -282,24 +282,6 @@ export default React.createClass({
         <input type="file" multiple="multiple" accept={DEFAULT.SUPPORTED_FILE_EXTENSIONS} ref="fileInput" style={fileInputStyle} onChange={this.handleFileInputChange} />
 
       </FileDragAndDrop>
-    );
-  },
-});
-
-const ConfirmDuplicate = React.createClass({
-  render() {
-    return (
-      <div className="wgsa-confirm-duplicate-button">
-        Any duplicate records encountered will be overwritten.
-        <button className="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
-          onClick={this.props.confirmHandler.bind(this, true)}>
-          Confirm
-        </button>
-        <button className="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
-          onClick={this.props.confirmHandler.bind(this, false)}>
-          Cancel
-        </button>
-      </div>
     );
   },
 });

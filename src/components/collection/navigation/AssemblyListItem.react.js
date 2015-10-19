@@ -1,12 +1,14 @@
-import React from 'react';
-import css from '../../../css/upload-review.css';
+import '../../../css/upload-review.css';
 
-import UploadWorkspaceNavigationStore from '../../../stores/UploadWorkspaceNavigationStore.js';
+import React from 'react';
+
 import UploadWorkspaceNavigationActionCreators from '../../../actions/UploadWorkspaceNavigationActionCreators';
+
+import { DANGER_COLOUR, CGPS } from '../../../defaults';
 
 const Component = React.createClass({
   propTypes: {
-    assemblyName: React.PropTypes.string.isRequired
+    assemblyName: React.PropTypes.string.isRequired,
   },
 
   getInitialState() {
@@ -33,32 +35,15 @@ const Component = React.createClass({
   },
 
   handleDeleteAssembly() {
-    const currentAssemblyIdOnDisplay = UploadWorkspaceNavigationStore.getAssemblyName();
-    if (currentAssemblyIdOnDisplay === this.props.assemblyName) {
-      var nextAssemblyIdForDisplay = UploadWorkspaceNavigationStore.getNextAssemblyNameOnDelete(this.props.assemblyName);
-      UploadWorkspaceNavigationActionCreators.navigateToAssembly(nextAssemblyIdForDisplay);
-    }
-
     UploadWorkspaceNavigationActionCreators.deleteAssembly(this.props.assemblyName);
   },
 
   render() {
     const assemblyName = this.props.assemblyName;
-    var validatedIconStyle = {
-      color: '#888'
+    const validatedIconStyle = {
+      color: this.props.isValid ? CGPS.COLOURS.GREEN : DANGER_COLOUR,
     };
-    var validatedIcon = {
-      icon: 'remove'
-    };
-
-    if(this.props.isValid) {
-      validatedIconStyle = { color: 'green' };
-      validatedIcon = 'check';
-    }
-    else {
-      validatedIconStyle = { color: 'red' };
-      validatedIcon = 'error_outline';
-    }
+    const validatedIcon = this.props.isValid ? 'check' : 'error_outline';
 
     return (
       <li ref={assemblyName} className={`assemblyListItem mdl-shadow--2dp${this.props.selected ? ' selected' : ''}`} title={assemblyName}>
@@ -66,15 +51,15 @@ const Component = React.createClass({
           <ConfirmDelete title={assemblyName} handleDeleteAssembly={this.handleDeleteAssembly} resetDeleteState={this.resetDeleteState}/>
           :
           <div>
-            <button className='selectButton mdl-button mdl-js-button mdl-js-ripple-effect' onClick={this.handleSelectAssembly.bind(this, assemblyName)}>
-            <span className='filename'>
+            <button className="selectButton mdl-button mdl-js-button mdl-js-ripple-effect" onClick={this.handleSelectAssembly.bind(this, assemblyName)}>
+            <span className="filename">
                 {assemblyName}
               </span>
             </button>
               { !this.props.isUploading &&
                 <span className="assembly-list-item__utils">
                   <span className="assembly-list-item__validate-icon utilityButton">
-                    <i style={validatedIconStyle} className='material-icons'>{validatedIcon}</i>
+                    <i style={validatedIconStyle} className="material-icons">{validatedIcon}</i>
                   </span>
                   <button className="deleteButton utilityButton mdl-button mdl-js-button mdl-button--icon mdl-button--colored"
                     onClick={this.handleDeleteConfirm.bind(this, assemblyName)}>
@@ -86,11 +71,11 @@ const Component = React.createClass({
         }
       </li>
     );
-  }
+  },
+
 });
 
-var ConfirmDelete = React.createClass({
-
+const ConfirmDelete = React.createClass({
   render() {
     return (
       <div>
@@ -106,7 +91,7 @@ var ConfirmDelete = React.createClass({
         </button>
       </div>
     );
-  }
-})
+  },
+});
 
 module.exports = Component;

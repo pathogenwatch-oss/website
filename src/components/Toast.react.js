@@ -1,7 +1,10 @@
 import '../css/toast.css';
 
 import React from 'react';
+
 import ToastStore from '../stores/ToastStore';
+
+import ToastActionCreators from '../actions/ToastActionCreators';
 
 export default React.createClass({
 
@@ -9,8 +12,7 @@ export default React.createClass({
 
   getInitialState() {
     return {
-      data: null,
-      active: null,
+      message: null,
     };
   },
 
@@ -23,19 +25,22 @@ export default React.createClass({
   },
 
   render() {
-    const { data, active } = this.state;
+    const { message, sticky, action } = this.state;
     return (
       <div className="wgsa-toast-container">
-      { active &&
-        <aside className={`wgsa-toast wgsa-toast--${data.sticky ? 'sticky' : 'nonsticky'}`}>
+      { message &&
+        <aside className={`wgsa-toast wgsa-toast--${sticky ? 'sticky' : 'nonsticky'}`}>
           <span className="wgsa-toast__message">
-            {data.message && data.message}
+            {message}
           </span>
-          { data.action &&
-            <button onClick={this.action.onClick} className="wgsa-toast__action">
-              {this.action.label}
+          { action &&
+            <button onClick={this.handleAction} className="wgsa-toast__action mdl-button">
+              {action.label}
             </button>
           }
+          <button onClick={this.handleClose} className="wgsa-toast__dismiss mdl-button mdl-button--icon">
+            <i className="material-icons">close</i>
+          </button>
         </aside>
       }
       </div>
@@ -43,17 +48,21 @@ export default React.createClass({
   },
 
   handleToastStoreChange() {
-    const toast = ToastStore.getToast();
+    const { message, sticky, action } = ToastStore.getToast();
     this.setState({
-      data: toast,
-      active: toast ? true : false,
+      message,
+      sticky,
+      action,
     });
   },
 
+  handleAction() {
+    this.state.action.onClick();
+    this.handleClose();
+  },
+
   handleClose() {
-    this.setState({
-      active: false,
-    });
+    ToastActionCreators.hideToast();
   },
 
 });

@@ -7,13 +7,14 @@ import DEFAULT from '../../defaults';
 
 import Map from './Map.react';
 
-var noContigsRange = {};
-var averageAssemblyLength = null;
+const noContigsRange = {};
+let averageAssemblyLength = null;
 
 export default React.createClass({
 
   propTypes: {
     clickHandler: React.PropTypes.func,
+    isReadyToUpload: React.PropTypes.bool,
   },
 
   getInitialState() {
@@ -63,8 +64,8 @@ export default React.createClass({
   render() {
     if (this.state.assemblyCount) {
       const locationsToAssembliesMap = UploadStore.getLocationToAssembliesMap();
-      var iconStyle = {
-        color: this.props.isUploading ? DEFAULT.CGPS.COLOURS.PURPLE : (this.props.isReadyToUpload ? 'green' : '#d11b1b')
+      const iconStyle = {
+        color: this.props.isReadyToUpload ? DEFAULT.CGPS.COLOURS.GREEN : DEFAULT.DANGER_COLOUR
       };
 
       return (

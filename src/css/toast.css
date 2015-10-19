@@ -1,7 +1,7 @@
 .wgsa-toast-container {
   position: fixed;
   bottom: 0px;
-  z-index: 1;
+  z-index: 4;
   width: 100%;
   min-height: 48px;
   display: flex;
@@ -18,6 +18,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 0 16px;
 }
 
 .wgsa-toast__icon {
@@ -34,16 +35,15 @@
 }
 
 .wgsa-toast__action {
-  padding: 14px;
   text-transform: uppercase;
-  color: white;
+  color: #87c7a6;
   cursor: pointer
 }
 
 .wgsa-toast__message {
-  padding: 0 16px;
   font-size: 14px;
   flex-grow: 1;
+  margin-right: 8px;
 }
 
 @keyframes toast-slide-nonsticky {
@@ -96,4 +96,8 @@
   animation-delay: 0;
   animation-play-state: running;
   animation-fill-mode: forwards;
+}
+
+.wgsa-toast__dismiss {
+  margin-right: -8px;
 }

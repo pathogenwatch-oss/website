@@ -40,15 +40,14 @@ const AssemblyList = React.createClass({
   },
 
   getListOptionElements() {
-    const assemblyNames = UploadStore.getAssemblyNames();
     const assemblies = UploadStore.getAssemblies();
-    const isValidMap = UploadStore.validateMetadata(assemblies);
-    return assemblyNames.map((assemblyName) => {
+    return Object.keys(assemblies).map((assemblyName) => {
+      const { hasErrors } = assemblies[assemblyName];
       return (
         <AssemblyListItem
           key={assemblyName}
           assemblyName={assemblyName}
-          isValid={isValidMap[assemblyName]}
+          isValid={!hasErrors}
           selected={assemblyName === this.state.selectedOption && this.state.isItemSelected}
           isUploading={this.state.isUploading} />
       );
@@ -58,11 +57,9 @@ const AssemblyList = React.createClass({
   render() {
     const listOptionElements = this.getListOptionElements();
     return (
-      <div>
-        <ul className="assemblyListContainer">
-          {listOptionElements}
-        </ul>
-      </div>
+      <ul className="assemblyListContainer">
+        {listOptionElements}
+      </ul>
     );
   },
 

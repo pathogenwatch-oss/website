@@ -155,7 +155,7 @@ function parseCsvFile(file, rawFiles, assemblies) {
   const csvJson = MetadataUtils.parseCsvToJson(file.content);
 
   if (csvJson.errors.length > 0) {
-    console.error('[WGSA] Filed to parse CSV file ' + file.name);
+    console.error('[WGSA] Failed to parse CSV file ' + file.name);
     return;
   }
 

@@ -16,8 +16,9 @@ function setViewPage(page) {
   viewPage = page;
 }
 
-function emitChange() {
-  Store.emit(CHANGE_EVENT);
+function navigateToAssembly(name) {
+  setassemblyName(name);
+  setViewPage(name ? 'assembly' : 'overview');
 }
 
 const Store = assign({}, EventEmitter.prototype, {
@@ -37,37 +38,30 @@ const Store = assign({}, EventEmitter.prototype, {
     return assemblyName;
   },
 
-  getNextAssemblyNameOnDelete(assemblyNameForDelete) {
-    const allAssemblyIds = UploadStore.getAssemblyNames();
-    const indexOfassemblyNameForDelete = allAssemblyIds.indexOf(assemblyNameForDelete);
-    const totalNoAssemblyIds = allAssemblyIds.length;
-    let nextAssemblyIdForDisplay = null;
-    // Check next index is a valid fileId for traverse
-    if (allAssemblyIds.length > 0) {
-      if (indexOfassemblyNameForDelete + 1 < totalNoAssemblyIds) {
-        nextAssemblyIdForDisplay = allAssemblyIds[indexOfassemblyNameForDelete + 1];
-      } else {
-        nextAssemblyIdForDisplay = allAssemblyIds[indexOfassemblyNameForDelete - 1];
-      }
-    }
-
-    return nextAssemblyIdForDisplay;
-  },
-
 });
+
+function emitChange() {
+  Store.emit(CHANGE_EVENT);
+}
 
 function handleAction(action) {
   switch (action.type) {
 
   case 'navigate_to_assembly':
-    setassemblyName(action.assemblyName);
-    setViewPage('assembly');
+    navigateToAssembly(action.assemblyName);
     emitChange();
     break;
 
   case 'set_view_page':
     setViewPage(action.page);
     emitChange();
+    break;
+
+  case 'delete_assembly':
+    if (assemblyName === action.assemblyName) {
+      navigateToAssembly(null);
+      emitChange();
+    }
     break;
 
   default:

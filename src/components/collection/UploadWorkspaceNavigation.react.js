@@ -5,6 +5,7 @@ import React from 'react';
 import AssemblyList from './navigation/AssemblyList.react';
 
 import UploadWorkspaceNavigationStore from '../../stores/UploadWorkspaceNavigationStore';
+import UploadStore from '../../stores/UploadStore';
 
 const titleStyle = {
   margin: 0,
@@ -13,11 +14,13 @@ const titleStyle = {
 export default React.createClass({
 
   componentDidMount() {
-    UploadWorkspaceNavigationStore.addChangeListener(this.handleNavigationChange);
+    UploadWorkspaceNavigationStore.addChangeListener(this.hideSidebar);
+    UploadStore.addChangeListener(this.hideSidebar);
   },
 
   componentWillUnmount() {
-    UploadWorkspaceNavigationStore.removeChangeListener(this.handleNavigationChange);
+    UploadWorkspaceNavigationStore.removeChangeListener(this.hideSidebar);
+    UploadStore.removeChangeListener(this.hideSidebar);
   },
 
   render() {
@@ -34,7 +37,7 @@ export default React.createClass({
     );
   },
 
-  handleNavigationChange() {
+  hideSidebar() {
     React.findDOMNode(this.refs.sidebar).classList.remove('is-visible');
   },
 

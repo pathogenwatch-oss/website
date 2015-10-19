@@ -1,39 +1,72 @@
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import { EventEmitter } from 'events';
 import assign from 'object-assign';
-import moment from 'moment';
 
-import ToastActionCreators from '../actions/ToastActionCreators';
+import UploadWorkspaceNavigationStore from '../stores/UploadWorkspaceNavigationStore';
+
+import MetadataUtils from '../utils/Metadata';
 
 const CHANGE_EVENT = 'change';
 
 const rawFiles = {};
 const assemblies = {};
-let readyToUpload = false;
-let errors = {};
+const errors = [];
 
 function addFiles(newRawFiles, newAssemblies) {
   assign(rawFiles, newRawFiles);
   assign(assemblies, newAssemblies);
 }
 
-function setMetadataDateComponent(assemblyName, component, value) {
-  assemblies[assemblyName].metadata.date[component] = value;
+function validateFiles() {
+  errors.length = 0;
+
+  const assemblyNames = Object.keys(assemblies);
+
+  if (assemblyNames.length < 3) {
+    const numberRequired = 3 - assemblyNames.length;
+    errors.push({
+      message: `Please upload at least ${numberRequired} more ${numberRequired === 1 ? 'assembly' : 'assemblies'} to begin.`,
+    });
+    return;
+  }
+
+  if (assemblyNames.length > 100) {
+    errors.push({
+      message: 'Please upload no more than 100 assemblies at one time.',
+    });
+    return;
+  }
+
+  for (const assemblyName of assemblyNames) {
+    const assembly = assemblies[assemblyName];
+    const previousNumberOfErrors = errors.length;
+
+    if (!assembly.fasta.assembly) {
+      errors.push({
+        message: `${assemblyName} - fasta file not provided.`,
+      });
+    }
+
+    if (!MetadataUtils.isValid(assembly.metadata)) {
+      errors.push({
+        assemblyName,
+        navigate: true,
+        message: `${assemblyName} - metadata not valid.`,
+      });
+    }
+
+    if (errors.length > previousNumberOfErrors) {
+      assembly.hasErrors = true;
+    }
+  }
 }
 
 function setMetadataColumn(assemblyName, columnName, value) {
   assemblies[assemblyName].metadata[columnName] = value;
 }
 
-function setMetadataDate(assemblyName, date) {
-  const m = moment(date);
-  setMetadataDateComponent(assemblyName, 'year', m.year());
-  setMetadataDateComponent(assemblyName, 'month', m.month() + 1);
-  setMetadataDateComponent(assemblyName, 'day', m.date());
-}
-
-function setMetadataSource(assemblyName, source) {
-  assemblies[assemblyName].metadata.source = source;
+function setMetadataDateComponent(assemblyName, component, value) {
+  assemblies[assemblyName].metadata.date[component] = value;
 }
 
 function deleteAssembly(assemblyName) {
@@ -75,13 +108,6 @@ const Store = assign({}, EventEmitter.prototype, {
       if (assemblies[id].analysis[chartType]) {
         memo[id] = assemblies[id].analysis[chartType];
       }
-      return memo;
-    }, {});
-  },
-
-  getAllMetadataLocations() {
-    return Object.keys(assemblies).reduce((memo, id) => {
-      memo[id] = assemblies[id].metadata.geography;
       return memo;
     }, {});
   },
@@ -132,75 +158,18 @@ const Store = assign({}, EventEmitter.prototype, {
     return Math.round(totalAssemblyLength / noAssemblies);
   },
 
-  validateMetadata() {
-    var isValidMap = {};
-    var currentTime = new Date();
-    var year = currentTime.getFullYear();
-    readyToUpload = true;
-
-    for (var id in assemblies) {
-      if (!assemblies[id].fasta.assembly) {
-        isValidMap[id] = false;
-        readyToUpload = false;
-      }
-      else if (assemblies[id].metadata.date.day && !(assemblies[id].metadata.date.day >= 1 && assemblies[id].metadata.date.day <= 31) ||
-               assemblies[id].metadata.date.month && !(assemblies[id].metadata.date.month >= 1 && assemblies[id].metadata.date.month <= 12) ||
-               assemblies[id].metadata.date.year && !(assemblies[id].metadata.date.year > 1900 && assemblies[id].metadata.date.year <= year)) {
-        isValidMap[id] = false;
-        readyToUpload = false;
-      }
-      else {
-        isValidMap[id] = true;
-      }
-    }
-    return isValidMap;
-  },
-
   isReadyToUpload() {
-    return readyToUpload;
+    return errors.length === 0;
   },
 
-  hasError() {
-    errors = [];
-
-    const totalAssemblies = this.getAssembliesCount();
-    if (totalAssemblies < 3 || totalAssemblies > 100) {
-      if (totalAssemblies > 100) {
-        errors.push({
-          message: 'Please upload 100 or fewer assemblies.',
-        });
-      }
-    }
-
-    for (const id of Object.keys(assemblies)) {
-      const { fasta, metadata } = assemblies[id];
-      if (!fasta.assembly) {
-        errors.push({
-          message: `${id}: assembly not provided.`
-        })
-        break;
-      } else if (!hasValidDate(metadata)) {
-        errors.push({
-          id,
-          message: `${id}: metadata not valid.`,
-        });
-        break;
-      }
-    }
-
+  getErrors() {
     return errors;
-  },
-
-  warn(message) {
-    ToastActionCreators.fireToast({
-      message: message,
-      sticky: true,
-    });
   },
 
 });
 
 function emitChange() {
+  validateFiles();
   Store.emit(CHANGE_EVENT);
 }
 
@@ -221,17 +190,10 @@ function handleAction(action) {
     emitChange();
     break;
 
-  case 'set_metadata_date':
-    setMetadataDate(action.assemblyName, action.date);
-    emitChange();
-    break;
-
-  case 'set_metadata_source':
-    setMetadataSource(action.assemblyName, action.source);
-    emitChange();
-    break;
-
   case 'delete_assembly':
+    AppDispatcher.waitFor([
+      UploadWorkspaceNavigationStore.dispatchToken,
+    ]);
     deleteAssembly(action.assemblyName);
     emitChange();
     break;
@@ -243,4 +205,4 @@ function handleAction(action) {
 
 Store.dispatchToken = AppDispatcher.register(handleAction);
 
-module.exports = Store;
+export default Store;

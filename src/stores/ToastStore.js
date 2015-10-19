@@ -18,6 +18,20 @@ function hideToast() {
   toast = null;
 }
 
+function showUploadErrors() {
+  const errors = UploadStore.getErrors();
+  if (errors.length) {
+    const [ { message, assemblyName, navigate } ] = errors;
+    const actionDef = navigate ? {
+      label: 'review',
+      onClick: UploadWorkspaceNavigationActionCreators.navigateToAssembly.bind(null, assemblyName),
+    } : null;
+    showToast({ message, assemblyName, action: actionDef });
+  } else {
+    hideToast();
+  }
+}
+
 const Store = assign({}, EventEmitter.prototype, {
   addChangeListener(callback) {
     this.on(CHANGE_EVENT, callback);
@@ -28,7 +42,7 @@ const Store = assign({}, EventEmitter.prototype, {
   },
 
   getToast() {
-    return toast;
+    return toast || {};
   },
 });
 
@@ -43,16 +57,26 @@ function handleAction(action) {
     AppDispatcher.waitFor([
       UploadStore.dispatchToken,
     ]);
-    const errors = UploadStore.hasError();
-    if (errors.length) {
-      const [ { message, id } ] = errors;
-      const actionDef = id ? {
-        label: 'review',
-        onClick: UploadWorkspaceNavigationActionCreators.navigateToAssembly.bind(null, id),
-      } : null;
-      showToast({ message, action: actionDef });
-      emitChange();
+    showUploadErrors(action);
+    emitChange();
+    break;
+
+  case 'delete_assembly':
+    AppDispatcher.waitFor([
+      UploadStore.dispatchToken,
+    ]);
+    if (toast && toast.assemblyName && action.assemblyName === toast.assemblyName) {
+      hideToast();
     }
+    showUploadErrors(action);
+    emitChange();
+    break;
+
+  case 'navigate_to_assembly':
+    if (toast && toast.assemblyName && action.assemblyName === toast.assemblyName) {
+      hideToast();
+    }
+    emitChange();
     break;
 
   case 'show_toast':
@@ -73,4 +97,4 @@ function handleAction(action) {
 
 Store.dispatchToken = AppDispatcher.register(handleAction);
 
-module.exports = Store;
+export default Store;

@@ -50,7 +50,7 @@ function getFormattedDateString({ year, month, day }) {
 function convertDateObjectToCustomObject(date) {
   return {
     year: date.getFullYear(),
-    month: date.getMonth() + 1,
+    month: date.getMonth() + 1, // converts months from 0-11 to 1-12
     day: date.getDate(),
   };
 }
@@ -65,8 +65,33 @@ function fixMetadataDateFormatInCollection({ assemblies }) {
   });
 }
 
+function isValid({ date }) {
+  const thisYear = new Date().getFullYear();
+
+  if (!date) {
+    return true;
+  }
+
+  const { day, month, year } = date;
+
+  if (day && (day < 1 || day > 31 || !month || !year)) {
+    return false;
+  }
+
+  if (month && (month < 1 || month > 12 || !year)) {
+    return false;
+  }
+
+  if (year && (year < 1900 || year > thisYear)) {
+    return false;
+  }
+
+  return true;
+}
+
 export default {
   parseCsvToJson,
   getFormattedDateString,
   fixMetadataDateFormatInCollection,
+  isValid,
 };

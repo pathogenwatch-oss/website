@@ -1,18 +1,16 @@
-var AppDispatcher = require('../dispatcher/AppDispatcher');
+const AppDispatcher = require('../dispatcher/AppDispatcher');
 
-module.exports = {
-  fireToast: function(data) {
-    var action = {
+export default {
+  fireToast(toast) {
+    AppDispatcher.dispatch({
       type: 'show_toast',
-      data: data
-    };
-    AppDispatcher.dispatch(action);
+      toast,
+    });
   },
 
-  hideToast: function() {
-    var action = {
-      type: 'hide_toast'
-    };
-    AppDispatcher.dispatch(action);
-  }
-}
+  hideToast() {
+    AppDispatcher.dispatch({
+      type: 'hide_toast',
+    });
+  },
+};

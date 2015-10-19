@@ -70,27 +70,29 @@ module.exports = {
       });
 
       const assemblyNameToAssemblyIdMap = ids.assemblyNameToAssemblyIdMap;
-      const assemblyNames = Object.keys(assemblyNameToAssemblyIdMap);
-      assemblyNames.forEach(function sendAssembly(assemblyName) {
-        const { metadata, fasta } = UploadStore.getAssembly(assemblyName);
-        const urlParams = {
-          collectionId: ids.collectionId,
-          assemblyId: assemblyNameToAssemblyIdMap[assemblyName],
-          speciesId: Species.id,
-        };
-        const requestBody = {
-          socketRoomId: roomId,
-          metadata: metadata,
-          sequences: fasta.assembly,
-        };
+      Object.keys(assemblyNameToAssemblyIdMap).forEach(
+        function sendAssembly(assemblyName) {
+          const { metadata, fasta } = UploadStore.getAssembly(assemblyName);
+          const urlParams = {
+            collectionId: ids.collectionId,
+            assemblyId: assemblyNameToAssemblyIdMap[assemblyName],
+            speciesId: Species.id,
+          };
+          const requestBody = {
+            socketRoomId: roomId,
+            metadata: metadata,
+            sequences: fasta.assembly,
+          };
 
-        ApiUtils.postAssembly(urlParams, requestBody, function (assemblyError) {
-          if (assemblyError) {
-            console.error(assemblyError);
-            return;
-          }
-        });
-      });
+          ApiUtils.postAssembly(urlParams, requestBody, function (assemblyError) {
+            if (assemblyError) {
+              console.error(assemblyError);
+              return;
+            }
+          });
+        }
+      );
     });
-  }
+  },
+
 };
