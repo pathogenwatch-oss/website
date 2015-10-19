@@ -16,27 +16,21 @@ export default React.createClass({
     width: React.PropTypes.number,
   },
 
-  getInitialState: function () {
+  getInitialState() {
     return {
       activeCollectionNavigation: CollectionNavigationStore.getCollectionNavigation(),
     };
   },
 
-  componentDidMount: function () {
+  componentDidMount() {
     CollectionNavigationStore.addChangeListener(this.handleCollectionNavigationStoreChange);
   },
 
-  componentWillUnmount: function () {
+  componentWillUnmount() {
     CollectionNavigationStore.removeChangeListener(this.handleCollectionNavigationStoreChange);
   },
 
-  handleCollectionNavigationStoreChange: function () {
-    this.setState({
-      activeCollectionNavigation: CollectionNavigationStore.getCollectionNavigation(),
-    });
-  },
-
-  getCollectionDataComponent: function () {
+  getCollectionDataComponent() {
     const activeCollectionNavigation = this.state.activeCollectionNavigation;
     const COLLECTION_NAVIGATION_STATES = CollectionNavigationStore.getCollectionNavigationStates();
 
@@ -51,13 +45,19 @@ export default React.createClass({
     }
   },
 
-  render: function () {
+  render() {
     const Component = this.getCollectionDataComponent();
     return (
       <section style={sectionStyle}>
         <Component { ...this.props }/>
       </section>
     );
+  },
+
+  handleCollectionNavigationStoreChange() {
+    this.setState({
+      activeCollectionNavigation: CollectionNavigationStore.getCollectionNavigation(),
+    });
   },
 
 });

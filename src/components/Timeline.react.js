@@ -87,7 +87,7 @@ var Timeline = React.createClass({
         return;
       }
 
-      dataObjectId = DataUtils.getDataObject__Id(dataObject);
+      dataObjectId = DataUtils.getDataObjectId(dataObject);
       color = DataUtils.getColor(colourDataByDataField, dataObject);
 
       items.push({

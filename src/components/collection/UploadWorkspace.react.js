@@ -172,7 +172,6 @@ export default React.createClass({
   },
 
   handleOverviewClick() {
-    // UploadWorkspaceNavigationActionCreators.navigateToAssembly(null);
     UploadWorkspaceNavigationActionCreators.setViewPage('overview');
   },
 
