@@ -5,7 +5,7 @@ import AssemblyAnalysisOverviewChart from '../../components/collection/AssemblyA
 import OverviewStatisticsItem from './OverviewStatisticsItem.react';
 import DEFAULT from '../../defaults';
 
-import Map from './Map.react';
+import Map from '../map/UploadOverviewMap.react';
 
 const noContigsRange = {};
 let averageAssemblyLength = null;
@@ -63,9 +63,8 @@ export default React.createClass({
 
   render() {
     if (this.state.assemblyCount) {
-      const locationsToAssembliesMap = UploadStore.getLocationToAssembliesMap();
       const iconStyle = {
-        color: this.props.isReadyToUpload ? DEFAULT.CGPS.COLOURS.GREEN : DEFAULT.DANGER_COLOUR
+        color: this.props.isReadyToUpload ? DEFAULT.CGPS.COLOURS.GREEN : DEFAULT.DANGER_COLOUR,
       };
 
       return (
@@ -91,13 +90,13 @@ export default React.createClass({
                         </div>
                       ||
                         <div className="mdl-card__title mdl-card--expand">
-                          <i style={iconStyle} className="material-icons">{this.props.isReadyToUpload && "check_circle" || "error"}</i>
+                          <i style={iconStyle} className="material-icons">{this.props.isReadyToUpload && 'check_circle' || 'error'}</i>
                         </div>
                     }
                     <span className="mdl-card__actions mdl-card--border">
-                      { this.props.isUploading && "Upload In Progress..."
-                        ||
-                          ( this.props.isReadyToUpload &&  "Ready To Upload" || "Not Ready To Upload")
+                      { this.props.isUploading ? 'Upload In Progress...'
+                        :
+                          ( this.props.isReadyToUpload &&  'Ready To Upload' || 'Not Ready To Upload')
                       }
                     </span>
                   </div>
@@ -113,6 +112,7 @@ export default React.createClass({
                 <a href="#overview-chart-panel" className="mdl-tabs__tab  is-active" onClick={this.showChart.bind(this, 'totalNumberOfNucleotidesInDnaStrings', 'Assembly Length')}>Assembly Length</a>
                 <a href="#overview-chart-panel" className="mdl-tabs__tab" onClick={this.showChart.bind(this, 'contigN50', 'N50')}>N50</a>
                 <a href="#overview-chart-panel" className="mdl-tabs__tab" onClick={this.showChart.bind(this, 'totalNumberOfContigs', 'No. Contigs')}>No. Contigs</a>
+                <a href="#overview-chart-panel" className="mdl-tabs__tab" onClick={this.showChart.bind(this, 'totalNumberOfNsInDnaStrings', 'Total Ns')}>Total Ns</a>
               </div>
 
               <div className="card-style mdl-tabs__panel is-active" id="overview-chart-panel">
@@ -123,7 +123,7 @@ export default React.createClass({
 
           <div key="map" className="mdl-cell mdl-cell--12-col increase-cell-gutter mdl-shadow--4dp" style={{ height: '50%' }}>
             <div className="card-style--no-padding" style={{ height: '100%', position: 'relative' }}>
-              <Map width="100%" height="100%" locationAssemblyMap={locationsToAssembliesMap}/>
+              <Map assemblies={this.state.assemblies}/>
             </div>
           </div>
         </div>

@@ -112,26 +112,9 @@ const Store = assign({}, EventEmitter.prototype, {
     }, {});
   },
 
-  getLocationToAssembliesMap() {
+  getAllMetadataLocations() {
     return Object.keys(assemblies).reduce((memo, id) => {
-      const { geography } = assemblies[id].metadata;
-      const filename = assemblies[id].fasta.name;
-      if (geography.position.latitude !== null) {
-        const latlng =
-          geography.position.latitude + ',' + geography.position.longitude;
-        if (!memo[latlng]) {
-          memo[latlng] = {
-            assemblyName: [],
-            location: null,
-          };
-        }
-        if (filename) {
-          memo[latlng].assemblyName.push(filename);
-        }
-        if (geography.location) {
-          memo[latlng].location = geography.location;
-        }
-      }
+      memo[id] = assemblies[id].metadata.geography;
       return memo;
     }, {});
   },

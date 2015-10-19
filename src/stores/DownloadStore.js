@@ -4,11 +4,19 @@ import assign from 'object-assign';
 import Api from '../utils/Api';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 
+import FilteredDataStore from './FilteredDataStore.js';
 import UploadedCollectionStore from './UploadedCollectionStore.js';
 
 const CHANGE_EVENT = 'change';
 
-const requestedFiles = {};
+const requestedFiles = new Map();
+
+function getIdList(format) {
+  if (format === 'score_matrix' || format === 'differences_matrix') {
+    return [ UploadedCollectionStore.getCollectionId() ];
+  }
+  return FilteredDataStore.getAssemblyIds();
+}
 
 const Store = assign({}, EventEmitter.prototype, {
 
@@ -20,23 +28,19 @@ const Store = assign({}, EventEmitter.prototype, {
     this.removeListener(CHANGE_EVENT, callback);
   },
 
-  getDownloadStatus(id, fileType = 'fasta') {
-    if (!requestedFiles[id] || !requestedFiles[id][fileType]) {
+  getDownloadStatus(format = 'fasta') {
+    const ids = getIdList(format);
+    const statuses = requestedFiles.get(ids);
+    if (!statuses || !statuses[format]) {
       return null;
     }
-    return requestedFiles[id][fileType];
+    return statuses[format];
   },
 
 });
 
 function emitChange() {
   Store.emit(CHANGE_EVENT);
-}
-
-function createIdList(id) {
-  const assemblies = UploadedCollectionStore.getAssemblies();
-  const collectionId = UploadedCollectionStore.getCollectionId();
-  return (id === collectionId) ? Object.keys(assemblies) : [ id ];
 }
 
 function createLink(keyToFilenameMap = {}) {
@@ -51,15 +55,16 @@ function handleAction(action) {
   switch (action.type) {
 
   case 'request_file':
-    const { id, fileType, speciesId } = action;
-    const requestedFilesForId = requestedFiles[id] || {};
+    const { format, speciesId } = action;
+    const idList = getIdList(format);
+    const requestedFilesForIds = requestedFiles.get(idList) || {};
 
     // ensures map is updated on first request
-    requestedFiles[id] = requestedFilesForId;
-
-    Api.requestFile(fileType, { speciesId, idList: [ id ] },
+    requestedFiles.set(idList, requestedFilesForIds);
+    console.log(requestedFiles);
+    Api.requestFile(format, { speciesId, idList },
       function (error, keyToFilenameMap) {
-        requestedFilesForId[fileType] = {
+        requestedFilesForIds[format] = {
           error,
           link: createLink(keyToFilenameMap),
         };
@@ -75,4 +80,4 @@ function handleAction(action) {
 
 Store.dispatchToken = AppDispatcher.register(handleAction);
 
-module.exports = Store;
+export default Store;

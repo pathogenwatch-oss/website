@@ -5,40 +5,41 @@ import assign from 'object-assign';
 const CHANGE_EVENT = 'change';
 
 let collection = null;
-
-function emitChange() {
-  UploadedCollectionStore.emit(CHANGE_EVENT);
-}
+let assemblyIds = [];
 
 const UploadedCollectionStore = assign({}, EventEmitter.prototype, {
 
-  addChangeListener: function (callback) {
+  addChangeListener(callback) {
     this.on(CHANGE_EVENT, callback);
   },
 
-  removeChangeListener: function (callback) {
+  removeChangeListener(callback) {
     this.removeListener(CHANGE_EVENT, callback);
   },
 
-  getCollection: function () {
+  getCollection() {
     return collection;
   },
 
-  getCollectionId: function () {
+  getCollectionId() {
     return collection.collectionId;
   },
 
-  getAssemblies: function () {
+  getAssemblies() {
     return this.getCollection().assemblies;
   },
 
-  getTree: function () {
+  getAssemblyIds() {
+    return assemblyIds;
+  },
+
+  getTree() {
     return collection.tree;
   },
 
-  getUserTree: function () {
+  getUserTree() {
     const assemblies = this.getAssemblies();
-    return Object.keys(assemblies).reduce(function (tree, assemblyId) {
+    return assemblyIds.reduce(function (tree, assemblyId) {
       const { assemblyName } = assemblies[assemblyId].metadata;
       return tree.replace(assemblyId, assemblyName);
     }, this.getTree());
@@ -46,17 +47,22 @@ const UploadedCollectionStore = assign({}, EventEmitter.prototype, {
 
   contains(assemblyId) {
     return (
-      Object.keys(this.getAssemblies()).indexOf(assemblyId) > -1
+      assemblyIds.indexOf(assemblyId) > -1
     );
   },
 
 });
+
+function emitChange() {
+  UploadedCollectionStore.emit(CHANGE_EVENT);
+}
 
 function handleAction(action) {
   switch (action.type) {
 
   case 'set_collection':
     collection = action.collection;
+    assemblyIds = Object.keys(collection.assemblies);
     emitChange();
     break;
 
@@ -68,4 +74,4 @@ function handleAction(action) {
 
 UploadedCollectionStore.dispatchToken = AppDispatcher.register(handleAction);
 
-module.exports = UploadedCollectionStore;
+export default UploadedCollectionStore;

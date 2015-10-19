@@ -29,7 +29,6 @@ export default React.createClass({
   },
 
   componentWillMount() {
-    this.collectionId = UploadedCollectionStore.getCollectionId();
     this.populationTreeLink = createBlobUrl(ReferenceCollectionStore.getTree());
     this.collectionTreeLink = createBlobUrl(UploadedCollectionStore.getUserTree());
   },
@@ -85,42 +84,36 @@ export default React.createClass({
               <li className="wgsa-menu__item">
                 <DownloadButton
                   description="Kernel Checksum Distribution"
-                  id={this.collectionId}
                   format="kernel_checksum_distribution" />
                 Kernel Checksum Distribution
               </li>
               <li className="wgsa-menu__item">
                 <DownloadButton
                   description="Concatenated Gene Family"
-                  id={this.collectionId}
                   format="extended_kernel_fasta" />
                 Kernel Matches
               </li>
               <li className="wgsa-menu__item">
                 <DownloadButton
                   description="Kernel Sequence Fasta"
-                  id={this.collectionId}
                   format="kernel_fasta" />
                 Kernel Sequence (.fa)
               </li>
               <li className="wgsa-menu__item">
                 <DownloadButton
                   description="Kernel CSV"
-                  id={this.collectionId}
                   format="kernel_csv" />
                 Kernel Sequence (.csv)
               </li>
               <li className="wgsa-menu__item">
                 <DownloadButton
                   description="Concatenated Gene Family"
-                  id={this.collectionId}
                   format="score_matrix" />
                 Score Matrix
               </li>
               <li className="wgsa-menu__item">
                 <DownloadButton
                   description="Concatenated Gene Family"
-                  id={this.collectionId}
                   format="differences_matrix" />
                 Differences Matrix
               </li>
