@@ -44,7 +44,7 @@ module.exports = {
     FileUploadingProgressActionCreators.setNumberOfExpectedResults();
 
     SocketStore.getSocketConnection().on('assemblyUploadNotification', function (data) {
-      console.log('[Macroreact] Received notification:');
+      console.log('[WGSA] Received notification:');
       console.dir(data);
 
       FileUploadingProgressActionCreators.addReceivedResult(data);

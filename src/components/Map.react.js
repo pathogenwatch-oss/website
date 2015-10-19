@@ -64,7 +64,6 @@ const Map = React.createClass({
     var mapOptions = {
       zoom: 4,
       center: center,
-      // styles: MapUtils.STYLES,
       streetViewControl: false,
       scaleControl: true,
       mapTypeId: google.maps.MapTypeId.TERRAIN,

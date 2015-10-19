@@ -17,7 +17,7 @@ export default {
 
     ApiUtils.getCollection(speciesId, collectionId, function (error, collection) {
       if (error) {
-        console.error('[Macroreact]', error);
+        console.error('[WGSA]', error);
         return AppDispatcher.dispatch(collectionErrorAction);
       }
 
@@ -30,11 +30,12 @@ export default {
 
     ApiUtils.getReferenceCollection(speciesId, function (error, referenceCollection) {
       if (error) {
-        console.error('[Macroreact]', error);
+        console.error('[WGSA]', error);
         return AppDispatcher.dispatch(collectionErrorAction);
       }
 
-      action.referenceCollection = MetadataUtils.fixMetadataDateFormatInCollection(referenceCollection);
+      MetadataUtils.fixMetadataDateFormatInCollection(referenceCollection);
+      action.referenceCollection = referenceCollection;
 
       if (action.collection && action.referenceCollection) {
         AppDispatcher.dispatch(action);

@@ -33,7 +33,6 @@ const Map = React.createClass({
 
     var mapOptions = {
       center: center,
-      // styles: MapUtils.STYLES,
       streetViewControl: false,
       scaleControl: true,
       mapTypeId: google.maps.MapTypeId.TERRAIN,

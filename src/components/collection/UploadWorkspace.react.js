@@ -76,11 +76,11 @@ export default React.createClass({
     const socket = SocketUtils.socketConnect();
 
     socket.on('connect', function () {
-      console.log('[Macroreact] Socket connected');
+      console.log('[WGSA] Socket connected');
     });
 
     socket.on('disconnect', function () {
-      console.error('[Macroreact] Socket connection lost');
+      console.error('[WGSA] Socket connection lost');
     });
 
     SocketStore.addChangeListener(this.handleSocketStoreChange);

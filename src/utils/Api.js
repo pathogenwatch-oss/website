@@ -66,7 +66,7 @@ function getReferenceCollection(speciesId, callback) {
 }
 
 function getCollection(speciesId, collectionId, callback) {
-  console.log(`[Macroreact] Getting collection ${collectionId}`);
+  console.log(`[WGSA] Getting collection ${collectionId}`);
 
   if (!collectionId) {
     return callback(new Error('Missing collection ID'), null);

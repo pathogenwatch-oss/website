@@ -194,7 +194,6 @@ const Store = assign({}, EventEmitter.prototype, {
   warn(message) {
     ToastActionCreators.fireToast({
       message: message,
-      type: 'warn',
       sticky: true,
     });
   },

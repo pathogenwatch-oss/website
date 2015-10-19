@@ -1,5 +1,3 @@
-import MapStylesUtils from '../utils/MapStyles';
-
 import { CGPS } from '../defaults';
 
 const MARKER = {
@@ -193,5 +191,4 @@ module.exports = {
   isDataObjectHasCoordinates: isDataObjectHasCoordinates,
   groupDataObjectsByPosition: groupDataObjectsByPosition,
   getMarkerIcon: getMarkerIcon,
-  STYLES: MapStylesUtils,
 };

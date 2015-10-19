@@ -9,7 +9,7 @@ import FilteredDataStore from '../../stores/FilteredDataStore';
 
 import FilteredDataActionCreators from '../../actions/FilteredDataActionCreators';
 
-import DataUtils from '../../utils/Data';
+import MetadataUtils from '../../utils/Metadata';
 
 const systemColumnProps = [
   { label: '',
@@ -42,7 +42,7 @@ const systemColumnProps = [
   { label: 'DATE',
     dataKey: '__date',
     labelGetter({ metadata }) {
-      return DataUtils.getFormattedDateString(metadata.date);
+      return MetadataUtils.getFormattedDateString(metadata.date);
     },
   },
   { label: 'ST',

@@ -1,4 +1,4 @@
-import DataUtils from './Data';
+import MetadataUtils from './Metadata';
 import AnalysisUtils from './Analysis';
 
 import UploadStore from '../stores/UploadStore.js';
@@ -46,13 +46,13 @@ function readFile(file, callback) {
   var fileReader = new FileReader();
 
   fileReader.onload = function handleLoad(event) {
-    // console.log('[Macroreact] Loaded dropped file: ' + file.name);
+    // console.log('[WGSA] Loaded dropped file: ' + file.name);
 
     callback(null, event.target.result);
   };
 
   fileReader.onerror = function handleError() {
-    console.error('[Macroreact] Failed to load dropped file: ' + file.name);
+    console.error('[WGSA] Failed to load dropped file: ' + file.name);
 
     callback(file.name, null);
   };
@@ -82,7 +82,7 @@ function parseFiles(files, callback) {
 
   readFiles(validatedFiles.validFiles, function handleReadFiles(error, fileContents) {
     if (error) {
-      console.error('[Macroreact] Failed to read files');
+      console.error('[WGSA] Failed to read files');
       callback(error);
       return;
     }
@@ -132,7 +132,7 @@ function handleFilesContent(filesContent, rawFiles, assemblies) {
     } else if (isFastaFile(file)) {
       parseFastaFile(file, rawFiles, assemblies);
     } else {
-      console.warn('[Macroreact] Unsupported file type: ' + file.name);
+      console.warn('[WGSA] Unsupported file type: ' + file.name);
     }
   });
 }
@@ -152,16 +152,16 @@ function parseFastaFile(file, rawFiles, assemblies) {
 }
 
 function parseCsvFile(file, rawFiles, assemblies) {
-  const csvJson = DataUtils.parseCsvToJson(file.content);
+  const csvJson = MetadataUtils.parseCsvToJson(file.content);
 
   if (csvJson.errors.length > 0) {
-    console.error('[Macroreact] Filed to parse CSV file ' + file.name);
+    console.error('[WGSA] Filed to parse CSV file ' + file.name);
     return;
   }
 
   csvJson.data.forEach(function (dataRow) {
     if (!dataRow.filename) {
-      console.error('[Macroreact] Missing assembly filename in metadata file ' + file.name);
+      console.error('[WGSA] Missing assembly filename in metadata file ' + file.name);
       return;
     }
 
@@ -230,12 +230,12 @@ function analyseFasta(assemblyName, fastaFileString) {
 }
 
 function readFiles(files, callback) {
-  var results = [];
+  const results = [];
 
-  files.forEach(function iife(file) {
+  files.forEach(function (file) {
     readFile(file, function handleFileContent(error, fileContent) {
       if (error) {
-        console.error('[Macroreact] Failed to load file: ' + error);
+        console.error('[WGSA] Failed to load file: ' + error);
         return;
       }
 
