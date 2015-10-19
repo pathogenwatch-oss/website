@@ -200,6 +200,7 @@ function analyseFasta(assemblyName, fastaFileString) {
   var contigN50 = assemblyN50Data['sequenceLength'];
   var sumsOfNucleotidesInDnaStrings = AnalysisUtils.calculateSumsOfNucleotidesInDnaStrings(dnaStrings);
   var totalNumberOfNucleotidesInDnaStrings = AnalysisUtils.calculateTotalNumberOfNucleotidesInDnaStrings(dnaStrings);
+  var totalNumberOfNsInDnaStrings = AnalysisUtils.calculateTotalNumberOfNsInDnaStrings(dnaStrings);
   var averageNumberOfNucleotidesInDnaStrings = AnalysisUtils.calculateAverageNumberOfNucleotidesInDnaStrings(dnaStrings);
   var smallestNumberOfNucleotidesInDnaStrings = AnalysisUtils.calculateSmallestNumberOfNucleotidesInDnaStrings(dnaStrings);
   var biggestNumberOfNucleotidesInDnaStrings = AnalysisUtils.calculateBiggestNumberOfNucleotidesInDnaStrings(dnaStrings);
@@ -221,8 +222,8 @@ function analyseFasta(assemblyName, fastaFileString) {
     assemblyN50Data: assemblyN50Data,
     contigN50: contigN50,
     sumsOfNucleotidesInDnaStrings: sumsOfNucleotidesInDnaStrings,
-
     totalNumberOfNucleotidesInDnaStrings: totalNumberOfNucleotidesInDnaStrings,
+    totalNumberOfNsInDnaStrings: totalNumberOfNsInDnaStrings,
     averageNumberOfNucleotidesInDnaStrings: averageNumberOfNucleotidesInDnaStrings,
     smallestNumberOfNucleotidesInDnaStrings: smallestNumberOfNucleotidesInDnaStrings,
     biggestNumberOfNucleotidesInDnaStrings: biggestNumberOfNucleotidesInDnaStrings,
