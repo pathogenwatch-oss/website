@@ -281,6 +281,7 @@
   flex-grow: 1;
   padding: 0px;
   white-space: nowrap;
+  text-transform: none;
 }
 
 
@@ -516,7 +517,7 @@ text.axis-label {
   stroke-width: 0.05em;
   letter-spacing: 0.03em;
   font-size: 12px;
-  text-transform: uppercase;
+  text-transform: none;
 }
 circle {
   stroke-width: 0.5px;

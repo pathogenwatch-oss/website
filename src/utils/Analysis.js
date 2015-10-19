@@ -170,6 +170,14 @@ function calculateTotalNumberOfNucleotidesInDnaStrings(dnaStrings) {
   // return totalNumberOfNucleotidesInDnaStrings;
 }
 
+function calculateTotalNumberOfNsInDnaStrings(dnaStrings) {
+  var totalNumberOfNsInDnaStrings = 0;
+  dnaStrings.forEach(function(dnaString, index, array){
+    totalNumberOfNsInDnaStrings = totalNumberOfNsInDnaStrings + (dnaString.match(/N/g) || []).length;
+  });
+  return totalNumberOfNsInDnaStrings;
+}
+
 function calculateAverageNumberOfNucleotidesInDnaStrings(dnaStrings) {
   var totalNumberOfNucleotidesInDnaStrings = calculateTotalNumberOfNucleotidesInDnaStrings(dnaStrings);
   var numberOfDnaStrings = dnaStrings.length;
@@ -626,6 +634,7 @@ module.exports = {
   isValidContig: isValidContig,
   calculateN50: calculateN50,
   calculateTotalNumberOfNucleotidesInDnaStrings: calculateTotalNumberOfNucleotidesInDnaStrings,
+  calculateTotalNumberOfNsInDnaStrings: calculateTotalNumberOfNsInDnaStrings,
   calculateAverageNumberOfNucleotidesInDnaStrings: calculateAverageNumberOfNucleotidesInDnaStrings,
   calculateSmallestNumberOfNucleotidesInDnaStrings: calculateSmallestNumberOfNucleotidesInDnaStrings,
   calculateBiggestNumberOfNucleotidesInDnaStrings: calculateBiggestNumberOfNucleotidesInDnaStrings,

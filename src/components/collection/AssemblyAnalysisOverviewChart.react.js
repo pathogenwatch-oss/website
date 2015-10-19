@@ -24,7 +24,7 @@ const AssemblyAnalysisOverviewChart = React.createClass({
     }
 
     const chartData =  UploadStore.getOverviewChartData(this.props.chartType);
-    AnalysisUtils.drawOverviewChart(chartData, '.overview-chart', 'assemblies', this.props.chartTitle);
+    AnalysisUtils.drawOverviewChart(chartData, '.overview-chart', 'Assemblies', this.props.chartTitle);
   },
 
   componentDidMount() {
