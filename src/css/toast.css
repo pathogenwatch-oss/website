@@ -3,72 +3,60 @@
   bottom: 0px;
   z-index: 4;
   width: 100%;
-  min-height: 48px;
+  height: 0;
   display: flex;
   justify-content: center;
-  overflow: none;
+  overflow: visible;
+}
+
+.wgsa-toast-container--active {
+  display: block;
 }
 
 .wgsa-toast {
   background-color: #323232;
   color: white;
+  height: 48px;
   min-width: 288px;
   max-width: 568px;
   border-radius: 2px;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0 16px;
-}
-
-.wgsa-toast__icon {
-  padding: 0px 16px;
-}
-
-.wgsa-toast__icon i, .wgsa-toast__action i {
-  font-size: 40px;
-  font-weight: 100;
-}
-
-.wgsa-toast__icon i, .wgsa-toast__action i {
-  font-size: 30px;
+  padding: 0 24px;
 }
 
 .wgsa-toast__action {
   text-transform: uppercase;
   color: #87c7a6;
-  cursor: pointer
+  cursor: pointer;
+  margin-left: 40px; /* + 8px padding = 48px */
 }
 
 .wgsa-toast__message {
   font-size: 14px;
   flex-grow: 1;
-  margin-right: 8px;
 }
 
 @keyframes toast-slide-nonsticky {
   0% {
-      bottom: -100%;
+      transform: translateY(0);
   }
-  10% {
-      bottom: 0px;
-      z-index: 1000000;
-      opacity: 1;
+  5% {
+      transform: translateY(-100%);
   }
-  80% {
-      bottom: 0px;
-      z-index: 1000000;
-      opacity: 1;
+  95% {
+      transform: translateY(-100%);
   }
   100% {
-      bottom: -100%;
+      transform: translateY(0);
   }
 }
 
 .wgsa-toast--nonsticky {
   animation-name: toast-slide-nonsticky;
-  animation-duration: 5s;
-  animation-timing-function: ease;
+  animation-duration: 6s;
+  animation-timing-function: cubic-bezier(.55,0,.1,1);
   animation-iteration-count: 1;
   animation-direction: normal;
   animation-delay: 0;
@@ -78,19 +66,17 @@
 
 @keyframes toast-slide-sticky {
   0% {
-      bottom: -100%;
+      transform: translateY(0);
   }
   100% {
-      bottom: 0px;
-      z-index: 1000000;
-      opacity: 1;
+      transform: translateY(-100%);
   }
 }
 
 .wgsa-toast--sticky {
   animation-name: toast-slide-sticky;
-  animation-duration: .5s;
-  animation-timing-function: ease;
+  animation-duration: .3s;
+  animation-timing-function: cubic-bezier(.55,0,.1,1);
   animation-iteration-count: 1;
   animation-direction: normal;
   animation-delay: 0;
