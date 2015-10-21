@@ -11,7 +11,7 @@ function isNotFoundInStorage(error) {
 }
 
 module.exports = function handleErrors(app) {
-  app.use(function (error, req, res) {
+  app.use(function (error, req, res, next) {
     LOGGER.error(error);
 
     if (isNotFoundInStorage(error)) {
