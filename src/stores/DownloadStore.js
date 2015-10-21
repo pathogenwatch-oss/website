@@ -7,6 +7,8 @@ import AppDispatcher from '../dispatcher/AppDispatcher';
 import FilteredDataStore from './FilteredDataStore.js';
 import UploadedCollectionStore from './UploadedCollectionStore.js';
 
+import Species from '../species';
+
 const CHANGE_EVENT = 'change';
 
 const requestedFiles = new Map();
@@ -55,14 +57,14 @@ function handleAction(action) {
   switch (action.type) {
 
   case 'request_file':
-    const { format, speciesId } = action;
+    const { format } = action;
     const idList = getIdList(format);
     const requestedFilesForIds = requestedFiles.get(idList) || {};
 
     // ensures map is updated on first request
     requestedFiles.set(idList, requestedFilesForIds);
-    console.log(requestedFiles);
-    Api.requestFile(format, { speciesId, idList },
+
+    Api.requestFile(format, { speciesId: Species.id, idList },
       function (error, keyToFilenameMap) {
         requestedFilesForIds[format] = {
           error,

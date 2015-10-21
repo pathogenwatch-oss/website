@@ -5,8 +5,8 @@ const MARKER_SIZE = 16;
 const LINE_WIDTH = 2;
 
 const canvas = document.createElement('canvas');
-canvas.width = MARKER_SIZE;
-canvas.height = MARKER_SIZE;
+canvas.width = MARKER_SIZE + LINE_WIDTH;
+canvas.height = MARKER_SIZE + LINE_WIDTH;
 
 const context = canvas.getContext('2d');
 context.lineWidth = LINE_WIDTH;
@@ -14,7 +14,7 @@ context.lineWidth = LINE_WIDTH;
 const centerX = canvas.width / 2;
 const centerY = canvas.height / 2;
 
-const radius = MARKER_SIZE / 2 - LINE_WIDTH;
+const radius = MARKER_SIZE / 2 - LINE_WIDTH / 2;
 
 function drawSingleColourMarker(fillColour, strokeColour = COLOUR) {
   context.clearRect(0, 0, MARKER_SIZE, MARKER_SIZE);

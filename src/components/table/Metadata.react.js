@@ -51,7 +51,7 @@ const systemColumnProps = [
       return analysis.st;
     },
   },
-  { label: 'MLST',
+  { label: 'MLST PROFILE',
     dataKey: '__mlst',
     labelGetter({ analysis }) {
       return analysis.mlst;
