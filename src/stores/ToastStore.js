@@ -3,7 +3,6 @@ import { EventEmitter }  from 'events';
 import assign from 'object-assign';
 
 import UploadStore from './UploadStore';
-import DownloadStore from './DownloadStore';
 
 import { defineUploadStoreErrorToast } from '../utils/Toast';
 
@@ -67,18 +66,6 @@ function handleAction(action) {
   case 'navigate_to_assembly':
     hideToastForAssembly(action.assemblyName);
     emitChange();
-    break;
-
-  case 'request_file':
-    AppDispatcher.waitFor([
-      DownloadStore.dispatchToken,
-    ]);
-    const { format, idList } = action;
-    const { error } = DownloadStore.getDownloadStatus(format, idList);
-    if (error) {
-      showToast({ message: 'Download failed to generate.' });
-      emitChange();
-    }
     break;
 
   case 'show_toast':

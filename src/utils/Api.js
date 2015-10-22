@@ -15,7 +15,6 @@ function postJson(path, data, progressFn) {
     contentType: 'application/json; charset=UTF-8',
     data: JSON.stringify(data),
     dataType: 'json',
-    timeout: 3000,
     xhr() {
       const xhr = new window.XMLHttpRequest();
 

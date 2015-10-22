@@ -24,6 +24,7 @@
   justify-content: center;
   align-items: center;
   padding: 0 24px;
+  transform: translateY(-100%);
 }
 
 .wgsa-toast__action {
@@ -38,52 +39,7 @@
   flex-grow: 1;
 }
 
-@keyframes toast-slide-nonsticky {
-  0% {
-      transform: translateY(0);
-  }
-  5% {
-      transform: translateY(-100%);
-  }
-  95% {
-      transform: translateY(-100%);
-  }
-  100% {
-      transform: translateY(0);
-  }
-}
-
-.wgsa-toast--nonsticky {
-  animation-name: toast-slide-nonsticky;
-  animation-duration: 6s;
-  animation-timing-function: cubic-bezier(.55,0,.1,1);
-  animation-iteration-count: 1;
-  animation-direction: normal;
-  animation-delay: 0;
-  animation-play-state: running;
-  animation-fill-mode: forwards;
-}
-
-@keyframes toast-slide-sticky {
-  0% {
-      transform: translateY(0);
-  }
-  100% {
-      transform: translateY(-100%);
-  }
-}
-
-.wgsa-toast--sticky {
-  animation-name: toast-slide-sticky;
-  animation-duration: .3s;
-  animation-timing-function: cubic-bezier(.55,0,.1,1);
-  animation-iteration-count: 1;
-  animation-direction: normal;
-  animation-delay: 0;
-  animation-play-state: running;
-  animation-fill-mode: forwards;
-}
-
 .wgsa-toast__dismiss {
+  margin-left: 8px;
   margin-right: -8px;
 }

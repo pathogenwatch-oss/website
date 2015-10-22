@@ -5,10 +5,10 @@ import Species from '../species';
 
 export default {
 
-  requestFile: function (format) {
+  requestFile(format, id = FilteredDataUtils.getDownloadIdList(format)) {
     AppDispatcher.dispatch({
       type: 'request_file',
-      idList: FilteredDataUtils.getDownloadIdList(format),
+      id,
       format,
       speciesId: Species.id,
     });

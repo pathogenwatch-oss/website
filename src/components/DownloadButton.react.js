@@ -16,13 +16,16 @@ export default React.createClass({
   propTypes: {
     description: React.PropTypes.string,
     format: React.PropTypes.string,
+    id: React.PropTypes.string,
   },
 
   getInitialState() {
+    const { format, id } = this.props;
+    const status = DownloadStore.getDownloadStatus(format, id) || {};
     return {
       loading: false,
-      error: null,
-      link: null,
+      error: status.error,
+      link: status.link,
     };
   },
 
@@ -72,11 +75,13 @@ export default React.createClass({
       loading: true,
     });
 
-    DownloadActionCreators.requestFile(this.props.format);
+    DownloadActionCreators.requestFile(this.props.format, this.props.id);
   },
 
   handleDownloadStoreChange() {
-    const status = DownloadStore.getDownloadStatus(this.props.format);
+    const { format, id } = this.props;
+    const status = DownloadStore.getDownloadStatus(format, id);
+    console.log(id, status);
     if (status) {
       this.setState({
         loading: false,

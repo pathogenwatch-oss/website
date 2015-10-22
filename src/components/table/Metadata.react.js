@@ -20,7 +20,7 @@ const systemColumnProps = [
     cellRenderer(_, __, data) {
       return (
         <DownloadButton
-          id={data.id}
+          id={data.assemblyId}
           format={'fasta'}
           description={'Assembly Fasta'} />
       );
@@ -85,7 +85,7 @@ function mapAssemblyIdToTableRow(assemblyId) {
         memo[dataKey] = labelGetter(assembly);
       }
       return memo;
-    }, {});
+    }, { assemblyId });
 }
 
 function setLabelGetter({ labelGetter }) {

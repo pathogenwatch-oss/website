@@ -1,7 +1,7 @@
 const AppDispatcher = require('../dispatcher/AppDispatcher');
 
 export default {
-  fireToast(toast) {
+  showToast(toast) {
     AppDispatcher.dispatch({
       type: 'show_toast',
       toast,

@@ -4,6 +4,8 @@ import assign from 'object-assign';
 import Api from '../utils/Api';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 
+import ToastActionCreators from '../actions/ToastActionCreators';
+
 import FilteredDataUtils from '../utils/FilteredData';
 
 const CHANGE_EVENT = 'change';
@@ -34,31 +36,38 @@ function emitChange() {
   Store.emit(CHANGE_EVENT);
 }
 
-function createLink(keyToFilenameMap = {}) {
+function createLink(keyToFilenameMap) {
   const key = Object.keys(keyToFilenameMap)[0];
   if (!key) {
     return '';
   }
-  return `/api/download/file/${encodeURIComponent(key)}?prettyFileName=${encodeURIComponent(keyToFilenameMap[key])}`;
+  return `/api/download/file/${encodeURIComponent(key)}?` +
+    `prettyFileName=${encodeURIComponent(keyToFilenameMap[key])}`;
 }
 
 function handleAction(action) {
   switch (action.type) {
 
   case 'request_file':
-    const { format, idList, speciesId } = action;
-    const requestedFilesForIds = requestedFiles.get(idList) || {};
+    const { format, id, speciesId } = action;
+    const requestedFilesForIds = requestedFiles.get(id) || {};
 
     // ensures map is updated on first request
-    requestedFiles.set(idList, requestedFilesForIds);
-    console.log(requestedFiles);
-    Api.requestFile(format, { speciesId, idList },
-      function (error, keyToFilenameMap) {
+    requestedFiles.set(id, requestedFilesForIds);
+
+    const requestBody = { speciesId, id: typeof id === 'string' ? [ id ] : id };
+    Api.requestFile(format, requestBody,
+      function (error, keyToFilenameMap = {}) {
         requestedFilesForIds[format] = {
           error,
           link: createLink(keyToFilenameMap),
         };
         emitChange();
+        if (error) {
+          ToastActionCreators.showToast({
+            message: 'Failed to generate download, please try again later.',
+          });
+        }
       }
     );
     break;
