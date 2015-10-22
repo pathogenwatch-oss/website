@@ -4,19 +4,11 @@ import assign from 'object-assign';
 import Api from '../utils/Api';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 
-import FilteredDataStore from './FilteredDataStore.js';
-import UploadedCollectionStore from './UploadedCollectionStore.js';
+import FilteredDataUtils from '../utils/FilteredData';
 
 const CHANGE_EVENT = 'change';
 
 const requestedFiles = new Map();
-
-function getIdList(format) {
-  if (format === 'score_matrix' || format === 'differences_matrix') {
-    return [ UploadedCollectionStore.getCollectionId() ];
-  }
-  return FilteredDataStore.getAssemblyIds();
-}
 
 const Store = assign({}, EventEmitter.prototype, {
 
@@ -28,8 +20,7 @@ const Store = assign({}, EventEmitter.prototype, {
     this.removeListener(CHANGE_EVENT, callback);
   },
 
-  getDownloadStatus(format = 'fasta') {
-    const ids = getIdList(format);
+  getDownloadStatus(format, ids = FilteredDataUtils.getDownloadIdList(format)) {
     const statuses = requestedFiles.get(ids);
     if (!statuses || !statuses[format]) {
       return null;
@@ -55,8 +46,7 @@ function handleAction(action) {
   switch (action.type) {
 
   case 'request_file':
-    const { format, speciesId } = action;
-    const idList = getIdList(format);
+    const { format, idList, speciesId } = action;
     const requestedFilesForIds = requestedFiles.get(idList) || {};
 
     // ensures map is updated on first request
