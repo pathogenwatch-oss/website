@@ -30,12 +30,12 @@ function validateFiles() {
     return;
   }
 
-  if (assemblyNames.length > 100) {
-    errors.push({
-      message: 'Please upload no more than 100 assemblies at one time.',
-    });
-    return;
-  }
+  // if (assemblyNames.length > 100) {
+  //   errors.push({
+  //     message: 'Please upload no more than 100 assemblies at one time.',
+  //   });
+  //   return;
+  // }
 
   for (const assemblyName of assemblyNames) {
     const assembly = assemblies[assemblyName];
