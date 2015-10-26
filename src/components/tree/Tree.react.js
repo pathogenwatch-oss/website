@@ -53,7 +53,11 @@ export default React.createClass({
 
     FilteredDataStore.addChangeListener(this.handleFilteredDataStoreChange);
 
-    const phylocanvas = PhyloCanvas.createTree('phylocanvas-container');
+    const phylocanvas = PhyloCanvas.createTree('phylocanvas-container', {
+      contextMenu: {
+        parent: document.body,
+      },
+    });
 
     phylocanvas.padding = 128;
     phylocanvas.showLabels = true;
