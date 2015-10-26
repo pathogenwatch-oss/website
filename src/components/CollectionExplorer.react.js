@@ -99,7 +99,6 @@ const Layout = React.createClass({
           </LayoutWest>
           <LayoutWestEastDivider
             left={this.state.layoutWestEastDividerLeft}
-            containmentRight={this.state.layoutMiddleEastDividerLeft}
             onDragEnd={this.handleLayoutWestEastDividerDragEnd} />
           <LayoutEast left={this.state.layoutEastLeft} width={this.state.layoutEastWidth}>
             <EastContent
