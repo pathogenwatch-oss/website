@@ -44,7 +44,7 @@ const LayoutDivider = React.createClass({
       left: this.props.left || 0,
       width: this.getWidth(),
       height: this.getHeight(),
-      zIndex: '999',
+      zIndex: 2,
       boxShadow: this.props.direction === 'horizontal' ?
         '0 -1px 1.5px 0 rgba(0,0,0,.12), 0 -4px 4px 0 rgba(0,0,0,.06)' :
         '1px 0 1.5px 0 rgba(0,0,0,.12), 4px 0px 4px 0 rgba(0,0,0,.06)',

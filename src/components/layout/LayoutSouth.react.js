@@ -5,7 +5,7 @@ const style = {
   width: '100%',
   bottom: 0,
   backgroundColor: '#ffffff',
-  zIndex: 2,
+  zIndex: 1,
 };
 
 export default React.createClass({

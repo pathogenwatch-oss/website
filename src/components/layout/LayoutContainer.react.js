@@ -30,6 +30,8 @@ const headerRowStyle = {
 
 const LayoutContainer = React.createClass({
 
+  displayName: 'LayoutContainer',
+
   componentDidMount() {
     componentHandler.upgradeElement(React.findDOMNode(this.refs.container));
   },

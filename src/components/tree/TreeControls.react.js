@@ -8,7 +8,7 @@ const treeSizeControlsStyle = {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'flex-end',
-  zIndex: '999',
+  zIndex: '1',
   userSelect: 'none',
 };
 

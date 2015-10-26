@@ -7,18 +7,20 @@ import CollectionNavigationActionCreators from '../actions/CollectionNavigationA
 
 const style = {
   position: 'absolute',
-  zIndex: 999,
+  zIndex: 2,
   transform: 'translateY(-50%)',
   left: 16,
 };
 
 export default React.createClass({
 
+  displayName: 'LayoutNavigation',
+
   propTypes: {
     top: React.PropTypes.number,
   },
 
-  render: function () {
+  render() {
     style.top = this.props.top;
     return (
       <div style={style} className="wgsa-switch-background mdl-shadow--2dp">
@@ -31,7 +33,7 @@ export default React.createClass({
     );
   },
 
-  handleClick: function (checked) {
+  handleClick(checked) {
     const { TABLE_METADATA, TABLE_RESISTANCE_PROFILE } = CollectionNavigationStore.getCollectionNavigationStates();
     CollectionNavigationActionCreators.setCollectionNavigation(
       checked ? TABLE_RESISTANCE_PROFILE : TABLE_METADATA
