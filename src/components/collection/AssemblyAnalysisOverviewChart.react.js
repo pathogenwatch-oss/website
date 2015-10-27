@@ -1,5 +1,5 @@
 import React from 'react';
-import AnalysisUtils from '../../utils/Analysis';
+import ChartUtils from '../../utils/Chart';
 import UploadStore from '../../stores/UploadStore';
 
 import '../../css/upload-review.css';
@@ -24,7 +24,7 @@ const AssemblyAnalysisOverviewChart = React.createClass({
     }
 
     const chartData =  UploadStore.getOverviewChartData(this.props.chartType);
-    AnalysisUtils.drawOverviewChart(chartData, '.overview-chart', 'Assemblies', this.props.chartTitle);
+    ChartUtils.drawOverviewChart(chartData, '.overview-chart', 'Assemblies', this.props.chartTitle);
   },
 
   componentDidMount() {

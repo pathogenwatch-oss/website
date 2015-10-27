@@ -62,6 +62,9 @@ export default React.createClass({
   render() {
     const { fasta, metadata } = this.props.assembly;
     const { assemblyName, geography } = metadata;
+    const { latitude, longitude } = geography.position;
+
+    const showMap = latitude !== null && longitude !== null;
 
     const markerDef = {
       position: geography.position,
@@ -74,8 +77,10 @@ export default React.createClass({
             <InputField key="assemblyName" type="text" columnName="assemblyName" label="Assembly Name" value={assemblyName} handleChange={this.handleMetadataChange} readonly={this.state.isUploading}/>
             <MetadataDate key={fasta.name} assemblyId={fasta.name} date={metadata.date} disabled={this.state.isUploading}/>
           </div>
-          <div className="mdl-cell mdl-cell--6-col" style={{ position: 'relative', height: '160px'}}>
-            <GoogleMap markerDefs={[ markerDef ]} />
+          <div className="mdl-cell mdl-cell--6-col" style={{ position: 'relative'}}>
+            { showMap ?
+              <GoogleMap markerDefs={[ markerDef ]} /> :
+              <p className="mdl-card__supporting-text">(Location not provided)</p> }
           </div>
         </div>
         <div className="metadata-fields__other">

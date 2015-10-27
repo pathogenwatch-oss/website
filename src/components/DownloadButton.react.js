@@ -81,7 +81,6 @@ export default React.createClass({
   handleDownloadStoreChange() {
     const { format, id } = this.props;
     const status = DownloadStore.getDownloadStatus(format, id);
-    console.log(id, status);
     if (status) {
       this.setState({
         loading: false,
