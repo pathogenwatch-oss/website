@@ -118,12 +118,6 @@ export default React.createClass({
           <h2 className="wgsa-tree-heading">
             <span>{title}</span>
           </h2>
-          <TreeMenu
-            tree={this.phylocanvas}
-            exportFilename={`${title}.png`}
-            handleToggleNodeLabels={this.handleToggleNodeLabels}
-            handleToggleNodeAlign={this.handleToggleNodeAlign}
-            handleRedrawOriginalTree={this.handleRedrawOriginalTree} />
         </header>
         <div id="phylocanvas-container" style={fullWidthHeight}></div>
         <TreeControls
@@ -185,19 +179,6 @@ export default React.createClass({
 
   handleTreeTypeChange(event) {
     this.phylocanvas.setTreeType(event.target.value);
-  },
-
-  handleToggleNodeLabels() {
-    this.phylocanvas.toggleLabels();
-  },
-
-  handleRedrawOriginalTree() {
-    this.phylocanvas.redrawOriginalTree();
-  },
-
-  handleToggleNodeAlign() {
-    this.phylocanvas.alignLabels = !this.phylocanvas.alignLabels;
-    this.phylocanvas.draw();
   },
 
   handleFilteredDataStoreChange() {
