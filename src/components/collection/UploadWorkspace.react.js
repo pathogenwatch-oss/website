@@ -146,7 +146,7 @@ export default React.createClass({
   handleDrop(event) {
     if (event.files.length > 0 && !this.state.isUploading) {
       if (!this.state.confirmedMultipleMetadataDrop && this.state.numberOfAssemblies > 0) {
-        ToastActionCreators.fireToast({
+        ToastActionCreators.showToast({
           message: 'Duplicate records will be overwritten.',
           action: {
             label: 'confirm',

@@ -25,11 +25,11 @@ export default React.createClass({
   },
 
   render() {
-    const { message, sticky, action } = this.state;
+    const { message, action } = this.state;
     return (
       <div className="wgsa-toast-container">
       { message &&
-        <aside className={`wgsa-toast wgsa-toast--${sticky ? 'sticky' : 'nonsticky'}`}>
+        <aside className="wgsa-toast">
           <span className="wgsa-toast__message">
             {message}
           </span>
