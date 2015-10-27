@@ -34,6 +34,14 @@ function getColour(assembly) {
   return colour;
 }
 
+function getDownloadIdList(format) {
+  if (format === 'score_matrix' || format === 'differences_matrix') {
+    return [ UploadedCollectionStore.getCollectionId() ];
+  }
+  return FilteredDataStore.getAssemblyIds();
+}
+
 export default {
   getColour,
+  getDownloadIdList,
 };
