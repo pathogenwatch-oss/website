@@ -88,8 +88,8 @@ function mapAssemblyIdToTableRow(assemblyId) {
     }, {});
 }
 
-function setLabelGetter({ labelGetter }) {
-  FilteredDataActionCreators.setLabelGetter(labelGetter);
+function setLabelGetter(columnDef) {
+  FilteredDataActionCreators.setActiveColumn(columnDef);
 }
 
 export default React.createClass({

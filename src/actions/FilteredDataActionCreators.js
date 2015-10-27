@@ -1,6 +1,6 @@
 import AppDispatcher from '../dispatcher/AppDispatcher';
 
-module.exports = {
+export default {
 
   setAssemblyIds(assemblyIds) {
     AppDispatcher.dispatch({
@@ -15,10 +15,10 @@ module.exports = {
     });
   },
 
-  setLabelGetter(labelGetter) {
+  setActiveColumn(columnDef) {
     AppDispatcher.dispatch({
-      type: 'set_label_getter',
-      labelGetter,
+      type: 'set_active_column',
+      columnDef,
     });
   },
 

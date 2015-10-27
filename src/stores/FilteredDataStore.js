@@ -7,14 +7,17 @@ import SubtreeStore from './SubtreeStore';
 
 const CHANGE_EVENT = 'change';
 
-function defaultLabelGetter(assembly) {
-  return assembly.metadata.assemblyName;
-}
+const defaultActiveColumn = {
+  label: 'ASSEMBLY',
+  labelGetter(assembly) {
+    return assembly.metadata.assemblyName;
+  },
+};
 
 let unfilteredAssemblyIds = null;
-let assemblyIds = null;
+let assemblyIds = [];
 let userDefinedColumns = [];
-let labelGetter = defaultLabelGetter;
+let activeColumn = defaultActiveColumn;
 let colourTableColumnName = null;
 let hasTextFilter = false;
 
@@ -23,12 +26,12 @@ function setUserDefinedColumns() {
   userDefinedColumns = userDefined ? Object.keys(userDefined) : [];
 }
 
-function setLabelGetter(labelGetterFn) {
-  if (!labelGetterFn || labelGetterFn === labelGetter) {
-    labelGetter = defaultLabelGetter;
+function setActiveColumn(newActiveColumn) {
+  if (!newActiveColumn || newActiveColumn === activeColumn) {
+    activeColumn = defaultActiveColumn;
     return;
   }
-  labelGetter = labelGetterFn;
+  activeColumn = newActiveColumn;
 }
 
 function setColourTableColumnName(tableColumnName) {
@@ -57,8 +60,12 @@ const FilteredDataStore = assign({}, EventEmitter.prototype, {
     return userDefinedColumns;
   },
 
+  getFilterColumnName() {
+    return activeColumn.label;
+  },
+
   getLabelGetter() {
-    return labelGetter;
+    return activeColumn.labelGetter;
   },
 
   getColourTableColumnName() {
@@ -67,7 +74,7 @@ const FilteredDataStore = assign({}, EventEmitter.prototype, {
 
   hasTextFilter() {
     return hasTextFilter;
-  }
+  },
 
 });
 
@@ -97,8 +104,8 @@ function handleAction(action) {
     }
     break;
 
-  case 'set_label_getter':
-    setLabelGetter(action.labelGetter);
+  case 'set_active_column':
+    setActiveColumn(action.columnDef);
     emitChange();
     break;
 
@@ -144,7 +151,7 @@ function handleAction(action) {
     } else {
       assemblyIds = unfilteredAssemblyIds.filter((id) => {
         const assembly = UploadedCollectionStore.getAssemblies()[id];
-        const value = '' + labelGetter(assembly); // cheap string coercion
+        const value = '' + activeColumn.labelGetter(assembly); // cheap string coercion
         return value && value.match(new RegExp(action.text, 'i'));
       });
       hasTextFilter = true;

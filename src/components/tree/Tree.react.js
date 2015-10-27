@@ -73,6 +73,7 @@ export default React.createClass({
         this.phylocanvas.leaves.map(_ => _.id)
       );
     });
+
     phylocanvas.on('original-tree', () => {
       this.styleTree();
       this.phylocanvas.fitInPanel();
