@@ -32,7 +32,7 @@ var AssemblyAnalysis = React.createClass({
       || ! assembly.analysis.contigN50
     ) {
       return (
-        <div style={labelStyle}>No assembly information</div>
+        <p className="mdl-card__supporting-text">(Assembly not provided)</p>
       );
     }
 

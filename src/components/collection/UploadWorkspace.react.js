@@ -238,26 +238,24 @@ export default React.createClass({
                 switch (this.state.viewPage) {
                 case 'assembly':
                   return (
-                    <div className="assemblyWorkspaceContainer mdl-grid assemblyWorkspaceContent">
-                      <div className="overflow-y--auto mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
-                        <div className="heading"> Metadata </div>
-                        <div className="card-style">
-                          <AssemblyMetadata assembly={assembly} />
+                    <div className="assemblyWorkspaceContent mdl-grid">
+                      <div className="wgsa-card mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
+                        <div className="wgsa-card-heading">Metadata</div>
+                        <div className="wgsa-card-content">
+                          <AssemblyMetadata assembly={assembly}/>
                         </div>
                       </div>
-                      <div className="overflow-y--auto mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
-                        <div className="mdl-grid mdl-grid--no-spacing">
-                          <div className="mdl-cell mdl-cell--12-col">
-                            <div className="heading"> Assembly Statistics </div>
-                            <div className="card-style">
-                              <AssemblyAnalysis assembly={assembly} />
-                            </div>
+                      <div className="mdl-cell mdl-cell--6-col wgsa-card-column">
+                        <div className="wgsa-card mdl-shadow--4dp">
+                          <div className="wgsa-card-heading">Assembly Statistics</div>
+                          <div className="wgsa-card-content">
+                            <AssemblyAnalysis assembly={assembly}/>
                           </div>
-                          <div className="mdl-cell mdl-cell--12-col">
-                            <div className="heading"> N50 Chart </div>
-                            <div className="card-style">
-                              <AssemblyAnalysisChart analysis={assembly && assembly.analysis} />
-                            </div>
+                        </div>
+                        <div className="wgsa-card mdl-shadow--4dp">
+                          <div className="wgsa-card-heading">N50 Chart</div>
+                          <div className="wgsa-card-content">
+                            <AssemblyAnalysisChart analysis={assembly && assembly.analysis} />
                           </div>
                         </div>
                       </div>

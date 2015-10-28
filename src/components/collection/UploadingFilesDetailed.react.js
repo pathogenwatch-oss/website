@@ -16,7 +16,7 @@ const UploadingFiles = React.createClass({
     return (
       <div className="wgsa-upload-progress">
         <main className="wgsa-upload-progress-container">
-          <div className="wgsa-collection-url-display card-style mdl-shadow--2dp">
+          <div className="wgsa-collection-url-display wgsa-card mdl-shadow--2dp">
             <div className="mdl-card__supporting-text">
               Final results will be available at the below URL, <br/>
               if upload fails to progress, please try this URL later.

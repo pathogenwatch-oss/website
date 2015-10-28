@@ -138,13 +138,6 @@
   padding: 10px 0px;
 }
 
-.assemblyWorkspaceContainer .mdl-layout__content{
-  padding: 32px;
-}
-.assemblyWorkspaceContainer .mdl-cell {
-  background-color: #fff;
-}
-
 .assemblyWorkspaceContent {
   position: absolute;
   left: 0;
@@ -213,16 +206,20 @@
   margin-top: 8px;
 }
 
-.card-style {
+.wgsa-card {
   background: #fff;
+}
+
+.wgsa-card--padded,
+.wgsa-card-content {
   padding: 32px;
 }
 
-.card-style--no-padding {
-  background: #fff;
+.wgsa-card + .wgsa-card {
+  margin-top: 16px;
 }
 
-.heading {
+.wgsa-card-heading {
   background: transparent;
   font-size: 20px;
   font-weight: 300;
@@ -233,6 +230,15 @@
   overflow: hidden;
   display: block;
   text-overflow: ellipsis;
+}
+
+.wgsa-card-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.wgsa-card-column .wgsa-card {
+  flex-grow: 1;
 }
 
 .metadata-fields {
@@ -257,9 +263,22 @@
   margin: 16px 0px;
 }
 
+.metadata-field__date {
+  padding: 0 16px;
+  border: 1px solid #ddd;
+  max-width: 300px;
+  box-sizing: border-box;
+}
+
+.metadata-field__date > legend {
+  display: block;
+  margin: 0;
+  text-transform: uppercase;
+  font-size: 13px;
+}
+
 .metadata-field__date .mdl-textfield {
   margin-right: 8px;
-  width: 56px;
 }
 
 .overview-fields {

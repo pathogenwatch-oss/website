@@ -3,14 +3,17 @@ import React from 'react';
 import UploadStore from '../../stores/UploadStore.js';
 import AssemblyAnalysisOverviewChart from '../../components/collection/AssemblyAnalysisOverviewChart.react';
 import OverviewStatisticsItem from './OverviewStatisticsItem.react';
-import DEFAULT from '../../defaults';
-
 import Map from '../map/UploadOverviewMap.react';
+
+import { FASTA_FILE_EXTENSIONS } from '../../utils/File';
+import DEFAULT from '../../defaults';
 
 const noContigsRange = {};
 let averageAssemblyLength = null;
 
 export default React.createClass({
+
+  displayName: 'Overview',
 
   propTypes: {
     clickHandler: React.PropTypes.func,
@@ -70,8 +73,8 @@ export default React.createClass({
       return (
         <div className="mdl-grid overviewContent">
           <div className="mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
-            <div className="heading"> Summary </div>
-            <div className="card-style">
+            <div className="wgsa-card-heading">Summary</div>
+            <div className="wgsa-card-content">
               <div className="mdl-grid mdl-grid--no-spacing">
                 <div className="mdl-cell mdl-cell--6-col">
                   <OverviewStatisticsItem label="Total Assemblies" value={this.state.assemblyCount} />
@@ -115,14 +118,14 @@ export default React.createClass({
                 <a href="#overview-chart-panel" className="mdl-tabs__tab" onClick={this.showChart.bind(this, 'totalNumberOfNsInDnaStrings', 'N Count')}>N Count</a>
               </div>
 
-              <div className="card-style mdl-tabs__panel is-active" id="overview-chart-panel">
+              <div className="wgsa-card-content mdl-tabs__panel is-active" id="overview-chart-panel">
                 <AssemblyAnalysisOverviewChart chartTitle={this.state.currentChart.title} chartType={this.state.currentChart.type}/>
               </div>
             </div>
           </div>
 
           <div key="map" className="mdl-cell mdl-cell--12-col increase-cell-gutter mdl-shadow--4dp" style={{ height: '50%' }}>
-            <div className="card-style--no-padding" style={{ height: '100%', position: 'relative' }}>
+            <div style={{ height: '100%', position: 'relative' }}>
               <Map assemblies={this.state.assemblies}/>
             </div>
           </div>
@@ -141,8 +144,9 @@ export default React.createClass({
             Drag and drop assemblies onto the page or click anywhere to open the file upload dialog.
           </p>
           <p className="mdl-card__supporting-text">
-            Assembled data must be in multi-FASTA format and should be one file per genome.
+            Assembled data must be in multi-FASTA format, should be one file per genome and have one of the following extensions:
           </p>
+          <p className="wgsa-highlight-text">{FASTA_FILE_EXTENSIONS.join(', ')}</p>
         </div>
         <div className="welcome-card welcome-card--reverse mdl-shadow--2dp">
           <h2 className="welcome-card__title">CSV File: Metadata</h2>
@@ -151,15 +155,8 @@ export default React.createClass({
           </p>
           <p className="mdl-card__supporting-text">
             Your CSV file MUST contain a column <span className="wgsa-highlight-text">filename</span> with values matching the name of each assembly file.  We strongly recommend you also include the following columns:
-            <br />
-             <ul className="wgsa-highlight-text">
-               <li>day</li>
-               <li>month</li>
-               <li>year</li>
-               <li>latitude</li>
-               <li>longitude</li>
-            </ul>
           </p>
+          <p className="wgsa-highlight-text">day, month, year, latitude, longitude</p>
           <p className="mdl-card__supporting-text">
             You can add any other columns containing metadata you wish to explore within your genome data set.
           </p>

@@ -3,6 +3,18 @@ import MetadataActionCreators from '../../../actions/MetadataActionCreators';
 
 const CURRENT_YEAR = new Date().getFullYear();
 
+const dayStyle = {
+  width: '56px',
+};
+
+const monthStyle = {
+  width: '80px',
+};
+
+const yearStyle = {
+  width: '64px',
+};
+
 const MetadataDate = React.createClass({
 
   componentDidMount() {
@@ -16,9 +28,9 @@ const MetadataDate = React.createClass({
     return (
       <fieldset className="metadata-field__date">
         <legend>Date</legend>
-        <DateInput ref="day_input" onChange={this.updateDateComponent} component="day" min="1" max="31"  value={day} disabled={this.props.disabled} />
-        <DateInput ref="month_input" onChange={this.updateDateComponent} component="month" min="1" max="12" value={month} disabled={this.props.disabled} />
-        <DateInput ref="year_input" onChange={this.updateDateComponent} component="year" min="1900" max={CURRENT_YEAR} value={year} disabled={this.props.disabled} />
+        <DateInput ref="day_input" style={dayStyle} onChange={this.updateDateComponent} component="day" min="1" max="31"  value={day} disabled={this.props.disabled} />
+        <DateInput ref="month_input" style={monthStyle} onChange={this.updateDateComponent} component="month" min="1" max="12" value={month} disabled={this.props.disabled} />
+        <DateInput ref="year_input" style={yearStyle} onChange={this.updateDateComponent} component="year" min="1900" max={CURRENT_YEAR} value={year} disabled={this.props.disabled} />
       </fieldset>
     );
   },
@@ -35,7 +47,7 @@ const DateInput = React.createClass({
   render() {
     const { component, min, max, value } = this.props;
     return (
-      <div className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+      <div className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style={this.props.style}>
         <input className="mdl-textfield__input" type="number" id={component}
           value={value}
           onChange={this.handleChange}

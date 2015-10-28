@@ -41,6 +41,8 @@ function validateFiles() {
     const assembly = assemblies[assemblyName];
     const previousNumberOfErrors = errors.length;
 
+    assembly.hasErrors = false;
+
     if (!assembly.fasta.assembly) {
       errors.push({
         message: `${assemblyName} - fasta file not provided.`,
