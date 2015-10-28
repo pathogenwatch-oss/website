@@ -26,9 +26,7 @@ function drawN50Chart(chartData, assemblyN50, appendToClass) {
     chartWidth = document.getElementsByClassName(className)[0].parentElement.offsetWidth;
   }
 
-  const chartHeight = document.getElementsByClassName('chart-card')[0].offsetHeight - 138;
-  const xTransformValue = chartHeight - 52;
-
+  const chartHeight = 240;
   // Scales
 
   // X
@@ -69,7 +67,7 @@ function drawN50Chart(chartData, assemblyN50, appendToClass) {
   // X
   svg.append('g')
     .attr('class', 'x axis')
-    .attr('transform', 'translate(20, '+ xTransformValue +')')
+    .attr('transform', 'translate(20, 188)')
     .call(xAxis);
 
   // Y
@@ -86,7 +84,7 @@ function drawN50Chart(chartData, assemblyN50, appendToClass) {
     .text('No. Contigs (ordered by length)')
     .attr('class', 'axis-label')
     .attr('text-anchor', 'middle')
-    .attr('x', (chartWidth / 2))
+    .attr('x', (chartWidth / 2.5))
     .attr('y', 45);
 
   // Y

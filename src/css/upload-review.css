@@ -170,6 +170,7 @@
   width: auto;
   margin: 16px;
   min-height: 136px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
 }
 .wgsa-overview-upload-ready-card i{
   font-size: 50px;
@@ -553,7 +554,7 @@ text {
 text.axis-label {
   letter-spacing: 0.03em;
   font-size: 12px;
-  text-transform: none;
+  text-transform: uppercase;
 }
 circle {
   stroke-width: 0.5px;

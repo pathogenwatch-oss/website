@@ -86,7 +86,7 @@ export default React.createClass({
                   <OverviewStatisticsItem label="Average Assembly Length" value={averageAssemblyLength} />
                 </div>
                 <div className="mdl-cell mdl-cell--6-col">
-                  <div className="wgsa-overview-upload-ready-card mdl-card mdl-shadow--2dp">
+                  <div className="wgsa-overview-upload-ready-card mdl-card">
                     { this.props.isUploading &&
                         <div style={iconStyle} className="mdl-card__title mdl-card--expand">
                           {this.props.uploadProgressPercentage + '%'}
@@ -108,7 +108,7 @@ export default React.createClass({
             </div>
           </div>
 
-          <div className="mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
+          <div className="mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp chart-card">
 
             <div className="wgsa-chart-select mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
               <div className="mdl-tabs__tab-bar">

@@ -20,7 +20,7 @@ const OverviewStatisticsItem = React.createClass({
 
   render: function () {
     return (
-      <div className="wgsa-overview-upload-ready-card mdl-card mdl-shadow--2dp">
+      <div className="wgsa-overview-upload-ready-card mdl-card">
         <div className="mdl-card__title mdl-card--expand">
             {this.props.value}
         </div>
