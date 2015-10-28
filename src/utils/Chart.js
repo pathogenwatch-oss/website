@@ -25,7 +25,9 @@ function drawN50Chart(chartData, assemblyN50, appendToClass) {
   if (document.getElementsByClassName(className)[0]) {
     chartWidth = document.getElementsByClassName(className)[0].parentElement.offsetWidth;
   }
-  const chartHeight = 412;
+
+  const chartHeight = document.getElementsByClassName('chart-card')[0].offsetHeight - 138;
+  const xTransformValue = chartHeight - 52;
 
   // Scales
 
@@ -67,7 +69,7 @@ function drawN50Chart(chartData, assemblyN50, appendToClass) {
   // X
   svg.append('g')
     .attr('class', 'x axis')
-    .attr('transform', 'translate(20, 360)')
+    .attr('transform', 'translate(20, '+ xTransformValue +')')
     .call(xAxis);
 
   // Y

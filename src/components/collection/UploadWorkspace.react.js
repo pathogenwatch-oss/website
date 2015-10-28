@@ -239,12 +239,6 @@ export default React.createClass({
                 case 'assembly':
                   return (
                     <div className="assemblyWorkspaceContent mdl-grid">
-                      <div className="wgsa-card mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
-                        <div className="wgsa-card-heading">Metadata</div>
-                        <div className="wgsa-card-content">
-                          <AssemblyMetadata assembly={assembly}/>
-                        </div>
-                      </div>
                       <div className="mdl-cell mdl-cell--6-col wgsa-card-column">
                         <div className="wgsa-card mdl-shadow--4dp">
                           <div className="wgsa-card-heading">Assembly Statistics</div>
@@ -252,11 +246,19 @@ export default React.createClass({
                             <AssemblyAnalysis assembly={assembly}/>
                           </div>
                         </div>
+                      </div>
+                      <div className="mdl-cell mdl-cell--6-col wgsa-card-column chart-card">
                         <div className="wgsa-card mdl-shadow--4dp">
                           <div className="wgsa-card-heading">N50 Chart</div>
-                          <div className="wgsa-card-content">
+                          <div className="wgsa-card-content ">
                             <AssemblyAnalysisChart analysis={assembly && assembly.analysis} />
                           </div>
+                        </div>
+                      </div>
+                      <div className="wgsa-card mdl-cell mdl-cell--12-col increase-cell-gutter mdl-shadow--4dp">
+                        <div className="wgsa-card-heading">Metadata</div>
+                        <div className="wgsa-card-content">
+                          <AssemblyMetadata assembly={assembly}/>
                         </div>
                       </div>
                     </div>

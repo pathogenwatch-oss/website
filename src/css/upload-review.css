@@ -245,6 +245,14 @@
   overflow: hidden;
 }
 
+.metadata-fields__main {
+  margin: auto;
+  max-width: 632px;
+}
+.metadata-googlemap {
+  max-width: 300px;
+}
+
 .metadata-fields__other {
   margin: 16px 0px;
   overflow-y: auto;
@@ -252,6 +260,20 @@
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-between;
+}
+
+.metadata-fields__other-fieldset {
+  margin: 16px;
+  padding: 0 16px;
+  border: 1px solid #ddd;
+  box-sizing: border-box;
+}
+
+.metadata-fields__other-fieldset > legend {
+  display: block;
+  margin: 0;
+  text-transform: uppercase;
+  font-size: 13px;
 }
 
 .metadata-input-field {
@@ -300,7 +322,6 @@
   text-transform: none;
 }
 
-
 .overflow-y--auto {
   overflow-y: auto;
 }
@@ -315,6 +336,7 @@
   flex-grow: 1;
   flex-basis: 0;*/
 }
+
 /*********************************/
 
 /**** UploadReview - Navigation Left Pane ****/

@@ -11,6 +11,7 @@ const mapStyle = {
   bottom: 0,
   left: 0,
   right: 0,
+  minHeight: '100px'
 };
 
 // module state
