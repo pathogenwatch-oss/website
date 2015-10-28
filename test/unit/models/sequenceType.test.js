@@ -45,7 +45,7 @@ describe('Model: Sequence Type', function () {
     }
   );
 
-  it.only('should handle null alleles', function (done) {
+  it('should handle null alleles', function (done) {
     var sequenceTypeModel = rewire('models/sequenceType');
 
     var assembly = {
