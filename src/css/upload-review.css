@@ -279,7 +279,7 @@
 
 .metadata-input-field {
   text-align: center;
-  /*width: auto;*/
+  width: 250px;
 }
 
 .metadata-fields__other .mdl-textfield {
