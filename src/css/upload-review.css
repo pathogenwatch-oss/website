@@ -551,8 +551,6 @@ text {
   font-weight: 100;
 }
 text.axis-label {
-  stroke: #888;
-  stroke-width: 0.05em;
   letter-spacing: 0.03em;
   font-size: 12px;
   text-transform: none;
