@@ -238,7 +238,7 @@ export default React.createClass({
                 switch (this.state.viewPage) {
                 case 'assembly':
                   return (
-                    <div className="assemblyWorkspaceContent mdl-grid">
+                    <div className="mdl-grid">
                       <div className="mdl-cell mdl-cell--6-col wgsa-card-column">
                         <div className="wgsa-card mdl-shadow--4dp">
                           <div className="wgsa-card-heading">Assembly Statistics</div>

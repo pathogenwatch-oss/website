@@ -41,14 +41,11 @@
   .mdl-cell--6-col, .mdl-cell--6-col-tablet.mdl-cell--6-col-tablet {
       width: calc(100% - 16px);
   }
-}
 
-@media (max-width: 839px) and (min-width: 480px) {
   .mdl-grid--no-spacing>.mdl-cell--6-col, .mdl-grid--no-spacing>.mdl-cell--6-col-tablet.mdl-cell--6-col-tablet {
       width: 50%;
   }
 }
-
 /**** UploadReview - Analysis ****/
 
 .welcome-container {
@@ -226,7 +223,7 @@
   font-weight: 300;
   color: #666;
   line-height: 40px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #ddd;
   padding: 4px 32px;
   overflow: hidden;
   display: block;
@@ -244,23 +241,27 @@
 
 .metadata-fields {
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.metadata-fields__main,
+.metadata-fields__other-fieldset {
+  min-width: calc(288px * 2 + 16px);
 }
 
 .metadata-fields__main {
-  margin: auto;
-  max-width: 632px;
-}
-.metadata-googlemap {
-  max-width: 300px;
+  margin-bottom: 16px;
 }
 
-.metadata-fields__other {
-  margin: 16px 0px;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+.metadata-fields__main > .mdl-grid {
   justify-content: space-between;
+}
+
+.metadata-googlemap {
+  position: relative;
+  max-width: 288px;
 }
 
 .metadata-fields__other-fieldset {
@@ -268,6 +269,7 @@
   padding: 0 16px;
   border: 1px solid #ddd;
   box-sizing: border-box;
+  max-width: calc(2px + 32px + (288px + 32px) * 4);
 }
 
 .metadata-fields__other-fieldset > legend {
@@ -277,19 +279,35 @@
   font-size: 13px;
 }
 
+.metadata-fields__other {
+  overflow-y: auto;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+@media (max-width: 1024px) {
+
+  .metadata-fields__other {
+    justify-content: space-around;
+  }
+
+}
+
 .metadata-input-field {
   text-align: center;
-  width: 250px;
+  width: 288px;
 }
 
 .metadata-fields__other .mdl-textfield {
-  margin: 16px 0px;
+  margin: 16px;
 }
 
 .metadata-field__date {
   padding: 0 16px;
   border: 1px solid #ddd;
-  max-width: 300px;
+  max-width: 288px;
   box-sizing: border-box;
 }
 
@@ -301,7 +319,7 @@
 }
 
 .metadata-field__date .mdl-textfield {
-  margin-right: 8px;
+  margin-right: 16px;
 }
 
 .overview-fields {
@@ -325,17 +343,6 @@
 
 .overflow-y--auto {
   overflow-y: auto;
-}
-
-.wgsa-overview-container {
-/*  display: flex;
-  flex-direction: column;
-*/}
-
-.wgsa-overview-container > .mdl-cell{
-/*  position: relative;
-  flex-grow: 1;
-  flex-basis: 0;*/
 }
 
 /*********************************/

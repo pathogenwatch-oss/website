@@ -65,37 +65,34 @@ export default React.createClass({
     const { latitude, longitude } = geography.position;
 
     const showMap = latitude !== null && longitude !== null;
-
     const markerDef = {
       position: geography.position,
     };
+    const otherMetadataFields = this.getMetadataFieldComponents(metadata);
 
     return (
       <form className="metadata-fields">
-        <div  style={{ justifyContent: 'flexstart' }}>
-          <div className="metadata-fields__main" style={{ paddingRight: '16px' }}>
-            <div className="mdl-grid mdl-grid--no-spacing" style={{ justifyContent: 'flexstart' }}>
-              <div className="mdl-cell mdl-cell--6-col" style={{ paddingRight: '16px' }}>
-                <InputField key="assemblyName" type="text" columnName="assemblyName" label="Assembly Name" value={assemblyName} handleChange={this.handleMetadataChange} readonly={this.state.isUploading}/>
-                <MetadataDate key={fasta.name} assemblyId={fasta.name} date={metadata.date} disabled={this.state.isUploading}/>
-              </div>
-              <div className="mdl-cell mdl-cell--6-col metadata-googlemap" style={{ position: 'relative'}}>
-              asdasd
-                { showMap ?
-                  <GoogleMap markerDefs={[ markerDef ]} /> :
-                  <p className="mdl-card__supporting-text">(Location not provided)</p> }
-              </div>
+        <div className="metadata-fields__main">
+          <div className="mdl-grid mdl-grid--no-spacing">
+            <div className="mdl-cell mdl-cell--6-col">
+              <InputField key="assemblyName" type="text" columnName="assemblyName" label="Assembly Name" value={assemblyName} handleChange={this.handleMetadataChange} readonly={this.state.isUploading}/>
+              <MetadataDate key={fasta.name} assemblyId={fasta.name} date={metadata.date} disabled={this.state.isUploading}/>
+            </div>
+            <div className="mdl-cell mdl-cell--6-col metadata-googlemap">
+              { showMap ?
+                <GoogleMap markerDefs={[ markerDef ]} /> :
+                <p className="mdl-card__supporting-text">(Location not provided)</p> }
             </div>
           </div>
         </div>
-        <div>
-        <fieldset className="metadata-fields__other-fieldset">
-          <legend>Other Metadata</legend>
-          <div className="metadata-fields__other">
-            {this.getMetadataFieldComponents(metadata)}
-          </div>
-        </fieldset>
-        </div>
+        { otherMetadataFields.length ?
+          <fieldset className="metadata-fields__other-fieldset">
+            <legend>Other Metadata</legend>
+            <div className="metadata-fields__other">
+              { otherMetadataFields }
+            </div>
+          </fieldset> : null
+        }
       </form>
     );
   },
