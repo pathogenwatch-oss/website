@@ -12,6 +12,10 @@ const CHANGE_EVENT = 'change';
 
 const requestedFiles = new Map();
 
+function createDownloadKey(id) {
+  return typeof id === 'string' ? id : id.join('|');
+}
+
 const Store = assign({}, EventEmitter.prototype, {
 
   addChangeListener(callback) {
@@ -23,7 +27,7 @@ const Store = assign({}, EventEmitter.prototype, {
   },
 
   getDownloadStatus(format, ids = FilteredDataUtils.getDownloadIdList(format)) {
-    const statuses = requestedFiles.get(ids);
+    const statuses = ids ? requestedFiles.get(createDownloadKey(ids)) : null;
     if (!statuses || !statuses[format]) {
       return null;
     }
@@ -50,12 +54,14 @@ function handleAction(action) {
 
   case 'request_file':
     const { format, id, speciesId } = action;
-    const requestedFilesForIds = requestedFiles.get(id) || {};
+    const idList = typeof id === 'string' ? [ id ] : id;
+    const downloadKey = createDownloadKey(idList);
+    const requestedFilesForIds = requestedFiles.get(downloadKey) || {};
 
     // ensures map is updated on first request
-    requestedFiles.set(id, requestedFilesForIds);
+    requestedFiles.set(downloadKey, requestedFilesForIds);
 
-    const requestBody = { speciesId, idList: typeof id === 'string' ? [ id ] : id };
+    const requestBody = { speciesId, idList };
     Api.requestFile(format, requestBody,
       function (error, keyToFilenameMap = {}) {
         requestedFilesForIds[format] = {
