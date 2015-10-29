@@ -73,7 +73,7 @@ export default React.createClass({
                 <div className="wgsa-download-button">
                   <a href={this.collectionTreeLink}
                     target="_blank"
-                    download={`${this.collectionId}_collection_tree.nwk`}
+                    download={`${UploadedCollectionStore.getCollectionId()}_collection_tree.nwk`}
                     className="mdl-button mdl-button--icon"
                     title="Download Population Tree (.nwk)">
                     <i className="wgsa-button-icon material-icons">file_download</i>
