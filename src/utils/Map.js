@@ -74,7 +74,7 @@ function getMarkerDefinitions(assemblies, {
   const positionMap = new Map();
 
   for (const assembly of assemblies) {
-    const { position } = assembly.metadata.geography;
+    const { position } = assembly.metadata;
     if (!position || !position.latitude || !position.longitude) {
       continue;
     }
