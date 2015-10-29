@@ -89,9 +89,19 @@ function isValid({ date }) {
   return true;
 }
 
+function fixPositionInCollection({ assemblies }) {
+  Object.keys(assemblies).forEach(function (assemblyId) {
+    const { metadata } = assemblies[assemblyId];
+    if (metadata.geography) {
+      metadata.position = metadata.geography.position;
+    }
+  });
+}
+
 export default {
   parseCsvToJson,
   getFormattedDateString,
   fixMetadataDateFormatInCollection,
   isValid,
+  fixPositionInCollection,
 };
