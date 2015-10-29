@@ -55,7 +55,7 @@ function handleAction(action) {
     // ensures map is updated on first request
     requestedFiles.set(id, requestedFilesForIds);
 
-    const requestBody = { speciesId, id: typeof id === 'string' ? [ id ] : id };
+    const requestBody = { speciesId, idList: typeof id === 'string' ? [ id ] : id };
     Api.requestFile(format, requestBody,
       function (error, keyToFilenameMap = {}) {
         requestedFilesForIds[format] = {
