@@ -21,7 +21,7 @@ export default React.createClass({
         return (
           columnName !== 'assemblyName' &&
           columnName !== 'name' &&
-          columnName !== 'geography' &&
+          columnName !== 'position' &&
           columnName !== 'date' &&
           (this.props.isUploading ? metadata[columnName] : true)
         );
@@ -35,13 +35,11 @@ export default React.createClass({
 
   render() {
     const { fasta, metadata } = this.props.assembly;
-    const { assemblyName, geography } = metadata;
-    const { latitude, longitude } = geography.position;
+    const { assemblyName, position } = metadata;
+    const { latitude, longitude } = position;
 
     const showMap = latitude !== null && longitude !== null;
-    const markerDef = {
-      position: geography.position,
-    };
+    const markerDef = { position };
     const otherMetadataFields = this.getMetadataFieldComponents(metadata);
 
     return (

@@ -21,6 +21,7 @@ export default {
         return AppDispatcher.dispatch(collectionErrorAction);
       }
 
+      MetadataUtils.fixPositionInCollection(collection);
       action.collection = collection;
 
       if (action.collection && action.referenceCollection) {

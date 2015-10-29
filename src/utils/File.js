@@ -100,12 +100,9 @@ function initialiseAssemblyObject(assemblyName, assemblies) {
         month: null,
         day: null,
       },
-      geography: {
-        location: null,
-        position: {
-          latitude: null,
-          longitude: null,
-        },
+      position: {
+        latitude: null,
+        longitude: null,
       },
     },
     analysis: {},
@@ -158,10 +155,9 @@ function parseCsvFile(file, rawFiles, assemblies) {
         continue;
       }
 
-      if (colName === 'latitude' || colName === 'longitude' || colName === 'location' || colName === 'year' || colName === 'month' || colName === 'day') {
-        assemblies[filename].metadata.geography.position.latitude = parseFloat(dataRow.latitude) || null;
-        assemblies[filename].metadata.geography.position.longitude = parseFloat(dataRow.longitude) || null;
-        assemblies[filename].metadata.geography.location = dataRow.location || null;
+      if (colName === 'latitude' || colName === 'longitude' || colName === 'year' || colName === 'month' || colName === 'day') {
+        assemblies[filename].metadata.position.latitude = parseFloat(dataRow.latitude) || null;
+        assemblies[filename].metadata.position.longitude = parseFloat(dataRow.longitude) || null;
         assemblies[filename].metadata.date.year = parseInt(dataRow.year, 10) || null;
         assemblies[filename].metadata.date.month = parseInt(dataRow.month, 10) || null;
         assemblies[filename].metadata.date.day = parseInt(dataRow.day, 10) || null;
