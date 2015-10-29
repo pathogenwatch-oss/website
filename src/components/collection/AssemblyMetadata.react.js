@@ -1,7 +1,6 @@
 import React from 'react';
 
 import MetadataActionCreators from '../../actions/MetadataActionCreators';
-import FileUploadingStore from '../../stores/FileUploadingStore.js';
 
 import MetadataDate from './metadata-form/Date.react';
 import InputField from './InputField.react';
@@ -13,32 +12,7 @@ export default React.createClass({
 
   propTypes: {
     assembly: React.PropTypes.object.isRequired,
-  },
-
-  getInitialState() {
-    return {
-      isUploading: FileUploadingStore.getFileUploadingState(),
-    };
-  },
-
-  componentDidMount() {
-    FileUploadingStore.addChangeListener(this.handleFileUploadingStoreChange);
-  },
-
-  componentWillUnmount() {
-    FileUploadingStore.removeChangeListener(this.handleFileUploadingStoreChange);
-  },
-
-  handleFileUploadingStoreChange() {
-    this.setState({
-      isUploading: FileUploadingStore.getFileUploadingState(),
-    });
-  },
-
-  handleMetadataChange(columnName, value) {
-    MetadataActionCreators.setMetadataColumn(
-      this.props.assembly.fasta.name, columnName, value
-    );
+    isUploading: React.PropTypes.bool,
   },
 
   getMetadataFieldComponents(metadata) {
@@ -49,12 +23,12 @@ export default React.createClass({
           columnName !== 'name' &&
           columnName !== 'geography' &&
           columnName !== 'date' &&
-          (this.state.isUploading ? metadata[columnName] : true)
+          (this.props.isUploading ? metadata[columnName] : true)
         );
       })
       .map((columnName) => {
         return (
-          <InputField key={columnName} type="text" label={columnName} value={metadata[columnName]} handleChange={this.handleMetadataChange} readonly={this.state.isUploading}/>
+          <InputField key={columnName} type="text" label={columnName} value={metadata[columnName]} handleChange={this.handleMetadataChange} readonly={this.props.isUploading}/>
         );
       });
   },
@@ -75,8 +49,8 @@ export default React.createClass({
         <div className="metadata-fields__main">
           <div className="mdl-grid mdl-grid--no-spacing">
             <div className="mdl-cell mdl-cell--6-col">
-              <InputField key="assemblyName" type="text" columnName="assemblyName" label="Assembly Name" value={assemblyName} handleChange={this.handleMetadataChange} readonly={this.state.isUploading}/>
-              <MetadataDate key={fasta.name} assemblyId={fasta.name} date={metadata.date} disabled={this.state.isUploading}/>
+              <InputField key="assemblyName" type="text" columnName="assemblyName" label="Assembly Name" value={assemblyName} handleChange={this.handleMetadataChange} readonly={this.props.isUploading}/>
+              <MetadataDate key={fasta.name} assemblyId={fasta.name} date={metadata.date} readonly={this.props.isUploading}/>
             </div>
             <div className="mdl-cell mdl-cell--6-col metadata-googlemap">
               { showMap ?
@@ -94,6 +68,12 @@ export default React.createClass({
           </fieldset> : null
         }
       </form>
+    );
+  },
+
+  handleMetadataChange(columnName, value) {
+    MetadataActionCreators.setMetadataColumn(
+      this.props.assembly.fasta.name, columnName, value
     );
   },
 

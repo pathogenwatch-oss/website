@@ -23,6 +23,11 @@
   width: 100%;
 }
 
+.wgsa-summary-stats {
+  max-width: 488px;
+  margin: 0 auto;
+}
+
 /**** Upload Review - Header ****/
 
 @media (max-width: 1024px) {

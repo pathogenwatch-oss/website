@@ -258,7 +258,7 @@ export default React.createClass({
                       <div className="wgsa-card mdl-cell mdl-cell--12-col increase-cell-gutter mdl-shadow--4dp">
                         <div className="wgsa-card-heading">Metadata</div>
                         <div className="wgsa-card-content">
-                          <AssemblyMetadata assembly={assembly}/>
+                          <AssemblyMetadata assembly={assembly} isUploading={this.state.isUploading}/>
                         </div>
                       </div>
                     </div>

@@ -74,7 +74,7 @@ export default React.createClass({
         <div className="mdl-grid overviewContent">
           <div className="mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
             <div className="wgsa-card-heading">Summary</div>
-            <div className="wgsa-card-content">
+            <div className="wgsa-card-content wgsa-summary-stats">
               <div className="mdl-grid mdl-grid--no-spacing">
                 <div className="mdl-cell mdl-cell--6-col">
                   <OverviewStatisticsItem label="Total Assemblies" value={this.state.assemblyCount} />
@@ -97,7 +97,7 @@ export default React.createClass({
                         </div>
                     }
                     <span className="mdl-card__actions mdl-card--border">
-                      { this.props.isUploading ? 'Upload In Progress...'
+                      { this.props.isUploading ? 'Upload Progress'
                         :
                           ( this.props.isReadyToUpload &&  'Ready To Upload' || 'Not Ready To Upload')
                       }
