@@ -114,13 +114,6 @@ const Store = assign({}, EventEmitter.prototype, {
     }, {});
   },
 
-  getAllMetadataLocations() {
-    return Object.keys(assemblies).reduce((memo, id) => {
-      memo[id] = assemblies[id].metadata.geography;
-      return memo;
-    }, {});
-  },
-
   getMinMaxNoContigsForAllAssemblies() {
     var noContigsArray = [];
     for (var assemblyId in assemblies) {

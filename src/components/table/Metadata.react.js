@@ -33,12 +33,6 @@ const systemColumnProps = [
       return metadata.assemblyName;
     },
   },
-  { label: 'LOCATION',
-    dataKey: '__location',
-    labelGetter({ metadata }) {
-      return metadata.geography.location;
-    },
-  },
   { label: 'DATE',
     dataKey: '__date',
     labelGetter({ metadata }) {
