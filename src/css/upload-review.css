@@ -72,7 +72,7 @@
   text-align: justify;
   margin-bottom: 24px;
   box-sizing: border-box;
-  background: url('/assets/img/WGSA_logo.png') #fff no-repeat;
+  background: url('/assets/img/WGSA.Icon.FINAL.svg') #fff no-repeat;
   background-size: 60px;
   background-position: -15px -14px;
 }
@@ -92,7 +92,7 @@
 }
 
 .welcome-card--reverse {
-  background-image: url('/assets/img/WGSA_logo_flipped.png');
+  background-image: url('/assets/img/WGSA.Icon.FINAL.reverse.svg');
   background-position: calc(100% + 15px) -15px;
 }
 
@@ -302,7 +302,7 @@
 
 /**** UploadReview - Navigation Left Pane ****/
 .navigation-container {
-  background: url('/assets/img/WGSA_logo.png') #fff no-repeat;
+  background: url('/assets/img/WGSA.Icon.FINAL.svg') #fff no-repeat;
   background-size: 80px;
   background-position: -20px -20px;
   text-align: center;

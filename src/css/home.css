@@ -31,12 +31,12 @@
 }
 
 .wgsa-home-header a > img {
-  width: 40px;
-  margin-right: 8px;
+  height: 40px;
 }
 
 .cgps-logo {
-  height: 40px;
+  height: 48px;
+  margin-top: 6px;
 }
 
 .wgsa-home-section1 {
@@ -50,6 +50,7 @@
 }
 
 .wgsa-home-content h1 {
+  padding-top: 16px;
   color: #a386bd;
 }
 
@@ -61,7 +62,6 @@
   text-align: center;
   margin: 0 auto 32px;
   padding: 0 16px;
-  /*max-width: 720px;*/
   font-size: 20px;
   line-height: 34px;
   color: #666;
@@ -133,7 +133,7 @@
   box-sizing: border-box;
   margin: 0 auto;
   padding: 32px;
-  background-image: url('/assets/img/WGSA_logo_flipped.png');
+  background-image: url('/assets/img/WGSA.Icon.FINAL.reverse.svg');
   background-size: 90px;
   background-position: calc(100% + 22.5px) -22.5px;
   background-repeat: no-repeat;

@@ -18,10 +18,10 @@ export default React.createClass({
       <section className="wgsa-home">
         <div className="wgsa-home-header mdl-layout__header-row">
           <a href="/" className="mdl-layout-title">
-            <img src="/assets/img/WGSA_logo.png" />WGSA
+            <img src="/assets/img/WGSA.FINAL.svg" />
           </a>
           <div className="mdl-layout-spacer"></div>
-          <img className="cgps-logo" src="/assets/img/cgps-logo.svg" />
+          <img className="cgps-logo" src="/assets/img/CGPS.SHORT.FINAL.svg" />
         </div>
         <div className="wgsa-home-section1">
           <div className="wgsa-home-content">
