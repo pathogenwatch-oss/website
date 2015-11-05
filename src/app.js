@@ -2,8 +2,9 @@ import './css/cgps-mdl-theme.css';
 import 'PhyloCanvas/polyfill';
 
 import React from 'react';
-import ReactDOM from 'react-dom';
-import Router, { Route, RouteHandler, DefaultRoute, NotFoundRoute, Redirect } from 'react-router';
+import { render } from 'react-dom';
+import { Router, Route, IndexRoute, Redirect } from 'react-router';
+import { createHistory } from 'history';
 
 import Home from './components/Home.react';
 import UploadCollection from './components/collection/UploadWorkspace.react';
@@ -13,37 +14,32 @@ import NotFound from './components/NotFound.react';
 
 import Species from './species';
 
-const Application = () => (
+const App = ({ children }) => (
   <div>
-    <RouteHandler />
+    {children}
     <Toast />
   </div>
 );
 
-const routes = (
-  <Route name="application" path="/" handler={Application}>
-    <DefaultRoute handler={Home}/>
-    { Species.list.map(({ nickname }) => [
-      <Redirect from={`${nickname}/?`} to={`upload-${nickname}`} />,
-      <Route
-        name={`upload-${nickname}`}
-        path={`${nickname}/upload/?`}
-        handler={UploadCollection} />,
-      <Route
-        name={`collection-${nickname}`}
-        path={`${nickname}/collection/:id/?`}
-        handler={ExploreCollection}
-      />,
-    ]).reduce((all, speciesRoutes) => {
-      return all.concat(speciesRoutes);
-    }, [])
-    }
-    <NotFoundRoute handler={NotFound}/>
-  </Route>
-);
+const SpeciesSetter = ({ route, children }) => {
+  Species.current = route.path;
+  return children;
+};
 
-const rootElement = document.getElementById('wgsa');
-
-Router.run(routes, Router.HistoryLocation, function (Handler) {
-  ReactDOM.render(<Handler />, rootElement);
-});
+render((
+  <Router history={createHistory()}>
+    <Route path="/" component={App}>
+      <IndexRoute component={Home} />
+      { Species.list.reduce((routes, { nickname }) =>
+        routes.concat([
+          <Redirect key={`${nickname}-redirect`} from={nickname} to={`${nickname}/upload`} />,
+          <Route key={nickname} path={nickname} component={SpeciesSetter}>
+            <Route path="upload" component={UploadCollection} />
+            <Route path="collection/:id" component={ExploreCollection} />
+          </Route>,
+        ]), []
+      )}
+    </Route>
+    <Route path="*" component={NotFound}/>
+  </Router>
+), document.getElementById('wgsa'));

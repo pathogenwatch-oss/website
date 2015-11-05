@@ -50,7 +50,7 @@ let isProcessing = false;
 export default React.createClass({
 
   contextTypes: {
-    router: React.PropTypes.func,
+    history: React.PropTypes.object,
   },
 
   getInitialState() {
@@ -117,16 +117,17 @@ export default React.createClass({
   handleFileUploadingStoreChange() {
     const uploadingResult = FileUploadingStore.getFileUploadingResult();
     const id = FileUploadingStore.getCollectionId();
-    const { transitionTo, makePath } = this.context.router;
+    const path = `/${Species.nickname}/collection/${id}`;
+    const { history } = this.context;
     if (uploadingResult === FileUploadingStore.getFileUploadingResults().SUCCESS) {
-      transitionTo(makePath(`collection-${Species.nickname}`, { id }));
+      history.pushState(null, path);
       return;
     }
 
     this.setState({
       isUploading: FileUploadingStore.getFileUploadingState(),
       viewPage: 'upload_progress',
-      collectionUrl: id ? window.location.origin + makePath('collection', { species: Species.nickname, id }) : null,
+      collectionUrl: id ? window.location.origin + path : null,
     });
   },
 
