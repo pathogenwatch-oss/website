@@ -13,46 +13,37 @@ import NotFound from './components/NotFound.react';
 
 import Species from './species';
 
-// const Application = () => (
-//   <div>
-//     <RouteHandler />
-//     <Toast />
-//   </div>
-// );
-
-class Application extends React.Component {
-  render() {
-    return (
-      <div>
-        <RouteHandler />
-        <Toast />
-      </div>
-    );
-  }
-}
+const Application = () => (
+  <div>
+    <RouteHandler />
+    <Toast />
+  </div>
+);
 
 const routes = (
   <Route name="application" path="/" handler={Application}>
     <DefaultRoute handler={Home}/>
-    <Redirect from=":species/?" to="upload" />
-    <Route name="upload" path=":species/upload/?" handler={UploadCollection} />
-    <Route name="collection" path=":species/collection/:id/?" handler={ExploreCollection} />
+    { Species.list.map(({ nickname }) => [
+      <Redirect from={`${nickname}/?`} to={`upload-${nickname}`} />,
+      <Route
+        name={`upload-${nickname}`}
+        path={`${nickname}/upload/?`}
+        handler={UploadCollection} />,
+      <Route
+        name={`collection-${nickname}`}
+        path={`${nickname}/collection/:id/?`}
+        handler={ExploreCollection}
+      />,
+    ]).reduce((all, speciesRoutes) => {
+      return all.concat(speciesRoutes);
+    }, [])
+    }
     <NotFoundRoute handler={NotFound}/>
   </Route>
 );
 
 const rootElement = document.getElementById('wgsa');
 
-Router.run(routes, Router.HistoryLocation, function (Handler, state) {
-  const requestedSpecies = state.params.species;
-  if (!requestedSpecies) {
-    return ReactDOM.render(<Handler />, rootElement);
-  }
-
-  if (Species.isSupported(requestedSpecies)) {
-    Species.current = requestedSpecies;
-    ReactDOM.render(<Handler />, rootElement);
-  } else {
-    ReactDOM.render(<NotFound />, rootElement);
-  }
+Router.run(routes, Router.HistoryLocation, function (Handler) {
+  ReactDOM.render(<Handler />, rootElement);
 });

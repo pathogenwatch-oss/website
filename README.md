@@ -10,3 +10,4 @@ The User-facing portion of WGSA.
   }
 }
 ```
+Using `localhost:8080` will load a static collection for development when a server is unavailable.
