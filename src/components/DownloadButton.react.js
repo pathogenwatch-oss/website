@@ -3,6 +3,8 @@ import '../css/spinner.css';
 import React from 'react';
 
 import DownloadStore from '../stores/DownloadStore';
+import FilteredDataStore from '../stores/FilteredDataStore';
+
 import DownloadActionCreators from '../actions/DownloadActionCreators';
 
 import DEFAULT from '../defaults';
@@ -10,6 +12,17 @@ import DEFAULT from '../defaults';
 const errorStyle = {
   color: DEFAULT.DANGER_COLOUR,
 };
+
+const MOUNTED_BUTTONS = new Set();
+
+function changeListener() {
+  for (const component of MOUNTED_BUTTONS) {
+    component.setState(component.getInitialState());
+  }
+}
+
+DownloadStore.addChangeListener(changeListener);
+FilteredDataStore.addChangeListener(changeListener);
 
 export default React.createClass({
 
@@ -30,7 +43,7 @@ export default React.createClass({
   },
 
   componentDidMount() {
-    DownloadStore.addChangeListener(this.handleDownloadStoreChange);
+    MOUNTED_BUTTONS.add(this);
   },
 
   componentDidUpdate() {
@@ -40,7 +53,7 @@ export default React.createClass({
   },
 
   componentWillUnmount() {
-    DownloadStore.removeChangeListener(this.handleDownloadStoreChange);
+    MOUNTED_BUTTONS.delete(this);
   },
 
   getDownloadElement() {
@@ -76,18 +89,6 @@ export default React.createClass({
     });
 
     DownloadActionCreators.requestFile(this.props.format, this.props.id);
-  },
-
-  handleDownloadStoreChange() {
-    const { format, id } = this.props;
-    const status = DownloadStore.getDownloadStatus(format, id);
-    if (status) {
-      this.setState({
-        loading: false,
-        error: status.error,
-        link: status.link,
-      });
-    }
   },
 
 });
