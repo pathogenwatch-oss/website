@@ -9,13 +9,13 @@ const FileUploadingProgress = React.createClass({
   componentDidMount: function () {
     FileUploadingProgressStore.addChangeListener(this.handleFileUploadingProgressStoreChange);
 
-    const progressElement = React.findDOMNode(this.refs.progressBar);
+    const { progressBar } = this.refs;
 
-    progressElement.addEventListener('mdl-componentupgraded', (event) => {
+    progressBar.addEventListener('mdl-componentupgraded', (event) => {
       this.progressBar = event.target.MaterialProgress;
     });
 
-    componentHandler.upgradeElement(progressElement);
+    componentHandler.upgradeElement(progressBar);
   },
 
   componentWillUnmount: function () {

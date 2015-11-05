@@ -12,7 +12,7 @@ const backgroundStyle = {
 const Loading = React.createClass({
 
   componentDidMount() {
-    componentHandler.upgradeElement(this.refs.spinner.getDOMNode());
+    componentHandler.upgradeElement(this.refs.spinner);
   },
 
   render() {

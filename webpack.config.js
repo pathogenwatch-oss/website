@@ -4,7 +4,7 @@ var path = require('path');
 var webpack = require('webpack');
 
 var postcssPlugins = [
-  require('autoprefixer')({ browsers: ['last 2 versions'] }),
+  require('autoprefixer')({ browsers: [ 'last 2 versions' ] }),
   require('postcss-input-style')
 ];
 
@@ -36,19 +36,19 @@ var devConfig = {
         loader: 'babel',
         include: path.join(__dirname, 'src'),
         query: {
-          'stage': 0,
-          'plugins': [
+          stage: 0,
+          plugins: [
             'react-transform'
           ],
-          'extra': {
+          extra: {
             'react-transform': {
               transforms: [ {
-                'transform': 'react-transform-hmr',
-                'imports': [ 'react' ],
-                'locals': [ 'module' ]
+                transform: 'react-transform-hmr',
+                imports: [ 'react' ],
+                locals: [ 'module' ]
               }, {
-                'transform': 'react-transform-catch-errors',
-                'imports': [ 'react', 'redbox-react' ]
+                transform: 'react-transform-catch-errors',
+                imports: [ 'react', 'redbox-react' ]
               } ]
             }
           }
@@ -73,7 +73,7 @@ var prodConfig = {
       }
     }),
     new webpack.DefinePlugin({
-      "process.env": {
+      'process.env': {
         NODE_ENV: JSON.stringify("production")
       }
     }),

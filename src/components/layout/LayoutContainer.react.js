@@ -33,7 +33,7 @@ const LayoutContainer = React.createClass({
   displayName: 'LayoutContainer',
 
   componentDidMount() {
-    componentHandler.upgradeElement(React.findDOMNode(this.refs.container));
+    componentHandler.upgradeElement(this.refs.container);
   },
 
   render() {

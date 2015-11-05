@@ -91,7 +91,6 @@ export default React.createClass({
     // header not re-rendered by state, need to do it the old-fashioned way
     $(`button[data-column="${columnProps.dataKey}"]`).toggleClass('active');
     $(`button[data-column]`).not(`[data-column="${columnProps.dataKey}"]`).removeClass('active');
-    // this.refs[columnProps.dataKey].getDOMNode().classList.toggle('active');
   },
 
   isColumnResizing: false,

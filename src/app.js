@@ -2,6 +2,7 @@ import './css/cgps-mdl-theme.css';
 import 'PhyloCanvas/polyfill';
 
 import React from 'react';
+import ReactDOM from 'react-dom';
 import Router, { Route, RouteHandler, DefaultRoute, NotFoundRoute, Redirect } from 'react-router';
 
 import Home from './components/Home.react';
@@ -11,6 +12,13 @@ import Toast from './components/Toast.react';
 import NotFound from './components/NotFound.react';
 
 import Species from './species';
+
+// const Application = () => (
+//   <div>
+//     <RouteHandler />
+//     <Toast />
+//   </div>
+// );
 
 class Application extends React.Component {
   render() {
@@ -38,13 +46,13 @@ const rootElement = document.getElementById('wgsa');
 Router.run(routes, Router.HistoryLocation, function (Handler, state) {
   const requestedSpecies = state.params.species;
   if (!requestedSpecies) {
-    return React.render(<Handler />, rootElement);
+    return ReactDOM.render(<Handler />, rootElement);
   }
 
   if (Species.isSupported(requestedSpecies)) {
     Species.current = requestedSpecies;
-    React.render(<Handler />, rootElement);
+    ReactDOM.render(<Handler />, rootElement);
   } else {
-    React.render(<NotFound />, rootElement);
+    ReactDOM.render(<NotFound />, rootElement);
   }
 });

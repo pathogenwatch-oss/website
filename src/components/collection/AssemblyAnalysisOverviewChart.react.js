@@ -18,7 +18,7 @@ const AssemblyAnalysisOverviewChart = React.createClass({
   },
 
   draw() {
-    const chartDiv = React.findDOMNode(this.refs.chartDiv);
+    const chartDiv = this.refs.chartDiv;
     if (chartDiv) {
       chartDiv.innerHTML = '';
     }

@@ -2,7 +2,8 @@ import '../../css/upload-review.css';
 import '../../css/forms.css';
 
 import React from 'react';
-import FileDragAndDrop from 'react-file-drag-and-drop';
+
+import FileDragAndDrop from './DragAndDrop.react';
 
 import AssemblyMetadata from './AssemblyMetadata.react';
 import AssemblyAnalysis from './AssemblyAnalysis.react';
@@ -158,7 +159,7 @@ export default React.createClass({
         UploadActionCreators.addFiles(event.files);
       }
       // allows the same file to be uploaded consecutively
-      React.findDOMNode(this.refs.fileInput).value = '';
+      this.refs.fileInput.value = '';
     }
   },
 
@@ -166,7 +167,7 @@ export default React.createClass({
     if (this.state.isUploading) {
       UploadWorkspaceNavigationActionCreators.setViewPage('upload_progress');
     } else {
-      React.findDOMNode(this.refs.fileInput).click();
+      this.refs.fileInput.click();
     }
   },
 
@@ -278,9 +279,8 @@ export default React.createClass({
                 }
               })() }
           </main>
+          <input type="file" multiple="multiple" accept={DEFAULT.SUPPORTED_FILE_EXTENSIONS} ref="fileInput" style={fileInputStyle} onChange={this.handleFileInputChange} />
         </div>
-        <input type="file" multiple="multiple" accept={DEFAULT.SUPPORTED_FILE_EXTENSIONS} ref="fileInput" style={fileInputStyle} onChange={this.handleFileInputChange} />
-
       </FileDragAndDrop>
     );
   },

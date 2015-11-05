@@ -135,7 +135,7 @@ export default React.createClass({
   },
 
   handleBodyClickStoreChange() {
-    const button = React.findDOMNode(this.refs.button);
+    const button = this.refs.button;
     if (!this.state.active || BodyClickStore.getEvent().target === button) {
       return;
     }

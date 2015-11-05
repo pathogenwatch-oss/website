@@ -33,14 +33,14 @@ export default React.createClass({
   },
 
   componentDidMount: function () {
-    componentHandler.upgradeElement(React.findDOMNode(this.refs.controls));
+    componentHandler.upgradeElement(this.refs.controls);
   },
 
   render: function () {
     return (
       <div ref="controls" style={treeSizeControlsStyle}>
         <select className="wgsa-select-tree-type" defaultValue={this.props.treeType} onChange={this.props.handleTreeTypeChange}>
-          { Object.keys(treeTypes).map((treeType) => <option value={treeType}>{treeType}</option>)}
+          { Object.keys(treeTypes).map((treeType) => <option key={treeType} value={treeType}>{treeType}</option>)}
         </select>
         <div>
           <div className="wgsa-tree-control" style={sizeControlStyle}>

@@ -18,9 +18,9 @@ const yearStyle = {
 const MetadataDate = React.createClass({
 
   componentDidMount() {
-    componentHandler.upgradeElement(React.findDOMNode(this.refs.day_input));
-    componentHandler.upgradeElement(React.findDOMNode(this.refs.month_input));
-    componentHandler.upgradeElement(React.findDOMNode(this.refs.year_input));
+    componentHandler.upgradeElement(this.refs.day_input);
+    componentHandler.upgradeElement(this.refs.month_input);
+    componentHandler.upgradeElement(this.refs.year_input);
   },
 
   render() {

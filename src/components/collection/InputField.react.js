@@ -5,8 +5,7 @@ export default React.createClass({
   displayName: 'InputField',
 
   componentDidMount() {
-    const inputDomElement = this.getDOMNode();
-    componentHandler.upgradeElement(inputDomElement);
+    componentHandler.upgradeElement(this.getDOMNode());
   },
 
   render() {

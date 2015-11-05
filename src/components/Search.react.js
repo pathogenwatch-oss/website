@@ -60,7 +60,7 @@ export default React.createClass({
   },
 
   handleClick() {
-    this.refs.input.getDOMNode().focus();
+    this.refs.input.focus();
   },
 
   handleFilteredDataStoreChange() {

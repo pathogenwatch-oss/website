@@ -56,7 +56,7 @@ const UploadingAssembliesProgress = React.createClass({
   componentDidMount() {
     FileUploadingProgressStore.addChangeListener(this.handleFileUploadingProgressStoreChange);
 
-    componentHandler.upgradeElement(React.findDOMNode(this.refs.table));
+    componentHandler.upgradeElement(this.refs.table);
   },
 
   componentDidUpdate() {
@@ -70,7 +70,7 @@ const UploadingAssembliesProgress = React.createClass({
       const assemblyId = FileUploadingStore.getAssemblyNameToAssemblyIdMap()[assemblyName];
       const results = assemblyResults[assemblyId];
       if (results && results.progress && !results.UPLOAD_OK) {
-        this.refs[`progress_${assemblyName}`].getDOMNode()
+        this.refs[`progress_${assemblyName}`]
           .MaterialProgress.setProgress(results.progress);
       }
     }

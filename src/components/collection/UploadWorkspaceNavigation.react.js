@@ -38,7 +38,7 @@ export default React.createClass({
   },
 
   hideSidebar() {
-    React.findDOMNode(this.refs.sidebar).classList.remove('is-visible');
+    this.refs.sidebar.classList.remove('is-visible');
   },
 
 });

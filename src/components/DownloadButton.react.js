@@ -48,7 +48,7 @@ export default React.createClass({
 
   componentDidUpdate() {
     if (this.state.loading) {
-      componentHandler.upgradeElement(React.findDOMNode(this.refs.spinner));
+      componentHandler.upgradeElement(this.refs.spinner);
     }
   },
 
