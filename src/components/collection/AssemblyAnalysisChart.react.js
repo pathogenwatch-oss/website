@@ -21,7 +21,7 @@ const AssemblyAnalysisChart = React.createClass({
 
   propTypes: {
     label: React.PropTypes.string,
-    analysis: React.PropTypes.object.isRequired,
+    metrics: React.PropTypes.object.isRequired,
   },
 
   getInitialState() {
@@ -48,8 +48,8 @@ const AssemblyAnalysisChart = React.createClass({
       }
     }
 
-    const fastaChartData = this.props.analysis.sumsOfNucleotidesInDnaStrings;
-    const assemblyN50 = this.props.analysis.assemblyN50Data;
+    const fastaChartData = this.props.metrics.sumsOfNucleotidesInDnaStrings;
+    const assemblyN50 = this.props.metrics.assemblyN50Data;
     ChartUtils.drawN50Chart(fastaChartData, assemblyN50, '.fasta-analytics-chart');
   },
 
@@ -62,7 +62,7 @@ const AssemblyAnalysisChart = React.createClass({
   },
 
   componentDidMount() {
-    if (Object.keys(this.props.analysis).length > 0) {
+    if (Object.keys(this.props.metrics).length > 0) {
       this.setState({
         isChartDataAvailable: true
       });
@@ -72,10 +72,10 @@ const AssemblyAnalysisChart = React.createClass({
   },
 
   render() {
-    if (Object.keys(this.props.analysis).length > 0) {
+    if (Object.keys(this.props.metrics).length > 0) {
       return (
         <div style={containerStyle}>
-          <label className='analysisItemLabel'>{this.props.label}</label>
+          <label className='metricsItemLabel'>{this.props.label}</label>
           <div className="fasta-analytics-chart"></div>
         </div>
       );

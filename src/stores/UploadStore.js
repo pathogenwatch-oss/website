@@ -107,8 +107,8 @@ const Store = assign({}, EventEmitter.prototype, {
 
   getOverviewChartData(chartType) {
     return Object.keys(assemblies).reduce((memo, id) => {
-      if (assemblies[id].analysis[chartType]) {
-        memo[id] = assemblies[id].analysis[chartType];
+      if (assemblies[id].metrics[chartType]) {
+        memo[id] = assemblies[id].metrics[chartType];
       }
       return memo;
     }, {});
@@ -117,8 +117,8 @@ const Store = assign({}, EventEmitter.prototype, {
   getMinMaxNoContigsForAllAssemblies() {
     var noContigsArray = [];
     for (var assemblyId in assemblies) {
-      if (assemblies[assemblyId].analysis.totalNumberOfContigs) {
-        noContigsArray.push(assemblies[assemblyId].analysis.totalNumberOfContigs);
+      if (assemblies[assemblyId].metrics.totalNumberOfContigs) {
+        noContigsArray.push(assemblies[assemblyId].metrics.totalNumberOfContigs);
       }
     }
     if (noContigsArray.length <= 0) {
@@ -131,7 +131,7 @@ const Store = assign({}, EventEmitter.prototype, {
     var totalAssemblyLength = 0;
     var noAssemblies = Object.keys(assemblies).length;
     for (var assemblyId in assemblies) {
-      totalAssemblyLength += assemblies[assemblyId].analysis.totalNumberOfNucleotidesInDnaStrings || 0;
+      totalAssemblyLength += assemblies[assemblyId].metrics.totalNumberOfNucleotidesInDnaStrings || 0;
     }
     return Math.round(totalAssemblyLength / noAssemblies);
   },

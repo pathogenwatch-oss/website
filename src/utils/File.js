@@ -105,7 +105,7 @@ function initialiseAssemblyObject(assemblyName, assemblies) {
         longitude: null,
       },
     },
-    analysis: {},
+    metrics: {},
   };
 
   assemblies[assemblyName] = ASSEMBLY_OBJECT;
@@ -124,7 +124,7 @@ function parseFastaFile(file, rawFiles, assemblies) {
   initialiseAssemblyObject(fileName, assemblies);
   assemblies[fileName].fasta.assembly = fileContent;
   if (fileContent.length) {
-    assemblies[fileName].analysis = AnalysisUtils.analyseFasta(fileName, fileContent);
+    assemblies[fileName].metrics = AnalysisUtils.analyseFasta(fileName, fileContent);
   }
 }
 
