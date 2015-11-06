@@ -1,13 +1,12 @@
 var fs = require('fs');
-var path = require('path');
 var storageConnection = require('utils/storageConnection');
 
 var bucket = process.argv[2];
 var documentKey = process.argv[3];
 var outputPath = process.argv[4];
 
-storageConnection.connect(function (error) {
-  if (error) throw error;
+storageConnection.connect(function (connError) {
+  if (connError) throw connError;
   var mainStorage = require('services/storage')(bucket);
   mainStorage.retrieve(documentKey, function (error, result) {
     if (error) {
