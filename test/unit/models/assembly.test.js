@@ -1,6 +1,6 @@
 var assert = require('assert');
 
-describe('Model: Assembly', function () {
+describe.only('Model: Assembly', function () {
 
   it('should map assembly IDs to taxa', function () {
     var assemblyModel = require('models/assembly');
@@ -31,9 +31,24 @@ describe('Model: Assembly', function () {
 
     var parsedMetadata = assemblyModel.createMetadataRecord(ids, rawMetadata);
     console.dir(parsedMetadata);
+    assert.equal(parsedMetadata.userDefined.location, rawMetadata.location);
     assert.equal(parsedMetadata.userDefined.col1, rawMetadata.col1);
     assert.equal(parsedMetadata.userDefined.col2, rawMetadata.col2);
     assert.equal(parsedMetadata.userDefined.col3, rawMetadata.col3);
+  });
+
+  it('should contain a "position" object', function () {
+    var assemblyModel = require('models/assembly');
+    var ids = { assemblyId: '123', speciesId: '1280' };
+    var rawMetadata = {
+      assemblyName: 'name',
+      latitude: 42,
+      longitude: 42,
+    };
+
+    var parsedMetadata = assemblyModel.createMetadataRecord(ids, rawMetadata);
+    assert.equal(parsedMetadata.position.latitude, rawMetadata.latitude);
+    assert.equal(parsedMetadata.position.longitude, rawMetadata.longitude);
   });
 
 });

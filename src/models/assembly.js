@@ -16,7 +16,7 @@ var ASSEMBLY_ANALYSES = [ 'FP', 'MLST', 'PAARSNP', 'CORE' ];
 var systemMetadataColumns = [
   'assemblyId', 'soeciesId', 'assemblyName',
   'date', 'year', 'month', 'day',
-  'geography', 'latitude', 'longitude', 'location'
+  'position', 'latitude', 'longitude',
 ];
 
 function createKey(id, prefix) {
@@ -42,12 +42,9 @@ function createMetadataRecord(ids, metadata) {
       month: metadata.month,
       day: metadata.day,
     },
-    geography: metadata.geography || {
-      position: {
-        latitude: metadata.latitude,
-        longitude: metadata.longitude
-      },
-      location: metadata.location
+    position: metadata.position || {
+      latitude: metadata.latitude,
+      longitude: metadata.longitude
     },
     userDefined: filterUserDefinedColumns(metadata)
   };
