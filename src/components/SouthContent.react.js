@@ -30,7 +30,7 @@ export default React.createClass({
     CollectionNavigationStore.removeChangeListener(this.handleCollectionNavigationStoreChange);
   },
 
-  getCollectionDataComponent() {
+  getTableComponent() {
     const activeCollectionNavigation = this.state.activeCollectionNavigation;
     const COLLECTION_NAVIGATION_STATES = CollectionNavigationStore.getCollectionNavigationStates();
 
@@ -46,10 +46,10 @@ export default React.createClass({
   },
 
   render() {
-    const Component = this.getCollectionDataComponent();
+    const TableComponent = this.getTableComponent();
     return (
       <section style={sectionStyle}>
-        <Component { ...this.props }/>
+        <TableComponent { ...this.props }/>
       </section>
     );
   },

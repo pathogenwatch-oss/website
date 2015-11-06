@@ -28,7 +28,7 @@ export default React.createClass({
     SubtreeStore.removeChangeListener(this.handleSubtreeStoreChange);
   },
 
-  render: function () {
+  render() {
     if (this.state.subtree) {
       return (
         <Subtree treeName={this.state.subtree} />

@@ -1,6 +1,8 @@
 import '../css/spinner.css';
 
 import React from 'react';
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
 
 import Loading from './Loading.react';
 import CollectionExplorer from './CollectionExplorer.react';
@@ -12,7 +14,18 @@ import AntibioticsActionCreators from '../actions/AntibioticsActionCreators';
 
 import Species from '../species';
 
+const store = createStore(function (state = { message: 'Hello World!' }, action) {
+  return state;
+});
+
 export default React.createClass({
+
+  propTypes: {
+    params: React.PropTypes.shape({
+      id: React.PropTypes.string,
+    }),
+    query: React.PropTypes.string,
+  },
 
   getInitialState() {
     return {
@@ -36,7 +49,9 @@ export default React.createClass({
   render() {
     if (this.state.collectionStatus === CollectionStore.states.LOADED) {
       return (
-        <CollectionExplorer query={this.props.query} />
+        <Provider store={store}>
+          <CollectionExplorer query={this.props.query} />
+        </Provider>
       );
     }
 
