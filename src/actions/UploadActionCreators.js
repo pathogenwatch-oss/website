@@ -72,7 +72,7 @@ module.exports = {
       const assemblyNameToAssemblyIdMap = ids.assemblyNameToAssemblyIdMap;
       Object.keys(assemblyNameToAssemblyIdMap).forEach(
         function sendAssembly(assemblyName) {
-          const { metadata, fasta } = UploadStore.getAssembly(assemblyName);
+          const { metadata, metrics, fasta } = UploadStore.getAssembly(assemblyName);
           const urlParams = {
             collectionId: ids.collectionId,
             assemblyId: assemblyNameToAssemblyIdMap[assemblyName],
@@ -80,8 +80,9 @@ module.exports = {
           };
           const requestBody = {
             socketRoomId: roomId,
-            metadata: metadata,
             sequences: fasta.assembly,
+            metadata,
+            metrics,
           };
 
           ApiUtils.postAssembly(urlParams, requestBody, function (assemblyError) {

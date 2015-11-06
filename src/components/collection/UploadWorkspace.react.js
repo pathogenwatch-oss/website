@@ -251,7 +251,7 @@ export default React.createClass({
                         <div className="wgsa-card mdl-shadow--4dp">
                           <div className="wgsa-card-heading">N50 Chart</div>
                           <div className="wgsa-card-content ">
-                            <AssemblyAnalysisChart analysis={assembly && assembly.analysis} />
+                            <AssemblyAnalysisChart metrics={assembly && assembly.metrics} />
                           </div>
                         </div>
                       </div>

@@ -43,7 +43,7 @@ const AssemblyAnalysisOverviewChart = React.createClass({
   render() {
     return (
       <div style={containerStyle}>
-        <label className="analysisItemLabel">{this.props.label}</label>
+        <label className="metricsItemLabel">{this.props.label}</label>
         <div ref="chartDiv" className="overview-chart"></div>
       </div>
     );
