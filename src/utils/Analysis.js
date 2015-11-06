@@ -169,7 +169,7 @@ function calculateTotalNumberOfNucleotidesInDnaStrings(dnaStrings) {
 function calculateTotalNumberOfNsInDnaStrings(dnaStrings) {
   var totalNumberOfNsInDnaStrings = 0;
   dnaStrings.forEach(function(dnaString, index, array){
-    totalNumberOfNsInDnaStrings = totalNumberOfNsInDnaStrings + (dnaString.match(/N/g) || []).length;
+    totalNumberOfNsInDnaStrings = totalNumberOfNsInDnaStrings + (dnaString.match(/[^ACGT]/g) || []).length;
   });
   return totalNumberOfNsInDnaStrings;
 }
