@@ -221,17 +221,16 @@ function getReference(speciesId, callback) {
     assemblies: getAssemblies.bind(null, params, assemblyModel.getReference),
     tree: getTree.bind(null, speciesId)
   }, function (error, result) {
-      if (error) {
-        return callback(error, null);
-      }
-
-      callback(null, {
-        collectionId: speciesId,
-        assemblies: result.assemblies,
-        tree: result.tree
-      });
+    if (error) {
+      return callback(error, null);
     }
-  );
+
+    callback(null, {
+      collectionId: speciesId,
+      assemblies: result.assemblies,
+      tree: result.tree
+    });
+  });
 }
 
 module.exports.add = add;

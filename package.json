@@ -3,6 +3,9 @@
   "version": "2.0.1",
   "description": "Middle layer for Macroreact",
   "main": "app.js",
+  "engines": {
+    "node": ">=4.x"
+  },
   "dependencies": {
     "amqp": "^0.2.0",
     "async": "^1.4.2",

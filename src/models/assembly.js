@@ -32,11 +32,11 @@ function filterUserDefinedColumns(metadata) {
   }, {});
 }
 
-function createMetadataRecord(ids, metadata) {
+function createMetadataRecord(ids, metadata, metrics) {
   return {
     assemblyId: ids.assemblyId,
-    assemblyName: metadata.assemblyName,
     speciesId: ids.speciesId,
+    assemblyName: metadata.assemblyName,
     date: metadata.date || {
       year: metadata.year,
       month: metadata.month,
@@ -46,23 +46,23 @@ function createMetadataRecord(ids, metadata) {
       latitude: metadata.latitude,
       longitude: metadata.longitude
     },
-    userDefined: filterUserDefinedColumns(metadata)
+    userDefined: filterUserDefinedColumns(metadata),
+    metrics
   };
 }
 
-function beginUpload(ids, metadata, sequences) {
+function beginUpload(ids, data) {
   messageQueueService.newAssemblyNotificationQueue(ids, {
     tasks: ASSEMBLY_ANALYSES,
     loggingId: 'Assembly ' + ids.assemblyId,
     notifyFn: socketService.notifyAssemblyUpload.bind(socketService, ids)
   }, function () {
-    var assemblyMetadata = createMetadataRecord(ids, metadata);
-
+    var assemblyMetadata = createMetadataRecord(ids, data.metadata, data.metrics);
     var assembly = {
       speciesId: ids.speciesId,
       assemblyId: ids.assemblyId,
       collectionId: ids.collectionId,
-      sequences: sequences
+      sequences: data.sequences
     };
 
     mainStorage.store(

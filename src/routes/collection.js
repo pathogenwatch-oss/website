@@ -47,7 +47,7 @@ router.post('/species/:speciesId/collection/:collectionId/assembly/:assemblyId',
     };
 
     LOGGER.info(
-      'Adding assembly ' + ids.assemblyId + ' to collection ' + ids.collectionId
+      `Adding assembly ${ids.assemblyId} to collection ${ids.collectionId}`
     );
 
     // TODO: Send error responses
@@ -68,7 +68,7 @@ router.post('/species/:speciesId/collection/:collectionId/assembly/:assemblyId',
       assemblyId: ids.assemblyId
     });
 
-    assemblyModel.beginUpload(ids, req.body.metadata, req.body.sequences);
+    assemblyModel.beginUpload(ids, req.body);
   }
 );
 
