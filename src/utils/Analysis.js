@@ -268,7 +268,6 @@ function analyseFasta(assemblyName, fastaFileString) {
 
   return {
     totalNumberOfContigs: contigs.length,
-    dnaStrings,
     assemblyN50Data,
     contigN50: assemblyN50Data.sequenceLength,
     sumsOfNucleotidesInDnaStrings: calculateSumsOfNucleotidesInDnaStrings(dnaStrings),
