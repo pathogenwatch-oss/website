@@ -98,14 +98,8 @@ function requestFile(fileType, requestBody, callback) {
   });
 }
 
-function getAntibiotics(speciesId, callback) {
-  $.get(`${API_ROOT}/species/${speciesId}/antibiotics`)
-    .done(function (antibiotics) {
-      callback(null, antibiotics);
-    })
-    .fail(function (error) {
-      callback(error);
-    });
+function getAntibiotics(speciesId) {
+  return $.get(`${API_ROOT}/species/${speciesId}/antibiotics`);
 }
 
 export default {

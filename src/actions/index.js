@@ -1,0 +1,51 @@
+/* Socket */
+export const SET_SOCKET_CONNECTION = 'SET_SOCKET_CONNECTION';
+export const SET_ROOM_ID = 'SET_ROOM_ID';
+
+/* File */
+export const START_PROCESSING_FILES = 'START_PROCESSING_FILES';
+export const FINISH_PROCESSING_FILES = 'FINISH_PROCESSING_FILES';
+export const ADD_FILES = 'ADD_FILES';
+
+/* Metadata */
+export const SET_METADATA_DATE_COMPONENT = 'SET_METADATA_DATE_COMPONENT';
+export const SET_METADATA_COLUMN = 'SET_METADATA_COLUMN';
+
+/* Upload */
+export const SET_COLLECTION_ID = 'SET_COLLECTION_ID';
+export const START_UPLOADING_FILES = 'START_UPLOADING_FILES';
+export const FINISH_UPLOADING_FILES = 'FINISH_UPLOADING_FILES';
+
+/* Upload Progress */
+export const SET_NUMBER_OF_EXPECTED_RESULTS = 'SET_NUMBER_OF_EXPECTED_RESULTS';
+export const SET_ASSEMBLY_PROGRESS = 'SET_ASSEMBLY_PROGRESS';
+export const SET_RECEIVED_RESULT = 'SET_RECEIVED_RESULT';
+
+
+/* Antibiotics */
+export const SET_ANTIBIOTICS = 'SET_ANTIBIOTICS';
+
+/* Collection */
+export const COLLECTION_ERROR = 'COLLECTION_ERROR';
+export const SET_COLLECTION = 'SET_COLLECTION';
+
+/* Body click */
+export const BODY_CLICK = 'BODY_CLICK';
+
+/* Collection Navigation */
+export const SET_COLLECTION_NAVIGATION = 'SET_COLLECTION_NAVIGATION';
+
+/* Filter */
+export const SET_FILTERED_ASSEMBLY_IDS = 'SET_FILTERED_ASSEMBLY_IDS';
+export const CLEAR_ASSEMBLY_FILTER = 'CLEAR_ASSEMBLY_FILTER';
+export const SET_LABEL_COLUMN = 'SET_LABEL_COLUMN';
+export const SET_COLOUR_COLUMN = 'SET_COLOUR_COLUMN';
+export const SET_BASE_ASSEMBLY_IDS = 'SET_BASE_ASSEMBLY_IDS';
+export const SET_TEXT_FILTER = 'SET_TEXT_FILTER';
+
+/* Download */
+export const REQUEST_FILE = 'REQUEST_FILE';
+
+/* Toast */
+export const SHOW_TOAST = 'SHOW_TOAST';
+export const HIDE_TOAST = 'HIDE_TOAST';

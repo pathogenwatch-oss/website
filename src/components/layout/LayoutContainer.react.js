@@ -1,7 +1,6 @@
 import '../../css/dropdown-menu.css';
 
 import React from 'react';
-import { connect } from 'react-redux';
 
 import DownloadsMenu from '../DownloadsMenu.react';
 import Search from '../Search.react';
@@ -60,4 +59,4 @@ const LayoutContainer = React.createClass({
 
 });
 
-export default connect(state => state)(LayoutContainer);
+export default LayoutContainer;

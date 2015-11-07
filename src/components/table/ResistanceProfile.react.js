@@ -1,9 +1,9 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import assign from 'object-assign';
 
 import FixedTable from './FixedTable.react';
 
-import AntibioticsStore from '../../stores/AntibioticsStore';
 import ReferenceCollectionStore from '../../stores/ReferenceCollectionStore';
 import UploadedCollectionStore from '../../stores/UploadedCollectionStore';
 import FilteredDataStore from '../../stores/FilteredDataStore';
@@ -28,40 +28,29 @@ function getAssembly(assemblyId) {
   return referenceCollectionAssemblies[assemblyId] || uploadedCollectionAssemblies[assemblyId];
 }
 
-function mapAssemblyIdToTableRow(assemblyId) {
-  const { metadata, analysis } = getAssembly(assemblyId);
-  return assign({
-    id: metadata.assemblyId,
-    __assembly: metadata.assemblyName,
-  }, AntibioticsStore.list().reduce(function (memo, antibiotic) {
-    if (!analysis.resistanceProfile[antibiotic]) {
-      return memo;
-    }
-    memo[antibiotic] = analysis.resistanceProfile[antibiotic].resistanceResult;
-    return memo;
-  }, {}));
-}
-
 function setColourTableColumnName({ dataKey }) {
   FilteredDataActionCreators.setColourTableColumnName(dataKey);
 }
 
-export default React.createClass({
+const ResistanceProfile = React.createClass({
 
   displayName: 'ResistanceProfile',
 
   propTypes: {
     height: React.PropTypes.number,
     width: React.PropTypes.number,
+    antibiotics: React.PropTypes.array,
   },
 
   componentWillMount() {
     if (columnProps.length > 1) {
       return;
     }
+    console.log(this.props);
+    const { antibiotics } = this.props;
 
     columnProps = columnProps.concat(
-      AntibioticsStore.list().map(function (antibiotic) {
+      antibiotics.map(function (antibiotic) {
         return {
           label: antibiotic.toUpperCase(),
           dataKey: antibiotic,
@@ -80,24 +69,16 @@ export default React.createClass({
     );
 
     tableProps = {
-      headerHeight: AntibioticsStore.list().reduce((maxWidth, antibiotic) => {
+      headerHeight: antibiotics.reduce((maxWidth, antibiotic) => {
         return Math.max(maxWidth, canvas.measureText(antibiotic.toUpperCase()).width + 32);
       }, 0),
     };
   },
 
-  componentDidMount() {
-    FilteredDataStore.addChangeListener(this.handleFilteredDataStoreChange);
-  },
-
-  componentWillUnmount() {
-    FilteredDataStore.removeChangeListener(this.handleFilteredDataStoreChange);
-  },
-
   render() {
     return (
       <FixedTable
-        data={FilteredDataStore.getAssemblyIds().map(mapAssemblyIdToTableRow)}
+        data={FilteredDataStore.getAssemblyIds().map(this.mapAssemblyIdToTableRow)}
         columns={columnProps}
         calculatedColumnWidths={[ '__assembly' ]}
         tableProps={tableProps}
@@ -107,10 +88,20 @@ export default React.createClass({
     );
   },
 
-  handleFilteredDataStoreChange() {
-    this.setState({
-      data: FilteredDataStore.getAssemblyIds().map(mapAssemblyIdToTableRow),
-    });
+  mapAssemblyIdToTableRow(assemblyId) {
+    const { metadata, analysis } = getAssembly(assemblyId);
+    return assign({
+      id: metadata.assemblyId,
+      __assembly: metadata.assemblyName,
+    }, this.props.antibiotics.reduce(function (memo, antibiotic) {
+      if (!analysis.resistanceProfile[antibiotic]) {
+        return memo;
+      }
+      memo[antibiotic] = analysis.resistanceProfile[antibiotic].resistanceResult;
+      return memo;
+    }, {}));
   },
 
 });
+
+export default connect(state => state || {})(ResistanceProfile);

@@ -1,7 +1,7 @@
 import '../css/spinner.css';
 
 import React from 'react';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 
 import Loading from './Loading.react';
@@ -10,13 +10,39 @@ import CollectionExplorer from './CollectionExplorer.react';
 import CollectionStore from '../stores/CollectionStore';
 
 import CollectionActionCreators from '../actions/CollectionActionCreators';
-import AntibioticsActionCreators from '../actions/AntibioticsActionCreators';
+import { fetchAntibiotics } from '../actions/AntibioticsActionCreators';
 
 import Species from '../species';
 
-const store = createStore(function (state = { message: 'Hello World!' }, action) {
-  return state;
-});
+
+const readyStatePromise = () => next => action => {
+  if (!action.promise) {
+    return next(action);
+  }
+
+  function makeAction(ready, data) {
+    const newAction = Object.assign({}, action, { ready }, data);
+    delete newAction.promise;
+    return newAction;
+  }
+
+  next(makeAction(false));
+
+  return action.promise.then(
+    result => next(makeAction(true, { result })),
+    error => next(makeAction(true, { error }))
+  );
+};
+
+const store = applyMiddleware(readyStatePromise)(createStore)(
+  (state = {}, { result = {} }) => {
+    if (!result) return state;
+
+    return {
+      antibiotics: Object.keys(result),
+    };
+  }
+);
 
 export default React.createClass({
 
@@ -34,7 +60,7 @@ export default React.createClass({
   },
 
   componentWillMount() {
-    AntibioticsActionCreators.fetch(Species.id);
+    store.dispatch(fetchAntibiotics(Species.id));
   },
 
   componentDidMount() {

@@ -1,21 +1,10 @@
-import AppDispatcher from '../dispatcher/AppDispatcher';
-
 import ApiUtils from '../utils/Api';
 
-export default {
+export const SET_ANTIBIOTICS = 'SET_ANTIBIOTICS';
 
-  fetch(speciesId) {
-    ApiUtils.getAntibiotics(speciesId, function (error, antibiotics) {
-      if (error) {
-        console.error('[WGSA]', error);
-        return;
-      }
-
-      AppDispatcher.dispatch({
-        type: 'set_antibiotics',
-        antibiotics,
-      });
-    });
-  },
-
-};
+export function fetchAntibiotics(speciesId) {
+  return {
+    type: SET_ANTIBIOTICS,
+    promise: ApiUtils.getAntibiotics(null, speciesId),
+  };
+}
