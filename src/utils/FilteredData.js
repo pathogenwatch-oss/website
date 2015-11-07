@@ -1,4 +1,3 @@
-import AntibioticsStore from '../stores/AntibioticsStore';
 import FilteredDataStore from '../stores/FilteredDataStore';
 import ReferenceCollectionStore from '../stores/ReferenceCollectionStore';
 import UploadedCollectionStore from '../stores/UploadedCollectionStore';
@@ -6,7 +5,7 @@ import UploadedCollectionStore from '../stores/UploadedCollectionStore';
 import { DANGER_COLOUR, CGPS } from '../defaults';
 
 function columnNameIsAntibiotic(columnName) {
-  return (Object.keys(AntibioticsStore.get()).indexOf(columnName) > -1);
+  return columnName && columnName.toLowerCase() !== '__assembly';
 }
 
 function getColour(assembly) {

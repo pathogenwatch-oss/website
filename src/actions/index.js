@@ -22,9 +22,6 @@ export const SET_ASSEMBLY_PROGRESS = 'SET_ASSEMBLY_PROGRESS';
 export const SET_RECEIVED_RESULT = 'SET_RECEIVED_RESULT';
 
 
-/* Antibiotics */
-export const SET_ANTIBIOTICS = 'SET_ANTIBIOTICS';
-
 /* Collection */
 export const COLLECTION_ERROR = 'COLLECTION_ERROR';
 export const SET_COLLECTION = 'SET_COLLECTION';
