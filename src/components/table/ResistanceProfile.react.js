@@ -46,7 +46,6 @@ const ResistanceProfile = React.createClass({
     if (columnProps.length > 1) {
       return;
     }
-    console.log(this.props);
     const { antibiotics } = this.props;
 
     columnProps = columnProps.concat(
@@ -104,4 +103,8 @@ const ResistanceProfile = React.createClass({
 
 });
 
-export default connect(state => state || {})(ResistanceProfile);
+export default connect(function (state) {
+  return {
+    antibiotics: state.antibiotics,
+  };
+})(ResistanceProfile);
