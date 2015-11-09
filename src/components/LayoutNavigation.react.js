@@ -1,4 +1,5 @@
 import React from 'react';
+import assign from 'object-assign';
 
 import Switch from './Switch.react';
 
@@ -21,9 +22,8 @@ export default React.createClass({
   },
 
   render() {
-    style.top = this.props.top;
     return (
-      <div style={style} className="wgsa-switch-background mdl-shadow--2dp">
+      <div style={assign({}, style, this.props)} className="wgsa-switch-background mdl-shadow--2dp">
         <Switch
           id="table-switcher"
           left={{ title: 'Metadata', icon: 'list' }}

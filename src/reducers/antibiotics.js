@@ -1,5 +1,7 @@
 import { SET_ANTIBIOTICS } from '../actions/antibiotics';
 
+const initialState = [];
+
 const actions = {
   [SET_ANTIBIOTICS]: function (state, { ready, result }) {
     if (ready) {
@@ -9,9 +11,4 @@ const actions = {
   },
 };
 
-export default function (state = [], action) {
-  if (actions[action.type]) {
-    return actions[action.type](state, action);
-  }
-  return state;
-}
+export default { actions, initialState };

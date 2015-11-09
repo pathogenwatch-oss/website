@@ -41,6 +41,8 @@ function getMarkerDefs(assemblyIds) {
 
 export default React.createClass({
 
+  displayName: 'ExplorerMap',
+
   propTypes: {
     width: React.PropTypes.any.isRequired,
     height: React.PropTypes.any.isRequired,
@@ -61,11 +63,8 @@ export default React.createClass({
   },
 
   render() {
-    style.width = this.props.width;
-    style.height = this.props.height;
-
     return (
-      <section style={style}>
+      <section style={assign({}, style, this.props)}>
         <GoogleMap
           markerDefs={getMarkerDefs(this.state.assemblyIds)}
           onMapClick={onMapClick} />

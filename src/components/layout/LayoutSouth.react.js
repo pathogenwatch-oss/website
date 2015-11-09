@@ -1,4 +1,5 @@
 import React from 'react';
+import assign from 'object-assign';
 
 const style = {
   position: 'absolute',
@@ -16,11 +17,11 @@ export default React.createClass({
   },
 
   render() {
-    style.top = this.props.top;
+    const { top, children } = this.props;
 
     return (
-      <div style={style}>
-        {this.props.children}
+      <div style={assign({ top }, style)}>
+        {children}
       </div>
     );
   },
