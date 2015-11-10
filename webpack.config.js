@@ -1,9 +1,11 @@
 const path = require('path');
 const webpack = require('webpack');
 
+const srcFolder = path.join(__dirname, 'src');
+
 const resolve = {
   alias: {
-    '^': path.join(__dirname, 'src'),
+    '^': srcFolder,
   },
 };
 
@@ -39,7 +41,7 @@ const devConfig = {
     loaders: [
       { test: /\.js$/,
         loader: 'babel',
-        include: path.join(__dirname, 'src'),
+        include: srcFolder,
         query: {
           stage: 0,
           plugins: [
@@ -88,7 +90,7 @@ const prodConfig = {
     loaders: [
       { test: /\.js$/,
         loader: 'babel',
-        include: path.join(__dirname, 'src'),
+        include: srcFolder,
       },
     ].concat(commonLoaders),
   },
