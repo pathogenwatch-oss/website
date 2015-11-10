@@ -55,7 +55,8 @@ function convertDateObjectToCustomObject(date) {
   };
 }
 
-function fixMetadataDateFormatInCollection({ assemblies }) {
+function fixDateFormats(collection) {
+  const { assemblies } = collection;
   Object.keys(assemblies).forEach(function (assemblyId) {
     const assembly = assemblies[assemblyId];
 
@@ -63,6 +64,7 @@ function fixMetadataDateFormatInCollection({ assemblies }) {
       assembly.metadata.date = convertDateObjectToCustomObject(new Date(assembly.metadata.datetime));
     }
   });
+  return collection;
 }
 
 function isValid({ date }) {
@@ -89,19 +91,21 @@ function isValid({ date }) {
   return true;
 }
 
-function fixPositionInCollection({ assemblies }) {
+function fixPositions(collection) {
+  const { assemblies } = collection;
   Object.keys(assemblies).forEach(function (assemblyId) {
     const { metadata } = assemblies[assemblyId];
     if (metadata.geography) {
       metadata.position = metadata.geography.position;
     }
   });
+  return collection;
 }
 
 export default {
   parseCsvToJson,
   getFormattedDateString,
-  fixMetadataDateFormatInCollection,
+  fixDateFormats,
   isValid,
-  fixPositionInCollection,
+  fixPositions,
 };

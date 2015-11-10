@@ -7,12 +7,12 @@ import { Router, Route, IndexRoute, Redirect } from 'react-router';
 import { createHistory } from 'history';
 
 import Home from './components/Home.react';
-import UploadCollection from './components/collection/UploadWorkspace.react';
-import ExploreCollection from './components/Collection.react';
+import UploadCollection from './components/upload';
+import ExploreCollection from './components/explorer';
 import Toast from './components/Toast.react';
 import NotFound from './components/NotFound.react';
 
-import Species from './species';
+import Species from './species.js';
 
 const App = ({ children }) => (
   <div>

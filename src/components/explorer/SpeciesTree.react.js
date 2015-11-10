@@ -1,0 +1,176 @@
+import React from 'react';
+
+import Tree from '../tree/Tree.react';
+import Switch from '../Switch.react';
+
+import ReferenceCollectionStore from '^/stores/ReferenceCollectionStore';
+import SubtreeStore from '^/stores/SubtreeStore';
+import UploadedCollectionStore from '^/stores/UploadedCollectionStore';
+import FilteredDataStore from '^/stores/FilteredDataStore';
+
+import SubtreeActionCreators from '^/actions/SubtreeActionCreators';
+import FilteredDataActionCreators from '^/actions/FilteredDataActionCreators';
+
+import FilteredDataUtils from '^/utils/FilteredData';
+import { CGPS } from '^/defaults';
+
+const POPULATION = Symbol('population');
+const COLLECTION = Symbol('collection');
+
+const emphasizedNodeLabelStyle = {
+  colour: CGPS.COLOURS.PURPLE,
+  format: 'bold',
+};
+
+const collectionNodeLabelStyle = {
+  colour: 'rgba(0, 0, 0, 0.87)',
+};
+
+const defaultLeafStyle = {
+  colour: '#6B6B6B',
+};
+
+const emphasizedLeafStyle = {
+  colour: CGPS.COLOURS.PURPLE_LIGHT,
+};
+
+function styleBranches(ids, options) {
+  for (const id of ids) {
+    const branch = this.branches[id];
+    if (branch) {
+      branch.setDisplay(options);
+    }
+  }
+}
+
+function idInFilteredAssemblyIds(assemblyId) {
+  return FilteredDataStore.getAssemblyIds().indexOf(assemblyId) !== -1;
+}
+
+const treeProps = {
+  [POPULATION]: {
+    title: 'Population',
+    newick: '',
+    styleTree(tree) {
+      for (const leaf of tree.leaves) {
+        leaf.setDisplay(defaultLeafStyle);
+      }
+      tree.root.cascadeFlag('interactive', false);
+
+      const subtrees = SubtreeStore.getSubtrees();
+      const subtreeIds = Object.keys(subtrees);
+
+      styleBranches.call(tree, subtreeIds, emphasizedLeafStyle);
+
+      for (const subtreeId of subtreeIds) {
+        const leaf = tree.branches[subtreeId];
+        if (leaf) {
+          leaf.interactive = true;
+          leaf.label = `${leaf.label} (${subtrees[leaf.id].assemblyIds.length})`;
+          leaf.labelStyle = emphasizedNodeLabelStyle;
+        }
+      }
+    },
+    onUpdated(event) {
+      if (event.property !== 'selected') {
+        return;
+      }
+      const { nodeIds } = event;
+      if (nodeIds.length === 1) {
+        SubtreeActionCreators.setActiveSubtreeId(nodeIds[0]);
+      }
+    },
+    highlightFilteredNodes({ branches }) {
+      const subtrees = SubtreeStore.getSubtrees();
+      for (const id of Object.keys(subtrees)) {
+        const leaf = branches[id];
+        if (!leaf) {
+          return;
+        }
+
+        leaf.highlighted = false;
+        const { assemblyIds } = subtrees[id];
+        for (const assemblyId of assemblyIds) {
+          if (idInFilteredAssemblyIds(assemblyId)) {
+            leaf.highlighted = true;
+            break;
+          }
+        }
+      }
+    },
+  },
+  [COLLECTION]: {
+    title: 'Collection',
+    newick: '',
+    styleTree(tree) {
+      const style = { colour: null }; // caching object
+      tree.leaves.forEach((leaf) => {
+        const assembly = UploadedCollectionStore.getAssemblies()[leaf.id];
+        style.colour = FilteredDataUtils.getColour(assembly);
+        leaf.setDisplay(style);
+        leaf.labelStyle = collectionNodeLabelStyle;
+      });
+    },
+    onUpdated(event) {
+      if (event.property !== 'selected') {
+        return;
+      }
+      const { nodeIds } = event;
+      if (nodeIds.length) {
+        FilteredDataActionCreators.setAssemblyIds(nodeIds);
+      } else {
+        FilteredDataActionCreators.clearAssemblyFilter();
+      }
+    },
+    onRedrawOriginalTree() {
+      FilteredDataActionCreators.setBaseAssemblyIds(
+        UploadedCollectionStore.getAssemblyIds()
+      );
+    },
+  },
+};
+
+export default React.createClass({
+
+  getInitialState() {
+    return {
+      treeProps: treeProps[POPULATION],
+    };
+  },
+
+  componentWillMount() {
+    treeProps[POPULATION].newick = ReferenceCollectionStore.getTree();
+    treeProps[COLLECTION].newick = UploadedCollectionStore.getTree();
+  },
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.treeProps !== this.state.treeProps) {
+      FilteredDataActionCreators.setBaseAssemblyIds(
+        UploadedCollectionStore.getAssemblyIds()
+      );
+    }
+  },
+
+  render() {
+    return (
+      <Tree
+        { ...this.state.treeProps }
+        navButton={
+          <div className="wgsa-switch-background wgsa-switch-background--see-through">
+            <Switch
+              id="tree-switcher"
+              left={{ title: 'Population Tree', icon: 'nature' }}
+              right={{ title: 'Collection Tree', icon: 'nature_people' }}
+              onChange={this.handleTreeSwitch} />
+          </div>
+        } />
+    );
+  },
+
+  handleTreeSwitch(checked) {
+    this.setState({
+      treeProps: checked ? treeProps[COLLECTION] : treeProps[POPULATION],
+    });
+  },
+
+});

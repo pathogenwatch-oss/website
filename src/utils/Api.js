@@ -1,6 +1,6 @@
 /* global $ */
 
-import { setAssemblyProgress }
+import { setAssemblyProgress, }
   from '../actions/FileUploadingProgressActionCreators';
 
 import CONFIG from '../config';
@@ -58,30 +58,13 @@ function postAssembly({ speciesId, collectionId, assemblyId }, requestBody, call
   });
 }
 
-function getReferenceCollection(speciesId, callback) {
-  $.get(`${API_ROOT}/species/${speciesId}/reference`)
-    .done(function (collection) {
-      callback(null, collection);
-    })
-    .fail(function (error) {
-      callback(error);
-    });
+function getReferenceCollection(speciesId) {
+  return $.get(`${API_ROOT}/species/${speciesId}/reference`);
 }
 
-function getCollection(speciesId, collectionId, callback) {
+function getCollection(speciesId, collectionId) {
   console.log(`[WGSA] Getting collection ${collectionId}`);
-
-  if (!collectionId) {
-    return callback(new Error('Missing collection ID'));
-  }
-
-  $.get(`${API_ROOT}/species/${speciesId}/collection/${collectionId}`)
-    .done(function (response) {
-      callback(null, response);
-    })
-    .fail(function (error) {
-      callback(error);
-    });
+  return $.get(`${API_ROOT}/species/${speciesId}/collection/${collectionId}`);
 }
 
 function requestFile(fileType, requestBody, callback) {

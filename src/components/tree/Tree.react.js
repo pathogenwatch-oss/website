@@ -7,13 +7,13 @@ import contextMenuPlugin from 'phylocanvas-plugin-context-menu';
 import TreeControls from './TreeControls.react';
 import TreeMenu from './TreeMenu.react';
 
-import FilteredDataActionCreators from '../../actions/FilteredDataActionCreators';
+import FilteredDataActionCreators from '^/actions/FilteredDataActionCreators';
 
-import FilteredDataStore from '../../stores/FilteredDataStore';
-import ReferenceCollectionStore from '../../stores/ReferenceCollectionStore';
-import UploadedCollectionStore from '../../stores/UploadedCollectionStore';
+import FilteredDataStore from '^/stores/FilteredDataStore';
+import ReferenceCollectionStore from '^/stores/ReferenceCollectionStore';
+import UploadedCollectionStore from '^/stores/UploadedCollectionStore';
 
-import DEFAULT, { CGPS } from '../../defaults';
+import DEFAULT, { CGPS } from '^/defaults';
 
 PhyloCanvas.plugin(contextMenuPlugin);
 

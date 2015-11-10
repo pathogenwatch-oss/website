@@ -6,10 +6,6 @@ const CHANGE_EVENT = 'change';
 
 let collection = null;
 
-function emitChange() {
-  ReferenceCollectionStore.emit(CHANGE_EVENT);
-}
-
 const ReferenceCollectionStore = assign({}, EventEmitter.prototype, {
 
   addChangeListener: function (callback) {
@@ -43,6 +39,10 @@ const ReferenceCollectionStore = assign({}, EventEmitter.prototype, {
   },
 
 });
+
+function emitChange() {
+  ReferenceCollectionStore.emit(CHANGE_EVENT);
+}
 
 function handleAction(action) {
   switch (action.type) {

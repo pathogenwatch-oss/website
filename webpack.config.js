@@ -1,34 +1,39 @@
-/* eslint es6: false */
+const path = require('path');
+const webpack = require('webpack');
 
-var path = require('path');
-var webpack = require('webpack');
+const resolve = {
+  alias: {
+    '^': path.join(__dirname, 'src'),
+  },
+};
 
-var postcssPlugins = [
+const postcss = [
   require('autoprefixer')({ browsers: [ 'last 2 versions' ] }),
-  require('postcss-input-style')
+  require('postcss-input-style'),
 ];
 
-var commonLoaders = [
+const commonLoaders = [
   { test: /.json$/, loaders: [ 'json' ] },
   { test: /.css$/, loaders: [ 'style', 'css', 'postcss' ] },
-  { test: /\.(png|jpg|jpeg|gif)$/, loader: "file" }
+  { test: /\.(png|jpg|jpeg|gif)$/, loader: 'file' },
 ];
 
-var devConfig = {
+const devConfig = {
   devtool: '#eval-source-map',
   entry: [
     'webpack-hot-middleware/client',
-    './src/app'
+    './src/app',
   ],
   output: {
     path: __dirname,
     filename: 'wgsa.js',
-    publicPath: '/'
+    publicPath: '/',
   },
+  resolve,
   plugins: [
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin()
+    new webpack.NoErrorsPlugin(),
   ],
   module: {
     loaders: [
@@ -38,55 +43,56 @@ var devConfig = {
         query: {
           stage: 0,
           plugins: [
-            'react-transform'
+            'react-transform',
           ],
           extra: {
             'react-transform': {
               transforms: [ {
                 transform: 'react-transform-hmr',
                 imports: [ 'react' ],
-                locals: [ 'module' ]
+                locals: [ 'module' ],
               }, {
                 transform: 'react-transform-catch-errors',
-                imports: [ 'react', 'redbox-react' ]
-              } ]
-            }
-          }
-        }
-      }
-    ].concat(commonLoaders)
+                imports: [ 'react', 'redbox-react' ],
+              } ],
+            },
+          },
+        },
+      },
+    ].concat(commonLoaders),
   },
-  postcss: postcssPlugins
+  postcss,
 };
 
-var prodConfig = {
+const prodConfig = {
   entry: './src/app',
   output: {
     path: path.join(__dirname, 'public'),
-    filename: 'wgsa.js'
+    filename: 'wgsa.js',
   },
+  resolve,
   plugins: [
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.optimize.UglifyJsPlugin({
       compressor: {
-        warnings: false
-      }
+        warnings: false,
+      },
     }),
     new webpack.DefinePlugin({
       'process.env': {
-        NODE_ENV: JSON.stringify("production")
-      }
+        NODE_ENV: JSON.stringify('production'),
+      },
     }),
   ],
   module: {
     loaders: [
       { test: /\.js$/,
         loader: 'babel',
-        include: path.join(__dirname, 'src')
-      }
-    ].concat(commonLoaders)
+        include: path.join(__dirname, 'src'),
+      },
+    ].concat(commonLoaders),
   },
-  postcss: postcssPlugins
+  postcss,
 };
 
 module.exports = process.env.NODE_ENV === 'production' ? prodConfig : devConfig;

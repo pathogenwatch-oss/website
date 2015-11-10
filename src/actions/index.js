@@ -1,3 +1,5 @@
+/* Upload View */
+
 /* Socket */
 export const SET_SOCKET_CONNECTION = 'SET_SOCKET_CONNECTION';
 export const SET_ROOM_ID = 'SET_ROOM_ID';
@@ -22,9 +24,7 @@ export const SET_ASSEMBLY_PROGRESS = 'SET_ASSEMBLY_PROGRESS';
 export const SET_RECEIVED_RESULT = 'SET_RECEIVED_RESULT';
 
 
-/* Collection */
-export const COLLECTION_ERROR = 'COLLECTION_ERROR';
-export const SET_COLLECTION = 'SET_COLLECTION';
+/* Explorer View */
 
 /* Body click */
 export const BODY_CLICK = 'BODY_CLICK';

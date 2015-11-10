@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 
 import antibiotics from './antibiotics';
+import collection from './collection';
 
 function createReducer({ actions, initialState }) {
   return function (state = initialState, action) {
@@ -13,4 +14,5 @@ function createReducer({ actions, initialState }) {
 
 export default combineReducers({
   antibiotics: createReducer(antibiotics),
+  collection: createReducer(collection),
 });
