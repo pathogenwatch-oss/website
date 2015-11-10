@@ -122,9 +122,9 @@ const Store = assign({}, EventEmitter.prototype, {
       }
     }
     if (noContigsArray.length <= 0) {
-      return [0, 0];
+      return [ 0, 0 ];
     }
-    return [Math.min(...noContigsArray), Math.max(...noContigsArray)];
+    return [ Math.min(...noContigsArray), Math.max(...noContigsArray) ];
   },
 
   getAverageAssemblyLengthForAllAssemblies() {

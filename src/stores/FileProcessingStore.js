@@ -37,17 +37,17 @@ function handleAction(action) {
 
   switch (action.type) {
 
-    case 'start_processing_files':
-      setFileProcessingState(STATES.PROCESSING_FILES);
-      emitChange();
-      break;
+  case 'start_processing_files':
+    setFileProcessingState(STATES.PROCESSING_FILES);
+    emitChange();
+    break;
 
-    case 'finish_processing_files':
-      setFileProcessingState(STATES.NOT_PROCESSING_FILES);
-      emitChange();
-      break;
+  case 'finish_processing_files':
+    setFileProcessingState(STATES.NOT_PROCESSING_FILES);
+    emitChange();
+    break;
 
-    default: // ... do nothing
+  default: // ... do nothing
 
   }
 }

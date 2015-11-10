@@ -20,7 +20,7 @@ function drawN50Chart(chartData, assemblyN50, appendToClass) {
     return;
   }
 
-  var className = appendToClass.replace(/^\./,"");
+  var className = appendToClass.replace(/^\./, '');
   var chartWidth = 0;
   if (document.getElementsByClassName(className)[0]) {
     chartWidth = document.getElementsByClassName(className)[0].parentElement.offsetWidth;
@@ -45,14 +45,14 @@ function drawN50Chart(chartData, assemblyN50, appendToClass) {
   const xAxis = d3.svg.axis()
     .scale(xScale)
     .orient('bottom')
-    .ticks(chartWidth/40);
+    .ticks(chartWidth / 40);
 
   // Y
   const yAxis = d3.svg.axis()
     .scale(yScale)
     .orient('left')
     // http://stackoverflow.com/a/18822793
-    .ticks(chartHeight/40);
+    .ticks(chartHeight / 40);
 
   d3.select('svg').remove();
 
@@ -233,7 +233,7 @@ function drawOverviewChart(data, appendToClass, xLabel = '', yLabel = '') {
     return;
   }
 
-  var className = appendToClass.replace(/^\./,"");
+  var className = appendToClass.replace(/^\./, '');
   var chartWidth = 0;
   if (document.getElementsByClassName(className)[0]) {
     chartWidth = document.getElementsByClassName(className)[0].parentElement.offsetWidth;
@@ -253,13 +253,13 @@ function drawOverviewChart(data, appendToClass, xLabel = '', yLabel = '') {
   // console.log(chartData)
   // X
   var xScale = d3.scale.linear()
-  .domain([0, chartData.length])
-  .range([40, chartWidth - 100]); // the pixels to map, i.e. the width of the diagram
+  .domain([ 0, chartData.length ])
+  .range([ 40, chartWidth - 100 ]); // the pixels to map, i.e. the width of the diagram
 
   // Y
   var yScale = d3.scale.linear()
-  .domain([Math.max(...chartData)*1.5, 0])
-  .range([30, chartHeight - 52]);
+  .domain([ Math.max(...chartData) * 1.5, 0 ])
+  .range([ 30, chartHeight - 52 ]);
 
   // Axes
 

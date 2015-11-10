@@ -73,8 +73,8 @@ function extractDnaStringFromContig(contig) {
 
 function extractDnaStringsFromContigs(contigs) {
   var dnaStrings = [],
-  dnaString;
-  contigs.forEach(function(contig) {
+    dnaString;
+  contigs.forEach(function (contig) {
     dnaString = extractDnaStringFromContig(contig);
     dnaStrings.push(dnaString);
   });
@@ -99,7 +99,7 @@ function calculateN50(dnaSequenceStrings) {
   //
 
   // Order array by sequence length DESC
-  var sortedDnaSequenceStrings = dnaSequenceStrings.sort(function(a, b){
+  var sortedDnaSequenceStrings = dnaSequenceStrings.sort(function (a, b) {
     return b.length - a.length;
   });
 
@@ -107,7 +107,7 @@ function calculateN50(dnaSequenceStrings) {
   // Contig length === number of nucleotides in this contig
   var assemblyNucleotideSums = [],
   // Count sorted dna sequence strings
-  sortedDnaSequenceStringCounter = 0;
+    sortedDnaSequenceStringCounter = 0;
 
   for (; sortedDnaSequenceStringCounter < sortedDnaSequenceStrings.length; sortedDnaSequenceStringCounter++) {
     if (assemblyNucleotideSums.length > 0) {
@@ -130,9 +130,9 @@ function calculateN50(dnaSequenceStrings) {
   // Store nucleotides sum
   var assemblyNucleotidesSum = 0,
   // N50 object
-  assemblyN50 = {},
+    assemblyN50 = {},
   // Count again sorted dna sequence strings
-  sortedDnaSequenceStringCounter = 0;
+    sortedDnaSequenceStringCounter = 0;
 
   for (; sortedDnaSequenceStringCounter < sortedDnaSequenceStrings.length; sortedDnaSequenceStringCounter++) {
     // Update nucleotides sum
@@ -152,7 +152,7 @@ function calculateN50(dnaSequenceStrings) {
 
 function calculateTotalNumberOfNucleotidesInDnaStrings(dnaStrings) {
   var totalNumberOfNucleotidesInDnaStrings = 0;
-  dnaStrings.forEach(function(dnaString, index, array){
+  dnaStrings.forEach(function (dnaString, index, array) {
     totalNumberOfNucleotidesInDnaStrings = totalNumberOfNucleotidesInDnaStrings + dnaString.length;
   });
   return totalNumberOfNucleotidesInDnaStrings;
@@ -168,7 +168,7 @@ function calculateTotalNumberOfNucleotidesInDnaStrings(dnaStrings) {
 
 function calculateTotalNumberOfNsInDnaStrings(dnaStrings) {
   var totalNumberOfNsInDnaStrings = 0;
-  dnaStrings.forEach(function(dnaString, index, array){
+  dnaStrings.forEach(function (dnaString, index, array) {
     totalNumberOfNsInDnaStrings = totalNumberOfNsInDnaStrings + (dnaString.match(/[^ACGT]/g) || []).length;
   });
   return totalNumberOfNsInDnaStrings;
@@ -182,20 +182,20 @@ function calculateAverageNumberOfNucleotidesInDnaStrings(dnaStrings) {
 }
 
 function calculateSmallestNumberOfNucleotidesInDnaStrings(dnaStrings) {
-  var numberOfNucleotidesInDnaStrings = dnaStrings.map(function(dnaString){
+  var numberOfNucleotidesInDnaStrings = dnaStrings.map(function (dnaString) {
     return dnaString.length;
   });
-  var smallestNumberOfNucleotidesInDnaStrings = numberOfNucleotidesInDnaStrings.reduce(function(previousNumberOfNucleotidesInDnaString, currentNumberOfNucleotidesInDnaString, index, array){
+  var smallestNumberOfNucleotidesInDnaStrings = numberOfNucleotidesInDnaStrings.reduce(function (previousNumberOfNucleotidesInDnaString, currentNumberOfNucleotidesInDnaString, index, array) {
     return Math.min(previousNumberOfNucleotidesInDnaString, currentNumberOfNucleotidesInDnaString);
   });
   return smallestNumberOfNucleotidesInDnaStrings;
 }
 
 function calculateBiggestNumberOfNucleotidesInDnaStrings(dnaStrings) {
-  var numberOfNucleotidesInDnaStrings = dnaStrings.map(function(dnaString){
+  var numberOfNucleotidesInDnaStrings = dnaStrings.map(function (dnaString) {
     return dnaString.length;
   });
-  var biggestNumberOfNucleotidesInDnaStrings = numberOfNucleotidesInDnaStrings.reduce(function(previousNumberOfNucleotidesInDnaString, currentNumberOfNucleotidesInDnaString, index, array){
+  var biggestNumberOfNucleotidesInDnaStrings = numberOfNucleotidesInDnaStrings.reduce(function (previousNumberOfNucleotidesInDnaString, currentNumberOfNucleotidesInDnaString, index, array) {
     return Math.max(previousNumberOfNucleotidesInDnaString, currentNumberOfNucleotidesInDnaString);
   });
   return biggestNumberOfNucleotidesInDnaStrings;
@@ -209,7 +209,7 @@ function calculateSumsOfNucleotidesInDnaStrings(dnaStrings) {
   //
   // Sort dna strings by their length
   //
-  var sortedDnaStrings = dnaStrings.sort(function(a, b){
+  var sortedDnaStrings = dnaStrings.sort(function (a, b) {
     return b.length - a.length;
   });
 
@@ -217,7 +217,7 @@ function calculateSumsOfNucleotidesInDnaStrings(dnaStrings) {
   // Calculate sums of all nucleotides in this assembly by adding current contig's length to the sum of all previous contig lengths
   //
   var sumsOfNucleotidesInDnaStrings = [];
-  sortedDnaStrings.forEach(function(sortedDnaString, index, array){
+  sortedDnaStrings.forEach(function (sortedDnaString, index, array) {
     if (sumsOfNucleotidesInDnaStrings.length === 0) {
       sumsOfNucleotidesInDnaStrings.push(sortedDnaString.length);
     } else {

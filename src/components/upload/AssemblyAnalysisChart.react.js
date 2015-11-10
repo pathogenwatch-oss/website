@@ -41,7 +41,7 @@ const AssemblyAnalysisChart = React.createClass({
   draw() {
     var divElement = document.getElementsByClassName('fasta-analytics-chart')[0];
     var svgElement;
-    if(divElement) {
+    if (divElement) {
       svgElement = divElement.childNodes[0];
       if (svgElement) {
         svgElement.parentNode.removeChild(svgElement);

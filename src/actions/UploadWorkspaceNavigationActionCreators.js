@@ -60,7 +60,7 @@ module.exports = {
     AppDispatcher.dispatch(action);
   },
 
-  deleteAssembly: function(assemblyName) {
+  deleteAssembly: function (assemblyName) {
     var action = {
       type: 'delete_assembly',
       assemblyName: assemblyName
@@ -69,7 +69,7 @@ module.exports = {
     AppDispatcher.dispatch(action);
   },
 
-  setViewPage: function(page) {
+  setViewPage: function (page) {
     var action = {
       type: 'set_view_page',
       page: page
