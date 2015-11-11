@@ -1,11 +1,11 @@
-import { SET_ANTIBIOTICS } from '../actions/antibiotics';
+import { FETCH_ENTITIES } from '../actions/fetch';
 
 const initialState = [];
 
 const actions = {
-  [SET_ANTIBIOTICS]: function (state, { ready, result }) {
+  [FETCH_ENTITIES]: function (state, { ready, result }) {
     if (ready) {
-      return Object.keys(result);
+      return Object.keys(result[2]);
     }
     return state;
   },

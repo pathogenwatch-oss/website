@@ -1,65 +1,81 @@
 import '../../css/spinner.css';
 
 import React from 'react';
-import { Provider } from 'react-redux';
+import { Provider, connect } from 'react-redux';
 
-import Loading from './Loading.react';
+import { Loading, LoadError } from './Loading.react';
 import CollectionExplorer from './CollectionExplorer.react';
 
-import store from '^/store';
-import CollectionStore from '^/stores/CollectionStore';
+import getStore from '^/store';
 
-import { fetchAntibiotics } from '^/actions/antibiotics';
-import { fetchCollection } from '^/actions/collection';
+import { fetchEntities } from '^/actions/fetch';
 
 import Species from '^/species';
 
-export default React.createClass({
+const store = getStore();
+
+const Explorer = React.createClass({
+
+  displayName: 'Explorer',
 
   propTypes: {
-    params: React.PropTypes.shape({
-      id: React.PropTypes.string,
-    }),
-    query: React.PropTypes.string,
-  },
-
-  getInitialState() {
-    return {
-      collectionStatus: null,
-    };
-  },
-
-  componentWillMount() {
-    store.dispatch(fetchAntibiotics(Species.id));
+    fetchEntities: React.PropTypes.func,
+    loading: React.PropTypes.object,
   },
 
   componentDidMount() {
-    CollectionStore.addChangeListener(this.handleCollectionStoreChange);
-    store.dispatch(fetchCollection(Species.id, this.props.params.id));
-  },
-
-  componentWillUnmount() {
-    CollectionStore.removeChangeListener(this.handleCollectionStoreChange);
+    this.props.fetchEntities();
   },
 
   render() {
-    if (this.state.collectionStatus === CollectionStore.states.LOADED) {
+    const { ready, error } = this.props.loading;
+
+    if (ready) {
       return (
-        <Provider store={store}>
-          <CollectionExplorer query={this.props.query} />
-        </Provider>
+        <CollectionExplorer />
+      );
+    }
+
+    if (error) {
+      return (
+        <LoadError />
       );
     }
 
     return (
-      <Loading error={this.state.collectionStatus} />
+      <Loading />
     );
   },
 
-  handleCollectionStoreChange() {
-    this.setState({
-      collectionStatus: CollectionStore.status(),
-    });
-  },
-
 });
+
+const connectExplorer = connect(
+  ({ loading }) => { return { loading }; },
+  (dispatch, { id }) => {
+    return {
+      fetchEntities: dispatch.bind(null, fetchEntities(Species.id, id)),
+    };
+  }
+);
+
+function addDevTools() {
+  if (process.env.NODE_ENV !== 'production') {
+    const DevTools = require('^/DevTools');
+    return (
+      <DevTools />
+    );
+  }
+}
+
+export default function ({ params }) {
+  const ReduxExplorer = connectExplorer(Explorer);
+
+  return (
+    <Provider store={store}>
+      <div>
+        <ReduxExplorer id={params.id} />
+        { addDevTools() }
+      </div>
+    </Provider>
+  );
+}
