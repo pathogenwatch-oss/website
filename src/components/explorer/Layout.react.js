@@ -16,7 +16,7 @@ import LayoutNorthSouthDivider from './layout/LayoutNorthSouthDivider.react';
 
 import LayoutUtils from '^/utils/Layout';
 
-const Layout = React.createClass({
+export default React.createClass({
 
   getInitialState() {
     return {
@@ -121,5 +121,3 @@ const Layout = React.createClass({
   },
 
 });
-
-module.exports = Layout;

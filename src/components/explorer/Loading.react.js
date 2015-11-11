@@ -15,9 +15,9 @@ const Background = ({ children }) => (
   </main>
 );
 
-export const Loading = React.createClass({
+export const LoadSpinner = React.createClass({
 
-  displayName: 'Loading',
+  displayName: 'LoadSpinner',
 
   componentDidMount() {
     componentHandler.upgradeElement(this.refs.spinner);
