@@ -7,9 +7,9 @@ export function ready(state = false, action) {
   return state;
 }
 
-export function error(state = null, action) {
+export function error(state = false, action) {
   if (action.type === FETCH_ENTITIES) {
-    return action.error || null; // ensures undefined is not returned
+    return (action.ready && action.error) || state;
   }
   return state;
 }

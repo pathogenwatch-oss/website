@@ -19,15 +19,15 @@ export default React.createClass({
   render() {
     const { ready, error } = this.props.loading;
 
-    if (ready) {
-      return (
-        <Layout />
-      );
-    }
-
     if (error) {
       return (
         <LoadError />
+      );
+    }
+
+    if (ready) {
+      return (
+        <Layout />
       );
     }
 

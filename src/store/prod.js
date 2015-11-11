@@ -3,4 +3,6 @@ import { createStore, applyMiddleware } from 'redux';
 import { readyStatePromise } from '../middleware';
 import rootReducer from '../reducers';
 
-export default applyMiddleware(readyStatePromise)(createStore)(rootReducer);
+export default function () {
+  return applyMiddleware(readyStatePromise)(createStore)(rootReducer);
+}

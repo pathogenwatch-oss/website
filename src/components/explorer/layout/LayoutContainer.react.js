@@ -32,6 +32,10 @@ const LayoutContainer = React.createClass({
 
   displayName: 'LayoutContainer',
 
+  propTypes: {
+    children: React.PropTypes.arrayOf(React.PropTypes.element),
+  },
+
   componentDidMount() {
     componentHandler.upgradeElement(this.refs.container);
   },

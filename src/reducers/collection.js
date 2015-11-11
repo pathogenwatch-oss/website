@@ -4,12 +4,8 @@ const initialState = {};
 
 const actions = {
   [FETCH_ENTITIES]: function (state, { ready, result, error }) {
-    if (!ready) {
+    if (!ready || error) {
       return state;
-    }
-
-    if (error) {
-      return error;
     }
 
     if (result) {

@@ -1,18 +1,16 @@
-/* eslint es6: false */
+const webpack = require('webpack');
+const express = require('express');
+const bodyParser = require('body-parser');
 
-var webpack = require("webpack");
-var express = require("express");
-var bodyParser = require('body-parser');
+const config = require('./webpack.config.js');
+const compiler = webpack(config);
 
-var config = require('./webpack.config.js');
-var compiler = webpack(config);
-
-var app = express();
+const app = express();
 
 app.use(require('webpack-dev-middleware')(compiler, {
   contentBase: '/public',
   publicPath: config.output.publicPath,
-  stats: { colors: true, cached: false }
+  stats: { colors: true, cached: false },
 }));
 
 app.use(require('webpack-hot-middleware')(compiler));
@@ -22,7 +20,7 @@ app.use(bodyParser.json());
 app.use(express.static('public'));
 
 
-var apiRouter = express.Router();
+const apiRouter = express.Router();
 
 apiRouter.post('/species/:speciesId/collection', function (req, res) {
   res.json({
@@ -30,8 +28,8 @@ apiRouter.post('/species/:speciesId/collection', function (req, res) {
     assemblyNameToAssemblyIdMap: {
       '7065_8#1_scaffolded': '123',
       '7065_8#2_scaffolded': '456',
-      '7065_8#3_scaffolded': '789'
-    }
+      '7065_8#3_scaffolded': '789',
+    },
   });
 });
 
@@ -56,7 +54,7 @@ apiRouter.get('/species/:speciesId/antibiotics', function (req, res) {
 apiRouter.post('/download/type/assembly/format/fasta', function (req, res) {
   setTimeout(function () {
     res.json({
-      'gobbledegook': req.body.idList[0] + '.fa'
+      'gobbledegook': req.body.idList[0] + '.fa',
     });
   }, 2000);
 });
@@ -64,7 +62,7 @@ apiRouter.post('/download/type/assembly/format/fasta', function (req, res) {
 apiRouter.post('/download/type/:idType/format/:fileFormat', function (req, res) {
   setTimeout(function () {
     res.json({
-      'gobbledegook': req.params.fileFormat
+      'gobbledegook': req.params.fileFormat,
     });
   }, 2000);
 });
@@ -79,7 +77,4 @@ app.use('/', function (req, res) {
   res.sendFile(__dirname + '/public/index.html');
 });
 
-var server = require('http').Server(app);
-var io = require('socket.io')(server);
-
-server.listen(8080);
+app.listen(8080);

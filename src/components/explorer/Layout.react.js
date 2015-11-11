@@ -18,6 +18,8 @@ import LayoutUtils from '^/utils/Layout';
 
 export default React.createClass({
 
+  displayName: 'Layout',
+
   getInitialState() {
     return {
       layoutWestWidth: 0,
@@ -47,7 +49,6 @@ export default React.createClass({
 
   setLayout() {
     this.setState({
-
       // West
       layoutWestWidth: LayoutUtils.getWestWidth(),
 

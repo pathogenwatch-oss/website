@@ -4,9 +4,11 @@ import LayoutUtils from '^/utils/Layout';
 
 export default React.createClass({
 
+  displayName: 'LayoutNorth',
+
   propTypes: {
     height: React.PropTypes.number.isRequired,
-    children: React.PropTypes.element,
+    children: React.PropTypes.arrayOf(React.PropTypes.element),
   },
 
   render() {
