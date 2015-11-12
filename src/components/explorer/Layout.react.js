@@ -92,30 +92,31 @@ export default React.createClass({
   render() {
     return (
       <LayoutContainer>
-        <LayoutNorth height={this.state.layoutNorthHeight}>
-          <LayoutWest width={this.state.layoutWestWidth}>
-            <WestContent
-              width={this.state.layoutWestWidth}
-              height={this.state.layoutNorthHeight} />
-          </LayoutWest>
-          <LayoutWestEastDivider
-            left={this.state.layoutWestEastDividerLeft}
-            onDragEnd={this.handleLayoutWestEastDividerDragEnd} />
-          <LayoutEast left={this.state.layoutEastLeft} width={this.state.layoutEastWidth}>
-            <EastContent
-              width={this.state.layoutEastWidth}
-              height={this.state.layoutNorthHeight} />
-          </LayoutEast>
-        </LayoutNorth>
-        <LayoutNorthSouthDivider
-          top={this.state.layoutNorthSouthDividerTop}
-          onDragEnd={this.handleLayoutNorthSourthDividerDragEnd} />
-        <LayoutSouth top={this.state.layoutSouthTop}>
-          <SouthContent height={this.state.layoutSouthHeight} width={this.state.layoutSouthWidth}/>
-        </LayoutSouth>
       </LayoutContainer>
     );
   },
+
+  // <LayoutNorth height={this.state.layoutNorthHeight}>
+  //   <LayoutWest width={this.state.layoutWestWidth}>
+  //     <WestContent
+  //       width={this.state.layoutWestWidth}
+  //       height={this.state.layoutNorthHeight} />
+  //   </LayoutWest>
+  //   <LayoutWestEastDivider
+  //     left={this.state.layoutWestEastDividerLeft}
+  //     onDragEnd={this.handleLayoutWestEastDividerDragEnd} />
+  //   <LayoutEast left={this.state.layoutEastLeft} width={this.state.layoutEastWidth}>
+  //     <EastContent
+  //       width={this.state.layoutEastWidth}
+  //       height={this.state.layoutNorthHeight} />
+  //   </LayoutEast>
+  // </LayoutNorth>
+  // <LayoutNorthSouthDivider
+  //   top={this.state.layoutNorthSouthDividerTop}
+  //   onDragEnd={this.handleLayoutNorthSourthDividerDragEnd} />
+  // <LayoutSouth top={this.state.layoutSouthTop}>
+  //   <SouthContent height={this.state.layoutSouthHeight} width={this.state.layoutSouthWidth}/>
+  // </LayoutSouth>
 
   dangerouslyHandleWindowResize() {
     $(window).on('resize', this.setLayout);

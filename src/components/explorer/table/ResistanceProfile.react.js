@@ -103,8 +103,6 @@ const ResistanceProfile = React.createClass({
 
 });
 
-export default connect(function (state) {
-  return {
-    antibiotics: state.antibiotics,
-  };
+export default connect(function ({ antibiotics }) {
+  return { antibiotics };
 })(ResistanceProfile);

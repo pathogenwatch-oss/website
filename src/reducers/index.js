@@ -2,6 +2,7 @@ import { combineReducers } from 'redux';
 
 import antibiotics from './antibiotics';
 import collection from './collection';
+import downloadsMenu from './downloadsMenu';
 
 import { ready, error } from './fetch';
 
@@ -17,7 +18,10 @@ function createReducer({ actions, initialState }) {
 export default combineReducers({
   entities: combineReducers({
     antibiotics: createReducer(antibiotics),
-    collection: createReducer(collection),
+    collections: createReducer(collection),
+  }),
+  ui: combineReducers({
+    downloadsMenu: createReducer(downloadsMenu),
   }),
   loading: combineReducers({ ready, error }),
 });
