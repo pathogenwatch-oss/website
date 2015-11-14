@@ -166,7 +166,6 @@ const SpeciesTree = React.createClass({
     return (
       <Tree
         { ...this.treeProps }
-        { ...this.props.dimensions }
         newick={newick}
         navButton={
           <div className="wgsa-switch-background wgsa-switch-background--see-through">

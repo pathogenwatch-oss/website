@@ -33,6 +33,7 @@ export default React.createClass({
       );
     }
 
+    // Somehow the props prevent the tree from being remounted on each update
     return (
       <SpeciesTree dimensions={this.props} />
     );

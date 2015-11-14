@@ -1,10 +1,15 @@
 import { combineReducers } from 'redux';
 
+// entities
 import antibiotics from './antibiotics';
 import collection from './collection';
 import subtrees from './subtrees';
-import downloadsMenu from './downloadsMenu';
 
+// ui
+import downloadsMenu from './downloadsMenu';
+import userDefinedColumns from './userDefinedColumns';
+
+// util
 import { ready, error } from './fetch';
 
 function createReducer({ actions, initialState }) {
@@ -24,6 +29,7 @@ export default combineReducers({
   }),
   ui: combineReducers({
     downloadsMenu: createReducer(downloadsMenu),
+    userDefinedColumns: createReducer(userDefinedColumns),
   }),
   loading: combineReducers({ ready, error }),
   // display: combineReducers({

@@ -111,11 +111,11 @@ export default React.createClass({
           top={this.state.layoutNorthSouthDividerTop}
           onDragEnd={this.handleLayoutNorthSourthDividerDragEnd} />
         <LayoutSouth top={this.state.layoutSouthTop}>
+          <SouthContent height={this.state.layoutSouthHeight} width={this.state.layoutSouthWidth}/>
         </LayoutSouth>
       </LayoutContainer>
     );
   },
-// <SouthContent height={this.state.layoutSouthHeight} width={this.state.layoutSouthWidth}/>
 
   dangerouslyHandleWindowResize() {
     $(window).on('resize', this.setLayout);

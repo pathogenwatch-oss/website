@@ -46,10 +46,10 @@ export default React.createClass({
   },
 
   render() {
-    const TableComponent = this.getTableComponent();
+    // const TableComponent = this.getTableComponent();
     return (
       <section style={sectionStyle}>
-        <TableComponent { ...this.props }/>
+        <Metadata { ...this.props }/>
       </section>
     );
   },
