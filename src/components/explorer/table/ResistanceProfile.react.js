@@ -4,10 +4,6 @@ import assign from 'object-assign';
 
 import FixedTable from '^/components/FixedTable.react';
 
-import ReferenceCollectionStore from '^/stores/ReferenceCollectionStore';
-import UploadedCollectionStore from '^/stores/UploadedCollectionStore';
-import FilteredDataStore from '^/stores/FilteredDataStore';
-
 import FilteredDataActionCreators from '^/actions/FilteredDataActionCreators';
 
 let columnProps = [

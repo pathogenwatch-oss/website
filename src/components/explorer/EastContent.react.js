@@ -11,9 +11,7 @@ const EastContent = React.createClass({
 
   render: function () {
     return (
-      <ExplorerMap
-        width={this.props.width}
-        height={this.props.height} />
+      <ExplorerMap dimensions={this.props} />
     );
   },
 

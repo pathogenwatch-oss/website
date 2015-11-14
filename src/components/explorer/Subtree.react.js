@@ -2,8 +2,8 @@ import React from 'react';
 
 import Tree from '../tree/Tree.react';
 
-import UploadedCollectionStore from '^/stores/UploadedCollectionStore';
-import ReferenceCollectionStore from '^/stores/ReferenceCollectionStore';
+// import UploadedCollectionStore from '^/stores/UploadedCollectionStore';
+// import ReferenceCollectionStore from '^/stores/ReferenceCollectionStore';
 import SubtreeStore from '^/stores/SubtreeStore';
 
 import SubtreeActionCreators from '^/actions/SubtreeActionCreators';

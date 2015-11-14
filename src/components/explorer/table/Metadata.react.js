@@ -3,9 +3,9 @@ import React from 'react';
 import FixedTable from '^/components/FixedTable.react';
 import DownloadButton from '../DownloadButton.react';
 
-import ReferenceCollectionStore from '^/stores/ReferenceCollectionStore';
-import UploadedCollectionStore from '^/stores/UploadedCollectionStore';
-import FilteredDataStore from '^/stores/FilteredDataStore';
+// import ReferenceCollectionStore from '^/stores/ReferenceCollectionStore';
+// import UploadedCollectionStore from '^/stores/UploadedCollectionStore';
+// import FilteredDataStore from '^/stores/FilteredDataStore';
 
 import FilteredDataActionCreators from '^/actions/FilteredDataActionCreators';
 

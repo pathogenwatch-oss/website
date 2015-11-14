@@ -1,13 +1,8 @@
-/* global google */
-
 import React from 'react';
+import { connect } from 'react-redux';
 import assign from 'object-assign';
 
 import GoogleMap from '../GoogleMap.react';
-
-import FilteredDataStore from '^/stores/FilteredDataStore';
-import ReferenceCollectionStore from '^/stores/ReferenceCollectionStore';
-import UploadedCollectionStore from '^/stores/UploadedCollectionStore';
 
 import FilteredDataActionCreators from '^/actions/FilteredDataActionCreators';
 
@@ -25,55 +20,44 @@ function onMarkerClick(assemblyIds) {
   FilteredDataActionCreators.setAssemblyIds(assemblyIds);
 }
 
-function getCombinedAssemblies() {
-  return assign({}, ReferenceCollectionStore.getAssemblies(), UploadedCollectionStore.getAssemblies());
-}
-
-function getMarkerDefs(assemblyIds) {
-  const combinedAssemblies = getCombinedAssemblies();
+function getMarkerDefs(assemblyIds, combinedAssemblies) {
   return MapUtils.getMarkerDefinitions(
     assemblyIds.map(id => combinedAssemblies[id]), {
       onClick: onMarkerClick,
-      getIcon: FilteredDataStore.getColourTableColumnName() ? MapUtils.resistanceMarkerIcon : undefined,
+      // getIcon: FilteredDataStore.getColourTableColumnName() ? MapUtils.resistanceMarkerIcon : undefined,
     }
   );
 }
 
-export default React.createClass({
+const ExplorerMap = React.createClass({
 
   displayName: 'ExplorerMap',
 
   propTypes: {
-    width: React.PropTypes.any.isRequired,
-    height: React.PropTypes.any.isRequired,
-  },
-
-  getInitialState() {
-    return {
-      assemblyIds: FilteredDataStore.getAssemblyIds(),
-    };
-  },
-
-  componentDidMount() {
-    FilteredDataStore.addChangeListener(this.handleFilteredDataStoreChange);
-  },
-
-  componentWillUnmount() {
-    FilteredDataStore.removeChangeListener(this.handleFilteredDataStoreChange);
+    dimensions: React.PropTypes.object,
+    combinedAssemblies: React.PropTypes.object,
+    visibleAssemblyIds: React.PropTypes.array,
   },
 
   render() {
+    const { combinedAssemblies, visibleAssemblyIds, dimensions } = this.props;
     return (
-      <section style={assign({}, style, this.props)}>
+      <section style={assign({}, style, dimensions)}>
         <GoogleMap
-          markerDefs={getMarkerDefs(this.state.assemblyIds)}
+          markerDefs={getMarkerDefs(visibleAssemblyIds, combinedAssemblies)}
           onMapClick={onMapClick} />
       </section>
     );
   },
 
-  handleFilteredDataStoreChange() {
-    this.setState({ assemblyIds: FilteredDataStore.getAssemblyIds() });
-  },
-
 });
+
+function mapStateToProps({ entities }) {
+  const { uploaded } = entities.collections;
+  return {
+    combinedAssemblies: uploaded.assemblies,
+    visibleAssemblyIds: uploaded.assemblyIds,
+  };
+}
+
+export default connect(mapStateToProps)(ExplorerMap);

@@ -14,10 +14,10 @@ const DownloadsMenu = ({
   collectionTreeLink,
   collectionId,
   active,
-  handleButtonClick,
+  dispatch,
 }) => (
   <div className={`wgsa-menu ${active ? 'wgsa-menu--is-open' : ''}`} onClick={e => e.stopPropagation()}>
-    <button ref="button" className="wgsa-menu-button mdl-button" onClick={handleButtonClick}>
+    <button className="wgsa-menu-button mdl-button" onClick={() => dispatch(setMenuActive(!active))}>
       <i className="wgsa-button-icon material-icons">file_download</i>
       <span>Downloads</span>
     </button>
@@ -26,16 +26,15 @@ const DownloadsMenu = ({
         <span className="wgsa-menu-heading">Population Downloads</span>
         <ul className="wgsa-submenu">
           <li className="wgsa-menu__item">
-            <div className="wgsa-download-button">
-              <a href={populationTreeLink}
-                target="_blank"
-                download={`${Species.nickname}_population_tree.nwk`}
-                className="wgsa-download-button mdl-button mdl-button--icon"
-                title="Download Population Tree (.nwk)">
-                <i className="wgsa-button-icon material-icons">file_download</i>
-              </a>
-            </div>
-            Population Tree (.nwk)
+            <a href={populationTreeLink}
+              target="_blank"
+              download={`${Species.nickname}_population_tree.nwk`}
+              title="Download Population Tree (.nwk)">
+                <span className="wgsa-download-button mdl-button mdl-button--icon">
+                  <i className="wgsa-button-icon material-icons">file_download</i>
+                </span>
+                Population Tree (.nwk)
+            </a>
           </li>
         </ul>
       </li>
@@ -43,52 +42,15 @@ const DownloadsMenu = ({
         <span className="wgsa-menu-heading">Collection Downloads</span>
         <ul className="wgsa-submenu">
           <li className="wgsa-menu__item">
-            <div className="wgsa-download-button">
-              <a href={collectionTreeLink}
-                target="_blank"
-                download={`${collectionId}_collection_tree.nwk`}
-                className="mdl-button mdl-button--icon"
-                title="Download Population Tree (.nwk)">
-                <i className="wgsa-button-icon material-icons">file_download</i>
-              </a>
-            </div>
-            Collection Tree (.nwk)
-          </li>
-          <li className="wgsa-menu__item">
-            <DownloadButton
-              description="Kernel Checksum Distribution"
-              format="kernel_checksum_distribution" />
-            Kernel Checksum Distribution
-          </li>
-          <li className="wgsa-menu__item">
-            <DownloadButton
-              description="Concatenated Gene Family"
-              format="extended_kernel_fasta" />
-            Kernel Matches
-          </li>
-          <li className="wgsa-menu__item">
-            <DownloadButton
-              description="Kernel Sequence Fasta"
-              format="kernel_fasta" />
-            Kernel Sequence (.fa)
-          </li>
-          <li className="wgsa-menu__item">
-            <DownloadButton
-              description="Kernel CSV"
-              format="kernel_csv" />
-            Kernel Sequence (.csv)
-          </li>
-          <li className="wgsa-menu__item">
-            <DownloadButton
-              description="Concatenated Gene Family"
-              format="score_matrix" />
-            Score Matrix
-          </li>
-          <li className="wgsa-menu__item">
-            <DownloadButton
-              description="Concatenated Gene Family"
-              format="differences_matrix" />
-            Differences Matrix
+            <a href={collectionTreeLink}
+              target="_blank"
+              download={`${collectionId}_collection_tree.nwk`}
+              title="Download Collection Tree (.nwk)">
+                <span className="wgsa-download-button mdl-button mdl-button--icon">
+                  <i className="wgsa-button-icon material-icons">file_download</i>
+                </span>
+                Collection Tree (.nwk)
+            </a>
           </li>
         </ul>
       </li>
@@ -96,12 +58,49 @@ const DownloadsMenu = ({
   </div>
 );
 
+// <li className="wgsa-menu__item">
+//   <DownloadButton
+//     description="Kernel Checksum Distribution"
+//     format="kernel_checksum_distribution" />
+//   Kernel Checksum Distribution
+// </li>
+// <li className="wgsa-menu__item">
+//   <DownloadButton
+//     description="Concatenated Gene Family"
+//     format="extended_kernel_fasta" />
+//   Kernel Matches
+// </li>
+// <li className="wgsa-menu__item">
+//   <DownloadButton
+//     description="Kernel Sequence Fasta"
+//     format="kernel_fasta" />
+//   Kernel Sequence (.fa)
+// </li>
+// <li className="wgsa-menu__item">
+//   <DownloadButton
+//     description="Kernel CSV"
+//     format="kernel_csv" />
+//   Kernel Sequence (.csv)
+// </li>
+// <li className="wgsa-menu__item">
+//   <DownloadButton
+//     description="Concatenated Gene Family"
+//     format="score_matrix" />
+//   Score Matrix
+// </li>
+// <li className="wgsa-menu__item">
+//   <DownloadButton
+//     description="Concatenated Gene Family"
+//     format="differences_matrix" />
+//   Differences Matrix
+// </li>
+
 DownloadsMenu.propTypes = {
   populationTreeLink: React.PropTypes.string,
   collectionTreeLink: React.PropTypes.string,
   collectionId: React.PropTypes.string,
   active: React.PropTypes.bool,
-  handleButtonClick: React.PropTypes.func,
+  dispatch: React.PropTypes.func,
 };
 
 const windowURL = window.URL || window.webkitURL;
@@ -120,10 +119,4 @@ function mapStateToProps({ entities, ui }) {
   };
 }
 
-function mapDispatchToProps(dispatch, { active }) {
-  return {
-    handleButtonClick: () => dispatch(setMenuActive(!active)),
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(DownloadsMenu);
+export default connect(mapStateToProps)(DownloadsMenu);

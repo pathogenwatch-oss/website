@@ -1,7 +1,3 @@
-import FilteredDataStore from '../stores/FilteredDataStore';
-import ReferenceCollectionStore from '../stores/ReferenceCollectionStore';
-import UploadedCollectionStore from '../stores/UploadedCollectionStore';
-
 import { DANGER_COLOUR, CGPS } from '../defaults';
 
 function columnNameIsAntibiotic(columnName) {

@@ -4,7 +4,6 @@ import SpeciesTree from './SpeciesTree.react';
 import Subtree from './Subtree.react';
 
 import SubtreeStore from '^/stores/SubtreeStore';
-import UploadedCollectionStore from '^/stores/UploadedCollectionStore';
 
 export default React.createClass({
 
@@ -21,7 +20,6 @@ export default React.createClass({
 
   componentDidMount() {
     SubtreeStore.addChangeListener(this.handleSubtreeStoreChange);
-    this.collectionId = UploadedCollectionStore.getCollectionId();
   },
 
   componentWillUnmount() {
@@ -36,7 +34,7 @@ export default React.createClass({
     }
 
     return (
-      <SpeciesTree />
+      <SpeciesTree dimensions={this.props} />
     );
   },
 

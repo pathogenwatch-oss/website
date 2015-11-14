@@ -1,34 +1,29 @@
 import '../../css/search.css';
 
 import React from 'react';
-
-import UploadedCollectionStore from '^/stores/UploadedCollectionStore';
-import FilteredDataStore from '^/stores/FilteredDataStore';
+import { connect } from 'react-redux';
 
 import FilteredDataActionCreators from '^/actions/FilteredDataActionCreators';
 
-export default React.createClass({
+const Search = React.createClass({
 
   displayName: 'Search',
 
+  propTypes: {
+    filteredAmount: React.PropTypes.number,
+    totalAmount: React.PropTypes.number,
+    filterColumnName: React.PropTypes.string,
+  },
+
   getInitialState() {
     return {
-      filteredAmount: FilteredDataStore.getAssemblyIds().length,
       focus: false,
     };
   },
 
-  componentDidMount() {
-    FilteredDataStore.addChangeListener(this.handleFilteredDataStoreChange);
-  },
-
-  componentWillUnmount() {
-    FilteredDataStore.removeChangeListener(this.handleFilteredDataStoreChange);
-  },
-
   render() {
-    const totalAssemblies = UploadedCollectionStore.getAssemblyIds().length;
-    const { filteredAmount, focus } = this.state;
+    const { totalAmount, filteredAmount, filterColumnName } = this.props;
+    const { focus } = this.state;
     return (
       <div className="wgsa-search-box-container">
         <div className={`wgsa-search-box ${ focus ? 'wgsa-search-box--active' : ''}`.trim()}
@@ -36,11 +31,11 @@ export default React.createClass({
           <i className="wgsa-search-box__icon material-icons">search</i>
           <input ref="input"
             className="wgsa-search-box__input"
-            placeholder={`SEARCH ${FilteredDataStore.getFilterColumnName()}`}
+            placeholder={`SEARCH ${filterColumnName}`}
             onChange={this.handleChange}
             onFocus={this.handleFocus} onBlur={this.handleBlur} />
           <p className="wgsa-search-box__numbers">
-            {filteredAmount} of {totalAssemblies}
+            {filteredAmount} of {totalAmount}
           </p>
         </div>
       </div>
@@ -63,10 +58,16 @@ export default React.createClass({
     this.refs.input.focus();
   },
 
-  handleFilteredDataStoreChange() {
-    this.setState({
-      filteredAmount: FilteredDataStore.getAssemblyIds().length,
-    });
-  },
-
 });
+
+function mapStateToProps({ entities }) {
+  const { assemblies } = entities.collections.uploaded;
+  const totalAmount = Object.keys(assemblies).length;
+  return {
+    totalAmount,
+    filteredAmount: totalAmount,
+    filterColumnName: 'ASSEMBLY',
+  };
+}
+
+export default connect(mapStateToProps)(Search);

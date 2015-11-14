@@ -5,13 +5,9 @@ import PhyloCanvas from 'PhyloCanvas';
 import contextMenuPlugin from 'phylocanvas-plugin-context-menu';
 
 import TreeControls from './TreeControls.react';
-import TreeMenu from './TreeMenu.react';
+// import TreeMenu from './TreeMenu.react';
 
 import FilteredDataActionCreators from '^/actions/FilteredDataActionCreators';
-
-import FilteredDataStore from '^/stores/FilteredDataStore';
-import ReferenceCollectionStore from '^/stores/ReferenceCollectionStore';
-import UploadedCollectionStore from '^/stores/UploadedCollectionStore';
 
 import DEFAULT, { CGPS } from '^/defaults';
 
@@ -24,7 +20,11 @@ const fullWidthHeight = {
 
 export default React.createClass({
 
+  displayName: 'Tree',
+
   propTypes: {
+    width: React.PropTypes.number,
+    height: React.PropTypes.number,
     newick: React.PropTypes.string,
     title: React.PropTypes.string,
     navButton: React.PropTypes.element,
@@ -32,6 +32,7 @@ export default React.createClass({
     onUpdated: React.PropTypes.func,
     onRedrawOriginalTree: React.PropTypes.func,
     highlightFilteredNodes: React.PropTypes.func,
+    collections: React.PropTypes.object,
   },
 
   getInitialState() {
@@ -41,8 +42,6 @@ export default React.createClass({
       treeType: DEFAULT.TREE_TYPE,
       nodeSize: DEFAULT.NODE_SIZE,
       labelSize: DEFAULT.LABEL_SIZE,
-      labelGetter: FilteredDataStore.getLabelGetter(),
-      colourColumnName: FilteredDataStore.getColourTableColumnName(),
       treeLoaded: false,
     });
   },
@@ -50,8 +49,6 @@ export default React.createClass({
   componentDidMount() {
     // TODO: Un-hack this
     componentHandler.upgradeDom();
-
-    FilteredDataStore.addChangeListener(this.handleFilteredDataStoreChange);
 
     const phylocanvas = PhyloCanvas.createTree('phylocanvas-container', {
       contextMenu: {
@@ -75,7 +72,7 @@ export default React.createClass({
     });
 
     phylocanvas.on('original-tree', () => {
-      this.styleTree();
+      this.props.styleTree(this.phylocanvas);
       this.phylocanvas.fitInPanel();
       this.phylocanvas.draw();
 
@@ -88,7 +85,7 @@ export default React.createClass({
   },
 
   componentWillUpdate() {
-    this.phylocanvas.canvasEl.removeEventListener('updated', this.props.onUpdated);
+    this.phylocanvas.containerElement.removeEventListener('updated', this.props.onUpdated);
   },
 
   componentDidUpdate() {
@@ -99,13 +96,9 @@ export default React.createClass({
     if (this.props.newick && this.props.newick !== this.phylocanvas.stringRepresentation) {
       this.loadTree();
     } else {
-      this.styleTree();
+      this.props.styleTree(this.phylocanvas);
       this.phylocanvas.draw();
     }
-  },
-
-  componentWillUnmount() {
-    FilteredDataStore.removeChangeListener(this.handleFilteredDataStoreChange);
   },
 
   render() {
@@ -135,38 +128,13 @@ export default React.createClass({
 
   loadTree() {
     this.phylocanvas.load(this.props.newick, () => {
-      this.styleTree();
+      this.props.styleTree(this.phylocanvas);
       this.phylocanvas.fitInPanel();
       this.phylocanvas.draw();
       this.setState({
         treeLoaded: true,
       });
     });
-  },
-
-  styleTree() {
-    this.setNodeLabels();
-    this.props.styleTree(this.phylocanvas);
-  },
-
-  setNodeLabels() {
-    for (const leaf of this.phylocanvas.leaves) {
-      if (UploadedCollectionStore.contains(leaf.id)) {
-        const assembly = UploadedCollectionStore.getAssemblies()[leaf.id];
-        leaf.label = this.state.labelGetter(assembly);
-      } else {
-        const assembly = ReferenceCollectionStore.getAssemblies()[leaf.id];
-        if (!assembly) {
-          leaf.label = leaf.id;
-          continue;
-        }
-
-        leaf.label = assembly.metadata.assemblyName;
-        if (assembly.analysis) {
-          leaf.label += `_${assembly.analysis.st}`;
-        }
-      }
-    }
   },
 
   handleNodeSizeChange(event) {
@@ -179,38 +147,6 @@ export default React.createClass({
 
   handleTreeTypeChange(event) {
     this.phylocanvas.setTreeType(event.target.value);
-  },
-
-  handleFilteredDataStoreChange() {
-    const newState = {};
-
-    const labelGetter = FilteredDataStore.getLabelGetter();
-    if (labelGetter !== this.state.labelGetter) {
-      newState.labelGetter = labelGetter;
-    }
-
-    const colourTableColumn = FilteredDataStore.getColourTableColumnName();
-    if (colourTableColumn !== this.state.colourTableColumn) {
-      newState.colourTableColumn = colourTableColumn;
-    }
-
-    this.setState(newState);
-
-    if (!FilteredDataStore.hasTextFilter()) {
-      for (const leaf of this.phylocanvas.leaves) {
-        leaf.highlighted = false;
-      }
-      return;
-    }
-
-    if (this.props.highlightFilteredNodes) {
-      this.props.highlightFilteredNodes(this.phylocanvas);
-    } else {
-      const assemblyIds = FilteredDataStore.getAssemblyIds();
-      for (const leaf of this.phylocanvas.leaves) {
-        leaf.highlighted = (assemblyIds.indexOf(leaf.id) !== -1);
-      }
-    }
   },
 
 });

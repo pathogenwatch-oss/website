@@ -9,16 +9,7 @@ const actions = {
     }
 
     if (result) {
-      const { collectionId, assemblies, tree } = result[0];
-      return {
-        uploaded: {
-          collectionId,
-          assemblies,
-          tree,
-          assemblyIds: Object.keys(assemblies),
-        },
-        reference: result[1],
-      };
+      return result[0].subtrees;
     }
   },
 };

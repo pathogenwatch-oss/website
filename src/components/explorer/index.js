@@ -9,7 +9,7 @@ import { fetchEntities } from '^/actions/fetch';
 
 import Species from '^/species';
 
-const store = getStore();
+export const store = getStore();
 
 const connectExplorer = connect(
   ({ loading }) => { return { loading }; },

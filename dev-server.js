@@ -40,7 +40,7 @@ apiRouter.post('/species/:speciesId/collection/:collectionId/assembly/:id', func
 apiRouter.get('/species/:speciesId/collection/:id', function (req, res) {
   setTimeout(function () {
     res.sendFile(__dirname + '/static_data/collection.json');
-  }, 2000);
+  }, 1000);
 });
 
 apiRouter.get('/species/:speciesId/reference', function (req, res) {
@@ -56,7 +56,7 @@ apiRouter.post('/download/type/assembly/format/fasta', function (req, res) {
     res.json({
       'gobbledegook': req.body.idList[0] + '.fa',
     });
-  }, 2000);
+  }, 1000);
 });
 
 apiRouter.post('/download/type/:idType/format/:fileFormat', function (req, res) {
@@ -64,7 +64,7 @@ apiRouter.post('/download/type/:idType/format/:fileFormat', function (req, res) 
     res.json({
       'gobbledegook': req.params.fileFormat,
     });
-  }, 2000);
+  }, 1000);
 });
 
 apiRouter.get('/download/file/:fileName', function (req, res) {

@@ -56,7 +56,6 @@ const LayoutContainer = React.createClass({
       </div>
     );
   },
-
   handleBodyClick(event) {
     BodyClickActionCreators.clicked(event);
   },
