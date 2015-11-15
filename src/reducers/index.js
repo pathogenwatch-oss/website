@@ -8,6 +8,7 @@ import subtrees from './subtrees';
 // ui
 import downloadsMenu from './downloadsMenu';
 import userDefinedColumns from './userDefinedColumns';
+import treeLinks from './treeLinks';
 import bodyClickEvent from './bodyClickEvent';
 
 // util
@@ -31,6 +32,7 @@ export default combineReducers({
   ui: combineReducers({
     downloadsMenu: createReducer(downloadsMenu),
     userDefinedColumns: createReducer(userDefinedColumns),
+    treeLinks: createReducer(treeLinks),
     bodyClickEvent,
   }),
   loading: combineReducers({ ready, error }),

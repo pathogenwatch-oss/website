@@ -103,18 +103,12 @@ DownloadsMenu.propTypes = {
   dispatch: React.PropTypes.func,
 };
 
-const windowURL = window.URL || window.webkitURL;
-function createBlobUrl(data, type = 'text/plain;charset=utf-8') {
-  const blob = new Blob([ data ], { type });
-  return windowURL.createObjectURL(blob);
-}
-
 function mapStateToProps({ entities, ui }) {
-  const { uploaded, reference } = entities.collections;
+  const { uploaded } = entities.collections;
   return {
-    populationTreeLink: createBlobUrl(uploaded.tree),
-    collectionTreeLink: createBlobUrl(reference.tree),
     collectionId: uploaded.collectionId,
+    populationTreeLink: ui.treeLinks.population,
+    collectionTreeLink: ui.treeLinks.collection,
     active: ui.downloadsMenu.active,
   };
 }
