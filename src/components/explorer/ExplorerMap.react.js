@@ -14,9 +14,9 @@ function onMapClick() {
   FilteredDataActionCreators.clearAssemblyFilter();
 }
 
-const ExplorerMap = ({ dimensions, mapProps }) => (
+const ExplorerMap = ({ dimensions, markerDefs }) => (
   <section style={assign({}, style, dimensions)}>
-    <GoogleMap { ...mapProps } />
+    <GoogleMap markerDefs={markerDefs} onMapClick={onMapClick} />
   </section>
 );
 
@@ -30,10 +30,7 @@ ExplorerMap.propTypes = {
 
 function mapStateToProps({ display }) {
   return {
-    mapProps: {
-      markerDefs: display.mapMarkers,
-      onMapClick,
-    },
+    markerDefs: display.mapMarkers,
   };
 }
 
