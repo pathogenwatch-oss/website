@@ -3,7 +3,6 @@ import '../../css/spinner.css';
 import React from 'react';
 
 import DownloadStore from '^/stores/DownloadStore';
-// import FilteredDataStore from '^/stores/FilteredDataStore';
 
 import DownloadActionCreators from '^/actions/DownloadActionCreators';
 
@@ -22,7 +21,6 @@ function changeListener() {
 }
 
 DownloadStore.addChangeListener(changeListener);
-// FilteredDataStore.addChangeListener(changeListener);
 
 export default React.createClass({
 

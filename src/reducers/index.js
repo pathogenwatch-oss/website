@@ -5,9 +5,11 @@ import antibiotics from './antibiotics';
 import collection from './collection';
 import subtrees from './subtrees';
 
+// table
+import metadata from './metadata';
+
 // ui
 import downloadsMenu from './downloadsMenu';
-import userDefinedColumns from './userDefinedColumns';
 import treeLinks from './treeLinks';
 import bodyClickEvent from './bodyClickEvent';
 
@@ -29,13 +31,9 @@ export default combineReducers({
     collections: createReducer(collection),
     subtrees: createReducer(subtrees),
   }),
-  ui: combineReducers({
-    downloadsMenu: createReducer(downloadsMenu),
-    userDefinedColumns: createReducer(userDefinedColumns),
-    treeLinks: createReducer(treeLinks),
-    bodyClickEvent,
+  tables: combineReducers({
+    metadata: createReducer(metadata),
   }),
-  loading: combineReducers({ ready, error }),
   // display: combineReducers({
   //   labels: createReducer(displayLabels),
   //   colours: createReducer(displayColours),
@@ -44,4 +42,10 @@ export default combineReducers({
   // filter: combineReducers({
   //   visibleAssemblyIds: createReducer(visibleAssemblyIds),
   // }),
+  ui: combineReducers({
+    downloadsMenu: createReducer(downloadsMenu),
+    treeLinks: createReducer(treeLinks),
+    bodyClickEvent,
+  }),
+  loading: combineReducers({ ready, error }),
 });

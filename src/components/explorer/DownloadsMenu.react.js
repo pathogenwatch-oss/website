@@ -52,48 +52,47 @@ const DownloadsMenu = ({
                 Collection Tree (.nwk)
             </a>
           </li>
+          <li className="wgsa-menu__item">
+            <DownloadButton
+              description="Kernel Checksum Distribution"
+              format="kernel_checksum_distribution" />
+            Kernel Checksum Distribution
+          </li>
+          <li className="wgsa-menu__item">
+            <DownloadButton
+              description="Concatenated Gene Family"
+              format="extended_kernel_fasta" />
+            Kernel Matches
+          </li>
+          <li className="wgsa-menu__item">
+            <DownloadButton
+              description="Kernel Sequence Fasta"
+              format="kernel_fasta" />
+            Kernel Sequence (.fa)
+          </li>
+          <li className="wgsa-menu__item">
+            <DownloadButton
+              description="Kernel CSV"
+              format="kernel_csv" />
+            Kernel Sequence (.csv)
+          </li>
+          <li className="wgsa-menu__item">
+            <DownloadButton
+              description="Concatenated Gene Family"
+              format="score_matrix" />
+            Score Matrix
+          </li>
+          <li className="wgsa-menu__item">
+            <DownloadButton
+              description="Concatenated Gene Family"
+              format="differences_matrix" />
+            Differences Matrix
+          </li>
         </ul>
       </li>
     </ul>
   </div>
 );
-
-// <li className="wgsa-menu__item">
-//   <DownloadButton
-//     description="Kernel Checksum Distribution"
-//     format="kernel_checksum_distribution" />
-//   Kernel Checksum Distribution
-// </li>
-// <li className="wgsa-menu__item">
-//   <DownloadButton
-//     description="Concatenated Gene Family"
-//     format="extended_kernel_fasta" />
-//   Kernel Matches
-// </li>
-// <li className="wgsa-menu__item">
-//   <DownloadButton
-//     description="Kernel Sequence Fasta"
-//     format="kernel_fasta" />
-//   Kernel Sequence (.fa)
-// </li>
-// <li className="wgsa-menu__item">
-//   <DownloadButton
-//     description="Kernel CSV"
-//     format="kernel_csv" />
-//   Kernel Sequence (.csv)
-// </li>
-// <li className="wgsa-menu__item">
-//   <DownloadButton
-//     description="Concatenated Gene Family"
-//     format="score_matrix" />
-//   Score Matrix
-// </li>
-// <li className="wgsa-menu__item">
-//   <DownloadButton
-//     description="Concatenated Gene Family"
-//     format="differences_matrix" />
-//   Differences Matrix
-// </li>
 
 DownloadsMenu.propTypes = {
   populationTreeLink: React.PropTypes.string,

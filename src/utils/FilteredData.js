@@ -30,12 +30,13 @@ function getColour(assembly) {
 }
 
 function getDownloadIdList(format) {
-  if (format === 'score_matrix' ||
-      format === 'differences_matrix' ||
-      format === 'kernel_checksum_distribution') {
-    return [ UploadedCollectionStore.getCollectionId() ];
-  }
-  return FilteredDataStore.getAssemblyIds();
+  // if (format === 'score_matrix' ||
+  //     format === 'differences_matrix' ||
+  //     format === 'kernel_checksum_distribution') {
+  //   return [ UploadedCollectionStore.getCollectionId() ];
+  // }
+  // return FilteredDataStore.getAssemblyIds();
+  return [];
 }
 
 export default {
