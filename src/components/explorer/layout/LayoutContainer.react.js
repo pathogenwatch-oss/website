@@ -1,11 +1,10 @@
-import '../../../css/dropdown-menu.css';
-
 import React from 'react';
+import { connect } from 'react-redux';
 
 import DownloadsMenu from '../DownloadsMenu.react';
 import Search from '../Search.react';
 
-import BodyClickActionCreators from '^/actions/BodyClickActionCreators';
+import { clicked } from '^/actions/bodyClick';
 
 import { CGPS } from '^/defaults';
 import Species from '^/species';
@@ -33,6 +32,7 @@ const LayoutContainer = React.createClass({
   displayName: 'LayoutContainer',
 
   propTypes: {
+    handleBodyClick: React.PropTypes.func,
     children: React.PropTypes.arrayOf(React.PropTypes.element),
   },
 
@@ -41,8 +41,9 @@ const LayoutContainer = React.createClass({
   },
 
   render() {
+    const { handleBodyClick } = this.props;
     return (
-      <div ref="container" style={style} className="mdl-layout mdl-js-layout mdl-layout--fixed-header" onClick={this.handleBodyClick}>
+      <div ref="container" style={style} className="mdl-layout mdl-js-layout mdl-layout--fixed-header" onClick={handleBodyClick}>
         <header style={headerStyle} className="mdl-layout__header">
           <div style={headerRowStyle} className="mdl-layout__header-row">
             <span className="mdl-layout-title">WGSA | {Species.formattedName}</span>
@@ -56,10 +57,13 @@ const LayoutContainer = React.createClass({
       </div>
     );
   },
-  handleBodyClick(event) {
-    BodyClickActionCreators.clicked(event);
-  },
 
 });
 
-export default LayoutContainer;
+function mapDispatchToProps(dispatch) {
+  return {
+    handleBodyClick: e => dispatch(clicked(e)),
+  };
+}
+
+export default connect(null, mapDispatchToProps)(LayoutContainer);

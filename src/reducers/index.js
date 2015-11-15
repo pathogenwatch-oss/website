@@ -8,6 +8,7 @@ import subtrees from './subtrees';
 // ui
 import downloadsMenu from './downloadsMenu';
 import userDefinedColumns from './userDefinedColumns';
+import bodyClickEvent from './bodyClickEvent';
 
 // util
 import { ready, error } from './fetch';
@@ -30,6 +31,7 @@ export default combineReducers({
   ui: combineReducers({
     downloadsMenu: createReducer(downloadsMenu),
     userDefinedColumns: createReducer(userDefinedColumns),
+    bodyClickEvent,
   }),
   loading: combineReducers({ ready, error }),
   // display: combineReducers({

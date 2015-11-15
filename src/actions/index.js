@@ -26,9 +26,6 @@ export const SET_RECEIVED_RESULT = 'SET_RECEIVED_RESULT';
 
 /* Explorer View */
 
-/* Body click */
-export const BODY_CLICK = 'BODY_CLICK';
-
 /* Collection Navigation */
 export const SET_COLLECTION_NAVIGATION = 'SET_COLLECTION_NAVIGATION';
 
