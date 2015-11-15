@@ -5,8 +5,11 @@ import antibiotics from './antibiotics';
 import collection from './collection';
 import subtrees from './subtrees';
 
-// table
+// tables
 import metadata from './metadata';
+
+// display
+import mapMarkers from './mapMarkers';
 
 // ui
 import downloadsMenu from './downloadsMenu';
@@ -34,11 +37,12 @@ export default combineReducers({
   tables: combineReducers({
     metadata: createReducer(metadata),
   }),
-  // display: combineReducers({
-  //   labels: createReducer(displayLabels),
-  //   colours: createReducer(displayColours),
-  //   subtree: createReducer(displayedSubtree),
-  // }),
+  display: combineReducers({
+    mapMarkers: createReducer(mapMarkers),
+    // labels: createReducer(displayLabels),
+    // colours: createReducer(displayColours),
+    // subtree: createReducer(displayedSubtree),
+  }),
   // filter: combineReducers({
   //   visibleAssemblyIds: createReducer(visibleAssemblyIds),
   // }),

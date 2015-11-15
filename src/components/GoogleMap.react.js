@@ -140,9 +140,13 @@ export default React.createClass({
     createMarkers(this.props.markerDefs);
   },
 
-  componentDidUpdate() {
+  componentDidUpdate(previous) {
     resizeMap();
-    createMarkers(this.props.markerDefs);
+
+    const { markerDefs } = this.props;
+    if (markerDefs !== previous.markerDefs) {
+      createMarkers(markerDefs);
+    }
   },
 
   render() {
