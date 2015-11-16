@@ -5,7 +5,7 @@ import PhyloCanvas from 'PhyloCanvas';
 import contextMenuPlugin from 'phylocanvas-plugin-context-menu';
 
 import TreeControls from './TreeControls.react';
-import TreeMenu from './TreeMenu.react';
+// import TreeMenu from './TreeMenu.react';
 
 import FilteredDataActionCreators from '../../actions/FilteredDataActionCreators';
 
@@ -88,7 +88,7 @@ export default React.createClass({
   },
 
   componentWillUpdate() {
-    this.phylocanvas.canvasEl.removeEventListener('updated', this.props.onUpdated);
+    this.phylocanvas.containerElement.removeEventListener('updated', this.props.onUpdated);
   },
 
   componentDidUpdate() {
