@@ -48,6 +48,7 @@ const actions = {
           data.push(mapAssemblyToTableRow(assemblies[id], columns));
           return data;
         }, []),
+        headerClick: () => {}, // TODO: Use action creator here
       };
     }
 

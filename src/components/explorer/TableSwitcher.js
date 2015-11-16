@@ -1,10 +1,10 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import assign from 'object-assign';
 
 import Switch from '../Switch.react';
 
-import CollectionNavigationStore from '^/stores/CollectionNavigationStore';
-import CollectionNavigationActionCreators from '^/actions/CollectionNavigationActionCreators';
+import { setTable } from '^/actions/table';
 
 const style = {
   position: 'absolute',
@@ -13,30 +13,35 @@ const style = {
   left: 16,
 };
 
-export default React.createClass({
+const TableSwitcher = React.createClass({
 
-  displayName: 'LayoutNavigation',
+  displayName: 'TableSwitcher',
 
   propTypes: {
     top: React.PropTypes.number,
+    handleClick: React.PropTypes.func,
   },
 
   render() {
+    const { top, handleClick } = this.props;
     return (
-      <div style={assign({}, style, this.props)} className="wgsa-switch-background mdl-shadow--2dp">
+      <div style={assign({ top }, style)} className="wgsa-switch-background mdl-shadow--2dp">
         <Switch
           id="table-switcher"
           left={{ title: 'Metadata', icon: 'list' }}
           right={{ title: 'Resistance Profile', icon: 'local_pharmacy' }}
-          onChange={this.handleClick} />
+          onChange={handleClick} />
       </div>
     );
   },
 
-  handleClick(checked) {
-    const { TABLE_METADATA, TABLE_RESISTANCE_PROFILE } = CollectionNavigationStore.getCollectionNavigationStates();
-    CollectionNavigationActionCreators.setCollectionNavigation(
-      checked ? TABLE_RESISTANCE_PROFILE : TABLE_METADATA
-    );
-  },
 });
+
+function mapDispatchToProps(dispatch) {
+  return {
+    handleClick: (checked) =>
+      dispatch(setTable(checked ? 'resistanceProfile' : 'metadata')),
+  };
+}
+
+export default connect(null, mapDispatchToProps)(TableSwitcher);

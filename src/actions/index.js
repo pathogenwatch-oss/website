@@ -26,9 +26,6 @@ export const SET_RECEIVED_RESULT = 'SET_RECEIVED_RESULT';
 
 /* Explorer View */
 
-/* Collection Navigation */
-export const SET_COLLECTION_NAVIGATION = 'SET_COLLECTION_NAVIGATION';
-
 /* Filter */
 export const SET_FILTERED_ASSEMBLY_IDS = 'SET_FILTERED_ASSEMBLY_IDS';
 export const CLEAR_ASSEMBLY_FILTER = 'CLEAR_ASSEMBLY_FILTER';

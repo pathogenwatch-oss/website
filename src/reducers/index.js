@@ -7,8 +7,10 @@ import subtrees from './subtrees';
 
 // tables
 import metadata from './metadata';
+import resistanceProfile from './resistanceProfile';
 
 // display
+import table from './table';
 import mapMarkers from './mapMarkers';
 
 // ui
@@ -36,8 +38,10 @@ export default combineReducers({
   }),
   tables: combineReducers({
     metadata: createReducer(metadata),
+    resistanceProfile: createReducer(resistanceProfile),
   }),
   display: combineReducers({
+    table: createReducer(table),
     mapMarkers: createReducer(mapMarkers),
     // labels: createReducer(displayLabels),
     // colours: createReducer(displayColours),
