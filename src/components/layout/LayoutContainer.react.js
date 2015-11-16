@@ -3,6 +3,7 @@ import '../../css/dropdown-menu.css';
 import React from 'react';
 
 import DownloadsMenu from '../DownloadsMenu.react';
+import Search from '../Search.react';
 
 import BodyClickActionCreators from '../../actions/BodyClickActionCreators';
 
@@ -29,6 +30,8 @@ const headerRowStyle = {
 
 const LayoutContainer = React.createClass({
 
+  displayName: 'LayoutContainer',
+
   componentDidMount() {
     componentHandler.upgradeElement(React.findDOMNode(this.refs.container));
   },
@@ -39,7 +42,7 @@ const LayoutContainer = React.createClass({
         <header style={headerStyle} className="mdl-layout__header">
           <div style={headerRowStyle} className="mdl-layout__header-row">
             <span className="mdl-layout-title">WGSA | {Species.formattedName}</span>
-            <div className="mdl-layout-spacer"></div>
+            <Search />
             <nav className="mdl-navigation">
               <DownloadsMenu />
             </nav>

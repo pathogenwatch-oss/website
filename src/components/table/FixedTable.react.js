@@ -30,7 +30,7 @@ export default React.createClass({
     height: React.PropTypes.number,
     width: React.PropTypes.number,
     tableProps: React.PropTypes.object,
-    columns: React.PropTypes.object,
+    columns: React.PropTypes.array,
     data: React.PropTypes.array,
     calculatedColumnWidths: React.PropTypes.array,
     headerClickHandler: React.PropTypes.func,

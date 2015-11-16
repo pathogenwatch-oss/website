@@ -25,9 +25,15 @@ const leftArrowStyle = assign({ left: '37.5%', transform: 'translate(-12px, -12p
 const rightArrowStyle = assign({ left: '62.5%', transform: 'translate(-12px, -12px) rotate(-90deg)' }, arrowStyle);
 
 
+export default React.createClass({
 
-const DragIcon = React.createClass({
-  render: function () {
+  displayName: 'DragIcon',
+
+  propTypes: {
+    direction: React.PropTypes.string,
+  },
+
+  render() {
     const direction = this.props.direction;
 
     const horizontalStyle = assign({
@@ -41,7 +47,6 @@ const DragIcon = React.createClass({
     }, buttonStyle);
 
     const className = `${buttonClasses} wgsa-drag-handle wgsa-drag-handle--${direction}`;
-
     if (direction === 'horizontal') {
       return (
         <a
@@ -64,5 +69,3 @@ const DragIcon = React.createClass({
   },
 
 });
-
-module.exports = DragIcon;

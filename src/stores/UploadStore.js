@@ -1,43 +1,78 @@
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import { EventEmitter } from 'events';
 import assign from 'object-assign';
-import moment from 'moment';
+
+import UploadWorkspaceNavigationStore from '../stores/UploadWorkspaceNavigationStore';
+
+import MetadataUtils from '../utils/Metadata';
 
 const CHANGE_EVENT = 'change';
 
 const rawFiles = {};
 const assemblies = {};
+const errors = [];
 
 function addFiles(newRawFiles, newAssemblies) {
   assign(rawFiles, newRawFiles);
   assign(assemblies, newAssemblies);
 }
 
-function setMetadataDateComponent(assemblyName, component, value) {
-  assemblies[assemblyName].metadata.date[component] = value;
+function validateFiles() {
+  errors.length = 0;
+
+  const assemblyNames = Object.keys(assemblies);
+
+  if (assemblyNames.length < 3) {
+    const numberRequired = 3 - assemblyNames.length;
+    errors.push({
+      message: `Please upload at least ${numberRequired} more ${numberRequired === 1 ? 'assembly' : 'assemblies'} to begin.`,
+    });
+    return;
+  }
+
+  // if (assemblyNames.length > 100) {
+  //   errors.push({
+  //     message: 'Please upload no more than 100 assemblies at one time.',
+  //   });
+  //   return;
+  // }
+
+  for (const assemblyName of assemblyNames) {
+    const assembly = assemblies[assemblyName];
+    const previousNumberOfErrors = errors.length;
+
+    assembly.hasErrors = false;
+
+    if (!assembly.fasta.assembly) {
+      errors.push({
+        message: `${assemblyName} - fasta file not provided.`,
+      });
+    }
+
+    if (!MetadataUtils.isValid(assembly.metadata)) {
+      errors.push({
+        assemblyName,
+        navigate: true,
+        message: `${assemblyName} - metadata not valid.`,
+      });
+    }
+
+    if (errors.length > previousNumberOfErrors) {
+      assembly.hasErrors = true;
+    }
+  }
 }
 
 function setMetadataColumn(assemblyName, columnName, value) {
   assemblies[assemblyName].metadata[columnName] = value;
 }
 
-function setMetadataDate(assemblyName, date) {
-  const m = moment(date);
-  setMetadataDateComponent(assemblyName, 'year', m.year());
-  setMetadataDateComponent(assemblyName, 'month', m.month() + 1);
-  setMetadataDateComponent(assemblyName, 'day', m.date());
-}
-
-function setMetadataSource(assemblyName, source) {
-  assemblies[assemblyName].metadata.source = source;
+function setMetadataDateComponent(assemblyName, component, value) {
+  assemblies[assemblyName].metadata.date[component] = value;
 }
 
 function deleteAssembly(assemblyName) {
   delete assemblies[assemblyName];
-}
-
-function emitChange() {
-  Store.emit(CHANGE_EVENT);
 }
 
 const Store = assign({}, EventEmitter.prototype, {
@@ -72,39 +107,8 @@ const Store = assign({}, EventEmitter.prototype, {
 
   getOverviewChartData(chartType) {
     return Object.keys(assemblies).reduce((memo, id) => {
-      if (assemblies[id].analysis[chartType]) {
-        memo[id] = assemblies[id].analysis[chartType];
-      }
-      return memo;
-    }, {});
-  },
-
-  getAllMetadataLocations() {
-    return Object.keys(assemblies).reduce((memo, id) => {
-      memo[id] = assemblies[id].metadata.geography;
-      return memo;
-    }, {});
-  },
-
-  getLocationToAssembliesMap() {
-    return Object.keys(assemblies).reduce((memo, id) => {
-      const { geography } = assemblies[id].metadata;
-      const filename = assemblies[id].fasta.name;
-      if (geography.position.latitude !== null) {
-        const latlng =
-          geography.position.latitude + ',' + geography.position.longitude;
-        if (!memo[latlng]) {
-          memo[latlng] = {
-            assemblyName: [],
-            location: null,
-          };
-        }
-        if (filename) {
-          memo[latlng].assemblyName.push(filename);
-        }
-        if (geography.location) {
-          memo[latlng].location = geography.location;
-        }
+      if (assemblies[id].metrics[chartType]) {
+        memo[id] = assemblies[id].metrics[chartType];
       }
       return memo;
     }, {});
@@ -113,8 +117,8 @@ const Store = assign({}, EventEmitter.prototype, {
   getMinMaxNoContigsForAllAssemblies() {
     var noContigsArray = [];
     for (var assemblyId in assemblies) {
-      if (assemblies[assemblyId].analysis.totalNumberOfContigs) {
-        noContigsArray.push(assemblies[assemblyId].analysis.totalNumberOfContigs);
+      if (assemblies[assemblyId].metrics.totalNumberOfContigs) {
+        noContigsArray.push(assemblies[assemblyId].metrics.totalNumberOfContigs);
       }
     }
     if (noContigsArray.length <= 0) {
@@ -127,12 +131,25 @@ const Store = assign({}, EventEmitter.prototype, {
     var totalAssemblyLength = 0;
     var noAssemblies = Object.keys(assemblies).length;
     for (var assemblyId in assemblies) {
-      totalAssemblyLength += assemblies[assemblyId].analysis.totalNumberOfNucleotidesInDnaStrings || 0;
+      totalAssemblyLength += assemblies[assemblyId].metrics.totalNumberOfNucleotidesInDnaStrings || 0;
     }
     return Math.round(totalAssemblyLength / noAssemblies);
-  }
+  },
+
+  isReadyToUpload() {
+    return errors.length === 0;
+  },
+
+  getErrors() {
+    return errors;
+  },
 
 });
+
+function emitChange() {
+  validateFiles();
+  Store.emit(CHANGE_EVENT);
+}
 
 function handleAction(action) {
   switch (action.type) {
@@ -151,17 +168,10 @@ function handleAction(action) {
     emitChange();
     break;
 
-  case 'set_metadata_date':
-    setMetadataDate(action.assemblyName, action.date);
-    emitChange();
-    break;
-
-  case 'set_metadata_source':
-    setMetadataSource(action.assemblyName, action.source);
-    emitChange();
-    break;
-
   case 'delete_assembly':
+    AppDispatcher.waitFor([
+      UploadWorkspaceNavigationStore.dispatchToken,
+    ]);
     deleteAssembly(action.assemblyName);
     emitChange();
     break;
@@ -173,4 +183,4 @@ function handleAction(action) {
 
 Store.dispatchToken = AppDispatcher.register(handleAction);
 
-module.exports = Store;
+export default Store;

@@ -26,7 +26,7 @@ const definitions = {
     nickname: 'salty',
     formattedName: (<span><em>Salmonella</em> Typhi</span>),
     imagePath: '/assets/img/salty.jpg',
-    definitionText: (<span><strong><em>Salmonella enterica</em></strong> subsp. <strong><em>enterica</em></strong>, a subspecies of Salmonella enterica.</span>),
+    definitionText: (<span><strong><em>Salmonella</em></strong> <strong>Typhi</strong>,  a common serovar of <em>Salmonella enterica</em> subsp. <em>enterica</em>.</span>),
     active: false,
   },
 
@@ -35,7 +35,7 @@ const definitions = {
     nickname: 'salen',
     formattedName: (<span><em>Salmonella</em> Enteritidis</span>),
     imagePath: '/assets/img/salen.jpg',
-    definitionText: (<span><strong><em>Salmonella</em></strong> serotype Enteritidis (SE), a common serotype of Salmonella bacteria.</span>),
+    definitionText: (<span><strong><em>Salmonella</em> Enteritidis</strong>, a common serovar of <em>Salmonella enterica</em> subsp. <em>enterica</em>.</span>),
     active: false,
   },
 

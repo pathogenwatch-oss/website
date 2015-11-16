@@ -3,7 +3,7 @@ import FilteredDataStore from '../stores/FilteredDataStore';
 import ReferenceCollectionStore from '../stores/ReferenceCollectionStore';
 import UploadedCollectionStore from '../stores/UploadedCollectionStore';
 
-import { CGPS } from '../defaults';
+import { DANGER_COLOUR, CGPS } from '../defaults';
 
 function columnNameIsAntibiotic(columnName) {
   return (Object.keys(AntibioticsStore.get()).indexOf(columnName) > -1);
@@ -21,7 +21,7 @@ function getColour(assembly) {
     const resistanceProfileResult = assembly.analysis.resistanceProfile[selectedTableColumnName].resistanceResult;
 
     if (resistanceProfileResult === 'RESISTANT') {
-      colour = '#d11b1b';
+      colour = DANGER_COLOUR;
     } else {
       colour = '#ffffff';
     }
@@ -34,6 +34,16 @@ function getColour(assembly) {
   return colour;
 }
 
+function getDownloadIdList(format) {
+  if (format === 'score_matrix' ||
+      format === 'differences_matrix' ||
+      format === 'kernel_checksum_distribution') {
+    return [ UploadedCollectionStore.getCollectionId() ];
+  }
+  return FilteredDataStore.getAssemblyIds();
+}
+
 export default {
   getColour,
+  getDownloadIdList,
 };

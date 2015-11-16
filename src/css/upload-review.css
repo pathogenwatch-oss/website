@@ -1,5 +1,10 @@
 /**** Upload Overview ****/
 
+.wgsa-confirm-duplicate-button button {
+  background: #ccc;
+  margin: 0px 8px;
+}
+
 .wgsa-highlight-text {
   color: #673c90;
   font-weight: 700;
@@ -16,6 +21,11 @@
 
 .overview-card-wide.mdl-card  {
   width: 100%;
+}
+
+.wgsa-summary-stats {
+  max-width: 488px;
+  margin: 0 auto;
 }
 
 /**** Upload Review - Header ****/
@@ -36,14 +46,11 @@
   .mdl-cell--6-col, .mdl-cell--6-col-tablet.mdl-cell--6-col-tablet {
       width: calc(100% - 16px);
   }
-}
 
-@media (max-width: 839px) and (min-width: 480px) {
   .mdl-grid--no-spacing>.mdl-cell--6-col, .mdl-grid--no-spacing>.mdl-cell--6-col-tablet.mdl-cell--6-col-tablet {
       width: 50%;
   }
 }
-
 /**** UploadReview - Analysis ****/
 
 .welcome-container {
@@ -133,13 +140,6 @@
   padding: 10px 0px;
 }
 
-.assemblyWorkspaceContainer .mdl-layout__content{
-  padding: 32px;
-}
-.assemblyWorkspaceContainer .mdl-cell {
-  background-color: #fff;
-}
-
 .assemblyWorkspaceContent {
   position: absolute;
   left: 0;
@@ -172,6 +172,7 @@
   width: auto;
   margin: 16px;
   min-height: 136px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
 }
 .wgsa-overview-upload-ready-card i{
   font-size: 50px;
@@ -200,69 +201,130 @@
   color: #777;
 }
 
-.overview-input-field {
-  padding-right: 10px;
-  display: flex;
-  justify-content: space-around;
-  margin: 16px 0px;
+.wgsa-info-window-button {
+  text-transform: none;
 }
 
-.overview-input-field .mdl-text-field {
-  width: auto;
+.wgsa-info-window-button + .wgsa-info-window-button {
+  margin-top: 8px;
 }
 
-.overview-input-field input {
-  font-size: 30px;
-  font-weight: 300;
-}
-
-.card-style {
+.wgsa-card {
   background: #fff;
+}
+
+.wgsa-card--padded,
+.wgsa-card-content {
   padding: 32px;
 }
 
-.card-style--no-padding {
-  background: #fff;
+.wgsa-card + .wgsa-card {
+  margin-top: 16px;
 }
 
-.heading {
+.wgsa-card-heading {
   background: transparent;
   font-size: 20px;
   font-weight: 300;
   color: #666;
   line-height: 40px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #ddd;
   padding: 4px 32px;
   overflow: hidden;
   display: block;
   text-overflow: ellipsis;
 }
 
+.wgsa-card-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.wgsa-card-column .wgsa-card {
+  flex-grow: 1;
+}
+
 .metadata-fields {
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.metadata-fields__main,
+.metadata-fields__other-fieldset {
+  min-width: calc(288px * 2 + 16px);
+}
+
+.metadata-fields__main {
+  margin-bottom: 16px;
+}
+
+.metadata-fields__main > .mdl-grid {
+  justify-content: space-between;
+}
+
+.metadata-googlemap {
+  position: relative;
+  max-width: 288px;
+}
+
+.metadata-fields__other-fieldset {
+  margin: 16px;
+  padding: 0 16px;
+  border: 1px solid #ddd;
+  box-sizing: border-box;
+  max-width: calc(2px + 32px + (288px + 32px) * 4);
+}
+
+.metadata-fields__other-fieldset > legend {
+  display: block;
+  margin: 0;
+  text-transform: uppercase;
+  font-size: 13px;
 }
 
 .metadata-fields__other {
-  margin: 16px 0px;
   overflow-y: auto;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: flex-start;
+}
+
+@media (max-width: 1024px) {
+
+  .metadata-fields__other {
+    justify-content: space-around;
+  }
+
 }
 
 .metadata-input-field {
   text-align: center;
-  /*width: auto;*/
+  width: 288px;
 }
 
 .metadata-fields__other .mdl-textfield {
-  margin: 16px 0px;
+  margin: 16px;
+}
+
+.metadata-field__date {
+  padding: 0 16px;
+  border: 1px solid #ddd;
+  max-width: 288px;
+  box-sizing: border-box;
+}
+
+.metadata-field__date > legend {
+  display: block;
+  margin: 0;
+  text-transform: uppercase;
+  font-size: 13px;
 }
 
 .metadata-field__date .mdl-textfield {
-  margin-right: 8px;
-  width: 56px;
+  margin-right: 16px;
 }
 
 .overview-fields {
@@ -281,23 +343,13 @@
   flex-grow: 1;
   padding: 0px;
   white-space: nowrap;
+  text-transform: none;
 }
-
 
 .overflow-y--auto {
   overflow-y: auto;
 }
 
-.wgsa-overview-container {
-/*  display: flex;
-  flex-direction: column;
-*/}
-
-.wgsa-overview-container > .mdl-cell{
-/*  position: relative;
-  flex-grow: 1;
-  flex-basis: 0;*/
-}
 /*********************************/
 
 /**** UploadReview - Navigation Left Pane ****/
@@ -512,8 +564,6 @@ text {
   font-weight: 100;
 }
 text.axis-label {
-  stroke: #888;
-  stroke-width: 0.05em;
   letter-spacing: 0.03em;
   font-size: 12px;
   text-transform: uppercase;

@@ -42,7 +42,7 @@ export default {
     console.log(`Expected: ${numberOfExpectedResults}, Received: ${numberOfReceivedResults}`);
 
     if (numberOfExpectedResults === numberOfReceivedResults) {
-      // console.log('[Macroreact] Received all results');
+      // console.log('[WGSA] Received all results');
 
       FileUploadingActionCreators.finishUploadingFiles(FileUploadingStore.getFileUploadingResults().SUCCESS);
     }

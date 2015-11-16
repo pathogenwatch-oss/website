@@ -1,123 +1,107 @@
-function generateYears(startYear, endYear) {
-  var years = [];
-  var yearCounter = endYear;
+import Papa from 'papaparse';
+import moment from 'moment';
 
-  for (; yearCounter !== startYear - 1;) {
-    years.push(yearCounter);
-    yearCounter = yearCounter - 1;
+function convertFieldNamesToLowerCase(dataObject) {
+  const fieldNames = Object.keys(dataObject);
+  let fieldNamesCounter = 0;
+  const dataObjectWithLowerCaseFieldNames = {};
+
+  while (fieldNamesCounter < fieldNames.length) {
+    const fieldName = fieldNames[fieldNamesCounter];
+    dataObjectWithLowerCaseFieldNames[fieldName.toLowerCase()] = dataObject[fieldName];
+    fieldNamesCounter = fieldNamesCounter + 1;
   }
 
-  return years;
+  return dataObjectWithLowerCaseFieldNames;
 }
 
-function generateMonths() {
-  var listOfMonths = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-  var monthCounter = 0;
-
-  listOfMonths = listOfMonths.map(function iife(monthName, index, array) {
-    return {
-      name: monthName,
-      number: index + 1
-    };
+function parseCsvToJson(csv) {
+  const results = Papa.parse(csv, {
+    header: true,
+    dynamicTyping: false,
+    skipEmptyLines: true,
   });
 
-  return listOfMonths;
-}
-
-function generateDays(year, month) {
-  var days = [];
-
-  if (typeof year !== 'number' || typeof month !== 'number') {
-    return days;
+  if (results.errors.length > 0) {
+    console.error('[WGSA] Errors during CSV to JSON conversion:');
+    console.dir(results.errors);
   }
 
-  var totalNumberOfDays = getTotalNumberOfDaysInMonth(year, month);
-  var dayCounter = 0;
+  results.data = results.data.map(convertFieldNamesToLowerCase);
+  return results;
+}
 
-  while (dayCounter < totalNumberOfDays) {
-    dayCounter = dayCounter + 1;
-    days.push(dayCounter);
+function getFormattedDateString({ year, month, day }) {
+  if (year && !month && !day) {
+    return year;
   }
 
-  return days;
-}
+  if (year && month && !day) {
+    return moment(`${year}-${month}`, 'YYYY-MM').format('MMMM YYYY');
+  }
 
-function getTotalNumberOfDaysInMonth(year, month) {
-  // Date() object counts months from 0 to 11
-  month = month - 1;
-
-  // http://www.dzone.com/snippets/determining-number-days-month
-  return (32 - new Date(year, month, 32).getDate());
-}
-
-function getCountry(isolate) {
-  if (isolate.metadata.geography.location && isolate.metadata.geography.location.country) {
-    return isolate.metadata.geography.location.country;
+  if (year && month && day) {
+    return moment(`${year}-${month}-${day}`, 'YYYY-MM-DD').format('Do MMMM YYYY');
   }
 
   return '';
 }
 
-function convertDataObjectToCustomObject(date) {
-  var year = date.getFullYear();
-  var month = date.getMonth() + 1;
-  var day = date.getDate();
-
+function convertDateObjectToCustomObject(date) {
   return {
-    year: year,
-    month: month,
-    day: day
+    year: date.getFullYear(),
+    month: date.getMonth() + 1, // converts months from 0-11 to 1-12
+    day: date.getDate(),
   };
 }
 
-function fixMetadataDateFormatInCollection(collection) {
-  var assemblies = collection.assemblies;
-  var assemblyIds = Object.keys(assemblies);
-  var assembly;
-
-  assemblyIds.forEach(function iife(assemblyId) {
-    assembly = assemblies[assemblyId];
+function fixMetadataDateFormatInCollection({ assemblies }) {
+  Object.keys(assemblies).forEach(function (assemblyId) {
+    const assembly = assemblies[assemblyId];
 
     if (assembly.metadata.datetime) {
-      assembly.metadata.date = convertDataObjectToCustomObject(new Date(assembly.metadata.datetime));
+      assembly.metadata.date = convertDateObjectToCustomObject(new Date(assembly.metadata.datetime));
     }
-
-    assemblies[assemblyId] = assembly;
   });
-
-  collection.assemblies = assemblies;
-
-  return collection;
 }
 
-function validateMetadata(collection) {
-  var isValidMap = {};
-  var currentTime = new Date();
-  var year = currentTime.getFullYear();
+function isValid({ date }) {
+  const thisYear = new Date().getFullYear();
 
-  for (var id in collection) {
-    if (!collection[id].fasta.assembly) {
-      isValidMap[id] = false;
-    }
-    else if (collection[id].metadata.date.day && !(collection[id].metadata.date.day >= 1 && collection[id].metadata.date.day <= 31) ||
-             collection[id].metadata.date.month && !(collection[id].metadata.date.month >= 1 && collection[id].metadata.date.month <= 12) ||
-             collection[id].metadata.date.year && !(collection[id].metadata.date.year > 1900 && collection[id].metadata.date.year <= year)) {
-      isValidMap[id] = false;
-    }
-    else {
-      isValidMap[id] = true;
-    }
+  if (!date) {
+    return true;
   }
-  return isValidMap;
+
+  const { day, month, year } = date;
+
+  if (day && (day < 1 || day > 31 || !month || !year)) {
+    return false;
+  }
+
+  if (month && (month < 1 || month > 12 || !year)) {
+    return false;
+  }
+
+  if (year && (year < 1900 || year > thisYear)) {
+    return false;
+  }
+
+  return true;
 }
 
-module.exports = {
-  generateYears: generateYears,
-  generateMonths: generateMonths,
-  generateDays: generateDays,
-  getTotalNumberOfDaysInMonth: getTotalNumberOfDaysInMonth,
-  getCountry: getCountry,
-  fixMetadataDateFormatInCollection: fixMetadataDateFormatInCollection,
-  validateMetadata: validateMetadata
-};
+function fixPositionInCollection({ assemblies }) {
+  Object.keys(assemblies).forEach(function (assemblyId) {
+    const { metadata } = assemblies[assemblyId];
+    if (metadata.geography) {
+      metadata.position = metadata.geography.position;
+    }
+  });
+}
 
+export default {
+  parseCsvToJson,
+  getFormattedDateString,
+  fixMetadataDateFormatInCollection,
+  isValid,
+  fixPositionInCollection,
+};

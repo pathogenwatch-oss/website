@@ -1,104 +1,125 @@
 import React from 'react';
 
-import Layout from './Layout.react';
-import DataUtils from '../utils/Data';
+import LayoutContainer from './layout/LayoutContainer.react';
+import LayoutWest from './layout/LayoutWest.react';
 
-const CollectionExplorer = React.createClass({
+import LayoutEast from './layout/LayoutEast.react';
+import LayoutNorth from './layout/LayoutNorth.react';
+import LayoutSouth from './layout/LayoutSouth.react';
 
-  propTypes: {
-    query: React.PropTypes.object.isRequired,
+import WestContent from './WestContent.react';
+import EastContent from './EastContent.react';
+import SouthContent from './SouthContent.react';
+
+import LayoutWestEastDivider from './layout/LayoutWestEastDivider.react';
+import LayoutNorthSouthDivider from './layout/LayoutNorthSouthDivider.react';
+
+import LayoutUtils from '../utils/Layout';
+
+const Layout = React.createClass({
+
+  getInitialState() {
+    return {
+      layoutWestWidth: 0,
+
+      layoutWestEastDividerLeft: 0,
+
+      layoutEastLeft: 0,
+      layoutEastWidth: 0,
+
+      layoutNorthHeight: 0,
+
+      layoutNorthSouthDividerTop: 0,
+
+      layoutSouthTop: 0,
+      layoutSouthHeight: 0,
+      layoutSouthWidth: 0,
+    };
   },
 
-  getInitialDataFieldThatFiltersMapMarkers: function () {
-    const dataObjects = this.state.data;
-
-    const dataFieldsThatFilterMapMarkers = DataUtils.findWhichDataFieldsShouldFilterMapMarkers(dataObjects);
-
-    if (dataFieldsThatFilterMapMarkers.length > 0) {
-      return dataFieldsThatFilterMapMarkers[0];
-    }
-
-    return null;
+  componentWillMount() {
+    this.setLayout();
   },
 
-  getFilteredIsolates: function (isolateIds) {
-    const filteredIsolates = {};
-    const unfilteredIsolates = this.state.data;
-
-    isolateIds.forEach(function (isolateId) {
-      filteredIsolates[isolateId] = unfilteredIsolates[isolateId];
-    });
-
-    return filteredIsolates;
+  componentDidMount() {
+    this.dangerouslyHandleWindowResize();
   },
 
-  handleFilterTableData: function (isolateIds) {
+  setLayout() {
     this.setState({
-      filteredTableData: this.getFilteredIsolates(isolateIds),
+
+      // West
+      layoutWestWidth: LayoutUtils.getWestWidth(),
+
+      layoutWestEastDividerLeft: LayoutUtils.getWestEastDividerLeft(),
+
+      // East
+      layoutEastLeft: LayoutUtils.getEastLeft(),
+      layoutEastWidth: LayoutUtils.getEastWidth(),
+
+      // North
+      layoutNorthHeight: LayoutUtils.getNorthHeight(),
+
+      layoutNorthSouthDividerTop: LayoutUtils.getNorthSouthDividerTop(),
+
+      // South
+      layoutSouthTop: LayoutUtils.getSouthTop(),
+      layoutSouthHeight: LayoutUtils.getSouthHeight(),
+      layoutSouthWidth: LayoutUtils.getSouthWidth(),
+
     });
   },
 
-  handleFilterMapAndTableData: function (isolateIds, allCurrentTreeNodeIds) {
-    let filteredIsolates;
-
-    if (isolateIds.length === 0) {
-      filteredIsolates = this.getFilteredIsolates(allCurrentTreeNodeIds);
-    } else {
-      filteredIsolates = this.getFilteredIsolates(isolateIds);
-    }
-
+  handleLayoutWestEastDividerDragEnd(westEastDividerLeft) {
     this.setState({
-      filteredMapData: filteredIsolates,
-      filteredTableData: filteredIsolates,
+      layoutWestWidth: westEastDividerLeft,
+      layoutWestEastDividerLeft: westEastDividerLeft,
+      layoutEastLeft: westEastDividerLeft + LayoutUtils.getDividerSize(),
+      layoutEastWidth: LayoutUtils.getViewportWidth() - (westEastDividerLeft + LayoutUtils.getDividerSize()),
     });
   },
 
-  handleSelectTreeData: function (isolateIds, allCurrentTreeNodeIds) {
-    this.selectIsolatesOnTree(isolateIds);
-    this.handleFilterMapAndTableData(isolateIds, allCurrentTreeNodeIds);
-  },
-
-  selectIsolatesOnTree: function (isolateIds) {
-    if (isolateIds.length > 1) {
-      this.setState({
-        selectIsolatesOnTree: [],
-      });
-    } else {
-      this.setState({
-        selectIsolatesOnTree: isolateIds,
-      });
-    }
-  },
-
-  handleInfoWindowIsolateClick: function (isolateId) {
-    this.selectIsolatesOnTree([ isolateId ]);
-  },
-
-  handleColourDataByDataField: function (dataField) {
+  handleLayoutNorthSourthDividerDragEnd(northSouthDividerTop) {
     this.setState({
-      colourDataByDataField: dataField,
+      layoutNorthHeight: northSouthDividerTop - LayoutUtils.HEADER_BAR_HEIGHT,
+      layoutNorthSouthDividerTop: northSouthDividerTop,
+      layoutSouthTop: northSouthDividerTop + LayoutUtils.getDividerSize(),
+      layoutSouthHeight: LayoutUtils.getViewportHeight() - (northSouthDividerTop + LayoutUtils.getDividerSize()),
     });
   },
 
-  handleChangeNodeLabel: function (nodeLabel) {
-    this.setState({
-      treeNodeLabel: nodeLabel,
-    });
-  },
-
-  handleTimelineFilterChange: function (filterStartDate, filterEndDate) {
-    this.setState({
-      filterStartDate: filterStartDate,
-      filterEndDate: filterEndDate,
-    });
-  },
-
-  render: function () {
+  render() {
     return (
-      <Layout />
+      <LayoutContainer>
+        <LayoutNorth height={this.state.layoutNorthHeight}>
+          <LayoutWest width={this.state.layoutWestWidth}>
+            <WestContent
+              width={this.state.layoutWestWidth}
+              height={this.state.layoutNorthHeight} />
+          </LayoutWest>
+          <LayoutWestEastDivider
+            left={this.state.layoutWestEastDividerLeft}
+            onDragEnd={this.handleLayoutWestEastDividerDragEnd} />
+          <LayoutEast left={this.state.layoutEastLeft} width={this.state.layoutEastWidth}>
+            <EastContent
+              width={this.state.layoutEastWidth}
+              height={this.state.layoutNorthHeight} />
+          </LayoutEast>
+        </LayoutNorth>
+        <LayoutNorthSouthDivider
+          top={this.state.layoutNorthSouthDividerTop}
+          onDragEnd={this.handleLayoutNorthSourthDividerDragEnd} />
+        <LayoutSouth top={this.state.layoutSouthTop}>
+          <SouthContent height={this.state.layoutSouthHeight} width={this.state.layoutSouthWidth}/>
+        </LayoutSouth>
+      </LayoutContainer>
     );
+  },
+
+  dangerouslyHandleWindowResize() {
+    $(window).on('resize', this.setLayout);
   },
 
 });
 
-module.exports = CollectionExplorer;
+module.exports = Layout;

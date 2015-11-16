@@ -7,7 +7,7 @@ export default {
   fetch(speciesId) {
     ApiUtils.getAntibiotics(speciesId, function (error, antibiotics) {
       if (error) {
-        console.error('[Macroreact]', error);
+        console.error('[WGSA]', error);
         return;
       }
 

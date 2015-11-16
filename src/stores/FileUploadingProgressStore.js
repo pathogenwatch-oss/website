@@ -25,7 +25,7 @@ function setReceivedResult(result) {
     receivedAssemblyResults.assemblies[result.assemblyId] = receivedAssemblyResults.assemblies[result.assemblyId] || {};
     receivedAssemblyResults.assemblies[result.assemblyId][result.result] = true;
 
-    // console.log('[Macroreact][Assembly Result] ' + result.assemblyId + ' ' + result.result);
+    // console.log('[WGSA][Assembly Result] ' + result.assemblyId + ' ' + result.result);
     console.dir(receivedAssemblyResults);
 
     return;
@@ -34,7 +34,7 @@ function setReceivedResult(result) {
   receivedAssemblyResults.collection = receivedAssemblyResults.collection || {};
   receivedAssemblyResults.collection[result.result] = true;
 
-  // console.log('[Macroreact][Collection Result] ' + result.collectionId + ' ' + result.result);
+  // console.log('[WGSA][Collection Result] ' + result.collectionId + ' ' + result.result);
   console.dir(receivedAssemblyResults);
 }
 

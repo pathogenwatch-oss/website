@@ -7,31 +7,31 @@ import SubtreeStore from './SubtreeStore';
 
 const CHANGE_EVENT = 'change';
 
-function defaultLabelGetter(assembly) {
-  return assembly.metadata.assemblyName;
-}
+const defaultActiveColumn = {
+  label: 'ASSEMBLY',
+  labelGetter(assembly) {
+    return assembly.metadata.assemblyName;
+  },
+};
 
-let collectionAssemblyIds = null;
-let assemblyIds = null;
+let unfilteredAssemblyIds = null;
+let assemblyIds = [];
 let userDefinedColumns = [];
-let labelGetter = defaultLabelGetter;
+let activeColumn = defaultActiveColumn;
 let colourTableColumnName = null;
-
-function setAssemblyIds(ids) {
-  assemblyIds = ids;
-}
+let hasTextFilter = false;
 
 function setUserDefinedColumns() {
   const { userDefined } = UploadedCollectionStore.getAssemblies()[assemblyIds[0]].metadata;
   userDefinedColumns = userDefined ? Object.keys(userDefined) : [];
 }
 
-function setLabelGetter(labelGetterFn) {
-  if (!labelGetterFn || labelGetterFn === labelGetter) {
-    labelGetter = defaultLabelGetter;
+function setActiveColumn(newActiveColumn) {
+  if (!newActiveColumn || newActiveColumn === activeColumn) {
+    activeColumn = defaultActiveColumn;
     return;
   }
-  labelGetter = labelGetterFn;
+  activeColumn = newActiveColumn;
 }
 
 function setColourTableColumnName(tableColumnName) {
@@ -60,12 +60,20 @@ const FilteredDataStore = assign({}, EventEmitter.prototype, {
     return userDefinedColumns;
   },
 
+  getFilterColumnName() {
+    return activeColumn.label;
+  },
+
   getLabelGetter() {
-    return labelGetter;
+    return activeColumn.labelGetter;
   },
 
   getColourTableColumnName() {
     return colourTableColumnName;
+  },
+
+  hasTextFilter() {
+    return hasTextFilter;
   },
 
 });
@@ -81,7 +89,7 @@ function handleAction(action) {
     const newAssemblyIds =
       action.assemblyIds.length ?
         action.assemblyIds :
-        collectionAssemblyIds;
+        unfilteredAssemblyIds;
 
     if (newAssemblyIds !== assemblyIds) {
       assemblyIds = newAssemblyIds;
@@ -90,17 +98,14 @@ function handleAction(action) {
     break;
 
   case 'clear_assembly_filter':
-    const unfilteredAssemblyIds =
-      SubtreeStore.getActiveSubtreeId() ?
-        SubtreeStore.getActiveSubtreeAssemblyIds() : collectionAssemblyIds;
     if (unfilteredAssemblyIds !== assemblyIds) {
       assemblyIds = unfilteredAssemblyIds;
       emitChange();
     }
     break;
 
-  case 'set_label_getter':
-    setLabelGetter(action.labelGetter);
+  case 'set_active_column':
+    setActiveColumn(action.columnDef);
     emitChange();
     break;
 
@@ -113,8 +118,8 @@ function handleAction(action) {
     AppDispatcher.waitFor([
       UploadedCollectionStore.dispatchToken,
     ]);
-    collectionAssemblyIds = Object.keys(UploadedCollectionStore.getAssemblies());
-    assemblyIds = collectionAssemblyIds;
+    unfilteredAssemblyIds = UploadedCollectionStore.getAssemblyIds();
+    assemblyIds = unfilteredAssemblyIds;
     setUserDefinedColumns();
     emitChange();
     break;
@@ -124,7 +129,33 @@ function handleAction(action) {
       SubtreeStore.dispatchToken,
     ]);
 
-    assemblyIds = action.activeSubtreeId ? SubtreeStore.getActiveSubtreeAssemblyIds() : collectionAssemblyIds;
+    unfilteredAssemblyIds = action.activeSubtreeId ?
+      SubtreeStore.getActiveSubtreeAssemblyIds() :
+      UploadedCollectionStore.getAssemblyIds();
+    assemblyIds = unfilteredAssemblyIds;
+    emitChange();
+    break;
+
+  case 'set_base_assembly_ids':
+    if (unfilteredAssemblyIds !== action.assemblyIds) {
+      unfilteredAssemblyIds = action.assemblyIds;
+      assemblyIds = unfilteredAssemblyIds;
+      emitChange();
+    }
+    break;
+
+  case 'set_text_filter':
+    if (!action.text) {
+      assemblyIds = unfilteredAssemblyIds;
+      hasTextFilter = false;
+    } else {
+      assemblyIds = unfilteredAssemblyIds.filter((id) => {
+        const assembly = UploadedCollectionStore.getAssemblies()[id];
+        const value = '' + activeColumn.labelGetter(assembly); // cheap string coercion
+        return value && value.match(new RegExp(action.text, 'i'));
+      });
+      hasTextFilter = true;
+    }
     emitChange();
     break;
 

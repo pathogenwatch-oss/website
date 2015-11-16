@@ -1,9 +1,13 @@
-import DataUtils from './Data';
+import MetadataUtils from './Metadata';
 import AnalysisUtils from './Analysis';
 
 import UploadStore from '../stores/UploadStore.js';
 
-const FASTA_FILE_NAME_REGEX = /(.fa|.fas|.fna|.ffn|.faa|.frn|.fasta|.contig)$/i;
+export const FASTA_FILE_EXTENSIONS = [
+  '.fa', '.fas', '.fna', '.ffn', '.faa', '.frn', '.fasta', '.contig',
+];
+
+const FASTA_FILE_NAME_REGEX = new RegExp(`(${FASTA_FILE_EXTENSIONS.join('|')})$`, 'i');
 const CSV_FILE_NAME_REGEX = /(.csv)$/i;
 
 function isFastaFile(file) {
@@ -19,18 +23,17 @@ function isValidFile(file) {
 }
 
 function validateFiles(files) {
-  var results = {
+  const results = {
     validFiles: [],
-    invalidFiles: []
+    invalidFiles: [],
   };
 
-  var fileCounter = files.length;
-  var file;
+  let fileCounter = files.length;
 
-  for (; fileCounter !== 0;) {
+  while (fileCounter > 0) {
     fileCounter = fileCounter - 1;
 
-    file = files[fileCounter];
+    const file = files[fileCounter];
 
     if (isValidFile(file)) {
       results.validFiles.push(file);
@@ -43,16 +46,14 @@ function validateFiles(files) {
 }
 
 function readFile(file, callback) {
-  var fileReader = new FileReader();
+  const fileReader = new FileReader();
 
   fileReader.onload = function handleLoad(event) {
-    // console.log('[Macroreact] Loaded dropped file: ' + file.name);
-
     callback(null, event.target.result);
   };
 
   fileReader.onerror = function handleError() {
-    console.error('[Macroreact] Failed to load dropped file: ' + file.name);
+    console.error('[WGSA] Failed to load dropped file: ' + file.name);
 
     callback(file.name, null);
   };
@@ -60,36 +61,25 @@ function readFile(file, callback) {
   fileReader.readAsText(file);
 }
 
-function sortFilesByName(files) {
-  files.sort(function iife(a, b) {
-    if (a.name > b.name) {
-      return 1;
-    } else if (a.name < b.name) {
-      return -1;
-    } else {
-      return 0;
-    }
-  });
+function readFiles(files, callback) {
+  const results = [];
 
-  return files;
-}
+  files.forEach(function (file) {
+    readFile(file, function handleFileContent(error, fileContent) {
+      if (error) {
+        console.error('[WGSA] Failed to load file: ' + error);
+        return;
+      }
 
-function parseFiles(files, callback) {
-  var rawFiles = {};
-  var assemblies = UploadStore.getAssemblies();
+      results.push({
+        name: file.name,
+        content: fileContent,
+      });
 
-  var validatedFiles = validateFiles(files);
-
-  readFiles(validatedFiles.validFiles, function handleReadFiles(error, fileContents) {
-    if (error) {
-      console.error('[Macroreact] Failed to read files');
-      callback(error);
-      return;
-    }
-
-    handleFilesContent(fileContents, rawFiles, assemblies);
-
-    callback(null, rawFiles, assemblies);
+      if (results.length === files.length) {
+        callback(null, results);
+      }
+    });
   });
 }
 
@@ -110,31 +100,16 @@ function initialiseAssemblyObject(assemblyName, assemblies) {
         month: null,
         day: null,
       },
-      geography: {
-        location: null,
-        position: {
-          latitude: null,
-          longitude: null,
-        },
+      position: {
+        latitude: null,
+        longitude: null,
       },
     },
-    analysis: {},
+    metrics: {},
   };
 
   assemblies[assemblyName] = ASSEMBLY_OBJECT;
   return assemblies;
-}
-
-function handleFilesContent(filesContent, rawFiles, assemblies) {
-  filesContent.forEach(function parseFileContent(file) {
-    if (isCsvFile(file)) {
-      parseCsvFile(file, rawFiles, assemblies);
-    } else if (isFastaFile(file)) {
-      parseFastaFile(file, rawFiles, assemblies);
-    } else {
-      console.warn('[Macroreact] Unsupported file type: ' + file.name);
-    }
-  });
 }
 
 function parseFastaFile(file, rawFiles, assemblies) {
@@ -148,20 +123,22 @@ function parseFastaFile(file, rawFiles, assemblies) {
 
   initialiseAssemblyObject(fileName, assemblies);
   assemblies[fileName].fasta.assembly = fileContent;
-  assemblies[fileName].analysis = analyseFasta(fileName, fileContent);
+  if (fileContent.length) {
+    assemblies[fileName].metrics = AnalysisUtils.analyseFasta(fileName, fileContent);
+  }
 }
 
 function parseCsvFile(file, rawFiles, assemblies) {
-  const csvJson = DataUtils.parseCsvToJson(file.content);
+  const csvJson = MetadataUtils.parseCsvToJson(file.content);
 
   if (csvJson.errors.length > 0) {
-    console.error('[Macroreact] Filed to parse CSV file ' + file.name);
+    console.error('[WGSA] Failed to parse CSV file ' + file.name);
     return;
   }
 
   csvJson.data.forEach(function (dataRow) {
     if (!dataRow.filename) {
-      console.error('[Macroreact] Missing assembly filename in metadata file ' + file.name);
+      console.error('[WGSA] Missing assembly filename in metadata file ' + file.name);
       return;
     }
 
@@ -178,10 +155,9 @@ function parseCsvFile(file, rawFiles, assemblies) {
         continue;
       }
 
-      if (colName === 'latitude' || colName === 'longitude' || colName === 'location' || colName === 'year' || colName === 'month' || colName === 'day') {
-        assemblies[filename].metadata.geography.position.latitude = parseFloat(dataRow.latitude) || null;
-        assemblies[filename].metadata.geography.position.longitude = parseFloat(dataRow.longitude) || null;
-        assemblies[filename].metadata.geography.location = dataRow.location || null;
+      if (colName === 'latitude' || colName === 'longitude' || colName === 'year' || colName === 'month' || colName === 'day') {
+        assemblies[filename].metadata.position.latitude = parseFloat(dataRow.latitude) || null;
+        assemblies[filename].metadata.position.longitude = parseFloat(dataRow.longitude) || null;
         assemblies[filename].metadata.date.year = parseInt(dataRow.year, 10) || null;
         assemblies[filename].metadata.date.month = parseInt(dataRow.month, 10) || null;
         assemblies[filename].metadata.date.day = parseInt(dataRow.day, 10) || null;
@@ -192,70 +168,37 @@ function parseCsvFile(file, rawFiles, assemblies) {
   });
 }
 
-function analyseFasta(assemblyName, fastaFileString) {
-  var contigs = AnalysisUtils.extractContigsFromFastaFileString(fastaFileString);
-  var totalNumberOfContigs = contigs.length;
-  var dnaStrings = AnalysisUtils.extractDnaStringsFromContigs(contigs);
-  var assemblyN50Data = AnalysisUtils.calculateN50(dnaStrings);
-  var contigN50 = assemblyN50Data['sequenceLength'];
-  var sumsOfNucleotidesInDnaStrings = AnalysisUtils.calculateSumsOfNucleotidesInDnaStrings(dnaStrings);
-  var totalNumberOfNucleotidesInDnaStrings = AnalysisUtils.calculateTotalNumberOfNucleotidesInDnaStrings(dnaStrings);
-  var averageNumberOfNucleotidesInDnaStrings = AnalysisUtils.calculateAverageNumberOfNucleotidesInDnaStrings(dnaStrings);
-  var smallestNumberOfNucleotidesInDnaStrings = AnalysisUtils.calculateSmallestNumberOfNucleotidesInDnaStrings(dnaStrings);
-  var biggestNumberOfNucleotidesInDnaStrings = AnalysisUtils.calculateBiggestNumberOfNucleotidesInDnaStrings(dnaStrings);
-
-  //AnalysisUtils.validateContigs(contigs);
-
-  // console.log('[WGST] * dev * dnaStrings:');
-  // console.dir(dnaStrings);
-  // console.log('[WGST] * dev * totalNumberOfNucleotidesInDnaStrings: ' + totalNumberOfNucleotidesInDnaStrings);
-  // console.log('[WGST] * dev * averageNumberOfNucleotidesInDnaStrings: ' + averageNumberOfNucleotidesInDnaStrings);
-  // console.log('[WGST] * dev * smallestNumberOfNucleotidesInDnaStrings: ' + smallestNumberOfNucleotidesInDnaStrings);
-  // console.log('[WGST] * dev * biggestNumberOfNucleotidesInDnaStrings: ' + biggestNumberOfNucleotidesInDnaStrings);
-
-  //window.WGST.upload.stats.totalNumberOfContigs = window.WGST.upload.stats.totalNumberOfContigs + contigs.length;
-
-  return {
-    totalNumberOfContigs: totalNumberOfContigs,
-    dnaStrings: dnaStrings,
-    assemblyN50Data: assemblyN50Data,
-    contigN50: contigN50,
-    sumsOfNucleotidesInDnaStrings: sumsOfNucleotidesInDnaStrings,
-
-    totalNumberOfNucleotidesInDnaStrings: totalNumberOfNucleotidesInDnaStrings,
-    averageNumberOfNucleotidesInDnaStrings: averageNumberOfNucleotidesInDnaStrings,
-    smallestNumberOfNucleotidesInDnaStrings: smallestNumberOfNucleotidesInDnaStrings,
-    biggestNumberOfNucleotidesInDnaStrings: biggestNumberOfNucleotidesInDnaStrings,
-  };
-}
-
-function readFiles(files, callback) {
-  var results = [];
-
-  files.forEach(function iife(file) {
-    readFile(file, function handleFileContent(error, fileContent) {
-      if (error) {
-        console.error('[Macroreact] Failed to load file: ' + error);
-        return;
-      }
-
-      results.push({
-        name: file.name,
-        content: fileContent,
-      });
-
-      if (results.length === files.length) {
-        callback(null, results);
-      }
-    });
+function handleFileContents(fileContents, rawFiles, assemblies) {
+  fileContents.forEach(function parseFileContent(file) {
+    if (isCsvFile(file)) {
+      parseCsvFile(file, rawFiles, assemblies);
+    } else if (isFastaFile(file)) {
+      parseFastaFile(file, rawFiles, assemblies);
+    } else {
+      console.warn('[WGSA] Unsupported file type: ' + file.name);
+    }
   });
 }
 
-module.exports = {
-  parseFiles: parseFiles,
-  isFastaFile: isFastaFile,
-  isCsvFile: isCsvFile,
-  validateFiles: validateFiles,
-  readFile: readFile,
-  sortFilesByName: sortFilesByName,
+function parseFiles(files, callback) {
+  const rawFiles = {};
+  const assemblies = UploadStore.getAssemblies();
+
+  const validatedFiles = validateFiles(files);
+
+  readFiles(validatedFiles.validFiles, function handleReadFiles(error, fileContents) {
+    if (error) {
+      console.error('[WGSA] Failed to read files');
+      callback(error);
+      return;
+    }
+
+    handleFileContents(fileContents, rawFiles, assemblies);
+
+    callback(null, rawFiles, assemblies);
+  });
+}
+
+export default {
+  parseFiles,
 };

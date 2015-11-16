@@ -3,6 +3,8 @@ import '../css/spinner.css';
 import React from 'react';
 
 import DownloadStore from '../stores/DownloadStore';
+import FilteredDataStore from '../stores/FilteredDataStore';
+
 import DownloadActionCreators from '../actions/DownloadActionCreators';
 
 import DEFAULT from '../defaults';
@@ -11,24 +13,37 @@ const errorStyle = {
   color: DEFAULT.DANGER_COLOUR,
 };
 
+const MOUNTED_BUTTONS = new Set();
+
+function changeListener() {
+  for (const component of MOUNTED_BUTTONS) {
+    component.setState(component.getInitialState());
+  }
+}
+
+DownloadStore.addChangeListener(changeListener);
+FilteredDataStore.addChangeListener(changeListener);
+
 export default React.createClass({
 
   propTypes: {
     description: React.PropTypes.string,
-    id: React.PropTypes.string,
     format: React.PropTypes.string,
+    id: React.PropTypes.string,
   },
 
   getInitialState() {
+    const { format, id } = this.props;
+    const status = DownloadStore.getDownloadStatus(format, id) || {};
     return {
       loading: false,
-      error: null,
-      link: null,
+      error: status.error,
+      link: status.link,
     };
   },
 
   componentDidMount() {
-    DownloadStore.addChangeListener(this.handleDownloadStoreChange);
+    MOUNTED_BUTTONS.add(this);
   },
 
   componentDidUpdate() {
@@ -38,7 +53,7 @@ export default React.createClass({
   },
 
   componentWillUnmount() {
-    DownloadStore.removeChangeListener(this.handleDownloadStoreChange);
+    MOUNTED_BUTTONS.delete(this);
   },
 
   getDownloadElement() {
@@ -73,18 +88,7 @@ export default React.createClass({
       loading: true,
     });
 
-    DownloadActionCreators.requestFile(this.props.id, this.props.format);
-  },
-
-  handleDownloadStoreChange() {
-    const status = DownloadStore.getDownloadStatus(this.props.id, this.props.format);
-    if (status) {
-      this.setState({
-        loading: false,
-        error: status.error,
-        link: status.link,
-      });
-    }
+    DownloadActionCreators.requestFile(this.props.format, this.props.id);
   },
 
 });

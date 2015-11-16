@@ -6,7 +6,6 @@ import FileDragAndDrop from 'react-file-drag-and-drop';
 
 import AssemblyMetadata from './AssemblyMetadata.react';
 import AssemblyAnalysis from './AssemblyAnalysis.react';
-
 import AssemblyAnalysisChart from './AssemblyAnalysisChart.react';
 
 import UploadWorkspaceNavigation from './UploadWorkspaceNavigation.react';
@@ -18,6 +17,8 @@ import UploadActionCreators from '../../actions/UploadActionCreators';
 import UploadStore from '../../stores/UploadStore';
 import SocketActionCreators from '../../actions/SocketActionCreators';
 import UploadWorkspaceNavigationActionCreators from '../../actions/UploadWorkspaceNavigationActionCreators';
+import ToastActionCreators from '../../actions/ToastActionCreators';
+
 import UploadWorkspaceNavigationStore from '../../stores/UploadWorkspaceNavigationStore';
 import FileProcessingStore from '../../stores/FileProcessingStore';
 import FileUploadingStore from '../../stores/FileUploadingStore';
@@ -27,7 +28,6 @@ import SocketStore from '../../stores/SocketStore';
 import SocketUtils from '../../utils/Socket';
 import Species from '../../species';
 import DEFAULT from '../../defaults';
-import { validateMetadata } from '../../utils/Metadata';
 
 const loadingAnimationStyle = {
   visibility: 'visible',
@@ -54,12 +54,12 @@ export default React.createClass({
 
   getInitialState() {
     return {
-      uploadButtonActive: false,
+      readyToUpload: false,
       confirmedMultipleMetadataDrop: false,
       pageTitleAppend: 'Upload',
       isUploading: FileUploadingStore.getFileUploadingState(),
+      numberOfAssemblies: UploadStore.getAssembliesCount(),
       viewPage: 'overview',
-      totalAssemblies: 0,
       assemblyName: null,
       uploadProgressPercentage: 0,
       collectionUrl: null,
@@ -76,11 +76,11 @@ export default React.createClass({
     const socket = SocketUtils.socketConnect();
 
     socket.on('connect', function () {
-      console.log('[Macroreact] Socket connected');
+      console.log('[WGSA] Socket connected');
     });
 
     socket.on('disconnect', function () {
-      console.error('[Macroreact] Socket connection lost');
+      console.error('[WGSA] Socket connection lost');
     });
 
     SocketStore.addChangeListener(this.handleSocketStoreChange);
@@ -121,17 +121,11 @@ export default React.createClass({
       transitionTo(makePath('collection', { species: Species.nickname, id }));
       return;
     }
-    else {
-      if (id) {
-        this.setState({
-          collectionUrl: window.location.origin + makePath('collection', { species: Species.nickname, id })
-        })
-      }
-    }
 
     this.setState({
       isUploading: FileUploadingStore.getFileUploadingState(),
       viewPage: 'upload_progress',
+      collectionUrl: id ? window.location.origin + makePath('collection', { species: Species.nickname, id }) : null,
     });
   },
 
@@ -142,16 +136,24 @@ export default React.createClass({
     });
   },
 
+  confirmDuplicateOverwrite(files) {
+    this.setState({
+      confirmedMultipleMetadataDrop: true,
+    });
+    UploadActionCreators.addFiles(files);
+  },
+
   handleDrop(event) {
     if (event.files.length > 0 && !this.state.isUploading) {
-      if (!this.state.confirmedMultipleMetadataDrop && this.state.totalAssemblies > 0) {
-        var multipleDropConfirm = confirm('Duplicate records will be overwritten');
-        if (multipleDropConfirm) {
-          this.setState({
-            confirmedMultipleMetadataDrop: true,
-          });
-          UploadActionCreators.addFiles(event.files);
-        }
+      if (!this.state.confirmedMultipleMetadataDrop && this.state.numberOfAssemblies > 0) {
+        ToastActionCreators.showToast({
+          message: 'Duplicate records will be overwritten.',
+          action: {
+            label: 'confirm',
+            onClick: this.confirmDuplicateOverwrite.bind(this, Array.from(event.files)),
+          },
+          sticky: true,
+        });
       } else {
         UploadActionCreators.addFiles(event.files);
       }
@@ -169,7 +171,6 @@ export default React.createClass({
   },
 
   handleOverviewClick() {
-    // UploadWorkspaceNavigationActionCreators.navigateToAssembly(null);
     UploadWorkspaceNavigationActionCreators.setViewPage('overview');
   },
 
@@ -178,29 +179,9 @@ export default React.createClass({
   },
 
   handleUploadStoreChange() {
-    const totalAssemblies = UploadStore.getAssembliesCount();
-    const assemblies = UploadStore.getAssemblies();
-    const isValidMap = validateMetadata(assemblies);
-
-    let isValid = true;
-    if (!Object.keys(isValidMap)) {
-      isValid = false;
-    }
-
-    if (totalAssemblies < 3) {
-      isValid = false;
-    }
-
-    for (const id in isValidMap) {
-      if (!isValidMap[id]) {
-        isValid = false;
-        break;
-      }
-    }
-
     this.setState({
-      totalAssemblies,
-      uploadButtonActive: isValid,
+      readyToUpload: UploadStore.isReadyToUpload(),
+      numberOfAssemblies: UploadStore.getAssembliesCount(),
     });
   },
 
@@ -229,9 +210,9 @@ export default React.createClass({
     return (
       <FileDragAndDrop onDrop={this.handleDrop}>
         <div className="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-drawer">
-          <UploadReviewHeader title={pageTitle} activateUploadButton={this.state.uploadButtonActive} uploadProgressPercentage={this.state.uploadProgressPercentage} isUploading={this.state.isUploading} />
+          <UploadReviewHeader title={pageTitle} activateUploadButton={this.state.readyToUpload} uploadProgressPercentage={this.state.uploadProgressPercentage} isUploading={this.state.isUploading} />
 
-          <UploadWorkspaceNavigation assembliesUploaded={assembly ? true : false} totalAssemblies={this.state.totalAssemblies}>
+          <UploadWorkspaceNavigation assembliesUploaded={assembly ? true : false} totalAssemblies={this.state.numberOfAssemblies}>
             <footer className="wgsa-upload-navigation__footer mdl-shadow--4dp">
               <button type="button" title="Overview"
                 className="wgsa-upload-review-button mdl-button mdl-js-button mdl-button--raised mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect"
@@ -257,34 +238,34 @@ export default React.createClass({
                 switch (this.state.viewPage) {
                 case 'assembly':
                   return (
-                    <div className="assemblyWorkspaceContainer mdl-grid assemblyWorkspaceContent">
-                      <div className="overflow-y--auto mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
-                        <div className="heading"> Metadata </div>
-                        <div className="card-style">
-                          <AssemblyMetadata assembly={assembly} />
+                    <div className="mdl-grid">
+                      <div className="mdl-cell mdl-cell--6-col wgsa-card-column">
+                        <div className="wgsa-card mdl-shadow--4dp">
+                          <div className="wgsa-card-heading">Assembly Statistics</div>
+                          <div className="wgsa-card-content">
+                            <AssemblyAnalysis assembly={assembly}/>
+                          </div>
                         </div>
                       </div>
-                      <div className="overflow-y--auto mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
-                        <div className="mdl-grid mdl-grid--no-spacing">
-                          <div className="mdl-cell mdl-cell--12-col">
-                            <div className="heading"> Assembly Statistics </div>
-                            <div className="card-style">
-                              <AssemblyAnalysis assembly={assembly} />
-                            </div>
+                      <div className="mdl-cell mdl-cell--6-col wgsa-card-column chart-card">
+                        <div className="wgsa-card mdl-shadow--4dp">
+                          <div className="wgsa-card-heading">N50 Chart</div>
+                          <div className="wgsa-card-content ">
+                            <AssemblyAnalysisChart metrics={assembly && assembly.metrics} />
                           </div>
-                          <div className="mdl-cell mdl-cell--12-col">
-                            <div className="heading"> N50 Chart </div>
-                            <div className="card-style">
-                              <AssemblyAnalysisChart analysis={assembly && assembly.analysis} />
-                            </div>
-                          </div>
+                        </div>
+                      </div>
+                      <div className="wgsa-card mdl-cell mdl-cell--12-col increase-cell-gutter mdl-shadow--4dp">
+                        <div className="wgsa-card-heading">Metadata</div>
+                        <div className="wgsa-card-content">
+                          <AssemblyMetadata assembly={assembly} isUploading={this.state.isUploading}/>
                         </div>
                       </div>
                     </div>
                   );
                 case 'overview':
                   return (
-                   <Overview clickHandler={this.handleClick} uploadProgressPercentage={this.state.uploadProgressPercentage} isUploading={this.state.isUploading} isReadyToUpload={this.state.uploadButtonActive} />
+                   <Overview clickHandler={this.handleClick} uploadProgressPercentage={this.state.uploadProgressPercentage} isUploading={this.state.isUploading} isReadyToUpload={this.state.readyToUpload} />
                   );
                 case 'upload_progress':
                   return (
@@ -299,8 +280,8 @@ export default React.createClass({
           </main>
         </div>
         <input type="file" multiple="multiple" accept={DEFAULT.SUPPORTED_FILE_EXTENSIONS} ref="fileInput" style={fileInputStyle} onChange={this.handleFileInputChange} />
+
       </FileDragAndDrop>
     );
   },
-
 });

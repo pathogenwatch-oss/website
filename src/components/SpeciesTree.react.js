@@ -6,6 +6,7 @@ import Switch from './Switch.react';
 import ReferenceCollectionStore from '../stores/ReferenceCollectionStore';
 import SubtreeStore from '../stores/SubtreeStore';
 import UploadedCollectionStore from '../stores/UploadedCollectionStore';
+import FilteredDataStore from '../stores/FilteredDataStore';
 
 import SubtreeActionCreators from '../actions/SubtreeActionCreators';
 import FilteredDataActionCreators from '../actions/FilteredDataActionCreators';
@@ -42,6 +43,10 @@ function styleBranches(ids, options) {
   }
 }
 
+function idInFilteredAssemblyIds(assemblyId) {
+  return FilteredDataStore.getAssemblyIds().indexOf(assemblyId) !== -1;
+}
+
 const treeProps = {
   [POPULATION]: {
     title: 'Population',
@@ -75,6 +80,24 @@ const treeProps = {
         SubtreeActionCreators.setActiveSubtreeId(nodeIds[0]);
       }
     },
+    highlightFilteredNodes({ branches }) {
+      const subtrees = SubtreeStore.getSubtrees();
+      for (const id of Object.keys(subtrees)) {
+        const leaf = branches[id];
+        if (!leaf) {
+          return;
+        }
+
+        leaf.highlighted = false;
+        const { assemblyIds } = subtrees[id];
+        for (const assemblyId of assemblyIds) {
+          if (idInFilteredAssemblyIds(assemblyId)) {
+            leaf.highlighted = true;
+            break;
+          }
+        }
+      }
+    },
   },
   [COLLECTION]: {
     title: 'Collection',
@@ -99,6 +122,11 @@ const treeProps = {
         FilteredDataActionCreators.clearAssemblyFilter();
       }
     },
+    onRedrawOriginalTree() {
+      FilteredDataActionCreators.setBaseAssemblyIds(
+        UploadedCollectionStore.getAssemblyIds()
+      );
+    },
   },
 };
 
@@ -115,8 +143,12 @@ export default React.createClass({
     treeProps[COLLECTION].newick = UploadedCollectionStore.getTree();
   },
 
-  componentDidUpdate() {
-    FilteredDataActionCreators.clearAssemblyFilter();
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.treeProps !== this.state.treeProps) {
+      FilteredDataActionCreators.setBaseAssemblyIds(
+        UploadedCollectionStore.getAssemblyIds()
+      );
+    }
   },
 
   render() {

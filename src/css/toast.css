@@ -1,0 +1,45 @@
+.wgsa-toast-container {
+  position: fixed;
+  bottom: 0px;
+  z-index: 4;
+  width: 100%;
+  height: 0;
+  display: flex;
+  justify-content: center;
+  overflow: visible;
+}
+
+.wgsa-toast-container--active {
+  display: block;
+}
+
+.wgsa-toast {
+  background-color: #323232;
+  color: white;
+  height: 48px;
+  min-width: 288px;
+  max-width: 568px;
+  border-radius: 2px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 24px;
+  transform: translateY(-100%);
+}
+
+.wgsa-toast__action {
+  text-transform: uppercase;
+  color: #87c7a6;
+  cursor: pointer;
+  margin-left: 40px; /* + 8px padding = 48px */
+}
+
+.wgsa-toast__message {
+  font-size: 14px;
+  flex-grow: 1;
+}
+
+.wgsa-toast__dismiss {
+  margin-left: 8px;
+  margin-right: -8px;
+}

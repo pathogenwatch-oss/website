@@ -5,10 +5,8 @@ import AssemblyListItem from '../navigation/AssemblyListItem.react';
 import UploadWorkspaceNavigationStore from '../../../stores/UploadWorkspaceNavigationStore';
 import UploadStore from '../../../stores/UploadStore';
 import FileUploadingStore from '../../../stores/FileUploadingStore';
-import { validateMetadata } from '../../../utils/Metadata';
 
 const AssemblyList = React.createClass({
-
 
   getInitialState() {
     return {
@@ -41,30 +39,27 @@ const AssemblyList = React.createClass({
     });
   },
 
-  getListOptionElements: function () {
-    const assemblyNames = UploadStore.getAssemblyNames();
+  getListOptionElements() {
     const assemblies = UploadStore.getAssemblies();
-    const isValidMap = validateMetadata(assemblies);
-    return assemblyNames.map((assemblyName) => {
+    return Object.keys(assemblies).map((assemblyName) => {
+      const { hasErrors } = assemblies[assemblyName];
       return (
         <AssemblyListItem
           key={assemblyName}
           assemblyName={assemblyName}
-          isValid={isValidMap[assemblyName]}
+          isValid={!hasErrors}
           selected={assemblyName === this.state.selectedOption && this.state.isItemSelected}
           isUploading={this.state.isUploading} />
       );
     });
   },
 
-  render: function () {
+  render() {
     const listOptionElements = this.getListOptionElements();
     return (
-      <div>
-        <ul className="assemblyListContainer">
-          {listOptionElements}
-        </ul>
-      </div>
+      <ul className="assemblyListContainer">
+        {listOptionElements}
+      </ul>
     );
   },
 

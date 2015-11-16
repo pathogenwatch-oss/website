@@ -7,7 +7,7 @@ fieldset > legend {
 }
 
 .mdl-textfield__label {
-  text-transform: capitalize;
+  text-transform: uppercase;
 }
 
 .mdl-textfield.is-focused .mdl-textfield__label,

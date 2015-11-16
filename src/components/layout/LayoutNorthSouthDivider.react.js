@@ -3,6 +3,7 @@ import React from 'react';
 import LayoutDivider from './LayoutDivider.react';
 import LayoutNavigation from '../LayoutNavigation.react';
 
+import LayoutUtils from '../../utils/Layout';
 import Species from '../../species';
 
 const style = {
@@ -17,23 +18,31 @@ export default React.createClass({
     onDragEnd: React.PropTypes.func.isRequired,
   },
 
-  componentDidMount: function () {
-    this.initialize();
-  },
-
-  initialize: function () {
+  componentDidMount() {
     $('.northSouthDivider').draggable({
-      containment: 'body',
+      containment: [
+        // x1
+        0,
+        // y1
+        LayoutUtils.HEADER_BAR_HEIGHT,
+        // x2
+        LayoutUtils.getViewportWidth(),
+        // y2
+        LayoutUtils.getViewportHeight(),
+      ],
       axis: 'y',
       scroll: false,
       cursor: 'grabbing',
       stop: (event, ui) => {
-        this.props.onDragEnd(ui.offset.top);
+        const { HEADER_BAR_HEIGHT } = LayoutUtils;
+        const top = Math.max(HEADER_BAR_HEIGHT, ui.offset.top);
+        this.props.onDragEnd(top);
+        if (top === HEADER_BAR_HEIGHT) this.forceUpdate();
       },
     });
   },
 
-  render: function () {
+  render() {
     return (
       <div style={style}>
         <LayoutDivider

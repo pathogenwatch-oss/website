@@ -1,7 +1,7 @@
 import '../../css/upload-review.css';
 
 import React from 'react';
-import AnalysisUtils from '../../utils/Analysis';
+import ChartUtils from '../../utils/Chart';
 
 const containerStyle = {
   margin: '0 0 25px 0',
@@ -21,16 +21,16 @@ const AssemblyAnalysisChart = React.createClass({
 
   propTypes: {
     label: React.PropTypes.string,
-    analysis: React.PropTypes.object.isRequired,
+    metrics: React.PropTypes.object.isRequired,
   },
 
-  getInitialState: function() {
+  getInitialState() {
     return {
       isChartDataAvailable: false
     };
   },
 
-  getChartDataWithN50Data: function(N50Data) {
+  getChartDataWithN50Data(N50Data) {
     const chartData = [];
     for (const id in N50Data) {
       chartData.push(N50Data[id].sum);
@@ -38,7 +38,7 @@ const AssemblyAnalysisChart = React.createClass({
     return chartData;
   },
 
-  draw: function() {
+  draw() {
     var divElement = document.getElementsByClassName('fasta-analytics-chart')[0];
     var svgElement;
     if(divElement) {
@@ -48,43 +48,44 @@ const AssemblyAnalysisChart = React.createClass({
       }
     }
 
-    const fastaChartData = this.props.analysis.sumsOfNucleotidesInDnaStrings;
-    const assemblyN50 = this.props.analysis.assemblyN50Data;
-    AnalysisUtils.drawN50Chart(fastaChartData, assemblyN50, '.fasta-analytics-chart');
+    const fastaChartData = this.props.metrics.sumsOfNucleotidesInDnaStrings;
+    const assemblyN50 = this.props.metrics.assemblyN50Data;
+    ChartUtils.drawN50Chart(fastaChartData, assemblyN50, '.fasta-analytics-chart');
   },
 
   handleResize(e) {
     this.draw();
   },
 
-  componentDidUpdate: function() {
+  componentDidUpdate() {
     this.draw();
   },
 
-  componentDidMount: function() {
-    if (Object.keys(this.props.analysis).length > 0) {
+  componentDidMount() {
+    if (Object.keys(this.props.metrics).length > 0) {
       this.setState({
         isChartDataAvailable: true
-      })
+      });
       this.draw();
     }
     window.addEventListener('resize', this.handleResize);
   },
 
-  render: function () {
-    if (Object.keys(this.props.analysis).length > 0) {
+  render() {
+    if (Object.keys(this.props.metrics).length > 0) {
       return (
         <div style={containerStyle}>
-          <label className='analysisItemLabel'>{this.props.label}</label>
+          <label className='metricsItemLabel'>{this.props.label}</label>
           <div className="fasta-analytics-chart"></div>
         </div>
       );
     }
 
     return (
-      <div style={labelStyle}>No data available</div>
+      <p className="mdl-card__supporting-text">(Assembly not provided)</p>
     );
-  }
+  },
+
 });
 
 module.exports = AssemblyAnalysisChart;

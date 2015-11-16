@@ -9,7 +9,7 @@ import FilteredDataStore from '../../stores/FilteredDataStore';
 
 import FilteredDataActionCreators from '../../actions/FilteredDataActionCreators';
 
-import DataUtils from '../../utils/Data';
+import MetadataUtils from '../../utils/Metadata';
 
 const systemColumnProps = [
   { label: '',
@@ -20,7 +20,7 @@ const systemColumnProps = [
     cellRenderer(_, __, data) {
       return (
         <DownloadButton
-          id={data.id}
+          id={data.assemblyId}
           format={'fasta'}
           description={'Assembly Fasta'} />
       );
@@ -33,16 +33,10 @@ const systemColumnProps = [
       return metadata.assemblyName;
     },
   },
-  { label: 'LOCATION',
-    dataKey: '__location',
-    labelGetter({ metadata }) {
-      return metadata.geography.location;
-    },
-  },
   { label: 'DATE',
     dataKey: '__date',
     labelGetter({ metadata }) {
-      return DataUtils.getFormattedDateString(metadata.date);
+      return MetadataUtils.getFormattedDateString(metadata.date);
     },
   },
   { label: 'ST',
@@ -51,7 +45,7 @@ const systemColumnProps = [
       return analysis.st;
     },
   },
-  { label: 'MLST',
+  { label: 'MLST PROFILE',
     dataKey: '__mlst',
     labelGetter({ analysis }) {
       return analysis.mlst;
@@ -85,11 +79,11 @@ function mapAssemblyIdToTableRow(assemblyId) {
         memo[dataKey] = labelGetter(assembly);
       }
       return memo;
-    }, {});
+    }, { assemblyId });
 }
 
-function setLabelGetter({ labelGetter }) {
-  FilteredDataActionCreators.setLabelGetter(labelGetter);
+function setLabelGetter(columnDef) {
+  FilteredDataActionCreators.setActiveColumn(columnDef);
 }
 
 export default React.createClass({

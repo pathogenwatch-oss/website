@@ -1,4 +1,7 @@
-import { setAssemblyProgress } from '../actions/FileUploadingProgressActionCreators';
+/* global $ */
+
+import { setAssemblyProgress }
+  from '../actions/FileUploadingProgressActionCreators';
 
 import CONFIG from '../config';
 
@@ -36,7 +39,7 @@ function getCollectionId(speciesId, collectionData, callback) {
     callback(null, data);
   })
   .fail(function (error) {
-    callback(error, null);
+    callback(error);
   });
 }
 
@@ -51,7 +54,7 @@ function postAssembly({ speciesId, collectionId, assemblyId }, requestBody, call
     callback(null, data);
   })
   .fail(function (error) {
-    callback(error, null);
+    callback(error);
   });
 }
 
@@ -61,15 +64,15 @@ function getReferenceCollection(speciesId, callback) {
       callback(null, collection);
     })
     .fail(function (error) {
-      callback(error, null);
+      callback(error);
     });
 }
 
 function getCollection(speciesId, collectionId, callback) {
-  console.log(`[Macroreact] Getting collection ${collectionId}`);
+  console.log(`[WGSA] Getting collection ${collectionId}`);
 
   if (!collectionId) {
-    return callback(new Error('Missing collection ID'), null);
+    return callback(new Error('Missing collection ID'));
   }
 
   $.get(`${API_ROOT}/species/${speciesId}/collection/${collectionId}`)
@@ -77,12 +80,12 @@ function getCollection(speciesId, collectionId, callback) {
       callback(null, response);
     })
     .fail(function (error) {
-      callback(error, null);
+      callback(error);
     });
 }
 
 function requestFile(fileType, requestBody, callback) {
-  console.log(`request url /download/type/collection/format/${fileType}`)
+  console.log(`request url /download/type/collection/format/${fileType}`);
   $.ajax(
     postJson(`/download/type/collection/format/${fileType}`, requestBody)
   ).done(function (response) {
@@ -91,7 +94,7 @@ function requestFile(fileType, requestBody, callback) {
   })
   .fail(function (error) {
     console.log(error);
-    callback(error, null);
+    callback(error);
   });
 }
 
@@ -101,7 +104,7 @@ function getAntibiotics(speciesId, callback) {
       callback(null, antibiotics);
     })
     .fail(function (error) {
-      callback(error, null);
+      callback(error);
     });
 }
 

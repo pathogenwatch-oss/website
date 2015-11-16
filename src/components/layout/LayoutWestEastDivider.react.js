@@ -1,33 +1,33 @@
-var React = require('react');
-var LayoutUtils = require('../../utils/Layout');
-var LayoutDivider = require('./LayoutDivider.react');
+import React from 'react';
+import LayoutUtils from '../../utils/Layout';
+import LayoutDivider from './LayoutDivider.react';
 
-var LayoutMiddleEastDivider = React.createClass({
+const style = {
+  width: '100%',
+  height: '100%',
+};
+
+export default React.createClass({
+
+  displayName: 'LayoutWestEastDivider',
 
   propTypes: {
     left: React.PropTypes.number.isRequired,
-    onDragEnd: React.PropTypes.func.isRequired
+    onDragEnd: React.PropTypes.func.isRequired,
   },
 
-  componentDidMount: function () {
-    this.initialize();
-  },
-
-  initialize: function () {
-
-    var containment = [
-      // x1
-      LayoutUtils.getEastLeft(),
-      // y1
-      LayoutUtils.getNorthHeight(),
-      // x2
-      LayoutUtils.getViewportWidth() - LayoutUtils.getDividerSize(),
-      // y2
-      0
-    ];
-
+  componentDidMount() {
     $('.westEastDivider').draggable({
-      containment: containment,
+      containment: [
+        // x1
+        0,
+        // y1
+        LayoutUtils.getNorthHeight(),
+        // x2
+        LayoutUtils.getViewportWidth() - LayoutUtils.getDividerSize(),
+        // y2
+        0,
+      ],
       axis: 'x',
       scroll: false,
       cursor: 'grabbing',
@@ -37,31 +37,20 @@ var LayoutMiddleEastDivider = React.createClass({
     });
   },
 
-  componentDidUpdate: function () {
-
-    var layoutWestMiddleDividerLeft = this.props.layoutWestMiddleDividerLeft;
-
-    var containment = [
+  componentDidUpdate() {
+    $('.westEastDivider').draggable( 'option', 'containment', [
       // x1
-      layoutWestMiddleDividerLeft + LayoutUtils.getDividerSize(),
+      0,
       // y1
       LayoutUtils.getNorthHeight(),
       // x2
       LayoutUtils.getViewportWidth() - LayoutUtils.getDividerSize(),
       // y2
-      0
-    ];
-
-    $('.westEastDivider').draggable( 'option', 'containment', containment );
+      0,
+    ]);
   },
 
-  render: function () {
-
-    var style = {
-      width: '100%',
-      height: '100%'
-    };
-
+  render() {
     return (
       <div style={style}>
         <LayoutDivider
@@ -75,7 +64,6 @@ var LayoutMiddleEastDivider = React.createClass({
           className={'westEastDivider'} />
       </div>
     );
-  }
-});
+  },
 
-module.exports = LayoutMiddleEastDivider;
+});
