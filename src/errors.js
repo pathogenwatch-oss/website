@@ -4,7 +4,7 @@ var errorCodes = {
   KEY_DOES_NOT_EXIST: 13
 };
 
-function notAServerError(error) {
+function isNotFoundInStorage(error) {
   return (
     error.code === errorCodes.KEY_DOES_NOT_EXIST
   );
@@ -13,10 +13,11 @@ function notAServerError(error) {
 module.exports = function handleErrors(app) {
   app.use(function (error, req, res, next) {
     LOGGER.error(error);
-    if (notAServerError(error)) {
-      // continue routing
-      return next();
+
+    if (isNotFoundInStorage(error)) {
+      return res.sendStatus(404);
     }
+
     res.sendStatus(500);
   });
 };

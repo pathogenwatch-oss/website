@@ -1,8 +1,11 @@
 {
   "name": "macroreact-middle",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Middle layer for Macroreact",
   "main": "app.js",
+  "engines": {
+    "node": ">=4.x"
+  },
   "dependencies": {
     "amqp": "^0.2.0",
     "async": "^1.4.2",
@@ -18,7 +21,7 @@
     "serve-favicon": "^2.2.0",
     "socket.io": "^1.2.1",
     "swig": "^1.4.2",
-    "wgsa_front-end": "imperialcollegelondon/wgsa_front-end#v2.0.3"
+    "wgsa_front-end": "imperialcollegelondon/wgsa_front-end#v2.0.4"
   },
   "devDependencies": {
     "cgps-style": "imperialcollegelondon/javascript#v1.0.1",

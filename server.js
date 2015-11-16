@@ -54,7 +54,6 @@ module.exports = function (callback) {
     });
 
     require('routes.js')(app);
-    require('errors.js')(app);
 
     app.use('/', function (req, res, next) {
       // crude file matching
@@ -66,6 +65,8 @@ module.exports = function (callback) {
     });
 
     app.use(require('routes/notFound'));
+
+    require('errors.js')(app);
 
     server = http.createServer(app).listen(app.get('port'), function () {
       LOGGER.info('✔ Express server listening on port ' + app.get('port'));

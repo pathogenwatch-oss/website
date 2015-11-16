@@ -3,10 +3,9 @@ var assemblyModel = require('models/assembly');
 var LOGGER = require('utils/logging').createLogger('download');
 
 var flattenAssemblyMetadata = function (assemblyMetadata) {
-  assemblyMetadata.location = assemblyMetadata.geography.address;
-  assemblyMetadata.latitude = assemblyMetadata.geography.position.latitude;
-  assemblyMetadata.longitude = assemblyMetadata.geography.position.longitude;
-  delete assemblyMetadata.geography;
+  assemblyMetadata.latitude = assemblyMetadata.position.latitude;
+  assemblyMetadata.longitude = assemblyMetadata.position.longitude;
+  delete assemblyMetadata.position;
 
   return assemblyMetadata;
 };
@@ -19,10 +18,8 @@ var convertJsonToCsv = function (flatJson) {
       'assemblyId',
       'assemblyName',
       'datetime',
-      'location',
       'latitude',
       'longitude',
-      'source'
     ],
     data: [ flatJson ]
   });
