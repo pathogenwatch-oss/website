@@ -424,12 +424,14 @@
   position: relative;
   list-style: none;
   border-bottom: 1px solid rgba(0, 0, 0, .12);
+  line-height: 50px;
 }
 
 .assemblyListItem .selectButton {
   height: auto;
   overflow: none;
   width: 100%;
+  padding: 4px 8px;
 }
 
 .assemblyListItem .deleteButton {
@@ -438,7 +440,7 @@
 
 .assembly-list-item__validate-icon {
   position: absolute;
-  top: 7px;
+  top: 4px;
   left: -18px;
 }
 
@@ -456,12 +458,11 @@
   font-weight: 400;
   text-transform: none;
   overflow: hidden;
-  width: 160px;
+  width: 155px;
   display: block;
   text-overflow: ellipsis;
   text-align: left;
   padding: inherit;
-  line-height: 50px;
   color: #333;
 }
 
@@ -483,8 +484,8 @@
 
 .assembly-list-item__utils {
   position: absolute;
-  top: 8px;
-  right: 0;
+  /*top: 2px;*/
+  right: 4px;
 }
 
 .wgsa-upload-navigation__footer {
@@ -498,9 +499,23 @@
   margin: 0px 10px;
 }
 
+.confirm-delete-button i{
+  color: #fff;
+}
 .confirm-delete-button {
+  background-color: HSL(149, 36%, 50%);
+}
+
+.confirm-delete-button:hover {
+  background-color: HSL(149, 36%, 60%);
+}
+
+.confirm-delete-button, .confirm-cancel-button {
   color: #777;
-  width: 50%;
+}
+
+.assembly-list-item__utils i{
+  font-size: 20px;
 }
 
 .mdl-button--accent.mdl-button--accent {

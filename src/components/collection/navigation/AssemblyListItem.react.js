@@ -47,16 +47,15 @@ const Component = React.createClass({
 
     return (
       <li ref={assemblyName} className={`assemblyListItem ${this.props.selected ? ' selected' : ''}`} title={assemblyName}>
-        { this.state.deleteConfirm ?
-          <ConfirmDelete title={assemblyName} handleDeleteAssembly={this.handleDeleteAssembly} resetDeleteState={this.resetDeleteState}/>
-          :
           <div>
             <button className="selectButton mdl-button mdl-js-button mdl-js-ripple-effect" onClick={this.handleSelectAssembly.bind(this, assemblyName)}>
             <span className="filename">
                 {assemblyName}
               </span>
             </button>
-              { !this.props.isUploading &&
+              { !this.props.isUploading && this.state.deleteConfirm ?
+                <ConfirmDelete title={assemblyName} handleDeleteAssembly={this.handleDeleteAssembly} resetDeleteState={this.resetDeleteState}/>
+                :
                 <span className="assembly-list-item__utils">
                   <span className="assembly-list-item__validate-icon utilityButton">
                     <i style={validatedIconStyle} className="material-icons">{validatedIcon}</i>
@@ -68,7 +67,6 @@ const Component = React.createClass({
                 </span>
               }
           </div>
-        }
       </li>
     );
   },
@@ -78,18 +76,18 @@ const Component = React.createClass({
 const ConfirmDelete = React.createClass({
   render() {
     return (
-      <div>
-        <button className="confirm-delete-button mdl-button mdl-js-button mdl-js-ripple-effect"
+      <span className="assembly-list-item__utils">
+        <button className="confirm-cancel-button mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect"
           title="Cancel"
           onClick={this.props.resetDeleteState}>
           <i className="material-icons">clear</i>
         </button>
-        <button className="confirm-delete-button mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--accent"
+        <button className="wgsa-sonar-effect2 confirm-delete-button mdl-button mdl-js-button mdl-button--icon mdl-button--accent"
           title={"Confirm Delete - " + this.props.title}
           onClick={this.props.handleDeleteAssembly}>
           <i className="material-icons">delete</i>
         </button>
-      </div>
+      </span>
     );
   },
 });
