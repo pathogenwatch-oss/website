@@ -119,6 +119,7 @@ export default React.createClass({
     const { transitionTo, makePath } = this.context.router;
     if (uploadingResult === FileUploadingStore.getFileUploadingResults().SUCCESS) {
       transitionTo(makePath('collection', { species: Species.nickname, id }));
+      UploadStore.clearStore();
       return;
     }
 
