@@ -14,9 +14,10 @@ var CORE_KEY = 'CORE_SLIM';
 var ASSEMBLY_ANALYSES = [ 'FP', 'MLST', 'PAARSNP', 'CORE' ];
 
 var systemMetadataColumns = [
-  'assemblyId', 'soeciesId', 'assemblyName',
+  'assemblyId', 'speciesId', 'assemblyName',
   'date', 'year', 'month', 'day',
   'position', 'latitude', 'longitude',
+  'filename'
 ];
 
 function createKey(id, prefix) {
