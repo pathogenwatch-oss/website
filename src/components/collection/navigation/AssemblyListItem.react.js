@@ -46,7 +46,7 @@ const Component = React.createClass({
     const validatedIcon = this.props.isValid ? 'check' : 'error_outline';
 
     return (
-      <li ref={assemblyName} className={`assemblyListItem mdl-shadow--2dp${this.props.selected ? ' selected' : ''}`} title={assemblyName}>
+      <li ref={assemblyName} className={`assemblyListItem ${this.props.selected ? ' selected' : ''}`} title={assemblyName}>
         { this.state.deleteConfirm ?
           <ConfirmDelete title={assemblyName} handleDeleteAssembly={this.handleDeleteAssembly} resetDeleteState={this.resetDeleteState}/>
           :

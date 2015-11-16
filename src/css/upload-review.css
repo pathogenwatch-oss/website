@@ -423,6 +423,7 @@
   padding: 0;
   position: relative;
   list-style: none;
+  border-bottom: 1px solid rgba(0, 0, 0, .12);
 }
 
 .assemblyListItem .selectButton {
@@ -452,14 +453,16 @@
 }
 
 .assemblyListItem .selectButton span.filename {
-  font-size: 12px;
-  font-weight: 100;
+  font-weight: 400;
   text-transform: none;
-  padding: 0px;
   overflow: hidden;
   width: 160px;
   display: block;
   text-overflow: ellipsis;
+  text-align: left;
+  padding: inherit;
+  line-height: 50px;
+  color: #333;
 }
 
 .assemblyListItem.mdl-button {
@@ -480,7 +483,7 @@
 
 .assembly-list-item__utils {
   position: absolute;
-  top: 2px;
+  top: 8px;
   right: 0;
 }
 
