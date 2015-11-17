@@ -32,28 +32,31 @@ export default React.createClass({
     handleTreeTypeChange: React.PropTypes.func,
   },
 
-  componentDidMount: function () {
-    componentHandler.upgradeElement(this.refs.controls);
+  componentDidMount() {
+    const { nodeSlider, labelSlider } = this.refs;
+    componentHandler.upgradeElements([ nodeSlider, labelSlider ]);
   },
 
-  render: function () {
+  render() {
     return (
-      <div ref="controls" style={treeSizeControlsStyle}>
+      <div style={treeSizeControlsStyle}>
         <select className="wgsa-select-tree-type" defaultValue={this.props.treeType} onChange={this.props.handleTreeTypeChange}>
           { Object.keys(treeTypes).map((treeType) => <option key={treeType} value={treeType}>{treeType}</option>)}
         </select>
         <div>
           <div className="wgsa-tree-control" style={sizeControlStyle}>
             <label>Node Size
-              <input type="range" onChange={this.props.handleNodeSizeChange}
-                min="1" max="50" defaultValue={this.props.nodeSize}
+              <input ref="nodeSlider" type="range"
+                onChange={this.props.handleNodeSizeChange}
+                min="1" max="50" value={this.props.nodeSize}
                 className="mdl-slider mdl-js-slider" tabIndex="0"/>
             </label>
           </div>
           <div className="wgsa-tree-control" style={sizeControlStyle}>
             <label>Label Size
-              <input type="range" onChange={this.props.handleLabelSizeChange}
-                min="1" max="50" defaultValue={this.props.labelSize}
+              <input ref="labelSlider" type="range"
+                onChange={this.props.handleLabelSizeChange}
+                min="1" max="50" value={this.props.labelSize}
                 className="mdl-slider mdl-js-slider" tabIndex="0"/>
             </label>
           </div>

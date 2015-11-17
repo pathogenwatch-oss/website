@@ -2,40 +2,35 @@ import '../css/switch.css';
 
 import React from 'react';
 
-export default React.createClass({
+const Switch = ({ left, right, id, checked, onChange }) => (
+  <label className="wgsa-switch" htmlFor={id}>
+    <i className={`material-icons ${checked ? '' : 'active'}`}
+      title={left.title}>
+      {left.icon}
+    </i>
+    <span className={`mdl-switch ${checked ? 'is-checked' : ''}`.trim()}>
+      <input type="checkbox" id={id} className="mdl-switch__input"
+        value={checked} onChange={() => onChange(!checked)} />
+      <div className="mdl-switch__track" />
+      <div className="mdl-switch__thumb">
+        <span className="mdl-switch___focus-helper" />
+      </div>
+    </span>
+    <i className={`material-icons ${checked ? 'active' : ''}`}
+      title={right.title}>
+      {right.icon}
+    </i>
+  </label>
+);
 
-  displayName: 'Switch',
+Switch.displayName = 'Switch';
 
-  propTypes: {
-    id: React.PropTypes.string,
-    left: React.PropTypes.object,
-    right: React.PropTypes.object,
-    onChange: React.PropTypes.func,
-  },
+Switch.propTypes = {
+  left: React.PropTypes.object,
+  right: React.PropTypes.object,
+  id: React.PropTypes.string,
+  checked: React.PropTypes.bool,
+  onChange: React.PropTypes.func,
+};
 
-  getInitialState() {
-    return {
-      checked: false,
-    };
-  },
-
-  render() {
-    const { left, right } = this.props;
-    return (
-      <label className="wgsa-switch" htmlFor={this.props.id}>
-        <i className={`material-icons ${this.state.checked ? '' : 'active'}`} title={left.title}>{left.icon}</i>
-        <span className="mdl-switch mdl-js-switch mdl-js-ripple-effect">
-          <input type="checkbox" id={this.props.id} className="mdl-switch__input" onChange={this.handleChange} />
-        </span>
-        <i className={`material-icons ${this.state.checked ? 'active' : ''}`} title={right.title}>{right.icon}</i>
-      </label>
-    );
-  },
-
-  handleChange(event) {
-    const { checked } = event.target;
-    this.setState({ checked });
-    this.props.onChange(checked);
-  },
-
-});
+export default Switch;

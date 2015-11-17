@@ -47,9 +47,6 @@ export default React.createClass({
   },
 
   componentDidMount() {
-    // TODO: Un-hack this
-    componentHandler.upgradeDom();
-
     const phylocanvas = PhyloCanvas.createTree('phylocanvas-container', {
       contextMenu: {
         parent: document.body,
@@ -62,8 +59,6 @@ export default React.createClass({
     phylocanvas.highlightColour = phylocanvas.selectedColour = CGPS.COLOURS.PURPLE;
 
     phylocanvas.setTreeType(this.state.treeType);
-    phylocanvas.setNodeSize(this.state.nodeSize);
-    phylocanvas.setTextSize(this.state.labelSize);
 
     phylocanvas.on('subtree', () => {
       FilteredDataActionCreators.setBaseAssemblyIds(
@@ -72,7 +67,7 @@ export default React.createClass({
     });
 
     phylocanvas.on('original-tree', () => {
-      this.props.styleTree(this.phylocanvas);
+      this.styleTree(this.phylocanvas);
       this.phylocanvas.fitInPanel();
       this.phylocanvas.draw();
 
@@ -96,7 +91,7 @@ export default React.createClass({
     if (this.props.newick && this.props.newick !== this.phylocanvas.stringRepresentation) {
       this.loadTree();
     } else {
-      this.props.styleTree(this.phylocanvas);
+      this.styleTree(this.phylocanvas);
       this.phylocanvas.draw();
     }
   },
@@ -137,12 +132,23 @@ export default React.createClass({
     });
   },
 
+  styleTree(tree) {
+    tree.baseNodeSize = this.state.nodeSize;
+    tree.textSize = this.state.labelSize;
+
+    this.props.styleTree(tree);
+  },
+
   handleNodeSizeChange(event) {
-    this.phylocanvas.setNodeSize(event.target.value);
+    this.setState({
+      nodeSize: event.target.value,
+    });
   },
 
   handleLabelSizeChange(event) {
-    this.phylocanvas.setTextSize(event.target.value);
+    this.setState({
+      labelSize: event.target.value,
+    });
   },
 
   handleTreeTypeChange(event) {

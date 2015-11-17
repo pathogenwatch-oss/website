@@ -12,6 +12,7 @@ import resistanceProfile from './resistanceProfile';
 // display
 import table from './table';
 import mapMarkers from './mapMarkers';
+import tree from './tree';
 
 // ui
 import downloadsMenu from './downloadsMenu';
@@ -43,6 +44,7 @@ export default combineReducers({
   display: combineReducers({
     table: createReducer(table),
     mapMarkers: createReducer(mapMarkers),
+    tree: createReducer(tree),
     // labels: createReducer(displayLabels),
     // colours: createReducer(displayColours),
     // subtree: createReducer(displayedSubtree),

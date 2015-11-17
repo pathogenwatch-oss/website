@@ -6,6 +6,8 @@ import Switch from '../Switch.react';
 
 import { setTable } from '^/actions/table';
 
+import { metadata, resistanceProfile } from '^/constants/table';
+
 const style = {
   position: 'absolute',
   zIndex: 2,
@@ -13,35 +15,30 @@ const style = {
   left: 16,
 };
 
-const TableSwitcher = React.createClass({
+const TableSwitcher = ({ top, displayedTable, dispatch }) => (
+  <div style={assign({ top }, style)} className="wgsa-switch-background mdl-shadow--2dp">
+    <Switch
+      id="table-switcher"
+      left={{ title: 'Metadata', icon: 'list' }}
+      right={{ title: 'Resistance Profile', icon: 'local_pharmacy' }}
+      checked={displayedTable === resistanceProfile}
+      onChange={(checked) =>
+        dispatch(setTable(checked ? resistanceProfile : metadata))} />
+  </div>
+);
 
-  displayName: 'TableSwitcher',
+TableSwitcher.displayName = 'TableSwitcher';
 
-  propTypes: {
-    top: React.PropTypes.number,
-    handleClick: React.PropTypes.func,
-  },
+TableSwitcher.propTypes = {
+  top: React.PropTypes.number,
+  displayedTable: React.PropTypes.string,
+  dispatch: React.PropTypes.func,
+};
 
-  render() {
-    const { top, handleClick } = this.props;
-    return (
-      <div style={assign({ top }, style)} className="wgsa-switch-background mdl-shadow--2dp">
-        <Switch
-          id="table-switcher"
-          left={{ title: 'Metadata', icon: 'list' }}
-          right={{ title: 'Resistance Profile', icon: 'local_pharmacy' }}
-          onChange={handleClick} />
-      </div>
-    );
-  },
-
-});
-
-function mapDispatchToProps(dispatch) {
+function mapStateToProps({ display }) {
   return {
-    handleClick: (checked) =>
-      dispatch(setTable(checked ? 'resistanceProfile' : 'metadata')),
+    displayedTable: display.table,
   };
 }
 
-export default connect(null, mapDispatchToProps)(TableSwitcher);
+export default connect(mapStateToProps)(TableSwitcher);

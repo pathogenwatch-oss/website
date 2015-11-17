@@ -1,17 +1,18 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import assign from 'object-assign';
 
 import Tree from '../tree/Tree.react';
 import Switch from '../Switch.react';
 
+import { switchTree } from '^/actions/tree';
 import SubtreeActionCreators from '^/actions/SubtreeActionCreators';
 import FilteredDataActionCreators from '^/actions/FilteredDataActionCreators';
 
-import FilteredDataUtils from '^/utils/FilteredData';
+// import FilteredDataUtils from '^/utils/FilteredData';
 import { CGPS } from '^/defaults';
 
-const POPULATION = Symbol('population');
-const COLLECTION = Symbol('collection');
+import { POPULATION, COLLECTION } from '^/constants/tree';
 
 const emphasizedNodeLabelStyle = {
   colour: CGPS.COLOURS.PURPLE,
@@ -100,9 +101,10 @@ const getTreeProps = {
         const style = { colour: null }; // caching object
         tree.leaves.forEach((leaf) => {
           const assembly = assemblies[leaf.id];
-          style.colour = FilteredDataUtils.getColour(assembly);
+          style.colour = CGPS.COLOURS.PURPLE_LIGHT; // FilteredDataUtils.getColour(assembly);
           leaf.setDisplay(style);
           leaf.labelStyle = collectionNodeLabelStyle;
+          leaf.label = assembly.metadata.assemblyName; //this.state.labelGetter(assembly);
         });
       },
       onUpdated(event) {
@@ -119,12 +121,6 @@ const getTreeProps = {
       onRedrawOriginalTree() {
         FilteredDataActionCreators.setBaseAssemblyIds(Object.keys(assemblies));
       },
-      setNodeLabels({ leaves }) {
-        for (const leaf of leaves) {
-          const assembly = assemblies[leaf.id];
-          leaf.label = assembly.metadata.assemblyName; //this.state.labelGetter(assembly);
-        }
-      },
     };
   },
 };
@@ -137,9 +133,9 @@ const SpeciesTree = React.createClass({
     assemblies: React.PropTypes.object,
     visibleAssemblyIds: React.PropTypes.array,
     subtrees: React.PropTypes.object,
-    trees: React.PropTypes.object,
+    newicks: React.PropTypes.object,
     dispatch: React.PropTypes.func,
-    dimensions: React.PropTypes.object,
+    displayedTree: React.PropTypes.any,
   },
 
   getInitialState() {
@@ -161,42 +157,38 @@ const SpeciesTree = React.createClass({
   },
 
   render() {
-    const { tree } = this.state;
-    const newick = this.props.trees[tree];
+    const { displayedTree, newicks, dispatch } = this.props;
     return (
       <Tree
-        { ...this.treeProps }
-        newick={newick}
+        { ...getTreeProps[displayedTree](this.props) }
+        newick={newicks[displayedTree]}
         navButton={
           <div className="wgsa-switch-background wgsa-switch-background--see-through">
             <Switch
               id="tree-switcher"
               left={{ title: 'Population Tree', icon: 'nature' }}
               right={{ title: 'Collection Tree', icon: 'nature_people' }}
-              onChange={this.handleTreeSwitch} />
+              checked={displayedTree === COLLECTION}
+              onChange={(checked) =>
+                dispatch(switchTree(checked ? COLLECTION : POPULATION))} />
           </div>
         } />
     );
   },
 
-  handleTreeSwitch(checked) {
-    // this.setState({
-    //   tree: checked ? COLLECTION : POPULATION,
-    // });
-  },
-
 });
 
-function mapStateToProps({ entities }) {
+function mapStateToProps({ entities, display }) {
   const { reference, uploaded } = entities.collections;
   return {
-    assemblies: reference.assemblies,
+    assemblies: assign({}, reference.assemblies, uploaded.assemblies),
     visibleAssemblyIds: uploaded.assemblyIds,
     subtrees: entities.subtrees,
-    trees: {
+    newicks: {
       [POPULATION]: reference.tree,
       [COLLECTION]: uploaded.tree,
     },
+    displayedTree: display.tree,
   };
 }
 
