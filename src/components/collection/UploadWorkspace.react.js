@@ -114,12 +114,14 @@ export default React.createClass({
   },
 
   handleFileUploadingStoreChange() {
-    const uploadingResult = FileUploadingStore.getFileUploadingResult();
+    let uploadingResult = FileUploadingStore.getFileUploadingResult();
     const id = FileUploadingStore.getCollectionId();
     const { transitionTo, makePath } = this.context.router;
     if (uploadingResult === FileUploadingStore.getFileUploadingResults().SUCCESS) {
       transitionTo(makePath('collection', { species: Species.nickname, id }));
       UploadStore.clearStore();
+      FileUploadingStore.clearStore();
+      FileUploadingProgressStore.clearStore();
       return;
     }
 

@@ -5,7 +5,7 @@ import assign from 'object-assign';
 const CHANGE_EVENT = 'change';
 
 let numberOfExpectedResults = null;
-const receivedResults = {};
+let receivedResults = {};
 const receivedAssemblyResults = {
   assemblies: null,
   collection: null,
@@ -70,6 +70,13 @@ const Store = assign({}, EventEmitter.prototype, {
   getReceivedAssemblyResults() {
     return receivedAssemblyResults;
   },
+
+  clearStore() {
+    numberOfExpectedResults = null;
+    receivedResults = {};
+    receivedAssemblyResults.assemblies = null;
+    receivedAssemblyResults.collection = null;
+  }
 
 });
 
