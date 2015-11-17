@@ -3,8 +3,6 @@ import '../../css/search.css';
 import React from 'react';
 import { connect } from 'react-redux';
 
-import FilteredDataActionCreators from '^/actions/FilteredDataActionCreators';
-
 const Search = React.createClass({
 
   displayName: 'Search',
@@ -43,7 +41,7 @@ const Search = React.createClass({
   },
 
   handleChange(event) {
-    FilteredDataActionCreators.setTextFilter(event.target.value);
+    // FilteredDataActionCreators.setTextFilter(event.target.value);
   },
 
   handleFocus() {

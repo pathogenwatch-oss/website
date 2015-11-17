@@ -13,6 +13,7 @@ import resistanceProfile from './resistanceProfile';
 import table from './table';
 import mapMarkers from './mapMarkers';
 import tree from './tree';
+import subtree from './subtree';
 
 // ui
 import downloadsMenu from './downloadsMenu';
@@ -45,13 +46,11 @@ export default combineReducers({
     table: createReducer(table),
     mapMarkers: createReducer(mapMarkers),
     tree: createReducer(tree),
+    subtree: createReducer(subtree),
     // labels: createReducer(displayLabels),
     // colours: createReducer(displayColours),
-    // subtree: createReducer(displayedSubtree),
+    // visibleAssemblyIds: createReducer(visibleAssemblyIds),
   }),
-  // filter: combineReducers({
-  //   visibleAssemblyIds: createReducer(visibleAssemblyIds),
-  // }),
   ui: combineReducers({
     downloadsMenu: createReducer(downloadsMenu),
     treeLinks: createReducer(treeLinks),

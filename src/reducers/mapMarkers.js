@@ -1,13 +1,11 @@
 import { FETCH_ENTITIES } from '../actions/fetch';
 
-import FilteredDataActionCreators from '^/actions/FilteredDataActionCreators';
-
 import MapUtils from '^/utils/Map';
 
 const initialState = [];
 
 function onMarkerClick(assemblyIds) {
-  FilteredDataActionCreators.setAssemblyIds(assemblyIds);
+  // FilteredDataActionCreators.setAssemblyIds(assemblyIds);
 }
 
 function getMarkerDefs(assemblyIds, combinedAssemblies) {

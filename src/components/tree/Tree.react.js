@@ -7,8 +7,6 @@ import contextMenuPlugin from 'phylocanvas-plugin-context-menu';
 import TreeControls from './TreeControls.react';
 // import TreeMenu from './TreeMenu.react';
 
-import FilteredDataActionCreators from '^/actions/FilteredDataActionCreators';
-
 import DEFAULT, { CGPS } from '^/defaults';
 
 PhyloCanvas.plugin(contextMenuPlugin);
@@ -53,6 +51,8 @@ export default React.createClass({
       },
     });
 
+    phylocanvas.baseNodeSize = this.state.nodeSize;
+    phylocanvas.textSize = this.state.labelSize;
     phylocanvas.padding = 128;
     phylocanvas.showLabels = true;
     phylocanvas.hoverLabel = true;
@@ -123,7 +123,7 @@ export default React.createClass({
 
   loadTree() {
     this.phylocanvas.load(this.props.newick, () => {
-      this.props.styleTree(this.phylocanvas);
+      this.styleTree(this.phylocanvas);
       this.phylocanvas.fitInPanel();
       this.phylocanvas.draw();
       this.setState({

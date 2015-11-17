@@ -1,78 +1,58 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
 import Tree from '../tree/Tree.react';
 
-// import UploadedCollectionStore from '^/stores/UploadedCollectionStore';
-// import ReferenceCollectionStore from '^/stores/ReferenceCollectionStore';
-import SubtreeStore from '^/stores/SubtreeStore';
+import { setSubtree } from '^/actions/tree';
 
-import SubtreeActionCreators from '^/actions/SubtreeActionCreators';
-import FilteredDataActionCreators from '^/actions/FilteredDataActionCreators';
-
-import FilteredDataUtils from '^/utils/FilteredData';
+import { CGPS } from '^/defaults';
 
 const nodeLabelStyle = {
   colour: 'rgba(0, 0, 0, 0.87)',
 };
 
-function styleTree(tree) {
-  tree.leaves.forEach((leaf) => {
-    const assembly = UploadedCollectionStore.getAssemblies()[leaf.id];
-    leaf.setDisplay({ colour: FilteredDataUtils.getColour(assembly) });
-    leaf.labelStyle = nodeLabelStyle;
-  });
-}
-
-function handleBackButton() {
-  SubtreeActionCreators.setActiveSubtreeId(null);
-}
-
-const backButton = (
+const BackButton = ({ handleBackButton }) => (
   <button className="wgsa-tree-return mdl-button mdl-button--icon" onClick={handleBackButton}>
     <i className="material-icons">arrow_back</i>
   </button>
 );
 
-function onUpdated(event) {
-  if (event.property !== 'selected') {
-    return;
-  }
-  const { nodeIds } = event;
-  FilteredDataActionCreators.setAssemblyIds(nodeIds.length ? nodeIds : SubtreeStore.getActiveSubtreeAssemblyIds());
+const Subtree = (props) => (<Tree { ...props } />);
+
+Subtree.displayName = 'Subtree';
+
+function mapStateToProps({ entities, display }) {
+  const { collections, subtrees } = entities;
+  const { subtree } = display;
+  const referenceAssembly = collections.reference.assemblies[subtree];
+  return {
+    title: referenceAssembly ? referenceAssembly.metadata.assemblyName : subtree,
+    newick: subtrees[subtree].newick,
+    styleTree({ leaves }) {
+      leaves.forEach((leaf) => {
+        const assembly = collections.uploaded.assemblies[leaf.id];
+        leaf.label = assembly ? assembly.metadata.assemblyName : leaf.id;
+        leaf.setDisplay({ colour: CGPS.COLOURS.PURPLE_LIGHT });
+        leaf.labelStyle = nodeLabelStyle;
+      });
+    },
+  };
 }
 
-function onRedrawOriginalTree() {
-  FilteredDataActionCreators.setBaseAssemblyIds(SubtreeStore.getActiveSubtreeAssemblyIds());
+function mapDispatchToProps(dispatch) {
+  return {
+    navButton: (<BackButton handleBackButton={() => dispatch(setSubtree(null))} />),
+    onUpdated(event) {
+      if (event.property !== 'selected') {
+        return;
+      }
+      // const { nodeIds } = event;
+      // FilteredDataActionCreators.setAssemblyIds(nodeIds.length ? nodeIds : SubtreeStore.getActiveSubtreeAssemblyIds());
+    },
+    onRedrawOriginalTree() {
+      // FilteredDataActionCreators.setBaseAssemblyIds(SubtreeStore.getActiveSubtreeAssemblyIds());
+    },
+  };
 }
 
-export default React.createClass({
-
-  propTypes: {
-    treeName: React.PropTypes.string,
-  },
-
-  render() {
-    const { treeName } = this.props;
-    const referenceAssembly = ReferenceCollectionStore.getAssemblies()[treeName];
-    const title = referenceAssembly ? referenceAssembly.metadata.assemblyName : treeName;
-    let newick;
-
-    const subtreeAssemblyIds = SubtreeStore.getActiveSubtreeAssemblyIds();
-    if (subtreeAssemblyIds.length === 1) {
-      newick = `(${treeName}:0.5,${subtreeAssemblyIds[0]}:0.5);`;
-    } else {
-      newick = SubtreeStore.getActiveSubtree().newick;
-    }
-
-    return (
-      <Tree
-        title={title}
-        newick={newick}
-        navButton={backButton}
-        styleTree={styleTree}
-        onUpdated={onUpdated}
-        onRedrawOriginalTree={onRedrawOriginalTree} />
-    );
-  },
-
-});
+export default connect(mapStateToProps, mapDispatchToProps)(Subtree);

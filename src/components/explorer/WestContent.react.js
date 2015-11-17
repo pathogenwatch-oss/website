@@ -1,48 +1,26 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
 import SpeciesTree from './SpeciesTree.react';
 import Subtree from './Subtree.react';
 
-import SubtreeStore from '^/stores/SubtreeStore';
-
-export default React.createClass({
+const WestContent = React.createClass({
 
   propTypes: {
     width: React.PropTypes.number.isRequired,
     height: React.PropTypes.number.isRequired,
-  },
-
-  getInitialState() {
-    return {
-      subtree: null,
-    };
-  },
-
-  componentDidMount() {
-    SubtreeStore.addChangeListener(this.handleSubtreeStoreChange);
-  },
-
-  componentWillUnmount() {
-    SubtreeStore.removeChangeListener(this.handleSubtreeStoreChange);
+    subtree: React.PropTypes.string,
   },
 
   render() {
-    if (this.state.subtree) {
-      return (
-        <Subtree treeName={this.state.subtree} />
-      );
-    }
+    const { subtree, width, height } = this.props;
 
-    // Somehow the props prevent the tree from being remounted on each update
+    const TreeComponent = subtree ? Subtree : SpeciesTree;
+
     return (
-      <SpeciesTree dimensions={this.props} />
+      <TreeComponent dimensions={{ width, height }} />
     );
   },
-
-  handleSubtreeStoreChange() {
-    this.setState({
-      subtree: SubtreeStore.getActiveSubtreeId(),
-    });
-  },
-
 });
+
+export default connect(({ display }) => display)(WestContent);

@@ -1,4 +1,3 @@
-
 import { SET_TABLE } from '../actions/table';
 
 import { metadata } from '../constants/table';
