@@ -15,6 +15,9 @@ import mapMarkers from './mapMarkers';
 import tree from './tree';
 import subtree from './subtree';
 
+// filter
+import filter from './filter';
+
 // ui
 import downloadsMenu from './downloadsMenu';
 import treeLinks from './treeLinks';
@@ -50,8 +53,8 @@ export default combineReducers({
     subtree: createReducer(subtree),
     // labels: createReducer(displayLabels),
     // colours: createReducer(displayColours),
-    // visibleAssemblyIds: createReducer(visibleAssemblyIds),
   }),
+  filter: createReducer(filter),
   ui: combineReducers({
     downloadsMenu: createReducer(downloadsMenu),
     treeLinks: createReducer(treeLinks),

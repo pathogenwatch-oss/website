@@ -42,7 +42,7 @@ export const trees = {
 };
 
 export const collectionId = {
-  initialState: '',
+  initialState: null,
   actions: {
     [SET_COLLECTION_ID]: function (state, { id }) {
       return id || state;

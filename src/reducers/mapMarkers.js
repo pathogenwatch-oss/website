@@ -1,7 +1,5 @@
 import { FETCH_ENTITIES } from '../actions/fetch';
 
-import { SET_VISIBLE_ASSEMBLY_IDS } from '../actions/filter';
-
 import MapUtils from '^/utils/Map';
 
 const initialState = [];
@@ -20,9 +18,6 @@ const actions = {
     }
 
     return state;
-  },
-  [SET_VISIBLE_ASSEMBLY_IDS]: function (state, { assemblyIds }) {
-
   },
 };
 

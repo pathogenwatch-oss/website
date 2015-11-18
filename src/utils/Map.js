@@ -96,7 +96,7 @@ function getMarkerDefinitions(assemblies, {
       const assemblyIds = positionAssemblies.map(_ => _.metadata.assemblyId);
       return {
         position: JSON.parse(position),
-        assemblyIds: new Set(assemblyIds),
+        assemblyIds,
         icon: getIcon(positionAssemblies),
         onClick: onClick ? onClick.bind(null, assemblyIds) : null,
         infoWindow: createInfoWindow ? createInfoWindow(positionAssemblies) : null,

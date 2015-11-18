@@ -1,9 +1,16 @@
 
-export const SET_VISIBLE_ASSEMBLY_IDS = 'SET_VISIBLE_ASSEMBLY_IDS';
+export const ACTIVATE_FILTER = 'ACTIVATE_FILTER';
 
-export function setVisibleAssemblyIds(assemblyIds) {
+export function activateFilter(ids) {
   return {
-    type: SET_VISIBLE_ASSEMBLY_IDS,
-    assemblyIds,
+    type: ACTIVATE_FILTER,
+    ids,
   };
+}
+
+
+export const RESET_FILTER = 'RESET_FILTER';
+
+export function resetFilter() {
+  return { type: RESET_FILTER };
 }
