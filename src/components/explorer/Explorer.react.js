@@ -8,12 +8,12 @@ export default React.createClass({
   displayName: 'Explorer',
 
   propTypes: {
-    fetchEntities: React.PropTypes.func,
+    initialise: React.PropTypes.func,
     loading: React.PropTypes.object,
   },
 
   componentDidMount() {
-    this.props.fetchEntities();
+    this.props.initialise();
   },
 
   render() {

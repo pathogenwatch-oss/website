@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import assign from 'object-assign';
 
 import Tree from '../tree/Tree.react';
 import Switch from '../Switch.react';
@@ -17,7 +16,7 @@ const SpeciesTree = React.createClass({
     assemblies: React.PropTypes.object,
     visibleAssemblyIds: React.PropTypes.array,
     subtrees: React.PropTypes.object,
-    newicks: React.PropTypes.object,
+    trees: React.PropTypes.object,
     dispatch: React.PropTypes.func,
     displayedTree: React.PropTypes.any,
   },
@@ -41,11 +40,11 @@ const SpeciesTree = React.createClass({
   },
 
   render() {
-    const { displayedTree, newicks, dispatch } = this.props;
+    const { displayedTree, trees, dispatch } = this.props;
     return (
       <Tree
         { ...getTreeProps[displayedTree](this.props) }
-        newick={newicks[displayedTree]}
+        newick={trees[displayedTree]}
         navButton={
           <div className="wgsa-switch-background wgsa-switch-background--see-through">
             <Switch
@@ -63,15 +62,11 @@ const SpeciesTree = React.createClass({
 });
 
 function mapStateToProps({ entities, display }) {
-  const { reference, uploaded } = entities.collections;
+  const { assemblies, trees, subtrees } = entities;
   return {
-    assemblies: assign({}, reference.assemblies, uploaded.assemblies),
-    visibleAssemblyIds: uploaded.assemblyIds,
-    subtrees: entities.subtrees,
-    newicks: {
-      [POPULATION]: reference.tree,
-      [COLLECTION]: uploaded.tree,
-    },
+    assemblies,
+    subtrees,
+    trees,
     displayedTree: display.tree,
   };
 }

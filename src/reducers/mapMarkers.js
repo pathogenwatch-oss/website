@@ -1,19 +1,14 @@
 import { FETCH_ENTITIES } from '../actions/fetch';
 
+import { SET_VISIBLE_ASSEMBLY_IDS } from '../actions/filter';
+
 import MapUtils from '^/utils/Map';
 
 const initialState = [];
 
-function onMarkerClick(assemblyIds) {
-  // FilteredDataActionCreators.setAssemblyIds(assemblyIds);
-}
-
 function getMarkerDefs(assemblyIds, combinedAssemblies) {
   return MapUtils.getMarkerDefinitions(
-    assemblyIds.map(id => combinedAssemblies[id]), {
-      onClick: onMarkerClick,
-      // getIcon: FilteredDataStore.getColourTableColumnName() ? MapUtils.resistanceMarkerIcon : undefined,
-    }
+    assemblyIds.map(id => combinedAssemblies[id])
   );
 }
 
@@ -25,6 +20,9 @@ const actions = {
     }
 
     return state;
+  },
+  [SET_VISIBLE_ASSEMBLY_IDS]: function (state, { assemblyIds }) {
+
   },
 };
 

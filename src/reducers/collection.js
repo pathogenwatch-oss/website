@@ -1,26 +1,51 @@
+import assign from 'object-assign';
+
 import { FETCH_ENTITIES } from '../actions/fetch';
+import { SET_COLLECTION_ID } from '../actions/collection';
 
-const initialState = {};
+import { POPULATION, COLLECTION } from '../constants/tree';
 
-const actions = {
-  [FETCH_ENTITIES]: function (state, { ready, result, error }) {
-    if (!ready || error) {
-      return state;
-    }
+export const assemblies = {
+  initialState: {},
+  actions: {
+    [FETCH_ENTITIES]: function (state, { ready, result, error }) {
+      if (!ready || error) {
+        return state;
+      }
 
-    if (result) {
-      const { collectionId, assemblies, tree } = result[0];
-      return {
-        uploaded: {
-          collectionId,
-          assemblies,
-          tree,
-          assemblyIds: Object.keys(assemblies),
-        },
-        reference: result[1],
-      };
-    }
+      if (result) {
+        const [ uploaded, reference ] = result;
+        return assign({}, uploaded.assemblies, reference.assemblies);
+      }
+    },
+  },
+
+};
+
+export const trees = {
+  initialState: {},
+  actions: {
+    [FETCH_ENTITIES]: function (state, { ready, result, error }) {
+      if (!ready || error) {
+        return state;
+      }
+
+      if (result) {
+        const [ uploaded, reference ] = result;
+        return {
+          [COLLECTION]: uploaded.tree,
+          [POPULATION]: reference.tree,
+        };
+      }
+    },
   },
 };
 
-export default { actions, initialState };
+export const collectionId = {
+  initialState: '',
+  actions: {
+    [SET_COLLECTION_ID]: function (state, { id }) {
+      return id || state;
+    },
+  },
+};

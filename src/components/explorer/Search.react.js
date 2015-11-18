@@ -59,7 +59,7 @@ const Search = React.createClass({
 });
 
 function mapStateToProps({ entities }) {
-  const { assemblies } = entities.collections.uploaded;
+  const { assemblies } = entities;
   const totalAmount = Object.keys(assemblies).length;
   return {
     totalAmount,

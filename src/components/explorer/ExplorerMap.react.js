@@ -4,31 +4,31 @@ import assign from 'object-assign';
 
 import GoogleMap from '../GoogleMap.react';
 
+import { setVisibleAssemblyIds } from '^/actions/filter';
+
 const style = {
   position: 'relative',
 };
 
-function onMapClick() {
-  // FilteredDataActionCreators.clearAssemblyFilter();
-}
-
-const ExplorerMap = ({ dimensions, markerDefs }) => (
+const ExplorerMap = ({ dimensions, markerDefs, dispatch, showAllAssemblies }) => (
   <section style={assign({}, style, dimensions)}>
-    <GoogleMap markerDefs={markerDefs} onMapClick={onMapClick} />
+    <GoogleMap
+      markerDefs={markerDefs}
+      onMapClick={() => dispatch(showAllAssemblies())}
+    />
   </section>
 );
 
 ExplorerMap.propTypes = {
   dimensions: React.PropTypes.object,
-  mapProps: React.PropTypes.shape({
-    markerDefs: React.PropTypes.array,
-    onMapClick: React.PropTypes.function,
-  }),
+  markerDefs: React.PropTypes.array,
+  dispatch: React.PropTypes.func,
 };
 
-function mapStateToProps({ display }) {
+function mapStateToProps({ display, cache }) {
   return {
     markerDefs: display.mapMarkers,
+    showAllAssemblies: () => setVisibleAssemblyIds(cache.allAssemblyIds),
   };
 }
 

@@ -22,15 +22,15 @@ const Subtree = (props) => (<Tree { ...props } />);
 Subtree.displayName = 'Subtree';
 
 function mapStateToProps({ entities, display }) {
-  const { collections, subtrees } = entities;
+  const { assemblies, subtrees } = entities;
   const { subtree } = display;
-  const referenceAssembly = collections.reference.assemblies[subtree];
+  const referenceAssembly = assemblies[subtree];
   return {
     title: referenceAssembly ? referenceAssembly.metadata.assemblyName : subtree,
     newick: subtrees[subtree].newick,
     styleTree({ leaves }) {
       leaves.forEach((leaf) => {
-        const assembly = collections.uploaded.assemblies[leaf.id];
+        const assembly = assemblies[leaf.id];
         leaf.label = assembly ? assembly.metadata.assemblyName : leaf.id;
         leaf.setDisplay({ colour: CGPS.COLOURS.PURPLE_LIGHT });
         leaf.labelStyle = nodeLabelStyle;

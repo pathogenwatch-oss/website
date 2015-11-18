@@ -30,7 +30,6 @@ export default React.createClass({
     onUpdated: React.PropTypes.func,
     onRedrawOriginalTree: React.PropTypes.func,
     highlightFilteredNodes: React.PropTypes.func,
-    collections: React.PropTypes.object,
   },
 
   getInitialState() {

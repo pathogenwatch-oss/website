@@ -66,11 +66,7 @@ function resistanceMarkerIcon(assemblies) {
     drawSingleColourMarker(Array.from(colours)[0]);
 }
 
-function getMarkerDefinitions(assemblies, {
-  getIcon = () => standardMarkerIcon,
-  onClick,
-  createInfoWindow,
-} = {}) {
+function mapPositionsToAssemblies(assemblies) {
   const positionMap = new Map();
 
   for (const assembly of assemblies) {
@@ -87,14 +83,25 @@ function getMarkerDefinitions(assemblies, {
     }
   }
 
-  return Array.from(positionMap).map(function ([ positionKey, positionAssemblies ]) {
-    return {
-      position: JSON.parse(positionKey),
-      icon: getIcon(positionAssemblies),
-      onClick: onClick ? onClick.bind(null, positionAssemblies.map(_ => _.metadata.assemblyId)) : null,
-      infoWindow: createInfoWindow ? createInfoWindow(positionAssemblies) : null,
-    };
-  });
+  return positionMap;
+}
+
+function getMarkerDefinitions(assemblies, {
+    getIcon = () => standardMarkerIcon,
+    onClick,
+    createInfoWindow,
+  } = {}) {
+  return Array.from(mapPositionsToAssemblies(assemblies)).
+    map(([ position, positionAssemblies ]) => {
+      const assemblyIds = positionAssemblies.map(_ => _.metadata.assemblyId);
+      return {
+        position: JSON.parse(position),
+        assemblyIds: new Set(assemblyIds),
+        icon: getIcon(positionAssemblies),
+        onClick: onClick ? onClick.bind(null, assemblyIds) : null,
+        infoWindow: createInfoWindow ? createInfoWindow(positionAssemblies) : null,
+      };
+    });
 }
 
 export default {

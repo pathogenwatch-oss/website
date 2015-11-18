@@ -5,6 +5,7 @@ import Explorer from './Explorer.react';
 
 import getStore from '^/store';
 
+import { setCollectionId } from '^/actions/collection';
 import { fetchEntities } from '^/actions/fetch';
 
 import Species from '^/species';
@@ -15,7 +16,10 @@ const connectExplorer = connect(
   ({ loading }) => { return { loading }; },
   (dispatch, { id }) => {
     return {
-      fetchEntities: dispatch.bind(null, fetchEntities(Species.id, id)),
+      initialise() {
+        dispatch(setCollectionId(id));
+        dispatch(fetchEntities(Species.id, id));
+      },
     };
   }
 );
