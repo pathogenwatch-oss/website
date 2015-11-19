@@ -10,15 +10,21 @@ const style = {
   position: 'relative',
 };
 
-function addClickHandler(markerDef, dispatch) {
-  markerDef.onClick = () => dispatch(activateFilter(markerDef.assemblyIds));
+function addClickHandler(markerDef, filter, dispatch) {
+  const { assemblyIds } = markerDef;
+
+  markerDef.onClick =
+    filter.active && filter.ids === assemblyIds ?
+      () => dispatch(resetFilter()) :
+      () => dispatch(activateFilter(assemblyIds));
+
   return markerDef;
 }
 
-const ExplorerMap = ({ dimensions, markerDefs, dispatch }) => (
+const ExplorerMap = ({ dimensions, markerDefs, filter, dispatch }) => (
   <section style={assign({}, style, dimensions)}>
     <GoogleMap
-      markerDefs={markerDefs.map((def) => addClickHandler(def, dispatch))}
+      markerDefs={markerDefs.map((def) => addClickHandler(def, filter, dispatch))}
       onMapClick={() => dispatch(resetFilter())}
     />
   </section>
@@ -30,9 +36,10 @@ ExplorerMap.propTypes = {
   dispatch: React.PropTypes.func,
 };
 
-function mapStateToProps({ display }) {
+function mapStateToProps({ display, filter }) {
   return {
     markerDefs: display.mapMarkers,
+    filter,
   };
 }
 

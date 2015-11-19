@@ -34,6 +34,8 @@ export default React.createClass({
     data: React.PropTypes.array,
     calculatedColumnWidths: React.PropTypes.array,
     headerClickHandler: React.PropTypes.func,
+    rowClickHandler: React.PropTypes.func,
+    filter: React.PropTypes.object,
   },
 
   getInitialState() {
@@ -67,6 +69,7 @@ export default React.createClass({
         rowsCount={this.props.data.length}
         height={this.props.height}
         width={this.props.width}
+        onRowClick={this.handleRowClick}
         isColumnResizing={this.isColumnResizing}
         onColumnResizeEndCallback={this.handleColumnResize}
         { ...this.props.tableProps } >
@@ -88,9 +91,10 @@ export default React.createClass({
 
   handleHeaderClick(columnProps) {
     this.props.headerClickHandler(columnProps);
-    // header not re-rendered by state, need to do it the old-fashioned way
-    $(`button[data-column="${columnProps.dataKey}"]`).toggleClass('active');
-    $(`button[data-column]`).not(`[data-column="${columnProps.dataKey}"]`).removeClass('active');
+  },
+
+  handleRowClick(e, index, rowData) {
+    this.props.rowClickHandler(rowData);
   },
 
   isColumnResizing: false,

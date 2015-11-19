@@ -31,6 +31,7 @@ function drawSingleColourMarker(fillColour, strokeColour = COLOUR) {
 }
 
 const standardMarkerIcon = drawSingleColourMarker(CGPS.COLOURS.PURPLE_LIGHT);
+const filteredMarkerIcon = drawSingleColourMarker('transparent');
 
 function drawDoubleColourMarker([ colour1, colour2 ], strokeColour = COLOUR) {
   context.clearRect(0, 0, MARKER_SIZE, MARKER_SIZE);
@@ -96,10 +97,11 @@ function getMarkerDefinitions(assemblies, {
       const assemblyIds = positionAssemblies.map(_ => _.metadata.assemblyId);
       return {
         position: JSON.parse(position),
-        assemblyIds,
+        assemblyIds: new Set(assemblyIds),
         icon: getIcon(positionAssemblies),
         onClick: onClick ? onClick.bind(null, assemblyIds) : null,
         infoWindow: createInfoWindow ? createInfoWindow(positionAssemblies) : null,
+        active: true,
       };
     });
 }
@@ -107,5 +109,6 @@ function getMarkerDefinitions(assemblies, {
 export default {
   getMarkerDefinitions,
   standardMarkerIcon,
+  filteredMarkerIcon,
   resistanceMarkerIcon,
 };

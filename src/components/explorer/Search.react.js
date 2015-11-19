@@ -62,7 +62,7 @@ function mapStateToProps({ entities, filter }) {
   const totalAmount = Object.keys(entities.assemblies).length;
   return {
     totalAmount,
-    filteredAmount: filter.active ? filter.ids.length : totalAmount,
+    filteredAmount: filter.active ? filter.ids.size : totalAmount,
     filterColumnName: 'ASSEMBLY',
   };
 }

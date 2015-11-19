@@ -49,13 +49,6 @@ function fitAllMarkers() {
   }
 }
 
-function clearMarkers() {
-  for (const marker of markers) {
-    marker.setMap(null);
-  }
-  markers.length = 0;
-}
-
 // bound to a marker
 function openInfoWindow(infoWindow) {
   if (currentInfoWindow) {
@@ -65,20 +58,12 @@ function openInfoWindow(infoWindow) {
   currentInfoWindow = infoWindow;
 }
 
-function createMarker({ position, icon = MapUtils.standardMarkerIcon, onClick, infoWindow }) {
-  const { latitude, longitude } = position;
-  if (!latitude || !longitude) {
-    return null;
-  }
-
-  const marker = new google.maps.Marker({
-    position: new google.maps.LatLng(
-      parseFloat(latitude), parseFloat(longitude)
-    ),
-    map,
-    icon,
-    optimized: false,
+function updateMarker(marker, { icon, active, infoWindow, onClick }) {
+  marker.setOptions({
+    icon: active ? icon : MapUtils.filteredMarkerIcon,
   });
+
+  google.maps.event.clearListeners(marker, 'click');
 
   if (infoWindow) {
     marker.addListener('click', openInfoWindow.bind(
@@ -87,21 +72,55 @@ function createMarker({ position, icon = MapUtils.standardMarkerIcon, onClick, i
   } else if (onClick) {
     marker.addListener('click', onClick);
   }
+}
+
+function createMarker({ position }) {
+  const { latitude, longitude } = position;
+
+  const marker = new google.maps.Marker({
+    map,
+    position: new google.maps.LatLng(
+      parseFloat(latitude), parseFloat(longitude)
+    ),
+    optimized: false,
+  });
 
   return marker;
 }
 
-function createMarkers(markerDefs) {
-  clearMarkers();
+function setMarkers(markerDefs) {
+  for (let i = 0; i < markerDefs.length; i++) {
+    const markerDef = markerDefs[i];
 
-  for (const definition of markerDefs) {
-    const marker = createMarker(definition);
-    if (marker) {
-      markers.push(marker);
+    if (!markers[i]) {
+      markers.push(createMarker(markerDef));
     }
+
+    updateMarker(markers[i], markerDef);
   }
 
   fitAllMarkers();
+}
+
+function createMap({ onMapClick, markerDefs }) {
+  const center = new google.maps.LatLng(
+    DEFAULT.MAP.CENTER.LATITUDE, DEFAULT.MAP.CENTER.LONGITUDE
+  );
+
+  map = new google.maps.Map(document.getElementById('map-canvas'), {
+    center,
+    streetViewControl: false,
+    scaleControl: true,
+    mapTypeControl: false,
+    mapTypeId: google.maps.MapTypeId.TERRAIN,
+    zoom: 4,
+  });
+
+  if (onMapClick) {
+    map.addListener('click', onMapClick);
+  }
+
+  setMarkers(markerDefs);
 }
 
 export default React.createClass({
@@ -120,32 +139,19 @@ export default React.createClass({
   },
 
   componentDidMount() {
-    const center = new google.maps.LatLng(
-      DEFAULT.MAP.CENTER.LATITUDE, DEFAULT.MAP.CENTER.LONGITUDE
-    );
-
-    map = new google.maps.Map(document.getElementById('map-canvas'), {
-      center,
-      streetViewControl: false,
-      scaleControl: true,
-      mapTypeControl: false,
-      mapTypeId: google.maps.MapTypeId.TERRAIN,
-      zoom: 4,
-    });
-
-    if (this.props.onMapClick) {
-      map.addListener('click', this.props.onMapClick);
-    }
-
-    createMarkers(this.props.markerDefs);
+    createMap(this.props);
   },
 
   componentDidUpdate(previous) {
+    if (!map) {
+      createMap(this.props);
+    }
+
     resizeMap();
 
     const { markerDefs } = this.props;
     if (markerDefs !== previous.markerDefs) {
-      createMarkers(markerDefs);
+      setMarkers(markerDefs);
     }
   },
 
