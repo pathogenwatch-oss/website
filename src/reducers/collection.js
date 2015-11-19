@@ -41,11 +41,27 @@ export const trees = {
   },
 };
 
-export const collectionId = {
-  initialState: null,
+export const collection = {
+  initialState: { id: null, assemblyIds: [] },
   actions: {
     [SET_COLLECTION_ID]: function (state, { id }) {
-      return id || state;
+      return {
+        ...state,
+        id,
+      };
+    },
+    [FETCH_ENTITIES]: function (state, { ready, result, error }) {
+      if (!ready || error) {
+        return state;
+      }
+
+      if (result) {
+        const [ uploaded ] = result;
+        return {
+          ...state,
+          assemblyIds: Object.keys(uploaded.assemblies),
+        };
+      }
     },
   },
 };

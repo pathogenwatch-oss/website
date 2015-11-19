@@ -29,7 +29,9 @@ const emphasizedLeafStyle = {
 };
 
 export const getTreeProps = {
-  [POPULATION]: function ({ dispatch, assemblies, visibleAssemblyIds, subtrees }) {
+  [POPULATION]: function ({ dispatch, assemblies, subtrees, filter }) {
+    const filterHasId = id => filter.ids.has(id);
+
     return {
       title: 'Population',
       styleTree(tree) {
@@ -54,11 +56,14 @@ export const getTreeProps = {
 
         for (const subtreeId of subtreeIds) {
           const leaf = tree.branches[subtreeId];
+          const { assemblyIds } = subtrees[subtreeId];
+
           if (leaf) {
             leaf.interactive = true;
             leaf.label = `${leaf.label} (${subtrees[leaf.id].assemblyIds.length})`;
             leaf.setDisplay(emphasizedLeafStyle);
             leaf.labelStyle = emphasizedNodeLabelStyle;
+            leaf.highlighted = (filter.active && assemblyIds.some(filterHasId));
           }
         }
       },
@@ -69,23 +74,6 @@ export const getTreeProps = {
         const { nodeIds } = event;
         if (nodeIds.length === 1) {
           dispatch(setSubtree(nodeIds[0]));
-        }
-      },
-      highlightFilteredNodes({ branches }) {
-        for (const id of Object.keys(subtrees)) {
-          const leaf = branches[id];
-          if (!leaf) {
-            return;
-          }
-
-          leaf.highlighted = false;
-          const { assemblyIds } = subtrees[id];
-          for (const assemblyId of assemblyIds) {
-            if (visibleAssemblyIds.indexOf(assemblyId) !== -1) {
-              leaf.highlighted = true;
-              break;
-            }
-          }
         }
       },
     };

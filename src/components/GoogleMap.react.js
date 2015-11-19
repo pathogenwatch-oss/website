@@ -98,8 +98,6 @@ function setMarkers(markerDefs) {
 
     updateMarker(markers[i], markerDef);
   }
-
-  fitAllMarkers();
 }
 
 function createMap({ onMapClick, markerDefs }) {
@@ -121,6 +119,7 @@ function createMap({ onMapClick, markerDefs }) {
   }
 
   setMarkers(markerDefs);
+  fitAllMarkers();
 }
 
 export default React.createClass({

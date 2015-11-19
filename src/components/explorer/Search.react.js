@@ -58,8 +58,8 @@ const Search = React.createClass({
 
 });
 
-function mapStateToProps({ entities, filter }) {
-  const totalAmount = Object.keys(entities.assemblies).length;
+function mapStateToProps({ collection, filter }) {
+  const totalAmount = collection.assemblyIds.length;
   return {
     totalAmount,
     filteredAmount: filter.active ? filter.ids.size : totalAmount,

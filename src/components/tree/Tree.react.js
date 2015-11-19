@@ -29,7 +29,6 @@ export default React.createClass({
     styleTree: React.PropTypes.func,
     onUpdated: React.PropTypes.func,
     onRedrawOriginalTree: React.PropTypes.func,
-    highlightFilteredNodes: React.PropTypes.func,
   },
 
   getInitialState() {

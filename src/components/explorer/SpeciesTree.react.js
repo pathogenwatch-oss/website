@@ -61,13 +61,14 @@ const SpeciesTree = React.createClass({
 
 });
 
-function mapStateToProps({ entities, display }) {
+function mapStateToProps({ entities, display, filter }) {
   const { assemblies, trees, subtrees } = entities;
   return {
     assemblies,
     subtrees,
     trees,
     displayedTree: display.tree,
+    filter,
   };
 }
 

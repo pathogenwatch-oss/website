@@ -2,7 +2,7 @@ import { combineReducers } from 'redux';
 
 // entities
 import antibiotics from './antibiotics';
-import { assemblies, trees, collectionId } from './collection';
+import { assemblies, trees, collection } from './collection';
 import subtrees from './subtrees';
 
 // tables
@@ -42,6 +42,7 @@ export default combineReducers({
     trees: createReducer(trees),
     subtrees: createReducer(subtrees),
   }),
+  collection: createReducer(collection),
   tables: combineReducers({
     metadata: createReducer(metadata),
     resistanceProfile: createReducer(resistanceProfile),
@@ -61,5 +62,4 @@ export default combineReducers({
     bodyClickEvent,
   }),
   loading: combineReducers({ ready, error }),
-  collectionId: createReducer(collectionId),
 });
