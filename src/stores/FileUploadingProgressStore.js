@@ -5,8 +5,8 @@ import assign from 'object-assign';
 const CHANGE_EVENT = 'change';
 
 let numberOfExpectedResults = null;
-let receivedResults = {};
-const receivedAssemblyResults = {
+let numberOfReceivedResults = 0;
+const receivedResults = {
   assemblies: null,
   collection: null,
 };
@@ -16,33 +16,32 @@ function setNumberOfExpectedResults(number) {
 }
 
 function setReceivedResult(result) {
-  const resultString = result.assemblyId + '__' + result.result;
 
-  receivedResults[resultString] = true;
+  numberOfReceivedResults++;
 
   if (result.assemblyId) {
-    receivedAssemblyResults.assemblies = receivedAssemblyResults.assemblies || {};
-    receivedAssemblyResults.assemblies[result.assemblyId] = receivedAssemblyResults.assemblies[result.assemblyId] || {};
-    receivedAssemblyResults.assemblies[result.assemblyId][result.result] = true;
+    receivedResults.assemblies = receivedResults.assemblies || {};
+    receivedResults.assemblies[result.assemblyId] = receivedResults.assemblies[result.assemblyId] || {};
+    receivedResults.assemblies[result.assemblyId][result.result] = true;
 
-    // console.log('[WGSA][Assembly Result] ' + result.assemblyId + ' ' + result.result);
-    console.dir(receivedAssemblyResults);
+    console.log('[WGSA][Assembly Result] ' + result.assemblyId + ' ' + result.result);
+    console.dir(receivedResults);
 
     return;
   }
 
-  receivedAssemblyResults.collection = receivedAssemblyResults.collection || {};
-  receivedAssemblyResults.collection[result.result] = true;
+  receivedResults.collection = receivedResults.collection || {};
+  receivedResults.collection[result.result] = true;
 
-  // console.log('[WGSA][Collection Result] ' + result.collectionId + ' ' + result.result);
-  console.dir(receivedAssemblyResults);
+  console.log('[WGSA][Collection Result] ' + result.collectionId + ' ' + result.result);
+  console.dir(receivedResults);
 }
 
 function setAssemblyProgress(assemblyId, progress) {
-  receivedAssemblyResults.assemblies = receivedAssemblyResults.assemblies || {};
-  receivedAssemblyResults.assemblies[assemblyId] = receivedAssemblyResults.assemblies[assemblyId] || {};
-  receivedAssemblyResults.assemblies[assemblyId].progress = Math.floor(progress);
-  console.log(receivedResults);
+  receivedResults.assemblies = receivedResults.assemblies || {};
+  receivedResults.assemblies[assemblyId] = receivedResults.assemblies[assemblyId] || {};
+  receivedResults.assemblies[assemblyId].progress = Math.floor(progress);
+  console.log(numberOfReceivedResults);
 }
 
 const Store = assign({}, EventEmitter.prototype, {
@@ -60,22 +59,22 @@ const Store = assign({}, EventEmitter.prototype, {
   },
 
   getNumberOfReceivedResults() {
-    return Object.keys(receivedResults).length;
+    return numberOfReceivedResults;
   },
 
   getProgressPercentage() {
     return Math.floor(this.getNumberOfReceivedResults() * 100 / this.getNumberOfExpectedResults());
   },
 
-  getReceivedAssemblyResults() {
-    return receivedAssemblyResults;
+  getReceivedResults() {
+    return receivedResults;
   },
 
   clearStore() {
     numberOfExpectedResults = null;
-    receivedResults = {};
-    receivedAssemblyResults.assemblies = null;
-    receivedAssemblyResults.collection = null;
+    numberOfReceivedResults = 0;
+    receivedResults.assemblies = null;
+    receivedResults.collection = null;
   }
 
 });
