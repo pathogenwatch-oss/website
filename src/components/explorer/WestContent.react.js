@@ -2,32 +2,32 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import Tree from '^/components/tree';
+import TreeHeader from '^/components/tree/TreeHeader.react';
 
-import { getTreeFunctions, getNavButton } from '^/constants/tree';
+import { getTreeFunctions } from '^/constants/tree';
 
 const ConnectedTree = (props) => (<Tree {...props} />);
 
 function mapStateToProps({ entities, display, collection, filter }) {
-  const { trees } = entities;
   const { tree } = display;
 
   return {
-    title: trees[tree].title,
+    newick: entities.trees[tree].newick,
     tree,
     state: {
-      ...entities,
+      entities,
       collection,
       filter,
     },
   };
 }
 
-function mergeProps({ title, tree, state }, { dispatch }, props) {
+function mergeProps({ newick, tree, state }, { dispatch }, props) {
   return {
     ...props,
-    title,
-    navButton: getNavButton(tree),
+    newick,
     ...getTreeFunctions(tree, state, dispatch),
+    header: (<TreeHeader tree={tree} dispatch={dispatch} />),
   };
 }
 

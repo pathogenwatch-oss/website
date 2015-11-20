@@ -3,7 +3,6 @@ import { combineReducers } from 'redux';
 // entities
 import antibiotics from './antibiotics';
 import { assemblies, trees, collection } from './collection';
-import subtrees from './subtrees';
 
 // tables
 import metadata from './metadata';
@@ -40,7 +39,6 @@ export default combineReducers({
     antibiotics: createReducer(antibiotics),
     assemblies: createReducer(assemblies),
     trees: createReducer(trees),
-    subtrees: createReducer(subtrees),
   }),
   collection: createReducer(collection),
   tables: combineReducers({
@@ -51,7 +49,6 @@ export default combineReducers({
     table: createReducer(table),
     mapMarkers: createReducer(mapMarkers),
     tree: createReducer(tree),
-    subtree: createReducer(subtree),
     // labels: createReducer(displayLabels),
     // colours: createReducer(displayColours),
   }),

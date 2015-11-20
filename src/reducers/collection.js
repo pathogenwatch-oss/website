@@ -33,8 +33,9 @@ export const trees = {
       if (result) {
         const [ uploaded, reference ] = result;
         return {
-          [COLLECTION]: uploaded.tree,
-          [POPULATION]: reference.tree,
+          [COLLECTION]: { newick: uploaded.tree },
+          [POPULATION]: { newick: reference.tree },
+          ...uploaded.subtrees,
         };
       }
     },
@@ -60,6 +61,7 @@ export const collection = {
         return {
           ...state,
           assemblyIds: Object.keys(uploaded.assemblies),
+          subtreeIds: Object.keys(uploaded.subtrees),
         };
       }
     },

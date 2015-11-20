@@ -1,4 +1,4 @@
-import { setSubtree } from '../actions/tree';
+import { displayTree } from '../actions/tree';
 import { activateFilter, resetFilter } from '../actions/filter';
 
 import { CGPS } from '^/defaults';
@@ -23,12 +23,12 @@ const styles = {
   },
 };
 
-export function getTreeFunctions({ assemblies, filter }, dispatch) {
+function getStandardTreeFunctions({ entities, filter }, dispatch) {
   return {
     styleTree(tree) {
       const style = { colour: null }; // caching object
       tree.leaves.forEach((leaf) => {
-        const assembly = assemblies[leaf.id];
+        const assembly = entities.assemblies[leaf.id];
         style.colour = CGPS.COLOURS.PURPLE_LIGHT; // FilteredDataUtils.getColour(assembly);
         leaf.setDisplay(style);
         leaf.labelStyle = styles.collectionNodeLabel;
@@ -53,8 +53,10 @@ export function getTreeFunctions({ assemblies, filter }, dispatch) {
   };
 }
 
-export function getPopulationTreeFunctions(state, dispatch) {
-  const { assemblies, subtrees, filter } = state;
+function getPopulationTreeFunctions(state, dispatch) {
+  const { entities, collection, filter } = state;
+  const { trees, assemblies } = entities;
+
   const filterHasId = id => filter.ids.has(id);
 
   return {
@@ -76,15 +78,13 @@ export function getPopulationTreeFunctions(state, dispatch) {
 
       tree.root.cascadeFlag('interactive', false);
 
-      const subtreeIds = Object.keys(subtrees);
-
-      for (const subtreeId of subtreeIds) {
+      for (const subtreeId of collection.subtreeIds) {
         const leaf = tree.branches[subtreeId];
-        const { assemblyIds } = subtrees[subtreeId];
+        const { assemblyIds } = trees[subtreeId];
 
         if (leaf) {
           leaf.interactive = true;
-          leaf.label = `${leaf.label} (${subtrees[leaf.id].assemblyIds.length})`;
+          leaf.label = `${leaf.label} (${assemblyIds.length})`;
           leaf.setDisplay(styles.emphasizedLeaf);
           leaf.labelStyle = styles.emphasizedNodeLabel;
           leaf.highlighted = (filter.active && assemblyIds.some(filterHasId));
@@ -97,8 +97,15 @@ export function getPopulationTreeFunctions(state, dispatch) {
       }
       const { nodeIds } = event;
       if (nodeIds.length === 1) {
-        dispatch(setSubtree(nodeIds[0]));
+        dispatch(displayTree(nodeIds[0]));
       }
     },
   };
+}
+
+export function getTreeFunctions(tree, state, dispatch) {
+  if (tree === POPULATION) {
+    return getPopulationTreeFunctions(state, dispatch);
+  }
+  return getStandardTreeFunctions(state, dispatch);
 }

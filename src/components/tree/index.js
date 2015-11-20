@@ -5,7 +5,6 @@ import PhyloCanvas from 'PhyloCanvas';
 import contextMenuPlugin from 'phylocanvas-plugin-context-menu';
 
 import TreeControls from './TreeControls.react';
-// import TreeMenu from './TreeMenu.react';
 
 import DEFAULT, { CGPS } from '^/defaults';
 
@@ -22,8 +21,7 @@ export default React.createClass({
 
   propTypes: {
     newick: React.PropTypes.string,
-    title: React.PropTypes.string,
-    navButton: React.PropTypes.element,
+    header: React.PropTypes.any,
     styleTree: React.PropTypes.func,
     onUpdated: React.PropTypes.func,
     onRedrawOriginalTree: React.PropTypes.func,
@@ -93,16 +91,11 @@ export default React.createClass({
   },
 
   render() {
-    const { title, navButton } = this.props;
+    const { header } = this.props;
 
     return (
       <section className="wgsa-tree">
-        <header className="wgsa-tree-header">
-          { navButton }
-          <h2 className="wgsa-tree-heading">
-            <span>{title}</span>
-          </h2>
-        </header>
+        {header}
         <div id="phylocanvas-container" style={fullWidthHeight}></div>
         <TreeControls
           treeType={this.state.treeType}
