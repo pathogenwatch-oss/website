@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import Tree from '../tree/Tree.react';
 
 import { setSubtree } from '^/actions/tree';
+import { activateFilter, resetFilter } from '^/actions/filter';
 
 import { CGPS } from '^/defaults';
 
@@ -21,7 +22,7 @@ const Subtree = (props) => (<Tree { ...props } />);
 
 Subtree.displayName = 'Subtree';
 
-function mapStateToProps({ entities, display }) {
+function mapStateToProps({ entities, display, filter }) {
   const { assemblies, subtrees } = entities;
   const { subtree } = display;
   const referenceAssembly = assemblies[subtree];
@@ -34,6 +35,7 @@ function mapStateToProps({ entities, display }) {
         leaf.label = assembly ? assembly.metadata.assemblyName : leaf.id;
         leaf.setDisplay({ colour: CGPS.COLOURS.PURPLE_LIGHT });
         leaf.labelStyle = nodeLabelStyle;
+        leaf.highlighted = (filter.active && filter.ids.has(leaf.id));
       });
     },
   };
@@ -46,11 +48,15 @@ function mapDispatchToProps(dispatch) {
       if (event.property !== 'selected') {
         return;
       }
-      // const { nodeIds } = event;
-      // FilteredDataActionCreators.setAssemblyIds(nodeIds.length ? nodeIds : SubtreeStore.getActiveSubtreeAssemblyIds());
+      const { nodeIds } = event;
+      if (nodeIds.length) {
+        dispatch(activateFilter(new Set(nodeIds)));
+      } else {
+        dispatch(resetFilter());
+      }
     },
     onRedrawOriginalTree() {
-      // FilteredDataActionCreators.setBaseAssemblyIds(SubtreeStore.getActiveSubtreeAssemblyIds());
+      dispatch(resetFilter());
     },
   };
 }

@@ -1,26 +1,34 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import SpeciesTree from './SpeciesTree.react';
-import Subtree from './Subtree.react';
+import Tree from '^/components/tree';
 
-const WestContent = React.createClass({
+import { getTreeFunctions, getNavButton } from '^/constants/tree';
 
-  propTypes: {
-    width: React.PropTypes.number.isRequired,
-    height: React.PropTypes.number.isRequired,
-    subtree: React.PropTypes.string,
-  },
+const ConnectedTree = (props) => (<Tree {...props} />);
 
-  render() {
-    const { subtree, width, height } = this.props;
+function mapStateToProps({ entities, display, collection, filter }) {
+  const { trees } = entities;
+  const { tree } = display;
 
-    const TreeComponent = subtree ? Subtree : SpeciesTree;
+  return {
+    title: trees[tree].title,
+    tree,
+    state: {
+      ...entities,
+      collection,
+      filter,
+    },
+  };
+}
 
-    return (
-      <TreeComponent dimensions={{ width, height }} />
-    );
-  },
-});
+function mergeProps({ title, tree, state }, { dispatch }, props) {
+  return {
+    ...props,
+    title,
+    navButton: getNavButton(tree),
+    ...getTreeFunctions(tree, state, dispatch),
+  };
+}
 
-export default connect(({ display }) => display)(WestContent);
+export default connect(mapStateToProps, null, mergeProps)(ConnectedTree);

@@ -21,8 +21,6 @@ export default React.createClass({
   displayName: 'Tree',
 
   propTypes: {
-    width: React.PropTypes.number,
-    height: React.PropTypes.number,
     newick: React.PropTypes.string,
     title: React.PropTypes.string,
     navButton: React.PropTypes.element,
