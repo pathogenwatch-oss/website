@@ -4,9 +4,10 @@ import DownloadButton from '../components/explorer/DownloadButton.react';
 
 import MetadataUtils from '../utils/Metadata';
 
+export const getCellContents = ({ labelGetter },  data) => labelGetter(data);
+
 export const systemColumnProps = [
-  { label: '',
-    columnKey: '__download',
+  { columnKey: '__download',
     width: 50,
     flexGrow: 0,
     fixed: true,
@@ -20,35 +21,35 @@ export const systemColumnProps = [
       );
     },
   },
-  { label: 'ASSEMBLY',
-    columnKey: '__assembly',
+  { columnKey: '__assembly',
     fixed: true,
     labelGetter({ metadata }) {
       return metadata.assemblyName;
     },
+    getCellContents,
   },
-  { label: 'DATE',
-    columnKey: '__date',
+  { columnKey: '__date',
     labelGetter({ metadata }) {
       return MetadataUtils.getFormattedDateString(metadata.date);
     },
+    getCellContents,
   },
-  { label: 'ST',
-    columnKey: '__st',
+  { columnKey: '__st',
     labelGetter({ analysis }) {
       return analysis.st;
     },
+    getCellContents,
   },
-  { label: 'MLST PROFILE',
-    columnKey: '__mlst',
+  { columnKey: '__mlst',
     labelGetter({ analysis }) {
       return analysis.mlst;
     },
+    getCellContents,
   },
-  { label: 'KERNEL SIZE',
-    columnKey: '__kernel_size',
+  { columnKey: '__kernel_size',
     labelGetter({ analysis }) {
       return analysis.kernelSize;
     },
+    getCellContents,
   },
 ];

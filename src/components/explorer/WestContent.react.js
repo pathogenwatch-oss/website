@@ -18,6 +18,7 @@ function mapStateToProps({ entities, display, collection, filter }) {
       entities,
       collection,
       filter,
+      display,
     },
   };
 }

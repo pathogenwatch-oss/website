@@ -12,14 +12,15 @@ canvas.font = '13px "Helvetica","Arial",sans-serif';
 const cellPadding = 36;
 function calculateColumnWidths(columns, data) {
   return columns.reduce((widths, column) => {
+    const { columnKey, getCellContents } = column;
     const columnLabelWidth =
-      canvas.measureText(formatColumnLabel(column)).width + cellPadding;
+      canvas.measureText(formatColumnLabel(columnKey)).width + cellPadding;
 
-    widths[column] = data.reduce((maxWidth, row) => {
+    widths[columnKey] = data.reduce((maxWidth, row) => {
       return Math.max(
         maxWidth,
         columnLabelWidth,
-        canvas.measureText(row[column] || '').width + cellPadding
+        canvas.measureText(getCellContents(column, row) || '').width + cellPadding
       );
     }, 0);
     return widths;
@@ -46,7 +47,7 @@ export default React.createClass({
     const { calculatedColumnWidths, columns, data } = this.props;
     return {
       columnWidths: calculateColumnWidths(
-        calculatedColumnWidths || columns.map(_ => _.columnKey),
+        calculatedColumnWidths || columns,
         data
       ),
     };
@@ -72,17 +73,15 @@ export default React.createClass({
     );
   },
 
-  renderCell(columnProps, { rowIndex, columnKey, ...dimensions }) {
+  renderCell(columnProps, { rowIndex, width, height }) {
     const { data } = this.props;
     const { cellClasses, getCellContents } = columnProps;
     return (
       <Cell
-        {...dimensions}
+        {...{ width, height }}
         className={`wgsa-table-cell ${cellClasses || ''}`.trim()}
       >
-        { getCellContents ?
-            getCellContents(data[rowIndex], columnKey) :
-            data[rowIndex][columnKey] }
+        { getCellContents(columnProps, data[rowIndex])}
       </Cell>
     );
   },

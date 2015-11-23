@@ -23,16 +23,16 @@ const styles = {
   },
 };
 
-function getStandardTreeFunctions({ entities, filter }, dispatch) {
+function getStandardTreeFunctions({ entities, display, filter }, dispatch) {
   return {
     styleTree(tree) {
       const style = { colour: null }; // caching object
       tree.leaves.forEach((leaf) => {
         const assembly = entities.assemblies[leaf.id];
-        style.colour = CGPS.COLOURS.PURPLE_LIGHT; // FilteredDataUtils.getColour(assembly);
+        style.colour = display.colourGetter(assembly);
         leaf.setDisplay(style);
         leaf.labelStyle = styles.collectionNodeLabel;
-        leaf.label = assembly.metadata.assemblyName; // this.state.labelGetter(assembly);
+        leaf.label = display.labelGetter(assembly);
         leaf.highlighted = (filter.active && filter.ids.has(leaf.id));
       });
     },
@@ -111,3 +111,5 @@ export function getTreeFunctions(tree, state, dispatch) {
   }
   return getStandardTreeFunctions(state, dispatch);
 }
+
+export const defaultColourGetter = () => CGPS.COLOURS.PURPLE_LIGHT;

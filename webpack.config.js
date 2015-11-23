@@ -41,7 +41,7 @@ const devConfig = {
     loaders: [
       { test: /\.js$/,
         loader: 'babel',
-        include: srcFolder,
+        exclude: /(node_modules|webpack)/,
         query: {
           stage: 0,
           plugins: [
@@ -90,7 +90,7 @@ const prodConfig = {
     loaders: [
       { test: /\.js$/,
         loader: 'babel',
-        include: srcFolder,
+        exclude: /(node_modules|webpack)/,
       },
     ].concat(commonLoaders),
   },

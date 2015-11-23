@@ -1,5 +1,4 @@
 import React from 'react';
-import assign from 'object-assign';
 
 import { FETCH_ENTITIES } from '../actions/fetch';
 
@@ -16,8 +15,8 @@ function buildAntibioticColumnProps(antibiotics) {
       headerClasses: 'wgsa-table-header--resistance',
       cellClasses: 'wgsa-table-cell--resistance',
       width: 24,
-      getCellContents(data, columnKey) {
-        const value = data[columnKey];
+      getCellContents({ columnKey }, { analysis }) {
+        const value = analysis.resistanceProfile[columnKey].resistanceResult;
         return (
           <i title={value} className={`material-icons wgsa-resistance-icon wgsa-resistance-icon--${value.toLowerCase()}`}>
             { value === 'RESISTANT' ? 'add_box' : '' }
@@ -28,37 +27,17 @@ function buildAntibioticColumnProps(antibiotics) {
   });
 }
 
-function mapAssemblyToTableRow({ metadata, analysis }, antibiotics) {
-  return assign({
-    id: metadata.assemblyId,
-    __assembly: metadata.assemblyName,
-  }, antibiotics.reduce(function (memo, antibiotic) {
-    if (!analysis.resistanceProfile[antibiotic]) {
-      return memo;
-    }
-    memo[antibiotic] = analysis.resistanceProfile[antibiotic].resistanceResult;
-    return memo;
-  }, {}));
-}
-
 const actions = {
   [FETCH_ENTITIES]: function (state, { ready, result, error }) {
     if (ready && !error) {
-      const [ uploaded, , antibioticsResult ] = result;
-      const { assemblies } = uploaded;
-      const assemblyIds = Object.keys(assemblies);
-      const antibiotics = Object.keys(antibioticsResult);
+      const antibiotics = Object.keys(result[2]);
 
       const columns =
         systemColumnProps.concat(buildAntibioticColumnProps(antibiotics));
 
       return {
         columns,
-        data: assemblyIds.reduce((data, id) => {
-          data.push(mapAssemblyToTableRow(assemblies[id], antibiotics));
-          return data;
-        }, []),
-        calculatedColumnWidths: [ '__assembly' ],
+        calculatedColumnWidths: [ columns[0] ],
         tableProps: {
           headerHeight: antibiotics.reduce((maxWidth, antibiotic) => {
             return Math.max(maxWidth, canvas.measureText(antibiotic.toUpperCase()).width + 32);

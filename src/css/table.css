@@ -30,8 +30,9 @@
   cursor: pointer;
 }
 
-.wgsa-table-header button.active {
-  color: #673c90;
+.wgsa-table-header--selected button {
+  background-color: #673c90;
+  color: #fff;
 }
 
 .wgsa-table-row:hover {

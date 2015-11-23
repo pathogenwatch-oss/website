@@ -1,8 +1,9 @@
 import { FETCH_ENTITIES } from '../actions/fetch';
+import { SET_LABEL_GETTER, setLabelGetter } from '../actions/getters';
 
-import { systemColumnProps } from '../constants/metadata';
+import { systemColumnProps, getCellContents } from '../constants/metadata';
 
-const initialState = [];
+const initialState = { columns: [] };
 
 function getUserDefinedColumns(assemblies) {
   const ids = Object.keys(assemblies);
@@ -18,40 +19,41 @@ function buildUserDefinedColumnProps(assemblies) {
       labelGetter({ metadata }) {
         return metadata.userDefined[column];
       },
+      getCellContents,
     };
   });
-}
-
-function mapAssemblyToTableRow(assembly, columns) {
-  const { assemblyId } = assembly.metadata;
-
-  return columns.reduce(function (memo, { columnKey, labelGetter }) {
-    if (labelGetter) {
-      memo[columnKey] = labelGetter(assembly);
-    }
-    return memo;
-  }, { assemblyId });
 }
 
 const actions = {
   [FETCH_ENTITIES]: function (state, { ready, result, error }) {
     if (ready && !error) {
       const { assemblies } = result[0];
-      const assemblyIds = Object.keys(assemblies);
       const columns =
         systemColumnProps.concat(buildUserDefinedColumnProps(assemblies));
 
       return {
         columns,
-        data: assemblyIds.reduce((data, id) => {
-          data.push(mapAssemblyToTableRow(assemblies[id], columns));
-          return data;
-        }, []),
-        headerClick: () => {}, // TODO: Use action creator here
+        headerClick({ labelGetter }) {
+          return setLabelGetter(labelGetter);
+        },
       };
     }
 
     return state;
+  },
+  [SET_LABEL_GETTER]: function (state, { getter }) {
+    return {
+      ...state,
+      columns: state.columns.map(function (column) {
+        return {
+          ...column,
+          headerClasses:
+            getter === column.labelGetter ?
+              'wgsa-table-header--selected' :
+              null,
+        };
+      }),
+    };
   },
 };
 

@@ -10,7 +10,7 @@ const sectionStyle = {
   height: '100%',
 };
 
-function handleRowClick(assemblyId, { ids, active }, dispatch) {
+function handleRowClick({ assemblyId }, { ids, active }, dispatch) {
   if (active && ids.size === 1 && ids.has(assemblyId)) {
     dispatch(resetFilter());
   } else {
@@ -38,7 +38,7 @@ const SouthContent = React.createClass({
     return (
       <section style={sectionStyle}>
         <FixedTable { ...this.props }
-          rowClickHandler={({ assemblyId }) => handleRowClick(assemblyId, filter, dispatch)}
+          rowClickHandler={({ metadata }) => handleRowClick(metadata, filter, dispatch)}
           headerClickHandler={(column) => dispatch(headerClick(column))}
         />
       </section>
@@ -47,11 +47,16 @@ const SouthContent = React.createClass({
 
 });
 
-function mapStateToProps({ display, tables, filter }) {
-  const { data, ...tableProps } = tables[display.table];
+function getTableData(assemblies, ids, filter) {
+  return ids.filter(id => !filter.active || filter.ids.has(id))
+            .map(id => assemblies[id]);
+}
+
+function mapStateToProps({ entities, display, collection, tables, filter }) {
+  const { ...tableProps } = tables[display.table];
   return {
     ...tableProps,
-    data: data.filter(({ assemblyId }) => !filter.active || filter.ids.has(assemblyId)),
+    data: getTableData(entities.assemblies, collection.assemblyIds, filter),
     filter,
   };
 }
