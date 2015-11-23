@@ -34,7 +34,6 @@ export default React.createClass({
       treeType: DEFAULT.TREE_TYPE,
       nodeSize: DEFAULT.NODE_SIZE,
       labelSize: DEFAULT.LABEL_SIZE,
-      treeLoaded: false,
     });
   },
 
@@ -115,9 +114,6 @@ export default React.createClass({
       this.styleTree(this.phylocanvas);
       this.phylocanvas.fitInPanel();
       this.phylocanvas.draw();
-      this.setState({
-        treeLoaded: true,
-      });
     });
   },
 

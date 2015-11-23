@@ -3,6 +3,8 @@ import '../../css/search.css';
 import React from 'react';
 import { connect } from 'react-redux';
 
+import { activateFilter, resetFilter } from '^/actions/filter';
+
 const Search = React.createClass({
 
   displayName: 'Search',
@@ -11,6 +13,7 @@ const Search = React.createClass({
     filteredAmount: React.PropTypes.number,
     totalAmount: React.PropTypes.number,
     filterColumnName: React.PropTypes.string,
+    handleChange: React.PropTypes.func,
   },
 
   getInitialState() {
@@ -41,7 +44,7 @@ const Search = React.createClass({
   },
 
   handleChange(event) {
-    // FilteredDataActionCreators.setTextFilter(event.target.value);
+    this.props.handleChange(event.target.value);
   },
 
   handleFocus() {
@@ -58,13 +61,36 @@ const Search = React.createClass({
 
 });
 
-function mapStateToProps({ collection, filter }) {
+function mapStateToProps({ collection, filter, entities }) {
   const totalAmount = collection.assemblyIds.length;
   return {
-    totalAmount,
-    filteredAmount: filter.active ? filter.ids.size : totalAmount,
-    filterColumnName: 'ASSEMBLY',
+    displayProps: {
+      totalAmount,
+      filteredAmount: filter.active ? filter.ids.size : totalAmount,
+      filterColumnName: 'ASSEMBLY',
+    },
+    assemblies: collection.assemblyIds.map(id => entities.assemblies[id]),
   };
 }
 
-export default connect(mapStateToProps)(Search);
+function mergeProps({ displayProps, filter, assemblies }, { dispatch }) {
+  return {
+    ...displayProps,
+    handleChange(text) {
+      if (!text || !text.length) {
+        return dispatch(resetFilter());
+      }
+      const matcher = new RegExp(text, 'i');
+      dispatch(activateFilter(
+        assemblies.reduce(function (set, assembly) {
+          if (assembly.metadata.assemblyName.match(matcher)) {
+            set.add(assembly.metadata.assemblyId);
+          }
+          return set;
+        }, new Set())
+      ));
+    },
+  };
+}
+
+export default connect(mapStateToProps, null, mergeProps)(Search);

@@ -98,6 +98,8 @@ function getPopulationTreeFunctions(state, dispatch) {
       const { nodeIds } = event;
       if (nodeIds.length === 1) {
         dispatch(displayTree(nodeIds[0]));
+      } else {
+        dispatch(resetFilter());
       }
     },
   };

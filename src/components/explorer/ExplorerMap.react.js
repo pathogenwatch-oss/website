@@ -13,10 +13,7 @@ const style = {
 function addClickHandler(markerDef, filter, dispatch) {
   const { assemblyIds } = markerDef;
 
-  markerDef.onClick =
-    filter.active && filter.ids === assemblyIds ?
-      () => dispatch(resetFilter()) :
-      () => dispatch(activateFilter(assemblyIds));
+  markerDef.onClick = () => dispatch(activateFilter(assemblyIds));
 
   return markerDef;
 }
