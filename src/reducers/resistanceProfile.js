@@ -12,11 +12,12 @@ function buildAntibioticColumnProps(antibiotics) {
   return antibiotics.map(function (antibiotic) {
     return {
       label: antibiotic.toUpperCase(),
-      dataKey: antibiotic,
-      headerClassName: 'wgsa-table-header wgsa-table-header--resistance',
-      cellClassName: 'wgsa-table-cell wgsa-table-cell--resistance',
+      columnKey: antibiotic,
+      headerClasses: 'wgsa-table-header--resistance',
+      cellClasses: 'wgsa-table-cell--resistance',
       width: 24,
-      cellRenderer(value) {
+      getCellContents(data, columnKey) {
+        const value = data[columnKey];
         return (
           <i title={value} className={`material-icons wgsa-resistance-icon wgsa-resistance-icon--${value.toLowerCase()}`}>
             { value === 'RESISTANT' ? 'add_box' : '' }

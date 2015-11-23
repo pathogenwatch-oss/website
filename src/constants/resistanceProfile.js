@@ -1,7 +1,6 @@
 
 export const systemColumnProps = [
-  { label: 'ASSEMBLY',
-    dataKey: '__assembly',
+  { columnKey: '__assembly',
     fixed: true,
   },
 ];

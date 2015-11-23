@@ -14,8 +14,7 @@ function getUserDefinedColumns(assemblies) {
 function buildUserDefinedColumnProps(assemblies) {
   return getUserDefinedColumns(assemblies).map((column) => {
     return {
-      label: column.toUpperCase(),
-      dataKey: column,
+      columnKey: column,
       labelGetter({ metadata }) {
         return metadata.userDefined[column];
       },
@@ -26,9 +25,9 @@ function buildUserDefinedColumnProps(assemblies) {
 function mapAssemblyToTableRow(assembly, columns) {
   const { assemblyId } = assembly.metadata;
 
-  return columns.reduce(function (memo, { dataKey, labelGetter }) {
+  return columns.reduce(function (memo, { columnKey, labelGetter }) {
     if (labelGetter) {
-      memo[dataKey] = labelGetter(assembly);
+      memo[columnKey] = labelGetter(assembly);
     }
     return memo;
   }, { assemblyId });

@@ -2,7 +2,9 @@ import 'fixed-data-table/dist/fixed-data-table.css';
 import '../css/table.css';
 
 import React from 'react';
-import { Table, Column } from 'fixed-data-table';
+import { Table, Column, Cell } from 'fixed-data-table';
+
+import { formatColumnLabel } from '../constants/table';
 
 const canvas = document.createElement('canvas').getContext('2d');
 canvas.font = '13px "Helvetica","Arial",sans-serif';
@@ -10,7 +12,9 @@ canvas.font = '13px "Helvetica","Arial",sans-serif';
 const cellPadding = 36;
 function calculateColumnWidths(columns, data) {
   return columns.reduce((widths, column) => {
-    const columnLabelWidth = canvas.measureText(column.toUpperCase()).width + cellPadding;
+    const columnLabelWidth =
+      canvas.measureText(formatColumnLabel(column)).width + cellPadding;
+
     widths[column] = data.reduce((maxWidth, row) => {
       return Math.max(
         maxWidth,
@@ -39,10 +43,11 @@ export default React.createClass({
   },
 
   getInitialState() {
+    const { calculatedColumnWidths, columns, data } = this.props;
     return {
       columnWidths: calculateColumnWidths(
-        this.props.calculatedColumnWidths || this.props.columns.map(_ => _.dataKey),
-        this.props.data
+        calculatedColumnWidths || columns.map(_ => _.columnKey),
+        data
       ),
     };
   },
@@ -51,36 +56,57 @@ export default React.createClass({
     return this.props.data[index];
   },
 
-  renderClickableHeader(label, dataKey, columnProps) {
+  renderHeader(columnProps, headerProps) {
+    const { headerClasses, noHeader, columnKey } = columnProps;
     return (
-      <div>
-        <button title={label} data-column={dataKey}
-          onClick={this.handleHeaderClick.bind(null, columnProps)}>{label}</button>
-      </div>
+      <Cell
+        {...headerProps}
+        className={`wgsa-table-header ${headerClasses || ''}`.trim()}
+      >
+        {!noHeader &&
+          <button onClick={() => this.props.headerClickHandler(columnProps)}>
+            {formatColumnLabel(columnKey)}
+          </button>
+        }
+      </Cell>
+    );
+  },
+
+  renderCell(columnProps, { rowIndex, columnKey, ...dimensions }) {
+    const { data } = this.props;
+    const { cellClasses, getCellContents } = columnProps;
+    return (
+      <Cell
+        {...dimensions}
+        className={`wgsa-table-cell ${cellClasses || ''}`.trim()}
+      >
+        { getCellContents ?
+            getCellContents(data[rowIndex], columnKey) :
+            data[rowIndex][columnKey] }
+      </Cell>
     );
   },
 
   render() {
+    const { data, columns, height, width, tableProps } = this.props;
+
     return (
       <Table
+        rowsCount={data.length}
         rowHeight={48}
         headerHeight={64}
-        rowGetter={this.getRow}
-        rowsCount={this.props.data.length}
-        height={this.props.height}
-        width={this.props.width}
+        height={height}
+        width={width}
+        rowClassNameGetter={() => 'wgsa-table-row'}
         onRowClick={this.handleRowClick}
-        isColumnResizing={this.isColumnResizing}
-        onColumnResizeEndCallback={this.handleColumnResize}
-        { ...this.props.tableProps } >
-        { this.props.columns.map((props) =>
+        { ...tableProps }
+      >
+        { columns.map((props) =>
             <Column
-              key={props.dataKey}
-              headerClassName={'wgsa-table-header'}
-              headerRenderer={this.renderClickableHeader}
-              columnData={props}
-              cellClassName={'wgsa-table-cell'}
-              width={this.state.columnWidths[props.dataKey] || 96}
+              key={props.columnKey}
+              header={this.renderHeader.bind(null, props)}
+              cell={this.renderCell.bind(null, props)}
+              width={this.state.columnWidths[props.columnKey] || 96}
               flexGrow={1}
               { ...props }
             />
@@ -89,23 +115,8 @@ export default React.createClass({
     );
   },
 
-  handleHeaderClick(columnProps) {
-    this.props.headerClickHandler(columnProps);
-  },
-
-  handleRowClick(e, index, rowData) {
-    this.props.rowClickHandler(rowData);
-  },
-
-  isColumnResizing: false,
-
-  handleColumnResize(newWidth, dataKey) {
-    const { columnWidths } = this.state;
-    columnWidths[dataKey] = newWidth;
-    this.isColumnResizing = false;
-    this.setState({
-      columnWidths,
-    });
+  handleRowClick(e, index) {
+    this.props.rowClickHandler(this.props.data[index]);
   },
 
 });

@@ -48,8 +48,10 @@ const SouthContent = React.createClass({
 });
 
 function mapStateToProps({ display, tables, filter }) {
+  const { data, ...tableProps } = tables[display.table];
   return {
-    ...tables[display.table],
+    ...tableProps,
+    data: data.filter(({ assemblyId }) => !filter.active || filter.ids.has(assemblyId)),
     filter,
   };
 }

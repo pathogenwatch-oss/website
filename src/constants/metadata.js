@@ -6,11 +6,12 @@ import MetadataUtils from '../utils/Metadata';
 
 export const systemColumnProps = [
   { label: '',
-    dataKey: '__download',
+    columnKey: '__download',
     width: 50,
     flexGrow: 0,
     fixed: true,
-    cellRenderer(_, __, data) {
+    noHeader: true,
+    getCellContents(data) {
       return (
         <DownloadButton
           id={data.assemblyId}
@@ -20,32 +21,32 @@ export const systemColumnProps = [
     },
   },
   { label: 'ASSEMBLY',
-    dataKey: '__assembly',
+    columnKey: '__assembly',
     fixed: true,
     labelGetter({ metadata }) {
       return metadata.assemblyName;
     },
   },
   { label: 'DATE',
-    dataKey: '__date',
+    columnKey: '__date',
     labelGetter({ metadata }) {
       return MetadataUtils.getFormattedDateString(metadata.date);
     },
   },
   { label: 'ST',
-    dataKey: '__st',
+    columnKey: '__st',
     labelGetter({ analysis }) {
       return analysis.st;
     },
   },
   { label: 'MLST PROFILE',
-    dataKey: '__mlst',
+    columnKey: '__mlst',
     labelGetter({ analysis }) {
       return analysis.mlst;
     },
   },
   { label: 'KERNEL SIZE',
-    dataKey: '__kernel_size',
+    columnKey: '__kernel_size',
     labelGetter({ analysis }) {
       return analysis.kernelSize;
     },

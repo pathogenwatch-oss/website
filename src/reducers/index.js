@@ -12,7 +12,6 @@ import resistanceProfile from './resistanceProfile';
 import table from './table';
 import mapMarkers from './mapMarkers';
 import tree from './tree';
-import subtree from './subtree';
 
 // filter
 import filter from './filter';
