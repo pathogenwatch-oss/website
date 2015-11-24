@@ -1,7 +1,6 @@
-import FilteredDataUtils from './FilteredData';
 import { COLOUR, CGPS } from '../defaults';
 
-const MARKER_SIZE = 16;
+const MARKER_SIZE = 18;
 const LINE_WIDTH = 2;
 
 const canvas = document.createElement('canvas');
@@ -14,7 +13,7 @@ context.lineWidth = LINE_WIDTH;
 const centerX = canvas.width / 2;
 const centerY = canvas.height / 2;
 
-const radius = MARKER_SIZE / 2 - LINE_WIDTH / 2;
+const radius = MARKER_SIZE / 2 - LINE_WIDTH;
 
 function drawSingleColourMarker(fillColour, strokeColour = COLOUR) {
   context.clearRect(0, 0, MARKER_SIZE, MARKER_SIZE);
@@ -57,10 +56,10 @@ function drawDoubleColourMarker([ colour1, colour2 ], strokeColour = COLOUR) {
   return canvas.toDataURL();
 }
 
-function resistanceMarkerIcon(assemblies) {
+function getMarkerIcon(assemblies, colourGetter) {
   const colours = new Set();
   for (const assembly of assemblies) {
-    colours.add(FilteredDataUtils.getColour(assembly));
+    colours.add(colourGetter(assembly));
   }
   return colours.size === 2 ?
     drawDoubleColourMarker(Array.from(colours).sort()) :
@@ -88,7 +87,6 @@ function mapPositionsToAssemblies(assemblies) {
 }
 
 function getMarkerDefinitions(assemblies, {
-    getIcon = () => standardMarkerIcon,
     onClick,
     createInfoWindow,
   } = {}) {
@@ -98,7 +96,7 @@ function getMarkerDefinitions(assemblies, {
       return {
         position: JSON.parse(position),
         assemblyIds: new Set(assemblyIds),
-        icon: getIcon(positionAssemblies),
+        icon: standardMarkerIcon,
         onClick: onClick ? onClick.bind(null, assemblyIds) : null,
         infoWindow: createInfoWindow ? createInfoWindow(positionAssemblies) : null,
         active: true,
@@ -110,5 +108,5 @@ export default {
   getMarkerDefinitions,
   standardMarkerIcon,
   filteredMarkerIcon,
-  resistanceMarkerIcon,
+  getMarkerIcon,
 };

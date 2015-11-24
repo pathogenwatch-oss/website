@@ -6,24 +6,15 @@ import GoogleMap from '../GoogleMap.react';
 
 import { activateFilter, resetFilter } from '^/actions/filter';
 
+import MapUtils from '^/utils/Map';
+
 const style = {
   position: 'relative',
 };
 
-function addClickHandler(markerDef, filter, dispatch) {
-  const { assemblyIds } = markerDef;
-
-  markerDef.onClick = () => dispatch(activateFilter(assemblyIds));
-
-  return markerDef;
-}
-
-const ExplorerMap = ({ dimensions, markerDefs, filter, dispatch }) => (
+const ExplorerMap = ({ dimensions, ...mapProps }) => (
   <section style={assign({}, style, dimensions)}>
-    <GoogleMap
-      markerDefs={markerDefs.map((def) => addClickHandler(def, filter, dispatch))}
-      onMapClick={() => dispatch(resetFilter())}
-    />
+    <GoogleMap {...mapProps} />
   </section>
 );
 
@@ -33,11 +24,34 @@ ExplorerMap.propTypes = {
   dispatch: React.PropTypes.func,
 };
 
-function mapStateToProps({ display, filter }) {
+function mapStateToProps({ display, entities }) {
+  const { mapMarkers, colourGetter } = display;
+  const { assemblies } = entities;
+
   return {
-    markerDefs: display.mapMarkers,
-    filter,
+    mapMarkers,
+    colourGetter,
+    assemblies,
   };
 }
 
-export default connect(mapStateToProps)(ExplorerMap);
+function mapStateToMarker(markerDef, { colourGetter, assemblies }, dispatch) {
+  const { assemblyIds } = markerDef;
+
+  markerDef.onClick = () => dispatch(activateFilter(assemblyIds));
+  markerDef.icon = MapUtils.getMarkerIcon(
+    Array.from(assemblyIds).map(id => assemblies[id]), colourGetter
+  );
+
+  return markerDef;
+}
+
+function mergeProps({ mapMarkers, ...state }, { dispatch }, props) {
+  return {
+    ...props,
+    markerDefs: mapMarkers.map(def => mapStateToMarker(def, state, dispatch)),
+    onMapClick: () => dispatch(resetFilter()),
+  };
+}
+
+export default connect(mapStateToProps, null, mergeProps)(ExplorerMap);

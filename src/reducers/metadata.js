@@ -24,13 +24,6 @@ function buildUserDefinedColumnProps(assemblies) {
   });
 }
 
-function headerClick({ labelGetter }, display) {
-  if (display.labelGetter === labelGetter) {
-    return setLabelGetter(systemColumnProps[1].labelGetter);
-  }
-  return setLabelGetter(labelGetter);
-}
-
 const actions = {
   [FETCH_ENTITIES]: function (state, { ready, result, error }) {
     if (ready && !error) {
@@ -40,7 +33,12 @@ const actions = {
 
       return {
         columns,
-        headerClick,
+        headerClick({ labelGetter }, display) {
+          if (display.labelGetter === labelGetter) {
+            return setLabelGetter(systemColumnProps[1].labelGetter);
+          }
+          return setLabelGetter(labelGetter);
+        },
       };
     }
 
@@ -52,10 +50,7 @@ const actions = {
       columns: state.columns.map(function (column) {
         return {
           ...column,
-          headerClasses:
-            getter === column.labelGetter ?
-              'wgsa-table-header--selected' :
-              null,
+          selected: getter === column.labelGetter,
         };
       }),
     };

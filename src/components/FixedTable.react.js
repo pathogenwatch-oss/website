@@ -31,6 +31,18 @@ function calculateColumnWidths(columns, data) {
   }, {});
 }
 
+function getClassNames(baseClass, selected, extraClasses) {
+  return (
+    baseClass +
+    (selected ? ` ${baseClass}--selected ` : ' ') +
+    (extraClasses || '')
+  ).trim();
+}
+
+const getHeaderClassNames = getClassNames.bind(null, 'wgsa-table-header');
+const getCellClassNames = getClassNames.bind(null, 'wgsa-table-cell');
+
+
 export default React.createClass({
 
   displayName: 'FixedTable',
@@ -62,11 +74,11 @@ export default React.createClass({
   },
 
   renderHeader(columnProps, headerProps) {
-    const { headerClasses, noHeader, columnKey } = columnProps;
+    const { headerClasses, noHeader, columnKey, selected } = columnProps;
     return (
       <Cell
         {...headerProps}
-        className={`wgsa-table-header ${headerClasses || ''}`.trim()}
+        className={getHeaderClassNames(selected, headerClasses)}
       >
         {!noHeader &&
           <button onClick={event => this.handleHeaderClick(event, columnProps)}>
@@ -79,11 +91,11 @@ export default React.createClass({
 
   renderCell(columnProps, { rowIndex, width, height }) {
     const { data } = this.props;
-    const { cellClasses, getCellContents } = columnProps;
+    const { selected, cellClasses, getCellContents } = columnProps;
     return (
       <Cell
         {...{ width, height }}
-        className={`wgsa-table-cell ${cellClasses || ''}`.trim()}
+        className={getCellClassNames(selected, cellClasses)}
       >
         { getCellContents(columnProps, data[rowIndex])}
       </Cell>
@@ -92,7 +104,6 @@ export default React.createClass({
 
   render() {
     const { data, columns, height, width, tableProps } = this.props;
-
     return (
       <Table
         rowsCount={data.length}
@@ -100,6 +111,7 @@ export default React.createClass({
         headerHeight={64}
         height={height}
         width={width}
+        className="wgsa-table"
         rowClassNameGetter={() => 'wgsa-table-row'}
         onRowClick={this.handleRowClick}
         { ...tableProps }

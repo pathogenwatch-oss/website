@@ -23,7 +23,7 @@ export const systemColumnProps = [
   },
   { columnKey: '__assembly',
     fixed: true,
-    headerClasses: 'wgsa-table-header--selected',
+    selected: true,
     labelGetter({ metadata }) {
       return metadata.assemblyName;
     },
