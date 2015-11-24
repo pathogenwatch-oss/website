@@ -424,14 +424,17 @@
   position: relative;
   list-style: none;
   border-bottom: 1px solid rgba(0, 0, 0, .12);
-  line-height: 50px;
+  line-height: 40px;
+  height: 40px;
+  box-sizing: border-box;
+  display: block;
 }
 
 .assemblyListItem .selectButton {
-  height: auto;
+  height: 40px;
   overflow: none;
   width: 100%;
-  padding: 4px 8px;
+  display: block;
 }
 
 .assemblyListItem .deleteButton {
@@ -484,7 +487,7 @@
 
 .assembly-list-item__utils {
   position: absolute;
-  /*top: 2px;*/
+  top: 0px;
   right: 4px;
 }
 
@@ -556,18 +559,18 @@
 }
 
 .wgsa-collection-url-display {
-  margin-bottom: 16px;
   padding: 16px;
   text-align: center;
 }
 .wgsa-collection-url-display .mdl-card__supporting-text {
   width: 100%;
 }
+
 .wgsa-collection-url {
   padding-top: 16px;
-  color: #673c90;
   font-size: 16px;
 }
+
 .wgsa-upload-progress-table {
   margin: 16px 0px;
 }

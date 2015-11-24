@@ -44,29 +44,27 @@ const Component = React.createClass({
       color: this.props.isValid ? CGPS.COLOURS.GREEN : DANGER_COLOUR,
     };
     const validatedIcon = this.props.isValid ? 'check' : 'error_outline';
-
+    console.log((this.props.isUploading && this.state.deleteConfirm)? 0 : 1)
     return (
       <li ref={assemblyName} className={`assemblyListItem ${this.props.selected ? ' selected' : ''}`} title={assemblyName}>
-          <div>
-            <button className="selectButton mdl-button mdl-js-button mdl-js-ripple-effect" onClick={this.handleSelectAssembly.bind(this, assemblyName)}>
-            <span className="filename">
-                {assemblyName}
-              </span>
+        <button className="selectButton mdl-button mdl-js-button mdl-js-ripple-effect" onClick={this.handleSelectAssembly.bind(this, assemblyName)}>
+        <span className="filename">
+            {assemblyName}
+          </span>
+        </button>
+        { !this.props.isUploading && this.state.deleteConfirm ?
+          <ConfirmDelete title={assemblyName} handleDeleteAssembly={this.handleDeleteAssembly} resetDeleteState={this.resetDeleteState}/>
+          :
+          <span className="assembly-list-item__utils">
+            <span className="assembly-list-item__validate-icon utilityButton">
+              <i style={validatedIconStyle} className="material-icons">{validatedIcon}</i>
+            </span>
+            <button className="deleteButton utilityButton mdl-button mdl-js-button mdl-button--icon mdl-button--colored"
+              onClick={this.handleDeleteConfirm.bind(this, assemblyName)} disabled={this.props.isUploading}>
+              <i className="material-icons">delete</i>
             </button>
-              { !this.props.isUploading && this.state.deleteConfirm ?
-                <ConfirmDelete title={assemblyName} handleDeleteAssembly={this.handleDeleteAssembly} resetDeleteState={this.resetDeleteState}/>
-                :
-                <span className="assembly-list-item__utils">
-                  <span className="assembly-list-item__validate-icon utilityButton">
-                    <i style={validatedIconStyle} className="material-icons">{validatedIcon}</i>
-                  </span>
-                  <button className="deleteButton utilityButton mdl-button mdl-js-button mdl-button--icon mdl-button--colored"
-                    onClick={this.handleDeleteConfirm.bind(this, assemblyName)}>
-                    <i className="material-icons">delete</i>
-                  </button>
-                </span>
-              }
-          </div>
+          </span>
+        }
       </li>
     );
   },

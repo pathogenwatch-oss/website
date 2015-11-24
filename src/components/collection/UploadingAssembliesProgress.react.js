@@ -12,8 +12,9 @@ const ICON_STYLE = {
 };
 
 const TABLE_STYLE = {
-  width: 'auto',
+  width: '100%',
   border: 'none',
+  margin: 'auto'
 };
 
 const HEADER_STYLE = {
@@ -156,34 +157,36 @@ const UploadingAssembliesProgress = React.createClass({
   render() {
     return (
       <div>
-        <table ref="table" className="mdl-data-table mdl-shadow--4dp" style={TABLE_STYLE}>
-          <thead>
-            <tr>
-              <td style={CELL_STYLE}></td>
-              <td style={HEADER_STYLE}>UPLOAD</td>
-              <td style={HEADER_STYLE}>METADATA</td>
-              <td style={HEADER_STYLE}>KERNEL</td>
-              <td style={HEADER_STYLE}>FP</td> {
-                this.assemblyResultColumns.indexOf('MLST') !== -1 ?
-                  <td style={HEADER_STYLE}>MLST</td> : null
-              } {
-                this.assemblyResultColumns.indexOf('PAARSNP') !== -1 ?
-                  <td style={HEADER_STYLE}>PAARSNP</td> : null
-              }
-            </tr>
-          </thead>
-          <tbody>
-            {this.getAssemblyResultElements()}
-          </tbody>
-        </table>
+        <div className="wgsa-upload-progress-table">
+          <table ref="table" className="mdl-data-table mdl-shadow--4dp" style={TABLE_STYLE}>
+            <thead>
+              <tr>
+                <td style={CELL_STYLE}></td>
+                <td style={HEADER_STYLE}>UPLOAD</td>
+                <td style={HEADER_STYLE}>METADATA</td>
+                <td style={HEADER_STYLE}>KERNEL</td>
+                <td style={HEADER_STYLE}>FP</td> {
+                  this.assemblyResultColumns.indexOf('MLST') !== -1 ?
+                    <td style={HEADER_STYLE}>MLST</td> : null
+                } {
+                  this.assemblyResultColumns.indexOf('PAARSNP') !== -1 ?
+                    <td style={HEADER_STYLE}>PAARSNP</td> : null
+                }
+              </tr>
+            </thead>
+            <tbody>
+              {this.getAssemblyResultElements()}
+            </tbody>
+          </table>
+        </div>
 
         <div className="wgsa-upload-progress-table">
           <table ref="table" className="mdl-data-table mdl-shadow--4dp" style={TABLE_STYLE}>
             <thead>
               <tr>
-                <td style={HEADER_STYLE}>PHYLO_MATRIX</td>
-                <td style={HEADER_STYLE}>CORE_MUTANT_TREE</td>
-                <td style={HEADER_STYLE}>SUBMATRIX</td>
+                <td style={HEADER_STYLE}>MATRIX</td>
+                <td style={HEADER_STYLE}>TREE</td>
+                <td style={HEADER_STYLE}>SUBTREES</td>
               </tr>
             </thead>
             <tbody>
