@@ -30,16 +30,17 @@ const SouthContent = React.createClass({
     columns: React.PropTypes.array,
     headerClick: React.PropTypes.func,
     dispatch: React.PropTypes.func,
+    display: React.PropTypes.object,
     filter: React.PropTypes.object,
   },
 
   render() {
-    const { dispatch, headerClick, filter } = this.props;
+    const { dispatch, headerClick, display, filter } = this.props;
     return (
-      <section style={sectionStyle}>
+      <section style={sectionStyle} onClick={() => dispatch(resetFilter())}>
         <FixedTable { ...this.props }
           rowClickHandler={({ metadata }) => handleRowClick(metadata, filter, dispatch)}
-          headerClickHandler={(column) => dispatch(headerClick(column))}
+          headerClickHandler={(column) => dispatch(headerClick(column, display))}
         />
       </section>
     );
@@ -57,6 +58,7 @@ function mapStateToProps({ entities, display, collection, tables, filter }) {
   return {
     ...tableProps,
     data: getTableData(entities.assemblies, collection.assemblyIds, filter),
+    display,
     filter,
   };
 }

@@ -10,17 +10,21 @@ const canvas = document.createElement('canvas').getContext('2d');
 canvas.font = '13px "Helvetica","Arial",sans-serif';
 
 const cellPadding = 36;
+
+function measureText(text) {
+  return canvas.measureText(text).width + cellPadding;
+}
+
 function calculateColumnWidths(columns, data) {
   return columns.reduce((widths, column) => {
     const { columnKey, getCellContents } = column;
-    const columnLabelWidth =
-      canvas.measureText(formatColumnLabel(columnKey)).width + cellPadding;
+    const columnLabelWidth = measureText(formatColumnLabel(columnKey));
 
     widths[columnKey] = data.reduce((maxWidth, row) => {
       return Math.max(
         maxWidth,
         columnLabelWidth,
-        canvas.measureText(getCellContents(column, row) || '').width + cellPadding
+        measureText(getCellContents(column, row) || ''),
       );
     }, 0);
     return widths;
@@ -65,7 +69,7 @@ export default React.createClass({
         className={`wgsa-table-header ${headerClasses || ''}`.trim()}
       >
         {!noHeader &&
-          <button onClick={() => this.props.headerClickHandler(columnProps)}>
+          <button onClick={event => this.handleHeaderClick(event, columnProps)}>
             {formatColumnLabel(columnKey)}
           </button>
         }
@@ -114,7 +118,13 @@ export default React.createClass({
     );
   },
 
+  handleHeaderClick(e, columnProps) {
+    e.stopPropagation();
+    this.props.headerClickHandler(columnProps);
+  },
+
   handleRowClick(e, index) {
+    e.stopPropagation();
     this.props.rowClickHandler(this.props.data[index]);
   },
 

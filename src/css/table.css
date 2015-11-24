@@ -10,7 +10,8 @@
   background: none;
   color: rgba(0, 0, 0, 0.54);
   border: none;
-  padding: 0;
+  padding: 0 4px;
+  margin: 0 -4px;
   font-weight: 700;
   line-height: 24px;
   letter-spacing: 0px;
@@ -22,7 +23,6 @@
 .wgsa-table-header button:hover,
 .wgsa-table-header button:focus,
 .wgsa-table-header button:active {
-  border: none;
   outline: none;
 }
 
@@ -31,8 +31,10 @@
 }
 
 .wgsa-table-header--selected button {
-  background-color: #673c90;
-  color: #fff;
+  border-bottom: 2px solid #673c90;
+  color: #673c90;
+  /*background-color: #673c90;
+  color: #fff;*/
 }
 
 .wgsa-table-row:hover {
@@ -98,8 +100,6 @@
 
 /* fixed-data-table overrides */
 
-.public_fixedDataTable_header,
-.public_fixedDataTableCell_main,
 .public_fixedDataTable_header .public_fixedDataTableCell_main {
   background: none;
 }
