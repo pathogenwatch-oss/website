@@ -1,5 +1,5 @@
 import { FETCH_ENTITIES } from '../actions/fetch';
-import { SET_LABEL_GETTER, setLabelGetter } from '../actions/getters';
+import { SET_LABEL_COLUMN, setLabelColumn } from '../actions/columns';
 
 import { systemColumnProps, getCellContents } from '../constants/metadata';
 
@@ -16,7 +16,7 @@ function buildUserDefinedColumnProps(assemblies) {
   return getUserDefinedColumns(assemblies).map((column) => {
     return {
       columnKey: column,
-      labelGetter({ metadata }) {
+      valueGetter({ metadata }) {
         return metadata.userDefined[column];
       },
       getCellContents,
@@ -33,28 +33,29 @@ const actions = {
 
       return {
         columns,
-        headerClick({ labelGetter }, display) {
-          if (display.labelGetter === labelGetter) {
-            return setLabelGetter(systemColumnProps[1].labelGetter);
+        headerClick(column, display) {
+          if (display.labelcolumn === column) {
+            return setLabelColumn(systemColumnProps[1]);
           }
-          return setLabelGetter(labelGetter);
+          return setLabelColumn(column);
         },
       };
     }
 
     return state;
   },
-  [SET_LABEL_GETTER]: function (state, { getter }) {
+  [SET_LABEL_COLUMN]: function (state, { column }) {
     return {
       ...state,
-      columns: state.columns.map(function (column) {
+      columns: state.columns.map(function (previous) {
         return {
-          ...column,
-          selected: getter === column.labelGetter,
+          ...previous,
+          selected: column.columnKey === previous.columnKey,
         };
       }),
     };
   },
+
 };
 
 export default { actions, initialState };

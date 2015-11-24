@@ -4,7 +4,7 @@ import DownloadButton from '../components/explorer/DownloadButton.react';
 
 import MetadataUtils from '../utils/Metadata';
 
-export const getCellContents = ({ labelGetter },  data) => labelGetter(data);
+export const getCellContents = ({ valueGetter },  data) => valueGetter(data);
 
 export const systemColumnProps = [
   { columnKey: '__download',
@@ -24,31 +24,31 @@ export const systemColumnProps = [
   { columnKey: '__assembly',
     fixed: true,
     selected: true,
-    labelGetter({ metadata }) {
+    valueGetter({ metadata }) {
       return metadata.assemblyName;
     },
     getCellContents,
   },
   { columnKey: '__date',
-    labelGetter({ metadata }) {
+    valueGetter({ metadata }) {
       return MetadataUtils.getFormattedDateString(metadata.date);
     },
     getCellContents,
   },
   { columnKey: '__st',
-    labelGetter({ analysis }) {
+    valueGetter({ analysis }) {
       return analysis.st;
     },
     getCellContents,
   },
   { columnKey: '__mlst',
-    labelGetter({ analysis }) {
+    valueGetter({ analysis }) {
       return analysis.mlst;
     },
     getCellContents,
   },
   { columnKey: '__kernel_size',
-    labelGetter({ analysis }) {
+    valueGetter({ analysis }) {
       return analysis.kernelSize;
     },
     getCellContents,

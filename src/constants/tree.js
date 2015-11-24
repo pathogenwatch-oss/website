@@ -24,15 +24,16 @@ const styles = {
 };
 
 function getStandardTreeFunctions({ entities, display, filter }, dispatch) {
+  const { colourColumn, labelColumn } = display;
   return {
     styleTree(tree) {
       const style = { colour: null }; // caching object
       tree.leaves.forEach((leaf) => {
         const assembly = entities.assemblies[leaf.id];
-        style.colour = display.colourGetter(assembly);
+        style.colour = colourColumn.valueGetter(assembly);
         leaf.setDisplay(style);
         leaf.labelStyle = styles.collectionNodeLabel;
-        leaf.label = display.labelGetter(assembly);
+        leaf.label = labelColumn.valueGetter(assembly);
         leaf.highlighted = (filter.active && filter.ids.has(leaf.id));
       });
     },

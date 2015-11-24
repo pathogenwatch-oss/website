@@ -5,6 +5,8 @@ import { connect } from 'react-redux';
 
 import { activateFilter, resetFilter } from '^/actions/filter';
 
+import { formatColumnLabel } from '^/constants/table';
+
 const Search = React.createClass({
 
   displayName: 'Search',
@@ -61,19 +63,21 @@ const Search = React.createClass({
 
 });
 
-function mapStateToProps({ collection, filter, entities }) {
+function mapStateToProps({ collection, display, filter, entities }) {
+  const { labelColumn } = display;
   const totalAmount = collection.assemblyIds.length;
   return {
     displayProps: {
       totalAmount,
       filteredAmount: filter.active ? filter.ids.size : totalAmount,
-      filterColumnName: 'ASSEMBLY',
+      filterColumnName: formatColumnLabel(labelColumn.columnKey),
     },
+    labelColumn,
     assemblies: collection.assemblyIds.map(id => entities.assemblies[id]),
   };
 }
 
-function mergeProps({ displayProps, filter, assemblies }, { dispatch }) {
+function mergeProps({ displayProps, labelColumn, assemblies }, { dispatch }) {
   return {
     ...displayProps,
     handleChange(text) {
@@ -83,7 +87,7 @@ function mergeProps({ displayProps, filter, assemblies }, { dispatch }) {
       const matcher = new RegExp(text, 'i');
       dispatch(activateFilter(
         assemblies.reduce(function (set, assembly) {
-          if (assembly.metadata.assemblyName.match(matcher)) {
+          if (('' + labelColumn.valueGetter(assembly)).match(matcher)) {
             set.add(assembly.metadata.assemblyId);
           }
           return set;

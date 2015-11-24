@@ -25,12 +25,12 @@ ExplorerMap.propTypes = {
 };
 
 function mapStateToProps({ display, entities }) {
-  const { mapMarkers, colourGetter } = display;
+  const { mapMarkers, colourColumn } = display;
   const { assemblies } = entities;
 
   return {
     mapMarkers,
-    colourGetter,
+    colourGetter: colourColumn.valueGetter,
     assemblies,
   };
 }

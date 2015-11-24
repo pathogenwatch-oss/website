@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { FETCH_ENTITIES } from '../actions/fetch';
-import { SET_COLOUR_GETTER, setColourGetter } from '../actions/getters';
+import { SET_COLOUR_COLUMN, setColourColumn } from '../actions/columns';
 
 import { systemColumnProps } from '../constants/resistanceProfile';
 import { defaultColourGetter } from '../constants/tree';
@@ -30,20 +30,13 @@ function buildAntibioticColumnProps(antibiotics) {
           </i>
         );
       },
-      colourGetter({ analysis }) {
+      valueGetter({ analysis }) {
         if (!analysis.resistanceProfile) return defaultColourGetter();
         const value = analysis.resistanceProfile[antibiotic].resistanceResult;
         return value === 'RESISTANT' ? DEFAULT.DANGER_COLOUR : '#fff';
       },
     };
   });
-}
-
-function amendHeaderClasses(classes, isSelected) {
-  if (!classes) return null;
-  console.log(classes, classes.replace('wgsa-table-header--selected', ''), isSelected);
-  return classes.replace('wgsa-table-header--selected', '') +
-          (isSelected ? ' wgsa-table-header--selected' : '');
 }
 
 const actions = {
@@ -69,25 +62,24 @@ const actions = {
             return Math.max(maxWidth, measureText(antibiotic));
           }, 0),
         },
-        headerClick({ colourGetter }, display) {
-          if (display.colourGetter === colourGetter) {
-            return setColourGetter(defaultColourGetter);
+        headerClick(column, display) {
+          if (display.colourColumn === column) {
+            return setColourColumn();
           }
-          return setColourGetter(colourGetter);
+          return setColourColumn(column);
         },
       };
     }
 
     return state;
   },
-  [SET_COLOUR_GETTER]: function (state, { getter }) {
+  [SET_COLOUR_COLUMN]: function (state, { column }) {
     return {
       ...state,
-      columns: state.columns.map(function (column) {
-        const { colourGetter } = column;
+      columns: state.columns.map(function (previous) {
         return {
-          ...column,
-          selected: (getter === colourGetter),
+          ...previous,
+          selected: column.columnKey === previous.columnKey,
         };
       }),
     };
