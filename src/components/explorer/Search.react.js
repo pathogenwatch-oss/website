@@ -63,21 +63,21 @@ const Search = React.createClass({
 
 });
 
-function mapStateToProps({ collection, display, filter, entities }) {
-  const { labelColumn } = display;
+function mapStateToProps({ collection, tables, filter, entities }) {
+  const { activeColumn } = tables.metadata;
   const totalAmount = collection.assemblyIds.length;
   return {
     displayProps: {
       totalAmount,
       filteredAmount: filter.active ? filter.ids.size : totalAmount,
-      filterColumnName: formatColumnLabel(labelColumn.columnKey),
+      filterColumnName: formatColumnLabel(activeColumn.columnKey),
     },
-    labelColumn,
+    activeColumn,
     assemblies: collection.assemblyIds.map(id => entities.assemblies[id]),
   };
 }
 
-function mergeProps({ displayProps, labelColumn, assemblies }, { dispatch }) {
+function mergeProps({ displayProps, activeColumn, assemblies }, { dispatch }) {
   return {
     ...displayProps,
     handleChange(text) {
@@ -87,7 +87,7 @@ function mergeProps({ displayProps, labelColumn, assemblies }, { dispatch }) {
       const matcher = new RegExp(text, 'i');
       dispatch(activateFilter(
         assemblies.reduce(function (set, assembly) {
-          if (('' + labelColumn.valueGetter(assembly)).match(matcher)) {
+          if (('' + activeColumn.valueGetter(assembly)).match(matcher)) {
             set.add(assembly.metadata.assemblyId);
           }
           return set;

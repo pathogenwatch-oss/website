@@ -23,17 +23,17 @@ const styles = {
   },
 };
 
-function getStandardTreeFunctions({ entities, display, filter }, dispatch) {
-  const { colourColumn, labelColumn } = display;
+function getStandardTreeFunctions({ entities, tables, filter }, dispatch) {
+  const { metadata, resistanceProfile } = tables;
   return {
     styleTree(tree) {
       const style = { colour: null }; // caching object
       tree.leaves.forEach((leaf) => {
         const assembly = entities.assemblies[leaf.id];
-        style.colour = colourColumn.valueGetter(assembly);
+        style.colour = resistanceProfile.activeColumn.valueGetter(assembly);
         leaf.setDisplay(style);
         leaf.labelStyle = styles.collectionNodeLabel;
-        leaf.label = labelColumn.valueGetter(assembly);
+        leaf.label = metadata.activeColumn.valueGetter(assembly);
         leaf.highlighted = (filter.active && filter.ids.has(leaf.id));
       });
     },

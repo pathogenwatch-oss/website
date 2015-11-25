@@ -1,9 +1,20 @@
 import { FETCH_ENTITIES } from '../actions/fetch';
-import { SET_LABEL_COLUMN, setLabelColumn } from '../actions/columns';
+import { SET_LABEL_COLUMN, setLabelColumn } from '../actions/table';
 
 import { systemColumnProps, getCellContents } from '../constants/metadata';
 
-const initialState = { columns: [] };
+const initialActiveColumn = systemColumnProps[1];
+
+const initialState = {
+  activeColumn: initialActiveColumn,
+  headerClick(column) {
+    if (this.activeColumn === column) {
+      return setLabelColumn(initialActiveColumn);
+    }
+    return setLabelColumn(column);
+  },
+  columns: [],
+};
 
 function getUserDefinedColumns(assemblies) {
   const ids = Object.keys(assemblies);
@@ -32,13 +43,8 @@ const actions = {
         systemColumnProps.concat(buildUserDefinedColumnProps(assemblies));
 
       return {
+        ...state,
         columns,
-        headerClick(column, display) {
-          if (display.labelcolumn === column) {
-            return setLabelColumn(systemColumnProps[1]);
-          }
-          return setLabelColumn(column);
-        },
       };
     }
 
@@ -47,12 +53,7 @@ const actions = {
   [SET_LABEL_COLUMN]: function (state, { column }) {
     return {
       ...state,
-      columns: state.columns.map(function (previous) {
-        return {
-          ...previous,
-          selected: column.columnKey === previous.columnKey,
-        };
-      }),
+      activeColumn: column,
     };
   },
 

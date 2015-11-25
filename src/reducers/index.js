@@ -12,7 +12,6 @@ import resistanceProfile from './resistanceProfile';
 import table from './table';
 import mapMarkers from './mapMarkers';
 import tree from './tree';
-import { labelColumn, colourColumn } from './columns';
 
 // filter
 import filter from './filter';
@@ -49,8 +48,6 @@ export default combineReducers({
     table: createReducer(table),
     mapMarkers: createReducer(mapMarkers),
     tree: createReducer(tree),
-    labelColumn: createReducer(labelColumn),
-    colourColumn: createReducer(colourColumn),
   }),
   filter: createReducer(filter),
   ui: combineReducers({

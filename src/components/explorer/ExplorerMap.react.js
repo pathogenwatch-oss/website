@@ -24,13 +24,14 @@ ExplorerMap.propTypes = {
   dispatch: React.PropTypes.func,
 };
 
-function mapStateToProps({ display, entities }) {
-  const { mapMarkers, colourColumn } = display;
+function mapStateToProps({ display, tables, entities }) {
+  const { mapMarkers } = display;
+  const { resistanceProfile } = tables;
   const { assemblies } = entities;
 
   return {
     mapMarkers,
-    colourGetter: colourColumn.valueGetter,
+    colourGetter: resistanceProfile.activeColumn.valueGetter,
     assemblies,
   };
 }

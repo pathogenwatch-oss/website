@@ -56,7 +56,7 @@ export default React.createClass({
     calculatedColumnWidths: React.PropTypes.array,
     headerClickHandler: React.PropTypes.func,
     rowClickHandler: React.PropTypes.func,
-    filter: React.PropTypes.object,
+    activeColumn: React.PropTypes.object,
   },
 
   getInitialState() {
@@ -74,11 +74,13 @@ export default React.createClass({
   },
 
   renderHeader(columnProps, headerProps) {
-    const { headerClasses, noHeader, columnKey, selected } = columnProps;
+    const { headerClasses, noHeader, columnKey } = columnProps;
+    const isSelected = (columnProps === this.props.activeColumn);
+
     return (
       <Cell
         {...headerProps}
-        className={getHeaderClassNames(selected, headerClasses)}
+        className={getHeaderClassNames(isSelected, headerClasses)}
       >
         {!noHeader &&
           <button onClick={event => this.handleHeaderClick(event, columnProps)}>
@@ -90,12 +92,14 @@ export default React.createClass({
   },
 
   renderCell(columnProps, { rowIndex, width, height }) {
-    const { data } = this.props;
-    const { selected, cellClasses, getCellContents } = columnProps;
+    const { data, activeColumn } = this.props;
+    const { cellClasses, getCellContents } = columnProps;
+    const isSelected = (columnProps === activeColumn);
+
     return (
       <Cell
         {...{ width, height }}
-        className={getCellClassNames(selected, cellClasses)}
+        className={getCellClassNames(isSelected, cellClasses)}
       >
         { getCellContents(columnProps, data[rowIndex])}
       </Cell>

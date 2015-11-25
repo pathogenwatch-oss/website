@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { FETCH_ENTITIES } from '../actions/fetch';
-import { SET_COLOUR_COLUMN, setColourColumn } from '../actions/columns';
+import { SET_COLOUR_COLUMN, setColourColumn } from '../actions/table';
 
 import { systemColumnProps } from '../constants/resistanceProfile';
 import { defaultColourGetter } from '../constants/tree';
@@ -55,18 +55,13 @@ const actions = {
       });
 
       return {
+        ...state,
         columns,
         calculatedColumnWidths: [ columns[0] ],
         tableProps: {
           headerHeight: antibiotics.reduce((maxWidth, antibiotic) => {
             return Math.max(maxWidth, measureText(antibiotic));
           }, 0),
-        },
-        headerClick(column, display) {
-          if (display.colourColumn === column) {
-            return setColourColumn();
-          }
-          return setColourColumn(column);
         },
       };
     }
@@ -76,16 +71,24 @@ const actions = {
   [SET_COLOUR_COLUMN]: function (state, { column }) {
     return {
       ...state,
-      columns: state.columns.map(function (previous) {
-        return {
-          ...previous,
-          selected: column.columnKey === previous.columnKey,
-        };
-      }),
+      activeColumn: column,
     };
   },
 };
 
-const initialState = [];
+const initialActiveColumn = {
+  valueGetter: defaultColourGetter,
+};
+
+const initialState = {
+  activeColumn: initialActiveColumn,
+  headerClick(column) {
+    if (this.activeColumn === column) {
+      return setColourColumn(initialActiveColumn);
+    }
+    return setColourColumn(column);
+  },
+  columns: [],
+};
 
 export default { actions, initialState };
