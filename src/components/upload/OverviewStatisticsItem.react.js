@@ -1,8 +1,10 @@
 import '../../css/upload-review.css';
 
 import React from 'react';
+import ReactDOM from 'react-dom';
 
 import InputField from './InputField.react';
+
 
 const OverviewStatisticsItem = React.createClass({
 
@@ -11,11 +13,6 @@ const OverviewStatisticsItem = React.createClass({
   propTypes: {
     label: React.PropTypes.string.isRequired,
     value: React.PropTypes.any.isRequired,
-  },
-
-  componentDidMount() {
-    var inputDomElement = this.getDOMNode();
-    componentHandler.upgradeElement(inputDomElement);
   },
 
   render: function () {

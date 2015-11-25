@@ -30,8 +30,12 @@ import SocketUtils from '^/utils/Socket';
 import Species from '^/species';
 import DEFAULT from '^/defaults';
 
-const loadingAnimationStyle = {
+const loadingAnimationStyleVisible = {
   visibility: 'visible',
+};
+
+const loadingAnimationStyleHidden = {
+  visibility: 'hidden',
 };
 
 const layoutContentStyle = {
@@ -198,7 +202,6 @@ export default React.createClass({
     let pageTitle = 'WGSA';
     const assembly = UploadStore.getAssembly(this.state.assemblyName);
 
-    loadingAnimationStyle.visibility = isProcessing ? 'visible' : 'hidden';
     switch (this.state.viewPage) {
     case 'assembly':
       pageTitle = `WGSA | ${assembly && assembly.fasta.name}`;
@@ -233,7 +236,7 @@ export default React.createClass({
           </UploadWorkspaceNavigation>
 
           <main className="mdl-layout__content" style={layoutContentStyle}>
-            <div id="loadingAnimation" style={loadingAnimationStyle} className="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
+            <div id="loadingAnimation" style={isProcessing ? loadingAnimationStyleVisible : loadingAnimationStyleHidden} className="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
 
             {
               (() => {

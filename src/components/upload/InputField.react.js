@@ -1,11 +1,12 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 
 export default React.createClass({
 
   displayName: 'InputField',
 
   componentDidMount() {
-    componentHandler.upgradeElement(this.getDOMNode());
+    componentHandler.upgradeElement(ReactDOM.findDOMNode(this));
   },
 
   render() {

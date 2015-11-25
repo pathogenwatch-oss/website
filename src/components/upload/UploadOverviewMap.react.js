@@ -28,7 +28,7 @@ export default React.createClass({
   displayName: 'UploadOverviewMap',
 
   propTypes: {
-    assemblies: React.PropTypes.array,
+    assemblies: React.PropTypes.object,
   },
 
   render() {

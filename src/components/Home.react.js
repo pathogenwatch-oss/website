@@ -48,10 +48,10 @@ export default React.createClass({
                   <div className="mdl-card__actions mdl-card--border">
                     { speciesDef.active ?
                       <Link
-                        to={`/${speciesDef.nickname}/upload`}
+                        to={`/${speciesDef.nickname}`}
                         className="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect"
                         style={textStyle}>
-                        Upload
+                        HOME
                       </Link> :
                       <a className="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" disabled >Coming soon</a>
                     }
