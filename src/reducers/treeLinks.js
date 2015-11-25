@@ -8,13 +8,21 @@ function createBlobUrl(data, type = 'text/plain;charset=utf-8') {
   return windowURL.createObjectURL(blob);
 }
 
+function getTreeWithPrettyTaxa({ tree, assemblies }) {
+  return Object.keys(assemblies).reduce(function (prettyTree, assemblyId) {
+    return prettyTree.replace(
+      assemblyId, assemblies[assemblyId].metadata.assemblyName
+    );
+  }, tree);
+}
+
 const actions = {
   [FETCH_ENTITIES]: function (state, { ready, error, result }) {
     if (ready && !error) {
       const [ uploaded, reference ] = result;
       return {
-        collection: createBlobUrl(uploaded.tree),
-        population: createBlobUrl(reference.tree),
+        collection: createBlobUrl(getTreeWithPrettyTaxa(uploaded)),
+        population: createBlobUrl(getTreeWithPrettyTaxa(reference)),
       };
     }
 

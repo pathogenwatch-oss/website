@@ -102,9 +102,9 @@ DownloadsMenu.propTypes = {
   dispatch: React.PropTypes.func,
 };
 
-function mapStateToProps({ ui, collectionId }) {
+function mapStateToProps({ ui, collection }) {
   return {
-    collectionId: collectionId,
+    collectionId: collection.id,
     populationTreeLink: ui.treeLinks.population,
     collectionTreeLink: ui.treeLinks.collection,
     active: ui.downloadsMenu.active,
