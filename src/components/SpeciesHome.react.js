@@ -123,7 +123,10 @@ const CollectionListItem = React.createClass({
     return Array.from(new Array(5), (x,i) => {
       return (
         <li ref={i} className="wgsa-species-collection-list-item">
-          <a className="selectButton mdl-button mdl-js-button mdl-js-ripple-effect" >
+          <Link
+            className="selectButton mdl-button mdl-js-button mdl-js-ripple-effect"
+            to={`/${Species.current.nickname}/collection/${i}`}
+            >
             <div className="wgsa-species-collection-list-item-content">
               <p>
                 <span className="wgsa-collection-author">Glasner. C et al. ({2000 + i})</span>
@@ -132,7 +135,7 @@ const CollectionListItem = React.createClass({
                 <span className="wgsa-collection-title">Genetic diversity of Staphylococcus aureus in Buruli ulcer</span>
               </p>
             </div>
-          </a>
+          </Link>
           <span className="wgsa-species-collection-list-item__utils">
             <a href="http://www.ncbi.nlm.nih.gov/pubmed/25658641"
               target="_blank"
