@@ -35,7 +35,7 @@ export default React.createClass({
 
   render() {
     return (
-      <section className="wgsa-home">
+      <section className="wgsa-home wgsa-species-home">
         <div className="wgsa-home-header mdl-layout__header-row">
           <a href="/" className="mdl-layout-title">
             <img src="/assets/img/WGSA.FINAL.svg" />
@@ -140,7 +140,7 @@ const CollectionListItem = React.createClass({
 
 
   getCollectionListElements() {
-    return Array.from(new Array(5), (x,i) => {
+    return Array.from(new Array(8), (x,i) => {
       return (
         <li ref={i} className="wgsa-species-collection-list-item">
           <Link

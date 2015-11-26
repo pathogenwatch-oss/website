@@ -1,3 +1,16 @@
+.wgsa-species-home:after {
+  background-image: url("/assets/img/WGSA.Icon.FINAL.svg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  content: "";
+  opacity: 0.1;
+  top: -20em;
+  left: -30em;
+  bottom: -0px;
+  right: 0px;
+  position: absolute;
+  z-index: -1;
+}
 .wgsa-species-home-collection-list {
   margin: auto;
   max-width: 900px;
@@ -21,8 +34,11 @@
   max-width: 900px;
   padding: 8px 0;
 }
+.wgsa-species-home-container .wgsa-card-content {
+  padding: 8px 32px;
+}
 .wgsa-species-collection-list-container {
-  max-height: 500px;
+  max-height: 400px;
   margin: 16px 0px;
   overflow: auto;
   padding: 0;
@@ -98,9 +114,14 @@
 
 .wgsa-species-home-download-links a {
   margin: 8px 0px;
-  background-color: #ccc;
+  background-color: #ddd;
   /*color: white;*/
   /*width: 60px;*/
   line-height: 40px;
   height: 40px;
+}
+
+.wgsa-species-home-download-links a:hover {
+  background-color: #bbb;
+  color: #673c90;
 }

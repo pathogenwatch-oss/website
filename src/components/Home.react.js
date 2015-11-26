@@ -29,9 +29,6 @@ export default React.createClass({
             <p>
               A web application for the processing, clustering and exploration of microbial genome assemblies.
             </p>
-            <p className="wgsa-nb">
-              WGSA is in final <em>beta</em> testing prior to full release in December 2015.<br/><a href="mailto:cgps@sanger.ac.uk">Your feedback</a> is appreciated.
-            </p>
           </div>
         </div>
         <div className="wgsa-home-section2">
