@@ -6,14 +6,15 @@ import { Link } from 'react-router';
 
 import Species from '../species';
 import { CGPS } from '../defaults';
-// import Colection from '../collection'
+import { FASTA_FILE_EXTENSIONS } from '^/utils/File';
+
 const textStyle = {
   color: CGPS.COLOURS.PURPLE,
 };
 const uploadButtonStyle = {
-  float: 'right',
+  position: 'absolute',
   top: '20px',
-  right: '10px',
+  right: '20px',
   zIndex: 1,
   color: '#fff',
   fontSize: '18px',
@@ -44,7 +45,7 @@ export default React.createClass({
         </div>
 
 
-        <div className="">
+        <div className="wgsa-species-home-container">
           <div className="wgsa-home-content">
             <h1><span className="accent">{Species.current.formattedName}</span></h1>
             <p>
@@ -53,50 +54,69 @@ export default React.createClass({
           </div>
 
 
-          <div>
-            <div className="mdl-grid">
-              <div className="mdl-cell mdl-cell--6-col wgsa-card-column">
-                <div className="wgsa-card mdl-shadow--4dp">
-                  <Link
-                    style={uploadButtonStyle}
-                    className="wgsa-upload-review-button mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--6dp"
-                    to={`/${Species.current.nickname}/upload`}
-                    >
-                    <i style={iconStyle} className="material-icons">cloud_upload</i>
-                  </Link>
-                  <div className="wgsa-card-heading">Collection List</div>
-                  <div className="wgsa-card-content">
-                    <CollectionList />
-                  </div>
-                </div>
-              </div>
-              <div className="mdl-cell mdl-cell--6-col wgsa-card-column chart-card">
-                <div className="wgsa-card mdl-shadow--4dp">
-                  <div className="wgsa-card-heading">Downloads</div>
-                  <div className="wgsa-card-content ">
-                    <a
-                      target="_blank"
-                      className="mdl-button mdl-js-button mdl-js-ripple-effect">
-                      Metadata
-                    </a>
-                    <a
-                      target="_blank"
-                      className="mdl-button mdl-js-button mdl-js-ripple-effect">
-                      Kernel
-                    </a>
-                    <a
-                      target="_blank"
-                      className="mdl-button mdl-js-button mdl-js-ripple-effect">
-                      Tree
-                    </a>
-
-
-                  </div>
+          <div className="mdl-grid">
+            <div className="mdl-cell mdl-cell--12-col wgsa-species-home-collection-list">
+              <div className="wgsa-card mdl-shadow--4dp">
+                <div className="wgsa-card-heading">Collection List</div>
+                <div className="wgsa-card-content">
+                  <CollectionList />
                 </div>
               </div>
             </div>
 
+            <div className="mdl-cell mdl-cell--12-col wgsa-species-home-other">
+              <div className="mdl-grid">
+                <div className="mdl-cell mdl-cell--6-col">
+                  <div className="wgsa-card mdl-shadow--4dp">
+                    <div className="wgsa-card-heading">Upload</div>
+                    <div className="wgsa-card-content">
+                      <p className="mdl-card__supporting-text">
+                        Upload your assemblies to WGSA
+                      </p>
+                      <p className="mdl-card__supporting-text">
+                        Assembled data must be in multi-FASTA format, should be one file per genome and have one of the following extensions:
+                      </p>
+                      <p className="wgsa-highlight-text">{FASTA_FILE_EXTENSIONS.join(', ')}</p>
+                      <Link
+                        style={uploadButtonStyle}
+                        className="wgsa-upload-review-button mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--6dp"
+                        to={`/${Species.current.nickname}/upload`}
+                        >
+                        <i style={iconStyle} className="material-icons">cloud_upload</i>
+                      </Link>
+                    </div>
+                  </div>
+                </div>
 
+                <div className="mdl-cell mdl-cell--6-col">
+                  <div className="wgsa-card mdl-shadow--4dp">
+                    <div className="wgsa-card-heading">Download</div>
+                    <div className="wgsa-card-content">
+                      <p className="mdl-card__supporting-text">
+                        Download data for all collections
+                      </p>
+                      <div className="wgsa-species-home-download-links">
+                        <a
+                          target="_blank"
+                          className="mdl-button mdl-js-button mdl-js-ripple-effect">
+                          Metadata
+                        </a>
+                        <a
+                          target="_blank"
+                          className="mdl-button mdl-js-button mdl-js-ripple-effect">
+                          Kernel
+                        </a>
+                        <a
+                          target="_blank"
+                          className="mdl-button mdl-js-button mdl-js-ripple-effect">
+                          Tree
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
