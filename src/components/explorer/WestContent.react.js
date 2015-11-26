@@ -8,7 +8,7 @@ import { getTreeFunctions } from '^/constants/tree';
 
 const ConnectedTree = (props) => (<Tree {...props} />);
 
-function mapStateToProps({ entities, display, collection, filter }) {
+function mapStateToProps({ entities, display, tables, collection, filter }) {
   const { tree } = display;
 
   return {
@@ -18,7 +18,7 @@ function mapStateToProps({ entities, display, collection, filter }) {
       entities,
       collection,
       filter,
-      display,
+      tables,
     },
   };
 }
