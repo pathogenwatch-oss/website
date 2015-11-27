@@ -94,6 +94,22 @@
   padding: 0 8px;
 }
 
+.wgsa-species-home-desc {
+  display: flex;
+  justify-content: space-around;
+}
+.wgsa-species-home-desc p{
+  font-size: 14px !important;
+  font-weight: 100;
+  text-transform: none;
+  padding: 0px;
+  overflow: hidden;
+  color: #666;
+  margin: 8px auto;
+  max-width: 900px;
+  line-height: 24px;
+  text-align: justify;
+}
 .wgsa-species-collection-list-item.mdl-button {
   padding: 0px;
   margin: 0px;

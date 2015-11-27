@@ -47,10 +47,14 @@ export default React.createClass({
 
         <div className="wgsa-species-home-container">
           <div className="wgsa-home-content">
-            <h1><span className="accent">{Species.current.formattedName}</span></h1>
-            <p>
-              {Species.current.definitionText}
-            </p>
+            <h2><span className="accent">{Species.current.formattedName}</span></h2>
+            <div className="wgsa-species-home-desc">
+              {Species.current.desc ||
+                <p>
+                  {Species.current.definitionText}
+                </p>
+              }
+            </div>
           </div>
 
 

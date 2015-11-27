@@ -7,4 +7,5 @@ export default {
   imagePath: '/assets/img/salty.jpg',
   definitionText: (<span><strong><em>Salmonella</em></strong> <strong>Typhi</strong>,  a common serovar of <em>Salmonella enterica</em> subsp. <em>enterica</em>.</span>),
   active: false,
+  desc: '',
 }
