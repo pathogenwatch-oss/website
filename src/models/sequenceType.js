@@ -4,18 +4,20 @@ var mainStorage = require('services/storage')('main');
 var sequencesStorage = require('services/storage')('sequences');
 
 var LOGGER = require('utils/logging').createLogger('sequenceType');
+const { MLST_RESULT } = require('utils/documentKeys');
+
 var UNKNOWN_ST = 'New';
 
 function getMlstQueryKeys(assembly) {
   var mlstAllelesQueryKeys;
 
-  if (!assembly || !assembly.MLST_RESULT) {
+  if (!assembly || !assembly[MLST_RESULT]) {
     return false;
   }
 
   mlstAllelesQueryKeys = [];
-  Object.keys(assembly.MLST_RESULT.alleles).forEach(function (key) {
-    var alleleQueryKey = assembly.MLST_RESULT.alleles[key];
+  Object.keys(assembly[MLST_RESULT].alleles).forEach(function (key) {
+    var alleleQueryKey = assembly[MLST_RESULT].alleles[key];
     if (alleleQueryKey !== null) {
       mlstAllelesQueryKeys.push(alleleQueryKey);
     }
@@ -39,7 +41,7 @@ function getMlstAllelesData(assembly, callback) {
 }
 
 function addMlstAllelesToAssembly(assembly, mlstAlleles) {
-  var alleles = assembly.MLST_RESULT.alleles;
+  var alleles = assembly[MLST_RESULT].alleles;
   var locusIds = Object.keys(alleles);
 
   Object.keys(mlstAlleles).forEach(function (key) {
@@ -49,7 +51,7 @@ function addMlstAllelesToAssembly(assembly, mlstAlleles) {
     }
   });
 
-  assembly.MLST_RESULT.code = locusIds.slice(1).reduce(function (memo, locusId) {
+  assembly[MLST_RESULT].code = locusIds.slice(1).reduce(function (memo, locusId) {
     var allele = alleles[locusId];
     if (!allele || !allele.alleleId || allele.alleleId === UNKNOWN_ST) {
       return memo;
@@ -76,7 +78,7 @@ function getSequenceType(assembly, speciesId, callback) {
   var stQueryKey;
 
   LOGGER.info('Getting assembly ST data');
-  stQueryKey = generateStQueryKey(speciesId, assembly.MLST_RESULT);
+  stQueryKey = generateStQueryKey(speciesId, assembly[MLST_RESULT]);
 
   if (stQueryKey === null) {
     LOGGER.warn('Skipping ST query for assembly ' + assembly.assemblyId);
@@ -103,7 +105,7 @@ function addSequenceTypeData(assembly, speciesId, callback) {
     },
     function (mlstAlleles, next) {
       if (!mlstAlleles) {
-        return next(null, assembly.MLST_RESULT.stCode || UNKNOWN_ST);
+        return next(null, assembly[MLST_RESULT].stCode || UNKNOWN_ST);
       }
       LOGGER.info('Got assembly MLST alleles data');
       addMlstAllelesToAssembly(assembly, mlstAlleles);
@@ -111,7 +113,7 @@ function addSequenceTypeData(assembly, speciesId, callback) {
     },
     function (sequenceType, next) {
       LOGGER.info('Got assembly ST data');
-      assembly.MLST_RESULT.sequenceType = sequenceType;
+      assembly[MLST_RESULT].sequenceType = sequenceType;
       next(null, assembly);
     }
   ], callback);

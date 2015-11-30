@@ -1,6 +1,7 @@
 var mainStorage = require('services/storage')('main');
 
 var LOGGER = require('utils/logging').createLogger('Antibiotic model');
+var { ANTIMICROBIALS } = require('utils/documentKeys');
 
 function flattenStructureForFrontend(document) {
   return (
@@ -23,9 +24,9 @@ function flattenStructureForFrontend(document) {
 }
 
 function get(speciesId, callback) {
-  LOGGER.info('Getting list of antibiotics for species: ' + speciesId);
+  LOGGER.info(`Getting list of antibiotics for species: ${speciesId}`);
 
-  mainStorage.retrieve('ANTIMICROBIALS_' + speciesId, function (error, result) {
+  mainStorage.retrieve(`${ANTIMICROBIALS}_${speciesId}`, function (error, result) {
     if (error) {
       return callback(error, result);
     }

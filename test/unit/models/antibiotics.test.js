@@ -10,10 +10,11 @@ describe('Model: Antibiotics', function () {
       retrieve: sinon.stub()
     };
     var reset = antibioticModel.__set__('mainStorage', mockMainStorage);
+    const { ANTIBIOTICS_LIST } = require('utils/documentKeys');
 
     antibioticModel.get('1280');
 
-    assert(mockMainStorage.retrieve.calledWith('ANTIBIOTICS_LIST_1280'));
+    assert(mockMainStorage.retrieve.calledWith(`${ANTIBIOTICS_LIST}_1280`));
 
     reset();
   });
