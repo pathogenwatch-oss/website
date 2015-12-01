@@ -33,15 +33,17 @@
   },
   "nodepath": "./src",
   "nodeopts": "--harmony_destructuring",
+  "bunyancmd": "bunyan -o short",
+  "startcmd": "NODE_PATH=$npm_package_nodepath node $npm_package_nodeopts",
   "testcmd": "NODE_PATH=$npm_package_nodepath NODE_ENV='test' mocha $npm_package_nodeopts -t 60000 --reporter spec",
   "scripts": {
-    "start": "NODE_PATH=$npm_package_nodepath node $npm_package_nodeopts start.js | bunyan -o short",
+    "start": "eval $npm_package_startcmd start.js | $npm_package_bunyancmd",
     "test": "eval $npm_package_testcmd 'test/unit/**/*.test.js'",
     "test-example": "eval $npm_package_testcmd 'test/example.test.js'",
     "e2e": "eval $npm_package_testcmd 'test/e2e/**/*.test.js'",
-    "upload": "NODE_PATH=$npm_package_nodepath node bin/upload-reference-data.js",
-    "download": "NODE_PATH=$npm_package_nodepath node bin/download.js",
-    "metadata": "NODE_PATH=$npm_package_nodepath node bin/generate-reference-metadata.js"
+    "upload": "eval $npm_package_startcmd bin/upload-reference-data.js | $npm_package_bunyancmd",
+    "download": "eval $npm_package_startcmd bin/download.js | $npm_package_bunyancmd",
+    "metadata": "eval $npm_package_startcmd bin/generate-reference-metadata.js | $npm_package_bunyancmd"
   },
   "repository": {
     "type": "git",

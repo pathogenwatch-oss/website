@@ -10,7 +10,7 @@ storageConnection.connect(function (connError) {
   var mainStorage = require('services/storage')(bucket);
   mainStorage.retrieve(documentKey, function (error, result) {
     if (error) {
-      console.err(error);
+      console.error(error);
       return process.exit(1);
     }
     if (outputPath) {
