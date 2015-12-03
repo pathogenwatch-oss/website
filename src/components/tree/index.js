@@ -1,7 +1,7 @@
 import '../../css/tree.css';
 
 import React from 'react';
-import PhyloCanvas from 'PhyloCanvas';
+import PhyloCanvas from 'phylocanvas';
 import contextMenuPlugin from 'phylocanvas-plugin-context-menu';
 
 import TreeControls from './TreeControls.react';

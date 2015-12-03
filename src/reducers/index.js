@@ -50,6 +50,10 @@ export default combineReducers({
     tree: createReducer(tree),
   }),
   filter: createReducer(filter),
+  // downloads: combineReducers({
+  //
+  //
+  // }),
   ui: combineReducers({
     downloadsMenu: createReducer(downloadsMenu),
     treeLinks: createReducer(treeLinks),

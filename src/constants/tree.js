@@ -1,25 +1,32 @@
 import { displayTree } from '../actions/tree';
 import { activateFilter, resetFilter } from '../actions/filter';
 
-import { CGPS } from '^/defaults';
+import { CGPS, COLOUR } from '^/defaults';
 
 export const POPULATION = Symbol('population');
 
 export const COLLECTION = Symbol('collection');
 
 const styles = {
-  emphasizedNodeLabel: {
-    colour: CGPS.COLOURS.PURPLE,
-    format: 'bold',
-  },
-  collectionNodeLabel: {
-    colour: 'rgba(0, 0, 0, 0.87)',
-  },
   defaultLeaf: {
-    colour: '#6B6B6B',
+    leafStyle: {
+      fillStyle: '#6B6B6B',
+      lineWidth: 0,
+    },
+    labelStyle: {
+      colour: 'rgba(0, 0, 0, 0.74)',
+    },
   },
   emphasizedLeaf: {
-    colour: CGPS.COLOURS.PURPLE_LIGHT,
+    leafStyle: {
+      fillStyle: CGPS.COLOURS.PURPLE_LIGHT,
+      strokeStyle: COLOUR,
+      lineWidth: 2,
+    },
+    labelStyle: {
+      colour: CGPS.COLOURS.PURPLE,
+      format: 'bold',
+    },
   },
 };
 
@@ -27,12 +34,17 @@ function getStandardTreeFunctions({ entities, tables, filter }, dispatch) {
   const { metadata, resistanceProfile } = tables;
   return {
     styleTree(tree) {
-      const style = { colour: null }; // caching object
       tree.leaves.forEach((leaf) => {
         const assembly = entities.assemblies[leaf.id];
-        style.colour = resistanceProfile.activeColumn.valueGetter(assembly);
-        leaf.setDisplay(style);
-        leaf.labelStyle = styles.collectionNodeLabel;
+        leaf.setDisplay({
+          leafStyle: {
+            strokeStyle: COLOUR,
+            fillStyle: resistanceProfile.activeColumn.valueGetter(assembly),
+            lineWidth: 2,
+          },
+          labelStyle: styles.defaultLeaf.labelStyle,
+        });
+
         leaf.label = metadata.activeColumn.valueGetter(assembly);
         leaf.highlighted = (filter.active && filter.ids.has(leaf.id));
       });
@@ -87,7 +99,6 @@ function getPopulationTreeFunctions(state, dispatch) {
           leaf.interactive = true;
           leaf.label = `${leaf.label} (${assemblyIds.length})`;
           leaf.setDisplay(styles.emphasizedLeaf);
-          leaf.labelStyle = styles.emphasizedNodeLabel;
           leaf.highlighted = (filter.active && assemblyIds.some(filterHasId));
         }
       }
