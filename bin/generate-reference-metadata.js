@@ -6,6 +6,8 @@ var speciesId = process.argv[2];
 var filePath = process.argv[3];
 var outputPath = process.argv[4];
 
+const { ASSEMBLY_METADATA } = require('utils/documentKeys');
+
 fs.readFile(filePath, 'utf8', function (error, file) {
   if (error) throw error;
 
@@ -37,7 +39,7 @@ fs.readFile(filePath, 'utf8', function (error, file) {
       };
       object.assemblyName = object.original_isolate_id;
       var metadata = assemblyModel.createMetadataRecord(ids, object);
-      var filename = 'ASSEMBLY_METADATA_' + ids.assemblyId + '.json';
+      var filename = `${ASSEMBLY_METADATA}_${ids.assemblyId}.json`;
       console.log('Writing file ' + filename);
       fs.writeFileSync(filename, JSON.stringify(metadata));
     });

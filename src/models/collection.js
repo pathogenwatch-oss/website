@@ -7,6 +7,8 @@ var messageQueueService = require('services/messageQueue');
 var socketService = require('services/socket');
 
 var LOGGER = require('utils/logging').createLogger('Collection');
+const { COLLECTION_LIST, CORE_TREE_RESULT } = require('utils/documentKeys');
+
 var IDENTIFIER_TYPES = {
   COLLECTION: 'Collection',
   ASSEMBLY: 'Assembly'
@@ -122,12 +124,12 @@ function getAssemblies(params, assemblyGetFn, callback) {
 
   async.waterfall([
     function (done) {
-      mainStorage.retrieve('COLLECTION_LIST_' + collectionId, done);
+      mainStorage.retrieve(`${COLLECTION_LIST}_${collectionId}`, done);
     },
     function (result, done) {
       var assemblyIds = result.assemblyIdentifiers;
       LOGGER.info('Got list of assemblies for collection ' + collectionId);
-      async.mapLimit(assemblyIds, 10, function (assemblyIdWrapper, callback) {
+      async.mapLimit(assemblyIds, 10, function (assemblyIdWrapper, finishMap) {
         var assemblyId = assemblyIdWrapper.assemblyId || assemblyIdWrapper; // List format varies between wrapped and raw value
         var assemblyParams = {
           assemblyId: assemblyId,
@@ -135,10 +137,10 @@ function getAssemblies(params, assemblyGetFn, callback) {
         };
         assemblyGetFn(assemblyParams, function (error, assembly) {
           if (error) {
-            return callback(error);
+            return finishMap(error);
           }
           LOGGER.info('Got assembly ' + assemblyId);
-          callback(null, assembly);
+          finishMap(null, assembly);
         });
       }, done);
     }
@@ -154,7 +156,7 @@ function getAssemblies(params, assemblyGetFn, callback) {
 }
 
 function getTree(suffix, callback) {
-  var treeQueryKey = 'CORE_TREE_RESULT_' + suffix;
+  var treeQueryKey = `${CORE_TREE_RESULT}_${suffix}`;
   LOGGER.info('Getting tree with suffix: ' + suffix);
   mainStorage.retrieve(treeQueryKey, function (error, treeData) {
     if (error) {

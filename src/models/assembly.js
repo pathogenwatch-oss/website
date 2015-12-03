@@ -4,19 +4,21 @@ var messageQueueService = require('services/messageQueue');
 var mainStorage = require('services/storage')('main');
 
 var LOGGER = require('utils/logging').createLogger('Assembly');
-
-var METADATA_KEY = 'ASSEMBLY_METADATA';
-var PAARSNP_KEY = 'PAARSNP_RESULT';
-var MLST_KEY = 'MLST_RESULT';
-var FP_COMP_KEY = 'FP_COMP';
-var CORE_KEY = 'CORE_SLIM';
+const {
+  ASSEMBLY_METADATA,
+  PAARSNP_RESULT,
+  MLST_RESULT,
+  FP_COMP,
+  CORE_SLIM,
+} = require('utils/documentKeys');
 
 var ASSEMBLY_ANALYSES = [ 'FP', 'MLST', 'PAARSNP', 'CORE' ];
 
 var systemMetadataColumns = [
-  'assemblyId', 'soeciesId', 'assemblyName',
+  'assemblyId', 'speciesId', 'assemblyName',
   'date', 'year', 'month', 'day',
   'position', 'latitude', 'longitude',
+  'filename'
 ];
 
 function createKey(id, prefix) {
@@ -66,7 +68,7 @@ function beginUpload(ids, data) {
     };
 
     mainStorage.store(
-      createKey(ids.assemblyId, METADATA_KEY),
+      createKey(ids.assemblyId, ASSEMBLY_METADATA),
       assemblyMetadata,
       function () {
         socketService.notifyAssemblyUpload(ids, 'METADATA_OK');
@@ -100,14 +102,14 @@ function mergeQueryResults(data, queryKeyPrefixes, assemblyId) {
 }
 
 function formatForFrontend(assembly) {
-  var paarsnp = assembly[PAARSNP_KEY];
+  var paarsnp = assembly[PAARSNP_RESULT];
   return {
-    populationSubtype: assembly[FP_COMP_KEY] ? assembly[FP_COMP_KEY].subTypeAssignment : null,
-    metadata: assembly[METADATA_KEY],
+    populationSubtype: assembly[FP_COMP] ? assembly[FP_COMP].subTypeAssignment : null,
+    metadata: assembly[ASSEMBLY_METADATA],
     analysis: {
-      st: assembly[MLST_KEY].sequenceType,
-      mlst: assembly[MLST_KEY].code,
-      kernelSize: assembly[CORE_KEY].kernelSize,
+      st: assembly[MLST_RESULT].sequenceType,
+      mlst: assembly[MLST_RESULT].code,
+      kernelSize: assembly[CORE_SLIM].kernelSize,
       // snpar: paarsnp.snparResult.completeSets.map(function (set) {
       //   return { repSequenceId: set.repSequenceId, setId: set.setId };
       // }),
@@ -157,16 +159,16 @@ function get(params, queryKeyPrefixes, callback) {
 function getComplete(params, callback) {
   LOGGER.info('Getting assembly ' + params.assemblyId);
 
-  var keys = [
-    METADATA_KEY,
-    CORE_KEY,
-    FP_COMP_KEY,
-    MLST_KEY,
+  const keys = [
+    ASSEMBLY_METADATA,
+    CORE_SLIM,
+    FP_COMP,
+    MLST_RESULT,
   ];
 
   // HACK: skip PAARSNP for listeria
   if (params.speciesId !== '1639') {
-    keys.push(PAARSNP_KEY);
+    keys.push(PAARSNP_RESULT);
   }
 
   get(params, keys, function (error, assembly) {
@@ -180,16 +182,16 @@ function getComplete(params, callback) {
 function getReference(params, callback) {
   LOGGER.info('Getting reference assembly ' + params.assemblyId);
   get(params, [
-    METADATA_KEY,
-    MLST_KEY,
+    ASSEMBLY_METADATA,
+    MLST_RESULT,
   ], function (error, assembly) {
     if (error) {
       return callback(error, null);
     }
     callback(null, {
-      metadata: assembly[METADATA_KEY],
+      metadata: assembly[ASSEMBLY_METADATA],
       analysis: {
-        st: assembly[MLST_KEY].sequenceType
+        st: assembly[MLST_RESULT].sequenceType
       }
     });
   });

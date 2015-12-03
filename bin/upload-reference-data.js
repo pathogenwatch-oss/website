@@ -35,7 +35,7 @@ async.waterfall([
   }
 ], function (error) {
   if (error) {
-    console.err(error);
+    console.error(error);
     return process.exit(1);
   }
   process.exit(0);
