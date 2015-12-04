@@ -1,5 +1,5 @@
 import React from 'react';
-import { treeTypes } from 'PhyloCanvas';
+import { treeTypes } from 'phylocanvas';
 
 const treeSizeControlsStyle = {
   position: 'absolute',

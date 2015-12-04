@@ -16,9 +16,12 @@ import tree from './tree';
 // filter
 import filter from './filter';
 
-// ui
+// downloads
+import downloads from './downloads';
 import downloadsMenu from './downloadsMenu';
 import treeLinks from './treeLinks';
+
+// ui
 import bodyClickEvent from './bodyClickEvent';
 
 // util
@@ -50,14 +53,11 @@ export default combineReducers({
     tree: createReducer(tree),
   }),
   filter: createReducer(filter),
-  // downloads: combineReducers({
-  //
-  //
-  // }),
-  ui: combineReducers({
-    downloadsMenu: createReducer(downloadsMenu),
+  downloads: combineReducers({
+    menuOpen: createReducer(downloadsMenu),
     treeLinks: createReducer(treeLinks),
-    bodyClickEvent,
+    files: createReducer(downloads),
   }),
+  bodyClickEvent,
   loading: combineReducers({ ready, error }),
 });

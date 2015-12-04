@@ -1,5 +1,5 @@
 import './css/cgps-mdl-theme.css';
-import 'PhyloCanvas/polyfill';
+import 'phylocanvas/polyfill';
 
 import React from 'react';
 import { render } from 'react-dom';

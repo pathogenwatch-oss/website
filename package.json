@@ -40,7 +40,7 @@
     "object-assign": "^4.0.1",
     "papaparse": "^4.1.1",
     "phylocanvas": "phylocanvas/phylocanvas#v2.0.0-rc3",
-    "phylocanvas-plugin-context-menu": "phylocanvas/phylocanvas-plugin-context-menu",
+    "phylocanvas-plugin-context-menu": "phylocanvas/phylocanvas-plugin-context-menu#v2.0.1",
     "postcss-input-style": "^0.3.0",
     "postcss-loader": "^0.7.0",
     "react": "^0.14.2",

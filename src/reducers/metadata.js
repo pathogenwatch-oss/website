@@ -3,7 +3,7 @@ import { SET_LABEL_COLUMN, setLabelColumn } from '../actions/table';
 
 import { systemColumnProps, getCellContents } from '../constants/metadata';
 
-const initialActiveColumn = systemColumnProps[1];
+const initialActiveColumn = systemColumnProps[0];
 
 const initialState = {
   activeColumn: initialActiveColumn,

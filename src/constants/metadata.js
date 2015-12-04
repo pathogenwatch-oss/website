@@ -1,26 +1,8 @@
-import React from 'react';
-
-import DownloadButton from '../components/explorer/DownloadButton.react';
-
 import MetadataUtils from '../utils/Metadata';
 
 export const getCellContents = ({ valueGetter },  data) => valueGetter(data);
 
 export const systemColumnProps = [
-  { columnKey: '__download',
-    width: 50,
-    flexGrow: 0,
-    fixed: true,
-    noHeader: true,
-    getCellContents(data) {
-      return (
-        <DownloadButton
-          id={data.assemblyId}
-          format={'fasta'}
-          description={'Assembly Fasta'} />
-      );
-    },
-  },
   { columnKey: '__assembly',
     fixed: true,
     selected: true,

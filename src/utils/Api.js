@@ -67,18 +67,11 @@ function getCollection(speciesId, collectionId) {
   return $.get(`${API_ROOT}/species/${speciesId}/collection/${collectionId}`);
 }
 
-function requestFile(fileType, requestBody, callback) {
+function requestFile(fileType, requestBody) {
   console.log(`request url /download/type/collection/format/${fileType}`);
-  $.ajax(
+  return $.ajax(
     postJson(`/download/type/collection/format/${fileType}`, requestBody)
-  ).done(function (response) {
-    console.log('req response', response);
-    callback(null, response);
-  })
-  .fail(function (error) {
-    console.log(error);
-    callback(error);
-  });
+  );
 }
 
 function getAntibiotics(speciesId) {
