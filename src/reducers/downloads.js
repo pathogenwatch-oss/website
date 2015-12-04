@@ -1,6 +1,8 @@
 import { REQUEST_DOWNLOAD } from '../actions/downloads';
 import ToastActionCreators from '../actions/ToastActionCreators';
 
+import { createDownloadKey } from '../constants/downloads';
+
 const initialState = {
   kernel_checksum_distribution: {
     description: 'Kernel Checksum Distribution',
@@ -25,10 +27,6 @@ const initialState = {
   },
 };
 
-function createDownloadKey(id) {
-  return typeof id === 'string' ? id : id.join('|');
-}
-
 function createLink(keyToFilenameMap) {
   const key = Object.keys(keyToFilenameMap)[0];
   if (!key) {
@@ -46,7 +44,7 @@ const actions = {
       return state;
     }
 
-    const { linksById, ...download } = state[format];
+    const { linksById = {}, ...download } = state[format];
     const downloadKey = createDownloadKey(idList);
 
     if (error) {

@@ -4,23 +4,22 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import DownloadMenuItem from './DownloadsMenuItem.react';
-import DownloadButton from './DownloadButton.react';
 
-import { setMenuActive } from '^/actions/download';
+import { setMenuActive, requestDownload } from '^/actions/downloads';
 
+import { createDownloadKey } from '^/constants/downloads';
 import Species from '^/species';
 
 
 const DownloadsMenu = ({
   collectionId,
-  assemblyIds,
   menuOpen,
   treeLinks,
   files,
-  dispatch,
+  menuButtonOnClick,
 }) => (
   <div className={`wgsa-menu ${menuOpen ? 'wgsa-menu--is-open' : ''}`} onClick={e => e.stopPropagation()}>
-    <button className="wgsa-menu-button mdl-button" onClick={() => dispatch(setMenuActive(!menuOpen))}>
+    <button className="wgsa-menu-button mdl-button" onClick={menuButtonOnClick}>
       <i className="wgsa-button-icon material-icons">file_download</i>
       <span>Downloads</span>
     </button>
@@ -43,20 +42,11 @@ const DownloadsMenu = ({
             filename={`${collectionId}_collection_tree.nwk`}
             description="Collection Tree (.nwk)"
           />
-          { Object.keys(files).map(format => {
-            const { collection, ...props } = files[format];
-            return (
-              <li key={format} className="wgsa-menu__item">
-                <DownloadButton
-                  format={format}
-                  idList={collection ? [ collectionId ] : assemblyIds}
-                  { ...props }
-                />
-                { props.description }
-              </li>
-            );
-          })
-          }
+          { (files).map(
+            ({ format, ...props }) => (
+              <DownloadMenuItem key={format} format={format} {...props} />
+            )
+          )}
         </ul>
       </li>
     </ul>
@@ -79,4 +69,25 @@ function mapStateToProps({ downloads, collection, filter }) {
   };
 }
 
-export default connect(mapStateToProps)(DownloadsMenu);
+function mergeProps(state, { dispatch }) {
+  const { collectionId, assemblyIds, menuOpen, treeLinks, files } = state;
+  return {
+    collectionId,
+    menuOpen,
+    treeLinks,
+    menuButtonOnClick: () => dispatch(setMenuActive(!menuOpen)),
+    files: Object.keys(files).map(format => {
+      const { collection, linksById, ...props } = files[format];
+      const ids = collection ? [ collectionId ] : assemblyIds;
+      const linkProps = linksById ? linksById[createDownloadKey(ids)] : {};
+      return {
+        format,
+        ...props,
+        ...linkProps,
+        onClick: () => dispatch(requestDownload(format, ids)),
+      };
+    }),
+  };
+}
+
+export default connect(mapStateToProps, null, mergeProps)(DownloadsMenu);

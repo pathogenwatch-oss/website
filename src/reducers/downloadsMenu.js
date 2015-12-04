@@ -1,4 +1,4 @@
-import { SET_MENU_ACTIVE } from '../actions/download';
+import { SET_MENU_ACTIVE } from '../actions/downloads';
 import { BODY_CLICK } from '../actions/bodyClick';
 
 const initialState = false;

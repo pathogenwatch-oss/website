@@ -27,11 +27,11 @@ fieldset > legend {
   display: none;
 }
 
-.wgsa-download-button {
+.wgsa-download-icon {
   display: inline-block;
   vertical-align: middle;
 }
 
-.wgsa-download-button .wgsa-button-icon {
+.wgsa-download-icon .wgsa-button-icon {
   color: #673c90;
 }
