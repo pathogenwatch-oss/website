@@ -29,9 +29,6 @@ export default React.createClass({
             <p>
               A web application for the processing, clustering and exploration of microbial genome assemblies.
             </p>
-            <p className="wgsa-nb">
-              WGSA is in final <em>beta</em> testing prior to full release in December 2015.<br/><a href="mailto:cgps@sanger.ac.uk">Your feedback</a> is appreciated.
-            </p>
           </div>
         </div>
         <div className="wgsa-home-section2">
@@ -48,10 +45,10 @@ export default React.createClass({
                   <div className="mdl-card__actions mdl-card--border">
                     { speciesDef.active ?
                       <Link
-                        to={`/${speciesDef.nickname}/upload`}
+                        to={`/${speciesDef.nickname}`}
                         className="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect"
                         style={textStyle}>
-                        Upload
+                        HOME
                       </Link> :
                       <a className="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" disabled >Coming soon</a>
                     }
