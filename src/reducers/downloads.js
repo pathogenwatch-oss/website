@@ -61,7 +61,7 @@ const actions = {
           ...linksById,
           [downloadKey]: {
             loading: !ready,
-            error: ready && error,
+            error: ready && typeof error !== undefined,
             link: ready && !error ? createLink(result) : null,
           },
         },

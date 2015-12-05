@@ -44,19 +44,23 @@
 
 .wgsa-menu-heading {
   font-size: 12px;
-  letter-spacing: 0;
   font-weight: bold;
+  font-family: inherit;
+  letter-spacing: 0;
+  line-height: inherit;
   color: rgba(0, 0, 0, 0.54);
   padding: 12px 16px 4px;
+  margin: 0;
   display: block;
 }
 
 .wgsa-menu__item {
   white-space: nowrap;
   font-size: 13px;
-  padding: 4px 16px;
+  padding: 4px 0;
   transition: background .28s cubic-bezier(.4,0,.2,1);
   color: rgba(0,0,0,.87);
+  min-width: calc(212px + 8px + (16px * 2)); /* hack for firefox :( */
 }
 
 .wgsa-menu__item:hover,
@@ -65,28 +69,36 @@
   background: rgba(0, 0, 0, 0.1);
 }
 
-.wgsa-menu__item > button + span {
-  margin-left: 8px;
-}
-
-.wgsa-menu__item > a {
-  text-decoration: none;
-  color: inherit;
-  display: block;
-}
-
+.wgsa-menu__item > a,
 .wgsa-menu__item > button {
   background: none;
   border: none;
-  padding: 0;
-  display: block;
+  padding: 0 16px;
   cursor: pointer;
+  height: 32px;
   width: 100%;
   text-align: left;
+  font-size: inherit;
+  font-family: inherit;
+  color: inherit;
+  text-decoration: none;
+  display: block;
+  position: relative;
+}
+
+.wgsa-menu__item > a:active,
+.wgsa-menu__item > a:focus,
+.wgsa-menu__item > button:active,
+.wgsa-menu__item > button:focus {
+  outline: none;
 }
 
 .wgsa-menu__item .wgsa-download-icon {
   margin-right: 8px;
+}
+.wgsa-menu__item .wgsa-download-icon + span {
+  display: inline-block;
+  vertical-align: middle;
 }
 
 .wgsa-menu__item .mdl-button--icon:hover,

@@ -25,7 +25,7 @@ const DownloadsMenu = ({
     </button>
     <ul className="wgsa-menu__list mdl-shadow--2dp">
       <li>
-        <span className="wgsa-menu-heading">Population Downloads</span>
+        <h3 className="wgsa-menu-heading">Population Downloads</h3>
         <ul className="wgsa-submenu">
           <DownloadMenuItem
             link={treeLinks.population}
@@ -35,7 +35,7 @@ const DownloadsMenu = ({
         </ul>
       </li>
       <li>
-        <span className="wgsa-menu-heading">Collection Downloads</span>
+        <h3 className="wgsa-menu-heading">Collection Downloads</h3>
         <ul className="wgsa-submenu">
           <DownloadMenuItem
             link={treeLinks.collection}

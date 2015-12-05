@@ -8,37 +8,30 @@ const errorStyle = {
   color: DEFAULT.DANGER_COLOUR,
 };
 
-export default React.createClass({
+const Spinner = React.createClass({
 
-  displayName: 'DownloadIcon',
-
-  propTypes: {
-    loading: React.PropTypes.bool,
-    error: React.PropTypes.bool,
-    hasLink: React.PropTypes.bool,
-  },
-
-  componentDidUpdate() {
-    if (this.props.loading) {
-      componentHandler.upgradeElement(this.refs.spinner);
-    }
+  componentDidMount() {
+    componentHandler.upgradeElement(this.refs.spinner);
   },
 
   render() {
-    const { loading, hasLink, error } = this.props;
     return (
-      <div className="wgsa-download-icon" >
-        { loading ?
-          <div ref="spinner" className="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active"></div>
-          :
-          <span className="mdl-button mdl-button--icon" style={error ? errorStyle : null}>
-            <i className="wgsa-button-icon material-icons">
-              { !hasLink || error ? 'insert_drive_file' : 'file_download' }
-            </i>
-          </span>
-        }
-      </div>
+      <span ref="spinner" className="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active"></span>
     );
   },
 
 });
+
+export default ({ loading, hasLink, error }) => (
+  <div className="wgsa-download-icon" >
+    { loading ?
+      <Spinner />
+      :
+      <span className="mdl-button mdl-button--icon">
+        <i className="wgsa-button-icon material-icons" style={error ? errorStyle : null}>
+          { !hasLink || error ? 'insert_drive_file' : 'file_download' }
+        </i>
+      </span>
+    }
+  </div>
+);

@@ -54,16 +54,19 @@ apiRouter.get('/species/:speciesId/antibiotics', function (req, res) {
 apiRouter.post('/download/type/assembly/format/fasta', function (req, res) {
   setTimeout(function () {
     res.json({
-      'gobbledegook': req.body.idList[0] + '.fa',
+      'checksum': req.body.idList[0] + '.fa',
     });
   }, 1000);
 });
 
+var error = false;
 apiRouter.post('/download/type/:idType/format/:fileFormat', function (req, res) {
+  error = !error;
   setTimeout(function () {
-    res.json({
-      'gobbledegook': req.params.fileFormat,
-    });
+    return error ? res.sendStatus(500) :
+      res.json({
+        'checksum': req.params.fileFormat,
+      });
   }, 1000);
 });
 

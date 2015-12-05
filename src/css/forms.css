@@ -30,6 +30,8 @@ fieldset > legend {
 .wgsa-download-icon {
   display: inline-block;
   vertical-align: middle;
+  height: 32px;
+  width: 32px;
 }
 
 .wgsa-download-icon .wgsa-button-icon {
