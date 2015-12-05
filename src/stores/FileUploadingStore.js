@@ -99,6 +99,12 @@ var Store = assign({}, EventEmitter.prototype, {
     return assemblyNameToAssemblyIdMap;
   },
 
+  clearStore: function () {
+    fileUploadingState = null;
+    fileUploadingResult = RESULTS.NONE;
+    collectionId = null;
+    assemblyNameToAssemblyIdMap = null;
+  },
 });
 
 function handleAction(action) {

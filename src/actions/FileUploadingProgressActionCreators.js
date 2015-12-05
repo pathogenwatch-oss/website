@@ -39,7 +39,7 @@ export default {
     const numberOfExpectedResults = FileUploadingProgressStore.getNumberOfExpectedResults();
     const numberOfReceivedResults = FileUploadingProgressStore.getNumberOfReceivedResults();
 
-    console.log(`Expected: ${numberOfExpectedResults}, Received: ${numberOfReceivedResults}`);
+    // console.log(`Expected: ${numberOfExpectedResults}, Received: ${numberOfReceivedResults}`);
 
     if (numberOfExpectedResults === numberOfReceivedResults) {
       // console.log('[WGSA] Received all results');

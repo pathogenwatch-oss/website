@@ -61,7 +61,7 @@ export default React.createClass({
     return {
       readyToUpload: false,
       confirmedMultipleMetadataDrop: false,
-      pageTitleAppend: 'Upload',
+      pageTitleMessage: 'Upload',
       isUploading: FileUploadingStore.getFileUploadingState(),
       numberOfAssemblies: UploadStore.getAssembliesCount(),
       viewPage: 'overview',
@@ -114,17 +114,20 @@ export default React.createClass({
   handleFileProcessingStoreChange() {
     isProcessing = FileProcessingStore.getFileProcessingState();
     this.setState({
-      pageTitleAppend: isProcessing ? 'Processing...' : 'Overview',
+      pageTitleMessage: isProcessing ? 'Processing...' : 'Overview',
     });
   },
 
   handleFileUploadingStoreChange() {
-    const uploadingResult = FileUploadingStore.getFileUploadingResult();
+    let uploadingResult = FileUploadingStore.getFileUploadingResult();
     const id = FileUploadingStore.getCollectionId();
     const path = `/${Species.nickname}/collection/${id}`;
     const { history } = this.context;
     if (uploadingResult === FileUploadingStore.getFileUploadingResults().SUCCESS) {
       history.pushState(null, path);
+      UploadStore.clearStore();
+      FileUploadingStore.clearStore();
+      FileUploadingProgressStore.clearStore();
       return;
     }
 
@@ -200,22 +203,25 @@ export default React.createClass({
 
   render() {
     let pageTitle = 'WGSA';
+    let species = Species.formattedName;
+    let activeAssemblyName = '';
+
     const assembly = UploadStore.getAssembly(this.state.assemblyName);
 
     switch (this.state.viewPage) {
     case 'assembly':
-      pageTitle = `WGSA | ${assembly && assembly.fasta.name}`;
+      activeAssemblyName = assembly && assembly.fasta.name;
       break;
     case 'upload_progress':
-      pageTitle = 'WGSA | Uploading...';
+      activeAssemblyName = 'Uploading...';
       break;
-    default: pageTitle = `WGSA | ${this.state.pageTitleAppend}`;
+    default: activeAssemblyName = this.state.pageTitleMessage;
     }
 
     return (
       <FileDragAndDrop onDrop={this.handleDrop}>
         <div className="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-drawer">
-          <UploadReviewHeader title={pageTitle} activateUploadButton={this.state.readyToUpload} uploadProgressPercentage={this.state.uploadProgressPercentage} isUploading={this.state.isUploading} />
+          <UploadReviewHeader title={pageTitle} species={species} activeAssemblyName={activeAssemblyName} activateUploadButton={this.state.readyToUpload} uploadProgressPercentage={this.state.uploadProgressPercentage} isUploading={this.state.isUploading} />
 
           <UploadWorkspaceNavigation assembliesUploaded={assembly ? true : false} totalAssemblies={this.state.numberOfAssemblies}>
             <footer className="wgsa-upload-navigation__footer mdl-shadow--4dp">

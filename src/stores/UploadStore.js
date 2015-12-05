@@ -8,8 +8,8 @@ import MetadataUtils from '../utils/Metadata';
 
 const CHANGE_EVENT = 'change';
 
-const rawFiles = {};
-const assemblies = {};
+var rawFiles = {};
+var assemblies = {};
 const errors = [];
 
 function addFiles(newRawFiles, newAssemblies) {
@@ -144,6 +144,10 @@ const Store = assign({}, EventEmitter.prototype, {
     return errors;
   },
 
+  clearStore() {
+    rawFiles = {};
+    assemblies = {};
+  }
 });
 
 function emitChange() {
