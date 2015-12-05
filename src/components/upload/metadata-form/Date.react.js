@@ -17,20 +17,14 @@ const yearStyle = {
 
 const MetadataDate = React.createClass({
 
-  componentDidMount() {
-    componentHandler.upgradeElement(this.refs.day_input);
-    componentHandler.upgradeElement(this.refs.month_input);
-    componentHandler.upgradeElement(this.refs.year_input);
-  },
-
   render() {
     const { day, month, year } = this.props.date;
     return (
       <fieldset className="metadata-field__date">
         <legend>Date</legend>
-        <DateInput ref="day_input" style={dayStyle} onChange={this.updateDateComponent} component="day" min="1" max="31"  value={day} readonly={this.props.readonly} />
-        <DateInput ref="month_input" style={monthStyle} onChange={this.updateDateComponent} component="month" min="1" max="12" value={month} readonly={this.props.readonly} />
-        <DateInput ref="year_input" style={yearStyle} onChange={this.updateDateComponent} component="year" min="1900" max={CURRENT_YEAR} value={year} readonly={this.props.readonly} />
+        <DateInput style={dayStyle} onChange={this.updateDateComponent} component="day" min="1" max="31"  value={day} readonly={this.props.readonly} />
+        <DateInput style={monthStyle} onChange={this.updateDateComponent} component="month" min="1" max="12" value={month} readonly={this.props.readonly} />
+        <DateInput style={yearStyle} onChange={this.updateDateComponent} component="year" min="1900" max={CURRENT_YEAR} value={year} readonly={this.props.readonly} />
       </fieldset>
     );
   },
@@ -44,10 +38,15 @@ const MetadataDate = React.createClass({
 });
 
 const DateInput = React.createClass({
+
+  componentDidMount() {
+    componentHandler.upgradeElement(this.refs.mdlElement);
+  },
+
   render() {
     const { component, min, max, value } = this.props;
     return (
-      <div className={`mdl-textfield mdl-js-textfield mdl-textfield--floating-label ${this.props.readonly ? 'wgsa-textfield-readonly' : ''}`}
+      <div ref="mdlElement" className={`mdl-textfield mdl-js-textfield mdl-textfield--floating-label ${this.props.readonly ? 'wgsa-textfield-readonly' : ''}`}
         style={this.props.style}>
         <input className="mdl-textfield__input" type="number" id={component}
           value={value}
