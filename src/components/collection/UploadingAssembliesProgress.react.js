@@ -12,8 +12,9 @@ const ICON_STYLE = {
 };
 
 const TABLE_STYLE = {
-  width: 'auto',
+  width: '100%',
   border: 'none',
+  margin: 'auto'
 };
 
 const HEADER_STYLE = {
@@ -45,30 +46,30 @@ const UploadingAssembliesProgress = React.createClass({
 
   getInitialState() {
     return {
-      assemblyResults: FileUploadingProgressStore.getReceivedAssemblyResults().assemblies,
+      receivedResults: FileUploadingProgressStore.getReceivedResults(),
     };
   },
 
   componentWillMount() {
-    this.resultColumns = FileUploadingStore.getAssemblyProcessingResults();
+    this.assemblyResultColumns = FileUploadingStore.getAssemblyProcessingResults();
+    this.collectionResultColumns = FileUploadingStore.getCollectionProcessingResults();
   },
 
   componentDidMount() {
     FileUploadingProgressStore.addChangeListener(this.handleFileUploadingProgressStoreChange);
-
     componentHandler.upgradeElement(React.findDOMNode(this.refs.table));
   },
 
   componentDidUpdate() {
-    const { assemblyResults } = this.state;
-
-    if (!assemblyResults) {
+    const { assemblies, collection } = this.state.receivedResults;
+    console.log('----------',assemblies, collection)
+    if (!assemblies) {
       return;
     }
 
     for (const assemblyName of Object.keys(FileUploadingStore.getAssemblyNameToAssemblyIdMap())) {
       const assemblyId = FileUploadingStore.getAssemblyNameToAssemblyIdMap()[assemblyName];
-      const results = assemblyResults[assemblyId];
+      const results = assemblies[assemblyId];
       if (results && results.progress && !results.UPLOAD_OK) {
         this.refs[`progress_${assemblyName}`].getDOMNode()
           .MaterialProgress.setProgress(results.progress);
@@ -82,14 +83,15 @@ const UploadingAssembliesProgress = React.createClass({
 
   handleFileUploadingProgressStoreChange() {
     this.setState({
-      assemblyResults: FileUploadingProgressStore.getReceivedAssemblyResults().assemblies,
+      receivedResults: FileUploadingProgressStore.getReceivedResults(),
     });
   },
 
   getAssemblyResultElements() {
     const assemblyNameToAssemblyIdMap = FileUploadingStore.getAssemblyNameToAssemblyIdMap();
     const assemblyNames = UploadStore.getAssemblyNames();
-    const assemblyResults = this.state.assemblyResults;
+    const assemblyResults = this.state.receivedResults.assemblies;
+    // console.log('assembly-results', assemblyResults);
 
     return assemblyNames.map((assemblyName) => {
       let assemblyResult = {};
@@ -107,7 +109,7 @@ const UploadingAssembliesProgress = React.createClass({
       return (
         <tr key={assemblyName}>
           <td style={FILE_ASSEMBLY_ID_STYLE} className="mdl-data-table__cell--non-numeric">{assemblyName}</td>
-          { this.resultColumns.map((resultName) => {
+          { this.assemblyResultColumns.map((resultName) => {
             return (
               <td style={CELL_STYLE} key={`${assemblyName}-${resultName}`}>
                 { resultName === 'UPLOAD_OK' && !assemblyResult[resultName] ?
@@ -130,28 +132,70 @@ const UploadingAssembliesProgress = React.createClass({
     });
   },
 
+  getCollectionResultElements() {
+    const assemblyResults = this.state.receivedResults.collection;
+
+    return (
+      <tr>
+        { Object.keys(this.collectionResultColumns).map((collectionResultName) => {
+          return (
+            <td style={CELL_STYLE}>
+              <i style={ICON_STYLE} className="material-icons">
+              { assemblyResults && assemblyResults[collectionResultName] ?
+                  'check_circle' :
+                  'radio_button_unchecked' }
+              </i>
+            </td>
+          );
+        }) }
+      </tr>
+    );
+  },
+
+
+
   render() {
     return (
-      <table ref="table" className="mdl-data-table mdl-shadow--4dp" style={TABLE_STYLE}>
-        <thead>
-          <tr>
-            <td style={CELL_STYLE}></td>
-            <td style={HEADER_STYLE}>UPLOAD</td>
-            <td style={HEADER_STYLE}>METADATA</td>
-            <td style={HEADER_STYLE}>KERNEL</td>
-            <td style={HEADER_STYLE}>FP</td> {
-              this.resultColumns.indexOf('MLST') !== -1 ?
-                <td style={HEADER_STYLE}>MLST</td> : null
-            } {
-              this.resultColumns.indexOf('PAARSNP') !== -1 ?
-                <td style={HEADER_STYLE}>PAARSNP</td> : null
-            }
-          </tr>
-        </thead>
-        <tbody>
-          {this.getAssemblyResultElements()}
-        </tbody>
-      </table>
+      <div>
+        <div className="wgsa-upload-progress-table">
+          <table ref="table" className="mdl-data-table mdl-shadow--4dp" style={TABLE_STYLE}>
+            <thead>
+              <tr>
+                <td style={CELL_STYLE}></td>
+                <td style={HEADER_STYLE}>UPLOAD</td>
+                <td style={HEADER_STYLE}>METADATA</td>
+                <td style={HEADER_STYLE}>KERNEL</td>
+                <td style={HEADER_STYLE}>FP</td> {
+                  this.assemblyResultColumns.indexOf('MLST') !== -1 ?
+                    <td style={HEADER_STYLE}>MLST</td> : null
+                } {
+                  this.assemblyResultColumns.indexOf('PAARSNP') !== -1 ?
+                    <td style={HEADER_STYLE}>PAARSNP</td> : null
+                }
+              </tr>
+            </thead>
+            <tbody>
+              {this.getAssemblyResultElements()}
+            </tbody>
+          </table>
+        </div>
+
+        <div className="wgsa-upload-progress-table">
+          <table ref="table" className="mdl-data-table mdl-shadow--4dp" style={TABLE_STYLE}>
+            <thead>
+              <tr>
+                <td style={HEADER_STYLE}>MATRIX</td>
+                <td style={HEADER_STYLE}>TREE</td>
+                <td style={HEADER_STYLE}>SUBTREES</td>
+              </tr>
+            </thead>
+            <tbody>
+              {this.getCollectionResultElements()}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
     );
   },
 
