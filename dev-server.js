@@ -71,7 +71,7 @@ apiRouter.post('/download/type/:idType/format/:fileFormat', function (req, res) 
 });
 
 apiRouter.get('/download/file/:fileName', function (req, res) {
-  return res.sendFile(__dirname + '/static_data/' + req.params.fileName);
+  return res.sendFile(__dirname + '/static_data/metadata.csv');
 });
 
 app.use('/api', apiRouter);

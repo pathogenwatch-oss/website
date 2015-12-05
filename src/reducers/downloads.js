@@ -27,13 +27,19 @@ const initialState = {
   },
 };
 
-function createLink(keyToFilenameMap) {
+function parseResult(keyToFilenameMap) {
   const key = Object.keys(keyToFilenameMap)[0];
+  const filename = keyToFilenameMap[key];
+
   if (!key) {
-    return '';
+    return {};
   }
-  return `/api/download/file/${encodeURIComponent(key)}?` +
-    `prettyFileName=${encodeURIComponent(keyToFilenameMap[key])}`;
+
+  return {
+    link: `/api/download/file/${encodeURIComponent(key)}?` +
+      `prettyFileName=${encodeURIComponent(filename)}`,
+    filename,
+  };
 }
 
 const actions = {
@@ -53,6 +59,8 @@ const actions = {
       });
     }
 
+    const { link, filename } = ready && !error ? parseResult(result) : {};
+
     return {
       ...state,
       [format]: {
@@ -62,7 +70,8 @@ const actions = {
           [downloadKey]: {
             loading: !ready,
             error: ready && typeof error !== undefined,
-            link: ready && !error ? createLink(result) : null,
+            link,
+            filename,
           },
         },
       },

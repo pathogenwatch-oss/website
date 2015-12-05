@@ -18,7 +18,7 @@ export default React.createClass({
   componentDidUpdate(previous) {
     const { loading, link } = this.props;
     if (previous.loading && (!loading && link)) {
-      // TOGO: autoclick
+      this.refs.link.click();
     }
   },
 
@@ -29,7 +29,8 @@ export default React.createClass({
     return (
       <li className="wgsa-menu__item">
         { link ?
-          <a href={link || '#'}
+          <a ref="link"
+            href={link || '#'}
             target="_blank"
             download={filename}
             title={title}>
