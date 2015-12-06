@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import Tree from '^/components/tree';
 import TreeHeader from '^/components/tree/TreeHeader.react';
 
-import { getTreeFunctions } from '^/constants/tree';
+import { getTreeFunctions, getTitle, speciesTrees } from '^/constants/tree';
 
 const ConnectedTree = (props) => (<Tree {...props} />);
 
@@ -28,7 +28,14 @@ function mergeProps({ newick, tree, state }, { dispatch }, props) {
     ...props,
     newick,
     ...getTreeFunctions(tree, state, dispatch),
-    header: (<TreeHeader tree={tree} dispatch={dispatch} />),
+    header: (
+      <TreeHeader
+        tree={tree}
+        title={getTitle(tree, state.entities.assemblies)}
+        isSpecies={speciesTrees.has(tree)}
+        dispatch={dispatch}
+      />
+    ),
   };
 }
 

@@ -6,6 +6,8 @@ import MetadataDate from './metadata-form/Date.react';
 import InputField from './InputField.react';
 import GoogleMap from '../GoogleMap.react';
 
+import MapUtils from '^/utils/Map';
+
 export default React.createClass({
 
   displayName: 'AssemblyMetadata',
@@ -39,7 +41,7 @@ export default React.createClass({
     const { latitude, longitude } = position;
 
     const showMap = latitude !== null && longitude !== null;
-    const markerDef = { position };
+    const markerDef = { position, active: true, icon: MapUtils.standardMarkerIcon };
     const otherMetadataFields = this.getMetadataFieldComponents(metadata);
 
     return (
@@ -52,7 +54,7 @@ export default React.createClass({
             </div>
             <div className="mdl-cell mdl-cell--6-col metadata-googlemap">
               { showMap ?
-                <GoogleMap markerDefs={[ markerDef ]} /> :
+                <GoogleMap markerDefs={[ markerDef ]} resetMarkers /> :
                 <p className="mdl-card__supporting-text">(Location not provided)</p> }
             </div>
           </div>

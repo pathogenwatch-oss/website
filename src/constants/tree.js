@@ -7,6 +7,17 @@ export const POPULATION = Symbol('population');
 
 export const COLLECTION = Symbol('collection');
 
+export const speciesTrees = new Set([ POPULATION, COLLECTION ]);
+
+const titles = {
+  [POPULATION]: 'Population',
+  [COLLECTION]: 'Collection',
+};
+
+export function getTitle(tree, assemblies) {
+  return titles[tree] || assemblies[tree].metadata.assemblyName;
+}
+
 const styles = {
   defaultLeaf: {
     leafStyle: {

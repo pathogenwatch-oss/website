@@ -6,15 +6,9 @@ import { displayTree } from '^/actions/tree';
 
 import { POPULATION, COLLECTION } from '^/constants/tree';
 
-const speciesTrees = new Set([ POPULATION, COLLECTION ]);
-const titles = {
-  [POPULATION]: 'Population',
-  [COLLECTION]: 'Collection',
-};
-
-export default ({ tree, dispatch }) => (
+export default ({ tree, title, isSpecies, dispatch }) => (
   <header className="wgsa-tree-header">
-    { speciesTrees.has(tree) ?
+    { isSpecies ?
       <div className="wgsa-switch-background wgsa-switch-background--see-through">
         <Switch
           id="tree-switcher"
@@ -32,7 +26,7 @@ export default ({ tree, dispatch }) => (
 
     }
     <h2 className="wgsa-tree-heading">
-      <span>{speciesTrees.has(tree) ? titles[tree] : tree}</span>
+      <span>{title}</span>
     </h2>
   </header>
 );

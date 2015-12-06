@@ -2,6 +2,7 @@ import { REQUEST_DOWNLOAD } from '../actions/downloads';
 import ToastActionCreators from '../actions/ToastActionCreators';
 
 import { createDownloadKey } from '../constants/downloads';
+import { API_ROOT } from '../utils/Api';
 
 const initialState = {
   kernel_checksum_distribution: {
@@ -36,7 +37,7 @@ function parseResult(keyToFilenameMap) {
   }
 
   return {
-    link: `/api/download/file/${encodeURIComponent(key)}?` +
+    link: `${API_ROOT}/download/file/${encodeURIComponent(key)}?` +
       `prettyFileName=${encodeURIComponent(filename)}`,
     filename,
   };

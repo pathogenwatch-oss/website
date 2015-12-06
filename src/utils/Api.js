@@ -5,7 +5,7 @@ import { setAssemblyProgress, }
 
 import CONFIG from '../config';
 
-const API_ROOT =
+export const API_ROOT =
   CONFIG.api ? `http://${CONFIG.api.address}/api` : '/api';
 
 function postJson(path, data, progressFn) {
@@ -32,7 +32,7 @@ function postJson(path, data, progressFn) {
   };
 }
 
-function getCollectionId(speciesId, collectionData, callback) {
+export function getCollectionId(speciesId, collectionData, callback) {
   $.ajax(
     postJson(`/species/${speciesId}/collection`, collectionData)
   ).done(function (data) {
@@ -43,7 +43,7 @@ function getCollectionId(speciesId, collectionData, callback) {
   });
 }
 
-function postAssembly({ speciesId, collectionId, assemblyId }, requestBody, callback) {
+export function postAssembly({ speciesId, collectionId, assemblyId }, requestBody, callback) {
   $.ajax(
     postJson(
       `/species/${speciesId}/collection/${collectionId}/assembly/${assemblyId}`,
@@ -58,31 +58,22 @@ function postAssembly({ speciesId, collectionId, assemblyId }, requestBody, call
   });
 }
 
-function getReferenceCollection(speciesId) {
+export function getReferenceCollection(speciesId) {
   return $.get(`${API_ROOT}/species/${speciesId}/reference`);
 }
 
-function getCollection(speciesId, collectionId) {
+export function getCollection(speciesId, collectionId) {
   console.log(`[WGSA] Getting collection ${collectionId}`);
   return $.get(`${API_ROOT}/species/${speciesId}/collection/${collectionId}`);
 }
 
-function requestFile(fileType, requestBody) {
+export function requestFile(fileType, requestBody) {
   console.log(`request url /download/type/collection/format/${fileType}`);
   return $.ajax(
     postJson(`/download/type/collection/format/${fileType}`, requestBody)
   );
 }
 
-function getAntibiotics(speciesId) {
+export function getAntibiotics(speciesId) {
   return $.get(`${API_ROOT}/species/${speciesId}/antibiotics`);
 }
-
-export default {
-  postAssembly,
-  getCollectionId,
-  getCollection,
-  getReferenceCollection,
-  requestFile,
-  getAntibiotics,
-};

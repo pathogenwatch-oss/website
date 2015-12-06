@@ -100,6 +100,16 @@ function setMarkers(markerDefs) {
   }
 }
 
+function createMarkers(markerDefs) {
+  for (const marker of markers) {
+    marker.setMap(null);
+  }
+  markers.length = 0;
+
+  setMarkers(markerDefs);
+  fitAllMarkers();
+}
+
 function createMap({ onMapClick, markerDefs }) {
   const center = new google.maps.LatLng(
     DEFAULT.MAP.CENTER.LATITUDE, DEFAULT.MAP.CENTER.LONGITUDE
@@ -118,8 +128,7 @@ function createMap({ onMapClick, markerDefs }) {
     map.addListener('click', onMapClick);
   }
 
-  setMarkers(markerDefs);
-  fitAllMarkers();
+  createMarkers(markerDefs);
 }
 
 export default React.createClass({
@@ -135,9 +144,11 @@ export default React.createClass({
       })
     ),
     onMapClick: React.PropTypes.func,
+    resetMarkers: React.PropTypes.bool,
   },
 
   componentDidMount() {
+    console.log('mount');
     createMap(this.props);
   },
 
@@ -149,7 +160,10 @@ export default React.createClass({
     resizeMap();
 
     const { markerDefs } = this.props;
-    if (markerDefs !== previous.markerDefs) {
+    if (this.props.resetMarkers) {
+      console.log(markerDefs);
+      createMarkers(markerDefs);
+    } else if (markerDefs !== previous.markerDefs) {
       setMarkers(markerDefs);
     }
   },

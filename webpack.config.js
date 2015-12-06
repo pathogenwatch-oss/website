@@ -45,6 +45,7 @@ const devConfig = {
         query: {
           stage: 0,
           plugins: [
+            'react-display-name',
             'react-transform',
           ],
           extra: {

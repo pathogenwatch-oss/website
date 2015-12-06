@@ -40,7 +40,7 @@ export default React.createClass({
 
     return (
       <fieldset className="metadata-field__map">
-        <GoogleMap markerDefs={markerDefs} />
+        <GoogleMap markerDefs={markerDefs} resetMarkers />
       </fieldset>
     );
   },
