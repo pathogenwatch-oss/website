@@ -148,7 +148,6 @@ export default React.createClass({
   },
 
   componentDidMount() {
-    console.log('mount');
     createMap(this.props);
   },
 
@@ -161,7 +160,6 @@ export default React.createClass({
 
     const { markerDefs } = this.props;
     if (this.props.resetMarkers) {
-      console.log(markerDefs);
       createMarkers(markerDefs);
     } else if (markerDefs !== previous.markerDefs) {
       setMarkers(markerDefs);

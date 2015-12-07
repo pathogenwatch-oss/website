@@ -7,7 +7,7 @@ import FileUploadingActionCreators from '../actions/FileUploadingActionCreators'
 import FileUploadingProgressActionCreators from '../actions/FileUploadingProgressActionCreators';
 
 import FileUtils from '../utils/File';
-import ApiUtils from '../utils/Api';
+import { getCollectionId, postAssembly } from '../utils/Api';
 import Species from '../species';
 
 module.exports = {
@@ -39,7 +39,7 @@ module.exports = {
     });
   },
 
-  getCollectionId: function getCollectionId() {
+  getCollectionId() {
     FileUploadingActionCreators.startUploadingFiles();
     FileUploadingProgressActionCreators.setNumberOfExpectedResults();
 
@@ -58,7 +58,7 @@ module.exports = {
       socketRoomId: roomId,
     };
 
-    ApiUtils.getCollectionId(Species.id, data, function (idError, ids) {
+    getCollectionId(Species.id, data, function (idError, ids) {
       if (idError) {
         console.error(idError);
         return;
@@ -85,7 +85,7 @@ module.exports = {
             metrics,
           };
 
-          ApiUtils.postAssembly(urlParams, requestBody, function (assemblyError) {
+          postAssembly(urlParams, requestBody, function (assemblyError) {
             if (assemblyError) {
               console.error(assemblyError);
               return;
