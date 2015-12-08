@@ -5,6 +5,7 @@ import PhyloCanvas from 'phylocanvas';
 import contextMenuPlugin from 'phylocanvas-plugin-context-menu';
 
 import TreeControls from './TreeControls.react';
+import Spinner from '^/components/Spinner.react';
 
 import DEFAULT, { CGPS } from '^/defaults';
 
@@ -25,6 +26,7 @@ export default React.createClass({
     styleTree: React.PropTypes.func,
     onUpdated: React.PropTypes.func,
     onRedrawOriginalTree: React.PropTypes.func,
+    loading: React.PropTypes.bool,
   },
 
   getInitialState() {
@@ -90,7 +92,7 @@ export default React.createClass({
   },
 
   render() {
-    const { header } = this.props;
+    const { header, loading } = this.props;
 
     return (
       <section className="wgsa-tree">
@@ -102,7 +104,12 @@ export default React.createClass({
           labelSize={this.state.labelSize}
           handleTreeTypeChange={this.handleTreeTypeChange}
           handleNodeSizeChange={this.handleNodeSizeChange}
-          handleLabelSizeChange={this.handleLabelSizeChange} />
+          handleLabelSizeChange={this.handleLabelSizeChange}
+        />
+        { loading ?
+          <div className="wgsa-loading-overlay">
+            <Spinner />
+          </div> : null }
       </section>
     );
   },

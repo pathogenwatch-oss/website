@@ -26,3 +26,16 @@
 .wgsa-loading-container a:visited {
   color: #a386bd;
 }
+
+.wgsa-loading-overlay {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  background-color: rgba(255, 255, 255, 0.87);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

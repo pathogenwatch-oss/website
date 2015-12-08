@@ -3,6 +3,8 @@ import '../../css/progress-bar.css';
 
 import React from 'react';
 
+import Spinner from '^/components/Spinner.react';
+
 import { CGPS } from '^/defaults';
 
 const backgroundStyle = {
@@ -19,14 +21,10 @@ export const LoadSpinner = React.createClass({
 
   displayName: 'LoadSpinner',
 
-  componentDidMount() {
-    componentHandler.upgradeElement(this.refs.spinner);
-  },
-
   render() {
     return (
       <Background>
-        <div ref="spinner" className="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active"></div>
+        <Spinner />
         <h1>Loading collection...</h1>
       </Background>
     );

@@ -2,6 +2,7 @@ import assign from 'object-assign';
 
 import { FETCH_ENTITIES } from '../actions/fetch';
 import { SET_COLLECTION_ID } from '../actions/collection';
+import { SET_TREE } from '../actions/tree';
 
 import { POPULATION, COLLECTION } from '../constants/tree';
 
@@ -18,6 +19,15 @@ export const assemblies = {
         return assign({}, uploaded.assemblies, reference.assemblies);
       }
     },
+    [SET_TREE]: function (state, { ready, result }) {
+      if (ready && result) {
+        return {
+          ...state,
+          ...result.assemblies,
+        };
+      }
+      return state;
+    },
   },
 
 };
@@ -33,11 +43,24 @@ export const trees = {
       if (result) {
         const [ uploaded, reference ] = result;
         return {
-          [COLLECTION]: { newick: uploaded.tree },
-          [POPULATION]: { newick: reference.tree },
+          [COLLECTION]: { name: COLLECTION, newick: uploaded.tree },
+          [POPULATION]: { name: POPULATION, newick: reference.tree },
           ...uploaded.subtrees,
         };
       }
+    },
+    [SET_TREE]: function (state, { ready, result, name }) {
+      if (ready && result) {
+        return {
+          ...state,
+          [name]: {
+            name,
+            newick: result.newick,
+          },
+        };
+      }
+
+      return state;
     },
   },
 };
@@ -61,7 +84,7 @@ export const collection = {
         return {
           ...state,
           assemblyIds: Object.keys(uploaded.assemblies),
-          subtreeIds: Object.keys(uploaded.subtrees),
+          subtrees: uploaded.subtrees,
         };
       }
     },

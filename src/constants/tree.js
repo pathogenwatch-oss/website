@@ -14,8 +14,8 @@ const titles = {
   [COLLECTION]: 'Collection',
 };
 
-export function getTitle(tree, assemblies) {
-  return titles[tree] || assemblies[tree].metadata.assemblyName;
+export function getTitle(tree, assembly) {
+  return titles[tree] || assembly.metadata.assemblyName;
 }
 
 const styles = {
@@ -41,23 +41,29 @@ const styles = {
   },
 };
 
-function getStandardTreeFunctions({ entities, tables, filter }, dispatch) {
+function getStandardTreeFunctions(state, dispatch) {
+  const { entities, tables, filter, collection } = state;
   const { metadata, resistanceProfile } = tables;
   return {
     styleTree(tree) {
       tree.leaves.forEach((leaf) => {
         const assembly = entities.assemblies[leaf.id];
+        const inCollection = new Set(collection.assemblyIds).has(leaf.id);
+        const { labelStyle } =
+          inCollection ? styles.emphasizedLeaf : styles.defaultLeaf;
+
         leaf.setDisplay({
-          leafStyle: {
+          leafStyle: inCollection ? {
             strokeStyle: COLOUR,
             fillStyle: resistanceProfile.activeColumn.valueGetter(assembly),
             lineWidth: 2,
-          },
-          labelStyle: styles.defaultLeaf.labelStyle,
+          } : styles.defaultLeaf.leafStyle,
+          labelStyle,
         });
 
         leaf.label = metadata.activeColumn.valueGetter(assembly);
         leaf.highlighted = (filter.active && filter.ids.has(leaf.id));
+        leaf.interactive = inCollection;
       });
     },
     onUpdated(event) {
@@ -79,7 +85,7 @@ function getStandardTreeFunctions({ entities, tables, filter }, dispatch) {
 
 function getPopulationTreeFunctions(state, dispatch) {
   const { entities, collection, filter } = state;
-  const { trees, assemblies } = entities;
+  const { assemblies } = entities;
 
   const filterHasId = id => filter.ids.has(id);
 
@@ -102,9 +108,9 @@ function getPopulationTreeFunctions(state, dispatch) {
 
       tree.root.cascadeFlag('interactive', false);
 
-      for (const subtreeId of collection.subtreeIds) {
+      for (const subtreeId of Object.keys(collection.subtrees)) {
         const leaf = tree.branches[subtreeId];
-        const { assemblyIds } = trees[subtreeId];
+        const { assemblyIds } = collection.subtrees[subtreeId];
 
         if (leaf) {
           leaf.interactive = true;
@@ -120,7 +126,8 @@ function getPopulationTreeFunctions(state, dispatch) {
       }
       const { nodeIds } = event;
       if (nodeIds.length === 1) {
-        dispatch(displayTree(nodeIds[0]));
+        const name = nodeIds[0];
+        dispatch(displayTree(entities.trees[name] || { name }));
       } else {
         dispatch(resetFilter());
       }

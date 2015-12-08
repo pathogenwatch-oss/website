@@ -8,12 +8,13 @@ import { getTreeFunctions, getTitle, speciesTrees } from '^/constants/tree';
 
 const ConnectedTree = (props) => (<Tree {...props} />);
 
-function mapStateToProps({ entities, display, tables, collection, filter }) {
+function mapStateToProps(state) {
+  const { entities, display, tables, collection, filter, loading } = state;
   const { tree } = display;
 
   return {
-    newick: entities.trees[tree].newick,
-    tree,
+    loading: loading.tree,
+    tree: entities.trees[tree],
     state: {
       entities,
       collection,
@@ -23,16 +24,17 @@ function mapStateToProps({ entities, display, tables, collection, filter }) {
   };
 }
 
-function mergeProps({ newick, tree, state }, { dispatch }, props) {
+function mergeProps({ loading, tree, state }, { dispatch }, props) {
   return {
     ...props,
-    newick,
-    ...getTreeFunctions(tree, state, dispatch),
+    loading,
+    ...tree,
+    ...getTreeFunctions(tree.name, state, dispatch), // TODO: Memoise this
     header: (
       <TreeHeader
         tree={tree}
-        title={getTitle(tree, state.entities.assemblies)}
-        isSpecies={speciesTrees.has(tree)}
+        title={getTitle(tree.name, state.entities.assemblies[tree.name])}
+        isSpecies={speciesTrees.has(tree.name)}
         dispatch={dispatch}
       />
     ),

@@ -50,7 +50,7 @@ export default combineReducers({
   display: combineReducers({
     table: createReducer(table),
     mapMarkers: createReducer(mapMarkers),
-    tree: createReducer(tree),
+    tree: createReducer(tree.display),
   }),
   filter: createReducer(filter),
   downloads: combineReducers({
@@ -59,5 +59,8 @@ export default combineReducers({
     files: createReducer(downloads),
   }),
   bodyClickEvent,
-  loading: combineReducers({ ready, error }),
+  loading: combineReducers({
+    collection: combineReducers({ ready, error }),
+    tree: createReducer(tree.loading),
+  }),
 });

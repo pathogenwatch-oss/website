@@ -14,13 +14,17 @@ export default ({ tree, title, isSpecies, dispatch }) => (
           id="tree-switcher"
           left={{ title: 'Population Tree', icon: 'nature' }}
           right={{ title: 'Collection Tree', icon: 'nature_people' }}
-          checked={tree === COLLECTION}
-          onChange={(checked) =>
-            dispatch(displayTree(checked ? COLLECTION : POPULATION))} />
+          checked={tree.name === COLLECTION}
+          onChange={(checked) => dispatch(
+            displayTree(
+              checked ? { name: COLLECTION } : { name: POPULATION }
+            )
+          )}
+        />
       </div> :
       <button
         className="wgsa-tree-return mdl-button mdl-button--icon"
-        onClick={() => dispatch(displayTree(POPULATION))}>
+        onClick={() => dispatch(displayTree({ name: POPULATION }))}>
         <i className="material-icons">arrow_back</i>
       </button>
 

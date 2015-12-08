@@ -2,12 +2,25 @@ import { SET_TREE } from '../actions/tree';
 
 import { POPULATION } from '../constants/tree';
 
-const initialState = POPULATION;
+export default {
+  display: {
+    initialState: POPULATION,
+    actions: {
+      [SET_TREE]: function (state, { name, ready = true }) {
+        if (ready) {
+          return name;
+        }
 
-const actions = {
-  [SET_TREE]: function (state, { tree }) {
-    return tree || state;
+        return state;
+      },
+    },
+  },
+  loading: {
+    initialState: false,
+    actions: {
+      [SET_TREE]: function (state, { ready = true }) {
+        return !ready;
+      },
+    },
   },
 };
-
-export default { initialState, actions };

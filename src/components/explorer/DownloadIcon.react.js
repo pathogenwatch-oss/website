@@ -1,26 +1,12 @@
-import '../../css/spinner.css';
-
 import React from 'react';
+
+import Spinner from '^/components/Spinner.react';
 
 import DEFAULT from '^/defaults';
 
 const errorStyle = {
   color: DEFAULT.DANGER_COLOUR,
 };
-
-const Spinner = React.createClass({
-
-  componentDidMount() {
-    componentHandler.upgradeElement(this.refs.spinner);
-  },
-
-  render() {
-    return (
-      <span ref="spinner" className="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active"></span>
-    );
-  },
-
-});
 
 export default ({ loading, hasLink, error }) => (
   <div className="wgsa-download-icon" >

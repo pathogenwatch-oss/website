@@ -51,6 +51,12 @@ apiRouter.get('/species/:speciesId/antibiotics', function (req, res) {
   res.sendFile(__dirname + '/static_data/antibiotics.json');
 });
 
+apiRouter.get('/species/:speciesId/subtree/:id', function (req, res) {
+  setTimeout(function () {
+    res.sendFile(__dirname + '/static_data/subtree.json');
+  }, 1000);
+});
+
 apiRouter.post('/download/type/assembly/format/fasta', function (req, res) {
   setTimeout(function () {
     res.json({

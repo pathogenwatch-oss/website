@@ -13,7 +13,7 @@ import Species from '^/species';
 export const store = getStore();
 
 const connectExplorer = connect(
-  ({ loading }) => { return { loading }; },
+  ({ loading }) => { return { loading: loading.collection }; },
   (dispatch, { id }) => {
     return {
       initialise() {
