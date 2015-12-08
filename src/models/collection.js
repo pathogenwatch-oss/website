@@ -167,20 +167,6 @@ function getTree(suffix, callback) {
   });
 }
 
-function getSubtrees(taxonToSubtreeMap, collectionId, callback) {
-  async.forEachOfLimit(
-    taxonToSubtreeMap, 10,
-    function (subtree, taxon, done) {
-      getTree(collectionId + '_' + taxon, function (error, newickTree) {
-        if (error) {
-          return done(error);
-        }
-        subtree.newick = newickTree;
-        done();
-      });
-    }, callback);
-}
-
 function get(params, callback) {
   var collectionId = params.collectionId;
   LOGGER.info('Getting list of assemblies for collection ' + collectionId);
@@ -192,13 +178,6 @@ function get(params, callback) {
         tree: getTree.bind(null, collectionId)
       }, done);
     },
-    function (result, done) {
-      var subtreeMap = assemblyModel.mapTaxaToAssemblies(result.assemblies);
-      getSubtrees(subtreeMap, collectionId, function (error) {
-        result.subtrees = subtreeMap;
-        done(error, result);
-      });
-    }
   ], function (error, result) {
     if (error) {
       return callback(error, null);
@@ -207,7 +186,7 @@ function get(params, callback) {
       collectionId: collectionId,
       assemblies: result.assemblies,
       tree: result.tree,
-      subtrees: result.subtrees
+      subtrees: assemblyModel.groupAssembliesBySubtype(result.assemblies)
     });
   });
 }
