@@ -121,10 +121,7 @@ function formatForFrontend(assembly) {
           reduce(function (profile, className) {
             var antibioticClass = paarsnp.resistanceProfile[className];
             Object.keys(antibioticClass).forEach(function (antibiotic) {
-              profile[antibiotic] = {
-                antibioticClass: className,
-                resistanceResult: antibioticClass[antibiotic]
-              };
+              profile[antibiotic] = antibioticClass[antibiotic];
             });
             return profile;
           }, {}) : {}
