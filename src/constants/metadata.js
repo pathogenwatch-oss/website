@@ -23,9 +23,15 @@ export const systemColumnProps = [
     },
     getCellContents,
   },
-  { columnKey: '__mlst',
+  { columnKey: '__mlst_profile',
     valueGetter({ analysis }) {
       return analysis.mlst;
+    },
+    getCellContents,
+  },
+  { columnKey: '__subtype',
+    valueGetter({ populationSubtype }) {
+      return populationSubtype;
     },
     getCellContents,
   },

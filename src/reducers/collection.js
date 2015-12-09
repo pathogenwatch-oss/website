@@ -1,9 +1,21 @@
-import assign from 'object-assign';
-
 import { FETCH_ENTITIES } from '../actions/fetch';
 import { SET_COLLECTION_ID } from '../actions/collection';
 
 import { POPULATION, COLLECTION } from '../constants/tree';
+
+function replaceSubtypeDisplayNames(uploaded, reference) {
+  return Object.keys(uploaded)
+    .reduce(function (memo, assemblyId) {
+      const { populationSubtype, ...assembly } = uploaded[assemblyId];
+      memo[assemblyId] = {
+        ...assembly,
+        populationSubtype:
+          reference[populationSubtype].metadata.assemblyName,
+      };
+      return memo;
+    }, {}
+  );
+}
 
 export const assemblies = {
   initialState: {},
@@ -15,7 +27,10 @@ export const assemblies = {
 
       if (result) {
         const [ uploaded, reference ] = result;
-        return assign({}, uploaded.assemblies, reference.assemblies);
+        return {
+          ...replaceSubtypeDisplayNames(uploaded.assemblies, reference.assemblies),
+          ...reference.assemblies,
+        };
       }
     },
   },
