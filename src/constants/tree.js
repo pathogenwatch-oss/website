@@ -102,7 +102,7 @@ function getPopulationTreeFunctions(state, dispatch) {
 
         leaf.label = assembly.metadata.assemblyName;
         if (assembly.analysis) {
-          leaf.label += `_${assembly.analysis.st}`;
+          leaf.label += `_ST${assembly.analysis.st}`;
         }
       }
 
