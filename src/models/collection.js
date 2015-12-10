@@ -214,7 +214,7 @@ function getReference(speciesId, callback) {
 function getSubtree(params, callback) {
   async.parallel({
     assemblies: getAssemblies.bind(null, params, assemblyModel.getComplete),
-    tree: getTree.bind(null, params.collectionId)
+    tree: getTree.bind(null, `${params.collectionId}_${params.id}`)
   }, function (error, result) {
     if (error) {
       return callback(error, null);

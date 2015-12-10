@@ -72,9 +72,10 @@ router.post('/species/:speciesId/collection/:collectionId/assembly/:assemblyId',
   }
 );
 
-router.get('/species/:speciesId/collection/subtree/:collectionId',
+router.get('/species/:speciesId/collection/:collectionId/subtree/:id',
   function (req, res, next) {
-    LOGGER.info(`Received request for subtree ${req.params.collectionId}`);
+    const { id, collectionId } = req.params;
+    LOGGER.info(`Received request for subtree ${id} in collection ${collectionId}`);
 
     collectionModel.getSubtree(req.params, function (error, result) {
       if (error) {
