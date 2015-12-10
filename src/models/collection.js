@@ -221,23 +221,17 @@ function getReference(speciesId, callback) {
   });
 }
 
-function getSubtree({ speciesId, collectionId, subtreeId }, callback) {
-  const subtreeKey = `${collectionId}_${subtreeId}`;
+function getSubtree({ speciesId, subtreeId }, callback) {
   async.waterfall([
-    function (done) {
-      async.parallel({
-        collection: getAssemblyIds.bind(null, collectionId),
-        subtree: getAssemblyIds.bind(null, subtreeKey)
-      }, done);
-    },
-    function ({ collection, subtree }, done) {
-      done(subtree.filter(assemblyId => collection.indexOf(assemblyId) === -1));
+    getAssemblyIds.bind(null, subtreeId),
+    function (assemblyIds, done) {
+      done(assemblyIds.filter(_ => _ !== subtreeId));
     },
     function (assemblyIds, done) {
       const params = { speciesId, assemblyIds };
       async.parallel({
         assemblies: getAssemblies.bind(null, params, assemblyModel.getComplete),
-        tree: getTree.bind(null, subtreeKey)
+        tree: getTree.bind(null, `${speciesId}_${subtreeId}`)
       }, done);
     }
   ], function (error, result) {
