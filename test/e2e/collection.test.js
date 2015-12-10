@@ -11,7 +11,7 @@ describe.only('Collection Routes', function () {
       .get('/api/species/1280/collection/52ieg3ar069p')
       .expect(200, {}, function (error, res) {
         if (error) { error.showDiff = false; }
-        console.log(JSON.stringify(res, null, ' '));
+        // console.log(JSON.stringify(res, null, ' '));
         done(error, res);
       });
   });
@@ -22,13 +22,13 @@ describe.only('Collection Routes', function () {
       .expect(404, done);
   });
 
-  it('GET /api/species/:speciesId/collection/reference', function (done) {
+  it('GET /api/species/:speciesId/reference', function (done) {
     // var fixture = require('./fixtures/collection.json');
     request
-      .get('/api/species/1280/collection/reference')
+      .get('/api/species/1280/reference')
       .expect(200, {}, function (error, res) {
         if (error) { error.showDiff = false; }
-        console.log(JSON.stringify(error.actual, null, ' '));
+        // console.log(JSON.stringify(error.actual, null, ' '));
         done(error, res);
       });
   });
@@ -41,7 +41,7 @@ describe.only('Collection Routes', function () {
         .get('/api/species/1280/subtree/1280_TW20')
         .expect(200, {}, function (error, res) {
           if (error) { error.showDiff = false; }
-          console.log(JSON.stringify(error.actual, null, ' '));
+          //console.log(JSON.stringify(error.actual, null, ' '));
           done(error, res);
         });
     }

@@ -228,7 +228,7 @@ function getSubtree({ speciesId, subtreeId }, callback) {
       const params = {
         speciesId,
         assemblyIds: assemblyIdWrappers.filter(
-          wrapper => (wrapper.assemblyId || wrapper) !== speciesId
+          wrapper => (wrapper.assemblyId || wrapper) !== subtreeId
         )
       };
       async.parallel({
