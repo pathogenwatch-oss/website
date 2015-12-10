@@ -1,6 +1,6 @@
 var assert = require('assert');
 
-describe.only('Download Routes', function () {
+describe('Download Routes', function () {
 
   it('GET /api/download/type/:idType/format/:fileFormat', function (done) {
     var url = '/api/download/type/assembly/format/fasta';

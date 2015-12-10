@@ -118,14 +118,21 @@ function add(speciesId, ids, callback) {
   });
 }
 
-function getAssemblies({ id, speciesId }, assemblyGetFn, callback) {
+function getAssemblyIds(collectionId, callback) {
+  mainStorage.retrieve(`${COLLECTION_LIST}_${collectionId}`,
+    function (error, { assemblyIdentifiers = [] }) {
+      if (error) {
+        return callback(error);
+      }
+      LOGGER.info('Got list of assemblies for collection ' + collectionId);
+      return callback(null, assemblyIdentifiers);
+    }
+  );
+}
+
+function getAssemblies({ assemblyIds, speciesId }, assemblyGetFn, callback) {
   async.waterfall([
     function (done) {
-      mainStorage.retrieve(`${COLLECTION_LIST}_${id}`, done);
-    },
-    function (result, done) {
-      var assemblyIds = result.assemblyIdentifiers;
-      LOGGER.info('Got list of assemblies for collection ' + id);
       async.mapLimit(assemblyIds, 10, function (assemblyIdWrapper, finishMap) {
         // List items can be wrapped or raw value
         var assemblyId = assemblyIdWrapper.assemblyId || assemblyIdWrapper;
@@ -165,23 +172,24 @@ function getTree(suffix, callback) {
   });
 }
 
-function get(params, callback) {
-  const { id } = params;
-  LOGGER.info('Getting list of assemblies for collection ' + id);
+function get({ collectionId, speciesId }, callback) {
+  LOGGER.info('Getting list of assemblies for collection ' + collectionId);
 
   async.waterfall([
-    function (done) {
+    getAssemblyIds.bind(null, collectionId),
+    function (assemblyIds, done) {
+      const params = { speciesId, assemblyIds };
       async.parallel({
         assemblies: getAssemblies.bind(null, params, assemblyModel.getComplete),
-        tree: getTree.bind(null, id)
+        tree: getTree.bind(null, collectionId)
       }, done);
-    },
+    }
   ], function (error, result) {
     if (error) {
       return callback(error, null);
     }
     callback(null, {
-      collectionId: id,
+      collectionId,
       assemblies: result.assemblies,
       tree: result.tree,
       subtrees: assemblyModel.groupAssembliesBySubtype(result.assemblies)
@@ -190,16 +198,17 @@ function get(params, callback) {
 }
 
 function getReference(speciesId, callback) {
-  var params = {
-    id: speciesId,
-    speciesId: speciesId
-  };
-
   LOGGER.info('Getting list of assemblies for species ' + speciesId);
-  async.parallel({
-    assemblies: getAssemblies.bind(null, params, assemblyModel.getReference),
-    tree: getTree.bind(null, speciesId)
-  }, function (error, result) {
+  async.waterfall([
+    getAssemblyIds.bind(null, speciesId),
+    function (assemblyIds, done) {
+      const params = { speciesId, assemblyIds };
+      async.parallel({
+        assemblies: getAssemblies.bind(null, params, assemblyModel.getReference),
+        tree: getTree.bind(null, speciesId)
+      }, done);
+    }
+  ], function (error, result) {
     if (error) {
       return callback(error, null);
     }
@@ -212,17 +221,31 @@ function getReference(speciesId, callback) {
   });
 }
 
-function getSubtree(params, callback) {
-  const { collectionId, id } = params;
-  async.parallel({
-    assemblies: getAssemblies.bind(null, params, assemblyModel.getComplete),
-    tree: getTree.bind(null, `${collectionId}_${id}`)
-  }, function (error, result) {
+function getSubtree({ speciesId, collectionId, subtreeId }, callback) {
+  const subtreeKey = `${collectionId}_${subtreeId}`;
+  async.waterfall([
+    function (done) {
+      async.parallel({
+        collection: getAssemblyIds.bind(null, collectionId),
+        subtree: getAssemblyIds.bind(null, subtreeKey)
+      }, done);
+    },
+    function ({ collection, subtree }, done) {
+      done(subtree.filter(assemblyId => collection.indexOf(assemblyId) === -1));
+    },
+    function (assemblyIds, done) {
+      const params = { speciesId, assemblyIds };
+      async.parallel({
+        assemblies: getAssemblies.bind(null, params, assemblyModel.getComplete),
+        tree: getTree.bind(null, subtreeKey)
+      }, done);
+    }
+  ], function (error, result) {
     if (error) {
       return callback(error, null);
     }
     callback(null, {
-      collectionId: id,
+      collectionId: subtreeId,
       assemblies: result.assemblies,
       tree: result.tree,
     });
