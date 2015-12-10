@@ -221,7 +221,7 @@ function getReference(speciesId, callback) {
   });
 }
 
-function getSubtree({ speciesId, subtreeId }, callback) {
+function getSubtree({ speciesId, collectionId, subtreeId }, callback) {
   async.waterfall([
     getAssemblyIds.bind(null, subtreeId),
     function (assemblyIdWrappers, done) {
@@ -233,7 +233,7 @@ function getSubtree({ speciesId, subtreeId }, callback) {
       };
       async.parallel({
         assemblies: getAssemblies.bind(null, params, assemblyModel.getComplete),
-        tree: getTree.bind(null, `${speciesId}_${subtreeId}`)
+        tree: getTree.bind(null, `${collectionId}_${subtreeId}`)
       }, done);
     }
   ], function (error, result) {
@@ -241,7 +241,7 @@ function getSubtree({ speciesId, subtreeId }, callback) {
       return callback(error, null);
     }
     callback(null, {
-      collectionId: subtreeId,
+      name: subtreeId,
       assemblies: result.assemblies,
       tree: result.tree,
     });

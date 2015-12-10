@@ -8,7 +8,7 @@ describe.only('Collection Routes', function () {
   it('GET /api/species/:speciesId/collection/:collectionId', function (done) {
     // var fixture = require('./fixtures/collection.json');
     request
-      .get('/api/species/1280/collection/52ieg3ar069p')
+      .get('/api/species/1280/collection/uuxuad606aj7')
       .expect(200, {}, function (error, res) {
         if (error) { error.showDiff = false; }
         // console.log(JSON.stringify(res, null, ' '));
@@ -34,11 +34,11 @@ describe.only('Collection Routes', function () {
   });
 
   // TODO: Needs fixture
-  it('GET /api/species/:speciesId/subtree/:subtreeId',
+  it('GET /api/species/:speciesId/collection/:collectionId/subtree/:subtreeId',
     function (done) {
       // var fixture = require('./fixtures/collection.json');
       request
-        .get('/api/species/1280/subtree/1280_TW20')
+        .get('/api/species/1280/collection/uuxuad606aj7/subtree/1280_TW20')
         .expect(200, {}, function (error, res) {
           if (error) { error.showDiff = false; }
           //console.log(JSON.stringify(error.actual, null, ' '));
