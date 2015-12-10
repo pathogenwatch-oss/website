@@ -120,12 +120,12 @@ function add(speciesId, ids, callback) {
 
 function getAssemblyIds(collectionId, callback) {
   mainStorage.retrieve(`${COLLECTION_LIST}_${collectionId}`,
-    function (error, { assemblyIdentifiers = [] }) {
+    function (error, result) {
       if (error) {
         return callback(error);
       }
       LOGGER.info('Got list of assemblies for collection ' + collectionId);
-      return callback(null, assemblyIdentifiers);
+      return callback(null, result.assemblyIdentifiers);
     }
   );
 }
