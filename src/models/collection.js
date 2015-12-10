@@ -118,10 +118,7 @@ function add(speciesId, ids, callback) {
   });
 }
 
-function getAssemblies(params, assemblyGetFn, callback) {
-  var collectionId = params.collectionId;
-  var speciesId = params.speciesId;
-
+function getAssemblies({ collectionId, speciesId }, assemblyGetFn, callback) {
   async.waterfall([
     function (done) {
       mainStorage.retrieve(`${COLLECTION_LIST}_${collectionId}`, done);
@@ -214,6 +211,23 @@ function getReference(speciesId, callback) {
   });
 }
 
+function getSubtree(params, callback) {
+  async.parallel({
+    assemblies: getAssemblies.bind(null, params, assemblyModel.getComplete),
+    tree: getTree.bind(null, params.collectionId)
+  }, function (error, result) {
+    if (error) {
+      return callback(error, null);
+    }
+    callback(null, {
+      collectionId: params.collectionId,
+      assemblies: result.assemblies,
+      tree: result.tree,
+    });
+  });
+}
+
 module.exports.add = add;
 module.exports.get = get;
 module.exports.getReference = getReference;
+module.exports.getSubtree = getSubtree;

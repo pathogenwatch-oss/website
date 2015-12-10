@@ -33,12 +33,18 @@ describe('Collection Routes', function () {
       });
   });
 
-  it.skip('GET /api/v1/collection/representative/metadata', function (done) {
-    var fixture = require('./fixtures/representative-metadata.json');
+  // TODO: Needs fixture
+  it('GET /api/v1/collection/subtree/:id', function (done) {
+    // var fixture = require('./fixtures/collection.json');
     request
-      .get('/api/v1/collection/representative/metadata')
-      .expect(200, fixture, done);
+      .get('/api/v1/collection/subtree/1280_TW20')
+      .expect(200, {}, function (error, res) {
+        if (error) { error.showDiff = false; }
+        console.log(JSON.stringify(error.actual, null, ' '));
+        done(error, res);
+      });
   });
+
 
   it('POST /api/v1/collection', function (done) {
     var assemblyNames = [ '123.fa', '456.fa', '789.fa' ];
@@ -51,29 +57,6 @@ describe('Collection Routes', function () {
         });
       })
       .end(done);
-  });
-
-  // TODO: Needs a Web Socket client and some dummy upload data
-  it.skip('POST /api/v1/collection/tree/merge', function (done) {
-    request
-      .post('/api/v1/collection/tree/merge')
-      .send({
-        collectionId: 'a1de6463-a6b8-4810-bbe4-94d782d452c5',
-        mergeWithCollectionId: '85974b89-fb99-4035-8eb6-74770d2dc794',
-        socketRoomId: '123'
-      })
-      .expect(200, done);
-  });
-
-  // TODO: Needs a Web Socket client and some dummy upload data
-  it.skip('POST /api/v1/collection/merged', function (done) {
-    request
-      .post('/api/v1/collection/merged')
-      .send({
-        mergeTreeId: '123',
-        socketRoomId: '456'
-      })
-      .expect(200, done);
   });
 
 });
