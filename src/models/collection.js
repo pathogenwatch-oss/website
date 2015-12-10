@@ -224,11 +224,13 @@ function getReference(speciesId, callback) {
 function getSubtree({ speciesId, subtreeId }, callback) {
   async.waterfall([
     getAssemblyIds.bind(null, subtreeId),
-    function (assemblyIds, done) {
-      done(assemblyIds.filter(_ => _ !== subtreeId));
-    },
-    function (assemblyIds, done) {
-      const params = { speciesId, assemblyIds };
+    function (assemblyIdWrappers, done) {
+      const params = {
+        speciesId,
+        assemblyIds: assemblyIdWrappers.filter(
+          wrapper => (wrapper.assemblyId || wrapper) !== speciesId
+        )
+      };
       async.parallel({
         assemblies: getAssemblies.bind(null, params, assemblyModel.getComplete),
         tree: getTree.bind(null, `${speciesId}_${subtreeId}`)
