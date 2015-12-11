@@ -67,10 +67,10 @@ export function getCollection(speciesId, collectionId) {
   return $.get(`${API_ROOT}/species/${speciesId}/collection/${collectionId}`);
 }
 
-export function requestFile(fileType, requestBody) {
+export function requestFile(fileType, idType, requestBody) {
   console.log(`request url /download/type/collection/format/${fileType}`);
   return $.ajax(
-    postJson(`/download/type/collection/format/${fileType}`, requestBody)
+    postJson(`/download/type/${idType}/format/${fileType}`, requestBody)
   );
 }
 

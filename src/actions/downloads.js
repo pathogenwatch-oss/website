@@ -15,10 +15,12 @@ export function setMenuActive(active) {
 
 export const REQUEST_DOWNLOAD = 'REQUEST_DOWNLOAD';
 
-export function requestDownload(format, idList) {
+export function requestDownload(format, collection, idList) {
+  const idType = collection ? 'collection' : 'assembly';
   return {
     type: REQUEST_DOWNLOAD,
-    format, idList,
-    promise: requestFile(format, { speciesId: Species.id, idList }),
+    format,
+    idList,
+    promise: requestFile(format, idType, { speciesId: Species.id, idList }),
   };
 }
