@@ -83,7 +83,7 @@ function mergeProps(state, { dispatch }) {
         format,
         ...props,
         ...linkProps,
-        onClick: () => dispatch(requestDownload(format, ids)),
+        onClick: () => dispatch(requestDownload(format, collection, ids)),
       };
     }),
   };

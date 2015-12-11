@@ -5,25 +5,24 @@ import { createDownloadKey } from '../constants/downloads';
 import { API_ROOT } from '../utils/Api';
 
 const initialState = {
-  kernel_checksum_distribution: {
-    description: 'Kernel Checksum Distribution',
-    collection: true,
-  },
   extended_kernel_fasta: {
-    description: 'Kernel Matches',
+    description: 'Core Matches (.fa)',
   },
-  kernel_fasta: {
-    description: 'Kernel Sequence (.fa)',
+  concatenated_core_genes_collection: {
+    description: 'Concatenated Core Genes (.fa)',
   },
-  kernel_sequences: {
-    description: 'Kernel Sequence (.csv)',
+  kernel_checksum_distribution: {
+    description: 'Core Checksum Distribution (.csv)',
+  },
+  amr_profile_collection: {
+    description: 'AMR profile (.csv)',
   },
   score_matrix: {
-    description: 'Score Matrix',
+    description: 'Score Matrix (.csv)',
     collection: true,
   },
   differences_matrix: {
-    description: 'Differences Matrix',
+    description: 'Differences Matrix (.csv)',
     collection: true,
   },
 };
