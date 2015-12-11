@@ -145,7 +145,8 @@ function getPopulationTreeFunctions(state, dispatch) {
       const { nodeIds } = event;
       if (nodeIds.length === 1) {
         const name = nodeIds[0];
-        dispatch(displayTree(entities.trees[name] || { name }, collection.id));
+        const tree = entities.trees[name];
+        dispatch(displayTree( tree.name ? tree : { name }, collection.id));
       } else {
         dispatch(resetFilter());
       }
