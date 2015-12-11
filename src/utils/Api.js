@@ -78,6 +78,6 @@ export function getAntibiotics(speciesId) {
   return $.get(`${API_ROOT}/species/${speciesId}/antibiotics`);
 }
 
-export function getSubtree(speciesId, subtreeId) {
-  return $.get(`${API_ROOT}/species/${speciesId}/subtree/${subtreeId}`);
+export function getSubtree(speciesId, collectionId, subtreeId) {
+  return $.get(`${API_ROOT}/species/${speciesId}/collection/${collectionId}/subtree/${subtreeId}`);
 }

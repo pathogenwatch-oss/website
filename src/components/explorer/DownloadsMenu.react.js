@@ -42,8 +42,7 @@ const DownloadsMenu = ({
             filename={`${collectionId}_collection_tree.nwk`}
             description="Collection Tree (.nwk)"
           />
-          { (files).map(
-            ({ format, ...props }) => (
+          { (files).map(({ format, ...props }) => (
               <DownloadMenuItem key={format} format={format} {...props} />
             )
           )}

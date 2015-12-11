@@ -1,30 +1,23 @@
 import { combineReducers } from 'redux';
 
-// entities
 import antibiotics from './antibiotics';
-import { assemblies, trees, collection } from './collection';
+import { assemblies, trees, collection, reference } from './collection';
 
-// tables
 import metadata from './metadata';
 import resistanceProfile from './resistanceProfile';
 
-// display
 import table from './table';
 import mapMarkers from './mapMarkers';
 import tree from './tree';
 
-// filter
 import filter from './filter';
 
-// downloads
 import downloads from './downloads';
 import downloadsMenu from './downloadsMenu';
 import treeLinks from './treeLinks';
 
-// ui
 import bodyClickEvent from './bodyClickEvent';
 
-// util
 import { ready, error } from './fetch';
 
 function createReducer({ actions, initialState }) {
@@ -43,6 +36,7 @@ export default combineReducers({
     trees: createReducer(trees),
   }),
   collection: createReducer(collection),
+  reference: createReducer(reference),
   tables: combineReducers({
     metadata: createReducer(metadata),
     resistanceProfile: createReducer(resistanceProfile),

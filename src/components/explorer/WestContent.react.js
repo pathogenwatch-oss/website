@@ -9,18 +9,13 @@ import { getTreeFunctions, getTitle, speciesTrees } from '^/constants/tree';
 const ConnectedTree = (props) => (<Tree {...props} />);
 
 function mapStateToProps(state) {
-  const { entities, display, tables, collection, filter, loading } = state;
+  const { entities, display, loading } = state;
   const { tree } = display;
 
   return {
     loading: loading.tree,
     tree: entities.trees[tree],
-    state: {
-      entities,
-      collection,
-      filter,
-      tables,
-    },
+    state,
   };
 }
 

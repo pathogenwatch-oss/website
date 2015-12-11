@@ -21,12 +21,15 @@ export function getTitle(tree, assembly) {
 const styles = {
   defaultLeaf: {
     leafStyle: {
-      fillStyle: '#6B6B6B',
-      lineWidth: 0,
+      fillStyle: CGPS.COLOURS.GREY,
+      strokeStyle: COLOUR,
+      lineWidth: 2,
     },
     labelStyle: {
-      colour: 'rgba(0, 0, 0, 0.74)',
+      colour: COLOUR,
+      format: 'bold',
     },
+    shape: 'triangle',
   },
   emphasizedLeaf: {
     leafStyle: {
@@ -38,32 +41,47 @@ const styles = {
       colour: CGPS.COLOURS.PURPLE,
       format: 'bold',
     },
+    shape: 'circle',
   },
 };
 
 function getStandardTreeFunctions(state, dispatch) {
-  const { entities, tables, filter, collection } = state;
+  const { entities, tables, filter, collection, reference } = state;
   const { metadata, resistanceProfile } = tables;
+
+  const assemblyIdsInCollection = new Set(collection.assemblyIds);
+  const assemblyIdsInReference = new Set(reference.assemblyIds);
+
   return {
     styleTree(tree) {
       tree.leaves.forEach((leaf) => {
         const assembly = entities.assemblies[leaf.id];
-        const inCollection = new Set(collection.assemblyIds).has(leaf.id);
-        const { labelStyle } =
-          inCollection ? styles.emphasizedLeaf : styles.defaultLeaf;
+
+        if (assemblyIdsInCollection.has(leaf.id)) {
+          leaf.labelStyle = styles.emphasizedLeaf.labelStyle;
+          leaf.interactive = true;
+        } else if (assemblyIdsInReference.has(leaf.id)) {
+          leaf.nodeShape = 'triangle';
+          leaf.labelStyle = {
+            colour: COLOUR,
+            format: 'bold',
+          };
+        } else {
+          leaf.nodeShape = 'square';
+        }
 
         leaf.setDisplay({
-          leafStyle: inCollection ? {
+          leafStyle: {
             strokeStyle: COLOUR,
-            fillStyle: resistanceProfile.activeColumn.valueGetter(assembly),
+            fillStyle: resistanceProfile.activeColumn.valueGetter(
+              assembly, assemblyIdsInCollection
+            ),
             lineWidth: 2,
-          } : styles.defaultLeaf.leafStyle,
-          labelStyle,
+          },
         });
 
         leaf.label = metadata.activeColumn.valueGetter(assembly);
         leaf.highlighted = (filter.active && filter.ids.has(leaf.id));
-        leaf.interactive = inCollection;
       });
     },
     onUpdated(event) {
@@ -127,7 +145,7 @@ function getPopulationTreeFunctions(state, dispatch) {
       const { nodeIds } = event;
       if (nodeIds.length === 1) {
         const name = nodeIds[0];
-        dispatch(displayTree(entities.trees[name] || { name }));
+        dispatch(displayTree(entities.trees[name] || { name }, collection.id));
       } else {
         dispatch(resetFilter());
       }
@@ -142,4 +160,11 @@ export function getTreeFunctions(tree, state, dispatch) {
   return getStandardTreeFunctions(state, dispatch);
 }
 
-export const defaultColourGetter = () => CGPS.COLOURS.PURPLE_LIGHT;
+export function defaultColourGetter(assembly, collectionAssemblyIds) {
+  const { assemblyId } = assembly.metadata;
+  if (!collectionAssemblyIds || collectionAssemblyIds.has(assemblyId)) {
+    return CGPS.COLOURS.PURPLE_LIGHT;
+  }
+
+  return CGPS.COLOURS.GREY;
+}

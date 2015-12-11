@@ -70,7 +70,7 @@ export const trees = {
           ...state,
           [name]: {
             name,
-            newick: result.newick,
+            newick: result.tree,
           },
         };
       }
@@ -100,6 +100,25 @@ export const collection = {
           ...state,
           assemblyIds: Object.keys(uploaded.assemblies),
           subtrees: uploaded.subtrees,
+        };
+      }
+    },
+  },
+};
+
+export const reference = {
+  initialState: { assemblyIds: [] },
+  actions: {
+    [FETCH_ENTITIES]: function (state, { ready, result, error }) {
+      if (!ready || error) {
+        return state;
+      }
+
+      if (result) {
+        const [ , referenceCollection ] = result;
+        return {
+          ...state,
+          assemblyIds: Object.keys(referenceCollection.assemblies),
         };
       }
     },

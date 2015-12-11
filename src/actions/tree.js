@@ -6,12 +6,12 @@ import Species from '../species';
 
 export const SET_TREE = 'SET_TREE';
 
-export function displayTree({ name, newick }) {
+export function displayTree({ name, newick }, collectionId) {
   if (!speciesTrees.has(name) && !newick) {
     return {
       type: SET_TREE,
       name,
-      promise: getSubtree(Species.id, name),
+      promise: getSubtree(Species.id, collectionId, name),
     };
   }
 

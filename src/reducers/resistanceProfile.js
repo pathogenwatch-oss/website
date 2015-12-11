@@ -30,8 +30,11 @@ function buildAntibioticColumnProps(antibiotics) {
           </i>
         );
       },
-      valueGetter({ analysis }) {
-        if (!analysis.resistanceProfile) return defaultColourGetter();
+      valueGetter(assembly, collectionAssemblyIds) {
+        const { analysis } = assembly;
+        if (!analysis.resistanceProfile) {
+          return defaultColourGetter(assembly, collectionAssemblyIds);
+        }
         const value = analysis.resistanceProfile[antibiotic].resistanceResult;
         return value === 'RESISTANT' ? DEFAULT.DANGER_COLOUR : '#fff';
       },
@@ -83,7 +86,7 @@ const initialActiveColumn = {
 const initialState = {
   activeColumn: initialActiveColumn,
   headerClick(column) {
-    if (this.activeColumn === column) {
+    if (this.activeColumn === column || !column.valueGetter) {
       return setColourColumn(initialActiveColumn);
     }
     return setColourColumn(column);

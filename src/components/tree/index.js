@@ -1,4 +1,5 @@
 import '../../css/tree.css';
+import '../../css/loading.css';
 
 import React from 'react';
 import PhyloCanvas from 'phylocanvas';
@@ -68,6 +69,8 @@ export default React.createClass({
 
       this.props.onRedrawOriginalTree();
     });
+
+    phylocanvas.on('updated', this.props.onUpdated);
 
     this.phylocanvas = phylocanvas;
 
