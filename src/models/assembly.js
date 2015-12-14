@@ -103,19 +103,16 @@ function mergeQueryResults(data, queryKeyPrefixes, assemblyId) {
 
 function formatForFrontend(assembly) {
   var paarsnp = assembly[PAARSNP_RESULT];
+  var mlst = assembly[MLST_RESULT];
+  var core = assembly[CORE_SLIM];
+  var fp = assembly[FP_COMP];
   return {
-    populationSubtype: assembly[FP_COMP] ? assembly[FP_COMP].subTypeAssignment : null,
+    populationSubtype: fp ? fp.subTypeAssignment : null,
     metadata: assembly[ASSEMBLY_METADATA],
     analysis: {
-      st: assembly[MLST_RESULT].sequenceType,
-      mlst: assembly[MLST_RESULT].code,
-      kernelSize: assembly[CORE_SLIM].kernelSize,
-      // snpar: paarsnp.snparResult.completeSets.map(function (set) {
-      //   return { repSequenceId: set.repSequenceId, setId: set.setId };
-      // }),
-      // paar: paarsnp.paarResult.completeResistanceSets.map(function (set) {
-      //   return set.resistanceSetName;
-      // }),
+      st: mlst ? mlst.sequenceType : null,
+      mlst: mlst ? mlst.code : null,
+      kernelSize: core ? core.kernelSize : null,
       resistanceProfile: paarsnp ?
         Object.keys(paarsnp.resistanceProfile).
           reduce(function (profile, className) {
@@ -137,61 +134,45 @@ function get(params, queryKeyPrefixes, callback) {
   LOGGER.info(queryKeys);
 
   mainStorage.retrieveMany(queryKeys, function (error, assemblyData) {
-    var assembly;
-
     if (error) {
       return callback(error);
     }
+
     LOGGER.info('Got assembly ' + assemblyId + ' data');
-    assembly = mergeQueryResults(assemblyData, queryKeyPrefixes, assemblyId);
-    sequenceTypeModel.addSequenceTypeData(assembly, params.speciesId, function (stError, result) {
-      if (stError) {
-        return callback(stError);
+
+    const assembly = mergeQueryResults(assemblyData, queryKeyPrefixes, assemblyId);
+
+    sequenceTypeModel.addSequenceTypeData(
+      assembly, params.speciesId, function (stError, result) {
+        if (stError) {
+          return callback(stError);
+        }
+        callback(null, formatForFrontend(result));
       }
-      callback(null, result);
-    });
+    );
   });
 }
 
+const COMPLETE_ASSEMBLY_KEYS = [
+  ASSEMBLY_METADATA,
+  CORE_SLIM,
+  FP_COMP,
+  MLST_RESULT,
+  PAARSNP_RESULT,
+];
 function getComplete(params, callback) {
   LOGGER.info('Getting assembly ' + params.assemblyId);
-
-  const keys = [
-    ASSEMBLY_METADATA,
-    CORE_SLIM,
-    FP_COMP,
-    MLST_RESULT,
-  ];
-
-  // HACK: skip PAARSNP for listeria
-  if (params.speciesId !== '1639') {
-    keys.push(PAARSNP_RESULT);
-  }
-
-  get(params, keys, function (error, assembly) {
-    if (error) {
-      return callback(error);
-    }
-    callback(null, formatForFrontend(assembly));
-  });
+  get(params, COMPLETE_ASSEMBLY_KEYS, callback);
 }
 
+const REFERENCE_ASSEMBLY_KEYS = [
+  ASSEMBLY_METADATA,
+  MLST_RESULT,
+  PAARSNP_RESULT,
+];
 function getReference(params, callback) {
   LOGGER.info('Getting reference assembly ' + params.assemblyId);
-  get(params, [
-    ASSEMBLY_METADATA,
-    MLST_RESULT,
-  ], function (error, assembly) {
-    if (error) {
-      return callback(error, null);
-    }
-    callback(null, {
-      metadata: assembly[ASSEMBLY_METADATA],
-      analysis: {
-        st: assembly[MLST_RESULT].sequenceType
-      }
-    });
-  });
+  get(params, REFERENCE_ASSEMBLY_KEYS, callback);
 }
 
 function groupAssembliesBySubtype(assemblies) {
