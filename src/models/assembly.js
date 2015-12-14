@@ -18,7 +18,8 @@ var systemMetadataColumns = [
   'assemblyId', 'speciesId', 'assemblyName',
   'date', 'year', 'month', 'day',
   'position', 'latitude', 'longitude',
-  'filename'
+  'pmid',
+  'filename', 'displayname',
 ];
 
 function createKey(id, prefix) {
@@ -48,6 +49,7 @@ function createMetadataRecord(ids, metadata, metrics) {
       latitude: metadata.latitude,
       longitude: metadata.longitude
     },
+    pmid: metadata.pmid,
     userDefined: filterUserDefinedColumns(metadata),
     metrics
   };
