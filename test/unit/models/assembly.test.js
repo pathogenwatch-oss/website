@@ -1,6 +1,6 @@
 var assert = require('assert');
 
-describe.only('Model: Assembly', function () {
+describe('Model: Assembly', function () {
 
   it('should map assembly IDs to taxa', function () {
     var assemblyModel = require('models/assembly');
