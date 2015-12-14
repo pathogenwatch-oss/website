@@ -4,7 +4,12 @@ import { connect } from 'react-redux';
 import Tree from '^/components/tree';
 import TreeHeader from '^/components/tree/TreeHeader.react';
 
-import { getTreeFunctions, getTitle, speciesTrees } from '^/constants/tree';
+import {
+  getTreeFunctions,
+  getTitle,
+  getFilenames,
+  speciesTrees,
+} from '^/constants/tree';
 
 const ConnectedTree = (props) => (<Tree {...props} />);
 
@@ -19,16 +24,20 @@ function mapStateToProps(state) {
   };
 }
 
+// TODO: Memoisation
 function mergeProps({ loading, tree, state }, { dispatch }, props) {
+  const { collection, tables } = state;
+  const title = getTitle(tree.name, state.entities.assemblies[tree.name]);
   return {
     ...props,
     loading,
     ...tree,
-    ...getTreeFunctions(tree.name, state, dispatch), // TODO: Memoise this
+    ...getTreeFunctions(tree.name, state, dispatch),
+    filenames: getFilenames(title, collection.id, tables.metadata.activeColumn),
     header: (
       <TreeHeader
         tree={tree}
-        title={getTitle(tree.name, state.entities.assemblies[tree.name])}
+        title={title}
         isSpecies={speciesTrees.has(tree.name)}
         dispatch={dispatch}
       />

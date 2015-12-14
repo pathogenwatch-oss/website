@@ -1,7 +1,10 @@
 import { displayTree } from '../actions/tree';
 import { activateFilter, resetFilter } from '../actions/filter';
 
+import { formatColumnLabel } from '../constants/table';
+import Species from '../species';
 import { CGPS, COLOUR } from '^/defaults';
+
 
 export const POPULATION = Symbol('population');
 
@@ -168,4 +171,20 @@ export function defaultColourGetter(assembly, collectionAssemblyIds) {
   }
 
   return CGPS.COLOURS.GREY;
+}
+
+const TREE_LABELS_SUFFIX = 'tree_labels.txt';
+
+export function getFilenames(title, collectionId, { columnKey }) {
+  const formattedTitle = title.toLowerCase();
+  const formattedColumnLabel = formatColumnLabel(columnKey).toLowerCase();
+  const PREFIX = `wgsa_${Species.nickname}_${collectionId}_${formattedTitle}`;
+  return {
+    image: `${PREFIX}_tree.png`,
+    leafLabels:
+      title === titles[POPULATION] ?
+        `${PREFIX}_${TREE_LABELS_SUFFIX}` :
+        `${PREFIX}_${formattedColumnLabel}_${TREE_LABELS_SUFFIX}`,
+    newick: `${PREFIX}.nwk`,
+  };
 }

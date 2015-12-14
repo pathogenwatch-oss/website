@@ -28,6 +28,7 @@ export default React.createClass({
     onUpdated: React.PropTypes.func,
     onRedrawOriginalTree: React.PropTypes.func,
     loading: React.PropTypes.bool,
+    filenames: React.PropTypes.object,
   },
 
   getInitialState() {
@@ -81,12 +82,18 @@ export default React.createClass({
     this.phylocanvas.containerElement.removeEventListener('updated', this.props.onUpdated);
   },
 
-  componentDidUpdate() {
+  componentDidUpdate(previous) {
     this.phylocanvas.resizeToContainer();
 
-    this.phylocanvas.on('updated', this.props.onUpdated);
+    const { onUpdated, filenames, newick } = this.props;
 
-    if (this.props.newick && this.props.newick !== this.phylocanvas.stringRepresentation) {
+    this.phylocanvas.on('updated', onUpdated);
+
+    if (filenames !== previous.filenames) {
+      this.phylocanvas.contextMenu.filenames = filenames;
+    }
+
+    if (newick && newick !== this.phylocanvas.stringRepresentation) {
       this.loadTree();
     } else {
       this.styleTree(this.phylocanvas);

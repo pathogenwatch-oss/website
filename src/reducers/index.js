@@ -1,14 +1,14 @@
 import { combineReducers } from 'redux';
 
 import antibiotics from './antibiotics';
-import { assemblies, trees, collection, reference } from './collection';
+import { assemblies, collection, reference } from './collection';
 
 import metadata from './metadata';
 import resistanceProfile from './resistanceProfile';
 
 import table from './table';
 import mapMarkers from './mapMarkers';
-import tree from './tree';
+import { trees, displayedTree, treeLoading } from './tree';
 
 import filter from './filter';
 
@@ -44,7 +44,7 @@ export default combineReducers({
   display: combineReducers({
     table: createReducer(table),
     mapMarkers: createReducer(mapMarkers),
-    tree: createReducer(tree.display),
+    tree: createReducer(displayedTree),
   }),
   filter: createReducer(filter),
   downloads: combineReducers({
@@ -55,6 +55,6 @@ export default combineReducers({
   bodyClickEvent,
   loading: combineReducers({
     collection: combineReducers({ ready, error }),
-    tree: createReducer(tree.loading),
+    tree: createReducer(treeLoading),
   }),
 });
