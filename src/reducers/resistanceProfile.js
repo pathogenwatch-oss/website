@@ -23,7 +23,7 @@ function buildAntibioticColumnProps(antibiotics) {
       cellClasses: 'wgsa-table-cell--resistance',
       width: 24,
       getCellContents({ columnKey }, { analysis }) {
-        const value = analysis.resistanceProfile[columnKey].resistanceResult;
+        const value = analysis.resistanceProfile[columnKey];
         return (
           <i title={value} className={`material-icons wgsa-resistance-icon wgsa-resistance-icon--${value.toLowerCase()}`}>
             { value === 'RESISTANT' ? 'add_box' : '' }
@@ -35,7 +35,7 @@ function buildAntibioticColumnProps(antibiotics) {
         if (!analysis.resistanceProfile) {
           return defaultColourGetter(assembly, collectionAssemblyIds);
         }
-        const value = analysis.resistanceProfile[antibiotic].resistanceResult;
+        const value = analysis.resistanceProfile[antibiotic];
         return value === 'RESISTANT' ? DEFAULT.DANGER_COLOUR : '#fff';
       },
     };
@@ -45,7 +45,7 @@ function buildAntibioticColumnProps(antibiotics) {
 const actions = {
   [FETCH_ENTITIES]: function (state, { ready, result, error }) {
     if (ready && !error) {
-      const antibiotics = Object.keys(result[2]);
+      const antibiotics = result[2];
 
       const columns =
         systemColumnProps.concat(buildAntibioticColumnProps(antibiotics));

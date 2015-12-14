@@ -5,7 +5,7 @@ const initialState = [];
 const actions = {
   [FETCH_ENTITIES]: function (state, { ready, result }) {
     if (ready && result) {
-      return Object.keys(result[2]);
+      return result[2];
     }
     return state;
   },
