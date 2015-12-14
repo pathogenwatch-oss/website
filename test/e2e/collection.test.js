@@ -3,44 +3,52 @@ var uuid = require('node-uuid');
 
 var registerCollection = require('./features/register-collection');
 
-describe('Collection Routes', function () {
+describe.only('Collection Routes', function () {
 
-  it('GET /api/v1/collection/:id', function (done) {
-    var fixture = require('./fixtures/collection.json');
+  it('GET /api/species/:speciesId/collection/:collectionId', function (done) {
+    // var fixture = require('./fixtures/collection.json');
     request
-      .get('/api/v1/collection/1bd2dee3-e32c-4fb4-8d29-cb7be28f0028')
-      .expect(200, fixture, function (error, res) {
+      .get('/api/species/1280/collection/uuxuad606aj7')
+      .expect(200, {}, function (error, res) {
         if (error) { error.showDiff = false; }
-        console.log(JSON.stringify(error.actual, null, ' '));
+        // console.log(JSON.stringify(res, null, ' '));
         done(error, res);
       });
   });
 
-  it('GET /api/v1/collection/:id [Error]', function (done) {
+  it('GET /api/species/:speciesId/collection/:collectionId [Error]', function (done) {
     request
-      .get('/api/v1/collection/' + uuid.v4())
+      .get('/api/species/1280/collection/' + uuid.v4())
       .expect(404, done);
   });
 
-  it('GET /api/v1/collection/reference/:id', function (done) {
-    var fixture = require('./fixtures/collection.json');
+  it('GET /api/species/:speciesId/reference', function (done) {
+    // var fixture = require('./fixtures/collection.json');
     request
-      .get('/api/v1/collection/reference/1280')
+      .get('/api/species/1280/reference')
       .expect(200, {}, function (error, res) {
         if (error) { error.showDiff = false; }
-        console.log(JSON.stringify(error.actual, null, ' '));
+        // console.log(JSON.stringify(error.actual, null, ' '));
         done(error, res);
       });
   });
 
-  it.skip('GET /api/v1/collection/representative/metadata', function (done) {
-    var fixture = require('./fixtures/representative-metadata.json');
-    request
-      .get('/api/v1/collection/representative/metadata')
-      .expect(200, fixture, done);
-  });
+  // TODO: Needs fixture
+  it('GET /api/species/:speciesId/collection/:collectionId/subtree/:subtreeId',
+    function (done) {
+      // var fixture = require('./fixtures/collection.json');
+      request
+        .get('/api/species/1280/collection/uuxuad606aj7/subtree/1280_TW20')
+        .expect(200, {}, function (error, res) {
+          if (error) { error.showDiff = false; }
+          //console.log(JSON.stringify(error.actual, null, ' '));
+          done(error, res);
+        });
+    }
+  );
 
-  it('POST /api/v1/collection', function (done) {
+
+  it.skip('POST /api/species/1280/collection', function (done) {
     var assemblyNames = [ '123.fa', '456.fa', '789.fa' ];
     registerCollection(assemblyNames)
       .expect(200)
@@ -51,29 +59,6 @@ describe('Collection Routes', function () {
         });
       })
       .end(done);
-  });
-
-  // TODO: Needs a Web Socket client and some dummy upload data
-  it.skip('POST /api/v1/collection/tree/merge', function (done) {
-    request
-      .post('/api/v1/collection/tree/merge')
-      .send({
-        collectionId: 'a1de6463-a6b8-4810-bbe4-94d782d452c5',
-        mergeWithCollectionId: '85974b89-fb99-4035-8eb6-74770d2dc794',
-        socketRoomId: '123'
-      })
-      .expect(200, done);
-  });
-
-  // TODO: Needs a Web Socket client and some dummy upload data
-  it.skip('POST /api/v1/collection/merged', function (done) {
-    request
-      .post('/api/v1/collection/merged')
-      .send({
-        mergeTreeId: '123',
-        socketRoomId: '456'
-      })
-      .expect(200, done);
   });
 
 });
