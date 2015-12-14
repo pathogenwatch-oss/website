@@ -95,6 +95,7 @@ function initialiseAssemblyObject(assemblyName, assemblies) {
     },
     metadata: {
       assemblyName: assemblyName,
+      pmid: null,
       date: {
         year: null,
         month: null,
@@ -145,7 +146,7 @@ function parseCsvFile(file, rawFiles, assemblies) {
     const filename = dataRow.filename.replace(FASTA_FILE_NAME_REGEX, '');
     initialiseAssemblyObject(filename, assemblies);
 
-    const assemblyName = dataRow.assembly_name || dataRow.original_isolate_id || filename;
+    const assemblyName = dataRow.displayname || filename;
     assemblies[filename].metadata.assemblyName = assemblyName;
 
     for (const colName of Object.keys(dataRow)) {

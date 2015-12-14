@@ -264,6 +264,10 @@
   justify-content: space-between;
 }
 
+.metadata-fields__main .mdl-textfield {
+  margin: -8px 0;
+}
+
 .metadata-googlemap {
   position: relative;
   max-width: 288px;
@@ -290,6 +294,7 @@
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: flex-start;
+  padding-bottom: 16px;
 }
 
 @media (max-width: 1024px) {
@@ -306,7 +311,7 @@
 }
 
 .metadata-fields__other .mdl-textfield {
-  margin: 16px;
+  margin: 16px 16px 0;
 }
 
 .metadata-field__date {
@@ -324,6 +329,7 @@
 }
 
 .metadata-field__date .mdl-textfield {
+  margin: 0;
   margin-right: 16px;
 }
 
