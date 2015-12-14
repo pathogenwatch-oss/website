@@ -63,6 +63,10 @@
   padding: 0;
 }
 
+.wgsa-table-cell a {
+  color: #673c90;
+}
+
 .wgsa-table-header--resistance .fixedDataTableCellLayout_wrap1,
 .wgsa-table-header--resistance .fixedDataTableCellLayout_wrap2,
 .wgsa-table-header--resistance .fixedDataTableCellLayout_wrap3,
