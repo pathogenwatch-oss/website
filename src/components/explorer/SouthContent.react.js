@@ -5,6 +5,8 @@ import FixedTable from '^/components/FixedTable.react';
 
 import { activateFilter, resetFilter } from '^/actions/filter';
 
+import { addColumnWidth } from '^/constants/table';
+
 const sectionStyle = {
   width: '100%',
   height: '100%',
@@ -48,18 +50,20 @@ const SouthContent = React.createClass({
 
 });
 
-function getTableData(assemblies, ids, filter) {
-  return ids.filter(id => !filter.active || filter.ids.has(id))
-            .map(id => assemblies[id]);
+function getTableData(assemblies, filter) {
+  const ids = filter.active ? [ ...filter.ids ] : filter.unfilteredIds;
+  return ids.map(id => assemblies[id]);
 }
 
-function mapStateToProps({ entities, display, collection, tables, filter }) {
+function mapStateToProps({ entities, display, tables, filter }) {
   const table = tables[display.table];
-  const { headerClick, ...tableProps } = table;
+  const { headerClick, columns, ...tableProps } = table;
+  const data = getTableData(entities.assemblies, filter);
   return {
     ...tableProps,
+    columns: columns.map(column => addColumnWidth(column, data)),
     headerClick: headerClick.bind(table),
-    data: getTableData(entities.assemblies, collection.assemblyIds, filter),
+    data,
     filter,
   };
 }

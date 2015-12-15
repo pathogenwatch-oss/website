@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import Tree from '^/components/tree';
 import TreeHeader from '^/components/tree/TreeHeader.react';
 
+import { setUnfilteredIds } from '^/actions/filter';
+
 import {
   getTreeFunctions,
   getTitle,
@@ -34,6 +36,7 @@ function mergeProps({ loading, tree, state }, { dispatch }, props) {
     ...tree,
     ...getTreeFunctions(tree.name, state, dispatch),
     filenames: getFilenames(title, collection.id, tables.metadata.activeColumn),
+    setUnfilteredIds: (ids) => dispatch(setUnfilteredIds(ids)),
     header: (
       <TreeHeader
         tree={tree}

@@ -65,7 +65,7 @@ const Search = React.createClass({
 
 function mapStateToProps({ collection, tables, filter, entities }) {
   const { activeColumn } = tables.metadata;
-  const totalAmount = collection.assemblyIds.length;
+  const totalAmount = filter.unfilteredIds.length;
   return {
     displayProps: {
       totalAmount,

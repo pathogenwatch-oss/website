@@ -4,14 +4,14 @@ import { SET_TREE } from '../actions/tree';
 
 import { sortAssemblies } from '../constants/table';
 
-function replaceSubtypeDisplayNames(uploaded, reference) {
+function replaceSubtypeAssemblyNames(uploaded, reference) {
   return Object.keys(uploaded)
     .reduce(function (memo, assemblyId) {
       const { populationSubtype, ...assembly } = uploaded[assemblyId];
       memo[assemblyId] = {
         ...assembly,
         populationSubtype:
-          reference[populationSubtype].metadata.assemblyName,
+          reference[populationSubtype].originalAssemblyName,
       };
       return memo;
     }, {}
@@ -31,6 +31,7 @@ function addReferenceSTSuffixes(assemblies) {
             `${metadata.assemblyName}_ST${analysis.st}` :
             metadata.assemblyName,
         },
+        originalAssemblyName: metadata.assemblyName,
       };
       return memo;
     }, {}
@@ -47,9 +48,10 @@ export const assemblies = {
 
       if (result) {
         const [ uploaded, reference ] = result;
+        const referenceAssemblies = addReferenceSTSuffixes(reference.assemblies);
         return {
-          ...replaceSubtypeDisplayNames(uploaded.assemblies, reference.assemblies),
-          ...addReferenceSTSuffixes(reference.assemblies),
+          ...replaceSubtypeAssemblyNames(uploaded.assemblies, referenceAssemblies),
+          ...referenceAssemblies,
         };
       }
     },
@@ -57,7 +59,7 @@ export const assemblies = {
       if (ready && result) {
         return {
           ...state,
-          ...result.assemblies,
+          ...replaceSubtypeAssemblyNames(result.assemblies, state),
         };
       }
       return state;

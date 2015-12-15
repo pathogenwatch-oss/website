@@ -21,7 +21,7 @@ function buildAntibioticColumnProps(antibiotics) {
       columnKey: antibiotic,
       headerClasses: 'wgsa-table-header--resistance',
       cellClasses: 'wgsa-table-cell--resistance',
-      width: 24,
+      fixedWidth: 24,
       getCellContents({ columnKey }, { analysis }) {
         const value = analysis.resistanceProfile[columnKey];
         return (
@@ -53,14 +53,14 @@ const actions = {
       columns.push({
         columnKey: '__spacer',
         noHeader: true,
-        width: measureText(antibiotics[antibiotics.length - 1]) - 40,
+        fixedWidth: Math.cos(45 * Math.PI / 180) *
+          measureText(antibiotics[antibiotics.length - 1]) - 40,
         getCellContents() {},
       });
 
       return {
         ...state,
         columns,
-        calculatedColumnWidths: [ columns[0] ],
         tableProps: {
           headerHeight: antibiotics.reduce((maxWidth, antibiotic) => {
             return Math.max(maxWidth, measureText(antibiotic));

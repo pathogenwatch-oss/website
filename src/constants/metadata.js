@@ -45,25 +45,33 @@ export const systemColumnProps = [
   },
   { columnKey: '__assembly_length',
     valueGetter({ metadata }) {
-      return metadata.metrics.totalNumberOfNucleotidesInDnaStrings;
+      return metadata.metrics ?
+        metadata.metrics.totalNumberOfNucleotidesInDnaStrings :
+        null;
     },
     getCellContents,
   },
   { columnKey: '__n50',
     valueGetter({ metadata }) {
-      return metadata.metrics.contigN50;
+      return metadata.metrics ?
+        metadata.metrics.contigN50 :
+        null;
     },
     getCellContents,
   },
   { columnKey: '__no._contigs',
     valueGetter({ metadata }) {
-      return metadata.metrics.totalNumberOfContigs;
+      return metadata.metrics ?
+        metadata.metrics.totalNumberOfContigs :
+        null;
     },
     getCellContents,
   },
   { columnKey: '__n_count',
     valueGetter({ metadata }) {
-      return metadata.metrics.totalNumberOfNsInDnaStrings;
+      return metadata.metrics ?
+        metadata.metrics.totalNumberOfNsInDnaStrings :
+        null;
     },
     getCellContents,
   },

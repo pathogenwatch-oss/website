@@ -1,5 +1,5 @@
-import '../../css/tree.css';
-import '../../css/loading.css';
+import '^/css/tree.css';
+import '^/css/loading.css';
 
 import React from 'react';
 import PhyloCanvas from 'phylocanvas';
@@ -25,10 +25,11 @@ export default React.createClass({
     newick: React.PropTypes.string,
     header: React.PropTypes.any,
     styleTree: React.PropTypes.func,
+    onLoaded: React.PropTypes.func,
     onUpdated: React.PropTypes.func,
-    onRedrawOriginalTree: React.PropTypes.func,
     loading: React.PropTypes.bool,
     filenames: React.PropTypes.object,
+    setUnfilteredIds: React.PropTypes.func,
   },
 
   getInitialState() {
@@ -58,19 +59,15 @@ export default React.createClass({
     phylocanvas.setTreeType(this.state.treeType);
 
     phylocanvas.on('subtree', () => {
-      FilteredDataActionCreators.setBaseAssemblyIds(
-        this.phylocanvas.leaves.map(_ => _.id)
-      );
+      this.props.setUnfilteredIds(this.phylocanvas.leaves.map(_ => _.id));
     });
 
     phylocanvas.on('original-tree', () => {
-      this.styleTree(this.phylocanvas);
-      this.phylocanvas.fitInPanel();
-      this.phylocanvas.draw();
-
-      this.props.onRedrawOriginalTree();
+      this.props.setUnfilteredIds(this.phylocanvas.leaves.map(_ => _.id));
     });
 
+    this.onLoaded = () => this.props.onLoaded(phylocanvas);
+    phylocanvas.on('loaded', this.onLoaded);
     phylocanvas.on('updated', this.props.onUpdated);
 
     this.phylocanvas = phylocanvas;
@@ -79,14 +76,18 @@ export default React.createClass({
   },
 
   componentWillUpdate() {
-    this.phylocanvas.containerElement.removeEventListener('updated', this.props.onUpdated);
+    const { containerElement } = this.phylocanvas;
+    containerElement.removeEventListener('updated', this.props.onUpdated);
+    containerElement.removeEventListener('loaded', this.onLoaded);
   },
 
   componentDidUpdate(previous) {
     this.phylocanvas.resizeToContainer();
 
-    const { onUpdated, filenames, newick } = this.props;
+    const { onLoaded, onUpdated, filenames, newick } = this.props;
 
+    this.onLoaded = () => onLoaded(this.phylocanvas);
+    this.phylocanvas.on('loaded', this.onLoaded);
     this.phylocanvas.on('updated', onUpdated);
 
     if (filenames !== previous.filenames) {

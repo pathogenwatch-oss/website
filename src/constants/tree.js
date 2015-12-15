@@ -1,5 +1,9 @@
 import { displayTree } from '../actions/tree';
-import { activateFilter, resetFilter } from '../actions/filter';
+import {
+  setUnfilteredIds,
+  activateFilter,
+  resetFilter,
+} from '../actions/filter';
 
 import { formatColumnLabel } from '../constants/table';
 import Species from '../species';
@@ -87,6 +91,9 @@ function getStandardTreeFunctions(state, dispatch) {
         leaf.highlighted = (filter.active && filter.ids.has(leaf.id));
       });
     },
+    onLoaded({ leaves }) {
+      dispatch(setUnfilteredIds(leaves.map(_ => _.id)));
+    },
     onUpdated(event) {
       if (event.property !== 'selected') {
         return;
@@ -97,9 +104,6 @@ function getStandardTreeFunctions(state, dispatch) {
       } else {
         dispatch(resetFilter());
       }
-    },
-    onRedrawOriginalTree() {
-      dispatch(resetFilter());
     },
   };
 }
@@ -133,6 +137,9 @@ function getPopulationTreeFunctions(state, dispatch) {
           leaf.highlighted = (filter.active && assemblyIds.some(filterHasId));
         }
       }
+    },
+    onLoaded() {
+      dispatch(setUnfilteredIds(collection.assemblyIds));
     },
     onUpdated(event) {
       if (event.property !== 'selected') {

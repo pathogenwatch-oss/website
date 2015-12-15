@@ -8,6 +8,15 @@ export function activateFilter(ids) {
   };
 }
 
+export const SET_UNFILTERED_IDS = 'SET_UNFILTERED_IDS';
+
+export function setUnfilteredIds(ids) {
+  return {
+    type: SET_UNFILTERED_IDS,
+    ids,
+  };
+}
+
 
 export const RESET_FILTER = 'RESET_FILTER';
 

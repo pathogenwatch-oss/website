@@ -6,30 +6,6 @@ import { Table, Column, Cell } from 'fixed-data-table';
 
 import { formatColumnLabel } from '../constants/table';
 
-const canvas = document.createElement('canvas').getContext('2d');
-canvas.font = '13px "Helvetica","Arial",sans-serif';
-
-const cellPadding = 36;
-
-function measureText(text) {
-  return canvas.measureText(text).width + cellPadding;
-}
-
-function calculateColumnWidths(columns, data) {
-  return columns.reduce((widths, column) => {
-    const { columnKey, getCellContents } = column;
-    const columnLabelWidth = measureText(formatColumnLabel(columnKey));
-
-    widths[columnKey] = data.reduce((maxWidth, row) => {
-      return Math.max(
-        maxWidth,
-        columnLabelWidth,
-        measureText(getCellContents(column, row) || ''),
-      );
-    }, 0);
-    return widths;
-  }, {});
-}
 
 function getClassNames(baseClass, selected, extraClasses) {
   return (
@@ -57,16 +33,6 @@ export default React.createClass({
     headerClickHandler: React.PropTypes.func,
     rowClickHandler: React.PropTypes.func,
     activeColumn: React.PropTypes.object,
-  },
-
-  getInitialState() {
-    const { calculatedColumnWidths, columns, data } = this.props;
-    return {
-      columnWidths: calculateColumnWidths(
-        calculatedColumnWidths || columns,
-        data
-      ),
-    };
   },
 
   getRow(index) {
@@ -125,7 +91,7 @@ export default React.createClass({
               key={props.columnKey}
               header={this.renderHeader.bind(null, props)}
               cell={this.renderCell.bind(null, props)}
-              width={this.state.columnWidths[props.columnKey] || 96}
+              width={props.fixedWidth || props.width || 96}
               flexGrow={1}
               { ...props }
             />
