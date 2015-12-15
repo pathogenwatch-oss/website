@@ -24,7 +24,7 @@ ExplorerMap.propTypes = {
   dispatch: React.PropTypes.func,
 };
 
-function mapStateToProps({ display, tables, entities }) {
+function mapStateToProps({ display, collection, tables, entities }) {
   const { mapMarkers } = display;
   const { resistanceProfile } = tables;
   const { assemblies } = entities;
@@ -33,15 +33,19 @@ function mapStateToProps({ display, tables, entities }) {
     mapMarkers,
     colourGetter: resistanceProfile.activeColumn.valueGetter,
     assemblies,
+    collection,
   };
 }
 
-function mapStateToMarker(markerDef, { colourGetter, assemblies }, dispatch) {
+function mapStateToMarker(markerDef, state, dispatch) {
   const { assemblyIds } = markerDef;
+  const { colourGetter, assemblies, collection } = state;
 
   markerDef.onClick = () => dispatch(activateFilter(assemblyIds));
   markerDef.icon = MapUtils.getMarkerIcon(
-    Array.from(assemblyIds).map(id => assemblies[id]), colourGetter
+    assemblyIds.map(id => assemblies[id]),
+    colourGetter,
+    collection.assemblyIds
   );
 
   return markerDef;

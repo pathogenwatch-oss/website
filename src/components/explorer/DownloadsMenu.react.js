@@ -43,7 +43,7 @@ DownloadsMenu.propTypes = {
 function mapStateToProps({ downloads, collection, filter }) {
   return {
     collectionId: collection.id,
-    assemblyIds: filter.active ? [ ...filter.ids ] : collection.assemblyIds,
+    assemblyIds: [ ...(filter.active ?  filter.ids : filter.unfilteredIds) ],
     ...downloads,
   };
 }

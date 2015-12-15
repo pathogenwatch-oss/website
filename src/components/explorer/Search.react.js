@@ -63,9 +63,9 @@ const Search = React.createClass({
 
 });
 
-function mapStateToProps({ collection, tables, filter, entities }) {
+function mapStateToProps({ tables, filter, entities }) {
   const { activeColumn } = tables.metadata;
-  const totalAmount = filter.unfilteredIds.length;
+  const totalAmount = filter.unfilteredIds.size;
   return {
     displayProps: {
       totalAmount,
@@ -73,7 +73,7 @@ function mapStateToProps({ collection, tables, filter, entities }) {
       filterColumnName: formatColumnLabel(activeColumn.columnKey),
     },
     activeColumn,
-    assemblies: collection.assemblyIds.map(id => entities.assemblies[id]),
+    assemblies: [ ...filter.unfilteredIds ].map(id => entities.assemblies[id]),
   };
 }
 

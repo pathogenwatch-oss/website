@@ -16,7 +16,7 @@ function handleRowClick({ assemblyId }, { ids, active }, dispatch) {
   if (active && ids.size === 1 && ids.has(assemblyId)) {
     dispatch(resetFilter());
   } else {
-    dispatch(activateFilter(new Set().add(assemblyId)));
+    dispatch(activateFilter([ assemblyId ]));
   }
 }
 
@@ -51,8 +51,8 @@ const SouthContent = React.createClass({
 });
 
 function getTableData(assemblies, filter) {
-  const ids = filter.active ? [ ...filter.ids ] : filter.unfilteredIds;
-  return ids.map(id => assemblies[id]);
+  const ids = filter.active ? filter.ids : filter.unfilteredIds;
+  return [ ...ids ].map(id => assemblies[id]);
 }
 
 function mapStateToProps({ entities, display, tables, filter }) {

@@ -22,6 +22,7 @@ export function sortAssemblies(assemblies, id1, id2) {
   return 0;
 }
 
+
 const canvas = document.createElement('canvas').getContext('2d');
 canvas.font = '13px "Helvetica","Arial",sans-serif';
 
@@ -39,13 +40,13 @@ export function addColumnWidth(column, data) {
   const { columnKey, getCellContents } = column;
   const columnLabelWidth = measureText(formatColumnLabel(columnKey));
 
-  column.width = data.reduce((maxWidth, row) => {
+  column.width = data.length ? data.reduce((maxWidth, row) => {
     return Math.max(
       maxWidth,
       columnLabelWidth,
       measureText(getCellContents(column, row) || ''),
     );
-  }, 0);
+  }, 0) : columnLabelWidth;
 
   return column;
 }

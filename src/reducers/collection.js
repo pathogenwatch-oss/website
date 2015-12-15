@@ -86,10 +86,11 @@ export const collection = {
         const [ uploaded ] = result;
         return {
           ...state,
-          assemblyIds:
+          assemblyIds: new Set(
             Object.keys(uploaded.assemblies).sort(
               sortAssemblies.bind(null, uploaded.assemblies)
-            ),
+            )
+          ),
           subtrees: uploaded.subtrees,
         };
       }
@@ -109,7 +110,7 @@ export const reference = {
         const [ , referenceCollection ] = result;
         return {
           ...state,
-          assemblyIds: Object.keys(referenceCollection.assemblies),
+          assemblyIds: new Set(Object.keys(referenceCollection.assemblies)),
         };
       }
     },

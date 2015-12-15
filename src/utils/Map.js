@@ -56,10 +56,10 @@ function drawDoubleColourMarker([ colour1, colour2 ], strokeColour = COLOUR) {
   return canvas.toDataURL();
 }
 
-function getMarkerIcon(assemblies, colourGetter) {
+function getMarkerIcon(assemblies, colourGetter, collectionAssemblyIds) {
   const colours = new Set();
   for (const assembly of assemblies) {
-    colours.add(colourGetter(assembly));
+    colours.add(colourGetter(assembly, collectionAssemblyIds));
   }
   return colours.size === 2 ?
     drawDoubleColourMarker(Array.from(colours).sort()) :
@@ -95,11 +95,12 @@ function getMarkerDefinitions(assemblies, {
       const assemblyIds = positionAssemblies.map(_ => _.metadata.assemblyId);
       return {
         position: JSON.parse(position),
-        assemblyIds: new Set(assemblyIds),
+        assemblyIds,
         icon: standardMarkerIcon,
         onClick: onClick ? onClick.bind(null, assemblyIds) : null,
         infoWindow: createInfoWindow ? createInfoWindow(positionAssemblies) : null,
         active: true,
+        visible: true,
       };
     });
 }

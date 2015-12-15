@@ -1,5 +1,11 @@
 import { FETCH_ENTITIES } from '../actions/fetch';
-import { ACTIVATE_FILTER, RESET_FILTER } from '../actions/filter';
+import { SET_TREE } from '../actions/tree';
+import {
+  SET_UNFILTERED_IDS,
+  ACTIVATE_FILTER,
+  RESET_FILTER,
+} from '../actions/filter';
+
 
 import MapUtils from '^/utils/Map';
 
@@ -14,6 +20,22 @@ const actions = {
       );
     }
     return state;
+  },
+  [SET_TREE]: function (state, { ready, result }) {
+    if (ready && result) {
+      return state.concat(MapUtils.getMarkerDefinitions(
+        Object.keys(result.assemblies).map(id => result.assemblies[id])
+      ));
+    }
+    return state;
+  },
+  [SET_UNFILTERED_IDS]: function (state, { ids }) {
+    return state.map(markerDef => {
+      if ([ ...markerDef.assemblyIds ].some(id => ids.has(id))) {
+        return { ...markerDef, visible: true };
+      }
+      return { ...markerDef, visible: false };
+    });
   },
   [ACTIVATE_FILTER]: function (state, { ids }) {
     return state.map(markerDef => {

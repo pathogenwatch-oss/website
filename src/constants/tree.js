@@ -56,24 +56,22 @@ function getStandardTreeFunctions(state, dispatch) {
   const { entities, tables, filter, collection, reference } = state;
   const { metadata, resistanceProfile } = tables;
 
-  const assemblyIdsInCollection = new Set(collection.assemblyIds);
-  const assemblyIdsInReference = new Set(reference.assemblyIds);
-
   return {
     styleTree(tree) {
       tree.leaves.forEach((leaf) => {
         const assembly = entities.assemblies[leaf.id];
 
-        if (assemblyIdsInCollection.has(leaf.id)) {
+        if (collection.assemblyIds.has(leaf.id)) {
           leaf.labelStyle = styles.emphasizedLeaf.labelStyle;
           leaf.interactive = true;
-        } else if (assemblyIdsInReference.has(leaf.id)) {
+        } else if (reference.assemblyIds.has(leaf.id)) {
           leaf.nodeShape = 'triangle';
           leaf.labelStyle = {
             colour: COLOUR,
             format: 'bold',
           };
         } else {
+          // assumed public
           leaf.nodeShape = 'square';
         }
 
@@ -81,7 +79,7 @@ function getStandardTreeFunctions(state, dispatch) {
           leafStyle: {
             strokeStyle: COLOUR,
             fillStyle: resistanceProfile.activeColumn.valueGetter(
-              assembly, assemblyIdsInCollection
+              assembly, collection.assemblyIds
             ),
             lineWidth: 2,
           },
@@ -100,7 +98,7 @@ function getStandardTreeFunctions(state, dispatch) {
       }
       const { nodeIds } = event;
       if (nodeIds.length) {
-        dispatch(activateFilter(new Set(nodeIds)));
+        dispatch(activateFilter(nodeIds));
       } else {
         dispatch(resetFilter());
       }
