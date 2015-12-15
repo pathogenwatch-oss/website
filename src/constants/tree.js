@@ -116,15 +116,7 @@ function getPopulationTreeFunctions(state, dispatch) {
         leaf.setDisplay(styles.defaultLeaf);
 
         const assembly = assemblies[leaf.id];
-        if (!assembly) {
-          leaf.label = leaf.id;
-          continue;
-        }
-
-        leaf.label = assembly.metadata.assemblyName;
-        if (assembly.analysis) {
-          leaf.label += `_ST${assembly.analysis.st}`;
-        }
+        leaf.label = assembly ? assembly.metadata.assemblyName : leaf.id;
       }
 
       tree.root.cascadeFlag('interactive', false);
@@ -137,6 +129,7 @@ function getPopulationTreeFunctions(state, dispatch) {
           leaf.interactive = true;
           leaf.label = `${leaf.label} (${assemblyIds.length})`;
           leaf.setDisplay(styles.emphasizedLeaf);
+          leaf.nodeShape = styles.defaultLeaf.shape;
           leaf.highlighted = (filter.active && assemblyIds.some(filterHasId));
         }
       }

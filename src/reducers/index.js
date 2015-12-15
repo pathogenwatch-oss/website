@@ -14,7 +14,6 @@ import filter from './filter';
 
 import downloads from './downloads';
 import downloadsMenu from './downloadsMenu';
-import treeLinks from './treeLinks';
 
 import bodyClickEvent from './bodyClickEvent';
 
@@ -49,7 +48,6 @@ export default combineReducers({
   filter: createReducer(filter),
   downloads: combineReducers({
     menuOpen: createReducer(downloadsMenu),
-    treeLinks: createReducer(treeLinks),
     files: createReducer(downloads),
   }),
   bodyClickEvent,

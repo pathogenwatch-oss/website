@@ -18,6 +18,25 @@ function replaceSubtypeDisplayNames(uploaded, reference) {
   );
 }
 
+function addReferenceSTSuffixes(assemblies) {
+  return Object.keys(assemblies)
+    .reduce(function (memo, assemblyId) {
+      const { metadata, analysis, ...assembly } = assemblies[assemblyId];
+      memo[assemblyId] = {
+        ...assembly,
+        analysis,
+        metadata: {
+          ...metadata,
+          assemblyName: analysis ?
+            `${metadata.assemblyName}_ST${analysis.st}` :
+            metadata.assemblyName,
+        },
+      };
+      return memo;
+    }, {}
+  );
+}
+
 export const assemblies = {
   initialState: {},
   actions: {
@@ -30,7 +49,7 @@ export const assemblies = {
         const [ uploaded, reference ] = result;
         return {
           ...replaceSubtypeDisplayNames(uploaded.assemblies, reference.assemblies),
-          ...reference.assemblies,
+          ...addReferenceSTSuffixes(reference.assemblies),
         };
       }
     },

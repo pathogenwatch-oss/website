@@ -15,14 +15,14 @@ const initialState = {
     description: 'Core Checksum Distribution (.csv)',
   },
   amr_profile_collection: {
-    description: 'AMR profile (.csv)',
+    description: 'AMR Profile (.csv)',
   },
   score_matrix: {
     description: 'Score Matrix (.csv)',
     collection: true,
   },
   differences_matrix: {
-    description: 'Differences Matrix (.csv)',
+    description: 'Difference Matrix (.csv)',
     collection: true,
   },
 };
