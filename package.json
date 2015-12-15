@@ -1,6 +1,6 @@
 {
   "name": "macroreact-middle",
-  "version": "2.2.0-rc1",
+  "version": "3.0.0-rc1",
   "description": "Middle layer for Macroreact",
   "main": "app.js",
   "engines": {
@@ -21,7 +21,7 @@
     "serve-favicon": "^2.2.0",
     "socket.io": "^1.2.1",
     "swig": "^1.4.2",
-    "wgsa_front-end": "imperialcollegelondon/wgsa_front-end#v2.2.0-rc5"
+    "wgsa_front-end": "imperialcollegelondon/wgsa_front-end#v3.0.0-rc1"
   },
   "devDependencies": {
     "cgps-style": "imperialcollegelondon/javascript#v1.0.1",
