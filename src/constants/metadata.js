@@ -13,25 +13,15 @@ export const systemColumnProps = [
     },
     getCellContents,
   },
-  { columnKey: '__pmid',
-    valueGetter({ metadata }) {
-      return metadata.pmid;
-    },
-    getCellContents({ valueGetter }, data) {
-      const pmid = valueGetter(data);
-      return (
-        <a href={`http://www.ncbi.nlm.nih.gov/pubmed/${pmid}`}
-          target="_blank"
-          onClick={(e) => e.stopPropagation()}
-        >
-          {pmid}
-        </a>
-      );
-    },
-  },
   { columnKey: '__date',
     valueGetter({ metadata }) {
       return MetadataUtils.getFormattedDateString(metadata.date);
+    },
+    getCellContents,
+  },
+  { columnKey: '__subtype',
+    valueGetter({ populationSubtype }) {
+      return populationSubtype;
     },
     getCellContents,
   },
@@ -47,16 +37,50 @@ export const systemColumnProps = [
     },
     getCellContents,
   },
-  { columnKey: '__subtype',
-    valueGetter({ populationSubtype }) {
-      return populationSubtype;
-    },
-    getCellContents,
-  },
   { columnKey: '__kernel_size',
     valueGetter({ analysis }) {
       return analysis.kernelSize;
     },
     getCellContents,
+  },
+  { columnKey: '__assembly_length',
+    valueGetter({ metadata }) {
+      return metadata.metrics.totalNumberOfNucleotidesInDnaStrings;
+    },
+    getCellContents,
+  },
+  { columnKey: '__n50',
+    valueGetter({ metadata }) {
+      return metadata.metrics.contigN50;
+    },
+    getCellContents,
+  },
+  { columnKey: '__no._contigs',
+    valueGetter({ metadata }) {
+      return metadata.metrics.totalNumberOfContigs;
+    },
+    getCellContents,
+  },
+  { columnKey: '__n_count',
+    valueGetter({ metadata }) {
+      return metadata.metrics.totalNumberOfNsInDnaStrings;
+    },
+    getCellContents,
+  },
+  { columnKey: '__pmid',
+    valueGetter({ metadata }) {
+      return metadata.pmid;
+    },
+    getCellContents({ valueGetter }, data) {
+      const pmid = valueGetter(data);
+      return (
+        <a href={`http://www.ncbi.nlm.nih.gov/pubmed/${pmid}`}
+          target="_blank"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {pmid}
+        </a>
+      );
+    },
   },
 ];
