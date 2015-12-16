@@ -13,57 +13,118 @@ context.lineWidth = LINE_WIDTH;
 const centerX = canvas.width / 2;
 const centerY = canvas.height / 2;
 
-const radius = MARKER_SIZE / 2 - LINE_WIDTH;
+const radius = MARKER_SIZE / 2;
+const lengthOfSquareSide = radius * Math.sqrt(2);
+const squareStartX = centerX - lengthOfSquareSide / 2;
+const scaledArea = Math.pow(lengthOfSquareSide, 2);
+const scaledRadius = Math.sqrt(scaledArea / Math.PI);
 
-function drawSingleColourMarker(fillColour, strokeColour = COLOUR) {
+const singleColour = {
+  circle(fillColour, strokeColour = COLOUR) {
+    context.beginPath();
+    context.arc(centerX, centerY, scaledRadius, 0, Math.PI * 2, false);
+    context.fillStyle = fillColour;
+    context.fill();
+    context.strokeStyle = strokeColour;
+    context.stroke();
+    context.closePath();
+  },
+  square(fillColour, strokeColour = COLOUR) {
+    context.beginPath();
+    context.moveTo(squareStartX, centerY);
+    context.lineTo(squareStartX, centerY + lengthOfSquareSide / 2);
+    context.lineTo(squareStartX + lengthOfSquareSide, centerY + lengthOfSquareSide / 2);
+    context.lineTo(squareStartX + lengthOfSquareSide, centerY - lengthOfSquareSide / 2);
+    context.lineTo(squareStartX, centerY - lengthOfSquareSide / 2);
+    context.lineTo(squareStartX, centerY);
+    context.fillStyle = fillColour;
+    context.fill();
+    context.strokeStyle = strokeColour;
+    context.stroke();
+    context.closePath();
+  },
+};
+
+const doubleColour = {
+  circle([ colour1, colour2 ], strokeColour = COLOUR) {
+    context.beginPath();
+    context.arc(centerX, centerY, radius, Math.PI * 0.5, Math.PI * 1.5, false);
+    context.fillStyle = colour1;
+    context.fill();
+    context.closePath();
+
+    context.beginPath();
+    context.arc(centerX, centerY, radius, Math.PI * 1.5, Math.PI * 0.5, false);
+    context.fillStyle = colour2;
+    context.fill();
+    context.closePath();
+
+    context.beginPath();
+    context.arc(centerX, centerY, radius, 0, Math.PI * 2, false);
+    context.strokeStyle = strokeColour;
+    context.stroke();
+    context.closePath();
+  },
+  square([ colour1, colour2 ], strokeColour = COLOUR) {
+    context.beginPath();
+    context.moveTo(squareStartX, centerY);
+    context.lineTo(squareStartX, centerY + lengthOfSquareSide / 2);
+    context.lineTo(squareStartX + lengthOfSquareSide / 2, centerY + lengthOfSquareSide / 2);
+    context.lineTo(squareStartX + lengthOfSquareSide / 2, centerY - lengthOfSquareSide / 2);
+    context.lineTo(squareStartX, centerY - lengthOfSquareSide / 2);
+    context.lineTo(squareStartX, centerY);
+    context.fillStyle = colour1;
+    context.fill();
+    context.closePath();
+
+    context.beginPath();
+    context.moveTo(centerX, centerY);
+    context.lineTo(centerX, centerY + lengthOfSquareSide / 2);
+    context.lineTo(centerX + lengthOfSquareSide / 2, centerY + lengthOfSquareSide / 2);
+    context.lineTo(centerX + lengthOfSquareSide / 2, centerY - lengthOfSquareSide / 2);
+    context.lineTo(centerX, centerY - lengthOfSquareSide / 2);
+    context.lineTo(centerX, centerY);
+    context.fillStyle = colour2;
+    context.fill();
+    context.closePath();
+
+    context.beginPath();
+    context.moveTo(squareStartX, centerY);
+    context.lineTo(squareStartX, centerY + lengthOfSquareSide / 2);
+    context.lineTo(squareStartX + lengthOfSquareSide, centerY + lengthOfSquareSide / 2);
+    context.lineTo(squareStartX + lengthOfSquareSide, centerY - lengthOfSquareSide / 2);
+    context.lineTo(squareStartX, centerY - lengthOfSquareSide / 2);
+    context.lineTo(squareStartX, centerY);
+    context.strokeStyle = strokeColour;
+    context.stroke();
+    context.closePath();
+  },
+};
+
+function drawIcon(tracePath, fillColour) {
   context.clearRect(0, 0, MARKER_SIZE, MARKER_SIZE);
-
-  context.beginPath();
-  context.arc(centerX, centerY, radius, 0, Math.PI * 2, false);
-  context.fillStyle = fillColour;
-  context.fill();
-  context.strokeStyle = strokeColour;
-  context.stroke();
-  context.closePath();
-
+  tracePath(fillColour);
   return canvas.toDataURL();
 }
 
-const standardMarkerIcon = drawSingleColourMarker(CGPS.COLOURS.PURPLE_LIGHT);
-const filteredMarkerIcon = drawSingleColourMarker('transparent');
+export const standardMarkerIcons = {
+  collection: drawIcon(singleColour.circle, CGPS.COLOURS.PURPLE_LIGHT),
+  nonCollection: drawIcon(singleColour.square, CGPS.COLOURS.PURPLE_LIGHT),
+};
+export const filteredMarkerIcons = {
+  collection: drawIcon(singleColour.circle, 'transparent'),
+  nonCollection: drawIcon(singleColour.square, 'transparent'),
+};
 
-function drawDoubleColourMarker([ colour1, colour2 ], strokeColour = COLOUR) {
-  context.clearRect(0, 0, MARKER_SIZE, MARKER_SIZE);
-
-  context.beginPath();
-  context.arc(centerX, centerY, radius, Math.PI * 0.5, Math.PI * 1.5, false);
-  context.fillStyle = colour1;
-  context.fill();
-  context.closePath();
-
-  context.beginPath();
-  context.arc(centerX, centerY, radius, Math.PI * 1.5, Math.PI * 0.5, false);
-  context.fillStyle = colour2;
-  context.fill();
-  context.closePath();
-
-  context.beginPath();
-  context.arc(centerX, centerY, radius, 0, Math.PI * 2, false);
-  context.strokeStyle = strokeColour;
-  context.stroke();
-  context.closePath();
-
-  return canvas.toDataURL();
-}
-
-function getMarkerIcon(assemblies, colourGetter, collectionAssemblyIds) {
+export function getMarkerIcon(assemblies, colourGetter, hasCollectionAssemblies) {
+  const shape = hasCollectionAssemblies ? 'circle' : 'square';
   const colours = new Set();
   for (const assembly of assemblies) {
-    colours.add(colourGetter(assembly, collectionAssemblyIds));
+    colours.add(colourGetter(assembly));
   }
   return colours.size === 2 ?
-    drawDoubleColourMarker(Array.from(colours).sort()) :
-    drawSingleColourMarker(Array.from(colours)[0]);
+    drawIcon(doubleColour[shape], Array.from(colours).sort()) :
+    drawIcon(singleColour[shape], Array.from(colours)[0]);
 }
 
 function mapPositionsToAssemblies(assemblies) {
@@ -86,7 +147,7 @@ function mapPositionsToAssemblies(assemblies) {
   return positionMap;
 }
 
-function getMarkerDefinitions(assemblies, {
+export function getMarkerDefinitions(assemblies, {
     onClick,
     createInfoWindow,
   } = {}) {
@@ -96,7 +157,6 @@ function getMarkerDefinitions(assemblies, {
       return {
         position: JSON.parse(position),
         assemblyIds,
-        icon: standardMarkerIcon,
         onClick: onClick ? onClick.bind(null, assemblyIds) : null,
         infoWindow: createInfoWindow ? createInfoWindow(positionAssemblies) : null,
         active: true,
@@ -107,7 +167,7 @@ function getMarkerDefinitions(assemblies, {
 
 export default {
   getMarkerDefinitions,
-  standardMarkerIcon,
-  filteredMarkerIcon,
   getMarkerIcon,
+  standardMarkerIcons,
+  filteredMarkerIcons,
 };

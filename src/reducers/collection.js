@@ -48,9 +48,17 @@ export const assemblies = {
 
       if (result) {
         const [ uploaded, reference ] = result;
+        const uploadedAssemblies =
+          Object.keys(uploaded.assemblies).reduce(function (memo, key) {
+            memo[key] = {
+              ...uploaded.assemblies[key],
+              __isCollection: true,
+            };
+            return memo;
+          }, {});
         const referenceAssemblies = addReferenceSTSuffixes(reference.assemblies);
         return {
-          ...replaceSubtypeAssemblyNames(uploaded.assemblies, referenceAssemblies),
+          ...replaceSubtypeAssemblyNames(uploadedAssemblies, referenceAssemblies),
           ...referenceAssemblies,
         };
       }

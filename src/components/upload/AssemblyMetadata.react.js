@@ -42,7 +42,7 @@ export default React.createClass({
     const { latitude, longitude } = position;
 
     const showMap = latitude !== null && longitude !== null;
-    const markerDef = { position, active: true, icon: MapUtils.standardMarkerIcon };
+    const markerDef = { position, active: true, icon: MapUtils.standardMarkerIcons.collection };
     const additionalMetadataFields = this.getMetadataFieldComponents(metadata);
 
     return (

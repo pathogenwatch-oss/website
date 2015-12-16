@@ -40,13 +40,17 @@ function mapStateToProps({ display, collection, tables, entities }) {
 function mapStateToMarker(markerDef, state, dispatch) {
   const { assemblyIds } = markerDef;
   const { colourGetter, assemblies, collection } = state;
+  const isCollection = assemblyIds.some(id => collection.assemblyIds.has(id));
 
   markerDef.onClick = () => dispatch(activateFilter(assemblyIds));
-  markerDef.icon = MapUtils.getMarkerIcon(
-    assemblyIds.map(id => assemblies[id]),
-    colourGetter,
-    collection.assemblyIds
-  );
+  markerDef.icon = markerDef.active ?
+    MapUtils.getMarkerIcon(
+      assemblyIds.map(id => assemblies[id]),
+      colourGetter,
+      isCollection
+    ) :
+    MapUtils.filteredMarkerIcons[isCollection ? 'collection' : 'nonCollection'];
+
   markerDef.zIndex =
     assemblyIds.some(id => collection.assemblyIds.has(id)) ? 1 : 0;
 

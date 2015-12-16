@@ -30,10 +30,10 @@ function buildAntibioticColumnProps(antibiotics) {
           </i>
         );
       },
-      valueGetter(assembly, collectionAssemblyIds) {
+      valueGetter(assembly) {
         const { analysis } = assembly;
         if (!analysis.resistanceProfile) {
-          return defaultColourGetter(assembly, collectionAssemblyIds);
+          return defaultColourGetter(assembly);
         }
         const value = analysis.resistanceProfile[antibiotic];
         return value === 'RESISTANT' ? DEFAULT.DANGER_COLOUR : '#fff';

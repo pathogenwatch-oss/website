@@ -62,7 +62,7 @@ function updateMarker(marker, markerDef) {
   const { icon, active, infoWindow, onClick, visible, zIndex } = markerDef;
 
   marker.setOptions({
-    icon: active ? icon : MapUtils.filteredMarkerIcon,
+    icon: icon || MapUtils.standardMarkerIcons.collection,
     visible,
     zIndex: active ? zIndex : -1,
   });

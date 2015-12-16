@@ -168,9 +168,8 @@ export function getTreeFunctions(tree, state, dispatch) {
   return getStandardTreeFunctions(state, dispatch);
 }
 
-export function defaultColourGetter(assembly, collectionAssemblyIds) {
-  const { assemblyId } = assembly.metadata;
-  if (!collectionAssemblyIds || collectionAssemblyIds.has(assemblyId)) {
+export function defaultColourGetter(assembly) {
+  if (assembly.__isCollection) {
     return CGPS.COLOURS.PURPLE_LIGHT;
   }
 
