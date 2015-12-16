@@ -24,9 +24,11 @@ export function sortAssemblies(assemblies, id1, id2) {
 
 
 const canvas = document.createElement('canvas').getContext('2d');
-canvas.font = '13px "Helvetica","Arial",sans-serif';
 
-const cellPadding = 36;
+const cellPadding = 40;
+
+const getFontString =
+  (weight = 'normal') => `13px ${weight} "Helvetica","Arial",sans-serif`;
 
 function measureText(text) {
   return canvas.measureText(text).width + cellPadding;
@@ -37,14 +39,17 @@ export function addColumnWidth(column, data) {
     return column;
   }
 
-  const { columnKey, getCellContents } = column;
+  const { columnKey, valueGetter } = column;
+  canvas.font = getFontString();
   const columnLabelWidth = measureText(formatColumnLabel(columnKey));
 
   column.width = data.length ? data.reduce((maxWidth, row) => {
+    const weight = row.__isCollection || row.__isreference ? 'bold' : 'normal';
+    canvas.font = getFontString(weight);
     return Math.max(
       maxWidth,
       columnLabelWidth,
-      measureText(getCellContents(column, row) || ''),
+      measureText(valueGetter(row) || ''),
     );
   }, 0) : columnLabelWidth;
 

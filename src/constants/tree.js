@@ -26,19 +26,7 @@ export function getTitle(tree, assembly) {
 }
 
 const styles = {
-  defaultLeaf: {
-    leafStyle: {
-      fillStyle: CGPS.COLOURS.GREY,
-      strokeStyle: COLOUR,
-      lineWidth: 2,
-    },
-    labelStyle: {
-      colour: COLOUR,
-      format: 'bold',
-    },
-    shape: 'triangle',
-  },
-  emphasizedLeaf: {
+  collectionLeaf: {
     leafStyle: {
       fillStyle: CGPS.COLOURS.PURPLE_LIGHT,
       strokeStyle: COLOUR,
@@ -49,6 +37,29 @@ const styles = {
       format: 'bold',
     },
     shape: 'circle',
+  },
+  publicLeaf: {
+    leafStyle: {
+      fillStyle: CGPS.COLOURS.GREY,
+      strokeStyle: COLOUR,
+      lineWidth: 2,
+    },
+    labelStyle: {
+      colour: 'rgba(33, 33, 33, 1)',
+    },
+    shape: 'square',
+  },
+  referenceLeaf: {
+    leafStyle: {
+      fillStyle: CGPS.COLOURS.GREY,
+      strokeStyle: COLOUR,
+      lineWidth: 2,
+    },
+    labelStyle: {
+      colour: 'rgba(33, 33, 33, 1)',
+      format: 'bold',
+    },
+    shape: 'triangle',
   },
 };
 
@@ -62,19 +73,14 @@ function getStandardTreeFunctions(state, dispatch) {
         const assembly = entities.assemblies[leaf.id];
 
         if (collection.assemblyIds.has(leaf.id)) {
-          leaf.labelStyle = styles.emphasizedLeaf.labelStyle;
-          leaf.interactive = true;
+          leaf.setDisplay(styles.collectionLeaf);
         } else if (reference.assemblyIds.has(leaf.id)) {
-          leaf.nodeShape = 'triangle';
-          leaf.labelStyle = {
-            colour: COLOUR,
-            format: 'bold',
-          };
+          leaf.setDisplay(styles.referenceLeaf);
         } else {
-          // assumed public
-          leaf.nodeShape = 'square';
+          leaf.setDisplay(styles.publicLeaf);
         }
 
+        // add dynamic leaf style
         leaf.setDisplay({
           leafStyle: {
             strokeStyle: COLOUR,
@@ -115,7 +121,7 @@ function getPopulationTreeFunctions(state, dispatch) {
   return {
     styleTree(tree) {
       for (const leaf of tree.leaves) {
-        leaf.setDisplay(styles.defaultLeaf);
+        leaf.setDisplay(styles.referenceLeaf);
 
         const assembly = assemblies[leaf.id];
         leaf.label = assembly ? assembly.metadata.assemblyName : leaf.id;
@@ -130,8 +136,8 @@ function getPopulationTreeFunctions(state, dispatch) {
         if (leaf) {
           leaf.interactive = true;
           leaf.label = `${leaf.label} (${assemblyIds.length})`;
-          leaf.setDisplay(styles.emphasizedLeaf);
-          leaf.nodeShape = styles.defaultLeaf.shape;
+          leaf.setDisplay(styles.collectionLeaf);
+          leaf.nodeShape = styles.referenceLeaf.shape;
           leaf.highlighted = (filter.active && assemblyIds.some(filterHasId));
         }
       }
