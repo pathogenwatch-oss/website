@@ -174,7 +174,7 @@ export function defaultColourGetter(assembly, collectionAssemblyIds) {
     return CGPS.COLOURS.PURPLE_LIGHT;
   }
 
-  return CGPS.COLOURS.GREY;
+  return CGPS.COLOURS.GREY_DARK;
 }
 
 const TREE_LABELS_SUFFIX = 'tree_labels.txt';

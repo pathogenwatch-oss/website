@@ -47,6 +47,8 @@ function mapStateToMarker(markerDef, state, dispatch) {
     colourGetter,
     collection.assemblyIds
   );
+  markerDef.zIndex =
+    assemblyIds.some(id => collection.assemblyIds.has(id)) ? 1 : 0;
 
   return markerDef;
 }

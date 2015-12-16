@@ -58,10 +58,13 @@ function openInfoWindow(infoWindow) {
   currentInfoWindow = infoWindow;
 }
 
-function updateMarker(marker, { icon, active, infoWindow, onClick, visible }) {
+function updateMarker(marker, markerDef) {
+  const { icon, active, infoWindow, onClick, visible, zIndex } = markerDef;
+
   marker.setOptions({
     icon: active ? icon : MapUtils.filteredMarkerIcon,
     visible,
+    zIndex: active ? zIndex : -1,
   });
 
   google.maps.event.clearListeners(marker, 'click');

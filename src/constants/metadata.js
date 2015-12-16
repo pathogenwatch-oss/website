@@ -11,7 +11,7 @@ const collectionStyle = {
 export const getCellContents = ({ valueGetter },  data) => valueGetter(data);
 
 export const systemColumnProps = [
-  { columnKey: '__assembly',
+  { columnKey: '__name',
     fixed: true,
     selected: true,
     valueGetter({ metadata }) {
