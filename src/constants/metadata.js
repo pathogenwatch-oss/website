@@ -37,7 +37,7 @@ export const systemColumnProps = [
     },
     getCellContents,
   },
-  { columnKey: '__kernel_size',
+  { columnKey: '__core_matches',
     valueGetter({ analysis }) {
       return analysis.kernelSize;
     },
