@@ -58,6 +58,12 @@ export default React.createClass({
 
     phylocanvas.setTreeType(this.state.treeType);
 
+    phylocanvas.on('loaded', () => {
+      this.styleTree(phylocanvas);
+      phylocanvas.fitInPanel();
+      phylocanvas.draw();
+    });
+
     phylocanvas.on('subtree', () => {
       this.props.setUnfilteredIds(this.phylocanvas.leaves.map(_ => _.id));
     });
@@ -128,11 +134,7 @@ export default React.createClass({
   phylocanvas: null,
 
   loadTree() {
-    this.phylocanvas.load(this.props.newick, () => {
-      this.styleTree(this.phylocanvas);
-      this.phylocanvas.fitInPanel();
-      this.phylocanvas.draw();
-    });
+    this.phylocanvas.load(this.props.newick);
   },
 
   styleTree(tree) {
