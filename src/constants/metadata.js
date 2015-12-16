@@ -1,39 +1,11 @@
 import React from 'react';
 
+import { nameColumnProps, getCellContents } from '../constants/table';
 import MetadataUtils from '../utils/Metadata';
 
-import { CGPS } from '^/defaults';
-
-const collectionStyle = {
-  color: CGPS.COLOURS.PURPLE,
-};
-
-export const getCellContents = ({ valueGetter },  data) => valueGetter(data);
-
 export const systemColumnProps = [
-  { columnKey: '__name',
-    fixed: true,
+  { ...nameColumnProps,
     selected: true,
-    valueGetter({ metadata }) {
-      return metadata.assemblyName;
-    },
-    getCellContents({ valueGetter }, data) {
-      const text = valueGetter(data);
-
-      if (data.__isCollection) {
-        return (
-          <strong style={collectionStyle}>{text}</strong>
-        );
-      }
-
-      if (data.__isReference) {
-        return (
-          <strong>{text}</strong>
-        );
-      }
-
-      return text;
-    },
   },
   { columnKey: '__date',
     valueGetter({ metadata }) {

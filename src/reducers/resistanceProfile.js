@@ -86,7 +86,7 @@ const initialActiveColumn = {
 const initialState = {
   activeColumn: initialActiveColumn,
   headerClick(column) {
-    if (this.activeColumn === column || !column.valueGetter) {
+    if (this.activeColumn === column || column === systemColumnProps[0]) {
       return setColourColumn(initialActiveColumn);
     }
     return setColourColumn(column);

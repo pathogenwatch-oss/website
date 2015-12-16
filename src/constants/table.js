@@ -1,7 +1,42 @@
+import React from 'react';
 
-export const metadata = 'metadata';
+import { CGPS } from '^/defaults';
 
-export const resistanceProfile = 'resistanceProfile';
+
+export const tableKeys = {
+  metadata: 'metadata',
+  resistanceProfile: 'resistanceProfile',
+};
+
+export const getCellContents = ({ valueGetter },  data) => valueGetter(data);
+
+const collectionStyle = { color: CGPS.COLOURS.PURPLE };
+
+export const nameColumnProps = {
+  columnKey: '__name',
+  fixed: true,
+  valueGetter({ metadata }) {
+    return metadata.assemblyName;
+  },
+  getCellContents({ valueGetter }, data) {
+    const text = valueGetter(data);
+
+    if (data.__isCollection) {
+      return (
+        <strong style={collectionStyle}>{text}</strong>
+      );
+    }
+
+    if (data.__isReference) {
+      return (
+        <strong>{text}</strong>
+      );
+    }
+
+    return text;
+  },
+};
+
 
 export const formatColumnLabel =
   (columnkey) => columnkey.replace(/^__/, '').replace(/_/g, ' ').toUpperCase();

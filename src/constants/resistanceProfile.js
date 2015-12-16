@@ -1,10 +1,7 @@
+import { nameColumnProps } from '../constants/table';
 
 export const systemColumnProps = [
-  { columnKey: '__assembly',
-    fixed: true,
+  { ...nameColumnProps,
     cellClasses: 'wgsa-table-cell--bordered',
-    getCellContents(_, { metadata }) {
-      return metadata.assemblyName;
-    },
   },
 ];

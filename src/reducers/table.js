@@ -1,8 +1,8 @@
 import { SET_TABLE } from '../actions/table';
 
-import { metadata } from '../constants/table';
+import { tableKeys } from '../constants/table';
 
-const initialState = metadata;
+const initialState = tableKeys.metadata;
 
 const actions = {
   [SET_TABLE]: function (state, action) {

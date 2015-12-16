@@ -6,7 +6,10 @@ import Switch from '../Switch.react';
 
 import { setTable } from '^/actions/table';
 
-import { metadata, resistanceProfile } from '^/constants/table';
+import { tableKeys } from '^/constants/table';
+
+
+const { metadata, resistanceProfile } = tableKeys;
 
 const style = {
   position: 'absolute',
