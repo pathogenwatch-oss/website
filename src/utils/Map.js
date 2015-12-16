@@ -48,19 +48,19 @@ const singleColour = {
 const doubleColour = {
   circle([ colour1, colour2 ], strokeColour = COLOUR) {
     context.beginPath();
-    context.arc(centerX, centerY, radius, Math.PI * 0.5, Math.PI * 1.5, false);
+    context.arc(centerX, centerY, scaledRadius, Math.PI * 0.5, Math.PI * 1.5, false);
     context.fillStyle = colour1;
     context.fill();
     context.closePath();
 
     context.beginPath();
-    context.arc(centerX, centerY, radius, Math.PI * 1.5, Math.PI * 0.5, false);
+    context.arc(centerX, centerY, scaledRadius, Math.PI * 1.5, Math.PI * 0.5, false);
     context.fillStyle = colour2;
     context.fill();
     context.closePath();
 
     context.beginPath();
-    context.arc(centerX, centerY, radius, 0, Math.PI * 2, false);
+    context.arc(centerX, centerY, scaledRadius, 0, Math.PI * 2, false);
     context.strokeStyle = strokeColour;
     context.stroke();
     context.closePath();
@@ -107,24 +107,23 @@ function drawIcon(tracePath, fillColour) {
   return canvas.toDataURL();
 }
 
-export const standardMarkerIcons = {
-  collection: drawIcon(singleColour.circle, CGPS.COLOURS.PURPLE_LIGHT),
-  nonCollection: drawIcon(singleColour.square, CGPS.COLOURS.PURPLE_LIGHT),
-};
-export const filteredMarkerIcons = {
-  collection: drawIcon(singleColour.circle, 'transparent'),
-  nonCollection: drawIcon(singleColour.square, 'transparent'),
-};
-
-export function getMarkerIcon(assemblies, colourGetter, hasCollectionAssemblies) {
-  const shape = hasCollectionAssemblies ? 'circle' : 'square';
-  const colours = new Set();
-  for (const assembly of assemblies) {
-    colours.add(colourGetter(assembly));
+const ICONS = {};
+function getIcon(shape, colours) {
+  const key = `${shape}|${colours.join('|')}`;
+  if (!ICONS[key]) {
+    ICONS[key] =
+      colours.length === 2 ?
+        drawIcon(doubleColour[shape], colours) :
+        drawIcon(singleColour[shape], colours[0]);
   }
-  return colours.size === 2 ?
-    drawIcon(doubleColour[shape], Array.from(colours).sort()) :
-    drawIcon(singleColour[shape], Array.from(colours)[0]);
+  return ICONS[key];
+}
+
+export const standardMarkerIcon =
+  getIcon('circle', [ CGPS.COLOURS.PURPLE_LIGHT ]);
+
+export function getMarkerIcon(shape, colours) {
+  return getIcon(shape, Array.from(colours).sort());
 }
 
 function mapPositionsToAssemblies(assemblies) {
@@ -168,6 +167,5 @@ export function getMarkerDefinitions(assemblies, {
 export default {
   getMarkerDefinitions,
   getMarkerIcon,
-  standardMarkerIcons,
-  filteredMarkerIcons,
+  standardMarkerIcon,
 };

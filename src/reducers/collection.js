@@ -18,7 +18,7 @@ function replaceSubtypeAssemblyNames(uploaded, reference) {
   );
 }
 
-function addReferenceSTSuffixes(assemblies) {
+function decorateReferenceAssemblies(assemblies) {
   return Object.keys(assemblies)
     .reduce(function (memo, assemblyId) {
       const { metadata, analysis, ...assembly } = assemblies[assemblyId];
@@ -32,10 +32,21 @@ function addReferenceSTSuffixes(assemblies) {
             metadata.assemblyName,
         },
         originalAssemblyName: metadata.assemblyName,
+        __isReference: true,
       };
       return memo;
     }, {}
   );
+}
+
+function decorateCollectionAssemblies(assemblies) {
+  return Object.keys(assemblies).reduce(function (memo, key) {
+    memo[key] = {
+      ...assemblies[key],
+      __isCollection: true,
+    };
+    return memo;
+  }, {});
 }
 
 export const assemblies = {
@@ -49,14 +60,9 @@ export const assemblies = {
       if (result) {
         const [ uploaded, reference ] = result;
         const uploadedAssemblies =
-          Object.keys(uploaded.assemblies).reduce(function (memo, key) {
-            memo[key] = {
-              ...uploaded.assemblies[key],
-              __isCollection: true,
-            };
-            return memo;
-          }, {});
-        const referenceAssemblies = addReferenceSTSuffixes(reference.assemblies);
+          decorateCollectionAssemblies(uploaded.assemblies);
+        const referenceAssemblies =
+          decorateReferenceAssemblies(reference.assemblies);
         return {
           ...replaceSubtypeAssemblyNames(uploadedAssemblies, referenceAssemblies),
           ...referenceAssemblies,

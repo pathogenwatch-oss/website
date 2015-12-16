@@ -31,7 +31,7 @@ const actions = {
   },
   [SET_UNFILTERED_IDS]: function (state, { ids }) {
     return state.map(markerDef => {
-      if ([ ...markerDef.assemblyIds ].some(id => ids.has(id))) {
+      if (markerDef.assemblyIds.some(id => ids.has(id))) {
         return { ...markerDef, visible: true };
       }
       return { ...markerDef, visible: false };
@@ -39,7 +39,7 @@ const actions = {
   },
   [ACTIVATE_FILTER]: function (state, { ids }) {
     return state.map(markerDef => {
-      if ([ ...markerDef.assemblyIds ].some(id => ids.has(id))) {
+      if (markerDef.assemblyIds.some(id => ids.has(id))) {
         return { ...markerDef, active: true };
       }
       return { ...markerDef, active: false };

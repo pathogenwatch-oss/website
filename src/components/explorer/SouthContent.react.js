@@ -50,29 +50,18 @@ const SouthContent = React.createClass({
 
 });
 
-function getTableData(assemblies, filter, { collection, reference }) {
+function getTableData(assemblies, filter) {
   const ids = filter.active ? filter.ids : filter.unfilteredIds;
-  return [ ...ids ].map(id => {
-    return {
-      ...assemblies[id],
-      __isCollection: collection.has(id),
-      __isReference: reference.has(id),
-    };
-  });
+  return [ ...ids ].map(id => assemblies[id]);
 }
 
 function mapStateToProps(state) {
-  const { entities, display, tables, filter, collection, reference } = state;
+  const { entities, display, tables, filter } = state;
 
   const table = tables[display.table];
   const { headerClick, columns, ...tableProps } = table;
 
-  const members = {
-    collection: collection.assemblyIds,
-    reference: reference.assemblyIds,
-  };
-
-  const data = getTableData(entities.assemblies, filter, members);
+  const data = getTableData(entities.assemblies, filter);
   return {
     ...tableProps,
     columns: columns.map(column => addColumnWidth(column, data)),
