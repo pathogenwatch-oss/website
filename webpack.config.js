@@ -20,6 +20,8 @@ const commonLoaders = [
   { test: /\.(png|jpg|jpeg|gif)$/, loader: 'file' },
 ];
 
+const babelPresets = [ 'react', 'es2015', 'stage-0' ];
+
 const devConfig = {
   devtool: '#eval-source-map',
   entry: [
@@ -43,23 +45,19 @@ const devConfig = {
         loader: 'babel',
         exclude: /(node_modules|webpack)/,
         query: {
-          stage: 0,
+          presets: babelPresets,
           plugins: [
-            'react-display-name',
-            'react-transform',
-          ],
-          extra: {
-            'react-transform': {
-              transforms: [ {
-                transform: 'react-transform-hmr',
-                imports: [ 'react' ],
-                locals: [ 'module' ],
+            [ 'react-transform', {
+              'transforms': [ {
+                'transform': 'react-transform-hmr',
+                'imports': [ 'react' ],
+                'locals': [ 'module' ],
               }, {
-                transform: 'react-transform-catch-errors',
-                imports: [ 'react', 'redbox-react' ],
+                'transform': 'react-transform-catch-errors',
+                'imports': [ 'react', 'redbox-react' ],
               } ],
-            },
-          },
+            } ],
+          ],
         },
       },
     ].concat(commonLoaders),
@@ -91,6 +89,9 @@ const prodConfig = {
     loaders: [
       { test: /\.js$/,
         loader: 'babel',
+        query: {
+          presets: babelPresets,
+        },
         exclude: /(node_modules|webpack)/,
       },
     ].concat(commonLoaders),

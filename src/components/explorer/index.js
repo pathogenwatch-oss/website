@@ -26,7 +26,7 @@ const connectExplorer = connect(
 
 function addDevTools() {
   if (process.env.NODE_ENV !== 'production') {
-    const DevTools = require('^/DevTools');
+    const DevTools = require('^/DevTools').default;
     return (
       <DevTools />
     );

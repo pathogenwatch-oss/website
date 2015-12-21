@@ -1,16 +1,11 @@
 import '../css/species-home.css';
 
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { Link } from 'react-router';
 
 import Species from '../species';
-import { CGPS } from '../defaults';
 import { FASTA_FILE_EXTENSIONS } from '^/utils/File';
 
-const textStyle = {
-  color: CGPS.COLOURS.PURPLE,
-};
 const uploadButtonStyle = {
   position: 'absolute',
   top: '20px',
@@ -27,7 +22,7 @@ const iconStyle = {
 
 export default React.createClass({
 
-  displayName: 'Passive View',
+  displayName: 'PassiveView',
 
   propTypes: {
   },
