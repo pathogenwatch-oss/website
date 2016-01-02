@@ -43,7 +43,7 @@ const devConfig = {
     loaders: [
       { test: /\.js$/,
         loader: 'babel',
-        exclude: /(node_modules|webpack)/,
+        include: /src/,
         query: {
           presets: babelPresets,
           plugins: [
@@ -92,7 +92,7 @@ const prodConfig = {
         query: {
           presets: babelPresets,
         },
-        exclude: /(node_modules|webpack)/,
+        include: /src/,
       },
     ].concat(commonLoaders),
   },
