@@ -1,6 +1,7 @@
 var amqp = require('amqp');
 var extend = require('extend');
 var async = require('async');
+var os = require('os');
 
 var appConfig = require('configuration');
 
@@ -42,8 +43,7 @@ function setDefaultPublishOptions(exchange) {
     mandatory: true,
     contentType: 'application/json',
     deliveryMode: 1,
-    // Generate UUID?
-    correlationId: 'Art'
+    correlationId: os.hostname(),
   };
   exchange.publish = function (topic, message, options) {
     delegate(topic, message, extend({}, DEFAULT_OPTIONS, options),

@@ -17,7 +17,7 @@ function parseMessagesAsJson(queue) {
   if (!queue.subscribe) {
     return;
   }
-  var delegate = queue.subscribe.bind(queue);
+  const delegate = queue.subscribe.bind(queue);
 
   queue.subscribe = function (callback) {
     delegate(function (message) {
@@ -25,7 +25,7 @@ function parseMessagesAsJson(queue) {
       var bufferJSON = buffer.toString();
       try {
         LOGGER.debug('Parsing message ' + bufferJSON);
-        var parsedMessage = JSON.parse(bufferJSON);
+        const parsedMessage = JSON.parse(bufferJSON);
         callback(null, parsedMessage);
       } catch (error) {
         callback(error, null);
@@ -41,7 +41,7 @@ function generateQueueId(prefix) {
 function newCollectionNotificationQueue(ids, notifyOptions, callback) {
   LOGGER.debug(ids);
   connection.queue(
-    'NOTIFICATION_' + ids.collectionId,
+    `collection-${ids.collectionId}-notification-queue`,
     { exclusive: true },
     function (queue) {
       LOGGER.info('Notification queue "' + queue.name + '" is open');
@@ -60,7 +60,7 @@ function newCollectionNotificationQueue(ids, notifyOptions, callback) {
 
 function newAssemblyNotificationQueue(ids, notifyOptions, callback) {
   connection.queue(
-    'NOTIFICATION_' + ids.assemblyId,
+    `assembly-${ids.assemblyId}-notification-queue`,
     { exclusive: true },
     function (queue) {
       LOGGER.info('Notification queue "' + queue.name + '" is open');
@@ -79,7 +79,7 @@ function newAssemblyNotificationQueue(ids, notifyOptions, callback) {
 
 function newAssemblyUploadQueue(assemblyId, callback) {
   connection.queue(
-    'ASSEMBLY_UPLOAD_' + assemblyId, {
+    `assembly-${assemblyId}-upload-queue`, {
       passive: false,
       durable: false,
       exclusive: true,
@@ -96,7 +96,7 @@ function newAssemblyUploadQueue(assemblyId, callback) {
 }
 
 function newCollectionAddQueue(callback) {
-  var queueId = generateQueueId('CREATE_COLLECTION_');
+  var queueId = generateQueueId('create-collection-queue-');
   return connection.queue(queueId, {
     passive: false,
     durable: false,
@@ -112,7 +112,7 @@ function newCollectionAddQueue(callback) {
 }
 
 function newFileRequestQueue(callback) {
-  var queueId = generateQueueId('FILE_REQUEST_');
+  var queueId = generateQueueId('file-request-queue-');
   return connection.queue(queueId, {
     passive: false,
     durable: false,
