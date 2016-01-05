@@ -1,32 +1,32 @@
-var AppDispatcher = require('../dispatcher/AppDispatcher');
+import  AppDispatcher from '../dispatcher/AppDispatcher';
 
-module.exports = {
+export default {
 
   startUploadingFiles: function () {
-    var action = {
-      type: 'start_uploading_files'
+    const action = {
+      type: 'start_uploading_files',
     };
 
     AppDispatcher.dispatch(action);
   },
 
   finishUploadingFiles: function (result) {
-    var action = {
+    const action = {
       type: 'finish_uploading_files',
-      result: result
+      result: result,
     };
 
     AppDispatcher.dispatch(action);
   },
 
   setCollectionId: function (collection) {
-    var action = {
+    const action = {
       type: 'set_collection_id',
       collectionId: collection.collectionId,
       assemblyNameToAssemblyIdMap: collection.assemblyNameToAssemblyIdMap,
     };
 
     AppDispatcher.dispatch(action);
-  }
+  },
 
 };

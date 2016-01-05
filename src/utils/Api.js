@@ -1,6 +1,6 @@
 /* global $ */
 
-import { setAssemblyProgress, }
+import FileUploadingProgressActionCreators
   from '../actions/FileUploadingProgressActionCreators';
 
 import CONFIG from '../config';
@@ -48,7 +48,7 @@ export function postAssembly({ speciesId, collectionId, assemblyId }, requestBod
     postJson(
       `/species/${speciesId}/collection/${collectionId}/assembly/${assemblyId}`,
       requestBody,
-      setAssemblyProgress.bind(null, assemblyId)
+      FileUploadingProgressActionCreators.setAssemblyProgress.bind(null, assemblyId)
     )
   ).done(function (data) {
     callback(null, data);

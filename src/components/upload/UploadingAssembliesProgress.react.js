@@ -14,7 +14,7 @@ const ICON_STYLE = {
 const TABLE_STYLE = {
   width: '100%',
   border: 'none',
-  margin: 'auto'
+  margin: 'auto',
 };
 
 const HEADER_STYLE = {
