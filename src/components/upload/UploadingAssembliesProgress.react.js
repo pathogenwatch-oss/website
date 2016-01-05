@@ -140,7 +140,7 @@ const UploadingAssembliesProgress = React.createClass({
       <tr>
         { Object.keys(this.collectionResultColumns).map((collectionResultName) => {
           return (
-            <td style={CELL_STYLE}>
+            <td style={CELL_STYLE} key={collectionResultName}>
               <i style={ICON_STYLE} className="material-icons">
               { assemblyResults && assemblyResults[collectionResultName] ?
                   'check_circle' :
