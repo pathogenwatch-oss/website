@@ -63,7 +63,7 @@ const canvas = document.createElement('canvas').getContext('2d');
 const cellPadding = 40;
 
 const getFontString =
-  (weight = 'normal') => `13px ${weight} "Helvetica","Arial",sans-serif`;
+  (weight = 'normal') => `${weight} 13px "Helvetica","Arial",sans-serif`;
 
 function measureText(text) {
   return canvas.measureText(text).width + cellPadding;
