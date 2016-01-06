@@ -13,3 +13,13 @@
 .mdl-layout__header-row {
     height: 56px;
 }
+
+.mdl-spinner .mdl-spinner__layer-1,
+.mdl-spinner .mdl-spinner__layer-3 {
+  border-color: #673c90;
+}
+
+.mdl-spinner .mdl-spinner__layer-2,
+.mdl-spinner .mdl-spinner__layer-4 {
+  border-color: #87c7a6;
+}

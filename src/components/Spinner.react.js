@@ -1,5 +1,3 @@
-import '../css/spinner.css';
-
 import React from 'react';
 
 export default React.createClass({
@@ -10,7 +8,7 @@ export default React.createClass({
 
   render() {
     return (
-      <div ref="spinner" className="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active"></div>
+      <div ref="spinner" className="mdl-spinner mdl-js-spinner is-active"></div>
     );
   },
 
