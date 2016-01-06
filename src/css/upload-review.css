@@ -203,10 +203,11 @@
 
 .wgsa-info-window-button {
   text-transform: none;
+  display: block;
 }
 
-.wgsa-info-window-button + .wgsa-info-window-button {
-  margin-top: 8px;
+.wgsa-info-window-button:first-child {
+  margin-top: 4px;
 }
 
 .wgsa-card {
