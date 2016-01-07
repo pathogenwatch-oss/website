@@ -35,6 +35,15 @@ module.exports = function (callback) {
       return callback(error, null);
     }
 
+    // security
+    app.use(function (req, res, next) {
+      res.header('X-Frame-Options', 'SAMEORIGIN');
+      res.header('X-XSS-Protection', '1; mode=block');
+      res.header('X-Content-Type-Options', 'nosniff');
+      next();
+    });
+    app.disable('x-powered-by');
+
     app.use(function (req, res, next) {
       res.header('X-Clacks-Overhead', 'GNU Terry Pratchett');
       next();
