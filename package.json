@@ -1,6 +1,6 @@
 {
   "name": "macroreact-middle",
-  "version": "3.0.0-rc3",
+  "version": "3.0.0-rc4",
   "description": "Web API for WGSA",
   "main": "app.js",
   "engines": {
@@ -21,7 +21,7 @@
     "serve-favicon": "^2.2.0",
     "socket.io": "^1.2.1",
     "swig": "^1.4.2",
-    "wgsa_front-end": "imperialcollegelondon/wgsa_front-end#v3.0.0-rc3"
+    "wgsa_front-end": "imperialcollegelondon/wgsa_front-end#v3.0.0-rc4"
   },
   "devDependencies": {
     "cgps-style": "imperialcollegelondon/javascript#v1.0.1",
