@@ -75,7 +75,6 @@ function createExchange(exchangeKey, callback) {
 }
 
 function connect(callback) {
-  LOGGER.debug(CONNECTION_OPTIONS);
   connection =
     amqp.createConnection(CONNECTION_OPTIONS, IMPLEMENTATION_OPTIONS);
 
