@@ -87,6 +87,10 @@ function beginUpload(ids, data) {
 
         messageQueueService.getUploadExchange()
           .publish('upload', assembly, { replyTo: uploadQueue.name });
+
+        // "dereference" sequences to remove from heap
+        data.sequences = null;
+        assembly.sequences = null;
       }
     );
   });
