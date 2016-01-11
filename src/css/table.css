@@ -55,16 +55,30 @@
 
 .wgsa-table-cell--bordered,
 .wgsa-table-cell--resistance {
-  border-right: 1px solid rgba(0, 0, 0, 0.06);
-  border-left: 1px solid rgba(0, 0, 0, 0.06);
+  border-right: 2px solid #F0F0F0;
 }
 
-.wgsa-table-cell--resistance {
+.wgsa-table-cell--resistance,
+.wgsa-table-cell--skinny {
   padding: 0;
 }
 
 .wgsa-table-cell a {
   color: #673c90;
+}
+
+.wgsa-table-cell .wgsa-download-button {
+  padding: 0 8px;
+}
+
+.wgsa-table-cell .wgsa-download-button > span {
+  display: none;
+}
+
+.wgsa-table-cell .mdl-button:hover,
+.wgsa-table-cell .mdl-button:focus,
+.wgsa-table-cell .mdl-button:active {
+  background-color: rgba(255, 255, 255, 0.8);
 }
 
 .wgsa-table-header--resistance .fixedDataTableCellLayout_wrap1,

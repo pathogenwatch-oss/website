@@ -1,12 +1,13 @@
 import React from 'react';
 
-import { nameColumnProps, getCellContents } from '../constants/table';
+import { downloadColumnProps, nameColumnProps, getCellContents, }
+  from '../constants/table';
+
 import MetadataUtils from '../utils/Metadata';
 
 export const systemColumnProps = [
-  { ...nameColumnProps,
-    selected: true,
-  },
+  downloadColumnProps,
+  nameColumnProps,
   { columnKey: '__date',
     valueGetter({ metadata }) {
       return MetadataUtils.getFormattedDateString(metadata.date);

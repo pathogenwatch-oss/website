@@ -71,11 +71,6 @@
 
 .wgsa-menu__item > a,
 .wgsa-menu__item > button {
-  background: none;
-  border: none;
-  padding: 0 16px;
-  cursor: pointer;
-  height: 32px;
   width: 100%;
   text-align: left;
   font-size: inherit;
@@ -84,13 +79,7 @@
   text-decoration: none;
   display: block;
   position: relative;
-}
-
-.wgsa-menu__item > a:active,
-.wgsa-menu__item > a:focus,
-.wgsa-menu__item > button:active,
-.wgsa-menu__item > button:focus {
-  outline: none;
+  padding: 0 16px;
 }
 
 .wgsa-menu__item .wgsa-download-icon {

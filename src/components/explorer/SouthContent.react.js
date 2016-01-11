@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import FixedTable from '^/components/FixedTable.react';
 
 import { activateFilter, resetFilter } from '^/actions/filter';
+import { requestDownload } from '^/actions/downloads';
 
 import { addColumnWidth } from '^/constants/table';
 
@@ -56,7 +57,7 @@ function getTableData(assemblies, filter) {
 }
 
 function mapStateToProps(state) {
-  const { entities, display, tables, filter } = state;
+  const { entities, display, tables, filter, downloads } = state;
 
   const table = tables[display.table];
   const { headerClick, columns, ...tableProps } = table;
@@ -68,7 +69,29 @@ function mapStateToProps(state) {
     headerClick: headerClick.bind(table),
     data,
     filter,
+    fastaDownloads: downloads.files.fasta,
   };
 }
 
-export default connect(mapStateToProps)(SouthContent);
+function addDownloadProps(row, { description, linksById = {} }, dispatch) {
+  const id = row.metadata.assemblyId;
+  return {
+    ...row,
+    downloadProps: {
+      description,
+      ...linksById[id],
+      onClick: () => dispatch(requestDownload('fasta', null, [ id ])),
+    },
+  };
+}
+
+function mergeProps({ fastaDownloads, data, ...state }, { dispatch }, props) {
+  return {
+    ...props,
+    ...state,
+    dispatch,
+    data: data.map(row => addDownloadProps(row, fastaDownloads, dispatch)),
+  };
+}
+
+export default connect(mapStateToProps, null, mergeProps)(SouthContent);

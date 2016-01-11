@@ -25,6 +25,10 @@ const initialState = {
     description: 'Difference Matrix (.csv)',
     collection: true,
   },
+  fasta: {
+    description: 'Assembly (.fa)',
+    assembly: true,
+  },
 };
 
 function parseResult(keyToFilenameMap) {

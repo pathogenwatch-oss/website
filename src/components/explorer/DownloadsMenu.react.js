@@ -3,7 +3,7 @@ import '../../css/dropdown-menu.css';
 import React from 'react';
 import { connect } from 'react-redux';
 
-import DownloadMenuItem from './DownloadsMenuItem.react';
+import DownloadButton from './DownloadButton.react';
 
 import { setMenuActive, requestDownload } from '^/actions/downloads';
 
@@ -22,8 +22,10 @@ const DownloadsMenu = ({
     <ul className="wgsa-menu__list mdl-shadow--2dp">
       <li>
         <ul className="wgsa-submenu">
-          { (files).map(({ format, ...props }) => (
-              <DownloadMenuItem key={format} format={format} {...props} />
+          { (files).map(fileProps => (
+              <li className="wgsa-menu__item" key={fileProps.format}>
+                <DownloadButton {...fileProps} />
+              </li>
             )
           )}
         </ul>
@@ -53,17 +55,20 @@ function mergeProps(state, { dispatch }) {
   return {
     menuOpen,
     menuButtonOnClick: () => dispatch(setMenuActive(!menuOpen)),
-    files: Object.keys(files).map(format => {
-      const { collection, linksById, ...props } = files[format];
-      const ids = collection ? [ collectionId ] : assemblyIds;
-      const linkProps = linksById ? linksById[createDownloadKey(ids)] : {};
-      return {
-        format,
-        ...props,
-        ...linkProps,
-        onClick: () => dispatch(requestDownload(format, collection, ids)),
-      };
-    }),
+    files:
+      Object.keys(files).
+        filter(format => !files[format].assembly).
+        map(format => {
+          const { collection, linksById, ...props } = files[format];
+          const ids = collection ? [ collectionId ] : assemblyIds;
+          const linkProps = linksById ? linksById[createDownloadKey(ids)] : {};
+          return {
+            format,
+            ...props,
+            ...linkProps,
+            onClick: () => dispatch(requestDownload(format, collection, ids)),
+          };
+        }),
   };
 }
 

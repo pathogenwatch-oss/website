@@ -27,6 +27,18 @@ fieldset > legend {
   display: none;
 }
 
+.wgsa-download-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  height: 32px;
+}
+
+.wgsa-download-button:active,
+.wgsa-download-button:focus {
+  outline: none;
+}
+
 .wgsa-download-icon {
   display: inline-block;
   vertical-align: middle;

@@ -1,5 +1,7 @@
 import React from 'react';
 
+import DownloadButton from '../components/explorer/DownloadButton.react';
+
 import { CGPS } from '^/defaults';
 
 
@@ -11,6 +13,22 @@ export const tableKeys = {
 export const getCellContents = ({ valueGetter },  data) => valueGetter(data);
 
 const collectionStyle = { color: CGPS.COLOURS.PURPLE };
+
+export const downloadColumnProps = {
+  columnKey: '__download',
+  fixed: true,
+  noHeader: true,
+  cellClasses: 'wgsa-table-cell--skinny',
+  fixedWidth: 48,
+  flexGrow: 0,
+  getCellContents(_, data) {
+    return (
+      <span onClick={(e) => e.stopPropagation()}>
+        <DownloadButton { ...data.downloadProps } />
+      </span>
+    );
+  },
+};
 
 export const nameColumnProps = {
   columnKey: '__name',

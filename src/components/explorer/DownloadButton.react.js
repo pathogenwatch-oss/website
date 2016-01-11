@@ -2,9 +2,11 @@ import React from 'react';
 
 import DownloadIcon from './DownloadIcon.react';
 
+const className = 'wgsa-download-button';
+
 export default React.createClass({
 
-  displayName: 'DownloadsMenuItem',
+  displayName: 'DownloadButton',
 
   propTypes: {
     loading: React.PropTypes.bool,
@@ -26,23 +28,21 @@ export default React.createClass({
     const { loading, error, description, link, filename, onClick } = this.props;
     const title =
       `${ !loading && link ? 'Download' : 'Generate' } ${description}`;
-    return (
-      <li className="wgsa-menu__item">
-        { link ?
-          <a ref="link"
-            href={link || '#'}
-            target="_blank"
-            download={filename}
-            title={title}>
-              <DownloadIcon hasLink />
-              {description}
-          </a> :
-          <button onClick={onClick} title={title}>
-            <DownloadIcon loading={loading} error={error} />
-            {description}
-          </button>
-        }
-      </li>
+    return link ? (
+      <a ref="link"
+        href={link || '#'}
+        target="_blank"
+        download={filename}
+        title={title}
+        className={className}>
+          <DownloadIcon hasLink />
+          {description}
+      </a>
+    ) : (
+      <button onClick={onClick} title={title} className={className}>
+        <DownloadIcon loading={loading} error={error} />
+        {description}
+      </button>
     );
   },
 
