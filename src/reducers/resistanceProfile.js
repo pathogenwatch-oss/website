@@ -3,13 +3,20 @@ import React from 'react';
 import { FETCH_ENTITIES } from '../actions/fetch';
 import { SET_COLOUR_COLUMN, setColourColumn } from '../actions/table';
 
-import { systemColumnProps } from '../constants/resistanceProfile';
+import { downloadColumnProps, nameColumnProps } from '../constants/table';
 import { defaultColourGetter } from '../constants/tree';
 
 import DEFAULT from '../defaults';
 
 const canvas = document.createElement('canvas').getContext('2d');
 canvas.font = 'Bold 12px "Helvetica","Arial",sans-serif';
+
+const systemColumnProps = [
+  downloadColumnProps,
+  { ...nameColumnProps,
+    flexGrow: 0,
+  },
+];
 
 function measureText(text) {
   return (canvas.measureText(text.toUpperCase()).width * Math.cos(0.785)) + 40;
@@ -21,7 +28,8 @@ function buildAntibioticColumnProps(antibiotics) {
       columnKey: antibiotic,
       headerClasses: 'wgsa-table-header--resistance',
       cellClasses: 'wgsa-table-cell--resistance',
-      fixedWidth: 24,
+      fixedWidth: 40,
+      flexGrow: 0,
       getCellContents({ columnKey }, { analysis }) {
         const value = analysis.resistanceProfile[columnKey];
         return (
@@ -47,16 +55,23 @@ const actions = {
     if (ready && !error) {
       const antibiotics = result[2];
 
-      const columns =
-        systemColumnProps.concat(buildAntibioticColumnProps(antibiotics));
-
-      columns.push({
-        columnKey: '__spacer',
-        noHeader: true,
-        fixedWidth: Math.cos(45 * Math.PI / 180) *
-          measureText(antibiotics[antibiotics.length - 1]) - 40,
-        getCellContents() {},
-      });
+      const columns = [
+        { columnKey: '__spacer_l',
+          noHeader: true,
+          fixed: true,
+          fixedWidth: 1,
+          getCellContents() {},
+        },
+        ...systemColumnProps,
+        ...buildAntibioticColumnProps(antibiotics),
+        { columnKey: '__spacer_r',
+          noHeader: true,
+          fixedWidth: Math.cos(45 * Math.PI / 180) *
+            measureText(antibiotics[antibiotics.length - 1]) - 24,
+          getCellContents() {},
+          cellClasses: 'wgsa-table-cell--resistance',
+        },
+      ];
 
       return {
         ...state,

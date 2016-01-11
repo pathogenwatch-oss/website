@@ -55,7 +55,7 @@
 
 .wgsa-table-cell--bordered,
 .wgsa-table-cell--resistance {
-  border-right: 2px solid #F0F0F0;
+  border-left: 2px solid #F0F0F0;
 }
 
 .wgsa-table-cell--resistance,
@@ -110,9 +110,9 @@
 .wgsa-resistance-icon {
   position: absolute;
   left: 0;
-  top: calc(50% - 11px);
+  top: calc(50% - 13px);
   right: 0;
-  font-size: 20px;
+  font-size: 24px;
   padding: 2px 0;
   text-align: center;
 }
