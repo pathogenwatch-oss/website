@@ -118,7 +118,10 @@ function formatForFrontend(assembly) {
     analysis: {
       st: mlst ? mlst.sequenceType : null,
       mlst: mlst ? mlst.code : null,
-      kernelSize: core ? core.kernelSize : null,
+      core: core ? {
+        size: core.kernelSize,
+        percentMatched: core.percentKernelMatched,
+      } : null,
       resistanceProfile: paarsnp ?
         Object.keys(paarsnp.resistanceProfile).
           reduce(function (profile, className) {
