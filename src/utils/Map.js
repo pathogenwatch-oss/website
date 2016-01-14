@@ -126,40 +126,64 @@ export function getMarkerIcon(shape, colours) {
   return getIcon(shape, Array.from(colours).sort());
 }
 
-function mapPositionsToAssemblies(assemblies) {
-  const positionMap = new Map();
+function hasNoPosition(assembly) {
+  const { position } = assembly.metadata;
+  return !position || !position.latitude || !position.longitude;
+}
+
+export function addAssembliesToMarkerDefs(assemblies, existingMarkers = []) {
+  const markersByPosition = existingMarkers.reduce((map, marker) => {
+    map.set(JSON.stringify(marker.position), marker);
+    return map;
+  }, new Map());
 
   for (const assembly of assemblies) {
-    const { position } = assembly.metadata;
-    if (!position || !position.latitude || !position.longitude) {
+    if (hasNoPosition(assembly)) {
       continue;
     }
 
-    const positionKey = JSON.stringify(position);
-    if (positionMap.has(positionKey)) {
-      positionMap.get(positionKey).push(assembly);
-    } else {
-      positionMap.set(positionKey, [ assembly ]);
+    const positionKey = JSON.stringify(assembly.metadata.position);
+    if (markersByPosition.has(positionKey)) {
+      markersByPosition.get(positionKey).
+        assemblyIds.push(assembly.metadata.assemblyId);
+      continue;
     }
+
+    markersByPosition.set(positionKey, {
+      position: JSON.parse(positionKey),
+      assemblyIds: [ assembly.metadata.assemblyId ],
+      active: true,
+      visible: true,
+    });
   }
 
-  return positionMap;
+  return Array.from(markersByPosition.values());
 }
 
-export function getMarkerDefinitions(assemblies, {
-    onClick,
-    createInfoWindow,
-  } = {}) {
-  return Array.from(mapPositionsToAssemblies(assemblies)).
-    map(([ position, positionAssemblies ]) => {
-      const assemblyIds = positionAssemblies.map(_ => _.metadata.assemblyId);
+function mapByPosition(assemblies) {
+  return assemblies.reduce((map, assembly) => {
+    if (hasNoPosition(assembly)) {
+      return map;
+    }
+    const positionKey = JSON.stringify(assembly.metadata.position);
+    if (map.has(positionKey)) {
+      map.get(positionKey).push(assembly);
+    } else {
+      map.set(positionKey, [ assembly ]);
+    }
+    return map;
+  }, new Map());
+}
+
+function getMarkerDefinitions(assemblies, createInfoWindow) {
+  return Array.from(mapByPosition(assemblies).entries()).
+    map(([ position, assembliesAtPosition ]) => {
       return {
         position: JSON.parse(position),
-        assemblyIds,
-        onClick: onClick ? onClick.bind(null, assemblyIds) : null,
-        infoWindow: createInfoWindow ? createInfoWindow(positionAssemblies) : null,
         active: true,
         visible: true,
+        infoWindow:
+          createInfoWindow ? createInfoWindow(assembliesAtPosition) : null,
       };
     });
 }

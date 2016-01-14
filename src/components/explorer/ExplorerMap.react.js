@@ -24,7 +24,7 @@ ExplorerMap.propTypes = {
   dispatch: React.PropTypes.func,
 };
 
-function mapStateToProps({ display, collection, tables, entities }) {
+function mapStateToProps({ display, collection, tables, entities, filter }) {
   const { mapMarkers } = display;
   const { resistanceProfile } = tables;
   const { assemblies } = entities;
@@ -34,6 +34,7 @@ function mapStateToProps({ display, collection, tables, entities }) {
     colourGetter: resistanceProfile.activeColumn.valueGetter,
     assemblies,
     collection,
+    filter,
   };
 }
 
@@ -41,19 +42,22 @@ const inactiveMarkerColours = [ 'transparent' ];
 
 function mapStateToMarker(markerDef, state, dispatch) {
   const { assemblyIds } = markerDef;
-  const { colourGetter, assemblies } = state;
+  const { colourGetter, assemblies, filter } = state;
 
   const markerAssemblies = assemblyIds.map(id => assemblies[id]);
   const isCollection = markerAssemblies.some(_ => _.__isCollection);
   const colours = markerAssemblies.reduce(function (memo, assembly) {
-    memo.add(colourGetter(assembly));
+    const filterIds = filter.active ? filter.ids : filter.unfilteredIds;
+    if (filterIds.has(assembly.metadata.assemblyId)) {
+      memo.add(colourGetter(assembly));
+    }
     return memo;
   }, new Set());
 
   markerDef.onClick = () => dispatch(activateFilter(assemblyIds));
   markerDef.icon = MapUtils.getMarkerIcon(
     isCollection ? 'circle' : 'square',
-    markerDef.active ? colours : inactiveMarkerColours
+    colours.size ? colours : inactiveMarkerColours
   );
 
   markerDef.zIndex = isCollection ? colours.size : 0;

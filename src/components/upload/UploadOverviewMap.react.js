@@ -14,8 +14,10 @@ function createInfoWindow(assemblies) {
     const button = document.createElement('button');
     const textNode = document.createTextNode(name);
     button.appendChild(textNode);
-    button.className = 'wgsa-info-window-button mdl-button mdl-js-button mdl-js-ripple-effect';
-    button.onclick = UploadWorkspaceNavigationActionCreators.navigateToAssembly.bind(null, name);
+    button.className =
+      'wgsa-info-window-button mdl-button mdl-js-button mdl-js-ripple-effect';
+    button.onclick =
+      UploadWorkspaceNavigationActionCreators.navigateToAssembly.bind(null, name);
     componentHandler.upgradeElement(button);
     container.appendChild(button);
   }
@@ -35,7 +37,7 @@ export default React.createClass({
     const { assemblies } = this.props;
     const markerDefs = MapUtils.getMarkerDefinitions(
       Object.keys(assemblies).map(key => assemblies[key]),
-      { createInfoWindow }
+      createInfoWindow
     );
 
     return (
