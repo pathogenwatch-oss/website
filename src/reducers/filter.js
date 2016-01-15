@@ -7,8 +7,8 @@ import {
 
 const initialState = {
   active: false,
-  unfilteredIds: [],
-  ids: [],
+  unfilteredIds: new Set(),
+  ids: new Set(),
 };
 
 const actions = {

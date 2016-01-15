@@ -69,6 +69,7 @@ function getStandardTreeFunctions(state, dispatch) {
 
   return {
     styleTree(tree) {
+      tree.root.cascadeFlag('selected', false);
       tree.leaves.forEach((leaf) => {
         const assembly = entities.assemblies[leaf.id];
 
@@ -173,7 +174,7 @@ export function defaultColourGetter(assembly) {
     return CGPS.COLOURS.PURPLE_LIGHT;
   }
 
-  return CGPS.COLOURS.GREY_DARK;
+  return CGPS.COLOURS.GREY;
 }
 
 const TREE_LABELS_SUFFIX = 'tree_labels.txt';
