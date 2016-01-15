@@ -6,7 +6,7 @@ var LOGGER = require('utils/logging').createLogger('Storage');
 
 var DEFAULT_HOSTNAME = '127.0.0.1';
 var HOSTNAME = appConfig.server.couchbase.ip || DEFAULT_HOSTNAME;
-var ADDRESS = 'http://' + HOSTNAME + ':8091';
+var ADDRESS = 'couchbase://' + HOSTNAME + ':8091';
 
 function createBucketConnection(config, cluster, callback) {
   var bucketName = config.name;
