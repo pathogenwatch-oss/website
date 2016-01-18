@@ -31,7 +31,7 @@ render((
   <Router history={createHistory()}>
     <Route path="/" component={App}>
       <IndexRoute component={Home} />
-      { Species.list.reduce((routes, { nickname }) =>
+      { Species.list.filter(_ => _.active).reduce((routes, { nickname }) =>
         routes.concat([
           <Route key={nickname} path={nickname} component={SpeciesSetter}>
             <IndexRoute component={SpeciesHome} />

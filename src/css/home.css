@@ -1,3 +1,7 @@
+.wgsa-home {
+  background-color: #efefef;
+}
+
 .wgsa-home h2 {
   font-size: 34px;
   line-height: 40px;
@@ -15,14 +19,14 @@
   color: #a386bd;
 }
 
-.wgsa-home-header {
-  margin: 0px 0px;
-  padding: 0px 32px 0;
+.wgsa-home header {
+  background: #fff;
   color: #673c90;
-  height: 70px;
-  /*position: absolute;*/
-  /*background-color: #fff;*/
-  z-index: 1;
+}
+
+.wgsa-home-header {
+  margin: 0 0;
+  padding: 0 16px 0;
 }
 
 .wgsa-home-header a {
@@ -34,154 +38,108 @@
   vertical-align: middle;
 }
 
-.wgsa-home-header a > img {
+.cgps-logo {
   height: 40px;
 }
 
-.cgps-logo {
-  height: 48px;
-  margin-top: 6px;
-}
-
-.wgsa-home-section1 {
-  background-image: url("/assets/img/bg-grey.jpg");
-  background-size: cover;
-  border-bottom: 1px solid #ccc;
-  color: #673c90;
+.wgsa-home__intro {
   padding: 3em 1em;
-  width: 100%;
-  height: 100%;
-  display: block;
-  position: relative;
-}
-/*.wgsa-home-section1:after {
-  background-image: url("/assets/img/WGSA.Icon.FINAL.svg");
-  background-size: cover;
-  background-repeat: no-repeat;
-  content: "";
-  opacity: 0.2;
-  top: -10em;
-  left: -30em;
-  bottom: -0px;
-  right: 0px;
-  position: absolute;
-  z-index: -1;
-}
-*/.wgsa-home-content {
   text-align: center;
 }
 
-.wgsa-home-content h1 {
+.wgsa-home__intro h1 {
   padding-top: 16px;
   font-size: 56px;
-  /*color: #a386bd;*/
 }
 
-.wgsa-home-content h1 > .accent {
-  color: #673c90;
-}
-
-.wgsa-home-content p {
-  text-align: center;
+.wgsa-home__intro p {
   margin: 0 auto 32px;
   padding: 0 16px;
-  font-size: 24px;
-  line-height: 34px;
+  font-size: 20px;
+  line-height: 1;
   color: #666;
-  font-weight: 300;
+  font-weight: 200;
 }
 
-.wgsa-nb {
-  padding: 100px 50px;
-  color: #673c90 !important;
+.wgsa-logo {
+  width: 25em;
+  margin-left: -5em;
 }
 
-/********* Home page species list ***********/
-
-.wgsa-home-section2 {
-  padding: 16px 0;
-}
-
-.wgsa-home-section2 h2 {
-  /*color: #a386bd;*/
-  text-align: center;
-  margin: 24px  auto;
-}
-
-.wgsa-species-list-container {
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: center;
-  margin: 0 auto 16px;
-}
-
-.wgsa-welcome-card-square {
-  height: 320px;
-  margin: 8px;
-}
-
-@media (max-width: 1424px) {
-
-  .wgsa-species-list-container {
-    max-width: 692px;
-  }
-
-}
-
-.wgsa-welcome-card-square.mdl-card .mdl-card__title-text {
-  color: #fff;
-  text-transform: none;
-}
-
-.wgsa-welcome-card-square.mdl-card .mdl-card__supporting-text {
-  color: rgba(0,0,0,.54);
-  font-size: 13px;
-  line-height: 18px;
-  overflow: hidden;
+.wgsa-cta {
+  background-color: #673c90 !important;
+  color: #fff !important;
   padding: 16px;
+  text-transform: none;
+  font-size: 20px;
 }
-/*******************************************/
 
+.wgsa-cta:hover,
+.wgsa-cta:focus,
+.wgsa-cta:active {
+  box-shadow: 0 8px 10px 0 rgba(0,0,0,.28),0 2px 20px 0 rgba(0,0,0,.24),0 4px 8px -2px rgba(0,0,0,.4);
+}
 
-.wgsa-home-section3 {
-  padding: 0px 16px 48px;
+.wgsa-home__features {
+  max-width: 900px;
+  margin: 48px auto;
+}
+
+.wgsa-home__features > .mdl-grid {
+  margin-bottom: 48px;
+}
+
+.wgsa-home__features > h2 {
+  text-align: center;
 }
 
 .wgsa-features-card {
   background: #fff;
-  color: #555;
-  max-width: 676px;
+  color: #444;
   box-sizing: border-box;
-  margin: 0 auto;
-  padding: 32px;
-  background-image: url('/assets/img/WGSA.Icon.FINAL.reverse.svg');
-  background-size: 90px;
-  background-position: calc(100% + 22.5px) -22.5px;
+  width: 45% !important;
+  padding: 40px 40px 16px;
+  padding-left: 56px;
+  margin-right: 5% !important;
+  background-size: 64px;
   background-repeat: no-repeat;
+  background-position: -16px -16px;
+  background-image: url('/assets/img/WGSA.Icon.FINAL.svg');
 }
 
-.wgsa-features-card h2 {
+.wgsa-features-card--reverse {
+  background-position: calc(100% + 16px) -16px;
+  background-image: url('/assets/img/WGSA.Icon.FINAL.reverse.svg');
+  margin-right: 0 !important;
+  margin-left: 5% !important;
+  padding-left: 40px;
+  padding-right: 56px;
+}
+
+.wgsa-features-card p {
   margin-top: 0;
 }
 
-.wgsa-home-section3 ol {
-  margin-bottom: 0;
+.wgsa-file-icon {
+  position: relative;
+  vertical-align: middle;
+  display: inline-block;
 }
 
-.wgsa-home-section3 li {
-  line-height: 20px;
-  font-size: 14px;
-  font-weight: 300;
-  margin-bottom: 8px;
+.wgsa-file-icon > i {
+  font-size: 8rem;
+  user-select: none;
 }
 
-.wgsa-home-section3 li li {
-  margin-bottom: 8px;
+.wgsa-file-icon > span {
+  position: absolute;
+  color: #fff;
+  left: 0;
+  right: 0;
+  bottom: 2rem;
+  font-size: 1.75rem;
 }
 
-.wgsa-home-section3 li ul {
-  margin-top: 8px;
-}
 
 .wgsa-home footer {
   background-color: #666;

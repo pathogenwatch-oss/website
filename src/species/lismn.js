@@ -7,6 +7,6 @@ export default {
   imagePath: '/assets/img/lismn.jpg',
   definitionText: (<span><strong><em>Listeria monocytogenes</em></strong>, a bacterium causing the infection Listeriosis.</span>),
   missingAnalyses: [ 'PAARSNP' ],
-  active: true,
+  active: false,
   desc: '',
-}
+};

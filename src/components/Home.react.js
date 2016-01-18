@@ -4,83 +4,70 @@ import React from 'react';
 
 import { Link } from 'react-router';
 
-import Species from '../species';
-import { CGPS } from '../defaults';
-
-const textStyle = {
-  color: CGPS.COLOURS.PURPLE,
-};
+import staph from '../species/saureus';
+import { CGPS } from '^/defaults';
 
 export default React.createClass({
 
   render() {
     return (
       <section className="wgsa-home">
-        <div className="wgsa-home-header mdl-layout__header-row">
-          <a href="/" className="mdl-layout-title">
-            <img src="/assets/img/WGSA.FINAL.svg" />
-          </a>
-          <div className="mdl-layout-spacer"></div>
-          <img className="cgps-logo" src="/assets/img/CGPS.SHORT.FINAL.svg" />
-        </div>
-        <div className="wgsa-home-section1">
-          <div className="wgsa-home-content">
-            <h1><span className="accent">W</span>hole <span className="accent">G</span>enome <span className="accent">S</span>equence <span className="accent">A</span>nalysis</h1>
+        <header className="mdl-shadow--2dp">
+          <div className="wgsa-home-header mdl-layout__header-row">
+            <span className="mdl-layout-title">
+              <img className="cgps-logo" src="/assets/img/CGPS.SHORT.FINAL.svg" />
+            </span>
+            <div className="mdl-layout-spacer"></div>
+          </div>
+          <div className="wgsa-home__intro">
+            <img src="/assets/img/WGSA.FINAL.svg" className="wgsa-logo" />
+            <h1>Whole Genome Sequence Analysis</h1>
             <p>
               A web application for the processing, clustering and exploration of microbial genome assemblies.
             </p>
+            <Link to="/saureus/upload" className="mdl-button mdl-button--colored mdl-button--raised wgsa-cta">
+              Get started with {staph.formattedName}
+            </Link>
           </div>
-        </div>
-        <div className="wgsa-home-section2">
-          <h2>Species</h2>
-          <ul className="wgsa-species-list-container mdl-grid">
-            { Species.list.map((speciesDef) => {
-              return (
-                <li key={speciesDef.nickname} className="wgsa-welcome-card-square mdl-card mdl-shadow--2dp">
-                  <div ref={speciesDef.nickname} style={{ backgroundImage: `url(${speciesDef.imagePath})` }} className="mdl-card__title mdl-card--expand">
-                  </div>
-                  <div className="mdl-card__supporting-text">
-                    {speciesDef.definitionText}
-                  </div>
-                  <div className="mdl-card__actions mdl-card--border">
-                    { speciesDef.active ?
-                      <Link
-                        to={`/${speciesDef.nickname}`}
-                        className="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect"
-                        style={textStyle}>
-                        HOME
-                      </Link> :
-                      <a className="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" disabled >Coming soon</a>
-                    }
-                  </div>
-                </li>
-              );
-            }) }
-          </ul>
-        </div>
-        <div className="wgsa-home-section3">
-          <div className="wgsa-features-card mdl-shadow--2dp">
-            <h2 className="wgsa-heading">Features</h2>
-            <ol>
-              <li>
-                Upload genome assemblies and metadata.
-              </li>
-              <li>
-                Results generated include:
-                <ul>
-                  <li>MLST</li>
-                  <li>AMR predictions</li>
-                  <li>Clustering of genomes</li>
-                  <li>Visualisation of metadata on interactive trees and Google Maps</li>
-                </ul>
-              </li>
-              <li>
-                Genomes placed within a ‘species population reference tree’ allowing comparison to other publicly available genomes.
-              </li>
-              <li>
-                Download processed results and trees for further analysis.
-              </li>
-            </ol>
+        </header>
+        <div className="wgsa-home__features">
+          <div className="mdl-grid mdl-grid--no-spacing">
+            <div className="wgsa-features-card mdl-shadow--2dp mdl-cell">
+              <p>
+                Upload genome assemblies and metadata, or view all publicly available genomes.
+              </p>
+            </div>
+            <div className="mdl-cell mdl-cell--6-col" style={{ textAlign: 'center' }}>
+              <span className="wgsa-file-icon">
+                <i className="material-icons" style={{ color: CGPS.COLOURS.PURPLE }}>insert_drive_file</i>
+                .fasta
+              </span>
+              <span className="wgsa-file-icon">
+                <i className="material-icons" style={{ color: CGPS.COLOURS.GREEN }}>insert_drive_file</i>
+                .csv
+              </span>
+            </div>
+          </div>
+          <div className="mdl-grid mdl-grid--no-spacing">
+            <div className="mdl-cell mdl-cell--6-col">
+            </div>
+            <div className="wgsa-features-card wgsa-features-card--reverse mdl-shadow--2dp mdl-cell">
+              <p>Generate results including MLST, AMR predictions, clustering of genomes, and interactive visualisation of metadata.</p>
+            </div>
+          </div>
+          <div className="mdl-grid mdl-grid--no-spacing">
+            <div className="wgsa-features-card mdl-shadow--2dp mdl-cell mdl-cell--6-col">
+              <p>Compare results with other publicly available genomes placed within a ‘species population reference tree’.</p>
+            </div>
+            <div className="mdl-cell mdl-cell--6-col">
+            </div>
+          </div>
+          <div className="mdl-grid mdl-grid--no-spacing">
+            <div className="mdl-cell mdl-cell--6-col">
+            </div>
+            <div className="wgsa-features-card wgsa-features-card--reverse mdl-shadow--2dp mdl-cell mdl-cell--6-col">
+              <p>Download processed results for further analysis.</p>
+            </div>
           </div>
         </div>
         <footer>
