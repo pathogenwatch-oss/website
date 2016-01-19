@@ -15,7 +15,10 @@ export default React.createClass({
         <header className="mdl-shadow--2dp">
           <div className="wgsa-home-header mdl-layout__header-row">
             <span className="mdl-layout-title">
-              <img className="cgps-logo" src="/assets/img/CGPS.SHORT.FINAL.svg" />
+              <picture>
+                <source srcSet="/assets/img/CGPS.FINAL.svg" media="(min-width: 1200px)" />
+                <img className="cgps-logo" src="/assets/img/CGPS.SHORT.FINAL.svg" />
+              </picture>
             </span>
             <div className="mdl-layout-spacer"></div>
           </div>
@@ -37,7 +40,7 @@ export default React.createClass({
                 Upload genome assemblies and metadata, or view all publicly available genomes.
               </p>
             </div>
-            <div className="mdl-cell mdl-cell--6-col" style={{ textAlign: 'center' }}>
+            <div className="mdl-cell mdl-cell--6-col wgsa-feature-icons">
               <span className="wgsa-file-icon">
                 <i className="material-icons" style={{ color: CGPS.COLOURS.PURPLE }}>insert_drive_file</i>
                 .fasta
@@ -49,7 +52,10 @@ export default React.createClass({
             </div>
           </div>
           <div className="mdl-grid mdl-grid--no-spacing">
-            <div className="mdl-cell mdl-cell--6-col">
+            <div className="mdl-cell mdl-cell--6-col wgsa-feature-icons">
+              <i className="material-icons wgsa-result-icon">check_circle</i>
+              <i className="material-icons wgsa-result-icon">check_circle</i>
+              <i className="material-icons wgsa-result-icon">radio_button_unchecked</i>
             </div>
             <div className="wgsa-features-card wgsa-features-card--reverse mdl-shadow--2dp mdl-cell">
               <p>Generate results including MLST, AMR predictions, clustering of genomes, and interactive visualisation of metadata.</p>
@@ -57,13 +63,18 @@ export default React.createClass({
           </div>
           <div className="mdl-grid mdl-grid--no-spacing">
             <div className="wgsa-features-card mdl-shadow--2dp mdl-cell mdl-cell--6-col">
-              <p>Compare results with other publicly available genomes placed within a ‘species population reference tree’.</p>
+              <p>Compare results with publicly available genomes within a species reference tree.</p>
             </div>
-            <div className="mdl-cell mdl-cell--6-col">
+            <div className="mdl-cell mdl-cell--6-col wgsa-feature-icons">
+              <i className="material-icons wgsa-compare-icon" style={{ color: CGPS.COLOURS.PURPLE_LIGHT }}>nature_people</i>
             </div>
           </div>
           <div className="mdl-grid mdl-grid--no-spacing">
-            <div className="mdl-cell mdl-cell--6-col">
+            <div className="mdl-cell mdl-cell--6-col wgsa-feature-icons">
+              <span className="wgsa-menu-button mdl-button">
+                <i className="wgsa-button-icon material-icons">file_download</i>
+                <span>Downloads</span>
+              </span>
             </div>
             <div className="wgsa-features-card wgsa-features-card--reverse mdl-shadow--2dp mdl-cell mdl-cell--6-col">
               <p>Download processed results for further analysis.</p>

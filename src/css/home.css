@@ -29,13 +29,8 @@
   padding: 0 16px 0;
 }
 
-.wgsa-home-header a {
-  text-decoration: none;
-}
-
-.wgsa-home-header a > img,
-.wgsa-home-header a > span {
-  vertical-align: middle;
+.wgsa-home-header .mdl-layout-title {
+  align-self: flex-end;
 }
 
 .cgps-logo {
@@ -43,7 +38,7 @@
 }
 
 .wgsa-home__intro {
-  padding: 3em 1em;
+  padding-bottom: 56px;
   text-align: center;
 }
 
@@ -69,7 +64,7 @@
 .wgsa-cta {
   background-color: #673c90 !important;
   color: #fff !important;
-  padding: 16px;
+  padding: 16px 32px;
   text-transform: none;
   font-size: 20px;
 }
@@ -98,7 +93,7 @@
   color: #444;
   box-sizing: border-box;
   width: 45% !important;
-  padding: 40px 40px 16px;
+  padding: 40px 56px 20px;
   padding-left: 56px;
   margin-right: 5% !important;
   background-size: 64px;
@@ -120,14 +115,18 @@
   margin-top: 0;
 }
 
+.wgsa-feature-icons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .wgsa-file-icon {
   position: relative;
-  vertical-align: middle;
-  display: inline-block;
 }
 
 .wgsa-file-icon > i {
-  font-size: 8rem;
+  font-size: 6rem;
   user-select: none;
 }
 
@@ -136,10 +135,28 @@
   color: #fff;
   left: 0;
   right: 0;
-  bottom: 2rem;
-  font-size: 1.75rem;
+  bottom: 1.25rem;
+  font-size: 1.25rem;
+  text-align: center;
 }
 
+.wgsa-result-icon {
+  font-size: 4rem;
+  margin: 0.5rem;
+  color: #673c90;
+}
+
+.wgsa-compare-icon {
+  font-size: 6rem;
+  margin: 0.5rem;
+}
+
+.wgsa-home__features .wgsa-menu-button:hover,
+.wgsa-home__features .wgsa-menu-button:active,
+.wgsa-home__features .wgsa-menu-button:focus {
+  background: #673c90;
+  box-shadow: 0 8px 10px 0 rgba(0,0,0,.28),0 2px 20px 0 rgba(0,0,0,.24),0 4px 8px -2px rgba(0,0,0,.4);
+}
 
 .wgsa-home footer {
   background-color: #666;
@@ -155,9 +172,8 @@
 
 .wgsa-home footer a:hover,
 .wgsa-home footer a:focus,
-.wgsa-home footer a:active,
-.wgsa-home footer a:visited {
-  color: #673c90;
+.wgsa-home footer a:active {
+  color: #ccc;
 }
 
 .wgsa-footer-content {
@@ -178,6 +194,7 @@
   display: block;
   padding: 24px 0;
 }
+
 
 .copyright {
   font-size: 13px;
