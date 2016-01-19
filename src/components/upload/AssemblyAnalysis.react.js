@@ -63,7 +63,7 @@ var AssemblyAnalysis = React.createClass({
         </div>
 
         <div className="mdl-cell mdl-cell--6-col">
-          <AssemblyAnalysisItem label="N Count" value={assembly.metrics.totalNumberOfNsInDnaStrings} />
+          <AssemblyAnalysisItem label="Non-ATCG" value={assembly.metrics.totalNumberOfNsInDnaStrings} />
         </div>
       </div>
     );

@@ -34,7 +34,13 @@ export const systemColumnProps = [
   },
   { columnKey: '__core_matches',
     valueGetter({ analysis }) {
-      return analysis.kernelSize;
+      return analysis.core.size;
+    },
+    getCellContents,
+  },
+  { columnKey: '__%_matched',
+    valueGetter({ analysis }) {
+      return analysis.core.percentMatched;
     },
     getCellContents,
   },
@@ -62,7 +68,7 @@ export const systemColumnProps = [
     },
     getCellContents,
   },
-  { columnKey: '__n_count',
+  { columnKey: '__non-ACTG',
     valueGetter({ metadata }) {
       return metadata.metrics ?
         metadata.metrics.totalNumberOfNsInDnaStrings :
