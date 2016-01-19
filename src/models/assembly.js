@@ -9,7 +9,7 @@ const {
   PAARSNP_RESULT,
   MLST_RESULT,
   FP_COMP,
-  CORE_SLIM,
+  CORE_RESULT,
 } = require('utils/documentKeys');
 
 var ASSEMBLY_ANALYSES = [ 'FP', 'MLST', 'PAARSNP', 'CORE' ];
@@ -110,7 +110,7 @@ function mergeQueryResults(data, queryKeyPrefixes, assemblyId) {
 function formatForFrontend(assembly) {
   var paarsnp = assembly[PAARSNP_RESULT];
   var mlst = assembly[MLST_RESULT];
-  var core = assembly[CORE_SLIM];
+  var core = assembly[CORE_RESULT];
   var fp = assembly[FP_COMP];
   return {
     populationSubtype: fp ? fp.subTypeAssignment : null,
@@ -118,7 +118,10 @@ function formatForFrontend(assembly) {
     analysis: {
       st: mlst ? mlst.sequenceType : null,
       mlst: mlst ? mlst.code : null,
-      kernelSize: core ? core.kernelSize : null,
+      core: core ? {
+        size: core.kernelSize,
+        percentMatched: core.percentKernelMatched,
+      } : null,
       resistanceProfile: paarsnp ?
         Object.keys(paarsnp.resistanceProfile).
           reduce(function (profile, className) {
@@ -161,7 +164,7 @@ function get(params, queryKeyPrefixes, callback) {
 
 const COMPLETE_ASSEMBLY_KEYS = [
   ASSEMBLY_METADATA,
-  CORE_SLIM,
+  CORE_RESULT,
   FP_COMP,
   MLST_RESULT,
   PAARSNP_RESULT,
