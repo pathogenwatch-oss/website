@@ -10,6 +10,13 @@
   justify-content: center;
 }
 
+.wgsa-loading-logo {
+  width: 240px;
+  margin-left: -48px; /* width / 5 */
+  margin-top: -120px; /* width / 2 */
+  padding-bottom: 48px; /* width / 5 */
+}
+
 .wgsa-loading-container h1 {
   font-family: Roboto, Arial, sans-serif;
   font-size: 36px;

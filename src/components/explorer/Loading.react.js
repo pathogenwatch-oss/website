@@ -13,7 +13,8 @@ const backgroundStyle = {
 
 const Background = ({ children }) => (
   <main style={backgroundStyle} className="wgsa-loading-container">
-   { children }
+    <img src="/assets/img/WGSA.FINAL.svg" className="wgsa-loading-logo"/>
+    { children }
   </main>
 );
 
@@ -34,7 +35,7 @@ export const LoadSpinner = React.createClass({
 
 export const LoadError = () => (
   <Background>
-    <h1>We're sorry, this collection is currently unavailable.</h1>
+    <h1>Sorry, this collection is currently unavailable.</h1>
     <p>Please try again later, or contact <a href="mailto:cgps@sanger.ac.uk">cgps@sanger.ac.uk</a> if problems persist.</p>
   </Background>
 );
