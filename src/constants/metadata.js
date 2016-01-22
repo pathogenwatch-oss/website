@@ -34,13 +34,17 @@ export const systemColumnProps = [
   },
   { columnKey: '__core_matches',
     valueGetter({ analysis }) {
-      return analysis.core.size;
+      return analysis.core ?
+        analysis.core.size :
+        null;
     },
     getCellContents,
   },
-  { columnKey: '__%_matched',
+  { columnKey: '__%_core_families',
     valueGetter({ analysis }) {
-      return analysis.core.percentMatched;
+      return analysis.core ?
+        analysis.core.percentMatched :
+        null;
     },
     getCellContents,
   },
@@ -68,7 +72,7 @@ export const systemColumnProps = [
     },
     getCellContents,
   },
-  { columnKey: '__non-ACTG',
+  { columnKey: '__non-ATCG',
     valueGetter({ metadata }) {
       return metadata.metrics ?
         metadata.metrics.totalNumberOfNsInDnaStrings :
