@@ -8,7 +8,7 @@ const options = {
 function socketConnect() {
   if (CONFIG.api) {
     // no options here to allow dev mode to use long-polling
-    return io.connect(CONFIG.api.address);
+    return io.connect(CONFIG.api.address, options);
   }
   return io.connect(null, options);
 }
