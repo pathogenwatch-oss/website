@@ -42,7 +42,7 @@ function newCollectionNotificationQueue(ids, notifyOptions, callback) {
   LOGGER.debug(ids);
   connection.queue(
     `collection-${ids.collectionId}-notification-queue`,
-    { exclusive: true },
+    {},
     function (queue) {
       LOGGER.info('Notification queue "' + queue.name + '" is open');
 
@@ -61,7 +61,7 @@ function newCollectionNotificationQueue(ids, notifyOptions, callback) {
 function newAssemblyNotificationQueue(ids, notifyOptions, callback) {
   connection.queue(
     `assembly-${ids.assemblyId}-notification-queue`,
-    { exclusive: true },
+    {},
     function (queue) {
       LOGGER.info('Notification queue "' + queue.name + '" is open');
 
@@ -82,7 +82,6 @@ function newAssemblyUploadQueue(assemblyId, callback) {
     `assembly-${assemblyId}-upload-queue`, {
       passive: false,
       durable: false,
-      exclusive: true,
       autoDelete: true,
       noDeclare: false,
       closeChannelOnUnsubscribe: false
@@ -100,7 +99,6 @@ function newCollectionAddQueue(callback) {
   return connection.queue(queueId, {
     passive: false,
     durable: false,
-    exclusive: true,
     autoDelete: true,
     noDeclare: false,
     closeChannelOnUnsubscribe: false
@@ -116,7 +114,6 @@ function newFileRequestQueue(callback) {
   return connection.queue(queueId, {
     passive: false,
     durable: false,
-    exclusive: true,
     autoDelete: true,
     noDeclare: false,
     closeChannelOnUnsubscribe: false

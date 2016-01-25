@@ -58,7 +58,7 @@ function manageCollection(request, callback) {
   });
 }
 
-function add(speciesId, ids, callback) {
+function add(ids, callback) {
   var assemblyNames = ids.assemblyNames;
   var collectionRequest = {
     identifierType: IDENTIFIER_TYPES.COLLECTION,
@@ -73,48 +73,53 @@ function add(speciesId, ids, callback) {
   LOGGER.info('Assembly ids requested: ' + assemblyRequest.count);
 
   async.waterfall([
-    function (done) {
+    function (next) {
       async.parallel({
         collection: requestIDs.bind(null, collectionRequest),
         assembly: requestIDs.bind(null, assemblyRequest)
-      }, done);
+      }, next);
     },
-    function (results, done) {
+    function (results, next) {
       LOGGER.info('Received IDs successfully:', results);
       manageCollection({
         collectionId: results.collection.identifiers[0],
         assemblyIds: results.assembly.identifiers,
         collectionOperation: COLLECTION_OPERATIONS.INITIATE
-      }, done);
+      }, next);
     },
-    function (results, done) {
-      var assemblyNameToAssemblyIdMap =
-        results.assemblyIds.reduce(function (map, newId) {
-          map[assemblyNames.shift()] = newId;
-          return map;
-        }, {});
-
-      ids.collectionId = results.collectionId;
-      ids.speciesId = speciesId;
-
-      messageQueueService.newCollectionNotificationQueue(ids, {
-        tasks: COLLECTION_TREE_TASKS,
-        loggingId: 'Collection ' + ids.collectionId,
-        notifyFn: socketService.notifyCollectionUpload.bind(socketService, ids)
-      }, function () {
-        done(null, {
-          collectionId: ids.collectionId,
-          assemblyNameToAssemblyIdMap: assemblyNameToAssemblyIdMap
-        });
-      });
-    }
   ],
-  function (error, result) {
+  function (error, { collectionId, assemblyIds }) {
     if (error) {
       LOGGER.error(error);
-      return callback(error, null);
+      return callback(error);
     }
-    callback(null, result);
+
+    async.parallel({
+      collectionId(done) {
+        const collectionQueueIds = Object.assign({}, ids, { collectionId });
+        messageQueueService.newCollectionNotificationQueue(collectionQueueIds, {
+          tasks: COLLECTION_TREE_TASKS,
+          loggingId: `Collection ${collectionId}`,
+          notifyFn: socketService.notifyCollectionUpload.bind(socketService, collectionQueueIds)
+        }, done);
+      },
+      assemblyIds(done) {
+        async.eachLimit(
+          assemblyIds,
+          10,
+          assemblyModel.awaitNotifications.bind(null, ids),
+          done
+        );
+      }
+    }, function () {
+      callback(null, {
+        collectionId,
+        assemblyNameToAssemblyIdMap: assemblyIds.reduce(function (map, newId) {
+          map[assemblyNames.shift()] = newId;
+          return map;
+        }, {})
+      });
+    });
   });
 }
 

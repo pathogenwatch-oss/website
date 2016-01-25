@@ -55,45 +55,49 @@ function createMetadataRecord(ids, metadata, metrics) {
   };
 }
 
-function beginUpload(ids, data) {
-  messageQueueService.newAssemblyNotificationQueue(ids, {
+function awaitNotifications(ids, assemblyId, callback) {
+  const allIds = Object.assign({ assemblyId }, ids);
+  messageQueueService.newAssemblyNotificationQueue(allIds, {
     tasks: ASSEMBLY_ANALYSES,
-    loggingId: 'Assembly ' + ids.assemblyId,
-    notifyFn: socketService.notifyAssemblyUpload.bind(socketService, ids)
+    loggingId: `Assembly ${assemblyId}`,
+    notifyFn: socketService.notifyAssemblyUpload.bind(socketService, allIds)
   }, function () {
-    var assemblyMetadata = createMetadataRecord(ids, data.metadata, data.metrics);
-    var assembly = {
-      speciesId: ids.speciesId,
-      assemblyId: ids.assemblyId,
-      collectionId: ids.collectionId,
-      sequences: data.sequences
-    };
-
-    mainStorage.store(
-      createKey(ids.assemblyId, ASSEMBLY_METADATA),
-      assemblyMetadata,
-      function () {
-        socketService.notifyAssemblyUpload(ids, 'METADATA_OK');
-      }
-    );
-
-    messageQueueService.newAssemblyUploadQueue(ids.assemblyId,
-      function (uploadQueue) {
-        uploadQueue.subscribe(function () {
-          LOGGER.info('Received response from ' + this.name + ', destroying.');
-          uploadQueue.destroy();
-          socketService.notifyAssemblyUpload(ids, 'UPLOAD_OK');
-        });
-
-        messageQueueService.getUploadExchange()
-          .publish('upload', assembly, { replyTo: uploadQueue.name });
-
-        // "dereference" sequences to remove from heap
-        data.sequences = null;
-        assembly.sequences = null;
-      }
-    );
+    callback(null, assemblyId);
   });
+}
+
+function beginUpload(ids, data) {
+  var assemblyMetadata = createMetadataRecord(ids, data.metadata, data.metrics);
+  var assembly = {
+    speciesId: ids.speciesId,
+    assemblyId: ids.assemblyId,
+    collectionId: ids.collectionId,
+    sequences: data.sequences
+  };
+
+  mainStorage.store(
+    createKey(ids.assemblyId, ASSEMBLY_METADATA),
+    assemblyMetadata,
+    function () {
+      socketService.notifyAssemblyUpload(ids, 'METADATA_OK');
+    }
+  );
+
+  messageQueueService.newAssemblyUploadQueue(ids.assemblyId,
+    function (uploadQueue) {
+      uploadQueue.subscribe(function () {
+        LOGGER.info('Received response from ' + this.name + ', destroying.');
+        uploadQueue.destroy();
+      });
+
+      messageQueueService.getUploadExchange()
+        .publish('upload', assembly, { replyTo: uploadQueue.name });
+
+      // "dereference" sequences to remove from heap
+      data.sequences = null;
+      assembly.sequences = null;
+    }
+  );
 }
 
 function constructQueryKeys(prefixes, assemblyId) {
@@ -204,6 +208,7 @@ function groupAssembliesBySubtype(assemblies) {
   }, {});
 }
 
+module.exports.awaitNotifications = awaitNotifications;
 module.exports.beginUpload = beginUpload;
 module.exports.getComplete = getComplete;
 module.exports.getReference = getReference;

@@ -26,17 +26,6 @@ router.get('/species/:speciesId/collection/:collectionId', function (req, res, n
   });
 });
 
-router.post('/species/:id/collection', function (req, res, next) {
-  LOGGER.info('Received request for new collection id');
-
-  collectionModel.add(req.params.id, req.body, function (error, result) {
-    if (error) {
-      return next(error);
-    }
-    res.json(result);
-  });
-});
-
 router.post('/species/:speciesId/collection/:collectionId/assembly/:assemblyId',
   function (req, res) {
     var ids = {
