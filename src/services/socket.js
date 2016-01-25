@@ -1,4 +1,5 @@
 var socketio = require('socket.io');
+var redis = require('socket.io-redis');
 
 var socketConnection = require('utils/socketConnection');
 
@@ -7,7 +8,7 @@ var LOGGER = require('utils/logging').createLogger('Socket');
 var io; // module-wide variable because initialisation and usage are separate
 function connect(server) {
   io = socketio.listen(server);
-  // io.set('origins', '*');
+  io.adapter(redis({ host: 'cgps-devdg24.internal.sanger.ac.uk', port: 6379 }));
   io.sockets.on('connection', socketConnection.initialise);
 }
 
