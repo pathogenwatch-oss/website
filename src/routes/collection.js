@@ -58,7 +58,7 @@ router.post('/species/:speciesId/collection/:collectionId/assembly/:assemblyId',
         res.sendStatus(500);
       }
 
-      res.sendStatus(200);
+      res.json({ assemblyId: ids.assemblyId });
     });
   }
 );
