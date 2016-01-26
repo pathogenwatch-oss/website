@@ -163,7 +163,6 @@ const UploadingAssembliesProgress = React.createClass({
               <tr>
                 <td style={CELL_STYLE}></td>
                 <td style={HEADER_STYLE}>UPLOAD</td>
-                <td style={HEADER_STYLE}>METADATA</td>
                 <td style={HEADER_STYLE}>CORE</td>
                 <td style={HEADER_STYLE}>FP</td> {
                   this.assemblyResultColumns.indexOf('MLST') !== -1 ?

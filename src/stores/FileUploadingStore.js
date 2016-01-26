@@ -9,7 +9,6 @@ import Species from '../species';
 const CHANGE_EVENT = 'change';
 
 const ASSEMBLY_PROCESSING_RESULTS = [
-  'METADATA_OK',
   'CORE',
   'FP',
   'MLST',
