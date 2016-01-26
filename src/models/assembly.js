@@ -1,3 +1,5 @@
+var async = require('async');
+
 var sequenceTypeModel = require('models/sequenceType');
 var socketService = require('services/socket');
 var messageQueueService = require('services/messageQueue');
@@ -66,7 +68,7 @@ function awaitNotifications(ids, assemblyId, callback) {
   });
 }
 
-function beginUpload(ids, data) {
+function beginUpload(ids, data, callback) {
   var assemblyMetadata = createMetadataRecord(ids, data.metadata, data.metrics);
   var assembly = {
     speciesId: ids.speciesId,
@@ -75,29 +77,29 @@ function beginUpload(ids, data) {
     sequences: data.sequences
   };
 
-  mainStorage.store(
-    createKey(ids.assemblyId, ASSEMBLY_METADATA),
-    assemblyMetadata,
-    function () {
-      socketService.notifyAssemblyUpload(ids, 'METADATA_OK');
-    }
-  );
+  async.parallel([
+    (done) => mainStorage.store(
+      createKey(ids.assemblyId, ASSEMBLY_METADATA),
+      assemblyMetadata,
+      done
+    ),
+    (done) => messageQueueService.newAssemblyUploadQueue(ids.assemblyId,
+      function (uploadQueue) {
+        uploadQueue.subscribe(function () {
+          LOGGER.info('Received response from ' + this.name + ', destroying.');
+          uploadQueue.destroy();
+          done();
+        });
 
-  messageQueueService.newAssemblyUploadQueue(ids.assemblyId,
-    function (uploadQueue) {
-      uploadQueue.subscribe(function () {
-        LOGGER.info('Received response from ' + this.name + ', destroying.');
-        uploadQueue.destroy();
-      });
+        messageQueueService.getUploadExchange()
+          .publish('upload', assembly, { replyTo: uploadQueue.name });
 
-      messageQueueService.getUploadExchange()
-        .publish('upload', assembly, { replyTo: uploadQueue.name });
-
-      // "dereference" sequences to remove from heap
-      data.sequences = null;
-      assembly.sequences = null;
-    }
-  );
+        // "dereference" sequences to remove from heap
+        data.sequences = null;
+        assembly.sequences = null;
+      }
+    )
+  ], callback);
 }
 
 function constructQueryKeys(prefixes, assemblyId) {

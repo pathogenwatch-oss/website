@@ -53,11 +53,13 @@ router.post('/species/:speciesId/collection/:collectionId/assembly/:assemblyId',
       LOGGER.error('Missing species id');
     }
 
-    res.json({
-      assemblyId: ids.assemblyId
-    });
+    assemblyModel.beginUpload(ids, req.body, function (error) {
+      if (error) {
+        res.sendStatus(500);
+      }
 
-    assemblyModel.beginUpload(ids, req.body);
+      res.sendStatus(200);
+    });
   }
 );
 
