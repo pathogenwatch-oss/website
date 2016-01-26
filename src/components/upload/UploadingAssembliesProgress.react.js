@@ -62,8 +62,7 @@ const UploadingAssembliesProgress = React.createClass({
   },
 
   componentDidUpdate() {
-    const { assemblies, collection } = this.state.receivedResults;
-    console.log('----------', assemblies, collection)
+    const { assemblies } = this.state.receivedResults;
     if (!assemblies) {
       return;
     }
@@ -71,7 +70,7 @@ const UploadingAssembliesProgress = React.createClass({
     for (const assemblyName of Object.keys(FileUploadingStore.getAssemblyNameToAssemblyIdMap())) {
       const assemblyId = FileUploadingStore.getAssemblyNameToAssemblyIdMap()[assemblyName];
       const results = assemblies[assemblyId];
-      if (results && results.progress && !results.UPLOAD_OK) {
+      if (results && results.progress && results.progress < 100) {
         this.refs[`progress_${assemblyName}`]
           .MaterialProgress.setProgress(results.progress);
       }

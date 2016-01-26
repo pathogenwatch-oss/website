@@ -42,9 +42,13 @@ export default {
     // console.log(`Expected: ${numberOfExpectedResults}, Received: ${numberOfReceivedResults}`);
 
     if (numberOfExpectedResults === numberOfReceivedResults) {
-      // console.log('[WGSA] Received all results');
-
-      FileUploadingActionCreators.finishUploadingFiles(FileUploadingStore.getFileUploadingResults().SUCCESS);
+      console.log('[WGSA] Received all results');
+      // fire action on next tick to allow last result to show.
+      setTimeout(() =>
+        FileUploadingActionCreators.finishUploadingFiles(
+          FileUploadingStore.getFileUploadingResults().SUCCESS
+        ),
+      0);
     }
   },
 

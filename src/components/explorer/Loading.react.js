@@ -35,7 +35,7 @@ export const LoadSpinner = React.createClass({
 
 export const LoadError = () => (
   <Background>
-    <h1>Sorry, this collection is currently unavailable.</h1>
+    <h1>This collection is currently unavailable.</h1>
     <p>Please try again later, or contact <a href="mailto:cgps@sanger.ac.uk">cgps@sanger.ac.uk</a> if problems persist.</p>
   </Background>
 );
