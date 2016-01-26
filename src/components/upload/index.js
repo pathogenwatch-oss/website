@@ -85,7 +85,7 @@ export default React.createClass({
     });
 
     socket.on('disconnect', function () {
-      console.error('[WGSA] Socket connection lost');
+      console.error('[WGSA] Socket connection disconnected');
     });
 
     SocketStore.addChangeListener(this.handleSocketStoreChange);

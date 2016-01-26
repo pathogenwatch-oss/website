@@ -16,7 +16,6 @@ function setNumberOfExpectedResults(number) {
 }
 
 function setReceivedResult(result) {
-
   numberOfReceivedResults++;
 
   if (result.assemblyId) {
@@ -25,8 +24,6 @@ function setReceivedResult(result) {
     receivedResults.assemblies[result.assemblyId][result.result] = true;
 
     console.log('[WGSA][Assembly Result] ' + result.assemblyId + ' ' + result.result);
-    console.dir(receivedResults);
-
     return;
   }
 
@@ -34,7 +31,6 @@ function setReceivedResult(result) {
   receivedResults.collection[result.result] = true;
 
   console.log('[WGSA][Collection Result] ' + result.collectionId + ' ' + result.result);
-  console.dir(receivedResults);
 }
 
 function setAssemblyProgress(assemblyId, progress) {
@@ -75,7 +71,7 @@ const Store = assign({}, EventEmitter.prototype, {
     numberOfReceivedResults = 0;
     receivedResults.assemblies = null;
     receivedResults.collection = null;
-  }
+  },
 
 });
 

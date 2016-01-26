@@ -63,7 +63,7 @@ const UploadingAssembliesProgress = React.createClass({
 
   componentDidUpdate() {
     const { assemblies, collection } = this.state.receivedResults;
-    console.log('----------',assemblies, collection)
+    console.log('----------', assemblies, collection)
     if (!assemblies) {
       return;
     }
@@ -92,7 +92,6 @@ const UploadingAssembliesProgress = React.createClass({
     const assemblyNameToAssemblyIdMap = FileUploadingStore.getAssemblyNameToAssemblyIdMap();
     const assemblyNames = UploadStore.getAssemblyNames();
     const assemblyResults = this.state.receivedResults.assemblies;
-    // console.log('assembly-results', assemblyResults);
 
     return assemblyNames.map((assemblyName) => {
       let assemblyResult = {};
@@ -110,21 +109,23 @@ const UploadingAssembliesProgress = React.createClass({
       return (
         <tr key={assemblyName}>
           <td style={FILE_ASSEMBLY_ID_STYLE} className="mdl-data-table__cell--non-numeric">{assemblyName}</td>
+          <td style={CELL_STYLE}>
+            { assemblyResult.progress === 100 ?
+              <i style={ICON_STYLE} className="material-icons">check_circle</i> :
+              <div>
+                <p style={ASSEMBLY_PERCENT_STYLE}>{`${assemblyResult.progress || 0}%`}</p>
+                <div style={ASSEMBLY_PROGRESS_BAR_STYLE} ref={`progress_${assemblyName}`} className="mdl-progress mdl-js-progress"></div>
+              </div>
+            }
+          </td>
           { this.assemblyResultColumns.map((resultName) => {
             return (
               <td style={CELL_STYLE} key={`${assemblyName}-${resultName}`}>
-                { resultName === 'UPLOAD_OK' && !assemblyResult[resultName] ?
-                  <div>
-                    <p style={ASSEMBLY_PERCENT_STYLE}>{`${assemblyResult.progress || 0}%`}</p>
-                    <div style={ASSEMBLY_PROGRESS_BAR_STYLE} ref={`progress_${assemblyName}`} className="mdl-progress mdl-js-progress"></div>
-                  </div>
-                  :
-                  <i style={ICON_STYLE} className="material-icons">
-                  { assemblyResult[resultName] ?
-                      'check_circle' :
-                      'radio_button_unchecked' }
-                  </i>
-                }
+                <i style={ICON_STYLE} className="material-icons">
+                { assemblyResult[resultName] ?
+                    'check_circle' :
+                    'radio_button_unchecked' }
+                </i>
               </td>
             );
           }) }
@@ -142,7 +143,7 @@ const UploadingAssembliesProgress = React.createClass({
           return (
             <td style={CELL_STYLE} key={collectionResultName}>
               <i style={ICON_STYLE} className="material-icons">
-              { assemblyResults && assemblyResults[collectionResultName] ?
+                { assemblyResults && assemblyResults[collectionResultName] ?
                   'check_circle' :
                   'radio_button_unchecked' }
               </i>
@@ -152,7 +153,6 @@ const UploadingAssembliesProgress = React.createClass({
       </tr>
     );
   },
-
 
 
   render() {

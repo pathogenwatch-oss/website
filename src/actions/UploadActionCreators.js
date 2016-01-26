@@ -7,7 +7,7 @@ import FileUploadingActionCreators from '../actions/FileUploadingActionCreators'
 import FileUploadingProgressActionCreators from '../actions/FileUploadingProgressActionCreators';
 
 import FileUtils from '../utils/File';
-import { getCollectionId, postAssembly } from '../utils/Api';
+import { postAssembly } from '../utils/Api';
 import Species from '../species';
 
 module.exports = {
@@ -43,7 +43,9 @@ module.exports = {
     FileUploadingActionCreators.startUploadingFiles();
     FileUploadingProgressActionCreators.setNumberOfExpectedResults();
 
-    SocketStore.getSocketConnection().on('assemblyUploadNotification', function (data) {
+    const socket = SocketStore.getSocketConnection()
+
+    socket.on('assemblyUploadNotification', function (data) {
       console.log('[WGSA] Received notification:');
       console.dir(data);
 
@@ -56,25 +58,26 @@ module.exports = {
     const data = {
       assemblyNames: assemblyNames,
       socketRoomId: roomId,
+      speciesId: Species.id,
     };
 
-    getCollectionId(Species.id, data, function (idError, ids) {
-      if (idError) {
-        console.error(idError);
+    socket.on('ids', function ({ error, result }) {
+      if (error) {
+        console.error(error);
         return;
       }
 
       FileUploadingActionCreators.setCollectionId({
-        collectionId: ids.collectionId,
-        assemblyNameToAssemblyIdMap: ids.assemblyNameToAssemblyIdMap,
+        collectionId: result.collectionId,
+        assemblyNameToAssemblyIdMap: result.assemblyNameToAssemblyIdMap,
       });
 
-      const assemblyNameToAssemblyIdMap = ids.assemblyNameToAssemblyIdMap;
+      const assemblyNameToAssemblyIdMap = result.assemblyNameToAssemblyIdMap;
       Object.keys(assemblyNameToAssemblyIdMap).forEach(
         function sendAssembly(assemblyName) {
           const { metadata, metrics, fasta } = UploadStore.getAssembly(assemblyName);
           const urlParams = {
-            collectionId: ids.collectionId,
+            collectionId: result.collectionId,
             assemblyId: assemblyNameToAssemblyIdMap[assemblyName],
             speciesId: Species.id,
           };
@@ -94,6 +97,8 @@ module.exports = {
         }
       );
     });
+
+    socket.emit('requestIds', data);
   },
 
 };

@@ -9,7 +9,6 @@ import Species from '../species';
 const CHANGE_EVENT = 'change';
 
 const ASSEMBLY_PROCESSING_RESULTS = [
-  'UPLOAD_OK',
   'METADATA_OK',
   'CORE',
   'FP',
@@ -17,28 +16,28 @@ const ASSEMBLY_PROCESSING_RESULTS = [
   'PAARSNP',
 ];
 
-var COLLECTION_PROCESSING_RESULTS = keyMirror({
+const COLLECTION_PROCESSING_RESULTS = keyMirror({
   PHYLO_MATRIX: null,
   CORE_MUTANT_TREE: null,
   SUBMATRIX: null,
 });
 
-var STATES = keyMirror({
+const STATES = keyMirror({
   NOT_UPLOADING_FILES: null,
   UPLOADING_FILES: null,
 });
 
-var RESULTS = keyMirror({
+const RESULTS = keyMirror({
   NONE: null,
   SUCCESS: null,
   ERROR: null,
   ABORT: null,
 });
 
-var fileUploadingState = null;
-var fileUploadingResult = RESULTS.NONE;
-var collectionId = null;
-var assemblyNameToAssemblyIdMap = null;
+let fileUploadingState = null;
+let fileUploadingResult = RESULTS.NONE;
+let collectionId = null;
+let assemblyNameToAssemblyIdMap = null;
 
 function setFileUploadingState(state) {
   fileUploadingState = state;
@@ -56,11 +55,7 @@ function setassemblyNameToAssemblyIdMap(idToIdMap) {
   assemblyNameToAssemblyIdMap = idToIdMap;
 }
 
-function emitChange() {
-  Store.emit(CHANGE_EVENT);
-}
-
-var Store = assign({}, EventEmitter.prototype, {
+const Store = assign({}, EventEmitter.prototype, {
   addChangeListener: function (callback) {
     this.on(CHANGE_EVENT, callback);
   },
@@ -106,6 +101,10 @@ var Store = assign({}, EventEmitter.prototype, {
     assemblyNameToAssemblyIdMap = null;
   },
 });
+
+function emitChange() {
+  Store.emit(CHANGE_EVENT);
+}
 
 function handleAction(action) {
   switch (action.type) {
