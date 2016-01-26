@@ -28,6 +28,13 @@ export default {
     });
   },
 
+  setAssemblyUploaded(assemblyId) {
+    AppDispatcher.dispatch({
+      type: 'set_assembly_uploaded',
+      assemblyId,
+    });
+  },
+
   addReceivedResult(result) {
     const action = {
       type: 'add_received_result',

@@ -70,7 +70,7 @@ const UploadingAssembliesProgress = React.createClass({
     for (const assemblyName of Object.keys(FileUploadingStore.getAssemblyNameToAssemblyIdMap())) {
       const assemblyId = FileUploadingStore.getAssemblyNameToAssemblyIdMap()[assemblyName];
       const results = assemblies[assemblyId];
-      if (results && results.progress && results.progress < 100) {
+      if (results && results.progress && !results.uploaded) {
         this.refs[`progress_${assemblyName}`]
           .MaterialProgress.setProgress(results.progress);
       }
@@ -109,7 +109,7 @@ const UploadingAssembliesProgress = React.createClass({
         <tr key={assemblyName}>
           <td style={FILE_ASSEMBLY_ID_STYLE} className="mdl-data-table__cell--non-numeric">{assemblyName}</td>
           <td style={CELL_STYLE}>
-            { assemblyResult.progress === 100 ?
+            { assemblyResult.uploaded ?
               <i style={ICON_STYLE} className="material-icons">check_circle</i> :
               <div>
                 <p style={ASSEMBLY_PERCENT_STYLE}>{`${assemblyResult.progress || 0}%`}</p>

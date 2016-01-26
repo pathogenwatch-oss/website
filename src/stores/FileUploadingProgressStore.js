@@ -40,6 +40,12 @@ function setAssemblyProgress(assemblyId, progress) {
   console.log(numberOfReceivedResults);
 }
 
+function setAssemblyUploaded(assemblyId) {
+  receivedResults.assemblies = receivedResults.assemblies || {};
+  receivedResults.assemblies[assemblyId] = receivedResults.assemblies[assemblyId] || {};
+  receivedResults.assemblies[assemblyId].uploaded = true;
+}
+
 const Store = assign({}, EventEmitter.prototype, {
 
   addChangeListener(callback) {
@@ -94,6 +100,11 @@ function handleAction(action) {
 
   case 'add_received_result':
     setReceivedResult(action.result);
+    emitChange();
+    break;
+
+  case 'set_assembly_uploaded':
+    setAssemblyUploaded(action.assemblyId);
     emitChange();
     break;
 

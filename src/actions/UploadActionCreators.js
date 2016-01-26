@@ -93,6 +93,7 @@ module.exports = {
               console.error(assemblyError);
               return;
             }
+            FileUploadingProgressActionCreators.setAssemblyUploaded(urlParams.assemblyId);
           });
         }
       );
