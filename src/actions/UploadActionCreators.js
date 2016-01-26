@@ -67,36 +67,42 @@ module.exports = {
         return;
       }
 
+      const { collectionId, assemblyNameToAssemblyIdMap } = result;
+
       FileUploadingActionCreators.setCollectionId({
-        collectionId: result.collectionId,
-        assemblyNameToAssemblyIdMap: result.assemblyNameToAssemblyIdMap,
+        collectionId,
+        assemblyNameToAssemblyIdMap,
       });
 
-      const assemblyNameToAssemblyIdMap = result.assemblyNameToAssemblyIdMap;
-      Object.keys(assemblyNameToAssemblyIdMap).forEach(
-        function sendAssembly(assemblyName) {
-          const { metadata, metrics, fasta } = UploadStore.getAssembly(assemblyName);
-          const urlParams = {
-            collectionId: result.collectionId,
-            assemblyId: assemblyNameToAssemblyIdMap[assemblyName],
-            speciesId: Species.id,
-          };
-          const requestBody = {
-            socketRoomId: roomId,
-            sequences: fasta.assembly,
-            metadata,
-            metrics,
-          };
+      const uploadAssembly = (assemblyName) => {
+        const { metadata, metrics, fasta } = UploadStore.getAssembly(assemblyName);
+        const urlParams = {
+          collectionId: result.collectionId,
+          assemblyId: assemblyNameToAssemblyIdMap[assemblyName],
+          speciesId: Species.id,
+        };
+        const requestBody = {
+          socketRoomId: roomId,
+          sequences: fasta.assembly,
+          metadata,
+          metrics,
+        };
 
-          postAssembly(urlParams, requestBody, function (assemblyError) {
-            if (assemblyError) {
-              console.error(assemblyError);
-              return;
-            }
-            FileUploadingProgressActionCreators.setAssemblyUploaded(urlParams.assemblyId);
-          });
-        }
-      );
+        postAssembly(urlParams, requestBody, function (assemblyError, { assemblyId }) {
+          if (assemblyError) {
+            console.error(assemblyError);
+            return;
+          }
+          FileUploadingProgressActionCreators.setAssemblyUploaded(assemblyId);
+          if (assemblyNames.length) {
+            uploadAssembly(assemblyNames.shift());
+          }
+        });
+      };
+
+      for (let i = 0; i < Math.min(assemblyNames.length, 10); i++) {
+        uploadAssembly(assemblyNames.shift());
+      }
     });
 
     socket.emit('requestIds', data);

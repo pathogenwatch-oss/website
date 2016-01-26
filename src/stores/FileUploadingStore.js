@@ -93,6 +93,12 @@ const Store = assign({}, EventEmitter.prototype, {
     return assemblyNameToAssemblyIdMap;
   },
 
+  getAssemblyId(assemblyName) {
+    return assemblyNameToAssemblyIdMap ?
+      assemblyNameToAssemblyIdMap[assemblyName] :
+      null;
+  },
+
   clearStore: function () {
     fileUploadingState = null;
     fileUploadingResult = RESULTS.NONE;

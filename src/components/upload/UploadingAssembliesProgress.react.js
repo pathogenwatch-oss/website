@@ -42,107 +42,50 @@ const ASSEMBLY_PROGRESS_BAR_STYLE = {
   marginTop: '4px',
 };
 
-const UploadingAssembliesProgress = React.createClass({
 
-  getInitialState() {
-    return {
-      receivedResults: FileUploadingProgressStore.getReceivedResults(),
-    };
+const ASSEMBLY_RESULT_COLUMNS = FileUploadingStore.getAssemblyProcessingResults();
+const COLLECTION_RESULT_COLUMNS = FileUploadingStore.getCollectionProcessingResults();
+
+const AssemblyProgressRow = React.createClass({
+
+  propTypes: {
+    assemblyName: React.PropTypes.string,
+    results: React.PropTypes.object,
   },
 
-  componentWillMount() {
-    this.assemblyResultColumns = FileUploadingStore.getAssemblyProcessingResults();
-    this.collectionResultColumns = FileUploadingStore.getCollectionProcessingResults();
-  },
-
-  componentDidMount() {
-    FileUploadingProgressStore.addChangeListener(this.handleFileUploadingProgressStoreChange);
-
-    componentHandler.upgradeElement(this.refs.table);
+  shouldComponentUpdate(nextProps) {
+    return nextProps.results !== this.props.results;
   },
 
   componentDidUpdate() {
-    const { assemblies } = this.state.receivedResults;
-    if (!assemblies) {
-      return;
-    }
+    const { results } = this.props;
 
-    for (const assemblyName of Object.keys(FileUploadingStore.getAssemblyNameToAssemblyIdMap())) {
-      const assemblyId = FileUploadingStore.getAssemblyNameToAssemblyIdMap()[assemblyName];
-      const results = assemblies[assemblyId];
-      if (results && results.progress && !results.uploaded) {
-        this.refs[`progress_${assemblyName}`]
-          .MaterialProgress.setProgress(results.progress);
-      }
+    if (results.progress && !results.uploaded) {
+      this.refs[`progress_${this.props.assemblyName}`]
+        .MaterialProgress.setProgress(results.progress);
     }
   },
 
-  componentWillUnmount() {
-    FileUploadingProgressStore.removeChangeListener(this.handleFileUploadingProgressStoreChange);
-  },
-
-  handleFileUploadingProgressStoreChange() {
-    this.setState({
-      receivedResults: FileUploadingProgressStore.getReceivedResults(),
-    });
-  },
-
-  getAssemblyResultElements() {
-    const assemblyNameToAssemblyIdMap = FileUploadingStore.getAssemblyNameToAssemblyIdMap();
-    const assemblyNames = UploadStore.getAssemblyNames();
-    const assemblyResults = this.state.receivedResults.assemblies;
-
-    return assemblyNames.map((assemblyName) => {
-      let assemblyResult = {};
-      let assemblyId;
-
-      // This logic needs to be refactored:
-      if (assemblyNameToAssemblyIdMap && assemblyResults) {
-        assemblyId = assemblyNameToAssemblyIdMap[assemblyName];
-
-        if (assemblyResults[assemblyId]) {
-          assemblyResult = assemblyResults[assemblyId];
-        }
-      }
-
-      return (
-        <tr key={assemblyName}>
-          <td style={FILE_ASSEMBLY_ID_STYLE} className="mdl-data-table__cell--non-numeric">{assemblyName}</td>
-          <td style={CELL_STYLE}>
-            { assemblyResult.uploaded ?
-              <i style={ICON_STYLE} className="material-icons">check_circle</i> :
-              <div>
-                <p style={ASSEMBLY_PERCENT_STYLE}>{`${assemblyResult.progress || 0}%`}</p>
-                <div style={ASSEMBLY_PROGRESS_BAR_STYLE} ref={`progress_${assemblyName}`} className="mdl-progress mdl-js-progress"></div>
-              </div>
-            }
-          </td>
-          { this.assemblyResultColumns.map((resultName) => {
-            return (
-              <td style={CELL_STYLE} key={`${assemblyName}-${resultName}`}>
-                <i style={ICON_STYLE} className="material-icons">
-                { assemblyResult[resultName] ?
-                    'check_circle' :
-                    'radio_button_unchecked' }
-                </i>
-              </td>
-            );
-          }) }
-        </tr>
-      );
-    });
-  },
-
-  getCollectionResultElements() {
-    const assemblyResults = this.state.receivedResults.collection;
+  render() {
+    const { assemblyName, results } = this.props;
 
     return (
-      <tr>
-        { Object.keys(this.collectionResultColumns).map((collectionResultName) => {
+      <tr key={assemblyName}>
+        <td style={FILE_ASSEMBLY_ID_STYLE} className="mdl-data-table__cell--non-numeric">{assemblyName}</td>
+        <td style={CELL_STYLE}>
+          { results.uploaded ?
+            <i style={ICON_STYLE} className="material-icons">check_circle</i> :
+            <div>
+              <p style={ASSEMBLY_PERCENT_STYLE}>{`${results.progress || 0}%`}</p>
+              <div style={ASSEMBLY_PROGRESS_BAR_STYLE} ref={`progress_${assemblyName}`} className="mdl-progress mdl-js-progress"></div>
+            </div>
+          }
+        </td>
+        { ASSEMBLY_RESULT_COLUMNS.map((resultName) => {
           return (
-            <td style={CELL_STYLE} key={collectionResultName}>
+            <td style={CELL_STYLE} key={`${assemblyName}-${resultName}`}>
               <i style={ICON_STYLE} className="material-icons">
-                { assemblyResults && assemblyResults[collectionResultName] ?
+              { results[resultName] ?
                   'check_circle' :
                   'radio_button_unchecked' }
               </i>
@@ -153,8 +96,50 @@ const UploadingAssembliesProgress = React.createClass({
     );
   },
 
+});
+
+const UploadingAssembliesProgress = React.createClass({
+
+  // dummy object to stop rows updating through immutability
+  noResults: {},
+
+  getInitialState() {
+    return {
+      results: {},
+    };
+  },
+
+  componentDidMount() {
+    FileUploadingProgressStore.addChangeListener(this.handleFileUploadingProgressStoreChange);
+    // componentHandler.upgradeElement(this.refs.table);
+  },
+
+  componentWillUnmount() {
+    FileUploadingProgressStore.removeChangeListener(this.handleFileUploadingProgressStoreChange);
+  },
+
+  getCollectionResultElements() {
+    const collectionResults = this.state.results.collection;
+
+    return (
+      <tr>
+        { Object.keys(COLLECTION_RESULT_COLUMNS).map((collectionResultName) => {
+          return (
+            <td style={CELL_STYLE} key={collectionResultName}>
+              <i style={ICON_STYLE} className="material-icons">
+                { collectionResults && collectionResults[collectionResultName] ?
+                  'check_circle' :
+                  'radio_button_unchecked' }
+              </i>
+            </td>
+          );
+        }) }
+      </tr>
+    );
+  },
 
   render() {
+    const { assemblies = {} } = this.state.results;
     return (
       <div>
         <div className="wgsa-upload-progress-table">
@@ -165,16 +150,26 @@ const UploadingAssembliesProgress = React.createClass({
                 <td style={HEADER_STYLE}>UPLOAD</td>
                 <td style={HEADER_STYLE}>CORE</td>
                 <td style={HEADER_STYLE}>FP</td> {
-                  this.assemblyResultColumns.indexOf('MLST') !== -1 ?
+                  ASSEMBLY_RESULT_COLUMNS.indexOf('MLST') !== -1 ?
                     <td style={HEADER_STYLE}>MLST</td> : null
                 } {
-                  this.assemblyResultColumns.indexOf('PAARSNP') !== -1 ?
+                  ASSEMBLY_RESULT_COLUMNS.indexOf('PAARSNP') !== -1 ?
                     <td style={HEADER_STYLE}>PAARSNP</td> : null
                 }
               </tr>
             </thead>
             <tbody>
-              {this.getAssemblyResultElements()}
+              {UploadStore.getAssemblyNames().map(assemblyName => {
+                const assemblyId = FileUploadingStore.getAssemblyId(assemblyName);
+                const results = assemblyId && assemblies[assemblyId];
+                return (
+                  <AssemblyProgressRow
+                    key={assemblyName}
+                    assemblyName={assemblyName}
+                    results={results || this.noResults}
+                  />
+                );
+              })}
             </tbody>
           </table>
         </div>
@@ -196,6 +191,12 @@ const UploadingAssembliesProgress = React.createClass({
       </div>
 
     );
+  },
+
+  handleFileUploadingProgressStoreChange() {
+    this.setState({
+      results: FileUploadingProgressStore.getResults(),
+    });
   },
 
 });

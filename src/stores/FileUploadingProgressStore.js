@@ -20,8 +20,11 @@ function setReceivedResult(result) {
 
   if (result.assemblyId) {
     receivedResults.assemblies = receivedResults.assemblies || {};
-    receivedResults.assemblies[result.assemblyId] = receivedResults.assemblies[result.assemblyId] || {};
-    receivedResults.assemblies[result.assemblyId][result.result] = true;
+    const results = receivedResults.assemblies[result.assemblyId] || {};
+    receivedResults.assemblies[result.assemblyId] = {
+      ...results,
+      [result.result]: true,
+    };
 
     console.log('[WGSA][Assembly Result] ' + result.assemblyId + ' ' + result.result);
     return;
@@ -35,15 +38,21 @@ function setReceivedResult(result) {
 
 function setAssemblyProgress(assemblyId, progress) {
   receivedResults.assemblies = receivedResults.assemblies || {};
-  receivedResults.assemblies[assemblyId] = receivedResults.assemblies[assemblyId] || {};
-  receivedResults.assemblies[assemblyId].progress = Math.floor(progress);
-  console.log(numberOfReceivedResults);
+  const results = receivedResults.assemblies[assemblyId] || {};
+  receivedResults.assemblies[assemblyId] = {
+    ...results,
+    progress: Math.floor(progress),
+  };
 }
 
 function setAssemblyUploaded(assemblyId) {
   receivedResults.assemblies = receivedResults.assemblies || {};
-  receivedResults.assemblies[assemblyId] = receivedResults.assemblies[assemblyId] || {};
-  receivedResults.assemblies[assemblyId].uploaded = true;
+  const results = receivedResults.assemblies[assemblyId] || {};
+
+  receivedResults.assemblies[assemblyId] = {
+    ...results,
+    uploaded: true,
+  };
 }
 
 const Store = assign({}, EventEmitter.prototype, {
@@ -68,7 +77,7 @@ const Store = assign({}, EventEmitter.prototype, {
     return Math.floor(this.getNumberOfReceivedResults() * 100 / this.getNumberOfExpectedResults());
   },
 
-  getReceivedResults() {
+  getResults() {
     return receivedResults;
   },
 
