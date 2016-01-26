@@ -88,7 +88,6 @@ export default React.createClass({
       console.error('[WGSA] Socket connection disconnected');
     });
 
-    SocketStore.addChangeListener(this.handleSocketStoreChange);
     SocketActionCreators.setSocketConnection(socket);
   },
 
@@ -96,19 +95,10 @@ export default React.createClass({
     FileProcessingStore.removeChangeListener(this.handleFileProcessingStoreChange);
     FileUploadingStore.removeChangeListener(this.handleFileUploadingStoreChange);
     FileUploadingProgressStore.removeChangeListener(this.handleFileUploadingProgressStoreChange);
-    SocketStore.removeChangeListener(this.handleSocketStoreChange);
     UploadWorkspaceNavigationStore.removeChangeListener(this.handleUploadWorkspaceNavigationStoreChange);
     UploadStore.removeChangeListener(this.handleUploadStoreChange);
-  },
 
-  handleSocketStoreChange() {
-    if (!SocketStore.getRoomId()) {
-      SocketStore.getSocketConnection().on('roomId', function iife(roomId) {
-        SocketActionCreators.setRoomId(roomId);
-      });
-
-      SocketStore.getSocketConnection().emit('getRoomId');
-    }
+    SocketStore.getSocketConnection().disconnect();
   },
 
   handleFileProcessingStoreChange() {
@@ -119,7 +109,7 @@ export default React.createClass({
   },
 
   handleFileUploadingStoreChange() {
-    let uploadingResult = FileUploadingStore.getFileUploadingResult();
+    const uploadingResult = FileUploadingStore.getFileUploadingResult();
     const id = FileUploadingStore.getCollectionId();
     const path = `/${Species.nickname}/collection/${id}`;
     const { history } = this.context;

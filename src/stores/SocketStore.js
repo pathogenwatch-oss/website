@@ -9,10 +9,10 @@ let roomId = null;
 
 function setSocketConnection(connection) {
   socketConnection = connection;
-}
-
-function setRoomId(id) {
-  roomId = id;
+  connection.on('roomId', function (id) {
+    roomId = id;
+  });
+  connection.emit('getRoomId');
 }
 
 const SocketStore = assign({}, EventEmitter.prototype, {
@@ -44,11 +44,6 @@ function handleAction(action) {
 
   case 'set_socket_connection':
     setSocketConnection(action.socketConnection);
-    emitChange();
-    break;
-
-  case 'set_room_id':
-    setRoomId(action.roomId);
     emitChange();
     break;
 

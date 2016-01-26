@@ -1,9 +1,9 @@
 import io from 'socket.io-client';
 import CONFIG from '../config';
 
-const options = {
+const options = process.env.NODE_ENV === 'production' ? {
   transports: [ 'websocket' ],
-};
+} : {};
 
 function socketConnect() {
   if (CONFIG.api) {

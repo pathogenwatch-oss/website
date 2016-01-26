@@ -43,7 +43,8 @@ export function getCollectionId(speciesId, collectionData, callback) {
   });
 }
 
-export function postAssembly({ speciesId, collectionId, assemblyId }, requestBody, callback) {
+export function postAssembly(params, requestBody, callback) {
+  const { speciesId, collectionId, assemblyId } = params;
   $.ajax(
     postJson(
       `/species/${speciesId}/collection/${collectionId}/assembly/${assemblyId}`,
