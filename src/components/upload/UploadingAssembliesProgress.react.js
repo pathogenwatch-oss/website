@@ -1,8 +1,8 @@
 import React from 'react';
 
-import UploadStore from '^/stores/UploadStore';
 import FileUploadingProgressStore from '^/stores/FileUploadingProgressStore';
 import FileUploadingStore from '^/stores/FileUploadingStore';
+import UploadStore from '^/stores/UploadStore';
 
 import { CGPS } from '^/defaults';
 
@@ -11,185 +11,92 @@ const ICON_STYLE = {
   color: CGPS.COLOURS.PURPLE,
 };
 
-const TABLE_STYLE = {
-  width: '100%',
-  border: 'none',
-  margin: 'auto',
-};
-
-const HEADER_STYLE = {
-  textAlign: 'center',
-};
-
 const CELL_STYLE = {
   textAlign: 'center',
   fontSize: '16px',
 };
 
-const FILE_ASSEMBLY_ID_STYLE = {
-  textAlign: 'center',
-  fontWeight: '600',
-};
-
-const ASSEMBLY_PERCENT_STYLE = {
-  margin: 0,
-  fontSize: '12px',
-  lineHeight: '1',
-};
-
-const ASSEMBLY_PROGRESS_BAR_STYLE = {
-  width: '80px',
-  marginTop: '4px',
-};
-
-
-const ASSEMBLY_RESULT_COLUMNS = FileUploadingStore.getAssemblyProcessingResults();
-const COLLECTION_RESULT_COLUMNS = FileUploadingStore.getCollectionProcessingResults();
-
-const AssemblyProgressRow = React.createClass({
-
-  propTypes: {
-    assemblyName: React.PropTypes.string,
-    results: React.PropTypes.object,
-  },
-
-  shouldComponentUpdate(nextProps) {
-    return nextProps.results !== this.props.results;
-  },
-
-  componentDidUpdate() {
-    const { results } = this.props;
-
-    if (results.progress && !results.uploaded) {
-      this.refs[`progress_${this.props.assemblyName}`]
-        .MaterialProgress.setProgress(results.progress);
-    }
-  },
-
-  render() {
-    const { assemblyName, results } = this.props;
-
-    return (
-      <tr key={assemblyName}>
-        <td style={FILE_ASSEMBLY_ID_STYLE} className="mdl-data-table__cell--non-numeric">{assemblyName}</td>
-        <td style={CELL_STYLE}>
-          { results.uploaded ?
-            <i style={ICON_STYLE} className="material-icons">check_circle</i> :
-            <div>
-              <p style={ASSEMBLY_PERCENT_STYLE}>{`${results.progress || 0}%`}</p>
-              <div style={ASSEMBLY_PROGRESS_BAR_STYLE} ref={`progress_${assemblyName}`} className="mdl-progress mdl-js-progress"></div>
-            </div>
-          }
-        </td>
-        { ASSEMBLY_RESULT_COLUMNS.map((resultName) => {
-          return (
-            <td style={CELL_STYLE} key={`${assemblyName}-${resultName}`}>
-              <i style={ICON_STYLE} className="material-icons">
-              { results[resultName] ?
-                  'check_circle' :
-                  'radio_button_unchecked' }
-              </i>
-            </td>
-          );
-        }) }
-      </tr>
-    );
-  },
-
-});
-
 const UploadingAssembliesProgress = React.createClass({
-
-  // dummy object to stop rows updating through immutability
-  noResults: {},
 
   getInitialState() {
     return {
       results: {},
+      fileProgress: 0,
     };
+  },
+
+  componentWillMount() {
+    this.assemblyCount = UploadStore.getAssembliesCount();
   },
 
   componentDidMount() {
     FileUploadingProgressStore.addChangeListener(this.handleFileUploadingProgressStoreChange);
-    // componentHandler.upgradeElement(this.refs.table);
+    this.uploadProgress = document.querySelector('#fileProgressBar');
+    componentHandler.upgradeElement(this.uploadProgress);
+  },
+
+  componentDidUpdate() {
+    this.uploadProgress.MaterialProgress.setProgress(this.state.fileProgress);
   },
 
   componentWillUnmount() {
     FileUploadingProgressStore.removeChangeListener(this.handleFileUploadingProgressStoreChange);
   },
 
-  getCollectionResultElements() {
-    const collectionResults = this.state.results.collection;
-
-    return (
-      <tr>
-        { Object.keys(COLLECTION_RESULT_COLUMNS).map((collectionResultName) => {
-          return (
-            <td style={CELL_STYLE} key={collectionResultName}>
-              <i style={ICON_STYLE} className="material-icons">
-                { collectionResults && collectionResults[collectionResultName] ?
-                  'check_circle' :
-                  'radio_button_unchecked' }
-              </i>
-            </td>
-          );
-        }) }
-      </tr>
-    );
-  },
-
   render() {
-    const { assemblies = {} } = this.state.results;
     return (
-      <div>
-        <div className="wgsa-upload-progress-table">
-          <table ref="table" className="mdl-data-table mdl-shadow--4dp" style={TABLE_STYLE}>
-            <thead>
-              <tr>
-                <td style={CELL_STYLE}></td>
-                <td style={HEADER_STYLE}>UPLOAD</td>
-                <td style={HEADER_STYLE}>CORE</td>
-                <td style={HEADER_STYLE}>FP</td> {
-                  ASSEMBLY_RESULT_COLUMNS.indexOf('MLST') !== -1 ?
-                    <td style={HEADER_STYLE}>MLST</td> : null
-                } {
-                  ASSEMBLY_RESULT_COLUMNS.indexOf('PAARSNP') !== -1 ?
-                    <td style={HEADER_STYLE}>PAARSNP</td> : null
-                }
-              </tr>
-            </thead>
-            <tbody>
-              {UploadStore.getAssemblyNames().map(assemblyName => {
-                const assemblyId = FileUploadingStore.getAssemblyId(assemblyName);
-                const results = assemblyId && assemblies[assemblyId];
-                return (
-                  <AssemblyProgressRow
-                    key={assemblyName}
-                    assemblyName={assemblyName}
-                    results={results || this.noResults}
-                  />
-                );
-              })}
-            </tbody>
-          </table>
+      <div className="mdl-grid">
+        <div className="wgsa-card mdl-cell mdl-cell--12-col mdl-shadow--2dp">
+        <div className="wgsa-card-heading">Assembly/Metadata Uploads</div>
+        <div className="wgsa-card-content" style={{ textAlign: 'center' }}>
+          <p>44/100 files uploaded</p>
+          <div id="fileProgressBar" className="mdl-progress mdl-js-progress"
+            style={{ width: '80%', margin: '16px auto' }}></div>
+          <span className="material-icons">warning</span>
+          <p>
+            Please do not close the browser tab until all files have been uploaded.
+          </p>
         </div>
-
-        <div className="wgsa-upload-progress-table">
-          <table ref="table" className="mdl-data-table mdl-shadow--4dp" style={TABLE_STYLE}>
-            <thead>
-              <tr>
-                <td style={HEADER_STYLE}>MATRIX</td>
-                <td style={HEADER_STYLE}>TREE</td>
-                <td style={HEADER_STYLE}>SUBTREES</td>
-              </tr>
-            </thead>
-            <tbody>
-              {this.getCollectionResultElements()}
-            </tbody>
-          </table>
+        </div>
+        <div className="wgsa-card mdl-cell mdl-cell--6-col mdl-shadow--2dp">
+          <div className="wgsa-card-heading">Remaining Assembly Analyses</div>
+          <div className="wgsa-card-content wgsa-assembly-analyses mdl-grid">
+            <div className="wgsa-overview-upload-ready-card mdl-card mdl-cell mdl-cell--6-col">
+              <div className="mdl-card__title mdl-card--expand">93</div>
+              <span className="mdl-card__actions mdl-card--border">CORE</span>
+            </div>
+            <div className="wgsa-overview-upload-ready-card mdl-card mdl-cell mdl-cell--6-col">
+              <div className="mdl-card__title mdl-card--expand">93</div>
+              <span className="mdl-card__actions mdl-card--border">FP</span>
+            </div>
+            <div className="wgsa-overview-upload-ready-card mdl-card mdl-cell mdl-cell--6-col">
+              <div className="mdl-card__title mdl-card--expand">93</div>
+              <span className="mdl-card__actions mdl-card--border">MLST</span>
+            </div>
+            <div className="wgsa-overview-upload-ready-card mdl-card mdl-cell mdl-cell--6-col">
+              <div className="mdl-card__title mdl-card--expand">93</div>
+              <span className="mdl-card__actions mdl-card--border">PAARSNP</span>
+            </div>
+          </div>
+        </div>
+        <div className="wgsa-card mdl-cell mdl-cell--6-col mdl-shadow--2dp">
+          <div className="wgsa-card-heading">Collection Analyses</div>
+          <div className="wgsa-card-content wgsa-collection-analyses">
+            <div>
+              <span className="material-icons">radio_button_unchecked</span>
+              <h5 className="wgsa-collection-analysis-status__title">MATRIX</h5>
+            </div>
+            <div>
+              <span className="material-icons">radio_button_unchecked</span>
+              <h5 className="wgsa-collection-analysis-status__title">TREE</h5>
+            </div>
+            <div>
+              <span className="material-icons">radio_button_unchecked</span>
+              <h5 className="wgsa-collection-analysis-status__title">SUBTREE</h5>
+            </div>
+          </div>
         </div>
       </div>
-
     );
   },
 

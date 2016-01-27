@@ -5,7 +5,7 @@ import UploadingAssembliesProgress from './UploadingAssembliesProgress.react';
 
 const urlStyle = {
   color: DEFAULT.CGPS.COLOURS.PURPLE_LIGHT,
-}
+};
 
 const UploadingFiles = React.createClass({
 

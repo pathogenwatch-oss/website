@@ -6,6 +6,7 @@ const CHANGE_EVENT = 'change';
 
 let numberOfExpectedResults = null;
 let numberOfReceivedResults = 0;
+let fileProgress = 0;
 const receivedResults = {
   assemblies: null,
   collection: null,
@@ -36,13 +37,8 @@ function setReceivedResult(result) {
   console.log('[WGSA][Collection Result] ' + result.collectionId + ' ' + result.result);
 }
 
-function setAssemblyProgress(assemblyId, progress) {
-  receivedResults.assemblies = receivedResults.assemblies || {};
-  const results = receivedResults.assemblies[assemblyId] || {};
-  receivedResults.assemblies[assemblyId] = {
-    ...results,
-    progress: Math.floor(progress),
-  };
+function setAssemblyProgress(progress) {
+  fileProgress += progress;
 }
 
 function setAssemblyUploaded(assemblyId) {
@@ -84,6 +80,7 @@ const Store = assign({}, EventEmitter.prototype, {
   clearStore() {
     numberOfExpectedResults = null;
     numberOfReceivedResults = 0;
+    fileProgress = 0;
     receivedResults.assemblies = null;
     receivedResults.collection = null;
   },
@@ -103,7 +100,7 @@ function handleAction(action) {
     break;
 
   case 'set_assembly_progress':
-    setAssemblyProgress(action.assemblyId, action.progress);
+    setAssemblyProgress(action.progress);
     emitChange();
     break;
 
