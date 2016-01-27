@@ -236,47 +236,47 @@ export default React.createClass({
 
             {
               (() => {
-                // switch (this.state.viewPage) {
-                // case 'assembly':
-                //   return (
-                //     <div className="mdl-grid">
-                //       <div className="mdl-cell mdl-cell--6-col wgsa-card-column">
-                //         <div className="wgsa-card mdl-shadow--2dp">
-                //           <div className="wgsa-card-heading">Assembly Statistics</div>
-                //           <div className="wgsa-card-content">
-                //             <AssemblyAnalysis assembly={assembly}/>
-                //           </div>
-                //         </div>
-                //       </div>
-                //       <div className="mdl-cell mdl-cell--6-col wgsa-card-column chart-card">
-                //         <div className="wgsa-card mdl-shadow--2dp">
-                //           <div className="wgsa-card-heading">N50 Chart</div>
-                //           <div className="wgsa-card-content ">
-                //             <AssemblyAnalysisChart metrics={assembly && assembly.metrics} />
-                //           </div>
-                //         </div>
-                //       </div>
-                //       <div className="wgsa-card mdl-cell mdl-cell--12-col increase-cell-gutter mdl-shadow--2dp">
-                //         <div className="wgsa-card-heading">Metadata</div>
-                //         <div className="wgsa-card-content">
-                //           <AssemblyMetadata assembly={assembly} isUploading={this.state.isUploading}/>
-                //         </div>
-                //       </div>
-                //     </div>
-                //   );
-                // case 'overview':
-                //   return (
-                //    <Overview clickHandler={this.handleClick} uploadProgressPercentage={this.state.uploadProgressPercentage} isUploading={this.state.isUploading} isReadyToUpload={this.state.readyToUpload} />
-                //   );
-                // case 'upload_progress':
+                switch (this.state.viewPage) {
+                case 'assembly':
+                  return (
+                    <div className="mdl-grid">
+                      <div className="mdl-cell mdl-cell--6-col wgsa-card-column">
+                        <div className="wgsa-card mdl-shadow--2dp">
+                          <div className="wgsa-card-heading">Assembly Statistics</div>
+                          <div className="wgsa-card-content">
+                            <AssemblyAnalysis assembly={assembly}/>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="mdl-cell mdl-cell--6-col wgsa-card-column chart-card">
+                        <div className="wgsa-card mdl-shadow--2dp">
+                          <div className="wgsa-card-heading">N50 Chart</div>
+                          <div className="wgsa-card-content ">
+                            <AssemblyAnalysisChart metrics={assembly && assembly.metrics} />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="wgsa-card mdl-cell mdl-cell--12-col increase-cell-gutter mdl-shadow--2dp">
+                        <div className="wgsa-card-heading">Metadata</div>
+                        <div className="wgsa-card-content">
+                          <AssemblyMetadata assembly={assembly} isUploading={this.state.isUploading}/>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                case 'overview':
+                  return (
+                   <Overview clickHandler={this.handleClick} uploadProgressPercentage={this.state.uploadProgressPercentage} isUploading={this.state.isUploading} isReadyToUpload={this.state.readyToUpload} />
+                  );
+                case 'upload_progress':
                   return (
                     <div>
                       <UploadingFilesDetailed collectionUrl={this.state.collectionUrl}/>
                     </div>
                   );
-                // default:
+                default:
                   // should never hit default
-                // }
+                }
               })() }
           </main>
         </div>

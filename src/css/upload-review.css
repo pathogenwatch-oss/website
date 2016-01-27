@@ -146,7 +146,6 @@
   top: 0;
   bottom: 0;
   right: 0;
-  /*padding: 32px;*/
   justify-content: space-around;
   margin: 8px;
 }
@@ -162,10 +161,10 @@
 }
 
 .wgsa-overview-upload-ready-card {
-  /*width: auto;
-  margin: 16px;*/
   min-height: 136px;
   border: 1px solid rgba(0, 0, 0, 0.12);
+  font-family: "Roboto","Helvetica","Arial",sans-serif;
+  font-weight: 400;
 }
 .wgsa-overview-upload-ready-card i {
   font-size: 50px;
@@ -177,13 +176,13 @@
   justify-content: center;
   font-size: 26px;
   font-weight: 300;
-  color: #666;
+  /*color: #666;*/
 }
 
 .wgsa-overview-statistics-item-value {
   font-size: 26px;
   font-weight: 300;
-  color: #666;
+  /*color: #666;*/
 }
 
 .wgsa-overview-upload-ready-card span {
@@ -191,7 +190,6 @@
   text-align: center;
   font-weight: 300;
   font-size: 16px;
-  color: #777;
 }
 
 .wgsa-info-window-button {
@@ -212,10 +210,6 @@
 .wgsa-card-content {
   padding: 32px;
 }
-
-/*.wgsa-card + .wgsa-card {
-  margin-top: 16px;
-}*/
 
 .wgsa-card-heading {
   background: transparent;
@@ -588,6 +582,20 @@
   margin: 0 auto;
 }
 
+.wgsa-assembly-analyses .mdl-card__title {
+  color: #673c90;
+  font-weight: 400;
+}
+
+.wgsa-assembly-analyses .mdl-card__actions {
+  font-weight: 500;
+}
+
+.wgsa-assembly-analyses .material-icons {
+  font-size: 24px;
+  color: #48996F;
+}
+
 .wgsa-collection-analyses {
   display: flex;
   align-items: center;
@@ -602,7 +610,6 @@
 
 .wgsa-collection-analyses .material-icons {
   font-size: 2em;
-  color: #673c90;
 }
 
 /*****************************************************/

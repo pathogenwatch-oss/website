@@ -4,7 +4,7 @@ import DEFAULT from '../../defaults';
 import UploadingAssembliesProgress from './UploadingAssembliesProgress.react';
 
 const urlStyle = {
-  color: DEFAULT.CGPS.COLOURS.PURPLE_LIGHT,
+  color: DEFAULT.CGPS.COLOURS.PURPLE,
 };
 
 const UploadingFiles = React.createClass({
@@ -14,7 +14,7 @@ const UploadingFiles = React.createClass({
   },
 
   componentDidMount() {
-    componentHandler.upgradeDom();
+    componentHandler.upgradeElement(this.refs.spinner);
   },
 
   render() {
@@ -29,7 +29,7 @@ const UploadingFiles = React.createClass({
             <div className="mdl-card__supporting-text wgsa-collection-url">
               { this.props.collectionUrl ?
                   <a style={urlStyle} href={this.props.collectionUrl}>{this.props.collectionUrl}</a> :
-                  <div className="mdl-spinner mdl-js-spinner is-active"></div>
+                  <div ref="spinner" className="mdl-spinner mdl-js-spinner is-active"></div>
               }
             </div>
           </div>

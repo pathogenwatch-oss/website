@@ -20,7 +20,7 @@
   opacity: 0;
   z-index: -1;
   pointer-events: none;
-  /*animation: sonarWave 3s linear infinite;*/
+  animation: sonarWave 3s linear infinite;
 }
 
 @keyframes sonarWave {

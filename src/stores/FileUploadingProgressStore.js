@@ -6,10 +6,20 @@ const CHANGE_EVENT = 'change';
 
 let numberOfExpectedResults = null;
 let numberOfReceivedResults = 0;
-let fileProgress = 0;
-const receivedResults = {
-  assemblies: null,
-  collection: null,
+let fileProgress = {};
+let uploadedFiles = 0;
+let receivedResults = {
+  assembly: {
+    core: 0,
+    fp: 0,
+    mlst: 0,
+    paarsnp: 0,
+  },
+  collection: {
+    phylo_matrix: false,
+    core_mutant_tree: false,
+    submatrix: false,
+  },
 };
 
 function setNumberOfExpectedResults(number) {
@@ -19,36 +29,27 @@ function setNumberOfExpectedResults(number) {
 function setReceivedResult(result) {
   numberOfReceivedResults++;
 
+  const resultName = result.result.toLowerCase();
   if (result.assemblyId) {
-    receivedResults.assemblies = receivedResults.assemblies || {};
-    const results = receivedResults.assemblies[result.assemblyId] || {};
-    receivedResults.assemblies[result.assemblyId] = {
-      ...results,
-      [result.result]: true,
-    };
+    const numberOfResults = receivedResults.assembly[resultName] || 0;
+    receivedResults.assembly[resultName] = numberOfResults + 1;
 
     console.log('[WGSA][Assembly Result] ' + result.assemblyId + ' ' + result.result);
     return;
   }
 
-  receivedResults.collection = receivedResults.collection || {};
-  receivedResults.collection[result.result] = true;
+  receivedResults.collection[resultName] = true;
 
   console.log('[WGSA][Collection Result] ' + result.collectionId + ' ' + result.result);
 }
 
-function setAssemblyProgress(progress) {
-  fileProgress += progress;
+function setAssemblyProgress(assemblyId, progress) {
+  fileProgress[assemblyId] = progress;
+  console.warn(fileProgress);
 }
 
-function setAssemblyUploaded(assemblyId) {
-  receivedResults.assemblies = receivedResults.assemblies || {};
-  const results = receivedResults.assemblies[assemblyId] || {};
-
-  receivedResults.assemblies[assemblyId] = {
-    ...results,
-    uploaded: true,
-  };
+function setAssemblyUploaded() {
+  uploadedFiles++;
 }
 
 const Store = assign({}, EventEmitter.prototype, {
@@ -70,19 +71,41 @@ const Store = assign({}, EventEmitter.prototype, {
   },
 
   getProgressPercentage() {
-    return Math.floor(this.getNumberOfReceivedResults() * 100 / this.getNumberOfExpectedResults());
+    return Math.floor(
+      this.getNumberOfReceivedResults() * 100 / this.getNumberOfExpectedResults()
+    );
   },
 
   getResults() {
     return receivedResults;
   },
 
+  getFileProgress() {
+    return Object.keys(fileProgress).reduce((sum, id) => sum + fileProgress[id] || 0, 0);
+  },
+
+  getUploadedFiles() {
+    return uploadedFiles;
+  },
+
   clearStore() {
     numberOfExpectedResults = null;
     numberOfReceivedResults = 0;
-    fileProgress = 0;
-    receivedResults.assemblies = null;
-    receivedResults.collection = null;
+    fileProgress = {};
+    uploadedFiles = 0;
+    receivedResults = {
+      assembly: {
+        core: 0,
+        fp: 0,
+        mlst: 0,
+        paarsnp: 0,
+      },
+      collection: {
+        phylo_matrix: false,
+        core_mutant_tree: false,
+        submatrix: false,
+      },
+    };
   },
 
 });
@@ -100,7 +123,7 @@ function handleAction(action) {
     break;
 
   case 'set_assembly_progress':
-    setAssemblyProgress(action.progress);
+    setAssemblyProgress(action.assemblyId, action.progress);
     emitChange();
     break;
 
