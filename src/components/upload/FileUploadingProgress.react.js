@@ -6,7 +6,7 @@ import FileUploadingProgressStore from '^/stores/FileUploadingProgressStore';
 
 const FileUploadingProgress = React.createClass({
 
-  componentDidMount: function () {
+  componentDidMount() {
     FileUploadingProgressStore.addChangeListener(this.handleFileUploadingProgressStoreChange);
 
     const { progressBar } = this.refs;
@@ -18,21 +18,21 @@ const FileUploadingProgress = React.createClass({
     componentHandler.upgradeElement(progressBar);
   },
 
-  componentWillUnmount: function () {
+  componentWillUnmount() {
     FileUploadingProgressStore.removeChangeListener(this.handleFileUploadingProgressStoreChange);
   },
 
-  handleFileUploadingProgressStoreChange: function () {
-    const percentage = FileUploadingProgressStore.getProgressPercentage();
-    this.progressBar.setProgress(percentage);
-  },
-
-  render: function () {
+  render() {
     return (
       <div className="wgsa-fileupload-progressbar-container">
         <div ref="progressBar" className="wgsa-fileupload-progressbar mdl-progress mdl-js-progress"></div>
       </div>
     );
+  },
+
+  handleFileUploadingProgressStoreChange() {
+    const percentage = FileUploadingProgressStore.getProgressPercentage();
+    this.progressBar.setProgress(percentage);
   },
 
 });

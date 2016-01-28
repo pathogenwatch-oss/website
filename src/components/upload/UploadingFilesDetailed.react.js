@@ -28,8 +28,8 @@ const UploadingFiles = React.createClass({
             </div>
             <div className="mdl-card__supporting-text wgsa-collection-url">
               { this.props.collectionUrl ?
-                  <a style={urlStyle} href={this.props.collectionUrl}>{this.props.collectionUrl}</a> :
-                  <div ref="spinner" className="mdl-spinner mdl-js-spinner is-active"></div>
+                <a style={urlStyle} href={this.props.collectionUrl}>{this.props.collectionUrl}</a> :
+                <div ref="spinner" className="mdl-spinner mdl-js-spinner is-active"></div>
               }
             </div>
           </div>

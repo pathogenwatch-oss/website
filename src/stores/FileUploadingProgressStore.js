@@ -45,7 +45,6 @@ function setReceivedResult(result) {
 
 function setAssemblyProgress(assemblyId, progress) {
   fileProgress[assemblyId] = progress;
-  console.warn(fileProgress);
 }
 
 function setAssemblyUploaded() {

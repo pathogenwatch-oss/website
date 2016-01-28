@@ -1,5 +1,7 @@
 import React from 'react';
 
+import CircularProgress from '^/components/CircularProgress.react';
+
 import FileUploadingProgressStore from '^/stores/FileUploadingProgressStore';
 import UploadStore from '^/stores/UploadStore';
 
@@ -13,10 +15,11 @@ const ICON_SUCCESS = {
   color: CGPS.COLOURS.GREEN,
 };
 
-const RemainingTasksIndicator = ({ title, remaining }) => (
+const RemainingTasksIndicator = ({ title, percentage }) => (
   <div className="wgsa-overview-upload-ready-card mdl-card mdl-cell mdl-cell--6-col">
     <div className="mdl-card__title mdl-card--expand">
-      {remaining === 0 ? (<span className="material-icons">check_circle</span>) : remaining}
+      <CircularProgress radius="40" strokeWidth="8" percentage={Math.floor(percentage) || 0} />
+      {/*{remaining === 0 ? (<span className="material-icons">check_circle</span>) : remaining}*/}
     </div>
     <span className="mdl-card__actions mdl-card--border">{title}</span>
   </div>
@@ -93,10 +96,10 @@ const UploadingAssembliesProgress = React.createClass({
         <div className="wgsa-card mdl-cell mdl-cell--6-col mdl-shadow--2dp">
           <div className="wgsa-card-heading">Remaining Assembly Analyses</div>
           <div className="wgsa-card-content wgsa-assembly-analyses mdl-grid">
-            <RemainingTasksIndicator title={'CORE'} remaining={this.assemblyCount - assembly.core} />
-            <RemainingTasksIndicator title={'FP'} remaining={this.assemblyCount - assembly.fp} />
-            <RemainingTasksIndicator title={'MLST'} remaining={this.assemblyCount - assembly.mlst} />
-            <RemainingTasksIndicator title={'PAARSNP'} remaining={this.assemblyCount - assembly.paarsnp} />
+            <RemainingTasksIndicator title={'CORE'} percentage={assembly.core / this.assemblyCount * 100} />
+            <RemainingTasksIndicator title={'FP'} percentage={assembly.fp / this.assemblyCount * 100 } />
+            <RemainingTasksIndicator title={'MLST'} percentage={assembly.mlst / this.assemblyCount * 100 } />
+            <RemainingTasksIndicator title={'PAARSNP'} percentage={assembly.paarsnp / this.assemblyCount * 100 } />
           </div>
         </div>
         <div className="wgsa-card mdl-cell mdl-cell--6-col mdl-shadow--2dp">
@@ -112,10 +115,10 @@ const UploadingAssembliesProgress = React.createClass({
   },
 
   handleFileUploadingProgressStoreChange() {
-    console.warn('*', Math.floor(FileUploadingProgressStore.getFileProgress() / this.assemblyCount));
+    const fileProgress = FileUploadingProgressStore.getFileProgress();
     this.setState({
-      fileProgress: Math.floor(FileUploadingProgressStore.getFileProgress() / this.assemblyCount),
-      uploadedFiles: FileUploadingProgressStore.getUploadedFiles(),
+      fileProgress: fileProgress / this.assemblyCount,
+      uploadedFiles: Math.floor(fileProgress / 100),
       ...FileUploadingProgressStore.getResults(),
     });
   },

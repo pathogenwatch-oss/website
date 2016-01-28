@@ -1,0 +1,29 @@
+.CircularProgress-Bg,
+.CircularProgress-Fg {
+  fill: none;
+  stroke-width: 8px;
+  opacity: 1;
+}
+
+.CircularProgress-Bg {
+  stroke: #ccc;
+}
+
+.CircularProgress-Fg {
+  transition: stroke-dashoffset .5s ease-in-out;
+  stroke: #673c90;
+}
+
+.CircularProgress-Text {
+  font-size: 16px;
+  fill: #673c90;
+
+  transform: translate(0 50%);
+}
+
+.CircularProgress-success .CircularProgress-Fg {
+  stroke: #48996F;
+}
+.CircularProgress-success .CircularProgress-Text {
+  fill: #48996F;
+}
