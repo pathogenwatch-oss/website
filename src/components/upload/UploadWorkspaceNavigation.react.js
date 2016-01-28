@@ -25,7 +25,7 @@ export default React.createClass({
 
   render() {
     return (
-      <aside ref="sidebar" className="navigation-container mdl-layout__drawer mdl-shadow--2dp">
+      <aside ref="sidebar" className="navigation-container mdl-layout__drawer mdl-shadow--3dp">
         <h2 className="uploadWorkspaceNavigationTitle">
           <span className="mdl-badge" style={titleStyle} data-badge={this.props.totalAssemblies}>Assemblies</span>
         </h2>

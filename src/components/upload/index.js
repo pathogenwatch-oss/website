@@ -214,18 +214,18 @@ export default React.createClass({
           <UploadReviewHeader title={pageTitle} species={species} activeAssemblyName={activeAssemblyName} activateUploadButton={this.state.readyToUpload} uploadProgressPercentage={this.state.uploadProgressPercentage} isUploading={this.state.isUploading} />
 
           <UploadWorkspaceNavigation assembliesUploaded={assembly ? true : false} totalAssemblies={this.state.numberOfAssemblies}>
-            <footer className="wgsa-upload-navigation__footer mdl-shadow--2dp">
+            <footer className="wgsa-upload-navigation__footer mdl-shadow--4dp">
               <button type="button" title="Overview"
-                className="wgsa-upload-review-button mdl-button mdl-js-button mdl-button--raised mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect"
+                className="wgsa-upload-review-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
                 onClick={this.handleOverviewClick}>
-                <i className="material-icons">home</i>
+                Overview
               </button>
 
               { !this.state.isUploading &&
                 <button type="button" title="Add files"
-                  className="wgsa-upload-review-button mdl-button mdl-js-button mdl-button--raised mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect"
+                  className="wgsa-upload-review-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
                   onClick={this.handleClick}>
-                  <i className="material-icons">add</i>
+                  Add Files
                 </button>
               }
             </footer>

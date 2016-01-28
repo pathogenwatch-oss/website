@@ -383,6 +383,7 @@
 
 .wgsa-upload-review-button {
   background: #673c90 !important;
+  color: #fff;
 }
 
 .wgsa-upload-review-button:hover,
@@ -622,11 +623,12 @@
 }
 text {
   font-size: 11px;
-  font-weight: 100;
+  font-family: "Roboto","Helvetica","Arial",sans-serif;
+  stroke: none;
+  fill: currentColor;
+  text-rendering: optimizeLegibility;
 }
 text.axis-label {
-  letter-spacing: 0.03em;
-  font-size: 11px;
   text-transform: uppercase;
 }
 circle {
