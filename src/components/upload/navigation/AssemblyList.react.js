@@ -35,7 +35,7 @@ const AssemblyList = React.createClass({
   handleUploadWorkspaceNavigationStoreChange() {
     this.setState({
       selectedOption: UploadWorkspaceNavigationStore.getAssemblyName(),
-      isItemSelected: (UploadWorkspaceNavigationStore.getCurrentViewPage() === 'assembly')
+      isItemSelected: (UploadWorkspaceNavigationStore.getCurrentViewPage() === 'assembly'),
     });
   },
 

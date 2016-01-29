@@ -74,7 +74,6 @@ export default React.createClass({
   componentDidMount() {
     FileProcessingStore.addChangeListener(this.handleFileProcessingStoreChange);
     FileUploadingStore.addChangeListener(this.handleFileUploadingStoreChange);
-    FileUploadingProgressStore.addChangeListener(this.handleFileUploadingProgressStoreChange);
     UploadWorkspaceNavigationStore.addChangeListener(this.handleUploadWorkspaceNavigationStoreChange);
     UploadStore.addChangeListener(this.handleUploadStoreChange);
 
@@ -94,11 +93,13 @@ export default React.createClass({
   componentWillUnmount() {
     FileProcessingStore.removeChangeListener(this.handleFileProcessingStoreChange);
     FileUploadingStore.removeChangeListener(this.handleFileUploadingStoreChange);
-    FileUploadingProgressStore.removeChangeListener(this.handleFileUploadingProgressStoreChange);
     UploadWorkspaceNavigationStore.removeChangeListener(this.handleUploadWorkspaceNavigationStoreChange);
     UploadStore.removeChangeListener(this.handleUploadStoreChange);
 
     SocketStore.getSocketConnection().disconnect();
+    FileUploadingProgressStore.clearStore();
+    UploadStore.clearStore();
+    FileUploadingStore.clearStore();
   },
 
   handleFileProcessingStoreChange() {
@@ -115,9 +116,6 @@ export default React.createClass({
     const { history } = this.context;
     if (uploadingResult === FileUploadingStore.getFileUploadingResults().SUCCESS) {
       history.pushState(null, path);
-      UploadStore.clearStore();
-      FileUploadingStore.clearStore();
-      FileUploadingProgressStore.clearStore();
       return;
     }
 
@@ -184,34 +182,24 @@ export default React.createClass({
     });
   },
 
-  handleFileUploadingProgressStoreChange() {
-    const percentage = FileUploadingProgressStore.getProgressPercentage();
-    this.setState({
-      uploadProgressPercentage: percentage,
-    });
-  },
-
   render() {
-    let pageTitle = 'WGSA';
-    let species = Species.formattedName;
-    let activeAssemblyName = '';
-
+    let subtitle = '';
     const assembly = UploadStore.getAssembly(this.state.assemblyName);
 
     switch (this.state.viewPage) {
     case 'assembly':
-      activeAssemblyName = assembly && assembly.fasta.name;
+      subtitle = assembly && assembly.fasta.name;
       break;
     case 'upload_progress':
-      activeAssemblyName = 'Uploading...';
+      subtitle = 'Uploading...';
       break;
-    default: activeAssemblyName = this.state.pageTitleMessage;
+    default: subtitle = this.state.pageTitleMessage;
     }
 
     return (
       <FileDragAndDrop onDrop={this.handleDrop}>
         <div className="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-drawer">
-          <UploadReviewHeader title={pageTitle} species={species} activeAssemblyName={activeAssemblyName} activateUploadButton={this.state.readyToUpload} uploadProgressPercentage={this.state.uploadProgressPercentage} isUploading={this.state.isUploading} />
+          <UploadReviewHeader subtitle={subtitle} activateUploadButton={this.state.readyToUpload} isUploading={this.state.isUploading} />
 
           <UploadWorkspaceNavigation assembliesUploaded={assembly ? true : false} totalAssemblies={this.state.numberOfAssemblies}>
             <footer className="wgsa-upload-navigation__footer mdl-shadow--4dp">
@@ -266,7 +254,7 @@ export default React.createClass({
                   );
                 case 'overview':
                   return (
-                   <Overview clickHandler={this.handleClick} uploadProgressPercentage={this.state.uploadProgressPercentage} isUploading={this.state.isUploading} isReadyToUpload={this.state.readyToUpload} />
+                   <Overview clickHandler={this.handleClick} isUploading={this.state.isUploading} isReadyToUpload={this.state.readyToUpload} />
                   );
                 case 'upload_progress':
                   return (

@@ -19,6 +19,8 @@ import bodyClickEvent from './bodyClickEvent';
 
 import { ready, error } from './fetch';
 
+import { RESET_STORE } from '../actions/reset';
+
 function createReducer({ actions, initialState }) {
   return function (state = initialState, action) {
     if (actions[action.type]) {
@@ -28,7 +30,7 @@ function createReducer({ actions, initialState }) {
   };
 }
 
-export default combineReducers({
+const rootReducer = combineReducers({
   entities: combineReducers({
     antibiotics: createReducer(antibiotics),
     assemblies: createReducer(assemblies),
@@ -56,3 +58,13 @@ export default combineReducers({
     tree: createReducer(treeLoading),
   }),
 });
+
+const initialState = rootReducer({}, {});
+
+export default function (state = initialState, action = {}) {
+  if (action.type === RESET_STORE) {
+    return initialState;
+  }
+
+  return rootReducer(state, action);
+}

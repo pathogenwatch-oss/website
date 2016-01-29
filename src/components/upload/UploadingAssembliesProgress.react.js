@@ -79,9 +79,9 @@ const UploadingAssembliesProgress = React.createClass({
     return (
       <div className="mdl-grid">
         <div className="wgsa-card mdl-cell mdl-cell--12-col mdl-shadow--2dp">
-        <div className="wgsa-card-heading">Assembly/Metadata Uploads</div>
+        <div className="wgsa-card-heading">Uploads</div>
         <div className="wgsa-card-content" style={{ textAlign: 'center' }}>
-          <h5>{uploadedFiles}/{this.assemblyCount} files uploaded</h5>
+          <h5>{uploadedFiles}/{this.assemblyCount} uploaded</h5>
           <div id="fileProgressBar" className="mdl-progress mdl-js-progress"
             style={{ width: '80%', margin: '16px auto' }}></div>
             <span className="material-icons" style={uploadFinished ? ICON_SUCCESS : ICON_WARNING}>
@@ -94,7 +94,7 @@ const UploadingAssembliesProgress = React.createClass({
           </div>
         </div>
         <div className="wgsa-card mdl-cell mdl-cell--6-col mdl-shadow--2dp">
-          <div className="wgsa-card-heading">Remaining Assembly Analyses</div>
+          <div className="wgsa-card-heading">Assembly Analyses</div>
           <div className="wgsa-card-content wgsa-assembly-analyses mdl-grid">
             <RemainingTasksIndicator title={'CORE'} percentage={assembly.core / this.assemblyCount * 100} />
             <RemainingTasksIndicator title={'FP'} percentage={assembly.fp / this.assemblyCount * 100 } />

@@ -9,11 +9,16 @@ export default React.createClass({
 
   propTypes: {
     initialise: React.PropTypes.func,
+    reset: React.PropTypes.func,
     loading: React.PropTypes.object,
   },
 
   componentDidMount() {
     this.props.initialise();
+  },
+
+  componentWillUnmount() {
+    this.props.reset();
   },
 
   render() {

@@ -7,21 +7,27 @@ import getStore from '^/store';
 
 import { setCollectionId } from '^/actions/collection';
 import { fetchEntities } from '^/actions/fetch';
+import { resetStore } from '^/actions/reset';
 
 import Species from '^/species';
 
 export const store = getStore();
 
 const connectExplorer = connect(
-  ({ loading }) => { return { loading: loading.collection }; },
+  ({ loading }) => {
+    return { loading: loading.collection };
+  },
   (dispatch, { id }) => {
     return {
       initialise() {
         dispatch(setCollectionId(id));
         dispatch(fetchEntities(Species.id, id));
       },
+      reset() {
+        dispatch(resetStore());
+      },
     };
-  }
+  },
 );
 
 function addDevTools() {
