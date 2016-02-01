@@ -19,10 +19,10 @@ async.parallel({
 
   mqConnection.queue(`upload-progress-queue`, {}, function (queue) {
     LOGGER.info(`${queue.name} is open.`);
-    queue.bind(NOTIFICATION.name, '*');
+    queue.bind(NOTIFICATION.name, '#');
 
     queue.subscribe({ ack: true }, function (message) {
-      LOGGER.debug(message.data);
+      LOGGER.debug(message.data.toString());
       queue.shift();
     });
   });

@@ -43,7 +43,8 @@
     "e2e": "eval $npm_package_testcmd 'test/e2e/**/*.test.js'",
     "upload": "eval $npm_package_startcmd bin/upload-reference-data.js",
     "download": "eval $npm_package_startcmd bin/download.js",
-    "metadata": "eval $npm_package_startcmd bin/generate-reference-metadata.js"
+    "metadata": "eval $npm_package_startcmd bin/generate-reference-metadata.js",
+    "service": "eval $npm_package_startcmd microservices/upload-progress.js | bunyan -o short"
   },
   "repository": {
     "type": "git",
