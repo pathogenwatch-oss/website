@@ -29,9 +29,10 @@ var EXCHANGE_CONFIG = {
     name: 'grid-ex',
     type: 'direct'
   },
-  TASKS: { // TODO: should not be used by the middle end
-    name: 'wgst-tasks-ex',
-    type: 'topic'
+  SERVICES: {
+    name: 'me-services-ex',
+    type: 'topic',
+    confirm: true
   }
 };
 var connection;

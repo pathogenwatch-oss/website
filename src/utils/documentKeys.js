@@ -7,4 +7,5 @@ module.exports = {
   FP_COMP: 'FPR',
   MLST_RESULT: 'MLSTR',
   PAARSNP_RESULT: 'PSR',
+  UPLOAD_PROGRESS: 'UP'
 };

@@ -1,7 +1,6 @@
 var async = require('async');
 
 var sequenceTypeModel = require('models/sequenceType');
-var socketService = require('services/socket');
 var messageQueueService = require('services/messageQueue');
 var mainStorage = require('services/storage')('main');
 
@@ -55,17 +54,6 @@ function createMetadataRecord(ids, metadata, metrics) {
     userDefined: filterUserDefinedColumns(metadata),
     metrics
   };
-}
-
-function awaitNotifications(ids, assemblyId, callback) {
-  const allIds = Object.assign({ assemblyId }, ids);
-  messageQueueService.newAssemblyNotificationQueue(allIds, {
-    tasks: ASSEMBLY_ANALYSES,
-    loggingId: `Assembly ${assemblyId}`,
-    notifyFn: socketService.notifyAssemblyUpload.bind(socketService, allIds)
-  }, function () {
-    callback(null, assemblyId);
-  });
 }
 
 function beginUpload(ids, data, callback) {
@@ -210,7 +198,7 @@ function groupAssembliesBySubtype(assemblies) {
   }, {});
 }
 
-module.exports.awaitNotifications = awaitNotifications;
+module.exports.ASSEMBLY_ANALYSES = ASSEMBLY_ANALYSES;
 module.exports.beginUpload = beginUpload;
 module.exports.getComplete = getComplete;
 module.exports.getReference = getReference;

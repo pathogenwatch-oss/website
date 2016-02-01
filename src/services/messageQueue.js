@@ -132,8 +132,8 @@ function getCollectionIdExchange() {
   return exchanges.COLLECTION_ID;
 }
 
-function getTasksExchange() {
-  return exchanges.TASKS;
+function getServicesExchange() {
+  return exchanges.SERVICES;
 }
 
 module.exports.newCollectionNotificationQueue = newCollectionNotificationQueue;
@@ -142,5 +142,5 @@ module.exports.newAssemblyUploadQueue = newAssemblyUploadQueue;
 module.exports.newCollectionAddQueue = newCollectionAddQueue;
 module.exports.getUploadExchange = getUploadExchange;
 module.exports.getCollectionIdExchange = getCollectionIdExchange;
-module.exports.getTasksExchange = getTasksExchange;
+module.exports.getServicesExchange = getServicesExchange;
 module.exports.newFileRequestQueue = newFileRequestQueue;

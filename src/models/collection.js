@@ -4,7 +4,6 @@ var assemblyModel = require('models/assembly');
 
 var mainStorage = require('services/storage')('main');
 var messageQueueService = require('services/messageQueue');
-var socketService = require('services/socket');
 
 var LOGGER = require('utils/logging').createLogger('Collection');
 const { COLLECTION_LIST, CORE_TREE_RESULT } = require('utils/documentKeys');
@@ -94,32 +93,34 @@ function add(ids, callback) {
       return callback(error);
     }
 
-    async.parallel({
-      collectionId(done) {
-        const collectionQueueIds = Object.assign({}, ids, { collectionId });
-        messageQueueService.newCollectionNotificationQueue(collectionQueueIds, {
-          tasks: COLLECTION_TREE_TASKS,
-          loggingId: `Collection ${collectionId}`,
-          notifyFn: socketService.notifyCollectionUpload.bind(socketService, collectionQueueIds)
-        }, done);
-      },
-      assemblyIds(done) {
-        async.eachLimit(
-          assemblyIds,
-          10,
-          assemblyModel.awaitNotifications.bind(null, ids),
-          done
-        );
+    const collectionSize = assemblyIds.length;
+    const message = {
+      collectionId,
+      collectionSize,
+      expectedResults:
+        collectionSize + // for upload notifications
+        collectionSize * assemblyModel.ASSEMBLY_ANALYSES.length +
+        COLLECTION_TREE_TASKS.length,
+    };
+
+    messageQueueService.getServicesExchange().publish(
+      'upload-progress', message, null, function (notAcknowledged) {
+        if (notAcknowledged) {
+          const errorMessage = 'upload progress service failed to acknowledge';
+          LOGGER.error(errorMessage);
+          return callback(new Error(errorMessage));
+        }
+
+        LOGGER.info('Received upload progress acknowledgement');
+        callback(null, {
+          collectionId,
+          assemblyNameToAssemblyIdMap: assemblyIds.reduce((map, newId) => {
+            map[assemblyNames.shift()] = newId;
+            return map;
+          }, {})
+        });
       }
-    }, function () {
-      callback(null, {
-        collectionId,
-        assemblyNameToAssemblyIdMap: assemblyIds.reduce(function (map, newId) {
-          map[assemblyNames.shift()] = newId;
-          return map;
-        }, {})
-      });
-    });
+    );
   });
 }
 
