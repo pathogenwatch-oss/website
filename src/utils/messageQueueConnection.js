@@ -91,7 +91,13 @@ function connect(callback) {
       function (exchangeKey, finishIteration) {
         createExchange(exchangeKey, finishIteration);
       },
-      callback
+      function (error) {
+        if (error) {
+          callback(error);
+        }
+
+        callback(null, connection);
+      }
     );
   });
 }
