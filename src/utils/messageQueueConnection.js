@@ -55,7 +55,7 @@ function setDefaultPublishOptions(exchange) {
         if (error) {
           return LOGGER.error('Error in trying to publish: ' + error);
         }
-        LOGGER.info('Message was published: ' + topic + ' ' + message);
+        LOGGER.info(`Message was published: ${topic}`, message);
       }
     );
   };

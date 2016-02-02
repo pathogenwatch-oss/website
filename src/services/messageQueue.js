@@ -136,11 +136,16 @@ function getServicesExchange() {
   return exchanges.SERVICES;
 }
 
+function getNotificationExchange() {
+  return exchanges.NOTIFICATION;
+}
+
 module.exports.newCollectionNotificationQueue = newCollectionNotificationQueue;
 module.exports.newAssemblyNotificationQueue = newAssemblyNotificationQueue;
 module.exports.newAssemblyUploadQueue = newAssemblyUploadQueue;
 module.exports.newCollectionAddQueue = newCollectionAddQueue;
+module.exports.newFileRequestQueue = newFileRequestQueue;
 module.exports.getUploadExchange = getUploadExchange;
 module.exports.getCollectionIdExchange = getCollectionIdExchange;
 module.exports.getServicesExchange = getServicesExchange;
-module.exports.newFileRequestQueue = newFileRequestQueue;
+module.exports.getNotificationExchange = getNotificationExchange;

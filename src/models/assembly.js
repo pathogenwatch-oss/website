@@ -74,13 +74,26 @@ function beginUpload(ids, data, callback) {
     (done) => messageQueueService.newAssemblyUploadQueue(ids.assemblyId,
       function (uploadQueue) {
         uploadQueue.subscribe(function () {
-          LOGGER.info('Received response from ' + this.name + ', destroying.');
+          LOGGER.info('Received response from ' + uploadQueue.name + ', destroying.');
           uploadQueue.destroy();
+
+          messageQueueService.getNotificationsExchange().publish(
+            `${ids.speciesId}.UPLOAD.ASSEMBLY.${ids.assemblyId}`, {
+              taskType: 'UPLOAD',
+              taskStatus: 'SUCCESS',
+              collectionId: ids.collectionId,
+              assemblyId: {
+                assemblyId: ids.assemblyId
+              }
+            }
+          );
+
           done();
         });
 
-        messageQueueService.getUploadExchange()
-          .publish('upload', assembly, { replyTo: uploadQueue.name });
+        messageQueueService.getUploadExchange().publish(
+          'upload', assembly, { replyTo: uploadQueue.name }
+        );
 
         // "dereference" sequences to remove from heap
         data.sequences = null;

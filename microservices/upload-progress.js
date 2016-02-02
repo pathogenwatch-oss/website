@@ -7,6 +7,8 @@ const logging = require('utils/logging');
 const LOGGER = logging.createLogger('upload progress');
 const { UPLOAD_PROGRESS } = require('utils/documentKeys');
 
+const QUEUE_OPTIONS = { durable: true, autoDelete: false };
+
 async.parallel({
   storage: storageConnection.connect,
   mqConnection: messageQueueConnection.connect
@@ -61,7 +63,7 @@ Collection: ${collectionId}`);
 
   function createNotificationQueue(collectionId, assemblyIds, callback) {
     const name = `collection-${collectionId}-notification-queue`;
-    mqConnection.queue(name, {}, function (queue) {
+    mqConnection.queue(name, QUEUE_OPTIONS, function (queue) {
       queue.bind(NOTIFICATION.name, `*.*.COLLECTION.${collectionId}`);
 
       for (var assemblyId of assemblyIds) {
@@ -75,7 +77,7 @@ Collection: ${collectionId}`);
     });
   }
 
-  mqConnection.queue(`upload-progress-queue`, {}, function (queue) {
+  mqConnection.queue(`upload-progress-queue`, QUEUE_OPTIONS, function (queue) {
     LOGGER.info(`${queue.name} is open.`);
     queue.bind(SERVICES.name, 'upload-progress');
 
