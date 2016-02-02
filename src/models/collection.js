@@ -57,8 +57,7 @@ function manageCollection(request, callback) {
   });
 }
 
-function add(ids, callback) {
-  var assemblyNames = ids.assemblyNames;
+function add(speciesId, { assemblyNames }, callback) {
   var collectionRequest = {
     identifierType: IDENTIFIER_TYPES.COLLECTION,
     count: 1
