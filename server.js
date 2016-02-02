@@ -25,8 +25,6 @@ app.use(bodyParser.urlencoded({
 logging.initHttpLogging(app, process.env.NODE_ENV || 'development');
 
 module.exports = function (callback) {
-  var server;
-
   async.parallel([
     storageConnection.connect,
     messageQueueConnection.connect
@@ -77,9 +75,8 @@ module.exports = function (callback) {
 
     require('errors.js')(app);
 
-    server = http.createServer(app).listen(app.get('port'), function () {
+    http.createServer(app).listen(app.get('port'), function () {
       LOGGER.info('✔ Express server listening on port ' + app.get('port'));
-      require('services/socket').connect(server);
       callback(null, app);
     });
   });

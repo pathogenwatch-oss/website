@@ -94,8 +94,18 @@ function add(ids, callback) {
     }
 
     const collectionSize = assemblyIds.length;
+    const assemblyNameToAssemblyIdMap = assemblyIds.reduce((map, newId) => {
+      map[assemblyNames.shift()] = newId;
+      return map;
+    }, {});
+
     const message = {
       collectionId,
+      assemblyIdToNameMap: // reverse mapping allows name to be recovered for errors
+        Object.keys(assemblyNameToAssemblyIdMap).reduce((map, name) => {
+          map[assemblyNameToAssemblyIdMap[name]] = name;
+          return map;
+        }),
       collectionSize,
       expectedResults:
         collectionSize + // for upload notifications
@@ -106,7 +116,7 @@ function add(ids, callback) {
     messageQueueService.getServicesExchange().publish(
       'upload-progress', message, null, function (notAcknowledged) {
         if (notAcknowledged) {
-          const errorMessage = 'upload progress service failed to acknowledge';
+          const errorMessage = 'Upload progress service failed to acknowledge';
           LOGGER.error(errorMessage);
           return callback(new Error(errorMessage));
         }
@@ -114,10 +124,7 @@ function add(ids, callback) {
         LOGGER.info('Received upload progress acknowledgement');
         callback(null, {
           collectionId,
-          assemblyNameToAssemblyIdMap: assemblyIds.reduce((map, newId) => {
-            map[assemblyNames.shift()] = newId;
-            return map;
-          }, {})
+          assemblyNameToAssemblyIdMap
         });
       }
     );

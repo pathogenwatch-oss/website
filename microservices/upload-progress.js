@@ -19,7 +19,7 @@ async.parallel({
   const mainStorage = require('services/storage')('main');
 
   function handleNotification(message) {
-    const { taskType, taskStatus, assemblyId, collectionId } =
+    const { taskType, taskStatus, assemblyId = {}, collectionId } =
       JSON.parse(message.data.toString());
 
     const documentKey = `${UPLOAD_PROGRESS}_${collectionId}`;
@@ -31,6 +31,7 @@ Status: ${taskStatus}
 Assembly Id: ${assemblyIdString}
 Collection: ${collectionId}`);
 
+    let isComplete = false;
     async.waterfall([
       mainStorage.retrieve.bind(null, documentKey),
       function (result, done) {
@@ -45,12 +46,20 @@ Collection: ${collectionId}`);
 
         doc.receivedResults++;
 
+        if (doc.receivedResults >== doc.expectedResults) {
+          isComplete = true;
+        }
+
         done(null, doc);
       },
       mainStorage.store.bind(null, documentKey)
     ], function (documentError) {
       if (documentError) {
         return LOGGER.error(documentError);
+      }
+      if (isComplete) {
+        LOGGER.info(`Upload complete, destroying ${this.name}`);
+        return this.destroy();
       }
       this.shift();
     });
@@ -59,9 +68,12 @@ Collection: ${collectionId}`);
   function createNotificationQueue(collectionId, callback) {
     const name = `collection-${collectionId}-notification-queue`;
     mqConnection.queue(name, {}, function (queue) {
-      queue.bind(NOTIFICATION.name, `*.COLLECTION.${collectionId}.*`);
+      // queue.bind(NOTIFICATION.name, `*.*.COLLECTION.${collectionId}`);
+      queue.bind(NOTIFICATION.name, '#'); // for testing till BE is updated
 
       queue.subscribe({ ack: true }, handleNotification.bind(queue));
+
+      LOGGER.info(`Opened queue ${name}`);
       callback();
     });
   }
@@ -72,20 +84,16 @@ Collection: ${collectionId}`);
 
     queue.subscribe({ ack: true, prefetchCount: 0 },
       (message, headers, deliveryInfo, ack) => {
-        const { collectionId, collectionSize, expectedResults } =
-          JSON.parse(message.data.toString());
+        const data = JSON.parse(message.data.toString());
 
-        const documentKey = `${UPLOAD_PROGRESS}_${collectionId}`;
-        const progressDocument = {
+        const documentKey = `${UPLOAD_PROGRESS}_${data.collectionId}`;
+        const progressDocument = Object.assign({
           type: 'UP',
           documentKey,
-          collectionId,
-          collectionSize,
-          expectedResults,
           receivedResults: 0,
           results: {},
           errors: []
-        };
+        }, data);
 
         async.parallel([
           (done) => mainStorage.store(
@@ -93,7 +101,7 @@ Collection: ${collectionId}`);
             progressDocument,
             done
           ),
-          (done) => createNotificationQueue(collectionId, done)
+          (done) => createNotificationQueue(data.collectionId, done)
         ], function () {
           ack.acknowledge();
         });
