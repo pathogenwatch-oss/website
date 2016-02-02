@@ -65,11 +65,13 @@ Collection: ${collectionId}`);
     });
   }
 
-  function createNotificationQueue(collectionId, callback) {
+  function createNotificationQueue(collectionId, assemblyIds, callback) {
     const name = `collection-${collectionId}-notification-queue`;
     mqConnection.queue(name, {}, function (queue) {
-      // queue.bind(NOTIFICATION.name, `*.*.COLLECTION.${collectionId}`);
-      queue.bind(NOTIFICATION.name, '#'); // for testing till BE is updated
+      queue.bind(NOTIFICATION.name, `*.*.COLLECTION.${collectionId}`);
+      for (const assemblyId of assemblyIds) {
+        queue.bind(NOTIFICATION.name, `*.*.ASSEMBLY.${assemblyId}`);
+      }
 
       queue.subscribe({ ack: true }, handleNotification.bind(queue));
 
@@ -101,7 +103,9 @@ Collection: ${collectionId}`);
             progressDocument,
             done
           ),
-          (done) => createNotificationQueue(data.collectionId, done)
+          (done) => createNotificationQueue(
+            data.collectionId, Object.keys(data.assemblyIdToNameMap), done
+          )
         ], function () {
           ack.acknowledge();
         });
