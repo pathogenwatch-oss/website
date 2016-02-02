@@ -33,10 +33,8 @@ Collection: ${collectionId}`);
 
     async.waterfall([
       (done) => mainStorage.retrieve(documentKey, done),
-      function (result, done) {
-        const doc = JSON.parse(result);
-
-        if (LOGGER.taskType === 'ERROR') {
+      function (doc, done) {
+        if (taskType === 'ERROR') {
           doc.errors.push({ assemblyId: assemblyIdString, taskType });
         } else {
           const numResults = doc.results[taskType] || 0;
