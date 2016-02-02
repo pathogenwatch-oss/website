@@ -104,7 +104,7 @@ function add(speciesId, { assemblyNames }, callback) {
         Object.keys(assemblyNameToAssemblyIdMap).reduce((map, name) => {
           map[assemblyNameToAssemblyIdMap[name]] = name;
           return map;
-        }),
+        }, {}),
       collectionSize,
       expectedResults:
         collectionSize + // for upload notifications

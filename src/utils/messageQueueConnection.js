@@ -71,7 +71,6 @@ function createExchange(exchangeKey, callback) {
     autoDelete: false,
     noDeclare: false
   }, config.options);
-
   connection.exchange(config.name, options, exchange => {
     setDefaultPublishOptions(exchange);
     exchanges[exchangeKey] = exchange;

@@ -83,16 +83,14 @@ Collection: ${collectionId}`);
 
     queue.subscribe({ ack: true, prefetchCount: 0 },
       (message, headers, deliveryInfo, ack) => {
-        const data = JSON.parse(message.data.toString());
-
-        const documentKey = `${UPLOAD_PROGRESS}_${data.collectionId}`;
+        const documentKey = `${UPLOAD_PROGRESS}_${message.collectionId}`;
         const progressDocument = Object.assign({
           type: 'UP',
           documentKey,
           receivedResults: 0,
           results: {},
           errors: []
-        }, data);
+        }, message);
 
         async.parallel([
           (done) => mainStorage.store(
@@ -101,10 +99,11 @@ Collection: ${collectionId}`);
             done
           ),
           (done) => createNotificationQueue(
-            data.collectionId, Object.keys(data.assemblyIdToNameMap), done
+            message.collectionId, Object.keys(message.assemblyIdToNameMap), done
           )
         ], function () {
           ack.acknowledge();
+          LOGGER.debug('Message acknowledged')
         });
       }
     );
