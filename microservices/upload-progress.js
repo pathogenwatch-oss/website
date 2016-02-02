@@ -31,9 +31,8 @@ Status: ${taskStatus}
 Assembly Id: ${assemblyIdString}
 Collection: ${collectionId}`);
 
-    let isComplete = false;
     async.waterfall([
-      mainStorage.retrieve.bind(null, documentKey),
+      (done) => mainStorage.retrieve(documentKey, done),
       function (result, done) {
         const doc = JSON.parse(result);
 
@@ -46,14 +45,11 @@ Collection: ${collectionId}`);
 
         doc.receivedResults++;
 
-        if (doc.receivedResults >== doc.expectedResults) {
-          isComplete = true;
-        }
-
-        done(null, doc);
+        mainStorage.store(documentKey, doc, function (storageError) {
+          done(storageError, (doc.receivedResults === doc.expectedResults));
+        });
       },
-      mainStorage.store.bind(null, documentKey)
-    ], function (documentError) {
+    ], function (documentError, isComplete) {
       if (documentError) {
         return LOGGER.error(documentError);
       }
