@@ -18,7 +18,7 @@ async.parallel({
   const { NOTIFICATION, SERVICES } = messageQueueConnection.getExchanges();
   const mainStorage = require('services/storage')('main');
 
-  function handleNotification(message) {
+  function handleNotification(message, _, __, { queue }) {
     const { taskType, taskStatus, assemblyId = {}, collectionId } =
       JSON.parse(message.data.toString());
 
@@ -34,12 +34,12 @@ Collection: ${collectionId}`);
     async.waterfall([
       (done) => mainStorage.retrieve(documentKey, done),
       function (doc, done) {
-        if (taskType === 'ERROR') {
+        if (taskStatus === 'ERROR') {
           doc.errors.push({ assemblyId: assemblyIdString, taskType });
-        } else {
-          const numResults = doc.results[taskType] || 0;
-          doc.results[taskType] = numResults + 1;
         }
+
+        const numResults = doc.results[taskType] || 0;
+        doc.results[taskType] = numResults + 1;
 
         doc.receivedResults++;
 
@@ -52,10 +52,10 @@ Collection: ${collectionId}`);
         return LOGGER.error(documentError);
       }
       if (isComplete) {
-        LOGGER.info(`Upload complete, destroying ${this.name}`);
-        return this.destroy();
+        LOGGER.info(`Upload complete, destroying ${queue.name}`);
+        return queue.destroy();
       }
-      this.shift();
+      queue.shift();
     });
   }
 
@@ -63,11 +63,12 @@ Collection: ${collectionId}`);
     const name = `collection-${collectionId}-notification-queue`;
     mqConnection.queue(name, {}, function (queue) {
       queue.bind(NOTIFICATION.name, `*.*.COLLECTION.${collectionId}`);
-      for (const assemblyId of assemblyIds) {
+
+      for (var assemblyId of assemblyIds) {
         queue.bind(NOTIFICATION.name, `*.*.ASSEMBLY.${assemblyId}`);
       }
 
-      queue.subscribe({ ack: true }, handleNotification.bind(queue));
+      queue.subscribe({ ack: true }, handleNotification);
 
       LOGGER.info(`Opened queue ${name}`);
       callback();
