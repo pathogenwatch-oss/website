@@ -32,7 +32,10 @@ var EXCHANGE_CONFIG = {
   SERVICES: {
     name: 'me-services-ex',
     type: 'topic',
-    confirm: true
+    options: {
+      passive: false,
+      confirm: true
+    }
   }
 };
 var connection;
@@ -59,15 +62,17 @@ function setDefaultPublishOptions(exchange) {
 }
 
 function createExchange(exchangeKey, callback) {
-  var config = EXCHANGE_CONFIG[exchangeKey];
-  connection.exchange(config.name, {
+  const config = EXCHANGE_CONFIG[exchangeKey];
+  const options = Object.assign({
     type: config.type,
     passive: true,
     durable: false,
     confirm: false,
     autoDelete: false,
     noDeclare: false
-  }, function (exchange) {
+  }, config.options);
+
+  connection.exchange(config.name, options, exchange => {
     setDefaultPublishOptions(exchange);
     exchanges[exchangeKey] = exchange;
     LOGGER.info('✔ Exchange "' + exchange.name + '" is open');
