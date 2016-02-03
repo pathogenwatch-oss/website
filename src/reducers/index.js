@@ -17,8 +17,6 @@ import downloadsMenu from './downloadsMenu';
 
 import bodyClickEvent from './bodyClickEvent';
 
-import { ready, error } from './fetch';
-
 import { RESET_STORE } from '../actions/reset';
 
 function createReducer({ actions, initialState }) {
@@ -54,7 +52,6 @@ const rootReducer = combineReducers({
   }),
   bodyClickEvent,
   loading: combineReducers({
-    collection: combineReducers({ ready, error }),
     tree: createReducer(treeLoading),
   }),
 });

@@ -1,7 +1,10 @@
 import React from 'react';
 
 import Layout from './Layout.react';
+import UploadProgress from './upload-progress';
 import { LoadSpinner, LoadError } from './Loading.react';
+
+import { statuses } from '^/constants/collection';
 
 export default React.createClass({
 
@@ -9,12 +12,19 @@ export default React.createClass({
 
   propTypes: {
     initialise: React.PropTypes.func,
+    fetch: React.PropTypes.func,
     reset: React.PropTypes.func,
-    loading: React.PropTypes.object,
+    status: React.PropTypes.string,
   },
 
   componentDidMount() {
     this.props.initialise();
+  },
+
+  componentWillReceiveProps({ status }) {
+    if (status === statuses.READY) {
+      this.props.fetch();
+    }
   },
 
   componentWillUnmount() {
@@ -22,15 +32,19 @@ export default React.createClass({
   },
 
   render() {
-    const { ready, error } = this.props.loading;
+    const { status } = this.props;
 
-    if (error) {
+    if (status === statuses.NOT_FOUND) {
       return (
         <LoadError />
       );
     }
 
-    if (ready) {
+    if (status === statuses.PROCESSING) {
+      return (<UploadProgress />);
+    }
+
+    if (status === statuses.FETCHED) {
       return (
         <Layout />
       );

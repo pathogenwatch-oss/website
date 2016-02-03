@@ -1,0 +1,78 @@
+.wgsa-fileupload-progressbar-container {
+  position: absolute;
+  left: 0;
+  right: 0;
+}
+
+.wgsa-fileupload-progressbar.mdl-progress {
+  width: 100%;
+  z-index: -1;
+}
+
+.uploadprogress-spinner-button {
+  font-size: 10px;
+}
+
+.wgsa-upload-progress-container {
+  position: absolute;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  overflow: visible;
+  margin: 16px;
+}
+
+.wgsa-collection-url-display {
+  padding: 16px;
+  text-align: center;
+}
+.wgsa-collection-url-display .mdl-card__supporting-text {
+  width: 100%;
+}
+
+.wgsa-collection-url {
+  padding-top: 16px;
+  font-size: 16px;
+}
+
+.wgsa-upload-progress-table {
+  margin: 16px 0px;
+}
+
+.wgsa-assembly-analyses {
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.wgsa-assembly-analyses .mdl-card__title {
+  color: #673c90;
+  font-weight: 400;
+}
+
+.wgsa-assembly-analyses .mdl-card__actions {
+  font-weight: 500;
+}
+
+.wgsa-assembly-analyses .material-icons {
+  font-size: 24px;
+  color: #48996F;
+}
+
+.wgsa-collection-analyses {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  text-align: center;
+  position: absolute;
+  top: 50px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.wgsa-collection-analyses .material-icons {
+  font-size: 2em;
+}

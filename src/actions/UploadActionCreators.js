@@ -1,13 +1,12 @@
 import AppDispatcher from '../dispatcher/AppDispatcher';
 
 import UploadStore from '../stores/UploadStore';
-import SocketStore from '../stores/SocketStore';
 
 import FileUploadingActionCreators from '../actions/FileUploadingActionCreators';
 import FileUploadingProgressActionCreators from '../actions/FileUploadingProgressActionCreators';
 
 import FileUtils from '../utils/File';
-import { postAssembly } from '../utils/Api';
+import { getCollectionId, postAssembly } from '../utils/Api';
 import Species from '../species';
 
 module.exports = {
@@ -43,26 +42,15 @@ module.exports = {
     FileUploadingActionCreators.startUploadingFiles();
     FileUploadingProgressActionCreators.setNumberOfExpectedResults();
 
-    const socket = SocketStore.getSocketConnection()
-
-    socket.on('assemblyUploadNotification', function (data) {
-      console.log('[WGSA] Received notification:');
-      console.dir(data);
-
-      FileUploadingProgressActionCreators.addReceivedResult(data);
-    });
-
     const assemblyNames = UploadStore.getAssemblyNames();
-    const roomId = SocketStore.getRoomId();
 
     const data = {
-      assemblyNames: assemblyNames,
-      socketRoomId: roomId,
-      speciesId: Species.id,
+      assemblyNames,
     };
 
-    socket.on('ids', function ({ error, result }) {
+    getCollectionId(Species.id, data, function (error, result) {
       if (error) {
+        // TODO: Pass error to front end
         console.error(error);
         return;
       }
@@ -82,7 +70,6 @@ module.exports = {
           speciesId: Species.id,
         };
         const requestBody = {
-          socketRoomId: roomId,
           sequences: fasta.assembly,
           metadata,
           metrics,
@@ -90,6 +77,7 @@ module.exports = {
 
         postAssembly(urlParams, requestBody, function (assemblyError, { assemblyId }) {
           if (assemblyError) {
+            // TODO: Pass error to front end
             console.error(assemblyError);
             return;
           }
@@ -104,8 +92,6 @@ module.exports = {
         uploadAssembly(assemblyNames.shift());
       }
     });
-
-    socket.emit('requestIds', data);
   },
 
 };

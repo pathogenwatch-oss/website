@@ -12,11 +12,9 @@ import AssemblyAnalysisChart from './AssemblyAnalysisChart.react';
 import UploadWorkspaceNavigation from './UploadWorkspaceNavigation.react';
 import UploadReviewHeader from './UploadReviewHeader.react';
 import Overview from './Overview.react';
-import UploadingFilesDetailed from './UploadingFilesDetailed.react';
 
 import UploadActionCreators from '^/actions/UploadActionCreators';
 import UploadStore from '^/stores/UploadStore';
-import SocketActionCreators from '^/actions/SocketActionCreators';
 import UploadWorkspaceNavigationActionCreators from '^/actions/UploadWorkspaceNavigationActionCreators';
 import ToastActionCreators from '^/actions/ToastActionCreators';
 
@@ -24,9 +22,7 @@ import UploadWorkspaceNavigationStore from '^/stores/UploadWorkspaceNavigationSt
 import FileProcessingStore from '^/stores/FileProcessingStore';
 import FileUploadingStore from '^/stores/FileUploadingStore';
 import FileUploadingProgressStore from '^/stores/FileUploadingProgressStore';
-import SocketStore from '^/stores/SocketStore';
 
-import SocketUtils from '^/utils/Socket';
 import Species from '^/species';
 import DEFAULT from '^/defaults';
 
@@ -76,18 +72,6 @@ export default React.createClass({
     FileUploadingStore.addChangeListener(this.handleFileUploadingStoreChange);
     UploadWorkspaceNavigationStore.addChangeListener(this.handleUploadWorkspaceNavigationStoreChange);
     UploadStore.addChangeListener(this.handleUploadStoreChange);
-
-    const socket = SocketUtils.socketConnect();
-
-    socket.on('connect', function () {
-      console.log('[WGSA] Socket connected');
-    });
-
-    socket.on('disconnect', function () {
-      console.error('[WGSA] Socket connection disconnected');
-    });
-
-    SocketActionCreators.setSocketConnection(socket);
   },
 
   componentWillUnmount() {
@@ -96,7 +80,6 @@ export default React.createClass({
     UploadWorkspaceNavigationStore.removeChangeListener(this.handleUploadWorkspaceNavigationStoreChange);
     UploadStore.removeChangeListener(this.handleUploadStoreChange);
 
-    SocketStore.getSocketConnection().disconnect();
     FileUploadingProgressStore.clearStore();
     UploadStore.clearStore();
     FileUploadingStore.clearStore();
@@ -190,9 +173,6 @@ export default React.createClass({
     case 'assembly':
       subtitle = assembly && assembly.fasta.name;
       break;
-    case 'upload_progress':
-      subtitle = 'Uploading...';
-      break;
     default: subtitle = this.state.pageTitleMessage;
     }
 
@@ -255,12 +235,6 @@ export default React.createClass({
                 case 'overview':
                   return (
                    <Overview clickHandler={this.handleClick} isUploading={this.state.isUploading} isReadyToUpload={this.state.readyToUpload} />
-                  );
-                case 'upload_progress':
-                  return (
-                    <div>
-                      <UploadingFilesDetailed collectionUrl={this.state.collectionUrl}/>
-                    </div>
                   );
                 default:
                   // should never hit default

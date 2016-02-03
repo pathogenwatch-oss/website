@@ -42,16 +42,16 @@ export default React.createClass({
 
   render() {
     return (
-        <header style={headerStyle} className="mdl-layout__header">
-          <div className="mdl-layout-icon"></div>
-          <div style={headerStyle} className="mdl-layout__header-row">
-            <span style={headerStyle} className="mdl-layout-title">WGSA | {Species.formattedName}</span>
-            <span className="mdl-layout-spacer" />
-            <span style={subtitleStyle} className="mdl-layout-title">{this.props.subtitle}</span>
-            <UploadButton activateButton={this.props.activateUploadButton} uploadProgressPercentage={this.state.uploadProgressPercentage} isUploading={this.props.isUploading} />
-          </div>
-          <FileUploadingProgress />
-        </header>
+      <header style={headerStyle} className="mdl-layout__header">
+        <div className="mdl-layout-icon"></div>
+        <div style={headerStyle} className="mdl-layout__header-row">
+          <span style={headerStyle} className="mdl-layout-title">WGSA | {Species.formattedName}</span>
+          <span className="mdl-layout-spacer" />
+          <span style={subtitleStyle} className="mdl-layout-title">{this.props.subtitle}</span>
+          <UploadButton active={this.props.activateUploadButton} />
+        </div>
+        <FileUploadingProgress />
+      </header>
     );
   },
 

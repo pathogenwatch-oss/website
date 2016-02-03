@@ -1,4 +1,10 @@
-import { getCollection, getReferenceCollection, getAntibiotics } from '../utils/Api';
+import {
+  checkCollectionStatus,
+  getCollection,
+  getReferenceCollection,
+  getAntibiotics,
+} from '../utils/Api';
+
 import { fixPositions, fixDateFormats } from '../utils/Metadata';
 
 export const FETCH_ENTITIES = 'FETCH_ENTITIES';
@@ -11,5 +17,14 @@ export function fetchEntities(speciesId, collectionId) {
       getReferenceCollection(speciesId, collectionId).then(fixDateFormats),
       getAntibiotics(speciesId),
     ]),
+  };
+}
+
+export const CHECK_STATUS = 'CHECK_STATUS';
+
+export function checkStatus(speciesId, collectionId) {
+  return {
+    type: CHECK_STATUS,
+    promise: checkCollectionStatus(speciesId, collectionId),
   };
 }

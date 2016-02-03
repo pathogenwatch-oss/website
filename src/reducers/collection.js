@@ -1,8 +1,9 @@
-import { FETCH_ENTITIES } from '../actions/fetch';
+import { FETCH_ENTITIES, CHECK_STATUS } from '../actions/fetch';
 import { SET_COLLECTION_ID } from '../actions/collection';
 import { SET_TREE } from '../actions/tree';
 
 import { sortAssemblies } from '../constants/table';
+import { statuses } from '../constants/collection';
 
 function replaceSubtypeAssemblyNames(uploaded, reference) {
   return Object.keys(uploaded)
@@ -91,15 +92,36 @@ export const collection = {
         id,
       };
     },
+    [CHECK_STATUS]: function (state, { ready, result, error }) {
+      if (ready && error) {
+        return {
+          ...state,
+          status: statuses.NOT_FOUND,
+        };
+      }
+
+      if (ready) {
+        return {
+          ...state,
+          ...result,
+        };
+      }
+
+      return state;
+    },
     [FETCH_ENTITIES]: function (state, { ready, result, error }) {
-      if (!ready || error) {
-        return state;
+      if (ready && error) {
+        return {
+          ...state,
+          status: statuses.NOT_FOUND,
+        };
       }
 
       if (result) {
         const [ uploaded ] = result;
         return {
           ...state,
+          status: statuses.FETCHED,
           assemblyIds: new Set(
             Object.keys(uploaded.assemblies).sort(
               sortAssemblies.bind(null, uploaded.assemblies)
@@ -108,6 +130,8 @@ export const collection = {
           subtrees: uploaded.subtrees,
         };
       }
+
+      return state;
     },
   },
 };
