@@ -97,7 +97,7 @@ function newUploadProgressRequestQueue(collectionId, callback) {
     const delegate = queue.subscribe.bind(queue);
     queue.subscribe = handler => {
       delegate(message => {
-        const { error } = JSON.parse(message.data);
+        const { error } = message;
         handler(error);
       });
     };

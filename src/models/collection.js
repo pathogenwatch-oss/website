@@ -112,7 +112,7 @@ function add(speciesId, { assemblyNames }, callback) {
         COLLECTION_TREE_TASKS.length,
     };
 
-    messageQueueService.newUploadProgressAckQueue(collectionId, queue => {
+    messageQueueService.newUploadProgressRequestQueue(collectionId, queue => {
       queue.subscribe(ackError => {
         if (ackError) {
           LOGGER.error('Upload progress service failed to acknowledge');
@@ -120,6 +120,7 @@ function add(speciesId, { assemblyNames }, callback) {
         }
 
         LOGGER.info('Received upload progress acknowledgement');
+        queue.destroy();
         callback(null, {
           collectionId,
           assemblyNameToAssemblyIdMap

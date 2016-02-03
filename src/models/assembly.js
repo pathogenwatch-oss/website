@@ -77,7 +77,7 @@ function beginUpload(ids, data, callback) {
           LOGGER.info(`Received response from ${uploadQueue.name}, destroying.`);
           uploadQueue.destroy();
 
-          messageQueueService.getNotificationsExchange().publish(
+          messageQueueService.getNotificationExchange().publish(
             `${ids.speciesId}.UPLOAD.ASSEMBLY.${ids.assemblyId}`, {
               taskType: 'UPLOAD',
               taskStatus: 'SUCCESS',
