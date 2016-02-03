@@ -21,8 +21,12 @@ async.parallel({
   const mainStorage = require('services/storage')('main');
 
   function handleNotification(message, _, __, { queue }) {
-    const { taskType, taskStatus, assemblyId = {}, collectionId } =
-      JSON.parse(message.data.toString());
+    // messages from different sources can be different formats
+    if (message.data && Buffer.isBuffer(message.data)) {
+      message = JSON.parse(message.data.toString());
+    }
+
+    const { taskType, taskStatus, assemblyId = {}, collectionId } = message;
 
     const documentKey = `${UPLOAD_PROGRESS}_${collectionId}`;
     const assemblyIdString = assemblyId.assemblyId || 'N/A';
