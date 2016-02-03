@@ -12,9 +12,9 @@ const QUEUE_OPTIONS = { durable: true, autoDelete: false };
 async.parallel({
   storage: storageConnection.connect,
   mqConnection: messageQueueConnection.connect
-}, function (error, { mqConnection }) {
-  if (error) {
-    return LOGGER.error(error);
+}, function (connectionError, { mqConnection }) {
+  if (connectionError) {
+    return LOGGER.error(connectionError);
   }
 
   const { NOTIFICATION, SERVICES } = messageQueueConnection.getExchanges();
@@ -34,7 +34,7 @@ Assembly Id: ${assemblyIdString}
 Collection: ${collectionId}`);
 
     async.waterfall([
-      (done) => mainStorage.retrieve(documentKey, done),
+      done => mainStorage.retrieve(documentKey, done),
       function (doc, done) {
         if (taskStatus === 'ERROR') {
           doc.errors.push({ assemblyId: assemblyIdString, taskType });
@@ -49,9 +49,9 @@ Collection: ${collectionId}`);
           done(storageError, (doc.receivedResults === doc.expectedResults));
         });
       },
-    ], function (documentError, isComplete) {
-      if (documentError) {
-        return LOGGER.error(documentError);
+    ], function (error, isComplete) {
+      if (error) {
+        return LOGGER.error(error);
       }
       if (isComplete) {
         LOGGER.info(`Upload complete, destroying ${queue.name}`);
@@ -81,31 +81,29 @@ Collection: ${collectionId}`);
     LOGGER.info(`${queue.name} is open.`);
     queue.bind(SERVICES.name, 'upload-progress');
 
-    queue.subscribe({ ack: true, prefetchCount: 0 },
-      (message, headers, deliveryInfo, ack) => {
-        const documentKey = `${UPLOAD_PROGRESS}_${message.collectionId}`;
-        const progressDocument = Object.assign({
-          type: 'UP',
-          documentKey,
-          receivedResults: 0,
-          results: {},
-          errors: []
-        }, message);
+    queue.subscribe(message => {
+      const documentKey = `${UPLOAD_PROGRESS}_${message.collectionId}`;
+      const progressDocument = Object.assign({
+        type: 'UP',
+        documentKey,
+        receivedResults: 0,
+        results: {},
+        errors: []
+      }, message);
 
-        async.parallel([
-          (done) => mainStorage.store(
-            documentKey,
-            progressDocument,
-            done
-          ),
-          (done) => createNotificationQueue(
-            message.collectionId, Object.keys(message.assemblyIdToNameMap), done
-          )
-        ], function () {
-          ack.acknowledge();
-          LOGGER.debug('Message acknowledged')
-        });
-      }
-    );
+      async.parallel([
+        done => mainStorage.store(
+          documentKey,
+          progressDocument,
+          done
+        ),
+        done => createNotificationQueue(
+          message.collectionId, Object.keys(message.assemblyIdToNameMap), done
+        )
+      ], error => mqConnection.exchange().publish(
+          `upload-progress-request-${message.collectionId}`, { error }
+        )
+      );
+    });
   });
 });

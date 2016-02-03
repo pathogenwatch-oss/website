@@ -112,12 +112,11 @@ function add(speciesId, { assemblyNames }, callback) {
         COLLECTION_TREE_TASKS.length,
     };
 
-    messageQueueService.getServicesExchange().publish(
-      'upload-progress', message, null, function (notAcknowledged) {
-        if (notAcknowledged) {
-          const errorMessage = 'Upload progress service failed to acknowledge';
-          LOGGER.error(errorMessage);
-          return callback(new Error(errorMessage));
+    messageQueueService.newUploadProgressAckQueue(collectionId, queue => {
+      queue.subscribe(ackError => {
+        if (ackError) {
+          LOGGER.error('Upload progress service failed to acknowledge');
+          return callback(ackError);
         }
 
         LOGGER.info('Received upload progress acknowledgement');
@@ -125,8 +124,10 @@ function add(speciesId, { assemblyNames }, callback) {
           collectionId,
           assemblyNameToAssemblyIdMap
         });
-      }
-    );
+      });
+
+      messageQueueService.getServicesExchange().publish('upload-progress', message);
+    });
   });
 }
 

@@ -66,15 +66,15 @@ function beginUpload(ids, data, callback) {
   };
 
   async.parallel([
-    (done) => mainStorage.store(
+    done => mainStorage.store(
       createKey(ids.assemblyId, ASSEMBLY_METADATA),
       assemblyMetadata,
       done
     ),
-    (done) => messageQueueService.newAssemblyUploadQueue(ids.assemblyId,
+    done => messageQueueService.newAssemblyUploadQueue(ids.assemblyId,
       function (uploadQueue) {
         uploadQueue.subscribe(function () {
-          LOGGER.info('Received response from ' + uploadQueue.name + ', destroying.');
+          LOGGER.info(`Received response from ${uploadQueue.name}, destroying.`);
           uploadQueue.destroy();
 
           messageQueueService.getNotificationsExchange().publish(
