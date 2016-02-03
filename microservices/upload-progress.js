@@ -53,17 +53,17 @@ Collection: ${collectionId}`);
 
         doc.receivedResults++;
 
-        mainStorage.store(documentKey, doc, function (storageError) {
-          done(storageError, (doc.receivedResults === doc.expectedResults));
-        });
+        if (doc.receivedResults === doc.expectedResults) {
+          doc.status = 'READY';
+          LOGGER.info(`Collection ready, destroying ${queue.name}`);
+          queue.destroy();
+        }
+
+        mainStorage.store(documentKey, doc, done);
       },
-    ], function (error, isComplete) {
+    ], function (error) {
       if (error) {
         return LOGGER.error(error);
-      }
-      if (isComplete) {
-        LOGGER.info(`Upload complete, destroying ${queue.name}`);
-        return queue.destroy();
       }
       queue.shift();
     });
@@ -95,6 +95,7 @@ Collection: ${collectionId}`);
       const progressDocument = Object.assign({
         type: 'UP',
         documentKey,
+        status: 'PROCESSING',
         receivedResults: 0,
         results: {},
         errors: []

@@ -6,7 +6,7 @@ var mainStorage = require('services/storage')('main');
 var messageQueueService = require('services/messageQueue');
 
 var LOGGER = require('utils/logging').createLogger('Collection');
-const { COLLECTION_LIST, CORE_TREE_RESULT } = require('utils/documentKeys');
+const { COLLECTION_LIST, CORE_TREE_RESULT, UPLOAD_PROGRESS } = require('utils/documentKeys');
 
 var IDENTIFIER_TYPES = {
   COLLECTION: 'Collection',
@@ -262,7 +262,27 @@ function getSubtree({ speciesId, collectionId, subtreeId }, callback) {
   });
 }
 
+function getStatus({ collectionId }, callback) {
+  mainStorage.retrieve(`${UPLOAD_PROGRESS}_${collectionId}`, function (error, doc) {
+    if (error) {
+      callback(error);
+    }
+
+    if (doc.status === 'READY') {
+      return callback(null, { status: 'READY' });
+    }
+
+    // status page doesn't need this data
+    delete doc.assemblyIdToNameMap;
+    delete doc.type;
+    delete doc.documentKey;
+
+    return callback(null, { status: 'PROCESSING', state: doc });
+  });
+}
+
 module.exports.add = add;
 module.exports.get = get;
 module.exports.getReference = getReference;
 module.exports.getSubtree = getSubtree;
+module.exports.getStatus = getStatus;
