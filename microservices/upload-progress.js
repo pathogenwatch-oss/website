@@ -21,10 +21,9 @@ async.parallel({
   const mainStorage = require('services/storage')('main');
 
   function handleNotification(message, _, __, { queue }) {
-    if (message.data && Buffer.isBuffer(message.data)){
-      message = JSON.parse(message.data.toString());
-    }
-    const { taskType, taskStatus, assemblyId = {}, collectionId } = message;
+    const { taskType, taskStatus, assemblyId = {}, collectionId } =
+      JSON.parse(message.data.toString());
+
     const documentKey = `${UPLOAD_PROGRESS}_${collectionId}`;
     const assemblyIdString = assemblyId.assemblyId || 'N/A';
 
@@ -37,8 +36,12 @@ Collection: ${collectionId}`);
     async.waterfall([
       done => mainStorage.retrieve(documentKey, done),
       function (doc, done) {
+        const { assemblyIdToNameMap } = doc;
         if (taskStatus === 'ERROR') {
-          doc.errors.push({ assemblyId: assemblyIdString, taskType });
+          doc.errors.push({
+            assemblyName: assemblyIdToNameMap[assemblyIdString],
+            taskType
+          });
         }
 
         const numResults = doc.results[taskType] || 0;
@@ -67,6 +70,7 @@ Collection: ${collectionId}`);
     mqConnection.queue(name, QUEUE_OPTIONS, function (queue) {
       queue.bind(NOTIFICATION.name, `*.*.COLLECTION.${collectionId}`);
 
+      // `let` is unavailable for now
       for (var assemblyId of assemblyIds) {
         queue.bind(NOTIFICATION.name, `*.*.ASSEMBLY.${assemblyId}`);
       }
