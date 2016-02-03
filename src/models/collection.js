@@ -276,8 +276,9 @@ function getStatus({ collectionId }, callback) {
     delete doc.assemblyIdToNameMap;
     delete doc.type;
     delete doc.documentKey;
+    delete doc.status;
 
-    return callback(null, { status: 'PROCESSING', state: doc });
+    return callback(null, { status: 'PROCESSING', progress: doc });
   });
 }
 
