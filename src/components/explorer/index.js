@@ -17,6 +17,7 @@ const connectExplorer = connect(
   ({ collection }) => {
     return {
       status: collection.status,
+      progress: collection.progress,
     };
   },
   (dispatch, { id }) => {
@@ -25,12 +26,9 @@ const connectExplorer = connect(
         dispatch(setCollectionId(id));
         dispatch(checkStatus(Species.id, id));
       },
-      fetch() {
-        dispatch(fetchEntities(Species.id, id));
-      },
-      reset() {
-        dispatch(resetStore());
-      },
+      checkStatus: () => dispatch(checkStatus(Species.id, id)),
+      fetch: () => dispatch(fetchEntities(Species.id, id)),
+      reset: () => dispatch(resetStore()),
     };
   },
 );

@@ -1,10 +1,5 @@
 import React from 'react';
 
-import FileUploadingProgress from '../../upload/FileUploadingProgress.react';
-import UploadButton from '../../upload/navigation/UploadButton.react';
-
-import FileUploadingProgressStore from '^/stores/FileUploadingProgressStore';
-
 import Species from '^/species';
 import DEFAULT from '^/defaults';
 
@@ -41,6 +36,21 @@ export default React.createClass({
     percentage: React.PropTypes.number,
   },
 
+  componentDidMount() {
+    const { progressBar } = this.refs;
+
+    progressBar.addEventListener('mdl-componentupgraded', (event) => {
+      this.progressBar = event.target.MaterialProgress;
+      this.progressBar.setProgress(this.props.percentage);
+    });
+
+    componentHandler.upgradeElement(progressBar);
+  },
+
+  componentDidUpdate() {
+    this.progressBar.setProgress(this.props.percentage);
+  },
+
   render() {
     return (
         <header style={headerStyle} className="mdl-layout__header">
@@ -48,12 +58,14 @@ export default React.createClass({
           <div className="mdl-layout__header-row">
             <span className="mdl-layout-title">WGSA | {Species.formattedName}</span>
             <span className="mdl-layout-spacer" />
-            <span style={subtitleStyle} className="mdl-layout-title">Upload Progress</span>
+            <span style={subtitleStyle} className="mdl-layout-title">In Progress</span>
             <div style={uploadButtonStyle} className="wgsa-sonar-effect wgsa-upload-review-button mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--6dp">
               {this.props.percentage || 0}%
             </div>
           </div>
-          <FileUploadingProgress />
+          <div className="wgsa-fileupload-progressbar-container">
+            <div ref="progressBar" className="wgsa-fileupload-progressbar mdl-progress mdl-js-progress"></div>
+          </div>
         </header>
     );
   },

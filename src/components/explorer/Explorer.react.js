@@ -12,9 +12,11 @@ export default React.createClass({
 
   propTypes: {
     initialise: React.PropTypes.func,
+    checkStatus: React.PropTypes.func,
     fetch: React.PropTypes.func,
     reset: React.PropTypes.func,
     status: React.PropTypes.string,
+    progress: React.PropTypes.object,
   },
 
   componentDidMount() {
@@ -41,7 +43,8 @@ export default React.createClass({
     }
 
     if (status === statuses.PROCESSING) {
-      return (<UploadProgress />);
+      const { progress, checkStatus } = this.props;
+      return (<UploadProgress progress={progress} checkStatus={checkStatus} />);
     }
 
     if (status === statuses.FETCHED) {

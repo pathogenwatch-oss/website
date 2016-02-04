@@ -12,20 +12,27 @@ const layoutContentStyle = {
   position: 'relative',
 };
 
-// const connectDashboard = connect(
-//
-// );
-
 const UploadProgress = React.createClass({
 
+  propTypes: {
+    checkStatus: React.PropTypes.func,
+    progress: React.PropTypes.object,
+  },
+
   componentDidMount() {
-    // componentHandler.upgradeElement(this.refs.spinner);
+    this.statusInterval = setInterval(this.props.checkStatus, 1000);
+  },
+
+  componentWillUnmount() {
+    clearInterval(this.statusInterval);
   },
 
   render() {
+    const { receivedResults, expectedResults, ...dashboardProps } = this.props.progress;
+    const percentage = Math.floor(receivedResults / expectedResults * 100);
     return (
       <div className="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-        <Header />
+        <Header percentage={percentage} />
         <main className="mdl-layout__content" style={layoutContentStyle}>
           <div className="wgsa-upload-progress">
             <main className="wgsa-upload-progress-container">
@@ -35,8 +42,7 @@ const UploadProgress = React.createClass({
                   If upload fails to progress, please refresh at a later time.
                 </div>
               </div>
-              {/*{connectDashboard(Dashboard)}*/}
-              <Dashboard />
+              <Dashboard {...dashboardProps} />
             </main>
           </div>
         </main>
@@ -46,4 +52,4 @@ const UploadProgress = React.createClass({
 
 });
 
-module.exports = UploadProgress;
+export default UploadProgress;

@@ -1,9 +1,6 @@
 import React from 'react';
 
-import FileUploadingProgress from './FileUploadingProgress.react';
 import UploadButton from './navigation/UploadButton.react';
-
-import FileUploadingProgressStore from '^/stores/FileUploadingProgressStore';
 
 import Species from '^/species';
 import DEFAULT from '^/defaults';
@@ -26,20 +23,6 @@ export default React.createClass({
 
   displayName: 'UploadReviewHeader',
 
-  getInitialState() {
-    return {
-      uploadProgressPercentage: 0,
-    };
-  },
-
-  componentDidMount() {
-    FileUploadingProgressStore.addChangeListener(this.handleFileUploadingProgressStoreChange);
-  },
-
-  componentWillUnmount() {
-    FileUploadingProgressStore.removeChangeListener(this.handleFileUploadingProgressStoreChange);
-  },
-
   render() {
     return (
       <header style={headerStyle} className="mdl-layout__header">
@@ -50,16 +33,8 @@ export default React.createClass({
           <span style={subtitleStyle} className="mdl-layout-title">{this.props.subtitle}</span>
           <UploadButton active={this.props.activateUploadButton} />
         </div>
-        <FileUploadingProgress />
       </header>
     );
-  },
-
-  handleFileUploadingProgressStoreChange() {
-    const percentage = FileUploadingProgressStore.getProgressPercentage();
-    this.setState({
-      uploadProgressPercentage: percentage,
-    });
   },
 
 });
