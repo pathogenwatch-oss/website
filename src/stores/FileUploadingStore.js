@@ -1,95 +1,50 @@
 import { EventEmitter } from 'events';
 import assign from 'object-assign';
-import keyMirror from 'keymirror';
 
 import AppDispatcher from '../dispatcher/AppDispatcher';
 
-import Species from '../species';
+import UploadStore from './UploadStore';
+import { postAssembly } from '../utils/Api';
+import Species from '^/species';
 
 const CHANGE_EVENT = 'change';
 
-const ASSEMBLY_PROCESSING_RESULTS = [
-  'CORE',
-  'FP',
-  'MLST',
-  'PAARSNP',
-];
-
-const COLLECTION_PROCESSING_RESULTS = keyMirror({
-  PHYLO_MATRIX: null,
-  CORE_MUTANT_TREE: null,
-  SUBMATRIX: null,
-});
-
-const STATES = keyMirror({
-  NOT_UPLOADING_FILES: null,
-  UPLOADING_FILES: null,
-});
-
-const RESULTS = keyMirror({
-  NONE: null,
-  SUCCESS: null,
-  ERROR: null,
-  ABORT: null,
-});
+export const UPLOADING = 'UPLOADING';
+export const UPLOAD_COMPLETE = 'UPLOAD_COMPLETE';
 
 let fileUploadingState = null;
-let fileUploadingResult = RESULTS.NONE;
 let collectionId = null;
 let assemblyNameToAssemblyIdMap = null;
 
 function setFileUploadingState(state) {
   fileUploadingState = state;
 }
-
-function setFileUploadingResult(result) {
-  fileUploadingResult = result;
-}
-
 function setCollectionId(id) {
   collectionId = id;
 }
 
-function setassemblyNameToAssemblyIdMap(idToIdMap) {
+function setAssemblyNameToAssemblyIdMap(idToIdMap) {
   assemblyNameToAssemblyIdMap = idToIdMap;
 }
 
 const Store = assign({}, EventEmitter.prototype, {
-  addChangeListener: function (callback) {
+  addChangeListener(callback) {
     this.on(CHANGE_EVENT, callback);
   },
 
-  removeChangeListener: function (callback) {
+  removeChangeListener(callback) {
     this.removeListener(CHANGE_EVENT, callback);
   },
 
-  getFileUploadingState: function () {
-    return fileUploadingState;
+  isUploading() {
+    return fileUploadingState === UPLOADING;
   },
 
-  getFileUploadingResult: function () {
-    return fileUploadingResult;
-  },
-
-  getFileUploadingResults: function () {
-    return RESULTS;
-  },
-
-  getAssemblyProcessingResults: function () {
-    return ASSEMBLY_PROCESSING_RESULTS.filter(
-      (result) => Species.missingAnalyses.indexOf(result) === -1
-    );
-  },
-
-  getCollectionProcessingResults: function () {
-    return COLLECTION_PROCESSING_RESULTS;
-  },
-
-  getCollectionId: function () {
+  getCollectionId() {
     return collectionId;
   },
 
-  getAssemblyNameToAssemblyIdMap: function () {
+  getAssemblyNameToAssemblyIdMap() {
     return assemblyNameToAssemblyIdMap;
   },
 
@@ -99,11 +54,44 @@ const Store = assign({}, EventEmitter.prototype, {
       null;
   },
 
-  clearStore: function () {
+  uploadFiles() {
+    console.log('*** UPLOADING FILES ***');
+    const assemblyNames = UploadStore.getAssemblyNames();
+    const uploadAssembly = (assemblyName) => {
+      const { metadata, metrics, fasta } = UploadStore.getAssembly(assemblyName);
+      const urlParams = {
+        collectionId: collectionId,
+        assemblyId: assemblyNameToAssemblyIdMap[assemblyName],
+        speciesId: Species.id,
+      };
+      const requestBody = {
+        sequences: fasta.assembly,
+        metadata,
+        metrics,
+      };
+
+      postAssembly(urlParams, requestBody, function (assemblyError) {
+        if (assemblyError) {
+          // TODO: Pass error to front end
+          console.error(assemblyError);
+          return;
+        }
+        if (assemblyNames.length) {
+          uploadAssembly(assemblyNames.shift());
+        }
+      });
+    };
+
+    for (let i = 0; i < Math.min(assemblyNames.length, 10); i++) {
+      uploadAssembly(assemblyNames.shift());
+    }
+  },
+
+  clearStore() {
     fileUploadingState = null;
-    fileUploadingResult = RESULTS.NONE;
     collectionId = null;
     assemblyNameToAssemblyIdMap = null;
+    UploadStore.clearStore();
   },
 });
 
@@ -114,20 +102,10 @@ function emitChange() {
 function handleAction(action) {
   switch (action.type) {
 
-  case 'start_uploading_files':
-    setFileUploadingState(STATES.UPLOADING_FILES);
-    emitChange();
-    break;
-
-  case 'finish_uploading_files':
-    setFileUploadingState(null);
-    setFileUploadingResult(action.result);
-    emitChange();
-    break;
-
-  case 'set_collection_id':
+  case 'set_collection_ids':
+    setFileUploadingState(UPLOADING);
     setCollectionId(action.collectionId);
-    setassemblyNameToAssemblyIdMap(action.assemblyNameToAssemblyIdMap);
+    setAssemblyNameToAssemblyIdMap(action.assemblyNameToAssemblyIdMap);
     emitChange();
     break;
 

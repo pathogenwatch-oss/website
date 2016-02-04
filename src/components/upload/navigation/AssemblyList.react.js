@@ -4,7 +4,6 @@ import AssemblyListItem from '../navigation/AssemblyListItem.react';
 
 import UploadWorkspaceNavigationStore from '^/stores/UploadWorkspaceNavigationStore';
 import UploadStore from '^/stores/UploadStore';
-import FileUploadingStore from '^/stores/FileUploadingStore';
 
 const AssemblyList = React.createClass({
 
@@ -18,18 +17,10 @@ const AssemblyList = React.createClass({
 
   componentDidMount() {
     UploadWorkspaceNavigationStore.addChangeListener(this.handleUploadWorkspaceNavigationStoreChange);
-    FileUploadingStore.addChangeListener(this.handleFileUploadingStoreChange);
   },
 
   componentWillUnmount() {
     UploadWorkspaceNavigationStore.removeChangeListener(this.handleUploadWorkspaceNavigationStoreChange);
-    FileUploadingStore.removeChangeListener(this.handleFileUploadingStoreChange);
-  },
-
-  handleFileUploadingStoreChange() {
-    this.setState({
-      isUploading: FileUploadingStore.getFileUploadingState(),
-    });
   },
 
   handleUploadWorkspaceNavigationStoreChange() {

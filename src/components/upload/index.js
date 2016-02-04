@@ -19,9 +19,7 @@ import UploadWorkspaceNavigationActionCreators from '^/actions/UploadWorkspaceNa
 import ToastActionCreators from '^/actions/ToastActionCreators';
 
 import UploadWorkspaceNavigationStore from '^/stores/UploadWorkspaceNavigationStore';
-import FileProcessingStore from '^/stores/FileProcessingStore';
 import FileUploadingStore from '^/stores/FileUploadingStore';
-import FileUploadingProgressStore from '^/stores/FileUploadingProgressStore';
 
 import Species from '^/species';
 import DEFAULT from '^/defaults';
@@ -45,8 +43,6 @@ const fileInputStyle = {
   opacity: 0,
 };
 
-let isProcessing = false;
-
 export default React.createClass({
 
   contextTypes: {
@@ -57,8 +53,7 @@ export default React.createClass({
     return {
       readyToUpload: false,
       confirmedMultipleMetadataDrop: false,
-      pageTitleMessage: 'Upload',
-      isUploading: FileUploadingStore.getFileUploadingState(),
+      isProcessing: false,
       numberOfAssemblies: UploadStore.getAssembliesCount(),
       viewPage: 'overview',
       assemblyName: null,
@@ -68,45 +63,27 @@ export default React.createClass({
   },
 
   componentDidMount() {
-    FileProcessingStore.addChangeListener(this.handleFileProcessingStoreChange);
     FileUploadingStore.addChangeListener(this.handleFileUploadingStoreChange);
     UploadWorkspaceNavigationStore.addChangeListener(this.handleUploadWorkspaceNavigationStoreChange);
     UploadStore.addChangeListener(this.handleUploadStoreChange);
   },
 
   componentWillUnmount() {
-    FileProcessingStore.removeChangeListener(this.handleFileProcessingStoreChange);
     FileUploadingStore.removeChangeListener(this.handleFileUploadingStoreChange);
     UploadWorkspaceNavigationStore.removeChangeListener(this.handleUploadWorkspaceNavigationStoreChange);
     UploadStore.removeChangeListener(this.handleUploadStoreChange);
-
-    FileUploadingProgressStore.clearStore();
-    UploadStore.clearStore();
-    FileUploadingStore.clearStore();
-  },
-
-  handleFileProcessingStoreChange() {
-    isProcessing = FileProcessingStore.getFileProcessingState();
-    this.setState({
-      pageTitleMessage: isProcessing ? 'Processing...' : 'Overview',
-    });
   },
 
   handleFileUploadingStoreChange() {
-    const uploadingResult = FileUploadingStore.getFileUploadingResult();
     const id = FileUploadingStore.getCollectionId();
-    const path = `/${Species.nickname}/collection/${id}`;
-    const { history } = this.context;
-    if (uploadingResult === FileUploadingStore.getFileUploadingResults().SUCCESS) {
-      history.pushState(null, path);
+    if (!id) {
+      this.setState({ isProcessing: true });
       return;
     }
 
-    this.setState({
-      isUploading: FileUploadingStore.getFileUploadingState(),
-      viewPage: 'upload_progress',
-      collectionUrl: id ? window.location.origin + path : null,
-    });
+    const path = `/${Species.nickname}/collection/${id}`;
+    const { history } = this.context;
+    history.pushState(null, path);
   },
 
   handleUploadWorkspaceNavigationStoreChange() {
@@ -135,7 +112,11 @@ export default React.createClass({
           sticky: true,
         });
       } else {
-        UploadActionCreators.addFiles(event.files);
+        this.setState({ isProcessing: true });
+        UploadActionCreators.addFiles(
+          event.files,
+          () => this.setState({ isProcessing: false }),
+        );
       }
       // allows the same file to be uploaded consecutively
       this.refs.fileInput.value = '';
@@ -168,18 +149,19 @@ export default React.createClass({
   render() {
     let subtitle = '';
     const assembly = UploadStore.getAssembly(this.state.assemblyName);
+    const { isProcessing } = this.state;
 
     switch (this.state.viewPage) {
     case 'assembly':
       subtitle = assembly && assembly.fasta.name;
       break;
-    default: subtitle = this.state.pageTitleMessage;
+    default: subtitle = isProcessing ? 'Processing...' : 'Overview';
     }
 
     return (
       <FileDragAndDrop onDrop={this.handleDrop}>
         <div className="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-drawer">
-          <UploadReviewHeader subtitle={subtitle} activateUploadButton={this.state.readyToUpload} isUploading={this.state.isUploading} />
+          <UploadReviewHeader subtitle={subtitle} activateUploadButton={this.state.readyToUpload} />
 
           <UploadWorkspaceNavigation assembliesUploaded={assembly ? true : false} totalAssemblies={this.state.numberOfAssemblies}>
             <footer className="wgsa-upload-navigation__footer mdl-shadow--4dp">
@@ -188,14 +170,11 @@ export default React.createClass({
                 onClick={this.handleOverviewClick}>
                 Overview
               </button>
-
-              { !this.state.isUploading &&
-                <button type="button" title="Add files"
-                  className="wgsa-upload-review-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
-                  onClick={this.handleClick}>
-                  Add Files
-                </button>
-              }
+              <button type="button" title="Add files"
+                className="wgsa-upload-review-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
+                onClick={this.handleClick}>
+                Add Files
+              </button>
             </footer>
           </UploadWorkspaceNavigation>
 

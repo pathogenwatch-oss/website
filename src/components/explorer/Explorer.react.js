@@ -4,6 +4,8 @@ import Layout from './Layout.react';
 import UploadProgress from './upload-progress';
 import { LoadSpinner, LoadError } from './Loading.react';
 
+import FileUploadingStore from '^/stores/FileUploadingStore';
+
 import { statuses } from '^/constants/collection';
 
 export default React.createClass({
@@ -31,6 +33,7 @@ export default React.createClass({
 
   componentWillUnmount() {
     this.props.reset();
+    FileUploadingStore.clearStore();
   },
 
   render() {
@@ -44,7 +47,13 @@ export default React.createClass({
 
     if (status === statuses.PROCESSING) {
       const { progress, checkStatus } = this.props;
-      return (<UploadProgress progress={progress} checkStatus={checkStatus} />);
+      return (
+        <UploadProgress
+          isUploading={FileUploadingStore.isUploading()}
+          progress={progress}
+          checkStatus={checkStatus}
+        />
+      );
     }
 
     if (status === statuses.FETCHED) {

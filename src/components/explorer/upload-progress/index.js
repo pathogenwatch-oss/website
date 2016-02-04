@@ -5,6 +5,8 @@ import React from 'react';
 import Header from './Header.react';
 import Dashboard from './Dashboard.react';
 
+import FileUploadingStore from '^/stores/FileUploadingStore';
+
 import { CGPS } from '^/defaults';
 
 const layoutContentStyle = {
@@ -17,10 +19,20 @@ const UploadProgress = React.createClass({
   propTypes: {
     checkStatus: React.PropTypes.func,
     progress: React.PropTypes.object,
+    isUploading: React.PropTypes.bool,
   },
 
   componentDidMount() {
-    this.statusInterval = setInterval(this.props.checkStatus, 1000);
+    componentHandler.upgradeDom();
+    const interval = 3000;
+    setTimeout(
+      () => this.statusInterval = setInterval(this.props.checkStatus, interval),
+      interval
+    );
+
+    if (this.props.isUploading) {
+      FileUploadingStore.uploadFiles();
+    }
   },
 
   componentWillUnmount() {
@@ -42,7 +54,9 @@ const UploadProgress = React.createClass({
                   If upload fails to progress, please refresh at a later time.
                 </div>
               </div>
-              <Dashboard {...dashboardProps} />
+              <Dashboard {...dashboardProps}
+                isUploading={this.props.isUploading}
+              />
             </main>
           </div>
         </main>

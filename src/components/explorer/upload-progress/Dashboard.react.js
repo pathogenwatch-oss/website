@@ -1,19 +1,9 @@
 import React from 'react';
 
+import FileUploadProgressBar from './FileUploadProgressBar.react';
+
 import CircularProgress from '^/components/CircularProgress.react';
 import Spinner from '^/components/Spinner.react';
-
-import FileUploadingProgressStore from '^/stores/FileUploadingProgressStore';
-
-import { CGPS } from '^/defaults';
-
-const ICON_WARNING = {
-  color: CGPS.COLOURS.PURPLE,
-};
-
-const ICON_SUCCESS = {
-  color: CGPS.COLOURS.GREEN,
-};
 
 const ProgressIndicator = ({ title, percentage }) => (
   <div className="wgsa-overview-upload-ready-card mdl-card mdl-cell mdl-cell--3-col">
@@ -34,20 +24,6 @@ const UploadDashboard = React.createClass({
     collectionSize: React.PropTypes.number,
   },
 
-  componentDidMount() {
-    FileUploadingProgressStore.addChangeListener(this.handleFileUploadingProgressStoreChange);
-    this.uploadProgress = document.querySelector('#fileProgressBar');
-    // componentHandler.upgradeElement(this.uploadProgress);
-  },
-
-  componentDidUpdate() {
-    this.uploadProgress.MaterialProgress.setProgress(this.state.fileProgress);
-  },
-
-  componentWillUnmount() {
-    FileUploadingProgressStore.removeChangeListener(this.handleFileUploadingProgressStoreChange);
-  },
-
   getAssemblyTasks({ CORE, FP, MLST, PAARSNP }, collectionSize) {
     return {
       core: CORE / collectionSize * 100,
@@ -64,20 +40,7 @@ const UploadDashboard = React.createClass({
       <div className="mdl-grid">
         <div className="wgsa-card mdl-cell mdl-cell--12-col mdl-shadow--2dp">
           <div className="wgsa-card-content" style={{ textAlign: 'center' }}>
-            { isUploading ?
-              <div>
-                <h5>{uploadedFiles}/{collectionSize} uploaded</h5>
-                <div id="fileProgressBar" className="mdl-progress mdl-js-progress" style={{ width: '80%', margin: '16px auto' }}></div>
-                <span className="material-icons" style={uploadFinished ? ICON_SUCCESS : ICON_WARNING}>
-                  {uploadFinished ? 'check_circle' : 'warning'}
-                </span>
-                <p>{uploadFinished ?
-                  'Collection will continue to process if the browser tab is closed.' :
-                  'Please do not close the browser tab until all files have uploaded.'
-                }</p>
-              </div> :
-              <h5>{collectionSize} assemblies uploaded</h5>
-            }
+            <FileUploadProgressBar collectionSize={collectionSize} isUploading={isUploading} />
             <div className="wgsa-assembly-analyses mdl-grid">
               <ProgressIndicator title={'CORE'} percentage={core} />
               <ProgressIndicator title={'MLST'} percentage={mlst} />
@@ -102,15 +65,6 @@ const UploadDashboard = React.createClass({
         </div>
       </div>
     );
-  },
-
-  handleFileUploadingProgressStoreChange() {
-    const fileProgress = FileUploadingProgressStore.getFileProgress();
-    this.setState({
-      fileProgress: fileProgress / this.assemblyCount,
-      uploadedFiles: Math.floor(fileProgress / 100),
-      ...FileUploadingProgressStore.getResults(),
-    });
   },
 
 });
