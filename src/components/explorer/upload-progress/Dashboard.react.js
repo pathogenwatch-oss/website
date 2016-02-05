@@ -1,6 +1,7 @@
 import React from 'react';
 
 import FileUploadProgressBar from './FileUploadProgressBar.react';
+import Errors from './Errors.react';
 
 import CircularProgress from '^/components/CircularProgress.react';
 import Spinner from '^/components/Spinner.react';
@@ -36,7 +37,7 @@ const UploadDashboard = React.createClass({
   },
 
   render() {
-    const { isUploading, collectionSize = UploadStore.getAssembliesCount(), results = {} } = this.props;
+    const { isUploading, collectionSize = UploadStore.getAssembliesCount(), results = {}, errors = [] } = this.props;
     const { core, fp, mlst, paarsnp } = this.getAssemblyTasks(results, collectionSize);
     return (
       <div className="mdl-grid">
@@ -49,10 +50,7 @@ const UploadDashboard = React.createClass({
               <ProgressIndicator title={'PAARSNP'} percentage={paarsnp} />
               <div className="wgsa-overview-upload-ready-card mdl-card mdl-cell mdl-cell--3-col">
                 <div className="mdl-card__title mdl-card--expand" style={{ fontSize: '16px' }}>
-                  { (core >= 100 && fp >= 100) ?
-                      <Spinner /> :
-                      'PENDING'
-                  }
+                  { (core >= 100) ? <Spinner /> : 'PENDING' }
                 </div>
                 <span className="mdl-card__actions mdl-card--border">TREES</span>
               </div>
@@ -61,9 +59,7 @@ const UploadDashboard = React.createClass({
         </div>
         <div className="wgsa-card mdl-cell mdl-cell--12-col mdl-shadow--2dp">
           <div className="wgsa-card-heading">Messages</div>
-          <div className="wgsa-card-content">
-            <p>Nothing to report :)</p>
-          </div>
+          { errors.length ? <Errors errors={errors} /> : null }
         </div>
       </div>
     );

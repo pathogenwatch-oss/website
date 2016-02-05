@@ -76,3 +76,17 @@
 .wgsa-collection-analyses .material-icons {
   font-size: 2em;
 }
+
+.wgsa-upload-errors .mdl-list__item {
+  font-family: inherit;
+  font-size: inherit;
+  letter-spacing: normal;
+}
+
+.wgsa-upload-errors .mdl-list__item-icon {
+  margin-right: 16px !important;
+}
+
+.wgsa-upload-errors .mdl-list__item-primary-content {
+  justify-content: center;
+}
