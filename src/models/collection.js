@@ -265,7 +265,7 @@ function getSubtree({ speciesId, collectionId, subtreeId }, callback) {
 function getStatus({ collectionId }, callback) {
   mainStorage.retrieve(`${UPLOAD_PROGRESS}_${collectionId}`, function (error, doc) {
     if (error) {
-      callback(error);
+      return callback(error);
     }
 
     if (doc.status === 'READY') {

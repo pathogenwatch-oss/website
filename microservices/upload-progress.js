@@ -91,6 +91,9 @@ Collection: ${collectionId}`);
     queue.bind(SERVICES.name, 'upload-progress');
 
     queue.subscribe(message => {
+      if (message.data && Buffer.isBuffer(message.data)) {
+        message = JSON.parse(message.data.toString());
+      }
       const documentKey = `${UPLOAD_PROGRESS}_${message.collectionId}`;
       const progressDocument = Object.assign({
         type: 'UP',
