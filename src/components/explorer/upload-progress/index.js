@@ -24,11 +24,8 @@ const UploadProgress = React.createClass({
 
   componentDidMount() {
     componentHandler.upgradeDom();
-    const interval = 3000;
-    setTimeout(
-      () => this.statusInterval = setInterval(this.props.checkStatus, interval),
-      interval
-    );
+
+    this.statusInterval = setInterval(this.props.checkStatus, 3000);
 
     if (this.props.isUploading) {
       FileUploadingStore.uploadFiles();
@@ -41,7 +38,7 @@ const UploadProgress = React.createClass({
 
   render() {
     const { receivedResults, expectedResults, ...dashboardProps } = this.props.progress;
-    const percentage = Math.floor(receivedResults / expectedResults * 100);
+    const percentage = expectedResults ? Math.floor(receivedResults / expectedResults * 100) : 0;
     return (
       <div className="mdl-layout mdl-js-layout mdl-layout--fixed-header">
         <Header percentage={percentage} />

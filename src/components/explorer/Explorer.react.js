@@ -45,8 +45,9 @@ export default React.createClass({
       );
     }
 
-    if (status === statuses.PROCESSING) {
-      const { progress, checkStatus } = this.props;
+    // this skips the loading page when uploading
+    if (status ? status === statuses.PROCESSING : FileUploadingStore.isUploading()) {
+      const { progress = {}, checkStatus } = this.props;
       return (
         <UploadProgress
           isUploading={FileUploadingStore.isUploading()}

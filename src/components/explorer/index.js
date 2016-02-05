@@ -4,6 +4,7 @@ import { Provider, connect } from 'react-redux';
 import Explorer from './Explorer.react';
 
 import getStore from '^/store';
+import FileUploadingStore from '^/stores/FileUploadingStore';
 
 import { setCollectionId } from '^/actions/collection';
 import { checkStatus, fetchEntities } from '^/actions/fetch';
@@ -24,7 +25,10 @@ const connectExplorer = connect(
     return {
       initialise() {
         dispatch(setCollectionId(id));
-        dispatch(checkStatus(Species.id, id));
+        // if uploading, initial status check not necessary
+        if (!FileUploadingStore.isUploading()) {
+          dispatch(checkStatus(Species.id, id));
+        }
       },
       checkStatus: () => dispatch(checkStatus(Species.id, id)),
       fetch: () => dispatch(fetchEntities(Species.id, id)),

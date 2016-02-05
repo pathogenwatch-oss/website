@@ -46,7 +46,9 @@ export default React.createClass({
   },
 
   componentDidUpdate() {
-    this.progressBar.setProgress(this.state.progress);
+    if (this.props.isUploading) {
+      this.progressBar.setProgress(this.state.progress);
+    }
   },
 
   componentWillUnmount() {

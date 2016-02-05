@@ -44,7 +44,11 @@ export default React.createClass({
   },
 
   componentDidMount() {
-    this.dangerouslyHandleWindowResize();
+    $(window).on('resize', this.setLayout);
+  },
+
+  componentWillUnmount() {
+    $(window).off('resize', this.setLayout);
   },
 
   setLayout() {
@@ -115,10 +119,6 @@ export default React.createClass({
         </LayoutSouth>
       </LayoutContainer>
     );
-  },
-
-  dangerouslyHandleWindowResize() {
-    $(window).on('resize', this.setLayout);
   },
 
 });

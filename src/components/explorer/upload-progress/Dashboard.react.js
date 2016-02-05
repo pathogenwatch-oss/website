@@ -5,6 +5,8 @@ import FileUploadProgressBar from './FileUploadProgressBar.react';
 import CircularProgress from '^/components/CircularProgress.react';
 import Spinner from '^/components/Spinner.react';
 
+import UploadStore from '^/stores/UploadStore';
+
 const ProgressIndicator = ({ title, percentage }) => (
   <div className="wgsa-overview-upload-ready-card mdl-card mdl-cell mdl-cell--3-col">
     <div className="mdl-card__title mdl-card--expand">
@@ -26,15 +28,15 @@ const UploadDashboard = React.createClass({
 
   getAssemblyTasks({ CORE, FP, MLST, PAARSNP }, collectionSize) {
     return {
-      core: CORE / collectionSize * 100,
-      fp: FP / collectionSize * 100,
-      mlst: MLST / collectionSize * 100,
-      paarsnp: PAARSNP / collectionSize * 100,
+      core: CORE ? CORE / collectionSize * 100 : 0,
+      fp: FP ? FP / collectionSize * 100 : 0,
+      mlst: MLST ? MLST / collectionSize * 100 : 0,
+      paarsnp: PAARSNP ? PAARSNP / collectionSize * 100 : 0,
     };
   },
 
   render() {
-    const { isUploading, collectionSize, results } = this.props;
+    const { isUploading, collectionSize = UploadStore.getAssembliesCount(), results = {} } = this.props;
     const { core, fp, mlst, paarsnp } = this.getAssemblyTasks(results, collectionSize);
     return (
       <div className="mdl-grid">
