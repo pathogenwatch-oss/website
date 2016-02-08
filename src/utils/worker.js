@@ -3,7 +3,7 @@ import AnalysisUtils from './Analysis';
 
 import UploadStore from '../stores/UploadStore.js';
 
-export const FASTA_FILE_EXTENSIONS = [
+const FASTA_FILE_EXTENSIONS = [
   '.fa', '.fas', '.fna', '.ffn', '.faa', '.frn', '.fasta', '.contig',
 ];
 
@@ -181,19 +181,27 @@ function handleFileContents(fileContents, rawFiles, assemblies) {
   });
 }
 
-function parseFiles(files, callback) {
-  const Worker = require("worker!./worker");
-  const worker = new Worker;
-  worker.onmessage = function(event) {
-    const { error, rawFiles, assemblies } = event.data;
-    callback(error, rawFiles, assemblies);
-  }
-  for (const file of files) {
-    worker.postMessage({ files });
-    parseFile([file], callback);
-  }
+function parseFile(files, callback) {
+  const rawFiles = {};
+  const assemblies = UploadStore.getAssemblies();
+
+  const validatedFiles = validateFiles(files);
+
+  readFiles(validatedFiles.validFiles, function handleReadFiles(error, fileContents) {
+    if (error) {
+      console.error('[WGSA] Failed to read files');
+      callback(error);
+      return;
+    }
+
+    handleFileContents(fileContents, rawFiles, assemblies);
+
+    callback(null, rawFiles, assemblies);
+  });
 }
 
-export default {
-  parseFiles,
-};
+onmessage = function(event) {
+  parseFile(event.data.files, (error, rawFiles, assemblies) => {
+    postMessage({ error, rawFiles, assemblies });
+  });
+}
