@@ -181,7 +181,7 @@ function handleFileContents(fileContents, rawFiles, assemblies) {
   });
 }
 
-function parseFile(files, callback) {
+function parseFiles(files, callback) {
   const rawFiles = {};
   const assemblies = UploadStore.getAssemblies();
 
@@ -200,8 +200,63 @@ function parseFile(files, callback) {
   });
 }
 
+
+function parseFiles2(files, callback) {
+  const rawFiles = {};
+  const assemblies = UploadStore.getAssemblies();
+
+  const parseFile = (fileIndex) => {
+    const validatedFiles = validateFiles([files[fileIndex]]);
+
+    readFiles(validatedFiles.validFiles, function handleReadFiles(error, fileContents) {
+      if (error) {
+        console.error('[WGSA] Failed to read files');
+        callback(error);
+        return;
+      }
+
+      handleFileContents(fileContents, rawFiles, assemblies);
+
+      callback(null, rawFiles, assemblies);
+
+      if (fileIndex + 1 < files.length) {
+        parseFile(fileIndex + 1);
+      }
+    });
+  };
+
+  parseFile(0);
+}
+
+function parseFiles3(files, callback) {
+  const rawFiles = {};
+  const assemblies = UploadStore.getAssemblies();
+
+  const parseFile = (fileIndex) => {
+    const validatedFiles = validateFiles([files[fileIndex]]);
+
+    readFiles(validatedFiles.validFiles, function handleReadFiles(error, fileContents) {
+      if (error) {
+        console.error('[WGSA] Failed to read files');
+        callback(error);
+        return;
+      }
+
+      handleFileContents(fileContents, rawFiles, assemblies);
+
+      callback(null, rawFiles, assemblies);
+
+      if (fileIndex + 1 < files.length) {
+        setTimeout(() => { parseFile(fileIndex + 1); }, 1000);
+      }
+    });
+  };
+
+  parseFile(0);
+}
+
 onmessage = function(event) {
-  parseFile(event.data.files, (error, rawFiles, assemblies) => {
+  parseFiles2(event.data, (error, rawFiles, assemblies) => {
     postMessage({ error, rawFiles, assemblies });
   });
 }

@@ -34,7 +34,9 @@ module.exports = {
         assemblies: assemblies,
       };
 
-      AppDispatcher.dispatch(finishProcessingFilesAction);
+      if (files.length === Object.keys(assemblies).length) {
+        AppDispatcher.dispatch(finishProcessingFilesAction);
+      }
       AppDispatcher.dispatch(addFilesAction);
     });
   },
