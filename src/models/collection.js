@@ -263,7 +263,7 @@ function getSubtree({ speciesId, collectionId, subtreeId }, callback) {
 }
 
 function getStatus({ collectionId }, callback) {
-  mainStorage.retrieve(`${UPLOAD_PROGRESS}_${collectionId}`, function (error, doc) {
+  mainStorage.retrieve(`${UPLOAD_PROGRESS}_${collectionId}`, function (error, doc, cas) {
     if (error) {
       return callback(error);
     }
@@ -278,7 +278,7 @@ function getStatus({ collectionId }, callback) {
     delete doc.documentKey;
     delete doc.status;
 
-    return callback(null, { status: 'PROCESSING', progress: doc });
+    return callback(null, { status: 'PROCESSING', progress: doc, cas });
   });
 }
 

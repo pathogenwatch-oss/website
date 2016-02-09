@@ -39,9 +39,10 @@ Collection: ${collectionId}`);
 
     async.waterfall([
       done => mainStorage.retrieve(documentKey, done),
-      function (doc, done) {
+      function (doc, cas, done) {
+        console.log(arguments);
         const { assemblyIdToNameMap } = doc;
-        if (taskStatus === 'ERROR') {
+        if (taskStatus === 'FAILURE') {
           doc.errors.push({
             assemblyName: assemblyIdToNameMap[assemblyIdString],
             taskType

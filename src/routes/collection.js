@@ -16,13 +16,45 @@ router.get('/species/:id/reference', function (req, res, next) {
   });
 });
 
-router.get('/species/:speciesId/collection/:collectionId/status', function (req, res, next) {
-  collectionModel.getStatus(req.params, function (error, result) {
-    if (error) {
-      return next(error);
-    }
-    res.json(result);
+router.get('/species/:speciesId/collection/:collectionId/test', function (req, res, next) {
+  LOGGER.debug(`request received`);
+  req.on('close', () => {
+    LOGGER.debug(`disconnected`);
   });
+  setInterval(() => {
+    console.log(req);
+  }, 5000);
+});
+
+router.get('/species/:speciesId/collection/:collectionId/status', function (req, res, next) {
+  LOGGER.info(`Received request for collection ${req.params.collectionId} upload progress`);
+  const timeout = Date.now() + 60000;
+  const noCas = typeof req.query.cas === 'undefined';
+  var disconnected = false;
+  req.on('close', () => {
+    LOGGER.info(`Request for collection ${req.params.collectionId} upload progress disconnected`);
+    disconnected = true;
+  });
+  (function poll() {
+    LOGGER.info(req.connection.destroyed);
+    if (disconnected || req.connection.destroyed) {
+      return res.end();
+    }
+    collectionModel.getStatus(req.params, function (error, result) {
+      if (error) {
+        return next(error);
+      }
+      if (!result.cas) {
+        LOGGER.info(result);
+      }
+      if (noCas || !result.cas || req.query.cas !== result.cas.toString() || Date.now() >= timeout) {
+        LOGGER.info(`Returning collection ${req.params.collectionId} upload progress`);
+        res.json(result);
+      } else {
+        setTimeout(poll, 3000);
+      }
+    });
+  })();
 });
 
 router.get('/species/:speciesId/collection/:collectionId', function (req, res, next) {
