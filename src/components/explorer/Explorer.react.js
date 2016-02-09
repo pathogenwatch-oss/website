@@ -19,6 +19,7 @@ export default React.createClass({
     reset: React.PropTypes.func,
     status: React.PropTypes.string,
     progress: React.PropTypes.object,
+    cas: React.PropTypes.string
   },
 
   componentDidMount() {
@@ -47,11 +48,12 @@ export default React.createClass({
 
     // this skips the loading page when uploading
     if (status ? status === statuses.PROCESSING : FileUploadingStore.isUploading()) {
-      const { progress = {}, checkStatus } = this.props;
+      const { progress = {}, cas, checkStatus } = this.props;
       return (
         <UploadProgress
           isUploading={FileUploadingStore.isUploading()}
           progress={progress}
+          cas={cas}
           checkStatus={checkStatus}
         />
       );

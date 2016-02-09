@@ -19,10 +19,15 @@ const connectExplorer = connect(
     return {
       status: collection.status,
       progress: collection.progress,
+      cas: collection.cas,
     };
   },
-  (dispatch, { id }) => {
+  null,
+  ({ status, progress, cas }, { dispatch }, { id }) => {
     return {
+      status,
+      progress,
+      cas,
       initialise() {
         dispatch(setCollectionId(id));
         // if uploading, initial status check not necessary
@@ -30,7 +35,7 @@ const connectExplorer = connect(
           dispatch(checkStatus(Species.id, id));
         }
       },
-      checkStatus: () => dispatch(checkStatus(Species.id, id)),
+      checkStatus: () => dispatch(checkStatus(Species.id, id, cas)),
       fetch: () => dispatch(fetchEntities(Species.id, id)),
       reset: () => dispatch(resetStore()),
     };

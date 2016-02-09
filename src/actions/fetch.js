@@ -22,9 +22,9 @@ export function fetchEntities(speciesId, collectionId) {
 
 export const CHECK_STATUS = 'CHECK_STATUS';
 
-export function checkStatus(speciesId, collectionId) {
+export function checkStatus(speciesId, collectionId, cas) {
   return {
     type: CHECK_STATUS,
-    promise: checkCollectionStatus(speciesId, collectionId),
+    promise: checkCollectionStatus(speciesId, collectionId, cas),
   };
 }

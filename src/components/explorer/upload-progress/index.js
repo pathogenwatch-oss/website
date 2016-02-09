@@ -25,15 +25,17 @@ const UploadProgress = React.createClass({
   componentDidMount() {
     componentHandler.upgradeDom();
 
-    this.statusInterval = setInterval(this.props.checkStatus, 3000);
+    this.props.checkStatus();
 
     if (this.props.isUploading) {
       FileUploadingStore.uploadFiles();
     }
   },
 
-  componentWillUnmount() {
-    clearInterval(this.statusInterval);
+  componentDidUpdate(previousProps) {
+    if (previousProps.progress !== this.props.progress) {
+      setTimeout(this.props.checkStatus, 3000);
+    }
   },
 
   render() {
