@@ -84,6 +84,5 @@ export function getSubtree(speciesId, collectionId, subtreeId) {
 }
 
 export function checkCollectionStatus(speciesId, collectionId, cas) {
-  window.poll = $.get(`${API_ROOT}/species/${speciesId}/collection/${collectionId}/status`, { cas });
-  return window.poll;
+  return $.get(`${API_ROOT}/species/${speciesId}/collection/${collectionId}/status`, { cas });
 }
