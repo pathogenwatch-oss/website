@@ -82,9 +82,10 @@ export default React.createClass({
   },
 
   handleFileUploadingStoreChange() {
+    this.setState({ isProcessing: true });
     const id = FileUploadingStore.getCollectionId();
+
     if (!id) {
-      this.setState({ isProcessing: true });
       return;
     }
 
