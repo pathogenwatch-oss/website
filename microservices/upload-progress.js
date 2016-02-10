@@ -9,6 +9,14 @@ const { UPLOAD_PROGRESS } = require('utils/documentKeys');
 
 const QUEUE_OPTIONS = { durable: true, autoDelete: false };
 
+function isCollectionFatal({ collectionSize, results, errors }) {
+  // allows error page to show all failed assemblies
+  if (results.UPLOAD < collectionSize) {
+    return false;
+  }
+  return errors.some(({ taskType }) => taskType === 'UPLOAD');
+}
+
 async.parallel({
   storage: storageConnection.connect,
   mqConnection: messageQueueConnection.connect
@@ -40,7 +48,6 @@ Collection: ${collectionId}`);
     async.waterfall([
       done => mainStorage.retrieve(documentKey, done),
       function (doc, cas, done) {
-        console.log(arguments);
         const { assemblyIdToNameMap } = doc;
         if (taskStatus === 'FAILURE') {
           doc.errors.push({
@@ -53,6 +60,12 @@ Collection: ${collectionId}`);
         doc.results[taskType] = numResults + 1;
 
         doc.receivedResults++;
+
+        if (taskType === 'UPLOAD' && isCollectionFatal(doc)) {
+          doc.status = 'FATAL';
+          LOGGER.info(`Collection fatal, destroying ${queue.name}`);
+          queue.destroy();
+        }
 
         if (doc.receivedResults === doc.expectedResults) {
           doc.status = 'READY';

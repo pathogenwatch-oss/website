@@ -276,9 +276,12 @@ function getStatus({ collectionId }, callback) {
     delete doc.assemblyIdToNameMap;
     delete doc.type;
     delete doc.documentKey;
+
+    // status is moved outside of progress doc
+    const status = doc.status;
     delete doc.status;
 
-    return callback(null, { status: 'PROCESSING', progress: doc, cas });
+    return callback(null, { status, progress: doc, cas });
   });
 }
 
