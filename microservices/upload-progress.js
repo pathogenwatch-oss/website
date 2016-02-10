@@ -9,6 +9,8 @@ const { UPLOAD_PROGRESS } = require('utils/documentKeys');
 
 const QUEUE_OPTIONS = { durable: true, autoDelete: false };
 
+const Pusher = require('pusher');
+
 async.parallel({
   storage: storageConnection.connect,
   mqConnection: messageQueueConnection.connect
@@ -19,6 +21,14 @@ async.parallel({
 
   const { NOTIFICATION, SERVICES } = messageQueueConnection.getExchanges();
   const mainStorage = require('services/storage')('main');
+
+  const pusher = new Pusher({
+    appId: '179140',
+    key: '8b8d274e51643f85f81a',
+    secret: '7e73d132b4093f650836',
+    encrypted: false,
+    proxy: 'http://webcache.sanger.ac.uk:3128/'
+  });
 
   function handleNotification(message, _, __, { queue }) {
     // messages from different sources can be different formats
@@ -61,6 +71,18 @@ Collection: ${collectionId}`);
         }
 
         mainStorage.store(documentKey, doc, done);
+
+        pusher.trigger(collectionId, 'upload-progress', {
+          status: doc.status,
+          progress: {
+            collectionId: doc.collectionId,
+            collectionSize: doc.collectionSize,
+            expectedResults: doc.expectedResults,
+            receivedResults: doc.receivedResults,
+            results: doc.results,
+            errors: doc.errors,
+          },
+        });
       },
     ], function (error) {
       if (error) {
