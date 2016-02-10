@@ -66,12 +66,19 @@ export default React.createClass({
     FileUploadingStore.addChangeListener(this.handleFileUploadingStoreChange);
     UploadWorkspaceNavigationStore.addChangeListener(this.handleUploadWorkspaceNavigationStoreChange);
     UploadStore.addChangeListener(this.handleUploadStoreChange);
+    this.menuButton = document.querySelector('.mdl-layout__drawer-button');
   },
 
   componentWillUnmount() {
     FileUploadingStore.removeChangeListener(this.handleFileUploadingStoreChange);
     UploadWorkspaceNavigationStore.removeChangeListener(this.handleUploadWorkspaceNavigationStoreChange);
     UploadStore.removeChangeListener(this.handleUploadStoreChange);
+  },
+
+  hideSidebar() {
+    if (this.menuButton.getAttribute('aria-expanded') === 'true') {
+      this.menuButton.click();
+    }
   },
 
   handleFileUploadingStoreChange() {
@@ -91,6 +98,7 @@ export default React.createClass({
       viewPage: UploadWorkspaceNavigationStore.getCurrentViewPage(),
       assemblyName: UploadWorkspaceNavigationStore.getAssemblyName(),
     });
+    this.hideSidebar();
   },
 
   confirmDuplicateOverwrite(files) {
@@ -144,6 +152,7 @@ export default React.createClass({
       readyToUpload: UploadStore.isReadyToUpload(),
       numberOfAssemblies: UploadStore.getAssembliesCount(),
     });
+    this.hideSidebar();
   },
 
   render() {
