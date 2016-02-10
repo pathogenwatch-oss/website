@@ -7,7 +7,7 @@ import getStore from '^/store';
 import FileUploadingStore from '^/stores/FileUploadingStore';
 
 import { setCollectionId } from '^/actions/collection';
-import { checkStatus, fetchEntities } from '^/actions/fetch';
+import { checkStatus, fetchEntities, updateProgress } from '^/actions/fetch';
 import { resetStore } from '^/actions/reset';
 
 import Species from '^/species';
@@ -36,6 +36,7 @@ const connectExplorer = connect(
         }
       },
       checkStatus: () => dispatch(checkStatus(Species.id, id, cas)),
+      updateProgress: (results) => dispatch(updateProgress(results)),
       fetch: () => dispatch(fetchEntities(Species.id, id)),
       reset: () => dispatch(resetStore()),
     };

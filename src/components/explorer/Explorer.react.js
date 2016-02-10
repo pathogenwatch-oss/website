@@ -55,6 +55,7 @@ export default React.createClass({
           progress={progress}
           cas={cas}
           checkStatus={checkStatus}
+          updateProgress={this.props.updateProgress}
         />
       );
     }

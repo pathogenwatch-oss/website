@@ -33,8 +33,11 @@ const UploadProgress = React.createClass({
   },
 
   componentDidUpdate(previousProps) {
-    if (previousProps.progress !== this.props.progress) {
-      setTimeout(this.props.checkStatus, 3000);
+    if (this.props.progress.collectionId && !this.pusher) {
+      const pusher = new Pusher('8b8d274e51643f85f81a', { encrypted: true });
+      const channel = pusher.subscribe(this.props.progress.collectionId);
+      channel.bind('upload-progress', (data) => { this.props.updateProgress(data); });
+      this.pusher = true;
     }
   },
 

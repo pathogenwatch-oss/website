@@ -1,4 +1,4 @@
-import { FETCH_ENTITIES, CHECK_STATUS } from '../actions/fetch';
+import { FETCH_ENTITIES, CHECK_STATUS, UPDATE_PROGRESS } from '../actions/fetch';
 import { SET_COLLECTION_ID } from '../actions/collection';
 import { SET_TREE } from '../actions/tree';
 
@@ -93,6 +93,23 @@ export const collection = {
       };
     },
     [CHECK_STATUS]: function (state, { ready, result, error }) {
+      if (ready && error) {
+        return {
+          ...state,
+          status: statuses.NOT_FOUND,
+        };
+      }
+
+      if (ready) {
+        return {
+          ...state,
+          ...result,
+        };
+      }
+
+      return state;
+    },
+    [UPDATE_PROGRESS]: function (state, { ready, result, error }) {
       if (ready && error) {
         return {
           ...state,
