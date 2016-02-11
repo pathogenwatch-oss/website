@@ -17,8 +17,6 @@
 .CircularProgress-Text {
   font-size: 16px;
   fill: #673c90;
-
-  transform: translate(0 50%);
 }
 
 .CircularProgress-success .CircularProgress-Fg {
