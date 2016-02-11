@@ -20,7 +20,7 @@
     "node-uuid": "^1.4.2",
     "serve-favicon": "^2.2.0",
     "swig": "^1.4.2",
-    "wgsa_front-end": "imperialcollegelondon/wgsa_front-end#websocket-testing"
+    "wgsa_front-end": "imperialcollegelondon/wgsa_front-end#remove-websockets-pusher"
   },
   "devDependencies": {
     "cgps-style": "imperialcollegelondon/javascript#v1.0.1",
