@@ -16,16 +16,6 @@ router.get('/species/:id/reference', function (req, res, next) {
   });
 });
 
-router.get('/species/:speciesId/collection/:collectionId/test', function (req, res, next) {
-  LOGGER.debug(`request received`);
-  req.on('close', () => {
-    LOGGER.debug(`disconnected`);
-  });
-  setInterval(() => {
-    console.log(req);
-  }, 5000);
-});
-
 router.get('/species/:speciesId/collection/:collectionId/status', function (req, res, next) {
   LOGGER.info(`Received request for collection ${req.params.collectionId} upload progress`);
   const timeout = Date.now() + 60000;
