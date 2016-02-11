@@ -34,8 +34,6 @@ export const UPDATE_PROGRESS = 'UPDATE_PROGRESS';
 export function updateProgress(results) {
   return {
     type: UPDATE_PROGRESS,
-    promise: new Promise(function(resolve, reject){
-      resolve(results);
-    }),
+    results,
   };
 }

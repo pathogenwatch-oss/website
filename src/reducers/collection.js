@@ -109,22 +109,11 @@ export const collection = {
 
       return state;
     },
-    [UPDATE_PROGRESS]: function (state, { ready, result, error }) {
-      if (ready && error) {
-        return {
-          ...state,
-          status: statuses.NOT_FOUND,
-        };
-      }
-
-      if (ready) {
-        return {
-          ...state,
-          ...result,
-        };
-      }
-
-      return state;
+    [UPDATE_PROGRESS]: function (state, { results }) {
+      return {
+        ...state,
+        ...results,
+      };
     },
     [FETCH_ENTITIES]: function (state, { ready, result, error }) {
       if (ready && error) {
