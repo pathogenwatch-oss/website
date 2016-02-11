@@ -19,7 +19,6 @@ export default React.createClass({
     reset: React.PropTypes.func,
     status: React.PropTypes.string,
     progress: React.PropTypes.object,
-    cas: React.PropTypes.string
   },
 
   componentDidMount() {
@@ -38,22 +37,20 @@ export default React.createClass({
   },
 
   render() {
-    const { status } = this.props;
+    const { progress = {} } = this.props;
+    let { status } = this.props;
 
-    if (status === statuses.NOT_FOUND) {
-      return (
-        <LoadError />
-      );
+    if (!status && FileUploadingStore.isUploading()) {
+      // this skips the loading spinner when uploading
+      status = statuses.PROCESSING;
     }
 
-    // this skips the loading page when uploading
-    if (status ? status === statuses.PROCESSING : FileUploadingStore.isUploading()) {
-      const { progress = {}, cas, checkStatus } = this.props;
+    if (status === statuses.PROCESSING) {
+      const { checkStatus } = this.props;
       return (
         <UploadProgress
           isUploading={FileUploadingStore.isUploading()}
           progress={progress}
-          cas={cas}
           checkStatus={checkStatus}
           updateProgress={this.props.updateProgress}
         />
@@ -63,6 +60,15 @@ export default React.createClass({
     if (status === statuses.FETCHED) {
       return (
         <Layout />
+      );
+    }
+
+    if (status && status !== statuses.READY) {
+      return (
+        <LoadError
+          status={status}
+          errors={progress ? progress.errors : []}
+        />
       );
     }
 

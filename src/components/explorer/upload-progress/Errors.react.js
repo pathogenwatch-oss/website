@@ -6,6 +6,8 @@ const iconStyle = {
   color: WARNING_COLOUR,
 };
 
+const statuses = [ 'PAARSNP', 'MLST' ];
+
 export default React.createClass({
 
   propTypes: {
@@ -18,20 +20,28 @@ export default React.createClass({
         <span>Antimicrobial resistance predictions will not be available for <strong>{assemblyName}</strong></span>
       );
     }
+    if (taskType === 'MLST') {
+      return (
+        <span>MLST prediction will not be available for <strong>{assemblyName}</strong></span>
+      );
+    }
   },
 
   render() {
     const { errors } = this.props;
     return (
       <ul className="wgsa-upload-errors mdl-list">
-        { errors.map((error) => (
-          <li className="mdl-list__item">
-            <span className="mdl-list__item-primary-content">
-              <i className="material-icons mdl-list__item-icon" style={iconStyle}>warning</i>
-              { this.getMessage(error) }
-            </span>
-          </li>
-        ))}
+        { errors.
+            filter(({ taskType }) => statuses.indexOf(taskType) !== -1).
+            map((error) => (
+              <li className="mdl-list__item">
+                <span className="mdl-list__item-primary-content">
+                  <i className="material-icons mdl-list__item-icon" style={iconStyle}>warning</i>
+                  { this.getMessage(error) }
+                </span>
+              </li>
+            ))
+        }
       </ul>
     );
   },
