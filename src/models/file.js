@@ -1,25 +1,15 @@
-var messageQueueService = require('services/messageQueue');
-var fileStorage = require('services/storage')('cache');
+var fs = require('fs');
+var path = require('path');
 
+var messageQueueService = require('services/messageQueue');
+
+var config = require('configuration.js');
 var LOGGER = require('utils/logging').createLogger('File');
 
-function constructFileFromParts(keys, parts) {
-  return keys.reduce(function (file, partKey) {
-    var step = file + parts[partKey];
-    LOGGER.info('File Length: ' + step.length);
-    return step;
-  }, '');
-}
-
-function getFile(fileName, callback) {
-  fileStorage.retrieve(fileName, function (error, partKeys) {
-    if (error) return callback(error);
-    LOGGER.info(partKeys);
-    fileStorage.retrieveMany(partKeys, function (error, parts) {
-      if (error) return callback(error);
-      callback(null, constructFileFromParts(partKeys, parts));
-    });
-  });
+function getFile({ fileName, speciesId }) {
+  return fs.createReadStream(
+    path.join(config.downloadFileLocation, speciesId, fileName)
+  );
 }
 
 function requestDownload(request, callback) {

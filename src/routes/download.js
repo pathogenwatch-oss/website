@@ -5,13 +5,12 @@ var fileModel = require('models/file');
 
 var LOGGER = require('utils/logging').createLogger('Download requests');
 
-router.post(
-  '/download/type/:idType/format/:fileFormat', function (req, res, next) {
+router.post('/species/:speciesId/download/type/:idType/format/:fileFormat',
+  function (req, res, next) {
     var downloadRequest = {
       idType: req.params.idType,
       format: req.params.fileFormat,
       idList: req.body.idList,
-      speciesId: req.body.speciesId
     };
 
     LOGGER.info(
@@ -29,24 +28,24 @@ router.post(
   }
 );
 
-router.get('/download/file/:fileName', function (req, res, next) {
-  LOGGER.info('Received request for files: ' + req.params.fileName);
+router.get('/species/:speciesId/download/file/:fileName',
+  function (req, res, next) {
+    LOGGER.info('Received request for files: ' + req.params.fileName);
 
-  if (!req.query.prettyFileName) {
-    return res.status(400).send('`prettyFileName` query parameter is required.');
-  }
-
-  fileModel.getFile(req.params.fileName, function (error, result) {
-    if (error) {
-      return next(error);
+    if (!req.query.prettyFileName) {
+      return res.status(400).send('`prettyFileName` query parameter is required.');
     }
 
     res.set({
-      'Content-Disposition': 'attachment; filename="' + req.query.prettyFileName + '"',
+      'Content-Disposition': `attachment; filename="${req.query.prettyFileName}"`,
       'Content-type': 'text/plain'
     });
-    res.send(result);
+
+    const stream = fileModel.getFile(req.params);
+
+    stream.on('error', error => next(error));
+
+    stream.pipe(res);
   });
-});
 
 module.exports = router;
