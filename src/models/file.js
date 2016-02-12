@@ -6,9 +6,9 @@ var messageQueueService = require('services/messageQueue');
 var config = require('configuration.js');
 var LOGGER = require('utils/logging').createLogger('File');
 
-function getFile({ fileName, speciesId }) {
+function getFile({ fileName }) {
   return fs.createReadStream(
-    path.join(config.downloadFileLocation, speciesId, fileName)
+    path.join(config.server.downloadFileLocation, fileName)
   );
 }
 

@@ -37,7 +37,7 @@ router.get('/species/:speciesId/download/file/:fileName',
     }
 
     res.set({
-      'Content-Disposition': `attachment; filename="${req.query.prettyFileName}"`,
+      'Content-Disposition': `attachment; filename="${req.params.fileName}.zip"`,
       'Content-type': 'text/plain'
     });
 
