@@ -4,6 +4,8 @@ import ToastActionCreators from '../actions/ToastActionCreators';
 import { createDownloadKey } from '../constants/downloads';
 import { API_ROOT } from '../utils/Api';
 
+import Species from '../species';
+
 const initialState = {
   extended_kernel_fasta: {
     description: 'Core Matches (.fa)',
@@ -40,7 +42,7 @@ function parseResult(keyToFilenameMap) {
   }
 
   return {
-    link: `${API_ROOT}/download/file/${encodeURIComponent(key)}?` +
+    link: `${API_ROOT}/species/${Species.id}/download/file/${encodeURIComponent(key)}?` +
       `prettyFileName=${encodeURIComponent(filename)}`,
     filename,
   };

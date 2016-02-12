@@ -21,6 +21,6 @@ export function requestDownload(format, collection, idList) {
     type: REQUEST_DOWNLOAD,
     format,
     idList,
-    promise: requestFile(format, idType, { speciesId: Species.id, idList }),
+    promise: requestFile({ speciesId: Species.id, format, idType }, { idList }),
   };
 }
