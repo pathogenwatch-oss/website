@@ -1,5 +1,6 @@
 var fs = require('fs');
 var path = require('path');
+var sanitize = require('sanitize-filename');
 
 var messageQueueService = require('services/messageQueue');
 
@@ -8,7 +9,7 @@ var LOGGER = require('utils/logging').createLogger('File');
 
 function getFile({ fileName }) {
   return fs.createReadStream(
-    path.join(config.server.downloadFileLocation, fileName)
+    path.join(config.server.downloadFileLocation, sanitize(fileName))
   );
 }
 
