@@ -59,7 +59,7 @@ function getStatusMessage(status, errors) {
     return [
       <h1>We're sorry, your collection could not be processed</h1>,
       <p className="mdl-typography--title">The following assemblies were rejected:</p>,
-      <ul>{failedAssemblies.map(assemblyName => <li key={assemblyName}>{assemblyName}</li>)}</ul>,
+      <ul className="wgsa-failed-assemblies">{failedAssemblies.map(assemblyName => <li key={assemblyName}>{assemblyName}</li>)}</ul>,
       <p className="mdl-typography--title">Please ensure that assemblies are the correct species and meet our quality criteria.</p>,
       <Link to={`/${species.nickname}/upload`} className="mdl-button mdl-button--raised">Try Again</Link>,
     ];
