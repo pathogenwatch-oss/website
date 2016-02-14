@@ -20,8 +20,11 @@
 .wgsa-drop-indicator.is-dragover {
     background-color: rgba(0,0,0,.5);
     visibility: visible;
-    pointer-events: auto;
     opacity: 1;
+}
+
+.wgsa-drop-indicator * {
+  pointer-events: none;
 }
 
 .wgsa-drop-indicator__message {
