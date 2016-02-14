@@ -46,9 +46,7 @@ export default React.createClass({
   },
 
   handleDragLeave(event) {
-    if (this.state.indicatorVisible) {
-      this.setState({ indicatorVisible: false });
-    }
+    this.hideDropIndicator();
     if (typeof this.props.onDragLeave === 'function') {
       this.props.onDragLeave(event);
     }
