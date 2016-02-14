@@ -237,12 +237,17 @@ function getReference(speciesId, callback) {
 
 function getSubtree({ speciesId, collectionId, subtreeId }, callback) {
   async.waterfall([
-    getAssemblyIds.bind(null, subtreeId),
-    function (assemblyIdWrappers, done) {
+    async.parallel.bind(null, {
+      subtree: getAssemblyIds.bind(null, subtreeId),
+      collection: getAssemblyIds.bind(null, collectionId),
+    }),
+    function ({ subtree, collection }, done) {
+      const subtreeAssemblyIds = subtree.map(_ => _.assemblyId);
+      const collectionAssemblyIds = new Set(collection.map(_ => _.assemblyId));
       const params = {
         speciesId,
-        assemblyIds: assemblyIdWrappers.filter(
-          wrapper => (wrapper.assemblyId || wrapper) !== subtreeId
+        assemblyIds: subtreeAssemblyIds.filter(
+          id => id !== subtreeId && !collectionAssemblyIds.has(id)
         )
       };
       async.parallel({
