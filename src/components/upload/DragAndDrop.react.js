@@ -1,11 +1,15 @@
+import '../../css/drop-indicator.css';
+
 import React from 'react';
 
-var style = {
+const style = {
   width: '100%',
-  height: '100%'
+  height: '100%',
 };
 
 export default React.createClass({
+
+  displayName: 'DragAndDrop',
 
   propTypes: {
     onDragStart: React.PropTypes.func,
@@ -13,7 +17,13 @@ export default React.createClass({
     onDragEnter: React.PropTypes.func,
     onDragLeave: React.PropTypes.func,
     onDragOver: React.PropTypes.func,
-    onDragEnd: React.PropTypes.func
+    onDragEnd: React.PropTypes.func,
+  },
+
+  getInitialState() {
+    return {
+      indicatorVisible: false,
+    };
   },
 
   handleDragStart(event) {
@@ -29,12 +39,16 @@ export default React.createClass({
   },
 
   handleDragEnter(event) {
+    this.showDropIndicator();
     if (typeof this.props.onDragEnter === 'function') {
       this.props.onDragEnter(event);
     }
   },
 
   handleDragLeave(event) {
+    if (this.state.indicatorVisible) {
+      this.setState({ indicatorVisible: false });
+    }
     if (typeof this.props.onDragLeave === 'function') {
       this.props.onDragLeave(event);
     }
@@ -43,6 +57,7 @@ export default React.createClass({
   handleDragOver(event) {
     event.preventDefault();
 
+    this.showDropIndicator();
     if (typeof this.props.onDragOver === 'function') {
       this.props.onDragOver(event);
     }
@@ -52,6 +67,7 @@ export default React.createClass({
     event.preventDefault();
     event.stopPropagation();
 
+    this.hideDropIndicator();
     if (event.dataTransfer.files.length > 0) {
       if (typeof this.props.onDrop === 'function') {
         this.props.onDrop(event.dataTransfer);
@@ -60,8 +76,21 @@ export default React.createClass({
   },
 
   handleDragEnd(event) {
+    this.hideDropIndicator();
     if (typeof this.props.onDragEnd === 'function') {
       this.props.onDragEnd(event);
+    }
+  },
+
+  showDropIndicator() {
+    if (! this.state.indicatorVisible) {
+      this.setState({ indicatorVisible: true });
+    }
+  },
+
+  hideDropIndicator() {
+    if (this.state.indicatorVisible) {
+      this.setState({ indicatorVisible: false });
     }
   },
 
@@ -75,11 +104,26 @@ export default React.createClass({
         onDragOver={this.handleDragOver}
         onDrop={this.handleDrop}
         onDragEnd={this.handleDragEnd}
-        style={style}>
-
+        style={style}
+      >
+        <div className={`wgsa-drop-indicator ${this.state.indicatorVisible ? 'is-dragover' : ''}`}>
+          <div className="wgsa-drop-indicator__message">
+            <div className="wgsa-drop-indicator__icons">
+              <span className="wgsa-file-icon">
+                <i className="material-icons">insert_drive_file</i>
+                .fasta
+              </span>
+              <span className="wgsa-file-icon">
+                <i className="material-icons">insert_drive_file</i>
+                .csv
+              </span>
+            </div>
+            <h3 className="wgsa-drop-indicator__title">Drop to upload to WGSA</h3>
+          </div>
+        </div>
         {this.props.children}
-
       </div>
     );
-  }
+  },
+
 });
