@@ -70,10 +70,6 @@ export default React.createClass({
       this.props.setUnfilteredIds(this.phylocanvas.leaves.map(_ => _.id));
     });
 
-    phylocanvas.on('original-tree', () => {
-      this.props.setUnfilteredIds(this.phylocanvas.leaves.map(_ => _.id));
-    });
-
     this.onLoaded = () => this.props.onLoaded(phylocanvas);
     phylocanvas.on('loaded', this.onLoaded);
     phylocanvas.on('updated', this.props.onUpdated);

@@ -1,6 +1,7 @@
 import {
   SET_UNFILTERED_IDS,
   ACTIVATE_FILTER,
+  APPEND_TO_FILTER,
   RESET_FILTER,
 } from '../actions/filter';
 
@@ -23,6 +24,14 @@ const actions = {
       ...state,
       active: true,
       ids,
+    };
+  },
+  [APPEND_TO_FILTER]: function (state, { ids }) {
+    const newIds = new Set([ ...state.ids, ...ids ]);
+    return {
+      ...state,
+      active: true,
+      ids: newIds,
     };
   },
   [RESET_FILTER]: function (state) {

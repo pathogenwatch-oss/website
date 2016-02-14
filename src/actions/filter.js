@@ -8,6 +8,16 @@ export function activateFilter(ids) {
   };
 }
 
+export const APPEND_TO_FILTER = 'APPEND_TO_FILTER';
+
+export function appendToFilter(ids) {
+  return {
+    type: APPEND_TO_FILTER,
+    ids: new Set(ids),
+  };
+}
+
+
 export const SET_UNFILTERED_IDS = 'SET_UNFILTERED_IDS';
 
 export function setUnfilteredIds(ids) {

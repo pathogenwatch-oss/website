@@ -37,6 +37,10 @@ apiRouter.post('/species/:speciesId/collection/:collectionId/assembly/:id', func
   res.json({ assemblyId: req.params.id });
 });
 
+apiRouter.get('/species/:speciesId/collection/:id/status', function (req, res) {
+  res.json({ status: 'READY' });
+});
+
 apiRouter.get('/species/:speciesId/collection/:id', function (req, res) {
   setTimeout(function () {
     res.sendFile(__dirname + '/static_data/collection.json');
