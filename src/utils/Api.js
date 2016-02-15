@@ -67,11 +67,11 @@ export function getCollection(speciesId, collectionId) {
   return $.get(`${API_ROOT}/species/${speciesId}/collection/${collectionId}`);
 }
 
-export function requestFile(fileType, idType, requestBody) {
-  console.log(`request url /download/type/collection/format/${fileType}`);
-  return $.ajax(
-    postJson(`/download/type/${idType}/format/${fileType}`, requestBody)
-  );
+export function requestFile({ speciesId, idType, format }, requestBody) {
+  return $.ajax(postJson(
+    `/species/${speciesId}/download/type/${idType}/format/${format}`,
+    requestBody
+  ));
 }
 
 export function getAntibiotics(speciesId) {
