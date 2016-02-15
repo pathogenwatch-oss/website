@@ -69,28 +69,34 @@ function mapStateToProps(state) {
     headerClick: headerClick.bind(table),
     data,
     filter,
-    fastaDownloads: downloads.files.fasta,
+    fasta: downloads.files.fasta,
+    gff: downloads.files.wgsa_gff,
   };
 }
 
-function addDownloadProps(row, { description, linksById = {} }, dispatch) {
+function addDownloadProps(row, { fasta, gff }, dispatch) {
   const id = row.metadata.assemblyId;
   return {
     ...row,
-    downloadProps: {
-      description,
-      ...linksById[id],
+    faDownloadProps: {
+      description: fasta.description,
+      ...fasta.linksById ? fasta.linksById[id] : null,
       onClick: () => dispatch(requestDownload('fasta', null, [ id ])),
+    },
+    gffDownloadProps: {
+      description: gff.description,
+      ...gff.linksById ? gff.linksById[id] : null,
+      onClick: () => dispatch(requestDownload('wgsa_gff', null, [ id ])),
     },
   };
 }
 
-function mergeProps({ fastaDownloads, data, ...state }, { dispatch }, props) {
+function mergeProps({ fasta, gff, data, ...state }, { dispatch }, props) {
   return {
     ...props,
     ...state,
     dispatch,
-    data: data.map(row => addDownloadProps(row, fastaDownloads, dispatch)),
+    data: data.map(row => addDownloadProps(row, { fasta, gff }, dispatch)),
   };
 }
 

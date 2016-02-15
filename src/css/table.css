@@ -68,11 +68,26 @@
 }
 
 .wgsa-table-cell .wgsa-download-button {
-  padding: 0 8px;
+  padding: 0;
+}
+
+.wgsa-table-cell .wgsa-download-button:first-child {
+  padding-left: 8px;
 }
 
 .wgsa-table-cell .wgsa-download-button > span {
   display: none;
+}
+
+.wgsa-download-label {
+  font-size: 8px;
+  position: absolute;
+  top: 16px;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  color: #fff;
+  text-transform: none;
 }
 
 .wgsa-table-cell .mdl-button:hover,

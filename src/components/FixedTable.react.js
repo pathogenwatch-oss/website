@@ -40,7 +40,7 @@ export default React.createClass({
   },
 
   renderHeader(columnProps, headerProps) {
-    const { headerClasses, noHeader, columnKey } = columnProps;
+    const { headerClasses, getHeaderContent, columnKey } = columnProps;
     const isSelected = (columnProps === this.props.activeColumn);
 
     return (
@@ -48,7 +48,8 @@ export default React.createClass({
         {...headerProps}
         className={getHeaderClassNames(isSelected, headerClasses)}
       >
-        {!noHeader &&
+        { getHeaderContent ?
+          getHeaderContent() :
           <button onClick={event => this.handleHeaderClick(event, columnProps)}>
             {formatColumnLabel(columnKey)}
           </button>

@@ -6,7 +6,7 @@ import { downloadColumnProps, nameColumnProps, getCellContents, }
 import MetadataUtils from '../utils/Metadata';
 
 export const systemColumnProps = [
-  downloadColumnProps,
+  ...downloadColumnProps,
   nameColumnProps,
   { columnKey: '__date',
     valueGetter({ metadata }) {

@@ -31,6 +31,10 @@ const initialState = {
     description: 'Assembly (.fa)',
     assembly: true,
   },
+  wgsa_gff: {
+    description: 'WGSA Results (.gff)',
+    assembly: true,
+  },
 };
 
 function parseResult(keyToFilenameMap) {

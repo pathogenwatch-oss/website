@@ -14,21 +14,28 @@ export const getCellContents = ({ valueGetter },  data) => valueGetter(data);
 
 const collectionStyle = { color: CGPS.COLOURS.PURPLE };
 
-export const downloadColumnProps = {
-  columnKey: '__download',
-  fixed: true,
-  noHeader: true,
-  cellClasses: 'wgsa-table-cell--skinny',
-  fixedWidth: 48,
-  flexGrow: 0,
-  getCellContents(_, data) {
-    return (
-      <span onClick={(e) => e.stopPropagation()}>
-        <DownloadButton { ...data.downloadProps } />
-      </span>
-    );
+export const downloadColumnProps = [
+  {
+    columnKey: '__fa_download',
+    fixed: true,
+    getHeaderContent() {},
+    cellClasses: 'wgsa-table-cell--skinny',
+    fixedWidth: 80,
+    flexGrow: 0,
+    getCellContents(_, data) {
+      return (
+        <span onClick={(e) => e.stopPropagation()}>
+          <DownloadButton { ...data.faDownloadProps } label=".fa"/>
+          <DownloadButton
+            { ...data.gffDownloadProps }
+            label=".gff"
+            color={CGPS.COLOURS.GREEN}
+          />
+        </span>
+      );
+    },
   },
-};
+];
 
 export const nameColumnProps = {
   columnKey: '__name',

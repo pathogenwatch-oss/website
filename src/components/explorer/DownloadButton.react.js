@@ -15,6 +15,8 @@ export default React.createClass({
     link: React.PropTypes.string,
     filename: React.PropTypes.string,
     onClick: React.PropTypes.func,
+    label: React.PropTypes.string,
+    color: React.PropTypes.string,
   },
 
   componentDidUpdate(previous) {
@@ -25,7 +27,9 @@ export default React.createClass({
   },
 
   render() {
-    const { loading, error, description, link, filename, onClick } = this.props;
+    const {
+      loading, error, description, link, filename, onClick, label, color,
+    } = this.props;
     const title =
       `${ !loading && link ? 'Download' : 'Generate' } ${description}`;
     return link ? (
@@ -35,12 +39,17 @@ export default React.createClass({
         download={filename}
         title={title}
         className={className}>
-          <DownloadIcon hasLink />
+          <DownloadIcon hasLink color={color}/>
           {description}
       </a>
     ) : (
       <button onClick={onClick} title={title} className={className}>
-        <DownloadIcon loading={loading} error={error} />
+        <DownloadIcon
+          loading={loading}
+          error={error}
+          color={color}
+          label={label}
+        />
         {description}
       </button>
     );
