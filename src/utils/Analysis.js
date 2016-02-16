@@ -228,6 +228,19 @@ function calculateSumsOfNucleotidesInDnaStrings(dnaStrings) {
   return sumsOfNucleotidesInDnaStrings;
 }
 
+function calculateGCContent(dnaSequenceStrings) {
+  let count = 0;
+  dnaSequenceStrings.forEach(sequenceString => {
+    for (let i = 0; i < sequenceString.length; i++) {
+      const char = sequenceString[i];
+      if (char === 'C' || char === 'G') {
+        count++;
+      }
+    }
+  });
+  return count;
+}
+
 function validateContigs(contigs) {
   var validatedContigs = {
     valid: [],
@@ -265,17 +278,20 @@ function analyseFasta(assemblyName, fastaFileString) {
   const contigs = extractContigsFromFastaFileString(fastaFileString);
   const dnaStrings = extractDnaStringsFromContigs(contigs);
   const assemblyN50Data = calculateN50(dnaStrings);
+  const totalNumberOfNucleotidesInDnaStrings = calculateTotalNumberOfNucleotidesInDnaStrings(dnaStrings);
+  const totalNumberOfNsInDnaStrings = calculateTotalNumberOfNsInDnaStrings(dnaStrings);
 
   return {
     totalNumberOfContigs: contigs.length,
     assemblyN50Data,
     contigN50: assemblyN50Data.sequenceLength,
     sumsOfNucleotidesInDnaStrings: calculateSumsOfNucleotidesInDnaStrings(dnaStrings),
-    totalNumberOfNucleotidesInDnaStrings: calculateTotalNumberOfNucleotidesInDnaStrings(dnaStrings),
-    totalNumberOfNsInDnaStrings: calculateTotalNumberOfNsInDnaStrings(dnaStrings),
+    totalNumberOfNucleotidesInDnaStrings,
+    totalNumberOfNsInDnaStrings,
     averageNumberOfNucleotidesInDnaStrings: calculateAverageNumberOfNucleotidesInDnaStrings(dnaStrings),
     smallestNumberOfNucleotidesInDnaStrings: calculateSmallestNumberOfNucleotidesInDnaStrings(dnaStrings),
     biggestNumberOfNucleotidesInDnaStrings: calculateBiggestNumberOfNucleotidesInDnaStrings(dnaStrings),
+    gcContent: (100 * calculateGCContent(dnaStrings) / (totalNumberOfNucleotidesInDnaStrings - totalNumberOfNsInDnaStrings)).toFixed(1),
   };
 }
 

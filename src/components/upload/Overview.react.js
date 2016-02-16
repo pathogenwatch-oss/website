@@ -88,6 +88,7 @@ export default React.createClass({
                 <a href="#overview-chart-panel" className="mdl-tabs__tab" onClick={this.showChart.bind(this, 'contigN50', 'N50')}>N50</a>
                 <a href="#overview-chart-panel" className="mdl-tabs__tab" onClick={this.showChart.bind(this, 'totalNumberOfContigs', 'No. Contigs')}>No. Contigs</a>
                 <a href="#overview-chart-panel" className="mdl-tabs__tab" onClick={this.showChart.bind(this, 'totalNumberOfNsInDnaStrings', 'Non-ATCG')}>Non-ATCG</a>
+                <a href="#overview-chart-panel" className="mdl-tabs__tab" onClick={this.showChart.bind(this, 'gcContent', 'GC Content')}>GC Content</a>
               </div>
 
               <div className="wgsa-card-content mdl-tabs__panel is-active" id="overview-chart-panel">
