@@ -1,5 +1,4 @@
 var sequenceTypeModel = require('models/sequenceType');
-var socketService = require('services/socket');
 var messageQueueService = require('services/messageQueue');
 var mainStorage = require('services/storage')('main');
 
@@ -56,43 +55,42 @@ function createMetadataRecord(ids, metadata, metrics) {
 }
 
 function beginUpload(ids, data) {
-  messageQueueService.newAssemblyNotificationQueue(ids, {
-    tasks: ASSEMBLY_ANALYSES,
-    loggingId: 'Assembly ' + ids.assemblyId,
-    notifyFn: socketService.notifyAssemblyUpload.bind(socketService, ids)
-  }, function () {
-    var assemblyMetadata = createMetadataRecord(ids, data.metadata, data.metrics);
-    var assembly = {
-      speciesId: ids.speciesId,
-      assemblyId: ids.assemblyId,
-      collectionId: ids.collectionId,
-      sequences: data.sequences
-    };
+  var assemblyMetadata = createMetadataRecord(ids, data.metadata, data.metrics);
+  var assembly = {
+    speciesId: ids.speciesId,
+    assemblyId: ids.assemblyId,
+    collectionId: ids.collectionId,
+    sequences: data.sequences
+  };
 
-    mainStorage.store(
-      createKey(ids.assemblyId, ASSEMBLY_METADATA),
-      assemblyMetadata,
-      function () {
-        socketService.notifyAssemblyUpload(ids, 'METADATA_OK');
-      }
+  mainStorage.store(
+    createKey(ids.assemblyId, ASSEMBLY_METADATA), assemblyMetadata, () => {});
+
+  messageQueueService.newAssemblyUploadQueue(ids.assemblyId, uploadQueue => {
+    uploadQueue.subscribe((error, message) => {
+      LOGGER.debug(error, message);
+      LOGGER.info(`Received response from ${uploadQueue.name}, destroying.`);
+      uploadQueue.destroy();
+
+      messageQueueService.getNotificationExchange().publish(
+        `${ids.speciesId}.UPLOAD.ASSEMBLY.${ids.assemblyId}`, {
+          taskType: 'UPLOAD',
+          taskStatus: 'SUCCESS',
+          collectionId: ids.collectionId,
+          assemblyId: {
+            assemblyId: ids.assemblyId
+          }
+        }
+      );
+    });
+
+    messageQueueService.getUploadExchange().publish(
+      'upload', assembly, { replyTo: uploadQueue.name }
     );
 
-    messageQueueService.newAssemblyUploadQueue(ids.assemblyId,
-      function (uploadQueue) {
-        uploadQueue.subscribe(function () {
-          LOGGER.info('Received response from ' + this.name + ', destroying.');
-          uploadQueue.destroy();
-          socketService.notifyAssemblyUpload(ids, 'UPLOAD_OK');
-        });
-
-        messageQueueService.getUploadExchange()
-          .publish('upload', assembly, { replyTo: uploadQueue.name });
-
-        // "dereference" sequences to remove from heap
-        data.sequences = null;
-        assembly.sequences = null;
-      }
-    );
+    // "dereference" sequences to remove from heap
+    data.sequences = null;
+    assembly.sequences = null;
   });
 }
 
@@ -204,6 +202,7 @@ function groupAssembliesBySubtype(assemblies) {
   }, {});
 }
 
+module.exports.ASSEMBLY_ANALYSES = ASSEMBLY_ANALYSES;
 module.exports.beginUpload = beginUpload;
 module.exports.getComplete = getComplete;
 module.exports.getReference = getReference;

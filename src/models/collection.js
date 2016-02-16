@@ -4,10 +4,9 @@ var assemblyModel = require('models/assembly');
 
 var mainStorage = require('services/storage')('main');
 var messageQueueService = require('services/messageQueue');
-var socketService = require('services/socket');
 
 var LOGGER = require('utils/logging').createLogger('Collection');
-const { COLLECTION_LIST, CORE_TREE_RESULT } = require('utils/documentKeys');
+const { COLLECTION_LIST, CORE_TREE_RESULT, UPLOAD_PROGRESS } = require('utils/documentKeys');
 
 var IDENTIFIER_TYPES = {
   COLLECTION: 'Collection',
@@ -58,8 +57,7 @@ function manageCollection(request, callback) {
   });
 }
 
-function add(speciesId, ids, callback) {
-  var assemblyNames = ids.assemblyNames;
+function add(speciesId, { assemblyNames }, callback) {
   var collectionRequest = {
     identifierType: IDENTIFIER_TYPES.COLLECTION,
     count: 1
@@ -73,48 +71,64 @@ function add(speciesId, ids, callback) {
   LOGGER.info('Assembly ids requested: ' + assemblyRequest.count);
 
   async.waterfall([
-    function (done) {
+    function (next) {
       async.parallel({
         collection: requestIDs.bind(null, collectionRequest),
         assembly: requestIDs.bind(null, assemblyRequest)
-      }, done);
+      }, next);
     },
-    function (results, done) {
+    function (results, next) {
       LOGGER.info('Received IDs successfully:', results);
       manageCollection({
         collectionId: results.collection.identifiers[0],
         assemblyIds: results.assembly.identifiers,
         collectionOperation: COLLECTION_OPERATIONS.INITIATE
-      }, done);
+      }, next);
     },
-    function (results, done) {
-      var assemblyNameToAssemblyIdMap =
-        results.assemblyIds.reduce(function (map, newId) {
-          map[assemblyNames.shift()] = newId;
-          return map;
-        }, {});
-
-      ids.collectionId = results.collectionId;
-      ids.speciesId = speciesId;
-
-      messageQueueService.newCollectionNotificationQueue(ids, {
-        tasks: COLLECTION_TREE_TASKS,
-        loggingId: 'Collection ' + ids.collectionId,
-        notifyFn: socketService.notifyCollectionUpload.bind(socketService, ids)
-      }, function () {
-        done(null, {
-          collectionId: ids.collectionId,
-          assemblyNameToAssemblyIdMap: assemblyNameToAssemblyIdMap
-        });
-      });
-    }
   ],
-  function (error, result) {
+  function (error, { collectionId, assemblyIds }) {
     if (error) {
       LOGGER.error(error);
-      return callback(error, null);
+      return callback(error);
     }
-    callback(null, result);
+
+    const collectionSize = assemblyIds.length;
+    const assemblyNameToAssemblyIdMap = assemblyIds.reduce((map, newId) => {
+      map[assemblyNames.shift()] = newId;
+      return map;
+    }, {});
+
+    const message = {
+      collectionId,
+      assemblyIdToNameMap: // reverse mapping allows name to be recovered for errors
+        Object.keys(assemblyNameToAssemblyIdMap).reduce((map, name) => {
+          map[assemblyNameToAssemblyIdMap[name]] = name;
+          return map;
+        }, {}),
+      collectionSize,
+      expectedResults:
+        collectionSize + // for upload notifications
+        collectionSize * assemblyModel.ASSEMBLY_ANALYSES.length +
+        COLLECTION_TREE_TASKS.length,
+    };
+
+    messageQueueService.newUploadProgressRequestQueue(collectionId, queue => {
+      queue.subscribe(ackError => {
+        if (ackError) {
+          LOGGER.error('Upload progress service failed to acknowledge');
+          return callback(ackError);
+        }
+
+        LOGGER.info('Received upload progress acknowledgement');
+        queue.destroy();
+        callback(null, {
+          collectionId,
+          assemblyNameToAssemblyIdMap
+        });
+      });
+
+      messageQueueService.getServicesExchange().publish('upload-progress', message);
+    });
   });
 }
 
@@ -223,12 +237,17 @@ function getReference(speciesId, callback) {
 
 function getSubtree({ speciesId, collectionId, subtreeId }, callback) {
   async.waterfall([
-    getAssemblyIds.bind(null, subtreeId),
-    function (assemblyIdWrappers, done) {
+    async.parallel.bind(null, {
+      subtree: getAssemblyIds.bind(null, subtreeId),
+      collection: getAssemblyIds.bind(null, collectionId),
+    }),
+    function ({ subtree, collection }, done) {
+      const subtreeAssemblyIds = subtree.map(_ => _.assemblyId);
+      const collectionAssemblyIds = new Set(collection.map(_ => _.assemblyId));
       const params = {
         speciesId,
-        assemblyIds: assemblyIdWrappers.filter(
-          wrapper => (wrapper.assemblyId || wrapper) !== subtreeId
+        assemblyIds: subtreeAssemblyIds.filter(
+          id => id !== subtreeId && !collectionAssemblyIds.has(id)
         )
       };
       async.parallel({
@@ -248,7 +267,31 @@ function getSubtree({ speciesId, collectionId, subtreeId }, callback) {
   });
 }
 
+function getStatus({ collectionId }, callback) {
+  mainStorage.retrieve(`${UPLOAD_PROGRESS}_${collectionId}`, function (error, doc, cas) {
+    if (error) {
+      return callback(error);
+    }
+
+    if (doc.status === 'READY') {
+      return callback(null, { status: 'READY' });
+    }
+
+    // status page doesn't need this data
+    delete doc.assemblyIdToNameMap;
+    delete doc.type;
+    delete doc.documentKey;
+
+    // status is moved outside of progress doc
+    const status = doc.status;
+    delete doc.status;
+
+    return callback(null, { status, progress: doc, cas });
+  });
+}
+
 module.exports.add = add;
 module.exports.get = get;
 module.exports.getReference = getReference;
 module.exports.getSubtree = getSubtree;
+module.exports.getStatus = getStatus;

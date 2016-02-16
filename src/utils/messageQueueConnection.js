@@ -29,9 +29,13 @@ var EXCHANGE_CONFIG = {
     name: 'grid-ex',
     type: 'direct'
   },
-  TASKS: { // TODO: should not be used by the middle end
-    name: 'wgst-tasks-ex',
-    type: 'topic'
+  SERVICES: {
+    name: 'me-services-ex',
+    type: 'topic',
+    options: {
+      passive: false,
+      confirm: true
+    }
   }
 };
 var connection;
@@ -51,22 +55,23 @@ function setDefaultPublishOptions(exchange) {
         if (error) {
           return LOGGER.error('Error in trying to publish: ' + error);
         }
-        LOGGER.info('Message was published: ' + topic + ' ' + message);
+        LOGGER.info(`Message was published: ${topic}`, message);
       }
     );
   };
 }
 
 function createExchange(exchangeKey, callback) {
-  var config = EXCHANGE_CONFIG[exchangeKey];
-  connection.exchange(config.name, {
+  const config = EXCHANGE_CONFIG[exchangeKey];
+  const options = Object.assign({
     type: config.type,
     passive: true,
     durable: false,
     confirm: false,
     autoDelete: false,
     noDeclare: false
-  }, function (exchange) {
+  }, config.options);
+  connection.exchange(config.name, options, exchange => {
     setDefaultPublishOptions(exchange);
     exchanges[exchangeKey] = exchange;
     LOGGER.info('✔ Exchange "' + exchange.name + '" is open');
@@ -91,7 +96,13 @@ function connect(callback) {
       function (exchangeKey, finishIteration) {
         createExchange(exchangeKey, finishIteration);
       },
-      callback
+      function (error) {
+        if (error) {
+          callback(error);
+        }
+
+        callback(null, connection);
+      }
     );
   });
 }

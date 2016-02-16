@@ -23,7 +23,7 @@ function retrieve(key, callback) {
       return callback(error);
     }
     LOGGER.info('Successfully retrieved ' + key);
-    callback(null, result.value);
+    callback(null, result.value, result.cas);
   });
 }
 
