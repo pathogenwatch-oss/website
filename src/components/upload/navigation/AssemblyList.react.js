@@ -32,7 +32,15 @@ const AssemblyList = React.createClass({
 
   getListOptionElements() {
     const assemblies = UploadStore.getAssemblies();
-    return Object.keys(assemblies).map((assemblyName) => {
+    return Object.keys(assemblies).sort((a, b) => {
+      if (assemblies[a].hasErrors) {
+        return -1;
+      } else if (assemblies[b].hasErrors) {
+        return 1;
+      } else {
+        return 0;
+      }
+    }).map((assemblyName) => {
       const { hasErrors } = assemblies[assemblyName];
       return (
         <AssemblyListItem
