@@ -12,21 +12,15 @@ import AssemblyAnalysisChart from './AssemblyAnalysisChart.react';
 import UploadWorkspaceNavigation from './UploadWorkspaceNavigation.react';
 import UploadReviewHeader from './UploadReviewHeader.react';
 import Overview from './Overview.react';
-import UploadingFilesDetailed from './UploadingFilesDetailed.react';
 
 import UploadActionCreators from '^/actions/UploadActionCreators';
 import UploadStore from '^/stores/UploadStore';
-import SocketActionCreators from '^/actions/SocketActionCreators';
 import UploadWorkspaceNavigationActionCreators from '^/actions/UploadWorkspaceNavigationActionCreators';
 import ToastActionCreators from '^/actions/ToastActionCreators';
 
 import UploadWorkspaceNavigationStore from '^/stores/UploadWorkspaceNavigationStore';
-import FileProcessingStore from '^/stores/FileProcessingStore';
 import FileUploadingStore from '^/stores/FileUploadingStore';
-import FileUploadingProgressStore from '^/stores/FileUploadingProgressStore';
-import SocketStore from '^/stores/SocketStore';
 
-import SocketUtils from '^/utils/Socket';
 import Species from '^/species';
 import DEFAULT from '^/defaults';
 
@@ -49,8 +43,6 @@ const fileInputStyle = {
   opacity: 0,
 };
 
-let isProcessing = false;
-
 export default React.createClass({
 
   contextTypes: {
@@ -61,8 +53,7 @@ export default React.createClass({
     return {
       readyToUpload: false,
       confirmedMultipleMetadataDrop: false,
-      pageTitleMessage: 'Upload',
-      isUploading: FileUploadingStore.getFileUploadingState(),
+      isProcessing: false,
       numberOfAssemblies: UploadStore.getAssembliesCount(),
       viewPage: 'overview',
       assemblyName: null,
@@ -72,70 +63,35 @@ export default React.createClass({
   },
 
   componentDidMount() {
-    FileProcessingStore.addChangeListener(this.handleFileProcessingStoreChange);
     FileUploadingStore.addChangeListener(this.handleFileUploadingStoreChange);
-    FileUploadingProgressStore.addChangeListener(this.handleFileUploadingProgressStoreChange);
     UploadWorkspaceNavigationStore.addChangeListener(this.handleUploadWorkspaceNavigationStoreChange);
     UploadStore.addChangeListener(this.handleUploadStoreChange);
-
-    const socket = SocketUtils.socketConnect();
-
-    socket.on('connect', function () {
-      console.log('[WGSA] Socket connected');
-    });
-
-    socket.on('disconnect', function () {
-      console.error('[WGSA] Socket connection lost');
-    });
-
-    SocketStore.addChangeListener(this.handleSocketStoreChange);
-    SocketActionCreators.setSocketConnection(socket);
+    this.menuButton = document.querySelector('.mdl-layout__drawer-button');
   },
 
   componentWillUnmount() {
-    FileProcessingStore.removeChangeListener(this.handleFileProcessingStoreChange);
     FileUploadingStore.removeChangeListener(this.handleFileUploadingStoreChange);
-    FileUploadingProgressStore.removeChangeListener(this.handleFileUploadingProgressStoreChange);
-    SocketStore.removeChangeListener(this.handleSocketStoreChange);
     UploadWorkspaceNavigationStore.removeChangeListener(this.handleUploadWorkspaceNavigationStoreChange);
     UploadStore.removeChangeListener(this.handleUploadStoreChange);
   },
 
-  handleSocketStoreChange() {
-    if (!SocketStore.getRoomId()) {
-      SocketStore.getSocketConnection().on('roomId', function iife(roomId) {
-        SocketActionCreators.setRoomId(roomId);
-      });
-
-      SocketStore.getSocketConnection().emit('getRoomId');
+  hideSidebar() {
+    if (this.menuButton.getAttribute('aria-expanded') === 'true') {
+      this.menuButton.click();
     }
-  },
-
-  handleFileProcessingStoreChange() {
-    isProcessing = FileProcessingStore.getFileProcessingState();
-    this.setState({
-      pageTitleMessage: isProcessing ? 'Processing...' : 'Overview',
-    });
   },
 
   handleFileUploadingStoreChange() {
-    let uploadingResult = FileUploadingStore.getFileUploadingResult();
+    this.setState({ isProcessing: true });
     const id = FileUploadingStore.getCollectionId();
-    const path = `/${Species.nickname}/collection/${id}`;
-    const { history } = this.context;
-    if (uploadingResult === FileUploadingStore.getFileUploadingResults().SUCCESS) {
-      history.pushState(null, path);
-      UploadStore.clearStore();
-      FileUploadingStore.clearStore();
-      FileUploadingProgressStore.clearStore();
+
+    if (!id) {
       return;
     }
 
-    this.setState({
-      isUploading: FileUploadingStore.getFileUploadingState(),
-      viewPage: 'upload_progress',
-      collectionUrl: id ? window.location.origin + path : null,
-    });
+    const path = `/${Species.nickname}/collection/${id}`;
+    const { history } = this.context;
+    history.pushState(null, path);
   },
 
   handleUploadWorkspaceNavigationStoreChange() {
@@ -143,6 +99,7 @@ export default React.createClass({
       viewPage: UploadWorkspaceNavigationStore.getCurrentViewPage(),
       assemblyName: UploadWorkspaceNavigationStore.getAssemblyName(),
     });
+    this.hideSidebar();
   },
 
   confirmDuplicateOverwrite(files) {
@@ -164,7 +121,11 @@ export default React.createClass({
           sticky: true,
         });
       } else {
-        UploadActionCreators.addFiles(event.files);
+        this.setState({ isProcessing: true });
+        UploadActionCreators.addFiles(
+          event.files,
+          () => this.setState({ isProcessing: false }),
+        );
       }
       // allows the same file to be uploaded consecutively
       this.refs.fileInput.value = '';
@@ -192,52 +153,38 @@ export default React.createClass({
       readyToUpload: UploadStore.isReadyToUpload(),
       numberOfAssemblies: UploadStore.getAssembliesCount(),
     });
-  },
-
-  handleFileUploadingProgressStoreChange() {
-    const percentage = FileUploadingProgressStore.getProgressPercentage();
-    this.setState({
-      uploadProgressPercentage: percentage,
-    });
+    this.hideSidebar();
   },
 
   render() {
-    let pageTitle = 'WGSA';
-    let species = Species.formattedName;
-    let activeAssemblyName = '';
-
+    let subtitle = '';
     const assembly = UploadStore.getAssembly(this.state.assemblyName);
+    const { isProcessing } = this.state;
 
     switch (this.state.viewPage) {
     case 'assembly':
-      activeAssemblyName = assembly && assembly.fasta.name;
+      subtitle = assembly && assembly.fasta.name;
       break;
-    case 'upload_progress':
-      activeAssemblyName = 'Uploading...';
-      break;
-    default: activeAssemblyName = this.state.pageTitleMessage;
+    default: subtitle = isProcessing ? 'Processing...' : 'Overview';
     }
 
     return (
       <FileDragAndDrop onDrop={this.handleDrop}>
         <div className="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-drawer">
-          <UploadReviewHeader title={pageTitle} species={species} activeAssemblyName={activeAssemblyName} activateUploadButton={this.state.readyToUpload} uploadProgressPercentage={this.state.uploadProgressPercentage} isUploading={this.state.isUploading} />
+          <UploadReviewHeader subtitle={subtitle} activateUploadButton={this.state.readyToUpload} />
 
           <UploadWorkspaceNavigation assembliesUploaded={assembly ? true : false} totalAssemblies={this.state.numberOfAssemblies}>
             <footer className="wgsa-upload-navigation__footer mdl-shadow--4dp">
               <button type="button" title="Overview"
-                className="wgsa-upload-review-button mdl-button mdl-js-button mdl-button--raised mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect"
+                className="wgsa-upload-review-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
                 onClick={this.handleOverviewClick}>
-                <i className="material-icons">home</i>
+                Overview
               </button>
-
-              { !this.state.isUploading &&
-                <button type="button" title="Add files"
-                  className="wgsa-upload-review-button mdl-button mdl-js-button mdl-button--raised mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect"
-                  onClick={this.handleClick}>
-                  <i className="material-icons">add</i>
-                </button>
-              }
+              <button type="button" title="Add files"
+                className="wgsa-upload-review-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
+                onClick={this.handleClick}>
+                Add Files
+              </button>
             </footer>
           </UploadWorkspaceNavigation>
 
@@ -251,7 +198,7 @@ export default React.createClass({
                   return (
                     <div className="mdl-grid">
                       <div className="mdl-cell mdl-cell--6-col wgsa-card-column">
-                        <div className="wgsa-card mdl-shadow--4dp">
+                        <div className="wgsa-card mdl-shadow--2dp">
                           <div className="wgsa-card-heading">Assembly Statistics</div>
                           <div className="wgsa-card-content">
                             <AssemblyAnalysis assembly={assembly}/>
@@ -259,14 +206,14 @@ export default React.createClass({
                         </div>
                       </div>
                       <div className="mdl-cell mdl-cell--6-col wgsa-card-column chart-card">
-                        <div className="wgsa-card mdl-shadow--4dp">
+                        <div className="wgsa-card mdl-shadow--2dp">
                           <div className="wgsa-card-heading">N50 Chart</div>
                           <div className="wgsa-card-content ">
                             <AssemblyAnalysisChart metrics={assembly && assembly.metrics} />
                           </div>
                         </div>
                       </div>
-                      <div className="wgsa-card mdl-cell mdl-cell--12-col increase-cell-gutter mdl-shadow--4dp">
+                      <div className="wgsa-card mdl-cell mdl-cell--12-col increase-cell-gutter mdl-shadow--2dp">
                         <div className="wgsa-card-heading">Metadata</div>
                         <div className="wgsa-card-content">
                           <AssemblyMetadata assembly={assembly} isUploading={this.state.isUploading}/>
@@ -276,13 +223,7 @@ export default React.createClass({
                   );
                 case 'overview':
                   return (
-                   <Overview clickHandler={this.handleClick} uploadProgressPercentage={this.state.uploadProgressPercentage} isUploading={this.state.isUploading} isReadyToUpload={this.state.readyToUpload} />
-                  );
-                case 'upload_progress':
-                  return (
-                    <div>
-                      <UploadingFilesDetailed collectionUrl={this.state.collectionUrl}/>
-                    </div>
+                   <Overview clickHandler={this.handleClick} isUploading={this.state.isUploading} isReadyToUpload={this.state.readyToUpload} />
                   );
                 default:
                   // should never hit default

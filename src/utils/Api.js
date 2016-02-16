@@ -43,7 +43,8 @@ export function getCollectionId(speciesId, collectionData, callback) {
   });
 }
 
-export function postAssembly({ speciesId, collectionId, assemblyId }, requestBody, callback) {
+export function postAssembly(params, requestBody, callback) {
+  const { speciesId, collectionId, assemblyId } = params;
   $.ajax(
     postJson(
       `/species/${speciesId}/collection/${collectionId}/assembly/${assemblyId}`,
@@ -80,4 +81,8 @@ export function getAntibiotics(speciesId) {
 
 export function getSubtree(speciesId, collectionId, subtreeId) {
   return $.get(`${API_ROOT}/species/${speciesId}/collection/${collectionId}/subtree/${subtreeId}`);
+}
+
+export function checkCollectionStatus(speciesId, collectionId, cas) {
+  return $.get(`${API_ROOT}/species/${speciesId}/collection/${collectionId}/status`, { cas });
 }

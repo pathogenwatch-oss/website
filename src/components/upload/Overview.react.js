@@ -1,12 +1,13 @@
 import React from 'react';
 
-import UploadStore from '^/stores/UploadStore.js';
 import AssemblyAnalysisOverviewChart from './AssemblyAnalysisOverviewChart.react';
 import OverviewStatisticsItem from './OverviewStatisticsItem.react';
+import OverviewStatusItem from './OverviewStatusItem.react';
 import Map from './UploadOverviewMap.react';
 
+import UploadStore from '^/stores/UploadStore.js';
+
 import { FASTA_FILE_EXTENSIONS } from '^/utils/File';
-import DEFAULT from '^/defaults';
 
 const noContigsRange = {};
 let averageAssemblyLength = null;
@@ -28,6 +29,7 @@ export default React.createClass({
         title: 'Assembly Length',
         type: 'totalNumberOfNucleotidesInDnaStrings',
       },
+      uploadProgressPercentage: 0,
     };
   },
 
@@ -37,7 +39,7 @@ export default React.createClass({
   },
 
   componentDidUpdate() {
-    var range = UploadStore.getMinMaxNoContigsForAllAssemblies();
+    const range = UploadStore.getMinMaxNoContigsForAllAssemblies();
     noContigsRange.min = range[0];
     noContigsRange.max = range[1];
     averageAssemblyLength = UploadStore.getAverageAssemblyLengthForAllAssemblies();
@@ -66,49 +68,19 @@ export default React.createClass({
 
   render() {
     if (this.state.assemblyCount) {
-      const iconStyle = {
-        color: this.props.isReadyToUpload ? DEFAULT.CGPS.COLOURS.GREEN : DEFAULT.DANGER_COLOUR,
-      };
-
       return (
         <div className="mdl-grid overviewContent">
-          <div className="mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp">
+          <div className="wgsa-card mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--2dp">
             <div className="wgsa-card-heading">Summary</div>
-            <div className="wgsa-card-content wgsa-summary-stats">
-              <div className="mdl-grid mdl-grid--no-spacing">
-                <div className="mdl-cell mdl-cell--6-col">
-                  <OverviewStatisticsItem label="Total Assemblies" value={this.state.assemblyCount} />
-                </div>
-                <div className="mdl-cell mdl-cell--6-col">
-                  <OverviewStatisticsItem label="No. Contigs Range" value={noContigsRange.min + ' - ' + noContigsRange.max} />
-                </div>
-                <div className="mdl-cell mdl-cell--6-col">
-                  <OverviewStatisticsItem label="Average Assembly Length" value={averageAssemblyLength} />
-                </div>
-                <div className="mdl-cell mdl-cell--6-col">
-                  <div className="wgsa-overview-upload-ready-card mdl-card">
-                    { this.props.isUploading &&
-                        <div style={iconStyle} className="mdl-card__title mdl-card--expand">
-                          {this.props.uploadProgressPercentage + '%'}
-                        </div>
-                      ||
-                        <div className="mdl-card__title mdl-card--expand">
-                          <i style={iconStyle} className="material-icons">{this.props.isReadyToUpload && 'check_circle' || 'error'}</i>
-                        </div>
-                    }
-                    <span className="mdl-card__actions mdl-card--border">
-                      { this.props.isUploading ? 'Upload Progress'
-                        :
-                          ( this.props.isReadyToUpload &&  'Ready To Upload' || 'Not Ready To Upload')
-                      }
-                    </span>
-                  </div>
-                </div>
-              </div>
+            <div className="wgsa-card-content wgsa-summary-stats mdl-grid">
+              <OverviewStatisticsItem label="Total Assemblies" value={this.state.assemblyCount} />
+              <OverviewStatisticsItem label="No. Contigs Range" value={noContigsRange.min + ' - ' + noContigsRange.max} />
+              <OverviewStatisticsItem label="Average Assembly Length" value={averageAssemblyLength} />
+              <OverviewStatusItem isReadyToUpload={this.props.isReadyToUpload} isUploading={this.props.isUploading} />
             </div>
           </div>
 
-          <div className="mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--4dp chart-card">
+          <div className="wgsa-card mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--2dp chart-card">
 
             <div className="wgsa-chart-select mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
               <div className="mdl-tabs__tab-bar">
@@ -116,6 +88,7 @@ export default React.createClass({
                 <a href="#overview-chart-panel" className="mdl-tabs__tab" onClick={this.showChart.bind(this, 'contigN50', 'N50')}>N50</a>
                 <a href="#overview-chart-panel" className="mdl-tabs__tab" onClick={this.showChart.bind(this, 'totalNumberOfContigs', 'No. Contigs')}>No. Contigs</a>
                 <a href="#overview-chart-panel" className="mdl-tabs__tab" onClick={this.showChart.bind(this, 'totalNumberOfNsInDnaStrings', 'Non-ATCG')}>Non-ATCG</a>
+                <a href="#overview-chart-panel" className="mdl-tabs__tab" onClick={this.showChart.bind(this, 'gcContent', 'GC Content')}>GC Content</a>
               </div>
 
               <div className="wgsa-card-content mdl-tabs__panel is-active" id="overview-chart-panel">
@@ -124,7 +97,7 @@ export default React.createClass({
             </div>
           </div>
 
-          <div key="map" className="mdl-cell mdl-cell--12-col increase-cell-gutter mdl-shadow--4dp" style={{ height: '50%' }}>
+          <div key="map" className="mdl-cell mdl-cell--12-col increase-cell-gutter mdl-shadow--2dp" style={{ height: '50%' }}>
             <div style={{ height: '100%', position: 'relative' }}>
               <Map assemblies={this.state.assemblies}/>
             </div>

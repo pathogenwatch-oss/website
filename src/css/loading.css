@@ -10,11 +10,14 @@
   justify-content: center;
 }
 
+.wgsa-loading-container > .mdl-cell {
+  text-align: center;
+}
+
 .wgsa-loading-logo {
   width: 240px;
   margin-left: -48px; /* width / 5 */
   margin-top: -120px; /* width / 2 */
-  padding-bottom: 48px; /* width / 5 */
 }
 
 .wgsa-loading-container h1 {
@@ -23,16 +26,55 @@
   color: #a386bd;
 }
 
+.wgsa-loading-container p {
+  color: #555;
+  letter-spacing: normal;
+  max-width: 770px;
+  margin: 0 auto 24px;
+  line-height: 1.2;
+}
+
+.wgsa-loading-container p:last-child {
+  margin-bottom: 0;
+}
+
+.wgsa-loading-container .mdl-button {
+  color: #fff;
+  background: #673c90;
+  margin-bottom: 36px;
+}
+
+.wgsa-loading-container .mdl-button:hover,
+.wgsa-loading-container .mdl-button:focus,
+.wgsa-loading-container .mdl-button:active {
+  color: #fff;
+  background: #673c90;
+  box-shadow: 0 8px 10px 0 rgba(0,0,0,.28),0 2px 20px 0 rgba(0,0,0,.24),0 4px 8px -2px rgba(0,0,0,.4);
+}
+
+.wgsa-failed-assemblies,
+.wgsa-failed-assemblies > li {
+  list-style: none;
+  padding: 0;
+  color: #673c90;
+  font-weight: bold;
+}
+
 .wgsa-loading-container a {
   color: #673c90;
 }
 
 .wgsa-loading-container a:hover,
 .wgsa-loading-container a:focus,
-.wgsa-loading-container a:active,
-.wgsa-loading-container a:visited {
+.wgsa-loading-container a:active {
   color: #a386bd;
 }
+
+.wgsa-loading-container .mdl-spinner {
+  display: block;
+  margin: 16px auto 0;
+}
+
 
 .wgsa-loading-overlay {
   position: absolute;

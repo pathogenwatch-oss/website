@@ -2,6 +2,7 @@ import { displayTree } from '../actions/tree';
 import {
   setUnfilteredIds,
   activateFilter,
+  appendToFilter,
   resetFilter,
 } from '../actions/filter';
 
@@ -104,8 +105,9 @@ function getStandardTreeFunctions(state, dispatch) {
         return;
       }
       const { nodeIds } = event;
+
       if (nodeIds.length) {
-        dispatch(activateFilter(nodeIds));
+        dispatch(event.append ? appendToFilter(nodeIds) : activateFilter(nodeIds));
       } else {
         dispatch(resetFilter());
       }

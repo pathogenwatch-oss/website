@@ -47,11 +47,12 @@ export default React.createClass({
       contextMenu: {
         parent: document.body,
       },
+      fillCanvas: true,
     });
 
     phylocanvas.baseNodeSize = this.state.nodeSize;
     phylocanvas.textSize = this.state.labelSize;
-    phylocanvas.padding = 128;
+    phylocanvas.padding = 64;
     phylocanvas.showLabels = true;
     phylocanvas.hoverLabel = true;
     phylocanvas.branchColour = DEFAULT.COLOUR;
@@ -66,10 +67,6 @@ export default React.createClass({
     });
 
     phylocanvas.on('subtree', () => {
-      this.props.setUnfilteredIds(this.phylocanvas.leaves.map(_ => _.id));
-    });
-
-    phylocanvas.on('original-tree', () => {
       this.props.setUnfilteredIds(this.phylocanvas.leaves.map(_ => _.id));
     });
 

@@ -1,9 +1,5 @@
 /* Upload View */
 
-/* Socket */
-export const SET_SOCKET_CONNECTION = 'SET_SOCKET_CONNECTION';
-export const SET_ROOM_ID = 'SET_ROOM_ID';
-
 /* File */
 export const START_PROCESSING_FILES = 'START_PROCESSING_FILES';
 export const FINISH_PROCESSING_FILES = 'FINISH_PROCESSING_FILES';

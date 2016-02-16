@@ -2,8 +2,6 @@ import '../../../css/sonar.css';
 
 import React from 'react';
 import UploadActionCreators from '^/actions/UploadActionCreators';
-import UploadWorkspaceNavigationActionCreators from '^/actions/UploadWorkspaceNavigationActionCreators';
-
 
 const uploadButtonStyle = {
   right: '30px',
@@ -21,27 +19,26 @@ const iconStyle = {
 
 const UploadButton = React.createClass({
 
-  handleClick: function () {
-    !this.props.isUploading && UploadActionCreators.getCollectionId();
-    this.props.isUploading && UploadWorkspaceNavigationActionCreators.setViewPage('upload_progress');
+  propTypes: {
+    active: React.PropTypes.bool,
+    children: React.PropTypes.any,
   },
 
-  render: function () {
+  render() {
     return (
       <button
-        style={uploadButtonStyle} className={`${this.props.activateButton && 'wgsa-sonar-effect'} wgsa-upload-review-button mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--6dp`}
-        disabled={!this.props.activateButton}
+        style={uploadButtonStyle} className={`${this.props.active && 'wgsa-sonar-effect'} wgsa-upload-review-button mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--6dp`}
+        disabled={!this.props.active}
         onClick={this.handleClick}>
-        { this.props.isUploading &&
-          <div>
-            {this.props.uploadProgressPercentage}%
-          </div>
-          ||
           <i style={iconStyle} className="material-icons">cloud_upload</i>
-        }
       </button>
     );
-  }
+  },
+
+  handleClick() {
+    UploadActionCreators.getCollectionId();
+  },
+
 });
 
 module.exports = UploadButton;
