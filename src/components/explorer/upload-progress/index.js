@@ -6,6 +6,7 @@ import Header from './Header.react';
 import Dashboard from './Dashboard.react';
 
 import FileUploadingStore from '^/stores/FileUploadingStore';
+import { subscribeToNotification } from '^/utils/Notification';
 
 import { CGPS } from '^/defaults';
 
@@ -33,11 +34,10 @@ const UploadProgress = React.createClass({
   },
 
   componentDidUpdate(previousProps) {
-    if (this.props.progress.collectionId && !this.pusher) {
-      const pusher = new Pusher('8b8d274e51643f85f81a', { encrypted: true });
-      const channel = pusher.subscribe(this.props.progress.collectionId);
-      channel.bind('upload-progress', (data) => { this.props.updateProgress(data); });
-      this.pusher = true;
+    if (this.props.progress.collectionId && !this.notificationChannel) {
+      this.notificationChannel = subscribeToNotification(this.props.progress.collectionId,
+        'upload-progress', (data) => { this.props.updateProgress(data);
+      });
     }
   },
 
