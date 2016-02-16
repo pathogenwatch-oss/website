@@ -11,6 +11,7 @@ router.post('/species/:speciesId/download/type/:idType/format/:fileFormat',
       idType: req.params.idType,
       format: req.params.fileFormat,
       idList: req.body.idList,
+      speciesId: req.params.speciesId
     };
 
     LOGGER.info(
