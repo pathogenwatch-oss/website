@@ -14,7 +14,7 @@ describe('Util: Storage Connection', function () {
         }
       }
     };
-    config.server.couchbase.buckets[BUCKET_NAME] = {
+    config.couchbase.buckets[BUCKET_NAME] = {
       name: 'user',
       password: 'pass'
     };

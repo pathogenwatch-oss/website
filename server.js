@@ -4,7 +4,7 @@ var http = require('http');
 var path = require('path');
 var async = require('async');
 
-var appConfig = require('configuration.js');
+var config = require('configuration.js');
 var logging = require('utils/logging');
 var storageConnection = require('utils/storageConnection');
 var messageQueueConnection = require('utils/messageQueueConnection');
@@ -14,7 +14,7 @@ var app = express();
 
 var clientPath = path.join(__dirname, 'node_modules', 'wgsa_front-end', 'public');
 
-app.set('port', process.env.PORT || appConfig.server.node.port);
+app.set('port', process.env.PORT || config.node.port);
 // http://stackoverflow.com/a/19965089
 app.use(bodyParser.json({ limit: '500mb' }));
 app.use(bodyParser.urlencoded({

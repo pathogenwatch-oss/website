@@ -7,10 +7,10 @@ var appConfig = require('configuration');
 
 var LOGGER = require('utils/logging').createLogger('Message Queue');
 var CONNECTION_OPTIONS = {
-  host: appConfig.server.rabbit.ip,
-  port: appConfig.server.rabbit.port,
-  login: appConfig.server.rabbit.login,
-  password: appConfig.server.rabbit.password
+  host: appConfig.rabbit.ip,
+  port: appConfig.rabbit.port,
+  login: appConfig.rabbit.login,
+  password: appConfig.rabbit.password
 };
 var IMPLEMENTATION_OPTIONS = {
   reconnect: false,

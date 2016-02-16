@@ -1,38 +1,36 @@
 {
-	"server": {
-		"node": {
-			"port": "80"
-		},
-		"couchbase": {
-			"ip": "127.0.0.1",
-			"buckets": {
-				"main": {
-					"name": "wgsa",
-					"password": "4wgstuse"
-				},
-				"sequences": {
-					"name": "wgsa_sequences",
-					"password": "4wgstuse"
-				},
-				"cache": {
-					"name": "wgsa_cache",
-					"password": "4wgstuse"
-				}
+	"node": {
+		"port": "80"
+	},
+	"couchbase": {
+		"ip": "127.0.0.1",
+		"buckets": {
+			"main": {
+				"name": "wgsa",
+				"password": "4wgstuse"
+			},
+			"sequences": {
+				"name": "wgsa_sequences",
+				"password": "4wgstuse"
+			},
+			"cache": {
+				"name": "wgsa_cache",
+				"password": "4wgstuse"
 			}
-		},
-		"rabbit": {
-			"ip": "127.0.0.1",
-			"port": "5672",
-			"login": "wgsa",
-			"password": "wgsa"
-		},
-		"pusher": {
-			"appId": "",
-			"key": "",
-			"secret": "",
-			"encrypted": false,
-			"proxy": "http://webcache.sanger.ac.uk:3128/"
 		}
 	},
-  "downloadFileLocation" : "/nfs/wgst/files/"
+	"rabbit": {
+		"ip": "127.0.0.1",
+		"port": "5672",
+		"login": "wgsa",
+		"password": "wgsa"
+	},
+	"pusher": {
+		"appId": "",
+		"key": "",
+		"secret": "",
+		"encrypted": false,
+		"proxy": "http://webcache.sanger.ac.uk:3128/"
+	},
+  "downloadFileLocation" : "/files/"
 }
