@@ -2,6 +2,8 @@ import '../../css/drop-indicator.css';
 
 import React from 'react';
 
+import { CGPS } from '^/defaults';
+
 const style = {
   width: '100%',
   height: '100%',
@@ -108,15 +110,15 @@ export default React.createClass({
           <div className="wgsa-drop-indicator__message">
             <div className="wgsa-drop-indicator__icons">
               <span className="wgsa-file-icon">
-                <i className="material-icons">insert_drive_file</i>
+                <i className="material-icons" style={{ color: CGPS.COLOURS.PURPLE }}>insert_drive_file</i>
                 .fasta
               </span>
               <span className="wgsa-file-icon">
-                <i className="material-icons">insert_drive_file</i>
+                <i className="material-icons" style={{ color: CGPS.COLOURS.GREEN }}>insert_drive_file</i>
                 .csv
               </span>
             </div>
-            <h3 className="wgsa-drop-indicator__title">Drop to upload to WGSA</h3>
+            <h3 className="wgsa-drop-indicator__title">Drop to add to WGSA</h3>
           </div>
         </div>
         {this.props.children}
