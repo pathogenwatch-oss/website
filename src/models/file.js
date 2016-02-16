@@ -8,7 +8,7 @@ var LOGGER = require('utils/logging').createLogger('File');
 
 function getFile({ fileName, speciesId }) {
   return fs.createReadStream(
-    path.join(config.downloadFileLocation, speciesId, fileName)
+    path.join(config.downloadFileLocation, fileName)
   );
 }
 

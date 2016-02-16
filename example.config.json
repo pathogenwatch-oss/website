@@ -25,7 +25,7 @@
 			"port": "5672",
 			"login": "wgsa",
 			"password": "wgsa"
-		},
-	  "fileDirectory" : "/nfs/wgst/files/"
-	}
+		}
+	},
+        "downloadFileLocation" : "/nfs/wgst/files/"
 }

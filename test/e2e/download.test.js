@@ -2,14 +2,13 @@ var assert = require('assert');
 
 describe('Download Routes', function () {
 
-  it('GET /api/download/type/:idType/format/:fileFormat', function (done) {
-    var url = '/api/download/type/assembly/format/fasta';
+  it('GET /api/species/:speciesId/download/type/:idType/format/:fileFormat', function (done) {
+    var url = '/api/species/1280/download/type/assembly/format/fasta';
     request
       .post(url)
       .send({
-        speciesId: '1280',
         idToFilenameMap: {
-          'c3b35122-3625-4638-9091-2d73ad675e6d': 'DAVID_ASSEMBLY_1'
+          'MjZiM2NiOTEtMmQzZC00OG': 'DAVID_ASSEMBLY_1'
         }
       })
       .end(function (error, result) {
@@ -19,13 +18,13 @@ describe('Download Routes', function () {
       });
   });
 
-  it('GET /api/download/file/:fileName', function (done) {
-    var url = '/api/download/file/QKN+LXimcfJwgGmQbenLRRh1EYE=.fsa?prettyFileName=assembly.fa';
+  it.only('GET /api/species/:speciesId/download/file/:fileName', function (done) {
+    var url = '/api/species/1280/download/file/fasta_SYS2jmj7l5rSw0yVb-vlWAYkK-YBwk_?prettyFileName=assembly.fa';
     request
       .get(url)
       .end(function (error, result) {
         if (error) return done(error);
-        //console.log(result.text);
+        console.log(result.text);
         done();
       });
   });

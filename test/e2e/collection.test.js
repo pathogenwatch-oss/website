@@ -3,7 +3,7 @@ var uuid = require('node-uuid');
 
 var registerCollection = require('./features/register-collection');
 
-describe.only('Collection Routes', function () {
+describe('Collection Routes', function () {
 
   it('GET /api/species/:speciesId/collection/:collectionId', function (done) {
     // var fixture = require('./fixtures/collection.json');
