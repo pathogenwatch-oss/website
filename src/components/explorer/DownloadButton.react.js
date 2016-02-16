@@ -17,6 +17,7 @@ export default React.createClass({
     onClick: React.PropTypes.func,
     label: React.PropTypes.string,
     color: React.PropTypes.string,
+    isArchive: React.PropTypes.bool,
   },
 
   componentDidUpdate(previous) {
@@ -28,7 +29,8 @@ export default React.createClass({
 
   render() {
     const {
-      loading, error, description, link, filename, onClick, label, color,
+      loading, error, description, link, filename,
+      onClick, label, color, isArchive,
     } = this.props;
     const title =
       `${ !loading && link ? 'Download' : 'Generate' } ${description}`;
@@ -49,6 +51,7 @@ export default React.createClass({
           error={error}
           color={color}
           label={label}
+          isArchive={isArchive}
         />
         {description}
       </button>

@@ -6,7 +6,7 @@
   border-right: none;
 }
 
-.wgsa-table-header button {
+.wgsa-selectable-column-heading {
   background: none;
   color: rgba(0, 0, 0, 0.54);
   border: none;
@@ -20,17 +20,17 @@
   text-overflow: ellipsis;
 }
 
-.wgsa-table-header button:hover,
-.wgsa-table-header button:focus,
-.wgsa-table-header button:active {
+.wgsa-selectable-column-heading:hover,
+.wgsa-selectable-column-heading:focus,
+.wgsa-selectable-column-heading:active {
   outline: none;
 }
 
-.wgsa-table-header button:hover {
+.wgsa-selectable-column-heading:hover {
   cursor: pointer;
 }
 
-.wgsa-table-header--selected button {
+.wgsa-table-header--selected .wgsa-selectable-column-heading {
   border-bottom: 2px solid #673c90;
   color: #673c90;
 }
@@ -67,16 +67,20 @@
   color: #673c90;
 }
 
-.wgsa-table-cell .wgsa-download-button {
+.wgsa-table-downloads {
+  padding: 0 8px;
+}
+
+.wgsa-table-downloads .wgsa-download-button {
   padding: 0;
 }
 
-.wgsa-table-cell .wgsa-download-button:first-child {
-  padding-left: 8px;
+.wgsa-table-downloads .wgsa-download-button > span {
+  display: none;
 }
 
-.wgsa-table-cell .wgsa-download-button > span {
-  display: none;
+.wgsa-table-header .wgsa-download-button {
+  margin-bottom: -4px;
 }
 
 .wgsa-download-label {

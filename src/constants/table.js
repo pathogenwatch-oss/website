@@ -2,6 +2,7 @@ import React from 'react';
 
 import DownloadButton from '../components/explorer/DownloadButton.react';
 
+import { getArchiveDownloadProps } from '../constants/downloads';
 import { CGPS } from '^/defaults';
 
 
@@ -16,16 +17,25 @@ const collectionStyle = { color: CGPS.COLOURS.PURPLE };
 
 export const downloadColumnProps = [
   {
-    columnKey: '__fa_download',
+    columnKey: '__downloads',
     fixed: true,
-    getHeaderContent() {},
+    headerClasses: 'wgsa-table-cell--skinny',
+    getHeaderContent({ archiveDownloads }) {
+      console.log(arguments);
+      return (
+        <span className="wgsa-table-downloads" onClick={(e) => e.stopPropagation()}>
+          <DownloadButton {...archiveDownloads.fa} isArchive />
+          <DownloadButton {...archiveDownloads.gff} isArchive color={CGPS.COLOURS.GREEN} />
+        </span>
+      );
+    },
     cellClasses: 'wgsa-table-cell--skinny',
     fixedWidth: 80,
     flexGrow: 0,
     getCellContents(_, data) {
       return (
-        <span onClick={(e) => e.stopPropagation()}>
-          <DownloadButton { ...data.faDownloadProps } label=".fa"/>
+        <span className="wgsa-table-downloads" onClick={(e) => e.stopPropagation()}>
+          <DownloadButton { ...data.faDownloadProps } label=".fa" />
           <DownloadButton
             { ...data.gffDownloadProps }
             label=".gff"
@@ -33,6 +43,12 @@ export const downloadColumnProps = [
           />
         </span>
       );
+    },
+    addState({ filter, downloads }, dispatch) {
+      return {
+        ...this,
+        archiveDownloads: getArchiveDownloadProps(filter, downloads, dispatch),
+      };
     },
   },
 ];

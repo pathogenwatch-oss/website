@@ -49,8 +49,9 @@ export default React.createClass({
         className={getHeaderClassNames(isSelected, headerClasses)}
       >
         { getHeaderContent ?
-          getHeaderContent() :
-          <button onClick={event => this.handleHeaderClick(event, columnProps)}>
+          getHeaderContent(columnProps) :
+          <button className="wgsa-selectable-column-heading"
+            onClick={event => this.handleHeaderClick(event, columnProps)}>
             {formatColumnLabel(columnKey)}
           </button>
         }
