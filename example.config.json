@@ -26,6 +26,13 @@
 			"login": "wgsa",
 			"password": "wgsa"
 		},
+		"pusher": {
+			"appId": "",
+			"key": "",
+			"secret": "",
+			"encrypted": false,
+			"proxy": "http://webcache.sanger.ac.uk:3128/"
+		},
 	  "fileDirectory" : "/nfs/wgst/files/"
 	}
 }

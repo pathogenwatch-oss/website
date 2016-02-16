@@ -1,8 +1,8 @@
 const async = require('async');
-const Pusher = require('pusher');
 
 const storageConnection = require('utils/storageConnection');
 const messageQueueConnection = require('utils/messageQueueConnection');
+const notificationDispatcher = require('utils/notificationDispatcher');
 const logging = require('utils/logging');
 
 const LOGGER = logging.createLogger('upload progress');
@@ -28,14 +28,6 @@ async.parallel({
 
   const { NOTIFICATION, SERVICES } = messageQueueConnection.getExchanges();
   const mainStorage = require('services/storage')('main');
-
-  const pusher = new Pusher({
-    appId: '179140',
-    key: '8b8d274e51643f85f81a',
-    secret: '7e73d132b4093f650836',
-    encrypted: false,
-    proxy: 'http://webcache.sanger.ac.uk:3128/'
-  });
 
   function handleNotification(message, _, __, { queue }) {
     // messages from different sources can be different formats
@@ -84,7 +76,7 @@ Collection: ${collectionId}`);
 
         mainStorage.store(documentKey, doc, done);
 
-        pusher.trigger(collectionId, 'upload-progress', {
+        notificationDispatcher.publishNotification(collectionId, 'upload-progress', {
           status: doc.status,
           progress: {
             collectionId: doc.collectionId,
