@@ -73,6 +73,9 @@
 
 .wgsa-table-downloads .wgsa-download-button {
   padding: 0;
+  height: 32px;
+  display: inline-block;
+  vertical-align: middle;
 }
 
 .wgsa-table-downloads .wgsa-download-button > span {
