@@ -11,6 +11,7 @@ router.post('/species/:speciesId/download/type/:idType/format/:fileFormat',
       idType: req.params.idType,
       format: req.params.fileFormat,
       idList: req.body.idList,
+      speciesId: req.params.speciesId
     };
 
     LOGGER.info(
@@ -37,7 +38,7 @@ router.get('/species/:speciesId/download/file/:fileName',
     }
 
     res.set({
-      'Content-Disposition': `attachment; filename="${req.query.prettyFileName}"`,
+      'Content-Disposition': `attachment; filename="${req.query.prettyFileName}.zip"`,
       'Content-type': 'text/plain'
     });
 
