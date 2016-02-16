@@ -26,7 +26,7 @@ const devConfig = {
   devtool: '#eval-source-map',
   entry: [
     'webpack-hot-middleware/client',
-    './src/app',
+    './src',
   ],
   output: {
     path: __dirname,
@@ -66,7 +66,7 @@ const devConfig = {
 };
 
 const prodConfig = {
-  entry: './src/app',
+  entry: './src',
   output: {
     path: path.join(__dirname, 'public'),
     filename: 'wgsa.js',
