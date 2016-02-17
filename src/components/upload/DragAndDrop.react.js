@@ -41,14 +41,12 @@ export default React.createClass({
   },
 
   handleDragEnter(event) {
-    this.showDropIndicator();
     if (typeof this.props.onDragEnter === 'function') {
       this.props.onDragEnter(event);
     }
   },
 
   handleDragLeave(event) {
-    this.hideDropIndicator();
     if (typeof this.props.onDragLeave === 'function') {
       this.props.onDragLeave(event);
     }
@@ -57,7 +55,17 @@ export default React.createClass({
   handleDragOver(event) {
     event.preventDefault();
 
-    this.showDropIndicator();
+    if (!this.dropIndicatorTimeout) {
+      this.showDropIndicator();
+    }
+    else {
+      clearTimeout(this.dropIndicatorTimeout);
+    }
+    this.dropIndicatorTimeout = setTimeout(() => {
+      this.dropIndicatorTimeout = null;
+      this.hideDropIndicator();
+    }, 100);
+
     if (typeof this.props.onDragOver === 'function') {
       this.props.onDragOver(event);
     }
@@ -76,7 +84,6 @@ export default React.createClass({
   },
 
   handleDragEnd(event) {
-    this.hideDropIndicator();
     if (typeof this.props.onDragEnd === 'function') {
       this.props.onDragEnd(event);
     }
