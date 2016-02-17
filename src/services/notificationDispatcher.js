@@ -14,7 +14,6 @@ const pusher = new Pusher({
 LOGGER.info(`Pusher connected to app ${pusherConfig.appId} with key ${pusherConfig.key}`);
 
 function publishNotification(channel, message, data) {
-  LOGGER.info(`triggering messaage ${messaage} on channel ${collectionId}.`)
   return pusher.trigger(channel, message, data);
 }
 
