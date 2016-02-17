@@ -1,8 +1,9 @@
 const async = require('async');
 
+const notificationDispatcher = require('services/notificationDispatcher');
+
 const storageConnection = require('utils/storageConnection');
 const messageQueueConnection = require('utils/messageQueueConnection');
-const notificationDispatcher = require('utils/notificationDispatcher');
 const logging = require('utils/logging');
 
 const LOGGER = logging.createLogger('upload progress');
