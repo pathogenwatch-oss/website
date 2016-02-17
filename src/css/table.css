@@ -73,6 +73,7 @@
 
 .wgsa-table-downloads .wgsa-download-button {
   padding: 0;
+  width: 32px;
   height: 32px;
   display: inline-block;
   vertical-align: middle;

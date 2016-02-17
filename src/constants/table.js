@@ -24,8 +24,8 @@ export const downloadColumnProps = [
       console.log(arguments);
       return (
         <span className="wgsa-table-downloads" onClick={(e) => e.stopPropagation()}>
-          <DownloadButton {...archiveDownloads.fa} isArchive />
-          <DownloadButton {...archiveDownloads.gff} isArchive color={CGPS.COLOURS.GREEN} />
+          <DownloadButton {...archiveDownloads.fa} isArchive iconOnly />
+          <DownloadButton {...archiveDownloads.gff} isArchive color={CGPS.COLOURS.GREEN} iconOnly />
         </span>
       );
     },
@@ -35,11 +35,12 @@ export const downloadColumnProps = [
     getCellContents(_, data) {
       return (
         <span className="wgsa-table-downloads" onClick={(e) => e.stopPropagation()}>
-          <DownloadButton { ...data.faDownloadProps } label=".fa" />
+          <DownloadButton { ...data.faDownloadProps } label=".fa" iconOnly />
           <DownloadButton
             { ...data.gffDownloadProps }
             label=".gff"
             color={CGPS.COLOURS.GREEN}
+            iconOnly
           />
         </span>
       );
