@@ -65,6 +65,10 @@ var AssemblyAnalysis = React.createClass({
         <div className="mdl-cell mdl-cell--6-col">
           <AssemblyAnalysisItem label="Non-ATCG" value={assembly.metrics.totalNumberOfNsInDnaStrings} />
         </div>
+
+        <div className="mdl-cell mdl-cell--6-col">
+          <AssemblyAnalysisItem label="GC Content" value={`${assembly.metrics.gcContent}%`} />
+        </div>
       </div>
     );
   }

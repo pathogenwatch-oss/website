@@ -80,6 +80,14 @@ export const systemColumnProps = [
     },
     getCellContents,
   },
+  { columnKey: '__GC_Content',
+    valueGetter({ metadata }) {
+      return metadata.metrics ?
+        `${metadata.metrics.gcContent}%` :
+        null;
+    },
+    getCellContents,
+  },
   { columnKey: '__pmid',
     valueGetter({ metadata }) {
       return metadata.pmid;
