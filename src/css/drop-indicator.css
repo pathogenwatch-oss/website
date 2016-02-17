@@ -45,6 +45,7 @@
   right: 0;
 }
 
-.wgsa-drag-and-drop.is-dragover p {
+.wgsa-drag-and-drop.is-dragover header *,
+.wgsa-drag-and-drop.is-dragover main * {
   pointer-events: none;
 }

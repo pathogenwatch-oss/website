@@ -29,7 +29,11 @@ export default React.createClass({
   },
 
   componentDidMount() {
-    $(window).draghover().on({
+    $('body').on('drop', (event) => {
+      event.preventDefault();
+      this.handleDrop(event);
+    });
+    this.draghover = $(window).draghover().on({
       draghoverstart: (e, event, winssb) => {
         let hasFiles = false;
         if (event && event.originalEvent && event.originalEvent.dataTransfer
@@ -50,8 +54,13 @@ export default React.createClass({
       },
       draghoverend: () => {
         this.hideDropIndicator();
-      }
+      },
     });
+  },
+
+  componentWillUnmount() {
+    $('body').off('drop');
+    this.draghover.trigger('draghoverunbind');
   },
 
   handleDragStart(event) {
@@ -81,17 +90,6 @@ export default React.createClass({
   handleDragOver(event) {
     event.preventDefault();
 
-    if (!this.dropIndicatorTimeout) {
-      this.showDropIndicator();
-    }
-    else {
-      clearTimeout(this.dropIndicatorTimeout);
-    }
-    this.dropIndicatorTimeout = setTimeout(() => {
-      this.dropIndicatorTimeout = null;
-      this.hideDropIndicator();
-    }, 100);
-
     if (typeof this.props.onDragOver === 'function') {
       this.props.onDragOver(event);
     }
@@ -99,10 +97,9 @@ export default React.createClass({
 
   handleDrop(event) {
     event.preventDefault();
-    event.stopPropagation();
 
     this.hideDropIndicator();
-    if (event.dataTransfer.files.length > 0) {
+    if (event.dataTransfer && event.dataTransfer.files.length > 0) {
       if (typeof this.props.onDrop === 'function') {
         this.props.onDrop(event.dataTransfer);
       }

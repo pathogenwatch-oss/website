@@ -3,6 +3,9 @@ $.fn.draghover = function(options) {
   return this.each(function() {
     var collection = $();
     var self = $(this);
+    self.on('draghoverunbind', function () {
+      self.off('dragenter dragleave drop draghoverunbind');
+    });
     self.on("dragenter", function(event) {
       if (collection.size() === 0) {
         self.trigger("draghoverstart", event);
