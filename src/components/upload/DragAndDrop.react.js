@@ -1,7 +1,7 @@
 import '../../css/drop-indicator.css';
 
 import React from 'react';
-
+import Draghover from '^/../public/assets/jquery-ui/jquery.draghover.js';
 import { CGPS } from '^/defaults';
 
 const style = {
@@ -26,6 +26,32 @@ export default React.createClass({
     return {
       indicatorVisible: false,
     };
+  },
+
+  componentDidMount() {
+    $(window).draghover().on({
+      draghoverstart: (e, event, winssb) => {
+        let hasFiles = false;
+        if (event && event.originalEvent && event.originalEvent.dataTransfer
+          && event.originalEvent.dataTransfer.types) {
+          for (const type of event.originalEvent.dataTransfer.types) {
+            if (type.toLowerCase() === 'files') {
+              hasFiles = true;
+              break;
+            }
+          }
+        }
+        if (!hasFiles) {
+          hasFiles = !!winssb;
+        }
+        if (hasFiles) {
+          this.showDropIndicator();
+        }
+      },
+      draghoverend: () => {
+        this.hideDropIndicator();
+      }
+    });
   },
 
   handleDragStart(event) {
@@ -104,6 +130,7 @@ export default React.createClass({
   render() {
     return (
       <div
+        className={`wgsa-drag-and-drop ${this.state.indicatorVisible ? 'is-dragover' : ''}`}
         onDragStart={this.handleDragStart}
         onDrag={this.handleDrop}
         onDragEnter={this.handleDragEnter}
@@ -113,7 +140,7 @@ export default React.createClass({
         onDragEnd={this.handleDragEnd}
         style={style}
       >
-        <div className={`wgsa-drop-indicator ${this.state.indicatorVisible ? 'is-dragover' : ''}`}>
+        <div className="wgsa-drop-indicator">
           <div className="wgsa-drop-indicator__message">
             <div className="wgsa-drop-indicator__icons">
               <span className="wgsa-file-icon">

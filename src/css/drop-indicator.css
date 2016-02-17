@@ -17,7 +17,7 @@
   justify-content: center;
 }
 
-.wgsa-drop-indicator.is-dragover {
+.is-dragover .wgsa-drop-indicator{
     background-color: rgba(0,0,0,.5);
     visibility: visible;
     opacity: 1;
@@ -43,4 +43,8 @@
   top: -48px;
   left: 0;
   right: 0;
+}
+
+.wgsa-drag-and-drop.is-dragover p {
+  pointer-events: none;
 }
