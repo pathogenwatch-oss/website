@@ -1,5 +1,7 @@
-import userConfig from '../config.json';
 
-const config = process.env.NODE_ENV === 'production' ? {} : userConfig;
+const config =
+  process.env.NODE_ENV === 'production' ?
+    require('../config.json') :
+    require('../dev.config.json');
 
 export default config;
