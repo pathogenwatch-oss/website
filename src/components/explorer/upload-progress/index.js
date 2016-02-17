@@ -6,7 +6,7 @@ import Header from './Header.react';
 import Dashboard from './Dashboard.react';
 
 import FileUploadingStore from '^/stores/FileUploadingStore';
-import { subscribeToNotification } from '^/utils/Notification';
+import { subscribe } from '^/utils/Notification';
 
 import { CGPS } from '^/defaults';
 
@@ -35,7 +35,7 @@ const UploadProgress = React.createClass({
 
   componentDidUpdate(previousProps) {
     if (this.props.progress.collectionId && !this.notificationChannel) {
-      this.notificationChannel = subscribeToNotification(this.props.progress.collectionId,
+      this.notificationChannel = subscribe(this.props.progress.collectionId,
         'upload-progress', (data) => { this.props.updateProgress(data);
       });
     }
