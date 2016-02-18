@@ -12,7 +12,7 @@ const { UPLOAD_PROGRESS } = require('utils/documentKeys');
 const QUEUE_OPTIONS = { durable: true, autoDelete: false };
 
 const EXPECTED_ASSEMBLY_RESULTS =
-  require('models/assembly').ASSEMBLY_ANALYSES.concat([ 'GSL' ]);
+  require('models/assembly').ASSEMBLY_ANALYSES.concat([ 'UPLOAD', 'GSL' ]);
 
 const EXPECTED_COLLECTION_RESULTS =
   [ 'PHYLO_MATRIX', 'SUBMATRIX', 'CORE_MUTANT_TREE' ];
