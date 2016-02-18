@@ -2,8 +2,6 @@ const async = require('async');
 
 const notificationDispatcher = require('services/notificationDispatcher');
 
-const storageConnection = require('utils/storageConnection');
-const messageQueueConnection = require('utils/messageQueueConnection');
 const logging = require('utils/logging');
 
 const LOGGER = logging.createLogger('upload progress');
@@ -36,15 +34,12 @@ function isCollectionFatal({ collectionSize, results, errors }) {
   return errors.some(({ taskType }) => taskType === 'UPLOAD');
 }
 
-async.parallel({
-  storage: storageConnection.connect,
-  mqConnection: messageQueueConnection.connect
-}, function (connectionError, { mqConnection }) {
+module.exports = function (connectionError, { mqConnection }) {
   if (connectionError) {
     return LOGGER.error(connectionError);
   }
 
-  const { NOTIFICATION, SERVICES } = messageQueueConnection.getExchanges();
+  const { NOTIFICATION, SERVICES } = mqConnection.getExchanges();
   const mainStorage = require('services/storage')('main');
 
   function handleNotification(message, _, __, { queue }) {
@@ -170,4 +165,4 @@ Collection: ${collectionId}`);
       );
     });
   });
-});
+};
