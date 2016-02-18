@@ -35,6 +35,7 @@
     "fixed-data-table": "^0.6.0",
     "flux": "^2.1.1",
     "history": "^1.13.0",
+    "jquery-draghover": "github:imperialcollegelondon/jquery-draghover",
     "json-loader": "^0.5.3",
     "keymirror": "^0.1.1",
     "moment": "^2.10.3",

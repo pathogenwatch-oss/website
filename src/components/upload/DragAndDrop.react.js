@@ -1,5 +1,5 @@
 import '../../css/drop-indicator.css';
-import '^/../public/assets/jquery-ui/jquery.draghover.js';
+import 'jquery-draghover';
 
 import React from 'react';
 
