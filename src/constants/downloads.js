@@ -1,6 +1,9 @@
 import { requestDownload } from '../actions/downloads';
 
+import Species from '../species';
+
 export function createDownloadKey(id) {
+  if (!id) return null;
   return typeof id === 'string' ? id : id.join('|');
 }
 
@@ -30,4 +33,12 @@ export function getArchiveDownloadProps(filter, { fasta, gff }, dispatch) {
     fa: createDownloadProps({ type: 'fasta', ...fasta, ids }, dispatch),
     gff: createDownloadProps({ type: 'wgsa_gff', ...gff, ids }, dispatch),
   };
+}
+
+export function createFilename(formatName, collectionId, assemblyName) {
+  return (
+    `wgsa_${Species.nickname}_` +
+    `${assemblyName ? formatName : collectionId}_` +
+    `${assemblyName ? assemblyName : formatName}`
+  );
 }

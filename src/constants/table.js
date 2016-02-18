@@ -21,7 +21,6 @@ export const downloadColumnProps = [
     fixed: true,
     headerClasses: 'wgsa-table-cell--skinny',
     getHeaderContent({ archiveDownloads }) {
-      console.log(arguments);
       return (
         <span className="wgsa-table-downloads" onClick={(e) => e.stopPropagation()}>
           <DownloadButton {...archiveDownloads.fa} isArchive iconOnly />
