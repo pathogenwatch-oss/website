@@ -2,6 +2,7 @@ const async = require('async');
 
 const notificationDispatcher = require('services/notificationDispatcher');
 
+const messageQueueUtil = require('utils/messageQueueConnection');
 const logging = require('utils/logging');
 
 const LOGGER = logging.createLogger('upload progress');
@@ -10,7 +11,7 @@ const { UPLOAD_PROGRESS } = require('utils/documentKeys');
 const QUEUE_OPTIONS = { durable: true, autoDelete: false };
 
 const EXPECTED_ASSEMBLY_RESULTS =
-  require('models/assembly').ASSEMBLY_ANALYSES.concat([ 'UPLOAD', 'GSL' ]);
+  require('models/assembly').ASSEMBLY_ANALYSES.concat([ 'UPLOAD', /*'GSL'*/ ]);
 
 const EXPECTED_COLLECTION_RESULTS =
   [ 'PHYLO_MATRIX', 'SUBMATRIX', 'CORE_MUTANT_TREE' ];
@@ -21,8 +22,8 @@ const EXPECTED_RESULTS = new Set(
 
 function calculateExpectedResults({ collectionSize }) {
   return (
-    collectionSize * EXPECTED_ASSEMBLY_RESULTS.size +
-    EXPECTED_COLLECTION_RESULTS.size
+    collectionSize * EXPECTED_ASSEMBLY_RESULTS.length +
+    EXPECTED_COLLECTION_RESULTS.length
   );
 }
 
@@ -34,12 +35,8 @@ function isCollectionFatal({ collectionSize, results, errors }) {
   return errors.some(({ taskType }) => taskType === 'UPLOAD');
 }
 
-module.exports = function (connectionError, { mqConnection }) {
-  if (connectionError) {
-    return LOGGER.error(connectionError);
-  }
-
-  const { NOTIFICATION, SERVICES } = mqConnection.getExchanges();
+module.exports = function ({ mqConnection }) {
+  const { NOTIFICATION, SERVICES } = messageQueueUtil.getExchanges();
   const mainStorage = require('services/storage')('main');
 
   function handleNotification(message, _, __, { queue }) {

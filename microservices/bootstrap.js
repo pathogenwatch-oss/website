@@ -13,5 +13,10 @@ if (!serviceName) {
   async.parallel({
     storage: storageConnection.connect,
     mqConnection: messageQueueConnection.connect
-  }, require(`./${serviceName}`));
+  }, function (error, connections) {
+    if (error) {
+      return LOGGER.error(error);
+    }
+    require(`./${serviceName}`)(connections);
+  });
 }
