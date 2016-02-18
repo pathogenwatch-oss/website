@@ -1,4 +1,5 @@
 import React from 'react';
+import VirtualList from 'react-virtual-list';
 
 import AssemblyListItem from '../navigation/AssemblyListItem.react';
 
@@ -30,7 +31,7 @@ const AssemblyList = React.createClass({
     });
   },
 
-  getListOptionElements() {
+  getListItems() {
     const assemblies = UploadStore.getAssemblies();
     return Object.keys(assemblies).sort((a, b) => {
       if (assemblies[a].hasErrors) {
@@ -40,25 +41,36 @@ const AssemblyList = React.createClass({
       } else {
         return 0;
       }
-    }).map((assemblyName) => {
-      const { hasErrors } = assemblies[assemblyName];
-      return (
-        <AssemblyListItem
-          key={assemblyName}
-          assemblyName={assemblyName}
-          isValid={!hasErrors}
-          selected={assemblyName === this.state.selectedOption && this.state.isItemSelected}
-          isUploading={this.state.isUploading} />
-      );
-    });
+    }).map(assemblyName => assemblies[assemblyName]);
+  },
+
+  renderItem({ fasta, hasErrors }) {
+    const assemblyName = fasta.name;
+    return (
+      <AssemblyListItem
+        key={assemblyName}
+        assemblyName={assemblyName}
+        isValid={!hasErrors}
+        selected={assemblyName === this.state.selectedOption && this.state.isItemSelected}
+        isUploading={this.state.isUploading}
+      />
+    );
   },
 
   render() {
-    const listOptionElements = this.getListOptionElements();
+    const listItems = this.getListItems();
     return (
-      <ul className="assemblyListContainer">
-        {listOptionElements}
-      </ul>
+      <div className="wgsa-assembly-list-wrapper" ref="container">
+        <VirtualList
+          tagName="ul"
+          className="assemblyListContainer"
+          items={listItems}
+          renderItem={this.renderItem}
+          itemHeight={39}
+          container={this.refs.container}
+          itemBuffer={5}
+        />
+      </div>
     );
   },
 

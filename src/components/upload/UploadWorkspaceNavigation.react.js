@@ -16,9 +16,7 @@ export default React.createClass({
         <h2 className="uploadWorkspaceNavigationTitle">
           <span className="mdl-badge" style={titleStyle} data-badge={this.props.totalAssemblies}>Assemblies</span>
         </h2>
-        <div className="wgsa-assembly-list-wrapper">
-          <AssemblyList />
-        </div>
+        <AssemblyList />
         { this.props.children && this.props.children }
       </aside>
     );
