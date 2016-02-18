@@ -44,10 +44,12 @@ export const downloadColumnProps = [
         </span>
       );
     },
-    addState({ filter, downloads }, dispatch) {
+    addState({ collection, filter, downloads }, dispatch) {
       return {
         ...this,
-        archiveDownloads: getArchiveDownloadProps(filter, downloads, dispatch),
+        archiveDownloads: getArchiveDownloadProps(
+          { collection, filter }, downloads, dispatch
+        ),
       };
     },
   },

@@ -65,7 +65,7 @@ function getTableData(assemblies, filter) {
 }
 
 function mapStateToProps(state) {
-  const { entities, display, tables, filter, downloads } = state;
+  const { entities, collection, display, tables, filter, downloads } = state;
 
   const table = tables[display.table];
   const { headerClick, columns, ...tableProps } = table;
@@ -77,6 +77,7 @@ function mapStateToProps(state) {
     headerClick: headerClick.bind(table),
     data,
     filter,
+    collection,
     downloads: {
       fasta: downloads.files.fasta,
       gff: downloads.files.wgsa_gff,

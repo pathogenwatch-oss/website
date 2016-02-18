@@ -7,38 +7,61 @@ export function createDownloadKey(id) {
   return typeof id === 'string' ? id : id.join('|');
 }
 
-function createDownloadProps({ type, description, linksById = {}, ids }, dispatch) {
-  const downloadKey = createDownloadKey(ids);
-  return {
-    description,
-    ...(linksById[downloadKey] || []),
-    onClick: () => dispatch(requestDownload(type, null, ids)),
-  };
-}
-
-export function addDownloadProps(row, { fasta, gff }, dispatch) {
-  const id = row.metadata.assemblyId;
-  return {
-    ...row,
-    faDownloadProps:
-      createDownloadProps({ type: 'fasta', ...fasta, ids: [ id ] }, dispatch),
-    gffDownloadProps:
-      createDownloadProps({ type: 'wgsa_gff', ...gff, ids: [ id ] }, dispatch),
-  };
-}
-
-export function getArchiveDownloadProps(filter, { fasta, gff }, dispatch) {
-  const ids = Array.from(filter.active ? filter.ids : filter.unfilteredIds);
-  return {
-    fa: createDownloadProps({ type: 'fasta', ...fasta, ids }, dispatch),
-    gff: createDownloadProps({ type: 'wgsa_gff', ...gff, ids }, dispatch),
-  };
-}
-
 export function createFilename(formatName, collectionId, assemblyName) {
   return (
     `wgsa_${Species.nickname}_` +
     `${assemblyName ? formatName : collectionId}_` +
     `${assemblyName ? assemblyName : formatName}`
   );
+}
+
+function createDownloadProps(args, dispatch) {
+  const { format, description, filename, linksById = {}, idList } = args;
+  const downloadKey = createDownloadKey(idList);
+  return {
+    description,
+    ...(linksById[downloadKey] || []),
+    onClick: () => dispatch(requestDownload({ format, idList, filename })),
+  };
+}
+
+export function addDownloadProps(row, { fasta, gff }, dispatch) {
+  const id = row.metadata.assemblyId;
+  const assemblyName = row.metadata.assemblyName;
+  return {
+    ...row,
+    faDownloadProps:
+      createDownloadProps({
+        format: 'fasta',
+        ...fasta,
+        filename: createFilename(fasta.filename, null, assemblyName),
+        idList: [ id ],
+      }, dispatch),
+    gffDownloadProps:
+      createDownloadProps({
+        format: 'wgsa_gff',
+        ...gff,
+        filename: createFilename(gff.filename, null, assemblyName),
+        idList: [ id ],
+      }, dispatch),
+  };
+}
+
+export function getArchiveDownloadProps(state, { fasta, gff }, dispatch) {
+  const { filter, collection } = state;
+  const idList = Array.from(filter.active ? filter.ids : filter.unfilteredIds);
+  return {
+    fa: createDownloadProps({
+      format: 'fasta',
+      ...fasta,
+      idList,
+      filename: createFilename(fasta.filename, collection.id),
+    }, dispatch),
+    gff: createDownloadProps({
+      format: 'wgsa_gff',
+      ...gff,
+      idList,
+      filename: createFilename(gff.filename, collection.id),
+    }, dispatch),
+  };
 }
