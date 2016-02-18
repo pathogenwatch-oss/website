@@ -45,8 +45,11 @@ const fileInputStyle = {
 
 export default React.createClass({
 
+  conponentName: 'UploadIndex',
+
   contextTypes: {
     history: React.PropTypes.object,
+    router: React.PropTypes.object,
   },
 
   getInitialState() {
@@ -67,12 +70,25 @@ export default React.createClass({
     UploadWorkspaceNavigationStore.addChangeListener(this.handleUploadWorkspaceNavigationStoreChange);
     UploadStore.addChangeListener(this.handleUploadStoreChange);
     this.menuButton = document.querySelector('.mdl-layout__drawer-button');
+
+    this.context.router.setRouteLeaveHook(this.props.route, this.routerWillLeave);
+    this.bindHashEvents();
   },
 
   componentWillUnmount() {
     FileUploadingStore.removeChangeListener(this.handleFileUploadingStoreChange);
     UploadWorkspaceNavigationStore.removeChangeListener(this.handleUploadWorkspaceNavigationStoreChange);
     UploadStore.removeChangeListener(this.handleUploadStoreChange);
+    window.onhashchange = null;
+    window.onbeforeunload = null;
+  },
+
+  routerWillLeave(nextLocation) {
+    // return false to prevent a transition w/o prompting the user,
+    // or return a string to allow the user to decide:
+    if (UploadStore.getAssembliesCount() > 0) {
+      return 'By leaving this page, your collection will be lost. Continue?';
+    }
   },
 
   hideSidebar() {
@@ -156,6 +172,50 @@ export default React.createClass({
     this.hideSidebar();
   },
 
+  bindHashEvents() {
+    if (window.location.hash) {
+      window.location.hash = '';
+    }
+    window.onhashchange = this.handleHashChange;
+    window.onbeforeunload = this.handleBeforeUnload;
+  },
+
+  handleHashChange(event) {
+    console.log(`You got hash: ${window.location.hash}`);
+    const hash = window.location.hash;
+    if (!hash || hash === '' || hash === '#') {
+      this.handleOverviewClick();
+    } else {
+      const re = /#assembly-(.+)/;
+      const match = re.exec(hash);
+      if (match && match.length === 2) {
+        const assemblyName = match[1];
+        UploadWorkspaceNavigationActionCreators.navigateToAssembly(assemblyName);
+        this.scrollToAssemblyLink(assemblyName);
+      }
+    }
+  },
+
+  scrollToAssemblyLink(assemblyName, speed = 'fast') {
+    const $link = $(`.assemblyListItem [href="#assembly-${assemblyName}"]`);
+    const linkOffset = parseInt($link.offset().top);
+    const $container = $('.wgsa-assembly-list-wrapper');
+    const containerOffset = parseInt($container.offset().top);
+    const scrollTop = $container.scrollTop();
+    const height = $container.height();
+    if (linkOffset < containerOffset) {
+      $container.animate({ scrollTop: linkOffset - containerOffset + scrollTop }, speed);
+    } else if (linkOffset > containerOffset + height - 40) {
+      console.log({ linkOffset, containerOffset, scrollTop, height });
+      console.log(linkOffset - containerOffset + scrollTop, height + 40);
+      $container.animate({ scrollTop: linkOffset - containerOffset + scrollTop - height + 40 }, speed);
+    }
+  },
+
+  handleBeforeUnload(event) {
+    return 'Do you realy want to uload this page? :-(';
+  },
+
   render() {
     let subtitle = '';
     const assembly = UploadStore.getAssembly(this.state.assemblyName);
@@ -174,18 +234,12 @@ export default React.createClass({
           <UploadReviewHeader subtitle={subtitle} activateUploadButton={this.state.readyToUpload} />
 
           <UploadWorkspaceNavigation assembliesUploaded={assembly ? true : false} totalAssemblies={this.state.numberOfAssemblies}>
-            <footer className="wgsa-upload-navigation__footer mdl-shadow--4dp">
-              <button type="button" title="Overview"
-                className="wgsa-upload-review-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
-                onClick={this.handleOverviewClick}>
-                Overview
-              </button>
-              <button type="button" title="Add files"
-                className="wgsa-upload-review-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
-                onClick={this.handleClick}>
-                Add Files
-              </button>
-            </footer>
+            <button type="button" title="Add files"
+              className="wgsa-upload-review-button wgsa-add-files-button mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect mdl-shadow--4dp"
+              onClick={this.handleClick}
+            >
+              <i className="material-icons">add</i>
+            </button>
           </UploadWorkspaceNavigation>
 
           <main className="mdl-layout__content" style={layoutContentStyle}>

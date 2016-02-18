@@ -369,7 +369,14 @@
   line-height: 64px;
   margin: 40px 0px 0px 0px;
   text-align: center;
-  border-bottom: 1px solid rgba(0, 0, 0, .12);
+  color: inherit;
+  font-family: "Roboto","Helvetica","Arial",sans-serif;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  text-decoration: none;
+}
+
+.uploadWorkspaceNavigationTitle:hover {
+  text-decoration: underline;
 }
 
 .uploadWorkspaceNavigationTitle > .mdl-badge:after {
@@ -404,6 +411,16 @@
   background: #fff;
 }
 
+.wgsa-add-files-button {
+  position: absolute;
+  display: block;
+  right: 0;
+  bottom: 0;
+  margin-right: 24px;
+  margin-bottom: 16px;
+  z-index: 900;
+}
+
 .wgsa-assembly-list-wrapper {
   position: relative;
   flex-grow: 1;
@@ -419,6 +436,10 @@
   right: 0;
   padding: 0px;
   margin: 0px;
+}
+
+.assemblyListContainer li:last-child {
+  margin-bottom: 72px;
 }
 
 .assemblyListItem {

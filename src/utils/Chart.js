@@ -1,6 +1,6 @@
 import d3 from 'd3';
 
-import UploadWorkspaceNavigationActionCreators from '../actions/UploadWorkspaceNavigationActionCreators.js';
+import { navigateToAssembly } from '^/utils/Navigation';
 
 const tooltip = d3.select('body')
   .append('div')
@@ -112,7 +112,7 @@ function drawN50Chart(chartData, assemblyN50, appendToClass) {
       return tooltip
         .style('top', (d3.event.pageY - 10) + 'px')
         .style('left', (d3.event.pageX + 10) + 'px')
-        .style('display', 'block')
+        //.style('display', 'block')
         .html('Sum: <b>' + datum + '</b>');
     })
     .on('mousemove', function () {
@@ -178,7 +178,7 @@ function drawN50Chart(chartData, assemblyN50, appendToClass) {
       return tooltip
         .style('top', (d3.event.pageY - 10) + 'px')
         .style('left', (d3.event.pageX + 10) + 'px')
-        .style('display', 'block')
+        //.style('display', 'block')
         .html('Sum: <b>' + datum.sum + '</b>' );
     })
     .on('mousemove', function () {
@@ -225,6 +225,8 @@ function drawN50Chart(chartData, assemblyN50, appendToClass) {
   // N50 path
   n50Group.append('path').attr('d', d50Line(d50LinesData));
   // console.log(assemblyN50)
+
+  tooltip.style('display', 'none');
 }
 
 function drawOverviewChart(data, appendToClass, xLabel = '', yLabel = '') {
@@ -344,8 +346,11 @@ function drawOverviewChart(data, appendToClass, xLabel = '', yLabel = '') {
       return tooltip.style('display', 'none');
     })
     .on('click', function (datum, index) {
-      UploadWorkspaceNavigationActionCreators.navigateToAssembly(chartXAxis[index]); return tooltip.style('display', 'none');
+      navigateToAssembly(chartXAxis[index]);
+      return tooltip.style('display', 'none');
     });
+
+  tooltip.style('display', 'none');
 }
 
 export default {
