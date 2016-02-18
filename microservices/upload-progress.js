@@ -11,6 +11,23 @@ const { UPLOAD_PROGRESS } = require('utils/documentKeys');
 
 const QUEUE_OPTIONS = { durable: true, autoDelete: false };
 
+const EXPECTED_ASSEMBLY_RESULTS =
+  require('models/assembly').ASSEMBLY_ANALYSES.concat([ 'GSL' ]);
+
+const EXPECTED_COLLECTION_RESULTS =
+  [ 'PHYLO_MATRIX', 'SUBMATRIX', 'CORE_MUTANT_TREE' ];
+
+const EXPECTED_RESULTS = new Set(
+  EXPECTED_ASSEMBLY_RESULTS.concat(EXPECTED_COLLECTION_RESULTS)
+);
+
+function calculateExpectedResults({ collectionSize }) {
+  return (
+    collectionSize * EXPECTED_ASSEMBLY_RESULTS.size +
+    EXPECTED_COLLECTION_RESULTS.size
+  );
+}
+
 function isCollectionFatal({ collectionSize, results, errors }) {
   // allows error page to show all failed assemblies
   if (results.UPLOAD < collectionSize) {
@@ -47,11 +64,16 @@ Status: ${taskStatus}
 Assembly Id: ${assemblyIdString}
 Collection: ${collectionId}`);
 
+    if (!EXPECTED_RESULTS.has(taskType)) {
+      LOGGER.warn(`${taskType} is not an expected result, discarding.`);
+      return;
+    }
+
     async.waterfall([
       done => mainStorage.retrieve(documentKey, done),
       function (doc, cas, done) {
         const { assemblyIdToNameMap } = doc;
-        if (taskStatus === 'FAILURE') {
+        if (taskStatus !== 'SUCCESS') {
           doc.errors.push({
             assemblyName: assemblyIdToNameMap[assemblyIdString],
             taskType
@@ -127,6 +149,7 @@ Collection: ${collectionId}`);
         type: 'UP',
         documentKey,
         status: 'PROCESSING',
+        expectedResults: calculateExpectedResults(message),
         receivedResults: 0,
         results: {},
         errors: []
