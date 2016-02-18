@@ -35,23 +35,8 @@ export default React.createClass({
       this.handleDrop(event.originalEvent);
     });
     this.draghover = $(window).draghover().on({
-      draghoverstart: (e, event, winssb) => {
-        let hasFiles = false;
-        if (event && event.originalEvent && event.originalEvent.dataTransfer
-          && event.originalEvent.dataTransfer.types) {
-          for (const type of event.originalEvent.dataTransfer.types) {
-            if (type.toLowerCase() === 'files') {
-              hasFiles = true;
-              break;
-            }
-          }
-        }
-        if (!hasFiles) {
-          hasFiles = !!winssb;
-        }
-        if (hasFiles) {
-          this.showDropIndicator();
-        }
+      draghoverstart: () => {
+        this.showDropIndicator();
       },
       draghoverend: () => {
         this.hideDropIndicator();
