@@ -9,12 +9,24 @@ export const FASTA_FILE_EXTENSIONS = [
 ];
 
 function parseFiles(files, callback) {
+  const allAssemblies = UploadStore.getAssemblies();
+  const allRawFiles = {};
   const worker = new Worker;
+  let i = 0;
   worker.onmessage = function(event) {
     const { error, rawFiles, assemblies } = event.data;
-    callback(error, rawFiles, assemblies);
+    for (const key in rawFiles) {
+      allRawFiles[key] = rawFiles[key];
+    }
+    for (const key in assemblies) {
+      allAssemblies[key] = assemblies[key];
+    }
+    i++;
+    if (true || i < 10 || i % 10 === 0 || i === files.length) {
+      callback(error, allRawFiles, allAssemblies);
+    }
   }
-  worker.postMessage(files);
+  worker.postMessage({ files });
 }
 
 export default {
