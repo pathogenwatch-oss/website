@@ -1,41 +1,13 @@
-.wgsa-menu {
+.wgsa-downloads-menu {
   position: relative;
-}
-
-.wgsa-menu__list {
-  position: absolute;
-  right: 0;
-  top: calc(100% + 8px);
   background-color: #fff;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  display: none;
-}
-
-.wgsa-menu__list::after {
-  border-color: transparent transparent #FFF;
-  border-style: dashed dashed solid;
-  border-width: 0px 8.5px 8.5px;
-  display: block;
-  position: absolute;
-  right: 25%;
-  top: -8.5px;
-  z-index: 1;
-  height: 0px;
-  width: 0px;
-  content: '';
-}
-
-.wgsa-menu--is-open .wgsa-menu__list {
-  display: block;
+  padding: 16px;
 }
 
 .wgsa-submenu {
   list-style: none;
   margin: 0;
   padding: 8px 0;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .wgsa-menu > li:last-child > .wgsa-submenu {
