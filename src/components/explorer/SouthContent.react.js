@@ -80,7 +80,7 @@ function mapStateToProps(state) {
     collection,
     downloads: {
       fasta: downloads.files.fasta,
-      gff: downloads.files.wgsa_gff,
+      wgsa_gff: downloads.files.wgsa_gff,
     },
   };
 }
@@ -90,13 +90,13 @@ function mapStateToColumn(column, state, dispatch) {
 }
 
 function mergeProps(state, { dispatch }, props) {
-  const { downloads, data, columns, ...otherState } = state;
+  const { data, columns, ...otherState } = state;
   return {
     ...props,
     ...otherState,
     dispatch,
     columns: columns.map(column => mapStateToColumn(column, state, dispatch)),
-    data: data.map(row => addDownloadProps(row, downloads, dispatch)),
+    data: data.map(row => addDownloadProps(row, state, dispatch)),
   };
 }
 

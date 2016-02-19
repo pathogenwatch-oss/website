@@ -59,10 +59,10 @@ function mergeProps(state, { dispatch }) {
     menuButtonOnClick: () => dispatch(setMenuActive(!menuOpen)),
     files:
       Object.keys(files).
-        filter(format => !files[format].assembly).
+        filter(format => !files[format].notMenu).
         map(format => {
-          const { collection, linksById, filename, ...props } = files[format];
-          const idList = collection ? [ collectionId ] : assemblyIds;
+          const { ignoresFilter, linksById, filename, ...props } = files[format];
+          const idList = ignoresFilter ? [ collectionId ] : assemblyIds;
           const linkProps = linksById ? linksById[createDownloadKey(idList)] : {};
           return {
             format,
@@ -71,7 +71,7 @@ function mergeProps(state, { dispatch }) {
             onClick: () => dispatch(
               requestDownload({
                 format,
-                collection,
+                ignoresFilter,
                 idList,
                 filename: createFilename(filename, collectionId),
               })

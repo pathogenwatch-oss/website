@@ -15,8 +15,8 @@ export function setMenuActive(active) {
 
 export const REQUEST_DOWNLOAD = 'REQUEST_DOWNLOAD';
 
-export function requestDownload({ format, collection, idList, filename }) {
-  const idType = collection ? 'collection' : 'assembly';
+export function requestDownload({ format, ignoresFilter, idList, filename }) {
+  const idType = ignoresFilter ? 'collection' : 'assembly';
   return {
     type: REQUEST_DOWNLOAD,
     format,

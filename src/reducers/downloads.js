@@ -7,10 +7,6 @@ import { API_ROOT } from '../utils/Api';
 import Species from '../species';
 
 const initialState = {
-  extended_kernel_fasta: {
-    description: 'Core Matches (.fa)',
-    filename: 'core_matches',
-  },
   concatenated_core_genes_collection: {
     description: 'Concatenated Core Genes (.fa)',
     filename: 'concatenated_core_genes',
@@ -26,22 +22,22 @@ const initialState = {
   score_matrix: {
     description: 'Score Matrix (.csv)',
     filename: 'score_matrix',
-    collection: true,
+    ignoresFilter: true,
   },
   differences_matrix: {
     description: 'Difference Matrix (.csv)',
     filename: 'differences_matrix',
-    collection: true,
+    ignoresFilter: true,
   },
   fasta: {
     description: 'Assembly (.fa)',
     filename: 'fasta',
-    assembly: true,
+    notMenu: true,
   },
   wgsa_gff: {
     description: 'WGSA Results (.gff)',
-    filename: 'results',
-    assembly: true,
+    filename: 'annotations',
+    notMenu: true,
   },
 };
 
