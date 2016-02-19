@@ -1,6 +1,6 @@
 {
   "name": "wgsa_front-end",
-  "version": "3.0.0-rc7",
+  "version": "3.0.0-rc8",
   "description": "Web client for WGSA",
   "main": "index.js",
   "scripts": {
@@ -52,6 +52,7 @@
     "react-router": "^2.0.0",
     "react-transform-catch-errors": "^1.0.0",
     "react-transform-hmr": "^1.0.1",
+    "react-virtual-list": "github:imperialcollegelondon/react-virtual-list",
     "redbox-react": "^1.1.1",
     "redux": "^3.0.4",
     "redux-devtools": "^3.0.0",

@@ -8,13 +8,11 @@ import MetadataUtils from '../utils/Metadata';
 
 const CHANGE_EVENT = 'change';
 
-let rawFiles = {};
 let assemblies = {};
 const errors = [];
 
 function addFiles(newRawFiles, newAssemblies) {
-  assign(rawFiles, newRawFiles);
-  assign(assemblies, newAssemblies);
+  assemblies = assign({}, assemblies, newAssemblies);
 }
 
 function validateFiles() {
@@ -73,6 +71,7 @@ function setMetadataDateComponent(assemblyName, component, value) {
 
 function deleteAssembly(assemblyName) {
   delete assemblies[assemblyName];
+  assemblies = assign({}, assemblies);
 }
 
 const Store = assign({}, EventEmitter.prototype, {
@@ -145,7 +144,6 @@ const Store = assign({}, EventEmitter.prototype, {
   },
 
   clearStore() {
-    rawFiles = {};
     assemblies = {};
   },
 });

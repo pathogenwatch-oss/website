@@ -9,7 +9,7 @@ import AssemblyMetadata from './AssemblyMetadata.react';
 import AssemblyAnalysis from './AssemblyAnalysis.react';
 import AssemblyAnalysisChart from './AssemblyAnalysisChart.react';
 
-import UploadWorkspaceNavigation from './UploadWorkspaceNavigation.react';
+import AssemblyList from './navigation/AssemblyList.react';
 import UploadReviewHeader from './UploadReviewHeader.react';
 import Overview from './Overview.react';
 
@@ -181,7 +181,6 @@ export default React.createClass({
   },
 
   handleHashChange(event) {
-    console.log(`You got hash: ${window.location.hash}`);
     const hash = window.location.hash;
     if (!hash || hash === '' || hash === '#') {
       this.handleOverviewClick();
@@ -192,6 +191,8 @@ export default React.createClass({
         const assemblyName = match[1];
         UploadWorkspaceNavigationActionCreators.navigateToAssembly(assemblyName);
         this.scrollToAssemblyLink(assemblyName);
+      } else {
+        console.error(`407 Hash not found.`);
       }
     }
   },
@@ -206,8 +207,6 @@ export default React.createClass({
     if (linkOffset < containerOffset) {
       $container.animate({ scrollTop: linkOffset - containerOffset + scrollTop }, speed);
     } else if (linkOffset > containerOffset + height - 40) {
-      console.log({ linkOffset, containerOffset, scrollTop, height });
-      console.log(linkOffset - containerOffset + scrollTop, height + 40);
       $container.animate({ scrollTop: linkOffset - containerOffset + scrollTop - height + 40 }, speed);
     }
   },
@@ -218,6 +217,7 @@ export default React.createClass({
 
   render() {
     let subtitle = '';
+    const assemblies = UploadStore.getAssemblies();
     const assembly = UploadStore.getAssembly(this.state.assemblyName);
     const { isProcessing } = this.state;
 
@@ -233,14 +233,18 @@ export default React.createClass({
         <div className="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-drawer">
           <UploadReviewHeader subtitle={subtitle} activateUploadButton={this.state.readyToUpload} />
 
-          <UploadWorkspaceNavigation assembliesUploaded={assembly ? true : false} totalAssemblies={this.state.numberOfAssemblies}>
+          <aside className="navigation-container mdl-layout__drawer mdl-shadow--3dp">
+            <a className="uploadWorkspaceNavigationTitle" href="#">
+              <span className="mdl-badge" style={{ margin: 0 }} data-badge={this.state.numberOfAssemblies}>Assemblies</span>
+            </a>
+            <AssemblyList assemblies={assemblies} selectedAssemblyName={assembly} />
             <button type="button" title="Add files"
               className="wgsa-upload-review-button wgsa-add-files-button mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect mdl-shadow--4dp"
               onClick={this.handleClick}
             >
               <i className="material-icons">add</i>
             </button>
-          </UploadWorkspaceNavigation>
+          </aside>
 
           <main className="mdl-layout__content" style={layoutContentStyle}>
             <div id="loadingAnimation" style={isProcessing ? loadingAnimationStyleVisible : loadingAnimationStyleHidden} className="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
