@@ -7,7 +7,7 @@ const CHANGE_EVENT = 'change';
 let assemblyName = null;
 let viewPage = null;
 
-function setassemblyName(id) {
+function setAssemblyName(id) {
   assemblyName = id;
 }
 
@@ -16,7 +16,7 @@ function setViewPage(page) {
 }
 
 function navigateToAssembly(name) {
-  setassemblyName(name);
+  setAssemblyName(name);
   setViewPage(name ? 'assembly' : 'overview');
 }
 

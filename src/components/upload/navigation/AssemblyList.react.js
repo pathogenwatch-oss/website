@@ -6,6 +6,8 @@ import AssemblyListItem from '../navigation/AssemblyListItem.react';
 import UploadWorkspaceNavigationStore from '^/stores/UploadWorkspaceNavigationStore';
 import UploadStore from '^/stores/UploadStore';
 
+const itemHeight = 40;
+
 const AssemblyList = React.createClass({
 
   propTypes: {
@@ -23,6 +25,9 @@ const AssemblyList = React.createClass({
 
   componentDidMount() {
     UploadWorkspaceNavigationStore.addChangeListener(this.handleUploadWorkspaceNavigationStoreChange);
+
+    // cache jQuery container
+    this.$container = $(this.refs.container);
   },
 
   componentWillUnmount() {
@@ -31,17 +36,15 @@ const AssemblyList = React.createClass({
 
   shouldComponentUpdate(nextProps) {
     const { assemblies, selectedAssemblyName } = this.props;
-
-    console.log(assemblies, nextProps.assemblies, assemblies !== nextProps.assemblies,
-      selectedAssemblyName !== nextProps.selectedAssemblyName)
-
     return (
       assemblies !== nextProps.assemblies || selectedAssemblyName !== nextProps.selectedAssemblyName
     );
   },
 
-  componentDidUpdate(prevProps, prevState) {
-    if (prevState.selectedOption !== this.state.selectedOption) {
+  componentDidUpdate(prevProps) {
+    const { selectedAssemblyName } = this.props;
+    if (selectedAssemblyName && prevProps.selectedAssemblyName !== selectedAssemblyName) {
+      this.scrollToAssemblyLink(this.props.selectedAssemblyName);
     }
   },
 
@@ -62,11 +65,18 @@ const AssemblyList = React.createClass({
       } else {
         return 0;
       }
-    }).map(assemblyName => { return { ...assemblies[assemblyName], selected: assemblyName === this.state.selectedOption && this.state.isItemSelected}; });
+    }).map((assemblyName, index) => {
+      if (assemblyName === this.props.selectedAssemblyName) {
+        this.selectedItemIndex = index;
+      }
+      return {
+        ...assemblies[assemblyName],
+        selected: assemblyName === this.props.selectedAssemblyName && this.state.isItemSelected,
+      };
+   });
   },
 
   renderItem({ fasta, hasErrors, selected }) {
-    // console.log('render', fasta.name);
     const assemblyName = fasta.name;
     return (
       <AssemblyListItem
@@ -79,8 +89,26 @@ const AssemblyList = React.createClass({
     );
   },
 
+  scrollToAssemblyLink(assemblyName, speed = 'fast') {
+    // const listItems = this.getListItems();
+    // let selectedItemIndex = 0;
+    // for (const item of listItems) {
+    //   if (item.selected) {
+    //     break;
+    //   }
+    //   selectedItemIndex += 1;
+    // }
+    const itemOffset = this.selectedItemIndex * itemHeight;
+    const scrollTop = this.$container.scrollTop();
+    const height = this.$container.height();
+    if (itemOffset < scrollTop) {
+      this.$container.animate({ scrollTop: itemOffset }, speed);
+    } else if (itemOffset > scrollTop + height - itemHeight) {
+      this.$container.animate({ scrollTop: itemOffset - height + 2.5 * itemHeight  }, speed);
+    }
+  },
+
   render() {
-    console.log(Date.now(), 'render');
     const listItems = this.getListItems();
     return (
       <div className="wgsa-assembly-list-wrapper" ref="container">
@@ -89,7 +117,7 @@ const AssemblyList = React.createClass({
           className="assemblyListContainer"
           items={listItems}
           renderItem={this.renderItem}
-          itemHeight={40}
+          itemHeight={itemHeight}
           container={this.refs.container}
           itemBuffer={5}
         />

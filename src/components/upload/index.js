@@ -157,6 +157,8 @@ export default React.createClass({
   },
 
   handleOverviewClick() {
+    //TODO: reset selected assembly
+    UploadWorkspaceNavigationActionCreators.navigateToAssembly('');
     UploadWorkspaceNavigationActionCreators.setViewPage('overview');
   },
 
@@ -189,8 +191,11 @@ export default React.createClass({
       const match = re.exec(hash);
       if (match && match.length === 2) {
         const assemblyName = match[1];
-        UploadWorkspaceNavigationActionCreators.navigateToAssembly(assemblyName);
-        this.scrollToAssemblyLink(assemblyName);
+        //TODO: Must check that the assembly name is a valid one
+        const assemblies = UploadStore.getAssemblies();
+        if (assemblies[assemblyName]) {
+          UploadWorkspaceNavigationActionCreators.navigateToAssembly(assemblyName);
+        }
       } else {
         console.error(`407 Hash not found.`);
       }
@@ -222,10 +227,11 @@ export default React.createClass({
     const { isProcessing } = this.state;
 
     switch (this.state.viewPage) {
-    case 'assembly':
-      subtitle = assembly && assembly.fasta.name;
-      break;
-    default: subtitle = isProcessing ? 'Processing...' : 'Overview';
+      case 'assembly':
+        subtitle = assembly && assembly.fasta.name;
+        break;
+      default:
+        subtitle = isProcessing ? 'Processing...' : 'Overview';
     }
 
     return (
@@ -237,7 +243,7 @@ export default React.createClass({
             <a className="uploadWorkspaceNavigationTitle" href="#">
               <span className="mdl-badge" style={{ margin: 0 }} data-badge={this.state.numberOfAssemblies}>Assemblies</span>
             </a>
-            <AssemblyList assemblies={assemblies} selectedAssemblyName={assembly} />
+            <AssemblyList assemblies={assemblies} selectedAssemblyName={this.state.assemblyName} />
             <button type="button" title="Add files"
               className="wgsa-upload-review-button wgsa-add-files-button mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect mdl-shadow--4dp"
               onClick={this.handleClick}
