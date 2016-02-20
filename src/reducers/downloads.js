@@ -29,7 +29,7 @@ const initialState = {
     assembly: true,
   },
   wgsa_gff: {
-    description: 'WGSA Results (.gff)',
+    description: 'Annotations (.gff)',
     assembly: true,
   },
 };
