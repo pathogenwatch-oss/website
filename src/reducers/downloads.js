@@ -7,8 +7,8 @@ import { API_ROOT } from '../utils/Api';
 import Species from '../species';
 
 const initialState = {
-  extended_kernel_fasta: {
-    description: 'Core Matches (.fa)',
+  amr_profile_collection: {
+    description: 'AMR Profile (.csv)',
   },
   concatenated_core_genes_collection: {
     description: 'Concatenated Core Genes (.fa)',
@@ -16,15 +16,12 @@ const initialState = {
   kernel_checksum_distribution: {
     description: 'Core Checksum Distribution (.csv)',
   },
-  amr_profile_collection: {
-    description: 'AMR Profile (.csv)',
+  differences_matrix: {
+    description: 'Difference Matrix (.csv)',
+    collection: true,
   },
   score_matrix: {
     description: 'Score Matrix (.csv)',
-    collection: true,
-  },
-  differences_matrix: {
-    description: 'Difference Matrix (.csv)',
     collection: true,
   },
   fasta: {

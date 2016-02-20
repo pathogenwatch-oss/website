@@ -4,10 +4,17 @@
   padding: 16px;
 }
 
+.wgsa-downloads-menu__list {
+  display: inline-block;
+  vertical-align: top;
+  padding: 8px;
+}
+
 .wgsa-submenu {
   list-style: none;
   margin: 0;
-  padding: 8px 0;
+  padding: 0;
+  display: block;
 }
 
 .wgsa-menu > li:last-child > .wgsa-submenu {
@@ -15,30 +22,28 @@
 }
 
 .wgsa-menu-heading {
-  font-size: 12px;
-  font-weight: bold;
-  font-family: inherit;
+  font-size: 14px;
+  font-family: Roboto, sans-serif;
+  font-weight: 500;
   letter-spacing: 0;
   line-height: inherit;
   color: rgba(0, 0, 0, 0.54);
-  padding: 12px 16px 4px;
+  padding: 16px 16px 8px ;
   margin: 0;
   display: block;
 }
 
 .wgsa-menu__item {
+  display: block;
   white-space: nowrap;
   font-size: 13px;
-  padding: 4px 0;
+  padding: 8px 0;
   transition: background .28s cubic-bezier(.4,0,.2,1);
-  color: rgba(0,0,0,.87);
-  min-width: calc(212px + 8px + (16px * 2)); /* hack for firefox :( */
-}
-
-.wgsa-menu__item:hover,
-.wgsa-menu__item:focus,
-.wgsa-menu__item:active {
-  background: rgba(0, 0, 0, 0.1);
+  font-family: Roboto, sans-serif;
+  font-size: 16px;
+  line-height: 16px;
+  color: rgba(0,0,0,.870588);
+  min-width: 240px;
 }
 
 .wgsa-menu__item > a,
@@ -54,23 +59,26 @@
   padding: 0 16px;
 }
 
-.wgsa-menu__item .wgsa-download-icon {
-  margin-right: 8px;
+.wgsa-menu__item:hover,
+.wgsa-menu__item:focus,
+.wgsa-menu__item:active {
+  background: rgba(0, 0, 0, 0.09);
 }
+
+/* pushes icon in download menu up a bit for alignment */
+button.wgsa-download-button:not(.mdl-button--icon) .material-icons {
+  margin-top: -4px;
+  margin-left: -4px;
+}
+
 .wgsa-menu__item .wgsa-download-icon + span {
   display: inline-block;
   vertical-align: middle;
 }
 
-.wgsa-menu__item .mdl-button--icon:hover,
-.wgsa-menu__item .mdl-button--icon:focus,
-.wgsa-menu__item .mdl-button--icon:active {
-  background: none;
-}
-
 .wgsa-menu__item .mdl-spinner {
-  margin-right: 4px;
-  margin-bottom: -4px;
+  position: relative;
+  left: -8px;
 }
 
 .wgsa-menu-button {
