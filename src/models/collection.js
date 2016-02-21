@@ -193,7 +193,7 @@ function addPublicAssemblyCounts(subtrees, collectionId, callback) {
     subtreeIds.map(id => `${CORE_TREE_RESULT}_${collectionId}_${id}`),
     (error, results) => {
       if (error) {
-        return callback(error, null);
+        return callback(error);
       }
       Object.keys(results).forEach(function (key, i) {
         const { leafIdentifiers } = results[key];
@@ -229,7 +229,7 @@ function get({ collectionId, speciesId }, callback) {
 
         done(null, {
           collectionId,
-          assemblies: result.assemblies,
+          assemblies,
           tree: result.tree,
           subtrees: result.subtrees
         });
@@ -237,9 +237,10 @@ function get({ collectionId, speciesId }, callback) {
     }
   ], function (error, result) {
     if (error) {
+      LOGGER.error(error);
       return callback(error);
     }
-    callback(result);
+    callback(null, result);
   });
 }
 
