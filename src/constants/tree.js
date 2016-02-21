@@ -134,11 +134,11 @@ function getPopulationTreeFunctions(state, dispatch) {
 
       for (const subtreeId of Object.keys(collection.subtrees)) {
         const leaf = tree.branches[subtreeId];
-        const { assemblyIds } = collection.subtrees[subtreeId];
+        const { assemblyIds, publicCount = 0 } = collection.subtrees[subtreeId];
 
         if (leaf) {
           leaf.interactive = true;
-          leaf.label = `${leaf.label} (${assemblyIds.length})`;
+          leaf.label = `${leaf.label} (${assemblyIds.length}) [${publicCount}]`;
           leaf.setDisplay(styles.collectionLeaf);
           leaf.nodeShape = styles.referenceLeaf.shape;
           leaf.highlighted = (filter.active && assemblyIds.some(filterHasId));
