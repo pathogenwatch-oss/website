@@ -17,7 +17,7 @@ var systemMetadataColumns = [
   'assemblyId', 'speciesId', 'assemblyName',
   'date', 'year', 'month', 'day',
   'position', 'latitude', 'longitude',
-  'pmid',
+  'collectionId', 'pmid',
   'filename', 'displayname',
 ];
 
@@ -38,6 +38,7 @@ function createMetadataRecord(ids, metadata, metrics) {
   return {
     assemblyId: ids.assemblyId,
     speciesId: ids.speciesId,
+    collectionId: ids.collectionId,
     assemblyName: metadata.assemblyName,
     date: metadata.date || {
       year: metadata.year,

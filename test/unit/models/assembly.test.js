@@ -15,7 +15,7 @@ describe('Model: Assembly', function () {
 
   it('should add user-defined metadata', function () {
     var assemblyModel = require('models/assembly');
-    var ids = { assemblyId: '123', speciesId: '1280' };
+    var ids = { assemblyId: '123', speciesId: '1280', collectionId: 'abc' };
     var rawMetadata = {
       assemblyName: 'name',
       year: 2015,
