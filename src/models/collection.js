@@ -186,28 +186,60 @@ function getTree(suffix, callback) {
   });
 }
 
+function addPublicAssemblyCounts(subtrees, collectionId, callback) {
+  const subtreeIds = Object.keys(subtrees);
+  LOGGER.info(`Getting public assembly counts for subtrees: ${subtreeIds}`);
+  mainStorage.retrieveMany(
+    subtreeIds.map(id => `${CORE_TREE_RESULT}_${collectionId}_${id}`),
+    (error, results) => {
+      if (error) {
+        return callback(error, null);
+      }
+      Object.keys(results).forEach(function (key, i) {
+        const { leafIdentifiers } = results[key];
+        const subtreeId = subtreeIds[i];
+        const subtree = subtrees[subtreeId];
+        const collectionAssemblyIds = new Set(subtree.assemblyIds);
+        subtree.publicCount = leafIdentifiers.filter(
+          id => id !== subtreeId && !collectionAssemblyIds.has(id)
+        ).length;
+      });
+      callback(null, subtrees);
+    }
+  );
+}
+
 function get({ collectionId, speciesId }, callback) {
   LOGGER.info('Getting list of assemblies for collection ' + collectionId);
-
   async.waterfall([
     getAssemblyIds.bind(null, collectionId),
     function (assemblyIds, done) {
       const params = { speciesId, assemblyIds };
+      getAssemblies(params, assemblyModel.getComplete, done);
+    },
+    function (assemblies, done) {
+      const subtrees = assemblyModel.groupAssembliesBySubtype(assemblies);
       async.parallel({
-        assemblies: getAssemblies.bind(null, params, assemblyModel.getComplete),
+        subtrees: addPublicAssemblyCounts.bind(null, subtrees, collectionId),
         tree: getTree.bind(null, collectionId)
-      }, done);
+      }, function (error, result) {
+        if (error) {
+          return done(error);
+        }
+
+        done(null, {
+          collectionId,
+          assemblies: result.assemblies,
+          tree: result.tree,
+          subtrees: result.subtrees
+        });
+      });
     }
   ], function (error, result) {
     if (error) {
-      return callback(error, null);
+      return callback(error);
     }
-    callback(null, {
-      collectionId,
-      assemblies: result.assemblies,
-      tree: result.tree,
-      subtrees: assemblyModel.groupAssembliesBySubtype(result.assemblies)
-    });
+    callback(result);
   });
 }
 
