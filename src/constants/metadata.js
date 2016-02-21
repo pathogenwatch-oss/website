@@ -82,7 +82,7 @@ export const systemColumnProps = [
   },
   { columnKey: '__GC_Content',
     valueGetter({ metadata }) {
-      return metadata.metrics ?
+      return metadata.metrics && metadata.metrics.gcContent ?
         `${metadata.metrics.gcContent}%` :
         null;
     },
