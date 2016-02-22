@@ -1,7 +1,7 @@
 
 const config =
   process.env.NODE_ENV === 'production' ?
-    require('../config.json') :
-    require('../dev.config.json');
+    require('../prod.config.json') :
+    require('../config.json');
 
 export default config;

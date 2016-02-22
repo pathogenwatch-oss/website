@@ -3,8 +3,7 @@ import 'phylocanvas/polyfill';
 
 import React from 'react';
 import { render } from 'react-dom';
-import { Router, Route, IndexRoute } from 'react-router';
-import { createHistory } from 'history';
+import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 
 import Home from './components/Home.react';
 import SpeciesHome from './components/SpeciesHome.react';
@@ -28,7 +27,7 @@ const SpeciesSetter = ({ route, children }) => {
 };
 
 render((
-  <Router history={createHistory()}>
+  <Router history={browserHistory}>
     <Route path="/" component={App}>
       <IndexRoute component={Home} />
       { Species.list.filter(_ => _.active).reduce((routes, { nickname }) =>

@@ -8,13 +8,13 @@ import DownloadButton from './DownloadButton.react';
 
 import { setMenuActive, requestDownload } from '^/actions/downloads';
 
-import { createDownloadKey } from '^/constants/downloads';
+import { createDownloadKey, createFilename } from '^/constants/downloads';
 
 const DownloadsMenu = React.createClass({
 
   propTypes: {
     menuOpen: React.PropTypes.bool,
-    files: React.PropTypes.object,
+    files: React.PropTypes.array,
     closeMenu: React.PropTypes.func,
   },
 
@@ -35,7 +35,7 @@ const DownloadsMenu = React.createClass({
           <div className="wgsa-downloads-menu__list">
             <h4 className="wgsa-menu-heading">Filtered</h4>
             <ul className="wgsa-submenu">
-              { (files).filter(_ => !_.collection).map(fileProps => (
+              { files.filter(_ => !_.ignoresFilter).map(fileProps => (
                   <li className="wgsa-menu__item" key={fileProps.format}>
                     <DownloadButton {...fileProps} />
                   </li>
@@ -46,7 +46,7 @@ const DownloadsMenu = React.createClass({
           <div className="wgsa-downloads-menu__list">
             <h4 className="wgsa-menu-heading">Unfiltered</h4>
             <ul className="wgsa-submenu">
-              { (files).filter(_ => _.collection).map(fileProps => (
+              { files.filter(_ => _.ignoresFilter).map(fileProps => (
                   <li className="wgsa-menu__item" key={fileProps.format}>
                     <DownloadButton {...fileProps} />
                   </li>
@@ -70,7 +70,7 @@ const DownloadsMenu = React.createClass({
 function mapStateToProps({ downloads, collection, filter }) {
   return {
     collectionId: collection.id,
-    assemblyIds: [ ...(filter.active ?  filter.ids : filter.unfilteredIds) ],
+    assemblyIds: [ ...(filter.active ? filter.ids : filter.unfilteredIds) ],
     ...downloads,
   };
 }
@@ -81,17 +81,24 @@ function mergeProps(state, { dispatch }) {
     menuOpen,
     files:
       Object.keys(files).
-        filter(format => !files[format].assembly).
+        filter(format => !files[format].notMenu).
         map(format => {
-          const { collection, linksById, ...props } = files[format];
-          const ids = collection ? [ collectionId ] : assemblyIds;
-          const linkProps = linksById ? linksById[createDownloadKey(ids)] : {};
+          const { ignoresFilter, linksById, filename, ...props } = files[format];
+          const idList = ignoresFilter ? [ collectionId ] : assemblyIds;
+          const linkProps = linksById ? linksById[createDownloadKey(idList)] : {};
           return {
             format,
             ...props,
             ...linkProps,
-            collection,
-            onClick: () => dispatch(requestDownload(format, collection, ids)),
+            ignoresFilter,
+            onClick: () => dispatch(
+              requestDownload({
+                format,
+                ignoresFilter,
+                idList,
+                filename: createFilename(filename, collectionId),
+              })
+            ),
           };
         }),
     closeMenu() {

@@ -1,7 +1,8 @@
 import '../../css/drop-indicator.css';
+import 'jquery-draghover';
 
 import React from 'react';
-import Draghover from '^/../public/assets/jquery-ui/jquery.draghover.js';
+
 import { CGPS } from '^/defaults';
 
 const style = {
@@ -31,26 +32,11 @@ export default React.createClass({
   componentDidMount() {
     $('body').on('drop', (event) => {
       event.preventDefault();
-      this.handleDrop(event);
+      this.handleDrop(event.originalEvent);
     });
     this.draghover = $(window).draghover().on({
-      draghoverstart: (e, event, winssb) => {
-        let hasFiles = false;
-        if (event && event.originalEvent && event.originalEvent.dataTransfer
-          && event.originalEvent.dataTransfer.types) {
-          for (const type of event.originalEvent.dataTransfer.types) {
-            if (type.toLowerCase() === 'files') {
-              hasFiles = true;
-              break;
-            }
-          }
-        }
-        if (!hasFiles) {
-          hasFiles = !!winssb;
-        }
-        if (hasFiles) {
-          this.showDropIndicator();
-        }
+      draghoverstart: () => {
+        this.showDropIndicator();
       },
       draghoverend: () => {
         this.hideDropIndicator();
@@ -133,7 +119,6 @@ export default React.createClass({
         onDragEnter={this.handleDragEnter}
         onDragLeave={this.handleDragLeave}
         onDragOver={this.handleDragOver}
-        onDrop={this.handleDrop}
         onDragEnd={this.handleDragEnd}
         style={style}
       >

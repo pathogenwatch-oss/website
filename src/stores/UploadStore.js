@@ -2,19 +2,15 @@ import AppDispatcher from '../dispatcher/AppDispatcher';
 import { EventEmitter } from 'events';
 import assign from 'object-assign';
 
-import UploadWorkspaceNavigationStore from '../stores/UploadWorkspaceNavigationStore';
-
 import MetadataUtils from '../utils/Metadata';
 
 const CHANGE_EVENT = 'change';
 
-let rawFiles = {};
 let assemblies = {};
 const errors = [];
 
 function addFiles(newRawFiles, newAssemblies) {
-  assign(rawFiles, newRawFiles);
-  assign(assemblies, newAssemblies);
+  assemblies = assign({}, assemblies, newAssemblies);
 }
 
 function validateFiles() {
@@ -73,6 +69,7 @@ function setMetadataDateComponent(assemblyName, component, value) {
 
 function deleteAssembly(assemblyName) {
   delete assemblies[assemblyName];
+  assemblies = assign({}, assemblies);
 }
 
 const Store = assign({}, EventEmitter.prototype, {
@@ -145,7 +142,6 @@ const Store = assign({}, EventEmitter.prototype, {
   },
 
   clearStore() {
-    rawFiles = {};
     assemblies = {};
   },
 });
@@ -173,9 +169,6 @@ function handleAction(action) {
     break;
 
   case 'delete_assembly':
-    AppDispatcher.waitFor([
-      UploadWorkspaceNavigationStore.dispatchToken,
-    ]);
     deleteAssembly(action.assemblyName);
     emitChange();
     break;
