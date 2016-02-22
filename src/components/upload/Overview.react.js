@@ -36,7 +36,7 @@ export default React.createClass({
     componentHandler.upgradeDom();
   },
 
-  _componentDidUpdate() {
+  componentDidUpdate() {
     var range = UploadStore.getMinMaxNoContigsForAllAssemblies();
     noContigsRange.min = range[0];
     noContigsRange.max = range[1];
