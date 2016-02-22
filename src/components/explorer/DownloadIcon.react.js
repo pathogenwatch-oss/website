@@ -15,13 +15,13 @@ function getIcon(isArchive) {
 export default ({ loading, hasLink, error, color, label, isArchive }) => (
   <div className="wgsa-download-icon" >
     { loading ?
-      <Spinner />
-      : [
+      <Spinner /> :
+      <div>
         <i className="wgsa-button-icon material-icons" style={error ? errorStyle : { color }}>
           { !hasLink || error ? getIcon(isArchive) : 'file_download' }
-        </i>,
-        label ? <span className="wgsa-download-label">{label}</span> : null
-      ]
+        </i>
+        { label ? <span className="wgsa-download-label">{label}</span> : null }
+      </div>
     }
   </div>
 );

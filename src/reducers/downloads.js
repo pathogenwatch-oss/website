@@ -7,6 +7,10 @@ import { API_ROOT } from '../utils/Api';
 import Species from '../species';
 
 const initialState = {
+  amr_profile_collection: {
+    description: 'AMR Profile (.csv)',
+    filename: 'amr_profile',
+  },
   concatenated_core_genes_collection: {
     description: 'Concatenated Core Genes (.fa)',
     filename: 'concatenated_core_genes',
@@ -15,18 +19,14 @@ const initialState = {
     description: 'Core Checksum Distribution (.csv)',
     filename: 'core_checksum_distribution',
   },
-  amr_profile_collection: {
-    description: 'AMR Profile (.csv)',
-    filename: 'amr_profile',
+  differences_matrix: {
+    description: 'Difference Matrix (.csv)',
+    filename: 'differences_matrix',
+    ignoresFilter: true,
   },
   score_matrix: {
     description: 'Score Matrix (.csv)',
     filename: 'score_matrix',
-    ignoresFilter: true,
-  },
-  differences_matrix: {
-    description: 'Difference Matrix (.csv)',
-    filename: 'differences_matrix',
     ignoresFilter: true,
   },
   fasta: {
@@ -35,7 +35,7 @@ const initialState = {
     notMenu: true,
   },
   wgsa_gff: {
-    description: 'WGSA Results (.gff)',
+    description: 'Annotations (.gff)',
     filename: 'annotations',
     notMenu: true,
   },

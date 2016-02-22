@@ -122,7 +122,7 @@ export default React.createClass({
         onDragEnd={this.handleDragEnd}
         style={style}
       >
-        <div className="wgsa-drop-indicator">
+        <div className={`wgsa-drop-indicator wgsa-overlay ${this.state.indicatorVisible ? 'wgsa-overlay--is-visible' : ''}`}>
           <div className="wgsa-drop-indicator__message">
             <div className="wgsa-drop-indicator__icons">
               <span className="wgsa-file-icon">

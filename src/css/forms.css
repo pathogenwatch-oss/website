@@ -39,12 +39,6 @@ fieldset > legend {
   outline: none;
 }
 
-
-/* pushes icon in download menu up a bit for alignment */
-button.wgsa-download-button:not(.mdl-button--icon) .material-icons {
-  margin-top: -4px;
-}
-
 .wgsa-download-icon {
   display: inline-block;
   vertical-align: middle;
