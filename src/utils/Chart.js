@@ -112,7 +112,7 @@ function drawN50Chart(chartData, assemblyN50, appendToClass) {
       return tooltip
         .style('top', (d3.event.pageY - 10) + 'px')
         .style('left', (d3.event.pageX + 10) + 'px')
-        //.style('display', 'block')
+        .style('display', 'block')
         .html('Sum: <b>' + datum + '</b>');
     })
     .on('mousemove', function () {
@@ -178,7 +178,7 @@ function drawN50Chart(chartData, assemblyN50, appendToClass) {
       return tooltip
         .style('top', (d3.event.pageY - 10) + 'px')
         .style('left', (d3.event.pageX + 10) + 'px')
-        //.style('display', 'block')
+        .style('display', 'block')
         .html('Sum: <b>' + datum.sum + '</b>' );
     })
     .on('mousemove', function () {
