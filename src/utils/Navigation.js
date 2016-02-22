@@ -6,7 +6,7 @@ export function navigateToHome() {
   return setHash();
 }
 
-export function getAssemblyName() {
+function getAssemblyName() {
   const match = assemblyNameRegex.exec(window.location.hash);
   if (match && match.length === 2) {
     return match[1];
@@ -42,7 +42,6 @@ export function unbindNavigationEvents() {
 }
 
 function handleHashChange(callback) {
-  console.log('You got hash', window.location.hash);
   const hash = window.location.hash;
   if (!hash || hash === '' || hash === '#') {
     callback();

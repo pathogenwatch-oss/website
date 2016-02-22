@@ -104,9 +104,7 @@ export default React.createClass({
   },
 
   handleNavigationChange(assemblyName = null) {
-    this.setState({
-      assemblyName,
-    });
+    this.setState({ assemblyName });
     this.hideSidebar();
   },
 
@@ -152,9 +150,7 @@ export default React.createClass({
     if (this.state.assemblyName && UploadStore.getAssembly(this.state.assemblyName) === null) {
       navigateToHome();
     } else {
-      this.setState({
-        readyToUpload: UploadStore.isReadyToUpload(),
-      });
+      this.setState({ readyToUpload: UploadStore.isReadyToUpload() });
       this.hideSidebar();
     }
   },
@@ -185,7 +181,6 @@ export default React.createClass({
 
           <main className="mdl-layout__content" style={layoutContentStyle}>
             <div id="loadingAnimation" style={isProcessing ? loadingAnimationStyleVisible : loadingAnimationStyleHidden} className="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
-
             { assembly ? (
                 <div className="mdl-grid">
                   <div className="mdl-cell mdl-cell--6-col wgsa-card-column">

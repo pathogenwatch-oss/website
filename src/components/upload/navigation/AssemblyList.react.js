@@ -36,13 +36,15 @@ const AssemblyList = React.createClass({
   getListItems() {
     const { assemblies } = this.props;
     return Object.keys(assemblies).sort((a, b) => {
+      if (assemblies[a].hasErrors === assemblies[b].hasErrors) {
+        return a < b ? -1 : 1;
+      }
       if (assemblies[a].hasErrors) {
         return -1;
       } else if (assemblies[b].hasErrors) {
         return 1;
-      } else {
-        return 0;
       }
+      return 0;
     }).map((assemblyName, index) => {
       if (assemblyName === this.props.selectedAssemblyName) {
         this.selectedItemIndex = index;
