@@ -19,7 +19,10 @@ import ToastActionCreators from '^/actions/ToastActionCreators';
 import UploadStore from '^/stores/UploadStore';
 import FileUploadingStore from '^/stores/FileUploadingStore';
 
-import { bindNavigationEvents, unbindNavigationEvents, navigateToHome } from '^/utils/Navigation';
+import {
+  bindNavigationEvents, unbindNavigationEvents,
+  navigateToHome, handleBeforeUnload,
+} from '^/utils/Navigation';
 import Species from '^/species';
 import DEFAULT from '^/defaults';
 
@@ -44,7 +47,7 @@ const fileInputStyle = {
 
 export default React.createClass({
 
-  conponentName: 'UploadIndex',
+  displayName: 'UploadIndex',
 
   contextTypes: {
     history: React.PropTypes.object,
@@ -79,9 +82,11 @@ export default React.createClass({
   routerWillLeave(nextLocation) {
     // return false to prevent a transition w/o prompting the user,
     // or return a string to allow the user to decide:
-    if (UploadStore.getAssembliesCount() > 0) {
-      return 'By leaving this page, your collection will be lost. Continue?';
+    if (FileUploadingStore.isUploading()) {
+      return null;
     }
+
+    return handleBeforeUnload();
   },
 
   hideSidebar() {
@@ -98,9 +103,10 @@ export default React.createClass({
       return;
     }
 
+    unbindNavigationEvents();
     const path = `/${Species.nickname}/collection/${id}`;
-    const { history } = this.context;
-    history.pushState(null, path);
+    const { router } = this.context;
+    router.push(path);
   },
 
   handleNavigationChange(assemblyName = null) {
@@ -108,11 +114,19 @@ export default React.createClass({
     this.hideSidebar();
   },
 
+  processFiles(files) {
+    this.setState({ isProcessing: true });
+    UploadActionCreators.addFiles(
+      files,
+      () => this.setState({ isProcessing: false }),
+    );
+  },
+
   confirmDuplicateOverwrite(files) {
     this.setState({
       confirmedMultipleMetadataDrop: true,
     });
-    UploadActionCreators.addFiles(files);
+    this.processFiles(files);
   },
 
   handleDrop(event) {
@@ -127,11 +141,7 @@ export default React.createClass({
           sticky: true,
         });
       } else {
-        this.setState({ isProcessing: true });
-        UploadActionCreators.addFiles(
-          event.files,
-          () => this.setState({ isProcessing: false }),
-        );
+        this.processFiles(event.files);
       }
       // allows the same file to be uploaded consecutively
       this.refs.fileInput.value = '';
@@ -178,7 +188,6 @@ export default React.createClass({
               <i className="material-icons">add</i>
             </button>
           </aside>
-
           <main className="mdl-layout__content" style={layoutContentStyle}>
             <div id="loadingAnimation" style={isProcessing ? loadingAnimationStyleVisible : loadingAnimationStyleHidden} className="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
             { assembly ? (

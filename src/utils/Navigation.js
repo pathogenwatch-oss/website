@@ -57,6 +57,8 @@ function handleHashChange(callback) {
   }
 }
 
-function handleBeforeUnload(event) {
-  return 'Do you realy want to uload this page?';
+export function handleBeforeUnload() {
+  if (UploadStore.getAssembliesCount() > 0) {
+    return 'By leaving this page, your collection will be lost.';
+  }
 }
