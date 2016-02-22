@@ -41,9 +41,10 @@ function mapStateToProps({ display, collection, tables, entities, filter }) {
 const inactiveMarkerColours = [ 'transparent' ];
 
 function mapStateToMarker(markerDef, state, dispatch) {
-  const { assemblyIds } = markerDef;
   const { colourGetter, assemblies, filter } = state;
 
+  const assemblyIds =
+    markerDef.assemblyIds.filter(id => filter.unfilteredIds.has(id));
   const markerAssemblies = assemblyIds.map(id => assemblies[id]);
   const isCollection = markerAssemblies.some(_ => _.__isCollection);
   const colours = markerAssemblies.reduce(function (memo, assembly) {
