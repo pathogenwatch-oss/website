@@ -2,7 +2,7 @@ import '../../../css/upload-review.css';
 
 import React from 'react';
 
-import UploadWorkspaceNavigationActionCreators from '^/actions/UploadWorkspaceNavigationActionCreators';
+import UploadActionCreators from '^/actions/UploadActionCreators';
 
 import { DANGER_COLOUR, CGPS } from '^/defaults';
 
@@ -34,7 +34,7 @@ const Component = React.createClass({
   },
 
   handleDeleteAssembly() {
-    UploadWorkspaceNavigationActionCreators.deleteAssembly(this.props.assemblyName);
+    UploadActionCreators.deleteAssembly(this.props.assemblyName);
   },
 
   render() {

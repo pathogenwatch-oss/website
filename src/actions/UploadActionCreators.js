@@ -47,4 +47,11 @@ module.exports = {
     });
   },
 
+  deleteAssembly(assemblyName) {
+    AppDispatcher.dispatch({
+      type: 'delete_assembly',
+      assemblyName,
+    });
+  },
+
 };

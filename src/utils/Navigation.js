@@ -1,41 +1,63 @@
-export function hashChangeFallback() {
-  // exit if the browser implements that event
-  if ( "onhashchange" in window.document.body ) { return; }
+import UploadStore from '../stores/UploadStore';
 
-  var location = window.location,
-    oldURL = location.href,
-    oldHash = location.hash;
+const assemblyNameRegex = /#assembly-(.+)/;
 
-  // check the location hash on a 100ms interval
-  setInterval(function() {
-    var newURL = location.href,
-      newHash = location.hash;
+export function navigateToHome() {
+  return setHash();
+}
 
-    // if the hash has changed and a handler has been bound...
-    if ( newHash != oldHash && typeof window.onhashchange === "function" ) {
-      // execute the handler
-      window.onhashchange({
-        type: "hashchange",
-        oldURL: oldURL,
-        newURL: newURL
-      });
-
-      oldURL = newURL;
-      oldHash = newHash;
-    }
-  }, 100);
+export function getAssemblyName() {
+  const match = assemblyNameRegex.exec(window.location.hash);
+  if (match && match.length === 2) {
+    return match[1];
+  } else {
+    return null;
+  }
 }
 
 export function navigateToAssembly(name) {
+  return setHash(`#assembly-${name}`);
+}
+
+function setHash(hash = '') {
   if (window.location.pathname !== '/saureus/upload') {
     return console.error('Invalid location path', window.location);
   }
-  return navigateTo('assembly', name);
-}
-
-function navigateTo(prefix, id) {
-  const hash = `#${prefix}-${id}`;
   if (window.location.hash !== hash) {
     window.location.hash = hash;
   }
+}
+
+export function bindNavigationEvents(callback) {
+  if (window.location.hash) {
+    window.location.hash = '';
+  }
+  window.onhashchange = handleHashChange.bind(null, callback);
+  window.onbeforeunload = handleBeforeUnload;
+}
+
+export function unbindNavigationEvents() {
+  window.onhashchange = null;
+  window.onbeforeunload = null;
+}
+
+function handleHashChange(callback) {
+  console.log('You got hash', window.location.hash);
+  const hash = window.location.hash;
+  if (!hash || hash === '' || hash === '#') {
+    callback();
+  } else {
+    const assemblyName = getAssemblyName();
+    if (assemblyName) {
+      if (UploadStore.getAssembly(assemblyName)) {
+        callback(assemblyName);
+      } else {
+        callback();
+      }
+    }
+  }
+}
+
+function handleBeforeUnload(event) {
+  return 'Do you realy want to uload this page?';
 }

@@ -3,7 +3,6 @@ import VirtualList from 'react-virtual-list';
 
 import AssemblyListItem from '../navigation/AssemblyListItem.react';
 
-import UploadWorkspaceNavigationStore from '^/stores/UploadWorkspaceNavigationStore';
 import UploadStore from '^/stores/UploadStore';
 
 const itemHeight = 40;
@@ -15,23 +14,9 @@ const AssemblyList = React.createClass({
     selectedAssemblyName: React.PropTypes.string,
   },
 
-  getInitialState() {
-    return {
-      selectedOption: null,
-      isUploading: null,
-      isItemSelected: null,
-    };
-  },
-
   componentDidMount() {
-    UploadWorkspaceNavigationStore.addChangeListener(this.handleUploadWorkspaceNavigationStoreChange);
-
     // cache jQuery container
     this.$container = $(this.refs.container);
-  },
-
-  componentWillUnmount() {
-    UploadWorkspaceNavigationStore.removeChangeListener(this.handleUploadWorkspaceNavigationStoreChange);
   },
 
   shouldComponentUpdate(nextProps) {
@@ -46,13 +31,6 @@ const AssemblyList = React.createClass({
     if (selectedAssemblyName && prevProps.selectedAssemblyName !== selectedAssemblyName) {
       this.scrollToAssemblyLink(this.props.selectedAssemblyName);
     }
-  },
-
-  handleUploadWorkspaceNavigationStoreChange() {
-    this.setState({
-      selectedOption: UploadWorkspaceNavigationStore.getAssemblyName(),
-      isItemSelected: (UploadWorkspaceNavigationStore.getCurrentViewPage() === 'assembly'),
-    });
   },
 
   getListItems() {
@@ -71,7 +49,7 @@ const AssemblyList = React.createClass({
       }
       return {
         ...assemblies[assemblyName],
-        selected: assemblyName === this.props.selectedAssemblyName && this.state.isItemSelected,
+        selected: assemblyName === this.props.selectedAssemblyName,
       };
    });
   },
@@ -84,20 +62,11 @@ const AssemblyList = React.createClass({
         assemblyName={assemblyName}
         isValid={!hasErrors}
         selected={selected}
-        isUploading={this.state.isUploading}
       />
     );
   },
 
   scrollToAssemblyLink(assemblyName, speed = 'fast') {
-    // const listItems = this.getListItems();
-    // let selectedItemIndex = 0;
-    // for (const item of listItems) {
-    //   if (item.selected) {
-    //     break;
-    //   }
-    //   selectedItemIndex += 1;
-    // }
     const itemOffset = this.selectedItemIndex * itemHeight;
     const scrollTop = this.$container.scrollTop();
     const height = this.$container.height();

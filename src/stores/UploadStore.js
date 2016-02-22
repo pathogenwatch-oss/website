@@ -2,8 +2,6 @@ import AppDispatcher from '../dispatcher/AppDispatcher';
 import { EventEmitter } from 'events';
 import assign from 'object-assign';
 
-import UploadWorkspaceNavigationStore from '../stores/UploadWorkspaceNavigationStore';
-
 import MetadataUtils from '../utils/Metadata';
 
 const CHANGE_EVENT = 'change';
@@ -171,9 +169,6 @@ function handleAction(action) {
     break;
 
   case 'delete_assembly':
-    AppDispatcher.waitFor([
-      UploadWorkspaceNavigationStore.dispatchToken,
-    ]);
     deleteAssembly(action.assemblyName);
     emitChange();
     break;
