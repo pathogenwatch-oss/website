@@ -14,7 +14,6 @@ import UploadReviewHeader from './UploadReviewHeader.react';
 import Overview from './Overview.react';
 import UploadingFilesDetailed from './UploadingFilesDetailed.react';
 
-import UploadActionCreators from '^/actions/UploadActionCreators';
 import UploadStore from '^/stores/UploadStore';
 import SocketActionCreators from '^/actions/SocketActionCreators';
 import UploadWorkspaceNavigationActionCreators from '^/actions/UploadWorkspaceNavigationActionCreators';
@@ -27,6 +26,7 @@ import FileUploadingProgressStore from '^/stores/FileUploadingProgressStore';
 import SocketStore from '^/stores/SocketStore';
 
 import SocketUtils from '^/utils/Socket';
+import FileUtils from '^/utils/File';
 import Species from '^/species';
 import DEFAULT from '^/defaults';
 
@@ -49,8 +49,6 @@ const fileInputStyle = {
   opacity: 0,
 };
 
-let isProcessing = false;
-
 export default React.createClass({
 
   contextTypes: {
@@ -61,7 +59,7 @@ export default React.createClass({
     return {
       readyToUpload: false,
       confirmedMultipleMetadataDrop: false,
-      pageTitleMessage: 'Upload',
+      isProcessing: false,
       isUploading: FileUploadingStore.getFileUploadingState(),
       numberOfAssemblies: UploadStore.getAssembliesCount(),
       viewPage: 'overview',
@@ -92,6 +90,11 @@ export default React.createClass({
     SocketActionCreators.setSocketConnection(socket);
   },
 
+  shouldComponentUpdate(prevProps, prevState) {
+    const { isProcessing } = this.state;
+    return isProcessing !== prevState.isProcessing;
+  },
+
   componentWillUnmount() {
     FileProcessingStore.removeChangeListener(this.handleFileProcessingStoreChange);
     FileUploadingStore.removeChangeListener(this.handleFileUploadingStoreChange);
@@ -112,9 +115,8 @@ export default React.createClass({
   },
 
   handleFileProcessingStoreChange() {
-    isProcessing = FileProcessingStore.getFileProcessingState();
     this.setState({
-      pageTitleMessage: isProcessing ? 'Processing...' : 'Overview',
+      isProcessing: FileProcessingStore.getFileProcessingState(),
     });
   },
 
@@ -149,7 +151,7 @@ export default React.createClass({
     this.setState({
       confirmedMultipleMetadataDrop: true,
     });
-    UploadActionCreators.addFiles(files);
+    FileUtils.parseFiles(files);
   },
 
   handleDrop(event) {
@@ -164,7 +166,7 @@ export default React.createClass({
           sticky: true,
         });
       } else {
-        UploadActionCreators.addFiles(event.files);
+        FileUtils.parseFiles(event.files);
       }
       // allows the same file to be uploaded consecutively
       this.refs.fileInput.value = '';
@@ -202,6 +204,7 @@ export default React.createClass({
   },
 
   render() {
+    console.log('render');
     let pageTitle = 'WGSA';
     let species = Species.formattedName;
     let activeAssemblyName = '';
@@ -215,7 +218,7 @@ export default React.createClass({
     case 'upload_progress':
       activeAssemblyName = 'Uploading...';
       break;
-    default: activeAssemblyName = this.state.pageTitleMessage;
+    default: activeAssemblyName = this.state.isProcessing ? 'Processing...' : 'Overview';
     }
 
     return (
@@ -242,7 +245,7 @@ export default React.createClass({
           </UploadWorkspaceNavigation>
 
           <main className="mdl-layout__content" style={layoutContentStyle}>
-            <div id="loadingAnimation" style={isProcessing ? loadingAnimationStyleVisible : loadingAnimationStyleHidden} className="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
+            <div id="loadingAnimation" style={this.state.isProcessing ? loadingAnimationStyleVisible : loadingAnimationStyleHidden} className="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
 
             {
               (() => {

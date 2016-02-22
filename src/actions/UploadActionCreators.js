@@ -12,31 +12,22 @@ import Species from '../species';
 
 module.exports = {
 
-  addFiles: function addFiles(files) {
-    const startProcessingFilesAction = {
+  startProcessingFiles() {
+    AppDispatcher.dispatch({
       type: 'start_processing_files',
-    };
+    });
+  },
 
-    AppDispatcher.dispatch(startProcessingFilesAction);
+  addFiles(assemblies) {
+    AppDispatcher.dispatch({
+      type: 'add_files',
+      assemblies,
+    });
+  },
 
-    FileUtils.parseFiles(files, function (error, rawFiles, assemblies) {
-      if (error) {
-        console.error(error);
-        return;
-      }
-
-      const finishProcessingFilesAction = {
-        type: 'finish_processing_files',
-      };
-      const addFilesAction = {
-        type: 'add_files',
-        rawFiles: rawFiles,
-        assemblies: assemblies,
-      };
-
-      //TODO: dispatch finish processing action after the last file is processing
-      AppDispatcher.dispatch(finishProcessingFilesAction);
-      AppDispatcher.dispatch(addFilesAction);
+  finishProcessingFiles() {
+    AppDispatcher.dispatch({
+      type: 'finish_processing_files',
     });
   },
 

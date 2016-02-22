@@ -209,6 +209,6 @@ function parseFiles(files, callback) {
 
 onmessage = function(event) {
   parseFiles(event.data.files, (error, rawFiles, assemblies) => {
-    postMessage({ error, rawFiles, assemblies });
+    postMessage({ error, assemblies });
   });
 }
