@@ -18,9 +18,6 @@ var COLLECTION_OPERATIONS = {
   DELETE: 'DELETE_COLLECTION',
   DELETE_ASSEMBLIES: 'DELETE_ASSEMBLIES'
 };
-var COLLECTION_TREE_TASKS = [
-  'PHYLO_MATRIX', 'SUBMATRIX', 'CORE_MUTANT_TREE'
-];
 
 function requestIDs(request, callback) {
   messageQueueService.newCollectionAddQueue(function (queue) {
@@ -106,10 +103,6 @@ function add(speciesId, { assemblyNames }, callback) {
           return map;
         }, {}),
       collectionSize,
-      expectedResults:
-        collectionSize + // for upload notifications
-        collectionSize * assemblyModel.ASSEMBLY_ANALYSES.length +
-        COLLECTION_TREE_TASKS.length,
     };
 
     messageQueueService.newUploadProgressRequestQueue(collectionId, queue => {

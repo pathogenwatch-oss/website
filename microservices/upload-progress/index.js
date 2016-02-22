@@ -2,14 +2,30 @@ const async = require('async');
 
 const notificationDispatcher = require('services/notificationDispatcher');
 
-const storageConnection = require('utils/storageConnection');
-const messageQueueConnection = require('utils/messageQueueConnection');
+const messageQueueUtil = require('utils/messageQueueConnection');
 const logging = require('utils/logging');
 
 const LOGGER = logging.createLogger('upload progress');
 const { UPLOAD_PROGRESS } = require('utils/documentKeys');
 
 const QUEUE_OPTIONS = { durable: true, autoDelete: false };
+
+const EXPECTED_ASSEMBLY_RESULTS =
+  require('models/assembly').ASSEMBLY_ANALYSES.concat([ 'UPLOAD', /*'GSL'*/ ]);
+
+const EXPECTED_COLLECTION_RESULTS =
+  [ 'PHYLO_MATRIX', 'SUBMATRIX', 'CORE_MUTANT_TREE' ];
+
+const EXPECTED_RESULTS = new Set(
+  EXPECTED_ASSEMBLY_RESULTS.concat(EXPECTED_COLLECTION_RESULTS)
+);
+
+function calculateExpectedResults({ collectionSize }) {
+  return (
+    collectionSize * EXPECTED_ASSEMBLY_RESULTS.length +
+    EXPECTED_COLLECTION_RESULTS.length
+  );
+}
 
 function isCollectionFatal({ collectionSize, results, errors }) {
   // allows error page to show all failed assemblies
@@ -19,15 +35,8 @@ function isCollectionFatal({ collectionSize, results, errors }) {
   return errors.some(({ taskType }) => taskType === 'UPLOAD');
 }
 
-async.parallel({
-  storage: storageConnection.connect,
-  mqConnection: messageQueueConnection.connect
-}, function (connectionError, { mqConnection }) {
-  if (connectionError) {
-    return LOGGER.error(connectionError);
-  }
-
-  const { NOTIFICATION, SERVICES } = messageQueueConnection.getExchanges();
+module.exports = function ({ mqConnection }) {
+  const { NOTIFICATION, SERVICES } = messageQueueUtil.getExchanges();
   const mainStorage = require('services/storage')('main');
 
   function handleNotification(message, _, __, { queue }) {
@@ -47,11 +56,16 @@ Status: ${taskStatus}
 Assembly Id: ${assemblyIdString}
 Collection: ${collectionId}`);
 
+    if (!EXPECTED_RESULTS.has(taskType)) {
+      LOGGER.warn(`${taskType} is not an expected result, discarding.`);
+      return;
+    }
+
     async.waterfall([
       done => mainStorage.retrieve(documentKey, done),
       function (doc, cas, done) {
         const { assemblyIdToNameMap } = doc;
-        if (taskStatus === 'FAILURE') {
+        if (taskStatus !== 'SUCCESS') {
           doc.errors.push({
             assemblyName: assemblyIdToNameMap[assemblyIdString],
             taskType
@@ -127,6 +141,7 @@ Collection: ${collectionId}`);
         type: 'UP',
         documentKey,
         status: 'PROCESSING',
+        expectedResults: calculateExpectedResults(message),
         receivedResults: 0,
         results: {},
         errors: []
@@ -147,4 +162,4 @@ Collection: ${collectionId}`);
       );
     });
   });
-});
+};
