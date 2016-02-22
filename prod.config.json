@@ -1,0 +1,6 @@
+{
+  "pusher": {
+    "key": "<%= pusherKey %>",
+    "encrypted": true
+  }
+}
