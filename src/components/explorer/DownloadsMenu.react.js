@@ -7,7 +7,7 @@ import DownloadButton from './DownloadButton.react';
 
 import { setMenuActive, requestDownload } from '^/actions/downloads';
 
-import { createDownloadKey } from '^/constants/downloads';
+import { createDownloadKey, createFilename } from '^/constants/downloads';
 
 const DownloadsMenu = ({
   menuOpen,
@@ -34,6 +34,8 @@ const DownloadsMenu = ({
   </div>
 );
 
+DownloadsMenu.displayName = 'DownloadsMenu';
+
 DownloadsMenu.propTypes = {
   populationTreeLink: React.PropTypes.string,
   collectionTreeLink: React.PropTypes.string,
@@ -57,16 +59,23 @@ function mergeProps(state, { dispatch }) {
     menuButtonOnClick: () => dispatch(setMenuActive(!menuOpen)),
     files:
       Object.keys(files).
-        filter(format => !files[format].assembly).
+        filter(format => !files[format].notMenu).
         map(format => {
-          const { collection, linksById, ...props } = files[format];
-          const ids = collection ? [ collectionId ] : assemblyIds;
-          const linkProps = linksById ? linksById[createDownloadKey(ids)] : {};
+          const { ignoresFilter, linksById, filename, ...props } = files[format];
+          const idList = ignoresFilter ? [ collectionId ] : assemblyIds;
+          const linkProps = linksById ? linksById[createDownloadKey(idList)] : {};
           return {
             format,
             ...props,
             ...linkProps,
-            onClick: () => dispatch(requestDownload(format, collection, ids)),
+            onClick: () => dispatch(
+              requestDownload({
+                format,
+                ignoresFilter,
+                idList,
+                filename: createFilename(filename, collectionId),
+              })
+            ),
           };
         }),
   };

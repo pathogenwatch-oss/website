@@ -22,11 +22,15 @@ export const downloadColumnProps = [
     fixed: true,
     headerClasses: 'wgsa-table-cell--skinny',
     getHeaderContent({ archiveDownloads }) {
-      console.log(arguments);
       return (
         <span className="wgsa-table-downloads" onClick={(e) => e.stopPropagation()}>
-          <DownloadButton {...archiveDownloads.fa} isArchive iconOnly />
-          <DownloadButton {...archiveDownloads.gff} isArchive color={CGPS.COLOURS.GREEN} iconOnly />
+          <DownloadButton {...archiveDownloads.fasta} isArchive iconOnly />
+          <DownloadButton
+            {...archiveDownloads.wgsa_gff}
+            isArchive
+            color={CGPS.COLOURS.GREEN}
+            iconOnly
+          />
         </span>
       );
     },
@@ -34,11 +38,12 @@ export const downloadColumnProps = [
     fixedWidth: 80,
     flexGrow: 0,
     getCellContents(_, data) {
+      const { fasta, wgsa_gff } = data.__downloads;
       return (
         <span className="wgsa-table-downloads" onClick={(e) => e.stopPropagation()}>
-          <DownloadButton { ...data.faDownloadProps } label=".fa" iconOnly />
+          <DownloadButton { ...fasta } label=".fa" iconOnly />
           <DownloadButton
-            { ...data.gffDownloadProps }
+            { ...wgsa_gff }
             label=".gff"
             color={CGPS.COLOURS.GREEN}
             iconOnly
@@ -46,10 +51,12 @@ export const downloadColumnProps = [
         </span>
       );
     },
-    addState({ filter, downloads }, dispatch) {
+    addState({ collection, filter, downloads }, dispatch) {
       return {
         ...this,
-        archiveDownloads: getArchiveDownloadProps(filter, downloads, dispatch),
+        archiveDownloads: getArchiveDownloadProps(
+          { collection, filter }, downloads, dispatch
+        ),
       };
     },
   },
