@@ -9,18 +9,17 @@ import AssemblyMetadata from './AssemblyMetadata.react';
 import AssemblyAnalysis from './AssemblyAnalysis.react';
 import AssemblyAnalysisChart from './AssemblyAnalysisChart.react';
 
-import UploadWorkspaceNavigation from './UploadWorkspaceNavigation.react';
+import AssemblyList from './navigation/AssemblyList.react';
 import UploadReviewHeader from './UploadReviewHeader.react';
 import Overview from './Overview.react';
 
 import UploadActionCreators from '^/actions/UploadActionCreators';
-import UploadStore from '^/stores/UploadStore';
-import UploadWorkspaceNavigationActionCreators from '^/actions/UploadWorkspaceNavigationActionCreators';
 import ToastActionCreators from '^/actions/ToastActionCreators';
 
-import UploadWorkspaceNavigationStore from '^/stores/UploadWorkspaceNavigationStore';
+import UploadStore from '^/stores/UploadStore';
 import FileUploadingStore from '^/stores/FileUploadingStore';
 
+import { bindNavigationEvents, unbindNavigationEvents, navigateToHome } from '^/utils/Navigation';
 import Species from '^/species';
 import DEFAULT from '^/defaults';
 
@@ -45,8 +44,11 @@ const fileInputStyle = {
 
 export default React.createClass({
 
+  conponentName: 'UploadIndex',
+
   contextTypes: {
     history: React.PropTypes.object,
+    router: React.PropTypes.object,
   },
 
   getInitialState() {
@@ -54,8 +56,6 @@ export default React.createClass({
       readyToUpload: false,
       confirmedMultipleMetadataDrop: false,
       isProcessing: false,
-      numberOfAssemblies: UploadStore.getAssembliesCount(),
-      viewPage: 'overview',
       assemblyName: null,
       uploadProgressPercentage: 0,
       collectionUrl: null,
@@ -64,15 +64,24 @@ export default React.createClass({
 
   componentDidMount() {
     FileUploadingStore.addChangeListener(this.handleFileUploadingStoreChange);
-    UploadWorkspaceNavigationStore.addChangeListener(this.handleUploadWorkspaceNavigationStoreChange);
     UploadStore.addChangeListener(this.handleUploadStoreChange);
     this.menuButton = document.querySelector('.mdl-layout__drawer-button');
+    this.context.router.setRouteLeaveHook(this.props.route, this.routerWillLeave);
+    bindNavigationEvents(this.handleNavigationChange);
   },
 
   componentWillUnmount() {
     FileUploadingStore.removeChangeListener(this.handleFileUploadingStoreChange);
-    UploadWorkspaceNavigationStore.removeChangeListener(this.handleUploadWorkspaceNavigationStoreChange);
     UploadStore.removeChangeListener(this.handleUploadStoreChange);
+    unbindNavigationEvents();
+  },
+
+  routerWillLeave(nextLocation) {
+    // return false to prevent a transition w/o prompting the user,
+    // or return a string to allow the user to decide:
+    if (UploadStore.getAssembliesCount() > 0) {
+      return 'By leaving this page, your collection will be lost. Continue?';
+    }
   },
 
   hideSidebar() {
@@ -94,11 +103,8 @@ export default React.createClass({
     history.pushState(null, path);
   },
 
-  handleUploadWorkspaceNavigationStoreChange() {
-    this.setState({
-      viewPage: UploadWorkspaceNavigationStore.getCurrentViewPage(),
-      assemblyName: UploadWorkspaceNavigationStore.getAssemblyName(),
-    });
+  handleNavigationChange(assemblyName = null) {
+    this.setState({ assemblyName });
     this.hideSidebar();
   },
 
@@ -111,7 +117,7 @@ export default React.createClass({
 
   handleDrop(event) {
     if (event.files.length > 0 && !this.state.isUploading) {
-      if (!this.state.confirmedMultipleMetadataDrop && this.state.numberOfAssemblies > 0) {
+      if (!this.state.confirmedMultipleMetadataDrop && UploadStore.getAssembliesCount() > 0) {
         ToastActionCreators.showToast({
           message: 'Duplicate records will be overwritten.',
           action: {
@@ -133,15 +139,7 @@ export default React.createClass({
   },
 
   handleClick() {
-    if (this.state.isUploading) {
-      UploadWorkspaceNavigationActionCreators.setViewPage('upload_progress');
-    } else {
-      this.refs.fileInput.click();
-    }
-  },
-
-  handleOverviewClick() {
-    UploadWorkspaceNavigationActionCreators.setViewPage('overview');
+    this.refs.fileInput.click();
   },
 
   handleFileInputChange(event) {
@@ -149,86 +147,69 @@ export default React.createClass({
   },
 
   handleUploadStoreChange() {
-    this.setState({
-      readyToUpload: UploadStore.isReadyToUpload(),
-      numberOfAssemblies: UploadStore.getAssembliesCount(),
-    });
-    this.hideSidebar();
+    if (this.state.assemblyName && UploadStore.getAssembly(this.state.assemblyName) === null) {
+      navigateToHome();
+    } else {
+      this.setState({ readyToUpload: UploadStore.isReadyToUpload() });
+      this.hideSidebar();
+    }
   },
 
   render() {
-    let subtitle = '';
+    const assemblies = UploadStore.getAssemblies();
     const assembly = UploadStore.getAssembly(this.state.assemblyName);
     const { isProcessing } = this.state;
-
-    switch (this.state.viewPage) {
-    case 'assembly':
-      subtitle = assembly && assembly.fasta.name;
-      break;
-    default: subtitle = isProcessing ? 'Processing...' : 'Overview';
-    }
+    const subtitle = assembly ? assembly.fasta.name : (isProcessing ? 'Processing...' : 'Overview');
 
     return (
       <FileDragAndDrop onDrop={this.handleDrop}>
         <div className="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-drawer">
           <UploadReviewHeader subtitle={subtitle} activateUploadButton={this.state.readyToUpload} />
 
-          <UploadWorkspaceNavigation assembliesUploaded={assembly ? true : false} totalAssemblies={this.state.numberOfAssemblies}>
-            <footer className="wgsa-upload-navigation__footer mdl-shadow--4dp">
-              <button type="button" title="Overview"
-                className="wgsa-upload-review-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
-                onClick={this.handleOverviewClick}>
-                Overview
-              </button>
-              <button type="button" title="Add files"
-                className="wgsa-upload-review-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
-                onClick={this.handleClick}>
-                Add Files
-              </button>
-            </footer>
-          </UploadWorkspaceNavigation>
+          <aside className="navigation-container mdl-layout__drawer mdl-shadow--3dp">
+            <a className="uploadWorkspaceNavigationTitle" href="#">
+              <span className="mdl-badge" style={{ margin: 0 }} data-badge={UploadStore.getAssembliesCount()}>Assemblies</span>
+            </a>
+            <AssemblyList assemblies={assemblies} selectedAssemblyName={this.state.assemblyName} />
+            <button type="button" title="Add files"
+              className="wgsa-upload-review-button wgsa-add-files-button mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect mdl-shadow--4dp"
+              onClick={this.handleClick}
+            >
+              <i className="material-icons">add</i>
+            </button>
+          </aside>
 
           <main className="mdl-layout__content" style={layoutContentStyle}>
             <div id="loadingAnimation" style={isProcessing ? loadingAnimationStyleVisible : loadingAnimationStyleHidden} className="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
-
-            {
-              (() => {
-                switch (this.state.viewPage) {
-                case 'assembly':
-                  return (
-                    <div className="mdl-grid">
-                      <div className="mdl-cell mdl-cell--6-col wgsa-card-column">
-                        <div className="wgsa-card mdl-shadow--2dp">
-                          <div className="wgsa-card-heading">Assembly Statistics</div>
-                          <div className="wgsa-card-content">
-                            <AssemblyAnalysis assembly={assembly}/>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="mdl-cell mdl-cell--6-col wgsa-card-column chart-card">
-                        <div className="wgsa-card mdl-shadow--2dp">
-                          <div className="wgsa-card-heading">N50 Chart</div>
-                          <div className="wgsa-card-content ">
-                            <AssemblyAnalysisChart metrics={assembly && assembly.metrics} />
-                          </div>
-                        </div>
-                      </div>
-                      <div className="wgsa-card mdl-cell mdl-cell--12-col increase-cell-gutter mdl-shadow--2dp">
-                        <div className="wgsa-card-heading">Metadata</div>
-                        <div className="wgsa-card-content">
-                          <AssemblyMetadata assembly={assembly} isUploading={this.state.isUploading}/>
-                        </div>
+            { assembly ? (
+                <div className="mdl-grid">
+                  <div className="mdl-cell mdl-cell--6-col wgsa-card-column">
+                    <div className="wgsa-card mdl-shadow--2dp">
+                      <div className="wgsa-card-heading">Assembly Statistics</div>
+                      <div className="wgsa-card-content">
+                        <AssemblyAnalysis assembly={assembly}/>
                       </div>
                     </div>
-                  );
-                case 'overview':
-                  return (
-                   <Overview clickHandler={this.handleClick} isUploading={this.state.isUploading} isReadyToUpload={this.state.readyToUpload} />
-                  );
-                default:
-                  // should never hit default
-                }
-              })() }
+                  </div>
+                  <div className="mdl-cell mdl-cell--6-col wgsa-card-column chart-card">
+                    <div className="wgsa-card mdl-shadow--2dp">
+                      <div className="wgsa-card-heading">N50 Chart</div>
+                      <div className="wgsa-card-content ">
+                        <AssemblyAnalysisChart metrics={assembly && assembly.metrics} />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="wgsa-card mdl-cell mdl-cell--12-col increase-cell-gutter mdl-shadow--2dp">
+                    <div className="wgsa-card-heading">Metadata</div>
+                    <div className="wgsa-card-content">
+                      <AssemblyMetadata assembly={assembly} isUploading={this.state.isUploading}/>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+               <Overview clickHandler={this.handleClick} isUploading={this.state.isUploading} isReadyToUpload={this.state.readyToUpload} />
+             )
+            }
           </main>
         </div>
         <input type="file" multiple="multiple" accept={DEFAULT.SUPPORTED_FILE_EXTENSIONS} ref="fileInput" style={fileInputStyle} onChange={this.handleFileInputChange} />

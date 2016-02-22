@@ -2,7 +2,7 @@ import React from 'react';
 
 import GoogleMap from '../GoogleMap.react';
 
-import UploadWorkspaceNavigationActionCreators from '^/actions/UploadWorkspaceNavigationActionCreators.js';
+import { navigateToAssembly } from '^/utils/Navigation';
 
 import MapUtils from '^/utils/Map';
 
@@ -16,8 +16,7 @@ function createInfoWindow(assemblies) {
     button.appendChild(textNode);
     button.className =
       'wgsa-info-window-button mdl-button mdl-js-button mdl-js-ripple-effect';
-    button.onclick =
-      UploadWorkspaceNavigationActionCreators.navigateToAssembly.bind(null, name);
+    button.onclick = () => { navigateToAssembly(name); };
     componentHandler.upgradeElement(button);
     container.appendChild(button);
   }
