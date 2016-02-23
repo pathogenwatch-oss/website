@@ -444,7 +444,7 @@
 
 .assemblyListItem {
   margin: 0;
-  padding: 0;
+  padding: 0 8px 0 16px;
   position: relative;
   list-style: none;
   border-bottom: 1px solid rgba(0, 0, 0, .12);
@@ -452,7 +452,7 @@
   height: 40px;
   box-sizing: border-box;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
 }
 
 .assemblyListItem .selectButton {
@@ -460,16 +460,16 @@
   overflow: none;
   display: block;
   line-height: 40px;
+  padding: 0;
 }
 
 .assemblyListItem .deleteButton {
   color: #777;
 }
 
-.assembly-list-item__validate-icon {
-  position: absolute;
-  top: 4px;
-  left: -18px;
+.assembly-list-item__validate-icon .material-icons {
+  line-height: 40px;
+  vertical-align: top;
 }
 
 .assemblyListItem:hover,
@@ -486,7 +486,6 @@
   font-weight: 400;
   text-transform: none;
   overflow: hidden;
-  width: 160px;
   display: block;
   text-overflow: ellipsis;
   text-align: left;
@@ -510,8 +509,9 @@
 }
 
 .assembly-list-item__utils {
-  position: relative;
-  line-height: 39px;
+  line-height: 40px;
+  display: flex;
+  align-items: center;
 }
 
 .wgsa-upload-navigation__footer {
@@ -525,7 +525,7 @@
   margin: 0px 10px;
 }
 
-.confirm-delete-button i{
+.confirm-delete-button i {
   color: #fff;
 }
 .confirm-delete-button {
