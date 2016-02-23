@@ -120,11 +120,16 @@ function parseFastaFile(file, rawFiles, assemblies) {
     content: fileContent,
   };
 
-  initialiseAssemblyObject(fileName, assemblies);
-  assemblies[fileName].fasta.assembly = fileContent;
-  if (fileContent.length) {
-    assemblies[fileName].metrics = AnalysisUtils.analyseFasta(fileName, fileContent);
-  }
+  assemblies[fileName] = {
+    name: fileName,
+    fasta: {
+      name: fileName,
+      assembly: fileContent,
+    },
+    metrics: fileContent.length ?
+      AnalysisUtils.analyseFasta(fileName, fileContent) :
+      {},
+  };
 }
 
 function parseCsvFile(file, rawFiles, assemblies) {
@@ -142,10 +147,24 @@ function parseCsvFile(file, rawFiles, assemblies) {
     }
 
     const filename = dataRow.filename.replace(FASTA_FILE_NAME_REGEX, '');
-    initialiseAssemblyObject(filename, assemblies);
-
     const assemblyName = dataRow.displayname || filename;
-    assemblies[filename].metadata.assemblyName = assemblyName;
+
+    const assembly = {
+      name: filename,
+      metadata: {
+        assemblyName: assemblyName,
+        pmid: null,
+        date: {
+          year: null,
+          month: null,
+          day: null,
+        },
+        position: {
+          latitude: null,
+          longitude: null,
+        },
+      },
+    };
 
     for (const colName of Object.keys(dataRow)) {
       if (colName === 'filename' ||
@@ -155,15 +174,17 @@ function parseCsvFile(file, rawFiles, assemblies) {
       }
 
       if (colName === 'latitude' || colName === 'longitude' || colName === 'year' || colName === 'month' || colName === 'day') {
-        assemblies[filename].metadata.position.latitude = parseFloat(dataRow.latitude) || null;
-        assemblies[filename].metadata.position.longitude = parseFloat(dataRow.longitude) || null;
-        assemblies[filename].metadata.date.year = parseInt(dataRow.year, 10) || null;
-        assemblies[filename].metadata.date.month = parseInt(dataRow.month, 10) || null;
-        assemblies[filename].metadata.date.day = parseInt(dataRow.day, 10) || null;
+        assembly.metadata.position.latitude = parseFloat(dataRow.latitude) || null;
+        assembly.metadata.position.longitude = parseFloat(dataRow.longitude) || null;
+        assembly.metadata.date.year = parseInt(dataRow.year, 10) || null;
+        assembly.metadata.date.month = parseInt(dataRow.month, 10) || null;
+        assembly.metadata.date.day = parseInt(dataRow.day, 10) || null;
       } else {
-        assemblies[filename].metadata[colName] = dataRow[colName] || null;
+        assembly.metadata[colName] = dataRow[colName] || null;
       }
     }
+
+    assemblies[filename] = assembly;
   });
 }
 
@@ -209,11 +230,6 @@ onmessage = function (event) {
     if (error) {
       postMessage({ error });
     }
-    const key = Object.keys(assemblies)[0];
-    postMessage({
-      key,
-      assembly: assemblies[key],
-      index,
-    });
+    postMessage({ assemblies, index });
   });
 };

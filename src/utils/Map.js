@@ -126,8 +126,8 @@ export function getMarkerIcon(shape, colours) {
   return getIcon(shape, Array.from(colours).sort());
 }
 
-function hasNoPosition(assembly) {
-  const { position } = assembly.metadata;
+function hasNoPosition({ metadata = {} }) {
+  const { position } = metadata;
   return !position || !position.latitude || !position.longitude;
 }
 

@@ -11,26 +11,19 @@ var labelStyle = {
   fontWeight: '300',
   lineHeight: '20px',
   textTransform: 'uppercase',
-  color: '#777'
+  color: '#777',
 };
 
 var AssemblyAnalysis = React.createClass({
 
   propTypes: {
-    assembly: React.PropTypes.object.isRequired
+    metrics: React.PropTypes.object,
   },
 
   render: function () {
-    var assembly = this.props.assembly;
+    const { metrics } = this.props;
 
-    if (
-      ! assembly.metrics.totalNumberOfNucleotidesInDnaStrings
-      || ! assembly.metrics.totalNumberOfContigs
-      || ! assembly.metrics.smallestNumberOfNucleotidesInDnaStrings
-      || ! assembly.metrics.averageNumberOfNucleotidesInDnaStrings
-      || ! assembly.metrics.biggestNumberOfNucleotidesInDnaStrings
-      || ! assembly.metrics.contigN50
-    ) {
+    if (!metrics || !Object.keys(metrics).length) {
       return (
         <p className="mdl-card__supporting-text">(Assembly not provided)</p>
       );
@@ -39,35 +32,35 @@ var AssemblyAnalysis = React.createClass({
     return (
       <div className="mdl-grid mdl-grid--no-spacing">
         <div className="mdl-cell mdl-cell--6-col">
-          <AssemblyAnalysisItem label="Assembly Length" value={assembly.metrics.totalNumberOfNucleotidesInDnaStrings} />
+          <AssemblyAnalysisItem label="Assembly Length" value={metrics.totalNumberOfNucleotidesInDnaStrings} />
         </div>
 
         <div className="mdl-cell mdl-cell--6-col">
-          <AssemblyAnalysisItem label="No. Contigs" value={assembly.metrics.totalNumberOfContigs} />
+          <AssemblyAnalysisItem label="No. Contigs" value={metrics.totalNumberOfContigs} />
         </div>
 
         <div className="mdl-cell mdl-cell--6-col">
-          <AssemblyAnalysisItem label="Smallest Contig" value={assembly.metrics.smallestNumberOfNucleotidesInDnaStrings} />
+          <AssemblyAnalysisItem label="Smallest Contig" value={metrics.smallestNumberOfNucleotidesInDnaStrings} />
         </div>
 
         <div className="mdl-cell mdl-cell--6-col">
-          <AssemblyAnalysisItem label="Largest Contig" value={assembly.metrics.biggestNumberOfNucleotidesInDnaStrings} />
+          <AssemblyAnalysisItem label="Largest Contig" value={metrics.biggestNumberOfNucleotidesInDnaStrings} />
         </div>
 
         <div className="mdl-cell mdl-cell--6-col">
-          <AssemblyAnalysisItem label="Average Contig Length" value={assembly.metrics.averageNumberOfNucleotidesInDnaStrings} />
+          <AssemblyAnalysisItem label="Average Contig Length" value={metrics.averageNumberOfNucleotidesInDnaStrings} />
         </div>
 
         <div className="mdl-cell mdl-cell--6-col">
-          <AssemblyAnalysisItem label="N50" value={assembly.metrics.contigN50} />
+          <AssemblyAnalysisItem label="N50" value={metrics.contigN50} />
         </div>
 
         <div className="mdl-cell mdl-cell--6-col">
-          <AssemblyAnalysisItem label="Non-ATCG" value={assembly.metrics.totalNumberOfNsInDnaStrings} />
+          <AssemblyAnalysisItem label="Non-ATCG" value={metrics.totalNumberOfNsInDnaStrings} />
         </div>
 
         <div className="mdl-cell mdl-cell--6-col">
-          <AssemblyAnalysisItem label="GC Content" value={`${assembly.metrics.gcContent}%`} />
+          <AssemblyAnalysisItem label="GC Content" value={`${metrics.gcContent}%`} />
         </div>
       </div>
     );

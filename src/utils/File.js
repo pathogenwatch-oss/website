@@ -8,9 +8,8 @@ export const FASTA_FILE_EXTENSIONS = [
 function parseFiles(files, callback) {
   const worker = new Worker;
   worker.onmessage = function (event) {
-    const { error, key, assembly, index } = event.data;
-
-    UploadActionCreators.addFiles({ [key]: assembly });
+    const { error, assemblies, index } = event.data;
+    UploadActionCreators.addFiles(assemblies);
 
     if (index === files.length) {
       callback();

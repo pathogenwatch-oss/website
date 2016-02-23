@@ -3,8 +3,6 @@ import VirtualList from 'react-virtual-list';
 
 import AssemblyListItem from '../navigation/AssemblyListItem.react';
 
-import UploadStore from '^/stores/UploadStore';
-
 const itemHeight = 40;
 
 const AssemblyList = React.createClass({
@@ -53,15 +51,14 @@ const AssemblyList = React.createClass({
         ...assemblies[assemblyName],
         selected: assemblyName === this.props.selectedAssemblyName,
       };
-   });
+    });
   },
 
-  renderItem({ fasta, hasErrors, selected }) {
-    const assemblyName = fasta.name;
+  renderItem({ name, hasErrors, selected }) {
     return (
       <AssemblyListItem
-        key={assemblyName}
-        assemblyName={assemblyName}
+        key={name}
+        assemblyName={name}
         isValid={!hasErrors}
         selected={selected}
       />

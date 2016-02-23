@@ -176,7 +176,7 @@ export default React.createClass({
     const assemblies = UploadStore.getAssemblies();
     const assembly = UploadStore.getAssembly(this.state.assemblyName);
     const { isProcessing } = this.state;
-    const subtitle = assembly ? assembly.fasta.name : (isProcessing ? 'Processing...' : 'Overview');
+    const subtitle = assembly ? assembly.name : (isProcessing ? 'Processing...' : 'Overview');
 
     return (
       <FileDragAndDrop onDrop={this.handleDrop}>
@@ -203,7 +203,7 @@ export default React.createClass({
                     <div className="wgsa-card mdl-shadow--2dp">
                       <div className="wgsa-card-heading">Assembly Statistics</div>
                       <div className="wgsa-card-content">
-                        <AssemblyAnalysis assembly={assembly}/>
+                        <AssemblyAnalysis metrics={assembly.metrics}/>
                       </div>
                     </div>
                   </div>
@@ -211,7 +211,9 @@ export default React.createClass({
                     <div className="wgsa-card mdl-shadow--2dp">
                       <div className="wgsa-card-heading">N50 Chart</div>
                       <div className="wgsa-card-content ">
-                        <AssemblyAnalysisChart metrics={assembly && assembly.metrics} />
+                        { assembly.metrics &&
+                          <AssemblyAnalysisChart metrics={assembly.metrics} />
+                        }
                       </div>
                     </div>
                   </div>

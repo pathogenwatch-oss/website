@@ -10,7 +10,20 @@ let assemblies = {};
 const errors = [];
 
 function addFiles(newRawFiles, newAssemblies) {
-  assemblies = assign({}, assemblies, newAssemblies);
+  assemblies = assign(
+    {},
+    assemblies,
+    Object.keys(newAssemblies).reduce((memo, key) => {
+      const newAssembly = newAssemblies[key];
+      const existingAssembly = assemblies[key];
+
+      memo[key] = existingAssembly ?
+        assign({}, existingAssembly, newAssembly) :
+        newAssembly;
+
+      return memo;
+    }, {})
+  );
 }
 
 function validateFiles() {
@@ -39,13 +52,13 @@ function validateFiles() {
 
     assembly.hasErrors = false;
 
-    if (!assembly.fasta.assembly) {
+    if (!assembly.fasta || !assembly.fasta.assembly) {
       errors.push({
         message: `${assemblyName} - fasta file not provided.`,
       });
     }
 
-    if (!MetadataUtils.isValid(assembly.metadata)) {
+    if (assembly.metadata && !MetadataUtils.isValid(assembly.metadata)) {
       errors.push({
         assemblyName,
         navigate: true,
@@ -104,8 +117,9 @@ const Store = assign({}, EventEmitter.prototype, {
 
   getOverviewChartData(chartType) {
     return Object.keys(assemblies).reduce((memo, id) => {
-      if (assemblies[id].metrics[chartType]) {
-        memo[id] = assemblies[id].metrics[chartType];
+      const metrics = assemblies[id].metrics || {};
+      if (metrics[chartType]) {
+        memo[id] = metrics[chartType];
       }
       return memo;
     }, {});
@@ -114,8 +128,9 @@ const Store = assign({}, EventEmitter.prototype, {
   getMinMaxNoContigsForAllAssemblies() {
     var noContigsArray = [];
     for (var assemblyId in assemblies) {
-      if (assemblies[assemblyId].metrics.totalNumberOfContigs) {
-        noContigsArray.push(assemblies[assemblyId].metrics.totalNumberOfContigs);
+      const metrics = assemblies[assemblyId].metrics || {};
+      if (metrics.totalNumberOfContigs) {
+        noContigsArray.push(metrics.totalNumberOfContigs);
       }
     }
     if (noContigsArray.length <= 0) {
@@ -128,7 +143,8 @@ const Store = assign({}, EventEmitter.prototype, {
     var totalAssemblyLength = 0;
     var noAssemblies = Object.keys(assemblies).length;
     for (var assemblyId in assemblies) {
-      totalAssemblyLength += assemblies[assemblyId].metrics.totalNumberOfNucleotidesInDnaStrings || 0;
+      const metrics = assemblies[assemblyId].metrics || {};
+      totalAssemblyLength += metrics.totalNumberOfNucleotidesInDnaStrings || 0;
     }
     return Math.round(totalAssemblyLength / noAssemblies);
   },

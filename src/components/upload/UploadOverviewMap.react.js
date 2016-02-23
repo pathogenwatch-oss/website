@@ -9,8 +9,7 @@ import MapUtils from '^/utils/Map';
 function createInfoWindow(assemblies) {
   const container = document.createElement('div');
 
-  for (const { fasta } of assemblies) {
-    const { name } = fasta;
+  for (const { name } of assemblies) {
     const button = document.createElement('button');
     const textNode = document.createTextNode(name);
     button.appendChild(textNode);
