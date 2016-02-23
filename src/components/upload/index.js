@@ -76,7 +76,7 @@ export default React.createClass({
 
   shouldComponentUpdate(prevProps, prevState) {
     const { isProcessing } = this.state;
-    return isProcessing !== prevState.isProcessing;
+    return isProcessing !== prevState.isProcessing || isProcessing === false;
   },
 
   componentWillUnmount() {

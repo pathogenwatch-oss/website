@@ -451,14 +451,15 @@
   line-height: 40px;
   height: 40px;
   box-sizing: border-box;
-  display: block;
+  display: flex;
+  justify-content: space-around;
 }
 
 .assemblyListItem .selectButton {
   height: 40px;
   overflow: none;
-  width: 100%;
   display: block;
+  line-height: 40px;
 }
 
 .assemblyListItem .deleteButton {
@@ -485,11 +486,10 @@
   font-weight: 400;
   text-transform: none;
   overflow: hidden;
-  width: 155px;
+  width: 160px;
   display: block;
   text-overflow: ellipsis;
   text-align: left;
-  padding: inherit;
   color: #333;
 }
 
@@ -510,9 +510,8 @@
 }
 
 .assembly-list-item__utils {
-  position: absolute;
-  top: 0px;
-  right: 4px;
+  position: relative;
+  line-height: 39px;
 }
 
 .wgsa-upload-navigation__footer {
