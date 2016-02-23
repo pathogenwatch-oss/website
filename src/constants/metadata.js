@@ -48,6 +48,14 @@ export const systemColumnProps = [
     },
     getCellContents,
   },
+  { columnKey: '__%_annotated',
+    valueGetter({ analysis }) {
+      return analysis.core && analysis.core.percentAssemblyMatched ?
+        analysis.core.percentAssemblyMatched.toFixed(1) :
+        null;
+    },
+    getCellContents,
+  },
   { columnKey: '__assembly_length',
     valueGetter({ metadata }) {
       return metadata.metrics ?
