@@ -7,6 +7,10 @@ The User-facing portion of WGSA.
 {
   "api": {
     "address": "localhost:8080"
+  },
+  "pusher": {
+    "key": "",
+    "encrypted": true
   }
 }
 ```

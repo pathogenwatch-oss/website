@@ -4,9 +4,9 @@ import { connect } from 'react-redux';
 import FixedTable from '^/components/FixedTable.react';
 
 import { activateFilter, resetFilter } from '^/actions/filter';
-import { requestDownload } from '^/actions/downloads';
 
 import { addColumnWidth } from '^/constants/table';
+import { addDownloadProps } from '^/constants/downloads';
 
 const sectionStyle = {
   width: '100%',
@@ -37,6 +37,14 @@ const SouthContent = React.createClass({
     filter: React.PropTypes.object,
   },
 
+  componentDidMount() {
+    componentHandler.upgradeDom();
+  },
+
+  componentDidUpdate() {
+    componentHandler.upgradeDom();
+  },
+
   render() {
     const { dispatch, headerClick, filter } = this.props;
     return (
@@ -57,7 +65,7 @@ function getTableData(assemblies, filter) {
 }
 
 function mapStateToProps(state) {
-  const { entities, display, tables, filter, downloads } = state;
+  const { entities, collection, display, tables, filter, downloads } = state;
 
   const table = tables[display.table];
   const { headerClick, columns, ...tableProps } = table;
@@ -69,28 +77,26 @@ function mapStateToProps(state) {
     headerClick: headerClick.bind(table),
     data,
     filter,
-    fastaDownloads: downloads.files.fasta,
-  };
-}
-
-function addDownloadProps(row, { description, linksById = {} }, dispatch) {
-  const id = row.metadata.assemblyId;
-  return {
-    ...row,
-    downloadProps: {
-      description,
-      ...linksById[id],
-      onClick: () => dispatch(requestDownload('fasta', null, [ id ])),
+    collection,
+    downloads: {
+      fasta: downloads.files.fasta,
+      wgsa_gff: downloads.files.wgsa_gff,
     },
   };
 }
 
-function mergeProps({ fastaDownloads, data, ...state }, { dispatch }, props) {
+function mapStateToColumn(column, state, dispatch) {
+  return column.addState ? column.addState(state, dispatch) : column;
+}
+
+function mergeProps(state, { dispatch }, props) {
+  const { data, columns, ...otherState } = state;
   return {
     ...props,
-    ...state,
+    ...otherState,
     dispatch,
-    data: data.map(row => addDownloadProps(row, fastaDownloads, dispatch)),
+    columns: columns.map(column => mapStateToColumn(column, state, dispatch)),
+    data: data.map(row => addDownloadProps(row, state, dispatch)),
   };
 }
 

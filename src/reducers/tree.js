@@ -1,6 +1,7 @@
 import { FETCH_ENTITIES } from '../actions/fetch';
 
 import { SET_TREE } from '../actions/tree';
+import ToastActionCreators from '../actions/ToastActionCreators';
 
 import { COLLECTION, POPULATION } from '../constants/tree';
 
@@ -21,7 +22,11 @@ export const trees = {
         };
       }
     },
-    [SET_TREE]: function (state, { ready, result, name }) {
+    [SET_TREE]: function (state, { ready, result, error, name }) {
+      if (error) {
+        return state;
+      }
+
       if (ready && result) {
         return {
           ...state,
@@ -31,6 +36,7 @@ export const trees = {
           },
         };
       }
+
       return state;
     },
   },
@@ -39,7 +45,14 @@ export const trees = {
 export const displayedTree = {
   initialState: POPULATION,
   actions: {
-    [SET_TREE]: function (state, { name, ready = true }) {
+    [SET_TREE]: function (state, { name, ready = true, error }) {
+      if (error) {
+        ToastActionCreators.showToast({
+          message: 'Subtree currently unavailable, please try again later.',
+        });
+        return state;
+      }
+
       if (ready) {
         return name;
       }

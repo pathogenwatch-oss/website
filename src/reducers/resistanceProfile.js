@@ -12,7 +12,7 @@ const canvas = document.createElement('canvas').getContext('2d');
 canvas.font = 'Bold 12px "Helvetica","Arial",sans-serif';
 
 const systemColumnProps = [
-  downloadColumnProps,
+  ...downloadColumnProps,
   { ...nameColumnProps,
     flexGrow: 0,
   },
@@ -57,7 +57,7 @@ const actions = {
 
       const columns = [
         { columnKey: '__spacer_l',
-          noHeader: true,
+          getHeaderContent() {},
           fixed: true,
           fixedWidth: 1,
           getCellContents() {},
@@ -65,7 +65,7 @@ const actions = {
         ...systemColumnProps,
         ...buildAntibioticColumnProps(antibiotics),
         { columnKey: '__spacer_r',
-          noHeader: true,
+          getHeaderContent() {},
           fixedWidth: Math.cos(45 * Math.PI / 180) *
             measureText(antibiotics[antibiotics.length - 1]) - 24,
           getCellContents() {},

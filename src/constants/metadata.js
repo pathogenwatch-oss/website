@@ -6,7 +6,7 @@ import { downloadColumnProps, nameColumnProps, getCellContents, }
 import MetadataUtils from '../utils/Metadata';
 
 export const systemColumnProps = [
-  downloadColumnProps,
+  ...downloadColumnProps,
   nameColumnProps,
   { columnKey: '__date',
     valueGetter({ metadata }) {
@@ -34,13 +34,17 @@ export const systemColumnProps = [
   },
   { columnKey: '__core_matches',
     valueGetter({ analysis }) {
-      return analysis.core.size;
+      return analysis.core ?
+        analysis.core.size :
+        null;
     },
     getCellContents,
   },
-  { columnKey: '__%_matched',
+  { columnKey: '__%_core_families',
     valueGetter({ analysis }) {
-      return analysis.core.percentMatched;
+      return analysis.core ?
+        analysis.core.percentMatched :
+        null;
     },
     getCellContents,
   },
@@ -68,10 +72,18 @@ export const systemColumnProps = [
     },
     getCellContents,
   },
-  { columnKey: '__non-ACTG',
+  { columnKey: '__non-ATCG',
     valueGetter({ metadata }) {
       return metadata.metrics ?
         metadata.metrics.totalNumberOfNsInDnaStrings :
+        null;
+    },
+    getCellContents,
+  },
+  { columnKey: '__GC_Content',
+    valueGetter({ metadata }) {
+      return metadata.metrics && metadata.metrics.gcContent ?
+        `${metadata.metrics.gcContent}%` :
         null;
     },
     getCellContents,

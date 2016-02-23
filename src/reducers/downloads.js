@@ -4,51 +4,59 @@ import ToastActionCreators from '../actions/ToastActionCreators';
 import { createDownloadKey } from '../constants/downloads';
 import { API_ROOT } from '../utils/Api';
 
+import Species from '../species';
+
 const initialState = {
-  extended_kernel_fasta: {
-    description: 'Core Matches (.fa)',
+  amr_profile_collection: {
+    description: 'AMR Profile (.csv)',
+    filename: 'amr_profile',
   },
   concatenated_core_genes_collection: {
     description: 'Concatenated Core Genes (.fa)',
+    filename: 'concatenated_core_genes',
   },
   kernel_checksum_distribution: {
     description: 'Core Checksum Distribution (.csv)',
-  },
-  amr_profile_collection: {
-    description: 'AMR Profile (.csv)',
-  },
-  score_matrix: {
-    description: 'Score Matrix (.csv)',
-    collection: true,
+    filename: 'core_checksum_distribution',
   },
   differences_matrix: {
     description: 'Difference Matrix (.csv)',
-    collection: true,
+    filename: 'differences_matrix',
+    ignoresFilter: true,
+  },
+  score_matrix: {
+    description: 'Score Matrix (.csv)',
+    filename: 'score_matrix',
+    ignoresFilter: true,
   },
   fasta: {
     description: 'Assembly (.fa)',
-    assembly: true,
+    filename: 'fasta',
+    notMenu: true,
+  },
+  wgsa_gff: {
+    description: 'Annotations (.gff)',
+    filename: 'annotations',
+    notMenu: true,
   },
 };
 
-function parseResult(keyToFilenameMap) {
-  const key = Object.keys(keyToFilenameMap)[0];
-  const filename = keyToFilenameMap[key];
+function createLink(keyMap, filename) {
+  const key = Object.keys(keyMap)[0];
 
   if (!key) {
     return {};
   }
 
-  return {
-    link: `${API_ROOT}/download/file/${encodeURIComponent(key)}?` +
-      `prettyFileName=${encodeURIComponent(filename)}`,
-    filename,
-  };
+  return (
+    `${API_ROOT}/species/${Species.id}/download/file/${encodeURIComponent(key)}?` +
+        `prettyFileName=${encodeURIComponent(filename)}`
+  );
 }
 
 const actions = {
   [REQUEST_DOWNLOAD]: function (state, action) {
-    const { format, idList, ready, result, error } = action;
+    const { format, idList, filename, ready, result, error } = action;
 
     if (!state[format]) {
       return state;
@@ -63,7 +71,7 @@ const actions = {
       });
     }
 
-    const { link, filename } = ready && !error ? parseResult(result) : {};
+    const link = ready && !error ? createLink(result, filename) : null;
 
     return {
       ...state,

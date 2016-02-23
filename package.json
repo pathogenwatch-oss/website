@@ -1,11 +1,12 @@
 {
   "name": "wgsa_front-end",
-  "version": "3.0.0-rc6",
+  "version": "3.0.0-rc9",
   "description": "Web client for WGSA",
   "main": "index.js",
   "scripts": {
     "start": "node dev-server.js",
-    "build": "NODE_ENV=production webpack"
+    "build": "NODE_ENV=production webpack",
+    "config": "node bin/config.js"
   },
   "repository": {
     "type": "git",
@@ -16,6 +17,9 @@
     "url": "https://github.com/ImperialCollegeLondon/wgsa_front-end/issues"
   },
   "homepage": "https://github.com/ImperialCollegeLondon/wgsa_front-end",
+  "dependencies": {
+    "lodash.template": "^4.2.0"
+  },
   "devDependencies": {
     "autoprefixer": "^6.0.3",
     "babel-core": "^6.3.21",
@@ -35,6 +39,7 @@
     "fixed-data-table": "^0.6.0",
     "flux": "^2.1.1",
     "history": "^1.13.0",
+    "jquery-draghover": "github:imperialcollegelondon/jquery-draghover",
     "json-loader": "^0.5.3",
     "keymirror": "^0.1.1",
     "moment": "^2.10.3",
@@ -42,16 +47,17 @@
     "node-uuid": "^1.4.3",
     "object-assign": "^4.0.1",
     "papaparse": "^4.1.1",
-    "phylocanvas": "phylocanvas/phylocanvas#v2.0.0-rc8",
-    "phylocanvas-plugin-context-menu": "phylocanvas/phylocanvas-plugin-context-menu#v3.1.0",
+    "phylocanvas": "phylocanvas/phylocanvas#release/2.0.0",
+    "phylocanvas-plugin-context-menu": "phylocanvas/phylocanvas-plugin-context-menu#v3.4.0",
     "postcss-input-style": "^0.3.0",
     "postcss-loader": "^0.8.0",
     "react": "^0.14.2",
     "react-dom": "^0.14.2",
     "react-redux": "^4.0.0",
-    "react-router": "^1.0.0-rc4",
+    "react-router": "^2.0.0",
     "react-transform-catch-errors": "^1.0.0",
     "react-transform-hmr": "^1.0.1",
+    "react-virtual-list": "github:imperialcollegelondon/react-virtual-list",
     "redbox-react": "^1.1.1",
     "redux": "^3.0.4",
     "redux-devtools": "^3.0.0",

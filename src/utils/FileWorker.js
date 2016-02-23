@@ -1,8 +1,6 @@
 import MetadataUtils from './Metadata';
 import AnalysisUtils from './Analysis';
 
-import UploadStore from '../stores/UploadStore.js';
-
 const FASTA_FILE_EXTENSIONS = [
   '.fa', '.fas', '.fna', '.ffn', '.faa', '.frn', '.fasta', '.contig',
 ];
@@ -183,7 +181,6 @@ function handleFileContents(fileContents, rawFiles, assemblies) {
 
 function parseFiles(files, callback) {
   const parseFile = (fileIndex) => {
-    const rawFiles = {};
     const assemblies = {};
     const validatedFiles = validateFiles([files[fileIndex]]);
 
@@ -194,9 +191,9 @@ function parseFiles(files, callback) {
         return;
       }
 
-      handleFileContents(fileContents, rawFiles, assemblies);
+      handleFileContents(fileContents, {}, assemblies);
 
-      callback(null, rawFiles, assemblies);
+      callback(null, assemblies, fileIndex + 1);
 
       if (fileIndex + 1 < files.length) {
         parseFile(fileIndex + 1);
@@ -207,8 +204,16 @@ function parseFiles(files, callback) {
   parseFile(0);
 }
 
-onmessage = function(event) {
-  parseFiles(event.data.files, (error, rawFiles, assemblies) => {
-    postMessage({ error, assemblies });
+onmessage = function (event) {
+  parseFiles(event.data.files, (error, assemblies, index) => {
+    if (error) {
+      postMessage({ error });
+    }
+    const key = Object.keys(assemblies)[0];
+    postMessage({
+      key,
+      assembly: assemblies[key],
+      index,
+    });
   });
-}
+};

@@ -2,6 +2,7 @@ import { displayTree } from '../actions/tree';
 import {
   setUnfilteredIds,
   activateFilter,
+  appendToFilter,
   resetFilter,
 } from '../actions/filter';
 
@@ -104,8 +105,9 @@ function getStandardTreeFunctions(state, dispatch) {
         return;
       }
       const { nodeIds } = event;
+
       if (nodeIds.length) {
-        dispatch(activateFilter(nodeIds));
+        dispatch(event.append ? appendToFilter(nodeIds) : activateFilter(nodeIds));
       } else {
         dispatch(resetFilter());
       }
@@ -132,11 +134,11 @@ function getPopulationTreeFunctions(state, dispatch) {
 
       for (const subtreeId of Object.keys(collection.subtrees)) {
         const leaf = tree.branches[subtreeId];
-        const { assemblyIds } = collection.subtrees[subtreeId];
+        const { assemblyIds, publicCount = 0 } = collection.subtrees[subtreeId];
 
         if (leaf) {
           leaf.interactive = true;
-          leaf.label = `${leaf.label} (${assemblyIds.length})`;
+          leaf.label = `${leaf.label} (${assemblyIds.length}) [${publicCount}]`;
           leaf.setDisplay(styles.collectionLeaf);
           leaf.nodeShape = styles.referenceLeaf.shape;
           leaf.highlighted = (filter.active && assemblyIds.some(filterHasId));

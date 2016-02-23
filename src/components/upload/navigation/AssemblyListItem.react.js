@@ -2,7 +2,7 @@ import '../../../css/upload-review.css';
 
 import React from 'react';
 
-import UploadWorkspaceNavigationActionCreators from '^/actions/UploadWorkspaceNavigationActionCreators';
+import UploadActionCreators from '^/actions/UploadActionCreators';
 
 import { DANGER_COLOUR, CGPS } from '^/defaults';
 
@@ -31,11 +31,10 @@ const Component = React.createClass({
 
   handleSelectAssembly(selectedassemblyName) {
     this.resetDeleteState();
-    UploadWorkspaceNavigationActionCreators.navigateToAssembly(selectedassemblyName);
   },
 
   handleDeleteAssembly() {
-    UploadWorkspaceNavigationActionCreators.deleteAssembly(this.props.assemblyName);
+    UploadActionCreators.deleteAssembly(this.props.assemblyName);
   },
 
   render() {
@@ -47,11 +46,15 @@ const Component = React.createClass({
 
     return (
       <li ref={assemblyName} className={`assemblyListItem ${this.props.selected ? ' selected' : ''}`} title={assemblyName}>
-        <button className="selectButton mdl-button mdl-js-button mdl-js-ripple-effect" onClick={this.handleSelectAssembly.bind(this, assemblyName)}>
-        <span className="filename">
+        <a
+          className="selectButton mdl-button mdl-js-button mdl-js-ripple-effect"
+          href={`#assembly-${assemblyName}`}
+          onClick={this.handleSelectAssembly.bind(this, assemblyName)}
+        >
+          <span className="filename">
             {assemblyName}
           </span>
-        </button>
+        </a>
         { !this.props.isUploading && this.state.deleteConfirm ?
           <ConfirmDelete title={assemblyName} handleDeleteAssembly={this.handleDeleteAssembly} resetDeleteState={this.resetDeleteState}/>
           :

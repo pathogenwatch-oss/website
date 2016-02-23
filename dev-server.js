@@ -37,6 +37,10 @@ apiRouter.post('/species/:speciesId/collection/:collectionId/assembly/:id', func
   res.json({ assemblyId: req.params.id });
 });
 
+apiRouter.get('/species/:speciesId/collection/:id/status', function (req, res) {
+  res.json({ status: 'READY' });
+});
+
 apiRouter.get('/species/:speciesId/collection/:id', function (req, res) {
   setTimeout(function () {
     res.sendFile(__dirname + '/static_data/collection.json');
@@ -51,9 +55,12 @@ apiRouter.get('/species/:speciesId/antibiotics', function (req, res) {
   res.sendFile(__dirname + '/static_data/antibiotics.json');
 });
 
+var subtreeError = false;
 apiRouter.get('/species/:speciesId/collection/:collectionId/subtree/:subtreeId', function (req, res) {
+  subtreeError = !subtreeError;
   setTimeout(function () {
-    res.sendFile(`${__dirname}/static_data/${req.params.subtreeId}.json`);
+    return subtreeError ? res.sendStatus(500) :
+      res.sendFile(`${__dirname}/static_data/${req.params.subtreeId}.json`);
   }, 1000);
 });
 
@@ -65,11 +72,11 @@ apiRouter.post('/download/type/assembly/format/fasta', function (req, res) {
   }, 1000);
 });
 
-var error = false;
+var downloadError = false;
 apiRouter.post('/download/type/:idType/format/:fileFormat', function (req, res) {
-  error = !error;
+  downloadError = !downloadError;
   setTimeout(function () {
-    return error ? res.sendStatus(500) :
+    return downloadError ? res.sendStatus(500) :
       res.json({
         'checksum': req.params.fileFormat,
       });

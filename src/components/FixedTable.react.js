@@ -1,4 +1,5 @@
 import 'fixed-data-table/dist/fixed-data-table.css';
+import '../css/fixed-data-table-overrides.css';
 import '../css/table.css';
 
 import React from 'react';
@@ -40,7 +41,7 @@ export default React.createClass({
   },
 
   renderHeader(columnProps, headerProps) {
-    const { headerClasses, noHeader, columnKey } = columnProps;
+    const { headerClasses, getHeaderContent, columnKey } = columnProps;
     const isSelected = (columnProps === this.props.activeColumn);
 
     return (
@@ -48,8 +49,10 @@ export default React.createClass({
         {...headerProps}
         className={getHeaderClassNames(isSelected, headerClasses)}
       >
-        {!noHeader &&
-          <button onClick={event => this.handleHeaderClick(event, columnProps)}>
+        { getHeaderContent ?
+          getHeaderContent(columnProps) :
+          <button className="wgsa-selectable-column-heading"
+            onClick={event => this.handleHeaderClick(event, columnProps)}>
             {formatColumnLabel(columnKey)}
           </button>
         }
