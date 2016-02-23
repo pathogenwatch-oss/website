@@ -58,7 +58,7 @@ Collection: ${collectionId}`);
 
     if (!EXPECTED_RESULTS.has(taskType)) {
       LOGGER.warn(`${taskType} is not an expected result, discarding.`);
-      return;
+      return queue.shift();
     }
 
     async.waterfall([
