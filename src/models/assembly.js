@@ -120,6 +120,7 @@ function formatForFrontend(assembly) {
       core: core ? {
         size: core.kernelSize,
         percentMatched: core.percentKernelMatched,
+        percentAssemblyMatched: core.percentAssemblyMatched,
       } : null,
       resistanceProfile: paarsnp ?
         Object.keys(paarsnp.resistanceProfile).
