@@ -4,6 +4,7 @@ import '../../css/forms.css';
 import React from 'react';
 
 import FileDragAndDrop from './DragAndDrop.react';
+import CircularProgress from '^/components/CircularProgress.react';
 
 import AssemblyMetadata from './AssemblyMetadata.react';
 import AssemblyAnalysis from './AssemblyAnalysis.react';
@@ -60,8 +61,8 @@ export default React.createClass({
       readyToUpload: false,
       confirmedMultipleMetadataDrop: false,
       isProcessing: false,
+      processingProgress: 0,
       assemblyName: null,
-      uploadProgressPercentage: 0,
       collectionUrl: null,
     };
   },
@@ -74,9 +75,14 @@ export default React.createClass({
     bindNavigationEvents(this.handleNavigationChange);
   },
 
-  shouldComponentUpdate(prevProps, prevState) {
-    const { isProcessing } = this.state;
-    return isProcessing !== prevState.isProcessing || isProcessing === false;
+  _shouldComponentUpdate(prevProps, prevState) {
+    const { isProcessing, processingProgress, readyToUpload } = this.state;
+    return (
+      readyToUpload !== prevState.readyToUpload ||
+      processingProgress !== prevState.processingProgress ||
+      isProcessing !== prevState.isProcessing ||
+      isProcessing === false
+    );
   },
 
   componentWillUnmount() {
@@ -121,11 +127,11 @@ export default React.createClass({
   },
 
   processFiles(files) {
-    this.setState({ isProcessing: true });
-    FileUtils.parseFiles(
-      files,
-      () => this.setState({ isProcessing: false }),
-    );
+    this.setState({ isProcessing: true, processingProgress: 0 });
+    FileUtils.parseFiles(files, {
+      progress: (percent) => this.setState({ processingProgress: percent }),
+      complete: () => this.setState({ isProcessing: false }),
+    });
   },
 
   confirmDuplicateOverwrite(files) {
@@ -197,37 +203,57 @@ export default React.createClass({
           </aside>
           <main className="mdl-layout__content" style={layoutContentStyle}>
             <div id="loadingAnimation" style={isProcessing ? loadingAnimationStyleVisible : loadingAnimationStyleHidden} className="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
-            { assembly ? (
-                <div className="mdl-grid">
-                  <div className="mdl-cell mdl-cell--6-col wgsa-card-column">
-                    <div className="wgsa-card mdl-shadow--2dp">
-                      <div className="wgsa-card-heading">Assembly Statistics</div>
+            {(() => {
+              if (isProcessing) {
+                return (
+                  <div className="wgsa-file-processing-progress" ref="progressWrapper">
+                    <CircularProgress
+                      radius={240}
+                      percentage={this.state.processingProgress}
+                    />
+                  </div>
+                );
+              }
+
+              if (assembly) {
+                return (
+                  <div className="mdl-grid">
+                    <div className="mdl-cell mdl-cell--6-col wgsa-card-column">
+                      <div className="wgsa-card mdl-shadow--2dp">
+                        <div className="wgsa-card-heading">Assembly Statistics</div>
+                        <div className="wgsa-card-content">
+                          <AssemblyAnalysis metrics={assembly.metrics}/>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="mdl-cell mdl-cell--6-col wgsa-card-column chart-card">
+                      <div className="wgsa-card mdl-shadow--2dp">
+                        <div className="wgsa-card-heading">N50 Chart</div>
+                        <div className="wgsa-card-content ">
+                          { assembly.metrics &&
+                            <AssemblyAnalysisChart metrics={assembly.metrics} />
+                          }
+                        </div>
+                      </div>
+                    </div>
+                    <div className="wgsa-card mdl-cell mdl-cell--12-col increase-cell-gutter mdl-shadow--2dp">
+                      <div className="wgsa-card-heading">Metadata</div>
                       <div className="wgsa-card-content">
-                        <AssemblyAnalysis metrics={assembly.metrics}/>
+                        <AssemblyMetadata assembly={assembly} />
                       </div>
                     </div>
                   </div>
-                  <div className="mdl-cell mdl-cell--6-col wgsa-card-column chart-card">
-                    <div className="wgsa-card mdl-shadow--2dp">
-                      <div className="wgsa-card-heading">N50 Chart</div>
-                      <div className="wgsa-card-content ">
-                        { assembly.metrics &&
-                          <AssemblyAnalysisChart metrics={assembly.metrics} />
-                        }
-                      </div>
-                    </div>
-                  </div>
-                  <div className="wgsa-card mdl-cell mdl-cell--12-col increase-cell-gutter mdl-shadow--2dp">
-                    <div className="wgsa-card-heading">Metadata</div>
-                    <div className="wgsa-card-content">
-                      <AssemblyMetadata assembly={assembly} />
-                    </div>
-                  </div>
-                </div>
-              ) : (
-               <Overview clickHandler={this.handleClick} isReadyToUpload={this.state.readyToUpload} />
-             )
-            }
+                );
+              }
+
+              return (
+                <Overview
+                  clickHandler={this.handleClick}
+                  isReadyToUpload={this.state.readyToUpload}
+                />
+              );
+            })()
+          }
           </main>
         </div>
         <input type="file" multiple="multiple" accept={DEFAULT.SUPPORTED_FILE_EXTENSIONS} ref="fileInput" style={fileInputStyle} onChange={this.handleFileInputChange} />

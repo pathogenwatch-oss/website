@@ -10,20 +10,7 @@ let assemblies = {};
 const errors = [];
 
 function addFiles(newRawFiles, newAssemblies) {
-  assemblies = assign(
-    {},
-    assemblies,
-    Object.keys(newAssemblies).reduce((memo, key) => {
-      const newAssembly = newAssemblies[key];
-      const existingAssembly = assemblies[key];
-
-      memo[key] = existingAssembly ?
-        assign({}, existingAssembly, newAssembly) :
-        newAssembly;
-
-      return memo;
-    }, {})
-  );
+  assemblies = newAssemblies;
 }
 
 function validateFiles() {
@@ -126,25 +113,29 @@ const Store = assign({}, EventEmitter.prototype, {
   },
 
   getMinMaxNoContigsForAllAssemblies() {
-    var noContigsArray = [];
-    for (var assemblyId in assemblies) {
-      const metrics = assemblies[assemblyId].metrics || {};
-      if (metrics.totalNumberOfContigs) {
-        noContigsArray.push(metrics.totalNumberOfContigs);
+    const contigsRange = {};
+
+    for (const assemblyId of Object.keys(assemblies)) {
+      const { totalNumberOfContigs } = assemblies[assemblyId].metrics || {};
+      if (totalNumberOfContigs) {
+        contigsRange.min = contigsRange.min ?
+          Math.min(contigsRange.min, totalNumberOfContigs) :
+          totalNumberOfContigs;
+        contigsRange.max = contigsRange.max ?
+          Math.max(contigsRange.max, totalNumberOfContigs) :
+          totalNumberOfContigs;
       }
     }
-    if (noContigsArray.length <= 0) {
-      return [ 0, 0 ];
-    }
-    return [ Math.min(...noContigsArray), Math.max(...noContigsArray) ];
+
+    return contigsRange;
   },
 
-  getAverageAssemblyLengthForAllAssemblies() {
+  getAverageAssemblyLength() {
     var totalAssemblyLength = 0;
     var noAssemblies = Object.keys(assemblies).length;
     for (var assemblyId in assemblies) {
       const metrics = assemblies[assemblyId].metrics || {};
-      totalAssemblyLength += metrics.totalNumberOfNucleotidesInDnaStrings || 0;
+      totalAssemblyLength += (metrics.totalNumberOfNucleotidesInDnaStrings || 0);
     }
     return Math.round(totalAssemblyLength / noAssemblies);
   },

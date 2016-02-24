@@ -28,6 +28,30 @@
   margin: 0 auto;
 }
 
+.wgsa-file-processing-progress {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 28px; /* half of header height to balance vertical alignment */
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wgsa-file-processing-progress .CircularProgress {
+  overflow: visible;
+}
+
+.wgsa-file-processing-progress .CircularProgress-Text {
+  font-size: 112px;
+}
+
+.wgsa-file-processing-progress .CircularProgress-Bg,
+.wgsa-file-processing-progress .CircularProgress-Fg {
+  stroke-width: 24px;
+}
+
 /**** Upload Review - Header ****/
 
 @media (max-width: 1024px) {
