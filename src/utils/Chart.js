@@ -249,19 +249,19 @@ function drawOverviewChart(data, appendToClass, xLabel = '', yLabel = '') {
     }
   }
 
-  var chartXAxis = Object.keys(data);
+  var chartXAxis = Object.keys(data).concat([ '__spacer' ]);
 
   // Scales
   // console.log(chartData)
   // X
   var xScale = d3.scale.linear()
-  .domain([ 0, chartData.length ])
-  .range([ 40, chartWidth - 100 ]); // the pixels to map, i.e. the width of the diagram
+  .domain([ 0, chartData.length + 1 ])
+  .range([ 75, chartWidth - 50 ]); // the pixels to map, i.e. the width of the diagram
 
   // Y
   var yScale = d3.scale.linear()
-  .domain([ Math.max(...chartData) * 1.5, 0 ])
-  .range([ 30, chartHeight - 52 ]);
+  .domain([ Math.max(...chartData) * 1.01, Math.min(...chartData) * 0.99 ])
+  .range([ 30, chartHeight - 30 ]);
 
   // Axes
 
@@ -289,13 +289,13 @@ function drawOverviewChart(data, appendToClass, xLabel = '', yLabel = '') {
   // X
   svg.append('g')
   .attr('class', 'x axis')
-  .attr('transform', 'translate(20, 260)')
+  .attr('transform', 'translate(20, 282)')
   .call(xAxis);
 
   // Y
   svg.append('g')
   .attr('class', 'y axis')
-  .attr('transform', 'translate(60, 0)')
+  .attr('transform', 'translate(95, 0)')
   .call(yAxis);
 
   // Axis labels
@@ -305,9 +305,9 @@ function drawOverviewChart(data, appendToClass, xLabel = '', yLabel = '') {
   .append('text')
   .text(xLabel)
   .attr('class', 'axis-label')
-  .attr('text-anchor', 'end')
-  .attr('x', (chartWidth / 2))
-  .attr('y', 45);
+  .attr('text-anchor', 'middle')
+  .attr('x', chartWidth / 2)
+  .attr('y', 30);
 
   // Y
   svg.select('.y.axis')
@@ -315,8 +315,9 @@ function drawOverviewChart(data, appendToClass, xLabel = '', yLabel = '') {
   .text(yLabel)
   .attr('class', 'axis-label')
   .attr('transform', 'rotate(-90)')
-  .attr('x', -(chartHeight / 2) - 44)
-  .attr('y', chartWidth - 120);
+  .attr('text-anchor', 'middle')
+  .attr('x', -(chartHeight / 2))
+  .attr('y', -75);
 
   // Circles
   svg.selectAll('circle')

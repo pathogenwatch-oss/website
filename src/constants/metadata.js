@@ -48,10 +48,10 @@ export const systemColumnProps = [
     },
     getCellContents,
   },
-  { columnKey: '__%_annotated',
+  { columnKey: '__%_non-core',
     valueGetter({ analysis }) {
       return analysis.core && analysis.core.percentAssemblyMatched ?
-        analysis.core.percentAssemblyMatched.toFixed(1) :
+        (100 - analysis.core.percentAssemblyMatched).toFixed(1) :
         null;
     },
     getCellContents,

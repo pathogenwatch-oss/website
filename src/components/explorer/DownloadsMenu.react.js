@@ -33,20 +33,8 @@ const DownloadsMenu = React.createClass({
         <div className="wgsa-overlay__content wgsa-downloads-menu mdl-shadow--3dp" onClick={e => e.stopPropagation()}>
           <h3 className="mdl-dialog__title">Downloads</h3>
           <div className="wgsa-downloads-menu__list">
-            <h4 className="wgsa-menu-heading">Filtered</h4>
             <ul className="wgsa-submenu">
-              { files.filter(_ => !_.ignoresFilter).map(fileProps => (
-                  <li className="wgsa-menu__item" key={fileProps.format}>
-                    <DownloadButton {...fileProps} />
-                  </li>
-                )
-              )}
-            </ul>
-          </div>
-          <div className="wgsa-downloads-menu__list">
-            <h4 className="wgsa-menu-heading">Unfiltered</h4>
-            <ul className="wgsa-submenu">
-              { files.filter(_ => _.ignoresFilter).map(fileProps => (
+              { files.map(fileProps => (
                   <li className="wgsa-menu__item" key={fileProps.format}>
                     <DownloadButton {...fileProps} />
                   </li>
