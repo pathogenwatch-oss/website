@@ -33,7 +33,8 @@ function validateFiles() {
   //   return;
   // }
 
-  for (const assemblyName of assemblyNames) {
+  // create a new array to propagate error changes - temporary hack...
+  assemblies = assemblyNames.reduce((memo, assemblyName) => {
     const assembly = assemblies[assemblyName];
     const previousNumberOfErrors = errors.length;
 
@@ -56,7 +57,10 @@ function validateFiles() {
     if (errors.length > previousNumberOfErrors) {
       assembly.hasErrors = true;
     }
-  }
+
+    memo[assemblyName] = assembly;
+    return memo;
+  }, {});
 }
 
 function setMetadataColumn(assemblyName, columnName, value) {

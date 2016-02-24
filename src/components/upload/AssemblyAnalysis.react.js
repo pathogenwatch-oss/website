@@ -25,7 +25,7 @@ var AssemblyAnalysis = React.createClass({
 
     if (!metrics || !Object.keys(metrics).length) {
       return (
-        <p className="mdl-card__supporting-text">(Assembly not provided)</p>
+        <p className="mdl-card__supporting-text">(Fasta not provided)</p>
       );
     }
 
