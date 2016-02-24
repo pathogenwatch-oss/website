@@ -477,6 +477,7 @@
   box-sizing: border-box;
   display: flex;
   justify-content: space-between;
+  cursor: pointer;
 }
 
 .assemblyListItem .selectButton {
@@ -530,6 +531,10 @@
 
 .assemblyListItem .utilityButton .material-icons {
   font-size: 16px;  /* Preferred icon size */
+}
+
+.assemblyListItem > .mdl-button__ripple-container {
+  z-index: -1;
 }
 
 .assembly-list-item__utils {
