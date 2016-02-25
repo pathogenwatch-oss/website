@@ -23,7 +23,7 @@ function requestDownload(request, callback) {
       LOGGER.info('Received response', message);
       queue.destroy();
 
-      if (message.taskStatus === 'FAILURE') {
+      if (message.taskStatus !== 'SUCCESS') {
         return callback(new Error('File generation failed'));
       }
 
