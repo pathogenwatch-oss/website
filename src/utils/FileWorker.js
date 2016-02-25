@@ -81,36 +81,6 @@ function readFiles(files, callback) {
   });
 }
 
-function initialiseAssemblyObject(assemblyName, assemblies) {
-  if (assemblies[assemblyName]) {
-    return assemblies;
-  }
-
-  const ASSEMBLY_OBJECT = {
-    fasta: {
-      name: assemblyName,
-      assembly: null,
-    },
-    metadata: {
-      assemblyName: assemblyName,
-      pmid: null,
-      date: {
-        year: null,
-        month: null,
-        day: null,
-      },
-      position: {
-        latitude: null,
-        longitude: null,
-      },
-    },
-    metrics: {},
-  };
-
-  assemblies[assemblyName] = ASSEMBLY_OBJECT;
-  return assemblies;
-}
-
 function parseFastaFile(file, rawFiles, assemblies) {
   const fileName = file.name.replace(FASTA_FILE_NAME_REGEX, '');
   const fileContent = file.content;
