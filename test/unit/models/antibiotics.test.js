@@ -19,7 +19,7 @@ describe('Model: Antibiotics', function () {
     reset();
   });
 
-  it.only('should return a sorted array for the front end', function () {
+  it('should return a sorted array for the front end', function () {
     var antibioticModel = rewire('models/antibiotic');
     var antibiotics = {
       class1: {

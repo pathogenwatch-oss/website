@@ -135,6 +135,14 @@ function formatForFrontend(assembly) {
   };
 }
 
+function hasFatalErrors(erroredKeys) {
+  return erroredKeys.some(key =>
+    key.startsWith(ASSEMBLY_METADATA) ||
+    key.startsWith(CORE_RESULT) ||
+    key.startsWith(FP_COMP)
+  );
+}
+
 function get(params, queryKeyPrefixes, callback) {
   var assemblyId = params.assemblyId;
   var queryKeys = constructQueryKeys(queryKeyPrefixes, assemblyId);
@@ -142,9 +150,10 @@ function get(params, queryKeyPrefixes, callback) {
   LOGGER.info('Assembly ' + assemblyId + ' query keys:');
   LOGGER.info(queryKeys);
 
-  mainStorage.retrieveMany(queryKeys, function (error, assemblyData) {
-    if (error) {
-      return callback(error);
+  mainStorage.retrieveMany(queryKeys, function (erroredKeys, assemblyData) {
+    if (erroredKeys && hasFatalErrors(erroredKeys)) {
+      LOGGER.error(`Assembly ${assemblyId} could not be retrieve minimum documents`)
+      return callback(erroredKeys);
     }
 
     LOGGER.info('Got assembly ' + assemblyId + ' data');
