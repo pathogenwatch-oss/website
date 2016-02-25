@@ -10,11 +10,13 @@ const { UPLOAD_PROGRESS } = require('utils/documentKeys');
 
 const QUEUE_OPTIONS = { durable: true, autoDelete: false };
 
-const EXPECTED_ASSEMBLY_RESULTS =
-  require('models/assembly').ASSEMBLY_ANALYSES.concat([ 'UPLOAD', /*'GSL'*/ ]);
+const EXPECTED_ASSEMBLY_RESULTS = new Set(
+  require('models/assembly').ASSEMBLY_ANALYSES.concat([ 'UPLOAD', 'GSL' ])
+);
 
-const EXPECTED_COLLECTION_RESULTS =
-  [ 'PHYLO_MATRIX', 'SUBMATRIX', 'CORE_MUTANT_TREE' ];
+const EXPECTED_COLLECTION_RESULTS = new Set(
+  [ 'PHYLO_MATRIX', 'SUBMATRIX', 'CORE_MUTANT_TREE' ]
+);
 
 const EXPECTED_RESULTS = new Set(
   EXPECTED_ASSEMBLY_RESULTS.concat(EXPECTED_COLLECTION_RESULTS)
@@ -22,9 +24,21 @@ const EXPECTED_RESULTS = new Set(
 
 function calculateExpectedResults({ collectionSize }) {
   return (
-    collectionSize * EXPECTED_ASSEMBLY_RESULTS.length +
-    EXPECTED_COLLECTION_RESULTS.length
+    collectionSize * EXPECTED_ASSEMBLY_RESULTS.size +
+    EXPECTED_COLLECTION_RESULTS.size
   );
+}
+
+function resultIsExpected(taskType, numResults, collectionSize) {
+  if (EXPECTED_COLLECTION_RESULTS.has(taskType)) {
+    return numResults === 0;
+  }
+
+  if (EXPECTED_ASSEMBLY_RESULTS.has(taskType)) {
+    return numResults < collectionSize;
+  }
+
+  return false;
 }
 
 function isCollectionFatal({ collectionSize, results, errors }) {
@@ -64,7 +78,7 @@ Collection: ${collectionId}`);
     async.waterfall([
       done => mainStorage.retrieve(documentKey, done),
       function (doc, cas, done) {
-        const { assemblyIdToNameMap } = doc;
+        const { assemblyIdToNameMap, collectionSize } = doc;
         if (taskStatus !== 'SUCCESS') {
           doc.errors.push({
             assemblyName: assemblyIdToNameMap[assemblyIdString],
@@ -73,11 +87,13 @@ Collection: ${collectionId}`);
         }
 
         const numResults = doc.results[taskType] || 0;
-        doc.results[taskType] = numResults + 1;
 
-        doc.receivedResults++;
+        if (resultIsExpected(taskType, numResults, collectionSize)) {
+          doc.results[taskType] = numResults + 1;
+          doc.receivedResults++;
+        }
 
-        if (taskType === 'UPLOAD' && isCollectionFatal(doc)) {
+        if (isCollectionFatal(doc)) {
           doc.status = 'FATAL';
           LOGGER.info(`Collection fatal, destroying ${queue.name}`);
           queue.destroy();
