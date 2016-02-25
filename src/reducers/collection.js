@@ -50,6 +50,16 @@ function decorateCollectionAssemblies(assemblies) {
   }, {});
 }
 
+function decoratePublicAssemblies(assemblies) {
+  return Object.keys(assemblies).reduce(function (memo, key) {
+    memo[key] = {
+      ...assemblies[key],
+      __isPublic: true,
+    };
+    return memo;
+  }, {});
+}
+
 export const assemblies = {
   initialState: {},
   actions: {
@@ -72,9 +82,10 @@ export const assemblies = {
     },
     [SET_TREE]: function (state, { ready, result }) {
       if (ready && result) {
+        const publicAssemblies = decoratePublicAssemblies(result.assemblies);
         return {
           ...state,
-          ...replaceSubtypeAssemblyNames(result.assemblies, state),
+          ...replaceSubtypeAssemblyNames(publicAssemblies, state),
         };
       }
       return state;

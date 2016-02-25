@@ -1,4 +1,4 @@
-import React from 'react';
+// import React from 'react';
 
 import { downloadColumnProps, nameColumnProps, getCellContents, }
   from '../constants/table';
@@ -95,21 +95,5 @@ export const systemColumnProps = [
         null;
     },
     getCellContents,
-  },
-  { columnKey: '__pmid',
-    valueGetter({ metadata }) {
-      return metadata.pmid;
-    },
-    getCellContents({ valueGetter }, data) {
-      const pmid = valueGetter(data);
-      return (
-        <a href={`http://www.ncbi.nlm.nih.gov/pubmed/${pmid}`}
-          target="_blank"
-          onClick={(e) => e.stopPropagation()}
-        >
-          {pmid}
-        </a>
-      );
-    },
   },
 ];
