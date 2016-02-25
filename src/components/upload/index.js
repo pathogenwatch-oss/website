@@ -14,6 +14,7 @@ import AssemblyList from './navigation/AssemblyList.react';
 import UploadReviewHeader from './UploadReviewHeader.react';
 import Overview from './Overview.react';
 
+import UploadActionCreators from '^/actions/UploadActionCreators';
 import ToastActionCreators from '^/actions/ToastActionCreators';
 
 import UploadStore from '^/stores/UploadStore';
@@ -98,7 +99,6 @@ export default React.createClass({
   },
 
   handleFileUploadingStoreChange() {
-    this.setState({ isProcessing: true });
     const id = FileUploadingStore.getCollectionId();
 
     if (!id) {
@@ -168,17 +168,29 @@ export default React.createClass({
     }
   },
 
+  handleUploadButtonClick() {
+    if (this.state.isWaiting) {
+      return;
+    }
+
+    this.setState({ isWaiting: true });
+    UploadActionCreators.getCollectionId();
+  },
+
   render() {
     const assemblies = UploadStore.getAssemblies();
     const assembly = UploadStore.getAssembly(this.state.assemblyName);
-    const { isProcessing } = this.state;
+    const { isProcessing, isWaiting } = this.state;
     const subtitle = assembly ? assembly.name : (isProcessing ? 'Processing...' : 'Overview');
 
     return (
       <FileDragAndDrop onDrop={this.handleDrop}>
         <div className="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-drawer">
-          <UploadReviewHeader subtitle={subtitle} activateUploadButton={this.state.readyToUpload} />
-
+          <UploadReviewHeader
+            subtitle={subtitle}
+            activateUploadButton={this.state.readyToUpload}
+            handleUploadButtonClick={this.handleUploadButtonClick}
+          />
           <aside className="navigation-container mdl-layout__drawer mdl-shadow--3dp">
             <a className="uploadWorkspaceNavigationTitle" href="#">
               <span className="mdl-badge" style={{ margin: 0 }} data-badge={UploadStore.getAssembliesCount()}>Assemblies</span>
@@ -192,7 +204,7 @@ export default React.createClass({
             </button>
           </aside>
           <main className="mdl-layout__content" style={layoutContentStyle}>
-            <div id="loadingAnimation" style={isProcessing ? loadingAnimationStyleVisible : loadingAnimationStyleHidden} className="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
+            <div id="loadingAnimation" style={isWaiting ? loadingAnimationStyleVisible : loadingAnimationStyleHidden} className="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
             {(() => {
               if (isProcessing) {
                 return (

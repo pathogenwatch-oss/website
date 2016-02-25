@@ -31,7 +31,10 @@ export default React.createClass({
           <span style={headerStyle} className="mdl-layout-title">WGSA | {Species.formattedName}</span>
           <span className="mdl-layout-spacer" />
           <span style={subtitleStyle} className="mdl-layout-title">{this.props.subtitle}</span>
-          <UploadButton active={this.props.activateUploadButton} />
+          <UploadButton
+            active={this.props.activateUploadButton}
+            onClick={this.props.handleUploadButtonClick}
+          />
         </div>
       </header>
     );
