@@ -27,23 +27,26 @@ function retrieve(key, callback) {
   });
 }
 
-function createMultiError(errorCount, documents) {
-  documents.errorCount = errorCount;
-  return documents;
-}
-
 function retrieveMany(keys, callback) {
-  this.connection.getMulti(keys, function (errorCount, result) {
+  this.connection.getMulti(keys, (errorCount, result) => {
+    const { erroredKeys, results } = Object.keys(result).reduce((memo, key) => {
+      const { error, value } = result[key];
+      if (error) {
+        memo.erroredKeys.push(key);
+      }
+
+      if (value) {
+        memo.results[key] = value;
+      }
+      return memo;
+    }, { erroredKeys: [], results: {} });
+
     if (errorCount) {
-      LOGGER.error('✗ Failed to retrieve ' + errorCount + ' keys.');
-      LOGGER.error(result);
-      return callback(createMultiError(errorCount, result), null);
+      LOGGER.error(`✗ Failed to retrieve ${errorCount} keys: ${erroredKeys}`);
+      return callback(erroredKeys, results);
     }
     LOGGER.info('Successfully retrieved ' + keys);
-    callback(null, Object.keys(result).reduce(function (memo, key) {
-      memo[key] = result[key].value;
-      return memo;
-    }, {}));
+    callback(null, results);
   });
 }
 
