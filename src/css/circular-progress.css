@@ -3,6 +3,8 @@
   fill: none;
   stroke-width: 8px;
   opacity: 1;
+  transform-origin: center;
+  transform: rotate(-90deg); /* starts progress at 12 o' clock position */
 }
 
 .CircularProgress-Bg {

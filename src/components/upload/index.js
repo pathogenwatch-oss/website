@@ -75,16 +75,6 @@ export default React.createClass({
     bindNavigationEvents(this.handleNavigationChange);
   },
 
-  _shouldComponentUpdate(prevProps, prevState) {
-    const { isProcessing, processingProgress, readyToUpload } = this.state;
-    return (
-      readyToUpload !== prevState.readyToUpload ||
-      processingProgress !== prevState.processingProgress ||
-      isProcessing !== prevState.isProcessing ||
-      isProcessing === false
-    );
-  },
-
   componentWillUnmount() {
     FileUploadingStore.removeChangeListener(this.handleFileUploadingStoreChange);
     UploadStore.removeChangeListener(this.handleUploadStoreChange);

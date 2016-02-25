@@ -22,12 +22,10 @@ const initialState = {
   differences_matrix: {
     description: 'Difference Matrix (.csv)',
     filename: 'differences_matrix',
-    ignoresFilter: true,
   },
   score_matrix: {
     description: 'Score Matrix (.csv)',
     filename: 'score_matrix',
-    ignoresFilter: true,
   },
   fasta: {
     description: 'Assembly (.fa)',
