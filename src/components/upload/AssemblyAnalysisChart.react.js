@@ -82,7 +82,7 @@ const AssemblyAnalysisChart = React.createClass({
     }
 
     return (
-      <p className="mdl-card__supporting-text">(Fasta not provided)</p>
+      <p className="mdl-card__supporting-text">(Fasta file not provided)</p>
     );
   },
 

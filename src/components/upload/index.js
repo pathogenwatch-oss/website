@@ -232,8 +232,9 @@ export default React.createClass({
                       <div className="wgsa-card mdl-shadow--2dp">
                         <div className="wgsa-card-heading">N50 Chart</div>
                         <div className="wgsa-card-content ">
-                          { assembly.metrics &&
-                            <AssemblyAnalysisChart metrics={assembly.metrics} />
+                          { assembly.metrics ?
+                            <AssemblyAnalysisChart metrics={assembly.metrics} /> :
+                            <p className="mdl-card__supporting-text">(Fasta file not provided)</p>
                           }
                         </div>
                       </div>

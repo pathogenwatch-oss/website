@@ -13,6 +13,7 @@ export default React.createClass({
   getInitialState() {
     return {
       message: null,
+      active: false,
     };
   },
 
@@ -20,39 +21,47 @@ export default React.createClass({
     ToastStore.addChangeListener(this.handleToastStoreChange);
   },
 
+  componentDidUpdate(_, { message }) {
+    // should only focus when a message is added
+    if (!this.state.active || message) return;
+
+    if (this.state.action) {
+      this.refs.actionButton.focus();
+    } else {
+      this.refs.closeButton.focus();
+    }
+  },
+
   componentWillUnmount() {
     ToastStore.removeChangeListener(this.handleToastStoreChange);
   },
 
   render() {
-    const { message, action } = this.state;
+    const { active, message, action } = this.state;
+    console.log(this.state);
     return (
       <div className="wgsa-toast-container">
-      { message &&
-        <aside className="wgsa-toast">
-          <span className="wgsa-toast__message">
-            {message}
-          </span>
+        <aside className={`wgsa-toast ${active ? 'wgsa-toast--active' : null}`.trim()}>
+          <span className="wgsa-toast__message">{message}</span>
           { action &&
-            <button onClick={this.handleAction} className="wgsa-toast__action mdl-button">
+            <button ref="actionButton" onClick={this.handleAction} className="wgsa-toast__action mdl-button">
               {action.label}
             </button>
           }
-          <button onClick={this.handleClose} className="wgsa-toast__dismiss mdl-button mdl-button--icon">
+          <button ref="closeButton" onClick={this.handleClose} className="wgsa-toast__dismiss mdl-button mdl-button--icon">
             <i className="material-icons">close</i>
           </button>
         </aside>
-      }
       </div>
     );
   },
 
   handleToastStoreChange() {
-    const { message, sticky, action } = ToastStore.getToast();
+    const { message, action } = ToastStore.getToast();
     this.setState({
       message,
-      sticky,
       action,
+      active: typeof message !== 'undefined',
     });
   },
 
@@ -62,7 +71,8 @@ export default React.createClass({
   },
 
   handleClose() {
-    ToastActionCreators.hideToast();
+    this.setState({ active: false });
+    setTimeout(() => ToastActionCreators.hideToast(), 300);
   },
 
 });
