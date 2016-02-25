@@ -152,7 +152,7 @@ function get(params, queryKeyPrefixes, callback) {
 
   mainStorage.retrieveMany(queryKeys, function (erroredKeys, assemblyData) {
     if (erroredKeys && hasFatalErrors(erroredKeys)) {
-      LOGGER.error(`Assembly ${assemblyId} could not be retrieve minimum documents`)
+      LOGGER.error(`Could retrieve minimum documents for assembly ${assemblyId}`);
       return callback(erroredKeys);
     }
 
