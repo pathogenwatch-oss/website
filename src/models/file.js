@@ -24,7 +24,7 @@ function requestDownload(request, callback) {
       queue.destroy();
 
       if (message.taskStatus !== 'SUCCESS') {
-        return callback(new Error('File generation failed'));
+        return callback(`${message.format} generation failed: ${message.taskStatus}`);
       }
 
       callback(null, message.fileNamesMap);
