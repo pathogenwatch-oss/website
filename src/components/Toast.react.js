@@ -38,7 +38,6 @@ export default React.createClass({
 
   render() {
     const { active, message, action } = this.state;
-    console.log(this.state);
     return (
       <div className="wgsa-toast-container">
         <aside className={`wgsa-toast ${active ? 'wgsa-toast--active' : null}`.trim()}>

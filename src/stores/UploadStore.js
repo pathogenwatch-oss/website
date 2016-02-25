@@ -64,11 +64,21 @@ function validateFiles() {
 }
 
 function setMetadataColumn(assemblyName, columnName, value) {
-  assemblies[assemblyName].metadata[columnName] = value;
+  const { metadata = {} } = assemblies[assemblyName];
+
+  if (typeof value === 'string' && value.length) {
+    metadata[columnName] = value;
+  } else {
+    delete metadata[columnName];
+  }
+
+  assemblies[assemblyName].metadata = metadata;
 }
 
 function setMetadataDateComponent(assemblyName, component, value) {
-  assemblies[assemblyName].metadata.date[component] = value;
+  const { metadata = {} } = assemblies[assemblyName];
+  metadata.date[component] = value;
+  assemblies[assemblyName].metadata = metadata;
 }
 
 function deleteAssembly(assemblyName) {

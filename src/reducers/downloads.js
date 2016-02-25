@@ -43,7 +43,7 @@ function createLink(keyMap, filename) {
   const key = Object.keys(keyMap)[0];
 
   if (!key) {
-    return {};
+    return null;
   }
 
   return (

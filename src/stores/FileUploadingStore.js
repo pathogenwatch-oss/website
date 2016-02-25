@@ -67,7 +67,7 @@ const Store = assign({}, EventEmitter.prototype, {
       };
       const requestBody = {
         sequences: fasta.assembly,
-        metadata: metadata || {
+        metadata: Object.assign({
           assemblyName: name,
           pmid: null,
           date: {
@@ -79,7 +79,7 @@ const Store = assign({}, EventEmitter.prototype, {
             latitude: null,
             longitude: null,
           },
-        },
+        }, metadata),
         metrics,
       };
 
