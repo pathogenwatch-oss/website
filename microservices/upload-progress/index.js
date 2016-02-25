@@ -19,7 +19,7 @@ const EXPECTED_COLLECTION_RESULTS = new Set(
 );
 
 const EXPECTED_RESULTS = new Set(
-  EXPECTED_ASSEMBLY_RESULTS.concat(EXPECTED_COLLECTION_RESULTS)
+  [ ...EXPECTED_ASSEMBLY_RESULTS, ...EXPECTED_COLLECTION_RESULTS ]
 );
 
 function calculateExpectedResults({ collectionSize }) {
@@ -41,12 +41,13 @@ function resultIsExpected(taskType, numResults, collectionSize) {
   return false;
 }
 
+const fatalTasks = new Set([ 'UPLOAD', 'CORE' ]);
 function isCollectionFatal({ collectionSize, results, errors }) {
   // allows error page to show all failed assemblies
-  if (results.UPLOAD < collectionSize) {
-    return false;
+  if (Array.from(fatalTasks).every(task => results[task] === collectionSize)) {
+    return errors.some(({ taskType }) => fatalTasks.has(taskType));
   }
-  return errors.some(({ taskType }) => taskType === 'UPLOAD');
+  return false;
 }
 
 module.exports = function ({ mqConnection }) {
@@ -91,6 +92,9 @@ Collection: ${collectionId}`);
         if (resultIsExpected(taskType, numResults, collectionSize)) {
           doc.results[taskType] = numResults + 1;
           doc.receivedResults++;
+        } else {
+          LOGGER.warn(`${taskType} is a duplicate, ignoring.`);
+          return done();
         }
 
         if (isCollectionFatal(doc)) {
