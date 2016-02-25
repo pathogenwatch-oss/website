@@ -23,7 +23,7 @@ function measureText(text) {
 }
 
 function buildAntibioticColumnProps(antibiotics) {
-  return antibiotics.map(function (antibiotic) {
+  return antibiotics.map(antibiotic => {
     return {
       columnKey: antibiotic,
       headerClasses: 'wgsa-table-header--resistance',
@@ -32,11 +32,13 @@ function buildAntibioticColumnProps(antibiotics) {
       flexGrow: 0,
       getCellContents({ columnKey }, { analysis }) {
         const value = analysis.resistanceProfile[columnKey];
-        return (
-          <i title={value} className={`material-icons wgsa-resistance-icon wgsa-resistance-icon--${value.toLowerCase()}`}>
-            { value === 'RESISTANT' ? 'add_box' : '' }
-          </i>
-        );
+        if (value) {
+          return (
+            <i title={value} className={`material-icons wgsa-resistance-icon wgsa-resistance-icon--${value.toLowerCase()}`}>
+              { value === 'RESISTANT' ? 'add_box' : '' }
+            </i>
+          );
+        }
       },
       valueGetter(assembly) {
         const { analysis } = assembly;
