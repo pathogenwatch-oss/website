@@ -6,7 +6,7 @@ const messageQueueUtil = require('utils/messageQueueConnection');
 const logging = require('utils/logging');
 
 const LOGGER = logging.createLogger('upload progress');
-const { UPLOAD_PROGRESS } = require('utils/documentKeys');
+const { COLLECTION_METADATA } = require('utils/documentKeys');
 
 const QUEUE_OPTIONS = { durable: true, autoDelete: false };
 
@@ -62,7 +62,7 @@ module.exports = function ({ mqConnection }) {
 
     const { taskType, taskStatus, assemblyId = {}, collectionId } = message;
 
-    const documentKey = `${UPLOAD_PROGRESS}_${collectionId}`;
+    const documentKey = `${COLLECTION_METADATA}_${collectionId}`;
     const assemblyIdString = assemblyId.assemblyId || 'N/A';
 
     LOGGER.info(`Processing message:
@@ -99,12 +99,14 @@ Collection: ${collectionId}`);
 
         if (isCollectionFatal(doc)) {
           doc.status = 'FATAL';
+          doc.uploadEnded = new Date();
           LOGGER.info(`Collection fatal, destroying ${queue.name}`);
           queue.destroy();
         }
 
         if (doc.receivedResults === doc.expectedResults) {
           doc.status = 'READY';
+          doc.uploadEnded = new Date();
           LOGGER.info(`Collection ready, destroying ${queue.name}`);
           queue.destroy();
         }
@@ -156,10 +158,11 @@ Collection: ${collectionId}`);
       if (message.data && Buffer.isBuffer(message.data)) {
         message = JSON.parse(message.data.toString());
       }
-      const documentKey = `${UPLOAD_PROGRESS}_${message.collectionId}`;
+      const documentKey = `${COLLECTION_METADATA}_${message.collectionId}`;
       const progressDocument = Object.assign({
-        type: 'UP',
+        type: `${COLLECTION_METADATA}`,
         documentKey,
+        uploadStarted: new Date(),
         status: 'PROCESSING',
         expectedResults: calculateExpectedResults(message),
         receivedResults: 0,

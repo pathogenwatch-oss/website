@@ -6,7 +6,7 @@ var mainStorage = require('services/storage')('main');
 var messageQueueService = require('services/messageQueue');
 
 var LOGGER = require('utils/logging').createLogger('Collection');
-const { COLLECTION_LIST, CORE_TREE_RESULT, UPLOAD_PROGRESS } = require('utils/documentKeys');
+const { COLLECTION_LIST, CORE_TREE_RESULT, COLLECTION_METADATA } = require('utils/documentKeys');
 
 var IDENTIFIER_TYPES = {
   COLLECTION: 'Collection',
@@ -294,7 +294,7 @@ function getSubtree({ speciesId, collectionId, subtreeId }, callback) {
 }
 
 function getStatus({ collectionId }, callback) {
-  mainStorage.retrieve(`${UPLOAD_PROGRESS}_${collectionId}`, function (error, doc, cas) {
+  mainStorage.retrieve(`${COLLECTION_METADATA}_${collectionId}`, function (error, doc, cas) {
     if (error) {
       return callback(error);
     }

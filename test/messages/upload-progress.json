@@ -1,0 +1,9 @@
+{
+  "collectionId": "123",
+  "collectionSize": 3,
+  "assemblyIdToNameMap": {
+    "123": "assembly1",
+    "456": "assembly2",
+    "789": "assembly3"
+  }
+}
