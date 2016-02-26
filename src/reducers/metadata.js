@@ -1,5 +1,6 @@
 import { FETCH_ENTITIES } from '../actions/fetch';
 import { SET_LABEL_COLUMN, setLabelColumn } from '../actions/table';
+import { SET_TREE } from '../actions/tree';
 
 import { systemColumnProps } from '../constants/metadata';
 import { getCellContents } from '../constants/table';
@@ -17,15 +18,19 @@ const initialState = {
   columns: [],
 };
 
-function getUserDefinedColumns(assemblies) {
-  const ids = Object.keys(assemblies);
-  const { userDefined } = assemblies[ids[0]].metadata;
+const userDefinedColumnNames = new Set();
 
-  return userDefined ? Object.keys(userDefined) : [];
+function getUserDefinedColumns(assemblies) {
+  Object.keys(assemblies).forEach(key => {
+    const { userDefined } = assemblies[key].metadata;
+    if (userDefined) {
+      Object.keys(userDefined).forEach(name => userDefinedColumnNames.add(name));
+    }
+  });
 }
 
-function buildUserDefinedColumnProps(assemblies) {
-  return getUserDefinedColumns(assemblies).map((column) => {
+function buildUserDefinedColumnProps() {
+  return Array.from(userDefinedColumnNames).map((column) => {
     return {
       columnKey: column,
       valueGetter({ metadata }) {
@@ -36,16 +41,32 @@ function buildUserDefinedColumnProps(assemblies) {
   });
 }
 
+function updateUserDefinedColumns(assemblies) {
+  getUserDefinedColumns(assemblies);
+  return systemColumnProps.concat(buildUserDefinedColumnProps());
+}
+
+
 const actions = {
   [FETCH_ENTITIES]: function (state, { ready, result, error }) {
     if (ready && !error) {
       const { assemblies } = result[0];
-      const columns =
-        systemColumnProps.concat(buildUserDefinedColumnProps(assemblies));
 
       return {
         ...state,
-        columns,
+        columns: updateUserDefinedColumns(assemblies),
+      };
+    }
+
+    return state;
+  },
+  [SET_TREE]: function (state, { ready, result }) {
+    if (ready && result) {
+      const { assemblies } = result;
+
+      return {
+        ...state,
+        columns: updateUserDefinedColumns(assemblies),
       };
     }
 
