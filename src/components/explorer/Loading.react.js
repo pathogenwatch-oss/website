@@ -38,9 +38,11 @@ export const LoadSpinner = React.createClass({
 
 });
 
+const fatalTasks = new Set([ 'UPLOAD', 'CORE' ]);
+
 function getFailedAssemblies(errors) {
   return errors.reduce((memo, { taskType, assemblyName }) => {
-    if (taskType === 'UPLOAD') {
+    if (fatalTasks.has(taskType)) {
       memo.push(assemblyName);
     }
     return memo;
