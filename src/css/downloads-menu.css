@@ -1,7 +1,9 @@
 .wgsa-downloads-menu {
   position: relative;
-  background-color: #fff;
   padding: 16px;
+  background: url('/assets/img/WGSA.Icon.FINAL.reverse.svg') #fff no-repeat;
+  background-size: 80px;
+  background-position: calc(100% + 20px) -20px;
 }
 
 .wgsa-downloads-menu__list {
