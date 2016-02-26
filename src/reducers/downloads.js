@@ -21,7 +21,7 @@ const initialState = {
   },
   differences_matrix: {
     description: 'Difference Matrix (.csv)',
-    filename: 'differences_matrix',
+    filename: 'difference_matrix',
   },
   score_matrix: {
     description: 'Score Matrix (.csv)',
