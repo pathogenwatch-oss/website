@@ -2,7 +2,7 @@ import UploadActionCreators from '../actions/UploadActionCreators.js';
 
 import UploadStore from '../stores/UploadStore.js';
 
-import Worker from 'worker!./FileWorker';
+import Worker from 'worker?name=file.worker.js!./FileWorker';
 
 export const FASTA_FILE_EXTENSIONS = [
   '.fa', '.fas', '.fna', '.ffn', '.faa', '.frn', '.fasta', '.contig',
