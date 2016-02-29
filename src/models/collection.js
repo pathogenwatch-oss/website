@@ -181,14 +181,16 @@ function getTree(suffix, callback) {
 
 function addPublicAssemblyCounts(subtrees, collectionId, callback) {
   const subtreeIds = Object.keys(subtrees);
+  const documentKeys =
+    subtreeIds.map(id => `${CORE_TREE_RESULT}_${collectionId}_${id}`);
   LOGGER.info(`Getting public assembly counts for subtrees: ${subtreeIds}`);
   mainStorage.retrieveMany(
-    subtreeIds.map(id => `${CORE_TREE_RESULT}_${collectionId}_${id}`),
+    documentKeys,
     (error, results) => {
       if (error) {
         return callback(error);
       }
-      Object.keys(results).forEach(function (key, i) {
+      documentKeys.forEach((key, i) => {
         const { leafIdentifiers } = results[key];
         const subtreeId = subtreeIds[i];
         const subtree = subtrees[subtreeId];
