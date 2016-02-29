@@ -14,9 +14,12 @@ const initialState = {
 
 const actions = {
   [SET_UNFILTERED_IDS]: function (state, { ids }) {
+    const noReset = state.active && Array.from(ids).some(id => state.ids.has(id));
     return {
       ...state,
       unfilteredIds: ids,
+      ids: noReset ? state.ids : new Set(),
+      active: noReset,
     };
   },
   [ACTIVATE_FILTER]: function (state, { ids }) {
@@ -38,7 +41,7 @@ const actions = {
     return {
       ...state,
       active: false,
-      ids: [],
+      ids: new Set(),
     };
   },
 };

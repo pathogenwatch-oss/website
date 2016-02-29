@@ -70,14 +70,13 @@ function mapStateToProps(state) {
   const table = tables[display.table];
   const { headerClick, columns, ...tableProps } = table;
 
-  const data = getTableData(entities.assemblies, filter);
   return {
     ...tableProps,
-    columns: columns.map(column => addColumnWidth(column, data)),
-    headerClick: headerClick.bind(table),
-    data,
+    columns,
     filter,
     collection,
+    data: getTableData(entities.assemblies, filter),
+    headerClick: headerClick.bind(table),
     downloads: {
       fasta: downloads.files.fasta,
       wgsa_gff: downloads.files.wgsa_gff,
@@ -86,7 +85,9 @@ function mapStateToProps(state) {
 }
 
 function mapStateToColumn(column, state, dispatch) {
-  return column.addState ? column.addState(state, dispatch) : column;
+  return column.addState ?
+    column.addState(state, dispatch) :
+    addColumnWidth(column, state.data);
 }
 
 function mergeProps(state, { dispatch }, props) {

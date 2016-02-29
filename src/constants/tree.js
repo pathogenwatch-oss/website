@@ -31,7 +31,7 @@ const styles = {
     leafStyle: {
       fillStyle: CGPS.COLOURS.PURPLE_LIGHT,
       strokeStyle: COLOUR,
-      lineWidth: 2,
+      lineWidth: 1.5,
     },
     labelStyle: {
       colour: CGPS.COLOURS.PURPLE,
@@ -43,7 +43,7 @@ const styles = {
     leafStyle: {
       fillStyle: CGPS.COLOURS.GREY,
       strokeStyle: COLOUR,
-      lineWidth: 2,
+      lineWidth: 1.5,
     },
     labelStyle: {
       colour: 'rgba(33, 33, 33, 1)',
@@ -54,7 +54,7 @@ const styles = {
     leafStyle: {
       fillStyle: CGPS.COLOURS.GREY,
       strokeStyle: COLOUR,
-      lineWidth: 2,
+      lineWidth: 1.5,
     },
     labelStyle: {
       colour: 'rgba(33, 33, 33, 1)',
@@ -89,7 +89,7 @@ function getStandardTreeFunctions(state, dispatch) {
             fillStyle: resistanceProfile.activeColumn.valueGetter(
               assembly, collection.assemblyIds
             ),
-            lineWidth: 2,
+            lineWidth: 1.5,
           },
         });
 
