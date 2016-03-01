@@ -1,4 +1,5 @@
 import 'fixed-data-table/dist/fixed-data-table.css';
+import '../css/fixed-data-table-overrides.css';
 import '../css/table.css';
 
 import React from 'react';

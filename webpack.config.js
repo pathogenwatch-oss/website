@@ -70,6 +70,7 @@ const prodConfig = {
   output: {
     path: path.join(__dirname, 'public'),
     filename: 'wgsa.js',
+    publicPath: '/',
   },
   resolve,
   plugins: [

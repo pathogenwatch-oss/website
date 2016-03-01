@@ -52,6 +52,10 @@
   box-shadow: 0 8px 10px 0 rgba(0,0,0,.28),0 2px 20px 0 rgba(0,0,0,.24),0 4px 8px -2px rgba(0,0,0,.4);
 }
 
+.wgsa-failed-assemblies {
+  margin-top: -8px;
+}
+
 .wgsa-failed-assemblies,
 .wgsa-failed-assemblies > li {
   list-style: none;

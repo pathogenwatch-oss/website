@@ -2,28 +2,27 @@ import AppDispatcher from '../dispatcher/AppDispatcher';
 
 import UploadStore from '../stores/UploadStore';
 
-import FileUtils from '../utils/File';
 import { getCollectionId } from '../utils/Api';
 import Species from '../species';
 
 module.exports = {
 
-  addFiles(files, callback) {
-    FileUtils.parseFiles(files, function (error, rawFiles, assemblies) {
-      if (error) {
-        // TODO: Toast message?
-        console.error(error);
-        return;
-      }
+  startProcessingFiles() {
+    AppDispatcher.dispatch({
+      type: 'start_processing_files',
+    });
+  },
 
-      const addFilesAction = {
-        type: 'add_files',
-        rawFiles: rawFiles,
-        assemblies: assemblies,
-      };
+  addFiles(assemblies) {
+    AppDispatcher.dispatch({
+      type: 'add_files',
+      assemblies,
+    });
+  },
 
-      AppDispatcher.dispatch(addFilesAction);
-      callback();
+  finishProcessingFiles() {
+    AppDispatcher.dispatch({
+      type: 'finish_processing_files',
     });
   },
 
@@ -44,6 +43,13 @@ module.exports = {
         collectionId,
         assemblyNameToAssemblyIdMap,
       });
+    });
+  },
+
+  deleteAssembly(assemblyName) {
+    AppDispatcher.dispatch({
+      type: 'delete_assembly',
+      assemblyName,
     });
   },
 

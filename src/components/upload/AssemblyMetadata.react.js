@@ -37,8 +37,8 @@ export default React.createClass({
   },
 
   render() {
-    const { fasta, metadata } = this.props.assembly;
-    const { assemblyName, position, date, pmid } = metadata;
+    const { name, metadata = {} } = this.props.assembly;
+    const { assemblyName, position = {}, date = {}, pmid } = metadata;
     const { latitude, longitude } = position;
 
     const showMap = latitude !== null && longitude !== null;
@@ -56,7 +56,7 @@ export default React.createClass({
             <div className="mdl-cell mdl-cell--6-col">
               <InputField key="assemblyName" type="text" columnName="assemblyName" label="Assembly Name" value={assemblyName} handleChange={this.handleMetadataChange} readonly={this.props.isUploading}/>
               <InputField key="pmid" type="text" columnName="pmid" label="PMID" value={pmid} handleChange={this.handleMetadataChange} readonly={this.props.isUploading}/>
-              <MetadataDate key={fasta.name} assemblyId={fasta.name} date={date} readonly={this.props.isUploading}/>
+              <MetadataDate key={name} assemblyId={name} date={date} readonly={this.props.isUploading}/>
             </div>
             <div className="mdl-cell mdl-cell--6-col metadata-googlemap">
               { showMap ?
@@ -79,7 +79,7 @@ export default React.createClass({
 
   handleMetadataChange(columnName, value) {
     MetadataActionCreators.setMetadataColumn(
-      this.props.assembly.fasta.name, columnName, value
+      this.props.assembly.name, columnName, value
     );
   },
 

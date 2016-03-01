@@ -6,7 +6,7 @@ const iconStyle = {
   color: WARNING_COLOUR,
 };
 
-const statuses = [ 'PAARSNP', 'MLST' ];
+const taskTypes = new Set([ 'PAARSNP', 'MLST' ]);
 
 export default React.createClass({
 
@@ -25,22 +25,27 @@ export default React.createClass({
         <span>MLST prediction will not be available for <strong>{assemblyName}</strong></span>
       );
     }
+
+    return null;
   },
 
   render() {
-    const { errors } = this.props;
+    const errors = this.props.errors.filter(({ taskType }) => taskTypes.has(taskType));
+
+    if (!errors.length) {
+      return null;
+    }
+
     return (
       <ul className="wgsa-upload-errors mdl-list">
-        { errors.
-            filter(({ taskType }) => statuses.indexOf(taskType) !== -1).
-            map((error) => (
-              <li className="mdl-list__item">
-                <span className="mdl-list__item-primary-content">
-                  <i className="material-icons mdl-list__item-icon" style={iconStyle}>warning</i>
-                  { this.getMessage(error) }
-                </span>
-              </li>
-            ))
+        { errors.map((error) => (
+            <li className="mdl-list__item">
+              <span className="mdl-list__item-primary-content">
+                <i className="material-icons mdl-list__item-icon" style={iconStyle}>warning</i>
+                { this.getMessage(error) }
+              </span>
+            </li>
+          ))
         }
       </ul>
     );

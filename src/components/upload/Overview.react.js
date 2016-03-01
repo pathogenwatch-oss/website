@@ -9,8 +9,6 @@ import UploadStore from '^/stores/UploadStore.js';
 
 import { FASTA_FILE_EXTENSIONS } from '^/utils/File';
 
-const noContigsRange = {};
-let averageAssemblyLength = null;
 
 export default React.createClass({
 
@@ -25,6 +23,8 @@ export default React.createClass({
     return {
       assemblies: UploadStore.getAssemblies(),
       assemblyCount: UploadStore.getAssembliesCount(),
+      noContigsRange: UploadStore.getMinMaxNoContigsForAllAssemblies(),
+      averageAssemblyLength: UploadStore.getAverageAssemblyLength(),
       currentChart: {
         title: 'Assembly Length',
         type: 'totalNumberOfNucleotidesInDnaStrings',
@@ -38,14 +38,6 @@ export default React.createClass({
     componentHandler.upgradeDom();
   },
 
-  componentDidUpdate() {
-    const range = UploadStore.getMinMaxNoContigsForAllAssemblies();
-    noContigsRange.min = range[0];
-    noContigsRange.max = range[1];
-    averageAssemblyLength = UploadStore.getAverageAssemblyLengthForAllAssemblies();
-    componentHandler.upgradeDom();
-  },
-
   componentWillUnmount() {
     UploadStore.removeChangeListener(this.handleUploadStoreChange);
   },
@@ -54,6 +46,8 @@ export default React.createClass({
     this.setState({
       assemblies: UploadStore.getAssemblies(),
       assemblyCount: UploadStore.getAssembliesCount(),
+      noContigsRange: UploadStore.getMinMaxNoContigsForAllAssemblies(),
+      averageAssemblyLength: UploadStore.getAverageAssemblyLength(),
     });
   },
 
@@ -67,6 +61,8 @@ export default React.createClass({
   },
 
   render() {
+    const { noContigsRange, averageAssemblyLength } = this.state;
+    const { max = 0, min = 0 } = noContigsRange;
     if (this.state.assemblyCount) {
       return (
         <div className="mdl-grid overviewContent">
@@ -74,7 +70,7 @@ export default React.createClass({
             <div className="wgsa-card-heading">Summary</div>
             <div className="wgsa-card-content wgsa-summary-stats mdl-grid">
               <OverviewStatisticsItem label="Total Assemblies" value={this.state.assemblyCount} />
-              <OverviewStatisticsItem label="No. Contigs Range" value={noContigsRange.min + ' - ' + noContigsRange.max} />
+              <OverviewStatisticsItem label="No. Contigs Range" value={min + ' - ' + max} />
               <OverviewStatisticsItem label="Average Assembly Length" value={averageAssemblyLength} />
               <OverviewStatusItem isReadyToUpload={this.props.isReadyToUpload} isUploading={this.props.isUploading} />
             </div>
@@ -88,7 +84,7 @@ export default React.createClass({
                 <a href="#overview-chart-panel" className="mdl-tabs__tab" onClick={this.showChart.bind(this, 'contigN50', 'N50')}>N50</a>
                 <a href="#overview-chart-panel" className="mdl-tabs__tab" onClick={this.showChart.bind(this, 'totalNumberOfContigs', 'No. Contigs')}>No. Contigs</a>
                 <a href="#overview-chart-panel" className="mdl-tabs__tab" onClick={this.showChart.bind(this, 'totalNumberOfNsInDnaStrings', 'Non-ATCG')}>Non-ATCG</a>
-                <a href="#overview-chart-panel" className="mdl-tabs__tab" onClick={this.showChart.bind(this, 'gcContent', 'GC Content')}>GC Content</a>
+                <a href="#overview-chart-panel" className="mdl-tabs__tab" onClick={this.showChart.bind(this, 'gcContent', 'GC Content (%)')}>GC Content</a>
               </div>
 
               <div className="wgsa-card-content mdl-tabs__panel is-active" id="overview-chart-panel">

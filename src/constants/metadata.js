@@ -8,6 +8,22 @@ import MetadataUtils from '../utils/Metadata';
 export const systemColumnProps = [
   ...downloadColumnProps,
   nameColumnProps,
+  { columnKey: '__pmid',
+    valueGetter({ metadata }) {
+      return metadata.pmid;
+    },
+    getCellContents({ valueGetter }, data) {
+      const pmid = valueGetter(data);
+      return (
+        <a href={`http://www.ncbi.nlm.nih.gov/pubmed/${pmid}`}
+          target="_blank"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {pmid}
+        </a>
+      );
+    },
+  },
   { columnKey: '__date',
     valueGetter({ metadata }) {
       return MetadataUtils.getFormattedDateString(metadata.date);
@@ -48,6 +64,14 @@ export const systemColumnProps = [
     },
     getCellContents,
   },
+  { columnKey: '__%_non-core',
+    valueGetter({ analysis }) {
+      return analysis.core && analysis.core.percentAssemblyMatched ?
+        (100 - analysis.core.percentAssemblyMatched).toFixed(1) :
+        null;
+    },
+    getCellContents,
+  },
   { columnKey: '__assembly_length',
     valueGetter({ metadata }) {
       return metadata.metrics ?
@@ -80,20 +104,12 @@ export const systemColumnProps = [
     },
     getCellContents,
   },
-  { columnKey: '__pmid',
+  { columnKey: '__GC_Content',
     valueGetter({ metadata }) {
-      return metadata.pmid;
+      return metadata.metrics && metadata.metrics.gcContent ?
+        `${metadata.metrics.gcContent}%` :
+        null;
     },
-    getCellContents({ valueGetter }, data) {
-      const pmid = valueGetter(data);
-      return (
-        <a href={`http://www.ncbi.nlm.nih.gov/pubmed/${pmid}`}
-          target="_blank"
-          onClick={(e) => e.stopPropagation()}
-        >
-          {pmid}
-        </a>
-      );
-    },
+    getCellContents,
   },
 ];

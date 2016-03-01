@@ -27,10 +27,9 @@ const UploadDashboard = React.createClass({
     collectionSize: React.PropTypes.number,
   },
 
-  getAssemblyTasks({ CORE, FP, MLST, PAARSNP }, collectionSize) {
+  getAssemblyTasks({ CORE, MLST, PAARSNP }, collectionSize) {
     return {
       core: CORE ? CORE / collectionSize * 100 : 0,
-      fp: FP ? FP / collectionSize * 100 : 0,
       mlst: MLST ? MLST / collectionSize * 100 : 0,
       paarsnp: PAARSNP ? PAARSNP / collectionSize * 100 : 0,
     };
@@ -38,7 +37,7 @@ const UploadDashboard = React.createClass({
 
   render() {
     const { isUploading, collectionSize = UploadStore.getAssembliesCount(), results = {}, errors = [] } = this.props;
-    const { core, fp, mlst, paarsnp } = this.getAssemblyTasks(results, collectionSize);
+    const { core, mlst, paarsnp } = this.getAssemblyTasks(results, collectionSize);
     return (
       <div className="mdl-grid">
         <div className="wgsa-card mdl-cell mdl-cell--12-col mdl-shadow--2dp">
@@ -59,7 +58,7 @@ const UploadDashboard = React.createClass({
         </div>
         <div className="wgsa-card mdl-cell mdl-cell--12-col mdl-shadow--2dp">
           <div className="wgsa-card-heading">Messages</div>
-          { errors.length ? <Errors errors={errors} /> : null }
+          <Errors errors={errors} />
         </div>
       </div>
     );

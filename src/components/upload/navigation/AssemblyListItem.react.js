@@ -2,7 +2,7 @@ import '../../../css/upload-review.css';
 
 import React from 'react';
 
-import UploadWorkspaceNavigationActionCreators from '^/actions/UploadWorkspaceNavigationActionCreators';
+import UploadActionCreators from '^/actions/UploadActionCreators';
 
 import { DANGER_COLOUR, CGPS } from '^/defaults';
 
@@ -31,11 +31,10 @@ const Component = React.createClass({
 
   handleSelectAssembly(selectedassemblyName) {
     this.resetDeleteState();
-    UploadWorkspaceNavigationActionCreators.navigateToAssembly(selectedassemblyName);
   },
 
   handleDeleteAssembly() {
-    UploadWorkspaceNavigationActionCreators.deleteAssembly(this.props.assemblyName);
+    UploadActionCreators.deleteAssembly(this.props.assemblyName);
   },
 
   render() {
@@ -46,16 +45,25 @@ const Component = React.createClass({
     const validatedIcon = this.props.isValid ? 'check' : 'error_outline';
 
     return (
-      <li ref={assemblyName} className={`assemblyListItem ${this.props.selected ? ' selected' : ''}`} title={assemblyName}>
-        <button className="selectButton mdl-button mdl-js-button mdl-js-ripple-effect" onClick={this.handleSelectAssembly.bind(this, assemblyName)}>
-        <span className="filename">
+      <li
+        className={`assemblyListItem mdl-js-button mdl-js-ripple-effect ${this.props.selected ? ' selected' : ''}`}
+        title={assemblyName}
+        onClick={(e) => this.refs.link.click()}
+      >
+        <a
+          ref="link"
+          className="selectButton mdl-button"
+          href={`#assembly-${assemblyName}`}
+          onClick={this.handleSelectAssembly.bind(this, assemblyName)}
+        >
+          <span className="filename">
             {assemblyName}
           </span>
-        </button>
-        { !this.props.isUploading && this.state.deleteConfirm ?
+        </a>
+        { this.state.deleteConfirm ?
           <ConfirmDelete title={assemblyName} handleDeleteAssembly={this.handleDeleteAssembly} resetDeleteState={this.resetDeleteState}/>
           :
-          <span className="assembly-list-item__utils">
+          <span className="assembly-list-item__utils" onClick={(e) => e.stopPropagation()}>
             <span className="assembly-list-item__validate-icon utilityButton">
               <i style={validatedIconStyle} className="material-icons">{validatedIcon}</i>
             </span>
@@ -74,7 +82,7 @@ const Component = React.createClass({
 const ConfirmDelete = React.createClass({
   render() {
     return (
-      <span className="assembly-list-item__utils">
+      <span className="assembly-list-item__utils" onClick={(e) => e.stopPropagation()}>
         <button className="confirm-cancel-button mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect"
           title="Cancel"
           onClick={this.props.resetDeleteState}>

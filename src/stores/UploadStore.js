@@ -2,19 +2,15 @@ import AppDispatcher from '../dispatcher/AppDispatcher';
 import { EventEmitter } from 'events';
 import assign from 'object-assign';
 
-import UploadWorkspaceNavigationStore from '../stores/UploadWorkspaceNavigationStore';
-
 import MetadataUtils from '../utils/Metadata';
 
 const CHANGE_EVENT = 'change';
 
-let rawFiles = {};
 let assemblies = {};
 const errors = [];
 
 function addFiles(newRawFiles, newAssemblies) {
-  assign(rawFiles, newRawFiles);
-  assign(assemblies, newAssemblies);
+  assemblies = newAssemblies;
 }
 
 function validateFiles() {
@@ -37,19 +33,20 @@ function validateFiles() {
   //   return;
   // }
 
-  for (const assemblyName of assemblyNames) {
+  // create a new array to propagate error changes - temporary hack...
+  assemblies = assemblyNames.reduce((memo, assemblyName) => {
     const assembly = assemblies[assemblyName];
     const previousNumberOfErrors = errors.length;
 
     assembly.hasErrors = false;
 
-    if (!assembly.fasta.assembly) {
+    if (!assembly.fasta || !assembly.fasta.assembly) {
       errors.push({
         message: `${assemblyName} - fasta file not provided.`,
       });
     }
 
-    if (!MetadataUtils.isValid(assembly.metadata)) {
+    if (assembly.metadata && !MetadataUtils.isValid(assembly.metadata)) {
       errors.push({
         assemblyName,
         navigate: true,
@@ -60,19 +57,33 @@ function validateFiles() {
     if (errors.length > previousNumberOfErrors) {
       assembly.hasErrors = true;
     }
-  }
+
+    memo[assemblyName] = assembly;
+    return memo;
+  }, {});
 }
 
 function setMetadataColumn(assemblyName, columnName, value) {
-  assemblies[assemblyName].metadata[columnName] = value;
+  const { metadata = {} } = assemblies[assemblyName];
+
+  if (typeof value === 'string' && value.length) {
+    metadata[columnName] = value;
+  } else {
+    delete metadata[columnName];
+  }
+
+  assemblies[assemblyName].metadata = metadata;
 }
 
 function setMetadataDateComponent(assemblyName, component, value) {
-  assemblies[assemblyName].metadata.date[component] = value;
+  const { metadata = {} } = assemblies[assemblyName];
+  metadata.date[component] = value;
+  assemblies[assemblyName].metadata = metadata;
 }
 
 function deleteAssembly(assemblyName) {
   delete assemblies[assemblyName];
+  assemblies = assign({}, assemblies);
 }
 
 const Store = assign({}, EventEmitter.prototype, {
@@ -107,31 +118,38 @@ const Store = assign({}, EventEmitter.prototype, {
 
   getOverviewChartData(chartType) {
     return Object.keys(assemblies).reduce((memo, id) => {
-      if (assemblies[id].metrics[chartType]) {
-        memo[id] = assemblies[id].metrics[chartType];
+      const metrics = assemblies[id].metrics || {};
+      if (metrics[chartType]) {
+        memo[id] = metrics[chartType];
       }
       return memo;
     }, {});
   },
 
   getMinMaxNoContigsForAllAssemblies() {
-    var noContigsArray = [];
-    for (var assemblyId in assemblies) {
-      if (assemblies[assemblyId].metrics.totalNumberOfContigs) {
-        noContigsArray.push(assemblies[assemblyId].metrics.totalNumberOfContigs);
+    const contigsRange = {};
+
+    for (const assemblyId of Object.keys(assemblies)) {
+      const { totalNumberOfContigs } = assemblies[assemblyId].metrics || {};
+      if (totalNumberOfContigs) {
+        contigsRange.min = contigsRange.min ?
+          Math.min(contigsRange.min, totalNumberOfContigs) :
+          totalNumberOfContigs;
+        contigsRange.max = contigsRange.max ?
+          Math.max(contigsRange.max, totalNumberOfContigs) :
+          totalNumberOfContigs;
       }
     }
-    if (noContigsArray.length <= 0) {
-      return [ 0, 0 ];
-    }
-    return [ Math.min(...noContigsArray), Math.max(...noContigsArray) ];
+
+    return contigsRange;
   },
 
-  getAverageAssemblyLengthForAllAssemblies() {
+  getAverageAssemblyLength() {
     var totalAssemblyLength = 0;
     var noAssemblies = Object.keys(assemblies).length;
     for (var assemblyId in assemblies) {
-      totalAssemblyLength += assemblies[assemblyId].metrics.totalNumberOfNucleotidesInDnaStrings || 0;
+      const metrics = assemblies[assemblyId].metrics || {};
+      totalAssemblyLength += (metrics.totalNumberOfNucleotidesInDnaStrings || 0);
     }
     return Math.round(totalAssemblyLength / noAssemblies);
   },
@@ -145,7 +163,6 @@ const Store = assign({}, EventEmitter.prototype, {
   },
 
   clearStore() {
-    rawFiles = {};
     assemblies = {};
   },
 });
@@ -173,9 +190,6 @@ function handleAction(action) {
     break;
 
   case 'delete_assembly':
-    AppDispatcher.waitFor([
-      UploadWorkspaceNavigationStore.dispatchToken,
-    ]);
     deleteAssembly(action.assemblyName);
     emitChange();
     break;

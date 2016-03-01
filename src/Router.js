@@ -1,6 +1,6 @@
 import React from 'react';
-import { Router, Route, IndexRoute } from 'react-router';
-import { createHistory } from 'history';
+
+import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 
 import App from './App';
 import Home from './components/Home.react';
@@ -17,7 +17,7 @@ const SpeciesSetter = ({ route, children }) => {
 };
 
 export default () => (
-  <Router history={createHistory()}>
+  <Router history={browserHistory}>
     <Route path="/" component={App}>
       <IndexRoute component={Home} />
       { Species.list.filter(_ => _.active).reduce((routes, { nickname }) =>

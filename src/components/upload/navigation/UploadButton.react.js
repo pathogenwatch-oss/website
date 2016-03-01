@@ -1,7 +1,6 @@
 import '../../../css/sonar.css';
 
 import React from 'react';
-import UploadActionCreators from '^/actions/UploadActionCreators';
 
 const uploadButtonStyle = {
   right: '30px',
@@ -21,7 +20,7 @@ const UploadButton = React.createClass({
 
   propTypes: {
     active: React.PropTypes.bool,
-    children: React.PropTypes.any,
+    onClick: React.PropTypes.func,
   },
 
   render() {
@@ -29,14 +28,10 @@ const UploadButton = React.createClass({
       <button
         style={uploadButtonStyle} className={`${this.props.active && 'wgsa-sonar-effect'} wgsa-upload-review-button mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--6dp`}
         disabled={!this.props.active}
-        onClick={this.handleClick}>
+        onClick={this.props.onClick}>
           <i style={iconStyle} className="material-icons">cloud_upload</i>
       </button>
     );
-  },
-
-  handleClick() {
-    UploadActionCreators.getCollectionId();
   },
 
 });

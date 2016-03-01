@@ -58,7 +58,8 @@ const Store = assign({}, EventEmitter.prototype, {
     console.log('*** UPLOADING FILES ***');
     const assemblyNames = UploadStore.getAssemblyNames();
     const uploadAssembly = (assemblyName) => {
-      const { metadata, metrics, fasta } = UploadStore.getAssembly(assemblyName);
+      const assembly = UploadStore.getAssembly(assemblyName);
+      const { name, fasta, metadata, metrics } = assembly;
       const urlParams = {
         collectionId: collectionId,
         assemblyId: assemblyNameToAssemblyIdMap[assemblyName],
@@ -66,7 +67,19 @@ const Store = assign({}, EventEmitter.prototype, {
       };
       const requestBody = {
         sequences: fasta.assembly,
-        metadata,
+        metadata: Object.assign({
+          assemblyName: name,
+          pmid: null,
+          date: {
+            year: null,
+            month: null,
+            day: null,
+          },
+          position: {
+            latitude: null,
+            longitude: null,
+          },
+        }, metadata),
         metrics,
       };
 

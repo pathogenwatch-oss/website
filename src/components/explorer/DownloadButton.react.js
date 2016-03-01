@@ -2,7 +2,7 @@ import React from 'react';
 
 import DownloadIcon from './DownloadIcon.react';
 
-const className = 'wgsa-download-button';
+const defaultClassName = 'wgsa-download-button';
 
 export default React.createClass({
 
@@ -18,6 +18,7 @@ export default React.createClass({
     label: React.PropTypes.string,
     color: React.PropTypes.string,
     isArchive: React.PropTypes.bool,
+    iconOnly: React.PropTypes.bool,
   },
 
   componentDidUpdate(previous) {
@@ -30,22 +31,23 @@ export default React.createClass({
   render() {
     const {
       loading, error, description, link, filename,
-      onClick, label, color, isArchive,
+      onClick, label, color, isArchive, iconOnly
     } = this.props;
     const title =
       `${ !loading && link ? 'Download' : 'Generate' } ${description}`;
+    const classNames = iconOnly ? `${defaultClassName} mdl-button mdl-button--icon` : defaultClassName;
     return link ? (
       <a ref="link"
         href={link || '#'}
         target="_blank"
         download={filename}
         title={title}
-        className={className}>
+        className={classNames}>
           <DownloadIcon hasLink color={color}/>
-          {description}
+          {!iconOnly && description}
       </a>
     ) : (
-      <button onClick={onClick} title={title} className={className}>
+      <button onClick={onClick} title={title} className={classNames}>
         <DownloadIcon
           loading={loading}
           error={error}
@@ -53,7 +55,7 @@ export default React.createClass({
           label={label}
           isArchive={isArchive}
         />
-        {description}
+        {!iconOnly && description}
       </button>
     );
   },

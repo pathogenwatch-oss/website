@@ -1,6 +1,6 @@
 import d3 from 'd3';
 
-import UploadWorkspaceNavigationActionCreators from '../actions/UploadWorkspaceNavigationActionCreators.js';
+import { navigateToAssembly } from '^/utils/Navigation';
 
 const tooltip = d3.select('body')
   .append('div')
@@ -32,12 +32,12 @@ function drawN50Chart(chartData, assemblyN50, appendToClass) {
   // X
   const xScale = d3.scale.linear()
     .domain([ 0, chartData.length ])
-    .range([ 40, chartWidth - 100 ]); // the pixels to map, i.e. the width of the diagram
+    .range([ 80, chartWidth - 10 ]); // the pixels to map, i.e. the width of the diagram
 
   // Y
   const yScale = d3.scale.linear()
     .domain([ chartData[chartData.length - 1], 0 ])
-    .range([ 30, chartHeight - 52 ]);
+    .range([ 10, chartHeight - 40 ]);
 
   // Axes
 
@@ -67,13 +67,13 @@ function drawN50Chart(chartData, assemblyN50, appendToClass) {
   // X
   svg.append('g')
     .attr('class', 'x axis')
-    .attr('transform', 'translate(20, 188)')
+    .attr('transform', 'translate(0, 200)')
     .call(xAxis);
 
   // Y
   svg.append('g')
     .attr('class', 'y axis')
-    .attr('transform', 'translate(60, 0)')
+    .attr('transform', 'translate(80, 0)')
     .call(yAxis);
 
   // Axis labels
@@ -84,8 +84,8 @@ function drawN50Chart(chartData, assemblyN50, appendToClass) {
     .text('No. Contigs (ordered by length)')
     .attr('class', 'axis-label')
     .attr('text-anchor', 'middle')
-    .attr('x', (chartWidth / 2.5))
-    .attr('y', 45);
+    .attr('x', (chartWidth / 2))
+    .attr('y', 40);
 
   // Y
   svg.select('.y.axis')
@@ -93,8 +93,9 @@ function drawN50Chart(chartData, assemblyN50, appendToClass) {
     .text('Assembly Length (nt)')
     .attr('class', 'axis-label')
     .attr('transform', 'rotate(-90)')
-    .attr('x', -(chartHeight / 2) - 44)
-    .attr('y', chartWidth - 120);
+    .attr('text-anchor', 'middle')
+    .attr('x', -(chartHeight / 2))
+    .attr('y', -70);
 
   // Circles
   svg.selectAll('circle')
@@ -102,7 +103,7 @@ function drawN50Chart(chartData, assemblyN50, appendToClass) {
     .enter()
     .append('circle')
     .attr('cx', function (datum, index) {
-      return xScale(index + 1) + 20;
+      return xScale(index + 1);
     })
     .attr('cy', function (datum) {
       return yScale(datum);
@@ -127,7 +128,7 @@ function drawN50Chart(chartData, assemblyN50, appendToClass) {
   // Line
   const line = d3.svg.line()
     .x(function (datum, index) {
-      return xScale(index + 1) + 20;
+      return xScale(index + 1);
     })
     .y(function (datum) {
       return yScale(datum);
@@ -137,10 +138,10 @@ function drawN50Chart(chartData, assemblyN50, appendToClass) {
 
   // Draw line from (0,0) to d3.max(data)
   const rootLineData = [ {
-    'x': xScale(0) + 20,
+    'x': xScale(0),
     'y': yScale(0),
   }, {
-    'x': xScale(1) + 20,
+    'x': xScale(1),
     'y': yScale(chartData[0]),
   } ];
 
@@ -167,7 +168,7 @@ function drawN50Chart(chartData, assemblyN50, appendToClass) {
   // Append circle to group
   n50Group.append('circle')
     .attr('cx', function (datum) {
-      return xScale(datum.sequenceNumber) + 20;
+      return xScale(datum.sequenceNumber);
     })
     .attr('cy', function (datum) {
       return yScale(datum.sum);
@@ -193,7 +194,7 @@ function drawN50Chart(chartData, assemblyN50, appendToClass) {
   // Append text to group
   n50Group.append('text')
     .attr('dx', function (datum) {
-      return xScale(datum.sequenceNumber) + 20 + 9;
+      return xScale(datum.sequenceNumber) + 9;
     })
     .attr('dy', function (datum) {
       return yScale(datum.sum) + 5;
@@ -203,14 +204,14 @@ function drawN50Chart(chartData, assemblyN50, appendToClass) {
 
   // Draw N50 lines
   const d50LinesData = [ {
-    'x': 54,
+    'x': 80,
     'y': yScale(assemblyN50.sum),
   }, {
-    'x': xScale(assemblyN50.sequenceNumber) + 20,
+    'x': xScale(assemblyN50.sequenceNumber),
     'y': yScale(assemblyN50.sum),
   }, {
-    'x': xScale(assemblyN50.sequenceNumber) + 20,
-    'y': chartHeight - 46,
+    'x': xScale(assemblyN50.sequenceNumber),
+    'y': chartHeight - 40,
   } ];
 
   const d50Line = d3.svg.line()
@@ -225,6 +226,8 @@ function drawN50Chart(chartData, assemblyN50, appendToClass) {
   // N50 path
   n50Group.append('path').attr('d', d50Line(d50LinesData));
   // console.log(assemblyN50)
+
+  tooltip.style('display', 'none');
 }
 
 function drawOverviewChart(data, appendToClass, xLabel = '', yLabel = '') {
@@ -247,19 +250,19 @@ function drawOverviewChart(data, appendToClass, xLabel = '', yLabel = '') {
     }
   }
 
-  var chartXAxis = Object.keys(data);
+  var chartXAxis = Object.keys(data).concat([ '__spacer' ]);
 
   // Scales
   // console.log(chartData)
   // X
   var xScale = d3.scale.linear()
-  .domain([ 0, chartData.length ])
-  .range([ 40, chartWidth - 100 ]); // the pixels to map, i.e. the width of the diagram
+  .domain([ 0, chartData.length + 1 ])
+  .range([ 75, chartWidth - 50 ]); // the pixels to map, i.e. the width of the diagram
 
   // Y
   var yScale = d3.scale.linear()
-  .domain([ Math.max(...chartData) * 1.5, 0 ])
-  .range([ 30, chartHeight - 52 ]);
+  .domain([ Math.max(...chartData) * 1.01, Math.min(...chartData) * 0.99 ])
+  .range([ 30, chartHeight - 30 ]);
 
   // Axes
 
@@ -287,13 +290,13 @@ function drawOverviewChart(data, appendToClass, xLabel = '', yLabel = '') {
   // X
   svg.append('g')
   .attr('class', 'x axis')
-  .attr('transform', 'translate(20, 260)')
+  .attr('transform', 'translate(20, 282)')
   .call(xAxis);
 
   // Y
   svg.append('g')
   .attr('class', 'y axis')
-  .attr('transform', 'translate(60, 0)')
+  .attr('transform', 'translate(95, 0)')
   .call(yAxis);
 
   // Axis labels
@@ -303,9 +306,9 @@ function drawOverviewChart(data, appendToClass, xLabel = '', yLabel = '') {
   .append('text')
   .text(xLabel)
   .attr('class', 'axis-label')
-  .attr('text-anchor', 'end')
-  .attr('x', (chartWidth / 2))
-  .attr('y', 45);
+  .attr('text-anchor', 'middle')
+  .attr('x', chartWidth / 2)
+  .attr('y', 30);
 
   // Y
   svg.select('.y.axis')
@@ -313,8 +316,9 @@ function drawOverviewChart(data, appendToClass, xLabel = '', yLabel = '') {
   .text(yLabel)
   .attr('class', 'axis-label')
   .attr('transform', 'rotate(-90)')
-  .attr('x', -(chartHeight / 2) - 44)
-  .attr('y', chartWidth - 120);
+  .attr('text-anchor', 'middle')
+  .attr('x', -(chartHeight / 2))
+  .attr('y', -75);
 
   // Circles
   svg.selectAll('circle')
@@ -344,8 +348,11 @@ function drawOverviewChart(data, appendToClass, xLabel = '', yLabel = '') {
       return tooltip.style('display', 'none');
     })
     .on('click', function (datum, index) {
-      UploadWorkspaceNavigationActionCreators.navigateToAssembly(chartXAxis[index]); return tooltip.style('display', 'none');
+      navigateToAssembly(chartXAxis[index]);
+      return tooltip.style('display', 'none');
     });
+
+  tooltip.style('display', 'none');
 }
 
 export default {

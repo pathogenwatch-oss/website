@@ -28,6 +28,30 @@
   margin: 0 auto;
 }
 
+.wgsa-file-processing-progress {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 28px; /* half of header height to balance vertical alignment */
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wgsa-file-processing-progress .CircularProgress {
+  overflow: visible;
+}
+
+.wgsa-file-processing-progress .CircularProgress-Text {
+  font-size: 112px;
+}
+
+.wgsa-file-processing-progress .CircularProgress-Bg,
+.wgsa-file-processing-progress .CircularProgress-Fg {
+  stroke-width: 24px;
+}
+
 /**** Upload Review - Header ****/
 
 @media (max-width: 1024px) {
@@ -369,7 +393,14 @@
   line-height: 64px;
   margin: 40px 0px 0px 0px;
   text-align: center;
-  border-bottom: 1px solid rgba(0, 0, 0, .12);
+  color: inherit;
+  font-family: "Roboto","Helvetica","Arial",sans-serif;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  text-decoration: none;
+}
+
+.uploadWorkspaceNavigationTitle:hover {
+  text-decoration: underline;
 }
 
 .uploadWorkspaceNavigationTitle > .mdl-badge:after {
@@ -404,6 +435,16 @@
   background: #fff;
 }
 
+.wgsa-add-files-button {
+  position: absolute;
+  display: block;
+  right: 0;
+  bottom: 0;
+  margin-right: 24px;
+  margin-bottom: 16px;
+  z-index: 900;
+}
+
 .wgsa-assembly-list-wrapper {
   position: relative;
   flex-grow: 1;
@@ -421,33 +462,39 @@
   margin: 0px;
 }
 
+.assemblyListContainer li:last-child {
+  margin-bottom: 72px;
+}
+
 .assemblyListItem {
   margin: 0;
-  padding: 0;
+  padding: 0 8px 0 16px;
   position: relative;
   list-style: none;
   border-bottom: 1px solid rgba(0, 0, 0, .12);
   line-height: 40px;
   height: 40px;
   box-sizing: border-box;
-  display: block;
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
 }
 
 .assemblyListItem .selectButton {
   height: 40px;
   overflow: none;
-  width: 100%;
   display: block;
+  line-height: 40px;
+  padding: 0;
 }
 
 .assemblyListItem .deleteButton {
   color: #777;
 }
 
-.assembly-list-item__validate-icon {
-  position: absolute;
-  top: 4px;
-  left: -18px;
+.assembly-list-item__validate-icon .material-icons {
+  line-height: 40px;
+  vertical-align: top;
 }
 
 .assemblyListItem:hover,
@@ -464,11 +511,9 @@
   font-weight: 400;
   text-transform: none;
   overflow: hidden;
-  width: 155px;
   display: block;
   text-overflow: ellipsis;
   text-align: left;
-  padding: inherit;
   color: #333;
 }
 
@@ -488,10 +533,14 @@
   font-size: 16px;  /* Preferred icon size */
 }
 
+.assemblyListItem > .mdl-button__ripple-container {
+  z-index: -1;
+}
+
 .assembly-list-item__utils {
-  position: absolute;
-  top: 0px;
-  right: 4px;
+  line-height: 40px;
+  display: flex;
+  align-items: center;
 }
 
 .wgsa-upload-navigation__footer {
@@ -505,7 +554,7 @@
   margin: 0px 10px;
 }
 
-.confirm-delete-button i{
+.confirm-delete-button i {
   color: #fff;
 }
 .confirm-delete-button {

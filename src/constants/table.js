@@ -4,6 +4,7 @@ import DownloadButton from '../components/explorer/DownloadButton.react';
 
 import { getArchiveDownloadProps } from '../constants/downloads';
 import { CGPS } from '^/defaults';
+import Species from '^/species';
 
 
 export const tableKeys = {
@@ -21,11 +22,15 @@ export const downloadColumnProps = [
     fixed: true,
     headerClasses: 'wgsa-table-cell--skinny',
     getHeaderContent({ archiveDownloads }) {
-      console.log(arguments);
       return (
         <span className="wgsa-table-downloads" onClick={(e) => e.stopPropagation()}>
-          <DownloadButton {...archiveDownloads.fa} isArchive />
-          <DownloadButton {...archiveDownloads.gff} isArchive color={CGPS.COLOURS.GREEN} />
+          <DownloadButton {...archiveDownloads.fasta} isArchive iconOnly />
+          <DownloadButton
+            {...archiveDownloads.wgsa_gff}
+            isArchive
+            color={CGPS.COLOURS.GREEN}
+            iconOnly
+          />
         </span>
       );
     },
@@ -33,21 +38,25 @@ export const downloadColumnProps = [
     fixedWidth: 80,
     flexGrow: 0,
     getCellContents(_, data) {
+      const { fasta, wgsa_gff } = data.__downloads;
       return (
         <span className="wgsa-table-downloads" onClick={(e) => e.stopPropagation()}>
-          <DownloadButton { ...data.faDownloadProps } label=".fa" />
+          <DownloadButton { ...fasta } label=".fa" iconOnly />
           <DownloadButton
-            { ...data.gffDownloadProps }
+            { ...wgsa_gff }
             label=".gff"
             color={CGPS.COLOURS.GREEN}
+            iconOnly
           />
         </span>
       );
     },
-    addState({ filter, downloads }, dispatch) {
+    addState({ collection, filter, downloads }, dispatch) {
       return {
         ...this,
-        archiveDownloads: getArchiveDownloadProps(filter, downloads, dispatch),
+        archiveDownloads: getArchiveDownloadProps(
+          { collection, filter }, downloads, dispatch
+        ),
       };
     },
   },
@@ -58,6 +67,15 @@ export const nameColumnProps = {
   fixed: true,
   valueGetter({ metadata }) {
     return metadata.assemblyName;
+  },
+  getWidth(columnProps, row) {
+    const textWidth = defaultWidthGetter(columnProps, row);
+
+    if (row.__isCollection || row.__isReference || !row.metadata.collectionId) {
+      return textWidth;
+    }
+
+    return textWidth + 8 + 32; // extra space for collection link
   },
   getCellContents({ valueGetter }, data) {
     const text = valueGetter(data);
@@ -71,6 +89,21 @@ export const nameColumnProps = {
     if (data.__isReference) {
       return (
         <strong>{text}</strong>
+      );
+    }
+
+    if (data.metadata.collectionId) {
+      return (
+        <div className="wgsa-public-collection-link" onClick={(e) => e.stopPropagation()}>
+          <span>{text}</span>
+          <a className="mdl-button mdl-button--icon"
+            target="_blank"
+            title="View Original Collection"
+            href={`/${Species.nickname}/collection/${data.metadata.collectionId}`}
+          >
+            <i className="material-icons">open_in_new</i>
+          </a>
+        </div>
       );
     }
 
@@ -110,22 +143,26 @@ function measureText(text) {
   return canvas.measureText(text).width + cellPadding;
 }
 
+export function defaultWidthGetter({ valueGetter }, row) {
+  return measureText(valueGetter(row) || '');
+}
+
 export function addColumnWidth(column, data) {
   if (column.fixedWidth) {
     return column;
   }
 
-  const { columnKey, valueGetter } = column;
+  const { columnKey, getWidth = defaultWidthGetter } = column;
   canvas.font = getFontString();
   const columnLabelWidth = measureText(formatColumnLabel(columnKey));
 
   column.width = data.length ? data.reduce((maxWidth, row) => {
-    const weight = row.__isCollection || row.__isreference ? 'bold' : 'normal';
+    const weight = row.__isCollection || row.__isReference ? 'bold' : 'normal';
     canvas.font = getFontString(weight);
     return Math.max(
       maxWidth,
       columnLabelWidth,
-      measureText(valueGetter(row) || ''),
+      getWidth(column, row),
     );
   }, 0) : columnLabelWidth;
 
