@@ -157,3 +157,9 @@
 .wgsa-assembly-name-cell .material-icons {
   font-size: 20px;
 }
+
+.wgsa-assembly-name-cell .mdl-button--icon {
+  height: 28px;
+  width: 28px;
+  min-width: 28px;
+}
