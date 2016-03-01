@@ -45,10 +45,18 @@ const SouthContent = React.createClass({
     componentHandler.upgradeDom();
   },
 
+  onClick(dispatch, { target }) {
+    if (target.classList.contains('public_Scrollbar_face') ||
+        target.classList.contains('public_Scrollbar_main')) {
+      return;
+    }
+    dispatch(resetFilter());
+  },
+
   render() {
     const { dispatch, headerClick, filter } = this.props;
     return (
-      <section style={sectionStyle} onClick={() => dispatch(resetFilter())}>
+      <section style={sectionStyle} onClick={this.onClick.bind(null, dispatch)}>
         <FixedTable { ...this.props }
           rowClickHandler={({ metadata }) => handleRowClick(metadata, filter, dispatch)}
           headerClickHandler={(column) => dispatch(headerClick(column))}
