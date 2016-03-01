@@ -8,22 +8,6 @@ import MetadataUtils from '../utils/Metadata';
 export const systemColumnProps = [
   ...downloadColumnProps,
   nameColumnProps,
-  { columnKey: '__pmid',
-    valueGetter({ metadata }) {
-      return metadata.pmid;
-    },
-    getCellContents({ valueGetter }, data) {
-      const pmid = valueGetter(data);
-      return (
-        <a href={`http://www.ncbi.nlm.nih.gov/pubmed/${pmid}`}
-          target="_blank"
-          onClick={(e) => e.stopPropagation()}
-        >
-          {pmid}
-        </a>
-      );
-    },
-  },
   { columnKey: '__date',
     valueGetter({ metadata }) {
       return MetadataUtils.getFormattedDateString(metadata.date);

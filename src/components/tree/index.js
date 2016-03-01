@@ -17,6 +17,10 @@ const fullWidthHeight = {
   width: '100%',
 };
 
+const initialMaxScale = 2;
+const maxBaseSize = 10;
+const minBaseSize = 3;
+
 export default React.createClass({
 
   displayName: 'Tree',
@@ -33,13 +37,16 @@ export default React.createClass({
   },
 
   getInitialState() {
-    return ({
+    return {
       isHighlightingBranch: false,
       isTreeControlsOn: false,
       treeType: DEFAULT.TREE_TYPE,
-      nodeSize: DEFAULT.NODE_SIZE,
-      labelSize: DEFAULT.LABEL_SIZE,
-    });
+      scales: {
+        node: 1,
+        label: 1,
+        max: initialMaxScale,
+      },
+    };
   },
 
   componentDidMount() {
@@ -50,8 +57,6 @@ export default React.createClass({
       fillCanvas: true,
     });
 
-    phylocanvas.baseNodeSize = this.state.nodeSize;
-    phylocanvas.textSize = this.state.labelSize;
     phylocanvas.padding = 64;
     phylocanvas.showLabels = true;
     phylocanvas.hoverLabel = true;
@@ -61,38 +66,46 @@ export default React.createClass({
     phylocanvas.setTreeType(this.state.treeType);
 
     phylocanvas.on('loaded', () => {
-      this.styleTree(phylocanvas);
+      this.baseSize = Math.min(
+        maxBaseSize,
+        Math.max(minBaseSize, phylocanvas.prerenderer.getStep(phylocanvas) / 2)
+      );
+
+      phylocanvas.baseNodeSize = this.baseSize;
+      phylocanvas.textSize = this.baseSize;
+
+      this.props.styleTree(phylocanvas);
       phylocanvas.fitInPanel();
       phylocanvas.draw();
+
+      this.setState({
+        scales: {
+          node: 1,
+          label: 1,
+          max: Math.max(
+            initialMaxScale,
+            (initialMaxScale * maxBaseSize) / this.baseSize
+          ),
+        },
+      });
     });
 
     phylocanvas.on('subtree', () => {
       this.props.setUnfilteredIds(this.phylocanvas.leaves.map(_ => _.id));
     });
 
-    this.onLoaded = () => this.props.onLoaded(phylocanvas);
     phylocanvas.on('loaded', this.onLoaded);
-    phylocanvas.on('updated', this.props.onUpdated);
+    phylocanvas.on('updated', this.onUpdated);
 
     this.phylocanvas = phylocanvas;
 
     this.loadTree();
   },
 
-  componentWillUpdate() {
-    const { containerElement } = this.phylocanvas;
-    containerElement.removeEventListener('updated', this.props.onUpdated);
-    containerElement.removeEventListener('loaded', this.onLoaded);
-  },
-
   componentDidUpdate(previous) {
     this.phylocanvas.resizeToContainer();
 
-    const { onLoaded, onUpdated, filenames, newick } = this.props;
-
-    this.onLoaded = () => onLoaded(this.phylocanvas);
-    this.phylocanvas.on('loaded', this.onLoaded);
-    this.phylocanvas.on('updated', onUpdated);
+    const { filenames, newick } = this.props;
 
     if (filenames !== previous.filenames) {
       this.phylocanvas.contextMenu.filenames = filenames;
@@ -106,6 +119,14 @@ export default React.createClass({
     }
   },
 
+  onLoaded() {
+    this.props.onLoaded(this.phylocanvas);
+  },
+
+  onUpdated(event) {
+    this.props.onUpdated(event);
+  },
+
   render() {
     const { header, loading } = this.props;
 
@@ -115,11 +136,10 @@ export default React.createClass({
         <div id="phylocanvas-container" style={fullWidthHeight}></div>
         <TreeControls
           treeType={this.state.treeType}
-          nodeSize={this.state.nodeSize}
-          labelSize={this.state.labelSize}
+          scales={this.state.scales}
           handleTreeTypeChange={this.handleTreeTypeChange}
-          handleNodeSizeChange={this.handleNodeSizeChange}
-          handleLabelSizeChange={this.handleLabelSizeChange}
+          handleNodeScaleChange={this.handleNodeScaleChange}
+          handleLabelScaleChange={this.handleLabelScaleChange}
         />
         { loading ?
           <div className="wgsa-loading-overlay">
@@ -136,22 +156,17 @@ export default React.createClass({
   },
 
   styleTree(tree) {
-    tree.baseNodeSize = this.state.nodeSize;
-    tree.textSize = this.state.labelSize;
-
     this.props.styleTree(tree);
   },
 
-  handleNodeSizeChange(event) {
-    this.setState({
-      nodeSize: event.target.value,
-    });
+  handleNodeScaleChange(event) {
+    this.phylocanvas.baseNodeSize = this.baseSize * parseFloat(event.target.value);
+    this.phylocanvas.draw();
   },
 
-  handleLabelSizeChange(event) {
-    this.setState({
-      labelSize: event.target.value,
-    });
+  handleLabelScaleChange(event) {
+    this.phylocanvas.textSize = this.baseSize * parseFloat(event.target.value);
+    this.phylocanvas.draw();
   },
 
   handleTreeTypeChange(event) {
