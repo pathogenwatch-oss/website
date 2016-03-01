@@ -54,7 +54,7 @@ export default React.createClass({
         <select className="wgsa-select-tree-type" defaultValue={this.props.treeType} onChange={this.props.handleTreeTypeChange}>
           { Object.keys(treeTypes).map((treeType) => <option key={treeType} value={treeType}>{treeType}</option>)}
         </select>
-        <div>
+        <div className="wgsa-tree-controls">
           <div className="wgsa-tree-control" style={sizeControlStyle}>
             <label>Node Size
               <input ref="nodeSlider" type="range"

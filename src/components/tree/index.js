@@ -66,32 +66,13 @@ export default React.createClass({
     phylocanvas.setTreeType(this.state.treeType);
 
     phylocanvas.on('loaded', () => {
-      this.baseSize = Math.min(
-        maxBaseSize,
-        Math.max(minBaseSize, phylocanvas.prerenderer.getStep(phylocanvas) / 2)
-      );
-
-      phylocanvas.baseNodeSize = this.baseSize;
-      phylocanvas.textSize = this.baseSize;
-
       this.props.styleTree(phylocanvas);
-      phylocanvas.fitInPanel();
-      phylocanvas.draw();
-
-      this.setState({
-        scales: {
-          node: 1,
-          label: 1,
-          max: Math.max(
-            initialMaxScale,
-            (initialMaxScale * maxBaseSize) / this.baseSize
-          ),
-        },
-      });
+      this.setBaseSize(phylocanvas);
     });
 
     phylocanvas.on('subtree', () => {
-      this.props.setUnfilteredIds(this.phylocanvas.leaves.map(_ => _.id));
+      this.props.setUnfilteredIds(phylocanvas.leaves.map(_ => _.id));
+      this.setBaseSize(phylocanvas);
     });
 
     phylocanvas.on('loaded', this.onLoaded);
@@ -150,6 +131,30 @@ export default React.createClass({
   },
 
   phylocanvas: null,
+
+  setBaseSize(tree) {
+    this.baseSize = Math.min(
+      maxBaseSize,
+      Math.max(minBaseSize, tree.prerenderer.getStep(tree) / 2)
+    );
+
+    tree.baseNodeSize = this.baseSize;
+    tree.textSize = this.baseSize;
+
+    tree.fitInPanel();
+    tree.draw();
+
+    this.setState({
+      scales: {
+        node: 1,
+        label: 1,
+        max: Math.max(
+          initialMaxScale,
+          (initialMaxScale * maxBaseSize) / this.baseSize
+        ),
+      },
+    });
+  },
 
   loadTree() {
     this.phylocanvas.load(this.props.newick);

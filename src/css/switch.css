@@ -2,6 +2,7 @@
   display: flex;
   width: 88px;
   user-select: none;
+  justify-content: space-between;
 }
 
 .wgsa-switch:hover {
@@ -13,9 +14,8 @@
   display: none;
 }
 
-.wgsa-switch .mdl-switch.is-upgraded {
-  display: block;
-  margin-left: 1px;
+.wgsa-switch .mdl-switch {
+  margin: 0 2px;
 }
 
 .wgsa-switch .mdl-switch__thumb,
