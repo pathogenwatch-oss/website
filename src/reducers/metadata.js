@@ -6,6 +6,8 @@ import { systemColumnProps } from '../constants/metadata';
 import { getCellContents } from '../constants/table';
 import { speciesTrees } from '../constants/tree';
 
+import Species from '^/species';
+
 const initialActiveColumn = systemColumnProps[1];
 
 const initialState = {
@@ -17,7 +19,6 @@ const initialState = {
     return setLabelColumn(column);
   },
   columns: [],
-  subtreeMetadataColumnNames: {},
 };
 
 function getUserDefinedColumnNames(assemblies) {
@@ -43,8 +44,7 @@ function buildUserDefinedColumnProps(columnNames) {
   });
 }
 
-function createColumnProps(assemblies) {
-  const columnNames = getUserDefinedColumnNames(assemblies);
+function createColumnProps(columnNames) {
   return systemColumnProps.concat(buildUserDefinedColumnProps(columnNames));
 }
 
@@ -60,48 +60,35 @@ const actions = {
   [FETCH_ENTITIES]: function (state, { ready, result, error }) {
     if (ready && !error) {
       const { assemblies } = result[0];
+      const { publicMetadataColumnNames } = Species.current;
 
-      const userDefinedColumnProps = createColumnProps(assemblies);
+      const columnNames = getUserDefinedColumnNames(assemblies);
+      const userDefinedColumnProps = createColumnProps(columnNames);
 
       return {
         ...state,
         userDefinedColumnProps,
+        publicMetadataColumnProps: createColumnProps(publicMetadataColumnNames),
         columns: userDefinedColumnProps,
       };
     }
 
     return state;
   },
-  [SET_TREE]: function (state, { ready, result, name }) {
+  [SET_TREE]: function (state, { ready, name }) {
     if (ready === false) {
       return state;
     }
 
-    if (ready && result) {
-      const { assemblies } = result;
-
-      const subtreeMetadataColumnProps = createColumnProps(assemblies);
-
-      return {
-        ...state,
-        subtreeMetadataColumnProps: {
-          ...state.subtreeMetadataColumnProps,
-          [name]: subtreeMetadataColumnProps,
-        },
-        columns: subtreeMetadataColumnProps,
-        activeColumn: getActiveColumn(state.activeColumn, subtreeMetadataColumnProps),
-      };
-    }
-
-    const userDefinedColumnProps =
+    const columnProps =
       speciesTrees.has(name) ?
         state.userDefinedColumnProps :
-        state.subtreeMetadataColumnProps[name];
+        state.publicMetadataColumnProps;
 
     return {
       ...state,
-      columns: userDefinedColumnProps,
-      activeColumn: getActiveColumn(state.activeColumn, userDefinedColumnProps),
+      columns: columnProps,
+      activeColumn: getActiveColumn(state.activeColumn, columnProps),
     };
   },
   [SET_LABEL_COLUMN]: function (state, { column }) {
