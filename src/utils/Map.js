@@ -131,6 +131,13 @@ function hasNoPosition({ metadata = {} }) {
   return !position || !position.latitude || !position.longitude;
 }
 
+function getPositionKey({ latitude, longitude }) {
+  return JSON.stringify({
+    latitude: latitude.toFixed(6), // 6 avoids rounding at 5dp
+    longitude: longitude.toFixed(6),
+  });
+}
+
 export function addAssembliesToMarkerDefs(assemblies, existingMarkers = []) {
   const markersByPosition = existingMarkers.reduce((map, marker) => {
     map.set(JSON.stringify(marker.position), marker);
@@ -142,7 +149,7 @@ export function addAssembliesToMarkerDefs(assemblies, existingMarkers = []) {
       continue;
     }
 
-    const positionKey = JSON.stringify(assembly.metadata.position);
+    const positionKey = getPositionKey(assembly.metadata.position);
     if (markersByPosition.has(positionKey)) {
       markersByPosition.get(positionKey).
         assemblyIds.push(assembly.metadata.assemblyId);

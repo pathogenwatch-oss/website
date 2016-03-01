@@ -55,12 +55,10 @@ apiRouter.get('/species/:speciesId/antibiotics', function (req, res) {
   res.sendFile(__dirname + '/static_data/antibiotics.json');
 });
 
-var subtreeError = false;
+
 apiRouter.get('/species/:speciesId/collection/:collectionId/subtree/:subtreeId', function (req, res) {
-  subtreeError = !subtreeError;
   setTimeout(function () {
-    return subtreeError ? res.sendStatus(500) :
-      res.sendFile(`${__dirname}/static_data/${req.params.subtreeId}.json`);
+    res.sendFile(`${__dirname}/static_data/${req.params.subtreeId}.json`);
   }, 1000);
 });
 
