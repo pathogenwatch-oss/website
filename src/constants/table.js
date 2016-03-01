@@ -62,6 +62,24 @@ export const downloadColumnProps = [
   },
 ];
 
+function getNameText(data, valueGetter) {
+  const text = valueGetter(data);
+
+  if (data.__isCollection) {
+    return (
+      <strong style={collectionStyle}>{text}</strong>
+    );
+  }
+
+  if (data.__isReference) {
+    return (
+      <strong>{text}</strong>
+    );
+  }
+
+  return <span>{text}</span>;
+}
+
 export const nameColumnProps = {
   columnKey: '__name',
   fixed: true,
@@ -69,45 +87,47 @@ export const nameColumnProps = {
     return metadata.assemblyName;
   },
   getWidth(columnProps, row) {
-    const textWidth = defaultWidthGetter(columnProps, row);
+    let width = defaultWidthGetter(columnProps, row);
 
-    if (row.__isCollection || row.__isReference || !row.metadata.collectionId) {
-      return textWidth;
+    if (row.__isPublic && !row.metadata.collectionId) {
+      width += 40;
     }
 
-    return textWidth + 8 + 32; // extra space for collection link
+    if (row.metadata.pmid) {
+      width += 40;
+    }
+
+    return width;
   },
   getCellContents({ valueGetter }, data) {
-    const text = valueGetter(data);
+    const { metadata } = data;
 
-    if (data.__isCollection) {
-      return (
-        <strong style={collectionStyle}>{text}</strong>
-      );
-    }
-
-    if (data.__isReference) {
-      return (
-        <strong>{text}</strong>
-      );
-    }
-
-    if (data.metadata.collectionId) {
-      return (
-        <div className="wgsa-public-collection-link" onClick={(e) => e.stopPropagation()}>
-          <span>{text}</span>
-          <a className="mdl-button mdl-button--icon"
-            target="_blank"
-            title="View Original Collection"
-            href={`/${Species.nickname}/collection/${data.metadata.collectionId}`}
-          >
-            <i className="material-icons">open_in_new</i>
-          </a>
+    return (
+      <div className="wgsa-assembly-name-cell">
+        {getNameText(data, valueGetter)}
+        <div onClick={(e) => e.stopPropagation()}>
+          { data.__isPublic && metadata.collectionId ?
+            <a className="mdl-button mdl-button--icon"
+              href={`/${Species.nickname}/collection/${metadata.collectionId}`}
+              title="View WGSA Collection"
+              target="_blank"
+            >
+              <i className="material-icons">open_in_new</i>
+            </a> : null
+          }
+          { metadata.pmid ?
+            <a className="mdl-button mdl-button--icon"
+              href={`http://www.ncbi.nlm.nih.gov/pubmed/${metadata.pmid}`}
+              target="_blank"
+              title={`PMID ${metadata.pmid}`}
+              style={{ color: '#369' }}
+            >
+              <i className="material-icons">open_in_new</i>
+            </a> : null
+          }
         </div>
-      );
-    }
-
-    return text;
+      </div>
+    );
   },
 };
 
