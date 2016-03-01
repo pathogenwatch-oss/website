@@ -319,6 +319,7 @@ function getStatus({ collectionId }, callback) {
 }
 
 module.exports.add = add;
+module.exports.getAssemblyIds = getAssemblyIds;
 module.exports.get = get;
 module.exports.getReference = getReference;
 module.exports.getSubtree = getSubtree;

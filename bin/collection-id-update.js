@@ -3,6 +3,7 @@ var async = require('async');
 
 var storageConnection = require('utils/storageConnection');
 var { ASSEMBLY_METADATA } = require('utils/documentKeys');
+var LOGGER = require('utils/logging').getBaseLogger();
 
 var FILE_PATH = process.argv[2];
 
@@ -11,18 +12,20 @@ async.waterfall([
     storageConnection.connect(next);
   },
   function (next) {
-    const file = fs.readFileSync(FILE_PATH);
-    return next(null, file.split('\n'));
+    const file = fs.readFileSync(FILE_PATH, 'utf8');
+    LOGGER.debug(file, FILE_PATH);
+    return next(null, file.split('\n').filter(_ => _.length));
   },
   function (collectionIds, next) {
     const model = require('models/collection');
-    const storage = require('services/storage');
+    const storage = require('services/storage')('main');
 
     function addCollectionId(collectionId, assemblyId, done) {
       const key = `${ASSEMBLY_METADATA}_${assemblyId}`;
+      LOGGER.debug(key);
       storage.retrieve(key, function (error, metadata) {
         if (error) {
-          done(error);
+          return done(error);
         }
         metadata.collectionId = collectionId;
 
@@ -35,9 +38,11 @@ async.waterfall([
         if (error) {
           return done(error);
         }
-        async.each(
-          ids.map(_ => _.assemblyId), addCollectionId.bind(null, id), done
-        );
+        LOGGER.debug(ids);
+        //async.each(
+          //ids.map(_ => _.assemblyId), addCollectionId.bind(null, id), done
+        //);
+        addCollectionId(id, ids[0].assemblyId, done);
       });
     }
 
