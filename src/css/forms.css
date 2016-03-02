@@ -31,7 +31,6 @@ fieldset > legend {
   background: none;
   border: none;
   cursor: pointer;
-  height: 32px;
 }
 
 .wgsa-download-button:active,
@@ -54,4 +53,25 @@ fieldset > legend {
 .wgsa-button-icon {
   vertical-align: middle;
   margin-right: 4px;
+}
+
+.wgsa-external-link {
+  color: #673c90;
+  text-decoration: none;
+}
+
+.wgsa-external-link:hover,
+.wgsa-external-link:focus,
+.wgsa-external-link:active {
+  text-decoration: underline;
+}
+
+.wgsa-external-link > span {
+  vertical-align: middle;
+}
+
+.wgsa-external-link > .material-icons {
+  vertical-align: middle;
+  font-size: 1em;
+  margin-left: .25em;
 }

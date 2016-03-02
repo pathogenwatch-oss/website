@@ -28,7 +28,7 @@ export default React.createClass({
             <p>
               A web application for the processing, clustering and exploration of microbial genome assemblies.
             </p>
-            <Link to="/saureus/upload" className="mdl-button mdl-button--colored mdl-button--raised wgsa-cta">
+            <Link to="/saureus" className="mdl-button mdl-button--colored mdl-button--raised wgsa-cta">
               Get started with {staph.formattedName}
             </Link>
           </div>

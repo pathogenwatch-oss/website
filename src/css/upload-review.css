@@ -240,9 +240,9 @@
   text-transform: uppercase;
   font-size: 16px;
   color: #666;
-  line-height: 40px;
+  line-height: 48px;
   border-bottom: 1px solid #ddd;
-  padding: 4px 32px;
+  padding: 4px 32px 0;
   overflow: hidden;
   display: block;
   text-overflow: ellipsis;
@@ -363,9 +363,14 @@
 .assembly-map {
   padding-bottom: 30px;
 }
+
+.wgsa-chart-select .mdl-tabs {
+  height: 52px;
+}
+
 .wgsa-chart-select .mdl-tabs__tab {
   flex-grow: 1;
-  padding: 0px;
+  padding: 4px 0 0;
   white-space: nowrap;
   font-size: 13px;
   font-family: "Roboto","Helvetica","Arial",sans-serif;
