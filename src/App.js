@@ -33,7 +33,10 @@ export default React.createClass({
             <img src="/assets/img/WGSA.FINAL.svg" />
           </span>
           <nav className="mdl-navigation">
-            <a className="mdl-navigation__link" href="/">WGSA Home</a>
+            <a className="mdl-navigation__link" href="/">
+              <i className="material-icons">home</i>
+              Home
+            </a>
             <a className="mdl-navigation__link" href="">{Staph.formattedName}</a>
             <a className="mdl-navigation__link" href="">Upload</a>
           </nav>
