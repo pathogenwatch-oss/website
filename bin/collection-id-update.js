@@ -39,10 +39,10 @@ async.waterfall([
           return done(error);
         }
         LOGGER.debug(ids);
-        //async.each(
-          //ids.map(_ => _.assemblyId), addCollectionId.bind(null, id), done
-        //);
-        addCollectionId(id, ids[0].assemblyId, done);
+        async.each(
+          ids.map(_ => _.assemblyId), addCollectionId.bind(null, id), done
+        );
+
       });
     }
 
