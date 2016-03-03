@@ -1,8 +1,11 @@
 import './css/menu.css';
 
 import React from 'react';
+import { Link } from 'react-router';
 
+import Header from './components/Header.react';
 import Toast from './components/Toast.react';
+
 
 import Staph from './species/saureus';
 
@@ -14,31 +17,33 @@ export default React.createClass({
     headerClassNames: React.PropTypes.string,
   },
 
+  componentDidMount() {
+    componentHandler.upgradeDom();
+    this.menuButton = document.querySelector('.mdl-layout__drawer-button');
+  },
+
   render() {
-    const { children, title = 'WGSA', headerClassNames } = this.props;
+    const { children } = this.props;
     return (
       <div className="mdl-layout mdl-js-layout">
-        <header className={`mdl-layout__header mdl-layout__header--scroll ${headerClassNames}`.trim()}>
-          <div className="mdl-layout__header-row">
-            <span className="mdl-layout-title">{title}</span>
-            <div className="mdl-layout-spacer"></div>
-            <picture>
-              <source srcSet="/assets/img/CGPS.FINAL.svg" media="(min-width: 1200px)" />
-              <img className="cgps-logo" src="/assets/img/CGPS.SHORT.FINAL.svg" />
-            </picture>
-          </div>
-        </header>
+        <Header />
         <div className="mdl-layout__drawer">
           <span className="mdl-layout-title">
             <img src="/assets/img/WGSA.FINAL.svg" />
           </span>
-          <nav className="mdl-navigation">
-            <a className="mdl-navigation__link" href="/">
+          <nav className="mdl-navigation" onClick={this.hideSidebar}>
+            <Link className="mdl-navigation__link" to="/">
               <i className="material-icons">home</i>
               Home
-            </a>
-            <a className="mdl-navigation__link" href="">{Staph.formattedName}</a>
-            <a className="mdl-navigation__link" href="">Upload</a>
+            </Link>
+            <Link className="mdl-navigation__link" to={`/${Staph.nickname}`}>
+              <i className="material-icons">bug_report</i>
+              <span>{Staph.shortFormattedName}</span>
+            </Link>
+            <Link className="mdl-navigation__link" to={`/${Staph.nickname}/upload`}>
+              <i className="material-icons">cloud_upload</i>
+              Create Collection
+            </Link>
           </nav>
         </div>
         <main className="mdl-layout__content">
@@ -47,6 +52,12 @@ export default React.createClass({
         <Toast />
       </div>
     );
+  },
+
+  hideSidebar() {
+    if (this.menuButton.getAttribute('aria-expanded') === 'true') {
+      this.menuButton.click();
+    }
   },
 
 });

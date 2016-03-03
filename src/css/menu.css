@@ -13,17 +13,20 @@
   color: rgba(0, 0, 0, 0.870588);
   font-size: 16px;
   line-height: 16px;
+  transition: background .28s cubic-bezier(.4,0,.2,1);
+  padding-left: 24px;
 }
 
 .mdl-navigation__link > span {
   line-height: 16px;
-  vertical-align: bottom;
-  /*margin-bottom: 2px;*/
   display: inline-block;
+  vertical-align: bottom;
+  margin-bottom: -2px;
 }
 
 .mdl-navigation__link .material-icons {
   margin-right: 16px;
   line-height: 16px;
   vertical-align: middle;
+  color: #673c90;
 }

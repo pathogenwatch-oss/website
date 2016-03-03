@@ -6,6 +6,7 @@ import { assemblies, collection, reference } from './collection';
 import metadata from './metadata';
 import resistanceProfile from './resistanceProfile';
 
+import header from './header';
 import table from './table';
 import mapMarkers from './mapMarkers';
 import { trees, displayedTree, treeLoading } from './tree';
@@ -41,6 +42,7 @@ const rootReducer = combineReducers({
     resistanceProfile: createReducer(resistanceProfile),
   }),
   display: combineReducers({
+    header: createReducer(header),
     table: createReducer(table),
     mapMarkers: createReducer(mapMarkers),
     tree: createReducer(displayedTree),

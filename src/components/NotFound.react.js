@@ -1,4 +1,7 @@
 import React from 'react';
+import { connect } from 'react-redux';
+
+import { updateHeader } from '^/actions/header';
 
 import { CGPS } from '../defaults';
 
@@ -7,9 +10,15 @@ const titleStyle = {
   color: CGPS.COLOURS.PURPLE,
 };
 
-export default React.createClass({
+export default connect()(React.createClass({
 
-  render: function () {
+  componentWillMount() {
+    this.props.dispatch(updateHeader({
+      classNames: 'mdl-shadow--3dp',
+    }));
+  },
+
+  render() {
     return (
       <div className="mdl-layout wgsa-loading-container">
         <a href="/">
@@ -23,4 +32,4 @@ export default React.createClass({
     );
   },
 
-});
+}));

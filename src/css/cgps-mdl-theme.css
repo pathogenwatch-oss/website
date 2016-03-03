@@ -1,7 +1,10 @@
+/* Layout */
+
 .mdl-layout__header {
   background-color: #fff;
   color: #673c90 !important;
   min-height: 56px;
+  display: block; /* overrides display: none on small screens! */
 }
 
 .mdl-layout__header-row {
@@ -35,6 +38,13 @@
   color: #fff !important
 }
 
+.mdl-layout__content {
+  background: #efefef;
+  position: relative;
+}
+
+/* Tabs */
+
 .mdl-tabs__tab .mdl-tabs__ripple-container .mdl-ripple {
   background: #673c90 !important;
 }
@@ -42,6 +52,9 @@
   background-color: #673c90;
   background: #673c90;
 }
+
+
+/* Spinner */
 
 .mdl-spinner .mdl-spinner__layer-1,
 .mdl-spinner .mdl-spinner__layer-3 {

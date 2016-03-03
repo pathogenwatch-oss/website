@@ -1,13 +1,29 @@
 import '../css/home.css';
 
 import React from 'react';
-
+import { connect } from 'react-redux';
 import { Link } from 'react-router';
+
+import { updateHeader } from '^/actions/header';
 
 import staph from '../species/saureus';
 import { CGPS } from '^/defaults';
 
-export default React.createClass({
+export default connect()(React.createClass({
+
+  propTypes: {
+    dispatch: React.PropTypes.func,
+  },
+
+  componentWillMount() {
+    this.props.dispatch(
+      updateHeader({
+        speciesName: null,
+        classNames: null,
+        content: null,
+      })
+    );
+  },
 
   render() {
     return (
@@ -82,4 +98,4 @@ export default React.createClass({
     );
   },
 
-});
+}));
