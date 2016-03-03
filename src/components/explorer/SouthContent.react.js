@@ -45,10 +45,18 @@ const SouthContent = React.createClass({
     componentHandler.upgradeDom();
   },
 
+  onClick(dispatch, { target }) {
+    if (target.classList.contains('public_Scrollbar_face') ||
+        target.classList.contains('public_Scrollbar_main')) {
+      return;
+    }
+    dispatch(resetFilter());
+  },
+
   render() {
     const { dispatch, headerClick, filter } = this.props;
     return (
-      <section style={sectionStyle} onClick={() => dispatch(resetFilter())}>
+      <section style={sectionStyle} onClick={this.onClick.bind(null, dispatch)}>
         <FixedTable { ...this.props }
           rowClickHandler={({ metadata }) => handleRowClick(metadata, filter, dispatch)}
           headerClickHandler={(column) => dispatch(headerClick(column))}
@@ -70,14 +78,13 @@ function mapStateToProps(state) {
   const table = tables[display.table];
   const { headerClick, columns, ...tableProps } = table;
 
-  const data = getTableData(entities.assemblies, filter);
   return {
     ...tableProps,
-    columns: columns.map(column => addColumnWidth(column, data)),
-    headerClick: headerClick.bind(table),
-    data,
+    columns,
     filter,
     collection,
+    data: getTableData(entities.assemblies, filter),
+    headerClick: headerClick.bind(table),
     downloads: {
       fasta: downloads.files.fasta,
       wgsa_gff: downloads.files.wgsa_gff,
@@ -86,7 +93,9 @@ function mapStateToProps(state) {
 }
 
 function mapStateToColumn(column, state, dispatch) {
-  return column.addState ? column.addState(state, dispatch) : column;
+  return column.addState ?
+    column.addState(state, dispatch) :
+    addColumnWidth(column, state.data);
 }
 
 function mergeProps(state, { dispatch }, props) {

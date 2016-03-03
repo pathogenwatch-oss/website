@@ -58,6 +58,12 @@
   background: rgba(255, 255, 255, 0.87);
 }
 
+.wgsa-tree-controls {
+  background: rgba(255, 255, 255, 0.87);
+  padding: 4px 0;
+  border-radius: 8px;
+}
+
 .wgsa-tree-control .mdl-slider {
   display: none;
 }
@@ -83,9 +89,6 @@
   font-size: 12px;
   font-weight: 700;
   color: rgba(0, 0, 0, 0.54);
-  background: rgba(255, 255, 255, 0.87);
-  padding: 4px 8px;
-  border-radius: 16px;
 }
 
 .wgsa-no-subtree {

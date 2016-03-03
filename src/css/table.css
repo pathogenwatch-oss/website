@@ -144,17 +144,22 @@
   color: #d11b1b;
 }
 
-.wgsa-public-collection-link {
+.wgsa-assembly-name-cell {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.wgsa-public-collection-link > a {
+.wgsa-assembly-name-cell a {
   color: #673c90;
+}
+
+.wgsa-assembly-name-cell .material-icons {
   font-size: 16px;
 }
 
-.wgsa-public-collection-link .material-icons {
-  font-size: 20px;
+.wgsa-assembly-name-cell .mdl-button--icon {
+  height: 24px;
+  width: 24px;
+  min-width: 24px;
 }

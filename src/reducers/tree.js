@@ -43,7 +43,7 @@ export const trees = {
 };
 
 export const displayedTree = {
-  initialState: POPULATION,
+  initialState: COLLECTION,
   actions: {
     [SET_TREE]: function (state, { name, ready = true, error }) {
       if (error) {

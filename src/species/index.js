@@ -1,13 +1,13 @@
 import saureus from './saureus';
-import salty from './salty';
+// import salty from './salty';
 // import lismn from './lismn';
 // import salen from './salen';
 
 const definitions = {
-  // lismn,
   saureus,
-  salty,
-  // salen
+  // salty,
+  // lismn,
+  // salen,
 };
 
 const definitionsAsList = Object.keys(definitions).map(key => definitions[key]);
