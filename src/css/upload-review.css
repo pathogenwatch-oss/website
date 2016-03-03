@@ -54,18 +54,6 @@
 
 /**** Upload Review - Header ****/
 
-@media (max-width: 1024px) {
-
-  .mdl-layout__header-row {
-    /*padding-left: 60px !important;*/
-  }
-
-  .mdl-layout__header .mdl-layout__drawer-button {
-    color: #673c90;
-  }
-
-}
-
 @media (max-width: 839px) and (min-width: 480px) {
   .mdl-cell--6-col, .mdl-cell--6-col-tablet.mdl-cell--6-col-tablet {
       width: calc(100% - 16px);

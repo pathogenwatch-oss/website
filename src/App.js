@@ -15,7 +15,7 @@ export default React.createClass({
   },
 
   render() {
-    const { children, title = 'Home', headerClassNames } = this.props;
+    const { children, title = 'WGSA', headerClassNames } = this.props;
     return (
       <div className="mdl-layout mdl-js-layout">
         <header className={`mdl-layout__header mdl-layout__header--scroll ${headerClassNames}`.trim()}>
@@ -29,7 +29,9 @@ export default React.createClass({
           </div>
         </header>
         <div className="mdl-layout__drawer">
-          <span className="mdl-layout-title">Navigation</span>
+          <span className="mdl-layout-title">
+            <img src="/assets/img/WGSA.FINAL.svg" />
+          </span>
           <nav className="mdl-navigation">
             <a className="mdl-navigation__link" href="/">WGSA Home</a>
             <a className="mdl-navigation__link" href="">{Staph.formattedName}</a>

@@ -1,6 +1,29 @@
 .mdl-layout__header {
   background-color: #fff;
   color: #673c90 !important;
+  min-height: 56px;
+}
+
+.mdl-layout__header-row {
+  height: 56px;
+  padding-left: 72px !important;
+}
+
+.mdl-layout__drawer-button {
+  color: #673c90 !important;
+  margin: 4px;
+  width: 64px;
+}
+
+.mdl-layout__drawer-button:focus {
+  outline: none;
+}
+
+.mdl-layout__drawer-button:hover > .material-icons,
+.mdl-layout__drawer-button:focus > .material-icons {
+  border-radius: 50%;
+  padding: 4px;
+  background-color: rgba(0,0,0,.12);
 }
 
 .mdl-layout__header--primary {
@@ -8,14 +31,9 @@
   color: #fff !important;
 }
 
-.mdl-layout__drawer-button {
-  color: #673c90 !important;
-}
-
 .mdl-layout__header--primary .mdl-layout__drawer-button {
   color: #fff !important
 }
-
 
 .mdl-tabs__tab .mdl-tabs__ripple-container .mdl-ripple {
   background: #673c90 !important;
@@ -23,14 +41,6 @@
 .mdl-tabs.is-upgraded .mdl-tabs__tab.is-active:after {
   background-color: #673c90;
   background: #673c90;
-}
-
-.mdl-layout__header--skinny {
-  min-height: 56px;
-}
-
-.mdl-layout__header--skinny .mdl-layout__header-row {
-  height: 56px;
 }
 
 .mdl-spinner .mdl-spinner__layer-1,

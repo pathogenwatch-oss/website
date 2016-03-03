@@ -1,14 +1,16 @@
 .mdl-layout__drawer {
-  background: url('/assets/img/WGSA.Icon.FINAL.svg') #fff no-repeat;
-  background-size: 80px;
-  background-position: -20px -20px;
-  text-align: center;
-  border: none;
+  background: #fff;
 }
 
 .mdl-layout__drawer > .mdl-layout-title {
-  margin-top: 48px;
-  font-size: 24px;
-  font-weight: 300;
-  padding: 0;
+  padding: 32px 48px;
+  margin-left: -24px;
+  border-bottom: 1px solid #555;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.mdl-layout__drawer .mdl-navigation .mdl-navigation__link {
+  color: rgba(0, 0, 0, 0.870588);
+  font-size: 16px;
+  line-height: 16px;
 }
