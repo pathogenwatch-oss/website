@@ -44,19 +44,26 @@ function validateFiles(files) {
 }
 
 function readFile(file, callback) {
-  const fileReader = new FileReader();
-
-  fileReader.onload = function handleLoad(event) {
-    callback(null, event.target.result);
-  };
-
-  fileReader.onerror = function handleError() {
-    console.error('[WGSA] Failed to load dropped file: ' + file.name);
-
-    callback(file.name, null);
-  };
-
-  fileReader.readAsText(file);
+  if (typeof FileReader === 'undefined') {
+    console.log('using FileReaderSync');
+    try {
+      const reader = new FileReaderSync();
+      callback(null, reader.readAsText(file));
+    } catch(e) {
+      callback(`[WGSA] Failed to read file: ${file.name}. ${e}`, null);
+    }
+  } else {
+    console.log('using FileReader');
+    const fileReader = new FileReader();
+    fileReader.onload = function handleLoad(event) {
+      callback(null, event.target.result);
+    };
+    fileReader.onerror = function handleError() {
+      console.error('[WGSA] Failed to load dropped file: ' + file.name);
+      callback(file.name, null);
+    };
+    fileReader.readAsText(file);
+  }
 }
 
 function readFiles(files, callback) {
