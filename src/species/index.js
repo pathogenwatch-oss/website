@@ -1,11 +1,11 @@
 import saureus from './saureus';
-// import salty from './salty';
+import salty from './salty';
 // import lismn from './lismn';
 // import salen from './salen';
 
 const definitions = {
   saureus,
-  // salty,
+  salty,
   // lismn,
   // salen,
 };
