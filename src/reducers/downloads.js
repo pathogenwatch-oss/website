@@ -16,8 +16,8 @@ const initialState = {
     filename: 'concatenated_core_genes',
   },
   kernel_checksum_distribution: {
-    description: 'Core Checksum Distribution (.csv)',
-    filename: 'core_checksum_distribution',
+    description: 'Core Allele Distribution (.csv)',
+    filename: 'core_allele_distribution',
   },
   differences_matrix: {
     description: 'Difference Matrix (.csv)',
