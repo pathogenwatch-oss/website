@@ -1,5 +1,7 @@
 import UploadStore from '../stores/UploadStore';
 
+import Species from '^/species';
+
 const assemblyNameRegex = /#assembly-(.+)/;
 
 export function navigateToHome() {
@@ -20,7 +22,7 @@ export function navigateToAssembly(name) {
 }
 
 function setHash(hash = '') {
-  if (window.location.pathname !== '/saureus/upload') {
+  if (window.location.pathname !== `/${Species.nickname}/upload`) {
     return console.error('Invalid location path', window.location);
   }
   if (window.location.hash !== hash) {
