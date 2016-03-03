@@ -261,7 +261,10 @@ function drawOverviewChart(data, appendToClass, xLabel = '', yLabel = '') {
 
   // Y
   var yScale = d3.scale.linear()
-  .domain([ Math.max(...chartData) * 1.01, Math.min(...chartData) * 0.99 ])
+  .domain([
+    Math.ceil(Math.max(...chartData) * 1.5),
+    Math.floor(Math.min(...chartData) * 0.5)
+  ])
   .range([ 30, chartHeight - 30 ]);
 
   // Axes
