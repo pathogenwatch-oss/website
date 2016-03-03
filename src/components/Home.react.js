@@ -12,26 +12,15 @@ export default React.createClass({
   render() {
     return (
       <section className="wgsa-home">
-        <header className="mdl-shadow--2dp">
-          <div className="wgsa-home-header mdl-layout__header-row">
-            <span className="mdl-layout-title">
-              <picture>
-                <source srcSet="/assets/img/CGPS.FINAL.svg" media="(min-width: 1200px)" />
-                <img className="cgps-logo" src="/assets/img/CGPS.SHORT.FINAL.svg" />
-              </picture>
-            </span>
-            <div className="mdl-layout-spacer"></div>
-          </div>
-          <div className="wgsa-home__intro">
-            <img src="/assets/img/WGSA.FINAL.svg" className="wgsa-logo" />
-            <h1>Whole Genome Sequence Analysis</h1>
-            <p>
-              A web application for the processing, clustering and exploration of microbial genome assemblies.
-            </p>
-            <Link to="/saureus/upload" className="mdl-button mdl-button--colored mdl-button--raised wgsa-cta">
-              Get started with {staph.formattedName}
-            </Link>
-          </div>
+        <header className="wgsa-home__intro mdl-shadow--2dp">
+          <img src="/assets/img/WGSA.FINAL.svg" className="wgsa-logo" />
+          <h1>Whole Genome Sequence Analysis</h1>
+          <p>
+            A web application for the processing, clustering and exploration of microbial genome assemblies.
+          </p>
+          <Link to="/saureus/upload" className="mdl-button mdl-button--colored mdl-button--raised wgsa-cta">
+            Get started with {staph.formattedName}
+          </Link>
         </header>
         <div className="wgsa-home__features">
           <div className="mdl-grid mdl-grid--no-spacing">

@@ -1,3 +1,22 @@
+.mdl-layout__header {
+  background-color: #fff;
+  color: #673c90 !important;
+}
+
+.mdl-layout__header--primary {
+  background-color: #673c90;
+  color: #fff !important;
+}
+
+.mdl-layout__drawer-button {
+  color: #673c90 !important;
+}
+
+.mdl-layout__header--primary .mdl-layout__drawer-button {
+  color: #fff !important
+}
+
+
 .mdl-tabs__tab .mdl-tabs__ripple-container .mdl-ripple {
   background: #673c90 !important;
 }
@@ -6,12 +25,12 @@
   background: #673c90;
 }
 
-.mdl-layout__header {
-    min-height: 56px;
+.mdl-layout__header--skinny {
+  min-height: 56px;
 }
 
-.mdl-layout__header-row {
-    height: 56px;
+.mdl-layout__header--skinny .mdl-layout__header-row {
+  height: 56px;
 }
 
 .mdl-spinner .mdl-spinner__layer-1,

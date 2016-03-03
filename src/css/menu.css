@@ -1,0 +1,14 @@
+.mdl-layout__drawer {
+  background: url('/assets/img/WGSA.Icon.FINAL.svg') #fff no-repeat;
+  background-size: 80px;
+  background-position: -20px -20px;
+  text-align: center;
+  border: none;
+}
+
+.mdl-layout__drawer > .mdl-layout-title {
+  margin-top: 48px;
+  font-size: 24px;
+  font-weight: 300;
+  padding: 0;
+}

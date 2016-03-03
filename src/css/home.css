@@ -38,8 +38,12 @@
 }
 
 .wgsa-home__intro {
-  padding-bottom: 56px;
   text-align: center;
+  padding-bottom: 56px;
+}
+
+.is-small-screen .wgsa-home__intro {
+  padding-top: 56px;
 }
 
 .wgsa-home__intro h1 {
