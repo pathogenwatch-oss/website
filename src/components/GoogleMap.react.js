@@ -59,10 +59,15 @@ function openInfoWindow(infoWindow) {
 }
 
 function updateMarker(marker, markerDef) {
-  const { icon, active, infoWindow, onClick, visible, zIndex } = markerDef;
+  const { iconDef, active, infoWindow, onClick, visible, zIndex } = markerDef;
 
   marker.setOptions({
-    icon: icon || MapUtils.standardMarkerIcon,
+    icon: iconDef ? {
+      url: iconDef.image,
+      size: new google.maps.Size(iconDef.size, iconDef.size),
+      origin: new google.maps.Point(iconDef.offset, iconDef.offset),
+      anchor: new google.maps.Point(iconDef.size / 2, iconDef.size / 2),
+    } : MapUtils.standardMarkerIcon,
     visible,
     zIndex: active ? zIndex : -1,
   });

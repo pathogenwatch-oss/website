@@ -38,8 +38,6 @@ function mapStateToProps({ display, collection, tables, entities, filter }) {
   };
 }
 
-const inactiveMarkerColours = [ 'transparent' ];
-
 function mapStateToMarker(markerDef, state, dispatch) {
   const { colourGetter, assemblies, filter } = state;
 
@@ -48,20 +46,22 @@ function mapStateToMarker(markerDef, state, dispatch) {
   const markerAssemblies = assemblyIds.map(id => assemblies[id]);
   const isCollection = markerAssemblies.some(_ => _.__isCollection);
   const colours = markerAssemblies.reduce(function (memo, assembly) {
-    const filterIds = filter.active ? filter.ids : filter.unfilteredIds;
-    if (filterIds.has(assembly.metadata.assemblyId)) {
-      memo.add(colourGetter(assembly));
-    }
+    memo.add(colourGetter(assembly));
     return memo;
   }, new Set());
 
+  markerDef.highlighted =
+    filter.active && assemblyIds.some(id => filter.ids.has(id));
+
   markerDef.onClick = () => dispatch(activateFilter(assemblyIds));
-  markerDef.icon = MapUtils.getMarkerIcon(
+
+  markerDef.iconDef = MapUtils.getMarkerIcon(
     isCollection ? 'circle' : 'square',
-    colours.size ? colours : inactiveMarkerColours
+    colours,
+    markerDef.highlighted
   );
 
-  markerDef.zIndex = isCollection ? colours.size : 0;
+  markerDef.zIndex = (isCollection || markerDef.highlighted) ? colours.size : 0;
 
   return markerDef;
 }
