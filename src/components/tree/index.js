@@ -95,7 +95,7 @@ export default React.createClass({
     if (newick && newick !== this.phylocanvas.stringRepresentation) {
       this.loadTree();
     } else {
-      this.styleTree(this.phylocanvas);
+      this.props.styleTree(this.phylocanvas);
       this.phylocanvas.draw();
     }
   },
@@ -158,10 +158,6 @@ export default React.createClass({
 
   loadTree() {
     this.phylocanvas.load(this.props.newick);
-  },
-
-  styleTree(tree) {
-    this.props.styleTree(tree);
   },
 
   handleNodeScaleChange(event) {

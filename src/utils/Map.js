@@ -1,11 +1,12 @@
 import { COLOUR, CGPS } from '../defaults';
 
+const CANVAS_SIZE = 40;
 const MARKER_SIZE = 18;
 const LINE_WIDTH = 2;
 
 const canvas = document.createElement('canvas');
-canvas.width = MARKER_SIZE + LINE_WIDTH;
-canvas.height = MARKER_SIZE + LINE_WIDTH;
+canvas.width = CANVAS_SIZE;
+canvas.height = CANVAS_SIZE;
 
 const context = canvas.getContext('2d');
 context.lineWidth = LINE_WIDTH;
@@ -101,20 +102,37 @@ const doubleColour = {
   },
 };
 
-function drawIcon(tracePath, fillColour) {
-  context.clearRect(0, 0, MARKER_SIZE, MARKER_SIZE);
+const HALO_WIDTH = 4;
+const HALO_RADIUS = CANVAS_SIZE / 2 - HALO_WIDTH;
+function drawHalo() {
+  context.beginPath();
+  context.arc(centerX, centerY, HALO_RADIUS, 0, Math.PI * 2, false);
+  context.strokeStyle = CGPS.COLOURS.PURPLE;
+  context.lineWidth = HALO_WIDTH;
+  context.stroke();
+  context.closePath();
+  context.lineWidth = LINE_WIDTH;
+}
+
+function drawIcon(tracePath, fillColour, highlighted) {
+  context.clearRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+
   tracePath(fillColour);
+  if (highlighted) {
+    drawHalo();
+  }
+
   return canvas.toDataURL();
 }
 
 const ICONS = {};
-function getIcon(shape, colours) {
-  const key = `${shape}|${colours.join('|')}`;
+function getIcon(shape, colours, highlighted = false) {
+  const key = `${shape}|${colours.join('|')}|${highlighted}`;
   if (!ICONS[key]) {
     ICONS[key] =
       colours.length === 2 ?
-        drawIcon(doubleColour[shape], colours) :
-        drawIcon(singleColour[shape], colours[0]);
+        drawIcon(doubleColour[shape], colours, highlighted) :
+        drawIcon(singleColour[shape], colours[0], highlighted);
   }
   return ICONS[key];
 }
@@ -122,8 +140,17 @@ function getIcon(shape, colours) {
 export const standardMarkerIcon =
   getIcon('circle', [ CGPS.COLOURS.PURPLE_LIGHT ]);
 
-export function getMarkerIcon(shape, colours) {
-  return getIcon(shape, Array.from(colours).sort());
+const MARKER_OFFSET = (CANVAS_SIZE - MARKER_SIZE) / 2;
+export function getMarkerIcon(shape, colours, highlighted) {
+  return {
+    image: getIcon(
+      shape,
+      Array.from(colours).sort(),
+      highlighted
+    ),
+    size: highlighted ? CANVAS_SIZE : MARKER_SIZE,
+    offset: highlighted ? 0 : MARKER_OFFSET,
+  };
 }
 
 function hasNoPosition({ metadata = {} }) {
