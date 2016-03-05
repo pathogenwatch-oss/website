@@ -59,7 +59,7 @@ export default React.createClass({
 
   getInitialState() {
     return {
-      readyToUpload: false,
+      readyToUpload: UploadStore.isReadyToUpload(),
       confirmedMultipleMetadataDrop: false,
       isProcessing: false,
       processingProgress: 0,
@@ -72,24 +72,13 @@ export default React.createClass({
     FileUploadingStore.addChangeListener(this.handleFileUploadingStoreChange);
     UploadStore.addChangeListener(this.handleUploadStoreChange);
     this.menuButton = document.querySelector('.mdl-layout__drawer-button');
-    this.context.router.setRouteLeaveHook(this.props.route, this.routerWillLeave);
     bindNavigationEvents(this.handleNavigationChange);
   },
 
   componentWillUnmount() {
-    FileUploadingStore.removeChangeListener(this.handleFileUploadingStoreChange);
     UploadStore.removeChangeListener(this.handleUploadStoreChange);
+    FileUploadingStore.removeChangeListener(this.handleFileUploadingStoreChange);
     unbindNavigationEvents();
-  },
-
-  routerWillLeave(nextLocation) {
-    // return false to prevent a transition w/o prompting the user,
-    // or return a string to allow the user to decide:
-    if (FileUploadingStore.isUploading()) {
-      return null;
-    }
-
-    return handleBeforeUnload();
   },
 
   hideSidebar() {
