@@ -20,7 +20,7 @@ module.exports = function handleErrors(app) {
       return res.sendStatus(404);
     }
 
-    if (error.msg === 'request aborted') {
+    if (error.message === 'request aborted') {
       assemblyModel.sendUploadNotification(req.params, 'ABORTED');
     }
 
