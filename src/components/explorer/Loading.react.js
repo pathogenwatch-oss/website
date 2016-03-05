@@ -7,6 +7,8 @@ import { Link } from 'react-router';
 import Spinner from '^/components/Spinner.react';
 
 import { statuses } from '^/constants/collection';
+import { UPLOAD_FAILED } from '^/stores/FileUploadingStore';
+
 import species from '^/species';
 import { CGPS } from '^/defaults';
 
@@ -52,8 +54,8 @@ function getFailedAssemblies(errors) {
 function getStatusMessage(status, errors) {
   if (status === statuses.NOT_FOUND) {
     return [
-      <h1>We're sorry, your collection is currently unavailable</h1>,
-      <p className="mdl-typography--title">You may be able to try again later.</p>,
+      <h1>We're sorry, this collection is currently unavailable</h1>,
+      <p className="mdl-typography--title">It may be available again later.</p>,
     ];
   }
   if (status === statuses.FATAL) {
@@ -64,6 +66,15 @@ function getStatusMessage(status, errors) {
       <ul className="wgsa-failed-assemblies">{failedAssemblies.map(assemblyName => <li key={assemblyName}>{assemblyName}</li>)}</ul>,
       <p className="mdl-typography--title">Please ensure that assemblies are the correct species and meet our quality criteria.</p>,
       <Link to={`/${species.nickname}/upload`} className="mdl-button mdl-button--raised">Try Again</Link>,
+    ];
+  }
+  if (status === UPLOAD_FAILED) {
+    return [
+      <h1>We're sorry, your upload did not complete.</h1>,
+      <p className="mdl-typography--title">
+        Please upload your files again.
+      </p>,
+      <Link to={`/${species.nickname}/upload`} className="mdl-button mdl-button--raised">Go Back</Link>,
     ];
   }
 }

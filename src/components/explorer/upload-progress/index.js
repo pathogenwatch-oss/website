@@ -5,6 +5,8 @@ import React from 'react';
 import Header from './Header.react';
 import Dashboard from './Dashboard.react';
 
+import UploadActionCreators from '^/actions/UploadActionCreators';
+
 import FileUploadingStore from '^/stores/FileUploadingStore';
 import { subscribe } from '^/utils/Notification';
 
@@ -19,6 +21,7 @@ const UploadProgress = React.createClass({
 
   propTypes: {
     checkStatus: React.PropTypes.func,
+    updateProgress: React.PropTypes.func,
     progress: React.PropTypes.object,
     isUploading: React.PropTypes.bool,
   },
@@ -29,15 +32,22 @@ const UploadProgress = React.createClass({
     this.props.checkStatus();
 
     if (this.props.isUploading) {
-      FileUploadingStore.uploadFiles();
+      FileUploadingStore.uploadFiles(function (error) {
+        if (error) {
+          console.error(error);
+          UploadActionCreators.notifyUploadFailed();
+        }
+      });
     }
   },
 
-  componentDidUpdate(previousProps) {
+  componentDidUpdate() {
     if (this.props.progress.collectionId && !this.notificationChannel) {
-      this.notificationChannel = subscribe(this.props.progress.collectionId,
-        'upload-progress', (data) => { this.props.updateProgress(data);
-      });
+      this.notificationChannel = subscribe(
+        this.props.progress.collectionId,
+        'upload-progress',
+        data => this.props.updateProgress(data)
+      );
     }
   },
 

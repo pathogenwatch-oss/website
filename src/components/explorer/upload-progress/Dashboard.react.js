@@ -42,7 +42,11 @@ const UploadDashboard = React.createClass({
       <div className="mdl-grid">
         <div className="wgsa-card mdl-cell mdl-cell--12-col mdl-shadow--2dp">
           <div className="wgsa-card-content" style={{ textAlign: 'center' }}>
-            <FileUploadProgressBar collectionSize={collectionSize} isUploading={isUploading} />
+            <FileUploadProgressBar
+              collectionSize={collectionSize}
+              isUploading={isUploading}
+              uploadResults={results.UPLOAD}
+            />
             <div className="wgsa-assembly-analyses mdl-grid">
               <ProgressIndicator title={'CORE'} percentage={core} />
               <ProgressIndicator title={'MLST'} percentage={mlst} />

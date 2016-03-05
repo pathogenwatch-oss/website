@@ -7,22 +7,10 @@ import Species from '../species';
 
 module.exports = {
 
-  startProcessingFiles() {
-    AppDispatcher.dispatch({
-      type: 'start_processing_files',
-    });
-  },
-
   addFiles(assemblies) {
     AppDispatcher.dispatch({
       type: 'add_files',
       assemblies,
-    });
-  },
-
-  finishProcessingFiles() {
-    AppDispatcher.dispatch({
-      type: 'finish_processing_files',
     });
   },
 
@@ -50,6 +38,12 @@ module.exports = {
     AppDispatcher.dispatch({
       type: 'delete_assembly',
       assemblyName,
+    });
+  },
+
+  notifyUploadFailed() {
+    AppDispatcher.dispatch({
+      type: 'notify_upload_failed',
     });
   },
 

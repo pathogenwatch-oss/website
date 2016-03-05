@@ -4,7 +4,7 @@ import Layout from './Layout.react';
 import UploadProgress from './upload-progress';
 import { LoadSpinner, LoadError } from './Loading.react';
 
-import FileUploadingStore from '^/stores/FileUploadingStore';
+import FileUploadingStore, { UPLOAD_FAILED } from '^/stores/FileUploadingStore';
 
 import { statuses } from '^/constants/collection';
 
@@ -15,14 +15,22 @@ export default React.createClass({
   propTypes: {
     initialise: React.PropTypes.func,
     checkStatus: React.PropTypes.func,
+    updateProgress: React.PropTypes.func,
     fetch: React.PropTypes.func,
     reset: React.PropTypes.func,
     status: React.PropTypes.string,
     progress: React.PropTypes.object,
   },
 
+  getInitialState() {
+    return {
+      uploadFailed: false,
+    }
+  },
+
   componentDidMount() {
     this.props.initialise();
+    FileUploadingStore.addChangeListener(this.handleFileUploadingStoreChange);
   },
 
   componentWillReceiveProps({ status }) {
@@ -33,6 +41,7 @@ export default React.createClass({
 
   componentWillUnmount() {
     this.props.reset();
+    FileUploadingStore.removeChangeListener(this.handleFileUploadingStoreChange);
     FileUploadingStore.clearStore();
   },
 
@@ -45,14 +54,20 @@ export default React.createClass({
       status = statuses.PROCESSING;
     }
 
+    if (this.state.uploadFailed) {
+      return (
+        <LoadError status={UPLOAD_FAILED} />
+      );
+    }
+
     if (status === statuses.PROCESSING) {
-      const { checkStatus } = this.props;
+      const { checkStatus, updateProgress } = this.props;
       return (
         <UploadProgress
           isUploading={FileUploadingStore.isUploading()}
           progress={progress}
           checkStatus={checkStatus}
-          updateProgress={this.props.updateProgress}
+          updateProgress={updateProgress}
         />
       );
     }
@@ -75,6 +90,12 @@ export default React.createClass({
     return (
       <LoadSpinner />
     );
+  },
+
+  handleFileUploadingStoreChange() {
+    if (FileUploadingStore.hasFailed()) {
+      this.setState({ uploadFailed: true });
+    }
   },
 
 });

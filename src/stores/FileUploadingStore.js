@@ -11,6 +11,7 @@ const CHANGE_EVENT = 'change';
 
 export const UPLOADING = 'UPLOADING';
 export const UPLOAD_COMPLETE = 'UPLOAD_COMPLETE';
+export const UPLOAD_FAILED = 'UPLOAD_FAILED';
 
 let fileUploadingState = null;
 let collectionId = null;
@@ -40,6 +41,10 @@ const Store = assign({}, EventEmitter.prototype, {
     return fileUploadingState === UPLOADING;
   },
 
+  hasFailed() {
+    return fileUploadingState === UPLOAD_FAILED;
+  },
+
   getCollectionId() {
     return collectionId;
   },
@@ -54,9 +59,10 @@ const Store = assign({}, EventEmitter.prototype, {
       null;
   },
 
-  uploadFiles() {
-    console.log('*** UPLOADING FILES ***');
+  uploadFiles(callback) {
     const assemblyNames = UploadStore.getAssemblyNames();
+
+    let retryCount = 0;
     const uploadAssembly = (assemblyName) => {
       const assembly = UploadStore.getAssembly(assemblyName);
       const { name, fasta, metadata, metrics } = assembly;
@@ -83,12 +89,20 @@ const Store = assign({}, EventEmitter.prototype, {
         metrics,
       };
 
-      postAssembly(urlParams, requestBody, function (assemblyError) {
-        if (assemblyError) {
-          // TODO: Pass error to front end
-          console.error(assemblyError);
+      postAssembly(urlParams, requestBody, function (error) {
+        if (error) {
+          console.error(error);
+          if (retryCount < 3) {
+            retryCount++;
+            console.warn(assemblyName, `retry ${retryCount}`);
+            setTimeout(() => uploadAssembly(assemblyName), 3000);
+          } else {
+            callback(new Error('Upload failed to complete'));
+          }
           return;
         }
+
+        retryCount = 0;
         if (assemblyNames.length) {
           uploadAssembly(assemblyNames.shift());
         }
@@ -119,6 +133,11 @@ function handleAction(action) {
     setFileUploadingState(UPLOADING);
     setCollectionId(action.collectionId);
     setAssemblyNameToAssemblyIdMap(action.assemblyNameToAssemblyIdMap);
+    emitChange();
+    break;
+
+  case 'notify_upload_failed':
+    setFileUploadingState(UPLOAD_FAILED);
     emitChange();
     break;
 

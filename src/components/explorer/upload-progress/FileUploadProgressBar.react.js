@@ -20,6 +20,7 @@ export default React.createClass({
 
   propTypes: {
     collectionSize: React.PropTypes.number,
+    uploadResults: React.PropTypes.number,
     isUploading: React.PropTypes.bool,
   },
 
@@ -35,10 +36,11 @@ export default React.createClass({
 
 
     const { progressBar } = this.refs;
+    const { isUploading } = this.props;
     progressBar.addEventListener('mdl-componentupgraded', (event) => {
       this.progressBar = event.target.MaterialProgress;
-      if (!this.props.isUploading) {
-        this.progressBar.setProgress(100);
+      if (!isUploading) {
+        this.setProgressFromProps();
       }
     });
 
@@ -48,6 +50,8 @@ export default React.createClass({
   componentDidUpdate() {
     if (this.props.isUploading) {
       this.progressBar.setProgress(this.state.progress);
+    } else {
+      this.setProgressFromProps();
     }
   },
 
@@ -57,14 +61,14 @@ export default React.createClass({
   },
 
   render() {
-    const { collectionSize, isUploading } = this.props;
+    const { collectionSize, isUploading, uploadResults } = this.props;
     const { uploadedFiles } = this.state;
     const uploadFinished = !isUploading || this.state.progress >= 100;
     const { icon, iconColour, text } = uploadFinished ? finishedOptions : inProgressOptions;
 
     return (
       <div>
-        <h5>{isUploading ? uploadedFiles : collectionSize}/{collectionSize} uploaded</h5>
+        <h5>{isUploading ? uploadedFiles : uploadResults}/{collectionSize} uploaded</h5>
         <div ref="progressBar" className="mdl-progress mdl-js-progress" style={{ width: '80%', margin: '16px auto' }}></div>
         <span className="material-icons" style={{ color: iconColour }}>{icon}</span>
         <p>{text}</p>
@@ -78,6 +82,11 @@ export default React.createClass({
       progress: fileProgress / this.props.collectionSize,
       uploadedFiles: Math.floor(fileProgress / 100),
     });
+  },
+
+  setProgressFromProps() {
+    const { collectionSize, uploadResults } = this.props;
+    this.progressBar.setProgress(uploadResults / collectionSize * 100);
   },
 
 });
