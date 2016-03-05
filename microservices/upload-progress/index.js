@@ -97,14 +97,19 @@ Collection: ${collectionId}`);
           return done();
         }
 
-        if (isCollectionFatal(doc)) {
+        if (taskType === 'UPLOAD' && taskStatus === 'ABORTED') {
+          doc.status = 'FATAL';
+          doc.uploadEnded = new Date();
+          LOGGER.info(`Upload aborted, destroying ${queue.name}`);
+          queue.destroy();
+        }
+        else if (isCollectionFatal(doc)) {
           doc.status = 'FATAL';
           doc.uploadEnded = new Date();
           LOGGER.info(`Collection fatal, destroying ${queue.name}`);
           queue.destroy();
         }
-
-        if (doc.receivedResults === doc.expectedResults) {
+        else if (doc.receivedResults === doc.expectedResults) {
           doc.status = 'READY';
           doc.uploadEnded = new Date();
           LOGGER.info(`Collection ready, destroying ${queue.name}`);

@@ -21,6 +21,19 @@ var systemMetadataColumns = [
   'filename', 'displayname',
 ];
 
+function sendUploadNotification({ speciesId, collectionId, assemblyId  }, status) {
+  messageQueueService.getNotificationExchange().publish(
+    `${speciesId}.UPLOAD.ASSEMBLY.${assemblyId}`, {
+      taskType: 'UPLOAD',
+      taskStatus: status,
+      collectionId,
+      assemblyId: {
+        assemblyId: assemblyId
+      }
+    }
+  );
+}
+
 function createKey(id, prefix) {
   return prefix + '_' + id;
 }
@@ -73,16 +86,7 @@ function beginUpload(ids, data) {
       LOGGER.info(`Received response from ${uploadQueue.name}, destroying.`);
       uploadQueue.destroy();
 
-      messageQueueService.getNotificationExchange().publish(
-        `${ids.speciesId}.UPLOAD.ASSEMBLY.${ids.assemblyId}`, {
-          taskType: 'UPLOAD',
-          taskStatus: 'SUCCESS',
-          collectionId: ids.collectionId,
-          assemblyId: {
-            assemblyId: ids.assemblyId
-          }
-        }
-      );
+      sendUploadNotification(ids, error ? 'ERROR' : 'SUCCESS');
     });
 
     messageQueueService.getUploadExchange().publish(
@@ -219,3 +223,4 @@ module.exports.getComplete = getComplete;
 module.exports.getReference = getReference;
 module.exports.groupAssembliesBySubtype = groupAssembliesBySubtype;
 module.exports.createMetadataRecord = createMetadataRecord;
+module.exports.sendUploadNotification = sendUploadNotification;
