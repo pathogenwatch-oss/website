@@ -60,7 +60,7 @@ const actions = {
   [FETCH_ENTITIES]: function (state, { ready, result, error }) {
     if (ready && !error) {
       const { assemblies } = result[0];
-      const { publicMetadataColumnNames } = Species.current;
+      const { publicMetadataColumnNames = [] } = Species.current;
 
       const columnNames = getUserDefinedColumnNames(assemblies);
       const userDefinedColumnProps = createColumnProps(columnNames);
@@ -68,7 +68,10 @@ const actions = {
       return {
         ...state,
         userDefinedColumnProps,
-        publicMetadataColumnProps: createColumnProps(publicMetadataColumnNames),
+        publicMetadataColumnProps:
+          publicMetadataColumnNames.length ?
+            createColumnProps(publicMetadataColumnNames) :
+            userDefinedColumnProps,
         columns: userDefinedColumnProps,
       };
     }

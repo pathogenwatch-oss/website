@@ -56,7 +56,7 @@ export default connect()(React.createClass({
 
   getInitialState() {
     return {
-      readyToUpload: false,
+      readyToUpload: UploadStore.isReadyToUpload(),
       confirmedMultipleMetadataDrop: false,
       isProcessing: false,
       processingProgress: 0,
@@ -80,7 +80,6 @@ export default connect()(React.createClass({
   componentDidMount() {
     FileUploadingStore.addChangeListener(this.handleFileUploadingStoreChange);
     UploadStore.addChangeListener(this.handleUploadStoreChange);
-    this.context.router.setRouteLeaveHook(this.props.route, this.routerWillLeave);
     bindNavigationEvents(this.handleNavigationChange);
   },
 
@@ -102,19 +101,9 @@ export default connect()(React.createClass({
   },
 
   componentWillUnmount() {
-    FileUploadingStore.removeChangeListener(this.handleFileUploadingStoreChange);
     UploadStore.removeChangeListener(this.handleUploadStoreChange);
+    FileUploadingStore.removeChangeListener(this.handleFileUploadingStoreChange);
     unbindNavigationEvents();
-  },
-
-  routerWillLeave(nextLocation) {
-    // return false to prevent a transition w/o prompting the user,
-    // or return a string to allow the user to decide:
-    if (FileUploadingStore.isUploading()) {
-      return null;
-    }
-
-    return handleBeforeUnload();
   },
 
   handleFileUploadingStoreChange() {
