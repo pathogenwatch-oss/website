@@ -70,7 +70,7 @@ function getStatusMessage(status, errors) {
   }
   if (status === UPLOAD_FAILED || status === statuses.ABORTED) {
     return [
-      <h1>We're sorry, your upload was interrupted.</h1>,
+      <h1>We're sorry, your upload was interrupted</h1>,
       <p className="mdl-typography--title">
         Please upload your files again.
       </p>,
