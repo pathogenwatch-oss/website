@@ -98,7 +98,7 @@ Collection: ${collectionId}`);
         }
 
         if (taskType === 'UPLOAD' && taskStatus === 'ABORTED') {
-          doc.status = 'FATAL';
+          doc.status = 'ABORTED';
           doc.uploadEnded = new Date();
           LOGGER.info(`Upload aborted, destroying ${queue.name}`);
           queue.destroy();
