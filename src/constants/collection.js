@@ -4,4 +4,5 @@ export const statuses = {
   FETCHED: 'FETCHED',
   NOT_FOUND: 'NOT_FOUND',
   FATAL: 'FATAL',
+  ABORTED: 'ABORTED',
 };

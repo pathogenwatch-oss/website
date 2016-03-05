@@ -68,9 +68,9 @@ function getStatusMessage(status, errors) {
       <Link to={`/${species.nickname}/upload`} className="mdl-button mdl-button--raised">Try Again</Link>,
     ];
   }
-  if (status === UPLOAD_FAILED) {
+  if (status === UPLOAD_FAILED || status === statuses.ABORTED) {
     return [
-      <h1>We're sorry, your upload did not complete.</h1>,
+      <h1>We're sorry, your upload was interrupted.</h1>,
       <p className="mdl-typography--title">
         Please upload your files again.
       </p>,
