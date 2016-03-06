@@ -30,3 +30,8 @@
   vertical-align: middle;
   color: #673c90;
 }
+
+.mdl-navigation__link--active {
+  color: #673c90 !important;
+  font-weight: 700;
+}

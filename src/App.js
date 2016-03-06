@@ -9,12 +9,33 @@ import Toast from './components/Toast.react';
 
 import Staph from './species/saureus';
 
+const MenuLink = ({ isActive, icon, text, link }) => (
+  <Link className={`mdl-navigation__link ${isActive ? 'mdl-navigation__link--active' : null}`.trim()} to={link}>
+    <i className="material-icons">{icon}</i>
+    {text}
+  </Link>
+);
+
+const menuItems = [
+  { icon: 'home',
+    text: 'Home',
+    link: '/',
+  },
+  { icon: 'bug_report',
+    text: <span>{Staph.shortFormattedName}</span>,
+    link: `/${Staph.nickname}`,
+  },
+  { icon: 'cloud_upload',
+    text: 'Create Collection',
+    link: `/${Staph.nickname}/upload`,
+  },
+];
+
 export default React.createClass({
 
   propTypes: {
     children: React.PropTypes.element,
-    title: React.PropTypes.any,
-    headerClassNames: React.PropTypes.string,
+    location: React.PropTypes.object,
   },
 
   componentDidMount() {
@@ -23,7 +44,7 @@ export default React.createClass({
   },
 
   render() {
-    const { children } = this.props;
+    const { children, location } = this.props;
     return (
       <div className="mdl-layout mdl-js-layout mdl-layout--fixed-header">
         <Header />
@@ -32,18 +53,12 @@ export default React.createClass({
             <img src="/assets/img/WGSA.FINAL.svg" />
           </span>
           <nav className="mdl-navigation" onClick={this.hideSidebar}>
-            <Link className="mdl-navigation__link" to="/">
-              <i className="material-icons">home</i>
-              Home
-            </Link>
-            <Link className="mdl-navigation__link" to={`/${Staph.nickname}`}>
-              <i className="material-icons">bug_report</i>
-              <span>{Staph.shortFormattedName}</span>
-            </Link>
-            <Link className="mdl-navigation__link" to={`/${Staph.nickname}/upload`}>
-              <i className="material-icons">cloud_upload</i>
-              Create Collection
-            </Link>
+            {menuItems.map(props => (
+              <MenuLink key={props.link}
+                isActive={location.pathname === props.link}
+                {...props}
+              />
+            ))}
           </nav>
         </div>
         <main className="mdl-layout__content">
