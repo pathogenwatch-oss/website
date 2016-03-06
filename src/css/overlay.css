@@ -8,7 +8,7 @@
   z-index: 6;
   visibility: hidden;
   transition-property: opacity;
-  transition-duration: .2s;
+  transition-duration: .28s;
   transition-timing-function: cubic-bezier(.4,0,.2,1);
   opacity: 0;
   pointer-events: none;

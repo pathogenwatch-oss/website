@@ -5,6 +5,8 @@
   color: #673c90 !important;
   min-height: 56px;
   display: block; /* overrides display: none on small screens! */
+  transition: .28s cubic-bezier(.4,0,.2,1);
+  transition-property: color, background, background-color;
 }
 
 .mdl-layout__header-row {

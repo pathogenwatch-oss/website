@@ -3,25 +3,46 @@ import '../../css/progress-bar.css';
 
 import React from 'react';
 import { Link } from 'react-router';
+import { connect } from 'react-redux';
 
 import Spinner from '^/components/Spinner.react';
 
+import { updateHeader } from '^/actions/header';
+
 import { statuses } from '^/constants/collection';
-import species from '^/species';
+import Species from '^/species';
 import { CGPS } from '^/defaults';
 
 const backgroundStyle = {
   background: CGPS.COLOURS.GREY_LIGHT,
 };
 
-const Background = ({ children }) => (
-  <main style={backgroundStyle} className="wgsa-loading-container mdl-grid">
-    <div className="mdl-cell mdl-cell--10-col">
-      <img src="/assets/img/WGSA.FINAL.svg" className="wgsa-loading-logo"/>
-      { children }
-    </div>
-  </main>
-);
+const Background = connect()(React.createClass({
+
+  componentWillMount() {
+    this.props.dispatch(updateHeader({
+      speciesName: Species.formattedName,
+      classNames: 'mdl-layout__header--primary mdl-shadow--3dp',
+      content: null,
+    }));
+  },
+
+  componentDidMount() {
+    componentHandler.upgradeDom();
+  },
+
+  render() {
+    return (
+      <div style={backgroundStyle} className="wgsa-loading-container mdl-grid">
+        <div className="mdl-cell mdl-cell--10-col">
+          <img src="/assets/img/WGSA.FINAL.svg" className="wgsa-loading-logo"/>
+          { this.props.children }
+        </div>
+      </div>
+    );
+  },
+
+}));
 
 export const LoadSpinner = React.createClass({
 
@@ -63,7 +84,7 @@ function getStatusMessage(status, errors) {
       <p className="mdl-typography--title">The following assemblies were rejected:</p>,
       <ul className="wgsa-failed-assemblies">{failedAssemblies.map(assemblyName => <li key={assemblyName}>{assemblyName}</li>)}</ul>,
       <p className="mdl-typography--title">Please ensure that assemblies are the correct species and meet our quality criteria.</p>,
-      <Link to={`/${species.nickname}/upload`} className="mdl-button mdl-button--raised">Try Again</Link>,
+      <Link to={`/${Species.nickname}/upload`} className="mdl-button mdl-button--raised">Try Again</Link>,
     ];
   }
 }
