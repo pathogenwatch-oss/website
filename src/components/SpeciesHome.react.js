@@ -2,11 +2,13 @@ import '../css/species-home.css';
 
 import React from 'react';
 import { Link } from 'react-router';
+import { connect } from 'react-redux';
 
 import DownloadIcon from './explorer/DownloadIcon.react';
 
+import { updateHeader } from '^/actions/header';
+
 import Species from '../species';
-import { CGPS } from '../defaults';
 
 const uploadButtonStyle = {
   position: 'absolute',
@@ -22,28 +24,29 @@ const iconStyle = {
   color: '#fff',
 };
 
-export default React.createClass({
+export default connect()(React.createClass({
 
   displayName: 'SpeciesHome',
+
+  componentWillMount() {
+    this.props.dispatch(
+      updateHeader({
+        speciesName: Species.formattedName,
+        classNames: 'mdl-shadow--3dp',
+        content: null,
+      })
+    );
+  },
 
   render() {
     return (
       <section className="wgsa-species-home">
-        <div className="wgsa-home-header mdl-layout__header-row">
-          <span className="mdl-layout-title">
-            <picture>
-              <source srcSet="/assets/img/CGPS.FINAL.svg" media="(min-width: 1200px)" />
-              <img className="cgps-logo" src="/assets/img/CGPS.SHORT.FINAL.svg" />
-            </picture>
-          </span>
-          <div className="mdl-layout-spacer"></div>
-        </div>
 
         <div className="wgsa-species-home-container">
           <div className="mdl-grid">
+            <h1 className="wgsa-species-home-title">{Species.current.formattedName}</h1>
 
-            <div className="mdl-cell mdl-cell--12-col wgsa-species-home-intro">
-              <h1 style={{ color: CGPS.COLOURS.PURPLE }}>{Species.current.formattedName}</h1>
+            <div className="mdl-cell mdl-cell--6-col wgsa-species-home-intro">
               <div className="wgsa-card mdl-shadow--2dp">
                 <div className="wgsa-card-content">
                   {Species.current.desc ||
@@ -55,7 +58,7 @@ export default React.createClass({
               </div>
             </div>
 
-            <div className="mdl-cell mdl-cell--8-col wgsa-species-home-collection-list">
+            <div className="mdl-cell mdl-cell--6-col wgsa-species-home-collection-list">
               <div className="wgsa-card mdl-shadow--2dp">
                 <div className="wgsa-card-heading">Collections</div>
                 <div className="wgsa-card-content wgsa-species-collection-list">
@@ -64,7 +67,7 @@ export default React.createClass({
               </div>
             </div>
 
-            <div className="mdl-cell mdl-cell--4-col wgsa-species-home-other">
+            <div className="mdl-cell mdl-cell--6-col wgsa-species-home-other">
               <div className="wgsa-card mdl-shadow--2dp">
                 <div className="wgsa-card-heading">Upload</div>
                 <div className="wgsa-card-content">
@@ -125,7 +128,7 @@ export default React.createClass({
     );
   },
 
-});
+}));
 
 const CollectionList = () => (
   <ul className="wgsa-species-collection-list-container">
