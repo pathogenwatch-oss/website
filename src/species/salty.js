@@ -9,4 +9,5 @@ export default {
   active: true,
   desc: '',
   publicMetadataColumnNames: [],
+  collections: [],
 };
