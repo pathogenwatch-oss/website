@@ -131,6 +131,7 @@
 
 #loadingAnimation.mdl-progress {
   width: auto;
+  z-index: 2;
 }
 
 .uploadReviewAnalysisStyle input {

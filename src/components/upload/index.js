@@ -65,7 +65,9 @@ export default connect()(React.createClass({
   },
 
   componentWillMount() {
+    console.log(this.state);
     this.props.dispatch(updateHeader({
+      speciesName: Species.formattedName,
       classNames: 'mdl-shadow--3dp',
       content: (
         <UploadReviewHeader

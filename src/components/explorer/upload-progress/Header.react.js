@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
 import Species from '^/species';
 import DEFAULT from '^/defaults';
@@ -28,7 +29,7 @@ const uploadButtonStyle = {
   lineHeight: '56px',
 };
 
-export default React.createClass({
+const Header = React.createClass({
 
   displayName: 'UploadProgressHeader',
 
@@ -53,21 +54,25 @@ export default React.createClass({
 
   render() {
     return (
-        <header style={headerStyle} className="mdl-layout__header">
-          <div className="mdl-layout-icon"></div>
-          <div className="mdl-layout__header-row">
-            <span className="mdl-layout-title">WGSA | {Species.formattedName}</span>
-            <span className="mdl-layout-spacer" />
-            <span style={subtitleStyle} className="mdl-layout-title">In Progress</span>
-            <div style={uploadButtonStyle} className="wgsa-sonar-effect wgsa-upload-review-button mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--6dp">
-              {this.props.percentage || 0}%
-            </div>
-          </div>
-          <div className="wgsa-fileupload-progressbar-container">
-            <div ref="progressBar" className="wgsa-fileupload-progressbar mdl-progress mdl-js-progress"></div>
-          </div>
-        </header>
+      <div className="mdl-layout-spacer" style={{ textAlign: 'right' }}>
+        <span style={subtitleStyle} className="mdl-layout-title">In Progress</span>
+        <div style={uploadButtonStyle} className="wgsa-sonar-effect wgsa-upload-review-button mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--6dp">
+          {this.props.percentage || 0}%
+        </div>
+        <div className="wgsa-fileupload-progressbar-container">
+          <div ref="progressBar" className="wgsa-fileupload-progressbar mdl-progress mdl-js-progress"></div>
+        </div>
+      </div>
     );
   },
 
 });
+
+function mapStateToProps({ collection }) {
+  const { receivedResults, expectedResults } = collection.progress || {};
+  return {
+    percentage: expectedResults ? Math.floor(receivedResults / expectedResults * 100) : 0,
+  };
+}
+
+export default connect(mapStateToProps)(Header);
