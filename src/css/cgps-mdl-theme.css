@@ -43,6 +43,11 @@
   position: relative;
 }
 
+.mdl-grid--internal {
+  padding: 0;
+  margin: -8px;
+}
+
 /* Tabs */
 
 .mdl-tabs__tab .mdl-tabs__ripple-container .mdl-ripple {

@@ -24,8 +24,7 @@ import FileUploadingStore from '^/stores/FileUploadingStore';
 
 import FileUtils from '^/utils/File';
 import {
-  bindNavigationEvents, unbindNavigationEvents,
-  navigateToHome, handleBeforeUnload,
+  bindNavigationEvents, unbindNavigationEvents, navigateToHome,
 } from '^/utils/Navigation';
 
 import Species from '^/species';
@@ -40,7 +39,7 @@ const loadingAnimationStyleHidden = {
 };
 
 const fileInputStyle = {
-  position: 'absolute',
+  position: 'fixed',
   zIndex: -1,
   opacity: 0,
 };
@@ -71,6 +70,7 @@ export default connect()(React.createClass({
       content: (
         <UploadReviewHeader
           subtitle="overview"
+          activateUploadButton={this.state.readyToUpload}
           handleUploadButtonClick={this.handleUploadButtonClick}
         />
       ),
@@ -94,6 +94,7 @@ export default connect()(React.createClass({
           <UploadReviewHeader
             subtitle={assembly ? assembly.name : (isProcessing ? 'Processing...' : 'Overview')}
             activateUploadButton={this.state.readyToUpload}
+            handleUploadButtonClick={this.handleUploadButtonClick}
           />
         ),
       }));
@@ -191,76 +192,71 @@ export default connect()(React.createClass({
 
     return (
       <FileDragAndDrop onDrop={this.handleDrop}>
-          {/*<UploadReviewHeader
-            subtitle={subtitle}
-            activateUploadButton={this.state.readyToUpload}
-            handleUploadButtonClick={this.handleUploadButtonClick}
-          />*/}
-          {/*<aside className="navigation-container mdl-layout__drawer mdl-shadow--3dp">
-            <a className="uploadWorkspaceNavigationTitle" href="#">
-              <span className="mdl-badge" style={{ margin: 0 }} data-badge={UploadStore.getAssembliesCount()}>Assemblies</span>
-            </a>
-            <AssemblyList assemblies={assemblies} selectedAssemblyName={this.state.assemblyName} />
-            <button type="button" title="Add files"
-              className="wgsa-upload-review-button wgsa-add-files-button mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect mdl-shadow--4dp"
-              onClick={this.handleClick}
-            >
-              <i className="material-icons">add</i>
-            </button>
-          </aside>*/}
-          <div id="loadingAnimation" style={isWaiting ? loadingAnimationStyleVisible : loadingAnimationStyleHidden} className="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
-          {(() => {
-            if (isProcessing) {
-              return (
-                <div className="wgsa-file-processing-progress" ref="progressWrapper">
-                  <CircularProgress
-                    radius={240}
-                    percentage={this.state.processingProgress}
-                  />
-                </div>
-              );
-            }
-
-            if (assembly) {
-              return (
-                <div className="mdl-grid">
-                  <div className="mdl-cell mdl-cell--6-col wgsa-card-column">
-                    <div className="wgsa-card mdl-shadow--2dp">
-                      <div className="wgsa-card-heading">Assembly Statistics</div>
-                      <div className="wgsa-card-content">
-                        <AssemblyAnalysis metrics={assembly.metrics}/>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="mdl-cell mdl-cell--6-col wgsa-card-column chart-card">
-                    <div className="wgsa-card mdl-shadow--2dp">
-                      <div className="wgsa-card-heading">N50 Chart</div>
-                      <div className="wgsa-card-content ">
-                        { assembly.metrics ?
-                          <AssemblyAnalysisChart metrics={assembly.metrics} /> :
-                          <p className="mdl-card__supporting-text">(Fasta file not provided)</p>
-                        }
-                      </div>
-                    </div>
-                  </div>
-                  <div className="wgsa-card mdl-cell mdl-cell--12-col increase-cell-gutter mdl-shadow--2dp">
-                    <div className="wgsa-card-heading">Metadata</div>
-                    <div className="wgsa-card-content">
-                      <AssemblyMetadata assembly={assembly} />
-                    </div>
-                  </div>
-                </div>
-              );
-            }
-
+        <div id="loadingAnimation" style={isWaiting ? loadingAnimationStyleVisible : loadingAnimationStyleHidden} className="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
+        {(() => {
+          if (isProcessing) {
             return (
-              <Overview
-                clickHandler={this.handleClick}
-                isReadyToUpload={this.state.readyToUpload}
-              />
+              <div className="wgsa-file-processing-progress" ref="progressWrapper">
+                <CircularProgress
+                  radius={240}
+                  percentage={this.state.processingProgress}
+                />
+              </div>
             );
-          })()
-        }
+          }
+
+          return (
+            <div className="mdl-grid mdl-grid--no-spacing" style={{ position: 'absolute', top: 0, bottom: 0, left: 0, right: 0 }}>
+              <aside className="navigation-container wgsa-card mdl-cell mdl-cell--2-col mdl-cell--stretch mdl-shadow--2dp">
+                <a className="uploadWorkspaceNavigationTitle" href="#">
+                  <span className="mdl-badge" style={{ margin: 0 }} data-badge={UploadStore.getAssembliesCount()}>Assemblies</span>
+                </a>
+                <AssemblyList assemblies={assemblies} selectedAssemblyName={this.state.assemblyName} />
+                <button type="button" title="Add files"
+                  className="wgsa-upload-review-button wgsa-add-files-button mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-shadow--4dp"
+                  onClick={this.handleClick}
+                >
+                  <i className="material-icons">add</i>
+                </button>
+              </aside>
+              <div className="mdl-cell mdl-cell--stretch mdl-cell--10-col mdl-cell--2-offset increase-cell-gutter" style={{ position: 'relative', overflowY: 'auto' }}>
+                { assembly ?
+                  <div className="mdl-grid">
+                    <div className="mdl-cell mdl-cell--6-col wgsa-card-column">
+                      <div className="wgsa-card mdl-shadow--2dp">
+                        <div className="wgsa-card-heading">Assembly Statistics</div>
+                        <div className="wgsa-card-content">
+                          <AssemblyAnalysis metrics={assembly.metrics}/>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="mdl-cell mdl-cell--6-col wgsa-card-column chart-card">
+                      <div className="wgsa-card mdl-shadow--2dp">
+                        <div className="wgsa-card-heading">N50 Chart</div>
+                        <div className="wgsa-card-content ">
+                          { assembly.metrics ?
+                            <AssemblyAnalysisChart metrics={assembly.metrics} /> :
+                            <p className="mdl-card__supporting-text">(Fasta file not provided)</p>
+                          }
+                        </div>
+                      </div>
+                    </div>
+                    <div className="wgsa-card mdl-cell mdl-cell--12-col increase-cell-gutter mdl-shadow--2dp">
+                      <div className="wgsa-card-heading">Metadata</div>
+                      <div className="wgsa-card-content">
+                        <AssemblyMetadata assembly={assembly} />
+                      </div>
+                    </div>
+                  </div> :
+                  <Overview
+                    clickHandler={this.handleClick}
+                    isReadyToUpload={this.state.readyToUpload}
+                  />
+                }
+              </div>
+            </div>
+          );
+        })()}
         <input type="file" multiple="multiple" accept={DEFAULT.SUPPORTED_FILE_EXTENSIONS} ref="fileInput" style={fileInputStyle} onChange={this.handleFileInputChange} />
       </FileDragAndDrop>
     );

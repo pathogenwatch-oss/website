@@ -25,7 +25,7 @@ export default React.createClass({
   render() {
     const { children } = this.props;
     return (
-      <div className="mdl-layout mdl-js-layout">
+      <div className="mdl-layout mdl-js-layout mdl-layout--fixed-header">
         <Header />
         <div className="mdl-layout__drawer">
           <span className="mdl-layout-title">

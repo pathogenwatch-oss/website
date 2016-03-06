@@ -162,14 +162,12 @@
   margin: 8px;
 }
 
-.overviewContent {
+.wgsa-overview-content {
   position: absolute;
   left: 0;
   top: 0;
-  bottom: 0;
   right: 0;
-  justify-content: space-around;
-  margin: 8px;
+  bottom: 0;
 }
 
 .wgsa-overview-upload-ready-card {
@@ -373,6 +371,21 @@
   background-position: -20px -20px;
   text-align: center;
   border: none;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+}
+
+.is-small-screen .navigation-container {
+  display: none;
+}
+
+.is-small-screen .navigation-container + .mdl-cell {
+  width: 100%;
+  margin: 0;
 }
 
 .uploadWorkspaceNavigationTitle {
@@ -429,7 +442,7 @@
   right: 0;
   bottom: 0;
   margin-right: 24px;
-  margin-bottom: 16px;
+  margin-bottom: 24px;
   z-index: 900;
 }
 
@@ -456,7 +469,7 @@
 
 .assemblyListItem {
   margin: 0;
-  padding: 0 8px 0 16px;
+  padding: 0 8px 0 24px;
   position: relative;
   list-style: none;
   border-bottom: 1px solid rgba(0, 0, 0, .12);
