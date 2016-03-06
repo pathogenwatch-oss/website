@@ -17,6 +17,12 @@
   padding-left: 24px;
 }
 
+.mdl-layout__drawer > .cgps-logo {
+  margin-top: auto;
+  margin-bottom: 24px;
+  height: 48px;
+}
+
 .mdl-navigation__link > span {
   line-height: 16px;
   display: inline-block;

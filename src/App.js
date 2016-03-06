@@ -49,6 +49,12 @@ export default connect(mapStateToProps)(React.createClass({
     this.menuButton = document.querySelector('.mdl-layout__drawer-button');
   },
 
+  componentDidUpdate(previous) {
+    if (this.props.location !== previous.location) {
+      this.hideSidebar();
+    }
+  },
+
   render() {
     const { children, location, bodyClickListener = () => {} } = this.props;
     return (
@@ -66,6 +72,7 @@ export default connect(mapStateToProps)(React.createClass({
               />
             ))}
           </nav>
+          <img className="cgps-logo" src="/assets/img/CGPS.SHORT.FINAL.svg" />
         </div>
         <main className="mdl-layout__content">
           {children}

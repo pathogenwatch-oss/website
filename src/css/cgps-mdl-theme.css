@@ -50,6 +50,10 @@
   position: relative;
 }
 
+.is-small-screen .mdl-layout__content {
+  overflow: visible !important;
+}
+
 .mdl-grid--internal {
   padding: 0;
   margin: -8px;
