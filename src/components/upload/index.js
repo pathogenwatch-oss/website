@@ -207,19 +207,19 @@ export default connect()(React.createClass({
 
           return (
             <div className="mdl-grid mdl-grid--no-spacing" style={{ position: 'absolute', top: 0, bottom: 0, left: 0, right: 0 }}>
-              <aside className="navigation-container wgsa-card mdl-cell mdl-cell--2-col mdl-cell--stretch mdl-shadow--2dp">
+              <aside className="navigation-container wgsa-card mdl-cell mdl-cell--stretch mdl-shadow--2dp">
                 <a className="uploadWorkspaceNavigationTitle" href="#">
                   <span className="mdl-badge" style={{ margin: 0 }} data-badge={UploadStore.getAssembliesCount()}>Assemblies</span>
                 </a>
                 <AssemblyList assemblies={assemblies} selectedAssemblyName={this.state.assemblyName} />
                 <button type="button" title="Add files"
-                  className="wgsa-upload-review-button wgsa-add-files-button mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-shadow--4dp"
+                  className="wgsa-upload-review-button wgsa-add-files-button mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect mdl-shadow--4dp"
                   onClick={this.handleClick}
                 >
                   <i className="material-icons">add</i>
                 </button>
               </aside>
-              <div className="mdl-cell mdl-cell--stretch mdl-cell--10-col mdl-cell--2-offset increase-cell-gutter" style={{ position: 'relative', overflowY: 'auto' }}>
+              <div className="mdl-cell mdl-cell--stretch increase-cell-gutter" style={{ position: 'relative', overflowY: 'auto' }}>
                 { assembly ?
                   <div className="mdl-grid">
                     <div className="mdl-cell mdl-cell--6-col wgsa-card-column">

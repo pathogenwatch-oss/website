@@ -377,6 +377,12 @@
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
+  width: 240px !important;
+}
+
+.navigation-container + .mdl-cell {
+  width: calc(100% - 240px);
+  margin-left: 240px !important;
 }
 
 .is-small-screen .navigation-container {
@@ -441,7 +447,7 @@
   display: block;
   right: 0;
   bottom: 0;
-  margin-right: 24px;
+  margin-right: 20px;
   margin-bottom: 24px;
   z-index: 900;
 }
