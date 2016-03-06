@@ -38,6 +38,11 @@
   color: #fff !important
 }
 
+.mdl-layout-spacer--flex {
+  display: flex;
+  align-items: center;
+}
+
 .mdl-layout__content {
   background: #efefef;
   position: relative;

@@ -16,7 +16,7 @@ import filter from './filter';
 import downloads from './downloads';
 import downloadsMenu from './downloadsMenu';
 
-import bodyClickEvent from './bodyClickEvent';
+import bodyClickListener from './bodyClickListener';
 
 import { RESET_STORE } from '../actions/reset';
 
@@ -52,7 +52,7 @@ const rootReducer = combineReducers({
     menuOpen: createReducer(downloadsMenu),
     files: createReducer(downloads),
   }),
-  bodyClickEvent,
+  bodyClickListener,
   loading: combineReducers({
     tree: createReducer(treeLoading),
   }),

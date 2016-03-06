@@ -2,10 +2,11 @@ import './css/menu.css';
 
 import React from 'react';
 import { Link } from 'react-router';
+import { connect } from 'react-redux';
 
 import Header from './components/Header.react';
 import Toast from './components/Toast.react';
-
+import DownloadsMenu from './components/explorer/DownloadsMenu.react';
 
 import Staph from './species/saureus';
 
@@ -31,11 +32,16 @@ const menuItems = [
   },
 ];
 
-export default React.createClass({
+function mapStateToProps({ bodyClickListener }) {
+  return { bodyClickListener };
+}
+
+export default connect(mapStateToProps)(React.createClass({
 
   propTypes: {
     children: React.PropTypes.element,
     location: React.PropTypes.object,
+    bodyClickListener: React.PropTypes.func,
   },
 
   componentDidMount() {
@@ -44,9 +50,9 @@ export default React.createClass({
   },
 
   render() {
-    const { children, location } = this.props;
+    const { children, location, bodyClickListener = () => {} } = this.props;
     return (
-      <div className="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+      <div className="mdl-layout mdl-js-layout mdl-layout--fixed-header" onClick={bodyClickListener}>
         <Header />
         <div className="mdl-layout__drawer">
           <span className="mdl-layout-title">
@@ -64,6 +70,7 @@ export default React.createClass({
         <main className="mdl-layout__content">
           {children}
         </main>
+        <DownloadsMenu />
         <Toast />
       </div>
     );
@@ -75,4 +82,4 @@ export default React.createClass({
     }
   },
 
-});
+}));
