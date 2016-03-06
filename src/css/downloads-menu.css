@@ -39,18 +39,16 @@
   display: block;
   white-space: nowrap;
   font-size: 13px;
-  padding: 8px 0;
+  padding: 0;
   transition: background .28s cubic-bezier(.4,0,.2,1);
   font-family: Roboto, sans-serif;
   font-size: 16px;
   line-height: 16px;
   color: rgba(0,0,0,.870588);
-  min-width: 240px;
 }
 
 .wgsa-menu__item > a,
 .wgsa-menu__item > button {
-  width: 100%;
   text-align: left;
   font-size: inherit;
   font-family: inherit;
@@ -58,7 +56,11 @@
   text-decoration: none;
   display: block;
   position: relative;
-  padding: 0 16px;
+  padding: 8px 16px;
+}
+
+.wgsa-menu__item > button {
+  width: 100%;
 }
 
 .wgsa-menu__item:hover,
