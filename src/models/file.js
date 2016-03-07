@@ -13,6 +13,14 @@ function getFile({ fileName }) {
   );
 }
 
+function getSpeciesFile({ speciesId, fileName }) {
+  return fs.createReadStream(
+    path.join(
+      config.downloadFileLocation, sanitize(speciesId), sanitize(fileName)
+    )
+  );
+}
+
 function requestDownload(request, callback) {
   messageQueueService.newFileRequestQueue(function (queue) {
     queue.subscribe(function (error, message) {
@@ -36,4 +44,5 @@ function requestDownload(request, callback) {
 }
 
 module.exports.getFile = getFile;
+module.exports.getSpeciesFile = getSpeciesFile;
 module.exports.requestDownload = requestDownload;

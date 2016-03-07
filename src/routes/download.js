@@ -39,7 +39,7 @@ router.get('/species/:speciesId/download/file/:fileName',
 
     res.set({
       'Content-Disposition': `attachment; filename="${req.query.prettyFileName}.zip"`,
-      'Content-type': 'text/plain'
+      'Content-type': 'application/zip'
     });
 
     const stream = fileModel.getFile(req.params);
@@ -47,6 +47,26 @@ router.get('/species/:speciesId/download/file/:fileName',
     stream.on('error', error => next(error));
 
     stream.pipe(res);
+  }
+);
+
+router.get('/species/:speciesId/download/:fileName', function (req, res, next) {
+  LOGGER.info('Received request for files: ' + req.params.fileName);
+
+  if (!req.query.prettyFileName) {
+    return res.status(400).send('`prettyFileName` query parameter is required.');
+  }
+
+  res.set({
+    'Content-Disposition': `attachment; filename="${req.query.prettyFileName}"`,
+    'Content-type': 'text/plain'
   });
+
+  const stream = fileModel.getFile(req.params);
+
+  stream.on('error', error => next(error));
+
+  stream.pipe(res);
+});
 
 module.exports = router;
