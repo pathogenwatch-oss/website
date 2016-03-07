@@ -4,8 +4,8 @@ import { API_ROOT } from '../utils/Api';
 import Species from '../species';
 
 export const encode = encodeURIComponent;
-export const collectionPath = `${API_ROOT}/species/${Species.id}/download/file`;
-export const speciesPath = `${API_ROOT}/species/${Species.id}/download`;
+export const collectionPath = () => `${API_ROOT}/species/${Species.id}/download/file`;
+export const speciesPath = () => `${API_ROOT}/species/${Species.id}/download`;
 
 export function createDownloadKey(id) {
   if (!id) return null;

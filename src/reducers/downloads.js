@@ -48,7 +48,7 @@ function createLink(keyMap, filename) {
   }
 
   return (
-    `${collectionPath}/${encode(key)}?prettyFileName=${encode(filename)}`
+    `${collectionPath()}/${encode(key)}?prettyFileName=${encode(filename)}`
   );
 }
 
