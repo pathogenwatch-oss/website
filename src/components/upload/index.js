@@ -65,7 +65,6 @@ export default connect()(React.createClass({
   },
 
   componentWillMount() {
-    console.log(this.state);
     this.props.dispatch(updateHeader({
       speciesName: Species.formattedName,
       classNames: 'mdl-shadow--3dp',
@@ -77,6 +76,8 @@ export default connect()(React.createClass({
         />
       ),
     }));
+
+    document.title = `WGSA | Create Collection`;
   },
 
   componentDidMount() {
@@ -124,6 +125,15 @@ export default connect()(React.createClass({
 
   handleNavigationChange(assemblyName = null) {
     this.setState({ assemblyName });
+    this.props.dispatch(updateHeader({
+      content: (
+        <UploadReviewHeader
+          subtitle={assemblyName || 'Overview'}
+          activateUploadButton={this.state.readyToUpload}
+          handleUploadButtonClick={this.handleUploadButtonClick}
+        />
+      ),
+    }));
   },
 
   processFiles(files) {

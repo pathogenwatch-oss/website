@@ -1,6 +1,11 @@
 import { requestDownload } from '../actions/downloads';
 
+import { API_ROOT } from '../utils/Api';
 import Species from '../species';
+
+export const encode = encodeURIComponent;
+export const collectionPath = `${API_ROOT}/species/${Species.id}/download/file`;
+export const speciesPath = `${API_ROOT}/species/${Species.id}/download`;
 
 export function createDownloadKey(id) {
   if (!id) return null;
@@ -9,7 +14,7 @@ export function createDownloadKey(id) {
 
 export function createFilename(formatName, collectionId, assemblyName) {
   return (
-    `wgsa_${Species.nickname}_${collectionId}_${ formatName}` +
+    `wgsa_${Species.nickname}_${collectionId}_${formatName}` +
     `${assemblyName ? `_${assemblyName}` : ''}`
   );
 }
@@ -52,3 +57,22 @@ export function getArchiveDownloadProps(state, downloads, dispatch) {
     filenameParams: [ collection.id ],
   }, dispatch);
 }
+
+export const speciesDownloads = [
+  { text: 'AMR SNP Sequences (FASTA)',
+    filename: `wgsa_${Species.nickname}_amr_snp_sequences.fa`,
+    serverName: `ar_snps_lib.fa`,
+  },
+  { text: 'AMR SNPs (TSV)',
+    filename: `wgsa_${Species.nickname}_amr_snps.tsv`,
+    serverName: `ar_snps.tsv`,
+  },
+  { text: 'Core Representatives (CSV)',
+    filename: `wgsa_${Species.nickname}_core_representatives.csv`,
+    serverName: `core_rep_map.tsv`,
+  },
+  { text: 'AMR Genes (CSV)',
+    filename: `wgsa_${Species.nickname}_resistance_genes.csv`,
+    serverName: `resistance_genes.tsv`,
+  },
+];

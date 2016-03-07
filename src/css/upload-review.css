@@ -357,11 +357,15 @@
 
 .wgsa-chart-select .mdl-tabs__tab {
   flex-grow: 1;
-  padding: 4px 0 0;
+  padding: 2px 0 0;
   white-space: nowrap;
   font-size: 13px;
   font-family: "Roboto","Helvetica","Arial",sans-serif;
   font-weight: 400;
+}
+
+.wgsa-chart-select .mdl-tabs__tab.is-active:after {
+  bottom: 2px;
 }
 
 .overflow-y--auto {

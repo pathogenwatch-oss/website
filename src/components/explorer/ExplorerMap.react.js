@@ -4,7 +4,7 @@ import assign from 'object-assign';
 
 import GoogleMap from '../GoogleMap.react';
 
-import { activateFilter, resetFilter } from '^/actions/filter';
+import { activateFilter, appendToFilter, resetFilter } from '^/actions/filter';
 
 import MapUtils from '^/utils/Map';
 
@@ -53,7 +53,13 @@ function mapStateToMarker(markerDef, state, dispatch) {
   markerDef.highlighted =
     filter.active && assemblyIds.some(id => filter.ids.has(id));
 
-  markerDef.onClick = () => dispatch(activateFilter(assemblyIds));
+  markerDef.onClick = ({ Pb = {} }) => {
+    const { ctrlKey, metaKey } = Pb;
+    if (ctrlKey || metaKey) {
+      return dispatch(appendToFilter(assemblyIds));
+    }
+    dispatch(activateFilter(assemblyIds));
+  };
 
   markerDef.iconDef = MapUtils.getMarkerIcon(
     isCollection ? 'circle' : 'square',

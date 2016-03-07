@@ -140,7 +140,14 @@ function getIcon(shape, colours, highlighted = false) {
 export const standardMarkerIcon =
   getIcon('circle', [ CGPS.COLOURS.PURPLE_LIGHT ]);
 
+
 const MARKER_OFFSET = (CANVAS_SIZE - MARKER_SIZE) / 2;
+const coords = {
+  square: [ 0, 0, MARKER_SIZE, MARKER_SIZE ],
+  circle: [ MARKER_SIZE / 2, MARKER_SIZE / 2, scaledRadius + LINE_WIDTH ],
+  highlighted: [ CANVAS_SIZE / 2, CANVAS_SIZE / 2, CANVAS_SIZE / 2 ],
+};
+
 export function getMarkerIcon(shape, colours, highlighted) {
   return {
     image: getIcon(
@@ -150,6 +157,10 @@ export function getMarkerIcon(shape, colours, highlighted) {
     ),
     size: highlighted ? CANVAS_SIZE : MARKER_SIZE,
     offset: highlighted ? 0 : MARKER_OFFSET,
+    shape: {
+      type: highlighted ? 'circle' : shape === 'square' ? 'rect' : shape,
+      coords: highlighted ? coords.highlighted : coords[shape],
+    },
   };
 }
 

@@ -3,7 +3,7 @@ import React from 'react';
 import UploadButton from './navigation/UploadButton.react';
 
 const subtitleStyle = {
-  marginRight: '100px',
+  marginRight: '80px',
   textTransform: 'uppercase',
   color: '#666',
   fontFamily: '"Roboto","Helvetica","Arial",sans-serif',

@@ -63,6 +63,9 @@ export default React.createClass({
     phylocanvas.branchColour = DEFAULT.COLOUR;
     phylocanvas.highlightColour = phylocanvas.selectedColour = CGPS.COLOURS.PURPLE;
 
+    phylocanvas.clickFlag = 'highlighted';
+    phylocanvas.clickFlagPredicate = node => node.leaf;
+
     phylocanvas.setTreeType(this.state.treeType);
 
     phylocanvas.on('loaded', () => {
@@ -105,7 +108,7 @@ export default React.createClass({
   },
 
   onUpdated(event) {
-    this.props.onUpdated(event);
+    this.props.onUpdated(event, this.phylocanvas);
   },
 
   render() {

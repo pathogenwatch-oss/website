@@ -8,6 +8,7 @@ import DownloadIcon from './explorer/DownloadIcon.react';
 
 import { updateHeader } from '^/actions/header';
 
+import { speciesDownloads, speciesPath } from '^/constants/downloads';
 import Species from '../species';
 
 const uploadButtonStyle = {
@@ -31,11 +32,13 @@ export default connect()(React.createClass({
   componentWillMount() {
     this.props.dispatch(
       updateHeader({
-        speciesName: Species.formattedName,
+        speciesName: null,
         classNames: 'mdl-shadow--3dp',
         content: null,
       })
     );
+
+    document.title = `WGSA | ${Species.current.shortName}`;
   },
 
   render() {
@@ -68,7 +71,7 @@ export default connect()(React.createClass({
             </div>
 
             <div className="mdl-cell mdl-cell--6-col wgsa-species-home-other">
-              <div className="wgsa-card mdl-shadow--2dp">
+              <div className="wgsa-card wgsa-species-upload-link mdl-shadow--2dp">
                 <div className="wgsa-card-heading">Upload</div>
                 <div className="wgsa-card-content">
                   <p className="mdl-card__supporting-text">
@@ -87,36 +90,20 @@ export default connect()(React.createClass({
                 <div className="wgsa-card-heading">Downloads</div>
                 <div className="wgsa-card-content">
                   <ul className="wgsa-submenu">
-                    <li className="wgsa-menu__item">
-                      <a ref="link"
-                        href="#"
-                        target="_blank"
-                        download=""
-                        className="wgsa-download-button">
-                          <DownloadIcon hasLink />
-                          Public metadata (.csv)
-                      </a>
-                    </li>
-                    <li className="wgsa-menu__item">
-                      <a ref="link"
-                        href="#"
-                        target="_blank"
-                        download=""
-                        className="wgsa-download-button">
-                          <DownloadIcon hasLink />
-                          Core Genes (.fa)
-                      </a>
-                    </li>
-                    <li className="wgsa-menu__item">
-                      <a ref="link"
-                        href="#"
-                        target="_blank"
-                        download=""
-                        className="wgsa-download-button">
-                          <DownloadIcon hasLink />
-                          Species Tree (.nwk)
-                      </a>
-                    </li>
+                    { speciesDownloads.map(
+                      ({ text, filename, serverName }) => (
+                        <li className="wgsa-menu__item">
+                          <a ref="link"
+                            href={`${speciesPath}/${serverName}`}
+                            target="_blank"
+                            download={filename}
+                            className="wgsa-download-button">
+                              <DownloadIcon hasLink />
+                              {text}
+                          </a>
+                        </li>
+                      )
+                    )}
                   </ul>
                 </div>
               </div>

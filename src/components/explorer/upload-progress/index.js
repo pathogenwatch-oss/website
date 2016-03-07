@@ -31,6 +31,8 @@ const UploadProgress = React.createClass({
       classNames: 'mdl-shadow--3dp',
       content: (<Header />),
     }));
+
+    document.title = 'WGSA | Upload Progress';
   },
 
   componentDidMount() {

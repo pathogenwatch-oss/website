@@ -40,7 +40,6 @@ export default connect()(React.createClass({
   displayName: 'LayoutContainer',
 
   propTypes: {
-    handleBodyClick: React.PropTypes.func,
     downloadMenuButtonClick: React.PropTypes.func,
     children: React.PropTypes.arrayOf(React.PropTypes.element),
     dispatch: React.PropTypes.func,
@@ -52,6 +51,8 @@ export default connect()(React.createClass({
       classNames: 'mdl-layout__header--primary mdl-shadow--3dp',
       content: (<HeaderContent />),
     }));
+
+    document.title = 'WGSA | Explore Collection';
 
     this.props.dispatch(
       listen(() => this.props.dispatch(clicked()))
