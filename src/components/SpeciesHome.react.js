@@ -31,6 +31,7 @@ export default connect()(React.createClass({
   componentWillMount() {
     this.props.dispatch(
       updateHeader({
+        speciesName: null,
         classNames: 'mdl-shadow--3dp',
         content: null,
       })
