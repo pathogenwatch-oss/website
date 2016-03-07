@@ -96,7 +96,7 @@ export default connect()(React.createClass({
                           <a ref="link"
                             href={`${speciesPath()}/${serverName}`}
                             target="_blank"
-                            download={filename}
+                            download={filename()}
                             className="wgsa-download-button">
                               <DownloadIcon hasLink />
                               {text}
