@@ -2,7 +2,6 @@ import { displayTree } from '../actions/tree';
 import {
   setUnfilteredIds,
   activateFilter,
-  appendToFilter,
   resetFilter,
 } from '../actions/filter';
 
@@ -70,7 +69,6 @@ function getStandardTreeFunctions(state, dispatch) {
 
   return {
     styleTree(tree) {
-      tree.root.cascadeFlag('selected', false);
       tree.leaves.forEach((leaf) => {
         const assembly = entities.assemblies[leaf.id];
 
@@ -100,14 +98,14 @@ function getStandardTreeFunctions(state, dispatch) {
     onLoaded({ leaves }) {
       dispatch(setUnfilteredIds(leaves.map(_ => _.id)));
     },
-    onUpdated(event) {
-      if (event.property !== 'selected') {
+    onUpdated(event, tree) {
+      if (event.property !== tree.clickFlag) {
         return;
       }
-      const { nodeIds } = event;
+      const nodeIds = tree.getNodeIdsWithFlag(tree.clickFlag);
 
       if (nodeIds.length) {
-        dispatch(event.append ? appendToFilter(nodeIds) : activateFilter(nodeIds));
+        dispatch(activateFilter(nodeIds));
       } else {
         dispatch(resetFilter());
       }
@@ -148,15 +146,15 @@ function getPopulationTreeFunctions(state, dispatch) {
     onLoaded() {
       dispatch(setUnfilteredIds(collection.assemblyIds));
     },
-    onUpdated(event) {
-      if (event.property !== 'selected') {
+    onUpdated(event, tree) {
+      if (event.property !== tree.clickFlag) {
         return;
       }
       const { nodeIds } = event;
       if (nodeIds.length === 1) {
         const name = nodeIds[0];
-        const tree = entities.trees[name];
-        dispatch(displayTree( tree.name ? tree : { name }, collection.id));
+        const subtree = entities.trees[name];
+        dispatch(displayTree(subtree.name ? subtree : { name }, collection.id));
       } else {
         dispatch(resetFilter());
       }
