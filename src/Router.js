@@ -1,32 +1,21 @@
-import './css/cgps-mdl-theme.css';
-import 'phylocanvas/polyfill';
-
 import React from 'react';
-import { render } from 'react-dom';
 import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 
+import App from './App';
 import Home from './components/Home.react';
 import SpeciesHome from './components/SpeciesHome.react';
 import UploadCollection from './components/upload';
 import ExploreCollection from './components/explorer';
-import Toast from './components/Toast.react';
 import NotFound from './components/NotFound.react';
 
 import Species from './species';
 
-const App = ({ children }) => (
-  <div>
-    {children}
-    <Toast />
-  </div>
-);
-
-const SpeciesSetter = ({ route, children }) => {
+const SpeciesSetter = ({ children, route }) => {
   Species.current = route.path;
   return children;
 };
 
-render((
+export default () => (
   <Router history={browserHistory}>
     <Route path="/" component={App}>
       <IndexRoute component={Home} />
@@ -39,7 +28,7 @@ render((
           </Route>,
         ]), []
       )}
+      <Route path="*" component={NotFound}/>
     </Route>
-    <Route path="*" component={NotFound}/>
   </Router>
-), document.getElementById('wgsa'));
+);

@@ -43,7 +43,7 @@ function getViewportWidth() {
 }
 
 function getViewportHeight() {
-  return $(window).height();
+  return $(window).height() - HEADER_BAR_HEIGHT;
 }
 
 function getNumberOfDividers() {
@@ -77,17 +77,17 @@ function getEastWidth() {
 // North
 
 function getNorthHeight() {
-  return ((getViewportHeight() - HEADER_BAR_HEIGHT) / NORTH_SOUTH_CONTAINERS_RATIO);
+  return (getViewportHeight() / NORTH_SOUTH_CONTAINERS_RATIO);
 }
 
 function getNorthSouthDividerTop() {
-  return HEADER_BAR_HEIGHT + getNorthHeight();
+  return getNorthHeight();
 }
 
 // South
 
 function getSouthTop() {
-  return (HEADER_BAR_HEIGHT + getNorthHeight() + getDividerSize());
+  return (getNorthHeight() + getDividerSize());
 }
 
 function getSouthHeight() {

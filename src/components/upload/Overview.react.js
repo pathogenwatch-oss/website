@@ -65,7 +65,7 @@ export default React.createClass({
     const { max = 0, min = 0 } = noContigsRange;
     if (this.state.assemblyCount) {
       return (
-        <div className="mdl-grid overviewContent">
+        <div className="mdl-grid wgsa-overview-content">
           <div className="wgsa-card mdl-cell mdl-cell--6-col increase-cell-gutter mdl-shadow--2dp">
             <div className="wgsa-card-heading">Summary</div>
             <div className="wgsa-card-content wgsa-summary-stats mdl-grid">

@@ -86,7 +86,7 @@ export default React.createClass({
 
   handleLayoutNorthSourthDividerDragEnd(northSouthDividerTop) {
     this.setState({
-      layoutNorthHeight: northSouthDividerTop - LayoutUtils.HEADER_BAR_HEIGHT,
+      layoutNorthHeight: northSouthDividerTop,
       layoutNorthSouthDividerTop: northSouthDividerTop,
       layoutSouthTop: northSouthDividerTop + LayoutUtils.getDividerSize(),
       layoutSouthHeight: LayoutUtils.getViewportHeight() - (northSouthDividerTop + LayoutUtils.getDividerSize()),

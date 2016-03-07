@@ -155,7 +155,7 @@ const Store = assign({}, EventEmitter.prototype, {
   },
 
   isReadyToUpload() {
-    return errors.length === 0;
+    return this.getAssembliesCount() > 0 && errors.length === 0;
   },
 
   getErrors() {
@@ -164,6 +164,7 @@ const Store = assign({}, EventEmitter.prototype, {
 
   clearStore() {
     assemblies = {};
+    errors.length = 0;
   },
 });
 

@@ -36,6 +36,7 @@ export default React.createClass({
   componentWillReceiveProps({ status }) {
     if (status === statuses.READY) {
       this.props.fetch();
+      FileUploadingStore.clearStore();
     }
   },
 

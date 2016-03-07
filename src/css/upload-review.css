@@ -54,18 +54,6 @@
 
 /**** Upload Review - Header ****/
 
-@media (max-width: 1024px) {
-
-  .mdl-layout__header-row {
-    /*padding-left: 60px !important;*/
-  }
-
-  .mdl-layout__header .mdl-layout__drawer-button {
-    color: #673c90;
-  }
-
-}
-
 @media (max-width: 839px) and (min-width: 480px) {
   .mdl-cell--6-col, .mdl-cell--6-col-tablet.mdl-cell--6-col-tablet {
       width: calc(100% - 16px);
@@ -143,6 +131,7 @@
 
 #loadingAnimation.mdl-progress {
   width: auto;
+  z-index: 2;
 }
 
 .uploadReviewAnalysisStyle input {
@@ -174,14 +163,12 @@
   margin: 8px;
 }
 
-.overviewContent {
+.wgsa-overview-content {
   position: absolute;
   left: 0;
   top: 0;
-  bottom: 0;
   right: 0;
-  justify-content: space-around;
-  margin: 8px;
+  bottom: 0;
 }
 
 .wgsa-overview-upload-ready-card {
@@ -240,9 +227,9 @@
   text-transform: uppercase;
   font-size: 16px;
   color: #666;
-  line-height: 40px;
+  line-height: 48px;
   border-bottom: 1px solid #ddd;
-  padding: 4px 32px;
+  padding: 4px 32px 0;
   overflow: hidden;
   display: block;
   text-overflow: ellipsis;
@@ -363,9 +350,14 @@
 .assembly-map {
   padding-bottom: 30px;
 }
+
+.wgsa-chart-select .mdl-tabs {
+  height: 52px;
+}
+
 .wgsa-chart-select .mdl-tabs__tab {
   flex-grow: 1;
-  padding: 0px;
+  padding: 4px 0 0;
   white-space: nowrap;
   font-size: 13px;
   font-family: "Roboto","Helvetica","Arial",sans-serif;
@@ -385,6 +377,27 @@
   background-position: -20px -20px;
   text-align: center;
   border: none;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  width: 240px !important;
+}
+
+.navigation-container + .mdl-cell {
+  width: calc(100% - 240px);
+  margin-left: 240px !important;
+}
+
+.is-small-screen .navigation-container {
+  display: none;
+}
+
+.is-small-screen .navigation-container + .mdl-cell {
+  width: 100%;
+  margin: 0 !important;
 }
 
 .uploadWorkspaceNavigationTitle {
@@ -440,8 +453,8 @@
   display: block;
   right: 0;
   bottom: 0;
-  margin-right: 24px;
-  margin-bottom: 16px;
+  margin-right: 20px;
+  margin-bottom: 24px;
   z-index: 900;
 }
 
@@ -468,7 +481,7 @@
 
 .assemblyListItem {
   margin: 0;
-  padding: 0 8px 0 16px;
+  padding: 0 8px 0 24px;
   position: relative;
   list-style: none;
   border-bottom: 1px solid rgba(0, 0, 0, .12);

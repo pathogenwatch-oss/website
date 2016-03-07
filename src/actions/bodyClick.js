@@ -7,3 +7,12 @@ export function clicked(event) {
     event,
   };
 }
+
+export const LISTEN = 'LISTEN';
+
+export function listen(listener) {
+  return {
+    type: LISTEN,
+    listener,
+  };
+}

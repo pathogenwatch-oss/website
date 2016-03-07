@@ -6,6 +6,7 @@ import { assemblies, collection, reference } from './collection';
 import metadata from './metadata';
 import resistanceProfile from './resistanceProfile';
 
+import header from './header';
 import table from './table';
 import mapMarkers from './mapMarkers';
 import { trees, displayedTree, treeLoading } from './tree';
@@ -15,7 +16,7 @@ import filter from './filter';
 import downloads from './downloads';
 import downloadsMenu from './downloadsMenu';
 
-import bodyClickEvent from './bodyClickEvent';
+import bodyClickListener from './bodyClickListener';
 
 import { RESET_STORE } from '../actions/reset';
 
@@ -41,6 +42,7 @@ const rootReducer = combineReducers({
     resistanceProfile: createReducer(resistanceProfile),
   }),
   display: combineReducers({
+    header: createReducer(header),
     table: createReducer(table),
     mapMarkers: createReducer(mapMarkers),
     tree: createReducer(displayedTree),
@@ -50,7 +52,7 @@ const rootReducer = combineReducers({
     menuOpen: createReducer(downloadsMenu),
     files: createReducer(downloads),
   }),
-  bodyClickEvent,
+  bodyClickListener,
   loading: combineReducers({
     tree: createReducer(treeLoading),
   }),

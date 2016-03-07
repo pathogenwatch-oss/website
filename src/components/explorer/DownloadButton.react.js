@@ -31,7 +31,7 @@ export default React.createClass({
   render() {
     const {
       loading, error, description, link, filename,
-      onClick, label, color, isArchive, iconOnly
+      onClick, label, color, isArchive, iconOnly,
     } = this.props;
     const title =
       `${ !loading && link ? 'Download' : 'Generate' } ${description}`;

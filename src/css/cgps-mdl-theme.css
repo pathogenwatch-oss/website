@@ -1,3 +1,66 @@
+/* Layout */
+
+.mdl-layout__header {
+  background-color: #fff;
+  color: #673c90 !important;
+  min-height: 56px;
+  display: block; /* overrides display: none on small screens! */
+  transition: .28s cubic-bezier(.4,0,.2,1);
+  transition-property: color, background, background-color;
+}
+
+.mdl-layout__header-row {
+  height: 56px;
+  padding-left: 72px !important;
+}
+
+.mdl-layout__drawer-button {
+  color: #673c90 !important;
+  margin: 4px;
+  width: 64px;
+}
+
+.mdl-layout__drawer-button:focus {
+  outline: none;
+}
+
+.mdl-layout__drawer-button:hover > .material-icons,
+.mdl-layout__drawer-button:focus > .material-icons {
+  border-radius: 50%;
+  padding: 4px;
+  background-color: rgba(0,0,0,.12);
+}
+
+.mdl-layout__header--primary {
+  background-color: #673c90;
+  color: #fff !important;
+}
+
+.mdl-layout__header--primary .mdl-layout__drawer-button {
+  color: #fff !important
+}
+
+.mdl-layout-spacer--flex {
+  display: flex;
+  align-items: center;
+}
+
+.mdl-layout__content {
+  background: #efefef;
+  position: relative;
+}
+
+.is-small-screen .mdl-layout__content {
+  overflow: visible !important;
+}
+
+.mdl-grid--internal {
+  padding: 0;
+  margin: -8px;
+}
+
+/* Tabs */
+
 .mdl-tabs__tab .mdl-tabs__ripple-container .mdl-ripple {
   background: #673c90 !important;
 }
@@ -6,13 +69,8 @@
   background: #673c90;
 }
 
-.mdl-layout__header {
-    min-height: 56px;
-}
 
-.mdl-layout__header-row {
-    height: 56px;
-}
+/* Spinner */
 
 .mdl-spinner .mdl-spinner__layer-1,
 .mdl-spinner .mdl-spinner__layer-3 {

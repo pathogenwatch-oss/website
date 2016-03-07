@@ -19,7 +19,7 @@ export default React.createClass({
       position: 'absolute',
       width: width + 'px',
       height: height + 'px',
-      top: '56px',
+      top: 0,
       left: 0,
       zIndex: 1,
       overflow: 'hidden',
