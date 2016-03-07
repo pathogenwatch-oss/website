@@ -1,39 +1,40 @@
 import { REQUEST_DOWNLOAD } from '../actions/downloads';
 import ToastActionCreators from '../actions/ToastActionCreators';
 
-import { createDownloadKey } from '../constants/downloads';
-import { API_ROOT } from '../utils/Api';
-
-import Species from '../species';
+import {
+  createDownloadKey,
+  collectionPath,
+  encode,
+} from '../constants/downloads';
 
 const initialState = {
   amr_profile_collection: {
-    description: 'AMR Profile (.csv)',
+    description: 'AMR Profile (CSV)',
     filename: 'amr_profile',
   },
   concatenated_core_genes_collection: {
-    description: 'Concatenated Core Genes (.fa)',
+    description: 'Concatenated Core Genes (FASTA)',
     filename: 'concatenated_core_genes',
   },
   kernel_checksum_distribution: {
-    description: 'Core Allele Distribution (.csv)',
+    description: 'Core Allele Distribution (CSV)',
     filename: 'core_allele_distribution',
   },
   differences_matrix: {
-    description: 'Difference Matrix (.csv)',
+    description: 'Difference Matrix (FASTA)',
     filename: 'difference_matrix',
   },
   score_matrix: {
-    description: 'Score Matrix (.csv)',
+    description: 'Score Matrix (FASTA)',
     filename: 'score_matrix',
   },
   fasta: {
-    description: 'Assembly (.fa)',
+    description: 'Assembly (FASTA)',
     filename: 'fasta',
     notMenu: true,
   },
   wgsa_gff: {
-    description: 'Annotations (.gff)',
+    description: 'Annotations (GFF)',
     filename: 'annotations',
     notMenu: true,
   },
@@ -47,8 +48,7 @@ function createLink(keyMap, filename) {
   }
 
   return (
-    `${API_ROOT}/species/${Species.id}/download/file/${encodeURIComponent(key)}?` +
-        `prettyFileName=${encodeURIComponent(filename)}`
+    `${collectionPath}/${encode(key)}?prettyFileName=${encode(filename)}`
   );
 }
 

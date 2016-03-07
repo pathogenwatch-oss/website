@@ -146,6 +146,8 @@
 
 .wgsa-species-home-other {
   float: right;
+  display: flex;
+  flex-direction: column;
 }
 
 .is-small-screen .wgsa-species-home-other {
@@ -153,8 +155,7 @@
   display: block;
 }
 
-.is-small-screen .wgsa-species-home-other .wgsa-card {
-  width: auto;
+.wgsa-species-home-other .wgsa-card {
   margin-bottom: 16px;
 }
 
@@ -163,7 +164,7 @@
 }
 
 .wgsa-species-downloads {
-  max-width: 280px;
+  max-width: 320px;
   margin: inherit auto;
 }
 
@@ -173,7 +174,6 @@
 
 .wgsa-species-downloads .wgsa-card-content {
   padding: 0;
-  /*display: flex;*/
 }
 
 .is-small-screen .wgsa-species-downloads .wgsa-card-content {
@@ -188,18 +188,18 @@
   padding-left: 32px;
 }
 
+.is-small-screen .wgsa-species-downloads .wgsa-download-button {
+  padding-left: 24px;
+}
+
 .wgsa-species-upload-link {
-  position: absolute !important;
-  top: 16px;
-  right: 16px;
-  width: 280px;
+  max-width: 320px;
 }
 
 .is-small-screen .wgsa-species-upload-link {
-  position: relative !important;
-  top: 0;
-  right: 0;
+  display: block;
 }
+
 
 
 @media(min-width: 1280px) {
@@ -217,29 +217,19 @@
     width: calc(58.3333333333% - 16px); /* 7 col */
   }
 
+  .wgsa-species-home-other {
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    align-items: flex-start;
+  }
+
+  .wgsa-species-home-other .wgsa-card {
+    width: 100%;
+    margin-right: 16px;
+  }
+
   .wgsa-species-upload-link {
-    right: 40px;
-  }
-
-  .wgsa-species-downloads {
-    max-width: none;
-  }
-
-  .wgsa-species-downloads .wgsa-card-content {
-    padding: 16px;
-  }
-
-  .wgsa-species-downloads .wgsa-submenu {
-    display: flex;
-    justify-content: center;
-  }
-
-  .wgsa-species-downloads .wgsa-download-button {
-    padding-left: 16px;
-  }
-
-  .wgsa-species-downloads .wgsa-menu__item {
-    margin: 0 8px;
+    display: block;
   }
 
 }
