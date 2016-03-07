@@ -30,11 +30,16 @@ const actions = {
     };
   },
   [APPEND_TO_FILTER]: function (state, { ids }) {
-    const newIds = new Set([ ...state.ids, ...ids ]);
+    const stateWithNewIdsRemoved =
+      Array.from(state.ids).filter(id => !ids.has(id));
+
     return {
       ...state,
       active: true,
-      ids: newIds,
+      ids:
+        stateWithNewIdsRemoved.length === state.ids.size - ids.size ?
+          new Set(stateWithNewIdsRemoved) :
+          new Set([ ...state.ids, ...ids ]),
     };
   },
   [RESET_FILTER]: function (state) {

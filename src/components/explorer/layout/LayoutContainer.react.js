@@ -40,7 +40,6 @@ export default connect()(React.createClass({
   displayName: 'LayoutContainer',
 
   propTypes: {
-    handleBodyClick: React.PropTypes.func,
     downloadMenuButtonClick: React.PropTypes.func,
     children: React.PropTypes.arrayOf(React.PropTypes.element),
     dispatch: React.PropTypes.func,

@@ -68,6 +68,7 @@ function updateMarker(marker, markerDef) {
       origin: new google.maps.Point(iconDef.offset, iconDef.offset),
       anchor: new google.maps.Point(iconDef.size / 2, iconDef.size / 2),
     } : MapUtils.standardMarkerIcon,
+    shape: iconDef ? iconDef.shape : undefined,
     visible,
     zIndex: active ? zIndex : -1,
   });
