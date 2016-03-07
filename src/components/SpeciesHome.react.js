@@ -94,7 +94,7 @@ export default connect()(React.createClass({
                       ({ text, filename, serverName }) => (
                         <li className="wgsa-menu__item">
                           <a ref="link"
-                            href={`${speciesPath()}/${serverName}`}
+                            href={`${speciesPath()}/${serverName}?prettyFileName=${filename()}`}
                             target="_blank"
                             download={filename()}
                             className="wgsa-download-button">
