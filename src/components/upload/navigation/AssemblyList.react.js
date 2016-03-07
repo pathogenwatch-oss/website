@@ -12,15 +12,25 @@ const AssemblyList = React.createClass({
     selectedAssemblyName: React.PropTypes.string,
   },
 
+  getInitialState() {
+    return {
+      mounted: false,
+    };
+  },
+
   componentDidMount() {
     // cache jQuery container
     this.$container = $(this.refs.container);
+    this.setState({ mounted: true });
   },
 
-  shouldComponentUpdate(nextProps) {
+  shouldComponentUpdate(nextProps, nextState) {
     const { assemblies, selectedAssemblyName } = this.props;
+    const { mounted } = this.state;
     return (
-      assemblies !== nextProps.assemblies || selectedAssemblyName !== nextProps.selectedAssemblyName
+      mounted !== nextState.mounted ||
+      assemblies !== nextProps.assemblies ||
+      selectedAssemblyName !== nextProps.selectedAssemblyName
     );
   },
 
@@ -80,15 +90,18 @@ const AssemblyList = React.createClass({
     const listItems = this.getListItems();
     return (
       <div className="wgsa-assembly-list-wrapper" ref="container">
-        <VirtualList
-          tagName="ul"
-          className="assemblyListContainer"
-          items={listItems}
-          renderItem={this.renderItem}
-          itemHeight={itemHeight}
-          container={this.refs.container}
-          itemBuffer={5}
-        />
+        { this.state.mounted ? (
+            <VirtualList
+              tagName="ul"
+              className="assemblyListContainer"
+              items={listItems}
+              renderItem={this.renderItem}
+              itemHeight={itemHeight}
+              container={this.refs.container}
+              itemBuffer={5}
+            />
+          ) : null
+        }
       </div>
     );
   },
