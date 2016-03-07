@@ -225,6 +225,10 @@
     max-width: none;
   }
 
+  .wgsa-species-downloads .wgsa-card-content {
+    padding: 16px;
+  }
+
   .wgsa-species-downloads .wgsa-submenu {
     display: flex;
     justify-content: center;
