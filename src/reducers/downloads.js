@@ -21,11 +21,11 @@ const initialState = {
     filename: 'core_allele_distribution',
   },
   differences_matrix: {
-    description: 'Difference Matrix (FASTA)',
+    description: 'Difference Matrix (CSV)',
     filename: 'difference_matrix',
   },
   score_matrix: {
-    description: 'Score Matrix (FASTA)',
+    description: 'Score Matrix (CSV)',
     filename: 'score_matrix',
   },
   fasta: {
