@@ -12,7 +12,7 @@ export default ({ tree, title, isSpecies, dispatch }) => (
       <div className="wgsa-switch-background wgsa-switch-background--see-through">
         <Switch
           id="tree-switcher"
-          left={{ title: 'Collection View', icon: 'group_work' }}
+          left={{ title: 'Collection View', icon: 'person' }}
           right={{ title: 'Population View', icon: 'language' }}
           checked={tree.name === POPULATION}
           onChange={(checked) => dispatch(
