@@ -31,7 +31,6 @@ export default connect()(React.createClass({
   componentWillMount() {
     this.props.dispatch(
       updateHeader({
-        speciesName: Species.formattedName,
         classNames: 'mdl-shadow--3dp',
         content: null,
       })
@@ -68,7 +67,7 @@ export default connect()(React.createClass({
             </div>
 
             <div className="mdl-cell mdl-cell--6-col wgsa-species-home-other">
-              <div className="wgsa-card mdl-shadow--2dp">
+              <div className="wgsa-card wgsa-species-upload-link mdl-shadow--2dp">
                 <div className="wgsa-card-heading">Upload</div>
                 <div className="wgsa-card-content">
                   <p className="mdl-card__supporting-text">
