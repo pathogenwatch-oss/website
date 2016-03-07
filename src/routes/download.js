@@ -62,7 +62,7 @@ router.get('/species/:speciesId/download/:fileName', function (req, res, next) {
     'Content-type': 'text/plain'
   });
 
-  const stream = fileModel.getFile(req.params);
+  const stream = fileModel.getSpeciesFile(req.params);
 
   stream.on('error', error => next(error));
 
