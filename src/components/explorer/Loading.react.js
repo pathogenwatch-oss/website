@@ -89,9 +89,20 @@ function getStatusMessage(status, errors) {
   }
 }
 
-export const LoadError = ({ status, errors }) => (
-  <Background>
-    { getStatusMessage(status, errors) }
-    <p>Please contact <a href="mailto:cgps@sanger.ac.uk">cgps@sanger.ac.uk</a> if problems persist.</p>
-  </Background>
-);
+export const LoadError = React.createClass({
+
+  componentWillMount() {
+    document.title = 'WGSA | Error';
+  },
+
+  render() {
+    const { status, errors } = this.props;
+    return (
+      <Background>
+        { getStatusMessage(status, errors) }
+        <p>Please contact <a href="mailto:cgps@sanger.ac.uk">cgps@sanger.ac.uk</a> if problems persist.</p>
+      </Background>
+    );
+  },
+
+});

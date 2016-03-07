@@ -23,6 +23,8 @@ export default connect()(React.createClass({
         content: null,
       })
     );
+
+    document.title = 'WGSA - Whole Genome Sequence Analysis';
   },
 
   render() {

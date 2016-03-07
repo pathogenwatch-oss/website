@@ -52,6 +52,8 @@ export default connect()(React.createClass({
       content: (<HeaderContent />),
     }));
 
+    document.title = 'WGSA | Explore Collection';
+
     this.props.dispatch(
       listen(() => this.props.dispatch(clicked()))
     );

@@ -23,7 +23,7 @@ const menuItems = [
     link: '/',
   },
   { icon: 'bug_report',
-    text: <span>{Staph.shortFormattedName}</span>,
+    text: <span>{Staph.formattedShortName}</span>,
     link: `/${Staph.nickname}`,
   },
   { icon: 'cloud_upload',

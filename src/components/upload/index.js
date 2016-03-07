@@ -76,6 +76,8 @@ export default connect()(React.createClass({
         />
       ),
     }));
+
+    document.title = `WGSA | Create Collection`;
   },
 
   componentDidMount() {

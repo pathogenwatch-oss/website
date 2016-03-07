@@ -36,6 +36,8 @@ export default connect()(React.createClass({
         content: null,
       })
     );
+
+    document.title = `WGSA | ${Species.current.shortName}`;
   },
 
   render() {
