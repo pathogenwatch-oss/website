@@ -9,32 +9,32 @@ import {
 
 const initialState = {
   amr_profile_collection: {
-    description: 'AMR Profile (CSV)',
+    description: 'AMR Profile',
     filename: 'amr_profile',
   },
   concatenated_core_genes_collection: {
-    description: 'Concatenated Core Genes (FASTA)',
+    description: 'Concatenated Core Genes',
     filename: 'concatenated_core_genes',
   },
   kernel_checksum_distribution: {
-    description: 'Core Allele Distribution (CSV)',
+    description: 'Core Allele Distribution',
     filename: 'core_allele_distribution',
   },
   differences_matrix: {
-    description: 'Difference Matrix (CSV)',
+    description: 'Difference Matrix',
     filename: 'difference_matrix',
   },
   score_matrix: {
-    description: 'Score Matrix (CSV)',
+    description: 'Score Matrix',
     filename: 'score_matrix',
   },
   fasta: {
-    description: 'Assembly (FASTA)',
+    description: 'Assembly',
     filename: 'fasta',
     notMenu: true,
   },
   wgsa_gff: {
-    description: 'Annotations (GFF)',
+    description: 'Annotations',
     filename: 'annotations',
     notMenu: true,
   },
