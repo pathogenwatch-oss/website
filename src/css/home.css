@@ -33,8 +33,9 @@
   align-self: flex-end;
 }
 
-.cgps-logo {
-  height: 40px;
+.mdl-layout__header .cgps-logo {
+  height: 36px;
+  float: right;
 }
 
 .wgsa-home__intro {
@@ -160,6 +161,37 @@
 .wgsa-home__features .wgsa-menu-button:focus {
   background: #673c90;
   box-shadow: 0 8px 10px 0 rgba(0,0,0,.28),0 2px 20px 0 rgba(0,0,0,.24),0 4px 8px -2px rgba(0,0,0,.4);
+}
+
+.wgsa-home__features .CircularProgress {
+  overflow: visible;
+}
+
+.wgsa-feature-icons--progress {
+  display: flex;
+  justify-content: space-around;
+  padding-right: 32px;
+}
+
+.wgsa-feature-icons .wgsa-switch {
+  width: 172px;
+}
+
+.wgsa-feature-icons .wgsa-switch i {
+  font-size: 48px;
+}
+
+.wgsa-feature-icons .wgsa-switch .mdl-switch__track {
+  width: 72px;
+  height: 28px;
+  top: 10px
+}
+
+.wgsa-feature-icons .wgsa-switch .mdl-switch__thumb {
+  left: 32px;
+  top: 4px;
+  height: 40px;
+  width: 40px;
 }
 
 .wgsa-home footer {

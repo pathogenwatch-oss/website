@@ -24,6 +24,11 @@
   margin-bottom: 16px;
 }
 
+.wgsa-species-home-title img {
+  height: 64px;
+  transform: translateY(-50%);
+}
+
 .wgsa-species-home-intro {
   float: right;
 }
@@ -45,6 +50,32 @@
 
 .wgsa-species-home-intro p:last-child {
   margin-bottom: 0;
+}
+
+.wgsa-species-home-intro ul {
+ list-style: none;
+}
+
+@media(max-width: 1280px) {
+  .wgsa-species-home-intro li > span {
+    width: 88%;
+  }
+}
+
+.wgsa-species-home-intro li {
+  margin-bottom: 8px;
+}
+
+.wgsa-species-home-intro li > i,
+.wgsa-species-home-intro li > span {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.wgsa-species-home-intro i {
+  color: #673c90;
+  position: relative;
+  left: -16px;
 }
 
 .wgsa-species-home-collection-list {

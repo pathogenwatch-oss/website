@@ -32,7 +32,7 @@ export default connect()(React.createClass({
   componentWillMount() {
     this.props.dispatch(
       updateHeader({
-        speciesName: null,
+        speciesName: Species.formattedName,
         classNames: 'mdl-shadow--3dp',
         content: null,
       })
@@ -47,7 +47,10 @@ export default connect()(React.createClass({
 
         <div className="wgsa-species-home-container">
           <div className="mdl-grid">
-            <h1 className="wgsa-species-home-title">{Species.current.formattedName}</h1>
+            <h1 className="wgsa-species-home-title">
+              <img src="/assets/img/WGSA.Icon.FINAL.svg" />
+              {Species.current.formattedName}
+            </h1>
 
             <div className="mdl-cell mdl-cell--6-col wgsa-species-home-intro">
               <div className="wgsa-card mdl-shadow--2dp">

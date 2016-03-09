@@ -59,6 +59,10 @@ export function getArchiveDownloadProps(state, downloads, dispatch) {
 }
 
 export const speciesDownloads = [
+  { text: 'Core Representatives',
+    filename: () => `wgsa_${Species.nickname}_core_representatives.csv`,
+    serverName: 'core_rep_map.tsv',
+  },
   { text: 'AMR SNP Sequences',
     filename: () => `wgsa_${Species.nickname}_amr_snp_sequences.fa`,
     serverName: 'ar_snps_lib.fa',
@@ -67,11 +71,7 @@ export const speciesDownloads = [
     filename: () => `wgsa_${Species.nickname}_amr_snps.tsv`,
     serverName: 'ar_snps.tsv',
   },
-  { text: 'Core Representatives',
-    filename: () => `wgsa_${Species.nickname}_core_representatives.csv`,
-    serverName: 'core_rep_map.tsv',
-  },
-  { text: 'AMR Genes',
+  { text: 'Acquired AMR Genes',
     filename: () => `wgsa_${Species.nickname}_resistance_genes.csv`,
     serverName: 'resistance_genes.tsv',
   },

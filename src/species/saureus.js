@@ -32,10 +32,14 @@ export default {
   ],
   desc: (
     <span>
-      <p><strong>{formattedName}</strong> is a gram-positive microorganism of prominent versatility. While the nasal colonization by S. aureus is fairly widespread and occurs asymptomatically, S. aureus can also transform into a pathogen causing a diverse infections ranging from mild skin infections to life-threatening conditions.</p>
-      <p>{formattedShortName} in its methicillin-sensitive (MSSA) form but especially in its methicillin-resistant (MRSA) or even multi-resistant form are threatening the community and healthcare system worldwide and it has reached the status of being one of the most common causative agents for infectious disease.</p>
-      <p>News agencies have been calling MRSA the superbug in recent years and thus it is of no surprise that agencies like the WHO, CDC and ECDC (Ears-Net) include S. aureus in their list of target species in their reports.</p>
-      <p>With the new revolution of whole genome sequencing the identification and tracking of high-risk clones and epidemiological investigations, outbreak and transmission prevention and control will be made possible in a timely manner.</p>
+      <p>{formattedName} is a Gram-positive microorganism. While the nasal colonization by {formattedShortName} is fairly widespread and occurs asymptomatically, {formattedShortName} can also transform into a pathogen causing a diverse infections ranging from mild skin infections to life-threatening conditions. {formattedShortName} in its methicillin-sensitive (MSSA) form but especially in its methicillin-resistant (MRSA) or even multi-resistant form are threatening the community and healthcare system worldwide and it has reached the status of being one of the most common causative agents for infectious disease.</p>
+      <p>Upload your genome assemblies and interact with results:</p>
+      <ul>
+        <li><i className="material-icons">local_pharmacy</i> AMR - Prediction of antimicrobial resistance.</li>
+        <li><i className="material-icons">nature_people</i> Trees - Cluster genomes using nucleotide similarity at shared regions.</li>
+        <li><i className="material-icons">language</i> Compare - Position your genomes(s) in the population.</li>
+        <li><i className="material-icons">file_download</i> Download all results and/or share data.</li>
+      </ul>
     </span>
   ),
   collections: [

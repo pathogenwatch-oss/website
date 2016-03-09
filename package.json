@@ -43,7 +43,6 @@
     "history": "^1.13.0",
     "jquery-draghover": "github:imperialcollegelondon/jquery-draghover",
     "json-loader": "^0.5.3",
-    "keymirror": "^0.1.1",
     "moment": "^2.10.3",
     "node-libs-browser": "^0.5.3",
     "node-uuid": "^1.4.3",

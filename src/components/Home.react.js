@@ -4,6 +4,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 
+import CircularProgress from './CircularProgress.react';
+import Switch from './Switch.react';
+
 import { updateHeader } from '^/actions/header';
 
 import staph from '../species/saureus';
@@ -15,12 +18,22 @@ export default connect()(React.createClass({
     dispatch: React.PropTypes.func,
   },
 
+  getInitialState() {
+    return {
+      isChecked: false,
+    };
+  },
+
   componentWillMount() {
     this.props.dispatch(
       updateHeader({
         speciesName: null,
         classNames: null,
-        content: null,
+        content: (
+          <div className="mdl-layout-spacer">
+            <img className="cgps-logo" src="/assets/img/CGPS.SHORT.FINAL.svg" />
+          </div>
+        ),
       })
     );
 
@@ -39,6 +52,7 @@ export default connect()(React.createClass({
           <Link to={`/${staph.nickname}`} className="mdl-button mdl-button--colored mdl-button--raised wgsa-cta">
             Get started with {staph.formattedName}
           </Link>
+          <p style={{ fontSize: '16px', margin: '32px 0 0' }}>N.B. This is an open preview of WGSA. Uploaded data will be stored for one week only, and we appreciate your feedback.</p>
         </header>
         <div className="wgsa-home__features">
           <div className="mdl-grid mdl-grid--no-spacing">
@@ -59,10 +73,10 @@ export default connect()(React.createClass({
             </div>
           </div>
           <div className="mdl-grid mdl-grid--no-spacing">
-            <div className="mdl-cell mdl-cell--6-col wgsa-feature-icons">
-              <i className="material-icons wgsa-result-icon">check_circle</i>
-              <i className="material-icons wgsa-result-icon">check_circle</i>
-              <i className="material-icons wgsa-result-icon">radio_button_unchecked</i>
+            <div className="mdl-cell mdl-cell--6-col wgsa-feature-icons wgsa-feature-icons--progress">
+              <CircularProgress percentage={Math.ceil(Math.random() * 100)}/>
+              <CircularProgress percentage={Math.ceil(Math.random() * 100)}/>
+              <CircularProgress percentage={Math.ceil(Math.random() * 100)}/>
             </div>
             <div className="wgsa-features-card wgsa-features-card--reverse mdl-shadow--2dp mdl-cell">
               <p>Generate results including MLST, AMR predictions, clustering of genomes, and interactive visualisation of metadata.</p>
@@ -73,13 +87,18 @@ export default connect()(React.createClass({
               <p>Compare results with publicly available genomes within a species reference tree.</p>
             </div>
             <div className="mdl-cell mdl-cell--6-col wgsa-feature-icons">
-              <i className="material-icons wgsa-compare-icon" style={{ color: CGPS.COLOURS.PURPLE_LIGHT }}>nature_people</i>
+              <Switch
+                id="tree-switcher"
+                left={{ title: 'Collection View', icon: 'person' }}
+                right={{ title: 'Population View', icon: 'language' }}
+                checked={true}
+              />
             </div>
           </div>
           <div className="mdl-grid mdl-grid--no-spacing">
             <div className="mdl-cell mdl-cell--6-col wgsa-feature-icons">
-              <span className="wgsa-menu-button mdl-button">
-                <i className="wgsa-button-icon material-icons">file_download</i>
+              <span className="wgsa-menu-button mdl-button" style={{ padding: '12px 32px', fontSize: '24px', borderRadius: '4px' }}>
+                <i className="wgsa-button-icon material-icons" style={{ fontSize: '32px', marginRight: '8px' }}>file_download</i>
                 <span>Downloads</span>
               </span>
             </div>
