@@ -9,16 +9,16 @@
 }
 
 .wgsa-loading-content {
-  width: calc(10 / 12 * 100%);
+  width: 100%;
   text-align: center;
   margin: auto;
-  padding: 32px 0;
+  padding: 32px;
 }
 
 .wgsa-loading-logo {
   width: 240px;
   margin-left: -48px; /* width / 5 */
-  padding-bottom: 24px;
+  padding-bottom: 16px;
 }
 
 .wgsa-loading-container h1 {
@@ -30,7 +30,6 @@
 .wgsa-loading-container p {
   color: #555;
   letter-spacing: normal;
-  max-width: 770px;
   margin: 0 auto 24px;
   line-height: 1.2;
 }

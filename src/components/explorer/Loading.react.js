@@ -89,7 +89,7 @@ function getStatusMessage(status, { collectionSize, errors = [] }) {
         <p className="mdl-typography--title">All {collectionSize} assemblies were rejected.</p> :
         <p className="mdl-typography--title">{failedAssemblies.length} of {collectionSize} assemblies were rejected:</p>,
       !totalFail ? <ul className="wgsa-failed-assemblies">{failedAssemblies.map(assemblyName => <li key={assemblyName}>{assemblyName}</li>)}</ul> : null,
-      <p className="mdl-typography--title">Please ensure that assemblies are the correct species and meet our quality criteria.</p>,
+      <p className="mdl-typography--title">Please ensure assemblies are the correct species, as we were unable to process them as {Species.current.formattedShortName}.</p>,
       <Link to={`/${Species.nickname}/upload`} className="mdl-button mdl-button--raised">Try Again</Link>,
     ];
   }
