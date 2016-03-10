@@ -17,5 +17,8 @@ const bundle = fs.readFileSync(bundlePath);
 
 fs.writeFileSync(
   bundlePath,
-  template(bundle)({ pusherKey: serverConfig.pusher.key })
+  template(bundle)({
+    pusherKey: serverConfig.pusher.key,
+    maxCollectionSize: serverConfig.maxCollectionSize,
+  })
 );
