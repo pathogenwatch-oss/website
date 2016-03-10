@@ -6,6 +6,8 @@ import MetadataUtils from '../utils/Metadata';
 import CONFIG from '../config';
 
 const MIN_COLLECTION_SIZE = 3;
+const MAX_COLLECTION_SIZE = parseInt(CONFIG.maxCollectionSize || '0', 10);
+
 const CHANGE_EVENT = 'change';
 
 let assemblies = {};
@@ -112,7 +114,7 @@ const Store = assign({}, EventEmitter.prototype, {
 
   isCollectionTooLarge() {
     const count = this.getAssembliesCount();
-    return CONFIG.maxCollectionSize && count > CONFIG.maxCollectionSize;
+    return MAX_COLLECTION_SIZE && count > MAX_COLLECTION_SIZE;
   },
 
   getAssemblyNames() {
