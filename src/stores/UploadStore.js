@@ -3,7 +3,9 @@ import { EventEmitter } from 'events';
 import assign from 'object-assign';
 
 import MetadataUtils from '../utils/Metadata';
+import CONFIG from '../config';
 
+const MIN_COLLECTION_SIZE = 3;
 const CHANGE_EVENT = 'change';
 
 let assemblies = {};
@@ -18,17 +20,17 @@ function validateFiles() {
 
   const assemblyNames = Object.keys(assemblies);
 
-  if (assemblyNames.length < 3) {
-    const numberRequired = 3 - assemblyNames.length;
+  if (assemblyNames.length < MIN_COLLECTION_SIZE) {
+    const numberRequired = MIN_COLLECTION_SIZE - assemblyNames.length;
     errors.push({
       message: `Please upload at least ${numberRequired} more ${numberRequired === 1 ? 'assembly' : 'assemblies'} to begin.`,
     });
     return;
   }
 
-  if (assemblyNames.length > 100) {
+  if (Store.isCollectionTooLarge()) {
     errors.push({
-      message: 'Please upload no more than 100 assemblies at one time.',
+      message: `Please upload no more than ${CONFIG.maxCollectionSize} assemblies at one time.`,
     });
     return;
   }
@@ -106,6 +108,11 @@ const Store = assign({}, EventEmitter.prototype, {
 
   getAssembliesCount() {
     return Object.keys(assemblies).length;
+  },
+
+  isCollectionTooLarge() {
+    const count = this.getAssembliesCount();
+    return CONFIG.maxCollectionSize && count > CONFIG.maxCollectionSize;
   },
 
   getAssemblyNames() {

@@ -221,7 +221,7 @@ export default connect()(React.createClass({
             <div className="mdl-grid mdl-grid--no-spacing" style={{ position: 'absolute', top: 0, bottom: 0, left: 0, right: 0 }}>
               <aside className="navigation-container wgsa-card mdl-cell mdl-cell--stretch mdl-shadow--2dp">
                 <a className="uploadWorkspaceNavigationTitle" href="#">
-                  <span className="mdl-badge" style={{ margin: 0 }} data-badge={UploadStore.getAssembliesCount()}>Assemblies</span>
+                  <span className={`mdl-badge ${UploadStore.isCollectionTooLarge() ? 'mdl-badge--error' : null}`.trim()} style={{ margin: 0 }} data-badge={UploadStore.getAssembliesCount()}>Assemblies</span>
                 </a>
                 <AssemblyList assemblies={assemblies} selectedAssemblyName={this.state.assemblyName} />
                 <button type="button" title="Add files"

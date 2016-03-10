@@ -81,3 +81,10 @@
 .mdl-spinner .mdl-spinner__layer-4 {
   border-color: #87c7a6;
 }
+
+
+/* Badge */
+
+.mdl-badge--error:after {
+  background: #d11b1b !important;
+}
