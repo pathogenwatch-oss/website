@@ -25,7 +25,7 @@ export default React.createClass({
   getInitialState() {
     return {
       uploadFailed: false,
-    }
+    };
   },
 
   componentDidMount() {

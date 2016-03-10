@@ -26,12 +26,12 @@ function validateFiles() {
     return;
   }
 
-  // if (assemblyNames.length > 100) {
-  //   errors.push({
-  //     message: 'Please upload no more than 100 assemblies at one time.',
-  //   });
-  //   return;
-  // }
+  if (assemblyNames.length > 100) {
+    errors.push({
+      message: 'Please upload no more than 100 assemblies at one time.',
+    });
+    return;
+  }
 
   // create a new array to propagate error changes - temporary hack...
   assemblies = assemblyNames.reduce((memo, assemblyName) => {

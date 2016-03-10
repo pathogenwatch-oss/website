@@ -33,7 +33,7 @@ const connectExplorer = connect(
         }
       },
       checkStatus: () => dispatch(checkStatus(Species.id, id, cas)),
-      updateProgress: (results) => dispatch(updateProgress(results)),
+      updateProgress: results => dispatch(updateProgress(results)),
       fetch: () => dispatch(fetchEntities(Species.id, id)),
       reset: () => dispatch(resetStore()),
     };
