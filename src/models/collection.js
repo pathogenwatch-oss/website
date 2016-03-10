@@ -116,6 +116,7 @@ function add(speciesId, { assemblyNames }, callback) {
         queue.destroy();
         callback(null, {
           collectionId,
+          speciesId,
           assemblyNameToAssemblyIdMap
         });
       });
@@ -295,10 +296,14 @@ function getSubtree({ speciesId, collectionId, subtreeId }, callback) {
   });
 }
 
-function getStatus({ collectionId }, callback) {
+function getStatus({ speciesId, collectionId }, callback) {
   mainStorage.retrieve(`${COLLECTION_METADATA}_${collectionId}`, function (error, doc, cas) {
     if (error) {
       return callback(error);
+    }
+
+    if (doc.speciesId && speciesId !== doc.speciesId) {
+      return callback(new Error('Species does not match'));
     }
 
     if (doc.status === 'READY') {
