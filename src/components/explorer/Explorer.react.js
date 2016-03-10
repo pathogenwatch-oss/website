@@ -83,7 +83,7 @@ export default React.createClass({
       return (
         <LoadError
           status={status}
-          errors={progress ? progress.errors : []}
+          progress={progress || {}}
         />
       );
     }

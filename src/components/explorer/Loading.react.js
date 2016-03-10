@@ -36,8 +36,8 @@ const Background = connect()(React.createClass({
 
   render() {
     return (
-      <div style={backgroundStyle} className="wgsa-loading-container mdl-grid">
-        <div className="mdl-cell mdl-cell--10-col">
+      <div style={backgroundStyle} className="wgsa-loading-container">
+        <div className="wgsa-loading-content">
           <img src="/assets/img/WGSA.FINAL.svg" className="wgsa-loading-logo"/>
           { this.props.children }
         </div>
@@ -73,19 +73,22 @@ function getFailedAssemblies(errors) {
   }, []);
 }
 
-function getStatusMessage(status, errors) {
+function getStatusMessage(status, { collectionSize, errors = [] }) {
   if (status === statuses.NOT_FOUND) {
     return [
-      <h1>We're sorry, this collection is currently unavailable</h1>,
-      <p className="mdl-typography--title">It may be available again later.</p>,
+      <h1>We're sorry, this collection could not be found</h1>,
+      <p className="mdl-typography--title">Please ensure that the URL is correct, and if so, please try again later.</p>,
     ];
   }
   if (status === statuses.FATAL) {
     const failedAssemblies = getFailedAssemblies(errors);
+    const totalFail = collectionSize === failedAssemblies.length;
     return [
       <h1>We're sorry, your collection could not be processed</h1>,
-      <p className="mdl-typography--title">The following assemblies were rejected:</p>,
-      <ul className="wgsa-failed-assemblies">{failedAssemblies.map(assemblyName => <li key={assemblyName}>{assemblyName}</li>)}</ul>,
+      totalFail ?
+        <p className="mdl-typography--title">All {collectionSize} assemblies were rejected.</p> :
+        <p className="mdl-typography--title">{failedAssemblies.length} of {collectionSize} assemblies were rejected:</p>,
+      !totalFail ? <ul className="wgsa-failed-assemblies">{failedAssemblies.map(assemblyName => <li key={assemblyName}>{assemblyName}</li>)}</ul> : null,
       <p className="mdl-typography--title">Please ensure that assemblies are the correct species and meet our quality criteria.</p>,
       <Link to={`/${Species.nickname}/upload`} className="mdl-button mdl-button--raised">Try Again</Link>,
     ];
@@ -108,10 +111,10 @@ export const LoadError = React.createClass({
   },
 
   render() {
-    const { status, errors } = this.props;
+    const { status, progress } = this.props;
     return (
       <Background>
-        { getStatusMessage(status, errors) }
+        { getStatusMessage(status, progress) }
         <p>Please contact <a href="mailto:cgps@sanger.ac.uk">cgps@sanger.ac.uk</a> if problems persist.</p>
       </Background>
     );
