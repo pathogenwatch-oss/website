@@ -176,6 +176,7 @@
   border: 1px solid rgba(0, 0, 0, 0.12);
   font-family: "Roboto","Helvetica","Arial",sans-serif;
   font-weight: 400;
+  z-index: 0;
 }
 .wgsa-overview-upload-ready-card i {
   font-size: 50px;
@@ -187,13 +188,11 @@
   justify-content: center;
   font-size: 26px;
   font-weight: 300;
-  /*color: #666;*/
 }
 
 .wgsa-overview-statistics-item-value {
   font-size: 26px;
   font-weight: 300;
-  /*color: #666;*/
 }
 
 .wgsa-overview-upload-ready-card span {
@@ -256,8 +255,7 @@
   align-items: center;
 }
 
-.metadata-fields__main,
-.metadata-fields__other-fieldset {
+.metadata-fields__main {
   min-width: calc(288px * 2 + 16px);
 }
 
@@ -388,6 +386,8 @@
   flex-direction: column;
   flex-wrap: nowrap;
   width: 240px !important;
+  transform: none;
+  overflow: visible !important;
 }
 
 .navigation-container + .mdl-cell {
@@ -396,12 +396,27 @@
 }
 
 .is-small-screen .navigation-container {
-  display: none;
+  transform: translateX(-240px);
+}
+
+.is-small-screen .navigation-container.is-visible {
+  transform: translateX(0px);
 }
 
 .is-small-screen .navigation-container + .mdl-cell {
   width: 100%;
   margin: 0 !important;
+}
+
+.wgsa-navigation-container__btn {
+  display: none;
+  position: absolute;
+  bottom: calc(50% + 8px);
+  right: -48px;
+}
+
+.is-small-screen .wgsa-navigation-container__btn {
+  display: block;
 }
 
 .uploadWorkspaceNavigationTitle {
@@ -424,9 +439,17 @@
   background: #a386bd;
 }
 
-.assemblyNavTitle {
-  text-align: center;
-  border-bottom: 1px solid #e0e0e0;
+.wgsa-upload-subtitle {
+  margin-right: 80px;
+  text-transform: uppercase;
+  color: #666;
+  font-family: "Roboto","Helvetica","Arial",sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.is-small-screen .wgsa-upload-subtitle {
+  margin-right: 96px;
 }
 
 .wgsa-upload-review-button {

@@ -199,7 +199,7 @@ export default connect()(React.createClass({
   render() {
     const assemblies = UploadStore.getAssemblies();
     const assembly = UploadStore.getAssembly(this.state.assemblyName);
-    const { isProcessing, isWaiting } = this.state;
+    const { isProcessing, isWaiting, assemblyListOpen } = this.state;
     const subtitle = assembly ? assembly.name : (isProcessing ? 'Processing...' : 'Overview');
 
     return (
@@ -218,8 +218,14 @@ export default connect()(React.createClass({
           }
 
           return (
-            <div className="mdl-grid mdl-grid--no-spacing" style={{ position: 'absolute', top: 0, bottom: 0, left: 0, right: 0 }}>
-              <aside className="navigation-container wgsa-card mdl-cell mdl-cell--stretch mdl-shadow--2dp">
+            <div
+              className="mdl-grid mdl-grid--no-spacing"
+              style={{ position: 'absolute', top: 0, bottom: 0, left: 0, right: 0 }}
+              onClick={() => this.setState({ assemblyListOpen: false })}
+            >
+              <aside className={
+                `navigation-container wgsa-card mdl-cell mdl-cell--stretch mdl-shadow--3dp mdl-layout__drawer ${this.state.assemblyListOpen ? 'is-visible' : ''}`.trim()
+              }>
                 <a className="uploadWorkspaceNavigationTitle" href="#">
                   <span className={`mdl-badge ${UploadStore.isCollectionTooLarge() ? 'mdl-badge--error' : null}`.trim()} style={{ margin: 0 }} data-badge={UploadStore.getAssembliesCount()}>Assemblies</span>
                 </a>
@@ -229,6 +235,15 @@ export default connect()(React.createClass({
                   onClick={this.handleClick}
                 >
                   <i className="material-icons">add</i>
+                </button>
+                <button
+                  className="wgsa-upload-review-button wgsa-navigation-container__btn mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect mdl-shadow--4dp"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    this.setState({ assemblyListOpen: !assemblyListOpen });
+                  }}
+                >
+                  <i className="material-icons">{ assemblyListOpen ? 'keyboard_arrow_left' : 'list' }</i>
                 </button>
               </aside>
               <div className="mdl-cell mdl-cell--stretch increase-cell-gutter" style={{ position: 'relative', overflowY: 'auto' }}>
