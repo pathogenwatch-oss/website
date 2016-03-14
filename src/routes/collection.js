@@ -5,6 +5,7 @@ var collectionModel = require('models/collection');
 var assemblyModel = require('models/assembly');
 
 var LOGGER = require('utils/logging').createLogger('Collection requests');
+var { maxCollectionSize = 0 } = require('configuration');
 
 router.get('/species/:id/reference', function (req, res, next) {
   LOGGER.info('Getting reference collection: ' + req.params.id);
@@ -41,7 +42,8 @@ router.post('/species/:id/collection', function (req, res, next) {
 
   LOGGER.info('Received request for new collection id');
 
-  if (!assemblyNames || !assemblyNames.length || assemblyNames.length > 100) {
+  if (!assemblyNames || !assemblyNames.length ||
+    (maxCollectionSize && assemblyNames.length > maxCollectionSize)) {
     return res.sendStatus(400);
   }
 

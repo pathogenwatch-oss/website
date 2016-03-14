@@ -32,5 +32,6 @@
 		"encrypted": false,
 		"proxy": "http://webcache.sanger.ac.uk:3128/"
 	},
-  "downloadFileLocation" : "/files/"
+  "downloadFileLocation" : "/path/to/files/",
+  "maxCollectionSize": 0
 }
