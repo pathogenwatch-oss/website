@@ -10,16 +10,12 @@ function flattenStructureForFrontend(document) {
         var antibioticClass = document[antibioticClassname];
         return (
           Object.keys(antibioticClass).map(function (antibioticKey) {
-            return antibioticClass[antibioticKey];
+            return antibioticClass[antibioticKey].antibioticName;
           })
         );
       }).
-      reduce(function (flattenedObject, antibiotics) {
-        antibiotics.forEach(function (antibiotic) {
-          flattenedObject[antibiotic.antibioticName] = antibiotic.antibioticClass;
-        });
-        return flattenedObject;
-      }, {})
+      reduce((flatArray, antibiotics) => flatArray.concat(antibiotics))
+      .sort()
   );
 }
 

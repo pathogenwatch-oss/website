@@ -1,5 +1,4 @@
 var sequenceTypeModel = require('models/sequenceType');
-var socketService = require('services/socket');
 var messageQueueService = require('services/messageQueue');
 var mainStorage = require('services/storage')('main');
 
@@ -9,7 +8,7 @@ const {
   PAARSNP_RESULT,
   MLST_RESULT,
   FP_COMP,
-  CORE_SLIM,
+  CORE_RESULT,
 } = require('utils/documentKeys');
 
 var ASSEMBLY_ANALYSES = [ 'FP', 'MLST', 'PAARSNP', 'CORE' ];
@@ -18,8 +17,22 @@ var systemMetadataColumns = [
   'assemblyId', 'speciesId', 'assemblyName',
   'date', 'year', 'month', 'day',
   'position', 'latitude', 'longitude',
-  'filename'
+  'collectionId', 'pmid',
+  'filename', 'displayname',
 ];
+
+function sendUploadNotification({ speciesId, collectionId, assemblyId  }, status) {
+  messageQueueService.getNotificationExchange().publish(
+    `${speciesId}.UPLOAD.ASSEMBLY.${assemblyId}`, {
+      taskType: 'UPLOAD',
+      taskStatus: status,
+      collectionId,
+      assemblyId: {
+        assemblyId: assemblyId
+      }
+    }
+  );
+}
 
 function createKey(id, prefix) {
   return prefix + '_' + id;
@@ -38,6 +51,7 @@ function createMetadataRecord(ids, metadata, metrics) {
   return {
     assemblyId: ids.assemblyId,
     speciesId: ids.speciesId,
+    collectionId: ids.collectionId,
     assemblyName: metadata.assemblyName,
     date: metadata.date || {
       year: metadata.year,
@@ -48,45 +62,40 @@ function createMetadataRecord(ids, metadata, metrics) {
       latitude: metadata.latitude,
       longitude: metadata.longitude
     },
+    pmid: metadata.pmid,
     userDefined: filterUserDefinedColumns(metadata),
     metrics
   };
 }
 
 function beginUpload(ids, data) {
-  messageQueueService.newAssemblyNotificationQueue(ids, {
-    tasks: ASSEMBLY_ANALYSES,
-    loggingId: 'Assembly ' + ids.assemblyId,
-    notifyFn: socketService.notifyAssemblyUpload.bind(socketService, ids)
-  }, function () {
-    var assemblyMetadata = createMetadataRecord(ids, data.metadata, data.metrics);
-    var assembly = {
-      speciesId: ids.speciesId,
-      assemblyId: ids.assemblyId,
-      collectionId: ids.collectionId,
-      sequences: data.sequences
-    };
+  var assemblyMetadata = createMetadataRecord(ids, data.metadata, data.metrics);
+  var assembly = {
+    speciesId: ids.speciesId,
+    assemblyId: ids.assemblyId,
+    collectionId: ids.collectionId,
+    sequences: data.sequences
+  };
 
-    mainStorage.store(
-      createKey(ids.assemblyId, ASSEMBLY_METADATA),
-      assemblyMetadata,
-      function () {
-        socketService.notifyAssemblyUpload(ids, 'METADATA_OK');
-      }
+  mainStorage.store(
+    createKey(ids.assemblyId, ASSEMBLY_METADATA), assemblyMetadata, () => {});
+
+  messageQueueService.newAssemblyUploadQueue(ids.assemblyId, uploadQueue => {
+    uploadQueue.subscribe((error, message) => {
+      LOGGER.debug(error, message);
+      LOGGER.info(`Received response from ${uploadQueue.name}, destroying.`);
+      uploadQueue.destroy();
+
+      sendUploadNotification(ids, error ? 'ERROR' : 'SUCCESS');
+    });
+
+    messageQueueService.getUploadExchange().publish(
+      'upload', assembly, { replyTo: uploadQueue.name }
     );
 
-    messageQueueService.newAssemblyUploadQueue(ids.assemblyId,
-      function (uploadQueue) {
-        uploadQueue.subscribe(function () {
-          LOGGER.info('Received response from ' + this.name + ', destroying.');
-          uploadQueue.destroy();
-          socketService.notifyAssemblyUpload(ids, 'UPLOAD_OK');
-        });
-
-        messageQueueService.getUploadExchange()
-          .publish('upload', assembly, { replyTo: uploadQueue.name });
-      }
-    );
+    // "dereference" sequences to remove from heap
+    data.sequences = null;
+    assembly.sequences = null;
   });
 }
 
@@ -103,33 +112,39 @@ function mergeQueryResults(data, queryKeyPrefixes, assemblyId) {
 
 function formatForFrontend(assembly) {
   var paarsnp = assembly[PAARSNP_RESULT];
+  var mlst = assembly[MLST_RESULT];
+  var core = assembly[CORE_RESULT];
+  var fp = assembly[FP_COMP];
   return {
-    populationSubtype: assembly[FP_COMP] ? assembly[FP_COMP].subTypeAssignment : null,
+    populationSubtype: fp ? fp.subTypeAssignment : null,
     metadata: assembly[ASSEMBLY_METADATA],
     analysis: {
-      st: assembly[MLST_RESULT].sequenceType,
-      mlst: assembly[MLST_RESULT].code,
-      kernelSize: assembly[CORE_SLIM].kernelSize,
-      // snpar: paarsnp.snparResult.completeSets.map(function (set) {
-      //   return { repSequenceId: set.repSequenceId, setId: set.setId };
-      // }),
-      // paar: paarsnp.paarResult.completeResistanceSets.map(function (set) {
-      //   return set.resistanceSetName;
-      // }),
+      st: mlst ? mlst.sequenceType : null,
+      mlst: mlst ? mlst.code : null,
+      core: core ? {
+        size: core.kernelSize,
+        percentMatched: core.percentKernelMatched,
+        percentAssemblyMatched: core.percentAssemblyMatched,
+      } : null,
       resistanceProfile: paarsnp ?
         Object.keys(paarsnp.resistanceProfile).
           reduce(function (profile, className) {
             var antibioticClass = paarsnp.resistanceProfile[className];
             Object.keys(antibioticClass).forEach(function (antibiotic) {
-              profile[antibiotic] = {
-                antibioticClass: className,
-                resistanceResult: antibioticClass[antibiotic]
-              };
+              profile[antibiotic] = antibioticClass[antibiotic];
             });
             return profile;
           }, {}) : {}
     }
   };
+}
+
+function hasFatalErrors(erroredKeys) {
+  return erroredKeys.some(key =>
+    key.startsWith(ASSEMBLY_METADATA) ||
+    key.startsWith(CORE_RESULT) ||
+    key.startsWith(FP_COMP)
+  );
 }
 
 function get(params, queryKeyPrefixes, callback) {
@@ -139,65 +154,50 @@ function get(params, queryKeyPrefixes, callback) {
   LOGGER.info('Assembly ' + assemblyId + ' query keys:');
   LOGGER.info(queryKeys);
 
-  mainStorage.retrieveMany(queryKeys, function (error, assemblyData) {
-    var assembly;
-
-    if (error) {
-      return callback(error);
+  mainStorage.retrieveMany(queryKeys, function (erroredKeys, assemblyData) {
+    if (erroredKeys && hasFatalErrors(erroredKeys)) {
+      LOGGER.error(`Could retrieve minimum documents for assembly ${assemblyId}`);
+      return callback(erroredKeys);
     }
+
     LOGGER.info('Got assembly ' + assemblyId + ' data');
-    assembly = mergeQueryResults(assemblyData, queryKeyPrefixes, assemblyId);
-    sequenceTypeModel.addSequenceTypeData(assembly, params.speciesId, function (stError, result) {
-      if (stError) {
-        return callback(stError);
+
+    const assembly = mergeQueryResults(assemblyData, queryKeyPrefixes, assemblyId);
+
+    sequenceTypeModel.addSequenceTypeData(
+      assembly, params.speciesId, function (stError, result) {
+        if (stError) {
+          return callback(stError);
+        }
+        callback(null, formatForFrontend(result));
       }
-      callback(null, result);
-    });
+    );
   });
 }
 
+const COMPLETE_ASSEMBLY_KEYS = [
+  ASSEMBLY_METADATA,
+  CORE_RESULT,
+  FP_COMP,
+  MLST_RESULT,
+  PAARSNP_RESULT,
+];
 function getComplete(params, callback) {
   LOGGER.info('Getting assembly ' + params.assemblyId);
-
-  const keys = [
-    ASSEMBLY_METADATA,
-    CORE_SLIM,
-    FP_COMP,
-    MLST_RESULT,
-  ];
-
-  // HACK: skip PAARSNP for listeria
-  if (params.speciesId !== '1639') {
-    keys.push(PAARSNP_RESULT);
-  }
-
-  get(params, keys, function (error, assembly) {
-    if (error) {
-      return callback(error);
-    }
-    callback(null, formatForFrontend(assembly));
-  });
+  get(params, COMPLETE_ASSEMBLY_KEYS, callback);
 }
 
+const REFERENCE_ASSEMBLY_KEYS = [
+  ASSEMBLY_METADATA,
+  MLST_RESULT,
+  PAARSNP_RESULT,
+];
 function getReference(params, callback) {
   LOGGER.info('Getting reference assembly ' + params.assemblyId);
-  get(params, [
-    ASSEMBLY_METADATA,
-    MLST_RESULT,
-  ], function (error, assembly) {
-    if (error) {
-      return callback(error, null);
-    }
-    callback(null, {
-      metadata: assembly[ASSEMBLY_METADATA],
-      analysis: {
-        st: assembly[MLST_RESULT].sequenceType
-      }
-    });
-  });
+  get(params, REFERENCE_ASSEMBLY_KEYS, callback);
 }
 
-function mapTaxaToAssemblies(assemblies) {
+function groupAssembliesBySubtype(assemblies) {
   return Object.keys(assemblies).reduce(function (map, assemblyId) {
     var taxon = assemblies[assemblyId].populationSubtype;
 
@@ -208,14 +208,19 @@ function mapTaxaToAssemblies(assemblies) {
     if (taxon in map) {
       map[taxon].assemblyIds.push(assemblyId);
     } else {
-      map[taxon] = { assemblyIds: [ assemblyId ] };
+      map[taxon] = {
+        name: taxon,
+        assemblyIds: [ assemblyId ],
+      };
     }
     return map;
   }, {});
 }
 
+module.exports.ASSEMBLY_ANALYSES = ASSEMBLY_ANALYSES;
 module.exports.beginUpload = beginUpload;
 module.exports.getComplete = getComplete;
 module.exports.getReference = getReference;
-module.exports.mapTaxaToAssemblies = mapTaxaToAssemblies;
+module.exports.groupAssembliesBySubtype = groupAssembliesBySubtype;
 module.exports.createMetadataRecord = createMetadataRecord;
+module.exports.sendUploadNotification = sendUploadNotification;

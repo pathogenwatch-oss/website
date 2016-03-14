@@ -1,25 +1,24 @@
-var messageQueueService = require('services/messageQueue');
-var fileStorage = require('services/storage')('cache');
+var fs = require('fs');
+var path = require('path');
+var sanitize = require('sanitize-filename');
 
+var messageQueueService = require('services/messageQueue');
+
+var config = require('configuration.js');
 var LOGGER = require('utils/logging').createLogger('File');
 
-function constructFileFromParts(keys, parts) {
-  return keys.reduce(function (file, partKey) {
-    var step = file + parts[partKey];
-    LOGGER.info('File Length: ' + step.length);
-    return step;
-  }, '');
+function getFile({ fileName }) {
+  return fs.createReadStream(
+    path.join(config.downloadFileLocation, sanitize(fileName))
+  );
 }
 
-function getFile(fileName, callback) {
-  fileStorage.retrieve(fileName, function (error, partKeys) {
-    if (error) return callback(error);
-    LOGGER.info(partKeys);
-    fileStorage.retrieveMany(partKeys, function (error, parts) {
-      if (error) return callback(error);
-      callback(null, constructFileFromParts(partKeys, parts));
-    });
-  });
+function getSpeciesFile({ speciesId, fileName }) {
+  return fs.createReadStream(
+    path.join(
+      config.downloadFileLocation, sanitize(speciesId), sanitize(fileName)
+    )
+  );
 }
 
 function requestDownload(request, callback) {
@@ -32,8 +31,8 @@ function requestDownload(request, callback) {
       LOGGER.info('Received response', message);
       queue.destroy();
 
-      if (message.taskStatus === 'FAILURE') {
-        return callback(new Error('File generation failed'));
+      if (message.taskStatus !== 'SUCCESS') {
+        return callback(`${message.format} generation failed: ${message.taskStatus}`);
       }
 
       callback(null, message.fileNamesMap);
@@ -45,4 +44,5 @@ function requestDownload(request, callback) {
 }
 
 module.exports.getFile = getFile;
+module.exports.getSpeciesFile = getSpeciesFile;
 module.exports.requestDownload = requestDownload;

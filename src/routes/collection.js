@@ -16,6 +16,16 @@ router.get('/species/:id/reference', function (req, res, next) {
   });
 });
 
+router.get('/species/:speciesId/collection/:collectionId/status', function (req, res, next) {
+  LOGGER.info(`Received request for collection ${req.params.collectionId} upload progress`);
+  collectionModel.getStatus(req.params, function (error, result) {
+    if (error) {
+      return next(error);
+    }
+    res.json(result);
+  });
+});
+
 router.get('/species/:speciesId/collection/:collectionId', function (req, res, next) {
   LOGGER.info('Getting collection: ' + req.params.collectionId);
   collectionModel.get(req.params, function (error, result) {
@@ -45,36 +55,38 @@ router.post('/species/:id/collection', function (req, res, next) {
 
 router.post('/species/:speciesId/collection/:collectionId/assembly/:assemblyId',
   function (req, res) {
-    var ids = {
-      collectionId: req.params.collectionId,
-      assemblyId: req.params.assemblyId,
-      speciesId: req.params.speciesId,
-      socketRoomId: req.body.socketRoomId,
-    };
+    const { params } = req;
 
     LOGGER.info(
-      `Adding assembly ${ids.assemblyId} to collection ${ids.collectionId}`
+      `Adding assembly ${params.assemblyId} to collection ${params.collectionId}`
     );
 
     // TODO: Send error responses
-    if (!ids.collectionId) {
+    if (!params.collectionId) {
       LOGGER.error('Missing collection id');
     }
-    if (!ids.socketRoomId) {
-      LOGGER.error('Missing socket room id');
-    }
-    if (!ids.assemblyId) {
+    if (!params.assemblyId) {
       LOGGER.error('Missing assembly id');
     }
-    if (!ids.speciesId) {
+    if (!params.speciesId) {
       LOGGER.error('Missing species id');
     }
 
-    res.json({
-      assemblyId: ids.assemblyId
-    });
+    res.json({ assemblyId: params.assemblyId });
+    assemblyModel.beginUpload(params, req.body);
+  }
+);
 
-    assemblyModel.beginUpload(ids, req.body);
+router.get('/species/:speciesId/collection/:collectionId/subtree/:subtreeId',
+  function (req, res, next) {
+    LOGGER.info(`Received request for subtree ${req.params.subtreeId}`);
+
+    collectionModel.getSubtree(req.params, function (error, result) {
+      if (error) {
+        return next(error);
+      }
+      res.json(result);
+    });
   }
 );
 

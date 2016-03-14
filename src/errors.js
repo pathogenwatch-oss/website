@@ -1,3 +1,5 @@
+var assemblyModel = require('models/assembly');
+
 var LOGGER = require('utils/logging').createLogger('Error handler');
 
 var errorCodes = {
@@ -16,6 +18,11 @@ module.exports = function handleErrors(app) {
 
     if (isNotFoundInStorage(error)) {
       return res.sendStatus(404);
+    }
+
+    if (error.message === 'request aborted') {
+      assemblyModel.sendUploadNotification(req.params, 'ABORTED');
+      return res.status(400).send(error.message);
     }
 
     res.sendStatus(500);

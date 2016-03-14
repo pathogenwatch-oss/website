@@ -99,6 +99,10 @@ function getSequenceType(assembly, speciesId, callback) {
 }
 
 function addSequenceTypeData(assembly, speciesId, callback) {
+  if (!assembly[MLST_RESULT]) {
+    return callback(null, assembly);
+  }
+
   async.waterfall([
     function (next) {
       getMlstAllelesData(assembly, next);

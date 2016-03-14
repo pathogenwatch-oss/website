@@ -1,13 +1,13 @@
 {
   "name": "macroreact-middle",
-  "version": "2.1.2",
-  "description": "Middle layer for Macroreact",
+  "version": "3.0.0",
+  "description": "Web API for WGSA",
   "main": "app.js",
   "engines": {
     "node": ">=5.x"
   },
   "dependencies": {
-    "amqp": "^0.2.0",
+    "amqp": "^0.2.4",
     "async": "^1.4.2",
     "babyparse": "^0.2.1",
     "body-parser": "^1.10.1",
@@ -18,23 +18,23 @@
     "longjohn": "^0.2.4",
     "morgan": "^1.5.1",
     "node-uuid": "^1.4.2",
+    "pusher": "^1.1.0",
+    "sanitize-filename": "^1.5.3",
     "serve-favicon": "^2.2.0",
-    "socket.io": "^1.2.1",
     "swig": "^1.4.2",
-    "wgsa_front-end": "imperialcollegelondon/wgsa_front-end#v2.1.1"
+    "wgsa_front-end": "imperialcollegelondon/wgsa_front-end#v3.0.0"
   },
   "devDependencies": {
     "cgps-style": "imperialcollegelondon/javascript#v1.0.1",
     "mocha": "^2.1.0",
     "rewire": "^2.1.4",
     "sinon": "^1.12.2",
-    "socket.io-client": "^1.3.5",
     "supertest": "^1.0.1"
   },
   "nodepath": "./src",
   "nodeopts": "--harmony_destructuring",
   "startcmd": "NODE_PATH=$npm_package_nodepath node $npm_package_nodeopts",
-  "testcmd": "NODE_PATH=$npm_package_nodepath NODE_ENV='test' mocha $npm_package_nodeopts -t 60000 --reporter spec",
+  "testcmd": "NODE_PATH=$npm_package_nodepath NODE_ENV='testing' mocha $npm_package_nodeopts -t 60000 --reporter spec",
   "scripts": {
     "start": "eval $npm_package_startcmd start.js | bunyan -o short",
     "test": "eval $npm_package_testcmd 'test/unit/**/*.test.js'",
@@ -42,7 +42,9 @@
     "e2e": "eval $npm_package_testcmd 'test/e2e/**/*.test.js'",
     "upload": "eval $npm_package_startcmd bin/upload-reference-data.js",
     "download": "eval $npm_package_startcmd bin/download.js",
-    "metadata": "eval $npm_package_startcmd bin/generate-reference-metadata.js"
+    "metadata": "eval $npm_package_startcmd bin/generate-reference-metadata.js",
+    "service": "eval $npm_package_startcmd microservices/bootstrap.js upload-progress | bunyan -o short",
+    "ids": "eval $npm_package_startcmd bin/collection-id-update.js"
   },
   "repository": {
     "type": "git",

@@ -2,7 +2,7 @@ var assert = require('assert');
 var sinon = require('sinon');
 var extend = require('extend');
 
-describe('Service: Storage', function () {
+describe.only('Service: Storage', function () {
 
   var CONNECTION_NAME = 'main';
   var COUCHBASE_RESULT = { value: 'result', cas: 'cas' };
@@ -113,17 +113,16 @@ describe('Service: Storage', function () {
       });
     });
 
-    it('should surface batch operation errors', function (done) {
+    it('should return the keys of the errored documents', function (done) {
       var storageService = require('services/storage');
 
       var storage = storageService(CONNECTION_NAME);
       storage.connection = mockErrorConnection;
 
-      storage.retrieveMany(COUCHBASE_MULTI_QUERY, function (error, result) {
+      storage.retrieveMany(COUCHBASE_MULTI_QUERY, function (erroredKeys) {
         assert(
-          sinon.match(error, extend({ errorCount: 2 }, COUCHBASE_MULTI_ERROR))
+          sinon.match(erroredKeys, Object.keys(COUCHBASE_MULTI_ERROR))
         );
-        assert.equal(result, null);
         done();
       });
     });

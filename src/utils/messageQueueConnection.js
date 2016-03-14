@@ -1,15 +1,16 @@
 var amqp = require('amqp');
 var extend = require('extend');
 var async = require('async');
+var os = require('os');
 
 var appConfig = require('configuration');
 
 var LOGGER = require('utils/logging').createLogger('Message Queue');
 var CONNECTION_OPTIONS = {
-  host: appConfig.server.rabbit.ip,
-  port: appConfig.server.rabbit.port,
-  login: appConfig.server.rabbit.login,
-  password: appConfig.server.rabbit.password
+  host: appConfig.rabbit.ip,
+  port: appConfig.rabbit.port,
+  login: appConfig.rabbit.login,
+  password: appConfig.rabbit.password
 };
 var IMPLEMENTATION_OPTIONS = {
   reconnect: false,
@@ -28,9 +29,13 @@ var EXCHANGE_CONFIG = {
     name: 'grid-ex',
     type: 'direct'
   },
-  TASKS: { // TODO: should not be used by the middle end
-    name: 'wgst-tasks-ex',
-    type: 'topic'
+  SERVICES: {
+    name: 'me-services-ex',
+    type: 'topic',
+    options: {
+      passive: false,
+      confirm: true
+    }
   }
 };
 var connection;
@@ -42,8 +47,7 @@ function setDefaultPublishOptions(exchange) {
     mandatory: true,
     contentType: 'application/json',
     deliveryMode: 1,
-    // Generate UUID?
-    correlationId: 'Art'
+    correlationId: os.hostname(),
   };
   exchange.publish = function (topic, message, options) {
     delegate(topic, message, extend({}, DEFAULT_OPTIONS, options),
@@ -51,22 +55,23 @@ function setDefaultPublishOptions(exchange) {
         if (error) {
           return LOGGER.error('Error in trying to publish: ' + error);
         }
-        LOGGER.info('Message was published: ' + topic + ' ' + message);
+        LOGGER.info(`Message was published: ${topic}`, message);
       }
     );
   };
 }
 
 function createExchange(exchangeKey, callback) {
-  var config = EXCHANGE_CONFIG[exchangeKey];
-  connection.exchange(config.name, {
+  const config = EXCHANGE_CONFIG[exchangeKey];
+  const options = Object.assign({
     type: config.type,
     passive: true,
     durable: false,
     confirm: false,
     autoDelete: false,
     noDeclare: false
-  }, function (exchange) {
+  }, config.options);
+  connection.exchange(config.name, options, exchange => {
     setDefaultPublishOptions(exchange);
     exchanges[exchangeKey] = exchange;
     LOGGER.info('✔ Exchange "' + exchange.name + '" is open');
@@ -75,7 +80,6 @@ function createExchange(exchangeKey, callback) {
 }
 
 function connect(callback) {
-  LOGGER.debug(CONNECTION_OPTIONS);
   connection =
     amqp.createConnection(CONNECTION_OPTIONS, IMPLEMENTATION_OPTIONS);
 
@@ -92,7 +96,13 @@ function connect(callback) {
       function (exchangeKey, finishIteration) {
         createExchange(exchangeKey, finishIteration);
       },
-      callback
+      function (error) {
+        if (error) {
+          callback(error);
+        }
+
+        callback(null, connection);
+      }
     );
   });
 }
