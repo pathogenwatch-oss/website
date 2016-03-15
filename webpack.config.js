@@ -20,6 +20,10 @@ const commonLoaders = [
   { test: /\.(png|jpg|jpeg|gif)$/, loader: 'file' },
 ];
 
+const commonPlugins = [
+  new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+];
+
 const babelPresets = [ 'react', 'es2015', 'stage-0' ];
 
 const devConfig = {
@@ -34,11 +38,10 @@ const devConfig = {
     publicPath: '/',
   },
   resolve,
-  plugins: [
-    new webpack.optimize.OccurenceOrderPlugin(),
+  plugins: commonPlugins.concat([
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin(),
-  ],
+  ]),
   module: {
     loaders: [
       { test: /\.js$/,
@@ -73,7 +76,7 @@ const prodConfig = {
     publicPath: '/',
   },
   resolve,
-  plugins: [
+  plugins: commonPlugins.concat([
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.optimize.UglifyJsPlugin({
       compressor: {
@@ -86,7 +89,7 @@ const prodConfig = {
         NODE_ENV: JSON.stringify('production'),
       },
     }),
-  ],
+  ]),
   module: {
     loaders: [
       { test: /\.js$/,

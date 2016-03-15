@@ -19,7 +19,7 @@ export default () => (
   <Router history={browserHistory}>
     <Route path="/" component={App}>
       <IndexRoute component={Home} />
-      { Species.list.filter(_ => _.active).reduce((routes, { nickname }) =>
+      { Species.list.reduce((routes, { nickname }) =>
         routes.concat([
           <Route key={nickname} path={nickname} component={SpeciesSetter}>
             <IndexRoute component={SpeciesHome} />

@@ -18,7 +18,6 @@ export default {
       <strong>{formattedName}</strong>, a gram-positive coccal bacterium.
     </span>
   ),
-  active: true,
   publicMetadataColumnNames: [
     'ena study',
     'ena run',

@@ -99,7 +99,7 @@ function getStatusMessage(status, { collectionSize, errors = [] }) {
       <p className="mdl-typography--title">
         Please upload your files again.
       </p>,
-      <Link to={`/${species.nickname}/upload`} className="mdl-button mdl-button--raised">Go Back</Link>,
+      <Link to={`/${Species.nickname}/upload`} className="mdl-button mdl-button--raised">Go Back</Link>,
     ];
   }
 }
