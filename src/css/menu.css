@@ -9,6 +9,10 @@
   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
 }
 
+.mdl-layout__drawer > .mdl-layout-title > img {
+  width:100%;
+}
+
 .mdl-layout__drawer .mdl-navigation .mdl-navigation__link {
   color: rgba(0, 0, 0, 0.870588);
   font-size: 16px;
