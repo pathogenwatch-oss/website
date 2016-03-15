@@ -19,7 +19,7 @@
 
 .mdl-layout__drawer > .cgps-logo {
   margin-top: auto;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
   height: 48px;
 }
 
@@ -40,4 +40,17 @@
 .mdl-navigation__link--active {
   color: #673c90 !important;
   font-weight: 700;
+}
+
+.mdl-layout__drawer > .contact-email {
+  font-size: 16px;
+  text-align: center;
+  padding-top: 0;
+  color: #673c90;
+}
+
+.mdl-layout__drawer > .contact-email:hover,
+.mdl-layout__drawer > .contact-email:focus,
+.mdl-layout__drawer > .contact-email:active {
+  color: #a386bd;
 }
