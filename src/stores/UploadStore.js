@@ -5,7 +5,6 @@ import assign from 'object-assign';
 import MetadataUtils from '../utils/Metadata';
 import CONFIG from '../config';
 
-const MIN_COLLECTION_SIZE = 3;
 const MAX_COLLECTION_SIZE = parseInt(CONFIG.maxCollectionSize || '0', 10);
 
 const CHANGE_EVENT = 'change';
@@ -21,14 +20,6 @@ function validateFiles() {
   errors.length = 0;
 
   const assemblyNames = Object.keys(assemblies);
-
-  if (assemblyNames.length < MIN_COLLECTION_SIZE) {
-    const numberRequired = MIN_COLLECTION_SIZE - assemblyNames.length;
-    errors.push({
-      message: `Please upload at least ${numberRequired} more ${numberRequired === 1 ? 'assembly' : 'assemblies'} to begin.`,
-    });
-    return;
-  }
 
   if (Store.isCollectionTooLarge()) {
     errors.push({
