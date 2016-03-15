@@ -36,10 +36,23 @@ export default React.createClass({
       stop: (event, ui) => {
         const { HEADER_BAR_HEIGHT } = LayoutUtils;
         const top = Math.max(HEADER_BAR_HEIGHT, ui.offset.top);
-        this.props.onDragEnd(top);
+        this.props.onDragEnd(top - HEADER_BAR_HEIGHT);
         if (top === HEADER_BAR_HEIGHT) this.forceUpdate();
       },
     });
+  },
+
+  componentDidUpdate() {
+    $('.westEastDivider').draggable( 'option', 'containment', [
+      // x1
+      0,
+      // y1
+      LayoutUtils.HEADER_BAR_HEIGHT,
+      // x2
+      LayoutUtils.getViewportWidth(),
+      // y2
+      LayoutUtils.getViewportHeight(),
+    ]);
   },
 
   render() {
@@ -47,12 +60,12 @@ export default React.createClass({
       <div style={style}>
         <LayoutDivider
           top={this.props.top}
-          direction={'horizontal'}
+          direction="horizontal"
           isStatic={true} />
         <LayoutDivider
           top={this.props.top}
-          direction={'horizontal'}
-          className={'northSouthDivider'} />
+          direction="horizontal"
+          className="northSouthDivider" />
         { Species.missingAnalyses.indexOf('PAARSNP') === -1 ?
           <TableSwitcher
             top={this.props.top}

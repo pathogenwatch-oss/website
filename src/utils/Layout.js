@@ -43,7 +43,7 @@ function getViewportWidth() {
 }
 
 function getViewportHeight() {
-  return $(window).height() - HEADER_BAR_HEIGHT;
+  return $(window).height();
 }
 
 function getNumberOfDividers() {
