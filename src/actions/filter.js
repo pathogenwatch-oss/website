@@ -17,6 +17,14 @@ export function appendToFilter(ids) {
   };
 }
 
+export const REMOVE_FROM_FILTER = 'REMOVE_FROM_FILTER';
+
+export function removeFromFilter(ids) {
+  return {
+    type: REMOVE_FROM_FILTER,
+    ids: new Set(ids),
+  };
+}
 
 export const SET_UNFILTERED_IDS = 'SET_UNFILTERED_IDS';
 
