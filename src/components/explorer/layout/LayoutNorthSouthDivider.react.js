@@ -43,7 +43,7 @@ export default React.createClass({
   },
 
   componentDidUpdate() {
-    $('.westEastDivider').draggable( 'option', 'containment', [
+    $('.northSouthDivider').draggable( 'option', 'containment', [
       // x1
       0,
       // y1
