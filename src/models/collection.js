@@ -97,6 +97,7 @@ function add(speciesId, { assemblyNames }, callback) {
 
     const message = {
       collectionId,
+      speciesId,
       assemblyIdToNameMap: // reverse mapping allows name to be recovered for errors
         Object.keys(assemblyNameToAssemblyIdMap).reduce((map, name) => {
           map[assemblyNameToAssemblyIdMap[name]] = name;
@@ -116,7 +117,6 @@ function add(speciesId, { assemblyNames }, callback) {
         queue.destroy();
         callback(null, {
           collectionId,
-          speciesId,
           assemblyNameToAssemblyIdMap
         });
       });
