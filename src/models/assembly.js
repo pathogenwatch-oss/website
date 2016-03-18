@@ -189,6 +189,7 @@ function getComplete(params, callback) {
 
 const REFERENCE_ASSEMBLY_KEYS = [
   ASSEMBLY_METADATA,
+  CORE_RESULT,
   MLST_RESULT,
   PAARSNP_RESULT,
 ];
