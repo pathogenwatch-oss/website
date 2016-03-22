@@ -173,8 +173,9 @@
   padding-right: 32px;
 }
 
-.wgsa-feature-icons .wgsa-switch {
-  width: 172px;
+.wgsa-feature-icons .mdl-switch {
+  width: 72px !important;
+  margin: 0 4px !important;
 }
 
 .wgsa-feature-icons .wgsa-switch i {

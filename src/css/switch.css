@@ -1,6 +1,5 @@
 .wgsa-switch {
   display: flex;
-  width: 88px;
   user-select: none;
   justify-content: space-between;
 }
@@ -16,6 +15,7 @@
 
 .wgsa-switch .mdl-switch {
   margin: 0 2px;
+  width: 36px;
 }
 
 .wgsa-switch .mdl-switch__thumb,
