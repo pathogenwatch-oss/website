@@ -11,9 +11,12 @@ export default React.createClass({
   displayName: 'Toast',
 
   getInitialState() {
+    const { message, action } = ToastStore.getToast();
+
     return {
-      message: null,
-      active: false,
+      message,
+      action,
+      active: typeof message !== 'undefined',
     };
   },
 

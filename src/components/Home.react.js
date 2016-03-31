@@ -91,7 +91,7 @@ export default connect()(React.createClass({
                 id="tree-switcher"
                 left={{ title: 'Collection View', icon: 'person' }}
                 right={{ title: 'Population View', icon: 'language' }}
-                checked={true}
+                checked
               />
             </div>
           </div>
