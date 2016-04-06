@@ -11,11 +11,11 @@ const { COLLECTION_METADATA } = require('utils/documentKeys');
 const QUEUE_OPTIONS = { durable: true, autoDelete: false };
 
 const EXPECTED_ASSEMBLY_RESULTS = new Set(
-  require('models/assembly').ASSEMBLY_ANALYSES.concat([ 'UPLOAD', 'GSL' ])
+  require('models/assembly').ASSEMBLY_ANALYSES.concat([ 'UPLOAD' ])
 );
 
 const EXPECTED_COLLECTION_RESULTS = new Set(
-  [ 'PHYLO_MATRIX', 'SUBMATRIX', 'CORE_MUTANT_TREE' ]
+  [ 'PHYLO_MATRIX', 'SUBMATRIX', 'CORE_MUTANT_TREE', 'GSL' ]
 );
 
 const EXPECTED_RESULTS = new Set(
