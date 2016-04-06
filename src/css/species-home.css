@@ -30,7 +30,8 @@
 }
 
 .wgsa-species-home-intro {
-  float: right;
+  float: left;
+  color: #555;
 }
 
 .wgsa-species-home-intro p {
@@ -38,7 +39,6 @@
   text-transform: none;
   padding: 0px;
   overflow: hidden;
-  color: #555;
   margin: 0 0 16px;
   line-height: 24px;
   text-align: justify;
@@ -53,10 +53,10 @@
 }
 
 .wgsa-species-home-intro ul {
- list-style: none;
+  list-style: none;
 }
 
-@media(max-width: 1280px) {
+@media(: 1280px) {
   .wgsa-species-home-intro li > span {
     width: 88%;
   }
@@ -78,9 +78,21 @@
   left: -16px;
 }
 
+.wgsa-species-home-intro sup {
+  color: #673c90;
+}
+
+.wgsa-species-home-citations {
+  font-size: 0.9em;
+  padding-left: 16px;
+}
+
+.wgsa-species-home-citations li {
+  margin-bottom: 0;
+}
+
 .wgsa-species-home-collection-list {
-  order: -1;
-  float: left;
+  float: right;
 }
 
 .is-small-screen .wgsa-species-home-collection-list {
@@ -176,9 +188,10 @@
 
 
 .wgsa-species-home-other {
-  float: right;
+  float: left;
   display: flex;
   flex-direction: column;
+  direction: rtl;
 }
 
 .is-small-screen .wgsa-species-home-other {
@@ -188,6 +201,7 @@
 
 .wgsa-species-home-other .wgsa-card {
   margin-bottom: 16px;
+  direction: ltr;
 }
 
 .wgsa-species-home-other .wgsa-card-content {
@@ -195,7 +209,6 @@
 }
 
 .wgsa-species-downloads {
-  max-width: 320px;
   margin: inherit auto;
 }
 
@@ -223,10 +236,6 @@
   padding-left: 24px;
 }
 
-.wgsa-species-upload-link {
-  max-width: 320px;
-}
-
 .is-small-screen .wgsa-species-upload-link {
   display: block;
 }
@@ -250,13 +259,12 @@
 
   .wgsa-species-home-other {
     flex-direction: row-reverse;
-    justify-content: flex-end;
+    justify-content: space-between;;
     align-items: flex-start;
   }
 
   .wgsa-species-home-other .wgsa-card {
-    width: 100%;
-    margin-right: 16px;
+    width: calc(50% - 8px);
   }
 
   .wgsa-species-upload-link {

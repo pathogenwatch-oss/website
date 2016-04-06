@@ -1,6 +1,6 @@
 import React from 'react';
 import AppDispatcher from '../dispatcher/AppDispatcher';
-import { EventEmitter }  from 'events';
+import { EventEmitter } from 'events';
 import assign from 'object-assign';
 
 import UploadStore from './UploadStore';
@@ -9,9 +9,7 @@ import { defineUploadStoreErrorToast } from '../utils/Toast';
 
 const CHANGE_EVENT = 'change';
 
-let toast = {
-  message: (<span><strong>Please note:</strong> WGSA will be unavailable on <strong>Monday 4th and Tuesday 5th April 2016</strong> as we perform essential maintenance. We apologise for the inconvenience.</span>),
-};
+let toast = null;
 
 function showToast(data) {
   toast = data;

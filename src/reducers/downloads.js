@@ -20,14 +20,14 @@ const initialState = {
     description: 'Core Allele Distribution',
     filename: 'core_allele_distribution',
   },
-  // differences_matrix: {
-  //   description: 'Difference Matrix',
-  //   filename: 'difference_matrix',
-  // },
-  // score_matrix: {
-  //   description: 'Score Matrix',
-  //   filename: 'score_matrix',
-  // },
+  differences_matrix: {
+    description: 'Difference Matrix',
+    filename: 'difference_matrix',
+  },
+  score_matrix: {
+    description: 'Score Matrix',
+    filename: 'score_matrix',
+  },
   fasta: {
     description: 'Assembly',
     filename: 'fasta',

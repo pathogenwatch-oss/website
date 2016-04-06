@@ -68,7 +68,10 @@ export default connect()(React.createClass({
               <div className="wgsa-card mdl-shadow--2dp">
                 <div className="wgsa-card-heading">Collections</div>
                 <div className="wgsa-card-content wgsa-species-collection-list">
-                  <CollectionList />
+                  { Species.current.collections.length ?
+                    <CollectionList /> :
+                    <p className="mdl-card__supporting-text" style={{ padding: "32px", margin: 0, }}>Coming soon.</p>
+                  }
                 </div>
               </div>
             </div>
@@ -77,7 +80,7 @@ export default connect()(React.createClass({
               <div className="wgsa-card wgsa-species-upload-link mdl-shadow--2dp">
                 <div className="wgsa-card-heading">Upload</div>
                 <div className="wgsa-card-content">
-                  <p className="mdl-card__supporting-text">
+                  <p className="mdl-card__supporting-text" style={{ fontSize: '16px', fontWeight: 500, color: 'rgba(0, 0, 0, 0.87)' }}>
                     Create your own collection.
                   </p>
                   <Link
@@ -95,7 +98,7 @@ export default connect()(React.createClass({
                   <ul className="wgsa-submenu">
                     { speciesDownloads.map(
                       ({ text, filename, serverName }) => (
-                        <li className="wgsa-menu__item">
+                        <li className="wgsa-menu__item" key={filename}>
                           <a ref="link"
                             href={`${speciesPath()}/${serverName}?prettyFileName=${filename()}`}
                             target="_blank"
@@ -111,6 +114,7 @@ export default connect()(React.createClass({
                 </div>
               </div>
             </div>
+
           </div>
         </div>
 
