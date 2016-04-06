@@ -1,6 +1,6 @@
 {
-  "extends": "./node_modules/cgps-style/es5/.eslintrc",
+  "extends": "cgps",
   "env": {
-    "es6": false
+    "node": true
   }
 }
