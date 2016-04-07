@@ -138,10 +138,10 @@ Collection: ${collectionId}`);
     });
   }
 
-  console.log(process.argv[2]);
-  // const name = `collection-${collectionId}-notification-queue`;
-  // mqConnection.queue(name, QUEUE_OPTIONS, function (queue) {
-  //   queue.subscribe({ ack: true }, handleNotification);
-  //   LOGGER.info(`Opened queue ${name}`);
-  // });
+  const collectionId = process.argv[3];
+  const name = `collection-${collectionId}-notification-queue`;
+  mqConnection.queue(name, QUEUE_OPTIONS, function (queue) {
+     queue.subscribe({ ack: true }, handleNotification);
+     LOGGER.info(`Opened queue ${name}`);
+   });
 };
