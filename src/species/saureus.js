@@ -42,7 +42,7 @@ export default {
     </span>
   ),
   collections: [
-    { id: '3ilqyonbg2y6',
+    { id: 'pvhcy9uopt05',
       name: 'SA_001_004',
       author: (<span>Castillo-Ramirez <em>et al.</em> (2012)</span>),
       size: 145,
@@ -52,7 +52,7 @@ export default {
       pmid: '23270620',
     },
 
-    { id: '9ywvf45o6bf8',
+    { id: 'u0ka3roo1kh5',
       name: 'SA_003',
       author: (<span>Ellington <em>et al.</em> (2015)</span>),
       size: 23,
@@ -62,7 +62,7 @@ export default {
       pmid: '25769787',
     },
 
-    { id: '49511lury364',
+    { id: 'gf8ftkvvskd7',
       name: 'SA_004',
       author: (<span>Harris <em>et al.</em> (2010)</span>),
       size: 58,
@@ -72,7 +72,7 @@ export default {
       pmid: '20093474',
     },
 
-    { id: 'xfhpgz421my4',
+    { id: 't2nbcpwm6ont',
       name: 'SA_015',
       author: (<span>Harris <em>et al.</em> (2013)</span>),
       size: 65,
@@ -82,7 +82,7 @@ export default {
       pmid: '23158674',
     },
 
-    { id: 'hbflqwalb4ed',
+    { id: 'mq2u89rctp3u',
       name: 'SA_006',
       author: (<span>Holden <em>et al.</em> (2013)</span>),
       size: 192,
@@ -92,7 +92,7 @@ export default {
       pmid: '23299977',
     },
 
-    { id: 'vdlaxlgsewne',
+    { id: '25qlfgvm13ql',
       name: 'SA_007',
       author: (<span>Hsu <em>et al.</em> (2015)</span>),
       size: 259,
@@ -102,7 +102,7 @@ export default {
       pmid: '25903077',
     },
 
-    { id: '4hu48x8k5utj',
+    { id: 'pqmpmgp682sz',
       name: 'SA_009',
       author: (<span>Köser <em>et al.</em> (2012)</span>),
       size: 13,
@@ -112,7 +112,7 @@ export default {
       pmid: '22693998',
     },
 
-    { id: '3rah4h2d1r8x',
+    { id: 'mw65kstrghfh',
       name: 'SA_011',
       author: (<span>Dordel <em>et al.</em> (2014)</span>),
       size: 54,
@@ -122,7 +122,7 @@ export default {
       pmid: '24713324',
     },
 
-    { id: 'wwr9m7afcuds',
+    { id: '8shl40iywh2q',
       name: 'SA_017',
       author: (<span>Harrison <em>et al.</em> (2014)</span>),
       size: 68,
@@ -132,7 +132,7 @@ export default {
       pmid: '24825010',
     },
 
-    { id: 'w0qna0wxt1k9',
+    { id: '4lkoblcgeq7l',
       name: 'SA_018',
       author: (<span>Harrison <em>et al.</em> (2013)</span>),
       size: 7,
