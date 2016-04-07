@@ -52,6 +52,10 @@ function buildAntibioticColumnProps(antibiotics) {
   });
 }
 
+const initialActiveColumn = {
+  valueGetter: defaultColourGetter,
+};
+
 const actions = {
   [FETCH_ENTITIES]: function (state, { ready, result, error }) {
     if (ready && !error) {
@@ -91,13 +95,12 @@ const actions = {
   [SET_COLOUR_COLUMN]: function (state, { column }) {
     return {
       ...state,
-      activeColumn: column,
+      activeColumn:
+        column.columnKey === nameColumnProps.columnKey ?
+          initialActiveColumn :
+          column,
     };
   },
-};
-
-const initialActiveColumn = {
-  valueGetter: defaultColourGetter,
 };
 
 const initialState = {

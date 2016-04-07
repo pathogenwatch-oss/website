@@ -76,7 +76,7 @@ function getFailedAssemblies(errors) {
 function getStatusMessage(status, { collectionSize, errors = [] }) {
   if (status === statuses.NOT_FOUND) {
     return [
-      <h1>We're sorry, this collection could not be found</h1>,
+      <h1>We're sorry, this collection cannot be displayed</h1>,
       <p className="mdl-typography--title">Please ensure that the URL is correct, and if so, please try again later.</p>,
     ];
   }
