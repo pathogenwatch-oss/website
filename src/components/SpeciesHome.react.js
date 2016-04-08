@@ -80,7 +80,7 @@ export default connect()(React.createClass({
               <div className="wgsa-card wgsa-species-upload-link mdl-shadow--2dp">
                 <div className="wgsa-card-heading">Upload</div>
                 <div className="wgsa-card-content">
-                  <p className="mdl-card__supporting-text" style={{ fontSize: '16px', fontWeight: 500, color: 'rgba(0, 0, 0, 0.87)' }}>
+                  <p className="mdl-card__supporting-text">
                     Create your own collection.
                   </p>
                   <Link
