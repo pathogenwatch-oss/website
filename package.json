@@ -17,6 +17,7 @@
     "extend": "^2.0.0",
     "longjohn": "^0.2.4",
     "morgan": "^1.5.1",
+    "named-argv": "^0.3.0",
     "node-uuid": "^1.4.2",
     "pusher": "^1.1.0",
     "sanitize-filename": "^1.5.3",

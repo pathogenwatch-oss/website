@@ -1,18 +1,19 @@
 const fs = require('fs');
-const path = require('path');
+const argv = require('named-argv');
 
 const metadataModel = require('models/assemblyMetadata');
 const analyseFasta = require('wgsa_front-end/src/utils/Analysis');
 
 const { ASSEMBLY_METADATA } = require('utils/documentKeys');
 
-const speciesId = process.argv[2];
-const filePath = process.argv[3];
-const outputPath = process.argv[4];
+const {
+  speciesId,
+  csvFile,
+  fastaDir,
+  outputDir = process.cwd(),
+} = argv.opts;
 
-const inputPath = path.dirname(filePath);
-
-fs.readFile(filePath, 'utf8', (error, file) => {
+fs.readFile(csvFile, 'utf8', (error, file) => {
   if (error) throw error;
 
   const lines = file.split(/\r?\n/g);
@@ -37,8 +38,7 @@ fs.readFile(filePath, 'utf8', (error, file) => {
       };
       parsedLine.assemblyName = parsedLine.displayname || parsedLine.filename;
 
-      process.chdir(inputPath);
-
+      process.chdir(fastaDir);
       const metrics = analyseFasta(
         fs.readFileSync(`${parsedLine.filename}.fasta`, 'utf8')
       );
@@ -47,7 +47,7 @@ fs.readFile(filePath, 'utf8', (error, file) => {
       const filename = `${ASSEMBLY_METADATA}_${ids.assemblyId}.json`;
       console.log('Writing file', filename);
 
-      if (outputPath) process.chdir(outputPath);
+      if (outputDir) process.chdir(outputDir);
       fs.writeFileSync(filename, JSON.stringify(metadata));
     });
 
