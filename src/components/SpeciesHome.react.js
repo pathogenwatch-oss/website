@@ -87,7 +87,7 @@ export default connect()(React.createClass({
                     style={uploadButtonStyle}
                     className="wgsa-upload-review-button mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--6dp"
                     to={`/${Species.current.nickname}/upload`}
-                    >
+                  >
                     <i style={iconStyle} className="material-icons">cloud_upload</i>
                   </Link>
                 </div>
@@ -96,20 +96,26 @@ export default connect()(React.createClass({
                 <div className="wgsa-card-heading">Downloads</div>
                 <div className="wgsa-card-content">
                   <ul className="wgsa-submenu">
-                    { speciesDownloads.map(
-                      ({ text, filename, serverName }) => (
-                        <li className="wgsa-menu__item" key={filename}>
-                          <a ref="link"
-                            href={`${speciesPath()}/${serverName}?prettyFileName=${filename()}`}
-                            target="_blank"
-                            download={filename()}
-                            className="wgsa-download-button">
+                    { speciesDownloads.map(({ subtitle, items }) => (
+                      <li key={subtitle()}>
+                        <h3 className="wgsa-menu-heading">{subtitle()}</h3>
+                        <ul className="wgsa-submenu">
+                        {items.map(({ text, filename, serverName }) => (
+                          <li className="wgsa-menu__item" key={filename}>
+                            <a ref="link"
+                              href={`${speciesPath()}/${serverName()}?prettyFileName=${filename()}`}
+                              target="_blank"
+                              download={filename()}
+                              className="wgsa-download-button"
+                            >
                               <DownloadIcon hasLink />
                               {text}
-                          </a>
-                        </li>
-                      )
-                    )}
+                            </a>
+                          </li>
+                        ))}
+                        </ul>
+                      </li>
+                    ))}
                   </ul>
                 </div>
               </div>
