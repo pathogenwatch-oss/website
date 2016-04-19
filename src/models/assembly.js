@@ -1,3 +1,4 @@
+var metadataModel = require('models/assemblyMetadata');
 var sequenceTypeModel = require('models/sequenceType');
 var messageQueueService = require('services/messageQueue');
 var mainStorage = require('services/storage')('main');
@@ -13,15 +14,7 @@ const {
 
 var ASSEMBLY_ANALYSES = [ 'FP', 'MLST', 'PAARSNP', 'CORE' ];
 
-var systemMetadataColumns = [
-  'assemblyId', 'speciesId', 'assemblyName',
-  'date', 'year', 'month', 'day',
-  'position', 'latitude', 'longitude',
-  'collectionId', 'pmid',
-  'filename', 'displayname',
-];
-
-function sendUploadNotification({ speciesId, collectionId, assemblyId  }, status) {
+function sendUploadNotification({ speciesId, collectionId, assemblyId }, status) {
   messageQueueService.getNotificationExchange().publish(
     `${speciesId}.UPLOAD.ASSEMBLY.${assemblyId}`, {
       taskType: 'UPLOAD',
@@ -38,38 +31,9 @@ function createKey(id, prefix) {
   return prefix + '_' + id;
 }
 
-function filterUserDefinedColumns(metadata) {
-  return Object.keys(metadata).reduce(function (memo, key) {
-    if (systemMetadataColumns.indexOf(key) === -1) {
-      memo[key] = metadata[key];
-    }
-    return memo;
-  }, {});
-}
-
-function createMetadataRecord(ids, metadata, metrics) {
-  return {
-    assemblyId: ids.assemblyId,
-    speciesId: ids.speciesId,
-    collectionId: ids.collectionId,
-    assemblyName: metadata.assemblyName,
-    date: metadata.date || {
-      year: metadata.year,
-      month: metadata.month,
-      day: metadata.day,
-    },
-    position: metadata.position || {
-      latitude: metadata.latitude,
-      longitude: metadata.longitude
-    },
-    pmid: metadata.pmid,
-    userDefined: filterUserDefinedColumns(metadata),
-    metrics
-  };
-}
 
 function beginUpload(ids, data) {
-  var assemblyMetadata = createMetadataRecord(ids, data.metadata, data.metrics);
+  var assemblyMetadata = metadataModel.createRecord(ids, data.metadata, data.metrics);
   var assembly = {
     speciesId: ids.speciesId,
     assemblyId: ids.assemblyId,
@@ -223,5 +187,4 @@ module.exports.beginUpload = beginUpload;
 module.exports.getComplete = getComplete;
 module.exports.getReference = getReference;
 module.exports.groupAssembliesBySubtype = groupAssembliesBySubtype;
-module.exports.createMetadataRecord = createMetadataRecord;
 module.exports.sendUploadNotification = sendUploadNotification;
