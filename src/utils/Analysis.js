@@ -1,3 +1,8 @@
+
+/**
+ * N.B. This file is used by the middle-end, please be careful ES6 features
+ */
+
 const DNA_SEQUENCE_REGEX = /^[CTAGNUX]+$/i;
 
 function extractContigsFromFastaFileString(fastaFileString) {
@@ -50,7 +55,7 @@ function extractDnaStringFromContig(contig) {
   // -----------------------------
   //
   // Create sub array of the contig parts array - cut the first element (id and description).
-  let contigPartsWithNoIdAndDescription = contigParts.splice(1, contigParts.length);
+  var contigPartsWithNoIdAndDescription = contigParts.splice(1, contigParts.length);
   //
   // Very rarely the second line can be a comment
   // If the first element won't match regex then assume it is a comment
@@ -67,7 +72,6 @@ function extractDnaStringFromContig(contig) {
   // Remove whitespace
   //
   var dnaString = contigPartsWithNoIdAndDescription.join('').replace(/\s/g, '');
-
   return dnaString;
 }
 
@@ -229,10 +233,10 @@ function calculateSumsOfNucleotidesInDnaStrings(dnaStrings) {
 }
 
 function calculateGCContent(dnaSequenceStrings) {
-  let count = 0;
+  var count = 0;
   dnaSequenceStrings.forEach(sequenceString => {
-    for (let i = 0; i < sequenceString.length; i++) {
-      const char = sequenceString[i];
+    for (var i = 0; i < sequenceString.length; i++) {
+      var char = sequenceString[i];
       if (char === 'C' || char === 'G') {
         count++;
       }
@@ -274,13 +278,12 @@ function validateContigs(contigs) {
   return validatedContigs;
 }
 
-function analyseFasta(assemblyName, fastaFileString) {
+function analyseFasta(fastaFileString) {
   const contigs = extractContigsFromFastaFileString(fastaFileString);
   const dnaStrings = extractDnaStringsFromContigs(contigs);
   const assemblyN50Data = calculateN50(dnaStrings);
   const totalNumberOfNucleotidesInDnaStrings = calculateTotalNumberOfNucleotidesInDnaStrings(dnaStrings);
   const totalNumberOfNsInDnaStrings = calculateTotalNumberOfNsInDnaStrings(dnaStrings);
-
   return {
     totalNumberOfContigs: contigs.length,
     assemblyN50Data,
@@ -295,6 +298,5 @@ function analyseFasta(assemblyName, fastaFileString) {
   };
 }
 
-export default {
-  analyseFasta,
-};
+// CommonJS for middle-end
+module.exports = analyseFasta;
