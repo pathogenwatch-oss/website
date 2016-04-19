@@ -1,9 +1,8 @@
 #!/bin/bash
 
-git checkout master
-git pull
+git fetch
+git checkout $1
 cp ./public/wgsa.js ../wgsa_middle-end/node_modules/wgsa_front-end/public
 cd ../wgsa_middle-end/node_modules/wgsa_front-end
-. ~/.nvm/nvm.sh
-nvm use node
+. ~/.nvm/nvm.sh && nvm use node
 npm run config
