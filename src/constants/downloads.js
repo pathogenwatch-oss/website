@@ -61,17 +61,21 @@ export function getArchiveDownloadProps(state, downloads, dispatch) {
 }
 
 export const speciesDownloads = [
-  { subtitle: () => 'Reference Population',
+  { // subtitle: () => 'Reference Population',
     items: [
       { text: 'Core Representatives',
         filename: () => `wgsa_${Species.nickname}_core_representatives.csv`,
         serverName: () => 'core_rep_map.tsv',
       },
-      { text: 'Reference Sequences',
+    ],
+  },
+  { subtitle: () => 'Reference Data',
+    items: [
+      { text: 'Sequences',
         filename: () => `wgsa_${Species.nickname}_reference_fastas.zip`,
         serverName: () => 'fastas.zip',
       },
-      { text: 'Reference Annotations',
+      { text: 'Annotations',
         filename: () => `wgsa_${Species.nickname}_reference_annotations.zip`,
         serverName: () => `wgsa_gff_${Species.id}.zip`,
       },

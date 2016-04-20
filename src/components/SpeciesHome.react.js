@@ -95,11 +95,11 @@ export default connect()(React.createClass({
               <div className="wgsa-card mdl-shadow--2dp wgsa-species-downloads">
                 <div className="wgsa-card-heading">Downloads</div>
                 <div className="wgsa-card-content">
-                  <ul className="wgsa-submenu">
+                  <ul className="wgsa-menu">
                     { speciesDownloads.map(({ subtitle, items }) => (
-                      <li key={subtitle()}>
-                        <h3 className="wgsa-menu-heading">{subtitle()}</h3>
-                        <ul className="wgsa-submenu">
+                      <li key={subtitle}>
+                        { subtitle ? <h3 className="wgsa-menu-heading">{subtitle()}</h3> : null }
+                        <ul className="wgsa-menu">
                         {items.map(({ text, filename, serverName }) => (
                           <li className="wgsa-menu__item" key={filename}>
                             <a ref="link"
