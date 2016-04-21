@@ -6,6 +6,8 @@ import TreeHeader from '^/components/tree/TreeHeader.react';
 
 import { setUnfilteredIds } from '^/actions/filter';
 
+import { COLLECTION, POPULATION } from '^/constants/tree';
+
 import {
   getTreeFunctions,
   getTitle,
@@ -17,19 +19,21 @@ const ConnectedTree = (props) => (<Tree {...props} />);
 
 function mapStateToProps(state) {
   const { entities, display, loading } = state;
-  const { tree } = display;
+  const displayedTree = entities.trees[display.tree];
 
   return {
     loading: loading.tree,
-    tree: entities.trees[tree],
+    tree: displayedTree.newick ? displayedTree : entities.trees[POPULATION],
     state,
   };
 }
 
 // TODO: Memoisation
 function mergeProps({ loading, tree, state }, { dispatch }, props) {
-  const { collection, tables } = state;
-  const title = getTitle(tree.name, state.entities.assemblies[tree.name]);
+  const { collection, tables, entities } = state;
+  const title = getTitle(tree.name, entities.assemblies[tree.name]);
+  const collectionTree = entities.trees[COLLECTION];
+
   return {
     ...props,
     loading,
@@ -43,6 +47,7 @@ function mergeProps({ loading, tree, state }, { dispatch }, props) {
         title={title}
         isSpecies={speciesTrees.has(tree.name)}
         dispatch={dispatch}
+        hasCollectionTree={collectionTree && collectionTree.newick}
       />
     ),
   };

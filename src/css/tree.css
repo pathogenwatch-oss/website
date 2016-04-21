@@ -33,10 +33,17 @@
   border-radius: 24px;
 }
 
-.wgsa-tree-return {
+.wgsa-tree-icon {
   color: #673c90;
   background: rgba(255, 255, 255, 0.87);
-  margin-left: 8px;
+  margin-left: 12px;
+}
+
+div.wgsa-tree-icon:hover,
+div.wgsa-tree-icon:focus,
+div.wgsa-tree-icon:active {
+  background: rgba(255, 255, 255, 0.87);
+  cursor: default;
 }
 
 .wgsa-tree-menu {
@@ -90,28 +97,6 @@
   font-size: 12px;
   font-weight: 700;
   color: rgba(0, 0, 0, 0.54);
-}
-
-.wgsa-no-subtree {
-  position: absolute;
-  top: 64px;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  color: #673c90;
-}
-
-.wgsa-no-subtree i {
-  font-size: 45px;
-  color: #a386bd;
-}
-
-.wgsa-no-subtree p {
-  font-size: 20px;
 }
 
 .wgsa-select-tree-type {
