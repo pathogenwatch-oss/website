@@ -9,9 +9,7 @@ import { defineUploadStoreErrorToast } from '../utils/Toast';
 
 const CHANGE_EVENT = 'change';
 
-let toast = {
-  message: (<span><strong>Please note:</strong> WGSA will be unavailable on <strong>Friday 22nd April 2016</strong> as we perform essential maintenance. We apologise for any inconvenience this may cause.</span>),
-};
+let toast = null;
 
 function showToast(data) {
   toast = data;

@@ -79,10 +79,6 @@ button.wgsa-download-button:not(.mdl-button--icon) .material-icons {
   margin-top: -4px;
 }
 
-.wgsa-download-button > span {
-  font-weight: 500;
-}
-
 .wgsa-menu__item .wgsa-download-icon + span {
   display: inline-block;
   vertical-align: middle;

@@ -14,8 +14,7 @@
 
 .wgsa-home a:hover,
 .wgsa-home a:focus,
-.wgsa-home a:active,
-.wgsa-home a:visited {
+.wgsa-home a:active {
   color: #a386bd;
 }
 
