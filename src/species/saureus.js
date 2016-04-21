@@ -15,9 +15,14 @@ export default {
   imagePath: '/assets/img/saureus.jpg',
   definitionText: (
     <span>
-      <strong>{formattedName}</strong>, a gram-positive coccal bacterium.
+      <strong>{formattedName}</strong>, a Gram-positive coccal bacterium.
     </span>
   ),
+  maxAssemblySize: 3500000,
+  gcRange: {
+    min: 31,
+    max: 35,
+  },
   publicMetadataColumnNames: [
     'ena study',
     'ena run',

@@ -1,8 +1,11 @@
+import React from 'react';
+
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import { EventEmitter } from 'events';
 import assign from 'object-assign';
 
 import MetadataUtils from '../utils/Metadata';
+import Species from '^/species';
 import CONFIG from '../config';
 
 const MIN_COLLECTION_SIZE = 3;
@@ -27,14 +30,12 @@ function validateFiles() {
     errors.push({
       message: `Please upload at least ${numberRequired} more ${numberRequired === 1 ? 'assembly' : 'assemblies'} to begin.`,
     });
-    return;
   }
 
   if (Store.isCollectionTooLarge()) {
     errors.push({
       message: `Please upload no more than ${CONFIG.maxCollectionSize} assemblies at one time.`,
     });
-    return;
   }
 
   // create a new array to propagate error changes - temporary hack...
@@ -46,7 +47,7 @@ function validateFiles() {
 
     if (!assembly.fasta || !assembly.fasta.assembly) {
       errors.push({
-        message: `${assemblyName} - fasta file not provided.`,
+        message: (<span><strong>{assemblyName}</strong> - fasta file not provided.</span>),
       });
     }
 
@@ -54,7 +55,17 @@ function validateFiles() {
       errors.push({
         assemblyName,
         navigate: true,
-        message: `${assemblyName} - metadata not valid.`,
+        message: (<span><strong>{assemblyName}</strong> - metadata not valid.</span>),
+      });
+    }
+
+    const assemblySize =
+      assembly.metrics && assembly.metrics.totalNumberOfNucleotidesInDnaStrings;
+    if (assemblySize > Species.maxAssemblySize) {
+      errors.push({
+        assemblyName,
+        navigate: true,
+        message: (<span><strong>{assemblyName}</strong> - assembly too large. Please ensure it is {Species.current.formattedShortName}.</span>),
       });
     }
 
@@ -184,28 +195,28 @@ function emitChange() {
 
 function handleAction(action) {
   switch (action.type) {
-  case 'add_files':
-    addFiles(action.rawFiles, action.assemblies);
-    emitChange();
-    break;
+    case 'add_files':
+      addFiles(action.rawFiles, action.assemblies);
+      emitChange();
+      break;
 
-  case 'set_metadata_date_component':
-    setMetadataDateComponent(action.assemblyName, action.component, action.value);
-    emitChange();
-    break;
+    case 'set_metadata_date_component':
+      setMetadataDateComponent(action.assemblyName, action.component, action.value);
+      emitChange();
+      break;
 
-  case 'set_metadata_column':
-    setMetadataColumn(action.assemblyName, action.columnName, action.value);
-    emitChange();
-    break;
+    case 'set_metadata_column':
+      setMetadataColumn(action.assemblyName, action.columnName, action.value);
+      emitChange();
+      break;
 
-  case 'delete_assembly':
-    deleteAssembly(action.assemblyName);
-    emitChange();
-    break;
+    case 'delete_assembly':
+      deleteAssembly(action.assemblyName);
+      emitChange();
+      break;
 
-  default:
-    // ... do nothing
+    default:
+      // ... do nothing
   }
 }
 

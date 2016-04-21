@@ -1,12 +1,14 @@
-var React = require('react');
-var AssemblyAnalysisItem = require('./AssemblyAnalysisItem.react');
+import React from 'react';
+import AssemblyAnalysisItem from './AssemblyAnalysisItem.react';
 
-var fullWidthAndHeightStyle = {
+import Species from '^/species';
+
+const fullWidthAndHeightStyle = {
   width: '100%',
-  height: '100%'
+  height: '100%',
 };
 
-var labelStyle = {
+const labelStyle = {
   fontSize: '15px',
   fontWeight: '300',
   lineHeight: '20px',
@@ -14,14 +16,15 @@ var labelStyle = {
   color: '#777',
 };
 
-var AssemblyAnalysis = React.createClass({
+const AssemblyAnalysis = React.createClass({
 
   propTypes: {
     metrics: React.PropTypes.object,
   },
 
-  render: function () {
+  render() {
     const { metrics } = this.props;
+    const { totalNumberOfNucleotidesInDnaStrings, gcContent } = metrics;
 
     if (!metrics || !Object.keys(metrics).length) {
       return (
@@ -32,7 +35,13 @@ var AssemblyAnalysis = React.createClass({
     return (
       <div className="mdl-grid mdl-grid--no-spacing">
         <div className="mdl-cell mdl-cell--6-col">
-          <AssemblyAnalysisItem label="Assembly Length" value={metrics.totalNumberOfNucleotidesInDnaStrings} />
+          <AssemblyAnalysisItem
+            label="Assembly Length"
+            value={totalNumberOfNucleotidesInDnaStrings}
+            error={
+              totalNumberOfNucleotidesInDnaStrings > Species.maxAssemblySize
+            }
+          />
         </div>
 
         <div className="mdl-cell mdl-cell--6-col">
@@ -60,11 +69,17 @@ var AssemblyAnalysis = React.createClass({
         </div>
 
         <div className="mdl-cell mdl-cell--6-col">
-          <AssemblyAnalysisItem label="GC Content" value={`${metrics.gcContent}%`} />
+          <AssemblyAnalysisItem label="GC Content"
+            value={`${metrics.gcContent}%`}
+            error={ Species.gcRange &&
+              gcContent > Species.gcRange.max ||
+              gcContent < Species.gcRange.min
+            }
+          />
         </div>
       </div>
     );
-  }
+  },
 });
 
 module.exports = AssemblyAnalysis;

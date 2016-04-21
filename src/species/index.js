@@ -44,4 +44,12 @@ export default {
     return currentSpecies.missingAnalyses || [];
   },
 
+  get maxAssemblySize() {
+    return currentSpecies.maxAssemblySize || Math.pow(10, 10);
+  },
+
+  get gcRange() {
+    return currentSpecies.gcRange || {};
+  },
+
 };

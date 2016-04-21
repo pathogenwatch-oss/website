@@ -60,11 +60,14 @@ export default React.createClass({
 
   handleToastStoreChange() {
     const { message, action } = ToastStore.getToast();
-    this.setState({
-      message,
-      action,
-      active: typeof message !== 'undefined',
-    });
+    const active = typeof message !== 'undefined';
+
+    if (active && this.state.message && !this.state.active) {
+      this.messageQueued = true;
+      return;
+    }
+
+    this.setState({ message, action, active });
   },
 
   handleAction() {
@@ -74,7 +77,13 @@ export default React.createClass({
 
   handleClose() {
     this.setState({ active: false });
-    setTimeout(() => ToastActionCreators.hideToast(), 300);
+    setTimeout(() => {
+      ToastActionCreators.hideToast();
+      if (this.messageQueued) {
+        this.handleToastStoreChange();
+        this.messageQueued = false;
+      }
+    }, 300);
   },
 
 });

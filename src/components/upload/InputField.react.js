@@ -16,7 +16,8 @@ export default React.createClass({
           value={this.props.value}
           onChange={this.handleChange}
           readOnly={this.props.readonly}
-          />
+          style={this.props.style}
+        />
         <label className="mdl-textfield__label" htmlFor={this.props.label}>{this.props.label}</label>
       </div>
     );

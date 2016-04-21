@@ -230,7 +230,10 @@ function drawN50Chart(chartData, assemblyN50, appendToClass) {
   tooltip.style('display', 'none');
 }
 
-function drawOverviewChart(data, appendToClass, xLabel = '', yLabel = '') {
+function drawOverviewChart(options) {
+  const {
+    data, appendToClass, xLabel = '', yLabel = '', bounds = {},
+  } = options;
 
   if (!data) {
     return;
@@ -274,7 +277,7 @@ function drawOverviewChart(data, appendToClass, xLabel = '', yLabel = '') {
   .scale(xScale)
   .orient('bottom')
   .ticks(chartXAxis.length)
-  .tickFormat(function (d) {return ''; });
+  .tickFormat(function (d) { return ''; });
   // Y
   var yAxis = d3.svg.axis()
   .scale(yScale)
@@ -323,6 +326,28 @@ function drawOverviewChart(data, appendToClass, xLabel = '', yLabel = '') {
   .attr('x', -(chartHeight / 2))
   .attr('y', -75);
 
+
+  if (bounds.min) {
+    const y = yScale(bounds.min);
+    svg.append('line')
+      .attr('class', 'boundary-line')
+      .attr({
+        x1: 95, y1: y,
+        x2: chartWidth - 30, y2: y,
+      });
+  }
+
+  if (bounds.max) {
+    const y = yScale(bounds.max);
+    svg.append('line')
+      .attr('class', 'boundary-line')
+      .attr({
+        x1: 95, y1: y,
+        x2: chartWidth - 30, y2: y,
+      });
+  }
+
+
   // Circles
   svg.selectAll('circle')
     .data(chartData)
@@ -335,6 +360,14 @@ function drawOverviewChart(data, appendToClass, xLabel = '', yLabel = '') {
       return yScale(datum);
     })
     .attr('r', 5)
+    .attr('class', function (datum) {
+      if ((bounds.max && datum > bounds.max)
+       || (bounds.min && datum < bounds.min)) {
+        return 'outside-bounds';
+      }
+
+      return '';
+    })
     .on('mouseover', function (datum, index) {
       return tooltip
         .style('top', (d3.event.pageY - 10) + 'px')
