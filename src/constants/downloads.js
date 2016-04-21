@@ -77,7 +77,7 @@ export const speciesDownloads = [
       },
       { text: 'Annotations',
         filename: () => `wgsa_${Species.nickname}_reference_annotations.zip`,
-        serverName: () => `wgsa_gff_${Species.id}.zip`,
+        serverName: () => `wgsa_gff_${Species.id}`,
       },
       { text: 'Metadata',
         filename: () => `wgsa_${Species.nickname}_reference_metadata.csv`,
