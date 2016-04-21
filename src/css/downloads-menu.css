@@ -12,14 +12,15 @@
   padding: 8px;
 }
 
-.wgsa-submenu {
+
+.wgsa-menu {
   list-style: none;
   margin: 0;
   padding: 8px 0;
   display: block;
 }
 
-.wgsa-menu > li:last-child > .wgsa-submenu {
+.wgsa-menu > li:last-child > .wgsa-menu {
   border: none;
 }
 
@@ -30,7 +31,7 @@
   letter-spacing: 0;
   line-height: inherit;
   color: rgba(0, 0, 0, 0.54);
-  padding: 16px 16px 8px ;
+  padding: 8px 32px 0;
   margin: 0;
   display: block;
 }
@@ -51,7 +52,7 @@
 .wgsa-menu__item > button {
   text-align: left;
   font-size: inherit;
-  font-family: inherit;
+  font-weight: 400;
   color: inherit;
   text-decoration: none;
   display: block;
@@ -76,6 +77,10 @@
 
 button.wgsa-download-button:not(.mdl-button--icon) .material-icons {
   margin-top: -4px;
+}
+
+.wgsa-download-button > span {
+  font-weight: 500;
 }
 
 .wgsa-menu__item .wgsa-download-icon + span {

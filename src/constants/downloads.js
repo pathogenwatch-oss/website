@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { requestDownload } from '../actions/downloads';
 
 import { API_ROOT } from '../utils/Api';
@@ -59,20 +61,44 @@ export function getArchiveDownloadProps(state, downloads, dispatch) {
 }
 
 export const speciesDownloads = [
-  { text: 'Core Representatives',
-    filename: () => `wgsa_${Species.nickname}_core_representatives.csv`,
-    serverName: 'core_rep_map.tsv',
+  { // subtitle: () => 'Reference Population',
+    items: [
+      { text: 'Core Representatives',
+        filename: () => `wgsa_${Species.nickname}_core_representatives.csv`,
+        serverName: () => 'core_rep_map.tsv',
+      },
+    ],
   },
-  // { text: 'AMR SNP Sequences',
-  //   filename: () => `wgsa_${Species.nickname}_amr_snp_sequences.fa`,
-  //   serverName: 'ar_snps_lib.fa',
-  // },
-  // { text: 'AMR SNPs',
-  //   filename: () => `wgsa_${Species.nickname}_amr_snps.tsv`,
-  //   serverName: 'ar_snps.tsv',
-  // },
-  // { text: 'Acquired AMR Genes',
-  //   filename: () => `wgsa_${Species.nickname}_resistance_genes.csv`,
-  //   serverName: 'resistance_genes.tsv',
+  { subtitle: () => 'Reference Data',
+    items: [
+      { text: 'Sequences',
+        filename: () => `wgsa_${Species.nickname}_reference_fastas.zip`,
+        serverName: () => 'fastas.zip',
+      },
+      { text: 'Annotations',
+        filename: () => `wgsa_${Species.nickname}_reference_annotations.zip`,
+        serverName: () => `wgsa_gff_${Species.id}.zip`,
+      },
+      { text: 'Metadata',
+        filename: () => `wgsa_${Species.nickname}_reference_metadata.csv`,
+        serverName: () => 'metadata.csv',
+      },
+    ],
+  },
+  // { subtitle: () => 'Antibiotic Resistance',
+  //   items: [
+  //     { text: 'AMR SNP Sequences',
+  //       filename: () => `wgsa_${Species.nickname}_amr_snp_sequences.fa`,
+  //       serverName: () => 'ar_snps_lib.fa',
+  //     },
+  //     { text: 'AMR SNPs',
+  //       filename: () => `wgsa_${Species.nickname}_amr_snps.tsv`,
+  //       serverName: () => 'ar_snps.tsv',
+  //     },
+  //     { text: 'Acquired AMR Genes',
+  //       filename: () => `wgsa_${Species.nickname}_resistance_genes.csv`,
+  //       serverName: () => 'resistance_genes.tsv',
+  //     },
+  //   ],
   // },
 ];

@@ -43,7 +43,7 @@ const DownloadsMenu = React.createClass({
             </p> : null
           }
           <div className="wgsa-downloads-menu__list">
-            <ul className="wgsa-submenu">
+            <ul className="wgsa-menu">
               { files.map(fileProps => (
                   <li className="wgsa-menu__item" key={fileProps.format}>
                     <DownloadButton {...fileProps} />
