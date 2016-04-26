@@ -9,6 +9,8 @@ app.use(express.static(
   path.join(__dirname, '..', '..', 'node_modules', 'wgsa_front-end', 'public')
 ));
 
+app.use('/', (req, res) => res.redirect('/'));
+
 app.listen(8001);
 
 console.log('Holding page server listening on 8001.')
