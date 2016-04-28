@@ -49,38 +49,38 @@ function hideToastForAssembly(assemblyName) {
 function handleAction(action) {
   switch (action.type) {
 
-  case 'add_files':
-  case 'delete_assembly':
-    AppDispatcher.waitFor([
-      UploadStore.dispatchToken,
-    ]);
-    hideToastForAssembly(action.assemblyName);
-    const errors = UploadStore.getErrors();
-    if (errors.length) {
-      showToast(defineUploadStoreErrorToast(errors));
-    } else {
+    case 'add_files':
+    case 'delete_assembly':
+      AppDispatcher.waitFor([
+        UploadStore.dispatchToken,
+      ]);
+      hideToastForAssembly(action.assemblyName);
+      const errors = UploadStore.getErrors();
+      if (errors.length) {
+        showToast(defineUploadStoreErrorToast(errors));
+      } else {
+        hideToast();
+      }
+      emitChange();
+      break;
+
+    case 'navigate_to_assembly':
+      hideToastForAssembly(action.assemblyName);
+      emitChange();
+      break;
+
+    case 'show_toast':
+      showToast(action.toast);
+      emitChange();
+      break;
+
+    case 'hide_toast':
       hideToast();
-    }
-    emitChange();
-    break;
+      emitChange();
+      break;
 
-  case 'navigate_to_assembly':
-    hideToastForAssembly(action.assemblyName);
-    emitChange();
-    break;
-
-  case 'show_toast':
-    showToast(action.toast);
-    emitChange();
-    break;
-
-  case 'hide_toast':
-    hideToast();
-    emitChange();
-    break;
-
-  default:
-    // ... do nothing
+    default:
+      // ... do nothing
 
   }
 }

@@ -1,5 +1,5 @@
 .wgsa-species-home {
-  background-color: #efefef;
+  background-image: #efefef;
 }
 
 .wgsa-species-home-container > .mdl-grid {
@@ -94,8 +94,10 @@
 .wgsa-species-upload-link .mdl-card__supporting-text {
   font-family: "Roboto", sans-serif;
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 400;
   color: rgba(0, 0, 0, 0.87);
+  line-height: 32px;
+  margin-bottom: 0;
 }
 
 .wgsa-species-home-collection-list {
@@ -212,7 +214,7 @@
 }
 
 .wgsa-species-home-other .wgsa-card-content {
-  padding: 32px 32px 16px;
+  padding: 24px 32px;
 }
 
 .wgsa-species-downloads {
@@ -231,17 +233,18 @@
   display: block;
 }
 
-.wgsa-species-downloads .wgsa-submenu {
+.wgsa-species-downloads .wgsa-menu {
   margin: 0 auto;
 }
 
 .wgsa-species-downloads .wgsa-download-button {
   padding-left: 32px;
+  font-weight: 400;
 }
 
-.is-small-screen .wgsa-species-downloads .wgsa-download-button {
+/*.is-small-screen .wgsa-species-downloads .wgsa-download-button {
   padding-left: 24px;
-}
+}*/
 
 .is-small-screen .wgsa-species-upload-link {
   display: block;

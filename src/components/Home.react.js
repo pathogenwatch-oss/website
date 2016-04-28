@@ -52,7 +52,10 @@ export default connect()(React.createClass({
           <Link to={`/${staph.nickname}`} className="mdl-button mdl-button--colored mdl-button--raised wgsa-cta">
             Get started with {staph.formattedName}
           </Link>
-          <p style={{ fontSize: '16px', margin: '32px 0 0' }}>N.B. This is an open preview of WGSA. Uploaded data will be stored for one week only, and we appreciate your feedback.</p>
+          <div style={{ fontSize: '16px', margin: '16px 0 0' }}>
+            <Link style={{ padding: '0 8px' }} to={`/${staph.nickname}`}>Showcase</Link>
+            <Link style={{ padding: '0 8px' }} to={`/${staph.nickname}/upload`} >Create a new collection</Link>
+          </div>
         </header>
         <div className="wgsa-home__features">
           <div className="mdl-grid mdl-grid--no-spacing">

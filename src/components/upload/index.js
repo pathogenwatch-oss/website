@@ -180,10 +180,10 @@ export default connect()(React.createClass({
   },
 
   handleUploadStoreChange() {
+    this.setState({ readyToUpload: UploadStore.isReadyToUpload() });
+
     if (this.state.assemblyName && UploadStore.getAssembly(this.state.assemblyName) === null) {
       navigateToHome();
-    } else {
-      this.setState({ readyToUpload: UploadStore.isReadyToUpload() });
     }
   },
 

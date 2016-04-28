@@ -15,9 +15,14 @@ export default {
   imagePath: '/assets/img/saureus.jpg',
   definitionText: (
     <span>
-      <strong>{formattedName}</strong>, a gram-positive coccal bacterium.
+      <strong>{formattedName}</strong>, a Gram-positive coccal bacterium.
     </span>
   ),
+  maxAssemblySize: 3500000,
+  gcRange: {
+    min: 31,
+    max: 35,
+  },
   publicMetadataColumnNames: [
     'ena study',
     'ena run',
@@ -32,13 +37,13 @@ export default {
   desc: (
     <span>
       <p>{formattedName} is a Gram-positive microorganism. While the nasal colonization by {formattedShortName} is fairly widespread and occurs asymptomatically, {formattedShortName} can also transform into a pathogen causing a diverse infections ranging from mild skin infections to life-threatening conditions. {formattedShortName} in its methicillin-sensitive (MSSA) form but especially in its methicillin-resistant (MRSA) or even multi-resistant form are threatening the community and healthcare system worldwide and it has reached the status of being one of the most common causative agents for infectious disease.</p>
-      <p>Upload your genome assemblies and interact with results:</p>
+      {/*<p>Upload your genome assemblies and interact with results:</p>
       <ul>
         <li><i className="material-icons">local_pharmacy</i> AMR - Prediction of antimicrobial resistance.</li>
         <li><i className="material-icons">nature_people</i> Trees - Cluster genomes using nucleotide similarity at shared regions.</li>
         <li><i className="material-icons">language</i> Compare - Position your genomes(s) in the population.</li>
         <li><i className="material-icons">file_download</i> Download all results and/or share data.</li>
-      </ul>
+      </ul>*/}
     </span>
   ),
   collections: [

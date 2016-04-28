@@ -639,6 +639,14 @@ circle {
   opacity: 0.5;
   cursor: pointer;
 }
+circle.outside-bounds {
+  fill: #d11b1b;
+}
+.boundary-line {
+  stroke-width: 1px;
+  stroke: rgba(0, 0, 0, 0.54);
+  stroke-dasharray: 2, 4;
+}
 path {
   stroke: #aaa;
   fill: none;

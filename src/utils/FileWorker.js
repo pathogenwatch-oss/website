@@ -1,5 +1,5 @@
 import MetadataUtils from './Metadata';
-import AnalysisUtils from './Analysis';
+import analyseFasta from './Analysis';
 
 const FASTA_FILE_EXTENSIONS = [
   '.fa', '.fas', '.fna', '.ffn', '.faa', '.frn', '.fasta', '.contig',
@@ -104,7 +104,7 @@ function parseFastaFile(file, rawFiles, assemblies) {
       assembly: fileContent,
     },
     metrics: fileContent.length ?
-      AnalysisUtils.analyseFasta(fileName, fileContent) :
+      analyseFasta(fileContent) :
       {},
   };
 }
