@@ -12,13 +12,12 @@ export default {
   formattedName,
   shortName,
   formattedShortName,
-  imagePath: '/assets/img/saureus.jpg',
   definitionText: (
     <span>
       <strong>{formattedName}</strong>, a Gram-positive coccal bacterium.
     </span>
   ),
-  maxAssemblySize: 3500000,
+  maxAssemblySize: 3.5 * Math.pow(10, 6),
   gcRange: {
     min: 31,
     max: 35,
