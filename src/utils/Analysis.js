@@ -71,8 +71,7 @@ function extractDnaStringFromContig(contig) {
   // Convert array of DNA sequence substrings into a single string
   // Remove whitespace
   //
-  var dnaString = contigPartsWithNoIdAndDescription.join('').replace(/\s/g, '');
-  return dnaString;
+  return contigPartsWithNoIdAndDescription.join('').replace(/\s/g, '').toUpperCase();
 }
 
 function extractDnaStringsFromContigs(contigs) {

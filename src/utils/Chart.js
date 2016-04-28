@@ -248,7 +248,7 @@ function drawOverviewChart(options) {
 
   var chartData = [];
   for (const id in data) {
-    if (data[id]) {
+    if (data[id] !== undefined) {
       chartData.push(data[id]);
     }
   }
@@ -265,7 +265,7 @@ function drawOverviewChart(options) {
   // Y
   var yScale = d3.scale.linear()
   .domain([
-    Math.ceil(Math.max(...chartData) * 1.5),
+    Math.ceil(Math.max(...chartData) * 1.5) || 500,
     Math.floor(Math.min(...chartData) * 0.5)
   ])
   .range([ 30, chartHeight - 30 ]);

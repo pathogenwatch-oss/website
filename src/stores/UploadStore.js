@@ -131,7 +131,7 @@ const Store = assign({}, EventEmitter.prototype, {
   getOverviewChartData(chartType) {
     return Object.keys(assemblies).reduce((memo, id) => {
       const metrics = assemblies[id].metrics || {};
-      if (metrics[chartType]) {
+      if (metrics[chartType] !== undefined) {
         memo[id] = metrics[chartType];
       }
       return memo;
