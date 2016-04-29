@@ -236,15 +236,17 @@ export default connect()(React.createClass({
                 >
                   <i className="material-icons">add</i>
                 </button>
-                <button
-                  className="wgsa-upload-review-button wgsa-navigation-container__btn mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect mdl-shadow--4dp"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    this.setState({ assemblyListOpen: !assemblyListOpen });
-                  }}
-                >
-                  <i className="material-icons">{ assemblyListOpen ? 'keyboard_arrow_left' : 'list' }</i>
-                </button>
+                <div className="wgsa-navigation-container__btn">
+                  <button
+                    className="mdl-button mdl-shadow--3dp"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      this.setState({ assemblyListOpen: !assemblyListOpen });
+                    }}
+                  >
+                    <i className="material-icons">{ assemblyListOpen ? 'keyboard_arrow_left' : 'keyboard_arrow_right' }</i>
+                  </button>
+                </div>
               </aside>
               <div className="mdl-cell mdl-cell--stretch increase-cell-gutter" style={{ position: 'relative', overflowY: 'auto' }}>
                 { assembly ?

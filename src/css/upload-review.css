@@ -411,8 +411,28 @@
 .wgsa-navigation-container__btn {
   display: none;
   position: absolute;
-  bottom: calc(50% + 8px);
-  right: -48px;
+  top: 8px;
+  width: 28px;
+  right: -28px;
+  padding: 8px 0;
+  overflow: hidden;
+  text-align: left;
+}
+
+.wgsa-navigation-container__btn > button {
+  min-width: 24px;
+  height: 48px;
+  padding: 0;
+  background: #fff;
+  color: #673c90;
+  border-radius: 0 2px 2px 0;
+}
+
+.wgsa-navigation-container__btn > button:hover,
+.wgsa-navigation-container__btn > button:focus,
+.wgsa-navigation-container__btn > button:active {
+  color: #fff;
+  background: #673c90 !important;
 }
 
 .is-small-screen .wgsa-navigation-container__btn {
