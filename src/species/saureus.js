@@ -57,7 +57,7 @@ export default {
       pmid: '23270620',
     },
 
-    { id: 'u0ka3roo1kh5',
+    { id: 'b4o3iku66i6z',
       name: 'SA_003',
       author: (<span>Ellington <em>et al.</em> (2015)</span>),
       size: 23,
@@ -87,7 +87,7 @@ export default {
       pmid: '23158674',
     },
 
-    { id: 'mq2u89rctp3u',
+    { id: 'tdgzqah2n3mh',
       name: 'SA_006',
       author: (<span>Holden <em>et al.</em> (2013)</span>),
       size: 192,
@@ -117,7 +117,7 @@ export default {
       pmid: '22693998',
     },
 
-    { id: 'mw65kstrghfh',
+    { id: '5a7zt8vf7vyu',
       name: 'SA_011',
       author: (<span>Dordel <em>et al.</em> (2014)</span>),
       size: 54,
@@ -127,7 +127,7 @@ export default {
       pmid: '24713324',
     },
 
-    { id: '8shl40iywh2q',
+    { id: 'rqs1nm74gco5',
       name: 'SA_017',
       author: (<span>Harrison <em>et al.</em> (2014)</span>),
       size: 68,
@@ -137,7 +137,7 @@ export default {
       pmid: '24825010',
     },
 
-    { id: '4lkoblcgeq7l',
+    { id: 'joh87o3qymai',
       name: 'SA_018',
       author: (<span>Harrison <em>et al.</em> (2013)</span>),
       size: 7,
