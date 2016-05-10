@@ -140,7 +140,7 @@ const CollectionList = () => (
           >
           <div className="wgsa-species-collection-list-item-content">
             <header className="wgsa-collection-author">
-              {author} - {size} assemblies
+              {author}
             </header>
             <p className="wgsa-collection-title">{title}</p>
           </div>
