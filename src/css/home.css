@@ -32,6 +32,16 @@
   align-self: flex-end;
 }
 
+.cgps-logo {
+  display: block;
+}
+
+.cgps-logo > img {
+  height: 100%;
+  display: block;
+  margin: 0 auto;
+}
+
 .mdl-layout__header .cgps-logo {
   height: 36px;
   float: right;

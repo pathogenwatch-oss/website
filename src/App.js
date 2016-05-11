@@ -71,8 +71,14 @@ export default connect(mapStateToProps)(React.createClass({
                 {...props}
               />
             ))}
+            <a className="mdl-navigation__link" target="_blank" href="https://github.com/ImperialCollegeLondon/wgsa-documentation/wiki">
+              <i className="material-icons">description</i>
+              Documentation
+            </a>
           </nav>
-          <img className="cgps-logo" src="/assets/img/CGPS.SHORT.FINAL.svg" />
+          <a className="cgps-logo" target="_blank" href="http://www.pathogensurveillance.net">
+            <img src="/assets/img/CGPS.SHORT.FINAL.svg" />
+          </a>
           <a className="contact-email" href="mailto:cgps@sanger.ac.uk">cgps@sanger.ac.uk</a>
         </div>
         <main className="mdl-layout__content">

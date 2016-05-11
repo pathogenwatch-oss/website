@@ -31,7 +31,9 @@ export default connect()(React.createClass({
         classNames: null,
         content: (
           <div className="mdl-layout-spacer">
-            <img className="cgps-logo" src="/assets/img/CGPS.SHORT.FINAL.svg" />
+            <a className="cgps-logo" target="_blank" href="http://www.pathogensurveillance.net">
+              <img src="/assets/img/CGPS.SHORT.FINAL.svg" />
+            </a>
           </div>
         ),
       })
@@ -53,8 +55,8 @@ export default connect()(React.createClass({
             Get started with {staph.formattedName}
           </Link>
           <div style={{ fontSize: '16px', margin: '16px 0 0' }}>
-            <Link style={{ padding: '0 8px' }} to={`/${staph.nickname}`}>Showcase</Link>
             <Link style={{ padding: '0 8px' }} to={`/${staph.nickname}/upload`} >Create a new collection</Link>
+            <a style={{ padding: '0 8px' }} target="_blank" href="https://github.com/ImperialCollegeLondon/wgsa-documentation/wiki">Documentation</a>
           </div>
         </header>
         <div className="wgsa-home__features">

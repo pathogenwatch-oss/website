@@ -137,7 +137,7 @@ const CollectionList = () => (
         <Link
           className="selectButton mdl-button mdl-js-button mdl-js-ripple-effect"
           to={`/${Species.current.nickname}/collection/${id}`}
-          >
+        >
           <div className="wgsa-species-collection-list-item-content">
             <header className="wgsa-collection-author">
               {author}
