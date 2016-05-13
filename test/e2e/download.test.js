@@ -18,7 +18,7 @@ describe('Download Routes', function () {
       });
   });
 
-  it.only('GET /api/species/:speciesId/download/file/:fileName', function (done) {
+  it('GET /api/species/:speciesId/download/file/:fileName', function (done) {
     var url = '/api/species/1280/download/file/fasta_SYS2jmj7l5rSw0yVb-vlWAYkK-YBwk_?prettyFileName=assembly.fa';
     request
       .get(url)
