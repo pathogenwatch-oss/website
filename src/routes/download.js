@@ -31,7 +31,7 @@ router.post('/species/:speciesId/download/type/:idType/format/:fileFormat',
 
 router.get('/species/:speciesId/download/file/:fileName',
   function (req, res, next) {
-    LOGGER.info('Received request for files: ' + req.params.fileName);
+    LOGGER.info('Received request for file: ' + req.params.fileName);
 
     if (!req.query.prettyFileName) {
       return res.status(400).send('`prettyFileName` query parameter is required.');
@@ -39,7 +39,7 @@ router.get('/species/:speciesId/download/file/:fileName',
 
     res.set({
       'Content-Disposition': `attachment; filename="${req.query.prettyFileName}.zip"`,
-      'Content-type': 'application/zip'
+      'Content-type': 'application/zip',
     });
 
     const stream = fileModel.getFile(req.params);
@@ -50,19 +50,41 @@ router.get('/species/:speciesId/download/file/:fileName',
   }
 );
 
-router.get('/species/:speciesId/download/:fileName', function (req, res, next) {
-  LOGGER.info('Received request for files: ' + req.params.fileName);
+const speciesDownloads = {
+  'core_representatives.csv': {
+    contentType: 'text/csv',
+    fileOnDisk: () => 'core_rep_map.tsv',
+  },
+  'reference_fastas.zip': {
+    contentType: 'application/zip',
+    fileOnDisk: () => 'fastas.zip',
+  },
+  'reference_annotations.zip': {
+    contentType: 'application/zip',
+    fileOnDisk: (speciesId) => `wgsa_gff_${speciesId}`,
+  },
+  'reference_metadata.csv': {
+    contentType: 'text/csv',
+    fileOnDisk: () => 'metadata.csv',
+  },
+};
 
-  if (!req.query.prettyFileName) {
-    return res.status(400).send('`prettyFileName` query parameter is required.');
-  }
+function getPrettyFilename({ speciesId, fileName }) {
+  return `wgsa_${getSpeciesNickname(speciesId)}_${fileName}`;
+}
+
+router.get('/species/:speciesId/download/:fileName', function (req, res, next) {
+  const { speciesId, fileName } = req.params;
+  const { contentType, fileOnDisk } = speciesDownloads[fileName];
+
+  LOGGER.info(`Received request for ${speciesId} file: ${fileName}`);
 
   res.set({
-    'Content-Disposition': `attachment; filename="${req.query.prettyFileName}"`,
-    'Content-type': 'text/plain'
+    'Content-Disposition': `attachment; filename="${getPrettyFilename(req.params)}"`,
+    'Content-type': contentType,
   });
 
-  const stream = fileModel.getSpeciesFile(req.params);
+  const stream = fileModel.getSpeciesFile(speciesId, fileOnDisk(speciesId));
 
   stream.on('error', error => next(error));
 
