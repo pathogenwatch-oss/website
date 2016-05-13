@@ -5,8 +5,10 @@ import FileUploadingProgressActionCreators
 
 import CONFIG from '../config';
 
-export const API_ROOT =
-  CONFIG.api ? `http://${CONFIG.api.address}/api` : '/api';
+export const SERVER_ADDRESS =
+  CONFIG.api ? `http://${CONFIG.api.address}` : '';
+
+export const API_ROOT = `${SERVER_ADDRESS}/api`;
 
 function postJson(path, data, progressFn) {
   return {

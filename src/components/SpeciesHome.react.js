@@ -9,6 +9,7 @@ import DownloadIcon from './explorer/DownloadIcon.react';
 import { updateHeader } from '^/actions/header';
 
 import { speciesDownloads, speciesPath } from '^/constants/downloads';
+import downloadUtils from '^/../universal/downloads';
 import Species from '../species';
 
 const uploadButtonStyle = {
@@ -103,9 +104,9 @@ export default connect()(React.createClass({
                         {items.map(({ text, filename, serverName }) => (
                           <li className="wgsa-menu__item" key={filename}>
                             <a ref="link"
-                              href={`${speciesPath()}/${serverName()}?prettyFileName=${filename()}`}
+                              href={`${speciesPath()}/${filename}`}
                               target="_blank"
-                              download={filename()}
+                              download={downloadUtils.getPrettyFilename(Species.current.nickname, filename)}
                               className="wgsa-download-button"
                             >
                               <DownloadIcon hasLink />
