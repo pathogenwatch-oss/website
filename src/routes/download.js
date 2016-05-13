@@ -1,24 +1,23 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
-var fileModel = require('models/file');
+const fileModel = require('models/file');
 
-var LOGGER = require('utils/logging').createLogger('Download requests');
+const LOGGER = require('utils/logging').createLogger('Download requests');
 
 router.post('/species/:speciesId/download/type/:idType/format/:fileFormat',
   function (req, res, next) {
-    var downloadRequest = {
+    const downloadRequest = {
       idType: req.params.idType,
       format: req.params.fileFormat,
       idList: req.body.idList,
-      speciesId: req.params.speciesId
+      speciesId: req.params.speciesId,
     };
 
     LOGGER.info(
       'Received request for download: ' + downloadRequest.idType + ', ' +
         downloadRequest.format
     );
-    LOGGER.debug(downloadRequest);
 
     fileModel.requestDownload(downloadRequest, function (error, result) {
       if (error) {
@@ -49,46 +48,5 @@ router.get('/species/:speciesId/download/file/:fileName',
     stream.pipe(res);
   }
 );
-
-const speciesDownloads = {
-  'core_representatives.csv': {
-    contentType: 'text/csv',
-    fileOnDisk: () => 'core_rep_map.tsv',
-  },
-  'reference_fastas.zip': {
-    contentType: 'application/zip',
-    fileOnDisk: () => 'fastas.zip',
-  },
-  'reference_annotations.zip': {
-    contentType: 'application/zip',
-    fileOnDisk: (speciesId) => `wgsa_gff_${speciesId}`,
-  },
-  'reference_metadata.csv': {
-    contentType: 'text/csv',
-    fileOnDisk: () => 'metadata.csv',
-  },
-};
-
-function getPrettyFilename({ speciesId, fileName }) {
-  return `wgsa_${getSpeciesNickname(speciesId)}_${fileName}`;
-}
-
-router.get('/species/:speciesId/download/:fileName', function (req, res, next) {
-  const { speciesId, fileName } = req.params;
-  const { contentType, fileOnDisk } = speciesDownloads[fileName];
-
-  LOGGER.info(`Received request for ${speciesId} file: ${fileName}`);
-
-  res.set({
-    'Content-Disposition': `attachment; filename="${getPrettyFilename(req.params)}"`,
-    'Content-type': contentType,
-  });
-
-  const stream = fileModel.getSpeciesFile(speciesId, fileOnDisk(speciesId));
-
-  stream.on('error', error => next(error));
-
-  stream.pipe(res);
-});
 
 module.exports = router;
