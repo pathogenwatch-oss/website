@@ -11,7 +11,7 @@ describe.only('Species Downloads', function () {
         request
           .get(url)
           .expect(200)
-          .expect('Content-Type', new RegExp(`̣\^${downloads[filename].contentType}`))
+          .expect('Content-Type', new RegExp(`^${downloads[filename].contentType}`))
           .end(done)
       );
     }
