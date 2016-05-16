@@ -5,7 +5,7 @@ import Species from '../species';
 
 export const encode = encodeURIComponent;
 export const collectionPath = () => `${API_ROOT}/species/${Species.id}/download/file`;
-export const speciesPath = () => `${SERVER_ADDRESS}/species/${Species.nickname}/download`;
+export const speciesPath = () => `${SERVER_ADDRESS}/${Species.nickname}/download`;
 
 export function createDownloadKey(id) {
   if (!id) return null;
