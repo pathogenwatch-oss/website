@@ -14,7 +14,7 @@ const speciesIds = species.reduce((memo, { nickname, id }) => {
   return memo;
 }, {});
 
-router.get('/species/:nickname/download/:fileName', function (req, res, next) {
+router.get('/:nickname/download/:fileName', function (req, res, next) {
   const { nickname, fileName } = req.params;
   const speciesId = speciesIds[nickname];
   const { contentType, fileOnDisk } = downloads[fileName];
