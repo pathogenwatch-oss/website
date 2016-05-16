@@ -118,6 +118,13 @@ export default React.createClass({
       <section className="wgsa-tree">
         {header}
         <div id="phylocanvas-container" style={fullWidthHeight}></div>
+        <button
+          style={{ position: 'absolute', top: 24, right: 16, zIndex: 1, color: '#673C90' }}
+          className="mdl-button mdl-js-button mdl-button--icon"
+          onClick={this.openContextMenu}
+        >
+          <i className="material-icons">settings</i>
+        </button>
         <TreeControls
           treeType={this.state.treeType}
           scales={this.state.scales}
@@ -175,6 +182,14 @@ export default React.createClass({
 
   handleTreeTypeChange(event) {
     this.phylocanvas.setTreeType(event.target.value);
+  },
+
+  openContextMenu(event) {
+    event.preventDefault();
+    console.log(event.target);
+    this.phylocanvas.contextMenu.open(event.clientX, event.clientY);
+    this.phylocanvas.contextMenu.closed = false;
+    this.phylocanvas.tooltip.close();
   },
 
 });
