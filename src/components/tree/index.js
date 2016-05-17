@@ -119,11 +119,10 @@ export default React.createClass({
         {header}
         <div id="phylocanvas-container" style={fullWidthHeight}></div>
         <button
-          style={{ position: 'absolute', top: 24, right: 16, zIndex: 1, color: '#673C90' }}
-          className="mdl-button mdl-js-button mdl-button--icon"
-          onClick={this.openContextMenu}
+          className="mdl-button mdl-js-button mdl-button--icon wgsa-tree-menu-button"
+          onClick={this.toggleContextMenu}
         >
-          <i className="material-icons">settings</i>
+          <i className="material-icons">more_vert</i>
         </button>
         <TreeControls
           treeType={this.state.treeType}
@@ -184,10 +183,15 @@ export default React.createClass({
     this.phylocanvas.setTreeType(event.target.value);
   },
 
-  openContextMenu(event) {
+  toggleContextMenu(event) {
+    event.stopPropagation();
     event.preventDefault();
-    console.log(event.target);
-    this.phylocanvas.contextMenu.open(event.clientX, event.clientY);
+    if (!this.phylocanvas.contextMenu.closed) {
+      this.phylocanvas.contextMenu.close();
+      return;
+    }
+    const { top, left } = $(event.target).offset();
+    this.phylocanvas.contextMenu.open(left - 128, top + 32); // magic numbers to position the menu "bottom-right"
     this.phylocanvas.contextMenu.closed = false;
     this.phylocanvas.tooltip.close();
   },
