@@ -7,8 +7,6 @@ const formattedShortName = (<em>{shortName}</em>);
 
 
 export default {
-  id: '1646',
-  nickname: 'rensm',
   name,
   formattedName,
   shortName,

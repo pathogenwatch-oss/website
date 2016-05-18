@@ -6,8 +6,6 @@ const shortName = 'S. aureus';
 const formattedShortName = (<em>{shortName}</em>);
 
 export default {
-  id: '1280',
-  nickname: 'saureus',
   name,
   formattedName,
   shortName,

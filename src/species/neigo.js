@@ -7,8 +7,6 @@ const shortName = 'N. gonorrhoeae';
 const formattedShortName = (<em>{name}</em>);
 
 export default {
-  id: '485',
-  nickname: 'neigo',
   name,
   formattedName,
   shortName,

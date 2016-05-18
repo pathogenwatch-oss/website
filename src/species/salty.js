@@ -18,8 +18,6 @@ const formattedShortName = (() => {
 
 
 export default {
-  id: '90370',
-  nickname: 'salty',
   name,
   formattedName,
   shortName,
