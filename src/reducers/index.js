@@ -45,7 +45,10 @@ const rootReducer = combineReducers({
     header: createReducer(header),
     table: createReducer(table),
     mapMarkers: createReducer(mapMarkers),
-    tree: createReducer(displayedTree),
+    tree: combineReducers({
+      name: createReducer(displayedTree),
+      loading: createReducer(treeLoading),
+    }),
   }),
   filter: createReducer(filter),
   downloads: combineReducers({
@@ -53,9 +56,6 @@ const rootReducer = combineReducers({
     files: createReducer(downloads),
   }),
   bodyClickListener,
-  loading: combineReducers({
-    tree: createReducer(treeLoading),
-  }),
 });
 
 const initialState = rootReducer({}, {});

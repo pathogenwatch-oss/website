@@ -2,7 +2,7 @@ import '^/css/tree.css';
 import '^/css/loading.css';
 
 import React from 'react';
-import PhyloCanvas from 'phylocanvas';
+import Phylocanvas from 'phylocanvas';
 import contextMenuPlugin from 'phylocanvas-plugin-context-menu';
 
 import TreeControls from './TreeControls.react';
@@ -10,7 +10,7 @@ import Spinner from '^/components/Spinner.react';
 
 import DEFAULT, { CGPS } from '^/defaults';
 
-PhyloCanvas.plugin(contextMenuPlugin);
+Phylocanvas.plugin(contextMenuPlugin);
 
 const fullWidthHeight = {
   height: '100%',
@@ -50,7 +50,7 @@ export default React.createClass({
   },
 
   componentDidMount() {
-    const phylocanvas = PhyloCanvas.createTree('phylocanvas-container', {
+    const phylocanvas = Phylocanvas.createTree('phylocanvas-container', {
       contextMenu: {
         parent: document.body,
       },
@@ -82,6 +82,9 @@ export default React.createClass({
     phylocanvas.on('updated', this.onUpdated);
 
     this.phylocanvas = phylocanvas;
+
+    // must be native event to for body click cancellation to work
+    this.refs.menuButton.addEventListener('click', (e) => this.toggleContextMenu(e));
 
     this.loadTree();
   },
@@ -119,8 +122,8 @@ export default React.createClass({
         {header}
         <div id="phylocanvas-container" style={fullWidthHeight}></div>
         <button
+          ref="menuButton"
           className="mdl-button mdl-js-button mdl-button--icon wgsa-tree-menu-button"
-          onClick={this.toggleContextMenu}
         >
           <i className="material-icons">more_vert</i>
         </button>
