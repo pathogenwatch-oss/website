@@ -1,6 +1,6 @@
-var connectWsClient = require('./features/ws-client');
-var uploadAssembly = require('./features/upload-assembly');
-var assertUploadNotifications = require('./features/assert-upload-notifications');
+//var connectWsClient = require('./features/ws-client');
+//var uploadAssembly = require('./features/upload-assembly');
+//var assertUploadNotifications = require('./features/assert-upload-notifications');
 
 describe('Assembly Routes', function () {
 

@@ -13,7 +13,8 @@ function getFile({ fileName }) {
   );
 }
 
-function getSpeciesFile({ speciesId, fileName }) {
+
+function getSpeciesFile(speciesId, fileName) {
   return fs.createReadStream(
     path.join(
       config.downloadFileLocation, sanitize(speciesId), sanitize(fileName)
