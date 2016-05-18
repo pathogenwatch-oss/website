@@ -1,6 +1,10 @@
 const definitions =
   require('../../universal/species').reduce((memo, { id, nickname }) => {
-    memo[nickname] = require(`./${nickname}`).default;
+    memo[nickname] = {
+      id,
+      nickname,
+      ...require(`./${nickname}`).default,
+    };
     return memo;
   }, {});
 
