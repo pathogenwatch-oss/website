@@ -1,13 +1,11 @@
-import React from 'react';
-
 import { requestDownload } from '../actions/downloads';
 
-import { API_ROOT } from '../utils/Api';
+import { SERVER_ADDRESS, API_ROOT } from '../utils/Api';
 import Species from '../species';
 
 export const encode = encodeURIComponent;
 export const collectionPath = () => `${API_ROOT}/species/${Species.id}/download/file`;
-export const speciesPath = () => `${API_ROOT}/species/${Species.id}/download`;
+export const speciesPath = () => `${SERVER_ADDRESS}/${Species.nickname}/download`;
 
 export function createDownloadKey(id) {
   if (!id) return null;
@@ -64,24 +62,20 @@ export const speciesDownloads = [
   { // subtitle: () => 'Reference Population',
     items: [
       { text: 'Core Representatives',
-        filename: () => `wgsa_${Species.nickname}_core_representatives.csv`,
-        serverName: () => 'core_rep_map.tsv',
+        filename: 'core_representatives.csv',
       },
     ],
   },
   { subtitle: () => 'Reference Data',
     items: [
       { text: 'Sequences',
-        filename: () => `wgsa_${Species.nickname}_reference_fastas.zip`,
-        serverName: () => 'fastas.zip',
+        filename: 'reference_fastas.zip',
       },
       { text: 'Annotations',
-        filename: () => `wgsa_${Species.nickname}_reference_annotations.zip`,
-        serverName: () => `wgsa_gff_${Species.id}`,
+        filename: 'reference_annotations.zip',
       },
       { text: 'Metadata',
-        filename: () => `wgsa_${Species.nickname}_reference_metadata.csv`,
-        serverName: () => 'metadata.csv',
+        filename: 'reference_metadata.csv',
       },
     ],
   },

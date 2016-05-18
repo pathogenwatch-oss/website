@@ -1,5 +1,5 @@
 import MetadataUtils from './Metadata';
-import analyseFasta from './Analysis';
+import analyseFasta from '../../universal/fastaAnalysis';
 
 const FASTA_FILE_EXTENSIONS = [
   '.fa', '.fas', '.fna', '.ffn', '.faa', '.frn', '.fasta', '.contig',

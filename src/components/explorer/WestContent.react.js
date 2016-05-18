@@ -18,11 +18,12 @@ import {
 const ConnectedTree = (props) => (<Tree {...props} />);
 
 function mapStateToProps(state) {
-  const { entities, display, loading } = state;
-  const displayedTree = entities.trees[display.tree];
+  const { entities, display } = state;
+  const { tree } = display;
+  const displayedTree = entities.trees[tree.name];
 
   return {
-    loading: loading.tree,
+    loading: tree.loading,
     tree: displayedTree.newick ? displayedTree : entities.trees[POPULATION],
     state,
   };

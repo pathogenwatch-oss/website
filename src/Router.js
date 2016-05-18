@@ -28,7 +28,7 @@ export default () => (
           </Route>,
         ]), []
       )}
-      <Route path="*" component={NotFound}/>
+      <Route path="*" component={NotFound} />
     </Route>
   </Router>
 );
