@@ -26,6 +26,10 @@ export default {
     currentSpecies = definitions[nickname];
   },
 
+  get(nickname) {
+    return definitions[nickname];
+  },
+
   get id() {
     return currentSpecies.id;
   },

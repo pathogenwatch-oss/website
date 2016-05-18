@@ -9,8 +9,10 @@ import Switch from './Switch.react';
 
 import { updateHeader } from '^/actions/header';
 
-import staph from '../species/saureus';
+import Species from '../species';
 import { CGPS } from '^/defaults';
+
+const staph = Species.get('saureus');
 
 export default connect()(React.createClass({
 

@@ -8,7 +8,9 @@ import Header from './components/Header.react';
 import Toast from './components/Toast.react';
 import DownloadsMenu from './components/explorer/DownloadsMenu.react';
 
-import Staph from './species/saureus';
+import Species from './species';
+
+const Staph = Species.get('saureus');
 
 const MenuLink = ({ isActive, icon, text, link }) => (
   <Link className={`mdl-navigation__link ${isActive ? 'mdl-navigation__link--active' : ''}`.trim()} to={link}>
