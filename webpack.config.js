@@ -24,7 +24,12 @@ const commonPlugins = [
   new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
 ];
 
-const babelPresets = [ 'react', 'es2015', 'stage-0' ];
+const commonBabelProps = {
+  test: /\.js$/,
+  loader: 'babel',
+  include: /(src|universal)/,
+  presets: [ 'react', 'es2015', 'stage-0' ]
+};
 
 const devConfig = {
   devtool: '#eval-source-map',
@@ -44,11 +49,11 @@ const devConfig = {
   ]),
   module: {
     loaders: [
-      { test: /\.js$/,
-        loader: 'babel',
-        include: /src/,
+      { test: commonBabelProps.test,
+        loader: commonBabelProps.loader,
+        include: commonBabelProps.include,
         query: {
-          presets: babelPresets,
+          presets: commonBabelProps.presets,
           plugins: [
             [ 'react-transform', {
               transforms: [ {
@@ -92,12 +97,12 @@ const prodConfig = {
   ]),
   module: {
     loaders: [
-      { test: /\.js$/,
-        loader: 'babel',
+      { test: commonBabelProps.test,
+        loader: commonBabelProps.loader,
+        include: commonBabelProps.include,
         query: {
-          presets: babelPresets,
+          presets: commonBabelProps.presets,
         },
-        include: /src/,
       },
     ].concat(commonLoaders),
   },
