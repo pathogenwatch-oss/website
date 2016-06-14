@@ -9,7 +9,7 @@ module.exports = {
   },
   'reference_annotations.zip': {
     contentType: 'application/zip',
-    fileOnDisk: (speciesId) => `wgsa_gff_${speciesId}`,
+    fileOnDisk: (speciesId) => `wgsa_gff_${speciesId}.zip`,
   },
   'reference_metadata.csv': {
     contentType: 'text/csv',
