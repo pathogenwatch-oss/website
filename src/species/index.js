@@ -42,8 +42,8 @@ export default {
     return currentSpecies.nickname;
   },
 
-  get missingAnalyses() {
-    return currentSpecies.missingAnalyses || [];
+  get uiOptions() {
+    return currentSpecies.uiOptions || {};
   },
 
   get maxAssemblySize() {
