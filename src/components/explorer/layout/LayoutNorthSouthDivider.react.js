@@ -61,18 +61,21 @@ export default React.createClass({
         <LayoutDivider
           top={this.props.top}
           direction="horizontal"
-          isStatic={true} />
+          isStatic
+        />
         <LayoutDivider
           top={this.props.top}
           direction="horizontal"
-          className="northSouthDivider" />
-        { Species.missingAnalyses.indexOf('PAARSNP') === -1 ?
+          className="northSouthDivider"
+        />
+        { Species.uiOptions.noAMR ?
+          null :
           <TableSwitcher
             top={this.props.top}
             showTimeline={this.props.showTimeline}
             shortCollectionId={this.props.shortCollectionId}
-            onLayoutNavigationChange={this.props.onLayoutNavigationChange} />
-          : null
+            onLayoutNavigationChange={this.props.onLayoutNavigationChange}
+          />
         }
       </div>
     );
