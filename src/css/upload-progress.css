@@ -46,6 +46,7 @@
 .wgsa-assembly-analyses {
   max-width: 640px;
   margin: 0 auto;
+  justify-content: center;
 }
 
 .wgsa-assembly-analyses .mdl-card__title {

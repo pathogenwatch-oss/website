@@ -8,6 +8,8 @@ import Spinner from '^/components/Spinner.react';
 
 import UploadStore from '^/stores/UploadStore';
 
+import Species from '^/species';
+
 const ProgressIndicator = ({ title, percentage }) => (
   <div className="wgsa-overview-upload-ready-card mdl-card mdl-cell mdl-cell--3-col">
     <div className="mdl-card__title mdl-card--expand">
@@ -38,6 +40,7 @@ const UploadDashboard = React.createClass({
   render() {
     const { isUploading, collectionSize = UploadStore.getAssembliesCount(), results = {}, errors = [] } = this.props;
     const { core, mlst, paarsnp } = this.getAssemblyTasks(results, collectionSize);
+    const { noMLST, noAMR } = Species.uiOptions;
     return (
       <div className="mdl-grid">
         <div className="wgsa-card mdl-cell mdl-cell--12-col mdl-shadow--2dp">
@@ -49,8 +52,8 @@ const UploadDashboard = React.createClass({
             />
             <div className="wgsa-assembly-analyses mdl-grid">
               <ProgressIndicator title={'CORE'} percentage={core} />
-              <ProgressIndicator title={'MLST'} percentage={mlst} />
-              <ProgressIndicator title={'PAARSNP'} percentage={paarsnp} />
+              { noMLST ? null : <ProgressIndicator title={'MLST'} percentage={mlst} /> }
+              { noAMR ? null : <ProgressIndicator title={'PAARSNP'} percentage={paarsnp} /> }
               <div className="wgsa-overview-upload-ready-card mdl-card mdl-cell mdl-cell--3-col">
                 <div className="mdl-card__title mdl-card--expand" style={{ fontSize: '16px' }}>
                   { (core >= 100) ? <Spinner /> : 'PENDING' }
