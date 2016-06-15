@@ -147,11 +147,14 @@ const CollectionList = () => (
           </div>
         </Link>
         <span className="wgsa-species-collection-list-item__utils">
-          <a href={`http://www.ncbi.nlm.nih.gov/pubmed/${pmid}`}
-            target="_blank"
-            className="wgsa-external-link">
-            <span>PUBMED</span><i className="material-icons">open_in_new</i>
-          </a>
+          { pmid ?
+            <a href={`http://www.ncbi.nlm.nih.gov/pubmed/${pmid}`}
+              target="_blank"
+              className="wgsa-external-link">
+              <span>PUBMED</span><i className="material-icons">open_in_new</i>
+            </a> :
+            null
+          }
         </span>
       </li>
     ))}
