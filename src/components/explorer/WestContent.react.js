@@ -15,6 +15,8 @@ import {
   speciesTrees,
 } from '^/constants/tree';
 
+import Species from '^/species';
+
 const ConnectedTree = (props) => (<Tree {...props} />);
 
 function mapStateToProps(state) {
@@ -47,7 +49,10 @@ function mergeProps({ loading, tree, state }, { dispatch }, props) {
         title={title}
         isSpecies={speciesTrees.has(tree.name)}
         dispatch={dispatch}
-        hasCollectionTree={collectionTree && collectionTree.newick}
+        hideSwitcher={
+          Species.uiOptions.noPopulation ||
+          !(collectionTree && collectionTree.newick)
+        }
       />
     ),
   };
