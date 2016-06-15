@@ -45,7 +45,7 @@
     "node-uuid": "^1.4.3",
     "object-assign": "^4.0.1",
     "papaparse": "^4.1.1",
-    "phylocanvas": "^2.4.0",
+    "phylocanvas": "phylocanvas/phylocanvas#v2.3.0",
     "phylocanvas-plugin-context-menu": "^3.8.0",
     "postcss-input-style": "^0.3.0",
     "postcss-loader": "^0.8.0",
