@@ -3,7 +3,7 @@
  * N.B. This file is used by the middle-end, please be careful ES6 features
  */
 
-const DNA_SEQUENCE_REGEX = /^[CTAGNUX]+$/i;
+const DNA_SEQUENCE_REGEX = /^[CTAGNUXRY]+$/i;
 
 function extractContigsFromFastaFileString(fastaFileString) {
   //
@@ -278,6 +278,7 @@ function validateContigs(contigs) {
 }
 
 function analyseFasta(fastaFileString) {
+  debugger;
   const contigs = extractContigsFromFastaFileString(fastaFileString);
   const dnaStrings = extractDnaStringsFromContigs(contigs);
   const assemblyN50Data = calculateN50(dnaStrings);
