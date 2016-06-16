@@ -36,6 +36,13 @@ function mergeProps({ loading, tree, state }, { dispatch }, props) {
   const title = getTitle(tree.name, entities.assemblies[tree.name]);
   const collectionTree = entities.trees[COLLECTION];
 
+  let singleTree;
+  if (Species.uiOptions.noPopulation) {
+    singleTree = COLLECTION;
+  } else if (!(collectionTree && collectionTree.newick)) {
+    singleTree = POPULATION;
+  }
+
   return {
     ...props,
     loading,
@@ -49,10 +56,7 @@ function mergeProps({ loading, tree, state }, { dispatch }, props) {
         title={title}
         isSpecies={speciesTrees.has(tree.name)}
         dispatch={dispatch}
-        hideSwitcher={
-          Species.uiOptions.noPopulation ||
-          !(collectionTree && collectionTree.newick)
-        }
+        singleTree={singleTree}
       />
     ),
   };

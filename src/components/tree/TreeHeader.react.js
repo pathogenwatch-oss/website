@@ -6,18 +6,22 @@ import { displayTree } from '^/actions/tree';
 
 import { POPULATION, COLLECTION } from '^/constants/tree';
 
-export default ({ tree, title, isSpecies, hideSwitcher, dispatch }) => {
+const icons = {
+  [COLLECTION]: 'person',
+  [POPULATION]: 'language',
+};
 
+export default ({ tree, title, isSpecies, singleTree, dispatch }) => {
   const switcher =
-    hideSwitcher ?
+    singleTree ?
     <div className="wgsa-tree-icon mdl-button mdl-button--icon">
-      <i className="material-icons">language</i>
+      <i className="material-icons">{icons[singleTree]}</i>
     </div> :
     <div className="wgsa-switch-background wgsa-switch-background--see-through">
       <Switch
         id="tree-switcher"
-        left={{ title: 'Collection View', icon: 'person' }}
-        right={{ title: 'Population View', icon: 'language' }}
+        left={{ title: 'Collection View', icon: icons[COLLECTION] }}
+        right={{ title: 'Population View', icon: icons[POPULATION] }}
         checked={tree.name === POPULATION}
         onChange={(checked) => dispatch(
           displayTree(
