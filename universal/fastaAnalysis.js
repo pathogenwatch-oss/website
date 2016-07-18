@@ -278,7 +278,6 @@ function validateContigs(contigs) {
 }
 
 function analyseFasta(fastaFileString) {
-  debugger;
   const contigs = extractContigsFromFastaFileString(fastaFileString);
   const dnaStrings = extractDnaStringsFromContigs(contigs);
   const assemblyN50Data = calculateN50(dnaStrings);

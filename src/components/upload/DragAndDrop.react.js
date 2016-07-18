@@ -15,12 +15,7 @@ export default React.createClass({
   displayName: 'DragAndDrop',
 
   propTypes: {
-    onDragStart: React.PropTypes.func,
     onDrop: React.PropTypes.func.isRequired,
-    onDragEnter: React.PropTypes.func,
-    onDragLeave: React.PropTypes.func,
-    onDragOver: React.PropTypes.func,
-    onDragEnd: React.PropTypes.func,
   },
 
   getInitialState() {
@@ -32,9 +27,10 @@ export default React.createClass({
   componentDidMount() {
     $('body').on('drop', (event) => {
       event.preventDefault();
+      this.hideDropIndicator();
       this.handleDrop(event.originalEvent);
     });
-    this.draghover = $(window).draghover().on({
+    $.draghover({
       draghoverstart: () => {
         this.showDropIndicator();
       },
@@ -46,39 +42,7 @@ export default React.createClass({
 
   componentWillUnmount() {
     $('body').off('drop');
-    this.draghover.trigger('draghoverunbind');
-  },
-
-  handleDragStart(event) {
-    if (typeof this.props.onDragStart === 'function') {
-      this.props.onDragStart(event);
-    }
-  },
-
-  handleDrag(event) {
-    if (typeof this.props.onDrag === 'function') {
-      this.props.onDrag(event);
-    }
-  },
-
-  handleDragEnter(event) {
-    if (typeof this.props.onDragEnter === 'function') {
-      this.props.onDragEnter(event);
-    }
-  },
-
-  handleDragLeave(event) {
-    if (typeof this.props.onDragLeave === 'function') {
-      this.props.onDragLeave(event);
-    }
-  },
-
-  handleDragOver(event) {
-    event.preventDefault();
-
-    if (typeof this.props.onDragOver === 'function') {
-      this.props.onDragOver(event);
-    }
+    $.draghover(false);
   },
 
   handleDrop(event) {
@@ -92,22 +56,12 @@ export default React.createClass({
     }
   },
 
-  handleDragEnd(event) {
-    if (typeof this.props.onDragEnd === 'function') {
-      this.props.onDragEnd(event);
-    }
-  },
-
   showDropIndicator() {
-    if (! this.state.indicatorVisible) {
-      this.setState({ indicatorVisible: true });
-    }
+    this.setState({ indicatorVisible: true });
   },
 
   hideDropIndicator() {
-    if (this.state.indicatorVisible) {
-      this.setState({ indicatorVisible: false });
-    }
+    this.setState({ indicatorVisible: false });
   },
 
   render() {

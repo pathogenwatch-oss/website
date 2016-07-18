@@ -28,7 +28,7 @@ const commonBabelProps = {
   test: /\.js$/,
   loader: 'babel',
   include: /(src|universal)/,
-  presets: [ 'react', 'es2015', 'stage-0' ]
+  presets: [ 'react', 'es2015', 'stage-0' ],
 };
 
 const devConfig = {
