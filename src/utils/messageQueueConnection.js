@@ -21,21 +21,21 @@ var EXCHANGE_CONFIG = {
     name: 'notifications-ex',
     type: 'direct',
     options: {
-      passive: false,
+      // passive: false,
     },
   },
   UPLOAD: {
     name: 'wgst-ex',
     type: 'direct',
     options: {
-      passive: false,
+      // passive: false,
     },
   },
   COLLECTION_ID: {
     name: 'grid-ex',
     type: 'direct',
     options: {
-      passive: false,
+      // passive: false,
     },
   },
   SERVICES: {
