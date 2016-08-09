@@ -11,9 +11,9 @@ if (!serviceName) {
   LOGGER.error('Service name not provided.');
 } else {
   async.parallel({
-    storage: storageConnection.connect,
-    mqConnection: messageQueueConnection.connect
-  }, function (error, connections) {
+    storageConnection: storageConnection.connect,
+    mqConnection: messageQueueConnection.connect,
+  }, (error, connections) => {
     if (error) {
       return LOGGER.error(error);
     }

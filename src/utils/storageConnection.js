@@ -1,41 +1,40 @@
-var couchbase = require('couchbase');
-var async = require('async');
+const couchbase = require('couchbase');
+const async = require('async');
 
-var appConfig = require('configuration');
-var LOGGER = require('utils/logging').createLogger('Storage');
+const appConfig = require('configuration');
+const LOGGER = require('utils/logging').createLogger('Storage');
 
-var DEFAULT_HOSTNAME = '127.0.0.1';
-var HOSTNAMES = appConfig.couchbase.ip || DEFAULT_HOSTNAME;
-var ADDRESS = 'couchbase://' + HOSTNAMES;
+const DEFAULT_HOSTNAME = '127.0.0.1';
+const HOSTNAMES = appConfig.couchbase.ip || DEFAULT_HOSTNAME;
+const ADDRESS = HOSTNAMES;
+// var ADDRESS = 'couchbase://' + HOSTNAMES;
 
 function createBucketConnection(config, cluster, callback) {
-  var bucketName = config.name;
-  var password = config.password;
+  const bucketName = config.name;
+  const password = config.password;
 
-  LOGGER.info('Connecting to bucket: ' + bucketName);
-  var bucket = cluster.openBucket(bucketName, password,
-    function (error) {
-      if (error) {
-        LOGGER.error('✗ ' + error + ' ' + bucketName);
-        return callback(error, null);
-      }
-      LOGGER.info('✔ Connected to "' + bucketName + '" bucket');
-      bucket.connectionTimeout = 60000;
-      bucket.operationTimeout = 60000;
-      callback(null, bucket);
+  LOGGER.info(`Connecting to bucket: ${bucketName}`);
+  const bucket = cluster.openBucket(bucketName, password, (error) => {
+    if (error) {
+      LOGGER.error(`✗ ${error} ${bucketName}`);
+      return callback(error, null);
     }
-  );
+    LOGGER.info(`✔ Connected to "${bucketName}" bucket`);
+    bucket.connectionTimeout = 60000;
+    bucket.operationTimeout = 60000;
+    callback(null, bucket);
+  });
 }
 
-var connections = {};
+const connections = {};
 function connect(callback) {
-  var config = appConfig.couchbase.buckets;
-  var cluster = new couchbase.Cluster(ADDRESS);
+  const config = appConfig.couchbase.buckets;
+  const cluster = new couchbase.Cluster(ADDRESS);
 
   async.each(
     Object.keys(config),
-    function (key, iterationFinished) {
-      createBucketConnection(config[key], cluster, function (error, bucket) {
+    (key, iterationFinished) => {
+      createBucketConnection(config[key], cluster, (error, bucket) => {
         if (error) {
           return iterationFinished(error);
         }
