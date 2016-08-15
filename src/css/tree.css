@@ -46,6 +46,14 @@ div.wgsa-tree-icon:active {
   cursor: default;
 }
 
+.wgsa-tree-menu-button {
+  position: absolute;
+  top: 24px;
+  right: 16px;
+  z-index: 1;
+  color: #673c90;
+}
+
 .wgsa-tree-menu {
   align-self: flex-end;
 }
