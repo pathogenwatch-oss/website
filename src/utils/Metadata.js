@@ -57,7 +57,7 @@ function convertDateObjectToCustomObject(date) {
 
 function fixDateFormats(collection) {
   const { assemblies } = collection;
-  Object.keys(assemblies).forEach(function (assemblyId) {
+  Object.keys(assemblies).forEach(assemblyId => {
     const assembly = assemblies[assemblyId];
 
     if (assembly.metadata.datetime) {
@@ -93,7 +93,7 @@ function isValid({ date }) {
 
 function fixPositions(collection) {
   const { assemblies } = collection;
-  Object.keys(assemblies).forEach(function (assemblyId) {
+  Object.keys(assemblies).forEach(assemblyId => {
     const { metadata } = assemblies[assemblyId];
     if (metadata.geography) {
       metadata.position = metadata.geography.position;

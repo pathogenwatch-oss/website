@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { requestDownload } from '../actions/downloads';
 
 import { API_ROOT } from '../utils/Api';

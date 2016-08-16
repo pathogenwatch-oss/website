@@ -3,7 +3,6 @@ import { SET_LABEL_COLUMN, setLabelColumn } from '../actions/table';
 import { SET_TREE } from '../actions/tree';
 
 import { systemColumnProps } from '../constants/metadata';
-import { getCellContents } from '../constants/table';
 import { speciesTrees } from '../constants/tree';
 
 import Species from '^/species';
@@ -39,7 +38,6 @@ function buildUserDefinedColumnProps(columnNames) {
       valueGetter({ metadata }) {
         return metadata.userDefined[column];
       },
-      getCellContents,
     };
   });
 }

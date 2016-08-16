@@ -5,7 +5,7 @@ import FixedTable from '^/components/FixedTable.react';
 
 import { activateFilter, resetFilter } from '^/actions/filter';
 
-import { addColumnWidth } from '^/constants/table';
+import { addColumnWidth } from '^/utils/table/columnWidth';
 import { addDownloadProps } from '^/constants/downloads';
 
 const sectionStyle = {

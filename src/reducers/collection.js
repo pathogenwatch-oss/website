@@ -2,12 +2,12 @@ import { FETCH_ENTITIES, CHECK_STATUS, UPDATE_PROGRESS } from '../actions/fetch'
 import { SET_COLLECTION_ID } from '../actions/collection';
 import { SET_TREE } from '../actions/tree';
 
-import { sortAssemblies } from '../constants/table';
+import { sortAssemblies } from '../utils/table';
 import { statuses } from '../constants/collection';
 
 function replaceSubtypeAssemblyNames(uploaded, reference) {
   return Object.keys(uploaded)
-    .reduce(function (memo, assemblyId) {
+    .reduce((memo, assemblyId) => {
       const { populationSubtype, ...assembly } = uploaded[assemblyId];
       memo[assemblyId] = {
         ...assembly,
@@ -21,7 +21,7 @@ function replaceSubtypeAssemblyNames(uploaded, reference) {
 
 function decorateReferenceAssemblies(assemblies) {
   return Object.keys(assemblies)
-    .reduce(function (memo, assemblyId) {
+    .reduce((memo, assemblyId) => {
       const { metadata, analysis, ...assembly } = assemblies[assemblyId];
       memo[assemblyId] = {
         ...assembly,
@@ -41,7 +41,7 @@ function decorateReferenceAssemblies(assemblies) {
 }
 
 function decorateCollectionAssemblies(assemblies) {
-  return Object.keys(assemblies).reduce(function (memo, key) {
+  return Object.keys(assemblies).reduce((memo, key) => {
     memo[key] = {
       ...assemblies[key],
       __isCollection: true,
@@ -51,7 +51,7 @@ function decorateCollectionAssemblies(assemblies) {
 }
 
 function decoratePublicAssemblies(assemblies) {
-  return Object.keys(assemblies).reduce(function (memo, key) {
+  return Object.keys(assemblies).reduce((memo, key) => {
     memo[key] = {
       ...assemblies[key],
       __isPublic: true,
@@ -63,7 +63,7 @@ function decoratePublicAssemblies(assemblies) {
 export const assemblies = {
   initialState: {},
   actions: {
-    [FETCH_ENTITIES]: function (state, { ready, result, error }) {
+    [FETCH_ENTITIES](state, { ready, result, error }) {
       if (!ready || error) {
         return state;
       }
@@ -80,7 +80,7 @@ export const assemblies = {
         };
       }
     },
-    [SET_TREE]: function (state, { ready, result }) {
+    [SET_TREE](state, { ready, result }) {
       if (ready && result) {
         const publicAssemblies = decoratePublicAssemblies(result.assemblies);
         return {
@@ -97,13 +97,13 @@ export const assemblies = {
 export const collection = {
   initialState: { id: null, assemblyIds: [] },
   actions: {
-    [SET_COLLECTION_ID]: function (state, { id }) {
+    [SET_COLLECTION_ID](state, { id }) {
       return {
         ...state,
         id,
       };
     },
-    [CHECK_STATUS]: function (state, { ready, result, error }) {
+    [CHECK_STATUS](state, { ready, result, error }) {
       if (ready && error) {
         return {
           ...state,
@@ -120,13 +120,13 @@ export const collection = {
 
       return state;
     },
-    [UPDATE_PROGRESS]: function (state, { results }) {
+    [UPDATE_PROGRESS](state, { results }) {
       return {
         ...state,
         ...results,
       };
     },
-    [FETCH_ENTITIES]: function (state, { ready, result, error }) {
+    [FETCH_ENTITIES](state, { ready, result, error }) {
       if (ready && error) {
         return {
           ...state,
@@ -156,7 +156,7 @@ export const collection = {
 export const reference = {
   initialState: { assemblyIds: [] },
   actions: {
-    [FETCH_ENTITIES]: function (state, { ready, result, error }) {
+    [FETCH_ENTITIES](state, { ready, result, error }) {
       if (!ready || error) {
         return state;
       }

@@ -1,36 +1,29 @@
-// import React from 'react';
+import { downloadColumnProps, nameColumnProps } from '../constants/table';
 
-import { downloadColumnProps, nameColumnProps, getCellContents, }
-  from '../constants/table';
+import { toCSV } from '../utils/table';
 
 import MetadataUtils from '../utils/Metadata';
 
-export const systemColumnProps = [
-  ...downloadColumnProps,
-  nameColumnProps,
+const wgsaDataColumnProps = [
   { columnKey: '__date',
     valueGetter({ metadata }) {
       return MetadataUtils.getFormattedDateString(metadata.date);
     },
-    getCellContents,
   },
   { columnKey: '__subtype',
     valueGetter({ populationSubtype }) {
       return populationSubtype;
     },
-    getCellContents,
   },
   { columnKey: '__st',
     valueGetter({ analysis }) {
       return analysis.st;
     },
-    getCellContents,
   },
   { columnKey: '__mlst_profile',
     valueGetter({ analysis }) {
       return analysis.mlst;
     },
-    getCellContents,
   },
   { columnKey: '__core_matches',
     valueGetter({ analysis }) {
@@ -38,7 +31,6 @@ export const systemColumnProps = [
         analysis.core.size :
         null;
     },
-    getCellContents,
   },
   { columnKey: '__%_core_families',
     valueGetter({ analysis }) {
@@ -46,7 +38,6 @@ export const systemColumnProps = [
         analysis.core.percentMatched :
         null;
     },
-    getCellContents,
   },
   { columnKey: '__%_non-core',
     valueGetter({ analysis }) {
@@ -54,7 +45,6 @@ export const systemColumnProps = [
         (100 - analysis.core.percentAssemblyMatched).toFixed(1) :
         null;
     },
-    getCellContents,
   },
   { columnKey: '__assembly_length',
     valueGetter({ metadata }) {
@@ -62,7 +52,6 @@ export const systemColumnProps = [
         metadata.metrics.totalNumberOfNucleotidesInDnaStrings :
         null;
     },
-    getCellContents,
   },
   { columnKey: '__n50',
     valueGetter({ metadata }) {
@@ -70,7 +59,6 @@ export const systemColumnProps = [
         metadata.metrics.contigN50 :
         null;
     },
-    getCellContents,
   },
   { columnKey: '__no._contigs',
     valueGetter({ metadata }) {
@@ -78,7 +66,6 @@ export const systemColumnProps = [
         metadata.metrics.totalNumberOfContigs :
         null;
     },
-    getCellContents,
   },
   { columnKey: '__non-ATCG',
     valueGetter({ metadata }) {
@@ -86,7 +73,6 @@ export const systemColumnProps = [
         metadata.metrics.totalNumberOfNsInDnaStrings :
         null;
     },
-    getCellContents,
   },
   { columnKey: '__GC_Content',
     valueGetter({ metadata }) {
@@ -94,6 +80,11 @@ export const systemColumnProps = [
         `${metadata.metrics.gcContent}%` :
         null;
     },
-    getCellContents,
   },
+];
+
+export const systemColumnProps = [
+  downloadColumnProps,
+  nameColumnProps,
+  ...wgsaDataColumnProps,
 ];
