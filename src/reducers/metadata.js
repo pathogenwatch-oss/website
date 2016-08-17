@@ -2,8 +2,9 @@ import { FETCH_ENTITIES } from '../actions/fetch';
 import { SET_LABEL_COLUMN, setLabelColumn } from '../actions/table';
 import { SET_TREE } from '../actions/tree';
 
-import { getSystemColumnProps } from '../constants/metadata';
-import { nameColumnProps, getCellContents } from '../constants/table';
+import { downloadColumnProps, nameColumnProps } from '../constants/table';
+import { getSystemDataColumnProps, getUserDefinedValue } from '../constants/metadata';
+
 import { speciesTrees } from '../constants/tree';
 
 import Species from '^/species';
@@ -35,10 +36,9 @@ function getUserDefinedColumnNames(assemblies) {
 function getUserDefinedColumnProps(columnNames) {
   return Array.from(columnNames).map(column => ({
     columnKey: column,
-    valueGetter({ metadata }) {
-      return metadata.userDefined[column];
+    valueGetter(data) {
+      return getUserDefinedValue(column, data);
     },
-    getCellContents,
   }));
 }
 
@@ -56,7 +56,11 @@ const actions = {
       const { publicMetadataColumnNames = [], uiOptions = {} } = Species.current;
 
       const columnNames = getUserDefinedColumnNames(assemblies);
-      const systemColumnProps = getSystemColumnProps(uiOptions);
+      const systemColumnProps = [
+        downloadColumnProps,
+        nameColumnProps,
+        ...getSystemDataColumnProps(uiOptions),
+      ];
       const userDefinedColumnProps =
         systemColumnProps.concat(getUserDefinedColumnProps(columnNames));
 

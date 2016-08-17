@@ -2,15 +2,23 @@ import { REQUEST_DOWNLOAD } from '../actions/downloads';
 import ToastActionCreators from '../actions/ToastActionCreators';
 
 import {
-  createDownloadKey,
-  collectionPath,
-  encode,
-} from '../constants/downloads';
+  generateMetadataFile, generateAMRProfile, createCSVLink, createDefaultLink,
+} from '../utils/download';
+
+import { createDownloadKey } from '../constants/downloads';
 
 const initialState = {
+  metadata_csv: {
+    description: 'Metadata',
+    filename: 'metadata.csv',
+    getFileContents: generateMetadataFile,
+    createLink: createCSVLink,
+  },
   amr_profile_collection: {
     description: 'AMR Profile',
-    filename: 'amr_profile',
+    filename: 'amr_profile.csv',
+    getFileContents: generateAMRProfile,
+    createLink: createCSVLink,
   },
   concatenated_core_genes_collection: {
     description: 'Concatenated Core Genes',
@@ -40,27 +48,21 @@ const initialState = {
   },
 };
 
-function createLink(keyMap, filename) {
-  const key = Object.keys(keyMap)[0];
-
-  if (!key) {
-    return null;
-  }
-
-  return (
-    `${collectionPath()}/${encode(key)}?prettyFileName=${encode(filename)}`
-  );
-}
-
 const actions = {
-  [REQUEST_DOWNLOAD]: function (state, action) {
+  [REQUEST_DOWNLOAD](state, action) {
     const { format, idList, filename, ready, result, error } = action;
 
-    if (!state[format]) {
+    const downloadState = state[format];
+
+    if (!downloadState) {
       return state;
     }
 
-    const { linksById = {}, ...download } = state[format];
+    const {
+      linksById = {},
+      createLink = createDefaultLink,
+    } = downloadState;
+
     const downloadKey = createDownloadKey(idList);
 
     if (error) {
@@ -74,7 +76,7 @@ const actions = {
     return {
       ...state,
       [format]: {
-        ...download,
+        ...downloadState,
         linksById: {
           ...linksById,
           [downloadKey]: {

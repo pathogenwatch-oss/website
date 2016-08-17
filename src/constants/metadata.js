@@ -1,19 +1,11 @@
-// import React from 'react';
-
-import { downloadColumnProps, nameColumnProps, getCellContents }
-  from '../constants/table';
-
 import MetadataUtils from '../utils/Metadata';
 
-export function getSystemColumnProps({ noPopulation, noMLST } = {}) {
+export function getSystemDataColumnProps({ noPopulation, noMLST } = {}) {
   return [
-    ...downloadColumnProps,
-    nameColumnProps,
     { columnKey: '__date',
       valueGetter({ metadata }) {
         return MetadataUtils.getFormattedDateString(metadata.date);
       },
-      getCellContents,
     },
   ].
   concat(noPopulation ? [] : [
@@ -21,13 +13,11 @@ export function getSystemColumnProps({ noPopulation, noMLST } = {}) {
       valueGetter({ populationSubtype }) {
         return populationSubtype;
       },
-      getCellContents,
     },
     { columnKey: '__st',
       valueGetter({ analysis }) {
         return analysis.st;
       },
-      getCellContents,
     },
   ]).
   concat(noMLST ? [] : [
@@ -35,7 +25,6 @@ export function getSystemColumnProps({ noPopulation, noMLST } = {}) {
       valueGetter({ analysis }) {
         return analysis.mlst;
       },
-      getCellContents,
     },
   ]).
   concat([
@@ -45,7 +34,6 @@ export function getSystemColumnProps({ noPopulation, noMLST } = {}) {
           analysis.core.size :
           null;
       },
-      getCellContents,
     },
     { columnKey: '__%_core_families',
       valueGetter({ analysis }) {
@@ -53,7 +41,6 @@ export function getSystemColumnProps({ noPopulation, noMLST } = {}) {
           analysis.core.percentMatched :
           null;
       },
-      getCellContents,
     },
     { columnKey: '__%_non-core',
       valueGetter({ analysis }) {
@@ -61,7 +48,6 @@ export function getSystemColumnProps({ noPopulation, noMLST } = {}) {
           (100 - analysis.core.percentAssemblyMatched).toFixed(1) :
           null;
       },
-      getCellContents,
     },
     { columnKey: '__assembly_length',
       valueGetter({ metadata }) {
@@ -69,7 +55,6 @@ export function getSystemColumnProps({ noPopulation, noMLST } = {}) {
           metadata.metrics.totalNumberOfNucleotidesInDnaStrings :
           null;
       },
-      getCellContents,
     },
     { columnKey: '__n50',
       valueGetter({ metadata }) {
@@ -77,7 +62,6 @@ export function getSystemColumnProps({ noPopulation, noMLST } = {}) {
           metadata.metrics.contigN50 :
           null;
       },
-      getCellContents,
     },
     { columnKey: '__no._contigs',
       valueGetter({ metadata }) {
@@ -85,7 +69,6 @@ export function getSystemColumnProps({ noPopulation, noMLST } = {}) {
           metadata.metrics.totalNumberOfContigs :
           null;
       },
-      getCellContents,
     },
     { columnKey: '__non-ATCG',
       valueGetter({ metadata }) {
@@ -93,7 +76,6 @@ export function getSystemColumnProps({ noPopulation, noMLST } = {}) {
           metadata.metrics.totalNumberOfNsInDnaStrings :
           null;
       },
-      getCellContents,
     },
     { columnKey: '__GC_Content',
       valueGetter({ metadata }) {
@@ -101,7 +83,9 @@ export function getSystemColumnProps({ noPopulation, noMLST } = {}) {
           `${metadata.metrics.gcContent}%` :
           null;
       },
-      getCellContents,
     },
   ]);
 }
+
+export const getUserDefinedValue =
+  (column, { metadata }) => metadata.userDefined[column];

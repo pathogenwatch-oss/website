@@ -19,7 +19,9 @@ const systemColumnProps = [
 ];
 
 function measureText(text) {
-  return (canvas.measureText(text.toUpperCase()).width * Math.cos(0.785)) + 40;
+  return (
+    canvas.measureText(text.toUpperCase()).width * Math.cos(45 * Math.PI / 180)
+  ) + 40;
 }
 
 function buildAntibioticColumnProps(antibiotics) {
@@ -61,6 +63,11 @@ const actions = {
     if (ready && !error) {
       const antibiotics = result[2];
 
+      console.log(
+        Math.cos(45 * Math.PI / 180) *
+          measureText(antibiotics[antibiotics.length - 1]) - 24,
+      );
+
       const columns = [
         { columnKey: '__spacer_l',
           getHeaderContent() {},
@@ -72,8 +79,9 @@ const actions = {
         ...buildAntibioticColumnProps(antibiotics),
         { columnKey: '__spacer_r',
           getHeaderContent() {},
-          fixedWidth: Math.cos(45 * Math.PI / 180) *
-            measureText(antibiotics[antibiotics.length - 1]) - 24,
+          fixedWidth:
+            Math.cos(45 * Math.PI / 180) *
+              measureText(antibiotics[antibiotics.length - 1]) - 24,
           getCellContents() {},
           cellClasses: 'wgsa-table-cell--resistance',
         },

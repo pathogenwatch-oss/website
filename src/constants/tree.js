@@ -5,7 +5,7 @@ import {
   resetFilter,
 } from '../actions/filter';
 
-import { formatColumnLabel } from '../constants/table';
+import { formatColumnLabel } from '../utils/table';
 import Species from '../species';
 import { CGPS, COLOUR } from '^/defaults';
 

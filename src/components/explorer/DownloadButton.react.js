@@ -33,17 +33,19 @@ export default React.createClass({
       loading, error, description, link, filename,
       onClick, label, color, isArchive, iconOnly,
     } = this.props;
-    const title =
-      `${ !loading && link ? 'Download' : 'Generate' } ${description}`;
+
+    const title = `Download ${description}`;
     const classNames = iconOnly ? `${defaultClassName} mdl-button mdl-button--icon` : defaultClassName;
+
     return link ? (
       <a ref="link"
         href={link || '#'}
         target="_blank"
         download={filename}
         title={title}
-        className={classNames}>
-          <DownloadIcon hasLink color={color}/>
+        className={classNames}
+      >
+          <DownloadIcon hasLink color={color} />
           {!iconOnly && description}
       </a>
     ) : (
