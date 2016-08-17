@@ -1,18 +1,28 @@
-import { toCSV } from './table';
+import PromiseWorker from 'promise-worker';
 
 import { tableKeys } from '../constants/table';
 import { collectionPath, encode } from '../constants/downloads';
 
+import getCSVWorker from 'worker?name=csv.worker.js!./table/CsvWorker';
 
-export function generateMetadataFile({ tables, assemblies, assemblyIds }) {
-  const rows = assemblyIds.map(id => assemblies[id]);
+function convertTableToCSV(table) {
+  return function ({ tables, assemblies, assemblyIds }) {
+    const columnKeys =
+      tables[table].columns.
+        filter(_ => 'valueGetter' in _).
+        map(_ => _.columnKey);
 
-  // Removes downloads column
-  const columns =
-    tables[tableKeys.metadata].columns.slice(1);
+    const rows = assemblyIds.map(_ => assemblies[_]);
 
-  return new Promise((resolve) => resolve(toCSV(columns, rows)));
+    return (
+      new PromiseWorker(getCSVWorker()).postMessage({ table, rows, columnKeys })
+    );
+  };
 }
+
+const { metadata, resistanceProfile } = tableKeys;
+export const generateMetadataFile = convertTableToCSV(metadata);
+export const generateAMRProfile = convertTableToCSV(resistanceProfile);
 
 export function createDefaultLink(keyMap, filename) {
   const key = Object.keys(keyMap)[0];
@@ -28,7 +38,7 @@ export function createDefaultLink(keyMap, filename) {
 
 const windowURL = window.URL || window.webkitURL;
 
-export function createBlobLink(type = 'text/plain;charset=utf-8', data) {
-  const blob = new Blob([ data ], { type });
+export function createCSVLink(data) {
+  const blob = new Blob([ data ], { type: 'text/csv;charset=utf-8' });
   return windowURL.createObjectURL(blob);
 }

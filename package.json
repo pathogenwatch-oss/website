@@ -49,6 +49,7 @@
     "phylocanvas-plugin-context-menu": "^3.8.0",
     "postcss-input-style": "^0.3.0",
     "postcss-loader": "^0.9.1",
+    "promise-worker": "^1.1.1",
     "react": "^15.2.1",
     "react-dom": "^15.2.1",
     "react-redux": "^4.0.0",

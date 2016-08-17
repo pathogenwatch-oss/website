@@ -1,10 +1,6 @@
-import { downloadColumnProps, nameColumnProps } from '../constants/table';
-
-import { toCSV } from '../utils/table';
-
 import MetadataUtils from '../utils/Metadata';
 
-const wgsaDataColumnProps = [
+export const wgsaDataColumnProps = [
   { columnKey: '__date',
     valueGetter({ metadata }) {
       return MetadataUtils.getFormattedDateString(metadata.date);
@@ -83,8 +79,5 @@ const wgsaDataColumnProps = [
   },
 ];
 
-export const systemColumnProps = [
-  downloadColumnProps,
-  nameColumnProps,
-  ...wgsaDataColumnProps,
-];
+export const getUserDefinedValue =
+  (column, { metadata }) => metadata.userDefined[column];

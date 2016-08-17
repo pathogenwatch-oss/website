@@ -2,7 +2,7 @@ import { REQUEST_DOWNLOAD } from '../actions/downloads';
 import ToastActionCreators from '../actions/ToastActionCreators';
 
 import {
-  generateMetadataFile, createBlobLink, createDefaultLink,
+  generateMetadataFile, generateAMRProfile, createCSVLink, createDefaultLink,
 } from '../utils/download';
 
 import { createDownloadKey } from '../constants/downloads';
@@ -12,11 +12,13 @@ const initialState = {
     description: 'Metadata',
     filename: 'metadata.csv',
     getFileContents: generateMetadataFile,
-    createLink: createBlobLink.bind(null, 'text/csv;charset=utf-8'),
+    createLink: createCSVLink,
   },
   amr_profile_collection: {
     description: 'AMR Profile',
-    filename: 'amr_profile',
+    filename: 'amr_profile.csv',
+    getFileContents: generateAMRProfile,
+    createLink: createCSVLink,
   },
   concatenated_core_genes_collection: {
     description: 'Concatenated Core Genes',

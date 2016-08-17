@@ -2,10 +2,17 @@ import { FETCH_ENTITIES } from '../actions/fetch';
 import { SET_LABEL_COLUMN, setLabelColumn } from '../actions/table';
 import { SET_TREE } from '../actions/tree';
 
-import { systemColumnProps } from '../constants/metadata';
+import { downloadColumnProps, nameColumnProps } from '../constants/table';
+import { wgsaDataColumnProps, getUserDefinedValue } from '../constants/metadata';
 import { speciesTrees } from '../constants/tree';
 
 import Species from '^/species';
+
+const systemColumnProps = [
+  downloadColumnProps,
+  nameColumnProps,
+  ...wgsaDataColumnProps,
+];
 
 const initialActiveColumn = systemColumnProps[1];
 
@@ -32,14 +39,12 @@ function getUserDefinedColumnNames(assemblies) {
 }
 
 function buildUserDefinedColumnProps(columnNames) {
-  return Array.from(columnNames).map((column) => {
-    return {
-      columnKey: column,
-      valueGetter({ metadata }) {
-        return metadata.userDefined[column];
-      },
-    };
-  });
+  return Array.from(columnNames).map((column) => ({
+    columnKey: column,
+    valueGetter(data) {
+      return getUserDefinedValue(column, data);
+    },
+  }));
 }
 
 function createColumnProps(columnNames) {

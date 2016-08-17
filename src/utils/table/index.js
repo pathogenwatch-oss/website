@@ -1,5 +1,3 @@
-import Papa from 'papaparse';
-
 export const getCellValue = ({ valueGetter }, data) => valueGetter(data);
 
 export const formatColumnLabel =
@@ -19,14 +17,4 @@ export function sortAssemblies(assemblies, id1, id2) {
   }
 
   return 0;
-}
-
-export function toCSV(columns, rows) {
-
-  const params = {
-    fields: columns.map(_ => formatColumnLabel(_.columnKey)),
-    data: rows.map(row => columns.map(_ => _.valueGetter(row))),
-  };
-  console.log(params);
-  return Papa.unparse(params);
 }

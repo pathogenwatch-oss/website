@@ -1,10 +1,11 @@
 import React from 'react';
 
-import DownloadButton from '../components/explorer/DownloadButton.react';
+import DownloadButton from '^/components/explorer/DownloadButton.react';
 
-import { getArchiveDownloadProps } from '../constants/downloads';
+import { getArchiveDownloadProps } from '^/constants/downloads';
+import { nameColumnData } from './columns';
 
-import { defaultWidthGetter } from '../utils/table/columnWidth';
+import { defaultWidthGetter } from '^/utils/table/columnWidth';
 
 import { CGPS } from '^/defaults';
 import Species from '^/species';
@@ -80,11 +81,8 @@ function getNameText(data, valueGetter) {
 }
 
 export const nameColumnProps = {
-  columnKey: '__name',
+  ...nameColumnData,
   fixed: true,
-  valueGetter({ metadata }) {
-    return metadata.assemblyName;
-  },
   getWidth(columnProps, row) {
     let width = defaultWidthGetter(columnProps, row);
 
