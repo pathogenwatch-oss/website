@@ -7,6 +7,8 @@ import {
 
 import { createDownloadKey } from '../constants/downloads';
 
+import Species from '^/species';
+
 const initialState = {
   metadata_csv: {
     description: 'Metadata',
@@ -19,6 +21,10 @@ const initialState = {
     filename: 'amr_profile.csv',
     getFileContents: generateAMRProfile,
     createLink: createCSVLink,
+    hideFromMenu() {
+      const { uiOptions = {} } = Species.current;
+      return uiOptions.noAMR;
+    },
   },
   concatenated_core_genes_collection: {
     description: 'Concatenated Core Genes',
@@ -39,12 +45,12 @@ const initialState = {
   fasta: {
     description: 'Assembly',
     filename: 'fasta',
-    notMenu: true,
+    hideFromMenu: () => true,
   },
   wgsa_gff: {
     description: 'Annotations',
     filename: 'annotations',
-    notMenu: true,
+    hideFromMenu: () => true,
   },
 };
 

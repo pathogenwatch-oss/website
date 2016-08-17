@@ -80,7 +80,10 @@ function mergeProps(state, { dispatch }) {
     counts: getCounts(assemblies, assemblyIds),
     files:
       Object.keys(files).
-        filter(format => !files[format].notMenu).
+        filter(format => {
+          const { hideFromMenu = () => false } = files[format];
+          return !hideFromMenu();
+        }).
         map(format => {
           const {
             linksById, filename, getFileContents, ...props,

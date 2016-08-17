@@ -5,7 +5,13 @@ import { SET_TREE } from '../actions/tree';
 import { sortAssemblies } from '../utils/table';
 import { statuses } from '../constants/collection';
 
+import Species from '^/species';
+
 function replaceSubtypeAssemblyNames(uploaded, reference) {
+  const { uiOptions = {} } = Species.current;
+  if (uiOptions.noPopulation) {
+    return uploaded;
+  }
   return Object.keys(uploaded)
     .reduce((memo, assemblyId) => {
       const { populationSubtype, ...assembly } = uploaded[assemblyId];
