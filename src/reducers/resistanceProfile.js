@@ -63,11 +63,6 @@ const actions = {
     if (ready && !error) {
       const antibiotics = result[2];
 
-      console.log(
-        Math.cos(45 * Math.PI / 180) *
-          measureText(antibiotics[antibiotics.length - 1]) - 24,
-      );
-
       const columns = [
         { columnKey: '__spacer_l',
           getHeaderContent() {},
