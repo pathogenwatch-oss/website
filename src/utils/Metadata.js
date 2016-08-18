@@ -37,11 +37,11 @@ function getFormattedDateString({ year, month, day }) {
   }
 
   if (year && month && !day) {
-    return `${formatMonth(month)} ${year}`
+    return `${formatMonth(month)} ${year}`;
   }
 
   if (year && month && day) {
-    return `${formatDay(day)} ${formatMonth(month)} ${year}`
+    return `${formatDay(day)} ${formatMonth(month)} ${year}`;
   }
 
   return '';
