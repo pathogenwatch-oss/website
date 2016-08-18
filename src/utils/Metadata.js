@@ -1,5 +1,5 @@
 import Papa from 'papaparse';
-import moment from 'moment';
+import { formatMonth, formatDay } from './Date';
 
 function convertFieldNamesToLowerCase(dataObject) {
   const fieldNames = Object.keys(dataObject);
@@ -37,11 +37,11 @@ function getFormattedDateString({ year, month, day }) {
   }
 
   if (year && month && !day) {
-    return moment(`${year}-${month}`, 'YYYY-MM').format('MMMM YYYY');
+    return `${formatMonth(month)} ${year}`
   }
 
   if (year && month && day) {
-    return moment(`${year}-${month}-${day}`, 'YYYY-MM-DD').format('Do MMMM YYYY');
+    return `${formatDay(day)} ${getMonth(month)} ${year}`
   }
 
   return '';
