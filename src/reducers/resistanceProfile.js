@@ -12,7 +12,7 @@ const canvas = document.createElement('canvas').getContext('2d');
 canvas.font = 'Bold 12px "Helvetica","Arial",sans-serif';
 
 const systemColumnProps = [
-  ...downloadColumnProps,
+  downloadColumnProps,
   { ...nameColumnProps,
     flexGrow: 0,
   },
