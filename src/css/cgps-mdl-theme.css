@@ -15,6 +15,10 @@
   padding-right: 16px;
 }
 
+.mdl-layout-title {
+  white-space: nowrap;
+}
+
 .mdl-layout__drawer-button {
   color: #673c90 !important;
   margin: 4px;
