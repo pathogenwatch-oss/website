@@ -85,6 +85,11 @@ apiRouter.get('/download/file/:fileName', function (req, res) {
   return res.sendFile(__dirname + '/static_data/metadata.csv');
 });
 
+apiRouter.post('/specieator', (req, res) => setTimeout(
+  () => res.json({ speciesId: '1280' }),
+  1000
+));
+
 app.use('/api', apiRouter);
 
 app.use('/', function (req, res) {

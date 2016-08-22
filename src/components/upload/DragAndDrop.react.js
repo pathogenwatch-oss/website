@@ -3,11 +3,17 @@ import 'jquery-draghover';
 
 import React from 'react';
 
-import { CGPS } from '^/defaults';
+import DEFAULT, { CGPS } from '^/defaults';
 
 const style = {
   width: '100%',
   height: '100%',
+};
+
+const fileInputStyle = {
+  position: 'fixed',
+  zIndex: -1,
+  opacity: 0,
 };
 
 export default React.createClass({
@@ -15,7 +21,7 @@ export default React.createClass({
   displayName: 'DragAndDrop',
 
   propTypes: {
-    onDrop: React.PropTypes.func.isRequired,
+    onFiles: React.PropTypes.func.isRequired,
   },
 
   getInitialState() {
@@ -45,14 +51,27 @@ export default React.createClass({
     $.draghover(false);
   },
 
+  handleFiles(fileList) {
+    this.props.onFiles(Array.from(fileList));
+  },
+
   handleDrop(event) {
     event.preventDefault();
 
     this.hideDropIndicator();
     if (event.dataTransfer && event.dataTransfer.files.length > 0) {
-      if (typeof this.props.onDrop === 'function') {
-        this.props.onDrop(event.dataTransfer);
-      }
+      this.handleFiles(event.dataTransfer.files);
+    }
+  },
+
+  handleClick() {
+    this.refs.fileInput.click();
+  },
+
+  handleFileInputChange(event) {
+    const { files } = event.target;
+    if (files && files.length > 0) {
+      this.handleFiles(files);
     }
   },
 
@@ -67,8 +86,9 @@ export default React.createClass({
   render() {
     return (
       <div
-        className={`wgsa-drag-and-drop ${this.state.indicatorVisible ? 'is-dragover' : ''}`}
+        className={`wgsa-drag-and-drop wgsa-workspace-click-area ${this.state.indicatorVisible ? 'is-dragover' : ''}`}
         onDrag={this.handleDrop}
+        onClick={this.handleClick}
         style={style}
       >
         <div className={`wgsa-drop-indicator wgsa-overlay ${this.state.indicatorVisible ? 'wgsa-overlay--is-visible' : ''}`}>
@@ -87,6 +107,7 @@ export default React.createClass({
           </div>
         </div>
         {this.props.children}
+        <input type="file" multiple="multiple" accept={DEFAULT.SUPPORTED_FILE_EXTENSIONS} ref="fileInput" style={fileInputStyle} onChange={this.handleFileInputChange} />
       </div>
     );
   },

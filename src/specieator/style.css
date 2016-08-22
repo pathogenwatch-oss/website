@@ -1,0 +1,21 @@
+.wgsa-specieator-file {
+  padding: 1rem;
+  border: 1px solid rgba(0, 0, 0, 0.14);
+  background: white;
+}
+
+.wgsa-specieator-file__title {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  margin: 0 0 0.5rem;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  color: #673c90;
+}
+
+.wgsa-specieator-file p {
+  margin: 0;
+  font-style: italic;
+  color: rgba(0, 0, 0, 0.54);
+}
