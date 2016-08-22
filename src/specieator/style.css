@@ -2,6 +2,13 @@
   padding: 1rem;
   border: 1px solid rgba(0, 0, 0, 0.14);
   background: white;
+  width: calc(33.333% - 16px);
+}
+
+@media(min-width: 1024px) {
+  .wgsa-specieator-file {
+    width: calc(20% - 16px);
+  }
 }
 
 .wgsa-specieator-file__title {

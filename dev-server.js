@@ -1,9 +1,19 @@
+const fspath = require('path');
+
 const webpack = require('webpack');
 const express = require('express');
 const bodyParser = require('body-parser');
+const storeFastaFile = require('wgsa-fasta-store');
+const createMashSpecieator = require('mash-specieator');
 
 const config = require('./webpack.config.js');
 const compiler = webpack(config);
+
+const referencesDir = require('mash-sketches');
+const sketchFilePath = fspath.join(referencesDir, 'refseq-archaea-bacteria-fungi-viral-k16-s400.msh');
+const metadataFilePath = fspath.join(referencesDir, 'refseq-archaea-bacteria-fungi-viral-k16-s400.csv');
+const specieator = createMashSpecieator(sketchFilePath, metadataFilePath);
+
 
 const app = express();
 
@@ -14,6 +24,8 @@ app.use(require('webpack-dev-middleware')(compiler, {
 }));
 
 app.use(require('webpack-hot-middleware')(compiler));
+
+app.use(bodyParser.text({ limit: '10mb' }));
 
 app.use(bodyParser.json());
 
@@ -85,10 +97,16 @@ apiRouter.get('/download/file/:fileName', function (req, res) {
   return res.sendFile(__dirname + '/static_data/metadata.csv');
 });
 
-apiRouter.post('/specieator', (req, res) => setTimeout(
-  () => res.json({ speciesId: '1280' }),
-  1000
-));
+apiRouter.post('/specieator', (req, res) => {
+  storeFastaFile('./fastas', req.body).
+    then(({ path, id }) =>
+      specieator.queryFile(path).then(({ speciesTaxId, taxId }) => ({
+        speciesId: speciesTaxId || taxId || null,
+        id
+      }))
+    ).
+    then(result => res.json(result));
+});
 
 app.use('/api', apiRouter);
 

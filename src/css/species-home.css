@@ -56,7 +56,7 @@
   list-style: none;
 }
 
-@media(: 1280px) {
+@media(max-width: 1280px) {
   .wgsa-species-home-intro li > span {
     width: 88%;
   }

@@ -86,9 +86,8 @@ export default React.createClass({
   render() {
     return (
       <div
-        className={`wgsa-drag-and-drop wgsa-workspace-click-area ${this.state.indicatorVisible ? 'is-dragover' : ''}`}
+        className={`wgsa-drag-and-drop ${this.state.indicatorVisible ? 'is-dragover' : ''}`}
         onDrag={this.handleDrop}
-        onClick={this.handleClick}
         style={style}
       >
         <div className={`wgsa-drop-indicator wgsa-overlay ${this.state.indicatorVisible ? 'wgsa-overlay--is-visible' : ''}`}>
@@ -107,6 +106,9 @@ export default React.createClass({
           </div>
         </div>
         {this.props.children}
+        <button className="mdl-button mdl-js-button mdl-button--fab wgsa-drag-and-drop__button mdl-shadow--3dp" title="Add files" onClick={this.handleClick}>
+          <i className="material-icons">add</i>
+        </button>
         <input type="file" multiple="multiple" accept={DEFAULT.SUPPORTED_FILE_EXTENSIONS} ref="fileInput" style={fileInputStyle} onChange={this.handleFileInputChange} />
       </div>
     );

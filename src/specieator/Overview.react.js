@@ -16,9 +16,9 @@ export default React.createClass({
 
   render() {
     return (
-      <div className="welcome-container wgsa-workspace-click-area">
+      <div className="welcome-container">
         <p className="welcome-intro">
-          Drag and drop files or click anywhere to begin.
+          Drag and drop files to begin.
         </p>
         <div className="welcome-card mdl-shadow--2dp">
           <h2 className="welcome-card__title">FASTA Files: Genome Assemblies</h2>
