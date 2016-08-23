@@ -57,7 +57,7 @@ const Specieator = React.createClass({
       componentHandler.upgradeElement(this.refs.loadingBar);
     }
 
-    if (collection) {
+    if (collection.id) {
       const { speciesId, id } = collection;
       const species = taxIdMap.get(speciesId);
       const path = `/${species.nickname}/collection/${id}`;

@@ -74,11 +74,11 @@ export function createCollection(files, speciesId) {
   return $.ajax({
     type: 'POST',
     url: `${API_ROOT}/collection`,
-    contentType: 'text/plain; charset=UTF-8',
-    data: {
+    contentType: 'application/json; charset=UTF-8',
+    data: JSON.stringify({
       speciesId,
       files: files.map(removeViewModel),
-    },
+    }),
     dataType: 'json',
   });
 }
