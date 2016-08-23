@@ -1,28 +1,28 @@
-var LOGGER = require('utils/logging').createLogger('Storage');
-var storageConnections = require('utils/storageConnection').getConnections();
+const LOGGER = require('utils/logging').createLogger('Storage');
+const storageConnections = require('utils/storageConnection').getConnections();
 
 function Storage(type) {
   this.connection = storageConnections[type];
 }
 
 function store(key, value, callback) {
-  this.connection.upsert(key, value, function (error, result) {
+  this.connection.upsert(key, value, (error, result) => {
     if (error) {
-      LOGGER.error('✗ Failed to store "' + key + '": ' + error);
+      LOGGER.error(`✗ Failed to store "${key}": ${error}`);
       return callback(error);
     }
-    LOGGER.info('Successfully stored ' + key);
+    LOGGER.info(`Successfully stored ${key}`);
     callback(null, result.cas);
   });
 }
 
 function retrieve(key, callback) {
-  this.connection.get(key, function (error, result) {
+  this.connection.get(key, (error, result) => {
     if (error) {
-      LOGGER.error('✗ Failed to retrieve "' + key + '": ' + error);
+      LOGGER.error(`✗ Failed to retrieve "${key}": ${error}`);
       return callback(error);
     }
-    LOGGER.info('Successfully retrieved ' + key);
+    LOGGER.info(`Successfully retrieved ${key}`);
     callback(null, result.value, result.cas);
   });
 }
@@ -45,7 +45,7 @@ function retrieveMany(keys, callback) {
       LOGGER.error(`✗ Failed to retrieve ${errorCount} keys: ${erroredKeys}`);
       return callback(erroredKeys, results);
     }
-    LOGGER.info('Successfully retrieved ' + keys);
+    LOGGER.info(`Successfully retrieved ${keys}`);
     callback(null, results);
   });
 }
@@ -54,11 +54,9 @@ Storage.prototype.store = store;
 Storage.prototype.retrieve = retrieve;
 Storage.prototype.retrieveMany = retrieveMany;
 
-var STORAGE_TYPES = {
+const STORAGE_TYPES = {
   main: new Storage('main'),
   sequences: new Storage('sequences'),
-  cache: new Storage('cache')
-  // feedback: new Storage('feedback')
 };
 
 module.exports = function (type) {

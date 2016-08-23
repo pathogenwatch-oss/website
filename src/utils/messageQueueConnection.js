@@ -19,15 +19,24 @@ var IMPLEMENTATION_OPTIONS = {
 var EXCHANGE_CONFIG = {
   NOTIFICATION: {
     name: 'notifications-ex',
-    type: 'direct'
+    type: 'direct',
+    options: {
+      // passive: false,
+    },
   },
   UPLOAD: {
     name: 'wgst-ex',
-    type: 'direct'
+    type: 'direct',
+    options: {
+      // passive: false,
+    },
   },
   COLLECTION_ID: {
     name: 'grid-ex',
-    type: 'direct'
+    type: 'direct',
+    options: {
+      // passive: false,
+    },
   },
   SERVICES: {
     name: 'me-services-ex',

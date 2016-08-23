@@ -75,8 +75,17 @@ module.exports = function (callback) {
 
     require('errors.js')(app);
 
-    http.createServer(app).listen(app.get('port'), function () {
+    const server = http.createServer(app).listen(app.get('port'), () => {
       LOGGER.info('✔ Express server listening on port ' + app.get('port'));
+
+      process.on('SIGTERM', () => {
+        LOGGER.info('Received stop signal (SIGTERM), shutting down gracefully');
+        server.close(() => {
+          LOGGER.info('Closed out remaining connections');
+          process.exit();
+        });
+      });
+
       callback(null, app);
     });
   });
