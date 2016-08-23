@@ -32,7 +32,10 @@
 
 .wgsa-header-logo {
   width: 88px;
-  /*filter: grayscale(1) brightness(1.5);*/
+}
+
+:not(.wgsa-specieator-header) .wgsa-header-logo {
+  filter: grayscale(1) brightness(5);
 }
 
 .wgsa-specieator-header .mdl-navigation {

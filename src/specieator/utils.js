@@ -15,7 +15,7 @@ function sendToServer(file, dispatch) {
       then(data =>
         $.ajax({
           type: 'POST',
-          url: `${API_ROOT}/specieator`,
+          url: `${API_ROOT}/upload`,
           contentType: 'text/plain; charset=UTF-8',
           data,
           dataType: 'json',
@@ -64,4 +64,21 @@ export function addFiles(newFiles, existingFiles, dispatch) {
 
   if (duplicates.length) showDuplicatesToast(duplicates);
   if (nonDuplicates.length) dispatch(addFastas(nonDuplicates));
+}
+
+function removeViewModel({ id, name, speciesId, metrics }) {
+  return { id, name, speciesId, metrics };
+}
+
+export function createCollection(files, speciesId) {
+  return $.ajax({
+    type: 'POST',
+    url: `${API_ROOT}/collection`,
+    contentType: 'text/plain; charset=UTF-8',
+    data: {
+      speciesId,
+      files: files.map(removeViewModel),
+    },
+    dataType: 'json',
+  });
 }

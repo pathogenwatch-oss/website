@@ -98,7 +98,7 @@ apiRouter.get('/download/file/:fileName', function (req, res) {
   return res.sendFile(__dirname + '/static_data/metadata.csv');
 });
 
-apiRouter.post('/specieator', (req, res) => {
+apiRouter.post('/upload', (req, res) => {
   storeFastaFile('./fastas', req.body).
     then(({ path, id }) =>
       specieator.queryFile(path).then(({ speciesTaxId, taxId, scientificName }) => ({
@@ -109,6 +109,10 @@ apiRouter.post('/specieator', (req, res) => {
     ).
     then(result => res.json(Object.assign({ metrics: analyse(req.body) }, result )));
 });
+
+apiRouter.post('/collection', (req, res) =>
+  setTimeout(() => res.json({ collectionId: '123' }), 2000)
+);
 
 app.use('/api', apiRouter);
 

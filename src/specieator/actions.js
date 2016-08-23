@@ -26,3 +26,15 @@ export function updateFastaProgress(name, progress) {
     progress,
   };
 }
+
+export const CREATE_COLLECTION = 'CREATE_COLLECTION';
+
+import { createCollection as createCollectionPromise } from './utils';
+
+export function createCollection(files, speciesId) {
+  return {
+    type: CREATE_COLLECTION,
+    speciesId,
+    promise: createCollectionPromise(files, speciesId),
+  };
+}

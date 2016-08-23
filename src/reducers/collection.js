@@ -1,3 +1,4 @@
+import { CREATE_COLLECTION } from '../specieator/actions';
 import { FETCH_ENTITIES, CHECK_STATUS, UPDATE_PROGRESS } from '../actions/fetch';
 import { SET_COLLECTION_ID } from '../actions/collection';
 import { SET_TREE } from '../actions/tree';
@@ -97,6 +98,15 @@ export const assemblies = {
 export const collection = {
   initialState: { id: null, assemblyIds: [] },
   actions: {
+    [CREATE_COLLECTION](state, { ready, result, speciesId }) {
+      if (!ready || !result) return state;
+
+      return {
+        ...state,
+        id: result && result.collectionId,
+        speciesId,
+      };
+    },
     [SET_COLLECTION_ID]: function (state, { id }) {
       return {
         ...state,

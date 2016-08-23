@@ -1,4 +1,9 @@
-import { ADD_FASTAS, UPLOAD_FASTA, UPDATE_FASTA_PROGRESS } from './actions';
+import {
+  ADD_FASTAS,
+  UPLOAD_FASTA,
+  UPDATE_FASTA_PROGRESS,
+  CREATE_COLLECTION,
+} from './actions';
 
 export const fastas = {
   initialState: {},
@@ -96,6 +101,15 @@ export const uploads = {
         ...state,
         uploading: new Set(uploading),
       };
+    },
+  },
+};
+
+export const loading = {
+  initialState: false,
+  actions: {
+    [CREATE_COLLECTION](state, { ready }) {
+      return !ready;
     },
   },
 };

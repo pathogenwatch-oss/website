@@ -11,6 +11,7 @@ import Filter from './Filter.react';
 import { updateHeader } from '^/actions/header';
 
 import { addFiles, uploadFile } from './utils';
+import { taxIdMap } from '^/species';
 
 const Specieator = React.createClass({
 
@@ -19,6 +20,10 @@ const Specieator = React.createClass({
     order: React.PropTypes.array.isRequired,
     uploads: React.PropTypes.object,
     dispatch: React.PropTypes.func.isRequired,
+  },
+
+  contextTypes: {
+    router: React.PropTypes.object,
   },
 
   componentWillMount() {
@@ -41,10 +46,23 @@ const Specieator = React.createClass({
   },
 
   componentDidUpdate() {
-    const { uploads, fastas, dispatch } = this.props;
+    const { uploads, fastas, loading, collection, dispatch } = this.props;
+
     const { queue, uploading } = uploads;
     if (queue.length && uploading.size < 5) {
       uploadFile(fastas[queue[0]], dispatch);
+    }
+
+    if (loading) {
+      componentHandler.upgradeElement(this.refs.loadingBar);
+    }
+
+    if (collection) {
+      const { speciesId, id } = collection;
+      const species = taxIdMap.get(speciesId);
+      const path = `/${species.nickname}/collection/${id}`;
+      const { router } = this.context;
+      router.push(path);
     }
   },
 
@@ -65,12 +83,13 @@ const Specieator = React.createClass({
   },
 
   render() {
-    const { fastas, order } = this.props;
+    const { fastas, order, loading } = this.props;
 
     const orderedFastas = order.map(name => fastas[name]);
 
     return (
       <FileDragAndDrop onFiles={this.upload}>
+        { loading && <div ref="loadingBar" className="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>}
         { order.length ?
             <FileGrid files={orderedFastas} /> :
             <Overview />
@@ -83,11 +102,13 @@ const Specieator = React.createClass({
 });
 
 
-function mapStateToProps({ specieator, entities }) {
+function mapStateToProps({ specieator, entities, collection }) {
   return {
     fastas: entities.fastas,
     order: specieator.fastaOrder,
     uploads: specieator.uploads,
+    loading: specieator.loading,
+    collection,
   };
 }
 
