@@ -16,6 +16,8 @@
     "express": "^4.10.7",
     "extend": "^2.0.0",
     "longjohn": "^0.2.4",
+    "mash-sketches": "gitlab:cgps/mash-sketches",
+    "mash-specieator": "gitlab:cgps/mash-specieator",
     "morgan": "^1.5.1",
     "named-argv": "^0.3.0",
     "node-uuid": "^1.4.2",
@@ -23,12 +25,11 @@
     "sanitize-filename": "^1.5.3",
     "serve-favicon": "^2.2.0",
     "swig": "^1.4.2",
+    "wgsa-fasta-store": "gitlab:cgps/wgsa-fasta-store",
     "wgsa_front-end": "imperialcollegelondon/wgsa_front-end#specieator"
   },
   "devDependencies": {
     "eslint-config-cgps": "github:imperialcollegelondon/eslint-config-cgps",
-    "mash-sketches": "gitlab:cgps/mash-sketches",
-    "mash-specieator": "gitlab:cgps/mash-specieator",
     "mocha": "^2.1.0",
     "rewire": "^2.1.4",
     "sinon": "^1.12.2",

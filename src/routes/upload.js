@@ -19,6 +19,7 @@ const LOGGER = require('utils/logging').createLogger('Upload');
 const { maxCollectionSize = 0, fastaStoragePath } = require('configuration');
 
 router.post('/upload', (req, res) => {
+  LOGGER.info('Upload received', req.body.length);
   fastaStorage.store(fastaStoragePath, req.body).
     then(({ path, id }) =>
       specieator.queryFile(path).then(({ speciesTaxId, taxId, scientificName }) => ({
@@ -40,7 +41,7 @@ router.post('/collection', (req, res, next) => {
     return res.sendStatus(400);
   }
 
-  collectionModel.add(speciesId, files.map(_ => _.name), (error, result) => {
+  collectionModel.add(speciesId, { assemblyNames: files.map(_ => _.name) }, (error, result) => {
     if (error) {
       return next(error);
     }
@@ -49,10 +50,10 @@ router.post('/collection', (req, res, next) => {
 
     const uploads =
       files.map(file => {
-        const { storageId, metadata, metrics, name } = file;
+        const { id, name, metadata = { assemblyName: name }, metrics } = file;
         const assemblyId = assemblyNameToAssemblyIdMap[name];
         return (
-          fastaStorage.retrieve(fastaStoragePath, storageId).
+          fastaStorage.retrieve(fastaStoragePath, id).
             then(sequences =>
               assemblyModel.beginUpload(
                 { speciesId, collectionId, assemblyId },
