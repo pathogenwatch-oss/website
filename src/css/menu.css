@@ -27,16 +27,15 @@
   height: 48px;
 }
 
-.mdl-navigation__link > span {
+.mdl-navigation__link > .material-icons + span {
   line-height: 16px;
   display: inline-block;
   vertical-align: bottom;
-  margin-bottom: -2px;
+  margin-bottom: 2px;
+  padding-left: 16px;
 }
 
 .mdl-navigation__link .material-icons {
-  margin-right: 16px;
-  line-height: 16px;
   vertical-align: middle;
   color: #673c90;
 }

@@ -8,7 +8,9 @@ const Header = React.createClass({
     return (
       <header className={`mdl-layout__header mdl-layout__header--scroll ${classNames}`.trim()}>
         <div className="mdl-layout__header-row">
-          <span className="mdl-layout-title">WGSA {speciesName ? (<span>| {speciesName}</span>) : null}</span>
+          <span className="mdl-layout-title">
+            <img src="/assets/img/WGSA.FINAL.svg" className="wgsa-header-logo" />
+          </span>
           {content}
         </div>
       </header>

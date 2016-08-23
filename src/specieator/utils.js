@@ -63,6 +63,5 @@ export function addFiles(newFiles, existingFiles, dispatch) {
   const nonDuplicates = newFiles.filter(file => !(file.name in existingFiles));
 
   if (duplicates.length) showDuplicatesToast(duplicates);
-
-  dispatch(addFastas(nonDuplicates));
+  if (nonDuplicates.length) dispatch(addFastas(nonDuplicates));
 }

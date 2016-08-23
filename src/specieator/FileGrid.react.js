@@ -10,7 +10,7 @@ export default React.createClass({
 
   render() {
     return (
-      <div className="mdl-grid">
+      <div className="mdl-grid wgsa-specieator-files">
         {this.props.files.map(file => <File key={file.name} { ...file } />)}
       </div>
     );

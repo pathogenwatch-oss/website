@@ -13,7 +13,7 @@ import Staph from './species/saureus';
 const MenuLink = ({ isActive, icon, text, link }) => (
   <Link className={`mdl-navigation__link ${isActive ? 'mdl-navigation__link--active' : ''}`.trim()} to={link}>
     <i className="material-icons">{icon}</i>
-    {text}
+    <span>{text}</span>
   </Link>
 );
 
@@ -73,7 +73,7 @@ export default connect(mapStateToProps)(React.createClass({
             ))}
             <a className="mdl-navigation__link" target="_blank" href="https://github.com/ImperialCollegeLondon/wgsa-documentation/wiki">
               <i className="material-icons">description</i>
-              Documentation
+              <span>Documentation</span>
             </a>
           </nav>
           <a className="cgps-logo" target="_blank" href="http://www.pathogensurveillance.net">

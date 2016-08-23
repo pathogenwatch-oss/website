@@ -20,7 +20,7 @@ export default React.createClass({
         <p className="welcome-intro">
           Drag and drop files to begin.
         </p>
-        <div className="welcome-card mdl-shadow--2dp">
+        {/* <div className="welcome-card mdl-shadow--2dp">
           <h2 className="welcome-card__title">FASTA Files: Genome Assemblies</h2>
           <p className="mdl-card__supporting-text">
             Drag and drop assemblies onto the page or click anywhere to open the file upload dialog.
@@ -42,7 +42,7 @@ export default React.createClass({
           <p className="mdl-card__supporting-text">
             You can add any other columns containing metadata you wish to explore within your genome data set.
           </p>
-        </div>
+        </div> */}
       </div>
     );
   },

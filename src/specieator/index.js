@@ -24,8 +24,20 @@ const Specieator = React.createClass({
     this.props.dispatch(
       updateHeader({
         speciesName: 'Specieator',
-        classNames: 'mdl-shadow--3dp',
-        content: null,
+        classNames: 'wgsa-specieator-header',
+        content: (
+          <span className="mdl-layout-spacer mdl-layout-spacer--flex">
+            <div className="mdl-layout-spacer" />
+            <nav className="mdl-navigation">
+              <a className="mdl-navigation__link mdl-navigation__link--active" href="">Specieator</a>
+              <a className="mdl-navigation__link" href="">Downloads</a>
+              <a className="mdl-navigation__link" href="">Documentation</a>
+              <button className="mdl-navigation__link mdl-button mdl-js-button mdl-button--icon">
+                <i className="material-icons">search</i>
+              </button>
+            </nav>
+          </span>
+        ),
       })
     );
   },

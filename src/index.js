@@ -1,3 +1,4 @@
+import './css/base.css';
 import './css/cgps-mdl-theme.css';
 import 'phylocanvas/polyfill';
 

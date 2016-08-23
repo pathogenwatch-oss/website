@@ -6,8 +6,6 @@ export const fastas = {
     [ADD_FASTAS](state, { files }) {
       if (!files.length) return state;
 
-      console.log(files);
-
       return files.reduce((memo, file) => {
         if (file.name in memo) return memo;
 
@@ -49,11 +47,17 @@ export const fastas = {
 export const fastaOrder = {
   initialState: [],
   actions: {
-    [UPLOAD_FASTA](state, { name, ready }) {
-      if (!name || ready) return state;
-
+    // [UPLOAD_FASTA](state, { name, ready }) {
+    //   if (!name || ready) return state;
+    //
+    //   return [
+    //     name,
+    //     ...state,
+    //   ];
+    // },
+    [ADD_FASTAS](state, { files }) {
       return [
-        name,
+        ...files.map(_ => _.name),
         ...state,
       ];
     },

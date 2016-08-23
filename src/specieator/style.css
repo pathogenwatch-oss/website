@@ -1,8 +1,39 @@
+.wgsa-specieator-header {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.14);
+}
+
+.wgsa-specieator-header ~ .mdl-layout__content {
+  background: #fff;
+}
+
+.wgsa-specieator-header .mdl-layout-title {
+  font-family: "Roboto Condensed", "Helvetica", "Arial", sans-serif;
+}
+
+.wgsa-header-logo {
+  width: 88px;
+  /*filter: grayscale(1) brightness(1.5);*/
+}
+
+.wgsa-specieator-header .mdl-navigation__link {
+  text-transform: uppercase;
+  color: rgba(0,0,0,0.54);
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 500 !important;
+  padding: 0;
+  margin-left: 2rem;
+}
+
+.wgsa-specieator-files {
+  justify-content: center;
+}
+
 .wgsa-specieator-file {
   padding: 1rem;
-  border: 1px solid rgba(0, 0, 0, 0.14);
+  border-top: 1px solid rgba(0, 0, 0, 0.28);
   background: white;
   width: calc(33.333% - 16px);
+  margin: 2rem;
 }
 
 @media(min-width: 1024px) {
@@ -14,7 +45,7 @@
 .wgsa-specieator-file__title {
   font-size: 1.5rem;
   line-height: 2rem;
-  margin: 0 0 0.5rem;
+  margin: 0;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
@@ -23,6 +54,8 @@
 
 .wgsa-specieator-file p {
   margin: 0;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
   font-style: italic;
+  font-weight: 500;
   color: rgba(0, 0, 0, 0.54);
 }

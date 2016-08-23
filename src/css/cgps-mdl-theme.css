@@ -10,7 +10,6 @@
 }
 
 .mdl-layout__header-row {
-  height: 56px;
   padding-left: 72px !important;
   padding-right: 16px;
 }
@@ -23,7 +22,6 @@
   color: #673c90 !important;
   margin: 4px;
   width: 64px;
-  line-height: 54px;
 }
 
 .mdl-layout__drawer-button:focus {
