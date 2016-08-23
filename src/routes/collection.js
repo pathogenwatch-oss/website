@@ -1,11 +1,13 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
-var collectionModel = require('models/collection');
-var assemblyModel = require('models/assembly');
+const fastaStorage = require('wgsa-fasta-store');
 
-var LOGGER = require('utils/logging').createLogger('Collection requests');
-var { maxCollectionSize = 0 } = require('configuration');
+const collectionModel = require('models/collection');
+const assemblyModel = require('models/assembly');
+
+const LOGGER = require('utils/logging').createLogger('Collection requests');
+const { maxCollectionSize = 0, fastaStoragePath } = require('configuration');
 
 router.get('/species/:id/reference', function (req, res, next) {
   LOGGER.info('Getting reference collection: ' + req.params.id);
@@ -56,7 +58,7 @@ router.post('/species/:id/collection', function (req, res, next) {
 });
 
 router.post('/species/:speciesId/collection/:collectionId/assembly/:assemblyId',
-  function (req, res) {
+  function (req, res, next) {
     const { params } = req;
 
     LOGGER.info(
@@ -75,7 +77,14 @@ router.post('/species/:speciesId/collection/:collectionId/assembly/:assemblyId',
     }
 
     res.json({ assemblyId: params.assemblyId });
-    assemblyModel.beginUpload(params, req.body);
+
+    const { storageId, metadata, metrics } = req.body;
+
+    fastaStorage.retrieve(fastaStoragePath, storageId).
+      then(sequences =>
+        assemblyModel.beginUpload(params, { sequences, metadata, metrics })
+      ).
+      catch(error => next(error));
   }
 );
 

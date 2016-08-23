@@ -23,10 +23,12 @@
     "sanitize-filename": "^1.5.3",
     "serve-favicon": "^2.2.0",
     "swig": "^1.4.2",
-    "wgsa_front-end": "imperialcollegelondon/wgsa_front-end#dev"
+    "wgsa_front-end": "imperialcollegelondon/wgsa_front-end#specieator"
   },
   "devDependencies": {
     "eslint-config-cgps": "github:imperialcollegelondon/eslint-config-cgps",
+    "mash-sketches": "gitlab:cgps/mash-sketches",
+    "mash-specieator": "gitlab:cgps/mash-specieator",
     "mocha": "^2.1.0",
     "rewire": "^2.1.4",
     "sinon": "^1.12.2",
