@@ -14,6 +14,7 @@ const sketchFilePath = fspath.join(referencesDir, 'refseq-archaea-bacteria-fungi
 const metadataFilePath = fspath.join(referencesDir, 'refseq-archaea-bacteria-fungi-viral-k16-s400.csv');
 const specieator = createMashSpecieator(sketchFilePath, metadataFilePath);
 
+const analyse = require('./src/utils/Analysis');
 
 const app = express();
 
@@ -100,12 +101,13 @@ apiRouter.get('/download/file/:fileName', function (req, res) {
 apiRouter.post('/specieator', (req, res) => {
   storeFastaFile('./fastas', req.body).
     then(({ path, id }) =>
-      specieator.queryFile(path).then(({ speciesTaxId, taxId }) => ({
+      specieator.queryFile(path).then(({ speciesTaxId, taxId, scientificName }) => ({
         speciesId: speciesTaxId || taxId || null,
-        id
+        speciesName: scientificName,
+        id,
       }))
     ).
-    then(result => res.json(result));
+    then(result => res.json(Object.assign({ metrics: analyse(req.body) }, result )));
 });
 
 app.use('/api', apiRouter);

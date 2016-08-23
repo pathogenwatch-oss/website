@@ -13,7 +13,7 @@ export const fastas = {
         return memo;
       }, state);
     },
-    [UPLOAD_FASTA](state, { name, ready, error, result }) {
+    [UPLOAD_FASTA](state, { name, ready, error, result = {} }) {
       const fasta = state[name];
 
       const newState = {
@@ -23,7 +23,7 @@ export const fastas = {
           name,
           ready,
           error,
-          speciesId: result && result.speciesId,
+          ...result,
         },
       };
 

@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import FileDragAndDrop from '../components/upload/DragAndDrop.react';
 import Overview from './Overview.react';
 import FileGrid from './FileGrid.react';
+import Filter from './Filter.react';
 
 import { updateHeader } from '^/actions/header';
 
@@ -32,9 +33,6 @@ const Specieator = React.createClass({
               <a className="mdl-navigation__link mdl-navigation__link--active" href="">Specieator</a>
               <a className="mdl-navigation__link" href="">Downloads</a>
               <a className="mdl-navigation__link" href="">Documentation</a>
-              <button className="mdl-navigation__link mdl-button mdl-js-button mdl-button--icon">
-                <i className="material-icons">search</i>
-              </button>
             </nav>
           </span>
         ),
@@ -53,17 +51,31 @@ const Specieator = React.createClass({
   upload(newFiles) {
     const { dispatch, fastas } = this.props;
     addFiles(newFiles, fastas, dispatch);
+    dispatch(updateHeader({ classNames: 'wgsa-specieator-header wgsa-specieator--has-aside' }));
+  },
+
+  countSpecies(fastas) {
+    return fastas.reduce((memo, { speciesId }) => {
+      if (!speciesId) return memo;
+      return {
+        ...memo,
+        [speciesId]: (memo[speciesId] || 0) + 1,
+      };
+    }, {});
   },
 
   render() {
     const { fastas, order } = this.props;
 
+    const orderedFastas = order.map(name => fastas[name]);
+
     return (
       <FileDragAndDrop onFiles={this.upload}>
         { order.length ?
-            <FileGrid files={order.map(name => fastas[name])} /> :
+            <FileGrid files={orderedFastas} /> :
             <Overview />
         }
+        <Filter speciesSummary={this.countSpecies(orderedFastas)} />
       </FileDragAndDrop>
     );
   },
