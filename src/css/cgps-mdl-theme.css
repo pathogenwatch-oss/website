@@ -92,3 +92,41 @@
 .mdl-badge--error:after {
   background: #d11b1b !important;
 }
+
+
+/* Buttons */
+
+.mdl-button--raised.mdl-button--colored {
+  background: #673c90;
+}
+
+.mdl-button--raised.mdl-button--colored:hover,
+.mdl-button--raised.mdl-button--colored:focus,
+.mdl-button--raised.mdl-button--colored:active {
+  background: #a386bd !important;
+}
+
+
+/* Slider */
+
+.mdl-slider::thumb,
+.mdl-slider__background-lower {
+  background: #673c90 !important;
+}
+
+.mdl-slider:active::thumb {
+  background: #a386bd !important;
+}
+
+
+/* Checkbox */
+
+.mdl-checkbox__box-outline {
+  width: 20px;
+  height: 20px;
+  border-color: #673c90 !important;
+}
+
+.mdl-checkbox.is-checked .mdl-checkbox__tick-outline {
+  background-color: #673c90;
+}

@@ -9,9 +9,22 @@ export default React.createClass({
   },
 
   render() {
+    const { files } = this.props;
     return (
-      <div className="mdl-grid wgsa-specieator-files">
-        {this.props.files.map(file => <File key={file.name} { ...file } />)}
+      <div className="wgsa-specieator-files">
+        <div className="wgsa-specieator-content">
+          <p className="wgsa-specieator-summary">
+            Viewing <span>{files.length}</span> of {files.length} assemblies
+          </p>
+        </div>
+        <div className="mdl-grid">
+          {files.map(file => <File key={file.name} { ...file } />)}
+        </div>
+        <div className="wgsa-specieator-content text-center">
+          <button className="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+            Create Collection
+          </button>
+        </div>
       </div>
     );
   },

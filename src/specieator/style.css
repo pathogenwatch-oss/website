@@ -1,17 +1,29 @@
 .wgsa-specieator-header {
   border-bottom: 1px solid rgba(0, 0, 0, 0.14);
+  position: fixed;
 }
 
 .wgsa-specieator--has-aside {
   padding-right: 255px;
 }
-.wgsa-specieator--has-aside ~ .mdl-layout__content {
+.wgsa-specieator--has-aside ~ .mdl-layout__content,
+.wgsa-specieator--has-aside ~ .mdl-layout__content .wgsa-drag-and-drop__button {
   margin-right: 255px;
 }
 
 .wgsa-specieator-header ~ .mdl-layout__content {
   background: #fff;
   z-index: auto;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-size: 13px;
+  color: rgba(0, 0, 0, 0.54);
+  padding-top: 56px;
+}
+
+@media(min-width: 1024px) {
+  .wgsa-specieator-header ~ .mdl-layout__content {
+    padding-top: 64px;
+  }
 }
 
 .wgsa-specieator-header .mdl-layout-title {
@@ -23,6 +35,10 @@
   /*filter: grayscale(1) brightness(1.5);*/
 }
 
+.wgsa-specieator-header .mdl-navigation {
+  padding-right: 1rem;
+}
+
 .wgsa-specieator-header .mdl-navigation__link {
   text-transform: uppercase;
   color: rgba(0,0,0,0.54);
@@ -32,8 +48,26 @@
   margin-left: 2rem;
 }
 
+
 .wgsa-specieator-files {
-  justify-content: center;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 8px;
+}
+
+.wgsa-specieator-content {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 8px 48px;
+}
+
+.wgsa-specieator-summary {
+  margin: 0;
+  font-size: 13px;
+}
+
+.wgsa-specieator-summary > span {
+  color: #673c90;
 }
 
 .wgsa-specieator-file {
@@ -41,7 +75,7 @@
   border-top: 1px solid rgba(0, 0, 0, 0.28);
   background: white;
   width: calc(33.333% - 16px);
-  margin: 2rem;
+  margin: 0 2rem 2rem;
 }
 
 @media(min-width: 1024px) {
@@ -118,7 +152,7 @@
 }
 
 .wgsa-specieator-filter__section {
-  padding: 16px;
+  padding: 16px 24px 0;
 }
 
 .wgsa-specieator-filter__section > h3 {
@@ -137,4 +171,15 @@
 .wgsa-specieator-filter .mdl-chip__contact {
   background: #a386bd;
   color: #fff;
+  font-size: 14px;
+  font-weight: 500;
 }
+
+.wgsa-specieator-filter .mdl-slider__container {
+  margin-top: 3px;
+  margin-left: -8px;
+}
+
+/*.wgsa-specieator-filter .mdl-checkbox__box-outline {
+  margin-left: 8px;
+}*/

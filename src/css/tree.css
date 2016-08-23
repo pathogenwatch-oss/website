@@ -88,15 +88,6 @@ div.wgsa-tree-icon:active {
   display: block;
 }
 
-.wgsa-tree-control .mdl-slider::thumb,
-.mdl-slider__background-lower {
-  background: #673c90;
-}
-
-.wgsa-tree-control .mdl-slider:active::thumb {
-  background: #a386bd;
-}
-
 .wgsa-tree-control {
   margin: 0 -20px;
 }

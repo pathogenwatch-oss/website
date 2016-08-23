@@ -11,7 +11,7 @@ function fastaData(speciesId, speciesName, metrics) {
   return (
     <div>
       <p>{wgsaSpecies ? wgsaSpecies.formattedShortName : speciesName}</p>
-      <span>{metrics.totalNumberOfContigs} contigs, {metrics.gcContent}% GCs</span>
+      <span>{metrics.totalNumberOfContigs} contig(s), {metrics.gcContent}% GC content.</span>
     </div>
   );
 }
