@@ -6,7 +6,6 @@ import { SET_COLOUR_COLUMN, setColourColumn } from '../actions/table';
 import { getColour } from '../utils/resistanceProfile';
 
 import { downloadColumnProps, nameColumnProps } from '../constants/table';
-import { defaultColourGetter } from '../constants/tree';
 
 const canvas = document.createElement('canvas').getContext('2d');
 canvas.font = 'Bold 12px "Helvetica","Arial",sans-serif';
@@ -88,25 +87,11 @@ const actions = {
   },
 };
 
-const noActiveColumns = new Set([ { valueGetter: defaultColourGetter } ]);
-
-function isDeselecting(activeColumns, column) {
-  return (
-    column.columnKey === nameColumnProps.columnKey ||
-    (activeColumns.size === 1 && activeColumns.has(column))
-  );
-}
-
 const initialState = {
-  activeColumns: noActiveColumns,
+  activeColumns: new Set(),
   handleHeaderClick(event, column, dispatch) {
-    if (isDeselecting(this.activeColumns, column)) {
-      dispatch(setColourColumn(noActiveColumns));
-      return;
-    }
-
-    if (this.activeColumns === noActiveColumns) {
-      dispatch(setColourColumn(new Set([ column ])));
+    if (column.columnKey === nameColumnProps.columnKey) {
+      dispatch(setColourColumn(new Set()));
       return;
     }
 
@@ -114,11 +99,7 @@ const initialState = {
 
     if (cumulative && this.activeColumns.has(column)) {
       this.activeColumns.delete(column);
-      dispatch(setColourColumn(
-        this.activeColumns.size ?
-          new Set(this.activeColumns) :
-          noActiveColumns
-      ));
+      dispatch(setColourColumn(new Set(this.activeColumns)));
       return;
     }
 

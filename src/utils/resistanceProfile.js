@@ -13,10 +13,13 @@ export function getColour(antibiotic, assembly) {
   return value === 'RESISTANT' ? DEFAULT.DANGER_COLOUR : nonResistantColour;
 }
 
+const noActiveColumns = [ { valueGetter: defaultColourGetter } ];
+
 export function createColourGetter(columns) {
   return function (assembly) {
     const colours = new Set(
-      Array.from(columns).map(column => column.valueGetter(assembly))
+      Array.from(columns.size ? columns : noActiveColumns).
+        map(column => column.valueGetter(assembly))
     );
     return colours.size === 1 ? Array.from(colours)[0] : nonResistantColour;
   };
