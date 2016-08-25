@@ -33,5 +33,6 @@
 		"proxy": "http://webcache.sanger.ac.uk:3128/"
 	},
   "downloadFileLocation" : "/path/to/files/",
-  "maxCollectionSize": 0
+  "maxCollectionSize": 0,
+  "googleMapsKey": "abcdef"
 }
