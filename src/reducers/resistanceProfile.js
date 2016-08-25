@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { FETCH_ENTITIES } from '../actions/fetch';
-import { SET_COLOUR_COLUMN, setColourColumn } from '../actions/table';
+import { SET_COLOUR_COLUMNS, setColourColumns } from '../actions/table';
 
 import { getColour } from '../utils/resistanceProfile';
 
@@ -79,7 +79,7 @@ const actions = {
 
     return state;
   },
-  [SET_COLOUR_COLUMN](state, { column }) {
+  [SET_COLOUR_COLUMNS](state, { column }) {
     return {
       ...state,
       activeColumns: column,
@@ -91,7 +91,7 @@ const initialState = {
   activeColumns: new Set(),
   handleHeaderClick(event, column, dispatch) {
     if (column.columnKey === nameColumnProps.columnKey) {
-      dispatch(setColourColumn(new Set()));
+      dispatch(setColourColumns(new Set()));
       return;
     }
 
@@ -99,17 +99,17 @@ const initialState = {
 
     if (cumulative && this.activeColumns.has(column)) {
       this.activeColumns.delete(column);
-      dispatch(setColourColumn(new Set(this.activeColumns)));
+      dispatch(setColourColumns(new Set(this.activeColumns)));
       return;
     }
 
     if (cumulative) {
       this.activeColumns.add(column);
-      dispatch(setColourColumn(new Set(this.activeColumns)));
+      dispatch(setColourColumns(new Set(this.activeColumns)));
       return;
     }
 
-    dispatch(setColourColumn(new Set([ column ])));
+    dispatch(setColourColumns(new Set([ column ])));
   },
   columns: [],
 };
