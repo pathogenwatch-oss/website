@@ -18,7 +18,7 @@ const analyse = require('wgsa_front-end/universal/fastaAnalysis');
 const LOGGER = require('utils/logging').createLogger('Upload');
 const { maxCollectionSize = 0, fastaStoragePath } = require('configuration');
 
-router.post('/upload', (req, res) => {
+router.post('/upload', (req, res, next) => {
   LOGGER.info('Upload received', req.body.length);
   fastaStorage.store(fastaStoragePath, req.body).
     then(({ path, id }) =>
@@ -28,7 +28,8 @@ router.post('/upload', (req, res) => {
         id,
       }))
     ).
-    then(result => res.json(Object.assign({ metrics: analyse(req.body) }, result)));
+    then(result => res.json(Object.assign({ metrics: analyse(req.body) }, result))).
+    catch(error => next(error));
 });
 
 router.post('/collection', (req, res, next) => {
