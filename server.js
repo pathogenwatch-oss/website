@@ -12,7 +12,7 @@ var messageQueueConnection = require('utils/messageQueueConnection');
 var LOGGER = logging.getBaseLogger();
 var app = express();
 
-var clientPath = path.join(__dirname, 'node_modules', 'wgsa_front-end', 'public');
+var clientPath = path.join(__dirname, 'node_modules', 'wgsa_front-end');
 
 app.set('port', process.env.PORT || config.node.port);
 // http://stackoverflow.com/a/19965089
@@ -47,7 +47,7 @@ module.exports = function (callback) {
       next();
     });
 
-    app.use(express.static(clientPath));
+    app.use(express.static(path.join(clientPath, 'public')));
 
     // CORS
     app.use(function (req, res, next) {
@@ -62,13 +62,18 @@ module.exports = function (callback) {
 
     require('routes.js')(app);
 
+    app.set('view engine', 'ejs');
+    app.set('views', path.join(clientPath, 'views'));
+
     app.use('/', function (req, res, next) {
       // crude file matching
       if (req.path.match(/\.[a-z]{1,4}$/) || req.xhr) {
         return next();
       }
 
-      return res.sendFile(path.join(clientPath, 'index.html'));
+      return res.render('index', {
+        googleMapsKey: config.googleMapsKey,
+      });
     });
 
     app.use(require('routes/notFound'));
