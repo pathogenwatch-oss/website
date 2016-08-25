@@ -5,6 +5,8 @@ import {
   resetFilter,
 } from '../actions/filter';
 
+import { createColourGetter } from '../utils/resistanceProfile';
+
 import { formatColumnLabel } from '../constants/table';
 import Species from '../species';
 import { CGPS, COLOUR } from '^/defaults';
@@ -67,6 +69,8 @@ function getStandardTreeFunctions(state, dispatch) {
   const { entities, tables, filter, collection, reference } = state;
   const { metadata, resistanceProfile } = tables;
 
+  const getColour = createColourGetter(resistanceProfile.activeColumns);
+
   return {
     styleTree(tree) {
       tree.leaves.forEach((leaf) => {
@@ -84,9 +88,7 @@ function getStandardTreeFunctions(state, dispatch) {
         leaf.setDisplay({
           leafStyle: {
             strokeStyle: COLOUR,
-            fillStyle: resistanceProfile.activeColumn.valueGetter(
-              assembly, collection.assemblyIds
-            ),
+            fillStyle: getColour(assembly),
             lineWidth: 1.5,
           },
         });

@@ -12,11 +12,10 @@ const initialActiveColumn = systemColumnProps[1];
 
 const initialState = {
   activeColumn: initialActiveColumn,
-  headerClick(column) {
-    if (this.activeColumn === column) {
-      return setLabelColumn(initialActiveColumn);
-    }
-    return setLabelColumn(column);
+  handleHeaderClick(event, column, dispatch) {
+    dispatch(setLabelColumn(
+      (this.activeColumn === column) ? initialActiveColumn : column
+    ));
   },
   columns: [],
 };
@@ -26,22 +25,21 @@ function getUserDefinedColumnNames(assemblies) {
   Object.keys(assemblies).forEach(key => {
     const { userDefined } = assemblies[key].metadata;
     if (userDefined) {
-      Object.keys(userDefined).forEach(name => userDefinedColumnNames.add(name));
+      Object.keys(userDefined).
+        forEach(name => userDefinedColumnNames.add(name));
     }
   });
   return userDefinedColumnNames;
 }
 
 function buildUserDefinedColumnProps(columnNames) {
-  return Array.from(columnNames).map((column) => {
-    return {
-      columnKey: column,
-      valueGetter({ metadata }) {
-        return metadata.userDefined[column];
-      },
-      getCellContents,
-    };
-  });
+  return Array.from(columnNames).map((column) => ({
+    columnKey: column,
+    valueGetter({ metadata }) {
+      return metadata.userDefined[column];
+    },
+    getCellContents,
+  }));
 }
 
 function createColumnProps(columnNames) {
@@ -57,7 +55,7 @@ function getActiveColumn(currentActiveColumn, newColumns) {
 }
 
 const actions = {
-  [FETCH_ENTITIES]: function (state, { ready, result, error }) {
+  [FETCH_ENTITIES](state, { ready, result, error }) {
     if (ready && !error) {
       const { assemblies } = result[0];
       const { publicMetadataColumnNames = [] } = Species.current;
@@ -78,7 +76,7 @@ const actions = {
 
     return state;
   },
-  [SET_TREE]: function (state, { ready, name }) {
+  [SET_TREE](state, { ready, name }) {
     if (ready === false) {
       return state;
     }
@@ -94,7 +92,7 @@ const actions = {
       activeColumn: getActiveColumn(state.activeColumn, columnProps),
     };
   },
-  [SET_LABEL_COLUMN]: function (state, { column }) {
+  [SET_LABEL_COLUMN](state, { column }) {
     return {
       ...state,
       activeColumn: column,
