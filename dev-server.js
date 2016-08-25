@@ -87,8 +87,12 @@ apiRouter.get('/download/file/:fileName', function (req, res) {
 
 app.use('/api', apiRouter);
 
-app.use('/', function (req, res) {
-  res.sendFile(__dirname + '/public/index.html');
+app.set('view engine', 'ejs');
+
+app.use('/', function (req, res, next) {
+  return res.render('index', {
+    googleMapsKey: 'AIzaSyBUn4F1N7KKElr6Qcwxvm7v3IzDoI0aQzE',
+  });
 });
 
 app.listen(8080, '0.0.0.0');
