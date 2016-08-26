@@ -13,11 +13,10 @@ const initialActiveColumn = nameColumnProps;
 
 const initialState = {
   activeColumn: initialActiveColumn,
-  headerClick(column) {
-    if (this.activeColumn === column) {
-      return setLabelColumn(initialActiveColumn);
-    }
-    return setLabelColumn(column);
+  handleHeaderClick(event, column, dispatch) {
+    dispatch(setLabelColumn(
+      (this.activeColumn === column) ? initialActiveColumn : column
+    ));
   },
   columns: [],
 };
@@ -50,7 +49,7 @@ function getActiveColumn(currentActiveColumn, newColumns) {
 }
 
 const actions = {
-  [FETCH_ENTITIES]: function (state, { ready, result, error }) {
+  [FETCH_ENTITIES](state, { ready, result, error }) {
     if (ready && !error) {
       const { assemblies } = result[0];
       const { publicMetadataColumnNames = [], uiOptions = {} } = Species.current;
@@ -79,7 +78,7 @@ const actions = {
 
     return state;
   },
-  [SET_TREE]: function (state, { ready, name }) {
+  [SET_TREE](state, { ready, name }) {
     if (ready === false) {
       return state;
     }
@@ -95,7 +94,7 @@ const actions = {
       activeColumn: getActiveColumn(state.activeColumn, columnProps),
     };
   },
-  [SET_LABEL_COLUMN]: function (state, { column }) {
+  [SET_LABEL_COLUMN](state, { column }) {
     return {
       ...state,
       activeColumn: column,

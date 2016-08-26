@@ -12,6 +12,7 @@ import {
 } from '^/actions/filter';
 
 import MapUtils from '^/utils/Map';
+import { createColourGetter } from '^/utils/resistanceProfile';
 
 const style = {
   position: 'relative',
@@ -36,7 +37,7 @@ function mapStateToProps({ display, collection, tables, entities, filter }) {
 
   return {
     mapMarkers,
-    colourGetter: resistanceProfile.activeColumn.valueGetter,
+    colourGetter: createColourGetter(resistanceProfile.activeColumns),
     assemblies,
     collection,
     filter,

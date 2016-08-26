@@ -7,7 +7,6 @@ import { Table, Column, Cell } from 'fixed-data-table';
 
 import { formatColumnLabel, getCellValue } from '../utils/table';
 
-
 function getClassNames(baseClass, selected, extraClasses) {
   return (
     baseClass +
@@ -33,16 +32,12 @@ export default React.createClass({
     calculatedColumnWidths: React.PropTypes.array,
     headerClickHandler: React.PropTypes.func,
     rowClickHandler: React.PropTypes.func,
-    activeColumn: React.PropTypes.object,
-  },
-
-  getRow(index) {
-    return this.props.data[index];
+    activeColumns: React.PropTypes.object,
   },
 
   handleHeaderClick(e, columnProps) {
     e.stopPropagation();
-    this.props.headerClickHandler(columnProps);
+    this.props.headerClickHandler(e, columnProps);
   },
 
   handleRowClick(e, index) {
@@ -50,9 +45,13 @@ export default React.createClass({
     this.props.rowClickHandler(this.props.data[index]);
   },
 
+  isSelected(column) {
+    return this.props.activeColumns.has(column);
+  },
+
   renderHeader(columnProps, headerProps) {
     const { headerClasses, getHeaderContent, columnKey } = columnProps;
-    const isSelected = (columnProps === this.props.activeColumn);
+    const isSelected = this.isSelected(columnProps);
 
     return (
       <Cell
@@ -61,7 +60,8 @@ export default React.createClass({
       >
         { getHeaderContent ?
           getHeaderContent(columnProps) :
-          <button className="wgsa-selectable-column-heading"
+          <button
+            className="wgsa-selectable-column-heading"
             onClick={event => this.handleHeaderClick(event, columnProps)}
           >
             {formatColumnLabel(columnKey)}
@@ -72,16 +72,15 @@ export default React.createClass({
   },
 
   renderCell(columnProps, { rowIndex, width, height }) {
-    const { data, activeColumn } = this.props;
     const { cellClasses, getCellContents = getCellValue } = columnProps;
-    const isSelected = (columnProps === activeColumn);
+    const isSelected = this.isSelected(columnProps);
 
     return (
       <Cell
         {...{ width, height }}
         className={getCellClassNames(isSelected, cellClasses)}
       >
-        {getCellContents(columnProps, data[rowIndex])}
+        { getCellContents(columnProps, this.props.data[rowIndex])}
       </Cell>
     );
   },
@@ -103,8 +102,8 @@ export default React.createClass({
         { columns.map((props) =>
             <Column
               key={props.columnKey}
-              header={(...args) => this.renderHeader(props, ...args)}
-              cell={(...args) => this.renderCell(props, ...args)}
+              header={(headerProps) => this.renderHeader(props, headerProps)}
+              cell={(cellProps) => this.renderCell(props, cellProps)}
               width={props.fixedWidth || props.width || 96}
               flexGrow={1}
               { ...props }

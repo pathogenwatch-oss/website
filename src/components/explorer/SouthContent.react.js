@@ -31,7 +31,7 @@ const SouthContent = React.createClass({
     tableProps: React.PropTypes.object,
     data: React.PropTypes.array,
     columns: React.PropTypes.array,
-    headerClick: React.PropTypes.func,
+    handleHeaderClick: React.PropTypes.func,
     dispatch: React.PropTypes.func,
     display: React.PropTypes.object,
     filter: React.PropTypes.object,
@@ -54,12 +54,12 @@ const SouthContent = React.createClass({
   },
 
   render() {
-    const { dispatch, headerClick, filter } = this.props;
+    const { dispatch, handleHeaderClick, filter } = this.props;
     return (
-      <section style={sectionStyle} onClick={this.onClick.bind(null, dispatch)}>
+      <section style={sectionStyle} onClick={(...args) => this.onClick(dispatch, ...args)}>
         <FixedTable { ...this.props }
           rowClickHandler={({ metadata }) => handleRowClick(metadata, filter, dispatch)}
-          headerClickHandler={(column) => dispatch(headerClick(column))}
+          headerClickHandler={(event, column) => handleHeaderClick(event, column, dispatch)}
         />
       </section>
     );
@@ -76,15 +76,21 @@ function mapStateToProps(state) {
   const { entities, collection, display, tables, filter, downloads } = state;
 
   const table = tables[display.table];
-  const { headerClick, columns, ...tableProps } = table;
+  const {
+    handleHeaderClick,
+    activeColumn,
+    activeColumns,
+    ...tableState,
+  } = table;
 
   return {
-    ...tableProps,
-    columns,
+    ...tableState,
+    activeColumns:
+      activeColumn ? new Set([ activeColumn ]) : activeColumns,
     filter,
     collection,
     data: getTableData(entities.assemblies, filter),
-    headerClick: headerClick.bind(table),
+    handleHeaderClick: handleHeaderClick.bind(table),
     downloads: {
       fasta: downloads.files.fasta,
       wgsa_gff: downloads.files.wgsa_gff,

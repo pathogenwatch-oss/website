@@ -1,12 +1,11 @@
 import React from 'react';
 
 import { FETCH_ENTITIES } from '../actions/fetch';
-import { SET_COLOUR_COLUMN, setColourColumn } from '../actions/table';
+import { SET_COLOUR_COLUMNS, setColourColumns } from '../actions/table';
+
+import { getColour } from '../utils/resistanceProfile';
 
 import { downloadColumnProps, nameColumnProps } from '../constants/table';
-import { defaultColourGetter } from '../constants/tree';
-
-import DEFAULT from '../defaults';
 
 const canvas = document.createElement('canvas').getContext('2d');
 canvas.font = 'Bold 12px "Helvetica","Arial",sans-serif';
@@ -25,41 +24,29 @@ function measureText(text) {
 }
 
 function buildAntibioticColumnProps(antibiotics) {
-  return antibiotics.map(antibiotic => {
-    return {
-      columnKey: antibiotic,
-      headerClasses: 'wgsa-table-header--resistance',
-      cellClasses: 'wgsa-table-cell--resistance',
-      fixedWidth: 40,
-      flexGrow: 0,
-      getCellContents({ columnKey }, { analysis }) {
-        const value = analysis.resistanceProfile[columnKey];
-        if (value) {
-          return (
-            <i title={value} className={`material-icons wgsa-resistance-icon wgsa-resistance-icon--${value.toLowerCase()}`}>
-              { value === 'RESISTANT' ? 'add_box' : '' }
-            </i>
-          );
-        }
-      },
-      valueGetter(assembly) {
-        const { analysis } = assembly;
-        if (!analysis.resistanceProfile) {
-          return defaultColourGetter(assembly);
-        }
-        const value = analysis.resistanceProfile[antibiotic];
-        return value === 'RESISTANT' ? DEFAULT.DANGER_COLOUR : '#fff';
-      },
-    };
-  });
+  return antibiotics.map(antibiotic => ({
+    columnKey: antibiotic,
+    headerClasses: 'wgsa-table-header--resistance',
+    cellClasses: 'wgsa-table-cell--resistance',
+    fixedWidth: 40,
+    flexGrow: 0,
+    getCellContents({ columnKey }, { analysis }) {
+      const value = analysis.resistanceProfile[columnKey];
+      if (value) {
+        return (
+          <i title={value} className={`material-icons wgsa-resistance-icon wgsa-resistance-icon--${value.toLowerCase()}`}>
+            { value === 'RESISTANT' ? 'add_box' : '' }
+          </i>
+        );
+      }
+      return null;
+    },
+    valueGetter: (assembly) => getColour(antibiotic, assembly),
+  }));
 }
 
-const initialActiveColumn = {
-  valueGetter: defaultColourGetter,
-};
-
 const actions = {
-  [FETCH_ENTITIES]: function (state, { ready, result, error }) {
+  [FETCH_ENTITIES](state, { ready, result, error }) {
     if (ready && !error) {
       const antibiotics = result[2];
 
@@ -86,33 +73,46 @@ const actions = {
         ...state,
         columns,
         tableProps: {
-          headerHeight: antibiotics.reduce((maxWidth, antibiotic) => {
-            return Math.max(maxWidth, measureText(antibiotic));
-          }, 0),
+          headerHeight: antibiotics.reduce((maxWidth, antibiotic) =>
+            Math.max(maxWidth, measureText(antibiotic))
+          , 0),
         },
       };
     }
 
     return state;
   },
-  [SET_COLOUR_COLUMN]: function (state, { column }) {
+  [SET_COLOUR_COLUMNS](state, { column }) {
     return {
       ...state,
-      activeColumn:
-        column.columnKey === nameColumnProps.columnKey ?
-          initialActiveColumn :
-          column,
+      activeColumns: column,
     };
   },
 };
 
 const initialState = {
-  activeColumn: initialActiveColumn,
-  headerClick(column) {
-    if (this.activeColumn === column || column === systemColumnProps[0]) {
-      return setColourColumn(initialActiveColumn);
+  activeColumns: new Set(),
+  handleHeaderClick(event, column, dispatch) {
+    if (column.columnKey === nameColumnProps.columnKey) {
+      dispatch(setColourColumns(new Set()));
+      return;
     }
-    return setColourColumn(column);
+
+    const cumulative = (event.metaKey || event.ctrlKey);
+
+    if (cumulative && this.activeColumns.has(column)) {
+      this.activeColumns.delete(column);
+      dispatch(setColourColumns(new Set(this.activeColumns)));
+      return;
+    }
+
+    if (cumulative) {
+      this.activeColumns.add(column);
+      dispatch(setColourColumns(new Set(this.activeColumns)));
+      return;
+    }
+
+    dispatch(setColourColumns(new Set([ column ])));
   },
   columns: [],
 };

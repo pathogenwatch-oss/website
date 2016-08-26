@@ -24,7 +24,7 @@ export const SET_RECEIVED_RESULT = 'SET_RECEIVED_RESULT';
 
 /* Filter */
 export const SET_LABEL_COLUMN = 'SET_LABEL_COLUMN';
-export const SET_COLOUR_COLUMN = 'SET_COLOUR_COLUMN';
+export const SET_COLOUR_COLUMNS = 'SET_COLOUR_COLUMNS';
 
 
 /* Download */
