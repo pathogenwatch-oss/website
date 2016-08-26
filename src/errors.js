@@ -3,7 +3,7 @@ var assemblyModel = require('models/assembly');
 var LOGGER = require('utils/logging').createLogger('Error handler');
 
 var errorCodes = {
-  KEY_DOES_NOT_EXIST: 13
+  KEY_DOES_NOT_EXIST: 13,
 };
 
 function isNotFoundInStorage(error) {

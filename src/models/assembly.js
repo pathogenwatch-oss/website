@@ -21,8 +21,8 @@ function sendUploadNotification({ speciesId, collectionId, assemblyId }, status)
       taskStatus: status,
       collectionId,
       assemblyId: {
-        assemblyId: assemblyId
-      }
+        assemblyId,
+      },
     }
   );
 }
@@ -38,7 +38,7 @@ function beginUpload(ids, data) {
     speciesId: ids.speciesId,
     assemblyId: ids.assemblyId,
     collectionId: ids.collectionId,
-    sequences: data.sequences
+    sequences: data.sequences,
   };
 
   mainStorage.store(
@@ -71,7 +71,7 @@ function mergeQueryResults(data, queryKeyPrefixes, assemblyId) {
   return queryKeyPrefixes.reduce(function (assembly, key) {
     assembly[key] = data[createKey(assemblyId, key)];
     return assembly;
-  }, { assemblyId: assemblyId });
+  }, { assemblyId });
 }
 
 function formatForFrontend(assembly) {
@@ -98,8 +98,8 @@ function formatForFrontend(assembly) {
               profile[antibiotic] = antibioticClass[antibiotic];
             });
             return profile;
-          }, {}) : {}
-    }
+          }, {}) : {},
+    },
   };
 }
 

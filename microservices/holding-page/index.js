@@ -13,4 +13,4 @@ app.use('/', (req, res) => res.redirect('/'));
 
 app.listen(8001);
 
-console.log('Holding page server listening on 8001.')
+console.log('Holding page server listening on 8001.');

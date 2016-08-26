@@ -12,7 +12,7 @@ if (!serviceName) {
 } else {
   async.parallel({
     storage: storageConnection.connect,
-    mqConnection: messageQueueConnection.connect
+    mqConnection: messageQueueConnection.connect,
   }, function (error, connections) {
     if (error) {
       return LOGGER.error(error);

@@ -19,7 +19,7 @@ app.set('port', process.env.PORT || config.node.port);
 app.use(bodyParser.json({ limit: '500mb' }));
 app.use(bodyParser.urlencoded({
   extended: true,
-  limit: '50mb'
+  limit: '50mb',
 }));
 
 logging.initHttpLogging(app, process.env.NODE_ENV || 'development');
@@ -27,7 +27,7 @@ logging.initHttpLogging(app, process.env.NODE_ENV || 'development');
 module.exports = function (callback) {
   async.parallel([
     storageConnection.connect,
-    messageQueueConnection.connect
+    messageQueueConnection.connect,
   ], function (error) {
     if (error) {
       return callback(error, null);

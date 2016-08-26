@@ -119,7 +119,7 @@ function addSequenceTypeData(assembly, speciesId, callback) {
       LOGGER.info('Got assembly ST data');
       assembly[MLST_RESULT].sequenceType = sequenceType;
       next(null, assembly);
-    }
+    },
   ], callback);
 }
 

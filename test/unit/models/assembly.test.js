@@ -6,7 +6,7 @@ describe('Model: Assembly', function () {
     var assemblyModel = require('models/assembly');
     var assemblies = {
       assembly1: { populationSubtype: 'taxon1' },
-      assembly2: { populationSubtype: 'taxon2' }
+      assembly2: { populationSubtype: 'taxon2' },
     };
     var taxonToAssemblyMap = assemblyModel.mapTaxaToAssemblies(assemblies);
     assert.equal(taxonToAssemblyMap.taxon1.assemblyIds[0], 'assembly1');
@@ -26,7 +26,7 @@ describe('Model: Assembly', function () {
       location: 'sanger',
       col1: 'val1',
       col2: 'val2',
-      col3: 'val3'
+      col3: 'val3',
     };
 
     var parsedMetadata = assemblyModel.createMetadataRecord(ids, rawMetadata);

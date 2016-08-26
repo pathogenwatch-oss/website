@@ -16,9 +16,9 @@ describe('Full Upload Test', function () {
 
       async.each(assemblyNames, function (filename, callback) {
         uploadAssembly({
-          collectionId: collectionId,
+          collectionId,
           assemblyId: assemblyIds[filename],
-          fileName: filename
+          fileName: filename,
         })
         .expect(200)
         .end(callback);

@@ -8,7 +8,7 @@ const pusher = new Pusher({
   key: pusherConfig.key,
   secret: pusherConfig.secret,
   encrypted: pusherConfig.encrypted || false,
-  proxy: pusherConfig.proxy || ''
+  proxy: pusherConfig.proxy || '',
 });
 
 LOGGER.info(`Pusher connected to app ${pusherConfig.appId} with key ${pusherConfig.key}`);

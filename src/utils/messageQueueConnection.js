@@ -10,33 +10,33 @@ var CONNECTION_OPTIONS = {
   host: appConfig.rabbit.ip,
   port: appConfig.rabbit.port,
   login: appConfig.rabbit.login,
-  password: appConfig.rabbit.password
+  password: appConfig.rabbit.password,
 };
 var IMPLEMENTATION_OPTIONS = {
   reconnect: false,
-  autoDelete: true
+  autoDelete: true,
 };
 var EXCHANGE_CONFIG = {
   NOTIFICATION: {
     name: 'notifications-ex',
-    type: 'direct'
+    type: 'direct',
   },
   UPLOAD: {
     name: 'wgst-ex',
-    type: 'direct'
+    type: 'direct',
   },
   COLLECTION_ID: {
     name: 'grid-ex',
-    type: 'direct'
+    type: 'direct',
   },
   SERVICES: {
     name: 'me-services-ex',
     type: 'topic',
     options: {
       passive: false,
-      confirm: true
-    }
-  }
+      confirm: true,
+    },
+  },
 };
 var connection;
 var exchanges = {};
@@ -69,7 +69,7 @@ function createExchange(exchangeKey, callback) {
     durable: false,
     confirm: false,
     autoDelete: false,
-    noDeclare: false
+    noDeclare: false,
   }, config.options);
   connection.exchange(config.name, options, exchange => {
     setDefaultPublishOptions(exchange);

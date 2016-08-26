@@ -31,9 +31,9 @@ function initHttpLogging(app, env) {
   getBaseLogger().warn('Environment: ' + env);
   if (env !== 'development') {
     app.use(morgan(':date :method :url :status :response-time', {
-      skip: function (req, res) {
+      skip(req, res) {
         return (res.statusCode < 400);
-      }
+      },
     }));
   } else {
     app.use(morgan('dev'));
@@ -42,7 +42,7 @@ function initHttpLogging(app, env) {
 }
 
 module.exports = {
-  createLogger: createLogger,
-  getBaseLogger: getBaseLogger,
-  initHttpLogging: initHttpLogging
+  createLogger,
+  getBaseLogger,
+  initHttpLogging,
 };

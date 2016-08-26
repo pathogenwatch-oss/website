@@ -10,6 +10,6 @@ module.exports = function (requestData) {
     .post('/api/species/1280/collection/' + collectionId + '/assembly/' + assemblyId)
     .send({
       metadata: {},
-      sequences: fs.readFileSync(path.resolve(__dirname, '..', 'fixtures', fileName), { encoding: 'utf-8' })
+      sequences: fs.readFileSync(path.resolve(__dirname, '..', 'fixtures', fileName), { encoding: 'utf-8' }),
     });
 };

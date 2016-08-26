@@ -17,8 +17,8 @@ describe('Model: Sequence Type', function () {
         alleles: {
           one: { alleleId: 1 },
           two: { alleleId: 2 },
-          three: { alleleId: 3 }
-        }
+          three: { alleleId: 3 },
+        },
       };
 
       var stQueryKey = generateStQueryKey('1280', mlst);
@@ -36,8 +36,8 @@ describe('Model: Sequence Type', function () {
         alleles: {
           one: { alleleId: 1 },
           two: { alleleId: undefined },
-          three: { alleleId: 3 }
-        }
+          three: { alleleId: 3 },
+        },
       };
 
       var stQueryKey = generateStQueryKey('1280', mlst);
@@ -57,10 +57,10 @@ describe('Model: Sequence Type', function () {
           gmk_: null,
           pta_: null,
           tpi_: null,
-          yqil: null
+          yqil: null,
         },
-        stCode: 'Not determined'
-      }
+        stCode: 'Not determined',
+      },
     };
 
     sequenceTypeModel.addSequenceTypeData(assembly, '1234', function (_, result) {
