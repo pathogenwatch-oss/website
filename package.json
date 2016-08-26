@@ -38,7 +38,7 @@
     "file-loader": "^0.9.0",
     "fixed-data-table": "^0.6.0",
     "flux": "^2.1.1",
-    "jquery-draghover": "github:imperialcollegelondon/jquery-draghover",
+    "jquery-draghover": "gitlab:cgps/jquery-draghover",
     "json-loader": "^0.5.3",
     "moment": "^2.10.3",
     "node-libs-browser": "^0.5.3",
