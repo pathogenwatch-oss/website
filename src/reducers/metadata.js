@@ -13,12 +13,12 @@ const initialActiveColumn = nameColumnProps;
 
 const initialState = {
   activeColumn: initialActiveColumn,
-  handleHeaderClick(event, column, dispatch) {
+  columns: [],
+  onHeaderClick(event, { column, activeColumns }, dispatch) {
     dispatch(setLabelColumn(
-      (this.activeColumn === column) ? initialActiveColumn : column
+      activeColumns.has(column) ? initialActiveColumn : column
     ));
   },
-  columns: [],
 };
 
 function getUserDefinedColumnNames(assemblies) {
