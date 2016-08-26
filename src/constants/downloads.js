@@ -22,11 +22,11 @@ export function createFilename(formatName, collectionId, assemblyName) {
 
 export function createDownloadProps(params, dispatch) {
   const { format, download, idList, filenameParams, getFileContents } = params;
-  const { filename, linksById = {}, ...DownloadProps } = download;
+  const { filename, linksById = {}, ...downloadProps } = download;
 
   return {
     format,
-    ...DownloadProps,
+    ...downloadProps,
     ...(linksById[createDownloadKey(idList)] || []),
     onClick: () => dispatch(
       requestDownload({
