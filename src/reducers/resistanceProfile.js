@@ -82,10 +82,10 @@ const actions = {
 
     return state;
   },
-  [SET_COLOUR_COLUMNS](state, { column }) {
+  [SET_COLOUR_COLUMNS](state, { columns }) {
     return {
       ...state,
-      activeColumns: column,
+      activeColumns: columns,
     };
   },
 };
@@ -98,15 +98,13 @@ const initialState = {
       return;
     }
 
-    const cumulative = (event.metaKey || event.ctrlKey);
-
-    if (cumulative && this.activeColumns.has(column)) {
+    if (this.activeColumns.has(column)) {
       this.activeColumns.delete(column);
       dispatch(setColourColumns(new Set(this.activeColumns)));
       return;
     }
 
-    if (cumulative) {
+    if (event.metaKey || event.ctrlKey) {
       this.activeColumns.add(column);
       dispatch(setColourColumns(new Set(this.activeColumns)));
       return;
