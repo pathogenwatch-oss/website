@@ -1,25 +1,23 @@
 import React from 'react';
 
 import { FETCH_ENTITIES } from '../actions/fetch';
-import { SET_COLOUR_COLUMNS, setColourColumns } from '../actions/table';
+import { SET_COLOUR_COLUMNS } from '../actions/table';
 
-import { getColour } from '../utils/resistanceProfile';
+import {
+  getColour,
+  measureText,
+  onHeaderClick,
+} from '../utils/resistanceProfile';
 
 import { downloadColumnProps, nameColumnProps } from '../constants/table';
-
-const canvas = document.createElement('canvas').getContext('2d');
-canvas.font = 'Bold 12px "Helvetica","Arial",sans-serif';
 
 const systemColumnProps = [
   ...downloadColumnProps,
   { ...nameColumnProps,
     flexGrow: 0,
+    onHeaderClick: () => {},
   },
 ];
-
-function measureText(text) {
-  return (canvas.measureText(text.toUpperCase()).width * Math.cos(0.785)) + 40;
-}
 
 function buildAntibioticColumnProps(antibiotics) {
   return antibiotics.map(antibiotic => ({
@@ -40,6 +38,7 @@ function buildAntibioticColumnProps(antibiotics) {
       return null;
     },
     valueGetter: (assembly) => getColour(antibiotic, assembly),
+    onHeaderClick,
   }));
 }
 
@@ -89,26 +88,6 @@ const actions = {
 
 const initialState = {
   activeColumns: new Set(),
-  handleHeaderClick(event, column, dispatch) {
-    if (column.columnKey === nameColumnProps.columnKey) {
-      dispatch(setColourColumns(new Set()));
-      return;
-    }
-
-    if (this.activeColumns.has(column)) {
-      this.activeColumns.delete(column);
-      dispatch(setColourColumns(new Set(this.activeColumns)));
-      return;
-    }
-
-    if (event.metaKey || event.ctrlKey) {
-      this.activeColumns.add(column);
-      dispatch(setColourColumns(new Set(this.activeColumns)));
-      return;
-    }
-
-    dispatch(setColourColumns(new Set([ column ])));
-  },
   columns: [],
 };
 
