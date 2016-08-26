@@ -94,18 +94,20 @@ function mergeProps(state, { dispatch }) {
             format,
             ...props,
             ...linkProps,
-            onClick: () => dispatch(requestDownload({
-              format,
-              idList,
-              filename: createFilename(filename, collectionId),
-              getFileContents() {
-                return getFileContents ?
-                  getFileContents(state) :
-                  requestFile(
-                    { speciesId: Species.id, format }, { idList }
-                  );
-              },
-            })),
+            onClick: () => dispatch(
+              requestDownload({
+                format,
+                idList,
+                filename: createFilename(filename, collectionId),
+                getFileContents() {
+                  return getFileContents ?
+                    getFileContents(state) :
+                    requestFile(
+                      { speciesId: Species.id, format }, { idList }
+                    );
+                },
+              })
+            ),
           };
         }),
     closeMenu() {
