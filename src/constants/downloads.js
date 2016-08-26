@@ -1,6 +1,7 @@
 import { requestDownload } from '../actions/downloads';
 
-import { API_ROOT } from '../utils/Api';
+import { API_ROOT, requestFile } from '../utils/Api';
+
 import Species from '../species';
 
 export const encode = encodeURIComponent;
@@ -31,6 +32,9 @@ function createDownloadProps(downloads, { idList, filenameParams }, dispatch) {
           format,
           idList,
           filename: createFilename(filename, ...filenameParams),
+          getFileContents() {
+            return requestFile({ speciesId: Species.id, format }, { idList });
+          },
         })
       ),
     };
