@@ -71,6 +71,10 @@ export function requestFile({ speciesId, idType = 'assembly', format }, requestB
   ));
 }
 
+export function makeFileRequest(format, idList, speciesId) {
+  return () => requestFile({ speciesId, format }, { idList });
+}
+
 export function getAntibiotics(speciesId) {
   return $.get(`${API_ROOT}/species/${speciesId}/antibiotics`);
 }

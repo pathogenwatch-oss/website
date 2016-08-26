@@ -6,14 +6,10 @@ import { connect } from 'react-redux';
 
 import DownloadButton from './DownloadButton.react';
 
-import { setMenuActive, requestDownload } from '^/actions/downloads';
+import { setMenuActive } from '^/actions/downloads';
 
-import { createDownloadKey, createFilename } from '^/constants/downloads';
-
+import { createDownloadProps } from '^/constants/downloads';
 import { getCounts, showCounts } from '^/utils/assembly';
-import { requestFile } from '^/utils/Api';
-
-import Species from '^/species';
 
 
 const DownloadsMenu = React.createClass({
@@ -85,33 +81,16 @@ function mergeProps(state, { dispatch }) {
           return !hideFromMenu();
         }).
         map(format => {
-          const {
-            linksById, filename, getFileContents, ...props,
-          } = files[format];
-
-          const idList = assemblyIds;
-          const linkProps =
-            linksById ? linksById[createDownloadKey(idList)] : {};
-
-          return {
+          const download = files[format];
+          return createDownloadProps({
             format,
-            ...props,
-            ...linkProps,
-            onClick: () => dispatch(
-              requestDownload({
-                format,
-                idList,
-                filename: createFilename(filename, collectionId),
-                getFileContents() {
-                  return getFileContents ?
-                    getFileContents(state) :
-                    requestFile(
-                      { speciesId: Species.id, format }, { idList }
-                    );
-                },
-              })
-            ),
-          };
+            download,
+            idList: assemblyIds,
+            filenameParams: [ collectionId ],
+            getFileContents:
+              download.getFileContents &&
+                (() => download.getFileContents(state, dispatch)),
+          }, dispatch);
         }),
     closeMenu() {
       dispatch(setMenuActive(false));
