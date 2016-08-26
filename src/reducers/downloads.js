@@ -3,7 +3,7 @@ import ToastActionCreators from '../actions/ToastActionCreators';
 
 import {
   generateMetadataFile, generateAMRProfile, createCSVLink, createDefaultLink,
-} from '../utils/download';
+} from '../utils/downloads';
 
 import { createDownloadKey } from '../constants/downloads';
 
