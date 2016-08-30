@@ -7,16 +7,6 @@ export function createAsyncConstants(actionType) {
   }), {});
 }
 
-export function createThunk(action, promise) {
-  return dispatch => {
-    dispatch({ type: action.ATTEMPT });
-    return promise.then(
-      result => dispatch({ type: action.SUCCESS, payload: result }),
-      error => dispatch({ type: action.ERROR, payload: error })
-    );
-  };
-}
-
 /* Upload View */
 
 /* File */

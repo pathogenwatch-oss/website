@@ -1,18 +1,15 @@
-export const readyStatePromise = () => next => action => {
+export const promiseToThunk = () => next => action => {
   if (!action.promise) {
     return next(action);
   }
 
-  function makeAction(ready, data) {
-    const newAction = Object.assign({}, action, { ready }, data);
-    delete newAction.promise;
-    return newAction;
-  }
+  const { type, promise } = action;
 
-  next(makeAction(false));
-
-  return action.promise.then(
-    result => next(makeAction(true, { result })),
-    error => next(makeAction(true, { error }))
-  );
+  return next(dispatch => {
+    dispatch({ type: type.ATTEMPT });
+    return promise.then(
+      result => dispatch({ type: type.SUCCESS, payload: result }),
+      error => dispatch({ type: type.ERROR, payload: error })
+    );
+  });
 };
