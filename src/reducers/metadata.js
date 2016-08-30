@@ -49,34 +49,30 @@ function getActiveColumn(currentActiveColumn, newColumns) {
 }
 
 const actions = {
-  [FETCH_ENTITIES](state, { ready, result, error }) {
-    if (ready && !error) {
-      const { assemblies } = result[0];
-      const { publicMetadataColumnNames = [], uiOptions = {} } = Species.current;
+  [FETCH_ENTITIES.SUCCESS](state, { payload }) {
+    const { assemblies } = payload[0];
+    const { publicMetadataColumnNames = [], uiOptions = {} } = Species.current;
 
-      const columnNames = getUserDefinedColumnNames(assemblies);
-      const systemColumnProps = [
-        downloadColumnProps,
-        nameColumnProps,
-        ...getSystemDataColumnProps(uiOptions),
-      ];
-      const userDefinedColumnProps =
-        systemColumnProps.concat(getUserDefinedColumnProps(columnNames));
+    const columnNames = getUserDefinedColumnNames(assemblies);
+    const systemColumnProps = [
+      downloadColumnProps,
+      nameColumnProps,
+      ...getSystemDataColumnProps(uiOptions),
+    ];
+    const userDefinedColumnProps =
+      systemColumnProps.concat(getUserDefinedColumnProps(columnNames));
 
-      return {
-        ...state,
-        userDefinedColumnProps,
-        publicMetadataColumnProps:
-          publicMetadataColumnNames.length ?
-            systemColumnProps.concat(
-              getUserDefinedColumnProps(publicMetadataColumnNames)
-            ) :
-            userDefinedColumnProps,
-        columns: userDefinedColumnProps,
-      };
-    }
-
-    return state;
+    return {
+      ...state,
+      userDefinedColumnProps,
+      publicMetadataColumnProps:
+        publicMetadataColumnNames.length ?
+          systemColumnProps.concat(
+            getUserDefinedColumnProps(publicMetadataColumnNames)
+          ) :
+          userDefinedColumnProps,
+      columns: userDefinedColumnProps,
+    };
   },
   [SET_TREE](state, { ready, name }) {
     if (ready === false) {

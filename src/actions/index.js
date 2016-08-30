@@ -1,3 +1,12 @@
+const asyncStages = [ 'START', 'SUCCESS', 'FAILURE' ];
+
+export function createAsyncConstants(actionType) {
+  return asyncStages.reduce((constants, stage) => ({
+    ...constants,
+    [stage]: `${actionType}_${stage}`,
+  }), {});
+}
+
 /* Upload View */
 
 /* File */

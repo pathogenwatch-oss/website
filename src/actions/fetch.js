@@ -1,3 +1,5 @@
+import { createAsyncConstants } from '../actions';
+
 import {
   checkCollectionStatus,
   getCollection,
@@ -7,11 +9,11 @@ import {
 
 import { fixPositions, fixDateFormats } from '../utils/Metadata';
 
-export const FETCH_ENTITIES = 'FETCH_ENTITIES';
+export const FETCH_ENTITIES = createAsyncConstants('FETCH_ENTITIES');
 
 export const fetchEntities = (speciesId, collectionId) =>
   dispatch => {
-    dispatch({ type: FETCH_ENTITIES, ready: false });
+    dispatch({ type: FETCH_ENTITIES.START });
 
     Promise.all([
       getCollection(speciesId, collectionId).then(fixPositions),
@@ -19,8 +21,8 @@ export const fetchEntities = (speciesId, collectionId) =>
       getAntibiotics(speciesId),
     ]).
     then(
-      result => dispatch({ type: FETCH_ENTITIES, ready: true, result }),
-      error => dispatch({ type: FETCH_ENTITIES, ready: true, error })
+      result => dispatch({ type: FETCH_ENTITIES.SUCCESS, payload: result }),
+      error => dispatch({ type: FETCH_ENTITIES.ERROR, payload: error })
     );
   };
 

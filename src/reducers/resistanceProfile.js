@@ -43,41 +43,37 @@ function buildAntibioticColumnProps(antibiotics) {
 }
 
 const actions = {
-  [FETCH_ENTITIES](state, { ready, result, error }) {
-    if (ready && !error) {
-      const antibiotics = result[2];
+  [FETCH_ENTITIES.SUCCESS](state, { payload }) {
+    const antibiotics = payload[2];
 
-      const columns = [
-        { columnKey: '__spacer_l',
-          getHeaderContent() {},
-          fixed: true,
-          fixedWidth: 1,
-          getCellContents() {},
-        },
-        ...systemColumnProps,
-        ...buildAntibioticColumnProps(antibiotics),
-        { columnKey: '__spacer_r',
-          getHeaderContent() {},
-          fixedWidth:
-            Math.cos(45 * Math.PI / 180) *
-              measureText(antibiotics[antibiotics.length - 1]) - 24,
-          getCellContents() {},
-          cellClasses: 'wgsa-table-cell--resistance',
-        },
-      ];
+    const columns = [
+      { columnKey: '__spacer_l',
+        getHeaderContent() {},
+        fixed: true,
+        fixedWidth: 1,
+        getCellContents() {},
+      },
+      ...systemColumnProps,
+      ...buildAntibioticColumnProps(antibiotics),
+      { columnKey: '__spacer_r',
+        getHeaderContent() {},
+        fixedWidth:
+          Math.cos(45 * Math.PI / 180) *
+            measureText(antibiotics[antibiotics.length - 1]) - 24,
+        getCellContents() {},
+        cellClasses: 'wgsa-table-cell--resistance',
+      },
+    ];
 
-      return {
-        ...state,
-        columns,
-        tableProps: {
-          headerHeight: antibiotics.reduce((maxWidth, antibiotic) =>
-            Math.max(maxWidth, measureText(antibiotic))
-          , 0),
-        },
-      };
-    }
-
-    return state;
+    return {
+      ...state,
+      columns,
+      tableProps: {
+        headerHeight: antibiotics.reduce((maxWidth, antibiotic) =>
+          Math.max(maxWidth, measureText(antibiotic))
+        , 0),
+      },
+    };
   },
   [SET_COLOUR_COLUMNS](state, { columns }) {
     return {
