@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node dev-server.js",
     "build": "NODE_ENV=production webpack",
-    "config": "node bin/config.js"
+    "config": "node bin/config.js",
+    "test": "ava"
   },
   "repository": {
     "type": "git",
@@ -22,6 +23,7 @@
   },
   "devDependencies": {
     "autoprefixer": "^6.0.3",
+    "ava": "^0.16.0",
     "babel-core": "^6.3.21",
     "babel-loader": "^6.2.5",
     "babel-plugin-react-transform": "^2.0.0-beta1",
