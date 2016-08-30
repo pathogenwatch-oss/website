@@ -1,10 +1,20 @@
-const asyncStages = [ 'START', 'SUCCESS', 'FAILURE' ];
+const asyncStages = [ 'ATTEMPT', 'SUCCESS', 'FAILURE' ];
 
 export function createAsyncConstants(actionType) {
   return asyncStages.reduce((constants, stage) => ({
     ...constants,
-    [stage]: `${actionType}_${stage}`,
+    [stage]: `${actionType}::${stage}`,
   }), {});
+}
+
+export function createThunk(action, promise) {
+  return dispatch => {
+    dispatch({ type: action.ATTEMPT });
+    return promise.then(
+      result => dispatch({ type: action.SUCCESS, payload: result }),
+      error => dispatch({ type: action.ERROR, payload: error })
+    );
+  };
 }
 
 /* Upload View */

@@ -1,4 +1,4 @@
-import { createAsyncConstants } from '../actions';
+import { createAsyncConstants, createThunk } from '../actions';
 
 import {
   checkCollectionStatus,
@@ -12,28 +12,22 @@ import { fixPositions, fixDateFormats } from '../utils/Metadata';
 export const FETCH_ENTITIES = createAsyncConstants('FETCH_ENTITIES');
 
 export const fetchEntities = (speciesId, collectionId) =>
-  dispatch => {
-    dispatch({ type: FETCH_ENTITIES.START });
-
+  createThunk(
+    FETCH_ENTITIES,
     Promise.all([
       getCollection(speciesId, collectionId).then(fixPositions),
       getReferenceCollection(speciesId, collectionId).then(fixDateFormats),
       getAntibiotics(speciesId),
-    ]).
-    then(
-      result => dispatch({ type: FETCH_ENTITIES.SUCCESS, payload: result }),
-      error => dispatch({ type: FETCH_ENTITIES.ERROR, payload: error })
-    );
-  };
+    ])
+  );
 
-export const CHECK_STATUS = 'CHECK_STATUS';
+export const CHECK_STATUS = createAsyncConstants('CHECK_STATUS');
 
-export function checkStatus(speciesId, collectionId, cas) {
-  return {
-    type: CHECK_STATUS,
-    promise: checkCollectionStatus(speciesId, collectionId, cas),
-  };
-}
+export const checkStatus = (speciesId, collectionId, cas) =>
+  createThunk(
+    CHECK_STATUS,
+    checkCollectionStatus(speciesId, collectionId, cas)
+  );
 
 export const UPDATE_PROGRESS = 'UPDATE_PROGRESS';
 

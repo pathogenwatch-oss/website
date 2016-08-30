@@ -103,22 +103,17 @@ export const collection = {
         id,
       };
     },
-    [CHECK_STATUS](state, { ready, result, error }) {
-      if (ready && error) {
-        return {
-          ...state,
-          status: statuses.NOT_FOUND,
-        };
-      }
-
-      if (ready) {
-        return {
-          ...state,
-          ...result,
-        };
-      }
-
-      return state;
+    [CHECK_STATUS.FAILURE](state) {
+      return {
+        ...state,
+        status: statuses.NOT_FOUND,
+      };
+    },
+    [CHECK_STATUS.SUCCESS](state, { payload }) {
+      return {
+        ...state,
+        ...payload,
+      };
     },
     [UPDATE_PROGRESS](state, { results }) {
       return {
