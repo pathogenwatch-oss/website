@@ -9,16 +9,20 @@ import { fixPositions, fixDateFormats } from '../utils/Metadata';
 
 export const FETCH_ENTITIES = 'FETCH_ENTITIES';
 
-export function fetchEntities(speciesId, collectionId) {
-  return {
-    type: FETCH_ENTITIES,
-    promise: Promise.all([
+export const fetchEntities = (speciesId, collectionId) =>
+  dispatch => {
+    dispatch({ type: FETCH_ENTITIES, ready: false });
+
+    Promise.all([
       getCollection(speciesId, collectionId).then(fixPositions),
       getReferenceCollection(speciesId, collectionId).then(fixDateFormats),
       getAntibiotics(speciesId),
-    ]),
+    ]).
+    then(
+      result => dispatch({ type: FETCH_ENTITIES, ready: true, result }),
+      error => dispatch({ type: FETCH_ENTITIES, ready: true, error })
+    );
   };
-}
 
 export const CHECK_STATUS = 'CHECK_STATUS';
 
