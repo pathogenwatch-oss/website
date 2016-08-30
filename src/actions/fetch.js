@@ -13,18 +13,22 @@ export const FETCH_ENTITIES = createAsyncConstants('FETCH_ENTITIES');
 
 export const fetchEntities = (speciesId, collectionId) => ({
   type: FETCH_ENTITIES,
-  promise: Promise.all([
-    getCollection(speciesId, collectionId).then(fixPositions),
-    getReferenceCollection(speciesId, collectionId).then(fixDateFormats),
-    getAntibiotics(speciesId),
-  ]),
+  payload: {
+    promise: Promise.all([
+      getCollection(speciesId, collectionId).then(fixPositions),
+      getReferenceCollection(speciesId, collectionId).then(fixDateFormats),
+      getAntibiotics(speciesId),
+    ]),
+  },
 });
 
 export const CHECK_STATUS = createAsyncConstants('CHECK_STATUS');
 
 export const checkStatus = (speciesId, collectionId, cas) => ({
   type: CHECK_STATUS,
-  promise: checkCollectionStatus(speciesId, collectionId, cas)
+  payload: {
+    promise: checkCollectionStatus(speciesId, collectionId, cas),
+  },
 });
 
 export const UPDATE_PROGRESS = 'UPDATE_PROGRESS';

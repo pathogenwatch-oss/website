@@ -1,3 +1,5 @@
+import { createAsyncConstants } from '../actions';
+
 import { makeFileRequest } from '../utils/Api';
 
 export const SET_MENU_ACTIVE = 'SET_MENU_ACTIVE';
@@ -10,7 +12,7 @@ export function setMenuActive(active) {
 }
 
 
-export const REQUEST_DOWNLOAD = 'REQUEST_DOWNLOAD';
+export const REQUEST_DOWNLOAD = createAsyncConstants('REQUEST_DOWNLOAD');
 
 export function requestDownload(args) {
   const {
@@ -20,9 +22,11 @@ export function requestDownload(args) {
 
   return {
     type: REQUEST_DOWNLOAD,
-    format,
-    idList,
-    filename,
-    promise: getFileContents(),
+    payload: {
+      format,
+      idList,
+      filename,
+      promise: getFileContents(),
+    },
   };
 }

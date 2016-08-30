@@ -54,46 +54,41 @@ const initialState = {
   },
 };
 
-const actions = {
-  [REQUEST_DOWNLOAD](state, action) {
-    const { format, idList, filename, ready, result, error } = action;
+function updateDownloads(state, payload, newStateForKey) {
+  const { format, idList } = payload;
 
-    const downloadState = state[format];
+  const { linksById = {}, ...downloadState } = state[format];
+  const downloadKey = createDownloadKey(idList);
 
-    if (!downloadState) {
-      return state;
-    }
-
-    const {
-      linksById = {},
-      createLink = createDefaultLink,
-    } = downloadState;
-
-    const downloadKey = createDownloadKey(idList);
-
-    if (error) {
-      ToastActionCreators.showToast({
-        message: 'Failed to generate download, please try again later.',
-      });
-    }
-
-    const link = ready && !error ? createLink(result, filename) : null;
-
-    return {
-      ...state,
-      [format]: {
-        ...downloadState,
-        linksById: {
-          ...linksById,
-          [downloadKey]: {
-            loading: !ready,
-            error: ready && typeof error !== undefined,
-            link,
-            filename,
-          },
-        },
+  return {
+    ...state,
+    [format]: {
+      ...downloadState,
+      linksById: {
+        ...linksById,
+        [downloadKey]: newStateForKey,
       },
-    };
+    },
+  };
+}
+
+const actions = {
+  [REQUEST_DOWNLOAD.ATTEMPT](state, { payload }) {
+    return updateDownloads(state, payload, { loading: true });
+  },
+  [REQUEST_DOWNLOAD.FAILURE](state, { payload }) {
+    ToastActionCreators.showToast({
+      message: 'Failed to generate download, please try again later.',
+    });
+
+    return updateDownloads(state, payload, { error: true });
+  },
+  [REQUEST_DOWNLOAD.SUCCESS](state, { payload }) {
+    const { format, filename, result } = payload;
+    const { createLink = createDefaultLink } = state[format];
+
+    const link = createLink(result, filename);
+    return updateDownloads(state, payload, { link, filename });
   },
 };
 
