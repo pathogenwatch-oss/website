@@ -21,6 +21,8 @@ function handleRowClick({ assemblyId }, { ids, active }, dispatch) {
   }
 }
 
+const preventDefault = e => e.preventDefault();
+
 const SouthContent = React.createClass({
 
   displayName: 'SouthContent',
@@ -62,7 +64,12 @@ const SouthContent = React.createClass({
       );
 
     return (
-      <section style={sectionStyle} onClick={(...args) => this.onClick(dispatch, ...args)}>
+      <section
+        style={sectionStyle}
+        onClick={(...args) => this.onClick(dispatch, ...args)}
+        onWheel={preventDefault}
+        onTouchMove={preventDefault}
+      >
         <FixedTable { ...this.props }
           rowClickHandler={({ metadata }) => handleRowClick(metadata, filter, dispatch)}
           headerClickHandler={headerClickHandler}
