@@ -2,12 +2,11 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import createLogger from 'redux-logger';
 
 import { readyStatePromise } from '../middleware';
-import DevTools from '../DevTools';
 import rootReducer from '../reducers';
 
 const configureStore = compose(
   applyMiddleware(readyStatePromise, createLogger()),
-  DevTools.instrument()
+  window.devToolsExtension ? window.devToolsExtension() : f => f
 )(createStore);
 
 export default function getStore() {

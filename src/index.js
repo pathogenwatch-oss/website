@@ -11,20 +11,8 @@ import getStore from '^/store';
 
 export const store = getStore();
 
-function addDevTools() {
-  if (process.env.NODE_ENV !== 'production') {
-    const DevTools = require('^/DevTools').default;
-    return (
-      <DevTools />
-    );
-  }
-}
-
 render((
   <Provider store={store}>
-    <div>
-      <Router />
-      { addDevTools() }
-    </div>
+    <Router />
   </Provider>
 ), document.getElementById('wgsa'));
