@@ -28,15 +28,16 @@ const Specieator = React.createClass({
   },
 
   componentWillMount() {
-    this.props.dispatch(
+    const { order, dispatch } = this.props;
+    dispatch(
       updateHeader({
         speciesName: 'Specieator',
-        classNames: 'wgsa-specieator-header',
+        classNames: `wgsa-specieator-header ${order.length ? 'wgsa-specieator--has-aside' : ''}`.trim(),
         content: (
           <span className="mdl-layout-spacer mdl-layout-spacer--flex">
             <div className="mdl-layout-spacer" />
             <nav className="mdl-navigation">
-              <a className="mdl-navigation__link mdl-navigation__link--active" href="">Specieator</a>
+              <a className="mdl-navigation__link mdl-navigation__link--active" href="">Upload</a>
               <a className="mdl-navigation__link" href="">Downloads</a>
               <a className="mdl-navigation__link" href="">Documentation</a>
             </nav>

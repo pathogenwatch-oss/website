@@ -8,6 +8,27 @@ import ToastActionCreators from '../actions/ToastActionCreators';
 
 import { API_ROOT } from '^/utils/Api';
 
+function getCustomXHR(filename, dispatch) {
+  const xhr = new window.XMLHttpRequest();
+
+  let previousPercent = 0;
+
+  xhr.upload.addEventListener('progress', evt => {
+    if (evt.lengthComputable) {
+      const percentComplete = (evt.loaded / evt.total) * 100;
+      const percentRounded =
+        Math.floor(percentComplete / 10) * 10;
+
+      if (percentRounded > previousPercent) {
+        dispatch(updateFastaProgress(filename, percentRounded));
+        previousPercent = percentRounded;
+      }
+    }
+  }, false);
+
+  return xhr;
+}
+
 export function sendToServer(file, dispatch) {
   return (
     readAsText(file).
@@ -18,26 +39,7 @@ export function sendToServer(file, dispatch) {
           contentType: 'text/plain; charset=UTF-8',
           data,
           dataType: 'json',
-          xhr() {
-            const xhr = new window.XMLHttpRequest();
-
-            let previousPercent = 0;
-
-            xhr.upload.addEventListener('progress', evt => {
-              if (evt.lengthComputable) {
-                const percentComplete = (evt.loaded / evt.total) * 100;
-                const percentRounded =
-                  Math.floor(percentComplete / 10) * 10;
-
-                if (percentRounded > previousPercent) {
-                  dispatch(updateFastaProgress(file.name, percentRounded));
-                  previousPercent = percentRounded;
-                }
-              }
-            }, false);
-
-            return xhr;
-          },
+          xhr: () => getCustomXHR(file.name, dispatch),
         })
       )
   );

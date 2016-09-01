@@ -39,12 +39,19 @@ export const CREATE_COLLECTION = createAsyncConstants('CREATE_COLLECTION');
 
 import { createCollection as createCollectionPromise } from './utils';
 
-export function createCollection(files, speciesId) {
-  return {
-    type: CREATE_COLLECTION,
-    payload: {
-      speciesId,
-      promise: createCollectionPromise(files, speciesId),
-    },
+export function createCollection() {
+  return (dispatch, getState) => {
+    const { entities: { fastas } } = getState();
+
+    const files = Object.keys(fastas).map(_ => fastas[_]);
+    const speciesId = files[0].speciesId;
+
+    dispatch({
+      type: CREATE_COLLECTION,
+      payload: {
+        speciesId,
+        promise: createCollectionPromise(files, speciesId),
+      },
+    });
   };
 }

@@ -101,11 +101,12 @@ apiRouter.get(
 apiRouter.post('/upload', (req, res) => {
   fastaStorage.store('./fastas', req.body).
     then(({ path, id }) =>
-      specieator.queryFile(path).then(({ speciesTaxId, taxId, scientificName }) => ({
-        speciesId: speciesTaxId || taxId || null,
-        speciesName: scientificName,
-        id,
-      }))
+      specieator.queryFile(path).
+        then(({ speciesTaxId, taxId, scientificName }) => ({
+          speciesId: speciesTaxId || taxId || null,
+          speciesName: scientificName,
+          id,
+        }))
     ).
     then(result =>
       res.json(Object.assign({ metrics: analyse(req.body) }, result))
