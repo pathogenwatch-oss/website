@@ -1,7 +1,6 @@
 node_modules
 npm*
 config.json
-*.config.json
 .DS_Store
 *.log
 fastas
