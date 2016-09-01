@@ -1,6 +1,6 @@
 import { FETCH_ENTITIES, CHECK_STATUS, UPDATE_PROGRESS } from '../actions/fetch';
 import { SET_COLLECTION_ID } from '../actions/collection';
-import { SET_TREE } from '../actions/tree';
+import { FETCH_TREE } from '../actions/tree';
 
 import { sortAssemblies } from '../utils/table';
 import { statuses } from '../constants/collection';
@@ -79,9 +79,7 @@ export const assemblies = {
         ...referenceAssemblies,
       };
     },
-    [SET_TREE.SUCCESS](state, { result }) {
-      if (!result) return state;
-
+    [FETCH_TREE.SUCCESS](state, { result }) {
       const publicAssemblies = decoratePublicAssemblies(result.assemblies);
       return {
         ...state,

@@ -1,5 +1,5 @@
 import { FETCH_ENTITIES } from '../actions/fetch';
-import { SET_TREE } from '../actions/tree';
+import { FETCH_TREE } from '../actions/tree';
 import { SET_UNFILTERED_IDS } from '../actions/filter';
 
 
@@ -15,9 +15,7 @@ const actions = {
       state,
     );
   },
-  [SET_TREE.SUCCESS](state, { result }) {
-    if (!result) return state;
-
+  [FETCH_TREE.SUCCESS](state, { result }) {
     return addAssembliesToMarkerDefs(
       Object.keys(result.assemblies).map(id => result.assemblies[id]),
       state,

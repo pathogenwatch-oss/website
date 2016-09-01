@@ -74,7 +74,7 @@ const actions = {
       columns: userDefinedColumnProps,
     };
   },
-  [SET_TREE.SUCCESS](state, { name }) {
+  [SET_TREE](state, { name }) {
     const columnProps =
       speciesTrees.has(name) ?
         state.userDefinedColumnProps :

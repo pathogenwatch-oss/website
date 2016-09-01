@@ -33,9 +33,9 @@ apiRouter.post('/species/:speciesId/collection', (req, res) => {
   });
 });
 
-apiRouter.post('/species/:speciesId/collection/:collectionId/assembly/:id', (req, res) => {
-  res.json({ assemblyId: req.params.id });
-});
+apiRouter.post('/species/:speciesId/collection/:collectionId/assembly/:id',
+  (req, res) => res.json({ assemblyId: req.params.id })
+);
 
 apiRouter.get('/species/:speciesId/collection/:id/status', (req, res) => {
   res.json({ status: 'READY' });
@@ -56,11 +56,13 @@ apiRouter.get('/species/:speciesId/antibiotics', (req, res) => {
 });
 
 
-apiRouter.get('/species/:speciesId/collection/:collectionId/subtree/:subtreeId', (req, res) => {
-  setTimeout(() => {
-    res.sendFile(`${__dirname}/static_data/${req.params.subtreeId}.json`);
-  }, 1000);
-});
+apiRouter.get('/species/:speciesId/collection/:collectionId/subtree/:subtreeId',
+  (req, res) =>
+    setTimeout(() =>
+      res.sendFile(`${__dirname}/static_data/${req.params.subtreeId}.json`)
+      // res.sendStatus(500)
+    , 1000)
+);
 
 apiRouter.post('/download/type/assembly/format/fasta', (req, res) => {
   setTimeout(() => {

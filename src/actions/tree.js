@@ -5,23 +5,24 @@ import { createAsyncConstants } from '../actions';
 
 import Species from '../species';
 
-export const SET_TREE = createAsyncConstants('SET_TREE');
+export const SET_TREE = 'SET_TREE';
+export const FETCH_TREE = createAsyncConstants('FETCH_TREE');
 
 export function displayTree({ name, newick }, collectionId) {
-  if (!speciesTrees.has(name) && !newick) {
-    return {
-      type: SET_TREE,
+  const setTree = { type: SET_TREE, name };
+
+  return dispatch => {
+    if (speciesTrees.has(name) || newick) {
+      dispatch(setTree);
+      return;
+    }
+
+    dispatch({
+      type: FETCH_TREE,
       payload: {
         name,
         promise: getSubtree(Species.id, collectionId, name),
       },
-    };
-  }
-
-  return {
-    type: SET_TREE.SUCCESS,
-    payload: {
-      name,
-    },
+    }).then(() => dispatch(setTree));
   };
 }

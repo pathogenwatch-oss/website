@@ -1,6 +1,6 @@
 import { FETCH_ENTITIES } from '../actions/fetch';
 
-import { SET_TREE } from '../actions/tree';
+import { FETCH_TREE, SET_TREE } from '../actions/tree';
 import ToastActionCreators from '../actions/ToastActionCreators';
 
 import { COLLECTION, POPULATION } from '../constants/tree';
@@ -16,11 +16,7 @@ export const trees = {
         ...uploaded.subtrees,
       };
     },
-    [SET_TREE.SUCCESS](state, { result, name }) {
-      if (!result) {
-        return state;
-      }
-
+    [FETCH_TREE.SUCCESS](state, { result, name }) {
       return {
         ...state,
         [name]: {
@@ -35,14 +31,14 @@ export const trees = {
 export const displayedTree = {
   initialState: COLLECTION,
   actions: {
-    [SET_TREE.FAILURE](state) {
+    [FETCH_TREE.FAILURE](state) {
       ToastActionCreators.showToast({
         message: 'Subtree currently unavailable, please try again later.',
       });
       return state;
     },
-    [SET_TREE.SUCCESS](state, { name }) {
-      return name || state;
+    [SET_TREE](state, { name }) {
+      return name;
     },
   },
 };
@@ -52,8 +48,8 @@ const contradication = () => false;
 export const treeLoading = {
   initialState: false,
   actions: {
-    [SET_TREE.ATTEMPT]: () => true,
-    [SET_TREE.SUCCESS]: contradication,
-    [SET_TREE.FAILURE]: contradication,
+    [FETCH_TREE.ATTEMPT]: () => true,
+    [FETCH_TREE.SUCCESS]: contradication,
+    [FETCH_TREE.FAILURE]: contradication,
   },
 };
