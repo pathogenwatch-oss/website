@@ -5,6 +5,14 @@ import {
   CREATE_COLLECTION,
 } from './actions';
 
+function updateFastas(state, name, update) {
+  const fasta = state[name];
+  return {
+    ...state,
+    [name]: { ...fasta, ...update },
+  };
+}
+
 export const fastas = {
   initialState: {},
   actions: {
@@ -13,38 +21,20 @@ export const fastas = {
 
       return files.reduce((memo, file) => {
         if (file.name in memo) return memo;
-
-        memo[file.name] = file;
-        return memo;
+        return { ...memo, [file.name]: { name: file.name, file } };
       }, state);
     },
-    [UPLOAD_FASTA](state, { name, ready, error, result = {} }) {
-      const fasta = state[name];
-
-      const newState = {
-        ...state,
-        [name]: {
-          ...fasta,
-          name,
-          ready,
-          error,
-          ...result,
-        },
-      };
-
-      return newState;
+    [UPLOAD_FASTA.ATTEMPT](state, { name }) {
+      return updateFastas(state, name, { ready: false });
+    },
+    [UPLOAD_FASTA.FAILURE](state, { name, error }) {
+      return updateFastas(state, name, { ready: true, error });
+    },
+    [UPLOAD_FASTA.SUCCESS](state, { name, result }) {
+      return updateFastas(state, name, { ready: true, ...result });
     },
     [UPDATE_FASTA_PROGRESS](state, { name, progress }) {
-      const fasta = state[name];
-      if (!fasta) return state;
-
-      return {
-        ...state,
-        [name]: {
-          ...fasta,
-          progress,
-        },
-      };
+      return updateFastas(state, name, { progress });
     },
   },
 };
@@ -52,14 +42,6 @@ export const fastas = {
 export const fastaOrder = {
   initialState: [],
   actions: {
-    // [UPLOAD_FASTA](state, { name, ready }) {
-    //   if (!name || ready) return state;
-    //
-    //   return [
-    //     name,
-    //     ...state,
-    //   ];
-    // },
     [ADD_FASTAS](state, { files }) {
       return [
         ...files.map(_ => _.name),
@@ -84,8 +66,7 @@ export const uploads = {
         ],
       };
     },
-    [UPLOAD_FASTA](state, { name, ready }) {
-      if (ready) return state;
+    [UPLOAD_FASTA.ATTEMPT](state, { name }) {
       return {
         queue: state.queue.slice(1),
         uploading: new Set([ ...state.uploading, name ]),
@@ -108,8 +89,8 @@ export const uploads = {
 export const loading = {
   initialState: false,
   actions: {
-    [CREATE_COLLECTION](state, { ready }) {
-      return !ready;
-    },
+    [CREATE_COLLECTION.ATTEMPT]: () => true,
+    [CREATE_COLLECTION.SUCCESS]: () => false,
+    [CREATE_COLLECTION.FAILURE]: () => false,
   },
 };

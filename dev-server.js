@@ -3,7 +3,7 @@ const fspath = require('path');
 const webpack = require('webpack');
 const express = require('express');
 const bodyParser = require('body-parser');
-const storeFastaFile = require('wgsa-fasta-store');
+const fastaStorage = require('wgsa-fasta-store');
 const createMashSpecieator = require('mash-specieator');
 
 const config = require('./webpack.config.js');
@@ -99,7 +99,7 @@ apiRouter.get(
 );
 
 apiRouter.post('/upload', (req, res) => {
-  storeFastaFile('./fastas', req.body).
+  fastaStorage.store('./fastas', req.body).
     then(({ path, id }) =>
       specieator.queryFile(path).then(({ speciesTaxId, taxId, scientificName }) => ({
         speciesId: speciesTaxId || taxId || null,
@@ -107,7 +107,9 @@ apiRouter.post('/upload', (req, res) => {
         id,
       }))
     ).
-    then(result => res.json(Object.assign({ metrics: analyse(req.body) }, result )));
+    then(result =>
+      res.json(Object.assign({ metrics: analyse(req.body) }, result))
+    );
 });
 
 apiRouter.post('/collection', (req, res) =>

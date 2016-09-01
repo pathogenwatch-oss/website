@@ -9,8 +9,9 @@ import FileGrid from './FileGrid.react';
 import Filter from './Filter.react';
 
 import { updateHeader } from '^/actions/header';
+import { uploadFasta } from './actions';
 
-import { addFiles, uploadFile } from './utils';
+import { addFiles, sendToServer } from './utils';
 import { taxIdMap } from '^/species';
 
 const Specieator = React.createClass({
@@ -50,7 +51,8 @@ const Specieator = React.createClass({
 
     const { queue, uploading } = uploads;
     if (queue.length && uploading.size < 5) {
-      uploadFile(fastas[queue[0]], dispatch);
+      const { name, file } = fastas[queue[0]];
+      dispatch(uploadFasta(name, sendToServer(file, dispatch)));
     }
 
     if (loading) {

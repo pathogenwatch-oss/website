@@ -3,13 +3,12 @@ import React from 'react';
 import { readAsText } from 'promise-file-reader';
 
 import { updateFastaProgress } from './actions';
-import { addFastas, uploadFasta } from './actions';
+import { addFastas } from './actions';
 import ToastActionCreators from '../actions/ToastActionCreators';
 
 import { API_ROOT } from '^/utils/Api';
 
-
-function sendToServer(file, dispatch) {
+export function sendToServer(file, dispatch) {
   return (
     readAsText(file).
       then(data =>
@@ -42,10 +41,6 @@ function sendToServer(file, dispatch) {
         })
       )
   );
-}
-
-export function uploadFile(file, dispatch) {
-  dispatch(uploadFasta(file.name, sendToServer(file, dispatch)));
 }
 
 function showDuplicatesToast(duplicates) {

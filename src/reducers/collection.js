@@ -94,9 +94,7 @@ export const assemblies = {
 export const collection = {
   initialState: { id: null, assemblyIds: [] },
   actions: {
-    [CREATE_COLLECTION](state, { ready, result, speciesId }) {
-      if (!ready || !result) return state;
-
+    [CREATE_COLLECTION.SUCCESS](state, { result, speciesId }) {
       return {
         ...state,
         id: result && result.collectionId,

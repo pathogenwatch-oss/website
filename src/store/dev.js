@@ -1,9 +1,10 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 
-import createLogger from 'redux-logger';
+// import createLogger from 'redux-logger';
 
 const configureStore = middleware => compose(
-  applyMiddleware(...middleware, createLogger()),
+  // applyMiddleware(...middleware, createLogger()),
+  applyMiddleware(...middleware),
   window.devToolsExtension ? window.devToolsExtension() : f => f
 )(createStore);
 

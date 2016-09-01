@@ -4,7 +4,6 @@ import antibiotics from './antibiotics';
 import { assemblies, collection, reference } from './collection';
 
 import * as specieator from '../specieator/reducers';
-console.log(specieator);
 import metadata from './metadata';
 import resistanceProfile from './resistanceProfile';
 
