@@ -170,6 +170,7 @@
 .wgsa-specieator-filter .mdl-chip {
   display: block;
   margin-bottom: 8px;
+  max-width: 100%;
 }
 
 .wgsa-specieator-filter .mdl-chip__contact {
@@ -177,6 +178,12 @@
   color: #fff;
   font-size: 14px;
   font-weight: 500;
+}
+
+.wgsa-specieator-filter .mdl-chip__text {
+  max-width: 80%;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .wgsa-specieator-filter .mdl-slider__container {

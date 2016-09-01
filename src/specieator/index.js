@@ -76,11 +76,11 @@ const Specieator = React.createClass({
   },
 
   countSpecies(fastas) {
-    return fastas.reduce((memo, { speciesId }) => {
-      if (!speciesId) return memo;
+    return fastas.reduce((memo, { speciesName }) => {
+      if (!speciesName) return memo;
       return {
         ...memo,
-        [speciesId]: (memo[speciesId] || 0) + 1,
+        [speciesName]: (memo[speciesName] || 0) + 1,
       };
     }, {});
   },

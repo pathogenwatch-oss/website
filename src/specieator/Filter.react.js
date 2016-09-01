@@ -32,19 +32,5 @@ export default ({ speciesSummary }) => (
     <section className="wgsa-specieator-filter__section" style={{ textAlign: 'center' }}>
       <CreateCollectionButton />
     </section>
-    {/* <section className="wgsa-specieator-filter__section">
-      <h3>No. Contigs</h3>
-      <label className="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
-        <input type="checkbox" className="mdl-checkbox__input" />
-        <span className="mdl-checkbox__label">
-          <input className="mdl-slider mdl-js-slider" type="range" min="0" max="100" value="25" tabIndex="0" />
-        </span>
-      </label>
-      <h3>GC Content</h3>
-      <label className="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
-        <input type="checkbox" className="mdl-checkbox__input" />
-        <input className="mdl-slider mdl-js-slider" type="range" min="0" max="100" value="25" tabIndex="0" />
-      </label>
-    </section> */}
   </aside>
 );
