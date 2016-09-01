@@ -3,7 +3,7 @@
  * N.B. This file is used by the middle-end, please be careful ES6 features
  */
 
-const DNA_SEQUENCE_REGEX = /^[CTAGNUX]+$/i;
+const DNA_SEQUENCE_REGEX = /^[CTAGNUXRY]+$/i;
 
 function extractContigsFromFastaFileString(fastaFileString) {
   //

@@ -2,15 +2,29 @@ import { REQUEST_DOWNLOAD } from '../actions/downloads';
 import ToastActionCreators from '../actions/ToastActionCreators';
 
 import {
-  createDownloadKey,
-  collectionPath,
-  encode,
-} from '../constants/downloads';
+  generateMetadataFile, generateAMRProfile, createCSVLink, createDefaultLink,
+} from '../utils/downloads';
+
+import { createDownloadKey } from '../constants/downloads';
+
+import Species from '^/species';
 
 const initialState = {
+  metadata_csv: {
+    description: 'Metadata',
+    filename: 'metadata.csv',
+    getFileContents: generateMetadataFile,
+    createLink: createCSVLink,
+  },
   amr_profile_collection: {
     description: 'AMR Profile',
-    filename: 'amr_profile',
+    filename: 'amr_profile.csv',
+    getFileContents: generateAMRProfile,
+    createLink: createCSVLink,
+    hideFromMenu() {
+      const { uiOptions = {} } = Species.current;
+      return uiOptions.noAMR;
+    },
   },
   concatenated_core_genes_collection: {
     description: 'Concatenated Core Genes',
@@ -31,61 +45,50 @@ const initialState = {
   fasta: {
     description: 'Assembly',
     filename: 'fasta',
-    notMenu: true,
+    hideFromMenu: () => true,
   },
   wgsa_gff: {
     description: 'Annotations',
     filename: 'annotations',
-    notMenu: true,
+    hideFromMenu: () => true,
   },
 };
 
-function createLink(keyMap, filename) {
-  const key = Object.keys(keyMap)[0];
+function updateDownloads(state, payload, newStateForKey) {
+  const { format, idList } = payload;
 
-  if (!key) {
-    return null;
-  }
+  const { linksById = {}, ...downloadState } = state[format];
+  const downloadKey = createDownloadKey(idList);
 
-  return (
-    `${collectionPath()}/${encode(key)}?prettyFileName=${encode(filename)}`
-  );
+  return {
+    ...state,
+    [format]: {
+      ...downloadState,
+      linksById: {
+        ...linksById,
+        [downloadKey]: newStateForKey,
+      },
+    },
+  };
 }
 
 const actions = {
-  [REQUEST_DOWNLOAD]: function (state, action) {
-    const { format, idList, filename, ready, result, error } = action;
+  [REQUEST_DOWNLOAD.ATTEMPT](state, payload) {
+    return updateDownloads(state, payload, { loading: true });
+  },
+  [REQUEST_DOWNLOAD.FAILURE](state, payload) {
+    ToastActionCreators.showToast({
+      message: 'Failed to generate download, please try again later.',
+    });
 
-    if (!state[format]) {
-      return state;
-    }
+    return updateDownloads(state, payload, { error: true });
+  },
+  [REQUEST_DOWNLOAD.SUCCESS](state, payload) {
+    const { format, filename, result } = payload;
+    const { createLink = createDefaultLink } = state[format];
 
-    const { linksById = {}, ...download } = state[format];
-    const downloadKey = createDownloadKey(idList);
-
-    if (error) {
-      ToastActionCreators.showToast({
-        message: 'Failed to generate download, please try again later.',
-      });
-    }
-
-    const link = ready && !error ? createLink(result, filename) : null;
-
-    return {
-      ...state,
-      [format]: {
-        ...download,
-        linksById: {
-          ...linksById,
-          [downloadKey]: {
-            loading: !ready,
-            error: ready && typeof error !== undefined,
-            link,
-            filename,
-          },
-        },
-      },
-    };
+    const link = createLink(result, filename);
+    return updateDownloads(state, payload, { link, filename });
   },
 };
 

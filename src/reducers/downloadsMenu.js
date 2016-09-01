@@ -4,13 +4,13 @@ import { BODY_CLICK } from '../actions/bodyClick';
 const initialState = false;
 
 const actions = {
-  [SET_MENU_ACTIVE]: function (state, { active } = {}) {
+  [SET_MENU_ACTIVE](state, { active } = {}) {
     if (typeof active !== 'undefined') {
       return active;
     }
     return state;
   },
-  [BODY_CLICK]: function (state) {
+  [BODY_CLICK](state) {
     if (state === true) {
       return false;
     }

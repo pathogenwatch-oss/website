@@ -1,5 +1,5 @@
 import Papa from 'papaparse';
-import moment from 'moment';
+import { formatMonth, formatDay } from './Date';
 
 function convertFieldNamesToLowerCase(dataObject) {
   const fieldNames = Object.keys(dataObject);
@@ -37,11 +37,11 @@ function getFormattedDateString({ year, month, day }) {
   }
 
   if (year && month && !day) {
-    return moment(`${year}-${month}`, 'YYYY-MM').format('MMMM YYYY');
+    return `${formatMonth(month)} ${year}`;
   }
 
   if (year && month && day) {
-    return moment(`${year}-${month}-${day}`, 'YYYY-MM-DD').format('Do MMMM YYYY');
+    return `${formatDay(day)} ${formatMonth(month)} ${year}`;
   }
 
   return '';
@@ -57,7 +57,7 @@ function convertDateObjectToCustomObject(date) {
 
 function fixDateFormats(collection) {
   const { assemblies } = collection;
-  Object.keys(assemblies).forEach(function (assemblyId) {
+  Object.keys(assemblies).forEach(assemblyId => {
     const assembly = assemblies[assemblyId];
 
     if (assembly.metadata.datetime) {
@@ -93,7 +93,7 @@ function isValid({ date }) {
 
 function fixPositions(collection) {
   const { assemblies } = collection;
-  Object.keys(assemblies).forEach(function (assemblyId) {
+  Object.keys(assemblies).forEach(assemblyId => {
     const { metadata } = assemblies[assemblyId];
     if (metadata.geography) {
       metadata.position = metadata.geography.position;

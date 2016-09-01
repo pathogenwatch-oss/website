@@ -25,7 +25,7 @@ import { RESET_STORE } from '../actions/reset';
 function createReducer({ actions, initialState }) {
   return function (state = initialState, action) {
     if (actions[action.type]) {
-      return actions[action.type](state, action);
+      return actions[action.type](state, action.payload || action);
     }
     return state;
   };

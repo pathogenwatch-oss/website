@@ -6,19 +6,22 @@ const shortName = 'S. aureus';
 const formattedShortName = (<em>{shortName}</em>);
 
 export default {
-  id: '1280',
-  nickname: 'saureus',
   name,
   formattedName,
   shortName,
   formattedShortName,
-  imagePath: '/assets/img/saureus.jpg',
   definitionText: (
     <span>
       <strong>{formattedName}</strong>, a Gram-positive coccal bacterium.
     </span>
   ),
-  maxAssemblySize: 3500000,
+
+  maxAssemblySize: 3.5 * Math.pow(10, 6),
+  uiOptions: {
+    // noPopulation: true,
+    // noMLST: true,
+    // noAMR: true,
+  },
   gcRange: {
     min: 31,
     max: 35,

@@ -1,7 +1,6 @@
-import { requestFile } from '../utils/Api';
+import { createAsyncConstants } from '../actions';
 
-import Species from '^/species';
-
+import { makeFileRequest } from '../utils/Api';
 
 export const SET_MENU_ACTIVE = 'SET_MENU_ACTIVE';
 
@@ -13,15 +12,21 @@ export function setMenuActive(active) {
 }
 
 
-export const REQUEST_DOWNLOAD = 'REQUEST_DOWNLOAD';
+export const REQUEST_DOWNLOAD = createAsyncConstants('REQUEST_DOWNLOAD');
 
-export function requestDownload({ format, ignoresFilter, idList, filename }) {
-  const idType = ignoresFilter ? 'collection' : 'assembly';
+export function requestDownload(args) {
+  const {
+    format, idList, filename, speciesId,
+    getFileContents = makeFileRequest(format, idList, speciesId),
+  } = args;
+
   return {
     type: REQUEST_DOWNLOAD,
-    format,
-    idList,
-    filename,
-    promise: requestFile({ speciesId: Species.id, format, idType }, { idList }),
+    payload: {
+      format,
+      idList,
+      filename,
+      promise: getFileContents(),
+    },
   };
 }

@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 import { activateFilter, resetFilter } from '^/actions/filter';
 
-import { formatColumnLabel } from '^/constants/table';
+import { formatColumnLabel } from '^/utils/table';
 
 const Search = React.createClass({
 

@@ -6,9 +6,11 @@ import { connect } from 'react-redux';
 
 import DownloadButton from './DownloadButton.react';
 
-import { setMenuActive, requestDownload } from '^/actions/downloads';
+import { setMenuActive } from '^/actions/downloads';
 
-import { createDownloadKey, createFilename } from '^/constants/downloads';
+import { createDownloadProps } from '^/constants/downloads';
+import { getCounts, showCounts } from '^/utils/assembly';
+
 
 const DownloadsMenu = React.createClass({
 
@@ -27,21 +29,19 @@ const DownloadsMenu = React.createClass({
     window.removeEventListener('keydown', this.closeMenuOnEsc);
   },
 
+  closeMenuOnEsc(event) {
+    if (this.props.menuOpen && event.keyCode === 27) {
+      this.props.closeMenu();
+    }
+  },
+
   render() {
     const { menuOpen, files, counts = {} } = this.props;
     return (
       <div className={`wgsa-overlay ${menuOpen ? 'wgsa-overlay--is-visible' : ''}`.trim()}>
         <div className="wgsa-overlay__content wgsa-downloads-menu mdl-shadow--4dp" onClick={e => e.stopPropagation()}>
           <h3 className="mdl-dialog__title">Downloads</h3>
-          { Object.keys(counts).length ?
-            <p style={{margin: '24px 24px 0'}}>
-              { counts.reference ? <strong>{counts.reference} Reference</strong> : null }
-              { (counts.reference && counts.collection) ? (<span>,&nbsp;</span>) : null }
-              { counts.collection ? (<strong style={{color: '#673c90'}}>{counts.collection} Collection</strong>) : null }
-              { (counts.collection && counts.public) ? (<span>,&nbsp;</span>) : null }
-              { counts.public ? `${counts.public} Public` : null }
-            </p> : null
-          }
+          { Object.keys(counts).length ? showCounts(counts) : null }
           <div className="wgsa-downloads-menu__list">
             <ul className="wgsa-menu">
               { files.map(fileProps => (
@@ -57,20 +57,15 @@ const DownloadsMenu = React.createClass({
     );
   },
 
-  closeMenuOnEsc(event) {
-    if (this.props.menuOpen && event.keyCode === 27) {
-      this.props.closeMenu();
-    }
-  },
-
 });
 
-function mapStateToProps({ downloads, collection, filter, entities }) {
+function mapStateToProps({ downloads, collection, filter, entities, tables }) {
   return {
     assemblies: entities.assemblies,
     collectionId: collection.id,
     assemblyIds: [ ...(filter.active ? filter.ids : filter.unfilteredIds) ],
     ...downloads,
+    tables,
   };
 }
 
@@ -78,40 +73,24 @@ function mergeProps(state, { dispatch }) {
   const { assemblies, collectionId, assemblyIds, menuOpen, files } = state;
   return {
     menuOpen,
-    counts: assemblyIds.reduce((memo, id) => {
-      const { __isReference, __isCollection } = assemblies[id];
-      if (__isReference) {
-        memo.reference++;
-        return memo;
-      }
-      if (__isCollection) {
-        memo.collection++;
-        return memo;
-      }
-      memo.public++;
-      return memo;
-    }, { reference: 0, collection: 0, public: 0 }),
+    counts: getCounts(assemblies, assemblyIds),
     files:
       Object.keys(files).
-        filter(format => !files[format].notMenu).
+        filter(format => {
+          const { hideFromMenu = () => false } = files[format];
+          return !hideFromMenu();
+        }).
         map(format => {
-          const { ignoresFilter, linksById, filename, ...props } = files[format];
-          const idList = ignoresFilter ? [ collectionId ] : assemblyIds;
-          const linkProps = linksById ? linksById[createDownloadKey(idList)] : {};
-          return {
+          const download = files[format];
+          return createDownloadProps({
             format,
-            ...props,
-            ...linkProps,
-            ignoresFilter,
-            onClick: () => dispatch(
-              requestDownload({
-                format,
-                ignoresFilter,
-                idList,
-                filename: createFilename(filename, collectionId),
-              })
-            ),
-          };
+            download,
+            idList: assemblyIds,
+            filenameParams: [ collectionId ],
+            getFileContents:
+              download.getFileContents &&
+                (() => download.getFileContents(state, dispatch)),
+          }, dispatch);
         }),
     closeMenu() {
       dispatch(setMenuActive(false));

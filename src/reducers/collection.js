@@ -1,14 +1,20 @@
 import { CREATE_COLLECTION } from '../specieator/actions';
 import { FETCH_ENTITIES, CHECK_STATUS, UPDATE_PROGRESS } from '../actions/fetch';
 import { SET_COLLECTION_ID } from '../actions/collection';
-import { SET_TREE } from '../actions/tree';
+import { FETCH_TREE } from '../actions/tree';
 
-import { sortAssemblies } from '../constants/table';
+import { sortAssemblies } from '../utils/table';
 import { statuses } from '../constants/collection';
 
+import Species from '^/species';
+
 function replaceSubtypeAssemblyNames(uploaded, reference) {
+  const { uiOptions = {} } = Species.current;
+  if (uiOptions.noPopulation) {
+    return uploaded;
+  }
   return Object.keys(uploaded)
-    .reduce(function (memo, assemblyId) {
+    .reduce((memo, assemblyId) => {
       const { populationSubtype, ...assembly } = uploaded[assemblyId];
       memo[assemblyId] = {
         ...assembly,
@@ -22,7 +28,7 @@ function replaceSubtypeAssemblyNames(uploaded, reference) {
 
 function decorateReferenceAssemblies(assemblies) {
   return Object.keys(assemblies)
-    .reduce(function (memo, assemblyId) {
+    .reduce((memo, assemblyId) => {
       const { metadata, analysis, ...assembly } = assemblies[assemblyId];
       memo[assemblyId] = {
         ...assembly,
@@ -42,7 +48,7 @@ function decorateReferenceAssemblies(assemblies) {
 }
 
 function decorateCollectionAssemblies(assemblies) {
-  return Object.keys(assemblies).reduce(function (memo, key) {
+  return Object.keys(assemblies).reduce((memo, key) => {
     memo[key] = {
       ...assemblies[key],
       __isCollection: true,
@@ -52,7 +58,7 @@ function decorateCollectionAssemblies(assemblies) {
 }
 
 function decoratePublicAssemblies(assemblies) {
-  return Object.keys(assemblies).reduce(function (memo, key) {
+  return Object.keys(assemblies).reduce((memo, key) => {
     memo[key] = {
       ...assemblies[key],
       __isPublic: true,
@@ -64,32 +70,22 @@ function decoratePublicAssemblies(assemblies) {
 export const assemblies = {
   initialState: {},
   actions: {
-    [FETCH_ENTITIES]: function (state, { ready, result, error }) {
-      if (!ready || error) {
-        return state;
-      }
-
-      if (result) {
-        const [ uploaded, reference ] = result;
-        const uploadedAssemblies =
-          decorateCollectionAssemblies(uploaded.assemblies);
-        const referenceAssemblies =
-          decorateReferenceAssemblies(reference.assemblies);
-        return {
-          ...replaceSubtypeAssemblyNames(uploadedAssemblies, referenceAssemblies),
-          ...referenceAssemblies,
-        };
-      }
+    [FETCH_ENTITIES.SUCCESS](state, [ uploaded, reference ]) {
+      const uploadedAssemblies =
+        decorateCollectionAssemblies(uploaded.assemblies);
+      const referenceAssemblies =
+        decorateReferenceAssemblies(reference.assemblies);
+      return {
+        ...replaceSubtypeAssemblyNames(uploadedAssemblies, referenceAssemblies),
+        ...referenceAssemblies,
+      };
     },
-    [SET_TREE]: function (state, { ready, result }) {
-      if (ready && result) {
-        const publicAssemblies = decoratePublicAssemblies(result.assemblies);
-        return {
-          ...state,
-          ...replaceSubtypeAssemblyNames(publicAssemblies, state),
-        };
-      }
-      return state;
+    [FETCH_TREE.SUCCESS](state, { result }) {
+      const publicAssemblies = decoratePublicAssemblies(result.assemblies);
+      return {
+        ...state,
+        ...replaceSubtypeAssemblyNames(publicAssemblies, state),
+      };
     },
   },
 
@@ -107,58 +103,47 @@ export const collection = {
         speciesId,
       };
     },
-    [SET_COLLECTION_ID]: function (state, { id }) {
+    [SET_COLLECTION_ID](state, { id }) {
       return {
         ...state,
         id,
       };
     },
-    [CHECK_STATUS]: function (state, { ready, result, error }) {
-      if (ready && error) {
-        return {
-          ...state,
-          status: statuses.NOT_FOUND,
-        };
-      }
-
-      if (ready) {
-        return {
-          ...state,
-          ...result,
-        };
-      }
-
-      return state;
+    [CHECK_STATUS.FAILURE](state) {
+      return {
+        ...state,
+        status: statuses.NOT_FOUND,
+      };
     },
-    [UPDATE_PROGRESS]: function (state, { results }) {
+    [CHECK_STATUS.SUCCESS](state, result) {
+      return {
+        ...state,
+        ...result,
+      };
+    },
+    [UPDATE_PROGRESS](state, { results }) {
       return {
         ...state,
         ...results,
       };
     },
-    [FETCH_ENTITIES]: function (state, { ready, result, error }) {
-      if (ready && error) {
-        return {
-          ...state,
-          status: statuses.NOT_FOUND,
-        };
-      }
-
-      if (result) {
-        const [ uploaded ] = result;
-        return {
-          ...state,
-          status: statuses.FETCHED,
-          assemblyIds: new Set(
-            Object.keys(uploaded.assemblies).sort(
-              sortAssemblies.bind(null, uploaded.assemblies)
-            )
-          ),
-          subtrees: uploaded.subtrees,
-        };
-      }
-
-      return state;
+    [FETCH_ENTITIES.FAILURE](state) {
+      return {
+        ...state,
+        status: statuses.NOT_FOUND,
+      };
+    },
+    [FETCH_ENTITIES.SUCCESS](state, [ uploaded ]) {
+      return {
+        ...state,
+        status: statuses.FETCHED,
+        assemblyIds: new Set(
+          Object.keys(uploaded.assemblies).sort(
+            sortAssemblies.bind(null, uploaded.assemblies)
+          )
+        ),
+        subtrees: uploaded.subtrees,
+      };
     },
   },
 };
@@ -166,18 +151,11 @@ export const collection = {
 export const reference = {
   initialState: { assemblyIds: [] },
   actions: {
-    [FETCH_ENTITIES]: function (state, { ready, result, error }) {
-      if (!ready || error) {
-        return state;
-      }
-
-      if (result) {
-        const [ , referenceCollection ] = result;
-        return {
-          ...state,
-          assemblyIds: new Set(Object.keys(referenceCollection.assemblies)),
-        };
-      }
+    [FETCH_ENTITIES.SUCCESS](state, [ , referenceCollection ]) {
+      return {
+        ...state,
+        assemblyIds: new Set(Object.keys(referenceCollection.assemblies)),
+      };
     },
   },
 };

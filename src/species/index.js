@@ -1,14 +1,12 @@
-import saureus from './saureus';
-import salty from './salty';
-// import lismn from './lismn';
-// import salen from './salen';
-
-const definitions = {
-  saureus,
-  salty,
-  // lismn,
-  // salen,
-};
+const definitions =
+  require('../../universal/species').reduce((memo, { id, nickname }) => {
+    memo[nickname] = {
+      id,
+      nickname,
+      ...require(`./${nickname}`).default,
+    };
+    return memo;
+  }, {});
 
 const definitionsAsList = Object.keys(definitions).map(key => definitions[key]);
 
@@ -32,6 +30,10 @@ export default {
     currentSpecies = definitions[nickname];
   },
 
+  get(nickname) {
+    return definitions[nickname];
+  },
+
   get id() {
     return currentSpecies.id;
   },
@@ -44,8 +46,8 @@ export default {
     return currentSpecies.nickname;
   },
 
-  get missingAnalyses() {
-    return currentSpecies.missingAnalyses || [];
+  get uiOptions() {
+    return currentSpecies.uiOptions || {};
   },
 
   get maxAssemblySize() {

@@ -1,13 +1,12 @@
-import React from 'react';
-
 import { requestDownload } from '../actions/downloads';
 
-import { API_ROOT } from '../utils/Api';
+import { SERVER_ADDRESS, API_ROOT } from '../utils/Api';
+
 import Species from '../species';
 
 export const encode = encodeURIComponent;
 export const collectionPath = () => `${API_ROOT}/species/${Species.id}/download/file`;
-export const speciesPath = () => `${API_ROOT}/species/${Species.id}/download`;
+export const speciesPath = () => `${SERVER_ADDRESS}/${Species.nickname}/download`;
 
 export function createDownloadKey(id) {
   if (!id) return null;
@@ -21,30 +20,45 @@ export function createFilename(formatName, collectionId, assemblyName) {
   );
 }
 
-function createDownloadProps(downloads, { idList, filenameParams }, dispatch) {
-  return Object.keys(downloads).reduce((memo, format) => {
-    const { description, filename, linksById = {} } = downloads[format];
-    const downloadKey = createDownloadKey(idList);
-    memo[format] = {
-      description,
-      ...(linksById[downloadKey] || []),
-      onClick: () => dispatch(
-        requestDownload({
-          format,
-          idList,
-          filename: createFilename(filename, ...filenameParams),
-        })
-      ),
-    };
-    return memo;
-  }, {});
+export function createDownloadProps(params, dispatch) {
+  const { format, download, idList, filenameParams, getFileContents } = params;
+  const { filename, linksById = {}, ...downloadProps } = download;
+
+  return {
+    format,
+    ...downloadProps,
+    ...(linksById[createDownloadKey(idList)] || []),
+    onClick: () => dispatch(
+      requestDownload({
+        format,
+        idList,
+        getFileContents,
+        speciesId: Species.id,
+        filename: createFilename(filename, ...filenameParams),
+      })
+    ),
+  };
+}
+
+function createPropsForDownloads(downloads, params, dispatch) {
+  const { idList, filenameParams } = params;
+
+  return Object.keys(downloads).reduce((memo, format) => ({
+    ...memo,
+    [format]: createDownloadProps({
+      format,
+      download: downloads[format],
+      idList,
+      filenameParams,
+    }, dispatch),
+  }), {});
 }
 
 export function addDownloadProps(row, { collection, downloads }, dispatch) {
   const { assemblyId, assemblyName } = row.metadata;
   return {
     ...row,
-    __downloads: createDownloadProps(downloads, {
+    __downloads: createPropsForDownloads(downloads, {
       idList: [ assemblyId ],
       filenameParams: [ collection.id, assemblyName ],
     }, dispatch),
@@ -54,7 +68,7 @@ export function addDownloadProps(row, { collection, downloads }, dispatch) {
 export function getArchiveDownloadProps(state, downloads, dispatch) {
   const { filter, collection } = state;
   const idList = Array.from(filter.active ? filter.ids : filter.unfilteredIds);
-  return createDownloadProps(downloads, {
+  return createPropsForDownloads(downloads, {
     idList,
     filenameParams: [ collection.id ],
   }, dispatch);
@@ -64,24 +78,20 @@ export const speciesDownloads = [
   { // subtitle: () => 'Reference Population',
     items: [
       { text: 'Core Representatives',
-        filename: () => `wgsa_${Species.nickname}_core_representatives.csv`,
-        serverName: () => 'core_rep_map.tsv',
+        filename: 'core_representatives.csv',
       },
     ],
   },
   { subtitle: () => 'Reference Data',
     items: [
       { text: 'Sequences',
-        filename: () => `wgsa_${Species.nickname}_reference_fastas.zip`,
-        serverName: () => 'fastas.zip',
+        filename: 'reference_fastas.zip',
       },
       { text: 'Annotations',
-        filename: () => `wgsa_${Species.nickname}_reference_annotations.zip`,
-        serverName: () => `wgsa_gff_${Species.id}`,
+        filename: 'reference_annotations.zip',
       },
       { text: 'Metadata',
-        filename: () => `wgsa_${Species.nickname}_reference_metadata.csv`,
-        serverName: () => 'metadata.csv',
+        filename: 'reference_metadata.csv',
       },
     ],
   },

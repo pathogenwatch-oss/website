@@ -2,23 +2,23 @@ import { FETCH_ENTITIES } from '../actions/fetch';
 import { SET_LABEL_COLUMN, setLabelColumn } from '../actions/table';
 import { SET_TREE } from '../actions/tree';
 
-import { systemColumnProps } from '../constants/metadata';
-import { getCellContents } from '../constants/table';
+import { downloadColumnProps, nameColumnProps } from '../constants/table';
+import { getSystemDataColumnProps, getUserDefinedValue } from '../constants/metadata';
+
 import { speciesTrees } from '../constants/tree';
 
 import Species from '^/species';
 
-const initialActiveColumn = systemColumnProps[1];
+const initialActiveColumn = nameColumnProps;
 
 const initialState = {
   activeColumn: initialActiveColumn,
-  headerClick(column) {
-    if (this.activeColumn === column) {
-      return setLabelColumn(initialActiveColumn);
-    }
-    return setLabelColumn(column);
-  },
   columns: [],
+  onHeaderClick(event, { column, activeColumns }, dispatch) {
+    dispatch(setLabelColumn(
+      activeColumns.has(column) ? initialActiveColumn : column
+    ));
+  },
 };
 
 function getUserDefinedColumnNames(assemblies) {
@@ -32,57 +32,49 @@ function getUserDefinedColumnNames(assemblies) {
   return userDefinedColumnNames;
 }
 
-function buildUserDefinedColumnProps(columnNames) {
-  return Array.from(columnNames).map((column) => {
-    return {
-      columnKey: column,
-      valueGetter({ metadata }) {
-        return metadata.userDefined[column];
-      },
-      getCellContents,
-    };
-  });
-}
-
-function createColumnProps(columnNames) {
-  return systemColumnProps.concat(buildUserDefinedColumnProps(columnNames));
+function getUserDefinedColumnProps(columnNames) {
+  return Array.from(columnNames).map(column => ({
+    columnKey: column,
+    valueGetter(data) {
+      return getUserDefinedValue(column, data);
+    },
+  }));
 }
 
 function getActiveColumn(currentActiveColumn, newColumns) {
   if (newColumns.indexOf(currentActiveColumn) !== -1) {
     return currentActiveColumn;
   }
-
   return initialActiveColumn;
 }
 
 const actions = {
-  [FETCH_ENTITIES]: function (state, { ready, result, error }) {
-    if (ready && !error) {
-      const { assemblies } = result[0];
-      const { publicMetadataColumnNames = [] } = Species.current;
+  [FETCH_ENTITIES.SUCCESS](state, payload) {
+    const { assemblies } = payload[0];
+    const { publicMetadataColumnNames = [], uiOptions = {} } = Species.current;
 
-      const columnNames = getUserDefinedColumnNames(assemblies);
-      const userDefinedColumnProps = createColumnProps(columnNames);
+    const columnNames = getUserDefinedColumnNames(assemblies);
+    const systemColumnProps = [
+      downloadColumnProps,
+      nameColumnProps,
+      ...getSystemDataColumnProps(uiOptions),
+    ];
+    const userDefinedColumnProps =
+      systemColumnProps.concat(getUserDefinedColumnProps(columnNames));
 
-      return {
-        ...state,
-        userDefinedColumnProps,
-        publicMetadataColumnProps:
-          publicMetadataColumnNames.length ?
-            createColumnProps(publicMetadataColumnNames) :
-            userDefinedColumnProps,
-        columns: userDefinedColumnProps,
-      };
-    }
-
-    return state;
+    return {
+      ...state,
+      userDefinedColumnProps,
+      publicMetadataColumnProps:
+        publicMetadataColumnNames.length ?
+          systemColumnProps.concat(
+            getUserDefinedColumnProps(publicMetadataColumnNames)
+          ) :
+          userDefinedColumnProps,
+      columns: userDefinedColumnProps,
+    };
   },
-  [SET_TREE]: function (state, { ready, name }) {
-    if (ready === false) {
-      return state;
-    }
-
+  [SET_TREE](state, { name }) {
     const columnProps =
       speciesTrees.has(name) ?
         state.userDefinedColumnProps :
@@ -94,7 +86,7 @@ const actions = {
       activeColumn: getActiveColumn(state.activeColumn, columnProps),
     };
   },
-  [SET_LABEL_COLUMN]: function (state, { column }) {
+  [SET_LABEL_COLUMN](state, { column }) {
     return {
       ...state,
       activeColumn: column,

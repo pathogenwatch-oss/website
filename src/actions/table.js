@@ -18,11 +18,11 @@ export function setLabelColumn(column) {
 }
 
 
-export const SET_COLOUR_COLUMN = 'SET_COLOUR_COLUMN';
+export const SET_COLOUR_COLUMNS = 'SET_COLOUR_COLUMNS';
 
-export function setColourColumn(column) {
+export function setColourColumns(columns) {
   return {
-    type: SET_COLOUR_COLUMN,
-    column,
+    type: SET_COLOUR_COLUMNS,
+    columns,
   };
 }

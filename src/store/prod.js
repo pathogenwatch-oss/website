@@ -1,8 +1,5 @@
 import { createStore, applyMiddleware } from 'redux';
 
-import { readyStatePromise } from '../middleware';
-import rootReducer from '../reducers';
-
-export default function () {
-  return applyMiddleware(readyStatePromise)(createStore)(rootReducer);
+export default function (middleware, rootReducer) {
+  return applyMiddleware(...middleware)(createStore)(rootReducer);
 }

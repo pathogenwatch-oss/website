@@ -83,7 +83,7 @@ function setMetadataColumn(assemblyName, columnName, value) {
 }
 
 function setMetadataDateComponent(assemblyName, component, value) {
-  const { metadata = {} } = assemblies[assemblyName];
+  const { metadata = { date: {} } } = assemblies[assemblyName];
   metadata.date[component] = value;
   assemblies[assemblyName].metadata = metadata;
 }

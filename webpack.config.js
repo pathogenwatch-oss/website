@@ -14,17 +14,16 @@ const postcss = [
   require('postcss-input-style'),
 ];
 
-const commonLoaders = [
+const loaders = [
   { test: /.json$/, loaders: [ 'json' ] },
   { test: /.css$/, loaders: [ 'style', 'css', 'postcss' ] },
   { test: /\.(png|jpg|jpeg|gif)$/, loader: 'file' },
+  { test: /\.js$/, loader: 'babel', include: /(src|universal)/ },
 ];
 
 const commonPlugins = [
   new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
 ];
-
-const babelPresets = [ 'react', 'es2015', 'stage-0' ];
 
 const devConfig = {
   devtool: '#eval-source-map',
@@ -43,27 +42,7 @@ const devConfig = {
     new webpack.NoErrorsPlugin(),
   ]),
   module: {
-    loaders: [
-      { test: /\.js$/,
-        loader: 'babel',
-        include: /src/,
-        query: {
-          presets: babelPresets,
-          plugins: [
-            [ 'react-transform', {
-              transforms: [ {
-                transform: 'react-transform-hmr',
-                imports: [ 'react' ],
-                locals: [ 'module' ],
-              }, {
-                transform: 'react-transform-catch-errors',
-                imports: [ 'react', 'redbox-react' ],
-              } ],
-            } ],
-          ],
-        },
-      },
-    ].concat(commonLoaders),
+    loaders,
   },
   postcss,
 };
@@ -91,15 +70,7 @@ const prodConfig = {
     }),
   ]),
   module: {
-    loaders: [
-      { test: /\.js$/,
-        loader: 'babel',
-        query: {
-          presets: babelPresets,
-        },
-        include: /src/,
-      },
-    ].concat(commonLoaders),
+    loaders,
   },
   postcss,
 };

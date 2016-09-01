@@ -64,17 +64,6 @@ export default React.createClass({
     }
   },
 
-  handleClick() {
-    this.refs.fileInput.click();
-  },
-
-  handleFileInputChange(event) {
-    const { files } = event.target;
-    if (files && files.length > 0) {
-      this.handleFiles(files);
-    }
-  },
-
   showDropIndicator() {
     this.setState({ indicatorVisible: true });
   },

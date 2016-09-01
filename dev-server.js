@@ -14,7 +14,7 @@ const sketchFilePath = fspath.join(referencesDir, 'refseq-archaea-bacteria-fungi
 const metadataFilePath = fspath.join(referencesDir, 'refseq-archaea-bacteria-fungi-viral-k16-s400.csv');
 const specieator = createMashSpecieator(sketchFilePath, metadataFilePath);
 
-const analyse = require('./src/utils/Analysis');
+const analyse = require('./universal/fastaAnalysis');
 
 const app = express();
 
@@ -35,7 +35,7 @@ app.use(express.static('public'));
 
 const apiRouter = express.Router();
 
-apiRouter.post('/species/:speciesId/collection', function (req, res) {
+apiRouter.post('/species/:speciesId/collection', (req, res) => {
   res.json({
     collectionId: '123',
     assemblyNameToAssemblyIdMap: {
@@ -46,57 +46,57 @@ apiRouter.post('/species/:speciesId/collection', function (req, res) {
   });
 });
 
-apiRouter.post('/species/:speciesId/collection/:collectionId/assembly/:id', function (req, res) {
-  res.json({ assemblyId: req.params.id });
-});
+apiRouter.post('/species/:speciesId/collection/:collectionId/assembly/:id',
+  (req, res) => res.json({ assemblyId: req.params.id })
+);
 
-apiRouter.get('/species/:speciesId/collection/:id/status', function (req, res) {
+apiRouter.get('/species/:speciesId/collection/:id/status', (req, res) => {
   res.json({ status: 'READY' });
 });
 
-apiRouter.get('/species/:speciesId/collection/:id', function (req, res) {
-  setTimeout(function () {
-    res.sendFile(__dirname + '/static_data/collection.json');
+apiRouter.get('/species/:speciesId/collection/:id', (req, res) => {
+  setTimeout(() => {
+    res.sendFile(`${__dirname}/static_data/collection.json`);
   }, 1000);
 });
 
-apiRouter.get('/species/:speciesId/reference', function (req, res) {
-  res.sendFile(__dirname + '/static_data/reference.json');
+apiRouter.get('/species/:speciesId/reference', (req, res) => {
+  res.sendFile(`${__dirname}/static_data/reference.json`);
 });
 
-apiRouter.get('/species/:speciesId/antibiotics', function (req, res) {
-  res.sendFile(__dirname + '/static_data/antibiotics.json');
+apiRouter.get('/species/:speciesId/antibiotics', (req, res) => {
+  res.sendFile(`${__dirname}/static_data/antibiotics.json`);
 });
 
 
-apiRouter.get('/species/:speciesId/collection/:collectionId/subtree/:subtreeId', function (req, res) {
-  setTimeout(function () {
-    res.sendFile(`${__dirname}/static_data/${req.params.subtreeId}.json`);
+apiRouter.get('/species/:speciesId/collection/:collectionId/subtree/:subtreeId',
+  (req, res) =>
+    setTimeout(() =>
+      res.sendFile(`${__dirname}/static_data/${req.params.subtreeId}.json`)
+      // res.sendStatus(500)
+    , 1000)
+);
+
+apiRouter.post('/download/type/assembly/format/fasta', (req, res) => {
+  setTimeout(() => {
+    res.json({ checksum: `${req.body.idList[0]}.fa` });
   }, 1000);
 });
 
-apiRouter.post('/download/type/assembly/format/fasta', function (req, res) {
-  setTimeout(function () {
-    res.json({
-      'checksum': req.body.idList[0] + '.fa',
-    });
-  }, 1000);
-});
-
-var downloadError = false;
-apiRouter.post('/download/type/:idType/format/:fileFormat', function (req, res) {
+let downloadError = false;
+apiRouter.post('/download/type/:idType/format/:fileFormat', (req, res) => {
   downloadError = !downloadError;
-  setTimeout(function () {
-    return downloadError ? res.sendStatus(500) :
-      res.json({
-        'checksum': req.params.fileFormat,
-      });
-  }, 1000);
+  setTimeout(() => (
+    downloadError ?
+      res.sendStatus(500) :
+      res.json({ checksum: req.params.fileFormat })
+  ), 1000);
 });
 
-apiRouter.get('/download/file/:fileName', function (req, res) {
-  return res.sendFile(__dirname + '/static_data/metadata.csv');
-});
+apiRouter.get(
+  '/download/file/:fileName',
+  (req, res) => res.sendFile(`${__dirname}/static_data/metadata.csv`)
+);
 
 apiRouter.post('/upload', (req, res) => {
   storeFastaFile('./fastas', req.body).
@@ -116,8 +116,12 @@ apiRouter.post('/collection', (req, res) =>
 
 app.use('/api', apiRouter);
 
-app.use('/', function (req, res) {
-  res.sendFile(__dirname + '/public/index.html');
-});
+app.set('view engine', 'ejs');
+
+app.use('/', (req, res) =>
+  res.render('index', {
+    googleMapsKey: 'AIzaSyBUn4F1N7KKElr6Qcwxvm7v3IzDoI0aQzE',
+  })
+);
 
 app.listen(8080, '0.0.0.0');

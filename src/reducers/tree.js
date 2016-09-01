@@ -1,6 +1,6 @@
 import { FETCH_ENTITIES } from '../actions/fetch';
 
-import { SET_TREE } from '../actions/tree';
+import { FETCH_TREE, SET_TREE } from '../actions/tree';
 import ToastActionCreators from '../actions/ToastActionCreators';
 
 import { COLLECTION, POPULATION } from '../constants/tree';
@@ -8,36 +8,22 @@ import { COLLECTION, POPULATION } from '../constants/tree';
 export const trees = {
   initialState: {},
   actions: {
-    [FETCH_ENTITIES]: function (state, { ready, result, error }) {
-      if (!ready || error) {
-        return state;
-      }
-
-      if (result) {
-        const [ uploaded, reference ] = result;
-        return {
-          [COLLECTION]: { name: COLLECTION, newick: uploaded.tree },
-          [POPULATION]: { name: POPULATION, newick: reference.tree },
-          ...uploaded.subtrees,
-        };
-      }
+    [FETCH_ENTITIES.SUCCESS](state, payload) {
+      const [ uploaded, reference ] = payload;
+      return {
+        [COLLECTION]: { name: COLLECTION, newick: uploaded.tree },
+        [POPULATION]: { name: POPULATION, newick: reference.tree },
+        ...uploaded.subtrees,
+      };
     },
-    [SET_TREE]: function (state, { ready, result, error, name }) {
-      if (error) {
-        return state;
-      }
-
-      if (ready && result) {
-        return {
-          ...state,
-          [name]: {
-            name,
-            newick: result.tree,
-          },
-        };
-      }
-
-      return state;
+    [FETCH_TREE.SUCCESS](state, { result, name }) {
+      return {
+        ...state,
+        [name]: {
+          name,
+          newick: result.tree,
+        },
+      };
     },
   },
 };
@@ -45,28 +31,25 @@ export const trees = {
 export const displayedTree = {
   initialState: COLLECTION,
   actions: {
-    [SET_TREE]: function (state, { name, ready = true, error }) {
-      if (error) {
-        ToastActionCreators.showToast({
-          message: 'Subtree currently unavailable, please try again later.',
-        });
-        return state;
-      }
-
-      if (ready) {
-        return name;
-      }
-
+    [FETCH_TREE.FAILURE](state) {
+      ToastActionCreators.showToast({
+        message: 'Subtree currently unavailable, please try again later.',
+      });
       return state;
+    },
+    [SET_TREE](state, { name }) {
+      return name;
     },
   },
 };
 
+const contradication = () => false;
+
 export const treeLoading = {
   initialState: false,
   actions: {
-    [SET_TREE]: function (state, { ready = true }) {
-      return !ready;
-    },
+    [FETCH_TREE.ATTEMPT]: () => true,
+    [FETCH_TREE.SUCCESS]: contradication,
+    [FETCH_TREE.FAILURE]: contradication,
   },
 };
