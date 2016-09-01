@@ -69,8 +69,7 @@ function decoratePublicAssemblies(assemblies) {
 export const assemblies = {
   initialState: {},
   actions: {
-    [FETCH_ENTITIES.SUCCESS](state, { payload }) {
-      const [ uploaded, reference ] = payload;
+    [FETCH_ENTITIES.SUCCESS](state, [ uploaded, reference ]) {
       const uploadedAssemblies =
         decorateCollectionAssemblies(uploaded.assemblies);
       const referenceAssemblies =
@@ -80,15 +79,14 @@ export const assemblies = {
         ...referenceAssemblies,
       };
     },
-    [SET_TREE](state, { ready, result }) {
-      if (ready && result) {
-        const publicAssemblies = decoratePublicAssemblies(result.assemblies);
-        return {
-          ...state,
-          ...replaceSubtypeAssemblyNames(publicAssemblies, state),
-        };
-      }
-      return state;
+    [SET_TREE.SUCCESS](state, { result }) {
+      if (!result) return state;
+
+      const publicAssemblies = decoratePublicAssemblies(result.assemblies);
+      return {
+        ...state,
+        ...replaceSubtypeAssemblyNames(publicAssemblies, state),
+      };
     },
   },
 
@@ -109,10 +107,10 @@ export const collection = {
         status: statuses.NOT_FOUND,
       };
     },
-    [CHECK_STATUS.SUCCESS](state, { payload }) {
+    [CHECK_STATUS.SUCCESS](state, result) {
       return {
         ...state,
-        ...payload,
+        ...result,
       };
     },
     [UPDATE_PROGRESS](state, { results }) {
@@ -127,8 +125,7 @@ export const collection = {
         status: statuses.NOT_FOUND,
       };
     },
-    [FETCH_ENTITIES.SUCCESS](state, { payload }) {
-      const [ uploaded ] = payload;
+    [FETCH_ENTITIES.SUCCESS](state, [ uploaded ]) {
       return {
         ...state,
         status: statuses.FETCHED,
@@ -146,8 +143,7 @@ export const collection = {
 export const reference = {
   initialState: { assemblyIds: [] },
   actions: {
-    [FETCH_ENTITIES.SUCCESS](state, { payload }) {
-      const [ , referenceCollection ] = payload;
+    [FETCH_ENTITIES.SUCCESS](state, [ , referenceCollection ]) {
       return {
         ...state,
         assemblyIds: new Set(Object.keys(referenceCollection.assemblies)),

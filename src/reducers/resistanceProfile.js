@@ -43,7 +43,7 @@ function buildAntibioticColumnProps(antibiotics) {
 }
 
 const actions = {
-  [FETCH_ENTITIES.SUCCESS](state, { payload }) {
+  [FETCH_ENTITIES.SUCCESS](state, payload) {
     const antibiotics = payload[2];
 
     const columns = [

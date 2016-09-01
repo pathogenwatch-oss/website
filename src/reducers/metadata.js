@@ -49,7 +49,7 @@ function getActiveColumn(currentActiveColumn, newColumns) {
 }
 
 const actions = {
-  [FETCH_ENTITIES.SUCCESS](state, { payload }) {
+  [FETCH_ENTITIES.SUCCESS](state, payload) {
     const { assemblies } = payload[0];
     const { publicMetadataColumnNames = [], uiOptions = {} } = Species.current;
 
@@ -74,11 +74,7 @@ const actions = {
       columns: userDefinedColumnProps,
     };
   },
-  [SET_TREE](state, { ready, name }) {
-    if (ready === false) {
-      return state;
-    }
-
+  [SET_TREE.SUCCESS](state, { name }) {
     const columnProps =
       speciesTrees.has(name) ?
         state.userDefinedColumnProps :

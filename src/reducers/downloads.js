@@ -73,17 +73,17 @@ function updateDownloads(state, payload, newStateForKey) {
 }
 
 const actions = {
-  [REQUEST_DOWNLOAD.ATTEMPT](state, { payload }) {
+  [REQUEST_DOWNLOAD.ATTEMPT](state, payload) {
     return updateDownloads(state, payload, { loading: true });
   },
-  [REQUEST_DOWNLOAD.FAILURE](state, { payload }) {
+  [REQUEST_DOWNLOAD.FAILURE](state, payload) {
     ToastActionCreators.showToast({
       message: 'Failed to generate download, please try again later.',
     });
 
     return updateDownloads(state, payload, { error: true });
   },
-  [REQUEST_DOWNLOAD.SUCCESS](state, { payload }) {
+  [REQUEST_DOWNLOAD.SUCCESS](state, payload) {
     const { format, filename, result } = payload;
     const { createLink = createDefaultLink } = state[format];
 

@@ -8,21 +8,20 @@ import { addAssembliesToMarkerDefs } from '^/utils/Map';
 const initialState = [];
 
 const actions = {
-  [FETCH_ENTITIES.SUCCESS](state, { payload }) {
+  [FETCH_ENTITIES.SUCCESS](state, payload) {
     const { assemblies } = payload[0];
     return addAssembliesToMarkerDefs(
       Object.keys(assemblies).map(id => assemblies[id]),
       state,
     );
   },
-  [SET_TREE](state, { ready, result }) {
-    if (ready && result) {
-      return addAssembliesToMarkerDefs(
-        Object.keys(result.assemblies).map(id => result.assemblies[id]),
-        state,
-      );
-    }
-    return state;
+  [SET_TREE.SUCCESS](state, { result }) {
+    if (!result) return state;
+
+    return addAssembliesToMarkerDefs(
+      Object.keys(result.assemblies).map(id => result.assemblies[id]),
+      state,
+    );
   },
   [SET_UNFILTERED_IDS](state, { ids }) {
     return state.map(markerDef => {

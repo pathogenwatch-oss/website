@@ -8,7 +8,7 @@ import { COLLECTION, POPULATION } from '../constants/tree';
 export const trees = {
   initialState: {},
   actions: {
-    [FETCH_ENTITIES.SUCCESS](state, { payload }) {
+    [FETCH_ENTITIES.SUCCESS](state, payload) {
       const [ uploaded, reference ] = payload;
       return {
         [COLLECTION]: { name: COLLECTION, newick: uploaded.tree },
@@ -16,22 +16,18 @@ export const trees = {
         ...uploaded.subtrees,
       };
     },
-    [SET_TREE](state, { ready, result, error, name }) {
-      if (error) {
+    [SET_TREE.SUCCESS](state, { result, name }) {
+      if (!result) {
         return state;
       }
 
-      if (ready && result) {
-        return {
-          ...state,
-          [name]: {
-            name,
-            newick: result.tree,
-          },
-        };
-      }
-
-      return state;
+      return {
+        ...state,
+        [name]: {
+          name,
+          newick: result.tree,
+        },
+      };
     },
   },
 };
@@ -39,28 +35,25 @@ export const trees = {
 export const displayedTree = {
   initialState: COLLECTION,
   actions: {
-    [SET_TREE](state, { name, ready = true, error }) {
-      if (error) {
-        ToastActionCreators.showToast({
-          message: 'Subtree currently unavailable, please try again later.',
-        });
-        return state;
-      }
-
-      if (ready) {
-        return name;
-      }
-
+    [SET_TREE.FAILURE](state) {
+      ToastActionCreators.showToast({
+        message: 'Subtree currently unavailable, please try again later.',
+      });
       return state;
+    },
+    [SET_TREE.SUCCESS](state, { name }) {
+      return name || state;
     },
   },
 };
 
+const contradication = () => false;
+
 export const treeLoading = {
   initialState: false,
   actions: {
-    [SET_TREE](state, { ready = true }) {
-      return !ready;
-    },
+    [SET_TREE.ATTEMPT]: () => true,
+    [SET_TREE.SUCCESS]: contradication,
+    [SET_TREE.FAILURE]: contradication,
   },
 };
