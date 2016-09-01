@@ -1,5 +1,4 @@
 import { combineReducers } from 'redux';
-import { routerReducer as routing } from 'react-router-redux';
 
 import antibiotics from './antibiotics';
 import { assemblies, collection, reference } from './collection';
@@ -57,7 +56,6 @@ const rootReducer = combineReducers({
     files: createReducer(downloads),
   }),
   bodyClickListener,
-  routing,
 });
 
 const initialState = rootReducer({}, {});
