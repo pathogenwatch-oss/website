@@ -45,6 +45,7 @@ const Specieator = React.createClass({
         ),
       })
     );
+    document.title = 'WGSA | Upload';
   },
 
   componentDidUpdate() {

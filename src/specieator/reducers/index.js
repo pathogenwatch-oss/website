@@ -1,5 +1,4 @@
-import { ADD_FASTAS, FILTER_FASTAS } from '../actions';
-import { CREATE_COLLECTION } from '../thunks';
+import { ADD_FASTAS, FILTER_FASTAS, CREATE_COLLECTION } from '../actions';
 
 import { getFastas, getFastasAsList } from './fastas';
 

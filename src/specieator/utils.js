@@ -2,7 +2,7 @@
 import React from 'react';
 import { readAsText } from 'promise-file-reader';
 
-import { updateFastaProgress } from './actions';
+import actions from './actions';
 import ToastActionCreators from '../actions/ToastActionCreators';
 
 import { API_ROOT } from '^/utils/Api';
@@ -19,7 +19,7 @@ function getCustomXHR(filename, dispatch) {
         Math.floor(percentComplete / 10) * 10;
 
       if (percentRounded > previousPercent) {
-        dispatch(updateFastaProgress(filename, percentRounded));
+        dispatch(actions.updateFastaProgress(filename, percentRounded));
         previousPercent = percentRounded;
       }
     }

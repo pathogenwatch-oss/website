@@ -1,15 +1,9 @@
-import { createAsyncConstants } from '../actions';
-
-import { ADD_FASTAS, UPLOAD_FASTA, filterFastas } from './actions';
+import actions, { ADD_FASTAS, UPLOAD_FASTA } from './actions';
 
 import { getFastas, getFastasAsList } from './reducers/fastas';
 import { getVisibleFastas } from './reducers';
 
-import {
-  showDuplicatesToast,
-  createCollection as createCollectionPromise,
-  sendToServer,
-} from './utils';
+import { showDuplicatesToast, sendToServer } from './utils';
 
 
 export function addFiles(newFiles) {
@@ -45,22 +39,10 @@ export function uploadFasta(name) {
 }
 
 
-export const CREATE_COLLECTION = createAsyncConstants('CREATE_COLLECTION');
-
 export function createCollection() {
   return (dispatch, getState) => {
     const fastas = getVisibleFastas(getState());
-
-    const files = Object.keys(fastas).map(_ => fastas[_]);
-    const speciesId = files[0].speciesId;
-
-    dispatch({
-      type: CREATE_COLLECTION,
-      payload: {
-        speciesId,
-        promise: createCollectionPromise(files, speciesId),
-      },
-    });
+    dispatch(actions.createCollection(fastas));
   };
 }
 
@@ -68,20 +50,20 @@ export function createCollection() {
 export function filterByText(text) {
   return (dispatch, getState) => {
     if (!text.length) {
-      dispatch(filterFastas());
+      dispatch(actions.filterFastas());
       return;
     }
 
     const regexp = new RegExp(text, 'i');
-    dispatch(
-      filterFastas(getFastasAsList(getState()), file => regexp.test(file.name))
-    );
+    dispatch(actions.filterFastas(
+      getFastasAsList(getState()), file => regexp.test(file.name)
+    ));
   };
 }
 
 export function filterBySpeciesId(speciesId) {
   return (dispatch, getState) =>
-    dispatch(filterFastas(
+    dispatch(actions.filterFastas(
       getFastasAsList(getState()), file => file.speciesId === speciesId
     ));
 }

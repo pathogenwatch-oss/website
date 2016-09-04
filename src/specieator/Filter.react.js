@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { filterFastas } from './actions';
+import actions from './actions';
 import { createCollection, filterByText, filterBySpeciesId } from './thunks';
 
 import { taxIdMap } from '^/species';
@@ -38,7 +38,7 @@ const SpeciesButton = connect()(({ speciesId, count, species, dispatch }) => (
 const ClearFilterButton = connect()(({ dispatch }) => (
   <button
     className="mdl-button mdl-js-button mdl-button--primary"
-    onClick={() => dispatch(filterFastas())}
+    onClick={() => dispatch(actions.filterFastas())}
   >
     Clear Filters
   </button>
