@@ -19,14 +19,14 @@ const subtitleStyle = {
 };
 
 const uploadButtonStyle = {
-  right: '30px',
-  top: '24px',
+  right: '32px',
+  top: '32px',
   position: 'absolute',
   zIndex: 1,
   color: '#fff',
   fontSize: '18px',
   fontWeight: '400',
-  lineHeight: '64px',
+  lineHeight: '56px',
 };
 
 const Header = React.createClass({
