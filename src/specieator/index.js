@@ -4,22 +4,22 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import FileDragAndDrop from '../components/upload/DragAndDrop.react';
-import Overview from './Overview.react';
 import FileGrid from './FileGrid.react';
 import Filter from './Filter.react';
 
 import { updateHeader } from '^/actions/header';
-import { uploadFasta } from './actions';
+import { uploadFasta, addFiles } from './thunks';
 
-import { addFiles, sendToServer } from './utils';
+import { getVisibleFastas, isFilterActive } from './reducers';
+
 import { taxIdMap } from '^/species';
 
 const Specieator = React.createClass({
 
   propTypes: {
-    fastas: React.PropTypes.object.isRequired,
-    order: React.PropTypes.array.isRequired,
+    fastas: React.PropTypes.array.isRequired,
     uploads: React.PropTypes.object,
+    filterActive: React.PropTypes.bool,
     dispatch: React.PropTypes.func.isRequired,
   },
 
@@ -28,11 +28,11 @@ const Specieator = React.createClass({
   },
 
   componentWillMount() {
-    const { order, dispatch } = this.props;
+    const { fastas, dispatch } = this.props;
     dispatch(
       updateHeader({
         speciesName: 'Specieator',
-        classNames: `wgsa-specieator-header ${order.length ? 'wgsa-specieator--has-aside' : ''}`.trim(),
+        classNames: `wgsa-specieator-header ${fastas.length ? 'wgsa-specieator--has-aside' : ''}`.trim(),
         content: (
           <span className="mdl-layout-spacer mdl-layout-spacer--flex">
             <div className="mdl-layout-spacer" />
@@ -48,12 +48,11 @@ const Specieator = React.createClass({
   },
 
   componentDidUpdate() {
-    const { uploads, fastas, loading, collection, dispatch } = this.props;
-
+    const { uploads, loading, collection, dispatch } = this.props;
     const { queue, uploading } = uploads;
+
     if (queue.length && uploading.size < 5) {
-      const { name, file } = fastas[queue[0]];
-      dispatch(uploadFasta(name, sendToServer(file, dispatch)));
+      dispatch(uploadFasta(queue[0]));
     }
 
     if (loading) {
@@ -70,34 +69,47 @@ const Specieator = React.createClass({
   },
 
   upload(newFiles) {
-    const { dispatch, fastas } = this.props;
-    addFiles(newFiles, fastas, dispatch);
+    const { dispatch } = this.props;
+    dispatch(addFiles(newFiles));
     dispatch(updateHeader({ classNames: 'wgsa-specieator-header wgsa-specieator--has-aside' }));
   },
 
   countSpecies(fastas) {
-    return fastas.reduce((memo, { speciesName }) => {
-      if (!speciesName) return memo;
-      return {
-        ...memo,
-        [speciesName]: (memo[speciesName] || 0) + 1,
-      };
-    }, {});
+    const summary =
+      fastas.reduce((memo, { speciesId }) => {
+        if (!speciesId) return memo;
+        return {
+          ...memo,
+          [speciesId]: (memo[speciesId] || 0) + 1,
+        };
+      }, {});
+
+    return (
+      Object.keys(summary).map(speciesId => ({
+        speciesId,
+        count: summary[speciesId],
+      }))
+    );
   },
 
   render() {
-    const { fastas, order, loading } = this.props;
-
-    const orderedFastas = order.map(name => fastas[name]);
+    const { fastas, filterActive, loading } = this.props;
 
     return (
       <FileDragAndDrop onFiles={this.upload}>
         { loading && <div ref="loadingBar" className="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>}
-        { order.length ?
-            <FileGrid files={orderedFastas} /> :
-            <Overview />
+        { fastas.length ?
+            <FileGrid files={fastas} /> :
+            <div className="welcome-container">
+              <p className="welcome-intro">
+                { filterActive ?
+                    'Nothing to show...' :
+                    'Drag and drop files to begin.'
+                }
+              </p>
+            </div>
         }
-        <Filter speciesSummary={this.countSpecies(orderedFastas)} />
+        <Filter speciesSummary={this.countSpecies(fastas)} />
       </FileDragAndDrop>
     );
   },
@@ -105,10 +117,11 @@ const Specieator = React.createClass({
 });
 
 
-function mapStateToProps({ specieator, entities, collection }) {
+function mapStateToProps(state) {
+  const { specieator, collection } = state;
   return {
-    fastas: entities.fastas,
-    order: specieator.fastaOrder,
+    fastas: getVisibleFastas(state),
+    filterActive: isFilterActive(state),
     uploads: specieator.uploads,
     loading: specieator.loading,
     collection,

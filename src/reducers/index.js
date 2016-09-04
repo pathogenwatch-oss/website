@@ -3,7 +3,10 @@ import { combineReducers } from 'redux';
 import antibiotics from './antibiotics';
 import { assemblies, collection, reference } from './collection';
 
-import * as specieator from '../specieator/reducers';
+import specieator from '../specieator/reducers';
+import fastas from '../specieator/reducers/fastas';
+import uploads from '../specieator/reducers/uploads';
+
 import metadata from './metadata';
 import resistanceProfile from './resistanceProfile';
 
@@ -35,7 +38,7 @@ const rootReducer = combineReducers({
     antibiotics: createReducer(antibiotics),
     assemblies: createReducer(assemblies),
     trees: createReducer(trees),
-    fastas: createReducer(specieator.fastas),
+    fastas: createReducer(fastas),
   }),
   collection: createReducer(collection),
   reference: createReducer(reference),
@@ -60,8 +63,9 @@ const rootReducer = combineReducers({
   bodyClickListener,
   specieator: combineReducers({
     fastaOrder: createReducer(specieator.fastaOrder),
-    uploads: createReducer(specieator.uploads),
+    uploads: createReducer(uploads),
     loading: createReducer(specieator.loading),
+    filter: createReducer(specieator.filter),
   }),
 });
 

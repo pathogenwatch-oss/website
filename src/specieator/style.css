@@ -101,9 +101,14 @@
 .wgsa-specieator-file p {
   margin: 0;
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-  font-style: italic;
+  font-size: 14px;
+  line-height: 20px;
   font-weight: 500;
-  color: rgba(0, 0, 0, 0.54);
+}
+
+.wgsa-specieator-file p:first-child {
+  font-style: italic;
+  color: rgba(0, 0, 0, 0.87);
 }
 
 .wgsa-specieator-file a {

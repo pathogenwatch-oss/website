@@ -3,7 +3,6 @@ import React from 'react';
 import { readAsText } from 'promise-file-reader';
 
 import { updateFastaProgress } from './actions';
-import { addFastas } from './actions';
 import ToastActionCreators from '../actions/ToastActionCreators';
 
 import { API_ROOT } from '^/utils/Api';
@@ -45,7 +44,7 @@ export function sendToServer(file, dispatch) {
   );
 }
 
-function showDuplicatesToast(duplicates) {
+export function showDuplicatesToast(duplicates) {
   ToastActionCreators.showToast({
     message: duplicates.length === 1 ? (
       <span><strong>{duplicates[0]}</strong> is a duplicate and was not queued.</span>
@@ -53,14 +52,6 @@ function showDuplicatesToast(duplicates) {
       <span>{duplicates.length} duplicates were not queued.</span>
     ),
   });
-}
-
-export function addFiles(newFiles, existingFiles, dispatch) {
-  const duplicates = newFiles.filter(file => file.name in existingFiles);
-  const nonDuplicates = newFiles.filter(file => !(file.name in existingFiles));
-
-  if (duplicates.length) showDuplicatesToast(duplicates);
-  if (nonDuplicates.length) dispatch(addFastas(nonDuplicates));
 }
 
 function removeViewModel({ id, name, speciesId, metrics }) {
