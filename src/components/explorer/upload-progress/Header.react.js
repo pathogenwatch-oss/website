@@ -26,7 +26,7 @@ const uploadButtonStyle = {
   color: '#fff',
   fontSize: '18px',
   fontWeight: '400',
-  lineHeight: '56px',
+  lineHeight: '64px',
 };
 
 const Header = React.createClass({

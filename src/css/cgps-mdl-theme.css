@@ -3,7 +3,7 @@
 .mdl-layout__header {
   background-color: #fff;
   color: #673c90 !important;
-  min-height: 56px;
+  min-height: 64px;
   display: block; /* overrides display: none on small screens! */
   transition: .28s cubic-bezier(.4,0,.2,1);
   transition-property: color, background, background-color;
@@ -12,6 +12,7 @@
 .mdl-layout__header-row {
   padding-left: 72px !important;
   padding-right: 16px;
+  height: 64px !important;
 }
 
 .mdl-layout-title {
@@ -22,6 +23,8 @@
   color: #673c90 !important;
   margin: 4px;
   width: 64px;
+  height: 60px;
+  line-height: 64px;
 }
 
 .mdl-layout__drawer-button:focus {

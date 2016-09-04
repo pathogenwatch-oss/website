@@ -17,7 +17,7 @@
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
   font-size: 13px;
   color: rgba(0, 0, 0, 0.54);
-  padding-top: 56px;
+  padding-top: 64px;
 }
 
 @media(min-width: 1024px) {
@@ -144,10 +144,6 @@
   display: flex;
   align-items: center;
   height: 64px;
-}
-
-.is-small-screen .wgsa-specieator-filter__search {
-  height: 56px;
 }
 
 .wgsa-specieator-filter__search input {

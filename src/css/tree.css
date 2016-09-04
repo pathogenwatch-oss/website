@@ -110,6 +110,7 @@ div.wgsa-tree-icon:active {
   font-weight: 700;
   color: rgba(0, 0, 0, 0.54);
   flex-shrink: 1;
+  width: 8.5em; /* hack for bug on linux */
 }
 
 .wgsa-select-tree-type:hover,
