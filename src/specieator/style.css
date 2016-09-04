@@ -199,3 +199,19 @@
 /*.wgsa-specieator-filter .mdl-checkbox__box-outline {
   margin-left: 8px;
 }*/
+
+.wgsa-specieator-filter__footer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 8px;
+  border-top: 1px solid rgba(0, 0, 0, 0.14);
+  transform: translateY(100%);
+  transition: .28s cubic-bezier(.4,0,.2,1);
+  transition-property: transform;
+}
+
+.wgsa-specieator-filter__footer--active {
+  transform: translateY(0);
+}

@@ -1,8 +1,9 @@
 import { createAsyncConstants } from '../actions';
 
-import { ADD_FASTAS, UPLOAD_FASTA } from './actions';
+import { ADD_FASTAS, UPLOAD_FASTA, filterFastas } from './actions';
 
 import { getFastas, getFastasAsList } from './reducers/fastas';
+import { getVisibleFastas } from './reducers';
 
 import {
   showDuplicatesToast,
@@ -48,7 +49,7 @@ export const CREATE_COLLECTION = createAsyncConstants('CREATE_COLLECTION');
 
 export function createCollection() {
   return (dispatch, getState) => {
-    const fastas = getFastas(getState());
+    const fastas = getVisibleFastas(getState());
 
     const files = Object.keys(fastas).map(_ => fastas[_]);
     const speciesId = files[0].speciesId;
@@ -64,29 +65,23 @@ export function createCollection() {
 }
 
 
-export const FILTER_FASTAS = 'FILTER_FASTAS';
-
-export function filterFastas(text) {
+export function filterByText(text) {
   return (dispatch, getState) => {
     if (!text.length) {
-      dispatch({
-        type: FILTER_FASTAS,
-        payload: { active: false },
-      });
+      dispatch(filterFastas());
       return;
     }
 
     const regexp = new RegExp(text, 'i');
-    dispatch({
-      type: FILTER_FASTAS,
-      payload: {
-        active: true,
-        ids: (
-          getFastasAsList(getState()).
-            filter(file => regexp.test(file.name)).
-            map(file => file.name)
-        ),
-      },
-    });
+    dispatch(
+      filterFastas(getFastasAsList(getState()), file => regexp.test(file.name))
+    );
   };
+}
+
+export function filterBySpeciesId(speciesId) {
+  return (dispatch, getState) =>
+    dispatch(filterFastas(
+      getFastasAsList(getState()), file => file.speciesId === speciesId
+    ));
 }

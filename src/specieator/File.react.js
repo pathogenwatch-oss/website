@@ -20,7 +20,7 @@ function fastaData(speciesId, speciesName, metrics) {
 function getProgressBar(progress) {
   return (
     progress === 100 ?
-      <ProgressBar key={progress} indeterminate /> : // key forces remount
+      <ProgressBar indeterminate /> :
       <ProgressBar progress={progress} />
   );
 }

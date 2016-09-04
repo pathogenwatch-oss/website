@@ -1,7 +1,9 @@
-import { ADD_FASTAS } from '../actions';
-import { CREATE_COLLECTION, FILTER_FASTAS } from '../thunks';
+import { ADD_FASTAS, FILTER_FASTAS } from '../actions';
+import { CREATE_COLLECTION } from '../thunks';
 
-import { getFastas } from './fastas';
+import { getFastas, getFastasAsList } from './fastas';
+
+export const getTotalFastas = (state) => getFastasAsList(state).length;
 
 const fastaOrder = {
   initialState: [],

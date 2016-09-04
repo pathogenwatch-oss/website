@@ -14,3 +14,26 @@ export function updateFastaProgress(name, progress) {
     },
   };
 }
+
+export const FILTER_FASTAS = 'FILTER_FASTAS';
+
+export function filterFastas(fastas, predicate) {
+  if (fastas) {
+    return {
+      type: FILTER_FASTAS,
+      payload: {
+        active: true,
+        ids: (
+          fastas.
+            filter(predicate).
+            map(file => file.name)
+        ),
+      },
+    };
+  }
+
+  return {
+    type: FILTER_FASTAS,
+    payload: { active: false },
+  };
+}

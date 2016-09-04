@@ -10,7 +10,7 @@ import Filter from './Filter.react';
 import { updateHeader } from '^/actions/header';
 import { uploadFasta, addFiles } from './thunks';
 
-import { getVisibleFastas, isFilterActive } from './reducers';
+import { getVisibleFastas, getTotalFastas, isFilterActive } from './reducers';
 
 import { taxIdMap } from '^/species';
 
@@ -93,13 +93,13 @@ const Specieator = React.createClass({
   },
 
   render() {
-    const { fastas, filterActive, loading } = this.props;
+    const { fastas, totalFastas, filterActive, loading } = this.props;
 
     return (
       <FileDragAndDrop onFiles={this.upload}>
         { loading && <div ref="loadingBar" className="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>}
         { fastas.length ?
-            <FileGrid files={fastas} /> :
+            <FileGrid total={totalFastas} files={fastas} /> :
             <div className="welcome-container">
               <p className="welcome-intro">
                 { filterActive ?
@@ -109,7 +109,10 @@ const Specieator = React.createClass({
               </p>
             </div>
         }
-        <Filter speciesSummary={this.countSpecies(fastas)} />
+        <Filter
+          speciesSummary={this.countSpecies(fastas)}
+          filterActive={filterActive}
+        />
       </FileDragAndDrop>
     );
   },
@@ -120,6 +123,7 @@ const Specieator = React.createClass({
 function mapStateToProps(state) {
   const { specieator, collection } = state;
   return {
+    totalFastas: getTotalFastas(state),
     fastas: getVisibleFastas(state),
     filterActive: isFilterActive(state),
     uploads: specieator.uploads,

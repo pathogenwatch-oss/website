@@ -10,12 +10,12 @@ export default connect()(React.createClass({
   },
 
   render() {
-    const { files } = this.props;
+    const { files, total } = this.props;
     return (
       <div className="wgsa-specieator-files">
         <div className="wgsa-specieator-content">
           <p className="wgsa-specieator-summary">
-            Viewing <span>{files.length}</span> of {files.length} assemblies
+            Viewing <span>{files.length}</span> of {total} assemblies
           </p>
         </div>
         <div className="mdl-grid">
