@@ -1,3 +1,7 @@
+.mdl-progress {
+  width: auto;
+}
+
 .mdl-progress > .progressbar {
   background: #673c90 !important;
 }

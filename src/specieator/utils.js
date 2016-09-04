@@ -47,7 +47,7 @@ export function sendToServer(file, dispatch) {
 export function showDuplicatesToast(duplicates) {
   ToastActionCreators.showToast({
     message: duplicates.length === 1 ? (
-      <span><strong>{duplicates[0]}</strong> is a duplicate and was not queued.</span>
+      <span><strong>{duplicates[0].name}</strong> is a duplicate and was not queued.</span>
     ) : (
       <span>{duplicates.length} duplicates were not queued.</span>
     ),
