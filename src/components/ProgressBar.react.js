@@ -6,6 +6,7 @@ export default React.createClass({
 
   propTypes: {
     progress: React.PropTypes.number,
+    indeterminate: React.PropTypes.bool,
   },
 
   componentDidMount() {
@@ -13,19 +14,27 @@ export default React.createClass({
 
     progressBar.addEventListener('mdl-componentupgraded', (event) => {
       this.progressBar = event.target.MaterialProgress;
-      this.progressBar.setProgress(this.props.progress);
+      this.setProgress();
     });
 
     componentHandler.upgradeElement(progressBar);
   },
 
   componentDidUpdate() {
-    this.progressBar.setProgress(this.props.progress);
+    this.setProgress();
+  },
+
+  setProgress() {
+    if ('progress' in this.props) {
+      this.progressBar.setProgress(this.props.progress);
+    }
   },
 
   render() {
+    const classes = `mdl-progress mdl-js-progress ${this.props.indeterminate ? 'mdl-progress__indeterminate' : ''}`.trim();
     return (
-      <div ref="progressBar" className="mdl-progress mdl-js-progress"></div>
+      <div ref="progressBar" className={classes}>
+      </div>
     );
   },
 
