@@ -4,6 +4,8 @@ import React from 'react';
 
 import ProgressBar from '../components/ProgressBar.react';
 
+import { formatDay, formatMonth } from '../utils/Date';
+
 import { taxIdMap } from '^/species';
 
 function displayContigs(count) {
@@ -14,13 +16,52 @@ function displayContigs(count) {
   );
 }
 
-function fastaData(speciesId, speciesName, metrics) {
+function displayDate({ day, month, year }) {
+  if (!day && !month && !year) {
+    return null;
+  }
+  return (
+    <div className="wgsa-specieator-file__metadata">
+      <i className="material-icons">date_range</i>
+      <p>
+        {day ? formatDay(day) : ''}
+        {month ? formatMonth(month) : ''}
+        {year || ''}
+      </p>
+    </div>
+  );
+}
+
+function displayPosition({ latitude, longitude }) {
+  if (!latitude && !longitude) return null;
+  return (
+    <div className="wgsa-specieator-file__metadata">
+      <i className="material-icons">map_marker</i>
+      <p>{latitude}, {longitude}</p>
+    </div>
+  );
+}
+
+// TODO: Parse user-defined cols to determine actual number
+function displayMoreCols(metadata) {
+  const moreCols = Object.keys(metadata).length - 8;
+  if (moreCols <= 0) return null;
+  return (
+    <p><em>+ {moreCols} user-defined</em></p>
+  );
+}
+
+function displayFastaData({ speciesId, speciesName, metadata = {}, metrics }) {
   const wgsaSpecies = taxIdMap.get(speciesId);
   return (
     <div>
       <p>{wgsaSpecies ? wgsaSpecies.formattedShortName : speciesName}</p>
       <p>{displayContigs(metrics.totalNumberOfContigs)}</p>
       <p>{metrics.gcContent}% GC content</p>
+      <br />
+      {displayPosition(metadata)}
+      {displayDate(metadata)}
+      {displayMoreCols(metadata)}
     </div>
   );
 }
@@ -33,12 +74,14 @@ function getProgressBar(progress) {
   );
 }
 
-export default ({ name, progress, speciesId, speciesName, metrics }) => (
+export default props => (
   <article className="mdl-cell wgsa-specieator-file">
-    <h2 className="wgsa-specieator-file__title">{name}</h2>
-    { speciesId ?
-        fastaData(speciesId, speciesName, metrics) :
-        getProgressBar(progress)
+    <h2 className="wgsa-specieator-file__title">
+      {props.metadata ? props.metadata.displayname : props.name}
+    </h2>
+    { props.speciesId ?
+        displayFastaData(props) :
+        getProgressBar(props.progress)
     }
   </article>
 );

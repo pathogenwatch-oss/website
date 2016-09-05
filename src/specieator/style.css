@@ -114,6 +114,20 @@
   color: #AC65A6;
 }
 
+.wgsa-specieator-file__metadata {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.wgsa-specieator-file__metadata i {
+  width: 32px;
+}
+
+.wgsa-specieator-file__metadata p {
+  white-space: nowrap;
+}
 
 .wgsa-specieator-filter {
   position: fixed;

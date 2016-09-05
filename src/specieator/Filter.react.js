@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { getSpeciesSummary } from './selectors';
+import { getSpeciesSummary, getVisibleSpeciesIds } from './selectors';
 
 import actions from './actions';
 import { createCollection, filterByText } from './thunks';
@@ -51,34 +51,37 @@ const ClearFilterButton = connect()(({ dispatch }) => (
 function mapStateToProps(state) {
   return {
     speciesSummary: getSpeciesSummary(state),
+    visibleSpeciesIds: getVisibleSpeciesIds(state),
   };
 }
 
-export default connect(mapStateToProps)(({ speciesSummary, filterActive }) => (
-  <aside className="wgsa-specieator-filter">
-    <header className="wgsa-specieator-filter__header mdl-layout__header mdl-layout__header--scroll">
-      <label className="wgsa-specieator-filter__search">
-        <i className="material-icons">search</i>
-        <FilterInput />
-      </label>
-    </header>
-    <section className="wgsa-specieator-filter__section">
-      <h3>Species</h3>
-      { speciesSummary.map(({ speciesId, count, active }) =>
-          <SpeciesButton
-            key={speciesId}
-            speciesId={speciesId}
-            species={taxIdMap.get(speciesId)}
-            count={count}
-            active={active}
-          />
-      )}
-    </section>
-    <section className="wgsa-specieator-filter__section" style={{ textAlign: 'center' }}>
-      <CreateCollectionButton disabled={speciesSummary.length > 1} />
-    </section>
-    <footer className={`wgsa-specieator-filter__footer ${filterActive ? 'wgsa-specieator-filter__footer--active' : ''}`.trim()}>
-      <ClearFilterButton />
-    </footer>
-  </aside>
-));
+export default connect(mapStateToProps)(
+  ({ speciesSummary, visibleSpeciesIds, filterActive }) => (
+    <aside className="wgsa-specieator-filter">
+      <header className="wgsa-specieator-filter__header mdl-layout__header mdl-layout__header--scroll">
+        <label className="wgsa-specieator-filter__search">
+          <i className="material-icons">search</i>
+          <FilterInput />
+        </label>
+      </header>
+      <section className="wgsa-specieator-filter__section">
+        <h3>Species</h3>
+        { speciesSummary.map(({ speciesId, count, active }) =>
+            <SpeciesButton
+              key={speciesId}
+              speciesId={speciesId}
+              species={taxIdMap.get(speciesId)}
+              count={count}
+              active={active}
+            />
+        )}
+      </section>
+      <section className="wgsa-specieator-filter__section" style={{ textAlign: 'center' }}>
+        <CreateCollectionButton disabled={visibleSpeciesIds.size > 1} />
+      </section>
+      <footer className={`wgsa-specieator-filter__footer ${filterActive ? 'wgsa-specieator-filter__footer--active' : ''}`.trim()}>
+        <ClearFilterButton />
+      </footer>
+    </aside>
+  )
+);

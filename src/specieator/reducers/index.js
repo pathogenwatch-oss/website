@@ -6,9 +6,9 @@ import {
 const fastaOrder = {
   initialState: [],
   actions: {
-    [ADD_FASTAS](state, { files }) {
+    [ADD_FASTAS](state, { fastas }) {
       return [
-        ...files.map(_ => _.name),
+        ...fastas.map(_ => _.name),
         ...state,
       ];
     },

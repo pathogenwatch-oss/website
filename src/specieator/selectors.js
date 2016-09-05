@@ -38,6 +38,11 @@ export const getVisibleFastas = createSelector(
   }
 );
 
+export const getVisibleSpeciesIds = createSelector(
+  getVisibleFastas,
+  (fastas) => fastas.reduce((memo, _) => memo.add(_.speciesId), new Set())
+);
+
 export const getSpeciesSummary = createSelector(
   getOrderedFastas,
   getFilter,

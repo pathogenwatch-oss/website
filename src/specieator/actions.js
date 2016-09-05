@@ -50,7 +50,6 @@ function clearFilter() {
   };
 }
 
-
 export const CREATE_COLLECTION = createAsyncConstants('CREATE_COLLECTION');
 
 function createCollection(files) {

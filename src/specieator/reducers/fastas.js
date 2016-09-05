@@ -11,12 +11,12 @@ function updateFastas(state, name, update) {
 export default {
   initialState: {},
   actions: {
-    [ADD_FASTAS](state, { files }) {
-      if (!files.length) return state;
+    [ADD_FASTAS](state, { fastas }) {
+      if (!fastas.length) return state;
 
-      return files.reduce((memo, file) => {
-        if (file.name in memo) return memo;
-        return { ...memo, [file.name]: { name: file.name, file } };
+      return fastas.reduce((memo, fasta) => {
+        if (fasta.name in memo) return memo;
+        return { ...memo, [fasta.name]: fasta };
       }, state);
     },
     [UPLOAD_FASTA.ATTEMPT](state, { name }) {

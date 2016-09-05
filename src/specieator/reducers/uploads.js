@@ -6,11 +6,11 @@ export default {
     uploading: new Set(),
   },
   actions: {
-    [ADD_FASTAS](state, { files }) {
+    [ADD_FASTAS](state, { fastas }) {
       return {
         ...state,
         queue: [
-          ...files.map(_ => _.name),
+          ...fastas.map(_ => _.name),
           ...state.queue,
         ],
       };

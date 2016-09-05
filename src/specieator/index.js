@@ -93,7 +93,6 @@ const Specieator = React.createClass({
 
 });
 
-
 function mapStateToProps(state) {
   const { specieator, collection } = state;
   return {
