@@ -33,7 +33,3 @@ export default {
     },
   },
 };
-
-export const getFastas = ({ entities }) => entities.fastas;
-export const getFastasAsList = ({ entities }) =>
-  Object.keys(entities.fastas).map(key => entities.fastas[key]);

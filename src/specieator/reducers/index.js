@@ -1,8 +1,7 @@
-import { ADD_FASTAS, FILTER_FASTAS, CREATE_COLLECTION } from '../actions';
-
-import { getFastas, getFastasAsList } from './fastas';
-
-export const getTotalFastas = (state) => getFastasAsList(state).length;
+import {
+  ADD_FASTAS, CREATE_COLLECTION,
+  FILTER_FASTAS, FILTER_BY_SPECIES, CLEAR_FILTER,
+} from '../actions';
 
 const fastaOrder = {
   initialState: [],
@@ -16,14 +15,6 @@ const fastaOrder = {
   },
 };
 
-export const getFastaOrder = state => state.specieator.fastaOrder;
-
-export const getOrderedFastas = state => {
-  const fastas = getFastas(state);
-  return getFastaOrder(state).map(name => fastas[name]);
-};
-
-
 const loading = {
   initialState: false,
   actions: {
@@ -33,32 +24,35 @@ const loading = {
   },
 };
 
+const initialFilterState = {
+  active: false,
+  ids: new Set(),
+  speciesId: null,
+};
 
 const filter = {
-  initialState: { active: false, ids: new Set() },
+  initialState: initialFilterState,
   actions: {
     [FILTER_FASTAS](state, { active = false, ids }) {
       return {
+        ...state,
         active,
         ids: new Set(active ? ids : []),
+        speciesId: active ? state.speciesId : null,
       };
+    },
+    [FILTER_BY_SPECIES](state, { speciesId }) {
+      const newSpeciesId = speciesId === state.speciesId ? null : speciesId;
+      return {
+        ...state,
+        speciesId: newSpeciesId,
+        active: newSpeciesId !== null,
+      };
+    },
+    [CLEAR_FILTER]() {
+      return initialFilterState;
     },
   },
 };
-
-export const isFilterActive = ({ specieator }) => specieator.filter.active;
-export const getFilterIds = ({ specieator }) => specieator.filter.ids;
-
-export const getVisibleFastas = state => {
-  const filterIds = getFilterIds(state);
-  const fastas = getOrderedFastas(state);
-
-  return (
-    isFilterActive(state) ?
-      fastas.filter(({ name }) => filterIds.has(name)) :
-      fastas
-  );
-};
-
 
 export default { fastaOrder, loading, filter };

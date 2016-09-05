@@ -2,3 +2,7 @@ h1, h2 {
   font-family: "Roboto Condensed", "Helvetica", "Arial", sans-serif;
   font-weight: 400;
 }
+
+button {
+  cursor: pointer;
+}

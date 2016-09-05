@@ -1,10 +1,8 @@
 import actions, { ADD_FASTAS, UPLOAD_FASTA } from './actions';
 
-import { getFastas, getFastasAsList } from './reducers/fastas';
-import { getVisibleFastas } from './reducers';
+import { getFastas, getFastasAsList, getVisibleFastas } from './selectors';
 
 import { showDuplicatesToast, sendToServer } from './utils';
-
 
 export function addFiles(newFiles) {
   return (dispatch, getState) => {
@@ -20,7 +18,6 @@ export function addFiles(newFiles) {
     }
   };
 }
-
 
 export function uploadFasta(name) {
   return (dispatch, getState) => {
@@ -38,7 +35,6 @@ export function uploadFasta(name) {
   };
 }
 
-
 export function createCollection() {
   return (dispatch, getState) => {
     const fastas = getVisibleFastas(getState());
@@ -46,24 +42,17 @@ export function createCollection() {
   };
 }
 
-
 export function filterByText(text) {
   return (dispatch, getState) => {
+    const state = getState();
+    const fastas = getFastasAsList(state);
+
     if (!text.length) {
-      dispatch(actions.filterFastas());
+      dispatch(actions.filterFastas(fastas, () => true));
       return;
     }
 
     const regexp = new RegExp(text, 'i');
-    dispatch(actions.filterFastas(
-      getFastasAsList(getState()), file => regexp.test(file.name)
-    ));
+    dispatch(actions.filterFastas(fastas, file => regexp.test(file.name)));
   };
-}
-
-export function filterBySpeciesId(speciesId) {
-  return (dispatch, getState) =>
-    dispatch(actions.filterFastas(
-      getFastasAsList(getState()), file => file.speciesId === speciesId
-    ));
 }

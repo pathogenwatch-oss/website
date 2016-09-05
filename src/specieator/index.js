@@ -4,13 +4,14 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import FileDragAndDrop from '../components/upload/DragAndDrop.react';
+import Header from './Header.react';
 import FileGrid from './FileGrid.react';
 import Filter from './Filter.react';
 
 import { updateHeader } from '^/actions/header';
 import { uploadFasta, addFiles } from './thunks';
 
-import { getVisibleFastas, getTotalFastas, isFilterActive } from './reducers';
+import * as selectors from './selectors';
 
 import { taxIdMap } from '^/species';
 
@@ -33,16 +34,7 @@ const Specieator = React.createClass({
       updateHeader({
         speciesName: 'Specieator',
         classNames: `wgsa-specieator-header ${fastas.length ? 'wgsa-specieator--has-aside' : ''}`.trim(),
-        content: (
-          <span className="mdl-layout-spacer mdl-layout-spacer--flex">
-            <div className="mdl-layout-spacer" />
-            <nav className="mdl-navigation">
-              <a className="mdl-navigation__link mdl-navigation__link--active" href="">Upload</a>
-              <a className="mdl-navigation__link" href="">Downloads</a>
-              <a className="mdl-navigation__link" href="">Documentation</a>
-            </nav>
-          </span>
-        ),
+        content: <Header />,
       })
     );
     document.title = 'WGSA | Upload';
@@ -72,25 +64,9 @@ const Specieator = React.createClass({
   upload(newFiles) {
     const { dispatch } = this.props;
     dispatch(addFiles(newFiles));
-    dispatch(updateHeader({ classNames: 'wgsa-specieator-header wgsa-specieator--has-aside' }));
-  },
-
-  countSpecies(fastas) {
-    const summary =
-      fastas.reduce((memo, { speciesId }) => {
-        if (!speciesId) return memo;
-        return {
-          ...memo,
-          [speciesId]: (memo[speciesId] || 0) + 1,
-        };
-      }, {});
-
-    return (
-      Object.keys(summary).map(speciesId => ({
-        speciesId,
-        count: summary[speciesId],
-      }))
-    );
+    dispatch(updateHeader({
+      classNames: 'wgsa-specieator-header wgsa-specieator--has-aside',
+    }));
   },
 
   render() {
@@ -110,10 +86,7 @@ const Specieator = React.createClass({
               </p>
             </div>
         }
-        <Filter
-          speciesSummary={this.countSpecies(fastas)}
-          filterActive={filterActive}
-        />
+        <Filter filterActive={filterActive} />
       </FileDragAndDrop>
     );
   },
@@ -124,9 +97,9 @@ const Specieator = React.createClass({
 function mapStateToProps(state) {
   const { specieator, collection } = state;
   return {
-    totalFastas: getTotalFastas(state),
-    fastas: getVisibleFastas(state),
-    filterActive: isFilterActive(state),
+    totalFastas: selectors.getTotalFastas(state),
+    fastas: selectors.getVisibleFastas(state),
+    filterActive: selectors.isFilterActive(state),
     uploads: specieator.uploads,
     loading: specieator.loading,
     collection,

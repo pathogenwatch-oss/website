@@ -1,8 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
+import { getSpeciesSummary } from './selectors';
+
 import actions from './actions';
-import { createCollection, filterByText, filterBySpeciesId } from './thunks';
+import { createCollection, filterByText } from './thunks';
 
 import { taxIdMap } from '^/species';
 
@@ -24,27 +26,35 @@ const FilterInput = connect()(({ dispatch }) => (
   />
 ));
 
-const SpeciesButton = connect()(({ speciesId, count, species, dispatch }) => (
-  <button
-    title={species.shortName}
-    className="mdl-chip mdl-chip--contact"
-    onClick={() => dispatch(filterBySpeciesId(speciesId))}
-  >
-    <span className="mdl-chip__contact">{count}</span>
-    <span className="mdl-chip__text">{species.formattedShortName}</span>
-  </button>
-));
+const SpeciesButton = connect()(
+  ({ speciesId, count, species, active, dispatch }) => (
+    <button
+      title={species.shortName}
+      className={`mdl-chip mdl-chip--contact ${active ? 'mdl-chip--active' : ''}`.trim()}
+      onClick={() => dispatch(actions.filterBySpecies(speciesId))}
+    >
+      <span className="mdl-chip__contact">{count}</span>
+      <span className="mdl-chip__text">{species.formattedShortName}</span>
+    </button>
+  )
+);
 
 const ClearFilterButton = connect()(({ dispatch }) => (
   <button
     className="mdl-button mdl-js-button mdl-button--primary"
-    onClick={() => dispatch(actions.filterFastas())}
+    onClick={() => dispatch(actions.clearFilter())}
   >
     Clear Filters
   </button>
 ));
 
-export default ({ speciesSummary, filterActive }) => (
+function mapStateToProps(state) {
+  return {
+    speciesSummary: getSpeciesSummary(state),
+  };
+}
+
+export default connect(mapStateToProps)(({ speciesSummary, filterActive }) => (
   <aside className="wgsa-specieator-filter">
     <header className="wgsa-specieator-filter__header mdl-layout__header mdl-layout__header--scroll">
       <label className="wgsa-specieator-filter__search">
@@ -54,12 +64,13 @@ export default ({ speciesSummary, filterActive }) => (
     </header>
     <section className="wgsa-specieator-filter__section">
       <h3>Species</h3>
-      { speciesSummary.map(({ speciesId, count }) =>
+      { speciesSummary.map(({ speciesId, count, active }) =>
           <SpeciesButton
             key={speciesId}
             speciesId={speciesId}
             species={taxIdMap.get(speciesId)}
             count={count}
+            active={active}
           />
       )}
     </section>
@@ -70,4 +81,4 @@ export default ({ speciesSummary, filterActive }) => (
       <ClearFilterButton />
     </footer>
   </aside>
-);
+));

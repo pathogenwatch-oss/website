@@ -6,12 +6,20 @@ import ProgressBar from '../components/ProgressBar.react';
 
 import { taxIdMap } from '^/species';
 
+function displayContigs(count) {
+  return (
+    count === 1 ?
+      '1 contig' :
+      `${count} contigs`
+  );
+}
+
 function fastaData(speciesId, speciesName, metrics) {
   const wgsaSpecies = taxIdMap.get(speciesId);
   return (
     <div>
       <p>{wgsaSpecies ? wgsaSpecies.formattedShortName : speciesName}</p>
-      <p>{metrics.totalNumberOfContigs} contig(s),</p>
+      <p>{displayContigs(metrics.totalNumberOfContigs)}</p>
       <p>{metrics.gcContent}% GC content</p>
     </div>
   );
