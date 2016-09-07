@@ -28,7 +28,10 @@ router.post('/upload', (req, res, next) => {
         id,
       }))
     ).
-    then(result => res.json(Object.assign({ metrics: analyse(req.body) }, result))).
+    then(result => {
+      res.json(Object.assign({ metrics: analyse(req.body) }, result));
+      req.body = null; // prevent memory leak
+    }).
     catch(error => next(error));
 });
 
