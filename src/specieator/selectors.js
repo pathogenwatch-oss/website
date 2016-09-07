@@ -47,13 +47,14 @@ export const getSpeciesSummary = createSelector(
   getOrderedFastas,
   getFilter,
   (fastas, filterState) => Array.from(
-    fastas.reduce((memo, { speciesId }) => {
+    fastas.reduce((memo, { speciesId, speciesName }) => {
       if (!speciesId) return memo;
 
       const { count = 0 } = memo.get(speciesId) || {};
 
       memo.set(speciesId, {
         speciesId,
+        speciesName,
         count: count + 1,
         active: speciesId === filterState.speciesId,
       });

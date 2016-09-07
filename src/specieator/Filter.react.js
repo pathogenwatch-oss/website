@@ -27,14 +27,16 @@ const FilterInput = connect()(({ dispatch }) => (
 ));
 
 const SpeciesButton = connect()(
-  ({ speciesId, count, species, active, dispatch }) => (
+  ({ speciesId, speciesName, count, species, active, dispatch }) => (
     <button
-      title={species.shortName}
+      title={`Taxon ID: ${speciesId}`}
       className={`mdl-chip mdl-chip--contact ${active ? 'mdl-chip--active' : ''}`.trim()}
       onClick={() => dispatch(actions.filterBySpecies(speciesId))}
     >
       <span className="mdl-chip__contact">{count}</span>
-      <span className="mdl-chip__text">{species.formattedShortName}</span>
+      <span className="mdl-chip__text">{
+        species ? species.formattedShortName : speciesName
+      }</span>
     </button>
   )
 );
@@ -66,10 +68,11 @@ export default connect(mapStateToProps)(
       </header>
       <section className="wgsa-specieator-filter__section">
         <h3>Species</h3>
-        { speciesSummary.map(({ speciesId, count, active }) =>
+        { speciesSummary.map(({ speciesId, speciesName, count, active }) =>
             <SpeciesButton
               key={speciesId}
               speciesId={speciesId}
+              speciesName={speciesName}
               species={taxIdMap.get(speciesId)}
               count={count}
               active={active}
