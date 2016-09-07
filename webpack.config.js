@@ -10,7 +10,7 @@ const resolve = {
 };
 
 const postcss = [
-  require('autoprefixer')({ browsers: [ 'last 2 versions' ] }),
+  require('autoprefixer')({ browsers: [ 'last 2 versions', 'Safari 8' ] }),
   require('postcss-input-style'),
 ];
 
@@ -18,7 +18,10 @@ const loaders = [
   { test: /.json$/, loaders: [ 'json' ] },
   { test: /.css$/, loaders: [ 'style', 'css', 'postcss' ] },
   { test: /\.(png|jpg|jpeg|gif)$/, loader: 'file' },
-  { test: /\.js$/, loader: 'babel', include: /(src|universal)/ },
+  { test: /\.js$/, loader: 'babel', include: [
+    /(src|universal)/,
+    path.join(__dirname, 'node_modules', 'promise-file-reader'),
+  ] },
 ];
 
 const commonPlugins = [
