@@ -4,8 +4,8 @@ const router = express.Router();
 const downloads = require('models/speciesDownloads');
 const fileModel = require('models/file');
 
-const species = require('wgsa_front-end/universal/species');
-const downloadUtils = require('wgsa_front-end/universal/downloads');
+const species = require('wgsa-front-end/universal/species');
+const downloadUtils = require('wgsa-front-end/universal/downloads');
 
 const LOGGER = require('utils/logging').createLogger('Species Downloads');
 

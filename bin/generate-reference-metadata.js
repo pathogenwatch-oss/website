@@ -2,7 +2,7 @@ const fs = require('fs');
 const argv = require('named-argv');
 
 const metadataModel = require('models/assemblyMetadata');
-const analyseFasta = require('wgsa_front-end/universal/fastaAnalysis');
+const analyseFasta = require('wgsa-front-end/universal/fastaAnalysis');
 
 const { ASSEMBLY_METADATA } = require('utils/documentKeys');
 

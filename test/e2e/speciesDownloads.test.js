@@ -1,6 +1,6 @@
 const assert = require('assert');
 
-const species = require('wgsa_front-end/universal/species');
+const species = require('wgsa-front-end/universal/species');
 const downloads = require('models/speciesDownloads');
 
 describe.only('Species Downloads', function () {

@@ -13,7 +13,7 @@ const specieator = createMashSpecieator(sketchFilePath, metadataFilePath);
 
 const collectionModel = require('models/collection');
 const assemblyModel = require('models/assembly');
-const analyse = require('wgsa_front-end/universal/fastaAnalysis');
+const analyse = require('wgsa-front-end/universal/fastaAnalysis');
 
 const LOGGER = require('utils/logging').createLogger('Upload');
 const { maxCollectionSize = 0, fastaStoragePath } = require('configuration');
