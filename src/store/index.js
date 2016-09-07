@@ -10,4 +10,4 @@ const configureStoreCreator =
     require('./prod').default :
     require('./dev').default;
 
-module.exports = configureStoreCreator(middleware, rootReducer);
+export default configureStoreCreator(middleware, rootReducer);
