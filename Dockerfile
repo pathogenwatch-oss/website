@@ -1,11 +1,11 @@
 FROM node:6.3.1
 
+COPY ./node_modules/mash-node-native/scripts/install-dependencies.sh /tmp
+RUN bash /tmp/install-dependencies.sh && rm /tmp/install-dependencies.sh
+
 COPY . /opt/wgsa/middle-end
-
 WORKDIR /opt/wgsa/middle-end
-
-RUN bash node_modules/mash-node-native/scripts/install-dependencies.sh && \
-  npm rebuild
+RUN npm rebuild
 
 ENV NODE_PATH=/opt/wgsa/middle-end/src \
     NODE_ENV=production
