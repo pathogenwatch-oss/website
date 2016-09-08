@@ -3,3 +3,11 @@ FROM node:6.3.1
 COPY . /opt/wgsa/middle-end
 
 WORKDIR /opt/wgsa/middle-end
+
+RUN bash node_modules/mash-node-native/scripts/install-dependencies.sh && \
+  npm rebuild
+
+ENV NODE_PATH=/opt/wgsa/middle-end/src \
+    NODE_ENV=production
+
+CMD [ "node", "start.js" ]
