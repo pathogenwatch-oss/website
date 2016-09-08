@@ -2,11 +2,9 @@
 
 import React from 'react';
 
-import ProgressBar from '../components/ProgressBar.react';
+import ProgressBar from '../../components/ProgressBar.react';
 
-import { formatDay, formatMonth } from '../utils/Date';
-
-import { taxIdMap } from '^/species';
+import { formatDay, formatMonth } from '../../utils/Date';
 
 function displayContigs(count) {
   return (
@@ -51,11 +49,10 @@ function displayMoreCols(metadata) {
   );
 }
 
-function displayFastaData({ speciesId, speciesName, metadata = {}, metrics }) {
-  const wgsaSpecies = taxIdMap.get(speciesId);
+function displayFastaData({ speciesLabel, metadata = {}, metrics }) {
   return (
     <div>
-      <p>{wgsaSpecies ? wgsaSpecies.formattedShortName : speciesName}</p>
+      <p>{speciesLabel}</p>
       <p>{displayContigs(metrics.totalNumberOfContigs)}</p>
       <p>{metrics.gcContent}% GC content</p>
       <br />
@@ -79,7 +76,7 @@ export default props => (
     <h2 className="wgsa-specieator-file__title">
       {props.metadata ? props.metadata.displayname : props.name}
     </h2>
-    { props.speciesId ?
+    { typeof props.speciesId !== 'undefined' ?
         displayFastaData(props) :
         getProgressBar(props.progress)
     }

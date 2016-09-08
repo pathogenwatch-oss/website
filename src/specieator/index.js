@@ -4,9 +4,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import FileDragAndDrop from '../components/upload/DragAndDrop.react';
-import Header from './Header.react';
-import FileGrid from './FileGrid.react';
-import Filter from './Filter.react';
+import Header from './components/Header.react';
+import FileGrid from './components/FileGrid.react';
+import Filter from './components/Filter.react';
 
 import { updateHeader } from '^/actions/header';
 import { uploadFasta, addFiles } from './thunks';

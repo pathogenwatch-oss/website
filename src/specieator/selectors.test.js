@@ -2,20 +2,32 @@ import test from 'ava';
 
 import * as selectors from './selectors';
 
+import saureus from '../species/saureus';
+import salty from '../species/salty';
+
 function getTestState(mods = {}) {
   return {
     entities: {
       fastas: {
-        '123.fa': { name: '123.fa', speciesId: '1280' },
-        '456.fa': { name: '456.fa', speciesId: '90370' },
+        '123.fa': {
+          name: '123.fa',
+          speciesId: '1280',
+          speciesKey: saureus.name,
+          speciesLabel: saureus.formattedShortName,
+        },
+        '456.fa': {
+          name: '456.fa',
+          speciesId: '90370',
+          speciesKey: salty.name,
+          speciesLabel: salty.formattedShortName,
+        },
       },
     },
     specieator: Object.assign({
       fastaOrder: [ '123.fa', '456.fa' ],
       filter: {
-        active: false,
-        ids: new Set(),
-        speciesId: null,
+        searchText: '',
+        speciesKey: null,
       },
     }, mods),
   };
@@ -46,6 +58,14 @@ test('getOrderedFastas', t => {
   t.deepEqual(getOrderedFastas(state), result);
 });
 
+test('getFastaKeys', t => {
+  const { getFastaKeys } = selectors;
+  const state = getTestState();
+  const result = [ '123.fa', '456.fa' ];
+
+  t.deepEqual(getFastaKeys(state), result);
+});
+
 test('getFilter', t => {
   const { getFilter } = selectors;
   const filter = {};
@@ -62,13 +82,12 @@ test('getVisibleFastas with inactive filter', t => {
   t.deepEqual(getVisibleFastas(state), result);
 });
 
-test('getVisibleFastas with id filter', t => {
+test('getVisibleFastas with text filter', t => {
   const { getVisibleFastas, getFastas } = selectors;
   const state = getTestState({
     fastaOrder: [ '123.fa', '456.fa' ],
     filter: {
-      active: true,
-      ids: new Set([ '123.fa' ]),
+      searchText: '123',
     },
   });
   const fastas = getFastas(state);
@@ -82,9 +101,7 @@ test('getVisibleFastas with species filter', t => {
   const state = getTestState({
     fastaOrder: [ '123.fa', '456.fa' ],
     filter: {
-      active: true,
-      ids: new Set([ '456.fa' ]),
-      speciesId: '90370',
+      speciesKey: salty.name,
     },
   });
   const fastas = getFastas(state);
@@ -98,21 +115,59 @@ test.todo('getVisibleFastas with species and id filter');
 test('getSpeciesSummary', t => {
   const { getSpeciesSummary } = selectors;
   const state = getTestState();
-  const result = [
-    { speciesId: '1280', count: 1, active: false },
-    { speciesId: '90370', count: 1, active: false },
-  ];
+  const [ staph, typhi ] = getSpeciesSummary(state);
 
-  t.deepEqual(getSpeciesSummary(state), result);
+  t.true(
+    staph.name === saureus.name &&
+    staph.count === 1 &&
+    staph.active === false
+  );
+
+  t.true(
+    typhi.name === salty.name &&
+    typhi.count === 1 &&
+    typhi.active === false
+  );
 });
 
 test('getSpeciesSummary with species filter', t => {
   const { getSpeciesSummary } = selectors;
-  const state = getTestState({ filter: { speciesId: '1280' } });
-  const result = [
-    { speciesId: '1280', count: 1, active: true },
-    { speciesId: '90370', count: 1, active: false },
-  ];
+  const state = getTestState({ filter: { speciesKey: saureus.name } });
+  const [ staph, typhi ] = getSpeciesSummary(state);
 
-  t.deepEqual(getSpeciesSummary(state), result);
+  t.true(
+    staph.name === saureus.name &&
+    staph.count === 1 &&
+    staph.active === true
+  );
+
+  t.true(
+    typhi.name === salty.name &&
+    typhi.count === 1 &&
+    typhi.active === false
+  );
+});
+
+test('isSupportedSpeciesSelected', t => {
+  const { isSupportedSpeciesSelected } = selectors;
+  const state = getTestState({
+    fastaOrder: [ '123.fa', '456.fa' ],
+    filter: {
+      speciesKey: saureus.name,
+    },
+  });
+
+  t.true(isSupportedSpeciesSelected(state));
+});
+
+test('isFilterActive', t => {
+  const { isFilterActive } = selectors;
+  const state = getTestState({
+    filter: {
+      speciesKey: null,
+      searchText: true,
+    },
+  });
+
+  t.false(isFilterActive(state));
 });

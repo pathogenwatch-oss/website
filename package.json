@@ -7,7 +7,7 @@
     "start": "node dev-server.js",
     "build": "NODE_ENV=production webpack",
     "config": "node bin/config.js",
-    "test": "ava --require babel-register"
+    "test": "ava --require babel-register --watch"
   },
   "repository": {
     "type": "git",

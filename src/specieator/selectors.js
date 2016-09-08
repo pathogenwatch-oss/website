@@ -7,12 +7,18 @@ export const getFilter = ({ specieator }) => specieator.filter;
 
 export const isFilterActive = createSelector(
   getFilter,
-  filter => filter.active
+  ({ searchText = '', speciesKey }) =>
+    searchText.length > 0 || speciesKey !== null
 );
 
 export const getFastasAsList = createSelector(
   getFastas,
   fastas => Object.keys(fastas).map(key => fastas[key])
+);
+
+export const getFastaKeys = createSelector(
+  getFastasAsList,
+  fastas => fastas.map(_ => _.name)
 );
 
 export const getTotalFastas = (state) => getFastasAsList(state).length;
@@ -25,38 +31,47 @@ export const getOrderedFastas =
   );
 
 export const getVisibleFastas = createSelector(
-  getOrderedFastas,
+  isFilterActive,
   getFilter,
-  (fastas, { active, ids, speciesId }) => {
-    if (active) {
+  getOrderedFastas,
+  (isActive, { searchText = '', speciesKey }, fastas) => {
+    if (isActive) {
+      const regexp = new RegExp(searchText, 'i');
       return fastas.filter(fasta =>
-        (ids.size ? ids.has(fasta.name) : true) &&
-        (speciesId ? speciesId === fasta.speciesId : true)
+        (searchText.length ? regexp.test(fasta.name) : true) &&
+        (speciesKey ? speciesKey === fasta.speciesKey : true)
       );
     }
     return fastas;
   }
 );
 
-export const getVisibleSpeciesIds = createSelector(
+export const isSupportedSpeciesSelected = createSelector(
   getVisibleFastas,
-  (fastas) => fastas.reduce((memo, _) => memo.add(_.speciesId), new Set())
+  fastas => {
+    for (const { speciesId } of fastas) {
+      if (!speciesId) return false;
+      if (speciesId !== fastas[0].speciesId) return false;
+    }
+    return true;
+  }
 );
 
 export const getSpeciesSummary = createSelector(
   getOrderedFastas,
   getFilter,
   (fastas, filterState) => Array.from(
-    fastas.reduce((memo, { speciesId, speciesName }) => {
-      if (!speciesId) return memo;
+    fastas.reduce((memo, { supported, speciesKey, speciesLabel }) => {
+      if (!speciesKey) return memo;
 
-      const { count = 0 } = memo.get(speciesId) || {};
+      const { count = 0 } = memo.get(speciesKey) || {};
 
-      memo.set(speciesId, {
-        speciesId,
-        speciesName,
+      memo.set(speciesKey, {
+        supported,
+        name: speciesKey,
+        label: speciesLabel,
         count: count + 1,
-        active: speciesId === filterState.speciesId,
+        active: speciesKey === filterState.speciesKey,
       });
 
       return memo;

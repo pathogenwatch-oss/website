@@ -17,28 +17,23 @@ function updateFastaProgress(name, progress) {
   };
 }
 
-export const FILTER_FASTAS = 'FILTER_FASTAS';
+export const FILTER_BY_TEXT = 'FILTER_BY_TEXT';
 
-function filterFastas(fastas, predicate) {
+function filterByText(searchText) {
   return {
-    type: FILTER_FASTAS,
+    type: FILTER_BY_TEXT,
     payload: {
-      active: true,
-      ids: (
-        fastas.
-          filter(predicate).
-          map(file => file.name)
-      ),
+      searchText,
     },
   };
 }
 
 export const FILTER_BY_SPECIES = 'FILTER_BY_SPECIES';
 
-function filterBySpecies(speciesId) {
+function filterBySpecies(speciesKey) {
   return {
     type: FILTER_BY_SPECIES,
-    speciesId,
+    speciesKey,
   };
 }
 
@@ -65,7 +60,7 @@ function createCollection(files) {
 
 export default {
   updateFastaProgress,
-  filterFastas,
+  filterByText,
   clearFilter,
   filterBySpecies,
   createCollection,

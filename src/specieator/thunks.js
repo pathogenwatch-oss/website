@@ -1,6 +1,6 @@
 import actions, { ADD_FASTAS, UPLOAD_FASTA } from './actions';
 
-import { getFastas, getFastasAsList, getVisibleFastas } from './selectors';
+import * as selectors from './selectors';
 
 import { mapCSVsToFastas, showDuplicatesToast, sendToServer } from './utils';
 
@@ -12,7 +12,7 @@ function isDuplicate({ name, metadata }, files) {
 export function addFiles(newFiles) {
   return (dispatch, getState) => {
     const state = getState();
-    const files = getFastas(state);
+    const files = selectors.getFastas(state);
     return mapCSVsToFastas(newFiles).then(
       parsedFiles => {
         const duplicates = parsedFiles.filter(file => isDuplicate(file, files));
@@ -31,7 +31,7 @@ export function uploadFasta(name) {
   return (dispatch, getState) => {
     const state = getState();
 
-    const { file } = getFastas(state)[name];
+    const { file } = selectors.getFastas(state)[name];
 
     if (!file) return;
 
@@ -47,22 +47,28 @@ export function uploadFasta(name) {
 
 export function createCollection() {
   return (dispatch, getState) => {
-    const fastas = getVisibleFastas(getState());
+    const fastas = selectors.getVisibleFastas(getState());
     dispatch(actions.createCollection(fastas));
   };
+}
+
+function getNames(fastas, predicate) {
+  return fastas.filter(predicate).map(_ => _.name);
 }
 
 export function filterByText(text) {
   return (dispatch, getState) => {
     const state = getState();
-    const fastas = getFastasAsList(state);
+    const fastas = selectors.getFastasAsList(state);
 
     if (!text.length) {
-      dispatch(actions.filterFastas(fastas, () => true));
+      dispatch(actions.filterFastas(text, selectors.getFastaKeys(state)));
       return;
     }
 
     const regexp = new RegExp(text, 'i');
-    dispatch(actions.filterFastas(fastas, file => regexp.test(file.name)));
+    dispatch(actions.filterFastas(
+      text, getNames(fastas, file => regexp.test(file.name))
+    ));
   };
 }

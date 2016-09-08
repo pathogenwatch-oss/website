@@ -203,6 +203,7 @@
 .mdl-chip--active {
   background: #a386bd;
   color: #fff;
+  font-weight: 500;
 }
 
 .mdl-chip--active .mdl-chip__contact {

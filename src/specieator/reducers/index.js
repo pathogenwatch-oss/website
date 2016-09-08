@@ -1,6 +1,6 @@
 import {
   ADD_FASTAS, CREATE_COLLECTION,
-  FILTER_FASTAS, FILTER_BY_SPECIES, CLEAR_FILTER,
+  FILTER_BY_TEXT, FILTER_BY_SPECIES, CLEAR_FILTER,
 } from '../actions';
 
 const fastaOrder = {
@@ -25,28 +25,24 @@ const loading = {
 };
 
 const initialFilterState = {
-  active: false,
-  ids: new Set(),
-  speciesId: null,
+  searchText: '',
+  speciesKey: null,
 };
 
 const filter = {
   initialState: initialFilterState,
   actions: {
-    [FILTER_FASTAS](state, { active = false, ids }) {
+    [FILTER_BY_TEXT](state, { searchText }) {
       return {
         ...state,
-        active,
-        ids: new Set(active ? ids : []),
-        speciesId: active ? state.speciesId : null,
+        searchText,
       };
     },
-    [FILTER_BY_SPECIES](state, { speciesId }) {
-      const newSpeciesId = speciesId === state.speciesId ? null : speciesId;
+    [FILTER_BY_SPECIES](state, { speciesKey }) {
+      const newSpeciesKey = speciesKey === state.speciesKey ? null : speciesKey;
       return {
         ...state,
-        speciesId: newSpeciesId,
-        active: newSpeciesId !== null,
+        speciesKey: newSpeciesKey,
       };
     },
     [CLEAR_FILTER]() {
