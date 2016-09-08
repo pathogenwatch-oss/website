@@ -98,12 +98,21 @@ apiRouter.get(
   (req, res) => res.sendFile(`${__dirname}/static_data/metadata.csv`)
 );
 
+const speciesIds = new Set(require('./universal/species').map(_ => _.id));
+
+function getWGSASpeciesId(...ids) {
+  for (const id of ids) {
+    if (speciesIds.has(id)) return id;
+  }
+  return null;
+}
+
 apiRouter.post('/upload', (req, res) => {
   fastaStorage.store('./fastas', req.body).
     then(({ path, id }) =>
       specieator.queryFile(path).
         then(({ speciesTaxId, taxId, scientificName }) => ({
-          speciesId: speciesTaxId || taxId || null,
+          speciesId: getWGSASpeciesId(speciesTaxId, taxId),
           speciesName: scientificName,
           id,
         }))
