@@ -1,7 +1,8 @@
+/* global WGSA_CONFIG */
+/* eslint no-native-reassign: 0 */
 
-const config =
-  process.env.NODE_ENV === 'production' ?
-    require('../prod.config.json') :
-    require('../config.json');
+const config = Object.assign({}, WGSA_CONFIG);
+
+WGSA_CONFIG = undefined;
 
 export default config;

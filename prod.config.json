@@ -1,7 +1,0 @@
-{
-  "pusher": {
-    "key": "<%= pusherKey %>",
-    "encrypted": true
-  },
-  "maxCollectionSize": "<%= maxCollectionSize %>"
-}
