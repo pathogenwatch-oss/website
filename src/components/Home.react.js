@@ -53,11 +53,10 @@ export default connect()(React.createClass({
           <p>
             A web application for the processing, clustering and exploration of microbial genome assemblies.
           </p>
-          <Link to={`/${staph.nickname}`} className="mdl-button mdl-button--colored mdl-button--raised wgsa-cta">
-            Get started with {staph.formattedName}
+          <Link to={`/upload`} className="mdl-button mdl-button--colored mdl-button--raised wgsa-cta">
+            Get started with anything you like
           </Link>
           <div style={{ fontSize: '16px', margin: '16px 0 0' }}>
-            <Link style={{ padding: '0 8px' }} to={`/${staph.nickname}/upload`} >Create a new collection</Link>
             <a style={{ padding: '0 8px' }} target="_blank" href="https://github.com/ImperialCollegeLondon/wgsa-documentation/wiki">Documentation</a>
           </div>
         </header>
