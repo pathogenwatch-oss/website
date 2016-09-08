@@ -10,13 +10,13 @@ describe('Util: Storage Connection', function () {
     var config = {
       server: {
         couchbase: {
-          buckets: {}
-        }
-      }
+          buckets: {},
+        },
+      },
     };
     config.couchbase.buckets[BUCKET_NAME] = {
       name: 'user',
-      password: 'pass'
+      password: 'pass',
     };
     var bucket = {};
 

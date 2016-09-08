@@ -83,7 +83,7 @@ Collection: ${collectionId}`);
         if (taskStatus !== 'SUCCESS') {
           doc.errors.push({
             assemblyName: assemblyIdToNameMap[assemblyIdString],
-            taskType
+            taskType,
           });
         }
 
@@ -155,7 +155,7 @@ Collection: ${collectionId}`);
     });
   }
 
-  mqConnection.queue(`upload-progress-queue`, QUEUE_OPTIONS, function (queue) {
+  mqConnection.queue('upload-progress-queue', QUEUE_OPTIONS, function (queue) {
     LOGGER.info(`${queue.name} is open.`);
     queue.bind(SERVICES.name, 'upload-progress');
 
@@ -172,7 +172,7 @@ Collection: ${collectionId}`);
         expectedResults: calculateExpectedResults(message),
         receivedResults: 0,
         results: {},
-        errors: []
+        errors: [],
       }, message);
 
       async.parallel([
@@ -183,7 +183,7 @@ Collection: ${collectionId}`);
         ),
         done => createNotificationQueue(
           message.collectionId, Object.keys(message.assemblyIdToNameMap), done
-        )
+        ),
       ], error => mqConnection.exchange().publish(
           `upload-progress-request-${message.collectionId}`, { error }
         )

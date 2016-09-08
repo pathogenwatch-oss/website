@@ -10,28 +10,28 @@ describe('Model: Collection', function () {
     var exchange = { publish: sinon.spy() };
     var MESSAGE = {
       uuid: '123',
-      idMap: {}
+      idMap: {},
     };
     var queue = { name: 'NAME', subscribe: sinon.stub().yieldsAsync(null, MESSAGE), destroy: sinon.spy() };
     var messageQueueService = {
       getCollectionIdExchange: sinon.stub().returns(exchange),
-      newCollectionAddQueue: sinon.stub().yields(queue)
+      newCollectionAddQueue: sinon.stub().yields(queue),
     };
 
     collectionModel.__set__('messageQueueService', messageQueueService);
 
     var requestBody = { collectionId: '123', assemblyNames: [ '456', '789' ] };
-    collectionModel.add( '1280', requestBody, function (error, result) {
-        assert(exchange.publish.calledWith('id-request', {
-          taskId: requestBody.collectionId,
-          inputData: requestBody.assemblyNames
-        }, { replyTo: queue.name }));
-        assert(sinon.match(result, {
-          collectionId: MESSAGE.uuid,
-          assemblyNameToAssemblyIdMap: MESSAGE.idMap
-        }));
-        done();
-      }
+    collectionModel.add('1280', requestBody, function (error, result) {
+      assert(exchange.publish.calledWith('id-request', {
+        taskId: requestBody.collectionId,
+        inputData: requestBody.assemblyNames,
+      }, { replyTo: queue.name }));
+      assert(sinon.match(result, {
+        collectionId: MESSAGE.uuid,
+        assemblyNameToAssemblyIdMap: MESSAGE.idMap,
+      }));
+      done();
+    }
     );
   });
 

@@ -10,13 +10,13 @@ const { COLLECTION_LIST, CORE_TREE_RESULT, COLLECTION_METADATA } = require('util
 
 var IDENTIFIER_TYPES = {
   COLLECTION: 'Collection',
-  ASSEMBLY: 'Assembly'
+  ASSEMBLY: 'Assembly',
 };
 var COLLECTION_OPERATIONS = {
   INITIATE: 'INITIATE_COLLECTION',
   EXTEND: 'EXTEND_COLLECTION',
   DELETE: 'DELETE_COLLECTION',
-  DELETE_ASSEMBLIES: 'DELETE_ASSEMBLIES'
+  DELETE_ASSEMBLIES: 'DELETE_ASSEMBLIES',
 };
 
 function requestIDs(request, callback) {
@@ -57,11 +57,11 @@ function manageCollection(request, callback) {
 function add(speciesId, { assemblyNames }, callback) {
   var collectionRequest = {
     identifierType: IDENTIFIER_TYPES.COLLECTION,
-    count: 1
+    count: 1,
   };
   var assemblyRequest = {
     identifierType: IDENTIFIER_TYPES.ASSEMBLY,
-    count: assemblyNames.length
+    count: assemblyNames.length,
   };
 
   LOGGER.info('Collection ids requested: ' + collectionRequest.count);
@@ -71,7 +71,7 @@ function add(speciesId, { assemblyNames }, callback) {
     function (next) {
       async.parallel({
         collection: requestIDs.bind(null, collectionRequest),
-        assembly: requestIDs.bind(null, assemblyRequest)
+        assembly: requestIDs.bind(null, assemblyRequest),
       }, next);
     },
     function (results, next) {
@@ -79,7 +79,7 @@ function add(speciesId, { assemblyNames }, callback) {
       manageCollection({
         collectionId: results.collection.identifiers[0],
         assemblyIds: results.assembly.identifiers,
-        collectionOperation: COLLECTION_OPERATIONS.INITIATE
+        collectionOperation: COLLECTION_OPERATIONS.INITIATE,
       }, next);
     },
   ],
@@ -117,7 +117,7 @@ function add(speciesId, { assemblyNames }, callback) {
         queue.destroy();
         callback(null, {
           collectionId,
-          assemblyNameToAssemblyIdMap
+          assemblyNameToAssemblyIdMap,
         });
       });
 
@@ -145,8 +145,8 @@ function getAssemblies({ assemblyIds, speciesId }, assemblyGetFn, callback) {
         // List items can be wrapped or raw value
         var assemblyId = assemblyIdWrapper.assemblyId || assemblyIdWrapper;
         var assemblyParams = {
-          assemblyId: assemblyId,
-          speciesId: speciesId
+          assemblyId,
+          speciesId,
         };
         assemblyGetFn(assemblyParams, function (error, assembly) {
           if (error) {
@@ -156,7 +156,7 @@ function getAssemblies({ assemblyIds, speciesId }, assemblyGetFn, callback) {
           finishMap(null, assembly);
         });
       }, done);
-    }
+    },
   ], function (error, result) {
     if (error) {
       return callback(error, null);
@@ -217,7 +217,7 @@ function get({ collectionId, speciesId }, callback) {
       const subtrees = assemblyModel.groupAssembliesBySubtype(assemblies);
       async.parallel({
         subtrees: addPublicAssemblyCounts.bind(null, subtrees, collectionId),
-        tree: getTree.bind(null, collectionId)
+        tree: getTree.bind(null, collectionId),
       }, function (error, result) {
         if (error) {
           return done(error);
@@ -227,10 +227,10 @@ function get({ collectionId, speciesId }, callback) {
           collectionId,
           assemblies,
           tree: result.tree,
-          subtrees: result.subtrees
+          subtrees: result.subtrees,
         });
       });
-    }
+    },
   ], function (error, result) {
     if (error) {
       LOGGER.error(error);
@@ -248,9 +248,9 @@ function getReference(speciesId, callback) {
       const params = { speciesId, assemblyIds };
       async.parallel({
         assemblies: getAssemblies.bind(null, params, assemblyModel.getReference),
-        tree: getTree.bind(null, speciesId)
+        tree: getTree.bind(null, speciesId),
       }, done);
-    }
+    },
   ], function (error, result) {
     if (error) {
       return callback(error, null);
@@ -259,7 +259,7 @@ function getReference(speciesId, callback) {
     callback(null, {
       collectionId: speciesId,
       assemblies: result.assemblies,
-      tree: result.tree
+      tree: result.tree,
     });
   });
 }
@@ -277,13 +277,13 @@ function getSubtree({ speciesId, collectionId, subtreeId }, callback) {
         speciesId,
         assemblyIds: subtreeAssemblyIds.filter(
           id => id !== subtreeId && !collectionAssemblyIds.has(id)
-        )
+        ),
       };
       async.parallel({
         assemblies: getAssemblies.bind(null, params, assemblyModel.getComplete),
-        tree: getTree.bind(null, `${collectionId}_${subtreeId}`)
+        tree: getTree.bind(null, `${collectionId}_${subtreeId}`),
       }, done);
-    }
+    },
   ], function (error, result) {
     if (error) {
       return callback(error, null);

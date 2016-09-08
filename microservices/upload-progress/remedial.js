@@ -83,7 +83,7 @@ Collection: ${collectionId}`);
         if (taskStatus !== 'SUCCESS') {
           doc.errors.push({
             assemblyName: assemblyIdToNameMap[assemblyIdString],
-            taskType
+            taskType,
           });
         }
 
@@ -126,7 +126,7 @@ Collection: ${collectionId}`);
             expectedResults: doc.expectedResults,
             receivedResults: doc.receivedResults,
             results: doc.results,
-          errors: doc.errors
+            errors: doc.errors,
           },
         });
       },
@@ -141,7 +141,7 @@ Collection: ${collectionId}`);
   const collectionId = process.argv[3];
   const name = `collection-${collectionId}-notification-queue`;
   mqConnection.queue(name, QUEUE_OPTIONS, function (queue) {
-     queue.subscribe({ ack: true }, handleNotification);
-     LOGGER.info(`Opened queue ${name}`);
-   });
+    queue.subscribe({ ack: true }, handleNotification);
+    LOGGER.info(`Opened queue ${name}`);
+  });
 };

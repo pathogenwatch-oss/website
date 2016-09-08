@@ -12,12 +12,12 @@ describe('Service: Message Queue', function () {
     messageQueueService.__set__({
       exchanges: {
         NOTIFICATION: {
-          name: NOTIFICATION_EXCHANGE_NAME
-        }
+          name: NOTIFICATION_EXCHANGE_NAME,
+        },
       },
       connection: {
-        queue: sinon.stub().yields(mockQueue)
-      }
+        queue: sinon.stub().yields(mockQueue),
+      },
     });
   }
 
@@ -40,13 +40,13 @@ describe('Service: Message Queue', function () {
       var NOTIFICATION_IDS = {
         assemblyId: 'assembly1',
         collectionId: 'collection1',
-        speciesId: '1280'
+        speciesId: '1280',
       };
       messageQueueService.newAssemblyNotificationQueue(
         NOTIFICATION_IDS, {
           tasks: [],
           loggingId: 'Assembly',
-          notifyFn: function () {}
+          notifyFn() {},
         }, function (queue) {
           assert(queue.bind.calledWith(
             NOTIFICATION_EXCHANGE_NAME,
@@ -70,7 +70,7 @@ describe('Service: Message Queue', function () {
         NOTIFICATION_IDS, {
           tasks: [],
           loggingId: 'Assembly',
-          notifyFn: function () {}
+          notifyFn() {},
         }, function (queue) {
           queue.subscribe(function (error, message) {
             assert(error === null);
@@ -94,7 +94,7 @@ describe('Service: Message Queue', function () {
         NOTIFICATION_IDS, {
           tasks: [],
           loggingId: 'Assembly',
-          notifyFn: function () {}
+          notifyFn() {},
         }, function (queue) {
           queue.subscribe(function (error, value) {
             assert(error);

@@ -6,10 +6,10 @@ describe('Service: Notification', function () {
   function createSynchronousQueue() {
     return {
       name: 'sync queue',
-      subscribe: function (callback) {
+      subscribe(callback) {
         this.onMessage = callback;
       },
-      destroy: sinon.spy()
+      destroy: sinon.spy(),
     };
   }
 
@@ -20,7 +20,7 @@ describe('Service: Notification', function () {
     var options = {
       tasks: [ 'task1', 'task2', 'task3' ],
       loggingId: 'test',
-      notifyFn: sinon.stub()
+      notifyFn: sinon.stub(),
     };
 
     notificationService.notifyResults(queue, options);

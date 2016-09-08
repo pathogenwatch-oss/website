@@ -8,8 +8,8 @@ describe('Download Routes', function () {
       .post(url)
       .send({
         idToFilenameMap: {
-          'MjZiM2NiOTEtMmQzZC00OG': 'DAVID_ASSEMBLY_1'
-        }
+          'MjZiM2NiOTEtMmQzZC00OG': 'DAVID_ASSEMBLY_1',
+        },
       })
       .end(function (error, result) {
         if (error) return done(error);

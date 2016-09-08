@@ -44,7 +44,7 @@ function newAssemblyUploadQueue(assemblyId, callback) {
       durable: false,
       autoDelete: true,
       noDeclare: false,
-      closeChannelOnUnsubscribe: false
+      closeChannelOnUnsubscribe: false,
     },
     function (queue) {
       LOGGER.info('Upload queue "' + queue.name + '" is open');
@@ -61,7 +61,7 @@ function newCollectionAddQueue(callback) {
     durable: false,
     autoDelete: true,
     noDeclare: false,
-    closeChannelOnUnsubscribe: false
+    closeChannelOnUnsubscribe: false,
   }, function (queue) {
     LOGGER.info(`Queue "${queue.name}" is open`);
     parseMessagesAsJson(queue);
@@ -76,7 +76,7 @@ function newFileRequestQueue(callback) {
     durable: false,
     autoDelete: true,
     noDeclare: false,
-    closeChannelOnUnsubscribe: false
+    closeChannelOnUnsubscribe: false,
   }, function (queue) {
     LOGGER.info(`Queue "${queue.name}" is open`);
     parseMessagesAsJson(queue);
@@ -90,7 +90,7 @@ function newUploadProgressRequestQueue(collectionId, callback) {
     durable: false,
     autoDelete: true,
     noDeclare: false,
-    closeChannelOnUnsubscribe: false
+    closeChannelOnUnsubscribe: false,
   }, function (queue) {
     LOGGER.info(`Queue "${queue.name}" is open`);
 

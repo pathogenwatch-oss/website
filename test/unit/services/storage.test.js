@@ -9,12 +9,12 @@ describe.only('Service: Storage', function () {
 
   var mockSuccessConnection = {
     get: sinon.stub().yields(null, COUCHBASE_RESULT),
-    upsert: sinon.stub().yields(null, COUCHBASE_RESULT)
+    upsert: sinon.stub().yields(null, COUCHBASE_RESULT),
   };
 
   var mockErrorConnection = {
     get: sinon.stub().yields(new Error('get error'), null),
-    upsert: sinon.stub().yields(new Error('set error'), null)
+    upsert: sinon.stub().yields(new Error('set error'), null),
   };
 
   it('should create the required connections', function () {
@@ -77,22 +77,22 @@ describe.only('Service: Storage', function () {
 
   describe('Batch Operations', function () {
 
-    var COUCHBASE_MULTI_QUERY = ['one', 'two'];
-    var COUCHBASE_MULTI_RESULT =  {
+    var COUCHBASE_MULTI_QUERY = [ 'one', 'two' ];
+    var COUCHBASE_MULTI_RESULT = {
       one: { value: 'result one' },
-      two: { value: 'result two' }
+      two: { value: 'result two' },
     };
-    var COUCHBASE_MULTI_ERROR =  {
+    var COUCHBASE_MULTI_ERROR = {
       one: { error: new Error('one not found') },
-      two: { error: new Error('two not found') }
+      two: { error: new Error('two not found') },
     };
 
     var mockSuccessConnection = {
-      getMulti: sinon.stub().yields(null, COUCHBASE_MULTI_RESULT)
+      getMulti: sinon.stub().yields(null, COUCHBASE_MULTI_RESULT),
     };
 
     var mockErrorConnection = {
-      getMulti: sinon.stub().yields(2, COUCHBASE_MULTI_ERROR)
+      getMulti: sinon.stub().yields(2, COUCHBASE_MULTI_ERROR),
     };
 
     it('should return multiple values from a batch operation', function (done) {
@@ -107,7 +107,7 @@ describe.only('Service: Storage', function () {
         ));
         assert(sinon.match(result, {
           one: COUCHBASE_MULTI_RESULT.one.value,
-          two: COUCHBASE_MULTI_RESULT.two.value
+          two: COUCHBASE_MULTI_RESULT.two.value,
         }));
         done();
       });
