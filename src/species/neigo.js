@@ -4,7 +4,7 @@ const name = 'Neisseria gonorrhoeae';
 const formattedName = (<em>{name}</em>);
 
 const shortName = 'N. gonorrhoeae';
-const formattedShortName = (<em>{name}</em>);
+const formattedShortName = (<em>{shortName}</em>);
 
 export default {
   name,
