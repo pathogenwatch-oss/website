@@ -18,12 +18,22 @@ const analyse = require('wgsa-front-end/universal/fastaAnalysis');
 const LOGGER = require('utils/logging').createLogger('Upload');
 const { maxCollectionSize = 0, fastaStoragePath } = require('configuration');
 
+const speciesIds =
+  new Set(require('wgsa-front-end/universal/species').map(_ => _.id));
+
+function getWGSASpeciesId(...ids) {
+  for (const id of ids) {
+    if (speciesIds.has(id)) return id;
+  }
+  return null;
+}
+
 router.post('/upload', (req, res, next) => {
   LOGGER.info('Upload received', req.body.length);
   fastaStorage.store(fastaStoragePath, req.body).
     then(({ path, id }) =>
       specieator.queryFile(path).then(({ speciesTaxId, taxId, scientificName }) => ({
-        speciesId: speciesTaxId || taxId || null,
+        speciesId: getWGSASpeciesId(speciesTaxId, taxId),
         speciesName: scientificName,
         id,
       }))
