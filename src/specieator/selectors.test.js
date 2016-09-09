@@ -4,8 +4,9 @@ import * as selectors from './selectors';
 
 import saureus from '../species/saureus';
 import salty from '../species/salty';
+const otherSpeciesKey = 'Other';
 
-function getTestState(mods = {}) {
+function getTestState(overrides = {}) {
   return {
     entities: {
       fastas: {
@@ -21,15 +22,21 @@ function getTestState(mods = {}) {
           speciesKey: salty.name,
           speciesLabel: salty.formattedShortName,
         },
+        '789.fa': {
+          name: '789.fa',
+          speciesId: null,
+          speciesKey: otherSpeciesKey,
+          speciesLabel: otherSpeciesKey,
+        },
       },
     },
-    specieator: Object.assign({
-      fastaOrder: [ '123.fa', '456.fa' ],
-      filter: {
+    specieator: {
+      fastaOrder: overrides.fastaOrder || [ '123.fa', '456.fa', '789.fa' ],
+      filter: overrides.filter || {
         searchText: '',
         speciesKey: null,
       },
-    }, mods),
+    },
   };
 }
 
@@ -53,7 +60,7 @@ test('getOrderedFastas', t => {
   const { getFastas, getOrderedFastas } = selectors;
   const state = getTestState();
   const fastas = getFastas(state);
-  const result = [ fastas['123.fa'], fastas['456.fa'] ];
+  const result = [ fastas['123.fa'], fastas['456.fa'], fastas['789.fa'] ];
 
   t.deepEqual(getOrderedFastas(state), result);
 });
@@ -61,7 +68,7 @@ test('getOrderedFastas', t => {
 test('getFastaKeys', t => {
   const { getFastaKeys } = selectors;
   const state = getTestState();
-  const result = [ '123.fa', '456.fa' ];
+  const result = [ '123.fa', '456.fa', '789.fa' ];
 
   t.deepEqual(getFastaKeys(state), result);
 });
@@ -85,7 +92,6 @@ test('getVisibleFastas with inactive filter', t => {
 test('getVisibleFastas with text filter', t => {
   const { getVisibleFastas, getFastas } = selectors;
   const state = getTestState({
-    fastaOrder: [ '123.fa', '456.fa' ],
     filter: {
       searchText: '123',
     },
@@ -99,13 +105,12 @@ test('getVisibleFastas with text filter', t => {
 test('getVisibleFastas with species filter', t => {
   const { getVisibleFastas, getFastas } = selectors;
   const state = getTestState({
-    fastaOrder: [ '123.fa', '456.fa' ],
     filter: {
-      speciesKey: salty.name,
+      speciesKey: otherSpeciesKey, // salty.name,
     },
   });
   const fastas = getFastas(state);
-  const result = [ fastas['456.fa'] ];
+  const result = [ fastas['789.fa'] ];
 
   t.deepEqual(getVisibleFastas(state), result);
 });
@@ -115,7 +120,7 @@ test.todo('getVisibleFastas with species and id filter');
 test('getSpeciesSummary', t => {
   const { getSpeciesSummary } = selectors;
   const state = getTestState();
-  const [ staph, typhi ] = getSpeciesSummary(state);
+  const [ staph, typhi, other ] = getSpeciesSummary(state);
 
   t.true(
     staph.name === saureus.name &&
@@ -128,12 +133,18 @@ test('getSpeciesSummary', t => {
     typhi.count === 1 &&
     typhi.active === false
   );
+
+  t.true(
+    other.name === otherSpeciesKey &&
+    other.count === 1 &&
+    other.active === false
+  );
 });
 
 test('getSpeciesSummary with species filter', t => {
   const { getSpeciesSummary } = selectors;
   const state = getTestState({ filter: { speciesKey: saureus.name } });
-  const [ staph, typhi ] = getSpeciesSummary(state);
+  const [ staph, typhi, other ] = getSpeciesSummary(state);
 
   t.true(
     staph.name === saureus.name &&
@@ -146,12 +157,17 @@ test('getSpeciesSummary with species filter', t => {
     typhi.count === 1 &&
     typhi.active === false
   );
+
+  t.true(
+    other.name === otherSpeciesKey &&
+    other.count === 1 &&
+    other.active === false
+  );
 });
 
-test('isSupportedSpeciesSelected', t => {
+test('isSupportedSpeciesSelected with species filter', t => {
   const { isSupportedSpeciesSelected } = selectors;
   const state = getTestState({
-    fastaOrder: [ '123.fa', '456.fa' ],
     filter: {
       speciesKey: saureus.name,
     },
@@ -160,14 +176,69 @@ test('isSupportedSpeciesSelected', t => {
   t.true(isSupportedSpeciesSelected(state));
 });
 
-test('isFilterActive', t => {
+test('isSupportedSpeciesSelected with text filter', t => {
+  const { isSupportedSpeciesSelected } = selectors;
+  const state = getTestState({
+    filter: {
+      searchText: '123',
+    },
+  });
+
+  t.true(isSupportedSpeciesSelected(state));
+});
+
+test('isSupportedSpeciesSelected with non-supported species', t => {
+  const { isSupportedSpeciesSelected } = selectors;
+  const state = getTestState({
+    filter: {
+      speciesKey: otherSpeciesKey,
+    },
+  });
+
+  t.false(isSupportedSpeciesSelected(state));
+});
+
+test('isSupportedSpeciesSelected with nothing to show', t => {
+  const { isSupportedSpeciesSelected } = selectors;
+  const state = getTestState({
+    filter: {
+      searchText: 'x',
+    },
+  });
+
+  t.false(isSupportedSpeciesSelected(state));
+});
+
+test('isFilterActive with no filter', t => {
   const { isFilterActive } = selectors;
   const state = getTestState({
     filter: {
       speciesKey: null,
-      searchText: true,
+      searchText: '',
     },
   });
 
   t.false(isFilterActive(state));
+});
+
+test('isFilterActive with speciesKey', t => {
+  const { isFilterActive } = selectors;
+  const state = getTestState({
+    filter: {
+      speciesKey: saureus.name,
+    },
+  });
+
+  t.true(isFilterActive(state));
+});
+
+test('isFilterActive with searchText', t => {
+  const { isFilterActive } = selectors;
+  const state = getTestState({
+    filter: {
+      searchText: '12',
+    },
+  });
+
+  t.true(isFilterActive(state));
 });

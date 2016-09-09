@@ -1,5 +1,7 @@
 import { createSelector } from 'reselect';
 
+import { isSupported } from '../species';
+
 export const getFastas = ({ entities }) => entities.fastas;
 
 export const getFastaOrder = ({ specieator }) => specieator.fastaOrder;
@@ -53,7 +55,7 @@ export const isSupportedSpeciesSelected = createSelector(
       if (!speciesId) return false;
       if (speciesId !== fastas[0].speciesId) return false;
     }
-    return true;
+    return fastas.length > 0;
   }
 );
 
@@ -61,18 +63,21 @@ export const getSpeciesSummary = createSelector(
   getOrderedFastas,
   getFilter,
   (fastas, filterState) => Array.from(
-    fastas.reduce((memo, { supported, speciesKey, speciesLabel }) => {
+    fastas.reduce((memo, fasta) => {
+      const { speciesKey, speciesLabel } = fasta;
       if (!speciesKey) return memo;
 
-      const { count = 0 } = memo.get(speciesKey) || {};
-
-      memo.set(speciesKey, {
-        supported,
+      const summary = memo.get(speciesKey) || {
+        count: 0,
         name: speciesKey,
         label: speciesLabel,
-        count: count + 1,
         active: speciesKey === filterState.speciesKey,
-      });
+        supported: isSupported(fasta),
+      };
+
+      summary.count++;
+
+      memo.set(speciesKey, summary);
 
       return memo;
     }, new Map()).values()

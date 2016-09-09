@@ -16,6 +16,8 @@ export const taxIdMap = new Map(
 
 let currentSpecies = {};
 
+export const isSupported = ({ speciesId }) => speciesId !== null;
+
 export default {
 
   get list() {

@@ -1,6 +1,6 @@
 import { ADD_FASTAS, UPLOAD_FASTA, UPDATE_FASTA_PROGRESS } from '../actions';
 
-import { taxIdMap } from '^/species';
+import { taxIdMap, isSupported } from '^/species';
 
 function updateFastas(state, name, update) {
   const fasta = state[name];
@@ -21,22 +21,19 @@ export default {
         return { ...memo, [fasta.name]: fasta };
       }, state);
     },
-    [UPLOAD_FASTA.ATTEMPT](state, { name }) {
-      return updateFastas(state, name, { ready: false });
-    },
     [UPLOAD_FASTA.FAILURE](state, { name, error }) {
-      return updateFastas(state, name, { ready: true, error });
+      console.error(error);
+      return updateFastas(state, name, { error });
     },
     [UPLOAD_FASTA.SUCCESS](state, { name, result }) {
       const { speciesId, speciesName } = result;
-      const supported = speciesId !== null;
+      const supported = isSupported(result);
       const species = taxIdMap.get(speciesId);
 
       const speciesKey = supported ? species.name : speciesName;
       const speciesLabel = supported ? species.formattedShortName : speciesName;
 
       return updateFastas(state, name, {
-        supported,
         speciesKey,
         speciesLabel,
         ...result,
