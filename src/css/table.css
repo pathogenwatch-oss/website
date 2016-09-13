@@ -8,15 +8,16 @@
 
 .wgsa-selectable-column-heading {
   background: rgba(0, 0, 0, 0.07);
-  color: rgba(0, 0, 0, 0.54);
+  color: rgba(0, 0, 0, 0.70);
   border: none;
   border-radius: 4px;
-  padding: 0 8px;
-  margin: 0 -8px;
-  font-weight: 700;
-  line-height: 24px;
-  letter-spacing: 0px;
   font-size: 12px;
+  font-weight: 700;
+  height: 20px;
+  letter-spacing: 0px;
+  line-height: 16px;
+  margin: 0 -6px 2px;
+  padding: 0px 6px;
   text-transform: capitalize;
   text-overflow: ellipsis;
   white-space: nowrap;
