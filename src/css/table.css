@@ -133,12 +133,13 @@
 .wgsa-table-header--resistance button {
   line-height: 16px;
   margin: 0;
-  padding: 2px 6px;
+  padding: 2px 0;
   position: relative;
   text-transform: uppercase;
   top: 28px;
   white-space: nowrap;
   z-index: 1;
+  width: calc(100% - 4px)
 }
 
 .wgsa-table-header--resistance.wgsa-table-header--angled .public_fixedDataTableCell_cellContent {
@@ -150,6 +151,7 @@
   height: 20px;
   margin: 0;
   margin-left: 37.5%;
+  padding: 2px 6px;
   position: absolute;
   top: auto;
   transform: rotate(-45deg);
