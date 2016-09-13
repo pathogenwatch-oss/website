@@ -1,45 +1,59 @@
-var assert = require('assert');
-var rewire = require('rewire');
-var sinon = require('sinon');
+const assert = require('assert');
+const rewire = require('rewire');
+const sinon = require('sinon');
 
-describe('Model: Antibiotics', function () {
+describe.only('Model: Antibiotics', () => {
 
-  it('should request antibiotics for the specified species id', function () {
-    var antibioticModel = rewire('models/antibiotic');
-    var mockMainStorage = {
+  it('should request antibiotics for the specified species id', () => {
+    const antibioticModel = rewire('models/antibiotic');
+    const mockMainStorage = {
       retrieve: sinon.stub(),
     };
-    var reset = antibioticModel.__set__('mainStorage', mockMainStorage);
-    const { ANTIBIOTICS_LIST } = require('utils/documentKeys');
+    const reset = antibioticModel.__set__('mainStorage', mockMainStorage);
+    const { ANTIMICROBIALS } = require('utils/documentKeys');
 
     antibioticModel.get('1280');
 
-    assert(mockMainStorage.retrieve.calledWith(`${ANTIBIOTICS_LIST}_1280`));
+    assert(mockMainStorage.retrieve.calledWith(`${ANTIMICROBIALS}_1280`));
 
     reset();
   });
 
-  it('should return a sorted array for the front end', function () {
-    var antibioticModel = rewire('models/antibiotic');
-    var antibiotics = {
+  it('should return a sorted array for the front end', () => {
+    const antibioticModel = rewire('models/antibiotic');
+    const antibiotics = {
       class1: {
-        name1: { 'antibioticClass': 'class1', 'antibioticName': 'name1' },
+        name1: {
+          antibioticClass: 'class1',
+          antibioticName: 'name1',
+          altName: 'altName1',
+        },
       },
       class2: {
-        name3: { 'antibioticClass': 'class2', 'antibioticName': 'name3' },
-        name2: { 'antibioticClass': 'class2', 'antibioticName': 'name2' },
+        name2: {
+          antibioticClass: 'class2',
+          antibioticName: 'name2',
+          altName: 'altName2',
+        },
+        name3: {
+          antibioticClass: 'class2',
+          antibioticName: 'name3',
+          altName: 'altName3',
+        },
       },
     };
-    var mockMainStorage = {
+    const mockMainStorage = {
       retrieve: sinon.stub().yields(null, { antibiotics }),
     };
-    var reset = antibioticModel.__set__('mainStorage', mockMainStorage);
+    const reset = antibioticModel.__set__('mainStorage', mockMainStorage);
 
-    antibioticModel.get('1280', function (_, array) {
-      assert(array[0] === 'name1');
-      assert(array[1] === 'name2');
-      assert(array[2] === 'name3');
-
+    antibioticModel.get('1280', (_, [ ab1, ab2, ab3 ]) => {
+      assert.equal(ab1.name, 'name1');
+      assert.equal(ab1.longName, 'altName1');
+      assert.equal(ab2.name, 'name2');
+      assert.equal(ab2.longName, 'altName2');
+      assert.equal(ab3.name, 'name3');
+      assert.equal(ab3.longName, 'altName3');
       reset();
     });
   });

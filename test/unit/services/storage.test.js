@@ -2,7 +2,7 @@ var assert = require('assert');
 var sinon = require('sinon');
 var extend = require('extend');
 
-describe.only('Service: Storage', function () {
+describe('Service: Storage', function () {
 
   var CONNECTION_NAME = 'main';
   var COUCHBASE_RESULT = { value: 'result', cas: 'cas' };

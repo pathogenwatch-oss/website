@@ -1,16 +1,19 @@
-const mainStorage = require('services/storage')('main');
+var mainStorage = require('services/storage')('main');
 
 const LOGGER = require('utils/logging').createLogger('Antibiotic model');
 const { ANTIMICROBIALS } = require('utils/documentKeys');
 
-function flattenStructureForFrontend(doc) {
+function formatForFrontend(doc) {
   return (
     Object.keys(doc).
       map(antibioticClassname => {
         const antibioticClass = doc[antibioticClassname];
         return (
           Object.keys(antibioticClass).
-            map(antibioticKey => antibioticClass[antibioticKey].antibioticName)
+            map(antibioticKey => ({
+              name: antibioticClass[antibioticKey].antibioticName,
+              longName: antibioticClass[antibioticKey].altName,
+            }))
         );
       }).
       reduce((flatArray, antibiotics) => flatArray.concat(antibiotics))
@@ -26,7 +29,7 @@ function get(speciesId, callback) {
     }
 
     LOGGER.info('Got the list of all antibiotics');
-    return callback(null, flattenStructureForFrontend(result.antibiotics));
+    return callback(null, formatForFrontend(result.antibiotics));
   });
 }
 
