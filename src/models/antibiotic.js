@@ -3,6 +3,15 @@ var mainStorage = require('services/storage')('main');
 const LOGGER = require('utils/logging').createLogger('Antibiotic model');
 const { ANTIMICROBIALS } = require('utils/documentKeys');
 
+function formatLongName(longName) {
+  return longName ?
+    longName.
+      split(' ').
+      map(word => `${word[0].toUpperCase()}${word.slice(1)}`).
+      join(' ') :
+    null;
+}
+
 function formatForFrontend(doc) {
   return (
     Object.keys(doc).
@@ -12,7 +21,7 @@ function formatForFrontend(doc) {
           Object.keys(antibioticClass).
             map(antibioticKey => ({
               name: antibioticClass[antibioticKey].antibioticName,
-              longName: antibioticClass[antibioticKey].altName,
+              longName: formatLongName(antibioticClass[antibioticKey].altName),
             }))
         );
       }).

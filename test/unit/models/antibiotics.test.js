@@ -38,7 +38,7 @@ describe.only('Model: Antibiotics', () => {
         name3: {
           antibioticClass: 'class2',
           antibioticName: 'name3',
-          altName: 'altName3',
+          altName: 'alt Name3',
         },
       },
     };
@@ -49,11 +49,11 @@ describe.only('Model: Antibiotics', () => {
 
     antibioticModel.get('1280', (_, [ ab1, ab2, ab3 ]) => {
       assert.equal(ab1.name, 'name1');
-      assert.equal(ab1.longName, 'altName1');
+      assert.equal(ab1.longName, 'AltName1'); // formatted
       assert.equal(ab2.name, 'name2');
-      assert.equal(ab2.longName, 'altName2');
+      assert.equal(ab2.longName, 'AltName2');
       assert.equal(ab3.name, 'name3');
-      assert.equal(ab3.longName, 'altName3');
+      assert.equal(ab3.longName, 'Alt Name3');
       reset();
     });
   });
