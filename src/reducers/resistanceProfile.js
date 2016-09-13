@@ -17,15 +17,18 @@ const systemColumnProps = [
   downloadColumnProps,
   { ...nameColumnProps,
     flexGrow: 0,
+    headerClasses: 'wgsa-table-header--unstyled',
     onHeaderClick: () => {},
   },
 ];
 
 function createAntibioticsColumn({ name, longName }) {
+  const isAbbreviated = longName !== null;
+
   return {
     columnKey: name,
-    headerClasses: 'wgsa-table-header--resistance',
-    headerTitle: `${longName} - (Ctrl/Cmd + click to add)`,
+    headerClasses: `wgsa-table-header--resistance ${!isAbbreviated ? 'wgsa-table-header--angled' : ''}`.trim(),
+    headerTitle: `${isAbbreviated ? `${longName} - ` : ''}(Ctrl/Cmd + click to add)`,
     cellClasses: 'wgsa-table-cell--resistance',
     fixedWidth: 40,
     flexGrow: 0,
@@ -48,7 +51,7 @@ function createAntibioticsColumn({ name, longName }) {
 function buildAntibioticColumnProps(antibiotics) {
   const separatorIndex = Species.current.resistanceProfileSeparatorIndex;
 
-  if (typeof separatorIndex === undefined) {
+  if (typeof separatorIndex === 'undefined') {
     return antibiotics.map(createAntibioticsColumn);
   }
 
@@ -83,7 +86,7 @@ const actions = {
         getHeaderContent() {},
         fixedWidth:
           Math.cos(45 * Math.PI / 180) *
-            measureText(lastAntibiotic.name) - 24,
+            measureText(lastAntibiotic.name) - 16,
         getCellContents() {},
         cellClasses: 'wgsa-table-cell--resistance',
       },

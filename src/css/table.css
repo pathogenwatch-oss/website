@@ -7,17 +7,24 @@
 }
 
 .wgsa-selectable-column-heading {
-  background: none;
+  background: rgba(0, 0, 0, 0.07);
   color: rgba(0, 0, 0, 0.54);
   border: none;
-  padding: 0 4px;
-  margin: 0 -4px;
+  border-radius: 4px;
+  padding: 0 8px;
+  margin: 0 -8px;
   font-weight: 700;
   line-height: 24px;
   letter-spacing: 0px;
   font-size: 12px;
   text-transform: capitalize;
   text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wgsa-table-header--unstyled button {
+  background: none;
+  cursor: auto !important;
 }
 
 .wgsa-selectable-column-heading:hover,
@@ -31,8 +38,11 @@
 }
 
 .wgsa-table-header--selected .wgsa-selectable-column-heading {
-  border-bottom: 2px solid #673c90;
-  color: #673c90;
+  /*background: #a386bd;*/
+  background: #673c90;
+  /*background: rgba(0, 0, 0, 0.54);*/
+  /*border: 1px solid rgba(0, 0, 0, 0.54);*/
+  color: #fff;
 }
 
 .wgsa-table-row:hover {
@@ -116,18 +126,35 @@
   padding: 0;
 }
 
+.wgsa-table-header--resistance .public_fixedDataTableCell_cellContent {
+  text-align: center;
+}
+
 .wgsa-table-header--resistance button {
-  transform: rotate(-45deg);
-  transform-origin: left;
+  line-height: 16px;
+  margin: 0;
+  padding: 2px 6px;
+  position: relative;
   text-transform: uppercase;
+  top: 28px;
   white-space: nowrap;
-  position: absolute;
-  bottom: 0px;
+  z-index: 1;
+}
+
+.wgsa-table-header--resistance.wgsa-table-header--angled .public_fixedDataTableCell_cellContent {
+  text-align: left;
+}
+
+.wgsa-table-header--resistance.wgsa-table-header--angled button {
+  bottom: 0;
+  height: 20px;
   margin: 0;
   margin-left: 37.5%;
-  padding-left: 4px;
-  line-height: 16px;
-  z-index: 1;
+  position: absolute;
+  top: auto;
+  transform: rotate(-45deg);
+  transform-origin: left;
+  width: auto;
 }
 
 .wgsa-resistance-icon {
