@@ -133,7 +133,12 @@ app.set('view engine', 'ejs');
 app.use('/', (req, res) =>
   res.render('index', {
     googleMapsKey: 'AIzaSyBUn4F1N7KKElr6Qcwxvm7v3IzDoI0aQzE',
-    pusherKey: '8b8d274e51643f85f81a',
+    frontEndConfig: {
+      pusherKey: '8b8d274e51643f85f81a',
+      api: {
+        address: 'localhost:8001',
+      },
+    },
   })
 );
 

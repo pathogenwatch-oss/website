@@ -3,6 +3,8 @@ import React from 'react';
 import { FETCH_ENTITIES } from '../actions/fetch';
 import { SET_COLOUR_COLUMNS } from '../actions/table';
 
+import Species from '../species';
+
 import {
   getColour,
   measureText,
@@ -19,10 +21,11 @@ const systemColumnProps = [
   },
 ];
 
-function buildAntibioticColumnProps(antibiotics) {
-  return antibiotics.map(antibiotic => ({
-    columnKey: antibiotic,
+function createAntibioticsColumn({ name, longName }) {
+  return {
+    columnKey: name,
     headerClasses: 'wgsa-table-header--resistance',
+    headerTitle: `${longName} - (Ctrl/Cmd + click to add)`,
     cellClasses: 'wgsa-table-cell--resistance',
     fixedWidth: 40,
     flexGrow: 0,
@@ -30,21 +33,42 @@ function buildAntibioticColumnProps(antibiotics) {
       const value = analysis.resistanceProfile[columnKey];
       if (value) {
         return (
-          <i title={value} className={`material-icons wgsa-resistance-icon wgsa-resistance-icon--${value.toLowerCase()}`}>
-            { value === 'RESISTANT' ? 'add_box' : '' }
+          <i className={`material-icons wgsa-resistance-icon wgsa-resistance-icon--${value.toLowerCase()}`}>
+            { value === 'RESISTANT' ? 'check_circle' : '' }
           </i>
         );
       }
       return null;
     },
-    valueGetter: (assembly) => getColour(antibiotic, assembly),
+    valueGetter: (assembly) => getColour(name, assembly),
     onHeaderClick,
-  }));
+  };
+}
+
+function buildAntibioticColumnProps(antibiotics) {
+  const separatorIndex = Species.current.resistanceProfileSeparatorIndex;
+
+  if (typeof separatorIndex === undefined) {
+    return antibiotics.map(createAntibioticsColumn);
+  }
+
+  return [
+    ...antibiotics.slice(0, separatorIndex).map(createAntibioticsColumn),
+    { columnKey: '__group_spacer',
+      getHeaderContent() {},
+      fixedWidth: 40,
+      flexGrow: 0,
+      getCellContents() {},
+      cellClasses: 'wgsa-table-cell--resistance',
+    },
+    ...antibiotics.slice(separatorIndex).map(createAntibioticsColumn),
+  ];
 }
 
 const actions = {
   [FETCH_ENTITIES.SUCCESS](state, payload) {
     const antibiotics = payload[2];
+    const lastAntibiotic = antibiotics[antibiotics.length - 1];
 
     const columns = [
       { columnKey: '__spacer_l',
@@ -59,7 +83,7 @@ const actions = {
         getHeaderContent() {},
         fixedWidth:
           Math.cos(45 * Math.PI / 180) *
-            measureText(antibiotics[antibiotics.length - 1]) - 24,
+            measureText(lastAntibiotic.name) - 24,
         getCellContents() {},
         cellClasses: 'wgsa-table-cell--resistance',
       },
@@ -70,7 +94,7 @@ const actions = {
       columns,
       tableProps: {
         headerHeight: antibiotics.reduce((maxWidth, antibiotic) =>
-          Math.max(maxWidth, measureText(antibiotic))
+          Math.max(maxWidth, measureText(antibiotic.name))
         , 0),
       },
     };

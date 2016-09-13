@@ -16,7 +16,6 @@ const formattedShortName = (() => {
   );
 })();
 
-
 export default {
   name,
   formattedName,
@@ -36,4 +35,5 @@ export default {
   ),
   publicMetadataColumnNames: [],
   collections: [],
+  resistanceProfileSeparatorIndex: -1,
 };

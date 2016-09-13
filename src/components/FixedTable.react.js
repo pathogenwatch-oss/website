@@ -19,6 +19,17 @@ const getHeaderClassNames = getClassNames.bind(null, 'wgsa-table-header');
 const getCellClassNames = getClassNames.bind(null, 'wgsa-table-cell');
 
 
+export const DefaultColumnHeader =
+  ({ handleHeaderClick, columnProps, title }) => (
+    <button
+      title={title}
+      className="wgsa-selectable-column-heading"
+      onClick={event => handleHeaderClick(event, columnProps)}
+    >
+      {formatColumnLabel(columnProps.columnKey)}
+    </button>
+  );
+
 export default React.createClass({
 
   displayName: 'FixedTable',
@@ -50,7 +61,7 @@ export default React.createClass({
   },
 
   renderHeader(columnProps, headerProps) {
-    const { headerClasses, getHeaderContent, columnKey } = columnProps;
+    const { headerClasses, headerTitle, getHeaderContent } = columnProps;
     const isSelected = this.isSelected(columnProps);
 
     return (
@@ -60,12 +71,11 @@ export default React.createClass({
       >
         { getHeaderContent ?
           getHeaderContent(columnProps) :
-          <button
-            className="wgsa-selectable-column-heading"
-            onClick={event => this.handleHeaderClick(event, columnProps)}
-          >
-            {formatColumnLabel(columnKey)}
-          </button>
+          <DefaultColumnHeader
+            title={headerTitle}
+            columnProps={columnProps}
+            handleHeaderClick={this.handleHeaderClick}
+          />
         }
       </Cell>
     );
