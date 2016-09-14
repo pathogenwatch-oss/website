@@ -1,6 +1,6 @@
-.wgsa-drop-indicator * {
+/*.wgsa-drop-indicator * {
   pointer-events: none;
-}
+}*/
 
 .wgsa-drop-indicator__message {
   position: relative;
@@ -20,10 +20,10 @@
   right: 0;
 }
 
-.wgsa-drag-and-drop.is-dragover header *,
+/*.wgsa-drag-and-drop.is-dragover header *,
 .wgsa-drag-and-drop.is-dragover main * {
   pointer-events: none;
-}
+}*/
 
 .wgsa-drag-and-drop__button {
   position: fixed;

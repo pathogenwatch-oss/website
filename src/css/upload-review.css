@@ -18,10 +18,6 @@
   bottom: 0;
 }
 
-.wgsa-workspace-click-area:hover {
-  cursor: pointer;
-}
-
 .overview-card-wide.mdl-card  {
   width: 100%;
 }

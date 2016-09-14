@@ -67,11 +67,11 @@ export default connect()(React.createClass({
             <div className="mdl-cell mdl-cell--6-col wgsa-feature-icons">
               <span className="wgsa-file-icon">
                 <i className="material-icons" style={{ color: CGPS.COLOURS.PURPLE }}>insert_drive_file</i>
-                .fasta
+                <span className="wgsa-file-icon__label">.fasta</span>
               </span>
               <span className="wgsa-file-icon">
                 <i className="material-icons" style={{ color: CGPS.COLOURS.GREEN }}>insert_drive_file</i>
-                .csv
+                <span className="wgsa-file-icon__label">.csv</span>
               </span>
             </div>
           </div>

@@ -11,7 +11,7 @@
   transition-duration: .28s;
   transition-timing-function: cubic-bezier(.4,0,.2,1);
   opacity: 0;
-  pointer-events: none;
+  /*pointer-events: none;*/
   display: flex;
   align-items: center;
   justify-content: center;
@@ -20,7 +20,7 @@
 .wgsa-overlay--is-visible {
   visibility: visible;
   opacity: 1;
-  pointer-events: auto;
+  /*pointer-events: auto;*/
 }
 
 .wgsa-overlay__content {

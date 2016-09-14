@@ -151,8 +151,7 @@ export default connect()(React.createClass({
     this.processFiles(files);
   },
 
-  handleDrop(event) {
-    const files = Array.from(event.files);
+  handleDrop(files) {
     if (files.length > 0) {
       if (!this.state.confirmedMultipleMetadataDrop && UploadStore.getAssembliesCount() > 0) {
         ToastActionCreators.showToast({
@@ -166,17 +165,11 @@ export default connect()(React.createClass({
       } else {
         this.processFiles(files);
       }
-      // allows the same file to be uploaded consecutively
-      this.refs.fileInput.value = '';
     }
   },
 
   handleClick() {
     this.refs.fileInput.click();
-  },
-
-  handleFileInputChange(event) {
-    this.handleDrop(event.target);
   },
 
   handleUploadStoreChange() {
@@ -203,7 +196,7 @@ export default connect()(React.createClass({
     const subtitle = assembly ? assembly.name : (isProcessing ? 'Processing...' : 'Overview');
 
     return (
-      <FileDragAndDrop onDrop={this.handleDrop}>
+      <FileDragAndDrop onFiles={this.handleDrop} noAddButton>
         <div id="loadingAnimation" style={isWaiting ? loadingAnimationStyleVisible : loadingAnimationStyleHidden} className="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
         {(() => {
           if (isProcessing) {
@@ -278,7 +271,6 @@ export default connect()(React.createClass({
                     </div>
                   </div> :
                   <Overview
-                    clickHandler={this.handleClick}
                     isReadyToUpload={this.state.readyToUpload}
                   />
                 }
@@ -286,7 +278,6 @@ export default connect()(React.createClass({
             </div>
           );
         })()}
-        <input type="file" multiple="multiple" accept={DEFAULT.SUPPORTED_FILE_EXTENSIONS} ref="fileInput" style={fileInputStyle} onChange={this.handleFileInputChange} />
       </FileDragAndDrop>
     );
   },
