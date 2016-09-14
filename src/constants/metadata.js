@@ -21,7 +21,7 @@ export function getSystemDataColumnProps({ noPopulation, noMLST } = {}) {
     },
   ]).
   concat(noMLST ? [] : [
-    { columnKey: '__mlst_profile',
+    { columnKey: '__profile',
       valueGetter({ analysis }) {
         return analysis.mlst;
       },

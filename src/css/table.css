@@ -83,12 +83,22 @@
   padding: 0 8px;
 }
 
+.wgsa-table-header .wgsa-table-downloads {
+  line-height: 32px;
+}
+
 .wgsa-table-downloads .wgsa-download-button {
   padding: 0;
-  width: 32px;
-  height: 32px;
   display: inline-block;
   vertical-align: middle;
+  min-width: 28px;
+}
+
+.wgsa-table-downloads .wgsa-download-button,
+.wgsa-table-downloads .wgsa-download-icon {
+  width: 28px;
+  height: 28px;
+  line-height: 28px;
 }
 
 .wgsa-table-downloads .wgsa-download-button > span {
@@ -97,6 +107,11 @@
 
 .wgsa-table-header .wgsa-download-button {
   margin-bottom: -4px;
+}
+
+.wgsa-table-header .mdl-spinner {
+  width: 24px;
+  height: 24px;
 }
 
 .wgsa-download-label {
@@ -138,7 +153,7 @@
   padding: 2px 0;
   position: relative;
   text-transform: uppercase;
-  top: 28px;
+  top: 32px;
   white-space: nowrap;
   z-index: 1;
   width: calc(100% - 4px)

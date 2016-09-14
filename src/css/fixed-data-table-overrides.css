@@ -7,8 +7,12 @@
   background: none;
 }
 
+.public_fixedDataTable_header .public_fixedDataTableCell_cellContent {
+  padding: 4px 0;
+}
+
 .public_fixedDataTableCell_cellContent {
-  padding: 8px 0;
+  padding: 0;
 }
 
 .fixedDataTableLayout_main,

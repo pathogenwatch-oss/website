@@ -22,13 +22,18 @@ const systemColumnProps = [
   },
 ];
 
+const isMac =
+  (navigator && navigator.platform &&
+    navigator.platform.toUpperCase().indexOf('MAC') >= 0);
+const modifierKey = isMac ? 'Cmd' : 'Ctrl';
+
 function createAntibioticsColumn({ name, longName }) {
   const isAbbreviated = longName !== null;
 
   return {
     columnKey: name,
     headerClasses: `wgsa-table-header--resistance ${!isAbbreviated ? 'wgsa-table-header--angled' : ''}`.trim(),
-    headerTitle: `${isAbbreviated ? `${longName} - ` : ''}(Ctrl/Cmd + click to add)`,
+    headerTitle: `${isAbbreviated ? `${longName} - ` : ''}${modifierKey} + click to select multiple`,
     cellClasses: 'wgsa-table-cell--resistance',
     fixedWidth: 40,
     flexGrow: 0,

@@ -92,10 +92,10 @@ div.wgsa-tree-icon:active {
   margin: 0 -20px;
 }
 
-.wgsa-tree-control label > span {
-  font-size: 12px;
-  font-weight: 700;
-  color: rgba(0, 0, 0, 0.54);
+.wgsa-tree-control label {
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.87);
 }
 
 .wgsa-select-tree-type {
@@ -106,9 +106,9 @@ div.wgsa-tree-icon:active {
   border-radius: 16px;
   background: rgba(255, 255, 255, 0.87);
   border: none;
-  font-size: 12px;
-  font-weight: 700;
-  color: rgba(0, 0, 0, 0.54);
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.87);
   flex-shrink: 1;
   width: 8.5em; /* hack for bug on linux */
 }
