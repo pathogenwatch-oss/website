@@ -27,7 +27,7 @@
     "serve-favicon": "^2.2.0",
     "swig": "^1.4.2",
     "wgsa-fasta-store": "gitlab:cgps/wgsa-fasta-store",
-    "wgsa-front-end": "gitlab:cgps/wgsa-front-end#specieator"
+    "wgsa-front-end": "gitlab:cgps/wgsa-front-end#release/4.0.0"
   },
   "devDependencies": {
     "eslint-config-cgps": "github:imperialcollegelondon/eslint-config-cgps",
