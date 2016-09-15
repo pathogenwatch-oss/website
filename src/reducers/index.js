@@ -73,7 +73,11 @@ const initialState = rootReducer({}, {});
 
 export default function (state = initialState, action = {}) {
   if (action.type === RESET_STORE) {
-    return initialState;
+    return {
+      ...initialState,
+      entities: state.entities,
+      specieator: state.specieator,
+    };
   }
 
   return rootReducer(state, action);
