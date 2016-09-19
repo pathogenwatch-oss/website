@@ -40,14 +40,17 @@ router.post('/upload', (req, res, next) => {
       }))
     ).
     then(result => {
-      res.json(Object.assign({
-        metrics: analyse(req.body),
-        country:
-          req.query.lat ?
-            getCountry(
-              Number.parseFloat(req.query.lat), Number.parseFloat(req.query.lon)
-            ) : null,
-      }, result));
+      let country;
+
+      if (req.query.lat && req.query.lon) {
+        try {
+          country = getCountry(
+            Number.parseFloat(req.query.lat), Number.parseFloat(req.query.lon)
+          );
+        } catch (e) { return e; }
+      }
+
+      res.json(Object.assign({ country, metrics: analyse(req.body) }, result));
       req.body = null; // prevent memory leak
     }).
     catch(error => next(error));
