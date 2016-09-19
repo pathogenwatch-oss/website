@@ -20,12 +20,6 @@
   margin-top: 64px;
 }
 
-@media(min-width: 1024px) {
-  .wgsa-specieator-header ~ .mdl-layout__content {
-    padding-top: 64px;
-  }
-}
-
 .wgsa-specieator-header .mdl-layout-title {
   font-family: "Roboto Condensed", "Helvetica", "Arial", sans-serif;
 }
