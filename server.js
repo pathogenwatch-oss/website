@@ -74,8 +74,8 @@ module.exports = function (callback) {
 
       return res.render('index', {
         googleMapsKey: config.googleMapsKey,
-	frontEndConfig: {        
-	  pusherKey: config.pusher.key,
+        frontEndConfig: {
+          pusherKey: config.pusher.key,
         },
       });
     });
