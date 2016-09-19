@@ -1,7 +1,4 @@
-import './style.css';
-
 import React from 'react';
-import { connect } from 'react-redux';
 
 import FileDragAndDrop from '../components/upload/DragAndDrop.react';
 import Header from './components/Header.react';
@@ -11,11 +8,9 @@ import Filter from './components/Filter.react';
 import { updateHeader } from '^/actions/header';
 import { uploadFasta, addFiles } from './thunks';
 
-import * as selectors from './selectors';
-
 import { taxIdMap } from '^/species';
 
-const Specieator = React.createClass({
+export default React.createClass({
 
   propTypes: {
     fastas: React.PropTypes.array.isRequired,
@@ -32,8 +27,7 @@ const Specieator = React.createClass({
     const { fastas, dispatch } = this.props;
     dispatch(
       updateHeader({
-        speciesName: 'Specieator',
-        classNames: `wgsa-specieator-header ${fastas.length ? 'wgsa-specieator--has-aside' : ''}`.trim(),
+        classNames: `wgsa-hub-header ${fastas.length ? 'wgsa-hub--has-aside' : ''}`.trim(),
         content: <Header />,
       })
     );
@@ -65,7 +59,7 @@ const Specieator = React.createClass({
     const { dispatch } = this.props;
     dispatch(addFiles(newFiles));
     dispatch(updateHeader({
-      classNames: 'wgsa-specieator-header wgsa-specieator--has-aside',
+      classNames: 'wgsa-hub-header wgsa-hub--has-aside',
     }));
   },
 
@@ -92,17 +86,3 @@ const Specieator = React.createClass({
   },
 
 });
-
-function mapStateToProps(state) {
-  const { specieator, collection } = state;
-  return {
-    totalFastas: selectors.getTotalFastas(state),
-    fastas: selectors.getVisibleFastas(state),
-    filterActive: selectors.isFilterActive(state),
-    uploads: specieator.uploads,
-    loading: specieator.loading,
-    collection,
-  };
-}
-
-export default connect(mapStateToProps)(Specieator);

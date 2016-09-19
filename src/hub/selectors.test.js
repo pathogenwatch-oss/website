@@ -30,7 +30,7 @@ function getTestState(overrides = {}) {
         },
       },
     },
-    specieator: {
+    hub: {
       fastaOrder: overrides.fastaOrder || [ '123.fa', '456.fa', '789.fa' ],
       filter: overrides.filter || {
         searchText: '',
@@ -53,7 +53,7 @@ test('getFastaOrder', t => {
 
   const fastaOrder = [];
 
-  t.is(getFastaOrder({ specieator: { fastaOrder } }), fastaOrder);
+  t.is(getFastaOrder({ hub: { fastaOrder } }), fastaOrder);
 });
 
 test('getOrderedFastas', t => {
@@ -76,7 +76,7 @@ test('getFastaKeys', t => {
 test('getFilter', t => {
   const { getFilter } = selectors;
   const filter = {};
-  const state = { specieator: { filter } };
+  const state = { hub: { filter } };
 
   t.is(getFilter(state), filter);
 });

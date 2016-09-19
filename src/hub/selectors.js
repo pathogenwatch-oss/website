@@ -4,8 +4,8 @@ import { isSupported } from '../species';
 
 export const getFastas = ({ entities }) => entities.fastas;
 
-export const getFastaOrder = ({ specieator }) => specieator.fastaOrder;
-export const getFilter = ({ specieator }) => specieator.filter;
+export const getFastaOrder = ({ hub }) => hub.fastaOrder;
+export const getFilter = ({ hub }) => hub.filter;
 
 export const isFilterActive = createSelector(
   getFilter,

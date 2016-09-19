@@ -45,7 +45,7 @@ const ClearFilterButton = connect()(({ dispatch }) => (
 ));
 
 const SpeciesFilter = ({ title, summary }) => (
-  <section className="wgsa-specieator-filter__section">
+  <section className="wgsa-hub-filter__section">
     <h3>{title}</h3>
     { summary.map(({ name, label, count, active }) =>
         <SpeciesButton
@@ -67,9 +67,9 @@ function mapStateToProps(state) {
 
 export default connect(mapStateToProps)(
   ({ speciesSummary, filterActive }) => (
-    <aside className="wgsa-specieator-filter">
-      <header className="wgsa-specieator-filter__header mdl-layout__header mdl-layout__header--scroll">
-        <label className="wgsa-specieator-filter__search">
+    <aside className="wgsa-hub-filter">
+      <header className="wgsa-hub-filter__header mdl-layout__header mdl-layout__header--scroll">
+        <label className="wgsa-hub-filter__search">
           <i className="material-icons">search</i>
           <FilterInput />
         </label>
@@ -78,14 +78,14 @@ export default connect(mapStateToProps)(
         title="WGSA Species"
         summary={speciesSummary.filter(({ supported }) => supported)}
       />
-      <section className="wgsa-specieator-filter__section" style={{ textAlign: 'center' }}>
+      <section className="wgsa-hub-filter__section" style={{ textAlign: 'center' }}>
         <CreateCollectionButton />
       </section>
       <SpeciesFilter
         title="Other Species"
         summary={speciesSummary.filter(({ supported }) => !supported)}
       />
-      <footer className={`wgsa-specieator-filter__footer ${filterActive ? 'wgsa-specieator-filter__footer--active' : ''}`.trim()}>
+      <footer className={`wgsa-hub-filter__footer ${filterActive ? 'wgsa-hub-filter__footer--active' : ''}`.trim()}>
         <ClearFilterButton />
       </footer>
     </aside>

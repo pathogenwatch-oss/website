@@ -19,7 +19,7 @@ function displayDate({ day, month, year }) {
     return null;
   }
   return (
-    <div className="wgsa-specieator-file__metadata">
+    <div className="wgsa-hub-file__metadata">
       <i className="material-icons">date_range</i>
       <p>
         {day ? formatDay(day) : ''}
@@ -33,7 +33,7 @@ function displayDate({ day, month, year }) {
 function displayPosition({ latitude, longitude }) {
   if (!latitude && !longitude) return null;
   return (
-    <div className="wgsa-specieator-file__metadata">
+    <div className="wgsa-hub-file__metadata">
       <i className="material-icons">map_marker</i>
       <p>{latitude}, {longitude}</p>
     </div>
@@ -72,8 +72,8 @@ function getProgressBar(progress) {
 }
 
 export default props => (
-  <article className="mdl-cell wgsa-specieator-file">
-    <h2 className="wgsa-specieator-file__title">
+  <article className="mdl-cell wgsa-hub-file">
+    <h2 className="wgsa-hub-file__title">
       {props.metadata ? props.metadata.displayname : props.name}
     </h2>
     { typeof props.speciesId !== 'undefined' ?

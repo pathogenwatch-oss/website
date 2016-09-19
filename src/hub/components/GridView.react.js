@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import File from './File.react';
+import GridItem from './GridItem.react';
 
 export default connect()(React.createClass({
 
@@ -12,14 +12,14 @@ export default connect()(React.createClass({
   render() {
     const { files, total } = this.props;
     return (
-      <div className="wgsa-specieator-files">
-        <div className="wgsa-specieator-content">
-          <p className="wgsa-specieator-summary">
+      <div className="wgsa-hub-files">
+        <div className="wgsa-hub-content">
+          <p className="wgsa-hub-summary">
             Viewing <span>{files.length}</span> of {total} assemblies
           </p>
         </div>
         <div className="mdl-grid">
-          {files.map(file => <File key={file.name} { ...file } />)}
+          {files.map(file => <GridItem key={file.name} { ...file } />)}
         </div>
       </div>
     );
