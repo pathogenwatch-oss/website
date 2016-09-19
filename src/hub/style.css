@@ -84,7 +84,7 @@
 .wgsa-hub-file__title {
   font-size: 1.5rem;
   line-height: 2rem;
-  margin: 0;
+  margin: 0 0 0.5rem;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
@@ -99,11 +99,6 @@
   font-weight: 500;
 }
 
-.wgsa-hub-file p:first-child {
-  font-style: italic;
-  color: rgba(0, 0, 0, 0.87);
-}
-
 .wgsa-hub-file a {
   color: #AC65A6;
 }
@@ -112,11 +107,19 @@
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
+  position: relative;
 }
 
+.wgsa-hub-file__metadata--species {
+  font-style: italic;
+  color: rgba(0, 0, 0, 0.87);
+}
+
+
 .wgsa-hub-file__metadata i {
-  width: 32px;
+  font-size: 16px;
+  margin-left: 4px;
 }
 
 .wgsa-hub-file__metadata p {

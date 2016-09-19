@@ -12,12 +12,12 @@ function displayDate({ day, month, year }) {
   }
   return (
     <div className="wgsa-hub-file__metadata">
-      <i className="material-icons">date_range</i>
       <p>
         {day ? formatDay(day) : ''}
         {month ? formatMonth(month) : ''}
         {year || ''}
       </p>
+      <i title="Date" className="material-icons">date_range</i>
     </div>
   );
 }
@@ -26,8 +26,18 @@ function displayCountry(country) {
   if (!country || !country.name) return null;
   return (
     <div className="wgsa-hub-file__metadata">
-      <i className="material-icons">place</i>
       <p>{country.name}</p>
+      <i title="Country" className="material-icons">place</i>
+    </div>
+  );
+}
+
+function displaySpecies(label) {
+  if (!label) return null;
+  return (
+    <div className="wgsa-hub-file__metadata wgsa-hub-file__metadata--species">
+      <p>{label}</p>
+      <i title="Species" className="material-icons">bug_report</i>
     </div>
   );
 }
@@ -35,8 +45,7 @@ function displayCountry(country) {
 function displayFastaData({ speciesLabel, metadata = {}, country }) {
   return (
     <div>
-      <p>{speciesLabel}</p>
-      <br />
+      {displaySpecies(speciesLabel)}
       {displayCountry(country)}
       {displayDate(metadata)}
     </div>
