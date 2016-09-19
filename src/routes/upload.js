@@ -3,9 +3,10 @@ const fspath = require('path');
 const express = require('express');
 const router = express.Router();
 
+const { getCountry } = require('country-reverse-geocoding');
+
 const fastaStorage = require('wgsa-fasta-store');
 const createMashSpecieator = require('mash-specieator');
-
 const referencesDir = require('mash-sketches');
 const sketchFilePath = fspath.join(referencesDir, 'refseq-archaea-bacteria-fungi-viral-k16-s400.msh');
 const metadataFilePath = fspath.join(referencesDir, 'refseq-archaea-bacteria-fungi-viral-k16-s400.csv');
@@ -39,7 +40,14 @@ router.post('/upload', (req, res, next) => {
       }))
     ).
     then(result => {
-      res.json(Object.assign({ metrics: analyse(req.body) }, result));
+      res.json(Object.assign({
+        metrics: analyse(req.body),
+        country:
+          req.query.lat ?
+            getCountry(
+              Number.parseFloat(req.query.lat), Number.parseFloat(req.query.lon)
+            ) : null,
+      }, result));
       req.body = null; // prevent memory leak
     }).
     catch(error => next(error));
