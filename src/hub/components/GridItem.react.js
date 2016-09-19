@@ -6,14 +6,6 @@ import ProgressBar from '../../components/ProgressBar.react';
 
 import { formatDay, formatMonth } from '../../utils/Date';
 
-function displayContigs(count) {
-  return (
-    count === 1 ?
-      '1 contig' :
-      `${count} contigs`
-  );
-}
-
 function displayDate({ day, month, year }) {
   if (!day && !month && !year) {
     return null;
@@ -30,35 +22,23 @@ function displayDate({ day, month, year }) {
   );
 }
 
-function displayPosition({ latitude, longitude }) {
-  if (!latitude && !longitude) return null;
+function displayCountry(country) {
+  if (!country || !country.name) return null;
   return (
     <div className="wgsa-hub-file__metadata">
-      <i className="material-icons">map_marker</i>
-      <p>{latitude}, {longitude}</p>
+      <i className="material-icons">place</i>
+      <p>{country.name}</p>
     </div>
   );
 }
 
-// TODO: Parse user-defined cols to determine actual number
-function displayMoreCols(metadata) {
-  const moreCols = Object.keys(metadata).length - 8;
-  if (moreCols <= 0) return null;
-  return (
-    <p><em>+ {moreCols} user-defined</em></p>
-  );
-}
-
-function displayFastaData({ speciesLabel, metadata = {}, metrics }) {
+function displayFastaData({ speciesLabel, metadata = {}, country }) {
   return (
     <div>
       <p>{speciesLabel}</p>
-      <p>{displayContigs(metrics.totalNumberOfContigs)}</p>
-      <p>{metrics.gcContent}% GC content</p>
       <br />
-      {displayPosition(metadata)}
+      {displayCountry(country)}
       {displayDate(metadata)}
-      {displayMoreCols(metadata)}
     </div>
   );
 }

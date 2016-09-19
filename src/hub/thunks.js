@@ -31,7 +31,11 @@ export function uploadFasta(name) {
   return (dispatch, getState) => {
     const state = getState();
 
-    const { file } = selectors.getFastas(state)[name];
+    const { file, metadata } = selectors.getFastas(state)[name];
+    const coords =
+      metadata && metadata.latitude && metadata.longitude ?
+        { lat: metadata.latitude, lon: metadata.longitude } :
+        null;
 
     if (!file) return;
 
@@ -39,7 +43,7 @@ export function uploadFasta(name) {
       type: UPLOAD_FASTA,
       payload: {
         name,
-        promise: sendToServer(file, dispatch),
+        promise: sendToServer({ file, coords }, dispatch),
       },
     });
   };

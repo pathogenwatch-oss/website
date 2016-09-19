@@ -1,12 +1,12 @@
 import React from 'react';
 
-import FileDragAndDrop from '../components/upload/DragAndDrop.react';
-import Header from './components/Header.react';
-import FileGrid from './components/FileGrid.react';
-import Filter from './components/Filter.react';
+import FileDragAndDrop from '../../components/upload/DragAndDrop.react';
+import Header from './Header.react';
+import GridView from './GridView.react';
+import Filter from './Filter.react';
 
 import { updateHeader } from '^/actions/header';
-import { uploadFasta, addFiles } from './thunks';
+import { uploadFasta, addFiles } from '../thunks';
 
 import { taxIdMap } from '^/species';
 
@@ -70,7 +70,7 @@ export default React.createClass({
       <FileDragAndDrop onFiles={this.upload}>
         { loading && <div ref="loadingBar" className="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>}
         { fastas.length ?
-            <FileGrid total={totalFastas} files={fastas} /> :
+            <GridView total={totalFastas} files={fastas} /> :
             <div className="welcome-container">
               <p className="welcome-intro">
                 { filterActive ?
