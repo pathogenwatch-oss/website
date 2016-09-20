@@ -61,7 +61,7 @@ function getProgressBar(progress) {
 }
 
 export default props => (
-  <article className="mdl-cell wgsa-hub-file">
+  <article className="wgsa-hub-file">
     <h2 className="wgsa-hub-file__title">
       {props.metadata ? props.metadata.displayname : props.name}
     </h2>

@@ -70,7 +70,12 @@ export default React.createClass({
       <FileDragAndDrop onFiles={this.upload}>
         { loading && <div ref="loadingBar" className="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>}
         { fastas.length ?
-            <GridView total={totalFastas} files={fastas} /> :
+            <div className="wgsa-hub">
+              <p className="wgsa-hub-summary">
+                Viewing <span>{fastas.length}</span> of {totalFastas} assemblies
+              </p>
+              <GridView items={fastas} />
+            </div> :
             <div className="welcome-container">
               <p className="welcome-intro">
                 { filterActive ?

@@ -1,28 +1,43 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { AutoSizer, Grid } from 'react-virtualized';
 
 import GridItem from './GridItem.react';
 
-export default connect()(React.createClass({
+export default React.createClass({
 
   propTypes: {
-    files: React.PropTypes.array.isRequired,
+    items: React.PropTypes.array.isRequired,
   },
 
   render() {
-    const { files, total } = this.props;
+    const { items } = this.props;
     return (
-      <div className="wgsa-hub-files">
-        <div className="wgsa-hub-content">
-          <p className="wgsa-hub-summary">
-            Viewing <span>{files.length}</span> of {total} assemblies
-          </p>
-        </div>
-        <div className="mdl-grid">
-          {files.map(file => <GridItem key={file.name} { ...file } />)}
-        </div>
-      </div>
+      <AutoSizer>
+        {({ height, width }) => {
+          const columnWidth = 256;
+          const columnCount = Math.max(1, Math.floor(width / columnWidth));
+          return (
+            <Grid
+              cellRenderer={({ key, columnIndex, rowIndex, style }) => {
+                const file = items[columnIndex + rowIndex * columnCount];
+                return (
+                  <div key={key} style={style}>
+                    <GridItem { ...file } />
+                  </div>
+                );
+              }}
+              columnWidth={columnWidth}
+              columnCount={columnCount}
+              height={height}
+              rowHeight={136}
+              rowCount={Math.ceil(items.length / columnCount)}
+              width={width}
+              className="test"
+            />
+          );
+        }}
+      </AutoSizer>
     );
   },
 
-}));
+});
