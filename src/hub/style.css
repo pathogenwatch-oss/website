@@ -106,7 +106,7 @@
 .wgsa-hub-file__metadata {
   display: flex;
   justify-content: flex-start;
-  align-items: center;
+  align-items: bottom;
   margin-bottom: 4px;
   position: relative;
 }
@@ -116,10 +116,10 @@
   color: rgba(0, 0, 0, 0.87);
 }
 
-
 .wgsa-hub-file__metadata i {
   font-size: 16px;
-  margin-left: 4px;
+  margin-right: 4px;
+  line-height: 18px;
 }
 
 .wgsa-hub-file__metadata p {
