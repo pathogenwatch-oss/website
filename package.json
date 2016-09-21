@@ -38,7 +38,7 @@
     "file-loader": "^0.9.0",
     "fixed-data-table": "^0.6.0",
     "flux": "^2.1.1",
-    "jquery-draghover": "gitlab:cgps/jquery-draghover",
+    "jquery-draghover": "gitlab:cgps/jquery-draghover#3ca2abc6e2cd19d695ec65aefe4992fbd2b46bf9",
     "json-loader": "^0.5.3",
     "moment": "^2.10.3",
     "node-libs-browser": "^0.5.3",
