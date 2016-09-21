@@ -1,7 +1,4 @@
-import {
-  ADD_FASTAS, CREATE_COLLECTION,
-  FILTER_BY_TEXT, FILTER_BY_SPECIES, CLEAR_FILTER,
-} from '../actions';
+import { ADD_FASTAS, CREATE_COLLECTION } from '../actions';
 
 const fastaOrder = {
   initialState: [],
@@ -24,31 +21,4 @@ const loading = {
   },
 };
 
-const initialFilterState = {
-  searchText: '',
-  speciesKey: null,
-};
-
-const filter = {
-  initialState: initialFilterState,
-  actions: {
-    [FILTER_BY_TEXT](state, { searchText }) {
-      return {
-        ...state,
-        searchText,
-      };
-    },
-    [FILTER_BY_SPECIES](state, { speciesKey }) {
-      const newSpeciesKey = speciesKey === state.speciesKey ? null : speciesKey;
-      return {
-        ...state,
-        speciesKey: newSpeciesKey,
-      };
-    },
-    [CLEAR_FILTER]() {
-      return initialFilterState;
-    },
-  },
-};
-
-export default { fastaOrder, loading, filter };
+export default { fastaOrder, loading };

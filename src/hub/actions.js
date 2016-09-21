@@ -28,12 +28,12 @@ function filterByText(searchText) {
   };
 }
 
-export const FILTER_BY_SPECIES = 'FILTER_BY_SPECIES';
+export const FILTER_BY_METADATA = 'FILTER_BY_METADATA';
 
-function filterBySpecies(speciesKey) {
+function filterByMetadata(key, value) {
   return {
-    type: FILTER_BY_SPECIES,
-    speciesKey,
+    type: FILTER_BY_METADATA,
+    key, value,
   };
 }
 
@@ -62,6 +62,6 @@ export default {
   updateFastaProgress,
   filterByText,
   clearFilter,
-  filterBySpecies,
+  filterByMetadata,
   createCollection,
 };

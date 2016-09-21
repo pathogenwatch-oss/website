@@ -4,6 +4,7 @@ import antibiotics from './antibiotics';
 import { assemblies, collection, reference } from './collection';
 
 import hub from '../hub/reducers';
+import hubFilter from '../hub/reducers/filter';
 import fastas from '../hub/reducers/fastas';
 import uploads from '../hub/reducers/uploads';
 
@@ -65,7 +66,7 @@ const rootReducer = combineReducers({
     fastaOrder: createReducer(hub.fastaOrder),
     uploads: createReducer(uploads),
     loading: createReducer(hub.loading),
-    filter: createReducer(hub.filter),
+    filter: createReducer(hubFilter),
   }),
 });
 

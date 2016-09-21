@@ -15,12 +15,18 @@ function getTestState(overrides = {}) {
           speciesId: '1280',
           speciesKey: saureus.name,
           speciesLabel: saureus.formattedShortName,
+          country: {
+            name: 'United Kingdom',
+          },
         },
         '456.fa': {
           name: '456.fa',
           speciesId: '90370',
           speciesKey: salty.name,
           speciesLabel: salty.formattedShortName,
+          country: {
+            name: 'United States',
+          },
         },
         '789.fa': {
           name: '789.fa',
@@ -35,6 +41,7 @@ function getTestState(overrides = {}) {
       filter: overrides.filter || {
         searchText: '',
         speciesKey: null,
+        country: null,
       },
     },
   };
@@ -117,53 +124,18 @@ test('getVisibleFastas with species filter', t => {
 
 test.todo('getVisibleFastas with species and id filter');
 
-test('getSpeciesSummary', t => {
-  const { getSpeciesSummary } = selectors;
+test('getMetadataFilters', t => {
+  const { getMetadataFilters } = selectors;
   const state = getTestState();
-  const [ staph, typhi, other ] = getSpeciesSummary(state);
+  const { wgsaSpecies, otherSpecies, country } = getMetadataFilters(state);
 
-  t.true(
-    staph.name === saureus.name &&
-    staph.count === 1 &&
-    staph.active === false
-  );
-
-  t.true(
-    typhi.name === salty.name &&
-    typhi.count === 1 &&
-    typhi.active === false
-  );
-
-  t.true(
-    other.name === otherSpeciesKey &&
-    other.count === 1 &&
-    other.active === false
-  );
+  t.true(wgsaSpecies.length === 2);
+  t.true(otherSpecies.length === 1);
+  t.true(country.length === 2);
 });
 
-test('getSpeciesSummary with species filter', t => {
-  const { getSpeciesSummary } = selectors;
-  const state = getTestState({ filter: { speciesKey: saureus.name } });
-  const [ staph, typhi, other ] = getSpeciesSummary(state);
-
-  t.true(
-    staph.name === saureus.name &&
-    staph.count === 1 &&
-    staph.active === true
-  );
-
-  t.true(
-    typhi.name === salty.name &&
-    typhi.count === 1 &&
-    typhi.active === false
-  );
-
-  t.true(
-    other.name === otherSpeciesKey &&
-    other.count === 1 &&
-    other.active === false
-  );
-});
+test.todo('getMetadataFilters with species filter');
+test.todo('getMetadataFilters with country filter');
 
 test('isSupportedSpeciesSelected with species filter', t => {
   const { isSupportedSpeciesSelected } = selectors;

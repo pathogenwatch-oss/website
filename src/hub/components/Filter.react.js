@@ -1,11 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import CreateCollectionButton from './CreateCollectionButton.react';
-
-import { getFilter, getSpeciesSummary } from '../selectors';
+import { getFilter, getMetadataFilters } from '../selectors';
 
 import actions from '../actions';
+
+import { metadataFilters } from '../utils/filter.js';
+
+const [ speciesFilter, countryFilter ] = metadataFilters;
 
 function mapFilterSearchText(state) {
   return {
@@ -22,17 +24,15 @@ const FilterInput = connect(mapFilterSearchText)(({ value, dispatch }) => (
   />
 ));
 
-const SpeciesButton = connect()(
-  ({ name, label, count, active, dispatch }) => (
-    <button
-      title={name}
-      className={`mdl-chip mdl-chip--contact ${active ? 'mdl-chip--active' : ''}`.trim()}
-      onClick={() => dispatch(actions.filterBySpecies(name))}
-    >
-      <span className="mdl-chip__contact">{count}</span>
-      <span className="mdl-chip__text">{label}</span>
-    </button>
-  )
+const FilterButton = ({ name, label, count, active, onClick }) => (
+  <button
+    title={name}
+    className={`mdl-chip mdl-chip--contact ${active ? 'mdl-chip--active' : ''}`.trim()}
+    onClick={onClick}
+  >
+    <span className="mdl-chip__contact">{count}</span>
+    <span className="mdl-chip__text">{label || name}</span>
+  </button>
 );
 
 const ClearFilterButton = connect()(({ dispatch }) => (
@@ -44,29 +44,32 @@ const ClearFilterButton = connect()(({ dispatch }) => (
   </button>
 ));
 
-const SpeciesFilter = ({ title, summary }) => (
-  <section className="wgsa-hub-filter__section">
-    <h3>{title}</h3>
-    { summary.map(({ name, label, count, active }) =>
-        <SpeciesButton
-          key={name}
-          name={name}
-          label={label}
-          count={count}
-          active={active}
-        />
-    )}
-  </section>
+const MetadataFilter = connect()(
+  ({ title, summary, property, dispatch }) => (
+    <section className="wgsa-hub-filter__section">
+      <h3>{title}</h3>
+      { summary.map(({ name, label, count, active }) =>
+          <FilterButton
+            key={name}
+            name={name}
+            label={label}
+            count={count}
+            active={active}
+            onClick={() => dispatch(actions.filterByMetadata(property, name))}
+          />
+      )}
+    </section>
+  )
 );
 
 function mapStateToProps(state) {
   return {
-    speciesSummary: getSpeciesSummary(state),
+    metadataFilters: getMetadataFilters(state),
   };
 }
 
 export default connect(mapStateToProps)(
-  ({ speciesSummary, filterActive }) => (
+  ({ metadataFilters, filterActive }) => (
     <aside className="wgsa-hub-filter">
       <header className="wgsa-hub-filter__header mdl-layout__header mdl-layout__header--scroll">
         <label className="wgsa-hub-filter__search">
@@ -74,16 +77,20 @@ export default connect(mapStateToProps)(
           <FilterInput />
         </label>
       </header>
-      <SpeciesFilter
+      <MetadataFilter
         title="WGSA Species"
-        summary={speciesSummary.filter(({ supported }) => supported)}
+        summary={metadataFilters.wgsaSpecies}
+        property={speciesFilter.key}
       />
-      <section className="wgsa-hub-filter__section" style={{ textAlign: 'center' }}>
-        <CreateCollectionButton />
-      </section>
-      <SpeciesFilter
+      <MetadataFilter
         title="Other Species"
-        summary={speciesSummary.filter(({ supported }) => !supported)}
+        summary={metadataFilters.otherSpecies}
+        property={speciesFilter.key}
+      />
+      <MetadataFilter
+        title="Country"
+        summary={metadataFilters.country}
+        property={countryFilter.key}
       />
       <footer className={`wgsa-hub-filter__footer ${filterActive ? 'wgsa-hub-filter__footer--active' : ''}`.trim()}>
         <ClearFilterButton />

@@ -1,5 +1,7 @@
 import { createSelector } from 'reselect';
 
+import { metadataFilters } from './utils/filter';
+
 import { isSupported } from '../species';
 
 export const getFastas = ({ entities }) => entities.fastas;
@@ -9,8 +11,15 @@ export const getFilter = ({ hub }) => hub.filter;
 
 export const isFilterActive = createSelector(
   getFilter,
-  ({ searchText = '', speciesKey }) =>
-    searchText.length > 0 || speciesKey !== null
+  ({ searchText = '', ...metadata }) => {
+    if (searchText.length > 0) return true;
+
+    for (const { key } of metadataFilters) {
+      if (metadata[key]) return true;
+    }
+
+    return false;
+  }
 );
 
 export const getFastasAsList = createSelector(
@@ -36,12 +45,17 @@ export const getVisibleFastas = createSelector(
   isFilterActive,
   getFilter,
   getOrderedFastas,
-  (isActive, { searchText = '', speciesKey }, fastas) => {
+  (isActive, { searchText = '', ...metadata }, fastas) => {
     if (isActive) {
       const regexp = new RegExp(searchText, 'i');
       return fastas.filter(fasta =>
         (searchText.length ? regexp.test(fasta.name) : true) &&
-        (speciesKey ? speciesKey === fasta.speciesKey : true)
+        metadataFilters.every(filter => {
+          const value = metadata[filter.key];
+          return (
+            value ? filter.matches(fasta, value) : true
+          );
+        })
       );
     }
     return fastas;
@@ -51,35 +65,54 @@ export const getVisibleFastas = createSelector(
 export const isSupportedSpeciesSelected = createSelector(
   getVisibleFastas,
   fastas => {
-    for (const { speciesId } of fastas) {
-      if (!speciesId) return false;
-      if (speciesId !== fastas[0].speciesId) return false;
+    for (const fasta of fastas) {
+      if (!isSupported(fasta)) return false;
     }
     return fastas.length > 0;
   }
 );
 
-export const getSpeciesSummary = createSelector(
+function incrementSummary(map, key, newEntry) {
+  const summary = map.get(key) || {
+    ...newEntry,
+    count: 0,
+  };
+  summary.count++;
+  map.set(key, summary);
+}
+
+export const getMetadataFilters = createSelector(
   getOrderedFastas,
   getFilter,
-  (fastas, filterState) => Array.from(
-    fastas.reduce((memo, fasta) => {
-      const { speciesKey, speciesLabel } = fasta;
-      if (!speciesKey) return memo;
+  (fastas, filterState) => {
+    const wgsaSpeciesMap = new Map();
+    const otherSpeciesMap = new Map();
+    const countryMap = new Map();
 
-      const summary = memo.get(speciesKey) || {
-        count: 0,
-        name: speciesKey,
-        label: speciesLabel,
-        active: speciesKey === filterState.speciesKey,
-        supported: isSupported(fasta),
-      };
+    for (const fasta of fastas) {
+      if (fasta.speciesKey) {
+        const speciesMap =
+          isSupported(fasta) ? wgsaSpeciesMap : otherSpeciesMap;
+        incrementSummary(speciesMap, fasta.speciesKey, {
+          name: fasta.speciesKey,
+          label: fasta.speciesLabel,
+          active: fasta.speciesKey === filterState.speciesKey,
+        });
+      }
 
-      summary.count++;
+      if (fasta.country) {
+        const { name } = fasta.country;
+        incrementSummary(countryMap, name, {
+          name,
+          active: name === filterState.country,
+        });
+      }
+    }
 
-      memo.set(speciesKey, summary);
-
-      return memo;
-    }, new Map()).values()
-  )
+    return {
+      wgsaSpecies: Array.from(wgsaSpeciesMap.values()),
+      otherSpecies: Array.from(otherSpeciesMap.values()),
+      country: Array.from(countryMap.values()),
+    };
+  }
 );
