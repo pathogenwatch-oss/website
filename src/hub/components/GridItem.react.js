@@ -32,20 +32,20 @@ function displayCountry(country) {
   );
 }
 
-function displaySpecies(label) {
+function displaySpecies(key, label) {
   if (!label) return null;
   return (
     <div className="wgsa-hub-card__metadata wgsa-hub-card__metadata--species">
       <i title="Species" className="material-icons">bug_report</i>
-      <p>{label}</p>
+      <p title={key}>{label}</p>
     </div>
   );
 }
 
-function displayFastaData({ speciesLabel, metadata = {}, country }) {
+function displayFastaData({ speciesKey, speciesLabel, metadata = {}, country }) {
   return (
-    <div>
-      {displaySpecies(speciesLabel)}
+    <div className="wgsa-hub-card__content">
+      {displaySpecies(speciesKey, speciesLabel)}
       {displayCountry(country)}
       {displayDate(metadata)}
     </div>

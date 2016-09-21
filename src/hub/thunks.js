@@ -4,9 +4,8 @@ import * as selectors from './selectors';
 
 import { mapCSVsToFastas, showDuplicatesToast, sendToServer } from './utils';
 
-function isDuplicate({ name, metadata }, files) {
-  const existingFile = files[name];
-  return existingFile && metadata === existingFile.metadata;
+function isDuplicate({ name }, files) {
+  return files[name] !== undefined;
 }
 
 export function addFiles(newFiles) {

@@ -88,6 +88,7 @@
   height: 104px;
   margin: 0 1rem 1rem;
   padding: 1.25rem 1.5rem;
+  /*overflow: hidden;*/
 }
 
 .wgsa-hub-card__title {
@@ -96,7 +97,6 @@
   margin: 0 0 0.5rem;
   white-space: nowrap;
   text-overflow: ellipsis;
-  overflow: hidden;
   color: #673c90;
 }
 
@@ -113,9 +113,9 @@
 }
 
 .wgsa-hub-card__metadata {
+  align-items: bottom;
   display: flex;
   justify-content: flex-start;
-  align-items: bottom;
   margin-bottom: 4px;
   position: relative;
 }
@@ -133,6 +133,8 @@
 
 .wgsa-hub-card__metadata p {
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .wgsa-hub-filter {
