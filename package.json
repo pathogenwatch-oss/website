@@ -22,7 +22,6 @@
     "lodash.template": "^4.2.0"
   },
   "devDependencies": {
-    "autoprefixer": "^6.4.1",
     "ava": "^0.16.0",
     "babel-core": "^6.14.0",
     "babel-loader": "^6.2.5",
@@ -50,6 +49,7 @@
     "papaparse": "^4.1.1",
     "phylocanvas": "^2.6.1",
     "phylocanvas-plugin-context-menu": "^3.8.0",
+    "postcss-cssnext": "^2.8.0",
     "postcss-input-style": "^0.3.0",
     "postcss-loader": "^0.11.1",
     "promise-file-reader": "^0.3.0",

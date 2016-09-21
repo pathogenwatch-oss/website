@@ -10,8 +10,14 @@ const resolve = {
 };
 
 const postcss = [
-  require('autoprefixer')({ browsers: [ 'last 2 versions', 'Safari 8' ] }),
   require('postcss-input-style'),
+  require('postcss-cssnext')({
+    feature: {
+      autoprefixer: {
+        browsers: [ 'last 2 versions', 'Safari 8' ],
+      },
+    },
+  }),
 ];
 
 const loaders = [

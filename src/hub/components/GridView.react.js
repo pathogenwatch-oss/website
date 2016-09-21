@@ -21,18 +21,16 @@ export default React.createClass({
               cellRenderer={({ key, columnIndex, rowIndex, style }) => {
                 const file = items[columnIndex + rowIndex * columnCount];
                 return (
-                  <div key={key} style={style}>
-                    <GridItem { ...file } />
-                  </div>
+                  <GridItem key={key} style={style} { ...file } />
                 );
               }}
+              className="wgsa-virtualised-grid"
               columnWidth={columnWidth}
               columnCount={columnCount}
               height={height}
-              rowHeight={136}
               rowCount={Math.ceil(items.length / columnCount)}
+              rowHeight={160}
               width={width}
-              className="test"
             />
           );
         }}

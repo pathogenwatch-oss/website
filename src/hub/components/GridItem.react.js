@@ -11,7 +11,7 @@ function displayDate({ day, month, year }) {
     return null;
   }
   return (
-    <div className="wgsa-hub-file__metadata">
+    <div className="wgsa-hub-card__metadata">
       <i title="Date" className="material-icons">date_range</i>
       <p>
         {day ? formatDay(day) : ''}
@@ -25,7 +25,7 @@ function displayDate({ day, month, year }) {
 function displayCountry(country) {
   if (!country || !country.name) return null;
   return (
-    <div className="wgsa-hub-file__metadata">
+    <div className="wgsa-hub-card__metadata">
       <i title="Country" className="material-icons">place</i>
       <p>{country.name}</p>
     </div>
@@ -35,7 +35,7 @@ function displayCountry(country) {
 function displaySpecies(label) {
   if (!label) return null;
   return (
-    <div className="wgsa-hub-file__metadata wgsa-hub-file__metadata--species">
+    <div className="wgsa-hub-card__metadata wgsa-hub-card__metadata--species">
       <i title="Species" className="material-icons">bug_report</i>
       <p>{label}</p>
     </div>
@@ -61,13 +61,15 @@ function getProgressBar(progress) {
 }
 
 export default props => (
-  <article className="wgsa-hub-file">
-    <h2 className="wgsa-hub-file__title">
-      {props.metadata ? props.metadata.displayname : props.name}
-    </h2>
-    { typeof props.speciesId !== 'undefined' ?
-        displayFastaData(props) :
-        getProgressBar(props.progress)
-    }
+  <article style={props.style}>
+    <div className="wgsa-hub-card">
+      <h2 className="wgsa-hub-card__title">
+        {props.metadata ? props.metadata.displayname : props.name}
+      </h2>
+      { typeof props.speciesId !== 'undefined' ?
+          displayFastaData(props) :
+          getProgressBar(props.progress)
+      }
+    </div>
   </article>
 );

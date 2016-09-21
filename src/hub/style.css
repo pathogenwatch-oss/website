@@ -8,7 +8,7 @@
 }
 .wgsa-hub--has-aside ~ .mdl-layout__content,
 .wgsa-hub--has-aside ~ .mdl-layout__content .wgsa-drag-and-drop__button {
-  margin-right: 240px;
+  margin-right: 255px;
 }
 
 .wgsa-hub-header ~ .mdl-layout__content {
@@ -45,35 +45,52 @@
   margin-left: 2rem;
 }
 
-
 .wgsa-hub {
-  max-width: 1280px;
-  margin: 0 auto;
-  width: 100%;
+  box-sizing: border-box;
   height: 100%;
+  padding-top: 52px;
+  padding-left: 4rem;
+  width: 100%;
+  position: relative;
 }
 
 .wgsa-hub-summary {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 16px 48px;
-  margin: 0;
   font-size: 13px;
+  padding: 1rem 2.5rem;
+  margin: 0;
+  position: absolute;
+  top: 0;
+  left: 4rem;
+  right: 0;
 }
 
 .wgsa-hub-summary > span {
   color: #673c90;
 }
 
-.wgsa-hub-file {
-  padding: 1rem;
-  border-top: 1px solid rgba(0, 0, 0, 0.28);
-  background: white;
-  width: calc(100% - 4rem);
-  margin: 0 2rem 2rem;
+/*.wgsa-hub-summary::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 1rem;
+  right: 4.5rem;
+  height: 1px;
+  background: rgba(0, 0, 0, 0.14);
+}*/
+
+.wgsa-virtualised-grid {
+  outline: none;
 }
 
-.wgsa-hub-file__title {
+.wgsa-hub-card {
+  background: white;
+  border-top: 1px solid color(#a386bd tint(50%));
+  height: 104px;
+  margin: 0 1rem 1rem;
+  padding: 1.25rem 1.5rem;
+}
+
+.wgsa-hub-card__title {
   font-size: 1.5rem;
   line-height: 2rem;
   margin: 0 0 0.5rem;
@@ -83,7 +100,7 @@
   color: #673c90;
 }
 
-.wgsa-hub-file p {
+.wgsa-hub-card p {
   margin: 0;
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
   font-size: 14px;
@@ -91,11 +108,11 @@
   font-weight: 500;
 }
 
-.wgsa-hub-file a {
+.wgsa-hub-card a {
   color: #AC65A6;
 }
 
-.wgsa-hub-file__metadata {
+.wgsa-hub-card__metadata {
   display: flex;
   justify-content: flex-start;
   align-items: bottom;
@@ -103,18 +120,18 @@
   position: relative;
 }
 
-.wgsa-hub-file__metadata--species {
+.wgsa-hub-card__metadata--species {
   font-style: italic;
   color: rgba(0, 0, 0, 0.87);
 }
 
-.wgsa-hub-file__metadata i {
+.wgsa-hub-card__metadata i {
   font-size: 16px;
   margin-right: 4px;
   line-height: 18px;
 }
 
-.wgsa-hub-file__metadata p {
+.wgsa-hub-card__metadata p {
   white-space: nowrap;
 }
 
