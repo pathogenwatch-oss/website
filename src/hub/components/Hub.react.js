@@ -1,6 +1,8 @@
 import React from 'react';
 
+import ProgressBar from '../../components/ProgressBar.react';
 import FileDragAndDrop from '../../components/upload/DragAndDrop.react';
+
 import Header from './Header.react';
 import GridView from './GridView.react';
 import Filter from './Filter.react';
@@ -64,16 +66,23 @@ export default React.createClass({
   },
 
   render() {
-    const { fastas, totalFastas, filterActive, loading } = this.props;
+    const { fastas, totalFastas, filterActive, loading, uploads } = this.props;
+    const { queue } = uploads;
 
     return (
       <FileDragAndDrop onFiles={this.upload}>
         { loading && <div ref="loadingBar" className="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>}
         { fastas.length ?
             <div className="wgsa-hub">
-              <p className="wgsa-hub-summary">
-                Viewing <span>{fastas.length}</span> of {totalFastas} assemblies
-              </p>
+              <div className="wgsa-hub-summary">
+                { queue.length ?
+                    <ProgressBar
+                      className="wgsa-hub-upload-progress"
+                      progress={(1 - (queue.length / fastas.length)) * 100}
+                    /> :
+                    <p>Viewing <span>{fastas.length}</span> of {totalFastas} assemblies</p>
+                }
+              </div>
               <GridView items={fastas} />
             </div> :
             <div className="welcome-container">

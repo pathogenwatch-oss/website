@@ -54,17 +54,25 @@
   position: relative;
 }
 
+.wgsa-hub-upload-progress {
+  margin: 10px auto; /* Emulating 20px line-height */
+  max-width: 640px;
+}
+
 .wgsa-hub-summary {
-  font-size: 13px;
   padding: 1rem 2.5rem;
-  margin: 0;
   position: absolute;
   top: 0;
   left: 4rem;
   right: 0;
 }
 
-.wgsa-hub-summary > span {
+.wgsa-hub-summary > p {
+  font-size: 13px;
+  margin: 0;
+}
+
+.wgsa-hub-summary > p > span {
   color: #673c90;
 }
 

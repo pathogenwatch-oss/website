@@ -5,6 +5,7 @@ export default React.createClass({
   displayName: 'Progress Bar',
 
   propTypes: {
+    className: React.PropTypes.string,
     progress: React.PropTypes.number,
     indeterminate: React.PropTypes.bool,
   },
@@ -31,7 +32,8 @@ export default React.createClass({
   },
 
   render() {
-    const classes = `mdl-progress mdl-js-progress ${this.props.indeterminate ? 'mdl-progress__indeterminate' : ''}`.trim();
+    const { className, indeterminate } = this.props;
+    const classes = `${className} mdl-progress mdl-js-progress ${indeterminate ? 'mdl-progress__indeterminate' : ''}`.trim();
     return (
       <div ref="progressBar" className={classes}>
       </div>
