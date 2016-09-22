@@ -1,16 +1,9 @@
-import { ADD_FASTAS, CREATE_COLLECTION } from '../actions';
+import { combineReducers } from 'redux';
 
-const fastaOrder = {
-  initialState: [],
-  actions: {
-    [ADD_FASTAS](state, { fastas }) {
-      return [
-        ...fastas.map(_ => _.name),
-        ...state,
-      ];
-    },
-  },
-};
+import filter from './filter';
+import uploads from './uploads';
+
+import { CREATE_COLLECTION } from '../actions';
 
 const loading = {
   initialState: false,
@@ -21,4 +14,9 @@ const loading = {
   },
 };
 
-export default { fastaOrder, loading };
+export default createReducer =>
+  combineReducers({
+    uploads: createReducer(uploads),
+    loading: createReducer(loading),
+    filter: createReducer(filter),
+  });

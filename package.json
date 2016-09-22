@@ -41,6 +41,7 @@
     "flux": "^2.1.1",
     "jquery-draghover": "gitlab:cgps/jquery-draghover",
     "json-loader": "^0.5.3",
+    "lodash.sortby": "^4.7.0",
     "mash-sketches": "gitlab:cgps/mash-sketches",
     "mash-specieator": "gitlab:cgps/mash-specieator",
     "node-libs-browser": "^0.5.3",

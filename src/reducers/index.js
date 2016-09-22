@@ -4,9 +4,7 @@ import antibiotics from './antibiotics';
 import { assemblies, collection, reference } from './collection';
 
 import hub from '../hub/reducers';
-import hubFilter from '../hub/reducers/filter';
 import fastas from '../hub/reducers/fastas';
-import uploads from '../hub/reducers/uploads';
 
 import metadata from './metadata';
 import resistanceProfile from './resistanceProfile';
@@ -62,12 +60,7 @@ const rootReducer = combineReducers({
     files: createReducer(downloads),
   }),
   bodyClickListener,
-  hub: combineReducers({
-    fastaOrder: createReducer(hub.fastaOrder),
-    uploads: createReducer(uploads),
-    loading: createReducer(hub.loading),
-    filter: createReducer(hubFilter),
-  }),
+  hub: hub(createReducer),
 });
 
 const initialState = rootReducer({}, {});

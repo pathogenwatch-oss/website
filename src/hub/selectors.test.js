@@ -37,7 +37,6 @@ function getTestState(overrides = {}) {
       },
     },
     hub: {
-      fastaOrder: overrides.fastaOrder || [ '123.fa', '456.fa', '789.fa' ],
       filter: overrides.filter || {
         searchText: '',
         speciesKey: null,
@@ -53,14 +52,6 @@ test('getFastas', t => {
   const fastas = { '123.fa': {} };
 
   t.is(getFastas({ entities: { fastas } }), fastas);
-});
-
-test('getFastaOrder', t => {
-  const { getFastaOrder } = selectors;
-
-  const fastaOrder = [];
-
-  t.is(getFastaOrder({ hub: { fastaOrder } }), fastaOrder);
 });
 
 test('getOrderedFastas', t => {

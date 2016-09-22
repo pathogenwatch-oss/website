@@ -1,12 +1,11 @@
 import { createSelector } from 'reselect';
+import sortBy from 'lodash.sortby';
 
 import { metadataFilters } from './utils/filter';
-
 import { isSupported } from '../species';
 
 export const getFastas = ({ entities }) => entities.fastas;
 
-export const getFastaOrder = ({ hub }) => hub.fastaOrder;
 export const getFilter = ({ hub }) => hub.filter;
 
 export const isFilterActive = createSelector(
@@ -37,8 +36,7 @@ export const getTotalFastas = (state) => getFastasAsList(state).length;
 export const getOrderedFastas =
   createSelector(
     getFastas,
-    getFastaOrder,
-    (fastas, order) => order.map(name => fastas[name])
+    fastas => sortBy(fastas, [ 'name' ])
   );
 
 export const getVisibleFastas = createSelector(
@@ -81,6 +79,10 @@ function incrementSummary(map, key, newEntry) {
   map.set(key, summary);
 }
 
+function getSummary(map) {
+  return sortBy(Array.from(map.values()), [ 'name' ]);
+}
+
 export const getMetadataFilters = createSelector(
   getOrderedFastas,
   getFilter,
@@ -110,9 +112,9 @@ export const getMetadataFilters = createSelector(
     }
 
     return {
-      wgsaSpecies: Array.from(wgsaSpeciesMap.values()),
-      otherSpecies: Array.from(otherSpeciesMap.values()),
-      country: Array.from(countryMap.values()),
+      wgsaSpecies: getSummary(wgsaSpeciesMap),
+      otherSpecies: getSummary(otherSpeciesMap),
+      country: getSummary(countryMap),
     };
   }
 );
