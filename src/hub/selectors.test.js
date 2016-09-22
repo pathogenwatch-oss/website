@@ -18,6 +18,7 @@ function getTestState(overrides = {}) {
           country: {
             name: 'United Kingdom',
           },
+          uploadAttempted: true,
         },
         '456.fa': {
           name: '456.fa',
@@ -27,12 +28,14 @@ function getTestState(overrides = {}) {
           country: {
             name: 'United States',
           },
+          uploadAttempted: true,
         },
         '789.fa': {
           name: '789.fa',
           speciesId: null,
           speciesKey: otherSpeciesKey,
           speciesLabel: otherSpeciesKey,
+          uploadAttempted: true,
         },
       },
     },

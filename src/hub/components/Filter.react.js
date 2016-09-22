@@ -46,30 +46,31 @@ const ClearFilterButton = connect()(({ dispatch }) => (
 
 const MetadataFilter = connect()(
   ({ title, summary, property, dispatch }) => (
-    <section className="wgsa-hub-filter__section">
-      <h3>{title}</h3>
-      { summary.map(({ name, label, count, active }) =>
-          <FilterButton
-            key={name}
-            name={name}
-            label={label}
-            count={count}
-            active={active}
-            onClick={() => dispatch(actions.filterByMetadata(property, name))}
-          />
-      )}
-    </section>
+    summary.length ?
+      <section className="wgsa-hub-filter__section">
+        <h3>{title}</h3>
+        { summary.map(({ name, label, count, active }) =>
+            <FilterButton
+              key={name}
+              name={name}
+              label={label}
+              count={count}
+              active={active}
+              onClick={() => dispatch(actions.filterByMetadata(property, name))}
+            />
+        )}
+      </section> : null
   )
 );
 
 function mapStateToProps(state) {
   return {
-    metadataFilters: getMetadataFilters(state),
+    filters: getMetadataFilters(state),
   };
 }
 
 export default connect(mapStateToProps)(
-  ({ metadataFilters, filterActive }) => (
+  ({ filters, filterActive }) => (
     <aside className="wgsa-hub-filter">
       <header className="wgsa-hub-filter__header mdl-layout__header mdl-layout__header--scroll">
         <label className="wgsa-hub-filter__search">
@@ -79,17 +80,17 @@ export default connect(mapStateToProps)(
       </header>
       <MetadataFilter
         title="WGSA Species"
-        summary={metadataFilters.wgsaSpecies}
+        summary={filters.wgsaSpecies}
         property={speciesFilter.key}
       />
       <MetadataFilter
         title="Other Species"
-        summary={metadataFilters.otherSpecies}
+        summary={filters.otherSpecies}
         property={speciesFilter.key}
       />
       <MetadataFilter
         title="Country"
-        summary={metadataFilters.country}
+        summary={filters.country}
         property={countryFilter.key}
       />
       <footer className={`wgsa-hub-filter__footer ${filterActive ? 'wgsa-hub-filter__footer--active' : ''}`.trim()}>

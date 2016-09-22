@@ -39,10 +39,16 @@ export const getOrderedFastas =
     fastas => sortBy(fastas, [ 'name' ])
   );
 
+export const getUploadedFastas =
+  createSelector(
+    getOrderedFastas,
+    fastas => fastas.filter(_ => _.uploadAttempted)
+  );
+
 export const getVisibleFastas = createSelector(
   isFilterActive,
   getFilter,
-  getOrderedFastas,
+  getUploadedFastas,
   (isActive, { searchText = '', ...metadata }, fastas) => {
     if (isActive) {
       const regexp = new RegExp(searchText, 'i');
