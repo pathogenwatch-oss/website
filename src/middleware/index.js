@@ -11,12 +11,12 @@ export const promiseToThunk = () => next => action => {
       result =>
         dispatch({
           type: type.SUCCESS,
-          payload: Object.keys(props).length ? { result, ...props } : result,
+          payload: { result, ...props },
         }),
       error =>
         dispatch({
           type: type.FAILURE,
-          payload: Object.keys(props).length ? { error, ...props } : error,
+          payload: { error, ...props },
         })
     );
   });

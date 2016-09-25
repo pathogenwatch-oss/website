@@ -49,8 +49,8 @@ function getActiveColumn(currentActiveColumn, newColumns) {
 }
 
 const actions = {
-  [FETCH_ENTITIES.SUCCESS](state, payload) {
-    const { assemblies } = payload[0];
+  [FETCH_ENTITIES.SUCCESS](state, { result }) {
+    const [ { assemblies } ] = result;
     const { publicMetadataColumnNames = [], uiOptions = {} } = Species.current;
 
     const columnNames = getUserDefinedColumnNames(assemblies);

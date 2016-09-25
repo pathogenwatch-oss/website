@@ -70,7 +70,7 @@ function decoratePublicAssemblies(assemblies) {
 export const assemblies = {
   initialState: {},
   actions: {
-    [FETCH_ENTITIES.SUCCESS](state, [ uploaded, reference ]) {
+    [FETCH_ENTITIES.SUCCESS](state, { result: [ uploaded, reference ] }) {
       const uploadedAssemblies =
         decorateCollectionAssemblies(uploaded.assemblies);
       const referenceAssemblies =
@@ -113,7 +113,7 @@ export const collection = {
         status: statuses.NOT_FOUND,
       };
     },
-    [CHECK_STATUS.SUCCESS](state, result) {
+    [CHECK_STATUS.SUCCESS](state, { result }) {
       return {
         ...state,
         ...result,
@@ -131,7 +131,7 @@ export const collection = {
         status: statuses.NOT_FOUND,
       };
     },
-    [FETCH_ENTITIES.SUCCESS](state, [ uploaded ]) {
+    [FETCH_ENTITIES.SUCCESS](state, { result: [ uploaded ] }) {
       return {
         ...state,
         status: statuses.FETCHED,
@@ -149,7 +149,7 @@ export const collection = {
 export const reference = {
   initialState: { assemblyIds: [] },
   actions: {
-    [FETCH_ENTITIES.SUCCESS](state, [ , referenceCollection ]) {
+    [FETCH_ENTITIES.SUCCESS](state, { result: [ , referenceCollection ] }) {
       return {
         ...state,
         assemblyIds: new Set(Object.keys(referenceCollection.assemblies)),

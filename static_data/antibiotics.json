@@ -1,1 +1,19 @@
-["Amikacin","Ciprofloxacin","Clindamycin","Daptomycin","Erythromycin","Fusidic Acid","Gentamicin","Linezolid","Methicillin","Moxifloxacin","Mupirocin","Penicillin","Rifampicin","Teicoplanin","Tetracycline","Tobramycin","Trimethoprim","Vancomycin"]
+[ { "name": "Amikacin" },
+  { "name": "Ciprofloxacin" },
+  { "name": "Clindamycin" },
+  { "name": "Daptomycin" },
+  { "name": "Erythromycin" },
+  { "name": "Fusidic Acid" },
+  { "name": "Gentamicin" },
+  { "name": "Linezolid" },
+  { "name": "Methicillin" },
+  { "name": "Moxifloxacin" },
+  { "name": "Mupirocin" },
+  { "name": "Penicillin" },
+  { "name": "Rifampicin" },
+  { "name": "Teicoplanin" },
+  { "name": "Tetracycline" },
+  { "name": "Tobramycin" },
+  { "name": "Trimethoprim" },
+  { "name": "Vancomycin" }
+]

@@ -94,3 +94,20 @@ test('converted thunk should fire actions for rejected promises and pass props',
     }
   }
 );
+
+test('success payload should contain result',
+  async t => {
+    const result = 'result';
+    const payload = { promise: Promise.resolve(result) };
+    const { type, thunk } = setupThunk(payload);
+    const dispatch = td.function();
+
+    thunk(dispatch);
+
+    await payload.promise;
+
+    td.verify(dispatch({ type: type.ATTEMPT, payload: {} }));
+    td.verify(dispatch({ type: type.SUCCESS, payload: { result } }));
+    t.pass();
+  }
+);
