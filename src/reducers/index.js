@@ -3,9 +3,8 @@ import { combineReducers } from 'redux';
 import antibiotics from './antibiotics';
 import { assemblies, collection, reference } from './collection';
 
-import specieator from '../specieator/reducers';
-import fastas from '../specieator/reducers/fastas';
-import uploads from '../specieator/reducers/uploads';
+import hub from '../hub/reducers';
+import fastas from '../hub/reducers/fastas';
 
 import metadata from './metadata';
 import resistanceProfile from './resistanceProfile';
@@ -61,12 +60,7 @@ const rootReducer = combineReducers({
     files: createReducer(downloads),
   }),
   bodyClickListener,
-  specieator: combineReducers({
-    fastaOrder: createReducer(specieator.fastaOrder),
-    uploads: createReducer(uploads),
-    loading: createReducer(specieator.loading),
-    filter: createReducer(specieator.filter),
-  }),
+  hub: hub(createReducer),
 });
 
 const initialState = rootReducer({}, {});
@@ -76,7 +70,7 @@ export default function (state = initialState, action = {}) {
     return {
       ...initialState,
       entities: state.entities,
-      specieator: state.specieator,
+      hub: state.hub,
     };
   }
 

@@ -1,11 +1,11 @@
 import React from 'react';
 import { readAsText } from 'promise-file-reader';
 
-import actions from './actions';
-import ToastActionCreators from '../actions/ToastActionCreators';
+import actions from '../actions';
+import ToastActionCreators from '../../actions/ToastActionCreators';
 
-import MetadataUtils from '../utils/Metadata';
-import { API_ROOT } from '../utils/Api';
+import MetadataUtils from '../../utils/Metadata';
+import { API_ROOT } from '../../utils/Api';
 
 function parseMetadata(row) {
   if (!row) return undefined;
@@ -74,13 +74,13 @@ function getCustomXHR(filename, dispatch) {
   return xhr;
 }
 
-export function sendToServer(file, dispatch) {
+export function sendToServer({ file, coords }, dispatch) {
   return (
     readAsText(file).
       then(data =>
         $.ajax({
           type: 'POST',
-          url: `${API_ROOT}/upload`,
+          url: `${API_ROOT}/upload${coords ? `?lat=${coords.lat}&lon=${coords.lon}` : ''}`,
           contentType: 'text/plain; charset=UTF-8',
           data,
           dataType: 'json',

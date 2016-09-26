@@ -21,6 +21,9 @@ export default {
         return { ...memo, [fasta.name]: fasta };
       }, state);
     },
+    [UPLOAD_FASTA.ATTEMPT](state, { name }) {
+      return updateFastas(state, name, { uploadAttempted: true });
+    },
     [UPLOAD_FASTA.FAILURE](state, { name, error }) {
       console.error(error);
       return updateFastas(state, name, { error });

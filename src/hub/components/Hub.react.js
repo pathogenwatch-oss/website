@@ -1,21 +1,18 @@
-import './style.css';
-
 import React from 'react';
-import { connect } from 'react-redux';
 
-import FileDragAndDrop from '../components/upload/DragAndDrop.react';
-import Header from './components/Header.react';
-import FileGrid from './components/FileGrid.react';
-import Filter from './components/Filter.react';
+import ProgressBar from '../../components/ProgressBar.react';
+import FileDragAndDrop from '../../components/upload/DragAndDrop.react';
+
+import Header from './Header.react';
+import GridView from './GridView.react';
+import Filter from './Filter.react';
 
 import { updateHeader } from '^/actions/header';
-import { uploadFasta, addFiles } from './thunks';
-
-import * as selectors from './selectors';
+import { uploadFasta, addFiles } from '../thunks';
 
 import { taxIdMap } from '^/species';
 
-const Specieator = React.createClass({
+export default React.createClass({
 
   propTypes: {
     fastas: React.PropTypes.array.isRequired,
@@ -32,8 +29,7 @@ const Specieator = React.createClass({
     const { fastas, dispatch } = this.props;
     dispatch(
       updateHeader({
-        speciesName: 'Specieator',
-        classNames: `wgsa-specieator-header ${fastas.length ? 'wgsa-specieator--has-aside' : ''}`.trim(),
+        classNames: `wgsa-hub-header ${fastas.length ? 'wgsa-hub--has-aside' : ''}`.trim(),
         content: <Header />,
       })
     );
@@ -65,18 +61,30 @@ const Specieator = React.createClass({
     const { dispatch } = this.props;
     dispatch(addFiles(newFiles));
     dispatch(updateHeader({
-      classNames: 'wgsa-specieator-header wgsa-specieator--has-aside',
+      classNames: 'wgsa-hub-header wgsa-hub--has-aside',
     }));
   },
 
   render() {
-    const { fastas, totalFastas, filterActive, loading } = this.props;
+    const { fastas, totalFastas, filterActive, loading, uploads } = this.props;
+    const { queue } = uploads;
 
     return (
       <FileDragAndDrop onFiles={this.upload}>
         { loading && <div ref="loadingBar" className="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>}
         { fastas.length ?
-            <FileGrid total={totalFastas} files={fastas} /> :
+            <div className="wgsa-hub">
+              <div className="wgsa-hub-summary">
+                { queue.length ?
+                    <ProgressBar
+                      className="wgsa-hub-upload-progress"
+                      progress={(1 - (queue.length / fastas.length)) * 100}
+                    /> :
+                    <p>Viewing <span>{fastas.length}</span> of {totalFastas} assemblies</p>
+                }
+              </div>
+              <GridView items={fastas} />
+            </div> :
             <div className="welcome-container">
               <p className="welcome-intro">
                 { filterActive ?
@@ -92,17 +100,3 @@ const Specieator = React.createClass({
   },
 
 });
-
-function mapStateToProps(state) {
-  const { specieator, collection } = state;
-  return {
-    totalFastas: selectors.getTotalFastas(state),
-    fastas: selectors.getVisibleFastas(state),
-    filterActive: selectors.isFilterActive(state),
-    uploads: specieator.uploads,
-    loading: specieator.loading,
-    collection,
-  };
-}
-
-export default connect(mapStateToProps)(Specieator);

@@ -15,26 +15,35 @@ function getTestState(overrides = {}) {
           speciesId: '1280',
           speciesKey: saureus.name,
           speciesLabel: saureus.formattedShortName,
+          country: {
+            name: 'United Kingdom',
+          },
+          uploadAttempted: true,
         },
         '456.fa': {
           name: '456.fa',
           speciesId: '90370',
           speciesKey: salty.name,
           speciesLabel: salty.formattedShortName,
+          country: {
+            name: 'United States',
+          },
+          uploadAttempted: true,
         },
         '789.fa': {
           name: '789.fa',
           speciesId: null,
           speciesKey: otherSpeciesKey,
           speciesLabel: otherSpeciesKey,
+          uploadAttempted: true,
         },
       },
     },
-    specieator: {
-      fastaOrder: overrides.fastaOrder || [ '123.fa', '456.fa', '789.fa' ],
+    hub: {
       filter: overrides.filter || {
         searchText: '',
         speciesKey: null,
+        country: null,
       },
     },
   };
@@ -46,14 +55,6 @@ test('getFastas', t => {
   const fastas = { '123.fa': {} };
 
   t.is(getFastas({ entities: { fastas } }), fastas);
-});
-
-test('getFastaOrder', t => {
-  const { getFastaOrder } = selectors;
-
-  const fastaOrder = [];
-
-  t.is(getFastaOrder({ specieator: { fastaOrder } }), fastaOrder);
 });
 
 test('getOrderedFastas', t => {
@@ -76,7 +77,7 @@ test('getFastaKeys', t => {
 test('getFilter', t => {
   const { getFilter } = selectors;
   const filter = {};
-  const state = { specieator: { filter } };
+  const state = { hub: { filter } };
 
   t.is(getFilter(state), filter);
 });
@@ -117,53 +118,18 @@ test('getVisibleFastas with species filter', t => {
 
 test.todo('getVisibleFastas with species and id filter');
 
-test('getSpeciesSummary', t => {
-  const { getSpeciesSummary } = selectors;
+test('getMetadataFilters', t => {
+  const { getMetadataFilters } = selectors;
   const state = getTestState();
-  const [ staph, typhi, other ] = getSpeciesSummary(state);
+  const { wgsaSpecies, otherSpecies, country } = getMetadataFilters(state);
 
-  t.true(
-    staph.name === saureus.name &&
-    staph.count === 1 &&
-    staph.active === false
-  );
-
-  t.true(
-    typhi.name === salty.name &&
-    typhi.count === 1 &&
-    typhi.active === false
-  );
-
-  t.true(
-    other.name === otherSpeciesKey &&
-    other.count === 1 &&
-    other.active === false
-  );
+  t.true(wgsaSpecies.length === 2);
+  t.true(otherSpecies.length === 1);
+  t.true(country.length === 2);
 });
 
-test('getSpeciesSummary with species filter', t => {
-  const { getSpeciesSummary } = selectors;
-  const state = getTestState({ filter: { speciesKey: saureus.name } });
-  const [ staph, typhi, other ] = getSpeciesSummary(state);
-
-  t.true(
-    staph.name === saureus.name &&
-    staph.count === 1 &&
-    staph.active === true
-  );
-
-  t.true(
-    typhi.name === salty.name &&
-    typhi.count === 1 &&
-    typhi.active === false
-  );
-
-  t.true(
-    other.name === otherSpeciesKey &&
-    other.count === 1 &&
-    other.active === false
-  );
-});
+test.todo('getMetadataFilters with species filter');
+test.todo('getMetadataFilters with country filter');
 
 test('isSupportedSpeciesSelected with species filter', t => {
   const { isSupportedSpeciesSelected } = selectors;
