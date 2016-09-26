@@ -4,6 +4,7 @@ import { defaultColourGetter } from '../constants/tree';
 
 import DEFAULT from '../defaults';
 
+const resistantColour = DEFAULT.DANGER_COLOUR;
 const nonResistantColour = '#fff';
 
 export function getColour(antibiotic, assembly) {
@@ -12,7 +13,7 @@ export function getColour(antibiotic, assembly) {
     return defaultColourGetter(assembly);
   }
   const value = analysis.resistanceProfile[antibiotic];
-  return value === 'RESISTANT' ? DEFAULT.DANGER_COLOUR : nonResistantColour;
+  return value === 'RESISTANT' ? resistantColour : nonResistantColour;
 }
 
 const noActiveColumns = [ { valueGetter: defaultColourGetter } ];
