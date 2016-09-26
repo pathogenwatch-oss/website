@@ -8,8 +8,8 @@ import { COLLECTION, POPULATION } from '../constants/tree';
 export const trees = {
   initialState: {},
   actions: {
-    [FETCH_ENTITIES.SUCCESS](state, payload) {
-      const [ uploaded, reference ] = payload;
+    [FETCH_ENTITIES.SUCCESS](state, { result }) {
+      const [ uploaded, reference ] = result;
       return {
         [COLLECTION]: { name: COLLECTION, newick: uploaded.tree },
         [POPULATION]: { name: POPULATION, newick: reference.tree },
