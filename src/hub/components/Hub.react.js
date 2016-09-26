@@ -4,7 +4,6 @@ import ProgressBar from '../../components/ProgressBar.react';
 import FileDragAndDrop from '../../components/upload/DragAndDrop.react';
 
 import Header from './Header.react';
-import GridView from './GridView.react';
 import Filter from './Filter.react';
 
 import { updateHeader } from '^/actions/header';
@@ -83,7 +82,7 @@ export default React.createClass({
                     <p>Viewing <span>{fastas.length}</span> of {totalFastas} assemblies</p>
                 }
               </div>
-              <GridView items={fastas} />
+              { React.cloneElement(this.props.children, { items: fastas }) }
             </div> :
             <div className="welcome-container">
               <p className="welcome-intro">

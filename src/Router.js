@@ -4,7 +4,7 @@ import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 import App from './App';
 import Home from './components/Home.react';
 import SpeciesHome from './components/SpeciesHome.react';
-import hub from './hub';
+import hub, { GridView, MapView, StatsView } from './hub';
 import UploadCollection from './components/upload';
 import ExploreCollection from './components/explorer';
 import NotFound from './components/NotFound.react';
@@ -20,7 +20,11 @@ export default () => (
   <Router history={browserHistory}>
     <Route path="/" component={App}>
       <IndexRoute component={Home} />
-      <Route path="/upload" component={hub} />
+      <Route path="upload" component={hub} >
+        <IndexRoute component={GridView} />
+        <Route path="map" component={MapView} />
+        <Route path="stats" component={StatsView} />
+      </Route>
       { Species.list.reduce((routes, { nickname }) =>
         routes.concat([
           <Route key={nickname} path={nickname} component={SpeciesSetter}>

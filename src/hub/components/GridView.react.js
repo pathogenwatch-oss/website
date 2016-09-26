@@ -6,7 +6,7 @@ import GridItem from './GridItem.react';
 export default React.createClass({
 
   propTypes: {
-    items: React.PropTypes.array.isRequired,
+    items: React.PropTypes.array,
   },
 
   render() {
