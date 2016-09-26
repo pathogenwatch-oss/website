@@ -1,13 +1,13 @@
 import React from 'react';
 
-import ProgressBar from '../../components/ProgressBar.react';
 import FileDragAndDrop from '../../components/upload/DragAndDrop.react';
 
 import Header from './Header.react';
 import Filter from './Filter.react';
+import Summary from './Summary.react';
 
 import { updateHeader } from '^/actions/header';
-import { uploadFasta, addFiles } from '../thunks';
+import { addFiles } from '../thunks';
 
 import { taxIdMap } from '^/species';
 
@@ -36,12 +36,7 @@ export default React.createClass({
   },
 
   componentDidUpdate() {
-    const { uploads, loading, collection, dispatch } = this.props;
-    const { queue, uploading } = uploads;
-
-    if (queue.length && uploading.size < 5) {
-      dispatch(uploadFasta(queue[0]));
-    }
+    const { loading, collection } = this.props;
 
     if (loading) {
       componentHandler.upgradeElement(this.refs.loadingBar);
@@ -65,23 +60,14 @@ export default React.createClass({
   },
 
   render() {
-    const { fastas, totalFastas, filterActive, loading, uploads } = this.props;
-    const { queue } = uploads;
+    const { fastas, filterActive, loading } = this.props;
 
     return (
       <FileDragAndDrop onFiles={this.upload}>
         { loading && <div ref="loadingBar" className="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>}
         { fastas.length ?
             <div className="wgsa-hub">
-              <div className="wgsa-hub-summary">
-                { queue.length ?
-                    <ProgressBar
-                      className="wgsa-hub-upload-progress"
-                      progress={(1 - (queue.length / fastas.length)) * 100}
-                    /> :
-                    <p>Viewing <span>{fastas.length}</span> of {totalFastas} assemblies</p>
-                }
-              </div>
+              <Summary />
               { React.cloneElement(this.props.children, { items: fastas }) }
             </div> :
             <div className="welcome-container">

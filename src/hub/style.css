@@ -55,7 +55,6 @@
 }
 
 .wgsa-hub-upload-progress {
-  margin: 10px auto; /* Emulating 20px line-height */
   max-width: 640px;
 }
 
