@@ -1,8 +1,11 @@
-import actions, { ADD_FASTAS, UPLOAD_FASTA } from './actions';
+import actions, { UPLOAD_FASTA } from './actions';
 
 import * as selectors from './selectors';
 
+import ToastActionCreators from '../actions/ToastActionCreators';
+
 import { mapCSVsToFastas, showDuplicatesToast, sendToServer } from './utils';
+import { undoRemoveFasta } from './utils/toasts';
 
 function isDuplicate({ name }, files) {
   return files[name] !== undefined;
@@ -29,7 +32,7 @@ const uploadLimit = 5;
 
 export function uploadFiles(files) {
   return (dispatch, getState) => {
-    dispatch({ type: ADD_FASTAS, payload: { fastas: files } });
+    dispatch(actions.addFastas(files));
 
     (function upload() {
       const { queue, uploading } = selectors.getUploads(getState());
@@ -86,5 +89,16 @@ export function filterByText(text) {
     dispatch(actions.filterFastas(
       text, getNames(fastas, file => regexp.test(file.name))
     ));
+  };
+}
+
+export function removeFasta(name) {
+  return (dispatch, getState) => {
+    const state = getState();
+    const fastas = selectors.getFastas(state);
+    const fasta = { ...fastas[name] };
+
+    dispatch(actions.removeFasta(name));
+    ToastActionCreators.showToast(undoRemoveFasta(fasta, dispatch));
   };
 }

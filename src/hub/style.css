@@ -95,6 +95,7 @@
   height: 104px;
   margin: 0 1rem 1rem;
   padding: 1.25rem 1.5rem;
+  position: relative;
   /*overflow: hidden;*/
 }
 
@@ -142,6 +143,22 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.wgsa-remove-fasta-button {
+  position: absolute;
+  right: 0.25rem;
+  bottom: 0rem;
+}
+
+.wgsa-hub-card button {
+  height: 28px;
+  width: 28px;
+  min-width: 28px;
+}
+
+.wgsa-hub-card button > i {
+  font-size: 20px;
 }
 
 .wgsa-hub-filter {
