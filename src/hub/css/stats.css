@@ -30,17 +30,19 @@
 
 .wgsa-hub-stats-section {
   margin: 0 2.5rem;
+  width: calc(100% - 4rem);
 }
 
 .wgsa-hub-stats-section--small {
-  width: 50%;
+  width: calc(50% - 4rem);
 }
 
 .wgsa-hub-stats-bigstat {
   font-size: 4rem;
+  line-height: 1;
   font-weight: 100;
   margin: 0;
-  padding: 1rem 0 2rem;
+  padding: 0 0 2rem;
 
 }
 
