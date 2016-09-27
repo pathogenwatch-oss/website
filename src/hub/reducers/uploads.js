@@ -1,4 +1,4 @@
-import { ADD_FASTAS, UPLOAD_FASTA, UPDATE_FASTA_PROGRESS } from '../actions';
+import { ADD_FASTAS, UPLOAD_FASTA } from '../actions';
 
 export default {
   initialState: {
@@ -21,9 +21,7 @@ export default {
         uploading: new Set([ ...state.uploading, name ]),
       };
     },
-    [UPDATE_FASTA_PROGRESS](state, { progress, name }) {
-      if (progress !== 100) return state;
-
+    [UPLOAD_FASTA.SUCCESS](state, { name }) {
       const { uploading } = state;
       uploading.delete(name);
 

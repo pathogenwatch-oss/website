@@ -1,5 +1,15 @@
+.wgsa-progress-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wgsa-progress-bar__label {
+  padding-right: 1em;
+}
+
 .mdl-progress {
-  width: auto;
+  width: 100%;
   background-color: rgba(0,0,0,0.14);
 }
 

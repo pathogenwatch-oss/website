@@ -6,6 +6,16 @@ import { isSupported } from '../species';
 
 export const getFastas = ({ entities }) => entities.fastas;
 
+export const getUploads = ({ hub }) => hub.uploads;
+export const getUploadQueue = createSelector(
+  getUploads,
+  uploads => uploads.queue,
+);
+export const getUploadQueueLength = createSelector(
+  getUploadQueue,
+  queue => queue.length,
+);
+
 export const getFilter = ({ hub }) => hub.filter;
 
 export const isFilterActive = createSelector(
@@ -64,6 +74,11 @@ export const getVisibleFastas = createSelector(
     }
     return fastas;
   }
+);
+
+export const getNumberOfVisibleFastas = createSelector(
+  getVisibleFastas,
+  fastas => fastas.length,
 );
 
 export const isSupportedSpeciesSelected = createSelector(
