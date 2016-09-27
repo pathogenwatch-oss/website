@@ -46,3 +46,25 @@
 .wgsa-hub-view-switcher > i {
   font-size: 20px;
 }
+
+/* TODO: Move to index.css after merge */
+.welcome-container {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.welcome-intro {
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-size: 24px;
+  line-height: 32px;
+  color: #a386bd;
+  margin-bottom: 32px;
+  font-weight: 100;
+}
