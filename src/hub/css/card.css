@@ -1,0 +1,70 @@
+.wgsa-hub-card {
+  background: white;
+  border-top: 1px solid color(#a386bd tint(50%));
+  height: 104px;
+  margin: 0 1rem 1rem;
+  padding: 1.25rem 1.5rem;
+  /*overflow: hidden;*/
+}
+
+.wgsa-hub-card__title {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  margin: 0 0 0.5rem;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: #673c90;
+}
+
+.wgsa-hub-card p {
+  margin: 0;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 500;
+}
+
+.wgsa-hub-card a {
+  color: #AC65A6;
+}
+
+.wgsa-hub-card__metadata {
+  align-items: bottom;
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 4px;
+  position: relative;
+}
+
+.wgsa-hub-card__metadata--species {
+  font-style: italic;
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.wgsa-hub-card__metadata i {
+  font-size: 16px;
+  margin-right: 4px;
+  line-height: 18px;
+}
+
+.wgsa-hub-card__metadata p {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.wgsa-remove-fasta-button {
+  position: absolute;
+  right: 1rem;
+  bottom: 1rem;
+}
+
+.wgsa-hub-card button {
+  height: 28px;
+  width: 28px;
+  min-width: 28px;
+}
+
+.wgsa-hub-card button > i {
+  font-size: 20px;
+}
