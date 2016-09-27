@@ -25,13 +25,9 @@ export default React.createClass({
   },
 
   componentWillMount() {
-    const { fastas, dispatch } = this.props;
-    dispatch(
-      updateHeader({
-        classNames: `wgsa-hub-header ${fastas.length ? 'wgsa-hub--has-aside' : ''}`.trim(),
-        content: <Header />,
-      })
-    );
+    const { fastas } = this.props;
+
+    this.toggleAside();
     document.title = 'WGSA | Upload';
   },
 
@@ -49,14 +45,26 @@ export default React.createClass({
       const { router } = this.context;
       router.push(path);
     }
+
+    this.toggleAside();
+  },
+
+  toggleAside() {
+    const { fastas, dispatch } = this.props;
+    const isOpen = fastas && fastas.length > 0;
+
+    dispatch(
+      updateHeader({
+        hasAside: isOpen,
+        classNames: 'wgsa-hub-header',
+        content: <Header />,
+      })
+    );
   },
 
   upload(newFiles) {
     const { dispatch } = this.props;
     dispatch(addFiles(newFiles));
-    dispatch(updateHeader({
-      classNames: 'wgsa-hub-header wgsa-hub--has-aside',
-    }));
   },
 
   render() {
