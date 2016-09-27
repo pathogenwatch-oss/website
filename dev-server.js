@@ -135,9 +135,9 @@ app.use('/', (req, res) =>
     googleMapsKey: 'AIzaSyBUn4F1N7KKElr6Qcwxvm7v3IzDoI0aQzE',
     frontEndConfig: {
       pusherKey: '8b8d274e51643f85f81a',
-      // api: {
-      //   address: 'localhost:8001',
-      // },
+      api: {
+        address: 'localhost:8001',
+      },
     },
   })
 );
