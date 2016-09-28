@@ -5,9 +5,9 @@ import {
   ResponsiveContainer, ScatterChart, Scatter, XAxis, YAxis, Tooltip,
 } from 'recharts';
 
-const TooltipContent = ({ payload: [ index, assemblyLength ], items }) => (
+const TooltipContent = ({ payload: [ index, assemblyLength ], data }) => (
   <div className="wgsa-chart-tooltip">
-    <h3 className="wgsa-chart-tooltip__heading">{items[index.value].name}</h3>
+    <h3 className="wgsa-chart-tooltip__heading">{data[index.value].name}</h3>
     <dl>
       <dt>Assembly Length</dt>
       <dd>{assemblyLength.value}</dd>
@@ -47,16 +47,15 @@ export default React.createClass({
           <h2 className="wgsa-hub-stats-heading">Assembly Length</h2>
           <ResponsiveContainer height={320}>
             <ScatterChart
-              data={data}
-              margin={{ top: 16, right: 16, bottom: 16, left: 16 }}
+              margin={{ top: 16, bottom: 16, left: 0, right: 0 }}
             >
-              <XAxis dataKey="key" name="name" padding={{ left: 16, right: 0 }} tickFormatter={() => null} />
-              <YAxis dataKey="value" name="Assembly Length" unit="nt" tickLine={false} />
+              <XAxis dataKey="key" name="name" padding={{ left: 8, right: 0 }} tickFormatter={() => null} />
+              <YAxis dataKey="value" name="Assembly Length" tickLine={false} />
               <Scatter data={data} fill="#a386bd" isAnimationActive={false} />
               <Tooltip
                 cursor={{ stroke: 'transparent' }}
-                offset={8}
-                content={<TooltipContent items={data} />}
+                offset={12}
+                content={<TooltipContent data={data} />}
               />
             </ScatterChart>
           </ResponsiveContainer>
