@@ -3,7 +3,7 @@ import { combineReducers } from 'redux';
 import filter from './filter';
 import uploads from './uploads';
 
-import { CREATE_COLLECTION } from '../actions';
+import { CREATE_COLLECTION, SHOW_METRIC } from '../actions';
 
 const loading = {
   initialState: false,
@@ -14,9 +14,19 @@ const loading = {
   },
 };
 
+const selectedMetric = {
+  initialState: 'totalNumberOfNucleotidesInDnaStrings',
+  actions: {
+    [SHOW_METRIC](state, { metric }) {
+      return metric;
+    },
+  },
+};
+
 export default createReducer =>
   combineReducers({
     uploads: createReducer(uploads),
     loading: createReducer(loading),
     filter: createReducer(filter),
+    selectedMetric: createReducer(selectedMetric),
   });

@@ -1,17 +1,48 @@
 .wgsa-hub-stats-view {
   display: flex;
   flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding-right: 3.5rem;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.wgsa-hub-stats-section {
+  margin: 0 0 3rem;
+  width: 100%;
+  box-sizing: border-box;
+  padding-right: 2rem;
 }
 
 .wgsa-hub-stats-heading {
   font-family: "Roboto Condensed", "Helvetica", "Arial", sans-serif;
   font-size: 1rem;
   line-height: 1.5;
-  margin: 1rem 0;
+  margin: 0 0 1rem;
   padding-top: 0.625rem;
   color: #673c90;
-  font-weight: 500;
+  font-weight: 400;
   border-top: 1px solid #673c90;
+}
+
+.wgsa-hub-stats-heading > button {
+  background: none;
+  border: none;
+  color: rgba(0, 0, 0, 0.54);
+  font-family: "Roboto Condensed", "Helvetica", "Arial", sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
+  margin-right: 1.5rem;
+  outline: none;
+  padding: 0;
+}
+
+.wgsa-hub-stats-heading > button:hover,
+.wgsa-hub-stats-heading > button:focus,
+.wgsa-hub-stats-heading > button:active,
+.wgsa-hub-stats-heading > button.active {
+  color: #673c90;
 }
 
 .wgsa-chart-tooltip {
@@ -27,22 +58,8 @@
   color: #673c90;
 }
 
-.wgsa-hub-stats-section {
-  margin: 0;
-  width: 100%;
-}
-
 .wgsa-hub-stats-section--small {
   width: 50%;
-}
-
-.wgsa-hub-stats-bigstat {
-  font-size: 4rem;
-  line-height: 1;
-  font-weight: 100;
-  margin: 0;
-  padding: 0 0 2rem;
-
 }
 
 .wgsa-chart-tooltip dl {
@@ -56,4 +73,12 @@
 
 .wgsa-chart-tooltip dd {
   margin: 0;
+}
+
+.wgsa-hub-stats-bigstat {
+  font-size: 4rem;
+  line-height: 1;
+  font-weight: 100;
+  margin: 0;
+  text-align: center;
 }

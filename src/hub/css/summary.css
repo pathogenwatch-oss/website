@@ -1,6 +1,7 @@
 .wgsa-hub-summary {
   display: flex;
   height: 4rem;
+  min-height: 4rem;
   align-items: center;
 }
 
