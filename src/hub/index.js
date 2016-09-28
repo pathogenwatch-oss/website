@@ -12,7 +12,7 @@ import * as selectors from './selectors';
 function mapStateToProps(state) {
   const { hub, collection } = state;
   return {
-    fastas: selectors.getVisibleFastas(state),
+    hasFastas: selectors.getNumberOfVisibleFastas(state) > 0,
     filterActive: selectors.isFilterActive(state),
     loading: hub.loading,
     collection,

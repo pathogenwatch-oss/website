@@ -4,6 +4,9 @@ import React from 'react';
 import {
   ResponsiveContainer, ScatterChart, Scatter, XAxis, YAxis, Tooltip,
 } from 'recharts';
+import { connect } from 'react-redux';
+
+import { getVisibleFastas } from '../selectors';
 
 const TooltipContent = ({ payload: [ index, assemblyLength ], data }) => (
   <div className="wgsa-chart-tooltip">
@@ -15,25 +18,10 @@ const TooltipContent = ({ payload: [ index, assemblyLength ], data }) => (
   </div>
 );
 
-export default React.createClass({
-
-  propTypes: {
-    items: React.PropTypes.array,
-  },
+export const StatsView = React.createClass({
 
   render() {
-    const { items } = this.props;
-    const data =
-      items.
-        filter(_ => _.metrics).
-        map(({ name, metrics }, i) => ({
-          key: i,
-          name,
-          value: metrics.totalNumberOfNucleotidesInDnaStrings,
-        }));
-    const avg =
-      data.length ?
-        data.reduce((memo, { value }) => memo + value, 0) / data.length : 0;
+    const { avg, data } = this.props;
 
     return (
       <div className="wgsa-hub__view wgsa-hub-gutter wgsa-hub-stats-view">
@@ -66,3 +54,23 @@ export default React.createClass({
   },
 
 });
+
+function mapStateToProps(state) {
+  const fastas = getVisibleFastas(state);
+  const data =
+  fastas.
+    filter(_ => _.metrics).
+    map(({ name, metrics }, i) => ({
+      key: i,
+      name,
+      value: metrics.totalNumberOfNucleotidesInDnaStrings,
+    }));
+
+  return {
+    data,
+    avg: data.length ?
+      data.reduce((memo, { value }) => memo + value, 0) / data.length : 0,
+  };
+}
+
+export default connect(mapStateToProps)(StatsView);

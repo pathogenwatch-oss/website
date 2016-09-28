@@ -14,7 +14,7 @@ import { taxIdMap } from '^/species';
 export default React.createClass({
 
   propTypes: {
-    fastas: React.PropTypes.array.isRequired,
+    hasFastas: React.PropTypes.bool,
     uploads: React.PropTypes.object,
     filterActive: React.PropTypes.bool,
     dispatch: React.PropTypes.func.isRequired,
@@ -48,12 +48,11 @@ export default React.createClass({
   },
 
   toggleAside() {
-    const { fastas, dispatch } = this.props;
-    const isOpen = fastas && fastas.length > 0;
+    const { hasFastas, dispatch } = this.props;
 
     dispatch(
       updateHeader({
-        hasAside: isOpen,
+        hasAside: hasFastas,
         classNames: 'wgsa-hub-header',
         content: <Header />,
       })
@@ -66,14 +65,14 @@ export default React.createClass({
   },
 
   render() {
-    const { fastas, filterActive, loading, location } = this.props;
+    const { hasFastas, filterActive, loading, location } = this.props;
     return (
       <FileDragAndDrop onFiles={this.upload}>
         { loading && <div ref="loadingBar" className="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>}
-        { fastas.length ?
+        { hasFastas ?
             <div className="wgsa-hub">
               <Summary pathname={location && location.pathname} />
-              { React.cloneElement(this.props.children, { items: fastas }) }
+              { this.props.children }
             </div> :
             <div className="wgsa-hub-welcome-container">
               <p className="wgsa-hub-welcome">

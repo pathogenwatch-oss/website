@@ -1,9 +1,12 @@
 import React from 'react';
 import { AutoSizer, Grid } from 'react-virtualized';
+import { connect } from 'react-redux';
 
 import GridItem from './GridItem.react';
 
-export default React.createClass({
+import { getVisibleFastas } from '../selectors';
+
+export const GridView = React.createClass({
 
   propTypes: {
     items: React.PropTypes.array,
@@ -41,3 +44,11 @@ export default React.createClass({
   },
 
 });
+
+function mapStateToProps(state) {
+  return {
+    items: getVisibleFastas(state),
+  };
+}
+
+export default connect(mapStateToProps)(GridView);
