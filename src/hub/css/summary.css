@@ -1,0 +1,70 @@
+.wgsa-hub-summary {
+  padding: 0 2.5rem;
+  position: absolute;
+  top: 0;
+  left: 4rem;
+  right: 0;
+  display: flex;
+  height: 4rem;
+  align-items: center;
+}
+
+.wgsa-hub-summary > .wgsa-progress-bar {
+  width: 12.5rem;
+}
+
+.wgsa-hub-summary > p {
+  font-size: 13px;
+}
+
+.wgsa-hub-summary > p > span {
+  color: #673c90;
+}
+
+.wgsa-hub-view-switcher {
+  margin: 0 0.125rem;
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+}
+
+.wgsa-hub-view-switcher:first-of-type {
+  margin-left: 1.125rem;
+}
+
+.wgsa-hub-view-switcher--active {
+  color: #a386bd;
+  cursor: default;
+}
+
+.wgsa-hub-view-switcher--active:hover,
+.wgsa-hub-view-switcher--active:focus,
+.wgsa-hub-view-switcher--active:active {
+  background: none !important;
+}
+
+.wgsa-hub-view-switcher > i {
+  font-size: 20px;
+}
+
+/* TODO: Move to index.css after merge */
+.welcome-container {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.welcome-intro {
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-size: 24px;
+  line-height: 32px;
+  color: #a386bd;
+  margin-bottom: 32px;
+  font-weight: 400;
+}

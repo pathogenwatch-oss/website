@@ -68,14 +68,13 @@ export default React.createClass({
   },
 
   render() {
-    const { fastas, filterActive, loading } = this.props;
-
+    const { fastas, filterActive, loading, location } = this.props;
     return (
       <FileDragAndDrop onFiles={this.upload}>
         { loading && <div ref="loadingBar" className="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>}
         { fastas.length ?
             <div className="wgsa-hub">
-              <Summary />
+              <Summary pathname={location && location.pathname} />
               { React.cloneElement(this.props.children, { items: fastas }) }
             </div> :
             <div className="welcome-container">
