@@ -25,7 +25,7 @@ export default React.createClass({
   },
 
   componentWillMount() {
-    this.toggleAside();
+    this.toggleAside(this.props.hasFastas);
     document.title = 'WGSA | Upload';
   },
 
@@ -43,16 +43,14 @@ export default React.createClass({
       const { router } = this.context;
       router.push(path);
     }
-
-    this.toggleAside();
   },
 
-  toggleAside() {
-    const { hasFastas, dispatch } = this.props;
+  toggleAside(hasAside) {
+    const { dispatch } = this.props;
 
     dispatch(
       updateHeader({
-        hasAside: hasFastas,
+        hasAside,
         classNames: 'wgsa-hub-header',
         content: <Header />,
       })
@@ -62,6 +60,7 @@ export default React.createClass({
   upload(newFiles) {
     const { dispatch } = this.props;
     dispatch(addFiles(newFiles));
+    this.toggleAside(true);
   },
 
   render() {
