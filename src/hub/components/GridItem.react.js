@@ -64,7 +64,7 @@ export default props => (
   <article style={props.style}>
     <div className="wgsa-hub-card">
       <h2 className="wgsa-hub-card__title">
-        {props.metadata ? props.metadata.displayname : props.name}
+        {props.metadata ? props.metadata.assemblyName : props.name}
       </h2>
       { typeof props.speciesId !== 'undefined' ?
           displayFastaData(props) :
