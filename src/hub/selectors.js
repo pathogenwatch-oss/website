@@ -6,31 +6,6 @@ import { isSupported } from '../species';
 
 export const getFastas = ({ entities }) => entities.fastas;
 
-export const getUploads = ({ hub }) => hub.uploads;
-export const getUploadQueue = createSelector(
-  getUploads,
-  uploads => uploads.queue,
-);
-export const getUploadQueueLength = createSelector(
-  getUploadQueue,
-  queue => queue.length,
-);
-
-export const getFilter = ({ hub }) => hub.filter;
-
-export const isFilterActive = createSelector(
-  getFilter,
-  ({ searchText = '', ...metadata }) => {
-    if (searchText.length > 0) return true;
-
-    for (const { key } of metadataFilters) {
-      if (metadata[key]) return true;
-    }
-
-    return false;
-  }
-);
-
 export const getFastasAsList = createSelector(
   getFastas,
   fastas => Object.keys(fastas).map(key => fastas[key])
@@ -54,6 +29,33 @@ export const getUploadedFastas =
     getOrderedFastas,
     fastas => fastas.filter(_ => _.uploadAttempted)
   );
+
+export const getUploads = ({ hub }) => hub.uploads;
+export const getUploadQueue = createSelector(
+  getUploads,
+  uploads => uploads.queue,
+);
+export const getUploadQueueLength = createSelector(
+  getUploadQueue,
+  queue => queue.length,
+);
+
+export const getFilter = ({ hub }) => hub.filter;
+
+export const isFilterActive = createSelector(
+  getTotalFastas,
+  getFilter,
+  (total, { searchText = '', ...metadata }) => {
+    if (!total) return false;
+    if (searchText.length > 0) return true;
+
+    for (const { key } of metadataFilters) {
+      if (metadata[key]) return true;
+    }
+
+    return false;
+  }
+);
 
 export const getVisibleFastas = createSelector(
   isFilterActive,

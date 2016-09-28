@@ -68,20 +68,18 @@ export default React.createClass({
     return (
       <FileDragAndDrop onFiles={this.upload}>
         { loading && <div ref="loadingBar" className="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>}
-        { hasFastas ?
-            <div className="wgsa-hub">
-              <Summary pathname={location && location.pathname} />
-              { this.props.children }
-            </div> :
-            <div className="wgsa-hub-welcome-container">
-              <p className="wgsa-hub-welcome">
-                { filterActive ?
-                    'Nothing to show...' :
-                    'Drag and drop files to begin.'
-                }
-              </p>
-            </div>
-        }
+        <div className="wgsa-hub">
+          <Summary pathname={location && location.pathname} />
+          { hasFastas ?
+            this.props.children :
+            <p className="wgsa-hub__view wgsa-hub-big-message">
+              { filterActive ?
+                  'No matches.' :
+                  'Drag and drop files to begin.'
+              }
+            </p>
+          }
+        </div>
         <Filter filterActive={filterActive} />
       </FileDragAndDrop>
     );

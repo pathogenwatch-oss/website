@@ -10,25 +10,16 @@
   flex-grow: 1;
 }
 
-.wgsa-hub-welcome-container {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-}
-
-.wgsa-hub-welcome {
+.wgsa-hub-big-message {
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
   font-size: 1.75rem;
   line-height: 1.2;
   color: #a386bd;
-  margin-bottom: 32px;
   font-weight: 400;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 120px;
 }
 
 .wgsa-virtualised-grid {
