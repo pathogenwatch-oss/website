@@ -1,0 +1,44 @@
+.wgsa-hub-summary {
+  display: flex;
+  height: 4rem;
+  align-items: center;
+}
+
+.wgsa-hub-summary > .wgsa-progress-bar {
+  width: 12.5rem;
+}
+
+.wgsa-hub-summary > p {
+  font-size: 13px;
+  margin: 0;
+}
+
+.wgsa-hub-summary > p > span {
+  color: #673c90;
+}
+
+.wgsa-hub-view-switcher {
+  margin: 0 0.125rem;
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+}
+
+.wgsa-hub-view-switcher:first-of-type {
+  margin-left: 1.125rem;
+}
+
+.wgsa-hub-view-switcher--active {
+  color: #a386bd;
+  cursor: default;
+}
+
+.wgsa-hub-view-switcher--active:hover,
+.wgsa-hub-view-switcher--active:focus,
+.wgsa-hub-view-switcher--active:active {
+  background: none !important;
+}
+
+.wgsa-hub-view-switcher > i {
+  font-size: 20px;
+}

@@ -1,4 +1,7 @@
-import { ADD_FASTAS, UPLOAD_FASTA, UPDATE_FASTA_PROGRESS } from '../actions';
+import {
+  ADD_FASTAS, UPLOAD_FASTA, UPDATE_FASTA_PROGRESS,
+  REMOVE_FASTA, UNDO_REMOVE_FASTA,
+} from '../actions';
 
 import { taxIdMap, isSupported } from '^/species';
 
@@ -44,6 +47,16 @@ export default {
     },
     [UPDATE_FASTA_PROGRESS](state, { name, progress }) {
       return updateFastas(state, name, { progress });
+    },
+    [REMOVE_FASTA](state, { name }) {
+      delete state[name];
+      return { ...state };
+    },
+    [UNDO_REMOVE_FASTA](state, { fasta }) {
+      return {
+        ...state,
+        [fasta.name]: fasta,
+      };
     },
   },
 };

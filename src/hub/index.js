@@ -1,4 +1,4 @@
-import './style.css';
+import './css/index.css';
 
 import { connect } from 'react-redux';
 
@@ -12,10 +12,8 @@ import * as selectors from './selectors';
 function mapStateToProps(state) {
   const { hub, collection } = state;
   return {
-    totalFastas: selectors.getTotalFastas(state),
-    fastas: selectors.getVisibleFastas(state),
+    hasFastas: selectors.getNumberOfVisibleFastas(state) > 0,
     filterActive: selectors.isFilterActive(state),
-    uploads: hub.uploads,
     loading: hub.loading,
     collection,
   };

@@ -1,4 +1,5 @@
 import './css/menu.css';
+import './css/forms.css';
 
 import React from 'react';
 import { Link } from 'react-router';

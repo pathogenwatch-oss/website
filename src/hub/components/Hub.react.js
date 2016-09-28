@@ -1,20 +1,20 @@
 import React from 'react';
 
-import ProgressBar from '../../components/ProgressBar.react';
 import FileDragAndDrop from '../../components/upload/DragAndDrop.react';
 
 import Header from './Header.react';
 import Filter from './Filter.react';
+import Summary from './Summary.react';
 
 import { updateHeader } from '^/actions/header';
-import { uploadFasta, addFiles } from '../thunks';
+import { addFiles } from '../thunks';
 
 import { taxIdMap } from '^/species';
 
 export default React.createClass({
 
   propTypes: {
-    fastas: React.PropTypes.array.isRequired,
+    hasFastas: React.PropTypes.bool,
     uploads: React.PropTypes.object,
     filterActive: React.PropTypes.bool,
     dispatch: React.PropTypes.func.isRequired,
@@ -25,23 +25,12 @@ export default React.createClass({
   },
 
   componentWillMount() {
-    const { fastas, dispatch } = this.props;
-    dispatch(
-      updateHeader({
-        classNames: `wgsa-hub-header ${fastas.length ? 'wgsa-hub--has-aside' : ''}`.trim(),
-        content: <Header />,
-      })
-    );
+    this.toggleAside(this.props.hasFastas);
     document.title = 'WGSA | Upload';
   },
 
   componentDidUpdate() {
-    const { uploads, loading, collection, dispatch } = this.props;
-    const { queue, uploading } = uploads;
-
-    if (queue.length && uploading.size < 5) {
-      dispatch(uploadFasta(queue[0]));
-    }
+    const { loading, collection } = this.props;
 
     if (loading) {
       componentHandler.upgradeElement(this.refs.loadingBar);
@@ -56,43 +45,41 @@ export default React.createClass({
     }
   },
 
+  toggleAside(hasAside) {
+    const { dispatch } = this.props;
+
+    dispatch(
+      updateHeader({
+        hasAside,
+        classNames: 'wgsa-hub-header',
+        content: <Header />,
+      })
+    );
+  },
+
   upload(newFiles) {
     const { dispatch } = this.props;
     dispatch(addFiles(newFiles));
-    dispatch(updateHeader({
-      classNames: 'wgsa-hub-header wgsa-hub--has-aside',
-    }));
+    this.toggleAside(true);
   },
 
   render() {
-    const { fastas, totalFastas, filterActive, loading, uploads } = this.props;
-    const { queue } = uploads;
-
+    const { hasFastas, filterActive, loading, location } = this.props;
     return (
       <FileDragAndDrop onFiles={this.upload}>
         { loading && <div ref="loadingBar" className="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>}
-        { fastas.length ?
-            <div className="wgsa-hub">
-              <div className="wgsa-hub-summary">
-                { queue.length ?
-                    <ProgressBar
-                      className="wgsa-hub-upload-progress"
-                      progress={(1 - (queue.length / fastas.length)) * 100}
-                    /> :
-                    <p>Viewing <span>{fastas.length}</span> of {totalFastas} assemblies</p>
-                }
-              </div>
-              { React.cloneElement(this.props.children, { items: fastas }) }
-            </div> :
-            <div className="welcome-container">
-              <p className="welcome-intro">
-                { filterActive ?
-                    'Nothing to show...' :
-                    'Drag and drop files to begin.'
-                }
-              </p>
-            </div>
-        }
+        <div className="wgsa-hub">
+          <Summary pathname={location && location.pathname} />
+          { hasFastas ?
+            this.props.children :
+            <p className="wgsa-hub__view wgsa-hub-big-message">
+              { filterActive ?
+                  'No matches.' :
+                  'Drag and drop files to begin.'
+              }
+            </p>
+          }
+        </div>
         <Filter filterActive={filterActive} />
       </FileDragAndDrop>
     );

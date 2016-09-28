@@ -8,6 +8,7 @@ export default React.createClass({
     className: React.PropTypes.string,
     progress: React.PropTypes.number,
     indeterminate: React.PropTypes.bool,
+    label: React.PropTypes.string,
   },
 
   componentDidMount() {
@@ -32,10 +33,12 @@ export default React.createClass({
   },
 
   render() {
-    const { className, indeterminate } = this.props;
+    const { className, indeterminate, label } = this.props;
     const classes = `${className} mdl-progress mdl-js-progress ${indeterminate ? 'mdl-progress__indeterminate' : ''}`.trim();
     return (
-      <div ref="progressBar" className={classes}>
+      <div className="wgsa-progress-bar">
+        { label ? <label className="wgsa-progress-bar__label">{label}</label> : null }
+        <div ref="progressBar" className={classes} />
       </div>
     );
   },

@@ -28,30 +28,31 @@ export default React.createClass({
   },
 
   render() {
-    const { items } = this.props;
     const position = [ 51.505, -0.09 ];
     return (
-      <AutoSizer>
-        {({ height, width }) => {
-          if (window.leaflet) {
-            window.leaflet.invalidateSize(true);
-          }
-          return (
-            <Map center={position} zoom={1} style={{ height, width }}>
-              <Test />
-              <TileLayer
-                url="https://api.mapbox.com/styles/v1/mapbox/light-v9/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiY2dwc2RldiIsImEiOiJjaW96aXdzdDEwMGV0dm1tMnhqOWIzNXViIn0.2lJftMpp7LBJ_FeumUE4qw"
-                attribution="Map data &copy;<a href='http://openstreetmap.org'>OpenStreetMap</a> contributors, <a href='http://creativecommons.org/licenses/by-sa/2.0/'>CC-BY-SA</a>, Imagery © <a href='http://mapbox.com'>Mapbox</a>"
-              />
-              <Marker position={position}>
-                <Popup>
-                  <span>A pretty CSS3 popup.<br />Easily customizable.</span>
-                </Popup>
-              </Marker>
-            </Map>
-          );
-        }}
-      </AutoSizer>
+      <div className="wgsa-hub__view">
+        <AutoSizer>
+          {({ height, width }) => {
+            if (window.leaflet) {
+              window.leaflet.invalidateSize(true);
+            }
+            return (
+              <Map center={position} zoom={1} style={{ height, width }}>
+                <Test />
+                <TileLayer
+                  url="https://api.mapbox.com/styles/v1/mapbox/light-v9/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiY2dwc2RldiIsImEiOiJjaW96aXdzdDEwMGV0dm1tMnhqOWIzNXViIn0.2lJftMpp7LBJ_FeumUE4qw"
+                  attribution="Map data &copy;<a href='http://openstreetmap.org'>OpenStreetMap</a> contributors, <a href='http://creativecommons.org/licenses/by-sa/2.0/'>CC-BY-SA</a>, Imagery © <a href='http://mapbox.com'>Mapbox</a>"
+                />
+                <Marker position={position}>
+                  <Popup>
+                    <span>A pretty CSS3 popup.<br />Easily customizable.</span>
+                  </Popup>
+                </Marker>
+              </Map>
+            );
+          }}
+        </AutoSizer>
+      </div>
     );
   },
 

@@ -1,0 +1,96 @@
+.wgsa-hub-filter {
+  position: fixed;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 255px;
+  z-index: 3;
+  background: #fff;
+  border-left: 1px solid rgba(0, 0, 0, 0.14);
+  transform: translateX(255px);
+  transition: .28s cubic-bezier(.4,0,.2,1);
+  transition-property: transform;
+}
+
+.wgsa-has-aside ~ .mdl-layout__content .wgsa-hub-filter {
+  transform: translateX(0);
+}
+
+.wgsa-hub-filter__header {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.14);
+  position: relative;
+}
+
+.wgsa-hub-filter__search {
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  height: 64px;
+}
+
+.wgsa-hub-filter__search input {
+  border: 0;
+  height: 100%;
+  width: 100%;
+  padding: 0 16px;
+  outline: none;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-size: 15px;
+}
+
+.wgsa-hub-filter__section {
+  padding: 16px 24px 0;
+}
+
+.wgsa-hub-filter__section > h3 {
+  font-size: 14px;
+  font-family: "Roboto", sans-serif;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.54);
+  margin: 0;
+}
+
+.wgsa-hub-filter .mdl-chip {
+  display: block;
+  margin-bottom: 8px;
+  max-width: 100%;
+}
+
+.wgsa-hub-filter .mdl-chip__contact {
+  background: #a386bd;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.wgsa-hub-filter .mdl-chip__text {
+  max-width: 80%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mdl-chip--active {
+  background: #a386bd;
+  color: #fff;
+  font-weight: 500;
+}
+
+.mdl-chip--active .mdl-chip__contact {
+  background: #673c90;
+}
+
+.wgsa-hub-filter__footer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 8px;
+  border-top: 1px solid rgba(0, 0, 0, 0.14);
+  transform: translateY(100%);
+  transition: .28s cubic-bezier(.4,0,.2,1);
+  transition-property: transform;
+}
+
+.wgsa-hub-filter__footer--active {
+  transform: translateY(0);
+}

@@ -1,11 +1,49 @@
-import actions, { ADD_FASTAS, UPLOAD_FASTA } from './actions';
+import actions, { UPLOAD_FASTA } from './actions';
 
 import * as selectors from './selectors';
 
+import ToastActionCreators from '../actions/ToastActionCreators';
+
 import { mapCSVsToFastas, showDuplicatesToast, sendToServer } from './utils';
+import { undoRemoveFasta } from './utils/toasts';
 
 function isDuplicate({ name }, files) {
   return files[name] !== undefined;
+}
+
+export function uploadFasta({ name, file, metadata }) {
+  return dispatch => {
+    const coords =
+      metadata && metadata.latitude && metadata.longitude ?
+        { lat: metadata.latitude, lon: metadata.longitude } :
+        null;
+
+    return dispatch({
+      type: UPLOAD_FASTA,
+      payload: {
+        name,
+        promise: sendToServer({ file, coords }, dispatch),
+      },
+    });
+  };
+}
+
+const uploadLimit = 5;
+
+export function uploadFiles(files) {
+  return (dispatch, getState) => {
+    dispatch(actions.addFastas(files));
+
+    (function upload() {
+      const { queue, uploading } = selectors.getUploads(getState());
+      if (queue.length && uploading.size < uploadLimit) {
+        dispatch(
+          uploadFasta(files[files.length - queue.length])
+        ).then(() => { if (queue.length > uploadLimit) upload(); });
+        upload();
+      }
+    }());
+  };
 }
 
 export function addFiles(newFiles) {
@@ -19,32 +57,10 @@ export function addFiles(newFiles) {
 
         if (duplicates.length) showDuplicatesToast(duplicates);
         if (nonDuplicates.length) {
-          dispatch({ type: ADD_FASTAS, payload: { fastas: nonDuplicates } });
+          dispatch(uploadFiles(nonDuplicates));
         }
       }
     );
-  };
-}
-
-export function uploadFasta(name) {
-  return (dispatch, getState) => {
-    const state = getState();
-
-    const { file, metadata } = selectors.getFastas(state)[name];
-    const coords =
-      metadata && metadata.latitude && metadata.longitude ?
-        { lat: metadata.latitude, lon: metadata.longitude } :
-        null;
-
-    if (!file) return;
-
-    dispatch({
-      type: UPLOAD_FASTA,
-      payload: {
-        name,
-        promise: sendToServer({ file, coords }, dispatch),
-      },
-    });
   };
 }
 
@@ -73,5 +89,16 @@ export function filterByText(text) {
     dispatch(actions.filterFastas(
       text, getNames(fastas, file => regexp.test(file.name))
     ));
+  };
+}
+
+export function removeFasta(name) {
+  return (dispatch, getState) => {
+    const state = getState();
+    const fastas = selectors.getFastas(state);
+    const fasta = { ...fastas[name] };
+
+    dispatch(actions.removeFasta(name));
+    ToastActionCreators.showToast(undoRemoveFasta(fasta, dispatch));
   };
 }

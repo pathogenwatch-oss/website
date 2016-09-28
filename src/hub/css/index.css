@@ -1,0 +1,40 @@
+.wgsa-hub {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+.wgsa-hub__view {
+  flex-grow: 1;
+}
+
+.wgsa-hub-big-message {
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-size: 1.75rem;
+  line-height: 1.2;
+  color: #a386bd;
+  font-weight: 400;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 120px;
+}
+
+.wgsa-virtualised-grid {
+  outline: none;
+  overflow-x: hidden !important;
+}
+
+.wgsa-hub-gutter {
+  margin: 0 5.5rem;
+}
+
+.wgsa-hub-gutter-left {
+  margin-left: 5.5rem;
+}
+
+.wgsa-hub-gutter-right {
+  margin-right: 5.5rem;
+}

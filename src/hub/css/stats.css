@@ -1,0 +1,59 @@
+.wgsa-hub-stats-view {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.wgsa-hub-stats-heading {
+  font-family: "Roboto Condensed", "Helvetica", "Arial", sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
+  margin: 1rem 0;
+  padding-top: 0.625rem;
+  color: #673c90;
+  font-weight: 500;
+  border-top: 1px solid #673c90;
+}
+
+.wgsa-chart-tooltip {
+  background: rgba(255, 255, 255, 0.87);
+  padding: 0.5rem;
+}
+
+.wgsa-chart-tooltip__heading {
+  font-size: 1rem;
+  line-height: 1;
+  font-weight: 500;
+  margin: 0 0 0.25rem;
+  color: #673c90;
+}
+
+.wgsa-hub-stats-section {
+  margin: 0;
+  width: 100%;
+}
+
+.wgsa-hub-stats-section--small {
+  width: 50%;
+}
+
+.wgsa-hub-stats-bigstat {
+  font-size: 4rem;
+  line-height: 1;
+  font-weight: 100;
+  margin: 0;
+  padding: 0 0 2rem;
+
+}
+
+.wgsa-chart-tooltip dl {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.wgsa-chart-tooltip dt {
+  display: none;
+}
+
+.wgsa-chart-tooltip dd {
+  margin: 0;
+}
