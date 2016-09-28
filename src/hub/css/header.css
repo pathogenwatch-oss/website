@@ -1,6 +1,6 @@
 .wgsa-hub-header {
   border-bottom: 1px solid rgba(0, 0, 0, 0.14);
-  position: fixed;
+  /*position: fixed;*/
 }
 
 .wgsa-has-aside {
@@ -17,7 +17,7 @@
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
   font-size: 13px;
   color: rgba(0, 0, 0, 0.54);
-  margin-top: 64px;
+  /*margin-top: 64px;*/
 }
 
 .wgsa-hub-header .mdl-layout-title {

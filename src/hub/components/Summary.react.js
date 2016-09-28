@@ -19,7 +19,7 @@ const ViewSwitcher = ({ icon, title, to, pathname }) => (
 );
 
 export const Summary = ({ queueLength, visibleFastas, totalFastas, pathname }) => (
-  <div className="wgsa-hub-summary">
+  <div className="wgsa-hub-summary wgsa-hub-gutter">
     { queueLength ?
         <ProgressBar
           className="wgsa-hub-upload-progress"

@@ -1,33 +1,49 @@
 .wgsa-hub {
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
   height: 100%;
-  padding-top: 52px;
-  padding-left: 4rem;
   width: 100%;
-  position: relative;
 }
 
-.wgsa-hub-upload-progress {
-  max-width: 640px;
+.wgsa-hub__view {
+  flex-grow: 1;
 }
 
-.wgsa-hub-summary {
-  padding: 1rem 2.5rem;
+.wgsa-hub-welcome-container {
   position: absolute;
   top: 0;
-  left: 4rem;
+  bottom: 0;
+  left: 0;
   right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
-.wgsa-hub-summary > p {
-  font-size: 13px;
-  margin: 0;
-}
-
-.wgsa-hub-summary > p > span {
-  color: #673c90;
+.wgsa-hub-welcome {
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-size: 1.75rem;
+  line-height: 1.2;
+  color: #a386bd;
+  margin-bottom: 32px;
+  font-weight: 400;
 }
 
 .wgsa-virtualised-grid {
   outline: none;
+  overflow-x: hidden !important;
+}
+
+.wgsa-hub-gutter {
+  margin: 0 5.5rem;
+}
+
+.wgsa-hub-gutter-left {
+  margin-left: 5.5rem;
+}
+
+.wgsa-hub-gutter-right {
+  margin-right: 5.5rem;
 }

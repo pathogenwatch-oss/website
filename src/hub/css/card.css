@@ -2,8 +2,10 @@
   background: white;
   border-top: 1px solid color(#a386bd tint(50%));
   height: 104px;
-  margin: 0 1rem 1rem;
+  margin-right: 2rem;
+  margin-bottom: 1rem;
   padding: 1.25rem 1.5rem;
+  position: relative;
   /*overflow: hidden;*/
 }
 
@@ -55,8 +57,8 @@
 
 .wgsa-remove-fasta-button {
   position: absolute;
-  right: 1rem;
-  bottom: 1rem;
+  right: 0rem;
+  bottom: 0rem;
 }
 
 .wgsa-hub-card button {

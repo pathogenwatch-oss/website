@@ -1,14 +1,8 @@
-import '../../css/drop-indicator.css';
+import '../../css/drag-and-drop.css';
 
 import React from 'react';
 
 import DEFAULT, { CGPS } from '^/defaults';
-
-const style = {
-  width: '100%',
-  height: '100%',
-  position: 'absolute',
-};
 
 const fileInputStyle = {
   position: 'fixed',
@@ -33,9 +27,11 @@ export default React.createClass({
 
   componentWillMount() {
     if (this.props.noAddButton) {
-      style.cursor = 'pointer';
+      this.style.cursor = 'pointer';
     }
   },
+
+  style: {},
 
   handleFiles(fileList) {
     this.props.onFiles(Array.from(fileList));
@@ -80,7 +76,7 @@ export default React.createClass({
         className={`wgsa-drag-and-drop ${this.state.indicatorVisible ? 'is-dragover' : ''}`}
         onDragOver={this.showDropIndicator}
         onDrop={this.handleDrop}
-        style={style}
+        style={this.style}
         onClick={this.props.noAddButton ? this.handleClick : () => {}}
       >
         <div

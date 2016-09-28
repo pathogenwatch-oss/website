@@ -9,7 +9,7 @@ export default React.createClass({
   render() {
     const { items } = this.props;
     return (
-      <div>Map</div>
+      <div className="wgsa-hub__view">Map</div>
     );
   },
 

@@ -36,7 +36,7 @@ export default React.createClass({
         data.reduce((memo, { value }) => memo + value, 0) / data.length : 0;
 
     return (
-      <div className="wgsa-hub-stats-view">
+      <div className="wgsa-hub__view wgsa-hub-gutter wgsa-hub-stats-view">
         <dl className="wgsa-hub-stats-section wgsa-hub-stats-section--small">
           <dt className="wgsa-hub-stats-heading">Avg. Assembly Length</dt>
           <dd className="wgsa-hub-stats-bigstat">{avg.toFixed(0)}</dd>

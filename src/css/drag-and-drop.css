@@ -1,3 +1,11 @@
+.wgsa-drag-and-drop {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
 /*.wgsa-drop-indicator * {
   pointer-events: none;
 }*/
@@ -28,7 +36,7 @@
 .wgsa-drag-and-drop__button {
   position: fixed;
   bottom: 3rem;
-  right: 4rem;
+  right: 3rem;
   background: #673c90;
   color: #fff;
 }

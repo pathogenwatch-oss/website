@@ -25,8 +25,6 @@ export default React.createClass({
   },
 
   componentWillMount() {
-    const { fastas } = this.props;
-
     this.toggleAside();
     document.title = 'WGSA | Upload';
   },
@@ -77,8 +75,8 @@ export default React.createClass({
               <Summary pathname={location && location.pathname} />
               { React.cloneElement(this.props.children, { items: fastas }) }
             </div> :
-            <div className="welcome-container">
-              <p className="welcome-intro">
+            <div className="wgsa-hub-welcome-container">
+              <p className="wgsa-hub-welcome">
                 { filterActive ?
                     'Nothing to show...' :
                     'Drag and drop files to begin.'

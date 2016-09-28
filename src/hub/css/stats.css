@@ -1,5 +1,4 @@
 .wgsa-hub-stats-view {
-  padding-right: 4em;
   display: flex;
   flex-wrap: wrap;
 }
@@ -29,12 +28,12 @@
 }
 
 .wgsa-hub-stats-section {
-  margin: 0 2.5rem;
-  width: calc(100% - 4rem);
+  margin: 0;
+  width: 100%;
 }
 
 .wgsa-hub-stats-section--small {
-  width: calc(50% - 4rem);
+  width: 50%;
 }
 
 .wgsa-hub-stats-bigstat {
