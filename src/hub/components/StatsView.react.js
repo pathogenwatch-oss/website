@@ -49,18 +49,8 @@ const ChartButton = connect(mapStateToButton, mapDispatchToButton)(
 );
 
 export const StatsView =
-  ({ avgAsemblyLength, numContigsRange = {}, chartData }) => (
+  ({ average, range = {}, chartData }) => (
       <div className="wgsa-hub-stats-view wgsa-hub-gutter-left">
-        <dl className="wgsa-hub-stats-section wgsa-hub-stats-section--small">
-          <dt className="wgsa-hub-stats-heading">Avg. Assembly Length</dt>
-          <dd className="wgsa-hub-stats-bigstat">{avgAsemblyLength}</dd>
-        </dl>
-        <dl className="wgsa-hub-stats-section wgsa-hub-stats-section--small">
-          <dt className="wgsa-hub-stats-heading">No. Contigs Range</dt>
-          <dd className="wgsa-hub-stats-bigstat">
-            {`${numContigsRange.min} - ${numContigsRange.max}`}
-          </dd>
-        </dl>
         <div className="wgsa-hub-stats-section">
           <h2 className="wgsa-hub-stats-heading">
             {charts.map(props =>
@@ -83,13 +73,23 @@ export const StatsView =
           </ResponsiveContainer>
           {/* <TooltipContent items={data} payload={[ { value: 0 }, { value: data[0].value } ]} /> */}
         </div>
+        <dl className="wgsa-hub-stats-section wgsa-hub-stats-section--small">
+          <dt className="wgsa-hub-stats-heading">Average</dt>
+          <dd className="wgsa-hub-stats-bigstat">{average}</dd>
+        </dl>
+        <dl className="wgsa-hub-stats-section wgsa-hub-stats-section--small">
+          <dt className="wgsa-hub-stats-heading">Range</dt>
+          <dd className="wgsa-hub-stats-bigstat">
+            {`${range.min} - ${range.max}`}
+          </dd>
+        </dl>
       </div>
     );
 
 function mapStateToProps(state) {
   return {
-    avgAsemblyLength: selectors.getAverageAssemblyLength(state),
-    numContigsRange: selectors.getNumContigsRange(state),
+    average: selectors.getMetricAverage(state),
+    range: selectors.getMetricRange(state),
     chartData: selectors.getSelectedChartData(state),
   };
 }

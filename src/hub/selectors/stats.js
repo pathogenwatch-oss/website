@@ -15,21 +15,22 @@ export const getAssemblyMetrics = createSelector(
     }, [])
 );
 
-export const getAverageAssemblyLength = createSelector(
+export const getMetricAverage = createSelector(
   getAssemblyMetrics,
-  metrics => (
-    metrics.reduce((memo, metric) =>
-      memo + metric.totalNumberOfNucleotidesInDnaStrings, 0
-    ) / (metrics.length || 1)
+  getSelectedMetric,
+  (metrics, selectedMetric) => (
+    metrics.reduce((memo, _) => memo + Number(_[selectedMetric]), 0) /
+    (metrics.length || 1)
   ).toFixed(0)
 );
 
-export const getNumContigsRange = createSelector(
+export const getMetricRange = createSelector(
   getAssemblyMetrics,
-  metrics => metrics.reduce((memo, metric) => ({
-    min: Math.min(memo.min, metric.totalNumberOfContigs),
-    max: Math.max(memo.max, metric.totalNumberOfContigs),
-  }), { min: 1, max: 1 })
+  getSelectedMetric,
+  (metrics, selectedMetric) => metrics.reduce(({ min, max }, _) => ({
+    min: min ? Math.min(min, _[selectedMetric]) : _[selectedMetric],
+    max: max ? Math.max(max, _[selectedMetric]) : _[selectedMetric],
+  }), { min: 0, max: 0 })
 );
 
 export const getSelectedChartData = createSelector(
