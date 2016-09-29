@@ -6,6 +6,7 @@ import { SET_COLOUR_COLUMNS } from '../actions/table';
 import Species from '../species';
 
 import * as resistanceProfile from '../utils/resistanceProfile';
+import { measureText } from '../utils/table/columnWidth';
 
 import { downloadColumnProps, nameColumnProps } from '../constants/table';
 
@@ -29,16 +30,39 @@ function createAntibioticsColumn({ name, longName }) {
 
   return {
     columnKey,
+    getLabel(isSelected) {
+      return isSelected ? hoverName : columnKey;
+    },
     headerClasses: 'wgsa-table-header--resistance',
     headerTitle: `${hoverName} - ${modifierKey} + click to select multiple`,
     cellClasses: 'wgsa-table-cell--resistance',
-    fixedWidth: 40,
+    getWidth(props, { analysis = {} }) {
+      if (!props.isSelected) {
+        return 40;
+      }
+      const { mechanisms } = analysis.resistanceProfile[props.columnKey];
+      return mechanisms.reduce((width, _) => width + measureText(_, 16), 0);
+    },
+    cellPadding: 16,
     flexGrow: 0,
     getCellContents(props, { analysis = {} }) {
-      const isResistant = resistanceProfile.isResistant(analysis.resistanceProfile, props.columnKey);
+      const isResistant =
+        resistanceProfile.isResistant(analysis.resistanceProfile, props.columnKey);
       if (isResistant) {
-        return (
-          <i className="material-icons wgsa-resistance-icon wgsa-resistance-icon--resistant">
+        const { mechanisms } = analysis.resistanceProfile[props.columnKey];
+        return props.isSelected ? (
+          <span className="wgsa-resistance-mechanism-list">
+            {mechanisms.map(mechanism =>
+              <button key={mechanism} className="wgsa-resistance-mechanism">
+                {mechanism}
+              </button>)
+            }
+          </span>
+        ) : (
+          <i
+            className="material-icons wgsa-resistance-icon wgsa-resistance-icon--resistant"
+            title={mechanisms.join(', ')}
+          >
             check_circle
           </i>
         );
@@ -85,7 +109,7 @@ const actions = {
       ...buildAntibioticColumnProps(antibiotics),
       { columnKey: '__spacer_r',
         getHeaderContent() {},
-        fixedWidth: 1,
+        fixedWidth: 8,
         getCellContents() {},
         cellClasses: 'wgsa-table-cell--resistance',
       },

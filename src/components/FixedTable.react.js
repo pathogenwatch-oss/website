@@ -5,7 +5,7 @@ import '../css/table.css';
 import React from 'react';
 import { Table, Column, Cell } from 'fixed-data-table';
 
-import { formatColumnLabel, getCellValue } from '../utils/table';
+import { getColumnLabel, getCellValue } from '../utils/table';
 
 function getClassNames(baseClass, selected, extraClasses) {
   return (
@@ -26,7 +26,7 @@ export const DefaultColumnHeader =
       className="wgsa-selectable-column-heading"
       onClick={event => handleHeaderClick(event, columnProps)}
     >
-      {formatColumnLabel(columnProps.columnKey)}
+      {getColumnLabel(columnProps)}
     </button>
   );
 

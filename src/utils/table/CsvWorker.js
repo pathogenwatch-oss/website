@@ -1,7 +1,7 @@
 import registerPromiseWorker from 'promise-worker/register';
 import Papa from 'papaparse';
 
-import { formatColumnLabel } from './index';
+import { formatColumnKeyAsLabel } from './index';
 
 import {
   getSystemDataColumnProps,
@@ -61,7 +61,7 @@ registerPromiseWorker((message) => {
   const valueGetters = mapToGetters(columnKeys, table);
 
   return Papa.unparse({
-    fields: columnKeys.map(_ => formatColumnLabel(_)),
+    fields: columnKeys.map(key => formatColumnKeyAsLabel(key)),
     data: rows.map(row => valueGetters.map(getter => getter(row))),
   });
 });
