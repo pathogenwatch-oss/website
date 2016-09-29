@@ -172,14 +172,6 @@ export function getTreeFunctions(tree, state, dispatch) {
   return getStandardTreeFunctions(state, dispatch);
 }
 
-export function defaultColourGetter(assembly) {
-  if (assembly.__isCollection) {
-    return CGPS.COLOURS.PURPLE_LIGHT;
-  }
-
-  return CGPS.COLOURS.GREY;
-}
-
 const TREE_LABELS_SUFFIX = 'tree_labels.txt';
 
 export function getFilenames(title, collectionId, { columnKey }) {

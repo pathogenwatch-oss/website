@@ -5,11 +5,7 @@ import { SET_COLOUR_COLUMNS } from '../actions/table';
 
 import Species from '../species';
 
-import {
-  getColour,
-  measureText,
-  onHeaderClick,
-} from '../utils/resistanceProfile';
+import * as resistanceProfile from '../utils/resistanceProfile';
 
 import { downloadColumnProps, nameColumnProps } from '../constants/table';
 
@@ -28,28 +24,29 @@ const isMac =
 const modifierKey = isMac ? 'Cmd' : 'Ctrl';
 
 function createAntibioticsColumn({ name, longName }) {
-  const isAbbreviated = longName !== null;
+  const columnKey = longName ? name : name.slice(0, 3);
+  const hoverName = longName || name;
 
   return {
-    columnKey: name,
-    headerClasses: `wgsa-table-header--resistance ${!isAbbreviated ? 'wgsa-table-header--angled' : ''}`.trim(),
-    headerTitle: `${isAbbreviated ? `${longName} - ` : ''}${modifierKey} + click to select multiple`,
+    columnKey,
+    headerClasses: 'wgsa-table-header--resistance',
+    headerTitle: `${hoverName} - ${modifierKey} + click to select multiple`,
     cellClasses: 'wgsa-table-cell--resistance',
     fixedWidth: 40,
     flexGrow: 0,
-    getCellContents({ columnKey }, { analysis }) {
-      const value = analysis.resistanceProfile[columnKey];
-      if (value) {
+    getCellContents(props, { analysis = {} }) {
+      const isResistant = resistanceProfile.isResistant(analysis.resistanceProfile, props.columnKey);
+      if (isResistant) {
         return (
-          <i className={`material-icons wgsa-resistance-icon wgsa-resistance-icon--${value.toLowerCase()}`}>
-            { value === 'RESISTANT' ? 'check_circle' : '' }
+          <i className="material-icons wgsa-resistance-icon wgsa-resistance-icon--resistant">
+            check_circle
           </i>
         );
       }
       return null;
     },
-    valueGetter: (assembly) => getColour(name, assembly),
-    onHeaderClick,
+    valueGetter: (assembly) => resistanceProfile.getColour(name, assembly),
+    onHeaderClick: resistanceProfile.onHeaderClick,
   };
 }
 
@@ -76,7 +73,6 @@ function buildAntibioticColumnProps(antibiotics) {
 const actions = {
   [FETCH_ENTITIES.SUCCESS](state, payload) {
     const antibiotics = payload[2];
-    const lastAntibiotic = antibiotics[antibiotics.length - 1];
 
     const columns = [
       { columnKey: '__spacer_l',
@@ -89,23 +85,13 @@ const actions = {
       ...buildAntibioticColumnProps(antibiotics),
       { columnKey: '__spacer_r',
         getHeaderContent() {},
-        fixedWidth:
-          Math.cos(45 * Math.PI / 180) *
-            measureText(lastAntibiotic.name) - 16,
+        fixedWidth: 1,
         getCellContents() {},
         cellClasses: 'wgsa-table-cell--resistance',
       },
     ];
 
-    return {
-      ...state,
-      columns,
-      tableProps: {
-        headerHeight: antibiotics.reduce((maxWidth, antibiotic) =>
-          Math.max(maxWidth, measureText(antibiotic.name))
-        , 0),
-      },
-    };
+    return { ...state, columns };
   },
   [SET_COLOUR_COLUMNS](state, { columns }) {
     return {

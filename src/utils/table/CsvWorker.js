@@ -8,6 +8,8 @@ import {
   getUserDefinedValue,
 } from '^/constants/metadata';
 
+import { isResistant } from '^/utils/resistanceProfile';
+
 import { nameColumnData } from '^/constants/table/columns';
 
 import Species from '^/species';
@@ -38,8 +40,7 @@ const gettersByTable = {
         if (!analysis.resistanceProfile) {
           return 0;
         }
-        const value = analysis.resistanceProfile[antibiotic];
-        return value === 'RESISTANT' ? 1 : 0;
+        return isResistant(analysis.resistanceProfile, antibiotic) ? 1 : 0;
       },
     };
   },
