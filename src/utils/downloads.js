@@ -5,7 +5,7 @@ import { collectionPath, encode } from '../constants/downloads';
 
 import getCSVWorker from 'worker?name=csv.worker.js!./table/CsvWorker';
 
-function convertTableToCSV(table) {
+function convertTableToCSV(table, dataType) {
   return function ({ tables, assemblies, assemblyIds }) {
     const columnKeys =
       tables[table].columns.
@@ -15,14 +15,18 @@ function convertTableToCSV(table) {
     const rows = assemblyIds.map(_ => assemblies[_]);
 
     return (
-      new PromiseWorker(getCSVWorker()).postMessage({ table, rows, columnKeys })
+      new PromiseWorker(getCSVWorker()).
+        postMessage({ table, dataType, rows, columnKeys })
     );
   };
 }
 
 const { metadata, resistanceProfile } = tableKeys;
 export const generateMetadataFile = convertTableToCSV(metadata);
-export const generateAMRProfile = convertTableToCSV(resistanceProfile);
+export const generateAMRProfile =
+  convertTableToCSV(resistanceProfile, 'profile');
+export const generateAMRMechanisms =
+  convertTableToCSV(resistanceProfile, 'mechanisms');
 
 export function createDefaultLink(keyMap, filename) {
   const key = Object.keys(keyMap)[0];
