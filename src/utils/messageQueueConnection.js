@@ -21,9 +21,9 @@ var EXCHANGE_CONFIG = {
     name: 'notifications-ex',
     type: 'direct',
   },
-  UPLOAD: {
-    name: 'wgst-ex',
-    type: 'direct',
+  TASK: {
+    name: 'wgst-task-ex',
+    type: 'topic',
   },
   COLLECTION_ID: {
     name: 'grid-ex',

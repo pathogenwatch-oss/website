@@ -14,53 +14,40 @@ const {
 
 var ASSEMBLY_ANALYSES = [ 'FP', 'MLST', 'PAARSNP', 'CORE' ];
 
-function sendUploadNotification({ speciesId, collectionId, assemblyId }, status) {
-  messageQueueService.getNotificationExchange().publish(
-    `${speciesId}.UPLOAD.ASSEMBLY.${assemblyId}`, {
-      taskType: 'UPLOAD',
-      taskStatus: status,
-      collectionId,
-      assemblyId: {
-        assemblyId,
-      },
-    }
-  );
-}
-
 function createKey(id, prefix) {
   return prefix + '_' + id;
 }
 
+function storeMetadata(args) {
+  const { speciesId, collectionId, assemblyId, metadata, metrics } = args;
 
-function beginUpload(ids, data) {
-  var assemblyMetadata = metadataModel.createRecord(ids, data.metadata, data.metrics);
-  var assembly = {
-    speciesId: ids.speciesId,
-    assemblyId: ids.assemblyId,
-    collectionId: ids.collectionId,
-    sequences: data.sequences,
+  const assemblyMetadata = metadataModel.createRecord(
+    { speciesId, collectionId, assemblyId },
+    metadata,
+    metrics
+  );
+
+  return new Promise((resolve, reject) => {
+    mainStorage.store(
+      createKey(assemblyId, ASSEMBLY_METADATA),
+      assemblyMetadata, error => {
+        if (error) return reject(error);
+        return resolve();
+      });
+  });
+}
+
+function submit({ speciesId, collectionId, assemblyId, fileId, filePath }) {
+  const message = {
+    speciesId,
+    collectionId,
+    assemblyId: { uuid: assemblyId, checksum: fileId },
+    fastaLocation: filePath,
+    taskId: `${collectionId}_${assemblyId}`,
+    action: 'CREATE',
   };
 
-  mainStorage.store(
-    createKey(ids.assemblyId, ASSEMBLY_METADATA), assemblyMetadata, () => {});
-
-  messageQueueService.newAssemblyUploadQueue(ids.assemblyId, uploadQueue => {
-    uploadQueue.subscribe((error, message) => {
-      LOGGER.debug(error, message);
-      LOGGER.info(`Received response from ${uploadQueue.name}, destroying.`);
-      uploadQueue.destroy();
-
-      sendUploadNotification(ids, error ? 'ERROR' : 'SUCCESS');
-    });
-
-    messageQueueService.getUploadExchange().publish(
-      'upload', assembly, { replyTo: uploadQueue.name }
-    );
-
-    // "dereference" sequences to remove from heap
-    data.sequences = null;
-    assembly.sequences = null;
-  });
+  messageQueueService.getTaskExchange().publish(`${speciesId}.all`, message);
 }
 
 function constructQueryKeys(prefixes, assemblyId) {
@@ -183,7 +170,8 @@ function groupAssembliesBySubtype(assemblies) {
 }
 
 module.exports.ASSEMBLY_ANALYSES = ASSEMBLY_ANALYSES;
-module.exports.beginUpload = beginUpload;
+module.exports.submit = submit;
+module.exports.storeMetadata = storeMetadata;
 module.exports.getComplete = getComplete;
 module.exports.getReference = getReference;
 module.exports.groupAssembliesBySubtype = groupAssembliesBySubtype;

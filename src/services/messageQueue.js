@@ -37,23 +37,6 @@ function generateQueueId(prefix) {
   return (prefix + uuid.v4());
 }
 
-function newAssemblyUploadQueue(assemblyId, callback) {
-  connection.queue(
-    `assembly-${assemblyId}-upload-queue`, {
-      passive: false,
-      durable: false,
-      autoDelete: true,
-      noDeclare: false,
-      closeChannelOnUnsubscribe: false,
-    },
-    function (queue) {
-      LOGGER.info('Upload queue "' + queue.name + '" is open');
-      parseMessagesAsJson(queue);
-      callback(queue);
-    }
-  );
-}
-
 function newCollectionAddQueue(callback) {
   var queueId = generateQueueId('create-collection-queue-');
   return connection.queue(queueId, {
@@ -105,8 +88,8 @@ function newUploadProgressRequestQueue(collectionId, callback) {
   });
 }
 
-function getUploadExchange() {
-  return exchanges.UPLOAD;
+function getTaskExchange() {
+  return exchanges.TASK;
 }
 
 function getCollectionIdExchange() {
@@ -121,11 +104,10 @@ function getNotificationExchange() {
   return exchanges.NOTIFICATION;
 }
 
-module.exports.newAssemblyUploadQueue = newAssemblyUploadQueue;
 module.exports.newCollectionAddQueue = newCollectionAddQueue;
 module.exports.newFileRequestQueue = newFileRequestQueue;
 module.exports.newUploadProgressRequestQueue = newUploadProgressRequestQueue;
-module.exports.getUploadExchange = getUploadExchange;
+module.exports.getTaskExchange = getTaskExchange;
 module.exports.getCollectionIdExchange = getCollectionIdExchange;
 module.exports.getServicesExchange = getServicesExchange;
 module.exports.getNotificationExchange = getNotificationExchange;
