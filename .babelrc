@@ -3,18 +3,7 @@
   "plugins": [ "recharts" ],
   "env": {
     "development": {
-      "plugins": [
-        [ "react-transform", {
-          "transforms": [ {
-            "transform": "react-transform-hmr",
-            "imports": [ "react" ],
-            "locals": [ "module" ]
-          }, {
-            "transform": "react-transform-catch-errors",
-            "imports": [ "react", "redbox-react" ]
-          } ]
-        } ]
-      ]
+      "plugins": [ "react-hot-loader/babel" ]
     }
   }
 }

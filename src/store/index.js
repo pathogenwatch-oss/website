@@ -5,9 +5,19 @@ import rootReducer from '../reducers';
 
 const middleware = [ promiseToThunk, thunk ];
 
-const configureStoreCreator =
+const getStore =
   process.env.NODE_ENV === 'production' ?
     require('./prod').default :
     require('./dev').default;
 
-export default configureStoreCreator(middleware, rootReducer);
+const store = getStore(middleware, rootReducer);
+
+export default store;
+
+if (module.hot) {
+  // Enable Webpack hot module replacement for reducers
+  module.hot.accept('../reducers', () => {
+    const nextRootReducer = require('../reducers').default;
+    store.replaceReducer(nextRootReducer);
+  });
+}

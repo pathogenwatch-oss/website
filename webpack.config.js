@@ -37,6 +37,7 @@ const commonPlugins = [
 const devConfig = {
   devtool: '#eval-source-map',
   entry: [
+    'react-hot-loader/patch',
     'webpack-hot-middleware/client',
     './src',
   ],

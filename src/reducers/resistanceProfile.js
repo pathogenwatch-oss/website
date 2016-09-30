@@ -75,7 +75,6 @@ function buildAntibioticColumnProps(antibiotics) {
 
 const actions = {
   [FETCH_ENTITIES.SUCCESS](state, { result }) {
-    console.log(result[2])
     const antibiotics = result[2];
     const lastAntibiotic = antibiotics[antibiotics.length - 1];
 

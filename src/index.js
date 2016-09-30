@@ -5,15 +5,27 @@ import 'phylocanvas/polyfill';
 import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
+import { AppContainer } from 'react-hot-loader';
 
 import Router from './Router';
 
-import getStore from '^/store';
+import store from '^/store';
 
-export const store = getStore();
+function renderApp(Root) {
+  render((
+    <AppContainer>
+      <Provider store={store}>
+        <Root />
+      </Provider>
+    </AppContainer>
+  ), document.getElementById('wgsa'));
+}
 
-render((
-  <Provider store={store}>
-    <Router />
-  </Provider>
-), document.getElementById('wgsa'));
+renderApp(Router);
+
+if (module.hot) {
+  module.hot.accept('./Router', () => {
+    const NextRouter = require('./Router').default;
+    renderApp(NextRouter);
+  });
+}
