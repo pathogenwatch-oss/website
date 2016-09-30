@@ -1,59 +1,67 @@
+import '../css/map.css';
+
 import React from 'react';
-import { Map, Marker, Popup, TileLayer } from 'react-leaflet';
-import { AutoSizer } from 'react-virtualized';
+import { connect } from 'react-redux';
 
-import leaflet from 'leaflet'
+import LeafletMap from './LeafletMap.react';
 
-const Test = React.createClass({
+import CONFIG from '../../config';
 
-  contextTypes: {
-    map: React.PropTypes.instanceOf(leaflet.Map),
-  },
+import { getMarkers, getBounds, getLassoPath } from '../selectors/map';
 
-  componentDidMount() {
-    window.leaflet = this.context.map;
-  },
+import filterActions from '../actions';
+import mapActions from '../actions/map';
 
-  render() {
-    return <p>test</p>;
-  },
+const lassoButtonClassname =
+  'wgsa-map-lasso-button mdl-button mdl-button--fab mdl-button--mini-fab';
 
-});
+const MapView = React.createClass({
 
-
-export default React.createClass({
+  displayName: 'MapView',
 
   propTypes: {
-    items: React.PropTypes.array,
+    markers: React.PropTypes.array,
+    bounds: React.PropTypes.object,
+    lassoPath: React.PropTypes.array,
+    onBoundsChange: React.PropTypes.func,
+    onLassoPathChange: React.PropTypes.func,
   },
 
   render() {
-    const position = [ 51.505, -0.09 ];
+    const { center, zoom } = this.props.bounds || {};
     return (
       <div className="wgsa-hub__view">
-        <AutoSizer>
-          {({ height, width }) => {
-            if (window.leaflet) {
-              window.leaflet.invalidateSize(true);
-            }
-            return (
-              <Map center={position} zoom={1} style={{ height, width }}>
-                <Test />
-                <TileLayer
-                  url="https://api.mapbox.com/styles/v1/mapbox/light-v9/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiY2dwc2RldiIsImEiOiJjaW96aXdzdDEwMGV0dm1tMnhqOWIzNXViIn0.2lJftMpp7LBJ_FeumUE4qw"
-                  attribution="Map data &copy;<a href='http://openstreetmap.org'>OpenStreetMap</a> contributors, <a href='http://creativecommons.org/licenses/by-sa/2.0/'>CC-BY-SA</a>, Imagery © <a href='http://mapbox.com'>Mapbox</a>"
-                />
-                <Marker position={position}>
-                  <Popup>
-                    <span>A pretty CSS3 popup.<br />Easily customizable.</span>
-                  </Popup>
-                </Marker>
-              </Map>
-            );
-          }}
-        </AutoSizer>
+        <LeafletMap
+          className="wgsa-hub-map-view"
+          markers={this.props.markers}
+          mapboxStyle="light-v9"
+          mapboxKey={CONFIG.mapboxKey}
+          center={center}
+          zoom={zoom}
+          lassoPath={this.props.lassoPath}
+          lassoButtonClassname={lassoButtonClassname}
+          onBoundsChange={this.props.onBoundsChange}
+          onLassoPathChange={this.props.onLassoPathChange}
+        />
       </div>
     );
   },
 
 });
+
+function mapStateToProps(state) {
+  return {
+    markers: getMarkers(state),
+    bounds: getBounds(state),
+    lassoPath: getLassoPath(state),
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    onBoundsChange: bounds => dispatch(mapActions.storeBounds(bounds)),
+    onLassoPathChange: path => dispatch(filterActions.filterByMetadata('area', path)),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(MapView);
