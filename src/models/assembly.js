@@ -42,10 +42,13 @@ function submit({ speciesId, collectionId, assemblyId, fileId, filePath }) {
     speciesId,
     collectionId,
     assemblyId: { uuid: assemblyId, checksum: fileId },
-    fastaLocation: filePath,
+    sequenceFile: filePath,
     taskId: `${collectionId}_${assemblyId}`,
     action: 'CREATE',
   };
+
+  LOGGER.info(`Submitting assembly ${assemblyId}`);
+  LOGGER.debug(message);
 
   messageQueueService.getTaskExchange().publish(`${speciesId}.all`, message);
 }
@@ -175,4 +178,3 @@ module.exports.storeMetadata = storeMetadata;
 module.exports.getComplete = getComplete;
 module.exports.getReference = getReference;
 module.exports.groupAssembliesBySubtype = groupAssembliesBySubtype;
-module.exports.sendUploadNotification = sendUploadNotification;

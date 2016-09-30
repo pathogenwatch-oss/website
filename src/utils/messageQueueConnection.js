@@ -22,7 +22,7 @@ var EXCHANGE_CONFIG = {
     type: 'direct',
   },
   TASK: {
-    name: 'wgst-task-ex',
+    name: 'wgst-tasks-ex',
     type: 'topic',
   },
   COLLECTION_ID: {

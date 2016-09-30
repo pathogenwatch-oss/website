@@ -11,7 +11,7 @@ const { COLLECTION_METADATA } = require('utils/documentKeys');
 const QUEUE_OPTIONS = { durable: true, autoDelete: false };
 
 const EXPECTED_ASSEMBLY_RESULTS = new Set(
-  require('models/assembly').ASSEMBLY_ANALYSES.concat([ 'UPLOAD' ])
+  require('models/assembly').ASSEMBLY_ANALYSES
 );
 
 const EXPECTED_COLLECTION_RESULTS = new Set(

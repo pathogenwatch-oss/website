@@ -76,33 +76,31 @@ function notifyUploadProgress({ speciesId, collectionId, assemblyIds, files }) {
 }
 
 function submitAssemblies({ speciesId, collectionId, assemblyIds, files }) {
-  const uploads =
-    files.map(file => {
-      const { id, name, metadata = { assemblyName: name }, metrics } = file;
-      const assemblyId = assemblyIds[id];
-      return (
-        fastaStorage.retrieve(fastaStoragePath, id).
-          then(sequences =>
-            assemblyModel.submit(
-              { speciesId, collectionId, assemblyId },
-              { sequences, metadata, metrics }
-            )
-          )
-      );
+  LOGGER.info('Submitting Assemblies');
+  for (const { id } of files) {
+    const assemblyId = assemblyIds[id];
+    assemblyModel.submit({
+      speciesId,
+      collectionId,
+      assemblyId,
+      fileId: id,
+      filePath: fastaStorage.getFilePath(fastaStoragePath, id),
     });
-
-  return Promise.all(uploads);
+  }
+  return Promise.resolve();
 }
 
 function add({ speciesId, files }) {
   LOGGER.info(`Creating collection of species ${speciesId} with ${files.length} files`);
 
   return manageCollection({
-    fileIds: files.map(_ => _.id),
+    checksums: files.map(_ => _.id),
     collectionOperation: COLLECTION_OPERATIONS.CREATE,
   }).then(({ collectionId, assemblyIds }) => {
     const args = { speciesId, collectionId, assemblyIds, files };
-    return notifyUploadProgress(args).then(() => submitAssemblies(args));
+    return notifyUploadProgress(args).
+      then(() => submitAssemblies(args)).
+      then(() => collectionId);
   });
 }
 

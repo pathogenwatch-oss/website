@@ -67,7 +67,7 @@ router.post('/collection', (req, res, next) => {
   }
 
   return collectionModel.add({ speciesId, files }).
-    then(({ collectionId }) => res.json({ collectionId })).
+    then(collectionId => res.json({ collectionId })).
     catch(e => next(e));
 });
 
