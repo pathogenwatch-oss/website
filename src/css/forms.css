@@ -6,13 +6,14 @@ fieldset > legend {
   padding: 0;
 }
 
-.mdl-textfield__label {
-  text-transform: uppercase;
-}
+/*.mdl-textfield__label {
+  color: #673c90;
+}*/
 
 .mdl-textfield.is-focused .mdl-textfield__label,
 .mdl-textfield.is-dirty .mdl-textfield__label {
-  color: rgba(0, 0, 0, 0.54) !important;
+  /*color: rgba(0, 0, 0, 0.54) !important;*/
+  color: #673c90 !important;
 }
 
 .mdl-textfield__label::after {

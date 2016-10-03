@@ -46,6 +46,11 @@ export const getNumRemainingUploads = createSelector(
   (queue, uploading) => queue.length + uploading.size,
 );
 
+export const isUploading = createSelector(
+  getNumRemainingUploads,
+  numRemaining => numRemaining > 0,
+);
+
 export const getFilter = ({ hub }) => hub.filter;
 
 export const isFilterActive = createSelector(
@@ -87,16 +92,6 @@ export const getVisibleFastas = createSelector(
 export const getNumberOfVisibleFastas = createSelector(
   getVisibleFastas,
   fastas => fastas.length,
-);
-
-export const isSupportedSpeciesSelected = createSelector(
-  getVisibleFastas,
-  fastas => {
-    for (const fasta of fastas) {
-      if (!isSupported(fasta)) return false;
-    }
-    return fastas.length > 0;
-  }
 );
 
 function incrementSummary(map, key, newEntry) {

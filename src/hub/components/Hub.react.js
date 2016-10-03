@@ -5,6 +5,7 @@ import FileDragAndDrop from '../../components/upload/DragAndDrop.react';
 import Header from './Header.react';
 import Filter from './Filter.react';
 import Summary from './Summary.react';
+import CreateCollectionTray from './CreateCollectionTray.react.js';
 
 import { updateHeader } from '^/actions/header';
 import { addFiles } from '../thunks';
@@ -81,6 +82,7 @@ export default React.createClass({
           }
         </div>
         <Filter filterActive={filterActive} />
+        <CreateCollectionTray />
       </FileDragAndDrop>
     );
   },

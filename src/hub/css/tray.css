@@ -1,0 +1,117 @@
+.wgsa-tray-container {
+  bottom: 0;
+  height: 0;
+  right: 10.5rem;
+  position: fixed;
+  min-width: 34rem;
+}
+
+.wgsa-tray {
+  box-shadow: 0 1px 5px 0 rgba(0,0,0,0.2),0 2px 2px 0 rgba(0,0,0,0.14),0 3px 1px -2px rgba(0,0,0,0.12);
+  position: absolute;
+  top: -3rem;
+  transition: .28s cubic-bezier(.4,0,.2,1);
+  transition-property: transform;
+  width: 34.5rem;
+}
+
+.wgsa-tray--open {
+  transform: translateY(calc(-100% + 3rem));
+}
+
+.wgsa-tray-enter {
+  transform: translateY(3rem);
+}
+
+.wgsa-tray-enter.wgsa-tray-enter-active {
+  transform: translateY(0);
+  transition: .28s cubic-bezier(.4,0,.2,1);
+  transition-property: transform;
+}
+
+.wgsa-tray-leave {
+  transform: translateY(0);
+}
+
+.wgsa-tray-leave.wgsa-tray-leave-active {
+  transform: translateY(3rem);
+  transition: .28s cubic-bezier(.4,0,.2,1);
+  transition-property: transform;
+}
+
+.wgsa-tray__header {
+  align-items: center;
+  background: #222;
+  color: #fff;
+  display: flex;
+  height: 3rem;
+  padding-top: 2px;
+  padding-left: 1.5rem;
+  padding-right: 1rem;
+  justify-content: space-between;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.wgsa-tray__content {
+  background: #fff;
+  border-left: 1px solid rgba(0, 0, 0, 0.14);
+  border-right: 1px solid rgba(0, 0, 0, 0.14);
+  height: 16rem;
+  padding: 1.5rem;
+}
+
+.wgsa-collection-summary {
+  display: flex;
+  font-size: 1rem;
+  font-weight: 500;
+  justify-content: flex-end;
+  margin: 0 0 1em;
+}
+
+.wgsa-collection-summary dt {
+  color: #673c90;
+  font-weight: 400;
+}
+
+.wgsa-collection-summary dt::after {
+  content: ":";
+}
+
+.wgsa-collection-summary dd {
+  margin-left: 0.5em;
+  margin-right: 1.5em;
+}
+
+.wgsa-collection-summary dd:last-of-type {
+  margin-right: 0;
+}
+
+.wgsa-tray__content strong {
+  color: #673c90;
+  font-weight: 500;
+}
+
+.wgsa-tray .mdl-textfield {
+  padding: 1rem 0;
+  width: 100%;
+}
+
+.wgsa-tray .mdl-textfield__label {
+  top: 1.25rem;
+}
+
+.mdl-textfield--floating-label.is-focused .mdl-textfield__label,
+.mdl-textfield--floating-label.is-dirty .mdl-textfield__label,
+.mdl-textfield--floating-label.has-placeholder .mdl-textfield__label {
+  top: -0.25rem;
+}
+
+.wgsa-tray .mdl-textfield__label::after {
+  bottom: 1rem !important;
+}
+
+.wgsa-tray textarea {
+  resize: none;
+}

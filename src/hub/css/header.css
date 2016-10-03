@@ -6,7 +6,8 @@
   padding-right: 255px;
 }
 .wgsa-has-aside ~ .mdl-layout__content,
-.wgsa-has-aside ~ .mdl-layout__content .wgsa-drag-and-drop__button {
+.wgsa-has-aside ~ .mdl-layout__content .wgsa-drag-and-drop__button,
+.wgsa-has-aside ~ .mdl-layout__content .wgsa-tray-container {
   margin-right: 255px;
 }
 
