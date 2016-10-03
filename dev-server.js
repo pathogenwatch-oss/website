@@ -136,6 +136,7 @@ app.use('/', (req, res) =>
     frontEndConfig: {
       pusherKey: '8b8d274e51643f85f81a',
       mapboxKey: 'pk.eyJ1IjoiY2dwc2RldiIsImEiOiJjaW96aXdzdDEwMGV0dm1tMnhqOWIzNXViIn0.2lJftMpp7LBJ_FeumUE4qw',
+      maxFastaFileSize: 10,
       // api: {
       //   address: 'localhost:8001',
       // },
