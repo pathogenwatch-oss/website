@@ -12,7 +12,7 @@ const CreateCollectionTray = React.createClass({
 
   getInitialState() {
     return {
-      open: true,
+      open: false,
     };
   },
 
@@ -23,6 +23,10 @@ const CreateCollectionTray = React.createClass({
   componentDidUpdate(previously) {
     if (!previously.visible && this.props.visible) {
       componentHandler.upgradeElements(this.formElements);
+    }
+
+    if (this.props.visible && this.state.open) {
+      this.formElements[0].querySelector('input').focus();
     }
   },
 

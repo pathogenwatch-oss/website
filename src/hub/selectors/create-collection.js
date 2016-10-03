@@ -25,6 +25,6 @@ export const getCollectionSummary = createSelector(
   selectors.getNumberOfVisibleFastas,
   ({ wgsaSpecies }, numAssemblies) => ({
     numAssemblies,
-    species: wgsaSpecies.filter(_ => _.active)[0],
+    species: wgsaSpecies.filter(_ => wgsaSpecies.length === 1 || _.active)[0],
   })
 );

@@ -15,8 +15,8 @@ function displayDate({ day, month, year }) {
     <div className="wgsa-hub-card__metadata">
       <i title="Date" className="material-icons">date_range</i>
       <p>
-        {day ? formatDay(day) : ''}
-        {month ? formatMonth(month) : ''}
+        {day ? `${formatDay(day)} ` : ''}
+        {month ? `${formatMonth(month)} ` : ''}
         {year || ''}
       </p>
     </div>
