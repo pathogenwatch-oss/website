@@ -1,6 +1,7 @@
 .wgsa-hub-map-view {
   height: 100%;
   width: 100%;
+  position: absolute !important;
 }
 
 .wgsa-hub-map-view .leaflet-marker-icon {
