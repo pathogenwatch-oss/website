@@ -27,6 +27,7 @@ const loaders = [
   { test: /\.js$/, loader: 'babel', include: [
     /(src|universal)/,
     path.join(__dirname, 'node_modules', 'promise-file-reader'),
+    path.join(__dirname, 'node_modules', 'cgps-commons'),
   ] },
 ];
 
