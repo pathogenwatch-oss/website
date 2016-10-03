@@ -27,6 +27,7 @@
     "babel-preset-react": "^6.3.13",
     "babel-preset-stage-0": "^6.3.13",
     "body-parser": "^1.14.1",
+    "cgps-commons": "gitlab:cgps/commons",
     "css-loader": "^0.25.0",
     "ejs": "^2.5.1",
     "eslint-config-cgps": "github:imperialcollegelondon/eslint-config-cgps",
