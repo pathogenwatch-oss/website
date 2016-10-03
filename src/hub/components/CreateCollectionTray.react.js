@@ -16,6 +16,16 @@ const CreateCollectionTray = React.createClass({
     };
   },
 
+  componentDidMount() {
+    componentHandler.upgradeElements(this.formElements);
+  },
+
+  componentDidUpdate(previously) {
+    if (!previously.visible && this.props.visible) {
+      componentHandler.upgradeElements(this.formElements);
+    }
+  },
+
   onHeaderClick() {
     this.setState({
       open: !this.state.open,
@@ -25,6 +35,12 @@ const CreateCollectionTray = React.createClass({
   getClassname() {
     return `wgsa-tray ${this.state.open ? 'wgsa-tray--open' : ''}`.trim();
   },
+
+  addToFormElements(element) {
+    this.formElements.push(element);
+  },
+
+  formElements: [],
 
   render() {
     const { species, numAssemblies } = this.props.collectionSummary;
@@ -50,11 +66,11 @@ const CreateCollectionTray = React.createClass({
               <dt>Num. Assemblies</dt>
               <dd>{numAssemblies}</dd>
             </dl>
-            <div className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <div ref={this.addToFormElements} className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
               <input className="mdl-textfield__input" type="text" id="collection-name-input" />
               <label className="mdl-textfield__label" htmlFor="collection-name-input">Name</label>
             </div>
-            <div className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <div ref={this.addToFormElements} className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
               <textarea className="mdl-textfield__input" type="text" rows="3" id="collection-desc-input" ></textarea>
               <label className="mdl-textfield__label" htmlFor="collection-desc-input">Description</label>
             </div>

@@ -47,7 +47,7 @@
   height: 3rem;
   padding-top: 2px;
   padding-left: 1.5rem;
-  padding-right: 1rem;
+  padding-right: 0.8rem;
   justify-content: space-between;
   font-size: 1rem;
   font-weight: 500;
@@ -59,7 +59,7 @@
   border-left: 1px solid rgba(0, 0, 0, 0.14);
   border-right: 1px solid rgba(0, 0, 0, 0.14);
   height: 16rem;
-  padding: 1.5rem;
+  padding: 1.5rem 1.75rem;
 }
 
 .wgsa-collection-summary {
@@ -67,11 +67,10 @@
   font-size: 1rem;
   font-weight: 500;
   justify-content: flex-end;
-  margin: 0 0 1em;
+  margin: 0 0 1rem;
 }
 
 .wgsa-collection-summary dt {
-  color: #673c90;
   font-weight: 400;
 }
 
@@ -80,17 +79,13 @@
 }
 
 .wgsa-collection-summary dd {
+  color: #673c90;
   margin-left: 0.5em;
   margin-right: 1.5em;
 }
 
 .wgsa-collection-summary dd:last-of-type {
   margin-right: 0;
-}
-
-.wgsa-tray__content strong {
-  color: #673c90;
-  font-weight: 500;
 }
 
 .wgsa-tray .mdl-textfield {
@@ -114,4 +109,8 @@
 
 .wgsa-tray textarea {
   resize: none;
+}
+
+.wgsa-tray__content button {
+  float: right;
 }
