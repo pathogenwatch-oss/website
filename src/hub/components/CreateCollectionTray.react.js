@@ -26,7 +26,7 @@ const CreateCollectionTray = React.createClass({
     }
 
     if (this.props.visible && this.state.open) {
-      this.formElements[0].querySelector('input').focus();
+      this.firstInput.focus();
     }
   },
 
@@ -41,10 +41,14 @@ const CreateCollectionTray = React.createClass({
   },
 
   addToFormElements(element) {
+    if (!this.firstInput) {
+      this.firstInput = element.querySelector('input');
+    }
     this.formElements.push(element);
   },
 
   formElements: [],
+  firstInput: null,
 
   render() {
     const { species, numAssemblies } = this.props.collectionSummary;
@@ -78,13 +82,14 @@ const CreateCollectionTray = React.createClass({
               <textarea className="mdl-textfield__input" type="text" rows="3" id="collection-desc-input" ></textarea>
               <label className="mdl-textfield__label" htmlFor="collection-desc-input">Description</label>
             </div>
-            <br />
-            <button
-              className="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
-              onClick={this.props.onButtonClick}
-            >
-              Create
-            </button>
+            <div className="wgsa-tray-actions">
+              <button
+                className="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
+                onClick={this.props.onButtonClick}
+              >
+                Create
+              </button>
+            </div>
           </div>
         </aside>
         : null
