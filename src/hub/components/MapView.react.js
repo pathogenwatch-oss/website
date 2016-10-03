@@ -3,7 +3,7 @@ import '../css/map.css';
 import React from 'react';
 import { connect } from 'react-redux';
 
-import LeafletMap from './LeafletMap.react';
+import LeafletMap from 'cgps-commons/LeafletMap';
 
 import CONFIG from '../../config';
 
