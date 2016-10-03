@@ -35,9 +35,15 @@ export const getUploadQueue = createSelector(
   getUploads,
   uploads => uploads.queue,
 );
-export const getUploadQueueLength = createSelector(
+export const getUploading = createSelector(
+  getUploads,
+  uploads => uploads.uploading,
+);
+
+export const getNumRemainingUploads = createSelector(
   getUploadQueue,
-  queue => queue.length,
+  getUploading,
+  (queue, uploading) => queue.length + uploading.size,
 );
 
 export const getFilter = ({ hub }) => hub.filter;

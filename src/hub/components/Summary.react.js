@@ -51,7 +51,7 @@ export const Summary = ({ queueLength, visibleFastas, totalFastas, pathname }) =
 
 function mapStateToProps(state) {
   return {
-    queueLength: selectors.getUploadQueueLength(state),
+    queueLength: selectors.getNumRemainingUploads(state),
     visibleFastas: selectors.getNumberOfVisibleFastas(state),
     totalFastas: selectors.getTotalFastas(state),
   };
