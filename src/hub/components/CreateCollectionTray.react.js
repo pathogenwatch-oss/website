@@ -75,8 +75,8 @@ const CreateCollectionTray = React.createClass({
               <dd>{numAssemblies}</dd>
             </dl>
             <div ref={this.addToFormElements} className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-              <input className="mdl-textfield__input" type="text" id="collection-name-input" />
-              <label className="mdl-textfield__label" htmlFor="collection-name-input">Name</label>
+              <input className="mdl-textfield__input" type="text" id="collection-title-input" />
+              <label className="mdl-textfield__label" htmlFor="collection-title-input">Title</label>
             </div>
             <div ref={this.addToFormElements} className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
               <textarea className="mdl-textfield__input" type="text" rows="3" id="collection-desc-input" ></textarea>
