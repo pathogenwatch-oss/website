@@ -1,0 +1,13 @@
+.wgsa-hub-map-view {
+  height: 100%;
+  width: 100%;
+}
+
+.wgsa-hub-map-view .leaflet-marker-icon {
+  color: #673c90;
+  font-size: 40px;
+}
+
+.wgsa-map-lasso-button.is-active {
+  background-color: #a386bd;
+}

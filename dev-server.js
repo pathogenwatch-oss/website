@@ -135,6 +135,7 @@ app.use('/', (req, res) =>
     googleMapsKey: 'AIzaSyBUn4F1N7KKElr6Qcwxvm7v3IzDoI0aQzE',
     frontEndConfig: {
       pusherKey: '8b8d274e51643f85f81a',
+      mapboxKey: 'pk.eyJ1IjoiY2dwc2RldiIsImEiOiJjaW96aXdzdDEwMGV0dm1tMnhqOWIzNXViIn0.2lJftMpp7LBJ_FeumUE4qw',
       // api: {
       //   address: 'localhost:8001',
       // },
