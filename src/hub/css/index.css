@@ -8,6 +8,7 @@
 
 .wgsa-hub__view {
   flex-grow: 1;
+  position: relative;
 }
 
 .wgsa-hub-big-message {
