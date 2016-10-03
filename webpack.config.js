@@ -3,10 +3,15 @@ const webpack = require('webpack');
 
 const srcFolder = path.join(__dirname, 'src');
 
+const resolveFallback = path.resolve(__dirname, 'node_modules');
 const resolve = {
   alias: {
     '^': srcFolder,
   },
+  fallback: resolveFallback,
+};
+const resolveLoader = {
+  fallback: resolveFallback,
 };
 
 const postcss = [
@@ -20,15 +25,20 @@ const postcss = [
   }),
 ];
 
+const babelSettings = {
+  extends: path.join(__dirname, '/.babelrc'),
+};
+
 const loaders = [
   { test: /.json$/, loaders: [ 'json' ] },
   { test: /.css$/, loaders: [ 'style', 'css', 'postcss' ] },
   { test: /\.(png|jpg|jpeg|gif)$/, loader: 'file' },
-  { test: /\.js$/, loader: 'babel', include: [
-    /(src|universal)/,
-    path.join(__dirname, 'node_modules', 'promise-file-reader'),
-    path.join(__dirname, 'node_modules', 'cgps-commons'),
-  ] },
+  { test: /\.js$/, loader: `babel?${JSON.stringify(babelSettings)}`,
+    include: [
+      /(src|universal|cgps-commons)/,
+      path.join(__dirname, 'node_modules', 'promise-file-reader'),
+    ],
+  },
 ];
 
 const commonPlugins = [
@@ -48,6 +58,7 @@ const devConfig = {
     publicPath: '/',
   },
   resolve,
+  resolveLoader,
   plugins: commonPlugins.concat([
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin(),
@@ -60,12 +71,14 @@ const devConfig = {
 
 const prodConfig = {
   entry: './src',
+  devtool: 'cheap-module-inline-source-map',
   output: {
     path: path.join(__dirname, 'public'),
     filename: 'wgsa.js',
     publicPath: '/',
   },
   resolve,
+  resolveLoader,
   plugins: commonPlugins.concat([
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.optimize.UglifyJsPlugin({
