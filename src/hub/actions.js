@@ -84,6 +84,15 @@ function undoRemoveFasta(fasta) {
   };
 }
 
+export const SHOW_METRIC = 'SHOW_METRIC';
+
+function showMetric(metric) {
+  return {
+    type: SHOW_METRIC,
+    payload: { metric },
+  };
+}
+
 export default {
   addFastas,
   updateFastaProgress,
@@ -93,4 +102,5 @@ export default {
   createCollection,
   removeFasta,
   undoRemoveFasta,
+  showMetric,
 };
