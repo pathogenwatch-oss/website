@@ -209,7 +209,9 @@ function addPublicAssemblyCounts(subtrees, collectionId, callback) {
 
 function getMetadata(collectionId, callback) {
   return (
-    mainStorage.retrieve(`${COLLECTION_METADATA}_${collectionId}`, callback)
+    mainStorage.retrieve(`${COLLECTION_METADATA}_${collectionId}`,
+      (error, result) => callback(error, result)
+    )
   );
 }
 
@@ -229,23 +231,26 @@ function get({ collectionId, speciesId }, callback) {
         metadata: getMetadata.bind(null, collectionId),
       }, (error, { tree, subtrees, metadata }) => {
         if (error) {
-          return done(error);
+          done(error);
+          return;
         }
 
         done(null, {
           collectionId,
           title: metadata.title,
           description: metadata.description,
+          dateUploaded: metadata.uploadEnded,
           assemblies,
           tree,
           subtrees,
         });
       });
     },
-  ], function (error, result) {
+  ], (error, result) => {
     if (error) {
       LOGGER.error(error);
-      return callback(error);
+      callback(error);
+      return;
     }
     callback(null, result);
   });
