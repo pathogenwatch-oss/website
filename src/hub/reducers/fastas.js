@@ -25,7 +25,7 @@ export default {
       }, state);
     },
     [UPLOAD_FASTA.ATTEMPT](state, { name }) {
-      return updateFastas(state, name, { uploadAttempted: true });
+      return updateFastas(state, name, { uploadAttempted: true, error: null });
     },
     [UPLOAD_FASTA.FAILURE](state, { name, error }) {
       return updateFastas(state, name, { error });

@@ -17,7 +17,7 @@ function getContent(props) {
     return (<FastaError {...props} />);
   }
 
-  if (props.speciesId) {
+  if (props.speciesKey) {
     return (<FastaMetadata {...props} />);
   }
 

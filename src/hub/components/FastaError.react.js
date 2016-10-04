@@ -1,8 +1,11 @@
 import '../css/card.css';
 
 import React from 'react';
+import { connect } from 'react-redux';
 
 import FastaCard from './FastaCard.react';
+
+import { uploadFiles } from '../thunks';
 
 import { fastaValidationErrors as errors } from '../utils/fasta';
 import config from '../../config';
@@ -15,8 +18,20 @@ const Error = ({ message, children }) => (
   </div>
 );
 
-function getError(error) {
-  switch (error) {
+function mapDispatchToProps(dispatch, { file }) {
+  return {
+    onClick: () => dispatch(uploadFiles([ file ])),
+  };
+}
+
+const RetryButton = connect(null, mapDispatchToProps)(({ onClick }) => (
+  <button title="Retry" className="mdl-button mdl-button--icon" onClick={onClick}>
+    <i className="material-icons">replay</i>
+  </button>
+));
+
+function getError(file) {
+  switch (file.error) {
     case errors.INVALID_FASTA_CONTENT:
       return <Error message="This is not a valid fasta file." />;
     case errors.INVALID_FASTA_SIZE:
@@ -26,16 +41,14 @@ function getError(error) {
     default:
       return (
         <Error message="Upload failed, please retry.">
-          <button title="Retry" className="mdl-button mdl-button--icon">
-            <i className="material-icons">replay</i>
-          </button>
+          <RetryButton file={file} />
         </Error>
       );
   }
 }
 
-export default ({ name, error }) => (
-  <FastaCard name={name}>
-    { getError(error) }
+export default (file) => (
+  <FastaCard name={file.name}>
+    { getError(file) }
   </FastaCard>
 );
