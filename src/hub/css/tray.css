@@ -4,6 +4,7 @@
   right: 10.5rem;
   position: fixed;
   min-width: 34rem;
+  z-index: 1;
 }
 
 .wgsa-tray {

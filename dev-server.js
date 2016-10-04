@@ -112,7 +112,7 @@ let uploadError = false;
 apiRouter.post('/upload', (req, res) => {
   uploadError = !uploadError;
   return uploadError ?
-    res.sendStatus(500) :
+    setTimeout(() => res.sendStatus(500), 500) :
     fastaStorage.store('./fastas', req.body).
       then(({ path, id }) =>
         specieator.queryFile(path).
