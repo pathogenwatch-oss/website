@@ -16,7 +16,7 @@ export const taxIdMap = new Map(
 
 let currentSpecies = {};
 
-export const isSupported = ({ speciesId }) => speciesId !== null;
+export const isSupported = ({ speciesId }) => !!speciesId; // cast to boolean
 
 export default {
 

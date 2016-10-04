@@ -110,7 +110,7 @@ function getWGSASpeciesId(...ids) {
 
 let uploadError = false;
 apiRouter.post('/upload', (req, res) => {
-  uploadError = !uploadError;
+  // uploadError = !uploadError;
   return uploadError ?
     setTimeout(() => res.sendStatus(500), 500) :
     fastaStorage.store('./fastas', req.body).

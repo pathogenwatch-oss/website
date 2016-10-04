@@ -25,8 +25,8 @@ function mapDispatchToProps(dispatch, { file }) {
 }
 
 const RetryButton = connect(null, mapDispatchToProps)(({ onClick }) => (
-  <button title="Retry" className="mdl-button mdl-button--icon" onClick={onClick}>
-    <i className="material-icons">replay</i>
+  <button className="mdl-button mdl-button--primary" onClick={onClick}>
+    Retry
   </button>
 ));
 
@@ -40,7 +40,7 @@ function getError(file) {
       return <Error message="This is an empty file." />;
     default:
       return (
-        <Error message="Upload failed, please retry.">
+        <Error message="File could not be uploaded.">
           <RetryButton file={file} />
         </Error>
       );
