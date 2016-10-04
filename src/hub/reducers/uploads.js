@@ -1,5 +1,15 @@
 import { ADD_FASTAS, UPLOAD_FASTA } from '../actions';
 
+function finishedUploading(state, { name }) {
+  const { uploading } = state;
+  uploading.delete(name);
+
+  return {
+    ...state,
+    uploading: new Set(uploading),
+  };
+}
+
 export default {
   initialState: {
     queue: [],
@@ -21,14 +31,7 @@ export default {
         uploading: new Set([ ...state.uploading, name ]),
       };
     },
-    [UPLOAD_FASTA.SUCCESS](state, { name }) {
-      const { uploading } = state;
-      uploading.delete(name);
-
-      return {
-        ...state,
-        uploading: new Set(uploading),
-      };
-    },
+    [UPLOAD_FASTA.SUCCESS]: finishedUploading,
+    [UPLOAD_FASTA.FAILURE]: finishedUploading,
   },
 };

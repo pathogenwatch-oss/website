@@ -35,7 +35,6 @@
   display: flex;
   justify-content: flex-start;
   margin-bottom: 4px;
-  position: relative;
 }
 
 .wgsa-hub-card__metadata--species {
@@ -69,4 +68,26 @@
 
 .wgsa-hub-card button > i {
   font-size: 20px;
+}
+
+.wgsa-hub-card-error {
+  color: #d11b1b;
+}
+
+.wgsa-hub-card-error p {
+  white-space: normal;
+}
+
+.wgsa-hub-card-error i {
+  position: absolute;
+  font-size: 1.5rem;
+  top: 1.625rem;
+  right: 0;
+}
+
+.wgsa-hub-card-error > button {
+  bottom: 0;
+  color: rgba(0, 0, 0, 0.54);
+  position: absolute;
+  right: 2rem;
 }

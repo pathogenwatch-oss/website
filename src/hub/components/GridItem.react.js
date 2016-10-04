@@ -1,7 +1,8 @@
 import React from 'react';
 
 import ProgressBar from '../../components/ProgressBar.react';
-import FastaCard from './FastaCard.react';
+import FastaMetadata from './FastaMetadata.react';
+import FastaError from './FastaError.react';
 
 function getProgressBar(progress) {
   return (
@@ -11,16 +12,26 @@ function getProgressBar(progress) {
   );
 }
 
-export default props => (
-  <article style={props.style}>
-    <div className="wgsa-hub-card">
-      <h2 className="wgsa-hub-card__title">
-        {props.metadata ? props.metadata.assemblyName : props.name}
-      </h2>
-      { typeof props.speciesId !== 'undefined' ?
-          <FastaCard {...props} /> :
-          getProgressBar(props.progress)
-      }
-    </div>
-  </article>
-);
+function getContent(props) {
+  if (props.error) {
+    return (<FastaError {...props} />);
+  }
+
+  if (props.speciesId) {
+    return (<FastaMetadata {...props} />);
+  }
+
+  return getProgressBar(props.progress);
+}
+
+export default props => {
+  const name = props.metadata ? props.metadata.assemblyName : props.name;
+  return (
+    <article style={props.style}>
+      <div className="wgsa-hub-card">
+        <h2 className="wgsa-hub-card__title" title={name}>{name}</h2>
+        { getContent(props) }
+      </div>
+    </article>
+  );
+};

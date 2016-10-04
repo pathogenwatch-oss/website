@@ -108,19 +108,23 @@ function getWGSASpeciesId(...ids) {
   return null;
 }
 
+let uploadError = false;
 apiRouter.post('/upload', (req, res) => {
-  fastaStorage.store('./fastas', req.body).
-    then(({ path, id }) =>
-      specieator.queryFile(path).
-        then(({ speciesTaxId, taxId, scientificName }) => ({
-          speciesId: getWGSASpeciesId(speciesTaxId, taxId),
-          speciesName: scientificName,
-          id,
-        }))
-    ).
-    then(result =>
-      res.json(Object.assign({ metrics: analyse(req.body) }, result))
-    );
+  uploadError = !uploadError;
+  return uploadError ?
+    res.sendStatus(500) :
+    fastaStorage.store('./fastas', req.body).
+      then(({ path, id }) =>
+        specieator.queryFile(path).
+          then(({ speciesTaxId, taxId, scientificName }) => ({
+            speciesId: getWGSASpeciesId(speciesTaxId, taxId),
+            speciesName: scientificName,
+            id,
+          }))
+      ).
+      then(result =>
+        res.json(Object.assign({ metrics: analyse(req.body) }, result))
+      );
 });
 
 apiRouter.post('/collection', (req, res) =>
