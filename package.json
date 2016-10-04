@@ -38,6 +38,7 @@
     "json-loader": "^0.5.3",
     "leaflet": "0.7.7",
     "leaflet-lassoselect": "github:imperialcollegelondon/leaflet-lassoselect",
+    "leaflet.markercluster": "github:leaflet/leaflet.markercluster#leaflet-0.7",
     "lodash.sortby": "^4.7.0",
     "mash-sketches": "gitlab:cgps/mash-sketches",
     "mash-specieator": "gitlab:cgps/mash-specieator",

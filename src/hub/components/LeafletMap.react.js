@@ -2,7 +2,7 @@ import React from 'react';
 import Leaflet from 'leaflet';
 import { Map, Marker, Popup, TileLayer, PropTypes } from 'react-leaflet';
 
-import MapResizer from './LeafletMapResizer.react';
+import MapCluster from './LeafletMapCluster.react';
 import MapLasso from './LeafletMapLasso.react';
 
 const ATTRIBUTION = `
@@ -70,31 +70,30 @@ export default React.createClass({
         boundsOptions={{ animate: false }}
         className={this.props.className}
         onMoveend={({ target }) => { this.map = target; }}
-        style={{
-          position: 'absolute',
-        }}
       >
         <TileLayer
           attribution={ATTRIBUTION}
           url={`https://api.mapbox.com/styles/v1/mapbox/${mapboxStyle}/tiles/{z}/{x}/{y}?access_token=${mapboxKey}`}
         />
-        { this.props.markers.map(({ position, label }, index) =>
-          <Marker
-            key={index}
-            position={position}
-            icon={
-              Leaflet.divIcon({
-                className: 'material-icons',
-                html: 'place',
-                iconSize: [ 40, 40 ],
-                iconAnchor: [ 20, 37 ],
-                popupAnchor: [ 0, -32 ],
-              })
-            }
-          >
-            { label ? <Popup><span>{ label }</span></Popup> : null }
-          </Marker>
-        )}
+        <MapCluster>
+          { this.props.markers.map(({ position, label }, index) =>
+            <Marker
+              key={index}
+              position={position}
+              icon={
+                Leaflet.divIcon({
+                  className: 'material-icons',
+                  html: 'place',
+                  iconSize: [ 40, 40 ],
+                  iconAnchor: [ 20, 37 ],
+                  popupAnchor: [ 0, -32 ],
+                })
+              }
+            >
+              { label ? <Popup><span>{ label }</span></Popup> : null }
+            </Marker>
+          )}
+        </MapCluster>
         <MapLasso
           className={this.props.lassoButtonClassname}
           activeClassName="is-active"
