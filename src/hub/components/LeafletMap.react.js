@@ -75,25 +75,9 @@ export default React.createClass({
           attribution={ATTRIBUTION}
           url={`https://api.mapbox.com/styles/v1/mapbox/${mapboxStyle}/tiles/{z}/{x}/{y}?access_token=${mapboxKey}`}
         />
-        <MapCluster>
-          { this.props.markers.map(({ position, label }, index) =>
-            <Marker
-              key={index}
-              position={position}
-              icon={
-                Leaflet.divIcon({
-                  className: 'material-icons',
-                  html: 'place',
-                  iconSize: [ 40, 40 ],
-                  iconAnchor: [ 20, 37 ],
-                  popupAnchor: [ 0, -32 ],
-                })
-              }
-            >
-              { label ? <Popup><span>{ label }</span></Popup> : null }
-            </Marker>
-          )}
-        </MapCluster>
+        <MapCluster
+          markers={this.props.markers}
+        />
         <MapLasso
           className={this.props.lassoButtonClassname}
           activeClassName="is-active"
