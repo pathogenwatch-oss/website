@@ -15,9 +15,11 @@ export const isSupportedSpeciesSelected = createSelector(
 );
 
 export const canCreateCollection = createSelector(
+  ({ hub }) => hub.loading,
   selectors.isUploading,
   isSupportedSpeciesSelected,
-  (uploading, supportSpeciesSelected) => !uploading && supportSpeciesSelected
+  (loading, uploading, supportSpeciesSelected) =>
+    !loading && !uploading && supportSpeciesSelected
 );
 
 export const getCollectionSummary = createSelector(
@@ -28,3 +30,5 @@ export const getCollectionSummary = createSelector(
     species: wgsaSpecies.filter(_ => wgsaSpecies.length === 1 || _.active)[0],
   })
 );
+
+export const getCollectionMetadata = ({ hub }) => hub.collectionMetadata;

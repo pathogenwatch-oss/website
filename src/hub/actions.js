@@ -55,13 +55,13 @@ function clearFilter() {
 
 export const CREATE_COLLECTION = createAsyncConstants('CREATE_COLLECTION');
 
-function createCollection(files) {
+function createCollection(files, metadata) {
   const speciesId = files[0].speciesId;
   return {
     type: CREATE_COLLECTION,
     payload: {
       speciesId,
-      promise: createCollectionPromise(files, speciesId),
+      promise: createCollectionPromise(files, speciesId, metadata),
     },
   };
 }
@@ -93,6 +93,17 @@ function showMetric(metric) {
   };
 }
 
+export const CHANGE_COLLECTION_METADATA = 'CHANGE_COLLECTION_METADATA';
+
+function changeCollectionMetadata(field, value) {
+  return {
+    type: CHANGE_COLLECTION_METADATA,
+    payload: {
+      [field]: value,
+    },
+  };
+}
+
 export default {
   addFastas,
   updateFastaProgress,
@@ -103,4 +114,5 @@ export default {
   removeFasta,
   undoRemoveFasta,
   showMetric,
+  changeCollectionMetadata,
 };

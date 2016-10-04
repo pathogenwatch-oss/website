@@ -1,6 +1,7 @@
 import actions, { UPLOAD_FASTA } from './actions';
 
 import * as selectors from './selectors';
+import { getCollectionMetadata } from './selectors/create-collection';
 
 import ToastActionCreators from '../actions/ToastActionCreators';
 
@@ -66,8 +67,10 @@ export function addFiles(newFiles) {
 
 export function createCollection() {
   return (dispatch, getState) => {
-    const fastas = selectors.getVisibleFastas(getState());
-    dispatch(actions.createCollection(fastas));
+    const state = getState();
+    const fastas = selectors.getVisibleFastas(state);
+    const metadata = getCollectionMetadata(state);
+    dispatch(actions.createCollection(fastas, metadata));
   };
 }
 

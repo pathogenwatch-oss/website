@@ -4,8 +4,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
-import { canCreateCollection, getCollectionSummary } from '../selectors/create-collection';
+import * as selectors from '../selectors/create-collection';
 
+import actions from '../actions';
 import { createCollection } from '../thunks';
 
 const CreateCollectionTray = React.createClass({
@@ -25,7 +26,7 @@ const CreateCollectionTray = React.createClass({
       componentHandler.upgradeElements(this.formElements);
     }
 
-    if (this.props.visible && this.state.open) {
+    if (!previously.visible && this.props.visible && this.state.open) {
       this.firstInput.focus();
     }
   },
@@ -51,6 +52,7 @@ const CreateCollectionTray = React.createClass({
   firstInput: null,
 
   render() {
+    const { metadata: { title, description } } = this.props;
     const { species, numAssemblies } = this.props.collectionSummary;
     return (
       <ReactCSSTransitionGroup
@@ -71,16 +73,29 @@ const CreateCollectionTray = React.createClass({
             <dl className="wgsa-collection-summary">
               <dt>Species</dt>
               <dd>{species.label}</dd>
-              <dt>Num. Assemblies</dt>
+              <dt>Assemblies</dt>
               <dd>{numAssemblies}</dd>
             </dl>
             <div ref={this.addToFormElements} className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-              <input className="mdl-textfield__input" type="text" id="collection-title-input" />
-              <label className="mdl-textfield__label" htmlFor="collection-title-input">Title</label>
+              <input
+                className="mdl-textfield__input"
+                type="text"
+                id="collection-title"
+                value={title}
+                onChange={this.props.onFormChange}
+              />
+              <label className="mdl-textfield__label" htmlFor="collection-title">Title</label>
             </div>
             <div ref={this.addToFormElements} className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-              <textarea className="mdl-textfield__input" type="text" rows="3" id="collection-desc-input" ></textarea>
-              <label className="mdl-textfield__label" htmlFor="collection-desc-input">Description</label>
+              <textarea
+                className="mdl-textfield__input"
+                type="text"
+                rows="3"
+                id="collection-description"
+                value={description}
+                onChange={this.props.onFormChange}
+              />
+              <label className="mdl-textfield__label" htmlFor="collection-description">Description</label>
             </div>
             <div className="wgsa-tray-actions">
               <button
@@ -102,14 +117,21 @@ const CreateCollectionTray = React.createClass({
 
 function mapStateToProps(state) {
   return {
-    visible: canCreateCollection(state),
-    collectionSummary: getCollectionSummary(state),
+    visible: selectors.canCreateCollection(state),
+    collectionSummary: selectors.getCollectionSummary(state),
+    metadata: selectors.getCollectionMetadata(state),
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    onButtonClick: () => dispatch(createCollection()),
+    onButtonClick:
+      () => dispatch(createCollection()),
+    onFormChange:
+      ({ target }) => dispatch(actions.changeCollectionMetadata(
+        target.id.split('collection-')[1],
+        target.value
+      )),
   };
 }
 

@@ -4,22 +4,31 @@ import filter from './filter';
 import uploads from './uploads';
 import { bounds, lassoPath } from './map';
 
-import { CREATE_COLLECTION, SHOW_METRIC } from '../actions';
+import * as actions from '../actions';
 
 const loading = {
   initialState: false,
   actions: {
-    [CREATE_COLLECTION.ATTEMPT]: () => true,
-    [CREATE_COLLECTION.SUCCESS]: () => false,
-    [CREATE_COLLECTION.FAILURE]: () => false,
+    [actions.CREATE_COLLECTION.ATTEMPT]: () => true,
+    [actions.CREATE_COLLECTION.SUCCESS]: () => false,
+    [actions.CREATE_COLLECTION.FAILURE]: () => false,
   },
 };
 
 const selectedMetric = {
   initialState: 'totalNumberOfNucleotidesInDnaStrings',
   actions: {
-    [SHOW_METRIC](state, { metric }) {
+    [actions.SHOW_METRIC](state, { metric }) {
       return metric;
+    },
+  },
+};
+
+const collectionMetadata = {
+  initialState: { title: '', description: '' },
+  actions: {
+    [actions.CHANGE_COLLECTION_METADATA](state, payload) {
+      return { ...state, ...payload };
     },
   },
 };
@@ -34,4 +43,5 @@ export default createReducer =>
       bounds: createReducer(bounds),
       lassoPath: createReducer(lassoPath),
     }),
+    collectionMetadata: createReducer(collectionMetadata),
   });
