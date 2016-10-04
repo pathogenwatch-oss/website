@@ -77,7 +77,6 @@ function getCustomXHR(filename, dispatch) {
 }
 
 export function sendToServer({ file, coords }, dispatch) {
-  console.log({ file });
   return (
     validateFastaSize(file).
       then(readAsText).

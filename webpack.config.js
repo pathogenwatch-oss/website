@@ -71,7 +71,6 @@ const devConfig = {
 
 const prodConfig = {
   entry: './src',
-  devtool: 'cheap-module-inline-source-map',
   output: {
     path: path.join(__dirname, 'public'),
     filename: 'wgsa.js',
