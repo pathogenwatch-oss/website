@@ -7,6 +7,8 @@ import ToastActionCreators from '../../actions/ToastActionCreators';
 import MetadataUtils from '../../utils/Metadata';
 import { API_ROOT } from '../../utils/Api';
 
+import { validateFastaSize, validateFastaContent } from './fasta';
+
 function parseMetadata(row) {
   if (!row) return undefined;
 
@@ -75,8 +77,11 @@ function getCustomXHR(filename, dispatch) {
 }
 
 export function sendToServer({ file, coords }, dispatch) {
+  console.log({ file });
   return (
-    readAsText(file).
+    validateFastaSize(file).
+      then(readAsText).
+      then(validateFastaContent).
       then(data =>
         $.ajax({
           type: 'POST',
