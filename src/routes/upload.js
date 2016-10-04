@@ -57,7 +57,7 @@ router.post('/upload', (req, res, next) => {
 });
 
 router.post('/collection', (req, res, next) => {
-  const { speciesId, files } = req.body;
+  const { speciesId, title, description, files } = req.body;
 
   LOGGER.info('Received request for new collection id');
 
@@ -66,7 +66,12 @@ router.post('/collection', (req, res, next) => {
     return res.sendStatus(400);
   }
 
-  collectionModel.add(speciesId, { assemblyNames: files.map(_ => _.name) }, (error, result) => {
+  collectionModel.add({
+    speciesId,
+    title,
+    description,
+    assemblyNames: files.map(_ => _.name),
+  }, (error, result) => {
     if (error) {
       return next(error);
     }

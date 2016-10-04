@@ -54,7 +54,7 @@ function manageCollection(request, callback) {
   });
 }
 
-function add(speciesId, { assemblyNames }, callback) {
+function add({ speciesId, title, description, assemblyNames }, callback) {
   var collectionRequest = {
     identifierType: IDENTIFIER_TYPES.COLLECTION,
     count: 1,
@@ -98,6 +98,8 @@ function add(speciesId, { assemblyNames }, callback) {
     const message = {
       collectionId,
       speciesId,
+      title,
+      description,
       assemblyIdToNameMap: // reverse mapping allows name to be recovered for errors
         Object.keys(assemblyNameToAssemblyIdMap).reduce((map, name) => {
           map[assemblyNameToAssemblyIdMap[name]] = name;
@@ -205,6 +207,12 @@ function addPublicAssemblyCounts(subtrees, collectionId, callback) {
   );
 }
 
+function getMetadata(collectionId, callback) {
+  return (
+    mainStorage.retrieve(`${COLLECTION_METADATA}_${collectionId}`, callback)
+  );
+}
+
 function get({ collectionId, speciesId }, callback) {
   LOGGER.info('Getting list of assemblies for collection ' + collectionId);
   async.waterfall([
@@ -214,20 +222,23 @@ function get({ collectionId, speciesId }, callback) {
       getAssemblies(params, assemblyModel.getComplete, done);
     },
     function (assemblies, done) {
-      const subtrees = assemblyModel.groupAssembliesBySubtype(assemblies);
+      const subtypes = assemblyModel.groupAssembliesBySubtype(assemblies);
       async.parallel({
-        subtrees: addPublicAssemblyCounts.bind(null, subtrees, collectionId),
+        subtrees: addPublicAssemblyCounts.bind(null, subtypes, collectionId),
         tree: getTree.bind(null, collectionId),
-      }, function (error, result) {
+        metadata: getMetadata.bind(null, collectionId),
+      }, (error, { tree, subtrees, metadata }) => {
         if (error) {
           return done(error);
         }
 
         done(null, {
           collectionId,
+          title: metadata.title,
+          description: metadata.description,
           assemblies,
-          tree: result.tree,
-          subtrees: result.subtrees,
+          tree,
+          subtrees,
         });
       });
     },
@@ -297,7 +308,7 @@ function getSubtree({ speciesId, collectionId, subtreeId }, callback) {
 }
 
 function getStatus({ speciesId, collectionId }, callback) {
-  mainStorage.retrieve(`${COLLECTION_METADATA}_${collectionId}`, function (error, doc, cas) {
+  getMetadata(collectionId, (error, doc, cas) => {
     if (error) {
       return callback(error);
     }
