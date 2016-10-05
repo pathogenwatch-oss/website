@@ -1,18 +1,34 @@
+/* eslint no-param-reassign: ["error", { "props": false }] */
+
+import { compose } from 'redux';
+
 import Papa from 'papaparse';
 import { formatMonth, formatDay } from './Date';
 
-function convertFieldNamesToLowerCase(dataObject) {
-  const fieldNames = Object.keys(dataObject);
+function convertFieldNamesToLowerCase(row) {
+  const fieldNames = Object.keys(row);
   let fieldNamesCounter = 0;
-  const dataObjectWithLowerCaseFieldNames = {};
+  const cleanRow = {};
 
   while (fieldNamesCounter < fieldNames.length) {
     const fieldName = fieldNames[fieldNamesCounter];
-    dataObjectWithLowerCaseFieldNames[fieldName.toLowerCase()] = dataObject[fieldName];
+    cleanRow[fieldName.toLowerCase()] = row[fieldName];
     fieldNamesCounter = fieldNamesCounter + 1;
   }
 
-  return dataObjectWithLowerCaseFieldNames;
+  return cleanRow;
+}
+
+function addDateObject(row) {
+  const { year, month = 0, day = 1 } = row;
+  row.date = year ? new Date(year, month, day) : null;
+  return row;
+}
+
+function transformRawCsv(rows) {
+  return rows.map(
+    compose(addDateObject, convertFieldNamesToLowerCase)
+  );
 }
 
 function parseCsvToJson(csv) {
@@ -27,7 +43,7 @@ function parseCsvToJson(csv) {
     console.dir(results.errors);
   }
 
-  results.data = results.data.map(convertFieldNamesToLowerCase);
+  results.data = transformRawCsv(results.data);
   return results;
 }
 
