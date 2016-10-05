@@ -61,8 +61,18 @@ export const StatsView =
             <ScatterChart
               margin={{ top: 16, bottom: 16, left: 0, right: 0 }}
             >
-              <XAxis dataKey="key" name="name" padding={{ left: 8, right: 8 }} tickFormatter={() => null} />
-              <YAxis dataKey="value" name="Assembly Length" tickLine={false} />
+              <XAxis
+                dataKey="key"
+                name="name"
+                tickFormatter={() => null}
+                domain={[ -1, 'dataMax + 1' ]}
+              />
+              <YAxis
+                dataKey="value"
+                name="Assembly Length"
+                tickLine={false}
+                domain={[ 0, Math.ceil(range.max * 1.25) ]}
+              />
               <Scatter data={chartData} fill="#a386bd" isAnimationActive={false} />
               <Tooltip
                 cursor={{ stroke: 'transparent' }}

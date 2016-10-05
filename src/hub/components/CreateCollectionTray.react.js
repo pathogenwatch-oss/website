@@ -9,6 +9,8 @@ import * as selectors from '../selectors/create-collection';
 import actions from '../actions';
 import { createCollection } from '../thunks';
 
+import { taxIdMap } from '../../species';
+
 const CreateCollectionTray = React.createClass({
 
   getInitialState() {
@@ -53,7 +55,7 @@ const CreateCollectionTray = React.createClass({
 
   render() {
     const { metadata: { title, description } } = this.props;
-    const { species, numAssemblies } = this.props.collectionSummary;
+    const { speciesId, numAssemblies } = this.props.collectionSummary;
     return (
       <ReactCSSTransitionGroup
         className="wgsa-tray-container"
@@ -72,7 +74,7 @@ const CreateCollectionTray = React.createClass({
           <div className="wgsa-tray__content">
             <dl className="wgsa-collection-summary">
               <dt>Species</dt>
-              <dd>{species.label}</dd>
+              <dd>{taxIdMap.get(speciesId).formattedShortName}</dd>
               <dt>Assemblies</dt>
               <dd>{numAssemblies}</dd>
             </dl>

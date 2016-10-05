@@ -27,11 +27,11 @@ export const canCreateCollection = createSelector(
 );
 
 export const getCollectionSummary = createSelector(
-  selectors.getMetadataFilters,
+  getVisibleSupportedSpecies,
   selectors.getNumberOfVisibleFastas,
-  ({ wgsaSpecies }, numAssemblies) => ({
+  (speciesIds, numAssemblies) => ({
     numAssemblies,
-    species: wgsaSpecies.filter(_ => wgsaSpecies.length === 1 || _.active)[0],
+    speciesId: Array.from(speciesIds)[0],
   })
 );
 
