@@ -1,15 +1,14 @@
 .wgsa-search-box-container {
-  flex-grow: 1;
   display: flex;
   justify-content: center;
   height: 36px;
-  margin: 0 48px;
   user-select: none;
+  font-size: 21px;
+  width: 320px;
 }
 
 .wgsa-search-box {
   flex-grow: 1;
-  max-width: 640px;
   display: flex;
   background: rgba(255, 255, 255, 0.15);
   padding: 0 16px;

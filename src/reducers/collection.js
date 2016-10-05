@@ -92,7 +92,7 @@ export const assemblies = {
 };
 
 export const collection = {
-  initialState: { id: null, assemblyIds: [] },
+  initialState: { id: null, assemblyIds: [], metadata: {} },
   actions: {
     [CREATE_COLLECTION.SUCCESS](state, { result, speciesId }) {
       return {
@@ -134,6 +134,11 @@ export const collection = {
     [FETCH_ENTITIES.SUCCESS](state, { result: [ uploaded ] }) {
       return {
         ...state,
+        metadata: {
+          title: uploaded.title,
+          description: uploaded.description,
+          dateCreated: new Date(uploaded.dateCreated).toLocaleDateString(),
+        },
         status: statuses.FETCHED,
         assemblyIds: new Set(
           Object.keys(uploaded.assemblies).sort(

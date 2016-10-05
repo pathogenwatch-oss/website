@@ -43,3 +43,24 @@
   padding: 0;
   margin-left: 2rem;
 }
+
+.wgsa-header-collection-metadata {
+  position: relative;
+  flex-grow: 1;
+  height: 64px;
+}
+
+.wgsa-header-collection-title {
+  line-height: 64px;
+  font-size: 1.5rem;
+  margin: 0;
+  margin-left: 2rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}

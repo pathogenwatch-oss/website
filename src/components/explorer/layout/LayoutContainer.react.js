@@ -9,23 +9,29 @@ import { updateHeader } from '^/actions/header';
 
 import Species from '^/species';
 
-function mapStateToProps({ downloads }) {
+function mapStateToProps({ downloads, collection }) {
   return {
     menuOpen: downloads.menuOpen,
+    metadata: collection.metadata,
+    species: Species.current.formattedName,
   };
 }
 
-function mergeProps({ menuOpen }, { dispatch }) {
+function mergeProps({ menuOpen, ...state }, { dispatch }) {
   return {
+    ...state,
     downloadMenuButtonClick: () => dispatch(setMenuActive(!menuOpen)),
   };
 }
 
 const HeaderContent = connect(mapStateToProps, null, mergeProps)(
-  ({ downloadMenuButtonClick }) => (
+  ({ metadata, species, downloadMenuButtonClick }) => (
     <span className="mdl-layout-spacer mdl-layout-spacer--flex">
+      <div className="wgsa-header-collection-metadata">
+        <h2 className="wgsa-header-collection-title">{metadata.title} - {species}</h2>
+      </div>
       <Search />
-      <nav className="mdl-navigation" onClick={e => e.stopPropagation()}>
+      <nav className="wgsa-header-collection-options mdl-navigation" onClick={e => e.stopPropagation()}>
         <button className="wgsa-menu-button mdl-button" onClick={downloadMenuButtonClick}>
           <i className="wgsa-button-icon material-icons">file_download</i>
           <span>Downloads</span>
