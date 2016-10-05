@@ -50,6 +50,7 @@ export default connect()(React.createClass({
       speciesName: Species.formattedName,
       classNames: 'mdl-layout__header--primary mdl-shadow--3dp',
       content: (<HeaderContent />),
+      hasAside: false,
     }));
 
     document.title = 'WGSA | Explore Collection';

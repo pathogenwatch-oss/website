@@ -63,32 +63,93 @@
   color: #48996F;
 }
 
-.wgsa-collection-analyses {
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
+.mdl-card__supporting-text {
+  padding: 0px;
+}
+
+.wgsa-overview-upload-ready-card {
+  min-height: 136px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  font-family: "Roboto","Helvetica","Arial",sans-serif;
+  font-weight: 400;
+  z-index: 0;
+}
+.wgsa-overview-upload-ready-card i {
+  font-size: 50px;
+  color: green;
   text-align: center;
-  position: absolute;
-  top: 50px;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  width: 100%;
 }
-
-.wgsa-collection-analyses .material-icons {
-  font-size: 2em;
-}
-
-.wgsa-upload-errors .mdl-list__item {
-  font-family: inherit;
-  font-size: inherit;
-  letter-spacing: normal;
-}
-
-.wgsa-upload-errors .mdl-list__item-icon {
-  margin-right: 16px !important;
-}
-
-.wgsa-upload-errors .mdl-list__item-primary-content {
+.wgsa-overview-upload-ready-card .mdl-card__title {
   justify-content: center;
+  font-size: 26px;
+}
+
+.wgsa-overview-statistics-item-value {
+  font-size: 26px;
+  font-weight: 300;
+}
+
+.wgsa-overview-upload-ready-card span {
+  padding: 16px 10px;
+  text-align: center;
+  font-weight: 300;
+  font-size: 16px;
+}
+
+.wgsa-card {
+  background: #fff;
+  position: relative;
+}
+
+.wgsa-card--padded,
+.wgsa-card-content {
+  padding: 32px;
+}
+
+.wgsa-card-heading {
+  background: transparent;
+  text-transform: uppercase;
+  font-size: 16px;
+  color: #666;
+  line-height: 48px;
+  border-bottom: 1px solid #ddd;
+  padding: 4px 32px 0;
+  overflow: hidden;
+  display: block;
+  text-overflow: ellipsis;
+  font-family: "Roboto","Helvetica","Arial",sans-serif;
+}
+
+.wgsa-card-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.wgsa-card-column .wgsa-card {
+  flex-grow: 1;
+}
+
+
+.wgsa-upload-review-button {
+  background: #673c90 !important;
+  color: #fff;
+}
+
+.wgsa-upload-review-button:hover,
+.wgsa-upload-review-button:focus,
+.wgsa-upload-review-button:active {
+  background: #a386bd !important;
+}
+
+.wgsa-upload-review-button:disabled {
+  background: #e5e5e5 !important;
+}
+
+.wgsa-upload-navigation__footer .material-icons {
+  color: #fff;
+}
+
+.wgsa-upload-review-button .mdl-button__ripple-container .mdl-ripple {
+  background: #fff;
 }

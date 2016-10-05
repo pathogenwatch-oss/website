@@ -1,4 +1,4 @@
-import '../../css/drag-and-drop.css';
+import '../css/drag-and-drop.css';
 
 import React from 'react';
 

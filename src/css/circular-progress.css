@@ -24,8 +24,8 @@
 
 .CircularProgress-Text {
   transition-property: fill;
-  font-size: 16px;
   fill: #673c90;
+  font-size: 16px;
 }
 
 .CircularProgress-success .CircularProgress-Fg {

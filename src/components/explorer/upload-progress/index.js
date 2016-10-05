@@ -6,9 +6,6 @@ import { connect } from 'react-redux';
 import Header from './Header.react';
 import Dashboard from './Dashboard.react';
 
-import UploadActionCreators from '^/actions/UploadActionCreators';
-
-import FileUploadingStore from '^/stores/FileUploadingStore';
 import { subscribe } from '^/utils/Notification';
 
 import { updateHeader } from '^/actions/header';
@@ -30,6 +27,7 @@ const UploadProgress = React.createClass({
       speciesName: Species.formattedName,
       classNames: 'mdl-shadow--3dp',
       content: (<Header />),
+      hasAside: false,
     }));
 
     document.title = 'WGSA | Upload Progress';
@@ -37,17 +35,7 @@ const UploadProgress = React.createClass({
 
   componentDidMount() {
     componentHandler.upgradeDom();
-
     this.props.checkStatus();
-
-    if (this.props.isUploading) {
-      FileUploadingStore.uploadFiles(function (error) {
-        if (error) {
-          console.error(error);
-          UploadActionCreators.notifyUploadFailed();
-        }
-      });
-    }
   },
 
   componentDidUpdate() {
@@ -66,7 +54,7 @@ const UploadProgress = React.createClass({
         <main className="wgsa-upload-progress-container">
           <div className="wgsa-collection-url-display wgsa-card mdl-shadow--2dp">
             <div className="mdl-card__supporting-text">
-              Final results will be available at the above address. <br/>
+              Final results will be available at the current address.<br />
               If upload fails to progress, please refresh at a later time.
             </div>
           </div>
