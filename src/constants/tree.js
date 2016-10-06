@@ -7,7 +7,7 @@ import {
 
 import { createColourGetter } from '../utils/resistanceProfile';
 
-import { formatColumnLabel } from '../utils/table';
+import { getColumnLabel } from '../utils/table';
 
 import Species from '../species';
 import { CGPS, COLOUR } from '^/defaults';
@@ -172,19 +172,11 @@ export function getTreeFunctions(tree, state, dispatch) {
   return getStandardTreeFunctions(state, dispatch);
 }
 
-export function defaultColourGetter(assembly) {
-  if (assembly.__isCollection) {
-    return CGPS.COLOURS.PURPLE_LIGHT;
-  }
-
-  return CGPS.COLOURS.GREY;
-}
-
 const TREE_LABELS_SUFFIX = 'tree_labels.txt';
 
-export function getFilenames(title, collectionId, { columnKey }) {
+export function getFilenames(title, collectionId, column) {
   const formattedTitle = title.toLowerCase();
-  const formattedColumnLabel = formatColumnLabel(columnKey).toLowerCase();
+  const formattedColumnLabel = getColumnLabel(column).toLowerCase();
   const PREFIX = `wgsa_${Species.nickname}_${collectionId}_${formattedTitle}`;
   return {
     image: `${PREFIX}_tree.png`,

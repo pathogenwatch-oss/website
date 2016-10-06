@@ -108,7 +108,7 @@ function mapStateToProps(state) {
 function mapStateToColumn(column, state, dispatch) {
   return column.addState ?
     column.addState(state, dispatch) :
-    addColumnWidth(column, state.data);
+    addColumnWidth(column, state);
 }
 
 function mergeProps(state, { dispatch }, props) {

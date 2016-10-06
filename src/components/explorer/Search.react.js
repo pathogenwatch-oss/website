@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 import { activateFilter, resetFilter } from '^/actions/filter';
 
-import { formatColumnLabel } from '^/utils/table';
+import { getColumnLabel } from '^/utils/table';
 
 const Search = React.createClass({
 
@@ -70,7 +70,7 @@ function mapStateToProps({ tables, filter, entities }) {
     displayProps: {
       totalAmount,
       filteredAmount: filter.active ? filter.ids.size : totalAmount,
-      filterColumnName: formatColumnLabel(activeColumn.columnKey),
+      filterColumnName: getColumnLabel(activeColumn),
     },
     activeColumn,
     assemblies: [ ...filter.unfilteredIds ].map(id => entities.assemblies[id]),

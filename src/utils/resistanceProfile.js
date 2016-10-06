@@ -1,19 +1,30 @@
 import { setColourColumns } from '../actions/table';
 
-import { defaultColourGetter } from '../constants/tree';
-
-import DEFAULT from '../defaults';
+import DEFAULT, { CGPS } from '../defaults';
 
 const resistantColour = DEFAULT.DANGER_COLOUR;
 const nonResistantColour = '#fff';
+
+export function isResistant(profile, antibiotic) {
+  return profile ? profile[antibiotic].state === 'RESISTANT' : null;
+}
+
+export function defaultColourGetter(assembly) {
+  if (assembly.__isCollection) {
+    return CGPS.COLOURS.PURPLE_LIGHT;
+  }
+  return CGPS.COLOURS.GREY;
+}
 
 export function getColour(antibiotic, assembly) {
   const { analysis } = assembly;
   if (!analysis.resistanceProfile) {
     return defaultColourGetter(assembly);
   }
-  const value = analysis.resistanceProfile[antibiotic];
-  return value === 'RESISTANT' ? resistantColour : nonResistantColour;
+  return (
+    isResistant(analysis.resistanceProfile, antibiotic) ?
+      resistantColour : nonResistantColour
+  );
 }
 
 const noActiveColumns = [ { valueGetter: defaultColourGetter } ];
@@ -26,13 +37,6 @@ export function createColourGetter(columns) {
     );
     return colours.size === 1 ? Array.from(colours)[0] : nonResistantColour;
   };
-}
-
-const canvas = document.createElement('canvas').getContext('2d');
-canvas.font = 'Bold 12px "Helvetica","Arial",sans-serif';
-
-export function measureText(text) {
-  return (canvas.measureText(text.toUpperCase()).width * Math.cos(0.785)) + 40;
 }
 
 export function onHeaderClick(event, { column, activeColumns }, dispatch) {
