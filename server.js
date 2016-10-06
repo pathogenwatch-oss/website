@@ -76,6 +76,8 @@ module.exports = function (callback) {
         googleMapsKey: config.googleMapsKey,
         frontEndConfig: {
           pusherKey: config.pusher.key,
+          mapboxKey: config.mapboxKey,
+          maxFastaFileSize: config.maxFastaFileSize,
         },
       });
     });

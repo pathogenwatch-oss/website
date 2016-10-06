@@ -239,7 +239,7 @@ function get({ collectionId, speciesId }, callback) {
           collectionId,
           title: metadata.title,
           description: metadata.description,
-          dateUploaded: metadata.uploadEnded,
+          dateCreated: metadata.uploadEnded,
           assemblies,
           tree,
           subtrees,

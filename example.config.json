@@ -7,23 +7,19 @@
 		"buckets": {
 			"main": {
 				"name": "wgsa",
-				"password": "4wgstuse"
+				"password": ""
 			},
 			"sequences": {
 				"name": "wgsa_sequences",
-				"password": "4wgstuse"
-			},
-			"cache": {
-				"name": "wgsa_cache",
-				"password": "4wgstuse"
+				"password": ""
 			}
 		}
 	},
 	"rabbit": {
 		"ip": "127.0.0.1",
 		"port": "5672",
-		"login": "wgsa",
-		"password": "wgsa"
+		"login": "",
+		"password": ""
 	},
 	"pusher": {
 		"appId": "",
@@ -33,6 +29,8 @@
 		"proxy": "http://webcache.sanger.ac.uk:3128/"
 	},
   "downloadFileLocation" : "/path/to/files/",
-  "maxCollectionSize": 0,
-  "googleMapsKey": "abcdef"
+  "maxFastaFileSize": 10,
+  "googleMapsKey": "",
+  "mapboxKey": "",
+  "fastaStoragePath": "/path/to/files/"
 }
