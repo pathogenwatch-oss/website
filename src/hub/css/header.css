@@ -44,17 +44,24 @@
   margin-left: 2rem;
 }
 
+.mdl-layout-spacer .mdl-layout-spacer--flex {
+  flex-basis: 0;
+}
+
 .wgsa-header-collection-metadata {
   position: relative;
-  flex-grow: 1;
+  flex-grow: 2;
   height: 64px;
+  min-width: 0;
+  display: flex;
+  align-items: center;
 }
 
 .wgsa-header-collection-title {
   line-height: 64px;
   font-size: 1.5rem;
   margin: 0;
-  margin-left: 2rem;
+  margin-left: 1rem;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

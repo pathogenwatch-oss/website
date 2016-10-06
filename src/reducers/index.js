@@ -13,6 +13,7 @@ import header from './header';
 import table from './table';
 import mapMarkers from './mapMarkers';
 import { trees, displayedTree, treeLoading } from './tree';
+import aboutCollectionOpen from '../about-collection-dropdown/reducer';
 
 import filter from './filter';
 
@@ -53,6 +54,7 @@ const rootReducer = combineReducers({
       name: createReducer(displayedTree),
       loading: createReducer(treeLoading),
     }),
+    aboutCollectionOpen,
   }),
   filter: createReducer(filter),
   downloads: combineReducers({

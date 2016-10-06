@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import Search from '../Search.react';
+import AboutCollection from '../../../about-collection-dropdown';
 
 import { setMenuActive } from '^/actions/downloads';
 import { listen, clicked } from '^/actions/bodyClick';
@@ -9,33 +10,28 @@ import { updateHeader } from '^/actions/header';
 
 import Species from '^/species';
 
-function mapStateToProps({ downloads, collection }) {
+function mapStateToProps({ downloads }) {
   return {
     menuOpen: downloads.menuOpen,
-    metadata: collection.metadata,
-    species: Species.current.formattedName,
   };
 }
 
-function mergeProps({ menuOpen, ...state }, { dispatch }) {
+function mergeProps({ menuOpen }, { dispatch }) {
   return {
-    ...state,
     downloadMenuButtonClick: () => dispatch(setMenuActive(!menuOpen)),
   };
 }
 
 const HeaderContent = connect(mapStateToProps, null, mergeProps)(
-  ({ metadata, species, downloadMenuButtonClick }) => (
+  ({ downloadMenuButtonClick }) => (
     <span className="mdl-layout-spacer mdl-layout-spacer--flex">
-      <div className="wgsa-header-collection-metadata">
-        <h2 className="wgsa-header-collection-title">{metadata.title} - {species}</h2>
-      </div>
       <Search />
       <nav className="wgsa-header-collection-options mdl-navigation" onClick={e => e.stopPropagation()}>
         <button className="wgsa-menu-button mdl-button" onClick={downloadMenuButtonClick}>
           <i className="wgsa-button-icon material-icons">file_download</i>
           <span>Downloads</span>
         </button>
+        <AboutCollection />
       </nav>
     </span>
   )

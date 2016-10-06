@@ -16,6 +16,7 @@
 }
 
 .mdl-layout-title {
+  margin-right: 1rem;
   white-space: nowrap;
 }
 
