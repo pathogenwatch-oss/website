@@ -20,7 +20,9 @@ export default React.createClass({
           <i className="material-icons">info</i>
         </button>
         <div className="wgsa-header-dropdown__content">
-          <h4 className="wgsa-about-collection-dropdown__title">{metadata.title}</h4>
+          <h4 className="wgsa-about-collection-dropdown__title">
+            {metadata.title || 'About Collection'}
+          </h4>
           <p>{metadata.description}</p>
           <dl>
             <dt>Species</dt>
