@@ -1,7 +1,5 @@
 /* eslint no-param-reassign: ["error", { "props": false }] */
 
-import { compose } from 'redux';
-
 import Papa from 'papaparse';
 import { formatMonth, formatDay } from './Date';
 
@@ -19,15 +17,9 @@ function convertFieldNamesToLowerCase(row) {
   return cleanRow;
 }
 
-function addDateObject(row) {
-  const { year, month = 0, day = 1 } = row;
-  row.date = year ? new Date(year, month, day) : null;
-  return row;
-}
-
 function transformRawCsv(rows) {
   return rows.map(
-    compose(addDateObject, convertFieldNamesToLowerCase)
+    convertFieldNamesToLowerCase
   );
 }
 

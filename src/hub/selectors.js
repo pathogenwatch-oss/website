@@ -114,6 +114,7 @@ export const getMetadataFilters = createSelector(
     const wgsaSpeciesMap = new Map();
     const otherSpeciesMap = new Map();
     const countryMap = new Map();
+    const yearSet = new Set();
 
     for (const fasta of fastas) {
       if (fasta.speciesKey) {
@@ -133,12 +134,22 @@ export const getMetadataFilters = createSelector(
           active: name === filterState.country,
         });
       }
+
+      if (fasta.date) {
+        yearSet.add(fasta.date.getFullYear());
+      }
     }
 
     return {
       wgsaSpecies: getSummary(wgsaSpeciesMap),
       otherSpecies: getSummary(otherSpeciesMap),
       country: getSummary(countryMap),
+      date: {
+        min: filterState.minDate,
+        max: filterState.maxDate,
+        years: Array.from(yearSet),
+        months: [ '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12' ],
+      },
     };
   }
 );

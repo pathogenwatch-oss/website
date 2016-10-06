@@ -79,6 +79,11 @@
   background: #673c90;
 }
 
+.wgsa-hub-date-filter {
+  display: flex;
+  margin-top: -20px;
+}
+
 .wgsa-hub-filter__footer {
   background-color: #fff;
   position: absolute;

@@ -35,6 +35,7 @@
     "file-loader": "^0.9.0",
     "fixed-data-table": "^0.6.0",
     "flux": "^3.0.0",
+    "getmdl-select": "^1.0.4",
     "json-loader": "^0.5.3",
     "leaflet": "0.7.7",
     "leaflet-lassoselect": "github:imperialcollegelondon/leaflet-lassoselect",

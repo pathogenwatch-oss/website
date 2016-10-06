@@ -19,4 +19,22 @@ export const metadataFilters = [
       return false;
     },
   },
+  { key: 'minDate',
+    matches({ date }, { year, month } = {}) {
+      const min = new Date(year, parseInt(month || '1', 10) - 1);
+      if (date) {
+        return date >= min;
+      }
+      return false;
+    },
+  },
+  { key: 'maxDate',
+    matches({ date }, { year, month }) {
+      const max = new Date(year, parseInt(month || '1', 10) - 1);
+      if (date) {
+        return date <= max;
+      }
+      return false;
+    },
+  },
 ];

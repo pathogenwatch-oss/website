@@ -20,6 +20,10 @@ function parseMetadata(row) {
   };
 }
 
+function parseDate({ year, month, day } = {}) {
+  return year ? new Date(year, parseInt(month || '1', 10) - 1, day || 1) : undefined;
+}
+
 function flattenCSVs(files) {
   return files.reduce((memo, { data = {} }) => memo.concat(data), []);
 }
@@ -47,11 +51,15 @@ export function mapCSVsToFastas(files) {
     )
   ).then(parsedFiles => flattenCSVs(parsedFiles))
    .then(rows =>
-      fastaFiles.reduce((memo, file) => {
+      fastaFiles.map(file => {
         const row = rows.filter(({ filename }) => filename === file.name)[0];
-        memo.push({ name: file.name, file, metadata: parseMetadata(row) });
-        return memo;
-      }, [])
+        return {
+          name: file.name,
+          file,
+          metadata: parseMetadata(row),
+          date: parseDate(row),
+        };
+      })
     );
 }
 
