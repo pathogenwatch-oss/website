@@ -40,7 +40,7 @@ export default React.createClass({
     return link ? (
       <a ref="link"
         href={link || '#'}
-        target="_blank"
+        target="_blank" rel="noopener"
         download={filename}
         title={title}
         className={classNames}

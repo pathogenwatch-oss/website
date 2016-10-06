@@ -107,7 +107,7 @@ export const nameColumnProps = {
             <a className="mdl-button mdl-button--icon"
               href={`/${Species.nickname}/collection/${metadata.collectionId}`}
               title="View WGSA Collection"
-              target="_blank"
+              target="_blank" rel="noopener"
             >
               <i className="material-icons">open_in_new</i>
             </a> : null
@@ -115,7 +115,7 @@ export const nameColumnProps = {
           { metadata.pmid ?
             <a className="mdl-button mdl-button--icon"
               href={`http://www.ncbi.nlm.nih.gov/pubmed/${metadata.pmid}`}
-              target="_blank"
+              target="_blank" rel="noopener"
               title={`PMID ${metadata.pmid}`}
               style={{ color: '#369' }}
             >

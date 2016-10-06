@@ -13,7 +13,7 @@ export const Header = ({ hasAside, toggleAside }) => (
     <nav className="mdl-navigation">
       <a className="mdl-navigation__link mdl-navigation__link--active" href="">Upload</a>
       <a className="mdl-navigation__link" href="">Downloads</a>
-      <a className="mdl-navigation__link" href="">Documentation</a>
+      <a className="mdl-navigation__link" target="_blank" rel="noopener" href="https://github.com/ImperialCollegeLondon/wgsa-documentation/wiki">Documentation</a>
     </nav>
     <button className="mdl-button mdl-button--icon" onClick={() => toggleAside(hasAside)}>
       <i className="material-icons">{hasAside ? 'chevron_right' : 'search'}</i>

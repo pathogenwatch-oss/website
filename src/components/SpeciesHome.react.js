@@ -105,7 +105,7 @@ export default connect()(React.createClass({
                           <li className="wgsa-menu__item" key={filename}>
                             <a ref="link"
                               href={`${speciesPath()}/${filename}`}
-                              target="_blank"
+                              target="_blank" rel="noopener"
                               download={downloadUtils.getPrettyFilename(Species.current.nickname, filename)}
                               className="wgsa-download-button"
                             >
@@ -149,8 +149,9 @@ const CollectionList = () => (
         <span className="wgsa-species-collection-list-item__utils">
           { pmid ?
             <a href={`http://www.ncbi.nlm.nih.gov/pubmed/${pmid}`}
-              target="_blank"
-              className="wgsa-external-link">
+              target="_blank" rel="noopener"
+              className="wgsa-external-link"
+            >
               <span>PUBMED</span><i className="material-icons">open_in_new</i>
             </a> :
             null

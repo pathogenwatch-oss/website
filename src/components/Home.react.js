@@ -30,7 +30,7 @@ export default connect()(React.createClass({
         classNames: null,
         content: (
           <div className="mdl-layout-spacer">
-            <a className="cgps-logo" target="_blank" href="http://www.pathogensurveillance.net">
+            <a className="cgps-logo" target="_blank" rel="noopener" href="http://www.pathogensurveillance.net">
               <img src="/assets/img/CGPS.SHORT.FINAL.svg" />
             </a>
           </div>
@@ -54,7 +54,7 @@ export default connect()(React.createClass({
             Get started with anything you like
           </Link>
           <div style={{ fontSize: '16px', margin: '16px 0 0' }}>
-            <a style={{ padding: '0 8px' }} target="_blank" href="https://github.com/ImperialCollegeLondon/wgsa-documentation/wiki">Documentation</a>
+            <a style={{ padding: '0 8px' }} target="_blank" rel="noopener" href="https://github.com/ImperialCollegeLondon/wgsa-documentation/wiki">Documentation</a>
           </div>
         </header>
         <div className="wgsa-home__features">

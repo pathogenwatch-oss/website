@@ -9,10 +9,6 @@ import Header from './components/Header.react';
 import Toast from './components/Toast.react';
 import DownloadsMenu from './components/explorer/DownloadsMenu.react';
 
-import Species from './species';
-
-const Staph = Species.get('saureus');
-
 const MenuLink = ({ isActive, icon, text, link }) => (
   <Link className={`mdl-navigation__link ${isActive ? 'mdl-navigation__link--active' : ''}`.trim()} to={link}>
     <i className="material-icons">{icon}</i>
@@ -25,13 +21,9 @@ const menuItems = [
     text: 'Home',
     link: '/',
   },
-  { icon: 'bug_report',
-    text: <span>{Staph.formattedShortName}</span>,
-    link: `/${Staph.nickname}`,
-  },
   { icon: 'cloud_upload',
     text: 'Create Collection',
-    link: `/${Staph.nickname}/upload`,
+    link: '/upload',
   },
 ];
 
@@ -74,12 +66,12 @@ export default connect(mapStateToProps)(React.createClass({
                 {...props}
               />
             ))}
-            <a className="mdl-navigation__link" target="_blank" href="https://github.com/ImperialCollegeLondon/wgsa-documentation/wiki">
+            <a className="mdl-navigation__link" target="_blank" rel="noopener" href="https://github.com/ImperialCollegeLondon/wgsa-documentation/wiki">
               <i className="material-icons">description</i>
               <span>Documentation</span>
             </a>
           </nav>
-          <a className="cgps-logo" target="_blank" href="http://www.pathogensurveillance.net">
+          <a className="cgps-logo" target="_blank" rel="noopener" href="http://www.pathogensurveillance.net">
             <img src="/assets/img/CGPS.SHORT.FINAL.svg" />
           </a>
           <a className="contact-email" href="mailto:cgps@sanger.ac.uk">cgps@sanger.ac.uk</a>
