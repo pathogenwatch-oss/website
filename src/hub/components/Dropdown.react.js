@@ -1,7 +1,6 @@
-// import 'getmdl-select/getmdl-select.min.css';
-// import 'getmdl-select/getmdl-select.min.js';
-
 import React from 'react';
+
+import classnames from 'classnames';
 
 export default React.createClass({
 
@@ -13,27 +12,60 @@ export default React.createClass({
     className: React.PropTypes.string,
     placeholder: React.PropTypes.string,
     options: React.PropTypes.array,
-    selected: React.PropTypes.string,
+    selected: React.PropTypes.oneOfType([
+      React.PropTypes.string,
+      React.PropTypes.number,
+    ]),
+    floatingLabel: React.PropTypes.bool,
+    fullWidth: React.PropTypes.bool,
+    fixHeight: React.PropTypes.bool,
     onChange: React.PropTypes.func,
   },
 
-  componentDidUpdate() {
-    componentHandler.upgradeDom();
+  getDefaultProps() {
+    return {
+      className: '',
+      placeholder: '',
+      floatingLabel: false,
+      fullWidth: false,
+      fixHeight: false,
+    };
+  },
+
+  componentDidUpdate(prevProps) {
+    const { selected } = this.props;
+    if (selected !== prevProps.selected) {
+      this.upgradeElement();
+    }
   },
 
   onChange(value) {
-    console.log('change');
     const { onChange } = this.props;
     if (onChange) {
       onChange(value);
     }
   },
 
+  upgradeElement() {
+    const { textfield } = this.refs;
+    if (textfield.attributes['data-upgraded']) {
+      textfield.attributes.removeNamedItem('data-upgraded');
+      componentHandler.upgradeElement(textfield);
+    }
+  },
+
   render() {
-    const { id, label } = this.props;
-    const className = `mdl-textfield mdl-js-textfield getmdl-select getmdl-select__fullwidth getmdl-select__fix-height ${this.props.className}`
+    const { id, label, floatingLabel, fullWidth, fixHeight } = this.props;
+    const className = classnames(this.props.className,
+      'mdl-textfield',
+      'mdl-js-textfield',
+      'getmdl-select', {
+        'mdl-textfield--floating-label': floatingLabel,
+        'getmdl-select__fullwidth': fullWidth,
+        'getmdl-select__fix-height': fixHeight,
+      });
     return (
-      <div className={className}>
+      <div ref="textfield" className={className}>
         <input
           className="mdl-textfield__input"
           value={this.props.selected}
@@ -41,15 +73,22 @@ export default React.createClass({
           id={id}
           readOnly
           tabIndex="-1"
-          placeholder={placeholder}
+          placeholder={this.props.placeholder}
         />
-        { label ? <label className="mdl-textfield__label" htmlFor={id}>{ label }</label> : null }
-        <ul
-          className="mdl-menu mdl-menu--bottom-left mdl-js-menu"
-          htmlFor={id}
-        >
+        { label ?
+            <label className="mdl-textfield__label" htmlFor={id}>
+              { label }
+            </label> :
+            null
+        }
+        <ul ref="list" htmlFor={id} className="mdl-menu mdl-menu--bottom-left mdl-js-menu">
           {this.props.options.map((item, index) =>
-            <li key={index} className="mdl-menu__item" onClick={() => this.onChange(item)}>{ item }</li>
+            <li key={index}
+              className="mdl-menu__item"
+              onClick={() => this.onChange(item)}
+            >
+              { item }
+            </li>
           )}
         </ul>
       </div>
@@ -57,3 +96,18 @@ export default React.createClass({
   },
 
 });
+
+const materialMenuShow = MaterialMenu.prototype.show;
+MaterialMenu.prototype.show = function(e) {
+  const forRect = this.forElement_.parentElement.getBoundingClientRect();
+  const maxHeight = document.documentElement.clientHeight - forRect.bottom;
+  if (maxHeight < 320) {
+    this.container_.style.maxHeight = '320px';
+    this.container_.style.marginTop = `-${320 - maxHeight}px`;
+  } else {
+    this.container_.style.maxHeight = `${maxHeight}px`;
+    this.container_.style.marginTop = '';
+  }
+  this.container_.style.overflowY = 'auto';
+  materialMenuShow.call(this, e);
+};

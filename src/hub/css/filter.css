@@ -81,7 +81,12 @@
 
 .wgsa-hub-date-filter {
   display: flex;
+  justify-content: space-between;
   margin-top: -20px;
+}
+
+.wgsa-hub-date-filter__dropdown {
+  width: calc(50% - 8px);
 }
 
 .wgsa-hub-filter__footer {

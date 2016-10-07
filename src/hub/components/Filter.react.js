@@ -76,23 +76,27 @@ const DateFilter = connect()(
       <section className="wgsa-hub-filter__section">
         <h3>Min Date</h3>
         <div className="wgsa-hub-date-filter">
-          <Dropdown id="minYear" placeholder="Year" options={years}
-            selected={min ? min.year : ''}
-            onChange={year => dispatch(actions.filterByMetadata('minDate', { year, month: min ? min.month : '01' }))}
+          <Dropdown id="minYear" label="Year" options={years}
+            className="wgsa-hub-date-filter__dropdown"
+            selected={min.year} fullWidth
+            onChange={year => dispatch(actions.filterByMetadata('minDate', { year, month: min.month }))}
           />
-          <Dropdown id="minMonth" placeholder="Month" options={months}
-            selected={min ? min.month : ''}
+          <Dropdown id="minMonth" label="Month" options={months}
+            className="wgsa-hub-date-filter__dropdown"
+            selected={min.month} fullWidth
             onChange={month => dispatch(actions.filterByMetadata('minDate', { year: min.year, month }))}
           />
         </div>
         <h3>Max Date</h3>
         <div className="wgsa-hub-date-filter">
-          <Dropdown id="maxYear" placeholder="Year" options={years}
-            selected={max ? max.year : ''}
-            onChange={year => dispatch(actions.filterByMetadata('maxDate', { year, month: max ? max.month : '12' }))}
+          <Dropdown id="maxYear" label="Year" options={years}
+            className="wgsa-hub-date-filter__dropdown"
+            selected={max.year} fullWidth
+            onChange={year => dispatch(actions.filterByMetadata('maxDate', { year, month: max.month }))}
           />
-          <Dropdown id="maxMonth" placeholder="Month" options={months}
-            selected={max ? max.month : ''}
+          <Dropdown id="maxMonth" label="Month" options={months}
+            className="wgsa-hub-date-filter__dropdown"
+            selected={max.month} fullWidth
             onChange={month => dispatch(actions.filterByMetadata('maxDate', { year: max.year, month }))}
           />
         </div>
@@ -137,7 +141,6 @@ export default connect(mapStateToProps)(
         years={filters.date.years}
         months={filters.date.months}
       />
-
       <footer className={`wgsa-hub-filter__footer ${filterActive ? 'wgsa-hub-filter__footer--active' : ''}`.trim()}>
         <ClearFilterButton />
       </footer>

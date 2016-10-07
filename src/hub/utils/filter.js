@@ -21,6 +21,7 @@ export const metadataFilters = [
   },
   { key: 'minDate',
     matches({ date }, { year, month } = {}) {
+      if (!year) return true;
       const min = new Date(year, parseInt(month || '1', 10) - 1);
       if (date) {
         return date >= min;
@@ -30,7 +31,8 @@ export const metadataFilters = [
   },
   { key: 'maxDate',
     matches({ date }, { year, month }) {
-      const max = new Date(year, parseInt(month || '1', 10) - 1);
+      if (!year) return true;
+      const max = new Date(year, parseInt(month || '12', 10) - 1);
       if (date) {
         return date <= max;
       }
