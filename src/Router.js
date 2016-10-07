@@ -19,7 +19,7 @@ export default () => (
   <Router history={browserHistory}>
     <Route path="/" component={App}>
       <IndexRoute component={Home} />
-      <Route path="upload" component={hub} >
+      <Route path="upload" component={hub}>
         <IndexRoute component={GridView} />
         <Route path="map" component={MapView} />
         <Route path="stats" component={StatsView} />

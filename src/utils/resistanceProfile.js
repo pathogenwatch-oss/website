@@ -6,7 +6,9 @@ const resistantColour = DEFAULT.DANGER_COLOUR;
 const nonResistantColour = '#fff';
 
 export function isResistant(profile, antibiotic) {
-  return profile ? profile[antibiotic].state === 'RESISTANT' : null;
+  if (!profile || !profile[antibiotic]) return false;
+
+  return profile[antibiotic].state === 'RESISTANT';
 }
 
 export function defaultColourGetter(assembly) {
