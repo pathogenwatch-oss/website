@@ -3,6 +3,8 @@ import '../css/filter.css';
 import React from 'react';
 import { connect } from 'react-redux';
 
+import Dropdown from './Dropdown.react';
+
 import { getFilter, getMetadataFilters } from '../selectors';
 
 import actions from '../actions';
@@ -65,6 +67,44 @@ const MetadataFilter = connect()(
   )
 );
 
+const DateFilter = connect()(
+  ({ min, max, years, months, dispatch }) => {
+    if (!years || years.length === 0) {
+      return null;
+    }
+    return (
+      <section className="wgsa-hub-filter__section">
+        <h3>Min Date</h3>
+        <div className="wgsa-hub-date-filter">
+          <Dropdown id="minYear" label="Year" options={years}
+            className="wgsa-hub-date-filter__dropdown"
+            selected={min.year} fullWidth
+            onChange={year => dispatch(actions.filterByMetadata('minDate', { year, month: min.month }))}
+          />
+          <Dropdown id="minMonth" label="Month" options={months}
+            className="wgsa-hub-date-filter__dropdown"
+            selected={min.month} fullWidth
+            onChange={month => dispatch(actions.filterByMetadata('minDate', { year: min.year, month }))}
+          />
+        </div>
+        <h3>Max Date</h3>
+        <div className="wgsa-hub-date-filter">
+          <Dropdown id="maxYear" label="Year" options={years}
+            className="wgsa-hub-date-filter__dropdown"
+            selected={max.year} fullWidth
+            onChange={year => dispatch(actions.filterByMetadata('maxDate', { year, month: max.month }))}
+          />
+          <Dropdown id="maxMonth" label="Month" options={months}
+            className="wgsa-hub-date-filter__dropdown"
+            selected={max.month} fullWidth
+            onChange={month => dispatch(actions.filterByMetadata('maxDate', { year: max.year, month }))}
+          />
+        </div>
+      </section>
+    );
+  }
+);
+
 function mapStateToProps(state) {
   return {
     filters: getMetadataFilters(state),
@@ -94,6 +134,12 @@ export default connect(mapStateToProps)(
         title="Country"
         summary={filters.country}
         property={countryFilter.key}
+      />
+      <DateFilter
+        min={filters.date.min}
+        max={filters.date.max}
+        years={filters.date.years}
+        months={filters.date.months}
       />
       <footer className={`wgsa-hub-filter__footer ${filterActive ? 'wgsa-hub-filter__footer--active' : ''}`.trim()}>
         <ClearFilterButton />
