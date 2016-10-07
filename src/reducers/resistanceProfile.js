@@ -24,7 +24,8 @@ const isMac =
     navigator.platform.toUpperCase().indexOf('MAC') >= 0);
 const modifierKey = isMac ? 'Cmd' : 'Ctrl';
 
-function createAntibioticsColumn({ name, longName }) {
+function createAntibioticsColumn(antibiotic) {
+  const { name = antibiotic, longName } = antibiotic;
   const columnKey = longName ? name : name.slice(0, 3);
   const hoverName = longName || name;
 
