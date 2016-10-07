@@ -148,7 +148,6 @@ export const getMetadataFilters = createSelector(
         min: filterState.minDate || { year: '', month: '' },
         max: filterState.maxDate || { year: '', month: '' },
         years: Array.from(yearSet),
-        months: [ '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12' ],
       },
     };
   }

@@ -2,6 +2,7 @@ import '../css/filter.css';
 
 import React from 'react';
 import { connect } from 'react-redux';
+import classnames from 'classnames';
 
 import Dropdown from './Dropdown.react';
 
@@ -9,7 +10,8 @@ import { getFilter, getMetadataFilters } from '../selectors';
 
 import actions from '../actions';
 
-import { metadataFilters } from '../utils/filter.js';
+import { metadataFilters } from '../utils/filter';
+import { months } from '../../utils/Date';
 
 const [ speciesFilter, countryFilter ] = metadataFilters;
 
@@ -83,8 +85,8 @@ const DateFilter = connect()(
           />
           <Dropdown id="minMonth" label="Month" options={months}
             className="wgsa-hub-date-filter__dropdown"
-            selected={min.month} fullWidth
-            onChange={month => dispatch(actions.filterByMetadata('minDate', { year: min.year, month }))}
+            selected={min.month ? months[min.month] : ''} fullWidth
+            onChange={month => dispatch(actions.filterByMetadata('minDate', { year: min.year, month: months.indexOf(month).toString() }))}
           />
         </div>
         <h3>Max Date</h3>
@@ -96,8 +98,8 @@ const DateFilter = connect()(
           />
           <Dropdown id="maxMonth" label="Month" options={months}
             className="wgsa-hub-date-filter__dropdown"
-            selected={max.month} fullWidth
-            onChange={month => dispatch(actions.filterByMetadata('maxDate', { year: max.year, month }))}
+            selected={max.month ? months[max.month] : ''} fullWidth
+            onChange={month => dispatch(actions.filterByMetadata('maxDate', { year: max.year, month: months.indexOf(month).toString() }))}
           />
         </div>
       </section>
@@ -113,35 +115,37 @@ function mapStateToProps(state) {
 
 export default connect(mapStateToProps)(
   ({ filters, filterActive }) => (
-    <aside className="wgsa-hub-filter">
+    <aside className={classnames('wgsa-hub-filter', { 'wgsa-hub-filter--active': filterActive })}>
       <header className="wgsa-hub-filter__header mdl-layout__header mdl-layout__header--scroll">
         <label className="wgsa-hub-filter__search">
           <i className="material-icons">search</i>
           <FilterInput />
         </label>
       </header>
-      <MetadataFilter
-        title="WGSA Species"
-        summary={filters.wgsaSpecies}
-        property={speciesFilter.key}
-      />
-      <MetadataFilter
-        title="Other Species"
-        summary={filters.otherSpecies}
-        property={speciesFilter.key}
-      />
-      <MetadataFilter
-        title="Country"
-        summary={filters.country}
-        property={countryFilter.key}
-      />
-      <DateFilter
-        min={filters.date.min}
-        max={filters.date.max}
-        years={filters.date.years}
-        months={filters.date.months}
-      />
-      <footer className={`wgsa-hub-filter__footer ${filterActive ? 'wgsa-hub-filter__footer--active' : ''}`.trim()}>
+      <div className="wgsa-hub-filter__content">
+        <MetadataFilter
+          title="WGSA Species"
+          summary={filters.wgsaSpecies}
+          property={speciesFilter.key}
+        />
+        <MetadataFilter
+          title="Other Species"
+          summary={filters.otherSpecies}
+          property={speciesFilter.key}
+        />
+        <MetadataFilter
+          title="Country"
+          summary={filters.country}
+          property={countryFilter.key}
+        />
+        <DateFilter
+          min={filters.date.min}
+          max={filters.date.max}
+          years={filters.date.years}
+          months={months}
+        />
+      </div>
+      <footer className="wgsa-hub-filter__footer">
         <ClearFilterButton />
       </footer>
     </aside>
