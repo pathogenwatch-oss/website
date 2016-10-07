@@ -54,6 +54,7 @@ export default React.createClass({
       contextMenu: {
         parent: document.body,
       },
+      collapsedColour: 'rgba(0, 0, 0, 1)',
       fillCanvas: true,
     });
 

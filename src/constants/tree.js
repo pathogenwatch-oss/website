@@ -74,11 +74,19 @@ function getStandardTreeFunctions(state, dispatch) {
 
   return {
     styleTree(tree) {
+      Object.keys(tree.branches).forEach(branchId => {
+        tree.branches[branchId].collapsed = true;
+      });
       tree.leaves.forEach((leaf) => {
         const assembly = entities.assemblies[leaf.id];
 
         if (collection.assemblyIds.has(leaf.id)) {
           leaf.setDisplay(styles.collectionLeaf);
+          let node = leaf;
+          while (node !== null && node.collapsed) {
+            node.collapsed = false;
+            node = node.parent;
+          }
         } else if (reference.assemblyIds.has(leaf.id)) {
           leaf.setDisplay(styles.referenceLeaf);
         } else {
