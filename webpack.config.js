@@ -33,7 +33,8 @@ const loaders = [
   { test: /.json$/, loaders: [ 'json' ] },
   { test: /.css$/, loaders: [ 'style', 'css', 'postcss' ] },
   { test: /\.(png|jpg|jpeg|gif)$/, loader: 'file' },
-  { test: /\.js$/, loader: `babel?${JSON.stringify(babelSettings)}`,
+  { test: /\.js$/,
+    loader: (process.env.NODE_ENV === 'production' ? '' : 'react-hot!').concat(`babel?${JSON.stringify(babelSettings)}`),
     include: [
       /(src|universal|cgps-commons)/,
       path.join(__dirname, 'node_modules', 'promise-file-reader'),
@@ -48,7 +49,6 @@ const commonPlugins = [
 const devConfig = {
   devtool: '#eval-source-map',
   entry: [
-    'react-hot-loader/patch',
     'webpack-hot-middleware/client',
     './src',
   ],
