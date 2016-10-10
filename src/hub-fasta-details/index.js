@@ -13,7 +13,7 @@ export function viewFastaDetails(name) {
   };
 }
 
-export function selectedFasta(state, { type, payload }) {
+export function selectedFasta(state = null, { type, payload }) {
   switch (type) {
     case HUB_VIEW_FASTA_DETAILS:
       return payload.name;
