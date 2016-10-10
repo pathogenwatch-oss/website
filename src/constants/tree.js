@@ -66,6 +66,25 @@ const styles = {
   },
 };
 
+function collapseTreeBranches(node, leafPredicate) {
+  if (node.leaf) {
+    node.collapsed = false;
+    return leafPredicate(node);
+  }
+  const childrenToCollapse = node.children.reduce((memo, child) => {
+    const flag = collapseTreeBranches(child, leafPredicate);
+    if (flag) memo.push(child);
+    return memo;
+  }, []);
+  const someCollapsed = childrenToCollapse.length < node.children.length;
+  if (someCollapsed) {
+    for (const child of childrenToCollapse) {
+      if (!child.leaf) child.collapsed = true;
+    }
+  }
+  return !someCollapsed;
+}
+
 function getStandardTreeFunctions(state, dispatch) {
   const { entities, tables, filter, collection, reference } = state;
   const { metadata, resistanceProfile } = tables;
@@ -74,19 +93,11 @@ function getStandardTreeFunctions(state, dispatch) {
 
   return {
     styleTree(tree) {
-      Object.keys(tree.branches).forEach(branchId => {
-        tree.branches[branchId].collapsed = true;
-      });
       tree.leaves.forEach((leaf) => {
         const assembly = entities.assemblies[leaf.id];
 
         if (collection.assemblyIds.has(leaf.id)) {
           leaf.setDisplay(styles.collectionLeaf);
-          let node = leaf;
-          while (node !== null && node.collapsed) {
-            node.collapsed = false;
-            node = node.parent;
-          }
         } else if (reference.assemblyIds.has(leaf.id)) {
           leaf.setDisplay(styles.referenceLeaf);
         } else {
@@ -106,7 +117,8 @@ function getStandardTreeFunctions(state, dispatch) {
         leaf.highlighted = (filter.active && filter.ids.has(leaf.id));
       });
     },
-    onLoaded({ leaves }) {
+    onLoaded({ leaves, root }) {
+      collapseTreeBranches(root, leaf => !collection.assemblyIds.has(leaf.id));
       dispatch(setUnfilteredIds(leaves.map(_ => _.id)));
     },
     onUpdated(event, tree) {
