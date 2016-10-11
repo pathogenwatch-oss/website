@@ -2,7 +2,7 @@ import '^/css/tree.css';
 import '^/css/loading.css';
 
 import React from 'react';
-import Phylocanvas from 'phylocanvas';
+import Phylocanvas, { Tree } from 'phylocanvas';
 import contextMenuPlugin from 'phylocanvas-plugin-context-menu';
 
 import TreeControls from './TreeControls.react';
@@ -11,6 +11,19 @@ import Spinner from '^/components/Spinner.react';
 import DEFAULT, { CGPS } from '^/defaults';
 
 Phylocanvas.plugin(contextMenuPlugin);
+
+Phylocanvas.plugin(decorate => {
+  decorate(Tree, 'clicked', function (delegate, args) {
+    const [ event ] = args;
+    const node = this.getNodeAtMousePosition(event);
+    if (event.shiftKey && node) {
+      node.toggleCollapsed();
+      this.draw();
+    } else {
+      delegate.apply(this, args);
+    }
+  });
+});
 
 const fullWidthHeight = {
   height: '100%',
@@ -54,7 +67,7 @@ export default React.createClass({
       contextMenu: {
         parent: document.body,
       },
-      collapsedColour: 'rgba(0, 0, 0, 1)',
+      // collapsedColour: '#222',
       fillCanvas: true,
     });
 
