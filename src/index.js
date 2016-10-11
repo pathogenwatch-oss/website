@@ -5,7 +5,6 @@ import 'phylocanvas/polyfill';
 import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
-import { AppContainer } from 'react-hot-loader';
 
 import Router from './Router';
 
@@ -13,11 +12,9 @@ import store from '^/store';
 
 function renderApp(Root) {
   render((
-    <AppContainer>
-      <Provider store={store}>
-        <Root />
-      </Provider>
-    </AppContainer>
+    <Provider store={store}>
+      <Root />
+    </Provider>
   ), document.getElementById('wgsa'));
 }
 
