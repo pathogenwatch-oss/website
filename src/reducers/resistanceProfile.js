@@ -25,13 +25,13 @@ const isMac =
 const modifierKey = isMac ? 'Cmd' : 'Ctrl';
 
 function createAntibioticsColumn({ name, longName }) {
-  const columnKey = longName ? name : name.slice(0, 3);
+  const columnKey = name;
   const hoverName = longName || name;
 
   return {
     columnKey,
     getLabel(isSelected) {
-      return isSelected ? hoverName : columnKey;
+      return isSelected ? hoverName : name.slice(0, 3);
     },
     headerClasses: 'wgsa-table-header--resistance',
     headerTitle: `${hoverName} - ${modifierKey} + click to select multiple`,

@@ -11,7 +11,6 @@ import { setMenuActive } from '^/actions/downloads';
 import { createDownloadProps } from '^/constants/downloads';
 import { getCounts, showCounts } from '^/utils/assembly';
 
-
 const DownloadsMenu = React.createClass({
 
   propTypes: {
