@@ -67,6 +67,7 @@ export default React.createClass({
     const { files } = event.target;
     if (files && files.length > 0) {
       this.handleFiles(files);
+      event.target.value = null;
     }
   },
 
