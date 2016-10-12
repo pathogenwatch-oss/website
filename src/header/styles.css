@@ -31,17 +31,13 @@
   filter: grayscale(1) brightness(5);
 }
 
-.wgsa-header .mdl-navigation {
-  padding-right: 1rem;
-}
-
 .wgsa-header .mdl-navigation__link {
   text-transform: uppercase;
   color: rgba(0,0,0,0.54);
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
   font-weight: 500 !important;
   padding: 0;
-  margin-left: 2rem;
+  margin: 0 1rem;
 }
 
 .mdl-layout-spacer .mdl-layout-spacer--flex {
