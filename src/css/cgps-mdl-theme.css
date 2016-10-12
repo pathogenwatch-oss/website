@@ -26,6 +26,7 @@
   width: 64px;
   height: 60px;
   line-height: 64px;
+  background: none !important;
 }
 
 .mdl-layout__drawer-button:focus {

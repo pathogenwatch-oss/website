@@ -5,6 +5,7 @@
 .mdl-layout__drawer > .mdl-layout-title {
   padding: 32px 48px;
   margin-left: -24px;
+  margin-right: 0;
   border-bottom: 1px solid #555;
   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
 }
