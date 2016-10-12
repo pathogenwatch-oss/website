@@ -1,4 +1,4 @@
-import CONFIG from '../config';
+import CONFIG from '../app/config';
 
 export function subscribe(channelId, message, callback) {
   const pusher = new Pusher(CONFIG.pusherKey, { encrypted: true });

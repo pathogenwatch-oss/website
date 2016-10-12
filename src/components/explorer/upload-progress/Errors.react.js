@@ -1,9 +1,9 @@
 import React from 'react';
 
-import { WARNING_COLOUR } from '^/defaults';
+import { DEFAULT } from '^/app/constants';
 
 const iconStyle = {
-  color: WARNING_COLOUR,
+  color: DEFAULT.WARNING_COLOUR,
 };
 
 const taskTypes = new Set([ 'PAARSNP', 'MLST' ]);

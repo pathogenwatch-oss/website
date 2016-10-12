@@ -1,26 +1,20 @@
 import { combineReducers } from 'redux';
 
-import antibiotics from './antibiotics';
-import { assemblies, collection, reference } from './collection';
-
+import aboutCollectionOpen from '../about-collection-dropdown/reducer';
+import antibiotics from '../reducers/antibiotics';
+import bodyClickListener from '../reducers/bodyClickListener';
+import { assemblies, collection, reference } from '../reducers/collection';
+import downloads from '../reducers/downloads';
+import downloadsMenu from '../reducers/downloadsMenu';
+import filter from '../reducers/filter';
+import { reducer as header } from '../header';
 import hub from '../hub/reducers';
 import fastas from '../hub/reducers/fastas';
-
-import metadata from './metadata';
-import resistanceProfile from './resistanceProfile';
-
-import header from './header';
-import table from './table';
-import mapMarkers from './mapMarkers';
-import { trees, displayedTree, treeLoading } from './tree';
-import aboutCollectionOpen from '../about-collection-dropdown/reducer';
-
-import filter from './filter';
-
-import downloads from './downloads';
-import downloadsMenu from './downloadsMenu';
-
-import bodyClickListener from './bodyClickListener';
+import mapMarkers from '../reducers/mapMarkers';
+import metadata from '../reducers/metadata';
+import resistanceProfile from '../reducers/resistanceProfile';
+import table from '../reducers/table';
+import { trees, displayedTree, treeLoading } from '../reducers/tree';
 
 import { RESET_STORE } from '../actions/reset';
 
@@ -34,20 +28,9 @@ function createReducer({ actions, initialState }) {
 }
 
 const rootReducer = combineReducers({
-  entities: combineReducers({
-    antibiotics: createReducer(antibiotics),
-    assemblies: createReducer(assemblies),
-    trees: createReducer(trees),
-    fastas: createReducer(fastas),
-  }),
+  bodyClickListener,
   collection: createReducer(collection),
-  reference: createReducer(reference),
-  tables: combineReducers({
-    metadata: createReducer(metadata),
-    resistanceProfile: createReducer(resistanceProfile),
-  }),
   display: combineReducers({
-    header: createReducer(header),
     table: createReducer(table),
     mapMarkers: createReducer(mapMarkers),
     tree: combineReducers({
@@ -56,13 +39,24 @@ const rootReducer = combineReducers({
     }),
     aboutCollectionOpen,
   }),
-  filter: createReducer(filter),
   downloads: combineReducers({
     menuOpen: createReducer(downloadsMenu),
     files: createReducer(downloads),
   }),
-  bodyClickListener,
+  entities: combineReducers({
+    antibiotics: createReducer(antibiotics),
+    assemblies: createReducer(assemblies),
+    trees: createReducer(trees),
+    fastas: createReducer(fastas),
+  }),
+  filter: createReducer(filter),
+  header,
   hub: hub(createReducer),
+  reference: createReducer(reference),
+  tables: combineReducers({
+    metadata: createReducer(metadata),
+    resistanceProfile: createReducer(resistanceProfile),
+  }),
 });
 
 const initialState = rootReducer({}, {});

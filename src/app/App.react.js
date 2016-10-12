@@ -1,13 +1,13 @@
-import './css/menu.css';
-import './css/forms.css';
+import '../css/menu.css';
+import '../css/forms.css';
 
 import React from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 
-import Header from './components/Header.react';
-import Toast from './components/Toast.react';
-import DownloadsMenu from './components/explorer/DownloadsMenu.react';
+import Header from '../header/Header.react';
+import Toast from '../components/Toast.react';
+import DownloadsMenu from '../components/explorer/DownloadsMenu.react';
 
 const MenuLink = ({ isActive, icon, text, link }) => (
   <Link className={`mdl-navigation__link ${isActive ? 'mdl-navigation__link--active' : ''}`.trim()} to={link}>
@@ -51,10 +51,11 @@ export default connect(mapStateToProps)(React.createClass({
   },
 
   render() {
-    const { children, location, bodyClickListener = () => {} } = this.props;
+    const { location, bodyClickListener = () => {}, routes } = this.props;
+    const [ , routeProps ] = routes;
     return (
       <div className="mdl-layout mdl-js-layout mdl-layout--fixed-header" onClick={bodyClickListener}>
-        <Header />
+        <Header {...(routeProps.header || {})} />
         <div className="mdl-layout__drawer">
           <span className="mdl-layout-title">
             <img src="/assets/img/WGSA.FINAL.svg" />
@@ -77,7 +78,7 @@ export default connect(mapStateToProps)(React.createClass({
           <a className="contact-email" href="mailto:cgps@sanger.ac.uk">cgps@sanger.ac.uk</a>
         </div>
         <main className="mdl-layout__content">
-          {children}
+          {this.props.children}
         </main>
         <DownloadsMenu />
         <Toast />

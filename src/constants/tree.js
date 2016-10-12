@@ -10,7 +10,7 @@ import { createColourGetter } from '../utils/resistanceProfile';
 import { getColumnLabel } from '../utils/table';
 
 import Species from '../species';
-import { CGPS, COLOUR } from '^/defaults';
+import { CGPS, DEFAULT } from '^/app/constants';
 
 
 export const POPULATION = Symbol('population');
@@ -32,7 +32,7 @@ const styles = {
   collectionLeaf: {
     leafStyle: {
       fillStyle: CGPS.COLOURS.PURPLE_LIGHT,
-      strokeStyle: COLOUR,
+      strokeStyle: DEFAULT.COLOUR,
       lineWidth: 1.5,
     },
     labelStyle: {
@@ -44,7 +44,7 @@ const styles = {
   publicLeaf: {
     leafStyle: {
       fillStyle: CGPS.COLOURS.GREY,
-      strokeStyle: COLOUR,
+      strokeStyle: DEFAULT.COLOUR,
       lineWidth: 1.5,
     },
     labelStyle: {
@@ -55,7 +55,7 @@ const styles = {
   referenceLeaf: {
     leafStyle: {
       fillStyle: CGPS.COLOURS.GREY,
-      strokeStyle: COLOUR,
+      strokeStyle: DEFAULT.COLOUR,
       lineWidth: 1.5,
     },
     labelStyle: {
@@ -88,7 +88,7 @@ function getStandardTreeFunctions(state, dispatch) {
         // add dynamic leaf style
         leaf.setDisplay({
           leafStyle: {
-            strokeStyle: COLOUR,
+            strokeStyle: DEFAULT.COLOUR,
             fillStyle: getColour(assembly),
             lineWidth: 1.5,
           },

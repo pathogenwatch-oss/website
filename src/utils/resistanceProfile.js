@@ -1,6 +1,6 @@
 import { setColourColumns } from '../actions/table';
 
-import DEFAULT, { CGPS } from '../defaults';
+import { DEFAULT, CGPS } from '../app/constants';
 
 const resistantColour = DEFAULT.DANGER_COLOUR;
 const nonResistantColour = '#fff';

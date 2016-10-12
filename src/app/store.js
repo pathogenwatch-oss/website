@@ -2,7 +2,7 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 
 import { promiseToThunk } from '../middleware';
-import rootReducer from '../reducers';
+import rootReducer from './reducer';
 
 const middleware = [ promiseToThunk, thunk ];
 
@@ -17,8 +17,8 @@ export default store;
 
 if (module.hot) {
   // Enable Webpack hot module replacement for reducers
-  module.hot.accept('../reducers', () => {
-    const nextRootReducer = require('../reducers').default;
+  module.hot.accept('./reducer', () => {
+    const nextRootReducer = require('./reducer').default;
     store.replaceReducer(nextRootReducer);
   });
 }

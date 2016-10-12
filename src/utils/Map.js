@@ -1,4 +1,4 @@
-import { COLOUR, CGPS } from '../defaults';
+import { DEFAULT, CGPS } from '../app/constants';
 
 const CANVAS_SIZE = 40;
 const MARKER_SIZE = 18;
@@ -21,7 +21,7 @@ const scaledArea = Math.pow(lengthOfSquareSide, 2);
 const scaledRadius = Math.sqrt(scaledArea / Math.PI);
 
 const singleColour = {
-  circle(fillColour, strokeColour = COLOUR) {
+  circle(fillColour, strokeColour = DEFAULT.COLOUR) {
     context.beginPath();
     context.arc(centerX, centerY, scaledRadius, 0, Math.PI * 2, false);
     context.fillStyle = fillColour;
@@ -30,7 +30,7 @@ const singleColour = {
     context.stroke();
     context.closePath();
   },
-  square(fillColour, strokeColour = COLOUR) {
+  square(fillColour, strokeColour = DEFAULT.COLOUR) {
     context.beginPath();
     context.moveTo(squareStartX, centerY);
     context.lineTo(squareStartX, centerY + lengthOfSquareSide / 2);
@@ -47,7 +47,7 @@ const singleColour = {
 };
 
 const doubleColour = {
-  circle([ colour1, colour2 ], strokeColour = COLOUR) {
+  circle([ colour1, colour2 ], strokeColour = DEFAULT.COLOUR) {
     context.beginPath();
     context.arc(centerX, centerY, scaledRadius, Math.PI * 0.5, Math.PI * 1.5, false);
     context.fillStyle = colour1;
@@ -66,7 +66,7 @@ const doubleColour = {
     context.stroke();
     context.closePath();
   },
-  square([ colour1, colour2 ], strokeColour = COLOUR) {
+  square([ colour1, colour2 ], strokeColour = DEFAULT.COLOUR) {
     context.beginPath();
     context.moveTo(squareStartX, centerY);
     context.lineTo(squareStartX, centerY + lengthOfSquareSide / 2);

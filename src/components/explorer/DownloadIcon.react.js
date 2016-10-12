@@ -2,7 +2,7 @@ import React from 'react';
 
 import Spinner from '^/components/Spinner.react';
 
-import DEFAULT from '^/defaults';
+import { DEFAULT } from '^/app/constants';
 
 const errorStyle = {
   color: DEFAULT.DANGER_COLOUR,

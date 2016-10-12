@@ -2,7 +2,7 @@ import '../css/drag-and-drop.css';
 
 import React from 'react';
 
-import DEFAULT, { CGPS } from '^/defaults';
+import { CGPS, DEFAULT } from '^/app/constants';
 
 const fileInputStyle = {
   position: 'fixed',

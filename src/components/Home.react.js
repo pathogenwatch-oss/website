@@ -9,7 +9,7 @@ import Switch from './Switch.react';
 
 import { updateHeader } from '^/actions/header';
 
-import { CGPS } from '^/defaults';
+import { CGPS } from '^/app/constants';
 
 export default connect()(React.createClass({
 

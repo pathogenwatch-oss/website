@@ -1,14 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import Species from '^/species';
-import DEFAULT from '^/defaults';
-
-const headerStyle = {
-  'background': '#fff',
-  'color': DEFAULT.CGPS.COLOURS.PURPLE,
-};
-
 const subtitleStyle = {
   marginRight: '100px',
   textTransform: 'uppercase',

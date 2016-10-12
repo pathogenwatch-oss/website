@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import { updateHeader } from '^/actions/header';
 
-import { CGPS } from '../defaults';
+import { CGPS } from '../app/constants';
 
 const titleStyle = {
   textAlign: 'center',

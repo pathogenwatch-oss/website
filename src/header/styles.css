@@ -1,4 +1,4 @@
-.wgsa-hub-header {
+.wgsa-header {
   border-bottom: 1px solid rgba(0, 0, 0, 0.14);
 }
 
@@ -11,7 +11,7 @@
   margin-right: 255px;
 }
 
-.wgsa-hub-header ~ .mdl-layout__content {
+.wgsa-header ~ .mdl-layout__content {
   background: #fff;
   z-index: auto;
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
@@ -19,7 +19,7 @@
   color: rgba(0, 0, 0, 0.54);
 }
 
-.wgsa-hub-header .mdl-layout-title {
+.wgsa-header .mdl-layout-title {
   font-family: "Roboto Condensed", "Helvetica", "Arial", sans-serif;
 }
 
@@ -31,11 +31,11 @@
   filter: grayscale(1) brightness(5);
 }
 
-.wgsa-hub-header .mdl-navigation {
+.wgsa-header .mdl-navigation {
   padding-right: 1rem;
 }
 
-.wgsa-hub-header .mdl-navigation__link {
+.wgsa-header .mdl-navigation__link {
   text-transform: uppercase;
   color: rgba(0,0,0,0.54);
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;

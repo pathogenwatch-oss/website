@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 import LeafletMap from './LeafletMap.react';
 
-import CONFIG from '../../config';
+import CONFIG from '../../app/config';
 
 import { getMarkers, getBounds, getLassoPath } from '../selectors/map';
 

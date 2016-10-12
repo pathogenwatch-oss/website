@@ -2,12 +2,10 @@ import React from 'react';
 
 import FileDragAndDrop from '../../components/DragAndDrop.react';
 
-import Header from './Header.react';
 import Filter from './Filter.react';
 import Summary from './Summary.react';
 import CreateCollectionTray from './CreateCollectionTray.react.js';
 
-import { updateHeader } from '^/actions/header';
 import { addFiles } from '../thunks';
 
 import { taxIdMap } from '^/species';
@@ -47,15 +45,7 @@ export default React.createClass({
   },
 
   toggleAside(hasAside) {
-    const { dispatch } = this.props;
-
-    dispatch(
-      updateHeader({
-        hasAside,
-        classNames: 'wgsa-hub-header',
-        content: <Header />,
-      })
-    );
+    // TODO: Send toggle aside action from header module
   },
 
   upload(newFiles) {

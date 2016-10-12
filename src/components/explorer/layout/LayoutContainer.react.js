@@ -6,9 +6,6 @@ import AboutCollection from '../../../about-collection-dropdown';
 
 import { setMenuActive } from '^/actions/downloads';
 import { listen, clicked } from '^/actions/bodyClick';
-import { updateHeader } from '^/actions/header';
-
-import Species from '^/species';
 
 function mapStateToProps({ downloads }) {
   return {
@@ -22,7 +19,7 @@ function mergeProps({ menuOpen }, { dispatch }) {
   };
 }
 
-const HeaderContent = connect(mapStateToProps, null, mergeProps)(
+export const HeaderContent = connect(mapStateToProps, null, mergeProps)(
   ({ downloadMenuButtonClick }) => (
     <span className="mdl-layout-spacer mdl-layout-spacer--flex">
       <Search />
@@ -48,13 +45,6 @@ export default connect()(React.createClass({
   },
 
   componentWillMount() {
-    this.props.dispatch(updateHeader({
-      speciesName: Species.formattedName,
-      classNames: 'mdl-layout__header--primary mdl-shadow--3dp',
-      content: (<HeaderContent />),
-      hasAside: false,
-    }));
-
     document.title = 'WGSA | Explore Collection';
 
     this.props.dispatch(

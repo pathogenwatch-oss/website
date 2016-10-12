@@ -3,7 +3,7 @@
 import FileUploadingProgressActionCreators
   from '../actions/FileUploadingProgressActionCreators';
 
-import CONFIG from '../config';
+import CONFIG from '../app/config';
 
 export const SERVER_ADDRESS =
   CONFIG.api ? `http://${CONFIG.api.address}` : '';

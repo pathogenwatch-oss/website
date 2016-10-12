@@ -7,7 +7,7 @@ import { nameColumnData } from './columns';
 
 import { defaultWidthGetter } from '^/utils/table/columnWidth';
 
-import { CGPS } from '^/defaults';
+import { CGPS } from '^/app/constants';
 import Species from '^/species';
 
 

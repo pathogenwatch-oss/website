@@ -6,7 +6,7 @@ import assign from 'object-assign';
 
 import MetadataUtils from '../utils/Metadata';
 import Species from '^/species';
-import CONFIG from '../config';
+import CONFIG from '../app/config';
 
 const MAX_COLLECTION_SIZE = parseInt(CONFIG.maxCollectionSize || '0', 10);
 

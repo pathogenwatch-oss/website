@@ -2,7 +2,7 @@ import React from 'react';
 
 import FileUploadingProgressStore from '^/stores/FileUploadingProgressStore';
 
-import { CGPS } from '^/defaults';
+import { CGPS } from '^/app/constants';
 
 const inProgressOptions = {
   icon: 'warning',

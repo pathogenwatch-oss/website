@@ -14,7 +14,7 @@ import { statuses } from '^/constants/collection';
 import { UPLOAD_FAILED } from '^/stores/FileUploadingStore';
 
 import Species from '^/species';
-import { CGPS } from '^/defaults';
+import { CGPS } from '^/app/constants';
 
 const backgroundStyle = {
   background: CGPS.COLOURS.GREY_LIGHT,
