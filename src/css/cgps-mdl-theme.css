@@ -43,6 +43,7 @@
 .mdl-layout__header--primary {
   background-color: #673c90;
   color: #fff !important;
+  border-bottom: none !important;
 }
 
 .mdl-layout__header--primary .mdl-layout__drawer-button {
