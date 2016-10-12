@@ -90,7 +90,7 @@ function formatForFrontend(assembly) {
         percentMatched: core.percentKernelMatched,
         percentAssemblyMatched: core.percentAssemblyMatched,
       } : null,
-      resistanceProfile: paarsnp ?
+      resistanceProfile: paarsnp && paarsnp.antibioticProfiles ?
         paarsnp.antibioticProfiles.reduce(
           (memo, { name, resistanceState, resistanceSets }) => {
             memo[name] = {
