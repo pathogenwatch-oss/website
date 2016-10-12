@@ -8,27 +8,25 @@ import DefaultContent from './DefaultContent.react';
 
 import { selector as getHeader } from './index';
 
-const Header = ({ hasAside, content = (<DefaultContent hasAside={hasAside} />), className }) => (
-  <header className={
-    classnames([
-      'mdl-layout__header mdl-layout__header--scroll wgsa-header',
-      { 'wgsa-has-aside': hasAside },
-      className,
-    ])}
-  >
-    <div className="mdl-layout__header-row">
-      <span className="mdl-layout-title">
-        <img src="/assets/img/WGSA.FINAL.svg" className="wgsa-header-logo" />
-      </span>
-      {content}
-    </div>
-  </header>
-);
-
 function mapStateToProps(state) {
-  return {
-    hasAside: getHeader(state).hasAside,
-  };
+  return getHeader(state);
 }
 
-export default connect(mapStateToProps)(Header);
+export default connect(mapStateToProps)(
+  ({ hasAside, content = <DefaultContent />, className }) => (
+    <header className={
+      classnames([
+        'mdl-layout__header mdl-layout__header--scroll wgsa-header',
+        { 'wgsa-has-aside': hasAside },
+        className,
+      ])}
+    >
+      <div className="mdl-layout__header-row">
+        <span className="mdl-layout-title">
+          <img src="/assets/img/WGSA.FINAL.svg" className="wgsa-header-logo" />
+        </span>
+        {content}
+      </div>
+    </header>
+  )
+);

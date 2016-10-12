@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import Explorer from './Explorer.react';
-import { HeaderContent } from './layout/LayoutContainer.react';
 
 import FileUploadingStore from '^/stores/FileUploadingStore';
 
@@ -40,11 +39,6 @@ const connectExplorer = connect(
     };
   },
 );
-
-export const headerProps = {
-  className: 'mdl-layout__header--primary mdl-shadow--3dp',
-  content: (<HeaderContent />),
-};
 
 export default function ({ params }) {
   const ReduxExplorer = connectExplorer(Explorer);

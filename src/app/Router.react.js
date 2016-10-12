@@ -4,7 +4,9 @@ import { Router, Route, IndexRoute, browserHistory, Redirect } from 'react-route
 import App from './App.react';
 import Home from '../components/Home.react';
 import hub, { GridView, MapView, StatsView } from '../hub';
-import ExploreCollection, { headerProps } from '../components/explorer';
+
+import CollectionViewerRoute from '../collection-viewer';
+
 import NotFound from '../components/NotFound.react';
 
 import Species from '../species';
@@ -26,11 +28,7 @@ export default () => (
       { Species.list.map(({ nickname }) =>
           <Route key={nickname} path={nickname} component={SpeciesSetter}>
             <Redirect from="upload" to="/upload" />
-            <Route
-              path="collection/:id"
-              component={ExploreCollection}
-              header={headerProps}
-            />
+            {CollectionViewerRoute}
           </Route>
       )}
       <Route path="*" component={NotFound} />

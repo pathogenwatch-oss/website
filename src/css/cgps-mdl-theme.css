@@ -56,9 +56,6 @@
 .mdl-layout__content {
   background: #efefef;
   position: relative;
-}
-
-.is-small-screen .mdl-layout__content {
   overflow: visible !important;
 }
 

@@ -50,12 +50,18 @@ export default connect(mapStateToProps)(React.createClass({
     }
   },
 
+  hideSidebar() {
+    if (this.menuButton.getAttribute('aria-expanded') === 'true') {
+      this.menuButton.click();
+    }
+  },
+
   render() {
     const { location, bodyClickListener = () => {}, routes } = this.props;
-    const [ route ] = routes.reverse();
+    const { header } = routes[routes.length - 1];
     return (
-      <div className="mdl-layout mdl-js-layout mdl-layout--fixed-header" onClick={bodyClickListener}>
-        <Header {...(route.header || {})} />
+      <div ref="layout" className="mdl-layout mdl-js-layout mdl-layout--fixed-header" onClick={bodyClickListener}>
+        <Header content={header} />
         <div className="mdl-layout__drawer">
           <span className="mdl-layout-title">
             <img src="/assets/img/WGSA.FINAL.svg" />
@@ -84,12 +90,6 @@ export default connect(mapStateToProps)(React.createClass({
         <Toast />
       </div>
     );
-  },
-
-  hideSidebar() {
-    if (this.menuButton.getAttribute('aria-expanded') === 'true') {
-      this.menuButton.click();
-    }
   },
 
 }));

@@ -1,3 +1,7 @@
+import { CHECK_STATUS } from '../actions/fetch';
+
+import { getHeaderClassName } from '../collection-viewer';
+
 const HEADER_TOGGLE_ASIDE = 'HEADER_TOGGLE_ASIDE';
 
 export function toggleAside(isOpen) {
@@ -15,6 +19,11 @@ export function reducer(state = initialState, { type, payload }) {
   switch (type) {
     case HEADER_TOGGLE_ASIDE:
       return { ...state, hasAside: payload.isOpen };
+    case CHECK_STATUS.SUCCESS:
+      return {
+        ...state,
+        className: getHeaderClassName(payload.result.status),
+      };
     default:
       return state;
   }
