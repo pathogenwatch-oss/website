@@ -52,10 +52,10 @@ export default connect(mapStateToProps)(React.createClass({
 
   render() {
     const { location, bodyClickListener = () => {}, routes } = this.props;
-    const [ , routeProps ] = routes;
+    const [ route ] = routes.reverse();
     return (
       <div className="mdl-layout mdl-js-layout mdl-layout--fixed-header" onClick={bodyClickListener}>
-        <Header {...(routeProps.header || {})} />
+        <Header {...(route.header || {})} />
         <div className="mdl-layout__drawer">
           <span className="mdl-layout-title">
             <img src="/assets/img/WGSA.FINAL.svg" />
