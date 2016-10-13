@@ -58,11 +58,11 @@ export default connect(mapStateToProps, mapDispatchToProps)(React.createClass({
   },
 
   render() {
-    const { bodyClickListener = () => {}, routes, location } = this.props;
+    const { bodyClickListener = () => {}, routes } = this.props;
     const { header } = routes[routes.length - 1];
     return (
       <div ref="layout" className="mdl-layout mdl-js-layout mdl-layout--fixed-header" onClick={bodyClickListener}>
-        <Header content={header} location={location} />
+        <Header content={header} />
         <div className="mdl-layout__drawer">
           <span className="mdl-layout-title">
             <img src="/assets/img/WGSA.FINAL.svg" />

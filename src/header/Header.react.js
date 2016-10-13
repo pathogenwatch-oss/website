@@ -13,7 +13,7 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps)(
-  ({ hasAside, content, className, location }) => (
+  ({ hasAside, content, className }) => (
     <header className={
       classnames(
         'mdl-layout__header mdl-layout__header--scroll wgsa-header',
@@ -25,7 +25,7 @@ export default connect(mapStateToProps)(
         <span className="mdl-layout-title">
           <img src="/assets/img/WGSA.FINAL.svg" className="wgsa-header-logo" />
         </span>
-        {content || <DefaultContent hasAside={hasAside} location={location} />}
+        {content || <DefaultContent hasAside={hasAside} />}
       </div>
     </header>
   )
