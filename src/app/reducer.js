@@ -14,6 +14,7 @@ import mapMarkers from '../reducers/mapMarkers';
 import metadata from '../reducers/metadata';
 import resistanceProfile from '../reducers/resistanceProfile';
 import table from '../reducers/table';
+import { reducer as toast } from '../toast';
 import { trees, displayedTree, treeLoading } from '../reducers/tree';
 
 import { RESET_STORE } from '../actions/reset';
@@ -57,6 +58,7 @@ const rootReducer = combineReducers({
     metadata: createReducer(metadata),
     resistanceProfile: createReducer(resistanceProfile),
   }),
+  toast,
 });
 
 const initialState = rootReducer({}, {});

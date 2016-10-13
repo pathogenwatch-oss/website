@@ -15,11 +15,11 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps)(
   ({ hasAside, content = <DefaultContent hasAside={hasAside} />, className }) => (
     <header className={
-      classnames([
+      classnames(
         'mdl-layout__header mdl-layout__header--scroll wgsa-header',
         { 'wgsa-has-aside': hasAside },
         className,
-      ])}
+      )}
     >
       <div className="mdl-layout__header-row">
         <span className="mdl-layout-title">

@@ -3,6 +3,7 @@ import '../css/tray.css';
 import React from 'react';
 import { connect } from 'react-redux';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import classnames from 'classnames';
 
 import * as selectors from '../selectors/create-collection';
 
@@ -39,10 +40,6 @@ const CreateCollectionTray = React.createClass({
     });
   },
 
-  getClassname() {
-    return `wgsa-tray ${this.state.open ? 'wgsa-tray--open' : ''}`.trim();
-  },
-
   addToFormElements(element) {
     if (!this.firstInput) {
       this.firstInput = element.querySelector('input');
@@ -64,7 +61,7 @@ const CreateCollectionTray = React.createClass({
         transitionLeaveTimeout={280}
       >
       { this.props.visible ?
-        <aside key="create-collection-tray" className={this.getClassname()}>
+        <aside key="create-collection-tray" className={classnames('wgsa-tray', { 'wgsa-tray--open': this.state.open })}>
           <header className="wgsa-tray__header" onClick={this.onHeaderClick}>
             Create Collection
             <button className="mdl-button mdl-button--icon">

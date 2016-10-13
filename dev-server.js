@@ -69,23 +69,26 @@ apiRouter.get('/species/:speciesId/antibiotics', (req, res) => {
   res.sendFile(`${__dirname}/static_data/antibiotics.json`);
 });
 
-
+let subtreeError = false;
 apiRouter.get('/species/:speciesId/collection/:collectionId/subtree/:subtreeId',
-  (req, res) =>
-    setTimeout(() =>
-      res.sendFile(`${__dirname}/static_data/${req.params.subtreeId}.json`)
-      // res.sendStatus(500)
-    , 1000)
+  (req, res) => {
+    subtreeError = !subtreeError;
+    setTimeout(() => (
+      subtreeError ?
+        res.sendStatus(500) :
+        res.sendFile(`${__dirname}/static_data/${req.params.subtreeId}.json`)
+    ), 1000);
+  }
 );
 
-apiRouter.post('/download/type/assembly/format/fasta', (req, res) => {
+apiRouter.post('/species/:speciesId/download/type/assembly/format/fasta', (req, res) => {
   setTimeout(() => {
     res.json({ checksum: `${req.body.idList[0]}.fa` });
   }, 1000);
 });
 
 let downloadError = false;
-apiRouter.post('/download/type/:idType/format/:fileFormat', (req, res) => {
+apiRouter.post('/species/:speciesId/download/type/:idType/format/:fileFormat', (req, res) => {
   downloadError = !downloadError;
   setTimeout(() => (
     downloadError ?
@@ -95,7 +98,7 @@ apiRouter.post('/download/type/:idType/format/:fileFormat', (req, res) => {
 });
 
 apiRouter.get(
-  '/download/file/:fileName',
+  '/species/:speciesId/download/file/:fileName',
   (req, res) => res.sendFile(`${__dirname}/static_data/metadata.csv`)
 );
 

@@ -5,8 +5,8 @@ import React from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 
-import Header from '../header/Header.react';
-import Toast from '../components/Toast.react';
+import Header from '../header';
+import Toast from '../toast';
 import DownloadsMenu from '../components/explorer/DownloadsMenu.react';
 
 const MenuLink = ({ isActive, icon, text, link }) => (

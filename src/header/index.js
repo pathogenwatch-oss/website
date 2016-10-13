@@ -32,3 +32,5 @@ export function reducer(state = initialState, { type, payload }) {
 export function selector({ header }) {
   return header;
 }
+
+export default from './Header.react';

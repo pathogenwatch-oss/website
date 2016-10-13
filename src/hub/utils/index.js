@@ -1,8 +1,6 @@
-import React from 'react';
 import { readAsText } from 'promise-file-reader';
 
 import actions from '../actions';
-import ToastActionCreators from '../../actions/ToastActionCreators';
 
 import MetadataUtils from '../../utils/Metadata';
 import { API_ROOT } from '../../utils/Api';
@@ -100,16 +98,6 @@ export function sendToServer({ file, coords }, dispatch) {
         })
       )
   );
-}
-
-export function showDuplicatesToast(duplicates) {
-  ToastActionCreators.showToast({
-    message: duplicates.length === 1 ? (
-      <span><strong>{duplicates[0].name}</strong> is a duplicate and was not queued.</span>
-    ) : (
-      <span>{duplicates.length} duplicates were not queued.</span>
-    ),
-  });
 }
 
 function removeViewModel({ id, name, speciesId, metrics, metadata }) {
