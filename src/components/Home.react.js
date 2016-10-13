@@ -7,8 +7,6 @@ import { Link } from 'react-router';
 import CircularProgress from './CircularProgress.react';
 import Switch from './Switch.react';
 
-import { updateHeader } from '^/actions/header';
-
 import { CGPS } from '^/app/constants';
 
 export default connect()(React.createClass({
@@ -24,20 +22,6 @@ export default connect()(React.createClass({
   },
 
   componentWillMount() {
-    this.props.dispatch(
-      updateHeader({
-        speciesName: null,
-        classNames: null,
-        content: (
-          <div className="mdl-layout-spacer">
-            <a className="cgps-logo" target="_blank" rel="noopener" href="http://www.pathogensurveillance.net">
-              <img src="/assets/img/CGPS.SHORT.FINAL.svg" />
-            </a>
-          </div>
-        ),
-      })
-    );
-
     document.title = 'WGSA - Whole Genome Sequence Analysis';
   },
 

@@ -7,8 +7,6 @@ import { connect } from 'react-redux';
 
 import Spinner from '^/components/Spinner.react';
 
-import { updateHeader } from '^/actions/header';
-
 import { statuses } from '^/constants/collection';
 
 import Species from '^/species';
@@ -19,14 +17,6 @@ const backgroundStyle = {
 };
 
 const Background = connect()(React.createClass({
-
-  componentWillMount() {
-    this.props.dispatch(updateHeader({
-      speciesName: Species.formattedName,
-      classNames: 'mdl-layout__header--primary mdl-shadow--3dp',
-      content: null,
-    }));
-  },
 
   componentDidMount() {
     componentHandler.upgradeDom();

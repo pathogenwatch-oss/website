@@ -1,8 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { updateHeader } from '^/actions/header';
-
 import { CGPS } from '../app/constants';
 
 const titleStyle = {
@@ -11,12 +9,6 @@ const titleStyle = {
 };
 
 export default connect()(React.createClass({
-
-  componentWillMount() {
-    this.props.dispatch(updateHeader({
-      classNames: 'mdl-shadow--3dp',
-    }));
-  },
 
   render() {
     return (

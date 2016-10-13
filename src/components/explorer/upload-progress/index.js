@@ -3,14 +3,9 @@ import '^/css/upload-progress.css';
 import React from 'react';
 import { connect } from 'react-redux';
 
-import Header from './Header.react';
 import Dashboard from './Dashboard.react';
 
 import { subscribe } from '^/utils/Notification';
-
-import { updateHeader } from '^/actions/header';
-
-import Species from '^/species';
 
 const UploadProgress = React.createClass({
 
@@ -23,13 +18,6 @@ const UploadProgress = React.createClass({
   },
 
   componentWillMount() {
-    this.props.dispatch(updateHeader({
-      speciesName: Species.formattedName,
-      classNames: 'mdl-shadow--3dp',
-      content: (<Header />),
-      hasAside: false,
-    }));
-
     document.title = 'WGSA | Upload Progress';
   },
 
