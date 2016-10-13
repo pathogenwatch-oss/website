@@ -2,19 +2,14 @@ import '../css/menu.css';
 import '../css/forms.css';
 
 import React from 'react';
-import { Link } from 'react-router';
 import { connect } from 'react-redux';
 
 import Header from '../header';
 import Toast from '../toast';
 import DownloadsMenu from '../components/explorer/DownloadsMenu.react';
+import NavLink from '../nav-link';
 
-const MenuLink = ({ isActive, icon, text, link }) => (
-  <Link className={`mdl-navigation__link ${isActive ? 'mdl-navigation__link--active' : ''}`.trim()} to={link}>
-    <i className="material-icons">{icon}</i>
-    <span>{text}</span>
-  </Link>
-);
+import { locationChange } from '../nav-link';
 
 const menuItems = [
   { icon: 'home',
@@ -22,7 +17,7 @@ const menuItems = [
     link: '/',
   },
   { icon: 'cloud_upload',
-    text: 'Create Collection',
+    text: 'Upload',
     link: '/upload',
   },
 ];
@@ -31,11 +26,16 @@ function mapStateToProps({ bodyClickListener }) {
   return { bodyClickListener };
 }
 
-export default connect(mapStateToProps)(React.createClass({
+function mapDispatchToProps(dispatch, { location }) {
+  return {
+    onLocationChange: () => dispatch(locationChange(location)),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(React.createClass({
 
   propTypes: {
     children: React.PropTypes.element,
-    location: React.PropTypes.object,
     bodyClickListener: React.PropTypes.func,
   },
 
@@ -47,6 +47,7 @@ export default connect(mapStateToProps)(React.createClass({
   componentDidUpdate(previous) {
     if (this.props.location !== previous.location) {
       this.hideSidebar();
+      this.props.onLocationChange();
     }
   },
 
@@ -57,21 +58,18 @@ export default connect(mapStateToProps)(React.createClass({
   },
 
   render() {
-    const { location, bodyClickListener = () => {}, routes } = this.props;
+    const { bodyClickListener = () => {}, routes, location } = this.props;
     const { header } = routes[routes.length - 1];
     return (
       <div ref="layout" className="mdl-layout mdl-js-layout mdl-layout--fixed-header" onClick={bodyClickListener}>
-        <Header content={header} />
+        <Header content={header} location={location} />
         <div className="mdl-layout__drawer">
           <span className="mdl-layout-title">
             <img src="/assets/img/WGSA.FINAL.svg" />
           </span>
           <nav className="mdl-navigation" onClick={this.hideSidebar}>
             {menuItems.map(props => (
-              <MenuLink key={props.link}
-                isActive={location.pathname === props.link}
-                {...props}
-              />
+              <NavLink key={props.link} {...props} />
             ))}
             <a className="mdl-navigation__link" target="_blank" rel="noopener" href="https://github.com/ImperialCollegeLondon/wgsa-documentation/wiki">
               <i className="material-icons">description</i>

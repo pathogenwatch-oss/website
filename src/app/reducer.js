@@ -12,6 +12,7 @@ import hub from '../hub/reducers';
 import fastas from '../hub/reducers/fastas';
 import mapMarkers from '../reducers/mapMarkers';
 import metadata from '../reducers/metadata';
+import { reducer as location } from '../nav-link/';
 import resistanceProfile from '../reducers/resistanceProfile';
 import table from '../reducers/table';
 import { reducer as toast } from '../toast';
@@ -53,6 +54,7 @@ const rootReducer = combineReducers({
   filter: createReducer(filter),
   header,
   hub: hub(createReducer),
+  location,
   reference: createReducer(reference),
   tables: combineReducers({
     metadata: createReducer(metadata),

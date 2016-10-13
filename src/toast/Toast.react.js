@@ -27,7 +27,6 @@ const ToastContainer = React.createClass({
     return (
       <ReactCSSTransitionGroup
         className="wgsa-toast-container"
-        element="div"
         transitionName="wgsa-toast"
         transitionEnterTimeout={280}
         transitionLeaveTimeout={280}

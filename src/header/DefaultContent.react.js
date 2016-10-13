@@ -1,18 +1,20 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
+import NavLink from '../nav-link';
+
 import { toggleAside } from './index';
+
+const links = [
+  { text: 'Home', link: '/' },
+  { text: 'Upload', link: '/upload' },
+];
 
 const DefaultContent = ({ hasAside, onClick }) => (
   <span className="mdl-layout-spacer mdl-layout-spacer--flex">
     <div className="mdl-layout-spacer" />
     <nav className="mdl-navigation">
-      <a className="mdl-navigation__link mdl-navigation__link--active" href="">
-        Upload
-      </a>
-      <a className="mdl-navigation__link" href="">
-        Downloads
-      </a>
+      { links.map(props => <NavLink key={props.link} {...props} />) }
       <a className="mdl-navigation__link" target="_blank" rel="noopener"
         href="https://github.com/ImperialCollegeLondon/wgsa-documentation/wiki"
       >
