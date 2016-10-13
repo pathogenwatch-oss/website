@@ -11,8 +11,6 @@ import { updateHeader } from '^/actions/header';
 
 import { statuses } from '^/constants/collection';
 
-import { UPLOAD_FAILED } from '^/stores/FileUploadingStore';
-
 import Species from '^/species';
 import { CGPS } from '^/app/constants';
 
@@ -38,7 +36,7 @@ const Background = connect()(React.createClass({
     return (
       <div style={backgroundStyle} className="wgsa-loading-container">
         <div className="wgsa-loading-content">
-          <img src="/assets/img/WGSA.FINAL.svg" className="wgsa-loading-logo"/>
+          <img src="/assets/img/WGSA.FINAL.svg" className="wgsa-loading-logo" />
           { this.props.children }
         </div>
       </div>
@@ -93,7 +91,7 @@ function getStatusMessage(status, { collectionSize, errors = [] }) {
       <Link to={`/${Species.nickname}/upload`} className="mdl-button mdl-button--raised">Try Again</Link>,
     ];
   }
-  if (status === UPLOAD_FAILED || status === statuses.ABORTED) {
+  if (status === statuses.ABORTED) {
     return [
       <h1>We're sorry, your upload was interrupted</h1>,
       <p className="mdl-typography--title">

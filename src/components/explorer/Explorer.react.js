@@ -4,8 +4,6 @@ import Layout from './Layout.react';
 import UploadProgress from './upload-progress';
 import { LoadSpinner, LoadError } from './Loading.react';
 
-import FileUploadingStore, { UPLOAD_FAILED } from '^/stores/FileUploadingStore';
-
 import { statuses } from '^/constants/collection';
 
 export default React.createClass({
@@ -22,50 +20,28 @@ export default React.createClass({
     progress: React.PropTypes.object,
   },
 
-  getInitialState() {
-    return {
-      uploadFailed: false,
-    };
-  },
-
   componentDidMount() {
     this.props.initialise();
-    FileUploadingStore.addChangeListener(this.handleFileUploadingStoreChange);
   },
 
   componentWillReceiveProps({ status }) {
     if (status === statuses.READY) {
       this.props.fetch();
-      FileUploadingStore.clearStore();
     }
   },
 
   componentWillUnmount() {
     this.props.reset();
-    FileUploadingStore.removeChangeListener(this.handleFileUploadingStoreChange);
-    FileUploadingStore.clearStore();
   },
 
   render() {
     const { progress = {} } = this.props;
-    let { status } = this.props;
-
-    if (!status && FileUploadingStore.isUploading()) {
-      // this skips the loading spinner when uploading
-      status = statuses.PROCESSING;
-    }
-
-    if (this.state.uploadFailed) {
-      return (
-        <LoadError status={UPLOAD_FAILED} />
-      );
-    }
+    const { status = statuses.PROCESSING } = this.props;
 
     if (status === statuses.PROCESSING) {
       const { checkStatus, updateProgress } = this.props;
       return (
         <UploadProgress
-          isUploading={FileUploadingStore.isUploading()}
           progress={progress}
           checkStatus={checkStatus}
           updateProgress={updateProgress}
@@ -91,12 +67,6 @@ export default React.createClass({
     return (
       <LoadSpinner />
     );
-  },
-
-  handleFileUploadingStoreChange() {
-    if (FileUploadingStore.hasFailed()) {
-      this.setState({ uploadFailed: true });
-    }
   },
 
 });

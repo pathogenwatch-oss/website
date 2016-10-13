@@ -1,3 +1,5 @@
+/* global Pusher */
+
 import CONFIG from '../app/config';
 
 export function subscribe(channelId, message, callback) {

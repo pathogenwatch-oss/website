@@ -58,9 +58,7 @@ const UploadProgress = React.createClass({
               If upload fails to progress, please refresh at a later time.
             </div>
           </div>
-          <Dashboard {...this.props.progress}
-            isUploading={this.props.isUploading}
-          />
+          <Dashboard {...this.props.progress} />
         </main>
       </div>
     );
