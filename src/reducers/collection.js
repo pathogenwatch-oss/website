@@ -119,10 +119,10 @@ export const collection = {
         ...result,
       };
     },
-    [UPDATE_PROGRESS](state, { results }) {
+    [UPDATE_PROGRESS](state, { result }) {
       return {
         ...state,
-        ...results,
+        ...result,
       };
     },
     [FETCH_ENTITIES.FAILURE](state) {

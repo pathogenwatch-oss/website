@@ -1,4 +1,4 @@
-import { CHECK_STATUS } from '../actions/fetch';
+import { CHECK_STATUS, UPDATE_PROGRESS } from '../actions/fetch';
 
 import { getHeaderClassName } from '../collection-viewer';
 
@@ -20,6 +20,7 @@ export function reducer(state = initialState, { type, payload }) {
     case HEADER_TOGGLE_ASIDE:
       return { ...state, hasAside: payload.isOpen };
     case CHECK_STATUS.SUCCESS:
+    case UPDATE_PROGRESS:
       return {
         ...state,
         className: getHeaderClassName(payload.result.status),

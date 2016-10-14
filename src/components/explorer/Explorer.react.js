@@ -36,7 +36,7 @@ export default React.createClass({
 
   render() {
     const { progress = {} } = this.props;
-    const { status = statuses.PROCESSING } = this.props;
+    const { status } = this.props;
 
     if (status === statuses.PROCESSING) {
       const { checkStatus, updateProgress } = this.props;

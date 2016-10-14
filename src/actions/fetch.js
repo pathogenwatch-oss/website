@@ -33,9 +33,11 @@ export const checkStatus = (speciesId, collectionId, cas) => ({
 
 export const UPDATE_PROGRESS = 'UPDATE_PROGRESS';
 
-export function updateProgress(results) {
+export function updateProgress(result) {
   return {
     type: UPDATE_PROGRESS,
-    results,
+    payload: {
+      result,
+    },
   };
 }

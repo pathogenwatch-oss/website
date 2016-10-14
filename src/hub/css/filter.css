@@ -10,6 +10,7 @@
   transform: translateX(255px);
   transition: .28s cubic-bezier(.4,0,.2,1);
   transition-property: transform;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
 }
 
 .wgsa-has-aside ~ .mdl-layout__content .wgsa-hub-filter {
@@ -34,7 +35,6 @@
   width: 100%;
   padding: 0 16px;
   outline: none;
-  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
   font-size: 15px;
 }
 
