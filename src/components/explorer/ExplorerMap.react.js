@@ -59,8 +59,10 @@ function mapStateToMarker(markerDef, state, dispatch) {
   markerDef.highlighted =
     filter.active && assemblyIds.some(id => filter.ids.has(id));
 
-  markerDef.onClick = ({ Pb = {} }) => {
-    const { ctrlKey, metaKey } = Pb;
+  markerDef.onClick = (args) => {
+    // Google Maps uses a minified key for the click event, it can change.
+    const eventProp = Object.keys(args).find(key => args[key].type === 'click');
+    const { ctrlKey, metaKey } = args[eventProp];
     if (ctrlKey || metaKey) {
       return markerDef.highlighted ?
         dispatch(removeFromFilter(assemblyIds)) :
