@@ -54,14 +54,14 @@
 }
 
 .wgsa-table-cell {
-  vertical-align: top;
   border-top: 1px solid rgba(0, 0, 0, 0.12);
   border-right: none;
-  padding: 0 18px;
   box-sizing: border-box;
   font-size: 13px;
+  padding: 0 18px;
   transition: .28s cubic-bezier(.4,0,.2,1);
   transition-property: color, background, background-color;
+  vertical-align: top;
   white-space: nowrap;
 }
 

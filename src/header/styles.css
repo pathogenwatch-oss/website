@@ -12,11 +12,7 @@
 }
 
 .wgsa-header ~ .mdl-layout__content {
-  background: #fff;
   z-index: auto;
-  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-  font-size: 13px;
-  color: rgba(0, 0, 0, 0.54);
 }
 
 .wgsa-header .mdl-layout-title {
@@ -33,7 +29,7 @@
 
 .wgsa-header .mdl-navigation__link {
   text-transform: uppercase;
-  color: rgba(0,0,0,0.54);
+  color: rgba(0, 0, 0, 0.54);
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
   font-weight: 500 !important;
   padding: 0;
