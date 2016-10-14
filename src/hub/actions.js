@@ -61,6 +61,7 @@ function createCollection(files, metadata) {
     type: CREATE_COLLECTION,
     payload: {
       speciesId,
+      metadata,
       promise: createCollectionPromise(files, speciesId, metadata),
     },
   };

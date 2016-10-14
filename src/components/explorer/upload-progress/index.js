@@ -15,7 +15,7 @@ const UploadProgress = React.createClass({
     updateProgress: React.PropTypes.func,
     progress: React.PropTypes.object,
     dispatch: React.PropTypes.func,
-    metadata: React.PropTypes.string,
+    metadata: React.PropTypes.object,
   },
 
   componentWillMount() {

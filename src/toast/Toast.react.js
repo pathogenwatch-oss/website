@@ -2,7 +2,6 @@ import './styles.css';
 
 import React from 'react';
 import { connect } from 'react-redux';
-import classnames from 'classnames';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 import { hideToast } from './index';
@@ -12,14 +11,15 @@ const ToastContainer = React.createClass({
   displayName: 'ToastContainer',
 
   componentDidUpdate(previously) {
-    // should only focus when a message is added
+    // should only focus when toast becomes visble
     if (previously.visible) return;
 
-    if (this.props.action) {
+    if (this.props.action && this.refs.actionButton) {
       this.refs.actionButton.focus();
-    } else {
-      this.refs.closeButton.focus();
+      return;
     }
+
+    if (this.refs.closeButton) this.refs.closeButton.focus();
   },
 
   render() {
