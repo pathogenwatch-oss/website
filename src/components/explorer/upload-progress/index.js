@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import Dashboard from './Dashboard.react';
 
 import { subscribe } from '^/utils/Notification';
+import Species from '^/species';
 
 const UploadProgress = React.createClass({
 
@@ -13,12 +14,12 @@ const UploadProgress = React.createClass({
     checkStatus: React.PropTypes.func,
     updateProgress: React.PropTypes.func,
     progress: React.PropTypes.object,
-    isUploading: React.PropTypes.bool,
     dispatch: React.PropTypes.func,
+    metadata: React.PropTypes.string,
   },
 
   componentWillMount() {
-    document.title = 'WGSA | Upload Progress';
+    this.setDocumentTitle();
   },
 
   componentDidMount() {
@@ -27,13 +28,27 @@ const UploadProgress = React.createClass({
   },
 
   componentDidUpdate() {
-    if (this.props.progress.collectionId && !this.notificationChannel) {
+    const { progress, updateProgress } = this.props;
+    if (progress.collectionId && !this.notificationChannel) {
       this.notificationChannel = subscribe(
-        this.props.progress.collectionId,
+        progress.collectionId,
         'upload-progress',
-        data => this.props.updateProgress(data)
+        data => updateProgress(data)
       );
     }
+    this.setDocumentTitle();
+  },
+
+  setDocumentTitle() {
+    const { metadata = {}, percentage = 0 } = this.props;
+
+    document.title = [
+      'WGSA',
+      '|',
+      `(${percentage}%)`,
+      `${metadata.title || 'Upload Progress'}`,
+      `[${Species.current.name}]`,
+    ].join(' ');
   },
 
   render() {

@@ -68,7 +68,7 @@ const CreateCollectionTray = React.createClass({
               <i className="material-icons">{`expand_${this.state.open ? 'more' : 'less'}`}</i>
             </button>
           </header>
-          <div className="wgsa-tray__content">
+          <form className="wgsa-tray__content" onSubmit={this.props.onSubmit}>
             <dl className="wgsa-collection-summary">
               <dt>Species</dt>
               <dd>{taxIdMap.get(speciesId).formattedShortName}</dd>
@@ -99,12 +99,11 @@ const CreateCollectionTray = React.createClass({
             <div className="wgsa-tray-actions">
               <button
                 className="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
-                onClick={this.props.onButtonClick}
               >
                 Create
               </button>
             </div>
-          </div>
+          </form>
         </aside>
         : null
       }
@@ -124,8 +123,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    onButtonClick:
-      () => dispatch(createCollection()),
+    onSubmit:
+      (e) => { e.preventDefault(); dispatch(createCollection()); },
     onFormChange:
       ({ target }) => dispatch(actions.changeCollectionMetadata(
         target.id.split('collection-')[1],

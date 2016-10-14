@@ -3,7 +3,13 @@ import { connect } from 'react-redux';
 
 import { listen, clicked } from '^/actions/bodyClick';
 
-export default connect()(React.createClass({
+import Species from '^/species';
+
+function mapStateToProps({ collection }) {
+  return { ...collection.metadata };
+}
+
+export default connect(mapStateToProps)(React.createClass({
 
   displayName: 'LayoutContainer',
 
@@ -14,7 +20,12 @@ export default connect()(React.createClass({
   },
 
   componentWillMount() {
-    document.title = 'WGSA | Explore Collection';
+    document.title = [
+      'WGSA',
+      '|',
+      `${this.props.title || 'Explore Collection'}`,
+      `[${Species.current.name}]`,
+    ].join(' ');
 
     this.props.dispatch(
       listen(() => this.props.dispatch(clicked()))

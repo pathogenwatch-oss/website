@@ -35,17 +35,11 @@ export default React.createClass({
   },
 
   render() {
-    const { progress = {} } = this.props;
-    const { status } = this.props;
+    const { progress = {}, status } = this.props;
 
     if (status === statuses.PROCESSING) {
-      const { checkStatus, updateProgress } = this.props;
       return (
-        <UploadProgress
-          progress={progress}
-          checkStatus={checkStatus}
-          updateProgress={updateProgress}
-        />
+        <UploadProgress {...this.props} />
       );
     }
 

@@ -39,6 +39,10 @@ export const LoadSpinner = React.createClass({
 
   displayName: 'LoadSpinner',
 
+  componentWillMount() {
+    document.title = 'WGSA | Loading...';
+  },
+
   render() {
     return (
       <Background>
