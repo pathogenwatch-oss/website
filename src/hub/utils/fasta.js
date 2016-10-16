@@ -23,8 +23,9 @@ export function validateFastaSize(file) {
 }
 
 export function validateFastaContent(fastaContent) {
-  if (regexp.test(fastaContent)) {
-    return fastaContent;
+  const cleanContent = fastaContent.replace(/\r/g, '');
+  if (regexp.test(cleanContent)) {
+    return cleanContent;
   }
   throw fastaValidationErrors.INVALID_FASTA_CONTENT;
 }
