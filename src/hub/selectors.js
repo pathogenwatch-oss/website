@@ -21,13 +21,14 @@ export const getTotalFastas = (state) => getFastasAsList(state).length;
 export const getOrderedFastas =
   createSelector(
     getFastas,
-    fastas => sortBy(fastas, [ 'name' ])
-  );
-
-export const getUploadedFastas =
-  createSelector(
-    getOrderedFastas,
-    fastas => fastas.filter(_ => _.uploadAttempted)
+    fastas => sortBy(fastas, [
+      'error',
+      ({ speciesKey, uploadAttempted }) => {
+        if (uploadAttempted && !speciesKey) return false;
+        return true;
+      },
+      'name',
+    ])
   );
 
 export const getUploads = ({ hub }) => hub.uploads;
@@ -78,7 +79,7 @@ export const isFilterActive = createSelector(
 export const getVisibleFastas = createSelector(
   isFilterActive,
   getFilter,
-  getUploadedFastas,
+  getOrderedFastas,
   (isActive, { searchText = '', ...metadata }, fastas) => {
     if (isActive) {
       const regexp = new RegExp(searchText, 'i');

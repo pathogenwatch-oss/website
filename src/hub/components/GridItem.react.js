@@ -21,7 +21,11 @@ function getContent(props) {
     return (<FastaMetadata {...props} />);
   }
 
-  return getProgressBar(props.progress);
+  if (props.uploadAttempted) {
+    return getProgressBar(props.progress);
+  }
+
+  return (<small>Upload pending</small>);
 }
 
 export default props => {
