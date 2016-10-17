@@ -45,6 +45,10 @@ export default React.createClass({
     }
   },
 
+  componentWillUnmount() {
+    this.toggleAside(false);
+  },
+
   toggleAside(isOpen) {
     this.props.dispatch(toggleAside(isOpen));
   },
