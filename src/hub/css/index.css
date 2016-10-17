@@ -26,11 +26,6 @@
   margin-bottom: 120px;
 }
 
-.wgsa-virtualised-grid {
-  outline: none;
-  overflow-x: hidden !important;
-}
-
 .wgsa-hub-gutter {
   margin: 0 5.5rem;
 }
