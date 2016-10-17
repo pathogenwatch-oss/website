@@ -22,10 +22,10 @@ export const getOrderedFastas =
   createSelector(
     getFastas,
     fastas => sortBy(fastas, [
-      'error',
-      ({ speciesKey, uploadAttempted }) => {
-        if (uploadAttempted && !speciesKey) return false;
-        return true;
+      ({ speciesKey, uploadAttempted, error }) => {
+        if (uploadAttempted && !speciesKey) return 0;
+        if (error) return 1;
+        return 2;
       },
       'name',
     ])
