@@ -46,10 +46,9 @@ function createAntibioticsColumn({ name, longName }) {
       }
 
       canvas.font = '700 13px "Helvetica","Arial",sans-serif';
-      return Math.floor(Math.max(
-        // labelWidth,
-        mechanisms.reduce((width, m) => width + measureText(m, 24), 0),
-      ));
+      return Math.floor(
+        mechanisms.reduce((width, m) => width + measureText(m, 16), 0),
+      );
     },
     cellPadding: 16,
     flexGrow: 0,

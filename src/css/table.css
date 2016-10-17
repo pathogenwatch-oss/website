@@ -1,6 +1,6 @@
 .wgsa-table-header {
   vertical-align: top;
-  padding: 0 18px 0;
+  padding-left: 18px;
   box-sizing: border-box;
   background: none !important;
   border-right: none;
@@ -20,8 +20,6 @@
   padding: 0px 6px;
   text-transform: capitalize;
   text-overflow: ellipsis;
-  transition: .28s cubic-bezier(.4,0,.2,1);
-  transition-property: color, background, background-color;
   white-space: nowrap;
 }
 
@@ -43,9 +41,12 @@
 .wgsa-table-header--selected .wgsa-selectable-column-heading {
   background: #673c90;
   color: #fff;
+  width: auto;
   max-width: calc(100% - 2px);
   overflow: hidden;
   text-overflow: ellipsis;
+  transition: .28s cubic-bezier(.4,0,.2,1);
+  transition-property: color, background-color;
 }
 
 .wgsa-table-row:hover {
@@ -159,7 +160,7 @@
   top: 30px;
   white-space: nowrap;
   z-index: 1;
-  /*width: 36px;*/
+  width: 38px;
 }
 
 .wgsa-resistance-icon {
@@ -210,8 +211,8 @@
   height: 20px;
   letter-spacing: 0px;
   line-height: 16px;
-  margin: 0 2px;
-  padding: 0px 6px;
+  margin: 0 4px;
+  padding: 0 2px;
   outline: none;
 }
 
