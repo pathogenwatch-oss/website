@@ -1,5 +1,5 @@
 import React from 'react';
-import { Router, Route, IndexRoute, browserHistory, Redirect } from 'react-router';
+import { Router, Route, IndexRoute, browserHistory, Redirect, IndexRedirect } from 'react-router';
 
 import App from './App.react';
 import Home from '../home';
@@ -27,7 +27,7 @@ export default () => (
       </Route>
       { Species.list.map(({ nickname }) =>
           <Route key={nickname} path={nickname} component={SpeciesSetter}>
-            <Redirect from="/" to={`/?species=${nickname}`} />
+            <IndexRedirect to="/" query={{ species: nickname }} />
             <Redirect from="upload" to="/upload" />
             {CollectionViewerRoute}
           </Route>
