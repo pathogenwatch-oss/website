@@ -14,7 +14,7 @@ const Template = ({ style, title }) => (
 
 export default React.createClass({
 
-  compnentWillMount() {
+  componentWillMount() {
     document.title = 'WGSA | Home';
   },
 
