@@ -8,55 +8,48 @@ import ProgressBar from '../../components/ProgressBar.react';
 
 import * as selectors from '../selectors';
 
-const ViewSwitcher = ({ icon, title, to, pathname }) => (
+const mapLocationFromState = ({ location }) => ({ location });
+
+const ViewSwitcher = connect(mapLocationFromState)(({ icon, title, to }) => (
   <Link
     to={to}
-    className={`mdl-button mdl-button--icon wgsa-hub-view-switcher ${to === pathname ? 'wgsa-hub-view-switcher--active' : ''}`.trim()}
+    className="mdl-button mdl-button--icon wgsa-hub-view-switcher"
+    activeClassName="wgsa-hub-view-switcher--active"
+    onlyActiveOnIndex
     title={title}
   >
     <i className="material-icons">{icon}</i>
   </Link>
-);
+));
 
 const Summary = React.createClass({
 
   componentDidUpdate() {
-    const { queueLength, visibleFastas, totalFastas } = this.props;
+    const { completedUploads, batchSize } = this.props;
     document.title = [
       'WGSA',
       '|',
-      queueLength ? `(${visibleFastas}/${totalFastas})` : '',
+      batchSize ? `(${completedUploads}/${batchSize})` : '',
       'Upload',
     ].join(' ');
   },
 
   render() {
-    const { queueLength, visibleFastas, totalFastas, pathname } = this.props;
+    const { completedUploads, batchSize, visibleFastas, totalFastas } = this.props;
     return (
       <div className="wgsa-hub-summary wgsa-hub-gutter">
-        { queueLength ?
+        { batchSize ?
           <ProgressBar
             className="wgsa-hub-upload-progress"
-            progress={(1 - queueLength / totalFastas) * 100}
-            label={`${totalFastas - queueLength}/${totalFastas}`}
+            progress={(completedUploads / batchSize) * 100}
+            label={`${completedUploads}/${batchSize}`}
           /> :
           <p>Viewing <span>{visibleFastas}</span> of {totalFastas} assemblies</p>
         }
-        <ViewSwitcher
-          to="/upload"
-          pathname={pathname}
-          title="Grid view"
-          icon="view_module"
-        />
-        <ViewSwitcher
-          to="/upload/map"
-          pathname={pathname}
-          title="Map view"
-          icon="map"
-        />
+        <ViewSwitcher to="/upload" title="Grid view" icon="view_module" />
+        <ViewSwitcher to="/upload/map" title="Map view" icon="map" />
         <ViewSwitcher
           to="/upload/stats"
-          pathname={pathname}
           title="Stats view"
           icon="multiline_chart"
         />
@@ -68,7 +61,8 @@ const Summary = React.createClass({
 
 function mapStateToProps(state) {
   return {
-    queueLength: selectors.getNumRemainingUploads(state),
+    batchSize: selectors.getBatchSize(state),
+    completedUploads: selectors.getNumCompletedUploads(state),
     visibleFastas: selectors.getNumberOfVisibleFastas(state),
     totalFastas: selectors.getTotalFastas(state),
   };

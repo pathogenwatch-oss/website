@@ -39,6 +39,7 @@ export const getUploading = createSelector(
   getUploads,
   uploads => uploads.uploading,
 );
+export const getBatchSize = state => getUploads(state).batchSize;
 
 export const getNumRemainingUploads = createSelector(
   getUploadQueue,
@@ -49,6 +50,12 @@ export const getNumRemainingUploads = createSelector(
 export const isUploading = createSelector(
   getNumRemainingUploads,
   numRemaining => numRemaining > 0,
+);
+
+export const getNumCompletedUploads = createSelector(
+  getBatchSize,
+  getNumRemainingUploads,
+  (batchSize, numRemaining) => batchSize - numRemaining,
 );
 
 export const getFilter = ({ hub }) => hub.filter;

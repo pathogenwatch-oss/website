@@ -35,7 +35,7 @@ const collectionMetadata = {
 
 export default createReducer =>
   combineReducers({
-    uploads: createReducer(uploads),
+    uploads,
     loading: createReducer(loading),
     filter: createReducer(filter),
     selectedMetric: createReducer(selectedMetric),

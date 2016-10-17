@@ -56,12 +56,12 @@ export default React.createClass({
   },
 
   render() {
-    const { hasFastas, filterActive, loading, location } = this.props;
+    const { hasFastas, filterActive, loading } = this.props;
     return (
       <FileDragAndDrop onFiles={this.upload}>
         { loading && <div ref="loadingBar" className="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>}
         <div className="wgsa-hub">
-          <Summary pathname={location && location.pathname} />
+          <Summary />
           { hasFastas ?
             this.props.children :
             <p className="wgsa-hub__view wgsa-hub-big-message">
