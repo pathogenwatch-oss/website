@@ -7,7 +7,6 @@ import { SET_COLOUR_COLUMNS } from '../actions/table';
 import Species from '../species';
 import * as resistanceProfile from '../utils/resistanceProfile';
 import { canvas, measureText } from '../utils/table/columnWidth';
-import { getColumnLabel } from '../utils/table';
 
 import { downloadColumnProps, nameColumnProps } from '../constants/table';
 
@@ -47,8 +46,8 @@ function createAntibioticsColumn({ name, longName }) {
 
       canvas.font = '700 13px "Helvetica","Arial",sans-serif';
       return Math.floor(
-        mechanisms.reduce((width, m) => width + measureText(m, 16), 0),
-      );
+        mechanisms.reduce((width, m) => width + measureText(m, 8), 0),
+      ) + 16;
     },
     cellPadding: 16,
     flexGrow: 0,
