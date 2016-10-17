@@ -23,7 +23,7 @@ export default {
       // name: '',
       author: (<span>Initial Subset of Genomes from GenBank</span>),
       title: (
-        <em>Click to view</em>
+        <em>Initial Subset of Genomes from GenBank</em>
       ),
       // pmid: '23270620',
     },

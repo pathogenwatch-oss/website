@@ -2,7 +2,7 @@ import React from 'react';
 import { Router, Route, IndexRoute, browserHistory, Redirect } from 'react-router';
 
 import App from './App.react';
-import Home from '../components/Home.react';
+import Home from '../home';
 import hub, { GridView, MapView, StatsView } from '../hub';
 
 import CollectionViewerRoute from '../collection-viewer';
@@ -27,6 +27,7 @@ export default () => (
       </Route>
       { Species.list.map(({ nickname }) =>
           <Route key={nickname} path={nickname} component={SpeciesSetter}>
+            <Redirect from="/" to={`/?species=${nickname}`} />
             <Redirect from="upload" to="/upload" />
             {CollectionViewerRoute}
           </Route>

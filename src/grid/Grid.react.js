@@ -1,7 +1,7 @@
 import React from 'react';
 import { AutoSizer, Grid } from 'react-virtualized';
 
-export const GridView = React.createClass({
+export default React.createClass({
 
   propTypes: {
     className: React.PropTypes.string,
@@ -21,9 +21,10 @@ export const GridView = React.createClass({
             return (
               <Grid
                 cellRenderer={({ key, columnIndex, rowIndex, style }) => {
-                  const file = items[columnIndex + rowIndex * columnCount];
-                  return file ?
-                    React.createElement(template, { key, style, ...file }) :
+                  const item = items[columnIndex + rowIndex * columnCount];
+                  console.log(item);
+                  return item ?
+                    React.createElement(template, { key, style, ...item }) :
                     null;
                 }}
                 className="wgsa-virtualised-grid"
@@ -42,5 +43,3 @@ export const GridView = React.createClass({
   },
 
 });
-
-export default GridView;
