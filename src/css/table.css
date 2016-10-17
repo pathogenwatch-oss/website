@@ -198,11 +198,11 @@
 }
 
 .wgsa-resistance-mechanism {
-  color: #d11b1b;
+  color: color(#000 tint(65%)); /* (87 / 8) + 54 */
   background: none;
   border: none;
   border-radius: 4px;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
   height: 20px;
   letter-spacing: 0px;
@@ -210,4 +210,8 @@
   margin: 0 2px;
   padding: 0px 6px;
   outline: none;
+}
+
+.wgsa-resistance-mechanism--active {
+  color: #d11b1b;
 }

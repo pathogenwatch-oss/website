@@ -83,8 +83,8 @@ function getNameText(data, valueGetter) {
 export const nameColumnProps = {
   ...nameColumnData,
   fixed: true,
-  getWidth(columnProps, row) {
-    let width = defaultWidthGetter(columnProps, row);
+  getWidth(row, props) {
+    let width = defaultWidthGetter(row, props);
 
     if (row.__isPublic && row.metadata.collectionId) {
       width += 32;
