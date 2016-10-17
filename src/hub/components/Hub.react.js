@@ -7,6 +7,7 @@ import Summary from './Summary.react';
 import CreateCollectionTray from './CreateCollectionTray.react.js';
 
 import { addFiles } from '../thunks';
+import { toggleAside } from '../../header';
 
 import { taxIdMap } from '^/species';
 
@@ -44,8 +45,8 @@ export default React.createClass({
     }
   },
 
-  toggleAside(hasAside) {
-    // TODO: Send toggle aside action from header module
+  toggleAside(isOpen) {
+    this.props.dispatch(toggleAside(isOpen));
   },
 
   upload(newFiles) {
