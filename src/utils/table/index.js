@@ -3,11 +3,11 @@ export const getCellValue = ({ valueGetter }, data) => valueGetter(data);
 export const formatColumnKeyAsLabel =
   (columnkey) => columnkey.replace(/^__/, '').replace(/_/g, ' ');
 
-export function getColumnLabel({ columnKey, getLabel, isSelected }) {
+export function getColumnLabel(props) {
   return (
-    getLabel ?
-      getLabel(isSelected) :
-      formatColumnKeyAsLabel(columnKey)
+    props.getLabel ?
+      props.getLabel() :
+      formatColumnKeyAsLabel(props.columnKey)
   ).toUpperCase();
 }
 

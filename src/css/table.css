@@ -43,6 +43,9 @@
 .wgsa-table-header--selected .wgsa-selectable-column-heading {
   background: #673c90;
   color: #fff;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .wgsa-table-row:hover {

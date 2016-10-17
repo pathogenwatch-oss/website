@@ -31,20 +31,23 @@ function createAntibioticsColumn({ name, longName }) {
 
   return {
     columnKey,
-    getLabel(isSelected) {
-      return isSelected ? hoverName : name.slice(0, 3);
+    isExpandable() {
+      return this.isSelected && this.allMechanisms.length;
+    },
+    getLabel() {
+      return this.isExpandable() ? hoverName : name.slice(0, 3);
     },
     headerClasses: 'wgsa-table-header--resistance',
     headerTitle: `${hoverName} - ${modifierKey} + click to select multiple`,
     cellClasses: 'wgsa-table-cell--resistance',
     getWidth(mechanisms) {
-      if (!this.isSelected) {
+      if (!this.isExpandable()) {
         return 40;
       }
-      const labelWidth = measureText(getColumnLabel(this), this.cellPadding);
+
       canvas.font = '700 13px "Helvetica","Arial",sans-serif';
       return Math.floor(Math.max(
-        labelWidth,
+        // labelWidth,
         mechanisms.reduce((width, m) => width + measureText(m, 24), 0),
       ));
     },
