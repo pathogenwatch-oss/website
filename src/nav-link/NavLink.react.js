@@ -7,11 +7,11 @@ function mapStateToProps({ location }) {
 }
 
 export default connect(mapStateToProps)(
-  ({ icon, text, link }) => (
+  ({ icon, text, link, onlyActiveOnIndex = true }) => (
     <Link
       className="mdl-navigation__link"
       activeClassName="mdl-navigation__link--active"
-      onlyActiveOnIndex
+      onlyActiveOnIndex={onlyActiveOnIndex}
       to={link}
     >
       { icon && <i className="material-icons">{icon}</i>}

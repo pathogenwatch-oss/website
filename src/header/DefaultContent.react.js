@@ -8,6 +8,7 @@ import { toggleAside } from './index';
 const links = [
   { text: 'Home', link: '/' },
   { text: 'Upload', link: '/upload' },
+  { text: 'Documentation', link: '/documentation', onlyActiveOnIndex: false },
 ];
 
 const DefaultContent = ({ hasAside, onClick }) => (
@@ -15,11 +16,6 @@ const DefaultContent = ({ hasAside, onClick }) => (
     <div className="mdl-layout-spacer" />
     <nav className="mdl-navigation">
       { links.map(props => <NavLink key={props.link} {...props} />) }
-      <a className="mdl-navigation__link" target="_blank" rel="noopener"
-        href="https://github.com/ImperialCollegeLondon/wgsa-documentation/wiki"
-      >
-        Documentation
-      </a>
     </nav>
     <button className="mdl-button mdl-button--icon" onClick={onClick}>
       <i className="material-icons">{hasAside ? 'chevron_right' : 'search'}</i>

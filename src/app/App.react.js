@@ -20,6 +20,11 @@ const menuItems = [
     text: 'Upload',
     link: '/upload',
   },
+  { icon: 'description',
+    text: 'Documentation',
+    link: '/documentation',
+    onlyActiveOnIndex: false,
+  },
 ];
 
 function mapStateToProps({ bodyClickListener }) {
@@ -71,10 +76,6 @@ export default connect(mapStateToProps, mapDispatchToProps)(React.createClass({
             {menuItems.map(props => (
               <NavLink key={props.link} {...props} />
             ))}
-            <a className="mdl-navigation__link" target="_blank" rel="noopener" href="https://github.com/ImperialCollegeLondon/wgsa-documentation/wiki">
-              <i className="material-icons">description</i>
-              <span>Documentation</span>
-            </a>
           </nav>
           <a className="cgps-logo" target="_blank" rel="noopener" href="http://www.pathogensurveillance.net">
             <img src="/assets/img/CGPS.SHORT.FINAL.svg" />
