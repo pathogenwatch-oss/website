@@ -6,6 +6,7 @@ import Home from '../components/Home.react';
 import hub, { GridView, MapView, StatsView } from '../hub';
 
 import CollectionViewerRoute from '../collection-viewer';
+import DocumentationViewerRoute from '../documentation-viewer';
 
 import NotFound from '../components/NotFound.react';
 
@@ -31,6 +32,7 @@ export default () => (
             {CollectionViewerRoute}
           </Route>
       )}
+      {DocumentationViewerRoute}
       <Route path="*" component={NotFound} />
     </Route>
   </Router>
