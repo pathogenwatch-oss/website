@@ -82,13 +82,17 @@ export default React.createClass({
             null
         }
         <ul ref="list" htmlFor={id} className="mdl-menu mdl-menu--bottom-left mdl-js-menu">
-          {this.props.options.map((item, index) =>
-            <li key={index}
-              className="mdl-menu__item"
-              onClick={() => this.onChange(item)}
-            >
-              { item }
-            </li>
+          {this.props.options.map((item, index) => {
+            const { text = item, value = item } = typeof item === 'object' ? item : {};
+            return (
+              <li key={index}
+                className="mdl-menu__item"
+                onClick={() => this.onChange(value.toString())}
+              >
+                { text }
+              </li>
+            );
+          }
           )}
         </ul>
       </div>

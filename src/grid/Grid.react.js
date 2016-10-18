@@ -2,8 +2,8 @@ import React from 'react';
 import { AutoSizer, Grid } from 'react-virtualized';
 import classnames from 'classnames';
 
-const GridItem = ({ key, style, children }) => (
-  <div key={key} style={style} className="wgsa-grid-item">
+const GridItem = ({ style, children }) => (
+  <div style={style} className="wgsa-grid-item">
     {children}
   </div>
 );

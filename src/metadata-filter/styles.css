@@ -1,0 +1,28 @@
+.wgsa-filter .mdl-chip {
+  display: block;
+  margin-bottom: 8px;
+  max-width: 100%;
+}
+
+.wgsa-filter .mdl-chip__contact {
+  background: #a386bd;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.wgsa-filter .mdl-chip__text {
+  max-width: 80%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mdl-chip--active {
+  background: #a386bd;
+  color: #fff;
+  font-weight: 500;
+}
+
+.mdl-chip--active .mdl-chip__contact {
+  background: #673c90;
+}
