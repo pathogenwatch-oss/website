@@ -1,7 +1,8 @@
 import { createSelector } from 'reselect';
 import sortBy from 'lodash.sortby';
 
-import { metadataFilters } from './utils/filter';
+import { selectors as filter } from './filter';
+
 import { isSupported } from '../species';
 
 export const getFastas = ({ entities }) => entities.fastas;
@@ -59,43 +60,12 @@ export const getNumCompletedUploads = createSelector(
   (batchSize, numRemaining) => batchSize - numRemaining,
 );
 
-export const getFilter = ({ hub }) => hub.filter;
+export const isFilterActive = state => {
+  if (getTotalFastas(state) === 0) return false;
+  return filter.isActive(state);
+};
 
-export const isFilterActive = createSelector(
-  getTotalFastas,
-  getFilter,
-  (total, { searchText = '', ...metadata }) => {
-    if (!total) return false;
-    if (searchText.length > 0) return true;
-
-    for (const { key } of metadataFilters) {
-      if (metadata[key]) return true;
-    }
-
-    return false;
-  }
-);
-
-export const getVisibleFastas = createSelector(
-  isFilterActive,
-  getFilter,
-  getOrderedFastas,
-  (isActive, { searchText = '', ...metadata }, fastas) => {
-    if (isActive) {
-      const regexp = new RegExp(searchText, 'i');
-      return fastas.filter(fasta =>
-        (searchText.length ? regexp.test(fasta.name) : true) &&
-        metadataFilters.every(filter => {
-          const value = metadata[filter.key];
-          return (
-            value ? filter.matches(fasta, value) : true
-          );
-        })
-      );
-    }
-    return fastas;
-  }
-);
+export const getVisibleFastas = filter.getIncludedItems(getOrderedFastas);
 
 export const getNumberOfVisibleFastas = createSelector(
   getVisibleFastas,
@@ -117,7 +87,7 @@ function getSummary(map) {
 
 export const getMetadataFilters = createSelector(
   getOrderedFastas,
-  getFilter,
+  filter.getFilter,
   (fastas, filterState) => {
     const wgsaSpeciesMap = new Map();
     const otherSpeciesMap = new Map();
@@ -159,4 +129,9 @@ export const getMetadataFilters = createSelector(
       },
     };
   }
+);
+
+export const getSearchText = createSelector(
+  filter.getFilter,
+  ({ searchRegExp }) => (searchRegExp ? searchRegExp.source : ''),
 );

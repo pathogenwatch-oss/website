@@ -5,18 +5,16 @@ import FilterAside from '../../filter-aside';
 import DateFilter from '../../date-filter';
 import MetadataFilter from '../../metadata-filter';
 
-import { getFilter, getMetadataFilters } from '../selectors';
+import { getMetadataFilters, getSearchText } from '../selectors';
 
-import actions from '../actions';
+import { filters as metadataFilters, actions } from '../filter';
 
-import { metadataFilters } from '../utils/filter';
-
-const [ speciesFilter, countryFilter ] = metadataFilters;
+const [ searchRegExp, speciesFilter, countryFilter ] = metadataFilters;
 
 function mapStateToProps(state) {
   return {
     filters: getMetadataFilters(state),
-    textValue: getFilter(state).searchText,
+    textValue: getSearchText(state),
   };
 }
 
@@ -26,29 +24,32 @@ export default connect(mapStateToProps)(
       active={filterActive}
       clear={() => dispatch(actions.clearFilter())}
       textValue={textValue}
-      textOnChange={e => dispatch(actions.filterByText(e.target.value))}
+      textOnChange={e => dispatch(actions.updateFilter(
+        searchRegExp.key,
+        e.target.value ? new RegExp(e.target.value, 'i') : null
+      ))}
     >
       <MetadataFilter
         title="WGSA Species"
         summary={filters.wgsaSpecies}
-        onClick={value => dispatch(actions.filterByMetadata(speciesFilter.key, value))}
+        onClick={value => dispatch(actions.updateFilter(speciesFilter.key, value))}
       />
       <MetadataFilter
         title="Other Species"
         summary={filters.otherSpecies}
-        onClick={value => dispatch(actions.filterByMetadata(speciesFilter.key, value))}
+        onClick={value => dispatch(actions.updateFilter(speciesFilter.key, value))}
       />
       <MetadataFilter
         title="Country"
         summary={filters.country}
-        onClick={value => dispatch(actions.filterByMetadata(countryFilter.key, value))}
+        onClick={value => dispatch(actions.updateFilter(countryFilter.key, value))}
       />
       <DateFilter
         min={filters.date.min}
         max={filters.date.max}
         years={filters.date.years}
-        onChangeMin={value => dispatch(actions.filterByMetadata('minDate', value))}
-        onChangeMax={value => dispatch(actions.filterByMetadata('maxDate', value))}
+        onChangeMin={value => dispatch(actions.updateFilter('minDate', value))}
+        onChangeMax={value => dispatch(actions.updateFilter('maxDate', value))}
       />
     </FilterAside>
   )

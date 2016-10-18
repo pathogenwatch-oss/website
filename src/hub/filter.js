@@ -1,6 +1,12 @@
+import createFilter from '../filter';
 import { contains } from 'leaflet-lassoselect/utils';
 
-export const metadataFilters = [
+export const filters = [
+  { key: 'searchRegExp',
+    matches(fasta, regexp) {
+      return regexp ? regexp.test(fasta.name) : true;
+    },
+  },
   { key: 'speciesKey',
     matches(fasta, value) {
       return fasta.speciesKey === value;
@@ -40,3 +46,10 @@ export const metadataFilters = [
     },
   },
 ];
+
+export const { actions, reducer, selectors } =
+  createFilter({
+    name: 'hub',
+    filters,
+    getFilterState: ({ hub }) => hub.filter,
+  });

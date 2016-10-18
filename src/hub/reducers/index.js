@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
 
-import filter from './filter';
 import uploads from './uploads';
 import { bounds, lassoPath } from './map';
+import { reducer as filter } from '../filter';
 
 import * as actions from '../actions';
 
@@ -36,8 +36,8 @@ const collectionMetadata = {
 export default createReducer =>
   combineReducers({
     uploads,
+    filter,
     loading: createReducer(loading),
-    filter: createReducer(filter),
     selectedMetric: createReducer(selectedMetric),
     map: combineReducers({
       bounds: createReducer(bounds),
