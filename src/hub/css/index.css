@@ -1,20 +1,3 @@
-.wgsa-hub {
-  background: #fff;
-  box-sizing: border-box;
-  color: rgba(0, 0, 0, 0.54);
-  display: flex;
-  flex-direction: column;
-  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-  font-size: 13px;
-  height: 100%;
-  width: 100%;
-}
-
-.wgsa-hub__view {
-  flex-grow: 1;
-  position: relative;
-}
-
 .wgsa-hub-big-message {
   font-size: 1.75rem;
   line-height: 1.2;
@@ -24,16 +7,4 @@
   justify-content: center;
   align-items: center;
   margin-bottom: 120px;
-}
-
-.wgsa-hub-gutter {
-  margin: 0 5.5rem;
-}
-
-.wgsa-hub-gutter-left {
-  margin-left: 5.5rem;
-}
-
-.wgsa-hub-gutter-right {
-  margin-right: 5.5rem;
 }

@@ -16,7 +16,6 @@ export const GridView = React.createClass({
     const { items } = this.props;
     return (
       <Grid
-        className="wgsa-hub__view wgsa-hub-gutter-left"
         template={GridItem}
         items={items}
         columnWidth={256}

@@ -1,34 +1,57 @@
 import React from 'react';
 import { AutoSizer, Grid } from 'react-virtualized';
+import classnames from 'classnames';
+
+const GridItem = ({ key, style, children }) => (
+  <div key={key} style={style} className="wgsa-grid-item">
+    {children}
+  </div>
+);
 
 export default React.createClass({
 
   propTypes: {
     className: React.PropTypes.string,
-    columnWidth: React.PropTypes.number.isRequired,
+    columnWidth: React.PropTypes.number,
+    columnCount: React.PropTypes.number,
     items: React.PropTypes.array,
     rowHeight: React.PropTypes.number.isRequired,
     template: React.PropTypes.element,
   },
 
-  render() {
-    const { template, items, columnWidth } = this.props;
+  getColumnCount(width) {
     return (
-      <div className={this.props.className}>
+      this.props.columnCount ||
+      Math.max(1, Math.floor(width / this.props.columnWidth))
+    );
+  },
+
+  getColumnWidth(width) {
+    return (
+      this.props.columnWidth ||
+      Math.floor(width / this.props.columnCount)
+    );
+  },
+
+  render() {
+    const { template, items } = this.props;
+    return (
+      <div className={classnames('wgsa-content-margin-left', this.props.className)}>
         <AutoSizer>
           {({ height, width }) => {
-            const columnCount = Math.max(1, Math.floor(width / columnWidth));
+            const columnCount = this.getColumnCount(width);
             return (
               <Grid
                 cellRenderer={({ key, columnIndex, rowIndex, style }) => {
                   const item = items[columnIndex + rowIndex * columnCount];
-                  console.log(item);
                   return item ?
-                    React.createElement(template, { key, style, ...item }) :
+                    <GridItem key={key} style={style}>
+                      { React.createElement(template, item) }
+                    </GridItem> :
                     null;
                 }}
                 className="wgsa-virtualised-grid"
-                columnWidth={columnWidth}
+                columnWidth={this.getColumnWidth(width)}
                 columnCount={columnCount}
                 height={height}
                 rowCount={Math.ceil(items.length / columnCount)}

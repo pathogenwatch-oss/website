@@ -2,8 +2,8 @@ import '../css/filter.css';
 
 import React from 'react';
 import { connect } from 'react-redux';
-import classnames from 'classnames';
 
+import Filter from '../../filter';
 import Dropdown from './Dropdown.react';
 
 import { getFilter, getMetadataFilters } from '../selectors';
@@ -15,21 +15,6 @@ import { months } from '../../utils/Date';
 
 const [ speciesFilter, countryFilter ] = metadataFilters;
 
-function mapFilterSearchText(state) {
-  return {
-    value: getFilter(state).searchText,
-  };
-}
-
-const FilterInput = connect(mapFilterSearchText)(({ value, dispatch }) => (
-  <input
-    type="text"
-    placeholder="Search"
-    value={value}
-    onChange={e => dispatch(actions.filterByText(e.target.value))}
-  />
-));
-
 const FilterButton = ({ name, label, count, active, onClick }) => (
   <button
     title={name}
@@ -40,15 +25,6 @@ const FilterButton = ({ name, label, count, active, onClick }) => (
     <span className="mdl-chip__text">{label || name}</span>
   </button>
 );
-
-const ClearFilterButton = connect()(({ dispatch }) => (
-  <button
-    className="mdl-button mdl-js-button mdl-button--primary"
-    onClick={() => dispatch(actions.clearFilter())}
-  >
-    Clear Filters
-  </button>
-));
 
 const MetadataFilter = connect()(
   ({ title, summary, property, dispatch }) => (
@@ -110,44 +86,49 @@ const DateFilter = connect()(
 function mapStateToProps(state) {
   return {
     filters: getMetadataFilters(state),
+    textValue: getFilter(state).searchText,
   };
 }
 
-export default connect(mapStateToProps)(
-  ({ filters, filterActive }) => (
-    <aside className={classnames('wgsa-hub-filter', { 'wgsa-hub-filter--active': filterActive })}>
-      <header className="wgsa-hub-filter__header mdl-layout__header mdl-layout__header--scroll">
-        <label className="wgsa-hub-filter__search">
-          <i className="material-icons">search</i>
-          <FilterInput />
-        </label>
-      </header>
-      <div className="wgsa-hub-filter__content">
-        <MetadataFilter
-          title="WGSA Species"
-          summary={filters.wgsaSpecies}
-          property={speciesFilter.key}
-        />
-        <MetadataFilter
-          title="Other Species"
-          summary={filters.otherSpecies}
-          property={speciesFilter.key}
-        />
-        <MetadataFilter
-          title="Country"
-          summary={filters.country}
-          property={countryFilter.key}
-        />
-        <DateFilter
-          min={filters.date.min}
-          max={filters.date.max}
-          years={filters.date.years}
-          months={months}
-        />
-      </div>
-      <footer className="wgsa-hub-filter__footer">
-        <ClearFilterButton />
-      </footer>
-    </aside>
+function mergeProps({ textValue, ...state }, { dispatch }) {
+  return {
+    ...state,
+    textFilter: {
+      value: textValue,
+      onChange: e => dispatch(actions.filterByText(e.target.value)),
+    },
+    clearFilter: () => dispatch(actions.clearFilter()),
+  };
+}
+
+export default connect(mapStateToProps, null, mergeProps)(
+  ({ filters, filterActive, textFilter, clearFilter }) => (
+    <Filter
+      active={filterActive}
+      clear={clearFilter}
+      text={textFilter}
+    >
+      <MetadataFilter
+        title="WGSA Species"
+        summary={filters.wgsaSpecies}
+        property={speciesFilter.key}
+      />
+      <MetadataFilter
+        title="Other Species"
+        summary={filters.otherSpecies}
+        property={speciesFilter.key}
+      />
+      <MetadataFilter
+        title="Country"
+        summary={filters.country}
+        property={countryFilter.key}
+      />
+      <DateFilter
+        min={filters.date.min}
+        max={filters.date.max}
+        years={filters.date.years}
+        months={months}
+      />
+    </Filter>
   )
 );

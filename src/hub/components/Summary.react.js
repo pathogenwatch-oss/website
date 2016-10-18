@@ -4,6 +4,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 
+import { Summary as FilterSummary, Totals } from '../../filter-summary';
 import ProgressBar from '../../components/ProgressBar.react';
 
 import * as selectors from '../selectors';
@@ -37,14 +38,18 @@ const Summary = React.createClass({
   render() {
     const { completedUploads, batchSize, visibleFastas, totalFastas } = this.props;
     return (
-      <div className="wgsa-hub-summary wgsa-hub-gutter">
+      <FilterSummary className="wgsa-hub-summary">
         { batchSize ?
           <ProgressBar
             className="wgsa-hub-upload-progress"
             progress={(completedUploads / batchSize) * 100}
             label={`${completedUploads}/${batchSize}`}
           /> :
-          <p>Viewing <span>{visibleFastas}</span> of {totalFastas} assemblies</p>
+          <Totals
+            visible={visibleFastas}
+            total={totalFastas}
+            itemType="assemblies"
+          />
         }
         <ViewSwitcher to="/upload" title="Grid view" icon="view_module" />
         <ViewSwitcher to="/upload/map" title="Map view" icon="map" />
@@ -53,7 +58,7 @@ const Summary = React.createClass({
           title="Stats view"
           icon="multiline_chart"
         />
-      </div>
+      </FilterSummary>
     );
   },
 

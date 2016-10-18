@@ -1,3 +1,4 @@
+import './styles.css';
 import '../css/menu.css';
 import '../css/forms.css';
 
