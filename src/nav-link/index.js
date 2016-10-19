@@ -18,10 +18,13 @@ function createSlug({ pathname }) {
 
 export function reducer(state = '/', { type, payload }) {
   switch (type) {
-    case LOCATION_CHANGE:
+    case LOCATION_CHANGE: {
+      const { location } = payload;
       return {
         slug: createSlug(payload.location),
+        pathname: location.pathname,
       };
+    }
     default:
       return state;
   }

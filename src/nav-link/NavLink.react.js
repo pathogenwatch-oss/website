@@ -1,17 +1,28 @@
 import React from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
+import classnames from 'classnames';
+
+function isActive(activePathname, link, activeOnIndexOnly = false) {
+  console.log(arguments);
+  if (!activePathname) return false;
+  if (activeOnIndexOnly) return link === activePathname;
+  return activePathname.indexOf(link) === 0;
+}
 
 function mapStateToProps({ location }) {
-  return { location };
+  return {
+    activePathname: location.pathname,
+  };
 }
 
 export default connect(mapStateToProps)(
-  ({ icon, text, link, onlyActiveOnIndex = true }) => (
+  ({ icon, text, link, activeOnIndexOnly, activePathname }) => (
     <Link
-      className="mdl-navigation__link"
-      activeClassName="mdl-navigation__link--active"
-      onlyActiveOnIndex={onlyActiveOnIndex}
+      className={classnames(
+        'mdl-navigation__link',
+        { 'mdl-navigation__link--active': isActive(activePathname, link, activeOnIndexOnly) },
+      )}
       to={link}
     >
       { icon && <i className="material-icons">{icon}</i>}

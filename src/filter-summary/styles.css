@@ -1,5 +1,6 @@
 .wgsa-filter-summary {
   display: flex;
+  font-size: 13px;
   height: 4rem;
   min-height: 4rem;
   align-items: center;

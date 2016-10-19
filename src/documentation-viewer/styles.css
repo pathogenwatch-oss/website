@@ -3,9 +3,13 @@
 }
 
 .wgsa-wiki-page {
-  max-width: 800px;
+  max-width: 75rem;
   margin: auto auto;
-  padding: 8px 16px;
+}
+
+.wgsa-wiki-breadcrumb {
+  font-size: 13px;
+  margin-top: 16px;
 }
 
 .wgsa-wiki-page a {
@@ -19,6 +23,8 @@
 .wgsa-wiki-page h5,
 .wgsa-wiki-page h6 {
   color: #673c90;
+  font-family: "Roboto Condensed", "Helvetica", "Arial", sans-serif;
+  font-weight: 400;
 }
 
 .wgsa-wiki-page h1 {

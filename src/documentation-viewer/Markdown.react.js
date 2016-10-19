@@ -4,8 +4,6 @@ import React from 'react';
 import Markdown from 'react-markdown';
 import { Link } from 'react-router';
 
-import { Summary } from '../filter-summary';
-
 import { API_ROOT } from '../utils/Api';
 
 function rewriteMarkdown(markdown) {
@@ -35,12 +33,13 @@ const renderers = {
 export default ({ page, markdown }) => (
   <div className="wgsa-wiki-page">
     { page ?
-      <Summary>
-        <Link to="/documentation">Documentation home</Link>&nbsp;&raquo;&nbsp;{page}
-      </Summary> :
+      <div className="wgsa-wiki-breadcrumb wgsa-content-margin">
+        <Link to="/documentation">Documentation Home</Link>&nbsp;&raquo;&nbsp;{page}
+      </div> :
       null
     }
     <Markdown
+      className="wgsa-content-margin"
       source={rewriteMarkdown(markdown)}
       renderers={renderers}
     />

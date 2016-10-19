@@ -17,6 +17,7 @@ const menuItems = [
   { icon: 'home',
     text: 'Home',
     link: '/',
+    activeOnIndexOnly: true,
   },
   { icon: 'cloud_upload',
     text: 'Upload',
@@ -25,7 +26,6 @@ const menuItems = [
   { icon: 'description',
     text: 'Documentation',
     link: '/documentation',
-    onlyActiveOnIndex: false,
   },
 ];
 

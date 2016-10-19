@@ -6,9 +6,9 @@ import NavLink from '../nav-link';
 import { toggleAside } from './index';
 
 const links = [
-  { text: 'Home', link: '/' },
+  { text: 'Home', link: '/', activeOnIndexOnly: true },
   { text: 'Upload', link: '/upload' },
-  { text: 'Documentation', link: '/documentation', onlyActiveOnIndex: false },
+  { text: 'Documentation', link: '/documentation' },
 ];
 
 const DefaultContent = ({ hasAside, onClick }) => (
