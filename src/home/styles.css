@@ -11,21 +11,3 @@
   height: 100%;
   width: 100%;
 }
-
-.wgsa-collection-card {
-  box-sizing: border-box;
-  padding: 8px;
-}
-
-.wgsa-card-content {
-  background: #fff;
-  box-sizing: border-box;
-  height: 100%;
-  padding: 8px;
-}
-
-.wgsa-card-title {
-  margin: 0 0 8px;
-  font-size: 1rem;
-  line-height: 1.5;
-}

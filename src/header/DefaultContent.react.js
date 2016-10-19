@@ -11,13 +11,17 @@ const links = [
   { text: 'Documentation', link: '/documentation' },
 ];
 
-const DefaultContent = ({ hasAside, onClick }) => (
+export const DefaultContent = ({ hasAside, onClick, asideDisabled }) => (
   <span className="mdl-layout-spacer mdl-layout-spacer--flex">
     <div className="mdl-layout-spacer" />
     <nav className="mdl-navigation">
       { links.map(props => <NavLink key={props.link} {...props} />) }
     </nav>
-    <button className="mdl-button mdl-button--icon wgsa-search-button" onClick={onClick}>
+    <button
+      className="mdl-button mdl-button--icon wgsa-search-button"
+      onClick={onClick}
+      disabled={asideDisabled}
+    >
       <i className="material-icons">{hasAside ? 'chevron_right' : 'search'}</i>
     </button>
   </span>

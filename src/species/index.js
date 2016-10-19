@@ -15,9 +15,15 @@ export const taxIdMap = new Map(
 );
 
 export const referenceCollections =
-  definitionsAsList.reduce((memo, { collections }) => {
+  definitionsAsList.reduce((memo, { id, nickname, collections }) => {
     if (!collections) return memo;
-    return memo.concat(collections);
+    return memo.concat(collections.map(_ => ({
+      link: `/${nickname}/collection/${_.id}`,
+      species: id,
+      title: _.author,
+      description: _.title,
+      pubmedLink: `http://www.ncbi.nlm.nih.gov/pubmed/${_.pmid}`,
+    })));
   }, []);
 
 let currentSpecies = {};

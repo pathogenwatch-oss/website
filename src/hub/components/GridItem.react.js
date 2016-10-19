@@ -34,7 +34,7 @@ export default props => {
   const name = props.metadata ? props.metadata.assemblyName : props.name;
   return (
     <article className="wgsa-card wgsa-assembly-card">
-      <h2 className="wgsa-assembly-card-title" title={name}>{name}</h2>
+      <h2 className="wgsa-card-title" title={name}>{name}</h2>
       { getContent(props) }
     </article>
   );

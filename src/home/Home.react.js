@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 
 import Grid from '../grid';
 import Filter from '../home-filter';
@@ -7,9 +8,19 @@ import { Summary, Totals } from '../filter-summary';
 
 import { getVisibleCollections, getTotalCollections } from './selectors';
 
-const CollectionCard = ({ title }) => (
+const CollectionCard = ({ title, description, link, pubmedLink }) => (
   <article className="wgsa-card wgsa-collection-card">
-    <h3 className="wgsa-card-title">{title}</h3>
+    <h2 className="wgsa-card-title">{title}</h2>
+    <p>{description}</p>
+    <div className="wgsa-card-footer">
+      <Link
+        className="mdl-button mdl-button--primary wgsa-button--text"
+        to={link}
+      >
+        View Collection
+      </Link>
+      { pubmedLink && <a className="mdl-button wgsa-button--text" href={pubmedLink} target="_blank" rel="noopener">Pubmed</a>}
+    </div>
   </article>
 );
 

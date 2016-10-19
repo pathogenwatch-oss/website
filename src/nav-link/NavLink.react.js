@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import classnames from 'classnames';
 
 function isActive(activePathname, link, activeOnIndexOnly = false) {
-  console.log(arguments);
   if (!activePathname) return false;
   if (activeOnIndexOnly) return link === activePathname;
   return activePathname.indexOf(link) === 0;
