@@ -17,7 +17,7 @@ const DefaultContent = ({ hasAside, onClick }) => (
     <nav className="mdl-navigation">
       { links.map(props => <NavLink key={props.link} {...props} />) }
     </nav>
-    <button className="mdl-button mdl-button--icon" onClick={onClick}>
+    <button className="mdl-button mdl-button--icon wgsa-search-button" onClick={onClick}>
       <i className="material-icons">{hasAside ? 'chevron_right' : 'search'}</i>
     </button>
   </span>

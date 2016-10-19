@@ -4,6 +4,7 @@ import '../css/forms.css';
 
 import React from 'react';
 import { connect } from 'react-redux';
+import classnames from 'classnames';
 
 import Header from '../header';
 import Toast from '../toast';
@@ -28,8 +29,11 @@ const menuItems = [
   },
 ];
 
-function mapStateToProps({ bodyClickListener }) {
-  return { bodyClickListener };
+function mapStateToProps({ bodyClickListener, location }) {
+  return {
+    bodyClickListener,
+    pageSlug: location.slug,
+  };
 }
 
 function mapDispatchToProps(dispatch, { location }) {
@@ -48,6 +52,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(React.createClass({
   componentDidMount() {
     componentHandler.upgradeDom();
     this.menuButton = document.querySelector('.mdl-layout__drawer-button');
+    this.props.onLocationChange();
   },
 
   componentDidUpdate(previous) {
@@ -67,7 +72,13 @@ export default connect(mapStateToProps, mapDispatchToProps)(React.createClass({
     const { bodyClickListener = () => {}, routes } = this.props;
     const { header } = routes[routes.length - 1];
     return (
-      <div ref="layout" className="mdl-layout mdl-js-layout mdl-layout--fixed-header" onClick={bodyClickListener}>
+      <div ref="layout"
+        className={classnames(
+          'mdl-layout mdl-js-layout mdl-layout--fixed-header',
+          `wgsa-page--${this.props.pageSlug}`,
+        )}
+        onClick={bodyClickListener}
+      >
         <Header content={header} />
         <div className="mdl-layout__drawer">
           <span className="mdl-layout-title">

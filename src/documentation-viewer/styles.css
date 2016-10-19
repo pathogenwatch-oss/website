@@ -1,3 +1,7 @@
+.wgsa-page--documentation .wgsa-search-button {
+  display: none;
+}
+
 .wgsa-wiki-page {
   max-width: 800px;
   margin: auto auto;
