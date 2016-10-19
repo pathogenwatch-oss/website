@@ -8,6 +8,15 @@
   color: #673c90;
 }
 
+.wgsa-wiki-page h1,
+.wgsa-wiki-page h2,
+.wgsa-wiki-page h3,
+.wgsa-wiki-page h4,
+.wgsa-wiki-page h5,
+.wgsa-wiki-page h6 {
+  color: #673c90;
+}
+
 .wgsa-wiki-page h1 {
   font-size: 32px;
 }
@@ -30,4 +39,8 @@
 
 .wgsa-wiki-page h6 {
   font-size: 16px;
+}
+
+.wgsa-wiki-page blockquote p {
+  display: inline-block;
 }

@@ -4,12 +4,16 @@ import React from 'react';
 import Markdown from 'react-markdown';
 import { Link } from 'react-router';
 
+import { API_ROOT } from '../utils/Api';
+
 function rewriteMarkdown(markdown) {
   return markdown.replace(
     /\[\[([^\]]+)\]\]/g,
     (a, b) => `[${b}](/documentation/${b.replace(/ /g, '-')})`
   );
 }
+
+const liveApiRoot = 'https://wgsa.net/api';
 
 const renderers = {
   Link: ({ href, title = '', children }) => {
@@ -19,7 +23,7 @@ const renderers = {
       );
     }
     return (
-      <a href={href} title={title}>
+      <a href={href.replace(liveApiRoot, API_ROOT)} title={title}>
         {children}
       </a>
     );
