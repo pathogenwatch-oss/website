@@ -2,7 +2,7 @@ import React from 'react';
 
 import FileDragAndDrop from '../../components/DragAndDrop.react';
 
-import Filter from './Filter.react';
+import Filter from '../../hub-filter';
 import Summary from './Summary.react';
 import CreateCollectionTray from './CreateCollectionTray.react.js';
 
@@ -64,11 +64,11 @@ export default React.createClass({
     return (
       <FileDragAndDrop onFiles={this.upload}>
         { loading && <div ref="loadingBar" className="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>}
-        <div className="wgsa-hub">
+        <div className="wgsa-hipster-style wgsa-filterable-view">
           <Summary />
           { hasFastas ?
             this.props.children :
-            <p className="wgsa-hub__view wgsa-hub-big-message">
+            <p className="wgsa-filterable-content wgsa-hub-big-message">
               { filterActive ?
                   'No matches.' :
                   'Drag and drop files to begin.'

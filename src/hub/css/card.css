@@ -1,14 +1,8 @@
-.wgsa-hub-card {
-  background: white;
-  border-top: 1px solid color(#a386bd tint(50%));
+.wgsa-assembly-card {
   height: 104px;
-  margin-right: 2rem;
-  margin-bottom: 1rem;
-  padding: 1.25rem 1.5rem;
-  position: relative;
 }
 
-.wgsa-hub-card__title {
+.wgsa-assembly-card-title {
   font-size: 1.5rem;
   line-height: 2rem;
   margin: 0 0 0.5rem;
@@ -18,7 +12,7 @@
   color: #673c90;
 }
 
-.wgsa-hub-card p {
+.wgsa-assembly-card p {
   margin: 0;
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
   font-size: 14px;
@@ -26,7 +20,7 @@
   font-weight: 500;
 }
 
-.wgsa-hub-card a {
+.wgsa-assembly-card a {
   color: #AC65A6;
 }
 

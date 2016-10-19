@@ -1,13 +1,13 @@
 import React from 'react';
-import { Router, Route, IndexRoute, browserHistory, Redirect } from 'react-router';
+import { Router, Route, IndexRoute, browserHistory, Redirect, IndexRedirect } from 'react-router';
 
 import App from './App.react';
-import Home from '../components/Home.react';
-import hub, { GridView, MapView, StatsView } from '../hub';
 
+import HomeRoute from '../home';
 import CollectionViewerRoute from '../collection-viewer';
 import DocumentationViewerRoute from '../documentation-viewer';
 
+import hub, { GridView, MapView, StatsView } from '../hub';
 import NotFound from '../components/NotFound.react';
 
 import Species from '../species';
@@ -20,7 +20,7 @@ const SpeciesSetter = ({ children, route }) => {
 export default () => (
   <Router history={browserHistory}>
     <Route path="/" component={App}>
-      <IndexRoute component={Home} />
+      {HomeRoute}
       <Route path="upload" component={hub}>
         <IndexRoute component={GridView} />
         <Route path="map" component={MapView} />
@@ -28,6 +28,7 @@ export default () => (
       </Route>
       { Species.list.map(({ nickname }) =>
           <Route key={nickname} path={nickname} component={SpeciesSetter}>
+            <IndexRedirect to="/" query={{ species: nickname }} />
             <Redirect from="upload" to="/upload" />
             {CollectionViewerRoute}
           </Route>

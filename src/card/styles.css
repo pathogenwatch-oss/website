@@ -1,0 +1,6 @@
+.wgsa-card {
+  background: white;
+  border-top: 1px solid color(#a386bd tint(50%));
+  padding: 1.25rem 1.5rem;
+  position: relative;
+}

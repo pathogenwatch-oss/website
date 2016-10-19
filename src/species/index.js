@@ -14,6 +14,12 @@ export const taxIdMap = new Map(
   definitionsAsList.map(({ id, ...species }) => [ id, species ])
 );
 
+export const referenceCollections =
+  definitionsAsList.reduce((memo, { collections }) => {
+    if (!collections) return memo;
+    return memo.concat(collections);
+  }, []);
+
 let currentSpecies = {};
 
 export const isSupported = ({ speciesId }) => !!speciesId; // cast to boolean
