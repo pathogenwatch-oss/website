@@ -2,21 +2,13 @@ import './styles.css';
 
 import React from 'react';
 import { IndexRoute } from 'react-router';
+import { combineReducers } from 'redux';
 
 import Home from './Home.react';
 
-// const initialState = {
-//   textFilter: null,
-//   species: null,
-//   date: {
-//     min: null,
-//     max: null,
-//   },
-// };
+import { reducer as filter } from '../home-filter';
 
-// export function reducer(state = initialState, { type, payload }) {
-//
-// }
+export const reducer = combineReducers({ filter });
 
 export default (
   <IndexRoute

@@ -8,6 +8,7 @@ import downloads from '../reducers/downloads';
 import downloadsMenu from '../reducers/downloadsMenu';
 import filter from '../reducers/filter';
 import { reducer as header } from '../header';
+import { reducer as home } from '../home';
 import hub from '../hub/reducers';
 import fastas from '../hub/reducers/fastas';
 import mapMarkers from '../reducers/mapMarkers';
@@ -53,6 +54,7 @@ const rootReducer = combineReducers({
   }),
   filter: createReducer(filter),
   header,
+  home,
   hub: hub(createReducer),
   location,
   reference: createReducer(reference),
