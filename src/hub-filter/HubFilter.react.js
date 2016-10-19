@@ -1,13 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import FilterAside from '../../filter-aside';
-import DateFilter from '../../date-filter';
-import MetadataFilter from '../../metadata-filter';
+import FilterAside from '../filter-aside';
+import DateFilter from '../date-filter';
+import MetadataFilter from '../metadata-filter';
 
-import { getMetadataFilters, getSearchText } from '../selectors';
+import { getMetadataFilters, getSearchText } from './selectors';
 
-import { filters as metadataFilters, actions } from '../filter';
+import { filters as metadataFilters, actions } from './filter';
 
 const [ searchRegExp, speciesFilter, countryFilter ] = metadataFilters;
 

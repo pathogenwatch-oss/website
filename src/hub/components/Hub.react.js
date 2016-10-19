@@ -2,7 +2,7 @@ import React from 'react';
 
 import FileDragAndDrop from '../../components/DragAndDrop.react';
 
-import Filter from './Filter.react';
+import Filter from '../../hub-filter';
 import Summary from './Summary.react';
 import CreateCollectionTray from './CreateCollectionTray.react.js';
 

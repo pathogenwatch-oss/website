@@ -2,7 +2,7 @@ import { combineReducers } from 'redux';
 
 import uploads from './uploads';
 import { bounds, lassoPath } from './map';
-import { reducer as filter } from '../filter';
+import { reducer as filter } from '../../hub-filter';
 
 import * as actions from '../actions';
 
