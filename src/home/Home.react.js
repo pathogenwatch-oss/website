@@ -55,6 +55,7 @@ export default connect(mapStateToProps)(
           columnCount={[ { minWidth: 560, count: 2 }, { minWidth: 1020, count: 3 }, { minWidth: 1580, count: 4 } ]}
           rightMargin={48}
           cellArea={400 * 160}
+          rowMinHeight={200}
           rowFooterHeight={36}
         />
       </div>

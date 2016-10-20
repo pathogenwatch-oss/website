@@ -35,8 +35,11 @@ export default React.createClass({
   },
 
   getRowHeight(columnWidth) {
-    const { rowHeight, cellArea, rowFooterHeight } = this.props;
-    return (rowHeight || cellArea / columnWidth) + rowFooterHeight;
+    const { rowHeight, rowMinHeight, cellArea, rowFooterHeight } = this.props;
+    return Math.max(
+      rowMinHeight,
+      (rowHeight || cellArea / columnWidth) + rowFooterHeight
+    );
   },
 
   parseColumnCount(width) {
