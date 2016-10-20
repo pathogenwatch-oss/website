@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
+import Markdown from 'react-markdown';
 
 import Grid from '../grid';
 import Filter from '../home-filter';
@@ -8,10 +9,16 @@ import { Summary, Totals } from '../filter-summary';
 
 import { getVisibleCollections, getTotalCollections } from './selectors';
 
+const renderers = {
+  Paragraph: (props) => {
+    return <span>{props.children}</span>;
+  },
+};
+
 const CollectionCard = ({ title, description, link, pubmedLink }) => (
   <article className="wgsa-card wgsa-collection-card">
-    <h2 className="wgsa-card-title">{title}</h2>
-    <p>{description}</p>
+    <Markdown containerTagName="h2" className="wgsa-card-title" source={title} renderers={renderers} />
+    <Markdown source={description} />
     <div className="wgsa-card-footer">
       <Link
         className="mdl-button mdl-button--primary wgsa-button--text"

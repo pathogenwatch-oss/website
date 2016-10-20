@@ -94,7 +94,7 @@ export default {
     { id: 'a97l4irm2i2b',
       name: 'SA_008',
       author: 'Uhlemann _et al._ (2014)',
-      title: 'Molecular tracing of the emergence, diversification, and transmission of __Staphylococcus aureus_ sequence type 8 in a New York community',
+      title: 'Molecular tracing of the emergence, diversification, and transmission of _Staphylococcus aureus_ sequence type 8 in a New York community',
       pmid: '24753569',
       numberOfAssemblies: 387,
     },
