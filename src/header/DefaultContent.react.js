@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import NavLink from '../nav-link';
+import NavLink from '../location';
 
 import { toggleAside } from './index';
 

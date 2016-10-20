@@ -1,4 +1,5 @@
 import React from 'react';
+import classnames from 'classnames';
 
 export default ({ title, summary, onClick }) => (
   summary.length ?
@@ -8,7 +9,10 @@ export default ({ title, summary, onClick }) => (
         <button
           key={name}
           title={name}
-          className={`mdl-chip mdl-chip--contact ${active ? 'mdl-chip--active' : ''}`.trim()}
+          className={classnames(
+            'mdl-chip mdl-chip--contact',
+            { 'mdl-chip--active': active }
+          )}
           onClick={() => onClick(name)}
         >
           <span className="mdl-chip__contact">{count}</span>
