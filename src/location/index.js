@@ -3,7 +3,11 @@ import { browserHistory } from 'react-router';
 
 export function updateQueryString(key, value) {
   const qs = queryString.parse(location.search);
-  browserHistory.push(`?${queryString.stringify({ ...qs, [key]: value })}`);
+  const nextString = queryString.stringify({
+    ...qs,
+    [key]: value === qs[key] ? undefined : value,
+  });
+  browserHistory.push(nextString.length ? `?${nextString}` : '');
 }
 
 export const LOCATION_CHANGE = 'LOCATION_CHANGE';

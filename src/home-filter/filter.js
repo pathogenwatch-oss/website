@@ -23,7 +23,8 @@ export const filters = [
       return collection.species === value;
     },
     onLocationChange(state, { query }) {
-      if (query.species && taxIdMap.has(query.species)) return query.species;
+      if (!query.species) return null;
+      if (taxIdMap.has(query.species)) return query.species;
       return state;
     },
   },
