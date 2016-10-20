@@ -1,10 +1,6 @@
-import '../css/card.css';
-
 import React from 'react';
 
-import FastaCard from './FastaCard.react';
-
-import { formatDay, formatMonth } from '../../utils/Date';
+import { formatDay, formatMonth } from '../utils/Date';
 
 function displayDate({ day, month, year }) {
   if (!day && !month && !year) {
@@ -42,11 +38,13 @@ function displaySpecies(key, label) {
   );
 }
 
-export default
-  ({ name, speciesKey, speciesLabel, metadata = {}, country }) => (
-    <FastaCard name={name}>
+export default props => {
+  const { speciesKey, speciesLabel, metadata = {}, country } = props;
+  return (
+    <div className="wgsa-card-content">
       {displaySpecies(speciesKey, speciesLabel)}
       {displayCountry(country)}
       {displayDate(metadata)}
-    </FastaCard>
+    </div>
   );
+};

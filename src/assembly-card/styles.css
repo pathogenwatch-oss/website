@@ -10,6 +10,16 @@
   color: #AC65A6;
 }
 
+.wgsa-remove-fasta-button {
+  height: 28px;
+  width: 28px;
+  min-width: 28px;
+}
+
+.wgsa-remove-fasta-button > i {
+  font-size: 20px;
+}
+
 .wgsa-hub-card__metadata {
   align-items: bottom;
   display: flex;
@@ -34,16 +44,6 @@
   text-overflow: ellipsis;
 }
 
-.wgsa-remove-fasta-button {
-  height: 28px;
-  width: 28px;
-  min-width: 28px;
-}
-
-.wgsa-remove-fasta-button > i {
-  font-size: 20px;
-}
-
 .wgsa-hub-card-error {
   color: #d11b1b;
 }
@@ -57,19 +57,4 @@
   font-size: 1.5rem;
   top: 1.625rem;
   right: 0;
-}
-
-.wgsa-hub-card-error > button {
-  bottom: 0rem;
-  position: absolute;
-  left: 0.375rem;
-  width: auto;
-  background-color: rgba(158,158,158,.2);
-}
-
-.wgsa-hub-card-error > button:hover,
-.wgsa-hub-card-error > button:focus,
-.wgsa-hub-card-error > button:active {
-  background: #a386bd;
-  color: #fff !important;
 }
