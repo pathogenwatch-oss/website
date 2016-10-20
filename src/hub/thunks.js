@@ -3,10 +3,10 @@ import actions, { UPLOAD_FASTA } from './actions';
 import * as selectors from './selectors';
 import { getCollectionMetadata } from './selectors/create-collection';
 
-import ToastActionCreators from '../actions/ToastActionCreators';
+import { showToast } from '../toast';
 
-import { mapCSVsToFastas, showDuplicatesToast, sendToServer } from './utils';
-import { undoRemoveFasta } from './utils/toasts';
+import { mapCSVsToFastas, sendToServer } from './utils';
+import { getUndoRemoveFastaToast, getDuplicatesToastMessage } from './utils/toasts';
 
 function isDuplicate({ name }, files) {
   return files[name] !== undefined;
@@ -56,7 +56,9 @@ export function addFiles(newFiles) {
         const duplicates = parsedFiles.filter(file => isDuplicate(file, files));
         const nonDuplicates = parsedFiles.filter(file => !isDuplicate(file, files));
 
-        if (duplicates.length) showDuplicatesToast(duplicates);
+        if (duplicates.length) {
+          dispatch(showToast(getDuplicatesToastMessage(duplicates)));
+        }
         if (nonDuplicates.length) {
           dispatch(uploadFiles(nonDuplicates));
         }
@@ -102,6 +104,7 @@ export function removeFasta(name) {
     const fasta = { ...fastas[name] };
 
     dispatch(actions.removeFasta(name));
-    ToastActionCreators.showToast(undoRemoveFasta(fasta, dispatch));
+    const { message, action } = getUndoRemoveFastaToast(fasta, dispatch);
+    dispatch(showToast(message, action));
   };
 }

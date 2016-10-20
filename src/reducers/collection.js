@@ -94,11 +94,12 @@ export const assemblies = {
 export const collection = {
   initialState: { id: null, assemblyIds: [], metadata: {} },
   actions: {
-    [CREATE_COLLECTION.SUCCESS](state, { result, speciesId }) {
+    [CREATE_COLLECTION.SUCCESS](state, { result, speciesId, metadata }) {
       return {
         ...state,
         id: result && result.collectionId,
         speciesId,
+        metadata,
       };
     },
     [SET_COLLECTION_ID](state, { id }) {
@@ -119,10 +120,10 @@ export const collection = {
         ...result,
       };
     },
-    [UPDATE_PROGRESS](state, { results }) {
+    [UPDATE_PROGRESS](state, { result }) {
       return {
         ...state,
-        ...results,
+        ...result,
       };
     },
     [FETCH_ENTITIES.FAILURE](state) {

@@ -1,7 +1,6 @@
 import { FETCH_ENTITIES } from '../actions/fetch';
 
 import { FETCH_TREE, SET_TREE } from '../actions/tree';
-import ToastActionCreators from '../actions/ToastActionCreators';
 
 import { COLLECTION, POPULATION } from '../constants/tree';
 
@@ -31,12 +30,6 @@ export const trees = {
 export const displayedTree = {
   initialState: COLLECTION,
   actions: {
-    [FETCH_TREE.FAILURE](state) {
-      ToastActionCreators.showToast({
-        message: 'Subtree currently unavailable, please try again later.',
-      });
-      return state;
-    },
     [SET_TREE](state, { name }) {
       return name;
     },

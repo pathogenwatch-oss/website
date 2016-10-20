@@ -1,0 +1,23 @@
+.wgsa-hipster-style {
+  color: rgba(0, 0, 0, 0.54);
+  background: #fff;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-size: 13px;
+}
+
+.cgps-logo {
+  display: block;
+}
+
+.cgps-logo > img {
+  height: 100%;
+  display: block;
+  margin: 0 auto;
+}
+
+.contact-email {
+  font-size: 24px;
+  line-height: 1;
+  display: block;
+  padding: 24px 0;
+}

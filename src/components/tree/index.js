@@ -8,7 +8,7 @@ import contextMenuPlugin from 'phylocanvas-plugin-context-menu';
 import TreeControls from './TreeControls.react';
 import Spinner from '^/components/Spinner.react';
 
-import DEFAULT, { CGPS } from '^/defaults';
+import { DEFAULT, CGPS } from '^/app/constants';
 
 Phylocanvas.plugin(contextMenuPlugin);
 

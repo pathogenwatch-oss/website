@@ -1,5 +1,4 @@
 import { REQUEST_DOWNLOAD } from '../actions/downloads';
-import ToastActionCreators from '../actions/ToastActionCreators';
 
 import * as downloads from '../utils/downloads';
 
@@ -85,10 +84,6 @@ const actions = {
     return updateDownloads(state, payload, { loading: true });
   },
   [REQUEST_DOWNLOAD.FAILURE](state, payload) {
-    ToastActionCreators.showToast({
-      message: 'Failed to generate download, please try again later.',
-    });
-
     return updateDownloads(state, payload, { error: true });
   },
   [REQUEST_DOWNLOAD.SUCCESS](state, payload) {

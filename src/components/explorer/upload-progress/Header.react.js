@@ -1,13 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import Species from '^/species';
-import DEFAULT from '^/defaults';
-
-const headerStyle = {
-  'background': '#fff',
-  'color': DEFAULT.CGPS.COLOURS.PURPLE,
-};
+import { getProgressPercentage } from '^/collection/selectors.js';
 
 const subtitleStyle = {
   marginRight: '100px',
@@ -69,9 +63,8 @@ const Header = React.createClass({
 });
 
 function mapStateToProps({ collection }) {
-  const { receivedResults, expectedResults } = collection.progress || {};
   return {
-    percentage: expectedResults ? Math.floor(receivedResults / expectedResults * 100) : 0,
+    percentage: getProgressPercentage(collection),
   };
 }
 

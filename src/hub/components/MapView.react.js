@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 import LeafletMap from './LeafletMap.react';
 
-import CONFIG from '../../config';
+import CONFIG from '../../app/config';
 
 import { getMarkers, getBounds, getLassoPath } from '../selectors/map';
 
@@ -30,7 +30,7 @@ const MapView = React.createClass({
   render() {
     const { center, zoom } = this.props.bounds || {};
     return (
-      <div className="wgsa-hub__view">
+      <div className="wgsa-filterable-content">
         <LeafletMap
           className="wgsa-hub-map-view"
           markers={this.props.markers}

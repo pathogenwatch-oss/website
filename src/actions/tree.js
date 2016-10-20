@@ -1,12 +1,14 @@
-import { getSubtree } from '../utils/Api';
+import { createAsyncConstants } from '../actions';
+import { showToast } from '../toast';
 
 import { speciesTrees } from '../constants/tree';
-import { createAsyncConstants } from '../actions';
-
+import { getSubtree } from '../utils/Api';
 import Species from '../species';
 
 export const SET_TREE = 'SET_TREE';
 export const FETCH_TREE = createAsyncConstants('FETCH_TREE');
+
+const errorMessage = 'Subtree currently unavailable, please try again later.';
 
 export function displayTree({ name, newick }, collectionId) {
   const setTree = { type: SET_TREE, name };
@@ -23,6 +25,7 @@ export function displayTree({ name, newick }, collectionId) {
         name,
         promise: getSubtree(Species.id, collectionId, name),
       },
-    }).then(() => dispatch(setTree));
+    }).then(() => dispatch(setTree))
+      .catch(() => dispatch(showToast(errorMessage)));
   };
 }

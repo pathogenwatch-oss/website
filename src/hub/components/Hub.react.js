@@ -2,13 +2,12 @@ import React from 'react';
 
 import FileDragAndDrop from '../../components/DragAndDrop.react';
 
-import Header from './Header.react';
-import Filter from './Filter.react';
+import Filter from '../../hub-filter';
 import Summary from './Summary.react';
 import CreateCollectionTray from './CreateCollectionTray.react.js';
 
-import { updateHeader } from '^/actions/header';
 import { addFiles } from '../thunks';
+import { toggleAside } from '../../header';
 
 import { taxIdMap } from '^/species';
 
@@ -46,16 +45,12 @@ export default React.createClass({
     }
   },
 
-  toggleAside(hasAside) {
-    const { dispatch } = this.props;
+  componentWillUnmount() {
+    this.toggleAside(false);
+  },
 
-    dispatch(
-      updateHeader({
-        hasAside,
-        classNames: 'wgsa-hub-header',
-        content: <Header />,
-      })
-    );
+  toggleAside(isOpen) {
+    this.props.dispatch(toggleAside(isOpen));
   },
 
   upload(newFiles) {
@@ -65,15 +60,15 @@ export default React.createClass({
   },
 
   render() {
-    const { hasFastas, filterActive, loading, location } = this.props;
+    const { hasFastas, filterActive, loading } = this.props;
     return (
       <FileDragAndDrop onFiles={this.upload}>
         { loading && <div ref="loadingBar" className="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>}
-        <div className="wgsa-hub">
-          <Summary pathname={location && location.pathname} />
+        <div className="wgsa-hipster-style wgsa-filterable-view">
+          <Summary />
           { hasFastas ?
             this.props.children :
-            <p className="wgsa-hub__view wgsa-hub-big-message">
+            <p className="wgsa-filterable-content wgsa-hub-big-message">
               { filterActive ?
                   'No matches.' :
                   'Drag and drop files to begin.'

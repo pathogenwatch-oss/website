@@ -3,6 +3,7 @@ import '../css/tray.css';
 import React from 'react';
 import { connect } from 'react-redux';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import classnames from 'classnames';
 
 import * as selectors from '../selectors/create-collection';
 
@@ -39,10 +40,6 @@ const CreateCollectionTray = React.createClass({
     });
   },
 
-  getClassname() {
-    return `wgsa-tray ${this.state.open ? 'wgsa-tray--open' : ''}`.trim();
-  },
-
   addToFormElements(element) {
     if (!this.firstInput) {
       this.firstInput = element.querySelector('input');
@@ -64,14 +61,14 @@ const CreateCollectionTray = React.createClass({
         transitionLeaveTimeout={280}
       >
       { this.props.visible ?
-        <aside key="create-collection-tray" className={this.getClassname()}>
+        <aside key="create-collection-tray" className={classnames('wgsa-tray', { 'wgsa-tray--open': this.state.open })}>
           <header className="wgsa-tray__header" onClick={this.onHeaderClick}>
             Create Collection
             <button className="mdl-button mdl-button--icon">
               <i className="material-icons">{`expand_${this.state.open ? 'more' : 'less'}`}</i>
             </button>
           </header>
-          <div className="wgsa-tray__content">
+          <form className="wgsa-tray__content" onSubmit={this.props.onSubmit}>
             <dl className="wgsa-collection-summary">
               <dt>Species</dt>
               <dd>{taxIdMap.get(speciesId).formattedShortName}</dd>
@@ -102,12 +99,11 @@ const CreateCollectionTray = React.createClass({
             <div className="wgsa-tray-actions">
               <button
                 className="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
-                onClick={this.props.onButtonClick}
               >
                 Create
               </button>
             </div>
-          </div>
+          </form>
         </aside>
         : null
       }
@@ -127,8 +123,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    onButtonClick:
-      () => dispatch(createCollection()),
+    onSubmit:
+      (e) => { e.preventDefault(); dispatch(createCollection()); },
     onFormChange:
       ({ target }) => dispatch(actions.changeCollectionMetadata(
         target.id.split('collection-')[1],

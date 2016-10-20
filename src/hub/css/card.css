@@ -1,24 +1,4 @@
-.wgsa-hub-card {
-  background: white;
-  border-top: 1px solid color(#a386bd tint(50%));
-  height: 104px;
-  margin-right: 2rem;
-  margin-bottom: 1rem;
-  padding: 1.25rem 1.5rem;
-  position: relative;
-}
-
-.wgsa-hub-card__title {
-  font-size: 1.5rem;
-  line-height: 2rem;
-  margin: 0 0 0.5rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  color: #673c90;
-}
-
-.wgsa-hub-card p {
+.wgsa-assembly-card p {
   margin: 0;
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
   font-size: 14px;
@@ -26,7 +6,7 @@
   font-weight: 500;
 }
 
-.wgsa-hub-card a {
+.wgsa-assembly-card a {
   color: #AC65A6;
 }
 
@@ -55,9 +35,6 @@
 }
 
 .wgsa-remove-fasta-button {
-  position: absolute;
-  right: 0rem;
-  bottom: 0.3rem;
   height: 28px;
   width: 28px;
   min-width: 28px;

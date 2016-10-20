@@ -8,7 +8,7 @@ import FastaCard from './FastaCard.react';
 import { uploadFiles } from '../thunks';
 
 import { fastaValidationErrors as errors } from '../utils/fasta';
-import config from '../../config';
+import config from '../../app/config';
 
 const Error = ({ message, children }) => (
   <div className="wgsa-hub-card__metadata wgsa-hub-card-error">

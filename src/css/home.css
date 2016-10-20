@@ -49,11 +49,7 @@
 
 .wgsa-home__intro {
   text-align: center;
-  padding-bottom: 56px;
-}
-
-.is-small-screen .wgsa-home__intro {
-  padding-top: 56px;
+  padding: 56px 0;
 }
 
 .wgsa-home__intro h1 {
@@ -66,8 +62,7 @@
   padding: 0 16px;
   font-size: 20px;
   line-height: 1;
-  color: #666;
-  font-weight: 200;
+  color: rgba(0, 0, 0, 0.54);
 }
 
 .wgsa-logo {

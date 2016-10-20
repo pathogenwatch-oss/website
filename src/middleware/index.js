@@ -9,15 +9,11 @@ export const promiseToThunk = () => next => action => {
     dispatch({ type: type.ATTEMPT, payload: { ...props } });
     return promise.then(
       result =>
-        dispatch({
-          type: type.SUCCESS,
-          payload: { result, ...props },
-        }),
-      error =>
-        dispatch({
-          type: type.FAILURE,
-          payload: { error, ...props },
-        })
+        dispatch({ type: type.SUCCESS, payload: { result, ...props } }),
+      error => {
+        dispatch({ type: type.FAILURE, payload: { error, ...props } });
+        return error;
+      }
     );
   });
 };
