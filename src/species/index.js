@@ -23,6 +23,7 @@ export const referenceCollections =
       title: _.author,
       description: _.title,
       pubmedLink: `http://www.ncbi.nlm.nih.gov/pubmed/${_.pmid}`,
+      size: _.numberOfAssemblies,
     })));
   }, []);
 
