@@ -17,7 +17,7 @@ export default React.createClass({
       React.PropTypes.number, React.PropTypes.array,
     ]),
     items: React.PropTypes.array,
-    rowHeight: React.PropTypes.number.isRequired,
+    rowHeight: React.PropTypes.number,
     template: React.PropTypes.node,
   },
 
@@ -37,10 +37,13 @@ export default React.createClass({
   },
 
   getRowHeight(columnWidth) {
-    const { rowHeight, rowMinHeight = 0, cellArea, rowFooterHeight = 0 } = this.props;
-    return Math.max(
-      rowMinHeight,
-      (rowHeight || cellArea / columnWidth) + rowFooterHeight
+    const { rowHeight, rowMinHeight = 0, rowMaxHeight = Number.MAX_VALUE, cellArea, rowFooterHeight = 0 } = this.props;
+    return Math.min(
+        Math.max(
+        rowMinHeight,
+        (rowHeight || (cellArea / columnWidth)) + rowFooterHeight
+      ),
+      rowMaxHeight
     );
   },
 
