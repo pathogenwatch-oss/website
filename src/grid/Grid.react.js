@@ -13,24 +13,43 @@ export default React.createClass({
   propTypes: {
     className: React.PropTypes.string,
     columnWidth: React.PropTypes.number,
-    columnCount: React.PropTypes.number,
+    columnCount: React.PropTypes.oneOf(React.PropTypes.number, React.PropTypes.array),
     items: React.PropTypes.array,
     rowHeight: React.PropTypes.number.isRequired,
-    template: React.PropTypes.element,
+    template: React.PropTypes.node,
   },
 
   getColumnCount(width) {
+    if (this.props.columnCount) {
+      return this.parseColumnCount(width);
+    }
+    return Math.max(1, Math.floor(width / this.props.columnWidth));
+  },
+
+  getColumnWidth(width, columnCount) {
+    const { columnWidth, rightMargin } = this.props;
     return (
-      this.props.columnCount ||
-      Math.max(1, Math.floor(width / this.props.columnWidth))
+      (columnWidth || Math.floor(width / columnCount)) -
+        (rightMargin ? rightMargin / columnCount : 0)
     );
   },
 
-  getColumnWidth(width) {
-    return (
-      this.props.columnWidth ||
-      Math.floor(width / this.props.columnCount)
-    );
+  getRowHeight(columnWidth) {
+    const { rowHeight, cellArea, rowFooterHeight } = this.props;
+    return (rowHeight || cellArea / columnWidth) + rowFooterHeight;
+  },
+
+  parseColumnCount(width) {
+    const { columnCount } = this.props;
+    if (Array.isArray(columnCount)) {
+      let newCount = 1;
+      for (const { minWidth = 0, count } of columnCount) {
+        if (minWidth > width) return newCount;
+        newCount = count;
+      }
+      return newCount;
+    }
+    return columnCount; // just a number
   },
 
   render() {
@@ -40,6 +59,7 @@ export default React.createClass({
         <AutoSizer>
           {({ height, width }) => {
             const columnCount = this.getColumnCount(width);
+            const columnWidth = this.getColumnWidth(width, columnCount);
             return (
               <Grid
                 cellRenderer={({ key, columnIndex, rowIndex, style }) => {
@@ -51,12 +71,12 @@ export default React.createClass({
                     null;
                 }}
                 className="wgsa-virtualised-grid"
-                columnWidth={this.getColumnWidth(width)}
                 columnCount={columnCount}
-                height={height}
+                columnWidth={columnWidth}
                 rowCount={Math.ceil(items.length / columnCount)}
-                rowHeight={this.props.rowHeight}
+                rowHeight={this.getRowHeight(columnWidth)}
                 width={width}
+                height={height}
               />
             );
           }}
