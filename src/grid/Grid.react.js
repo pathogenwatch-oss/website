@@ -13,7 +13,9 @@ export default React.createClass({
   propTypes: {
     className: React.PropTypes.string,
     columnWidth: React.PropTypes.number,
-    columnCount: React.PropTypes.oneOf(React.PropTypes.number, React.PropTypes.array),
+    columnCount: React.PropTypes.oneOfType([
+      React.PropTypes.number, React.PropTypes.array,
+    ]),
     items: React.PropTypes.array,
     rowHeight: React.PropTypes.number.isRequired,
     template: React.PropTypes.node,
@@ -35,7 +37,7 @@ export default React.createClass({
   },
 
   getRowHeight(columnWidth) {
-    const { rowHeight, rowMinHeight, cellArea, rowFooterHeight } = this.props;
+    const { rowHeight, rowMinHeight = 0, cellArea, rowFooterHeight = 0 } = this.props;
     return Math.max(
       rowMinHeight,
       (rowHeight || cellArea / columnWidth) + rowFooterHeight
