@@ -1,3 +1,5 @@
+import { LOCATION_CHANGE } from '../location';
+
 export default (actionTypes, filters) => {
   const initialState =
     filters.reduce((memo, { key }) => ({ ...memo, [key]: null }), {});
@@ -12,6 +14,15 @@ export default (actionTypes, filters) => {
         };
       case actionTypes.CLEAR_FILTER:
         return initialState;
+      case LOCATION_CHANGE:
+        return {
+          ...state,
+          ...filters.reduce((memo, { key, onLocationChange }) => {
+            if (!onLocationChange) return memo;
+            memo[key] = onLocationChange(state[key], payload.location);
+            return memo;
+          }, {}),
+        };
       default:
         return state;
     }

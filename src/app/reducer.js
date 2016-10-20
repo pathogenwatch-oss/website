@@ -13,7 +13,7 @@ import hub from '../hub/reducers';
 import fastas from '../hub/reducers/fastas';
 import mapMarkers from '../reducers/mapMarkers';
 import metadata from '../reducers/metadata';
-import { reducer as location } from '../nav-link/';
+import { reducer as location } from '../location/';
 import resistanceProfile from '../reducers/resistanceProfile';
 import table from '../reducers/table';
 import { reducer as toast } from '../toast';

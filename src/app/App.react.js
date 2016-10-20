@@ -9,9 +9,9 @@ import classnames from 'classnames';
 import Header from '../header';
 import Toast from '../toast';
 import DownloadsMenu from '../components/explorer/DownloadsMenu.react';
-import NavLink from '../nav-link';
+import NavLink from '../location';
 
-import { locationChange } from '../nav-link';
+import { locationChange } from '../location';
 
 const menuItems = [
   { icon: 'home',
