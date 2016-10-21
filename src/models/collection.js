@@ -84,7 +84,27 @@ function submitAssemblies({ speciesId, collectionId, assemblyIds, files }) {
       filePath: fastaStorage.getFilePath(fastaStoragePath, id),
     });
   }
-  return Promise.resolve();
+
+  return Promise.all(files.map(file => {
+    const assemblyId = assemblyIds[file.id];
+
+    assemblyModel.submit({
+      speciesId,
+      collectionId,
+      assemblyId,
+      fileId: file.id,
+      filePath: fastaStorage.getFilePath(fastaStoragePath, file.id),
+    });
+
+    return (
+      assemblyModel.storeMetadata({
+        speciesId,
+        collectionId,
+        assemblyId,
+        file,
+      })
+    );
+  }));
 }
 
 function add({ speciesId, title, description, files }) {
@@ -118,7 +138,7 @@ function getAssemblies({ assemblyIds, speciesId }, assemblyGetFn, callback) {
     function (done) {
       async.mapLimit(assemblyIds, 10, function (assemblyIdWrapper, finishMap) {
         // List items can be wrapped or raw value
-        var assemblyId = assemblyIdWrapper.assemblyId || assemblyIdWrapper;
+        var assemblyId = assemblyIdWrapper.uuid || assemblyIdWrapper;
         var assemblyParams = {
           assemblyId,
           speciesId,

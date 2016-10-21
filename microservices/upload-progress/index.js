@@ -63,7 +63,7 @@ module.exports = function ({ mqConnection }) {
     const { taskType, taskStatus, assemblyId = {}, collectionId } = message;
 
     const documentKey = `${COLLECTION_METADATA}_${collectionId}`;
-    const assemblyIdString = assemblyId.assemblyId || 'N/A';
+    const assemblyIdString = assemblyId.uuid || 'N/A';
 
     LOGGER.info(`Processing message:
 Tasktype: ${taskType}

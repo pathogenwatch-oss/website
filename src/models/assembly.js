@@ -19,12 +19,12 @@ function createKey(id, prefix) {
 }
 
 function storeMetadata(args) {
-  const { speciesId, collectionId, assemblyId, metadata, metrics } = args;
+  const { speciesId, collectionId, assemblyId, file } = args;
 
   const assemblyMetadata = metadataModel.createRecord(
     { speciesId, collectionId, assemblyId },
-    metadata,
-    metrics
+    file.metadata,
+    file.metrics
   );
 
   return new Promise((resolve, reject) => {
