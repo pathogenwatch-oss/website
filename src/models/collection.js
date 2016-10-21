@@ -192,10 +192,11 @@ function getMetadata(collectionId, callback) {
 }
 
 function get({ collectionId, speciesId }, callback) {
-  LOGGER.info('Getting list of assemblies for collection ' + collectionId);
+  LOGGER.info(`Getting list of assemblies for collection ${collectionId}`);
   async.waterfall([
-    getAssemblyIds.bind(null, collectionId),
-    function (assemblyIds, done) {
+    getMetadata.bind(null, collectionId),
+    function (metadata, done) {
+      const assemblyIds = Object.keys(metadata.assemblyIdToNameMap);
       const params = { speciesId, assemblyIds };
       getAssemblies(params, assemblyModel.getComplete, done);
     },
@@ -204,7 +205,6 @@ function get({ collectionId, speciesId }, callback) {
       async.parallel({
         subtrees: addPublicAssemblyCounts.bind(null, subtypes, collectionId),
         tree: getTree.bind(null, collectionId),
-        metadata: getMetadata.bind(null, collectionId),
       }, (error, { tree, subtrees, metadata }) => {
         if (error) {
           done(error);
