@@ -13,7 +13,6 @@ const metadataFilePath = fspath.join(referencesDir, 'refseq-archaea-bacteria-fun
 const specieator = createMashSpecieator(sketchFilePath, metadataFilePath);
 
 const collectionModel = require('models/collection');
-const assemblyModel = require('models/assembly');
 const analyse = require('wgsa-front-end/universal/fastaAnalysis');
 
 const LOGGER = require('utils/logging').createLogger('Upload');
@@ -57,7 +56,7 @@ router.post('/upload', (req, res, next) => {
 });
 
 router.post('/collection', (req, res, next) => {
-  const { speciesId, files } = req.body;
+  const { speciesId, title, description, files } = req.body;
 
   LOGGER.info('Received request for new collection id');
 
@@ -66,7 +65,7 @@ router.post('/collection', (req, res, next) => {
     return res.sendStatus(400);
   }
 
-  return collectionModel.add({ speciesId, files }).
+  return collectionModel.add({ title, description, speciesId, files }).
     then(collectionId => res.json({ collectionId })).
     catch(e => next(e));
 });

@@ -58,17 +58,17 @@ function constructQueryKeys(prefixes, assemblyId) {
 }
 
 function mergeQueryResults(data, queryKeyPrefixes, assemblyId) {
-  return queryKeyPrefixes.reduce(function (assembly, key) {
+  return queryKeyPrefixes.reduce((assembly, key) => {
     assembly[key] = data[createKey(assemblyId, key)];
     return assembly;
   }, { assemblyId });
 }
 
 function formatForFrontend(assembly) {
-  var paarsnp = assembly[PAARSNP_RESULT];
-  var mlst = assembly[MLST_RESULT];
-  var core = assembly[CORE_RESULT];
-  var fp = assembly[FP_COMP];
+  const paarsnp = assembly[PAARSNP_RESULT];
+  const mlst = assembly[MLST_RESULT];
+  const core = assembly[CORE_RESULT];
+  const fp = assembly[FP_COMP];
   return {
     populationSubtype: fp ? fp.subTypeAssignment : null,
     metadata: assembly[ASSEMBLY_METADATA],
@@ -80,15 +80,17 @@ function formatForFrontend(assembly) {
         percentMatched: core.percentKernelMatched,
         percentAssemblyMatched: core.percentAssemblyMatched,
       } : null,
-      resistanceProfile: paarsnp ?
-        Object.keys(paarsnp.resistanceProfile).
-          reduce(function (profile, className) {
-            var antibioticClass = paarsnp.resistanceProfile[className];
-            Object.keys(antibioticClass).forEach(function (antibiotic) {
-              profile[antibiotic] = antibioticClass[antibiotic];
-            });
-            return profile;
-          }, {}) : {},
+      resistanceProfile: paarsnp && paarsnp.antibioticProfiles ?
+        paarsnp.antibioticProfiles.reduce(
+          (memo, { name, resistanceState, resistanceSets }) => {
+            memo[name] = {
+              name,
+              state: resistanceState,
+              mechanisms: resistanceSets.map(_ => _.resistanceSetName),
+            };
+            return memo;
+          }, {}
+        ) : {},
     },
   };
 }

@@ -43,7 +43,7 @@ function manageCollection(request) {
   });
 }
 
-function notifyUploadProgress({ speciesId, collectionId, assemblyIds, files }) {
+function notifyUploadProgress(collection, assemblyIds, files) {
   const collectionSize = files.length;
   const assemblyIdToNameMap = files.reduce((memo, { id, name }) => {
     memo[assemblyIds[id]] = name;
@@ -51,12 +51,12 @@ function notifyUploadProgress({ speciesId, collectionId, assemblyIds, files }) {
   }, {});
 
   const message = {
-    collectionId,
-    speciesId,
+    ...collection,
     assemblyIdToNameMap,
     collectionSize,
   };
 
+  const { collectionId } = collection;
   return new Promise((resolve, reject) => {
     messageQueueService.newUploadProgressRequestQueue(collectionId, queue => {
       queue.subscribe(ackError => {
@@ -90,16 +90,16 @@ function submitAssemblies({ speciesId, collectionId, assemblyIds, files }) {
   return Promise.resolve();
 }
 
-function add({ speciesId, files }) {
+function add({ speciesId, title, description, files }) {
   LOGGER.info(`Creating collection of species ${speciesId} with ${files.length} files`);
 
   return manageCollection({
     checksums: files.map(_ => _.id),
     collectionOperation: COLLECTION_OPERATIONS.CREATE,
   }).then(({ collectionId, assemblyIds }) => {
-    const args = { speciesId, collectionId, assemblyIds, files };
-    return notifyUploadProgress(args).
-      then(() => submitAssemblies(args)).
+    const collectionData = { collectionId, speciesId, title, description };
+    return notifyUploadProgress(collectionData, assemblyIds, files).
+      then(() => submitAssemblies({ collectionId, assemblyIds, speciesId, files })).
       then(() => collectionId);
   });
 }
@@ -183,6 +183,14 @@ function addPublicAssemblyCounts(subtrees, collectionId, callback) {
   );
 }
 
+function getMetadata(collectionId, callback) {
+  return (
+    mainStorage.retrieve(`${COLLECTION_METADATA}_${collectionId}`,
+      (error, result) => callback(error, result)
+    )
+  );
+}
+
 function get({ collectionId, speciesId }, callback) {
   LOGGER.info('Getting list of assemblies for collection ' + collectionId);
   async.waterfall([
@@ -192,27 +200,33 @@ function get({ collectionId, speciesId }, callback) {
       getAssemblies(params, assemblyModel.getComplete, done);
     },
     function (assemblies, done) {
-      const subtrees = assemblyModel.groupAssembliesBySubtype(assemblies);
+      const subtypes = assemblyModel.groupAssembliesBySubtype(assemblies);
       async.parallel({
-        subtrees: addPublicAssemblyCounts.bind(null, subtrees, collectionId),
+        subtrees: addPublicAssemblyCounts.bind(null, subtypes, collectionId),
         tree: getTree.bind(null, collectionId),
-      }, function (error, result) {
+        metadata: getMetadata.bind(null, collectionId),
+      }, (error, { tree, subtrees, metadata }) => {
         if (error) {
-          return done(error);
+          done(error);
+          return;
         }
 
         done(null, {
           collectionId,
+          title: metadata.title,
+          description: metadata.description,
+          dateCreated: metadata.uploadEnded,
           assemblies,
-          tree: result.tree,
-          subtrees: result.subtrees,
+          tree,
+          subtrees,
         });
       });
     },
-  ], function (error, result) {
+  ], (error, result) => {
     if (error) {
       LOGGER.error(error);
-      return callback(error);
+      callback(error);
+      return;
     }
     callback(null, result);
   });
@@ -275,7 +289,7 @@ function getSubtree({ speciesId, collectionId, subtreeId }, callback) {
 }
 
 function getStatus({ speciesId, collectionId }, callback) {
-  mainStorage.retrieve(`${COLLECTION_METADATA}_${collectionId}`, function (error, doc, cas) {
+  getMetadata(collectionId, (error, doc, cas) => {
     if (error) {
       return callback(error);
     }

@@ -155,7 +155,7 @@ Collection: ${collectionId}`);
     });
   }
 
-  mqConnection.queue('upload-progress-queue', QUEUE_OPTIONS, function (queue) {
+  mqConnection.queue('upload-progress-queue', QUEUE_OPTIONS, queue => {
     LOGGER.info(`${queue.name} is open.`);
     queue.bind(SERVICES.name, 'upload-progress');
 
