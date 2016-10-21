@@ -19,7 +19,7 @@ export const GridView = React.createClass({
         template={AssemblyCard}
         items={items}
         columnWidth={256}
-        rowHeight={160}
+        rowHeight={176}
       />
     );
   },

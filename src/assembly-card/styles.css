@@ -14,34 +14,12 @@
   height: 28px;
   width: 28px;
   min-width: 28px;
+  margin-left: -6px;
+  margin-bottom: 2px;
 }
 
 .wgsa-remove-fasta-button > i {
   font-size: 20px;
-}
-
-.wgsa-hub-card__metadata {
-  align-items: bottom;
-  display: flex;
-  justify-content: flex-start;
-  margin-bottom: 4px;
-}
-
-.wgsa-hub-card__metadata--species {
-  font-style: italic;
-  color: rgba(0, 0, 0, 0.87);
-}
-
-.wgsa-hub-card__metadata i {
-  font-size: 16px;
-  margin-right: 4px;
-  line-height: 18px;
-}
-
-.wgsa-hub-card__metadata p {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .wgsa-hub-card-error {
@@ -54,7 +32,7 @@
 
 .wgsa-hub-card-error i {
   position: absolute;
-  font-size: 1.5rem;
-  top: 1.625rem;
+  font-size: 20px;
+  top: 22px;
   right: 0;
 }
