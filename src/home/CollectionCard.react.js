@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router';
 import Markdown from 'react-markdown';
 
-import Card from '../card';
+import Card, { CardMetadata } from '../card';
 
 import { taxIdMap } from '../species';
 
@@ -13,11 +13,13 @@ const renderers = {
 export default ({ title, description, link, pubmedLink, size, species }) => (
   <Card>
     <Markdown containerTagName="h2" className="wgsa-card-title" source={title} renderers={renderers} />
-    <span className="wgsa-card__metadata">
-      <i title="Species" className="material-icons">bug_report</i>
-      {taxIdMap.get(species).formattedShortName}
-      <i title="Species" className="material-icons">insert_drive_file</i>
-      {size} assemblies
+    <span className="wgsa-card-metadata-inliner">
+      <CardMetadata title="Species" icon="bug_report">
+        {taxIdMap.get(species).formattedShortName}
+      </CardMetadata>
+      <CardMetadata icon="insert_drive_file">
+        {size} assemblies
+      </CardMetadata>
     </span>
     <Markdown source={description} />
     <div className="wgsa-card-footer">

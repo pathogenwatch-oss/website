@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { CardMetadata } from '../card';
+
 import { formatDay, formatMonth } from '../utils/Date';
 
 function displayDate({ day, month, year }) {
@@ -7,32 +9,29 @@ function displayDate({ day, month, year }) {
     return null;
   }
   return (
-    <div className="wgsa-card__metadata">
-      <i title="Date" className="material-icons">date_range</i>
+    <CardMetadata title="Date" icon="date_range">
       {day ? `${formatDay(day)} ` : ''}
       {month ? `${formatMonth(month)} ` : ''}
       {year || ''}
-    </div>
+    </CardMetadata>
   );
 }
 
 function displayCountry(country) {
   if (!country || !country.name) return null;
   return (
-    <div className="wgsa-card__metadata">
-      <i title="Country" className="material-icons">place</i>
+    <CardMetadata title="Country" icon="place">
       <span>{country.name}</span>
-    </div>
+    </CardMetadata>
   );
 }
 
 function displaySpecies(key, label) {
   if (!label) return null;
   return (
-    <div className="wgsa-card__metadata">
-      <i title="Species" className="material-icons">bug_report</i>
+    <CardMetadata title="Species" icon="bug_report">
       <span title={key}>{label}</span>
-    </div>
+    </CardMetadata>
   );
 }
 

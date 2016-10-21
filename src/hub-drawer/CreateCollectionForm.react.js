@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
+import { CardMetadata } from '../card';
+
 import * as selectors from './selectors';
 
 import { createCollection, changeCollectionMetadata } from './actions';
@@ -38,12 +40,14 @@ const CreateCollectionForm = React.createClass({
     const { speciesId, numAssemblies } = this.props.collectionSummary;
     return (
       <form className="wgsa-drawer__content wgsa-create-collection-form" onSubmit={this.props.onSubmit}>
-        <dl className="wgsa-collection-summary">
-          <dt>Species</dt>
-          <dd>{taxIdMap.get(speciesId).formattedShortName}</dd>
-          <dt>Assemblies</dt>
-          <dd>{numAssemblies}</dd>
-        </dl>
+        <span className="wgsa-card-metadata-inliner wgsa-collection-summary">
+          <CardMetadata title="Species" icon="bug_report">
+            {taxIdMap.get(speciesId).formattedShortName}
+          </CardMetadata>
+          <CardMetadata icon="insert_drive_file">
+            {numAssemblies} assemblies
+          </CardMetadata>
+        </span>
         <div ref={this.addToFormElements} className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
           <input
             className="mdl-textfield__input"

@@ -41,7 +41,7 @@
   visibility: visible;
 }
 
-.wgsa-card__metadata {
+.wgsa-card-metadata {
   align-items: bottom;
   display: flex;
   justify-content: flex-start;
@@ -49,20 +49,27 @@
   color: rgba(0, 0, 0, 0.87);
 }
 
-.wgsa-card__metadata i {
+.wgsa-card-metadata i {
   font-size: 16px;
-  margin-left: 8px;
-  padding: 0 4px;
+  padding-right: 4px;
   line-height: 18px;
 }
 
-.wgsa-card__metadata i:first-child {
-  margin-left: 0;
-  padding-left: 0;
-}
-
-.wgsa-card__metadata span {
+.wgsa-card-metadata span {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.wgsa-card-metadata-inliner {
+  display: flex;
+  font-size: 13px;
+}
+
+.wgsa-card-metadata-inliner .wgsa-card-metadata {
+  margin-left: 8px;
+}
+
+.wgsa-card-metadata-inliner .wgsa-card-metadata:first-child {
+  margin-left: 0;
 }
