@@ -23,7 +23,7 @@ function storeMetadata(args) {
 
   const assemblyMetadata = metadataModel.createRecord(
     { speciesId, collectionId, assemblyId },
-    file.metadata,
+    file.metadata || { assemblyName: file.name },
     file.metrics
   );
 
