@@ -1,0 +1,48 @@
+.wgsa-collection-summary {
+  display: flex;
+  font-size: 1rem;
+  font-weight: 500;
+  justify-content: flex-end;
+  margin: 0 0 1rem;
+}
+
+.wgsa-collection-summary dt {
+  font-weight: 400;
+}
+
+.wgsa-collection-summary dt::after {
+  content: ":";
+}
+
+.wgsa-collection-summary dd {
+  color: #673c90;
+  margin-left: 0.5em;
+  margin-right: 1.5em;
+}
+
+.wgsa-collection-summary dd:last-of-type {
+  margin-right: 0;
+}
+
+.wgsa-create-collection-form .mdl-textfield {
+  padding: 1rem 0;
+  width: 100%;
+}
+
+.wgsa-create-collection-form .mdl-textfield__label {
+  top: 1.25rem;
+}
+
+.mdl-textfield--floating-label.is-focused .mdl-textfield__label,
+.mdl-textfield--floating-label.is-dirty .mdl-textfield__label,
+.mdl-textfield--floating-label.has-placeholder .mdl-textfield__label {
+  top: -0.25rem;
+}
+
+.wgsa-create-collection-form .mdl-textfield__label::after {
+  bottom: 1rem !important;
+}
+
+.wgsa-create-collection-form textarea {
+  resize: none;
+}

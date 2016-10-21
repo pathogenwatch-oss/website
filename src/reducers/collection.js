@@ -1,4 +1,4 @@
-import { CREATE_COLLECTION } from '../hub/actions';
+import { CREATE_COLLECTION } from '../hub-drawer';
 import { FETCH_ENTITIES, CHECK_STATUS, UPDATE_PROGRESS } from '../actions/fetch';
 import { SET_COLLECTION_ID } from '../actions/collection';
 import { FETCH_TREE } from '../actions/tree';

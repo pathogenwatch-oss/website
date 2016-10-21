@@ -1,4 +1,4 @@
-.wgsa-tray-container {
+.wgsa-drawer-container {
   bottom: 0;
   height: 0;
   right: 10.5rem;
@@ -7,7 +7,7 @@
   z-index: 1;
 }
 
-.wgsa-tray {
+.wgsa-drawer {
   box-shadow: 0 1px 5px 0 rgba(0,0,0,0.2),0 2px 2px 0 rgba(0,0,0,0.14),0 3px 1px -2px rgba(0,0,0,0.12);
   color: rgba(0, 0, 0, 0.54);
   position: absolute;
@@ -18,31 +18,31 @@
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
 }
 
-.wgsa-tray--open {
+.wgsa-drawer--open {
   transform: translateY(calc(-100% + 3rem));
 }
 
-.wgsa-tray-enter {
+.wgsa-drawer-enter {
   transform: translateY(3rem);
 }
 
-.wgsa-tray-enter.wgsa-tray-enter-active {
+.wgsa-drawer-enter.wgsa-drawer-enter-active {
   transform: translateY(0);
   transition: .28s cubic-bezier(.4,0,.2,1);
   transition-property: transform;
 }
 
-.wgsa-tray-leave {
+.wgsa-drawer-leave {
   transform: translateY(0);
 }
 
-.wgsa-tray-leave.wgsa-tray-leave-active {
+.wgsa-drawer-leave.wgsa-drawer-leave-active {
   transform: translateY(3rem);
   transition: .28s cubic-bezier(.4,0,.2,1);
   transition-property: transform;
 }
 
-.wgsa-tray__header {
+.wgsa-drawer__header {
   align-items: center;
   background: #222;
   color: #fff;
@@ -57,7 +57,7 @@
   cursor: pointer;
 }
 
-.wgsa-tray__content {
+.wgsa-drawer__content {
   background: #fff;
   border-left: 1px solid rgba(0, 0, 0, 0.14);
   border-right: 1px solid rgba(0, 0, 0, 0.14);
@@ -65,56 +65,7 @@
   padding: 1.5rem 1.75rem;
 }
 
-.wgsa-collection-summary {
-  display: flex;
-  font-size: 1rem;
-  font-weight: 500;
-  justify-content: flex-end;
-  margin: 0 0 1rem;
-}
-
-.wgsa-collection-summary dt {
-  font-weight: 400;
-}
-
-.wgsa-collection-summary dt::after {
-  content: ":";
-}
-
-.wgsa-collection-summary dd {
-  color: #673c90;
-  margin-left: 0.5em;
-  margin-right: 1.5em;
-}
-
-.wgsa-collection-summary dd:last-of-type {
-  margin-right: 0;
-}
-
-.wgsa-tray .mdl-textfield {
-  padding: 1rem 0;
-  width: 100%;
-}
-
-.wgsa-tray .mdl-textfield__label {
-  top: 1.25rem;
-}
-
-.mdl-textfield--floating-label.is-focused .mdl-textfield__label,
-.mdl-textfield--floating-label.is-dirty .mdl-textfield__label,
-.mdl-textfield--floating-label.has-placeholder .mdl-textfield__label {
-  top: -0.25rem;
-}
-
-.wgsa-tray .mdl-textfield__label::after {
-  bottom: 1rem !important;
-}
-
-.wgsa-tray textarea {
-  resize: none;
-}
-
-.wgsa-tray-actions {
+.wgsa-drawer-actions {
   display: flex;
   justify-content: flex-end;
 }

@@ -1,7 +1,5 @@
 import { createAsyncConstants } from '../actions';
 
-import { createCollection as createCollectionPromise } from './utils';
-
 export const ADD_FASTAS = 'ADD_FASTAS';
 
 function addFastas(fastas) {
@@ -21,20 +19,6 @@ function updateFastaProgress(name, progress) {
     payload: {
       name,
       progress,
-    },
-  };
-}
-
-export const CREATE_COLLECTION = createAsyncConstants('CREATE_COLLECTION');
-
-function createCollection(files, metadata) {
-  const speciesId = files[0].speciesId;
-  return {
-    type: CREATE_COLLECTION,
-    payload: {
-      speciesId,
-      metadata,
-      promise: createCollectionPromise(files, speciesId, metadata),
     },
   };
 }
@@ -66,23 +50,10 @@ function showMetric(metric) {
   };
 }
 
-export const CHANGE_COLLECTION_METADATA = 'CHANGE_COLLECTION_METADATA';
-
-function changeCollectionMetadata(field, value) {
-  return {
-    type: CHANGE_COLLECTION_METADATA,
-    payload: {
-      [field]: value,
-    },
-  };
-}
-
 export default {
   addFastas,
   updateFastaProgress,
-  createCollection,
   removeFasta,
   undoRemoveFasta,
   showMetric,
-  changeCollectionMetadata,
 };
