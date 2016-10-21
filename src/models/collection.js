@@ -50,11 +50,8 @@ function notifyUploadProgress(collection, assemblyIds, files) {
     return memo;
   }, {});
 
-  const message = {
-    ...collection,
-    assemblyIdToNameMap,
-    collectionSize,
-  };
+  const message =
+    Object.assign({ assemblyIdToNameMap, collectionSize }, collection);
 
   const { collectionId } = collection;
   return new Promise((resolve, reject) => {
@@ -198,14 +195,17 @@ function get({ collectionId, speciesId }, callback) {
     function (metadata, done) {
       const assemblyIds = Object.keys(metadata.assemblyIdToNameMap);
       const params = { speciesId, assemblyIds };
-      getAssemblies(params, assemblyModel.getComplete, done);
+      getAssemblies(params, assemblyModel.getComplete, (error, assemblies) => {
+        if (error) return done(error);
+        done(null, assemblies, metadata);
+      });
     },
-    function (assemblies, done) {
+    function (assemblies, metadata, done) {
       const subtypes = assemblyModel.groupAssembliesBySubtype(assemblies);
       async.parallel({
         subtrees: addPublicAssemblyCounts.bind(null, subtypes, collectionId),
         tree: getTree.bind(null, collectionId),
-      }, (error, { tree, subtrees, metadata }) => {
+      }, (error, { tree, subtrees }) => {
         if (error) {
           done(error);
           return;
