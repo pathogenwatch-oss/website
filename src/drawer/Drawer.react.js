@@ -9,6 +9,7 @@ export default React.createClass({
     children: React.PropTypes.node,
     visible: React.PropTypes.bool,
     isOpen: React.PropTypes.bool,
+    onClose: React.PropTypes.func,
   },
 
   getDefaultProps() {
@@ -25,6 +26,11 @@ export default React.createClass({
   },
 
   onHeaderClick() {
+    if (this.props.isOpen) {
+      this.props.onClose();
+      return;
+    }
+
     this.setState({
       open: !this.state.open,
     });

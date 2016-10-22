@@ -2,7 +2,7 @@ import { combineReducers } from 'redux';
 
 import aboutCollectionOpen from '../about-collection-dropdown/reducer';
 import antibiotics from '../reducers/antibiotics';
-import { reducer as assemblyDetail } from '../assembly-detail-view';
+import { reducer as assemblyDrawer } from '../assembly-drawer';
 import bodyClickListener from '../reducers/bodyClickListener';
 import { assemblies, collection, reference } from '../reducers/collection';
 import downloads from '../reducers/downloads';
@@ -32,7 +32,7 @@ function createReducer({ actions, initialState }) {
 }
 
 const rootReducer = combineReducers({
-  assemblyDetail,
+  assemblyDrawer,
   bodyClickListener,
   collection: createReducer(collection),
   display: combineReducers({

@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { showAssemblyDetails } from '../assembly-detail-view';
+import { showAssemblyDetails } from '../assembly-drawer';
 
 function mapDispatchToProps(dispatch, ownProps) {
   return {
