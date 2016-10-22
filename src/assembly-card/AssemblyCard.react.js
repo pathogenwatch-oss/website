@@ -3,7 +3,7 @@ import React from 'react';
 import Card from '../card';
 import ProgressBar from '../components/ProgressBar.react';
 
-import FastaMetadata from './FastaMetadata.react';
+import AssemblyMetadata from './AssemblyMetadata.react';
 import DefaultFooter from './DefaultFooter.react';
 
 import FastaError from './FastaError.react';
@@ -27,7 +27,7 @@ function getCardComponents(props) {
 
   if (props.speciesKey) {
     return {
-      content: <FastaMetadata {...props} />,
+      content: <AssemblyMetadata {...props} />,
       footer: <DefaultFooter {...props} />,
     };
   }

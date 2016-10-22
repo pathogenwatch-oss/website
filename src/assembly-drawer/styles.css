@@ -1,8 +1,12 @@
-.wgsa-assembly-details {
-  background: #fff;
-  padding: 32px;
+.wgsa-assembly-drawer-content {
+  padding: 24px;
 }
 
-.wgsa-assembly-details-title {
+.wgsa-assembly-drawer-content.wgsa-hub-stats-view {
+  padding-right: 0;
+  margin: 0;
+}
 
+.wgsa-assembly-drawer-content .wgsa-hub-stats-section {
+  margin-bottom: 24px;
 }

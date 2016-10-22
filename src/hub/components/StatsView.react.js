@@ -85,11 +85,11 @@ export const StatsView =
         </div>
         <dl className="wgsa-hub-stats-section wgsa-hub-stats-section--small">
           <dt className="wgsa-hub-stats-heading">Average</dt>
-          <dd className="wgsa-hub-stats-bigstat">{average}</dd>
+          <dd className="wgsa-hub-stats-value wgsa-hub-stats-value--large">{average}</dd>
         </dl>
         <dl className="wgsa-hub-stats-section wgsa-hub-stats-section--small">
           <dt className="wgsa-hub-stats-heading">Range</dt>
-          <dd className="wgsa-hub-stats-bigstat">
+          <dd className="wgsa-hub-stats-value wgsa-hub-stats-value--large">
             {`${range.min} - ${range.max}`}
           </dd>
         </dl>

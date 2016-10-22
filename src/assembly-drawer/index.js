@@ -32,7 +32,7 @@ export function reducer(state = initialState, { type, payload }) {
 }
 
 export function getSelectedAssembly({ assemblyDrawer, entities: { fastas } }) {
-  return assemblyDrawer.name ? fastas[assemblyDrawer.name] : {};
+  return assemblyDrawer.name ? fastas[assemblyDrawer.name] : null;
 }
 
 function mapStateToProps(state) {
