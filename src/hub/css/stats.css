@@ -10,7 +10,7 @@
   margin: 0;
   width: 100%;
   box-sizing: border-box;
-  padding-right: 2rem;
+  padding-right: 24px;
 }
 
 .wgsa-hub-stats-section--small {
@@ -28,13 +28,19 @@
   border-top: 1px solid #673c90;
 }
 
+.wgsa-hub-stats-heading--large {
+  padding-top: 8px;
+  font-size: 1.25rem;
+  line-height: 1.5;
+}
+
 .wgsa-hub-stats-heading > button {
   background: none;
   border: none;
   color: rgba(0, 0, 0, 0.54);
   font-family: "Roboto Condensed", "Helvetica", "Arial", sans-serif;
-  font-size: 1.25rem;
-  line-height: 1.5;
+  font-size: inherit;
+  line-height: inherit;
   margin-right: 24px;
   outline: none;
   padding: 0;
@@ -45,6 +51,28 @@
 .wgsa-hub-stats-heading > button:active,
 .wgsa-hub-stats-heading > button.active {
   color: #673c90;
+}
+
+.wgsa-hub-stats-value {
+  color: rgba(0, 0, 0, 0.87);
+  line-height: 1.1;
+  margin: 0;
+  text-align: center;
+}
+
+.wgsa-hub-stats-value--large {
+  color: rgba(0, 0, 0, 0.54);
+  font-size: 4rem;
+  font-weight: 100;
+}
+
+.is-small-screen .wgsa-hub-stats-value--large {
+  font-size: 2rem;
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.wgsa-clickable-point {
+  cursor: pointer;
 }
 
 .wgsa-chart-tooltip {
@@ -71,23 +99,4 @@
 
 .wgsa-chart-tooltip dd {
   margin: 0;
-}
-
-.wgsa-hub-stats-value {
-  color: rgba(0, 0, 0, 0.87);
-  font-weight: 500;
-  line-height: 1.1;
-  margin: 0;
-  text-align: center;
-}
-
-.wgsa-hub-stats-value--large {
-  color: rgba(0, 0, 0, 0.54);
-  font-size: 4rem;
-  font-weight: 100;
-}
-
-.is-small-screen .wgsa-hub-stats-value--large {
-  font-size: 2rem;
-  color: rgba(0, 0, 0, 0.87);
 }
