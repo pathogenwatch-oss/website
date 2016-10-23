@@ -12,15 +12,11 @@ import { taxIdMap } from '../species';
 const CreateCollectionForm = React.createClass({
 
   componentDidMount() {
-    componentHandler.upgradeElements(this.formElements);
+    componentHandler.upgradeElements(Array.from(this.formElements));
   },
 
   componentDidUpdate(previously) {
-    if (!previously.visible && this.props.visible) {
-      componentHandler.upgradeElements(this.formElements);
-    }
-
-    if (!previously.visible && this.props.visible && this.state.open) {
+    if (!previously.open && this.props.open) {
       this.firstInput.focus();
     }
   },
@@ -29,10 +25,12 @@ const CreateCollectionForm = React.createClass({
     if (!this.firstInput) {
       this.firstInput = element.querySelector('input');
     }
-    this.formElements.push(element);
+    if (!this.formElements.has(element)) {
+      this.formElements.add(element);
+    }
   },
 
-  formElements: [],
+  formElements: new Set(),
   firstInput: null,
 
   render() {

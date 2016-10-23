@@ -59,7 +59,7 @@ export default React.createClass({
               <i className="material-icons">{`expand_${this.state.open ? 'more' : 'less'}`}</i>
             </button>
           </header>
-          {this.props.children}
+          {React.cloneElement(this.props.children, { open: this.state.open })}
         </aside>
         : null
       }
