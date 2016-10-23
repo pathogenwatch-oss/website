@@ -45,7 +45,7 @@ export default React.createClass({
         transitionLeaveTimeout={280}
       >
       { this.props.visible ?
-        <aside key="create-collection-tray" className={classnames('wgsa-drawer', { 'wgsa-drawer--open': this.state.open })}>
+        <aside key="wgsa-drawer" className={classnames('wgsa-drawer', { 'wgsa-drawer--open': this.state.open })}>
           <header className="wgsa-drawer__header" onClick={this.onHeaderClick}>
             {this.props.title}
             <button className="mdl-button mdl-button--icon">

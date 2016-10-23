@@ -68,6 +68,10 @@
 
 /* Tabs */
 
+.mdl-tabs__tab.is-active {
+  color: #673c90 !important;
+}
+
 .mdl-tabs__tab .mdl-tabs__ripple-container .mdl-ripple {
   background: #673c90 !important;
 }
