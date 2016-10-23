@@ -70,7 +70,7 @@ const AssemblyDrawerContent = React.createClass({
 });
 
 export default ({ assembly, onClose, ...props }) => (
-  <Drawer {...props} isOpen onClose={onClose}>
+  <Drawer {...props} isOpen onClose={onClose} animationKey={assembly && assembly.name}>
     <AssemblyDrawerContent assembly={assembly} />
   </Drawer>
 );

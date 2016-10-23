@@ -40,12 +40,19 @@ export default React.createClass({
     return (
       <ReactCSSTransitionGroup
         className="wgsa-drawer-container"
-        transitionName="wgsa-drawer"
-        transitionEnterTimeout={280}
-        transitionLeaveTimeout={280}
+        transitionName={`wgsa${this.props.isOpen ? '-open-' : '-'}drawer`}
+        transitionEnterTimeout={280 * (this.props.isOpen ? 2 : 1)}
+        transitionLeaveTimeout={280 * (this.props.isOpen ? 2 : 1)}
       >
       { this.props.visible ?
-        <aside key="wgsa-drawer" className={classnames('wgsa-drawer', { 'wgsa-drawer--open': this.state.open })}>
+        <aside
+          key={this.props.animationKey || 'wgsa-drawer'}
+          className={classnames(
+            'wgsa-drawer',
+            { 'wgsa-drawer--open': !this.props.isOpen && this.state.open },
+            { 'wgsa-open-drawer': this.props.isOpen }
+          )}
+        >
           <header className="wgsa-drawer__header" onClick={this.onHeaderClick}>
             {this.props.title}
             <button className="mdl-button mdl-button--icon">
