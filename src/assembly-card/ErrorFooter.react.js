@@ -18,14 +18,14 @@ export default (file) => {
     case errors.EMPTY_FILE:
       return (
         <Footer>
-          <RemoveButton name={name} primary />
+          <RemoveButton name={file.name} primary />
         </Footer>
       );
     default:
       return (
         <Footer>
           <RetryButton file={file} />
-          <RemoveButton name={name} />
+          <RemoveButton name={file.name} />
         </Footer>
       );
   }
