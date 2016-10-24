@@ -68,6 +68,11 @@
 
 /* Tabs */
 
+.mdl-tabs__tab {
+  font-family: Roboto, arial, sans-serif;
+  font-weight: 500;
+}
+
 .mdl-tabs__tab.is-active {
   color: #673c90 !important;
 }

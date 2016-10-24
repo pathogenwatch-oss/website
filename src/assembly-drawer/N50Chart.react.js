@@ -5,8 +5,16 @@ import {
   XAxis,
   YAxis,
   ReferenceLine,
-  Tooltip,
+  // Tooltip,
 } from 'recharts';
+
+// import ChartTooltip from '../chart-tooltip';
+
+// const TooltipContent = ({ payload }) =>
+//   <ChartTooltip
+//     heading="Sum"
+//     value={payload.sum}
+//   />;
 
 export default React.createClass({
 
@@ -15,6 +23,8 @@ export default React.createClass({
     const { sumsOfNucleotidesInDnaStrings, assemblyN50Data } = metrics;
 
     const data = sumsOfNucleotidesInDnaStrings.map(sum => ({ sum }));
+    const n50Index = assemblyN50Data.sequenceNumber - 1;
+
     return (
       <LineChart
         width={440}
@@ -22,12 +32,32 @@ export default React.createClass({
         data={data}
         margin={{ top: 16, right: 8, left: 16, bottom: 16 }}
       >
-       <XAxis dataKey="name" tickFormatter={() => null} />
-       <YAxis tickLine={false} />
-       <Tooltip />
-       <Line type="monotone" dataKey="sum" stroke="#673c90" />
-       <ReferenceLine x={assemblyN50Data.sequenceNumber - 1} label="N50" stroke="rgba(0, 0, 0, 0.54)" strokeDasharray="4 4" />
-       <ReferenceLine y={assemblyN50Data.sum} stroke="rgba(0, 0, 0, 0.54)" strokeDasharray="4 4" />
+        <XAxis dataKey="name" tickFormatter={() => null} />
+        <YAxis tickLine={false} />
+        {/* <Tooltip
+          cursor={{ stroke: 'none' }}
+          offset={8}
+          content={<TooltipContent />}
+          isAnimationActive={false}
+        /> */}
+        <Line
+          type="monotone"
+          dataKey="sum"
+          stroke="#673c90"
+          dot={{ stroke: 'none', fill: '#a386bd', r: 4 }}
+          isAnimationActive={false}
+        />
+        <ReferenceLine
+          x={n50Index}
+          label={`Contig ${assemblyN50Data.sequenceNumber}`}
+          stroke="rgba(0, 0, 0, 0.54)"
+          strokeDasharray="4 4"
+        />
+        <ReferenceLine
+          y={assemblyN50Data.sum}
+          stroke="rgba(0, 0, 0, 0.54)"
+          strokeDasharray="4 4"
+        />
       </LineChart>
     );
   },

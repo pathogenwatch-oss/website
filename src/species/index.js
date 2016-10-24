@@ -31,7 +31,6 @@ export const referenceCollections = sortBy(
   [ 'title' ]
 );
 
-
 let currentSpecies = {};
 
 export const isSupported = ({ speciesId }) => !!speciesId; // cast to boolean

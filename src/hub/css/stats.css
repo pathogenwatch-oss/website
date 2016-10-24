@@ -74,29 +74,3 @@
 .wgsa-clickable-point {
   cursor: pointer;
 }
-
-.wgsa-chart-tooltip {
-  background: rgba(255, 255, 255, 0.87);
-  padding: 8px;
-}
-
-.wgsa-chart-tooltip__heading {
-  font-size: 1rem;
-  line-height: 1;
-  font-weight: 500;
-  margin: 0 0 4px;
-  color: #673c90;
-}
-
-.wgsa-chart-tooltip dl {
-  margin: 0;
-  font-size: 1rem;
-}
-
-.wgsa-chart-tooltip dt {
-  display: none;
-}
-
-.wgsa-chart-tooltip dd {
-  margin: 0;
-}

@@ -6,19 +6,19 @@ import {
 } from 'recharts';
 import { connect } from 'react-redux';
 
+import ChartTooltip from '../../chart-tooltip';
+
 import * as selectors from '../selectors/stats';
 
 import { showAssemblyDetails } from '../../assembly-drawer';
 import actions from '../actions';
 
 const TooltipContent = ({ payload: [ index, assemblyLength ], data }) => (
-  <div className="wgsa-chart-tooltip">
-    <h3 className="wgsa-chart-tooltip__heading">{data[index.value].name}</h3>
-    <dl>
-      <dt>Assembly Length</dt>
-      <dd>{assemblyLength.value}</dd>
-    </dl>
-  </div>
+  <ChartTooltip
+    heading={data[index.value].name}
+    description="Assembly Length"
+    value={assemblyLength.value}
+  />
 );
 
 const charts = [
@@ -83,13 +83,12 @@ export const StatsView =
                 onClick={onPointClick}
               />
               <Tooltip
-                cursor={{ stroke: 'transparent' }}
-                offset={12}
+                cursor={{ stroke: 'none' }}
+                offset={8}
                 content={<TooltipContent data={chartData} />}
               />
             </ScatterChart>
           </ResponsiveContainer>
-          {/* <TooltipContent items={data} payload={[ { value: 0 }, { value: data[0].value } ]} /> */}
         </div>
         <dl className="wgsa-hub-stats-section wgsa-hub-stats-section--small">
           <dt className="wgsa-hub-stats-heading">Average</dt>
