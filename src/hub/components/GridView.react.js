@@ -2,9 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import Grid from '../../grid';
-import GridItem from './GridItem.react';
+import AssemblyCard from '../../assembly-card';
 
-import { getVisibleFastas } from '../selectors';
+import { getVisibleFastas } from '../../hub-filter/selectors';
 
 export const GridView = React.createClass({
 
@@ -16,10 +16,10 @@ export const GridView = React.createClass({
     const { items } = this.props;
     return (
       <Grid
-        template={GridItem}
+        template={AssemblyCard}
         items={items}
         columnWidth={256}
-        rowHeight={160}
+        rowHeight={176}
       />
     );
   },

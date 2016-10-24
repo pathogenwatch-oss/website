@@ -21,7 +21,7 @@
   background: #fff;
   box-sizing: border-box;
   height: 100%;
-  padding: 8px;
+  padding: 0;
 }
 
 .wgsa-card-footer {
@@ -33,8 +33,43 @@
   display: flex;
   flex-direction: row-reverse;
   justify-content: space-between;
+  align-items: center;
 }
 
-.wgsa-card:hover .wgsa-card-footer {
+.wgsa-card:hover .wgsa-card-footer,
+.wgsa-card-footer--visible {
   visibility: visible;
+}
+
+.wgsa-card-metadata {
+  align-items: bottom;
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 4px;
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.wgsa-card-metadata i {
+  font-size: 16px;
+  padding-right: 4px;
+  line-height: 18px;
+}
+
+.wgsa-card-metadata span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.wgsa-card-metadata-inliner {
+  display: flex;
+  font-size: 13px;
+}
+
+.wgsa-card-metadata-inliner .wgsa-card-metadata {
+  margin-left: 8px;
+}
+
+.wgsa-card-metadata-inliner .wgsa-card-metadata:first-child {
+  margin-left: 0;
 }

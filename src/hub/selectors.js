@@ -1,8 +1,6 @@
 import { createSelector } from 'reselect';
 import sortBy from 'lodash.sortby';
 
-import { selectors as filter } from '../hub-filter';
-
 export const getFastas = ({ entities }) => entities.fastas;
 
 export const getFastasAsList = createSelector(
@@ -56,16 +54,4 @@ export const getNumCompletedUploads = createSelector(
   getBatchSize,
   getNumRemainingUploads,
   (batchSize, numRemaining) => batchSize - numRemaining,
-);
-
-export const isFilterActive = state => {
-  if (getTotalFastas(state) === 0) return false;
-  return filter.isActive(state);
-};
-
-export const getVisibleFastas = filter.getIncludedItems(getOrderedFastas);
-
-export const getNumberOfVisibleFastas = createSelector(
-  getVisibleFastas,
-  fastas => fastas.length,
 );

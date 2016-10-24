@@ -4,7 +4,7 @@ import FileDragAndDrop from '../../components/DragAndDrop.react';
 
 import Filter from '../../hub-filter';
 import Summary from './Summary.react';
-import CreateCollectionTray from './CreateCollectionTray.react.js';
+import HubDrawer from '../../hub-drawer';
 
 import { addFiles } from '../thunks';
 import { toggleAside } from '../../header';
@@ -77,7 +77,7 @@ export default React.createClass({
           }
         </div>
         <Filter filterActive={filterActive} />
-        <CreateCollectionTray />
+        <HubDrawer />
       </FileDragAndDrop>
     );
   },

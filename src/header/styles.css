@@ -7,7 +7,8 @@
 }
 .wgsa-has-aside ~ .mdl-layout__content,
 .wgsa-has-aside ~ .mdl-layout__content .wgsa-drag-and-drop__button,
-.wgsa-has-aside ~ .mdl-layout__content .wgsa-tray-container {
+.wgsa-has-aside ~ .mdl-layout__content .wgsa-drawer-container,
+.wgsa-has-aside ~ .mdl-layout__content ~ .wgsa-drawer-container {
   margin-right: 255px;
 }
 

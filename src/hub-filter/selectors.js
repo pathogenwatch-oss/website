@@ -1,10 +1,22 @@
 import { createSelector } from 'reselect';
 import sortBy from 'lodash.sortby';
 
-import { getOrderedFastas } from '../hub/selectors';
+import { getOrderedFastas, getTotalFastas } from '../hub/selectors';
 import { selectors as filter } from './filter';
 
 import { isSupported } from '../species';
+
+export const isFilterActive = state => {
+  if (getTotalFastas(state) === 0) return false;
+  return filter.isActive(state);
+};
+
+export const getVisibleFastas = filter.getIncludedItems(getOrderedFastas);
+
+export const getNumberOfVisibleFastas = createSelector(
+  getVisibleFastas,
+  fastas => fastas.length,
+);
 
 function incrementSummary(map, key, newEntry) {
   const summary = map.get(key) || {

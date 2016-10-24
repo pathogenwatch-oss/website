@@ -10,6 +10,7 @@ import Header from '../header';
 import Toast from '../toast';
 import DownloadsMenu from '../components/explorer/DownloadsMenu.react';
 import NavLink from '../location';
+import AssemblyDrawer from '../assembly-drawer';
 
 import { locationChange } from '../location';
 
@@ -99,6 +100,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(React.createClass({
         </main>
         <DownloadsMenu />
         <Toast />
+        <AssemblyDrawer />
       </div>
     );
   },

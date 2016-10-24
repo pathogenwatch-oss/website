@@ -8,6 +8,7 @@ import { Summary as FilterSummary, Totals } from '../../filter-summary';
 import ProgressBar from '../../components/ProgressBar.react';
 
 import * as selectors from '../selectors';
+import { getNumberOfVisibleFastas } from '../../hub-filter/selectors';
 
 const mapLocationFromState = ({ location }) => ({ location });
 
@@ -68,7 +69,7 @@ function mapStateToProps(state) {
   return {
     batchSize: selectors.getBatchSize(state),
     completedUploads: selectors.getNumCompletedUploads(state),
-    visibleFastas: selectors.getNumberOfVisibleFastas(state),
+    visibleFastas: getNumberOfVisibleFastas(state),
     totalFastas: selectors.getTotalFastas(state),
   };
 }

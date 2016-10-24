@@ -1,0 +1,26 @@
+.wgsa-collection-summary {
+  justify-content: flex-end;
+}
+
+.wgsa-create-collection-form .mdl-textfield {
+  padding: 1rem 0;
+  width: 100%;
+}
+
+.wgsa-create-collection-form .mdl-textfield__label {
+  top: 1.25rem;
+}
+
+.mdl-textfield--floating-label.is-focused .mdl-textfield__label,
+.mdl-textfield--floating-label.is-dirty .mdl-textfield__label,
+.mdl-textfield--floating-label.has-placeholder .mdl-textfield__label {
+  top: -0.25rem;
+}
+
+.wgsa-create-collection-form .mdl-textfield__label::after {
+  bottom: 1rem !important;
+}
+
+.wgsa-create-collection-form textarea {
+  resize: none;
+}

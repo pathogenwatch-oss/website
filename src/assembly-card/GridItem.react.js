@@ -2,7 +2,9 @@ import '../../card/styles.css';
 
 import React from 'react';
 
+import AssemblyCard from '../../assembly-card';
 import ProgressBar from '../../components/ProgressBar.react';
+
 import FastaMetadata from './FastaMetadata.react';
 import FastaError from './FastaError.react';
 
@@ -14,7 +16,7 @@ function getProgressBar(progress) {
   );
 }
 
-function getContent(props) {
+export default props => {
   if (props.error) {
     return (<FastaError {...props} />);
   }
@@ -24,18 +26,16 @@ function getContent(props) {
   }
 
   if (props.uploadAttempted) {
-    return getProgressBar(props.progress);
+    return (
+      <AssemblyCard {...props}>
+        { getProgressBar(props.progress) }
+      </AssemblyCard>
+    );
   }
 
-  return (<small>Upload pending</small>);
-}
-
-export default props => {
-  const name = props.metadata ? props.metadata.assemblyName : props.name;
   return (
-    <article className="wgsa-card wgsa-assembly-card">
-      <h2 className="wgsa-card-title" title={name}>{name}</h2>
-      { getContent(props) }
-    </article>
+    <AssemblyCard {...props}>
+      <small>Upload pending</small>
+    </AssemblyCard>
   );
 };

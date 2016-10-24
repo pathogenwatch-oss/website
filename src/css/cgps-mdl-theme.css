@@ -68,6 +68,15 @@
 
 /* Tabs */
 
+.mdl-tabs__tab {
+  font-family: Roboto, arial, sans-serif;
+  font-weight: 500;
+}
+
+.mdl-tabs__tab.is-active {
+  color: #673c90 !important;
+}
+
 .mdl-tabs__tab .mdl-tabs__ripple-container .mdl-ripple {
   background: #673c90 !important;
 }
@@ -76,6 +85,14 @@
   background: #673c90;
 }
 
+.wgsa-tab-actions {
+  align-self: stretch;
+  flex-grow: 1;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0 8px;
+}
 
 /* Spinner */
 
@@ -101,6 +118,10 @@
 
 .mdl-button--primary {
   color: #673c90 !important;
+}
+
+.mdl-button--primary[disabled] {
+  color: rgba(0, 0, 0, 0.54) !important;
 }
 
 .mdl-button--raised.mdl-button--colored {
