@@ -13,7 +13,6 @@ const metadataFilePath = fspath.join(referencesDir, 'refseq-archaea-bacteria-fun
 const specieator = createMashSpecieator(sketchFilePath, metadataFilePath);
 
 const collectionModel = require('models/collection');
-const assemblyModel = require('models/assembly');
 const analyse = require('wgsa-front-end/universal/fastaAnalysis');
 
 const LOGGER = require('utils/logging').createLogger('Upload');
@@ -66,37 +65,9 @@ router.post('/collection', (req, res, next) => {
     return res.sendStatus(400);
   }
 
-  collectionModel.add({
-    speciesId,
-    title,
-    description,
-    assemblyNames: files.map(_ => _.name),
-  }, (error, result) => {
-    if (error) {
-      return next(error);
-    }
-
-    const { collectionId, assemblyNameToAssemblyIdMap } = result;
-
-    const uploads =
-      files.map(file => {
-        const { id, name, metadata = { assemblyName: name }, metrics } = file;
-        const assemblyId = assemblyNameToAssemblyIdMap[name];
-        return (
-          fastaStorage.retrieve(fastaStoragePath, id).
-            then(sequences =>
-              assemblyModel.beginUpload(
-                { speciesId, collectionId, assemblyId },
-                { sequences, metadata, metrics }
-              )
-            )
-        );
-      });
-
-    Promise.all(uploads).
-      then(() => res.json({ collectionId })).
-      catch(e => next(e));
-  });
+  return collectionModel.add({ title, description, speciesId, files }).
+    then(collectionId => res.json({ collectionId })).
+    catch(e => next(e));
 });
 
 module.exports = router;
