@@ -4,18 +4,21 @@ import * as selectors from '../selectors';
 
 import { isSupported } from '../../species';
 
-export const getVisibleSupportedSpecies = createSelector(
+export const getVisibleSpecies = createSelector(
   selectors.getVisibleFastas,
   fastas => fastas.reduce((memo, fasta) => {
-    if (!isSupported(fasta)) return memo;
-    memo.add(fasta.speciesId);
+    if (isSupported(fasta)) {
+      memo.supported.add(fasta.speciesId);
+    } else {
+      memo.unsupported.add(fasta.speciesKey); // no species id for unsupported
+    }
     return memo;
-  }, new Set())
+  }, { supported: new Set(), unsupported: new Set() })
 );
 
 export const isSupportedSpeciesSelected = createSelector(
-  getVisibleSupportedSpecies,
-  species => species.size === 1
+  getVisibleSpecies,
+  species => species.unsupported.size === 0 && species.supported.size === 1
 );
 
 export const canCreateCollection = createSelector(
@@ -27,11 +30,11 @@ export const canCreateCollection = createSelector(
 );
 
 export const getCollectionSummary = createSelector(
-  getVisibleSupportedSpecies,
+  getVisibleSpecies,
   selectors.getNumberOfVisibleFastas,
-  (speciesIds, numAssemblies) => ({
+  ({ supported }, numAssemblies) => ({
     numAssemblies,
-    speciesId: Array.from(speciesIds)[0],
+    speciesId: Array.from(supported)[0],
   })
 );
 

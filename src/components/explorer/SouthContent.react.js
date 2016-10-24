@@ -106,9 +106,13 @@ function mapStateToProps(state) {
 }
 
 function mapStateToColumn(column, state, dispatch) {
-  return column.addState ?
-    column.addState(state, dispatch) :
-    addColumnWidth(column, state);
+  column.isSelected = state.activeColumns.has(column);
+
+  return (
+    column.addState ?
+      column.addState(state, dispatch) :
+      addColumnWidth(column, state)
+  );
 }
 
 function mergeProps(state, { dispatch }, props) {

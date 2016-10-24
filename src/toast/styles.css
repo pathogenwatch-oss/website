@@ -1,0 +1,62 @@
+.wgsa-toast-container {
+  position: fixed;
+  bottom: 0px;
+  left: 24px;
+  z-index: 6;
+  height: 0;
+  overflow: visible;
+}
+
+.wgsa-toast {
+  background-color: #323232;
+  color: white;
+  min-width: 288px;
+  max-width: 568px;
+  border-radius: 3px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px 24px;
+  transform: translateY(calc(-100% - 24px));
+}
+
+.wgsa-toast-enter {
+  transform: translateY(0);
+}
+
+.wgsa-toast-enter.wgsa-toast-enter-active {
+  transform: translateY(calc(-100% - 24px));
+  transition: transform .28s cubic-bezier(0.165,0.840,0.440,1.000);
+  transition-property: transform;
+}
+
+.wgsa-toast-leave {
+  transform: translateY(calc(-100% - 24px));
+}
+
+.wgsa-toast-leave.wgsa-toast-leave-active {
+  transform: translateY(0);
+  transition: opacity .2s, transform .28s cubic-bezier(0.165,0.840,0.440,1.000);
+  transition-property: transform;
+}
+
+.wgsa-toast .mdl-button:focus {
+  background-color: rgba(158, 158, 158, .2);
+}
+
+.wgsa-toast__action {
+  text-transform: uppercase;
+  color: #87c7a6;
+  cursor: pointer;
+  margin-left: 40px; /* + 8px padding = 48px */
+}
+
+.wgsa-toast__message {
+  font-size: 14px;
+  flex-grow: 1;
+}
+
+.wgsa-toast__dismiss {
+  margin-left: 8px;
+  margin-right: -8px;
+}

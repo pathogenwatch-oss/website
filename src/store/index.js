@@ -1,3 +1,4 @@
+import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 
 import { promiseToThunk } from '../middleware';
@@ -5,12 +6,12 @@ import rootReducer from '../reducers';
 
 const middleware = [ promiseToThunk, thunk ];
 
-const getStore =
-  process.env.NODE_ENV === 'production' ?
-    require('./prod').default :
-    require('./dev').default;
+const isDev = process.env.NODE_ENV !== 'production';
 
-const store = getStore(middleware, rootReducer);
+const store = compose(
+  applyMiddleware(...middleware),
+  isDev && window.devToolsExtension ? window.devToolsExtension() : f => f
+)(createStore)(rootReducer);
 
 export default store;
 

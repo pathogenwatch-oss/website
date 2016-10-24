@@ -21,11 +21,10 @@ export default {
   collections: [
     { id: 'z46p4t05f7gk',
       // name: '',
-      author: (<span>Initial Subset of Genomes from GenBank</span>),
-      title: (
-        <em>Click to view</em>
-      ),
+      author: 'Initial Subset of Genomes from GenBank',
+      title: '_Initial Subset of Genomes from GenBank_',
       // pmid: '23270620',
+      numberOfAssemblies: 53,
     },
   ],
   uiOptions: {

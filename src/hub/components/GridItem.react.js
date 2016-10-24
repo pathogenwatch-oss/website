@@ -1,3 +1,5 @@
+import '../../card/styles.css';
+
 import React from 'react';
 
 import ProgressBar from '../../components/ProgressBar.react';
@@ -21,17 +23,19 @@ function getContent(props) {
     return (<FastaMetadata {...props} />);
   }
 
-  return getProgressBar(props.progress);
+  if (props.uploadAttempted) {
+    return getProgressBar(props.progress);
+  }
+
+  return (<small>Upload pending</small>);
 }
 
 export default props => {
   const name = props.metadata ? props.metadata.assemblyName : props.name;
   return (
-    <article style={props.style}>
-      <div className="wgsa-hub-card">
-        <h2 className="wgsa-hub-card__title" title={name}>{name}</h2>
-        { getContent(props) }
-      </div>
+    <article className="wgsa-card wgsa-assembly-card">
+      <h2 className="wgsa-card-title" title={name}>{name}</h2>
+      { getContent(props) }
     </article>
   );
 };

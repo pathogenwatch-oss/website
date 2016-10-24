@@ -25,34 +25,6 @@ function updateFastaProgress(name, progress) {
   };
 }
 
-export const FILTER_BY_TEXT = 'FILTER_BY_TEXT';
-
-function filterByText(searchText) {
-  return {
-    type: FILTER_BY_TEXT,
-    payload: {
-      searchText,
-    },
-  };
-}
-
-export const FILTER_BY_METADATA = 'FILTER_BY_METADATA';
-
-function filterByMetadata(key, value) {
-  return {
-    type: FILTER_BY_METADATA,
-    key, value,
-  };
-}
-
-export const CLEAR_FILTER = 'CLEAR_FILTER';
-
-function clearFilter() {
-  return {
-    type: CLEAR_FILTER,
-  };
-}
-
 export const CREATE_COLLECTION = createAsyncConstants('CREATE_COLLECTION');
 
 function createCollection(files, metadata) {
@@ -61,6 +33,7 @@ function createCollection(files, metadata) {
     type: CREATE_COLLECTION,
     payload: {
       speciesId,
+      metadata,
       promise: createCollectionPromise(files, speciesId, metadata),
     },
   };
@@ -107,9 +80,6 @@ function changeCollectionMetadata(field, value) {
 export default {
   addFastas,
   updateFastaProgress,
-  filterByText,
-  clearFilter,
-  filterByMetadata,
   createCollection,
   removeFasta,
   undoRemoveFasta,

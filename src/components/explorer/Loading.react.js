@@ -7,28 +7,16 @@ import { connect } from 'react-redux';
 
 import Spinner from '^/components/Spinner.react';
 
-import { updateHeader } from '^/actions/header';
-
 import { statuses } from '^/constants/collection';
 
-import { UPLOAD_FAILED } from '^/stores/FileUploadingStore';
-
 import Species from '^/species';
-import { CGPS } from '^/defaults';
+import { CGPS } from '^/app/constants';
 
 const backgroundStyle = {
   background: CGPS.COLOURS.GREY_LIGHT,
 };
 
 const Background = connect()(React.createClass({
-
-  componentWillMount() {
-    this.props.dispatch(updateHeader({
-      speciesName: Species.formattedName,
-      classNames: 'mdl-layout__header--primary mdl-shadow--3dp',
-      content: null,
-    }));
-  },
 
   componentDidMount() {
     componentHandler.upgradeDom();
@@ -38,7 +26,7 @@ const Background = connect()(React.createClass({
     return (
       <div style={backgroundStyle} className="wgsa-loading-container">
         <div className="wgsa-loading-content">
-          <img src="/assets/img/WGSA.FINAL.svg" className="wgsa-loading-logo"/>
+          <img src="/assets/img/WGSA.FINAL.svg" className="wgsa-loading-logo" />
           { this.props.children }
         </div>
       </div>
@@ -50,6 +38,10 @@ const Background = connect()(React.createClass({
 export const LoadSpinner = React.createClass({
 
   displayName: 'LoadSpinner',
+
+  componentWillMount() {
+    document.title = 'WGSA | Loading...';
+  },
 
   render() {
     return (
@@ -93,7 +85,7 @@ function getStatusMessage(status, { collectionSize, errors = [] }) {
       <Link to={`/${Species.nickname}/upload`} className="mdl-button mdl-button--raised">Try Again</Link>,
     ];
   }
-  if (status === UPLOAD_FAILED || status === statuses.ABORTED) {
+  if (status === statuses.ABORTED) {
     return [
       <h1>We're sorry, your upload was interrupted</h1>,
       <p className="mdl-typography--title">

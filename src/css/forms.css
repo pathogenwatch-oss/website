@@ -28,6 +28,13 @@ fieldset > legend {
   display: none;
 }
 
+.wgsa-button--text {
+  color: rgba(0, 0, 0, 0.87);
+  background: none !important;
+  min-width: 0;
+  padding: 0;
+}
+
 .wgsa-download-button {
   background: none;
   border: none;

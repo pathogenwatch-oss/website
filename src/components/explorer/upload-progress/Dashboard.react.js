@@ -1,12 +1,9 @@
 import React from 'react';
 
-import FileUploadProgressBar from './FileUploadProgressBar.react';
 import Errors from './Errors.react';
 
 import CircularProgress from '^/components/CircularProgress.react';
 import Spinner from '^/components/Spinner.react';
-
-import UploadStore from '^/stores/UploadStore';
 
 import Species from '^/species';
 
@@ -18,7 +15,6 @@ const ProgressIndicator = ({ title, percentage }) => (
     <span className="mdl-card__actions mdl-card--border">{title}</span>
   </div>
 );
-
 
 const UploadDashboard = React.createClass({
 
@@ -38,7 +34,7 @@ const UploadDashboard = React.createClass({
   },
 
   render() {
-    const { isUploading, collectionSize = UploadStore.getAssembliesCount(), results = {}, errors = [] } = this.props;
+    const { collectionSize, results = {}, errors = [] } = this.props;
     const { core, mlst, paarsnp } = this.getAssemblyTasks(results, collectionSize);
     const { noMLST, noAMR } = Species.uiOptions;
     return (

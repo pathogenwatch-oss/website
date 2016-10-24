@@ -1,12 +1,12 @@
 import React from 'react';
+import classnames from 'classnames';
 
 import { FETCH_ENTITIES } from '../actions/fetch';
 import { SET_COLOUR_COLUMNS } from '../actions/table';
 
 import Species from '../species';
-
 import * as resistanceProfile from '../utils/resistanceProfile';
-import { measureText } from '../utils/table/columnWidth';
+import { canvas, measureText } from '../utils/table/columnWidth';
 
 import { downloadColumnProps, nameColumnProps } from '../constants/table';
 
@@ -30,30 +30,59 @@ function createAntibioticsColumn({ name, longName }) {
 
   return {
     columnKey,
-    getLabel(isSelected) {
-      return isSelected ? hoverName : name.slice(0, 3);
+    isExpandable() {
+      return this.isSelected && this.allMechanisms.length;
+    },
+    getLabel() {
+      return this.isExpandable() ? hoverName : name.slice(0, 3);
     },
     headerClasses: 'wgsa-table-header--resistance',
     headerTitle: `${hoverName} - ${modifierKey} + click to select multiple`,
     cellClasses: 'wgsa-table-cell--resistance',
-    getWidth(props, { analysis = {} }) {
-      if (!props.isSelected) {
+    getWidth(mechanisms) {
+      if (!this.isExpandable()) {
         return 40;
       }
-      const { mechanisms } = analysis.resistanceProfile[props.columnKey];
-      return mechanisms.reduce((width, _) => width + measureText(_, 16), 0);
+
+      canvas.font = '700 13px "Helvetica","Arial",sans-serif';
+      return Math.floor(
+        mechanisms.reduce((width, m) => width + measureText(m, 8), 0),
+      ) + 16;
     },
     cellPadding: 16,
     flexGrow: 0,
+    addState({ data }) {
+      const allMechanisms = data.reduce((memo, row) => {
+        const { analysis = {} } = row;
+        if (!analysis.resistanceProfile) return memo;
+        const { mechanisms = [] } = analysis.resistanceProfile[this.columnKey];
+        for (const m of mechanisms) {
+          memo.add(m);
+        }
+        return memo;
+      }, new Set());
+
+      this.allMechanisms = Array.from(allMechanisms).sort();
+      this.width = this.getWidth(this.allMechanisms);
+
+      return this;
+    },
     getCellContents(props, { analysis = {} }) {
       const isResistant =
         resistanceProfile.isResistant(analysis.resistanceProfile, props.columnKey);
       if (isResistant) {
         const { mechanisms } = analysis.resistanceProfile[props.columnKey];
+        const activeMechanisms = new Set(mechanisms);
         return props.isSelected ? (
           <span className="wgsa-resistance-mechanism-list">
-            {mechanisms.map(mechanism =>
-              <button key={mechanism} className="wgsa-resistance-mechanism">
+            {props.allMechanisms.map(mechanism =>
+              <button
+                key={mechanism}
+                className={classnames(
+                  'wgsa-resistance-mechanism',
+                  { 'wgsa-resistance-mechanism--active': activeMechanisms.has(mechanism) }
+                )}
+              >
                 {mechanism}
               </button>)
             }

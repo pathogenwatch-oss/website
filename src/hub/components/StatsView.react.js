@@ -50,7 +50,7 @@ const ChartButton = connect(mapStateToButton, mapDispatchToButton)(
 
 export const StatsView =
   ({ average, range = {}, chartData }) => (
-      <div className="wgsa-hub-stats-view wgsa-hub-gutter-left">
+      <div className="wgsa-hub-stats-view wgsa-content-margin-left">
         <div className="wgsa-hub-stats-section">
           <h2 className="wgsa-hub-stats-heading">
             {charts.map(props =>

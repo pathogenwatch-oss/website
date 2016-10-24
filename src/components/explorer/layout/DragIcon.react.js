@@ -3,7 +3,7 @@ import '../../../css/drag-handle.css';
 import React from 'react';
 import assign from 'object-assign';
 
-import { CGPS } from '^/defaults';
+import { CGPS } from '^/app/constants';
 
 const background = '#fff';
 

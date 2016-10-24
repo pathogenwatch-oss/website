@@ -1,6 +1,6 @@
 .wgsa-table-header {
   vertical-align: top;
-  padding: 0 18px 0;
+  padding-left: 18px;
   box-sizing: border-box;
   background: none !important;
   border-right: none;
@@ -20,8 +20,6 @@
   padding: 0px 6px;
   text-transform: capitalize;
   text-overflow: ellipsis;
-  transition: .28s cubic-bezier(.4,0,.2,1);
-  transition-property: color, background, background-color;
   white-space: nowrap;
 }
 
@@ -43,6 +41,12 @@
 .wgsa-table-header--selected .wgsa-selectable-column-heading {
   background: #673c90;
   color: #fff;
+  width: auto;
+  max-width: calc(100% - 2px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: .28s cubic-bezier(.4,0,.2,1);
+  transition-property: color, background-color;
 }
 
 .wgsa-table-row:hover {
@@ -54,14 +58,14 @@
 }
 
 .wgsa-table-cell {
-  vertical-align: top;
   border-top: 1px solid rgba(0, 0, 0, 0.12);
   border-right: none;
-  padding: 0 18px;
   box-sizing: border-box;
   font-size: 13px;
+  padding: 0 18px;
   transition: .28s cubic-bezier(.4,0,.2,1);
   transition-property: color, background, background-color;
+  vertical-align: top;
   white-space: nowrap;
 }
 
@@ -156,7 +160,7 @@
   top: 30px;
   white-space: nowrap;
   z-index: 1;
-  /*width: 36px;*/
+  width: 38px;
 }
 
 .wgsa-resistance-icon {
@@ -198,16 +202,20 @@
 }
 
 .wgsa-resistance-mechanism {
-  color: #d11b1b;
+  color: color(#000 tint(65%)); /* (87 / 8) + 54 */
   background: none;
   border: none;
   border-radius: 4px;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
   height: 20px;
   letter-spacing: 0px;
   line-height: 16px;
   margin: 0 2px;
-  padding: 0px 6px;
+  padding: 0 2px;
   outline: none;
+}
+
+.wgsa-resistance-mechanism--active {
+  color: #d11b1b;
 }

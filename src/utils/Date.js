@@ -11,9 +11,9 @@ export const months = [
   'October',
   'November',
   'December',
-];
+].map((text, value) => ({ text, value }));
 
-export const formatMonth = index => months[index - 1];
+export const formatMonth = index => months[index - 1].text;
 
 export function formatDay(number) {
   const b = number % 10;

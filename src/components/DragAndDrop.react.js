@@ -2,7 +2,7 @@ import '../css/drag-and-drop.css';
 
 import React from 'react';
 
-import DEFAULT, { CGPS } from '^/defaults';
+import { CGPS, DEFAULT } from '^/app/constants';
 
 const fileInputStyle = {
   position: 'fixed',
@@ -67,6 +67,7 @@ export default React.createClass({
     const { files } = event.target;
     if (files && files.length > 0) {
       this.handleFiles(files);
+      event.target.value = null;
     }
   },
 

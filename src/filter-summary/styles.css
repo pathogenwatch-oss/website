@@ -1,0 +1,21 @@
+.wgsa-filter-summary {
+  display: flex;
+  font-size: 13px;
+  height: 4rem;
+  min-height: 4rem;
+  align-items: center;
+}
+
+.wgsa-filter-summary ~ * {
+  flex-grow: 1;
+  position: relative;
+}
+
+.wgsa-filter-summary > p {
+  font-size: 13px;
+  margin: 0;
+}
+
+.wgsa-filter-summary > p > span {
+  color: #673c90;
+}

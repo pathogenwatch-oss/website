@@ -3,7 +3,7 @@
 import React from 'react';
 
 import MapUtils from '../utils/Map';
-import DEFAULT from '../defaults';
+import { DEFAULT } from '../app/constants';
 
 const mapStyle = {
   position: 'absolute',

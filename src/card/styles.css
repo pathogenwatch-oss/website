@@ -1,0 +1,40 @@
+.wgsa-card {
+  background: white;
+  border-top: 1px solid color(#a386bd tint(25%));
+  padding: 1.25rem 0;
+  position: relative;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.wgsa-card-title {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  margin: 0 0 0.5rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #673c90;
+}
+
+.wgsa-card-content {
+  background: #fff;
+  box-sizing: border-box;
+  height: 100%;
+  padding: 8px;
+}
+
+.wgsa-card-footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  visibility: hidden;
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+}
+
+.wgsa-card:hover .wgsa-card-footer {
+  visibility: visible;
+}

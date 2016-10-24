@@ -1,0 +1,41 @@
+.wgsa-header {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.14);
+}
+
+.wgsa-has-aside {
+  padding-right: 255px;
+}
+.wgsa-has-aside ~ .mdl-layout__content,
+.wgsa-has-aside ~ .mdl-layout__content .wgsa-drag-and-drop__button,
+.wgsa-has-aside ~ .mdl-layout__content .wgsa-tray-container {
+  margin-right: 255px;
+}
+
+.wgsa-header ~ .mdl-layout__content {
+  z-index: auto;
+}
+
+.wgsa-header .mdl-layout-title {
+  font-family: "Roboto Condensed", "Helvetica", "Arial", sans-serif;
+}
+
+.wgsa-header-logo {
+  width: 88px;
+}
+
+.mdl-layout__header--primary .wgsa-header-logo {
+  filter: grayscale(1) brightness(5);
+}
+
+.wgsa-header .mdl-navigation__link {
+  text-transform: uppercase;
+  color: rgba(0, 0, 0, 0.54);
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 500 !important;
+  padding: 0;
+  margin: 0 1rem;
+}
+
+.mdl-layout-spacer .mdl-layout-spacer--flex {
+  flex-basis: 0;
+}

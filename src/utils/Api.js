@@ -1,14 +1,19 @@
 /* global $ */
 
-import FileUploadingProgressActionCreators
-  from '../actions/FileUploadingProgressActionCreators';
-
-import CONFIG from '../config';
+import CONFIG from '../app/config';
 
 export const SERVER_ADDRESS =
   CONFIG.api ? `http://${CONFIG.api.address}` : '';
 
 export const API_ROOT = `${SERVER_ADDRESS}/api`;
+
+function ajax(config) {
+  return new Promise((resolve, reject) => {
+    $.ajax(config).
+      done(data => resolve(data)).
+      fail(error => reject(error));
+  });
+}
 
 function postJson(path, data, progressFn) {
   return {
@@ -42,19 +47,6 @@ export function getCollectionId(speciesId, collectionData, callback) {
   fail(error => callback(error));
 }
 
-export function postAssembly(params, requestBody, callback) {
-  const { speciesId, collectionId, assemblyId } = params;
-  $.ajax(
-    postJson(
-      `/species/${speciesId}/collection/${collectionId}/assembly/${assemblyId}`,
-      requestBody,
-      FileUploadingProgressActionCreators.setAssemblyProgress.bind(null, assemblyId)
-    )
-  ).
-  done(data => callback(null, data)).
-  fail(error => callback(error));
-}
-
 export function getReferenceCollection(speciesId) {
   return $.get(`${API_ROOT}/species/${speciesId}/reference`);
 }
@@ -65,7 +57,7 @@ export function getCollection(speciesId, collectionId) {
 }
 
 export function requestFile({ speciesId, idType = 'assembly', format }, requestBody) {
-  return $.ajax(postJson(
+  return ajax(postJson(
     `/species/${speciesId}/download/type/${idType}/format/${format}`,
     requestBody
   ));
@@ -80,7 +72,10 @@ export function getAntibiotics(speciesId) {
 }
 
 export function getSubtree(speciesId, collectionId, subtreeId) {
-  return $.get(`${API_ROOT}/species/${speciesId}/collection/${collectionId}/subtree/${subtreeId}`);
+  return ajax({
+    type: 'GET',
+    url: `${API_ROOT}/species/${speciesId}/collection/${collectionId}/subtree/${subtreeId}`,
+  });
 }
 
 export function checkCollectionStatus(speciesId, collectionId, cas) {

@@ -1,6 +1,6 @@
 const regexp = /^(?:[>;].+\n(?:[ACGTURYKMSWBDHVN]+\*?\n)+\n*)+$/i;
 
-import CONFIG from '../../config';
+import CONFIG from '../../app/config';
 
 export const fastaValidationErrors = {
   INVALID_FASTA_SIZE: 'INVALID_FASTA_SIZE',
@@ -23,8 +23,9 @@ export function validateFastaSize(file) {
 }
 
 export function validateFastaContent(fastaContent) {
-  if (regexp.test(fastaContent)) {
-    return fastaContent;
+  const cleanContent = fastaContent.replace(/\r/g, '');
+  if (regexp.test(cleanContent)) {
+    return cleanContent;
   }
   throw fastaValidationErrors.INVALID_FASTA_CONTENT;
 }

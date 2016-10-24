@@ -7,7 +7,7 @@ import { nameColumnData } from './columns';
 
 import { defaultWidthGetter } from '^/utils/table/columnWidth';
 
-import { CGPS } from '^/defaults';
+import { CGPS } from '^/app/constants';
 import Species from '^/species';
 
 
@@ -83,8 +83,8 @@ function getNameText(data, valueGetter) {
 export const nameColumnProps = {
   ...nameColumnData,
   fixed: true,
-  getWidth(columnProps, row) {
-    let width = defaultWidthGetter(columnProps, row);
+  getWidth(row, props) {
+    let width = defaultWidthGetter(row, props);
 
     if (row.__isPublic && row.metadata.collectionId) {
       width += 32;

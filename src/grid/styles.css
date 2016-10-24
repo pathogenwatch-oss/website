@@ -1,0 +1,10 @@
+.wgsa-virtualised-grid {
+  outline: none;
+  overflow-x: hidden !important;
+}
+
+.wgsa-grid-item {
+  box-sizing: border-box;
+  padding-right: 32px;
+  padding-bottom: 16px;
+}

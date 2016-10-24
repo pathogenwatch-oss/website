@@ -1,37 +1,43 @@
 import { ADD_FASTAS, UPLOAD_FASTA } from '../actions';
 
-function finishedUploading(state, { name }) {
-  const { uploading } = state;
+function handleUploadCompletion(state, name) {
+  const { queue, uploading, batchSize } = state;
   uploading.delete(name);
 
   return {
     ...state,
     uploading: new Set(uploading),
+    batchSize: queue.length + uploading.size === 0 ? 0 : batchSize,
   };
 }
 
-export default {
-  initialState: {
-    queue: [],
-    uploading: new Set(),
-  },
-  actions: {
-    [ADD_FASTAS](state, { fastas }) {
+const initialState = {
+  batchSize: 0,
+  queue: [],
+  uploading: new Set(),
+};
+
+export default function (state = initialState, { type, payload }) {
+  switch (type) {
+    case ADD_FASTAS:
       return {
         ...state,
+        batchSize: state.batchSize + payload.fastas.length,
         queue: [
-          ...fastas.map(_ => _.name),
           ...state.queue,
+          ...payload.fastas.map(_ => _.name),
         ],
       };
-    },
-    [UPLOAD_FASTA.ATTEMPT](state, { name }) {
+    case UPLOAD_FASTA.ATTEMPT:
       return {
+        ...state,
         queue: state.queue.slice(1),
-        uploading: new Set([ ...state.uploading, name ]),
+        uploading: new Set([ ...state.uploading, payload.name ]),
       };
-    },
-    [UPLOAD_FASTA.SUCCESS]: finishedUploading,
-    [UPLOAD_FASTA.FAILURE]: finishedUploading,
-  },
-};
+    case UPLOAD_FASTA.SUCCESS:
+    case UPLOAD_FASTA.FAILURE:
+      return handleUploadCompletion(state, payload.name);
+    default:
+      return state;
+  }
+}
