@@ -78,6 +78,7 @@ module.exports = function (callback) {
           pusherKey: config.pusher.key,
           mapboxKey: config.mapboxKey,
           maxFastaFileSize: config.maxFastaFileSize,
+          wiki: config.wikiLocation,
         },
       });
     });
