@@ -1,4 +1,4 @@
-import { getVisibleFastas } from '../hub/selectors';
+import { getVisibleFastas } from '../hub-filter/selectors';
 import { getCollectionMetadata } from './selectors';
 
 import { createAsyncConstants } from '../actions';

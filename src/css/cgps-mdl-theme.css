@@ -85,6 +85,14 @@
   background: #673c90;
 }
 
+.wgsa-tab-actions {
+  align-self: stretch;
+  flex-grow: 1;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0 8px;
+}
 
 /* Spinner */
 

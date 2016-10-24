@@ -1,5 +1,5 @@
 .wgsa-assembly-drawer-content {
-  height: 400px;
+  height: 360px;
   overflow: hidden;
 }
 
@@ -18,5 +18,13 @@
 }
 
 .wgsa-assembly-drawer-content .wgsa-hub-stats-section {
-  margin-bottom: 24px;
+  margin-bottom: 16px;
+}
+
+.wgsa-assembly-drawer-content .wgsa-hub-stats-heading {
+  margin-bottom: 12px;
+}
+
+.wgsa-assembly-drawer-content .wgsa-drawer-actions {
+  padding-right: 24px;
 }

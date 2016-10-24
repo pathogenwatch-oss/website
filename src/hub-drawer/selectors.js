@@ -1,11 +1,13 @@
 import { createSelector } from 'reselect';
 
 import * as hub from '../hub/selectors';
+import { getNumberOfVisibleFastas, getVisibleFastas }
+  from '../hub-filter/selectors';
 
 import { isSupported } from '../species';
 
 export const getVisibleSpecies = createSelector(
-  hub.getVisibleFastas,
+  getVisibleFastas,
   fastas => fastas.reduce((memo, fasta) => {
     if (isSupported(fasta)) {
       memo.supported.add(fasta.speciesId);
@@ -26,15 +28,16 @@ export const canCreateCollection = createSelector(
   hub.isUploading,
   isSupportedSpeciesSelected,
   (loading, uploading, supportSpeciesSelected) =>
+    console.log(!loading, !uploading, supportSpeciesSelected) ||
     !loading && !uploading && supportSpeciesSelected
 );
 
 export const getCollectionSummary = createSelector(
   getVisibleSpecies,
-  hub.getNumberOfVisibleFastas,
+  getNumberOfVisibleFastas,
   ({ supported }, numAssemblies) => ({
     numAssemblies,
-    speciesId: Array.from(supported)[0],
+    speciesId: console.log(supported) || Array.from(supported)[0],
   })
 );
 

@@ -25,7 +25,7 @@ export default (file) => {
       return (
         <Footer>
           <RetryButton file={file} />
-          <RemoveButton name={file.name} />
+          <RemoveButton name={file.name} className="wgsa-icon-button--small" />
         </Footer>
       );
   }

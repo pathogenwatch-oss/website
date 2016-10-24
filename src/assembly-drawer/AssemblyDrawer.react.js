@@ -2,6 +2,7 @@ import React from 'react';
 // import classnames from 'classnames';
 
 import Drawer from '../drawer';
+import RemoveButton from '../assembly-card/RemoveButton.react';
 import N50Chart from './N50Chart.react';
 
 const AssemblyStats = ({ metrics }) => (
@@ -53,10 +54,13 @@ const AssemblyDrawerContent = React.createClass({
       <div className="wgsa-assembly-drawer-content">
         <div className="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
           <div className="mdl-tabs__tab-bar">
-            <a href="#stats-panel" className="mdl-tabs__tab is-active">Stats</a>
+            <a href="#metrics-panel" className="mdl-tabs__tab is-active">Metrics</a>
             <a href="#n50-panel" className="mdl-tabs__tab">N50</a>
+            <div className="wgsa-tab-actions">
+              <RemoveButton name={assembly.name} />
+            </div>
           </div>
-          <div className="mdl-tabs__panel is-active" id="stats-panel">
+          <div className="mdl-tabs__panel is-active" id="metrics-panel">
             { assembly && <AssemblyStats metrics={assembly.metrics} /> }
           </div>
           <div className="mdl-tabs__panel" id="n50-panel">

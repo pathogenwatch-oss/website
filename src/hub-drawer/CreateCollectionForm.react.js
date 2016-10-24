@@ -36,6 +36,8 @@ const CreateCollectionForm = React.createClass({
   render() {
     const { metadata: { title, description } } = this.props;
     const { speciesId, numAssemblies } = this.props.collectionSummary;
+
+    if (!speciesId) return null; // Prevent form erroring when species not supplied
     return (
       <form className="wgsa-drawer__content wgsa-create-collection-form" onSubmit={this.props.onSubmit}>
         <span className="wgsa-card-metadata-inliner wgsa-collection-summary">

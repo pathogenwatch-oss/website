@@ -35,6 +35,18 @@ fieldset > legend {
   padding: 0;
 }
 
+.wgsa-icon-button--small {
+  height: 28px;
+  width: 28px;
+  min-width: 28px;
+  margin-left: -6px;
+  margin-bottom: 2px;
+}
+
+.wgsa-icon-button--small > i {
+  font-size: 20px;
+}
+
 .wgsa-download-button {
   background: none;
   border: none;

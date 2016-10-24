@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import classnames from 'classnames';
 
 import { removeFasta } from '../hub/thunks';
 
@@ -10,7 +11,7 @@ function mapDispatchToProps(dispatch, ownProps) {
 }
 
 export default connect(null, mapDispatchToProps)(
-  ({ onClick, primary }) => (
+  ({ onClick, primary, className }) => (
     primary ? (
       <button
         className="mdl-button mdl-button--primary wgsa-button--text"
@@ -21,7 +22,7 @@ export default connect(null, mapDispatchToProps)(
       </button>
     ) : (
       <button
-        className="wgsa-remove-fasta-button mdl-button mdl-button--icon"
+        className={classnames('mdl-button mdl-button--icon', className)}
         onClick={onClick}
         title="Remove"
       >

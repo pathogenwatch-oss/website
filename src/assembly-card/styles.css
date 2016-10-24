@@ -10,18 +10,6 @@
   color: #AC65A6;
 }
 
-.wgsa-remove-fasta-button {
-  height: 28px;
-  width: 28px;
-  min-width: 28px;
-  margin-left: -6px;
-  margin-bottom: 2px;
-}
-
-.wgsa-remove-fasta-button > i {
-  font-size: 20px;
-}
-
 .wgsa-hub-card-error {
   color: #d11b1b;
 }
@@ -35,4 +23,10 @@
   font-size: 20px;
   top: 22px;
   right: 0;
+}
+
+.wgsa-assembly-card .mdl-button--icon:hover,
+.wgsa-assembly-card .mdl-button--icon:focus,
+.wgsa-assembly-card .mdl-button--icon:active {
+  background: none;
 }
