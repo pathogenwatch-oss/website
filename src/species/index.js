@@ -1,3 +1,5 @@
+import sortBy from 'lodash.sortby';
+
 const definitions =
   require('../../universal/species').reduce((memo, { id, nickname }) => {
     memo[nickname] = {
@@ -14,7 +16,7 @@ export const taxIdMap = new Map(
   definitionsAsList.map(({ id, ...species }) => [ id, species ])
 );
 
-export const referenceCollections =
+export const referenceCollections = sortBy(
   definitionsAsList.reduce((memo, { id, nickname, collections }) => {
     if (!collections) return memo;
     return memo.concat(collections.map(_ => ({
@@ -25,7 +27,10 @@ export const referenceCollections =
       pubmedLink: `http://www.ncbi.nlm.nih.gov/pubmed/${_.pmid}`,
       size: _.numberOfAssemblies,
     })));
-  }, []);
+  }, []),
+  [ 'title' ]
+);
+
 
 let currentSpecies = {};
 
