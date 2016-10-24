@@ -36,7 +36,7 @@ function displaySpecies(key, label) {
 }
 
 export default props => {
-  const { speciesKey, speciesLabel, metadata = {}, country = { name: 'UK' } } = props;
+  const { speciesKey, speciesLabel, metadata = {}, country } = props;
   return (
     <div className="wgsa-card-content">
       {displaySpecies(speciesKey, speciesLabel)}
