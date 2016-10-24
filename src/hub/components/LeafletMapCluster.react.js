@@ -38,8 +38,9 @@ class MarkerCluster extends MapLayer {
       return;
     }
 
-    const layers = markers.map(({ position, label }) =>
-      Leaflet.marker(position, { icon }).bindPopup(label)
+    const layers = markers.map(({ id, position, title }) =>
+      Leaflet.marker(position, { id, icon, title }).
+        on('click', this.props.onMarkerClick)
     );
 
     this.leafletElement.eachLayer(this.removeMarker.bind(this));
@@ -61,6 +62,7 @@ class MarkerCluster extends MapLayer {
 MarkerCluster.propTypes = {
   map: React.PropTypes.object,
   markers: React.PropTypes.array,
+  onMarkerClick: React.PropTypes.func,
 };
 
 MarkerCluster.defaultProps = {

@@ -31,7 +31,6 @@ function getSummary(map) {
   return sortBy(Array.from(map.values()), [ 'name' ]);
 }
 
-console.log(getOrderedFastas, filter.getFilter);
 export const getMetadataFilters = createSelector(
   getOrderedFastas,
   filter.getFilter,

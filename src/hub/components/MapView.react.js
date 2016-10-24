@@ -11,6 +11,7 @@ import { getMarkers, getBounds, getLassoPath } from '../selectors/map';
 
 import filterActions from '../actions';
 import mapActions from '../actions/map';
+import { showAssemblyDetails } from '../../assembly-drawer';
 
 const lassoButtonClassname =
   'wgsa-map-lasso-button mdl-button mdl-button--fab mdl-button--mini-fab';
@@ -42,6 +43,7 @@ const MapView = React.createClass({
           lassoButtonClassname={lassoButtonClassname}
           onBoundsChange={this.props.onBoundsChange}
           onLassoPathChange={this.props.onLassoPathChange}
+          onMarkerClick={this.props.onMarkerClick}
         />
       </div>
     );
@@ -61,6 +63,7 @@ function mapDispatchToProps(dispatch) {
   return {
     onBoundsChange: bounds => dispatch(mapActions.storeBounds(bounds)),
     onLassoPathChange: path => dispatch(filterActions.filterByMetadata('area', path)),
+    onMarkerClick: name => dispatch(showAssemblyDetails(name))
   };
 }
 

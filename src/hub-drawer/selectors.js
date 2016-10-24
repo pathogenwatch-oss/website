@@ -28,7 +28,6 @@ export const canCreateCollection = createSelector(
   hub.isUploading,
   isSupportedSpeciesSelected,
   (loading, uploading, supportSpeciesSelected) =>
-    console.log(!loading, !uploading, supportSpeciesSelected) ||
     !loading && !uploading && supportSpeciesSelected
 );
 
@@ -37,7 +36,7 @@ export const getCollectionSummary = createSelector(
   getNumberOfVisibleFastas,
   ({ supported }, numAssemblies) => ({
     numAssemblies,
-    speciesId: console.log(supported) || Array.from(supported)[0],
+    speciesId: Array.from(supported)[0],
   })
 );
 

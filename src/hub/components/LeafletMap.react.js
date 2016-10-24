@@ -1,6 +1,6 @@
 import React from 'react';
 import Leaflet from 'leaflet';
-import { Map, Marker, Popup, TileLayer, PropTypes } from 'react-leaflet';
+import { Map, TileLayer, PropTypes } from 'react-leaflet';
 
 import MapCluster from './LeafletMapCluster.react';
 import MapLasso from './LeafletMapLasso.react';
@@ -37,6 +37,13 @@ export default React.createClass({
       const center = this.map.getCenter();
       const zoom = this.map.getZoom();
       onBoundsChange({ center, zoom });
+    }
+  },
+
+  onMarkerClick({ target }) {
+    if (this.props.onMarkerClick) {
+      const { id } = target.options;
+      this.props.onMarkerClick(id);
     }
   },
 
@@ -77,6 +84,7 @@ export default React.createClass({
         />
         <MapCluster
           markers={this.props.markers}
+          onMarkerClick={this.onMarkerClick}
         />
         <MapLasso
           className={this.props.lassoButtonClassname}
