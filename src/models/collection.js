@@ -339,6 +339,25 @@ function getStatus({ speciesId, collectionId }, callback) {
   });
 }
 
+exports.getAggregated = function (collectionId) {
+  return new Promise((resolve, reject) => {
+    getMetadata(collectionId, (error, result) => {
+      if (error) return reject(error);
+      return resolve(result);
+    });
+  }).then(metadata =>
+    assemblyModel.getAssemblies(Object.keys(metadata.assemblyIdToNameMap)).
+      then(assemblies => ({
+        collectionId,
+        assemblies,
+        title: metadata.title,
+        description: metadata.description,
+        tree: metadata.tree,
+        subtrees: metadata.subtrees,
+      }))
+    );
+};
+
 module.exports.add = add;
 module.exports.getAssemblyIds = getAssemblyIds;
 module.exports.getMetadata = getMetadata;

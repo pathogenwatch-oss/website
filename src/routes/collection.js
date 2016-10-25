@@ -9,6 +9,13 @@ const assemblyModel = require('models/assembly');
 const LOGGER = require('utils/logging').createLogger('Collection requests');
 const { maxCollectionSize = 0, fastaStoragePath } = require('configuration');
 
+router.get('/collection/:collectionId', (req, res, next) => {
+  LOGGER.info(`Getting collection: ${req.params.collectionId}`);
+  return collectionModel.getAggregated(req.params.collectionId)
+    .then(result => res.json(result))
+    .catch(error => next(error));
+});
+
 router.get('/species/:id/reference', function (req, res, next) {
   LOGGER.info('Getting reference collection: ' + req.params.id);
   collectionModel.getReference(req.params.id, function (error, result) {

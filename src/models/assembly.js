@@ -1,9 +1,9 @@
-var metadataModel = require('models/assemblyMetadata');
-var sequenceTypeModel = require('models/sequenceType');
-var messageQueueService = require('services/messageQueue');
-var mainStorage = require('services/storage')('main');
+const metadataModel = require('models/assemblyMetadata');
+const sequenceTypeModel = require('models/sequenceType');
+const messageQueueService = require('services/messageQueue');
+const mainStorage = require('services/storage')('main');
 
-var LOGGER = require('utils/logging').createLogger('Assembly');
+const LOGGER = require('utils/logging').createLogger('Assembly');
 const {
   ASSEMBLY_METADATA,
   PAARSNP_RESULT,
@@ -12,7 +12,32 @@ const {
   CORE_RESULT,
 } = require('utils/documentKeys');
 
-var ASSEMBLY_ANALYSES = [ 'FP', 'MLST', 'PAARSNP', 'CORE' ];
+const ASSEMBLY_ANALYSES = [ 'FP', 'MLST', 'PAARSNP', 'CORE' ];
+
+function retrieveManyPromise(keys) {
+  return new Promise((resolve, reject) => {
+    mainStorage.retrieveMany(keys, (error, doc) => {
+      if (error) return reject(error);
+      return resolve(doc);
+    });
+  });
+}
+
+exports.getAssemblies = function (assemblyIds) {
+  return Promise.all([
+    retrieveManyPromise(assemblyIds.map(id => `AM_${id}`)),
+    retrieveManyPromise(assemblyIds.map(id => `WGSA_${id}`)),
+  ]).
+    then(([ analysis, metadata ]) =>
+      assemblyIds.reduce((memo, id, index) => {
+        memo[id] = {
+          analysis: analysis[index],
+          metadata: metadata[index],
+        };
+        return memo;
+      }, {})
+    );
+};
 
 function sendUploadNotification({ speciesId, collectionId, assemblyId }, status) {
   messageQueueService.getNotificationExchange().publish(
