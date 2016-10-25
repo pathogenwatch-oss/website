@@ -341,6 +341,7 @@ function getStatus({ speciesId, collectionId }, callback) {
 
 module.exports.add = add;
 module.exports.getAssemblyIds = getAssemblyIds;
+module.exports.getMetadata = getMetadata;
 module.exports.get = get;
 module.exports.getReference = getReference;
 module.exports.getSubtree = getSubtree;

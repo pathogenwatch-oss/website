@@ -50,7 +50,8 @@
     "download": "eval $npm_package_startcmd bin/download.js",
     "metadata": "eval $npm_package_startcmd bin/generate-reference-metadata.js",
     "service": "eval $npm_package_startcmd microservices/bootstrap.js upload-progress | bunyan -o short",
-    "ids": "eval $npm_package_startcmd bin/collection-id-update.js"
+    "ids": "eval $npm_package_startcmd bin/collection-id-update.js",
+    "aggregate": "eval $npm_package_startcmd bin/create-analysis-summary.js"
   },
   "repository": {
     "type": "git",
