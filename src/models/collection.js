@@ -74,17 +74,6 @@ function notifyUploadProgress(collection, assemblyIds, files) {
 
 function submitAssemblies({ speciesId, collectionId, assemblyIds, files }) {
   LOGGER.info('Submitting Assemblies');
-  for (const { id } of files) {
-    const assemblyId = assemblyIds[id];
-    assemblyModel.submit({
-      speciesId,
-      collectionId,
-      assemblyId,
-      fileId: id,
-      filePath: fastaStorage.getFilePath(fastaStoragePath, id),
-    });
-  }
-
   return Promise.all(files.map(file => {
     const assemblyId = assemblyIds[file.id];
 
