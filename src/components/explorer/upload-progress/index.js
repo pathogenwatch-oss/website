@@ -55,7 +55,7 @@ const UploadProgress = React.createClass({
     return (
       <div className="wgsa-upload-progress">
         <main className="wgsa-upload-progress-container">
-          <div className="wgsa-collection-url-display wgsa-card mdl-shadow--2dp">
+          <div className="wgsa-collection-url-display wgsa-upload-progress-section mdl-shadow--2dp">
             <div className="mdl-card__supporting-text">
               Final results will be available at the current address.<br />
               If upload fails to progress, please refresh at a later time.
