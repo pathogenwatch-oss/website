@@ -4,10 +4,7 @@ var morgan = require('morgan');
 var BASE_LOGGER_NAME = 'WGSA';
 
 function getDefaultLevel() {
-  if (process.env.NODE_ENV === 'testing') {
-    return bunyan.FATAL;
-  }
-  return bunyan.TRACE;
+  return process.env.LOG_LEVEL || bunyan.TRACE;
 }
 
 function createLogger(appendedName) {

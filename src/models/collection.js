@@ -22,7 +22,7 @@ function mapAssemblyIdsToFiles(assemblyIds, files) {
     const idPair = assemblyIds.find(pair =>
       unusedIds.has(pair) && pair.checksum === file.id
     );
-    unusedIds.remove(idPair);
+    unusedIds.delete(idPair);
     return {
       assemblyId: idPair.uuid,
       file,
