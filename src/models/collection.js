@@ -16,8 +16,27 @@ const COLLECTION_OPERATIONS = {
   CREATE: 'CREATE',
 };
 
-function manageCollection(request) {
+function mapAssemblyIdsToFiles(assemblyIds, files) {
+  const unusedIds = new Set(assemblyIds);
+  return files.map(file => {
+    const idPair = assemblyIds.find(pair =>
+      unusedIds.has(pair) && pair.checksum === file.id
+    );
+    unusedIds.remove(idPair);
+    return {
+      assemblyId: idPair.uuid,
+      file,
+    };
+  });
+}
+
+function createCollection(files) {
+  const request = {
+    checksums: files.map(_ => _.id),
+    collectionOperation: COLLECTION_OPERATIONS.CREATE,
+  };
   LOGGER.info(JSON.stringify(request));
+
   return new Promise((resolve, reject) => {
     messageQueueService.newCollectionAddQueue(queue => {
       queue.subscribe((error, message) => {
@@ -34,7 +53,10 @@ function manageCollection(request) {
           return reject();
         }
 
-        resolve(message);
+        resolve({
+          collectionId,
+          assemblies: mapAssemblyIdsToFiles(assemblyIds, files),
+        });
       });
 
       messageQueueService.getCollectionIdExchange()
@@ -43,13 +65,12 @@ function manageCollection(request) {
   });
 }
 
-function notifyUploadProgress(collection, assemblyIds, files) {
-  const collectionSize = files.length;
-  const assemblyIdToNameMap = files.reduce((memo, { id, name }) => {
-    memo[assemblyIds[id]] = name;
+function notifyUploadProgress(collection, assemblies) {
+  const collectionSize = assemblies.length;
+  const assemblyIdToNameMap = assemblies.reduce((memo, { assemblyId, file }) => {
+    memo[assemblyId] = file.name;
     return memo;
   }, {});
-
   const message =
     Object.assign({ assemblyIdToNameMap, collectionSize }, collection);
 
@@ -72,11 +93,9 @@ function notifyUploadProgress(collection, assemblyIds, files) {
   });
 }
 
-function submitAssemblies({ speciesId, collectionId, assemblyIds, files }) {
+function submitAssemblies({ speciesId, collectionId, assemblies }) {
   LOGGER.info('Submitting Assemblies');
-  return Promise.all(files.map(file => {
-    const assemblyId = assemblyIds[file.id];
-
+  return Promise.all(assemblies.map(({ assemblyId, file }) => {
     assemblyModel.submit({
       speciesId,
       collectionId,
@@ -99,15 +118,13 @@ function submitAssemblies({ speciesId, collectionId, assemblyIds, files }) {
 function add({ speciesId, title, description, files }) {
   LOGGER.info(`Creating collection of species ${speciesId} with ${files.length} files`);
 
-  return manageCollection({
-    checksums: files.map(_ => _.id),
-    collectionOperation: COLLECTION_OPERATIONS.CREATE,
-  }).then(({ collectionId, assemblyIds }) => {
-    const collectionData = { collectionId, speciesId, title, description };
-    return notifyUploadProgress(collectionData, assemblyIds, files).
-      then(() => submitAssemblies({ collectionId, assemblyIds, speciesId, files })).
-      then(() => collectionId);
-  });
+  return createCollection(files).
+    then(({ collectionId, assemblies }) => {
+      const collectionData = { collectionId, speciesId, title, description };
+      return notifyUploadProgress(collectionData, assemblies).
+        then(() => submitAssemblies({ collectionId, assemblies, speciesId })).
+        then(() => collectionId);
+    });
 }
 
 function getAssemblyIds(collectionId, callback) {
