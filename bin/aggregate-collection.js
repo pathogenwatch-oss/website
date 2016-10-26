@@ -23,13 +23,10 @@ storageConnection.connect(connError => {
       let remaining = assemblyIds.length;
       for (const assemblyId of assemblyIds) {
         console.log(`Writing ${assemblyId}, ${remaining} remaining`);
-        const { populationSubtype, analysis } = assemblies[assemblyId];
+        const { analysis, metadata } = assemblies[assemblyId];
         fs.writeFileSync(
           `WGSA_${assemblyId}.json`,
-          JSON.stringify(Object.assign(
-            { assemblyId, type: 'WGSA', populationSubtype },
-            analysis
-          ))
+          JSON.stringify({ type: 'WGSA', assemblyId, metadata, analysis }, null, '  ')
         );
         remaining--;
       }

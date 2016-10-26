@@ -105,9 +105,9 @@ function formatForFrontend(assembly) {
   const core = assembly[CORE_RESULT];
   const fp = assembly[FP_COMP];
   return {
-    populationSubtype: fp ? fp.subTypeAssignment : null,
     metadata: assembly[ASSEMBLY_METADATA],
     analysis: {
+      populationSubtype: fp ? fp.subTypeAssignment : null,
       st: mlst ? mlst.sequenceType : null,
       mlst: mlst ? mlst.code : null,
       core: core ? {
