@@ -39,7 +39,7 @@ export const getUploading = createSelector(
   getUploads,
   uploads => uploads.uploading,
 );
-export const getBatchSize = state => getUploads(state).batchSize;
+export const getBatchSize = state => getUploads(state).batch.size;
 
 export const getNumRemainingUploads = createSelector(
   getUploadQueue,
