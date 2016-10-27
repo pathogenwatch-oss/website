@@ -32,3 +32,7 @@ export function validateFastaContent(fastaContent) {
   }
   throw fastaValidationErrors.INVALID_FASTA_CONTENT;
 }
+
+export function isFailedUpload({ error }) {
+  return error && !fastaValidationErrorSet.has(error);
+}

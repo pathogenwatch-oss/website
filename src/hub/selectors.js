@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 import sortBy from 'lodash.sortby';
 
-import { fastaValidationErrorSet } from './utils/fasta';
+import { isFailedUpload } from './utils/fasta';
 
 export const getFastas = ({ entities }) => entities.fastas;
 
@@ -62,7 +62,5 @@ export const getNumCompletedUploads = createSelector(
 
 export const getFailedUploads = createSelector(
   getOrderedFastas,
-  fastas => fastas.filter(
-    ({ error }) => error && !fastaValidationErrorSet.has(error)
-  )
+  fastas => fastas.filter(fasta => isFailedUpload(fasta))
 );
