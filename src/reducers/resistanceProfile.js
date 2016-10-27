@@ -71,16 +71,16 @@ function createAntibioticsColumn({ name, longName }) {
       const isResistant =
         resistanceProfile.isResistant(analysis.resistanceProfile, props.columnKey);
       if (isResistant) {
-        const { mechanisms } = analysis.resistanceProfile[props.columnKey];
+        const { state, mechanisms } = analysis.resistanceProfile[props.columnKey];
         const activeMechanisms = new Set(mechanisms);
         return props.isSelected ? (
-          <span className="wgsa-resistance-mechanism-list">
+          <span className="wgsa-resistance-mechanism-list ">
             {props.allMechanisms.map(mechanism =>
               <button
                 key={mechanism}
                 className={classnames(
                   'wgsa-resistance-mechanism',
-                  { 'wgsa-resistance-mechanism--active': activeMechanisms.has(mechanism) }
+                  { [`wgsa-amr--${state.toLowerCase()}`]: activeMechanisms.has(mechanism) }
                 )}
               >
                 {mechanism}
@@ -89,10 +89,10 @@ function createAntibioticsColumn({ name, longName }) {
           </span>
         ) : (
           <i
-            className="material-icons wgsa-resistance-icon wgsa-resistance-icon--resistant"
+            className={`material-icons wgsa-resistance-icon wgsa-amr--${state.toLowerCase()}`}
             title={mechanisms.join(', ')}
           >
-            check_circle
+            {resistanceProfile.getIcon(state)}
           </i>
         );
       }

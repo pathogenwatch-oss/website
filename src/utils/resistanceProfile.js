@@ -8,7 +8,7 @@ const nonResistantColour = '#fff';
 export function isResistant(profile, antibiotic) {
   if (!profile || !profile[antibiotic]) return false;
 
-  return profile[antibiotic].state === 'RESISTANT';
+  return profile[antibiotic].state !== 'UNKNOWN';
 }
 
 export function defaultColourGetter(assembly) {
@@ -56,4 +56,15 @@ export function onHeaderClick(event, { column, activeColumns }, dispatch) {
   }
 
   dispatch(setColourColumns(new Set([ column ])));
+}
+
+export function getIcon(resistanceState) {
+  switch (resistanceState) {
+    case 'RESISTANT':
+      return 'check_circle';
+    case 'INTERMEDIATE':
+      return 'help';
+    default:
+      return null;
+  }
 }
