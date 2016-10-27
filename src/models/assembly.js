@@ -1,18 +1,19 @@
-var metadataModel = require('models/assemblyMetadata');
-var sequenceTypeModel = require('models/sequenceType');
-var messageQueueService = require('services/messageQueue');
-var mainStorage = require('services/storage')('main');
+const metadataModel = require('models/assemblyMetadata');
+const sequenceTypeModel = require('models/sequenceType');
+const messageQueueService = require('services/messageQueue');
+const mainStorage = require('services/storage')('main');
 
-var LOGGER = require('utils/logging').createLogger('Assembly');
+const LOGGER = require('utils/logging').createLogger('Assembly');
 const {
   ASSEMBLY_METADATA,
   PAARSNP_RESULT,
   MLST_RESULT,
   FP_COMP,
   CORE_RESULT,
+  NGMAST_RESULT,
 } = require('utils/documentKeys');
 
-var ASSEMBLY_ANALYSES = [ 'FP', 'MLST', 'PAARSNP', 'CORE' ];
+const ASSEMBLY_ANALYSES = [ 'FP', 'MLST', 'PAARSNP', 'CORE' ];
 
 function createKey(id, prefix) {
   return prefix + '_' + id;
@@ -69,6 +70,7 @@ function formatForFrontend(assembly) {
   const mlst = assembly[MLST_RESULT];
   const core = assembly[CORE_RESULT];
   const fp = assembly[FP_COMP];
+  const ngmast = assembly[NGMAST_RESULT];
   return {
     populationSubtype: fp ? fp.subTypeAssignment : null,
     metadata: assembly[ASSEMBLY_METADATA],
@@ -91,6 +93,11 @@ function formatForFrontend(assembly) {
             return memo;
           }, {}
         ) : {},
+      ngmast: ngmast ? {
+        ngmast: ngmast.ngmast,
+        por: ngmast.por,
+        tbqb: ngmast.tbqb,
+      } : null,
     },
   };
 }
@@ -112,7 +119,7 @@ function get(params, queryKeyPrefixes, callback) {
 
   mainStorage.retrieveMany(queryKeys, function (erroredKeys, assemblyData) {
     if (erroredKeys && hasFatalErrors(erroredKeys)) {
-      LOGGER.error(`Could retrieve minimum documents for assembly ${assemblyId}`);
+      LOGGER.error(`Could not retrieve minimum documents for assembly ${assemblyId}`);
       return callback(erroredKeys);
     }
 
@@ -137,6 +144,7 @@ const COMPLETE_ASSEMBLY_KEYS = [
   FP_COMP,
   MLST_RESULT,
   PAARSNP_RESULT,
+  NGMAST_RESULT,
 ];
 function getComplete(params, callback) {
   LOGGER.info('Getting assembly ' + params.assemblyId);
@@ -148,6 +156,7 @@ const REFERENCE_ASSEMBLY_KEYS = [
   CORE_RESULT,
   MLST_RESULT,
   PAARSNP_RESULT,
+  NGMAST_RESULT,
 ];
 function getReference(params, callback) {
   LOGGER.info('Getting reference assembly ' + params.assemblyId);

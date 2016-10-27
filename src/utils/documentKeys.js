@@ -8,4 +8,5 @@ module.exports = {
   FP_COMP: 'FPR',
   MLST_RESULT: 'MLSTR',
   PAARSNP_RESULT: 'PSR',
+  NGMAST_RESULT: 'NGMASTR',
 };

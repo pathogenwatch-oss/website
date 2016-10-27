@@ -142,7 +142,7 @@ function getAssemblyIds(collectionId, callback) {
 function getAssemblies({ assemblyIds, speciesId }, assemblyGetFn, callback) {
   async.waterfall([
     function (done) {
-      async.mapLimit(assemblyIds, 10, function (assemblyIdWrapper, finishMap) {
+      async.mapLimit(assemblyIds, 20, function (assemblyIdWrapper, finishMap) {
         // List items can be wrapped or raw value
         var assemblyId = assemblyIdWrapper.uuid || assemblyIdWrapper;
         var assemblyParams = {
