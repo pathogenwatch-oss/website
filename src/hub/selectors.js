@@ -13,6 +13,8 @@ export const getFastaKeys = createSelector(
   fastas => fastas.map(_ => _.name)
 );
 
+export const getFasta = (state, name) => getFastas(state)[name];
+
 export const getTotalFastas = (state) => getFastasAsList(state).length;
 
 export const getOrderedFastas =

@@ -11,8 +11,10 @@ function isDuplicate({ name }, files) {
   return files[name] !== undefined;
 }
 
-export function uploadFasta({ name, file, metadata }) {
-  return dispatch => {
+function uploadFasta(name) {
+  return (dispatch, getState) => {
+    const { file, metadata } = selectors.getFasta(getState(), name);
+
     const coords =
       metadata && metadata.latitude && metadata.longitude ?
         { lat: metadata.latitude, lon: metadata.longitude } :
@@ -24,7 +26,7 @@ export function uploadFasta({ name, file, metadata }) {
         name,
         promise: sendToServer({ file, coords }, dispatch),
       },
-    });
+    }).catch(() => {});
   };
 }
 
@@ -34,11 +36,14 @@ export function uploadFiles(files) {
   return (dispatch, getState) => {
     dispatch(actions.addFastas(files));
 
+    const uploads = selectors.getUploads(getState());
+    if (uploads.uploading.size > 0) return;
+
     (function upload() {
       const { queue, uploading } = selectors.getUploads(getState());
       if (queue.length && uploading.size < uploadLimit) {
         dispatch(
-          uploadFasta(files[files.length - queue.length])
+          uploadFasta(queue[0])
         ).then(() => { if (queue.length > uploadLimit) upload(); });
         upload();
       }

@@ -20,7 +20,12 @@ export default {
       if (!fastas.length) return state;
 
       return fastas.reduce((memo, fasta) => {
-        if (fasta.name in memo) return memo;
+        if (fasta.name in memo) {
+          return {
+            ...memo,
+            [fasta.name]: { ...fasta, error: null, uploadAttempted: false },
+          };
+        }
         return { ...memo, [fasta.name]: fasta };
       }, state);
     },
