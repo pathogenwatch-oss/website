@@ -1,6 +1,8 @@
 import { createSelector } from 'reselect';
 import sortBy from 'lodash.sortby';
 
+import { fastaValidationErrorSet } from './utils/fasta';
+
 export const getFastas = ({ entities }) => entities.fastas;
 
 export const getFastasAsList = createSelector(
@@ -48,12 +50,19 @@ export const getNumRemainingUploads = createSelector(
 );
 
 export const isUploading = createSelector(
-  getNumRemainingUploads,
-  numRemaining => numRemaining > 0,
+  getUploading,
+  uploading => uploading.size > 0,
 );
 
 export const getNumCompletedUploads = createSelector(
   getBatchSize,
   getNumRemainingUploads,
   (batchSize, numRemaining) => batchSize - numRemaining,
+);
+
+export const getFailedUploads = createSelector(
+  getOrderedFastas,
+  fastas => fastas.filter(
+    ({ error }) => error && !fastaValidationErrorSet.has(error)
+  )
 );

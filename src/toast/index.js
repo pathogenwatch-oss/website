@@ -1,12 +1,9 @@
 const TOAST_SHOW = 'TOAST_SHOW';
 
-export function showToast(message, action) {
+export function showToast(toast) {
   return {
     type: TOAST_SHOW,
-    payload: {
-      message,
-      action,
-    },
+    payload: toast,
   };
 }
 
