@@ -3,38 +3,23 @@ const webpack = require('webpack');
 
 const srcFolder = path.join(__dirname, 'src');
 
-const resolveFallback = path.resolve(__dirname, 'node_modules');
 const resolve = {
   alias: {
     '^': srcFolder,
   },
-  fallback: resolveFallback,
 };
-const resolveLoader = {
-  fallback: resolveFallback,
-};
-
-const postcss = [
-  require('postcss-input-style'),
-  require('postcss-cssnext')({
-    feature: {
-      autoprefixer: {
-        browsers: [ 'last 2 versions', 'Safari 8' ],
-      },
-    },
-  }),
-];
 
 const babelSettings = {
   extends: path.join(__dirname, '/.babelrc'),
 };
 
-const loaders = [
-  { test: /.json$/, loaders: [ 'json' ] },
-  { test: /.css$/, loaders: [ 'style', 'css', 'postcss' ] },
-  { test: /\.(png|jpg|jpeg|gif)$/, loader: 'file' },
+const rules = [
+  { test: /.json$/, use: [ 'json' ] },
+  { test: /.css$/, use: [ 'style', 'css', 'postcss' ] },
+  { test: /\.(png|jpg|jpeg|gif)$/, use: 'file' },
   { test: /\.js$/,
-    loader: (process.env.NODE_ENV === 'production' ? '' : 'react-hot!').concat(`babel?${JSON.stringify(babelSettings)}`),
+    use: (process.env.NODE_ENV === 'production' ? [] : [ 'react-hot' ]).
+      concat([ { loader: 'babel', query: JSON.stringify(babelSettings) } ]),
     include: [
       /(src|universal|cgps-commons)/,
       path.join(__dirname, 'node_modules', 'promise-file-reader'),
@@ -44,6 +29,23 @@ const loaders = [
 
 const commonPlugins = [
   new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+  // https://github.com/postcss/postcss-loader/issues/99#issuecomment-255367959
+  new webpack.LoaderOptionsPlugin({
+    options: {
+      postcss() {
+        return [
+          require('postcss-input-style')(),
+          require('postcss-cssnext')({
+            feature: {
+              autoprefixer: {
+                browsers: [ 'last 2 versions', 'Safari 8' ],
+              },
+            },
+          }),
+        ];
+      },
+    },
+  }),
 ];
 
 const devConfig = {
@@ -58,15 +60,13 @@ const devConfig = {
     publicPath: '/',
   },
   resolve,
-  resolveLoader,
   plugins: commonPlugins.concat([
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin(),
   ]),
   module: {
-    loaders,
+    rules,
   },
-  postcss,
 };
 
 const prodConfig = {
@@ -77,9 +77,7 @@ const prodConfig = {
     publicPath: '/',
   },
   resolve,
-  resolveLoader,
   plugins: commonPlugins.concat([
-    new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.optimize.UglifyJsPlugin({
       compressor: {
         warnings: false,
@@ -93,9 +91,8 @@ const prodConfig = {
     }),
   ]),
   module: {
-    loaders,
+    rules,
   },
-  postcss,
 };
 
 module.exports = process.env.NODE_ENV === 'production' ? prodConfig : devConfig;

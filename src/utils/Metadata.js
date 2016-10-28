@@ -63,7 +63,7 @@ function convertDateObjectToCustomObject(date) {
   };
 }
 
-function fixDateFormats(collection) {
+export function fixDateFormats(collection) {
   const { assemblies } = collection;
   Object.keys(assemblies).forEach(assemblyId => {
     const assembly = assemblies[assemblyId];
@@ -99,7 +99,7 @@ function isValid({ date }) {
   return true;
 }
 
-function fixPositions(collection) {
+export function fixPositions(collection) {
   const { assemblies } = collection;
   Object.keys(assemblies).forEach(assemblyId => {
     const { metadata } = assemblies[assemblyId];
@@ -113,7 +113,5 @@ function fixPositions(collection) {
 export default {
   parseCsvToJson,
   getFormattedDateString,
-  fixDateFormats,
   isValid,
-  fixPositions,
 };
