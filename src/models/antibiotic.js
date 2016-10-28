@@ -14,9 +14,9 @@ function formatLongName(longName) {
 
 function formatForFrontend(doc) {
   if (Array.isArray(doc)) {
-    return doc.map(({ antibioticKey, antibioticName }) => ({
+    return doc.map(({ antibioticKey, displayName }) => ({
       name: antibioticKey,
-      longName: antibioticName,
+      longName: displayName,
     }));
   }
 
