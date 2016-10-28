@@ -1,6 +1,6 @@
 import MetadataUtils from '../utils/Metadata';
 
-export function getSystemDataColumnProps({ noPopulation, noMLST } = {}) {
+export function getSystemDataColumnProps({ noPopulation, noMLST, ngMast } = {}) {
   return [
     { columnKey: '__date',
       valueGetter({ metadata }) {
@@ -27,6 +27,26 @@ export function getSystemDataColumnProps({ noPopulation, noMLST } = {}) {
       },
     },
   ]).
+  concat(ngMast ? [
+    { columnKey: '__ng-mast',
+      valueGetter({ analysis }) {
+        if (!analysis.ngmast) return null;
+        return analysis.ngmast.ngmast;
+      },
+    },
+    { columnKey: '__por',
+      valueGetter({ analysis }) {
+        if (!analysis.ngmast) return null;
+        return analysis.ngmast.por;
+      },
+    },
+    { columnKey: '__tbpb',
+      valueGetter({ analysis }) {
+        if (!analysis.ngmast) return null;
+        return analysis.ngmast.tbpb;
+      },
+    },
+  ] : []).
   concat([
     { columnKey: '__core_matches',
       valueGetter({ analysis }) {

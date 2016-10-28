@@ -172,8 +172,12 @@
   text-align: center;
 }
 
-.wgsa-resistance-icon--resistant {
+.wgsa-amr--resistant {
   color: #d11b1b;
+}
+
+.wgsa-amr--intermediate {
+  color: #d16d1b;
 }
 
 .wgsa-assembly-name-cell {
@@ -214,8 +218,4 @@
   margin: 0 2px;
   padding: 0 2px;
   outline: none;
-}
-
-.wgsa-resistance-mechanism--active {
-  color: #d11b1b;
 }
