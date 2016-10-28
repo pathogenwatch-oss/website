@@ -1,21 +1,12 @@
 const fs = require('fs');
-const fspath = require('path');
 
 const webpack = require('webpack');
 const express = require('express');
 const bodyParser = require('body-parser');
 const fastaStorage = require('wgsa-fasta-store');
-const createMashSpecieator = require('mash-specieator');
 
 const config = require('./webpack.config.js');
 const compiler = webpack(config);
-
-const referencesDir = require('mash-sketches');
-const sketchFilePath = fspath.join(referencesDir, 'refseq-archaea-bacteria-fungi-viral-k16-s400.msh');
-const metadataFilePath = fspath.join(referencesDir, 'refseq-archaea-bacteria-fungi-viral-k16-s400.csv');
-const specieator = createMashSpecieator(sketchFilePath, metadataFilePath);
-
-const analyse = require('./universal/fastaAnalysis');
 
 const app = express();
 
@@ -26,8 +17,6 @@ app.use(require('webpack-dev-middleware')(compiler, {
 }));
 
 app.use(require('webpack-hot-middleware')(compiler));
-
-app.use(bodyParser.text({ limit: '10mb' }));
 
 app.use(bodyParser.json());
 
@@ -102,32 +91,33 @@ apiRouter.get(
   (req, res) => res.sendFile(`${__dirname}/static_data/metadata.csv`)
 );
 
-const speciesIds = new Set(require('./universal/species').map(_ => _.id));
-
-function getWGSASpeciesId(...ids) {
-  for (const id of ids) {
-    if (speciesIds.has(id)) return id;
-  }
-  return null;
-}
+const fastaStoragePath = './fastas';
+fastaStorage.setup(fastaStoragePath);
 
 let uploadError = false;
 apiRouter.post('/upload', (req, res) => {
   // uploadError = !uploadError;
   return uploadError ?
     setTimeout(() => res.sendStatus(500), 500) :
-    fastaStorage.store('./fastas', req.body).
-      then(({ path, id }) =>
-        specieator.queryFile(path).
-          then(({ speciesTaxId, taxId, scientificName }) => ({
-            speciesId: getWGSASpeciesId(speciesTaxId, taxId),
-            speciesName: scientificName,
-            id,
-          }))
-      ).
-      then(result =>
-        res.json(Object.assign({ metrics: analyse(req.body) }, result))
-      );
+    fastaStorage.store(fastaStoragePath, req)
+      .then(({ fileId, metrics, specieator: { taxId, scientificName } }) => {
+        // let country;
+        //
+        // if (req.query.lat && req.query.lon) {
+        //   country = getCountry(
+        //     Number.parseFloat(req.query.lat), Number.parseFloat(req.query.lon)
+        //   );
+        // }
+
+        res.json({
+          id: fileId,
+          speciesId: taxId,
+          speciesName: scientificName,
+          metrics,
+          // country,
+        });
+      }).
+      catch(error => next(error));
 });
 
 apiRouter.post('/collection', (req, res) =>

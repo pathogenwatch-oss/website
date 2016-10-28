@@ -1,7 +1,13 @@
 import sortBy from 'lodash.sortby';
 
+const supportedSpecies = require('../../universal/species');
+
+const supportedSpeciesIds = new Set(supportedSpecies.map(_ => _.id));
+
+export const isSupported = ({ speciesId }) => supportedSpeciesIds.has(speciesId);
+
 const definitions =
-  require('../../universal/species').reduce((memo, { id, nickname }) => {
+  supportedSpecies.reduce((memo, { id, nickname }) => {
     memo[nickname] = {
       id,
       nickname,
@@ -32,8 +38,6 @@ export const referenceCollections = sortBy(
 );
 
 let currentSpecies = {};
-
-export const isSupported = ({ speciesId }) => !!speciesId; // cast to boolean
 
 export default {
 
