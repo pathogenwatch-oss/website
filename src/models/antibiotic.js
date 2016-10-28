@@ -13,6 +13,13 @@ function formatLongName(longName) {
 }
 
 function formatForFrontend(doc) {
+  if (Array.isArray(doc)) {
+    return doc.map(({ antibioticKey, displayName }) => ({
+      name: antibioticKey,
+      longName: displayName,
+    }));
+  }
+
   return (
     Object.keys(doc).
       map(antibioticClassname => {

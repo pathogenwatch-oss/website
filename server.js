@@ -17,7 +17,6 @@ var clientPath = path.join(__dirname, 'node_modules', 'wgsa-front-end');
 app.set('port', process.env.PORT || config.node.port);
 // http://stackoverflow.com/a/19965089
 app.use(bodyParser.json({ limit: '500mb' }));
-app.use(bodyParser.text({ limit: '500mb' }));
 app.use(bodyParser.urlencoded({
   extended: true,
   limit: '50mb',
