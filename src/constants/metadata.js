@@ -40,7 +40,7 @@ export function getSystemDataColumnProps({ noPopulation, noMLST, ngMast } = {}) 
         return analysis.ngmast.por;
       },
     },
-    { columnKey: '__tbqb',
+    { columnKey: '__tbpb',
       valueGetter({ analysis }) {
         if (!analysis.ngmast) return null;
         return analysis.ngmast.tbpb;
