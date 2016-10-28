@@ -24,7 +24,7 @@ export function createFilename(formatName, collectionId, assemblyName) {
 }
 
 const errorToast = {
-  message: 'Subtree currently unavailable, please try again later.',
+  message: 'Failed to generate download, please try again later.',
 };
 
 export function createDownloadProps(params, dispatch) {
