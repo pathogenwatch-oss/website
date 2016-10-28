@@ -37,7 +37,7 @@ const ToastContainer = React.createClass({
           { action &&
             <button
               ref="actionButton"
-              onClick={() => action.onClick() && onCloseButtonClick()}
+              onClick={() => { action.onClick(); onCloseButtonClick(); }}
               className="wgsa-toast__action mdl-button"
             >
               {action.label}

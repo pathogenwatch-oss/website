@@ -5,7 +5,7 @@ import * as selectors from './selectors';
 import { showToast } from '../toast';
 
 import { mapCSVsToFastas, sendToServer } from './utils';
-import { getUndoRemoveFastaToast, getDuplicatesToastMessage } from './utils/toasts';
+import * as toasts from './utils/toasts';
 
 function isDuplicate({ name }, files) {
   return files[name] !== undefined;
@@ -36,15 +36,30 @@ export function uploadFiles(files) {
   return (dispatch, getState) => {
     dispatch(actions.addFastas(files));
 
-    const uploads = selectors.getUploads(getState());
-    if (uploads.uploading.size > 0) return;
+    if (selectors.isUploading(getState())) return;
 
     (function upload() {
       const { queue, uploading } = selectors.getUploads(getState());
       if (queue.length && uploading.size < uploadLimit) {
         dispatch(
           uploadFasta(queue[0])
-        ).then(() => { if (queue.length > uploadLimit) upload(); });
+        ).then(() => {
+          if (queue.length > uploadLimit) {
+            upload();
+            return;
+          }
+
+          const state = getState();
+          if (selectors.isUploading(state)) return;
+
+          const failedUploads = selectors.getFailedUploads(state);
+          if (!failedUploads.length) return;
+
+          dispatch(showToast(toasts.retryAll(
+            failedUploads.length,
+            () => dispatch(uploadFiles(failedUploads))
+          )));
+        });
         upload();
       }
     }());
@@ -61,7 +76,7 @@ export function addFiles(newFiles) {
         const nonDuplicates = parsedFiles.filter(file => !isDuplicate(file, files));
 
         if (duplicates.length) {
-          dispatch(showToast(getDuplicatesToastMessage(duplicates)));
+          dispatch(showToast(toasts.notifyDuplicates(duplicates)));
         }
         if (nonDuplicates.length) {
           dispatch(uploadFiles(nonDuplicates));
@@ -99,7 +114,6 @@ export function removeFasta(name) {
     const fasta = { ...fastas[name] };
 
     dispatch(actions.removeFasta(name));
-    const { message, action } = getUndoRemoveFastaToast(fasta, dispatch);
-    dispatch(showToast(message, action));
+    dispatch(showToast(toasts.undoRemoveFasta(fasta, dispatch)));
   };
 }

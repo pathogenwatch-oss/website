@@ -8,6 +8,9 @@ export const fastaValidationErrors = {
   EMPTY_FILE: 'EMPTY_FILE',
 };
 
+export const fastaValidationErrorSet =
+  new Set(Object.keys(fastaValidationErrors));
+
 const MAX_FASTA_FILE_SIZE = CONFIG.maxFastaFileSize * 1048576;
 
 export function validateFastaSize(file) {
@@ -28,4 +31,8 @@ export function validateFastaContent(fastaContent) {
     return cleanContent;
   }
   throw fastaValidationErrors.INVALID_FASTA_CONTENT;
+}
+
+export function isFailedUpload({ error }) {
+  return error && !fastaValidationErrorSet.has(error);
 }

@@ -8,7 +8,9 @@ import Species from '../species';
 export const SET_TREE = 'SET_TREE';
 export const FETCH_TREE = createAsyncConstants('FETCH_TREE');
 
-const errorMessage = 'Subtree currently unavailable, please try again later.';
+const errorToast = {
+  message: 'Subtree currently unavailable, please try again later.',
+};
 
 export function displayTree({ name, newick }, collectionId) {
   const setTree = { type: SET_TREE, name };
@@ -26,6 +28,6 @@ export function displayTree({ name, newick }, collectionId) {
         promise: getSubtree(Species.id, collectionId, name),
       },
     }).then(() => dispatch(setTree))
-      .catch(() => dispatch(showToast(errorMessage)));
+      .catch(() => dispatch(showToast(errorToast)));
   };
 }
