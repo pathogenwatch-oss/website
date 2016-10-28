@@ -10,14 +10,6 @@ const collectionModel = require('models/collection');
 const LOGGER = require('utils/logging').createLogger('Upload');
 const { maxCollectionSize = 0, fastaStoragePath } = require('configuration');
 
-const speciesIds =
-  new Set(require('wgsa-front-end/universal/species').map(_ => _.id));
-
-function getWGSASpeciesId(taxId) {
-  if (speciesIds.has(taxId)) return taxId;
-  return null;
-}
-
 fastaStorage.setup(fastaStoragePath);
 
 router.post('/upload', (req, res, next) => {
@@ -35,7 +27,7 @@ router.post('/upload', (req, res, next) => {
 
       res.json({
         id: fileId,
-        speciesId: getWGSASpeciesId(taxId),
+        speciesId: taxId,
         speciesName: scientificName,
         metrics,
         country,
