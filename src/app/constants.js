@@ -16,7 +16,7 @@ export const DEFAULT = {
   SHAPE: 'circle',
   COLOUR: '#555555',
   DANGER_COLOUR: '#d11b1b',
-  WARNING_COLOUR: '#d1b11b',
+  WARNING_COLOUR: '#d19b1b',
   TREE_TYPE: 'rectangular',
   NODE_SIZE: 10,
   LABEL_SIZE: 10,

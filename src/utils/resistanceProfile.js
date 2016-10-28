@@ -2,7 +2,10 @@ import { setColourColumns } from '../actions/table';
 
 import { DEFAULT, CGPS } from '../app/constants';
 
-const resistantColour = DEFAULT.DANGER_COLOUR;
+const colours = {
+  RESISTANT: DEFAULT.DANGER_COLOUR,
+  INTERMEDIATE: DEFAULT.WARNING_COLOUR,
+};
 const nonResistantColour = '#fff';
 
 export function isResistant(profile, antibiotic) {
@@ -23,10 +26,12 @@ export function getColour(antibiotic, assembly) {
   if (!analysis.resistanceProfile) {
     return defaultColourGetter(assembly);
   }
-  return (
-    isResistant(analysis.resistanceProfile, antibiotic) ?
-      resistantColour : nonResistantColour
-  );
+
+  if (isResistant(analysis.resistanceProfile, antibiotic)) {
+    const { state } = analysis.resistanceProfile[antibiotic];
+    return colours[state];
+  }
+  return nonResistantColour;
 }
 
 const noActiveColumns = [ { valueGetter: defaultColourGetter } ];
