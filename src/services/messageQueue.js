@@ -88,6 +88,10 @@ function newUploadProgressRequestQueue(collectionId, callback) {
   });
 }
 
+function getUploadExchange() {
+  return exchanges.UPLOAD;
+}
+
 function getTaskExchange() {
   return exchanges.TASK;
 }
@@ -107,6 +111,7 @@ function getNotificationExchange() {
 module.exports.newCollectionAddQueue = newCollectionAddQueue;
 module.exports.newFileRequestQueue = newFileRequestQueue;
 module.exports.newUploadProgressRequestQueue = newUploadProgressRequestQueue;
+module.exports.getUploadExchange = getUploadExchange;
 module.exports.getTaskExchange = getTaskExchange;
 module.exports.getCollectionIdExchange = getCollectionIdExchange;
 module.exports.getServicesExchange = getServicesExchange;

@@ -17,16 +17,12 @@ var IMPLEMENTATION_OPTIONS = {
   autoDelete: true,
 };
 var EXCHANGE_CONFIG = {
-  NOTIFICATION: {
-    name: 'notifications-ex',
-    type: 'direct',
-  },
-  TASK: {
-    name: 'wgst-tasks-ex',
-    type: 'topic',
-  },
   COLLECTION_ID: {
     name: 'grid-ex',
+    type: 'direct',
+  },
+  NOTIFICATION: {
+    name: 'notifications-ex',
     type: 'direct',
   },
   SERVICES: {
@@ -36,6 +32,14 @@ var EXCHANGE_CONFIG = {
       passive: false,
       confirm: true,
     },
+  },
+  TASK: {
+    name: 'wgst-tasks-ex',
+    type: 'topic',
+  },
+  UPLOAD: {
+    name: 'wgst-ex',
+    type: 'direct',
   },
 };
 var connection;
