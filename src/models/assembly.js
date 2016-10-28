@@ -96,7 +96,7 @@ function formatForFrontend(assembly) {
       ngmast: ngmast ? {
         ngmast: ngmast.ngmast,
         por: ngmast.por,
-        tbqb: ngmast.tbqb,
+        tbpb: ngmast.tbpb,
       } : null,
     },
   };
