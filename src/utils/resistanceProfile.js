@@ -2,7 +2,7 @@ import { setColourColumns } from '../actions/table';
 
 import { DEFAULT, CGPS } from '../app/constants';
 
-const colours = {
+const stateColours = {
   RESISTANT: DEFAULT.DANGER_COLOUR,
   INTERMEDIATE: DEFAULT.WARNING_COLOUR,
 };
@@ -29,7 +29,7 @@ export function getColour(antibiotic, assembly) {
 
   if (isResistant(analysis.resistanceProfile, antibiotic)) {
     const { state } = analysis.resistanceProfile[antibiotic];
-    return colours[state];
+    return stateColours[state];
   }
   return nonResistantColour;
 }
