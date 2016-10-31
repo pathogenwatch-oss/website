@@ -16,10 +16,12 @@ import { createColourGetter } from '^/utils/resistanceProfile';
 
 const style = {
   position: 'relative',
+  height: '100%',
+  width: '100%',
 };
 
 const ExplorerMap = ({ dimensions, ...mapProps }) => (
-  <section style={assign({}, style, dimensions)}>
+  <section style={style}>
     <GoogleMap {...mapProps} />
   </section>
 );
