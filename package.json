@@ -61,7 +61,7 @@
     "react-markdown": "^2.4.2",
     "react-redux": "^4.0.0",
     "react-router": "^2.7.0",
-    "react-split-pane": "^0.1.51",
+    "react-split-pane": "^0.1.52",
     "react-virtualized": "^8.0.5",
     "recharts": "^0.15.1",
     "redbox-react": "^1.1.1",
