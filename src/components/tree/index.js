@@ -28,6 +28,7 @@ Phylocanvas.plugin(decorate => {
 const fullWidthHeight = {
   height: '100%',
   width: '100%',
+  overflow: 'hidden',
 };
 
 const initialMaxScale = 2;
