@@ -81,4 +81,25 @@ router.get('/download/fasta/:id', (req, res, next) => {
     catch(next);
 });
 
+router.post('/download/fastas', (req, res, next) => {
+  const { files, filename } = req.body;
+
+  if (!files || !Array.isArray(files) || !files.length) {
+    LOGGER.error('Invalid files list');
+    return res.sendStatus(400);
+  }
+
+  LOGGER.info(`Received request for fasta zip of ${files.length} files`);
+
+  fastaStorage.archive(fastaStoragePath, files).
+    then(pathToFile =>
+      res.set({
+        'Content-Disposition': `attachment; filename="${filename}.zip"`,
+        'Content-type': 'application/zip',
+      }).
+      sendFile(pathToFile)
+    ).
+    catch(next);
+});
+
 module.exports = router;
