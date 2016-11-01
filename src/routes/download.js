@@ -1,8 +1,13 @@
+const path = require('path');
 const express = require('express');
 const router = express.Router();
 
-const fileModel = require('models/file');
+const fastaStorage = require('wgsa-fasta-store');
 
+const fileModel = require('models/file');
+const assemblyModel = require('models/assembly');
+
+const { fastaStoragePath } = require('configuration');
 const LOGGER = require('utils/logging').createLogger('Download requests');
 
 router.post('/species/:speciesId/download/type/:idType/format/:fileFormat',
@@ -48,5 +53,32 @@ router.get('/species/:speciesId/download/file/:fileName',
     stream.pipe(res);
   }
 );
+
+function createFastaFileName(assemblyName = 'file') {
+  return path.extname(assemblyName || '').length ?
+    assemblyName :
+    `${assemblyName}.fasta`;
+}
+
+router.get('/download/fasta/:id', (req, res, next) => {
+  const { id } = req.params;
+
+  if (!id) {
+    LOGGER.error('Missing id');
+    return res.sendStatus(400);
+  }
+
+  LOGGER.info(`Received request for fasta: ${id}`);
+
+  assemblyModel.getMetadata(id).
+    then(({ fileId, assemblyName }) =>
+      res.set({
+        'Content-Disposition': `attachment; filename="${createFastaFileName(assemblyName)}"`,
+        'Content-type': 'text/plain',
+      }).
+      sendFile(fastaStorage.getFilePath(fastaStoragePath, fileId))
+    ).
+    catch(next);
+});
 
 module.exports = router;

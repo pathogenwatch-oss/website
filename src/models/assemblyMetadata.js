@@ -1,5 +1,5 @@
 const systemMetadataColumns = [
-  'assemblyId', 'speciesId', 'assemblyName',
+  'assemblyId', 'speciesId', 'assemblyName', 'fileId',
   'date', 'year', 'month', 'day',
   'position', 'latitude', 'longitude',
   'collectionId', 'pmid',
@@ -20,6 +20,7 @@ function createRecord(ids, metadata, metrics) {
     assemblyId: ids.assemblyId,
     speciesId: ids.speciesId,
     collectionId: ids.collectionId,
+    fileId: ids.fileId,
     assemblyName: metadata.assemblyName,
     date: metadata.date || {
       year: metadata.year,
