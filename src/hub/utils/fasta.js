@@ -1,4 +1,4 @@
-const regexp = /^(?:[>;].+\n(?:[ACGTURYKMSWBDHVN]+\*?\n)+\n*)+$/i;
+const regexp = /^(?:[>;].+(?:\n[ACGTURYKMSWBDHVN]+\*?)+\n*)+$/i;
 
 import CONFIG from '../../app/config';
 
