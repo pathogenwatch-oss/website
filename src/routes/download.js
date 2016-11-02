@@ -84,14 +84,27 @@ router.get('/download/fasta/:id', (req, res, next) => {
 router.post('/download/fastas', (req, res, next) => {
   const { files, filename } = req.body;
 
-  if (!files || !Array.isArray(files) || !files.length) {
+  if (!files || !files.length) {
     LOGGER.error('Invalid files list');
     return res.sendStatus(400);
   }
 
-  LOGGER.info(`Received request for fasta zip of ${files.length} files`);
+  let parsedFiles;
+  try {
+    parsedFiles = JSON.parse(files);
+  } catch (e) {
+    LOGGER.error('Files list not valid JSON');
+    return res.sendStatus(400);
+  }
 
-  fastaStorage.archive(fastaStoragePath, files).
+  if (!Array.isArray(parsedFiles) || !parsedFiles.length) {
+    LOGGER.error('Files list not an array');
+    return res.sendStatus(400);
+  }
+
+  LOGGER.info(`Received request for fasta zip of ${parsedFiles.length} files`);
+
+  fastaStorage.archive(fastaStoragePath, parsedFiles).
     then(pathToFile =>
       res.set({
         'Content-Disposition': `attachment; filename="${filename}.zip"`,
