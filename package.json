@@ -44,9 +44,9 @@
     "test": "eval $npm_package_testcmd 'test/unit/**/*.test.js'",
     "test-example": "eval $npm_package_testcmd 'test/example.test.js'",
     "e2e": "eval $npm_package_testcmd 'test/e2e/**/*.test.js'",
-    "upload": "eval $npm_package_startcmd bin/upload-reference-data.js",
+    "upload": "eval $npm_package_startcmd bin/upload.js",
     "download": "eval $npm_package_startcmd bin/download.js",
-    "metadata": "eval $npm_package_startcmd bin/generate-reference-metadata.js",
+    "add-fastas": "eval $npm_package_startcmd bin/add-to-fasta-store.js",
     "service": "eval $npm_package_startcmd microservices/bootstrap.js upload-progress | bunyan -o short",
     "ids": "eval $npm_package_startcmd bin/collection-id-update.js"
   },
