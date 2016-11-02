@@ -99,7 +99,6 @@ function mapStateToProps(state) {
     collection,
     data: getTableData(entities.assemblies, filter),
     downloads: {
-      fasta: downloads.files.fasta,
       wgsa_gff: downloads.files.wgsa_gff,
     },
   };

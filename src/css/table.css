@@ -84,17 +84,17 @@
 }
 
 .wgsa-table-downloads {
+  display: flex;
+  align-items: center;
   padding: 0 8px;
 }
 
 .wgsa-table-header .wgsa-table-downloads {
-  line-height: 32px;
+  line-height: 1;
 }
 
 .wgsa-table-downloads .wgsa-download-button {
   padding: 0;
-  display: inline-block;
-  vertical-align: middle;
   min-width: 28px;
 }
 
@@ -110,7 +110,7 @@
 }
 
 .wgsa-table-header .wgsa-download-button {
-  margin-bottom: -4px;
+  margin-bottom: -2px;
 }
 
 .wgsa-table-header .mdl-spinner {
