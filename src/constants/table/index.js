@@ -1,15 +1,15 @@
 import React from 'react';
 
-import DownloadButton from '^/components/explorer/DownloadButton.react';
+import DownloadButton from '../../components/explorer/DownloadButton.react';
+import FastaDownloadButton from '../../fasta-download-button';
 
-import { getArchiveDownloadProps } from '^/constants/downloads';
+import { getArchiveDownloadProps } from '../../constants/downloads';
 import { nameColumnData } from './columns';
 
-import { defaultWidthGetter } from '^/utils/table/columnWidth';
+import { defaultWidthGetter } from '../../utils/table/columnWidth';
 
-import { CGPS } from '^/app/constants';
-import Species from '^/species';
-
+import { CGPS } from '../../app/constants';
+import Species from '../../species';
 
 export const tableKeys = {
   metadata: 'metadata',
@@ -42,7 +42,7 @@ export const downloadColumnProps = {
     const { fasta, wgsa_gff } = data.__downloads;
     return (
       <span className="wgsa-table-downloads" onClick={(e) => e.stopPropagation()}>
-        <DownloadButton { ...fasta } label=".fa" iconOnly />
+        <FastaDownloadButton id={data.metadata.assemblyId} />
         <DownloadButton
           { ...wgsa_gff }
           label=".gff"
