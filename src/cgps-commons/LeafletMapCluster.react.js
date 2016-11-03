@@ -5,19 +5,35 @@ import Leaflet from 'leaflet';
 import { MapLayer } from 'react-leaflet';
 import 'leaflet.markercluster';
 
-const icon = Leaflet.divIcon({
+const layerId = {};
+
+const defaultIconProps = {
   className: 'material-icons',
   html: 'place',
   iconSize: [ 40, 40 ],
   iconAnchor: [ 20, 37 ],
   popupAnchor: [ 0, -32 ],
-});
+};
+
+const defaultIcon = Leaflet.divIcon(defaultIconProps);
+
+function getMarkerIcon(iconProps) {
+  return iconProps ?
+    Leaflet.divIcon(Object.assign({}, defaultIconProps, iconProps)) :
+    defaultIcon;
+}
 
 class MarkerCluster extends MapLayer {
 
   componentWillMount() {
     super.componentWillMount();
-    this.leafletElement = Leaflet.markerClusterGroup();
+    this.leafletElement = Leaflet.markerClusterGroup({
+      maxClusterRadius: 1,
+      iconCreateFunction(cluster) {
+        console.log(cluster.getAllChildMarkers());
+        return Leaflet.divIcon({ html: '<b>' + cluster.getChildCount() + '</b>' });
+      }
+    });
   }
 
   componentDidMount() {
@@ -38,8 +54,8 @@ class MarkerCluster extends MapLayer {
       return;
     }
 
-    const layers = markers.map(({ id, position, title }) =>
-      Leaflet.marker(position, { id, icon, title }).
+    const layers = markers.map(({ id, position, title, icon }) =>
+      Leaflet.marker(position, { id, icon: getMarkerIcon(icon), title, layerId }).
         on('click', this.props.onMarkerClick)
     );
 
@@ -49,7 +65,7 @@ class MarkerCluster extends MapLayer {
   }
 
   removeMarker(marker) {
-    if (marker.options.icon === icon) {
+    if (marker.options.layerId === layerId) {
       this.leafletElement.removeLayer(marker);
     }
   }
