@@ -60,6 +60,26 @@ function createFastaFileName(assemblyName = 'file') {
     `${assemblyName}.fasta`;
 }
 
+router.get('/download/archive/fasta/:id', (req, res) => {
+  const { id } = req.params;
+  const { filename } = req.query;
+
+  if (!id) {
+    LOGGER.error('Missing id');
+    return res.sendStatus(400);
+  }
+
+  LOGGER.info(`Received request for fasta: ${id}`);
+
+  const archivePath = fastaStorage.getArchivePath(fastaStoragePath, id);
+
+  res.set({
+    'Content-Disposition': `attachment; filename="${filename}"`,
+    'Content-type': 'text/plain',
+  }).
+  sendFile(archivePath);
+});
+
 router.get('/download/fasta/:id', (req, res, next) => {
   const { id } = req.params;
 
@@ -105,13 +125,7 @@ router.post('/download/fastas', (req, res, next) => {
   LOGGER.info(`Received request for fasta zip of ${parsedFiles.length} files`);
 
   fastaStorage.archive(fastaStoragePath, parsedFiles).
-    then(pathToFile =>
-      res.set({
-        'Content-Disposition': `attachment; filename="${filename}.zip"`,
-        'Content-type': 'application/zip',
-      }).
-      sendFile(pathToFile)
-    ).
+    then(fileId => res.json({ fileId })).
     catch(next);
 });
 
