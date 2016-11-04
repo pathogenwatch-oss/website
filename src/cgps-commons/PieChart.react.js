@@ -17,7 +17,7 @@ function renderPaths(slices) {
   let lastX = radius;
   let lastY = 0;
 
-  return slices.map(({ color, value }, index) => {
+  return slices.map(({ colour, value }, index) => {
     // Should we just draw a circle?
     if (value === total) {
       return (
@@ -25,7 +25,7 @@ function renderPaths(slices) {
           r={radius}
           cx={center}
           cy={center}
-          fill={color}
+          fill={colour}
           key={index}
           data-count={value}
         />
@@ -62,7 +62,7 @@ function renderPaths(slices) {
     lastX = nextX;
     lastY = nextY;
 
-    return <path d={d} fill={color} key={index} data-count={value} />;
+    return <path d={d} fill={colour} key={index} data-count={value} />;
   });
 }
 
@@ -90,7 +90,7 @@ export default class PieChart extends React.Component {
 PieChart.propTypes = {
   donut: PropTypes.bool,
   slices: PropTypes.arrayOf(PropTypes.shape({
-    color: PropTypes.string.isRequired, // hex color
+    colour: PropTypes.string.isRequired, // hex colour
     value: PropTypes.number.isRequired,
   })).isRequired,
 };
