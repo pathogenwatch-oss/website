@@ -13,15 +13,8 @@
 }
 
 .wgsa-collection-viewer-map .leaflet-marker-icon {
-  position: absolute;
-  left: 0;
-  top: 0;
-  display: block;
-  cursor: pointer;
-  background-color: transparent;
-  background-repeat: no-repeat;
-  background-position: center;
-  visibility: visible;
+  color: #673c90;
+  font-size: 40px;
 }
 
 .wgsa-collection-viewer-map .leaflet-marker-icon svg {

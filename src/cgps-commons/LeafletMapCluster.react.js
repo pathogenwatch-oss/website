@@ -7,13 +7,7 @@ import 'leaflet.markercluster';
 
 const layerId = {};
 
-const defaultIcon = Leaflet.divIcon({
-  className: 'material-icons',
-  html: 'place',
-  iconSize: [ 40, 40 ],
-  iconAnchor: [ 20, 37 ],
-  popupAnchor: [ 0, -32 ],
-});
+import defaultIcon from './LeafletMarkerDefaultIcon';
 
 class MarkerCluster extends MapLayer {
 
@@ -40,8 +34,8 @@ class MarkerCluster extends MapLayer {
       return;
     }
 
-    const layers = markers.map(({ id, position, title }) =>
-      Leaflet.marker(position, { id, icon: defaultIcon, title, layerId }).
+    const layers = markers.map(({ id, position, title, icon = defaultIcon }) =>
+      Leaflet.marker(position, { id, icon, title, layerId }).
         on('click', this.props.onMarkerClick)
     );
 

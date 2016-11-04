@@ -1,12 +1,10 @@
 import React from 'react';
-import ReactDOMServer from 'react-dom/server';
 import Leaflet from 'leaflet';
 import { Map, TileLayer, Marker, PropTypes } from 'react-leaflet';
 
-import PieChart from '../cgps-commons/PieChart.react';
-
 import MapCluster from './LeafletMapCluster.react';
 import MapLasso from './LeafletMapLasso.react';
+import defaultIcon from './LeafletMarkerDefaultIcon';
 
 const ATTRIBUTION = `
   Map data &copy;
@@ -87,18 +85,12 @@ export default React.createClass({
         />
       );
     }
-    return markers.map(({ position, colours, title }, index) => (
+    return markers.map(({ position, title, icon = defaultIcon }, index) => (
       <Marker
         key={index}
         position={position}
         title={title}
-        icon={Leaflet.divIcon({
-          className: 'leaflet-marker-icon',
-          html: ReactDOMServer.renderToString(<PieChart slices={Array.from(colours.entries()).map(([ color, value ]) => ({ color, value }))} />),
-          iconSize: [ 20, 20 ],
-          iconAnchor: [ 10, 10 ],
-          popupAnchor: [ 0, -20 ],
-        })}
+        icon={defaultIcon}
       />
     ));
   },
