@@ -1,6 +1,9 @@
 import React from 'react';
+import ReactDOMServer from 'react-dom/server';
 import Leaflet from 'leaflet';
-import { Map, TileLayer, PropTypes } from 'react-leaflet';
+import { Map, TileLayer, Marker, PropTypes } from 'react-leaflet';
+
+import PieChart from '../cgps-commons/PieChart.react';
 
 import MapCluster from './LeafletMapCluster.react';
 import MapLasso from './LeafletMapLasso.react';
@@ -21,6 +24,7 @@ export default React.createClass({
     width: React.PropTypes.number,
     className: React.PropTypes.string,
     markers: React.PropTypes.array,
+    cluster: React.PropTypes.bool,
     center: PropTypes.latlng,
     zoom: React.PropTypes.number,
     lassoPath: React.PropTypes.array,
@@ -29,6 +33,12 @@ export default React.createClass({
     lassoButtonClassname: React.PropTypes.string,
     onBoundsChange: React.PropTypes.func,
     onLassoPathChange: React.PropTypes.func,
+  },
+
+  getDefaultProps() {
+    return {
+      cluster: false,
+    };
   },
 
   componentWillUnmount() {
@@ -67,6 +77,32 @@ export default React.createClass({
     return Leaflet.latLngBounds(southWest, northEast);
   },
 
+  renderMarkers() {
+    const { markers, cluster } = this.props;
+    if (cluster) {
+      return (
+        <MapCluster
+          markers={this.props.markers}
+          onMarkerClick={this.onMarkerClick}
+        />
+      );
+    }
+    return markers.map(({ position, colours, title }, index) => (
+      <Marker
+        key={index}
+        position={position}
+        title={title}
+        icon={Leaflet.divIcon({
+          className: 'leaflet-marker-icon',
+          html: ReactDOMServer.renderToString(<PieChart slices={Array.from(colours.entries()).map(([ color, value ]) => ({ color, value }))} />),
+          iconSize: [ 20, 20 ],
+          iconAnchor: [ 10, 10 ],
+          popupAnchor: [ 0, -20 ],
+        })}
+      />
+    ));
+  },
+
   render() {
     const { center, zoom, mapboxStyle, mapboxKey } = this.props;
     return (
@@ -82,10 +118,7 @@ export default React.createClass({
           attribution={ATTRIBUTION}
           url={`https://api.mapbox.com/styles/v1/mapbox/${mapboxStyle}/tiles/{z}/{x}/{y}?access_token=${mapboxKey}`}
         />
-        <MapCluster
-          markers={this.props.markers}
-          onMarkerClick={this.onMarkerClick}
-        />
+        { this.renderMarkers() }
         <MapLasso
           className={this.props.lassoButtonClassname}
           activeClassName="is-active"

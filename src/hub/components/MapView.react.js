@@ -34,7 +34,7 @@ const MapView = React.createClass({
       <div className="wgsa-filterable-content">
         <LeafletMap
           className="wgsa-hub-map-view"
-          markers={this.props.markers}
+          cluster markers={this.props.markers}
           mapboxStyle="light-v9"
           mapboxKey={CONFIG.mapboxKey}
           center={center}

@@ -1,3 +1,5 @@
+import './styles.css';
+
 import React from 'react';
 import { connect } from 'react-redux';
 
@@ -17,14 +19,14 @@ import {
 const ExplorerMap = ({ markers }) => (
   // <section style={style}>
   <LeafletMap
-    className="wgsa-hub-map-view"
+    className="wgsa-collection-viewer-map"
     markers={markers}
     mapboxStyle="light-v9"
     mapboxKey={CONFIG.mapboxKey}
     center={[ 0, 0 ]}
     zoom={1}
     // lassoPath={this.props.lassoPath}
-    // lassoButtonClassname={lassoButtonClassname}
+    lassoButtonClassname="wgsa-map-lasso-button mdl-button mdl-button--fab mdl-button--mini-fab"
     // onBoundsChange={this.props.onBoundsChange}
     // onLassoPathChange={this.props.onLassoPathChange}
     // onMarkerClick={this.props.onMarkerClick}
