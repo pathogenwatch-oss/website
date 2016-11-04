@@ -1,8 +1,7 @@
 import React from 'react';
+import classnames from 'classnames';
 
 import DownloadIcon from './DownloadIcon.react';
-
-const defaultClassName = 'wgsa-download-button';
 
 export default React.createClass({
 
@@ -35,7 +34,10 @@ export default React.createClass({
     } = this.props;
 
     const title = `Download ${description}`;
-    const classNames = iconOnly ? `${defaultClassName} mdl-button mdl-button--icon` : defaultClassName;
+    const classNames = classnames(
+      'wgsa-download-button',
+      { 'mdl-button mdl-button--icon': iconOnly }
+    );
 
     return link ? (
       <a ref="link"

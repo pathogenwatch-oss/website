@@ -26,7 +26,7 @@ function flattenCSVs(files) {
   return files.reduce((memo, { data = {} }) => memo.concat(data), []);
 }
 
-const FASTA_FILE_EXTENSIONS = [
+export const FASTA_FILE_EXTENSIONS = [
   '.fa', '.fas', '.fna', '.ffn', '.faa', '.frn', '.fasta', '.contig',
 ];
 const FASTA_FILE_NAME_REGEX = new RegExp(`(${FASTA_FILE_EXTENSIONS.join('|')})$`, 'i');

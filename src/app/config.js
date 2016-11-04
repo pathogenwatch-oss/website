@@ -1,7 +1,13 @@
 /* global WGSA_CONFIG */
 /* eslint no-native-reassign: 0 */
 
-const config = Object.assign({}, WGSA_CONFIG);
-WGSA_CONFIG = undefined;
+function getConfig() {
+  if ('WGSA_CONFIG' in global) {
+    const config = Object.assign({}, WGSA_CONFIG);
+    WGSA_CONFIG = undefined;
+    return config;
+  }
+  return {};
+}
 
-export default config;
+export default getConfig();

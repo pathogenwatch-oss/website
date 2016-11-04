@@ -15,8 +15,8 @@ function ajax(config) {
   });
 }
 
-function postJson(path, data, progressFn) {
-  return {
+export function postJson(path, data, progressFn) {
+  return ajax({
     type: 'POST',
     url: `${API_ROOT}${path}`,
     contentType: 'application/json; charset=UTF-8',
@@ -36,15 +36,12 @@ function postJson(path, data, progressFn) {
 
       return xhr;
     },
-  };
+  });
 }
 
 export function getCollectionId(speciesId, collectionData, callback) {
-  $.ajax(
-    postJson(`/species/${speciesId}/collection`, collectionData)
-  ).
-  done(data => callback(null, data)).
-  fail(error => callback(error));
+  postJson(`/species/${speciesId}/collection`, collectionData)
+    .then(data => callback(null, data), error => callback(error));
 }
 
 export function getReferenceCollection(speciesId) {
@@ -57,14 +54,17 @@ export function getCollection(speciesId, collectionId) {
 }
 
 export function requestFile({ speciesId, idType = 'assembly', format }, requestBody) {
-  return ajax(postJson(
+  return postJson(
     `/species/${speciesId}/download/type/${idType}/format/${format}`,
     requestBody
-  ));
+  );
 }
 
-export function makeFileRequest(format, idList, speciesId) {
-  return () => requestFile({ speciesId, format }, { idList });
+export function makeFileRequest(format, id, speciesId) {
+  return () => requestFile(
+    { speciesId, format },
+    { idList: Array.isArray(id) ? id : [ id ] }
+  );
 }
 
 export function getAntibiotics(speciesId) {

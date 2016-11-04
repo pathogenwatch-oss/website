@@ -1,7 +1,7 @@
 import React from 'react';
 
 import DownloadButton from '../../components/explorer/DownloadButton.react';
-import { FastaFileLink, FastaArchiveButton } from '../../downloads';
+import { FastaFileLink, FastaArchiveButton } from '../../fasta-download';
 
 import { getArchiveDownloadProps } from '../../constants/downloads';
 import { nameColumnData } from './columns';
@@ -38,13 +38,12 @@ export const downloadColumnProps = {
   cellClasses: 'wgsa-table-cell--skinny',
   fixedWidth: 80,
   flexGrow: 0,
-  getCellContents(_, data) {
-    const { wgsa_gff } = data.__downloads;
+  getCellContents(_, { __downloads, metadata }) {
     return (
       <span className="wgsa-table-downloads" onClick={(e) => e.stopPropagation()}>
-        <FastaFileLink id={data.metadata.assemblyId} />
+        <FastaFileLink id={metadata.assemblyId} name={metadata.assemblyName} />
         <DownloadButton
-          { ...wgsa_gff }
+          { ...__downloads.wgsa_gff }
           label=".gff"
           color={CGPS.COLOURS.GREEN}
           iconOnly

@@ -6,12 +6,12 @@ export const getFastaArchiveFiles = createSelector(
   (filter, assemblies) => {
     const ids = Array.from(filter.active ? filter.ids : filter.unfilteredIds);
 
-    return JSON.stringify(ids.map(id => {
+    return ids.map(id => {
       const { metadata } = assemblies[id];
       return {
         id: metadata.fileId,
         name: metadata.assemblyName,
       };
-    }));
+    });
   }
 );
