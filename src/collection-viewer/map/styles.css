@@ -13,8 +13,10 @@
 }
 
 .wgsa-collection-viewer-map .leaflet-marker-icon {
-  color: #673c90;
-  font-size: 40px;
+  width: 20px;
+  height: 20px;
+  margin-top: -10px;
+  margin-left: -10px;
 }
 
 .wgsa-collection-viewer-map .leaflet-marker-icon svg {

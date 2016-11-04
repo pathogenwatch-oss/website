@@ -17,14 +17,14 @@ export const getMarkers = createSelector(
         const colour = colourGetter(assembly);
         const key = `${position.latitude},${position.longitude}`;
         const marker = memo.get(key) || {
-          position: [ position.latitude, position.longitude ],
+          position,
           id: [],
           title: '',
-          colours: new Map(),
+          slices: new Map(),
         };
         marker.id.push(assemblyId);
         marker.title = marker.id.length;
-        marker.colours.set(colour, (marker.colours.get(colour) || 0) + 1);
+        marker.slices.set(colour, (marker.slices.get(colour) || 0) + 1);
         memo.set(key, marker);
       }
       return memo;

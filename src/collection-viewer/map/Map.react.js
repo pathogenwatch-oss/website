@@ -4,6 +4,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import LeafletMap from '../../cgps-commons/LeafletMap.react';
+import LeafletPieChartMarker from '../../cgps-commons/LeafletPieChartMarker.react';
 
 import { getMarkers } from './selectors';
 
@@ -17,10 +18,10 @@ import {
 } from '../../actions/filter';
 
 const ExplorerMap = ({ markers }) => (
-  // <section style={style}>
   <LeafletMap
     className="wgsa-collection-viewer-map"
     markers={markers}
+    markerComponent={LeafletPieChartMarker}
     mapboxStyle="light-v9"
     mapboxKey={CONFIG.mapboxKey}
     center={[ 0, 0 ]}
@@ -31,7 +32,6 @@ const ExplorerMap = ({ markers }) => (
     // onLassoPathChange={this.props.onLassoPathChange}
     // onMarkerClick={this.props.onMarkerClick}
   />
-  // </section>
 );
 
 ExplorerMap.propTypes = {

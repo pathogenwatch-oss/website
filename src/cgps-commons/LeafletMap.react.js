@@ -1,10 +1,11 @@
 import React from 'react';
 import Leaflet from 'leaflet';
 import { Map, TileLayer, Marker, PropTypes } from 'react-leaflet';
+import MarkerLayer from 'react-leaflet-marker-layer';
 
 import MapCluster from './LeafletMapCluster.react';
 import MapLasso from './LeafletMapLasso.react';
-import defaultIcon from './LeafletMarkerDefaultIcon';
+import DefaultIcon from './LeafletMarkerDefaultIcon';
 
 const ATTRIBUTION = `
   Map data &copy;
@@ -22,6 +23,7 @@ export default React.createClass({
     width: React.PropTypes.number,
     className: React.PropTypes.string,
     markers: React.PropTypes.array,
+    markerComponent: React.PropTypes.func,
     cluster: React.PropTypes.bool,
     center: PropTypes.latlng,
     zoom: React.PropTypes.number,
@@ -76,7 +78,10 @@ export default React.createClass({
   },
 
   renderMarkers() {
-    const { markers, cluster } = this.props;
+    const { markers, cluster, markerComponent } = this.props;
+
+    if (!markers) return null;
+
     if (cluster) {
       return (
         <MapCluster
@@ -85,12 +90,24 @@ export default React.createClass({
         />
       );
     }
-    return markers.map(({ position, title, icon = defaultIcon }, index) => (
+
+    if (markerComponent) {
+      return (
+        <MarkerLayer
+          markers={markers}
+          latitudeExtractor={_ => _.position.latitude}
+          longitudeExtractor={_ => _.position.longitude}
+          markerComponent={markerComponent}
+        />
+      );
+    }
+
+    return markers.map(({ position, title, icon = DefaultIcon }, index) => (
       <Marker
         key={index}
-        position={position}
+        position={Array.isArray(position) ? position : [ position.latitude, position.longitude ]}
         title={title}
-        icon={defaultIcon}
+        icon={icon}
       />
     ));
   },
@@ -111,6 +128,7 @@ export default React.createClass({
           url={`https://api.mapbox.com/styles/v1/mapbox/${mapboxStyle}/tiles/{z}/{x}/{y}?access_token=${mapboxKey}`}
         />
         { this.renderMarkers() }
+        {/* {this.props.markers.map(({ position }) => <Marker position={[ position.latitude, position.longitude ]} />)} */}
         <MapLasso
           className={this.props.lassoButtonClassname}
           activeClassName="is-active"
