@@ -60,26 +60,6 @@ function createFastaFileName(assemblyName = 'file') {
     `${assemblyName}.fasta`;
 }
 
-router.get('/download/archive/fasta/:id', (req, res) => {
-  const { id } = req.params;
-  const { filename } = req.query;
-
-  if (!id) {
-    LOGGER.error('Missing id');
-    return res.sendStatus(400);
-  }
-
-  LOGGER.info(`Received request for fasta: ${id}`);
-
-  const archivePath = fastaStorage.getArchivePath(fastaStoragePath, id);
-
-  res.set({
-    'Content-Disposition': `attachment; filename="${filename}"`,
-    'Content-type': 'text/plain',
-  }).
-  sendFile(archivePath);
-});
-
 router.get('/download/fasta/:id', (req, res, next) => {
   const { id } = req.params;
 
@@ -102,31 +82,38 @@ router.get('/download/fasta/:id', (req, res, next) => {
 });
 
 router.post('/download/fastas', (req, res, next) => {
-  const { files, filename } = req.body;
+  const { files } = req.body;
 
-  if (!files || !files.length) {
+  if (!files || !Array.isArray(files) || !files.length) {
     LOGGER.error('Invalid files list');
     return res.sendStatus(400);
   }
 
-  let parsedFiles;
-  try {
-    parsedFiles = JSON.parse(files);
-  } catch (e) {
-    LOGGER.error('Files list not valid JSON');
-    return res.sendStatus(400);
-  }
+  LOGGER.info(`Received request for fasta zip of ${files.length} files`);
 
-  if (!Array.isArray(parsedFiles) || !parsedFiles.length) {
-    LOGGER.error('Files list not an array');
-    return res.sendStatus(400);
-  }
-
-  LOGGER.info(`Received request for fasta zip of ${parsedFiles.length} files`);
-
-  fastaStorage.archive(fastaStoragePath, parsedFiles).
+  fastaStorage.archive(fastaStoragePath, files).
     then(fileId => res.json({ fileId })).
     catch(next);
+});
+
+router.get('/download/fasta-archive/:id', (req, res) => {
+  const { id } = req.params;
+  const { filename } = req.query;
+
+  if (!id) {
+    LOGGER.error('Missing id');
+    return res.sendStatus(400);
+  }
+
+  LOGGER.info(`Received request for fasta archive: ${id} ${filename}`);
+
+  const archivePath = fastaStorage.getArchivePath(fastaStoragePath, id);
+
+  res.set({
+    'Content-Disposition': `attachment;${filename ? ` filename="${filename}.zip"` : ''}`,
+    'Content-type': 'text/plain',
+  }).
+  sendFile(archivePath);
 });
 
 module.exports = router;
