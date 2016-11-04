@@ -11,7 +11,15 @@ export default React.createClass({
     const slices = Array.from(marker.slices.entries())
         .map(([ colour, value ]) => ({ colour, value }));
     return (
-      <div style={style} className="leaflet-marker-icon" onClick={onClick}>
+      <div
+        style={style}
+        className="leaflet-marker-icon"
+        onClick={event => {
+          event.stopPropagation();
+          event.nativeEvent.stopImmediatePropagation();
+          onClick({ event, marker });
+        }}
+      >
         <PieChart slices={slices} />
       </div>
     );

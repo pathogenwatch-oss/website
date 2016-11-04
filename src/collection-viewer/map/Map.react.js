@@ -17,21 +17,27 @@ import {
   resetFilter,
 } from '../../actions/filter';
 
-const ExplorerMap = ({ markers }) => (
-  <LeafletMap
+const ExplorerMap = ({ markers, onMarkerClick, onClick }) => (
+  <div
     className="wgsa-collection-viewer-map"
-    markers={markers}
-    markerComponent={LeafletPieChartMarker}
-    mapboxStyle="light-v9"
-    mapboxKey={CONFIG.mapboxKey}
-    center={[ 0, 0 ]}
-    zoom={1}
-    // lassoPath={this.props.lassoPath}
-    lassoButtonClassname="wgsa-map-lasso-button mdl-button mdl-button--fab mdl-button--mini-fab"
-    // onBoundsChange={this.props.onBoundsChange}
-    // onLassoPathChange={this.props.onLassoPathChange}
-    // onMarkerClick={this.props.onMarkerClick}
-  />
+    onClick={onClick}
+  >
+    <LeafletMap
+      className="wgsa-collection-viewer-map"
+      markers={markers}
+      markerComponent={LeafletPieChartMarker}
+      mapboxStyle="light-v9"
+      mapboxKey={CONFIG.mapboxKey}
+      center={[ 0, 0 ]}
+      zoom={1}
+      // lassoPath={this.props.lassoPath}
+      lassoButtonClassname="wgsa-map-lasso-button mdl-button mdl-button--fab mdl-button--mini-fab"
+      // onBoundsChange={this.props.onBoundsChange}
+      // onLassoPathChange={this.props.onLassoPathChange}
+      onMarkerClick={onMarkerClick}
+    />
+  </div>
+
 );
 
 ExplorerMap.propTypes = {
@@ -48,7 +54,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    onMarkerClick: () => dispatch(resetFilter()),
+    onClick: () => dispatch(resetFilter()),
+    onMarkerClick: ({ id, event }) => dispatch(activateFilter(id)),
   };
 }
 

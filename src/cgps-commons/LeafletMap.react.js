@@ -50,10 +50,17 @@ export default React.createClass({
     }
   },
 
-  onMarkerClick({ target }) {
+  onClusterMarkerClick({ target, event }) {
     if (this.props.onMarkerClick) {
       const { id } = target.options;
-      this.props.onMarkerClick(id);
+      this.props.onMarkerClick({ id, event });
+    }
+  },
+
+  onMarkerLayerClick({ marker, event }) {
+    if (this.props.onMarkerClick) {
+      const { id } = marker;
+      this.props.onMarkerClick({ id, event });
     }
   },
 
@@ -86,7 +93,7 @@ export default React.createClass({
       return (
         <MapCluster
           markers={this.props.markers}
-          onMarkerClick={this.onMarkerClick}
+          onMarkerClick={this.onClusterMarkerClick}
         />
       );
     }
@@ -98,6 +105,7 @@ export default React.createClass({
           latitudeExtractor={_ => _.position.latitude}
           longitudeExtractor={_ => _.position.longitude}
           markerComponent={markerComponent}
+          propsForMarkers={{ onClick: this.onMarkerLayerClick }}
         />
       );
     }
