@@ -19,8 +19,3 @@
   margin-left: -10px;
   cursor: pointer;
 }
-
-.wgsa-collection-viewer-map .leaflet-marker-icon svg {
-  border: 1px solid #000;
-  border-radius: 50%;
-}

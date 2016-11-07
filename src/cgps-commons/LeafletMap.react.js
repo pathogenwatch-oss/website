@@ -27,6 +27,7 @@ export default React.createClass({
     cluster: React.PropTypes.bool,
     center: PropTypes.latlng,
     zoom: React.PropTypes.number,
+    highlightedColour: React.PropTypes.string,
     lassoPath: React.PropTypes.array,
     mapboxStyle: React.PropTypes.string,
     mapboxKey: React.PropTypes.string,
@@ -85,7 +86,7 @@ export default React.createClass({
   },
 
   renderMarkers() {
-    const { markers, cluster, markerComponent } = this.props;
+    const { markers, cluster, markerComponent, highlightedColour } = this.props;
 
     if (!markers) return null;
 
@@ -105,7 +106,7 @@ export default React.createClass({
           latitudeExtractor={_ => _.position.latitude}
           longitudeExtractor={_ => _.position.longitude}
           markerComponent={markerComponent}
-          propsForMarkers={{ onClick: this.onMarkerLayerClick }}
+          propsForMarkers={{ onClick: this.onMarkerLayerClick, highlightedColour }}
         />
       );
     }

@@ -10,6 +10,8 @@ import { getMarkers } from './selectors';
 
 import CONFIG from '../../app/config';
 
+import { CGPS } from '../../app/constants';
+
 import {
   activateFilter,
   appendToFilter,
@@ -30,6 +32,7 @@ const ExplorerMap = ({ markers, onMarkerClick, onClick }) => (
       mapboxKey={CONFIG.mapboxKey}
       center={[ 0, 0 ]}
       zoom={1}
+      highlightedColour={CGPS.COLOURS.PURPLE}
       // lassoPath={this.props.lassoPath}
       lassoButtonClassname="wgsa-map-lasso-button mdl-button mdl-button--fab mdl-button--mini-fab"
       // onBoundsChange={this.props.onBoundsChange}

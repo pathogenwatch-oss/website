@@ -10,11 +10,11 @@ const radius = center - 1; // padding to prevent clipping
  * @param {Object[]} slices
  * @return {Object[]}
  */
-function renderPaths(slices) {
+function renderPaths(slices, border = 0) {
   const total = slices.reduce((totalValue, { value }) => totalValue + value, 0);
 
   let radSegment = 0;
-  let lastX = radius;
+  let lastX = radius - border;
   let lastY = 0;
 
   return slices.map(({ colour, value }, index) => {
@@ -22,7 +22,7 @@ function renderPaths(slices) {
     if (value === total) {
       return (
         <circle
-          r={radius}
+          r={radius - border}
           cx={center}
           cy={center}
           fill={colour}
@@ -42,8 +42,8 @@ function renderPaths(slices) {
     const longArc = (valuePercentage <= 0.5) ? 0 : 1;
 
     radSegment += valuePercentage * radCircumference;
-    const nextX = Math.cos(radSegment) * radius;
-    const nextY = Math.sin(radSegment) * radius;
+    const nextX = Math.cos(radSegment) * (radius - border);
+    const nextY = Math.sin(radSegment) * (radius - border);
 
     // d is a string that describes the path of the slice.
     // The weirdly placed minus signs [eg, (-(lastY))] are due to the fact
@@ -52,7 +52,7 @@ function renderPaths(slices) {
     const d = [
       `M ${center},${center}`,
       `l ${lastX},${-lastY}`,
-      `a${radius},${radius}`,
+      `a${radius - border},${radius - border}`,
       '0',
       `${longArc},0`,
       `${nextX - lastX},${-(nextY - lastY)}`,
@@ -75,12 +75,14 @@ export default class PieChart extends React.Component {
    * @return {Object}
    */
   render() {
+    const { borderWidth = 0, borderColour = '' } = this.props;
     return (
       <svg viewBox={`0 0 ${size} ${size}`}>
+        { borderWidth > 0 ? <circle cx={center} cy={center} r={center} fill={borderColour} /> : null }
         <g transform={`rotate(-90 ${center} ${center})`}>
-          {renderPaths(this.props.slices)}
+          {renderPaths(this.props.slices, borderWidth)}
         </g>
-        { this.props.donut ? <circle cx="50" cy="50" r="25" /> : null }
+        { this.props.donut ? <circle cx={center} cy={center} r={center / 2} /> : null }
         <text x="50" y="50"></text>
       </svg>
     );
@@ -88,6 +90,8 @@ export default class PieChart extends React.Component {
 }
 
 PieChart.propTypes = {
+  borderWidth: PropTypes.number,
+  borderColour: PropTypes.string,
   donut: PropTypes.bool,
   slices: PropTypes.arrayOf(PropTypes.shape({
     colour: PropTypes.string.isRequired, // hex colour
