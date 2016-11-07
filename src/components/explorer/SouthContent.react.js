@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import FixedTable from '^/components/FixedTable.react';
+import TableSwitcher from './TableSwitcher.js';
 
 import { activateFilter, resetFilter } from '^/actions/filter';
 
@@ -70,6 +71,7 @@ const SouthContent = React.createClass({
         onWheel={preventDefault}
         onTouchMove={preventDefault}
       >
+        <TableSwitcher />
         <FixedTable { ...this.props }
           rowClickHandler={({ metadata }) => handleRowClick(metadata, filter, dispatch)}
           headerClickHandler={headerClickHandler}

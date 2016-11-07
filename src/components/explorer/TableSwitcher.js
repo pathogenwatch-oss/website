@@ -13,13 +13,13 @@ const { metadata, resistanceProfile } = tableKeys;
 
 const style = {
   position: 'absolute',
-  zIndex: 2,
-  transform: 'translateY(-50%)',
+  zIndex: 3,
+  transform: 'translateY(-18px)',
   left: 16,
 };
 
-const TableSwitcher = ({ top, displayedTable, dispatch }) => (
-  <div style={assign({ top }, style)} className="wgsa-switch-background mdl-shadow--2dp">
+const TableSwitcher = ({ displayedTable, dispatch }) => (
+  <div style={style} className="wgsa-switch-background mdl-shadow--2dp">
     <Switch
       id="table-switcher"
       left={{ title: 'Metadata', icon: 'list' }}
@@ -33,7 +33,6 @@ const TableSwitcher = ({ top, displayedTable, dispatch }) => (
 TableSwitcher.displayName = 'TableSwitcher';
 
 TableSwitcher.propTypes = {
-  top: React.PropTypes.number,
   displayedTable: React.PropTypes.string,
   dispatch: React.PropTypes.func,
 };

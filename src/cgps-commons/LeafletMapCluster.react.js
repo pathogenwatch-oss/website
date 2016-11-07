@@ -5,13 +5,9 @@ import Leaflet from 'leaflet';
 import { MapLayer } from 'react-leaflet';
 import 'leaflet.markercluster';
 
-const icon = Leaflet.divIcon({
-  className: 'material-icons',
-  html: 'place',
-  iconSize: [ 40, 40 ],
-  iconAnchor: [ 20, 37 ],
-  popupAnchor: [ 0, -32 ],
-});
+const layerId = {};
+
+import defaultIcon from './LeafletMarkerDefaultIcon';
 
 class MarkerCluster extends MapLayer {
 
@@ -38,8 +34,8 @@ class MarkerCluster extends MapLayer {
       return;
     }
 
-    const layers = markers.map(({ id, position, title }) =>
-      Leaflet.marker(position, { id, icon, title }).
+    const layers = markers.map(({ id, position, title, icon = defaultIcon }) =>
+      Leaflet.marker(position, { id, icon, title, layerId }).
         on('click', this.props.onMarkerClick)
     );
 
@@ -49,7 +45,7 @@ class MarkerCluster extends MapLayer {
   }
 
   removeMarker(marker) {
-    if (marker.options.icon === icon) {
+    if (marker.options.layerId === layerId) {
       this.leafletElement.removeLayer(marker);
     }
   }

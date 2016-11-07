@@ -3,7 +3,7 @@ import '../css/map.css';
 import React from 'react';
 import { connect } from 'react-redux';
 
-import LeafletMap from './LeafletMap.react';
+import LeafletMap from '../../cgps-commons/LeafletMap.react';
 
 import CONFIG from '../../app/config';
 
@@ -34,7 +34,7 @@ const MapView = React.createClass({
       <div className="wgsa-filterable-content">
         <LeafletMap
           className="wgsa-hub-map-view"
-          markers={this.props.markers}
+          cluster markers={this.props.markers}
           mapboxStyle="light-v9"
           mapboxKey={CONFIG.mapboxKey}
           center={center}
@@ -63,7 +63,7 @@ function mapDispatchToProps(dispatch) {
   return {
     onBoundsChange: bounds => dispatch(mapActions.storeBounds(bounds)),
     onLassoPathChange: path => dispatch(filterActions.filterByMetadata('area', path)),
-    onMarkerClick: name => dispatch(showAssemblyDetails(name))
+    onMarkerClick: ({ id }) => dispatch(showAssemblyDetails(id))
   };
 }
 

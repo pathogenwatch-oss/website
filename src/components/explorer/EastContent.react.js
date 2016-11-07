@@ -1,20 +1,13 @@
 import React from 'react';
 
-import ExplorerMap from './ExplorerMap.react';
+import ExplorerMap from '../../collection-viewer/map/Map.react';
 
-const EastContent = React.createClass({
+export default React.createClass({
 
-  propTypes: {
-    width: React.PropTypes.number.isRequired,
-    height: React.PropTypes.number.isRequired,
-  },
-
-  render: function () {
+  render() {
     return (
-      <ExplorerMap dimensions={this.props} />
+      <ExplorerMap />
     );
   },
 
 });
-
-module.exports = EastContent;

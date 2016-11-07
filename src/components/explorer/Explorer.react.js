@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Layout from './Layout.react';
+import CollectionViewer from '../../collection-viewer/CollectionViewer.react';
 import UploadProgress from './upload-progress';
 import { LoadSpinner, LoadError } from './Loading.react';
 
@@ -45,7 +45,7 @@ export default React.createClass({
 
     if (status === statuses.FETCHED) {
       return (
-        <Layout />
+        <CollectionViewer />
       );
     }
 

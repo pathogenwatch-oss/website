@@ -1,0 +1,21 @@
+.leaflet-top, .leaflet-bottom {
+  z-index: 1;
+}
+
+.wgsa-collection-viewer-map {
+  height: 100%;
+  width: 100%;
+  position: absolute !important;
+}
+
+.wgsa-collection-viewer-map .wgsa-map-lasso-button.is-active {
+  background-color: #a386bd;
+}
+
+.wgsa-collection-viewer-map .leaflet-marker-icon {
+  width: 20px;
+  height: 20px;
+  margin-top: -10px;
+  margin-left: -10px;
+  cursor: pointer;
+}
