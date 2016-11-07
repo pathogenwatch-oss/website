@@ -86,8 +86,3 @@
 .marker-cluster span {
   line-height: 30px;
 }
-
-.leaflet-overlay-pane > .leaflet-zoom-animated path {
-  stroke: #673c90;
-  stroke-opacity: 1;
-}

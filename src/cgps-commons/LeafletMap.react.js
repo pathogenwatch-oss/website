@@ -75,14 +75,29 @@ export default React.createClass({
     let south = 1000;
     let west = 1000;
     for (const { position } of markers) {
-      if (position[0] > north) north = position[0];
-      if (position[0] < south) south = position[0];
-      if (position[1] > east) east = position[1];
-      if (position[1] < west) west = position[1];
+      if (Array.isArray(position)) {
+        if (position[0] > north) north = position[0];
+        if (position[0] < south) south = position[0];
+        if (position[1] > east) east = position[1];
+        if (position[1] < west) west = position[1];
+      } else {
+        if (position.latitude > north) north = position.latitude;
+        if (position.latitude < south) south = position.latitude;
+        if (position.longitude > east) east = position.longitude;
+        if (position.longitude < west) west = position.longitude;
+      }
     }
     const southWest = Leaflet.latLng([ south, west ]);
     const northEast = Leaflet.latLng([ north, east ]);
     return Leaflet.latLngBounds(southWest, northEast);
+  },
+
+  refitMapBounds(point) {
+    if (point) {
+      this.leafletMap.leafletElement.panTo(point);
+    } else {
+      this.leafletMap.leafletElement.fitBounds(this.getBounds());
+    }
   },
 
   renderMarkers() {
@@ -131,6 +146,7 @@ export default React.createClass({
         boundsOptions={{ animate: false }}
         className={this.props.className}
         onMoveend={({ target }) => { this.map = target; }}
+        ref={(map) => { this.leafletMap = map; }}
       >
         <TileLayer
           attribution={ATTRIBUTION}
