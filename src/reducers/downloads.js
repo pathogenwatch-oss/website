@@ -3,19 +3,20 @@ import { REQUEST_DOWNLOAD } from '../actions/downloads';
 import * as downloads from '../utils/downloads';
 
 import { createDownloadKey } from '../constants/downloads';
+import { createFastaArchiveLink } from '../fasta-download';
 
-import Species from '^/species';
+import Species from '../species';
 
 const initialState = {
   metadata_csv: {
     description: 'Metadata',
-    filename: 'metadata.csv',
+    filenameSegment: 'metadata.csv',
     getFileContents: downloads.generateMetadataFile,
     createLink: downloads.createCSVLink,
   },
   amr_profile_csv: {
     description: 'AMR Profile',
-    filename: 'amr_profile.csv',
+    filenameSegment: 'amr_profile.csv',
     getFileContents: downloads.generateAMRProfile,
     createLink: downloads.createCSVLink,
     hideFromMenu() {
@@ -25,7 +26,7 @@ const initialState = {
   },
   amr_mechanisms_csv: {
     description: 'AMR Mechanisms',
-    filename: 'amr_mechansisms.csv',
+    filenameSegment: 'amr_mechansisms.csv',
     getFileContents: downloads.generateAMRMechanisms,
     createLink: downloads.createCSVLink,
     hideFromMenu() {
@@ -35,37 +36,37 @@ const initialState = {
   },
   concatenated_core_genes_collection: {
     description: 'Concatenated Core Genes',
-    filename: 'concatenated_core_genes',
+    filenameSegment: 'concatenated_core_genes',
   },
   kernel_checksum_distribution: {
     description: 'Core Allele Distribution',
-    filename: 'core_allele_distribution',
+    filenameSegment: 'core_allele_distribution',
   },
   differences_matrix: {
     description: 'Difference Matrix',
-    filename: 'difference_matrix',
+    filenameSegment: 'difference_matrix',
   },
   score_matrix: {
     description: 'Score Matrix',
-    filename: 'score_matrix',
+    filenameSegment: 'score_matrix',
   },
-  fasta: {
-    description: 'Assembly',
-    filename: 'fasta',
+  fasta_archive: {
+    createLink: createFastaArchiveLink,
+    filenameSegment: 'fastas',
     hideFromMenu: () => true,
   },
   wgsa_gff: {
     description: 'Annotations',
-    filename: 'annotations',
+    filenameSegment: 'annotations',
     hideFromMenu: () => true,
   },
 };
 
 function updateDownloads(state, payload, newStateForKey) {
-  const { format, idList } = payload;
+  const { format, id } = payload;
 
   const { linksById = {}, ...downloadState } = state[format];
-  const downloadKey = createDownloadKey(idList);
+  const downloadKey = createDownloadKey(id);
 
   return {
     ...state,

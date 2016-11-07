@@ -1,15 +1,15 @@
 import React from 'react';
 
-import DownloadButton from '^/components/explorer/DownloadButton.react';
+import DownloadButton from '../../components/explorer/DownloadButton.react';
+import { FastaFileLink, FastaArchiveButton } from '../../fasta-download';
 
-import { getArchiveDownloadProps } from '^/constants/downloads';
+import { getArchiveDownloadProps } from '../../constants/downloads';
 import { nameColumnData } from './columns';
 
-import { defaultWidthGetter } from '^/utils/table/columnWidth';
+import { defaultWidthGetter } from '../../utils/table/columnWidth';
 
-import { CGPS } from '^/app/constants';
-import Species from '^/species';
-
+import { CGPS } from '../../app/constants';
+import Species from '../../species';
 
 export const tableKeys = {
   metadata: 'metadata',
@@ -25,7 +25,7 @@ export const downloadColumnProps = {
   getHeaderContent({ archiveDownloads }) {
     return (
       <span className="wgsa-table-downloads" onClick={(e) => e.stopPropagation()}>
-        <DownloadButton {...archiveDownloads.fasta} isArchive iconOnly />
+        <FastaArchiveButton />
         <DownloadButton
           {...archiveDownloads.wgsa_gff}
           isArchive
@@ -38,13 +38,12 @@ export const downloadColumnProps = {
   cellClasses: 'wgsa-table-cell--skinny',
   fixedWidth: 80,
   flexGrow: 0,
-  getCellContents(_, data) {
-    const { fasta, wgsa_gff } = data.__downloads;
+  getCellContents(_, { __downloads, metadata }) {
     return (
       <span className="wgsa-table-downloads" onClick={(e) => e.stopPropagation()}>
-        <DownloadButton { ...fasta } label=".fa" iconOnly />
+        <FastaFileLink id={metadata.assemblyId} name={metadata.assemblyName} />
         <DownloadButton
-          { ...wgsa_gff }
+          { ...__downloads.wgsa_gff }
           label=".gff"
           color={CGPS.COLOURS.GREEN}
           iconOnly

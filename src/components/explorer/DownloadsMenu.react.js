@@ -8,7 +8,7 @@ import DownloadButton from './DownloadButton.react';
 
 import { setMenuActive } from '^/actions/downloads';
 
-import { createDownloadProps } from '^/constants/downloads';
+import { createDownloadProps, formatCollectionFilename } from '^/constants/downloads';
 import { getCounts, showCounts } from '^/utils/assembly';
 
 const DownloadsMenu = React.createClass({
@@ -60,8 +60,8 @@ const DownloadsMenu = React.createClass({
 
 function mapStateToProps({ downloads, collection, filter, entities, tables }) {
   return {
+    collection,
     assemblies: entities.assemblies,
-    collectionId: collection.id,
     assemblyIds: [ ...(filter.active ? filter.ids : filter.unfilteredIds) ],
     ...downloads,
     tables,
@@ -69,7 +69,7 @@ function mapStateToProps({ downloads, collection, filter, entities, tables }) {
 }
 
 function mergeProps(state, { dispatch }) {
-  const { assemblies, collectionId, assemblyIds, menuOpen, files } = state;
+  const { assemblies, collection, assemblyIds, menuOpen, files } = state;
   return {
     menuOpen,
     counts: getCounts(assemblies, assemblyIds),
@@ -84,8 +84,8 @@ function mergeProps(state, { dispatch }) {
           return createDownloadProps({
             format,
             download,
-            idList: assemblyIds,
-            filenameParams: [ collectionId ],
+            id: assemblyIds,
+            getFileName: () => `${formatCollectionFilename(collection)}`,
             getFileContents:
               download.getFileContents &&
                 (() => download.getFileContents(state, dispatch)),
