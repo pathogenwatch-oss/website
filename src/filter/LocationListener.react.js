@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import { updateFilter } from './actions';
 
-const LocationFilter = React.createClass({
+const LocationListener = React.createClass({
 
   propTypes: {
     location: React.PropTypes.object.isRequired,
@@ -32,9 +32,9 @@ function mapDispatchToProps(dispatch, { stateKey, filters }) {
   return {
     updateFilter: ({ query }) => filters.forEach(({ queryKey, key }) => {
       if (!queryKey) return;
-      dispatch(updateFilter(stateKey, { key }, query[queryKey]));
+      dispatch(updateFilter(stateKey, key, query[queryKey]));
     }),
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(LocationFilter);
+export default connect(mapStateToProps, mapDispatchToProps)(LocationListener);
