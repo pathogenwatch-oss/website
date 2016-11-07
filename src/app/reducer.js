@@ -7,9 +7,9 @@ import bodyClickListener from '../reducers/bodyClickListener';
 import { assemblies, collection, reference } from '../reducers/collection';
 import downloads from '../reducers/downloads';
 import downloadsMenu from '../reducers/downloadsMenu';
-import filter from '../reducers/filter';
+// import filter from '../reducers/filter';
+import filter from '../filter';
 import { reducer as header } from '../header';
-import { reducer as home } from '../home';
 import hub from '../hub/reducers';
 import fastas from '../hub/reducers/fastas';
 import mapMarkers from '../reducers/mapMarkers';
@@ -54,9 +54,8 @@ const rootReducer = combineReducers({
     trees: createReducer(trees),
     fastas: createReducer(fastas),
   }),
-  filter: createReducer(filter),
+  filter,
   header,
-  home,
   hub: hub(createReducer),
   location,
   reference: createReducer(reference),

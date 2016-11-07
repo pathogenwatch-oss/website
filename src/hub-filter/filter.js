@@ -1,4 +1,3 @@
-import createFilter from '../filter';
 import { contains } from 'leaflet-lassoselect/utils';
 
 export const filters = [
@@ -46,10 +45,3 @@ export const filters = [
     },
   },
 ];
-
-export const { actions, reducer, selectors } =
-  createFilter({
-    name: 'hub',
-    filters,
-    getFilterState: ({ hub }) => hub.filter,
-  });

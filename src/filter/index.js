@@ -1,20 +1,7 @@
-import createActionCreators from './actions';
-import createReducer from './reducer';
-import createSelectors from './selectors';
+export default from './reducer';
 
-function createConstants(prefix) {
-  return {
-    UPDATE_FILTER: `${prefix.toUpperCase()}_UPDATE_FILTER`,
-    CLEAR_FILTER: `${prefix.toUpperCase()}_CLEAR_FILTER`,
-  };
-}
+export * as actions from './actions';
 
-export default ({ name, filters, getFilterState }) => {
-  const actionTypes = createConstants(name);
+export * as selectors from './selectors';
 
-  return {
-    actions: createActionCreators(actionTypes),
-    reducer: createReducer(actionTypes, filters),
-    selectors: createSelectors(filters, getFilterState),
-  };
-};
+export LocationFilter from './LocationFilter.react';

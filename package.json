@@ -40,8 +40,6 @@
     "leaflet-lassoselect": "github:imperialcollegelondon/leaflet-lassoselect",
     "leaflet.markercluster": "github:leaflet/leaflet.markercluster#leaflet-0.7",
     "lodash.sortby": "^4.7.0",
-    "node-libs-browser": "^0.5.3",
-    "node-uuid": "^1.4.3",
     "object-assign": "^4.0.1",
     "papaparse": "^4.1.1",
     "phylocanvas": "^2.7.2",

@@ -1,10 +1,9 @@
 import { createSelector } from 'reselect';
 
-import createFilter from '../filter';
+import { HOME } from '../app/stateKeys/filters';
+export const stateKey = HOME;
 
-import { taxIdMap } from '../species';
-
-const getFilterState = ({ home }) => home.filter;
+import { getFilter } from './selectors';
 
 export const filters = [
   { key: 'searchRegExp',
@@ -14,25 +13,14 @@ export const filters = [
         true;
     },
     getValue: createSelector(
-      getFilterState,
+      getFilter,
       filter => (filter.searchRegExp ? filter.searchRegExp.source : '')
     ),
   },
   { key: 'species',
+    queryKey: 'species',
     matches(collection, value) {
       return collection.species === value;
     },
-    onLocationChange(state, { query }) {
-      if (!query.species) return null;
-      if (taxIdMap.has(query.species)) return query.species;
-      return state;
-    },
   },
 ];
-
-export const { actions, reducer, selectors } =
-  createFilter({
-    name: 'home',
-    filters,
-    getFilterState,
-  });

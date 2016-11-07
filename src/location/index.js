@@ -10,6 +10,14 @@ export function updateQueryString(key, value) {
   browserHistory.push(nextString.length ? `?${nextString}` : '');
 }
 
+export function clearQueryString(keys) {
+  const qs = queryString.parse(location.search);
+  const nextString = queryString.stringify(
+    keys.reduce((memo, key) => ({ ...memo, [key]: undefined }), qs)
+  );
+  browserHistory.push(nextString.length ? `?${nextString}` : '');
+}
+
 export const LOCATION_CHANGE = 'LOCATION_CHANGE';
 
 export function locationChange(location) {
@@ -28,13 +36,13 @@ function createSlug({ pathname }) {
   return pathname.split('/')[1];
 }
 
-export function reducer(state = '/', { type, payload }) {
+export function reducer(state = {}, { type, payload }) {
   switch (type) {
     case LOCATION_CHANGE: {
       const { location } = payload;
       return {
         slug: createSlug(payload.location),
-        pathname: location.pathname,
+        ...location,
       };
     }
     default:

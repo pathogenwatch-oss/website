@@ -2,7 +2,10 @@ import { createSelector } from 'reselect';
 import sortBy from 'lodash.sortby';
 
 import { getOrderedFastas, getTotalFastas } from '../hub/selectors';
-import { selectors as filter } from './filter';
+import { selectors as filter } from '../filter';
+
+import { filters } from './filter';
+import { UPLOAD } from '../app/stateKeys/filters';
 
 import { isSupported } from '../species';
 
@@ -11,7 +14,12 @@ export const isFilterActive = state => {
   return filter.isActive(state);
 };
 
-export const getVisibleFastas = filter.getIncludedItems(getOrderedFastas);
+export const getVisibleFastas = state =>
+  filter.getFilteredItems(state, {
+    filters,
+    stateKey: UPLOAD,
+    items: getOrderedFastas(state),
+  });
 
 export const getNumberOfVisibleFastas = createSelector(
   getVisibleFastas,
