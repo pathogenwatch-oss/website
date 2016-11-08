@@ -1,5 +1,6 @@
 .public_fixedDataTable_header,
-.fixedDataTableCellGroupLayout_cellGroup {
+.fixedDataTableCellGroupLayout_cellGroup,
+.fixedDataTableLayout_main {
   background: #fff !important;
 }
 

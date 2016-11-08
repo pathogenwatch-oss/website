@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import Search from './search/Search.react';
-import DownloadsMenu from '../collection-viewer/downloads/DownloadsMenu.react';
 import AboutCollection from '../about-collection-dropdown';
 
 import { setMenuActive } from '../actions/downloads';
@@ -31,7 +30,6 @@ export default connect(mapStateToProps, null, mergeProps)(
         </button>
         <AboutCollection />
       </nav>
-      <DownloadsMenu />
     </span>
   )
 );

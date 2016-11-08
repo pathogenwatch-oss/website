@@ -6,6 +6,7 @@
   height: 100%;
   width: 100%;
   position: absolute !important;
+  background: #cad2d3;
 }
 
 .wgsa-collection-viewer-map .wgsa-map-lasso-button.is-active {

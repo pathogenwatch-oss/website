@@ -22,7 +22,11 @@ export default React.createClass({
         }}
       >
         { marker.highlighted && <MarkerHighlight colour={highlightedColour} /> }
-        <PieChart slices={slices} borderWidth={2} />
+        <PieChart
+          slices={slices}
+          borderColour={this.props.borderColour}
+          borderWidth={this.props.botderWidth}
+        />
       </div>
     );
   },

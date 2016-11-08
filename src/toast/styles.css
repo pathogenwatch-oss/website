@@ -2,7 +2,7 @@
   position: fixed;
   bottom: 0px;
   left: 24px;
-  z-index: 6;
+  z-index: 101;
   height: 0;
   overflow: visible;
 }

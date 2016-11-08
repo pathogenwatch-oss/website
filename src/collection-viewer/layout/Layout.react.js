@@ -1,4 +1,4 @@
-import '../../css/layout-resizer.css';
+import './styles.css';
 
 import React from 'react';
 
@@ -31,6 +31,7 @@ export default React.createClass({
         <SplitPane
           split="vertical"
           defaultSize="33.4%"
+          className="wgsa-no-overflow-pane"
           resizerClassName="wgsa-resizer"
           onChange={(verticalSize) => this.setState({ verticalSize })}
         >

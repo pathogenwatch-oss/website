@@ -1,62 +1,43 @@
-import '^/css/overlay.css';
-import '^/css/downloads-menu.css';
+import './styles.css';
 
 import React from 'react';
 import { connect } from 'react-redux';
 
+import Overlay from '../../components/overlay';
 import DownloadButton from './DownloadButton.react';
 
-import { setMenuActive } from '^/actions/downloads';
+import { setMenuActive } from '../../actions/downloads';
 import { getActiveAssemblyIds } from '../selectors';
-import { createDownloadProps, formatCollectionFilename } from '^/constants/downloads';
-import { getCounts, showCounts } from '^/utils/assembly';
+import {
+  createDownloadProps, formatCollectionFilename,
+} from '../../constants/downloads';
+import { getCounts, showCounts } from '../../utils/assembly';
 
-const DownloadsMenu = React.createClass({
-
-  propTypes: {
-    menuOpen: React.PropTypes.bool,
-    files: React.PropTypes.array,
-    counts: React.PropTypes.object,
-    closeMenu: React.PropTypes.func,
-  },
-
-  componentDidMount() {
-    window.addEventListener('keydown', this.closeMenuOnEsc);
-  },
-
-  componentWillUnmount() {
-    window.removeEventListener('keydown', this.closeMenuOnEsc);
-  },
-
-  closeMenuOnEsc(event) {
-    if (this.props.menuOpen && event.keyCode === 27) {
-      this.props.closeMenu();
-    }
-  },
-
-  render() {
-    const { menuOpen, files, counts = {} } = this.props;
-    return (
-      <div className={`wgsa-overlay ${menuOpen ? 'wgsa-overlay--is-visible' : ''}`.trim()}>
-        <div className="wgsa-overlay__content wgsa-downloads-menu mdl-shadow--4dp" onClick={e => e.stopPropagation()}>
-          <h3 className="mdl-dialog__title">Downloads</h3>
-          { Object.keys(counts).length ? showCounts(counts) : null }
-          <div className="wgsa-downloads-menu__list">
-            <ul className="wgsa-menu">
-              { files.map(fileProps => (
-                  <li className="wgsa-menu__item" key={fileProps.format}>
-                    <DownloadButton {...fileProps} />
-                  </li>
-                )
-              )}
-            </ul>
-          </div>
-        </div>
+const DownloadsMenu = ({ menuOpen, files, counts = {}, closeMenu }) => (
+  <Overlay isVisible={menuOpen} hide={closeMenu}>
+    <div className="wgsa-downloads-menu">
+      <h3 className="mdl-dialog__title">Downloads</h3>
+      { Object.keys(counts).length ? showCounts(counts) : null }
+      <div className="wgsa-downloads-menu__list">
+        <ul className="wgsa-menu">
+          { files.map(fileProps => (
+              <li className="wgsa-menu__item" key={fileProps.format}>
+                <DownloadButton {...fileProps} />
+              </li>
+            )
+          )}
+        </ul>
       </div>
-    );
-  },
+    </div>
+  </Overlay>
+);
 
-});
+DownloadsMenu.PropTypes = {
+  menuOpen: React.PropTypes.bool,
+  files: React.PropTypes.array,
+  counts: React.PropTypes.object,
+  closeMenu: React.PropTypes.func,
+};
 
 function mapStateToProps(state) {
   const { downloads, collection, entities, tables } = state;

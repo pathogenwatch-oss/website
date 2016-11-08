@@ -75,13 +75,13 @@ export default class PieChart extends React.Component {
    * @return {Object}
    */
   render() {
-    const { borderWidth = 0, borderColour = '' } = this.props;
+    const { borderWidth = 7.5, borderColour = '#555' } = this.props;
     return (
       <svg viewBox={`0 0 ${size} ${size}`}>
-        { borderWidth > 0 ? <circle cx={center} cy={center} r={center} fill={borderColour} /> : null }
         <g transform={`rotate(-90 ${center} ${center})`}>
-          {renderPaths(this.props.slices, borderWidth)}
+          {renderPaths(this.props.slices)}
         </g>
+        { borderWidth > 0 ? <circle cx={center} cy={center} r={center - borderWidth / 2} fill="none" strokeWidth={borderWidth} stroke={borderColour} /> : null }
         { this.props.donut ? <circle cx={center} cy={center} r={center / 2} /> : null }
         <text x="50" y="50"></text>
       </svg>

@@ -5,7 +5,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: 6;
+  z-index: 100;
   visibility: hidden;
   transition-property: opacity;
   transition-duration: .28s;
@@ -21,9 +21,4 @@
   visibility: visible;
   opacity: 1;
   /*pointer-events: auto;*/
-}
-
-.wgsa-overlay__content {
-  position: relative;
-  z-index: 1;
 }

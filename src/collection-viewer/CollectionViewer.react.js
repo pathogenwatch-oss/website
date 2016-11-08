@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import Layout from './layout/Layout.react';
+import DownloadsMenu from './downloads/DownloadsMenu.react';
 
 const CollectionViewer = React.createClass({
 
@@ -17,7 +18,10 @@ const CollectionViewer = React.createClass({
 
   render() {
     return (
-      <Layout />
+      <div>
+        <Layout />
+        <DownloadsMenu />
+      </div>
     );
   },
 

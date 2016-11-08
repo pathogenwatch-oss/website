@@ -9,11 +9,6 @@ import { getActiveAssemblies } from '../selectors';
 import { addColumnWidth } from '../../table/utils/columnWidth';
 import { addDownloadProps } from '../../constants/downloads';
 
-const sectionStyle = {
-  width: '100%',
-  height: '100%',
-};
-
 function handleRowClick({ assemblyId }, { ids, active }, dispatch) {
   if (active && ids.size === 1 && ids.has(assemblyId)) {
     dispatch(resetFilter());
@@ -66,7 +61,6 @@ const SouthContent = React.createClass({
 
     return (
       <section
-        style={sectionStyle}
         onClick={(...args) => this.onClick(dispatch, ...args)}
         onWheel={preventDefault}
         onTouchMove={preventDefault}
