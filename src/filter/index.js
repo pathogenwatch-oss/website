@@ -2,11 +2,10 @@ import { updateQueryString, clearQueryString } from '../location';
 import * as actions from './actions';
 
 export function update(stateKey, { queryKey, key }, newValue) {
-  return dispatch =>
-    (queryKey ?
-      updateQueryString(queryKey, newValue) :
-      dispatch(actions.updateFilter(stateKey, key, newValue))
-    );
+  return dispatch => {
+    dispatch(actions.updateFilter(stateKey, key, newValue));
+    if (queryKey) updateQueryString(queryKey, newValue);
+  };
 }
 
 export function clear(stateKey, filters) {
@@ -18,7 +17,6 @@ export function clear(stateKey, filters) {
 
 export { isActive } from './selectors';
 
-export LocationListener from './LocationListener.react';
-
+export * as actions from './actions';
 export * as selectors from './selectors';
 export default from './reducer';

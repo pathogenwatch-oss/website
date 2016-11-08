@@ -50,4 +50,5 @@ export function reducer(state = {}, { type, payload }) {
   }
 }
 
+export LocationListener from './LocationListener.react';
 export default from './NavLink.react';

@@ -1,5 +1,3 @@
-// import { LOCATION_CHANGE } from '../location';
-
 import { UPDATE_FILTER, CLEAR_FILTER } from './actions';
 
 function applyFilterValue(state = {}, payload) {
