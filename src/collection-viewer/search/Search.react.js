@@ -1,11 +1,12 @@
-import '../../css/search.css';
+import './styles.css';
 
 import React from 'react';
 import { connect } from 'react-redux';
+import classnames from 'classnames';
 
-import { activateFilter, resetFilter } from '^/actions/filter';
+import { activateFilter, resetFilter } from '../filter/actions';
 
-import { getColumnLabel } from '^/utils/table';
+import { utils } from '../../table';
 
 const Search = React.createClass({
 
@@ -24,27 +25,6 @@ const Search = React.createClass({
     };
   },
 
-  render() {
-    const { totalAmount, filteredAmount, filterColumnName } = this.props;
-    const { focus } = this.state;
-    return (
-      <div className="wgsa-search-box-container">
-        <div className={`wgsa-search-box ${ focus ? 'wgsa-search-box--active' : ''}`.trim()}
-          onClick={this.handleClick}>
-          <i className="wgsa-search-box__icon material-icons">search</i>
-          <input ref="input"
-            className="wgsa-search-box__input"
-            placeholder={`SEARCH ${filterColumnName}`}
-            onChange={this.handleChange}
-            onFocus={this.handleFocus} onBlur={this.handleBlur} />
-          <p className="wgsa-search-box__numbers">
-            {filteredAmount} of {totalAmount}
-          </p>
-        </div>
-      </div>
-    );
-  },
-
   handleChange(event) {
     this.props.handleChange(event.target.value);
   },
@@ -61,16 +41,44 @@ const Search = React.createClass({
     this.refs.input.focus();
   },
 
+  render() {
+    const { totalAmount, filteredAmount, filterColumnName } = this.props;
+    const { focus } = this.state;
+    return (
+      <div className="wgsa-search-box-container">
+        <div className={classnames(
+            'wgsa-search-box',
+            { 'wgsa-search-box--active': focus }
+          )}
+          onClick={this.handleClick}
+        >
+          <i className="wgsa-search-box__icon material-icons">search</i>
+          <input ref="input"
+            className="wgsa-search-box__input"
+            placeholder={`SEARCH ${filterColumnName}`}
+            onChange={this.handleChange}
+            onFocus={this.handleFocus}
+            onBlur={this.handleBlur}
+          />
+          <p className="wgsa-search-box__numbers">
+            {filteredAmount} of {totalAmount}
+          </p>
+        </div>
+      </div>
+    );
+  },
+
 });
 
-function mapStateToProps({ tables, filter, entities }) {
+function mapStateToProps({ tables, collectionFilter, entities }) {
+  const filter = collectionFilter;
   const { activeColumn } = tables.metadata;
   const totalAmount = filter.unfilteredIds.size;
   return {
     displayProps: {
       totalAmount,
       filteredAmount: filter.active ? filter.ids.size : totalAmount,
-      filterColumnName: getColumnLabel(activeColumn),
+      filterColumnName: utils.getColumnLabel(activeColumn),
     },
     activeColumn,
     assemblies: [ ...filter.unfilteredIds ].map(id => entities.assemblies[id]),
@@ -82,12 +90,13 @@ function mergeProps({ displayProps, activeColumn, assemblies }, { dispatch }) {
     ...displayProps,
     handleChange(text) {
       if (!text || !text.length) {
-        return dispatch(resetFilter());
+        dispatch(resetFilter());
+        return;
       }
       const matcher = new RegExp(text, 'i');
       dispatch(activateFilter(
-        assemblies.reduce(function (set, assembly) {
-          if (('' + activeColumn.valueGetter(assembly)).match(matcher)) {
+        assemblies.reduce((set, assembly) => {
+          if (String(activeColumn.valueGetter(assembly)).match(matcher)) {
             set.add(assembly.metadata.assemblyId);
           }
           return set;

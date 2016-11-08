@@ -5,14 +5,13 @@ import antibiotics from '../reducers/antibiotics';
 import { reducer as assemblyDrawer } from '../assembly-drawer';
 import bodyClickListener from '../reducers/bodyClickListener';
 import { assemblies, collection, reference } from '../reducers/collection';
+import collectionFilter from '../collection-viewer/filter/reducer';
 import downloads from '../reducers/downloads';
 import downloadsMenu from '../reducers/downloadsMenu';
-// import filter from '../reducers/filter';
 import filter from '../filter';
 import { reducer as header } from '../header';
 import hub from '../hub/reducers';
 import fastas from '../hub/reducers/fastas';
-import mapMarkers from '../reducers/mapMarkers';
 import metadata from '../reducers/metadata';
 import { reducer as location } from '../location/';
 import resistanceProfile from '../reducers/resistanceProfile';
@@ -35,9 +34,9 @@ const rootReducer = combineReducers({
   assemblyDrawer,
   bodyClickListener,
   collection: createReducer(collection),
+  collectionFilter: createReducer(collectionFilter),
   display: combineReducers({
     table: createReducer(table),
-    mapMarkers: createReducer(mapMarkers),
     tree: combineReducers({
       name: createReducer(displayedTree),
       loading: createReducer(treeLoading),

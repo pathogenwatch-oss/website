@@ -1,5 +1,6 @@
 import { requestDownload } from '../actions/downloads';
 import { showToast } from '../toast';
+import { getActiveAssemblyIds } from '../collection-viewer/selectors';
 
 import { SERVER_ADDRESS, API_ROOT } from '../utils/Api';
 
@@ -73,10 +74,9 @@ export function addDownloadProps(row, { downloads }, dispatch) {
 }
 
 export function getArchiveDownloadProps(state, downloads, dispatch) {
-  const { filter, collection } = state;
-  const id = Array.from(filter.active ? filter.ids : filter.unfilteredIds);
+  const { collection } = state;
   return createPropsForDownloads(downloads, {
-    id,
+    id: getActiveAssemblyIds(state),
     getFileName: () => formatCollectionFilename(collection),
   }, dispatch);
 }

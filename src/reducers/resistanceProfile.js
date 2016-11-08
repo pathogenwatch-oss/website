@@ -6,7 +6,7 @@ import { SET_COLOUR_COLUMNS } from '../actions/table';
 
 import Species from '../species';
 import * as resistanceProfile from '../utils/resistanceProfile';
-import { canvas, measureText } from '../utils/table/columnWidth';
+import { canvas, measureText } from '../table/utils/columnWidth';
 
 import { downloadColumnProps, nameColumnProps } from '../constants/table';
 

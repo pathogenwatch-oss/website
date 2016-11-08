@@ -21,7 +21,6 @@ export const filters = [
     },
   },
   { key: 'minDate',
-    queryKey: 'minDate',
     matches({ date }, { year, month } = {}) {
       if (!year) return true;
       const min = new Date(year, month || 0);
@@ -32,7 +31,6 @@ export const filters = [
     },
   },
   { key: 'maxDate',
-    queryKey: 'maxDate',
     matches({ date }, { year, month }) {
       if (!year) return true;
       const max = new Date(year, month || 11);

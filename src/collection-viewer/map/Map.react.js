@@ -17,7 +17,7 @@ import {
   appendToFilter,
   removeFromFilter,
   resetFilter,
-} from '../../actions/filter';
+} from '../filter/actions';
 
 const ExplorerMap = ({ markers, onMarkerClick, onClick }) => (
   <div

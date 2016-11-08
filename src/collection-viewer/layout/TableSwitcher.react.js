@@ -1,13 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import assign from 'object-assign';
 
-import Switch from '../Switch.react';
+import Switch from '../../components/Switch.react';
 
-import { setTable } from '^/actions/table';
-
-import { tableKeys } from '^/constants/table';
-
+import { setTable } from '../../actions/table';
+import { tableKeys } from '../../constants/table';
 
 const { metadata, resistanceProfile } = tableKeys;
 

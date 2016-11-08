@@ -1,16 +1,15 @@
-import '../../css/loading.css';
-import '../../css/progress-bar.css';
+import './styles.css';
 
 import React from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 
-import Spinner from '^/components/Spinner.react';
+import Spinner from '../../components/Spinner.react';
 
-import { statuses } from '^/constants/collection';
+import { statuses } from '../constants';
 
-import Species from '^/species';
-import { CGPS } from '^/app/constants';
+import Species from '../../species';
+import { CGPS } from '../../app/constants';
 
 const backgroundStyle = {
   background: CGPS.COLOURS.GREY_LIGHT,

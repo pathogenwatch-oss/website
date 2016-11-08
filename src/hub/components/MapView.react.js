@@ -63,7 +63,7 @@ function mapDispatchToProps(dispatch) {
   return {
     onBoundsChange: bounds => dispatch(mapActions.storeBounds(bounds)),
     onLassoPathChange: path => dispatch(filterActions.filterByMetadata('area', path)),
-    onMarkerClick: ({ id }) => dispatch(showAssemblyDetails(id))
+    onMarkerClick: ({ id }) => dispatch(showAssemblyDetails(id)),
   };
 }
 

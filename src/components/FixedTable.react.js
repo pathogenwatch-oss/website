@@ -5,7 +5,7 @@ import '../css/table.css';
 import React from 'react';
 import { Table, Column, Cell } from 'fixed-data-table';
 
-import { getColumnLabel, getCellValue } from '../utils/table';
+import { getColumnLabel, getCellValue } from '../table/utils';
 
 function getClassNames(baseClass, selected, extraClasses) {
   return (

@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import DownloadButton from '../components/explorer/DownloadButton.react';
+import DownloadButton from '../collection-viewer/downloads/DownloadButton.react';
 
 import { createDownloadProps, formatCollectionFilename } from '../constants/downloads';
 import { getFastaArchiveFiles } from './selectors';

@@ -1,6 +1,6 @@
 import { CHECK_STATUS, UPDATE_PROGRESS } from '../actions/fetch';
 
-import { getHeaderClassName } from '../collection-viewer';
+import { getHeaderClassName } from '../collection-route';
 
 const HEADER_TOGGLE_ASIDE = 'HEADER_TOGGLE_ASIDE';
 

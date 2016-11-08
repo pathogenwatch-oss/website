@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 
 import { Summary as FilterSummary, Totals } from '../../filter-summary';
-import ProgressBar from '../../components/ProgressBar.react';
+import ProgressBar from '../../components/progress-bar';
 
 import * as selectors from '../selectors';
 import { getNumberOfVisibleFastas } from '../../hub-filter/selectors';

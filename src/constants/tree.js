@@ -3,11 +3,13 @@ import {
   setUnfilteredIds,
   activateFilter,
   resetFilter,
-} from '../actions/filter';
+} from '../collection-viewer/filter/actions';
+
+import { getFilter } from '../collection-viewer/selectors';
 
 import { createColourGetter } from '../utils/resistanceProfile';
 
-import { getColumnLabel } from '../utils/table';
+import { getColumnLabel } from '../table/utils';
 
 import Species from '../species';
 import { CGPS, DEFAULT } from '^/app/constants';
@@ -86,9 +88,9 @@ function collapseTreeBranches(node, leafPredicate) {
 }
 
 function getStandardTreeFunctions(state, dispatch) {
-  const { entities, tables, filter, collection, reference } = state;
+  const { entities, tables, collection, reference } = state;
   const { metadata, resistanceProfile } = tables;
-
+  const filter = getFilter(state);
   const getColour = createColourGetter(resistanceProfile.activeColumns);
 
   return {
@@ -137,8 +139,9 @@ function getStandardTreeFunctions(state, dispatch) {
 }
 
 function getPopulationTreeFunctions(state, dispatch) {
-  const { entities, collection, filter } = state;
+  const { entities, collection } = state;
   const { assemblies } = entities;
+  const filter = getFilter(state);
 
   const filterHasId = id => filter.ids.has(id);
 

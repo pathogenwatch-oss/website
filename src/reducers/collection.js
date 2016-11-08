@@ -3,8 +3,8 @@ import { FETCH_ENTITIES, CHECK_STATUS, UPDATE_PROGRESS } from '../actions/fetch'
 import { SET_COLLECTION_ID } from '../actions/collection';
 import { FETCH_TREE } from '../actions/tree';
 
-import { sortAssemblies } from '../utils/table';
-import { statuses } from '../constants/collection';
+import { sortAssemblies } from '../table/utils';
+import { statuses } from '../collection-route/constants';
 
 import Species from '^/species';
 

@@ -1,7 +1,6 @@
-import { FETCH_ENTITIES } from '../actions/fetch';
-import { FETCH_TREE } from '../actions/tree';
-import { SET_UNFILTERED_IDS } from '../actions/filter';
-
+import { FETCH_ENTITIES } from '../../actions/fetch';
+import { FETCH_TREE } from '../../actions/tree';
+import { SET_UNFILTERED_IDS } from '../filter/actions';
 
 import { addAssembliesToMarkerDefs } from '^/utils/Map';
 

@@ -4,7 +4,7 @@ import {
   APPEND_TO_FILTER,
   REMOVE_FROM_FILTER,
   RESET_FILTER,
-} from '../actions/filter';
+} from './actions';
 
 
 const initialState = {
@@ -14,8 +14,9 @@ const initialState = {
 };
 
 const actions = {
-  [SET_UNFILTERED_IDS]: function (state, { ids }) {
-    const noReset = state.active && Array.from(ids).some(id => state.ids.has(id));
+  [SET_UNFILTERED_IDS](state, { ids }) {
+    const noReset =
+      state.active && Array.from(ids).some(id => state.ids.has(id));
     return {
       ...state,
       unfilteredIds: ids,
@@ -23,28 +24,28 @@ const actions = {
       active: noReset,
     };
   },
-  [ACTIVATE_FILTER]: function (state, { ids }) {
+  [ACTIVATE_FILTER](state, { ids }) {
     return {
       ...state,
       active: true,
       ids,
     };
   },
-  [APPEND_TO_FILTER]: function (state, { ids }) {
+  [APPEND_TO_FILTER](state, { ids }) {
     return {
       ...state,
       active: true,
       ids: new Set([ ...state.ids, ...ids ]),
     };
   },
-  [REMOVE_FROM_FILTER]: function (state, { ids }) {
+  [REMOVE_FROM_FILTER](state, { ids }) {
     return {
       ...state,
       active: true,
       ids: new Set(Array.from(state.ids).filter(id => !ids.has(id))),
     };
   },
-  [RESET_FILTER]: function (state) {
+  [RESET_FILTER](state) {
     return {
       ...state,
       active: false,

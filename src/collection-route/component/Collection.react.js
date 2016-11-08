@@ -1,10 +1,10 @@
 import React from 'react';
 
 import CollectionViewer from '../../collection-viewer/CollectionViewer.react';
-import UploadProgress from './upload-progress';
-import { LoadSpinner, LoadError } from './Loading.react';
+import UploadProgress from '../upload-progress';
+import { LoadSpinner, LoadError } from '../loading/Loading.react';
 
-import { statuses } from '^/constants/collection';
+import { statuses } from '../constants';
 
 export default React.createClass({
 

@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import DownloadButton from './DownloadButton.react';
 
 import { setMenuActive } from '^/actions/downloads';
-
+import { getActiveAssemblyIds } from '../selectors';
 import { createDownloadProps, formatCollectionFilename } from '^/constants/downloads';
 import { getCounts, showCounts } from '^/utils/assembly';
 
@@ -58,11 +58,12 @@ const DownloadsMenu = React.createClass({
 
 });
 
-function mapStateToProps({ downloads, collection, filter, entities, tables }) {
+function mapStateToProps(state) {
+  const { downloads, collection, entities, tables } = state;
   return {
     collection,
     assemblies: entities.assemblies,
-    assemblyIds: [ ...(filter.active ? filter.ids : filter.unfilteredIds) ],
+    assemblyIds: getActiveAssemblyIds(state),
     ...downloads,
     tables,
   };

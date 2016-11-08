@@ -1,12 +1,12 @@
 import React from 'react';
 
-import DownloadButton from '../../components/explorer/DownloadButton.react';
+import DownloadButton from '../../collection-viewer/downloads/DownloadButton.react';
 import { FastaFileLink, FastaArchiveButton } from '../../fasta-download';
 
 import { getArchiveDownloadProps } from '../../constants/downloads';
 import { nameColumnData } from './columns';
 
-import { defaultWidthGetter } from '../../utils/table/columnWidth';
+import { defaultWidthGetter } from '../../table/utils/columnWidth';
 
 import { CGPS } from '../../app/constants';
 import Species from '../../species';
@@ -51,12 +51,10 @@ export const downloadColumnProps = {
       </span>
     );
   },
-  addState({ collection, filter, downloads }, dispatch) {
+  addState({ downloads, ...state }, dispatch) {
     return {
       ...this,
-      archiveDownloads: getArchiveDownloadProps(
-        { collection, filter }, downloads, dispatch
-      ),
+      archiveDownloads: getArchiveDownloadProps(state, downloads, dispatch),
     };
   },
 };

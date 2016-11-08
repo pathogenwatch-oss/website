@@ -1,26 +1,29 @@
-import React from 'react';
 import { connect } from 'react-redux';
 
-import Explorer from './Explorer.react';
+import Collection from './Collection.react';
 
-import { setCollectionId } from '^/actions/collection';
-import { checkStatus, fetchEntities, updateProgress } from '^/actions/fetch';
-import { resetStore } from '^/actions/reset';
+import { setCollectionId } from '../../actions/collection';
+import {
+  checkStatus, fetchEntities, updateProgress,
+} from '../../actions/fetch';
+import { resetStore } from '../../actions/reset';
 
 import { getProgressPercentage } from '../../collection/selectors.js';
 
-import Species from '^/species';
+import Species from '../../species';
 
-const connectExplorer = connect(
-  ({ collection }) => ({
+function mapStateToProps({ collection }) {
+  return {
     status: collection.status,
     progress: collection.progress,
     cas: collection.cas,
     metadata: collection.metadata,
     percentage: getProgressPercentage(collection),
-  }),
-  null,
-  (state, { dispatch }, { id }) => ({
+  };
+}
+
+function mergeProps(state, { dispatch }, { params: { id } }) {
+  return {
     ...state,
     initialise() {
       dispatch(setCollectionId(id));
@@ -30,13 +33,7 @@ const connectExplorer = connect(
     updateProgress: results => dispatch(updateProgress(results)),
     fetch: () => dispatch(fetchEntities(Species.id, id)),
     reset: () => dispatch(resetStore()),
-  }),
-);
-
-export default function ({ params }) {
-  const ReduxExplorer = connectExplorer(Explorer);
-
-  return (
-    <ReduxExplorer id={params.id} />
-  );
+  };
 }
+
+export default connect(mapStateToProps, null, mergeProps)(Collection);

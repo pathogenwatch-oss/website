@@ -2,11 +2,11 @@ import React from 'react';
 import { Route } from 'react-router';
 import { connect } from 'react-redux';
 
-import ExploreCollection from '../components/explorer';
-import FetchedHeaderContent from './HeaderContent.react';
-import ProcessingHeaderContent from '../components/explorer/upload-progress/Header.react';
+import Collection from './component';
+import FetchedHeaderContent from '../collection-viewer/HeaderContent.react';
+import ProcessingHeaderContent from './upload-progress/Header.react';
 
-import { statuses } from '^/constants/collection';
+import { statuses } from './constants';
 
 export function getHeaderClassName(status) {
   if (status === statuses.READY) {
@@ -33,7 +33,7 @@ const HeaderSwitcher = connect(mapStateToProps)(
 export default (
   <Route
     path="collection/:id"
-    component={ExploreCollection}
+    component={Collection}
     header={<HeaderSwitcher />}
   />
 );

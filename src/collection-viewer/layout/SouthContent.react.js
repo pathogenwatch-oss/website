@@ -1,13 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import FixedTable from '^/components/FixedTable.react';
-import TableSwitcher from './TableSwitcher.js';
+import FixedTable from '../../components/FixedTable.react';
+import TableSwitcher from './TableSwitcher.react';
 
-import { activateFilter, resetFilter } from '^/actions/filter';
-
-import { addColumnWidth } from '^/utils/table/columnWidth';
-import { addDownloadProps } from '^/constants/downloads';
+import { activateFilter, resetFilter } from '../filter/actions';
+import { getActiveAssemblies } from '../selectors';
+import { addColumnWidth } from '../../table/utils/columnWidth';
+import { addDownloadProps } from '../../constants/downloads';
 
 const sectionStyle = {
   width: '100%',
@@ -82,13 +82,8 @@ const SouthContent = React.createClass({
 
 });
 
-function getTableData(assemblies, filter) {
-  const ids = filter.active ? filter.ids : filter.unfilteredIds;
-  return [ ...ids ].map(id => assemblies[id]);
-}
-
 function mapStateToProps(state) {
-  const { entities, collection, display, tables, filter, downloads } = state;
+  const { collection, collectionFilter, display, tables, downloads } = state;
 
   const table = tables[display.table];
   const { activeColumn, activeColumns, ...tableState } = table;
@@ -97,12 +92,12 @@ function mapStateToProps(state) {
     ...tableState,
     activeColumns:
       activeColumn ? new Set([ activeColumn ]) : activeColumns,
-    filter,
     collection,
-    data: getTableData(entities.assemblies, filter),
+    data: getActiveAssemblies(state),
     downloads: {
       wgsa_gff: downloads.files.wgsa_gff,
     },
+    collectionFilter,
   };
 }
 

@@ -1,5 +1,4 @@
 import '^/css/tree.css';
-import '^/css/loading.css';
 
 import React from 'react';
 import Phylocanvas, { Tree } from 'phylocanvas';

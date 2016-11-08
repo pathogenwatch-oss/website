@@ -4,7 +4,7 @@ import { Router, Route, IndexRoute, browserHistory, Redirect, IndexRedirect } fr
 import App from './App.react';
 
 import HomeRoute from '../home';
-// import CollectionViewerRoute from '../collection-viewer';
+import CollectionRoute from '../collection-route';
 import DocumentationViewerRoute from '../documentation-viewer';
 
 import hub, { GridView, MapView, StatsView } from '../hub';
@@ -30,7 +30,7 @@ export default () => (
           <Route key={nickname} path={nickname} component={SpeciesSetter}>
             <IndexRedirect to="/" query={{ species: nickname }} />
             <Redirect from="upload" to="/upload" />
-            {/* {CollectionViewerRoute} */}
+            {CollectionRoute}
           </Route>
       )}
       {DocumentationViewerRoute}

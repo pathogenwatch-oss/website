@@ -1,6 +1,6 @@
 import React from 'react';
 
-import DownloadIcon from '../components/explorer/DownloadIcon.react';
+import DownloadIcon from '../collection-viewer/downloads/DownloadIcon.react';
 
 import { FASTA_FILE_EXTENSIONS } from '../hub/utils';
 import { API_ROOT } from '../utils/Api';

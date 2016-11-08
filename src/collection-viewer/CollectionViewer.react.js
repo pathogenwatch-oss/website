@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import Layout from '../components/explorer/Layout.react';
+import Layout from './layout/Layout.react';
 
 const CollectionViewer = React.createClass({
 

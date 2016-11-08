@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import Tree from '^/components/tree';
 import TreeHeader from '^/components/tree/TreeHeader.react';
 
-import { setUnfilteredIds } from '^/actions/filter';
+import { setUnfilteredIds } from '../../collection-viewer/filter/actions';
 
 import { COLLECTION, POPULATION } from '^/constants/tree';
 
