@@ -52,10 +52,10 @@ const SouthContent = React.createClass({
   },
 
   render() {
-    const { dispatch, filter, activeColumns, onHeaderClick } = this.props;
+    const { dispatch, collectionFilter, activeColumns } = this.props;
 
     const headerClickHandler = (event, column) =>
-      (column.onHeaderClick || onHeaderClick)(
+      (column.onHeaderClick || this.props.onHeaderClick)(
         event, { column, activeColumns }, dispatch
       );
 
@@ -67,7 +67,9 @@ const SouthContent = React.createClass({
       >
         <TableSwitcher />
         <FixedTable { ...this.props }
-          rowClickHandler={({ metadata }) => handleRowClick(metadata, filter, dispatch)}
+          rowClickHandler={({ metadata }) =>
+            handleRowClick(metadata, collectionFilter, dispatch)
+          }
           headerClickHandler={headerClickHandler}
         />
       </section>
