@@ -73,7 +73,7 @@
     "webpack": "^1.13.2",
     "webpack-dev-middleware": "^1.4.0",
     "webpack-hot-middleware": "^2.6.0",
-    "wgsa-fasta-store": "gitlab:cgps/wgsa-fasta-store#v2.0.0",
+    "wgsa-fasta-store": "gitlab:cgps/wgsa-fasta-store#v2.1.0",
     "worker-loader": "^0.7.0"
   }
 }

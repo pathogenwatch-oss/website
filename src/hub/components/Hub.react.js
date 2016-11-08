@@ -60,23 +60,23 @@ export default React.createClass({
   },
 
   render() {
-    const { hasFastas, filterActive, loading } = this.props;
+    const { hasFastas, hasVisibleFastas, loading } = this.props;
     return (
       <FileDragAndDrop onFiles={this.upload}>
         { loading && <div ref="loadingBar" className="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>}
         <div className="wgsa-hipster-style wgsa-filterable-view">
           <Summary />
-          { hasFastas ?
+          { hasVisibleFastas ?
             this.props.children :
             <p className="wgsa-filterable-content wgsa-hub-big-message">
-              { filterActive ?
+              { hasFastas ?
                   'No matches.' :
                   'Drag and drop files to begin.'
               }
             </p>
           }
         </div>
-        <Filter filterActive={filterActive} />
+        <Filter />
         <HubDrawer />
       </FileDragAndDrop>
     );

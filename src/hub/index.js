@@ -7,14 +7,14 @@ export GridView from './components/GridView.react';
 export MapView from './components/MapView.react';
 export StatsView from './components/StatsView.react';
 
-import { getNumberOfVisibleFastas, isFilterActive }
-  from '../hub-filter/selectors';
+import { getTotalFastas } from './selectors';
+import { getNumberOfVisibleFastas } from '../hub-filter/selectors';
 
 function mapStateToProps(state) {
   const { hub, collection } = state;
   return {
-    hasFastas: getNumberOfVisibleFastas(state) > 0,
-    filterActive: isFilterActive(state),
+    hasFastas: getTotalFastas(state) > 0,
+    hasVisibleFastas: getNumberOfVisibleFastas(state) > 0,
     loading: hub.loading,
     collection,
   };

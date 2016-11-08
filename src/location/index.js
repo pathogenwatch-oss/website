@@ -1,13 +1,20 @@
 import queryString from 'query-string';
 import { browserHistory } from 'react-router';
 
+function push(nextString) {
+  browserHistory.push({
+    pathname: location.pathname,
+    search: nextString.length ? `?${nextString.replace(/%20/g, '+')}` : '',
+  });
+}
+
 export function updateQueryString(key, value) {
   const qs = queryString.parse(location.search);
   const nextString = queryString.stringify({
     ...qs,
     [key]: value === qs[key] ? undefined : value,
   });
-  browserHistory.push(nextString.length ? `?${nextString}` : '');
+  push(nextString);
 }
 
 export function clearQueryString(keys) {
@@ -15,7 +22,7 @@ export function clearQueryString(keys) {
   const nextString = queryString.stringify(
     keys.reduce((memo, key) => ({ ...memo, [key]: undefined }), qs)
   );
-  browserHistory.push(nextString.length ? `?${nextString}` : '');
+  push(nextString);
 }
 
 export const LOCATION_CHANGE = 'LOCATION_CHANGE';

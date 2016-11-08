@@ -1,9 +1,4 @@
-import { createSelector } from 'reselect';
-
-import { HOME } from '../app/stateKeys/filters';
-export const stateKey = HOME;
-
-import { getFilter } from './selectors';
+export { HOME as stateKey } from '../app/stateKeys/filters';
 
 export const filters = [
   { key: 'searchRegExp',
@@ -12,10 +7,6 @@ export const filters = [
         regexp.test(collection.title) || regexp.test(collection.description) :
         true;
     },
-    getValue: createSelector(
-      getFilter,
-      filter => (filter.searchRegExp ? filter.searchRegExp.source : '')
-    ),
   },
   { key: 'species',
     queryKey: 'species',

@@ -18,7 +18,7 @@ export default React.createClass({
     ]),
     items: React.PropTypes.array,
     rowHeight: React.PropTypes.number,
-    template: React.PropTypes.node,
+    template: React.PropTypes.func,
   },
 
   getColumnCount(width) {

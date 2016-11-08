@@ -95,7 +95,7 @@ const fastaStoragePath = './fastas';
 fastaStorage.setup(fastaStoragePath);
 
 let uploadError = false;
-apiRouter.post('/upload', (req, res) => {
+apiRouter.post('/upload', (req, res, next) => {
   // uploadError = !uploadError;
   return uploadError ?
     setTimeout(() => res.sendStatus(500), 500) :
@@ -114,7 +114,7 @@ apiRouter.post('/upload', (req, res) => {
           speciesId: taxId,
           speciesName: scientificName,
           metrics,
-          // country,
+          // country: { code: "IND", name: "India" },
         });
       }).
       catch(error => next(error));

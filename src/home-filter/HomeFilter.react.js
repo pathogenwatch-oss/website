@@ -3,19 +3,18 @@ import { connect } from 'react-redux';
 
 import FilterAside from '../filter-aside';
 import MetadataFilter from '../metadata-filter';
-import { LocationListener } from '../location';
 import * as filter from '../filter';
 
 import { stateKey, filters } from './filter';
-import { getFilterSummary } from './selectors';
-import { onQueryChange } from './thunks';
+import { getFilterSummary, getSearchText } from './selectors';
 
+const { LocationListener } = filter;
 const [ searchRegExp, speciesFilter ] = filters;
 
 function mapStateToProps(state) {
   return {
     active: filter.isActive(state, { stateKey }),
-    searchText: searchRegExp.getValue(state),
+    searchText: getSearchText(state),
     filterSummary: getFilterSummary(state),
   };
 }
@@ -44,7 +43,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(
         summary={filterSummary.species}
         onClick={value => updateFilter(speciesFilter, value)}
       />
-      <LocationListener update={onQueryChange} />
+      <LocationListener stateKey={stateKey} filters={filters} />
     </FilterAside>
   )
 );

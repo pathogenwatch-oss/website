@@ -10,6 +10,11 @@ import { stateKey, filters } from './filter';
 
 export const getFilter = state => filter.getFilter(state, { stateKey });
 
+export const getSearchText = createSelector(
+  getFilter,
+  ({ searchRegExp }) => (searchRegExp ? searchRegExp.source : ''),
+);
+
 function incrementSummary(map, key, newEntry) {
   const summary = map.get(key) || {
     ...newEntry,
