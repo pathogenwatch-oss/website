@@ -1,10 +1,16 @@
 import { createSelector } from 'reselect';
 
-import { getVisibleFastas } from '../../hub-filter/selectors';
+import { getFilter, getVisibleFastas } from '../../hub-filter/selectors';
+import * as map from '../../map/selectors';
 
-export const getBounds = ({ hub: { map: { bounds } } }) => bounds;
+import { UPLOAD as stateKey } from '../../app/stateKeys/map';
 
-export const getLassoPath = ({ hub: { filter: { area } } }) => area;
+export const getBounds = state => map.getBounds(state, { stateKey });
+
+export const getLassoPath = createSelector(
+  getFilter,
+  ({ area }) => area
+);
 
 export const getMarkers = createSelector(
   getVisibleFastas,

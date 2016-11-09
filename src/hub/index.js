@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import Hub from './components/Hub.react';
 export GridView from './components/GridView.react';
-export MapView from './components/MapView.react';
+export MapView from './map';
 export StatsView from './components/StatsView.react';
 
 import { getTotalFastas } from './selectors';

@@ -1,5 +1,3 @@
-import '../css/map.css';
-
 import React from 'react';
 import { connect } from 'react-redux';
 
@@ -7,11 +5,12 @@ import LeafletMap from '../../cgps-commons/LeafletMap.react';
 
 import CONFIG from '../../app/config';
 
+import * as filter from '../../filter';
+import { actions as mapActions } from '../../map';
+import { showAssemblyDetails } from '../../assembly-drawer';
+
 import { getMarkers, getBounds, getLassoPath } from '../selectors/map';
 
-import filterActions from '../actions';
-import mapActions from '../actions/map';
-import { showAssemblyDetails } from '../../assembly-drawer';
 
 const lassoButtonClassname =
   'wgsa-map-lasso-button mdl-button mdl-button--fab mdl-button--mini-fab';
@@ -51,6 +50,8 @@ const MapView = React.createClass({
 
 });
 
+import { UPLOAD as stateKey } from '../../app/stateKeys/map';
+
 function mapStateToProps(state) {
   return {
     markers: getMarkers(state),
@@ -61,8 +62,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    onBoundsChange: bounds => dispatch(mapActions.storeBounds(bounds)),
-    onLassoPathChange: path => dispatch(filterActions.filterByMetadata('area', path)),
+    onBoundsChange: bounds => dispatch(mapActions.storeBounds(stateKey, bounds)),
+    onLassoPathChange: path => dispatch(filter.update(stateKey, { key: 'area' }, path)),
     onMarkerClick: ({ id }) => dispatch(showAssemblyDetails(id)),
   };
 }
