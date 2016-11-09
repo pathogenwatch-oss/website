@@ -2,7 +2,7 @@ import { createSelector } from 'reselect';
 
 import { createColourGetter } from '../utils/resistanceProfile';
 
-export const getFilter = ({ collectionFilter }) => collectionFilter;
+export const getFilter = ({ collectionViewer }) => collectionViewer.filter;
 
 export const getAssemblies = createSelector(
   ({ entities }) => entities.assemblies,

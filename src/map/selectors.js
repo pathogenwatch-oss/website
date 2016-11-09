@@ -10,3 +10,8 @@ export const getBounds = createSelector(
   getMap,
   ({ bounds }) => bounds
 );
+
+export const getLassoPath = createSelector(
+  getMap,
+  ({ lassoPath }) => lassoPath
+);

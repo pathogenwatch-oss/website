@@ -52,7 +52,7 @@ const SouthContent = React.createClass({
   },
 
   render() {
-    const { dispatch, collectionFilter, activeColumns } = this.props;
+    const { dispatch, collectionViewer, activeColumns } = this.props;
 
     const headerClickHandler = (event, column) =>
       (column.onHeaderClick || this.props.onHeaderClick)(
@@ -68,7 +68,7 @@ const SouthContent = React.createClass({
         <TableSwitcher />
         <FixedTable { ...this.props }
           rowClickHandler={({ metadata }) =>
-            handleRowClick(metadata, collectionFilter, dispatch)
+            handleRowClick(metadata, collectionViewer.filter, dispatch)
           }
           headerClickHandler={headerClickHandler}
         />
@@ -79,7 +79,7 @@ const SouthContent = React.createClass({
 });
 
 function mapStateToProps(state) {
-  const { collection, collectionFilter, display, tables, downloads } = state;
+  const { collection, collectionViewer, display, tables, downloads } = state;
 
   const table = tables[display.table];
   const { activeColumn, activeColumns, ...tableState } = table;
@@ -93,7 +93,7 @@ function mapStateToProps(state) {
     downloads: {
       wgsa_gff: downloads.files.wgsa_gff,
     },
-    collectionFilter,
+    collectionViewer,
   };
 }
 

@@ -2,10 +2,6 @@ import { createSelector } from 'reselect';
 
 import { getVisibleAssemblies, getFilteredAssemblyIds, getColourGetter } from '../selectors';
 
-export const getBounds = ({ collection: { map: { bounds } } }) => bounds;
-
-export const getLassoPath = ({ collection: { filter: { area } } }) => area;
-
 export const getMarkers = createSelector(
   getVisibleAssemblies,
   getFilteredAssemblyIds,

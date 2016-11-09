@@ -1,3 +1,4 @@
 export * as actions from './actions';
 export * as selectors from './selectors';
-export default from './reducer';
+export reducer from './reducer';
+export default from './Map.react';

@@ -12,7 +12,7 @@ import filter from '../filter';
 import { reducer as header } from '../header';
 import hub from '../hub/reducers';
 import fastas from '../hub/reducers/fastas';
-import map from '../map';
+import { reducer as map } from '../map';
 import metadata from '../reducers/metadata';
 import { reducer as location } from '../location/';
 import resistanceProfile from '../reducers/resistanceProfile';

@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import classnames from 'classnames';
 
 import { activateFilter, resetFilter } from '../filter/actions';
+import { getFilter } from '../selectors';
 
 import { utils } from '../../table';
 
@@ -47,9 +48,9 @@ const Search = React.createClass({
     return (
       <div className="wgsa-search-box-container">
         <div className={classnames(
-            'wgsa-search-box',
-            { 'wgsa-search-box--active': focus }
-          )}
+          'wgsa-search-box',
+          { 'wgsa-search-box--active': focus }
+        )}
           onClick={this.handleClick}
         >
           <i className="wgsa-search-box__icon material-icons">search</i>
@@ -70,8 +71,9 @@ const Search = React.createClass({
 
 });
 
-function mapStateToProps({ tables, collectionFilter, entities }) {
-  const filter = collectionFilter;
+function mapStateToProps(state) {
+  const { tables, entities } = state;
+  const filter = getFilter(state);
   const { activeColumn } = tables.metadata;
   const totalAmount = filter.unfilteredIds.size;
   return {

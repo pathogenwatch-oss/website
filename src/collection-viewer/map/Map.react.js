@@ -3,14 +3,12 @@ import './styles.css';
 import React from 'react';
 import { connect } from 'react-redux';
 
-import LeafletMap from '../../cgps-commons/LeafletMap.react';
+import WGSAMap from '../../map';
 import LeafletPieChartMarker from '../../cgps-commons/LeafletPieChartMarker.react';
 
 import { getMarkers } from './selectors';
 
-import CONFIG from '../../app/config';
-
-import { CGPS } from '../../app/constants';
+import { COLLECTION } from '../../app/stateKeys/map';
 
 import {
   activateFilter,
@@ -20,34 +18,15 @@ import {
 } from '../filter/actions';
 
 const ExplorerMap = ({ markers, onMarkerClick, onClick }) => (
-  <div
+  <WGSAMap
     className="wgsa-collection-viewer-map"
+    stateKey={COLLECTION}
+    markers={markers}
+    markerComponent={LeafletPieChartMarker}
     onClick={onClick}
-  >
-    <LeafletMap
-      className="wgsa-collection-viewer-map"
-      markers={markers}
-      markerComponent={LeafletPieChartMarker}
-      mapboxStyle="light-v9"
-      mapboxKey={CONFIG.mapboxKey}
-      center={[ 0, 0 ]}
-      zoom={1}
-      highlightedColour={CGPS.COLOURS.PURPLE}
-      // lassoPath={this.props.lassoPath}
-      lassoButtonClassname="wgsa-map-lasso-button mdl-button mdl-button--fab mdl-button--mini-fab"
-      // onBoundsChange={this.props.onBoundsChange}
-      // onLassoPathChange={this.props.onLassoPathChange}
-      onMarkerClick={onMarkerClick}
-    />
-  </div>
-
+    onMarkerClick={onMarkerClick}
+  />
 );
-
-ExplorerMap.propTypes = {
-  dimensions: React.PropTypes.object,
-  markerDefs: React.PropTypes.array,
-  dispatch: React.PropTypes.func,
-};
 
 function mapStateToProps(state) {
   return {
