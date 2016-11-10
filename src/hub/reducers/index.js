@@ -1,7 +1,6 @@
 import { combineReducers } from 'redux';
 
 import uploads from './uploads';
-import { bounds, lassoPath } from './map';
 
 import { CREATE_COLLECTION, CHANGE_COLLECTION_METADATA } from '../../hub-drawer';
 import * as actions from '../actions';
@@ -38,9 +37,5 @@ export default createReducer =>
     uploads,
     loading: createReducer(loading),
     selectedMetric: createReducer(selectedMetric),
-    map: combineReducers({
-      bounds: createReducer(bounds),
-      lassoPath: createReducer(lassoPath),
-    }),
     collectionMetadata: createReducer(collectionMetadata),
   });
