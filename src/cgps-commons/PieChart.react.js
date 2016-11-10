@@ -77,7 +77,7 @@ export default class PieChart extends React.Component {
   render() {
     const { borderWidth = 7.5, borderColour = '#555' } = this.props;
     return (
-      <svg viewBox={`0 0 ${size} ${size}`}>
+      <svg viewBox={`0 0 ${size} ${size}`} className={this.props.className}>
         <g transform={`rotate(-90 ${center} ${center})`}>
           {renderPaths(this.props.slices)}
         </g>
@@ -90,6 +90,7 @@ export default class PieChart extends React.Component {
 }
 
 PieChart.propTypes = {
+  className: PropTypes.string,
   borderWidth: PropTypes.number,
   borderColour: PropTypes.string,
   donut: PropTypes.bool,
