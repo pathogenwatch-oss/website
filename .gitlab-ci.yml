@@ -6,7 +6,5 @@ new-image:
     - tags
   stage: build
   script:
-    - NEW_TAG=$CI_REGISTRY_IMAGE:$CI_BUILD_REF_NAME
-    - sh ./bin/build-image.sh $NEW_TAG
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
-    - docker push $NEW_TAG
+    - sh ./bin/build-image.sh $CI_REGISTRY_IMAGE:$CI_BUILD_REF_NAME
