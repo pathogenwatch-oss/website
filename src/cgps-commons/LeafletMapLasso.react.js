@@ -33,15 +33,9 @@ export default React.createClass({
     map: React.PropTypes.instanceOf(Leaflet.Map),
   },
 
-  getDefaultProps() {
-    return {
-      initialPath: null,
-    };
-  },
-
   getInitialState() {
     return {
-      isActive: this.props.initialPath !== null,
+      isActive: (this.props.initialPath || null) !== null,
     };
   },
 
