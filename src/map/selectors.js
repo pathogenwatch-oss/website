@@ -1,14 +1,14 @@
 import { createSelector } from 'reselect';
 
+const defaultBounds = { center: [ 0, 0 ], zoom: 1 };
+
 export function getMap(state, { stateKey }) {
-  return state.map[stateKey] || {
-    bounds: { center: [ 0, 0 ], zoom: 1 },
-  };
+  return state.map[stateKey] || {};
 }
 
 export const getBounds = createSelector(
   getMap,
-  ({ bounds }) => bounds
+  ({ bounds = defaultBounds }) => bounds
 );
 
 export const getLassoPath = createSelector(

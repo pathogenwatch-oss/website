@@ -40,7 +40,7 @@ const WGSAMap = props => (
 
 function mapStateToProps(state, props) {
   return {
-    bounds: props.bounds || getBounds(state, props),
+    bounds: getBounds(state, props),
     lassoPath: props.lassoPath || getLassoPath(state, props),
   };
 }
