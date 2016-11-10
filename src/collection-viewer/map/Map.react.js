@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import WGSAMap from '../../map';
 import LeafletPieChartMarker from '../../cgps-commons/LeafletPieChartMarker.react';
 
+import { filterByLassoPath } from './actions';
 import { getMarkers } from './selectors';
 
 import { COLLECTION } from '../../app/stateKeys/map';
@@ -17,13 +18,14 @@ import {
   resetFilter,
 } from '../filter/actions';
 
-const ExplorerMap = ({ markers, onMarkerClick, onClick }) => (
+const ExplorerMap = ({ markers, onLassoPathChange, onMarkerClick, onClick }) => (
   <WGSAMap
     className="wgsa-collection-viewer-map"
     stateKey={COLLECTION}
     markers={markers}
     markerComponent={LeafletPieChartMarker}
     onClick={onClick}
+    onLassoPathChange={onLassoPathChange}
     onMarkerClick={onMarkerClick}
   />
 );
@@ -36,7 +38,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    onClick: () => dispatch(resetFilter()),
+    onClick: () => dispatch(filterByLassoPath(COLLECTION, null)),
+    onLassoPathChange: path => dispatch(filterByLassoPath(COLLECTION, path)),
     onMarkerClick: ({ id, event }) => dispatch(activateFilter(id)),
   };
 }

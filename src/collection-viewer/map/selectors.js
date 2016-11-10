@@ -1,6 +1,13 @@
 import { createSelector } from 'reselect';
+import { contains } from 'leaflet-lassoselect/utils';
 
-import { getVisibleAssemblies, getFilteredAssemblyIds, getColourGetter } from '../selectors';
+import { getLassoPath } from '../../map/selectors';
+
+import {
+  getVisibleAssemblies,
+  getFilteredAssemblyIds,
+  getColourGetter,
+} from '../selectors';
 
 export const getMarkers = createSelector(
   getVisibleAssemblies,
@@ -23,4 +30,16 @@ export const getMarkers = createSelector(
       return memo;
     }, new Map()).values()
   )
+);
+
+export const getAssemblyIdsInPath = createSelector(
+  getMarkers,
+  getLassoPath,
+  (markers, path) =>
+    markers.reduce((ids, { id, position: { latitude, longitude } }) => {
+      if (contains(path, { lat: latitude, lng: longitude })) {
+        return ids.concat(id);
+      }
+      return ids;
+    }, [])
 );
