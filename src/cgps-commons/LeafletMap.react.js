@@ -1,6 +1,6 @@
 import React from 'react';
 import Leaflet from 'leaflet';
-import { Map, TileLayer, Marker, PropTypes } from 'react-leaflet';
+import { Map, TileLayer, Marker, ZoomControl, PropTypes } from 'react-leaflet';
 import MarkerLayer from 'react-leaflet-marker-layer';
 
 import MapCluster from './LeafletMapCluster.react';
@@ -141,6 +141,7 @@ export default React.createClass({
         animate={false}
         center={center}
         zoom={zoom}
+        zoomControl={false}
         boundsOptions={{ animate: false }}
         className={this.props.className}
         onMoveend={({ target }) => { this.map = target; }}
@@ -157,6 +158,9 @@ export default React.createClass({
           activeClassName="is-active"
           initialPath={this.props.lassoPath}
           onPathChange={this.props.onLassoPathChange}
+        />
+        <ZoomControl
+          position="bottomleft"
         />
       </Map>
     );
