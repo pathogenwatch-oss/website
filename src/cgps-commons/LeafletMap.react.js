@@ -53,15 +53,13 @@ export default React.createClass({
 
   onClusterMarkerClick({ target, event }) {
     if (this.props.onMarkerClick) {
-      const { id } = target.options;
-      this.props.onMarkerClick({ id, event });
+      this.props.onMarkerClick(target.options, event);
     }
   },
 
   onMarkerLayerClick({ marker, event }) {
     if (this.props.onMarkerClick) {
-      const { id } = marker;
-      this.props.onMarkerClick({ id, event });
+      this.props.onMarkerClick(marker, event);
     }
   },
 

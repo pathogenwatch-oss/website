@@ -15,7 +15,6 @@ import {
   activateFilter,
   appendToFilter,
   removeFromFilter,
-  resetFilter,
 } from '../filter/actions';
 
 const ExplorerMap = ({ markers, onLassoPathChange, onMarkerClick, onClick }) => (
@@ -40,7 +39,13 @@ function mapDispatchToProps(dispatch) {
   return {
     onClick: () => dispatch(filterByLassoPath(COLLECTION, null)),
     onLassoPathChange: path => dispatch(filterByLassoPath(COLLECTION, path)),
-    onMarkerClick: ({ id, event }) => dispatch(activateFilter(id)),
+    onMarkerClick: ({ id, highlighted }, event) => {
+      if (event.metaKey || event.ctrlKey) {
+        dispatch(highlighted ? removeFromFilter(id) : appendToFilter(id));
+      } else {
+        dispatch(activateFilter(id));
+      }
+    },
   };
 }
 

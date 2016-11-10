@@ -38,12 +38,21 @@ export default function (state = initialState, { type, payload = {} }) {
         active: true,
         ids: new Set([ ...state.ids, ...ids ]),
       };
-    case REMOVE_FROM_FILTER:
+    case REMOVE_FROM_FILTER: {
+      const newIds = Array.from(state.ids).filter(id => !ids.has(id));
+      if (newIds.length) {
+        return {
+          ...state,
+          active: true,
+          ids: new Set(newIds),
+        };
+      }
       return {
         ...state,
-        active: true,
-        ids: new Set(Array.from(state.ids).filter(id => !ids.has(id))),
+        active: false,
+        ids: new Set(),
       };
+    }
     case RESET_FILTER:
       return {
         ...state,
