@@ -38,8 +38,8 @@ export default React.createClass({
 
     return (
       <ul className="wgsa-upload-errors mdl-list">
-        { errors.map((error) => (
-            <li className="mdl-list__item">
+        { errors.map((error, index) => (
+            <li key={index} className="mdl-list__item">
               <span className="mdl-list__item-primary-content">
                 <i className="material-icons mdl-list__item-icon" style={iconStyle}>warning</i>
                 { this.getMessage(error) }
