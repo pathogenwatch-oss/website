@@ -1,56 +1,36 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import Tree from '^/components/tree';
-import TreeHeader from '^/components/tree/TreeHeader.react';
+import Tree from '../tree';
+import TreeHeader from '../tree/Header.react';
+
+import * as selectors from '../tree/selectors';
 
 import { setUnfilteredIds } from '../../collection-viewer/filter/actions';
 
-import { COLLECTION, POPULATION } from '^/constants/tree';
-
-import {
-  getTreeFunctions,
-  getTitle,
-  getFilenames,
-  speciesTrees,
-} from '^/constants/tree';
-
-import Species from '^/species';
-
-const ConnectedTree = (props) => (<Tree {...props} />);
+import { getTreeFunctions, speciesTrees } from '../tree/constants';
 
 function mapStateToProps(state) {
-  const { entities, display } = state;
-  const { tree } = display;
-  const displayedTree = entities.trees[tree.name];
-
   return {
-    loading: tree.loading,
-    tree: displayedTree.newick ? displayedTree : entities.trees[POPULATION],
-    state,
+    tree: selectors.getVisibleTree(state),
+    singleTree: selectors.getSingleTree(state),
+    title: selectors.getTitle(state),
+    filenames: selectors.getFilenames(state),
+    loading: selectors.isLoading(state),
+    wholeState: state,
   };
 }
 
 // TODO: Memoisation
-function mergeProps({ loading, tree, state }, { dispatch }, props) {
-  const { collection, tables, entities } = state;
-  const title = getTitle(tree.name, entities.assemblies[tree.name]);
-  const collectionTree = entities.trees[COLLECTION];
-
-  let singleTree;
-  if (Species.uiOptions.noPopulation) {
-    singleTree = COLLECTION;
-  } else if (!(collectionTree && collectionTree.newick)) {
-    singleTree = POPULATION;
-  }
+function mergeProps(state, { dispatch }, props) {
+  const { wholeState, tree, singleTree, title, ...treeProps } = state;
 
   return {
     ...props,
-    loading,
     ...tree,
-    ...getTreeFunctions(tree.name, state, dispatch),
-    filenames: getFilenames(title, collection.id, tables.metadata.activeColumn),
-    setUnfilteredIds: (ids) => dispatch(setUnfilteredIds(ids)),
+    ...treeProps,
+    ...getTreeFunctions(tree.name, wholeState, dispatch),
+    setUnfilteredIds: ids => dispatch(setUnfilteredIds(ids)),
     header: (
       <TreeHeader
         tree={tree}
@@ -63,4 +43,4 @@ function mergeProps({ loading, tree, state }, { dispatch }, props) {
   };
 }
 
-export default connect(mapStateToProps, null, mergeProps)(ConnectedTree);
+export default connect(mapStateToProps, null, mergeProps)(Tree);

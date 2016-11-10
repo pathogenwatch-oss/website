@@ -1,10 +1,10 @@
 import React from 'react';
 
-import Switch from '../Switch.react';
+import Switch from '../../components/Switch.react';
 
-import { displayTree } from '^/actions/tree';
+import { displayTree } from './actions';
 
-import { POPULATION, COLLECTION } from '^/constants/tree';
+import { POPULATION, COLLECTION } from '../../app/stateKeys/tree';
 
 const icons = {
   [COLLECTION]: 'person',

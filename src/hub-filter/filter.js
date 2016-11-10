@@ -1,6 +1,6 @@
 import { contains } from 'leaflet-lassoselect/utils';
 
-export { UPLOAD as stateKey } from '../app/stateKeys/filters';
+export { UPLOAD as stateKey } from '../app/stateKeys/filter';
 
 export const filters = [
   { key: 'searchRegExp',

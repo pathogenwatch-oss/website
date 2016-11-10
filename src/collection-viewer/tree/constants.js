@@ -1,23 +1,21 @@
-import { displayTree } from '../actions/tree';
+import { displayTree } from './actions';
 import {
   setUnfilteredIds,
   activateFilter,
   resetFilter,
-} from '../collection-viewer/filter/actions';
+} from '../filter/actions';
 
-import { getFilter } from '../collection-viewer/selectors';
+import { getFilter } from '../selectors';
+import { getTrees } from './selectors';
 
-import { createColourGetter } from '../utils/resistanceProfile';
+import { createColourGetter } from '../../utils/resistanceProfile';
 
-import { getColumnLabel } from '../table/utils';
+import { getColumnLabel } from '../../table/utils';
 
-import Species from '../species';
-import { CGPS, DEFAULT } from '^/app/constants';
+import { POPULATION, COLLECTION } from '../../app/stateKeys/tree';
+import Species from '../../species';
+import { CGPS, DEFAULT } from '../../app/constants';
 
-
-export const POPULATION = Symbol('population');
-
-export const COLLECTION = Symbol('collection');
 
 export const speciesTrees = new Set([ POPULATION, COLLECTION ]);
 
@@ -179,8 +177,8 @@ function getPopulationTreeFunctions(state, dispatch) {
       const { nodeIds } = event;
       if (nodeIds.length === 1) {
         const name = nodeIds[0];
-        const subtree = entities.trees[name];
-        dispatch(displayTree(subtree.name ? subtree : { name }, collection.id));
+        const subtree = getTrees(state)[name];
+        dispatch(displayTree(subtree || { name }));
       } else {
         dispatch(resetFilter());
       }

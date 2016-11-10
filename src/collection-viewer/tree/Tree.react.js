@@ -1,13 +1,13 @@
-import '^/css/tree.css';
+import './styles.css';
 
 import React from 'react';
 import Phylocanvas, { Tree } from 'phylocanvas';
 import contextMenuPlugin from 'phylocanvas-plugin-context-menu';
 
-import TreeControls from './TreeControls.react';
-import Spinner from '^/components/Spinner.react';
+import TreeControls from './Controls.react';
+import Spinner from '../../components/Spinner.react';
 
-import { DEFAULT, CGPS } from '^/app/constants';
+import { DEFAULT, CGPS } from '../../app/constants';
 
 Phylocanvas.plugin(contextMenuPlugin);
 
@@ -130,7 +130,7 @@ export default React.createClass({
 
   render() {
     const { header, loading } = this.props;
-
+    console.log(this.props);
     return (
       <section className="wgsa-tree">
         {header}
