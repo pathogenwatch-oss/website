@@ -25,6 +25,7 @@ Phylocanvas.plugin(decorate => {
   });
 });
 
+
 const fullWidthHeight = {
   height: '100%',
   width: '100%',
@@ -63,11 +64,6 @@ export default React.createClass({
 
     phylocanvas.clickFlag = 'highlighted';
     phylocanvas.clickFlagPredicate = node => node.leaf;
-
-    phylocanvas.on('loaded', () => {
-      this.props.styleTree(phylocanvas);
-      this.setBaseSize(phylocanvas);
-    });
 
     phylocanvas.on('subtree', () => {
       this.props.setUnfilteredIds(phylocanvas.leaves.map(_ => _.id));
@@ -111,14 +107,16 @@ export default React.createClass({
   },
 
   setBaseSize(phylocanvas) {
-    phylocanvas.fitInPanel();
     this.props.setBaseSize(phylocanvas.prerenderer.getStep(phylocanvas));
   },
 
   phylocanvas: null,
 
   loadTree() {
-    this.phylocanvas.load(this.props.newick);
+    this.phylocanvas.load(this.props.newick, () => {
+      this.props.styleTree(this.phylocanvas);
+      this.setBaseSize(this.phylocanvas);
+    });
   },
 
   toggleContextMenu(event) {

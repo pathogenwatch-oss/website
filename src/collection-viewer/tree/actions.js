@@ -26,7 +26,6 @@ export function fetchTree(stateKey, promise) {
 export const SET_BASE_SIZE = 'SET_BASE_SIZE';
 
 export function setBaseSize(stateKey, step) {
-  console.log(stateKey, step);
   return {
     type: SET_BASE_SIZE,
     payload: {

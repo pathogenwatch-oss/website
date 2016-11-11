@@ -14,19 +14,20 @@ function mapStateToProps(state) {
     tree: selectors.getVisibleTree(state),
     filenames: selectors.getFilenames(state),
     loading: selectors.isLoading(state),
-    wholeState: state,
   };
 }
 
-// TODO: Memoisation
 function mergeProps(state, { dispatch }, props) {
-  const { wholeState, tree, ...treeProps } = state;
+  const { tree, ...treeProps } = state;
 
   return {
     ...props,
     ...tree,
     ...treeProps,
-    ...getTreeFunctions(tree.name, wholeState, dispatch),
+    styleTree: () => {},
+    onLoaded: () => {},
+    onUpdated: () => {},
+    // ...getTreeFunctions(tree.name, wholeState, dispatch),
     setUnfilteredIds: ids => dispatch(setUnfilteredIds(ids)),
     setBaseSize: step => dispatch(setBaseSize(tree.name, step)),
   };

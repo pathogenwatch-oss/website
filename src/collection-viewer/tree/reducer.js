@@ -9,9 +9,14 @@ const initialMaxScale = 2;
 const maxBaseSize = 10;
 const minBaseSize = 3;
 
-function setBaseSize({ step }) {
+function setBaseSize(trees, { stateKey, step }) {
+  const tree = trees[stateKey];
+  if (tree.step === step) return tree;
+
   const baseSize = Math.min(maxBaseSize, Math.max(minBaseSize, step / 2));
   return {
+    ...tree,
+    step,
     baseSize,
     scales: {
       node: 1,
@@ -61,7 +66,7 @@ function entities(state = {}, { type, payload }) {
         ...state,
         [payload.stateKey]: {
           ...state[payload.stateKey],
-          ...setBaseSize(payload),
+          ...setBaseSize(state, payload),
         },
       };
     case ACTIONS.SET_TREE_TYPE:
@@ -77,8 +82,8 @@ function entities(state = {}, { type, payload }) {
         ...state,
         [payload.stateKey]: {
           ...state[payload.stateKey],
-          scale: {
-            ...state[payload.stateKey].scale,
+          scales: {
+            ...state[payload.stateKey].scales,
             node: payload.scale,
           },
         },
@@ -88,8 +93,8 @@ function entities(state = {}, { type, payload }) {
         ...state,
         [payload.stateKey]: {
           ...state[payload.stateKey],
-          scale: {
-            ...state[payload.stateKey].scale,
+          scales: {
+            ...state[payload.stateKey].scales,
             label: payload.scale,
           },
         },

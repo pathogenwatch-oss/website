@@ -18,20 +18,13 @@ const Controls = React.createClass({
   componentDidMount() {
     const { nodeSlider, labelSlider } = this.refs;
     componentHandler.upgradeElements([ nodeSlider, labelSlider ]);
-
-    // const { scales, treeType, baseSize, phylocanvas } = this.props;
-    // phylocanvas.baseNodeSize = baseSize * scales.node;
-    // phylocanvas.textSize = baseSize * scales.node;
-    // phylocanvas.setTreeType(treeType);
   },
 
   componentDidUpdate(previous) {
     const { nodeSlider, labelSlider } = this.refs;
     const { scales, treeType, baseSize, phylocanvas } = this.props;
 
-    console.log(previous, this.props);
-
-    if (scales !== previous.scales) {
+    if (scales !== previous.scales && phylocanvas.drawn) {
       nodeSlider.MaterialSlider.change(scales.node);
       phylocanvas.baseNodeSize = baseSize * scales.node;
 
