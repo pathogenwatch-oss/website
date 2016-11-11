@@ -3,40 +3,28 @@ import Papa from 'papaparse';
 
 import { formatColumnKeyAsLabel } from './index';
 
-import {
-  getSystemDataColumnProps,
-  getUserDefinedValue,
-} from '^/constants/metadata';
+import { systemDataColumns, getUserDefinedValue } from '^/constants/metadata';
 
 import { isResistant } from '^/utils/resistanceProfile';
 
 import { nameColumnData } from '^/constants/table/columns';
 
-import Species from '^/species';
-
-
-function mapKeysToGetters(columns) {
-  return columns.reduce((memo, { columnKey, valueGetter }) => ({
-    ...memo,
-    [columnKey]: valueGetter,
-  }), {});
-}
-
-const gettersByTable = {
+const columnDefsByTable = {
   metadata() {
-    const { uiOptions = {} } = Species.current;
     return {
-      ...mapKeysToGetters([
-        nameColumnData,
-        ...getSystemDataColumnProps(uiOptions),
-      ]),
-      __general: getUserDefinedValue,
+      defined: {
+        [nameColumnData.columnKey]: nameColumnData,
+        ...systemDataColumns,
+      },
+      genericGetter: getUserDefinedValue,
     };
   },
   resistanceProfile(dataType) {
     return {
-      ...mapKeysToGetters([ nameColumnData ]),
-      __general(antibiotic, { analysis: { resistanceProfile } = {} }) {
+      defined: {
+        [nameColumnData.columnKey]: nameColumnData,
+      },
+      genericGetter: (antibiotic, { analysis: { resistanceProfile } = {} }) => {
         switch (dataType) {
           case 'profile':
             if (!resistanceProfile) {
@@ -56,19 +44,19 @@ const gettersByTable = {
   },
 };
 
-function mapToGetters(columnKeys, table, dataType) {
-  const getters = gettersByTable[table](dataType);
+function mapToGetters({ columnKeys, table, dataType }) {
+  const columns = columnDefsByTable[table](dataType);
   return columnKeys.map(key => {
-    if (key in getters) {
-      return getters[key];
+    if (key in columns.defined) {
+      return columns.defined[key].valueGetter;
     }
-    return (row) => getters.__general(key, row);
+    return row => columns.genericGetter(key, row);
   });
 }
 
 registerPromiseWorker((message) => {
   const { table, dataType, columnKeys, rows } = message;
-  const valueGetters = mapToGetters(columnKeys, table, dataType);
+  const valueGetters = mapToGetters({ columnKeys, table, dataType });
 
   return Papa.unparse({
     fields: columnKeys.map(key => formatColumnKeyAsLabel(key)),

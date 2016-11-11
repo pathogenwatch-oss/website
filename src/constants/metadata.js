@@ -1,110 +1,138 @@
 import MetadataUtils from '../utils/Metadata';
 
-export function getSystemDataColumnProps({ noPopulation, noMLST, ngMast } = {}) {
-  return [
-    { columnKey: '__date',
-      valueGetter({ metadata }) {
-        return MetadataUtils.getFormattedDateString(metadata.date);
-      },
+export const systemDataColumns = {
+  __date: {
+    columnKey: '__date',
+    valueGetter({ metadata }) {
+      return MetadataUtils.getFormattedDateString(metadata.date);
     },
-  ].
-  concat(noPopulation ? [] : [
-    { columnKey: '__subtype',
-      valueGetter({ populationSubtype }) {
-        return populationSubtype;
-      },
+  },
+  __subtype: {
+    columnKey: '__subtype',
+    valueGetter({ populationSubtype }) {
+      return populationSubtype;
     },
-    { columnKey: '__st',
-      valueGetter({ analysis }) {
-        return analysis.st;
-      },
+  },
+  __st: {
+    columnKey: '__st',
+    valueGetter({ analysis }) {
+      return analysis.st;
     },
-  ]).
-  concat(noMLST ? [] : [
-    { columnKey: '__profile',
-      valueGetter({ analysis }) {
-        return analysis.mlst;
-      },
+  },
+  __profile: {
+    columnKey: '__profile',
+    valueGetter({ analysis }) {
+      return analysis.mlst;
     },
-  ]).
-  concat(ngMast ? [
-    { columnKey: '__ng-mast',
-      valueGetter({ analysis }) {
-        if (!analysis.ngmast) return null;
-        return analysis.ngmast.ngmast;
-      },
+  },
+  '__ng-mast': {
+    columnKey: '__ng-mast',
+    valueGetter({ analysis }) {
+      if (!analysis.ngmast) return null;
+      return analysis.ngmast.ngmast;
     },
-    { columnKey: '__por',
-      valueGetter({ analysis }) {
-        if (!analysis.ngmast) return null;
-        return analysis.ngmast.por;
-      },
+  },
+  __por: {
+    columnKey: '__por',
+    valueGetter({ analysis }) {
+      if (!analysis.ngmast) return null;
+      return analysis.ngmast.por;
     },
-    { columnKey: '__tbpb',
-      valueGetter({ analysis }) {
-        if (!analysis.ngmast) return null;
-        return analysis.ngmast.tbpb;
-      },
+  },
+  __tbpb: {
+    columnKey: '__tbpb',
+    valueGetter({ analysis }) {
+      if (!analysis.ngmast) return null;
+      return analysis.ngmast.tbpb;
     },
-  ] : []).
-  concat([
-    { columnKey: '__core_matches',
-      valueGetter({ analysis }) {
-        return analysis.core ?
-          analysis.core.size :
-          null;
-      },
+  },
+  __core_matches: {
+    columnKey: '__core_matches',
+    valueGetter({ analysis }) {
+      return analysis.core ?
+        analysis.core.size :
+        null;
     },
-    { columnKey: '__%_core_families',
-      valueGetter({ analysis }) {
-        return analysis.core ?
-          analysis.core.percentMatched :
-          null;
-      },
+  },
+  '__%_core_families': {
+    columnKey: '__%_core_families',
+    valueGetter({ analysis }) {
+      return analysis.core ?
+        analysis.core.percentMatched :
+        null;
     },
-    { columnKey: '__%_non-core',
-      valueGetter({ analysis }) {
-        return analysis.core && analysis.core.percentAssemblyMatched ?
-          (100 - analysis.core.percentAssemblyMatched).toFixed(1) :
-          null;
-      },
+  },
+  '__%_non-core': {
+    columnKey: '__%_non-core',
+    valueGetter({ analysis }) {
+      return analysis.core && analysis.core.percentAssemblyMatched ?
+        (100 - analysis.core.percentAssemblyMatched).toFixed(1) :
+        null;
     },
-    { columnKey: '__assembly_length',
-      valueGetter({ metadata }) {
-        return metadata.metrics ?
-          metadata.metrics.totalNumberOfNucleotidesInDnaStrings :
-          null;
-      },
+  },
+  __assembly_length: {
+    columnKey: '__assembly_length',
+    valueGetter({ metadata }) {
+      return metadata.metrics ?
+        metadata.metrics.totalNumberOfNucleotidesInDnaStrings :
+        null;
     },
-    { columnKey: '__n50',
-      valueGetter({ metadata }) {
-        return metadata.metrics ?
-          metadata.metrics.contigN50 :
-          null;
-      },
+  },
+  __n50: {
+    columnKey: '__n50',
+    valueGetter({ metadata }) {
+      return metadata.metrics ?
+        metadata.metrics.contigN50 :
+        null;
     },
-    { columnKey: '__no._contigs',
-      valueGetter({ metadata }) {
-        return metadata.metrics ?
-          metadata.metrics.totalNumberOfContigs :
-          null;
-      },
+  },
+  '__no._contigs': {
+    columnKey: '__no._contigs',
+    valueGetter({ metadata }) {
+      return metadata.metrics ?
+        metadata.metrics.totalNumberOfContigs :
+        null;
     },
-    { columnKey: '__non-ATCG',
-      valueGetter({ metadata }) {
-        return metadata.metrics ?
-          metadata.metrics.totalNumberOfNsInDnaStrings :
-          null;
-      },
+  },
+  '__non-ATCG': {
+    columnKey: '__non-ATCG',
+    valueGetter({ metadata }) {
+      return metadata.metrics ?
+        metadata.metrics.totalNumberOfNsInDnaStrings :
+        null;
     },
-    { columnKey: '__GC_Content',
-      valueGetter({ metadata }) {
-        return metadata.metrics && metadata.metrics.gcContent ?
-          `${metadata.metrics.gcContent}%` :
-          null;
-      },
+  },
+  __GC_Content: {
+    columnKey: '__GC_Content',
+    valueGetter({ metadata }) {
+      return metadata.metrics && metadata.metrics.gcContent ?
+        `${metadata.metrics.gcContent}%` :
+        null;
     },
-  ]);
+  },
+};
+
+function getSystemDataColumnKeys({ noPopulation, noMLST, ngMast } = {}) {
+  return (
+    [ '__date' ].
+      concat(noPopulation ? [] : [ '__subtype', '__st' ]).
+      concat(noMLST ? [] : [ '__profile' ]).
+      concat(ngMast ? [ '__ng-mast', '__por', '__tbpb' ] : []).
+      concat([
+        '__core_matches',
+        '__%_core_families',
+        '__%_non-core',
+        '__assembly_length',
+        '__n50',
+        '__no._contigs',
+        '__non-ATCG',
+        '__GC_Content',
+      ])
+  );
+}
+
+export function getSystemDataColumnProps(uiOptions) {
+  return getSystemDataColumnKeys(uiOptions).map(key => systemDataColumns[key]);
 }
 
 export const getUserDefinedValue =
