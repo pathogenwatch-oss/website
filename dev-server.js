@@ -22,6 +22,9 @@ app.use(bodyParser.json());
 
 app.use(express.static('public'));
 
+const frontEndConfig = require('./config.json');
+const { dummyCollection } = frontEndConfig;
+const staticDataPath = `${__dirname}/static_data/${dummyCollection}`;
 
 const apiRouter = express.Router();
 
@@ -46,16 +49,16 @@ apiRouter.get('/species/:speciesId/collection/:id/status', (req, res) => {
 
 apiRouter.get('/species/:speciesId/collection/:id', (req, res) => {
   setTimeout(() => {
-    res.sendFile(`${__dirname}/static_data/collection.json`);
-  }, 1000);
+    res.sendFile(`${staticDataPath}/collection.json`);
+  }, 500);
 });
 
 apiRouter.get('/species/:speciesId/reference', (req, res) => {
-  res.sendFile(`${__dirname}/static_data/reference.json`);
+  res.sendFile(`${staticDataPath}/reference.json`);
 });
 
 apiRouter.get('/species/:speciesId/antibiotics', (req, res) => {
-  res.sendFile(`${__dirname}/static_data/antibiotics.json`);
+  res.sendFile(`${staticDataPath}/antibiotics.json`);
 });
 
 // let subtreeError = false;
@@ -65,7 +68,7 @@ apiRouter.get('/species/:speciesId/collection/:collectionId/subtree/:subtreeId',
     setTimeout(() => (
       // subtreeError ?
       //   res.sendStatus(500) :
-        res.sendFile(`${__dirname}/static_data/${req.params.subtreeId}.json`)
+        res.sendFile(`${staticDataPath}/${req.params.subtreeId}.json`)
     ), 1000);
   }
 );
@@ -88,7 +91,7 @@ apiRouter.post('/species/:speciesId/download/type/:idType/format/:fileFormat', (
 
 apiRouter.get(
   '/species/:speciesId/download/file/:fileName',
-  (req, res) => res.sendFile(`${__dirname}/static_data/metadata.csv`)
+  (req, res) => res.sendFile(`${staticDataPath}/metadata.csv`)
 );
 
 const fastaStoragePath = './fastas';
@@ -128,11 +131,6 @@ app.use('/api', apiRouter);
 
 app.set('view engine', 'ejs');
 
-app.use('/', (req, res) =>
-  res.render('index', {
-    googleMapsKey: 'AIzaSyBUn4F1N7KKElr6Qcwxvm7v3IzDoI0aQzE',
-    frontEndConfig: JSON.parse(fs.readFileSync('./config.json')),
-  })
-);
+app.use('/', (req, res) => res.render('index', { frontEndConfig }));
 
 app.listen(8080, '0.0.0.0');
