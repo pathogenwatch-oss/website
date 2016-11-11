@@ -1,7 +1,9 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
 import Switch from '../../components/Switch.react';
 
+import * as selectors from './selectors';
 import { displayTree } from './actions';
 
 import { POPULATION, COLLECTION } from '../../app/stateKeys/tree';
@@ -11,7 +13,7 @@ const icons = {
   [POPULATION]: 'language',
 };
 
-export default ({ tree, title, isSpecies, singleTree, dispatch }) => {
+const Header = ({ tree, title, singleTree, isSubtree, onSwitchChange, onBackButtonClick }) => {
   const switcher =
     singleTree ?
     <div className="wgsa-tree-icon mdl-button mdl-button--icon">
@@ -23,24 +25,20 @@ export default ({ tree, title, isSpecies, singleTree, dispatch }) => {
         left={{ title: 'Collection View', icon: icons[COLLECTION] }}
         right={{ title: 'Population View', icon: icons[POPULATION] }}
         checked={tree.name === POPULATION}
-        onChange={(checked) => dispatch(
-          displayTree(
-            checked ? { name: POPULATION } : { name: COLLECTION }
-          )
-        )}
+        onChange={onSwitchChange}
       />
     </div>;
 
   return (
     <header className="wgsa-tree-header">
-      { isSpecies ?
-          switcher :
-          <button
-            className="wgsa-tree-icon mdl-button mdl-button--icon"
-            onClick={() => dispatch(displayTree({ name: POPULATION }))}
-          >
-            <i className="material-icons">arrow_back</i>
-          </button>
+      { isSubtree ?
+        <button
+          className="wgsa-tree-icon mdl-button mdl-button--icon"
+          onClick={onBackButtonClick}
+        >
+          <i className="material-icons">arrow_back</i>
+        </button> :
+        switcher
       }
       <h2 className="wgsa-tree-heading">
         <span>{title}</span>
@@ -48,3 +46,22 @@ export default ({ tree, title, isSpecies, singleTree, dispatch }) => {
     </header>
   );
 };
+
+function mapStateToProps(state) {
+  return {
+    singleTree: selectors.getSingleTree(state),
+    tree: selectors.getVisibleTree(state),
+    title: selectors.getTitle(state),
+    isSubtree: selectors.isSubtree(state),
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    onSwitchChange: checked =>
+      dispatch(displayTree(checked ? POPULATION : COLLECTION)),
+    onBackButtonClick: () => dispatch(displayTree(POPULATION)),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

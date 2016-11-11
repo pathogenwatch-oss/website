@@ -1,7 +1,7 @@
 import { createAsyncConstants } from '../../actions';
 import { showToast } from '../../toast';
 
-import { speciesTrees } from './constants';
+import { getTrees } from './selectors';
 import { getSubtree } from '../../utils/Api';
 import Species from '../../species';
 
@@ -21,22 +21,31 @@ function setTree(name) {
   };
 }
 
-export function displayTree({ name, newick }) {
+function fetchTree(name) {
   return (dispatch, getState) => {
-    if (speciesTrees.has(name) || newick) {
-      dispatch(setTree(name));
-      return;
-    }
-
     const { collection } = getState();
-
-    dispatch({
+    return dispatch({
       type: FETCH_TREE,
       payload: {
         stateKey: name,
         promise: getSubtree(Species.id, collection.id, name),
       },
-    }).then(() => dispatch(setTree(name)))
-      .catch(() => dispatch(showToast(errorToast)));
+    });
+  };
+}
+
+export function displayTree(name) {
+  return (dispatch, getState) => {
+    const state = getState();
+    const tree = getTrees(state)[name];
+
+    if (tree && tree.newick) {
+      dispatch(setTree(name));
+      return;
+    }
+
+    dispatch(fetchTree(name)).
+      then(() => dispatch(setTree(name))).
+      catch(() => dispatch(showToast(errorToast)));
   };
 }

@@ -40,3 +40,8 @@ export const getFilenames = createSelector(
   ({ tables }) => tables.metadata.activeColumn,
   constants.getFilenames
 );
+
+export const isSubtree = createSelector(
+  getVisibleTree,
+  tree => !constants.speciesTrees.has(tree.name)
+);

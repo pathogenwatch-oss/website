@@ -4,6 +4,7 @@ import React from 'react';
 import Phylocanvas, { Tree } from 'phylocanvas';
 import contextMenuPlugin from 'phylocanvas-plugin-context-menu';
 
+import TreeHeader from './Header.react';
 import TreeControls from './Controls.react';
 import Spinner from '../../components/Spinner.react';
 
@@ -40,7 +41,6 @@ export default React.createClass({
 
   propTypes: {
     newick: React.PropTypes.string,
-    header: React.PropTypes.any,
     styleTree: React.PropTypes.func,
     onLoaded: React.PropTypes.func,
     onUpdated: React.PropTypes.func,
@@ -129,11 +129,9 @@ export default React.createClass({
   },
 
   render() {
-    const { header, loading } = this.props;
-    console.log(this.props);
     return (
       <section className="wgsa-tree">
-        {header}
+        <TreeHeader />
         <div id="phylocanvas-container" style={fullWidthHeight}></div>
         <button
           ref="menuButton"
@@ -148,7 +146,7 @@ export default React.createClass({
           handleNodeScaleChange={this.handleNodeScaleChange}
           handleLabelScaleChange={this.handleLabelScaleChange}
         />
-        { loading ?
+        { this.props.loading ?
           <div className="wgsa-loading-overlay">
             <Spinner />
           </div> : null }
