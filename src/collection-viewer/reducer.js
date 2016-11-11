@@ -1,7 +1,9 @@
 import { combineReducers } from 'redux';
 
-import filter from '../collection-viewer/filter/reducer';
+import filter from './filter/reducer';
+import summary from './summary/reducer';
 
 export default combineReducers({
   filter,
+  summary,
 });

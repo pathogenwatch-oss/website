@@ -2,7 +2,13 @@
   position: absolute;
   top: 16px;
   left: 16px;
+  width: 40px;
+  background: rgba(255, 255, 255, 0.87);
+  padding: 4px;
+  cursor: pointer;
+}
+
+.wgsa-collection-viewer-summary--expanded {
   width: 160px;
-  background: #E5E5E5;
   padding: 8px;
 }

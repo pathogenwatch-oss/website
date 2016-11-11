@@ -28,3 +28,7 @@ export const getAssemblySummary = createSelector(
     }, new Map()).entries()
   )
 );
+
+const getSummary = ({ collectionViewer }) => collectionViewer.summary;
+
+export const getIsSummaryExpanded = (state) => getSummary(state).isExpanded;
