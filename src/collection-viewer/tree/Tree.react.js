@@ -31,10 +31,6 @@ const fullWidthHeight = {
   overflow: 'hidden',
 };
 
-const initialMaxScale = 2;
-const maxBaseSize = 10;
-const minBaseSize = 3;
-
 export default React.createClass({
 
   displayName: 'Tree',
@@ -47,19 +43,7 @@ export default React.createClass({
     loading: React.PropTypes.bool,
     filenames: React.PropTypes.object,
     setUnfilteredIds: React.PropTypes.func,
-  },
-
-  getInitialState() {
-    return {
-      isHighlightingBranch: false,
-      isTreeControlsOn: false,
-      treeType: DEFAULT.TREE_TYPE,
-      scales: {
-        node: 1,
-        label: 1,
-        max: initialMaxScale,
-      },
-    };
+    setBaseSize: React.PropTypes.func,
   },
 
   componentDidMount() {
@@ -79,8 +63,6 @@ export default React.createClass({
 
     phylocanvas.clickFlag = 'highlighted';
     phylocanvas.clickFlagPredicate = node => node.leaf;
-
-    phylocanvas.setTreeType(this.state.treeType);
 
     phylocanvas.on('loaded', () => {
       this.props.styleTree(phylocanvas);
@@ -128,74 +110,15 @@ export default React.createClass({
     this.props.onUpdated(event, this.phylocanvas);
   },
 
-  render() {
-    return (
-      <section className="wgsa-tree">
-        <TreeHeader />
-        <div id="phylocanvas-container" style={fullWidthHeight}></div>
-        <button
-          ref="menuButton"
-          className="mdl-button mdl-js-button mdl-button--icon wgsa-tree-menu-button"
-        >
-          <i className="material-icons">more_vert</i>
-        </button>
-        <TreeControls
-          treeType={this.state.treeType}
-          scales={this.state.scales}
-          handleTreeTypeChange={this.handleTreeTypeChange}
-          handleNodeScaleChange={this.handleNodeScaleChange}
-          handleLabelScaleChange={this.handleLabelScaleChange}
-        />
-        { this.props.loading ?
-          <div className="wgsa-loading-overlay">
-            <Spinner />
-          </div> : null }
-      </section>
-    );
+  setBaseSize(phylocanvas) {
+    phylocanvas.fitInPanel();
+    this.props.setBaseSize(phylocanvas.prerenderer.getStep(phylocanvas));
   },
 
   phylocanvas: null,
 
-  setBaseSize(tree) {
-    this.baseSize = Math.min(
-      maxBaseSize,
-      Math.max(minBaseSize, tree.prerenderer.getStep(tree) / 2)
-    );
-
-    tree.baseNodeSize = this.baseSize;
-    tree.textSize = this.baseSize;
-
-    tree.fitInPanel();
-    tree.draw();
-
-    this.setState({
-      scales: {
-        node: 1,
-        label: 1,
-        max: Math.max(
-          initialMaxScale,
-          (initialMaxScale * maxBaseSize) / this.baseSize
-        ),
-      },
-    });
-  },
-
   loadTree() {
     this.phylocanvas.load(this.props.newick);
-  },
-
-  handleNodeScaleChange(event) {
-    this.phylocanvas.baseNodeSize = this.baseSize * parseFloat(event.target.value);
-    this.phylocanvas.draw();
-  },
-
-  handleLabelScaleChange(event) {
-    this.phylocanvas.textSize = this.baseSize * parseFloat(event.target.value);
-    this.phylocanvas.draw();
-  },
-
-  handleTreeTypeChange(event) {
-    this.phylocanvas.setTreeType(event.target.value);
   },
 
   toggleContextMenu(event) {
@@ -209,6 +132,29 @@ export default React.createClass({
     this.phylocanvas.contextMenu.open(left - 128, top + 32); // magic numbers to position the menu "bottom-right"
     this.phylocanvas.contextMenu.closed = false;
     this.phylocanvas.tooltip.close();
+  },
+
+  render() {
+    return (
+      <section className="wgsa-tree">
+        <TreeHeader />
+        <div id="phylocanvas-container" style={fullWidthHeight}></div>
+        <button
+          ref="menuButton"
+          className="mdl-button mdl-js-button mdl-button--icon wgsa-tree-menu-button"
+        >
+          <i className="material-icons">more_vert</i>
+        </button>
+        <TreeControls
+          stateKey={this.props.name}
+          phylocanvas={this.phylocanvas}
+        />
+        { this.props.loading ?
+          <div className="wgsa-loading-overlay">
+            <Spinner />
+          </div> : null }
+      </section>
+    );
   },
 
 });

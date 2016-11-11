@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import Switch from '../../components/Switch.react';
 
 import * as selectors from './selectors';
-import { displayTree } from './actions';
+import { displayTree } from './thunks';
 
 import { POPULATION, COLLECTION } from '../../app/stateKeys/tree';
 

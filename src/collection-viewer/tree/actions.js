@@ -1,18 +1,8 @@
 import { createAsyncConstants } from '../../actions';
-import { showToast } from '../../toast';
-
-import { getTrees } from './selectors';
-import { getSubtree } from '../../utils/Api';
-import Species from '../../species';
 
 export const SET_TREE = 'SET_TREE';
-export const FETCH_TREE = createAsyncConstants('FETCH_TREE');
 
-const errorToast = {
-  message: 'Subtree currently unavailable, please try again later.',
-};
-
-function setTree(name) {
+export function setTree(name) {
   return {
     type: SET_TREE,
     payload: {
@@ -21,31 +11,63 @@ function setTree(name) {
   };
 }
 
-function fetchTree(name) {
-  return (dispatch, getState) => {
-    const { collection } = getState();
-    return dispatch({
-      type: FETCH_TREE,
-      payload: {
-        stateKey: name,
-        promise: getSubtree(Species.id, collection.id, name),
-      },
-    });
+export const FETCH_TREE = createAsyncConstants('FETCH_TREE');
+
+export function fetchTree(stateKey, promise) {
+  return {
+    type: FETCH_TREE,
+    payload: {
+      stateKey,
+      promise,
+    },
   };
 }
 
-export function displayTree(name) {
-  return (dispatch, getState) => {
-    const state = getState();
-    const tree = getTrees(state)[name];
+export const SET_BASE_SIZE = 'SET_BASE_SIZE';
 
-    if (tree && tree.newick) {
-      dispatch(setTree(name));
-      return;
-    }
+export function setBaseSize(stateKey, step) {
+  console.log(stateKey, step);
+  return {
+    type: SET_BASE_SIZE,
+    payload: {
+      stateKey,
+      step,
+    },
+  };
+}
 
-    dispatch(fetchTree(name)).
-      then(() => dispatch(setTree(name))).
-      catch(() => dispatch(showToast(errorToast)));
+export const SET_TREE_TYPE = 'SET_TREE_TYPE';
+
+export function setTreeType(stateKey, type) {
+  return {
+    type: SET_TREE_TYPE,
+    payload: {
+      stateKey,
+      type,
+    },
+  };
+}
+
+export const SET_NODE_SCALE = 'SET_NODE_SCALE';
+
+export function setNodeScale(stateKey, scale) {
+  return {
+    type: SET_NODE_SCALE,
+    payload: {
+      stateKey,
+      scale: parseFloat(scale),
+    },
+  };
+}
+
+export const SET_LABEL_SCALE = 'SET_LABEL_SCALE';
+
+export function setLabelScale(stateKey, scale) {
+  return {
+    type: SET_LABEL_SCALE,
+    payload: {
+      stateKey,
+      scale: parseFloat(scale),
+    },
   };
 }

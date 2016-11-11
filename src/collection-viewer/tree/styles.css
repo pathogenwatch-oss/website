@@ -69,30 +69,42 @@ div.wgsa-tree-icon:active {
   color: inherit;
 }
 
-.wgsa-tree-actions {
-  color: #673c90;
-  background: rgba(255, 255, 255, 0.87);
+.wgsa-tree-controls {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  z-index: 1;
+  user-select: none;
 }
 
-.wgsa-tree-controls {
+.wgsa-tree-sliders {
   background: rgba(255, 255, 255, 0.87);
   padding: 4px 0;
   border-radius: 8px;
 }
 
-.wgsa-tree-control .mdl-slider {
+.wgsa-tree-slider .mdl-slider {
   display: none;
 }
 
-.wgsa-tree-control .mdl-slider.is-upgraded {
+.wgsa-tree-slider .mdl-slider.is-upgraded {
   display: block;
 }
 
-.wgsa-tree-control {
+.wgsa-tree-slider {
   margin: 0 -20px;
+  width: 128px;
+  height: 40px;
+  text-align: center;
+  display: inline-block;
+  overflow: hidden;
+  user-select: none;
 }
 
-.wgsa-tree-control label {
+.wgsa-tree-slider label {
   font-size: 13px;
   font-weight: 500;
   color: rgba(0, 0, 0, 0.87);

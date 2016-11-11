@@ -1,48 +1,48 @@
 import React from 'react';
 import { treeTypes } from 'phylocanvas';
+import { connect } from 'react-redux';
 
-const treeSizeControlsStyle = {
-  position: 'absolute',
-  bottom: 16,
-  right: 16,
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'flex-end',
-  zIndex: '1',
-  userSelect: 'none',
-};
+import { getTreeType, getBaseSize, getTreeScales } from './selectors';
+import { setTreeType, setNodeScale, setLabelScale } from './actions';
 
-const sizeControlStyle = {
-  width: '128px',
-  height: '40px',
-  textAlign: 'center',
-  display: 'inline-block',
-  overflow: 'hidden',
-  userSelect: 'none',
-};
-
-export default React.createClass({
+const Controls = React.createClass({
 
   propTypes: {
     scales: React.PropTypes.object,
     treeType: React.PropTypes.string,
-    handleNodeScaleChange: React.PropTypes.func,
-    handleLabelScaleChange: React.PropTypes.func,
-    handleTreeTypeChange: React.PropTypes.func,
+    onNodeScaleChange: React.PropTypes.func,
+    onLabelScaleChange: React.PropTypes.func,
+    onTreeTypeChange: React.PropTypes.func,
   },
 
   componentDidMount() {
     const { nodeSlider, labelSlider } = this.refs;
     componentHandler.upgradeElements([ nodeSlider, labelSlider ]);
+
+    // const { scales, treeType, baseSize, phylocanvas } = this.props;
+    // phylocanvas.baseNodeSize = baseSize * scales.node;
+    // phylocanvas.textSize = baseSize * scales.node;
+    // phylocanvas.setTreeType(treeType);
   },
 
   componentDidUpdate(previous) {
     const { nodeSlider, labelSlider } = this.refs;
-    const { scales } = this.props;
+    const { scales, treeType, baseSize, phylocanvas } = this.props;
+
+    console.log(previous, this.props);
 
     if (scales !== previous.scales) {
       nodeSlider.MaterialSlider.change(scales.node);
+      phylocanvas.baseNodeSize = baseSize * scales.node;
+
       labelSlider.MaterialSlider.change(scales.label);
+      phylocanvas.textSize = baseSize * scales.label;
+
+      phylocanvas.draw();
+    }
+
+    if (treeType !== previous.treeType || previous.phylocanvas === null) {
+      phylocanvas.setTreeType(treeType);
     }
   },
 
@@ -50,25 +50,32 @@ export default React.createClass({
     const { scales } = this.props;
 
     return (
-      <div style={treeSizeControlsStyle}>
-        <select className="wgsa-select-tree-type" defaultValue={this.props.treeType} onChange={this.props.handleTreeTypeChange}>
-          { Object.keys(treeTypes).map((treeType) => <option key={treeType} value={treeType}>{treeType}</option>)}
+      <div className="wgsa-tree-controls">
+        <select className="wgsa-select-tree-type"
+          value={this.props.treeType}
+          onChange={this.props.onTreeTypeChange}
+        >
+          { Object.keys(treeTypes).map((treeType) =>
+            <option key={treeType} value={treeType}>{treeType}</option>
+          )}
         </select>
-        <div className="wgsa-tree-controls">
-          <div className="wgsa-tree-control" style={sizeControlStyle}>
+        <div className="wgsa-tree-sliders">
+          <div className="wgsa-tree-slider">
             <label>Node Size
               <input ref="nodeSlider" type="range"
-                onChange={this.props.handleNodeScaleChange}
-                min="0.1" max={scales.max} step="0.1" defaultValue={scales.node}
-                className="mdl-slider mdl-js-slider" tabIndex="0"/>
+                onChange={this.props.onNodeScaleChange}
+                min="0.1" max={scales.max} step="0.1" value={scales.node}
+                className="mdl-slider mdl-js-slider" tabIndex="0"
+              />
             </label>
           </div>
-          <div className="wgsa-tree-control" style={sizeControlStyle}>
+          <div className="wgsa-tree-slider">
             <label>Label Size
               <input ref="labelSlider" type="range"
-                onChange={this.props.handleLabelScaleChange}
-                min="0.1" max={scales.max} step="0.1" defaultValue={scales.leaf}
-                className="mdl-slider mdl-js-slider" tabIndex="0"/>
+                onChange={this.props.onLabelScaleChange}
+                min="0.1" max={scales.max} step="0.1" value={scales.leaf}
+                className="mdl-slider mdl-js-slider" tabIndex="0"
+              />
             </label>
           </div>
         </div>
@@ -77,3 +84,24 @@ export default React.createClass({
   },
 
 });
+
+function mapStateToProps(state) {
+  return {
+    treeType: getTreeType(state),
+    baseSize: getBaseSize(state),
+    scales: getTreeScales(state),
+  };
+}
+
+function mapDispatchToProps(dispatch, { stateKey }) {
+  return {
+    onTreeTypeChange: event =>
+      dispatch(setTreeType(stateKey, event.target.value)),
+    onNodeScaleChange: event =>
+      dispatch(setNodeScale(stateKey, event.target.value)),
+    onLabelScaleChange: event =>
+      dispatch(setLabelScale(stateKey, event.target.value)),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Controls);

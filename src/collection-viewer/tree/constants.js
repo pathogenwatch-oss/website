@@ -1,4 +1,4 @@
-import { displayTree } from './actions';
+import { displayTree } from './thunks';
 import {
   setUnfilteredIds,
   activateFilter,
@@ -6,7 +6,6 @@ import {
 } from '../filter/actions';
 
 import { getFilter } from '../selectors';
-import { getTrees } from './selectors';
 
 import { createColourGetter } from '../../utils/resistanceProfile';
 

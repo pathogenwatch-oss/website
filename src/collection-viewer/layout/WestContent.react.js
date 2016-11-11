@@ -4,6 +4,7 @@ import Tree from '../tree';
 
 import * as selectors from '../tree/selectors';
 
+import { setBaseSize } from '../tree/actions';
 import { setUnfilteredIds } from '../../collection-viewer/filter/actions';
 
 import { getTreeFunctions } from '../tree/constants';
@@ -27,6 +28,7 @@ function mergeProps(state, { dispatch }, props) {
     ...treeProps,
     ...getTreeFunctions(tree.name, wholeState, dispatch),
     setUnfilteredIds: ids => dispatch(setUnfilteredIds(ids)),
+    setBaseSize: step => dispatch(setBaseSize(tree.name, step)),
   };
 }
 
