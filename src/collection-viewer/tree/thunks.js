@@ -1,11 +1,11 @@
+import { getTrees, getLeafIds } from './selectors';
+
 import { showToast } from '../../toast';
+import * as actions from './actions';
 
-import { getTrees } from './selectors';
-
+import { POPULATION, COLLECTION } from '../../app/stateKeys/tree';
 import { getSubtree } from '../../utils/Api';
 import Species from '../../species';
-
-import * as actions from './actions';
 
 function fetchTree(name) {
   return (dispatch, getState) => {
@@ -33,5 +33,18 @@ export function displayTree(name) {
     dispatch(fetchTree(name)).
       then(() => dispatch(actions.setTree(name))).
       catch(() => dispatch(showToast(errorToast)));
+  };
+}
+
+export function treeLoaded(stateKey, phylocanvas) {
+  return (dispatch, getState) => {
+    const leafIds = getLeafIds(getState(), {
+      stateKey: stateKey === POPULATION ? COLLECTION : stateKey,
+    });
+
+    dispatch(actions.treeLoaded(stateKey, {
+      step: phylocanvas.prerenderer.getStep(phylocanvas),
+      leafIds: leafIds || phylocanvas.leaves.map(_ => _.id),
+    }));
   };
 }

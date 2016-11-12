@@ -6,6 +6,7 @@ import {
   RESET_FILTER,
 } from './actions';
 
+import { TREE_LOADED } from '../tree/actions';
 
 const initialState = {
   active: false,
@@ -16,12 +17,14 @@ const initialState = {
 export default function (state = initialState, { type, payload = {} }) {
   const { ids } = payload;
   switch (type) {
+    case TREE_LOADED:
     case SET_UNFILTERED_IDS: {
+      const { leafIds } = payload;
       const noReset =
-        state.active && Array.from(ids).some(id => state.ids.has(id));
+        state.active && leafIds.some(id => state.ids.has(id));
       return {
         ...state,
-        unfilteredIds: ids,
+        unfilteredIds: new Set(leafIds),
         ids: noReset ? state.ids : new Set(),
         active: noReset,
       };

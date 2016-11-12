@@ -23,14 +23,14 @@ export function fetchTree(stateKey, promise) {
   };
 }
 
-export const SET_BASE_SIZE = 'SET_BASE_SIZE';
+export const TREE_LOADED = 'TREE_LOADED';
 
-export function setBaseSize(stateKey, step) {
+export function treeLoaded(stateKey, props) {
   return {
-    type: SET_BASE_SIZE,
+    type: TREE_LOADED,
     payload: {
       stateKey,
-      step,
+      ...props,
     },
   };
 }

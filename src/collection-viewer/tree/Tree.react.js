@@ -65,10 +65,10 @@ export default React.createClass({
     phylocanvas.clickFlag = 'highlighted';
     phylocanvas.clickFlagPredicate = node => node.leaf;
 
-    phylocanvas.on('subtree', () => {
-      this.props.setUnfilteredIds(phylocanvas.leaves.map(_ => _.id));
-      this.setBaseSize(phylocanvas);
-    });
+    // phylocanvas.on('subtree', () => {
+    //   this.props.setUnfilteredIds(phylocanvas.leaves.map(_ => _.id));
+    //   this.setBaseSize(phylocanvas);
+    // });
 
     phylocanvas.on('loaded', this.onLoaded);
     phylocanvas.on('updated', this.onUpdated);
@@ -100,16 +100,11 @@ export default React.createClass({
 
   onLoaded() {
     this.props.styleTree(this.phylocanvas);
-    this.setBaseSize(this.phylocanvas);
     this.props.onLoaded(this.phylocanvas);
   },
 
   onUpdated(event) {
     this.props.onUpdated(event, this.phylocanvas);
-  },
-
-  setBaseSize(phylocanvas) {
-    this.props.setBaseSize(phylocanvas.prerenderer.getStep(phylocanvas));
   },
 
   phylocanvas: null,

@@ -5,23 +5,20 @@ import * as ACTIONS from './actions';
 
 import { COLLECTION, POPULATION } from '../../app/stateKeys/tree';
 
-const initialMaxScale = 2;
 const maxBaseSize = 10;
 const minBaseSize = 3;
 
-function setBaseSize(trees, { stateKey, step }) {
-  const tree = trees[stateKey];
-  if (tree.step === step) return tree;
+function setBaseSize(state, { step, leafIds }) {
+  if (state.leafIds) return {};
 
-  const baseSize = Math.min(maxBaseSize, Math.max(minBaseSize, step / 2));
+  const baseSize = Math.min(maxBaseSize, Math.max(minBaseSize, step * 0.75));
   return {
-    ...tree,
-    step,
+    leafIds,
     baseSize,
     scales: {
       node: 1,
       label: 1,
-      max: Math.max(initialMaxScale, maxBaseSize / (baseSize / 2)),
+      max: 2,
     },
   };
 }
@@ -31,7 +28,7 @@ const initialState = {
   scales: {
     node: 1,
     label: 1,
-    max: initialMaxScale,
+    max: 2,
   },
 };
 
@@ -61,12 +58,21 @@ function entities(state = {}, { type, payload }) {
           ...initialState,
         },
       };
-    case ACTIONS.SET_BASE_SIZE:
+    case ACTIONS.SET_TREE:
+      return {
+        ...state,
+        [payload.name]: {
+          ...state[payload.name],
+          loaded: false,
+        },
+      };
+    case ACTIONS.TREE_LOADED:
       return {
         ...state,
         [payload.stateKey]: {
           ...state[payload.stateKey],
-          ...setBaseSize(state, payload),
+          loaded: true,
+          ...setBaseSize(state[payload.stateKey], payload),
         },
       };
     case ACTIONS.SET_TREE_TYPE:

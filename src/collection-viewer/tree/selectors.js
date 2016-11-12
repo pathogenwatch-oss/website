@@ -10,6 +10,9 @@ const getTreeState = ({ collectionViewer }) => collectionViewer.tree;
 export const getTrees = state => getTreeState(state).entities;
 export const isLoading = state => getTreeState(state).loading;
 
+export const getLeafIds = (state, { stateKey }) =>
+  getTrees(state)[stateKey].leafIds;
+
 export const getVisibleTree = createSelector(
   getTreeState,
   ({ visible, entities }) => {
@@ -18,6 +21,7 @@ export const getVisibleTree = createSelector(
   }
 );
 
+export const isLoaded = state => getVisibleTree(state).loaded;
 export const getTreeType = state => getVisibleTree(state).type;
 export const getBaseSize = state => getVisibleTree(state).baseSize;
 export const getTreeScales = state => getVisibleTree(state).scales;

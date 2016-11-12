@@ -2,7 +2,7 @@ import React from 'react';
 import { treeTypes } from 'phylocanvas';
 import { connect } from 'react-redux';
 
-import { getTreeType, getBaseSize, getTreeScales } from './selectors';
+import { isLoaded, getTreeType, getBaseSize, getTreeScales } from './selectors';
 import { setTreeType, setNodeScale, setLabelScale } from './actions';
 
 const Controls = React.createClass({
@@ -24,7 +24,11 @@ const Controls = React.createClass({
     const { nodeSlider, labelSlider } = this.refs;
     const { scales, treeType, baseSize, phylocanvas } = this.props;
 
-    if (scales !== previous.scales && baseSize) {
+    if (treeType !== previous.treeType || !previous.loaded) {
+      phylocanvas.setTreeType(treeType);
+    }
+
+    if (baseSize && (scales !== previous.scales || !previous.loaded)) {
       nodeSlider.MaterialSlider.change(scales.node);
       phylocanvas.baseNodeSize = baseSize * scales.node;
 
@@ -32,10 +36,6 @@ const Controls = React.createClass({
       phylocanvas.textSize = baseSize * scales.label;
 
       phylocanvas.draw();
-    }
-
-    if (treeType !== previous.treeType || previous.phylocanvas === null) {
-      phylocanvas.setTreeType(treeType);
     }
   },
 
@@ -57,7 +57,7 @@ const Controls = React.createClass({
             <label>Node Size
               <input ref="nodeSlider" type="range"
                 onChange={this.props.onNodeScaleChange}
-                min="0.1" max={scales.max} step="0.1" value={scales.node}
+                min="0.1" max={scales.max} step="0.2" value={scales.node}
                 className="mdl-slider mdl-js-slider" tabIndex="0"
               />
             </label>
@@ -66,7 +66,7 @@ const Controls = React.createClass({
             <label>Label Size
               <input ref="labelSlider" type="range"
                 onChange={this.props.onLabelScaleChange}
-                min="0.1" max={scales.max} step="0.1" value={scales.leaf}
+                min="0.1" max={scales.max} step="0.2" value={scales.leaf}
                 className="mdl-slider mdl-js-slider" tabIndex="0"
               />
             </label>
@@ -80,6 +80,7 @@ const Controls = React.createClass({
 
 function mapStateToProps(state) {
   return {
+    loaded: isLoaded(state),
     treeType: getTreeType(state),
     baseSize: getBaseSize(state),
     scales: getTreeScales(state),

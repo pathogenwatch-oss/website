@@ -4,8 +4,7 @@ import Tree from '../tree';
 
 import * as selectors from '../tree/selectors';
 
-import { setBaseSize } from '../tree/actions';
-import { setUnfilteredIds } from '../../collection-viewer/filter/actions';
+import { treeLoaded } from '../tree/thunks';
 
 import { getTreeFunctions } from '../tree/constants';
 
@@ -14,6 +13,7 @@ function mapStateToProps(state) {
     tree: selectors.getVisibleTree(state),
     filenames: selectors.getFilenames(state),
     loading: selectors.isLoading(state),
+    // leafStyles: selectors.getLeafStyles(state),
   };
 }
 
@@ -25,11 +25,9 @@ function mergeProps(state, { dispatch }, props) {
     ...tree,
     ...treeProps,
     styleTree: () => {},
-    onLoaded: () => {},
-    onUpdated: () => {},
-    // ...getTreeFunctions(tree.name, wholeState, dispatch),
-    setUnfilteredIds: ids => dispatch(setUnfilteredIds(ids)),
-    setBaseSize: step => dispatch(setBaseSize(tree.name, step)),
+    onLoaded: phylocanvas => dispatch(treeLoaded(tree.name, phylocanvas)),
+    // onUpdated: (event, phylocanvas) =>
+    //   dispatch(treeClicked(tree.name, event, phylocanvas)),
   };
 }
 
