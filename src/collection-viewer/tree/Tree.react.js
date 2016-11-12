@@ -99,6 +99,8 @@ export default React.createClass({
   },
 
   onLoaded() {
+    this.props.styleTree(this.phylocanvas);
+    this.setBaseSize(this.phylocanvas);
     this.props.onLoaded(this.phylocanvas);
   },
 
@@ -113,10 +115,7 @@ export default React.createClass({
   phylocanvas: null,
 
   loadTree() {
-    this.phylocanvas.load(this.props.newick, () => {
-      this.props.styleTree(this.phylocanvas);
-      this.setBaseSize(this.phylocanvas);
-    });
+    this.phylocanvas.load(this.props.newick);
   },
 
   toggleContextMenu(event) {

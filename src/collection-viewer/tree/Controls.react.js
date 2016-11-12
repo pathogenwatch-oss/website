@@ -24,7 +24,7 @@ const Controls = React.createClass({
     const { nodeSlider, labelSlider } = this.refs;
     const { scales, treeType, baseSize, phylocanvas } = this.props;
 
-    if (scales !== previous.scales && phylocanvas.drawn) {
+    if (scales !== previous.scales && baseSize) {
       nodeSlider.MaterialSlider.change(scales.node);
       phylocanvas.baseNodeSize = baseSize * scales.node;
 
