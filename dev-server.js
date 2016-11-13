@@ -22,9 +22,7 @@ app.use(bodyParser.json());
 
 app.use(express.static('public'));
 
-const frontEndConfig = require('./config.json');
-const { dummyCollection } = frontEndConfig;
-const staticDataPath = `${__dirname}/static_data/${dummyCollection}`;
+const getCollectionPath = species => `${__dirname}/static_data/${species}`;
 
 const apiRouter = express.Router();
 
@@ -49,16 +47,16 @@ apiRouter.get('/species/:speciesId/collection/:id/status', (req, res) => {
 
 apiRouter.get('/species/:speciesId/collection/:id', (req, res) => {
   setTimeout(() => {
-    res.sendFile(`${staticDataPath}/collection.json`);
+    res.sendFile(`${getCollectionPath(req.params.speciesId)}/collection.json`);
   }, 500);
 });
 
 apiRouter.get('/species/:speciesId/reference', (req, res) => {
-  res.sendFile(`${staticDataPath}/reference.json`);
+  res.sendFile(`${getCollectionPath(req.params.speciesId)}/reference.json`);
 });
 
 apiRouter.get('/species/:speciesId/antibiotics', (req, res) => {
-  res.sendFile(`${staticDataPath}/antibiotics.json`);
+  res.sendFile(`${getCollectionPath(req.params.speciesId)}/antibiotics.json`);
 });
 
 // let subtreeError = false;
@@ -68,7 +66,7 @@ apiRouter.get('/species/:speciesId/collection/:collectionId/subtree/:subtreeId',
     setTimeout(() => (
       // subtreeError ?
       //   res.sendStatus(500) :
-        res.sendFile(`${staticDataPath}/${req.params.subtreeId}.json`)
+        res.sendFile(`${getCollectionPath(req.params.speciesId)}/${req.params.subtreeId}.json`)
     ), 1000);
   }
 );
@@ -91,7 +89,7 @@ apiRouter.post('/species/:speciesId/download/type/:idType/format/:fileFormat', (
 
 apiRouter.get(
   '/species/:speciesId/download/file/:fileName',
-  (req, res) => res.sendFile(`${staticDataPath}/metadata.csv`)
+  (req, res) => res.sendFile(`${getCollectionPath(req.params.speciesId)}/metadata.csv`)
 );
 
 const fastaStoragePath = './fastas';
@@ -131,6 +129,8 @@ app.use('/api', apiRouter);
 
 app.set('view engine', 'ejs');
 
-app.use('/', (req, res) => res.render('index', { frontEndConfig }));
+app.use('/', (req, res) => res.render('index', {
+  frontEndConfig: JSON.parse(fs.readFileSync('./config.json')),
+}));
 
 app.listen(8080, '0.0.0.0');

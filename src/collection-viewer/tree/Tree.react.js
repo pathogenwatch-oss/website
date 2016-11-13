@@ -116,7 +116,7 @@ export default React.createClass({
   applyLeafProps() {
     if (!this.props.loaded) return;
 
-    this.phylocanvas.leaves.forEach(leaf => {
+    for (const leaf of this.phylocanvas.leaves) {
       const { interactive = true, ...props } = this.props.leafProps[leaf.id];
       leaf.setDisplay({
         ...props.display,
@@ -129,7 +129,7 @@ export default React.createClass({
       leaf.label = props.label;
       leaf.highlighted = props.highlighted;
       leaf.interactive = interactive;
-    });
+    }
     this.phylocanvas.draw();
   },
 
