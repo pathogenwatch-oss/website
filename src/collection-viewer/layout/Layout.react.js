@@ -39,9 +39,7 @@ export default React.createClass({
           <EastContent />
         </SplitPane>
         <AutoSizer>
-          {({ height, width }) => <div>table</div>
-            // <SouthContent height={height} width={width} />
-          }
+          {({ height, width }) => <SouthContent height={height} width={width} />}
         </AutoSizer>
       </SplitPane>
     );

@@ -17,8 +17,7 @@ const initialState = {
 export default function (state = initialState, { type, payload = {} }) {
   const { ids } = payload;
   switch (type) {
-    case TREE_LOADED:
-    case SET_UNFILTERED_IDS: {
+    case TREE_LOADED: {
       const { leafIds } = payload;
       const noReset =
         state.active && leafIds.some(id => state.ids.has(id));

@@ -8,12 +8,11 @@ import { COLLECTION, POPULATION } from '../../app/stateKeys/tree';
 const maxBaseSize = 10;
 const minBaseSize = 3;
 
-function setBaseSize(state, { step, leafIds }) {
-  if (state.leafIds) return {};
+function setBaseSize(treeState, { step }) {
+  if (treeState.leafIds && treeState.baseSize) return {};
 
   const baseSize = Math.min(maxBaseSize, Math.max(minBaseSize, step * 0.75));
   return {
-    leafIds,
     baseSize,
     scales: {
       node: 1,
@@ -45,6 +44,7 @@ function entities(state = {}, { type, payload }) {
         [POPULATION]: {
           name: POPULATION,
           newick: reference.tree,
+          leafIds: Object.keys(reference.assemblies),
           ...initialState,
         },
       };
@@ -66,15 +66,18 @@ function entities(state = {}, { type, payload }) {
           loaded: false,
         },
       };
-    case ACTIONS.TREE_LOADED:
+    case ACTIONS.TREE_LOADED: {
+      const treeState = state[payload.stateKey];
       return {
         ...state,
         [payload.stateKey]: {
-          ...state[payload.stateKey],
+          ...treeState,
           loaded: true,
-          ...setBaseSize(state[payload.stateKey], payload),
+          leafIds: treeState.leafIds || payload.leafIds,
+          ...setBaseSize(treeState, payload),
         },
       };
+    }
     case ACTIONS.SET_TREE_TYPE:
       return {
         ...state,

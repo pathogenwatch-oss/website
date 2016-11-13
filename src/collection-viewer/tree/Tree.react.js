@@ -38,7 +38,7 @@ export default React.createClass({
 
   propTypes: {
     newick: React.PropTypes.string,
-    styleTree: React.PropTypes.func,
+    leafStyles: React.PropTypes.object,
     onLoaded: React.PropTypes.func,
     onUpdated: React.PropTypes.func,
     loading: React.PropTypes.bool,
@@ -84,7 +84,7 @@ export default React.createClass({
   componentDidUpdate(previous) {
     this.phylocanvas.resizeToContainer();
 
-    const { filenames, newick } = this.props;
+    const { filenames, newick, leafProps } = this.props;
 
     if (filenames !== previous.filenames) {
       this.phylocanvas.contextMenu.filenames = filenames;
@@ -92,14 +92,14 @@ export default React.createClass({
 
     if (newick && newick !== this.phylocanvas.stringRepresentation) {
       this.loadTree();
-    } else {
-      this.props.styleTree(this.phylocanvas);
-      this.phylocanvas.draw();
+    }
+
+    if (leafProps !== previous.leafProps) {
+      this.applyLeafProps();
     }
   },
 
   onLoaded() {
-    this.props.styleTree(this.phylocanvas);
     this.props.onLoaded(this.phylocanvas);
   },
 
@@ -111,6 +111,26 @@ export default React.createClass({
 
   loadTree() {
     this.phylocanvas.load(this.props.newick);
+  },
+
+  applyLeafProps() {
+    if (!this.props.loaded) return;
+
+    this.phylocanvas.leaves.forEach(leaf => {
+      const { interactive = true, ...props } = this.props.leafProps[leaf.id];
+      leaf.setDisplay({
+        ...props.display,
+        leafStyle: {
+          strokeStyle: DEFAULT.COLOUR,
+          fillStyle: props.colour,
+          lineWidth: 1,
+        },
+      });
+      leaf.label = props.label;
+      leaf.highlighted = props.highlighted;
+      leaf.interactive = interactive;
+    });
+    this.phylocanvas.draw();
   },
 
   toggleContextMenu(event) {

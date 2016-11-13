@@ -16,14 +16,19 @@ const style = {
 };
 
 const TableSwitcher = ({ displayedTable, dispatch }) => (
-  <div style={style} className="wgsa-switch-background mdl-shadow--2dp">
+  <div
+    style={style}
+    className="wgsa-switch-background mdl-shadow--2dp"
+    onClick={event => event.stopPropagation()}
+  >
     <Switch
       id="table-switcher"
       left={{ title: 'Metadata', icon: 'list' }}
       right={{ title: 'Resistance Profile', icon: 'local_pharmacy' }}
       checked={displayedTable === resistanceProfile}
       onChange={(checked) =>
-        dispatch(setTable(checked ? resistanceProfile : metadata))} />
+        dispatch(setTable(checked ? resistanceProfile : metadata))}
+    />
   </div>
 );
 
