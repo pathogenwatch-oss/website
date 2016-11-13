@@ -6,14 +6,8 @@ import DownloadsMenu from './downloads/DownloadsMenu.react';
 
 const CollectionViewer = React.createClass({
 
-  getDefaultProps() {
-    return {
-      title: 'Explore Collection',
-    };
-  },
-
   componentDidMount() {
-    document.title = `WGSA | ${this.props.title}`;
+    document.title = `WGSA | ${this.props.title || 'Explore Collection'}`;
   },
 
   render() {

@@ -39,6 +39,16 @@ const SouthContent = React.createClass({
     componentHandler.upgradeDom();
   },
 
+  shouldComponentUpdate(previous) {
+    const { data, columns, display, filter } = this.props;
+    return (
+      data !== previous.data ||
+      columns !== previous.columns ||
+      display !== previous.display ||
+      filter !== previous.filter
+    );
+  },
+
   componentDidUpdate() {
     componentHandler.upgradeDom();
   },
