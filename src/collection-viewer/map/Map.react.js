@@ -29,9 +29,18 @@ const ExplorerMap = ({ markers, onLassoPathChange, onMarkerClick, onClick }) => 
   />
 );
 
+import {
+  getVisibleAssemblyIds,
+  getFilteredAssemblyIds,
+  getColourGetter,
+} from '../selectors';
+
 function mapStateToProps(state) {
   return {
-    markers: getMarkers(state),
+    assemblies: state.entities.assemblies,
+    visibleIds: getVisibleAssemblyIds(state),
+    ids: getFilteredAssemblyIds(state),
+    colourGetter: getColourGetter(state),
   };
 }
 
@@ -49,4 +58,11 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ExplorerMap);
+function mergeProps(state, actions) {
+  return {
+    ...actions,
+    markers: getMarkers(state),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(ExplorerMap);

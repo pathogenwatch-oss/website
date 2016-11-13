@@ -75,7 +75,7 @@ function mapStateToProps(state) {
   const { tables, entities } = state;
   const filter = getFilter(state);
   const { activeColumn } = tables.metadata;
-  const totalAmount = filter.unfilteredIds.size;
+  const totalAmount = filter.unfilteredIds.length;
   return {
     displayProps: {
       totalAmount,

@@ -10,7 +10,7 @@ import { TREE_LOADED } from '../tree/actions';
 
 const initialState = {
   active: false,
-  unfilteredIds: new Set(),
+  unfilteredIds: [], // An array to allow indentical ids arrays not to cause an update
   ids: new Set(),
 };
 
@@ -19,13 +19,13 @@ export default function (state = initialState, { type, payload = {} }) {
   switch (type) {
     case TREE_LOADED: {
       const { leafIds } = payload;
-      const noReset =
-        state.active && leafIds.some(id => state.ids.has(id));
+      const reset = state.active && !leafIds.some(id => state.ids.has(id));
+
       return {
         ...state,
-        unfilteredIds: new Set(leafIds),
-        ids: noReset ? state.ids : new Set(),
-        active: noReset,
+        unfilteredIds: leafIds,
+        ids: reset ? new Set() : state.ids,
+        active: reset ? false : state.active,
       };
     }
     case ACTIVATE_FILTER:
