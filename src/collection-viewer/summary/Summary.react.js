@@ -6,16 +6,18 @@ import classnames from 'classnames';
 
 import PieChart from '../../cgps-commons/PieChart.react';
 
+import { activateFilter } from '../filter/actions';
+
 import { getAssemblySummary, getIsSummaryExpanded } from './selectors';
 import { toggleSummary } from './actions';
 
 function getAssemblySummarySlices(summary) {
   return summary.map(
-    ([ colour, assemblies ]) => ({ colour, value: assemblies.length })
+    ([ colour, assemblies ]) => ({ colour, value: assemblies.length, assemblies })
   );
 }
 
-const Summary = ({ summary, isExpanded, onClick }) => (
+const Summary = ({ summary, isExpanded, onClick, onSliceClick }) => (
   <div
     className={classnames(
       'wgsa-collection-viewer-summary mdl-shadow--4dp',
@@ -25,8 +27,22 @@ const Summary = ({ summary, isExpanded, onClick }) => (
   >
     <PieChart
       slices={getAssemblySummarySlices(summary)}
-      borderWidth={1}
+      borderWidth={1.5}
+      onSliceClick={(slice, event) => {
+        if (isExpanded) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        onSliceClick(
+          slice.assemblies.map(({ metadata }) => metadata.assemblyId)
+        );
+      }}
     />
+    <ul className="wgsa-collection-viewer-summary-list">
+      {summary.map(([ colour, assemblies ], index) =>
+        <li key={index}>{colour}: {assemblies.length}</li>
+      )}
+    </ul>
   </div>
 );
 
@@ -40,6 +56,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     onClick: (isExpanded) => dispatch(toggleSummary(isExpanded)),
+    onSliceClick: (ids) => dispatch(activateFilter(ids)),
   };
 }
 

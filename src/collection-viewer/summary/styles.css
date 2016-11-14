@@ -12,3 +12,13 @@
   width: 160px;
   padding: 8px;
 }
+
+.wgsa-collection-viewer-summary-list {
+  display: none;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.wgsa-collection-viewer-summary--expanded .wgsa-collection-viewer-summary-list {
+  display: block;
+}
