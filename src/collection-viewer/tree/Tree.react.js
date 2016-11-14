@@ -171,7 +171,7 @@ export default React.createClass({
         <button
           ref="redrawOriginalTreeButton"
           className={classnames(
-            'wgsa-tree-overlay wgsa-redraw-original-tree-button',
+            'wgsa-tree-overlay wgsa-redraw-original-tree-button mdl-button',
             { 'wgsa-redraw-original-tree-button--visible': this.props.root !== 'root' }
           )}
         >

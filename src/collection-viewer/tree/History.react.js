@@ -25,25 +25,34 @@ const History = React.createClass({
 
   render() {
     const { tree } = this.props;
+    const { open } = this.state;
 
     return (
       <div
         className={classnames(
-          'wgsa-tree-history',
-          { 'wgsa-tree-history--open': this.state.open }
+          'wgsa-tree-history wgsa-tree-overlay',
+          { 'wgsa-tree-history--open': open }
         )}
       >
-        { tree.history.map(item =>
-          <button key={item}
-            className={classnames(
-              'wgsa-tree-history__item',
-              { 'wgsa-tree-history__item--active': this.isActive(item) }
-            )}
-            onClick={() => this.props.onClick(item)}
-          >
-            {JSON.stringify(item)}
-          </button>
-        )}
+        <button
+          className="wgsa-tree-history__tab mdl-button"
+          onClick={() => this.setState({ open: !open })}
+        >
+          History
+        </button>
+        <div className="wgsa-tree-history-snapshots">
+          { tree.history.map(snapshot =>
+            <button key={`${snapshot.type}|${snapshot.root}`}
+              className={classnames(
+                'wgsa-tree-history__snapshot',
+                { 'wgsa-tree-history__snapshot--active': this.isActive(snapshot) }
+              )}
+              onClick={() => this.props.onClick(snapshot)}
+            >
+              {JSON.stringify(snapshot)}
+            </button>
+          )}
+        </div>
       </div>
     );
   },
@@ -58,7 +67,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch, { stateKey }) {
   return {
-    onClick: item => dispatch(timeTravel(stateKey, item)),
+    onClick: snapshot => dispatch(timeTravel(stateKey, snapshot)),
   };
 }
 

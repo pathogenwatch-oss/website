@@ -13,12 +13,12 @@ function setBaseSize({ leafIds, baseSize }, { step }) {
   return Math.min(maxBaseSize, Math.max(minBaseSize, step * 0.75));
 }
 
-function updateHistory(tree, { type = tree.type, subtree = tree.subtree }) {
+function updateHistory(tree, { type = tree.type, root = tree.root }) {
   const { history } = tree;
-  if (history.find(_ => type === _.type && subtree === _.subtree)) {
+  if (history.find(_ => type === _.type && root === _.root)) {
     return history;
   }
-  return [ ...history, { type, subtree } ];
+  return [ { type, root }, ...history ];
 }
 
 const initialState = {
@@ -109,6 +109,14 @@ function entities(state = {}, { type, payload }) {
             ...state[payload.stateKey].scales,
             label: payload.scale,
           },
+        },
+      };
+    case ACTIONS.TIME_TRAVEL:
+      return {
+        ...state,
+        [payload.stateKey]: {
+          ...state[payload.stateKey],
+          ...payload.snapshot,
         },
       };
     default:

@@ -48,31 +48,17 @@ div.wgsa-tree-icon:active {
 
 .wgsa-tree-overlay {
   background: rgba(255, 255, 255, 0.87);
-  padding: 4px;
   z-index: 2;
 }
 
 .wgsa-redraw-original-tree-button {
   border: none;
-  border: 1px solid #a386bd;
-  border-radius: 4px;
   color: #673c90;
   font-family: Roboto, sans-serif;
-  font-size: 13px;
-  font-weight: 500;
-  left: 16px;
-  padding: 6px;
+  left: 8px;
   position: absolute;
-  outline: none;
   top: 64px;
   visibility: hidden;
-}
-
-.wgsa-redraw-original-tree-button:hover,
-.wgsa-redraw-original-tree-button:focus,
-.wgsa-redraw-original-tree-button:active {
-  background-color: #673c90;
-  color: #fff;
 }
 
 .wgsa-redraw-original-tree-button--visible {
@@ -161,4 +147,60 @@ div.wgsa-tree-icon:active {
 .wgsa-select-tree-type:active {
   outline: none;
   background: rgba(255, 255, 255, 0.87);
+}
+
+.wgsa-tree-history {
+  bottom: 112px;
+  height: 88px;
+  left: 0;
+  overflow: hidden;
+  position: absolute;
+  right: 0;
+  transform: translateX(calc(-100% + 32px));
+  transition: .28s cubic-bezier(.4,0,.2,1);
+  transition-property: transform;
+}
+
+.wgsa-tree-history--open {
+  transform: translateX(0);
+}
+
+.wgsa-tree-history__tab {
+  background: #673c90;
+  color: #fff;
+  margin-left: 36px;
+  margin-right: -90px;
+  position: absolute;
+  right: 0;
+  transform: rotate(90deg);
+  transform-origin: top left;
+}
+
+.wgsa-tree-history__tab:hover,
+.wgsa-tree-history__tab:focus,
+.wgsa-tree-history__tab:active {
+  background: #a386bd !important;
+}
+
+.wgsa-tree-history-snapshots {
+  align-items: stretch;
+  display: flex;
+  flex-direction: row-reverse;
+  flex-grow: 1;
+  height: 100%;
+  justify-content: flex-start;
+  margin-right: 36px;
+  overflow-x: auto;
+}
+
+.wgsa-tree-history__snapshot {
+  min-width: 88px;
+  border: none;
+  border-left: 1px solid rgba(0, 0, 0, 0.54);
+  outline: none;
+  overflow: hidden;
+}
+
+.wgsa-tree-history__snapshot--active {
+  border-bottom: 4px solid #673c90;
 }
