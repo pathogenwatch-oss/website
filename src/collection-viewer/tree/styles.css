@@ -160,6 +160,7 @@ div.wgsa-tree-icon:active {
   transform: translateX(calc(-100% + 32px));
   transition: .28s cubic-bezier(.4,0,.2,1);
   transition-property: transform;
+  z-index: 2;
 }
 
 .wgsa-tree-history--open {
