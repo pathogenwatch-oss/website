@@ -30,7 +30,7 @@ function mergeProps(state, { dispatch }, props) {
     onSubtree: phylocanvas => dispatch(subtreeLoaded(phylocanvas)),
     onUpdated: (event, phylocanvas) =>
       dispatch(treeClicked(event, phylocanvas)),
-    onStyled: phylocanvas => dispatch(addSnapshot(phylocanvas.getPngUrl())),
+    onStyled: phylocanvas => dispatch(addSnapshot(phylocanvas)),
   };
 }
 

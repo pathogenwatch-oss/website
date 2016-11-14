@@ -1,3 +1,5 @@
+import { utils } from 'phylocanvas';
+
 import { getTrees, getVisibleTree, getLeafIds } from './selectors';
 
 import { showToast } from '../../toast';
@@ -27,7 +29,7 @@ export function displayTree(name) {
   return (dispatch, getState) => {
     const state = getState();
     const tree = getTrees(state)[name];
-
+    debugger;
     if (tree && tree.newick) {
       dispatch(actions.setTree(name));
       return;
@@ -108,11 +110,27 @@ export function treeClicked(event, phylocanvas) {
   };
 }
 
-export function addSnapshot(imgUrl) {
+const canvas = document.createElement('canvas');
+export function addSnapshot(phylocanvas) {
   return (dispatch, getState) => {
     const state = getState();
     const stateKey = getVisibleTree(state).name;
 
-    dispatch(actions.addSnapshot(stateKey, imgUrl));
+    const [ [ left, top ], [ right, bottom ] ] = phylocanvas.getBounds();
+    const topLeft = utils.canvas.undoPointTranslation({ x: left, y: top }, phylocanvas);
+    const bottomRight = utils.canvas.undoPointTranslation({ x: right, y: bottom }, phylocanvas);
+    const width = bottomRight.x - topLeft.x;
+    const height = bottomRight.y - topLeft.y;
+    const { padding } = phylocanvas;
+    canvas.width = width + padding * 2;
+    canvas.height = height + padding * 2;
+    const imageData = phylocanvas.canvas.getImageData(
+      phylocanvas.offsetx,
+      phylocanvas.offsety,
+      width,
+      height
+    );
+    canvas.getContext('2d').putImageData(imageData, padding, padding);
+    dispatch(actions.addSnapshot(stateKey, canvas.toDataURL()));
   };
 }

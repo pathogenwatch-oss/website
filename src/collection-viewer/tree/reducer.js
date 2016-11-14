@@ -14,8 +14,6 @@ function setBaseSize({ leafIds, baseSize }, { step }) {
 
 function updateHistory(tree, { imgUrl }) {
   const { history, type, root, baseSize, scales } = tree;
-  console.log(history, type, root);
-  debugger;
   if (history.find(({ state }) => type === state.type && root === state.root)) {
     return tree;
   }
@@ -121,6 +119,7 @@ function entities(state = {}, { type, payload }) {
       };
     case ACTIONS.ADD_HISTORY_SNAPSHOT:
       return {
+        ...state,
         [payload.stateKey]: updateHistory(state[payload.stateKey], payload),
       };
     case ACTIONS.TIME_TRAVEL:

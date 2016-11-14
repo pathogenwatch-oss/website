@@ -18,9 +18,9 @@ const History = React.createClass({
     };
   },
 
-  isActive({ type, root }) {
+  isActive({ state }) {
     const { tree } = this.props;
-    return type === tree.type && root === tree.root;
+    return state.type === tree.type && state.root === tree.root;
   },
 
   render() {

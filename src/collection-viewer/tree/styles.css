@@ -185,6 +185,7 @@ div.wgsa-tree-icon:active {
 
 .wgsa-tree-history-snapshots {
   align-items: stretch;
+  /*background: #fff;*/
   display: flex;
   flex-direction: row-reverse;
   flex-grow: 1;
@@ -211,5 +212,6 @@ div.wgsa-tree-icon:active {
 }
 
 .wgsa-tree-history__snapshot--active {
+  background-color: color(#a386bd tint(87%));
   border-bottom: 4px solid #673c90;
 }
