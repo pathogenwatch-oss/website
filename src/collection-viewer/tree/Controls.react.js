@@ -44,7 +44,7 @@ const Controls = React.createClass({
 
     return (
       <div className="wgsa-tree-controls">
-        <select className="wgsa-select-tree-type"
+        <select className="wgsa-select-tree-type wgsa-tree-overlay"
           value={this.props.treeType}
           onChange={this.props.onTreeTypeChange}
         >
@@ -52,7 +52,7 @@ const Controls = React.createClass({
             <option key={treeType} value={treeType}>{treeType}</option>
           )}
         </select>
-        <div className="wgsa-tree-sliders">
+        <div className="wgsa-tree-sliders wgsa-tree-overlay">
           <div className="wgsa-tree-slider">
             <label>Node Size
               <input ref="nodeSlider" type="range"

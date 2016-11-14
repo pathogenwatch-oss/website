@@ -3,8 +3,10 @@ import './styles.css';
 import React from 'react';
 import Phylocanvas, { Tree } from 'phylocanvas';
 import contextMenuPlugin from 'phylocanvas-plugin-context-menu';
+import classnames from 'classnames';
 
 import TreeHeader from './Header.react';
+import TreeHistory from './History.react';
 import TreeControls from './Controls.react';
 import Spinner from '../../components/Spinner.react';
 
@@ -24,7 +26,6 @@ Phylocanvas.plugin(decorate => {
     }
   });
 });
-
 
 const fullWidthHeight = {
   height: '100%',
@@ -67,7 +68,7 @@ export default React.createClass({
 
     phylocanvas.on('loaded', () => {
       this.props.onLoaded(phylocanvas);
-      if (this.props.subtree && this.props.subtree !== 'root') {
+      if (this.props.root && this.props.root !== 'root') {
         this.loadSubtree();
       }
     });
@@ -77,7 +78,9 @@ export default React.createClass({
     this.phylocanvas = phylocanvas;
 
     // must be native event to for body click cancellation to work
-    this.refs.menuButton.addEventListener('click', (e) => this.toggleContextMenu(e));
+    this.refs.menuButton.addEventListener('click', e => this.toggleContextMenu(e));
+    // must be native event for timing to work :/
+    this.refs.redrawOriginalTreeButton.addEventListener('click', () => phylocanvas.redrawOriginalTree());
 
     this.loadTree();
   },
@@ -85,7 +88,7 @@ export default React.createClass({
   componentDidUpdate(previous) {
     this.phylocanvas.resizeToContainer();
 
-    const { filenames, newick, leafProps, subtree } = this.props;
+    const { filenames, newick, leafProps, root } = this.props;
 
     if (filenames !== previous.filenames) {
       this.phylocanvas.contextMenu.filenames = filenames;
@@ -96,7 +99,7 @@ export default React.createClass({
       return;
     }
 
-    if (subtree !== previous.subtree && subtree !== this.phylocanvas.root.id) {
+    if (root !== previous.root && root !== this.phylocanvas.root.id) {
       this.loadSubtree();
       return;
     }
@@ -113,7 +116,7 @@ export default React.createClass({
   },
 
   loadSubtree() {
-    const newRoot = this.phylocanvas.originalTree.branches[this.props.subtree];
+    const newRoot = this.phylocanvas.originalTree.branches[this.props.root];
     if (newRoot) {
       this.phylocanvas.redrawFromBranch(newRoot);
     } else {
@@ -161,10 +164,20 @@ export default React.createClass({
         <div id="phylocanvas-container" style={fullWidthHeight}></div>
         <button
           ref="menuButton"
-          className="mdl-button mdl-js-button mdl-button--icon wgsa-tree-menu-button"
+          className="mdl-button mdl-js-button mdl-button--icon wgsa-tree-menu-button wgsa-tree-overlay"
         >
           <i className="material-icons">more_vert</i>
         </button>
+        <button
+          ref="redrawOriginalTreeButton"
+          className={classnames(
+            'wgsa-tree-overlay wgsa-redraw-original-tree-button',
+            { 'wgsa-redraw-original-tree-button--visible': this.props.root !== 'root' }
+          )}
+        >
+          Redraw Original Tree
+        </button>
+        <TreeHistory stateKey={this.props.name} />
         <TreeControls
           stateKey={this.props.name}
           phylocanvas={this.phylocanvas}

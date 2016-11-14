@@ -59,7 +59,7 @@ export function treeLoaded(phylocanvas) {
     });
 
     dispatch(actions.treeLoaded(stateKey, {
-      subtree: phylocanvas.root.id,
+      root: phylocanvas.root.id,
       step: phylocanvas.prerenderer.getStep(phylocanvas),
       leafIds: leafIds || phylocanvas.leaves.map(_ => _.id),
     }));
@@ -72,7 +72,7 @@ export function subtreeLoaded(phylocanvas) {
     const stateKey = getVisibleTree(state).name;
 
     dispatch(actions.treeLoaded(stateKey, {
-      subtree: phylocanvas.root.id,
+      root: phylocanvas.root.id,
       step: phylocanvas.prerenderer.getStep(phylocanvas),
       leafIds: phylocanvas.leaves.map(_ => _.id),
     }));

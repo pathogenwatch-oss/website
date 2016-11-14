@@ -46,6 +46,39 @@ div.wgsa-tree-icon:active {
   cursor: default;
 }
 
+.wgsa-tree-overlay {
+  background: rgba(255, 255, 255, 0.87);
+  padding: 4px;
+  z-index: 2;
+}
+
+.wgsa-redraw-original-tree-button {
+  border: none;
+  border: 1px solid #a386bd;
+  border-radius: 4px;
+  color: #673c90;
+  font-family: Roboto, sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  left: 16px;
+  padding: 6px;
+  position: absolute;
+  outline: none;
+  top: 64px;
+  visibility: hidden;
+}
+
+.wgsa-redraw-original-tree-button:hover,
+.wgsa-redraw-original-tree-button:focus,
+.wgsa-redraw-original-tree-button:active {
+  background-color: #673c90;
+  color: #fff;
+}
+
+.wgsa-redraw-original-tree-button--visible {
+  visibility: visible;
+}
+
 .wgsa-tree-menu-button {
   position: absolute;
   top: 24px;
@@ -81,7 +114,6 @@ div.wgsa-tree-icon:active {
 }
 
 .wgsa-tree-sliders {
-  background: rgba(255, 255, 255, 0.87);
   padding: 4px 0;
   border-radius: 8px;
 }
@@ -116,7 +148,6 @@ div.wgsa-tree-icon:active {
   margin-bottom: 8px;
   padding: 2px 4px;
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.87);
   border: none;
   font-size: 13px;
   font-weight: 500;

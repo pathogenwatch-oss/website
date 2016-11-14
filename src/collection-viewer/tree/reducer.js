@@ -8,18 +8,17 @@ import { COLLECTION, POPULATION } from '../../app/stateKeys/tree';
 const maxBaseSize = 10;
 const minBaseSize = 3;
 
-function setBaseSize(treeState, { step }) {
-  if (treeState.leafIds && treeState.baseSize) return {};
+function setBaseSize({ leafIds, baseSize }, { step }) {
+  if (leafIds && baseSize) return baseSize;
+  return Math.min(maxBaseSize, Math.max(minBaseSize, step * 0.75));
+}
 
-  const baseSize = Math.min(maxBaseSize, Math.max(minBaseSize, step * 0.75));
-  return {
-    baseSize,
-    scales: {
-      node: 1,
-      label: 1,
-      max: 2,
-    },
-  };
+function updateHistory(tree, { type = tree.type, subtree = tree.subtree }) {
+  const { history } = tree;
+  if (history.find(_ => type === _.type && subtree === _.subtree)) {
+    return history;
+  }
+  return [ ...history, { type, subtree } ];
 }
 
 const initialState = {
@@ -29,6 +28,7 @@ const initialState = {
     label: 1,
     max: 2,
   },
+  history: [],
 };
 
 function entities(state = {}, { type, payload }) {
@@ -74,8 +74,9 @@ function entities(state = {}, { type, payload }) {
           ...treeState,
           loaded: true,
           leafIds: treeState.leafIds || payload.leafIds,
-          subtree: payload.subtree,
-          ...setBaseSize(treeState, payload),
+          root: payload.root,
+          baseSize: setBaseSize(treeState, payload),
+          history: updateHistory(treeState, payload),
         },
       };
     }
@@ -85,6 +86,7 @@ function entities(state = {}, { type, payload }) {
         [payload.stateKey]: {
           ...state[payload.stateKey],
           type: payload.type,
+          history: updateHistory(state[payload.stateKey], payload),
         },
       };
     case ACTIONS.SET_NODE_SCALE:

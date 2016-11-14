@@ -70,3 +70,15 @@ export function setLabelScale(stateKey, scale) {
     },
   };
 }
+
+export const TIME_TRAVEL = 'TIME_TRAVEL';
+
+export function timeTravel(stateKey, snapshot) {
+  return {
+    type: TIME_TRAVEL,
+    payload: {
+      stateKey,
+      snapshot,
+    },
+  };
+}
