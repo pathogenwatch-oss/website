@@ -107,3 +107,12 @@ export function treeClicked(event, phylocanvas) {
     }
   };
 }
+
+export function addSnapshot(imgUrl) {
+  return (dispatch, getState) => {
+    const state = getState();
+    const stateKey = getVisibleTree(state).name;
+
+    dispatch(actions.addSnapshot(stateKey, imgUrl));
+  };
+}

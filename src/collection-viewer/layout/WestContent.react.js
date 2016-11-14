@@ -3,7 +3,12 @@ import { connect } from 'react-redux';
 import Tree from '../tree';
 
 import * as selectors from '../tree/selectors';
-import { treeLoaded, subtreeLoaded, treeClicked } from '../tree/thunks';
+import {
+  treeLoaded,
+  subtreeLoaded,
+  treeClicked,
+  addSnapshot,
+} from '../tree/thunks';
 
 function mapStateToProps(state) {
   return {
@@ -25,6 +30,7 @@ function mergeProps(state, { dispatch }, props) {
     onSubtree: phylocanvas => dispatch(subtreeLoaded(phylocanvas)),
     onUpdated: (event, phylocanvas) =>
       dispatch(treeClicked(event, phylocanvas)),
+    onStyled: phylocanvas => dispatch(addSnapshot(phylocanvas.getPngUrl())),
   };
 }
 

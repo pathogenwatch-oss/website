@@ -44,8 +44,6 @@ export default React.createClass({
     onUpdated: React.PropTypes.func,
     loading: React.PropTypes.bool,
     filenames: React.PropTypes.object,
-    setUnfilteredIds: React.PropTypes.func,
-    setBaseSize: React.PropTypes.func,
   },
 
   componentDidMount() {
@@ -142,6 +140,7 @@ export default React.createClass({
       leaf.interactive = interactive;
     }
     this.phylocanvas.draw();
+    this.props.onStyled(this.phylocanvas);
   },
 
   toggleContextMenu(event) {

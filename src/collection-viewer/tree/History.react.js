@@ -42,14 +42,14 @@ const History = React.createClass({
         </button>
         <div className="wgsa-tree-history-snapshots">
           { tree.history.map(snapshot =>
-            <button key={`${snapshot.type}|${snapshot.root}`}
+            <button key={`${snapshot.id}`}
               className={classnames(
                 'wgsa-tree-history__snapshot',
                 { 'wgsa-tree-history__snapshot--active': this.isActive(snapshot) }
               )}
-              onClick={() => this.props.onClick(snapshot)}
+              onClick={() => this.props.onClick(snapshot.state)}
+              style={{ backgroundImage: `url(${snapshot.imgUrl})` }}
             >
-              {JSON.stringify(snapshot)}
             </button>
           )}
         </div>
