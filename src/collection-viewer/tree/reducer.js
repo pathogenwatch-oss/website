@@ -74,6 +74,7 @@ function entities(state = {}, { type, payload }) {
           ...treeState,
           loaded: true,
           leafIds: treeState.leafIds || payload.leafIds,
+          subtree: payload.subtree,
           ...setBaseSize(treeState, payload),
         },
       };

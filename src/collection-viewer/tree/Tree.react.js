@@ -65,13 +65,9 @@ export default React.createClass({
     phylocanvas.clickFlag = 'highlighted';
     phylocanvas.clickFlagPredicate = node => node.leaf;
 
-    // phylocanvas.on('subtree', () => {
-    //   this.props.setUnfilteredIds(phylocanvas.leaves.map(_ => _.id));
-    //   this.setBaseSize(phylocanvas);
-    // });
-
-    phylocanvas.on('loaded', this.onLoaded);
-    phylocanvas.on('updated', this.onUpdated);
+    phylocanvas.on('loaded', () => this.props.onLoaded(phylocanvas));
+    phylocanvas.on('subtree', () => this.props.onSubtree(phylocanvas));
+    phylocanvas.on('updated', event => this.props.onUpdated(event, phylocanvas));
 
     this.phylocanvas = phylocanvas;
 
@@ -84,14 +80,20 @@ export default React.createClass({
   componentDidUpdate(previous) {
     this.phylocanvas.resizeToContainer();
 
-    const { filenames, newick, leafProps } = this.props;
+    const { filenames, newick, leafProps, subtree } = this.props;
 
     if (filenames !== previous.filenames) {
       this.phylocanvas.contextMenu.filenames = filenames;
     }
 
-    if (newick && newick !== this.phylocanvas.stringRepresentation) {
+    if (subtree !== previous.subtree && subtree !== this.phylocanvas.root.id) {
+      this.loadSubtree();
+      return;
+    }
+
+    if (newick !== previous.newick && newick !== this.phylocanvas.stringRepresentation) {
       this.loadTree();
+      return;
     }
 
     if (leafProps !== previous.leafProps) {
@@ -99,18 +101,19 @@ export default React.createClass({
     }
   },
 
-  onLoaded() {
-    this.props.onLoaded(this.phylocanvas);
-  },
-
-  onUpdated(event) {
-    this.props.onUpdated(event, this.phylocanvas);
-  },
-
   phylocanvas: null,
 
   loadTree() {
     this.phylocanvas.load(this.props.newick);
+  },
+
+  loadSubtree() {
+    const newRoot = this.phylocanvas.originalTree.branches[this.props.subtree];
+    if (newRoot) {
+      this.phylocanvas.redrawFromBranch(newRoot);
+    } else {
+      this.phylocanvas.redrawOriginalTree();
+    }
   },
 
   applyLeafProps() {
