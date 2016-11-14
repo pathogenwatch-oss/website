@@ -32,10 +32,10 @@ const Summary = ({ summary, isExpanded, onClick, onSliceClick }) => (
         if (isExpanded) {
           event.preventDefault();
           event.stopPropagation();
+          onSliceClick(
+            slice.assemblies.map(({ metadata }) => metadata.assemblyId)
+          );
         }
-        onSliceClick(
-          slice.assemblies.map(({ metadata }) => metadata.assemblyId)
-        );
       }}
     />
     <ul className="wgsa-collection-viewer-summary-list">
