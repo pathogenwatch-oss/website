@@ -65,7 +65,12 @@ export default React.createClass({
     phylocanvas.clickFlag = 'highlighted';
     phylocanvas.clickFlagPredicate = node => node.leaf;
 
-    phylocanvas.on('loaded', () => this.props.onLoaded(phylocanvas));
+    phylocanvas.on('loaded', () => {
+      this.props.onLoaded(phylocanvas);
+      if (this.props.subtree && this.props.subtree !== 'root') {
+        this.loadSubtree();
+      }
+    });
     phylocanvas.on('subtree', () => this.props.onSubtree(phylocanvas));
     phylocanvas.on('updated', event => this.props.onUpdated(event, phylocanvas));
 
@@ -86,13 +91,13 @@ export default React.createClass({
       this.phylocanvas.contextMenu.filenames = filenames;
     }
 
-    if (subtree !== previous.subtree && subtree !== this.phylocanvas.root.id) {
-      this.loadSubtree();
+    if (newick !== previous.newick && newick !== this.phylocanvas.stringRepresentation) {
+      this.loadTree();
       return;
     }
 
-    if (newick !== previous.newick && newick !== this.phylocanvas.stringRepresentation) {
-      this.loadTree();
+    if (subtree !== previous.subtree && subtree !== this.phylocanvas.root.id) {
+      this.loadSubtree();
       return;
     }
 
