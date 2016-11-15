@@ -47,6 +47,7 @@ function entities(state = {}, { type, payload }) {
         [COLLECTION]: {
           name: COLLECTION,
           newick: uploaded.tree,
+          leafIds: uploaded.tree ? null : Object.keys(uploaded.assemblies),
           ...initialState,
         },
         [POPULATION]: {
