@@ -46,6 +46,25 @@ div.wgsa-tree-icon:active {
   cursor: default;
 }
 
+.wgsa-tree-overlay {
+  background: rgba(255, 255, 255, 0.87);
+  z-index: 2;
+}
+
+.wgsa-redraw-original-tree-button {
+  border: none;
+  color: #673c90;
+  font-family: Roboto, sans-serif;
+  left: 8px;
+  position: absolute;
+  top: 64px;
+  visibility: hidden;
+}
+
+.wgsa-redraw-original-tree-button--visible {
+  visibility: visible;
+}
+
 .wgsa-tree-menu-button {
   position: absolute;
   top: 24px;
@@ -81,7 +100,6 @@ div.wgsa-tree-icon:active {
 }
 
 .wgsa-tree-sliders {
-  background: rgba(255, 255, 255, 0.87);
   padding: 4px 0;
   border-radius: 8px;
 }
@@ -116,7 +134,6 @@ div.wgsa-tree-icon:active {
   margin-bottom: 8px;
   padding: 2px 4px;
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.87);
   border: none;
   font-size: 13px;
   font-weight: 500;
@@ -130,4 +147,71 @@ div.wgsa-tree-icon:active {
 .wgsa-select-tree-type:active {
   outline: none;
   background: rgba(255, 255, 255, 0.87);
+}
+
+.wgsa-tree-history {
+  align-items: center;
+  bottom: 112px;
+  display: flex;
+  height: 12vh;
+  left: 0;
+  position: absolute;
+  right: 0;
+  transform: translateX(calc(-100% + 32px));
+  transition: .28s cubic-bezier(.4,0,.2,1);
+  transition-property: transform;
+  z-index: 2;
+}
+
+.wgsa-tree-history--open {
+  transform: translateX(0);
+}
+
+.wgsa-tree-history__tab {
+  background: #673c90;
+  color: #fff;
+  margin-right: -1.9em;
+  position: absolute;
+  right: 0;
+  transform: rotate(90deg);
+  transform-origin: center;
+}
+
+.wgsa-tree-history__tab:hover,
+.wgsa-tree-history__tab:focus,
+.wgsa-tree-history__tab:active {
+  background: #a386bd !important;
+}
+
+.wgsa-tree-history-snapshots {
+  align-items: stretch;
+  box-shadow: 0 1px 5px 0 rgba(0,0,0,0.2),0 2px 2px 0 rgba(0,0,0,0.14),0 3px 1px -2px rgba(0,0,0,0.12);
+  display: flex;
+  flex-direction: row-reverse;
+  flex-grow: 1;
+  height: calc(100% - 2px);
+  justify-content: flex-start;
+  margin-right: 35px;
+  overflow-x: auto;
+  border: 1px solid rgba(0, 0, 0, 0.27);
+  border-left: none;
+}
+
+.wgsa-tree-history__snapshot {
+  min-width: 12vh;
+  max-width: 12vh;
+  border: none;
+  border-left: 1px solid rgba(0, 0, 0, 0.27);
+  padding: 0;
+  outline: none;
+  overflow: hidden;
+  background-color: #fff;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.wgsa-tree-history__snapshot--active {
+  background-color: color(#a386bd tint(87%));
+  border-bottom: 4px solid #673c90;
 }

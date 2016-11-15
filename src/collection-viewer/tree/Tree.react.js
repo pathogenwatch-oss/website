@@ -3,10 +3,13 @@ import './styles.css';
 import React from 'react';
 import Phylocanvas, { Tree } from 'phylocanvas';
 import contextMenuPlugin from 'phylocanvas-plugin-context-menu';
+import classnames from 'classnames';
+
+import Spinner from '../../components/Spinner.react';
 
 import Header from './Header.react';
 import Controls from './Controls.react';
-import Spinner from '../../components/Spinner.react';
+import History from './History.react';
 
 import { DEFAULT, CGPS } from '../../app/constants';
 
@@ -31,7 +34,6 @@ Phylocanvas.plugin(decorate => {
   });
 });
 
-
 const fullWidthHeight = {
   height: '100%',
   width: '100%',
@@ -49,8 +51,6 @@ export default React.createClass({
     onUpdated: React.PropTypes.func,
     loading: React.PropTypes.bool,
     filenames: React.PropTypes.object,
-    setUnfilteredIds: React.PropTypes.func,
-    setBaseSize: React.PropTypes.func,
   },
 
   componentDidMount() {
@@ -71,18 +71,21 @@ export default React.createClass({
     phylocanvas.clickFlag = 'highlighted';
     phylocanvas.clickFlagPredicate = node => node.leaf;
 
-    // phylocanvas.on('subtree', () => {
-    //   this.props.setUnfilteredIds(phylocanvas.leaves.map(_ => _.id));
-    //   this.setBaseSize(phylocanvas);
-    // });
-
-    phylocanvas.on('loaded', this.onLoaded);
-    phylocanvas.on('updated', this.onUpdated);
+    phylocanvas.on('loaded', () => {
+      this.props.onLoaded(phylocanvas);
+      if (this.props.root && this.props.root !== 'root') {
+        this.loadSubtree();
+      }
+    });
+    phylocanvas.on('subtree', () => this.props.onSubtree(phylocanvas));
+    phylocanvas.on('updated', event => this.props.onUpdated(event, phylocanvas));
 
     this.phylocanvas = phylocanvas;
 
     // must be native event to for body click cancellation to work
-    this.refs.menuButton.addEventListener('click', (e) => this.toggleContextMenu(e));
+    this.refs.menuButton.addEventListener('click', e => this.toggleContextMenu(e));
+    // must be native event for timing to work :/
+    this.refs.redrawOriginalTreeButton.addEventListener('click', () => phylocanvas.redrawOriginalTree());
 
     this.loadTree();
   },
@@ -90,29 +93,36 @@ export default React.createClass({
   componentDidUpdate(previous) {
     this.phylocanvas.resizeToContainer();
 
-    const { filenames, newick } = this.props;
+    const { filenames, newick, root } = this.props;
 
     if (filenames !== previous.filenames) {
       this.phylocanvas.contextMenu.filenames = filenames;
     }
 
-    if (newick && newick !== this.phylocanvas.stringRepresentation) {
+    if (newick !== previous.newick && newick !== this.phylocanvas.stringRepresentation) {
       this.loadTree();
+      return;
     }
-  },
 
-  onLoaded() {
-    this.props.onLoaded(this.phylocanvas);
-  },
-
-  onUpdated(event) {
-    this.props.onUpdated(event, this.phylocanvas);
+    if (root !== previous.root && root !== this.phylocanvas.root.id) {
+      this.loadSubtree();
+      return;
+    }
   },
 
   phylocanvas: null,
 
   loadTree() {
     this.phylocanvas.load(this.props.newick);
+  },
+
+  loadSubtree() {
+    const newRoot = this.phylocanvas.originalTree.branches[this.props.root];
+    if (newRoot) {
+      this.phylocanvas.redrawFromBranch(newRoot);
+    } else {
+      this.phylocanvas.redrawOriginalTree();
+    }
   },
 
   toggleContextMenu(event) {
@@ -137,10 +147,20 @@ export default React.createClass({
         <Styler phylocanvas={this.phylocanvas} />
         <button
           ref="menuButton"
-          className="mdl-button mdl-js-button mdl-button--icon wgsa-tree-menu-button"
+          className="mdl-button mdl-js-button mdl-button--icon wgsa-tree-menu-button wgsa-tree-overlay"
         >
           <i className="material-icons">more_vert</i>
         </button>
+        <button
+          ref="redrawOriginalTreeButton"
+          className={classnames(
+            'wgsa-tree-overlay wgsa-redraw-original-tree-button mdl-button',
+            { 'wgsa-redraw-original-tree-button--visible': this.props.root !== 'root' }
+          )}
+        >
+          Redraw Original Tree
+        </button>
+        <History stateKey={this.props.name} />
         <Controls
           stateKey={this.props.name}
           phylocanvas={this.phylocanvas}

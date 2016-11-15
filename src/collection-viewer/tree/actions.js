@@ -70,3 +70,27 @@ export function setLabelScale(stateKey, scale) {
     },
   };
 }
+
+export const ADD_HISTORY_SNAPSHOT = 'ADD_HISTORY_SNAPSHOT';
+
+export function addSnapshot(stateKey, imgUrl) {
+  return {
+    type: ADD_HISTORY_SNAPSHOT,
+    payload: {
+      stateKey,
+      imgUrl,
+    },
+  };
+}
+
+export const TIME_TRAVEL = 'TIME_TRAVEL';
+
+export function timeTravel(stateKey, snapshot) {
+  return {
+    type: TIME_TRAVEL,
+    payload: {
+      stateKey,
+      snapshot,
+    },
+  };
+}

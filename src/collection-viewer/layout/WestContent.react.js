@@ -5,8 +5,12 @@ import PopulationStyler from '../tree/PopulationStyler.react';
 import StandardStyler from '../tree/StandardStyler.react';
 
 import * as selectors from '../tree/selectors';
-
-import { treeLoaded, treeClicked } from '../tree/thunks';
+import {
+  treeLoaded,
+  subtreeLoaded,
+  treeClicked,
+  addSnapshot,
+} from '../tree/thunks';
 
 import { POPULATION } from '../../app/stateKeys/tree';
 
@@ -27,8 +31,10 @@ function mergeProps(state, { dispatch }, props) {
     ...treeProps,
     Styler: tree.name === POPULATION ? PopulationStyler : StandardStyler,
     onLoaded: phylocanvas => dispatch(treeLoaded(phylocanvas)),
+    onSubtree: phylocanvas => dispatch(subtreeLoaded(phylocanvas)),
     onUpdated: (event, phylocanvas) =>
       dispatch(treeClicked(event, phylocanvas)),
+    onStyled: phylocanvas => dispatch(addSnapshot(phylocanvas)),
   };
 }
 
