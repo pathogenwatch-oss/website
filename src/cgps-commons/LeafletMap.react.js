@@ -42,6 +42,12 @@ export default React.createClass({
     };
   },
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.markers === null && this.props.markers) {
+      this.refitMapBounds();
+    }
+  },
+
   componentWillUnmount() {
     const { onBoundsChange } = this.props;
     if (onBoundsChange && this.map) {
@@ -116,8 +122,8 @@ export default React.createClass({
       return (
         <MarkerLayer
           markers={markers}
-          latitudeExtractor={_ => _.position.latitude}
-          longitudeExtractor={_ => _.position.longitude}
+          latitudeExtractor={({ position }) => position.latitude}
+          longitudeExtractor={({ position }) => position.longitude}
           markerComponent={markerComponent}
           propsForMarkers={{ onClick: this.onMarkerLayerClick, highlightedColour }}
         />

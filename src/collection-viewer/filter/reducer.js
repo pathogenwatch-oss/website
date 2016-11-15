@@ -52,14 +52,14 @@ export default function (state = initialState, { type, payload = {} }) {
       return {
         ...state,
         active: false,
-        ids: new Set(),
+        ids: initialState.ids,
       };
     }
     case RESET_FILTER:
       return {
         ...state,
         active: false,
-        ids: new Set(),
+        ids: initialState.ids,
       };
     default:
       return state;

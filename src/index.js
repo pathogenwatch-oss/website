@@ -1,6 +1,6 @@
 import React from 'react';
 
-const config = require('./app/config.js');
+import config from './app/config.js';
 
 if (process.env.NODE_ENV !== 'production' && config.whyDidYouUpdate) {
   const { whyDidYouUpdate } = require('why-did-you-update');

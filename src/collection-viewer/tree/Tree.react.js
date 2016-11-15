@@ -26,12 +26,6 @@ Phylocanvas.plugin(decorate => {
       delegate.apply(this, args);
     }
   });
-
-  let count = 0;
-  decorate(Tree, 'draw', function (delegate, args) {
-    console.log('drawn', count++);
-    delegate.apply(this, args);
-  });
 });
 
 const fullWidthHeight = {
@@ -51,12 +45,6 @@ export default React.createClass({
     onUpdated: React.PropTypes.func,
     loading: React.PropTypes.bool,
     filenames: React.PropTypes.object,
-  },
-
-  getInitialState() {
-    return {
-      // phylocanvas: null,
-    };
   },
 
   componentDidMount() {
@@ -85,7 +73,6 @@ export default React.createClass({
     });
     phylocanvas.on('subtree', () => this.props.onSubtree(phylocanvas));
     phylocanvas.on('updated', event => this.props.onUpdated(event, phylocanvas));
-    //
     phylocanvas.on('error', error => console.error(error));
 
     this.phylocanvas = phylocanvas;
