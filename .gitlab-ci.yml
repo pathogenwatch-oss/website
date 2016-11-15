@@ -1,6 +1,7 @@
 image: docker:latest
 services:
  - docker:dind
+ - node:6.9.1
 new-image:
   only:
     - tags
