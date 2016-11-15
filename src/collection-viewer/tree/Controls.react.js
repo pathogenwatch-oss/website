@@ -30,6 +30,8 @@ const Controls = React.createClass({
 
       labelSlider.MaterialSlider.change(scales.label);
       phylocanvas.textSize = baseSize * scales.label;
+
+      phylocanvas.draw();
     }
   },
 
