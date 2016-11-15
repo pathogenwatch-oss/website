@@ -9,4 +9,5 @@ module.exports = {
   MLST_RESULT: 'MLSTR',
   PAARSNP_RESULT: 'PSR',
   NGMAST_RESULT: 'NGMASTR',
+  GENOTYPHI_RESULT: 'GTR',
 };

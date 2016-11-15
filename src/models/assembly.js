@@ -11,6 +11,7 @@ const {
   FP_COMP,
   CORE_RESULT,
   NGMAST_RESULT,
+  GENOTYPHI_RESULT,
 } = require('utils/documentKeys');
 
 const ASSEMBLY_ANALYSES = [ 'FP', 'MLST', 'PAARSNP', 'CORE' ];
@@ -71,6 +72,7 @@ function formatForFrontend(assembly) {
   const core = assembly[CORE_RESULT];
   const fp = assembly[FP_COMP];
   const ngmast = assembly[NGMAST_RESULT];
+  const genotyphi = assembly[GENOTYPHI_RESULT];
   return {
     populationSubtype: fp ? fp.subTypeAssignment : null,
     metadata: assembly[ASSEMBLY_METADATA],
@@ -97,7 +99,10 @@ function formatForFrontend(assembly) {
         ngmast: ngmast.ngmast,
         por: ngmast.por,
         tbpb: ngmast.tbpb,
-      } : null,
+      } : undefined,
+      genotyphi: genotyphi ? {
+        genotype: genotyphi.genotype,
+      } : undefined,
     },
   };
 }
@@ -145,6 +150,7 @@ const COMPLETE_ASSEMBLY_KEYS = [
   MLST_RESULT,
   PAARSNP_RESULT,
   NGMAST_RESULT,
+  GENOTYPHI_RESULT,
 ];
 function getComplete(params, callback) {
   LOGGER.info('Getting assembly ' + params.assemblyId);
