@@ -15,21 +15,17 @@ import {
 import { POPULATION } from '../../app/stateKeys/tree';
 
 function mapStateToProps(state) {
+  const { name, type, loaded, newick, root } = selectors.getVisibleTree(state);
   return {
-    tree: selectors.getVisibleTree(state),
+    name, type, loaded, newick, root,
     filenames: selectors.getFilenames(state),
     loading: selectors.isLoading(state),
+    Styler: name === POPULATION ? PopulationStyler : StandardStyler,
   };
 }
 
-function mergeProps(state, { dispatch }, props) {
-  const { tree, ...treeProps } = state;
-
+function mapDispatchToProps(dispatch) {
   return {
-    ...props,
-    ...tree,
-    ...treeProps,
-    Styler: tree.name === POPULATION ? PopulationStyler : StandardStyler,
     onLoaded: phylocanvas => dispatch(treeLoaded(phylocanvas)),
     onSubtree: phylocanvas => dispatch(subtreeLoaded(phylocanvas)),
     onUpdated: (event, phylocanvas) =>
@@ -38,4 +34,4 @@ function mergeProps(state, { dispatch }, props) {
   };
 }
 
-export default connect(mapStateToProps, null, mergeProps)(Tree);
+export default connect(mapStateToProps, mapDispatchToProps)(Tree);

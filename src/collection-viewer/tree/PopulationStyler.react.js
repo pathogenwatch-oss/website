@@ -2,16 +2,14 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { getFilter } from '../selectors';
-import { getTrees } from './selectors';
 
 import { leafStyles, defaultLeafStyle } from './constants';
 import { CGPS } from '../../app/constants';
-import { POPULATION } from '../../app/stateKeys/tree';
 
 const Styler = React.createClass({
 
-  componentDidUpdate(previous) {
-    const { phylocanvas, assemblies, subtrees, filter, treeType } = this.props;
+  componentDidUpdate() {
+    const { phylocanvas, assemblies, subtrees, filter } = this.props;
 
     for (const leaf of phylocanvas.leaves) {
       const { id } = leaf;
@@ -32,11 +30,7 @@ const Styler = React.createClass({
       leaf.interactive = !!subtree;
     }
 
-    if (treeType !== previous.treeType) {
-      phylocanvas.setTreeType(treeType);
-    } else {
-      phylocanvas.draw();
-    }
+    phylocanvas.draw();
   },
 
   render() {
@@ -47,10 +41,9 @@ const Styler = React.createClass({
 
 function mapStateToProps(state) {
   return {
-    treeType: getTrees(state)[POPULATION].treeType,
     assemblies: state.entities.assemblies,
     subtrees: state.collection.subtrees,
-    filter: getFilter,
+    filter: getFilter(state),
   };
 }
 

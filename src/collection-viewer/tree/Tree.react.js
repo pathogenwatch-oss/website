@@ -53,12 +53,18 @@ export default React.createClass({
     filenames: React.PropTypes.object,
   },
 
+  getInitialState() {
+    return {
+      // phylocanvas: null,
+    };
+  },
+
   componentDidMount() {
     const phylocanvas = Phylocanvas.createTree('phylocanvas-container', {
       contextMenu: {
         parent: document.body,
       },
-      // collapsedColour: '#222',
+      collapsedColour: '#222',
       fillCanvas: true,
     });
 
@@ -79,9 +85,11 @@ export default React.createClass({
     });
     phylocanvas.on('subtree', () => this.props.onSubtree(phylocanvas));
     phylocanvas.on('updated', event => this.props.onUpdated(event, phylocanvas));
+    //
+    phylocanvas.on('error', error => console.error(error));
 
     this.phylocanvas = phylocanvas;
-
+    window.phylocanvas = phylocanvas;
     // must be native event to for body click cancellation to work
     this.refs.menuButton.addEventListener('click', e => this.toggleContextMenu(e));
     // must be native event for timing to work :/
@@ -93,7 +101,7 @@ export default React.createClass({
   componentDidUpdate(previous) {
     this.phylocanvas.resizeToContainer();
 
-    const { filenames, newick, root } = this.props;
+    const { filenames, newick, root, type } = this.props;
 
     if (filenames !== previous.filenames) {
       this.phylocanvas.contextMenu.filenames = filenames;
@@ -108,6 +116,13 @@ export default React.createClass({
       this.loadSubtree();
       return;
     }
+
+    if (type && type !== previous.type || !previous.loaded) {
+      this.phylocanvas.setTreeType(type);
+    } else {
+      this.phylocanvas.draw();
+    }
+    this.props.onStyled(this.phylocanvas);
   },
 
   phylocanvas: null,

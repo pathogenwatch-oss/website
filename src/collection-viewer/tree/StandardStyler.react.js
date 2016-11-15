@@ -9,10 +9,8 @@ import { defaultLeafStyle } from './constants';
 
 const Styler = React.createClass({
 
-  componentDidUpdate(previous) {
-    const { phylocanvas, assemblies, filter, treeType, loaded } = this.props;
-
-    // if (!loaded) return;
+  componentDidUpdate() {
+    const { phylocanvas, assemblies, filter } = this.props;
 
     for (const leaf of phylocanvas.leaves) {
       const { id } = leaf;
@@ -29,11 +27,7 @@ const Styler = React.createClass({
       leaf.highlighted = filter.active && filter.ids.has(id);
     }
 
-    if (treeType !== previous.treeType || !previous.loaded) {
-      phylocanvas.setTreeType(treeType);
-    } else {
-      phylocanvas.draw();
-    }
+    phylocanvas.draw();
   },
 
   render() {

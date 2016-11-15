@@ -29,7 +29,7 @@ export function displayTree(name) {
   return (dispatch, getState) => {
     const state = getState();
     const tree = getTrees(state)[name];
-    debugger;
+
     if (tree && tree.newick) {
       dispatch(actions.setTree(name));
       return;
@@ -50,10 +50,10 @@ export function treeLoaded(phylocanvas) {
       phylocanvas.root.cascadeFlag('interactive', false);
     } else if (stateKey !== COLLECTION) {
       const { collection } = state;
-      // collapseTreeBranches(
-      //   phylocanvas.root,
-      //   leaf => !collection.assemblyIds.has(leaf.id)
-      // );
+      collapseTreeBranches(
+        phylocanvas.root,
+        leaf => !collection.assemblyIds.has(leaf.id)
+      );
     }
 
     const leafIds = getLeafIds(state, {

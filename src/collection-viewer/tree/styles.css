@@ -151,7 +151,7 @@ div.wgsa-tree-icon:active {
 
 .wgsa-tree-history {
   align-items: center;
-  bottom: 112px;
+  bottom: 24px;
   display: flex;
   height: 12vh;
   left: 0;
@@ -170,7 +170,7 @@ div.wgsa-tree-icon:active {
 .wgsa-tree-history__tab {
   background: #673c90;
   color: #fff;
-  margin-right: -1.9em;
+  margin-right: -2em;
   position: absolute;
   right: 0;
   transform: rotate(90deg);
