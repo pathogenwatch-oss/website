@@ -4,8 +4,8 @@ import React from 'react';
 import Phylocanvas, { Tree } from 'phylocanvas';
 import contextMenuPlugin from 'phylocanvas-plugin-context-menu';
 
-import TreeHeader from './Header.react';
-import TreeControls from './Controls.react';
+import Header from './Header.react';
+import Controls from './Controls.react';
 import Spinner from '../../components/Spinner.react';
 
 import { DEFAULT, CGPS } from '../../app/constants';
@@ -22,6 +22,12 @@ Phylocanvas.plugin(decorate => {
     } else {
       delegate.apply(this, args);
     }
+  });
+
+  let count = 0;
+  decorate(Tree, 'draw', function (delegate, args) {
+    console.log('drawn', count++);
+    delegate.apply(this, args);
   });
 });
 
@@ -84,7 +90,7 @@ export default React.createClass({
   componentDidUpdate(previous) {
     this.phylocanvas.resizeToContainer();
 
-    const { filenames, newick, leafProps } = this.props;
+    const { filenames, newick } = this.props;
 
     if (filenames !== previous.filenames) {
       this.phylocanvas.contextMenu.filenames = filenames;
@@ -92,10 +98,6 @@ export default React.createClass({
 
     if (newick && newick !== this.phylocanvas.stringRepresentation) {
       this.loadTree();
-    }
-
-    if (leafProps !== previous.leafProps) {
-      this.applyLeafProps();
     }
   },
 
@@ -113,26 +115,6 @@ export default React.createClass({
     this.phylocanvas.load(this.props.newick);
   },
 
-  applyLeafProps() {
-    if (!this.props.loaded) return;
-
-    for (const leaf of this.phylocanvas.leaves) {
-      const { interactive = true, ...props } = this.props.leafProps[leaf.id];
-      leaf.setDisplay({
-        ...props.display,
-        leafStyle: {
-          strokeStyle: DEFAULT.COLOUR,
-          fillStyle: props.colour,
-          lineWidth: 1,
-        },
-      });
-      leaf.label = props.label;
-      leaf.highlighted = props.highlighted;
-      leaf.interactive = interactive;
-    }
-    this.phylocanvas.draw();
-  },
-
   toggleContextMenu(event) {
     event.stopPropagation();
     event.preventDefault();
@@ -147,17 +129,19 @@ export default React.createClass({
   },
 
   render() {
+    const { Styler } = this.props;
     return (
       <section className="wgsa-tree">
-        <TreeHeader />
+        <Header />
         <div id="phylocanvas-container" style={fullWidthHeight}></div>
+        <Styler phylocanvas={this.phylocanvas} />
         <button
           ref="menuButton"
           className="mdl-button mdl-js-button mdl-button--icon wgsa-tree-menu-button"
         >
           <i className="material-icons">more_vert</i>
         </button>
-        <TreeControls
+        <Controls
           stateKey={this.props.name}
           phylocanvas={this.phylocanvas}
         />

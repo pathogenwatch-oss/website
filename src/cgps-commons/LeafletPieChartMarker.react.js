@@ -7,6 +7,10 @@ export default React.createClass({
 
   displayName: 'LeafletPieChartMarker',
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return false;
+  },
+
   render() {
     const { marker, style, onClick, highlightedColour } = this.props;
     const slices = Array.from(marker.slices.entries())

@@ -1,11 +1,16 @@
 import { POPULATION, COLLECTION } from '../../app/stateKeys/tree';
-import { CGPS } from '../../app/constants';
+import { CGPS, DEFAULT } from '../../app/constants';
 
 export const speciesTrees = new Set([ POPULATION, COLLECTION ]);
 
 export const titles = {
   [POPULATION]: 'Population',
   [COLLECTION]: 'Collection',
+};
+
+export const defaultLeafStyle = {
+  strokeStyle: DEFAULT.COLOUR,
+  lineWidth: 1,
 };
 
 export const leafStyles = {

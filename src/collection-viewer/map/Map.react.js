@@ -61,7 +61,7 @@ function mapDispatchToProps(dispatch) {
 function mergeProps(state, actions) {
   return {
     ...actions,
-    markers: getMarkers(state),
+    markers: [], // getMarkers(state),
   };
 }
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { treeTypes } from 'phylocanvas';
 import { connect } from 'react-redux';
 
-import { isLoaded, getTreeType, getBaseSize, getTreeScales } from './selectors';
+import { isLoaded, getBaseSize, getTreeScales } from './selectors';
 import { setTreeType, setNodeScale, setLabelScale } from './actions';
 
 const Controls = React.createClass({
@@ -22,11 +22,7 @@ const Controls = React.createClass({
 
   componentDidUpdate(previous) {
     const { nodeSlider, labelSlider } = this.refs;
-    const { scales, treeType, baseSize, phylocanvas } = this.props;
-
-    if (treeType !== previous.treeType || !previous.loaded) {
-      phylocanvas.setTreeType(treeType);
-    }
+    const { scales, baseSize, phylocanvas } = this.props;
 
     if (baseSize && (scales !== previous.scales || !previous.loaded)) {
       nodeSlider.MaterialSlider.change(scales.node);
@@ -34,8 +30,6 @@ const Controls = React.createClass({
 
       labelSlider.MaterialSlider.change(scales.label);
       phylocanvas.textSize = baseSize * scales.label;
-
-      phylocanvas.draw();
     }
   },
 
@@ -81,7 +75,6 @@ const Controls = React.createClass({
 function mapStateToProps(state) {
   return {
     loaded: isLoaded(state),
-    treeType: getTreeType(state),
     baseSize: getBaseSize(state),
     scales: getTreeScales(state),
   };

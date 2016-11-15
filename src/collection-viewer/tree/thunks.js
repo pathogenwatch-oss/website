@@ -48,10 +48,10 @@ export function treeLoaded(phylocanvas) {
       phylocanvas.root.cascadeFlag('interactive', false);
     } else if (stateKey !== COLLECTION) {
       const { collection } = state;
-      collapseTreeBranches(
-        phylocanvas.root,
-        leaf => !collection.assemblyIds.has(leaf.id)
-      );
+      // collapseTreeBranches(
+      //   phylocanvas.root,
+      //   leaf => !collection.assemblyIds.has(leaf.id)
+      // );
     }
 
     const leafIds = getLeafIds(state, {
