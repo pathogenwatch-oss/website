@@ -5,7 +5,7 @@ RUN bash /tmp/install-dependencies.sh && rm /tmp/install-dependencies.sh
 
 COPY . /opt/wgsa/middle-end
 WORKDIR /opt/wgsa/middle-end
-RUN npm rebuild
+RUN npm install
 
 ENV NODE_PATH=/opt/wgsa/middle-end/src \
     NODE_ENV=production
