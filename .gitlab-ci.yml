@@ -1,11 +1,24 @@
 image: docker:latest
 services:
  - docker:dind
- - node:6.9.1
-new-image:
+
+stages:
+  - install
+  - build
+
+npm:
+  only:
+    - tags
+  stage: install
+  image: node:6.9.1
+  script:
+    - npm install
+
+docker-image:
   only:
     - tags
   stage: build
   script:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
-    - sh ./bin/build-image.sh $CI_REGISTRY_IMAGE:$CI_BUILD_REF_NAME
+    - docker build -t $CI_REGISTRY_IMAGE:$CI_BUILD_REF_NAME
+    - docker push $CI_REGISTRY_IMAGE:$CI_BUILD_REF_NAME
