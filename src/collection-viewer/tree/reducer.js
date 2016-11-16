@@ -5,35 +5,33 @@ import * as ACTIONS from './actions';
 
 import { COLLECTION, POPULATION } from '../../app/stateKeys/tree';
 
-const maxBaseSize = 10;
-const minBaseSize = 3;
+function updateHistory(tree, { type = tree.type, root = tree.root, image }) {
+  const { history, nodeSize, labelSize } = tree;
+  const id = `${type}|${root}`;
 
-function setBaseSize({ leafIds, baseSize }, { step }) {
-  return Math.min(maxBaseSize, Math.max(minBaseSize, step * 0.75));
-}
-
-function updateHistory(tree, { imgUrl }) {
-  const { history, type, root, baseSize, scales } = tree;
-  if (history.find(({ state }) => type === state.type && root === state.root)) {
-    return tree;
+  const existingSnapshot = history.find(snapshot => snapshot.id === id);
+  if (existingSnapshot) {
+    existingSnapshot.image = image || existingSnapshot.image;
+    return history;
   }
-  return {
-    ...tree,
-    history: [
-      { id: `${type}|${root}`,
-        imgUrl,
-        state: { type, root, baseSize, scales },
-      },
-      ...history,
-    ],
-  };
+
+  return [
+    { id,
+      image,
+      state: { type, root, nodeSize, labelSize },
+    },
+    ...history,
+  ];
 }
 
 const initialState = {
   type: 'rectangular',
-  scales: {
-    node: 1,
-    label: 1,
+  nodeSize: {
+    scale: 1,
+    max: 2,
+  },
+  labelSize: {
+    scale: 1,
     max: 2,
   },
   history: [],
@@ -75,6 +73,21 @@ function entities(state = {}, { type, payload }) {
           loaded: false,
         },
       };
+    case ACTIONS.TYPE_CHANGED: {
+      const treeState = state[payload.stateKey];
+      return {
+        ...state,
+        [payload.stateKey]: {
+          ...treeState,
+          type: payload.type,
+          history: updateHistory(treeState, payload),
+          labelSize: {
+            ...treeState.labelSize,
+            base: payload.textSize,
+          },
+        },
+      };
+    }
     case ACTIONS.TREE_LOADED: {
       const treeState = state[payload.stateKey];
       return {
@@ -84,26 +97,21 @@ function entities(state = {}, { type, payload }) {
           loaded: true,
           leafIds: treeState.leafIds || payload.leafIds,
           root: payload.root,
-          baseSize: setBaseSize(treeState, payload),
+          nodeSize: {
+            ...treeState.nodeSize,
+            base: Math.max(3, Math.min(payload.step, 10)),
+          },
         },
       };
     }
-    case ACTIONS.SET_TREE_TYPE:
-      return {
-        ...state,
-        [payload.stateKey]: {
-          ...state[payload.stateKey],
-          type: payload.type,
-        },
-      };
     case ACTIONS.SET_NODE_SCALE:
       return {
         ...state,
         [payload.stateKey]: {
           ...state[payload.stateKey],
-          scales: {
-            ...state[payload.stateKey].scales,
-            node: payload.scale,
+          nodeSize: {
+            ...state[payload.stateKey].nodeSize,
+            scale: payload.scale,
           },
         },
       };
@@ -112,16 +120,11 @@ function entities(state = {}, { type, payload }) {
         ...state,
         [payload.stateKey]: {
           ...state[payload.stateKey],
-          scales: {
-            ...state[payload.stateKey].scales,
-            label: payload.scale,
+          labelSize: {
+            ...state[payload.stateKey].labelSize,
+            scale: payload.scale,
           },
         },
-      };
-    case ACTIONS.ADD_HISTORY_SNAPSHOT:
-      return {
-        ...state,
-        [payload.stateKey]: updateHistory(state[payload.stateKey], payload),
       };
     case ACTIONS.TIME_TRAVEL:
       return {

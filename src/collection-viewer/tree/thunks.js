@@ -1,5 +1,3 @@
-import { utils } from 'phylocanvas';
-
 import { getTrees, getVisibleTree, getLeafIds } from './selectors';
 
 import { showToast } from '../../toast';
@@ -60,11 +58,7 @@ export function treeLoaded(phylocanvas) {
       stateKey: stateKey === POPULATION ? COLLECTION : stateKey,
     });
 
-    dispatch(actions.treeLoaded(stateKey, {
-      root: phylocanvas.root.id,
-      step: phylocanvas.prerenderer.getStep(phylocanvas),
-      leafIds: leafIds || phylocanvas.leaves.map(_ => _.id),
-    }));
+    dispatch(actions.treeLoaded(stateKey, phylocanvas, leafIds));
   };
 }
 
@@ -73,11 +67,8 @@ export function subtreeLoaded(phylocanvas) {
     const state = getState();
     const stateKey = getVisibleTree(state).name;
 
-    dispatch(actions.treeLoaded(stateKey, {
-      root: phylocanvas.root.id,
-      step: phylocanvas.prerenderer.getStep(phylocanvas),
-      leafIds: phylocanvas.leaves.map(_ => _.id),
-    }));
+    dispatch(actions.treeLoaded(stateKey, phylocanvas));
+    dispatch(actions.typeChanged(stateKey, phylocanvas));
   };
 }
 
@@ -110,27 +101,11 @@ export function treeClicked(event, phylocanvas) {
   };
 }
 
-const canvas = document.createElement('canvas');
-export function addSnapshot(phylocanvas) {
+
+export function typeChanged(phylocanvas) {
   return (dispatch, getState) => {
     const state = getState();
     const stateKey = getVisibleTree(state).name;
-
-    const [ [ left, top ], [ right, bottom ] ] = phylocanvas.getBounds();
-    const topLeft = utils.canvas.undoPointTranslation({ x: left, y: top }, phylocanvas);
-    const bottomRight = utils.canvas.undoPointTranslation({ x: right, y: bottom }, phylocanvas);
-    const width = bottomRight.x - topLeft.x;
-    const height = bottomRight.y - topLeft.y;
-    const { padding } = phylocanvas;
-    canvas.width = width + padding * 2;
-    canvas.height = height + padding * 2;
-    const imageData = phylocanvas.canvas.getImageData(
-      phylocanvas.offsetx,
-      phylocanvas.offsety,
-      width,
-      height
-    );
-    canvas.getContext('2d').putImageData(imageData, padding, padding);
-    dispatch(actions.addSnapshot(stateKey, canvas.toDataURL()));
+    dispatch(actions.typeChanged(stateKey, phylocanvas));
   };
 }
