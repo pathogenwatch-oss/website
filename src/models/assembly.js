@@ -66,7 +66,7 @@ function mergeQueryResults(data, queryKeyPrefixes, assemblyId) {
   }, { assemblyId });
 }
 
-function formatForFrontend(assembly) {
+function formatForFrontend(id, assembly) {
   const paarsnp = assembly[PAARSNP_RESULT];
   const mlst = assembly[MLST_RESULT];
   const core = assembly[CORE_RESULT];
@@ -74,9 +74,11 @@ function formatForFrontend(assembly) {
   const ngmast = assembly[NGMAST_RESULT];
   const genotyphi = assembly[GENOTYPHI_RESULT];
   return {
-    populationSubtype: fp ? fp.subTypeAssignment : null,
+    id,
+    name: assembly[ASSEMBLY_METADATA].assemblyName,
     metadata: assembly[ASSEMBLY_METADATA],
     analysis: {
+      populationSubtype: fp ? fp.subTypeAssignment : null,
       st: mlst ? mlst.sequenceType : null,
       mlst: mlst ? mlst.code : null,
       core: core ? {
@@ -84,17 +86,21 @@ function formatForFrontend(assembly) {
         percentMatched: core.percentKernelMatched,
         percentAssemblyMatched: core.percentAssemblyMatched,
       } : null,
-      resistanceProfile: paarsnp && paarsnp.antibioticProfiles ?
-        paarsnp.antibioticProfiles.reduce(
-          (memo, { name, resistanceState, resistanceSets }) => {
-            memo[name] = {
-              name,
-              state: resistanceState,
-              mechanisms: resistanceSets.map(_ => _.resistanceSetName),
-            };
-            return memo;
-          }, {}
-        ) : {},
+      resistanceProfile: paarsnp ? {
+        antibiotics: paarsnp.antibioticProfiles ?
+          paarsnp.antibioticProfiles.reduce(
+            (memo, { name, resistanceState, resistanceSets }) => {
+              memo[name] = {
+                name,
+                state: resistanceState,
+                mechanisms: resistanceSets.map(_ => _.resistanceSetName),
+              };
+              return memo;
+            }, {}
+          ) : {},
+        paar: paarsnp.paar ? paarsnp.paar.paarElementIds : [],
+        snp: paarsnp.snp ? paarsnp.snp.resistanceMutationIds : [],
+      } : {},
       ngmast: ngmast ? {
         ngmast: ngmast.ngmast,
         por: ngmast.por,
@@ -137,7 +143,7 @@ function get(params, queryKeyPrefixes, callback) {
         if (stError) {
           return callback(stError);
         }
-        callback(null, formatForFrontend(result));
+        callback(null, formatForFrontend(assemblyId, result));
       }
     );
   });
@@ -170,8 +176,8 @@ function getReference(params, callback) {
 }
 
 function groupAssembliesBySubtype(assemblies) {
-  return Object.keys(assemblies).reduce(function (map, assemblyId) {
-    var taxon = assemblies[assemblyId].populationSubtype;
+  return Object.keys(assemblies).reduce((map, assemblyId) => {
+    var taxon = assemblies[assemblyId].analysis.populationSubtype;
 
     if (!taxon || taxon.toLowerCase() === 'none') {
       return map;
