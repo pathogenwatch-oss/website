@@ -2,7 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import FixedTable from '../../components/FixedTable.react';
-import TableSwitcher from './TableSwitcher.react';
+import TableSwitcher from '../tables/Switcher.react';
+import TableContentOptions from '../tables/ContentOptions.react';
 
 import { activateFilter, resetFilter } from '../filter/actions';
 import { getActiveAssemblies } from '../selectors';
@@ -76,6 +77,7 @@ const SouthContent = React.createClass({
         onTouchMove={preventDefault}
       >
         <TableSwitcher />
+        <TableContentOptions />
         <FixedTable { ...this.props }
           rowClickHandler={({ metadata }) =>
             handleRowClick(metadata, collectionViewer.filter, dispatch)

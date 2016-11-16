@@ -34,7 +34,7 @@ export const downloadColumnProps = {
     );
   },
   cellClasses: 'wgsa-table-cell--skinny',
-  fixedWidth: 72,
+  fixedWidth: 68,
   flexGrow: 0,
   getCellContents(_, { __downloads, id, name }) {
     return (
