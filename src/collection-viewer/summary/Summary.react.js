@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import classnames from 'classnames';
 
 import PieChart from '../../cgps-commons/PieChart.react';
+import ChipButton from '../../cgps-commons/ChipButton.react';
 
 import { activateFilter } from '../filter/actions';
 
@@ -17,10 +18,12 @@ function getAssemblySummarySlices(summary) {
   );
 }
 
+import { getColourState, nonResistantColour } from '../../utils/resistanceProfile';
+
 const Summary = ({ summary, isExpanded, onClick, onSliceClick }) => (
   <div
     className={classnames(
-      'wgsa-collection-viewer-summary mdl-shadow--4dp',
+      'wgsa-collection-viewer-summary mdl-shadow--2dp',
       { 'wgsa-collection-viewer-summary--expanded': isExpanded }
     )}
     onClick={() => onClick(!isExpanded)}
@@ -38,11 +41,28 @@ const Summary = ({ summary, isExpanded, onClick, onSliceClick }) => (
         }
       }}
     />
-    <ul className="wgsa-collection-viewer-summary-list">
+    <div className="wgsa-summary-list">
       {summary.map(([ colour, assemblies ], index) =>
-        <li key={index}>{colour}: {assemblies.length}</li>
+        getColourState(colour) &&
+          <ChipButton
+            key={index}
+            className={classnames(
+              'wgsa-summary-list__chip',
+              { 'mdl-chip--inverse': colour === nonResistantColour }
+            )}
+            text={getColourState(colour)}
+            contact={assemblies.length}
+            contactStyle={{ background: colour }}
+            onClick={(event) => {
+              event.preventDefault();
+              event.stopPropagation();
+              onSliceClick(
+                assemblies.map(({ metadata }) => metadata.assemblyId)
+              );
+            }}
+          />
       )}
-    </ul>
+    </div>
   </div>
 );
 

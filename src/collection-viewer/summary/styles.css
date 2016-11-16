@@ -13,12 +13,34 @@
   padding: 8px;
 }
 
-.wgsa-collection-viewer-summary-list {
+.wgsa-summary-list {
   display: none;
   list-style: none;
-  margin: 0;
-  padding: 0;
+  margin-top: 4px;
+  margin-bottom: -4px;
 }
-.wgsa-collection-viewer-summary--expanded .wgsa-collection-viewer-summary-list {
+.wgsa-collection-viewer-summary--expanded .wgsa-summary-list {
   display: block;
+}
+
+.wgsa-summary-list__chip {
+  background: transparent;
+  margin: 4px 0;
+}
+
+.wgsa-summary-list__chip > .mdl-chip__contact {
+  box-sizing: border-box;
+}
+
+.wgsa-summary-list__chip.mdl-chip--inverse > .mdl-chip__contact {
+  color: #555;
+  border: 1px solid rgba(0, 0, 0, 0.28);
+}
+
+.wgsa-summary-list__chip:hover {
+  background: rgba(0, 0, 0, 0.14);
+}
+
+.wgsa-summary-list__chip:focus {
+  box-shadow: none;
 }

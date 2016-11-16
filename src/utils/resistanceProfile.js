@@ -6,7 +6,11 @@ const stateColours = {
   RESISTANT: DEFAULT.DANGER_COLOUR,
   INTERMEDIATE: DEFAULT.WARNING_COLOUR,
 };
-const nonResistantColour = '#fff';
+export const nonResistantColour = '#fff';
+const stateColourMap = Object.keys(stateColours).reduce(
+  (map, key) => map.set(stateColours[key], key),
+  new Map().set(nonResistantColour, 'UNKNOWN')
+);
 
 export function isResistant(profile, antibiotic) {
   if (!profile || !profile[antibiotic]) return false;
@@ -73,3 +77,5 @@ export function getIcon(resistanceState) {
       return null;
   }
 }
+
+export const getColourState = (colour) => stateColourMap.get(colour);
