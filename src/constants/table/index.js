@@ -81,14 +81,14 @@ export const nameColumnProps = {
   ...nameColumnData,
   fixed: true,
   getWidth(row, props) {
-    let width = defaultWidthGetter(row, props);
+    let width = defaultWidthGetter(row, props, true);
 
     if (row.__isPublic && row.metadata.collectionId) {
-      width += 32;
+      width += 24;
     }
 
     if (row.metadata.pmid) {
-      width += 32;
+      width += 24;
     }
 
     return width;
