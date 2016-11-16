@@ -68,7 +68,7 @@ export function subtreeLoaded(phylocanvas) {
     const stateKey = getVisibleTree(state).name;
 
     dispatch(actions.treeLoaded(stateKey, phylocanvas));
-    dispatch(actions.typeChanged(stateKey, phylocanvas));
+    dispatch(actions.addHistorySnapshot(stateKey, phylocanvas));
   };
 }
 
@@ -107,5 +107,6 @@ export function typeChanged(phylocanvas) {
     const state = getState();
     const stateKey = getVisibleTree(state).name;
     dispatch(actions.typeChanged(stateKey, phylocanvas));
+    dispatch(actions.addHistorySnapshot(stateKey, phylocanvas));
   };
 }

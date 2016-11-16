@@ -46,7 +46,6 @@ export function typeChanged(stateKey, phylocanvas) {
     type: TYPE_CHANGED,
     payload: {
       stateKey,
-      image: takeSnapshot(phylocanvas),
       type: phylocanvas.treeType,
       textSize: phylocanvas.textSize,
     },
@@ -73,6 +72,18 @@ export function setLabelScale(stateKey, scale) {
     payload: {
       stateKey,
       scale: parseFloat(scale),
+    },
+  };
+}
+
+export const ADD_HISTORY_SNAPSHOT = 'ADD_HISTORY_SNAPSHOT';
+
+export function addHistorySnapshot(stateKey, phylocanvas) {
+  return {
+    type: ADD_HISTORY_SNAPSHOT,
+    payload: {
+      stateKey,
+      image: takeSnapshot(phylocanvas),
     },
   };
 }

@@ -5,13 +5,11 @@ import * as ACTIONS from './actions';
 
 import { COLLECTION, POPULATION } from '../../app/stateKeys/tree';
 
-function updateHistory(tree, { type = tree.type, root = tree.root, image }) {
-  const { history, nodeSize, labelSize } = tree;
+function updateHistory(tree, { image }) {
+  const { history, type, root, nodeSize, labelSize } = tree;
   const id = `${type}|${root}`;
 
-  const existingSnapshot = history.find(snapshot => snapshot.id === id);
-  if (existingSnapshot) {
-    existingSnapshot.image = image || existingSnapshot.image;
+  if (history.find(snapshot => snapshot.id === id)) {
     return history;
   }
 
@@ -80,7 +78,6 @@ function entities(state = {}, { type, payload }) {
         [payload.stateKey]: {
           ...treeState,
           type: payload.type,
-          history: updateHistory(treeState, payload),
           labelSize: {
             ...treeState.labelSize,
             base: payload.textSize,
@@ -126,6 +123,16 @@ function entities(state = {}, { type, payload }) {
           },
         },
       };
+    case ACTIONS.ADD_HISTORY_SNAPSHOT: {
+      const treeState = state[payload.stateKey];
+      return {
+        ...state,
+        [payload.stateKey]: {
+          ...treeState,
+          history: updateHistory(treeState, payload),
+        },
+      };
+    }
     case ACTIONS.TIME_TRAVEL:
       return {
         ...state,

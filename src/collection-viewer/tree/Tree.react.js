@@ -114,7 +114,6 @@ export default React.createClass({
 
     if (root !== previous.root && root !== this.phylocanvas.root.id) {
       this.changeRoot();
-      return;
     }
 
     if (type && (type !== this.phylocanvas.treeType || !previous.loaded)) {
