@@ -38,10 +38,10 @@ export const downloadColumnProps = {
   cellClasses: 'wgsa-table-cell--skinny',
   fixedWidth: 80,
   flexGrow: 0,
-  getCellContents(_, { __downloads, metadata }) {
+  getCellContents(_, { __downloads, id, name }) {
     return (
       <span className="wgsa-table-downloads" onClick={(e) => e.stopPropagation()}>
-        <FastaFileLink id={metadata.assemblyId} name={metadata.assemblyName} />
+        <FastaFileLink id={id} name={name} />
         <DownloadButton
           { ...__downloads.wgsa_gff }
           label=".gff"

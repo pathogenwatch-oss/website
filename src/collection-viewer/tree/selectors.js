@@ -40,8 +40,7 @@ export const getSingleTree = createSelector(
 export const getTitle = createSelector(
   getVisibleTree,
   ({ entities }) => entities.assemblies,
-  ({ name }, assemblies) =>
-    titles[name] || assemblies[name].metadata.assemblyName
+  (tree, assemblies) => titles[tree.name] || assemblies[tree.name].name
 );
 
 export const getFilenames = createSelector(
