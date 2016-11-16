@@ -4,7 +4,8 @@ const initialState = [];
 
 const actions = {
   [FETCH_ENTITIES.SUCCESS](state, { result }) {
-    return result[2].map(ab => (typeof ab === 'string' ? { name: ab } : ab));
+    const { antibiotics } = result[2];
+    return antibiotics.map(ab => (typeof ab === 'string' ? { name: ab } : ab));
   },
 };
 

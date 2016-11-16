@@ -173,7 +173,7 @@ div.wgsa-tree-icon:active {
   color: #fff;
   line-height: 32px;
   min-height: 80px;
-  min-width: 0;
+  min-width: 32px;
   width: 32px;
   padding: 0;
 }

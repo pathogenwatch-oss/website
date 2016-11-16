@@ -99,7 +99,7 @@ function mergeProps({ displayProps, activeColumn, assemblies }, { dispatch }) {
       dispatch(activateFilter(
         assemblies.reduce((set, assembly) => {
           if (String(activeColumn.valueGetter(assembly)).match(matcher)) {
-            set.add(assembly.metadata.assemblyId);
+            set.add(assembly.id);
           }
           return set;
         }, new Set())

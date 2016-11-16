@@ -9,8 +9,8 @@ export const systemDataColumns = {
   },
   __subtype: {
     columnKey: '__subtype',
-    valueGetter({ analyis }) {
-      return analyis.populationSubtype;
+    valueGetter({ analysis }) {
+      return analysis.populationSubtype;
     },
   },
   __st: {

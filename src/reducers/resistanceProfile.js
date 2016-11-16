@@ -53,10 +53,9 @@ function createAntibioticsColumn({ name, longName }) {
     flexGrow: 0,
     addState({ data }) {
       const allMechanisms = data.reduce((memo, row) => {
-        const { analysis = {} } = row;
-        if (!analysis.resistanceProfile) return memo;
-        const { mechanisms = [] } = analysis.resistanceProfile[this.columnKey];
-        for (const m of mechanisms) {
+        const { antibiotics } = row.analysis.resistanceProfile;
+        if (!antibiotics || !antibiotics[this.columnKey]) return memo;
+        for (const m of antibiotics[this.columnKey].mechanisms) {
           memo.add(m);
         }
         return memo;
@@ -67,11 +66,12 @@ function createAntibioticsColumn({ name, longName }) {
 
       return this;
     },
-    getCellContents(props, { analysis = {} }) {
+    getCellContents(props, { analysis }) {
+      const { antibiotics } = analysis.resistanceProfile;
       const isResistant =
         resistanceProfile.isResistant(analysis.resistanceProfile, props.columnKey);
       if (isResistant) {
-        const { state, mechanisms } = analysis.resistanceProfile[props.columnKey];
+        const { state, mechanisms } = antibiotics[props.columnKey];
         const activeMechanisms = new Set(mechanisms);
         return props.isSelected ? (
           <span className="wgsa-resistance-mechanism-list ">
@@ -125,7 +125,7 @@ function buildAntibioticColumnProps(antibiotics) {
 
 const actions = {
   [FETCH_ENTITIES.SUCCESS](state, { result }) {
-    const antibiotics = result[2];
+    const { antibiotics } = result[2];
 
     const columns = [
       { columnKey: '__spacer_l',

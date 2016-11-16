@@ -16,8 +16,6 @@ export const tableKeys = {
   resistanceProfile: 'resistanceProfile',
 };
 
-const collectionStyle = { color: CGPS.COLOURS.PURPLE };
-
 export const downloadColumnProps = {
   columnKey: '__downloads',
   fixed: true,
@@ -36,7 +34,7 @@ export const downloadColumnProps = {
     );
   },
   cellClasses: 'wgsa-table-cell--skinny',
-  fixedWidth: 80,
+  fixedWidth: 72,
   flexGrow: 0,
   getCellContents(_, { __downloads, id, name }) {
     return (
@@ -58,6 +56,8 @@ export const downloadColumnProps = {
     };
   },
 };
+
+const collectionStyle = { color: CGPS.COLOURS.PURPLE };
 
 function getNameText(data, valueGetter) {
   const text = valueGetter(data);
@@ -84,11 +84,11 @@ export const nameColumnProps = {
     let width = defaultWidthGetter(row, props, true);
 
     if (row.__isPublic && row.metadata.collectionId) {
-      width += 24;
+      width += 32;
     }
 
     if (row.metadata.pmid) {
-      width += 24;
+      width += 32;
     }
 
     return width;
