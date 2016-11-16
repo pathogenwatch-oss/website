@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import Search from './search/Search.react';
-import AboutCollection from '../about-collection-dropdown';
+import AboutCollection from './about-collection';
 
 import { setMenuActive } from '../actions/downloads';
 

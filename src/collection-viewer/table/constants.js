@@ -1,10 +1,9 @@
 import React from 'react';
 
-import DownloadButton from '../../collection-viewer/downloads/DownloadButton.react';
+import DownloadButton from '../downloads/DownloadButton.react';
 import { FastaFileLink, FastaArchiveButton } from '../../fasta-download';
 
 import { getArchiveDownloadProps } from '../../constants/downloads';
-import { nameColumnData } from './columns';
 
 import { defaultWidthGetter } from '../../table/utils/columnWidth';
 
@@ -14,6 +13,17 @@ import Species from '../../species';
 export const tableKeys = {
   metadata: 'metadata',
   resistanceProfile: 'resistanceProfile',
+};
+
+export const views = {
+  [tableKeys.resistanceProfile]: [ 'Antibiotics', 'SNPs', 'Mobile Elements' ],
+};
+
+export const nameColumnData = {
+  columnKey: '__name',
+  valueGetter({ name }) {
+    return name;
+  },
 };
 
 export const downloadColumnProps = {

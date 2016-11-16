@@ -1,4 +1,4 @@
-import { setColourColumns } from '../actions/table';
+import { setColourColumns } from '../collection-viewer/table/actions';
 
 import { DEFAULT, CGPS } from '../app/constants';
 

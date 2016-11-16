@@ -2,17 +2,17 @@ import React from 'react';
 import classnames from 'classnames';
 
 import { FETCH_ENTITIES } from '../actions/fetch';
-import { SET_COLOUR_COLUMNS } from '../actions/table';
+import { SET_COLOUR_COLUMNS } from '../collection-viewer/table/actions';
 
 import Species from '../species';
 import * as resistanceProfile from '../utils/resistanceProfile';
 import { canvas, measureText } from '../table/utils/columnWidth';
 
-import { downloadColumnProps, nameColumnProps } from '../constants/table';
+import * as constants from '../collection-viewer/table/constants';
 
 const systemColumnProps = [
-  downloadColumnProps,
-  { ...nameColumnProps,
+  constants.downloadColumnProps,
+  { ...constants.nameColumnProps,
     flexGrow: 0,
     headerClasses: 'wgsa-table-header--unstyled',
     onHeaderClick: () => {},
@@ -123,40 +123,42 @@ function buildAntibioticColumnProps(antibiotics) {
   ];
 }
 
-const actions = {
-  [FETCH_ENTITIES.SUCCESS](state, { result }) {
-    const { antibiotics } = result[2];
-
-    const columns = [
-      { columnKey: '__spacer_l',
-        getHeaderContent() {},
-        fixed: true,
-        fixedWidth: 1,
-        getCellContents() {},
-      },
-      ...systemColumnProps,
-      ...buildAntibioticColumnProps(antibiotics),
-      { columnKey: '__spacer_r',
-        getHeaderContent() {},
-        fixedWidth: 8,
-        getCellContents() {},
-        cellClasses: 'wgsa-table-cell--resistance',
-      },
-    ];
-
-    return { ...state, columns };
-  },
-  [SET_COLOUR_COLUMNS](state, { columns }) {
-    return {
-      ...state,
-      activeColumns: columns,
-    };
-  },
-};
-
 const initialState = {
   activeColumns: new Set(),
   columns: [],
+  view: constants.views[constants.tableKeys.resistanceProfile][0],
 };
 
-export default { actions, initialState };
+export default function (state = initialState, { type, payload }) {
+  switch (type) {
+    case FETCH_ENTITIES.SUCCESS: {
+      const { antibiotics } = payload.result[2];
+
+      const columns = [
+        { columnKey: '__spacer_l',
+          getHeaderContent() {},
+          fixed: true,
+          fixedWidth: 1,
+          getCellContents() {},
+        },
+        ...systemColumnProps,
+        ...buildAntibioticColumnProps(antibiotics),
+        { columnKey: '__spacer_r',
+          getHeaderContent() {},
+          fixedWidth: 8,
+          getCellContents() {},
+          cellClasses: 'wgsa-table-cell--resistance',
+        },
+      ];
+
+      return { ...state, columns };
+    }
+    case SET_COLOUR_COLUMNS:
+      return {
+        ...state,
+        activeColumns: payload.columns,
+      };
+    default:
+      return state;
+  }
+}

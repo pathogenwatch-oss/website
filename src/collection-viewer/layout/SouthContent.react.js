@@ -2,21 +2,16 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import FixedTable from '../../components/FixedTable.react';
-import TableSwitcher from '../tables/Switcher.react';
-import TableContentOptions from '../tables/ContentOptions.react';
+import TableSwitcher from '../table/Switcher.react';
 
-import { activateFilter, resetFilter } from '../filter/actions';
 import { getActiveAssemblies } from '../selectors';
+import { getVisibleTable } from '../table/selectors';
+
+import { onTableClick, onRowClick } from '../table/thunks';
+
 import { addColumnWidth } from '../../table/utils/columnWidth';
 import { addDownloadProps } from '../../constants/downloads';
 
-function handleRowClick({ assemblyId }, { ids, active }, dispatch) {
-  if (active && ids.size === 1 && ids.has(assemblyId)) {
-    dispatch(resetFilter());
-  } else {
-    dispatch(activateFilter([ assemblyId ]));
-  }
-}
 
 const preventDefault = e => e.preventDefault();
 
@@ -32,7 +27,6 @@ const SouthContent = React.createClass({
     columns: React.PropTypes.array,
     handleHeaderClick: React.PropTypes.func,
     dispatch: React.PropTypes.func,
-    display: React.PropTypes.object,
     filter: React.PropTypes.object,
   },
 
@@ -41,11 +35,10 @@ const SouthContent = React.createClass({
   },
 
   shouldComponentUpdate(previous) {
-    const { data, columns, display, filter } = this.props;
+    const { data, columns, filter } = this.props;
     return (
       data !== previous.data ||
       columns !== previous.columns ||
-      display !== previous.display ||
       filter !== previous.filter
     );
   },
@@ -54,35 +47,17 @@ const SouthContent = React.createClass({
     componentHandler.upgradeDom();
   },
 
-  onClick(dispatch, { target }) {
-    if (target.classList.contains('public_Scrollbar_face') ||
-        target.classList.contains('public_Scrollbar_main')) {
-      return;
-    }
-    dispatch(resetFilter());
-  },
-
   render() {
-    const { dispatch, collectionViewer, activeColumns } = this.props;
-
-    const headerClickHandler = (event, column) =>
-      (column.onHeaderClick || this.props.onHeaderClick)(
-        event, { column, activeColumns }, dispatch
-      );
-
     return (
       <section
-        onClick={(...args) => this.onClick(dispatch, ...args)}
+        onClick={this.props.onClick}
         onWheel={preventDefault}
         onTouchMove={preventDefault}
       >
         <TableSwitcher />
-        <TableContentOptions />
         <FixedTable { ...this.props }
-          rowClickHandler={({ metadata }) =>
-            handleRowClick(metadata, collectionViewer.filter, dispatch)
-          }
-          headerClickHandler={headerClickHandler}
+          rowClickHandler={this.props.onRowClick}
+          headerClickHandler={this.props.onHeaderClick}
         />
       </section>
     );
@@ -91,9 +66,9 @@ const SouthContent = React.createClass({
 });
 
 function mapStateToProps(state) {
-  const { collection, collectionViewer, display, tables, downloads } = state;
+  const { collection, collectionViewer, downloads } = state;
 
-  const table = tables[display.table];
+  const table = getVisibleTable(state);
   const { activeColumn, activeColumns, ...tableState } = table;
 
   return {
@@ -105,7 +80,7 @@ function mapStateToProps(state) {
     downloads: {
       wgsa_gff: downloads.files.wgsa_gff,
     },
-    collectionViewer,
+    collectionViewer, // must be here to make selectors work :/
   };
 }
 
@@ -120,13 +95,17 @@ function mapStateToColumn(column, state, dispatch) {
 }
 
 function mergeProps(state, { dispatch }, props) {
-  const { data, columns, ...otherState } = state;
+  const { data, columns, activeColumns } = state;
+
   return {
     ...props,
-    ...otherState,
-    dispatch,
+    activeColumns,
     columns: columns.map(column => mapStateToColumn(column, state, dispatch)),
     data: data.map(row => addDownloadProps(row, state, dispatch)),
+    onClick: (event) => dispatch(onTableClick(event)),
+    onRowClick: row => dispatch(onRowClick(row)),
+    onHeaderClick: (event, column) =>
+      (column.onHeaderClick || state.onHeaderClick)(event, { column, activeColumns }, dispatch),
   };
 }
 

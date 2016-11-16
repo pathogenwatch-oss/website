@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { getFilter, getColourGetter } from '../selectors';
+import { getMetadataTable } from '../table/selectors';
 import { getVisibleTree } from './selectors';
 
 import { getLeafStyle } from './utils';
@@ -40,7 +41,7 @@ function mapStateToProps(state) {
   return {
     assemblies: state.entities.assemblies,
     getColour: getColourGetter(state),
-    getLabel: state.tables.metadata.activeColumn.valueGetter,
+    getLabel: getMetadataTable(state).activeColumn.valueGetter,
     filter: getFilter(state),
     treeType: getVisibleTree(state).type,
     loaded: getVisibleTree(state).loaded,

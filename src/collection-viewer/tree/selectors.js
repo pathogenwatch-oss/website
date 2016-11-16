@@ -1,5 +1,7 @@
 import { createSelector } from 'reselect';
 
+import { getMetadataTable } from '../table/selectors';
+
 import { titles, speciesTrees } from './constants';
 import * as utils from './utils';
 
@@ -46,7 +48,7 @@ export const getTitle = createSelector(
 export const getFilenames = createSelector(
   getTitle,
   ({ collection }) => collection.id,
-  ({ tables }) => tables.metadata.activeColumn,
+  state => getMetadataTable(state).activeColumn,
   utils.getFilenames
 );
 
