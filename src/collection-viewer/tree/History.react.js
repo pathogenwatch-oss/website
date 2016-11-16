@@ -38,7 +38,7 @@ const History = React.createClass({
           className="wgsa-tree-history__tab mdl-button"
           onClick={() => this.setState({ open: !open })}
         >
-          History
+          <span>History</span>
         </button>
         <div className="wgsa-tree-history-snapshots wgsa-tree-overlay">
           { tree.history.map(snapshot =>
