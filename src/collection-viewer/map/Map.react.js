@@ -7,7 +7,7 @@ import WGSAMap from '../../map';
 import LeafletPieChartMarker from '../../cgps-commons/LeafletPieChartMarker.react';
 
 import { filterByLassoPath } from './actions';
-import { getMarkers } from './selectors';
+import { getMarkers } from './utils';
 
 import { COLLECTION } from '../../app/stateKeys/map';
 
@@ -17,21 +17,30 @@ import {
   removeFromFilter,
 } from '../filter/actions';
 
-const ExplorerMap = ({ markers, onLassoPathChange, onMarkerClick, onClick }) => (
+const ExplorerMap = (props) => (
   <WGSAMap
     className="wgsa-collection-viewer-map"
     stateKey={COLLECTION}
-    markers={markers}
+    markers={getMarkers(props)}
     markerComponent={LeafletPieChartMarker}
-    onClick={onClick}
-    onLassoPathChange={onLassoPathChange}
-    onMarkerClick={onMarkerClick}
+    onClick={props.onClick}
+    onLassoPathChange={props.onLassoPathChange}
+    onMarkerClick={props.onMarkerClick}
   />
 );
 
+import {
+  getVisibleAssemblyIds,
+  getFilteredAssemblyIds,
+  getColourGetter,
+} from '../selectors';
+
 function mapStateToProps(state) {
   return {
-    markers: getMarkers(state),
+    assemblies: state.entities.assemblies,
+    visibleIds: getVisibleAssemblyIds(state),
+    filteredIds: getFilteredAssemblyIds(state),
+    colourGetter: getColourGetter(state),
   };
 }
 

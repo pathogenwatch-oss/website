@@ -1,66 +1,37 @@
-import React from 'react';
 import { connect } from 'react-redux';
 
-import Tree from '^/components/tree';
-import TreeHeader from '^/components/tree/TreeHeader.react';
+import Tree from '../tree';
+import PopulationStyler from '../tree/PopulationStyler.react';
+import StandardStyler from '../tree/StandardStyler.react';
 
-import { setUnfilteredIds } from '../../collection-viewer/filter/actions';
-
-import { COLLECTION, POPULATION } from '^/constants/tree';
-
+import * as selectors from '../tree/selectors';
 import {
-  getTreeFunctions,
-  getTitle,
-  getFilenames,
-  speciesTrees,
-} from '^/constants/tree';
+  treeLoaded,
+  subtreeLoaded,
+  treeClicked,
+  typeChanged,
+} from '../tree/thunks';
 
-import Species from '^/species';
-
-const ConnectedTree = (props) => (<Tree {...props} />);
+import { POPULATION } from '../../app/stateKeys/tree';
 
 function mapStateToProps(state) {
-  const { entities, display } = state;
-  const { tree } = display;
-  const displayedTree = entities.trees[tree.name];
-
+  const { name, type, loaded, newick, root } = selectors.getVisibleTree(state);
   return {
-    loading: tree.loading,
-    tree: displayedTree.newick ? displayedTree : entities.trees[POPULATION],
-    state,
+    name, type, loaded, newick, root,
+    filenames: selectors.getFilenames(state),
+    loading: selectors.isLoading(state),
+    Styler: name === POPULATION ? PopulationStyler : StandardStyler,
   };
 }
 
-// TODO: Memoisation
-function mergeProps({ loading, tree, state }, { dispatch }, props) {
-  const { collection, tables, entities } = state;
-  const title = getTitle(tree.name, entities.assemblies[tree.name]);
-  const collectionTree = entities.trees[COLLECTION];
-
-  let singleTree;
-  if (Species.uiOptions.noPopulation) {
-    singleTree = COLLECTION;
-  } else if (!(collectionTree && collectionTree.newick)) {
-    singleTree = POPULATION;
-  }
-
+function mapDispatchToProps(dispatch) {
   return {
-    ...props,
-    loading,
-    ...tree,
-    ...getTreeFunctions(tree.name, state, dispatch),
-    filenames: getFilenames(title, collection.id, tables.metadata.activeColumn),
-    setUnfilteredIds: (ids) => dispatch(setUnfilteredIds(ids)),
-    header: (
-      <TreeHeader
-        tree={tree}
-        title={title}
-        isSpecies={speciesTrees.has(tree.name)}
-        dispatch={dispatch}
-        singleTree={singleTree}
-      />
-    ),
+    onLoaded: phylocanvas => dispatch(treeLoaded(phylocanvas)),
+    onSubtree: phylocanvas => dispatch(subtreeLoaded(phylocanvas)),
+    onUpdated: (event, phylocanvas) =>
+      dispatch(treeClicked(event, phylocanvas)),
+    onTypeChanged: phylocanvas => dispatch(typeChanged(phylocanvas)),
   };
 }
 
-export default connect(mapStateToProps, null, mergeProps)(ConnectedTree);
+export default connect(mapStateToProps, mapDispatchToProps)(Tree);

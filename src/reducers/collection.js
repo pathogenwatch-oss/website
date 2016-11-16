@@ -1,12 +1,12 @@
 import { CREATE_COLLECTION } from '../hub-drawer';
 import { FETCH_ENTITIES, CHECK_STATUS, UPDATE_PROGRESS } from '../actions/fetch';
 import { SET_COLLECTION_ID } from '../actions/collection';
-import { FETCH_TREE } from '../actions/tree';
+import { FETCH_TREE } from '../collection-viewer/tree/actions';
 
 import { sortAssemblies } from '../table/utils';
 import { statuses } from '../collection-route/constants';
 
-import Species from '^/species';
+import Species from '../species';
 
 function replaceSubtypeAssemblyNames(uploaded, reference) {
   const { uiOptions = {} } = Species.current;

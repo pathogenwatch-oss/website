@@ -1,0 +1,227 @@
+.wgsa-tree {
+  width: 100%;
+  height: 100%;
+  background: #fff;
+}
+
+#phylocanvas-container {
+  user-select: none;
+}
+
+.wgsa-tree-header {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  height: 32px;
+  padding: 16px 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+}
+
+.wgsa-tree-heading {
+  line-height: 1;
+  font-size: 20px;
+  margin: 0px;
+  color: #673c90;
+  flex-grow: 1;
+}
+
+.wgsa-tree-heading > span {
+  padding: 4px 8px;
+  background: rgba(255, 255, 255, 0.87);
+  border-radius: 24px;
+}
+
+.wgsa-tree-icon {
+  color: #673c90;
+  background: rgba(255, 255, 255, 0.87);
+  margin-left: 12px;
+}
+
+div.wgsa-tree-icon:hover,
+div.wgsa-tree-icon:focus,
+div.wgsa-tree-icon:active {
+  background: rgba(255, 255, 255, 0.87);
+  cursor: default;
+}
+
+.wgsa-tree-overlay {
+  background: rgba(255, 255, 255, 0.87);
+  z-index: 2;
+}
+
+.wgsa-redraw-original-tree-button {
+  border: none;
+  color: #673c90;
+  font-family: Roboto, sans-serif;
+  left: 8px;
+  position: absolute;
+  top: 64px;
+  visibility: hidden;
+}
+
+.wgsa-redraw-original-tree-button--visible {
+  visibility: visible;
+}
+
+.wgsa-tree-menu-button {
+  position: absolute;
+  top: 24px;
+  right: 16px;
+  z-index: 1;
+  color: #673c90;
+}
+
+.wgsa-tree-menu {
+  align-self: flex-end;
+}
+
+.wgsa-tree-menu .mdl-menu__item {
+  font-size: 13px;
+  height: 40px;
+  line-height: 40px;
+}
+
+.wgsa-tree-menu a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.wgsa-tree-controls {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  z-index: 1;
+  user-select: none;
+}
+
+.wgsa-tree-sliders {
+  padding: 4px 0;
+  border-radius: 8px;
+}
+
+.wgsa-tree-slider .mdl-slider {
+  display: none;
+}
+
+.wgsa-tree-slider .mdl-slider.is-upgraded {
+  display: block;
+}
+
+.wgsa-tree-slider {
+  margin: 0 -20px;
+  width: 128px;
+  height: 40px;
+  text-align: center;
+  display: inline-block;
+  overflow: hidden;
+  user-select: none;
+}
+
+.wgsa-tree-slider label {
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.wgsa-select-tree-type {
+  text-transform: capitalize;
+  display: block;
+  margin-bottom: 8px;
+  padding: 2px 4px;
+  border-radius: 16px;
+  border: none;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.87);
+  flex-shrink: 1;
+  width: 8.5em; /* hack for bug on linux */
+}
+
+.wgsa-select-tree-type:hover,
+.wgsa-select-tree-type:focus,
+.wgsa-select-tree-type:active {
+  outline: none;
+  background: rgba(255, 255, 255, 0.87);
+}
+
+.wgsa-tree-history {
+  align-items: center;
+  bottom: 24px;
+  display: flex;
+  flex-direction: row-reverse;
+  height: 12vh;
+  left: 0;
+  position: absolute;
+  right: 0;
+  transform: translateX(calc(-100% + 32px));
+  transition: .28s cubic-bezier(.4,0,.2,1);
+  transition-property: transform;
+  z-index: 2;
+}
+
+.wgsa-tree-history--open {
+  transform: translateX(0);
+}
+
+.wgsa-tree-history__tab {
+  background: #673c90;
+  color: #fff;
+  line-height: 32px;
+  min-height: 80px;
+  min-width: 0;
+  width: 32px;
+  padding: 0;
+}
+
+.wgsa-tree-history__tab:hover,
+.wgsa-tree-history__tab:focus,
+.wgsa-tree-history__tab:active {
+  background: #a386bd !important;
+}
+
+.wgsa-tree-history__tab > span {
+  display: block;
+  height: 32px;
+  line-height: 32px;
+  margin-left: -100%;
+  transform: rotate(90deg);
+  transform-origin: center center;
+  width: 96px;
+}
+
+.wgsa-tree-history-snapshots {
+  align-items: stretch;
+  box-shadow: 0 1px 5px 0 rgba(0,0,0,0.2),0 2px 2px 0 rgba(0,0,0,0.14),0 3px 1px -2px rgba(0,0,0,0.12);
+  display: flex;
+  flex-direction: row-reverse;
+  flex-grow: 1;
+  height: calc(100% - 2px);
+  justify-content: flex-start;
+  overflow-x: auto;
+  border: 1px solid rgba(0, 0, 0, 0.27);
+  border-left: none;
+}
+
+.wgsa-tree-history__snapshot {
+  min-width: 12vh;
+  max-width: 12vh;
+  border: none;
+  border-left: 1px solid rgba(0, 0, 0, 0.27);
+  padding: 0;
+  outline: none;
+  overflow: hidden;
+  background-color: #fff;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.wgsa-tree-history__snapshot--active {
+  background-color: color(#a386bd tint(87%));
+  border-bottom: 4px solid #673c90;
+}

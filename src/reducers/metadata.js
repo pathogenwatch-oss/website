@@ -1,13 +1,13 @@
 import { FETCH_ENTITIES } from '../actions/fetch';
 import { SET_LABEL_COLUMN, setLabelColumn } from '../actions/table';
-import { SET_TREE } from '../actions/tree';
+import { SET_TREE } from '../collection-viewer/tree/actions';
 
 import { downloadColumnProps, nameColumnProps } from '../constants/table';
-import { getSystemDataColumnProps, getUserDefinedValue } from '../constants/metadata';
+import * as metadata from '../constants/metadata';
 
-import { speciesTrees } from '../constants/tree';
+import { speciesTrees } from '../collection-viewer/tree/constants';
 
-import Species from '^/species';
+import Species from '../species';
 
 const initialActiveColumn = nameColumnProps;
 
@@ -26,7 +26,8 @@ function getUserDefinedColumnNames(assemblies) {
   Object.keys(assemblies).forEach(key => {
     const { userDefined } = assemblies[key].metadata;
     if (userDefined) {
-      Object.keys(userDefined).forEach(name => userDefinedColumnNames.add(name));
+      Object.keys(userDefined).
+        forEach(name => userDefinedColumnNames.add(name));
     }
   });
   return userDefinedColumnNames;
@@ -36,7 +37,7 @@ function getUserDefinedColumnProps(columnNames) {
   return Array.from(columnNames).map(column => ({
     columnKey: column,
     valueGetter(data) {
-      return getUserDefinedValue(column, data);
+      return metadata.getUserDefinedValue(column, data);
     },
   }));
 }
@@ -57,7 +58,7 @@ const actions = {
     const systemColumnProps = [
       downloadColumnProps,
       nameColumnProps,
-      ...getSystemDataColumnProps(uiOptions),
+      ...metadata.getSystemDataColumnProps(uiOptions),
     ];
     const userDefinedColumnProps =
       systemColumnProps.concat(getUserDefinedColumnProps(columnNames));

@@ -18,7 +18,6 @@ import { reducer as location } from '../location/';
 import resistanceProfile from '../reducers/resistanceProfile';
 import table from '../reducers/table';
 import { reducer as toast } from '../toast';
-import { trees, displayedTree, treeLoading } from '../reducers/tree';
 
 import { RESET_STORE } from '../actions/reset';
 
@@ -38,10 +37,6 @@ const rootReducer = combineReducers({
   collectionViewer,
   display: combineReducers({
     table: createReducer(table),
-    tree: combineReducers({
-      name: createReducer(displayedTree),
-      loading: createReducer(treeLoading),
-    }),
     aboutCollectionOpen,
   }),
   downloads: combineReducers({
@@ -51,7 +46,6 @@ const rootReducer = combineReducers({
   entities: combineReducers({
     antibiotics: createReducer(antibiotics),
     assemblies: createReducer(assemblies),
-    trees: createReducer(trees),
     fastas: createReducer(fastas),
   }),
   filter,

@@ -82,6 +82,7 @@ function renderPaths({ slices, onSliceClick }) {
  * @see {http://wiki.scribus.net/canvas/Making_a_Pie_Chart}
  */
 export default class PieChart extends React.Component {
+
   /**
    * @return {Object}
    */

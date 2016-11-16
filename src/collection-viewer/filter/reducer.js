@@ -6,24 +6,26 @@ import {
   RESET_FILTER,
 } from './actions';
 
+import { TREE_LOADED } from '../tree/actions';
 
 const initialState = {
   active: false,
-  unfilteredIds: new Set(),
+  unfilteredIds: [], // An array to allow indentical ids arrays not to cause an update
   ids: new Set(),
 };
 
 export default function (state = initialState, { type, payload = {} }) {
   const { ids } = payload;
   switch (type) {
-    case SET_UNFILTERED_IDS: {
-      const noReset =
-        state.active && Array.from(ids).some(id => state.ids.has(id));
+    case TREE_LOADED: {
+      const { leafIds } = payload;
+      const reset = state.active && !leafIds.some(id => state.ids.has(id));
+
       return {
         ...state,
-        unfilteredIds: ids,
-        ids: noReset ? state.ids : new Set(),
-        active: noReset,
+        unfilteredIds: leafIds,
+        ids: reset ? new Set() : state.ids,
+        active: reset ? false : state.active,
       };
     }
     case ACTIVATE_FILTER:
@@ -50,14 +52,14 @@ export default function (state = initialState, { type, payload = {} }) {
       return {
         ...state,
         active: false,
-        ids: new Set(),
+        ids: initialState.ids,
       };
     }
     case RESET_FILTER:
       return {
         ...state,
         active: false,
-        ids: new Set(),
+        ids: initialState.ids,
       };
     default:
       return state;

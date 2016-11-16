@@ -9,10 +9,7 @@ export const getAssemblies = createSelector(
   assemblies => Object.values(assemblies)
 );
 
-export const getVisibleAssemblyIds = createSelector(
-  getFilter,
-  filter => filter.unfilteredIds
-);
+export const getVisibleAssemblyIds = state => getFilter(state).unfilteredIds;
 
 export const getVisibleAssemblies = createSelector(
   ({ entities }) => entities.assemblies,
