@@ -44,3 +44,10 @@
 .wgsa-summary-list__chip:focus {
   box-shadow: none;
 }
+
+.wgsa-summary-chart path:hover {
+  opacity: 0.70;
+}
+.wgsa-summary-chart path[fill="#fff"]:hover {
+  fill: #efefef;
+}

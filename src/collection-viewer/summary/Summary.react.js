@@ -29,6 +29,7 @@ const Summary = ({ summary, isExpanded, onClick, onSliceClick }) => (
     onClick={() => onClick(!isExpanded)}
   >
     <PieChart
+      className="wgsa-summary-chart"
       slices={getAssemblySummarySlices(summary)}
       borderWidth={1.5}
       onSliceClick={(slice, event) => {
