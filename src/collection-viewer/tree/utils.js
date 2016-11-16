@@ -1,3 +1,5 @@
+import { utils } from 'phylocanvas';
+
 import { getColumnLabel } from '../../table/utils';
 import Species from '../../species';
 import { POPULATION } from '../../app/stateKeys/tree';
@@ -46,4 +48,26 @@ export function getFilenames(title, collectionId, column) {
         `${PREFIX}_${formattedColumnLabel}_${TREE_LABELS_SUFFIX}`,
     newick: `${PREFIX}.nwk`,
   };
+}
+
+
+const canvas = document.createElement('canvas');
+export function takeSnapshot(phylocanvas) {
+  const [ [ left, top ], [ right, bottom ] ] = phylocanvas.getBounds();
+  const topLeft = utils.canvas.undoPointTranslation({ x: left, y: top }, phylocanvas);
+  const bottomRight = utils.canvas.undoPointTranslation({ x: right, y: bottom }, phylocanvas);
+  const width = bottomRight.x - topLeft.x;
+  const height = bottomRight.y - topLeft.y;
+  const { padding } = phylocanvas;
+  canvas.width = width + padding * 2;
+  canvas.height = height + padding * 2;
+
+  const imageData = phylocanvas.canvas.getImageData(
+    phylocanvas.offsetx,
+    phylocanvas.offsety,
+    width,
+    height
+  );
+  canvas.getContext('2d').putImageData(imageData, padding, padding);
+  return canvas.toDataURL();
 }

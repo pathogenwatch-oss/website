@@ -73,10 +73,11 @@ export default React.createClass({
     });
     phylocanvas.on('subtree', () => this.props.onSubtree(phylocanvas));
     phylocanvas.on('updated', event => this.props.onUpdated(event, phylocanvas));
+    phylocanvas.on('typechanged', () => this.props.onTypeChanged(phylocanvas));
     phylocanvas.on('error', error => console.error(error));
 
     this.phylocanvas = phylocanvas;
-    window.phylocanvas = phylocanvas;
+
     // must be native event to for body click cancellation to work
     this.refs.menuButton.addEventListener('click', e => this.toggleContextMenu(e));
     // must be native event for timing to work :/
@@ -100,16 +101,14 @@ export default React.createClass({
     }
 
     if (root !== previous.root && root !== this.phylocanvas.root.id) {
-      this.loadSubtree();
-      return;
+      this.changeRoot();
     }
 
-    if (type && type !== previous.type || !previous.loaded) {
+    if (type && (type !== this.phylocanvas.treeType || !previous.loaded)) {
       this.phylocanvas.setTreeType(type);
     } else {
       this.phylocanvas.draw();
     }
-    this.props.onStyled(this.phylocanvas);
   },
 
   phylocanvas: null,
@@ -118,7 +117,7 @@ export default React.createClass({
     this.phylocanvas.load(this.props.newick);
   },
 
-  loadSubtree() {
+  changeRoot() {
     const newRoot = this.phylocanvas.originalTree.branches[this.props.root];
     if (newRoot) {
       this.phylocanvas.redrawFromBranch(newRoot);

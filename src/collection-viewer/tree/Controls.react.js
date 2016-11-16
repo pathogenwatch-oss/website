@@ -2,8 +2,8 @@ import React from 'react';
 import { treeTypes } from 'phylocanvas';
 import { connect } from 'react-redux';
 
-import { isLoaded, getBaseSize, getTreeScales } from './selectors';
-import { setTreeType, setNodeScale, setLabelScale } from './actions';
+import { isLoaded, getVisibleTree } from './selectors';
+import { setNodeScale, setLabelScale } from './actions';
 
 const Controls = React.createClass({
 
@@ -22,25 +22,33 @@ const Controls = React.createClass({
 
   componentDidUpdate(previous) {
     const { nodeSlider, labelSlider } = this.refs;
-    const { scales, baseSize, phylocanvas } = this.props;
+    const { phylocanvas, nodeSize, labelSize } = this.props;
 
-    if (baseSize && (scales !== previous.scales || !previous.loaded)) {
-      nodeSlider.MaterialSlider.change(scales.node);
-      phylocanvas.baseNodeSize = baseSize * scales.node;
+    if (nodeSize !== previous.nodeSize) {
+      const { scale, base } = nodeSize;
+      nodeSlider.MaterialSlider.change(scale);
+      phylocanvas.baseNodeSize = base * scale;
+    }
 
-      labelSlider.MaterialSlider.change(scales.label);
-      phylocanvas.textSize = baseSize * scales.label;
+    if (labelSize !== previous.labelSize) {
+      const { scale, base } = labelSize;
+      labelSlider.MaterialSlider.change(scale);
+      phylocanvas.textSize = base * scale;
+    }
+
+    if (nodeSize !== previous.nodeSize || labelSize !== previous.labelSize) {
+      phylocanvas.draw();
     }
   },
 
   render() {
-    const { scales } = this.props;
+    const { nodeSize, labelSize, phylocanvas } = this.props;
 
     return (
       <div className="wgsa-tree-controls">
         <select className="wgsa-select-tree-type wgsa-tree-overlay"
           value={this.props.treeType}
-          onChange={this.props.onTreeTypeChange}
+          onChange={event => phylocanvas.setTreeType(event.target.value)}
         >
           { Object.keys(treeTypes).map((treeType) =>
             <option key={treeType} value={treeType}>{treeType}</option>
@@ -51,7 +59,7 @@ const Controls = React.createClass({
             <label>Node Size
               <input ref="nodeSlider" type="range"
                 onChange={this.props.onNodeScaleChange}
-                min="0.1" max={scales.max} step="0.2" value={scales.node}
+                min="0.1" max={nodeSize.max} step="0.2" value={nodeSize.scale}
                 className="mdl-slider mdl-js-slider" tabIndex="0"
               />
             </label>
@@ -60,7 +68,7 @@ const Controls = React.createClass({
             <label>Label Size
               <input ref="labelSlider" type="range"
                 onChange={this.props.onLabelScaleChange}
-                min="0.1" max={scales.max} step="0.2" value={scales.leaf}
+                min="0.1" max={labelSize.max} step="0.2" value={labelSize.scale}
                 className="mdl-slider mdl-js-slider" tabIndex="0"
               />
             </label>
@@ -75,15 +83,13 @@ const Controls = React.createClass({
 function mapStateToProps(state) {
   return {
     loaded: isLoaded(state),
-    baseSize: getBaseSize(state),
-    scales: getTreeScales(state),
+    nodeSize: getVisibleTree(state).nodeSize,
+    labelSize: getVisibleTree(state).labelSize,
   };
 }
 
 function mapDispatchToProps(dispatch, { stateKey }) {
   return {
-    onTreeTypeChange: event =>
-      dispatch(setTreeType(stateKey, event.target.value)),
     onNodeScaleChange: event =>
       dispatch(setNodeScale(stateKey, event.target.value)),
     onLabelScaleChange: event =>

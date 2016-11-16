@@ -48,7 +48,7 @@ const History = React.createClass({
                 { 'wgsa-tree-history__snapshot--active': this.isActive(snapshot) }
               )}
               onClick={() => this.props.onClick(snapshot.state)}
-              style={{ backgroundImage: `url(${snapshot.imgUrl})` }}
+              style={{ backgroundImage: `url(${snapshot.image})` }}
             >
             </button>
           )}

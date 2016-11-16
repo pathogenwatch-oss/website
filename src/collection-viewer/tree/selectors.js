@@ -1,13 +1,10 @@
 import { createSelector } from 'reselect';
 
-import { getFilter, getColourGetter } from '../selectors';
-
-import { titles, speciesTrees, leafStyles } from './constants';
+import { titles, speciesTrees } from './constants';
 import * as utils from './utils';
 
 import { POPULATION, COLLECTION } from '../../app/stateKeys/tree';
 import Species from '../../species';
-import { CGPS } from '../../app/constants';
 
 const getTreeState = ({ collectionViewer }) => collectionViewer.tree;
 
