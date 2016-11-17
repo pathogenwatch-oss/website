@@ -59,7 +59,7 @@ export default React.createClass({
           label={label}
           isArchive={isArchive}
         />
-        {!iconOnly && description}
+        {!iconOnly && <span>{description}</span>}
       </button>
     );
   },

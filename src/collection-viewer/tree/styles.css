@@ -237,9 +237,13 @@ div.wgsa-tree-icon:active {
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
+  border-bottom: 4px solid transparent;
+  transition: .28s cubic-bezier(.4,0,.2,1);
+  transition-property: background-color;
 }
 
+.wgsa-tree-history__snapshot:hover,
 .wgsa-tree-history__snapshot--active {
   background-color: color(#a386bd tint(87%));
-  border-bottom: 4px solid #673c90;
+  border-bottom-color: #673c90;
 }
