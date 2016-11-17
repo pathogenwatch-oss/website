@@ -24,7 +24,7 @@ function storeMetadata(args) {
   const { speciesId, collectionId, assemblyId, file } = args;
 
   const assemblyMetadata = metadataModel.createRecord(
-    { speciesId, collectionId, assemblyId },
+    { speciesId, collectionId, assemblyId, fileId: file.id },
     file.metadata || { assemblyName: file.name },
     file.metrics
   );
@@ -189,9 +189,19 @@ function groupAssembliesBySubtype(assemblies) {
   }, {});
 }
 
+function getMetadata(id) {
+  return new Promise((resolve, reject) => {
+    mainStorage.retrieve(`${ASSEMBLY_METADATA}_${id}`, (error, doc) => {
+      if (error) return reject(error);
+      return resolve(doc);
+    });
+  });
+}
+
 module.exports.ASSEMBLY_ANALYSES = ASSEMBLY_ANALYSES;
 module.exports.submit = submit;
 module.exports.storeMetadata = storeMetadata;
 module.exports.getComplete = getComplete;
 module.exports.getReference = getReference;
 module.exports.groupAssembliesBySubtype = groupAssembliesBySubtype;
+module.exports.getMetadata = getMetadata;
