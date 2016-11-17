@@ -154,11 +154,14 @@ export default React.createClass({
         <div id="phylocanvas-container" style={fullWidthHeight}></div>
         <Styler phylocanvas={this.phylocanvas} />
         <button
-          ref="menuButton"
-          className="mdl-button mdl-js-button mdl-button--icon wgsa-tree-menu-button wgsa-tree-overlay"
-          title="More Options"
+          ref="redrawOriginalTreeButton"
+          className={classnames(
+            'wgsa-tree-overlay wgsa-redraw-original-tree-button mdl-button mdl-button--icon',
+            { 'wgsa-redraw-original-tree-button--visible': this.props.root !== 'root' }
+          )}
+          title="Redraw Original Tree"
         >
-          <i className="material-icons">more_vert</i>
+          <i className="material-icons">replay</i>
         </button>
         <button
           className={classnames(
@@ -171,14 +174,11 @@ export default React.createClass({
           <i className="material-icons">tune</i>
         </button>
         <button
-          ref="redrawOriginalTreeButton"
-          className={classnames(
-            'wgsa-tree-overlay wgsa-redraw-original-tree-button mdl-button mdl-button--icon',
-            { 'wgsa-redraw-original-tree-button--visible': this.props.root !== 'root' }
-          )}
-          title="Redraw Original Tree"
+          ref="menuButton"
+          className="mdl-button mdl-js-button mdl-button--icon wgsa-tree-menu-button wgsa-tree-overlay"
+          title="More Options"
         >
-          <i className="material-icons">replay</i>
+          <i className="material-icons">more_vert</i>
         </button>
         <History stateKey={this.props.name} />
         {

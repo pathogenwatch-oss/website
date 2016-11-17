@@ -63,8 +63,8 @@ export function takeSnapshot(phylocanvas) {
   canvas.height = height + padding * 2;
 
   const imageData = phylocanvas.canvas.getImageData(
-    phylocanvas.offsetx,
-    phylocanvas.offsety,
+    topLeft.x,
+    topLeft.y,
     width,
     height
   );

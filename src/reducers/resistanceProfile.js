@@ -92,7 +92,7 @@ function createAntibioticsColumn({ name, longName }) {
             className={`material-icons wgsa-resistance-icon wgsa-amr--${state.toLowerCase()}`}
             title={mechanisms.join(', ')}
           >
-            {resistanceProfile.getIcon(state)}
+            lens
           </i>
         );
       }

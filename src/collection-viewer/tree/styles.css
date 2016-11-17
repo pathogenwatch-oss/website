@@ -78,8 +78,9 @@ div.wgsa-tree-icon:active {
   color: #fff;
 }
 
-.wgsa-tree-toggle-controls-button--active:hover {
-  color: #000;
+.wgsa-tree-toggle-controls-button--active:hover,
+.wgsa-tree-toggle-controls-button--active:focus {
+  color: #555;
 }
 
 .wgsa-tree-menu-button {
