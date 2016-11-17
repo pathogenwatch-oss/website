@@ -1,4 +1,5 @@
 import React from 'react';
+import classnames from 'classnames';
 
 import MarkerHighlight from '../cgps-commons/MarkerHighlight.react.js';
 import PieChart from '../cgps-commons/PieChart.react.js';
@@ -30,7 +31,10 @@ export default React.createClass({
     return (
       <div
         style={style}
-        className="leaflet-marker-icon"
+        className={classnames(
+          'leaflet-marker-icon',
+          { highlighted: marker.highlighted }
+        )}
         onClick={event => {
           event.stopPropagation();
           event.nativeEvent.stopImmediatePropagation();
