@@ -4,8 +4,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
 
-import { activateFilter, resetFilter } from '../filter/actions';
+import { getMetadataTable } from '../table/selectors';
 import { getFilter } from '../selectors';
+
+import { activateFilter, resetFilter } from '../filter/actions';
+
 
 import { utils } from '../../table';
 
@@ -72,9 +75,9 @@ const Search = React.createClass({
 });
 
 function mapStateToProps(state) {
-  const { tables, entities } = state;
+  const { entities } = state;
   const filter = getFilter(state);
-  const { activeColumn } = tables.metadata;
+  const { activeColumn } = getMetadataTable(state);
   const totalAmount = filter.unfilteredIds.length;
   return {
     displayProps: {
@@ -99,7 +102,7 @@ function mergeProps({ displayProps, activeColumn, assemblies }, { dispatch }) {
       dispatch(activateFilter(
         assemblies.reduce((set, assembly) => {
           if (String(activeColumn.valueGetter(assembly)).match(matcher)) {
-            set.add(assembly.metadata.assemblyId);
+            set.add(assembly.id);
           }
           return set;
         }, new Set())

@@ -1,7 +1,5 @@
 import { combineReducers } from 'redux';
 
-import aboutCollectionOpen from '../about-collection-dropdown/reducer';
-import antibiotics from '../reducers/antibiotics';
 import { reducer as assemblyDrawer } from '../assembly-drawer';
 import bodyClickListener from '../reducers/bodyClickListener';
 import { assemblies, collection, reference } from '../reducers/collection';
@@ -13,10 +11,7 @@ import { reducer as header } from '../header';
 import hub from '../hub/reducers';
 import fastas from '../hub/reducers/fastas';
 import { reducer as map } from '../map';
-import metadata from '../reducers/metadata';
 import { reducer as location } from '../location/';
-import resistanceProfile from '../reducers/resistanceProfile';
-import table from '../reducers/table';
 import { reducer as toast } from '../toast';
 
 import { RESET_STORE } from '../actions/reset';
@@ -35,16 +30,11 @@ const rootReducer = combineReducers({
   bodyClickListener,
   collection: createReducer(collection),
   collectionViewer,
-  display: combineReducers({
-    table: createReducer(table),
-    aboutCollectionOpen,
-  }),
   downloads: combineReducers({
     menuOpen: createReducer(downloadsMenu),
     files: createReducer(downloads),
   }),
   entities: combineReducers({
-    antibiotics: createReducer(antibiotics),
     assemblies: createReducer(assemblies),
     fastas: createReducer(fastas),
   }),
@@ -54,10 +44,6 @@ const rootReducer = combineReducers({
   location,
   map,
   reference: createReducer(reference),
-  tables: combineReducers({
-    metadata: createReducer(metadata),
-    resistanceProfile: createReducer(resistanceProfile),
-  }),
   toast,
 });
 

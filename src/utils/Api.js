@@ -67,8 +67,8 @@ export function makeFileRequest(format, id, speciesId) {
   );
 }
 
-export function getAntibiotics(speciesId) {
-  return $.get(`${API_ROOT}/species/${speciesId}/antibiotics`);
+export function getResistanceData(speciesId) {
+  return $.get(`${API_ROOT}/species/${speciesId}/resistance`);
 }
 
 export function getSubtree(speciesId, collectionId, subtreeId) {

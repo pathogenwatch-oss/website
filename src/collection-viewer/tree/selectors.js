@@ -1,5 +1,7 @@
 import { createSelector } from 'reselect';
 
+import { getMetadataTable } from '../table/selectors';
+
 import { titles, speciesTrees } from './constants';
 import * as utils from './utils';
 
@@ -40,14 +42,13 @@ export const getSingleTree = createSelector(
 export const getTitle = createSelector(
   getVisibleTree,
   ({ entities }) => entities.assemblies,
-  ({ name }, assemblies) =>
-    titles[name] || assemblies[name].metadata.assemblyName
+  (tree, assemblies) => titles[tree.name] || assemblies[tree.name].name
 );
 
 export const getFilenames = createSelector(
   getTitle,
   ({ collection }) => collection.id,
-  ({ tables }) => tables.metadata.activeColumn,
+  state => getMetadataTable(state).activeColumn,
   utils.getFilenames
 );
 

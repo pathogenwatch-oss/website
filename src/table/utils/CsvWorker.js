@@ -7,7 +7,12 @@ import { systemDataColumns, getUserDefinedValue } from '^/constants/metadata';
 
 import { isResistant } from '^/utils/resistanceProfile';
 
-import { nameColumnData } from '^/constants/table/columns';
+const nameColumnData = {
+  columnKey: '__name',
+  valueGetter({ name }) {
+    return name;
+  },
+};
 
 const columnDefsByTable = {
   metadata() {
@@ -24,18 +29,14 @@ const columnDefsByTable = {
       defined: {
         [nameColumnData.columnKey]: nameColumnData,
       },
-      genericGetter: (antibiotic, { analysis: { resistanceProfile } = {} }) => {
+      genericGetter: (antibiotic, { analysis: { resistanceProfile } }) => {
         switch (dataType) {
           case 'profile':
-            if (!resistanceProfile) {
-              return 0;
-            }
             return isResistant(resistanceProfile, antibiotic) ? 1 : 0;
-          case 'mechanisms':
-            if (!resistanceProfile) {
-              return '""';
-            }
-            return `"${resistanceProfile[antibiotic].mechanisms.join(',')}"`;
+          case 'mechanisms': {
+            const { antibiotics } = resistanceProfile;
+            return `"${antibiotics[antibiotic].mechanisms.join(',')}"`;
+          }
           default:
             return '';
         }

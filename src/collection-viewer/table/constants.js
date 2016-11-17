@@ -1,10 +1,9 @@
 import React from 'react';
 
-import DownloadButton from '../../collection-viewer/downloads/DownloadButton.react';
+import DownloadButton from '../downloads/DownloadButton.react';
 import { FastaFileLink, FastaArchiveButton } from '../../fasta-download';
 
 import { getArchiveDownloadProps } from '../../constants/downloads';
-import { nameColumnData } from './columns';
 
 import { defaultWidthGetter } from '../../table/utils/columnWidth';
 
@@ -16,7 +15,16 @@ export const tableKeys = {
   resistanceProfile: 'resistanceProfile',
 };
 
-const collectionStyle = { color: CGPS.COLOURS.PURPLE };
+export const views = {
+  [tableKeys.resistanceProfile]: [ 'Antibiotics', 'SNPs', 'Genes' ],
+};
+
+export const nameColumnData = {
+  columnKey: '__name',
+  valueGetter({ name }) {
+    return name;
+  },
+};
 
 export const downloadColumnProps = {
   columnKey: '__downloads',
@@ -36,12 +44,12 @@ export const downloadColumnProps = {
     );
   },
   cellClasses: 'wgsa-table-cell--skinny',
-  fixedWidth: 80,
+  fixedWidth: 68,
   flexGrow: 0,
-  getCellContents(_, { __downloads, metadata }) {
+  getCellContents(_, { __downloads, id, name }) {
     return (
       <span className="wgsa-table-downloads" onClick={(e) => e.stopPropagation()}>
-        <FastaFileLink id={metadata.assemblyId} name={metadata.assemblyName} />
+        <FastaFileLink id={id} name={name} />
         <DownloadButton
           { ...__downloads.wgsa_gff }
           label=".gff"
@@ -58,6 +66,8 @@ export const downloadColumnProps = {
     };
   },
 };
+
+const collectionStyle = { color: CGPS.COLOURS.PURPLE };
 
 function getNameText(data, valueGetter) {
   const text = valueGetter(data);
@@ -84,11 +94,11 @@ export const nameColumnProps = {
     let width = defaultWidthGetter(row, props, true);
 
     if (row.__isPublic && row.metadata.collectionId) {
-      width += 24;
+      width += 32;
     }
 
     if (row.metadata.pmid) {
-      width += 24;
+      width += 32;
     }
 
     return width;

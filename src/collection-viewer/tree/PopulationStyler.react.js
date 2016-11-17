@@ -24,7 +24,7 @@ const Styler = React.createClass({
           fillStyle: subtree ? CGPS.COLOURS.PURPLE_LIGHT : CGPS.COLOURS.GREY,
         },
       });
-      leaf.label = `${assembly.metadata.assemblyName} (${assemblyIds.length}) [${publicCount}]`;
+      leaf.label = `${assembly.name} (${assemblyIds.length}) [${publicCount}]`;
       leaf.highlighted = (filter.active &&
         assemblyIds.some(assemblyId => filter.ids.has(assemblyId)));
       leaf.interactive = !!subtree;

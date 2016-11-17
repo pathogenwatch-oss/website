@@ -1,4 +1,4 @@
-import { setColourColumns } from '../actions/table';
+import { setColourColumns } from '../collection-viewer/table/actions';
 
 import { DEFAULT, CGPS } from '../app/constants';
 
@@ -12,10 +12,10 @@ const stateColourMap = Object.keys(stateColours).reduce(
   new Map().set(nonResistantColour, 'UNKNOWN')
 );
 
-export function isResistant(profile, antibiotic) {
-  if (!profile || !profile[antibiotic]) return false;
+export function isResistant({ antibiotics }, antibiotic) {
+  if (!(antibiotic in antibiotics)) return false;
 
-  return profile[antibiotic].state !== 'UNKNOWN';
+  return antibiotics[antibiotic].state !== 'UNKNOWN';
 }
 
 export function defaultColourGetter(assembly) {
@@ -26,14 +26,13 @@ export function defaultColourGetter(assembly) {
 }
 
 export function getColour(antibiotic, assembly) {
-  const { analysis } = assembly;
-  if (!analysis.resistanceProfile) {
+  const { resistanceProfile } = assembly.analysis;
+  if (!resistanceProfile) {
     return defaultColourGetter(assembly);
   }
 
-  if (isResistant(analysis.resistanceProfile, antibiotic)) {
-    const { state } = analysis.resistanceProfile[antibiotic];
-    return stateColours[state];
+  if (isResistant(resistanceProfile, antibiotic)) {
+    return stateColours[resistanceProfile.antibiotics[antibiotic].state];
   }
   return nonResistantColour;
 }

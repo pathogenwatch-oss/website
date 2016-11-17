@@ -3,11 +3,11 @@ import { connect } from 'react-redux';
 import AboutCollection from './AboutCollection.react';
 import { toggleAboutCollection } from './actions';
 
-import Species from '../species';
+import Species from '../../species';
 
-function mapStateToProps({ display, collection }) {
+function mapStateToProps({ collection, collectionViewer }) {
   return {
-    isOpen: display.aboutCollectionOpen,
+    isOpen: collectionViewer.aboutCollectionOpen,
     metadata: collection.metadata,
     species: Species.current.formattedName,
   };

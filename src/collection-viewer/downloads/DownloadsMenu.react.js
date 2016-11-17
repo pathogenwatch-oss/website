@@ -40,13 +40,13 @@ DownloadsMenu.PropTypes = {
 };
 
 function mapStateToProps(state) {
-  const { downloads, collection, entities, tables } = state;
+  const { downloads, collection, entities, collectionViewer } = state;
   return {
     collection,
     assemblies: entities.assemblies,
     assemblyIds: getActiveAssemblyIds(state),
     ...downloads,
-    tables,
+    collectionViewer, // needs to be here for selectors to work :/
   };
 }
 

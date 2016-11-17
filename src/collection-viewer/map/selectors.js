@@ -8,11 +8,11 @@ export const getAssemblyIdsInPath = createSelector(
   getVisibleAssemblies,
   getLassoPath,
   (assemblies, path) =>
-    assemblies.reduce((ids, { metadata }) => {
+    assemblies.reduce((ids, { id, metadata }) => {
       const { position = {} } = metadata;
       if (!position.latitude || !position.longitude) return ids;
       if (contains(path, { lat: position.latitude, lng: position.longitude })) {
-        return ids.concat(metadata.assemblyId);
+        return ids.concat(id);
       }
       return ids;
     }, [])

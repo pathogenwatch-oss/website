@@ -15,11 +15,13 @@ function replaceSubtypeAssemblyNames(uploaded, reference) {
   }
   return Object.keys(uploaded)
     .reduce((memo, assemblyId) => {
-      const { populationSubtype, ...assembly } = uploaded[assemblyId];
+      const { analysis, ...assembly } = uploaded[assemblyId];
       memo[assemblyId] = {
         ...assembly,
-        populationSubtype:
-          reference[populationSubtype].originalAssemblyName,
+        analysis: {
+          ...analysis,
+          populationSubtype: reference[analysis.populationSubtype].name,
+        },
       };
       return memo;
     }, {}
@@ -29,17 +31,11 @@ function replaceSubtypeAssemblyNames(uploaded, reference) {
 function decorateReferenceAssemblies(assemblies) {
   return Object.keys(assemblies)
     .reduce((memo, assemblyId) => {
-      const { metadata, analysis, ...assembly } = assemblies[assemblyId];
+      const { name, analysis, ...assembly } = assemblies[assemblyId];
       memo[assemblyId] = {
         ...assembly,
+        name: analysis ? `${name}_ST${analysis.st}` : name,
         analysis,
-        metadata: {
-          ...metadata,
-          assemblyName: analysis ?
-            `${metadata.assemblyName}_ST${analysis.st}` :
-            metadata.assemblyName,
-        },
-        originalAssemblyName: metadata.assemblyName,
         __isReference: true,
       };
       return memo;

@@ -4,7 +4,7 @@ import {
   checkCollectionStatus,
   getCollection,
   getReferenceCollection,
-  getAntibiotics,
+  getResistanceData,
 } from '../utils/Api';
 
 import { fixPositions, fixDateFormats } from '../utils/Metadata';
@@ -17,7 +17,7 @@ export const fetchEntities = (speciesId, collectionId) => ({
     promise: Promise.all([
       getCollection(speciesId, collectionId).then(fixPositions),
       getReferenceCollection(speciesId, collectionId).then(fixDateFormats),
-      getAntibiotics(speciesId),
+      getResistanceData(speciesId),
     ]),
   },
 });

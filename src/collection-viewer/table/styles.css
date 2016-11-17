@@ -1,9 +1,22 @@
+.wgsa-table-switcher {
+  display: flex;
+  z-index: 3;
+  left: 16px;
+  position: absolute;
+  transform: translateY(-18px);
+}
+
 .wgsa-table-header {
   vertical-align: top;
-  padding-left: 18px;
+  padding-left: 10px;
   box-sizing: border-box;
   background: none !important;
   border-right: none;
+}
+
+.wgsa-table-header--unstyled button {
+  background: none;
+  cursor: auto !important;
 }
 
 .wgsa-selectable-column-heading {
@@ -23,9 +36,12 @@
   white-space: nowrap;
 }
 
-.wgsa-table-header--unstyled button {
-  background: none;
-  cursor: auto !important;
+.wgsa-selectable-column-heading--active,
+.wgsa-table-header--selected .wgsa-selectable-column-heading {
+  background: #673c90;
+  color: #fff;
+  transition: .28s cubic-bezier(.4,0,.2,1);
+  transition-property: color, background-color;
 }
 
 .wgsa-selectable-column-heading:hover,
@@ -39,14 +55,10 @@
 }
 
 .wgsa-table-header--selected .wgsa-selectable-column-heading {
-  background: #673c90;
-  color: #fff;
   width: auto;
   max-width: calc(100% - 2px);
   overflow: hidden;
   text-overflow: ellipsis;
-  transition: .28s cubic-bezier(.4,0,.2,1);
-  transition-property: color, background-color;
 }
 
 .wgsa-table-row:hover {
@@ -62,7 +74,7 @@
   border-right: none;
   box-sizing: border-box;
   font-size: 13px;
-  padding: 0 18px;
+  padding: 0 10px;
   transition: .28s cubic-bezier(.4,0,.2,1);
   transition-property: color, background, background-color;
   vertical-align: top;
@@ -157,7 +169,7 @@
   padding: 2px 6px 8px;
   position: relative;
   text-transform: uppercase;
-  top: 30px;
+  top: 24px;
   white-space: nowrap;
   z-index: 1;
   width: 38px;
@@ -218,4 +230,13 @@
 
 .wgsa-amr--intermediate {
   color: #d19b1b;
+}
+
+.wgsa-table-content-options {
+  margin-left: 8px;
+}
+
+.wgsa-table-content-options > button {
+  display: inline-block;
+  margin: 0 4px;
 }
