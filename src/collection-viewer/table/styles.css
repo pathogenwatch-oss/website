@@ -234,6 +234,8 @@
 
 .wgsa-table-content-options {
   margin-left: 8px;
+  display: flex;
+  align-items: center;
 }
 
 .wgsa-table-content-options > button {

@@ -39,6 +39,7 @@ function createAntibioticsColumn({ name, longName }) {
     headerClasses: 'wgsa-table-header--resistance',
     headerTitle: `${hoverName} - ${modifierKey} + click to select multiple`,
     cellClasses: 'wgsa-table-cell--resistance',
+    flexGrow: 0,
     getWidth(mechanisms) {
       if (!this.isExpandable()) {
         return 40;
@@ -125,13 +126,14 @@ const viewColumnBuilders = {
   SNPs: ({ snp }) => snp.map(name => ({
     columnKey: name,
     cellClasses: 'wgsa-table-cell--resistance',
+    cellPadding: 16,
+    flexGrow: 0,
     getLabel() {
       return name;
     },
     getWidth() {
       return measureText(name, true) + 4;
     },
-    cellPadding: 16,
     getCellContents(props, { analysis }) {
       return analysis.resistanceProfile.snp.indexOf(name) !== -1 ? (
         <i className="material-icons wgsa-resistance-icon wgsa-amr--resistant">
@@ -145,13 +147,13 @@ const viewColumnBuilders = {
   Genes: ({ paar }) => paar.map(name => ({
     columnKey: name,
     cellClasses: 'wgsa-table-cell--resistance',
+    cellPadding: 16,
     getLabel() {
       return name;
     },
     getWidth() {
       return measureText(name, true) + 4;
     },
-    cellPadding: 16,
     getCellContents(props, { analysis }) {
       return analysis.resistanceProfile.paar.indexOf(name) !== -1 ? (
         <i className="material-icons wgsa-resistance-icon wgsa-amr--resistant">
@@ -159,6 +161,7 @@ const viewColumnBuilders = {
         </i>
       ) : null;
     },
+    flexGrow: 0,
     valueGetter: assembly => resistanceProfile.getColour(name, assembly),
     onHeaderClick: resistanceProfile.onHeaderClick,
   })),

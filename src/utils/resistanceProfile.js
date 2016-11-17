@@ -71,7 +71,7 @@ export function getIcon(resistanceState) {
     case 'RESISTANT':
       return 'check_circle';
     case 'INTERMEDIATE':
-      return 'help';
+      return 'info';
     default:
       return null;
   }

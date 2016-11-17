@@ -28,7 +28,7 @@ function renderPaths({ slices, onSliceClick }) {
           fill={colour}
           key={index}
           data-count={value}
-          onClick={(e) => onSliceClick(slice, e)}
+          onClick={e => onSliceClick && onSliceClick(slice, e)}
         />
       );
     }

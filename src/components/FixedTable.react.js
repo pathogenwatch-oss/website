@@ -111,8 +111,8 @@ export default React.createClass({
         { columns.map((props) =>
             <Column
               key={props.columnKey}
-              header={(headerProps) => this.renderHeader(props, headerProps)}
-              cell={(cellProps) => this.renderCell(props, cellProps)}
+              header={headerProps => this.renderHeader(props, headerProps)}
+              cell={cellProps => this.renderCell(props, cellProps)}
               width={props.fixedWidth || props.width || 96}
               flexGrow={1}
               { ...props }
