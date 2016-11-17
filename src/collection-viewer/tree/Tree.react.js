@@ -47,6 +47,12 @@ export default React.createClass({
     filenames: React.PropTypes.object,
   },
 
+  getInitialState() {
+    return {
+      controlsVisible: false,
+    };
+  },
+
   componentDidMount() {
     const phylocanvas = Phylocanvas.createTree('phylocanvas-container', {
       contextMenu: {
@@ -141,6 +147,7 @@ export default React.createClass({
 
   render() {
     const { Styler } = this.props;
+    const { controlsVisible } = this.state;
     return (
       <section className="wgsa-tree">
         <Header />
@@ -154,6 +161,16 @@ export default React.createClass({
           <i className="material-icons">more_vert</i>
         </button>
         <button
+          className={classnames(
+            'wgsa-tree-overlay wgsa-tree-toggle-controls-button mdl-button mdl-button--icon',
+            { 'wgsa-tree-toggle-controls-button--active': controlsVisible }
+          )}
+          title={controlsVisible ? 'Hide Tree Controls' : 'Show Tree Controls'}
+          onClick={() => this.setState({ controlsVisible: !controlsVisible })}
+        >
+          <i className="material-icons">tune</i>
+        </button>
+        <button
           ref="redrawOriginalTreeButton"
           className={classnames(
             'wgsa-tree-overlay wgsa-redraw-original-tree-button mdl-button mdl-button--icon',
@@ -164,10 +181,13 @@ export default React.createClass({
           <i className="material-icons">replay</i>
         </button>
         <History stateKey={this.props.name} />
-        <Controls
-          stateKey={this.props.name}
-          phylocanvas={this.phylocanvas}
-        />
+        {
+          controlsVisible &&
+          <Controls
+            stateKey={this.props.name}
+            phylocanvas={this.phylocanvas}
+          />
+        }
         { this.props.loading ?
           <div className="wgsa-loading-overlay">
             <Spinner />
