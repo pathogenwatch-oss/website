@@ -31,7 +31,7 @@ export default React.createClass({
       >
         <SplitPane
           split="vertical"
-          defaultSize="33.4%"
+          defaultSize="50%"
           className="wgsa-no-overflow-pane"
           resizerClassName="wgsa-resizer"
           onChange={(verticalSize) => this.setState({ verticalSize })}

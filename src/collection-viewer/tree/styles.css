@@ -55,9 +55,9 @@ div.wgsa-tree-icon:active {
   border: none;
   color: #673c90;
   font-family: Roboto, sans-serif;
-  left: 8px;
   position: absolute;
-  top: 64px;
+  top: 24px;
+  right: 48px;
   visibility: hidden;
 }
 

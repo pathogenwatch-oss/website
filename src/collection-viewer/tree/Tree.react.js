@@ -149,17 +149,19 @@ export default React.createClass({
         <button
           ref="menuButton"
           className="mdl-button mdl-js-button mdl-button--icon wgsa-tree-menu-button wgsa-tree-overlay"
+          title="More Options"
         >
           <i className="material-icons">more_vert</i>
         </button>
         <button
           ref="redrawOriginalTreeButton"
           className={classnames(
-            'wgsa-tree-overlay wgsa-redraw-original-tree-button mdl-button',
+            'wgsa-tree-overlay wgsa-redraw-original-tree-button mdl-button mdl-button--icon',
             { 'wgsa-redraw-original-tree-button--visible': this.props.root !== 'root' }
           )}
+          title="Redraw Original Tree"
         >
-          Redraw Original Tree
+          <i className="material-icons">replay</i>
         </button>
         <History stateKey={this.props.name} />
         <Controls
