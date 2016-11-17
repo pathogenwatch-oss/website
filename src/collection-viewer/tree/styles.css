@@ -57,12 +57,29 @@ div.wgsa-tree-icon:active {
   font-family: Roboto, sans-serif;
   position: absolute;
   top: 24px;
-  right: 48px;
+  right: 84px;
   visibility: hidden;
 }
 
 .wgsa-redraw-original-tree-button--visible {
   visibility: visible;
+}
+
+.wgsa-tree-toggle-controls-button {
+  border: none;
+  color: #673c90;
+  position: absolute;
+  top: 24px;
+  right: 50px;
+}
+
+.wgsa-tree-toggle-controls-button--active {
+  background-color: #a386bd;
+  color: #fff;
+}
+
+.wgsa-tree-toggle-controls-button--active:hover {
+  color: #000;
 }
 
 .wgsa-tree-menu-button {
