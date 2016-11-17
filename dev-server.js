@@ -55,8 +55,8 @@ apiRouter.get('/species/:speciesId/reference', (req, res) => {
   res.sendFile(`${getCollectionPath(req.params.speciesId)}/reference.json`);
 });
 
-apiRouter.get('/species/:speciesId/antibiotics', (req, res) => {
-  res.sendFile(`${getCollectionPath(req.params.speciesId)}/antibiotics.json`);
+apiRouter.get('/species/:speciesId/resistance', (req, res) => {
+  res.sendFile(`${getCollectionPath(req.params.speciesId)}/resistance.json`);
 });
 
 // let subtreeError = false;
