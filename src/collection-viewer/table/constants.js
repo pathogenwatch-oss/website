@@ -16,7 +16,7 @@ export const tableKeys = {
 };
 
 export const views = {
-  [tableKeys.resistanceProfile]: [ 'Antibiotics', 'SNPs', 'Mobile Elements' ],
+  [tableKeys.resistanceProfile]: [ 'Antibiotics', 'SNPs', 'Genes' ],
 };
 
 export const nameColumnData = {

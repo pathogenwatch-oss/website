@@ -46,8 +46,8 @@ export const systemDataColumns = {
       return analysis.ngmast.tbpb;
     },
   },
-  __genotype: {
-    columnKey: '__genotype',
+  __genotyphi_type: {
+    columnKey: '__genotyphi_type',
     valueGetter({ analysis }) {
       if (!analysis.genotyphi) return null;
       return analysis.genotyphi.genotype;
@@ -125,7 +125,7 @@ function getSystemDataColumnKeys(uiOptions = {}) {
       concat(uiOptions.noPopulation ? [] : [ '__subtype', '__st' ]).
       concat(uiOptions.noMLST ? [] : [ '__profile' ]).
       concat(uiOptions.ngMast ? [ '__ng-mast', '__por', '__tbpb' ] : []).
-      concat(uiOptions.genotyphi ? [ '__genotype' ] : []).
+      concat(uiOptions.genotyphi ? [ '__genotyphi_type' ] : []).
       concat([
         '__core_matches',
         '__%_core_families',

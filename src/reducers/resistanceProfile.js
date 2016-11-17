@@ -142,7 +142,7 @@ const viewColumnBuilders = {
     valueGetter: assembly => resistanceProfile.getColour(name, assembly),
     onHeaderClick: resistanceProfile.onHeaderClick,
   })),
-  'Mobile Elements': ({ paar }) => paar.map(name => ({
+  Genes: ({ paar }) => paar.map(name => ({
     columnKey: name,
     cellClasses: 'wgsa-table-cell--resistance',
     getLabel() {
