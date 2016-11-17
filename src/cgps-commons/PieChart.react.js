@@ -10,24 +10,25 @@ const radius = center - 1; // padding to prevent clipping
  * @param {Object[]} slices
  * @return {Object[]}
  */
-function renderPaths(slices, border = 0) {
+function renderPaths({ slices, onSliceClick }) {
   const total = slices.reduce((totalValue, { value }) => totalValue + value, 0);
-
   let radSegment = 0;
-  let lastX = radius - border;
+  let lastX = radius;
   let lastY = 0;
 
-  return slices.map(({ colour, value }, index) => {
+  return slices.map((slice, index) => {
+    const { colour, value } = slice;
     // Should we just draw a circle?
     if (value === total) {
       return (
         <circle
-          r={radius - border}
+          r={radius}
           cx={center}
           cy={center}
           fill={colour}
           key={index}
           data-count={value}
+          onClick={(e) => onSliceClick(slice, e)}
         />
       );
     }
@@ -42,8 +43,8 @@ function renderPaths(slices, border = 0) {
     const longArc = (valuePercentage <= 0.5) ? 0 : 1;
 
     radSegment += valuePercentage * radCircumference;
-    const nextX = Math.cos(radSegment) * (radius - border);
-    const nextY = Math.sin(radSegment) * (radius - border);
+    const nextX = Math.cos(radSegment) * radius;
+    const nextY = Math.sin(radSegment) * radius;
 
     // d is a string that describes the path of the slice.
     // The weirdly placed minus signs [eg, (-(lastY))] are due to the fact
@@ -52,7 +53,7 @@ function renderPaths(slices, border = 0) {
     const d = [
       `M ${center},${center}`,
       `l ${lastX},${-lastY}`,
-      `a${radius - border},${radius - border}`,
+      `a${radius},${radius}`,
       '0',
       `${longArc},0`,
       `${nextX - lastX},${-(nextY - lastY)}`,
@@ -62,7 +63,17 @@ function renderPaths(slices, border = 0) {
     lastX = nextX;
     lastY = nextY;
 
-    return <path d={d} fill={colour} key={index} data-count={value} />;
+    return (
+      <path
+        d={d}
+        fill={colour}
+        key={index}
+        data-count={value}
+        onClick={(e) => {
+          onSliceClick(slice, e);
+        }}
+      />
+    );
   });
 }
 
@@ -76,14 +87,36 @@ export default class PieChart extends React.Component {
    * @return {Object}
    */
   render() {
-    const { borderWidth = 7.5, borderColour = '#555' } = this.props;
+    const {
+      borderWidth = 7.5,
+      borderColour = '#555',
+      donutFill = '#fff',
+    } = this.props;
     return (
-      <svg viewBox={`0 0 ${size} ${size}`}>
+      <svg viewBox={`0 0 ${size} ${size}`} className={this.props.className}>
         <g transform={`rotate(-90 ${center} ${center})`}>
-          {renderPaths(this.props.slices)}
+          {renderPaths(this.props)}
         </g>
-        { borderWidth > 0 ? <circle cx={center} cy={center} r={center - borderWidth / 2} fill="none" strokeWidth={borderWidth} stroke={borderColour} /> : null }
-        { this.props.donut ? <circle cx={center} cy={center} r={center / 2} /> : null }
+        { borderWidth > 0 &&
+          <circle
+            cx={center}
+            cy={center}
+            r={center - borderWidth / 2}
+            fill="none"
+            strokeWidth={borderWidth}
+            stroke={borderColour}
+          />
+        }
+        { this.props.donut &&
+            <circle
+              cx={center}
+              cy={center}
+              r={(center - borderWidth) / 2}
+              fill={donutFill}
+              strokeWidth={borderWidth}
+              stroke={borderColour}
+            /> }
+        }
         <text x="50" y="50"></text>
       </svg>
     );
@@ -91,6 +124,7 @@ export default class PieChart extends React.Component {
 }
 
 PieChart.propTypes = {
+  className: PropTypes.string,
   borderWidth: PropTypes.number,
   borderColour: PropTypes.string,
   donut: PropTypes.bool,
@@ -98,4 +132,5 @@ PieChart.propTypes = {
     colour: PropTypes.string.isRequired, // hex colour
     value: PropTypes.number.isRequired,
   })).isRequired,
+  onSliceClick: PropTypes.func,
 };

@@ -1,0 +1,53 @@
+.wgsa-collection-viewer-summary {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  width: 40px;
+  background: rgba(255, 255, 255, 0.87);
+  padding: 4px;
+  cursor: pointer;
+}
+
+.wgsa-collection-viewer-summary--expanded {
+  width: 160px;
+  padding: 8px;
+}
+
+.wgsa-summary-list {
+  display: none;
+  list-style: none;
+  margin-top: 4px;
+  margin-bottom: -4px;
+}
+.wgsa-collection-viewer-summary--expanded .wgsa-summary-list {
+  display: block;
+}
+
+.wgsa-summary-list__chip {
+  background: transparent;
+  margin: 4px 0;
+}
+
+.wgsa-summary-list__chip > .mdl-chip__contact {
+  box-sizing: border-box;
+}
+
+.wgsa-summary-list__chip.mdl-chip--inverse > .mdl-chip__contact {
+  color: #555;
+  border: 1px solid rgba(0, 0, 0, 0.28);
+}
+
+.wgsa-summary-list__chip:hover {
+  background: rgba(0, 0, 0, 0.14);
+}
+
+.wgsa-summary-list__chip:focus {
+  box-shadow: none;
+}
+
+.wgsa-summary-chart path:hover {
+  opacity: 0.70;
+}
+.wgsa-summary-chart path[fill="#fff"]:hover {
+  fill: #efefef;
+}
