@@ -58,5 +58,6 @@
   "bugs": {
     "url": "https://github.com/ImperialCollegeLondon/wgst-front/issues"
   },
-  "homepage": "https://github.com/ImperialCollegeLondon/wgst-front"
+  "homepage": "https://github.com/ImperialCollegeLondon/wgst-front",
+  "moduleRoots": [ "src" ]
 }

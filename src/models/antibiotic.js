@@ -1,4 +1,4 @@
-var mainStorage = require('services/storage')('main');
+const mainStorage = require('services/storage')('main');
 
 const LOGGER = require('utils/logging').createLogger('Antibiotic model');
 const { ANTIMICROBIALS } = require('utils/documentKeys');
