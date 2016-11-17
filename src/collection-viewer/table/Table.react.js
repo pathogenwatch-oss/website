@@ -15,9 +15,9 @@ import { addDownloadProps } from '../../constants/downloads';
 
 const preventDefault = e => e.preventDefault();
 
-const SouthContent = React.createClass({
+const Table = React.createClass({
 
-  displayName: 'SouthContent',
+  displayName: 'Table',
 
   propTypes: {
     height: React.PropTypes.number,
@@ -109,4 +109,4 @@ function mergeProps(state, { dispatch }, props) {
   };
 }
 
-export default connect(mapStateToProps, null, mergeProps)(SouthContent);
+export default connect(mapStateToProps, null, mergeProps)(Table);

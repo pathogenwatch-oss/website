@@ -1,6 +1,6 @@
 import PromiseWorker from 'promise-worker';
 
-import { tableKeys } from '../constants/table';
+import { tableKeys } from '../collection-viewer/table/constants';
 import { collectionPath, encode } from '../constants/downloads';
 
 import getCSVWorker from 'worker?name=csv.worker.js!../table/utils/CsvWorker';

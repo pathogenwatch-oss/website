@@ -9,6 +9,17 @@ export function setTable(name) {
   };
 }
 
+export const SHOW_TABLE_VIEW = 'SHOW_TABLE_VIEW';
+
+export function showTableView(view) {
+  return {
+    type: SHOW_TABLE_VIEW,
+    payload: {
+      view,
+    },
+  };
+}
+
 export const SET_LABEL_COLUMN = 'SET_LABEL_COLUMN';
 
 export function setLabelColumn(column) {

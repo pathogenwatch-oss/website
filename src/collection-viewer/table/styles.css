@@ -1,3 +1,11 @@
+.wgsa-table-switcher {
+  display: flex;
+  z-index: 3;
+  left: 16px;
+  position: absolute;
+  transform: translateY(-18px);
+}
+
 .wgsa-table-header {
   vertical-align: top;
   padding-left: 10px;
@@ -225,10 +233,7 @@
 }
 
 .wgsa-table-content-options {
-  position: absolute;
-  z-index: 3;
-  top: 4px;
-  right: 4px;
+  margin-left: 8px;
 }
 
 .wgsa-table-content-options > button {

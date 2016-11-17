@@ -6,8 +6,8 @@ import SplitPane from 'react-split-pane';
 import { AutoSizer } from 'react-virtualized';
 
 import WestContent from './WestContent.react';
-import EastContent from './EastContent.react';
-import SouthContent from './SouthContent.react';
+import Map from '../map';
+import Table from '../table';
 
 export default React.createClass({
 
@@ -36,12 +36,11 @@ export default React.createClass({
           onChange={(verticalSize) => this.setState({ verticalSize })}
         >
           <WestContent height={this.state.horizontalSize} width={this.state.verticalSize} />
-          <EastContent />
+          <Map />
         </SplitPane>
         <AutoSizer>
           {({ height, width }) =>
-            // <div />
-            <SouthContent height={height} width={width} />
+            <Table height={height} width={width} />
           }
         </AutoSizer>
       </SplitPane>

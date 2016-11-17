@@ -1,6 +1,5 @@
 import { combineReducers } from 'redux';
 
-import antibiotics from '../reducers/antibiotics';
 import { reducer as assemblyDrawer } from '../assembly-drawer';
 import bodyClickListener from '../reducers/bodyClickListener';
 import { assemblies, collection, reference } from '../reducers/collection';
@@ -36,7 +35,6 @@ const rootReducer = combineReducers({
     files: createReducer(downloads),
   }),
   entities: combineReducers({
-    antibiotics: createReducer(antibiotics),
     assemblies: createReducer(assemblies),
     fastas: createReducer(fastas),
   }),

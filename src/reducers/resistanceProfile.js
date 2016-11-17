@@ -2,7 +2,7 @@ import React from 'react';
 import classnames from 'classnames';
 
 import { FETCH_ENTITIES } from '../actions/fetch';
-import { SET_COLOUR_COLUMNS } from '../collection-viewer/table/actions';
+import { SET_COLOUR_COLUMNS, SHOW_TABLE_VIEW } from '../collection-viewer/table/actions';
 
 import Species from '../species';
 import * as resistanceProfile from '../utils/resistanceProfile';
@@ -50,7 +50,6 @@ function createAntibioticsColumn({ name, longName }) {
       ) + 16;
     },
     cellPadding: 16,
-    flexGrow: 0,
     addState({ data }) {
       const allMechanisms = data.reduce((memo, row) => {
         const { antibiotics } = row.analysis.resistanceProfile;
@@ -98,28 +97,89 @@ function createAntibioticsColumn({ name, longName }) {
       }
       return null;
     },
-    valueGetter: (assembly) => resistanceProfile.getColour(name, assembly),
+    valueGetter: assembly => resistanceProfile.getColour(name, assembly),
     onHeaderClick: resistanceProfile.onHeaderClick,
   };
 }
 
-function buildAntibioticColumnProps(antibiotics) {
-  const separatorIndex = Species.current.resistanceProfileSeparatorIndex;
+const viewColumnBuilders = {
+  Antibiotics: ({ antibiotics }) => {
+    const separatorIndex = Species.current.resistanceProfileSeparatorIndex;
 
-  if (typeof separatorIndex === 'undefined') {
-    return antibiotics.map(createAntibioticsColumn);
-  }
+    if (typeof separatorIndex === 'undefined') {
+      return antibiotics.map(createAntibioticsColumn);
+    }
 
+    return [
+      ...antibiotics.slice(0, separatorIndex).map(createAntibioticsColumn),
+      { columnKey: '__group_spacer',
+        getHeaderContent() {},
+        fixedWidth: 40,
+        flexGrow: 0,
+        getCellContents() {},
+        cellClasses: 'wgsa-table-cell--resistance',
+      },
+      ...antibiotics.slice(separatorIndex).map(createAntibioticsColumn),
+    ];
+  },
+  SNPs: ({ snp }) => snp.map(name => ({
+    columnKey: name,
+    cellClasses: 'wgsa-table-cell--resistance',
+    getLabel() {
+      return name;
+    },
+    getWidth() {
+      return measureText(name, true) + 4;
+    },
+    cellPadding: 16,
+    getCellContents(props, { analysis }) {
+      return analysis.resistanceProfile.snp.indexOf(name) !== -1 ? (
+        <i className="material-icons wgsa-resistance-icon wgsa-amr--resistant">
+          {resistanceProfile.getIcon('RESISTANT')}
+        </i>
+      ) : null;
+    },
+    valueGetter: assembly => resistanceProfile.getColour(name, assembly),
+    onHeaderClick: resistanceProfile.onHeaderClick,
+  })),
+  'Mobile Elements': ({ paar }) => paar.map(name => ({
+    columnKey: name,
+    cellClasses: 'wgsa-table-cell--resistance',
+    getLabel() {
+      return name;
+    },
+    getWidth() {
+      return measureText(name, true) + 4;
+    },
+    cellPadding: 16,
+    getCellContents(props, { analysis }) {
+      return analysis.resistanceProfile.paar.indexOf(name) !== -1 ? (
+        <i className="material-icons wgsa-resistance-icon wgsa-amr--resistant">
+          {resistanceProfile.getIcon('RESISTANT')}
+        </i>
+      ) : null;
+    },
+    valueGetter: assembly => resistanceProfile.getColour(name, assembly),
+    onHeaderClick: resistanceProfile.onHeaderClick,
+  })),
+};
+
+function buildColumns(view, libraries) {
   return [
-    ...antibiotics.slice(0, separatorIndex).map(createAntibioticsColumn),
-    { columnKey: '__group_spacer',
+    { columnKey: '__spacer_l',
       getHeaderContent() {},
-      fixedWidth: 40,
-      flexGrow: 0,
+      fixed: true,
+      fixedWidth: 1,
+      getCellContents() {},
+    },
+    ...systemColumnProps,
+    ...viewColumnBuilders[view](libraries),
+    { columnKey: '__spacer_r',
+      getHeaderContent() {},
+      fixedWidth: 8,
       getCellContents() {},
       cellClasses: 'wgsa-table-cell--resistance',
     },
-    ...antibiotics.slice(separatorIndex).map(createAntibioticsColumn),
   ];
 }
 
@@ -127,36 +187,36 @@ const initialState = {
   activeColumns: new Set(),
   columns: [],
   view: constants.views[constants.tableKeys.resistanceProfile][0],
+  libraries: {},
 };
 
 export default function (state = initialState, { type, payload }) {
   switch (type) {
     case FETCH_ENTITIES.SUCCESS: {
-      const { antibiotics } = payload.result[2];
+      const { antibiotics, paar, snp } = payload.result[2];
 
-      const columns = [
-        { columnKey: '__spacer_l',
-          getHeaderContent() {},
-          fixed: true,
-          fixedWidth: 1,
-          getCellContents() {},
-        },
-        ...systemColumnProps,
-        ...buildAntibioticColumnProps(antibiotics),
-        { columnKey: '__spacer_r',
-          getHeaderContent() {},
-          fixedWidth: 8,
-          getCellContents() {},
-          cellClasses: 'wgsa-table-cell--resistance',
-        },
-      ];
+      const libraries = {
+        antibiotics: antibiotics.map(ab => (typeof ab === 'string' ? { name: ab } : ab)),
+        paar, snp,
+      };
 
-      return { ...state, columns };
+      return {
+        ...state,
+        libraries,
+        columns: buildColumns(state.view, libraries),
+      };
     }
     case SET_COLOUR_COLUMNS:
       return {
         ...state,
         activeColumns: payload.columns,
+      };
+    case SHOW_TABLE_VIEW:
+      if (state.view === payload.view) return state;
+      return {
+        ...state,
+        view: payload.view,
+        columns: buildColumns(payload.view, state.libraries),
       };
     default:
       return state;
