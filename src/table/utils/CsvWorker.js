@@ -7,7 +7,12 @@ import { systemDataColumns, getUserDefinedValue } from '^/constants/metadata';
 
 import { isResistant } from '^/utils/resistanceProfile';
 
-import { nameColumnData } from '^/constants/table/columns';
+const nameColumnData = {
+  columnKey: '__name',
+  valueGetter({ name }) {
+    return name;
+  },
+};
 
 const columnDefsByTable = {
   metadata() {
