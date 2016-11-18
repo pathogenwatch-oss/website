@@ -8,7 +8,7 @@ import * as utils from './utils';
 import { POPULATION, COLLECTION } from '../../app/stateKeys/tree';
 import Species from '../../species';
 
-const getTreeState = ({ collectionViewer }) => collectionViewer.tree;
+export const getTreeState = ({ collectionViewer }) => collectionViewer.tree;
 
 export const getTrees = state => getTreeState(state).entities;
 export const isLoading = state => getTreeState(state).loading;
@@ -26,8 +26,6 @@ export const getVisibleTree = createSelector(
 
 export const isLoaded = state => getVisibleTree(state).loaded;
 export const getTreeType = state => getVisibleTree(state).type;
-export const getBaseSize = state => getVisibleTree(state).baseSize;
-export const getTreeScales = state => getVisibleTree(state).scales;
 
 export const getSingleTree = createSelector(
   getTrees,

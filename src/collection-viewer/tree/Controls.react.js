@@ -1,13 +1,15 @@
 import React from 'react';
 import { treeTypes } from 'phylocanvas';
 import { connect } from 'react-redux';
+import classnames from 'classnames';
 
-import { isLoaded, getVisibleTree } from './selectors';
+import { isLoaded, getVisibleTree, getTreeState } from './selectors';
 import { setNodeScale, setLabelScale } from './actions';
 
 const Controls = React.createClass({
 
   propTypes: {
+    visible: React.PropTypes.bool,
     scales: React.PropTypes.object,
     treeType: React.PropTypes.string,
     onNodeScaleChange: React.PropTypes.func,
@@ -42,10 +44,10 @@ const Controls = React.createClass({
   },
 
   render() {
-    const { nodeSize, labelSize, phylocanvas } = this.props;
+    const { visible, nodeSize, labelSize, phylocanvas } = this.props;
 
     return (
-      <div className="wgsa-tree-controls">
+      <div className={classnames('wgsa-tree-controls', { 'wgsa-tree-controls--visible': visible })}>
         <select className="wgsa-select-tree-type wgsa-tree-overlay"
           value={this.props.treeType}
           onChange={event => phylocanvas.setTreeType(event.target.value)}
@@ -59,7 +61,7 @@ const Controls = React.createClass({
             <label>Node Size
               <input ref="nodeSlider" type="range"
                 onChange={this.props.onNodeScaleChange}
-                min="0.1" max={nodeSize.max} step="0.2" value={nodeSize.scale}
+                min="0" max={nodeSize.max} step="0.1" value={nodeSize.scale || 1}
                 className="mdl-slider mdl-js-slider" tabIndex="0"
               />
             </label>
@@ -68,7 +70,7 @@ const Controls = React.createClass({
             <label>Label Size
               <input ref="labelSlider" type="range"
                 onChange={this.props.onLabelScaleChange}
-                min="0" max={labelSize.max} step="0.1" value={labelSize.scale}
+                min="0" max={labelSize.max} step="0.1" value={labelSize.scale || 1}
                 className="mdl-slider mdl-js-slider" tabIndex="0"
               />
             </label>
@@ -83,8 +85,10 @@ const Controls = React.createClass({
 function mapStateToProps(state) {
   return {
     loaded: isLoaded(state),
+    tree: getTreeState(state).visible,
     nodeSize: getVisibleTree(state).nodeSize,
     labelSize: getVisibleTree(state).labelSize,
+    treeType: getVisibleTree(state).type,
   };
 }
 

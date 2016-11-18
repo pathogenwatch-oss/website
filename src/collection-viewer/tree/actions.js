@@ -33,7 +33,7 @@ export function treeLoaded(stateKey, phylocanvas, leafIds) {
     payload: {
       stateKey,
       root: phylocanvas.root.id,
-      step: phylocanvas.step,
+      step: getLinearStep(phylocanvas),
       leafIds: leafIds || phylocanvas.leaves.map(_ => _.id),
     },
   };

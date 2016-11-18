@@ -74,7 +74,7 @@ export default React.createClass({
     phylocanvas.on('loaded', () => {
       this.props.onLoaded(phylocanvas);
       if (this.props.root && this.props.root !== 'root') {
-        this.loadSubtree();
+        this.changeRoot();
       }
     });
     phylocanvas.on('subtree', () => this.props.onSubtree(phylocanvas));
@@ -181,13 +181,11 @@ export default React.createClass({
           <i className="material-icons">more_vert</i>
         </button>
         <History stateKey={this.props.name} />
-        {
-          controlsVisible &&
-          <Controls
-            stateKey={this.props.name}
-            phylocanvas={this.phylocanvas}
-          />
-        }
+        <Controls
+          visible={controlsVisible}
+          stateKey={this.props.name}
+          phylocanvas={this.phylocanvas}
+        />
         { this.props.loading ?
           <div className="wgsa-loading-overlay">
             <Spinner />

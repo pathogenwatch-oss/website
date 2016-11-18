@@ -5,6 +5,30 @@ import * as ACTIONS from './actions';
 
 import { COLLECTION, POPULATION } from '../../app/stateKeys/tree';
 
+function setSize(state, step, maxScalar) {
+  if (step === state.step) return state;
+
+  const { max = 1 } = state;
+  const newMax = Math.ceil(maxScalar / step);
+  const newScale = Math.max(1, Math.min(1 * max / newMax, newMax));
+
+  return {
+    ...state,
+    step,
+    base: step / 2,
+    scale: newScale,
+    max: newMax,
+  };
+}
+
+function setNodeSize(state, { step }) {
+  return setSize(state, step, 30);
+}
+
+function setLabelSize(state, { step }) {
+  return setSize(state, step, 40);
+}
+
 function updateHistory(tree, { image }) {
   const { history, type, root, nodeSize, labelSize } = tree;
   const id = `${type}|${root}`;
@@ -24,14 +48,8 @@ function updateHistory(tree, { image }) {
 
 const initialState = {
   type: 'rectangular',
-  nodeSize: {
-    scale: 1,
-    max: 2,
-  },
-  labelSize: {
-    scale: 1,
-    max: 1,
-  },
+  nodeSize: {},
+  labelSize: {},
   history: [],
 };
 
@@ -71,21 +89,6 @@ function entities(state = {}, { type, payload }) {
           loaded: false,
         },
       };
-    case ACTIONS.TREE_TYPE_CHANGED: {
-      const treeState = state[payload.stateKey];
-      return {
-        ...state,
-        [payload.stateKey]: {
-          ...treeState,
-          type: payload.type,
-          labelSize: {
-            ...treeState.labelSize,
-            base: payload.step / 2,
-            max: 40 / payload.step,
-          },
-        },
-      };
-    }
     case ACTIONS.TREE_LOADED: {
       const treeState = state[payload.stateKey];
       return {
@@ -95,10 +98,20 @@ function entities(state = {}, { type, payload }) {
           loaded: true,
           leafIds: treeState.leafIds || payload.leafIds,
           root: payload.root,
-          nodeSize: {
-            ...treeState.nodeSize,
-            base: Math.max(3, Math.min(payload.step, 10)),
-          },
+          nodeSize: setNodeSize(treeState.nodeSize, payload),
+          labelSize: setLabelSize(treeState.labelSize, payload),
+        },
+      };
+    }
+    case ACTIONS.TREE_TYPE_CHANGED: {
+      const treeState = state[payload.stateKey];
+      return {
+        ...state,
+        [payload.stateKey]: {
+          ...treeState,
+          type: payload.type,
+          nodeSize: setNodeSize(treeState.nodeSize, payload),
+          labelSize: setLabelSize(treeState.labelSize, payload),
         },
       };
     }

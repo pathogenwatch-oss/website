@@ -115,6 +115,15 @@ div.wgsa-tree-icon:active {
   align-items: flex-end;
   z-index: 1;
   user-select: none;
+  visibility: hidden;
+  opacity: 0;
+  transition: .28s cubic-bezier(.4,0,.2,1);
+  transition-property: opacity;
+}
+
+.wgsa-tree-controls--visible {
+  opacity: 1;
+  visibility: visible;
 }
 
 .wgsa-tree-sliders {
