@@ -7,8 +7,8 @@ export const systemDataColumns = {
       return MetadataUtils.getFormattedDateString(metadata.date);
     },
   },
-  __subtype: {
-    columnKey: '__subtype',
+  __wgsa_reference: {
+    columnKey: '__wgsa_reference',
     valueGetter({ analysis }) {
       return analysis.populationSubtype;
     },
@@ -122,7 +122,7 @@ export const systemDataColumns = {
 function getSystemDataColumnKeys(uiOptions = {}) {
   return (
     [ '__date' ].
-      concat(uiOptions.noPopulation ? [] : [ '__subtype', '__st' ]).
+      concat(uiOptions.noPopulation ? [] : [ '__wgsa_reference', '__st' ]).
       concat(uiOptions.noMLST ? [] : [ '__profile' ]).
       concat(uiOptions.ngMast ? [ '__ng-mast', '__por', '__tbpb' ] : []).
       concat(uiOptions.genotyphi ? [ '__genotyphi_type' ] : []).
