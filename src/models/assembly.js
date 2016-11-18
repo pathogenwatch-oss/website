@@ -98,8 +98,8 @@ function formatForFrontend(id, assembly) {
               return memo;
             }, {}
           ) : {},
-        paar: paarsnp.paar ? paarsnp.paar.paarElementIds : [],
-        snp: paarsnp.snp ? paarsnp.snp.resistanceMutationIds : [],
+        paar: paarsnp.paarResult ? paarsnp.paarResult.paarElementIds : [],
+        snp: paarsnp.snparResult ? paarsnp.snparResult.resistanceMutationIds : [],
       } : {},
       ngmast: ngmast ? {
         ngmast: ngmast.ngmast,
