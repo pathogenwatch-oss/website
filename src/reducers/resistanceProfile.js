@@ -137,7 +137,7 @@ const viewColumnBuilders = {
     getCellContents(props, { analysis }) {
       return analysis.resistanceProfile.snp.indexOf(name) !== -1 ? (
         <i className="material-icons wgsa-resistance-icon wgsa-amr--resistant">
-          {resistanceProfile.getIcon('RESISTANT')}
+          lens
         </i>
       ) : null;
     },
@@ -157,7 +157,7 @@ const viewColumnBuilders = {
     getCellContents(props, { analysis }) {
       return analysis.resistanceProfile.paar.indexOf(name) !== -1 ? (
         <i className="material-icons wgsa-resistance-icon wgsa-amr--resistant">
-          {resistanceProfile.getIcon('RESISTANT')}
+          lens
         </i>
       ) : null;
     },
