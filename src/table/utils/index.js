@@ -1,7 +1,11 @@
 export const getCellValue = ({ valueGetter }, data) => valueGetter(data);
 
 export const formatColumnKeyAsLabel =
-  (columnkey) => columnkey.replace(/^__/, '').replace(/_/g, ' ');
+  columnkey =>
+    columnkey.
+      replace(/_?_autocolou?r$/, '').
+      replace(/^__/, '').
+      replace(/_/g, ' ');
 
 export function getColumnLabel(props) {
   return (

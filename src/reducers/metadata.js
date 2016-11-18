@@ -27,6 +27,7 @@ function getUserDefinedColumnNames(assemblies) {
     const { userDefined } = assemblies[key].metadata;
     if (userDefined) {
       Object.keys(userDefined).
+        filter(name => !/__colou?r$/.test(name)).
         forEach(name => userDefinedColumnNames.add(name));
     }
   });
