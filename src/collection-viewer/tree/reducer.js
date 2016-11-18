@@ -30,7 +30,7 @@ const initialState = {
   },
   labelSize: {
     scale: 1,
-    max: 2,
+    max: 1,
   },
   history: [],
 };
@@ -71,7 +71,7 @@ function entities(state = {}, { type, payload }) {
           loaded: false,
         },
       };
-    case ACTIONS.TYPE_CHANGED: {
+    case ACTIONS.TREE_TYPE_CHANGED: {
       const treeState = state[payload.stateKey];
       return {
         ...state,
@@ -80,7 +80,8 @@ function entities(state = {}, { type, payload }) {
           type: payload.type,
           labelSize: {
             ...treeState.labelSize,
-            base: payload.textSize,
+            base: payload.step / 2,
+            max: 40 / payload.step,
           },
         },
       };

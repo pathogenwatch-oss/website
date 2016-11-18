@@ -68,7 +68,7 @@ const Controls = React.createClass({
             <label>Label Size
               <input ref="labelSlider" type="range"
                 onChange={this.props.onLabelScaleChange}
-                min="0.1" max={labelSize.max} step="0.2" value={labelSize.scale}
+                min="0" max={labelSize.max} step="0.1" value={labelSize.scale}
                 className="mdl-slider mdl-js-slider" tabIndex="0"
               />
             </label>

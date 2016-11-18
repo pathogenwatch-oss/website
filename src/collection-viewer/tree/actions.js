@@ -1,6 +1,6 @@
 import { createAsyncConstants } from '../../actions';
 
-import { takeSnapshot } from './utils';
+import { takeSnapshot, getLinearStep } from './utils';
 
 export const SET_TREE = 'SET_TREE';
 
@@ -39,15 +39,15 @@ export function treeLoaded(stateKey, phylocanvas, leafIds) {
   };
 }
 
-export const TYPE_CHANGED = 'TYPE_CHANGED';
+export const TREE_TYPE_CHANGED = 'TREE_TYPE_CHANGED';
 
 export function typeChanged(stateKey, phylocanvas) {
   return {
-    type: TYPE_CHANGED,
+    type: TREE_TYPE_CHANGED,
     payload: {
       stateKey,
       type: phylocanvas.treeType,
-      textSize: phylocanvas.textSize,
+      step: getLinearStep(phylocanvas),
     },
   };
 }

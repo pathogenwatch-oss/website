@@ -50,7 +50,6 @@ export function getFilenames(title, collectionId, column) {
   };
 }
 
-
 const canvas = document.createElement('canvas');
 export function takeSnapshot(phylocanvas) {
   const [ [ left, top ], [ right, bottom ] ] = phylocanvas.getBounds();
@@ -70,4 +69,11 @@ export function takeSnapshot(phylocanvas) {
   );
   canvas.getContext('2d').putImageData(imageData, padding, padding);
   return canvas.toDataURL();
+}
+
+export function getLinearStep({ step, treeType }) {
+  if (treeType === 'circular' || treeType === 'radial') {
+    return step * 2 * Math.PI;
+  }
+  return step;
 }

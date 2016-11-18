@@ -101,7 +101,6 @@ export function treeClicked(event, phylocanvas) {
   };
 }
 
-
 export function typeChanged(phylocanvas) {
   return (dispatch, getState) => {
     const state = getState();

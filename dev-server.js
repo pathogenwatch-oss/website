@@ -48,7 +48,7 @@ apiRouter.get('/species/:speciesId/collection/:id/status', (req, res) => {
 apiRouter.get('/species/:speciesId/collection/:id', (req, res) => {
   setTimeout(() => {
     res.sendFile(`${getCollectionPath(req.params.speciesId)}/collection.json`);
-  }, 500);
+  }, 0);
 });
 
 apiRouter.get('/species/:speciesId/reference', (req, res) => {
