@@ -10,7 +10,7 @@ import Spinner from '../../components/Spinner.react';
 import Header from './Header.react';
 import Controls from './Controls.react';
 import History from './History.react';
-
+import Scalebar from './Scalebar.react';
 import { DEFAULT, CGPS } from '../../app/constants';
 
 Phylocanvas.plugin(contextMenuPlugin);
@@ -148,11 +148,12 @@ export default React.createClass({
   render() {
     const { Styler } = this.props;
     const { controlsVisible } = this.state;
+
     return (
       <section className="wgsa-tree">
-        <Header />
         <div id="phylocanvas-container" style={fullWidthHeight}></div>
         <Styler phylocanvas={this.phylocanvas} />
+        <Header />
         <button
           ref="redrawOriginalTreeButton"
           className={classnames(
@@ -181,6 +182,7 @@ export default React.createClass({
           <i className="material-icons">more_vert</i>
         </button>
         <History stateKey={this.props.name} />
+        <Scalebar phylocanvas={this.phylocanvas} />
         <Controls
           visible={controlsVisible}
           stateKey={this.props.name}

@@ -178,7 +178,7 @@ div.wgsa-tree-icon:active {
 
 .wgsa-tree-history {
   align-items: center;
-  bottom: 24px;
+  bottom: 64px;
   display: flex;
   flex-direction: row-reverse;
   height: 12vh;
@@ -255,4 +255,42 @@ div.wgsa-tree-icon:active {
 .wgsa-tree-history__snapshot--active {
   background-color: color(#a386bd tint(87%));
   border-bottom-color: #673c90;
+}
+
+.wgsa-tree-scalebar {
+  border-radius: 8px;
+  bottom: 24px;
+  font-size: 13px;
+  height: 24px;
+  left: 16px;
+  padding: 2px 8px 8px;
+  position: absolute;
+  text-align: center;
+  z-index: 1;
+}
+
+.wgsa-tree-scalebar__bar {
+  display: block;
+  border: none;
+  border-bottom: 2px solid #555;
+  margin: 0;
+  position: relative;
+}
+
+.wgsa-tree-scalebar__bar::before,
+.wgsa-tree-scalebar__bar::after {
+  border-left: 2px solid #555;
+  bottom: 0;
+  content: '';
+  height: 8px;
+  position: absolute;
+  width: 0;
+}
+
+.wgsa-tree-scalebar__bar::before {
+  left: 0;
+}
+
+.wgsa-tree-scalebar__bar::after {
+  right: 0;
 }
