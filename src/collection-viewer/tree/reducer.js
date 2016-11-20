@@ -5,12 +5,13 @@ import * as ACTIONS from './actions';
 
 import { COLLECTION, POPULATION } from '../../app/stateKeys/tree';
 
-function setSize(state, step, maxScalar) {
+function setSize(state, step, maxStepFactor) {
   if (step === state.step) return state;
 
-  const { max = 1 } = state;
-  const newMax = Math.ceil(maxScalar / step);
-  const newScale = Math.max(1, Math.min(1 * max / newMax, newMax));
+  const { max = 2, scale } = state;
+  const newMax = Math.ceil(maxStepFactor / step);
+  const newScale =
+    scale ? Math.max(1, Math.min(max / newMax, newMax)) : newMax / 2;
 
   return {
     ...state,
