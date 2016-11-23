@@ -1,8 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import Component from './component';
-
 import FetchedHeaderContent from '../collection-viewer/HeaderContent.react';
 import ProcessingHeaderContent from './upload-progress/Header.react';
 
@@ -32,6 +30,10 @@ const HeaderSwitcher = connect(mapStateToProps)(
 
 export default {
   path: 'collection/:id',
-  component: Component,
+  getComponent(_, cb) {
+    return require.ensure([], require =>
+      cb(null, require('./component').default)
+    );
+  },
   header: <HeaderSwitcher />,
 };

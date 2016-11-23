@@ -5,6 +5,7 @@ import App from './App.react';
 
 import Home from '../home';
 import Upload from '../hub';
+import Collection from '../collection-route';
 import Documentation from '../documentation-viewer';
 import NotFound from '../components/NotFound.react';
 
@@ -33,11 +34,7 @@ const routes = {
           replace('/upload');
         }
       },
-      getChildRoutes(_, cb) {
-        require.ensure([], require => cb(null, [
-          require('../collection-route').default,
-        ]));
-      },
+      childRoutes: [ Collection ],
     })),
     Documentation,
     { path: '*', component: NotFound },
