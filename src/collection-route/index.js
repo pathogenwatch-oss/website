@@ -1,8 +1,8 @@
 import React from 'react';
-import { Route } from 'react-router';
 import { connect } from 'react-redux';
 
-import Collection from './component';
+import Component from './component';
+
 import FetchedHeaderContent from '../collection-viewer/HeaderContent.react';
 import ProcessingHeaderContent from './upload-progress/Header.react';
 
@@ -30,10 +30,8 @@ const HeaderSwitcher = connect(mapStateToProps)(
   }
 );
 
-export default (
-  <Route
-    path="collection/:id"
-    component={Collection}
-    header={<HeaderSwitcher />}
-  />
-);
+export default {
+  path: 'collection/:id',
+  component: Component,
+  header: <HeaderSwitcher />,
+};
