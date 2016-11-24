@@ -1,7 +1,7 @@
+import 'react-split-pane/styles.css';
 import './styles.css';
 
 import React from 'react';
-
 import SplitPane from 'react-split-pane';
 import { AutoSizer } from 'react-virtualized';
 
@@ -26,14 +26,12 @@ export default React.createClass({
       <SplitPane
         split="horizontal"
         defaultSize="68%"
-        resizerClassName="wgsa-resizer"
         onChange={(horizontalSize) => this.setState({ horizontalSize })}
       >
         <SplitPane
           split="vertical"
           defaultSize="50%"
           className="wgsa-no-overflow-pane"
-          resizerClassName="wgsa-resizer"
           onChange={(verticalSize) => this.setState({ verticalSize })}
         >
           <WestContent height={this.state.horizontalSize} width={this.state.verticalSize} />
