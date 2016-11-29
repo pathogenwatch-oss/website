@@ -5,6 +5,7 @@ import WGSAMap from '../../map';
 import LeafletPieChartMarker from '../../cgps-commons/LeafletPieChartMarker.react';
 
 import { filterByLassoPath } from './actions';
+import { getPositionExtractor } from './selectors';
 import { getMarkers } from './utils';
 
 import { COLLECTION } from '../../app/stateKeys/map';
@@ -39,6 +40,7 @@ function mapStateToProps(state) {
     visibleIds: getVisibleAssemblyIds(state),
     filteredIds: getFilteredAssemblyIds(state),
     colourGetter: getColourGetter(state),
+    positionExtractor: getPositionExtractor(state),
   };
 }
 

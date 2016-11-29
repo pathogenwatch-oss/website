@@ -1,10 +1,12 @@
 import React from 'react';
+import classnames from 'classnames';
 import Leaflet from 'leaflet';
 import { Map, TileLayer, Marker, ZoomControl, PropTypes } from 'react-leaflet';
 import MarkerLayer from 'react-leaflet-marker-layer';
 
 import MapCluster from './LeafletMapCluster.react';
-import MapLasso from './LeafletMapLasso.react';
+import Lasso from './LeafletMapLasso.react';
+import MarkerControls from './LeafletMarkerControls.react';
 import DefaultIcon from './LeafletMarkerDefaultIcon';
 
 const ATTRIBUTION = `
@@ -22,7 +24,7 @@ export default React.createClass({
     height: React.PropTypes.number,
     width: React.PropTypes.number,
     className: React.PropTypes.string,
-    markers: React.PropTypes.array,
+    markers: React.PropTypes.arrayOf(React.PropTypes.object),
     markerComponent: React.PropTypes.func,
     cluster: React.PropTypes.bool,
     center: PropTypes.latlng,
@@ -31,7 +33,7 @@ export default React.createClass({
     lassoPath: React.PropTypes.array,
     mapboxStyle: React.PropTypes.string,
     mapboxKey: React.PropTypes.string,
-    lassoButtonClassname: React.PropTypes.string,
+    buttonClassname: React.PropTypes.string,
     onBoundsChange: React.PropTypes.func,
     onLassoPathChange: React.PropTypes.func,
   },
@@ -39,6 +41,13 @@ export default React.createClass({
   getDefaultProps() {
     return {
       cluster: false,
+      markers: [],
+    };
+  },
+
+  getInitialState() {
+    return {
+      markerSize: 1,
     };
   },
 
@@ -79,17 +88,10 @@ export default React.createClass({
     let south = 1000;
     let west = 1000;
     for (const { position } of markers) {
-      if (Array.isArray(position)) {
-        if (position[0] > north) north = position[0];
-        if (position[0] < south) south = position[0];
-        if (position[1] > east) east = position[1];
-        if (position[1] < west) west = position[1];
-      } else {
-        if (position.latitude > north) north = position.latitude;
-        if (position.latitude < south) south = position.latitude;
-        if (position.longitude > east) east = position.longitude;
-        if (position.longitude < west) west = position.longitude;
-      }
+      if (position[0] > north) north = position[0];
+      if (position[0] < south) south = position[0];
+      if (position[1] > east) east = position[1];
+      if (position[1] < west) west = position[1];
     }
     const southWest = Leaflet.latLng([ south, west ]);
     const northEast = Leaflet.latLng([ north, east ]);
@@ -122,8 +124,8 @@ export default React.createClass({
       return (
         <MarkerLayer
           markers={markers}
-          latitudeExtractor={({ position }) => position.latitude}
-          longitudeExtractor={({ position }) => position.longitude}
+          latitudeExtractor={({ position }) => position[0]}
+          longitudeExtractor={({ position }) => position[1]}
           markerComponent={markerComponent}
           propsForMarkers={{ onClick: this.onMarkerLayerClick, highlightedColour }}
         />
@@ -133,42 +135,68 @@ export default React.createClass({
     return markers.map(({ position, title, icon = DefaultIcon }, index) => (
       <Marker
         key={index}
-        position={Array.isArray(position) ? position : [ position.latitude, position.longitude ]}
+        position={position}
         title={title}
         icon={icon}
       />
     ));
   },
 
+  renderDefaultMarkers() {
+    if (!this.props.markers) return null;
+
+    return (
+      this.props.markers.map(
+        ({ position }, index) =>
+          <Marker key={position.join('-')} position={position} />
+      )
+    );
+  },
+
   render() {
     const { center, zoom, mapboxStyle, mapboxKey } = this.props;
     return (
-      <Map
-        animate={false}
-        center={center}
-        zoom={zoom}
-        zoomControl={false}
-        boundsOptions={{ animate: false }}
-        className={this.props.className}
-        onMoveend={({ target }) => { this.map = target; }}
-        ref={(map) => { this.leafletMap = map; }}
+      <div
+        className={
+          classnames(
+            'cgps-leaflet-map',
+            `cgps-leaflet-map--marker-size-${this.state.markerSize}`,
+            this.props.className
+          )
+        }
+        onClick={this.props.onClick}
       >
-        <TileLayer
-          attribution={ATTRIBUTION}
-          url={`https://api.mapbox.com/styles/v1/mapbox/${mapboxStyle}/tiles/{z}/{x}/{y}?access_token=${mapboxKey}`}
+        <Map
+          animate={false}
+          center={center}
+          zoom={zoom}
+          zoomControl={false}
+          boundsOptions={{ animate: false }}
+          onMoveend={({ target }) => { this.map = target; }}
+          ref={(map) => { this.leafletMap = map; }}
+          style={{ width: '100%', height: '100%' }}
+        >
+          <TileLayer
+            attribution={ATTRIBUTION}
+            url={`https://api.mapbox.com/styles/v1/mapbox/${mapboxStyle}/tiles/{z}/{x}/{y}?access_token=${mapboxKey}`}
+          />
+          { this.renderMarkers() }
+          {/* { this.renderDefaultMarkers() } */}
+          <Lasso
+            className={this.props.buttonClassname}
+            initialPath={this.props.lassoPath}
+            onPathChange={this.props.onLassoPathChange}
+          />
+          <ZoomControl
+            position="bottomleft"
+          />
+        </Map>
+        <MarkerControls
+          className={this.props.buttonClassname}
+          markerSize={this.state.markerSize}
+          onMarkerSizeChange={(markerSize) => this.setState({ markerSize })}
         />
-        { this.renderMarkers() }
-        {/* {this.props.markers.map(({ position }) => <Marker position={[ position.latitude, position.longitude ]} />)} */}
-        <MapLasso
-          className={this.props.lassoButtonClassname}
-          activeClassName="is-active"
-          initialPath={this.props.lassoPath}
-          onPathChange={this.props.onLassoPathChange}
-        />
-        <ZoomControl
-          position="bottomleft"
-        />
-      </Map>
+      </div>
     );
   },
 

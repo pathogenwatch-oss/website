@@ -14,28 +14,23 @@ import { CGPS } from '../app/constants';
 import * as actions from './actions';
 
 const WGSAMap = props => (
-  <div
+  <LeafletMap
+    center={props.bounds.center}
     className={props.className}
+    cluster={props.cluster}
+    highlightedColour={CGPS.COLOURS.PURPLE}
+    buttonClassname="mdl-button mdl-button--fab mdl-button--mini-fab"
+    lassoPath={props.lassoPath}
+    markers={props.markers}
+    markerComponent={props.markerComponent}
+    mapboxKey={CONFIG.mapboxKey}
+    mapboxStyle="light-v9"
+    onBoundsChange={props.onBoundsChange}
     onClick={props.onClick}
-  >
-    <LeafletMap
-      center={props.bounds.center}
-      className="wgsa-map"
-      cluster={props.cluster}
-      highlightedColour={CGPS.COLOURS.PURPLE}
-      lassoButtonClassname="wgsa-map-lasso-button mdl-button mdl-button--fab mdl-button--mini-fab"
-      lassoPath={props.lassoPath}
-      markers={props.markers}
-      markerComponent={props.markerComponent}
-      mapboxKey={CONFIG.mapboxKey}
-      mapboxStyle="light-v9"
-      onBoundsChange={props.onBoundsChange}
-      onLassoPathChange={props.onLassoPathChange}
-      onMarkerClick={props.onMarkerClick}
-      zoom={props.bounds.zoom}
-    />
-  </div>
-
+    onLassoPathChange={props.onLassoPathChange}
+    onMarkerClick={props.onMarkerClick}
+    zoom={props.bounds.zoom}
+  />
 );
 
 function mapStateToProps(state, props) {
