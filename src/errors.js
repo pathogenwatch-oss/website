@@ -1,8 +1,8 @@
-var assemblyModel = require('models/assembly');
+const assemblyModel = require('models/assembly');
 
-var LOGGER = require('utils/logging').createLogger('Error handler');
+const LOGGER = require('utils/logging').createLogger('Error handler');
 
-var errorCodes = {
+const errorCodes = {
   KEY_DOES_NOT_EXIST: 13,
 };
 
@@ -12,8 +12,13 @@ function isNotFoundInStorage(error) {
   );
 }
 
+process.on('uncaughtException', error => {
+  console.error(error);
+  process.exit(1);
+});
+
 module.exports = function handleErrors(app) {
-  app.use(function (error, req, res, next) {
+  app.use((error, req, res, next) => {
     LOGGER.error(error);
 
     if (isNotFoundInStorage(error)) {
@@ -25,6 +30,6 @@ module.exports = function handleErrors(app) {
       return res.status(400).send(error.message);
     }
 
-    res.sendStatus(500);
+    return res.sendStatus(500);
   });
 };

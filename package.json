@@ -1,6 +1,6 @@
 {
   "name": "wgsa-middle-end",
-  "version": "4.0.0-alpha",
+  "version": "4.3.1",
   "description": "Web API for WGSA",
   "main": "app.js",
   "engines": {
@@ -18,8 +18,6 @@
     "express": "^4.10.7",
     "extend": "^2.0.0",
     "longjohn": "^0.2.4",
-    "mash-sketches": "gitlab:cgps/mash-sketches",
-    "mash-specieator": "gitlab:cgps/mash-specieator",
     "morgan": "^1.5.1",
     "named-argv": "^0.3.0",
     "node-uuid": "^1.4.2",
@@ -27,8 +25,8 @@
     "sanitize-filename": "^1.5.3",
     "serve-favicon": "^2.2.0",
     "swig": "^1.4.2",
-    "wgsa-fasta-store": "gitlab:cgps/wgsa-fasta-store",
-    "wgsa-front-end": "gitlab:cgps/wgsa-front-end#release/4.0.0"
+    "wgsa-fasta-store": "gitlab:cgps/wgsa-fasta-store#v2.2.0",
+    "wgsa-front-end": "gitlab:cgps/wgsa-front-end#v4.6.1"
   },
   "devDependencies": {
     "eslint-config-cgps": "github:imperialcollegelondon/eslint-config-cgps",
@@ -46,9 +44,9 @@
     "test": "eval $npm_package_testcmd 'test/unit/**/*.test.js'",
     "test-example": "eval $npm_package_testcmd 'test/example.test.js'",
     "e2e": "eval $npm_package_testcmd 'test/e2e/**/*.test.js'",
-    "upload": "eval $npm_package_startcmd bin/upload-reference-data.js",
+    "upload": "eval $npm_package_startcmd bin/upload.js",
     "download": "eval $npm_package_startcmd bin/download.js",
-    "metadata": "eval $npm_package_startcmd bin/generate-reference-metadata.js",
+    "add-fastas": "eval $npm_package_startcmd bin/add-to-fasta-store.js",
     "service": "eval $npm_package_startcmd microservices/bootstrap.js upload-progress | bunyan -o short",
     "ids": "eval $npm_package_startcmd bin/collection-id-update.js",
     "aggregate": "eval $npm_package_startcmd bin/aggregate-collection.js"
@@ -61,5 +59,8 @@
   "bugs": {
     "url": "https://github.com/ImperialCollegeLondon/wgst-front/issues"
   },
-  "homepage": "https://github.com/ImperialCollegeLondon/wgst-front"
+  "homepage": "https://github.com/ImperialCollegeLondon/wgst-front",
+  "moduleRoots": [
+    "src"
+  ]
 }
