@@ -1,7 +1,7 @@
 import { API_ROOT } from '../utils/Api';
 
-function removeViewModel({ id, name, speciesId, metrics, metadata }) {
-  return { id, name, speciesId, metrics, metadata };
+function removeViewModel({ id, name, speciesId, metrics, metadata, country }) {
+  return { id, name, speciesId, metrics, metadata, country };
 }
 
 export function createCollectionRequest(files, speciesId, metadata) {
