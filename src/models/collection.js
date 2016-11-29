@@ -1,6 +1,9 @@
 const async = require('async');
 
-const assemblyModel = require('models/assembly');
+const Collection = require('../data/collection');
+
+const assemblyModel = require('./assembly');
+const { calculateExpectedResults } = require('./analysisResults');
 
 const mainStorage = require('services/storage')('main');
 const messageQueueService = require('services/messageQueue');
@@ -30,7 +33,7 @@ function mapAssemblyIdsToFiles(assemblyIds, files) {
   });
 }
 
-function createCollection(files) {
+function notifyBackend(files) {
   const request = {
     checksums: files.map(_ => _.id),
     collectionOperation: COLLECTION_OPERATIONS.CREATE,
@@ -65,32 +68,18 @@ function createCollection(files) {
   });
 }
 
-function notifyUploadProgress(collection, assemblies) {
-  const collectionSize = assemblies.length;
-  const assemblyIdToNameMap = assemblies.reduce((memo, { assemblyId, file }) => {
-    memo[assemblyId] = file.name;
-    return memo;
-  }, {});
-  const message =
-    Object.assign({ assemblyIdToNameMap, collectionSize }, collection);
-
-  const { collectionId } = collection;
-  return new Promise((resolve, reject) => {
-    messageQueueService.newUploadProgressRequestQueue(collectionId, queue => {
-      queue.subscribe(ackError => {
-        if (ackError) {
-          LOGGER.error('Upload progress service failed to acknowledge');
-          return reject(ackError);
-        }
-
-        LOGGER.info('Received upload progress acknowledgement');
-        queue.destroy();
-        resolve();
-      });
-
-      messageQueueService.getServicesExchange().publish('upload-progress', message);
-    });
-  });
+function createCollection(metadata, assemblies) {
+  return assemblyModel.saveAll(assemblies).
+    then(ids =>
+      new Collection(
+        Object.assign({
+          assemblies: ids,
+          expectedResults: calculateExpectedResults(assemblies.length),
+          size: assemblies.length,
+          status: 'PROCESSING',
+        }, metadata)
+      ).save()
+    );
 }
 
 function submitAssemblies({ speciesId, collectionId, assemblies }) {
@@ -103,28 +92,20 @@ function submitAssemblies({ speciesId, collectionId, assemblies }) {
       fileId: file.id,
       filePath: fastaStorage.getFilePath(fastaStoragePath, file.id),
     });
-
-    return (
-      assemblyModel.storeMetadata({
-        speciesId,
-        collectionId,
-        assemblyId,
-        file,
-      })
-    );
   }));
 }
 
 function add({ speciesId, title, description, files }) {
   LOGGER.info(`Creating collection of species ${speciesId} with ${files.length} files`);
 
-  return createCollection(files).
-    then(({ collectionId, assemblies }) => {
-      const collectionData = { collectionId, speciesId, title, description };
-      return notifyUploadProgress(collectionData, assemblies).
+  return notifyBackend(files).
+    then(({ collectionId, assemblies }) =>
+      createCollection({
+        id: collectionId, speciesId, title, description,
+      }, assemblies).
         then(() => submitAssemblies({ collectionId, assemblies, speciesId })).
-        then(() => collectionId);
-    });
+        then(() => collectionId)
+    );
 }
 
 function getAssemblyIds(collectionId, callback) {
