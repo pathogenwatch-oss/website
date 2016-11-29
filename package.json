@@ -36,6 +36,7 @@
     "express": "^4.12.2",
     "file-loader": "^0.9.0",
     "fixed-data-table": "^0.6.0",
+    "geo-data": "gitlab:cgps/geo-data",
     "json-loader": "^0.5.3",
     "leaflet": "0.7.7",
     "leaflet-lassoselect": "github:imperialcollegelondon/leaflet-lassoselect",

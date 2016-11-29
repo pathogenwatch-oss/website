@@ -4,6 +4,7 @@ import {
 } from '../actions';
 
 import { taxIdMap, isSupported } from '^/species';
+import { getCountryInfo } from '../../utils/country';
 
 function updateFastas(state, name, update) {
   const fasta = state[name];
@@ -36,7 +37,7 @@ export default {
       return updateFastas(state, name, { error });
     },
     [UPLOAD_FASTA.SUCCESS](state, { name, result }) {
-      const { speciesId, speciesName } = result;
+      const { speciesId, speciesName, country } = result;
       const supported = isSupported(result);
       const species = taxIdMap.get(speciesId);
 
@@ -47,6 +48,7 @@ export default {
         speciesKey,
         speciesLabel,
         ...result,
+        country: getCountryInfo(country),
       });
     },
     [UPDATE_FASTA_PROGRESS](state, { name, progress }) {
