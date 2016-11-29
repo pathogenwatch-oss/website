@@ -15,3 +15,12 @@ export function changeLassoPath(stateKey, path) {
     payload: { stateKey, path },
   };
 }
+
+export const MAP_GROUP_MARKERS = 'MAP_GROUP_MARKERS';
+
+export function toggleGroupMarkers(stateKey, group) {
+  return {
+    type: MAP_GROUP_MARKERS,
+    payload: { stateKey, group },
+  };
+}

@@ -27,6 +27,7 @@ const WGSAMap = props => (
     mapboxStyle="light-v9"
     onBoundsChange={props.onBoundsChange}
     onClick={props.onClick}
+    onGroupMarkersChange={props.onGroupMarkersChange}
     onLassoPathChange={props.onLassoPathChange}
     onMarkerClick={props.onMarkerClick}
     zoom={props.bounds.zoom}
@@ -43,6 +44,8 @@ function mapStateToProps(state, props) {
 function mapDispatchToProps(dispatch, { stateKey, onLassoPathChange }) {
   return {
     onBoundsChange: bounds => dispatch(actions.storeBounds(stateKey, bounds)),
+    onGroupMarkersChange:
+      group => dispatch(actions.toggleGroupMarkers(stateKey, group)),
     onLassoPathChange: onLassoPathChange ||
       (path => dispatch(actions.changeLassoPath(stateKey, path))),
   };

@@ -40,7 +40,7 @@ function mapStateToProps(state) {
     visibleIds: getVisibleAssemblyIds(state),
     filteredIds: getFilteredAssemblyIds(state),
     colourGetter: getColourGetter(state),
-    positionExtractor: getPositionExtractor(state),
+    positionExtractor: getPositionExtractor(state, { stateKey: COLLECTION }),
   };
 }
 

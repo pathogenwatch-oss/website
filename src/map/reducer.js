@@ -1,4 +1,4 @@
-import { MAP_STORE_BOUNDS, MAP_LASSO_CHANGE } from './actions';
+import { MAP_STORE_BOUNDS, MAP_LASSO_CHANGE, MAP_GROUP_MARKERS } from './actions';
 
 export default function (state = {}, { type, payload }) {
   switch (type) {
@@ -16,6 +16,14 @@ export default function (state = {}, { type, payload }) {
         [payload.stateKey]: {
           ...state[payload.stateKey],
           lassoPath: payload.path,
+        },
+      };
+    case MAP_GROUP_MARKERS:
+      return {
+        ...state,
+        [payload.stateKey]: {
+          ...state[payload.stateKey],
+          group: payload.group,
         },
       };
     default:

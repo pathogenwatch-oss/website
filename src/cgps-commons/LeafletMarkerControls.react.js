@@ -15,6 +15,8 @@ export default React.createClass({
     className: React.PropTypes.string,
     activeClassName: React.PropTypes.string,
     markerSize: React.PropTypes.number,
+    onMarkerSizeChange: React.PropTypes.func,
+    onGroupMarkersChange: React.PropTypes.func,
   },
 
   getDefaultProps() {
@@ -35,6 +37,7 @@ export default React.createClass({
       activeClassName,
       markerSize,
       onMarkerSizeChange,
+      onGroupMarkersChange,
     } = this.props;
     const { isActive } = this.state;
 
@@ -60,6 +63,17 @@ export default React.createClass({
           <div
             className="wgsa-tree-controls"
           >
+            <div className="wgsa-tree-sliders wgsa-tree-overlay">
+              <label className="mdl-switch mdl-js-switch mdl-js-ripple-effect" htmlFor="group-markers-switch">
+                <input
+                  type="checkbox"
+                  id="group-markers-switch"
+                  className="mdl-switch__input"
+                  onChange={event => onGroupMarkersChange(event.target.checked)}
+                />
+                <span className="mdl-switch__label">Group markers</span>
+              </label>
+            </div>
             <div className="wgsa-tree-sliders wgsa-tree-overlay">
               <div className="wgsa-tree-slider">
                 <label>Marker Size

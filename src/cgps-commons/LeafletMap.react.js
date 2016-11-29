@@ -35,6 +35,7 @@ export default React.createClass({
     mapboxKey: React.PropTypes.string,
     buttonClassname: React.PropTypes.string,
     onBoundsChange: React.PropTypes.func,
+    onGroupMarkersChange: React.PropTypes.func,
     onLassoPathChange: React.PropTypes.func,
   },
 
@@ -195,6 +196,7 @@ export default React.createClass({
           className={this.props.buttonClassname}
           markerSize={this.state.markerSize}
           onMarkerSizeChange={(markerSize) => this.setState({ markerSize })}
+          onGroupMarkersChange={this.props.onGroupMarkersChange}
         />
       </div>
     );

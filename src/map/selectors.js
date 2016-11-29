@@ -15,3 +15,8 @@ export const getLassoPath = createSelector(
   getMap,
   ({ lassoPath }) => lassoPath
 );
+
+export const getGroupMarkers = createSelector(
+  getMap,
+  ({ group = false }) => group
+);
