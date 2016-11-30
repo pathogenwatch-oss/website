@@ -1,28 +1,17 @@
-stages:
-  - install
-  - build
+image: docker:latest
+services:
+ - docker:dind
 
-npm:
+build:
   only:
     - tags
-  stage: install
-  image: node:6.9.1
   script:
-    - which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )
+    - apk update && apk add openssh-client nodejs
     - eval $(ssh-agent -s)
     - ssh-add <(echo "$SSH_PRIVATE_KEY")
     - mkdir -p ~/.ssh
     - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
     - npm install
-
-docker-image:
-  only:
-    - tags
-  stage: build
-  image: docker:latest
-  services:
-   - docker:dind
-  script:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
     - docker build -t $CI_REGISTRY_IMAGE:$CI_BUILD_REF_NAME
     - docker push $CI_REGISTRY_IMAGE:$CI_BUILD_REF_NAME
