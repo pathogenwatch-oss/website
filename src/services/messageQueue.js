@@ -1,4 +1,4 @@
-var uuid = require('node-uuid');
+var uuid = require('uuid/v4');
 
 var messageQueueConnection = require('utils/messageQueueConnection');
 
@@ -34,7 +34,7 @@ function parseMessagesAsJson(queue) {
 }
 
 function generateQueueId(prefix) {
-  return (prefix + uuid.v4());
+  return (prefix + uuid());
 }
 
 function newCollectionAddQueue(callback) {

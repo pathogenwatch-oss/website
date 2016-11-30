@@ -11,7 +11,7 @@ build:
     - bash -c "ssh-add <(echo '$SSH_PRIVATE_KEY')"
     - mkdir -p ~/.ssh
     - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
-    - npm install
+    - npm install --production
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
     - docker build -t $CI_REGISTRY_IMAGE:$CI_BUILD_REF_NAME .
     - docker push $CI_REGISTRY_IMAGE:$CI_BUILD_REF_NAME
