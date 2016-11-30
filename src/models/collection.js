@@ -269,7 +269,7 @@ function getReference(speciesId, callback) {
         tree: getTree.bind(null, speciesId),
       }, done);
     },
-  ], function (error, result) {
+  ], (error, result) => {
     if (error) {
       return callback(error, null);
     }
@@ -289,8 +289,8 @@ function getSubtree({ speciesId, collectionId, subtreeId }, callback) {
       collection: getAssemblyIds.bind(null, collectionId),
     }),
     function ({ subtree, collection }, done) {
-      const subtreeAssemblyIds = subtree.map(_ => _.assemblyId);
-      const collectionAssemblyIds = new Set(collection.map(_ => _.assemblyId));
+      const subtreeAssemblyIds = subtree.map(_ => _.uuid);
+      const collectionAssemblyIds = new Set(collection.map(_ => _.uuid));
       const params = {
         speciesId,
         assemblyIds: subtreeAssemblyIds.filter(
@@ -302,7 +302,7 @@ function getSubtree({ speciesId, collectionId, subtreeId }, callback) {
         tree: getTree.bind(null, `${collectionId}_${subtreeId}`),
       }, done);
     },
-  ], function (error, result) {
+  ], (error, result) => {
     if (error) {
       return callback(error, null);
     }
