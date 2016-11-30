@@ -9,7 +9,7 @@ import { viewByCountry, markerSizeChanged } from '../../map/actions';
 import { filterByLassoPath } from './actions';
 import { getMarkerSize } from '../../map/selectors';
 import { getPositionExtractor } from './selectors';
-import { buttonClassname } from '../../map/Map.react';
+import { buttonClassname, activeButtonClassname } from '../../map/Map.react';
 import { getMarkers } from './utils';
 
 import { COLLECTION as stateKey } from '../../app/stateKeys/map';
@@ -34,6 +34,7 @@ const ExplorerMap = (props) => (
     {props.children}
     <MarkerControls
       className={buttonClassname}
+      activeClassName={activeButtonClassname}
       markerSize={props.markerSize}
       onMarkerSizeChange={props.onMarkerSizeChange}
       onViewByCountryChange={props.onViewByCountryChange}

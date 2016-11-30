@@ -16,6 +16,8 @@ import * as actions from './actions';
 export const buttonClassname =
   'mdl-button mdl-button--icon wgsa-pane-button wgsa-pane-button--dark';
 
+export const activeButtonClassname = 'wgsa-pane-button--active';
+
 const WGSAMap = props => (
   <LeafletMap
     center={props.bounds.center}

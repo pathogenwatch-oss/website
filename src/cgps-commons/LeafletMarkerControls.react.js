@@ -3,7 +3,7 @@ import classnames from 'classnames';
 
 export default React.createClass({
 
-  displayName: 'LeafletMapLasso',
+  displayName: 'LeafletMarkerControls',
 
   propTypes: {
     className: React.PropTypes.string,
