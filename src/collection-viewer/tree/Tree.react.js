@@ -157,19 +157,9 @@ export default React.createClass({
         <Styler phylocanvas={this.phylocanvas} />
         <Header />
         <button
-          ref="redrawOriginalTreeButton"
           className={classnames(
-            'wgsa-tree-overlay wgsa-redraw-original-tree-button mdl-button mdl-button--icon',
-            { 'wgsa-redraw-original-tree-button--visible': this.props.root !== 'root' }
-          )}
-          title="Redraw Original Tree"
-        >
-          <i className="material-icons">replay</i>
-        </button>
-        <button
-          className={classnames(
-            'wgsa-tree-overlay wgsa-tree-toggle-controls-button mdl-button mdl-button--icon',
-            { 'wgsa-tree-toggle-controls-button--active': controlsVisible }
+            'mdl-button mdl-button--icon wgsa-tree-toggle-controls-button wgsa-pane-button wgsa-pane-overlay',
+            { 'wgsa-pane-button--active': controlsVisible }
           )}
           title={controlsVisible ? 'Hide Tree Controls' : 'Show Tree Controls'}
           onClick={() => this.setState({ controlsVisible: !controlsVisible })}
@@ -177,8 +167,18 @@ export default React.createClass({
           <i className="material-icons">tune</i>
         </button>
         <button
+          ref="redrawOriginalTreeButton"
+          className={classnames(
+            'wgsa-pane-overlay wgsa-redraw-original-tree-button mdl-button mdl-button--icon',
+            { 'wgsa-redraw-original-tree-button--visible': this.props.root !== 'root' }
+          )}
+          title="Redraw Original Tree"
+        >
+          <i className="material-icons">replay</i>
+        </button>
+        <button
           ref="menuButton"
-          className="mdl-button mdl-js-button mdl-button--icon wgsa-tree-menu-button wgsa-tree-overlay"
+          className="mdl-button mdl-js-button mdl-button--icon wgsa-tree-menu-button wgsa-pane-button wgsa-pane-overlay"
           title="More Options"
         >
           <i className="material-icons">more_vert</i>

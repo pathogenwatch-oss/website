@@ -1,16 +1,11 @@
 import React from 'react';
+import classnames from 'classnames';
 import Leaflet from 'leaflet';
 import 'leaflet-lassoselect';
 
 const filterTooltip = 'Activate map region filter';
 const activeFilterTooltip = 'Disable map region filter';
 
-const buttonStyle = {
-  position: 'absolute',
-  top: 16,
-  right: 16,
-  zIndex: 1,
-};
 const iconStyle = {
   width: '30px',
   height: '30px',
@@ -31,6 +26,12 @@ export default React.createClass({
 
   contextTypes: {
     map: React.PropTypes.instanceOf(Leaflet.Map),
+  },
+
+  getDefaultProps() {
+    return {
+      activeClassName: 'is-active',
+    };
   },
 
   getInitialState() {
@@ -84,8 +85,13 @@ export default React.createClass({
 
     return (
       <button
-        className={isActive ? `${className} ${activeClassName}` : className}
-        style={buttonStyle}
+        className={
+          classnames(
+            'leaflet-map-lasso-button',
+            className,
+            { [activeClassName]: isActive }
+          )
+        }
         title={isActive ? activeFilterTooltip : filterTooltip}
         onClick={this.onLassoToogleButtonClick}
       >

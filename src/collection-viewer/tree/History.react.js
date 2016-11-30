@@ -40,7 +40,7 @@ const History = React.createClass({
         >
           <span>History</span>
         </button>
-        <div className="wgsa-tree-history-snapshots wgsa-tree-overlay">
+        <div className="wgsa-tree-history-snapshots wgsa-pane-overlay">
           { tree.history.map(snapshot =>
             <button key={`${snapshot.id}`}
               className={classnames(

@@ -35,7 +35,7 @@ export default React.createClass({
     const scale = style.width / branchScalar / zoom;
     const minDigits = parseInt(Math.abs(Math.log(scale) / LOG10), 10);
     return (
-      <div style={style} className="wgsa-tree-scalebar wgsa-tree-overlay">
+      <div style={style} className="wgsa-tree-scalebar wgsa-pane-overlay">
         {scale.toFixed(minDigits + extraDigits)}
         <hr className="wgsa-tree-scalebar__bar" />
       </div>

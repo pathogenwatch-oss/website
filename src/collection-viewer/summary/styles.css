@@ -45,9 +45,9 @@
   box-shadow: none;
 }
 
-.wgsa-summary-chart path:hover {
+.wgsa-collection-viewer-summary--expanded path:hover {
   opacity: 0.70;
 }
-.wgsa-summary-chart path[fill="#fff"]:hover {
+.wgsa-collection-viewer-summary--expanded path[fill="#fff"]:hover {
   fill: #efefef;
 }
