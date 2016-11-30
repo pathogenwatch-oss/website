@@ -61,9 +61,9 @@ export default React.createClass({
         {
           isActive &&
           <div
-            className="wgsa-tree-controls"
+            className="wgsa-pane-controls"
           >
-            <div className="wgsa-tree-sliders wgsa-tree-overlay">
+            <div className="wgsa-pane-overlay">
               <label className="mdl-switch mdl-js-switch mdl-js-ripple-effect" htmlFor="group-markers-switch">
                 <input
                   type="checkbox"
@@ -74,8 +74,8 @@ export default React.createClass({
                 <span className="mdl-switch__label">Group markers</span>
               </label>
             </div>
-            <div className="wgsa-tree-sliders wgsa-tree-overlay">
-              <div className="wgsa-tree-slider">
+            <div className="wgsa-pane-overlay">
+              <div className="wgsa-pane-slider">
                 <label>Marker Size
                   <input ref="nodeSlider" type="range"
                     onChange={event => onMarkerSizeChange(event.target.value)}

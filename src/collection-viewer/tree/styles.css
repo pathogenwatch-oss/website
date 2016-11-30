@@ -46,11 +46,6 @@ div.wgsa-tree-icon:active {
   cursor: default;
 }
 
-.wgsa-tree-overlay {
-  background: rgba(255, 255, 255, 0.87);
-  z-index: 2;
-}
-
 .wgsa-redraw-original-tree-button {
   border: none;
   color: #673c90;
@@ -66,29 +61,15 @@ div.wgsa-tree-icon:active {
 }
 
 .wgsa-tree-toggle-controls-button {
-  border: none;
-  color: #673c90;
   position: absolute;
   top: 16px;
   right: 50px;
-}
-
-.wgsa-tree-toggle-controls-button--active {
-  background-color: #a386bd;
-  color: #fff;
-}
-
-.wgsa-tree-toggle-controls-button--active:hover,
-.wgsa-tree-toggle-controls-button--active:focus:not(:active) {
-  background-color: #673c90;
 }
 
 .wgsa-tree-menu-button {
   position: absolute;
   top: 16px;
   right: 16px;
-  z-index: 1;
-  color: #673c90;
 }
 
 .wgsa-tree-menu {
@@ -104,46 +85,6 @@ div.wgsa-tree-icon:active {
 .wgsa-tree-menu a {
   text-decoration: none;
   color: inherit;
-}
-
-.wgsa-tree-controls {
-  position: absolute;
-  bottom: 16px;
-  right: 16px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  z-index: 1;
-  user-select: none;
-}
-
-.wgsa-tree-sliders {
-  padding: 4px 0;
-  border-radius: 8px;
-}
-
-.wgsa-tree-slider .mdl-slider {
-  display: none;
-}
-
-.wgsa-tree-slider .mdl-slider.is-upgraded {
-  display: block;
-}
-
-.wgsa-tree-slider {
-  margin: 0 -20px;
-  width: 128px;
-  height: 40px;
-  text-align: center;
-  display: inline-block;
-  overflow: hidden;
-  user-select: none;
-}
-
-.wgsa-tree-slider label {
-  font-size: 13px;
-  font-weight: 500;
-  color: rgba(0, 0, 0, 0.87);
 }
 
 .wgsa-select-tree-type {
@@ -169,7 +110,7 @@ div.wgsa-tree-icon:active {
 
 .wgsa-tree-history {
   align-items: center;
-  bottom: 24px;
+  bottom: 20px;
   display: flex;
   flex-direction: row-reverse;
   height: 12vh;

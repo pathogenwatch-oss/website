@@ -19,7 +19,7 @@ const WGSAMap = props => (
     className={props.className}
     cluster={props.cluster}
     highlightedColour={CGPS.COLOURS.PURPLE}
-    buttonClassname="mdl-button mdl-button--icon wgsa-map-button"
+    buttonClassname="mdl-button mdl-button--icon wgsa-pane-button wgsa-pane-button--dark"
     lassoPath={props.lassoPath}
     markers={props.markers}
     markerComponent={props.markerComponent}

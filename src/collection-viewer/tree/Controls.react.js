@@ -45,8 +45,8 @@ const Controls = React.createClass({
     const { nodeSize, labelSize, phylocanvas } = this.props;
 
     return (
-      <div className="wgsa-tree-controls">
-        <select className="wgsa-select-tree-type wgsa-tree-overlay"
+      <div className="wgsa-pane-controls">
+        <select className="wgsa-select-tree-type wgsa-pane-overlay"
           value={this.props.treeType}
           onChange={event => phylocanvas.setTreeType(event.target.value)}
         >
@@ -54,8 +54,8 @@ const Controls = React.createClass({
             <option key={treeType} value={treeType}>{treeType}</option>
           )}
         </select>
-        <div className="wgsa-tree-sliders wgsa-tree-overlay">
-          <div className="wgsa-tree-slider">
+        <div className="wgsa-pane-sliders wgsa-pane-overlay">
+          <div className="wgsa-pane-slider">
             <label>Node Size
               <input ref="nodeSlider" type="range"
                 onChange={this.props.onNodeScaleChange}
@@ -64,7 +64,7 @@ const Controls = React.createClass({
               />
             </label>
           </div>
-          <div className="wgsa-tree-slider">
+          <div className="wgsa-pane-slider">
             <label>Label Size
               <input ref="labelSlider" type="range"
                 onChange={this.props.onLabelScaleChange}
