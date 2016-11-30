@@ -6,7 +6,7 @@ build:
   only:
     - tags
   script:
-    - apk add --update bash openssh-client nodejs
+    - apk add --update bash git openssh-client nodejs
     - eval $(ssh-agent -s)
     - bash -c "ssh-add <(echo '$SSH_PRIVATE_KEY')"
     - mkdir -p ~/.ssh
