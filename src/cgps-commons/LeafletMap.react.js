@@ -6,7 +6,6 @@ import MarkerLayer from 'react-leaflet-marker-layer';
 
 import MapCluster from './LeafletMapCluster.react';
 import Lasso from './LeafletMapLasso.react';
-import MarkerControls from './LeafletMarkerControls.react';
 import DefaultIcon from './LeafletMarkerDefaultIcon';
 
 const ATTRIBUTION = `
@@ -26,17 +25,16 @@ export default React.createClass({
     className: React.PropTypes.string,
     markers: React.PropTypes.arrayOf(React.PropTypes.object),
     markerComponent: React.PropTypes.func,
+    markerSize: React.PropTypes.number,
     cluster: React.PropTypes.bool,
     center: PropTypes.latlng,
     zoom: React.PropTypes.number,
-    hideControls: React.PropTypes.bool,
     highlightedColour: React.PropTypes.string,
     lassoPath: React.PropTypes.array,
     mapboxStyle: React.PropTypes.string,
     mapboxKey: React.PropTypes.string,
     buttonClassname: React.PropTypes.string,
     onBoundsChange: React.PropTypes.func,
-    onGroupMarkersChange: React.PropTypes.func,
     onLassoPathChange: React.PropTypes.func,
   },
 
@@ -44,12 +42,6 @@ export default React.createClass({
     return {
       cluster: false,
       markers: [],
-    };
-  },
-
-  getInitialState() {
-    return {
-      markerSize: 1,
     };
   },
 
@@ -162,7 +154,7 @@ export default React.createClass({
         className={
           classnames(
             'cgps-leaflet-map',
-            `cgps-leaflet-map--marker-size-${this.state.markerSize}`,
+            `cgps-leaflet-map--marker-size-${this.props.markerSize}`,
             this.props.className
           )
         }
@@ -173,7 +165,7 @@ export default React.createClass({
           zoom={zoom}
           zoomControl={false}
           boundsOptions={{ animate: false }}
-          onClick={this.props.onClick}
+          onClick={this.props.onClick || (() => {})}
           onMoveend={({ target }) => { this.map = target; }}
           ref={(map) => { this.leafletMap = map; }}
           style={{ width: '100%', height: '100%' }}
@@ -193,14 +185,6 @@ export default React.createClass({
             position="bottomleft"
           />
         </Map>
-        { !this.props.hideControls &&
-          <MarkerControls
-            className={this.props.buttonClassname}
-            markerSize={this.state.markerSize}
-            onMarkerSizeChange={(markerSize) => this.setState({ markerSize })}
-            onGroupMarkersChange={this.props.onGroupMarkersChange}
-          />
-        }
         {this.props.children}
       </div>
     );

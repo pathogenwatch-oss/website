@@ -16,7 +16,12 @@ export const getLassoPath = createSelector(
   ({ lassoPath }) => lassoPath
 );
 
-export const getGroupMarkers = createSelector(
+export const getViewByCountry = createSelector(
   getMap,
-  ({ group = false }) => group
+  ({ viewByCountry = false }) => viewByCountry
+);
+
+export const getMarkerSize = createSelector(
+  getMap,
+  ({ markerSize = 1 }) => markerSize
 );

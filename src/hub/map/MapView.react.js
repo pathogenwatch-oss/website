@@ -14,7 +14,6 @@ const MapView = ({ lassoPath, markers, onLassoPathChange, onMarkerClick }) => (
     <WGSAMap
       className="wgsa-hub-map-view"
       cluster
-      hideControls
       lassoPath={lassoPath}
       markers={markers}
       onLassoPathChange={onLassoPathChange}

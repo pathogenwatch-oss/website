@@ -13,17 +13,20 @@ import { CGPS } from '../app/constants';
 
 import * as actions from './actions';
 
+export const buttonClassname =
+  'mdl-button mdl-button--icon wgsa-pane-button wgsa-pane-button--dark';
+
 const WGSAMap = props => (
   <LeafletMap
     center={props.bounds.center}
     className={props.className}
     cluster={props.cluster}
-    hideControls={props.hideControls}
     highlightedColour={CGPS.COLOURS.PURPLE}
-    buttonClassname="mdl-button mdl-button--icon wgsa-pane-button wgsa-pane-button--dark"
+    buttonClassname={buttonClassname}
     lassoPath={props.lassoPath}
     markers={props.markers}
     markerComponent={props.markerComponent}
+    markerSize={props.markerSize}
     mapboxKey={CONFIG.mapboxKey}
     mapboxStyle="light-v9"
     onBoundsChange={props.onBoundsChange}
@@ -47,8 +50,6 @@ function mapStateToProps(state, props) {
 function mapDispatchToProps(dispatch, { stateKey, onLassoPathChange }) {
   return {
     onBoundsChange: bounds => dispatch(actions.storeBounds(stateKey, bounds)),
-    onGroupMarkersChange:
-      group => dispatch(actions.toggleGroupMarkers(stateKey, group)),
     onLassoPathChange: onLassoPathChange ||
       (path => dispatch(actions.changeLassoPath(stateKey, path))),
   };

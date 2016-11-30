@@ -10,7 +10,7 @@ export default React.createClass({
     activeClassName: React.PropTypes.string,
     markerSize: React.PropTypes.number,
     onMarkerSizeChange: React.PropTypes.func,
-    onGroupMarkersChange: React.PropTypes.func,
+    onViewByCountryChange: React.PropTypes.func,
   },
 
   getDefaultProps() {
@@ -38,7 +38,7 @@ export default React.createClass({
       activeClassName,
       markerSize,
       onMarkerSizeChange,
-      onGroupMarkersChange,
+      onViewByCountryChange,
     } = this.props;
     const { isActive } = this.state;
 
@@ -67,7 +67,7 @@ export default React.createClass({
               <div className="wgsa-pane-slider">
                 <label>Marker Size
                   <input ref="slider" type="range"
-                    onChange={event => onMarkerSizeChange(event.target.value)}
+                    onChange={event => onMarkerSizeChange(parseInt(event.target.value, 10))}
                     min="1" max="8" step="1" value={markerSize}
                     className="mdl-slider mdl-js-slider" tabIndex="0"
                   />
@@ -83,7 +83,7 @@ export default React.createClass({
                   type="checkbox"
                   id="group-markers-switch"
                   className="mdl-icon-toggle__input"
-                  onChange={event => onGroupMarkersChange(event.target.checked)}
+                  onChange={event => onViewByCountryChange(event.target.checked)}
                 />
                 <i className="mdl-icon-toggle__label material-icons">flag</i>
               </label>

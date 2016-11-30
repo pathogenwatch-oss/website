@@ -4,7 +4,7 @@ import { contains } from 'leaflet-lassoselect/utils';
 import { getCountryCentroid } from '../../utils/country';
 
 import { getVisibleAssemblies } from '../selectors';
-import { getLassoPath, getGroupMarkers } from '../../map/selectors';
+import { getLassoPath, getViewByCountry } from '../../map/selectors';
 
 export const getAssemblyIdsInPath = createSelector(
   getVisibleAssemblies,
@@ -38,6 +38,7 @@ const countryPositionExtractor = ({ metadata }) => {
 };
 
 export const getPositionExtractor = createSelector(
-  getGroupMarkers,
-  (group) => (group ? countryPositionExtractor : defaultPositionExtractor)
+  getViewByCountry,
+  (viewByCountry) =>
+    (viewByCountry ? countryPositionExtractor : defaultPositionExtractor)
 );
