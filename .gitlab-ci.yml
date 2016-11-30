@@ -1,7 +1,3 @@
-image: docker:latest
-services:
- - docker:dind
-
 stages:
   - install
   - build
@@ -23,6 +19,9 @@ docker-image:
   only:
     - tags
   stage: build
+  image: docker:latest
+  services:
+   - docker:dind
   script:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
     - docker build -t $CI_REGISTRY_IMAGE:$CI_BUILD_REF_NAME
