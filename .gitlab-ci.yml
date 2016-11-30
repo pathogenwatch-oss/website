@@ -6,9 +6,9 @@ build:
   only:
     - tags
   script:
-    - apk update && apk add openssh-client nodejs
+    - apk add --update bash openssh-client nodejs
     - eval $(ssh-agent -s)
-    - ssh-add <(echo "$SSH_PRIVATE_KEY")
+    - bash -c "ssh-add <(echo $SSH_PRIVATE_KEY)"
     - mkdir -p ~/.ssh
     - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
     - npm install
