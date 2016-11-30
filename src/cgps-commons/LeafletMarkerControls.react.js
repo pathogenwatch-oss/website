@@ -1,12 +1,6 @@
 import React from 'react';
 import classnames from 'classnames';
 
-const buttonStyle = {
-  position: 'absolute',
-  top: 16,
-  right: 16,
-  zIndex: 1,
-};
 export default React.createClass({
 
   displayName: 'LeafletMapLasso',
@@ -59,7 +53,6 @@ export default React.createClass({
               { [activeClassName]: isActive }
             )
           }
-          style={buttonStyle}
           title={isActive ? 'Hide Map Controls' : 'Show Map Controls'}
           onClick={() => this.setState({ isActive: !isActive })}
         >

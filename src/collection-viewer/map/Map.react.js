@@ -25,7 +25,9 @@ const ExplorerMap = (props) => (
     onClick={props.onClick}
     onLassoPathChange={props.onLassoPathChange}
     onMarkerClick={props.onMarkerClick}
-  />
+  >
+    {props.children}
+  </WGSAMap>
 );
 
 import {

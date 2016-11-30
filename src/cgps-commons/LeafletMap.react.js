@@ -29,6 +29,7 @@ export default React.createClass({
     cluster: React.PropTypes.bool,
     center: PropTypes.latlng,
     zoom: React.PropTypes.number,
+    hideControls: React.PropTypes.bool,
     highlightedColour: React.PropTypes.string,
     lassoPath: React.PropTypes.array,
     mapboxStyle: React.PropTypes.string,
@@ -192,12 +193,15 @@ export default React.createClass({
             position="bottomleft"
           />
         </Map>
-        <MarkerControls
-          className={this.props.buttonClassname}
-          markerSize={this.state.markerSize}
-          onMarkerSizeChange={(markerSize) => this.setState({ markerSize })}
-          onGroupMarkersChange={this.props.onGroupMarkersChange}
-        />
+        { !this.props.hideControls &&
+          <MarkerControls
+            className={this.props.buttonClassname}
+            markerSize={this.state.markerSize}
+            onMarkerSizeChange={(markerSize) => this.setState({ markerSize })}
+            onGroupMarkersChange={this.props.onGroupMarkersChange}
+          />
+        }
+        {this.props.children}
       </div>
     );
   },

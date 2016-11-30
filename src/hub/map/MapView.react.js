@@ -10,15 +10,18 @@ import { getMarkers, getLassoPath } from './selectors';
 import { UPLOAD } from '../../app/stateKeys/map';
 
 const MapView = ({ lassoPath, markers, onLassoPathChange, onMarkerClick }) => (
-  <WGSAMap
-    className="wgsa-collection-viewer-map"
-    cluster
-    lassoPath={lassoPath}
-    markers={markers}
-    onLassoPathChange={onLassoPathChange}
-    onMarkerClick={onMarkerClick}
-    stateKey={UPLOAD}
-  />
+  <div>
+    <WGSAMap
+      className="wgsa-hub-map-view"
+      cluster
+      hideControls
+      lassoPath={lassoPath}
+      markers={markers}
+      onLassoPathChange={onLassoPathChange}
+      onMarkerClick={onMarkerClick}
+      stateKey={UPLOAD}
+    />
+  </div>
 );
 
 function mapStateToProps(state) {

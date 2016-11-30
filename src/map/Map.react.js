@@ -18,6 +18,7 @@ const WGSAMap = props => (
     center={props.bounds.center}
     className={props.className}
     cluster={props.cluster}
+    hideControls={props.hideControls}
     highlightedColour={CGPS.COLOURS.PURPLE}
     buttonClassname="mdl-button mdl-button--icon wgsa-pane-button wgsa-pane-button--dark"
     lassoPath={props.lassoPath}
@@ -31,7 +32,9 @@ const WGSAMap = props => (
     onLassoPathChange={props.onLassoPathChange}
     onMarkerClick={props.onMarkerClick}
     zoom={props.bounds.zoom}
-  />
+  >
+    {props.children}
+  </LeafletMap>
 );
 
 function mapStateToProps(state, props) {

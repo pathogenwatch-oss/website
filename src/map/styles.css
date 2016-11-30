@@ -12,7 +12,7 @@
 .cgps-leaflet-map .leaflet-map-lasso-button {
   position: absolute;
   top: 16px;
-  right: 52px;
+  right: 16px;
   z-index: 1;
 }
 
@@ -23,7 +23,7 @@
 .cgps-leaflet-map .leaflet-marker-controls-button {
   position: absolute;
   top: 16px;
-  right: 16px;
+  right: 52px;
   z-index: 1;
 }
 
