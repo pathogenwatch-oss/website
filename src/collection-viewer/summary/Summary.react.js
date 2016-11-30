@@ -20,6 +20,7 @@ import { getColourState, nonResistantColour } from '../../utils/resistanceProfil
 
 const Summary = ({ summary, isExpanded, onClick, onSliceClick }) => (
   <div
+    title={!isExpanded ? 'Summary' : ''}
     className={classnames(
       'wgsa-collection-viewer-summary mdl-shadow--2dp',
       { 'wgsa-collection-viewer-summary--expanded': isExpanded }

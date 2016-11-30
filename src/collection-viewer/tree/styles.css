@@ -10,10 +10,10 @@
 
 .wgsa-tree-header {
   position: absolute;
-  top: 8px;
+  top: 16px;
   left: 8px;
   height: 32px;
-  padding: 16px 0;
+  padding: 0;
   z-index: 2;
   display: flex;
   align-items: center;
@@ -56,7 +56,7 @@ div.wgsa-tree-icon:active {
   color: #673c90;
   font-family: Roboto, sans-serif;
   position: absolute;
-  top: 24px;
+  top: 16px;
   right: 84px;
   visibility: hidden;
 }
@@ -69,7 +69,7 @@ div.wgsa-tree-icon:active {
   border: none;
   color: #673c90;
   position: absolute;
-  top: 24px;
+  top: 16px;
   right: 50px;
 }
 
@@ -78,13 +78,14 @@ div.wgsa-tree-icon:active {
   color: #fff;
 }
 
-.wgsa-tree-toggle-controls-button--active:hover {
-  color: #000;
+.wgsa-tree-toggle-controls-button--active:hover,
+.wgsa-tree-toggle-controls-button--active:focus:not(:active) {
+  background-color: #673c90;
 }
 
 .wgsa-tree-menu-button {
   position: absolute;
-  top: 24px;
+  top: 16px;
   right: 16px;
   z-index: 1;
   color: #673c90;

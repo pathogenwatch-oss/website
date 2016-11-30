@@ -30,6 +30,7 @@
     "body-parser": "^1.14.1",
     "cgps-commons": "gitlab:cgps/commons",
     "classnames": "^2.2.5",
+    "country-reverse-geocoding": "gitlab:cgps/country-reverse-geocoding",
     "css-loader": "^0.25.0",
     "ejs": "^2.5.1",
     "eslint-config-cgps": "github:imperialcollegelondon/eslint-config-cgps#v1.1.0",

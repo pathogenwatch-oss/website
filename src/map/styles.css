@@ -9,10 +9,15 @@
   background: #cad2d3;
 }
 
+.wgsa-map-button {
+  background: rgba(158, 158, 158, .4);
+  color: #555;
+}
+
 .cgps-leaflet-map .leaflet-map-lasso-button {
   position: absolute;
   top: 16px;
-  right: 64px;
+  right: 52px;
   z-index: 1;
 }
 

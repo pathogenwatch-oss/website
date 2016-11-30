@@ -165,7 +165,6 @@ export default React.createClass({
             this.props.className
           )
         }
-        onClick={this.props.onClick}
       >
         <Map
           animate={false}
@@ -173,6 +172,7 @@ export default React.createClass({
           zoom={zoom}
           zoomControl={false}
           boundsOptions={{ animate: false }}
+          onClick={this.props.onClick}
           onMoveend={({ target }) => { this.map = target; }}
           ref={(map) => { this.leafletMap = map; }}
           style={{ width: '100%', height: '100%' }}
