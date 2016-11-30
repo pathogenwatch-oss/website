@@ -158,3 +158,18 @@
 .mdl-checkbox.is-checked .mdl-checkbox__tick-outline {
   background-color: #673c90;
 }
+
+.mdl-checkbox__label {
+  font-size: 13px;
+}
+
+
+/* Icon Toggle */
+
+.mdl-icon-toggle__label {
+  color: rgba(0, 0, 0, 0.39);
+}
+
+.mdl-icon-toggle.is-checked .mdl-icon-toggle__label {
+  color: #673c90;
+}

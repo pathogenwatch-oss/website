@@ -54,7 +54,7 @@ const Controls = React.createClass({
             <option key={treeType} value={treeType}>{treeType}</option>
           )}
         </select>
-        <div className="wgsa-pane-sliders wgsa-pane-overlay">
+        <div className="wgsa-pane-controls__row wgsa-pane-overlay">
           <div className="wgsa-pane-slider">
             <label>Node Size
               <input ref="nodeSlider" type="range"
