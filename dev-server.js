@@ -138,4 +138,4 @@ app.use('/', (req, res) => res.render('index', {
   frontEndConfig: JSON.parse(fs.readFileSync('./config.json')),
 }));
 
-app.listen(8080, '0.0.0.0');
+app.listen(process.env.PORT || 8080, '0.0.0.0');
