@@ -1,9 +1,8 @@
 const express = require('express');
-const iso31661Codes = require('geo-data/iso-3166-1.json');
 
 const router = express.Router();
 
-const { getCountry } = require('country-reverse-geocoding');
+const { getCountryCode } = require('models/assemblyMetadata');
 
 const fastaStorage = require('wgsa-fasta-store');
 
@@ -13,16 +12,6 @@ const LOGGER = require('utils/logging').createLogger('Upload');
 const { maxCollectionSize = 0, fastaStoragePath } = require('configuration');
 
 fastaStorage.setup(fastaStoragePath);
-
-function getCountryCode({ lat, lon }) {
-  if (lat && lon) {
-    const country = getCountry(Number.parseFloat(lat), Number.parseFloat(lon));
-    if (country.code && iso31661Codes[country.code]) {
-      return iso31661Codes[country.code].toLowerCase();
-    }
-  }
-  return null;
-}
 
 router.post('/upload', (req, res, next) => {
   LOGGER.info('Upload received');
