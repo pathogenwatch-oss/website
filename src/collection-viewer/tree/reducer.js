@@ -8,17 +8,12 @@ import { COLLECTION, POPULATION } from '../../app/stateKeys/tree';
 function setSize(state, step, maxStepFactor) {
   if (step === state.step) return state;
 
-  const { max = 2, scale } = state;
-  const newMax = Math.ceil(maxStepFactor / step);
-  const newScale =
-    scale ? Math.max(1, Math.min(max / newMax, newMax)) : newMax / 2;
-
   return {
     ...state,
     step,
-    base: step / 2,
-    scale: newScale,
-    max: newMax,
+    base: Math.min(step / 2, 15),
+    scale: 1,
+    max: Math.ceil(maxStepFactor / step),
   };
 }
 
