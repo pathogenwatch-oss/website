@@ -1,7 +1,8 @@
 const express = require('express');
+
 const router = express.Router();
 
-const { getCountry } = require('country-reverse-geocoding');
+const { getCountryCode } = require('models/assemblyMetadata');
 
 const fastaStorage = require('wgsa-fasta-store');
 
@@ -13,18 +14,11 @@ const { maxCollectionSize = 0, fastaStoragePath } = require('configuration');
 fastaStorage.setup(fastaStoragePath);
 
 router.post('/upload', (req, res, next) => {
-  LOGGER.info('Upload received', req.body.length);
+  LOGGER.info('Upload received');
 
   fastaStorage.store(fastaStoragePath, req)
     .then(({ fileId, metrics, specieator: { taxId, scientificName } }) => {
-      let country;
-
-      if (req.query.lat && req.query.lon) {
-        country = getCountry(
-          Number.parseFloat(req.query.lat), Number.parseFloat(req.query.lon)
-        );
-      }
-
+      const country = getCountryCode(req.query);
       res.json({
         id: fileId,
         speciesId: taxId,

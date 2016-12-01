@@ -48,7 +48,6 @@ function storeMetadata(args) {
     file.metadata || { assemblyName: file.name },
     file.metrics
   );
-
   return new Promise((resolve, reject) => {
     mainStorage.store(
       createKey(assemblyId, ASSEMBLY_METADATA),
