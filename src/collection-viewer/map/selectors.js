@@ -21,18 +21,17 @@ export const getAssemblyIdsInPath = createSelector(
 );
 
 const defaultPositionExtractor = ({ metadata }) => {
-  if (metadata && metadata.position) {
-    const { latitude, longitude } = metadata.position;
-    if (latitude && longitude) {
-      return [ latitude, longitude ];
-    }
+  const { latitude, longitude } = metadata.position;
+  if (latitude && longitude) {
+    return [ latitude, longitude ];
   }
   return null;
 };
 
 const countryPositionExtractor = ({ metadata }) => {
-  if (metadata && metadata.country) {
-    return getCountryCentroid(metadata.country);
+  const { country } = metadata.position;
+  if (country) {
+    return getCountryCentroid(country);
   }
   return null;
 };

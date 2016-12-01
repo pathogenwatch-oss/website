@@ -5,6 +5,7 @@ import { getOrderedFastas } from '../hub/selectors';
 import { selectors as filter } from '../filter';
 
 import { stateKey, filters } from './filter';
+import { getCountryName } from '../utils/country';
 
 import { isSupported } from '../species';
 
@@ -61,10 +62,10 @@ export const getFilterSummary = createSelector(
       }
 
       if (fasta.country) {
-        const { name } = fasta.country;
-        incrementSummary(countryMap, name, {
-          name,
-          active: name === filterState.country,
+        incrementSummary(countryMap, fasta.country, {
+          name: fasta.country,
+          label: getCountryName(fasta.country),
+          active: fasta.country === filterState.country,
         });
       }
 

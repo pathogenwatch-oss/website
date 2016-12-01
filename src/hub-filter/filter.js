@@ -17,7 +17,7 @@ export const filters = [
   { key: 'country',
     queryKey: 'country',
     matches(fasta, value) {
-      return fasta.country && fasta.country.name === value;
+      return fasta.country && fasta.country === value;
     },
   },
   { key: 'minDate',

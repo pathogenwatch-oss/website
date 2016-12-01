@@ -82,7 +82,8 @@ function getCustomXHR(filename, dispatch) {
   return xhr;
 }
 
-export function sendToServer({ file, coords }, dispatch) {
+export function sendToServer({ file, metadata = {} }, dispatch) {
+  const { latitude = '', longitude = '' } = metadata;
   return (
     validateFastaSize(file).
       then(readAsText).
@@ -90,7 +91,7 @@ export function sendToServer({ file, coords }, dispatch) {
       then(data =>
         $.ajax({
           type: 'POST',
-          url: `${API_ROOT}/upload${coords ? `?lat=${coords.lat}&lon=${coords.lon}` : ''}`,
+          url: `${API_ROOT}/upload?latitude=${latitude}&longitude=${longitude}`,
           contentType: 'text/plain; charset=UTF-8',
           data,
           dataType: 'json',

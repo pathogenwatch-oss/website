@@ -12,22 +12,14 @@ function isDuplicate({ name }, files) {
 }
 
 function uploadFasta(name) {
-  return (dispatch, getState) => {
-    const { file, metadata } = selectors.getFasta(getState(), name);
-
-    const coords =
-      metadata && metadata.latitude && metadata.longitude ?
-        { lat: metadata.latitude, lon: metadata.longitude } :
-        null;
-
-    return dispatch({
+  return (dispatch, getState) =>
+    dispatch({
       type: UPLOAD_FASTA,
       payload: {
         name,
-        promise: sendToServer({ file, coords }, dispatch),
+        promise: sendToServer(selectors.getFasta(getState(), name), dispatch),
       },
     }).catch(() => {});
-  };
 }
 
 const uploadLimit = 5;

@@ -1,11 +1,9 @@
 const centroids = require('geo-data/centroids.json');
 
-export function getCountryInfo(code) {
+export function getCountryName(code) {
   if (code) {
     const [ name ] = centroids[code.toLowerCase()];
-    if (name) {
-      return { code, name };
-    }
+    return name || code;
   }
   return code;
 }
