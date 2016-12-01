@@ -2,12 +2,11 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const schema = new Schema({
-  assemblies: [ { type: Schema.Types.ObjectId, ref: 'Assembly' } ],
   description: String,
-  id: String,
+  uuid: String,
   size: Number,
   speciesId: Number,
-  status: String,
+  status: { type: String, default: 'PENDING' },
   statusReason: String,
   submission: {
     ended: Date,
@@ -26,5 +25,17 @@ const schema = new Schema({
   title: String,
   tree: String,
 });
+
+schema.methods.addUUID = function (uuid) {
+  this.uuid = uuid;
+  this.status = 'PROCESSING';
+  return this.save();
+};
+
+schema.methods.failed = function (error) {
+  this.status = 'FAILED';
+  this.error = error;
+  return this.save();
+};
 
 module.exports = mongoose.model('Collection', schema);

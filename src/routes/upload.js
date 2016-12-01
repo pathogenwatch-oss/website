@@ -18,7 +18,7 @@ router.post('/collection', (req, res, next) => {
   LOGGER.info('Received request to create collection');
 
   return services.request('collection', 'create', req.body).
-    then(collectionId => res.json({ collectionId })).
+    then(({ uuid }) => res.json({ uuid })).
     catch(next);
 });
 

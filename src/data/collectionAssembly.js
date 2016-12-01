@@ -4,7 +4,7 @@ const { Schema } = mongoose;
 const schema = new Schema({
   _fasta: { type: Schema.Types.ObjectId, ref: 'Fasta' },
   _collection: { type: Schema.Types.ObjectId, ref: 'Collection' },
-  id: String,
+  uuid: String,
   name: String,
   date: {
     year: Number,
