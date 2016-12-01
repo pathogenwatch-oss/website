@@ -46,7 +46,7 @@
     "object-assign": "^4.0.1",
     "papaparse": "^4.1.1",
     "phylocanvas": "^2.7.2",
-    "phylocanvas-plugin-context-menu": "^3.8.0",
+    "phylocanvas-plugin-context-menu": "^3.9.0",
     "postcss-cssnext": "^2.8.0",
     "postcss-input-style": "^0.3.0",
     "postcss-loader": "^0.11.1",
