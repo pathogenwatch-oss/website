@@ -24,6 +24,7 @@
     "named-argv": "^0.3.0",
     "pusher": "^1.1.0",
     "sanitize-filename": "^1.5.3",
+    "seneca": "^3.2.2",
     "serve-favicon": "^2.2.0",
     "uuid": "^3.0.1",
     "wgsa-fasta-store": "gitlab:cgps/wgsa-fasta-store#v2.2.0",

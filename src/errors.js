@@ -1,5 +1,7 @@
 const assemblyModel = require('models/assembly');
 
+const { ServiceRequestError } = require('./utils/errors');
+
 const LOGGER = require('utils/logging').createLogger('Error handler');
 
 const errorCodes = {
@@ -20,6 +22,10 @@ process.on('uncaughtException', error => {
 module.exports = function handleErrors(app) {
   app.use((error, req, res, next) => {
     LOGGER.error(error);
+
+    if (error instanceof ServiceRequestError) {
+      return res.sendStatus(400);
+    }
 
     if (isNotFoundInStorage(error)) {
       return res.sendStatus(404);
