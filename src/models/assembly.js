@@ -26,9 +26,9 @@ function storeMetadata(args) {
   const assemblyMetadata = metadataModel.createRecord(
     { speciesId, collectionId, assemblyId, fileId: file.id },
     file.metadata || { assemblyName: file.name },
-    file.metrics
+    file.metrics,
+    file.country
   );
-
   return new Promise((resolve, reject) => {
     mainStorage.store(
       createKey(assemblyId, ASSEMBLY_METADATA),

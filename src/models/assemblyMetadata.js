@@ -14,7 +14,7 @@ function filterUserDefinedColumns(metadata) {
   }, {});
 }
 
-function createRecord(ids, metadata, metrics) {
+function createRecord(ids, metadata, metrics, country) {
   return {
     assemblyId: ids.assemblyId,
     speciesId: ids.speciesId,
@@ -30,6 +30,7 @@ function createRecord(ids, metadata, metrics) {
       latitude: metadata.latitude,
       longitude: metadata.longitude,
     },
+    country,
     pmid: metadata.pmid,
     userDefined: filterUserDefinedColumns(metadata),
     metrics,
