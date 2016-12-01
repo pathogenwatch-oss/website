@@ -18,9 +18,13 @@ const schema = new Schema({
   pmid: String,
   userDefined: Object,
   analysis: {
-    populationSubtype: String,
-    st: Number,
-    mlst: String,
+    fp: {
+      subtype: String,
+    },
+    mlst: {
+      st: Number,
+      code: String,
+    },
     core: {
       size: Number,
       percentMatched: Number,
@@ -42,4 +46,4 @@ const schema = new Schema({
   },
 });
 
-module.exports = mongoose.model('Assembly', schema);
+module.exports = mongoose.model('CollectionAssembly', schema);
