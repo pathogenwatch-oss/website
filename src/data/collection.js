@@ -12,7 +12,7 @@ const schema = new Schema({
     ended: Date,
     errors: Array,
     totalResultsExpected: Number,
-    totalResultsReceived: Number,
+    totalResultsReceived: { type: Number, default: 0 },
     results: Object,
     started: { type: Date, default: Date.now },
   },

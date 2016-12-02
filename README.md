@@ -15,5 +15,5 @@
 | Fasta File |-----------------------|  Assembly* |
 +------------+ 1                     +------------+
 
-*Copy of user assembly record
+*Collection Assembly - copy of user assembly record
 ```

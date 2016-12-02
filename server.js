@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const http = require('http');
 const path = require('path');
 const async = require('async');
+const mongoose = require('mongoose');
 
 const config = require('configuration.js');
 const logging = require('utils/logging');
@@ -28,6 +29,7 @@ module.exports = (callback) => {
   async.parallel([
     storageConnection.connect,
     messageQueueConnection.connect,
+    done => mongoose.connect('mongodb://localhost/wgsa', done),
   ], (error) => {
     if (error) {
       callback(error, null);

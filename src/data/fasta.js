@@ -2,21 +2,23 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const schema = new Schema({
-  id: String,
-  speciesId: Number,
+  fileId: String,
+  speciesId: String,
+  speciesName: String,
   metrics: {
-    totalContigs: Number, // totalNumberOfContigs
-    n50: { // assemblyN50Data
+    totalNumberOfContigs: Number, // totalContigs
+    assemblyN50Data: { // n50
       sum: Number,
       sequenceNumber: Number,
-      sequenceLength: Number, // also contigN50
+      sequenceLength: Number, // contigN50
     },
-    contigLengths: [ Number ], // sumsOfNucleotidesInDnaStrings
-    totalNucleotides: Number, // totalNumberOfNucleotidesInDnaStrings
-    nonATCG: Number, // totalNumberOfNsInDnaStrings
-    averageNucleotides: Number, // averageNumberOfNucleotidesInDnaStrings
-    minContigLength: Number, // smallestNumberOfNucleotidesInDnaStrings
-    maxContigLength: Number, // biggestNumberOfNucleotidesInDnaStrings
+    contigN50: Number,
+    sumsOfNucleotidesInDnaStrings: [ Number ], // contigLengths
+    totalNumberOfNucleotidesInDnaStrings: Number, // totalNucleotides
+    totalNumberOfNsInDnaStrings: Number, // nonATCG
+    averageNumberOfNucleotidesInDnaStrings: Number, // averageNucleotides
+    smallestNumberOfNucleotidesInDnaStrings: Number, // minContigLength
+    biggestNumberOfNucleotidesInDnaStrings: Number, // maxContigLength
     gcContent: Number,
   },
 });

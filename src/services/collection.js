@@ -2,6 +2,8 @@ const { register, request } = require('./bus');
 const { ServiceRequestError } = require('../utils/errors');
 
 const Collection = require('../data/collection');
+const CollectionAssembly = require('../data/collectionAssembly');
+const { createMetadataRecord } = require('models/assemblyMetadata');
 const { calculateExpectedResults } = require('../models/analysisResults');
 
 const { maxCollectionSize = 0 } = require('../configuration');
@@ -31,8 +33,19 @@ function createCollection({ speciesId, files, title, description }) {
   });
 }
 
-function addAssemblies(collection, files) {
-  return Promise.resolve();
+function addAssemblies(collection, uuidToFileMap) {
+  return CollectionAssembly.insertMany(
+    Object.keys(uuidToFileMap).map(uuid => {
+      const file = uuidToFileMap[uuid];
+      return Object.assign(
+        { collection, _fasta: file.id, uuid },
+        createMetadataRecord(
+          { speciesId: collection.speciesId },
+          file.metadata || { assemblyName: file.name }
+        )
+      );
+    })
+  );
 }
 
 const role = 'collection';
@@ -42,9 +55,13 @@ register(role, 'create', (message) => {
 
   return createCollection(message).
     then(collection =>
-      addAssemblies(collection, files).
-        then(() => request('backend', 'submit', { files, speciesId })).
-          then(uuid => collection.addUUID(uuid)).
-          catch(error => collection.failed(error))
+      request('backend', 'submit', { files, speciesId }).
+        then(({ collectionUuid, uuidToFileMap }) =>
+          Promise.all([
+            collection.addUUID(collectionUuid),
+            addAssemblies(collection, uuidToFileMap),
+          ]).then(() => collectionUuid)
+        ).
+        catch(error => collection.failed(error))
     );
 });
