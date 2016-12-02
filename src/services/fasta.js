@@ -15,7 +15,7 @@ function store({ stream, metadata }) {
   return fastaStorage.store(fastaStoragePath, stream)
     .then(({ fileId, metrics, specieator: { taxId, scientificName } }) =>
       Fasta.create({
-        fileId,
+        id: fileId,
         speciesId: taxId,
         speciesName: scientificName,
         metrics,

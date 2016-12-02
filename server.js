@@ -4,6 +4,7 @@ const http = require('http');
 const path = require('path');
 const async = require('async');
 const mongoose = require('mongoose');
+mongoose.Promise = global.Promise;
 
 const config = require('configuration.js');
 const logging = require('utils/logging');

@@ -17,6 +17,7 @@ const schema = new Schema({
   },
   pmid: String,
   userDefined: Object,
+  metrics: Object,
   analysis: {
     fp: {
       subtype: String,

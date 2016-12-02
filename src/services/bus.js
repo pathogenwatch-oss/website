@@ -10,9 +10,10 @@ exports.request = function (role, cmd, message) {
 };
 
 exports.register = function (role, cmd, action) {
-  seneca.add({ role, cmd }, (msg, reply) =>
-    action(msg).
+  seneca.add({ role, cmd }, (msg, reply) => {
+    const promise = action(msg);
+    return (promise instanceof Promise ? promise : Promise.resolve(promise)).
       then(result => reply(null, result)).
-      catch(reply)
-  );
+      catch(reply);
+  });
 };

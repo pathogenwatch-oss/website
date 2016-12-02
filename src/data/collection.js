@@ -35,7 +35,7 @@ schema.methods.addUUID = function (uuid) {
 schema.methods.failed = function (error) {
   this.status = 'FAILED';
   this.error = error;
-  return this.save();
+  return this.save().then(() => error);
 };
 
 module.exports = mongoose.model('Collection', schema);

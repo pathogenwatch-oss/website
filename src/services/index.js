@@ -4,3 +4,4 @@ exports.request = bus.request;
 
 require('./fasta');
 require('./collection');
+require('./backend');

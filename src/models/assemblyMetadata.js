@@ -22,7 +22,7 @@ function getCountryCode({ latitude, longitude }) {
 function filterUserDefinedColumns(metadata) {
   return Object.keys(metadata).reduce((memo, key) => {
     if (systemMetadataColumns.indexOf(key) === -1) {
-      memo[key] = metadata[key];
+      memo[key.replace(/\./g, '')] = metadata[key];
     }
     return memo;
   }, {});
@@ -34,7 +34,7 @@ function createRecord(ids, metadata, metrics) {
     speciesId: ids.speciesId,
     collectionId: ids.collectionId,
     fileId: ids.fileId,
-    assemblyName: metadata.assemblyName,
+    name: metadata.assemblyName || metadata.displayname || metadata.name,
     date: {
       year: metadata.year,
       month: metadata.month,
