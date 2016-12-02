@@ -8,7 +8,7 @@ import {
 } from '../../actions/fetch';
 import { resetStore } from '../../actions/reset';
 
-import { getProgressPercentage } from '../../collection/selectors.js';
+import { getProgressPercentage } from '../progress/selectors.js';
 
 import Species from '../../species';
 
