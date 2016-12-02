@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const schema = new Schema({
-  id: String,
+  fileId: { type: String, index: true },
   speciesId: String,
   speciesName: String,
   metrics: {
