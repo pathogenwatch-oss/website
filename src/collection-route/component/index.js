@@ -16,24 +16,22 @@ function mapStateToProps({ collection }) {
   return {
     status: collection.status,
     progress: collection.progress,
-    cas: collection.cas,
     metadata: collection.metadata,
     percentage: getProgressPercentage(collection),
   };
 }
 
-function mergeProps(state, { dispatch }, { params: { id } }) {
+function mapDispatchToProps(dispatch, { params: { id } }) {
   return {
-    ...state,
     initialise() {
       dispatch(setCollectionId(id));
-      dispatch(checkStatus(Species.id, id));
+      dispatch(checkStatus(id));
     },
-    checkStatus: () => dispatch(checkStatus(Species.id, id, state.cas)),
+    checkStatus: () => dispatch(checkStatus(id)),
     updateProgress: results => dispatch(updateProgress(results)),
     fetch: () => dispatch(fetchEntities(Species.id, id)),
     reset: () => dispatch(resetStore()),
   };
 }
 
-export default connect(mapStateToProps, null, mergeProps)(Collection);
+export default connect(mapStateToProps, mapDispatchToProps)(Collection);

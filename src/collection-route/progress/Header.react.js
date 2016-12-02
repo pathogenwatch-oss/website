@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { getProgressPercentage } from '^/collection/selectors.js';
+import { getProgressPercentage } from './selectors.js';
 
 const subtitleStyle = {
   marginRight: '100px',

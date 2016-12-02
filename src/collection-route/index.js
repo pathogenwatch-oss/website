@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import Collection from './component';
 import FetchedHeaderContent from '../collection-viewer/HeaderContent.react';
-import ProcessingHeaderContent from './upload-progress/Header.react';
+import ProcessingHeaderContent from './progress/Header.react';
 
 import { statuses } from './constants';
 

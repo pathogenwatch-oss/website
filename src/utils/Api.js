@@ -78,6 +78,6 @@ export function getSubtree(speciesId, collectionId, subtreeId) {
   });
 }
 
-export function checkCollectionStatus(speciesId, collectionId, cas) {
-  return $.get(`${API_ROOT}/species/${speciesId}/collection/${collectionId}/status`, { cas });
+export function checkCollectionStatus(speciesId, collectionId) {
+  return $.get(`${API_ROOT}/collection/${collectionId}`);
 }

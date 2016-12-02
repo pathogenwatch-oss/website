@@ -24,10 +24,10 @@ export const fetchEntities = (speciesId, collectionId) => ({
 
 export const CHECK_STATUS = createAsyncConstants('CHECK_STATUS');
 
-export const checkStatus = (speciesId, collectionId, cas) => ({
+export const checkStatus = (collectionId) => ({
   type: CHECK_STATUS,
   payload: {
-    promise: checkCollectionStatus(speciesId, collectionId, cas),
+    promise: checkCollectionStatus(collectionId),
   },
 });
 

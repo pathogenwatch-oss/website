@@ -2,10 +2,10 @@ import React from 'react';
 
 import Errors from './Errors.react';
 
-import CircularProgress from '^/components/CircularProgress.react';
-import Spinner from '^/components/Spinner.react';
+import CircularProgress from '../../components/CircularProgress.react';
+import Spinner from '../../components/Spinner.react';
 
-import Species from '^/species';
+import Species from '../../species';
 
 const ProgressIndicator = ({ title, percentage }) => (
   <div className="wgsa-overview-upload-ready-card mdl-card mdl-cell mdl-cell--3-col">
@@ -16,7 +16,7 @@ const ProgressIndicator = ({ title, percentage }) => (
   </div>
 );
 
-const UploadDashboard = React.createClass({
+export default React.createClass({
 
   propTypes: {
     isUploading: React.PropTypes.bool,
@@ -61,5 +61,3 @@ const UploadDashboard = React.createClass({
   },
 
 });
-
-module.exports = UploadDashboard;

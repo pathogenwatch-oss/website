@@ -1,7 +1,7 @@
 import React from 'react';
 
-import CollectionViewer from '../../collection-viewer';
-import UploadProgress from '../upload-progress';
+import Viewer from '../../collection-viewer';
+import Progress from '../progress';
 import { LoadSpinner, LoadError } from '../loading/Loading.react';
 
 import { statuses } from '../constants';
@@ -39,13 +39,13 @@ export default React.createClass({
 
     if (status === statuses.PROCESSING) {
       return (
-        <UploadProgress {...this.props} />
+        <Progress {...this.props} />
       );
     }
 
     if (status === statuses.FETCHED) {
       return (
-        <CollectionViewer />
+        <Viewer />
       );
     }
 

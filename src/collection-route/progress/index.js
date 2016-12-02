@@ -1,12 +1,12 @@
-import '^/css/upload-progress.css';
+import './styles.css';
 
 import React from 'react';
 import { connect } from 'react-redux';
 
 import Dashboard from './Dashboard.react';
 
-import { subscribe } from '^/utils/Notification';
-import Species from '^/species';
+import { subscribe } from '../../utils/Notification';
+import Species from '../../species';
 
 const UploadProgress = React.createClass({
 
