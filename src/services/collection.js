@@ -73,3 +73,7 @@ register(role, 'create', (message) => {
         catch(error => collection.failed(error))
     );
 });
+
+register(role, 'fetch', ({ uuid }) =>
+  Collection.findOne({ uuid }).then(collection => collection.toObject())
+);

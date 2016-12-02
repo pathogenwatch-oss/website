@@ -3,13 +3,13 @@ const { Schema } = mongoose;
 
 const schema = new Schema({
   description: String,
-  uuid: String,
+  uuid: { type: String, index: true },
   size: Number,
   speciesId: Number,
   status: { type: String, default: 'PENDING' },
   statusReason: String,
-  submission: {
-    ended: Date,
+  progress: {
+    completed: Date,
     errors: Array,
     totalResultsExpected: Number,
     totalResultsReceived: { type: Number, default: 0 },
