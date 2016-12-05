@@ -73,8 +73,8 @@ module.exports = (callback) => {
       userStore,
       url: config.passport.url,
       authPath: '/auth',
-      successRedirect: '/account',
-      failureRedirect: '/signin',
+      successRedirect: '/',
+      failureRedirect: '/',
       logoutPath: '/signout',
       strategies: config.passport.strategies,
     });
