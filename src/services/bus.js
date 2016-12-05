@@ -1,4 +1,8 @@
-const seneca = require('seneca')();
+const seneca = require('seneca')({
+  strict: {
+    result: false,
+  },
+});
 
 exports.request = function (role, cmd, message) {
   return new Promise((resolve, reject) => {

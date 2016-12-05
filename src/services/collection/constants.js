@@ -1,9 +1,9 @@
 const EXPECTED_ASSEMBLY_RESULTS = new Set(
-  require('models/assembly').ASSEMBLY_ANALYSES
+  require('models/assembly').ASSEMBLY_ANALYSES.concat([ 'GSL' ])
 );
 
 const EXPECTED_COLLECTION_RESULTS = new Set(
-  [ 'PHYLO_MATRIX', 'SUBMATRIX', 'CORE_MUTANT_TREE', 'GSL' ]
+  [ 'PHYLO_MATRIX', 'SUBMATRIX', 'CORE_MUTANT_TREE' ]
 );
 
 module.exports = {

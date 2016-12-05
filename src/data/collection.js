@@ -7,13 +7,13 @@ const schema = new Schema({
   size: Number,
   speciesId: Number,
   status: { type: String, default: 'PENDING' },
-  statusReason: String,
+  error: String,
   progress: {
     completed: Date,
     errors: Array,
     totalResultsExpected: Number,
     totalResultsReceived: { type: Number, default: 0 },
-    results: Object,
+    results: { Type: Object, default: {} },
     started: { type: Date, default: Date.now },
   },
   subtrees: [

@@ -29,10 +29,8 @@ function createCollection({ speciesId, files, title, description }) {
     description,
     size,
     speciesId,
-    submission: {
-      totalResultsExpected: calculateExpectedResults(size),
-    },
     title,
+    'progress.totalResultsExpected': calculateExpectedResults(size),
   });
 }
 

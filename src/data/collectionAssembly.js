@@ -23,7 +23,7 @@ const schema = new Schema({
       subtype: String,
     },
     mlst: {
-      st: Number,
+      st: String,
       code: String,
     },
     core: {
@@ -31,7 +31,7 @@ const schema = new Schema({
       percentMatched: Number,
       percentAssemblyMatched: Number,
     },
-    resistanceProfile: {
+    paarsnp: {
       antibiotics: [ { name: String, state: String, mechanisms: [ String ] } ],
       paar: [],
       snp: [],

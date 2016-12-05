@@ -3,7 +3,7 @@ const messageQueueService = require('services/messageQueue');
 module.exports = LOGGER => ({ files, collectionId, speciesId }) => {
   for (const file of files) {
     LOGGER.info(`Submitting assembly ${file.uuid}`);
-
+    LOGGER.debug(file.path);
     messageQueueService.getTaskExchange().publish(`${speciesId}.all`, {
       speciesId,
       collectionId,

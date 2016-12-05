@@ -16,26 +16,6 @@ const {
 
 const ASSEMBLY_ANALYSES = [ 'FP', 'MLST', 'PAARSNP', 'CORE' ];
 
-function retrieveManyPromise(keys) {
-  return new Promise((resolve, reject) => {
-    mainStorage.retrieveMany(keys, (error, results) => {
-      if (error) return reject(error);
-      return resolve(results);
-    });
-  });
-}
-
-exports.getAssemblies = function (assemblyIds) {
-  const documentKeys = assemblyIds.map(id => `WGSA_${id}`);
-  return retrieveManyPromise(documentKeys).
-    then(results =>
-      assemblyIds.reduce((memo, id, index) => {
-        memo[id] = results[documentKeys[index]];
-        return memo;
-      }, {})
-    );
-};
-
 function createKey(id, prefix) {
   return prefix + '_' + id;
 }

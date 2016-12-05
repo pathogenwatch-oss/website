@@ -6,48 +6,62 @@ function Storage(type) {
 }
 
 function store(key, value, callback) {
-  this.connection.upsert(key, value, (error, result) => {
-    if (error) {
-      LOGGER.error(`✗ Failed to store "${key}": ${error}`);
-      return callback(error);
-    }
-    LOGGER.info(`Successfully stored ${key}`);
-    callback(null, result.cas);
-  });
+  return new Promise((resolve, reject) =>
+    this.connection.upsert(key, value, (error, result) => {
+      if (error) {
+        LOGGER.error(`✗ Failed to store "${key}": ${error}`);
+        return reject(error);
+      }
+      LOGGER.info(`Successfully stored ${key}`);
+      return resolve(result.cas);
+    })
+  ).
+  then(cas => (callback ? callback(null, cas) : cas)).
+  catch(error => (callback ? callback(error) : error));
 }
 
 function retrieve(key, callback) {
-  this.connection.get(key, (error, result) => {
-    if (error) {
-      LOGGER.error(`✗ Failed to retrieve "${key}": ${error}`);
-      return callback(error);
-    }
-    LOGGER.info(`Successfully retrieved ${key}`);
-    callback(null, result.value, result.cas);
-  });
+  return new Promise((resolve, reject) =>
+    this.connection.get(key, (error, result) => {
+      if (error) {
+        LOGGER.error(`✗ Failed to retrieve "${key}": ${error}`);
+        return reject(error);
+      }
+      LOGGER.info(`Successfully retrieved ${key}`);
+      return resolve(result.value);
+    })
+  ).
+  then(value => (callback ? callback(null, value) : value)).
+  catch(error => (callback ? callback(error) : error));
 }
 
 function retrieveMany(keys, callback) {
-  this.connection.getMulti(keys, (errorCount, result) => {
-    const { erroredKeys, results } = Object.keys(result).reduce((memo, key) => {
-      const { error, value } = result[key];
-      if (error) {
-        memo.erroredKeys.push(key);
-      }
+  return new Promise((resolve) =>
+    this.connection.getMulti(keys, (errorCount, result) => {
+      const { erroredKeys, results } =
+        Object.keys(result).reduce((memo, key) => {
+          const { error, value } = result[key];
+          if (error) {
+            memo.erroredKeys.push(key);
+          }
+          if (value) {
+            memo.results[key] = value;
+          }
+          return memo;
+        }, { erroredKeys: [], results: {} });
 
-      if (value) {
-        memo.results[key] = value;
+      if (errorCount) {
+        LOGGER.error(`✗ Failed to retrieve ${errorCount} keys: ${erroredKeys}`);
+        // resolve to allow partial errors to continue
+        return resolve({ erroredKeys, results });
       }
-      return memo;
-    }, { erroredKeys: [], results: {} });
-
-    if (errorCount) {
-      LOGGER.error(`✗ Failed to retrieve ${errorCount} keys: ${erroredKeys}`);
-      return callback(erroredKeys, results);
-    }
-    LOGGER.info(`Successfully retrieved ${keys}`);
-    callback(null, results);
-  });
+      LOGGER.info(`Successfully retrieved ${keys}`);
+      return resolve({ results });
+    })).
+    then(value =>
+      (callback ? callback(value.erroredKeys, value.results) : value)
+    ).
+    catch(error => (callback ? callback(error) : error));
 }
 
 Storage.prototype.store = store;
