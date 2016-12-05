@@ -4,6 +4,7 @@ module.exports = function (app) {
     require('routes/collection'),
     require('routes/resistance'),
     require('routes/download'),
+    require('routes/user'),
   ]);
 
   app.use(require('routes/speciesDownloads'));
