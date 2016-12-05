@@ -1,5 +1,10 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
+const MongoSessionStore = require('connect-mongo')(session);
+const userAccounts = require('cgps-user-accounts/src');
+const userStore = require('utils/userStore');
 const http = require('http');
 const path = require('path');
 const async = require('async');
@@ -52,6 +57,28 @@ module.exports = (callback) => {
       next();
     });
 
+    // required for passport.js
+    app.use(cookieParser());
+    app.use(
+      session({
+        secret: config.node.sessionSecret,
+        store: new MongoSessionStore({ url: mongoConnection.dbUrl }),
+        resave: true,
+        saveUninitialized: true,
+      })
+    );
+
+    // user accounts
+    userAccounts(app, {
+      userStore,
+      url: config.passport.url,
+      authPath: '/auth',
+      successRedirect: '/account',
+      failureRedirect: '/signin',
+      logoutPath: '/signout',
+      strategies: config.passport.strategies,
+    });
+
     app.use(express.static(path.join(clientPath, 'public')));
 
     // CORS
@@ -75,7 +102,9 @@ module.exports = (callback) => {
       if (req.path.match(/\.[a-z]{1,4}$/) || req.xhr) {
         return next();
       }
-
+      const user = req.user ?
+        { name: req.user.name, email: req.user.email, photo: req.user.photo } :
+        null;
       return res.render('index', {
         googleMapsKey: config.googleMapsKey,
         frontEndConfig: {
@@ -83,6 +112,8 @@ module.exports = (callback) => {
           mapboxKey: config.mapboxKey,
           maxFastaFileSize: config.maxFastaFileSize,
           wiki: config.wikiLocation,
+          strategies: [ 'facebook', 'google', 'twitter' ],
+          user,
         },
       });
     });
