@@ -40,3 +40,17 @@
 .mdl-layout-spacer .mdl-layout-spacer--flex {
   flex-basis: 0;
 }
+
+.wgsa-header .cgps-avatar {
+  margin-left: 0.5em;
+}
+
+.cgps-avatar .material-icons {
+  font-size: 40px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.28);
+  line-height: 44px;
+  overflow: hidden;
+}
