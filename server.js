@@ -10,6 +10,7 @@ const config = require('configuration.js');
 const logging = require('utils/logging');
 const storageConnection = require('utils/storageConnection');
 const messageQueueConnection = require('utils/messageQueueConnection');
+const mongoConnection = require('utils/mongoConnection');
 
 const LOGGER = logging.getBaseLogger();
 const app = express();
@@ -30,7 +31,7 @@ module.exports = (callback) => {
   async.parallel([
     storageConnection.connect,
     messageQueueConnection.connect,
-    done => mongoose.connect('mongodb://localhost/wgsa', done),
+    mongoConnection.connect,
   ], (error) => {
     if (error) {
       callback(error, null);
