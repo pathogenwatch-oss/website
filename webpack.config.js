@@ -38,6 +38,7 @@ const loaders = [
     include: [
       /(src|universal|cgps-commons)/,
       path.join(__dirname, 'node_modules', 'promise-file-reader'),
+      path.join(__dirname, 'node_modules', 'cgps-commons'),
     ],
   },
 ];
