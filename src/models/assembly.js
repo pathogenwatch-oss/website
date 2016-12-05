@@ -8,7 +8,7 @@ const {
   ASSEMBLY_METADATA,
   PAARSNP_RESULT,
   MLST_RESULT,
-  FP_COMP,
+  FP_RESULT,
   CORE_RESULT,
   NGMAST_RESULT,
   GENOTYPHI_RESULT,
@@ -69,7 +69,7 @@ function formatForFrontend(id, assembly) {
   const paarsnp = assembly[PAARSNP_RESULT];
   const mlst = assembly[MLST_RESULT];
   const core = assembly[CORE_RESULT];
-  const fp = assembly[FP_COMP];
+  const fp = assembly[FP_RESULT];
   const ngmast = assembly[NGMAST_RESULT];
   const genotyphi = assembly[GENOTYPHI_RESULT];
   return {
@@ -116,7 +116,7 @@ function hasFatalErrors(erroredKeys) {
   return erroredKeys.some(key =>
     key.startsWith(ASSEMBLY_METADATA) ||
     key.startsWith(CORE_RESULT) ||
-    key.startsWith(FP_COMP)
+    key.startsWith(FP_RESULT)
   );
 }
 
@@ -151,7 +151,7 @@ function get(params, queryKeyPrefixes, callback) {
 const COMPLETE_ASSEMBLY_KEYS = [
   ASSEMBLY_METADATA,
   CORE_RESULT,
-  FP_COMP,
+  FP_RESULT,
   MLST_RESULT,
   PAARSNP_RESULT,
   NGMAST_RESULT,
