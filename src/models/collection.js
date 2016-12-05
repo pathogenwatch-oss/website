@@ -1,112 +1,12 @@
 const async = require('async');
 
-const Collection = require('../data/collection');
-
 const assemblyModel = require('./assembly');
-const { calculateExpectedResults } = require('./analysisResults');
 
 const mainStorage = require('services/storage')('main');
-const messageQueueService = require('services/messageQueue');
-
-const fastaStorage = require('wgsa-fasta-store');
-const { fastaStoragePath } = require('configuration');
 
 const LOGGER = require('utils/logging').createLogger('Collection');
 const { COLLECTION_LIST, CORE_TREE_RESULT, COLLECTION_METADATA } =
   require('utils/documentKeys');
-
-const COLLECTION_OPERATIONS = {
-  CREATE: 'CREATE',
-};
-
-function mapAssemblyIdsToFiles(assemblyIds, files) {
-  const unusedIds = new Set(assemblyIds);
-  return files.map(file => {
-    const idPair = assemblyIds.find(pair =>
-      unusedIds.has(pair) && pair.checksum === file.id
-    );
-    unusedIds.delete(idPair);
-    return {
-      assemblyId: idPair.uuid,
-      file,
-    };
-  });
-}
-
-function notifyBackend(files) {
-  const request = {
-    checksums: files.map(_ => _.id),
-    collectionOperation: COLLECTION_OPERATIONS.CREATE,
-  };
-  LOGGER.info(JSON.stringify(request));
-
-  return new Promise((resolve, reject) => {
-    messageQueueService.newCollectionAddQueue(queue => {
-      queue.subscribe((error, message) => {
-        if (error) {
-          LOGGER.error(error);
-          return reject(error);
-        }
-        LOGGER.info('Received response', message);
-        queue.destroy();
-
-        const { collectionId, assemblyIds, status } = message;
-        if (!collectionId || !assemblyIds || status !== 'SUCCESS') {
-          LOGGER.error('Invalid result of manageCollection');
-          return reject();
-        }
-
-        resolve({
-          collectionId,
-          assemblies: mapAssemblyIdsToFiles(assemblyIds, files),
-        });
-      });
-
-      messageQueueService.getCollectionIdExchange()
-        .publish('manage-collection', request, { replyTo: queue.name });
-    });
-  });
-}
-
-function createCollection(metadata, assemblies) {
-  return assemblyModel.saveAll(assemblies).
-    then(ids =>
-      new Collection(
-        Object.assign({
-          assemblies: ids,
-          expectedResults: calculateExpectedResults(assemblies.length),
-          size: assemblies.length,
-          status: 'PROCESSING',
-        }, metadata)
-      ).save()
-    );
-}
-
-function submitAssemblies({ speciesId, collectionId, assemblies }) {
-  LOGGER.info('Submitting Assemblies');
-  return Promise.all(assemblies.map(({ assemblyId, file }) => {
-    assemblyModel.submit({
-      speciesId,
-      collectionId,
-      assemblyId,
-      fileId: file.id,
-      filePath: fastaStorage.getFilePath(fastaStoragePath, file.id),
-    });
-  }));
-}
-
-function add({ speciesId, title, description, files }) {
-  LOGGER.info(`Creating collection of species ${speciesId} with ${files.length} files`);
-
-  return notifyBackend(files).
-    then(({ collectionId, assemblies }) =>
-      createCollection({
-        id: collectionId, speciesId, title, description,
-      }, assemblies).
-        then(() => submitAssemblies({ collectionId, assemblies, speciesId })).
-        then(() => collectionId)
-    );
-}
 
 function getAssemblyIds(collectionId, callback) {
   mainStorage.retrieve(`${COLLECTION_LIST}_${collectionId}`,
@@ -341,7 +241,6 @@ exports.getAggregated = function (collectionId) {
     );
 };
 
-module.exports.add = add;
 module.exports.getAssemblyIds = getAssemblyIds;
 module.exports.getMetadata = getMetadata;
 module.exports.get = get;

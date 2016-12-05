@@ -49,7 +49,7 @@
     "upload": "eval $npm_package_startcmd bin/upload.js",
     "download": "eval $npm_package_startcmd bin/download.js",
     "add-fastas": "eval $npm_package_startcmd bin/add-to-fasta-store.js",
-    "service": "eval $npm_package_startcmd microservices/bootstrap.js upload-progress | bunyan -o short",
+    "service": "eval $npm_package_startcmd microservices/bootstrap.js aggregator | bunyan -o short",
     "ids": "eval $npm_package_startcmd bin/collection-id-update.js",
     "aggregate": "eval $npm_package_startcmd bin/aggregate-collection.js"
   },

@@ -1,15 +1,15 @@
 const fastaStorage = require('wgsa-fasta-store');
 
-const { register, request } = require('./bus');
-const { ServiceRequestError } = require('../utils/errors');
+const { request } = require('services/bus');
+const { ServiceRequestError } = require('utils/errors');
 
-const Collection = require('../data/collection');
-const CollectionAssembly = require('../data/collectionAssembly');
+const Collection = require('data/collection');
+const CollectionAssembly = require('data/collectionAssembly');
 
 const { createRecord } = require('models/assemblyMetadata');
-const { calculateExpectedResults } = require('../models/analysisResults');
+const { calculateExpectedResults } = require('./utils');
 
-const { maxCollectionSize = 0, fastaStoragePath } = require('../configuration');
+const { maxCollectionSize = 0, fastaStoragePath } = require('configuration');
 
 function createCollection({ speciesId, files, title, description }) {
   if (!speciesId) {
@@ -45,9 +45,7 @@ function addAssemblies(collection, assemblies) {
   );
 }
 
-const role = 'collection';
-
-register(role, 'create', (message) => {
+module.exports = message => {
   const { files, speciesId } = message;
 
   return createCollection(message).
@@ -72,8 +70,4 @@ register(role, 'create', (message) => {
         ).
         catch(error => collection.failed(error))
     );
-});
-
-register(role, 'fetch', ({ uuid }) =>
-  Collection.findOne({ uuid }).then(collection => collection.toObject())
-);
+};

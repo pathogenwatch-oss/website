@@ -1,0 +1,12 @@
+const EXPECTED_ASSEMBLY_RESULTS = new Set(
+  require('models/assembly').ASSEMBLY_ANALYSES
+);
+
+const EXPECTED_COLLECTION_RESULTS = new Set(
+  [ 'PHYLO_MATRIX', 'SUBMATRIX', 'CORE_MUTANT_TREE', 'GSL' ]
+);
+
+module.exports = {
+  EXPECTED_ASSEMBLY_RESULTS,
+  EXPECTED_COLLECTION_RESULTS,
+};

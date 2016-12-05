@@ -1,10 +1,7 @@
-const analysisResults = require('models/analysisResults');
+const handle = require('./handler');
 
 const messageQueueUtil = require('utils/messageQueueConnection');
-const logging = require('utils/logging');
-
-const LOGGER = logging.createLogger('upload progress');
-
+const LOGGER = require('utils/logging').createLogger('aggregator');
 const QUEUE_OPTIONS = { durable: true, autoDelete: false };
 
 module.exports = function ({ mqConnection }) {
@@ -16,7 +13,16 @@ module.exports = function ({ mqConnection }) {
       message = JSON.parse(message.data.toString());
     }
 
-    analysisResults.handleResult(message).
+    const { taskType, taskStatus, assemblyId = {}, collectionId } = message;
+    const assemblyIdString = assemblyId.uuid || 'N/A';
+
+    LOGGER.info(`Processing message:
+Tasktype: ${taskType}
+Status: ${taskStatus}
+Assembly Id: ${assemblyIdString}
+Collection: ${collectionId}`);
+
+    handle(message).
       catch(error => {
         LOGGER.error(error);
         SERVICES.publish('aggregator-error', { error, message });
@@ -25,7 +31,8 @@ module.exports = function ({ mqConnection }) {
   }
 
   mqConnection.queue('aggregator-queue', QUEUE_OPTIONS, queue => {
-    queue.bind(NOTIFICATION.name, '*');
+    queue.bind(NOTIFICATION.name, '*.*.ASSEMBLY.*');
+    queue.bind(NOTIFICATION.name, '*.*.COLLECTION.*');
     queue.subscribe({ ack: true }, onMessage);
     LOGGER.info(`${queue.name} is open.`);
   });
