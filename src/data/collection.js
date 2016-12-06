@@ -18,12 +18,7 @@ const schema = new Schema({
     results: Object,
     percent: Number,
   },
-  subtrees: [
-    { name: String,
-      assemblies: [ { type: Schema.Types.ObjectId, ref: 'Assembly' } ],
-      tree: String,
-    },
-  ],
+  subtrees: [ { name: String, tree: String, leafIds: [ String ] } ],
   title: String,
   tree: String,
 });

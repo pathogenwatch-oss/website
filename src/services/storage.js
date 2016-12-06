@@ -52,11 +52,9 @@ function retrieveMany(keys, callback) {
 
       if (errorCount) {
         LOGGER.error(`✗ Failed to retrieve ${errorCount} keys: ${erroredKeys}`);
-        // resolve to allow partial errors to continue
-        return resolve({ erroredKeys, results });
       }
       LOGGER.info(`Successfully retrieved ${keys}`);
-      return resolve({ results });
+      return resolve({ results, erroredKeys });
     })).
     then(value =>
       (callback ? callback(value.erroredKeys, value.results) : value)
