@@ -4,6 +4,7 @@
     "node": true
   },
   "rules": {
-    "no-multiple-empty-lines": 0
+    "no-multiple-empty-lines": 0,
+    "new-cap": [ "error", { "capIsNewExceptions": [ "Router" ] } ]
   }
 }
