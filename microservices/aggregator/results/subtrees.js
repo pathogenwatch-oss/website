@@ -18,7 +18,7 @@ function parseSubtrees(results, collectionId) {
 module.exports = (taskName, { collectionId, documentKeys }) =>
   mainStorage.retrieveMany(documentKeys).
     then(({ results, erroredKeys }) => {
-      if (erroredKeys.length) return new Error(`Failed to find ${erroredKeys}`);
+      if (erroredKeys.length) throw new Error(`Failed to find ${erroredKeys}`);
       return Collection.update(
         { uuid: collectionId },
         { subtrees: parseSubtrees(results, collectionId) }
