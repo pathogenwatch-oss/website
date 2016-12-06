@@ -7,7 +7,6 @@ const Collection = require('data/collection');
 const CollectionAssembly = require('data/collectionAssembly');
 
 const { createRecord } = require('models/assemblyMetadata');
-const { calculateExpectedResults } = require('./utils');
 
 const { maxCollectionSize = 0, fastaStoragePath } = require('configuration');
 
@@ -30,7 +29,6 @@ function createCollection({ speciesId, files, title, description }) {
     size,
     speciesId,
     title,
-    'progress.totalResultsExpected': calculateExpectedResults(size),
   });
 }
 

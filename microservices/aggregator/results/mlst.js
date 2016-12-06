@@ -76,18 +76,16 @@ function getSequenceType(alleles, code, speciesId) {
     });
 }
 
-module.exports = ({ assemblyId, speciesId }) => {
+module.exports = (name, { assemblyId, speciesId }) => {
   const { uuid } = assemblyId;
   return mainStorage.retrieve(`${MLST_RESULT}_${uuid}`).
     then(({ alleles }) => getMLSTAlleleDetail(alleles).
       then(createMLSTCode).
       then(code => getSequenceType(alleles, code, speciesId)).
-      then(result => CollectionAssembly.update(
-        { uuid }, {
-          'analysis.mlst': {
-            st: result.sequenceType,
-            code: result.code,
-          },
-        }
-      )));
+      then(result => ({
+        st: result.sequenceType,
+        code: result.code,
+      })).
+      then(result => CollectionAssembly.addAnalysisResult(uuid, name, result))
+    );
 };

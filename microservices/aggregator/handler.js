@@ -11,8 +11,8 @@ const handlers = {
   FP: require('./results/fp'),
   NGMAST: require('./results/ngmast'),
   GENOTYPHI: require('./results/genotyphi'),
-  // CORE_MUTANT_TREE: () => Promise.resolve(),
-  // SUBMATRIX: () => Promise.resolve(),
+  CORE_MUTANT_TREE: require('./results/collection-tree'),
+  SUBMATRIX: require('./results/subtrees'),
 };
 
 function aggregateResult(message) {
@@ -22,18 +22,15 @@ function aggregateResult(message) {
     return Promise.resolve(); // ignore if not successful, nothing to save
   }
 
-  return handlers[message.taskType](message);
+  return handlers[message.taskType](message.taskType, message);
 }
 
 module.exports = function (message) {
   return aggregateResult(message).
-    then(() => services.request('collection', 'record-progress', message)).
+    then(() => services.request('collection', 'fetch-progress', { uuid: message.collectionId })).
     then(collection =>
-      notificationDispatcher.publishNotification(collection.uuid, 'progress', {
-        collectionId: collection.uuid,
-        size: collection.size,
-        status: collection.status,
-        progress: collection.progress,
-      })
+      notificationDispatcher.publishNotification(
+        message.collectionId, 'progress', collection.toObject()
+      )
     );
 };
