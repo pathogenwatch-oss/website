@@ -6,7 +6,9 @@ const sequencesStorage = require('services/storage')('sequences');
 const LOGGER = require('utils/logging').createLogger('MLST aggregator');
 const { MLST_RESULT } = require('utils/documentKeys');
 
-const UNKNOWN_ST = 'NEW';
+const UNKNOWN_ST = 'new';
+const UNKNOWN_ST_DISPLAY = '-';
+const MISSING_ALLELE_ID = '?';
 
 function getAlleleKeys(alleles) {
   const mlstAllelesQueryKeys = [];
@@ -28,41 +30,31 @@ function getMLSTAlleleDetail(alleles) {
     then(({ results }) => results);
 }
 
+function getAlleleId({ alleleId }) {
+  if (!alleleId || alleleId.toLowerCase() === UNKNOWN_ST) {
+    return MISSING_ALLELE_ID;
+  }
+  return alleleId;
+}
+
 function createMLSTCode(alleleDetails) {
-  LOGGER.debug(alleleDetails);
   return Object.keys(alleleDetails).reduce((memo, key) => {
     const allele = alleleDetails[key];
-    LOGGER.debug(memo, allele);
-    if (!allele.alleleId || allele.alleleId.toUpperCase() === UNKNOWN_ST) {
-      return memo;
-    }
-    return `${memo ? `${memo}_` : ''}${allele.alleleId}`;
+    return `${memo ? `${memo}_` : ''}${getAlleleId(allele)}`;
   }, '');
 }
 
-function isMlstComplete(alleles, code) {
-  LOGGER.debug(
-    code.
-      split('_').
-      filter(section => section && section.length).
-      length,
-    Object.keys(alleles).length
-  );
-  return (
-    code.
-      split('_').
-      filter(section => section && section.length).
-      length === Object.keys(alleles).length
-  );
+function isMlstIncomplete(alleles, code) {
+  return code.indexOf(MISSING_ALLELE_ID) !== -1;
 }
 
 function getSequenceType(alleles, code, speciesId) {
   LOGGER.info('Getting assembly ST data');
   LOGGER.debug(code);
 
-  if (!isMlstComplete(alleles, code)) {
+  if (isMlstIncomplete(alleles, code)) {
     LOGGER.warn('Skipping ST query');
-    return Promise.resolve({ code, sequenceType: UNKNOWN_ST });
+    return Promise.resolve({ code, sequenceType: UNKNOWN_ST_DISPLAY });
   }
 
   return mainStorage.retrieve(`ST_${speciesId}_${code}`).
@@ -70,7 +62,7 @@ function getSequenceType(alleles, code, speciesId) {
     catch(error => {
       if (error.code === 13) {
         LOGGER.warn('No ST key found');
-        return Promise.resolve({ code, sequenceType: UNKNOWN_ST });
+        return Promise.resolve({ code, sequenceType: UNKNOWN_ST_DISPLAY });
       }
       return Promise.reject(error);
     });
