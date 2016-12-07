@@ -3,39 +3,44 @@ import { combineReducers } from 'redux';
 import uploads from './uploads';
 
 import { CREATE_COLLECTION, CHANGE_COLLECTION_METADATA } from '../../hub-drawer';
-import * as actions from '../actions';
+import { SHOW_METRIC } from '../actions';
 
-const loading = {
-  initialState: false,
-  actions: {
-    [CREATE_COLLECTION.ATTEMPT]: () => true,
-    [CREATE_COLLECTION.SUCCESS]: () => false,
-    [CREATE_COLLECTION.FAILURE]: () => false,
-  },
-};
+function loading(state = false, { type }) {
+  switch (type) {
+    case CREATE_COLLECTION.ATTEMPT:
+      return true;
+    case CREATE_COLLECTION.SUCCESS:
+      return false;
+    case CREATE_COLLECTION.FAILURE:
+      return false;
+    default:
+      return state;
+  }
+}
 
-const selectedMetric = {
-  initialState: 'totalNumberOfNucleotidesInDnaStrings',
-  actions: {
-    [actions.SHOW_METRIC](state, { metric }) {
-      return metric;
-    },
-  },
-};
+const initialMetric = 'totalNumberOfNucleotidesInDnaStrings';
+function selectedMetric(state = initialMetric, { type, payload }) {
+  switch (type) {
+    case SHOW_METRIC:
+      return payload.metric;
+    default:
+      return state;
+  }
+}
 
-const collectionMetadata = {
-  initialState: { title: '', description: '' },
-  actions: {
-    [CHANGE_COLLECTION_METADATA](state, payload) {
+const initialMetadata = { title: '', description: '' };
+function collectionMetadata(state = initialMetadata, { type, payload }) {
+  switch (type) {
+    case CHANGE_COLLECTION_METADATA:
       return { ...state, ...payload };
-    },
-  },
-};
+    default:
+      return state;
+  }
+}
 
-export default createReducer =>
-  combineReducers({
-    uploads,
-    loading: createReducer(loading),
-    selectedMetric: createReducer(selectedMetric),
-    collectionMetadata: createReducer(collectionMetadata),
-  });
+export default combineReducers({
+  uploads,
+  loading,
+  selectedMetric,
+  collectionMetadata,
+});

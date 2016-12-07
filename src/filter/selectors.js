@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 
 export function getFilter(state, { stateKey }) {
-  return state.filter[stateKey] || {};
+  return state.filters[stateKey] || {};
 }
 
 export const isActive = createSelector(

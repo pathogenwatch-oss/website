@@ -7,6 +7,8 @@ export GridView from './components/GridView.react';
 export MapView from './map';
 export StatsView from './components/StatsView.react';
 
+export reducer from './reducers';
+
 import { getTotalFastas } from './selectors';
 import { getNumberOfVisibleFastas } from '../hub-filter/selectors';
 

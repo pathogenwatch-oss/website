@@ -3,11 +3,11 @@ import { combineReducers } from 'redux';
 import { reducer as assemblyDrawer } from '../assembly-drawer';
 import { assemblies, collection, reference } from '../collection-route/reducers';
 import collectionViewer from '../collection-viewer/reducer';
-import filter from '../filter';
+import filters from '../filter';
 import { reducer as header } from '../header';
-import hub from '../hub/reducers';
+import { reducer as hub } from '../hub';
 import fastas from '../hub/reducers/fastas';
-import { reducer as map } from '../map';
+import { reducer as maps } from '../map';
 import { reducer as location } from '../location/';
 import { reducer as toast } from '../toast';
 
@@ -28,11 +28,11 @@ export default combineReducers({
     assemblies: createReducer(assemblies),
     fastas: createReducer(fastas),
   }),
-  filter,
+  filters,
   header,
-  hub: hub(createReducer),
+  hub,
   location,
-  map,
+  maps,
   reference: createReducer(reference),
   toast,
 });
