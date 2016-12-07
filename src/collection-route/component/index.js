@@ -2,10 +2,9 @@ import { connect } from 'react-redux';
 
 import Collection from './Collection.react';
 
-import { setCollectionId } from '../../actions/collection';
 import {
-  checkStatus, fetchEntities, updateProgress,
-} from '../../actions/fetch';
+  fetchCollection, fetchSpeciesData, updateProgress,
+} from '../actions';
 import { resetStore } from '../../actions/reset';
 
 import { getProgressPercentage } from '../progress/selectors.js';
@@ -23,13 +22,10 @@ function mapStateToProps({ collection }) {
 
 function mapDispatchToProps(dispatch, { params: { id } }) {
   return {
-    initialise() {
-      dispatch(setCollectionId(id));
-      dispatch(checkStatus(id));
-    },
-    checkStatus: () => dispatch(checkStatus(id)),
+    initialise: () => dispatch(fetchCollection(id)),
+    checkStatus: () => dispatch(fetchCollection(id)),
     updateProgress: results => dispatch(updateProgress(results)),
-    fetch: () => dispatch(fetchEntities(Species.id, id)),
+    fetch: () => dispatch(fetchSpeciesData(Species.id)),
     reset: () => dispatch(resetStore()),
   };
 }

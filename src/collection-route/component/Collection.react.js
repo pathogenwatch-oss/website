@@ -43,7 +43,7 @@ export default React.createClass({
       );
     }
 
-    if (status === statuses.FETCHED) {
+    if (status === statuses.READY) {
       return (
         <Viewer />
       );

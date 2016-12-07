@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 
-import { FETCH_ENTITIES } from '../../actions/fetch';
+import { FETCH_COLLECTION, FETCH_SPECIES_DATA }
+  from '../../collection-route/actions';
 import * as ACTIONS from './actions';
 
 import { COLLECTION, POPULATION } from '../../app/stateKeys/tree';
@@ -51,15 +52,22 @@ const initialState = {
 
 function entities(state = {}, { type, payload }) {
   switch (type) {
-    case FETCH_ENTITIES.SUCCESS: {
-      const [ uploaded, reference ] = payload.result;
+    case FETCH_COLLECTION.SUCCESS: {
+      const { result } = payload;
       return {
+        ...state,
         [COLLECTION]: {
           name: COLLECTION,
-          newick: uploaded.tree,
-          leafIds: uploaded.tree ? null : Object.keys(uploaded.assemblies),
+          newick: result.tree,
+          leafIds: result.tree ? null : result.assemblies.map(_ => _.uuid),
           ...initialState,
         },
+      };
+    }
+    case FETCH_SPECIES_DATA.SUCCESS: {
+      const [ reference ] = payload.result;
+      return {
+        ...state,
         [POPULATION]: {
           name: POPULATION,
           newick: reference.tree,

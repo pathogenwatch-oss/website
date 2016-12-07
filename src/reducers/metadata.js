@@ -1,11 +1,8 @@
-import { FETCH_ENTITIES } from '../actions/fetch';
+import { FETCH_COLLECTION } from '../collection-route/actions';
 import { SET_LABEL_COLUMN, setLabelColumn } from '../collection-viewer/table/actions';
-import { SET_TREE } from '../collection-viewer/tree/actions';
 
 import { downloadColumnProps, nameColumnProps } from '../collection-viewer/table/constants';
 import * as metadata from '../constants/metadata';
-
-import { speciesTrees } from '../collection-viewer/tree/constants';
 
 import Species from '../species';
 
@@ -23,10 +20,9 @@ const initialState = {
 
 function getUserDefinedColumnNames(assemblies) {
   const userDefinedColumnNames = new Set();
-  Object.keys(assemblies).forEach(key => {
-    const { userDefined } = assemblies[key].metadata;
-    if (userDefined) {
-      Object.keys(userDefined).
+  assemblies.forEach(assembly => {
+    if (assembly.userDefined) {
+      Object.keys(assembly.userDefined).
         filter(name => !/__colou?r$/.test(name)).
         forEach(name => userDefinedColumnNames.add(name));
     }
@@ -43,50 +39,23 @@ function getUserDefinedColumnProps(columnNames) {
   }));
 }
 
-function getActiveColumn(currentActiveColumn, newColumns) {
-  if (newColumns.indexOf(currentActiveColumn) !== -1) {
-    return currentActiveColumn;
-  }
-  return initialActiveColumn;
-}
-
 export default function (state = initialState, { type, payload }) {
   switch (type) {
-    case FETCH_ENTITIES.SUCCESS: {
-      const [ { assemblies } ] = payload.result;
-      const { publicMetadataColumnNames = [], uiOptions = {} } = Species.current;
+    case FETCH_COLLECTION.SUCCESS: {
+      const { assemblies } = payload.result;
+      const { uiOptions = {} } = Species.current;
 
-      const columnNames = getUserDefinedColumnNames(assemblies);
       const systemColumnProps = [
         downloadColumnProps,
         nameColumnProps,
         ...metadata.getSystemDataColumnProps(uiOptions),
       ];
-      const userDefinedColumnProps =
-        systemColumnProps.concat(getUserDefinedColumnProps(columnNames));
+      const columnNames = getUserDefinedColumnNames(assemblies);
 
       return {
         ...state,
-        userDefinedColumnProps,
-        publicMetadataColumnProps:
-          publicMetadataColumnNames.length ?
-            systemColumnProps.concat(
-              getUserDefinedColumnProps(publicMetadataColumnNames)
-            ) :
-            userDefinedColumnProps,
-        columns: userDefinedColumnProps,
-      };
-    }
-    case SET_TREE: {
-      const columnProps =
-        speciesTrees.has(payload.name) ?
-          state.userDefinedColumnProps :
-          state.publicMetadataColumnProps;
-
-      return {
-        ...state,
-        columns: columnProps,
-        activeColumn: getActiveColumn(state.activeColumn, columnProps),
+        columns:
+          systemColumnProps.concat(getUserDefinedColumnProps(columnNames)),
       };
     }
     case SET_LABEL_COLUMN:

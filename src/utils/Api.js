@@ -39,18 +39,13 @@ export function postJson(path, data, progressFn) {
   });
 }
 
-export function getCollectionId(speciesId, collectionData, callback) {
-  postJson(`/species/${speciesId}/collection`, collectionData)
-    .then(data => callback(null, data), error => callback(error));
-}
-
 export function getReferenceCollection(speciesId) {
   return $.get(`${API_ROOT}/species/${speciesId}/reference`);
 }
 
-export function getCollection(speciesId, collectionId) {
+export function getCollection(collectionId) {
   console.log(`[WGSA] Getting collection ${collectionId}`);
-  return $.get(`${API_ROOT}/species/${speciesId}/collection/${collectionId}`);
+  return $.get(`${API_ROOT}/collection/${collectionId}`);
 }
 
 export function requestFile({ speciesId, idType = 'assembly', format }, requestBody) {
@@ -76,8 +71,4 @@ export function getSubtree(speciesId, collectionId, subtreeId) {
     type: 'GET',
     url: `${API_ROOT}/species/${speciesId}/collection/${collectionId}/subtree/${subtreeId}`,
   });
-}
-
-export function checkCollectionStatus(collectionId) {
-  return $.get(`${API_ROOT}/collection/${collectionId}`);
 }

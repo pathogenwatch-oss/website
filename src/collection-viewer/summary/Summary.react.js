@@ -35,9 +35,7 @@ const Summary = ({ summary, isExpanded, onClick, onSliceClick }) => (
         if (isExpanded) {
           event.preventDefault();
           event.stopPropagation();
-          onSliceClick(
-            slice.assemblies.map(({ metadata }) => metadata.assemblyId)
-          );
+          onSliceClick(slice.assemblies.map(_ => _.uuid));
         }
       }}
     />
@@ -56,9 +54,7 @@ const Summary = ({ summary, isExpanded, onClick, onSliceClick }) => (
             onClick={(event) => {
               event.preventDefault();
               event.stopPropagation();
-              onSliceClick(
-                assemblies.map(({ metadata }) => metadata.assemblyId)
-              );
+              onSliceClick(assemblies.map(_ => _.uuid));
             }}
           />
       )}

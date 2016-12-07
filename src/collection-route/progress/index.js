@@ -47,7 +47,6 @@ const UploadProgress = React.createClass({
       '|',
       `(${percentage}%)`,
       `${metadata.title || 'Upload Progress'}`,
-      `[${Species.current.name}]`,
     ].join(' ');
   },
 

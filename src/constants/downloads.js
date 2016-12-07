@@ -63,12 +63,12 @@ function createPropsForDownloads(downloads, params, dispatch) {
 }
 
 export function addDownloadProps(row, { downloads }, dispatch) {
-  const { assemblyId, assemblyName } = row.metadata;
+  const { uuid, name } = row;
   return {
     ...row,
     __downloads: createPropsForDownloads(downloads, {
-      id: assemblyId,
-      getFileName: () => assemblyName,
+      id: uuid,
+      getFileName: () => name,
     }, dispatch),
   };
 }

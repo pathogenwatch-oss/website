@@ -3,8 +3,8 @@ import MetadataUtils from '../utils/Metadata';
 export const systemDataColumns = {
   __date: {
     columnKey: '__date',
-    valueGetter({ metadata }) {
-      return MetadataUtils.getFormattedDateString(metadata.date);
+    valueGetter({ date }) {
+      return MetadataUtils.getFormattedDateString(date);
     },
   },
   __wgsa_reference: {
@@ -56,9 +56,7 @@ export const systemDataColumns = {
   __core_matches: {
     columnKey: '__core_matches',
     valueGetter({ analysis }) {
-      return analysis.core ?
-        analysis.core.size :
-        null;
+      return analysis.core ? analysis.core.size : null;
     },
   },
   '__%_core_families': {
@@ -79,42 +77,32 @@ export const systemDataColumns = {
   },
   __assembly_length: {
     columnKey: '__assembly_length',
-    valueGetter({ metadata }) {
-      return metadata.metrics ?
-        metadata.metrics.totalNumberOfNucleotidesInDnaStrings :
-        null;
+    valueGetter({ metrics }) {
+      return metrics ? metrics.totalNumberOfNucleotidesInDnaStrings : null;
     },
   },
   __n50: {
     columnKey: '__n50',
-    valueGetter({ metadata }) {
-      return metadata.metrics ?
-        metadata.metrics.contigN50 :
-        null;
+    valueGetter({ metrics }) {
+      return metrics ? metrics.contigN50 : null;
     },
   },
   '__no._contigs': {
     columnKey: '__no._contigs',
-    valueGetter({ metadata }) {
-      return metadata.metrics ?
-        metadata.metrics.totalNumberOfContigs :
-        null;
+    valueGetter({ metrics }) {
+      return metrics ? metrics.totalNumberOfContigs : null;
     },
   },
   '__non-ATCG': {
     columnKey: '__non-ATCG',
-    valueGetter({ metadata }) {
-      return metadata.metrics ?
-        metadata.metrics.totalNumberOfNsInDnaStrings :
-        null;
+    valueGetter({ metrics }) {
+      return metrics ? metrics.totalNumberOfNsInDnaStrings : null;
     },
   },
   __GC_Content: {
     columnKey: '__GC_Content',
-    valueGetter({ metadata }) {
-      return metadata.metrics && metadata.metrics.gcContent ?
-        `${metadata.metrics.gcContent}%` :
-        null;
+    valueGetter({ metrics }) {
+      return metrics && metrics.gcContent ? `${metrics.gcContent}%` : null;
     },
   },
 };
@@ -144,4 +132,4 @@ export function getSystemDataColumnProps(uiOptions) {
 }
 
 export const getUserDefinedValue =
-  (column, { metadata }) => metadata.userDefined[column];
+  (column, { userDefined }) => userDefined[column];

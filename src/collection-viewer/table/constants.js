@@ -93,37 +93,35 @@ export const nameColumnProps = {
   getWidth(row, props) {
     let width = defaultWidthGetter(row, props, true);
 
-    if (row.__isPublic && row.metadata.collectionId) {
+    if (row.__isPublic && row.collectionId) {
       width += 32;
     }
 
-    if (row.metadata.pmid) {
+    if (row.pmid) {
       width += 32;
     }
 
     return width;
   },
   getCellContents({ valueGetter }, data) {
-    const { metadata } = data;
-
     return (
       <div className="wgsa-assembly-name-cell">
         {getNameText(data, valueGetter)}
         <div onClick={(e) => e.stopPropagation()}>
-          { data.__isPublic && metadata.collectionId ?
+          { data.__isPublic && data.collectionId ?
             <a className="mdl-button mdl-button--icon"
-              href={`/${Species.nickname}/collection/${metadata.collectionId}`}
+              href={`/${Species.nickname}/collection/${data.collectionId}`}
               title="View WGSA Collection"
               target="_blank" rel="noopener"
             >
               <i className="material-icons">open_in_new</i>
             </a> : null
           }
-          { metadata.pmid ?
+          { data.pmid ?
             <a className="mdl-button mdl-button--icon"
-              href={`http://www.ncbi.nlm.nih.gov/pubmed/${metadata.pmid}`}
+              href={`http://www.ncbi.nlm.nih.gov/pubmed/${data.pmid}`}
               target="_blank" rel="noopener"
-              title={`PMID ${metadata.pmid}`}
+              title={`PMID ${data.pmid}`}
               style={{ color: '#369' }}
             >
               <i className="material-icons">open_in_new</i>

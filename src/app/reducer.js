@@ -2,7 +2,7 @@ import { combineReducers } from 'redux';
 
 import { reducer as assemblyDrawer } from '../assembly-drawer';
 import bodyClickListener from '../reducers/bodyClickListener';
-import { assemblies, collection, reference } from '../reducers/collection';
+import { assemblies, collection, reference } from '../collection-route/reducers';
 import collectionViewer from '../collection-viewer/reducer';
 import downloads from '../reducers/downloads';
 import downloadsMenu from '../reducers/downloadsMenu';

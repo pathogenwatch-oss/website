@@ -187,7 +187,7 @@ export function addAssembliesToMarkerDefs(assemblies, existingMarkers = []) {
       continue;
     }
 
-    const positionKey = getPositionKey(assembly.metadata.position);
+    const positionKey = getPositionKey(assembly.position);
     if (markersByPosition.has(positionKey)) {
       markersByPosition.get(positionKey).
         assemblyIds.push(assembly.id);

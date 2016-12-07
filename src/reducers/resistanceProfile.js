@@ -1,7 +1,7 @@
 import React from 'react';
 import classnames from 'classnames';
 
-import { FETCH_ENTITIES } from '../actions/fetch';
+import { FETCH_SPECIES_DATA } from '../collection-route/actions';
 import { SET_COLOUR_COLUMNS, SHOW_TABLE_VIEW } from '../collection-viewer/table/actions';
 
 import Species from '../species';
@@ -195,8 +195,8 @@ const initialState = {
 
 export default function (state = initialState, { type, payload }) {
   switch (type) {
-    case FETCH_ENTITIES.SUCCESS: {
-      const { antibiotics, paar, snp } = payload.result[2];
+    case FETCH_SPECIES_DATA.SUCCESS: {
+      const { antibiotics, paar, snp } = payload.result[1];
 
       const libraries = {
         antibiotics: antibiotics.map(ab => (typeof ab === 'string' ? { name: ab } : ab)),
