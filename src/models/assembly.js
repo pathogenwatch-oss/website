@@ -127,7 +127,8 @@ function get(params, queryKeyPrefixes, callback) {
   LOGGER.info('Assembly ' + assemblyId + ' query keys:');
   LOGGER.info(queryKeys);
 
-  mainStorage.retrieveMany(queryKeys, function (erroredKeys, assemblyData) {
+  mainStorage.retrieveMany(queryKeys, function (error, { erroredKeys, results }) {
+    if (error) return callback(error);
     if (erroredKeys && hasFatalErrors(erroredKeys)) {
       LOGGER.error(`Could not retrieve minimum documents for assembly ${assemblyId}`);
       return callback(erroredKeys);
@@ -135,7 +136,7 @@ function get(params, queryKeyPrefixes, callback) {
 
     LOGGER.info('Got assembly ' + assemblyId + ' data');
 
-    const assembly = mergeQueryResults(assemblyData, queryKeyPrefixes, assemblyId);
+    const assembly = mergeQueryResults(results, queryKeyPrefixes, assemblyId);
 
     sequenceTypeModel.addSequenceTypeData(
       assembly, params.speciesId, function (stError, result) {

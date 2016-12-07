@@ -18,9 +18,9 @@ module.exports = (taskName, { assemblyId }) => {
           }, {}
         ) : {},
       paar: result.paarResult ?
-        result.paarResult.paarElementIds : [],
+        result.paarResult.paarElementIds || [] : [],
       snp: result.snparResult ?
-        result.snparResult.resistanceMutationIds : [],
+        result.snparResult.resistanceMutationIds || [] : [],
     })).
     then(result => CollectionAssembly.addAnalysisResult(uuid, taskName, result));
 };

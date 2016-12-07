@@ -23,16 +23,6 @@ router.get('/species/:id/reference', function (req, res, next) {
   });
 });
 
-router.get('/species/:speciesId/collection/:collectionId', function (req, res, next) {
-  LOGGER.info('Getting collection: ' + req.params.collectionId);
-  collectionModel.get(req.params, function (error, result) {
-    if (error) {
-      return next(error);
-    }
-    res.json(result);
-  });
-});
-
 router.get('/species/:speciesId/collection/:collectionId/subtree/:subtreeId',
   function (req, res, next) {
     LOGGER.info(`Received request for subtree ${req.params.subtreeId}`);

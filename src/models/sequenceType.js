@@ -31,12 +31,12 @@ function getMlstAllelesData(assembly, callback) {
     return callback(null, null);
   }
   LOGGER.info('Getting MLST alleles data');
-  sequencesStorage.retrieveMany(queryKeys, function (error, mlstAllelesData) {
+  sequencesStorage.retrieveMany(queryKeys, function (error, { results }) {
     if (error) {
       return callback(error, null);
     }
     LOGGER.info('Got MLST alleles data');
-    callback(null, mlstAllelesData);
+    callback(null, results);
   });
 }
 

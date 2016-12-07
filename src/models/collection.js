@@ -69,7 +69,7 @@ function addPublicAssemblyCounts(subtrees, collectionId, callback) {
   LOGGER.info(`Getting public assembly counts for subtrees: ${subtreeIds}`);
   mainStorage.retrieveMany(
     documentKeys,
-    (error, results) => {
+    (error, { results }) => {
       if (error) {
         return callback(error);
       }
@@ -195,55 +195,8 @@ function getSubtree({ speciesId, collectionId, subtreeId }, callback) {
   });
 }
 
-function getStatus({ speciesId, collectionId }, callback) {
-  getMetadata(collectionId, (error, doc, cas) => {
-    if (error) {
-      return callback(error);
-    }
-
-    if (doc.speciesId && speciesId !== doc.speciesId) {
-      return callback(new Error('Species does not match'));
-    }
-
-    if (doc.status === 'READY') {
-      return callback(null, { status: 'READY' });
-    }
-
-    // status page doesn't need this data
-    delete doc.assemblyIdToNameMap;
-    delete doc.type;
-    delete doc.documentKey;
-
-    // status is moved outside of progress doc
-    const status = doc.status;
-    delete doc.status;
-
-    return callback(null, { status, progress: doc, cas });
-  });
-}
-
-exports.getAggregated = function (collectionId) {
-  return new Promise((resolve, reject) => {
-    getMetadata(collectionId, (error, result) => {
-      if (error) return reject(error);
-      return resolve(result);
-    });
-  }).then(metadata =>
-    assemblyModel.getAssemblies(Object.keys(metadata.assemblyIdToNameMap)).
-      then(assemblies => ({
-        collectionId,
-        assemblies,
-        title: metadata.title,
-        description: metadata.description,
-        tree: metadata.tree,
-        subtrees: metadata.subtrees,
-      }))
-    );
-};
-
 module.exports.getAssemblyIds = getAssemblyIds;
 module.exports.getMetadata = getMetadata;
 module.exports.get = get;
 module.exports.getReference = getReference;
 module.exports.getSubtree = getSubtree;
-module.exports.getStatus = getStatus;

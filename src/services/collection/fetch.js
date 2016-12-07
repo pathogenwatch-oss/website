@@ -13,7 +13,7 @@ function addAssemblies(collection) {
 module.exports = ({ uuid }) =>
   services.request('collection', 'fetch-progress', { uuid }).
     then(collection => {
-      if (collection.isReady) {
+      if (collection.status === 'READY') {
         return addAssemblies(collection);
       }
       return collection;

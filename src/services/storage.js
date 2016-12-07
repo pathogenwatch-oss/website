@@ -57,7 +57,7 @@ function retrieveMany(keys, callback) {
       return resolve({ results, erroredKeys });
     })).
     then(value =>
-      (callback ? callback(value.erroredKeys, value.results) : value)
+      (callback ? callback(null, value) : value)
     ).
     catch(error => (callback ? callback(error) : error));
 }
