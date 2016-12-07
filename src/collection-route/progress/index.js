@@ -29,11 +29,11 @@ const UploadProgress = React.createClass({
 
   componentDidUpdate() {
     const { progress, updateProgress } = this.props;
-    if (progress.collectionId && !this.notificationChannel) {
+    if (progress && !this.notificationChannel) {
       this.notificationChannel = subscribe(
-        progress.collectionId,
-        'upload-progress',
-        data => updateProgress(data)
+        this.props.params.id, // get collection id from url
+        'progress',
+        data => console.dir(data) || updateProgress(data)
       );
     }
     this.setDocumentTitle();

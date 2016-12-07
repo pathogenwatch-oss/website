@@ -1,7 +1,4 @@
 export function getProgressPercentage(collection) {
-  const { totalResultsReceived, totalResultsExpected } = collection.progress || {};
-
-  return (
-    totalResultsExpected ? Math.floor(totalResultsReceived / totalResultsExpected * 100) : 0
-  );
+  if (!collection.progress) return 0;
+  return collection.progress.percent || 0;
 }
