@@ -1,12 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import DownloadButton from '../collection-viewer/downloads/DownloadButton.react';
+import DownloadButton from '../downloads/DownloadButton.react';
 
-import { createDownloadProps, formatCollectionFilename } from '../constants/downloads';
 import { getFastaArchiveFiles } from './selectors';
+import { getFiles } from '../downloads/selectors';
 
-import { postJson } from '../utils/Api';
+import { createDownloadProps, formatCollectionFilename } from '../downloads/utils';
+
+import { postJson } from '../../utils/Api';
 
 const Button = props => (
   <DownloadButton
@@ -18,12 +20,12 @@ const Button = props => (
 );
 
 function mapStateToProps(state) {
-  const { collection, downloads } = state;
+  const { collection } = state;
   return {
     files: getFastaArchiveFiles(state),
     format: 'fasta_archive',
     collection,
-    download: downloads.files.fasta_archive,
+    download: getFiles(state).fasta_archive,
   };
 }
 

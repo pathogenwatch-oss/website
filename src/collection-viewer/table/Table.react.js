@@ -6,11 +6,12 @@ import TableSwitcher from '../table/Switcher.react';
 
 import { getActiveAssemblies } from '../selectors';
 import { getVisibleTable } from '../table/selectors';
+import { getFiles } from '../downloads/selectors';
 
-import { onTableClick, onRowClick } from '../table/thunks';
+import { onTableClick, onRowClick } from './thunks';
 
 import { addColumnWidth } from '../../table/utils/columnWidth';
-import { addDownloadProps } from '../../constants/downloads';
+import { addDownloadProps } from '../downloads/utils';
 
 
 const preventDefault = e => e.preventDefault();
@@ -78,7 +79,7 @@ function mapStateToProps(state) {
     collection,
     data: getActiveAssemblies(state),
     downloads: {
-      wgsa_gff: downloads.files.wgsa_gff,
+      wgsa_gff: getFiles(state).wgsa_gff,
     },
     collectionViewer, // must be here to make selectors work :/
   };

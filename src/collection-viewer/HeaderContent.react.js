@@ -4,11 +4,12 @@ import { connect } from 'react-redux';
 import Search from './search/Search.react';
 import AboutCollection from './about-collection';
 
-import { setMenuActive } from '../actions/downloads';
+import { isMenuOpen } from './downloads/selectors';
+import { setMenuActive } from './downloads/actions';
 
-function mapStateToProps({ downloads }) {
+function mapStateToProps(state) {
   return {
-    menuOpen: downloads.menuOpen,
+    menuOpen: isMenuOpen(state),
   };
 }
 

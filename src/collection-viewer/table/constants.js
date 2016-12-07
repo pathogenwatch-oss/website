@@ -1,9 +1,9 @@
 import React from 'react';
 
 import DownloadButton from '../downloads/DownloadButton.react';
-import { FastaFileLink, FastaArchiveButton } from '../../fasta-download';
+import { FastaFileLink, FastaArchiveButton } from '../fasta-download';
 
-import { getArchiveDownloadProps } from '../../constants/downloads';
+import { getArchiveDownloadProps } from '../downloads/utils';
 
 import { defaultWidthGetter } from '../../table/utils/columnWidth';
 

@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 
-import { getActiveAssemblies } from '../collection-viewer/selectors';
+import { getActiveAssemblies } from '../selectors';
 
 export const getFastaArchiveFiles = createSelector(
   getActiveAssemblies,

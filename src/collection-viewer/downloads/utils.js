@@ -1,16 +1,19 @@
-import { requestDownload } from '../actions/downloads';
-import { showToast } from '../toast';
-import { getActiveAssemblyIds } from '../collection-viewer/selectors';
+import { requestDownload } from './actions';
+import { showToast } from '../../toast';
+import { getActiveAssemblyIds } from '../selectors';
 
-import { SERVER_ADDRESS, API_ROOT } from '../utils/Api';
+import { fileTypes } from './constants';
 
-import Species from '../species';
+import { API_ROOT } from '../../utils/Api';
+import Species from '../../species';
 
 export const encode = encodeURIComponent;
 export const collectionPath =
   () => `${API_ROOT}/species/${Species.id}/download/file`;
-export const speciesPath =
-  () => `${SERVER_ADDRESS}/${Species.nickname}/download`;
+
+export function getInitialFileState() {
+  return fileTypes;
+}
 
 export function createDownloadKey(id) {
   if (!id) return null;
@@ -79,4 +82,17 @@ export function getArchiveDownloadProps(state, downloads, dispatch) {
     id: getActiveAssemblyIds(state),
     getFileName: () => formatCollectionFilename(collection),
   }, dispatch);
+}
+
+
+export function createDefaultLink(keyMap, filename) {
+  const key = Object.keys(keyMap)[0];
+
+  if (!key) {
+    return null;
+  }
+
+  return (
+    `${collectionPath()}/${encode(key)}?prettyFileName=${encode(filename)}`
+  );
 }

@@ -5,7 +5,6 @@ import Collection from './Collection.react';
 import {
   fetchCollection, fetchSpeciesData, updateProgress,
 } from '../actions';
-import { resetStore } from '../../actions/reset';
 
 import { getProgressPercentage } from '../progress/selectors.js';
 
@@ -26,7 +25,6 @@ function mapDispatchToProps(dispatch, { params: { id } }) {
     checkStatus: () => dispatch(fetchCollection(id)),
     updateProgress: results => dispatch(updateProgress(results)),
     fetch: () => dispatch(fetchSpeciesData(Species.id)),
-    reset: () => dispatch(resetStore()),
   };
 }
 

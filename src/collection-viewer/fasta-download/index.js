@@ -1,4 +1,4 @@
-import { API_ROOT } from '../utils/Api';
+import { API_ROOT } from '../../utils/Api';
 
 export FastaFileLink from './FastaFileLink.react';
 export FastaArchiveButton from './FastaArchiveButton.react';

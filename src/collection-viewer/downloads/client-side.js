@@ -1,11 +1,10 @@
 import PromiseWorker from 'promise-worker';
 
-import { getTables } from '../collection-viewer/table/selectors';
+import { getTables } from '../table/selectors';
 
-import { tableKeys } from '../collection-viewer/table/constants';
-import { collectionPath, encode } from '../constants/downloads';
+import { tableKeys } from '../table/constants';
 
-import getCSVWorker from 'worker?name=csv.worker.js!../table/utils/CsvWorker';
+import getCSVWorker from 'worker?name=csv.worker.js!../../table/utils/CsvWorker';
 
 function convertTableToCSV(table, dataType) {
   return function (state) {
@@ -30,18 +29,6 @@ export const generateAMRProfile =
   convertTableToCSV(resistanceProfile, 'profile');
 export const generateAMRMechanisms =
   convertTableToCSV(resistanceProfile, 'mechanisms');
-
-export function createDefaultLink(keyMap, filename) {
-  const key = Object.keys(keyMap)[0];
-
-  if (!key) {
-    return null;
-  }
-
-  return (
-    `${collectionPath()}/${encode(key)}?prettyFileName=${encode(filename)}`
-  );
-}
 
 const windowURL = window.URL || window.webkitURL;
 
