@@ -6,10 +6,11 @@ import { sortAssemblies } from '../table/utils';
 import { statuses } from '../collection-route/constants';
 
 function createAnalysisDictionary(analyses = []) {
+  if (!Array.isArray(analyses)) return analyses;
   return analyses.reduce((memo, { name, result }) => {
     memo[name.toLowerCase()] = result;
     return memo;
-  });
+  }, {});
 }
 
 function decorateReferenceAssemblies(assemblies) {
@@ -93,9 +94,7 @@ export const collection = {
     [actions.FETCH_COLLECTION.SUCCESS](state, { result }) {
       return {
         ...state,
-        assemblyIds: new Set(
-          sortAssemblies(result.assemblies).map(_ => _.uuid),
-        ),
+        assemblyIds: new Set(sortAssemblies(result.assemblies).map(_ => _.uuid)),
         id: result.uuid,
         metadata: {
           title: result.title,
@@ -117,6 +116,12 @@ export const collection = {
       return {
         ...state,
         status: statuses.NOT_FOUND,
+      };
+    },
+    [actions.FETCH_SPECIES_DATA.SUCCESS](state) {
+      return {
+        ...state,
+        status: statuses.FETCHED,
       };
     },
   },

@@ -6,10 +6,10 @@ import Collection from './component';
 import FetchedHeaderContent from '../collection-viewer/HeaderContent.react';
 import ProcessingHeaderContent from './progress/Header.react';
 
-import { statuses } from './constants';
+import { statuses, readyStatuses } from './constants';
 
 export function getHeaderClassName(status) {
-  if (status === statuses.READY) {
+  if (readyStatuses.has(status)) {
     return 'mdl-layout__header--primary mdl-shadow--3dp';
   }
   return null;

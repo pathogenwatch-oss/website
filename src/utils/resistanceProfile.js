@@ -19,20 +19,20 @@ export function isResistant({ antibiotics }, antibiotic) {
 }
 
 export function defaultColourGetter(assembly) {
-  if (assembly.__isCollection) {
+  if (assembly && assembly.__isCollection) {
     return CGPS.COLOURS.PURPLE_LIGHT;
   }
   return CGPS.COLOURS.GREY;
 }
 
 export function getColour(antibiotic, assembly) {
-  const { resistanceProfile } = assembly.analysis;
-  if (!resistanceProfile) {
+  const { paarsnp } = assembly.analysis;
+  if (!paarsnp) {
     return defaultColourGetter(assembly);
   }
 
-  if (isResistant(resistanceProfile, antibiotic)) {
-    return stateColours[resistanceProfile.antibiotics[antibiotic].state];
+  if (isResistant(paarsnp, antibiotic)) {
+    return stateColours[paarsnp.antibiotics[antibiotic].state];
   }
   return nonResistantColour;
 }

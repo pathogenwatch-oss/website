@@ -102,7 +102,7 @@ function mergeProps({ displayProps, activeColumn, assemblies }, { dispatch }) {
       dispatch(activateFilter(
         assemblies.reduce((set, assembly) => {
           if (String(activeColumn.valueGetter(assembly)).match(matcher)) {
-            set.add(assembly.id);
+            set.add(assembly.uuid);
           }
           return set;
         }, new Set())

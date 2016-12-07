@@ -190,13 +190,13 @@ export function addAssembliesToMarkerDefs(assemblies, existingMarkers = []) {
     const positionKey = getPositionKey(assembly.position);
     if (markersByPosition.has(positionKey)) {
       markersByPosition.get(positionKey).
-        assemblyIds.push(assembly.id);
+        assemblyIds.push(assembly.uuid);
       continue;
     }
 
     markersByPosition.set(positionKey, {
       position: JSON.parse(positionKey),
-      assemblyIds: [ assembly.id ],
+      assemblyIds: [ assembly.uuid ],
       active: true,
       visible: true,
     });

@@ -29,12 +29,12 @@ const columnDefsByTable = {
       defined: {
         [nameColumnData.columnKey]: nameColumnData,
       },
-      genericGetter: (antibiotic, { analysis: { resistanceProfile } }) => {
+      genericGetter: (antibiotic, { analysis: { paarsnp } }) => {
         switch (dataType) {
           case 'profile':
-            return isResistant(resistanceProfile, antibiotic) ? 1 : 0;
+            return isResistant(paarsnp, antibiotic) ? 1 : 0;
           case 'mechanisms': {
-            const { antibiotics } = resistanceProfile;
+            const { antibiotics } = paarsnp;
             return `"${antibiotics[antibiotic].mechanisms.join(',')}"`;
           }
           default:

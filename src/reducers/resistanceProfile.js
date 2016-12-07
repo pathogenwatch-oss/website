@@ -53,7 +53,7 @@ function createAntibioticsColumn({ name, longName }) {
     cellPadding: 16,
     addState({ data }) {
       const allMechanisms = data.reduce((memo, row) => {
-        const { antibiotics } = row.analysis.resistanceProfile;
+        const { antibiotics } = row.analysis.paarsnp;
         if (!antibiotics || !antibiotics[this.columnKey]) return memo;
         for (const m of antibiotics[this.columnKey].mechanisms) {
           memo.add(m);
@@ -67,9 +67,9 @@ function createAntibioticsColumn({ name, longName }) {
       return this;
     },
     getCellContents(props, { analysis }) {
-      const { antibiotics } = analysis.resistanceProfile;
+      const { antibiotics } = analysis.paarsnp;
       const isResistant =
-        resistanceProfile.isResistant(analysis.resistanceProfile, props.columnKey);
+        resistanceProfile.isResistant(analysis.paarsnp, props.columnKey);
       if (isResistant) {
         const { state, mechanisms } = antibiotics[props.columnKey];
         const activeMechanisms = new Set(mechanisms);
@@ -135,7 +135,7 @@ const viewColumnBuilders = {
       return measureText(name, true) + 4;
     },
     getCellContents(props, { analysis }) {
-      return analysis.resistanceProfile.snp.indexOf(name) !== -1 ? (
+      return analysis.paarsnp.snp.indexOf(name) !== -1 ? (
         <i className="material-icons wgsa-resistance-icon wgsa-amr--resistant">
           lens
         </i>
@@ -155,7 +155,7 @@ const viewColumnBuilders = {
       return measureText(name, true) + 4;
     },
     getCellContents(props, { analysis }) {
-      return analysis.resistanceProfile.paar.indexOf(name) !== -1 ? (
+      return analysis.paarsnp.paar.indexOf(name) !== -1 ? (
         <i className="material-icons wgsa-resistance-icon wgsa-amr--resistant">
           lens
         </i>

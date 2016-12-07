@@ -10,19 +10,19 @@ export const systemDataColumns = {
   __wgsa_reference: {
     columnKey: '__wgsa_reference',
     valueGetter({ analysis }) {
-      return analysis.populationSubtype;
+      return analysis.fp.subtype;
     },
   },
   __st: {
     columnKey: '__st',
     valueGetter({ analysis }) {
-      return analysis.st;
+      return analysis.mlst.st;
     },
   },
   __profile: {
     columnKey: '__profile',
     valueGetter({ analysis }) {
-      return analysis.mlst;
+      return analysis.mlst.code;
     },
   },
   '__ng-mast': {
