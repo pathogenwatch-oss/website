@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 
 import uploads from './uploads';
+import fastas from './fastas';
 
 import { CREATE_COLLECTION, CHANGE_COLLECTION_METADATA } from '../../hub-drawer';
 import { SHOW_METRIC } from '../actions';
@@ -39,6 +40,9 @@ function collectionMetadata(state = initialMetadata, { type, payload }) {
 }
 
 export default combineReducers({
+  entities: combineReducers({
+    fastas,
+  }),
   uploads,
   loading,
   selectedMetric,

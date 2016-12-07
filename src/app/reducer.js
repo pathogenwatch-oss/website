@@ -6,7 +6,6 @@ import collectionViewer from '../collection-viewer/reducer';
 import filters from '../filter';
 import { reducer as header } from '../header';
 import { reducer as hub } from '../hub';
-import fastas from '../hub/reducers/fastas';
 import { reducer as maps } from '../map';
 import { reducer as location } from '../location/';
 import { reducer as toast } from '../toast';
@@ -26,7 +25,6 @@ export default combineReducers({
   collectionViewer,
   entities: combineReducers({
     assemblies: createReducer(assemblies),
-    fastas: createReducer(fastas),
   }),
   filters,
   header,
