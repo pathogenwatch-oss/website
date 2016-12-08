@@ -1,5 +1,6 @@
 module.exports = function (app) {
   app.use('/api/', [
+    require('routes/assembly'),
     require('routes/upload'),
     require('routes/collection'),
     require('routes/resistance'),
