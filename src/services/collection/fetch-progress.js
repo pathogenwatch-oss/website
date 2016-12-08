@@ -15,7 +15,7 @@ function countAssemblyResults(collection) {
 
 function isReady(collection, results) {
   return (
-    collection.tree &&
+    (collection.size < 3 || collection.tree) &&
     collection.subtrees.length &&
     results.length === collection.totalAssemblyResults &&
     results.every(({ total }) => total === collection.size)

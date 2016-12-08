@@ -21,7 +21,7 @@ function getAlleleKeys(alleles) {
   return mlstAllelesQueryKeys;
 }
 
-function getMLSTAlleleDetail(alleles) {
+function getMLSTAlleleDetails(alleles) {
   const queryKeys = getAlleleKeys(alleles);
   if (!queryKeys || !queryKeys.length) {
     return null;
@@ -30,16 +30,16 @@ function getMLSTAlleleDetail(alleles) {
     then(({ results }) => results);
 }
 
-function getAlleleId({ alleleId }) {
-  if (!alleleId || alleleId.toLowerCase() === UNKNOWN_ST) {
+function getAlleleId(allele) {
+  if (!allele || !allele.alleleId || allele.alleleId.toLowerCase() === UNKNOWN_ST) {
     return MISSING_ALLELE_ID;
   }
-  return alleleId;
+  return allele.alleleId;
 }
 
-function createMLSTCode(alleleDetails) {
-  return Object.keys(alleleDetails).reduce((memo, key) => {
-    const allele = alleleDetails[key];
+function createMLSTCode(alleles, alleleDetails) {
+  return Object.keys(alleles).reduce((memo, key) => {
+    const allele = alleleDetails[alleles[key]];
     return `${memo ? `${memo}_` : ''}${getAlleleId(allele)}`;
   }, '');
 }
@@ -71,8 +71,9 @@ function getSequenceType(alleles, code, speciesId) {
 module.exports = (name, { assemblyId, speciesId }) => {
   const { uuid } = assemblyId;
   return mainStorage.retrieve(`${MLST_RESULT}_${uuid}`).
-    then(({ alleles }) => getMLSTAlleleDetail(alleles).
-      then(createMLSTCode).
+    then(({ alleles }) =>
+      getMLSTAlleleDetails(alleles).
+      then((results) => createMLSTCode(alleles, results)).
       then(code => getSequenceType(alleles, code, speciesId)).
       then(result => ({
         st: result.sequenceType,
