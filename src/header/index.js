@@ -1,4 +1,4 @@
-import { FETCH_COLLECTION, UPDATE_COLLECTION_PROGRESS }
+import { FETCH_COLLECTION, UPDATE_COLLECTION_PROGRESS, RESET_COLLECTION_VIEW }
   from '../collection-route/actions';
 
 import { getHeaderClassName } from '../collection-route';
@@ -25,6 +25,11 @@ export function reducer(state = initialState, { type, payload }) {
       return {
         ...state,
         className: getHeaderClassName((payload.result || payload.progress).status),
+      };
+    case RESET_COLLECTION_VIEW:
+      return {
+        ...state,
+        className: null,
       };
     default:
       return state;
