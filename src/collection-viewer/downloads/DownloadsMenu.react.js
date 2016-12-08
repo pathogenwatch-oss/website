@@ -6,8 +6,11 @@ import { connect } from 'react-redux';
 import Overlay from '../../components/overlay';
 import DownloadButton from './DownloadButton.react';
 
-import { setMenuActive } from './actions';
+import { getCollection, getAssemblies, getViewer } from '../../collection-route/selectors';
 import { getActiveAssemblyIds } from '../selectors';
+
+import { setMenuActive } from './actions';
+
 import {
   createDownloadProps, formatCollectionFilename,
 } from './utils';
@@ -40,13 +43,12 @@ DownloadsMenu.PropTypes = {
 };
 
 function mapStateToProps(state) {
-  const { collection, entities, collectionViewer } = state;
   return {
-    collection,
-    assemblies: entities.assemblies,
+    collection: getCollection(state),
+    assemblies: getAssemblies(state),
     assemblyIds: getActiveAssemblyIds(state),
-    ...collectionViewer.downloads,
-    collectionViewer, // needs to be here for selectors to work :/
+    ...getViewer(state).downloads,
+    collectionViewer: viewer, // needs to be here for selectors to work :/
   };
 }
 

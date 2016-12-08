@@ -1,5 +1,7 @@
-export const isMenuOpen = ({ collectionViewer }) =>
-  collectionViewer.downloads.menuOpen;
+import { getViewer } from '../../collection-route/selectors';
 
-export const getFiles = ({ collectionViewer }) =>
-  collectionViewer.downloads.files;
+export const isMenuOpen = state =>
+  getViewer(state).downloads.menuOpen;
+
+export const getFiles = state =>
+  getViewer(state).downloads.files;

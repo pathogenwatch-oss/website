@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import DownloadButton from '../downloads/DownloadButton.react';
 
+import { getCollection } from '../../collection-route/selectors';
 import { getFastaArchiveFiles } from './selectors';
 import { getFiles } from '../downloads/selectors';
 
@@ -20,11 +21,10 @@ const Button = props => (
 );
 
 function mapStateToProps(state) {
-  const { collection } = state;
   return {
     files: getFastaArchiveFiles(state),
     format: 'fasta_archive',
-    collection,
+    collection: getCollection(state),
     download: getFiles(state).fasta_archive,
   };
 }

@@ -4,6 +4,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
 
+import { getAssemblies } from '../../collection-route/selectors';
 import { getMetadataTable } from '../table/selectors';
 import { getFilter } from '../selectors';
 
@@ -75,7 +76,6 @@ const Search = React.createClass({
 });
 
 function mapStateToProps(state) {
-  const { entities } = state;
   const filter = getFilter(state);
   const { activeColumn } = getMetadataTable(state);
   const totalAmount = filter.unfilteredIds.length;
@@ -86,7 +86,7 @@ function mapStateToProps(state) {
       filterColumnName: utils.getColumnLabel(activeColumn),
     },
     activeColumn,
-    assemblies: [ ...filter.unfilteredIds ].map(id => entities.assemblies[id]),
+    assemblies: [ ...filter.unfilteredIds ].map(id => getAssemblies(state)[id]),
   };
 }
 

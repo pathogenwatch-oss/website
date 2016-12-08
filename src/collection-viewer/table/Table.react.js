@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import FixedTable from '../../components/FixedTable.react';
 import TableSwitcher from '../table/Switcher.react';
 
+import { getCollection, getViewer } from '../../collection-route/selectors';
 import { getActiveAssemblies } from '../selectors';
 import { getVisibleTable } from '../table/selectors';
 import { getFiles } from '../downloads/selectors';
@@ -67,8 +68,6 @@ const Table = React.createClass({
 });
 
 function mapStateToProps(state) {
-  const { collection, collectionViewer, downloads } = state;
-
   const table = getVisibleTable(state);
   const { activeColumn, activeColumns, ...tableState } = table;
 
@@ -76,12 +75,12 @@ function mapStateToProps(state) {
     ...tableState,
     activeColumns:
       activeColumn ? new Set([ activeColumn ]) : activeColumns,
-    collection,
+    collection: getCollection(state),
     data: getActiveAssemblies(state),
     downloads: {
       wgsa_gff: getFiles(state).wgsa_gff,
     },
-    collectionViewer, // must be here to make selectors work :/
+    collectionViewer: getViewer(state), // must be here to make selectors work :/
   };
 }
 

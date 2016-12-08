@@ -1,5 +1,7 @@
 import { createSelector } from 'reselect';
 
+import { getViewer } from '../../collection-route/selectors';
+
 import {
   getActiveAssemblies,
   getColourGetter,
@@ -29,6 +31,6 @@ export const getAssemblySummary = createSelector(
   )
 );
 
-const getSummary = ({ collectionViewer }) => collectionViewer.summary;
+const getSummary = state => getViewer(state).summary;
 
 export const getIsSummaryExpanded = (state) => getSummary(state).isExpanded;

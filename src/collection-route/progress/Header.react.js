@@ -62,9 +62,9 @@ const Header = React.createClass({
 
 });
 
-function mapStateToProps({ collection }) {
+function mapStateToProps(state) {
   return {
-    percentage: getProgressPercentage(collection),
+    percentage: getProgressPercentage(state),
   };
 }
 

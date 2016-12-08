@@ -2,20 +2,22 @@ import { connect } from 'react-redux';
 
 import Collection from './Collection.react';
 
+import { getCollection } from '../selectors';
+import { getProgressPercentage } from '../progress/selectors.js';
+
 import {
   fetchCollection, fetchSpeciesData, updateProgress,
 } from '../actions';
 
-import { getProgressPercentage } from '../progress/selectors.js';
-
 import Species from '../../species';
 
-function mapStateToProps({ collection }) {
+function mapStateToProps(state) {
+  const collection = getCollection(state);
   return {
     status: collection.status,
     progress: collection.progress,
     metadata: collection.metadata,
-    percentage: getProgressPercentage(collection),
+    percentage: getProgressPercentage(state),
   };
 }
 

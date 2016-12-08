@@ -1,5 +1,7 @@
 import { requestDownload } from './actions';
 import { showToast } from '../../toast';
+
+import { getCollection } from '../../collection-route/selectors';
 import { getActiveAssemblyIds } from '../selectors';
 
 import { fileTypes } from './constants';
@@ -77,7 +79,7 @@ export function addDownloadProps(row, { downloads }, dispatch) {
 }
 
 export function getArchiveDownloadProps(state, downloads, dispatch) {
-  const { collection } = state;
+  const collection = getCollection(state);
   return createPropsForDownloads(downloads, {
     id: getActiveAssemblyIds(state),
     getFileName: () => formatCollectionFilename(collection),

@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect';
 
+import { getAssemblies, getViewer } from '../../collection-route/selectors';
 import { getMetadataTable } from '../table/selectors';
 
 import { titles, speciesTrees } from './constants';
@@ -8,7 +9,7 @@ import * as utils from './utils';
 import { POPULATION, COLLECTION } from '../../app/stateKeys/tree';
 import Species from '../../species';
 
-export const getTreeState = ({ collectionViewer }) => collectionViewer.tree;
+export const getTreeState = state => getViewer(state).tree;
 
 export const getTrees = state => getTreeState(state).entities;
 export const isLoading = state => getTreeState(state).loading;
@@ -39,7 +40,7 @@ export const getSingleTree = createSelector(
 
 export const getTitle = createSelector(
   getVisibleTree,
-  ({ entities }) => entities.assemblies,
+  getAssemblies,
   (tree, assemblies) => titles[tree.name] || assemblies[tree.name].name
 );
 

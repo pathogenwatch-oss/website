@@ -6,7 +6,11 @@ import Collection from './component';
 import FetchedHeaderContent from '../collection-viewer/HeaderContent.react';
 import ProcessingHeaderContent from './progress/Header.react';
 
+import { getCollection } from './selectors';
+
 import { statuses, readyStatuses } from './constants';
+
+export reducer from './reducers';
 
 export function getHeaderClassName(status) {
   if (readyStatuses.has(status)) {
@@ -15,7 +19,7 @@ export function getHeaderClassName(status) {
   return null;
 }
 
-const mapStateToProps = ({ collection }) => ({ status: collection.status });
+const mapStateToProps = state => ({ status: getCollection(state).status });
 
 const HeaderSwitcher = connect(mapStateToProps)(
   ({ status }) => {
