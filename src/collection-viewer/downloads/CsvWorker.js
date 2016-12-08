@@ -1,11 +1,12 @@
 import registerPromiseWorker from 'promise-worker/register';
 import Papa from 'papaparse';
 
-import { formatColumnKeyAsLabel } from './index';
+import { formatColumnKeyAsLabel } from '../table/utils';
 
-import { systemDataColumns, getUserDefinedValue } from '^/constants/metadata';
+import { systemDataColumns } from '../metadata-table/constants';
+import { getUserDefinedValue } from '../metadata-table/utils';
 
-import { isResistant } from '^/utils/resistanceProfile';
+import { isResistant } from '../resistance-profile/utils';
 
 const nameColumnData = {
   columnKey: '__name',

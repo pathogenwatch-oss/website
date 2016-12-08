@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import FixedTable from '../../components/FixedTable.react';
+import FixedTable from '../../fixed-table';
 import TableSwitcher from '../table/Switcher.react';
 
 import { getCollection, getViewer } from '../../collection-route/selectors';
@@ -11,7 +11,7 @@ import { getFiles } from '../downloads/selectors';
 
 import { onTableClick, onRowClick } from './thunks';
 
-import { addColumnWidth } from '../../table/utils/columnWidth';
+import { addColumnWidth } from '../table/utils/columnWidth';
 import { addDownloadProps } from '../downloads/utils';
 
 

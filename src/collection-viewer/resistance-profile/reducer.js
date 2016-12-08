@@ -1,14 +1,14 @@
 import React from 'react';
 import classnames from 'classnames';
 
-import { FETCH_SPECIES_DATA } from '../collection-route/actions';
-import { SET_COLOUR_COLUMNS, SHOW_TABLE_VIEW } from '../collection-viewer/table/actions';
+import { FETCH_SPECIES_DATA } from '../../collection-route/actions';
+import { SET_COLOUR_COLUMNS, SHOW_TABLE_VIEW } from '../table/actions';
 
-import Species from '../species';
-import * as resistanceProfile from '../utils/resistanceProfile';
+import Species from '../../species';
+import * as resistanceProfile from './utils';
 import { canvas, measureText } from '../table/utils/columnWidth';
 
-import * as constants from '../collection-viewer/table/constants';
+import * as constants from '../table/constants';
 
 const systemColumnProps = [
   constants.downloadColumnProps,
@@ -199,7 +199,8 @@ export default function (state = initialState, { type, payload }) {
       const { antibiotics, paar, snp } = payload.result[1];
 
       const libraries = {
-        antibiotics: antibiotics.map(ab => (typeof ab === 'string' ? { name: ab } : ab)),
+        antibiotics: antibiotics.map(ab =>
+          (typeof ab === 'string' ? { name: ab } : ab)),
         paar, snp,
       };
 

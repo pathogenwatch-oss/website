@@ -3,7 +3,7 @@ import { createSelector } from 'reselect';
 import { getAssemblies, getViewer } from '../collection-route/selectors';
 import { getResistanceProfileTable } from './table/selectors';
 
-import { createColourGetter } from '../utils/resistanceProfile';
+import { createColourGetter } from './resistance-profile/utils';
 
 export const getFilter = state => getViewer(state).filter;
 

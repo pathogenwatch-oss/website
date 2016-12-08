@@ -2,7 +2,7 @@ import PromiseWorker from 'promise-worker';
 
 import { tableKeys } from '../table/constants';
 
-import getCSVWorker from 'worker?name=csv.worker.js!../../table/utils/CsvWorker';
+import getCSVWorker from 'worker?name=csv.worker.js!./CsvWorker';
 
 function convertTableToCSV(table, dataType) {
   return function (state) {

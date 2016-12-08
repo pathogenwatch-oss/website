@@ -1,10 +1,10 @@
-import { FETCH_COLLECTION } from '../collection-route/actions';
-import { SET_LABEL_COLUMN, setLabelColumn } from '../collection-viewer/table/actions';
+import { FETCH_COLLECTION } from '../../collection-route/actions';
+import { SET_LABEL_COLUMN, setLabelColumn } from './actions';
 
-import { downloadColumnProps, nameColumnProps } from '../collection-viewer/table/constants';
-import * as metadata from '../constants/metadata';
+import { downloadColumnProps, nameColumnProps } from '../table/constants';
+import { getUserDefinedValue, getSystemDataColumnProps } from './utils';
 
-import Species from '../species';
+import Species from '../../species';
 
 const initialActiveColumn = nameColumnProps;
 
@@ -34,7 +34,7 @@ function getUserDefinedColumnProps(columnNames) {
   return Array.from(columnNames).map(column => ({
     columnKey: column,
     valueGetter(data) {
-      return metadata.getUserDefinedValue(column, data);
+      return getUserDefinedValue(column, data);
     },
   }));
 }
@@ -48,7 +48,7 @@ export default function (state = initialState, { type, payload }) {
       const systemColumnProps = [
         downloadColumnProps,
         nameColumnProps,
-        ...metadata.getSystemDataColumnProps(uiOptions),
+        ...getSystemDataColumnProps(uiOptions),
       ];
       const columnNames = getUserDefinedColumnNames(assemblies);
 

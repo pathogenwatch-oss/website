@@ -1,7 +1,6 @@
 /* eslint no-param-reassign: ["error", { "props": false }] */
 
 import Papa from 'papaparse';
-import { formatMonth, formatDay } from './Date';
 
 function convertFieldNamesToLowerCase(row) {
   const fieldNames = Object.keys(row);
@@ -39,22 +38,6 @@ function parseCsvToJson(csv) {
   return results;
 }
 
-function getFormattedDateString({ year, month, day }) {
-  if (year && !month && !day) {
-    return year;
-  }
-
-  if (year && month && !day) {
-    return `${formatMonth(month)} ${year}`;
-  }
-
-  if (year && month && day) {
-    return `${formatDay(day)} ${formatMonth(month)} ${year}`;
-  }
-
-  return '';
-}
-
 function isValid({ date }) {
   const thisYear = new Date().getFullYear();
 
@@ -81,6 +64,5 @@ function isValid({ date }) {
 
 export default {
   parseCsvToJson,
-  getFormattedDateString,
   isValid,
 };

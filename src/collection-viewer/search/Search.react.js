@@ -10,8 +10,7 @@ import { getFilter } from '../selectors';
 
 import { activateFilter, resetFilter } from '../filter/actions';
 
-
-import { utils } from '../../table';
+import { getColumnLabel } from '../table/utils';
 
 const Search = React.createClass({
 
@@ -83,7 +82,7 @@ function mapStateToProps(state) {
     displayProps: {
       totalAmount,
       filteredAmount: filter.active ? filter.ids.size : totalAmount,
-      filterColumnName: utils.getColumnLabel(activeColumn),
+      filterColumnName: getColumnLabel(activeColumn),
     },
     activeColumn,
     assemblies: [ ...filter.unfilteredIds ].map(id => getAssemblies(state)[id]),

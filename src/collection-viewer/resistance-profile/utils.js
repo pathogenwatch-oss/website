@@ -1,6 +1,6 @@
-import { setColourColumns } from '../collection-viewer/table/actions';
+import { setColourColumns } from '../table/actions';
 
-import { DEFAULT, CGPS } from '../app/constants';
+import { DEFAULT, CGPS } from '../../app/constants';
 
 const stateColours = {
   RESISTANT: DEFAULT.DANGER_COLOUR,

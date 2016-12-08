@@ -1,4 +1,4 @@
-import { getColumnLabel } from '.';
+import { getColumnLabel } from '../utils';
 
 export const canvas = document.createElement('canvas').getContext('2d');
 

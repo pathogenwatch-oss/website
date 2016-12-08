@@ -1,10 +1,7 @@
-import 'fixed-data-table/dist/fixed-data-table.css';
-import '../css/fixed-data-table-overrides.css';
-
 import React from 'react';
 import { Table, Column, Cell } from 'fixed-data-table';
 
-import { getColumnLabel, getCellValue } from '../table/utils';
+import { getColumnLabel, getCellValue } from './utils';
 
 function getClassNames(baseClass, selected, extraClasses) {
   return (

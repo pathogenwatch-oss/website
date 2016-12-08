@@ -6,7 +6,7 @@ import { getFilter, getColourGetter } from '../selectors';
 import { getMetadataTable } from '../table/selectors';
 import { getVisibleTree } from './selectors';
 
-import { nonResistantColour } from '../../utils/resistanceProfile';
+import { nonResistantColour } from '../resistance-profile/utils';
 import { getLeafStyle } from './utils';
 import { defaultLeafStyle } from './constants';
 

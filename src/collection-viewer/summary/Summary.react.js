@@ -16,7 +16,7 @@ function getAssemblySummarySlices(summary) {
   );
 }
 
-import { getColourState, nonResistantColour } from '../../utils/resistanceProfile';
+import { getColourState, nonResistantColour } from '../resistance-profile/utils';
 
 const Summary = ({ summary, isExpanded, onClick, onSliceClick }) => (
   <div
