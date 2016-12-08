@@ -4,7 +4,7 @@ import * as actions from '../actions';
 import { sortAssemblies } from '../utils';
 import { statuses } from '../../collection-route/constants';
 
-const initialState = { id: null, assemblyIds: [], metadata: {} };
+const initialState = { id: null, assemblyIds: new Set(), metadata: {} };
 
 export default function (state = initialState, { type, payload }) {
   switch (type) {

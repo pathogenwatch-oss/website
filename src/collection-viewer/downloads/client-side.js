@@ -1,16 +1,14 @@
 import PromiseWorker from 'promise-worker';
 
-import { getTables } from '../table/selectors';
-
 import { tableKeys } from '../table/constants';
 
 import getCSVWorker from 'worker?name=csv.worker.js!../../table/utils/CsvWorker';
 
 function convertTableToCSV(table, dataType) {
   return function (state) {
-    const { assemblies, assemblyIds } = state;
+    const { assemblies, assemblyIds, tables } = state;
     const columnKeys =
-      getTables(state)[table].columns.
+      tables[table].columns.
         filter(_ => 'valueGetter' in _).
         map(_ => _.columnKey);
 

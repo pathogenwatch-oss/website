@@ -7,6 +7,7 @@ import Overlay from '../../components/overlay';
 import DownloadButton from './DownloadButton.react';
 
 import { getCollection, getAssemblies, getViewer } from '../../collection-route/selectors';
+import { getTables } from '../table/selectors';
 import { getActiveAssemblyIds } from '../selectors';
 
 import { setMenuActive } from './actions';
@@ -43,12 +44,13 @@ DownloadsMenu.PropTypes = {
 };
 
 function mapStateToProps(state) {
+  const viewer = getViewer(state);
   return {
     collection: getCollection(state),
     assemblies: getAssemblies(state),
     assemblyIds: getActiveAssemblyIds(state),
-    ...getViewer(state).downloads,
-    collectionViewer: viewer, // needs to be here for selectors to work :/
+    ...viewer.downloads,
+    tables: getTables(state),
   };
 }
 

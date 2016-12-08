@@ -43,7 +43,6 @@ const ExplorerMap = (props) => (
 );
 
 import { getAssemblies } from '../../collection-route/selectors';
-
 import {
   getVisibleAssemblyIds,
   getFilteredAssemblyIds,
