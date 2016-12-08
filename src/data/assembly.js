@@ -14,6 +14,7 @@ const schema = new Schema({
     latitude: String,
     longitude: String,
   },
+  country: String,
   userDefined: Object,
 });
 
