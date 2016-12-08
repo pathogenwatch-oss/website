@@ -4,7 +4,6 @@ const { fastaStoragePath } = require('configuration');
 fastaStorage.setup(fastaStoragePath);
 
 const Fasta = require('data/fasta');
-const { getCountryCode } = require('models/assemblyMetadata');
 
 const { ServiceRequestError } = require('utils/errors');
 
@@ -24,15 +23,12 @@ function getFastaDocument({ fileId, filePath }) {
     });
 }
 
-module.exports = ({ stream, metadata }) => {
+module.exports = ({ stream }) => {
   if (!stream) {
     return Promise.reject(new ServiceRequestError('No stream provided'));
   }
 
-  const country = getCountryCode(metadata);
-  return fastaStorage.store(fastaStoragePath, stream).
-    then(getFastaDocument).
-    then(fasta => Object.assign(
-      { country, id: fasta.fileId }, fasta.toObject())
-    );
+  return (
+    fastaStorage.store(fastaStoragePath, stream).then(getFastaDocument)
+  );
 };
