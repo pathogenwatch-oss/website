@@ -30,9 +30,9 @@ export default React.createClass({
     }
   },
 
-  // componentWillUnmount() {
-  //   this.props.reset();
-  // },
+  componentWillUnmount() {
+    this.props.reset();
+  },
 
   render() {
     const { progress = {}, status } = this.props;

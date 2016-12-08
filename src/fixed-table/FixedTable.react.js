@@ -1,8 +1,6 @@
 import React from 'react';
 import { Table, Column, Cell } from 'fixed-data-table';
 
-import { getColumnLabel, getCellValue } from './utils';
-
 function getClassNames(baseClass, selected, extraClasses) {
   return (
     baseClass +
@@ -14,17 +12,7 @@ function getClassNames(baseClass, selected, extraClasses) {
 const getHeaderClassNames = getClassNames.bind(null, 'wgsa-table-header');
 const getCellClassNames = getClassNames.bind(null, 'wgsa-table-cell');
 
-
-export const DefaultColumnHeader =
-  ({ handleHeaderClick, columnProps, title }) => (
-    <button
-      title={title}
-      className="wgsa-selectable-column-heading"
-      onClick={event => handleHeaderClick(event, columnProps)}
-    >
-      {getColumnLabel(columnProps)}
-    </button>
-  );
+const getCellValue = ({ valueGetter }, data) => valueGetter(data);
 
 export default React.createClass({
 
@@ -37,14 +25,9 @@ export default React.createClass({
     columns: React.PropTypes.array,
     data: React.PropTypes.array,
     calculatedColumnWidths: React.PropTypes.array,
-    headerClickHandler: React.PropTypes.func,
+    getDefaultHeaderContent: React.PropTypes.func,
     rowClickHandler: React.PropTypes.func,
     activeColumns: React.PropTypes.object,
-  },
-
-  handleHeaderClick(e, columnProps) {
-    e.stopPropagation();
-    this.props.headerClickHandler(e, columnProps);
   },
 
   handleRowClick(e, index) {
@@ -57,7 +40,7 @@ export default React.createClass({
   },
 
   renderHeader(columnProps, headerProps) {
-    const { headerClasses, headerTitle, getHeaderContent } = columnProps;
+    const { headerClasses, getHeaderContent } = columnProps;
     const isSelected = this.isSelected(columnProps);
 
     return (
@@ -67,11 +50,7 @@ export default React.createClass({
       >
         { getHeaderContent ?
           getHeaderContent(columnProps) :
-          <DefaultColumnHeader
-            title={headerTitle}
-            columnProps={columnProps}
-            handleHeaderClick={this.handleHeaderClick}
-          />
+          this.props.getDefaultHeaderContent(columnProps)
         }
       </Cell>
     );

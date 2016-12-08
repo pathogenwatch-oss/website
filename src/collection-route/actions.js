@@ -39,3 +39,11 @@ export function fetchSpeciesData(speciesId) {
     },
   };
 }
+
+export const RESET_COLLECTION_VIEW = 'RESET_COLLECTION_VIEW';
+
+export function resetCollectionView() {
+  return {
+    type: RESET_COLLECTION_VIEW,
+  };
+}

@@ -13,7 +13,7 @@ import { onTableClick, onRowClick } from './thunks';
 
 import { addColumnWidth } from '../table/utils/columnWidth';
 import { addDownloadProps } from '../downloads/utils';
-
+import { getColumnLabel } from './utils';
 
 const preventDefault = e => e.preventDefault();
 
@@ -59,13 +59,24 @@ const Table = React.createClass({
         <TableSwitcher />
         <FixedTable { ...this.props }
           rowClickHandler={this.props.onRowClick}
-          headerClickHandler={this.props.onHeaderClick}
+          getDefaultHeaderContent={this.props.getDefaultHeaderContent}
         />
       </section>
     );
   },
 
 });
+
+const DefaultColumnHeader =
+  ({ column, onClick }) => (
+    <button
+      title={column.headerTitle}
+      className="wgsa-selectable-column-heading"
+      onClick={event => onClick(event, column)}
+    >
+      {getColumnLabel(column)}
+    </button>
+  );
 
 function mapStateToProps(state) {
   const table = getVisibleTable(state);
@@ -104,8 +115,16 @@ function mergeProps(state, { dispatch }, props) {
     data: data.map(row => addDownloadProps(row, state, dispatch)),
     onClick: (event) => dispatch(onTableClick(event)),
     onRowClick: row => dispatch(onRowClick(row)),
-    onHeaderClick: (event, column) =>
-      (column.onHeaderClick || state.onHeaderClick)(event, { column, activeColumns }, dispatch),
+    getDefaultHeaderContent: columnProps => (
+      <DefaultColumnHeader
+        column={columnProps}
+        onClick={(event, column) => {
+          event.stopPropagation();
+          const handleEvent = column.onHeaderClick || state.onHeaderClick;
+          handleEvent(event, { column, activeColumns }, dispatch);
+        }}
+      />
+    ),
   };
 }
 

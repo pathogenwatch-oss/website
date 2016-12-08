@@ -6,7 +6,10 @@ import { getCollection } from '../selectors';
 import { getProgressPercentage } from '../progress/selectors.js';
 
 import {
-  fetchCollection, fetchSpeciesData, updateProgress,
+  fetchCollection,
+  fetchSpeciesData,
+  updateProgress,
+  resetCollectionView,
 } from '../actions';
 
 import Species from '../../species';
@@ -27,6 +30,7 @@ function mapDispatchToProps(dispatch, { params: { id } }) {
     checkStatus: () => dispatch(fetchCollection(id)),
     updateProgress: results => dispatch(updateProgress(results)),
     fetch: () => dispatch(fetchSpeciesData(Species.id)),
+    reset: () => dispatch(resetCollectionView()),
   };
 }
 
