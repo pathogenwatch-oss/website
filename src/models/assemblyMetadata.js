@@ -3,7 +3,7 @@ const iso31661Codes = require('geo-data/iso-3166-1.json');
 
 const systemMetadataColumns = [
   'assemblyId', 'uuid', 'speciesId', 'fileId', 'collectionId', 'pmid',
-  'filename', 'assemblyName', 'displayname',
+  'filename', 'assemblyName', 'displayname', 'name',
   'date', 'year', 'month', 'day',
   'position', 'latitude', 'longitude',
 ];
@@ -34,7 +34,7 @@ function createRecord(ids, metadata, metrics) {
     speciesId: ids.speciesId,
     collectionId: ids.collectionId,
     fileId: ids.fileId,
-    name: metadata.assemblyName || metadata.displayname || metadata.name,
+    name: metadata.filename || metadata.assemblyName || metadata.displayname || metadata.name,
     date: {
       year: metadata.year,
       month: metadata.month,
