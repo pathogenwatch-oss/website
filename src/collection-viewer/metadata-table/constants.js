@@ -4,7 +4,7 @@ export const systemDataColumns = {
   __date: {
     columnKey: '__date',
     valueGetter({ date }) {
-      return getFormattedDateString(date);
+      return date ? getFormattedDateString(date) : '';
     },
   },
   __wgsa_reference: {

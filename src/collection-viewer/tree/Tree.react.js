@@ -119,6 +119,10 @@ export default React.createClass({
     }
   },
 
+  componentWillUnmount() {
+    this.phylocanvas.cleanup();
+  },
+
   phylocanvas: null,
 
   loadTree() {

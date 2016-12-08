@@ -19,7 +19,7 @@ export const getAssemblyIdsInPath = createSelector(
     }, [])
 );
 
-const defaultPositionExtractor = ({ position }) => {
+const defaultPositionExtractor = ({ position = {} }) => {
   const { latitude, longitude } = position;
   if (latitude && longitude) {
     return [ latitude, longitude ];
@@ -27,7 +27,7 @@ const defaultPositionExtractor = ({ position }) => {
   return null;
 };
 
-const countryPositionExtractor = ({ position }) => {
+const countryPositionExtractor = ({ position = {} }) => {
   const { country } = position;
   if (country) {
     return getCountryCentroid(country);
