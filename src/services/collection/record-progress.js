@@ -26,11 +26,15 @@ const fatalTasksHaveCompleted = (collectionSize, results) =>
 const hasFatalErrors = errors =>
   errors.some(({ taskType }) => fatalTasks.has(taskType));
 
-function isCollectionFatal({ collectionSize, results, errors }) {
-  if (fatalTasksHaveCompleted(collectionSize, results)) {
-    return hasFatalErrors(errors);
+function isCollectionFatal({ size, progress }) {
+  if (fatalTasksHaveCompleted(size, progress.results)) {
+    return hasFatalErrors(progress.errors);
   }
   return false;
+}
+
+function isCollectionComplete({ progress }) {
+  return progress.totalResultsReceived === progress.totalResultsExpected;
 }
 
 function markCollectionFatal(id, error) {
@@ -41,36 +45,41 @@ function markCollectionFatal(id, error) {
 }
 
 module.exports = ({ taskType, taskStatus, assemblyId = {}, collectionId }) =>
-  Collection.findById(collectionId).
+  Collection.findOne({ uuid: collectionId }).
     then(collection => {
-      const { submission } = collection;
-      const numResultsForTask = submission.results[taskType] || 0;
+      try {
+        const { progress } = collection;
+        const numResultsForTask = progress.results[taskType] || 0;
 
-      if (resultIsNotADuplicate(taskType, numResultsForTask, collection.size)) {
-        submission.results[taskType] += numResultsForTask + 1;
-        submission.totalResultsReceived++;
-      } else {
-        LOGGER.warn(`${taskType} is a duplicate, ignoring.`);
-        return null;
+        if (resultIsNotADuplicate(taskType, numResultsForTask, collection.size)) {
+          progress.results[taskType] += numResultsForTask + 1;
+          progress.totalResultsReceived++;
+        } else {
+          LOGGER.warn(`${taskType} is a duplicate, ignoring.`);
+          return collection;
+        }
+
+        if (taskStatus !== 'SUCCESS') {
+          progress.errors.push({
+            assemblyName: assemblyId.uuid, // TODO: Fetch assembly name
+            taskType,
+          });
+        }
+
+        if (isCollectionFatal(collection)) {
+          collection.status = 'FATAL';
+          progress.completed = new Date();
+          LOGGER.info('Collection fatal :(');
+        } else if (isCollectionComplete(collection)) {
+          collection.status = 'READY';
+          progress.completed = new Date();
+          LOGGER.info('Collection ready!');
+        }
+
+        return collection.save();
+      } catch (error) {
+        LOGGER.error(error);
+        return error;
       }
-
-      if (taskStatus !== 'SUCCESS') {
-        submission.errors.push({
-          assemblyName: assemblyId.uuid, // TODO: Fetch assembly name
-          taskType,
-        });
-      }
-
-      if (isCollectionFatal(collection)) {
-        collection.status = 'FATAL';
-        submission.ended = new Date();
-        LOGGER.info('Collection fatal :(');
-      } else if (submission.isComplete()) {
-        collection.status = 'READY';
-        submission.ended = new Date();
-        LOGGER.info('Collection ready!');
-      }
-
-      return collection.save();
     }).
     catch(error => markCollectionFatal(error, collectionId));

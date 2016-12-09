@@ -8,33 +8,13 @@ const {
   ASSEMBLY_METADATA,
   PAARSNP_RESULT,
   MLST_RESULT,
-  FP_COMP,
+  FP_RESULT,
   CORE_RESULT,
   NGMAST_RESULT,
   GENOTYPHI_RESULT,
 } = require('utils/documentKeys');
 
 const ASSEMBLY_ANALYSES = [ 'FP', 'MLST', 'PAARSNP', 'CORE' ];
-
-function retrieveManyPromise(keys) {
-  return new Promise((resolve, reject) => {
-    mainStorage.retrieveMany(keys, (error, results) => {
-      if (error) return reject(error);
-      return resolve(results);
-    });
-  });
-}
-
-exports.getAssemblies = function (assemblyIds) {
-  const documentKeys = assemblyIds.map(id => `WGSA_${id}`);
-  return retrieveManyPromise(documentKeys).
-    then(results =>
-      assemblyIds.reduce((memo, id, index) => {
-        memo[id] = results[documentKeys[index]];
-        return memo;
-      }, {})
-    );
-};
 
 function createKey(id, prefix) {
   return prefix + '_' + id;
@@ -89,7 +69,7 @@ function formatForFrontend(id, assembly) {
   const paarsnp = assembly[PAARSNP_RESULT];
   const mlst = assembly[MLST_RESULT];
   const core = assembly[CORE_RESULT];
-  const fp = assembly[FP_COMP];
+  const fp = assembly[FP_RESULT];
   const ngmast = assembly[NGMAST_RESULT];
   const genotyphi = assembly[GENOTYPHI_RESULT];
   return {
@@ -136,7 +116,7 @@ function hasFatalErrors(erroredKeys) {
   return erroredKeys.some(key =>
     key.startsWith(ASSEMBLY_METADATA) ||
     key.startsWith(CORE_RESULT) ||
-    key.startsWith(FP_COMP)
+    key.startsWith(FP_RESULT)
   );
 }
 
@@ -147,7 +127,8 @@ function get(params, queryKeyPrefixes, callback) {
   LOGGER.info('Assembly ' + assemblyId + ' query keys:');
   LOGGER.info(queryKeys);
 
-  mainStorage.retrieveMany(queryKeys, function (erroredKeys, assemblyData) {
+  mainStorage.retrieveMany(queryKeys, function (error, { erroredKeys, results }) {
+    if (error) return callback(error);
     if (erroredKeys && hasFatalErrors(erroredKeys)) {
       LOGGER.error(`Could not retrieve minimum documents for assembly ${assemblyId}`);
       return callback(erroredKeys);
@@ -155,7 +136,7 @@ function get(params, queryKeyPrefixes, callback) {
 
     LOGGER.info('Got assembly ' + assemblyId + ' data');
 
-    const assembly = mergeQueryResults(assemblyData, queryKeyPrefixes, assemblyId);
+    const assembly = mergeQueryResults(results, queryKeyPrefixes, assemblyId);
 
     sequenceTypeModel.addSequenceTypeData(
       assembly, params.speciesId, function (stError, result) {
@@ -171,7 +152,7 @@ function get(params, queryKeyPrefixes, callback) {
 const COMPLETE_ASSEMBLY_KEYS = [
   ASSEMBLY_METADATA,
   CORE_RESULT,
-  FP_COMP,
+  FP_RESULT,
   MLST_RESULT,
   PAARSNP_RESULT,
   NGMAST_RESULT,

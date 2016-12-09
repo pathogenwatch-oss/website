@@ -4,4 +4,4 @@ const role = 'collection';
 
 register(role, 'create', require('./create'));
 register(role, 'fetch', require('./fetch'));
-register(role, 'record-progress', require('./record-progress'));
+register(role, 'fetch-progress', require('./fetch-progress'));

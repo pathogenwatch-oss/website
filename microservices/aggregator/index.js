@@ -23,11 +23,12 @@ Assembly Id: ${assemblyIdString}
 Collection: ${collectionId}`);
 
     handle(message).
+      then(() => queue.shift()).
       catch(error => {
         LOGGER.error(error);
         SERVICES.publish('aggregator-error', { error, message });
-      }).
-      finally(() => queue.shift());
+        queue.shift();
+      });
   }
 
   mqConnection.queue('aggregator-queue', QUEUE_OPTIONS, queue => {

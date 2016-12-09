@@ -15,7 +15,7 @@ router.get('/user/collections', (req, res) => {
   LOGGER.info(`Getting collections for user: ${user.id}`);
   mainStorage.retrieveMany(
     documentKeys,
-    (error, results) => {
+    (error, { results }) => {
       if (error) {
         LOGGER.error(error, results);
         return res.sendStatus(500);

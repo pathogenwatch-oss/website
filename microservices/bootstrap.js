@@ -2,6 +2,7 @@ const async = require('async');
 
 const storageConnection = require('utils/storageConnection');
 const messageQueueConnection = require('utils/messageQueueConnection');
+const mongoConnection = require('utils/mongoConnection');
 
 const LOGGER = require('utils/logging').createLogger('microservice');
 
@@ -13,6 +14,7 @@ if (!serviceName) {
   async.parallel({
     storageConnection: storageConnection.connect,
     mqConnection: messageQueueConnection.connect,
+    mongoConnection: mongoConnection.connect,
   }, (error, connections) => {
     if (error) {
       LOGGER.error(error);

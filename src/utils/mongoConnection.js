@@ -1,16 +1,17 @@
 const mongoose = require('mongoose');
+mongoose.Promise = global.Promise;
 
-const appConfig = require('configuration');
+const mongoConfig = require('configuration').mongodb || {};
 const LOGGER = require('utils/logging').createLogger('Mongo');
 
 const DEFAULT_HOSTNAME = '127.0.0.1';
 const DEFAULT_PORT = '27017';
-const DEFAULT_COLLECTION = 'Wgsa';
-const hostname = appConfig.mongodb.hostname || DEFAULT_HOSTNAME;
-const port = appConfig.mongodb.port || DEFAULT_PORT;
-const collection = appConfig.mongodb.collection || DEFAULT_COLLECTION;
+const DEFAULT_DATABASE = 'wgsa';
+const hostname = mongoConfig.hostname || DEFAULT_HOSTNAME;
+const port = mongoConfig.port || DEFAULT_PORT;
+const database = mongoConfig.database || DEFAULT_DATABASE;
 
-const dbUrl = `mongodb://${hostname}:${port}/${collection}`;
+const dbUrl = `mongodb://${hostname}:${port}/${database}`;
 
 function connect(callback) {
   mongoose.connection.on('error', (error) => LOGGER.error(error));
