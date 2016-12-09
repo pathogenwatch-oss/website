@@ -41,7 +41,7 @@ function getCardComponents(props) {
 
 export default props => {
   const { name, metadata } = props;
-  const title = metadata ? metadata.assemblyName : name;
+  const title = metadata ? metadata.name : name;
   const { content, footer = null } = getCardComponents(props);
   return (
     <Card className="wgsa-assembly-card">

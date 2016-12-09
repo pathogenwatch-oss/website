@@ -46,7 +46,7 @@ export default React.createClass({
           title="Sign in to your WGSA account"
           menuOpen={this.state.isLoginMenuOpen}
           closeMenu={this.closeLoginMenu}
-          strategies={config.strategies}
+          strategies={config.strategies || []}
         />
       </div>
     );

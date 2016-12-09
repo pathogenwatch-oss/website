@@ -3,16 +3,16 @@ import { readAsText } from 'promise-file-reader';
 import actions from '../actions';
 
 import MetadataUtils from '../../utils/Metadata';
-import { API_ROOT } from '../../utils/Api';
+import { API_ROOT, postJson } from '../../utils/Api';
 
 import { validateFastaSize, validateFastaContent } from './fasta';
 
-function parseMetadata(row) {
+function parseMetadata(row, name) {
   if (!row) return undefined;
 
   return {
     ...row,
-    assemblyName: row.displayname || row.filename,
+    name: row.displayname || row.filename || row.name || name,
     latitude: parseFloat(row.latitude),
     longitude: parseFloat(row.longitude),
   };
@@ -54,7 +54,7 @@ export function mapCSVsToFastas(files) {
         return {
           name: file.name,
           file,
-          metadata: parseMetadata(row),
+          metadata: parseMetadata(row, name),
           date: parseDate(row),
         };
       })
@@ -82,16 +82,19 @@ function getCustomXHR(filename, dispatch) {
   return xhr;
 }
 
-export function sendToServer({ file, metadata = {} }, dispatch) {
-  const { latitude = '', longitude = '' } = metadata;
+export function update(id, metadata) {
+  return postJson(`/genome/${id}`, metadata);
+}
+
+function create(file, dispatch) {
   return (
     validateFastaSize(file).
       then(readAsText).
       then(validateFastaContent).
       then(data =>
         $.ajax({
-          type: 'POST',
-          url: `${API_ROOT}/upload?latitude=${latitude}&longitude=${longitude}`,
+          type: 'PUT',
+          url: `${API_ROOT}/genome?name=${encodeURIComponent(file.name)}`,
           contentType: 'text/plain; charset=UTF-8',
           data,
           dataType: 'json',
@@ -99,4 +102,15 @@ export function sendToServer({ file, metadata = {} }, dispatch) {
         })
       )
   );
+}
+
+export function upload({ file, metadata }, dispatch) {
+  return create(file, dispatch).
+    then((result) =>
+      (metadata ?
+        update(result.id, metadata).
+          then(updateResult => ({ ...result, ...updateResult })) :
+        result
+      )
+    );
 }

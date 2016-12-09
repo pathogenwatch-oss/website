@@ -4,7 +4,7 @@ import * as selectors from './selectors';
 
 import { showToast } from '../toast';
 
-import { mapCSVsToFastas, sendToServer } from './utils';
+import * as utils from './utils';
 import * as toasts from './utils/toasts';
 
 function isDuplicate({ name }, files) {
@@ -17,7 +17,7 @@ function uploadFasta(name) {
       type: UPLOAD_FASTA,
       payload: {
         name,
-        promise: sendToServer(selectors.getFasta(getState(), name), dispatch),
+        promise: utils.upload(selectors.getFasta(getState(), name), dispatch),
       },
     }).catch(() => {});
 }
@@ -62,7 +62,7 @@ export function addFiles(newFiles) {
   return (dispatch, getState) => {
     const state = getState();
     const files = selectors.getFastas(state);
-    return mapCSVsToFastas(newFiles).then(
+    return utils.mapCSVsToFastas(newFiles).then(
       parsedFiles => {
         const duplicates = parsedFiles.filter(file => isDuplicate(file, files));
         const nonDuplicates = parsedFiles.filter(file => !isDuplicate(file, files));
