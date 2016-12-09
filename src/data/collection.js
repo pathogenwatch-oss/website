@@ -4,7 +4,7 @@ const { Schema } = mongoose;
 const { setToObjectOptions } = require('./utils');
 
 const schema = new Schema({
-  assemblies: Array,
+  genomes: Array,
   description: String,
   uuid: { type: String, index: true },
   size: Number,
@@ -54,7 +54,7 @@ const speciesSpecificResults = {
   485: [ 'NGMAST' ],
 };
 
-schema.virtual('totalAssemblyResults').get(function () {
+schema.virtual('totalGenomeResults').get(function () {
   return commonResults.length +
     (this.speciesId in speciesSpecificResults ?
       speciesSpecificResults[this.speciesId].length : 0);
@@ -62,7 +62,7 @@ schema.virtual('totalAssemblyResults').get(function () {
 
 const totalTreeResults = 2;
 schema.virtual('totalResultsExpected').get(function () {
-  return this.size * this.totalAssemblyResults + totalTreeResults;
+  return this.size * this.totalGenomeResults + totalTreeResults;
 });
 
 module.exports = mongoose.model('Collection', schema);

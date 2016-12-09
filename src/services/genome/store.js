@@ -3,17 +3,17 @@ const processFasta = require('wgsa-fasta-store/fasta-processor');
 const { fastaStoragePath } = require('configuration');
 fastaStorage.setup(fastaStoragePath);
 
-const Fasta = require('data/fasta');
+const GenomeFile = require('data/genomeFile');
 
 const { ServiceRequestError } = require('utils/errors');
 
-function getFastaDocument({ fileId, filePath }) {
-  return Fasta.findOne({ fileId }).
+function getGenomeFileDocument({ fileId, filePath }) {
+  return GenomeFile.findOne({ fileId }).
     then(fasta => {
       if (fasta) return fasta;
       return processFasta(filePath).then(
         ({ metrics, specieator: { taxId, scientificName } }) =>
-          Fasta.create({
+          GenomeFile.create({
             fileId,
             speciesId: taxId,
             speciesName: scientificName,
@@ -29,6 +29,6 @@ module.exports = ({ stream }) => {
   }
 
   return (
-    fastaStorage.store(fastaStoragePath, stream).then(getFastaDocument)
+    fastaStorage.store(fastaStoragePath, stream).then(getGenomeFileDocument)
   );
 };

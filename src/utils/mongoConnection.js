@@ -21,5 +21,7 @@ function connect(callback) {
   mongoose.connect(dbUrl);
 }
 
+mongoose.set('debug', (...args) => LOGGER.debug(args));
+
 module.exports.connect = connect;
 module.exports.dbUrl = dbUrl;

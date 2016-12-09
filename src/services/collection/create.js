@@ -4,7 +4,7 @@ const { request } = require('services/bus');
 const { ServiceRequestError } = require('utils/errors');
 
 const Collection = require('data/collection');
-const CollectionAssembly = require('data/collectionAssembly');
+const CollectionGenome = require('data/collectionGenome');
 
 const { createRecord } = require('models/assemblyMetadata');
 
@@ -33,7 +33,7 @@ function createCollection({ speciesId, files, title, description }) {
 }
 
 function addAssemblies(collection, assemblies) {
-  return CollectionAssembly.insertMany(
+  return CollectionGenome.insertMany(
     assemblies.map(({ uuid, file }) => Object.assign(
       { _collection: collection._id, uuid },
       createRecord({}, file.metadata || { name: file.name }, file.metrics)

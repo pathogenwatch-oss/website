@@ -1,10 +1,10 @@
 const Collection = require('data/collection');
-const CollectionAssembly = require('data/collectionAssembly');
+const CollectionGenome = require('data/collectionGenome');
 
 const { ServiceRequestError } = require('utils/errors');
 
-function countAssemblyResults(collection) {
-  return CollectionAssembly.aggregate([
+function countGenomeResults(collection) {
+  return CollectionGenome.aggregate([
     { $match: { _collection: collection._id } },
     { $project: { analysis: 1 } },
     { $unwind: '$analysis' },
@@ -17,7 +17,7 @@ function isReady(collection, results) {
   return (
     (collection.size < 3 || collection.tree) &&
     collection.subtrees.length &&
-    results.length === collection.totalAssemblyResults &&
+    results.length === collection.totalGenomeResults &&
     results.every(({ total }) => total === collection.size)
   );
 }
@@ -43,7 +43,7 @@ function addProgressResults(collection, results) {
 function checkStatus(collection) {
   if (!collection) throw new ServiceRequestError('Collection not found');
   if (collection.isProcessing) {
-    return countAssemblyResults(collection).
+    return countGenomeResults(collection).
       then(results => {
         if (isReady(collection, results)) {
           return collection.ready();

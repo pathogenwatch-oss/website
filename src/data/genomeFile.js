@@ -23,4 +23,4 @@ const schema = new Schema({
   },
 });
 
-module.exports = mongoose.model('Fasta', schema);
+module.exports = mongoose.model('GenomeFile', schema);

@@ -2,6 +2,6 @@ const bus = require('./bus');
 
 exports.request = bus.request;
 
-require('./fasta');
+require('./genome');
 require('./collection');
 require('./backend');
