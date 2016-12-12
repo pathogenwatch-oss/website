@@ -4,9 +4,10 @@ const LOGGER = require('utils/logging').createLogger('Antibiotic model');
 const { ANTIMICROBIALS, AMLIST } = require('utils/documentKeys');
 
 function formatForFrontend(master, species) {
-  return master.reduce((memo, { key, antimicrobialClass, fullName }) => {
-    const ab = species.find(_ => _.antibioticKey === key);
-    if (!ab) return memo;
+  return species.antibiotics.reduce((memo, { antibioticKey }) => {
+    const am = master.antimicrobials.find(_ => _.key === antibioticKey);
+    if (!am) return memo;
+    const { key, antimicrobialClass, fullName } = am;
     memo.push({ key, antimicrobialClass, fullName });
     return memo;
   }, []);
@@ -17,7 +18,9 @@ function get(speciesId, callback) {
   const documentKeys = [ AMLIST, `${ANTIMICROBIALS}_${speciesId}` ];
   return mainStorage.retrieveMany(documentKeys, (errors, results) => {
     if (errors) return callback(errors);
-    return callback(null, formatForFrontend(...results));
+    return callback(null, formatForFrontend(
+      ...documentKeys.map(key => results[key])
+    ));
   });
 }
 
