@@ -24,9 +24,9 @@ const isMac =
     navigator.platform.toUpperCase().indexOf('MAC') >= 0);
 const modifierKey = isMac ? 'Cmd' : 'Ctrl';
 
-function createAntibioticsColumn({ name, longName }) {
-  const columnKey = name;
-  const hoverName = longName || name;
+function createAntibioticsColumn({ key, fullName }) {
+  const columnKey = key;
+  const hoverName = fullName || key;
 
   return {
     columnKey,
@@ -34,7 +34,7 @@ function createAntibioticsColumn({ name, longName }) {
       return this.isSelected && this.allMechanisms.length;
     },
     getLabel() {
-      return this.isExpandable() ? hoverName : name.slice(0, 3);
+      return this.isExpandable() ? hoverName : key.slice(0, 3);
     },
     headerClasses: 'wgsa-table-header--resistance',
     headerTitle: `${hoverName} - ${modifierKey} + click to select multiple`,
@@ -98,7 +98,31 @@ function createAntibioticsColumn({ name, longName }) {
       }
       return null;
     },
-    valueGetter: assembly => resistanceProfile.getColour(name, assembly),
+    valueGetter: assembly => resistanceProfile.getColour(key, assembly),
+    onHeaderClick: resistanceProfile.onHeaderClick,
+  };
+}
+
+function createAdvancedViewColumn({ key, label }, profileKey) {
+  return {
+    columnKey: key,
+    cellClasses: 'wgsa-table-cell--resistance',
+    cellPadding: 16,
+    flexGrow: 0,
+    getLabel() {
+      return label;
+    },
+    getWidth() {
+      return measureText(label, true) + 4;
+    },
+    getCellContents(props, { analysis }) {
+      return analysis.resistanceProfile[profileKey].indexOf(key) !== -1 ? (
+        <i className="material-icons wgsa-resistance-icon wgsa-amr--resistant">
+          lens
+        </i>
+      ) : null;
+    },
+    valueGetter: assembly => resistanceProfile.getColour(key, assembly),
     onHeaderClick: resistanceProfile.onHeaderClick,
   };
 }
@@ -123,66 +147,51 @@ const viewColumnBuilders = {
       ...antibiotics.slice(separatorIndex).map(createAntibioticsColumn),
     ];
   },
-  SNPs: ({ snp }) => snp.map(name => ({
-    columnKey: name,
-    cellClasses: 'wgsa-table-cell--resistance',
-    cellPadding: 16,
-    flexGrow: 0,
-    getLabel() {
-      return name;
-    },
-    getWidth() {
-      return measureText(name, true) + 4;
-    },
-    getCellContents(props, { analysis }) {
-      return analysis.resistanceProfile.snp.indexOf(name) !== -1 ? (
-        <i className="material-icons wgsa-resistance-icon wgsa-amr--resistant">
-          lens
-        </i>
-      ) : null;
-    },
-    valueGetter: assembly => resistanceProfile.getColour(name, assembly),
-    onHeaderClick: resistanceProfile.onHeaderClick,
-  })),
-  Genes: ({ paar }) => paar.map(name => ({
-    columnKey: name,
-    cellClasses: 'wgsa-table-cell--resistance',
-    cellPadding: 16,
-    getLabel() {
-      return name;
-    },
-    getWidth() {
-      return measureText(name, true) + 4;
-    },
-    getCellContents(props, { analysis }) {
-      return analysis.resistanceProfile.paar.indexOf(name) !== -1 ? (
-        <i className="material-icons wgsa-resistance-icon wgsa-amr--resistant">
-          lens
-        </i>
-      ) : null;
-    },
-    flexGrow: 0,
-    valueGetter: assembly => resistanceProfile.getColour(name, assembly),
-    onHeaderClick: resistanceProfile.onHeaderClick,
-  })),
+  SNPs: ({ snp }) =>
+    Object.keys(snp).
+      map(antibiotic => ({
+        group: true,
+        columnKey: antibiotic,
+        columns:
+          Object.keys(snp[antibiotic]).
+            map(gene => ({
+              group: true,
+              columnKey: gene,
+              columns:
+                snp[antibiotic][gene].
+                  map(snpName => createAdvancedViewColumn(
+                    { key: `${gene}_${snpName}`, label: snpName }, 'snp'
+                  )),
+            })),
+      })),
+  Genes: ({ paar }) =>
+    Object.keys(paar).
+      map(antibiotic => ({
+        group: true,
+        columnKey: antibiotic,
+        columns: paar[antibiotic].
+          map(element => createAdvancedViewColumn(
+            { key: element, label: element }, 'paar'
+          )),
+      })),
 };
 
 function buildColumns(view, libraries) {
   return [
-    { columnKey: '__spacer_l',
-      getHeaderContent() {},
-      fixed: true,
-      fixedWidth: 1,
-      getCellContents() {},
-    },
-    ...systemColumnProps,
+    // { columnKey: '__spacer_l',
+    //   getHeaderContent() {},
+    //   fixed: true,
+    //   fixedWidth: 1,
+    //   getCellContents() {},
+    // },
+    // ...systemColumnProps,
     ...viewColumnBuilders[view](libraries),
-    { columnKey: '__spacer_r',
-      getHeaderContent() {},
-      fixedWidth: 8,
-      getCellContents() {},
-      cellClasses: 'wgsa-table-cell--resistance',
-    },
+    // { columnKey: '__spacer_r',
+    //   getHeaderContent() {},
+    //   fixedWidth: 8,
+    //   getCellContents() {},
+    //   cellClasses: 'wgsa-table-cell--resistance',
+    // },
   ];
 }
 
@@ -196,12 +205,7 @@ const initialState = {
 export default function (state = initialState, { type, payload }) {
   switch (type) {
     case FETCH_ENTITIES.SUCCESS: {
-      const { antibiotics, paar, snp } = payload.result[2];
-
-      const libraries = {
-        antibiotics: antibiotics.map(ab => (typeof ab === 'string' ? { name: ab } : ab)),
-        paar, snp,
-      };
+      const libraries = payload.result[2];
 
       return {
         ...state,

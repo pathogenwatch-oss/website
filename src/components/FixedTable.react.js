@@ -2,7 +2,7 @@ import 'fixed-data-table/dist/fixed-data-table.css';
 import '../css/fixed-data-table-overrides.css';
 
 import React from 'react';
-import { Table, Column, Cell } from 'fixed-data-table';
+import { Table, ColumnGroup, Column, Cell } from 'fixed-data-table';
 
 import { getColumnLabel, getCellValue } from '../table/utils';
 
@@ -62,7 +62,6 @@ export default React.createClass({
   renderHeader(columnProps, headerProps) {
     const { headerClasses, headerTitle, getHeaderContent } = columnProps;
     const isSelected = this.isSelected(columnProps);
-
     return (
       <Cell
         {...headerProps}
@@ -89,8 +88,30 @@ export default React.createClass({
         {...{ width, height }}
         className={getCellClassNames(isSelected, cellClasses)}
       >
-        { getCellContents(columnProps, this.props.data[rowIndex])}
+        {getCellContents(columnProps, this.props.data[rowIndex])}
       </Cell>
+    );
+  },
+
+  renderColumns(columnDefs) {
+    return columnDefs.map(props =>
+      (props.group ?
+        <ColumnGroup
+          key={props.columnKey}
+          header={headerProps => this.renderHeader(props, headerProps)}
+        >
+          {this.renderColumns(props.columns)}
+        </ColumnGroup> :
+        <Column
+          key={props.columnKey}
+          header={headerProps => this.renderHeader(props, headerProps)}
+          cell={cellProps => this.renderCell(props, cellProps)}
+          cell={props.columnKey}
+          width={props.fixedWidth || props.width || 96}
+          flexGrow={1}
+          { ...props }
+        />
+      )
     );
   },
 
@@ -100,24 +121,16 @@ export default React.createClass({
       <Table
         rowsCount={data.length}
         rowHeight={28}
-        headerHeight={56}
+        headerHeight={24 * 3}
+        groupHeaderHeight={24}
         height={height}
         width={width}
         className="wgsa-table"
         rowClassNameGetter={() => 'wgsa-table-row'}
         onRowClick={this.handleRowClick}
-        { ...tableProps }
+        {...tableProps}
       >
-        { columns.map((props) =>
-            <Column
-              key={props.columnKey}
-              header={headerProps => this.renderHeader(props, headerProps)}
-              cell={cellProps => this.renderCell(props, cellProps)}
-              width={props.fixedWidth || props.width || 96}
-              flexGrow={1}
-              { ...props }
-            />
-        )}
+        {this.renderColumns(columns)}
       </Table>
     );
   },

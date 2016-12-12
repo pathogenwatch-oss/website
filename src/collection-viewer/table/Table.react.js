@@ -87,6 +87,13 @@ function mapStateToProps(state) {
 function mapStateToColumn(column, state, dispatch) {
   column.isSelected = state.activeColumns.has(column);
 
+  if (column.group) {
+    for (let i = 0; i < column.columns.length; i++) {
+      column.columns[i] = mapStateToColumn(column.columns[i], state, dispatch);
+    }
+    return column;
+  }
+
   return (
     column.addState ?
       column.addState(state, dispatch) :
