@@ -4,10 +4,10 @@ const LOGGER = require('utils/logging').createLogger('Antibiotic model');
 const { ANTIMICROBIALS, AMLIST } = require('utils/documentKeys');
 
 function formatForFrontend(master, species) {
-  return master.reduce((memo, { key, class, fullName }) => {
+  return master.reduce((memo, { key, antimicrobialClass, fullName }) => {
     const ab = species.find(_ => _.antibioticKey === key);
     if (!ab) return memo;
-    memo.push({ key, class, fullName });
+    memo.push({ key, antimicrobialClass, fullName });
     return memo;
   }, []);
 }
