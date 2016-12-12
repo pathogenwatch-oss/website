@@ -10,7 +10,7 @@ const { createRecord } = require('models/assemblyMetadata');
 
 const { maxCollectionSize = 0, fastaStoragePath } = require('configuration');
 
-function createCollection({ speciesId, files, title, description }) {
+function createCollection({ speciesId, files, title, description, user }) {
   if (!speciesId) {
     return Promise.reject(new ServiceRequestError('No species ID provided'));
   }
@@ -25,6 +25,7 @@ function createCollection({ speciesId, files, title, description }) {
 
   const size = files.length;
   return Collection.create({
+    _user: user,
     description,
     size,
     speciesId,

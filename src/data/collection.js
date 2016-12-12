@@ -4,6 +4,7 @@ const { Schema } = mongoose;
 const { setToObjectOptions } = require('./utils');
 
 const schema = new Schema({
+  _user: { type: Schema.Types.ObjectId, ref: 'User' },
   genomes: Array,
   description: String,
   uuid: { type: String, index: true },

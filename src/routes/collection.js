@@ -9,7 +9,9 @@ const LOGGER = require('utils/logging').createLogger('Collection requests');
 router.put('/collection', (req, res, next) => {
   LOGGER.info('Received request to create collection');
 
-  return services.request('collection', 'create', req.body).
+  const { user } = req;
+  const { files, speciesId } = req.body;
+  return services.request('collection', 'create', { files, speciesId, user }).
     then(({ collectionId }) => res.json({ collectionId })).
     catch(next);
 });
@@ -19,6 +21,15 @@ router.get('/collection/:uuid', (req, res, next) => {
   return services.request('collection', 'fetch', req.params).
     then(response => res.json(response)).
     catch(next);
+});
+
+router.get('/collection', (req, res, next) => {
+  LOGGER.info('Received request to get collections');
+
+  const { user } = req;
+  services.request('collection', 'fetch-list', { user })
+    .then(response => res.json(response))
+    .catch(next);
 });
 
 router.get('/species/:id/reference', function (req, res, next) {
