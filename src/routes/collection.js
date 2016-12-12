@@ -6,6 +6,14 @@ const collectionModel = require('models/collection');
 
 const LOGGER = require('utils/logging').createLogger('Collection requests');
 
+router.put('/collection', (req, res, next) => {
+  LOGGER.info('Received request to create collection');
+
+  return services.request('collection', 'create', req.body).
+    then(({ collectionId }) => res.json({ collectionId })).
+    catch(next);
+});
+
 router.get('/collection/:uuid', (req, res, next) => {
   LOGGER.info(`Getting collection: ${req.params.uuid}`);
   return services.request('collection', 'fetch', req.params).
