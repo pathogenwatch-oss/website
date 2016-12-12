@@ -1,4 +1,5 @@
 module.exports = {
+  AMLIST: 'AMLIST',
   ANTIMICROBIALS: 'AMAS',
   ASSEMBLY_METADATA: 'AM',
   COLLECTION_LIST: 'CL',
