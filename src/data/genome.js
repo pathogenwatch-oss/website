@@ -1,8 +1,7 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
-const { getCountry } = require('country-reverse-geocoding');
-const iso31661Codes = require('geo-data/iso-3166-1.json');
+const geocoding = require('geocoding');
 
 const schema = new Schema({
   _file: { type: Schema.Types.ObjectId, ref: 'GenomeFile' },
@@ -22,11 +21,10 @@ const schema = new Schema({
 
 function getCountryCode(latitude, longitude) {
   if (latitude && longitude) {
-    const country =
-      getCountry(Number.parseFloat(latitude), Number.parseFloat(longitude));
-    if (country.code && iso31661Codes[country.code]) {
-      return iso31661Codes[country.code].toLowerCase();
-    }
+    return geocoding.getCountryCode(
+      Number.parseFloat(latitude),
+      Number.parseFloat(longitude)
+    );
   }
   return null;
 }

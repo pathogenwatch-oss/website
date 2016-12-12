@@ -1,5 +1,4 @@
-const { getCountry } = require('country-reverse-geocoding');
-const iso31661Codes = require('geo-data/iso-3166-1.json');
+const geocoding = require('geocoding');
 
 const systemMetadataColumns = [
   'assemblyId', 'uuid', 'speciesId', 'fileId', 'collectionId', 'pmid',
@@ -10,11 +9,10 @@ const systemMetadataColumns = [
 
 function getCountryCode({ latitude, longitude }) {
   if (latitude && longitude) {
-    const country =
-      getCountry(Number.parseFloat(latitude), Number.parseFloat(longitude));
-    if (country.code && iso31661Codes[country.code]) {
-      return iso31661Codes[country.code].toLowerCase();
-    }
+    return geocoding.getCountryCode(
+      Number.parseFloat(latitude),
+      Number.parseFloat(longitude)
+    );
   }
   return null;
 }
