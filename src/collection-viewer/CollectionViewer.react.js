@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import Layout from './layout/Layout.react';
 import DownloadsMenu from './downloads/DownloadsMenu.react';
 
+import { getCollection } from '../collection-route/selectors';
+
 const CollectionViewer = React.createClass({
 
   componentDidMount() {
@@ -21,8 +23,8 @@ const CollectionViewer = React.createClass({
 
 });
 
-function mapStateToProps({ collection }) {
-  const { metadata = {} } = collection;
+function mapStateToProps(state) {
+  const { metadata = {} } = getCollection(state);
   return {
     title: metadata.title,
   };

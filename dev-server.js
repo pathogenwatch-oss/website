@@ -45,9 +45,9 @@ apiRouter.get('/species/:speciesId/collection/:id/status', (req, res) => {
   res.json({ status: 'READY' });
 });
 
-apiRouter.get('/species/:speciesId/collection/:id', (req, res) => {
+apiRouter.get('/collection/:id', (req, res) => {
   setTimeout(() => {
-    res.sendFile(`${getCollectionPath(req.params.speciesId)}/collection.json`);
+    res.sendFile(`${getCollectionPath(req.params.id)}/collection.json`);
   }, 0);
 });
 

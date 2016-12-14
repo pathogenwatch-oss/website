@@ -13,10 +13,10 @@ function updateFastas(state, name, update) {
   };
 }
 
-export default {
-  initialState: {},
-  actions: {
-    [ADD_FASTAS](state, { fastas }) {
+export default function (state = {}, { type, payload }) {
+  switch (type) {
+    case ADD_FASTAS: {
+      const { fastas } = payload;
       if (!fastas.length) return state;
 
       return fastas.reduce((memo, fasta) => {
@@ -28,14 +28,17 @@ export default {
         }
         return { ...memo, [fasta.name]: fasta };
       }, state);
-    },
-    [UPLOAD_FASTA.ATTEMPT](state, { name }) {
+    }
+    case UPLOAD_FASTA.ATTEMPT: {
+      const { name } = payload;
       return updateFastas(state, name, { uploadAttempted: true, error: null });
-    },
-    [UPLOAD_FASTA.FAILURE](state, { name, error }) {
+    }
+    case UPLOAD_FASTA.FAILURE: {
+      const { name, error } = payload;
       return updateFastas(state, name, { error });
-    },
-    [UPLOAD_FASTA.SUCCESS](state, { name, result }) {
+    }
+    case UPLOAD_FASTA.SUCCESS: {
+      const { name, result } = payload;
       const { speciesId, speciesName } = result;
       const supported = isSupported(result);
       const species = taxIdMap.get(speciesId);
@@ -48,19 +51,24 @@ export default {
         speciesLabel,
         ...result,
       });
-    },
-    [UPDATE_FASTA_PROGRESS](state, { name, progress }) {
+    }
+    case UPDATE_FASTA_PROGRESS: {
+      const { name, progress } = payload;
       return updateFastas(state, name, { progress });
-    },
-    [REMOVE_FASTA](state, { name }) {
+    }
+    case REMOVE_FASTA: {
+      const { name } = payload;
       delete state[name];
       return { ...state };
-    },
-    [UNDO_REMOVE_FASTA](state, { fasta }) {
+    }
+    case UNDO_REMOVE_FASTA: {
+      const { fasta } = payload;
       return {
         ...state,
         [fasta.name]: fasta,
       };
-    },
-  },
-};
+    }
+    default:
+      return state;
+  }
+}

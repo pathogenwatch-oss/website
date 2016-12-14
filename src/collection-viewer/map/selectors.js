@@ -10,8 +10,7 @@ export const getAssemblyIdsInPath = createSelector(
   getVisibleAssemblies,
   getLassoPath,
   (assemblies, path) =>
-    assemblies.reduce((ids, { id, metadata }) => {
-      const { position = {} } = metadata;
+    assemblies.reduce((ids, { id, position = {} }) => {
       if (!position.latitude || !position.longitude) return ids;
       if (contains(path, { lat: position.latitude, lng: position.longitude })) {
         return ids.concat(id);
@@ -20,16 +19,16 @@ export const getAssemblyIdsInPath = createSelector(
     }, [])
 );
 
-const defaultPositionExtractor = ({ metadata }) => {
-  const { latitude, longitude } = metadata.position;
+const defaultPositionExtractor = ({ position = {} }) => {
+  const { latitude, longitude } = position;
   if (latitude && longitude) {
     return [ latitude, longitude ];
   }
   return null;
 };
 
-const countryPositionExtractor = ({ metadata }) => {
-  const { country } = metadata.position;
+const countryPositionExtractor = ({ position = {} }) => {
+  const { country } = position;
   if (country) {
     return getCountryCentroid(country);
   }

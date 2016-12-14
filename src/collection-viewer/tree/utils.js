@@ -1,6 +1,6 @@
 import { utils } from 'phylocanvas';
 
-import { getColumnLabel } from '../../table/utils';
+import { getColumnLabel } from '../table/utils';
 import Species from '../../species';
 import { POPULATION } from '../../app/stateKeys/tree';
 import { leafStyles, titles } from './constants';

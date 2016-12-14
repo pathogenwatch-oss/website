@@ -1,3 +1,4 @@
+import { getCollection } from '../../collection-route/selectors';
 import { getTrees, getVisibleTree, getLeafIds } from './selectors';
 
 import { showToast } from '../../toast';
@@ -11,7 +12,7 @@ import Species from '../../species';
 
 function fetchTree(name) {
   return (dispatch, getState) => {
-    const { collection } = getState();
+    const collection = getCollection(getState());
     return dispatch(
       actions.fetchTree(name, getSubtree(Species.id, collection.id, name))
     );

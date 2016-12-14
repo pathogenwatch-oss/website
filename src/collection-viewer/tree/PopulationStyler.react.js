@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
+import { getCollection, getAssemblies } from '../../collection-route/selectors';
 import { getFilter } from '../selectors';
 
 import { leafStyles, defaultLeafStyle } from './constants';
@@ -41,8 +42,8 @@ const Styler = React.createClass({
 
 function mapStateToProps(state) {
   return {
-    assemblies: state.entities.assemblies,
-    subtrees: state.collection.subtrees,
+    assemblies: getAssemblies(state),
+    subtrees: getCollection(state).subtrees,
     filter: getFilter(state),
   };
 }

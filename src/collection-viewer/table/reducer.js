@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 
-import metadata from '../../reducers/metadata';
-import resistanceProfile from '../../reducers/resistanceProfile';
+import metadata from '../metadata-table/reducer';
+import resistanceProfile from '../resistance-profile/reducer';
 
 import { SET_TABLE } from './actions';
 

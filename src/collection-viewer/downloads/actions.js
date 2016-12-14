@@ -1,0 +1,33 @@
+import { createAsyncConstants } from '../../actions';
+
+import { makeFileRequest } from '../../utils/Api';
+
+export const SET_MENU_ACTIVE = 'SET_MENU_ACTIVE';
+
+export function setMenuActive(active) {
+  return {
+    type: SET_MENU_ACTIVE,
+    payload: {
+      active,
+    },
+  };
+}
+
+export const REQUEST_DOWNLOAD = createAsyncConstants('REQUEST_DOWNLOAD');
+
+export function requestDownload(args) {
+  const {
+    format, id, filename, speciesId,
+    getFileContents = makeFileRequest(format, id, speciesId),
+  } = args;
+
+  return {
+    type: REQUEST_DOWNLOAD,
+    payload: {
+      format,
+      id,
+      filename,
+      promise: getFileContents(),
+    },
+  };
+}

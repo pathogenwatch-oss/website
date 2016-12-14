@@ -1,20 +1,16 @@
 import { createSelector } from 'reselect';
 
+import { getAssemblies, getViewer } from '../collection-route/selectors';
 import { getResistanceProfileTable } from './table/selectors';
 
-import { createColourGetter } from '../utils/resistanceProfile';
+import { createColourGetter } from './resistance-profile/utils';
 
-export const getFilter = ({ collectionViewer }) => collectionViewer.filter;
-
-export const getAssemblies = createSelector(
-  ({ entities }) => entities.assemblies,
-  assemblies => Object.values(assemblies)
-);
+export const getFilter = state => getViewer(state).filter;
 
 export const getVisibleAssemblyIds = state => getFilter(state).unfilteredIds;
 
 export const getVisibleAssemblies = createSelector(
-  ({ entities }) => entities.assemblies,
+  getAssemblies,
   getVisibleAssemblyIds,
   (assemblies, ids) => Array.from(ids).map(id => assemblies[id])
 );
@@ -30,7 +26,7 @@ export const getActiveAssemblyIds = createSelector(
 );
 
 export const getActiveAssemblies = createSelector(
-  ({ entities }) => entities.assemblies,
+  getAssemblies,
   getActiveAssemblyIds,
   (assemblies, ids) => Array.from(ids).map(id => assemblies[id])
 );

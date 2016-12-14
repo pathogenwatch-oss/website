@@ -29,9 +29,8 @@ const menuItems = [
   },
 ];
 
-function mapStateToProps({ bodyClickListener, location }) {
+function mapStateToProps({ location }) {
   return {
-    bodyClickListener,
     pageSlug: location.slug,
   };
 }
@@ -46,7 +45,6 @@ export default connect(mapStateToProps, mapDispatchToProps)(React.createClass({
 
   propTypes: {
     children: React.PropTypes.element,
-    bodyClickListener: React.PropTypes.func,
   },
 
   componentDidMount() {
@@ -69,7 +67,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(React.createClass({
   },
 
   render() {
-    const { bodyClickListener = () => {}, routes } = this.props;
+    const { routes } = this.props;
     const { header } = routes[routes.length - 1];
     return (
       <div ref="layout"
@@ -77,7 +75,6 @@ export default connect(mapStateToProps, mapDispatchToProps)(React.createClass({
           'mdl-layout mdl-js-layout mdl-layout--fixed-header',
           `wgsa-page--${this.props.pageSlug}`,
         )}
-        onClick={bodyClickListener}
       >
         <Header content={header} />
         <div className="mdl-layout__drawer">

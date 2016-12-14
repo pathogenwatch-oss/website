@@ -31,7 +31,8 @@ export function reducer(state = initialState, { type, payload }) {
   }
 }
 
-function getSelectedAssembly({ assemblyDrawer, entities: { fastas } }) {
+function getSelectedAssembly({ assemblyDrawer, hub }) {
+  const { fastas } = hub.entities;
   return assemblyDrawer.name ? fastas[assemblyDrawer.name] : null;
 }
 

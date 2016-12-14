@@ -17,10 +17,10 @@ export function onRowClick(assembly) {
     const state = getState();
     const { ids, active } = getFilter(state);
 
-    if (active && ids.size === 1 && ids.has(assembly.id)) {
+    if (active && ids.size === 1 && ids.has(assembly.uuid)) {
       dispatch(resetFilter());
     } else {
-      dispatch(activateFilter([ assembly.id ]));
+      dispatch(activateFilter([ assembly.uuid ]));
     }
   };
 }
