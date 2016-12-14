@@ -51,7 +51,7 @@ export default function (state = {}, { type, payload }) {
       const { result } = payload;
       return {
         ...state,
-        ...decorateCollectionAssemblies(result.assemblies),
+        ...decorateCollectionAssemblies(result.genomes),
       };
     }
     case actions.FETCH_SPECIES_DATA.SUCCESS: {

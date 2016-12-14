@@ -59,7 +59,7 @@ function entities(state = {}, { type, payload }) {
         [COLLECTION]: {
           name: COLLECTION,
           newick: result.tree,
-          leafIds: result.tree ? null : result.assemblies.map(_ => _.uuid),
+          leafIds: result.tree ? null : result.genomes.map(_ => _.uuid),
           ...initialState,
         },
       };

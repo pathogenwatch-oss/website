@@ -4,12 +4,12 @@ import { connect } from 'react-redux';
 import DownloadButton from '../downloads/DownloadButton.react';
 
 import { getCollection } from '../../collection-route/selectors';
-import { getFastaArchiveFiles } from './selectors';
+import { getActiveAssemblies } from '../selectors';
 import { getFiles } from '../downloads/selectors';
 
 import { createDownloadProps, formatCollectionFilename } from '../downloads/utils';
 
-import { postJson } from '../../utils/Api';
+import { sendJson } from '../../utils/Api';
 
 const Button = props => (
   <DownloadButton
@@ -22,20 +22,25 @@ const Button = props => (
 
 function mapStateToProps(state) {
   return {
-    files: getFastaArchiveFiles(state),
+    genomes: getActiveAssemblies(state),
     format: 'fasta_archive',
     collection: getCollection(state),
     download: getFiles(state).fasta_archive,
   };
 }
 
-function mergeProps({ files, format, download, collection }, { dispatch }) {
+function mergeProps({ genomes, format, download, collection }, { dispatch }) {
+  console.log(genomes);
   return createDownloadProps({
     format,
     download,
-    id: files,
+    id: genomes,
     getFileName: () => formatCollectionFilename(collection),
-    getFileContents: () => postJson('/download/fastas', { files }),
+    getFileContents: () =>
+      sendJson('PUT', '/download/genome-archive', {
+        type: 'collectionGenome',
+        ids: genomes.map(_ => _.id),
+      }),
   }, dispatch);
 }
 

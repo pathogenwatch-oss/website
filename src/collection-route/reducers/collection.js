@@ -27,7 +27,7 @@ export default function (state = initialState, { type, payload }) {
       const { result } = payload;
       return {
         ...state,
-        assemblyIds: new Set(sortAssemblies(result.assemblies).map(_ => _.uuid)),
+        assemblyIds: new Set(sortAssemblies(result.genomes).map(_ => _.uuid)),
         id: result.uuid,
         metadata: {
           title: result.title,

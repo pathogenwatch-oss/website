@@ -3,8 +3,8 @@ import React from 'react';
 import DownloadIcon from '../downloads/DownloadIcon.react';
 
 import { FASTA_FILE_EXTENSIONS } from '../../hub/utils';
-import { API_ROOT } from '../../utils/Api';
 import { CGPS } from '../../app/constants';
+import { SERVER_ADDRESS } from '../../utils/Api';
 
 function formatFastaFilename(assemblyName) {
   for (const ext in FASTA_FILE_EXTENSIONS) {
@@ -17,7 +17,7 @@ function formatFastaFilename(assemblyName) {
 
 export default ({ id, name }) => (
   <a
-    href={`${API_ROOT}/download/fasta/${id}`}
+    href={`${SERVER_ADDRESS}/download/genome/${id}`}
     download={formatFastaFilename(name)}
     target="_blank" rel="noopener"
     title="Download Assembly"

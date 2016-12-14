@@ -15,6 +15,16 @@ function ajax(config) {
   });
 }
 
+export function sendJson(method, path, data) {
+  return ajax({
+    type: method,
+    url: `${SERVER_ADDRESS}${path}`,
+    contentType: 'application/json; charset=UTF-8',
+    data: JSON.stringify(data),
+    dataType: 'json',
+  });
+}
+
 export function postJson(path, data, progressFn) {
   return ajax({
     type: 'POST',
@@ -38,6 +48,8 @@ export function postJson(path, data, progressFn) {
     },
   });
 }
+
+
 
 export function getReferenceCollection(speciesId) {
   return $.get(`${API_ROOT}/species/${speciesId}/reference`);
