@@ -10,8 +10,11 @@ router.put('/collection', (req, res, next) => {
   LOGGER.info('Received request to create collection');
 
   const { user } = req;
-  const { files, speciesId } = req.body;
-  return services.request('collection', 'create', { files, speciesId, user }).
+  const { genomeIds, title, description, speciesId } = req.body;
+  const message = { user, genomeIds, title, description, speciesId };
+
+  return services.
+    request('collection', 'create', message).
     then(({ collectionId }) => res.json({ collectionId })).
     catch(next);
 });

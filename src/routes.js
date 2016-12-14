@@ -3,10 +3,10 @@ module.exports = function (app) {
     require('routes/genome'),
     require('routes/collection'),
     require('routes/resistance'),
-    require('routes/download'),
     require('routes/user'),
   ]);
 
+  app.use(require('routes/download'));
   app.use(require('routes/speciesDownloads'));
 
   app.use('/zika', (req, res) =>

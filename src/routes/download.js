@@ -1,14 +1,11 @@
-const sanitise = require('sanitize-filename');
 const path = require('path');
 const express = require('express');
 const router = express.Router();
 
-const fastaStorage = require('wgsa-fasta-store');
-
+const services = require('services');
+const CollectionGenome = require('data/collectionGenome');
 const fileModel = require('models/file');
-const assemblyModel = require('models/assembly');
 
-const { fastaStoragePath } = require('configuration');
 const LOGGER = require('utils/logging').createLogger('Download requests');
 
 router.post('/species/:speciesId/download/type/:idType/format/:fileFormat',
@@ -61,7 +58,7 @@ function createFastaFileName(assemblyName = 'file') {
     `${assemblyName}.fasta`;
 }
 
-router.get('/download/fasta/:id', (req, res, next) => {
+router.get('/download/genome/:id', (req, res, next) => {
   const { id } = req.params;
 
   if (!id) {
@@ -71,50 +68,41 @@ router.get('/download/fasta/:id', (req, res, next) => {
 
   LOGGER.info(`Received request for fasta: ${id}`);
 
-  return assemblyModel.getMetadata(id).
-    then(({ fileId, assemblyName }) =>
+  return CollectionGenome.findById(id).
+    then(({ fileId, name }) => {
       res.set({
-        'Content-Disposition': `attachment; filename="${createFastaFileName(assemblyName)}"`,
+        'Content-Disposition': `attachment; filename="${createFastaFileName(name)}"`,
         'Content-type': 'text/plain',
-      }).
-      sendFile(fastaStorage.getFilePath(fastaStoragePath, fileId))
-    ).
+      });
+      return services.request('genome', 'file-path', { fileId });
+    }).
+    then(filePath => res.sendFile(filePath)).
     catch(next);
 });
 
-router.post('/download/fastas', (req, res, next) => {
-  const { files } = req.body;
+router.put('/download/genome-archive', (req, res, next) => {
+  const { type, ids } = req.body;
 
-  if (!files || !Array.isArray(files) || !files.length) {
-    LOGGER.error('Invalid files list');
-    return res.sendStatus(400);
-  }
+  LOGGER.info(`Received request for ${type} archive of ${ids.length} files`);
 
-  LOGGER.info(`Received request for fasta zip of ${files.length} files`);
-
-  return fastaStorage.archive(fastaStoragePath, files.map(id => sanitise(id))).
+  return services.request('download', 'create-genome-archive', { type, ids }).
     then(fileId => res.json({ fileId })).
     catch(next);
 });
 
-router.get('/download/fasta-archive/:id', (req, res) => {
+router.get('/download/genome-archive/:id', (req, res) => {
   const { id } = req.params;
   const { filename } = req.query;
 
-  if (!id) {
-    LOGGER.error('Missing id');
-    return res.sendStatus(400);
-  }
-
   LOGGER.info(`Received request for fasta archive: ${id} ${filename}`);
 
-  const archivePath = fastaStorage.getArchivePath(fastaStoragePath, sanitise(id));
-
-  return res.set({
+  res.set({
     'Content-Disposition': `attachment;${filename ? ` filename="${filename}.zip"` : ''}`,
     'Content-type': 'text/plain',
-  }).
-  sendFile(archivePath);
+  });
+
+  services.request('download', 'genome-archive-path', { id }).
+    then(archivePath => res.sendFile(archivePath));
 });
 
 module.exports = router;

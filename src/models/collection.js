@@ -77,9 +77,9 @@ function addPublicAssemblyCounts(subtrees, collectionId, callback) {
         const { leafIdentifiers } = results[key];
         const subtreeId = subtreeIds[i];
         const subtree = subtrees[subtreeId];
-        const collectionAssemblyIds = new Set(subtree.assemblyIds);
+        const collectionGenomeIds = new Set(subtree.assemblyIds);
         subtree.publicCount = leafIdentifiers.filter(
-          id => id !== subtreeId && !collectionAssemblyIds.has(id)
+          id => id !== subtreeId && !collectionGenomeIds.has(id)
         ).length;
       });
       callback(null, subtrees);
@@ -171,11 +171,11 @@ function getSubtree({ speciesId, collectionId, subtreeId }, callback) {
     }),
     function ({ subtree, collection }, done) {
       const subtreeAssemblyIds = subtree.map(_ => _.uuid);
-      const collectionAssemblyIds = new Set(collection.map(_ => _.uuid));
+      const collectionGenomeIds = new Set(collection.map(_ => _.uuid));
       const params = {
         speciesId,
         assemblyIds: subtreeAssemblyIds.filter(
-          id => id !== subtreeId && !collectionAssemblyIds.has(id)
+          id => id !== subtreeId && !collectionGenomeIds.has(id)
         ),
       };
       async.parallel({

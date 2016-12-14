@@ -4,23 +4,23 @@ const COLLECTION_OPERATIONS = {
   CREATE: 'CREATE',
 };
 
-function mapAssemblyIdsToFiles(uuids, files) {
+function mapUuidsToGenomes(uuids, genomes) {
   const unusedIds = new Set(uuids);
-  return files.map(file => {
+  return genomes.map(genome => {
     const idPair = uuids.find(pair =>
-      unusedIds.has(pair) && pair.checksum === file.id
+      unusedIds.has(pair) && pair.checksum === genome._file.fileId
     );
     unusedIds.delete(idPair);
     return {
       uuid: idPair.uuid,
-      file,
+      genome,
     };
   });
 }
 
-module.exports = LOGGER => ({ files }) => {
+module.exports = LOGGER => ({ genomes }) => {
   const message = {
-    checksums: files.map(_ => _.id),
+    checksums: genomes.map(_ => _._file.fileId),
     collectionOperation: COLLECTION_OPERATIONS.CREATE,
   };
   LOGGER.debug(message);
@@ -43,7 +43,7 @@ module.exports = LOGGER => ({ files }) => {
 
         resolve({
           collectionId,
-          assemblies: mapAssemblyIdsToFiles(assemblyIds, files),
+          collectionGenomes: mapUuidsToGenomes(assemblyIds, genomes),
         });
       });
 

@@ -1,16 +1,20 @@
 const messageQueueService = require('services/messageQueue');
+const services = require('services');
 
-module.exports = LOGGER => ({ files, collectionId, speciesId }) => {
-  for (const file of files) {
-    LOGGER.info(`Submitting assembly ${file.uuid}`);
-    LOGGER.debug(file.path);
-    messageQueueService.getTaskExchange().publish(`${speciesId}.all`, {
-      speciesId,
-      collectionId,
-      assemblyId: { uuid: file.uuid, checksum: file.id },
-      sequenceFile: file.path,
-      taskId: `${collectionId}_${file.uuid}`,
-      action: 'CREATE',
-    });
+module.exports = LOGGER => ({ collectionGenomes, collectionId, speciesId }) => {
+  for (const { uuid, genome } of collectionGenomes) {
+    services.request('genome', 'file-path', genome._file).
+      then(filePath => {
+        const { fileId } = genome._file;
+        LOGGER.info(`Submitting assembly ${uuid}`);
+        messageQueueService.getTaskExchange().publish(`${speciesId}.all`, {
+          speciesId,
+          collectionId,
+          assemblyId: { uuid, checksum: fileId },
+          sequenceFile: filePath,
+          taskId: `${collectionId}_${uuid}`,
+          action: 'CREATE',
+        });
+      });
   }
 };

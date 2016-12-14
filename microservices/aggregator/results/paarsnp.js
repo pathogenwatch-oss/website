@@ -1,4 +1,4 @@
-const CollectionAssembly = require('data/collectionAssembly');
+const CollectionGenome = require('data/collectionGenome');
 const mainStorage = require('services/storage')('main');
 const { PAARSNP_RESULT } = require('utils/documentKeys');
 
@@ -22,5 +22,5 @@ module.exports = (taskName, { assemblyId }) => {
       snp: result.snparResult ?
         result.snparResult.resistanceMutationIds || [] : [],
     })).
-    then(result => CollectionAssembly.addAnalysisResult(uuid, taskName, result));
+    then(result => CollectionGenome.addAnalysisResult(uuid, taskName, result));
 };

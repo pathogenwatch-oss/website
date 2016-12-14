@@ -1,4 +1,4 @@
-const CollectionAssembly = require('data/collectionAssembly');
+const CollectionGenome = require('data/collectionGenome');
 const mainStorage = require('services/storage')('main');
 const { GENOTYPHI_RESULT } = require('utils/documentKeys');
 
@@ -8,5 +8,5 @@ module.exports = (name, { assemblyId }) => {
     then(result => ({
       genotype: result.genotype,
     })).
-    then(result => CollectionAssembly.addAnalysisResult(uuid, name, result));
+    then(result => CollectionGenome.addAnalysisResult(uuid, name, result));
 };

@@ -3,7 +3,7 @@ const CollectionGenome = require('data/collectionGenome');
 
 function addGenomes(collection) {
   return CollectionGenome.
-    find({ _collection: collection._id }, { _collection: 0 }).
+    find({ _collection: collection._id }, { _collection: 0, fileId: 0 }).
     then(genomes => {
       collection.genomes = genomes.map(_ => _.toObject());
       return collection;

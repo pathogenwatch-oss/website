@@ -1,4 +1,4 @@
-const CollectionAssembly = require('data/collectionAssembly');
+const CollectionGenome = require('data/collectionGenome');
 const mainStorage = require('services/storage')('main');
 const { NGMAST_RESULT } = require('utils/documentKeys');
 
@@ -10,5 +10,5 @@ module.exports = (name, { assemblyId }) => {
       por: result.por,
       tbpb: result.tbpb,
     })).
-    then(result => CollectionAssembly.addAnalysisResult(uuid, name, result));
+    then(result => CollectionGenome.addAnalysisResult(uuid, name, result));
 };
