@@ -3,7 +3,7 @@ const services = require('services');
 
 module.exports = LOGGER => ({ collectionGenomes, collectionId, speciesId }) => {
   for (const { uuid, genome } of collectionGenomes) {
-    services.request('genome', 'file-path', genome._file).
+    services.request('genome', 'file-path', genome._file.toObject()).
       then(filePath => {
         const { fileId } = genome._file;
         LOGGER.info(`Submitting assembly ${uuid}`);

@@ -26,6 +26,12 @@ const schema = new Schema({
 
 setToObjectOptions(schema);
 
+const commonResults = [ 'FP', 'MLST', 'PAARSNP', 'CORE' ];
+const speciesSpecificResults = {
+  90370: [ 'GENOTYPHI' ],
+  485: [ 'NGMAST' ],
+};
+
 schema.methods.addUUID = function (uuid) {
   this.uuid = uuid;
   this.status = 'PROCESSING';
@@ -45,15 +51,21 @@ schema.methods.ready = function () {
   return this.save();
 };
 
+schema.methods.resultRequired = function (type) {
+  if (new Set(commonResults).has(type)) {
+    return true;
+  }
+
+  if (this.speciesId in speciesSpecificResults) {
+    return new Set(speciesSpecificResults[this.speciesId]).has(type);
+  }
+
+  return false;
+};
+
 schema.virtual('isProcessing').get(function () {
   return this.status === 'PROCESSING';
 });
-
-const commonResults = [ 'FP', 'MLST', 'PAARSNP', 'CORE' ];
-const speciesSpecificResults = {
-  90370: [ 'GENOTYPHI' ],
-  485: [ 'NGMAST' ],
-};
 
 schema.virtual('totalGenomeResults').get(function () {
   return commonResults.length +
