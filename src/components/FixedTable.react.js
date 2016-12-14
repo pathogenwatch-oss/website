@@ -82,7 +82,6 @@ export default React.createClass({
   renderCell(columnProps, { rowIndex, width, height }) {
     const { cellClasses, getCellContents = getCellValue } = columnProps;
     const isSelected = this.isSelected(columnProps);
-
     return (
       <Cell
         {...{ width, height }}
@@ -98,6 +97,7 @@ export default React.createClass({
       (props.group ?
         <ColumnGroup
           key={props.columnKey}
+          fixed={props.fixed}
           header={headerProps => this.renderHeader(props, headerProps)}
         >
           {this.renderColumns(props.columns)}
@@ -106,7 +106,6 @@ export default React.createClass({
           key={props.columnKey}
           header={headerProps => this.renderHeader(props, headerProps)}
           cell={cellProps => this.renderCell(props, cellProps)}
-          cell={props.columnKey}
           width={props.fixedWidth || props.width || 96}
           flexGrow={1}
           { ...props }

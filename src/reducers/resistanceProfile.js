@@ -176,23 +176,45 @@ const viewColumnBuilders = {
       })),
 };
 
+const systemGroup = { group: true,
+  fixed: true,
+  columnKey: 'test',
+  columns: [
+    { columnKey: '__spacer_l',
+      getHeaderContent() {},
+      fixed: true,
+      fixedWidth: 1,
+      getCellContents() {},
+    },
+    ...systemColumnProps,
+  ],
+};
+
+const spacerGroup = {
+  group: true,
+  columnKey: 'test3',
+  columns: [
+    { columnKey: '__spacer_r',
+      getHeaderContent() {},
+      fixedWidth: 8,
+      getCellContents() {},
+      cellClasses: 'wgsa-table-cell--resistance',
+    },
+  ],
+};
+
 function buildColumns(view, libraries) {
-  return [
-    // { columnKey: '__spacer_l',
-    //   getHeaderContent() {},
-    //   fixed: true,
-    //   fixedWidth: 1,
-    //   getCellContents() {},
-    // },
-    // ...systemColumnProps,
-    ...viewColumnBuilders[view](libraries),
-    // { columnKey: '__spacer_r',
-    //   getHeaderContent() {},
-    //   fixedWidth: 8,
-    //   getCellContents() {},
-    //   cellClasses: 'wgsa-table-cell--resistance',
-    // },
-  ];
+  const columns = viewColumnBuilders[view](libraries);
+
+  return [ systemGroup ].concat(
+    columns.some(_ => _.group) ?
+      columns :
+      { group: true,
+        columnKey: 'test2',
+        columns,
+      },
+    spacerGroup
+  );
 }
 
 const initialState = {
