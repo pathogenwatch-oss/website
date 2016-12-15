@@ -16,7 +16,8 @@ const Styler = React.createClass({
       const { id } = leaf;
       const assembly = assemblies[id];
       const subtree = subtrees[id];
-      const { assemblyIds = [], publicCount = 0 } = subtree || {};
+      const { leafIds = [], totalCollection = 0, totalPublic = 0 } =
+        subtree || {};
 
       leaf.setDisplay({
         ...(subtree ? leafStyles.subtree : leafStyles.reference),
@@ -25,9 +26,9 @@ const Styler = React.createClass({
           fillStyle: subtree ? CGPS.COLOURS.PURPLE_LIGHT : CGPS.COLOURS.GREY,
         },
       });
-      leaf.label = `${assembly.name} (${assemblyIds.length}) [${publicCount}]`;
+      leaf.label = `${assembly.name} (${totalCollection}) [${totalPublic}]`;
       leaf.highlighted = (filter.active &&
-        assemblyIds.some(assemblyId => filter.ids.has(assemblyId)));
+        leafIds.some(uuid => filter.ids.has(uuid)));
       leaf.interactive = !!subtree;
     }
 

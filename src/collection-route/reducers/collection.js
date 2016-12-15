@@ -36,7 +36,10 @@ export default function (state = initialState, { type, payload }) {
         },
         progress: result.progress,
         status: result.status,
-        subtrees: result.subtrees,
+        subtrees: result.subtrees.reduce((memo, subtree) => {
+          memo[subtree.name] = subtree;
+          return memo;
+        }, {}),
       };
     }
     case actions.UPDATE_COLLECTION_PROGRESS: {

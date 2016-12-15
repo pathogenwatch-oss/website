@@ -12,10 +12,8 @@ function createAnalysisDictionary(analyses = []) {
 function decorateReferenceAssemblies(assemblies) {
   return Object.keys(assemblies)
     .reduce((memo, assemblyId) => {
-      const { analysis, ...assembly } = assemblies[assemblyId];
       memo[assemblyId] = {
-        ...assembly,
-        analysis: createAnalysisDictionary(analysis),
+        ...assemblies[assemblyId],
         __isReference: true,
       };
       return memo;
@@ -27,7 +25,6 @@ function decorateCollectionAssemblies(assemblies) {
   return assemblies.reduce((memo, assembly) => {
     memo[assembly.uuid] = {
       ...assembly,
-      analysis: createAnalysisDictionary(assembly.analysis),
       __isCollection: true,
     };
     return memo;
@@ -38,7 +35,6 @@ function decoratePublicAssemblies(assemblies) {
   return assemblies.reduce((memo, assembly) => {
     memo[assembly.uuid] = {
       ...assembly,
-      analysis: createAnalysisDictionary(assembly.analysis),
       __isPublic: true,
     };
     return memo;
