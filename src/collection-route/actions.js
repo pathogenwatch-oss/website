@@ -17,13 +17,10 @@ export const fetchCollection = (collectionId) => ({
 
 export const UPDATE_COLLECTION_PROGRESS = 'UPDATE_COLLECTION_PROGRESS';
 
-export function updateProgress({ status, progress }) {
+export function updateProgress(message) {
   return {
     type: UPDATE_COLLECTION_PROGRESS,
-    payload: {
-      status,
-      progress,
-    },
+    payload: message,
   };
 }
 
