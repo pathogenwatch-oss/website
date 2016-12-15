@@ -62,6 +62,10 @@ function entities(state = {}, { type, payload }) {
           leafIds: result.tree ? null : result.genomes.map(_ => _.uuid),
           ...initialState,
         },
+        ...result.subtrees.reduce((memo, { tree, ...subtree }) => {
+          memo[subtree.name] = { ...subtree, newick: tree, ...initialState };
+          return memo;
+        }, {}),
       };
     }
     case FETCH_SPECIES_DATA.SUCCESS: {

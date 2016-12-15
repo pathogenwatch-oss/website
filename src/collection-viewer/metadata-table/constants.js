@@ -10,7 +10,7 @@ export const systemDataColumns = {
   __wgsa_reference: {
     columnKey: '__wgsa_reference',
     valueGetter({ analysis }) {
-      return analysis.fp.subtype;
+      return analysis.fp ? analysis.fp.subtype : '';
     },
   },
   __st: {

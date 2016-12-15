@@ -30,7 +30,6 @@ function mapStateToProps(state) {
 }
 
 function mergeProps({ genomes, format, download, collection }, { dispatch }) {
-  console.log(genomes);
   return createDownloadProps({
     format,
     download,

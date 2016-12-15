@@ -1,8 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { getCollection, getAssemblies } from '../../collection-route/selectors';
+import { getAssemblies } from '../../collection-route/selectors';
 import { getFilter } from '../selectors';
+import { getTrees } from './selectors';
 
 import { leafStyles, defaultLeafStyle } from './constants';
 import { CGPS } from '../../app/constants';
@@ -10,12 +11,12 @@ import { CGPS } from '../../app/constants';
 const Styler = React.createClass({
 
   componentDidUpdate() {
-    const { phylocanvas, assemblies, subtrees, filter } = this.props;
+    const { phylocanvas, assemblies, trees, filter } = this.props;
 
     for (const leaf of phylocanvas.leaves) {
       const { id } = leaf;
       const assembly = assemblies[id];
-      const subtree = subtrees[id];
+      const subtree = trees[id];
       const { leafIds = [], totalCollection = 0, totalPublic = 0 } =
         subtree || {};
 
@@ -44,7 +45,7 @@ const Styler = React.createClass({
 function mapStateToProps(state) {
   return {
     assemblies: getAssemblies(state),
-    subtrees: getCollection(state).subtrees,
+    trees: getTrees(state),
     filter: getFilter(state),
   };
 }
