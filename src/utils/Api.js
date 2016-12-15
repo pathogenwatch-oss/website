@@ -15,7 +15,7 @@ function ajax(config) {
   });
 }
 
-export function sendJson(method, path, data) {
+export function fetchJson(method, path, data) {
   return ajax({
     type: method,
     url: `${SERVER_ADDRESS}${path}`,
@@ -50,7 +50,6 @@ export function postJson(path, data, progressFn) {
 }
 
 
-
 export function getReferenceCollection(speciesId) {
   return $.get(`${API_ROOT}/species/${speciesId}/reference`);
 }
@@ -76,11 +75,4 @@ export function makeFileRequest(format, id, speciesId) {
 
 export function getResistanceData(speciesId) {
   return $.get(`${API_ROOT}/species/${speciesId}/resistance`);
-}
-
-export function getSubtree(speciesId, collectionId, subtreeId) {
-  return ajax({
-    type: 'GET',
-    url: `${API_ROOT}/species/${speciesId}/collection/${collectionId}/subtree/${subtreeId}`,
-  });
 }

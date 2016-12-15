@@ -5,16 +5,15 @@ import { showToast } from '../../toast';
 import * as actions from './actions';
 import { activateFilter, resetFilter } from '../filter/actions';
 
-import { getSubtree } from '../../utils/Api';
+import { getSubtree } from './api';
 
 import { POPULATION, COLLECTION } from '../../app/stateKeys/tree';
-import Species from '../../species';
 
 function fetchTree(name) {
   return (dispatch, getState) => {
     const collection = getCollection(getState());
     return dispatch(
-      actions.fetchTree(name, getSubtree(Species.id, collection.id, name))
+      actions.fetchTree(name, getSubtree(collection.id, name))
     );
   };
 }

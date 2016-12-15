@@ -9,7 +9,7 @@ import { getFiles } from '../downloads/selectors';
 
 import { createDownloadProps, formatCollectionFilename } from '../downloads/utils';
 
-import { sendJson } from '../../utils/Api';
+import { fetchJson } from '../../utils/Api';
 
 const Button = props => (
   <DownloadButton
@@ -36,7 +36,7 @@ function mergeProps({ genomes, format, download, collection }, { dispatch }) {
     id: genomes,
     getFileName: () => formatCollectionFilename(collection),
     getFileContents: () =>
-      sendJson('PUT', '/download/genome-archive', {
+      fetchJson('PUT', '/download/genome-archive', {
         type: 'collectionGenome',
         ids: genomes.map(_ => _.id),
       }),

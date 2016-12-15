@@ -1,14 +1,6 @@
 import * as actions from '../actions';
 import { FETCH_TREE } from '../../collection-viewer/tree/actions';
 
-function createAnalysisDictionary(analyses = []) {
-  if (!Array.isArray(analyses)) return analyses;
-  return analyses.reduce((memo, { name, result }) => {
-    memo[name.toLowerCase()] = result;
-    return memo;
-  }, {});
-}
-
 function decorateReferenceAssemblies(assemblies) {
   return Object.keys(assemblies)
     .reduce((memo, assemblyId) => {
@@ -61,7 +53,7 @@ export default function (state = {}, { type, payload }) {
       const { result } = payload;
       return {
         ...state,
-        ...decoratePublicAssemblies(result.assemblies),
+        ...decoratePublicAssemblies(result.genomes),
       };
     }
     default:
