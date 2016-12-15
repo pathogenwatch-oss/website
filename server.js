@@ -12,6 +12,13 @@ const messageQueueConnection = require('utils/messageQueueConnection');
 const LOGGER = logging.getBaseLogger();
 const app = express();
 
+if (config.node.auth) {
+  const auth = require('http-auth');
+  const { realm, file } = config.node.auth;
+  const basic = auth.basic({ realm, file });
+  app.use(auth.connect(basic));
+}
+
 const clientPath = path.join(__dirname, 'node_modules', 'wgsa-front-end');
 
 app.set('port', process.env.PORT || config.node.port);
