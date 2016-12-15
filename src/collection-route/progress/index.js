@@ -5,13 +5,11 @@ import { connect } from 'react-redux';
 
 import Dashboard from './Dashboard.react';
 
-import { subscribe } from '../../utils/Notification';
-import Species from '../../species';
+import { subscribe, unsubscribe } from '../../utils/Notification';
 
 const UploadProgress = React.createClass({
 
   propTypes: {
-    checkStatus: React.PropTypes.func,
     updateProgress: React.PropTypes.func,
     progress: React.PropTypes.object,
     dispatch: React.PropTypes.func,
@@ -19,24 +17,20 @@ const UploadProgress = React.createClass({
   },
 
   componentWillMount() {
+    this.subscribeToNotifications();
     this.setDocumentTitle();
   },
 
   componentDidMount() {
     componentHandler.upgradeDom();
-    this.props.checkStatus();
   },
 
   componentDidUpdate() {
-    const { progress, updateProgress } = this.props;
-    if (progress && !this.notificationChannel) {
-      this.notificationChannel = subscribe(
-        this.props.params.id, // get collection id from url
-        'progress',
-        data => console.dir(data) || updateProgress(data)
-      );
-    }
     this.setDocumentTitle();
+  },
+
+  componentWillUnmount() {
+    unsubscribe(this.props.params.id, 'progress');
   },
 
   setDocumentTitle() {
@@ -48,6 +42,17 @@ const UploadProgress = React.createClass({
       `(${percentage}%)`,
       `${metadata.title || 'Upload Progress'}`,
     ].join(' ');
+  },
+
+  subscribeToNotifications() {
+    const { progress, updateProgress } = this.props;
+    if (progress && !this.notificationChannel) {
+      this.notificationChannel = subscribe(
+        this.props.params.id, // get collection id from url
+        'progress',
+        updateProgress
+      );
+    }
   },
 
   render() {

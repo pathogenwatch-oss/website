@@ -5,14 +5,9 @@ import Collection from './Collection.react';
 import { getCollection } from '../selectors';
 import { getProgressPercentage } from '../progress/selectors.js';
 
-import {
-  fetchCollection,
-  fetchSpeciesData,
-  updateProgress,
-  resetCollectionView,
-} from '../actions';
+import { updateProgress, resetCollectionView } from '../actions';
 
-import Species from '../../species';
+import { fetchCollection } from '../thunks';
 
 function mapStateToProps(state) {
   const collection = getCollection(state);
@@ -26,10 +21,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch, { params: { id } }) {
   return {
-    initialise: () => dispatch(fetchCollection(id)),
-    checkStatus: () => dispatch(fetchCollection(id)),
+    fetch: () => dispatch(fetchCollection(id)),
     updateProgress: results => dispatch(updateProgress(results)),
-    fetch: () => dispatch(fetchSpeciesData(Species.id)),
     reset: () => dispatch(resetCollectionView()),
   };
 }

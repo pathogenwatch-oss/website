@@ -29,6 +29,7 @@ export default function (state = initialState, { type, payload }) {
         ...state,
         assemblyIds: new Set(sortAssemblies(result.genomes).map(_ => _.uuid)),
         id: result.uuid,
+        speciesId: result.speciesId,
         metadata: {
           title: result.title,
           description: result.description,

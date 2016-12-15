@@ -11,8 +11,6 @@ export default React.createClass({
   displayName: 'Explorer',
 
   propTypes: {
-    initialise: React.PropTypes.func,
-    checkStatus: React.PropTypes.func,
     updateProgress: React.PropTypes.func,
     fetch: React.PropTypes.func,
     reset: React.PropTypes.func,
@@ -21,11 +19,11 @@ export default React.createClass({
   },
 
   componentDidMount() {
-    this.props.initialise();
+    this.props.fetch();
   },
 
   componentWillReceiveProps({ status }) {
-    if (status === statuses.READY) {
+    if (status !== this.props.status && status === statuses.READY) {
       this.props.fetch();
     }
   },
