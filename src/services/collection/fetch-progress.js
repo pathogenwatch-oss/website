@@ -16,7 +16,7 @@ function isReady(collection, results) {
   );
 }
 
-function addProgressResults(collection, results) {
+function calculateProgress(collection, results) {
   collection.progress.results = {};
   let totalResults = 0;
 
@@ -42,7 +42,7 @@ function checkStatus(collection) {
         if (isReady(collection, results)) {
           return collection.ready();
         }
-        return addProgressResults(collection, results);
+        return calculateProgress(collection, results);
       });
   }
   return collection;

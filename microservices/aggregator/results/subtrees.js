@@ -4,7 +4,6 @@ const mainStorage = require('services/storage')('main');
 const { CORE_TREE_RESULT } = require('utils/documentKeys');
 
 function parseSubtrees(collectionId, results, totals) {
-  console.log(totals, results);
   return totals.map(({ subtype, count }) => {
     const { newickTree, leafIdentifiers } =
       results[`${CORE_TREE_RESULT}_${collectionId}_${subtype}`];
