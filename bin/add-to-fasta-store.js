@@ -12,6 +12,7 @@ const { fastaStoragePath } = require('configuration');
 fastaStorage.setup(fastaStoragePath);
 
 const {
+  speciesId,
   csvFile,
   fastaDir,
 } = argv.opts;
@@ -47,11 +48,15 @@ async.waterfall([
       fastaStorage.store(fastaStoragePath, fs.createReadStream(row.filename))
         .then(({ fileId, metrics, specieator: { taxId } }) => {
           console.log('Checksum:', fileId);
-          console.log('Species:', taxId);
+          console.log('Mash species:', taxId);
+
+          if (taxId !== speciesId) {
+            throw new Error(`Mash mismatch: ${speciesId}`);
+          }
 
           const ids = {
             fileId,
-            speciesId: taxId,
+            speciesId,
             assemblyId: row.uuid,
             collectionId: row.collectionId,
           };
