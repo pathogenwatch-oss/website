@@ -19,7 +19,13 @@ const schema = new Schema({
     results: Object,
     percent: Number,
   },
-  subtrees: [ { name: String, tree: String, leafIds: [ String ] } ],
+  subtrees: [ {
+    name: String,
+    tree: String,
+    leafIds: [ String ],
+    totalCollection: Number,
+    totalPublic: Number,
+  } ],
   title: String,
   tree: String,
 });
@@ -77,5 +83,9 @@ const totalTreeResults = 2;
 schema.virtual('totalResultsExpected').get(function () {
   return this.size * this.totalGenomeResults + totalTreeResults;
 });
+
+schema.statics.findByUuid = function (uuid, projection) {
+  return this.findOne({ uuid }, projection);
+};
 
 module.exports = mongoose.model('Collection', schema);

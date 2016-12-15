@@ -57,25 +57,35 @@ schema.statics.addAnalysisResult = function (uuid, name, result) {
   return this.update({ uuid }, { [`analysis.${name.toLowerCase()}`]: result });
 };
 
-const groupResultsByType =
-  Object.keys(schema.tree.analysis).reduce((memo, type) => {
-    memo[type] = {
-      $sum: {
-        $cond: {
-          if: { $ifNull: [ `analysis.${type}`, false ] },
-          then: 1,
-          else: 0,
-        },
+const projectResultsByType = {
+  analysis: Object.keys(schema.tree.analysis).map(type => ({
+    type,
+    count: {
+      $cond: {
+        if: { $ifNull: [ `$analysis.${type}`, false ] },
+        then: 1,
+        else: 0,
       },
-    };
-    return memo;
-  }, { _id: 'results' });
+    },
+  })),
+};
 
 schema.statics.countResults = function (collection) {
   return this.aggregate([
     { $match: { _collection: collection._id } },
-    { $project: { analysis: 1 } },
-    { $group: groupResultsByType },
+    { $project: projectResultsByType },
+    { $unwind: '$analysis' },
+    { $group: { _id: '$analysis.type', count: { $sum: '$analysis.count' } } },
+    { $project: { type: '$_id', _id: 0, count: 1 } },
+  ]);
+};
+
+schema.statics.countUniqueSubtypes = function (collection) {
+  return this.aggregate([
+    { $match: { _collection: collection._id } },
+    { $project: { 'analysis.fp.subtype': 1 } },
+    { $group: { _id: '$analysis.fp.subtype', count: { $sum: 1 } } },
+    { $project: { subtype: '$_id', _id: 0, count: 1 } },
   ]);
 };
 

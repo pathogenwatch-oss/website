@@ -23,9 +23,11 @@ function aggregateResult(message) {
 module.exports = function (message) {
   return aggregateResult(message).
     then(() => services.request('collection', 'fetch-progress', { uuid: message.collectionId })).
-    then(collection =>
+    then(collection => {
+      const { status, progress } = collection.toObject();
       notificationDispatcher.publishNotification(
-        message.collectionId, 'progress', collection.toObject().progress
-      )
+        message.collectionId, 'progress', { status, progress }
+      );
+    }
     );
 };

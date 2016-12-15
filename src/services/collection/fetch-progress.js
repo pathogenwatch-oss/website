@@ -20,10 +20,10 @@ function addProgressResults(collection, results) {
   collection.progress.results = {};
   let totalResults = 0;
 
-  for (const { name, total } of results) {
-    collection.progress.results[name] =
-      Math.floor(total * 100 / collection.size);
-    totalResults += total;
+  for (const { type, count } of results) {
+    collection.progress.results[type] =
+      Math.floor(count * 100 / collection.size);
+    totalResults += count;
   }
 
   if (collection.tree) totalResults++;

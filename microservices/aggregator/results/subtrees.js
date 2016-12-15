@@ -1,26 +1,34 @@
 const Collection = require('data/collection');
+const CollectionGenome = require('data/collectionGenome');
 const mainStorage = require('services/storage')('main');
 const { CORE_TREE_RESULT } = require('utils/documentKeys');
 
-function parseSubtrees(results, collectionId) {
-  return Object.keys(results).map(key => {
-    const { newickTree, leafIdentifiers } = results[key];
-    const name =
-      key.replace(new RegExp(`^${CORE_TREE_RESULT}_${collectionId}_`), '');
+function parseSubtrees(collectionId, results, totals) {
+  console.log(totals, results);
+  return totals.map(({ subtype, count }) => {
+    const { newickTree, leafIdentifiers } =
+      results[`${CORE_TREE_RESULT}_${collectionId}_${subtype}`];
+
     return {
-      name,
+      name: subtype,
       tree: newickTree,
       leafIds: leafIdentifiers,
+      totalCollection: count,
+      totalPublic: leafIdentifiers.length - count - 1, // -1 for reference
     };
   });
 }
 
+const countUniqueSubtypes =
+  collection => CollectionGenome.countUniqueSubtypes(collection);
+
 module.exports = (taskName, { collectionId, documentKeys }) =>
-  mainStorage.retrieveMany(documentKeys).
-    then(({ results, erroredKeys }) => {
-      if (erroredKeys.length) throw new Error(`Failed to find ${erroredKeys}`);
-      return Collection.update(
-        { uuid: collectionId },
-        { subtrees: parseSubtrees(results, collectionId) }
-      );
-    });
+  Promise.all([
+    mainStorage.retrieveMany(documentKeys),
+    Collection.findByUuid(collectionId, { _id: 1 }).then(countUniqueSubtypes),
+  ]).
+  then(([ { results, erroredKeys }, totals ]) => {
+    if (erroredKeys.length) throw new Error(`Failed to find ${erroredKeys}`);
+    return parseSubtrees(collectionId, results, totals);
+  }).
+  then(subtrees => Collection.update({ uuid: collectionId }, { subtrees }));
