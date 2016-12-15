@@ -6,3 +6,4 @@ register(role, 'create', require('./create'));
 register(role, 'fetch', require('./fetch'));
 register(role, 'fetch-list', require('./fetch-list'));
 register(role, 'fetch-progress', require('./fetch-progress'));
+register(role, 'subtree', require('./subtree'));

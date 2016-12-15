@@ -50,5 +50,5 @@ function checkStatus(collection) {
 
 module.exports = ({ uuid }) =>
   Collection.
-    findOne({ uuid }).
+    findOne({ uuid }, { 'subtrees.tree': 0, 'subtrees.leafIds': 0 }).
     then(checkStatus);

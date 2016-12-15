@@ -26,6 +26,13 @@ router.get('/collection/:uuid', (req, res, next) => {
     catch(next);
 });
 
+router.get('/collection/:uuid/subtree/:name', (req, res, next) => {
+  LOGGER.info('Received request for subtree', req.params);
+  return services.request('collection', 'subtree', req.params).
+    then(response => res.json(response)).
+    catch(next);
+});
+
 router.get('/collection', (req, res, next) => {
   LOGGER.info('Received request to get collections');
 
@@ -45,17 +52,5 @@ router.get('/species/:id/reference', function (req, res, next) {
   });
 });
 
-router.get('/species/:speciesId/collection/:collectionId/subtree/:subtreeId',
-  function (req, res, next) {
-    LOGGER.info(`Received request for subtree ${req.params.subtreeId}`);
-
-    collectionModel.getSubtree(req.params, function (error, result) {
-      if (error) {
-        return next(error);
-      }
-      res.json(result);
-    });
-  }
-);
 
 module.exports = router;

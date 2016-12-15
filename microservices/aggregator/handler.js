@@ -28,6 +28,5 @@ module.exports = function (message) {
       notificationDispatcher.publishNotification(
         message.collectionId, 'progress', { status, progress }
       );
-    }
-    );
+    });
 };
