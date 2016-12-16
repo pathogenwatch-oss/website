@@ -1,6 +1,10 @@
 {
 	"node": {
-		"port": "80"
+		"port": "80",
+    "auth": {
+      "realm": "",
+      "file": ""
+    }
 	},
 	"couchbase": {
 		"ip": "127.0.0.1",
@@ -20,6 +24,23 @@
 		"port": "5672",
 		"login": "",
 		"password": ""
+	},
+  "passport": {
+		"url": "",
+		"strategies": {
+			"facebook": {
+				"clientID": "",
+				"clientSecret": ""
+			},
+			"google": {
+				"clientID": "",
+				"clientSecret": ""
+			},
+			"twitter": {
+				"consumerKey": "",
+				"consumerSecret": ""
+			}
+		}
 	},
 	"pusher": {
 		"appId": "",
