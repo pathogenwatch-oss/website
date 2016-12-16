@@ -14,8 +14,9 @@ function createPaarColumns({ resistanceSets }) {
 }
 
 function createSnpColumns({ resistanceSets }) {
-  return Object.values(resistanceSets).reduce(
-    (memo, { agents, elementIds }) => {
+  return Object.keys(resistanceSets).reduce(
+    (memo, key) => {
+      const { agents, elementIds } = resistanceSets[key];
       for (const { antibioticKey } of agents) {
         for (const element of elementIds) {
           const genes = (memo[antibioticKey] || {});
