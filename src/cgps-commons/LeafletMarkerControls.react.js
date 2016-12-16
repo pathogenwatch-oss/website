@@ -66,7 +66,7 @@ export default React.createClass({
               <label>Marker Size
                 <input ref="slider" type="range"
                   onChange={event => onMarkerSizeChange(parseInt(event.target.value, 10))}
-                  min="1" max="8" step="1" value={markerSize}
+                  min="1" max="10" step="1" value={markerSize}
                   className="mdl-slider mdl-js-slider" tabIndex="0"
                 />
               </label>
