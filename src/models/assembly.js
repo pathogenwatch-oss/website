@@ -11,6 +11,7 @@ const {
   FP_COMP,
   CORE_RESULT,
   NGMAST_RESULT,
+  GENOTYPHI_RESULT,
 } = require('utils/documentKeys');
 
 const ASSEMBLY_ANALYSES = [ 'FP', 'MLST', 'PAARSNP', 'CORE' ];
@@ -23,11 +24,10 @@ function storeMetadata(args) {
   const { speciesId, collectionId, assemblyId, file } = args;
 
   const assemblyMetadata = metadataModel.createRecord(
-    { speciesId, collectionId, assemblyId },
+    { speciesId, collectionId, assemblyId, fileId: file.id },
     file.metadata || { assemblyName: file.name },
     file.metrics
   );
-
   return new Promise((resolve, reject) => {
     mainStorage.store(
       createKey(assemblyId, ASSEMBLY_METADATA),
@@ -65,16 +65,19 @@ function mergeQueryResults(data, queryKeyPrefixes, assemblyId) {
   }, { assemblyId });
 }
 
-function formatForFrontend(assembly) {
+function formatForFrontend(id, assembly) {
   const paarsnp = assembly[PAARSNP_RESULT];
   const mlst = assembly[MLST_RESULT];
   const core = assembly[CORE_RESULT];
   const fp = assembly[FP_COMP];
   const ngmast = assembly[NGMAST_RESULT];
+  const genotyphi = assembly[GENOTYPHI_RESULT];
   return {
-    populationSubtype: fp ? fp.subTypeAssignment : null,
+    id,
+    name: assembly[ASSEMBLY_METADATA].assemblyName,
     metadata: assembly[ASSEMBLY_METADATA],
     analysis: {
+      populationSubtype: fp ? fp.subTypeAssignment : null,
       st: mlst ? mlst.sequenceType : null,
       mlst: mlst ? mlst.code : null,
       core: core ? {
@@ -82,22 +85,29 @@ function formatForFrontend(assembly) {
         percentMatched: core.percentKernelMatched,
         percentAssemblyMatched: core.percentAssemblyMatched,
       } : null,
-      resistanceProfile: paarsnp && paarsnp.antibioticProfiles ?
-        paarsnp.antibioticProfiles.reduce(
-          (memo, { name, resistanceState, resistanceSets }) => {
-            memo[name] = {
-              name,
-              state: resistanceState,
-              mechanisms: resistanceSets.map(_ => _.resistanceSetName),
-            };
-            return memo;
-          }, {}
-        ) : {},
+      resistanceProfile: paarsnp ? {
+        antibiotics: paarsnp.antibioticProfiles ?
+          paarsnp.antibioticProfiles.reduce(
+            (memo, { name, resistanceState, resistanceSets }) => {
+              memo[name] = {
+                name,
+                state: resistanceState,
+                mechanisms: resistanceSets.map(_ => _.resistanceSetName),
+              };
+              return memo;
+            }, {}
+          ) : {},
+        paar: paarsnp.paarResult ? paarsnp.paarResult.paarElementIds : [],
+        snp: paarsnp.snparResult ? paarsnp.snparResult.resistanceMutationIds : [],
+      } : {},
       ngmast: ngmast ? {
         ngmast: ngmast.ngmast,
         por: ngmast.por,
         tbpb: ngmast.tbpb,
-      } : null,
+      } : undefined,
+      genotyphi: genotyphi ? {
+        genotype: genotyphi.genotype,
+      } : undefined,
     },
   };
 }
@@ -132,7 +142,7 @@ function get(params, queryKeyPrefixes, callback) {
         if (stError) {
           return callback(stError);
         }
-        callback(null, formatForFrontend(result));
+        callback(null, formatForFrontend(assemblyId, result));
       }
     );
   });
@@ -145,6 +155,7 @@ const COMPLETE_ASSEMBLY_KEYS = [
   MLST_RESULT,
   PAARSNP_RESULT,
   NGMAST_RESULT,
+  GENOTYPHI_RESULT,
 ];
 function getComplete(params, callback) {
   LOGGER.info('Getting assembly ' + params.assemblyId);
@@ -164,8 +175,8 @@ function getReference(params, callback) {
 }
 
 function groupAssembliesBySubtype(assemblies) {
-  return Object.keys(assemblies).reduce(function (map, assemblyId) {
-    var taxon = assemblies[assemblyId].populationSubtype;
+  return Object.keys(assemblies).reduce((map, assemblyId) => {
+    var taxon = assemblies[assemblyId].analysis.populationSubtype;
 
     if (!taxon || taxon.toLowerCase() === 'none') {
       return map;
@@ -183,9 +194,19 @@ function groupAssembliesBySubtype(assemblies) {
   }, {});
 }
 
+function getMetadata(id) {
+  return new Promise((resolve, reject) => {
+    mainStorage.retrieve(`${ASSEMBLY_METADATA}_${id}`, (error, doc) => {
+      if (error) return reject(error);
+      return resolve(doc);
+    });
+  });
+}
+
 module.exports.ASSEMBLY_ANALYSES = ASSEMBLY_ANALYSES;
 module.exports.submit = submit;
 module.exports.storeMetadata = storeMetadata;
 module.exports.getComplete = getComplete;
 module.exports.getReference = getReference;
 module.exports.groupAssembliesBySubtype = groupAssembliesBySubtype;
+module.exports.getMetadata = getMetadata;

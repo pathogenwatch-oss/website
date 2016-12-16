@@ -1,18 +1,25 @@
-var express = require('express');
-var bodyParser = require('body-parser');
-var http = require('http');
-var path = require('path');
-var async = require('async');
+const express = require('express');
+const bodyParser = require('body-parser');
+const http = require('http');
+const path = require('path');
+const async = require('async');
 
-var config = require('configuration.js');
-var logging = require('utils/logging');
-var storageConnection = require('utils/storageConnection');
-var messageQueueConnection = require('utils/messageQueueConnection');
+const config = require('configuration.js');
+const logging = require('utils/logging');
+const storageConnection = require('utils/storageConnection');
+const messageQueueConnection = require('utils/messageQueueConnection');
 
-var LOGGER = logging.getBaseLogger();
-var app = express();
+const LOGGER = logging.getBaseLogger();
+const app = express();
 
-var clientPath = path.join(__dirname, 'node_modules', 'wgsa-front-end');
+if (config.node.auth) {
+  const auth = require('http-auth');
+  const { realm, file } = config.node.auth;
+  const basic = auth.basic({ realm, file });
+  app.use(auth.connect(basic));
+}
+
+const clientPath = path.join(__dirname, 'node_modules', 'wgsa-front-end');
 
 app.set('port', process.env.PORT || config.node.port);
 // http://stackoverflow.com/a/19965089
@@ -24,17 +31,18 @@ app.use(bodyParser.urlencoded({
 
 logging.initHttpLogging(app, process.env.NODE_ENV || 'development');
 
-module.exports = function (callback) {
+module.exports = (callback) => {
   async.parallel([
     storageConnection.connect,
     messageQueueConnection.connect,
-  ], function (error) {
+  ], (error) => {
     if (error) {
-      return callback(error, null);
+      callback(error, null);
+      return;
     }
 
     // security
-    app.use(function (req, res, next) {
+    app.use((req, res, next) => {
       res.header('X-Frame-Options', 'SAMEORIGIN');
       res.header('X-XSS-Protection', '1; mode=block');
       res.header('X-Content-Type-Options', 'nosniff');
@@ -42,7 +50,7 @@ module.exports = function (callback) {
     });
     app.disable('x-powered-by');
 
-    app.use(function (req, res, next) {
+    app.use((req, res, next) => {
       res.header('X-Clacks-Overhead', 'GNU Terry Pratchett');
       next();
     });
@@ -50,7 +58,7 @@ module.exports = function (callback) {
     app.use(express.static(path.join(clientPath, 'public')));
 
     // CORS
-    app.use(function (req, res, next) {
+    app.use((req, res, next) => {
       res.header('Access-Control-Allow-Origin', '*');
       res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
       res.header(
@@ -65,7 +73,7 @@ module.exports = function (callback) {
     app.set('view engine', 'ejs');
     app.set('views', path.join(clientPath, 'views'));
 
-    app.use('/', function (req, res, next) {
+    app.use('/', (req, res, next) => {
       // crude file matching
       if (req.path.match(/\.[a-z]{1,4}$/) || req.xhr) {
         return next();
@@ -87,7 +95,7 @@ module.exports = function (callback) {
     require('errors.js')(app);
 
     const server = http.createServer(app).listen(app.get('port'), () => {
-      LOGGER.info('✔ Express server listening on port ' + app.get('port'));
+      LOGGER.info(`✔ Express server listening on port ${app.get('port')}`);
 
       process.on('SIGTERM', () => {
         LOGGER.info('Received stop signal (SIGTERM), shutting down gracefully');

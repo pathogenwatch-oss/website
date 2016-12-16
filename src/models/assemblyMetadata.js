@@ -1,13 +1,24 @@
+const geocoding = require('geocoding');
+
 const systemMetadataColumns = [
-  'assemblyId', 'speciesId', 'assemblyName',
+  'assemblyId', 'uuid', 'speciesId', 'fileId', 'collectionId', 'pmid',
+  'filename', 'assemblyName', 'displayname',
   'date', 'year', 'month', 'day',
   'position', 'latitude', 'longitude',
-  'collectionId', 'pmid',
-  'filename', 'displayname',
 ];
 
+function getCountryCode({ latitude, longitude }) {
+  if (latitude && longitude) {
+    return geocoding.getCountryCode(
+      Number.parseFloat(latitude),
+      Number.parseFloat(longitude)
+    );
+  }
+  return null;
+}
+
 function filterUserDefinedColumns(metadata) {
-  return Object.keys(metadata).reduce(function (memo, key) {
+  return Object.keys(metadata).reduce((memo, key) => {
     if (systemMetadataColumns.indexOf(key) === -1) {
       memo[key] = metadata[key];
     }
@@ -20,15 +31,17 @@ function createRecord(ids, metadata, metrics) {
     assemblyId: ids.assemblyId,
     speciesId: ids.speciesId,
     collectionId: ids.collectionId,
+    fileId: ids.fileId,
     assemblyName: metadata.assemblyName,
-    date: metadata.date || {
+    date: {
       year: metadata.year,
       month: metadata.month,
       day: metadata.day,
     },
-    position: metadata.position || {
+    position: {
       latitude: metadata.latitude,
       longitude: metadata.longitude,
+      country: getCountryCode(metadata),
     },
     pmid: metadata.pmid,
     userDefined: filterUserDefinedColumns(metadata),
@@ -38,4 +51,5 @@ function createRecord(ids, metadata, metrics) {
 
 module.exports = {
   createRecord,
+  getCountryCode,
 };

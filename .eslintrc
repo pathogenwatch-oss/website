@@ -2,5 +2,8 @@
   "extends": "cgps",
   "env": {
     "node": true
+  },
+  "rules": {
+    "no-multiple-empty-lines": 0
   }
 }
