@@ -54,5 +54,8 @@
   "googleMapsKey": "",
   "mapboxKey": "",
   "fastaStoragePath": "/path/to/files/",
-  "wikiLocation": "https://raw.githubusercontent.com/wiki/ImperialCollegeLondon/wgsa-documentation-wiki"
+  "wikiLocation": "https://raw.githubusercontent.com/wiki/ImperialCollegeLondon/wgsa-documentation-wiki",
+  "demos": [
+    { "speciesId": "", "collectionId": "" }
+  ]
 }

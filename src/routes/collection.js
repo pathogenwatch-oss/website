@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const path = require('path');
 
 const fastaStorage = require('wgsa-fasta-store');
 
@@ -7,7 +8,11 @@ const collectionModel = require('models/collection');
 const assemblyModel = require('models/assembly');
 
 const LOGGER = require('utils/logging').createLogger('Collection requests');
-const { maxCollectionSize = 0, fastaStoragePath } = require('configuration');
+const {
+  maxCollectionSize = 0,
+  fastaStoragePath,
+  demos = [],
+} = require('configuration');
 
 router.get('/species/:id/reference', function (req, res, next) {
   LOGGER.info('Getting reference collection: ' + req.params.id);
@@ -18,6 +23,21 @@ router.get('/species/:id/reference', function (req, res, next) {
     res.json(result);
   });
 });
+
+if (demos.length) {
+  for (const { speciesId, collectionId } of demos) {
+    router.get(`/species/${speciesId}/collection/${collectionId}/status`,
+      (req, res) => res.json({ status: 'READY' })
+    );
+
+    router.get(`/species/${speciesId}/collection/${collectionId}`,
+      (req, res) =>
+        res.sendFile(
+          path.resolve(__dirname, '..', '..', 'demos', speciesId, `${collectionId}.json`)
+        )
+    );
+  }
+}
 
 router.get('/species/:speciesId/collection/:collectionId/status', function (req, res, next) {
   LOGGER.info(`Received request for collection ${req.params.collectionId} upload progress`);
