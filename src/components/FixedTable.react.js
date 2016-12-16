@@ -93,25 +93,32 @@ export default React.createClass({
   },
 
   renderColumns(columnDefs) {
-    return columnDefs.map(props =>
-      (props.group ?
-        <ColumnGroup
-          key={props.columnKey}
-          fixed={props.fixed}
-          header={headerProps => this.renderHeader(props, headerProps)}
-        >
-          {this.renderColumns(props.columns)}
-        </ColumnGroup> :
-        <Column
-          key={props.columnKey}
-          header={headerProps => this.renderHeader(props, headerProps)}
-          cell={cellProps => this.renderCell(props, cellProps)}
-          width={props.fixedWidth || props.width || 96}
-          flexGrow={1}
-          { ...props }
-        />
-      )
-    );
+    return columnDefs.
+      filter(_ =>
+        (_.group ?
+          _.system || _.columns.some(c => c.valueGetter && !c.hidden) :
+          !_.hidden
+        )
+      ).
+      map(props =>
+        (props.group ?
+          <ColumnGroup
+            key={props.columnKey}
+            fixed={props.fixed}
+            header={headerProps => this.renderHeader(props, headerProps)}
+          >
+            {this.renderColumns(props.columns)}
+          </ColumnGroup> :
+          <Column
+            key={props.columnKey}
+            header={headerProps => this.renderHeader(props, headerProps)}
+            cell={cellProps => this.renderCell(props, cellProps)}
+            width={props.fixedWidth || props.width || 96}
+            flexGrow={1}
+            { ...props }
+          />
+        )
+      );
   },
 
   render() {
@@ -120,8 +127,8 @@ export default React.createClass({
       <Table
         rowsCount={data.length}
         rowHeight={28}
-        headerHeight={24 * 3}
-        groupHeaderHeight={24}
+        headerHeight={28 * (columns[0].group ? 1 : 2)}
+        groupHeaderHeight={28}
         height={height}
         width={width}
         className="wgsa-table"

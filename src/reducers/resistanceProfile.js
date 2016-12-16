@@ -1,12 +1,11 @@
 import React from 'react';
-import classnames from 'classnames';
 
 import { FETCH_ENTITIES } from '../actions/fetch';
 import { SET_COLOUR_COLUMNS, SHOW_TABLE_VIEW } from '../collection-viewer/table/actions';
 
 import Species from '../species';
 import * as resistanceProfile from '../utils/resistanceProfile';
-import { canvas, measureText } from '../table/utils/columnWidth';
+import { measureText } from '../table/utils/columnWidth';
 
 import * as constants from '../collection-viewer/table/constants';
 
@@ -34,63 +33,26 @@ function createAntibioticsColumn({ key, fullName }) {
       return this.isSelected && this.allMechanisms.length;
     },
     getLabel() {
-      return this.isExpandable() ? hoverName : key.slice(0, 3);
+      // return this.isExpandable() ? hoverName : key.slice(0, 3);
+      return key.slice(0, 3);
     },
     headerClasses: 'wgsa-table-header--resistance',
     headerTitle: `${hoverName} - ${modifierKey} + click to select multiple`,
     cellClasses: 'wgsa-table-cell--resistance',
     flexGrow: 0,
-    getWidth(mechanisms) {
-      if (!this.isExpandable()) {
-        return 40;
-      }
-
-      canvas.font = '700 13px "Helvetica","Arial",sans-serif';
-      return Math.floor(
-        mechanisms.reduce((width, m) => width + measureText(m, 8), 0),
-      ) + 16;
+    getWidth() {
+      return 32;
     },
     cellPadding: 16,
-    addState({ data }) {
-      const allMechanisms = data.reduce((memo, row) => {
-        const { antibiotics } = row.analysis.resistanceProfile;
-        if (!antibiotics || !antibiotics[this.columnKey]) return memo;
-        for (const m of antibiotics[this.columnKey].mechanisms) {
-          memo.add(m);
-        }
-        return memo;
-      }, new Set());
-
-      this.allMechanisms = Array.from(allMechanisms).sort();
-      this.width = this.getWidth(this.allMechanisms);
-
-      return this;
-    },
     getCellContents(props, { analysis }) {
       const { antibiotics } = analysis.resistanceProfile;
       const isResistant =
         resistanceProfile.isResistant(analysis.resistanceProfile, props.columnKey);
       if (isResistant) {
-        const { state, mechanisms } = antibiotics[props.columnKey];
-        const activeMechanisms = new Set(mechanisms);
-        return props.isSelected ? (
-          <span className="wgsa-resistance-mechanism-list ">
-            {props.allMechanisms.map(mechanism =>
-              <button
-                key={mechanism}
-                className={classnames(
-                  'wgsa-resistance-mechanism',
-                  { [`wgsa-amr--${state.toLowerCase()}`]: activeMechanisms.has(mechanism) }
-                )}
-              >
-                {mechanism}
-              </button>)
-            }
-          </span>
-        ) : (
+        const { state } = antibiotics[props.columnKey];
+        return (
           <i
             className={`material-icons wgsa-resistance-icon wgsa-amr--${state.toLowerCase()}`}
-            title={mechanisms.join(', ')}
           >
             lens
           </i>
@@ -105,6 +67,14 @@ function createAntibioticsColumn({ key, fullName }) {
 
 function createAdvancedViewColumn({ key, label }, profileKey) {
   return {
+    addState({ data }) {
+      this.hidden = data.every(
+        ({ analysis }) =>
+          analysis.resistanceProfile[profileKey].indexOf(key) === -1
+      );
+      this.width = this.getWidth() + 16;
+      return this;
+    },
     columnKey: key,
     cellClasses: 'wgsa-table-cell--resistance',
     cellPadding: 16,
@@ -122,7 +92,8 @@ function createAdvancedViewColumn({ key, label }, profileKey) {
         </i>
       ) : null;
     },
-    valueGetter: assembly => resistanceProfile.getColour(key, assembly),
+    valueGetter: assembly =>
+      resistanceProfile.getAdvancedColour(key, profileKey, assembly),
     onHeaderClick: resistanceProfile.onHeaderClick,
   };
 }
@@ -147,38 +118,65 @@ const viewColumnBuilders = {
       ...antibiotics.slice(separatorIndex).map(createAntibioticsColumn),
     ];
   },
-  SNPs: ({ snp }) =>
+  SNPs: ({ snp, antibiotics }) =>
     Object.keys(snp).
       map(antibiotic => ({
         group: true,
-        columnKey: antibiotic,
+        columnKey: `snp_${antibiotic}`,
         columns:
           Object.keys(snp[antibiotic]).
-            map(gene => ({
-              group: true,
-              columnKey: gene,
-              columns:
-                snp[antibiotic][gene].
-                  map(snpName => createAdvancedViewColumn(
-                    { key: `${gene}_${snpName}`, label: snpName }, 'snp'
-                  )),
-            })),
+            reduce((columns, gene) =>
+              columns.concat({
+                cellClasses: 'wgsa-table-cell--resistance',
+                columnKey: gene,
+                fixedWidth: measureText(gene, true) + 16,
+                flexGrow: 0,
+                getCellContents() {},
+                getHeaderContent: () => `${gene}_`,
+                addState({ data }) {
+                  this.hidden =
+                    snp[antibiotic][gene].every(snpName =>
+                      data.every(
+                        ({ analysis }) =>
+                          analysis.resistanceProfile.snp.indexOf(`${gene}_${snpName}`) === -1
+                      )
+                    );
+                  return this;
+                },
+                headerClasses: 'wgsa-table-header',
+              },
+              snp[antibiotic][gene].
+                map(snpName => createAdvancedViewColumn(
+                  { key: `${gene}_${snpName}`, label: snpName }, 'snp'
+                ))
+              ), []),
+        getLabel: () => antibiotic,
+        headerClasses: 'wgsa-table-header--group',
+        headerTitle: antibiotics.find(_ => _.key === antibiotic).fullName,
+        onHeaderClick: resistanceProfile.onHeaderClick,
       })),
-  Genes: ({ paar }) =>
+  Genes: ({ paar, antibiotics }) =>
     Object.keys(paar).
       map(antibiotic => ({
         group: true,
-        columnKey: antibiotic,
+        columnKey: `paar_${antibiotic}`,
         columns: paar[antibiotic].
           map(element => createAdvancedViewColumn(
             { key: element, label: element }, 'paar'
           )),
+        getLabel: () => antibiotic,
+        headerClasses: 'wgsa-table-header--group',
+        headerTitle: antibiotics.find(_ => _.key === antibiotic).fullName,
+        onHeaderClick: resistanceProfile.onHeaderClick,
       })),
 };
 
-const systemGroup = { group: true,
+const systemGroup = {
+  group: true,
+  system: true,
   fixed: true,
-  columnKey: 'test',
+  columnKey: 'system',
+  getHeaderContent() {},
   columns: [
     { columnKey: '__spacer_l',
       getHeaderContent() {},
@@ -192,7 +190,9 @@ const systemGroup = { group: true,
 
 const spacerGroup = {
   group: true,
-  columnKey: 'test3',
+  system: true,
+  columnKey: 'spacer',
+  getHeaderContent() {},
   columns: [
     { columnKey: '__spacer_r',
       getHeaderContent() {},
@@ -211,6 +211,7 @@ function buildColumns(view, libraries) {
       columns :
       { group: true,
         columnKey: 'test2',
+        getHeaderContent() {},
         columns,
       },
     spacerGroup
@@ -228,7 +229,6 @@ export default function (state = initialState, { type, payload }) {
   switch (type) {
     case FETCH_ENTITIES.SUCCESS: {
       const libraries = payload.result[2];
-
       return {
         ...state,
         libraries,

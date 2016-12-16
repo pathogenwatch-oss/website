@@ -12,7 +12,6 @@ import { onTableClick, onRowClick } from '../table/thunks';
 import { addColumnWidth } from '../../table/utils/columnWidth';
 import { addDownloadProps } from '../../constants/downloads';
 
-
 const preventDefault = e => e.preventDefault();
 
 const Table = React.createClass({

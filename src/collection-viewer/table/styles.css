@@ -12,11 +12,18 @@
   box-sizing: border-box;
   background: none !important;
   border-right: none;
+  font-family: arial, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 24px;
 }
 
 .wgsa-table-header--unstyled button {
   background: none;
   cursor: auto !important;
+  text-align: inherit;
 }
 
 .wgsa-selectable-column-heading {
@@ -26,12 +33,12 @@
   border-radius: 4px;
   font-size: 12px;
   font-weight: 700;
+  font-family: arial, sans-serif;
   height: 20px;
-  letter-spacing: 0px;
   line-height: 16px;
   margin: 0 -6px 2px;
   padding: 0px 6px;
-  text-transform: capitalize;
+  /*text-transform: capitalize;*/
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -54,12 +61,12 @@
   cursor: pointer;
 }
 
-.wgsa-table-header--selected .wgsa-selectable-column-heading {
+/*.wgsa-table-header--selected .wgsa-selectable-column-heading {
   width: auto;
   max-width: calc(100% - 2px);
   overflow: hidden;
   text-overflow: ellipsis;
-}
+}*/
 
 .wgsa-table-row:hover {
   cursor: pointer;
@@ -147,29 +154,16 @@
   background-color: rgba(255, 255, 255, 0.8);
 }
 
-.wgsa-table-header--resistance .fixedDataTableCellLayout_wrap1,
-.wgsa-table-header--resistance .fixedDataTableCellLayout_wrap2,
-.wgsa-table-header--resistance .fixedDataTableCellLayout_wrap3,
-.wgsa-table-header--resistance .public_fixedDataTableCell_cellContent {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 0;
-}
-
-.wgsa-table-header--resistance .public_fixedDataTableCell_cellContent {
+.wgsa-table-header--resistance {
   text-align: center;
+  padding: 0;
 }
 
 .wgsa-table-header--resistance button {
   line-height: 16px;
   margin: 0;
   padding: 2px 6px 8px;
-  position: relative;
   text-transform: uppercase;
-  top: 24px;
   white-space: nowrap;
   z-index: 1;
   width: 38px;
@@ -204,26 +198,6 @@
   min-width: 24px;
 }
 
-.wgsa-resistance-mechanism-list {
-  display: flex;
-  justify-content: center;
-}
-
-.wgsa-resistance-mechanism {
-  color: color(#000 tint(65%)); /* (87 / 8) + 54 */
-  background: none;
-  border: none;
-  border-radius: 4px;
-  font-size: 13px;
-  font-weight: 700;
-  height: 20px;
-  letter-spacing: 0px;
-  line-height: 16px;
-  margin: 0 2px;
-  padding: 0 2px;
-  outline: none;
-}
-
 .wgsa-amr--resistant {
   color: #d11b1b;
 }
@@ -241,4 +215,15 @@
 .wgsa-table-content-options > button {
   display: inline-block;
   margin: 0 4px;
+}
+
+.wgsa-table-header--group {
+  text-align: center;
+  padding: 0;
+}
+
+.wgsa-table-header--group button {
+  position: relative;
+  text-transform: capitalize;
+  top: 4px;
 }

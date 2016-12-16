@@ -37,6 +37,18 @@ export function getColour(antibiotic, assembly) {
   return nonResistantColour;
 }
 
+export function getAdvancedColour(element, type, assembly) {
+  const { resistanceProfile } = assembly.analysis;
+  if (!resistanceProfile) {
+    return defaultColourGetter(assembly);
+  }
+
+  if (resistanceProfile[type].indexOf(element) !== -1) {
+    return stateColours.RESISTANT;
+  }
+  return nonResistantColour;
+}
+
 const noActiveColumns = [ { valueGetter: defaultColourGetter } ];
 
 export function createColourGetter(columns) {
@@ -50,31 +62,25 @@ export function createColourGetter(columns) {
 }
 
 export function onHeaderClick(event, { column, activeColumns }, dispatch) {
+  const columns = column.group ?
+    column.columns.filter(_ => _.valueGetter && !_.hidden) :
+    [ column ];
   const cumulative = (event.metaKey || event.ctrlKey);
 
   if (cumulative) {
-    activeColumns[activeColumns.has(column) ? 'delete' : 'add'](column);
+    for (const c of columns) {
+      activeColumns[activeColumns.has(c) ? 'delete' : 'add'](c);
+    }
     dispatch(setColourColumns(new Set(activeColumns)));
     return;
   }
 
-  if (activeColumns.has(column) && activeColumns.size === 1) {
+  if (!column.group && activeColumns.has(column) && activeColumns.size === 1) {
     dispatch(setColourColumns(new Set()));
     return;
   }
 
-  dispatch(setColourColumns(new Set([ column ])));
-}
-
-export function getIcon(resistanceState) {
-  switch (resistanceState) {
-    case 'RESISTANT':
-      return 'check_circle';
-    case 'INTERMEDIATE':
-      return 'info';
-    default:
-      return null;
-  }
+  dispatch(setColourColumns(new Set(columns)));
 }
 
 export const getColourState = (colour) => stateColourMap.get(colour);
