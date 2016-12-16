@@ -36,7 +36,7 @@ function createAntibioticsColumn({ key, fullName }) {
       // return this.isExpandable() ? hoverName : key.slice(0, 3);
       return key.slice(0, 3);
     },
-    headerClasses: 'wgsa-table-header--resistance',
+    headerClasses: 'wgsa-table-header--expanded',
     headerTitle: `${hoverName} - ${modifierKey} + click to select multiple`,
     cellClasses: 'wgsa-table-cell--resistance',
     flexGrow: 0,
@@ -92,6 +92,7 @@ function createAdvancedViewColumn({ key, label }, profileKey) {
         </i>
       ) : null;
     },
+    headerClasses: 'wgsa-table-header--expanded',
     valueGetter: assembly =>
       resistanceProfile.getAdvancedColour(key, profileKey, assembly),
     onHeaderClick: resistanceProfile.onHeaderClick,
@@ -143,7 +144,7 @@ const viewColumnBuilders = {
                     );
                   return this;
                 },
-                headerClasses: 'wgsa-table-header',
+                headerClasses: 'wgsa-table-header--expanded',
               },
               snp[antibiotic][gene].
                 map(snpName => createAdvancedViewColumn(
@@ -151,7 +152,7 @@ const viewColumnBuilders = {
                 ))
               ), []),
         getLabel: () => antibiotic,
-        headerClasses: 'wgsa-table-header--group',
+        headerClasses: 'wgsa-table-header--expanded wgsa-table-header--group',
         headerTitle: antibiotics.find(_ => _.key === antibiotic).fullName,
         onHeaderClick: resistanceProfile.onHeaderClick,
       })),
@@ -165,7 +166,7 @@ const viewColumnBuilders = {
             { key: element, label: element }, 'paar'
           )),
         getLabel: () => antibiotic,
-        headerClasses: 'wgsa-table-header--group',
+        headerClasses: 'wgsa-table-header--expanded wgsa-table-header--group',
         headerTitle: antibiotics.find(_ => _.key === antibiotic).fullName,
         onHeaderClick: resistanceProfile.onHeaderClick,
       })),

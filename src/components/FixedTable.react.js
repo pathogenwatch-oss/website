@@ -127,8 +127,8 @@ export default React.createClass({
       <Table
         rowsCount={data.length}
         rowHeight={28}
-        headerHeight={28 * (columns[0].group ? 1 : 2)}
-        groupHeaderHeight={28}
+        headerHeight={28 + (columns[0].group ? 0 : 24)}
+        groupHeaderHeight={24}
         height={height}
         width={width}
         className="wgsa-table"

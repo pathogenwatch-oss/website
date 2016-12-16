@@ -1,10 +1,46 @@
 .wgsa-table-switcher {
   display: flex;
   z-index: 3;
-  left: 16px;
+  left: 8px;
   position: absolute;
   transform: translateY(-18px);
 }
+
+.wgsa-button-group {
+  margin: 0 4px;
+  border-radius: 4px;
+}
+
+.wgsa-button-group button {
+  padding: 8px;
+  background: #fff;
+  border: none;
+  border: 1px solid rgba(0, 0, 0, 0.28);
+  border-right: none;
+  outline: none;
+  font-weight: 500;
+  font-family: 'Roboto', arial, sans-serif;
+  transition: .28s cubic-bezier(.4,0,.2,1);
+  transition-property: background-color, color;
+}
+
+.wgsa-button-group button:first-child {
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+
+.wgsa-button-group button:last-child {
+  border-right: 1px solid rgba(0, 0, 0, 0.28);
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+.wgsa-button-group button.active {
+  background: #673c90;
+  border-color: #673c90;
+  color: #fff;
+}
+
 
 .wgsa-table-header {
   vertical-align: top;
@@ -12,12 +48,12 @@
   box-sizing: border-box;
   background: none !important;
   border-right: none;
-  font-family: arial, sans-serif;
-  font-size: 12px;
-  font-weight: 700;
+  font-family: 'Roboto', arial, sans-serif;
+  font-size: 11px;
+  font-weight: 500;
   text-overflow: ellipsis;
   white-space: nowrap;
-  line-height: 24px;
+  line-height: 2;
 }
 
 .wgsa-table-header--unstyled button {
@@ -26,19 +62,34 @@
   text-align: inherit;
 }
 
+.wgsa-table-header--expanded {
+  text-align: center;
+  padding: 0;
+}
+
+.wgsa-table-header--expanded button {
+  margin: 0 auto;
+  width: calc(100% - 2px);
+  display: block;
+}
+
+.wgsa-table-header--group {
+  margin-top: 4px;
+}
+
 .wgsa-selectable-column-heading {
   background: rgba(0, 0, 0, 0.07);
-  color: rgba(0, 0, 0, 0.70);
+  color: rgba(0, 0, 0, 0.87);
   border: none;
   border-radius: 4px;
-  font-size: 12px;
-  font-weight: 700;
+  font-size: 11px;
+  font-weight: 500;
   font-family: arial, sans-serif;
+  font-family: 'Roboto', arial, sans-serif;
   height: 20px;
-  line-height: 16px;
+  line-height: 2;
   margin: 0 -6px 2px;
   padding: 0px 6px;
-  /*text-transform: capitalize;*/
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -215,15 +266,4 @@
 .wgsa-table-content-options > button {
   display: inline-block;
   margin: 0 4px;
-}
-
-.wgsa-table-header--group {
-  text-align: center;
-  padding: 0;
-}
-
-.wgsa-table-header--group button {
-  position: relative;
-  text-transform: capitalize;
-  top: 4px;
 }
