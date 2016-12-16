@@ -14,9 +14,14 @@ const handlers = {
 };
 
 function aggregateResult(message) {
-  if (message.taskStatus !== 'SUCCESS' || !(message.taskType in handlers)) {
-    return Promise.resolve(); // ignore if not successful, nothing to save
+  if (!(message.taskType in handlers)) {
+    return Promise.resolve(); // ignore, nothing to save
   }
+
+  if (message.taskStatus !== 'SUCCESS') {
+    return services.request('collection', 'progress-error', message);
+  }
+
   return handlers[message.taskType](message.taskType, message);
 }
 

@@ -14,7 +14,7 @@ const schema = new Schema({
   error: String,
   progress: {
     completed: Date,
-    errors: Array,
+    errors: [ { taskType: String, name: String } ],
     started: { type: Date, default: Date.now },
     results: Object,
     percent: Number,

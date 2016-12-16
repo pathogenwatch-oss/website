@@ -89,4 +89,8 @@ schema.statics.countUniqueSubtypes = function (collection) {
   ]);
 };
 
+schema.statics.findByUuid = function (uuid, projection) {
+  return this.findOne({ uuid }, projection);
+};
+
 module.exports = mongoose.model('CollectionGenome', schema);
