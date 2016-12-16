@@ -1,4 +1,4 @@
-FROM node:6.9.1
+FROM node:7.2.1
 
 COPY ./node_modules/mash-node-native/scripts/install-dependencies.sh /tmp
 RUN bash /tmp/install-dependencies.sh && rm /tmp/install-dependencies.sh
