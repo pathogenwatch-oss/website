@@ -10,13 +10,14 @@ const schema = new Schema({
   year: Number,
   month: Number,
   day: Number,
-  latitude: String,
-  longitude: String,
+  latitude: Number,
+  longitude: Number,
   country: String,
   pmid: String,
   userDefined: Object,
   analysis: Array,
   public: { type: Boolean, default: false },
+  reference: { type: Boolean, default: false },
 });
 
 function getCountryCode(latitude, longitude) {
@@ -30,7 +31,15 @@ function getCountryCode(latitude, longitude) {
 }
 
 schema.statics.updateMetadata = function (_id, _user, metadata) {
-  const { name, year, month, day, latitude, longitude, pmid, userDefined } = metadata;
+  const {
+    name,
+    year = null,
+    month = null,
+    day = null,
+    latitude = null,
+    longitude = null,
+    pmid,
+    userDefined } = metadata;
   const country = getCountryCode(latitude, longitude);
   return this.update({ _id, _user }, {
     name,

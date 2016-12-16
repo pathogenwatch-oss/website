@@ -9,8 +9,9 @@ const LOGGER = require('utils/logging').createLogger('Upload');
 router.put('/genome', (req, res, next) => {
   LOGGER.info('Received request to create genome');
 
-  const { query, user } = req;
-  services.request('genome', 'create', { stream: req, metadata: query, user })
+  const { user } = req;
+  const { name } = req.query;
+  services.request('genome', 'create', { stream: req, metadata: { name }, user })
     .then(response => res.json(response))
     .catch(next);
 });
@@ -19,7 +20,7 @@ router.get('/genome', (req, res, next) => {
   LOGGER.info('Received request to get genomes');
 
   const { user } = req;
-  services.request('genome', 'get', { user })
+  services.request('genome', 'fetch', { user })
     .then(response => res.json(response))
     .catch(next);
 });

@@ -15,10 +15,12 @@ const dbUrl = `mongodb://${hostname}:${port}/${database}`;
 
 function connect(callback) {
   mongoose.connection.on('error', (error) => LOGGER.error(error));
-  mongoose.connection.once('open', callback);
+  if (callback) {
+    mongoose.connection.once('open', callback);
+  }
 
   LOGGER.info(`Connecting to mongodb: ${dbUrl}`);
-  mongoose.connect(dbUrl);
+  return mongoose.connect(dbUrl);
 }
 
 mongoose.set('debug', (...args) => LOGGER.debug(args));

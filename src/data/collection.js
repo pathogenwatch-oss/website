@@ -19,6 +19,7 @@ const schema = new Schema({
     results: Object,
     percent: Number,
   },
+  reference: { type: Boolean, default: false },
   subtrees: [ {
     name: String,
     tree: String,

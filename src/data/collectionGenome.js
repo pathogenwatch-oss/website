@@ -14,8 +14,8 @@ const schema = new Schema({
     day: Number,
   },
   position: {
-    latitude: String,
-    longitude: String,
+    latitude: Number,
+    longitude: Number,
   },
   country: String,
   pmid: String,

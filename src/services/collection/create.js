@@ -2,7 +2,6 @@ const { request } = require('services/bus');
 const { ServiceRequestError } = require('utils/errors');
 
 const Collection = require('data/collection');
-const CollectionGenome = require('data/collectionGenome');
 const Genome = require('data/genome');
 
 const { maxCollectionSize = 0 } = require('configuration');
@@ -30,27 +29,6 @@ function createCollection({ speciesId, genomeIds, title, description, user }) {
   });
 }
 
-function addCollectionGenomes(collection, assemblies) {
-  return CollectionGenome.insertMany(
-    assemblies.map(({ uuid, genome }) => {
-      const { name, year, month, day, latitude, longitude, country, pmid, userDefined } = genome;
-      const { fileId, metrics } = genome._file;
-      return {
-        uuid,
-        _collection: collection._id,
-        fileId,
-        name,
-        date: { year, month, day },
-        position: { latitude, longitude },
-        country,
-        pmid,
-        userDefined,
-        metrics,
-      };
-    })
-  );
-}
-
 function getGenomes(ids) {
   return Genome.
     find({ _id: { $in: ids } }).
@@ -69,7 +47,7 @@ module.exports = message => {
         then(({ collectionId, collectionGenomes }) =>
           Promise.all([
             collection.addUUID(collectionId),
-            addCollectionGenomes(collection, collectionGenomes),
+            request('collection', 'add-genomes', { collection, collectionGenomes }),
           ]).then(() => {
             request('backend', 'submit', {
               collectionId,

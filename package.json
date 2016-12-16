@@ -26,6 +26,7 @@
     "mongoose": "^4.7.0",
     "morgan": "^1.5.1",
     "named-argv": "^0.3.0",
+    "promisify-node": "^0.4.0",
     "pusher": "^1.1.0",
     "sanitize-filename": "^1.5.3",
     "seneca": "^3.2.2",
@@ -52,7 +53,7 @@
     "e2e": "eval $npm_package_testcmd 'test/e2e/**/*.test.js'",
     "upload": "eval $npm_package_startcmd bin/upload.js",
     "download": "eval $npm_package_startcmd bin/download.js",
-    "add-fastas": "eval $npm_package_startcmd bin/add-to-fasta-store.js",
+    "reference": "eval $npm_package_startcmd bin/create-reference-collection.js",
     "service": "eval $npm_package_startcmd microservices/bootstrap.js aggregator | bunyan -o short",
     "ids": "eval $npm_package_startcmd bin/collection-id-update.js",
     "aggregate": "eval $npm_package_startcmd bin/aggregate-collection.js"
