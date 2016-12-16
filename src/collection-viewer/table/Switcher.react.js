@@ -11,32 +11,31 @@ import { setTable, showTableView } from './actions';
 import { tableKeys, views } from './constants';
 const { metadata, resistanceProfile } = tableKeys;
 
-const TableSwitcher = ({ displayedTable, displayedView, onSwitchChange, onViewClick }) => (
+const TableSwitcher = ({ displayedTable, displayedView, showMetadataTable, showAMRView }) => (
   <div className="wgsa-table-switcher" onClick={event => event.stopPropagation()}>
-    <div className="wgsa-switch-background mdl-shadow--2dp">
-      <Switch
-        id="table-switcher"
-        left={{ title: 'Metadata', icon: 'list' }}
-        right={{ title: 'Resistance Profile', icon: 'local_pharmacy' }}
-        checked={displayedTable === resistanceProfile}
-        onChange={onSwitchChange}
-      />
-    </div>
-    { views[displayedTable] &&
-      <div className="wgsa-table-content-options wgsa-switch-background mdl-shadow--2dp">
-        { views[displayedTable].map(view =>
-          <button key={view}
-            className={classnames(
-              'wgsa-selectable-column-heading',
-              { 'wgsa-selectable-column-heading--active': view === displayedView }
-            )}
-            onClick={() => onViewClick(view)}
-          >
-            {view}
-          </button>
+    <div className="wgsa-table-content-options wgsa-switch-background mdl-shadow--2dp">
+      <button
+        className={classnames(
+          'wgsa-selectable-column-heading',
+          { 'wgsa-selectable-column-heading--active': displayedTable === metadata }
         )}
-      </div>
-    }
+        onClick={showMetadataTable}
+      >
+        Metadata
+      </button>
+      { views[resistanceProfile].map(view =>
+        <button key={view}
+          className={classnames(
+            'wgsa-selectable-column-heading',
+            { 'wgsa-selectable-column-heading--active':
+              displayedTable === resistanceProfile && view === displayedView }
+          )}
+          onClick={() => showAMRView(view)}
+        >
+          {view}
+        </button>
+      )}
+    </div>
   </div>
 );
 
@@ -51,9 +50,11 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    onSwitchChange:
-      checked => dispatch(setTable(checked ? resistanceProfile : metadata)),
-    onViewClick: view => dispatch(showTableView(view)),
+    showMetadataTable: () => dispatch(setTable(metadata)),
+    showAMRView: view => {
+      dispatch(setTable(resistanceProfile));
+      dispatch(showTableView(view));
+    },
   };
 }
 
