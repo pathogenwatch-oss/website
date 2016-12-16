@@ -24,6 +24,7 @@ export const nameColumnData = {
   valueGetter({ name }) {
     return name;
   },
+  minWidth: 216,
 };
 
 export const downloadColumnProps = {
