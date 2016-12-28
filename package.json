@@ -1,6 +1,6 @@
 {
   "name": "wgsa-front-end",
-  "version": "4.6.1",
+  "version": "4.8.1",
   "description": "Web client for WGSA",
   "main": "index.js",
   "scripts": {
@@ -37,6 +37,7 @@
     "express": "^4.12.2",
     "file-loader": "^0.9.0",
     "fixed-data-table": "^0.6.0",
+    "geo-data": "gitlab:cgps/geo-data",
     "json-loader": "^0.5.3",
     "leaflet": "0.7.7",
     "leaflet-lassoselect": "github:imperialcollegelondon/leaflet-lassoselect",
@@ -45,7 +46,7 @@
     "object-assign": "^4.0.1",
     "papaparse": "^4.1.1",
     "phylocanvas": "^2.7.2",
-    "phylocanvas-plugin-context-menu": "^3.8.0",
+    "phylocanvas-plugin-context-menu": "^3.9.0",
     "postcss-cssnext": "^2.8.0",
     "postcss-input-style": "^0.3.0",
     "postcss-loader": "^1.1.0",

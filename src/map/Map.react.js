@@ -13,29 +13,33 @@ import { CGPS } from '../app/constants';
 
 import * as actions from './actions';
 
-const WGSAMap = props => (
-  <div
-    className={props.className}
-    onClick={props.onClick}
-  >
-    <LeafletMap
-      center={props.bounds.center}
-      className="wgsa-map"
-      cluster={props.cluster}
-      highlightedColour={CGPS.COLOURS.PURPLE}
-      lassoButtonClassname="wgsa-map-lasso-button mdl-button mdl-button--fab mdl-button--mini-fab"
-      lassoPath={props.lassoPath}
-      markers={props.markers}
-      markerComponent={props.markerComponent}
-      mapboxKey={CONFIG.mapboxKey}
-      mapboxStyle="light-v9"
-      onBoundsChange={props.onBoundsChange}
-      onLassoPathChange={props.onLassoPathChange}
-      onMarkerClick={props.onMarkerClick}
-      zoom={props.bounds.zoom}
-    />
-  </div>
+export const buttonClassname =
+  'mdl-button mdl-button--icon wgsa-pane-button wgsa-pane-button--dark';
 
+export const activeButtonClassname = 'wgsa-pane-button--active';
+
+const WGSAMap = props => (
+  <LeafletMap
+    center={props.bounds.center}
+    className={props.className}
+    cluster={props.cluster}
+    highlightedColour={CGPS.COLOURS.PURPLE}
+    buttonClassname={buttonClassname}
+    lassoPath={props.lassoPath}
+    markers={props.markers}
+    markerComponent={props.markerComponent}
+    markerSize={props.markerSize}
+    mapboxKey={CONFIG.mapboxKey}
+    mapboxStyle="light-v9"
+    onBoundsChange={props.onBoundsChange}
+    onClick={props.onClick}
+    onGroupMarkersChange={props.onGroupMarkersChange}
+    onLassoPathChange={props.onLassoPathChange}
+    onMarkerClick={props.onMarkerClick}
+    zoom={props.bounds.zoom}
+  >
+    {props.children}
+  </LeafletMap>
 );
 
 function mapStateToProps(state, props) {

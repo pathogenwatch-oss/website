@@ -15,3 +15,21 @@ export function changeLassoPath(stateKey, path) {
     payload: { stateKey, path },
   };
 }
+
+export const MAP_VIEW_BY_COUNTRY = 'MAP_VIEW_BY_COUNTRY';
+
+export function viewByCountry(stateKey, active) {
+  return {
+    type: MAP_VIEW_BY_COUNTRY,
+    payload: { stateKey, active },
+  };
+}
+
+export const MAP_MARKER_SIZE_CHANGED = 'MAP_MARKER_SIZE_CHANGED';
+
+export function markerSizeChanged(stateKey, size) {
+  return {
+    type: MAP_MARKER_SIZE_CHANGED,
+    payload: { stateKey, size },
+  };
+}

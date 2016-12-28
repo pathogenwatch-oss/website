@@ -3,7 +3,7 @@ import {
   REMOVE_FASTA, UNDO_REMOVE_FASTA,
 } from '../actions';
 
-import { taxIdMap, isSupported } from '^/species';
+import { taxIdMap, isSupported } from '../../species';
 
 function updateFastas(state, name, update) {
   const fasta = state[name];

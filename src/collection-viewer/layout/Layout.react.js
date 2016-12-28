@@ -35,10 +35,9 @@ export default React.createClass({
           onChange={(verticalSize) => this.setState({ verticalSize })}
         >
           <WestContent height={this.state.horizontalSize} width={this.state.verticalSize} />
-          <div>
-            <Map />
+          <Map>
             <Summary />
-          </div>
+          </Map>
         </SplitPane>
         <AutoSizer>
           {({ height, width }) =>

@@ -3,6 +3,7 @@ import React from 'react';
 import { CardMetadata } from '../card';
 
 import { formatDay, formatMonth } from '../utils/Date';
+import { getCountryName } from '../utils/country';
 
 function displayDate({ day, month, year }) {
   if (!day && !month && !year) {
@@ -18,10 +19,10 @@ function displayDate({ day, month, year }) {
 }
 
 function displayCountry(country) {
-  if (!country || !country.name) return null;
+  if (!country) return null;
   return (
     <CardMetadata title="Country" icon="place">
-      <span>{country.name}</span>
+      <span>{getCountryName(country)}</span>
     </CardMetadata>
   );
 }

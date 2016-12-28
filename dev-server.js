@@ -95,6 +95,18 @@ apiRouter.get(
 const fastaStoragePath = './fastas';
 fastaStorage.setup(fastaStoragePath);
 
+const { getCountry } = require('country-reverse-geocoding');
+const iso31661Codes = require('geo-data/iso-3166-1.json');
+function getCountryCode({ lat, lon }) {
+  if (lat && lon) {
+    const country = getCountry(Number.parseFloat(lat), Number.parseFloat(lon));
+    if (country.code && iso31661Codes[country.code]) {
+      return iso31661Codes[country.code].toLowerCase();
+    }
+  }
+  return null;
+}
+
 let uploadError = false;
 apiRouter.post('/upload', (req, res, next) => {
   // uploadError = !uploadError;
@@ -102,20 +114,13 @@ apiRouter.post('/upload', (req, res, next) => {
     setTimeout(() => res.sendStatus(500), 500) :
     fastaStorage.store(fastaStoragePath, req)
       .then(({ fileId, metrics, specieator: { taxId, scientificName } }) => {
-        // let country;
-        //
-        // if (req.query.lat && req.query.lon) {
-        //   country = getCountry(
-        //     Number.parseFloat(req.query.lat), Number.parseFloat(req.query.lon)
-        //   );
-        // }
-
+        const country = getCountryCode(req.query);
         res.json({
           id: fileId,
           speciesId: taxId,
           speciesName: scientificName,
           metrics,
-          // country: { code: "IND", name: "India" },
+          country,
         });
       }).
       catch(error => next(error));
@@ -133,4 +138,4 @@ app.use('/', (req, res) => res.render('index', {
   frontEndConfig: JSON.parse(fs.readFileSync('./config.json')),
 }));
 
-app.listen(8080, '0.0.0.0');
+app.listen(process.env.PORT || 8080, '0.0.0.0');

@@ -1,7 +1,13 @@
 import { API_ROOT } from '../utils/Api';
 
-function removeViewModel({ id, name, speciesId, metrics, metadata }) {
-  return { id, name, speciesId, metrics, metadata };
+function formatForSubmit({ id, name, speciesId, metrics, metadata }) {
+  return {
+    id,
+    name,
+    speciesId,
+    metrics,
+    metadata,
+  };
 }
 
 export function createCollectionRequest(files, speciesId, metadata) {
@@ -12,7 +18,7 @@ export function createCollectionRequest(files, speciesId, metadata) {
     data: JSON.stringify({
       speciesId,
       ...metadata,
-      files: files.map(removeViewModel),
+      files: files.map(formatForSubmit),
     }),
     dataType: 'json',
   });

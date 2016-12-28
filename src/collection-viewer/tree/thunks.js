@@ -4,7 +4,6 @@ import { showToast } from '../../toast';
 import * as actions from './actions';
 import { activateFilter, resetFilter } from '../filter/actions';
 
-import { collapseTreeBranches } from './utils';
 import { getSubtree } from '../../utils/Api';
 
 import { POPULATION, COLLECTION } from '../../app/stateKeys/tree';
@@ -46,12 +45,6 @@ export function treeLoaded(phylocanvas) {
 
     if (stateKey === POPULATION) {
       phylocanvas.root.cascadeFlag('interactive', false);
-    } else if (stateKey !== COLLECTION) {
-      const { collection } = state;
-      collapseTreeBranches(
-        phylocanvas.root,
-        leaf => !collection.assemblyIds.has(leaf.id)
-      );
     }
 
     const leafIds = getLeafIds(state, {

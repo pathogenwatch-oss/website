@@ -15,3 +15,13 @@ export const getLassoPath = createSelector(
   getMap,
   ({ lassoPath }) => lassoPath
 );
+
+export const getViewByCountry = createSelector(
+  getMap,
+  ({ viewByCountry = false }) => viewByCountry
+);
+
+export const getMarkerSize = createSelector(
+  getMap,
+  ({ markerSize = 1 }) => markerSize
+);
