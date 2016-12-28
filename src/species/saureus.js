@@ -15,13 +15,7 @@ export default {
       <strong>{formattedName}</strong>, a Gram-positive coccal bacterium.
     </span>
   ),
-
   maxAssemblySize: 3.5 * Math.pow(10, 6),
-  uiOptions: {
-    // noPopulation: true,
-    // noMLST: true,
-    // noAMR: true,
-  },
   gcRange: {
     min: 31,
     max: 35,

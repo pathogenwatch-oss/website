@@ -1,13 +1,13 @@
 import { FETCH_ENTITIES } from '../actions/fetch';
-import { SET_LABEL_COLUMN, setLabelColumn } from '../actions/table';
-import { SET_TREE } from '../actions/tree';
+import { SET_LABEL_COLUMN, setLabelColumn } from '../collection-viewer/table/actions';
+import { SET_TREE } from '../collection-viewer/tree/actions';
 
-import { downloadColumnProps, nameColumnProps } from '../constants/table';
-import { getSystemDataColumnProps, getUserDefinedValue } from '../constants/metadata';
+import { downloadColumnProps, nameColumnProps } from '../collection-viewer/table/constants';
+import * as metadata from '../constants/metadata';
 
-import { speciesTrees } from '../constants/tree';
+import { speciesTrees } from '../collection-viewer/tree/constants';
 
-import Species from '^/species';
+import Species from '../species';
 
 const initialActiveColumn = nameColumnProps;
 
@@ -26,7 +26,9 @@ function getUserDefinedColumnNames(assemblies) {
   Object.keys(assemblies).forEach(key => {
     const { userDefined } = assemblies[key].metadata;
     if (userDefined) {
-      Object.keys(userDefined).forEach(name => userDefinedColumnNames.add(name));
+      Object.keys(userDefined).
+        filter(name => !/__colou?r$/.test(name)).
+        forEach(name => userDefinedColumnNames.add(name));
     }
   });
   return userDefinedColumnNames;
@@ -36,7 +38,7 @@ function getUserDefinedColumnProps(columnNames) {
   return Array.from(columnNames).map(column => ({
     columnKey: column,
     valueGetter(data) {
-      return getUserDefinedValue(column, data);
+      return metadata.getUserDefinedValue(column, data);
     },
   }));
 }
@@ -48,51 +50,51 @@ function getActiveColumn(currentActiveColumn, newColumns) {
   return initialActiveColumn;
 }
 
-const actions = {
-  [FETCH_ENTITIES.SUCCESS](state, { result }) {
-    const [ { assemblies } ] = result;
-    const { publicMetadataColumnNames = [], uiOptions = {} } = Species.current;
+export default function (state = initialState, { type, payload }) {
+  switch (type) {
+    case FETCH_ENTITIES.SUCCESS: {
+      const [ { assemblies } ] = payload.result;
+      const { publicMetadataColumnNames = [], uiOptions = {} } = Species.current;
 
-    const columnNames = getUserDefinedColumnNames(assemblies);
-    const systemColumnProps = [
-      downloadColumnProps,
-      nameColumnProps,
-      ...getSystemDataColumnProps(uiOptions),
-    ];
-    const userDefinedColumnProps =
-      systemColumnProps.concat(getUserDefinedColumnProps(columnNames));
+      const columnNames = getUserDefinedColumnNames(assemblies);
+      const systemColumnProps = [
+        downloadColumnProps,
+        nameColumnProps,
+        ...metadata.getSystemDataColumnProps(uiOptions),
+      ];
+      const userDefinedColumnProps =
+        systemColumnProps.concat(getUserDefinedColumnProps(columnNames));
 
-    return {
-      ...state,
-      userDefinedColumnProps,
-      publicMetadataColumnProps:
-        publicMetadataColumnNames.length ?
-          systemColumnProps.concat(
-            getUserDefinedColumnProps(publicMetadataColumnNames)
-          ) :
-          userDefinedColumnProps,
-      columns: userDefinedColumnProps,
-    };
-  },
-  [SET_TREE](state, { name }) {
-    const columnProps =
-      speciesTrees.has(name) ?
-        state.userDefinedColumnProps :
-        state.publicMetadataColumnProps;
+      return {
+        ...state,
+        userDefinedColumnProps,
+        publicMetadataColumnProps:
+          publicMetadataColumnNames.length ?
+            systemColumnProps.concat(
+              getUserDefinedColumnProps(publicMetadataColumnNames)
+            ) :
+            userDefinedColumnProps,
+        columns: userDefinedColumnProps,
+      };
+    }
+    case SET_TREE: {
+      const columnProps =
+        speciesTrees.has(payload.name) ?
+          state.userDefinedColumnProps :
+          state.publicMetadataColumnProps;
 
-    return {
-      ...state,
-      columns: columnProps,
-      activeColumn: getActiveColumn(state.activeColumn, columnProps),
-    };
-  },
-  [SET_LABEL_COLUMN](state, { column }) {
-    return {
-      ...state,
-      activeColumn: column,
-    };
-  },
-
-};
-
-export default { actions, initialState };
+      return {
+        ...state,
+        columns: columnProps,
+        activeColumn: getActiveColumn(state.activeColumn, columnProps),
+      };
+    }
+    case SET_LABEL_COLUMN:
+      return {
+        ...state,
+        activeColumn: payload.column,
+      };
+    default:
+      return state;
+  }
+}

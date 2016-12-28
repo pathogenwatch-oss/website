@@ -1,7 +1,5 @@
 import React from 'react';
-import { Route } from 'react-router';
 
-import Markdown from './Markdown.react';
 import NotFound from '../components/NotFound.react';
 
 import { DefaultContent } from '../header/DefaultContent.react';
@@ -16,17 +14,20 @@ function getWikiPageMarkdown(page = 'Home') {
   });
 }
 
-export default (
-  <Route
-    path="documentation(/:page)"
-    getComponent={({ params }, callback) => {
-      getWikiPageMarkdown(params.page)
-        .then(markdown => callback(null, () => <Markdown page={params.page} markdown={markdown} />))
-        .catch(() => callback(null, () => <NotFound />));
-    }}
-    header={<DefaultContent asideDisabled />}
-    onEnter={() => {
-      document.title = 'WGSA | Documentation';
-    }}
-  />
-);
+export default {
+  path: 'documentation(/:page)',
+  getComponent({ params }, callback) {
+    getWikiPageMarkdown(params.page)
+      .then(markdown =>
+        require.ensure([], require => {
+          const Markdown = require('./Markdown.react').default;
+          callback(null, () => <Markdown page={params.page} markdown={markdown} />);
+        })
+      )
+      .catch(() => callback(null, () => <NotFound />));
+  },
+  header: <DefaultContent asideDisabled />,
+  onEnter() {
+    document.title = 'WGSA | Documentation';
+  },
+};

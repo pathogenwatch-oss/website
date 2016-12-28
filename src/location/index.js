@@ -1,13 +1,28 @@
 import queryString from 'query-string';
 import { browserHistory } from 'react-router';
 
+function push(nextString) {
+  browserHistory.push({
+    pathname: location.pathname,
+    search: nextString.length ? `?${nextString.replace(/%20/g, '+')}` : '',
+  });
+}
+
 export function updateQueryString(key, value) {
   const qs = queryString.parse(location.search);
   const nextString = queryString.stringify({
     ...qs,
     [key]: value === qs[key] ? undefined : value,
   });
-  browserHistory.push(nextString.length ? `?${nextString}` : '');
+  push(nextString);
+}
+
+export function clearQueryString(keys) {
+  const qs = queryString.parse(location.search);
+  const nextString = queryString.stringify(
+    keys.reduce((memo, key) => ({ ...memo, [key]: undefined }), qs)
+  );
+  push(nextString);
 }
 
 export const LOCATION_CHANGE = 'LOCATION_CHANGE';
@@ -28,13 +43,13 @@ function createSlug({ pathname }) {
   return pathname.split('/')[1];
 }
 
-export function reducer(state = '/', { type, payload }) {
+export function reducer(state = {}, { type, payload }) {
   switch (type) {
     case LOCATION_CHANGE: {
       const { location } = payload;
       return {
         slug: createSlug(payload.location),
-        pathname: location.pathname,
+        ...location,
       };
     }
     default:
@@ -42,4 +57,5 @@ export function reducer(state = '/', { type, payload }) {
   }
 }
 
+export LocationListener from './LocationListener.react';
 export default from './NavLink.react';

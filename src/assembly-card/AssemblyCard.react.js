@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Card from '../card';
-import ProgressBar from '../components/ProgressBar.react';
+import ProgressBar from '../components/progress-bar';
 
 import AssemblyMetadata from './AssemblyMetadata.react';
 import DefaultFooter from './DefaultFooter.react';

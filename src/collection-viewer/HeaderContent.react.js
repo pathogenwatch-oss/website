@@ -1,10 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import Search from '../components/explorer/Search.react';
-import AboutCollection from '../about-collection-dropdown';
+import Search from './search/Search.react';
+import AboutCollection from './about-collection';
 
-import { setMenuActive } from '^/actions/downloads';
+import { setMenuActive } from '../actions/downloads';
 
 function mapStateToProps({ downloads }) {
   return {

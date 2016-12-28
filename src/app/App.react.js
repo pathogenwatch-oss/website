@@ -8,7 +8,6 @@ import classnames from 'classnames';
 
 import Header from '../header';
 import Toast from '../toast';
-import DownloadsMenu from '../components/explorer/DownloadsMenu.react';
 import NavLink from '../location';
 import AssemblyDrawer from '../assembly-drawer';
 
@@ -98,7 +97,6 @@ export default connect(mapStateToProps, mapDispatchToProps)(React.createClass({
         <main className="mdl-layout__content">
           {this.props.children}
         </main>
-        <DownloadsMenu />
         <Toast />
         <AssemblyDrawer />
       </div>

@@ -1,15 +1,20 @@
-export default actionTypes => ({
-  updateFilter(key, value) {
-    return {
-      type: actionTypes.UPDATE_FILTER,
-      payload: {
-        key, value,
-      },
-    };
-  },
-  clearFilter() {
-    return {
-      type: actionTypes.CLEAR_FILTER,
-    };
-  },
-});
+export const UPDATE_FILTER = 'UPDATE_FILTER';
+export const CLEAR_FILTER = 'CLEAR_FILTER';
+
+export function updateFilter(stateKey, filterKey, filterValue) {
+  return {
+    type: UPDATE_FILTER,
+    payload: {
+      stateKey, filterKey, filterValue,
+    },
+  };
+}
+
+export function clearFilter(stateKey) {
+  return {
+    type: CLEAR_FILTER,
+    payload: {
+      stateKey,
+    },
+  };
+}

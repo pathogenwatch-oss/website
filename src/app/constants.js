@@ -1,3 +1,5 @@
+import { FASTA_FILE_EXTENSIONS } from '../hub/utils';
+
 export const CGPS = {
   COLOURS: {
     GREEN_LIGHT: '#d0e9dc', // 149° 36% 86%
@@ -31,5 +33,5 @@ export const DEFAULT = {
       LONGITUDE: 5.85082183,
     },
   },
-  SUPPORTED_FILE_EXTENSIONS: '.csv,.fasta,.fa,.fna',
+  SUPPORTED_FILE_EXTENSIONS: [ '.csv' ].concat(FASTA_FILE_EXTENSIONS).join(','),
 };

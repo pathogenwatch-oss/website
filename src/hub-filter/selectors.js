@@ -1,17 +1,26 @@
 import { createSelector } from 'reselect';
 import sortBy from 'lodash.sortby';
 
-import { getOrderedFastas, getTotalFastas } from '../hub/selectors';
-import { selectors as filter } from './filter';
+import { getOrderedFastas } from '../hub/selectors';
+import { selectors as filter } from '../filter';
+
+import { stateKey, filters } from './filter';
 
 import { isSupported } from '../species';
 
-export const isFilterActive = state => {
-  if (getTotalFastas(state) === 0) return false;
-  return filter.isActive(state);
-};
+export const getFilter = state => filter.getFilter(state, { stateKey });
 
-export const getVisibleFastas = filter.getIncludedItems(getOrderedFastas);
+export const getSearchText = createSelector(
+  getFilter,
+  ({ searchRegExp }) => (searchRegExp ? searchRegExp.source : ''),
+);
+
+export const getVisibleFastas = state =>
+  filter.getFilteredItems(state, {
+    filters,
+    stateKey,
+    items: getOrderedFastas(state),
+  });
 
 export const getNumberOfVisibleFastas = createSelector(
   getVisibleFastas,
@@ -31,7 +40,7 @@ function getSummary(map) {
   return sortBy(Array.from(map.values()), [ 'name' ]);
 }
 
-export const getMetadataFilters = createSelector(
+export const getFilterSummary = createSelector(
   getOrderedFastas,
   filter.getFilter,
   (fastas, filterState) => {
@@ -75,9 +84,4 @@ export const getMetadataFilters = createSelector(
       },
     };
   }
-);
-
-export const getSearchText = createSelector(
-  filter.getFilter,
-  ({ searchRegExp }) => (searchRegExp ? searchRegExp.source : ''),
 );

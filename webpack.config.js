@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 const srcFolder = path.join(__dirname, 'src');
 
@@ -14,12 +15,11 @@ const babelSettings = {
 };
 
 const rules = [
-  { test: /.json$/, use: [ 'json' ] },
-  { test: /.css$/, use: [ 'style', 'css', 'postcss' ] },
+  { test: /.json$/, use: [ 'json-loader' ] },
+  { test: /.css$/, use: [ 'style-loader', 'css-loader', 'postcss-loader' ] },
   { test: /\.(png|jpg|jpeg|gif)$/, use: 'file' },
   { test: /\.js$/,
-    use: (process.env.NODE_ENV === 'production' ? [] : [ 'react-hot' ]).
-      concat([ { loader: 'babel', query: JSON.stringify(babelSettings) } ]),
+    use: `babel-loader?${JSON.stringify(babelSettings)}`,
     include: [
       /(src|universal|cgps-commons)/,
       path.join(__dirname, 'node_modules', 'promise-file-reader'),
@@ -73,22 +73,34 @@ const prodConfig = {
   entry: './src',
   output: {
     path: path.join(__dirname, 'public'),
-    filename: 'wgsa.js',
+    chunkFilename: '[name].js',
+    filename: '[name].js',
     publicPath: '/',
   },
   resolve,
   plugins: commonPlugins.concat([
+    new webpack.optimize.DedupePlugin(),
+    new webpack.LoaderOptionsPlugin({
+      minimize: true,
+      debug: false,
+    }),
     new webpack.optimize.UglifyJsPlugin({
       compressor: {
         warnings: false,
       },
     }),
-    new webpack.optimize.DedupePlugin(),
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify('production'),
       },
     }),
+    new webpack.optimize.CommonsChunkPlugin({
+      filename: 'common.js',
+      children: true,
+      async: true,
+      minChunks: 2,
+    }),
+    new BundleAnalyzerPlugin(),
   ]),
   module: {
     rules,

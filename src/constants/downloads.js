@@ -1,5 +1,6 @@
 import { requestDownload } from '../actions/downloads';
 import { showToast } from '../toast';
+import { getActiveAssemblyIds } from '../collection-viewer/selectors';
 
 import { SERVER_ADDRESS, API_ROOT } from '../utils/Api';
 
@@ -13,14 +14,13 @@ export const speciesPath =
 
 export function createDownloadKey(id) {
   if (!id) return null;
-  return typeof id === 'string' ? id : id.join('|');
+  return typeof id === 'string' ? id : JSON.stringify(id);
 }
 
-export function createFilename(formatName, collectionId, assemblyName) {
-  return (
-    `wgsa_${Species.nickname}_${collectionId}_${formatName}` +
-    `${assemblyName ? `_${assemblyName}` : ''}`
-  );
+export function formatCollectionFilename({ metadata, id }) {
+  return metadata.title ?
+    metadata.title.toLowerCase().replace(/\W/g, '_') :
+    [ Species.nickname, id ].join('_');
 }
 
 const errorToast = {
@@ -28,20 +28,20 @@ const errorToast = {
 };
 
 export function createDownloadProps(params, dispatch) {
-  const { format, download, idList, filenameParams, getFileContents } = params;
-  const { filename, linksById = {}, ...downloadProps } = download;
+  const { format, download, id, getFileContents, getFileName } = params;
+  const { filenameSegment, linksById = {}, ...downloadProps } = download;
 
   return {
     format,
     ...downloadProps,
-    ...(linksById[createDownloadKey(idList)] || []),
+    ...(linksById[createDownloadKey(id)] || {}),
     onClick: () => dispatch(
       requestDownload({
         format,
-        idList,
+        id,
         getFileContents,
         speciesId: Species.id,
-        filename: createFilename(filename, ...filenameParams),
+        filename: `wgsa_${getFileName()}_${filenameSegment}`,
       })
     )
     .catch(() => dispatch(showToast(errorToast))),
@@ -49,35 +49,34 @@ export function createDownloadProps(params, dispatch) {
 }
 
 function createPropsForDownloads(downloads, params, dispatch) {
-  const { idList, filenameParams } = params;
+  const { id, getFileName } = params;
 
   return Object.keys(downloads).reduce((memo, format) => ({
     ...memo,
     [format]: createDownloadProps({
       format,
       download: downloads[format],
-      idList,
-      filenameParams,
+      id,
+      getFileName,
     }, dispatch),
   }), {});
 }
 
-export function addDownloadProps(row, { collection, downloads }, dispatch) {
+export function addDownloadProps(row, { downloads }, dispatch) {
   const { assemblyId, assemblyName } = row.metadata;
   return {
     ...row,
     __downloads: createPropsForDownloads(downloads, {
-      idList: [ assemblyId ],
-      filenameParams: [ collection.id, assemblyName ],
+      id: assemblyId,
+      getFileName: () => assemblyName,
     }, dispatch),
   };
 }
 
 export function getArchiveDownloadProps(state, downloads, dispatch) {
-  const { filter, collection } = state;
-  const idList = Array.from(filter.active ? filter.ids : filter.unfilteredIds);
+  const { collection } = state;
   return createPropsForDownloads(downloads, {
-    idList,
-    filenameParams: [ collection.id ],
+    id: getActiveAssemblyIds(state),
+    getFileName: () => formatCollectionFilename(collection),
   }, dispatch);
 }

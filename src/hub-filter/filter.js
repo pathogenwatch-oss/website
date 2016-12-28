@@ -1,5 +1,6 @@
-import createFilter from '../filter';
 import { contains } from 'leaflet-lassoselect/utils';
+
+export { UPLOAD as stateKey } from '../app/stateKeys/filter';
 
 export const filters = [
   { key: 'searchRegExp',
@@ -8,21 +9,15 @@ export const filters = [
     },
   },
   { key: 'speciesKey',
+    queryKey: 'species',
     matches(fasta, value) {
       return fasta.speciesKey === value;
     },
   },
   { key: 'country',
+    queryKey: 'country',
     matches(fasta, value) {
       return fasta.country && fasta.country.name === value;
-    },
-  },
-  { key: 'area',
-    matches({ metadata: { latitude, longitude } = {} }, path) {
-      if (latitude && longitude) {
-        return contains(path, { lat: latitude, lng: longitude });
-      }
-      return false;
     },
   },
   { key: 'minDate',
@@ -45,11 +40,12 @@ export const filters = [
       return false;
     },
   },
+  { key: 'area',
+    matches({ metadata: { latitude, longitude } = {} }, path) {
+      if (latitude && longitude) {
+        return contains(path, { lat: latitude, lng: longitude });
+      }
+      return false;
+    },
+  },
 ];
-
-export const { actions, reducer, selectors } =
-  createFilter({
-    name: 'hub',
-    filters,
-    getFilterState: ({ hub }) => hub.filter,
-  });

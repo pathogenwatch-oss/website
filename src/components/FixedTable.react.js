@@ -1,11 +1,10 @@
 import 'fixed-data-table/dist/fixed-data-table.css';
 import '../css/fixed-data-table-overrides.css';
-import '../css/table.css';
 
 import React from 'react';
 import { Table, Column, Cell } from 'fixed-data-table';
 
-import { getColumnLabel, getCellValue } from '../utils/table';
+import { getColumnLabel, getCellValue } from '../table/utils';
 
 function getClassNames(baseClass, selected, extraClasses) {
   return (
@@ -112,8 +111,8 @@ export default React.createClass({
         { columns.map((props) =>
             <Column
               key={props.columnKey}
-              header={(headerProps) => this.renderHeader(props, headerProps)}
-              cell={(cellProps) => this.renderCell(props, cellProps)}
+              header={headerProps => this.renderHeader(props, headerProps)}
+              cell={cellProps => this.renderCell(props, cellProps)}
               width={props.fixedWidth || props.width || 96}
               flexGrow={1}
               { ...props }

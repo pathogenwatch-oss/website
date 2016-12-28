@@ -1,20 +1,22 @@
-import createActionCreators from './actions';
-import createReducer from './reducer';
-import createSelectors from './selectors';
+import { updateQueryString, clearQueryString } from '../location';
+import * as actions from './actions';
 
-function createConstants(prefix) {
-  return {
-    UPDATE_FILTER: `${prefix.toUpperCase()}_UPDATE_FILTER`,
-    CLEAR_FILTER: `${prefix.toUpperCase()}_CLEAR_FILTER`,
+export function update(stateKey, { queryKey, key }, newValue) {
+  return dispatch => {
+    dispatch(actions.updateFilter(stateKey, key, newValue));
+    if (queryKey) updateQueryString(queryKey, newValue);
   };
 }
 
-export default ({ name, filters, getFilterState }) => {
-  const actionTypes = createConstants(name);
-
-  return {
-    actions: createActionCreators(actionTypes),
-    reducer: createReducer(actionTypes, filters),
-    selectors: createSelectors(filters, getFilterState),
+export function clear(stateKey, filters) {
+  return dispatch => {
+    dispatch(actions.clearFilter(stateKey));
+    clearQueryString(filters.map(_ => _.queryKey));
   };
-};
+}
+
+export { isActive } from './selectors';
+export LocationListener from './LocationListener.react';
+export * as actions from './actions';
+export * as selectors from './selectors';
+export default from './reducer';

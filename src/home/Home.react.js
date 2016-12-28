@@ -2,11 +2,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import Grid from '../grid';
-import Filter from '../home-filter';
+import Filter, { getVisibleCollections } from '../home-filter';
 import { Summary, Totals } from '../filter-summary';
 import CollectionCard from './CollectionCard.react';
 
-import { getVisibleCollections, getTotalCollections } from './selectors';
+import { getTotalCollections } from './selectors';
 
 function mapStateToProps(state) {
   return {

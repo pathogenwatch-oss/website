@@ -2,9 +2,18 @@ import { createSelector } from 'reselect';
 import sortBy from 'lodash.sortby';
 
 import { getReferenceCollections } from '../home/selectors';
-import { selectors as filter } from './filter';
+import { selectors as filter } from '../filter';
 
 import { taxIdMap } from '../species';
+
+import { stateKey, filters } from './filter';
+
+export const getFilter = state => filter.getFilter(state, { stateKey });
+
+export const getSearchText = createSelector(
+  getFilter,
+  ({ searchRegExp }) => (searchRegExp ? searchRegExp.source : ''),
+);
 
 function incrementSummary(map, key, newEntry) {
   const summary = map.get(key) || {
@@ -21,7 +30,7 @@ function getSummary(map) {
 
 export const getFilterSummary = createSelector(
   getReferenceCollections,
-  filter.getFilter,
+  getFilter,
   (collections, filterState) => {
     const speciesMap = new Map();
 
@@ -38,3 +47,10 @@ export const getFilterSummary = createSelector(
     };
   }
 );
+
+export const getVisibleCollections = state =>
+  filter.getFilteredItems(state, {
+    stateKey,
+    filters,
+    items: getReferenceCollections(),
+  });

@@ -16,15 +16,15 @@ export const REQUEST_DOWNLOAD = createAsyncConstants('REQUEST_DOWNLOAD');
 
 export function requestDownload(args) {
   const {
-    format, idList, filename, speciesId,
-    getFileContents = makeFileRequest(format, idList, speciesId),
+    format, id, filename, speciesId,
+    getFileContents = makeFileRequest(format, id, speciesId),
   } = args;
 
   return {
     type: REQUEST_DOWNLOAD,
     payload: {
       format,
-      idList,
+      id,
       filename,
       promise: getFileContents(),
     },

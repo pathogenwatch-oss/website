@@ -36,4 +36,7 @@ export default {
   publicMetadataColumnNames: [],
   collections: [],
   resistanceProfileSeparatorIndex: -1,
+  uiOptions: {
+    genotyphi: true,
+  },
 };

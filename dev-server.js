@@ -22,6 +22,7 @@ app.use(bodyParser.json());
 
 app.use(express.static('public'));
 
+const getCollectionPath = species => `${__dirname}/static_data/${species}`;
 
 const apiRouter = express.Router();
 
@@ -46,16 +47,16 @@ apiRouter.get('/species/:speciesId/collection/:id/status', (req, res) => {
 
 apiRouter.get('/species/:speciesId/collection/:id', (req, res) => {
   setTimeout(() => {
-    res.sendFile(`${__dirname}/static_data/collection.json`);
-  }, 1000);
+    res.sendFile(`${getCollectionPath(req.params.speciesId)}/collection.json`);
+  }, 0);
 });
 
 apiRouter.get('/species/:speciesId/reference', (req, res) => {
-  res.sendFile(`${__dirname}/static_data/reference.json`);
+  res.sendFile(`${getCollectionPath(req.params.speciesId)}/reference.json`);
 });
 
-apiRouter.get('/species/:speciesId/antibiotics', (req, res) => {
-  res.sendFile(`${__dirname}/static_data/antibiotics.json`);
+apiRouter.get('/species/:speciesId/resistance', (req, res) => {
+  res.sendFile(`${getCollectionPath(req.params.speciesId)}/resistance.json`);
 });
 
 // let subtreeError = false;
@@ -65,7 +66,7 @@ apiRouter.get('/species/:speciesId/collection/:collectionId/subtree/:subtreeId',
     setTimeout(() => (
       // subtreeError ?
       //   res.sendStatus(500) :
-        res.sendFile(`${__dirname}/static_data/${req.params.subtreeId}.json`)
+        res.sendFile(`${getCollectionPath(req.params.speciesId)}/${req.params.subtreeId}.json`)
     ), 1000);
   }
 );
@@ -88,14 +89,14 @@ apiRouter.post('/species/:speciesId/download/type/:idType/format/:fileFormat', (
 
 apiRouter.get(
   '/species/:speciesId/download/file/:fileName',
-  (req, res) => res.sendFile(`${__dirname}/static_data/metadata.csv`)
+  (req, res) => res.sendFile(`${getCollectionPath(req.params.speciesId)}/metadata.csv`)
 );
 
 const fastaStoragePath = './fastas';
 fastaStorage.setup(fastaStoragePath);
 
 let uploadError = false;
-apiRouter.post('/upload', (req, res) => {
+apiRouter.post('/upload', (req, res, next) => {
   // uploadError = !uploadError;
   return uploadError ?
     setTimeout(() => res.sendStatus(500), 500) :
@@ -114,7 +115,7 @@ apiRouter.post('/upload', (req, res) => {
           speciesId: taxId,
           speciesName: scientificName,
           metrics,
-          // country,
+          // country: { code: "IND", name: "India" },
         });
       }).
       catch(error => next(error));
@@ -128,11 +129,8 @@ app.use('/api', apiRouter);
 
 app.set('view engine', 'ejs');
 
-app.use('/', (req, res) =>
-  res.render('index', {
-    googleMapsKey: 'AIzaSyBUn4F1N7KKElr6Qcwxvm7v3IzDoI0aQzE',
-    frontEndConfig: JSON.parse(fs.readFileSync('./config.json')),
-  })
-);
+app.use('/', (req, res) => res.render('index', {
+  frontEndConfig: JSON.parse(fs.readFileSync('./config.json')),
+}));
 
 app.listen(8080, '0.0.0.0');

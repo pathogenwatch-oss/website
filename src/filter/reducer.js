@@ -1,30 +1,27 @@
-import { LOCATION_CHANGE } from '../location';
+import { UPDATE_FILTER, CLEAR_FILTER } from './actions';
 
-export default (actionTypes, filters) => {
-  const initialState =
-    filters.reduce((memo, { key }) => ({ ...memo, [key]: null }), {});
-
-  return function (state = initialState, { type, payload }) {
-    switch (type) {
-      case actionTypes.UPDATE_FILTER:
-        return {
-          ...state,
-          [payload.key]:
-            payload.value === state[payload.key] ? null : payload.value,
-        };
-      case actionTypes.CLEAR_FILTER:
-        return initialState;
-      case LOCATION_CHANGE:
-        return {
-          ...state,
-          ...filters.reduce((memo, { key, onLocationChange }) => {
-            if (!onLocationChange) return memo;
-            memo[key] = onLocationChange(state[key], payload.location);
-            return memo;
-          }, {}),
-        };
-      default:
-        return state;
-    }
+function applyFilterValue(state = {}, payload) {
+  const { filterKey, filterValue } = payload;
+  return {
+    ...state,
+    [filterKey]: filterValue === state[filterKey] ? null : filterValue,
   };
-};
+}
+
+export default function (state = {}, { type, payload }) {
+  switch (type) {
+    case UPDATE_FILTER:
+      return {
+        ...state,
+        [payload.stateKey]:
+          applyFilterValue(state[payload.stateKey], payload),
+      };
+    case CLEAR_FILTER:
+      return {
+        ...state,
+        [payload.stateKey]: {},
+      };
+    default:
+      return state;
+  }
+}
