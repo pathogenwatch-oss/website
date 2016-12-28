@@ -5,7 +5,7 @@ import { getTables } from '../collection-viewer/table/selectors';
 import { tableKeys } from '../collection-viewer/table/constants';
 import { collectionPath, encode } from '../constants/downloads';
 
-import getCSVWorker from 'worker?name=csv.worker.js!../table/utils/CsvWorker';
+import getCSVWorker from 'worker-loader?name=csv.worker.js!../table/utils/CsvWorker';
 
 function convertTableToCSV(table, dataType) {
   return function (state) {
