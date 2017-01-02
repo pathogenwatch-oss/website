@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router';
+import { Link } from 'react-router/es';
 import Markdown from 'react-markdown';
 
 import Card, { CardMetadata } from '../card';

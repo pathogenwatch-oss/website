@@ -1,7 +1,7 @@
 import './styles.css';
 
 import React from 'react';
-import { Link } from 'react-router';
+import { Link } from 'react-router/es';
 import { connect } from 'react-redux';
 
 import Spinner from '../../components/Spinner.react';

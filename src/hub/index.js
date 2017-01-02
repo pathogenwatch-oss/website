@@ -18,23 +18,25 @@ function mapStateToProps(state) {
 export default {
   path: 'upload',
   getComponent(_, cb) {
-    return require.ensure([], require => cb(null,
-      connect(mapStateToProps)(require('./components/Hub.react').default))
-    );
+    System.import('./components/Hub.react').
+      then(module => cb(null,
+        connect(mapStateToProps)(module.default))
+      );
   },
   getIndexRoute(_, cb) {
-    return require.ensure([], require => cb(null, {
-      component: require('./components/GridView.react').default,
-    }));
+    System.import('./components/GridView.react').
+      then(module => cb(null, {
+        component: module.default,
+      }));
   },
   getChildRoutes({ location }, cb) {
-    require.ensure([], require => {
-      if (location.pathname === '/upload/map') {
-        cb(null, { path: 'map', component: require('./map').default });
-      }
-      if (location.pathname === '/upload/stats') {
-        cb(null, { path: 'stats', component: require('./components/StatsView.react').default });
-      }
-    });
+    if (location.pathname === '/upload/map') {
+      System.import('./map').
+        then(module => cb(null, { path: 'map', component: module.default }));
+    }
+    if (location.pathname === '/upload/stats') {
+      System.import('./components/StatsView.react').
+        then(module => cb(null, { path: 'stats', component: module.default }));
+    }
   },
 };

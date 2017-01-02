@@ -1,6 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
-const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+// const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 const srcFolder = path.join(__dirname, 'src');
 
@@ -70,16 +70,26 @@ const devConfig = {
 };
 
 const prodConfig = {
-  entry: './src',
+  entry: {
+    wgsa: './src',
+    vendor: [
+      'commonmark',
+      'leaflet',
+      'leaflet.markercluster',
+      'papaparse',
+      'phylocanvas',
+      'phylocanvas/polyfill.js',
+      'react',
+      'react-dom',
+    ],
+  },
   output: {
-    path: path.join(__dirname, 'public'),
-    chunkFilename: '[name].js',
-    filename: '[name].js',
+    path: './public',
+    filename: '[name].[chunkhash].js',
     publicPath: '/',
   },
   resolve,
   plugins: commonPlugins.concat([
-    new webpack.optimize.DedupePlugin(),
     new webpack.LoaderOptionsPlugin({
       minimize: true,
       debug: false,
@@ -95,12 +105,9 @@ const prodConfig = {
       },
     }),
     new webpack.optimize.CommonsChunkPlugin({
-      filename: 'common.js',
-      children: true,
-      async: true,
-      minChunks: 2,
+      names: [ 'wgsa', 'vendor', 'manifest' ],
     }),
-    new BundleAnalyzerPlugin(),
+    // new BundleAnalyzerPlugin(),
   ]),
   module: {
     rules,

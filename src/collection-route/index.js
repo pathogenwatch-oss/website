@@ -31,9 +31,8 @@ const HeaderSwitcher = connect(mapStateToProps)(
 export default {
   path: 'collection/:id',
   getComponent(_, cb) {
-    return require.ensure([], require =>
-      cb(null, require('./component').default)
-    );
+    return System.import('./component').
+      then(module => cb(null, module.default));
   },
   header: <HeaderSwitcher />,
 };

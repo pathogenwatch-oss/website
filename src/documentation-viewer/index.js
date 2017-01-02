@@ -17,14 +17,17 @@ function getWikiPageMarkdown(page = 'Home') {
 export default {
   path: 'documentation(/:page)',
   getComponent({ params }, callback) {
-    getWikiPageMarkdown(params.page)
-      .then(markdown =>
-        require.ensure([], require => {
-          const Markdown = require('./Markdown.react').default;
-          callback(null, () => <Markdown page={params.page} markdown={markdown} />);
-        })
-      )
-      .catch(() => callback(null, () => <NotFound />));
+    Promise.all([
+      getWikiPageMarkdown(params.page),
+      System.import('./Markdown.react'),
+    ]).
+    then(
+      ([ markdown, module ]) => {
+        const Markdown = module.default;
+        callback(null, () => <Markdown page={params.page} markdown={markdown} />);
+      }
+    ).
+    catch(() => callback(null, () => <NotFound />));
   },
   header: <DefaultContent asideDisabled />,
   onEnter() {

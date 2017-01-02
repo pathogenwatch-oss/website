@@ -1,4 +1,4 @@
-const centroids = require('geo-data/centroids.json');
+const centroids = require('geocoding/centroids.json');
 
 export function getCountryName(code) {
   if (code) {

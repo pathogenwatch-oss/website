@@ -1,5 +1,5 @@
 import queryString from 'query-string';
-import { browserHistory } from 'react-router';
+import { browserHistory } from 'react-router/es';
 
 function push(nextString) {
   browserHistory.push({

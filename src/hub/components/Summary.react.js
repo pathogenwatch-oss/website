@@ -2,7 +2,7 @@ import '../css/summary.css';
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
+import { Link } from 'react-router/es';
 
 import { Summary as FilterSummary, Totals } from '../../filter-summary';
 import ProgressBar from '../../components/progress-bar';
