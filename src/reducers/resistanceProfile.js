@@ -33,7 +33,6 @@ function createAntibioticsColumn({ key, fullName }) {
       return this.isSelected && this.allMechanisms.length;
     },
     getLabel() {
-      // return this.isExpandable() ? hoverName : key.slice(0, 3);
       return key.slice(0, 3);
     },
     headerClasses: 'wgsa-table-header--expanded',
