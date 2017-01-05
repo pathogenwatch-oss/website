@@ -29,6 +29,14 @@ export const DefaultColumnHeader =
     </button>
   );
 
+function isVisible(column) {
+  return (
+    column.group ?
+      column.system || column.columns.some(_ => _.valueGetter && !_.hidden) :
+      !column.hidden
+  );
+}
+
 export default React.createClass({
 
   displayName: 'FixedTable',
@@ -56,7 +64,15 @@ export default React.createClass({
   },
 
   isSelected(column) {
-    return this.props.activeColumns.has(column);
+    if (column.system) return false;
+
+    const columns =
+      (column.group ? column.columns : [ column ]).
+        filter(_ => isVisible(_) && _.valueGetter);
+
+    return columns.length ?
+      columns.every(c => this.props.activeColumns.has(c)) :
+      false;
   },
 
   renderHeader(columnProps, headerProps) {
@@ -94,12 +110,7 @@ export default React.createClass({
 
   renderColumns(columnDefs) {
     return columnDefs.
-      filter(_ =>
-        (_.group ?
-          _.system || _.columns.some(c => c.valueGetter && !c.hidden) :
-          !_.hidden
-        )
-      ).
+      filter(isVisible).
       map(props =>
         (props.group ?
           <ColumnGroup

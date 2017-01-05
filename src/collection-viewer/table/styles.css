@@ -98,8 +98,6 @@
 .wgsa-table-header--selected .wgsa-selectable-column-heading {
   background: #673c90;
   color: #fff;
-  transition: .28s cubic-bezier(.4,0,.2,1);
-  transition-property: color, background-color;
 }
 
 .wgsa-selectable-column-heading:hover,
@@ -111,13 +109,6 @@
 .wgsa-selectable-column-heading:hover {
   cursor: pointer;
 }
-
-/*.wgsa-table-header--selected .wgsa-selectable-column-heading {
-  width: auto;
-  max-width: calc(100% - 2px);
-  overflow: hidden;
-  text-overflow: ellipsis;
-}*/
 
 .wgsa-table-row:hover {
   cursor: pointer;
@@ -133,8 +124,6 @@
   box-sizing: border-box;
   font-size: 13px;
   padding: 0 10px;
-  transition: .28s cubic-bezier(.4,0,.2,1);
-  transition-property: color, background, background-color;
   vertical-align: top;
   white-space: nowrap;
 }
