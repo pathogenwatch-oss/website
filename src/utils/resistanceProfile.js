@@ -71,17 +71,26 @@ export function onHeaderClick(event, column) {
     const columns = column.group ?
       column.columns.filter(_ => _.valueGetter && !_.hidden) :
       [ column ];
-    const cumulative = (event.metaKey || event.ctrlKey);
 
-    if (cumulative) {
+    if (column.group && columns.every(c => activeColumns.has(c))) {
       for (const c of columns) {
-        activeColumns[activeColumns.has(c) ? 'delete' : 'add'](c);
+        activeColumns.delete(c);
       }
       dispatch(setColourColumns(name, new Set(activeColumns)));
       return;
     }
 
-    if (!column.group && activeColumns.has(column) && activeColumns.size === 1) {
+    const cumulative = (event.metaKey || event.ctrlKey);
+    if (cumulative) {
+      for (const c of columns) {
+        if (column.group) activeColumns.add(c);
+        else activeColumns[activeColumns.has(c) ? 'delete' : 'add'](c);
+      }
+      dispatch(setColourColumns(name, new Set(activeColumns)));
+      return;
+    }
+
+    if (activeColumns.has(column) && activeColumns.size === 1) {
       dispatch(setColourColumns(name, new Set()));
       return;
     }
@@ -90,4 +99,4 @@ export function onHeaderClick(event, column) {
   };
 }
 
-export const getColourState = (colour) => stateColourMap.get(colour);
+export const getColourState = colour => stateColourMap.get(colour);
