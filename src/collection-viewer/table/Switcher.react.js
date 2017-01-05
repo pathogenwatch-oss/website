@@ -2,13 +2,35 @@ import React from 'react';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
 
-import { getVisibleTableName, getVisibleTable } from './selectors';
+import { getVisibleTableName } from './selectors';
 
-import { setTable, showTableView } from './actions';
+import { setTable } from './actions';
 
-import { tableKeys, views } from './constants';
-const { metadata, resistanceProfile } = tableKeys;
+import { tableKeys } from './constants';
+const { metadata, antibiotics, snps, genes } = tableKeys;
 
+function mapStateToProps(state) {
+  return {
+    displayedTable: getVisibleTableName(state),
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    showTable: tableKey => dispatch(setTable(tableKey)),
+  };
+}
+
+const Button = connect(mapStateToProps, mapDispatchToProps)(
+  ({ table, label, displayedTable, showTable }) => (
+    <button
+      className={classnames({ active: displayedTable === table })}
+      onClick={() => showTable(table)}
+    >
+      {label}
+    </button>
+  )
+);
 
 const ButtonGroup = ({ children }) => (
   <div className="wgsa-button-group mdl-shadow--2dp">
@@ -16,53 +38,22 @@ const ButtonGroup = ({ children }) => (
   </div>
 );
 
-const Button = ({ active, children, onClick }) => (
-  <button className={classnames({ active })} onClick={onClick}>
-    {children}
-  </button>
-);
-
-const TableSwitcher = ({ displayedTable, displayedView, showMetadataTable, showAMRView }) => (
-  <div className="wgsa-table-switcher" onClick={event => event.stopPropagation()}>
+const TableSwitcher = () => (
+  <div
+    className="wgsa-table-switcher"
+    onClick={event => event.stopPropagation()}
+  >
     <ButtonGroup>
-      <Button
-        active={displayedTable === metadata}
-        onClick={showMetadataTable}
-      >
-        Metadata
-      </Button>
+      <Button table={metadata} label="Metadata" />
     </ButtonGroup>
     <ButtonGroup>
-      { views[resistanceProfile].map(view =>
-        <Button
-          key={view}
-          active={displayedTable === resistanceProfile && view === displayedView}
-          onClick={() => showAMRView(view)}
-        >
-          {view}
-        </Button>
-      )}
+      <Button table={antibiotics} label="Antibiotics" />
+      <Button table={snps} label="SNPs" />
+      <Button table={genes} label="Genes" />
     </ButtonGroup>
   </div>
 );
 
 TableSwitcher.displayName = 'TableSwitcher';
 
-function mapStateToProps(state) {
-  return {
-    displayedTable: getVisibleTableName(state),
-    displayedView: getVisibleTable(state).view,
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    showMetadataTable: () => dispatch(setTable(metadata)),
-    showAMRView: view => {
-      dispatch(setTable(resistanceProfile));
-      dispatch(showTableView(view));
-    },
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(TableSwitcher);
+export default TableSwitcher;

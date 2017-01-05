@@ -1,4 +1,5 @@
 import { setColourColumns } from '../collection-viewer/table/actions';
+import { getAMRTableName, getActiveAMRTable } from '../collection-viewer/table/selectors';
 
 import { DEFAULT, CGPS } from '../app/constants';
 
@@ -61,26 +62,32 @@ export function createColourGetter(columns) {
   };
 }
 
-export function onHeaderClick(event, { column, activeColumns }, dispatch) {
-  const columns = column.group ?
-    column.columns.filter(_ => _.valueGetter && !_.hidden) :
-    [ column ];
-  const cumulative = (event.metaKey || event.ctrlKey);
+export function onHeaderClick(event, column) {
+  return (dispatch, getState) => {
+    const state = getState();
+    const name = getAMRTableName(state);
+    const { activeColumns } = getActiveAMRTable(state);
 
-  if (cumulative) {
-    for (const c of columns) {
-      activeColumns[activeColumns.has(c) ? 'delete' : 'add'](c);
+    const columns = column.group ?
+      column.columns.filter(_ => _.valueGetter && !_.hidden) :
+      [ column ];
+    const cumulative = (event.metaKey || event.ctrlKey);
+
+    if (cumulative) {
+      for (const c of columns) {
+        activeColumns[activeColumns.has(c) ? 'delete' : 'add'](c);
+      }
+      dispatch(setColourColumns(name, new Set(activeColumns)));
+      return;
     }
-    dispatch(setColourColumns(new Set(activeColumns)));
-    return;
-  }
 
-  if (!column.group && activeColumns.has(column) && activeColumns.size === 1) {
-    dispatch(setColourColumns(new Set()));
-    return;
-  }
+    if (!column.group && activeColumns.has(column) && activeColumns.size === 1) {
+      dispatch(setColourColumns(name, new Set()));
+      return;
+    }
 
-  dispatch(setColourColumns(new Set(columns)));
+    dispatch(setColourColumns(name, new Set(columns)));
+  };
 }
 
 export const getColourState = (colour) => stateColourMap.get(colour);

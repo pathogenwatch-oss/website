@@ -111,7 +111,7 @@ function mergeProps(state, { dispatch }, props) {
     onClick: (event) => dispatch(onTableClick(event)),
     onRowClick: row => dispatch(onRowClick(row)),
     onHeaderClick: (event, column) =>
-      (column.onHeaderClick || state.onHeaderClick)(event, { column, activeColumns }, dispatch),
+      dispatch((column.onHeaderClick || state.onHeaderClick)(event, column)),
   };
 }
 

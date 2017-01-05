@@ -2,6 +2,7 @@ import { FETCH_ENTITIES } from '../actions/fetch';
 import { SET_LABEL_COLUMN, setLabelColumn } from '../collection-viewer/table/actions';
 import { SET_TREE } from '../collection-viewer/tree/actions';
 
+import { getMetadataTable } from '../collection-viewer/table/selectors';
 import { downloadColumnProps, nameColumnProps } from '../collection-viewer/table/constants';
 import * as metadata from '../constants/metadata';
 
@@ -14,10 +15,15 @@ const initialActiveColumn = nameColumnProps;
 const initialState = {
   activeColumn: initialActiveColumn,
   columns: [],
-  onHeaderClick(event, { column, activeColumns }, dispatch) {
-    dispatch(setLabelColumn(
-      activeColumns.has(column) ? initialActiveColumn : column
-    ));
+  onHeaderClick(event, column) {
+    return (dispatch, getState) => {
+      const state = getState();
+      const { activeColumn } = getMetadataTable(state);
+
+      dispatch(setLabelColumn(
+        activeColumn === column ? initialActiveColumn : column
+      ));
+    };
   },
 };
 
