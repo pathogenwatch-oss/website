@@ -52,13 +52,24 @@ export function getAdvancedColour(element, type, assembly) {
 
 const noActiveColumns = [ { valueGetter: defaultColourGetter } ];
 
-export function createColourGetter(columns) {
+function getColours(columns, assembly) {
+  return new Set(
+    Array.from(columns.size ? columns : noActiveColumns).
+      map(column => column.valueGetter(assembly))
+  );
+}
+
+// FIXME: name is hard-coded to avoid circular dependency
+function getMixedStateColour(table) {
+  return table === 'antibiotics' ? nonResistantColour : stateColours.RESISTANT;
+}
+
+export function createColourGetter(table, columns) {
   return function (assembly) {
-    const colours = new Set(
-      Array.from(columns.size ? columns : noActiveColumns).
-        map(column => column.valueGetter(assembly))
-    );
-    return colours.size === 1 ? Array.from(colours)[0] : nonResistantColour;
+    const colours = getColours(columns, assembly);
+    return colours.size === 1 ?
+      Array.from(colours)[0] :
+      getMixedStateColour(table);
   };
 }
 

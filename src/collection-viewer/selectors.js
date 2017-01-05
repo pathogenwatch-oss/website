@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 
-import { getActiveAMRTable } from './table/selectors';
+import { getTables, getAMRTableName } from './table/selectors';
 
 import { createColourGetter } from '../utils/resistanceProfile';
 
@@ -36,6 +36,7 @@ export const getActiveAssemblies = createSelector(
 );
 
 export const getColourGetter = createSelector(
-  getActiveAMRTable,
-  table => createColourGetter(table.activeColumns)
+  getTables,
+  getAMRTableName,
+  (tables, name) => createColourGetter(name, tables[name].activeColumns)
 );
