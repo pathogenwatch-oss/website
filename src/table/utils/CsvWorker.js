@@ -9,58 +9,58 @@ import { isResistant } from '^/utils/resistanceProfile';
 
 const nameColumnData = {
   columnKey: '__name',
+  label: 'NAME',
   valueGetter({ name }) {
     return name;
   },
 };
 
-const columnDefsByTable = {
-  metadata() {
-    return {
-      defined: {
-        [nameColumnData.columnKey]: nameColumnData,
-        ...systemDataColumns,
-      },
-      genericGetter: getUserDefinedValue,
-    };
+const definedColumns = {
+  [nameColumnData.columnKey]: nameColumnData,
+  ...systemDataColumns,
+};
+
+const csvOptions = {
+  metadata: {
+    valueGetter: getUserDefinedValue,
+    formatLabel: true,
   },
-  resistanceProfile(dataType) {
-    return {
-      defined: {
-        [nameColumnData.columnKey]: nameColumnData,
-      },
-      genericGetter: (antibiotic, { analysis: { resistanceProfile } }) => {
-        switch (dataType) {
-          case 'profile':
-            return isResistant(resistanceProfile, antibiotic) ? 1 : 0;
-          case 'mechanisms': {
-            const { antibiotics } = resistanceProfile;
-            return `"${antibiotics[antibiotic].mechanisms.join(',')}"`;
-          }
-          default:
-            return '';
-        }
-      },
-    };
+  antibiotics: {
+    valueGetter: (antibiotic, { analysis: { resistanceProfile } }) =>
+      (isResistant(resistanceProfile, antibiotic) ? 1 : 0),
+  },
+  snps: {
+    valueGetter: (snp, { analysis: { resistanceProfile } }) =>
+      (resistanceProfile.snp.indexOf(snp) === -1 ? 0 : 1),
+  },
+  genes: {
+    valueGetter: (gene, { analysis: { resistanceProfile } }) =>
+      (resistanceProfile.paar.indexOf(gene) === -1 ? 0 : 1),
   },
 };
 
-function mapToGetters({ columnKeys, table, dataType }) {
-  const columns = columnDefsByTable[table](dataType);
+function mapToGetters(columnKeys, table) {
   return columnKeys.map(key => {
-    if (key in columns.defined) {
-      return columns.defined[key].valueGetter;
+    if (key in definedColumns) {
+      return definedColumns[key].valueGetter;
     }
-    return row => columns.genericGetter(key, row);
+    const { valueGetter } = csvOptions[table];
+    return row => valueGetter(key, row);
   });
 }
 
+function mapToLabel(key, table) {
+  const { formatLabel } = csvOptions[table];
+  if (formatLabel) return formatColumnKeyAsLabel(key);
+  return key in definedColumns ? (definedColumns[key].label || key) : key;
+}
+
 registerPromiseWorker((message) => {
-  const { table, dataType, columnKeys, rows } = message;
-  const valueGetters = mapToGetters({ columnKeys, table, dataType });
+  const { table, columnKeys, rows } = message;
+  const valueGetters = mapToGetters(columnKeys, table);
 
   return Papa.unparse({
-    fields: columnKeys.map(key => formatColumnKeyAsLabel(key)),
+    fields: columnKeys.map(key => mapToLabel(key, table)),
     data: rows.map(row => valueGetters.map(getter => getter(row))),
   });
 });

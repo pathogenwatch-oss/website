@@ -4,14 +4,14 @@ import * as resistanceProfile from '../../utils/resistanceProfile';
 
 export const name = tableKeys.genes;
 
-export function buildColumns({ paar, antibiotics }) {
+export function buildColumns({ paar, antibiotics }, profiles) {
   return Object.keys(paar).
     map(antibiotic => ({
       group: true,
       columnKey: `paar_${antibiotic}`,
       columns: paar[antibiotic].
         map(element => createAdvancedViewColumn(
-          { key: element, label: element }, 'paar'
+          { key: element, label: element }, 'paar', profiles
         )),
       getLabel: () => antibiotic,
       headerClasses: 'wgsa-table-header--expanded wgsa-table-header--group',

@@ -48,12 +48,15 @@ const spacerGroup = {
   ],
 };
 
-export function createAdvancedViewColumn({ key, label }, profileKey) {
+function notPresent(profileSection, element) {
+  return profileSection.indexOf(element) === -1;
+}
+
+export function createAdvancedViewColumn({ key, label }, profileKey, profiles) {
   return {
     addState({ data }) {
-      this.hidden = data.every(
-        ({ analysis }) =>
-          analysis.resistanceProfile[profileKey].indexOf(key) === -1
+      this.hidden = data.every(({ analysis }) =>
+        notPresent(analysis.resistanceProfile[profileKey], key)
       );
       this.width = this.getWidth() + 16;
       return this;
@@ -76,12 +79,22 @@ export function createAdvancedViewColumn({ key, label }, profileKey) {
       ) : null;
     },
     headerClasses: 'wgsa-table-header--expanded',
+    hidden: profiles.every(profile => notPresent(profile[profileKey], key)),
     valueGetter: assembly =>
       resistanceProfile.getAdvancedColour(key, profileKey, assembly),
     onHeaderClick: resistanceProfile.onHeaderClick,
   };
 }
 
+function getResistanceProfiles(assemblies) {
+  return Object.keys(assemblies).
+    reduce((profiles, id) => {
+      const { analysis } = assemblies[id];
+      if (!analysis.resistanceProfile) return profiles;
+      profiles.push(analysis.resistanceProfile);
+      return profiles;
+    }, []);
+}
 
 const initialState = {
   activeColumns: new Set(),
@@ -92,8 +105,9 @@ export function createReducer({ name, buildColumns }) {
   return function (state = initialState, { type, payload }) {
     switch (type) {
       case FETCH_ENTITIES.SUCCESS: {
-        const libraries = payload.result[2];
-        const columns = buildColumns(libraries);
+        const [ collection, , libraries ] = payload.result;
+        const resistanceProfiles = getResistanceProfiles(collection.assemblies);
+        const columns = buildColumns(libraries, resistanceProfiles);
         return {
           ...state,
           columns: [ systemGroup ].concat(

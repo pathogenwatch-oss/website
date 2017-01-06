@@ -6,7 +6,7 @@ import { tableKeys } from '../../collection-viewer/table/constants';
 
 export const name = tableKeys.snps;
 
-export function buildColumns({ snp, antibiotics }) {
+export function buildColumns({ snp, antibiotics }, profiles) {
   return Object.keys(snp).
     map(antibiotic => ({
       group: true,
@@ -35,7 +35,7 @@ export function buildColumns({ snp, antibiotics }) {
             },
             snp[antibiotic][gene].
               map(snpName => createAdvancedViewColumn(
-                { key: `${gene}_${snpName}`, label: snpName }, 'snp'
+                { key: `${gene}_${snpName}`, label: snpName }, 'snp', profiles,
               ))
             ), []),
       getLabel: () => antibiotic,

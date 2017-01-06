@@ -24,16 +24,26 @@ const initialState = {
       return uiOptions.noAMR;
     },
   },
-  // amr_mechanisms_csv: {
-  //   description: 'AMR Mechanisms',
-  //   filenameSegment: 'amr_mechansisms.csv',
-  //   getFileContents: downloads.generateAMRMechanisms,
-  //   createLink: downloads.createCSVLink,
-  //   hideFromMenu() {
-  //     const { uiOptions = {} } = Species.current;
-  //     return uiOptions.noAMR;
-  //   },
-  // },
+  amr_snps_csv: {
+    description: 'AMR SNPs',
+    filenameSegment: 'amr_snps.csv',
+    getFileContents: downloads.generateAMRSNPs,
+    createLink: downloads.createCSVLink,
+    hideFromMenu() {
+      const { uiOptions = {} } = Species.current;
+      return uiOptions.noAMR;
+    },
+  },
+  amr_genes_csv: {
+    description: 'AMR Genes',
+    filenameSegment: 'amr_genes.csv',
+    getFileContents: downloads.generateAMRGenes,
+    createLink: downloads.createCSVLink,
+    hideFromMenu() {
+      const { uiOptions = {} } = Species.current;
+      return uiOptions.noAMR;
+    },
+  },
   concatenated_core_genes_collection: {
     description: 'Concatenated Core Genes',
     filenameSegment: 'concatenated_core_genes',
