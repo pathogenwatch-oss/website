@@ -11,6 +11,7 @@ import { onTableClick, onRowClick } from '../table/thunks';
 
 import { addColumnWidth } from '../../table/utils/columnWidth';
 import { addDownloadProps } from '../../constants/downloads';
+import Species from '../../species';
 
 const preventDefault = e => e.preventDefault();
 
@@ -47,13 +48,14 @@ const Table = React.createClass({
   },
 
   render() {
+    const { noAMR } = Species.uiOptions;
     return (
       <section
         onClick={this.props.onClick}
         onWheel={preventDefault}
         onTouchMove={preventDefault}
       >
-        <TableSwitcher />
+        { noAMR ? null : <TableSwitcher /> }
         <FixedTable { ...this.props }
           rowClickHandler={this.props.onRowClick}
           headerClickHandler={this.props.onHeaderClick}
