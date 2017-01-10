@@ -3,8 +3,9 @@ const fs = promisify('fs');
 const argv = require('named-argv');
 const path = require('path');
 
-const mongoConnection = require('utils/mongoConnection');
+const Species = require('data/species');
 const { request } = require('services');
+const mongoConnection = require('utils/mongoConnection');
 
 const {
   speciesId,
@@ -18,6 +19,8 @@ if (!speciesId || !csvFile || !fastaDir) {
   console.log('Missing arguments');
   process.exit(1);
 }
+
+require('tasks/create-species')({ speciesId, csvFile, fastaDir });
 
 function parseRows(file) {
   const lines = file.split(/\r?\n/g);
@@ -56,7 +59,7 @@ function createGenome(metadata) {
 
 mongoConnection.connect().
   then(() => Promise.all([
-    request('collection', 'create-reference', { speciesId }),
+    Species.create({ speciesId }),
     fs.readFile(csvFile, 'utf8').
       then(parseRows).
       then(rows => rows.reduce((memo, row) =>
@@ -65,9 +68,7 @@ mongoConnection.connect().
         )
       , Promise.resolve([]))),
   ])).
-  then(([ collection, collectionGenomes ]) =>
-    request('collection', 'add-genomes', { collection, collectionGenomes })
-  ).
+  then(([ species, genomes ]) => species.addReferences(genomes)).
   then(() => process.exit(0)).
   catch(console.error).
     then(() => process.exit(1));

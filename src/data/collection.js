@@ -5,11 +5,11 @@ const { setToObjectOptions } = require('./utils');
 
 const schema = new Schema({
   _user: { type: Schema.Types.ObjectId, ref: 'User' },
+  _species: { type: Schema.Types.ObjectId, ref: 'Species' },
   genomes: Array,
   description: String,
   uuid: { type: String, index: true },
   size: Number,
-  speciesId: Number,
   status: { type: String, default: 'PENDING' },
   error: String,
   progress: {
@@ -19,7 +19,6 @@ const schema = new Schema({
     results: Object,
     percent: Number,
   },
-  reference: { type: Boolean, default: false },
   subtrees: [ {
     name: String,
     tree: String,

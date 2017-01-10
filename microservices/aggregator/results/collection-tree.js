@@ -1,9 +1,18 @@
 const Collection = require('data/collection');
+const Species = require('data/species');
+
 const mainStorage = require('services/storage')('main');
 const { CORE_TREE_RESULT } = require('utils/documentKeys');
 
-module.exports = (taskName, { collectionId }) =>
-  mainStorage.retrieve(`${CORE_TREE_RESULT}_${collectionId}`).
+function fetchTree(collectionId) {
+  return mainStorage.retrieve(`${CORE_TREE_RESULT}_${collectionId}`);
+}
+
+module.exports = (taskName, { collectionId, speciesId }) =>
+  fetchTree(collectionId).
     then(({ newickTree }) =>
-      Collection.update({ uuid: collectionId }, { tree: newickTree })
+      (collectionId === speciesId ?
+        Species.aggregateMetadata(speciesId, newickTree) :
+        Collection.update({ uuid: collectionId }, { tree: newickTree })
+      )
     );
