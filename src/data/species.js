@@ -20,16 +20,16 @@ const schema = new Schema({
   },
 });
 
+schema.methods.addReferences = function (genomes) {
+  this.references = genomes.map(genome => CollectionGenome.convert(genome));
+  return this.save();
+};
+
 schema.statics.addAnalysisResult = function (taxId, uuid, name, result) {
   return this.update(
     { taxId, 'references.uuid': uuid },
     { $set: { [`references.$.analysis.${name.toLowerCase()}`]: result } }
   );
-};
-
-schema.methods.addReferences = function (genomes) {
-  this.references = genomes.map(genome => CollectionGenome.convert(genome));
-  return this.save();
 };
 
 function fetchAntibiotics(taxId) {
@@ -38,8 +38,8 @@ function fetchAntibiotics(taxId) {
     `${ANTIMICROBIAL_SPECIES}_${taxId}`,
   ]).
   then(({ results }) => {
-    const master = results[ANTIMICROBIAL_MASTER];
-    const { antibiotics } = results[ANTIMICROBIAL_SPECIES];
+    const master = results[ANTIMICROBIAL_MASTER].antimicrobials;
+    const { antibiotics } = results[`${ANTIMICROBIAL_SPECIES}_${taxId}`];
 
     return antibiotics.map(({ antibioticKey }) => ({
       name: antibioticKey,
@@ -60,8 +60,8 @@ function fetchPaarsnpLibrary(taxId) {
     }));
 }
 
-schema.methods.completeDeployment = function (taxId, tree) {
-  Promise.all([
+schema.statics.completeDeployment = function (taxId, tree) {
+  return Promise.all([
     fetchAntibiotics(taxId),
     fetchPaarsnpLibrary(taxId),
   ]).then(([ antibiotics, { paar, snp } ]) =>

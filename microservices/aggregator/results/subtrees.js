@@ -1,4 +1,4 @@
-const { isReference } = require('./utils');
+const { isReference } = require('../utils');
 const Collection = require('data/collection');
 const CollectionGenome = require('data/collectionGenome');
 const mainStorage = require('services/storage')('main');
