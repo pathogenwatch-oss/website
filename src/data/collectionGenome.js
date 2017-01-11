@@ -93,4 +93,21 @@ schema.statics.findByUuid = function (uuid, projection) {
   return this.findOne({ uuid }, projection);
 };
 
+schema.statics.convert = function (genome, uuid, _collection) {
+  const { name, year, month, day, latitude, longitude, country, pmid, userDefined } = genome;
+  const { fileId, metrics } = genome._file;
+  return {
+    uuid,
+    _collection,
+    fileId,
+    name,
+    date: { year, month, day },
+    position: { latitude, longitude },
+    country,
+    pmid,
+    userDefined,
+    metrics,
+  };
+};
+
 module.exports = mongoose.model('CollectionGenome', schema);

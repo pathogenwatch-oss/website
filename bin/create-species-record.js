@@ -65,8 +65,9 @@ mongoConnection.connect().
       then(rows => rows.reduce((memo, row) =>
         memo.then(genomes =>
           createGenome(row).then(genome => genomes.concat(genome))
-        )
-      , Promise.resolve([]))),
+        ),
+        Promise.resolve([])
+      )),
   ])).
   then(([ species, genomes ]) => species.addReferences(genomes)).
   then(() => process.exit(0)).

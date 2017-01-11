@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
-const CollectionGenome = require('data/CollectionGenome').schema;
+const CollectionGenome = require('data/CollectionGenome');
 const mainStorage = require('services/storage')('main');
 const { ANTIMICROBIAL_MASTER, ANTIMICROBIAL_SPECIES, PAARSNP_LIBRARY } =
   require('utils/documentKeys');
@@ -21,7 +21,8 @@ const schema = new Schema({
 });
 
 schema.methods.addReferences = function (genomes) {
-
+  this.references = genomes.map(CollectionGenome.convert);
+  return this.save();
 };
 
 function fetchAntibiotics(taxId) {
