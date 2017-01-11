@@ -29,12 +29,27 @@ function fetchAntibiotics(taxId) {
     ANTIMICROBIAL_MASTER,
     `${ANTIMICROBIAL_SPECIES}_${taxId}`,
   ]).
-  then(console.log);
+  then(({ results }) => {
+    const master = results[ANTIMICROBIAL_MASTER];
+    const { antibiotics } = results[ANTIMICROBIAL_SPECIES];
+
+    return antibiotics.map(({ antibioticKey }) => ({
+      name: antibioticKey,
+      longName: master.find(_ => _.key === antibioticKey).fullName,
+    }));
+  });
 }
 
 function fetchPaarsnpLibrary(taxId) {
   return mainStorage.retrieve(`${PAARSNP_LIBRARY}_${taxId}`).
-    then(console.log);
+    then(({ paarLibrary, snpLibrary }) => ({
+      paar: paarLibrary.resistanceGenes.map(_ => _.familyName),
+      snp:
+        Object.keys(snpLibrary.sequences).
+          reduce((memo, seqId) => memo.concat(
+            snpLibrary.sequences[seqId].resistanceMutations.map(_ => _.name)
+          ), []),
+    }));
 }
 
 schema.methods.completeDeployment = function (taxId, tree) {
