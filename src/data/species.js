@@ -23,7 +23,7 @@ const schema = new Schema({
 schema.statics.addAnalysisResult = function (taxId, uuid, name, result) {
   return this.update(
     { taxId, 'references.uuid': uuid },
-    { [`references.$.analysis.${name.toLowerCase()}`]: result }
+    { $set: { [`references.$.analysis.${name.toLowerCase()}`]: result } }
   );
 };
 

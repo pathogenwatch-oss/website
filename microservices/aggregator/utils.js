@@ -7,3 +7,7 @@ exports.storeGenomeAnalysis = function (uuid, speciesId, name, result) {
     CollectionGenome.addAnalysisResult(uuid, name, result)
   );
 };
+
+exports.isReference = function (message) {
+  return message.collectionId === message.speciesId;
+};

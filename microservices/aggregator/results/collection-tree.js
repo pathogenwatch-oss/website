@@ -12,7 +12,7 @@ module.exports = (taskName, { collectionId, speciesId }) =>
   fetchTree(collectionId).
     then(({ newickTree }) =>
       (collectionId === speciesId ?
-        Species.aggregateMetadata(speciesId, newickTree) :
+        Species.completeDeployment(speciesId, newickTree) :
         Collection.update({ uuid: collectionId }, { tree: newickTree })
       )
     );

@@ -1,6 +1,7 @@
 const notificationDispatcher = require('services/notificationDispatcher');
 
 const services = require('services');
+const { isReference } = require('./utils');
 
 const handlers = {
   MLST: require('./results/mlst'),
@@ -14,7 +15,7 @@ const handlers = {
 };
 
 function aggregateResult(message) {
-  if (!(message.taskType in handlers)) {
+  if (!(message.taskType in handlers) || message.action !== 'CREATE') {
     return Promise.resolve(); // ignore, nothing to save
   }
 
@@ -27,11 +28,16 @@ function aggregateResult(message) {
 
 module.exports = function (message) {
   return aggregateResult(message).
-    then(() => services.request('collection', 'fetch-progress', { uuid: message.collectionId })).
-    then(collection => {
-      const { status, progress } = collection.toObject();
-      notificationDispatcher.publishNotification(
-        message.collectionId, 'progress', { status, progress }
-      );
-    });
+    then(() =>
+      (isReference(message) ?
+        Promise.resolve() :
+        services.request('collection', 'fetch-progress', { uuid: message.collectionId }).
+          then(collection => {
+            const { status, progress } = collection.toObject();
+            notificationDispatcher.publishNotification(
+              message.collectionId, 'progress', { status, progress }
+            );
+          })
+      )
+    );
 };
