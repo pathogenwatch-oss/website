@@ -23,6 +23,6 @@ module.exports = (taskName, { assemblyId, speciesId }) => {
         result.snparResult.resistanceMutationIds || [] : [],
     })).
     then(result =>
-      storeGenomeAnalysis(assemblyId, speciesId, name, result)
+      storeGenomeAnalysis(uuid, speciesId, taskName, result)
     );
 };

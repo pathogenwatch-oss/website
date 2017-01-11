@@ -93,7 +93,7 @@ schema.statics.findByUuid = function (uuid, projection) {
   return this.findOne({ uuid }, projection);
 };
 
-schema.statics.convert = function (genome, uuid, _collection) {
+schema.statics.convert = function ({ genome, uuid }, _collection) {
   const { name, year, month, day, latitude, longitude, country, pmid, userDefined } = genome;
   const { fileId, metrics } = genome._file;
   return {

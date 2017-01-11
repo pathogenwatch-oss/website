@@ -53,7 +53,7 @@
     "e2e": "eval $npm_package_testcmd 'test/e2e/**/*.test.js'",
     "upload": "eval $npm_package_startcmd bin/upload.js",
     "download": "eval $npm_package_startcmd bin/download.js",
-    "reference": "eval $npm_package_startcmd bin/create-reference-collection.js",
+    "species": "eval $npm_package_startcmd bin/create-species-record.js",
     "service": "eval $npm_package_startcmd microservices/bootstrap.js aggregator | bunyan -o short",
     "ids": "eval $npm_package_startcmd bin/collection-id-update.js",
     "aggregate": "eval $npm_package_startcmd bin/aggregate-collection.js"

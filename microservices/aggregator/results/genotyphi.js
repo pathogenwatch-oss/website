@@ -9,6 +9,6 @@ module.exports = (name, { assemblyId, speciesId }) => {
       genotype: result.genotype,
     })).
     then(result =>
-      storeGenomeAnalysis(assemblyId, speciesId, name, result)
+      storeGenomeAnalysis(uuid, speciesId, name, result)
     );
 };

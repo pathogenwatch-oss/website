@@ -13,6 +13,6 @@ module.exports = (name, { assemblyId, speciesId }) => {
   return mainStorage.retrieve(`${FP_RESULT}_${uuid}`).
     then(formatResult).
     then(result =>
-      storeGenomeAnalysis(assemblyId, speciesId, name, result)
+      storeGenomeAnalysis(uuid, speciesId, name, result)
     );
 };

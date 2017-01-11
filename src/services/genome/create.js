@@ -7,8 +7,15 @@ const { ServiceRequestError } = require('utils/errors');
 function createGenomeDocument({ name }, reference, user, genomeFileDoc) {
   const { speciesId, speciesName, metrics } = genomeFileDoc;
   return (
-    Genome.create({ _file: genomeFileDoc._id, _user: user, name, reference, public: reference })
-      .then(({ _id }) => ({ id: _id, speciesId, speciesName, metrics }))
+    Genome.create({
+      _file: genomeFileDoc._id,
+      _user: user,
+      name,
+      speciesId,
+      reference,
+      public: reference,
+    }).
+    then(({ _id }) => ({ id: _id, speciesId, speciesName, metrics }))
   );
 }
 

@@ -11,6 +11,6 @@ module.exports = (name, { assemblyId, speciesId }) => {
       tbpb: result.tbpb,
     })).
     then(result =>
-      storeGenomeAnalysis(assemblyId, speciesId, name, result)
+      storeGenomeAnalysis(uuid, speciesId, name, result)
     );
 };

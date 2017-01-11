@@ -80,7 +80,7 @@ module.exports = (name, { assemblyId, speciesId }) => {
         code: result.code,
       })).
       then(result =>
-        storeGenomeAnalysis(assemblyId, speciesId, name, result)
+        storeGenomeAnalysis(uuid, speciesId, name, result)
       )
     );
 };

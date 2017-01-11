@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
-const CollectionGenome = require('data/CollectionGenome');
+const CollectionGenome = require('data/collectionGenome');
 const mainStorage = require('services/storage')('main');
 const { ANTIMICROBIAL_MASTER, ANTIMICROBIAL_SPECIES, PAARSNP_LIBRARY } =
   require('utils/documentKeys');
@@ -12,7 +12,7 @@ const schema = new Schema({
   shortName: String,
   deployed: { type: Date },
   tree: String,
-  references: [ CollectionGenome ],
+  references: [ CollectionGenome.schema ],
   resistance: {
     antibiotics: Schema.Types.Mixed,
     paar: Schema.Types.Mixed,
@@ -28,7 +28,7 @@ schema.statics.addAnalysisResult = function (taxId, uuid, name, result) {
 };
 
 schema.methods.addReferences = function (genomes) {
-  this.references = genomes.map(CollectionGenome.convert);
+  this.references = genomes.map(genome => CollectionGenome.convert(genome));
   return this.save();
 };
 

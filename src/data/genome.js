@@ -7,6 +7,7 @@ const schema = new Schema({
   _file: { type: Schema.Types.ObjectId, ref: 'GenomeFile' },
   _user: { type: Schema.Types.ObjectId, ref: 'User' },
   name: { type: String, required: true },
+  speciesId: Number,
   year: Number,
   month: Number,
   day: Number,
@@ -15,7 +16,6 @@ const schema = new Schema({
   country: String,
   pmid: String,
   userDefined: Object,
-  analysis: Array,
   public: { type: Boolean, default: false },
   reference: { type: Boolean, default: false },
 });

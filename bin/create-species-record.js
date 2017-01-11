@@ -4,6 +4,7 @@ const argv = require('named-argv');
 const path = require('path');
 
 const Species = require('data/species');
+const Genome = require('data/genome');
 const { request } = require('services');
 const mongoConnection = require('utils/mongoConnection');
 
@@ -19,8 +20,6 @@ if (!speciesId || !csvFile || !fastaDir) {
   console.log('Missing arguments');
   process.exit(1);
 }
-
-require('tasks/create-species')({ speciesId, csvFile, fastaDir });
 
 function parseRows(file) {
   const lines = file.split(/\r?\n/g);
@@ -58,8 +57,9 @@ function createGenome(metadata) {
 }
 
 mongoConnection.connect().
+  then(() => Genome.remove({ speciesId, reference: true })).
   then(() => Promise.all([
-    Species.create({ speciesId }),
+    Species.create({ taxId: speciesId }),
     fs.readFile(csvFile, 'utf8').
       then(parseRows).
       then(rows => rows.reduce((memo, row) =>
