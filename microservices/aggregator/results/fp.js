@@ -1,4 +1,4 @@
-const CollectionGenome = require('data/collectionGenome');
+const { storeGenomeAnalysis } = require('../utils');
 const mainStorage = require('services/storage')('main');
 const { FP_RESULT } = require('utils/documentKeys');
 
@@ -8,9 +8,11 @@ function formatResult({ subTypeAssignment }) {
   };
 }
 
-module.exports = (name, { assemblyId }) => {
+module.exports = (name, { assemblyId, speciesId }) => {
   const { uuid } = assemblyId;
   return mainStorage.retrieve(`${FP_RESULT}_${uuid}`).
     then(formatResult).
-    then(result => CollectionGenome.addAnalysisResult(uuid, name, result));
+    then(result =>
+      storeGenomeAnalysis(assemblyId, speciesId, name, result)
+    );
 };

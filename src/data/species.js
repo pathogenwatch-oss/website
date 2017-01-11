@@ -20,6 +20,13 @@ const schema = new Schema({
   },
 });
 
+schema.statics.addAnalysisResult = function (taxId, uuid, name, result) {
+  return this.update(
+    { taxId, 'references.uuid': uuid },
+    { [`references.$.analysis.${name.toLowerCase()}`]: result }
+  );
+};
+
 schema.methods.addReferences = function (genomes) {
   this.references = genomes.map(CollectionGenome.convert);
   return this.save();
