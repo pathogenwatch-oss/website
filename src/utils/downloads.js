@@ -25,8 +25,11 @@ function convertTableToCSV(table) {
     const rows = assemblyIds.map(id => assemblies[id]);
 
     return (
-      new PromiseWorker(getCSVWorker()).
-        postMessage({ table, rows, columnKeys })
+      new PromiseWorker(getCSVWorker()).postMessage({
+        table,
+        rows,
+        columnKeys: Array.from(new Set(columnKeys)), // quick hack for unique columns
+      })
     );
   };
 }
