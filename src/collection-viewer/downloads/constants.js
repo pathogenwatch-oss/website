@@ -21,10 +21,20 @@ export const fileTypes = {
       return uiOptions.noAMR;
     },
   },
-  amr_mechanisms_csv: {
-    description: 'AMR Mechanisms',
-    filenameSegment: 'amr_mechansisms.csv',
-    getFileContents: clientSide.generateAMRMechanisms,
+  amr_snps_csv: {
+    description: 'AMR SNPs',
+    filenameSegment: 'amr_snps.csv',
+    getFileContents: clientSide.generateAMRSNPs,
+    createLink: clientSide.createCSVLink,
+    hideFromMenu() {
+      const { uiOptions = {} } = Species.current;
+      return uiOptions.noAMR;
+    },
+  },
+  amr_genes_csv: {
+    description: 'AMR Genes',
+    filenameSegment: 'amr_genes.csv',
+    getFileContents: clientSide.generateAMRGenes,
     createLink: clientSide.createCSVLink,
     hideFromMenu() {
       const { uiOptions = {} } = Species.current;

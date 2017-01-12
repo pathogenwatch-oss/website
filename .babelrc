@@ -1,4 +1,11 @@
 {
-  "presets": [ "react", "es2015", "stage-0" ],
-  "plugins": [ "recharts" ]
+  "presets": [
+    "react",
+    [ "env" ]
+  ],
+  "plugins": [
+    "recharts",
+    "transform-object-rest-spread",
+    "transform-export-extensions"
+  ]
 }

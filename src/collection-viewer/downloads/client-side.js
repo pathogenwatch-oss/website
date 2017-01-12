@@ -1,32 +1,42 @@
 import PromiseWorker from 'promise-worker';
 
+import { getTables } from '../table/selectors';
 import { tableKeys } from '../table/constants';
 
 import getCSVWorker from 'worker?name=csv.worker.js!./CsvWorker';
 
-function convertTableToCSV(table, dataType) {
+function ungroup(column) {
+  if (column.hidden) return [];
+  if (!column.group) return column;
+  return column.columns.reduce((columns, c) => columns.concat(ungroup(c)), []);
+}
+
+function convertTableToCSV(table) {
   return function (state) {
-    const { assemblies, assemblyIds, tables } = state;
+    const { assemblies, assemblyIds } = state;
     const columnKeys =
-      tables[table].columns.
+      getTables(state)[table].columns.
+        reduce((flat, column) => flat.concat(ungroup(column)), []).
         filter(_ => 'valueGetter' in _).
         map(_ => _.columnKey);
 
-    const rows = assemblyIds.map(_ => assemblies[_]);
+    const rows = assemblyIds.map(id => assemblies[id]);
 
     return (
-      new PromiseWorker(getCSVWorker()).
-        postMessage({ table, dataType, rows, columnKeys })
+      new PromiseWorker(getCSVWorker()).postMessage({
+        table,
+        rows,
+        columnKeys: Array.from(new Set(columnKeys)), // quick hack for unique columns
+      })
     );
   };
 }
 
-const { metadata, resistanceProfile } = tableKeys;
+const { metadata, antibiotics, snps, genes } = tableKeys;
 export const generateMetadataFile = convertTableToCSV(metadata);
-export const generateAMRProfile =
-  convertTableToCSV(resistanceProfile, 'profile');
-export const generateAMRMechanisms =
-  convertTableToCSV(resistanceProfile, 'mechanisms');
+export const generateAMRProfile = convertTableToCSV(antibiotics);
+export const generateAMRSNPs = convertTableToCSV(snps);
+export const generateAMRGenes = convertTableToCSV(genes);
 
 const windowURL = window.URL || window.webkitURL;
 

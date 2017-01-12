@@ -1,6 +1,8 @@
 import { FETCH_COLLECTION } from '../../collection-route/actions';
 import { SET_LABEL_COLUMN, setLabelColumn } from './actions';
 
+import { getMetadataTable } from '../table/selectors';
+
 import { downloadColumnProps, nameColumnProps } from '../table/constants';
 import { getUserDefinedValue, getSystemDataColumnProps } from './utils';
 
@@ -11,10 +13,15 @@ const initialActiveColumn = nameColumnProps;
 const initialState = {
   activeColumn: initialActiveColumn,
   columns: [],
-  onHeaderClick(event, { column, activeColumns }, dispatch) {
-    dispatch(setLabelColumn(
-      activeColumns.has(column) ? initialActiveColumn : column
-    ));
+  onHeaderClick(event, column) {
+    return (dispatch, getState) => {
+      const state = getState();
+      const { activeColumn } = getMetadataTable(state);
+
+      dispatch(setLabelColumn(
+        activeColumn === column ? initialActiveColumn : column
+      ));
+    };
   },
 };
 

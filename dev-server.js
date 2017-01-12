@@ -95,18 +95,6 @@ apiRouter.get(
 const fastaStoragePath = './fastas';
 fastaStorage.setup(fastaStoragePath);
 
-const { getCountry } = require('country-reverse-geocoding');
-const iso31661Codes = require('geo-data/iso-3166-1.json');
-function getCountryCode({ lat, lon }) {
-  if (lat && lon) {
-    const country = getCountry(Number.parseFloat(lat), Number.parseFloat(lon));
-    if (country.code && iso31661Codes[country.code]) {
-      return iso31661Codes[country.code].toLowerCase();
-    }
-  }
-  return null;
-}
-
 let uploadError = false;
 apiRouter.post('/upload', (req, res, next) => {
   // uploadError = !uploadError;
@@ -114,13 +102,11 @@ apiRouter.post('/upload', (req, res, next) => {
     setTimeout(() => res.sendStatus(500), 500) :
     fastaStorage.store(fastaStoragePath, req)
       .then(({ fileId, metrics, specieator: { taxId, scientificName } }) => {
-        const country = getCountryCode(req.query);
         res.json({
           id: fileId,
           speciesId: taxId,
           speciesName: scientificName,
           metrics,
-          country,
         });
       }).
       catch(error => next(error));

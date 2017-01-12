@@ -33,6 +33,7 @@ export function addColumnWidth(column, { data }) {
   column.width = data.length ? data.reduce((maxWidth, row) =>
     Math.max(
       maxWidth,
+      column.minWidth || 0,
       columnLabelWidth + cellPadding,
       getWidth(row, column, row.__isCollection || row.__isReference) + cellPadding,
     ), 0

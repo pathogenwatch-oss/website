@@ -14,6 +14,7 @@ import { onTableClick, onRowClick } from './thunks';
 import { addColumnWidth } from '../table/utils/columnWidth';
 import { addDownloadProps } from '../downloads/utils';
 import { getColumnLabel } from './utils';
+import Species from '../../species';
 
 const preventDefault = e => e.preventDefault();
 
@@ -50,13 +51,14 @@ const Table = React.createClass({
   },
 
   render() {
+    const { noAMR } = Species.uiOptions;
     return (
       <section
         onClick={this.props.onClick}
         onWheel={preventDefault}
         onTouchMove={preventDefault}
       >
-        <TableSwitcher />
+        { noAMR ? null : <TableSwitcher /> }
         <FixedTable { ...this.props }
           rowClickHandler={this.props.onRowClick}
           getDefaultHeaderContent={this.props.getDefaultHeaderContent}
@@ -98,6 +100,13 @@ function mapStateToProps(state) {
 function mapStateToColumn(column, state, dispatch) {
   column.isSelected = state.activeColumns.has(column);
 
+  if (column.group) {
+    for (let i = 0; i < column.columns.length; i++) {
+      column.columns[i] = mapStateToColumn(column.columns[i], state, dispatch);
+    }
+    return column;
+  }
+
   return (
     column.addState ?
       column.addState(state, dispatch) :
@@ -121,7 +130,7 @@ function mergeProps(state, { dispatch }, props) {
         onClick={(event, column) => {
           event.stopPropagation();
           const handleEvent = column.onHeaderClick || state.onHeaderClick;
-          handleEvent(event, { column, activeColumns }, dispatch);
+          dispatch(handleEvent(event, column));
         }}
       />
     ),

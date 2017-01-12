@@ -12,18 +12,23 @@ import Species from '../../species';
 
 export const tableKeys = {
   metadata: 'metadata',
-  resistanceProfile: 'resistanceProfile',
+  antibiotics: 'antibiotics',
+  snps: 'snps',
+  genes: 'genes',
 };
 
-export const views = {
-  [tableKeys.resistanceProfile]: [ 'Antibiotics', 'SNPs', 'Genes' ],
-};
+export const amrTables = new Set([
+  tableKeys.antibiotics,
+  tableKeys.snps,
+  tableKeys.genes,
+]);
 
 export const nameColumnData = {
   columnKey: '__name',
   valueGetter({ name }) {
     return name;
   },
+  minWidth: 216,
 };
 
 export const downloadColumnProps = {

@@ -21,9 +21,9 @@ function renderApp(Root) {
 
 renderApp(Router);
 
-if (module.hot) {
-  module.hot.accept('./Router.react', () => {
-    const NextRouter = require('./Router.react').default;
-    renderApp(NextRouter);
-  });
-}
+// if (module.hot) {
+//   module.hot.accept('./Router.react', () => {
+//     const NextRouter = require('./Router.react').default;
+//     renderApp(NextRouter);
+//   });
+// }

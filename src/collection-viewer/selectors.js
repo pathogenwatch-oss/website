@@ -1,9 +1,9 @@
 import { createSelector } from 'reselect';
 
 import { getAssemblies, getViewer } from '../collection-route/selectors';
-import { getResistanceProfileTable } from './table/selectors';
+import { getTables, getAMRTableName } from './table/selectors';
 
-import { createColourGetter } from './resistance-profile/utils';
+import { createColourGetter } from './amr-utils';
 
 export const getFilter = state => getViewer(state).filter;
 
@@ -32,6 +32,7 @@ export const getActiveAssemblies = createSelector(
 );
 
 export const getColourGetter = createSelector(
-  getResistanceProfileTable,
-  resistanceProfile => createColourGetter(resistanceProfile.activeColumns)
+  getTables,
+  getAMRTableName,
+  (tables, name) => createColourGetter(name, tables[name].activeColumns)
 );

@@ -22,10 +22,11 @@ export function showTableView(view) {
 
 export const SET_COLOUR_COLUMNS = 'SET_COLOUR_COLUMNS';
 
-export function setColourColumns(columns) {
+export function setColourColumns(table, columns) {
   return {
     type: SET_COLOUR_COLUMNS,
     payload: {
+      table,
       columns,
     },
   };
