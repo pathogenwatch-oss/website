@@ -20,9 +20,10 @@ function createSnpColumns({ resistanceSets }) {
       for (const { antibioticKey } of agents) {
         for (const element of elementIds) {
           const genes = (memo[antibioticKey] || {});
-          const [ gene, snp ] = element.split('_');
-          const snps = (genes[gene] || []);
-          genes[gene] = snps.concat(snp);
+          const dividingIndex = element.lastIndexOf('_');
+          const gene = element.slice(0, dividingIndex);
+          const snp = element.slice(dividingIndex + 1);
+          genes[gene] = (genes[gene] || []).concat(snp);
           memo[antibioticKey] = genes;
         }
       }
