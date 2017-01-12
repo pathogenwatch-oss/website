@@ -1,8 +1,8 @@
-const { storeGenomeAnalysis } = require('../utils');
+const CollectionGenome = require('data/collectionGenome');
 const mainStorage = require('services/storage')('main');
 const { CORE_RESULT } = require('utils/documentKeys');
 
-module.exports = (name, { assemblyId, speciesId }) => {
+module.exports = (name, { assemblyId }) => {
   const { uuid } = assemblyId;
   return mainStorage.retrieve(`${CORE_RESULT}_${uuid}`).
     then(result => ({
@@ -10,7 +10,5 @@ module.exports = (name, { assemblyId, speciesId }) => {
       percentMatched: result.percentKernelMatched,
       percentAssemblyMatched: result.percentAssemblyMatched,
     })).
-    then(result =>
-      storeGenomeAnalysis(uuid, speciesId, name, result)
-    );
+    then(result => CollectionGenome.addAnalysisResult(uuid, name, result));
 };

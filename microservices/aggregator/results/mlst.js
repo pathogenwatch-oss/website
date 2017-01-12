@@ -1,4 +1,4 @@
-const { storeGenomeAnalysis } = require('../utils');
+const CollectionGenome = require('data/collectionGenome');
 
 const mainStorage = require('services/storage')('main');
 const sequencesStorage = require('services/storage')('sequences');
@@ -79,8 +79,6 @@ module.exports = (name, { assemblyId, speciesId }) => {
         st: result.sequenceType,
         code: result.code,
       })).
-      then(result =>
-        storeGenomeAnalysis(uuid, speciesId, name, result)
-      )
+      then(result => CollectionGenome.addAnalysisResult(uuid, name, result))
     );
 };

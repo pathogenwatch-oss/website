@@ -6,6 +6,8 @@ const mainStorage = require('services/storage')('main');
 const { ANTIMICROBIAL_MASTER, ANTIMICROBIAL_SPECIES, PAARSNP_LIBRARY } =
   require('utils/documentKeys');
 
+const { setToObjectOptions } = require('./utils');
+
 const schema = new Schema({
   taxId: { type: Number, required: true },
   name: String,
@@ -20,17 +22,7 @@ const schema = new Schema({
   },
 });
 
-schema.methods.addReferences = function (genomes) {
-  this.references = genomes.map(genome => CollectionGenome.convert(genome));
-  return this.save();
-};
-
-schema.statics.addAnalysisResult = function (taxId, uuid, name, result) {
-  return this.update(
-    { taxId, 'references.uuid': uuid },
-    { $set: { [`references.$.analysis.${name.toLowerCase()}`]: result } }
-  );
-};
+setToObjectOptions(schema);
 
 function fetchAntibiotics(taxId) {
   return mainStorage.retrieveMany([
@@ -60,17 +52,23 @@ function fetchPaarsnpLibrary(taxId) {
     }));
 }
 
-schema.statics.completeDeployment = function (taxId, tree) {
+schema.statics.deploy = function (collection) {
+  const taxId = collection.speciesId;
   return Promise.all([
     fetchAntibiotics(taxId),
     fetchPaarsnpLibrary(taxId),
-  ]).then(([ antibiotics, { paar, snp } ]) =>
-    this.update({
-      taxId,
-      tree,
-      resistance: { antibiotics, paar, snp },
-      deployed: new Date(),
-    })
+    CollectionGenome.remove({ _collection: collection }),
+  ]).then(([ antibiotics, { paar, snp }, references ]) =>
+    Promise.all([
+      this.create({
+        deployed: new Date(),
+        references,
+        resistance: { antibiotics, paar, snp },
+        taxId,
+        tree: collection.tree,
+      }),
+      collection.remove(),
+    ])
   );
 };
 

@@ -1,8 +1,8 @@
-const { storeGenomeAnalysis } = require('../utils');
+const CollectionGenome = require('data/collectionGenome');
 const mainStorage = require('services/storage')('main');
 const { PAARSNP_RESULT } = require('utils/documentKeys');
 
-module.exports = (taskName, { assemblyId, speciesId }) => {
+module.exports = (taskName, { assemblyId }) => {
   const { uuid } = assemblyId;
   return mainStorage.retrieve(`${PAARSNP_RESULT}_${uuid}`).
     then(result => ({
@@ -22,7 +22,5 @@ module.exports = (taskName, { assemblyId, speciesId }) => {
       snp: result.snparResult ?
         result.snparResult.resistanceMutationIds || [] : [],
     })).
-    then(result =>
-      storeGenomeAnalysis(uuid, speciesId, taskName, result)
-    );
+    then(result => CollectionGenome.addAnalysisResult(uuid, taskName, result));
 };

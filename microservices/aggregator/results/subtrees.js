@@ -1,4 +1,3 @@
-const { isReference } = require('../utils');
 const Collection = require('data/collection');
 const CollectionGenome = require('data/collectionGenome');
 const mainStorage = require('services/storage')('main');
@@ -22,7 +21,7 @@ function parseSubtrees(collectionId, results, totals) {
 const countUniqueSubtypes =
   collection => CollectionGenome.countUniqueSubtypes(collection);
 
-function aggregateSubtrees({ collectionId, documentKeys }) {
+module.exports = (taskName, { collectionId, documentKeys }) =>
   Promise.all([
     mainStorage.retrieveMany(documentKeys),
     Collection.findByUuid(collectionId, { _id: 1 }).then(countUniqueSubtypes),
@@ -32,7 +31,3 @@ function aggregateSubtrees({ collectionId, documentKeys }) {
     return parseSubtrees(collectionId, results, totals);
   }).
   then(subtrees => Collection.update({ uuid: collectionId }, { subtrees }));
-}
-
-module.exports = (taskName, { message }) =>
-  (isReference(message) ? Promise.resolve() : aggregateSubtrees(message));

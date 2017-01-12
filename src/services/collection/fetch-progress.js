@@ -1,5 +1,6 @@
 const Collection = require('data/collection');
 const CollectionGenome = require('data/collectionGenome');
+const Species = require('data/species');
 
 const { ServiceRequestError } = require('utils/errors');
 
@@ -40,7 +41,11 @@ function checkStatus(collection) {
     return CollectionGenome.countResults(collection).
       then(results => {
         if (isReady(collection, results)) {
-          return collection.ready();
+          return (
+            collection.reference ?
+              Species.deploy(collection) :
+              collection.ready()
+          );
         }
         return calculateProgress(collection, results);
       });

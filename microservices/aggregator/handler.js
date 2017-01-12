@@ -33,6 +33,8 @@ module.exports = function (message) {
         Promise.resolve() :
         services.request('collection', 'fetch-progress', { uuid: message.collectionId }).
           then(collection => {
+            if (collection.reference) return;
+
             const { status, progress } = collection.toObject();
             notificationDispatcher.publishNotification(
               message.collectionId, 'progress', { status, progress }

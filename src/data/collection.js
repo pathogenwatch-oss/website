@@ -6,7 +6,6 @@ const { setToObjectOptions } = require('./utils');
 const schema = new Schema({
   _user: { type: Schema.Types.ObjectId, ref: 'User' },
   _species: { type: Schema.Types.ObjectId, ref: 'Species' },
-  genomes: Array,
   description: String,
   uuid: { type: String, index: true },
   size: Number,
@@ -19,6 +18,7 @@ const schema = new Schema({
     results: Object,
     percent: Number,
   },
+  reference: Boolean,
   subtrees: [ {
     name: String,
     tree: String,

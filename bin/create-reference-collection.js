@@ -3,7 +3,7 @@ const fs = promisify('fs');
 const argv = require('named-argv');
 const path = require('path');
 
-const Species = require('data/species');
+const Collection = require('data/collection');
 const Genome = require('data/genome');
 const { request } = require('services');
 const mongoConnection = require('utils/mongoConnection');
@@ -58,8 +58,7 @@ function createGenome(metadata) {
 
 mongoConnection.connect().
   then(() => Genome.remove({ speciesId, reference: true })).
-  then(() => Promise.all([
-    Species.create({ taxId: speciesId }),
+  then(() =>
     fs.readFile(csvFile, 'utf8').
       then(parseRows).
       then(rows => rows.reduce((memo, row) =>
@@ -68,8 +67,21 @@ mongoConnection.connect().
         ),
         Promise.resolve([])
       )),
-  ])).
-  then(([ species, genomes ]) => species.addReferences(genomes)).
+  ).
+  then(collectionGenomes =>
+    Collection.create({
+      size: collectionGenomes.length,
+      speciesId,
+      title: `temp ${speciesId} reference collection`,
+      reference: true,
+    }).
+    then(collection =>
+      Promise.all([
+        collection.addUUID(speciesId),
+        request('collection', 'add-genomes', { collection, collectionGenomes }),
+      ])
+    )
+  ).
   then(() => process.exit(0)).
   catch(console.error).
     then(() => process.exit(1));
