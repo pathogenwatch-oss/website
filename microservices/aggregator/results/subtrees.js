@@ -19,7 +19,9 @@ function parseSubtrees(collectionId, results, totals) {
 }
 
 const countUniqueSubtypes =
-  collection => CollectionGenome.countUniqueSubtypes(collection);
+  collection => (collection.reference ? [] :
+    CollectionGenome.countUniqueSubtypes(collection)
+  );
 
 module.exports = (taskName, { collectionId, documentKeys }) =>
   Promise.all([

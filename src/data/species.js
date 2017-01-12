@@ -57,7 +57,7 @@ schema.statics.deploy = function (collection) {
   return Promise.all([
     fetchAntibiotics(taxId),
     fetchPaarsnpLibrary(taxId),
-    CollectionGenome.remove({ _collection: collection }),
+    CollectionGenome.remove({ _collection: collection._id }),
   ]).then(([ antibiotics, { paar, snp }, references ]) =>
     Promise.all([
       this.create({

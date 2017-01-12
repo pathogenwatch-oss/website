@@ -34,6 +34,7 @@ Collection: ${collectionId}`);
   mqConnection.queue('aggregator-queue', QUEUE_OPTIONS, queue => {
     queue.bind(NOTIFICATION.name, '*.*.ASSEMBLY.*');
     queue.bind(NOTIFICATION.name, '*.*.COLLECTION.*');
+    queue.bind(NOTIFICATION.name, '*.matrix'); // for reference core results
     queue.subscribe({ ack: true }, onMessage);
     LOGGER.info(`${queue.name} is open.`);
   });

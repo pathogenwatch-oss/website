@@ -32,10 +32,11 @@ const schema = new Schema({
 
 setToObjectOptions(schema);
 
-const commonResults = [ 'FP', 'MLST', 'PAARSNP', 'CORE' ];
+const commonResults = new Set([ 'MLST', 'PAARSNP', 'CORE' ]);
+const nonReferenceResults = new Set([ 'FP' ]);
 const speciesSpecificResults = {
-  90370: [ 'GENOTYPHI' ],
-  485: [ 'NGMAST' ],
+  90370: new Set([ 'GENOTYPHI' ]),
+  485: new Set([ 'NGMAST' ]),
 };
 
 schema.methods.addUUID = function (uuid) {
@@ -58,12 +59,16 @@ schema.methods.ready = function () {
 };
 
 schema.methods.resultRequired = function (type) {
-  if (new Set(commonResults).has(type)) {
+  if (commonResults.has(type)) {
+    return true;
+  }
+
+  if (!this.reference && nonReferenceResults.has(type)) {
     return true;
   }
 
   if (this.speciesId in speciesSpecificResults) {
-    return new Set(speciesSpecificResults[this.speciesId]).has(type);
+    return speciesSpecificResults[this.speciesId].has(type);
   }
 
   return false;
@@ -74,9 +79,12 @@ schema.virtual('isProcessing').get(function () {
 });
 
 schema.virtual('totalGenomeResults').get(function () {
-  return commonResults.length +
+  return (
+    commonResults.size +
+    (this.reference ? 0 : nonReferenceResults.size) +
     (this.speciesId in speciesSpecificResults ?
-      speciesSpecificResults[this.speciesId].length : 0);
+      speciesSpecificResults[this.speciesId].size : 0)
+  );
 });
 
 const totalTreeResults = 2;

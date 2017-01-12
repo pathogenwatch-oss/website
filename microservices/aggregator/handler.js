@@ -1,7 +1,6 @@
 const notificationDispatcher = require('services/notificationDispatcher');
 
 const services = require('services');
-const { isReference } = require('./utils');
 
 const handlers = {
   MLST: require('./results/mlst'),
@@ -29,17 +28,14 @@ function aggregateResult(message) {
 module.exports = function (message) {
   return aggregateResult(message).
     then(() =>
-      (isReference(message) ?
-        Promise.resolve() :
-        services.request('collection', 'fetch-progress', { uuid: message.collectionId }).
-          then(collection => {
-            if (collection.reference) return;
+      services.request('collection', 'fetch-progress', { uuid: message.collectionId }).
+        then(collection => {
+          if (collection.reference) return;
 
-            const { status, progress } = collection.toObject();
-            notificationDispatcher.publishNotification(
-              message.collectionId, 'progress', { status, progress }
-            );
-          })
-      )
+          const { status, progress } = collection.toObject();
+          notificationDispatcher.publishNotification(
+            message.collectionId, 'progress', { status, progress }
+          );
+        })
     );
 };

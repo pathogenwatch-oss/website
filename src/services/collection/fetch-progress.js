@@ -7,7 +7,7 @@ const { ServiceRequestError } = require('utils/errors');
 function isReady(collection, results) {
   return (
     (collection.size < 3 || collection.tree) &&
-    collection.subtrees.length &&
+    (collection.reference || collection.subtrees.length) &&
     Object.keys(results).
       every(type =>
         (collection.resultRequired(type) ?

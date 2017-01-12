@@ -21,6 +21,13 @@ if (!speciesId || !csvFile || !fastaDir) {
   process.exit(1);
 }
 
+const systemMetadataColumns = new Set([
+  'assemblyId', 'uuid', 'speciesId', 'fileId', 'collectionId', 'pmid',
+  'filename', 'assemblyname', 'displayname', 'name',
+  'date', 'year', 'month', 'day',
+  'position', 'latitude', 'longitude',
+]);
+
 function parseRows(file) {
   const lines = file.split(/\r?\n/g);
   console.log('Num lines:', lines.length - 1);
@@ -33,13 +40,16 @@ function parseRows(file) {
     map(line => {
       const values = line.split(',');
       return headers.reduce((memo, header, index) => {
+        const value = values[index];
         if (header === 'displayname') {
-          memo.name = values[index];
+          memo.name = value;
+        } else if (systemMetadataColumns.has(header)) {
+          memo[header] = value;
         } else {
-          memo[header] = values[index];
+          memo.userDefined[header] = value;
         }
         return memo;
-      }, {});
+      }, { userDefined: {} });
     });
 }
 
@@ -57,7 +67,10 @@ function createGenome(metadata) {
 }
 
 mongoConnection.connect().
-  then(() => Genome.remove({ speciesId, reference: true })).
+  then(() => Promise.all([
+    Genome.remove({ speciesId, reference: true }),
+    Collection.remove({ uuid: speciesId, reference: true }), // for testing
+  ])).
   then(() =>
     fs.readFile(csvFile, 'utf8').
       then(parseRows).
@@ -66,7 +79,7 @@ mongoConnection.connect().
           createGenome(row).then(genome => genomes.concat(genome))
         ),
         Promise.resolve([])
-      )),
+      ))
   ).
   then(collectionGenomes =>
     Collection.create({
