@@ -3,14 +3,39 @@ const mainStorage = require('services/storage')('main');
 const LOGGER = require('utils/logging').createLogger('PAARSNP model');
 const { PAARSNP_LIBRARY } = require('utils/documentKeys');
 
+function createPaarColumns({ resistanceSets }) {
+  return resistanceSets.reduce((memo, { agents, elementIds }) => {
+    for (const { antibioticKey } of agents) {
+      const elements = (memo[antibioticKey] || []);
+      memo[antibioticKey] = elements.concat(elementIds);
+    }
+    return memo;
+  }, {});
+}
+
+function createSnpColumns({ resistanceSets }) {
+  return Object.keys(resistanceSets).reduce(
+    (memo, key) => {
+      const { agents, elementIds } = resistanceSets[key];
+      for (const { antibioticKey } of agents) {
+        for (const element of elementIds) {
+          const genes = (memo[antibioticKey] || {});
+          const dividingIndex = element.lastIndexOf('_');
+          const gene = element.slice(0, dividingIndex);
+          const snp = element.slice(dividingIndex + 1);
+          genes[gene] = (genes[gene] || []).concat(snp);
+          memo[antibioticKey] = genes;
+        }
+      }
+      return memo;
+    }, {}
+  );
+}
+
 function formatForFrontend({ paarLibrary, snpLibrary }) {
   return {
-    paar: paarLibrary.resistanceGenes.map(_ => _.familyName),
-    snp:
-      Object.keys(snpLibrary.sequences).
-        reduce((memo, sequenceId) => memo.concat(
-          snpLibrary.sequences[sequenceId].resistanceMutations.map(_ => _.name)
-        ), []),
+    paar: createPaarColumns(paarLibrary),
+    snp: createSnpColumns(snpLibrary),
   };
 }
 

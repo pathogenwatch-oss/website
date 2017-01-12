@@ -11,10 +11,7 @@ var CONNECTION_OPTIONS = {
   port: appConfig.rabbit.port,
   login: appConfig.rabbit.login,
   password: appConfig.rabbit.password,
-};
-var IMPLEMENTATION_OPTIONS = {
-  reconnect: false,
-  autoDelete: true,
+  heartbeat: 60,
 };
 var EXCHANGE_CONFIG = {
   COLLECTION_ID: {
@@ -85,7 +82,7 @@ function createExchange(exchangeKey, callback) {
 
 function connect(callback) {
   connection =
-    amqp.createConnection(CONNECTION_OPTIONS, IMPLEMENTATION_OPTIONS);
+    amqp.createConnection(CONNECTION_OPTIONS);
 
   connection.on('error', function (error) {
     LOGGER.error(error);

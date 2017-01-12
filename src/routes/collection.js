@@ -1,10 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const services = require('../services');
 
-const collectionModel = require('models/collection');
+const services = require('../services');
+const path = require('path');
 
 const LOGGER = require('utils/logging').createLogger('Collection requests');
+
+const { demos = [] } = require('configuration');
 
 router.put('/collection', (req, res, next) => {
   LOGGER.info('Received request to create collection');
@@ -18,6 +20,21 @@ router.put('/collection', (req, res, next) => {
     then(({ collectionId }) => res.json({ collectionId })).
     catch(next);
 });
+
+if (demos.length) {
+  for (const { speciesId, collectionId } of demos) {
+    router.get(`/species/${speciesId}/collection/${collectionId}/status`,
+      (req, res) => res.json({ status: 'READY' })
+    );
+
+    router.get(`/species/${speciesId}/collection/${collectionId}`,
+      (req, res) =>
+        res.sendFile(
+          path.resolve(__dirname, '..', '..', 'demos', speciesId, `${collectionId}.json`)
+        )
+    );
+  }
+}
 
 router.get('/collection/:uuid', (req, res, next) => {
   LOGGER.info(`Getting collection: ${req.params.uuid}`);
@@ -37,20 +54,9 @@ router.get('/collection', (req, res, next) => {
   LOGGER.info('Received request to get collections');
 
   const { user } = req;
-  services.request('collection', 'fetch-list', { user })
-    .then(response => res.json(response))
-    .catch(next);
+  services.request('collection', 'fetch-list', { user }).
+    then(response => res.json(response)).
+    catch(next);
 });
-
-router.get('/species/:id/reference', function (req, res, next) {
-  LOGGER.info('Getting reference collection: ' + req.params.id);
-  collectionModel.getReference(req.params.id, function (error, result) {
-    if (error) {
-      return next(error);
-    }
-    res.json(result);
-  });
-});
-
 
 module.exports = router;

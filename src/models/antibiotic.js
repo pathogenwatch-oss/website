@@ -1,51 +1,26 @@
 const mainStorage = require('services/storage')('main');
 
 const LOGGER = require('utils/logging').createLogger('Antibiotic model');
-const { ANTIMICROBIALS } = require('utils/documentKeys');
+const { ANTIMICROBIALS, AMLIST } = require('utils/documentKeys');
 
-function formatLongName(longName) {
-  return longName ?
-    longName.
-      split(' ').
-      map(word => `${word[0].toUpperCase()}${word.slice(1)}`).
-      join(' ') :
-    null;
-}
-
-function formatForFrontend(doc) {
-  if (Array.isArray(doc)) {
-    return doc.map(({ antibioticKey, displayName }) => ({
-      name: antibioticKey,
-      longName: displayName,
-    }));
-  }
-
-  return (
-    Object.keys(doc).
-      map(antibioticClassname => {
-        const antibioticClass = doc[antibioticClassname];
-        return (
-          Object.keys(antibioticClass).
-            map(antibioticKey => ({
-              name: antibioticClass[antibioticKey].antibioticName,
-              longName: formatLongName(antibioticClass[antibioticKey].altName),
-            }))
-        );
-      }).
-      reduce((flatArray, antibiotics) => flatArray.concat(antibiotics))
-  );
+function formatForFrontend(master, species) {
+  return species.antibiotics.reduce((memo, { antibioticKey }) => {
+    const am = master.antimicrobials.find(_ => _.key === antibioticKey);
+    if (!am) return memo;
+    const { key, antimicrobialClass, fullName } = am;
+    memo.push({ key, antimicrobialClass, fullName });
+    return memo;
+  }, []);
 }
 
 function get(speciesId, callback) {
   LOGGER.info(`Getting list of antibiotics for species: ${speciesId}`);
-
-  mainStorage.retrieve(`${ANTIMICROBIALS}_${speciesId}`, (error, result) => {
-    if (error) {
-      return callback(error, result);
-    }
-
-    LOGGER.info('Got the list of all antibiotics');
-    return callback(null, formatForFrontend(result.antibiotics));
+  const documentKeys = [ AMLIST, `${ANTIMICROBIALS}_${speciesId}` ];
+  return mainStorage.retrieveMany(documentKeys, (errors, results) => {
+    if (errors) return callback(errors);
+    return callback(null, formatForFrontend(
+      ...documentKeys.map(key => results[key])
+    ));
   });
 }
 

@@ -33,27 +33,55 @@ function fetchAntibiotics(taxId) {
     const master = results[ANTIMICROBIAL_MASTER].antimicrobials;
     const { antibiotics } = results[`${ANTIMICROBIAL_SPECIES}_${taxId}`];
 
-    return antibiotics.map(({ antibioticKey }) => ({
-      name: antibioticKey,
-      longName: master.find(_ => _.key === antibioticKey).fullName,
-    }));
+    return antibiotics.reduce((memo, { antibioticKey }) => {
+      const am = master.find(_ => _.key === antibioticKey);
+      if (!am) return memo;
+      const { key, antimicrobialClass, fullName } = am;
+      memo.push({ key, antimicrobialClass, fullName });
+      return memo;
+    }, []);
   });
+}
+
+function createPaarColumns({ resistanceSets }) {
+  return resistanceSets.reduce((memo, { agents, elementIds }) => {
+    for (const { antibioticKey } of agents) {
+      const elements = (memo[antibioticKey] || []);
+      memo[antibioticKey] = elements.concat(elementIds);
+    }
+    return memo;
+  }, {});
+}
+
+function createSnpColumns({ resistanceSets }) {
+  return Object.keys(resistanceSets).reduce(
+    (memo, key) => {
+      const { agents, elementIds } = resistanceSets[key];
+      for (const { antibioticKey } of agents) {
+        for (const element of elementIds) {
+          const genes = (memo[antibioticKey] || {});
+          const dividingIndex = element.lastIndexOf('_');
+          const gene = element.slice(0, dividingIndex);
+          const snp = element.slice(dividingIndex + 1);
+          genes[gene] = (genes[gene] || []).concat(snp);
+          memo[antibioticKey] = genes;
+        }
+      }
+      return memo;
+    }, {}
+  );
 }
 
 function fetchPaarsnpLibrary(taxId) {
   return mainStorage.retrieve(`${PAARSNP_LIBRARY}_${taxId}`).
     then(({ paarLibrary, snpLibrary }) => ({
-      paar: paarLibrary.resistanceGenes.map(_ => _.familyName),
-      snp:
-        Object.keys(snpLibrary.sequences).
-          reduce((memo, seqId) => memo.concat(
-            snpLibrary.sequences[seqId].resistanceMutations.map(_ => _.name)
-          ), []),
+      paar: createPaarColumns(paarLibrary),
+      snp: createSnpColumns(snpLibrary),
     }));
 }
 
 schema.statics.deploy = function (collection) {
-  const taxId = collection.speciesId;
+  const taxId = collection.uuid;
   return Promise.all([
     fetchAntibiotics(taxId),
     fetchPaarsnpLibrary(taxId),
