@@ -73,6 +73,12 @@ export function createColourGetter(table, columns) {
   };
 }
 
+function isDeselection(columns, activeColumns) {
+  return activeColumns.size &&
+    activeColumns.size === columns.length &&
+    Array.from(activeColumns).every(column => columns.indexOf(column) !== -1);
+}
+
 export function onHeaderClick(event, column) {
   return (dispatch, getState) => {
     const state = getState();
@@ -82,26 +88,20 @@ export function onHeaderClick(event, column) {
     const columns = column.group ?
       column.columns.filter(_ => _.valueGetter && !_.hidden) :
       [ column ];
-
-    if (column.group && columns.every(c => activeColumns.has(c))) {
-      for (const c of columns) {
-        activeColumns.delete(c);
-      }
-      dispatch(setColourColumns(name, new Set(activeColumns)));
-      return;
-    }
+    const partiallySelected =
+      column.group && columns.some(c => !activeColumns.has(c));
 
     const cumulative = (event.metaKey || event.ctrlKey);
     if (cumulative) {
       for (const c of columns) {
-        if (column.group) activeColumns.add(c);
+        if (column.group && partiallySelected) activeColumns.add(c);
         else activeColumns[activeColumns.has(c) ? 'delete' : 'add'](c);
       }
       dispatch(setColourColumns(name, new Set(activeColumns)));
       return;
     }
 
-    if (activeColumns.has(column) && activeColumns.size === 1) {
+    if (isDeselection(columns, activeColumns)) {
       dispatch(setColourColumns(name, new Set()));
       return;
     }
