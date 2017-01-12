@@ -19,4 +19,9 @@ export default {
   maxAssemblySize: 4 * Math.pow(10, 6),
   publicMetadataColumnNames: [],
   collections: [],
+  uiOptions: {
+    noPopulation: true,
+    noMLST: true,
+    noAMR: true,
+  },
 };
