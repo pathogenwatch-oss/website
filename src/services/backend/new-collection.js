@@ -18,26 +18,22 @@ function mapUuidsToGenomes(uuids, genomes) {
   });
 }
 
-module.exports = LOGGER => ({ genomes }) => {
+module.exports = ({ genomes }) => {
   const message = {
     checksums: genomes.map(_ => _._file.fileId),
     collectionOperation: COLLECTION_OPERATIONS.CREATE,
   };
-  LOGGER.debug(message);
 
   return new Promise((resolve, reject) => {
     messageQueueService.newCollectionAddQueue(queue => {
       queue.subscribe((error, response) => {
         if (error) {
-          LOGGER.error(error);
           return reject(error);
         }
-        LOGGER.info('Received response', response);
         queue.destroy();
 
         const { collectionId, assemblyIds, status } = response;
         if (!collectionId || !assemblyIds || status !== 'SUCCESS') {
-          LOGGER.error('Invalid result of manageCollection');
           return reject();
         }
 
