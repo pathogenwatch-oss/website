@@ -85,7 +85,7 @@ schema.statics.deploy = function (collection) {
   return Promise.all([
     fetchAntibiotics(taxId),
     fetchPaarsnpLibrary(taxId),
-    CollectionGenome.remove({ _collection: collection._id }),
+    CollectionGenome.find({ _collection: collection._id }),
   ]).
   then(([ antibiotics, { paar, snp }, references ]) =>
     Promise.all([
@@ -97,6 +97,7 @@ schema.statics.deploy = function (collection) {
         tree: collection.tree,
       }),
       collection.remove(),
+      CollectionGenome.remove({ _collection: collection._id }),
     ])
   ).
   then(() => collection);
