@@ -14,7 +14,7 @@ const handlers = {
 };
 
 function aggregateResult(message) {
-  if (!(message.taskType in handlers) || message.action !== 'CREATE') {
+  if (!(message.taskType in handlers)) {
     return Promise.resolve(); // ignore, nothing to save
   }
 
@@ -26,6 +26,8 @@ function aggregateResult(message) {
 }
 
 module.exports = function (message) {
+  if (message.action !== 'CREATE') return Promise.resolve();
+
   return aggregateResult(message).
     then(() =>
       services.request('collection', 'fetch-progress', { uuid: message.collectionId }).

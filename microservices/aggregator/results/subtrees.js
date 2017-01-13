@@ -19,14 +19,17 @@ function parseSubtrees(collectionId, results, totals) {
 }
 
 const countUniqueSubtypes =
-  collection => (collection.reference ? [] :
-    CollectionGenome.countUniqueSubtypes(collection)
+  collection => (
+    (!collection || collection.reference) ?
+      [] :
+      CollectionGenome.countUniqueSubtypes(collection)
   );
 
 module.exports = (taskName, { collectionId, documentKeys }) =>
   Promise.all([
     mainStorage.retrieveMany(documentKeys),
-    Collection.findByUuid(collectionId, { _id: 1 }).then(countUniqueSubtypes),
+    Collection.findByUuid(collectionId, { _id: 1, reference: 1 }).
+      then(countUniqueSubtypes),
   ]).
   then(([ { results, erroredKeys }, totals ]) => {
     if (erroredKeys.length) throw new Error(`Failed to find ${erroredKeys}`);

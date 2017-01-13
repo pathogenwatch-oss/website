@@ -32,11 +32,11 @@ const schema = new Schema({
 
 setToObjectOptions(schema);
 
-const commonResults = new Set([ 'MLST', 'PAARSNP', 'CORE' ]);
-const nonReferenceResults = new Set([ 'FP' ]);
+const commonResults = new Set([ 'mlst', 'paarsnp', 'core' ]);
+const nonReferenceResults = new Set([ 'fp' ]);
 const speciesSpecificResults = {
-  90370: new Set([ 'GENOTYPHI' ]),
-  485: new Set([ 'NGMAST' ]),
+  90370: new Set([ 'genotyphi' ]),
+  485: new Set([ 'ngmast' ]),
 };
 
 schema.methods.addUUID = function (uuid) {

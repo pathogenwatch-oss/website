@@ -4,16 +4,17 @@ const Species = require('data/species');
 
 const { ServiceRequestError } = require('utils/errors');
 
+const fs = require('fs');
+
 function isReady(collection, results) {
   return (
     (collection.size < 3 || collection.tree) &&
     (collection.reference || collection.subtrees.length) &&
-    Object.keys(results).
-      every(type =>
-        (collection.resultRequired(type) ?
-          results[type] === collection.size :
-          true)
-      )
+    results.every(({ type, count }) => (
+      collection.resultRequired(type) ?
+        count === collection.size :
+        true
+    ))
   );
 }
 

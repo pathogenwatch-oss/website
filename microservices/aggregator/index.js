@@ -13,14 +13,15 @@ module.exports = function ({ mqConnection }) {
       message = JSON.parse(message.data.toString());
     }
 
-    const { taskType, taskStatus, assemblyId = {}, collectionId } = message;
+    const { assemblyId = {} } = message;
     const assemblyIdString = assemblyId.uuid || 'N/A';
 
     LOGGER.info(`Processing message:
-Tasktype: ${taskType}
-Status: ${taskStatus}
+Tasktype: ${message.taskType}
+Action: ${message.action}
+Status: ${message.taskStatus}
 Assembly Id: ${assemblyIdString}
-Collection: ${collectionId}`);
+Collection: ${message.collectionId}`);
 
     handle(message).
       then(() => queue.shift()).

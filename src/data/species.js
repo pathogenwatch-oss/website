@@ -86,7 +86,8 @@ schema.statics.deploy = function (collection) {
     fetchAntibiotics(taxId),
     fetchPaarsnpLibrary(taxId),
     CollectionGenome.remove({ _collection: collection._id }),
-  ]).then(([ antibiotics, { paar, snp }, references ]) =>
+  ]).
+  then(([ antibiotics, { paar, snp }, references ]) =>
     Promise.all([
       this.create({
         deployed: new Date(),
@@ -97,7 +98,8 @@ schema.statics.deploy = function (collection) {
       }),
       collection.remove(),
     ])
-  );
+  ).
+  then(() => collection);
 };
 
 module.exports = mongoose.model('Species', schema);
