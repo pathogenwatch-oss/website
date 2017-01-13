@@ -4,8 +4,6 @@ const Species = require('data/species');
 
 const { ServiceRequestError } = require('utils/errors');
 
-const fs = require('fs');
-
 function isReady(collection, results) {
   return (
     (collection.size < 3 || collection.tree) &&

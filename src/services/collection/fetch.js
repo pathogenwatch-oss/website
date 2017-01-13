@@ -14,7 +14,8 @@ module.exports = ({ uuid }) =>
   services.request('collection', 'fetch-progress', { uuid }).
     then(collection => {
       if (collection.status === 'READY') {
-        return addGenomes(collection);
+        return addGenomes(collection).
+          then(_ => _.populate('_species'));
       }
       return collection;
     }).

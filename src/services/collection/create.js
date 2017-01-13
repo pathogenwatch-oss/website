@@ -3,6 +3,7 @@ const { ServiceRequestError } = require('utils/errors');
 
 const Collection = require('data/collection');
 const Genome = require('data/genome');
+const Species = require('data/species');
 
 const { maxCollectionSize = 0 } = require('configuration');
 
@@ -20,13 +21,19 @@ function createCollection({ speciesId, genomeIds, title, description, user }) {
   }
 
   const size = genomeIds.length;
-  return Collection.create({
-    _user: user,
-    description,
-    size,
-    speciesId,
-    title,
-  });
+  return (
+    Species.getLatest(speciesId).
+      then(species =>
+        Collection.create({
+          _species: species,
+          _user: user,
+          description,
+          size,
+          speciesId,
+          title,
+        })
+      )
+  );
 }
 
 function getGenomes(ids) {

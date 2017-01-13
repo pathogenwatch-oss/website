@@ -103,4 +103,14 @@ schema.statics.deploy = function (collection) {
   then(() => collection);
 };
 
+schema.statics.getLatest = function (taxId) {
+  return (
+    this.
+      find({ taxId }).
+      sort({ deployed: -1 }).
+      limit(1).
+      then(([ doc ]) => doc)
+  );
+};
+
 module.exports = mongoose.model('Species', schema);
