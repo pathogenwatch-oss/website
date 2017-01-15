@@ -68,6 +68,15 @@ function getSequenceType(alleles, code, speciesId) {
     });
 }
 
+function addSTSuffix(uuid, st) {
+  return (
+    CollectionGenome.findByUuid(uuid, { name }).
+      then(({ name }) =>
+        CollectionGenome.update({ uuid }, { name: `${name}_${st}` })
+      )
+  );
+}
+
 module.exports = (name, { assemblyId, speciesId }) => {
   const { uuid } = assemblyId;
   return mainStorage.retrieve(`${MLST_RESULT}_${uuid}`).
@@ -79,6 +88,11 @@ module.exports = (name, { assemblyId, speciesId }) => {
         st: result.sequenceType,
         code: result.code,
       })).
-      then(result => CollectionGenome.addAnalysisResult(uuid, name, result))
+      then(result => Promise.all([
+        CollectionGenome.addAnalysisResult(uuid, name, result),
+        uuid.indexOf(`${speciesId}_` === 0) ?
+          addSTSuffix(uuid, result.st) :
+          Promise.resolve(),
+      ]))
     );
 };
