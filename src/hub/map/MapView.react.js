@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import WGSAMap from '../../map';
 
 import * as filter from '../../filter';
-import { showAssemblyDetails } from '../../assembly-drawer';
+import { showGenomeDetails } from '../../genome-drawer';
 
 import { getMarkers, getLassoPath } from './selectors';
 import { UPLOAD } from '../../app/stateKeys/map';
@@ -33,7 +33,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     onLassoPathChange: path => dispatch(filter.update(UPLOAD, { key: 'area' }, path)),
-    onMarkerClick: ({ id }) => dispatch(showAssemblyDetails(id)),
+    onMarkerClick: ({ id }) => dispatch(showGenomeDetails(id)),
   };
 }
 

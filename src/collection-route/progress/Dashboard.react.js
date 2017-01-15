@@ -30,7 +30,7 @@ export default React.createClass({
     return (
       <div className="mdl-grid">
         <div className="wgsa-upload-progress-section mdl-cell mdl-cell--12-col mdl-shadow--2dp">
-          <div className="wgsa-assembly-analyses mdl-grid">
+          <div className="wgsa-genome-analyses mdl-grid">
             <ProgressIndicator title="CORE" percentage={core} />
             { noMLST ? null : <ProgressIndicator title="MLST" percentage={mlst} /> }
             { noAMR ? null : <ProgressIndicator title="PAARSNP" percentage={paarsnp} /> }

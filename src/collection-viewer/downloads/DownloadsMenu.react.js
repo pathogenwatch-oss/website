@@ -6,16 +6,16 @@ import { connect } from 'react-redux';
 import Overlay from '../../components/overlay';
 import DownloadButton from './DownloadButton.react';
 
-import { getCollection, getAssemblies, getViewer } from '../../collection-route/selectors';
+import { getCollection, getGenomes, getViewer } from '../../collection-route/selectors';
 import { getTables } from '../table/selectors';
-import { getActiveAssemblyIds } from '../selectors';
+import { getActiveGenomeIds } from '../selectors';
 
 import { setMenuActive } from './actions';
 
 import {
   createDownloadProps, formatCollectionFilename,
 } from './utils';
-import { getCounts, showCounts } from '../../utils/assembly';
+import { getCounts, showCounts } from '../../utils/genome';
 
 const DownloadsMenu = ({ menuOpen, files, counts = {}, closeMenu }) => (
   <Overlay isVisible={menuOpen} hide={closeMenu}>
@@ -47,18 +47,18 @@ function mapStateToProps(state) {
   const viewer = getViewer(state);
   return {
     collection: getCollection(state),
-    assemblies: getAssemblies(state),
-    assemblyIds: getActiveAssemblyIds(state),
+    genomes: getGenomes(state),
+    genomeIds: getActiveGenomeIds(state),
     ...viewer.downloads,
     tables: getTables(state),
   };
 }
 
 function mergeProps(state, { dispatch }) {
-  const { assemblies, collection, assemblyIds, menuOpen, files } = state;
+  const { genomes, collection, genomeIds, menuOpen, files } = state;
   return {
     menuOpen,
-    counts: getCounts(assemblies, assemblyIds),
+    counts: getCounts(genomes, genomeIds),
     files:
       Object.keys(files).
         filter(format => {
@@ -70,7 +70,7 @@ function mergeProps(state, { dispatch }) {
           return createDownloadProps({
             format,
             download,
-            id: assemblyIds,
+            id: genomeIds,
             getFileName: () => `${formatCollectionFilename(collection)}`,
             getFileContents:
               download.getFileContents &&

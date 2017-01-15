@@ -59,7 +59,7 @@ export function getCollection(collectionId) {
   return $.get(`${API_ROOT}/collection/${collectionId}`);
 }
 
-export function requestFile({ speciesId, idType = 'assembly', format }, requestBody) {
+export function requestFile({ speciesId, idType = 'genome', format }, requestBody) {
   return postJson(
     `/species/${speciesId}/download/type/${idType}/format/${format}`,
     requestBody

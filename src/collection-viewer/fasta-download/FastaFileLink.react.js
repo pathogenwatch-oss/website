@@ -6,13 +6,13 @@ import { FASTA_FILE_EXTENSIONS } from '../../hub/utils';
 import { CGPS } from '../../app/constants';
 import { SERVER_ADDRESS } from '../../utils/Api';
 
-function formatFastaFilename(assemblyName) {
+function formatFastaFilename(genomeName) {
   for (const ext in FASTA_FILE_EXTENSIONS) {
-    if (assemblyName.indexOf(ext) !== -1) {
-      return assemblyName;
+    if (genomeName.indexOf(ext) !== -1) {
+      return genomeName;
     }
   }
-  return `${assemblyName}.fasta`;
+  return `${genomeName}.fasta`;
 }
 
 export default ({ id, name }) => (
@@ -20,7 +20,7 @@ export default ({ id, name }) => (
     href={`${SERVER_ADDRESS}/download/genome/${id}`}
     download={formatFastaFilename(name)}
     target="_blank" rel="noopener"
-    title="Download Assembly"
+    title="Download Genome"
     className="wgsa-download-button mdl-button mdl-button--icon"
   >
     <DownloadIcon color={CGPS.COLOURS.PURPLE} label=".fa" />

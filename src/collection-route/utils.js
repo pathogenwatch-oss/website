@@ -1,10 +1,10 @@
-export function sortAssemblies(assemblies) {
-  return assemblies.sort((assembly1, assembly2) => {
-    if (assembly1.name < assembly2.name) {
+export function sortGenomes(genomes) {
+  return genomes.sort((genome1, genome2) => {
+    if (genome1.name < genome2.name) {
       return -1;
     }
 
-    if (assembly1.name > assembly2.name) {
+    if (genome1.name > genome2.name) {
       return 1;
     }
 

@@ -25,11 +25,11 @@ const initialState = {
   },
 };
 
-function getUserDefinedColumnNames(assemblies) {
+function getUserDefinedColumnNames(genomes) {
   const userDefinedColumnNames = new Set();
-  assemblies.forEach(assembly => {
-    if (assembly.userDefined) {
-      Object.keys(assembly.userDefined).
+  genomes.forEach(genome => {
+    if (genome.userDefined) {
+      Object.keys(genome.userDefined).
         filter(name => !/__colou?r$/.test(name)).
         forEach(name => userDefinedColumnNames.add(name));
     }

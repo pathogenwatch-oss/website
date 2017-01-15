@@ -3,7 +3,7 @@ import React from 'react';
 import Card from '../card';
 import ProgressBar from '../components/progress-bar';
 
-import AssemblyMetadata from './AssemblyMetadata.react';
+import GenomeMetadata from './GenomeMetadata.react';
 import DefaultFooter from './DefaultFooter.react';
 
 import FastaError from './FastaError.react';
@@ -27,7 +27,7 @@ function getCardComponents(props) {
 
   if (props.speciesKey) {
     return {
-      content: <AssemblyMetadata {...props} />,
+      content: <GenomeMetadata {...props} />,
       footer: <DefaultFooter {...props} />,
     };
   }
@@ -44,7 +44,7 @@ export default props => {
   const title = metadata ? metadata.name : name;
   const { content, footer = null } = getCardComponents(props);
   return (
-    <Card className="wgsa-assembly-card">
+    <Card className="wgsa-genome-card">
       <h2 className="wgsa-card-title" title={title}>{title}</h2>
       { content }
       { footer }

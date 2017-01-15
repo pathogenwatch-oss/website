@@ -4,7 +4,7 @@ import { getVisibleFastas } from '../../hub-filter/selectors';
 
 export const getSelectedMetric = ({ hub }) => hub.selectedMetric;
 
-export const getAssemblyMetrics = createSelector(
+export const getGenomeMetrics = createSelector(
   getVisibleFastas,
   fastas =>
     fastas.reduce((memo, { name, metrics }) => {
@@ -16,7 +16,7 @@ export const getAssemblyMetrics = createSelector(
 );
 
 export const getMetricAverage = createSelector(
-  getAssemblyMetrics,
+  getGenomeMetrics,
   getSelectedMetric,
   (metrics, selectedMetric) => (
     metrics.reduce((memo, _) => memo + Number(_[selectedMetric]), 0) /
@@ -25,7 +25,7 @@ export const getMetricAverage = createSelector(
 );
 
 export const getMetricRange = createSelector(
-  getAssemblyMetrics,
+  getGenomeMetrics,
   getSelectedMetric,
   (metrics, selectedMetric) => metrics.reduce(({ min, max }, _) => ({
     min: min ? Math.min(min, _[selectedMetric]) : _[selectedMetric],
@@ -34,7 +34,7 @@ export const getMetricRange = createSelector(
 );
 
 export const getSelectedChartData = createSelector(
-  getAssemblyMetrics,
+  getGenomeMetrics,
   getSelectedMetric,
   (metrics, selectedMetric) => metrics.map((_, i) => ({
     key: i,

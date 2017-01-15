@@ -110,7 +110,7 @@ export const nameColumnProps = {
   },
   getCellContents({ valueGetter }, data) {
     return (
-      <div className="wgsa-assembly-name-cell">
+      <div className="wgsa-genome-name-cell">
         {getNameText(data, valueGetter)}
         <div onClick={(e) => e.stopPropagation()}>
           { data.__isPublic && data.collectionId ?

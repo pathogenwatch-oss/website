@@ -2,7 +2,7 @@ import '../../card/styles.css';
 
 import React from 'react';
 
-import AssemblyCard from '../../assembly-card';
+import GenomeCard from '../../genome-card';
 import ProgressBar from '../../components/ProgressBar.react';
 
 import FastaMetadata from './FastaMetadata.react';
@@ -27,15 +27,15 @@ export default props => {
 
   if (props.uploadAttempted) {
     return (
-      <AssemblyCard {...props}>
+      <GenomeCard {...props}>
         { getProgressBar(props.progress) }
-      </AssemblyCard>
+      </GenomeCard>
     );
   }
 
   return (
-    <AssemblyCard {...props}>
+    <GenomeCard {...props}>
       <small>Upload pending</small>
-    </AssemblyCard>
+    </GenomeCard>
   );
 };

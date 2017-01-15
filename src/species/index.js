@@ -31,7 +31,7 @@ export const referenceCollections = sortBy(
       title: _.author,
       description: _.title,
       pubmedLink: `http://www.ncbi.nlm.nih.gov/pubmed/${_.pmid}`,
-      size: _.numberOfAssemblies,
+      size: _.numberOfGenomes,
     })));
   }, []),
   [ 'title' ]
@@ -73,8 +73,8 @@ export default {
     return currentSpecies.uiOptions || {};
   },
 
-  get maxAssemblySize() {
-    return currentSpecies.maxAssemblySize || Math.pow(10, 10);
+  get maxGenomeSize() {
+    return currentSpecies.maxGenomeSize || Math.pow(10, 10);
   },
 
   get gcRange() {

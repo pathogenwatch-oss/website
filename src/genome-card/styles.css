@@ -1,4 +1,4 @@
-.wgsa-assembly-card p {
+.wgsa-genome-card p {
   margin: 0;
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
   font-size: 14px;
@@ -6,7 +6,7 @@
   font-weight: 500;
 }
 
-.wgsa-assembly-card a {
+.wgsa-genome-card a {
   color: #AC65A6;
 }
 
@@ -25,8 +25,8 @@
   right: 0;
 }
 
-.wgsa-assembly-card .mdl-button--icon:hover,
-.wgsa-assembly-card .mdl-button--icon:focus,
-.wgsa-assembly-card .mdl-button--icon:active {
+.wgsa-genome-card .mdl-button--icon:hover,
+.wgsa-genome-card .mdl-button--icon:focus,
+.wgsa-genome-card .mdl-button--icon:active {
   background: none;
 }

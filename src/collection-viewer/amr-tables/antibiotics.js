@@ -45,7 +45,7 @@ function createColumn({ key, fullName }) {
       }
       return null;
     },
-    valueGetter: assembly => resistanceProfile.getColour(key, assembly),
+    valueGetter: genome => resistanceProfile.getColour(key, genome),
     onHeaderClick: resistanceProfile.onHeaderClick,
   };
 }

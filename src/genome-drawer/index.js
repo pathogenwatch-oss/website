@@ -4,11 +4,11 @@ import { connect } from 'react-redux';
 
 import { REMOVE_FASTA } from '../hub/actions';
 
-import AssemblyDetails from './AssemblyDrawer.react';
+import GenomeDetails from './GenomeDrawer.react';
 
 export const SHOW_ASSEMBLY_DETAILS = 'SHOW_ASSEMBLY_DETAILS';
 
-export function showAssemblyDetails(name) {
+export function showGenomeDetails(name) {
   return {
     type: SHOW_ASSEMBLY_DETAILS,
     payload: {
@@ -31,25 +31,25 @@ export function reducer(state = initialState, { type, payload }) {
   }
 }
 
-function getSelectedAssembly({ assemblyDrawer, hub }) {
+function getSelectedGenome({ genomeDrawer, hub }) {
   const { fastas } = hub.entities;
-  return assemblyDrawer.name ? fastas[assemblyDrawer.name] : null;
+  return genomeDrawer.name ? fastas[genomeDrawer.name] : null;
 }
 
 function mapStateToProps(state) {
-  const assembly = getSelectedAssembly(state);
-  const visible = assembly !== null;
+  const genome = getSelectedGenome(state);
+  const visible = genome !== null;
   return {
     visible,
-    title: visible ? assembly.name : null,
-    assembly,
+    title: visible ? genome.name : null,
+    genome,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    onClose: () => dispatch(showAssemblyDetails(null)),
+    onClose: () => dispatch(showGenomeDetails(null)),
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AssemblyDetails);
+export default connect(mapStateToProps, mapDispatchToProps)(GenomeDetails);

@@ -11,7 +11,7 @@ function getSystemDataColumnKeys(uiOptions = {}) {
         '__core_matches',
         '__%_core_families',
         '__%_non-core',
-        '__assembly_length',
+        '__genome_length',
         '__n50',
         '__no._contigs',
         '__non-ATCG',

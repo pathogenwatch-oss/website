@@ -4,7 +4,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
 
-import { getAssemblies } from '../../collection-route/selectors';
+import { getGenomes } from '../../collection-route/selectors';
 import { getMetadataTable } from '../table/selectors';
 import { getFilter } from '../selectors';
 
@@ -85,11 +85,11 @@ function mapStateToProps(state) {
       filterColumnName: getColumnLabel(activeColumn),
     },
     activeColumn,
-    assemblies: [ ...filter.unfilteredIds ].map(id => getAssemblies(state)[id]),
+    genomes: [ ...filter.unfilteredIds ].map(id => getGenomes(state)[id]),
   };
 }
 
-function mergeProps({ displayProps, activeColumn, assemblies }, { dispatch }) {
+function mergeProps({ displayProps, activeColumn, genomes }, { dispatch }) {
   return {
     ...displayProps,
     handleChange(text) {
@@ -99,9 +99,9 @@ function mergeProps({ displayProps, activeColumn, assemblies }, { dispatch }) {
       }
       const matcher = new RegExp(text, 'i');
       dispatch(activateFilter(
-        assemblies.reduce((set, assembly) => {
-          if (String(activeColumn.valueGetter(assembly)).match(matcher)) {
-            set.add(assembly.uuid);
+        genomes.reduce((set, genome) => {
+          if (String(activeColumn.valueGetter(genome)).match(matcher)) {
+            set.add(genome.uuid);
           }
           return set;
         }, new Set())

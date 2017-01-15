@@ -49,7 +49,7 @@ const Summary = React.createClass({
           <Totals
             visible={visibleFastas}
             total={totalFastas}
-            itemType="assemblies"
+            itemType="genomes"
           />
         }
         <ViewSwitcher to="/upload" title="Grid view" icon="view_module" />

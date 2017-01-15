@@ -1,11 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { showAssemblyDetails } from '../assembly-drawer';
+import { showGenomeDetails } from '../genome-drawer';
 
 function mapDispatchToProps(dispatch, ownProps) {
   return {
-    onClick: () => dispatch(showAssemblyDetails(ownProps.name)),
+    onClick: () => dispatch(showGenomeDetails(ownProps.name)),
   };
 }
 

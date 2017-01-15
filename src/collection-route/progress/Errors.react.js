@@ -14,15 +14,15 @@ export default React.createClass({
     errors: React.PropTypes.array,
   },
 
-  getMessage({ taskType, assemblyName }) {
+  getMessage({ taskType, genomeName }) {
     if (taskType === 'PAARSNP') {
       return (
-        <span>Antimicrobial resistance predictions will not be available for <strong>{assemblyName}</strong></span>
+        <span>Antimicrobial resistance predictions will not be available for <strong>{genomeName}</strong></span>
       );
     }
     if (taskType === 'MLST') {
       return (
-        <span>MLST prediction will not be available for <strong>{assemblyName}</strong></span>
+        <span>MLST prediction will not be available for <strong>{genomeName}</strong></span>
       );
     }
 

@@ -70,13 +70,13 @@ export const systemDataColumns = {
   '__%_non-core': {
     columnKey: '__%_non-core',
     valueGetter({ analysis }) {
-      return analysis.core && analysis.core.percentAssemblyMatched ?
-        (100 - analysis.core.percentAssemblyMatched).toFixed(1) :
+      return analysis.core && analysis.core.percentGenomeMatched ?
+        (100 - analysis.core.percentGenomeMatched).toFixed(1) :
         null;
     },
   },
-  __assembly_length: {
-    columnKey: '__assembly_length',
+  __genome_length: {
+    columnKey: '__genome_length',
     valueGetter({ metrics }) {
       return metrics ? metrics.totalNumberOfNucleotidesInDnaStrings : null;
     },

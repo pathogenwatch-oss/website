@@ -81,16 +81,16 @@ export function createAdvancedViewColumn({ key, label }, profileKey, profiles) {
     },
     headerClasses: 'wgsa-table-header--expanded',
     hidden: profiles.every(profile => notPresent(profile[profileKey], key)),
-    valueGetter: assembly =>
-      amr.getAdvancedColour(key, profileKey, assembly),
+    valueGetter: genome =>
+      amr.getAdvancedColour(key, profileKey, genome),
     onHeaderClick,
   };
 }
 
-function getResistanceProfiles(assemblies) {
-  return Object.keys(assemblies).
+function getResistanceProfiles(genomes) {
+  return Object.keys(genomes).
     reduce((profiles, id) => {
-      const { analysis } = assemblies[id];
+      const { analysis } = genomes[id];
       if (!analysis.resistanceProfile) return profiles;
       profiles.push(analysis.resistanceProfile);
       return profiles;
@@ -107,7 +107,7 @@ export function createReducer({ name, buildColumns }) {
     switch (type) {
       case FETCH_COLLECTION.SUCCESS: {
         const [ collection, , libraries ] = payload.result;
-        const resistanceProfiles = getResistanceProfiles(collection.assemblies);
+        const resistanceProfiles = getResistanceProfiles(collection.genomes);
         const columns = buildColumns(libraries, resistanceProfiles);
         return {
           ...state,

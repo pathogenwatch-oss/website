@@ -12,15 +12,15 @@ export function onTableClick({ target }) {
   };
 }
 
-export function onRowClick(assembly) {
+export function onRowClick(genome) {
   return (dispatch, getState) => {
     const state = getState();
     const { ids, active } = getFilter(state);
 
-    if (active && ids.size === 1 && ids.has(assembly.uuid)) {
+    if (active && ids.size === 1 && ids.has(genome.uuid)) {
       dispatch(resetFilter());
     } else {
-      dispatch(activateFilter([ assembly.uuid ]));
+      dispatch(activateFilter([ genome.uuid ]));
     }
   };
 }

@@ -176,27 +176,27 @@ function getPositionKey({ latitude, longitude }) {
   });
 }
 
-export function addAssembliesToMarkerDefs(assemblies, existingMarkers = []) {
+export function addGenomesToMarkerDefs(genomes, existingMarkers = []) {
   const markersByPosition = existingMarkers.reduce((map, marker) => {
     map.set(JSON.stringify(marker.position), marker);
     return map;
   }, new Map());
 
-  for (const assembly of assemblies) {
-    if (hasNoPosition(assembly)) {
+  for (const genome of genomes) {
+    if (hasNoPosition(genome)) {
       continue;
     }
 
-    const positionKey = getPositionKey(assembly.position);
+    const positionKey = getPositionKey(genome.position);
     if (markersByPosition.has(positionKey)) {
       markersByPosition.get(positionKey).
-        assemblyIds.push(assembly.uuid);
+        genomeIds.push(genome.uuid);
       continue;
     }
 
     markersByPosition.set(positionKey, {
       position: JSON.parse(positionKey),
-      assemblyIds: [ assembly.uuid ],
+      genomeIds: [ genome.uuid ],
       active: true,
       visible: true,
     });
@@ -205,30 +205,30 @@ export function addAssembliesToMarkerDefs(assemblies, existingMarkers = []) {
   return Array.from(markersByPosition.values());
 }
 
-function mapByPosition(assemblies) {
-  return assemblies.reduce((map, assembly) => {
-    if (hasNoPosition(assembly)) {
+function mapByPosition(genomes) {
+  return genomes.reduce((map, genome) => {
+    if (hasNoPosition(genome)) {
       return map;
     }
-    const positionKey = JSON.stringify(assembly.metadata.position);
+    const positionKey = JSON.stringify(genome.metadata.position);
     if (map.has(positionKey)) {
-      map.get(positionKey).push(assembly);
+      map.get(positionKey).push(genome);
     } else {
-      map.set(positionKey, [ assembly ]);
+      map.set(positionKey, [ genome ]);
     }
     return map;
   }, new Map());
 }
 
-function getMarkerDefinitions(assemblies, createInfoWindow) {
-  return Array.from(mapByPosition(assemblies).entries()).
-    map(([ position, assembliesAtPosition ]) => {
+function getMarkerDefinitions(genomes, createInfoWindow) {
+  return Array.from(mapByPosition(genomes).entries()).
+    map(([ position, genomesAtPosition ]) => {
       return {
         position: JSON.parse(position),
         active: true,
         visible: true,
         infoWindow:
-          createInfoWindow ? createInfoWindow(assembliesAtPosition) : null,
+          createInfoWindow ? createInfoWindow(genomesAtPosition) : null,
       };
     });
 }

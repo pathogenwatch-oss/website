@@ -9,7 +9,7 @@ import classnames from 'classnames';
 import Header from '../header';
 import Toast from '../toast';
 import NavLink from '../location';
-import AssemblyDrawer from '../assembly-drawer';
+import GenomeDrawer from '../genome-drawer';
 
 import { locationChange } from '../location';
 
@@ -95,7 +95,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(React.createClass({
           {this.props.children}
         </main>
         <Toast />
-        <AssemblyDrawer />
+        <GenomeDrawer />
       </div>
     );
   },

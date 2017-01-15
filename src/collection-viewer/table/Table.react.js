@@ -5,7 +5,7 @@ import FixedTable from '../../fixed-table';
 import TableSwitcher from '../table/Switcher.react';
 
 import { getCollection, getViewer } from '../../collection-route/selectors';
-import { getActiveAssemblies } from '../selectors';
+import { getActiveGenomes } from '../selectors';
 import { getVisibleTable } from '../table/selectors';
 import { getFiles } from '../downloads/selectors';
 
@@ -89,7 +89,7 @@ function mapStateToProps(state) {
     activeColumns:
       activeColumn ? new Set([ activeColumn ]) : activeColumns,
     collection: getCollection(state),
-    data: getActiveAssemblies(state),
+    data: getActiveGenomes(state),
     downloads: {
       wgsa_gff: getFiles(state).wgsa_gff,
     },

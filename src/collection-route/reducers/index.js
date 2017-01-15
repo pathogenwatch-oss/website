@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 
 import collection from './collection';
-import assemblies from './assemblies';
+import genomes from './genomes';
 
 import { reducer as viewer } from '../../collection-viewer';
 
@@ -9,7 +9,7 @@ import { RESET_COLLECTION_VIEW } from '../actions';
 
 const reducer = combineReducers({
   entities: combineReducers({
-    assemblies,
+    genomes,
     collection,
   }),
   viewer,

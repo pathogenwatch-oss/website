@@ -10,19 +10,19 @@ import ChartTooltip from '../../chart-tooltip';
 
 import * as selectors from '../selectors/stats';
 
-import { showAssemblyDetails } from '../../assembly-drawer';
+import { showGenomeDetails } from '../../genome-drawer';
 import actions from '../actions';
 
-const TooltipContent = ({ payload: [ index, assemblyLength ], data }) => (
+const TooltipContent = ({ payload: [ index, genomeLength ], data }) => (
   <ChartTooltip
     heading={data[index.value].name}
-    description="Assembly Length"
-    value={assemblyLength.value}
+    description="Genome Length"
+    value={genomeLength.value}
   />
 );
 
 const charts = [
-  { title: 'Assembly Length', metric: 'totalNumberOfNucleotidesInDnaStrings' },
+  { title: 'Genome Length', metric: 'totalNumberOfNucleotidesInDnaStrings' },
   { title: 'N50', metric: 'contigN50' },
   { title: 'No. Contigs', metric: 'totalNumberOfContigs' },
   { title: 'Non-ATCG', metric: 'totalNumberOfNsInDnaStrings' },
@@ -71,7 +71,7 @@ export const StatsView =
               />
               <YAxis
                 dataKey="value"
-                name="Assembly Length"
+                name="Genome Length"
                 tickLine={false}
                 domain={[ 0, Math.ceil(range.max * 1.25) ]}
               />
@@ -113,7 +113,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    onPointClick: ({ name }) => dispatch(showAssemblyDetails(name)),
+    onPointClick: ({ name }) => dispatch(showGenomeDetails(name)),
   };
 }
 

@@ -1,10 +1,10 @@
 import { CREATE_COLLECTION } from '../../hub-drawer';
 import * as actions from '../actions';
 
-import { sortAssemblies } from '../utils';
+import { sortGenomes } from '../utils';
 import { statuses } from '../../collection-route/constants';
 
-const initialState = { id: null, assemblyIds: new Set(), metadata: {} };
+const initialState = { id: null, genomeIds: new Set(), metadata: {} };
 
 export default function (state = initialState, { type, payload }) {
   switch (type) {
@@ -27,7 +27,7 @@ export default function (state = initialState, { type, payload }) {
       const { result } = payload;
       return {
         ...state,
-        assemblyIds: new Set(sortAssemblies(result.genomes).map(_ => _.uuid)),
+        genomeIds: new Set(sortGenomes(result.genomes).map(_ => _.uuid)),
         id: result.uuid,
         speciesId: result.speciesId,
         metadata: {

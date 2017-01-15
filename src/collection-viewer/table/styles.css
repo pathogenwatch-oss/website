@@ -218,21 +218,21 @@
   text-align: center;
 }
 
-.wgsa-assembly-name-cell {
+.wgsa-genome-name-cell {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.wgsa-assembly-name-cell a {
+.wgsa-genome-name-cell a {
   color: #673c90;
 }
 
-.wgsa-assembly-name-cell .material-icons {
+.wgsa-genome-name-cell .material-icons {
   font-size: 16px;
 }
 
-.wgsa-assembly-name-cell .mdl-button--icon {
+.wgsa-genome-name-cell .mdl-button--icon {
   height: 24px;
   width: 24px;
   min-width: 24px;

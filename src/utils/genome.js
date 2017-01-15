@@ -1,8 +1,8 @@
 import React from 'react';
 
-export function getCounts(assemblies, ids) {
+export function getCounts(genomes, ids) {
   return ids.reduce((memo, id) => {
-    const { __isReference, __isCollection } = assemblies[id];
+    const { __isReference, __isCollection } = genomes[id];
     if (__isReference) {
       memo.reference++;
       return memo;

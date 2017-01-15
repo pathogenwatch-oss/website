@@ -1,11 +1,11 @@
 import * as actions from '../actions';
 import { FETCH_TREE } from '../../collection-viewer/tree/actions';
 
-function decorateReferenceAssemblies(assemblies) {
-  return Object.keys(assemblies)
-    .reduce((memo, assemblyId) => {
-      memo[assemblyId] = {
-        ...assemblies[assemblyId],
+function decorateReferenceGenomes(genomes) {
+  return Object.keys(genomes)
+    .reduce((memo, genomeId) => {
+      memo[genomeId] = {
+        ...genomes[genomeId],
         __isReference: true,
       };
       return memo;
@@ -13,20 +13,20 @@ function decorateReferenceAssemblies(assemblies) {
   );
 }
 
-function decorateCollectionAssemblies(assemblies) {
-  return assemblies.reduce((memo, assembly) => {
-    memo[assembly.uuid] = {
-      ...assembly,
+function decorateCollectionGenomes(genomes) {
+  return genomes.reduce((memo, genome) => {
+    memo[genome.uuid] = {
+      ...genome,
       __isCollection: true,
     };
     return memo;
   }, {});
 }
 
-function decoratePublicAssemblies(assemblies) {
-  return assemblies.reduce((memo, assembly) => {
-    memo[assembly.uuid] = {
-      ...assembly,
+function decoratePublicGenomes(genomes) {
+  return genomes.reduce((memo, genome) => {
+    memo[genome.uuid] = {
+      ...genome,
       __isPublic: true,
     };
     return memo;
@@ -39,21 +39,21 @@ export default function (state = {}, { type, payload }) {
       const { result } = payload;
       return {
         ...state,
-        ...decorateCollectionAssemblies(result.genomes),
+        ...decorateCollectionGenomes(result.genomes),
       };
     }
     case actions.FETCH_SPECIES_DATA.SUCCESS: {
       const { result: [ reference ] } = payload;
       return {
         ...state,
-        ...decorateReferenceAssemblies(reference.assemblies),
+        ...decorateReferenceGenomes(reference.genomes),
       };
     }
     case FETCH_TREE.SUCCESS: {
       const { result } = payload;
       return {
         ...state,
-        ...decoratePublicAssemblies(result.genomes),
+        ...decoratePublicGenomes(result.genomes),
       };
     }
     default:

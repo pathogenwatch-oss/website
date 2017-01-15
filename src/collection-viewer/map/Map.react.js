@@ -42,18 +42,18 @@ const ExplorerMap = (props) => (
   </WGSAMap>
 );
 
-import { getAssemblies } from '../../collection-route/selectors';
+import { getGenomes } from '../../collection-route/selectors';
 import {
-  getVisibleAssemblyIds,
-  getFilteredAssemblyIds,
+  getVisibleGenomeIds,
+  getFilteredGenomeIds,
   getColourGetter,
 } from '../selectors';
 
 function mapStateToProps(state) {
   return {
-    assemblies: getAssemblies(state),
-    visibleIds: getVisibleAssemblyIds(state),
-    filteredIds: getFilteredAssemblyIds(state),
+    genomes: getGenomes(state),
+    visibleIds: getVisibleGenomeIds(state),
+    filteredIds: getFilteredGenomeIds(state),
     colourGetter: getColourGetter(state),
     positionExtractor: getPositionExtractor(state, { stateKey }),
     markerSize: getMarkerSize(state, { stateKey }),

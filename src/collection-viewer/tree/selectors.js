@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 
-import { getAssemblies, getViewer } from '../../collection-route/selectors';
+import { getGenomes, getViewer } from '../../collection-route/selectors';
 import { getMetadataTable } from '../table/selectors';
 
 import { titles, speciesTrees } from './constants';
@@ -40,8 +40,8 @@ export const getSingleTree = createSelector(
 
 export const getTitle = createSelector(
   getVisibleTree,
-  getAssemblies,
-  (tree, assemblies) => titles[tree.name] || assemblies[tree.name].name
+  getGenomes,
+  (tree, genomes) => titles[tree.name] || genomes[tree.name].name
 );
 
 export const getFilenames = createSelector(

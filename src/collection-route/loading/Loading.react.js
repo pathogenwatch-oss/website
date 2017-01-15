@@ -55,10 +55,10 @@ export const LoadSpinner = React.createClass({
 
 const fatalTasks = new Set([ 'UPLOAD', 'CORE' ]);
 
-function getFailedAssemblies(errors) {
-  return errors.reduce((memo, { taskType, assemblyName }) => {
+function getFailedGenomes(errors) {
+  return errors.reduce((memo, { taskType, genomeName }) => {
     if (fatalTasks.has(taskType)) {
-      memo.push(assemblyName);
+      memo.push(genomeName);
     }
     return memo;
   }, []);
@@ -72,15 +72,15 @@ function getStatusMessage(status, { collectionSize, errors = [] }) {
     ];
   }
   if (status === statuses.FATAL) {
-    const failedAssemblies = getFailedAssemblies(errors);
-    const totalFail = collectionSize === failedAssemblies.length;
+    const failedGenomes = getFailedGenomes(errors);
+    const totalFail = collectionSize === failedGenomes.length;
     return [
       <h1>We're sorry, your collection could not be processed</h1>,
       totalFail ?
-        <p className="mdl-typography--title">All {collectionSize} assemblies were rejected.</p> :
-        <p className="mdl-typography--title">{failedAssemblies.length} of {collectionSize} assemblies were rejected:</p>,
-      !totalFail ? <ul className="wgsa-failed-assemblies">{failedAssemblies.map(assemblyName => <li key={assemblyName}>{assemblyName}</li>)}</ul> : null,
-      <p className="mdl-typography--title">Please ensure assemblies are the correct species, as we were unable to process them as {Species.current.formattedShortName}.</p>,
+        <p className="mdl-typography--title">All {collectionSize} genomes were rejected.</p> :
+        <p className="mdl-typography--title">{failedGenomes.length} of {collectionSize} genomes were rejected:</p>,
+      !totalFail ? <ul className="wgsa-failed-genomes">{failedGenomes.map(genomeName => <li key={genomeName}>{genomeName}</li>)}</ul> : null,
+      <p className="mdl-typography--title">Please ensure genomes are the correct species, as we were unable to process them as {Species.current.formattedShortName}.</p>,
       <Link to={`/${Species.nickname}/upload`} className="mdl-button mdl-button--raised">Try Again</Link>,
     ];
   }

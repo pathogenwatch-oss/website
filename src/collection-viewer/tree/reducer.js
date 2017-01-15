@@ -75,7 +75,7 @@ function entities(state = {}, { type, payload }) {
         [POPULATION]: {
           name: POPULATION,
           newick: reference.tree,
-          leafIds: Object.keys(reference.assemblies),
+          leafIds: Object.keys(reference.genomes),
           ...initialState,
         },
       };

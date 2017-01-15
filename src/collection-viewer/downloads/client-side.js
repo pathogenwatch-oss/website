@@ -13,14 +13,14 @@ function ungroup(column) {
 
 function convertTableToCSV(table) {
   return function (state) {
-    const { assemblies, assemblyIds } = state;
+    const { genomes, genomeIds } = state;
     const columnKeys =
       getTables(state)[table].columns.
         reduce((flat, column) => flat.concat(ungroup(column)), []).
         filter(_ => 'valueGetter' in _).
         map(_ => _.columnKey);
 
-    const rows = assemblyIds.map(id => assemblies[id]);
+    const rows = genomeIds.map(id => genomes[id]);
 
     return (
       new PromiseWorker(getCSVWorker()).postMessage({

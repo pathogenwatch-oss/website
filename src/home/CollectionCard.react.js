@@ -18,7 +18,7 @@ export default ({ title, description, link, pubmedLink, size, species }) => (
         {taxIdMap.get(species).formattedShortName}
       </CardMetadata>
       <CardMetadata icon="insert_drive_file">
-        {size} assemblies
+        {size} genomes
       </CardMetadata>
     </span>
     <Markdown source={description} />

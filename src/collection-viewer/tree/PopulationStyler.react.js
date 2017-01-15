@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { getAssemblies } from '../../collection-route/selectors';
+import { getGenomes } from '../../collection-route/selectors';
 import { getFilter } from '../selectors';
 import { getTrees } from './selectors';
 
@@ -11,11 +11,11 @@ import { CGPS } from '../../app/constants';
 const Styler = React.createClass({
 
   componentDidUpdate() {
-    const { phylocanvas, assemblies, trees, filter } = this.props;
+    const { phylocanvas, genomes, trees, filter } = this.props;
 
     for (const leaf of phylocanvas.leaves) {
       const { id } = leaf;
-      const assembly = assemblies[id];
+      const genome = genomes[id];
       const subtree = trees[id];
       const { leafIds = [], totalCollection = 0, totalPublic = 0 } =
         subtree || {};
@@ -27,7 +27,7 @@ const Styler = React.createClass({
           fillStyle: subtree ? CGPS.COLOURS.PURPLE_LIGHT : CGPS.COLOURS.GREY,
         },
       });
-      leaf.label = `${assembly.name} (${totalCollection}) [${totalPublic}]`;
+      leaf.label = `${genome.name} (${totalCollection}) [${totalPublic}]`;
       leaf.highlighted = (filter.active &&
         leafIds.some(uuid => filter.ids.has(uuid)));
       leaf.interactive = !!subtree;
@@ -44,7 +44,7 @@ const Styler = React.createClass({
 
 function mapStateToProps(state) {
   return {
-    assemblies: getAssemblies(state),
+    genomes: getGenomes(state),
     trees: getTrees(state),
     filter: getFilter(state),
   };

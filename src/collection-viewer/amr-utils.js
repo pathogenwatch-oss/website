@@ -16,17 +16,17 @@ export function isResistant({ antibiotics }, antibiotic) {
   return antibiotics[antibiotic].state !== 'UNKNOWN';
 }
 
-export function defaultColourGetter(assembly) {
-  if (assembly && assembly.__isCollection) {
+export function defaultColourGetter(genome) {
+  if (genome && genome.__isCollection) {
     return CGPS.COLOURS.PURPLE_LIGHT;
   }
   return CGPS.COLOURS.GREY;
 }
 
-export function getColour(antibiotic, assembly) {
-  const { paarsnp } = assembly.analysis;
+export function getColour(antibiotic, genome) {
+  const { paarsnp } = genome.analysis;
   if (!paarsnp) {
-    return defaultColourGetter(assembly);
+    return defaultColourGetter(genome);
   }
 
   if (isResistant(paarsnp, antibiotic)) {
@@ -35,10 +35,10 @@ export function getColour(antibiotic, assembly) {
   return nonResistantColour;
 }
 
-export function getAdvancedColour(element, type, assembly) {
-  const { resistanceProfile } = assembly.analysis;
+export function getAdvancedColour(element, type, genome) {
+  const { resistanceProfile } = genome.analysis;
   if (!resistanceProfile) {
-    return defaultColourGetter(assembly);
+    return defaultColourGetter(genome);
   }
 
   if (resistanceProfile[type].indexOf(element) !== -1) {
@@ -49,10 +49,10 @@ export function getAdvancedColour(element, type, assembly) {
 
 const noActiveColumns = [ { valueGetter: defaultColourGetter } ];
 
-function getColours(columns, assembly) {
+function getColours(columns, genome) {
   return new Set(
     Array.from(columns.size ? columns : noActiveColumns).
-      map(column => column.valueGetter(assembly))
+      map(column => column.valueGetter(genome))
   );
 }
 
@@ -62,8 +62,8 @@ function getMixedStateColour(table) {
 }
 
 export function createColourGetter(table, columns) {
-  return function (assembly) {
-    const colours = getColours(columns, assembly);
+  return function (genome) {
+    const colours = getColours(columns, genome);
     return colours.size === 1 ?
       Array.from(colours)[0] :
       getMixedStateColour(table);

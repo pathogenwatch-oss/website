@@ -47,22 +47,22 @@
   margin: 16px 0px;
 }
 
-.wgsa-assembly-analyses {
+.wgsa-genome-analyses {
   max-width: 640px;
   margin: 0 auto;
   justify-content: center;
 }
 
-.wgsa-assembly-analyses .mdl-card__title {
+.wgsa-genome-analyses .mdl-card__title {
   color: #673c90;
   font-weight: 400;
 }
 
-.wgsa-assembly-analyses .mdl-card__actions {
+.wgsa-genome-analyses .mdl-card__actions {
   font-weight: 500;
 }
 
-.wgsa-assembly-analyses .material-icons {
+.wgsa-genome-analyses .material-icons {
   font-size: 24px;
   color: #48996F;
 }

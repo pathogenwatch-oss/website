@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import Grid from '../../grid';
-import AssemblyCard from '../../assembly-card';
+import GenomeCard from '../../genome-card';
 
 import { getVisibleFastas } from '../../hub-filter/selectors';
 
@@ -16,7 +16,7 @@ export const GridView = React.createClass({
     const { items } = this.props;
     return (
       <Grid
-        template={AssemblyCard}
+        template={GenomeCard}
         items={items}
         columnWidth={256}
         rowHeight={176}

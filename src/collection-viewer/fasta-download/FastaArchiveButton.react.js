@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import DownloadButton from '../downloads/DownloadButton.react';
 
 import { getCollection } from '../../collection-route/selectors';
-import { getActiveAssemblies } from '../selectors';
+import { getActiveGenomes } from '../selectors';
 import { getFiles } from '../downloads/selectors';
 
 import { createDownloadProps, formatCollectionFilename } from '../downloads/utils';
@@ -14,7 +14,7 @@ import { fetchJson } from '../../utils/Api';
 const Button = props => (
   <DownloadButton
     {...props}
-    description="All Assemblies"
+    description="All Genomes"
     isArchive
     iconOnly
   />
@@ -22,7 +22,7 @@ const Button = props => (
 
 function mapStateToProps(state) {
   return {
-    genomes: getActiveAssemblies(state),
+    genomes: getActiveGenomes(state),
     format: 'fasta_archive',
     collection: getCollection(state),
     download: getFiles(state).fasta_archive,
