@@ -3,7 +3,7 @@ const { fastaStoragePath } = require('configuration');
 
 const Genome = require('data/genome');
 const CollectionGenome = require('data/collectionGenome');
-const ServiceRequestError = require('utils/errors');
+const { ServiceRequestError } = require('utils/errors');
 
 const getFiles = {
   genome: ids =>

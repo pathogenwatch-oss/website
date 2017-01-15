@@ -4,7 +4,6 @@ const router = express.Router();
 
 const services = require('services');
 const CollectionGenome = require('data/collectionGenome');
-const fileModel = require('models/file');
 
 const LOGGER = require('utils/logging').createLogger('Download requests');
 
@@ -21,18 +20,16 @@ router.post('/species/:speciesId/download/type/:idType/format/:fileFormat',
       `Received request for download: ${downloadRequest.idType}, ${downloadRequest.format}`
     );
 
-    fileModel.requestDownload(downloadRequest, (error, result) => {
-      if (error) {
-        return next(error);
-      }
-      return res.json(result);
-    });
+    services.request('backend', 'request-download', { request: downloadRequest }).
+      then(result => res.json(result)).
+      catch(error => next(error));
   }
 );
 
-router.get('/species/:speciesId/download/file/:fileName',
+router.get('/species/:speciesId/download/file/:filename',
   (req, res, next) => {
-    LOGGER.info(`Received request for file: ${req.params.fileName}`);
+    const { filename } = req.params;
+    LOGGER.info(`Received request for file: ${filename}`);
 
     if (!req.query.prettyFileName) {
       res.status(400).send('`prettyFileName` query parameter is required.');
@@ -44,11 +41,13 @@ router.get('/species/:speciesId/download/file/:fileName',
       'Content-type': 'application/zip',
     });
 
-    const stream = fileModel.getFile(req.params);
+    services.request('download', 'get-file', { filename }).
+      then(stream => {
+        stream.on('error', error => next(error));
 
-    stream.on('error', error => next(error));
-
-    stream.pipe(res);
+        stream.pipe(res);
+      }).
+      catch(error => next(error));
   }
 );
 

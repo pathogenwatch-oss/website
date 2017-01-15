@@ -1,38 +1,34 @@
 const express = require('express');
 const router = express.Router();
 
-const downloads = require('models/speciesDownloads');
-const fileModel = require('models/file');
+const { request } = require('services');
 
-const species = require('wgsa-front-end/universal/species');
+const downloads = require('utils/speciesDownloads');
 const downloadUtils = require('wgsa-front-end/universal/downloads');
 
 const LOGGER = require('utils/logging').createLogger('Species Downloads');
 
-const speciesIds = species.reduce((memo, { nickname, id }) => {
-  memo[nickname] = id;
-  return memo;
-}, {});
+router.get('/:nickname/download/:type', (req, res, next) => {
+  const { nickname, type } = req.params;
+  const { contentType } = downloads[type];
 
-router.get('/:nickname/download/:fileName', function (req, res, next) {
-  const { nickname, fileName } = req.params;
-  const speciesId = speciesIds[nickname];
-  const { contentType, fileOnDisk } = downloads[fileName];
+  LOGGER.info(`Received request for ${nickname} file: ${type}`);
 
-  LOGGER.info(`Received request for ${nickname} file: ${fileName}`);
-
-  const prettyFileName = downloadUtils.getPrettyFilename(nickname, fileName);
+  // TODO: Rename this function in FE Repo
+  const prettyFileName = downloadUtils.getPrettyFilename(nickname, type);
 
   res.set({
     'Content-Disposition': `attachment; filename="${prettyFileName}"`,
     'Content-Type': contentType,
   });
 
-  const stream = fileModel.getSpeciesFile(speciesId, fileOnDisk(speciesId));
+  request('download', 'get-species-file', { nickname, type }).
+    then(stream => {
+      stream.on('error', error => next(error));
 
-  stream.on('error', error => next(error));
-
-  stream.pipe(res);
+      stream.pipe(res);
+    }).
+    catch(error => next(error));
 });
 
 module.exports = router;
