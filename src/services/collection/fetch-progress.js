@@ -1,6 +1,6 @@
-const Collection = require('data/collection');
-const CollectionGenome = require('data/collectionGenome');
-const Species = require('data/species');
+const Collection = require('models/collection');
+const CollectionGenome = require('models/collectionGenome');
+const Species = require('models/species');
 
 const { ServiceRequestError } = require('utils/errors');
 

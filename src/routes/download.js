@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 
 const services = require('services');
-const CollectionGenome = require('data/collectionGenome');
+const CollectionGenome = require('models/collectionGenome');
 
 const LOGGER = require('utils/logging').createLogger('Download requests');
 

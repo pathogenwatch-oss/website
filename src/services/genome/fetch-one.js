@@ -1,4 +1,4 @@
-const Genome = require('data/genome');
+const Genome = require('models/genome');
 
 module.exports = function ({ id, user }) {
   return (

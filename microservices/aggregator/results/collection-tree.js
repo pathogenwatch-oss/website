@@ -1,4 +1,4 @@
-const Collection = require('data/collection');
+const Collection = require('models/collection');
 
 const mainStorage = require('services/storage')('main');
 const { CORE_TREE_RESULT } = require('utils/documentKeys');

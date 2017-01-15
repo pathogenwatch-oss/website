@@ -1,5 +1,5 @@
-const Collection = require('data/collection');
-const CollectionGenome = require('data/collectionGenome');
+const Collection = require('models/collection');
+const CollectionGenome = require('models/collectionGenome');
 
 module.exports = function ({ collectionId, assemblyId, taskType }) {
   return (

@@ -1,5 +1,5 @@
-const Collection = require('data/collection');
-const CollectionGenome = require('data/collectionGenome');
+const Collection = require('models/collection');
+const CollectionGenome = require('models/collectionGenome');
 const mainStorage = require('services/storage')('main');
 const { CORE_TREE_RESULT } = require('utils/documentKeys');
 

@@ -1,4 +1,4 @@
-const CollectionGenome = require('data/collectionGenome');
+const CollectionGenome = require('models/collectionGenome');
 
 const mainStorage = require('services/storage')('main');
 const sequencesStorage = require('services/storage')('sequences');
@@ -73,7 +73,7 @@ module.exports = (name, { assemblyId, speciesId }) => {
   return mainStorage.retrieve(`${MLST_RESULT}_${uuid}`).
     then(({ alleles }) =>
       getMLSTAlleleDetails(alleles).
-      then((results) => createMLSTCode(alleles, results)).
+      then(results => createMLSTCode(alleles, results)).
       then(code => getSequenceType(alleles, code, speciesId)).
       then(result => ({
         st: result.sequenceType,

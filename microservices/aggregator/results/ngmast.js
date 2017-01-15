@@ -1,4 +1,4 @@
-const CollectionGenome = require('data/collectionGenome');
+const CollectionGenome = require('models/collectionGenome');
 const mainStorage = require('services/storage')('main');
 const { NGMAST_RESULT } = require('utils/documentKeys');
 

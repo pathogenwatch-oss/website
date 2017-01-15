@@ -1,6 +1,6 @@
 const { request } = require('services/bus');
 
-const Genome = require('data/genome');
+const Genome = require('models/genome');
 
 const { ServiceRequestError } = require('utils/errors');
 

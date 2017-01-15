@@ -1,9 +1,9 @@
 const { request } = require('services/bus');
 const { ServiceRequestError } = require('utils/errors');
 
-const Collection = require('data/collection');
-const Genome = require('data/genome');
-const Species = require('data/species');
+const Collection = require('models/collection');
+const Genome = require('models/genome');
+const Species = require('models/species');
 
 const { maxCollectionSize = 0 } = require('configuration');
 

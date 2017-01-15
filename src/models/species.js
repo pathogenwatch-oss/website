@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
-const CollectionGenome = require('data/collectionGenome');
+const CollectionGenome = require('models/collectionGenome');
 const mainStorage = require('services/storage')('main');
 const { ANTIMICROBIAL_MASTER, ANTIMICROBIAL_SPECIES, PAARSNP_LIBRARY } =
   require('utils/documentKeys');

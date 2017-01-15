@@ -1,4 +1,4 @@
-const Genome = require('data/genome');
+const Genome = require('models/genome');
 
 const { ServiceRequestError } = require('utils/errors');
 

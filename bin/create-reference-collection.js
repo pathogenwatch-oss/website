@@ -3,8 +3,8 @@ const fs = promisify('fs');
 const argv = require('named-argv');
 const path = require('path');
 
-const Collection = require('data/collection');
-const Genome = require('data/genome');
+const Collection = require('models/collection');
+const Genome = require('models/genome');
 const { request } = require('services');
 const mongoConnection = require('utils/mongoConnection');
 

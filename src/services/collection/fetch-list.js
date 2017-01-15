@@ -1,4 +1,4 @@
-const Collection = require('data/collection');
+const Collection = require('models/collection');
 
 module.exports = function ({ user }) {
   return (

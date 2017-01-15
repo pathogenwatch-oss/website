@@ -1,8 +1,8 @@
 const fastaStorage = require('wgsa-fasta-store');
 const { fastaStoragePath } = require('configuration');
 
-const Genome = require('data/genome');
-const CollectionGenome = require('data/collectionGenome');
+const Genome = require('models/genome');
+const CollectionGenome = require('models/collectionGenome');
 const { ServiceRequestError } = require('utils/errors');
 
 const getFiles = {

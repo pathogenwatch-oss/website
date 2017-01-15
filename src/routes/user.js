@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const userModel = require('data/user');
+const userModel = require('models/user');
 const mainStorage = require('services/storage')('main');
 
 const LOGGER = require('utils/logging').createLogger('User');

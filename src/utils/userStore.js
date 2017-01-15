@@ -1,5 +1,5 @@
-const User = require('../data/user');
-const Organisation = require('../data/organisation');
+const User = require('../models/user');
+const Organisation = require('../models/organisation');
 
 module.exports = {
   serialize(user, done) {

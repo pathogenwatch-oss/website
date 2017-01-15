@@ -1,4 +1,4 @@
-const CollectionGenome = require('data/collectionGenome');
+const CollectionGenome = require('models/collectionGenome');
 
 module.exports = function ({ collection, collectionGenomes }) {
   return CollectionGenome.insertMany(

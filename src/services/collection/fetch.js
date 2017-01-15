@@ -1,5 +1,5 @@
 const services = require('services');
-const CollectionGenome = require('data/collectionGenome');
+const CollectionGenome = require('models/collectionGenome');
 
 function addGenomes(collection) {
   return CollectionGenome.

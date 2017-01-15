@@ -3,7 +3,7 @@ const processFasta = require('wgsa-fasta-store/fasta-processor');
 const { fastaStoragePath } = require('configuration');
 fastaStorage.setup(fastaStoragePath);
 
-const GenomeFile = require('data/genomeFile');
+const GenomeFile = require('models/genomeFile');
 
 const { ServiceRequestError } = require('utils/errors');
 
