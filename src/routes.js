@@ -2,7 +2,6 @@ module.exports = function (app) {
   app.use('/api/', [
     require('routes/genome'),
     require('routes/collection'),
-    require('routes/resistance'),
     require('routes/user'),
   ]);
 

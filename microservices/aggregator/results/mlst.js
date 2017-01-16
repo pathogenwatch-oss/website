@@ -70,9 +70,9 @@ function getSequenceType(alleles, code, speciesId) {
 
 function addSTSuffix(uuid, st) {
   return (
-    CollectionGenome.findByUuid(uuid, { name }).
+    CollectionGenome.findByUuid(uuid, { name: 1 }).
       then(({ name }) =>
-        CollectionGenome.update({ uuid }, { name: `${name}_${st}` })
+        CollectionGenome.update({ uuid }, { name: `${name}_ST${st}` })
       )
   );
 }

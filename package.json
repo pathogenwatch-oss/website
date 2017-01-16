@@ -54,9 +54,8 @@
     "upload": "eval $npm_package_startcmd bin/upload.js",
     "download": "eval $npm_package_startcmd bin/download.js",
     "reference": "eval $npm_package_startcmd bin/create-reference-collection.js",
-    "service": "eval $npm_package_startcmd microservices/bootstrap.js aggregator | bunyan -o short",
-    "ids": "eval $npm_package_startcmd bin/collection-id-update.js",
-    "aggregate": "eval $npm_package_startcmd bin/aggregate-collection.js"
+    "aggregator": "eval $npm_package_startcmd microservices/bootstrap.js aggregator | bunyan -o short",
+    "repost": "eval $npm_package_startcmd bin/repost-aggregator-errors.js"
   },
   "repository": {
     "type": "git",
