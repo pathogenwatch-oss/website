@@ -37,7 +37,7 @@ const History = React.createClass({
       >
         <button
           className="wgsa-tree-history__tab mdl-button"
-          onClick={() => this.setState({ open: !open })}
+          disabled={!active}
         >
           <span>History</span>
         </button>
