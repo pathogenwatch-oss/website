@@ -7,10 +7,8 @@ const schema = new Schema({
   _user: { type: Schema.Types.ObjectId, ref: 'User' },
   _species: { type: Schema.Types.ObjectId, ref: 'Species' },
   description: String,
-  uuid: { type: String, index: true },
-  size: Number,
-  status: { type: String, default: 'PENDING' },
   error: String,
+  genomes: Array,
   progress: {
     completed: Date,
     errors: [ { taskType: String, name: String } ],
@@ -19,6 +17,8 @@ const schema = new Schema({
     percent: Number,
   },
   reference: Boolean,
+  size: Number,
+  status: { type: String, default: 'PENDING' },
   subtrees: [ {
     name: String,
     tree: String,
@@ -28,6 +28,7 @@ const schema = new Schema({
   } ],
   title: String,
   tree: String,
+  uuid: { type: String, index: true },
 });
 
 setToObjectOptions(schema);

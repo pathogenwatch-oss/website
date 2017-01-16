@@ -15,7 +15,7 @@ module.exports = ({ uuid }) =>
     then(collection => {
       if (collection.status === 'READY') {
         return addGenomes(collection).
-          then(_ => _.populate('_species'));
+          then(_ => _.populate('_species').execPopulate());
       }
       return collection;
     }).
