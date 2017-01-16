@@ -6,6 +6,7 @@ import { SET_COLOUR_COLUMNS } from '../../collection-viewer/table/actions';
 import * as resistanceProfile from '../../utils/resistanceProfile';
 import { measureText } from '../../table/utils/columnWidth';
 import * as constants from '../../collection-viewer/table/constants';
+import Species from '../../species';
 
 const systemColumnProps = [
   constants.downloadColumnProps,
@@ -134,4 +135,9 @@ export function createReducer({ name, buildColumns }) {
         return state;
     }
   };
+}
+
+export function checkCustomLabels(key) {
+  const { customLabels } = Species.current.amrOptions;
+  return (key in customLabels ? customLabels[key] : key.slice(0, 3));
 }

@@ -3,6 +3,7 @@ import React from 'react';
 import * as resistanceProfile from '../../utils/resistanceProfile';
 import { tableKeys } from '../../collection-viewer/table/constants';
 import Species from '../../species';
+import { checkCustomLabels } from './utils';
 
 const isMac =
   (navigator && navigator.platform &&
@@ -12,12 +13,10 @@ const modifierKey = isMac ? 'Cmd' : 'Ctrl';
 function createColumn({ key, fullName }) {
   const columnKey = key;
   const hoverName = fullName || key;
-  const { customLabels } = Species.current.amrOptions;
+
   return {
     columnKey,
-    getLabel() {
-      return (key in customLabels ? customLabels[key] : key.slice(0, 3));
-    },
+    getLabel: () => checkCustomLabels(key),
     headerClasses: 'wgsa-table-header--expanded',
     headerTitle: `${hoverName} - ${modifierKey} + click to select multiple`,
     cellClasses: 'wgsa-table-cell--resistance',
