@@ -1,9 +1,11 @@
 .wgsa-filter-summary {
+  align-items: center;
   display: flex;
   font-size: 13px;
   height: 4rem;
+  justify-content: center;
   min-height: 4rem;
-  align-items: center;
+  position: relative;
 }
 
 .wgsa-filter-summary ~ * {
@@ -11,11 +13,13 @@
   position: relative;
 }
 
-.wgsa-filter-summary > p {
+.wgsa-filter-summary__count {
   font-size: 13px;
+  left: 0;
   margin: 0;
+  position: absolute;
 }
 
-.wgsa-filter-summary > p > span {
+.wgsa-filter-summary__count > span {
   color: #673c90;
 }

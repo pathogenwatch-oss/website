@@ -14,22 +14,25 @@
 }
 
 .wgsa-button-group .material-icons {
-  line-height: 32px;
+  line-height: 36px;
   padding: 0 4px;
-  background-color: rgba(0, 0, 0, 0.54);
-  color: #fff;
-  font-size: 20px;
-}
-
-.wgsa-button-group button {
-  padding: 8px;
-  background: #fff;
-  border: none;
+  color: rgba(0, 0, 0, 0.54);
+  font-size: 18px;
   border: 1px solid rgba(0, 0, 0, 0.28);
   border-right: none;
-  outline: none;
-  font-weight: 500;
+}
+
+.wgsa-button-group__item {
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.28);
+  border-right: none;
+  color: inherit;
   font-family: 'Roboto', arial, sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  padding: 8px;
+  outline: none;
+  text-decoration: none;
   transition: .28s cubic-bezier(.4,0,.2,1);
   transition-property: background-color, color;
 }
@@ -45,7 +48,7 @@
   border-bottom-right-radius: 4px;
 }
 
-.wgsa-button-group button.active {
+.wgsa-button-group .active {
   background: #673c90;
   border-color: #673c90;
   color: #fff;
