@@ -49,14 +49,9 @@ export function postJson(path, data, progressFn) {
   });
 }
 
-
-export function getReferenceCollection(speciesId) {
-  return $.get(`${API_ROOT}/species/${speciesId}/reference`);
-}
-
 export function getCollection(collectionId) {
   console.log(`[WGSA] Getting collection ${collectionId}`);
-  return $.get(`${API_ROOT}/collection/${collectionId}`);
+  return fetchJson('GET', `/api/collection/${collectionId}`);
 }
 
 export function requestFile({ speciesId, idType = 'genome', format }, requestBody) {
@@ -71,8 +66,4 @@ export function makeFileRequest(format, id, speciesId) {
     { speciesId, format },
     { idList: Array.isArray(id) ? id : [ id ] }
   );
-}
-
-export function getResistanceData(speciesId) {
-  return $.get(`${API_ROOT}/species/${speciesId}/resistance`);
 }

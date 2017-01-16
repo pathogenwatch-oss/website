@@ -36,17 +36,12 @@ function decoratePublicGenomes(genomes) {
 export default function (state = {}, { type, payload }) {
   switch (type) {
     case actions.FETCH_COLLECTION.SUCCESS: {
-      const { result } = payload;
+      const { genomes = [], _species } = payload.result;
+      const { references = [] } = _species;
       return {
         ...state,
-        ...decorateCollectionGenomes(result.genomes),
-      };
-    }
-    case actions.FETCH_SPECIES_DATA.SUCCESS: {
-      const { result: [ reference ] } = payload;
-      return {
-        ...state,
-        ...decorateReferenceGenomes(reference.genomes),
+        ...decorateCollectionGenomes(genomes),
+        ...decorateReferenceGenomes(references),
       };
     }
     case FETCH_TREE.SUCCESS: {

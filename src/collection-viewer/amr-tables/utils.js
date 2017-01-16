@@ -7,6 +7,7 @@ import { onHeaderClick } from './thunks';
 import * as amr from '../amr-utils';
 import { measureText } from '../table/utils/columnWidth';
 import * as constants from '../table/constants';
+import { statuses } from '../../collection-route/constants';
 
 const systemColumnProps = [
   constants.downloadColumnProps,
@@ -91,8 +92,8 @@ function getResistanceProfiles(genomes) {
   return Object.keys(genomes).
     reduce((profiles, id) => {
       const { analysis } = genomes[id];
-      if (!analysis.resistanceProfile) return profiles;
-      profiles.push(analysis.resistanceProfile);
+      if (!analysis.paarsnp) return profiles;
+      profiles.push(analysis.paarsnp);
       return profiles;
     }, []);
 }
@@ -106,9 +107,11 @@ export function createReducer({ name, buildColumns }) {
   return function (state = initialState, { type, payload }) {
     switch (type) {
       case FETCH_COLLECTION.SUCCESS: {
-        const [ collection, , libraries ] = payload.result;
-        const resistanceProfiles = getResistanceProfiles(collection.genomes);
-        const columns = buildColumns(libraries, resistanceProfiles);
+        const { genomes, _species, status } = payload.result;
+        if (status !== statuses.READY) return state;
+
+        const resistanceProfiles = getResistanceProfiles(genomes);
+        const columns = buildColumns(_species.resistance, resistanceProfiles);
         return {
           ...state,
           columns: [ systemGroup ].concat(

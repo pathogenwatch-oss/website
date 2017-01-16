@@ -1,10 +1,11 @@
 import { combineReducers } from 'redux';
 
-import { FETCH_COLLECTION, FETCH_SPECIES_DATA }
+import { FETCH_COLLECTION }
   from '../../collection-route/actions';
 import * as ACTIONS from './actions';
 
 import { COLLECTION, POPULATION } from '../../app/stateKeys/tree';
+import { statuses } from '../../collection-route/constants';
 
 function setSize(state, step, maxStepFactor) {
   if (step === state.step) return state;
@@ -53,31 +54,28 @@ const initialState = {
 function entities(state = {}, { type, payload }) {
   switch (type) {
     case FETCH_COLLECTION.SUCCESS: {
-      const { result } = payload;
+      const { genomes, _species, subtrees, status } = payload.result;
+
+      if (status !== statuses.READY) return state;
+
       return {
         ...state,
         [COLLECTION]: {
           name: COLLECTION,
-          newick: result.tree,
-          leafIds: result.tree ? null : result.genomes.map(_ => _.uuid),
+          newick: payload.result.tree,
+          leafIds: payload.result.tree ? null : genomes.map(_ => _.uuid),
           ...initialState,
         },
-        ...result.subtrees.reduce((memo, { tree, ...subtree }) => {
+        [POPULATION]: {
+          name: POPULATION,
+          newick: _species.tree,
+          leafIds: _species.references.map(_ => _.uuid),
+          ...initialState,
+        },
+        ...subtrees.reduce((memo, { tree, ...subtree }) => {
           memo[subtree.name] = { ...subtree, newick: tree, ...initialState };
           return memo;
         }, {}),
-      };
-    }
-    case FETCH_SPECIES_DATA.SUCCESS: {
-      const [ reference ] = payload.result;
-      return {
-        ...state,
-        [POPULATION]: {
-          name: POPULATION,
-          newick: reference.tree,
-          leafIds: Object.keys(reference.genomes),
-          ...initialState,
-        },
       };
     }
     case ACTIONS.FETCH_TREE.SUCCESS:

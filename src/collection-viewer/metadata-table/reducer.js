@@ -49,7 +49,7 @@ function getUserDefinedColumnProps(columnNames) {
 export default function (state = initialState, { type, payload }) {
   switch (type) {
     case FETCH_COLLECTION.SUCCESS: {
-      const { genomes } = payload.result;
+      const { genomes = [] } = payload.result;
       const { uiOptions = {} } = Species.current;
 
       const systemColumnProps = [

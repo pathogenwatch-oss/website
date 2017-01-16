@@ -41,13 +41,13 @@ export default React.createClass({
       );
     }
 
-    if (status === statuses.FETCHED) {
+    if (status === statuses.READY) {
       return (
         <Viewer />
       );
     }
 
-    if (status && status !== statuses.READY) {
+    if (status) {
       return (
         <LoadError
           status={status}

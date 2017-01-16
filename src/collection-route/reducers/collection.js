@@ -24,10 +24,10 @@ export default function (state = initialState, { type, payload }) {
       };
     }
     case actions.FETCH_COLLECTION.SUCCESS: {
-      const { result } = payload;
+      const { genomes = [], ...result } = payload.result;
       return {
         ...state,
-        genomeIds: new Set(sortGenomes(result.genomes).map(_ => _.uuid)),
+        genomeIds: new Set(sortGenomes(genomes).map(_ => _.uuid)),
         id: result.uuid,
         speciesId: result.speciesId,
         metadata: {
@@ -47,16 +47,6 @@ export default function (state = initialState, { type, payload }) {
         progress,
       };
     }
-    case actions.FETCH_SPECIES_DATA.FAILURE:
-      return {
-        ...state,
-        status: statuses.NOT_FOUND,
-      };
-    case actions.FETCH_SPECIES_DATA.SUCCESS:
-      return {
-        ...state,
-        status: statuses.FETCHED,
-      };
     default:
       return state;
   }

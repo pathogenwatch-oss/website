@@ -1,10 +1,6 @@
 import { createAsyncConstants } from '../actions';
 
-import {
-  getCollection,
-  getReferenceCollection,
-  getResistanceData,
-} from '../utils/Api';
+import { getCollection } from '../utils/Api';
 
 export const FETCH_COLLECTION = createAsyncConstants('FETCH_COLLECTION');
 
@@ -21,20 +17,6 @@ export function updateProgress(message) {
   return {
     type: UPDATE_COLLECTION_PROGRESS,
     payload: message,
-  };
-}
-
-export const FETCH_SPECIES_DATA = createAsyncConstants('FETCH_SPECIES_DATA');
-
-export function fetchSpeciesData(speciesId) {
-  return {
-    type: FETCH_SPECIES_DATA,
-    payload: {
-      promise: Promise.all([
-        getReferenceCollection(speciesId),
-        getResistanceData(speciesId),
-      ]),
-    },
   };
 }
 
