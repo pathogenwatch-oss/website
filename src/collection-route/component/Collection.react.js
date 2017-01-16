@@ -47,7 +47,7 @@ export default React.createClass({
       );
     }
 
-    if (status) {
+    if (status && status !== statuses.READY) {
       return (
         <LoadError
           status={status}

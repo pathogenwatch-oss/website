@@ -72,9 +72,8 @@ function mergeProps(state, { dispatch }) {
             download,
             id: genomeIds,
             getFileName: () => `${formatCollectionFilename(collection)}`,
-            getFileContents:
-              download.getFileContents &&
-                (() => download.getFileContents(state, dispatch)),
+            getFileContents: download.getFileContents &&
+              (() => download.getFileContents(state)),
           }, dispatch);
         }),
     closeMenu() {

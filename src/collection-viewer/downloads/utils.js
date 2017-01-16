@@ -3,12 +3,11 @@ import { showToast } from '../../toast';
 
 import { fileTypes } from './constants';
 
-import { API_ROOT } from '../../utils/Api';
+import { SERVER_ADDRESS } from '../../utils/Api';
 import Species from '../../species';
 
 export const encode = encodeURIComponent;
-export const collectionPath =
-  () => `${API_ROOT}/species/${Species.id}/download/file`;
+export const downloadPath = `${SERVER_ADDRESS}/download/file`;
 
 export function getInitialFileState() {
   return fileTypes;
@@ -92,6 +91,6 @@ export function createDefaultLink(keyMap, filename) {
   }
 
   return (
-    `${collectionPath()}/${encode(key)}?prettyFileName=${encode(filename)}`
+    `${downloadPath}/${encode(key)}?filename=${encode(filename)}`
   );
 }

@@ -1,9 +1,8 @@
 import PromiseWorker from 'promise-worker';
 
-import { getTables } from '../table/selectors';
-import { tableKeys } from '../table/constants';
-
 import getCSVWorker from 'worker?name=csv.worker.js!./CsvWorker';
+
+import { tableKeys } from '../table/constants';
 
 function ungroup(column) {
   if (column.hidden) return [];
@@ -13,9 +12,9 @@ function ungroup(column) {
 
 function convertTableToCSV(table) {
   return function (state) {
-    const { genomes, genomeIds } = state;
+    const { genomes, genomeIds, tables } = state;
     const columnKeys =
-      getTables(state)[table].columns.
+      tables[table].columns.
         reduce((flat, column) => flat.concat(ungroup(column)), []).
         filter(_ => 'valueGetter' in _).
         map(_ => _.columnKey);
