@@ -17,10 +17,8 @@ export function createDownloadKey(id) {
   return typeof id === 'string' ? id : JSON.stringify(id);
 }
 
-export function formatCollectionFilename({ metadata, id }) {
-  return metadata.title ?
-    metadata.title.toLowerCase().replace(/\W/g, '_') :
-    [ Species.nickname, id ].join('_');
+export function formatCollectionFilename({ id }) {
+  return [ Species.nickname, id ].join('_');
 }
 
 const errorToast = {
