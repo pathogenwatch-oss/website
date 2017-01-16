@@ -14,10 +14,10 @@
 }
 
 .wgsa-button-group .material-icons {
-  line-height: 36px;
+  line-height: 28px;
   padding: 0 4px;
   color: rgba(0, 0, 0, 0.54);
-  font-size: 18px;
+  font-size: 16px;
   border: 1px solid rgba(0, 0, 0, 0.28);
   border-right: none;
 }
@@ -29,8 +29,8 @@
   color: inherit;
   font-family: 'Roboto', arial, sans-serif;
   font-weight: 500;
-  font-size: 14px;
-  padding: 8px;
+  font-size: 12px;
+  padding: 4px 8px;
   outline: none;
   text-decoration: none;
   transition: .28s cubic-bezier(.4,0,.2,1);

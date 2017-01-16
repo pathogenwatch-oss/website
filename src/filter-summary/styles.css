@@ -13,11 +13,14 @@
   position: relative;
 }
 
+.wgsa-filter-summary > :first-child {
+  position: absolute;
+  left: 0;
+}
+
 .wgsa-filter-summary__count {
   font-size: 13px;
-  left: 0;
   margin: 0;
-  position: absolute;
 }
 
 .wgsa-filter-summary__count > span {

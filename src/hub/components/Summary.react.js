@@ -42,7 +42,7 @@ const Summary = React.createClass({
       <FilterSummary className="wgsa-hub-summary">
         { batchSize ?
           <ProgressBar
-            className="wgsa-hub-upload-progress"
+            className="wgsa-filter-summary__count"
             progress={(completedUploads / batchSize) * 100}
             label={`${completedUploads}/${batchSize}`}
           /> :
