@@ -85,6 +85,7 @@ export default React.createClass({
     phylocanvas.on('error', error => console.error(error));
 
     this.phylocanvas = phylocanvas;
+    this.phylocanvas.contextMenu.filenames = this.props.filenames;
 
     // must be native event to for body click cancellation to work
     this.refs.menuButton.addEventListener('click', e => this.toggleContextMenu(e));
