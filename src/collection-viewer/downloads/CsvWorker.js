@@ -27,16 +27,16 @@ const csvOptions = {
     formatLabel: true,
   },
   antibiotics: {
-    valueGetter: (antibiotic, { analysis: { resistanceProfile } }) =>
-      (isResistant(resistanceProfile, antibiotic) ? 1 : 0),
+    valueGetter: (antibiotic, { analysis: { paarsnp } }) =>
+      (isResistant(paarsnp, antibiotic) ? 1 : 0),
   },
   snps: {
-    valueGetter: (snp, { analysis: { resistanceProfile } }) =>
-      (resistanceProfile.snp.indexOf(snp) === -1 ? 0 : 1),
+    valueGetter: (snp, { analysis: { paarsnp } }) =>
+      (paarsnp.snp.indexOf(snp) === -1 ? 0 : 1),
   },
   genes: {
-    valueGetter: (gene, { analysis: { resistanceProfile } }) =>
-      (resistanceProfile.paar.indexOf(gene) === -1 ? 0 : 1),
+    valueGetter: (gene, { analysis: { paarsnp } }) =>
+      (paarsnp.paar.indexOf(gene) === -1 ? 0 : 1),
   },
 };
 

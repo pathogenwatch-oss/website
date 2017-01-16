@@ -35,7 +35,7 @@ export default {
   ),
   publicMetadataColumnNames: [],
   collections: [],
-  resistanceProfileSeparatorIndex: -1,
+  antibioticsSeparatorIndex: -1,
   uiOptions: {
     genotyphi: true,
   },

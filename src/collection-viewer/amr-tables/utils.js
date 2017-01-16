@@ -58,7 +58,7 @@ export function createAdvancedViewColumn({ key, label }, profileKey, profiles) {
   return {
     addState({ data }) {
       this.hidden = data.every(({ analysis }) =>
-        notPresent(analysis.resistanceProfile[profileKey], key)
+        notPresent(analysis.paarsnp[profileKey], key)
       );
       this.width = this.getWidth() + 16;
       return this;
@@ -74,7 +74,7 @@ export function createAdvancedViewColumn({ key, label }, profileKey, profiles) {
       return measureText(label, true) + 4;
     },
     getCellContents(props, { analysis }) {
-      return analysis.resistanceProfile[profileKey].indexOf(key) !== -1 ? (
+      return analysis.paarsnp[profileKey].indexOf(key) !== -1 ? (
         <i className="material-icons wgsa-resistance-icon wgsa-amr--resistant">
           lens
         </i>
@@ -88,14 +88,12 @@ export function createAdvancedViewColumn({ key, label }, profileKey, profiles) {
   };
 }
 
-function getResistanceProfiles(genomes) {
-  return Object.keys(genomes).
-    reduce((profiles, id) => {
-      const { analysis } = genomes[id];
-      if (!analysis.paarsnp) return profiles;
-      profiles.push(analysis.paarsnp);
-      return profiles;
-    }, []);
+function getPaarsnpResults(genomes) {
+  return genomes.reduce((results, { analysis }) => {
+    if (!analysis.paarsnp) return results;
+    results.push(analysis.paarsnp);
+    return results;
+  }, []);
 }
 
 const initialState = {
@@ -110,8 +108,8 @@ export function createReducer({ name, buildColumns }) {
         const { genomes, _species, status } = payload.result;
         if (status !== statuses.READY) return state;
 
-        const resistanceProfiles = getResistanceProfiles(genomes);
-        const columns = buildColumns(_species.resistance, resistanceProfiles);
+        const paarsnpResults = getPaarsnpResults(genomes);
+        const columns = buildColumns(_species.resistance, paarsnpResults);
         return {
           ...state,
           columns: [ systemGroup ].concat(

@@ -1,6 +1,8 @@
 import React from 'react';
 
-import * as resistanceProfile from '../amr-utils';
+const { onHeaderClick } = require('./thunks');
+
+import * as amr from '../amr-utils';
 import { tableKeys } from '../../collection-viewer/table/constants';
 import Species from '../../species';
 
@@ -30,9 +32,9 @@ function createColumn({ key, fullName }) {
     },
     cellPadding: 16,
     getCellContents(props, { analysis }) {
-      const { antibiotics } = analysis.resistanceProfile;
+      const { antibiotics } = analysis.paarsnp;
       const isResistant =
-        resistanceProfile.isResistant(analysis.resistanceProfile, props.columnKey);
+        amr.isResistant(analysis.paarsnp, props.columnKey);
       if (isResistant) {
         const { state } = antibiotics[props.columnKey];
         return (
@@ -45,15 +47,15 @@ function createColumn({ key, fullName }) {
       }
       return null;
     },
-    valueGetter: genome => resistanceProfile.getColour(key, genome),
-    onHeaderClick: resistanceProfile.onHeaderClick,
+    valueGetter: genome => amr.getColour(key, genome),
+    onHeaderClick,
   };
 }
 
 export const name = tableKeys.antibiotics;
 
 export function buildColumns({ antibiotics }) {
-  const separatorIndex = Species.current.resistanceProfileSeparatorIndex;
+  const separatorIndex = Species.current.antibioticsSeparatorIndex;
 
   if (typeof separatorIndex === 'undefined') {
     return antibiotics.map(createColumn);

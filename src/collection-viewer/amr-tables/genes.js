@@ -1,6 +1,7 @@
+const { onHeaderClick } = require('./thunks');
+
 import { tableKeys } from '../../collection-viewer/table/constants';
 import { createAdvancedViewColumn } from './utils';
-import * as resistanceProfile from '../amr-utils';
 
 export const name = tableKeys.genes;
 
@@ -16,6 +17,6 @@ export function buildColumns({ paar, antibiotics }, profiles) {
       getLabel: () => antibiotic,
       headerClasses: 'wgsa-table-header--expanded wgsa-table-header--group',
       headerTitle: antibiotics.find(_ => _.key === antibiotic).fullName,
-      onHeaderClick: resistanceProfile.onHeaderClick,
+      onHeaderClick,
     }));
 }

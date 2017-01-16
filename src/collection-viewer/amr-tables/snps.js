@@ -1,6 +1,7 @@
+const { onHeaderClick } = require('./thunks');
+
 import { measureText } from '../table/utils/columnWidth';
 import { createAdvancedViewColumn } from './utils';
-import * as resistanceProfile from '../amr-utils';
 
 import { tableKeys } from '../../collection-viewer/table/constants';
 
@@ -26,7 +27,7 @@ export function buildColumns({ snp, antibiotics }, profiles) {
                   snp[antibiotic][gene].every(snpName =>
                     data.every(
                       ({ analysis }) =>
-                        analysis.resistanceProfile.snp.indexOf(`${gene}_${snpName}`) === -1
+                        analysis.paarsnp.snp.indexOf(`${gene}_${snpName}`) === -1
                     )
                   );
                 return this;
@@ -41,6 +42,6 @@ export function buildColumns({ snp, antibiotics }, profiles) {
       getLabel: () => antibiotic,
       headerClasses: 'wgsa-table-header--expanded wgsa-table-header--group',
       headerTitle: antibiotics.find(_ => _.key === antibiotic).fullName,
-      onHeaderClick: resistanceProfile.onHeaderClick,
+      onHeaderClick,
     }));
 }

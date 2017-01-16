@@ -36,12 +36,12 @@ export function getColour(antibiotic, genome) {
 }
 
 export function getAdvancedColour(element, type, genome) {
-  const { resistanceProfile } = genome.analysis;
-  if (!resistanceProfile) {
+  const { paarsnp } = genome.analysis;
+  if (!paarsnp) {
     return defaultColourGetter(genome);
   }
 
-  if (resistanceProfile[type].indexOf(element) !== -1) {
+  if (paarsnp[type].indexOf(element) !== -1) {
     return stateColours.RESISTANT;
   }
   return nonResistantColour;
