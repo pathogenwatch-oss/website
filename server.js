@@ -11,7 +11,6 @@ const async = require('async');
 
 const config = require('configuration.js');
 const logging = require('utils/logging');
-const storageConnection = require('utils/storageConnection');
 const messageQueueConnection = require('utils/messageQueueConnection');
 const mongoConnection = require('utils/mongoConnection');
 
@@ -39,7 +38,6 @@ logging.initHttpLogging(app, process.env.NODE_ENV || 'development');
 
 module.exports = (callback) => {
   async.parallel([
-    storageConnection.connect,
     messageQueueConnection.connect,
     mongoConnection.connect,
   ], (error) => {
