@@ -13,14 +13,14 @@ export const systemDataColumns = {
       return analysis.populationSubtype;
     },
   },
-  __st: {
-    columnKey: '__st',
+  __mlst: {
+    columnKey: '__mlst',
     valueGetter({ analysis }) {
       return analysis.st;
     },
   },
-  __profile: {
-    columnKey: '__profile',
+  __mlst_profile: {
+    columnKey: '__mlst_profile',
     valueGetter({ analysis }) {
       return analysis.mlst;
     },
@@ -122,8 +122,8 @@ export const systemDataColumns = {
 function getSystemDataColumnKeys(uiOptions = {}) {
   return (
     [ '__date' ].
-      concat(uiOptions.noPopulation ? [] : [ '__wgsa_reference', '__st' ]).
-      concat(uiOptions.noMLST ? [] : [ '__profile' ]).
+      concat(uiOptions.noPopulation ? [] : [ '__wgsa_reference' ]).
+      concat(uiOptions.noMLST ? [] : [ '__mlst', '__mlst_profile' ]).
       concat(uiOptions.ngMast ? [ '__ng-mast', '__por', '__tbpb' ] : []).
       concat(uiOptions.genotyphi ? [ '__genotyphi_type' ] : []).
       concat([
