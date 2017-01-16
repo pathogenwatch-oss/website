@@ -1,10 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-
-import Switch from '../../components/Switch.react';
+import classnames from 'classnames';
 
 import * as selectors from './selectors';
-import { displayTree } from './thunks';
+import * as actions from './thunks';
 
 import { POPULATION, COLLECTION } from '../../app/stateKeys/tree';
 
@@ -13,20 +12,26 @@ const icons = {
   [POPULATION]: 'language',
 };
 
-const Header = ({ tree, title, singleTree, isSubtree, onSwitchChange, onBackButtonClick }) => {
+const Header = ({ tree, singleTree, isSubtree, displayTree }) => {
   const switcher =
     singleTree ?
     <div className="wgsa-tree-icon mdl-button mdl-button--icon">
       <i className="material-icons">{icons[singleTree]}</i>
     </div> :
-    <div className="wgsa-switch-background wgsa-switch-background--see-through">
-      <Switch
-        id="tree-switcher"
-        left={{ title: 'Collection View', icon: icons[COLLECTION] }}
-        right={{ title: 'Population View', icon: icons[POPULATION] }}
-        checked={tree.name === POPULATION}
-        onChange={onSwitchChange}
-      />
+    <div className="wgsa-button-group mdl-shadow--2dp">
+      <i className="material-icons" title="View">visibility</i>
+      <button
+        className={classnames({ active: tree.name === COLLECTION })}
+        onChange={() => displayTree(COLLECTION)}
+      >
+        Collection
+      </button>
+      <button
+        className={classnames({ active: tree.name === POPULATION })}
+        onChange={() => displayTree(POPULATION)}
+      >
+        Population
+      </button>
     </div>;
 
   return (
@@ -34,15 +39,12 @@ const Header = ({ tree, title, singleTree, isSubtree, onSwitchChange, onBackButt
       { isSubtree ?
         <button
           className="wgsa-tree-icon mdl-button mdl-button--icon"
-          onClick={onBackButtonClick}
+          onClick={() => displayTree(POPULATION)}
         >
           <i className="material-icons">arrow_back</i>
         </button> :
         switcher
       }
-      <h2 className="wgsa-tree-heading">
-        <span>{title}</span>
-      </h2>
     </header>
   );
 };
@@ -58,9 +60,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    onSwitchChange: checked =>
-      dispatch(displayTree(checked ? POPULATION : COLLECTION)),
-    onBackButtonClick: () => dispatch(displayTree(POPULATION)),
+    displayTree: tree => dispatch(actions.displayTree(tree)),
   };
 }
 
