@@ -20,7 +20,7 @@ export function buildColumns({ snp, antibiotics }, profiles) {
               fixedWidth: measureText(gene, true) + 16,
               flexGrow: 0,
               getCellContents() {},
-              getHeaderContent: () => `${gene}_`,
+              getLabel: () => `${gene}_`,
               addState({ data }) {
                 this.hidden =
                   snp[antibiotic][gene].every(snpName =>
@@ -31,7 +31,7 @@ export function buildColumns({ snp, antibiotics }, profiles) {
                   );
                 return this;
               },
-              headerClasses: 'wgsa-table-header--expanded',
+              headerClasses: 'wgsa-table-header--unstyled',
             },
             snp[antibiotic][gene].
               map(snpName => createAdvancedViewColumn(

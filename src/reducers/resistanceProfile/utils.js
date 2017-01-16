@@ -41,7 +41,7 @@ const spacerGroup = {
   columns: [
     { columnKey: '__spacer_r',
       getHeaderContent() {},
-      fixedWidth: 8,
+      fixedWidth: 24,
       getCellContents() {},
       cellClasses: 'wgsa-table-cell--resistance',
     },

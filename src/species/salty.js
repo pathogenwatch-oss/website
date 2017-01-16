@@ -35,7 +35,12 @@ export default {
   ),
   publicMetadataColumnNames: [],
   collections: [],
-  resistanceProfileSeparatorIndex: -1,
+  amrOptions: {
+    customLabels: {
+      SIL: 'OTHER',
+    },
+    antibioticsSeparatorIndex: -1,
+  },
   uiOptions: {
     genotyphi: true,
   },

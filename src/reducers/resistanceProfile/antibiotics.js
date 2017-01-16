@@ -12,14 +12,11 @@ const modifierKey = isMac ? 'Cmd' : 'Ctrl';
 function createColumn({ key, fullName }) {
   const columnKey = key;
   const hoverName = fullName || key;
-
+  const { customLabels } = Species.current.amrOptions;
   return {
     columnKey,
-    isExpandable() {
-      return this.isSelected && this.allMechanisms.length;
-    },
     getLabel() {
-      return key.slice(0, 3);
+      return (key in customLabels ? customLabels[key] : key.slice(0, 3));
     },
     headerClasses: 'wgsa-table-header--expanded',
     headerTitle: `${hoverName} - ${modifierKey} + click to select multiple`,
@@ -53,14 +50,14 @@ function createColumn({ key, fullName }) {
 export const name = tableKeys.antibiotics;
 
 export function buildColumns({ antibiotics }) {
-  const separatorIndex = Species.current.resistanceProfileSeparatorIndex;
+  const { antibioticsSeparatorIndex } = Species.current.amrOptions;
 
-  if (typeof separatorIndex === 'undefined') {
+  if (typeof antibioticsSeparatorIndex === 'undefined') {
     return antibiotics.map(createColumn);
   }
 
   return [
-    ...antibiotics.slice(0, separatorIndex).map(createColumn),
+    ...antibiotics.slice(0, antibioticsSeparatorIndex).map(createColumn),
     { columnKey: '__group_spacer',
       getHeaderContent() {},
       fixedWidth: 40,
@@ -68,6 +65,6 @@ export function buildColumns({ antibiotics }) {
       getCellContents() {},
       cellClasses: 'wgsa-table-cell--resistance',
     },
-    ...antibiotics.slice(separatorIndex).map(createColumn),
+    ...antibiotics.slice(antibioticsSeparatorIndex).map(createColumn),
   ];
 }
