@@ -3,7 +3,7 @@ import { Route } from 'react-router';
 import { connect } from 'react-redux';
 
 import Collection from './component';
-import FetchedHeaderContent from '../collection-viewer/HeaderContent.react';
+import ViewerHeaderContent from '../collection-viewer/HeaderContent.react';
 import ProcessingHeaderContent from './progress/Header.react';
 
 import { getCollection } from './selectors';
@@ -24,8 +24,8 @@ const mapStateToProps = state => ({ status: getCollection(state).status });
 const HeaderSwitcher = connect(mapStateToProps)(
   ({ status }) => {
     switch (status) {
-      case statuses.FETCHED:
-        return <FetchedHeaderContent />;
+      case statuses.READY:
+        return <ViewerHeaderContent />;
       case statuses.PROCESSING:
         return <ProcessingHeaderContent />;
       default:
