@@ -1,7 +1,4 @@
-import { setLabelColumn } from '../table/actions';
-import { getTables, getVisibleTableName } from '../table/selectors';
 import { formatMonth, formatDay } from '../../utils/Date';
-import { nameColumnProps } from '../table/constants';
 
 export function getFormattedDateString({ year, month, day }) {
   if (year && !month && !day) {
@@ -19,17 +16,5 @@ export function getFormattedDateString({ year, month, day }) {
   return '';
 }
 
-export const initialActiveColumn = nameColumnProps;
-
-export function onHeaderClick(event, column) {
-  return (dispatch, getState) => {
-    const state = getState();
-    const visibleTable = getVisibleTableName(state);
-    const { activeColumn } = getTables(state)[visibleTable];
-
-    dispatch(setLabelColumn(
-      visibleTable,
-      activeColumn === column ? initialActiveColumn : column,
-    ));
-  };
-}
+export const getUserDefinedValue =
+  (column, { metadata }) => metadata.userDefined[column];

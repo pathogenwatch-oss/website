@@ -1,15 +1,18 @@
 import { SET_LABEL_COLUMN } from '../table/actions';
 
-import { downloadColumnProps, nameColumnProps, tableKeys } from '../table/constants';
+import * as constants from '../table/constants';
 import { systemDataColumns } from './constants';
-import { initialActiveColumn, onHeaderClick } from './utils';
+import { onHeaderClick } from './thunks';
+
+const { tableKeys } = constants;
 
 const initialState = {
   name: tableKeys.stats,
-  activeColumn: initialActiveColumn,
+  activeColumn: constants.nameColumnProps,
   columns: [
-    downloadColumnProps,
-    nameColumnProps,
+    constants.leftSpacerColumn,
+    constants.downloadColumnProps,
+    constants.nameColumnProps,
     systemDataColumns.__core_matches,
     systemDataColumns['__%_core_families'],
     systemDataColumns['__%_non-core'],
@@ -18,6 +21,7 @@ const initialState = {
     systemDataColumns['__no._contigs'],
     systemDataColumns['__non-ATCG'],
     systemDataColumns.__GC_Content,
+    constants.rightSpacerColumn,
   ],
   onHeaderClick,
 };

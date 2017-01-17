@@ -25,12 +25,28 @@ export const dataTables = new Set([
   tableKeys.stats,
 ]);
 
-
 export const amrTables = new Set([
   tableKeys.antibiotics,
   tableKeys.snps,
   tableKeys.genes,
 ]);
+
+export const leftSpacerColumn = {
+  columnKey: '__spacer_l',
+  getHeaderContent() {},
+  fixed: true,
+  fixedWidth: 1,
+  flexGrow: 1,
+  getCellContents() {},
+};
+
+export const rightSpacerColumn = {
+  columnKey: '__spacer_r',
+  getHeaderContent() {},
+  fixedWidth: 24,
+  flexGrow: 1,
+  getCellContents() {},
+};
 
 export const nameColumnData = {
   columnKey: '__name',

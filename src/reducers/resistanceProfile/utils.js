@@ -5,17 +5,9 @@ import { SET_COLOUR_COLUMNS } from '../../collection-viewer/table/actions';
 
 import * as resistanceProfile from '../../utils/resistanceProfile';
 import { measureText } from '../../table/utils/columnWidth';
+
 import * as constants from '../../collection-viewer/table/constants';
 import Species from '../../species';
-
-const systemColumnProps = [
-  constants.downloadColumnProps,
-  { ...constants.nameColumnProps,
-    flexGrow: 0,
-    headerClasses: 'wgsa-table-header--unstyled',
-    onHeaderClick: () => {},
-  },
-];
 
 const systemGroup = {
   group: true,
@@ -24,13 +16,13 @@ const systemGroup = {
   columnKey: 'system',
   getHeaderContent() {},
   columns: [
-    { columnKey: '__spacer_l',
-      getHeaderContent() {},
-      fixed: true,
-      fixedWidth: 1,
-      getCellContents() {},
+    constants.leftSpacerColumn,
+    constants.downloadColumnProps,
+    { ...constants.nameColumnProps,
+      flexGrow: 0,
+      headerClasses: 'wgsa-table-header--unstyled',
+      onHeaderClick: () => {},
     },
-    ...systemColumnProps,
   ],
 };
 
@@ -40,11 +32,8 @@ const spacerGroup = {
   columnKey: 'spacer',
   getHeaderContent() {},
   columns: [
-    { columnKey: '__spacer_r',
-      getHeaderContent() {},
-      fixedWidth: 24,
-      getCellContents() {},
-      cellClasses: 'wgsa-table-cell--resistance',
+    { ...constants.rightSpacerColumn,
+      cellClasses: 'wgsa-table-cell--resistance', // for border on last column
     },
   ],
 };

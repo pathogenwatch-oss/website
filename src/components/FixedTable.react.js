@@ -125,7 +125,7 @@ export default React.createClass({
             header={headerProps => this.renderHeader(props, headerProps)}
             cell={cellProps => this.renderCell(props, cellProps)}
             width={props.fixedWidth || props.width || 96}
-            flexGrow={1}
+            flexGrow={0}
             { ...props }
           />
         )

@@ -118,6 +118,3 @@ export const systemDataColumns = {
     },
   },
 };
-
-export const getUserDefinedValue =
-  (column, { metadata }) => metadata.userDefined[column];

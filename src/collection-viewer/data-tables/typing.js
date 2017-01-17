@@ -1,18 +1,21 @@
 import { FETCH_ENTITIES } from '../../actions/fetch';
 import { SET_LABEL_COLUMN } from '../table/actions';
 
-import { downloadColumnProps, nameColumnProps, tableKeys } from '../table/constants';
+import * as constants from '../table/constants';
 import { systemDataColumns } from './constants';
-import { initialActiveColumn, onHeaderClick } from './utils';
+import { onHeaderClick } from './thunks';
 
 import Species from '../../species';
 
+const { tableKeys } = constants;
+
 const initialState = {
   name: tableKeys.typing,
-  activeColumn: initialActiveColumn,
+  activeColumn: constants.nameColumnProps,
   columns: [
-    downloadColumnProps,
-    nameColumnProps,
+    constants.leftSpacerColumn,
+    constants.downloadColumnProps,
+    constants.nameColumnProps,
     systemDataColumns.__wgsa_reference,
     systemDataColumns.__mlst,
     systemDataColumns.__mlst_profile,
@@ -20,6 +23,7 @@ const initialState = {
     systemDataColumns.__por,
     systemDataColumns.__tbpb,
     systemDataColumns.__genotyphi_type,
+    constants.rightSpacerColumn,
   ],
   onHeaderClick,
 };

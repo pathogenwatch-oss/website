@@ -2,18 +2,20 @@ import { FETCH_ENTITIES } from '../../actions/fetch';
 import { SET_LABEL_COLUMN } from '../table/actions';
 import { SET_TREE } from '../tree/actions';
 
-import { initialActiveColumn, onHeaderClick } from './utils';
-
-import { downloadColumnProps, nameColumnProps, tableKeys } from '../table/constants';
-import * as metadata from './constants';
+import { onHeaderClick } from './thunks';
+import { getUserDefinedValue } from './utils';
 
 import { speciesTrees } from '../tree/constants';
+import * as table from '../table/constants';
+import { systemDataColumns } from './constants';
 
 import Species from '../../species';
 
+const { tableKeys } = table;
+
 const initialState = {
   name: tableKeys.metadata,
-  activeColumn: initialActiveColumn,
+  activeColumn: table.nameColumnProps,
   columns: [],
   onHeaderClick,
 };
@@ -35,7 +37,7 @@ function getUserDefinedColumnProps(columnNames) {
   return Array.from(columnNames).map(column => ({
     columnKey: column,
     valueGetter(data) {
-      return metadata.getUserDefinedValue(column, data);
+      return getUserDefinedValue(column, data);
     },
   }));
 }
@@ -44,8 +46,15 @@ function getActiveColumn(currentActiveColumn, newColumns) {
   if (newColumns.indexOf(currentActiveColumn) !== -1) {
     return currentActiveColumn;
   }
-  return initialActiveColumn;
+  return table.nameColumnProps;
 }
+
+const systemColumnProps = [
+  table.leftSpacerColumn,
+  table.downloadColumnProps,
+  table.nameColumnProps,
+  systemDataColumns.__date,
+];
 
 export default function (state = initialState, { type, payload }) {
   switch (type) {
@@ -54,22 +63,22 @@ export default function (state = initialState, { type, payload }) {
       const { publicMetadataColumnNames = [] } = Species.current;
 
       const columnNames = getUserDefinedColumnNames(assemblies);
-      const systemColumnProps = [
-        downloadColumnProps,
-        nameColumnProps,
-        metadata.systemDataColumns.__date,
+
+      const userDefinedColumnProps = [
+        ...systemColumnProps,
+        ...getUserDefinedColumnProps(columnNames),
+        table.rightSpacerColumn,
       ];
-      const userDefinedColumnProps =
-        systemColumnProps.concat(getUserDefinedColumnProps(columnNames));
 
       return {
         ...state,
         userDefinedColumnProps,
         publicMetadataColumnProps:
           publicMetadataColumnNames.length ?
-            systemColumnProps.concat(
-              getUserDefinedColumnProps(publicMetadataColumnNames)
-            ) :
+            [ ...systemColumnProps,
+              ...getUserDefinedColumnProps(publicMetadataColumnNames),
+              table.rightSpacerColumn,
+            ] :
             userDefinedColumnProps,
         columns: userDefinedColumnProps,
       };

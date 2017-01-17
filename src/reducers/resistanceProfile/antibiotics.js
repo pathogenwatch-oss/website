@@ -12,13 +12,13 @@ const modifierKey = isMac ? 'Cmd' : 'Ctrl';
 
 function createColumn({ key, fullName }) {
   const columnKey = key;
-  const hoverName = fullName || key;
+  const hoverName = checkCustomLabels(key) === key ? (fullName || key) : null;
 
   return {
     columnKey,
     getLabel: () => checkCustomLabels(key),
     headerClasses: 'wgsa-table-header--expanded',
-    headerTitle: `${hoverName} - ${modifierKey} + click to select multiple`,
+    headerTitle: `${hoverName ? `${hoverName} - ` : ''}${modifierKey} + click to select multiple`,
     cellClasses: 'wgsa-table-cell--resistance',
     flexGrow: 0,
     getWidth() {

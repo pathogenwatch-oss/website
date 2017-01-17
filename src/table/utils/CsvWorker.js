@@ -3,8 +3,10 @@ import Papa from 'papaparse';
 
 import { formatColumnKeyAsLabel } from './index';
 
-import { systemDataColumns, getUserDefinedValue }
+import { systemDataColumns }
   from '../../collection-viewer/data-tables/constants';
+import { getUserDefinedValue }
+  from '../../collection-viewer/data-tables/utils';
 
 import { isResistant } from '../../utils/resistanceProfile';
 
