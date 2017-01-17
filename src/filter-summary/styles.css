@@ -3,7 +3,6 @@
   display: flex;
   font-size: 13px;
   height: 4rem;
-  justify-content: center;
   min-height: 4rem;
   position: relative;
 }
@@ -14,8 +13,8 @@
 }
 
 .wgsa-filter-summary > :first-child {
-  position: absolute;
-  left: 0;
+  margin: 0;
+  margin-right: 16px;
 }
 
 .wgsa-filter-summary__count {

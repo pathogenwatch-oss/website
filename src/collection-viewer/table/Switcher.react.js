@@ -24,7 +24,10 @@ function mapDispatchToProps(dispatch) {
 const Button = connect(mapStateToProps, mapDispatchToProps)(
   ({ table, label, displayedTable, showTable }) => (
     <button
-      className={classnames({ active: displayedTable === table })}
+      className={classnames(
+        'wgsa-button-group__item',
+        { active: displayedTable === table }
+      )}
       onClick={() => showTable(table)}
     >
       {label}
@@ -47,6 +50,7 @@ const TableSwitcher = () => (
       <Button table={metadata} label="Metadata" />
     </ButtonGroup>
     <ButtonGroup>
+      <i className="material-icons" title="AMR">local_pharmacy</i>
       <Button table={antibiotics} label="Antibiotics" />
       <Button table={snps} label="SNPs" />
       <Button table={genes} label="Genes" />

@@ -26,18 +26,17 @@ const History = React.createClass({
   render() {
     const { tree } = this.props;
     const { open } = this.state;
-    const active = tree.history.length > 1;
+
     return (
       <div
         className={classnames(
           'wgsa-tree-history',
           { 'wgsa-tree-history--open': open }
         )}
-        onClick={() => this.setState({ open: active && !open })}
+        onClick={() => this.setState({ open: !open })}
       >
         <button
           className="wgsa-tree-history__tab mdl-button"
-          disabled={!active}
         >
           <span>History</span>
         </button>

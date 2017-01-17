@@ -8,6 +8,7 @@
 
 .wgsa-button-group {
   margin: 0 4px;
+  background: #fff;
   border-radius: 4px;
   display: flex;
   align-items: stretch;
@@ -17,7 +18,8 @@
   line-height: 28px;
   padding: 0 4px;
   color: rgba(0, 0, 0, 0.54);
-  font-size: 16px;
+  cursor: help;
+  font-size: 18px;
   border: 1px solid rgba(0, 0, 0, 0.28);
   border-right: none;
 }

@@ -50,7 +50,12 @@ export const getFilenames = createSelector(
   utils.getFilenames
 );
 
-export const isSubtree = createSelector(
-  getVisibleTree,
-  tree => !speciesTrees.has(tree.name)
+export const getLastSubtree = createSelector(
+  getTreeState,
+  ({ entities }) => entities.assemblies,
+  ({ lastSubtree }, assemblies) => (
+    lastSubtree ?
+      { name: lastSubtree, title: assemblies[lastSubtree].name } :
+      null
+  )
 );

@@ -40,6 +40,12 @@ const Summary = React.createClass({
     if (totalFastas === 0) return <FilterSummary />;
     return (
       <FilterSummary className="wgsa-hub-summary">
+        <div className="wgsa-button-group">
+          <i className="material-icons" title="View">visibility</i>
+          <ViewSwitcher to="/upload" title="Grid" />
+          <ViewSwitcher to="/upload/map" title="Map" />
+          <ViewSwitcher to="/upload/stats" title="Stats" />
+        </div>
         { batchSize ?
           <ProgressBar
             className="wgsa-filter-summary__count"
@@ -49,15 +55,9 @@ const Summary = React.createClass({
           <Totals
             visible={visibleFastas}
             total={totalFastas}
-            itemType="assemblies"
+            itemType="genome"
           />
         }
-        <div className="wgsa-button-group">
-          <i className="material-icons" title="View">visibility</i>
-          <ViewSwitcher to="/upload" title="Grid" />
-          <ViewSwitcher to="/upload/map" title="Map" />
-          <ViewSwitcher to="/upload/stats" title="Stats" />
-        </div>
       </FilterSummary>
     );
   },

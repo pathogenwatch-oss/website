@@ -3,6 +3,7 @@ import { combineReducers } from 'redux';
 import { FETCH_ENTITIES } from '../../actions/fetch';
 import * as ACTIONS from './actions';
 
+import { speciesTrees } from './constants';
 import { COLLECTION, POPULATION } from '../../app/stateKeys/tree';
 
 function setSize(state, step, maxStepFactor) {
@@ -177,8 +178,18 @@ function loading(state = false, { type }) {
   }
 }
 
+function lastSubtree(state = null, { type, payload }) {
+  switch (type) {
+    case ACTIONS.SET_TREE:
+      return speciesTrees.has(payload.name) ? state : payload.name;
+    default:
+      return state;
+  }
+}
+
 export default combineReducers({
   entities,
   visible,
   loading,
+  lastSubtree,
 });
