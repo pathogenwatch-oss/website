@@ -18,6 +18,11 @@
   padding-right: 24px;
 }
 
+.wgsa-hub-stats-section--small {
+  float: left;
+  width: 50%;
+}
+
 .wgsa-hub-stats-heading {
   font-family: "Roboto Condensed", "Helvetica", "Arial", sans-serif;
   font-size: 14px;
