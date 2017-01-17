@@ -21,7 +21,7 @@
     "longjohn": "^0.2.4",
     "morgan": "^1.5.1",
     "named-argv": "^0.3.0",
-    "natural-sort": "^1.0.0",
+    "natsort": "^1.0.6",
     "pusher": "^1.1.0",
     "sanitize-filename": "^1.5.3",
     "serve-favicon": "^2.2.0",

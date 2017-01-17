@@ -1,4 +1,4 @@
-const naturalSort = require('natural-sort');
+const sort = require('natsort')();
 
 const mainStorage = require('services/storage')('main');
 
@@ -6,10 +6,14 @@ const LOGGER = require('utils/logging').createLogger('PAARSNP model');
 const { PAARSNP_LIBRARY } = require('utils/documentKeys');
 
 function createPaarColumns({ resistanceSets }) {
-  return resistanceSets.reduce((memo, { agents, elementIds }) => {
+  return resistanceSets.reduce((memo, { agents, elementIds, effect }) => {
     for (const { antibioticKey } of agents) {
-      const elements = (memo[antibioticKey] || []);
-      memo[antibioticKey] = Array.from(new Set(elements.concat(elementIds))).sort(naturalSort());
+      const elements = memo[antibioticKey] || [];
+      for (const element of elementIds) {
+        if (elements.find(_ => _.element === element)) continue;
+        elements.push({ element, effect: effect.split('_')[0] });
+      }
+      memo[antibioticKey] = elements.sort((a, b) => sort(a.element, b.element));
     }
     return memo;
   }, {});
@@ -18,14 +22,20 @@ function createPaarColumns({ resistanceSets }) {
 function createSnpColumns({ resistanceSets }) {
   return Object.keys(resistanceSets).reduce(
     (memo, key) => {
-      const { agents, elementIds } = resistanceSets[key];
+      const { agents, elementIds, effect } = resistanceSets[key];
       for (const { antibioticKey } of agents) {
         for (const element of elementIds) {
           const genes = (memo[antibioticKey] || {});
+
           const dividingIndex = element.lastIndexOf('_');
           const gene = element.slice(0, dividingIndex);
-          const snp = element.slice(dividingIndex + 1);
-          genes[gene] = (genes[gene] || []).concat(snp).sort(naturalSort());
+          const snpName = element.slice(dividingIndex + 1);
+
+          genes[gene] =
+            (genes[gene] || []).
+              concat({ snpName, effect: effect.split('_')[0] }).
+              sort((a, b) => sort(a.snpName, b.snpName));
+
           memo[antibioticKey] = genes;
         }
       }
