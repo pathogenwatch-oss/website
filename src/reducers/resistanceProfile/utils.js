@@ -42,7 +42,8 @@ function notPresent(profileSection, element) {
   return profileSection.indexOf(element) === -1;
 }
 
-export function createAdvancedViewColumn({ key, label }, profileKey, profiles) {
+export function createAdvancedViewColumn(element, profileKey, profiles) {
+  const { key, label, effect } = element;
   return {
     addState({ data }) {
       this.hidden = data.every(({ analysis }) =>
@@ -61,9 +62,12 @@ export function createAdvancedViewColumn({ key, label }, profileKey, profiles) {
     getWidth() {
       return measureText(label, true) + 4;
     },
-    getCellContents(props, { analysis }) {
-      return analysis.resistanceProfile[profileKey].indexOf(key) !== -1 ? (
-        <i className="material-icons wgsa-resistance-icon wgsa-amr--resistant">
+    getCellContents(props, assembly) {
+      return resistanceProfile.hasElement(assembly, profileKey, key) ? (
+        <i
+          className="material-icons wgsa-resistance-icon"
+          style={{ color: resistanceProfile.getEffectColour(effect) }}
+        >
           lens
         </i>
       ) : null;
@@ -71,7 +75,7 @@ export function createAdvancedViewColumn({ key, label }, profileKey, profiles) {
     headerClasses: 'wgsa-table-header--expanded',
     hidden: profiles.every(profile => notPresent(profile[profileKey], key)),
     valueGetter: assembly =>
-      resistanceProfile.getAdvancedColour(key, profileKey, assembly),
+      resistanceProfile.getAdvancedColour(element, profileKey, assembly),
     onHeaderClick: resistanceProfile.onHeaderClick,
   };
 }

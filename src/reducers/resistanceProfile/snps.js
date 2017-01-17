@@ -25,7 +25,7 @@ export function buildColumns({ snp, antibiotics }, profiles) {
                 getLabel: () => `${gene}_`,
                 addState({ data }) {
                   this.hidden =
-                    snp[key][gene].every(snpName =>
+                    snp[key][gene].every(({ snpName }) =>
                       data.every(
                         ({ analysis }) =>
                           analysis.resistanceProfile.snp.indexOf(`${gene}_${snpName}`) === -1
@@ -36,8 +36,10 @@ export function buildColumns({ snp, antibiotics }, profiles) {
                 headerClasses: 'wgsa-table-header--unstyled',
               },
               snp[key][gene].
-                map(snpName => createAdvancedViewColumn(
-                  { key: `${gene}_${snpName}`, label: snpName }, 'snp', profiles,
+                map(({ snpName, effect }) => createAdvancedViewColumn(
+                  { key: `${gene}_${snpName}`, label: snpName, effect },
+                  'snp',
+                  profiles,
                 ))
               ), []),
         getLabel: () => checkCustomLabels(key),

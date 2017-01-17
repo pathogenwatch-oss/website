@@ -11,8 +11,8 @@ export function buildColumns({ paar, antibiotics }, profiles) {
         group: true,
         columnKey: `paar_${key}`,
         columns: paar[key].
-          map(element => createAdvancedViewColumn(
-            { key: element, label: element }, 'paar', profiles
+          map(({ element, effect }) => createAdvancedViewColumn(
+            { key: element, label: element, effect }, 'paar', profiles
           )),
         getLabel: () => checkCustomLabels(key),
         headerClasses: 'wgsa-table-header--expanded wgsa-table-header--group',
