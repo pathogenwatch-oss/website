@@ -5,16 +5,17 @@
   overflow-y: auto;
 }
 
+.wgsa-hub-stats-group {
+  display: flex;
+  max-width: 1024px;
+  margin: 0 auto;
+}
+
 .wgsa-hub-stats-section {
-  float: left;
   margin: 0;
   width: 100%;
   box-sizing: border-box;
   padding-right: 24px;
-}
-
-.wgsa-hub-stats-section--small {
-  width: 50%;
 }
 
 .wgsa-hub-stats-heading {
@@ -61,14 +62,9 @@
 }
 
 .wgsa-hub-stats-value--large {
-  color: rgba(0, 0, 0, 0.54);
-  font-size: 4rem;
-  font-weight: 100;
-}
-
-.is-small-screen .wgsa-hub-stats-value--large {
-  font-size: 2rem;
   color: rgba(0, 0, 0, 0.87);
+  font-size: 2rem;
+  font-weight: 300;
 }
 
 .wgsa-clickable-point {
