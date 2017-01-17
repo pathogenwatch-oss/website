@@ -12,6 +12,8 @@ import Species from '../../species';
 
 export const tableKeys = {
   metadata: 'metadata',
+  typing: 'typing',
+  stats: 'stats',
   antibiotics: 'antibiotics',
   snps: 'snps',
   genes: 'genes',

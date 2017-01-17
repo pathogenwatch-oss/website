@@ -22,10 +22,11 @@ export function showTableView(view) {
 
 export const SET_LABEL_COLUMN = 'SET_LABEL_COLUMN';
 
-export function setLabelColumn(column) {
+export function setLabelColumn(table, column) {
   return {
     type: SET_LABEL_COLUMN,
     payload: {
+      table,
       column,
     },
   };

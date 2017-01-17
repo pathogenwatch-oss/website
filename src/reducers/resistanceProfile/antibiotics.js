@@ -49,7 +49,7 @@ function createColumn({ key, fullName }) {
 export const name = tableKeys.antibiotics;
 
 export function buildColumns({ antibiotics }) {
-  const { antibioticsSeparatorIndex } = Species.current.amrOptions;
+  const { antibioticsSeparatorIndex } = Species.current.amrOptions || {};
 
   if (typeof antibioticsSeparatorIndex === 'undefined') {
     return antibiotics.map(createColumn);

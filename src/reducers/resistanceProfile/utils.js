@@ -138,6 +138,6 @@ export function createReducer({ name, buildColumns }) {
 }
 
 export function checkCustomLabels(key) {
-  const { customLabels } = Species.current.amrOptions;
+  const { customLabels = {} } = Species.current.amrOptions || {};
   return (key in customLabels ? customLabels[key] : key.slice(0, 3));
 }

@@ -7,7 +7,6 @@ import { getVisibleTableName } from './selectors';
 import { setTable } from './actions';
 
 import { tableKeys } from './constants';
-const { metadata, antibiotics, snps, genes } = tableKeys;
 
 function mapStateToProps(state) {
   return {
@@ -47,13 +46,16 @@ const TableSwitcher = () => (
     onClick={event => event.stopPropagation()}
   >
     <ButtonGroup>
-      <Button table={metadata} label="Metadata" />
+      <i className="material-icons" title="Data">list</i>
+      <Button table={tableKeys.metadata} label="Metadata" />
+      <Button table={tableKeys.typing} label="Typing" />
+      <Button table={tableKeys.stats} label="Stats" />
     </ButtonGroup>
     <ButtonGroup>
       <i className="material-icons" title="AMR">local_pharmacy</i>
-      <Button table={antibiotics} label="Antibiotics" />
-      <Button table={snps} label="SNPs" />
-      <Button table={genes} label="Genes" />
+      <Button table={tableKeys.antibiotics} label="Antibiotics" />
+      <Button table={tableKeys.snps} label="SNPs" />
+      <Button table={tableKeys.genes} label="Genes" />
     </ButtonGroup>
   </div>
 );

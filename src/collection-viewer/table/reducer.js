@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 
-import metadata from '../../reducers/metadata';
+import { metadata, typing, stats } from '../data-tables';
 import { antibiotics, snps, genes } from '../../reducers/resistanceProfile';
 
 import { SET_TABLE } from './actions';
@@ -28,6 +28,8 @@ function activeAMR(state = tableKeys.antibiotics, { type, payload }) {
 export default combineReducers({
   entities: combineReducers({
     metadata,
+    typing,
+    stats,
     antibiotics,
     snps,
     genes,
