@@ -87,7 +87,7 @@ export default function (state = initialState, { type, payload }) {
       };
     }
     case SET_LABEL_COLUMN: {
-      if (payload.table !== state.name) return state;
+      if (payload.table !== tableKeys.metadata) return state;
       return {
         ...state,
         activeColumn: payload.column,

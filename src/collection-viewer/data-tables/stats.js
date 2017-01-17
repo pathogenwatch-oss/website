@@ -1,10 +1,8 @@
-import { SET_LABEL_COLUMN, setLabelColumn } from '../table/actions';
+import { SET_LABEL_COLUMN } from '../table/actions';
 
-import { getMetadataTable } from '../table/selectors';
 import { downloadColumnProps, nameColumnProps, tableKeys } from '../table/constants';
 import { systemDataColumns } from './constants';
-
-const initialActiveColumn = nameColumnProps;
+import { initialActiveColumn, onHeaderClick } from './utils';
 
 const initialState = {
   name: tableKeys.stats,
@@ -21,22 +19,13 @@ const initialState = {
     systemDataColumns['__non-ATCG'],
     systemDataColumns.__GC_Content,
   ],
-  onHeaderClick(event, column) {
-    return (dispatch, getState) => {
-      const state = getState();
-      const { activeColumn } = getMetadataTable(state);
-
-      dispatch(setLabelColumn(
-        activeColumn === column ? initialActiveColumn : column
-      ));
-    };
-  },
+  onHeaderClick,
 };
 
 export default function (state = initialState, { type, payload }) {
   switch (type) {
     case SET_LABEL_COLUMN: {
-      if (payload.name !== state.name) return state;
+      if (payload.table !== tableKeys.stats) return state;
       return {
         ...state,
         activeColumn: payload.column,

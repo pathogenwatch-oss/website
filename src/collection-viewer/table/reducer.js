@@ -5,12 +5,21 @@ import { antibiotics, snps, genes } from '../../reducers/resistanceProfile';
 
 import { SET_TABLE } from './actions';
 
-import { tableKeys, amrTables } from './constants';
+import { tableKeys, dataTables, amrTables } from './constants';
 
 function visible(state = tableKeys.metadata, { type, payload }) {
   switch (type) {
     case SET_TABLE:
       return payload.name;
+    default:
+      return state;
+  }
+}
+
+function activeData(state = tableKeys.metadata, { type, payload }) {
+  switch (type) {
+    case SET_TABLE:
+      return dataTables.has(payload.name) ? payload.name : state;
     default:
       return state;
   }
@@ -36,4 +45,5 @@ export default combineReducers({
   }),
   visible,
   activeAMR,
+  activeData,
 });

@@ -28,8 +28,8 @@ export function onHeaderClick(event, column) {
     const { activeColumn } = getTables(state)[visibleTable];
 
     dispatch(setLabelColumn(
+      visibleTable,
       activeColumn === column ? initialActiveColumn : column,
-      visibleTable
     ));
   };
 }

@@ -19,6 +19,13 @@ export const tableKeys = {
   genes: 'genes',
 };
 
+export const dataTables = new Set([
+  tableKeys.metadata,
+  tableKeys.typing,
+  tableKeys.stats,
+]);
+
+
 export const amrTables = new Set([
   tableKeys.antibiotics,
   tableKeys.snps,

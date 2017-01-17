@@ -1,15 +1,14 @@
 import { FETCH_ENTITIES } from '../../actions/fetch';
-import { SET_LABEL_COLUMN, setLabelColumn } from '../table/actions';
+import { SET_LABEL_COLUMN } from '../table/actions';
 
-import { getMetadataTable } from '../table/selectors';
-import { downloadColumnProps, nameColumnProps } from '../table/constants';
+import { downloadColumnProps, nameColumnProps, tableKeys } from '../table/constants';
 import { systemDataColumns } from './constants';
+import { initialActiveColumn, onHeaderClick } from './utils';
 
 import Species from '../../species';
 
-const initialActiveColumn = nameColumnProps;
-
 const initialState = {
+  name: tableKeys.typing,
   activeColumn: initialActiveColumn,
   columns: [
     downloadColumnProps,
@@ -22,16 +21,7 @@ const initialState = {
     systemDataColumns.__tbpb,
     systemDataColumns.__genotyphi_type,
   ],
-  onHeaderClick(event, column) {
-    return (dispatch, getState) => {
-      const state = getState();
-      const { activeColumn } = getMetadataTable(state);
-
-      dispatch(setLabelColumn(
-        activeColumn === column ? initialActiveColumn : column
-      ));
-    };
-  },
+  onHeaderClick,
 };
 
 function showOrHideColumns(columns, uiOptions) {
@@ -70,6 +60,7 @@ export default function (state = initialState, { type, payload }) {
         columns: showOrHideColumns(state.columns, Species.uiOptions),
       };
     case SET_LABEL_COLUMN:
+      if (payload.table !== tableKeys.typing) return state;
       return {
         ...state,
         activeColumn: payload.column,
