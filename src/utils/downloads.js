@@ -34,11 +34,12 @@ function convertTableToCSV(table) {
   };
 }
 
-const { metadata, antibiotics, snps, genes } = tableKeys;
-export const generateMetadataFile = convertTableToCSV(metadata);
-export const generateAMRProfile = convertTableToCSV(antibiotics);
-export const generateAMRSNPs = convertTableToCSV(snps);
-export const generateAMRGenes = convertTableToCSV(genes);
+export const generateMetadataFile = convertTableToCSV(tableKeys.metadata);
+export const generateTypingFile = convertTableToCSV(tableKeys.typing);
+export const generateStatsFile = convertTableToCSV(tableKeys.stats);
+export const generateAMRProfile = convertTableToCSV(tableKeys.antibiotics);
+export const generateAMRSNPs = convertTableToCSV(tableKeys.snps);
+export const generateAMRGenes = convertTableToCSV(tableKeys.genes);
 
 export function createDefaultLink(keyMap, filename) {
   const key = Object.keys(keyMap)[0];

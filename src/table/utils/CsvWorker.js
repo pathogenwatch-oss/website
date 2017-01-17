@@ -3,9 +3,10 @@ import Papa from 'papaparse';
 
 import { formatColumnKeyAsLabel } from './index';
 
-import { systemDataColumns, getUserDefinedValue } from '^/constants/metadata';
+import { systemDataColumns, getUserDefinedValue }
+  from '../../collection-viewer/data-tables/constants';
 
-import { isResistant } from '^/utils/resistanceProfile';
+import { isResistant } from '../../utils/resistanceProfile';
 
 const nameColumnData = {
   columnKey: '__name',
@@ -22,6 +23,14 @@ const definedColumns = {
 
 const csvOptions = {
   metadata: {
+    valueGetter: getUserDefinedValue,
+    formatLabel: true,
+  },
+  typing: {
+    valueGetter: getUserDefinedValue,
+    formatLabel: true,
+  },
+  stats: {
     valueGetter: getUserDefinedValue,
     formatLabel: true,
   },

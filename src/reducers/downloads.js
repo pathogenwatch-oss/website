@@ -1,9 +1,9 @@
 import { REQUEST_DOWNLOAD } from '../actions/downloads';
 
 import * as downloads from '../utils/downloads';
+import { createFastaArchiveLink } from '../fasta-download';
 
 import { createDownloadKey } from '../constants/downloads';
-import { createFastaArchiveLink } from '../fasta-download';
 
 import Species from '../species';
 
@@ -12,6 +12,18 @@ const initialState = {
     description: 'Metadata',
     filenameSegment: 'metadata.csv',
     getFileContents: downloads.generateMetadataFile,
+    createLink: downloads.createCSVLink,
+  },
+  typing_csv: {
+    description: 'Typing',
+    filenameSegment: 'typing.csv',
+    getFileContents: downloads.generateTypingFile,
+    createLink: downloads.createCSVLink,
+  },
+  stats_csv: {
+    description: 'Stats',
+    filenameSegment: 'stats.csv',
+    getFileContents: downloads.generateStatsFile,
     createLink: downloads.createCSVLink,
   },
   amr_profile_csv: {
