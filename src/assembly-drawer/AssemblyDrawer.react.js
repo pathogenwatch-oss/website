@@ -8,7 +8,7 @@ import N50Chart from './N50Chart.react';
 const AssemblyStats = ({ metrics }) => (
   <dl className="wgsa-hub-stats-view">
     <span className="wgsa-hub-stats-section wgsa-hub-stats-section--small">
-      <dt className="wgsa-hub-stats-heading">Assembly Length</dt>
+      <dt className="wgsa-hub-stats-heading">Genome Length</dt>
       <dd className="wgsa-hub-stats-value">{metrics.totalNumberOfNucleotidesInDnaStrings}</dd>
     </span>
     <span className="wgsa-hub-stats-section wgsa-hub-stats-section--small">

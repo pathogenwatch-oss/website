@@ -15,18 +15,18 @@ import actions from '../actions';
 
 const TooltipContent = ({ payload, data }) => {
   if (!payload) return null;
-  const [ index, assemblyLength ] = payload;
+  const [ index, metric ] = payload;
   return (
     <ChartTooltip
       heading={data[index.value].name}
-      description="Assembly Length"
-      value={assemblyLength.value}
+      description="value"
+      value={metric.value}
     />
   );
 };
 
 const charts = [
-  { title: 'Assembly Length', metric: 'totalNumberOfNucleotidesInDnaStrings' },
+  { title: 'Genome Length', metric: 'totalNumberOfNucleotidesInDnaStrings' },
   { title: 'N50', metric: 'contigN50' },
   { title: 'No. Contigs', metric: 'totalNumberOfContigs' },
   { title: 'Non-ATCG', metric: 'totalNumberOfNsInDnaStrings' },
@@ -75,7 +75,7 @@ export const StatsView =
               />
               <YAxis
                 dataKey="value"
-                name="Assembly Length"
+                name="metric"
                 tickLine={false}
                 domain={[ 0, Math.ceil(range.max * 1.25) ]}
               />
