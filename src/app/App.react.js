@@ -85,9 +85,9 @@ export default connect(mapStateToProps, mapDispatchToProps)(React.createClass({
         <div className="mdl-layout__drawer">
           <span className="mdl-layout-title">
             <img src="/assets/img/WGSA.FINAL.svg" />
-            { config.WGSA_VERSION &&
+            { config.wgsaVersion &&
               <small className="wgsa-version">
-                v{config.WGSA_VERSION}
+                v{config.wgsaVersion}
               </small>
             }
           </span>

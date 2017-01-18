@@ -120,11 +120,11 @@ app.use('/api', apiRouter);
 
 app.set('view engine', 'ejs');
 
-const WGSA_VERSION = require('./package.json').version;
+const wgsaVersion = require('./package.json').version;
 app.use('/', (req, res) => res.render('index', {
   frontEndConfig: Object.assign(
     JSON.parse(fs.readFileSync('./config.json')),
-    { WGSA_VERSION }
+    { wgsaVersion }
   ),
 }));
 
