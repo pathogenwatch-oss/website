@@ -27,14 +27,14 @@ function average(list, property) {
 export const getMetricAverage = createSelector(
   getAssemblyMetrics,
   getSelectedMetric,
-  (metrics, selectedMetric) => average(metrics, selectedMetric).toFixed(0)
+  (metrics, selectedMetric) => average(metrics, selectedMetric).toFixed(1)
 );
 
 export const getMetricStDev = createSelector(
   getAssemblyMetrics,
   getSelectedMetric,
-  (metrics, selectedMetric) => {
-    const avg = average(metrics, selectedMetric);
+  getMetricAverage,
+  (metrics, selectedMetric, avg) => {
     const squareDiffs = metrics.map(item => {
       const diff = item[selectedMetric] - avg;
       return diff * diff;
