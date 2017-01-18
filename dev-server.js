@@ -120,8 +120,12 @@ app.use('/api', apiRouter);
 
 app.set('view engine', 'ejs');
 
+const WGSA_VERSION = require('./package.json').version;
 app.use('/', (req, res) => res.render('index', {
-  frontEndConfig: JSON.parse(fs.readFileSync('./config.json')),
+  frontEndConfig: Object.assign(
+    JSON.parse(fs.readFileSync('./config.json')),
+    { WGSA_VERSION }
+  ),
 }));
 
 app.listen(process.env.PORT || 8080, '0.0.0.0');

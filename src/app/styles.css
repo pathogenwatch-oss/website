@@ -21,3 +21,14 @@
   display: block;
   padding: 24px 0;
 }
+
+.wgsa-version {
+  color: #673c90;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
+  position: absolute;
+  right: 16px;
+  text-align: center;
+  top: 16px;
+}

@@ -13,6 +13,8 @@ import AssemblyDrawer from '../assembly-drawer';
 
 import { locationChange } from '../location';
 
+import config from './config';
+
 const menuItems = [
   { icon: 'home',
     text: 'Home',
@@ -83,6 +85,11 @@ export default connect(mapStateToProps, mapDispatchToProps)(React.createClass({
         <div className="mdl-layout__drawer">
           <span className="mdl-layout-title">
             <img src="/assets/img/WGSA.FINAL.svg" />
+            { config.WGSA_VERSION &&
+              <small className="wgsa-version">
+                v{config.WGSA_VERSION}
+              </small>
+            }
           </span>
           <nav className="mdl-navigation" onClick={this.hideSidebar}>
             {menuItems.map(props => (
