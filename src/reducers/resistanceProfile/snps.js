@@ -24,6 +24,7 @@ export function buildColumns({ snp, antibiotics }, profiles) {
                 getCellContents() {},
                 getLabel: () => `${gene}_`,
                 addState({ data }) {
+                  if (!data.length) return this;
                   this.hidden =
                     snp[key][gene].every(({ snpName }) =>
                       data.every(

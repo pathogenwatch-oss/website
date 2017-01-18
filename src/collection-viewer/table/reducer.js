@@ -6,14 +6,14 @@ import { antibiotics, snps, genes } from '../../reducers/resistanceProfile';
 import { FETCH_ENTITIES } from '../../actions/fetch';
 import { SET_TABLE } from './actions';
 
-import { hasMetadata } from '../data-tables/utils';
+import { getInitialTable } from '../data-tables/utils';
 
 import { tableKeys, dataTables, amrTables } from './constants';
 
 function visible(state = tableKeys.metadata, { type, payload }) {
   switch (type) {
     case FETCH_ENTITIES.SUCCESS:
-      return hasMetadata(payload.result) ? state : tableKeys.typing;
+      return getInitialTable(payload.result);
     case SET_TABLE:
       return payload.name;
     default:
@@ -24,7 +24,7 @@ function visible(state = tableKeys.metadata, { type, payload }) {
 function activeData(state = tableKeys.metadata, { type, payload }) {
   switch (type) {
     case FETCH_ENTITIES.SUCCESS:
-      return hasMetadata(payload.result) ? state : tableKeys.typing;
+      return getInitialTable(payload.result);
     case SET_TABLE:
       return dataTables.has(payload.name) ? payload.name : state;
     default:

@@ -22,6 +22,9 @@ const initialState = {
     filenameSegment: 'typing.csv',
     getFileContents: downloads.generateTypingFile,
     createLink: downloads.createCSVLink,
+    hideFromMenu({ hasTyping }) {
+      return !hasTyping;
+    },
   },
   stats_csv: {
     description: 'Stats',

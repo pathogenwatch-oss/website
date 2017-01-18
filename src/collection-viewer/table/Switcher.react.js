@@ -2,11 +2,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
 
-import { getVisibleTableName, hasMetadata } from './selectors';
-
+import { getVisibleTableName, hasMetadata, hasTyping } from './selectors';
 import { setTable } from './actions';
-
 import { tableKeys } from './constants';
+import Species from '../../species';
 
 function mapStateToProps(state) {
   return {
@@ -41,28 +40,34 @@ const ButtonGroup = ({ children }) => (
 );
 
 const TableSwitcher =
-  connect(state => ({ hasMetadata: hasMetadata(state) }))(
-    props => (
-      <div
-        className="wgsa-table-switcher"
-        onClick={event => event.stopPropagation()}
-      >
-        <ButtonGroup>
-          <i className="material-icons" title="Data">list</i>
-          { props.hasMetadata &&
-            <Button table={tableKeys.metadata} label="Metadata" />}
-          <Button table={tableKeys.typing} label="Typing" />
-          <Button table={tableKeys.stats} label="Stats" />
-        </ButtonGroup>
+  connect(state => ({
+    hasMetadata: hasMetadata(state),
+    hasTyping: hasTyping(state),
+    hasAMR: !Species.uiOptions.noAMR,
+  }))(
+  props => (
+    <div
+      className="wgsa-table-switcher"
+      onClick={event => event.stopPropagation()}
+    >
+      <ButtonGroup>
+        <i className="material-icons" title="Data">list</i>
+        { props.hasMetadata &&
+          <Button table={tableKeys.metadata} label="Metadata" /> }
+        { props.hasTyping &&
+          <Button table={tableKeys.typing} label="Typing" /> }
+        <Button table={tableKeys.stats} label="Stats" />
+      </ButtonGroup>
+      { props.hasAMR &&
         <ButtonGroup>
           <i className="material-icons" title="AMR">local_pharmacy</i>
           <Button table={tableKeys.antibiotics} label="Antibiotics" />
           <Button table={tableKeys.snps} label="SNPs" />
           <Button table={tableKeys.genes} label="Genes" />
-        </ButtonGroup>
-      </div>
-    )
-  );
+        </ButtonGroup> }
+    </div>
+  )
+);
 
 TableSwitcher.displayName = 'TableSwitcher';
 

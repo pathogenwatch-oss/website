@@ -8,7 +8,7 @@ import DownloadButton from './DownloadButton.react';
 
 import { setMenuActive } from '../../actions/downloads';
 import { getActiveAssemblyIds } from '../selectors';
-import { hasMetadata } from '../table/selectors';
+import { hasMetadata, hasTyping } from '../table/selectors';
 import {
   createDownloadProps, formatCollectionFilename,
 } from '../../constants/downloads';
@@ -49,6 +49,7 @@ function mapStateToProps(state) {
     ...downloads,
     collectionViewer, // needs to be here for selectors to work :/
     hasMetadata: hasMetadata(state),
+    hasTyping: hasTyping(state),
   };
 }
 

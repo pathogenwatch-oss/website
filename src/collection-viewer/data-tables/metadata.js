@@ -3,7 +3,7 @@ import { SET_LABEL_COLUMN } from '../table/actions';
 import { SET_TREE } from '../tree/actions';
 
 import { onHeaderClick } from './thunks';
-import { getUserDefinedValue } from './utils';
+import { hasMetadata, getUserDefinedValue } from './utils';
 
 import { speciesTrees } from '../tree/constants';
 import * as table from '../table/constants';
@@ -21,12 +21,10 @@ const initialState = {
   active: true,
 };
 
-function getMetadataColumnNames(assemblies) {
+function getUserDefinedColumnNames(assemblies) {
   const columnNames = new Set();
   Object.keys(assemblies).forEach(key => {
-    const { userDefined, year } = assemblies[key].metadata;
-    if (year) columnNames.add('__date');
-
+    const { userDefined } = assemblies[key].metadata;
     if (userDefined) {
       Object.keys(userDefined).
         filter(name => !/__colou?r$/.test(name)).
@@ -67,15 +65,14 @@ export default function (state = initialState, { type, payload }) {
       const [ { assemblies } ] = payload.result;
       const { publicMetadataColumnNames = [] } = Species.current;
 
-      const columnNames = getMetadataColumnNames(assemblies);
-
-      if (!columnNames.length) {
+      if (!hasMetadata(assemblies)) {
         return {
           ...state,
           active: false,
         };
       }
 
+      const columnNames = getUserDefinedColumnNames(assemblies);
       const columnProps = [
         ...systemColumnProps,
         ...getUserDefinedColumnProps(columnNames),

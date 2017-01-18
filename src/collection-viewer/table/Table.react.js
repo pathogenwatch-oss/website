@@ -11,7 +11,6 @@ import { onTableClick, onRowClick } from '../table/thunks';
 
 import { addColumnWidth } from '../../table/utils/columnWidth';
 import { addDownloadProps } from '../../constants/downloads';
-import Species from '../../species';
 
 const preventDefault = e => e.preventDefault();
 
@@ -48,18 +47,22 @@ const Table = React.createClass({
   },
 
   render() {
-    const { noAMR } = Species.uiOptions;
     return (
       <section
         onClick={this.props.onClick}
         onWheel={preventDefault}
         onTouchMove={preventDefault}
       >
-        { noAMR ? null : <TableSwitcher /> }
+        <TableSwitcher />
         <FixedTable { ...this.props }
           rowClickHandler={this.props.onRowClick}
           headerClickHandler={this.props.onHeaderClick}
         />
+        { this.props.data.length === 0 &&
+          <p className="wgsa-text-overlay wgsa-hipster-style">
+            No matching results.
+          </p>
+        }
       </section>
     );
   },
@@ -95,11 +98,8 @@ function mapStateToColumn(column, state, dispatch) {
     return column;
   }
 
-  return (
-    column.addState ?
-      column.addState(state, dispatch) :
-      addColumnWidth(column, state)
-  );
+  if (column.addState) return column.addState(state, dispatch);
+  return state.data.length ? addColumnWidth(column, state) : column;
 }
 
 function mergeProps(state, { dispatch }, props) {

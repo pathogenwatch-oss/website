@@ -46,6 +46,7 @@ export function createAdvancedViewColumn(element, profileKey, profiles) {
   const { key, label, effect } = element;
   return {
     addState({ data }) {
+      if (!data.length) return this;
       this.hidden = data.every(({ analysis }) =>
         notPresent(analysis.resistanceProfile[profileKey], key)
       );

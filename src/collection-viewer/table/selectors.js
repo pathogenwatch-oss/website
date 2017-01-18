@@ -30,3 +30,8 @@ export const hasMetadata = createSelector(
   getTables,
   tables => tables.metadata.active
 );
+
+export const hasTyping = createSelector(
+  getTables,
+  tables => tables.typing.active
+);
