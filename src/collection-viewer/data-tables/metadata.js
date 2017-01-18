@@ -1,9 +1,10 @@
 import { FETCH_ENTITIES } from '../../actions/fetch';
 import { SET_LABEL_COLUMN } from '../table/actions';
 import { SET_TREE } from '../tree/actions';
-
 import { onHeaderClick } from './thunks';
-import { hasMetadata, getUserDefinedValue } from './utils';
+
+import { getUserDefinedValue } from '../table/utils';
+import { hasMetadata } from './utils';
 
 import { speciesTrees } from '../tree/constants';
 import * as table from '../table/constants';

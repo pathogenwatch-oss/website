@@ -1,26 +1,5 @@
-import { formatMonth, formatDay } from '../../utils/Date';
-
 import { tableKeys } from '../table/constants';
 import Species from '../../species';
-
-export function getFormattedDateString({ year, month, day }) {
-  if (year && !month && !day) {
-    return year;
-  }
-
-  if (year && month && !day) {
-    return `${formatMonth(month)} ${year}`;
-  }
-
-  if (year && month && day) {
-    return `${formatDay(day)} ${formatMonth(month)} ${year}`;
-  }
-
-  return '';
-}
-
-export const getUserDefinedValue =
-  (column, { metadata }) => metadata.userDefined[column];
 
 // TODO: Might be good if `date` and `userDefined` were null
 export function hasMetadata(assemblies) {

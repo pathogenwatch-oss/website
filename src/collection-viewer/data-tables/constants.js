@@ -1,4 +1,4 @@
-import { getFormattedDateString } from './utils';
+import { getFormattedDateString } from '../table/utils';
 
 export const systemDataColumns = {
   __date: {

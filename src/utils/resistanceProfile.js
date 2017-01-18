@@ -56,7 +56,6 @@ export function getAdvancedColour({ key, effect }, type, assembly) {
   }
 
   if (hasElement(assembly, type, key)) {
-    console.log(effect, stateColours[effect]);
     return stateColours[effect] || stateColours.RESISTANT;
   }
   return nonResistantColour;

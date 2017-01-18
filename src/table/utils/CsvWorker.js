@@ -3,12 +3,10 @@ import Papa from 'papaparse';
 
 import { formatColumnKeyAsLabel } from './index';
 
-import { systemDataColumns }
-  from '../../collection-viewer/data-tables/constants';
-import { getUserDefinedValue }
-  from '../../collection-viewer/data-tables/utils';
+import { systemDataColumns } from '../../collection-viewer/data-tables/constants';
 
-import { isResistant } from '../../utils/resistanceProfile';
+import { getUserDefinedValue } from '../../collection-viewer/table/utils';
+import { isResistant, hasElement } from '../../utils/resistanceProfile';
 
 const nameColumnData = {
   columnKey: '__name',
@@ -41,12 +39,10 @@ const csvOptions = {
       (isResistant(resistanceProfile, antibiotic) ? 1 : 0),
   },
   snps: {
-    valueGetter: (snp, { analysis: { resistanceProfile } }) =>
-      (resistanceProfile.snp.indexOf(snp) === -1 ? 0 : 1),
+    valueGetter: (snp, genome) => (hasElement(genome, 'snp', snp) ? 0 : 1),
   },
   genes: {
-    valueGetter: (gene, { analysis: { resistanceProfile } }) =>
-      (resistanceProfile.paar.indexOf(gene) === -1 ? 0 : 1),
+    valueGetter: (gene, genome) => (hasElement(genome, 'gene', gene) ? 0 : 1),
   },
 };
 
