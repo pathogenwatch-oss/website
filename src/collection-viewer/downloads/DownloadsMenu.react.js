@@ -8,6 +8,7 @@ import DownloadButton from './DownloadButton.react';
 
 import { setMenuActive } from '../../actions/downloads';
 import { getActiveAssemblyIds } from '../selectors';
+import { hasMetadata } from '../table/selectors';
 import {
   createDownloadProps, formatCollectionFilename,
 } from '../../constants/downloads';
@@ -47,6 +48,7 @@ function mapStateToProps(state) {
     assemblyIds: getActiveAssemblyIds(state),
     ...downloads,
     collectionViewer, // needs to be here for selectors to work :/
+    hasMetadata: hasMetadata(state),
   };
 }
 
@@ -59,7 +61,7 @@ function mergeProps(state, { dispatch }) {
       Object.keys(files).
         filter(format => {
           const { hideFromMenu = () => false } = files[format];
-          return !hideFromMenu();
+          return !hideFromMenu(state);
         }).
         map(format => {
           const download = files[format];

@@ -13,6 +13,9 @@ const initialState = {
     filenameSegment: 'metadata.csv',
     getFileContents: downloads.generateMetadataFile,
     createLink: downloads.createCSVLink,
+    hideFromMenu({ hasMetadata }) {
+      return !hasMetadata;
+    },
   },
   typing_csv: {
     description: 'Typing',

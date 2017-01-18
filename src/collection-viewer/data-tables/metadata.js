@@ -18,22 +18,26 @@ const initialState = {
   activeColumn: table.nameColumnProps,
   columns: [],
   onHeaderClick,
+  active: true,
 };
 
-function getUserDefinedColumnNames(assemblies) {
-  const userDefinedColumnNames = new Set();
+function getMetadataColumnNames(assemblies) {
+  const columnNames = new Set();
   Object.keys(assemblies).forEach(key => {
-    const { userDefined } = assemblies[key].metadata;
+    const { userDefined, year } = assemblies[key].metadata;
+    if (year) columnNames.add('__date');
+
     if (userDefined) {
       Object.keys(userDefined).
         filter(name => !/__colou?r$/.test(name)).
-        forEach(name => userDefinedColumnNames.add(name));
+        forEach(name => columnNames.add(name));
     }
   });
-  return userDefinedColumnNames;
+  return columnNames;
 }
 
 function getUserDefinedColumnProps(columnNames) {
+  columnNames.delete('__date');
   return Array.from(columnNames).map(column => ({
     columnKey: column,
     valueGetter(data) {
@@ -57,14 +61,22 @@ const systemColumnProps = [
 ];
 
 export default function (state = initialState, { type, payload }) {
+  if (!state.active) return state;
   switch (type) {
     case FETCH_ENTITIES.SUCCESS: {
       const [ { assemblies } ] = payload.result;
       const { publicMetadataColumnNames = [] } = Species.current;
 
-      const columnNames = getUserDefinedColumnNames(assemblies);
+      const columnNames = getMetadataColumnNames(assemblies);
 
-      const userDefinedColumnProps = [
+      if (!columnNames.length) {
+        return {
+          ...state,
+          active: false,
+        };
+      }
+
+      const columnProps = [
         ...systemColumnProps,
         ...getUserDefinedColumnProps(columnNames),
         table.rightSpacerColumn,
@@ -72,15 +84,15 @@ export default function (state = initialState, { type, payload }) {
 
       return {
         ...state,
-        userDefinedColumnProps,
+        columnProps,
         publicMetadataColumnProps:
           publicMetadataColumnNames.length ?
             [ ...systemColumnProps,
               ...getUserDefinedColumnProps(publicMetadataColumnNames),
               table.rightSpacerColumn,
             ] :
-            userDefinedColumnProps,
-        columns: userDefinedColumnProps,
+            columnProps,
+        columns: columnProps,
       };
     }
     case SET_TREE: {

@@ -18,3 +18,14 @@ export function getFormattedDateString({ year, month, day }) {
 
 export const getUserDefinedValue =
   (column, { metadata }) => metadata.userDefined[column];
+
+// TODO: Might be good if `date` and `userDefined` were null
+export function hasMetadata([ { assemblies } ]) {
+  return (
+    Object.keys(assemblies).
+      some(key => {
+        const { metadata: { date, userDefined } } = assemblies[key];
+        return !!(date.year || Object.keys(userDefined).length);
+      })
+  );
+}

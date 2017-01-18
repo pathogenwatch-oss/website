@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
 
-import { getVisibleTableName } from './selectors';
+import { getVisibleTableName, hasMetadata } from './selectors';
 
 import { setTable } from './actions';
 
@@ -40,25 +40,29 @@ const ButtonGroup = ({ children }) => (
   </div>
 );
 
-const TableSwitcher = () => (
-  <div
-    className="wgsa-table-switcher"
-    onClick={event => event.stopPropagation()}
-  >
-    <ButtonGroup>
-      <i className="material-icons" title="Data">list</i>
-      <Button table={tableKeys.metadata} label="Metadata" />
-      <Button table={tableKeys.typing} label="Typing" />
-      <Button table={tableKeys.stats} label="Stats" />
-    </ButtonGroup>
-    <ButtonGroup>
-      <i className="material-icons" title="AMR">local_pharmacy</i>
-      <Button table={tableKeys.antibiotics} label="Antibiotics" />
-      <Button table={tableKeys.snps} label="SNPs" />
-      <Button table={tableKeys.genes} label="Genes" />
-    </ButtonGroup>
-  </div>
-);
+const TableSwitcher =
+  connect(state => ({ hasMetadata: hasMetadata(state) }))(
+    props => (
+      <div
+        className="wgsa-table-switcher"
+        onClick={event => event.stopPropagation()}
+      >
+        <ButtonGroup>
+          <i className="material-icons" title="Data">list</i>
+          { props.hasMetadata &&
+            <Button table={tableKeys.metadata} label="Metadata" />}
+          <Button table={tableKeys.typing} label="Typing" />
+          <Button table={tableKeys.stats} label="Stats" />
+        </ButtonGroup>
+        <ButtonGroup>
+          <i className="material-icons" title="AMR">local_pharmacy</i>
+          <Button table={tableKeys.antibiotics} label="Antibiotics" />
+          <Button table={tableKeys.snps} label="SNPs" />
+          <Button table={tableKeys.genes} label="Genes" />
+        </ButtonGroup>
+      </div>
+    )
+  );
 
 TableSwitcher.displayName = 'TableSwitcher';
 

@@ -25,3 +25,8 @@ export const getActiveAMRTable = createSelector(
   getAMRTableName,
   (tables, name) => tables[name]
 );
+
+export const hasMetadata = createSelector(
+  getTables,
+  tables => tables.metadata.active
+);
