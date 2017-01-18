@@ -20,6 +20,7 @@ if (config.node.auth) {
 }
 
 const clientPath = path.join(__dirname, 'node_modules', 'wgsa-front-end');
+const { version } = require('./package.json')
 
 app.set('port', process.env.PORT || config.node.port);
 // http://stackoverflow.com/a/19965089
@@ -86,6 +87,7 @@ module.exports = (callback) => {
           mapboxKey: config.mapboxKey,
           maxFastaFileSize: config.maxFastaFileSize,
           wiki: config.wikiLocation,
+          wgsaVersion: version,
         },
       });
     });
