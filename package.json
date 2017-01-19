@@ -45,7 +45,7 @@
     "lodash.sortby": "^4.7.0",
     "papaparse": "^4.1.1",
     "phylocanvas": "^2.8.0",
-    "phylocanvas-plugin-context-menu": "^3.10.0",
+    "phylocanvas-plugin-context-menu": "^3.10.1",
     "postcss-cssnext": "^2.8.0",
     "postcss-input-style": "^0.3.0",
     "postcss-loader": "^0.11.1",

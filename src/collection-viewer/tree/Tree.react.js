@@ -16,15 +16,31 @@ import { DEFAULT, CGPS } from '../../app/constants';
 Phylocanvas.plugin(contextMenuPlugin);
 
 Phylocanvas.plugin(decorate => {
+  let lastClickedNode = null;
+
   decorate(Tree, 'clicked', function (delegate, args) {
     const [ event ] = args;
     const node = this.getNodeAtMousePosition(event);
+
     if (event.shiftKey && node) {
       node.toggleCollapsed();
       this.draw();
-    } else {
-      delegate.apply(this, args);
+      return;
     }
+
+    // highlight selected node
+    if (lastClickedNode) lastClickedNode.highlighted = false;
+    if (node) {
+      node.highlighted = true;
+      lastClickedNode = node;
+    }
+
+    delegate.apply(this, args);
+  });
+
+  decorate(Tree, 'cleanup', delegate => {
+    lastClickedNode = null;
+    delegate();
   });
 });
 
@@ -58,7 +74,6 @@ export default React.createClass({
       contextMenu: {
         parent: document.body,
       },
-      collapsedColour: '#222',
       fillCanvas: true,
     });
 
