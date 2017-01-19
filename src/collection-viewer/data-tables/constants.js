@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { getFormattedDateString } from '../table/utils';
 
 export const systemDataColumns = {
@@ -5,6 +7,27 @@ export const systemDataColumns = {
     columnKey: '__date',
     valueGetter({ metadata }) {
       return getFormattedDateString(metadata.date);
+    },
+  },
+  __pmid: {
+    columnKey: '__pmid',
+    valueGetter({ metadata }) {
+      return metadata.pmid;
+    },
+    getCellContents({ valueGetter }, data) {
+      const pmid = valueGetter(data);
+      if (!pmid) return null;
+      return (
+        <a
+          href={`http://www.ncbi.nlm.nih.gov/pubmed/${pmid}`}
+          target="_blank" rel="noopener"
+          title="View Publication"
+          style={{ color: '#369' }}
+          onClick={e => e.stopPropagation()}
+        >
+          {pmid}
+        </a>
+      );
     },
   },
   __wgsa_reference: {

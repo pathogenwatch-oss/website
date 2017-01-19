@@ -6,8 +6,8 @@ export function hasMetadata(assemblies) {
   return (
     Object.keys(assemblies).
       some(key => {
-        const { metadata: { date, userDefined } } = assemblies[key];
-        return !!(date.year || Object.keys(userDefined).length);
+        const { metadata: { date, pmid, userDefined } } = assemblies[key];
+        return !!(date.year || pmid || Object.keys(userDefined).length);
       })
   );
 }

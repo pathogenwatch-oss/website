@@ -33,24 +33,22 @@ const Button = connect(mapStateToButtonProps, mapDispatchToProps)(
   )
 );
 
-const Header = ({ singleTree, lastSubtree }) => {
-  return (
-    <header className="wgsa-tree-header">
-      <div className="wgsa-button-group mdl-shadow--2dp">
-        <i className="material-icons" title="View">visibility</i>
-        { (!singleTree || singleTree === COLLECTION) &&
-          <Button treeName={COLLECTION}>Collection</Button>
-        }
-        { (!singleTree || singleTree === POPULATION) &&
-          <Button treeName={POPULATION}>Population</Button>
-        }
-        { lastSubtree &&
-          <Button treeName={lastSubtree.name}>{lastSubtree.title}</Button>
-        }
-      </div>
-    </header>
-  );
-};
+const Header = ({ singleTree, lastSubtree }) => (
+  <header className="wgsa-tree-header">
+    <div className="wgsa-button-group mdl-shadow--2dp">
+      <i className="material-icons" title="View">visibility</i>
+      { (!singleTree || singleTree === COLLECTION) &&
+        <Button treeName={COLLECTION}>Collection</Button>
+      }
+      { (!singleTree || singleTree === POPULATION) &&
+        <Button treeName={POPULATION}>Population</Button>
+      }
+      { lastSubtree &&
+        <Button treeName={lastSubtree.name}>{lastSubtree.title}</Button>
+      }
+    </div>
+  </header>
+);
 
 function mapStateToProps(state) {
   return {

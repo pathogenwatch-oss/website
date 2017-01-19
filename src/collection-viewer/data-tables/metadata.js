@@ -36,7 +36,6 @@ function getUserDefinedColumnNames(assemblies) {
 }
 
 function getUserDefinedColumnProps(columnNames) {
-  columnNames.delete('__date');
   return Array.from(columnNames).map(column => ({
     columnKey: column,
     valueGetter(data) {
@@ -56,6 +55,7 @@ const systemColumnProps = [
   table.leftSpacerColumn,
   table.downloadColumnProps,
   table.nameColumnProps,
+  systemDataColumns.__pmid,
   systemDataColumns.__date,
 ];
 

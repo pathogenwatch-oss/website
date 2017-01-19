@@ -127,10 +127,6 @@ export const nameColumnProps = {
       width += 32;
     }
 
-    if (row.metadata.pmid) {
-      width += 32;
-    }
-
     return width;
   },
   getCellContents({ valueGetter }, data) {
@@ -143,18 +139,8 @@ export const nameColumnProps = {
           { data.__isPublic && metadata.collectionId ?
             <a className="mdl-button mdl-button--icon"
               href={`/${Species.nickname}/collection/${metadata.collectionId}`}
-              title="View WGSA Collection"
+              title="View Original Collection"
               target="_blank" rel="noopener"
-            >
-              <i className="material-icons">open_in_new</i>
-            </a> : null
-          }
-          { metadata.pmid ?
-            <a className="mdl-button mdl-button--icon"
-              href={`http://www.ncbi.nlm.nih.gov/pubmed/${metadata.pmid}`}
-              target="_blank" rel="noopener"
-              title={`PMID ${metadata.pmid}`}
-              style={{ color: '#369' }}
             >
               <i className="material-icons">open_in_new</i>
             </a> : null
