@@ -42,7 +42,7 @@ const csvOptions = {
     valueGetter: (snp, genome) => (hasElement(genome, 'snp', snp) ? 1 : 0),
   },
   genes: {
-    valueGetter: (gene, genome) => (hasElement(genome, 'gene', gene) ? 1 : 0),
+    valueGetter: (gene, genome) => (hasElement(genome, 'paar', gene) ? 1 : 0),
   },
 };
 
