@@ -39,10 +39,10 @@ const csvOptions = {
       (isResistant(resistanceProfile, antibiotic) ? 1 : 0),
   },
   snps: {
-    valueGetter: (snp, genome) => (hasElement(genome, 'snp', snp) ? 0 : 1),
+    valueGetter: (snp, genome) => (hasElement(genome, 'snp', snp) ? 1 : 0),
   },
   genes: {
-    valueGetter: (gene, genome) => (hasElement(genome, 'gene', gene) ? 0 : 1),
+    valueGetter: (gene, genome) => (hasElement(genome, 'gene', gene) ? 1 : 0),
   },
 };
 
