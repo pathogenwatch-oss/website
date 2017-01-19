@@ -23,7 +23,7 @@ export default connect(mapStateToProps)(
           <Totals
             visible={collections.length}
             total={total}
-            itemType="collections"
+            itemType="collection"
           />
         </Summary>
         <Grid
