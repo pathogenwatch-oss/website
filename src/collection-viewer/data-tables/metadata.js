@@ -96,7 +96,7 @@ export default function (state = initialState, { type, payload }) {
     case SET_TREE: {
       const columnProps =
         speciesTrees.has(payload.name) ?
-          state.userDefinedColumnProps :
+          state.columnProps :
           state.publicMetadataColumnProps;
 
       return {
