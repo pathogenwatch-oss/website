@@ -76,6 +76,13 @@ export const systemDataColumns = {
       return analysis.genotyphi.genotype;
     },
   },
+  __genotyphi_snps: {
+    columnKey: '__genotyphi_snps',
+    valueGetter({ analysis }) {
+      if (!analysis.genotyphi) return null;
+      return analysis.genotyphi.snps;
+    },
+  },
   __core_matches: {
     columnKey: '__core_matches',
     valueGetter({ analysis }) {

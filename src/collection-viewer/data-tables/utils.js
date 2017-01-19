@@ -17,7 +17,7 @@ export function getTypingColumns(uiOptions) {
     uiOptions.noPopulation ? null : '__wgsa_reference',
     ...(uiOptions.noMLST ? [] : [ '__mlst', '__mlst_profile' ]),
     ...(uiOptions.ngMast ? [ '__ng-mast', '__por', '__tbpb' ] : []),
-    uiOptions.genotyphi ? '__genotyphi_type' : null,
+    ...(uiOptions.genotyphi ? [ '__genotyphi_type', '__genotyphi_snps' ] : []),
   ].filter(_ => _);
 }
 
