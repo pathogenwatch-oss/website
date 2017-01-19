@@ -38,9 +38,9 @@ Phylocanvas.plugin(decorate => {
     delegate.apply(this, args);
   });
 
-  decorate(Tree, 'cleanup', delegate => {
+  decorate(Tree, 'cleanup', function (delegate) {
     lastClickedNode = null;
-    delegate();
+    delegate.call(this);
   });
 });
 
