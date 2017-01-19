@@ -76,7 +76,6 @@ function getSequenceType({ alleles, code, speciesId }, callback) {
       callback(error);
       return;
     }
-    console.log(callback);
     callback(null, { code, sequenceType: result.stType });
   });
 }
