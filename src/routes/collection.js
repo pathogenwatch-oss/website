@@ -5,12 +5,10 @@ const services = require('../services');
 const path = require('path');
 
 const LOGGER = require('utils/logging').createLogger('Collection requests');
-
-const { demos = [] } = require('configuration');
+const { demos = [], node } = require('configuration');
 
 router.put('/collection', (req, res, next) => {
   LOGGER.info('Received request to create collection');
-
   const { user } = req;
   const { genomeIds, title, description, speciesId } = req.body;
   const message = { user, genomeIds, title, description, speciesId };
@@ -20,6 +18,20 @@ router.put('/collection', (req, res, next) => {
     then(({ collectionId }) => res.json({ collectionId })).
     catch(next);
 });
+
+if (node.auth) {
+  const auth = require('http-auth');
+  const { realm, file, collections } = node.auth;
+  const basic = auth.basic({ realm, file });
+  const middleware = auth.connect(basic);
+  for (const { speciesId, collectionId } of collections) {
+    router.get(`/collection/${collectionId}`, middleware, (req, res, next) => {
+      LOGGER.info(`Requesting authorized collection: ${speciesId}/${collectionId}`);
+      req.params.uuid = collectionId;
+      next();
+    });
+  }
+}
 
 if (demos.length) {
   for (const { speciesId, collectionId } of demos) {

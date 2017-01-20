@@ -17,14 +17,8 @@ const mongoConnection = require('utils/mongoConnection');
 const LOGGER = logging.getBaseLogger();
 const app = express();
 
-if (config.node.auth) {
-  const auth = require('http-auth');
-  const { realm, file } = config.node.auth;
-  const basic = auth.basic({ realm, file });
-  app.use(auth.connect(basic));
-}
-
 const clientPath = path.join(__dirname, 'node_modules', 'wgsa-front-end');
+const { version } = require('./package.json');
 
 app.set('port', process.env.PORT || config.node.port);
 // http://stackoverflow.com/a/19965089
@@ -117,6 +111,7 @@ module.exports = (callback) => {
           wiki: config.wikiLocation,
           strategies: [ 'facebook', 'google', 'twitter' ],
           user,
+          wgsaVersion: version,
         },
       });
     });

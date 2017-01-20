@@ -7,6 +7,8 @@ module.exports = (name, { assemblyId }) => {
   return mainStorage.retrieve(`${GENOTYPHI_RESULT}_${uuid}`).
     then(result => ({
       genotype: result.genotype,
+      snps: result.genotyphiMutations ?
+        result.genotyphiMutations.length : undefined,
     })).
     then(result => CollectionGenome.addAnalysisResult(uuid, name, result));
 };
