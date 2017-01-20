@@ -28,7 +28,7 @@ function getUserDefinedColumnNames(assemblies) {
     const { userDefined } = assemblies[key].metadata;
     if (userDefined) {
       Object.keys(userDefined).
-        filter(name => !/__colou?r$/.test(name)).
+        filter(name => name.length && !/__colou?r$/.test(name)).
         forEach(name => columnNames.add(name));
     }
   });
@@ -51,12 +51,16 @@ function getActiveColumn(currentActiveColumn, newColumns) {
   return table.nameColumnProps;
 }
 
-const systemColumnProps = [
+const leftSystemColumnProps = [
   table.leftSpacerColumn,
   table.downloadColumnProps,
   table.nameColumnProps,
-  systemDataColumns.__pmid,
   systemDataColumns.__date,
+];
+
+const rightSystemColumnProps = [
+  systemDataColumns.__pmid,
+  table.rightSpacerColumn,
 ];
 
 export default function (state = initialState, { type, payload }) {
@@ -75,9 +79,9 @@ export default function (state = initialState, { type, payload }) {
 
       const columnNames = getUserDefinedColumnNames(assemblies);
       const columnProps = [
-        ...systemColumnProps,
+        ...leftSystemColumnProps,
         ...getUserDefinedColumnProps(columnNames),
-        table.rightSpacerColumn,
+        ...rightSystemColumnProps,
       ];
 
       return {
@@ -85,9 +89,9 @@ export default function (state = initialState, { type, payload }) {
         columnProps,
         publicMetadataColumnProps:
           publicMetadataColumnNames.length ?
-            [ ...systemColumnProps,
+            [ ...leftSystemColumnProps,
               ...getUserDefinedColumnProps(publicMetadataColumnNames),
-              table.rightSpacerColumn,
+              ...rightSystemColumnProps,
             ] :
             columnProps,
         columns: columnProps,
