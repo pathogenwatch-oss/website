@@ -48,6 +48,7 @@ const initialState = {
   nodeSize: {},
   labelSize: {},
   history: [],
+  selectedInternalNode: null,
 };
 
 function entities(state = {}, { type, payload }) {
@@ -150,6 +151,14 @@ function entities(state = {}, { type, payload }) {
         [payload.stateKey]: {
           ...state[payload.stateKey],
           ...payload.snapshot,
+        },
+      };
+    case ACTIONS.INTERNAL_NODE_SELECTED:
+      return {
+        ...state,
+        [payload.stateKey]: {
+          ...state[payload.stateKey],
+          selectedInternalNode: payload.nodeId,
         },
       };
     default:

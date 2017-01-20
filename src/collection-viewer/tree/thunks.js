@@ -102,3 +102,11 @@ export function typeChanged(phylocanvas) {
     dispatch(actions.addHistorySnapshot(stateKey, phylocanvas));
   };
 }
+
+export function internalNodeSelected(node) {
+  return (dispatch, getState) => {
+    const state = getState();
+    const stateKey = getVisibleTree(state).name;
+    dispatch(actions.internalNodeSelected(stateKey, node ? node.id : null));
+  };
+}

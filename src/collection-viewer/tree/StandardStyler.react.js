@@ -11,7 +11,7 @@ import { defaultLeafStyle } from './constants';
 
 const Styler = React.createClass({
 
-  componentDidUpdate() {
+  componentDidUpdate(previous) {
     const { phylocanvas, assemblies, filter } = this.props;
 
     for (const leaf of phylocanvas.leaves) {
@@ -32,6 +32,15 @@ const Styler = React.createClass({
       leaf.highlighted = filter.active && filter.ids.has(id);
     }
 
+    if (previous.selectedInternalNode) {
+      const node = phylocanvas.originalTree.branches[previous.selectedInternalNode];
+      if (node) node.highlighted = false;
+    }
+    if (this.props.selectedInternalNode && filter.active) {
+      const node = phylocanvas.originalTree.branches[this.props.selectedInternalNode];
+      if (node) node.highlighted = true;
+    }
+
     phylocanvas.draw();
   },
 
@@ -42,13 +51,15 @@ const Styler = React.createClass({
 });
 
 function mapStateToProps(state) {
+  const tree = getVisibleTree(state);
   return {
     assemblies: state.entities.assemblies,
     getColour: getColourGetter(state),
     getLabel: getActiveDataTable(state).activeColumn.valueGetter,
     filter: getFilter(state),
-    treeType: getVisibleTree(state).type,
-    loaded: getVisibleTree(state).loaded,
+    treeType: tree.type,
+    loaded: tree.loaded,
+    selectedInternalNode: tree.selectedInternalNode,
   };
 }
 
