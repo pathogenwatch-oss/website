@@ -5,7 +5,7 @@ const services = require('../services');
 const path = require('path');
 
 const LOGGER = require('utils/logging').createLogger('Collection requests');
-const { demos = [], node } = require('configuration');
+const config = require('configuration');
 
 router.put('/collection', (req, res, next) => {
   LOGGER.info('Received request to create collection');
@@ -19,9 +19,9 @@ router.put('/collection', (req, res, next) => {
     catch(next);
 });
 
-if (node.auth) {
+if (config.node.auth) {
   const auth = require('http-auth');
-  const { realm, file, collections } = node.auth;
+  const { realm, file, collections } = config.node.auth;
   const basic = auth.basic({ realm, file });
   const middleware = auth.connect(basic);
   for (const { speciesId, collectionId } of collections) {
@@ -30,21 +30,6 @@ if (node.auth) {
       req.params.uuid = collectionId;
       next();
     });
-  }
-}
-
-if (demos.length) {
-  for (const { speciesId, collectionId } of demos) {
-    router.get(`/species/${speciesId}/collection/${collectionId}/status`,
-      (req, res) => res.json({ status: 'READY' })
-    );
-
-    router.get(`/species/${speciesId}/collection/${collectionId}`,
-      (req, res) =>
-        res.sendFile(
-          path.resolve(__dirname, '..', '..', 'demos', speciesId, `${collectionId}.json`)
-        )
-    );
   }
 }
 
