@@ -16,7 +16,7 @@ const initialState = {
     systemDataColumns.__core_matches,
     systemDataColumns['__%_core_families'],
     systemDataColumns['__%_non-core'],
-    systemDataColumns.__assembly_length,
+    systemDataColumns.__genome_length,
     systemDataColumns.__n50,
     systemDataColumns['__no._contigs'],
     systemDataColumns['__non-ATCG'],

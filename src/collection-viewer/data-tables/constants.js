@@ -107,8 +107,8 @@ export const systemDataColumns = {
         null;
     },
   },
-  __assembly_length: {
-    columnKey: '__assembly_length',
+  __genome_length: {
+    columnKey: '__genome_length',
     valueGetter({ metadata }) {
       return metadata.metrics ?
         metadata.metrics.totalNumberOfNucleotidesInDnaStrings :
