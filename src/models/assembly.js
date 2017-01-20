@@ -107,6 +107,8 @@ function formatForFrontend(id, assembly) {
       } : undefined,
       genotyphi: genotyphi ? {
         genotype: genotyphi.genotype,
+        snps: genotyphi.genotyphiMutations ?
+          genotyphi.genotyphiMutations.length : undefined,
       } : undefined,
     },
   };

@@ -12,6 +12,7 @@ const {
   maxCollectionSize = 0,
   fastaStoragePath,
   demos = [],
+  node,
 } = require('configuration');
 
 router.get('/species/:id/reference', function (req, res, next) {
@@ -23,6 +24,21 @@ router.get('/species/:id/reference', function (req, res, next) {
     res.json(result);
   });
 });
+
+if (node.auth) {
+  const auth = require('http-auth');
+  const { realm, file, collections } = node.auth;
+  const basic = auth.basic({ realm, file });
+  const middleware = auth.connect(basic);
+  for (const { speciesId, collectionId } of collections) {
+    router.get(`/species/${speciesId}/collection/${collectionId}`, middleware, (req, res, next) => {
+      LOGGER.info(`Requesting authorized collection: ${speciesId}/${collectionId}`);
+      req.params.speciesId = speciesId;
+      req.params.collectionId = collectionId;
+      next();
+    });
+  }
+}
 
 if (demos.length) {
   for (const { speciesId, collectionId } of demos) {

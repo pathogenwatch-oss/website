@@ -3,7 +3,10 @@
 		"port": "80",
     "auth": {
       "realm": "",
-      "file": ""
+      "file": "",
+      "collections": [
+        { "speciesId": "", "collectionId": "" }
+      ]
     }
 	},
 	"couchbase": {
