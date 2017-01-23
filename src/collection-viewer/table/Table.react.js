@@ -96,7 +96,6 @@ function mapStateToProps(state) {
     downloads: {
       wgsa_gff: getFiles(state).wgsa_gff,
     },
-    collectionViewer: getViewer(state), // must be here to make selectors work :/
   };
 }
 

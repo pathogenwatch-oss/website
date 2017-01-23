@@ -22,16 +22,24 @@ const initialState = {
   active: true,
 };
 
-function getUserDefinedColumnNames(genomes) {
-  const columnNames = new Set();
+function getColumnNames(genomes) {
+  const leading = new Set();
+  const userDefined = new Set();
+  const trailing = new Set();
   genomes.forEach(genome => {
     if (genome.userDefined) {
       Object.keys(genome.userDefined).
         filter(name => name.length && !/__colou?r$/.test(name)).
-        forEach(name => columnNames.add(name));
+        forEach(name => userDefined.add(name));
+    }
+    if (genome.date) {
+      leading.add('__date');
+    }
+    if (genome.pmid) {
+      trailing.add('__pmid');
     }
   });
-  return columnNames;
+  return { leading, userDefined, trailing };
 }
 
 function getUserDefinedColumnProps(columnNames) {
@@ -50,17 +58,22 @@ function getActiveColumn(currentActiveColumn, newColumns) {
   return table.nameColumnProps;
 }
 
-const leftSystemColumnProps = [
-  table.leftSpacerColumn,
-  table.downloadColumnProps,
-  table.nameColumnProps,
-  systemDataColumns.__date,
-];
+function getLeadingSystemColumnProps(columnNames) {
+  return [
+    table.leftSpacerColumn,
+    table.downloadColumnProps,
+    table.nameColumnProps,
+  ].concat(Array.from(columnNames).map(name => systemDataColumns[name]));
+}
 
-const rightSystemColumnProps = [
-  systemDataColumns.__pmid,
-  table.rightSpacerColumn,
-];
+function getTrailingSystemColumnProps(columnNames) {
+  return (
+    Array.from(columnNames).map(name => systemDataColumns[name]).
+      concat([
+        table.rightSpacerColumn,
+      ])
+  );
+}
 
 export default function (state = initialState, { type, payload }) {
   if (!state.active) return state;
@@ -76,11 +89,13 @@ export default function (state = initialState, { type, payload }) {
         };
       }
 
-      const columnNames = getUserDefinedColumnNames(genomes);
+      const { leading, trailing, userDefined } = getColumnNames(genomes);
+      const leadingSystemColumnProps = getLeadingSystemColumnProps(leading);
+      const trailingSystemColumnProps = getTrailingSystemColumnProps(trailing);
       const columnProps = [
-        ...leftSystemColumnProps,
-        ...getUserDefinedColumnProps(columnNames),
-        ...rightSystemColumnProps,
+        ...leadingSystemColumnProps,
+        ...getUserDefinedColumnProps(userDefined),
+        ...trailingSystemColumnProps,
       ];
 
       return {
@@ -88,9 +103,9 @@ export default function (state = initialState, { type, payload }) {
         columnProps,
         publicMetadataColumnProps:
           publicMetadataColumnNames.length ?
-            [ ...leftSystemColumnProps,
+            [ ...leadingSystemColumnProps,
               ...getUserDefinedColumnProps(publicMetadataColumnNames),
-              ...rightSystemColumnProps,
+              ...trailingSystemColumnProps,
             ] :
             columnProps,
         columns: columnProps,
