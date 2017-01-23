@@ -12,15 +12,14 @@ import { getNumberOfVisibleFastas } from '../../hub-filter/selectors';
 
 const mapLocationFromState = ({ location }) => ({ location });
 
-const ViewSwitcher = connect(mapLocationFromState)(({ icon, title, to }) => (
+const ViewSwitcher = connect(mapLocationFromState)(({ title, to }) => (
   <Link
     to={to}
-    className="mdl-button mdl-button--icon wgsa-hub-view-switcher"
-    activeClassName="wgsa-hub-view-switcher--active"
+    className="wgsa-button-group__item"
+    activeClassName="active"
     onlyActiveOnIndex
-    title={title}
   >
-    <i className="material-icons">{icon}</i>
+    {title}
   </Link>
 ));
 
@@ -38,27 +37,27 @@ const Summary = React.createClass({
 
   render() {
     const { completedUploads, batchSize, visibleFastas, totalFastas } = this.props;
+    if (totalFastas === 0) return <FilterSummary />;
     return (
       <FilterSummary className="wgsa-hub-summary">
+        <div className="wgsa-button-group">
+          <i className="material-icons" title="View">visibility</i>
+          <ViewSwitcher to="/upload" title="Grid" />
+          <ViewSwitcher to="/upload/map" title="Map" />
+          <ViewSwitcher to="/upload/stats" title="Stats" />
+        </div>
         { batchSize ?
           <ProgressBar
-            className="wgsa-hub-upload-progress"
+            className="wgsa-filter-summary__count"
             progress={(completedUploads / batchSize) * 100}
             label={`${completedUploads}/${batchSize}`}
           /> :
           <Totals
             visible={visibleFastas}
             total={totalFastas}
-            itemType="genomes"
+            itemType="genome"
           />
         }
-        <ViewSwitcher to="/upload" title="Grid view" icon="view_module" />
-        <ViewSwitcher to="/upload/map" title="Map view" icon="map" />
-        <ViewSwitcher
-          to="/upload/stats"
-          title="Stats view"
-          icon="multiline_chart"
-        />
       </FilterSummary>
     );
   },

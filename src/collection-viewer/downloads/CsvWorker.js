@@ -3,10 +3,10 @@ import Papa from 'papaparse';
 
 import { formatColumnKeyAsLabel } from '../table/utils';
 
-import { systemDataColumns } from '../metadata-table/constants';
+import { systemDataColumns } from '../data-tables/constants';
 import { getUserDefinedValue } from '../metadata-table/utils';
 
-import { isResistant } from '../amr-utils';
+import { isResistant, hasElement } from '../amr-utils';
 
 const nameColumnData = {
   columnKey: '__name',
@@ -26,17 +26,23 @@ const csvOptions = {
     valueGetter: getUserDefinedValue,
     formatLabel: true,
   },
+  typing: {
+    valueGetter: getUserDefinedValue,
+    formatLabel: true,
+  },
+  stats: {
+    valueGetter: getUserDefinedValue,
+    formatLabel: true,
+  },
   antibiotics: {
     valueGetter: (antibiotic, { analysis: { paarsnp } }) =>
       (isResistant(paarsnp, antibiotic) ? 1 : 0),
   },
   snps: {
-    valueGetter: (snp, { analysis: { paarsnp } }) =>
-      (paarsnp.snp.indexOf(snp) === -1 ? 0 : 1),
+    valueGetter: (snp, genome) => (hasElement(genome, 'snp', snp) ? 1 : 0),
   },
   genes: {
-    valueGetter: (gene, { analysis: { paarsnp } }) =>
-      (paarsnp.paar.indexOf(gene) === -1 ? 0 : 1),
+    valueGetter: (gene, genome) => (hasElement(genome, 'paar', gene) ? 1 : 0),
   },
 };
 

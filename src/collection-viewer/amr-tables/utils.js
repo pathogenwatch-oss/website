@@ -9,14 +9,7 @@ import { measureText } from '../table/utils/columnWidth';
 import * as constants from '../table/constants';
 import { statuses } from '../../collection-route/constants';
 
-const systemColumnProps = [
-  constants.downloadColumnProps,
-  { ...constants.nameColumnProps,
-    flexGrow: 0,
-    headerClasses: 'wgsa-table-header--unstyled',
-    onHeaderClick: () => {},
-  },
-];
+import Species from '../../species';
 
 const systemGroup = {
   group: true,
@@ -25,13 +18,13 @@ const systemGroup = {
   columnKey: 'system',
   getHeaderContent() {},
   columns: [
-    { columnKey: '__spacer_l',
-      getHeaderContent() {},
-      fixed: true,
-      fixedWidth: 1,
-      getCellContents() {},
+    constants.leftSpacerColumn,
+    constants.downloadColumnProps,
+    { ...constants.nameColumnProps,
+      flexGrow: 0,
+      headerClasses: 'wgsa-table-header--unstyled',
+      onHeaderClick: () => {},
     },
-    ...systemColumnProps,
   ],
 };
 
@@ -41,11 +34,8 @@ const spacerGroup = {
   columnKey: 'spacer',
   getHeaderContent() {},
   columns: [
-    { columnKey: '__spacer_r',
-      getHeaderContent() {},
-      fixedWidth: 8,
-      getCellContents() {},
-      cellClasses: 'wgsa-table-cell--resistance',
+    { ...constants.rightSpacerColumn,
+      cellClasses: 'wgsa-table-cell--resistance', // for border on last column
     },
   ],
 };
@@ -54,9 +44,11 @@ function notPresent(profileSection, element) {
   return profileSection.indexOf(element) === -1;
 }
 
-export function createAdvancedViewColumn({ key, label }, profileKey, profiles) {
+export function createAdvancedViewColumn(element, profileKey, profiles) {
+  const { key, label, effect } = element;
   return {
     addState({ data }) {
+      if (!data.length) return this;
       this.hidden = data.every(({ analysis }) =>
         notPresent(analysis.paarsnp[profileKey], key)
       );
@@ -73,9 +65,12 @@ export function createAdvancedViewColumn({ key, label }, profileKey, profiles) {
     getWidth() {
       return measureText(label, true) + 4;
     },
-    getCellContents(props, { analysis }) {
-      return analysis.paarsnp[profileKey].indexOf(key) !== -1 ? (
-        <i className="material-icons wgsa-resistance-icon wgsa-amr--resistant">
+    getCellContents(props, assembly) {
+      return amr.hasElement(assembly, profileKey, key) ? (
+        <i
+          className="material-icons wgsa-resistance-icon"
+          style={{ color: amr.getEffectColour(effect) }}
+        >
           lens
         </i>
       ) : null;
@@ -136,4 +131,9 @@ export function createReducer({ name, buildColumns }) {
         return state;
     }
   };
+}
+
+export function checkCustomLabels(key) {
+  const { customLabels = {} } = Species.current.amrOptions || {};
+  return (key in customLabels ? customLabels[key] : key.slice(0, 3));
 }

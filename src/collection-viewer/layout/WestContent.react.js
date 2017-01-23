@@ -10,6 +10,7 @@ import {
   subtreeLoaded,
   treeClicked,
   typeChanged,
+  internalNodeSelected,
 } from '../tree/thunks';
 
 import { POPULATION } from '../../app/stateKeys/tree';
@@ -31,6 +32,7 @@ function mapDispatchToProps(dispatch) {
     onUpdated: (event, phylocanvas) =>
       dispatch(treeClicked(event, phylocanvas)),
     onTypeChanged: phylocanvas => dispatch(typeChanged(phylocanvas)),
+    onInternalNodeSelected: node => dispatch(internalNodeSelected(node)),
   };
 }
 

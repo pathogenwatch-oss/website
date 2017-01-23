@@ -12,16 +12,41 @@ import Species from '../../species';
 
 export const tableKeys = {
   metadata: 'metadata',
+  typing: 'typing',
+  stats: 'stats',
   antibiotics: 'antibiotics',
   snps: 'snps',
   genes: 'genes',
 };
+
+export const dataTables = new Set([
+  tableKeys.metadata,
+  tableKeys.typing,
+  tableKeys.stats,
+]);
 
 export const amrTables = new Set([
   tableKeys.antibiotics,
   tableKeys.snps,
   tableKeys.genes,
 ]);
+
+export const leftSpacerColumn = {
+  columnKey: '__spacer_l',
+  getHeaderContent() {},
+  fixed: true,
+  fixedWidth: 1,
+  flexGrow: 1,
+  getCellContents() {},
+};
+
+export const rightSpacerColumn = {
+  columnKey: '__spacer_r',
+  getHeaderContent() {},
+  fixedWidth: 24,
+  flexGrow: 1,
+  getCellContents() {},
+};
 
 export const nameColumnData = {
   columnKey: '__name',
@@ -102,10 +127,6 @@ export const nameColumnProps = {
       width += 32;
     }
 
-    if (row.pmid) {
-      width += 32;
-    }
-
     return width;
   },
   getCellContents({ valueGetter }, data) {
@@ -116,18 +137,8 @@ export const nameColumnProps = {
           { data.__isPublic && data.collectionId ?
             <a className="mdl-button mdl-button--icon"
               href={`/${Species.nickname}/collection/${data.collectionId}`}
-              title="View WGSA Collection"
+              title="View Original Collection"
               target="_blank" rel="noopener"
-            >
-              <i className="material-icons">open_in_new</i>
-            </a> : null
-          }
-          { data.pmid ?
-            <a className="mdl-button mdl-button--icon"
-              href={`http://www.ncbi.nlm.nih.gov/pubmed/${data.pmid}`}
-              target="_blank" rel="noopener"
-              title={`PMID ${data.pmid}`}
-              style={{ color: '#369' }}
             >
               <i className="material-icons">open_in_new</i>
             </a> : null

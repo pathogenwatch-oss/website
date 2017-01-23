@@ -4,6 +4,7 @@ import { FETCH_COLLECTION }
   from '../../collection-route/actions';
 import * as ACTIONS from './actions';
 
+import { speciesTrees } from './constants';
 import { COLLECTION, POPULATION } from '../../app/stateKeys/tree';
 import { statuses } from '../../collection-route/constants';
 
@@ -49,6 +50,7 @@ const initialState = {
   nodeSize: {},
   labelSize: {},
   history: [],
+  selectedInternalNode: null,
 };
 
 function entities(state = {}, { type, payload }) {
@@ -161,6 +163,14 @@ function entities(state = {}, { type, payload }) {
           ...payload.snapshot,
         },
       };
+    case ACTIONS.INTERNAL_NODE_SELECTED:
+      return {
+        ...state,
+        [payload.stateKey]: {
+          ...state[payload.stateKey],
+          selectedInternalNode: payload.nodeId,
+        },
+      };
     default:
       return state;
   }
@@ -187,8 +197,18 @@ function loading(state = false, { type }) {
   }
 }
 
+function lastSubtree(state = null, { type, payload }) {
+  switch (type) {
+    case ACTIONS.SET_TREE:
+      return speciesTrees.has(payload.name) ? state : payload.name;
+    default:
+      return state;
+  }
+}
+
 export default combineReducers({
   entities,
   visible,
   loading,
+  lastSubtree,
 });

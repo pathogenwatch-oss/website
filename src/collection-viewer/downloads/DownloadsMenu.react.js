@@ -7,7 +7,7 @@ import Overlay from '../../components/overlay';
 import DownloadButton from './DownloadButton.react';
 
 import { getCollection, getGenomes, getViewer } from '../../collection-route/selectors';
-import { getTables } from '../table/selectors';
+import { hasMetadata, hasTyping } from '../table/selectors';
 import { getActiveGenomeIds } from '../selectors';
 
 import { setMenuActive } from './actions';
@@ -50,7 +50,10 @@ function mapStateToProps(state) {
     genomes: getGenomes(state),
     genomeIds: getActiveGenomeIds(state),
     ...viewer.downloads,
-    tables: getTables(state),
+    // tables: getTables(state),
+    // collectionViewer, // needs to be here for selectors to work :/
+    hasMetadata: hasMetadata(state),
+    hasTyping: hasTyping(state),
   };
 }
 
@@ -63,7 +66,7 @@ function mergeProps(state, { dispatch }) {
       Object.keys(files).
         filter(format => {
           const { hideFromMenu = () => false } = files[format];
-          return !hideFromMenu();
+          return !hideFromMenu(state);
         }).
         map(format => {
           const download = files[format];

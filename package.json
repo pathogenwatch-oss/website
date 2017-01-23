@@ -1,6 +1,6 @@
 {
   "name": "wgsa-front-end",
-  "version": "4.10.2",
+  "version": "4.11.6",
   "description": "Web client for WGSA",
   "main": "index.js",
   "scripts": {
@@ -31,7 +31,7 @@
     "body-parser": "^1.14.1",
     "cgps-commons": "gitlab:cgps/commons",
     "classnames": "^2.2.5",
-    "css-loader": "^0.25.0",
+    "css-loader": "^0.26.1",
     "ejs": "^2.5.1",
     "eslint-config-cgps": "github:imperialcollegelondon/eslint-config-cgps#v1.1.0",
     "express": "^4.12.2",
@@ -43,10 +43,9 @@
     "leaflet-lassoselect": "github:imperialcollegelondon/leaflet-lassoselect",
     "leaflet.markercluster": "github:leaflet/leaflet.markercluster#leaflet-0.7",
     "lodash.sortby": "^4.7.0",
-    "object-assign": "^4.0.1",
     "papaparse": "^4.1.1",
     "phylocanvas": "^2.8.0",
-    "phylocanvas-plugin-context-menu": "^3.10.0",
+    "phylocanvas-plugin-context-menu": "^3.10.1",
     "postcss-cssnext": "^2.8.0",
     "postcss-input-style": "^0.3.0",
     "postcss-loader": "^0.11.1",

@@ -26,18 +26,17 @@ export function addColumnWidth(column, { data }) {
     return column;
   }
 
-  const { getWidth = defaultWidthGetter, cellPadding = 40 } = column;
-  const columnLabelWidth =
-    measureText(getColumnLabel(column));
+  const { getWidth = defaultWidthGetter, cellPadding = 16 } = column;
+  const columnHeaderWidth = measureText(getColumnLabel(column)) + cellPadding;
 
   column.width = data.length ? data.reduce((maxWidth, row) =>
     Math.max(
       maxWidth,
       column.minWidth || 0,
-      columnLabelWidth + cellPadding,
+      columnHeaderWidth,
       getWidth(row, column, row.__isCollection || row.__isReference) + cellPadding,
     ), 0
-  ) : columnLabelWidth;
+  ) : columnHeaderWidth;
 
   return column;
 }

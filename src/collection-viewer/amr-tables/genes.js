@@ -1,22 +1,26 @@
 const { onHeaderClick } = require('./thunks');
 
-import { tableKeys } from '../../collection-viewer/table/constants';
-import { createAdvancedViewColumn } from './utils';
+import { tableKeys } from '../table/constants';
+import { createAdvancedViewColumn, checkCustomLabels } from './utils';
 
 export const name = tableKeys.genes;
 
 export function buildColumns({ paar, antibiotics }, profiles) {
-  return Object.keys(paar).
-    map(antibiotic => ({
-      group: true,
-      columnKey: `paar_${antibiotic}`,
-      columns: paar[antibiotic].
-        map(element => createAdvancedViewColumn(
-          { key: element, label: element }, 'paar', profiles
-        )),
-      getLabel: () => antibiotic,
-      headerClasses: 'wgsa-table-header--expanded wgsa-table-header--group',
-      headerTitle: antibiotics.find(_ => _.key === antibiotic).fullName,
-      onHeaderClick,
-    }));
+  return antibiotics.reduce((groups, { key, fullName }) => {
+    if (key in paar) {
+      groups.push({
+        group: true,
+        columnKey: `paar_${key}`,
+        columns: paar[key].
+          map(({ element, effect }) => createAdvancedViewColumn(
+            { key: element, label: element, effect }, 'paar', profiles
+          )),
+        getLabel: () => checkCustomLabels(key),
+        headerClasses: 'wgsa-table-header--expanded wgsa-table-header--group',
+        headerTitle: fullName,
+        onHeaderClick,
+      });
+    }
+    return groups;
+  }, []);
 }

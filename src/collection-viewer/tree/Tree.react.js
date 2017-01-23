@@ -19,12 +19,19 @@ Phylocanvas.plugin(decorate => {
   decorate(Tree, 'clicked', function (delegate, args) {
     const [ event ] = args;
     const node = this.getNodeAtMousePosition(event);
+
     if (event.shiftKey && node) {
       node.toggleCollapsed();
       this.draw();
-    } else {
-      delegate.apply(this, args);
+      return;
     }
+
+    delegate.apply(this, args);
+  });
+
+  decorate(Tree, 'cleanup', function (delegate) {
+    this.removeListener('click', this._onInternalNodeSelected);
+    delegate.call(this);
   });
 });
 
@@ -43,6 +50,8 @@ export default React.createClass({
     leafStyles: React.PropTypes.object,
     onLoaded: React.PropTypes.func,
     onUpdated: React.PropTypes.func,
+    onTypeChanged: React.PropTypes.func,
+    onInternalNodeSelected: React.PropTypes.func,
     loading: React.PropTypes.bool,
     filenames: React.PropTypes.object,
   },
@@ -58,7 +67,6 @@ export default React.createClass({
       contextMenu: {
         parent: document.body,
       },
-      collapsedColour: '#222',
       fillCanvas: true,
     });
 
@@ -82,9 +90,16 @@ export default React.createClass({
     phylocanvas.on('subtree', () => this.props.onSubtree(phylocanvas));
     phylocanvas.on('updated', event => this.props.onUpdated(event, phylocanvas));
     phylocanvas.on('typechanged', () => this.props.onTypeChanged(phylocanvas));
+    phylocanvas._onInternalNodeSelected = event => {
+      const node = phylocanvas.getNodeAtMousePosition(event);
+      if (node && !node.leaf) this.props.onInternalNodeSelected(node);
+      else this.props.onInternalNodeSelected();
+    };
+    phylocanvas.on('click', phylocanvas._onInternalNodeSelected);
     phylocanvas.on('error', error => console.error(error));
 
     this.phylocanvas = phylocanvas;
+    this.phylocanvas.contextMenu.filenames = this.props.filenames;
 
     // must be native event to for body click cancellation to work
     this.refs.menuButton.addEventListener('click', e => this.toggleContextMenu(e));

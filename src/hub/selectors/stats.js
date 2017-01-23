@@ -15,13 +15,32 @@ export const getGenomeMetrics = createSelector(
     }, [])
 );
 
+function average(list, property) {
+  return (
+    list.reduce(
+      (memo, item) => memo + Number(property ? item[property] : item),
+      0
+    ) / (list.length || 1)
+  );
+}
+
 export const getMetricAverage = createSelector(
   getGenomeMetrics,
   getSelectedMetric,
-  (metrics, selectedMetric) => (
-    metrics.reduce((memo, _) => memo + Number(_[selectedMetric]), 0) /
-    (metrics.length || 1)
-  ).toFixed(0)
+  (metrics, selectedMetric) => average(metrics, selectedMetric).toFixed(1)
+);
+
+export const getMetricStDev = createSelector(
+  getAssemblyMetrics,
+  getSelectedMetric,
+  getMetricAverage,
+  (metrics, selectedMetric, avg) => {
+    const squareDiffs = metrics.map(item => {
+      const diff = item[selectedMetric] - avg;
+      return diff * diff;
+    });
+    return Math.sqrt(average(squareDiffs)).toFixed(2);
+  }
 );
 
 export const getMetricRange = createSelector(

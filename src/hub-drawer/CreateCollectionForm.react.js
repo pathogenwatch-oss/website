@@ -45,7 +45,7 @@ const CreateCollectionForm = React.createClass({
             {taxIdMap.get(speciesId).formattedShortName}
           </CardMetadata>
           <CardMetadata icon="insert_drive_file">
-            {numGenomes} genomes
+            {numGenomes} Genome{numGenomes > 1 ? 's' : ''}
           </CardMetadata>
         </span>
         <div ref={this.addToFormElements} className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">

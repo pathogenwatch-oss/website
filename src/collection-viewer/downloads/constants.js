@@ -10,6 +10,24 @@ export const fileTypes = {
     filenameSegment: 'metadata.csv',
     getFileContents: clientSide.generateMetadataFile,
     createLink: clientSide.createCSVLink,
+    hideFromMenu({ hasMetadata }) {
+      return !hasMetadata;
+    },
+  },
+  typing_csv: {
+    description: 'Typing',
+    filenameSegment: 'typing.csv',
+    getFileContents: clientSide.generateTypingFile,
+    createLink: clientSide.createCSVLink,
+    hideFromMenu({ hasTyping }) {
+      return !hasTyping;
+    },
+  },
+  stats_csv: {
+    description: 'Stats',
+    filenameSegment: 'stats.csv',
+    getFileContents: clientSide.generateStatsFile,
+    createLink: clientSide.createCSVLink,
   },
   amr_profile_csv: {
     description: 'AMR Profile',

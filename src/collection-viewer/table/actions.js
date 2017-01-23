@@ -20,6 +20,18 @@ export function showTableView(view) {
   };
 }
 
+export const SET_LABEL_COLUMN = 'SET_LABEL_COLUMN';
+
+export function setLabelColumn(table, column) {
+  return {
+    type: SET_LABEL_COLUMN,
+    payload: {
+      table,
+      column,
+    },
+  };
+}
+
 export const SET_COLOUR_COLUMNS = 'SET_COLOUR_COLUMNS';
 
 export function setColourColumns(table, columns) {

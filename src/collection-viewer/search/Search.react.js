@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import classnames from 'classnames';
 
 import { getGenomes } from '../../collection-route/selectors';
-import { getMetadataTable } from '../table/selectors';
+import { getActiveDataTable } from '../table/selectors';
 import { getFilter } from '../selectors';
 
 import { activateFilter, resetFilter } from '../filter/actions';
@@ -76,7 +76,7 @@ const Search = React.createClass({
 
 function mapStateToProps(state) {
   const filter = getFilter(state);
-  const { activeColumn } = getMetadataTable(state);
+  const { activeColumn } = getActiveDataTable(state);
   const totalAmount = filter.unfilteredIds.length;
   return {
     displayProps: {
