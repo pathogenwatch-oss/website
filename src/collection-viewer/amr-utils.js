@@ -11,6 +11,10 @@ const stateColourMap = Object.keys(stateColours).reduce(
 );
 export const getColourState = colour => stateColourMap.get(colour);
 
+export function getEffectColour(effect) {
+  return stateColours[effect] || stateColours.RESISTANT;
+}
+
 export function isResistant({ antibiotics }, antibiotic) {
   if (!(antibiotic in antibiotics)) return false;
 
