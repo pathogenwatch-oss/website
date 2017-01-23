@@ -1,4 +1,4 @@
-import { FETCH_ENTITIES } from '../../actions/fetch';
+import { FETCH_COLLECTION } from '../../collection-route/actions';
 import { SET_LABEL_COLUMN } from '../table/actions';
 import { SET_TREE } from '../tree/actions';
 import { onHeaderClick } from './thunks';
@@ -22,12 +22,11 @@ const initialState = {
   active: true,
 };
 
-function getUserDefinedColumnNames(assemblies) {
+function getUserDefinedColumnNames(genomes) {
   const columnNames = new Set();
-  Object.keys(assemblies).forEach(key => {
-    const { userDefined } = assemblies[key].metadata;
-    if (userDefined) {
-      Object.keys(userDefined).
+  genomes.forEach(genome => {
+    if (genome.userDefined) {
+      Object.keys(genome.userDefined).
         filter(name => name.length && !/__colou?r$/.test(name)).
         forEach(name => columnNames.add(name));
     }
@@ -66,18 +65,18 @@ const rightSystemColumnProps = [
 export default function (state = initialState, { type, payload }) {
   if (!state.active) return state;
   switch (type) {
-    case FETCH_ENTITIES.SUCCESS: {
-      const [ { assemblies } ] = payload.result;
+    case FETCH_COLLECTION.SUCCESS: {
+      const { genomes } = payload.result;
       const { publicMetadataColumnNames = [] } = Species.current;
 
-      if (!hasMetadata(assemblies)) {
+      if (!hasMetadata(genomes)) {
         return {
           ...state,
           active: false,
         };
       }
 
-      const columnNames = getUserDefinedColumnNames(assemblies);
+      const columnNames = getUserDefinedColumnNames(genomes);
       const columnProps = [
         ...leftSystemColumnProps,
         ...getUserDefinedColumnProps(columnNames),

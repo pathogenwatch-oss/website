@@ -1,10 +1,9 @@
 import registerPromiseWorker from 'promise-worker/register';
 import Papa from 'papaparse';
 
-import { formatColumnKeyAsLabel } from '../table/utils';
+import { formatColumnKeyAsLabel, getUserDefinedValue } from '../table/utils';
 
 import { systemDataColumns } from '../data-tables/constants';
-import { getUserDefinedValue } from '../metadata-table/utils';
 
 import { isResistant, hasElement } from '../amr-utils';
 

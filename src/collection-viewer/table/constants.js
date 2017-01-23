@@ -5,7 +5,7 @@ import { FastaFileLink, FastaArchiveButton } from '../fasta-download';
 
 import { getArchiveDownloadProps } from '../downloads/utils';
 
-import { defaultWidthGetter } from '../table/utils/columnWidth';
+import { defaultWidthGetter } from './columnWidth';
 
 import { CGPS } from '../../app/constants';
 import Species from '../../species';

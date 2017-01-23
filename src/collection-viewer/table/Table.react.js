@@ -11,7 +11,7 @@ import { getFiles } from '../downloads/selectors';
 
 import { onTableClick, onRowClick } from './thunks';
 
-import { addColumnWidth } from '../table/utils/columnWidth';
+import { addColumnWidth } from '../table/columnWidth';
 import { addDownloadProps } from '../downloads/utils';
 import { getColumnLabel } from './utils';
 

@@ -1,7 +1,6 @@
-
 const { onHeaderClick } = require('./thunks');
 
-import { measureText } from '../../table/utils/columnWidth';
+import { measureText } from '../table/columnWidth';
 import { createAdvancedViewColumn, checkCustomLabels } from './utils';
 
 import { tableKeys } from '../table/constants';

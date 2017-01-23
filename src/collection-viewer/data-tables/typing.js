@@ -1,4 +1,4 @@
-import { FETCH_ENTITIES } from '../../actions/fetch';
+import { FETCH_COLLECTION } from '../../collection-route/actions';
 import { SET_LABEL_COLUMN } from '../table/actions';
 import { onHeaderClick } from './thunks';
 
@@ -20,7 +20,7 @@ const initialState = {
 
 export default function (state = initialState, { type, payload }) {
   switch (type) {
-    case FETCH_ENTITIES.SUCCESS: {
+    case FETCH_COLLECTION.SUCCESS: {
       const columns =
         getTypingColumns(Species.uiOptions).
           map(columnKey => systemDataColumns[columnKey]);

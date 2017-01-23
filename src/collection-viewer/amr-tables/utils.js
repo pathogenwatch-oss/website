@@ -5,7 +5,7 @@ import { SET_COLOUR_COLUMNS } from '../table/actions';
 import { onHeaderClick } from './thunks';
 
 import * as amr from '../amr-utils';
-import { measureText } from '../table/utils/columnWidth';
+import { measureText } from '../table/columnWidth';
 import * as constants from '../table/constants';
 import { statuses } from '../../collection-route/constants';
 
