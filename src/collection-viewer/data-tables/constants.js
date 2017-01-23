@@ -5,14 +5,14 @@ import { getFormattedDateString } from '../table/utils';
 export const systemDataColumns = {
   __date: {
     columnKey: '__date',
-    valueGetter({ metadata }) {
-      return getFormattedDateString(metadata.date);
+    valueGetter({ date }) {
+      return getFormattedDateString(date);
     },
   },
   __pmid: {
     columnKey: '__pmid',
-    valueGetter({ metadata }) {
-      return metadata.pmid;
+    valueGetter({ pmid }) {
+      return pmid;
     },
     getCellContents({ valueGetter }, data) {
       const pmid = valueGetter(data);
@@ -33,19 +33,22 @@ export const systemDataColumns = {
   __wgsa_reference: {
     columnKey: '__wgsa_reference',
     valueGetter({ analysis }) {
-      return analysis.populationSubtype;
+      if (!analysis.fp) return null;
+      return analysis.fp.subtype;
     },
   },
   __mlst: {
     columnKey: '__mlst',
     valueGetter({ analysis }) {
-      return analysis.st;
+      if (!analysis.mlst) return null;
+      return analysis.mlst.st;
     },
   },
   __mlst_profile: {
     columnKey: '__mlst_profile',
     valueGetter({ analysis }) {
-      return analysis.mlst;
+      if (!analysis.mlst) return null;
+      return analysis.mlst.code;
     },
   },
   '__ng-mast': {
@@ -109,41 +112,41 @@ export const systemDataColumns = {
   },
   __genome_length: {
     columnKey: '__genome_length',
-    valueGetter({ metadata }) {
-      return metadata.metrics ?
-        metadata.metrics.totalNumberOfNucleotidesInDnaStrings :
+    valueGetter({ metrics }) {
+      return metrics ?
+        metrics.totalNumberOfNucleotidesInDnaStrings :
         null;
     },
   },
   __n50: {
     columnKey: '__n50',
-    valueGetter({ metadata }) {
-      return metadata.metrics ?
-        metadata.metrics.contigN50 :
+    valueGetter({ metrics }) {
+      return metrics ?
+        metrics.contigN50 :
         null;
     },
   },
   '__no._contigs': {
     columnKey: '__no._contigs',
-    valueGetter({ metadata }) {
-      return metadata.metrics ?
-        metadata.metrics.totalNumberOfContigs :
+    valueGetter({ metrics }) {
+      return metrics ?
+        metrics.totalNumberOfContigs :
         null;
     },
   },
   '__non-ATCG': {
     columnKey: '__non-ATCG',
-    valueGetter({ metadata }) {
-      return metadata.metrics ?
-        metadata.metrics.totalNumberOfNsInDnaStrings :
+    valueGetter({ metrics }) {
+      return metrics ?
+        metrics.totalNumberOfNsInDnaStrings :
         null;
     },
   },
   __GC_Content: {
     columnKey: '__GC_Content',
-    valueGetter({ metadata }) {
-      return metadata.metrics && metadata.metrics.gcContent ?
-        `${metadata.metrics.gcContent}%` :
+    valueGetter({ metrics }) {
+      return metrics && metrics.gcContent ?
+        `${metrics.gcContent}%` :
         null;
     },
   },

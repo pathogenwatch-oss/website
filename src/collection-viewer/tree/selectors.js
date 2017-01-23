@@ -53,10 +53,10 @@ export const getFilenames = createSelector(
 
 export const getLastSubtree = createSelector(
   getTreeState,
-  ({ entities }) => entities.assemblies,
-  ({ lastSubtree }, assemblies) => (
+  getGenomes,
+  ({ lastSubtree }, genomes) => (
     lastSubtree ?
-      { name: lastSubtree, title: assemblies[lastSubtree].name } :
+      { name: lastSubtree, title: genomes[lastSubtree].name } :
       null
   )
 );

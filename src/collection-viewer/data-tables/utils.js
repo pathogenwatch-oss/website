@@ -2,13 +2,11 @@ import { tableKeys } from '../table/constants';
 import Species from '../../species';
 
 // TODO: Might be good if `date` and `userDefined` were null
-export function hasMetadata(assemblies) {
+export function hasMetadata(genomes) {
   return (
-    Object.keys(assemblies).
-      some(key => {
-        const { metadata: { date, pmid, userDefined } } = assemblies[key];
-        return !!(date.year || pmid || Object.keys(userDefined).length);
-      })
+    genomes.some(({ date, pmid, userDefined }) =>
+      !!(date.year || pmid || Object.keys(userDefined).length)
+    )
   );
 }
 
@@ -21,8 +19,8 @@ export function getTypingColumns(uiOptions) {
   ].filter(_ => _);
 }
 
-export function getInitialTable([ { assemblies } ]) {
-  if (hasMetadata(assemblies)) return tableKeys.metadata;
+export function getInitialTable({ genomes }) {
+  if (hasMetadata(genomes)) return tableKeys.metadata;
   if (getTypingColumns(Species.uiOptions).length) return tableKeys.typing;
   return tableKeys.stats;
 }

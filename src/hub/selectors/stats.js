@@ -31,7 +31,7 @@ export const getMetricAverage = createSelector(
 );
 
 export const getMetricStDev = createSelector(
-  getAssemblyMetrics,
+  getGenomeMetrics,
   getSelectedMetric,
   getMetricAverage,
   (metrics, selectedMetric, avg) => {
