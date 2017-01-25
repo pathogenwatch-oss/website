@@ -1,31 +1,34 @@
-const async = require('async');
-
-const storageConnection = require('utils/storageConnection');
-const messageQueueConnection = require('utils/messageQueueConnection');
-const mongoConnection = require('utils/mongoConnection');
+const storage = require('utils/storageConnection');
+const messageQueue = require('utils/messageQueueConnection');
+const mongo = require('utils/mongoConnection');
 
 const LOGGER = require('utils/logging').createLogger('microservice');
 
 const serviceName = process.argv[2];
 
+const formatConnections =
+  ([ storageConnection, mqConnection, mongoConnection ]) => ({
+    storageConnection, mqConnection, mongoConnection,
+  });
+
 if (!serviceName) {
   LOGGER.error('Service name not provided.');
 } else {
-  async.parallel({
-    storageConnection: storageConnection.connect,
-    mqConnection: messageQueueConnection.connect,
-    mongoConnection: mongoConnection.connect,
-  }, (error, connections) => {
-    if (error) {
-      LOGGER.error(error);
-      return process.exit(1);
-    }
-
+  Promise.all([
+    storage.connect(),
+    messageQueue.connect(),
+    mongo.connect(),
+  ]).
+  then(connections => {
     process.on('SIGTERM', () => {
       LOGGER.info('Received stop signal (SIGTERM), shutting down.');
       process.exit();
     });
 
-    require(`./${serviceName}`)(connections);
+    require(`./${serviceName}`)(formatConnections(connections));
+  }).
+  catch(error => {
+    LOGGER.error(error);
+    return process.exit(1);
   });
 }

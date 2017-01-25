@@ -7,7 +7,6 @@ const userAccounts = require('cgps-user-accounts/src');
 const userStore = require('utils/userStore');
 const http = require('http');
 const path = require('path');
-const async = require('async');
 
 const config = require('configuration.js');
 const logging = require('utils/logging');
@@ -30,16 +29,11 @@ app.use(bodyParser.urlencoded({
 
 logging.initHttpLogging(app, process.env.NODE_ENV || 'development');
 
-module.exports = (callback) => {
-  async.parallel([
-    messageQueueConnection.connect,
-    mongoConnection.connect,
-  ], (error) => {
-    if (error) {
-      callback(error, null);
-      return;
-    }
-
+module.exports = () =>
+  Promise.all([
+    messageQueueConnection.connect(),
+    mongoConnection.connect(),
+  ]).then(() => {
     // security
     app.use((req, res, next) => {
       res.header('X-Frame-Options', 'SAMEORIGIN');
@@ -131,7 +125,6 @@ module.exports = (callback) => {
         });
       });
 
-      callback(null, app);
+      return app;
     });
   });
-};

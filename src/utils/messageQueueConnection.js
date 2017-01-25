@@ -1,6 +1,5 @@
 var amqp = require('amqp');
 var extend = require('extend');
-var async = require('async');
 var os = require('os');
 
 var appConfig = require('configuration');
@@ -62,7 +61,7 @@ function setDefaultPublishOptions(exchange) {
   };
 }
 
-function createExchange(exchangeKey, callback) {
+function createExchange(exchangeKey) {
   const config = EXCHANGE_CONFIG[exchangeKey];
   const options = Object.assign({
     type: config.type,
@@ -72,39 +71,34 @@ function createExchange(exchangeKey, callback) {
     autoDelete: false,
     noDeclare: false,
   }, config.options);
-  connection.exchange(config.name, options, exchange => {
-    setDefaultPublishOptions(exchange);
-    exchanges[exchangeKey] = exchange;
-    LOGGER.info('✔ Exchange "' + exchange.name + '" is open');
-    callback();
+
+  return new Promise((resolve) => {
+    connection.exchange(config.name, options, exchange => {
+      setDefaultPublishOptions(exchange);
+      exchanges[exchangeKey] = exchange;
+      LOGGER.info(`✔ Exchange "${exchange.name}" is open`);
+      resolve();
+    });
   });
 }
 
-function connect(callback) {
+function connect() {
   connection =
     amqp.createConnection(CONNECTION_OPTIONS);
 
-  connection.on('error', function (error) {
-    LOGGER.error(error);
-    callback(error);
-  });
+  return new Promise((resolve, reject) => {
+    connection.on('error', error => {
+      LOGGER.error(error);
+      reject(error);
+    });
 
-  connection.on('ready', function () {
-    LOGGER.info('✔ Connection is ready');
+    connection.on('ready', () => {
+      LOGGER.info('✔ Connection is ready');
 
-    async.each(
-      Object.keys(EXCHANGE_CONFIG),
-      function (exchangeKey, finishIteration) {
-        createExchange(exchangeKey, finishIteration);
-      },
-      function (error) {
-        if (error) {
-          callback(error);
-        }
-
-        callback(null, connection);
-      }
-    );
+      Promise.all(Object.keys(EXCHANGE_CONFIG).map(createExchange)).
+        then(() => resolve(connection)).
+        catch(error => reject(error));
+    });
   });
 }
 
