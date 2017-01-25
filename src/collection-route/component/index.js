@@ -10,9 +10,7 @@ import * as actions from '../actions';
 function mapStateToProps(state) {
   const collection = getCollection(state);
   return {
-    status: collection.status,
-    progress: collection.progress,
-    metadata: collection.metadata,
+    collection,
     percentage: getProgressPercentage(state),
   };
 }

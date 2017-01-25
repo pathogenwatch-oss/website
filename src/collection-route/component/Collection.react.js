@@ -33,26 +33,23 @@ export default React.createClass({
   },
 
   render() {
-    const { progress = {}, status } = this.props;
+    const { collection } = this.props;
 
-    if (status === statuses.PROCESSING) {
+    if (collection.status === statuses.PROCESSING) {
       return (
         <Progress {...this.props} />
       );
     }
 
-    if (status === statuses.READY) {
+    if (collection.status === statuses.READY) {
       return (
         <Viewer />
       );
     }
 
-    if (status && status !== statuses.READY) {
+    if (collection.status && collection.status !== statuses.READY) {
       return (
-        <LoadError
-          status={status}
-          progress={progress || {}}
-        />
+        <LoadError collection={collection} />
       );
     }
 

@@ -34,8 +34,8 @@ const UploadProgress = React.createClass({
   },
 
   setDocumentTitle() {
-    const { metadata = {}, percentage = 0 } = this.props;
-
+    const { collection, percentage = 0 } = this.props;
+    const { metadata = {} } = collection;
     document.title = [
       'WGSA',
       '|',
@@ -45,8 +45,8 @@ const UploadProgress = React.createClass({
   },
 
   subscribeToNotifications() {
-    const { progress, updateProgress } = this.props;
-    if (progress && !this.notificationChannel) {
+    const { collection, updateProgress } = this.props;
+    if (collection.progress && !this.notificationChannel) {
       this.notificationChannel = subscribe(
         this.props.params.id, // get collection id from url
         'progress',
@@ -65,7 +65,7 @@ const UploadProgress = React.createClass({
               If upload fails to progress, please refresh at a later time.
             </div>
           </div>
-          <Dashboard {...this.props.progress} />
+          <Dashboard {...this.props.collection.progress} />
         </main>
       </div>
     );
