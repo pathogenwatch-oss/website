@@ -26,7 +26,7 @@ const schema = new Schema({
       subtype: String,
     },
     mlst: {
-      st: Number,
+      st: String,
       code: String,
     },
     core: {
@@ -47,6 +47,7 @@ const schema = new Schema({
     },
     genotyphi: {
       genotype: String,
+      snps: Number,
     },
   },
 });
