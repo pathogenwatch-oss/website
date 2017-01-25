@@ -4,7 +4,7 @@ import Species from '../../species';
 // TODO: Might be good if `date` and `userDefined` were null
 export function hasMetadata(genomes) {
   return (
-    genomes.some(({ date, pmid, userDefined }) =>
+    genomes.some(({ date = {}, pmid, userDefined = {} }) =>
       !!(date.year || pmid || Object.keys(userDefined).length)
     )
   );
