@@ -7,6 +7,8 @@ import { getProgressPercentage } from '../progress/selectors.js';
 
 import * as actions from '../actions';
 
+import { statuses } from '../constants';
+
 function mapStateToProps(state) {
   const collection = getCollection(state);
   return {
@@ -18,7 +20,11 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch, { params: { id } }) {
   return {
     fetch: () => dispatch(actions.fetchCollection(id)),
-    updateProgress: results => dispatch(actions.updateProgress(results)),
+    updateProgress: results => (
+      results.status === statuses.READY ?
+        dispatch(actions.fetchCollection(id)) :
+        dispatch(actions.updateProgress(results))
+    ),
     reset: () => dispatch(actions.resetCollectionView()),
   };
 }
