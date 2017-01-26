@@ -24,7 +24,7 @@ function getAlleleKeys(alleles) {
 function getMLSTAlleleDetails(alleles) {
   const queryKeys = getAlleleKeys(alleles);
   if (!queryKeys || !queryKeys.length) {
-    return null;
+    return {};
   }
   return sequencesStorage.retrieveMany(queryKeys).
     then(({ results }) => results);
