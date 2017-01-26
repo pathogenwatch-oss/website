@@ -24,7 +24,7 @@ function getAlleleKeys(alleles) {
 function getMLSTAlleleDetails(alleles, callback) {
   const queryKeys = getAlleleKeys(alleles);
   if (!queryKeys || !queryKeys.length) {
-    callback();
+    callback(null, {}); // must return for async waterfall to work
     return;
   }
   sequencesStorage.retrieveMany(queryKeys, (error, results) => {
