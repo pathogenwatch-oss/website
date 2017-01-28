@@ -1,6 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
-// const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 const srcFolder = path.join(__dirname, 'src');
 
@@ -8,6 +8,7 @@ const resolve = {
   alias: {
     '^': srcFolder,
   },
+  unsafeCache: true,
 };
 
 const babelSettings = {
@@ -19,8 +20,8 @@ const rules = [
   { test: /.css$/, use: [ 'style-loader', 'css-loader', 'postcss-loader' ] },
   { test: /\.(png|jpg|jpeg|gif)$/, use: 'file' },
   { test: /\.js$/,
-    loader: (process.env.NODE_ENV === 'production' ? '' : 'react-hot-loader!').concat(`babel-loader?${JSON.stringify(babelSettings)}`),
-    // loader: `babel-loader?${JSON.stringify(babelSettings)}`,
+    // loader: (process.env.NODE_ENV === 'production' ? '' : 'react-hot-loader!').concat(`babel-loader?${JSON.stringify(babelSettings)}`),
+    loader: `babel-loader?${JSON.stringify(babelSettings)}`,
     include: [
       /(src|universal|cgps-commons)/,
       path.join(__dirname, 'node_modules', 'promise-file-reader'),
@@ -64,7 +65,7 @@ const devConfig = {
   resolve,
   plugins: commonPlugins.concat([
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin(),
+    new webpack.NoEmitOnErrorsPlugin(),
   ]),
   module: {
     rules,
@@ -109,7 +110,7 @@ const prodConfig = {
     new webpack.optimize.CommonsChunkPlugin({
       names: [ 'wgsa', 'vendor', 'manifest' ],
     }),
-    // new BundleAnalyzerPlugin(),
+    new BundleAnalyzerPlugin(),
   ]),
   module: {
     rules,

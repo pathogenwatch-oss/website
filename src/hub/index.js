@@ -6,6 +6,8 @@ import { getCollection } from '../collection-route/selectors';
 import { getTotalFastas } from './selectors';
 import { getNumberOfVisibleFastas } from '../hub-filter/selectors';
 
+export reducer from './reducer';
+
 function mapStateToProps(state) {
   const { hub } = state;
   return {

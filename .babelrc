@@ -6,5 +6,9 @@
       "modules": false
     } ]
   ],
-  "plugins": [ "recharts" ]
+  "plugins": [
+    "recharts",
+    "transform-export-extensions",
+    "transform-object-rest-spread"
+  ]
 }

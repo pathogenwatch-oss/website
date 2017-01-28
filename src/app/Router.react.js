@@ -1,11 +1,7 @@
 import React from 'react';
 import { Router, browserHistory } from 'react-router/es';
 
-import App from './App.react';
-
-import Home from '../home';
 import Upload from '../hub';
-import Collection from '../collection-route';
 import Documentation from '../documentation-viewer';
 import NotFound from '../components/NotFound.react';
 
@@ -18,8 +14,14 @@ const SpeciesSetter = ({ children, route }) => {
 
 const routes = {
   path: '/',
-  component: App,
-  indexRoute: Home,
+  getComponent(_, cb) {
+    return System.import('./App.react').
+      then(module => cb(null, module.default));
+  },
+  getIndexRoute(_, cb) {
+    return System.import('../home').
+      then(module => cb(null, module.default));
+  },
   childRoutes: [
     Upload,
     ...Species.list.map(({ nickname }) => ({
@@ -34,7 +36,10 @@ const routes = {
           replace('/upload');
         }
       },
-      childRoutes: [ Collection ],
+      getChildRoutes(_, cb) {
+        System.import('../collection-route').
+          then(module => cb(null, [ module.default ]));
+      },
     })),
     Documentation,
     { path: '*', component: NotFound },
