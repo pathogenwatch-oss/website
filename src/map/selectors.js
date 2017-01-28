@@ -3,7 +3,7 @@ import { createSelector } from 'reselect';
 const defaultBounds = { center: [ 0, 0 ], zoom: 1 };
 
 export function getMap(state, { stateKey }) {
-  return state.map[stateKey] || {};
+  return state.maps[stateKey] || {};
 }
 
 export const getBounds = createSelector(

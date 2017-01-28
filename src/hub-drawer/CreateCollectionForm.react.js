@@ -35,7 +35,7 @@ const CreateCollectionForm = React.createClass({
 
   render() {
     const { metadata: { title, description } } = this.props;
-    const { speciesId, numAssemblies } = this.props.collectionSummary;
+    const { speciesId, numGenomes } = this.props.collectionSummary;
 
     if (!speciesId) return null; // Prevent form erroring when species not supplied
     return (
@@ -45,7 +45,7 @@ const CreateCollectionForm = React.createClass({
             {taxIdMap.get(speciesId).formattedShortName}
           </CardMetadata>
           <CardMetadata icon="insert_drive_file">
-            {numAssemblies} assemblies
+            {numGenomes} Genome{numGenomes > 1 ? 's' : ''}
           </CardMetadata>
         </span>
         <div ref={this.addToFormElements} className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">

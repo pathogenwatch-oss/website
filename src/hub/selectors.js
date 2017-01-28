@@ -3,7 +3,7 @@ import sortBy from 'lodash.sortby';
 
 import { isFailedUpload } from './utils/fasta';
 
-export const getFastas = ({ entities }) => entities.fastas;
+export const getFastas = ({ hub }) => hub.entities.fastas;
 
 export const getFastasAsList = createSelector(
   getFastas,

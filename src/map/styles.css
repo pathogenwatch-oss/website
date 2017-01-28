@@ -104,62 +104,72 @@
 
 .cgps-leaflet-map .leaflet-marker-icon {
   cursor: pointer;
+}
+
+.cgps-leaflet-map--marker-size-1 .leaflet-marker-icon {
   width: 16px;
   height: 16px;
   margin-top: -8px;
   margin-left: -8px;
 }
 
-.cgps-leaflet-map--marker-size-1 .leaflet-marker-icon {
+.cgps-leaflet-map--marker-size-2 .leaflet-marker-icon {
+  width: 18px;
+  height: 18px;
+  margin-top: -9px;
+  margin-left: -9px;
+}
+
+.cgps-leaflet-map--marker-size-3 .leaflet-marker-icon {
   width: 20px;
   height: 20px;
   margin-top: -10px;
   margin-left: -10px;
 }
 
-.cgps-leaflet-map--marker-size-2 .leaflet-marker-icon {
+.cgps-leaflet-map--marker-size-4 .leaflet-marker-icon {
   width: 24px;
   height: 24px;
   margin-top: -12px;
   margin-left: -12px;
 }
 
-.cgps-leaflet-map--marker-size-3 .leaflet-marker-icon {
+.cgps-leaflet-map--marker-size-5 .leaflet-marker-icon {
   width: 28px;
   height: 28px;
   margin-top: -14px;
   margin-left: -14px;
 }
 
-.cgps-leaflet-map--marker-size-4 .leaflet-marker-icon {
+.cgps-leaflet-map--marker-size-6 .leaflet-marker-icon {
   width: 32px;
   height: 32px;
   margin-top: -16px;
   margin-left: -16px;
 }
 
-.cgps-leaflet-map--marker-size-5 .leaflet-marker-icon {
+.cgps-leaflet-map--marker-size-7 .leaflet-marker-icon {
   width: 36px;
   height: 36px;
   margin-top: -18px;
   margin-left: -18px;
 }
 
-.cgps-leaflet-map--marker-size-6 .leaflet-marker-icon {
+.cgps-leaflet-map--marker-size-8 .leaflet-marker-icon {
   width: 40px;
   height: 40px;
   margin-top: -20px;
   margin-left: -20px;
 }
 
-.cgps-leaflet-map--marker-size-7 .leaflet-marker-icon {
+.cgps-leaflet-map--marker-size-9 .leaflet-marker-icon {
   width: 44px;
   height: 44px;
   margin-top: -22px;
   margin-left: -22px;
 }
 
-.cgps-leaflet-map--marker-size-8 .leaflet-marker-icon {
+.cgps-leaflet-map--marker-size-10 .leaflet-marker-icon {
   width: 48px;
   height: 48px;
   margin-top: -24px;

@@ -1,9 +1,12 @@
 import { combineReducers } from 'redux';
 
-import { FETCH_ENTITIES } from '../../actions/fetch';
+import { FETCH_COLLECTION }
+  from '../../collection-route/actions';
 import * as ACTIONS from './actions';
 
+import { speciesTrees } from './constants';
 import { COLLECTION, POPULATION } from '../../app/stateKeys/tree';
+import { statuses } from '../../collection-route/constants';
 
 function setSize(state, step, maxStepFactor) {
   if (step === state.step) return state;
@@ -47,25 +50,34 @@ const initialState = {
   nodeSize: {},
   labelSize: {},
   history: [],
+  selectedInternalNode: null,
 };
 
 function entities(state = {}, { type, payload }) {
   switch (type) {
-    case FETCH_ENTITIES.SUCCESS: {
-      const [ uploaded, reference ] = payload.result;
+    case FETCH_COLLECTION.SUCCESS: {
+      const { genomes, _species, subtrees, status } = payload.result;
+
+      if (status !== statuses.READY) return state;
+
       return {
+        ...state,
         [COLLECTION]: {
           name: COLLECTION,
-          newick: uploaded.tree,
-          leafIds: uploaded.tree ? null : Object.keys(uploaded.assemblies),
+          newick: payload.result.tree,
+          leafIds: payload.result.tree ? null : genomes.map(_ => _.uuid),
           ...initialState,
         },
         [POPULATION]: {
           name: POPULATION,
-          newick: reference.tree,
-          leafIds: Object.keys(reference.assemblies),
+          newick: _species.tree,
+          leafIds: _species.references.map(_ => _.uuid),
           ...initialState,
         },
+        ...subtrees.reduce((memo, { tree, ...subtree }) => {
+          memo[subtree.name] = { ...subtree, newick: tree, ...initialState };
+          return memo;
+        }, {}),
       };
     }
     case ACTIONS.FETCH_TREE.SUCCESS:
@@ -151,6 +163,14 @@ function entities(state = {}, { type, payload }) {
           ...payload.snapshot,
         },
       };
+    case ACTIONS.INTERNAL_NODE_SELECTED:
+      return {
+        ...state,
+        [payload.stateKey]: {
+          ...state[payload.stateKey],
+          selectedInternalNode: payload.nodeId,
+        },
+      };
     default:
       return state;
   }
@@ -177,8 +197,18 @@ function loading(state = false, { type }) {
   }
 }
 
+function lastSubtree(state = null, { type, payload }) {
+  switch (type) {
+    case ACTIONS.SET_TREE:
+      return speciesTrees.has(payload.name) ? state : payload.name;
+    default:
+      return state;
+  }
+}
+
 export default combineReducers({
   entities,
   visible,
   loading,
+  lastSubtree,
 });

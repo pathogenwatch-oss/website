@@ -23,3 +23,19 @@ export function formatDay(number) {
     (b === 3) ? 'rd' : 'th';
   return number + output;
 }
+
+export function getFormattedDateString({ year, month, day }) {
+  if (year && !month && !day) {
+    return year;
+  }
+
+  if (year && month && !day) {
+    return `${formatMonth(month)} ${year}`;
+  }
+
+  if (year && month && day) {
+    return `${formatDay(day)} ${formatMonth(month)} ${year}`;
+  }
+
+  return '';
+}

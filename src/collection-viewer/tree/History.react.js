@@ -33,10 +33,10 @@ const History = React.createClass({
           'wgsa-tree-history',
           { 'wgsa-tree-history--open': open }
         )}
+        onClick={() => this.setState({ open: !open })}
       >
         <button
           className="wgsa-tree-history__tab mdl-button"
-          onClick={() => this.setState({ open: !open })}
         >
           <span>History</span>
         </button>

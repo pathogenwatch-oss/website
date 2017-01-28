@@ -7,16 +7,16 @@ import ChipButton from '../../cgps-commons/ChipButton.react';
 
 import { activateFilter } from '../filter/actions';
 
-import { getAssemblySummary, getIsSummaryExpanded } from './selectors';
+import { getGenomeSummary, getIsSummaryExpanded } from './selectors';
 import { toggleSummary } from './actions';
 
-function getAssemblySummarySlices(summary) {
+function getGenomeSummarySlices(summary) {
   return summary.map(
-    ([ colour, assemblies ]) => ({ colour, value: assemblies.length, assemblies })
+    ([ colour, genomes ]) => ({ colour, value: genomes.length, genomes })
   );
 }
 
-import { getColourState, nonResistantColour } from '../../utils/resistanceProfile';
+import { getColourState, nonResistantColour } from '../amr-utils';
 
 const Summary = ({ summary, isExpanded, onClick, onSliceClick }) => (
   <div
@@ -29,20 +29,18 @@ const Summary = ({ summary, isExpanded, onClick, onSliceClick }) => (
   >
     <PieChart
       className="wgsa-summary-chart"
-      slices={getAssemblySummarySlices(summary)}
+      slices={getGenomeSummarySlices(summary)}
       borderWidth={1.5}
       onSliceClick={(slice, event) => {
         if (isExpanded) {
           event.preventDefault();
           event.stopPropagation();
-          onSliceClick(
-            slice.assemblies.map(({ metadata }) => metadata.assemblyId)
-          );
+          onSliceClick(slice.genomes.map(_ => _.uuid));
         }
       }}
     />
     <div className="wgsa-summary-list">
-      {summary.map(([ colour, assemblies ], index) =>
+      {summary.map(([ colour, genomes ], index) =>
         getColourState(colour) &&
           <ChipButton
             key={index}
@@ -51,14 +49,12 @@ const Summary = ({ summary, isExpanded, onClick, onSliceClick }) => (
               { 'mdl-chip--inverse': colour === nonResistantColour }
             )}
             text={getColourState(colour)}
-            contact={assemblies.length}
+            contact={genomes.length}
             contactStyle={{ background: colour }}
             onClick={(event) => {
               event.preventDefault();
               event.stopPropagation();
-              onSliceClick(
-                assemblies.map(({ metadata }) => metadata.assemblyId)
-              );
+              onSliceClick(genomes.map(_ => _.uuid));
             }}
           />
       )}
@@ -68,7 +64,7 @@ const Summary = ({ summary, isExpanded, onClick, onSliceClick }) => (
 
 function mapStateToProps(state) {
   return {
-    summary: getAssemblySummary(state),
+    summary: getGenomeSummary(state),
     isExpanded: getIsSummaryExpanded(state),
   };
 }

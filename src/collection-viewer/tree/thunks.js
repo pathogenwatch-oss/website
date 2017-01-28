@@ -1,19 +1,19 @@
+import { getCollection } from '../../collection-route/selectors';
 import { getTrees, getVisibleTree, getLeafIds } from './selectors';
 
 import { showToast } from '../../toast';
 import * as actions from './actions';
 import { activateFilter, resetFilter } from '../filter/actions';
 
-import { getSubtree } from '../../utils/Api';
+import { getSubtree } from './api';
 
 import { POPULATION, COLLECTION } from '../../app/stateKeys/tree';
-import Species from '../../species';
 
 function fetchTree(name) {
   return (dispatch, getState) => {
-    const { collection } = getState();
+    const collection = getCollection(getState());
     return dispatch(
-      actions.fetchTree(name, getSubtree(Species.id, collection.id, name))
+      actions.fetchTree(name, getSubtree(collection.id, name))
     );
   };
 }
@@ -100,5 +100,13 @@ export function typeChanged(phylocanvas) {
     const stateKey = getVisibleTree(state).name;
     dispatch(actions.typeChanged(stateKey, phylocanvas));
     dispatch(actions.addHistorySnapshot(stateKey, phylocanvas));
+  };
+}
+
+export function internalNodeSelected(node) {
+  return (dispatch, getState) => {
+    const state = getState();
+    const stateKey = getVisibleTree(state).name;
+    dispatch(actions.internalNodeSelected(stateKey, node ? node.id : null));
   };
 }

@@ -3,15 +3,14 @@ import { contains } from 'leaflet-lassoselect/utils';
 
 import { getCountryCentroid } from '../../utils/country';
 
-import { getVisibleAssemblies } from '../selectors';
+import { getVisibleGenomes } from '../selectors';
 import { getLassoPath, getViewByCountry } from '../../map/selectors';
 
-export const getAssemblyIdsInPath = createSelector(
-  getVisibleAssemblies,
+export const getGenomeIdsInPath = createSelector(
+  getVisibleGenomes,
   getLassoPath,
-  (assemblies, path) =>
-    assemblies.reduce((ids, { id, metadata }) => {
-      const { position = {} } = metadata;
+  (genomes, path) =>
+    genomes.reduce((ids, { id, position = {} }) => {
       if (!position.latitude || !position.longitude) return ids;
       if (contains(path, { lat: position.latitude, lng: position.longitude })) {
         return ids.concat(id);
@@ -20,16 +19,16 @@ export const getAssemblyIdsInPath = createSelector(
     }, [])
 );
 
-const defaultPositionExtractor = ({ metadata }) => {
-  const { latitude, longitude } = metadata.position;
+const defaultPositionExtractor = ({ position = {} }) => {
+  const { latitude, longitude } = position;
   if (latitude && longitude) {
     return [ latitude, longitude ];
   }
   return null;
 };
 
-const countryPositionExtractor = ({ metadata }) => {
-  const { country } = metadata.position;
+const countryPositionExtractor = ({ position = {} }) => {
+  const { country } = position;
   if (country) {
     return getCountryCentroid(country);
   }

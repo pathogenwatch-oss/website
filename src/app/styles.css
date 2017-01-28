@@ -21,3 +21,26 @@
   display: block;
   padding: 24px 0;
 }
+
+.wgsa-version {
+  color: rgba(0, 0, 0, 0.54);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: normal;
+  line-height: 1;
+  position: absolute;
+  right: 16px;
+  text-align: center;
+  top: 16px;
+}
+
+.wgsa-text-overlay {
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

@@ -99,3 +99,15 @@ export function timeTravel(stateKey, snapshot) {
     },
   };
 }
+
+export const INTERNAL_NODE_SELECTED = 'INTERNAL_NODE_SELECTED';
+
+export function internalNodeSelected(stateKey, nodeId) {
+  return {
+    type: INTERNAL_NODE_SELECTED,
+    payload: {
+      stateKey,
+      nodeId,
+    },
+  };
+}

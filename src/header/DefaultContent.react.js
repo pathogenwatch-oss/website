@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import NavLink from '../location';
+// import AccountLink from './AccountLink.react';
 
 import { toggleAside } from './index';
 
@@ -16,6 +17,7 @@ export const DefaultContent = ({ hasAside, onClick, asideDisabled }) => (
     <div className="mdl-layout-spacer" />
     <nav className="mdl-navigation">
       { links.map(props => <NavLink key={props.link} {...props} />) }
+      {/* <AccountLink /> */}
     </nav>
     <button
       className="mdl-button mdl-button--icon wgsa-search-button"

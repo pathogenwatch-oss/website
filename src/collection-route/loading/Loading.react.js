@@ -53,35 +53,23 @@ export const LoadSpinner = React.createClass({
 
 });
 
-const fatalTasks = new Set([ 'UPLOAD', 'CORE' ]);
+const fatalTasks = new Set([ 'CORE', 'FP' ]);
 
-function getFailedAssemblies(errors) {
-  return errors.reduce((memo, { taskType, assemblyName }) => {
+function getFailedGenomes(errors) {
+  return errors.reduce((memo, { taskType, genomeName }) => {
     if (fatalTasks.has(taskType)) {
-      memo.push(assemblyName);
+      memo.push(genomeName);
     }
     return memo;
   }, []);
 }
 
-function getStatusMessage(status, { collectionSize, errors = [] }) {
+function getStatusMessage({ collection }) {
+  const { status, size, progress: { errors } } = collection;
   if (status === statuses.NOT_FOUND) {
     return [
-      <h1>We're sorry, this collection cannot be displayed</h1>,
+      <h1>We're sorry, this collection cannot be found.</h1>,
       <p className="mdl-typography--title">Please ensure that the URL is correct, and if so, please try again later.</p>,
-    ];
-  }
-  if (status === statuses.FATAL) {
-    const failedAssemblies = getFailedAssemblies(errors);
-    const totalFail = collectionSize === failedAssemblies.length;
-    return [
-      <h1>We're sorry, your collection could not be processed</h1>,
-      totalFail ?
-        <p className="mdl-typography--title">All {collectionSize} assemblies were rejected.</p> :
-        <p className="mdl-typography--title">{failedAssemblies.length} of {collectionSize} assemblies were rejected:</p>,
-      !totalFail ? <ul className="wgsa-failed-assemblies">{failedAssemblies.map(assemblyName => <li key={assemblyName}>{assemblyName}</li>)}</ul> : null,
-      <p className="mdl-typography--title">Please ensure assemblies are the correct species, as we were unable to process them as {Species.current.formattedShortName}.</p>,
-      <Link to={`/${Species.nickname}/upload`} className="mdl-button mdl-button--raised">Try Again</Link>,
     ];
   }
   if (status === statuses.ABORTED) {
@@ -93,6 +81,17 @@ function getStatusMessage(status, { collectionSize, errors = [] }) {
       <Link to={`/${Species.nickname}/upload`} className="mdl-button mdl-button--raised">Go Back</Link>,
     ];
   }
+  if (status === statuses.FAILED) {
+    const failedGenomes = getFailedGenomes(errors);
+    const totalFail = size === failedGenomes.length;
+    return [
+      <h1>We're sorry, something went wrong.</h1>,
+      totalFail ? <p className="mdl-typography--title">All {size} genomes were rejected.</p> : null,
+      !totalFail && failedGenomes.length ? <p className="mdl-typography--title">{failedGenomes.length} of {size} genomes were rejected:</p> : null,
+      !totalFail && failedGenomes.length ? <ul className="wgsa-failed-genomes">{failedGenomes.map(genomeName => <li key={genomeName}>{genomeName}</li>)}</ul> : null,
+      <Link to={`/${Species.nickname}/upload`} className="mdl-button mdl-button--raised">Try Again</Link>,
+    ];
+  }
 }
 
 export const LoadError = React.createClass({
@@ -102,10 +101,9 @@ export const LoadError = React.createClass({
   },
 
   render() {
-    const { status, progress } = this.props;
     return (
       <Background>
-        { getStatusMessage(status, progress) }
+        { getStatusMessage(this.props) }
         <p>Please contact <a href="mailto:cgps@sanger.ac.uk">cgps@sanger.ac.uk</a> if problems persist.</p>
       </Background>
     );

@@ -1,0 +1,30 @@
+.wgsa-genome-drawer-content {
+  height: 360px;
+  overflow: hidden;
+}
+
+.wgsa-genome-drawer-content .mdl-tabs__tab-bar {
+  justify-content: flex-start;
+}
+
+.wgsa-genome-drawer-content .mdl-tabs__panel {
+  padding: 16px 0 0;
+}
+
+.wgsa-genome-drawer-content .wgsa-hub-stats-view {
+  padding-left: 24px;
+  padding-right: 0;
+  margin: 0;
+}
+
+.wgsa-genome-drawer-content .wgsa-hub-stats-section {
+  margin-bottom: 16px;
+}
+
+.wgsa-genome-drawer-content .wgsa-hub-stats-heading {
+  margin-bottom: 12px;
+}
+
+.wgsa-genome-drawer-content .wgsa-drawer-actions {
+  padding-right: 24px;
+}

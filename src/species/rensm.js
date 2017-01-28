@@ -16,7 +16,12 @@ export default {
       {formattedName} is a member of the Micrococcaceae family. It is a Gram-positive, intracellular bacterium that causes disease in young salmonid fish.
     </p>
   ),
-  maxAssemblySize: 4 * Math.pow(10, 6),
+  maxGenomeSize: 4 * Math.pow(10, 6),
   publicMetadataColumnNames: [],
   collections: [],
+  uiOptions: {
+    noPopulation: true,
+    noMLST: true,
+    noAMR: true,
+  },
 };

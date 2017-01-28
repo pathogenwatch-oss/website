@@ -1,14 +1,15 @@
 import { createSelector } from 'reselect';
 
-import { getMetadataTable } from '../table/selectors';
+import { getGenomes, getViewer } from '../../collection-route/selectors';
+import { getActiveDataTable } from '../table/selectors';
 
-import { titles, speciesTrees } from './constants';
+import { titles } from './constants';
 import * as utils from './utils';
 
 import { POPULATION, COLLECTION } from '../../app/stateKeys/tree';
 import Species from '../../species';
 
-export const getTreeState = ({ collectionViewer }) => collectionViewer.tree;
+export const getTreeState = state => getViewer(state).tree;
 
 export const getTrees = state => getTreeState(state).entities;
 export const isLoading = state => getTreeState(state).loading;
@@ -39,18 +40,23 @@ export const getSingleTree = createSelector(
 
 export const getTitle = createSelector(
   getVisibleTree,
-  ({ entities }) => entities.assemblies,
-  (tree, assemblies) => titles[tree.name] || assemblies[tree.name].name
+  getGenomes,
+  (tree, genomes) => titles[tree.name] || genomes[tree.name].name
 );
 
 export const getFilenames = createSelector(
   getTitle,
   ({ collection }) => collection.id,
-  state => getMetadataTable(state).activeColumn,
+  state => getActiveDataTable(state).activeColumn,
   utils.getFilenames
 );
 
-export const isSubtree = createSelector(
-  getVisibleTree,
-  tree => !speciesTrees.has(tree.name)
+export const getLastSubtree = createSelector(
+  getTreeState,
+  getGenomes,
+  ({ lastSubtree }, genomes) => (
+    lastSubtree ?
+      { name: lastSubtree, title: genomes[lastSubtree].name } :
+      null
+  )
 );

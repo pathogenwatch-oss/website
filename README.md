@@ -8,10 +8,12 @@ The User-facing portion of WGSA.
   "api": {
     "address": "localhost:8080"
   },
-  "pusher": {
-    "key": "",
-    "encrypted": true
-  }
+  "pusherKey": "...",
+  "mapboxKey": "...",
+  "maxFastaFlieSize": 4,
+  "wiki": "https://raw.githubusercontent.com/wiki/ImperialCollegeLondon/wgsa-documentation",
+  "strategies": [ "facebook", "google", "twitter" ],
+  "whyDidYouUpdate": false
 }
 ```
 Using `localhost:8080` will load a static collection for development when a server is unavailable.

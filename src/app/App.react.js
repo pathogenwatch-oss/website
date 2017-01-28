@@ -9,9 +9,11 @@ import classnames from 'classnames';
 import Header from '../header';
 import Toast from '../toast';
 import NavLink from '../location';
-import AssemblyDrawer from '../assembly-drawer';
+import GenomeDrawer from '../genome-drawer';
 
 import { locationChange } from '../location';
+
+import config from './config';
 
 const menuItems = [
   { icon: 'home',
@@ -29,9 +31,8 @@ const menuItems = [
   },
 ];
 
-function mapStateToProps({ bodyClickListener, location }) {
+function mapStateToProps({ location }) {
   return {
-    bodyClickListener,
     pageSlug: location.slug,
   };
 }
@@ -46,7 +47,6 @@ export default connect(mapStateToProps, mapDispatchToProps)(React.createClass({
 
   propTypes: {
     children: React.PropTypes.element,
-    bodyClickListener: React.PropTypes.func,
   },
 
   componentDidMount() {
@@ -69,7 +69,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(React.createClass({
   },
 
   render() {
-    const { bodyClickListener = () => {}, routes } = this.props;
+    const { routes } = this.props;
     const { header } = routes[routes.length - 1];
     return (
       <div ref="layout"
@@ -77,12 +77,16 @@ export default connect(mapStateToProps, mapDispatchToProps)(React.createClass({
           'mdl-layout mdl-js-layout mdl-layout--fixed-header',
           `wgsa-page--${this.props.pageSlug}`,
         )}
-        onClick={bodyClickListener}
       >
         <Header content={header} />
         <div className="mdl-layout__drawer">
           <span className="mdl-layout-title">
             <img src="/assets/img/WGSA.FINAL.svg" />
+            { config.wgsaVersion &&
+              <small className="wgsa-version">
+                v{config.wgsaVersion}
+              </small>
+            }
           </span>
           <nav className="mdl-navigation" onClick={this.hideSidebar}>
             {menuItems.map(props => (
@@ -98,7 +102,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(React.createClass({
           {this.props.children}
         </main>
         <Toast />
-        <AssemblyDrawer />
+        <GenomeDrawer />
       </div>
     );
   },

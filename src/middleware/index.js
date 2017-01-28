@@ -11,6 +11,7 @@ export const promiseToThunk = () => next => action => {
       result =>
         dispatch({ type: type.SUCCESS, payload: { result, ...props } }),
       error => {
+        if (process.env.NODE_ENV !== 'production') { console.error(error); }
         dispatch({ type: type.FAILURE, payload: { error, ...props } });
         return error;
       }

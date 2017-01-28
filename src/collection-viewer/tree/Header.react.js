@@ -1,67 +1,60 @@
 import React from 'react';
 import { connect } from 'react-redux';
-
-import Switch from '../../components/Switch.react';
+import classnames from 'classnames';
 
 import * as selectors from './selectors';
-import { displayTree } from './thunks';
+import * as actions from './thunks';
 
 import { POPULATION, COLLECTION } from '../../app/stateKeys/tree';
 
-const icons = {
-  [COLLECTION]: 'person',
-  [POPULATION]: 'language',
-};
-
-const Header = ({ tree, title, singleTree, isSubtree, onSwitchChange, onBackButtonClick }) => {
-  const switcher =
-    singleTree ?
-    <div className="wgsa-tree-icon mdl-button mdl-button--icon">
-      <i className="material-icons">{icons[singleTree]}</i>
-    </div> :
-    <div className="wgsa-switch-background wgsa-switch-background--see-through">
-      <Switch
-        id="tree-switcher"
-        left={{ title: 'Collection View', icon: icons[COLLECTION] }}
-        right={{ title: 'Population View', icon: icons[POPULATION] }}
-        checked={tree.name === POPULATION}
-        onChange={onSwitchChange}
-      />
-    </div>;
-
-  return (
-    <header className="wgsa-tree-header">
-      { isSubtree ?
-        <button
-          className="wgsa-tree-icon mdl-button mdl-button--icon"
-          onClick={onBackButtonClick}
-        >
-          <i className="material-icons">arrow_back</i>
-        </button> :
-        switcher
-      }
-      <h2 className="wgsa-tree-heading">
-        <span>{title}</span>
-      </h2>
-    </header>
-  );
-};
-
-function mapStateToProps(state) {
+function mapStateToButtonProps(state) {
   return {
-    singleTree: selectors.getSingleTree(state),
-    tree: selectors.getVisibleTree(state),
-    title: selectors.getTitle(state),
-    isSubtree: selectors.isSubtree(state),
+    visibleTreeName: selectors.getVisibleTree(state).name,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    onSwitchChange: checked =>
-      dispatch(displayTree(checked ? POPULATION : COLLECTION)),
-    onBackButtonClick: () => dispatch(displayTree(POPULATION)),
+    displayTree: tree => dispatch(actions.displayTree(tree)),
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Header);
+const Button = connect(mapStateToButtonProps, mapDispatchToProps)(
+  ({ visibleTreeName, displayTree, treeName, children }) => (
+    <button
+      className={classnames(
+        'wgsa-button-group__item',
+        { active: visibleTreeName === treeName }
+      )}
+      onClick={() => displayTree(treeName)}
+    >
+      {children}
+    </button>
+  )
+);
+
+const Header = ({ singleTree, lastSubtree }) => (
+  <header className="wgsa-tree-header">
+    <div className="wgsa-button-group mdl-shadow--2dp">
+      <i className="material-icons" title="View">visibility</i>
+      { (!singleTree || singleTree === COLLECTION) &&
+        <Button treeName={COLLECTION}>Collection</Button>
+      }
+      { (!singleTree || singleTree === POPULATION) &&
+        <Button treeName={POPULATION}>Population</Button>
+      }
+      { lastSubtree &&
+        <Button treeName={lastSubtree.name}>{lastSubtree.title}</Button>
+      }
+    </div>
+  </header>
+);
+
+function mapStateToProps(state) {
+  return {
+    singleTree: selectors.getSingleTree(state),
+    lastSubtree: selectors.getLastSubtree(state),
+  };
+}
+
+export default connect(mapStateToProps)(Header);

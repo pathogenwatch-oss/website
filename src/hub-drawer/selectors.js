@@ -34,8 +34,8 @@ export const canCreateCollection = createSelector(
 export const getCollectionSummary = createSelector(
   getVisibleSpecies,
   getNumberOfVisibleFastas,
-  ({ supported }, numAssemblies) => ({
-    numAssemblies,
+  ({ supported }, numGenomes) => ({
+    numGenomes,
     speciesId: Array.from(supported)[0],
   })
 );

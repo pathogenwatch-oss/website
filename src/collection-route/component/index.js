@@ -2,38 +2,31 @@ import { connect } from 'react-redux';
 
 import Collection from './Collection.react';
 
-import { setCollectionId } from '../../actions/collection';
-import {
-  checkStatus, fetchEntities, updateProgress,
-} from '../../actions/fetch';
-import { resetStore } from '../../actions/reset';
+import { getCollection } from '../selectors';
+import { getProgressPercentage } from '../progress/selectors.js';
 
-import { getProgressPercentage } from '../../collection/selectors.js';
+import * as actions from '../actions';
 
-import Species from '../../species';
+import { statuses } from '../constants';
 
-function mapStateToProps({ collection }) {
+function mapStateToProps(state) {
+  const collection = getCollection(state);
   return {
-    status: collection.status,
-    progress: collection.progress,
-    cas: collection.cas,
-    metadata: collection.metadata,
-    percentage: getProgressPercentage(collection),
+    collection,
+    percentage: getProgressPercentage(state),
   };
 }
 
-function mergeProps(state, { dispatch }, { params: { id } }) {
+function mapDispatchToProps(dispatch, { params: { id } }) {
   return {
-    ...state,
-    initialise() {
-      dispatch(setCollectionId(id));
-      dispatch(checkStatus(Species.id, id));
-    },
-    checkStatus: () => dispatch(checkStatus(Species.id, id, state.cas)),
-    updateProgress: results => dispatch(updateProgress(results)),
-    fetch: () => dispatch(fetchEntities(Species.id, id)),
-    reset: () => dispatch(resetStore()),
+    fetch: () => dispatch(actions.fetchCollection(id)),
+    updateProgress: results => (
+      results.status === statuses.READY ?
+        dispatch(actions.fetchCollection(id)) :
+        dispatch(actions.updateProgress(results))
+    ),
+    reset: () => dispatch(actions.resetCollectionView()),
   };
 }
 
-export default connect(mapStateToProps, null, mergeProps)(Collection);
+export default connect(mapStateToProps, mapDispatchToProps)(Collection);

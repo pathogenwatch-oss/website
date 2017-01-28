@@ -1,7 +1,6 @@
 /* eslint no-param-reassign: ["error", { "props": false }] */
 
 import Papa from 'papaparse';
-import { formatMonth, formatDay } from './Date';
 
 function convertFieldNamesToLowerCase(row) {
   const fieldNames = Object.keys(row);
@@ -39,42 +38,6 @@ function parseCsvToJson(csv) {
   return results;
 }
 
-function getFormattedDateString({ year, month, day }) {
-  if (year && !month && !day) {
-    return year;
-  }
-
-  if (year && month && !day) {
-    return `${formatMonth(month)} ${year}`;
-  }
-
-  if (year && month && day) {
-    return `${formatDay(day)} ${formatMonth(month)} ${year}`;
-  }
-
-  return '';
-}
-
-function convertDateObjectToCustomObject(date) {
-  return {
-    year: date.getFullYear(),
-    month: date.getMonth() + 1, // converts months from 0-11 to 1-12
-    day: date.getDate(),
-  };
-}
-
-export function fixDateFormats(collection) {
-  const { assemblies } = collection;
-  Object.keys(assemblies).forEach(assemblyId => {
-    const assembly = assemblies[assemblyId];
-
-    if (assembly.metadata.datetime) {
-      assembly.metadata.date = convertDateObjectToCustomObject(new Date(assembly.metadata.datetime));
-    }
-  });
-  return collection;
-}
-
 function isValid({ date }) {
   const thisYear = new Date().getFullYear();
 
@@ -99,19 +62,7 @@ function isValid({ date }) {
   return true;
 }
 
-export function fixPositions(collection) {
-  const { assemblies } = collection;
-  Object.keys(assemblies).forEach(assemblyId => {
-    const { metadata } = assemblies[assemblyId];
-    if (metadata.geography) {
-      metadata.position = metadata.geography.position;
-    }
-  });
-  return collection;
-}
-
 export default {
   parseCsvToJson,
-  getFormattedDateString,
   isValid,
 };

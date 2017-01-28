@@ -1,22 +1,51 @@
 import React from 'react';
 
 import DownloadButton from '../downloads/DownloadButton.react';
-import { FastaFileLink, FastaArchiveButton } from '../../fasta-download';
+import { FastaFileLink, FastaArchiveButton } from '../fasta-download';
 
-import { getArchiveDownloadProps } from '../../constants/downloads';
+import { getArchiveDownloadProps } from '../downloads/utils';
 
-import { defaultWidthGetter } from '../../table/utils/columnWidth';
+import { defaultWidthGetter } from './columnWidth';
 
 import { CGPS } from '../../app/constants';
 import Species from '../../species';
 
 export const tableKeys = {
   metadata: 'metadata',
-  resistanceProfile: 'resistanceProfile',
+  typing: 'typing',
+  stats: 'stats',
+  antibiotics: 'antibiotics',
+  snps: 'snps',
+  genes: 'genes',
 };
 
-export const views = {
-  [tableKeys.resistanceProfile]: [ 'Antibiotics', 'SNPs', 'Genes' ],
+export const dataTables = new Set([
+  tableKeys.metadata,
+  tableKeys.typing,
+  tableKeys.stats,
+]);
+
+export const amrTables = new Set([
+  tableKeys.antibiotics,
+  tableKeys.snps,
+  tableKeys.genes,
+]);
+
+export const leftSpacerColumn = {
+  columnKey: '__spacer_l',
+  getHeaderContent() {},
+  fixed: true,
+  fixedWidth: 1,
+  flexGrow: 1,
+  getCellContents() {},
+};
+
+export const rightSpacerColumn = {
+  columnKey: '__spacer_r',
+  getHeaderContent() {},
+  fixedWidth: 24,
+  flexGrow: 1,
+  getCellContents() {},
 };
 
 export const nameColumnData = {
@@ -24,6 +53,7 @@ export const nameColumnData = {
   valueGetter({ name }) {
     return name;
   },
+  minWidth: 216,
 };
 
 export const downloadColumnProps = {
@@ -93,38 +123,22 @@ export const nameColumnProps = {
   getWidth(row, props) {
     let width = defaultWidthGetter(row, props, true);
 
-    if (row.__isPublic && row.metadata.collectionId) {
-      width += 32;
-    }
-
-    if (row.metadata.pmid) {
+    if (row.__isPublic && row.collectionId) {
       width += 32;
     }
 
     return width;
   },
   getCellContents({ valueGetter }, data) {
-    const { metadata } = data;
-
     return (
-      <div className="wgsa-assembly-name-cell">
+      <div className="wgsa-genome-name-cell">
         {getNameText(data, valueGetter)}
         <div onClick={(e) => e.stopPropagation()}>
-          { data.__isPublic && metadata.collectionId ?
+          { data.__isPublic && data.collectionId ?
             <a className="mdl-button mdl-button--icon"
-              href={`/${Species.nickname}/collection/${metadata.collectionId}`}
-              title="View WGSA Collection"
+              href={`/${Species.nickname}/collection/${data.collectionId}`}
+              title="View Original Collection"
               target="_blank" rel="noopener"
-            >
-              <i className="material-icons">open_in_new</i>
-            </a> : null
-          }
-          { metadata.pmid ?
-            <a className="mdl-button mdl-button--icon"
-              href={`http://www.ncbi.nlm.nih.gov/pubmed/${metadata.pmid}`}
-              target="_blank" rel="noopener"
-              title={`PMID ${metadata.pmid}`}
-              style={{ color: '#369' }}
             >
               <i className="material-icons">open_in_new</i>
             </a> : null

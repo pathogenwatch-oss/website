@@ -4,7 +4,7 @@ import { getVisibleFastas } from '../../hub-filter/selectors';
 
 export const getSelectedMetric = ({ hub }) => hub.selectedMetric;
 
-export const getAssemblyMetrics = createSelector(
+export const getGenomeMetrics = createSelector(
   getVisibleFastas,
   fastas =>
     fastas.reduce((memo, { name, metrics }) => {
@@ -15,17 +15,36 @@ export const getAssemblyMetrics = createSelector(
     }, [])
 );
 
+function average(list, property) {
+  return (
+    list.reduce(
+      (memo, item) => memo + Number(property ? item[property] : item),
+      0
+    ) / (list.length || 1)
+  );
+}
+
 export const getMetricAverage = createSelector(
-  getAssemblyMetrics,
+  getGenomeMetrics,
   getSelectedMetric,
-  (metrics, selectedMetric) => (
-    metrics.reduce((memo, _) => memo + Number(_[selectedMetric]), 0) /
-    (metrics.length || 1)
-  ).toFixed(0)
+  (metrics, selectedMetric) => average(metrics, selectedMetric).toFixed(1)
+);
+
+export const getMetricStDev = createSelector(
+  getGenomeMetrics,
+  getSelectedMetric,
+  getMetricAverage,
+  (metrics, selectedMetric, avg) => {
+    const squareDiffs = metrics.map(item => {
+      const diff = item[selectedMetric] - avg;
+      return diff * diff;
+    });
+    return Math.sqrt(average(squareDiffs)).toFixed(2);
+  }
 );
 
 export const getMetricRange = createSelector(
-  getAssemblyMetrics,
+  getGenomeMetrics,
   getSelectedMetric,
   (metrics, selectedMetric) => metrics.reduce(({ min, max }, _) => ({
     min: min ? Math.min(min, _[selectedMetric]) : _[selectedMetric],
@@ -34,7 +53,7 @@ export const getMetricRange = createSelector(
 );
 
 export const getSelectedChartData = createSelector(
-  getAssemblyMetrics,
+  getGenomeMetrics,
   getSelectedMetric,
   (metrics, selectedMetric) => metrics.map((_, i) => ({
     key: i,
