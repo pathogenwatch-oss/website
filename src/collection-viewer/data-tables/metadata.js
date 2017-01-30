@@ -81,7 +81,7 @@ export default function (state = initialState, { type, payload }) {
   switch (type) {
     case FETCH_COLLECTION.SUCCESS: {
       const { genomes, status } = payload.result;
-      console.log(status);
+
       if (status !== statuses.READY) return state;
 
       const { publicMetadataColumnNames = [] } = Species.current;
