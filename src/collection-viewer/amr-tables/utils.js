@@ -78,7 +78,7 @@ export function createAdvancedViewColumn(element, profileKey, profiles) {
     headerClasses: 'wgsa-table-header--expanded',
     hidden: profiles.every(profile => notPresent(profile[profileKey], key)),
     valueGetter: genome =>
-      amr.getAdvancedColour(key, profileKey, genome),
+      amr.getAdvancedColour(element, profileKey, genome),
     onHeaderClick,
   };
 }

@@ -82,6 +82,6 @@ export function createColourGetter(table, columns) {
     const colours = getColours(columns, genome);
     return colours.size === 1 ?
       Array.from(colours)[0] :
-      getMixedStateColour(table);
+      getMixedStateColour(table, colours);
   };
 }
