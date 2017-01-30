@@ -24,18 +24,14 @@ export function formatDay(number) {
   return number + output;
 }
 
-export function getFormattedDateString({ year, month, day }) {
-  if (year && !month && !day) {
-    return year;
-  }
+const validYear = /^[0-9]{4}$/;
 
-  if (year && month && !day) {
-    return `${formatMonth(month)} ${year}`;
-  }
+export function isValid({ year, month, day }) {
+  if (!year || (day && !month)) return false;
 
-  if (year && month && day) {
-    return `${formatDay(day)} ${formatMonth(month)} ${year}`;
-  }
-
-  return '';
+  return (
+    (day ? day >= 1 && day <= 31 : true) &&
+    (month ? month >= 1 && month <= 12 : true) &&
+    validYear.test(year)
+  );
 }
