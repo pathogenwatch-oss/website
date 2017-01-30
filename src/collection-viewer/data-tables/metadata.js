@@ -9,6 +9,7 @@ import { hasMetadata } from './utils';
 import { speciesTrees } from '../tree/constants';
 import * as table from '../table/constants';
 import { systemDataColumns } from './constants';
+import { statuses } from '../../collection-route/constants';
 
 import Species from '../../species';
 
@@ -79,7 +80,10 @@ export default function (state = initialState, { type, payload }) {
   if (!state.active) return state;
   switch (type) {
     case FETCH_COLLECTION.SUCCESS: {
-      const { genomes } = payload.result;
+      const { genomes, status } = payload.result;
+      console.log(status);
+      if (status !== statuses.READY) return state;
+
       const { publicMetadataColumnNames = [] } = Species.current;
 
       if (!hasMetadata(genomes)) {

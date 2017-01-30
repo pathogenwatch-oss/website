@@ -5,7 +5,7 @@ import { getFormattedDateString } from '../table/utils';
 export const systemDataColumns = {
   __date: {
     columnKey: '__date',
-    valueGetter({ date }) {
+    valueGetter({ date = {} }) {
       return getFormattedDateString(date);
     },
   },
