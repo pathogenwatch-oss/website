@@ -27,8 +27,7 @@ const defaultPositionExtractor = ({ position = {} }) => {
   return null;
 };
 
-const countryPositionExtractor = ({ position = {} }) => {
-  const { country } = position;
+const countryPositionExtractor = ({ country }) => {
   if (country) {
     return getCountryCentroid(country);
   }
