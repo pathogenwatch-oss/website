@@ -7,7 +7,7 @@ const handlers = {
   PAARSNP: require('./results/paarsnp'),
   CORE: require('./results/core'),
   FP: require('./results/fp'),
-  NGMAST: require('./results/ngmast'),
+  NGM: require('./results/ngmast'),
   GENOTYPHI: require('./results/genotyphi'),
   CORE_MUTANT_TREE: require('./results/collection-tree'),
   SUBMATRIX: require('./results/subtrees'),

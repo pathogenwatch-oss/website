@@ -10,5 +10,5 @@ module.exports = (name, { assemblyId }) => {
       por: result.por,
       tbpb: result.tbpb,
     })).
-    then(result => CollectionGenome.addAnalysisResult(uuid, name, result));
+    then(result => CollectionGenome.addAnalysisResult(uuid, 'ngmast', result));
 };
