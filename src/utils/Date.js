@@ -23,3 +23,15 @@ export function formatDay(number) {
     (b === 3) ? 'rd' : 'th';
   return number + output;
 }
+
+const validYear = /^[0-9]{4}$/;
+
+export function isValid({ year, month, day }) {
+  if (!year || (day && !month)) return false;
+
+  return (
+    (day ? day >= 1 && day <= 31 : true) &&
+    (month ? month >= 1 && month <= 12 : true) &&
+    validYear.test(year)
+  );
+}

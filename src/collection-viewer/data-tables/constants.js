@@ -6,7 +6,9 @@ export const systemDataColumns = {
   __date: {
     columnKey: '__date',
     valueGetter({ metadata }) {
-      return getFormattedDateString(metadata.date);
+      return metadata.date ?
+        getFormattedDateString(metadata.date) :
+        null;
     },
   },
   __pmid: {

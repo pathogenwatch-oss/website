@@ -1,19 +1,21 @@
-import { formatMonth, formatDay } from '../../utils/Date';
+import { formatMonth, formatDay, isValid } from '../../utils/Date';
 
-export function getFormattedDateString({ year, month, day }) {
-  if (year && !month && !day) {
-    return year;
+export function getFormattedDateString(date) {
+  if (!isValid(date)) {
+    return '';
   }
 
-  if (year && month && !day) {
-    return `${formatMonth(month)} ${year}`;
-  }
+  const { year, month, day } = date;
 
   if (year && month && day) {
     return `${formatDay(day)} ${formatMonth(month)} ${year}`;
   }
 
-  return '';
+  if (year && month) {
+    return `${formatMonth(month)} ${year}`;
+  }
+
+  return year;
 }
 
 export const getUserDefinedValue =
