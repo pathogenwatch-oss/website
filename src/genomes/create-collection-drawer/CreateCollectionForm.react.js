@@ -1,13 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { CardMetadata } from '../card';
+import { CardMetadata } from '../../card';
 
 import * as selectors from './selectors';
 
 import { createCollection, changeCollectionMetadata } from './actions';
 
-import { taxIdMap } from '../species';
+import { taxIdMap } from '../../species';
 
 const CreateCollectionForm = React.createClass({
 

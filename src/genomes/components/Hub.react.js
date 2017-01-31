@@ -2,14 +2,14 @@ import React from 'react';
 
 import FileDragAndDrop from '../../components/DragAndDrop.react';
 
-import Filter from '../../hub-filter';
+import Filter from '../filter';
 import Summary from './Summary.react';
-import HubDrawer from '../../hub-drawer';
+import HubDrawer from '../create-collection-drawer';
 
 import { addFiles } from '../thunks';
 import { toggleAside } from '../../header';
 
-import { taxIdMap } from '^/species';
+import { taxIdMap } from '../../species';
 
 export default React.createClass({
 

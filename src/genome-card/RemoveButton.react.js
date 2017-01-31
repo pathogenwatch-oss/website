@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
 
-import { removeFasta } from '../hub/thunks';
+import { removeFasta } from '../genomes/thunks';
 
 function mapDispatchToProps(dispatch, ownProps) {
   return {

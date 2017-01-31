@@ -3,7 +3,7 @@ import { combineReducers } from 'redux';
 import uploads from './uploads';
 import fastas from './fastas';
 
-import { CREATE_COLLECTION, CHANGE_COLLECTION_METADATA } from '../../hub-drawer';
+import { CREATE_COLLECTION, CHANGE_COLLECTION_METADATA } from '../create-collection-drawer';
 import { SHOW_METRIC } from '../actions';
 
 function loading(state = false, { type }) {

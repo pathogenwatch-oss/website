@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 import sortBy from 'lodash.sortby';
 
-import { getReferenceCollections } from '../home/selectors';
+import { getReferenceCollections } from '../collections/selectors';
 import { selectors as filter } from '../filter';
 
 import { taxIdMap } from '../species';

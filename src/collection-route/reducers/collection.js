@@ -1,4 +1,4 @@
-import { CREATE_COLLECTION } from '../../hub-drawer';
+import { CREATE_COLLECTION } from '../../genomes/create-collection-drawer';
 import * as actions from '../actions';
 
 import { sortGenomes } from '../utils';

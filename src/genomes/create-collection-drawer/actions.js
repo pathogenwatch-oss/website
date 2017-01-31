@@ -1,7 +1,7 @@
-import { getVisibleFastas } from '../hub-filter/selectors';
+import { getVisibleFastas } from '../filter/selectors';
 import { getCollectionMetadata } from './selectors';
 
-import { createAsyncConstants } from '../actions';
+import { createAsyncConstants } from '../../actions';
 import { createCollectionRequest } from './api';
 
 export const CREATE_COLLECTION = createAsyncConstants('CREATE_COLLECTION');

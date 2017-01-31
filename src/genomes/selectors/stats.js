@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 
-import { getVisibleFastas } from '../../hub-filter/selectors';
+import { getVisibleFastas } from '../../genomes/filter/selectors';
 
 export const getSelectedMetric = ({ hub }) => hub.selectedMetric;
 

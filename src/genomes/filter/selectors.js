@@ -1,13 +1,13 @@
 import { createSelector } from 'reselect';
 import sortBy from 'lodash.sortby';
 
-import { getOrderedFastas } from '../hub/selectors';
-import { selectors as filter } from '../filter';
+import { getOrderedFastas } from '../selectors';
+import { selectors as filter } from '../../filter';
 
 import { stateKey, filters } from './filter';
-import { getCountryName } from '../utils/country';
+import { getCountryName } from '../../utils/country';
 
-import { isSupported } from '../species';
+import { isSupported } from '../../species';
 
 export const getFilter = state => filter.getFilter(state, { stateKey });
 

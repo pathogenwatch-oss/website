@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 
-import { getFilter, getVisibleFastas } from '../../hub-filter/selectors';
+import { getFilter, getVisibleFastas } from '../../genomes/filter/selectors';
 
 export const getLassoPath = createSelector(
   getFilter,

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { fastaValidationErrors as errors } from '../hub/utils/fasta';
+import { fastaValidationErrors as errors } from '../genomes/utils/fasta';
 import config from '../app/config';
 
 const Error = ({ message, children }) => (

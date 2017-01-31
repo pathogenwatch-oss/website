@@ -1,10 +1,10 @@
 import { createSelector } from 'reselect';
 
-import * as hub from '../hub/selectors';
+import * as hub from '../selectors';
 import { getNumberOfVisibleFastas, getVisibleFastas }
-  from '../hub-filter/selectors';
+  from '../filter/selectors';
 
-import { isSupported } from '../species';
+import { isSupported } from '../../species';
 
 export const getVisibleSpecies = createSelector(
   getVisibleFastas,

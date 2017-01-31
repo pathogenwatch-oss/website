@@ -1,4 +1,4 @@
-import { API_ROOT } from '../utils/Api';
+import { API_ROOT } from '../../utils/Api';
 
 export function createCollectionRequest(genomes, speciesId, metadata) {
   return $.ajax({

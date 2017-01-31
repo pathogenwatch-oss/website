@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import Grid from '../../grid';
 import GenomeCard from '../../genome-card';
 
-import { getVisibleFastas } from '../../hub-filter/selectors';
+import { getVisibleFastas } from '../../genomes/filter/selectors';
 
 export const GridView = React.createClass({
 

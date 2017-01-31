@@ -2,7 +2,7 @@ import './styles.css';
 
 import { connect } from 'react-redux';
 
-import { REMOVE_FASTA } from '../hub/actions';
+import { REMOVE_FASTA } from '../genomes/actions';
 
 import GenomeDetails from './GenomeDrawer.react';
 

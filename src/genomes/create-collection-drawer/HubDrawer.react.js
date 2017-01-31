@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import Drawer from '../drawer';
+import Drawer from '../../drawer';
 import CreateCollectionForm from './CreateCollectionForm.react';
 
 import { canCreateCollection } from './selectors';

@@ -2,7 +2,7 @@ import React from 'react';
 
 import DownloadIcon from '../downloads/DownloadIcon.react';
 
-import { FASTA_FILE_EXTENSIONS } from '../../hub/utils';
+import { FASTA_FILE_EXTENSIONS } from '../../genomes/utils';
 import { CGPS } from '../../app/constants';
 import { SERVER_ADDRESS } from '../../utils/Api';
 

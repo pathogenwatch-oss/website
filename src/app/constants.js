@@ -1,4 +1,4 @@
-import { FASTA_FILE_EXTENSIONS } from '../hub/utils';
+import { FASTA_FILE_EXTENSIONS } from '../genomes/utils';
 
 export const CGPS = {
   COLOURS: {

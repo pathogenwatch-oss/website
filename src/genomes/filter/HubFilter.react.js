@@ -1,10 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import FilterAside from '../filter-aside';
-import DateFilter from '../date-filter';
-import MetadataFilter from '../metadata-filter';
-import * as filter from '../filter';
+import FilterAside from '../../filter-aside';
+import DateFilter from '../../date-filter';
+import MetadataFilter from '../../metadata-filter';
+import * as filter from '../../filter';
 
 import { getFilterSummary, getSearchText } from './selectors';
 

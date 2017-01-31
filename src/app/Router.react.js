@@ -5,9 +5,9 @@ import App from './App.react';
 
 import CollectionsRoute from '../collections';
 import CollectionRoute from '../collection-route';
+import GenomesRoute from '../genomes';
 import DocumentationViewerRoute from '../documentation-viewer';
 
-import hub, { GridView, MapView, StatsView } from '../hub';
 import NotFound from '../components/NotFound.react';
 
 import Species from '../species';
@@ -22,11 +22,7 @@ export default () => (
     <Route path="/" component={App}>
       <IndexRedirect to="collections" />
       {CollectionsRoute}
-      <Route path="upload" component={hub}>
-        <IndexRoute component={GridView} />
-        <Route path="map" component={MapView} />
-        <Route path="stats" component={StatsView} />
-      </Route>
+      {GenomesRoute}
       { Species.list.map(({ nickname }) =>
           <Route key={nickname} path={nickname} component={SpeciesSetter}>
             <IndexRedirect to="/" query={{ species: nickname }} />

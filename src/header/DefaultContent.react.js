@@ -7,8 +7,9 @@ import NavLink from '../location';
 import { toggleAside } from './index';
 
 const links = [
-  { text: 'Upload', link: '/upload' },
   { text: 'Collections', link: '/collections' },
+  { text: 'Genomes', link: '/genomes', activeOnIndexOnly: true },
+  { text: 'Upload', link: '/genomes/upload' },
   { text: 'Documentation', link: '/documentation' },
 ];
 

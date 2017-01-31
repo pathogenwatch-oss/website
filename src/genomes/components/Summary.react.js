@@ -8,7 +8,7 @@ import { Summary as FilterSummary, Totals } from '../../filter-summary';
 import ProgressBar from '../../components/progress-bar';
 
 import * as selectors from '../selectors';
-import { getNumberOfVisibleFastas } from '../../hub-filter/selectors';
+import { getNumberOfVisibleFastas } from '../../genomes/filter/selectors';
 
 const mapLocationFromState = ({ location }) => ({ location });
 
