@@ -3,7 +3,7 @@ import { Router, Route, IndexRoute, browserHistory, Redirect, IndexRedirect } fr
 
 import App from './App.react';
 
-import HomeRoute from '../home';
+import CollectionsRoute from '../collections';
 import CollectionRoute from '../collection-route';
 import DocumentationViewerRoute from '../documentation-viewer';
 
@@ -20,7 +20,8 @@ const SpeciesSetter = ({ children, route }) => {
 export default () => (
   <Router history={browserHistory}>
     <Route path="/" component={App}>
-      {HomeRoute}
+      <IndexRedirect to="collections" />
+      {CollectionsRoute}
       <Route path="upload" component={hub}>
         <IndexRoute component={GridView} />
         <Route path="map" component={MapView} />

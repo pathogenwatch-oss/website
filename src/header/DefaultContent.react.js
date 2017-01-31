@@ -7,8 +7,8 @@ import NavLink from '../location';
 import { toggleAside } from './index';
 
 const links = [
-  { text: 'Home', link: '/', activeOnIndexOnly: true },
   { text: 'Upload', link: '/upload' },
+  { text: 'Collections', link: '/collections' },
   { text: 'Documentation', link: '/documentation' },
 ];
 
