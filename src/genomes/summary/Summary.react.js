@@ -29,7 +29,7 @@ const Summary = React.createClass({
       'WGSA',
       '|',
       batchSize ? `(${completedUploads}/${batchSize})` : '',
-      'Upload',
+      'Genomes',
     ].join(' ');
   },
 
