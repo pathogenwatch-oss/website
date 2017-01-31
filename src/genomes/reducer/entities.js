@@ -14,24 +14,26 @@ function updateGenomes(state, name, update) {
   };
 }
 
+function categoriseBySpecies(genome) {
+  const { speciesId, speciesName } = genome;
+  const supported = isSupported(genome);
+  const species = taxIdMap.get(speciesId);
+  return {
+    speciesKey: supported ? species.name : speciesName,
+    speciesLabel: supported ? species.formattedShortName : speciesName,
+  };
+}
+
 export default function (state = {}, { type, payload }) {
   switch (type) {
     case FETCH_GENOMES.SUCCESS: {
       return payload.result.reduce((memo, genome) => {
-        const { speciesId, speciesName } = genome;
-        const supported = isSupported(genome);
-        const species = taxIdMap.get(speciesId);
-        const speciesKey = supported ? species.name : speciesName;
-        const speciesLabel = supported ? species.formattedShortName : speciesName;
         memo[genome.name] = {
-          speciesKey,
-          speciesLabel,
+          ...categoriseBySpecies(genome),
           ...genome,
-          error: null,
-          uploadAttempted: null,
         };
         return memo;
-      }, state);
+      }, { ...state });
     }
     case ADD_GENOMES: {
       const { genomes } = payload;
@@ -57,16 +59,8 @@ export default function (state = {}, { type, payload }) {
     }
     case UPLOAD_GENOME.SUCCESS: {
       const { name, result } = payload;
-      const { speciesId, speciesName } = result;
-      const supported = isSupported(result);
-      const species = taxIdMap.get(speciesId);
-
-      const speciesKey = supported ? species.name : speciesName;
-      const speciesLabel = supported ? species.formattedShortName : speciesName;
-
       return updateGenomes(state, name, {
-        speciesKey,
-        speciesLabel,
+        ...categoriseBySpecies(result),
         ...result,
       });
     }
