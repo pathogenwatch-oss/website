@@ -1,6 +1,6 @@
 import React from 'react';
 
-import FileDragAndDrop from '../../components/DragAndDrop.react';
+import FileDragAndDrop from '../../drag-and-drop';
 
 import Filter from '../filter';
 import Summary from '../summary';

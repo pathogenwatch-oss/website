@@ -44,3 +44,21 @@
 .wgsa-drag-and-drop__button:hover {
   background: #a386bd;
 }
+
+.wgsa-file-icon {
+  position: relative;
+}
+
+.wgsa-file-icon > .material-icons {
+  font-size: 96px;
+}
+
+.wgsa-file-icon__label {
+  position: absolute;
+  color: #fff;
+  left: 0;
+  right: 0;
+  bottom: 1.2rem;
+  font-size: 1.2rem;
+  text-align: center;
+}
