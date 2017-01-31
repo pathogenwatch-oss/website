@@ -1,5 +1,18 @@
 import { createAsyncConstants } from '../actions';
 
+import * as api from './api';
+
+export const FETCH_GENOMES = createAsyncConstants('FETCH_GENOMES');
+
+export function fetchGenomes() {
+  return {
+    type: FETCH_GENOMES,
+    payload: {
+      promise: api.fetchGenomes(),
+    },
+  };
+}
+
 export const ADD_FASTAS = 'ADD_FASTAS';
 
 function addFastas(fastas) {

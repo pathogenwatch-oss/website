@@ -1,4 +1,5 @@
 import {
+  FETCH_GENOMES,
   ADD_FASTAS, UPLOAD_FASTA, UPDATE_FASTA_PROGRESS,
   REMOVE_FASTA, UNDO_REMOVE_FASTA,
 } from '../actions';
@@ -15,6 +16,17 @@ function updateFastas(state, name, update) {
 
 export default function (state = {}, { type, payload }) {
   switch (type) {
+    case FETCH_GENOMES.SUCCESS: {
+      return payload.result.reduce((memo, genome) => {
+        const { speciesId, speciesName } = genome;
+        const supported = isSupported(genome);
+        const species = taxIdMap.get(speciesId);
+        const speciesKey = supported ? species.name : speciesName;
+        const speciesLabel = supported ? species.formattedShortName : speciesName;
+        memo[genome.name] = { speciesKey, speciesLabel, ...genome };
+        return memo;
+      }, state);
+    }
     case ADD_FASTAS: {
       const { fastas } = payload;
       if (!fastas.length) return state;

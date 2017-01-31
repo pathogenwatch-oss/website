@@ -6,9 +6,6 @@ import Filter from '../filter';
 import Summary from '../summary';
 import HubDrawer from '../create-collection-drawer';
 
-import { addFiles } from '../thunks';
-import { toggleAside } from '../../header';
-
 import { taxIdMap } from '../../species';
 
 export default React.createClass({
@@ -17,7 +14,9 @@ export default React.createClass({
     hasFastas: React.PropTypes.bool,
     uploads: React.PropTypes.object,
     filterActive: React.PropTypes.bool,
-    dispatch: React.PropTypes.func.isRequired,
+    toggleAside: React.PropTypes.func.isRequired,
+    fetchGenomes: React.PropTypes.func.isRequired,
+    addFiles: React.PropTypes.func.isRequired,
   },
 
   contextTypes: {
@@ -25,7 +24,8 @@ export default React.createClass({
   },
 
   componentWillMount() {
-    this.toggleAside(this.props.hasFastas);
+    this.props.fetchGenomes().
+      then(() => this.props.toggleAside(true));
   },
 
   componentDidUpdate() {
@@ -45,17 +45,13 @@ export default React.createClass({
   },
 
   componentWillUnmount() {
-    this.toggleAside(false);
-  },
-
-  toggleAside(isOpen) {
-    this.props.dispatch(toggleAside(isOpen));
+    this.props.toggleAside(false);
   },
 
   upload(newFiles) {
-    const { dispatch } = this.props;
-    dispatch(addFiles(newFiles));
-    this.toggleAside(true);
+    const { addFiles, toggleAside } = this.props;
+    addFiles(newFiles);
+    toggleAside(true);
   },
 
   render() {

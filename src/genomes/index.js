@@ -7,7 +7,7 @@ import MapView from './map';
 import StatsView from './stats';
 import Upload from './upload';
 
-export reducer from './reducers';
+export reducer from './reducer';
 
 export default (
   <Route path="genomes" component={Genomes}>

@@ -2,6 +2,9 @@ import { connect } from 'react-redux';
 
 import Genomes from './Genomes.react';
 
+import { toggleAside } from '../../header';
+import { fetchGenomes } from '../actions';
+import { addFiles } from '../thunks';
 import { getCollection } from '../../collection-route/selectors';
 import { getTotalFastas } from '../selectors';
 
@@ -14,4 +17,12 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(Genomes);
+function mapDispatchToProps(dispatch) {
+  return {
+    fetchGenomes: () => dispatch(fetchGenomes()),
+    toggleAside: isOpen => dispatch(toggleAside(isOpen)),
+    addFiles: files => dispatch(addFiles(files)),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Genomes);
