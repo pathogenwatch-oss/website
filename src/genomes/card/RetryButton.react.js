@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { uploadFiles } from '../genomes/thunks';
+import { uploadFiles } from '../thunks';
 
 function mapDispatchToProps(dispatch, { file }) {
   return {

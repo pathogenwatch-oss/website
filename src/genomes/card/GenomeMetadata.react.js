@@ -1,9 +1,9 @@
 import React from 'react';
 
-import { CardMetadata } from '../card';
+import { CardMetadata } from '../../card';
 
-import { formatDay, formatMonth } from '../utils/Date';
-import { getCountryName } from '../utils/country';
+import { formatDay, formatMonth } from '../../utils/Date';
+import { getCountryName } from '../../utils/country';
 
 function displayDate({ day, month, year }) {
   if (!day && !month && !year) {

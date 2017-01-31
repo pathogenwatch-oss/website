@@ -3,7 +3,7 @@ import React from 'react';
 import FileDragAndDrop from '../../components/DragAndDrop.react';
 
 import Filter from '../filter';
-import Summary from './Summary.react';
+import Summary from '../summary';
 import HubDrawer from '../create-collection-drawer';
 
 import { addFiles } from '../thunks';
@@ -26,7 +26,6 @@ export default React.createClass({
 
   componentWillMount() {
     this.toggleAside(this.props.hasFastas);
-    document.title = 'WGSA | Upload';
   },
 
   componentDidUpdate() {
@@ -60,21 +59,13 @@ export default React.createClass({
   },
 
   render() {
-    const { hasFastas, hasVisibleFastas, loading } = this.props;
+    const { loading } = this.props;
     return (
       <FileDragAndDrop onFiles={this.upload}>
         { loading && <div ref="loadingBar" className="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>}
         <div className="wgsa-hipster-style wgsa-filterable-view">
           <Summary />
-          { hasVisibleFastas ?
-            this.props.children :
-            <p className="wgsa-filterable-content wgsa-hub-big-message">
-              { hasFastas ?
-                  'No matches.' :
-                  'Drag and drop files to begin.'
-              }
-            </p>
-          }
+          {this.props.children}
         </div>
         <Filter />
         <HubDrawer />

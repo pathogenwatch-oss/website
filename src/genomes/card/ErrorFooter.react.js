@@ -3,7 +3,7 @@ import React from 'react';
 import RemoveButton from './RemoveButton.react';
 import RetryButton from './RetryButton.react';
 
-import { fastaValidationErrors as errors } from '../genomes/utils/fasta';
+import { fastaValidationErrors as errors } from '../utils/fasta';
 
 const Footer = ({ children }) => (
   <footer className="wgsa-card-footer wgsa-card-footer--visible">

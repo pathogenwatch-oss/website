@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { showGenomeDetails } from '../genome-drawer';
+import { showGenomeDetails } from '../../genome-drawer';
 
 function mapDispatchToProps(dispatch, ownProps) {
   return {

@@ -2,7 +2,7 @@ import React from 'react';
 // import classnames from 'classnames';
 
 import Drawer from '../drawer';
-import RemoveButton from '../genome-card/RemoveButton.react';
+import RemoveButton from '../genomes/card/RemoveButton.react';
 import N50Chart from './N50Chart.react';
 
 const GenomeStats = ({ metrics }) => (

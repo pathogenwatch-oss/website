@@ -1,5 +1,3 @@
-import '../css/summary.css';
-
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
@@ -37,14 +35,14 @@ const Summary = React.createClass({
 
   render() {
     const { completedUploads, batchSize, visibleFastas, totalFastas } = this.props;
-    if (totalFastas === 0) return <FilterSummary />;
+    // if (totalFastas === 0) return <FilterSummary />;
     return (
       <FilterSummary className="wgsa-hub-summary">
         <div className="wgsa-button-group">
           <i className="material-icons" title="View">visibility</i>
-          <ViewSwitcher to="/upload" title="Grid" />
-          <ViewSwitcher to="/upload/map" title="Map" />
-          <ViewSwitcher to="/upload/stats" title="Stats" />
+          <ViewSwitcher to="/genomes" title="Grid" />
+          <ViewSwitcher to="/genomes/map" title="Map" />
+          <ViewSwitcher to="/genomes/stats" title="Stats" />
         </div>
         { batchSize ?
           <ProgressBar

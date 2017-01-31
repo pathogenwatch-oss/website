@@ -1,5 +1,3 @@
-import '../css/stats.css';
-
 import React from 'react';
 import {
   ResponsiveContainer, ScatterChart, Scatter, XAxis, YAxis, Tooltip,

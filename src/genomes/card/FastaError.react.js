@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { fastaValidationErrors as errors } from '../genomes/utils/fasta';
-import config from '../app/config';
+import { fastaValidationErrors as errors } from '../utils/fasta';
+import config from '../../app/config';
 
 const Error = ({ message, children }) => (
   <div className="wgsa-hub-card__metadata wgsa-hub-card-error">

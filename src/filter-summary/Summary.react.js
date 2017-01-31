@@ -3,7 +3,7 @@ import classnames from 'classnames';
 
 export const Totals = ({ visible, total, itemType }) => (
   <p className="wgsa-filter-summary__count">
-    Viewing <span>{visible}</span> of {total} {itemType}{total > 1 ? 's' : ''}
+    Viewing <span>{visible}</span> of {total} {itemType}{total !== 1 ? 's' : ''}
   </p>
 );
 

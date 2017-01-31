@@ -1,7 +1,7 @@
 import React from 'react';
 
-import Card from '../card';
-import ProgressBar from '../components/progress-bar';
+import Card from '../../card';
+import ProgressBar from '../../components/progress-bar';
 
 import GenomeMetadata from './GenomeMetadata.react';
 import DefaultFooter from './DefaultFooter.react';

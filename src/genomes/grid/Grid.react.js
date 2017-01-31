@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import Grid from '../../grid';
-import GenomeCard from '../../genome-card';
+import GenomeCard from '../card';
 
 import { getVisibleFastas } from '../../genomes/filter/selectors';
 
@@ -12,15 +12,23 @@ export const GridView = React.createClass({
     items: React.PropTypes.array,
   },
 
+  componentWillMount() {
+    document.title = 'WGSA | Genomes';
+  },
+
   render() {
     const { items } = this.props;
-    return (
+    return items.length ? (
       <Grid
         template={GenomeCard}
         items={items}
         columnWidth={256}
         rowHeight={176}
       />
+    ) : (
+      <p className="wgsa-filterable-content wgsa-hub-big-message">
+        No matches.
+      </p>
     );
   },
 
