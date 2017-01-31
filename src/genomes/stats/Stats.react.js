@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 
 import ChartTooltip from '../../chart-tooltip';
 
-import * as selectors from '../selectors/stats';
+import * as selectors from './selectors';
 
 import { showGenomeDetails } from '../../genome-drawer';
 import actions from '../actions';

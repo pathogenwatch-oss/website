@@ -23,9 +23,9 @@ const Button = props => (
 function mapStateToProps(state) {
   return {
     genomes: getActiveGenomes(state),
-    format: 'fasta_archive',
+    format: 'genome_archive',
     collection: getCollection(state),
-    download: getFiles(state).fasta_archive,
+    download: getFiles(state).genome_archive,
   };
 }
 

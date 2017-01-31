@@ -13,22 +13,22 @@ export function fetchGenomes() {
   };
 }
 
-export const ADD_FASTAS = 'ADD_FASTAS';
+export const ADD_GENOMES = 'ADD_GENOMES';
 
-function addFastas(fastas) {
+function addGenomes(genomes) {
   return {
-    type: ADD_FASTAS,
-    payload: { fastas },
+    type: ADD_GENOMES,
+    payload: { genomes },
   };
 }
 
-export const UPLOAD_FASTA = createAsyncConstants('UPLOAD_FASTA');
+export const UPLOAD_GENOME = createAsyncConstants('UPLOAD_GENOME');
 
-export const UPDATE_FASTA_PROGRESS = 'UPDATE_FASTA_PROGRESS';
+export const UPDATE_GENOME_PROGRESS = 'UPDATE_GENOME_PROGRESS';
 
-function updateFastaProgress(name, progress) {
+function updateGenomeProgress(name, progress) {
   return {
-    type: UPDATE_FASTA_PROGRESS,
+    type: UPDATE_GENOME_PROGRESS,
     payload: {
       name,
       progress,
@@ -36,21 +36,21 @@ function updateFastaProgress(name, progress) {
   };
 }
 
-export const REMOVE_FASTA = 'REMOVE_FASTA';
+export const REMOVE_GENOME = 'REMOVE_GENOME';
 
-function removeFasta(name) {
+function removeGenome(name) {
   return {
-    type: REMOVE_FASTA,
+    type: REMOVE_GENOME,
     payload: { name },
   };
 }
 
-export const UNDO_REMOVE_FASTA = 'UNDO_REMOVE_FASTA';
+export const UNDO_REMOVE_GENOME = 'UNDO_REMOVE_GENOME';
 
-function undoRemoveFasta(fasta) {
+function undoRemoveGenome(genome) {
   return {
-    type: UNDO_REMOVE_FASTA,
-    payload: { fasta },
+    type: UNDO_REMOVE_GENOME,
+    payload: { genome },
   };
 }
 
@@ -64,9 +64,9 @@ function showMetric(metric) {
 }
 
 export default {
-  addFastas,
-  updateFastaProgress,
-  removeFasta,
-  undoRemoveFasta,
+  addGenomes,
+  updateGenomeProgress,
+  removeGenome,
+  undoRemoveGenome,
   showMetric,
 };

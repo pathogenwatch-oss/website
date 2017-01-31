@@ -2,14 +2,14 @@ import React from 'react';
 
 import actions from '../actions';
 
-export function undoRemoveFasta(fasta, dispatch) {
+export function undoRemoveGenome(genome, dispatch) {
   return {
     action: {
       label: 'Undo',
-      onClick: () => dispatch(actions.undoRemoveFasta(fasta)),
+      onClick: () => dispatch(actions.undoRemoveGenome(genome)),
     },
     message: (
-      <span><strong>{fasta.name}</strong> removed.</span>
+      <span><strong>{genome.name}</strong> removed.</span>
     ),
   };
 }

@@ -1,13 +1,13 @@
 import { createSelector } from 'reselect';
 
-import { getVisibleFastas } from '../../genomes/filter/selectors';
+import { getVisibleGenomes } from '../filter/selectors';
 
-export const getSelectedMetric = ({ hub }) => hub.selectedMetric;
+export const getSelectedMetric = ({ genomes }) => genomes.selectedMetric;
 
 export const getGenomeMetrics = createSelector(
-  getVisibleFastas,
-  fastas =>
-    fastas.reduce((memo, { name, metrics }) => {
+  getVisibleGenomes,
+  genomes =>
+    genomes.reduce((memo, { name, metrics }) => {
       if (!metrics) {
         return memo;
       }

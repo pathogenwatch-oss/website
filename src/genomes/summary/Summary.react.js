@@ -6,7 +6,7 @@ import { Summary as FilterSummary, Totals } from '../../filter-summary';
 import ProgressBar from '../../components/progress-bar';
 
 import * as selectors from '../selectors';
-import { getNumberOfVisibleFastas } from '../../genomes/filter/selectors';
+import { getNumberOfVisibleGenomes } from '../filter/selectors';
 
 const mapLocationFromState = ({ location }) => ({ location });
 
@@ -34,8 +34,8 @@ const Summary = React.createClass({
   },
 
   render() {
-    const { completedUploads, batchSize, visibleFastas, totalFastas } = this.props;
-    // if (totalFastas === 0) return <FilterSummary />;
+    const { completedUploads, batchSize, visibleGenomes, totalGenomes } = this.props;
+    // if (totalGenomes === 0) return <FilterSummary />;
     return (
       <FilterSummary className="wgsa-hub-summary">
         <div className="wgsa-button-group">
@@ -51,8 +51,8 @@ const Summary = React.createClass({
             label={`${completedUploads}/${batchSize}`}
           /> :
           <Totals
-            visible={visibleFastas}
-            total={totalFastas}
+            visible={visibleGenomes}
+            total={totalGenomes}
             itemType="genome"
           />
         }
@@ -66,8 +66,8 @@ function mapStateToProps(state) {
   return {
     batchSize: selectors.getBatchSize(state),
     completedUploads: selectors.getNumCompletedUploads(state),
-    visibleFastas: getNumberOfVisibleFastas(state),
-    totalFastas: selectors.getTotalFastas(state),
+    visibleGenomes: getNumberOfVisibleGenomes(state),
+    totalGenomes: selectors.getTotalGenomes(state),
   };
 }
 

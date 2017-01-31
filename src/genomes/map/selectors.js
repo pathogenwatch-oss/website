@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 
-import { getFilter, getVisibleFastas } from '../../genomes/filter/selectors';
+import { getFilter, getVisibleGenomes } from '../filter/selectors';
 
 export const getLassoPath = createSelector(
   getFilter,
@@ -8,8 +8,8 @@ export const getLassoPath = createSelector(
 );
 
 export const getMarkers = createSelector(
-  getVisibleFastas,
-  fastas => fastas.reduce((markers, { name, metadata = {} }) => {
+  getVisibleGenomes,
+  genomes => genomes.reduce((markers, { name, metadata = {} }) => {
     if (metadata.latitude && metadata.longitude) {
       markers.push({
         position: [ metadata.latitude, metadata.longitude ],

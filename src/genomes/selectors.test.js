@@ -9,7 +9,7 @@ const otherSpeciesKey = 'Other';
 function getTestState(overrides = {}) {
   return {
     entities: {
-      fastas: {
+      genomes: {
         '123.fa': {
           name: '123.fa',
           speciesId: '1280',
@@ -49,29 +49,29 @@ function getTestState(overrides = {}) {
   };
 }
 
-test('getFastas', t => {
-  const { getFastas } = selectors;
+test('getGenomes', t => {
+  const { getGenomes } = selectors;
 
-  const fastas = { '123.fa': {} };
+  const genomes = { '123.fa': {} };
 
-  t.is(getFastas({ entities: { fastas } }), fastas);
+  t.is(getGenomes({ entities: { genomes } }), genomes);
 });
 
-test('getOrderedFastas', t => {
-  const { getFastas, getOrderedFastas } = selectors;
+test('getOrderedGenomes', t => {
+  const { getGenomes, getOrderedGenomes } = selectors;
   const state = getTestState();
-  const fastas = getFastas(state);
-  const result = [ fastas['123.fa'], fastas['456.fa'], fastas['789.fa'] ];
+  const genomes = getGenomes(state);
+  const result = [ genomes['123.fa'], genomes['456.fa'], genomes['789.fa'] ];
 
-  t.deepEqual(getOrderedFastas(state), result);
+  t.deepEqual(getOrderedGenomes(state), result);
 });
 
-test('getFastaKeys', t => {
-  const { getFastaKeys } = selectors;
+test('getGenomeKeys', t => {
+  const { getGenomeKeys } = selectors;
   const state = getTestState();
   const result = [ '123.fa', '456.fa', '789.fa' ];
 
-  t.deepEqual(getFastaKeys(state), result);
+  t.deepEqual(getGenomeKeys(state), result);
 });
 
 test('getFilter', t => {
@@ -82,41 +82,41 @@ test('getFilter', t => {
   t.is(getFilter(state), filter);
 });
 
-test('getVisibleFastas with inactive filter', t => {
-  const { getVisibleFastas, getOrderedFastas } = selectors;
+test('getVisibleGenomes with inactive filter', t => {
+  const { getVisibleGenomes, getOrderedGenomes } = selectors;
   const state = getTestState();
-  const result = getOrderedFastas(state);
+  const result = getOrderedGenomes(state);
 
-  t.deepEqual(getVisibleFastas(state), result);
+  t.deepEqual(getVisibleGenomes(state), result);
 });
 
-test('getVisibleFastas with text filter', t => {
-  const { getVisibleFastas, getFastas } = selectors;
+test('getVisibleGenomes with text filter', t => {
+  const { getVisibleGenomes, getGenomes } = selectors;
   const state = getTestState({
     filter: {
       searchText: '123',
     },
   });
-  const fastas = getFastas(state);
-  const result = [ fastas['123.fa'] ];
+  const genomes = getGenomes(state);
+  const result = [ genomes['123.fa'] ];
 
-  t.deepEqual(getVisibleFastas(state), result);
+  t.deepEqual(getVisibleGenomes(state), result);
 });
 
-test('getVisibleFastas with species filter', t => {
-  const { getVisibleFastas, getFastas } = selectors;
+test('getVisibleGenomes with species filter', t => {
+  const { getVisibleGenomes, getGenomes } = selectors;
   const state = getTestState({
     filter: {
       speciesKey: otherSpeciesKey, // salty.name,
     },
   });
-  const fastas = getFastas(state);
-  const result = [ fastas['789.fa'] ];
+  const genomes = getGenomes(state);
+  const result = [ genomes['789.fa'] ];
 
-  t.deepEqual(getVisibleFastas(state), result);
+  t.deepEqual(getVisibleGenomes(state), result);
 });
 
-test.todo('getVisibleFastas with species and id filter');
+test.todo('getVisibleGenomes with species and id filter');
 
 test('getMetadataFilters', t => {
   const { getMetadataFilters } = selectors;

@@ -1,4 +1,4 @@
-import { ADD_FASTAS, UPLOAD_FASTA } from '../actions';
+import { ADD_GENOMES, UPLOAD_GENOME } from '../actions';
 
 function handleUploadCompletion(state, name) {
   const { queue, uploading, batch } = state;
@@ -11,8 +11,8 @@ function handleUploadCompletion(state, name) {
   };
 }
 
-function handleAddFastas(state, fastas) {
-  const names = fastas.map(_ => _.name);
+function handleAddGenomes(state, genomes) {
+  const names = genomes.map(_ => _.name);
   return {
     ...state,
     batch: new Set([ ...state.batch, ...names ]),
@@ -28,16 +28,16 @@ const initialState = {
 
 export default function (state = initialState, { type, payload }) {
   switch (type) {
-    case ADD_FASTAS:
-      return handleAddFastas(state, payload.fastas);
-    case UPLOAD_FASTA.ATTEMPT:
+    case ADD_GENOMES:
+      return handleAddGenomes(state, payload.genomes);
+    case UPLOAD_GENOME.ATTEMPT:
       return {
         ...state,
         queue: state.queue.slice(1),
         uploading: new Set([ ...state.uploading, payload.name ]),
       };
-    case UPLOAD_FASTA.SUCCESS:
-    case UPLOAD_FASTA.FAILURE:
+    case UPLOAD_GENOME.SUCCESS:
+    case UPLOAD_GENOME.FAILURE:
       return handleUploadCompletion(state, payload.name);
     default:
       return state;

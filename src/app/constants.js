@@ -1,4 +1,4 @@
-import { FASTA_FILE_EXTENSIONS } from '../genomes/utils';
+import { GENOME_FILE_EXTENSIONS } from '../genomes/utils';
 
 export const CGPS = {
   COLOURS: {
@@ -33,5 +33,5 @@ export const DEFAULT = {
       LONGITUDE: 5.85082183,
     },
   },
-  SUPPORTED_FILE_EXTENSIONS: [ '.csv' ].concat(FASTA_FILE_EXTENSIONS).join(','),
+  SUPPORTED_FILE_EXTENSIONS: [ '.csv' ].concat(GENOME_FILE_EXTENSIONS).join(','),
 };

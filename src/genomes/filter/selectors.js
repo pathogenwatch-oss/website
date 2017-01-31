@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 import sortBy from 'lodash.sortby';
 
-import { getOrderedFastas } from '../selectors';
+import { getOrderedGenomes } from '../selectors';
 import { selectors as filter } from '../../filter';
 
 import { stateKey, filters } from './filter';
@@ -16,16 +16,16 @@ export const getSearchText = createSelector(
   ({ searchRegExp }) => (searchRegExp ? searchRegExp.source : ''),
 );
 
-export const getVisibleFastas = state =>
+export const getVisibleGenomes = state =>
   filter.getFilteredItems(state, {
     filters,
     stateKey,
-    items: getOrderedFastas(state),
+    items: getOrderedGenomes(state),
   });
 
-export const getNumberOfVisibleFastas = createSelector(
-  getVisibleFastas,
-  fastas => fastas.length,
+export const getNumberOfVisibleGenomes = createSelector(
+  getVisibleGenomes,
+  genomes => genomes.length,
 );
 
 function incrementSummary(map, key, newEntry) {
@@ -42,35 +42,35 @@ function getSummary(map) {
 }
 
 export const getFilterSummary = createSelector(
-  getOrderedFastas,
+  getOrderedGenomes,
   filter.getFilter,
-  (fastas, filterState) => {
+  (genomes, filterState) => {
     const wgsaSpeciesMap = new Map();
     const otherSpeciesMap = new Map();
     const countryMap = new Map();
     const yearSet = new Set();
 
-    for (const fasta of fastas) {
-      if (fasta.speciesKey) {
+    for (const genome of genomes) {
+      if (genome.speciesKey) {
         const speciesMap =
-          isSupported(fasta) ? wgsaSpeciesMap : otherSpeciesMap;
-        incrementSummary(speciesMap, fasta.speciesKey, {
-          name: fasta.speciesKey,
-          label: fasta.speciesLabel,
-          active: fasta.speciesKey === filterState.speciesKey,
+          isSupported(genome) ? wgsaSpeciesMap : otherSpeciesMap;
+        incrementSummary(speciesMap, genome.speciesKey, {
+          name: genome.speciesKey,
+          label: genome.speciesLabel,
+          active: genome.speciesKey === filterState.speciesKey,
         });
       }
 
-      if (fasta.country) {
-        incrementSummary(countryMap, fasta.country, {
-          name: fasta.country,
-          label: getCountryName(fasta.country),
-          active: fasta.country === filterState.country,
+      if (genome.country) {
+        incrementSummary(countryMap, genome.country, {
+          name: genome.country,
+          label: getCountryName(genome.country),
+          active: genome.country === filterState.country,
         });
       }
 
-      if (fasta.date) {
-        yearSet.add(fasta.date.getFullYear());
+      if (genome.date) {
+        yearSet.add(genome.date.getFullYear());
       }
     }
 

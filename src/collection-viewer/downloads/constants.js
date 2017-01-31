@@ -1,6 +1,6 @@
 import * as clientSide from './client-side';
 
-import { createFastaArchiveLink } from '../fasta-download';
+import { createGenomeArchiveLink } from '../genome-download';
 
 import Species from '../../species';
 
@@ -75,9 +75,9 @@ export const fileTypes = {
     description: 'Score Matrix',
     filenameSegment: 'score_matrix',
   },
-  fasta_archive: {
-    createLink: createFastaArchiveLink,
-    filenameSegment: 'fastas',
+  genome_archive: {
+    createLink: createGenomeArchiveLink,
+    filenameSegment: 'genomes',
     hideFromMenu: () => true,
   },
   wgsa_gff: {

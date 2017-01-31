@@ -6,13 +6,13 @@ import { toggleAside } from '../../header';
 import { fetchGenomes } from '../actions';
 import { addFiles } from '../thunks';
 import { getCollection } from '../../collection-route/selectors';
-import { getTotalFastas } from '../selectors';
+import { getTotalGenomes } from '../selectors';
 
 function mapStateToProps(state) {
-  const { hub } = state;
+  const { genomes } = state;
   return {
-    hasFastas: getTotalFastas(state) > 0,
-    loading: hub.loading,
+    hasGenomes: getTotalGenomes(state) > 0,
+    loading: genomes.loading,
     collection: getCollection(state),
   };
 }

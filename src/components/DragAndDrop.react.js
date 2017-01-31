@@ -88,7 +88,7 @@ export default React.createClass({
             <div className="wgsa-drop-indicator__icons">
               <span className="wgsa-file-icon">
                 <i className="material-icons" style={{ color: CGPS.COLOURS.PURPLE }}>insert_drive_file</i>
-                <span className="wgsa-file-icon__label">.fasta</span>
+                <span className="wgsa-file-icon__label">.genome</span>
               </span>
               <span className="wgsa-file-icon">
                 <i className="material-icons" style={{ color: CGPS.COLOURS.GREEN }}>insert_drive_file</i>

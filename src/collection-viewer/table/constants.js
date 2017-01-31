@@ -1,7 +1,7 @@
 import React from 'react';
 
 import DownloadButton from '../downloads/DownloadButton.react';
-import { FastaFileLink, FastaArchiveButton } from '../fasta-download';
+import { GenomeFileLink, GenomeArchiveButton } from '../genome-download';
 
 import { getArchiveDownloadProps } from '../downloads/utils';
 
@@ -63,7 +63,7 @@ export const downloadColumnProps = {
   getHeaderContent({ archiveDownloads }) {
     return (
       <span className="wgsa-table-downloads" onClick={(e) => e.stopPropagation()}>
-        <FastaArchiveButton />
+        <GenomeArchiveButton />
         <DownloadButton
           {...archiveDownloads.wgsa_gff}
           isArchive
@@ -79,7 +79,7 @@ export const downloadColumnProps = {
   getCellContents(_, { __downloads, id, name }) {
     return (
       <span className="wgsa-table-downloads" onClick={(e) => e.stopPropagation()}>
-        <FastaFileLink id={id} name={name} />
+        <GenomeFileLink id={id} name={name} />
         <DownloadButton
           { ...__downloads.wgsa_gff }
           label=".gff"

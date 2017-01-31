@@ -1,18 +1,18 @@
 import { createSelector } from 'reselect';
 
-import * as hub from '../selectors';
-import { getNumberOfVisibleFastas, getVisibleFastas }
+import * as genomes from '../selectors';
+import { getNumberOfVisibleGenomes, getVisibleGenomes }
   from '../filter/selectors';
 
 import { isSupported } from '../../species';
 
 export const getVisibleSpecies = createSelector(
-  getVisibleFastas,
-  fastas => fastas.reduce((memo, fasta) => {
-    if (isSupported(fasta)) {
-      memo.supported.add(fasta.speciesId);
+  getVisibleGenomes,
+  genomes => genomes.reduce((memo, genome) => {
+    if (isSupported(genome)) {
+      memo.supported.add(genome.speciesId);
     } else {
-      memo.unsupported.add(fasta.speciesKey); // no species id for unsupported
+      memo.unsupported.add(genome.speciesKey); // no species id for unsupported
     }
     return memo;
   }, { supported: new Set(), unsupported: new Set() })
@@ -24,8 +24,8 @@ export const isSupportedSpeciesSelected = createSelector(
 );
 
 export const canCreateCollection = createSelector(
-  state => state.hub.loading,
-  hub.isUploading,
+  state => state.genomes.loading,
+  genomes.isUploading,
   isSupportedSpeciesSelected,
   (loading, uploading, supportSpeciesSelected) =>
     !loading && !uploading && supportSpeciesSelected
@@ -33,11 +33,11 @@ export const canCreateCollection = createSelector(
 
 export const getCollectionSummary = createSelector(
   getVisibleSpecies,
-  getNumberOfVisibleFastas,
+  getNumberOfVisibleGenomes,
   ({ supported }, numGenomes) => ({
     numGenomes,
     speciesId: Array.from(supported)[0],
   })
 );
 
-export const getCollectionMetadata = state => state.hub.collectionMetadata;
+export const getCollectionMetadata = state => state.genomes.collectionMetadata;

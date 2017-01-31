@@ -5,7 +5,7 @@ import actions from '../actions';
 import MetadataUtils from '../../utils/Metadata';
 import { API_ROOT, postJson } from '../../utils/Api';
 
-import { validateFastaSize, validateFastaContent } from './fasta';
+import { validateGenomeSize, validateGenomeContent } from './validation';
 
 function parseMetadata(row, name) {
   if (!row) return undefined;
@@ -26,19 +26,19 @@ function flattenCSVs(files) {
   return files.reduce((memo, { data = {} }) => memo.concat(data), []);
 }
 
-export const FASTA_FILE_EXTENSIONS = [
-  '.fa', '.fas', '.fna', '.ffn', '.faa', '.frn', '.fasta', '.contig',
+export const GENOME_FILE_EXTENSIONS = [
+  '.fa', '.fas', '.fna', '.ffn', '.faa', '.frn', '.genome', '.contig',
 ];
-const FASTA_FILE_NAME_REGEX = new RegExp(`(${FASTA_FILE_EXTENSIONS.join('|')})$`, 'i');
+const GENOME_FILE_NAME_REGEX = new RegExp(`(${GENOME_FILE_EXTENSIONS.join('|')})$`, 'i');
 const CSV_FILE_NAME_REGEX = /(.csv)$/i;
 
-export function mapCSVsToFastas(files) {
+export function mapCSVsToGenomes(files) {
   const csvFiles = files.filter(({ name }) => CSV_FILE_NAME_REGEX.test(name));
-  const fastaFiles = files.filter(({ name }) => FASTA_FILE_NAME_REGEX.test(name));
+  const genomeFiles = files.filter(({ name }) => GENOME_FILE_NAME_REGEX.test(name));
 
   if (!csvFiles.length) {
     return Promise.resolve(
-      fastaFiles.map(file => ({ name: file.name, file }))
+      genomeFiles.map(file => ({ name: file.name, file }))
     );
   }
 
@@ -49,7 +49,7 @@ export function mapCSVsToFastas(files) {
     )
   ).then(parsedFiles => flattenCSVs(parsedFiles))
    .then(rows =>
-      fastaFiles.map(file => {
+      genomeFiles.map(file => {
         const row = rows.filter(({ filename }) => filename === file.name)[0];
         return {
           name: file.name,
@@ -73,7 +73,7 @@ function getCustomXHR(filename, dispatch) {
         Math.floor(percentComplete / 10) * 10;
 
       if (percentRounded > previousPercent) {
-        dispatch(actions.updateFastaProgress(filename, percentRounded));
+        dispatch(actions.updateGenomeProgress(filename, percentRounded));
         previousPercent = percentRounded;
       }
     }
@@ -88,9 +88,9 @@ export function update(id, metadata) {
 
 function create(file, dispatch) {
   return (
-    validateFastaSize(file).
+    validateGenomeSize(file).
       then(readAsText).
-      then(validateFastaContent).
+      then(validateGenomeContent).
       then(data =>
         $.ajax({
           type: 'PUT',

@@ -6,7 +6,7 @@ import ProgressBar from '../../components/progress-bar';
 import GenomeMetadata from './GenomeMetadata.react';
 import DefaultFooter from './DefaultFooter.react';
 
-import FastaError from './FastaError.react';
+import GenomeError from './GenomeError.react';
 import ErrorFooter from './ErrorFooter.react';
 
 function getProgressBar(progress) {
@@ -20,7 +20,7 @@ function getProgressBar(progress) {
 function getCardComponents(props) {
   if (props.error) {
     return {
-      content: <FastaError {...props} />,
+      content: <GenomeError {...props} />,
       footer: <ErrorFooter {...props} />,
     };
   }

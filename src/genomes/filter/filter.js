@@ -4,20 +4,20 @@ export { UPLOAD as stateKey } from '../../app/stateKeys/filter';
 
 export const filters = [
   { key: 'searchRegExp',
-    matches(fasta, regexp) {
-      return regexp ? regexp.test(fasta.name) : true;
+    matches(genome, regexp) {
+      return regexp ? regexp.test(genome.name) : true;
     },
   },
   { key: 'speciesKey',
     queryKey: 'species',
-    matches(fasta, value) {
-      return fasta.speciesKey === value;
+    matches(genome, value) {
+      return genome.speciesKey === value;
     },
   },
   { key: 'country',
     queryKey: 'country',
-    matches(fasta, value) {
-      return fasta.country && fasta.country === value;
+    matches(genome, value) {
+      return genome.country && genome.country === value;
     },
   },
   { key: 'minDate',

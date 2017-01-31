@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { fastaValidationErrors as errors } from '../utils/fasta';
+import { genomeValidationErrors as errors } from '../utils/validation';
 import config from '../../app/config';
 
 const Error = ({ message, children }) => (
@@ -13,10 +13,10 @@ const Error = ({ message, children }) => (
 
 function getError(file) {
   switch (file.error) {
-    case errors.INVALID_FASTA_CONTENT:
-      return <Error message="This is not a valid fasta file." />;
-    case errors.INVALID_FASTA_SIZE:
-      return <Error message={`This file is larger than ${config.maxFastaFileSize} MB.`} />;
+    case errors.INVALID_GENOME_CONTENT:
+      return <Error message="This is not a valid genome file." />;
+    case errors.INVALID_GENOME_SIZE:
+      return <Error message={`This file is larger than ${config.maxGenomeFileSize} MB.`} />;
     case errors.EMPTY_FILE:
       return <Error message="This is an empty file." />;
     default:

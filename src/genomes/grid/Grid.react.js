@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import Grid from '../../grid';
 import GenomeCard from '../card';
 
-import { getVisibleFastas } from '../../genomes/filter/selectors';
+import { getVisibleGenomes } from '../filter/selectors';
 
 export const GridView = React.createClass({
 
@@ -36,7 +36,7 @@ export const GridView = React.createClass({
 
 function mapStateToProps(state) {
   return {
-    items: getVisibleFastas(state),
+    items: getVisibleGenomes(state),
   };
 }
 

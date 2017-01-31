@@ -2,7 +2,7 @@ import './styles.css';
 
 import { connect } from 'react-redux';
 
-import { REMOVE_FASTA } from '../genomes/actions';
+import { REMOVE_GENOME } from '../genomes/actions';
 
 import GenomeDetails from './GenomeDrawer.react';
 
@@ -24,16 +24,16 @@ export function reducer(state = initialState, { type, payload }) {
       return {
         name: payload.name,
       };
-    case REMOVE_FASTA:
+    case REMOVE_GENOME:
       return state.name === payload.name ? initialState : state;
     default:
       return state;
   }
 }
 
-function getSelectedGenome({ genomeDrawer, hub }) {
-  const { fastas } = hub.entities;
-  return genomeDrawer.name ? fastas[genomeDrawer.name] : null;
+function getSelectedGenome({ genomeDrawer, genomes }) {
+  const { entities } = genomes;
+  return genomeDrawer.name ? entities[genomeDrawer.name] : null;
 }
 
 function mapStateToProps(state) {

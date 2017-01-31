@@ -3,7 +3,7 @@ import React from 'react';
 import RemoveButton from './RemoveButton.react';
 import RetryButton from './RetryButton.react';
 
-import { fastaValidationErrors as errors } from '../utils/fasta';
+import { genomeValidationErrors as errors } from '../utils/validation';
 
 const Footer = ({ children }) => (
   <footer className="wgsa-card-footer wgsa-card-footer--visible">
@@ -13,8 +13,8 @@ const Footer = ({ children }) => (
 
 export default (file) => {
   switch (file.error) {
-    case errors.INVALID_FASTA_CONTENT:
-    case errors.INVALID_FASTA_SIZE:
+    case errors.INVALID_GENOME_CONTENT:
+    case errors.INVALID_GENOME_SIZE:
     case errors.EMPTY_FILE:
       return (
         <Footer>

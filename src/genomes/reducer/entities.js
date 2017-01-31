@@ -1,16 +1,16 @@
 import {
   FETCH_GENOMES,
-  ADD_FASTAS, UPLOAD_FASTA, UPDATE_FASTA_PROGRESS,
-  REMOVE_FASTA, UNDO_REMOVE_FASTA,
+  ADD_GENOMES, UPLOAD_GENOME, UPDATE_GENOME_PROGRESS,
+  REMOVE_GENOME, UNDO_REMOVE_GENOME,
 } from '../actions';
 
 import { taxIdMap, isSupported } from '../../species';
 
-function updateFastas(state, name, update) {
-  const fasta = state[name];
+function updateGenomes(state, name, update) {
+  const genome = state[name];
   return {
     ...state,
-    [name]: { ...fasta, ...update },
+    [name]: { ...genome, ...update },
   };
 }
 
@@ -23,33 +23,39 @@ export default function (state = {}, { type, payload }) {
         const species = taxIdMap.get(speciesId);
         const speciesKey = supported ? species.name : speciesName;
         const speciesLabel = supported ? species.formattedShortName : speciesName;
-        memo[genome.name] = { speciesKey, speciesLabel, ...genome };
+        memo[genome.name] = {
+          speciesKey,
+          speciesLabel,
+          ...genome,
+          error: null,
+          uploadAttempted: null,
+        };
         return memo;
       }, state);
     }
-    case ADD_FASTAS: {
-      const { fastas } = payload;
-      if (!fastas.length) return state;
+    case ADD_GENOMES: {
+      const { genomes } = payload;
+      if (!genomes.length) return state;
 
-      return fastas.reduce((memo, fasta) => {
-        if (fasta.name in memo) {
+      return genomes.reduce((memo, genome) => {
+        if (genome.name in memo) {
           return {
             ...memo,
-            [fasta.name]: { ...fasta, error: null, uploadAttempted: false },
+            [genome.name]: { ...genome, error: null, uploadAttempted: false },
           };
         }
-        return { ...memo, [fasta.name]: fasta };
+        return { ...memo, [genome.name]: genome };
       }, state);
     }
-    case UPLOAD_FASTA.ATTEMPT: {
+    case UPLOAD_GENOME.ATTEMPT: {
       const { name } = payload;
-      return updateFastas(state, name, { uploadAttempted: true, error: null });
+      return updateGenomes(state, name, { uploadAttempted: true, error: null });
     }
-    case UPLOAD_FASTA.FAILURE: {
+    case UPLOAD_GENOME.FAILURE: {
       const { name, error } = payload;
-      return updateFastas(state, name, { error });
+      return updateGenomes(state, name, { error });
     }
-    case UPLOAD_FASTA.SUCCESS: {
+    case UPLOAD_GENOME.SUCCESS: {
       const { name, result } = payload;
       const { speciesId, speciesName } = result;
       const supported = isSupported(result);
@@ -58,26 +64,26 @@ export default function (state = {}, { type, payload }) {
       const speciesKey = supported ? species.name : speciesName;
       const speciesLabel = supported ? species.formattedShortName : speciesName;
 
-      return updateFastas(state, name, {
+      return updateGenomes(state, name, {
         speciesKey,
         speciesLabel,
         ...result,
       });
     }
-    case UPDATE_FASTA_PROGRESS: {
+    case UPDATE_GENOME_PROGRESS: {
       const { name, progress } = payload;
-      return updateFastas(state, name, { progress });
+      return updateGenomes(state, name, { progress });
     }
-    case REMOVE_FASTA: {
+    case REMOVE_GENOME: {
       const { name } = payload;
       delete state[name];
       return { ...state };
     }
-    case UNDO_REMOVE_FASTA: {
-      const { fasta } = payload;
+    case UNDO_REMOVE_GENOME: {
+      const { genome } = payload;
       return {
         ...state,
-        [fasta.name]: fasta,
+        [genome.name]: genome,
       };
     }
     default:

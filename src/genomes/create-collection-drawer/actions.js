@@ -1,4 +1,4 @@
-import { getVisibleFastas } from '../filter/selectors';
+import { getVisibleGenomes } from '../filter/selectors';
 import { getCollectionMetadata } from './selectors';
 
 import { createAsyncConstants } from '../../actions';
@@ -21,9 +21,9 @@ function createCollectionAction(files, metadata) {
 export function createCollection() {
   return (dispatch, getState) => {
     const state = getState();
-    const fastas = getVisibleFastas(state);
+    const genomes = getVisibleGenomes(state);
     const metadata = getCollectionMetadata(state);
-    dispatch(createCollectionAction(fastas, metadata));
+    dispatch(createCollectionAction(genomes, metadata));
   };
 }
 

@@ -2,11 +2,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
 
-import { removeFasta } from '../thunks';
+import { removeGenome } from '../thunks';
 
 function mapDispatchToProps(dispatch, ownProps) {
   return {
-    onClick: () => dispatch(removeFasta(ownProps.name)),
+    onClick: () => dispatch(removeGenome(ownProps.name)),
   };
 }
 

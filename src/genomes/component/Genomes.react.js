@@ -11,7 +11,7 @@ import { taxIdMap } from '../../species';
 export default React.createClass({
 
   propTypes: {
-    hasFastas: React.PropTypes.bool,
+    hasGenomes: React.PropTypes.bool,
     uploads: React.PropTypes.object,
     filterActive: React.PropTypes.bool,
     toggleAside: React.PropTypes.func.isRequired,

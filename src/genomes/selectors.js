@@ -1,28 +1,28 @@
 import { createSelector } from 'reselect';
 import sortBy from 'lodash.sortby';
 
-import { isFailedUpload } from './utils/fasta';
+import { isFailedUpload } from './utils/validation';
 
-export const getFastas = ({ hub }) => hub.entities.fastas;
+export const getGenomes = ({ genomes }) => genomes.entities;
 
-export const getFastasAsList = createSelector(
-  getFastas,
-  fastas => Object.keys(fastas).map(key => fastas[key])
+export const getGenomesAsList = createSelector(
+  getGenomes,
+  genomes => Object.keys(genomes).map(key => genomes[key])
 );
 
-export const getFastaKeys = createSelector(
-  getFastasAsList,
-  fastas => fastas.map(_ => _.name)
+export const getGenomeKeys = createSelector(
+  getGenomes,
+  genomes => Object.keys(genomes)
 );
 
-export const getFasta = (state, name) => getFastas(state)[name];
+export const getGenome = (state, name) => getGenomes(state)[name];
 
-export const getTotalFastas = (state) => getFastasAsList(state).length;
+export const getTotalGenomes = (state) => getGenomesAsList(state).length;
 
-export const getOrderedFastas =
+export const getOrderedGenomes =
   createSelector(
-    getFastas,
-    fastas => sortBy(fastas, [
+    getGenomes,
+    genomes => sortBy(genomes, [
       ({ speciesKey, uploadAttempted, error }) => {
         if (uploadAttempted && !speciesKey) return 0;
         if (error) return 1;
@@ -32,7 +32,7 @@ export const getOrderedFastas =
     ])
   );
 
-export const getUploads = ({ hub }) => hub.uploads;
+export const getUploads = ({ genomes }) => genomes.uploads;
 export const getUploadQueue = createSelector(
   getUploads,
   uploads => uploads.queue,
@@ -61,6 +61,6 @@ export const getNumCompletedUploads = createSelector(
 );
 
 export const getFailedUploads = createSelector(
-  getOrderedFastas,
-  fastas => fastas.filter(fasta => isFailedUpload(fasta))
+  getOrderedGenomes,
+  genomes => genomes.filter(genome => isFailedUpload(genome))
 );
