@@ -28,7 +28,7 @@
   filter: grayscale(1) brightness(5);
 }
 
-.wgsa-header .mdl-navigation__link {
+.wgsa-header-nav .mdl-navigation__link {
   text-transform: uppercase;
   color: rgba(0, 0, 0, 0.54);
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
@@ -41,15 +41,18 @@
   flex-basis: 0;
 }
 
-.wgsa-header .cgps-avatar {
+.wgsa-account-link {
   position: absolute;
   left: 16px;
   top: 12px;
   background: #fff;
   color: #673c90;
+  border: none;
+  outline: none;
+  padding: 0;
 }
 
-.cgps-avatar .material-icons {
+.cgps-avatar > :first-child {
   font-size: 40px;
   width: 40px;
   height: 40px;
@@ -57,4 +60,29 @@
   background: rgba(0,0,0,0.28);
   line-height: 44px;
   overflow: hidden;
+}
+
+.wgsa-account-header {
+  background-color: #f5f5f5;
+  box-sizing: border-box;
+  display: block;
+  height: 64px;
+  color: #673c90;
+  padding: 12px 16px;
+}
+
+.cgps-avatar > * {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.wgsa-account-header + .mdl-layout-title {
+  padding-top: 8px;
+  padding-bottom: 16px;
+  padding-left: 72px;
+}
+
+.wgsa-account-header + .mdl-layout-title img {
+  width: 104px;
 }

@@ -15,7 +15,7 @@ const links = [
 export const DefaultContent = ({ hasAside, onClick, asideDisabled }) => (
   <span className="mdl-layout-spacer mdl-layout-spacer--flex">
     <div className="mdl-layout-spacer" />
-    <nav className="mdl-navigation">
+    <nav className="mdl-navigation wgsa-header-nav">
       { links.map(props => <NavLink key={props.link} {...props} />) }
     </nav>
     <button

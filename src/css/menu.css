@@ -6,20 +6,21 @@
   padding: 32px 48px;
   margin-left: -24px;
   margin-right: 0;
-  border-bottom: 1px solid #555;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  border-bottom: 1px solid #ddd;
 }
 
 .mdl-layout__drawer > .mdl-layout-title > img {
-  width:100%;
+  width: 100%;
+}
+
+.mdl-layout__drawer > .mdl-navigation {
+  padding-top: 8px;
 }
 
 .mdl-layout__drawer .mdl-navigation .mdl-navigation__link {
-  color: rgba(0, 0, 0, 0.870588);
-  font-size: 16px;
-  line-height: 16px;
+  color: rgba(0, 0, 0, 0.87);
   transition: background .28s cubic-bezier(.4,0,.2,1);
-  padding-left: 24px;
+  padding: 16px;
 }
 
 .mdl-layout__drawer > .cgps-logo {
@@ -29,21 +30,23 @@
 }
 
 .mdl-navigation__link > .material-icons + span {
-  line-height: 16px;
+  line-height: 24px;
   display: inline-block;
   vertical-align: bottom;
-  margin-bottom: 2px;
-  padding-left: 16px;
+  padding-left: 24px;
+  font-family: Roboto, Arial, sans-serif;
+  font-weight: 400;
+  font-size: 14px;
 }
 
 .mdl-navigation__link .material-icons {
   vertical-align: middle;
-  color: #673c90;
+  /*color: #673c90;*/
+  padding-left: 8px;
 }
 
 .mdl-navigation__link--active {
   color: #673c90 !important;
-  font-weight: 700;
 }
 
 .mdl-layout__drawer > .contact-email {

@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router';
 import { connect } from 'react-redux';
 
 import { toggleUserDrawer } from './actions';
@@ -20,20 +19,16 @@ const AccountLink = React.createClass({
 
   render() {
     return (
-      config.user ?
-        <Link
-          className="cgps-avatar"
-          title="Go to my account"
-          to="/"
-        >
-          <img src={config.user.photo} className="cgps-avatar__image" />
-        </Link> :
-        <a
-          className="cgps-avatar"
-          title="Sign in to your account"
-          onClick={(e) => this.openLoginMenu(e)}
-          href="/signin"
-        ><i className="material-icons">person</i></a>
+      <button
+        className="cgps-avatar wgsa-account-link"
+        title={config.user ? 'My account' : 'Sign in to your account'}
+        onClick={(e) => this.openLoginMenu(e)}
+      >
+        { config.user ?
+          <img src={config.user.photo} className="cgps-avatar__image" /> :
+          <i className="material-icons">person</i>
+        }
+      </button>
     );
   },
 
