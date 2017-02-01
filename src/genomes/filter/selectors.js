@@ -45,12 +45,27 @@ export const getFilterSummary = createSelector(
   getOrderedGenomes,
   filter.getFilter,
   (genomes, filterState) => {
+    const ownerMap = new Map();
     const wgsaSpeciesMap = new Map();
     const otherSpeciesMap = new Map();
     const countryMap = new Map();
     const yearSet = new Set();
 
     for (const genome of genomes) {
+      if (genome.owner === 'me') {
+        incrementSummary(ownerMap, 'me', {
+          name: 'me',
+          label: 'Me',
+          active: filterState.owner === 'me',
+        });
+      } else {
+        incrementSummary(ownerMap, 'other', {
+          name: 'other',
+          label: 'Other',
+          active: filterState.owner === 'other',
+        });
+      }
+
       if (genome.speciesKey) {
         const speciesMap =
           isSupported(genome) ? wgsaSpeciesMap : otherSpeciesMap;
@@ -75,6 +90,7 @@ export const getFilterSummary = createSelector(
     }
 
     return {
+      owner: getSummary(ownerMap),
       wgsaSpecies: getSummary(wgsaSpeciesMap),
       otherSpecies: getSummary(otherSpeciesMap),
       country: getSummary(countryMap),

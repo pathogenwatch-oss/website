@@ -22,6 +22,9 @@ export function fetchJson(method, path, data) {
     contentType: 'application/json; charset=UTF-8',
     data: JSON.stringify(data),
     dataType: 'json',
+    xhrFields: {
+      withCredentials: true,
+    },
   });
 }
 
@@ -45,6 +48,9 @@ export function postJson(path, data, progressFn) {
       }
 
       return xhr;
+    },
+    xhrFields: {
+      withCredentials: true,
     },
   });
 }

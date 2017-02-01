@@ -12,7 +12,7 @@ import { stateKey, filters } from './filter';
 
 const { LocationListener } = filter;
 const [
-  searchRegExp, speciesFilter, countryFilter, minDate, maxDate,
+  searchRegExp, speciesFilter, ownershipFilter, countryFilter, minDate, maxDate,
 ] = filters;
 
 function mapStateToProps(state) {
@@ -51,6 +51,11 @@ export default connect(mapStateToProps, mapDispatchToProps)(
         title="Other Species"
         summary={filterSummary.otherSpecies}
         onClick={value => updateFilter(speciesFilter, value)}
+      />
+      <MetadataFilter
+        title="Owner"
+        summary={filterSummary.owner}
+        onClick={value => updateFilter(ownershipFilter, value)}
       />
       <MetadataFilter
         title="Country"

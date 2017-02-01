@@ -14,6 +14,12 @@ export const filters = [
       return genome.speciesKey === value;
     },
   },
+  { key: 'owner',
+    queryKey: 'owner',
+    matches(genome, value) {
+      return genome.owner === value;
+    },
+  },
   { key: 'country',
     queryKey: 'country',
     matches(genome, value) {

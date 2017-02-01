@@ -1,2 +1,2 @@
 export * from './filter';
-export default from './HubFilter.react';
+export default from './Filter.react';
