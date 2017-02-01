@@ -42,7 +42,11 @@
 }
 
 .wgsa-header .cgps-avatar {
-  margin-left: 0.5em;
+  position: absolute;
+  left: 16px;
+  top: 12px;
+  background: #fff;
+  color: #673c90;
 }
 
 .cgps-avatar .material-icons {

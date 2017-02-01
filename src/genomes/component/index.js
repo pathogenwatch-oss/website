@@ -2,9 +2,10 @@ import { connect } from 'react-redux';
 
 import Genomes from './Genomes.react';
 
-import { toggleAside } from '../../header';
+import { toggleAside } from '../../header/actions';
 import { fetchGenomes } from '../actions';
 import { addFiles } from '../thunks';
+
 import { getCollection } from '../../collection-route/selectors';
 import { getTotalGenomes } from '../selectors';
 

@@ -24,8 +24,7 @@ export default React.createClass({
   },
 
   componentWillMount() {
-    this.props.fetchGenomes().
-      then(() => this.props.toggleAside(true));
+    this.props.fetchGenomes();
   },
 
   componentDidUpdate() {
