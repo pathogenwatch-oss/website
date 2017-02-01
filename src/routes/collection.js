@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 
 const services = require('../services');
-const path = require('path');
 
 const LOGGER = require('utils/logging').createLogger('Collection requests');
 const config = require('configuration');
@@ -35,7 +34,7 @@ if (config.node.auth) {
 
 router.get('/collection/:uuid', (req, res, next) => {
   LOGGER.info(`Getting collection: ${req.params.uuid}`);
-  return services.request('collection', 'fetch', req.params).
+  return services.request('collection', 'fetch-one', req.params).
     then(response => res.json(response)).
     catch(next);
 });

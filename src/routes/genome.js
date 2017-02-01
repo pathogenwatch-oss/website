@@ -20,9 +20,9 @@ router.get('/genome', (req, res, next) => {
   LOGGER.info('Received request to get genomes');
 
   const { user } = req;
-  services.request('genome', 'fetch', { user })
-    .then(response => res.json(response))
-    .catch(next);
+  services.request('genome', 'fetch-list', { user }).
+    then(response => res.json(response)).
+    catch(next);
 });
 
 router.post('/genome/:id', (req, res, next) => {

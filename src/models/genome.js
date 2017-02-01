@@ -3,6 +3,8 @@ const { Schema } = mongoose;
 
 const geocoding = require('geocoding');
 
+const { setToObjectOptions } = require('./utils');
+
 const schema = new Schema({
   _file: { type: Schema.Types.ObjectId, ref: 'GenomeFile' },
   _user: { type: Schema.Types.ObjectId, ref: 'User' },
@@ -18,6 +20,17 @@ const schema = new Schema({
   userDefined: Object,
   public: { type: Boolean, default: false },
   reference: { type: Boolean, default: false },
+});
+
+setToObjectOptions(schema, (_, genome, { user = {} }) => {
+  const { _user } = genome;
+  const { id } = user;
+  genome.owner = (_user && id && _user.toString() === id) ? 'me' : 'other';
+  genome.speciesName = genome._file.speciesName;
+  genome.metrics = genome._file.metrics;
+  delete genome._file;
+  delete genome._user;
+  return genome;
 });
 
 function getCountryCode(latitude, longitude) {
