@@ -47,16 +47,16 @@ const UserDrawer = React.createClass({
         onKeyUp={this.handleEscKey}
       >
         <div className={classnames('mdl-layout__drawer', { 'is-visible': this.props.visible })}>
-          { config.user &&
-            <AccountHeader
-              user={config.user}
-              linkTo="/account"
-              image="right"
-              className="wgsa-account-header"
-            />
-          }
           <span className="mdl-layout-title">
             <img src="/assets/img/WGSA.FINAL.svg" />
+            { config.user &&
+              <AccountHeader
+                user={config.user}
+                linkTo="/account"
+                image="top"
+                className="wgsa-account-header"
+              />
+            }
             { config.wgsaVersion &&
               <small className="wgsa-version">
                 v{config.wgsaVersion}

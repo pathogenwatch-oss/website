@@ -21,7 +21,7 @@ const AccountLink = React.createClass({
     return (
       <button
         className="cgps-avatar wgsa-account-link"
-        title={config.user ? 'My account' : 'Sign in to your account'}
+        title={config.user ? 'My Account' : 'Sign In'}
         onClick={(e) => this.openLoginMenu(e)}
       >
         { config.user ?

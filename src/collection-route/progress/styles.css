@@ -74,7 +74,6 @@
 .wgsa-overview-upload-ready-card {
   min-height: 136px;
   border: 1px solid rgba(0, 0, 0, 0.12);
-  font-family: "Roboto","Helvetica","Arial",sans-serif;
   font-weight: 400;
   z-index: 0;
 }
@@ -112,7 +111,6 @@
   overflow: hidden;
   display: block;
   text-overflow: ellipsis;
-  font-family: "Roboto","Helvetica","Arial",sans-serif;
 }
 
 .wgsa-upload-review-button {

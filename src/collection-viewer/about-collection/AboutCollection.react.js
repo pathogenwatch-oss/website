@@ -25,12 +25,12 @@ export default React.createClass({
           </h4>
           <p>{metadata.description}</p>
           <dl>
-            <dt>Species</dt>
-            <dd>{species}</dd>
+            <dt className="wgsa-hub-stats-heading">Species</dt>
+            <dd className="wgsa-hub-stats-value">{species}</dd>
           </dl>
           <dl>
-            <dt>Created</dt>
-            <dd>{metadata.dateCreated}</dd>
+            <dt className="wgsa-hub-stats-heading">Created</dt>
+            <dd className="wgsa-hub-stats-value">{metadata.dateCreated}</dd>
           </dl>
         </div>
       </div>

@@ -26,7 +26,6 @@
 
 .wgsa-menu-heading {
   font-size: 14px;
-  font-family: Roboto, sans-serif;
   font-weight: 500;
   letter-spacing: 0;
   line-height: inherit;
@@ -42,7 +41,6 @@
   font-size: 13px;
   padding: 0;
   transition: background .28s cubic-bezier(.4,0,.2,1);
-  font-family: Roboto, sans-serif;
   font-size: 16px;
   line-height: 16px;
   color: rgba(0,0,0,.870588);
