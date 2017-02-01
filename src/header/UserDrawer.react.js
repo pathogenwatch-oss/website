@@ -2,6 +2,8 @@ import React from 'react';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
 
+import LoginLink from '../cgps-commons/LoginLink.react';
+
 import { toggleUserDrawer } from './actions';
 
 import config from '../app/config';
@@ -14,6 +16,7 @@ const UserDrawer = React.createClass({
   },
 
   render() {
+    const { strategies = [] } = config;
     return (
       <div
         className={classnames('mdl-layout__obfuscator', { 'is-visible': this.props.visible })}
@@ -29,9 +32,7 @@ const UserDrawer = React.createClass({
             }
           </span>
           <nav className="mdl-navigation">
-            {/* {menuItems.map(props => (
-              <NavLink key={props.link} {...props} />
-            ))} */}
+            {strategies.map(provider => <LoginLink provider={provider} />)}
           </nav>
           <a className="cgps-logo" target="_blank" rel="noopener" href="http://www.pathogensurveillance.net">
             <img src="/assets/img/CGPS.SHORT.FINAL.svg" />
