@@ -16,10 +16,18 @@ var EXCHANGE_CONFIG = {
   COLLECTION_ID: {
     name: 'grid-ex',
     type: 'direct',
+    options: {
+      passive: false,
+      confirm: true,
+    },
   },
   NOTIFICATION: {
     name: 'notifications-ex',
-    type: 'direct',
+    type: 'topic',
+    options: {
+      passive: false,
+      confirm: true,
+    },
   },
   SERVICES: {
     name: 'me-services-ex',
@@ -32,10 +40,18 @@ var EXCHANGE_CONFIG = {
   TASK: {
     name: 'wgst-tasks-ex',
     type: 'topic',
+    options: {
+      passive: false,
+      confirm: true,
+    },
   },
   UPLOAD: {
     name: 'wgst-ex',
     type: 'direct',
+    options: {
+      passive: false,
+      confirm: true,
+    },
   },
 };
 var connection;
