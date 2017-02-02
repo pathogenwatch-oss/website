@@ -9,12 +9,12 @@ export const getLassoPath = createSelector(
 
 export const getMarkers = createSelector(
   getVisibleGenomes,
-  genomes => genomes.reduce((markers, { name, metadata = {} }) => {
+  genomes => genomes.reduce((markers, { id, name, metadata = {} }) => {
     if (metadata.latitude && metadata.longitude) {
       markers.push({
-        position: [ metadata.latitude, metadata.longitude ],
+        id,
         title: name,
-        id: name,
+        position: [ metadata.latitude, metadata.longitude ],
       });
     }
     return markers;

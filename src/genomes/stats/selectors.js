@@ -7,11 +7,11 @@ export const getSelectedMetric = ({ genomes }) => genomes.selectedMetric;
 export const getGenomeMetrics = createSelector(
   getVisibleGenomes,
   genomes =>
-    genomes.reduce((memo, { name, metrics }) => {
+    genomes.reduce((memo, { id, name, metrics }) => {
       if (!metrics) {
         return memo;
       }
-      return [ ...memo, { name, ...metrics } ];
+      return [ ...memo, { id, name, ...metrics } ];
     }, [])
 );
 
@@ -57,6 +57,7 @@ export const getSelectedChartData = createSelector(
   getSelectedMetric,
   (metrics, selectedMetric) => metrics.map((_, i) => ({
     key: i,
+    id: _.id,
     name: _.name,
     value: Number(_[selectedMetric]),
   }))

@@ -4,28 +4,28 @@ import { connect } from 'react-redux';
 
 import { REMOVE_GENOME } from '../genomes/actions';
 
-import GenomeDetails from './GenomeDrawer.react';
+import GenomeDrawer from './GenomeDrawer.react';
 
-export const SHOW_ASSEMBLY_DETAILS = 'SHOW_ASSEMBLY_DETAILS';
+export const SHOW_GENOME_DETAILS = 'SHOW_GENOME_DETAILS';
 
-export function showGenomeDetails(name) {
+export function showGenomeDrawer({ id }) {
   return {
-    type: SHOW_ASSEMBLY_DETAILS,
+    type: SHOW_GENOME_DETAILS,
     payload: {
-      name,
+      id,
     },
   };
 }
 
-const initialState = { name: null };
+const initialState = { id: null };
 export function reducer(state = initialState, { type, payload }) {
   switch (type) {
-    case SHOW_ASSEMBLY_DETAILS:
+    case SHOW_GENOME_DETAILS:
       return {
-        name: payload.name,
+        id: payload.id,
       };
     case REMOVE_GENOME:
-      return state.name === payload.name ? initialState : state;
+      return state.id === payload.id ? initialState : state;
     default:
       return state;
   }
@@ -33,11 +33,12 @@ export function reducer(state = initialState, { type, payload }) {
 
 function getSelectedGenome({ genomeDrawer, genomes }) {
   const { entities } = genomes;
-  return genomeDrawer.name ? entities[genomeDrawer.name] : null;
+  return genomeDrawer.id ? entities[genomeDrawer.id] : null;
 }
 
 function mapStateToProps(state) {
   const genome = getSelectedGenome(state);
+  console.log(genome);
   const visible = genome !== null;
   return {
     visible,
@@ -48,8 +49,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    onClose: () => dispatch(showGenomeDetails(null)),
+    onClose: () => dispatch(showGenomeDrawer({ id: null })),
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(GenomeDetails);
+export default connect(mapStateToProps, mapDispatchToProps)(GenomeDrawer);

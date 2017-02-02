@@ -1,8 +1,8 @@
 import { ADD_GENOMES, UPLOAD_GENOME } from '../actions';
 
-function handleUploadCompletion(state, name) {
+function handleUploadCompletion(state, id) {
   const { queue, uploading, batch } = state;
-  uploading.delete(name);
+  uploading.delete(id);
 
   return {
     ...state,
@@ -12,11 +12,11 @@ function handleUploadCompletion(state, name) {
 }
 
 function handleAddGenomes(state, genomes) {
-  const names = genomes.map(_ => _.name);
+  const ids = genomes.map(_ => _.id);
   return {
     ...state,
-    batch: new Set([ ...state.batch, ...names ]),
-    queue: [ ...state.queue, ...names ],
+    batch: new Set([ ...state.batch, ...ids ]),
+    queue: [ ...state.queue, ...ids ],
   };
 }
 
@@ -34,11 +34,11 @@ export default function (state = initialState, { type, payload }) {
       return {
         ...state,
         queue: state.queue.slice(1),
-        uploading: new Set([ ...state.uploading, payload.name ]),
+        uploading: new Set([ ...state.uploading, payload.id ]),
       };
     case UPLOAD_GENOME.SUCCESS:
     case UPLOAD_GENOME.FAILURE:
-      return handleUploadCompletion(state, payload.name);
+      return handleUploadCompletion(state, payload.id);
     default:
       return state;
   }

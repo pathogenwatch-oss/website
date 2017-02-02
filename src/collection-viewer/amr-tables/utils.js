@@ -65,8 +65,8 @@ export function createAdvancedViewColumn(element, profileKey, profiles) {
     getWidth() {
       return measureText(label, true) + 4;
     },
-    getCellContents(props, assembly) {
-      return amr.hasElement(assembly, profileKey, key) ? (
+    getCellContents(props, genome) {
+      return amr.hasElement(genome, profileKey, key) ? (
         <i
           className="material-icons wgsa-resistance-icon"
           style={{ color: amr.getEffectColour(effect) }}

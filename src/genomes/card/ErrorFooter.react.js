@@ -11,21 +11,21 @@ const Footer = ({ children }) => (
   </footer>
 );
 
-export default (file) => {
-  switch (file.error) {
+export default (genome) => {
+  switch (genome.error) {
     case errors.INVALID_GENOME_CONTENT:
     case errors.INVALID_GENOME_SIZE:
     case errors.EMPTY_FILE:
       return (
         <Footer>
-          <RemoveButton name={file.name} primary />
+          <RemoveButton genome={genome} primary />
         </Footer>
       );
     default:
       return (
         <Footer>
-          <RetryButton file={file} />
-          <RemoveButton name={file.name} className="wgsa-icon-button--small" />
+          <RetryButton genome={genome} />
+          <RemoveButton genome={genome} className="wgsa-icon-button--small" />
         </Footer>
       );
   }

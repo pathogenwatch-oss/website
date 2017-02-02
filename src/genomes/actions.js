@@ -26,11 +26,11 @@ export const UPLOAD_GENOME = createAsyncConstants('UPLOAD_GENOME');
 
 export const UPDATE_GENOME_PROGRESS = 'UPDATE_GENOME_PROGRESS';
 
-function updateGenomeProgress(name, progress) {
+function updateGenomeProgress(id, progress) {
   return {
     type: UPDATE_GENOME_PROGRESS,
     payload: {
-      name,
+      id,
       progress,
     },
   };
@@ -38,19 +38,19 @@ function updateGenomeProgress(name, progress) {
 
 export const REMOVE_GENOME = 'REMOVE_GENOME';
 
-function removeGenome(name) {
+function removeGenome({ id }) {
   return {
     type: REMOVE_GENOME,
-    payload: { name },
+    payload: { id },
   };
 }
 
 export const UNDO_REMOVE_GENOME = 'UNDO_REMOVE_GENOME';
 
-function undoRemoveGenome(genome) {
+function undoRemoveGenome(id) {
   return {
     type: UNDO_REMOVE_GENOME,
-    payload: { genome },
+    payload: { id },
   };
 }
 

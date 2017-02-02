@@ -3,9 +3,9 @@ import React from 'react';
 import ViewDetailsButton from './ViewDetailsButton.react';
 import RemoveButton from './RemoveButton.react';
 
-export default ({ name }) => (
+export default genome => (
   <footer className="wgsa-card-footer">
-    <ViewDetailsButton name={name} />
-    <RemoveButton name={name} className="wgsa-icon-button--small" />
+    <ViewDetailsButton genome={genome} />
+    <RemoveButton genome={genome} className="wgsa-icon-button--small" />
   </footer>
 );

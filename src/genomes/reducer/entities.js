@@ -6,11 +6,11 @@ import {
 
 import { taxIdMap, isSupported } from '../../species';
 
-function updateGenomes(state, name, update) {
-  const genome = state[name];
+function updateGenomes(state, id, update) {
+  const genome = state[id];
   return {
     ...state,
-    [name]: { ...genome, ...update },
+    [id]: { ...genome, ...update },
   };
 }
 
@@ -28,7 +28,7 @@ export default function (state = {}, { type, payload }) {
   switch (type) {
     case FETCH_GENOMES.SUCCESS: {
       return payload.result.reduce((memo, genome) => {
-        memo[genome.name] = {
+        memo[genome.id] = {
           ...categoriseBySpecies(genome),
           ...genome,
         };
@@ -40,44 +40,60 @@ export default function (state = {}, { type, payload }) {
       if (!genomes.length) return state;
 
       return genomes.reduce((memo, genome) => {
-        if (genome.name in memo) {
+        if (genome.id in memo) {
           return {
             ...memo,
-            [genome.name]: { ...genome, error: null, uploadAttempted: false },
+            [genome.id]: { ...genome, uploadAttempted: false, error: null },
           };
         }
-        return { ...memo, [genome.name]: genome };
+        return { ...memo, [genome.id]: genome };
       }, state);
     }
     case UPLOAD_GENOME.ATTEMPT: {
-      const { name } = payload;
-      return updateGenomes(state, name, { uploadAttempted: true, error: null });
+      const { id } = payload;
+      return updateGenomes(state, id, { uploadAttempted: true, error: null });
     }
     case UPLOAD_GENOME.FAILURE: {
-      const { name, error } = payload;
-      return updateGenomes(state, name, { error });
+      const { id, error } = payload;
+      return updateGenomes(state, id, { error });
     }
     case UPLOAD_GENOME.SUCCESS: {
-      const { name, result } = payload;
-      return updateGenomes(state, name, {
-        ...categoriseBySpecies(result),
-        ...result,
-      });
-    }
-    case UPDATE_GENOME_PROGRESS: {
-      const { name, progress } = payload;
-      return updateGenomes(state, name, { progress });
-    }
-    case REMOVE_GENOME: {
-      const { name } = payload;
-      delete state[name];
-      return { ...state };
-    }
-    case UNDO_REMOVE_GENOME: {
-      const { genome } = payload;
+      const { id, result } = payload;
+
+      const temp = state[id];
+      delete state[id]; // remove temporary record
+
       return {
         ...state,
-        [genome.name]: genome,
+        [result.id]: { // replace with id from server
+          ...temp,
+          ...categoriseBySpecies(result),
+          ...result,
+        },
+      };
+    }
+    case UPDATE_GENOME_PROGRESS: {
+      const { id, progress } = payload;
+      return updateGenomes(state, id, { progress });
+    }
+    case REMOVE_GENOME: {
+      const { id } = payload;
+      return {
+        ...state,
+        [id]: {
+          ...state[id],
+          bin: true,
+        },
+      };
+    }
+    case UNDO_REMOVE_GENOME: {
+      const { id } = payload;
+      return {
+        ...state,
+        [id]: {
+          ...state[id],
+          bin: false,
+        },
       };
     }
     default:

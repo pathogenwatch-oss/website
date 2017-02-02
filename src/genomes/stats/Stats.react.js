@@ -8,7 +8,7 @@ import ChartTooltip from '../../chart-tooltip';
 
 import * as selectors from './selectors';
 
-import { showGenomeDetails } from '../../genome-drawer';
+import { showGenomeDrawer } from '../../genome-drawer';
 import actions from '../actions';
 
 const TooltipContent = ({ payload, data }) => {
@@ -123,7 +123,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    onPointClick: ({ name }) => dispatch(showGenomeDetails(name)),
+    onPointClick: genome => dispatch(showGenomeDrawer(genome)),
   };
 }
 

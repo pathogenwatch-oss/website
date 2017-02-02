@@ -11,13 +11,13 @@ function isDuplicate({ name }, files) {
   return files[name] !== undefined;
 }
 
-function uploadGenome(name) {
+function uploadGenome(id) {
   return (dispatch, getState) =>
     dispatch({
       type: UPLOAD_GENOME,
       payload: {
-        name,
-        promise: utils.upload(selectors.getGenome(getState(), name), dispatch),
+        id,
+        promise: utils.upload(selectors.getGenome(getState(), id), dispatch),
       },
     }).catch(() => {});
 }
@@ -78,8 +78,8 @@ export function addFiles(newFiles) {
   };
 }
 
-function getNames(genomes, predicate) {
-  return genomes.filter(predicate).map(_ => _.name);
+function getIds(genomes, predicate) {
+  return genomes.filter(predicate).map(_ => _.id);
 }
 
 export function filterByText(text) {
@@ -94,18 +94,14 @@ export function filterByText(text) {
 
     const regexp = new RegExp(text, 'i');
     dispatch(actions.filterGenomes(
-      text, getNames(genomes, file => regexp.test(file.name))
+      text, getIds(genomes, file => regexp.test(file.name))
     ));
   };
 }
 
-export function removeGenome(name) {
-  return (dispatch, getState) => {
-    const state = getState();
-    const genomes = selectors.getGenomes(state);
-    const genome = { ...genomes[name] };
-
-    dispatch(actions.removeGenome(name));
+export function removeGenome(genome) {
+  return (dispatch) => {
+    dispatch(actions.removeGenome(genome));
     dispatch(showToast(toasts.undoRemoveGenome(genome, dispatch)));
   };
 }

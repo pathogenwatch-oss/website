@@ -6,7 +6,7 @@ export function undoRemoveGenome(genome, dispatch) {
   return {
     action: {
       label: 'Undo',
-      onClick: () => dispatch(actions.undoRemoveGenome(genome)),
+      onClick: () => dispatch(actions.undoRemoveGenome(genome.id)),
     },
     message: (
       <span><strong>{genome.name}</strong> removed.</span>

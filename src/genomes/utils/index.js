@@ -36,12 +36,6 @@ export function mapCSVsToGenomes(files) {
   const csvFiles = files.filter(({ name }) => CSV_FILE_NAME_REGEX.test(name));
   const genomeFiles = files.filter(({ name }) => GENOME_FILE_NAME_REGEX.test(name));
 
-  if (!csvFiles.length) {
-    return Promise.resolve(
-      genomeFiles.map(file => ({ name: file.name, file }))
-    );
-  }
-
   return Promise.all(
     csvFiles.map(file =>
       readAsText(file).
@@ -49,19 +43,21 @@ export function mapCSVsToGenomes(files) {
     )
   ).then(parsedFiles => flattenCSVs(parsedFiles))
    .then(rows =>
-      genomeFiles.map(file => {
+      genomeFiles.map((file, index) => {
         const row = rows.filter(({ filename }) => filename === file.name)[0];
         return {
+          id: `${file.name}__${Date.now()}_${index}`,
           name: file.name,
           file,
           metadata: parseMetadata(row, name),
           date: parseDate(row),
+          owner: 'me',
         };
       })
     );
 }
 
-function getCustomXHR(filename, dispatch) {
+function getCustomXHR(id, dispatch) {
   const xhr = new window.XMLHttpRequest();
 
   let previousPercent = 0;
@@ -73,7 +69,7 @@ function getCustomXHR(filename, dispatch) {
         Math.floor(percentComplete / 10) * 10;
 
       if (percentRounded > previousPercent) {
-        dispatch(actions.updateGenomeProgress(filename, percentRounded));
+        dispatch(actions.updateGenomeProgress(id, percentRounded));
         previousPercent = percentRounded;
       }
     }
@@ -86,7 +82,7 @@ export function update(id, metadata) {
   return postJson(`/genome/${id}`, metadata);
 }
 
-function create(file, dispatch) {
+function create(file, id, dispatch) {
   return (
     validateGenomeSize(file).
       then(readAsText).
@@ -98,14 +94,14 @@ function create(file, dispatch) {
           contentType: 'text/plain; charset=UTF-8',
           data,
           dataType: 'json',
-          xhr: () => getCustomXHR(file.name, dispatch),
+          xhr: () => getCustomXHR(id, dispatch),
         })
       )
   );
 }
 
-export function upload({ file, metadata }, dispatch) {
-  return create(file, dispatch).
+export function upload({ id, file, metadata }, dispatch) {
+  return create(file, id, dispatch).
     then((result) =>
       (metadata ?
         update(result.id, metadata).

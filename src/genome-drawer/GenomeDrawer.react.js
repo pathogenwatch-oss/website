@@ -57,7 +57,7 @@ const GenomeDrawerContent = React.createClass({
             <a href="#metrics-panel" className="mdl-tabs__tab is-active">Metrics</a>
             <a href="#n50-panel" className="mdl-tabs__tab">N50</a>
             <div className="wgsa-tab-actions">
-              <RemoveButton name={genome.name} />
+              <RemoveButton genome={genome} />
             </div>
           </div>
           <div className="mdl-tabs__panel is-active" id="metrics-panel">

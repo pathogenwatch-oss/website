@@ -3,9 +3,9 @@ import { connect } from 'react-redux';
 
 import { uploadFiles } from '../thunks';
 
-function mapDispatchToProps(dispatch, { file }) {
+function mapDispatchToProps(dispatch, { genome }) {
   return {
-    onClick: () => dispatch(uploadFiles([ file ])),
+    onClick: () => dispatch(uploadFiles([ genome ])),
   };
 }
 
