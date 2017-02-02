@@ -9,7 +9,7 @@ const schema = new Schema({
   _file: { type: Schema.Types.ObjectId, ref: 'GenomeFile' },
   _user: { type: Schema.Types.ObjectId, ref: 'User' },
   name: { type: String, required: true },
-  speciesId: Number,
+  speciesId: String,
   year: Number,
   month: Number,
   day: Number,

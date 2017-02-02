@@ -3,7 +3,7 @@ const { Schema } = mongoose;
 
 const schema = new Schema({
   fileId: { type: String, index: true },
-  speciesId: Number,
+  speciesId: String,
   speciesName: String,
   metrics: {
     totalNumberOfContigs: Number, // totalContigs

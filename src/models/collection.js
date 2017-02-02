@@ -18,7 +18,7 @@ const schema = new Schema({
   },
   reference: Boolean,
   size: Number,
-  speciesId: Number,
+  speciesId: String,
   status: { type: String, default: 'PENDING' },
   subtrees: [ {
     name: String,
