@@ -28,6 +28,13 @@
 		"login": "",
 		"password": ""
 	},
+  "mongodb": {
+    "hostname": "localhost",
+    "port": 27017,
+    "database": "wgsa",
+    "replicaset": ""
+  },
+
   "passport": {
 		"url": "",
 		"strategies": {

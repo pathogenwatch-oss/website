@@ -10,8 +10,9 @@ const DEFAULT_DATABASE = 'wgsa';
 const hostname = mongoConfig.hostname || DEFAULT_HOSTNAME;
 const port = mongoConfig.port || DEFAULT_PORT;
 const database = mongoConfig.database || DEFAULT_DATABASE;
+const replicaset = mongoConfig.replicaset;
 
-const dbUrl = `mongodb://${hostname}:${port}/${database}`;
+const dbUrl = `mongodb://${hostname}:${port}/${database}${replicaset ? `?replicaSet=${replicaset}` : ''}`;
 
 function connect(callback) {
   mongoose.connection.on('error', (error) => LOGGER.error(error));
