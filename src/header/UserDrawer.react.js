@@ -56,7 +56,7 @@ const UserDrawer = React.createClass({
           <span className="mdl-layout-title">
             <AccountHeader
               user={config.user || user}
-              linkTo="/account"
+              linkTo={config.user ? '/account' : null}
               image="top"
               className="wgsa-account-header"
             />
