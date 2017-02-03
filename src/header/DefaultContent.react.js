@@ -7,8 +7,8 @@ import { toggleAside } from './actions';
 
 const links = [
   { text: 'Collections', link: '/collections' },
-  { text: 'Genomes', link: '/genomes', activeOnIndexOnly: true },
-  { text: 'Upload', link: '/genomes/upload' },
+  { text: 'Genomes', link: '/genomes' },
+  { text: 'Upload', link: '/upload' },
   { text: 'Documentation', link: '/documentation' },
 ];
 

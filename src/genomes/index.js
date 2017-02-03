@@ -5,7 +5,6 @@ import Genomes from './component';
 import GridView from './grid';
 import MapView from './map';
 import StatsView from './stats';
-import Upload from './upload';
 
 export reducer from './reducer';
 
@@ -14,6 +13,5 @@ export default (
     <IndexRoute component={GridView} />
     <Route path="map" component={MapView} />
     <Route path="stats" component={StatsView} />
-    <Route path="upload" component={Upload} />
   </Route>
 );
