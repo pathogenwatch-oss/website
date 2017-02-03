@@ -38,7 +38,6 @@ function getSelectedGenome({ genomeDrawer, genomes }) {
 
 function mapStateToProps(state) {
   const genome = getSelectedGenome(state);
-  console.log(genome);
   const visible = genome !== null;
   return {
     visible,
