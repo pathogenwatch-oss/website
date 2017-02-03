@@ -17,6 +17,12 @@ const userLinks = [
   { icon: 'exit_to_app', text: 'Sign Out', link: '/signout' },
 ];
 
+const user = {
+  photo: '/assets/img/user.png',
+  name: 'WGSA',
+  email: 'Sign in to your account',
+};
+
 const UserDrawer = React.createClass({
 
   propTypes: {
@@ -48,15 +54,13 @@ const UserDrawer = React.createClass({
       >
         <div className={classnames('mdl-layout__drawer', { 'is-visible': this.props.visible })}>
           <span className="mdl-layout-title">
-            <img src="/assets/img/WGSA.FINAL.svg" />
-            { config.user &&
-              <AccountHeader
-                user={config.user}
-                linkTo="/account"
-                image="top"
-                className="wgsa-account-header"
-              />
-            }
+            <AccountHeader
+              user={config.user || user}
+              linkTo="/account"
+              image="top"
+              className="wgsa-account-header"
+            />
+            <img src="/assets/img/WGSA.Icon.FINAL.svg" />
             { config.wgsaVersion &&
               <small className="wgsa-version">
                 v{config.wgsaVersion}

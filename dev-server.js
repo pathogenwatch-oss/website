@@ -124,14 +124,7 @@ const wgsaVersion = require('./package.json').version;
 app.use('/', (req, res) => res.render('index', {
   frontEndConfig: Object.assign(
     JSON.parse(fs.readFileSync('./config.json')),
-    { wgsaVersion,
-      user: {
-        provider: 'twitter',
-        name: 'KAD',
-        email: 'ka10@sanger.ac.uk',
-        photo: 'https://abs.twimg.com/sticky/default_profile_images/default_profile_3_normal.png',
-      },
-    }
+    { wgsaVersion }
   ),
 }));
 

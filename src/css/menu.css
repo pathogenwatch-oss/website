@@ -1,5 +1,6 @@
 .mdl-layout__drawer {
   background: #fff;
+  overflow-x: hidden;
 }
 
 .mdl-layout__drawer > .mdl-layout-title {
@@ -13,7 +14,10 @@
 
 .mdl-layout__drawer > .mdl-layout-title > img {
   width: 160px;
-  margin-left: -56px;
+  position: absolute;
+  top: -50%;
+  right: -48px;
+  /*margin-left: -56px;*/
 }
 
 .mdl-layout__drawer > .mdl-navigation {
