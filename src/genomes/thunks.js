@@ -59,23 +59,10 @@ export function uploadFiles(files) {
 }
 
 export function addFiles(newFiles) {
-  return (dispatch, getState) => {
-    const state = getState();
-    const files = selectors.getGenomes(state);
-    return utils.mapCSVsToGenomes(newFiles).then(
-      parsedFiles => {
-        const duplicates = parsedFiles.filter(file => isDuplicate(file, files));
-        const nonDuplicates = parsedFiles.filter(file => !isDuplicate(file, files));
-
-        if (duplicates.length) {
-          dispatch(showToast(toasts.notifyDuplicates(duplicates)));
-        }
-        if (nonDuplicates.length) {
-          dispatch(uploadFiles(nonDuplicates));
-        }
-      }
+  return (dispatch) =>
+    utils.mapCSVsToGenomes(newFiles).then(
+      parsedFiles => dispatch(uploadFiles(parsedFiles))
     );
-  };
 }
 
 function getIds(genomes, predicate) {

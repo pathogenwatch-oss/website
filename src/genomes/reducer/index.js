@@ -4,7 +4,7 @@ import uploads from './uploads';
 import entities from './entities';
 
 import { CREATE_COLLECTION, CHANGE_COLLECTION_METADATA } from '../create-collection-drawer';
-import { SHOW_METRIC } from '../actions';
+import { SHOW_METRIC, PREFILTER } from '../actions';
 
 function loading(state = false, { type }) {
   switch (type) {
@@ -39,10 +39,21 @@ function collectionMetadata(state = initialMetadata, { type, payload }) {
   }
 }
 
+const initialPrefilter = {};
+function prefilter(state = initialPrefilter, { type, payload }) {
+  switch (type) {
+    case PREFILTER:
+      return { ...state, ...payload.condition };
+    default:
+      return state;
+  }
+}
+
 export default combineReducers({
   entities,
-  uploads,
-  loading,
-  selectedMetric,
   collectionMetadata,
+  loading,
+  prefilter,
+  selectedMetric,
+  uploads,
 });

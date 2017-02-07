@@ -52,6 +52,7 @@ export function mapCSVsToGenomes(files) {
           metadata: parseMetadata(row, name),
           date: parseDate(row),
           owner: 'me',
+          uploaded: true,
         };
       })
     );

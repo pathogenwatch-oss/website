@@ -1,25 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
 
 import { Summary as FilterSummary, Totals } from '../../filter-summary';
 import ProgressBar from '../../components/progress-bar';
+import ViewSwitcher from './ViewSwitcher.react';
 
+import { getFilter } from '../../filter/selectors';
 import * as selectors from '../selectors';
 import { getNumberOfVisibleGenomes } from '../filter/selectors';
 
-const mapLocationFromState = ({ location }) => ({ location });
-
-const ViewSwitcher = connect(mapLocationFromState)(({ title, to }) => (
-  <Link
-    to={to}
-    className="wgsa-button-group__item"
-    activeClassName="active"
-    onlyActiveOnIndex
-  >
-    {title}
-  </Link>
-));
+import { stateKey } from '../filter';
 
 const Summary = React.createClass({
 
@@ -40,9 +30,9 @@ const Summary = React.createClass({
       <FilterSummary className="wgsa-hub-summary">
         <div className="wgsa-button-group">
           <i className="material-icons" title="View">visibility</i>
-          <ViewSwitcher to="/genomes" title="Grid" />
-          <ViewSwitcher to="/genomes/map" title="Map" />
-          <ViewSwitcher to="/genomes/stats" title="Stats" />
+          <ViewSwitcher title="Grid" />
+          <ViewSwitcher view="map" title="Map" />
+          <ViewSwitcher view="stats" title="Stats" />
         </div>
         { batchSize ?
           <ProgressBar
@@ -68,6 +58,7 @@ function mapStateToProps(state) {
     completedUploads: selectors.getNumCompletedUploads(state),
     visibleGenomes: getNumberOfVisibleGenomes(state),
     totalGenomes: selectors.getTotalGenomes(state),
+    isUpload: getFilter(state, { stateKey }).upload,
   };
 }
 

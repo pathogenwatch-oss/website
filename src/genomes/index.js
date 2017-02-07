@@ -8,8 +8,18 @@ import StatsView from './stats';
 
 export reducer from './reducer';
 
-export default (
+export const GenomesRoute = (
   <Route path="genomes" component={Genomes}>
+    <IndexRoute component={GridView} />
+    <Route path="map" component={MapView} />
+    <Route path="stats" component={StatsView} />
+  </Route>
+);
+
+const Upload = props => <Genomes {...props} uploaded />;
+
+export const UploadRoute = (
+  <Route path="upload" component={Upload}>
     <IndexRoute component={GridView} />
     <Route path="map" component={MapView} />
     <Route path="stats" component={StatsView} />

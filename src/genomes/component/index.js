@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import Genomes from './Genomes.react';
 
 import { toggleAside } from '../../header/actions';
-import { fetchGenomes } from '../actions';
+import { prefilter, fetchGenomes } from '../actions';
 import { addFiles } from '../thunks';
 
 import { getCollection } from '../../collection-route/selectors';
@@ -18,11 +18,12 @@ function mapStateToProps(state) {
   };
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch, { uploaded = false }) {
   return {
     fetchGenomes: () => dispatch(fetchGenomes()),
     toggleAside: isOpen => dispatch(toggleAside(isOpen)),
     addFiles: files => dispatch(addFiles(files)),
+    prefilter: () => dispatch(prefilter({ uploaded })),
   };
 }
 

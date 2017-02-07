@@ -1,3 +1,3 @@
 export const HOME = 'HOME';
-export const UPLOAD = 'UPLOAD';
+export const GENOME = 'GENOME';
 export const COLLECTION = 'COLLECTION';

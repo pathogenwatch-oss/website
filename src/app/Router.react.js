@@ -5,10 +5,9 @@ import App from './App.react';
 
 import CollectionsRoute from '../collections';
 import CollectionRoute from '../collection-route';
-import GenomesRoute from '../genomes';
+import { GenomesRoute, UploadRoute } from '../genomes';
 import DocumentationViewerRoute from '../documentation-viewer';
 
-import Upload from '../genomes/upload';
 import NotFound from '../components/NotFound.react';
 
 import Species from '../species';
@@ -24,7 +23,7 @@ export default () => (
       <IndexRedirect to="collections" />
       {CollectionsRoute}
       {GenomesRoute}
-      <Route path="upload" component={Upload} />
+      {UploadRoute}
       { Species.list.map(({ nickname }) =>
           <Route key={nickname} path={nickname} component={SpeciesSetter}>
             <IndexRedirect to="/" query={{ species: nickname }} />
