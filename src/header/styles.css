@@ -16,10 +16,6 @@
   z-index: auto;
 }
 
-.wgsa-header .mdl-layout-title {
-  font-family: "Roboto Condensed", "Helvetica", "Arial", sans-serif;
-}
-
 .wgsa-header-logo {
   width: 88px;
 }
@@ -74,6 +70,7 @@
   bottom: 0;
   line-height: 18px;
   font-size: 14px;
+  letter-spacing: normal;
 }
 
 .cgps-avatar > * {
