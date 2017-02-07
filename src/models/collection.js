@@ -8,7 +8,6 @@ const schema = new Schema({
   _species: { type: Schema.Types.ObjectId, ref: 'Species' },
   description: String,
   error: String,
-  genomes: Array,
   progress: {
     completed: Date,
     errors: [ { taskType: String, name: String } ],
@@ -16,6 +15,8 @@ const schema = new Schema({
     results: Object,
     percent: Number,
   },
+  pmid: String,
+  public: { type: Boolean, default: false },
   reference: Boolean,
   size: Number,
   speciesId: String,
