@@ -10,12 +10,12 @@ const renderers = {
   Paragraph: (props) => <span>{props.children}</span>,
 };
 
-export default ({ title, description, link, pubmedLink, size, species }) => (
+export default ({ title, description, slug, pubmedLink, size, speciesId }) => (
   <Card>
     <Markdown containerTagName="h2" className="wgsa-card-title" source={title} renderers={renderers} />
     <span className="wgsa-card-metadata-inliner">
       <CardMetadata title="Species" icon="bug_report">
-        {taxIdMap.get(species).formattedShortName}
+        {taxIdMap.get(speciesId).formattedShortName}
       </CardMetadata>
       <CardMetadata icon="insert_drive_file">
         {size} genomes
@@ -25,7 +25,7 @@ export default ({ title, description, link, pubmedLink, size, species }) => (
     <div className="wgsa-card-footer">
       <Link
         className="mdl-button mdl-button--primary wgsa-button--text"
-        to={link}
+        to={`/collection/${slug}`}
       >
         View Collection
       </Link>

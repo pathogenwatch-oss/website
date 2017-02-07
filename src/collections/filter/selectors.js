@@ -1,10 +1,10 @@
 import { createSelector } from 'reselect';
 import sortBy from 'lodash.sortby';
 
-import { getReferenceCollections } from '../collections/selectors';
-import { selectors as filter } from '../filter';
+import { getCollections } from '../selectors';
+import { selectors as filter } from '../../filter';
 
-import { taxIdMap } from '../species';
+import { taxIdMap } from '../../species';
 
 import { stateKey, filters } from './filter';
 
@@ -29,21 +29,37 @@ function getSummary(map) {
 }
 
 export const getFilterSummary = createSelector(
-  getReferenceCollections,
+  getCollections,
   getFilter,
   (collections, filterState) => {
     const speciesMap = new Map();
+    const ownerMap = new Map();
 
-    for (const { species } of collections) {
-      incrementSummary(speciesMap, species, {
-        name: species,
-        label: taxIdMap.get(species).formattedShortName,
-        active: species === filterState.species,
+    for (const { speciesId, owner } of collections) {
+      incrementSummary(speciesMap, speciesId, {
+        name: speciesId,
+        label: taxIdMap.get(speciesId).formattedShortName,
+        active: speciesId === filterState.speciesId,
       });
+
+      if (owner === 'me') {
+        incrementSummary(ownerMap, 'me', {
+          name: 'me',
+          label: 'Me',
+          active: filterState.owner === 'me',
+        });
+      } else {
+        incrementSummary(ownerMap, 'other', {
+          name: 'other',
+          label: 'Other',
+          active: filterState.owner === 'other',
+        });
+      }
     }
 
     return {
       species: getSummary(speciesMap),
+      owner: getSummary(ownerMap),
     };
   }
 );
@@ -52,5 +68,5 @@ export const getVisibleCollections = state =>
   filter.getFilteredItems(state, {
     stateKey,
     filters,
-    items: getReferenceCollections(),
+    items: getCollections(state),
   });

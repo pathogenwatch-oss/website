@@ -1,4 +1,4 @@
-export { HOME as stateKey } from '../app/stateKeys/filter';
+export { HOME as stateKey } from '../../app/stateKeys/filter';
 
 export const filters = [
   { key: 'searchRegExp',
@@ -8,10 +8,16 @@ export const filters = [
         true;
     },
   },
-  { key: 'species',
+  { key: 'speciesId',
     queryKey: 'species',
     matches(collection, value) {
-      return collection.species === value;
+      return collection.speciesId === value;
+    },
+  },
+  { key: 'owner',
+    queryKey: 'owner',
+    matches(collection, value) {
+      return collection.owner === value;
     },
   },
 ];

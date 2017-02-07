@@ -11,8 +11,8 @@ import { toggleUserDrawer } from './actions';
 import config from '../app/config';
 
 const userLinks = [
-  { icon: 'collections', text: 'My Collections', link: '/collections?mine=true' },
-  { icon: 'bug_report', text: 'My Genomes', link: '/genomes?mine=true' },
+  { icon: 'collections', text: 'My Collections', link: '/collections?owner=me' },
+  { icon: 'bug_report', text: 'My Genomes', link: '/genomes?owner=me' },
   { icon: 'person', text: 'My Account', link: '/account' },
   { icon: 'exit_to_app', text: 'Sign Out', link: '/signout' },
 ];

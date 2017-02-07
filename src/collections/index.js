@@ -5,6 +5,8 @@ import { Route } from 'react-router';
 
 import Collections from './Collections.react';
 
+export reducer from './reducer';
+
 export default (
   <Route
     path="collections"

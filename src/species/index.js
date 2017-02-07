@@ -1,5 +1,3 @@
-import sortBy from 'lodash.sortby';
-
 const supportedSpecies = require('../../universal/species');
 
 const supportedSpeciesIds = new Set(supportedSpecies.map(_ => _.id));
@@ -20,21 +18,6 @@ const definitionsAsList = Object.keys(definitions).map(key => definitions[key]);
 
 export const taxIdMap = new Map(
   definitionsAsList.map(({ id, ...species }) => [ id, species ])
-);
-
-export const referenceCollections = sortBy(
-  definitionsAsList.reduce((memo, { id, nickname, collections }) => {
-    if (!collections) return memo;
-    return memo.concat(collections.map(_ => ({
-      link: `/${nickname}/collection/${_.id}`,
-      species: id,
-      title: _.author,
-      description: _.title,
-      pubmedLink: `http://www.ncbi.nlm.nih.gov/pubmed/${_.pmid}`,
-      size: _.numberOfGenomes,
-    })));
-  }, []),
-  [ 'title' ]
 );
 
 let currentSpecies = {};

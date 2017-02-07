@@ -1,15 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import FilterAside from '../filter-aside';
-import MetadataFilter from '../metadata-filter';
-import * as filter from '../filter';
+import FilterAside from '../../filter-aside';
+import MetadataFilter from '../../metadata-filter';
+import * as filter from '../../filter';
 
 import { stateKey, filters } from './filter';
 import { getFilterSummary, getSearchText } from './selectors';
 
 const { LocationListener } = filter;
-const [ searchRegExp, speciesFilter ] = filters;
+const [ searchRegExp, speciesFilter, ownershipFilter ] = filters;
 
 function mapStateToProps(state) {
   return {
@@ -42,6 +42,11 @@ export default connect(mapStateToProps, mapDispatchToProps)(
         title="Species"
         summary={filterSummary.species}
         onClick={value => updateFilter(speciesFilter, value)}
+      />
+      <MetadataFilter
+        title="Owner"
+        summary={filterSummary.owner}
+        onClick={value => updateFilter(ownershipFilter, value)}
       />
       <LocationListener stateKey={stateKey} filters={filters} />
     </FilterAside>
