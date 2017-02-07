@@ -14,7 +14,9 @@ module.exports = {
     User.findOne({ providerType: type, providerId: id })
       .then(user => {
         // log the user in if the user is found
-        if (user) return done(null, user);
+        if (user) {
+          return user.update({ name, email, photo }, err => done(err, user));
+        }
 
         // create a new user if there is no user found with the same profile ID
         const newUser = new User({
