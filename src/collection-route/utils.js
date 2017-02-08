@@ -11,3 +11,7 @@ export function sortGenomes(genomes) {
     return 0;
   });
 }
+
+export function getUuidFromSlug(slug) {
+  return slug.split('-')[0];
+}

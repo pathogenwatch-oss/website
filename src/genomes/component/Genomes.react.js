@@ -37,12 +37,9 @@ export default React.createClass({
       componentHandler.upgradeElement(this.refs.loadingBar);
     }
 
-    if (collection.id) {
-      const { speciesId, id } = collection;
-      const species = taxIdMap.get(speciesId);
-      const path = `/${species.nickname}/collection/${id}`;
+    if (collection.slug) {
       const { router } = this.context;
-      router.push(path);
+      router.push(`/collection/${collection.slug}`);
     }
   },
 

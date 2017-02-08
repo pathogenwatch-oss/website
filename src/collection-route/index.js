@@ -8,12 +8,12 @@ import ProcessingHeaderContent from './progress/Header.react';
 
 import { getCollection } from './selectors';
 
-import { statuses, readyStatuses } from './constants';
+import { statuses } from './constants';
 
 export reducer from './reducers';
 
 export function getHeaderClassName(status) {
-  if (readyStatuses.has(status)) {
+  if (status === statuses.READY) {
     return 'mdl-layout__header--primary mdl-shadow--3dp';
   }
   return null;

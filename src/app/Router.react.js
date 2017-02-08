@@ -20,7 +20,7 @@ export default () => (
       {GenomesRoute}
       {UploadRoute}
       { Species.list.map(({ nickname, name }) =>
-          <Redirect from={nickname} to="/genomes" query={{ species: name }} />
+          <Redirect key={nickname} from={nickname} to="/genomes" query={{ species: name }} />
       )}
       <Redirect from=":species/upload" to="/upload" />
       <Redirect from=":species/collection/:id" to="/collection/:id" />

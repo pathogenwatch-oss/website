@@ -46,7 +46,7 @@ export const getTitle = createSelector(
 
 export const getFilenames = createSelector(
   getTitle,
-  ({ collection }) => collection.id,
+  ({ collection }) => collection.uuid,
   state => getActiveDataTable(state).activeColumn,
   utils.getFilenames
 );

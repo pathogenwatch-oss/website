@@ -7,6 +7,8 @@ import { getProgressPercentage } from '../progress/selectors.js';
 
 import * as actions from '../actions';
 
+import { getUuidFromSlug } from '../utils';
+
 import { statuses } from '../constants';
 
 function mapStateToProps(state) {
@@ -18,12 +20,12 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch, { params: { slug } }) {
-  const id = slug.split('-')[0];
+  const uuid = getUuidFromSlug(slug);
   return {
-    fetch: () => dispatch(actions.fetchCollection(id)),
+    fetch: () => dispatch(actions.fetchCollection(uuid)),
     updateProgress: results => (
       results.status === statuses.READY ?
-        dispatch(actions.fetchCollection(id)) :
+        dispatch(actions.fetchCollection(uuid)) :
         dispatch(actions.updateProgress(results))
     ),
     reset: () => dispatch(actions.resetCollectionView()),

@@ -4,7 +4,7 @@ import Viewer from '../../collection-viewer';
 import Progress from '../progress';
 import { LoadSpinner, LoadError } from '../loading/Loading.react';
 
-import { statuses, readyStatuses } from '../constants';
+import { statuses } from '../constants';
 
 export default React.createClass({
 
@@ -22,8 +22,8 @@ export default React.createClass({
     this.props.fetch();
   },
 
-  componentWillReceiveProps({ status }) {
-    if (status !== this.props.status && !readyStatuses.has(status)) {
+  componentDidUpdate({ status }) {
+    if (status !== this.props.status && this.props.status === statuses.READY) {
       this.props.fetch();
     }
   },

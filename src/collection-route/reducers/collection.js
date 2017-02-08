@@ -1,7 +1,7 @@
 import { CREATE_COLLECTION } from '../../genomes/create-collection-drawer';
 import * as actions from '../actions';
 
-import { sortGenomes } from '../utils';
+import { sortGenomes, getUuidFromSlug } from '../utils';
 import { statuses } from '../../collection-route/constants';
 
 import Species from '../../species';
@@ -14,10 +14,11 @@ export default function (state = initialState, { type, payload }) {
       const { result, speciesId, metadata } = payload;
       return {
         ...state,
-        id: result && result.collectionId,
-        uuid: result && result.collectionId,
+        slug: result.slug,
+        uuid: getUuidFromSlug(result.slug),
         speciesId,
         metadata,
+        status: statuses.PROCESSING,
       };
     }
     case actions.FETCH_COLLECTION.FAILURE: {

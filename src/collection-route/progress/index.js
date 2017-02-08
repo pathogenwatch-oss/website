@@ -46,7 +46,7 @@ const UploadProgress = React.createClass({
 
   subscribeToNotifications() {
     const { collection, updateProgress } = this.props;
-    if (collection.progress && !this.notificationChannel) {
+    if (collection.uuid && !this.notificationChannel) {
       this.notificationChannel = subscribe(
         collection.uuid, // get collection id from url
         'progress',

@@ -65,7 +65,7 @@ function getFailedGenomes(errors) {
 }
 
 function getStatusMessage({ collection }) {
-  if (!collection.id) {
+  if (!collection.slug) {
     return [
       <h1>We're sorry, something is wrong.</h1>,
       <p className="mdl-typography--title">Please try again later.</p>,

@@ -13,7 +13,7 @@ function fetchTree(name) {
   return (dispatch, getState) => {
     const collection = getCollection(getState());
     return dispatch(
-      actions.fetchTree(name, getSubtree(collection.id, name))
+      actions.fetchTree(name, getSubtree(collection.uuid, name))
     );
   };
 }
