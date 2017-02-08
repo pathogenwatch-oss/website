@@ -17,7 +17,8 @@ function mapStateToProps(state) {
   };
 }
 
-function mapDispatchToProps(dispatch, { params: { id } }) {
+function mapDispatchToProps(dispatch, { params: { slug } }) {
+  const id = slug.split('-')[0];
   return {
     fetch: () => dispatch(actions.fetchCollection(id)),
     updateProgress: results => (

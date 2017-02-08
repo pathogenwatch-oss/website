@@ -32,8 +32,8 @@ export default {
     return currentSpecies;
   },
 
-  set current(nickname) {
-    currentSpecies = definitions[nickname];
+  set current(taxId) {
+    currentSpecies = taxIdMap.get(taxId);
   },
 
   get(nickname) {

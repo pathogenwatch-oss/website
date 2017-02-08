@@ -36,7 +36,7 @@ const HeaderSwitcher = connect(mapStateToProps)(
 
 export default (
   <Route
-    path="collection/:id"
+    path="collection/:slug"
     component={Collection}
     header={<HeaderSwitcher />}
   />

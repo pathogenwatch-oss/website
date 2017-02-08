@@ -12,11 +12,6 @@ import NotFound from '../components/NotFound.react';
 
 import Species from '../species';
 
-const SpeciesSetter = ({ children, route }) => {
-  Species.current = route.path;
-  return children;
-};
-
 export default () => (
   <Router history={browserHistory}>
     <Route path="/" component={App}>
@@ -24,13 +19,12 @@ export default () => (
       {CollectionsRoute}
       {GenomesRoute}
       {UploadRoute}
-      { Species.list.map(({ nickname }) =>
-          <Route key={nickname} path={nickname} component={SpeciesSetter}>
-            <IndexRedirect to="/" query={{ species: nickname }} />
-            <Redirect from="upload" to="/upload" />
-            {CollectionRoute}
-          </Route>
+      { Species.list.map(({ nickname, name }) =>
+          <Redirect from={nickname} to="/genomes" query={{ species: name }} />
       )}
+      <Redirect from=":species/upload" to="/upload" />
+      <Redirect from=":species/collection/:id" to="/collection/:id" />
+      {CollectionRoute}
       {DocumentationViewerRoute}
       <Route path="*" component={NotFound} />
     </Route>

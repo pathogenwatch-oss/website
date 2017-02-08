@@ -4,6 +4,8 @@ import * as actions from '../actions';
 import { sortGenomes } from '../utils';
 import { statuses } from '../../collection-route/constants';
 
+import Species from '../../species';
+
 const initialState = { id: null, genomeIds: new Set(), metadata: {} };
 
 export default function (state = initialState, { type, payload }) {
@@ -25,6 +27,9 @@ export default function (state = initialState, { type, payload }) {
     }
     case actions.FETCH_COLLECTION.SUCCESS: {
       const { genomes = [], ...result } = payload.result;
+
+      Species.current = result.speciesId;
+
       return {
         ...state,
         genomeIds: new Set(sortGenomes(genomes).map(_ => _.uuid)),
