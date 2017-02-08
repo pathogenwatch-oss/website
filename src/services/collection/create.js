@@ -61,7 +61,7 @@ module.exports = message => {
               speciesId,
               collectionGenomes,
             });
-            return { collectionId };
+            return { slug: collection.slug };
           })
         ).
         catch(error => collection.failed(error))

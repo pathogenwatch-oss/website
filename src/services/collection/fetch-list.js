@@ -1,13 +1,4 @@
-const slug = require('slug');
-
 const Collection = require('models/collection');
-
-function toSlug(text) {
-  const slugText = slug(text, { lower: true });
-  return slugText.length > 64 ?
-    slugText.slice(0, 64) :
-    slugText;
-}
 
 module.exports = function ({ user }) {
   return (
@@ -27,11 +18,11 @@ module.exports = function ({ user }) {
       ).
       then(collections => collections.map(doc => {
         const collection = doc.toObject();
-        const { _user, uuid, title } = collection;
+        const { _user } = collection;
         const { id } = user || {};
         collection.owner = _user && _user.toString() === id ? 'me' : 'other';
         collection.id = doc._id.toString();
-        collection.slug = `${uuid}-${toSlug(title)}`;
+        collection.slug = doc.slug;
         delete collection._user;
         delete collection.uuid;
         return collection;

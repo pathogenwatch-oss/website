@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
+const slug = require('slug');
 
 const { setToObjectOptions } = require('./utils');
 
@@ -93,6 +94,19 @@ schema.virtual('totalGenomeResults').get(function () {
 const totalTreeResults = 2;
 schema.virtual('totalResultsExpected').get(function () {
   return this.size * this.totalGenomeResults + totalTreeResults;
+});
+
+function toSlug(text) {
+  if (!text) return '';
+
+  const slugText = `-${slug(text, { lower: true })}`;
+  return slugText.length > 64 ?
+    slugText.slice(0, 64) :
+    slugText;
+}
+
+schema.virtual('slug').get(function () {
+  return `${this.uuid}${toSlug(this.title)}`;
 });
 
 schema.statics.findByUuid = function (uuid, projection) {
