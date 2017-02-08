@@ -45,13 +45,38 @@ export const getFilterSummary = createSelector(
   getOrderedGenomes,
   filter.getFilter,
   (genomes, filterState) => {
-    const ownerMap = new Map();
     const wgsaSpeciesMap = new Map();
     const otherSpeciesMap = new Map();
+    const referenceMap = new Map();
+    const ownerMap = new Map();
     const countryMap = new Map();
     const yearSet = new Set();
 
     for (const genome of genomes) {
+      if (genome.speciesKey) {
+        const speciesMap =
+          isSupported(genome) ? wgsaSpeciesMap : otherSpeciesMap;
+        incrementSummary(speciesMap, genome.speciesKey, {
+          name: genome.speciesKey,
+          label: genome.speciesLabel,
+          active: genome.speciesKey === filterState.speciesKey,
+        });
+      }
+
+      if (genome.reference) {
+        incrementSummary(referenceMap, '1', {
+          name: '1',
+          label: 'Reference',
+          active: filterState.reference === '1',
+        });
+      } else {
+        incrementSummary(referenceMap, '0', {
+          name: '0',
+          label: 'Non-reference',
+          active: filterState.reference === '0',
+        });
+      }
+
       if (genome.owner === 'me') {
         incrementSummary(ownerMap, 'me', {
           name: 'me',
@@ -63,16 +88,6 @@ export const getFilterSummary = createSelector(
           name: 'other',
           label: 'Other',
           active: filterState.owner === 'other',
-        });
-      }
-
-      if (genome.speciesKey) {
-        const speciesMap =
-          isSupported(genome) ? wgsaSpeciesMap : otherSpeciesMap;
-        incrementSummary(speciesMap, genome.speciesKey, {
-          name: genome.speciesKey,
-          label: genome.speciesLabel,
-          active: genome.speciesKey === filterState.speciesKey,
         });
       }
 
@@ -90,9 +105,10 @@ export const getFilterSummary = createSelector(
     }
 
     return {
-      owner: getSummary(ownerMap),
       wgsaSpecies: getSummary(wgsaSpeciesMap),
       otherSpecies: getSummary(otherSpeciesMap),
+      reference: getSummary(referenceMap).reverse(),
+      owner: getSummary(ownerMap),
       country: getSummary(countryMap),
       date: {
         min: filterState.minDate || { year: '', month: '' },

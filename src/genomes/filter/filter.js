@@ -14,6 +14,12 @@ export const filters = [
       return genome.speciesKey === value;
     },
   },
+  { key: 'reference',
+    queryKey: 'reference',
+    matches(genome, value) {
+      return value === '1' ? genome.reference : !genome.reference;
+    },
+  },
   { key: 'owner',
     queryKey: 'owner',
     matches(genome, value) {
