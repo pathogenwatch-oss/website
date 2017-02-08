@@ -7,19 +7,33 @@ import { API_ROOT, postJson } from '../../utils/Api';
 
 import { validateGenomeSize, validateGenomeContent } from './validation';
 
-function parseMetadata(row, name) {
+function parseMetadata(row) {
   if (!row) return undefined;
 
-  return {
-    ...row,
-    name: row.displayname || row.filename || row.name || name,
-    latitude: parseFloat(row.latitude),
-    longitude: parseFloat(row.longitude),
-  };
-}
+  const {
+    displayname,
+    name,
+    filename,
+    year,
+    month,
+    day,
+    latitude,
+    longitude,
+    pmid,
+    ...userDefined,
+  } = row;
 
-function parseDate({ year, month, day } = {}) {
-  return year ? new Date(year, parseInt(month || '1', 10) - 1, day || 1) : undefined;
+  return {
+    metadata: true,
+    name: displayname || name || filename,
+    year: year ? parseInt(year, 10) : null,
+    month: month ? parseInt(month, 10) : null,
+    day: day ? parseInt(day, 10) : null,
+    latitude: latitude ? parseFloat(latitude) : null,
+    longitude: longitude ? parseFloat(longitude) : null,
+    pmid: pmid || null,
+    userDefined,
+  };
 }
 
 function flattenCSVs(files) {
@@ -49,8 +63,7 @@ export function mapCSVsToGenomes(files) {
           id: `${file.name}__${Date.now()}_${index}`,
           name: file.name,
           file,
-          metadata: parseMetadata(row, name),
-          date: parseDate(row),
+          ...parseMetadata(row),
           owner: 'me',
           uploaded: true,
         };
@@ -101,11 +114,11 @@ function create(file, id, dispatch) {
   );
 }
 
-export function upload({ id, file, metadata }, dispatch) {
+export function upload({ id, file, metadata, ...props }, dispatch) {
   return create(file, id, dispatch).
     then((result) =>
       (metadata ?
-        update(result.id, metadata).
+        update(result.id, props).
           then(updateResult => ({ ...result, ...updateResult })) :
         result
       )
