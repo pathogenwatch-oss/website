@@ -17,7 +17,7 @@ const definitions =
 const definitionsAsList = Object.keys(definitions).map(key => definitions[key]);
 
 export const taxIdMap = new Map(
-  definitionsAsList.map(({ id, ...species }) => [ id, species ])
+  definitionsAsList.map(species => [ species.id, species ])
 );
 
 let currentSpecies = {};

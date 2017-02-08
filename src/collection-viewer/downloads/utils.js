@@ -18,8 +18,8 @@ export function createDownloadKey(id) {
   return typeof id === 'string' ? id : JSON.stringify(id);
 }
 
-export function formatCollectionFilename({ id }) {
-  return [ Species.nickname, id ].join('_');
+export function formatCollectionFilename({ uuid }) {
+  return [ Species.nickname, uuid ].join('_');
 }
 
 const errorToast = {
