@@ -24,6 +24,7 @@ const schema = new Schema({
   analysis: {
     fp: {
       subtype: String,
+      referenceName: String,
     },
     mlst: {
       st: String,

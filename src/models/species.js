@@ -10,7 +10,7 @@ const { ANTIMICROBIAL_MASTER, ANTIMICROBIAL_SPECIES, PAARSNP_LIBRARY } =
 const { setToObjectOptions } = require('./utils');
 
 const schema = new Schema({
-  taxId: { type: Number, required: true },
+  taxId: { type: String, required: true },
   name: String,
   shortName: String,
   deployed: { type: Date },
