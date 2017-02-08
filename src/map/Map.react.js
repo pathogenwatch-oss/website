@@ -23,6 +23,7 @@ const WGSAMap = props => (
     center={props.bounds.center}
     className={props.className}
     cluster={props.cluster}
+    clusterOptions={props.clusterOptions}
     highlightedColour={CGPS.COLOURS.PURPLE}
     buttonClassname={buttonClassname}
     lassoPath={props.lassoPath}

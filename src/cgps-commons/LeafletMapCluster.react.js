@@ -13,7 +13,7 @@ class MarkerCluster extends MapLayer {
 
   componentWillMount() {
     super.componentWillMount();
-    this.leafletElement = Leaflet.markerClusterGroup();
+    this.leafletElement = Leaflet.markerClusterGroup(this.props.options);
   }
 
   componentDidMount() {
@@ -59,10 +59,12 @@ MarkerCluster.propTypes = {
   map: React.PropTypes.object,
   markers: React.PropTypes.array,
   onMarkerClick: React.PropTypes.func,
+  options: React.PropTypes.object,
 };
 
 MarkerCluster.defaultProps = {
   markers: [],
+  options: {},
 };
 
 export default MarkerCluster;

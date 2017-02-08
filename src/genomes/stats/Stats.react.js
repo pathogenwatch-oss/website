@@ -123,7 +123,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    onPointClick: genome => dispatch(showGenomeDrawer(genome)),
+    onPointClick: ({ id }) => dispatch(showGenomeDrawer(id)),
   };
 }
 

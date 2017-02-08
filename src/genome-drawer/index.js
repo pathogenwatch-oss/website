@@ -8,7 +8,7 @@ import GenomeDrawer from './GenomeDrawer.react';
 
 export const SHOW_GENOME_DETAILS = 'SHOW_GENOME_DETAILS';
 
-export function showGenomeDrawer({ id }) {
+export function showGenomeDrawer(id) {
   return {
     type: SHOW_GENOME_DETAILS,
     payload: {
@@ -48,7 +48,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    onClose: () => dispatch(showGenomeDrawer({ id: null })),
+    onClose: () => dispatch(showGenomeDrawer(null)),
   };
 }
 

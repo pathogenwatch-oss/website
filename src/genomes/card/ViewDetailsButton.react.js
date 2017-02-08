@@ -3,9 +3,9 @@ import { connect } from 'react-redux';
 
 import { showGenomeDrawer } from '../../genome-drawer';
 
-function mapDispatchToProps(dispatch, ownProps) {
+function mapDispatchToProps(dispatch, { genome }) {
   return {
-    onClick: () => dispatch(showGenomeDrawer(ownProps.genome)),
+    onClick: () => dispatch(showGenomeDrawer(genome.id)),
   };
 }
 

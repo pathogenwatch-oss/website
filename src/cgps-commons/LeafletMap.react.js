@@ -27,6 +27,7 @@ export default React.createClass({
     markerComponent: React.PropTypes.func,
     markerSize: React.PropTypes.number,
     cluster: React.PropTypes.bool,
+    clusterOptions: React.PropTypes.object,
     center: PropTypes.latlng,
     zoom: React.PropTypes.number,
     highlightedColour: React.PropTypes.string,
@@ -110,6 +111,7 @@ export default React.createClass({
         <MapCluster
           markers={this.props.markers}
           onMarkerClick={this.onClusterMarkerClick}
+          options={this.props.clusterOptions}
         />
       );
     }

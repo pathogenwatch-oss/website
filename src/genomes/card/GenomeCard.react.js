@@ -40,7 +40,7 @@ function getCardComponents(props) {
 }
 
 export default props => {
-  const { name, metadata, reference } = props;
+  const { name, reference } = props;
   const { content, footer = null } = getCardComponents(props);
   return (
     <Card className="wgsa-genome-card">
