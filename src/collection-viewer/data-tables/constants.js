@@ -34,7 +34,7 @@ export const systemDataColumns = {
     columnKey: '__wgsa_reference',
     valueGetter({ analysis }) {
       if (!analysis.fp) return null;
-      return analysis.fp.subtype;
+      return analysis.fp.referenceName;
     },
   },
   __mlst: {
