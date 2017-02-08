@@ -65,11 +65,18 @@ function getFailedGenomes(errors) {
 }
 
 function getStatusMessage({ collection }) {
+  if (!collection.id) {
+    return [
+      <h1>We're sorry, something is wrong.</h1>,
+      <p className="mdl-typography--title">Please try again later.</p>,
+    ];
+  }
+
   const { status, size, progress: { errors } } = collection;
   if (status === statuses.NOT_FOUND) {
     return [
       <h1>We're sorry, this collection cannot be found.</h1>,
-      <p className="mdl-typography--title">Please ensure that the URL is correct, and if so, please try again later.</p>,
+      <p className="mdl-typography--title">Please ensure that the address is correct, and if so, please try again later.</p>,
     ];
   }
   if (status === statuses.ABORTED) {
