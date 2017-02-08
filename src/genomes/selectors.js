@@ -14,6 +14,18 @@ export const getGenomesAsList = createSelector(
     Object.keys(genomes).reduce((memo, key) => {
       const genome = genomes[key];
       if (uploaded && !genome.uploaded) return memo;
+      if (genome.binned) return memo;
+      memo.push(genome);
+      return memo;
+    }, [])
+);
+
+export const getBinnedGenomes = createSelector(
+  getGenomes,
+  genomes =>
+    Object.keys(genomes).reduce((memo, key) => {
+      const genome = genomes[key];
+      if (genome.owner !== 'me' && !genome.binned) return memo;
       memo.push(genome);
       return memo;
     }, [])

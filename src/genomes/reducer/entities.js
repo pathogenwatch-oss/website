@@ -82,7 +82,7 @@ export default function (state = {}, { type, payload }) {
         ...state,
         [id]: {
           ...state[id],
-          bin: true,
+          binned: true,
         },
       };
     }
@@ -92,7 +92,7 @@ export default function (state = {}, { type, payload }) {
         ...state,
         [id]: {
           ...state[id],
-          bin: false,
+          binned: false,
         },
       };
     }
