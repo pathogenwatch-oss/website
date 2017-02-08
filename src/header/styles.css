@@ -58,7 +58,6 @@
 }
 
 .wgsa-account-header {
-  /*background: linear-gradient(to bottom, rgba(245, 245, 245, 0.28) 0%, rgba(245,245,245,1) 100%);*/
   background: rgba(245, 245, 245, 0.87);
   box-sizing: border-box;
   color: #673c90;
@@ -77,4 +76,12 @@
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+}
+
+.wgsa-navigation-header {
+  font-size: inherit;
+  font-family: inherit;
+  font-weight: 500;
+  margin: inherit;
+  margin-left: 24px;
 }

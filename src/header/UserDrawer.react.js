@@ -10,11 +10,18 @@ import { toggleUserDrawer } from './actions';
 
 import config from '../app/config';
 
+const navLinks = [
+  { icon: 'collections', text: 'Collections', link: '/collections' },
+  { icon: 'bug_report', text: 'Genomes', link: '/genomes' },
+  { icon: 'file_upload', text: 'Upload', link: '/upload' },
+  { icon: 'help', text: 'Documentation', link: '/documentation' },
+];
+
 const userLinks = [
-  { icon: 'collections', text: 'My Collections', link: '/collections?owner=me' },
-  { icon: 'bug_report', text: 'My Genomes', link: '/genomes?owner=me' },
-  { icon: 'person', text: 'My Account', link: '/account' },
-  { icon: 'exit_to_app', text: 'Sign Out', link: '/signout' },
+  { icon: 'person', text: 'Profile', link: '/account' },
+  { icon: 'subdirectory_arrow_right', text: 'My Collections', link: '/collections?owner=me' },
+  { icon: 'subdirectory_arrow_right', text: 'My Genomes', link: '/genomes?owner=me' },
+  { icon: 'exit_to_app', text: 'Sign Out', link: '/signout', external: true },
 ];
 
 const user = {
@@ -68,14 +75,21 @@ const UserDrawer = React.createClass({
             }
           </span>
           <nav className="mdl-navigation">
+            {config.user && <h2 className="wgsa-navigation-header">My Account</h2>}
             {config.user ?
               userLinks.map(props => <NavLink key={props.link} {...props} />) :
               strategies.map(provider => <LoginLink key={provider} provider={provider} />)}
           </nav>
-          <a className="cgps-logo" target="_blank" rel="noopener" href="http://www.pathogensurveillance.net">
-            <img src="/assets/img/CGPS.SHORT.FINAL.svg" />
-          </a>
-          <a className="contact-email" href="mailto:cgps@sanger.ac.uk">cgps@sanger.ac.uk</a>
+          <hr />
+          <nav className="mdl-navigation">
+            {navLinks.map(props => <NavLink key={props.link} {...props} />)}
+          </nav>
+          <footer className="wgsa-menu-footer">
+            <a className="cgps-logo" target="_blank" rel="noopener" href="http://www.pathogensurveillance.net">
+              <img src="/assets/img/CGPS.SHORT.FINAL.svg" />
+            </a>
+            <a className="contact-email" href="mailto:cgps@sanger.ac.uk">cgps@sanger.ac.uk</a>
+          </footer>
         </div>
       </div>
     );

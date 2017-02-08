@@ -15,6 +15,10 @@
   opacity: 0.9;
 }
 
+.cgps-login-link:first-child {
+  margin-top: 8px;
+}
+
 .cgps-login-link__icon {
   border-right: 1px solid rgba(0, 0, 0, 0.1);
   box-sizing: border-box;

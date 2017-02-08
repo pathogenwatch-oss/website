@@ -5,7 +5,7 @@
 
 .mdl-layout__drawer > .mdl-layout-title {
   height: 128px;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #ccc;
   margin-right: 0;
   display: flex;
   align-items: center;
@@ -29,8 +29,16 @@
   padding: 12px 8px;
 }
 
-.mdl-layout__drawer > .cgps-logo {
+.wgsa-menu-footer {
   margin-top: auto;
+  padding-top: 16px;
+}
+
+.wgsa-menu-footer > :first-child {
+  padding-top: 8px;
+}
+
+.wgsa-menu-footer .cgps-logo {
   margin-bottom: 16px;
   height: 48px;
 }
@@ -50,7 +58,7 @@
   color: #673c90 !important;
 }
 
-.mdl-layout__drawer > .contact-email {
+.wgsa-menu-footer .contact-email {
   font-size: 16px;
   text-align: center;
   padding-top: 0;
