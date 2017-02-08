@@ -19,7 +19,7 @@ export function getFormattedDateString(date) {
 }
 
 export const getUserDefinedValue =
-  (column, { metadata }) => metadata.userDefined[column];
+  (column, { userDefined = {} }) => userDefined[column];
 
 export const formatColumnKeyAsLabel =
   columnkey =>

@@ -30,7 +30,7 @@ const UploadProgress = React.createClass({
   },
 
   componentWillUnmount() {
-    unsubscribe(this.props.params.id, 'progress');
+    unsubscribe(this.props.collection.uuid, 'progress');
   },
 
   setDocumentTitle() {
@@ -48,7 +48,7 @@ const UploadProgress = React.createClass({
     const { collection, updateProgress } = this.props;
     if (collection.progress && !this.notificationChannel) {
       this.notificationChannel = subscribe(
-        this.props.params.id, // get collection id from url
+        collection.uuid, // get collection id from url
         'progress',
         updateProgress
       );

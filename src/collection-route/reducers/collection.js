@@ -15,6 +15,7 @@ export default function (state = initialState, { type, payload }) {
       return {
         ...state,
         id: result && result.collectionId,
+        uuid: result && result.collectionId,
         speciesId,
         metadata,
       };
@@ -33,7 +34,7 @@ export default function (state = initialState, { type, payload }) {
       return {
         ...state,
         genomeIds: new Set(sortGenomes(genomes).map(_ => _.uuid)),
-        id: result.uuid,
+        uuid: result.uuid,
         speciesId: result.speciesId,
         metadata: {
           title: result.title,
