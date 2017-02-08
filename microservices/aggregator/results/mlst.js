@@ -90,7 +90,7 @@ module.exports = (name, { assemblyId, speciesId }) => {
       })).
       then(result => Promise.all([
         CollectionGenome.addAnalysisResult(uuid, name, result),
-        uuid.indexOf(`${speciesId}_` === 0) ?
+        uuid.indexOf(`${speciesId}_`) === 0 ?
           addSTSuffix(uuid, result.st) :
           Promise.resolve(),
       ]))
