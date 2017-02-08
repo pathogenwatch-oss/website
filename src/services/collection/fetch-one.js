@@ -2,7 +2,6 @@ const services = require('services');
 const CollectionGenome = require('models/collectionGenome');
 
 function addGenomes(collection) {
-  console.log(collection);
   if (collection.status !== 'READY') {
     collection.genomes = [];
     return collection;
