@@ -1,5 +1,3 @@
-const regexp = /^(?:[>;].+(?:\n[ACGTURYKMSWBDHVN]+\*?)+\n*)+$/i;
-
 import CONFIG from '../../app/config';
 
 export const genomeValidationErrors = {
@@ -25,9 +23,11 @@ export function validateGenomeSize(file) {
   });
 }
 
+const regexp = /^([^\n]+\n)(?:[ACGTURYKMSWBDHVN]+\n?)*$/i;
+
 export function validateGenomeContent(genomeContent) {
   const cleanContent = genomeContent.replace(/\r/g, '');
-  if (regexp.test(cleanContent)) {
+  if (cleanContent.split(/\n>/).every((contig) => regexp.test(contig))) {
     return cleanContent;
   }
   throw genomeValidationErrors.INVALID_GENOME_CONTENT;
