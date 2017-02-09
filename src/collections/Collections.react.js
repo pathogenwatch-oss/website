@@ -2,10 +2,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import Grid from '../grid';
-import Filter from './filter';
+import Filter, { stateKey } from './filter';
 import { Summary, Totals } from '../filter-summary';
 import CollectionCard from './CollectionCard.react';
 
+import { prefilter } from '../prefilter/actions';
 import { getVisibleCollections } from './filter/selectors';
 import { getTotalCollections } from './selectors';
 
@@ -15,6 +16,7 @@ const Collections = React.createClass({
 
   componentDidMount() {
     this.props.fetchCollections();
+    this.props.prefilter();
   },
 
   render() {
@@ -54,9 +56,10 @@ function mapStateToProps(state) {
   };
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch, props) {
   return {
     fetchCollections: () => dispatch(fetchCollections()),
+    prefilter: () => dispatch(prefilter(stateKey, props.prefilter)),
   };
 }
 

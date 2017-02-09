@@ -1,4 +1,4 @@
-export { HOME as stateKey } from '../../app/stateKeys/filter';
+export { COLLECTION as stateKey } from '../../app/stateKeys/filter';
 
 export const filters = [
   { key: 'searchRegExp',

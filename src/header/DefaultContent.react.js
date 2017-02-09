@@ -9,7 +9,7 @@ export const DefaultContent = ({ hasAside, onClick, asideDisabled }) => (
   <span className="mdl-layout-spacer mdl-layout-spacer--flex">
     <div className="mdl-layout-spacer" />
     <nav className="mdl-navigation wgsa-header-nav">
-      <NavLink to="/collections">Collections</NavLink>
+      <NavLink to="/collections/all">Collections</NavLink>
       <NavLink to="/genomes/all">Genomes</NavLink>
       <NavLink to="/genomes/upload">Upload</NavLink>
       <NavLink to="/documentation">Documentation</NavLink>

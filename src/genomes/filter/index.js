@@ -5,10 +5,10 @@ export const prefilters = {
     return !genome.binned;
   },
   user(genome) {
-    return genome.owner === 'me';
+    return !genome.binned && genome.owner === 'me';
   },
   upload(genome) {
-    return genome.uploaded;
+    return !genome.binned && genome.uploaded;
   },
   bin(genome) {
     return genome.binned;
