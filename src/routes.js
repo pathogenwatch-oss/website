@@ -4,6 +4,7 @@ module.exports = function (app) {
     require('routes/collection'),
     require('routes/download-request'),
     require('routes/user'),
+    require('routes/summary'),
   ]);
 
   app.use('/download/', [
