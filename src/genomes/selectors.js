@@ -1,21 +1,22 @@
 import { createSelector } from 'reselect';
 import sortBy from 'lodash.sortby';
 
+import { selectors as prefilter } from '../prefilter';
+
+import { stateKey, prefilters } from './filter';
 import { isFailedUpload } from './utils/validation';
 
-export const getPrefilter = ({ genomes }) => genomes.prefilter;
-
 export const getGenomes = ({ genomes }) => genomes.entities;
+
+export const getPrefilter = state => prefilter.getPrefilter(state, { stateKey });
 
 export const getGenomesAsList = createSelector(
   getGenomes,
   getPrefilter,
-  (genomes, { uploaded, own }) =>
+  (genomes, prefilterKey) =>
     Object.keys(genomes).reduce((memo, key) => {
       const genome = genomes[key];
-      if (uploaded && !genome.uploaded) return memo;
-      if (own && genome.owner !== 'me') return memo;
-      if (genome.binned) return memo;
+      if (!prefilters[prefilterKey](genome)) return memo;
       memo.push(genome);
       return memo;
     }, [])

@@ -11,8 +11,9 @@ import { getSummary } from '../summary/selectors';
 import { toggleUserDrawer } from './actions';
 
 import config from '../app/config';
+const { user } = config;
 
-const user = {
+const defaultUser = {
   photo: '/images/user.svg',
   name: 'WGSA',
   email: 'Sign in to your account',
@@ -42,7 +43,6 @@ const UserDrawer = React.createClass({
   render() {
     const { allCollections, allGenomes, userCollections, userGenomes } = this.props;
     const { strategies = [] } = config;
-    console.log(this.props);
     return (
       <div
         className={classnames('mdl-layout__obfuscator', { 'is-visible': this.props.visible })}
@@ -52,8 +52,8 @@ const UserDrawer = React.createClass({
         <div className={classnames('mdl-layout__drawer', { 'is-visible': this.props.visible })}>
           <span className="mdl-layout-title">
             <AccountHeader
-              user={config.user || user}
-              linkTo={config.user ? '/account' : null}
+              user={user || defaultUser}
+              linkTo={user ? '/account' : null}
               image="top"
               className="wgsa-account-header"
             />
@@ -64,27 +64,36 @@ const UserDrawer = React.createClass({
               </small>
             }
           </span>
-          { config.user ?
-            <nav className="mdl-navigation">
-              <h2 className="wgsa-navigation-header">Account</h2>
-              <NavLink icon="person" text="Profile" link="/account" />
-              <NavLink icon="subdirectory_arrow_right" text="My Collections" link="/account/collections" badge={userCollections} />
-              <NavLink icon="subdirectory_arrow_right" text="My Genomes" link="/account/genomes" badge={userGenomes} />
-              <NavLink icon="delete" text="Bin" link="/account/bin" />
-              <NavLink icon="exit_to_app" text="Sign Out" link="/signout" external />
-            </nav> :
+          { !user &&
             <nav className="mdl-navigation">
               { strategies.map(provider => <LoginLink key={provider} provider={provider} />) }
             </nav>
           }
+          { !user && <hr /> }
+          <nav className="mdl-navigation">
+            <h2 className="wgsa-navigation-header">Collections</h2>
+            <NavLink to="/collections/all" badge={allCollections} icon="collections">All Collections</NavLink>
+            { user && <NavLink to="/collections/user" badge={userCollections} icon="person">My Collections</NavLink> }
+            <NavLink to="/collections/bin" icon="delete">Bin</NavLink>
+          </nav>
           <hr />
           <nav className="mdl-navigation">
-            <NavLink icon="collections" text="Collections" link="/collections" badge={allCollections} />
-            <NavLink icon="bug_report" text="Genomes" link="/genomes" badge={allGenomes} />
-            <NavLink icon="cloud_upload" text="Upload" link="/upload" />
-            <NavLink icon="help" text="Documentation" link="/documentation" />
-            <NavLink icon="feedback" text="Feedback" link="https://gitlab.com/cgps/wgsa.net/issues" external />
+            <h2 className="wgsa-navigation-header">Genomes</h2>
+            <NavLink to="/genomes/all" badge={allGenomes} icon="bug_report">All Genomes</NavLink>
+            { user && <NavLink to="/genomes/user" badge={userGenomes} icon="person">My Genomes</NavLink> }
+            <NavLink to="/genomes/upload" icon="cloud_upload">Upload</NavLink>
+            <NavLink to="/genomes/bin" icon="delete">Bin</NavLink>
           </nav>
+          <hr />
+          <nav className="mdl-navigation">
+            <NavLink to="/documentation" icon="help">Documentation</NavLink>
+            <NavLink to="https://gitlab.com/cgps/wgsa.net/issues" external icon="feedback">Feedback</NavLink>
+          </nav>
+          { user &&
+            <nav className="mdl-navigation">
+              <NavLink to="/signout" external icon="exit_to_app">Sign Out</NavLink>
+            </nav>
+          }
           <footer className="wgsa-menu-footer">
             <a className="cgps-logo" target="_blank" rel="noopener" href="http://www.pathogensurveillance.net">
               <img src="/images/CGPS.SHORT.FINAL.svg" />

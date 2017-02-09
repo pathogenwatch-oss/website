@@ -39,11 +39,11 @@ function collectionMetadata(state = initialMetadata, { type, payload }) {
   }
 }
 
-const initialPrefilter = {};
+const initialPrefilter = 'all';
 function prefilter(state = initialPrefilter, { type, payload }) {
   switch (type) {
     case PREFILTER:
-      return { ...state, ...payload.condition };
+      return payload.name;
     default:
       return state;
   }

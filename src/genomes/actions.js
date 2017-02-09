@@ -13,17 +13,6 @@ export function fetchGenomes() {
   };
 }
 
-export const PREFILTER = 'PREFILTER';
-
-export function prefilter(condition) {
-  return {
-    type: PREFILTER,
-    payload: {
-      condition,
-    },
-  };
-}
-
 export const ADD_GENOMES = 'ADD_GENOMES';
 
 function addGenomes(genomes) {

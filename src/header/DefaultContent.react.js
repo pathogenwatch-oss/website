@@ -5,18 +5,14 @@ import NavLink from '../location';
 
 import { toggleAside } from './actions';
 
-const links = [
-  { text: 'Collections', link: '/collections' },
-  { text: 'Genomes', link: '/genomes' },
-  { text: 'Upload', link: '/upload' },
-  { text: 'Documentation', link: '/documentation' },
-];
-
 export const DefaultContent = ({ hasAside, onClick, asideDisabled }) => (
   <span className="mdl-layout-spacer mdl-layout-spacer--flex">
     <div className="mdl-layout-spacer" />
     <nav className="mdl-navigation wgsa-header-nav">
-      { links.map(props => <NavLink key={props.link} {...props} />) }
+      <NavLink to="/collections">Collections</NavLink>
+      <NavLink to="/genomes/all">Genomes</NavLink>
+      <NavLink to="/genomes/upload">Upload</NavLink>
+      <NavLink to="/documentation">Documentation</NavLink>
     </nav>
     <button
       className="mdl-button mdl-button--icon wgsa-search-button"

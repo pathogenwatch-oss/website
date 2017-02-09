@@ -25,7 +25,6 @@ const Summary = React.createClass({
 
   render() {
     const { completedUploads, batchSize, visibleGenomes, totalGenomes } = this.props;
-    // if (totalGenomes === 0) return <FilterSummary />;
     return (
       <FilterSummary className="wgsa-hub-summary">
         <div className="wgsa-button-group">

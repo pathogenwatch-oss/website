@@ -6,7 +6,7 @@ import { getPrefilter } from '../selectors';
 
 const mapStateToProps = state => ({
   location: state.location,
-  base: getPrefilter(state).uploaded ? '/upload' : '/genomes',
+  base: `/genomes/${getPrefilter(state)}`,
 });
 
 const ViewSwitcher = ({ title, base, view = '' }) => (
