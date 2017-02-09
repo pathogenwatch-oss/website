@@ -5,27 +5,17 @@ import { isFailedUpload } from './utils/validation';
 
 export const getPrefilter = ({ genomes }) => genomes.prefilter;
 
-const getGenomes = ({ genomes }) => genomes.entities;
+export const getGenomes = ({ genomes }) => genomes.entities;
 
 export const getGenomesAsList = createSelector(
   getGenomes,
   getPrefilter,
-  (genomes, { uploaded }) =>
+  (genomes, { uploaded, own }) =>
     Object.keys(genomes).reduce((memo, key) => {
       const genome = genomes[key];
       if (uploaded && !genome.uploaded) return memo;
+      if (own && genome.owner !== 'me') return memo;
       if (genome.binned) return memo;
-      memo.push(genome);
-      return memo;
-    }, [])
-);
-
-export const getBinnedGenomes = createSelector(
-  getGenomes,
-  genomes =>
-    Object.keys(genomes).reduce((memo, key) => {
-      const genome = genomes[key];
-      if (genome.owner !== 'me' && !genome.binned) return memo;
       memo.push(genome);
       return memo;
     }, [])

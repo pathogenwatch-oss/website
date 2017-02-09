@@ -12,10 +12,10 @@
 }
 
 .wgsa-hub-stats-section {
-  margin: 0;
-  width: 100%;
   box-sizing: border-box;
+  margin: 0;
   padding-right: 24px;
+  width: 100%;
 }
 
 .wgsa-hub-stats-section--small {

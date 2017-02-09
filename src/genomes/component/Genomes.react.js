@@ -4,9 +4,7 @@ import FileDragAndDrop from '../../drag-and-drop';
 
 import Filter from '../filter';
 import Summary from '../summary';
-import HubDrawer from '../create-collection-drawer';
-
-import { taxIdMap } from '../../species';
+import CreateCollectionDrawer from '../create-collection-drawer';
 
 export default React.createClass({
 
@@ -63,7 +61,7 @@ export default React.createClass({
           {this.props.children}
         </div>
         <Filter />
-        <HubDrawer />
+        <CreateCollectionDrawer />
       </FileDragAndDrop>
     );
   },

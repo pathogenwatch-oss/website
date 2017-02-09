@@ -13,19 +13,21 @@ import config from '../app/config';
 const navLinks = [
   { icon: 'collections', text: 'Collections', link: '/collections' },
   { icon: 'bug_report', text: 'Genomes', link: '/genomes' },
-  { icon: 'file_upload', text: 'Upload', link: '/upload' },
+  { icon: 'cloud_upload', text: 'Upload', link: '/upload' },
   { icon: 'help', text: 'Documentation', link: '/documentation' },
+  { icon: 'feedback', text: 'Feedback', link: 'https://gitlab.com/cgps/wgsa.net/issues', external: true },
 ];
 
 const userLinks = [
   { icon: 'person', text: 'Profile', link: '/account' },
-  { icon: 'subdirectory_arrow_right', text: 'My Collections', link: '/collections?owner=me' },
-  { icon: 'subdirectory_arrow_right', text: 'My Genomes', link: '/genomes?owner=me' },
+  { icon: 'subdirectory_arrow_right', text: 'My Collections', link: '/account/collections' },
+  { icon: 'subdirectory_arrow_right', text: 'My Genomes', link: '/account/genomes' },
+  { icon: 'delete', text: 'Bin', link: '/account/bin' },
   { icon: 'exit_to_app', text: 'Sign Out', link: '/signout', external: true },
 ];
 
 const user = {
-  photo: '/assets/img/user.png',
+  photo: '/images/user.svg',
   name: 'WGSA',
   email: 'Sign in to your account',
 };
@@ -67,15 +69,15 @@ const UserDrawer = React.createClass({
               image="top"
               className="wgsa-account-header"
             />
-            <img src="/assets/img/WGSA.Icon.FINAL.svg" />
-            { config.wgsaVersion &&
+            <img src="/images/WGSA.Icon.FINAL.svg" />
+            { config.version &&
               <small className="wgsa-version">
-                v{config.wgsaVersion}
+                v{config.version}
               </small>
             }
           </span>
           <nav className="mdl-navigation">
-            {config.user && <h2 className="wgsa-navigation-header">My Account</h2>}
+            {config.user && <h2 className="wgsa-navigation-header">Account</h2>}
             {config.user ?
               userLinks.map(props => <NavLink key={props.link} {...props} />) :
               strategies.map(provider => <LoginLink key={provider} provider={provider} />)}
@@ -86,7 +88,7 @@ const UserDrawer = React.createClass({
           </nav>
           <footer className="wgsa-menu-footer">
             <a className="cgps-logo" target="_blank" rel="noopener" href="http://www.pathogensurveillance.net">
-              <img src="/assets/img/CGPS.SHORT.FINAL.svg" />
+              <img src="/images/CGPS.SHORT.FINAL.svg" />
             </a>
             <a className="contact-email" href="mailto:cgps@sanger.ac.uk">cgps@sanger.ac.uk</a>
           </footer>

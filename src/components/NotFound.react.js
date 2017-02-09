@@ -15,7 +15,7 @@ export default connect()(React.createClass({
       <div className="mdl-layout wgsa-loading-container">
         <div className="wgsa-loading-content">
           <a href="/">
-            <img src="/assets/img/WGSA.FINAL.svg" className="wgsa-loading-logo" />
+            <img src="/images/WGSA.FINAL.svg" className="wgsa-loading-logo" />
           </a>
           <h1 style={titleStyle}>
             These aren't the bacteria you're looking for.

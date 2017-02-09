@@ -24,10 +24,7 @@ const AccountLink = React.createClass({
         title={config.user ? 'My Account' : 'Sign In'}
         onClick={(e) => this.openLoginMenu(e)}
       >
-        { config.user ?
-          <img src={config.user.photo} className="cgps-avatar__image" /> :
-          <i className="material-icons">person</i>
-        }
+        <img src={config.user ? config.user.photo : '/images/user.svg'} className="cgps-avatar__image" />
       </button>
     );
   },

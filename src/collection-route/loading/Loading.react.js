@@ -25,7 +25,7 @@ const Background = connect()(React.createClass({
     return (
       <div style={backgroundStyle} className="wgsa-loading-container">
         <div className="wgsa-loading-content">
-          <img src="/assets/img/WGSA.FINAL.svg" className="wgsa-loading-logo" />
+          <img src="/images/WGSA.FINAL.svg" className="wgsa-loading-logo" />
           { this.props.children }
         </div>
       </div>

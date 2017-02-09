@@ -3,6 +3,7 @@ import { Router, Route, browserHistory, Redirect, IndexRedirect } from 'react-ro
 
 import App from './App.react';
 
+import AccountRoute from '../account';
 import CollectionsRoute from '../collections';
 import CollectionRoute from '../collection-route';
 import { GenomesRoute, UploadRoute } from '../genomes';
@@ -16,6 +17,7 @@ export default () => (
   <Router history={browserHistory}>
     <Route path="/" component={App}>
       <IndexRedirect to="collections" />
+      {AccountRoute}
       {CollectionsRoute}
       {GenomesRoute}
       {UploadRoute}

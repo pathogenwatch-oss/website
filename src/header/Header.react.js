@@ -27,7 +27,7 @@ export default connect(mapStateToProps)(
       <div className="mdl-layout__header-row">
         <AccountLink />
         <span className="mdl-layout-title">
-          <img src="/assets/img/WGSA.FINAL.svg" className="wgsa-header-logo" />
+          <img src="/images/WGSA.FINAL.svg" className="wgsa-header-logo" />
         </span>
         {content || <DefaultContent hasAside={hasAside} />}
       </div>
