@@ -16,7 +16,7 @@ function mapStateToProps({ location }) {
 }
 
 export default connect(mapStateToProps)(
-  ({ icon, text, link, activeOnIndexOnly, activePathname, external }) => (
+  ({ icon, text, link, activeOnIndexOnly, activePathname, external, badge }) => (
     external ? (
       <a href={link} className="mdl-navigation__link">
         { icon && <i className="material-icons">{icon}</i>}
@@ -32,6 +32,7 @@ export default connect(mapStateToProps)(
       >
         { icon && <i className="material-icons">{icon}</i>}
         <span>{text}</span>
+        { badge ? <span className="wgsa-nav-badge mdl-badge" data-badge={badge}></span> : null}
       </Link>
     )
   )

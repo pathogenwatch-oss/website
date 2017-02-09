@@ -9,6 +9,7 @@ import { reducer as header } from '../header';
 import { reducer as location } from '../location/';
 import { reducer as maps } from '../map';
 import { reducer as toast } from '../toast';
+import { reducer as summary } from '../summary';
 
 export default combineReducers({
   genomeDrawer,
@@ -20,4 +21,5 @@ export default combineReducers({
   location,
   maps,
   toast,
+  summary,
 });

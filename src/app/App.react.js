@@ -10,6 +10,7 @@ import Header from '../header';
 import Toast from '../toast';
 import GenomeDrawer from '../genome-drawer';
 
+import { fetchSummary } from '../summary/actions';
 import { locationChange } from '../location';
 
 function mapStateToProps({ location }) {
@@ -21,6 +22,7 @@ function mapStateToProps({ location }) {
 function mapDispatchToProps(dispatch, { location }) {
   return {
     onLocationChange: () => dispatch(locationChange(location)),
+    fetchSummary: () => dispatch(fetchSummary()),
   };
 }
 
@@ -34,6 +36,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(React.createClass({
     componentHandler.upgradeDom();
     this.menuButton = document.querySelector('.mdl-layout__drawer-button');
     this.props.onLocationChange();
+    this.props.fetchSummary();
   },
 
   componentDidUpdate(previous) {

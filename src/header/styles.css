@@ -84,3 +84,13 @@
   margin: inherit;
   margin-left: 24px;
 }
+
+.wgsa-nav-badge {
+  position: absolute;
+  right: 16px;
+  margin-top: 12px;
+}
+
+.wgsa-nav-badge[data-badge]::after {
+  background: #673c90;
+}

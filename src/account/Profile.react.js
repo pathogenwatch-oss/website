@@ -2,24 +2,32 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 
+import { getSummary } from '../summary/selectors';
+
 import config from '../app/config';
+
+const { user } = config;
 
 const sectionStyle = {
   width: '80%',
   margin: '32px auto',
 };
 
-const Profile = ({ numCollections, numGenomes }) => (
+const Profile = ({ userCollections, userGenomes }) => (
   <div className="wgsa-hipster-style wgsa-filterable-view">
-    <h2 style={sectionStyle}>{config.user.name}'s Profile</h2>
+    <div className="cgps-avatar cgps-avatar--centered">
+      <img src={user.photo} className="cgps-avatar__image" />
+      <div className="cgps-avatar__name" title={user.name}>{user.name}</div>
+      <div className="cgps-avatar__contact" title={user.email}>{user.email}</div>
+    </div>
     <div className="wgsa-hub-stats-group" style={sectionStyle}>
       <Link className="wgsa-hub-stats-section" to="account/collections">
         <h3 className="wgsa-hub-stats-heading">Collections</h3>
-        <p className="wgsa-hub-stats-value wgsa-hub-stats-value--large">{numCollections}</p>
+        <p className="wgsa-hub-stats-value wgsa-hub-stats-value--large">{userCollections}</p>
       </Link>
       <Link className="wgsa-hub-stats-section" to="account/genomes">
         <h3 className="wgsa-hub-stats-heading">Genomes</h3>
-        <p className="wgsa-hub-stats-value wgsa-hub-stats-value--large">{numGenomes}</p>
+        <p className="wgsa-hub-stats-value wgsa-hub-stats-value--large">{userGenomes}</p>
       </Link>
     </div>
     <div className="wgsa-hub-stats-group" style={sectionStyle}>
@@ -31,10 +39,7 @@ const Profile = ({ numCollections, numGenomes }) => (
 );
 
 function mapStateToProps(state) {
-  return {
-    numCollections: 0,
-    numGenomes: 0,
-  };
+  return getSummary(state);
 }
 
 export default connect(mapStateToProps)(Profile);
