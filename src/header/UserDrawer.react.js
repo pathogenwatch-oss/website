@@ -81,8 +81,8 @@ const UserDrawer = React.createClass({
             <h2 className="wgsa-navigation-header">Genomes</h2>
             <NavLink to="/genomes/all" badge={allGenomes} icon="bug_report">All Genomes</NavLink>
             { user && <NavLink to="/genomes/user" badge={userGenomes} icon="person">My Genomes</NavLink> }
-            <NavLink to="/genomes/upload" icon="cloud_upload">Upload</NavLink>
             <NavLink to="/genomes/bin" icon="delete">Bin</NavLink>
+            <NavLink to="/genomes/upload" icon="cloud_upload">Upload</NavLink>
           </nav>
           <hr />
           <nav className="mdl-navigation">

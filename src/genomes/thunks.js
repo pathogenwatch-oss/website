@@ -88,7 +88,7 @@ export function filterByText(text) {
 
 export function removeGenome(genome) {
   return (dispatch) => {
-    dispatch(actions.removeGenome(genome));
+    dispatch(actions.removeGenome(genome.id));
     dispatch(showToast(toasts.undoRemoveGenome(genome, dispatch)));
   };
 }

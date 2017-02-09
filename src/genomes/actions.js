@@ -38,7 +38,7 @@ function updateGenomeProgress(id, progress) {
 
 export const REMOVE_GENOME = 'REMOVE_GENOME';
 
-function removeGenome({ id }) {
+function removeGenome(id) {
   return {
     type: REMOVE_GENOME,
     payload: { id },

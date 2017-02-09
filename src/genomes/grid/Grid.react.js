@@ -5,6 +5,7 @@ import Grid from '../../grid';
 import GenomeCard from '../card';
 
 import { getVisibleGenomes } from '../filter/selectors';
+import { getPrefilter, getTotalGenomes } from '../selectors';
 
 export const GridView = React.createClass({
 
@@ -16,6 +17,32 @@ export const GridView = React.createClass({
     document.title = 'WGSA | Genomes';
   },
 
+  getEmptyMessage() {
+    const { total, prefilter } = this.props;
+
+    if (prefilter === 'upload' && total === 0) {
+      return (
+        <p className="wgsa-filterable-content wgsa-hub-big-message">
+          Drag and drop files to begin.
+        </p>
+      );
+    }
+
+    if (prefilter === 'bin' && total === 0) {
+      return (
+        <p className="wgsa-filterable-content wgsa-hub-big-message">
+          Nothing in the bin 👍
+        </p>
+      );
+    }
+
+    return (
+      <p className="wgsa-filterable-content wgsa-hub-big-message">
+        No matches.
+      </p>
+    );
+  },
+
   render() {
     const { items } = this.props;
     return items.length ? (
@@ -25,11 +52,7 @@ export const GridView = React.createClass({
         columnWidth={256}
         rowHeight={176}
       />
-    ) : (
-      <p className="wgsa-filterable-content wgsa-hub-big-message">
-        No matches.
-      </p>
-    );
+    ) : this.getEmptyMessage();
   },
 
 });
@@ -37,6 +60,8 @@ export const GridView = React.createClass({
 function mapStateToProps(state) {
   return {
     items: getVisibleGenomes(state),
+    total: getTotalGenomes(state),
+    prefilter: getPrefilter(state),
   };
 }
 

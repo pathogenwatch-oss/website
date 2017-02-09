@@ -3,16 +3,31 @@ import { connect } from 'react-redux';
 import classnames from 'classnames';
 
 import { removeGenome } from '../thunks';
+import actions from '../actions';
 
-function mapDispatchToProps(dispatch, ownProps) {
+function mapDispatchToProps(dispatch, { genome }) {
   return {
-    onClick: () => dispatch(removeGenome(ownProps.genome)),
+    onClick: () => dispatch(
+      genome.binned ? actions.undoRemoveGenome(genome.id) : removeGenome(genome)
+    ),
   };
 }
 
 export default connect(null, mapDispatchToProps)(
   ({ onClick, primary, className, genome = {} }) => {
     if (genome.owner !== 'me') return null;
+
+    if (genome.binned) {
+      return (
+        <button
+          className="mdl-button wgsa-button--text"
+          onClick={onClick}
+          title="Restore from Bin"
+        >
+          Restore
+        </button>
+      );
+    }
 
     return primary ? (
       <button
