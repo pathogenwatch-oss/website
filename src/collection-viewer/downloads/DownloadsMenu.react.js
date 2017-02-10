@@ -6,13 +6,16 @@ import { connect } from 'react-redux';
 import Overlay from '../../components/overlay';
 import DownloadButton from './DownloadButton.react';
 
-import { setMenuActive } from '../../actions/downloads';
-import { getActiveAssemblyIds } from '../selectors';
-import { hasMetadata, hasTyping } from '../table/selectors';
+import { getCollection, getGenomes, getViewer } from '../../collection-route/selectors';
+import { getTables, hasMetadata, hasTyping } from '../table/selectors';
+import { getActiveGenomeIds } from '../selectors';
+
+import { setMenuActive } from './actions';
+
 import {
   createDownloadProps, formatCollectionFilename,
-} from '../../constants/downloads';
-import { getCounts, showCounts } from '../../utils/assembly';
+} from './utils';
+import { getCounts, showCounts } from '../../utils/genome';
 
 const DownloadsMenu = ({ menuOpen, files, counts = {}, closeMenu }) => (
   <Overlay isVisible={menuOpen} hide={closeMenu}>
@@ -41,23 +44,23 @@ DownloadsMenu.PropTypes = {
 };
 
 function mapStateToProps(state) {
-  const { downloads, collection, entities, collectionViewer } = state;
   return {
-    collection,
-    assemblies: entities.assemblies,
-    assemblyIds: getActiveAssemblyIds(state),
-    ...downloads,
-    collectionViewer, // needs to be here for selectors to work :/
+    collection: getCollection(state),
+    downloads: getViewer(state).downloads,
+    genomes: getGenomes(state),
+    genomeIds: getActiveGenomeIds(state),
     hasMetadata: hasMetadata(state),
     hasTyping: hasTyping(state),
+    tables: getTables(state),
   };
 }
 
 function mergeProps(state, { dispatch }) {
-  const { assemblies, collection, assemblyIds, menuOpen, files } = state;
+  const { genomes, collection, genomeIds, downloads } = state;
+  const { menuOpen, files } = downloads;
   return {
     menuOpen,
-    counts: getCounts(assemblies, assemblyIds),
+    counts: getCounts(genomes, genomeIds),
     files:
       Object.keys(files).
         filter(format => {
@@ -69,11 +72,10 @@ function mergeProps(state, { dispatch }) {
           return createDownloadProps({
             format,
             download,
-            id: assemblyIds,
+            id: genomeIds,
             getFileName: () => `${formatCollectionFilename(collection)}`,
-            getFileContents:
-              download.getFileContents &&
-                (() => download.getFileContents(state, dispatch)),
+            getFileContents: download.getFileContents &&
+              (() => download.getFileContents(state)),
           }, dispatch);
         }),
     closeMenu() {

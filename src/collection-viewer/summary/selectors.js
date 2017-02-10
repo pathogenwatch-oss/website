@@ -1,34 +1,36 @@
 import { createSelector } from 'reselect';
 
+import { getViewer } from '../../collection-route/selectors';
+
 import {
-  getActiveAssemblies,
+  getActiveGenomes,
   getColourGetter,
 } from '../selectors';
 
-export const getColouredActiveAssemblies = createSelector(
-  getActiveAssemblies,
+export const getColouredActiveGenomes = createSelector(
+  getActiveGenomes,
   getColourGetter,
   (items, colourGetter) =>
-    items.map((assembly) => ({
-      assembly,
-      colour: colourGetter(assembly),
+    items.map((genome) => ({
+      genome,
+      colour: colourGetter(genome),
     })
   )
 );
 
-export const getAssemblySummary = createSelector(
-  getActiveAssemblies,
+export const getGenomeSummary = createSelector(
+  getActiveGenomes,
   getColourGetter,
-  (activeAssemblies, colourGetter) => Array.from(
-    activeAssemblies.reduce((memo, assembly) => {
-      const colour = colourGetter(assembly);
-      const assemblies = memo.get(colour) || [];
-      assemblies.push(assembly);
-      return memo.set(colour, assemblies);
+  (activeGenomes, colourGetter) => Array.from(
+    activeGenomes.reduce((memo, genome) => {
+      const colour = colourGetter(genome);
+      const genomes = memo.get(colour) || [];
+      genomes.push(genome);
+      return memo.set(colour, genomes);
     }, new Map()).entries()
   )
 );
 
-const getSummary = ({ collectionViewer }) => collectionViewer.summary;
+const getSummary = state => getViewer(state).summary;
 
 export const getIsSummaryExpanded = (state) => getSummary(state).isExpanded;

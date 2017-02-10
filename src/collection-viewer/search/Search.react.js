@@ -4,13 +4,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
 
+import { getGenomes } from '../../collection-route/selectors';
 import { getActiveDataTable } from '../table/selectors';
 import { getFilter } from '../selectors';
 
 import { activateFilter, resetFilter } from '../filter/actions';
 
-
-import { utils } from '../../table';
+import { getColumnLabel } from '../table/utils';
 
 const Search = React.createClass({
 
@@ -75,7 +75,6 @@ const Search = React.createClass({
 });
 
 function mapStateToProps(state) {
-  const { entities } = state;
   const filter = getFilter(state);
   const { activeColumn } = getActiveDataTable(state);
   const totalAmount = filter.unfilteredIds.length;
@@ -83,14 +82,14 @@ function mapStateToProps(state) {
     displayProps: {
       totalAmount,
       filteredAmount: filter.active ? filter.ids.size : totalAmount,
-      filterColumnName: utils.getColumnLabel(activeColumn),
+      filterColumnName: getColumnLabel(activeColumn),
     },
     activeColumn,
-    assemblies: [ ...filter.unfilteredIds ].map(id => entities.assemblies[id]),
+    genomes: [ ...filter.unfilteredIds ].map(id => getGenomes(state)[id]),
   };
 }
 
-function mergeProps({ displayProps, activeColumn, assemblies }, { dispatch }) {
+function mergeProps({ displayProps, activeColumn, genomes }, { dispatch }) {
   return {
     ...displayProps,
     handleChange(text) {
@@ -100,9 +99,9 @@ function mergeProps({ displayProps, activeColumn, assemblies }, { dispatch }) {
       }
       const matcher = new RegExp(text, 'i');
       dispatch(activateFilter(
-        assemblies.reduce((set, assembly) => {
-          if (String(activeColumn.valueGetter(assembly)).match(matcher)) {
-            set.add(assembly.id);
+        genomes.reduce((set, genome) => {
+          if (String(activeColumn.valueGetter(genome)).match(matcher)) {
+            set.add(genome.uuid);
           }
           return set;
         }, new Set())

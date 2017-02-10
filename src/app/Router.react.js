@@ -1,38 +1,32 @@
 import React from 'react';
-import { Router, Route, IndexRoute, browserHistory, Redirect, IndexRedirect } from 'react-router';
+import { Router, Route, browserHistory, Redirect, IndexRedirect } from 'react-router';
 
 import App from './App.react';
 
-import HomeRoute from '../home';
+import AccountRoute from '../account';
+import CollectionsRoute from '../collections';
 import CollectionRoute from '../collection-route';
+import GenomesRoute from '../genomes';
 import DocumentationViewerRoute from '../documentation-viewer';
 
-import hub, { GridView, MapView, StatsView } from '../hub';
 import NotFound from '../components/NotFound.react';
 
 import Species from '../species';
 
-const SpeciesSetter = ({ children, route }) => {
-  Species.current = route.path;
-  return children;
-};
-
 export default () => (
   <Router history={browserHistory}>
     <Route path="/" component={App}>
-      {HomeRoute}
-      <Route path="upload" component={hub}>
-        <IndexRoute component={GridView} />
-        <Route path="map" component={MapView} />
-        <Route path="stats" component={StatsView} />
-      </Route>
-      { Species.list.map(({ nickname }) =>
-          <Route key={nickname} path={nickname} component={SpeciesSetter}>
-            <IndexRedirect to="/" query={{ species: nickname }} />
-            <Redirect from="upload" to="/upload" />
-            {CollectionRoute}
-          </Route>
+      <IndexRedirect to="collections" />
+      {AccountRoute}
+      {CollectionsRoute}
+      {GenomesRoute}
+      { Species.list.map(({ nickname, name }) =>
+          <Redirect key={nickname} from={nickname} to="/genomes" query={{ species: name }} />
       )}
+      <Redirect from=":species/upload" to="/upload" />
+      <Redirect from="upload" to="/genomes/upload" />
+      <Redirect from=":species/collection/:id" to="/collection/:id" />
+      {CollectionRoute}
       {DocumentationViewerRoute}
       <Route path="*" component={NotFound} />
     </Route>

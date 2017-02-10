@@ -1,7 +1,7 @@
 import React from 'react';
 
-import CollectionViewer from '../../collection-viewer';
-import UploadProgress from '../upload-progress';
+import Viewer from '../../collection-viewer';
+import Progress from '../progress';
 import { LoadSpinner, LoadError } from '../loading/Loading.react';
 
 import { statuses } from '../constants';
@@ -11,8 +11,6 @@ export default React.createClass({
   displayName: 'Explorer',
 
   propTypes: {
-    initialise: React.PropTypes.func,
-    checkStatus: React.PropTypes.func,
     updateProgress: React.PropTypes.func,
     fetch: React.PropTypes.func,
     reset: React.PropTypes.func,
@@ -21,11 +19,11 @@ export default React.createClass({
   },
 
   componentDidMount() {
-    this.props.initialise();
+    this.props.fetch();
   },
 
-  componentWillReceiveProps({ status }) {
-    if (status === statuses.READY) {
+  componentDidUpdate({ status }) {
+    if (status !== this.props.status && this.props.status === statuses.READY) {
       this.props.fetch();
     }
   },
@@ -35,26 +33,23 @@ export default React.createClass({
   },
 
   render() {
-    const { progress = {}, status } = this.props;
+    const { collection } = this.props;
 
-    if (status === statuses.PROCESSING) {
+    if (collection.status === statuses.PROCESSING) {
       return (
-        <UploadProgress {...this.props} />
+        <Progress {...this.props} />
       );
     }
 
-    if (status === statuses.FETCHED) {
+    if (collection.status === statuses.READY) {
       return (
-        <CollectionViewer />
+        <Viewer />
       );
     }
 
-    if (status && status !== statuses.READY) {
+    if (collection.status && collection.status !== statuses.READY) {
       return (
-        <LoadError
-          status={status}
-          progress={progress || {}}
-        />
+        <LoadError collection={collection} />
       );
     }
 

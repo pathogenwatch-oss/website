@@ -16,10 +16,6 @@
   z-index: auto;
 }
 
-.wgsa-header .mdl-layout-title {
-  font-family: "Roboto Condensed", "Helvetica", "Arial", sans-serif;
-}
-
 .wgsa-header-logo {
   width: 88px;
 }
@@ -28,10 +24,9 @@
   filter: grayscale(1) brightness(5);
 }
 
-.wgsa-header .mdl-navigation__link {
+.wgsa-header-nav .mdl-navigation__link {
   text-transform: uppercase;
   color: rgba(0, 0, 0, 0.54);
-  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
   font-weight: 500 !important;
   padding: 0;
   margin: 0 1rem;
@@ -39,4 +34,64 @@
 
 .mdl-layout-spacer .mdl-layout-spacer--flex {
   flex-basis: 0;
+}
+
+.wgsa-account-link {
+  position: absolute;
+  left: 16px;
+  top: 12px;
+  background: none;
+  color: #673c90;
+  border: none;
+  outline: none;
+  padding: 0;
+}
+
+.cgps-avatar > :first-child {
+  font-size: 40px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  line-height: 44px;
+  overflow: hidden;
+}
+
+.wgsa-account-header {
+  background: rgba(245, 245, 245, 0.87);
+  box-sizing: border-box;
+  color: #673c90;
+  padding: 24px 16px 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  line-height: 18px;
+  font-size: 14px;
+  letter-spacing: normal;
+}
+
+.cgps-avatar > * {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.wgsa-navigation-header {
+  font-size: inherit;
+  font-family: inherit;
+  font-weight: 500;
+  line-height: 40px;
+  margin: inherit;
+  margin-left: 24px;
+}
+
+.wgsa-nav-badge {
+  position: absolute;
+  right: 16px;
+  margin-top: 12px;
+}
+
+.wgsa-nav-badge[data-badge]::after {
+  background: #673c90;
 }

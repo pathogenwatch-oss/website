@@ -11,7 +11,7 @@ export default {
   formattedName,
   shortName,
   formattedShortName,
-  maxAssemblySize: 4 * Math.pow(10, 6),
+  maxGenomeSize: 4 * Math.pow(10, 6),
   // gcRange: {
   //   min: 31,
   //   max: 35,

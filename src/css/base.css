@@ -1,8 +1,22 @@
-h1, h2 {
+html, body {
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+}
+
+h1, h2, h3, h4 {
   font-family: "Roboto Condensed", "Helvetica", "Arial", sans-serif;
   font-weight: 400;
 }
 
-button {
+button, select {
   cursor: pointer;
+  font-family: inherit;
+}
+
+a {
+  font-weight: 400;
+  color: #673c90;
+}
+
+strong, b {
+  font-weight: 700;
 }

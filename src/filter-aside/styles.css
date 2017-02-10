@@ -21,7 +21,6 @@
   transform: translateX(255px);
   transition: .28s cubic-bezier(.4,0,.2,1);
   transition-property: transform;
-  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
 }
 
 .wgsa-has-aside ~ .mdl-layout__content .wgsa-filter {
@@ -68,7 +67,7 @@
 
 .wgsa-filter__section > h3 {
   font-size: 14px;
-  font-family: "Roboto", sans-serif;
+  font-family: "Roboto", "Arial", sans-serif;
   font-weight: 500;
   color: rgba(0, 0, 0, 0.54);
   margin: 0;

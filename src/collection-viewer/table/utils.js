@@ -1,4 +1,4 @@
-import { formatMonth, formatDay, isValid } from '../../utils/Date';
+import { isValid, formatMonth, formatDay } from '../../utils/Date';
 
 export function getFormattedDateString(date) {
   if (!isValid(date)) {
@@ -19,4 +19,20 @@ export function getFormattedDateString(date) {
 }
 
 export const getUserDefinedValue =
-  (column, { metadata }) => metadata.userDefined[column];
+  (column, { userDefined = {} }) => userDefined[column];
+
+export const formatColumnKeyAsLabel =
+  columnkey =>
+    columnkey.
+      replace(/_?_autocolou?r$/, '').
+      replace(/^__/, '').
+      replace(/_/g, ' ').
+      toUpperCase();
+
+export function getColumnLabel(props) {
+  return (
+    props.getLabel ?
+      props.getLabel() :
+      formatColumnKeyAsLabel(props.columnKey)
+  );
+}

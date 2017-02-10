@@ -1,6 +1,6 @@
 import { utils } from 'phylocanvas';
 
-import { getColumnLabel } from '../../table/utils';
+import { getColumnLabel } from '../table/utils';
 import Species from '../../species';
 import { POPULATION } from '../../app/stateKeys/tree';
 import { leafStyles, titles } from './constants';
@@ -24,11 +24,11 @@ export function collapseTreeBranches(node, leafPredicate) {
   return !someCollapsed;
 }
 
-export function getLeafStyle(assembly) {
-  if (assembly.__isReference) {
+export function getLeafStyle(genome) {
+  if (genome.__isReference) {
     return leafStyles.reference;
   }
-  if (assembly.__isPublic) {
+  if (genome.__isPublic) {
     return leafStyles.public;
   }
   return leafStyles.collection;

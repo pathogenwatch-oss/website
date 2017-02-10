@@ -15,6 +15,19 @@ function ajax(config) {
   });
 }
 
+export function fetchJson(method, path, data) {
+  return ajax({
+    type: method,
+    url: `${SERVER_ADDRESS}${path}`,
+    contentType: 'application/json; charset=UTF-8',
+    data: JSON.stringify(data),
+    dataType: 'json',
+    xhrFields: {
+      withCredentials: true,
+    },
+  });
+}
+
 export function postJson(path, data, progressFn) {
   return ajax({
     type: 'POST',
@@ -36,24 +49,18 @@ export function postJson(path, data, progressFn) {
 
       return xhr;
     },
+    xhrFields: {
+      withCredentials: true,
+    },
   });
 }
 
-export function getCollectionId(speciesId, collectionData, callback) {
-  postJson(`/species/${speciesId}/collection`, collectionData)
-    .then(data => callback(null, data), error => callback(error));
-}
-
-export function getReferenceCollection(speciesId) {
-  return $.get(`${API_ROOT}/species/${speciesId}/reference`);
-}
-
-export function getCollection(speciesId, collectionId) {
+export function getCollection(collectionId) {
   console.log(`[WGSA] Getting collection ${collectionId}`);
-  return $.get(`${API_ROOT}/species/${speciesId}/collection/${collectionId}`);
+  return fetchJson('GET', `/api/collection/${collectionId}`);
 }
 
-export function requestFile({ speciesId, idType = 'assembly', format }, requestBody) {
+export function requestFile({ speciesId, idType = 'genome', format }, requestBody) {
   return postJson(
     `/species/${speciesId}/download/type/${idType}/format/${format}`,
     requestBody
@@ -65,19 +72,4 @@ export function makeFileRequest(format, id, speciesId) {
     { speciesId, format },
     { idList: Array.isArray(id) ? id : [ id ] }
   );
-}
-
-export function getResistanceData(speciesId) {
-  return $.get(`${API_ROOT}/species/${speciesId}/resistance`);
-}
-
-export function getSubtree(speciesId, collectionId, subtreeId) {
-  return ajax({
-    type: 'GET',
-    url: `${API_ROOT}/species/${speciesId}/collection/${collectionId}/subtree/${subtreeId}`,
-  });
-}
-
-export function checkCollectionStatus(speciesId, collectionId, cas) {
-  return $.get(`${API_ROOT}/species/${speciesId}/collection/${collectionId}/status`, { cas });
 }

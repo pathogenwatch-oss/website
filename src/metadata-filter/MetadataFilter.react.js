@@ -8,7 +8,7 @@ export default ({ title, summary, onClick }) => (
       { summary.map(({ name, label, count, active }) =>
         <button
           key={name}
-          title={name}
+          title={typeof label === 'string' ? label : name}
           className={classnames(
             'mdl-chip mdl-chip--contact',
             { 'mdl-chip--active': active }

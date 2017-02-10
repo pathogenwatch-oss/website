@@ -3,19 +3,16 @@ import { connect } from 'react-redux';
 
 import NavLink from '../location';
 
-import { toggleAside } from './index';
-
-const links = [
-  { text: 'Home', link: '/', activeOnIndexOnly: true },
-  { text: 'Upload', link: '/upload' },
-  { text: 'Documentation', link: '/documentation' },
-];
+import { toggleAside } from './actions';
 
 export const DefaultContent = ({ hasAside, onClick, asideDisabled }) => (
   <span className="mdl-layout-spacer mdl-layout-spacer--flex">
     <div className="mdl-layout-spacer" />
-    <nav className="mdl-navigation">
-      { links.map(props => <NavLink key={props.link} {...props} />) }
+    <nav className="mdl-navigation wgsa-header-nav">
+      <NavLink to="/collections/all">Collections</NavLink>
+      <NavLink to="/genomes/all">Genomes</NavLink>
+      <NavLink to="/genomes/upload">Upload</NavLink>
+      <NavLink to="/documentation">Documentation</NavLink>
     </nav>
     <button
       className="mdl-button mdl-button--icon wgsa-search-button"

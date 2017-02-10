@@ -1,11 +1,11 @@
 import React from 'react';
 
 import DownloadButton from '../downloads/DownloadButton.react';
-import { FastaFileLink, FastaArchiveButton } from '../../fasta-download';
+import { GenomeFileLink, GenomeArchiveButton } from '../genome-download';
 
-import { getArchiveDownloadProps } from '../../constants/downloads';
+import { getArchiveDownloadProps } from '../downloads/utils';
 
-import { defaultWidthGetter } from '../../table/utils/columnWidth';
+import { defaultWidthGetter } from './columnWidth';
 
 import { CGPS } from '../../app/constants';
 import Species from '../../species';
@@ -63,7 +63,7 @@ export const downloadColumnProps = {
   getHeaderContent({ archiveDownloads }) {
     return (
       <span className="wgsa-table-downloads" onClick={(e) => e.stopPropagation()}>
-        <FastaArchiveButton />
+        <GenomeArchiveButton />
         <DownloadButton
           {...archiveDownloads.wgsa_gff}
           isArchive
@@ -79,7 +79,7 @@ export const downloadColumnProps = {
   getCellContents(_, { __downloads, id, name }) {
     return (
       <span className="wgsa-table-downloads" onClick={(e) => e.stopPropagation()}>
-        <FastaFileLink id={id} name={name} />
+        <GenomeFileLink id={id} name={name} />
         <DownloadButton
           { ...__downloads.wgsa_gff }
           label=".gff"
@@ -123,22 +123,20 @@ export const nameColumnProps = {
   getWidth(row, props) {
     let width = defaultWidthGetter(row, props, true);
 
-    if (row.__isPublic && row.metadata.collectionId) {
+    if (row.__isPublic && row.collectionId) {
       width += 32;
     }
 
     return width;
   },
   getCellContents({ valueGetter }, data) {
-    const { metadata } = data;
-
     return (
-      <div className="wgsa-assembly-name-cell">
+      <div className="wgsa-genome-name-cell">
         {getNameText(data, valueGetter)}
         <div onClick={(e) => e.stopPropagation()}>
-          { data.__isPublic && metadata.collectionId ?
+          { data.__isPublic && data.collectionId ?
             <a className="mdl-button mdl-button--icon"
-              href={`/${Species.nickname}/collection/${metadata.collectionId}`}
+              href={`/${Species.nickname}/collection/${data.collectionId}`}
               title="View Original Collection"
               target="_blank" rel="noopener"
             >

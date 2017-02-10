@@ -45,9 +45,9 @@ apiRouter.get('/species/:speciesId/collection/:id/status', (req, res) => {
   res.json({ status: 'READY' });
 });
 
-apiRouter.get('/species/:speciesId/collection/:id', (req, res) => {
+apiRouter.get('/collection/:id', (req, res) => {
   setTimeout(() => {
-    res.sendFile(`${getCollectionPath(req.params.speciesId)}/collection.json`);
+    res.sendFile(`${getCollectionPath(req.params.id)}/collection.json`);
   }, 0);
 });
 
@@ -120,12 +120,8 @@ app.use('/api', apiRouter);
 
 app.set('view engine', 'ejs');
 
-const wgsaVersion = require('./package.json').version;
 app.use('/', (req, res) => res.render('index', {
-  frontEndConfig: Object.assign(
-    JSON.parse(fs.readFileSync('./config.json')),
-    { wgsaVersion }
-  ),
+  frontEndConfig: JSON.parse(fs.readFileSync('./config.json')),
 }));
 
 app.listen(process.env.PORT || 8080, '0.0.0.0');

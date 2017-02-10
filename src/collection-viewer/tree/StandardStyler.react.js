@@ -1,26 +1,27 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
+import { getGenomes } from '../../collection-route/selectors';
 import { getFilter, getColourGetter } from '../selectors';
 import { getActiveDataTable } from '../table/selectors';
 import { getVisibleTree } from './selectors';
 
-import { nonResistantColour } from '../../utils/resistanceProfile';
+import { nonResistantColour } from '../amr-utils';
 import { getLeafStyle } from './utils';
 import { defaultLeafStyle } from './constants';
 
 const Styler = React.createClass({
 
   componentDidUpdate(previous) {
-    const { phylocanvas, assemblies, filter } = this.props;
+    const { phylocanvas, genomes, filter } = this.props;
 
     for (const leaf of phylocanvas.leaves) {
       const { id } = leaf;
-      const assembly = assemblies[id];
-      const colour = this.props.getColour(assembly);
+      const genome = genomes[id];
+      const colour = this.props.getColour(genome);
 
       leaf.setDisplay({
-        ...getLeafStyle(assembly),
+        ...getLeafStyle(genome),
         leafStyle: {
           ...defaultLeafStyle,
           fillStyle: colour,
@@ -28,7 +29,7 @@ const Styler = React.createClass({
       });
 
       leaf.radius = colour === nonResistantColour ? 0 : 1;
-      leaf.label = this.props.getLabel(assembly);
+      leaf.label = this.props.getLabel(genome);
       leaf.highlighted = filter.active && filter.ids.has(id);
     }
 
@@ -53,7 +54,7 @@ const Styler = React.createClass({
 function mapStateToProps(state) {
   const tree = getVisibleTree(state);
   return {
-    assemblies: state.entities.assemblies,
+    genomes: getGenomes(state),
     getColour: getColourGetter(state),
     getLabel: getActiveDataTable(state).activeColumn.valueGetter,
     filter: getFilter(state),

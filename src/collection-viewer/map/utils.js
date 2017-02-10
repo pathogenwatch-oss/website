@@ -1,19 +1,19 @@
-export function getMarkers({ positionExtractor, assemblies, visibleIds, filteredIds, colourGetter }) {
+export function getMarkers({ positionExtractor, genomes, visibleIds, filteredIds, colourGetter }) {
   if (visibleIds.length === 0) return null;
 
   return Array.from(
-    visibleIds.reduce((memo, assemblyId) => {
-      const assembly = assemblies[assemblyId];
-      const position = positionExtractor(assembly);
+    visibleIds.reduce((memo, genomeId) => {
+      const genome = genomes[genomeId];
+      const position = positionExtractor(genome);
       if (position) {
-        const colour = colourGetter(assembly);
+        const colour = colourGetter(genome);
         const key = position.join('_');
         const marker = memo.get(key) ||
           { position, id: [], slices: new Map(), highlighted: false };
-        marker.id.push(assemblyId);
+        marker.id.push(genomeId);
         marker.title = marker.id.length;
         marker.slices.set(colour, (marker.slices.get(colour) || 0) + 1);
-        marker.highlighted = marker.highlighted || filteredIds.has(assemblyId);
+        marker.highlighted = marker.highlighted || filteredIds.has(genomeId);
         memo.set(key, marker);
       }
       return memo;

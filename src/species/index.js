@@ -1,5 +1,3 @@
-import sortBy from 'lodash.sortby';
-
 const supportedSpecies = require('../../universal/species');
 
 const supportedSpeciesIds = new Set(supportedSpecies.map(_ => _.id));
@@ -19,22 +17,7 @@ const definitions =
 const definitionsAsList = Object.keys(definitions).map(key => definitions[key]);
 
 export const taxIdMap = new Map(
-  definitionsAsList.map(({ id, ...species }) => [ id, species ])
-);
-
-export const referenceCollections = sortBy(
-  definitionsAsList.reduce((memo, { id, nickname, collections }) => {
-    if (!collections) return memo;
-    return memo.concat(collections.map(_ => ({
-      link: `/${nickname}/collection/${_.id}`,
-      species: id,
-      title: _.author,
-      description: _.title,
-      pubmedLink: `http://www.ncbi.nlm.nih.gov/pubmed/${_.pmid}`,
-      size: _.numberOfAssemblies,
-    })));
-  }, []),
-  [ 'title' ]
+  definitionsAsList.map(species => [ species.id, species ])
 );
 
 let currentSpecies = {};
@@ -49,8 +32,8 @@ export default {
     return currentSpecies;
   },
 
-  set current(nickname) {
-    currentSpecies = definitions[nickname];
+  set current(taxId) {
+    currentSpecies = taxIdMap.get(taxId);
   },
 
   get(nickname) {
@@ -73,8 +56,8 @@ export default {
     return currentSpecies.uiOptions || {};
   },
 
-  get maxAssemblySize() {
-    return currentSpecies.maxAssemblySize || Math.pow(10, 10);
+  get maxGenomeSize() {
+    return currentSpecies.maxGenomeSize || Math.pow(10, 10);
   },
 
   get gcRange() {

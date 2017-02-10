@@ -1,38 +1,34 @@
 import { createSelector } from 'reselect';
 
+import { getGenomes, getViewer } from '../collection-route/selectors';
 import { getTables, getAMRTableName } from './table/selectors';
 
-import { createColourGetter } from '../utils/resistanceProfile';
+import { createColourGetter } from './amr-utils';
 
-export const getFilter = ({ collectionViewer }) => collectionViewer.filter;
+export const getFilter = state => getViewer(state).filter;
 
-export const getAssemblies = createSelector(
-  ({ entities }) => entities.assemblies,
-  assemblies => Object.values(assemblies)
+export const getVisibleGenomeIds = state => getFilter(state).unfilteredIds;
+
+export const getVisibleGenomes = createSelector(
+  getGenomes,
+  getVisibleGenomeIds,
+  (genomes, ids) => Array.from(ids).map(id => genomes[id])
 );
 
-export const getVisibleAssemblyIds = state => getFilter(state).unfilteredIds;
-
-export const getVisibleAssemblies = createSelector(
-  ({ entities }) => entities.assemblies,
-  getVisibleAssemblyIds,
-  (assemblies, ids) => Array.from(ids).map(id => assemblies[id])
-);
-
-export const getFilteredAssemblyIds = createSelector(
+export const getFilteredGenomeIds = createSelector(
   getFilter,
   filter => filter.ids
 );
 
-export const getActiveAssemblyIds = createSelector(
+export const getActiveGenomeIds = createSelector(
   getFilter,
   filter => Array.from(filter.active ? filter.ids : filter.unfilteredIds)
 );
 
-export const getActiveAssemblies = createSelector(
-  ({ entities }) => entities.assemblies,
-  getActiveAssemblyIds,
-  (assemblies, ids) => Array.from(ids).map(id => assemblies[id])
+export const getActiveGenomes = createSelector(
+  getGenomes,
+  getActiveGenomeIds,
+  (genomes, ids) => Array.from(ids).map(id => genomes[id])
 );
 
 export const getColourGetter = createSelector(

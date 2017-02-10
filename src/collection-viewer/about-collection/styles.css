@@ -1,11 +1,9 @@
 .wgsa-about-collection-dropdown {
   margin-left: 0.75rem;
-  font-family: "Roboto", sans-serif;
 }
 
 .wgsa-about-collection-dropdown__title {
   margin: 8px 0;
-  font-family: "Roboto Condensed", "Roboto", sans-serif;
   font-size: 1.5rem;
   line-height: 1.5;
   color: #673c90;
@@ -24,19 +22,6 @@
 
 .wgsa-about-collection-dropdown dl:nth-of-type(even) {
   padding-left: 8px;
-}
-
-.wgsa-about-collection-dropdown dt {
-  border-top: 1px solid #a386bd;
-  color: #673c90;
-  font-size: 0.9rem;
-  font-weight: 500;
-  padding-top: 4px;
-}
-
-.wgsa-about-collection-dropdown dd {
-  margin: 0.5rem 0 0;
-  text-align: center;
 }
 
 .wgsa-header-dropdown {

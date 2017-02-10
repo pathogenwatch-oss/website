@@ -1,4 +1,4 @@
-import { FETCH_ENTITIES } from '../../actions/fetch';
+import { FETCH_COLLECTION } from '../../collection-route/actions';
 import { SET_LABEL_COLUMN } from '../table/actions';
 import { SET_TREE } from '../tree/actions';
 import { onHeaderClick } from './thunks';
@@ -9,6 +9,7 @@ import { hasMetadata } from './utils';
 import { speciesTrees } from '../tree/constants';
 import * as table from '../table/constants';
 import { systemDataColumns } from './constants';
+import { statuses } from '../../collection-route/constants';
 
 import Species from '../../species';
 
@@ -22,17 +23,24 @@ const initialState = {
   active: true,
 };
 
-function getUserDefinedColumnNames(assemblies) {
-  const columnNames = new Set();
-  Object.keys(assemblies).forEach(key => {
-    const { userDefined } = assemblies[key].metadata;
-    if (userDefined) {
-      Object.keys(userDefined).
+function getColumnNames(genomes) {
+  const leading = new Set();
+  const userDefined = new Set();
+  const trailing = new Set();
+  genomes.forEach(genome => {
+    if (genome.userDefined) {
+      Object.keys(genome.userDefined).
         filter(name => name.length && !/__colou?r$/.test(name)).
-        forEach(name => columnNames.add(name));
+        forEach(name => userDefined.add(name));
+    }
+    if (genome.date) {
+      leading.add('__date');
+    }
+    if (genome.pmid) {
+      trailing.add('__pmid');
     }
   });
-  return columnNames;
+  return { leading, userDefined, trailing };
 }
 
 function getUserDefinedColumnProps(columnNames) {
@@ -51,37 +59,47 @@ function getActiveColumn(currentActiveColumn, newColumns) {
   return table.nameColumnProps;
 }
 
-const leftSystemColumnProps = [
-  table.leftSpacerColumn,
-  table.downloadColumnProps,
-  table.nameColumnProps,
-  systemDataColumns.__date,
-];
+function getLeadingSystemColumnProps(columnNames) {
+  return [
+    table.leftSpacerColumn,
+    table.downloadColumnProps,
+    table.nameColumnProps,
+  ].concat(Array.from(columnNames).map(name => systemDataColumns[name]));
+}
 
-const rightSystemColumnProps = [
-  systemDataColumns.__pmid,
-  table.rightSpacerColumn,
-];
+function getTrailingSystemColumnProps(columnNames) {
+  return (
+    Array.from(columnNames).map(name => systemDataColumns[name]).
+      concat([
+        table.rightSpacerColumn,
+      ])
+  );
+}
 
 export default function (state = initialState, { type, payload }) {
   if (!state.active) return state;
   switch (type) {
-    case FETCH_ENTITIES.SUCCESS: {
-      const [ { assemblies } ] = payload.result;
+    case FETCH_COLLECTION.SUCCESS: {
+      const { genomes, status } = payload.result;
+
+      if (status !== statuses.READY) return state;
+
       const { publicMetadataColumnNames = [] } = Species.current;
 
-      if (!hasMetadata(assemblies)) {
+      if (!hasMetadata(genomes)) {
         return {
           ...state,
           active: false,
         };
       }
 
-      const columnNames = getUserDefinedColumnNames(assemblies);
+      const { leading, trailing, userDefined } = getColumnNames(genomes);
+      const leadingSystemColumnProps = getLeadingSystemColumnProps(leading);
+      const trailingSystemColumnProps = getTrailingSystemColumnProps(trailing);
       const columnProps = [
-        ...leftSystemColumnProps,
-        ...getUserDefinedColumnProps(columnNames),
-        ...rightSystemColumnProps,
+        ...leadingSystemColumnProps,
+        ...getUserDefinedColumnProps(userDefined),
+        ...trailingSystemColumnProps,
       ];
 
       return {
@@ -89,9 +107,9 @@ export default function (state = initialState, { type, payload }) {
         columnProps,
         publicMetadataColumnProps:
           publicMetadataColumnNames.length ?
-            [ ...leftSystemColumnProps,
+            [ ...leadingSystemColumnProps,
               ...getUserDefinedColumnProps(publicMetadataColumnNames),
-              ...rightSystemColumnProps,
+              ...trailingSystemColumnProps,
             ] :
             columnProps,
         columns: columnProps,

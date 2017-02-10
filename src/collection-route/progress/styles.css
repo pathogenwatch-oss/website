@@ -1,0 +1,137 @@
+.wgsa-fileupload-progressbar-container {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 64px;
+}
+
+.wgsa-fileupload-progressbar.mdl-progress {
+  width: 100%;
+  z-index: -1;
+}
+
+.uploadprogress-spinner-button {
+  font-size: 10px;
+}
+
+.wgsa-upload-progress-container {
+  position: absolute;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  overflow: visible;
+  margin: 16px;
+}
+
+.wgsa-upload-progress-section {
+  background: #fff;
+}
+
+.wgsa-collection-url-display {
+  padding: 16px;
+  text-align: center;
+}
+.wgsa-collection-url-display .mdl-card__supporting-text {
+  width: 100%;
+}
+
+.wgsa-collection-url {
+  padding-top: 16px;
+  font-size: 16px;
+}
+
+.wgsa-upload-progress-table {
+  margin: 16px 0px;
+}
+
+.wgsa-genome-analyses {
+  max-width: 640px;
+  margin: 0 auto;
+  justify-content: center;
+}
+
+.wgsa-genome-analyses .mdl-card__title {
+  color: #673c90;
+  font-weight: 400;
+}
+
+.wgsa-genome-analyses .mdl-card__actions {
+  font-weight: 500;
+}
+
+.wgsa-genome-analyses .material-icons {
+  font-size: 24px;
+  color: #48996F;
+}
+
+.mdl-card__supporting-text {
+  padding: 0px;
+}
+
+.wgsa-overview-upload-ready-card {
+  min-height: 136px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  font-weight: 400;
+  z-index: 0;
+}
+.wgsa-overview-upload-ready-card i {
+  font-size: 50px;
+  color: green;
+  text-align: center;
+  width: 100%;
+}
+.wgsa-overview-upload-ready-card .mdl-card__title {
+  justify-content: center;
+  font-size: 26px;
+}
+
+.wgsa-overview-statistics-item-value {
+  font-size: 26px;
+  font-weight: 300;
+}
+
+.wgsa-overview-upload-ready-card span {
+  padding: 16px 10px;
+  text-align: center;
+  font-weight: 300;
+  font-size: 16px;
+}
+
+.wgsa-card-heading {
+  background: transparent;
+  text-transform: uppercase;
+  font-size: 16px;
+  color: #666;
+  line-height: 48px;
+  border-bottom: 1px solid #ddd;
+  padding: 4px 32px 0;
+  overflow: hidden;
+  display: block;
+  text-overflow: ellipsis;
+}
+
+.wgsa-upload-review-button {
+  background: #673c90 !important;
+  color: #fff;
+}
+
+.wgsa-upload-review-button:hover,
+.wgsa-upload-review-button:focus,
+.wgsa-upload-review-button:active {
+  background: #a386bd !important;
+}
+
+.wgsa-upload-review-button:disabled {
+  background: #e5e5e5 !important;
+}
+
+.wgsa-upload-navigation__footer .material-icons {
+  color: #fff;
+}
+
+.wgsa-upload-review-button .mdl-button__ripple-container .mdl-ripple {
+  background: #fff;
+}

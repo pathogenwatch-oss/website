@@ -35,9 +35,11 @@ const loaders = [
   { test: /\.(png|jpg|jpeg|gif)$/, loader: 'file' },
   { test: /\.js$/,
     loader: (process.env.NODE_ENV === 'production' ? '' : 'react-hot!').concat(`babel?${JSON.stringify(babelSettings)}`),
+    // loader: `babel?${JSON.stringify(babelSettings)}`,
     include: [
       /(src|universal|cgps-commons)/,
       path.join(__dirname, 'node_modules', 'promise-file-reader'),
+      path.join(__dirname, 'node_modules', 'cgps-commons'),
     ],
   },
 ];

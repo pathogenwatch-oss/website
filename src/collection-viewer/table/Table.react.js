@@ -1,16 +1,19 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import FixedTable from '../../components/FixedTable.react';
+import FixedTable from '../../fixed-table';
 import TableSwitcher from '../table/Switcher.react';
 
-import { getActiveAssemblies } from '../selectors';
+import { getCollection, getViewer } from '../../collection-route/selectors';
+import { getActiveGenomes } from '../selectors';
 import { getVisibleTable } from '../table/selectors';
+import { getFiles } from '../downloads/selectors';
 
-import { onTableClick, onRowClick } from '../table/thunks';
+import { onTableClick, onRowClick } from './thunks';
 
-import { addColumnWidth } from '../../table/utils/columnWidth';
-import { addDownloadProps } from '../../constants/downloads';
+import { addColumnWidth } from '../table/columnWidth';
+import { addDownloadProps } from '../downloads/utils';
+import { getColumnLabel } from './utils';
 
 const preventDefault = e => e.preventDefault();
 
@@ -56,7 +59,7 @@ const Table = React.createClass({
         <TableSwitcher />
         <FixedTable { ...this.props }
           rowClickHandler={this.props.onRowClick}
-          headerClickHandler={this.props.onHeaderClick}
+          getDefaultHeaderContent={this.props.getDefaultHeaderContent}
         />
         { this.props.data.length === 0 &&
           <p className="wgsa-text-overlay wgsa-hipster-style">
@@ -69,9 +72,18 @@ const Table = React.createClass({
 
 });
 
-function mapStateToProps(state) {
-  const { collection, collectionViewer, downloads } = state;
+const DefaultColumnHeader =
+  ({ column, onClick }) => (
+    <button
+      title={column.headerTitle}
+      className="wgsa-selectable-column-heading"
+      onClick={event => onClick(event, column)}
+    >
+      {getColumnLabel(column)}
+    </button>
+  );
 
+function mapStateToProps(state) {
   const table = getVisibleTable(state);
   const { activeColumn, activeColumns, ...tableState } = table;
 
@@ -79,12 +91,11 @@ function mapStateToProps(state) {
     ...tableState,
     activeColumns:
       activeColumn ? new Set([ activeColumn ]) : activeColumns,
-    collection,
-    data: getActiveAssemblies(state),
+    collection: getCollection(state),
+    data: getActiveGenomes(state),
     downloads: {
-      wgsa_gff: downloads.files.wgsa_gff,
+      wgsa_gff: getFiles(state).wgsa_gff,
     },
-    collectionViewer, // must be here to make selectors work :/
   };
 }
 
@@ -112,8 +123,16 @@ function mergeProps(state, { dispatch }, props) {
     data: data.map(row => addDownloadProps(row, state, dispatch)),
     onClick: (event) => dispatch(onTableClick(event)),
     onRowClick: row => dispatch(onRowClick(row)),
-    onHeaderClick: (event, column) =>
-      dispatch((column.onHeaderClick || state.onHeaderClick)(event, column)),
+    getDefaultHeaderContent: columnProps => (
+      <DefaultColumnHeader
+        column={columnProps}
+        onClick={(event, column) => {
+          event.stopPropagation();
+          const handleEvent = column.onHeaderClick || state.onHeaderClick;
+          dispatch(handleEvent(event, column));
+        }}
+      />
+    ),
   };
 }
 

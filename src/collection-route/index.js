@@ -3,10 +3,14 @@ import { Route } from 'react-router';
 import { connect } from 'react-redux';
 
 import Collection from './component';
-import FetchedHeaderContent from '../collection-viewer/HeaderContent.react';
-import ProcessingHeaderContent from './upload-progress/Header.react';
+import ViewerHeaderContent from '../collection-viewer/HeaderContent.react';
+import ProcessingHeaderContent from './progress/Header.react';
+
+import { getCollection } from './selectors';
 
 import { statuses } from './constants';
+
+export reducer from './reducers';
 
 export function getHeaderClassName(status) {
   if (status === statuses.READY) {
@@ -15,13 +19,13 @@ export function getHeaderClassName(status) {
   return null;
 }
 
-const mapStateToProps = ({ collection }) => ({ status: collection.status });
+const mapStateToProps = state => ({ status: getCollection(state).status });
 
 const HeaderSwitcher = connect(mapStateToProps)(
   ({ status }) => {
     switch (status) {
-      case statuses.FETCHED:
-        return <FetchedHeaderContent />;
+      case statuses.READY:
+        return <ViewerHeaderContent />;
       case statuses.PROCESSING:
         return <ProcessingHeaderContent />;
       default:
@@ -32,7 +36,7 @@ const HeaderSwitcher = connect(mapStateToProps)(
 
 export default (
   <Route
-    path="collection/:id"
+    path="collection/:slug"
     component={Collection}
     header={<HeaderSwitcher />}
   />

@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux';
 
 import { metadata, typing, stats } from '../data-tables';
-import { antibiotics, snps, genes } from '../../reducers/resistanceProfile';
+import { antibiotics, snps, genes } from '../amr-tables';
 
-import { FETCH_ENTITIES } from '../../actions/fetch';
+import { FETCH_COLLECTION } from '../../collection-route/actions';
 import { SET_TABLE } from './actions';
 
 import { getInitialTable } from '../data-tables/utils';
@@ -12,7 +12,7 @@ import { tableKeys, dataTables, amrTables } from './constants';
 
 function visible(state = tableKeys.metadata, { type, payload }) {
   switch (type) {
-    case FETCH_ENTITIES.SUCCESS:
+    case FETCH_COLLECTION.SUCCESS:
       return getInitialTable(payload.result);
     case SET_TABLE:
       return payload.name;
@@ -23,7 +23,7 @@ function visible(state = tableKeys.metadata, { type, payload }) {
 
 function activeData(state = tableKeys.metadata, { type, payload }) {
   switch (type) {
-    case FETCH_ENTITIES.SUCCESS:
+    case FETCH_COLLECTION.SUCCESS:
       return getInitialTable(payload.result);
     case SET_TABLE:
       return dataTables.has(payload.name) ? payload.name : state;

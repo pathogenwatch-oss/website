@@ -38,27 +38,6 @@ function parseCsvToJson(csv) {
   return results;
 }
 
-
-function convertDateObjectToCustomObject(date) {
-  return {
-    year: date.getFullYear(),
-    month: date.getMonth() + 1, // converts months from 0-11 to 1-12
-    day: date.getDate(),
-  };
-}
-
-function fixDateFormats(collection) {
-  const { assemblies } = collection;
-  Object.keys(assemblies).forEach(assemblyId => {
-    const assembly = assemblies[assemblyId];
-
-    if (assembly.metadata.datetime) {
-      assembly.metadata.date = convertDateObjectToCustomObject(new Date(assembly.metadata.datetime));
-    }
-  });
-  return collection;
-}
-
 function isValid({ date }) {
   const thisYear = new Date().getFullYear();
 
@@ -83,20 +62,7 @@ function isValid({ date }) {
   return true;
 }
 
-function fixPositions(collection) {
-  const { assemblies } = collection;
-  Object.keys(assemblies).forEach(assemblyId => {
-    const { metadata } = assemblies[assemblyId];
-    if (metadata.geography) {
-      metadata.position = metadata.geography.position;
-    }
-  });
-  return collection;
-}
-
 export default {
   parseCsvToJson,
-  fixDateFormats,
   isValid,
-  fixPositions,
 };
