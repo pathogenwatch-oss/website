@@ -6,7 +6,8 @@
       "file": "",
       "collections": [
         { "speciesId": "", "collectionId": "" }
-      ]
+      ],
+      "proxy": true
     }
 	},
 	"couchbase": {
@@ -56,8 +57,7 @@
 		"appId": "",
 		"key": "",
 		"secret": "",
-		"encrypted": false,
-		"proxy": "http://webcache.sanger.ac.uk:3128/"
+		"encrypted": false
 	},
   "downloadFileLocation" : "/path/to/files/",
   "maxFastaFileSize": 10,
