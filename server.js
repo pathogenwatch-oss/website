@@ -1,13 +1,17 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
+const MongoSessionStore = require('connect-mongo')(session);
+const userAccounts = require('cgps-user-accounts/src');
+const userStore = require('utils/userStore');
 const http = require('http');
 const path = require('path');
-const async = require('async');
 
 const config = require('configuration.js');
 const logging = require('utils/logging');
-const storageConnection = require('utils/storageConnection');
 const messageQueueConnection = require('utils/messageQueueConnection');
+const mongoConnection = require('utils/mongoConnection');
 
 const LOGGER = logging.getBaseLogger();
 const app = express();
@@ -25,16 +29,11 @@ app.use(bodyParser.urlencoded({
 
 logging.initHttpLogging(app, process.env.NODE_ENV || 'development');
 
-module.exports = (callback) => {
-  async.parallel([
-    storageConnection.connect,
-    messageQueueConnection.connect,
-  ], (error) => {
-    if (error) {
-      callback(error, null);
-      return;
-    }
-
+module.exports = () =>
+  Promise.all([
+    messageQueueConnection.connect(),
+    mongoConnection.connect(),
+  ]).then(() => {
     // security
     app.use((req, res, next) => {
       res.header('X-Frame-Options', 'SAMEORIGIN');
@@ -47,6 +46,28 @@ module.exports = (callback) => {
     app.use((req, res, next) => {
       res.header('X-Clacks-Overhead', 'GNU Terry Pratchett');
       next();
+    });
+
+    // required for passport.js
+    app.use(cookieParser());
+    app.use(
+      session({
+        secret: config.node.sessionSecret,
+        store: new MongoSessionStore({ url: mongoConnection.dbUrl }),
+        resave: true,
+        saveUninitialized: true,
+      })
+    );
+
+    // user accounts
+    userAccounts(app, {
+      userStore,
+      url: config.passport.url,
+      authPath: '/auth',
+      successRedirect: '/',
+      failureRedirect: '/',
+      logoutPath: '/signout',
+      strategies: config.passport.strategies,
     });
 
     app.use(express.static(path.join(clientPath, 'public')));
@@ -62,6 +83,14 @@ module.exports = (callback) => {
       next();
     });
 
+    if (process.env.NODE_ENV !== 'production') {
+      app.use((req, res, next) => {
+        res.header('Access-Control-Allow-Origin', 'http://localhost:8080');
+        res.header('Access-Control-Allow-Credentials', 'true');
+        next();
+      });
+    }
+
     require('routes.js')(app);
 
     app.set('view engine', 'ejs');
@@ -72,7 +101,9 @@ module.exports = (callback) => {
       if (req.path.match(/\.[a-z]{1,4}$/) || req.xhr) {
         return next();
       }
-
+      const user = req.user ?
+        { name: req.user.name, email: req.user.email, photo: req.user.photo } :
+        null;
       return res.render('index', {
         googleMapsKey: config.googleMapsKey,
         frontEndConfig: {
@@ -80,6 +111,8 @@ module.exports = (callback) => {
           mapboxKey: config.mapboxKey,
           maxFastaFileSize: config.maxFastaFileSize,
           wiki: config.wikiLocation,
+          strategies: [ 'facebook', 'google', 'twitter' ],
+          user,
           wgsaVersion: version,
         },
       });
@@ -100,7 +133,6 @@ module.exports = (callback) => {
         });
       });
 
-      callback(null, app);
+      return app;
     });
   });
-};

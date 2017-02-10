@@ -1,0 +1,38 @@
+const Collection = require('models/collection');
+const CollectionGenome = require('models/collectionGenome');
+const mainStorage = require('services/storage')('main');
+const { CORE_TREE_RESULT } = require('utils/documentKeys');
+
+function parseSubtrees(collectionId, results, totals) {
+  return totals.map(({ subtype, count }) => {
+    const { newickTree, leafIdentifiers } =
+      results[`${CORE_TREE_RESULT}_${collectionId}_${subtype}`];
+
+    return {
+      name: subtype,
+      tree: newickTree,
+      leafIds: leafIdentifiers,
+      totalCollection: count,
+      totalPublic: leafIdentifiers.length - count - 1, // -1 for reference
+    };
+  });
+}
+
+const countUniqueSubtypes =
+  collection => (
+    (!collection || collection.reference) ?
+      [] :
+      CollectionGenome.countUniqueSubtypes(collection)
+  );
+
+module.exports = (taskName, { collectionId, documentKeys }) =>
+  Promise.all([
+    mainStorage.retrieveMany(documentKeys),
+    Collection.findByUuid(collectionId, { _id: 1, reference: 1 }).
+      then(countUniqueSubtypes),
+  ]).
+  then(([ { results, erroredKeys }, totals ]) => {
+    if (erroredKeys.length) throw new Error(`Failed to find ${erroredKeys}`);
+    return parseSubtrees(collectionId, results, totals);
+  }).
+  then(subtrees => Collection.update({ uuid: collectionId }, { subtrees }));

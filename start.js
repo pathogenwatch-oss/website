@@ -1,9 +1,9 @@
-var LOGGER = require('utils/logging').getBaseLogger();
+const LOGGER = require('utils/logging').getBaseLogger();
 
-require('./server')(function (error) {
-  if (error) {
+require('./server')().
+  then(() => LOGGER.info('*** Application started ***')).
+  catch(error => {
+    LOGGER.error(error);
     LOGGER.error('*** Application not started ***');
     return process.exit(1);
-  }
-  LOGGER.info('*** Application started ***');
-});
+  });

@@ -1,12 +1,16 @@
 module.exports = function (app) {
   app.use('/api/', [
-    require('routes/upload'),
+    require('routes/genome'),
     require('routes/collection'),
-    require('routes/resistance'),
-    require('routes/download'),
+    require('routes/download-request'),
+    require('routes/user'),
+    require('routes/summary'),
   ]);
 
-  app.use(require('routes/speciesDownloads'));
+  app.use('/download/', [
+    require('routes/download'),
+    require('routes/speciesDownloads'),
+  ]);
 
   app.use('/zika', (req, res) =>
     res.redirect('http://edge.wgsa.net/zikv/upload')

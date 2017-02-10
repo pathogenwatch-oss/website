@@ -1,9 +1,11 @@
 {
   "extends": "cgps",
   "env": {
-    "node": true
+    "node": true,
+    "browser": false,
   },
   "rules": {
-    "no-multiple-empty-lines": 0
+    "no-multiple-empty-lines": 0,
+    "new-cap": [ "error", { "capIsNewExceptions": [ "Router" ] } ]
   }
 }

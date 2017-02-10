@@ -1,4 +1,4 @@
-const assemblyModel = require('models/assembly');
+const { ServiceRequestError } = require('./utils/errors');
 
 const LOGGER = require('utils/logging').createLogger('Error handler');
 
@@ -21,13 +21,12 @@ module.exports = function handleErrors(app) {
   app.use((error, req, res, next) => {
     LOGGER.error(error);
 
-    if (isNotFoundInStorage(error)) {
-      return res.sendStatus(404);
+    if (error instanceof ServiceRequestError) {
+      return res.sendStatus(400);
     }
 
-    if (error.message === 'request aborted') {
-      assemblyModel.sendUploadNotification(req.params, 'ABORTED');
-      return res.status(400).send(error.message);
+    if (isNotFoundInStorage(error)) {
+      return res.sendStatus(404);
     }
 
     return res.sendStatus(500);

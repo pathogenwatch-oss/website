@@ -1,37 +1,33 @@
-const fs = require('fs');
+const promisify = require('promisify-node');
+const fs = promisify('fs');
 const path = require('path');
-const async = require('async');
 
 const storageConnection = require('utils/storageConnection');
 
 const DOCUMENT_PATH = process.argv[2];
 
-async.waterfall([
-  next => storageConnection.connect(next),
-  next => fs.readdir(DOCUMENT_PATH, next),
-  (files, next) => {
+storageConnection.connect().
+  then(() => fs.readdir(DOCUMENT_PATH)).
+  then(files => {
     const filesToProcess =
       files.
         map(filename => path.join(DOCUMENT_PATH, filename)).
         filter(file => fs.statSync(file).isFile());
 
     const mainStorage = require('services/storage')('main');
-    async.eachSeries(filesToProcess, (file, done) => {
-      const string = fs.readFileSync(file, 'utf-8');
-      const contents = JSON.parse(string);
-      const key = path.basename(file).replace(path.extname(file), '');
-      console.log('inserting', key);
-      mainStorage.store(key, contents, storeError => {
-        if (storeError) done(storeError);
-        console.log('success:', key);
-        done();
-      });
-    }, next);
-  },
-], error => {
-  if (error) {
+    return filesToProcess.reduce((previous, file) =>
+      previous.then(() => {
+        const string = fs.readFileSync(file, 'utf-8');
+        const contents = JSON.parse(string);
+        const key = path.basename(file).replace(path.extname(file), '');
+        console.log('inserting', key);
+        return mainStorage.store(key, contents);
+      }),
+      Promise.resolve()
+    );
+  }).
+  then(() => process.exit(0)).
+  catch(error => {
     console.error(error);
     return process.exit(1);
-  }
-  return process.exit(0);
-});
+  });
