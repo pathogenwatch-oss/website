@@ -19,14 +19,6 @@ const app = express();
 const clientPath = path.join(__dirname, 'node_modules', 'wgsa-front-end');
 const { version } = require('./package.json');
 
-if (config.node.proxy && process.env.http_proxy) {
-  const globalTunnel = require('global-tunnel');
-  const { http_proxy } = process.env;
-  const [ , protocol, host, port ] = http_proxy.match(/(.*):\/\/(.*):(.*)/);
-  LOGGER.info('Using Proxy: ', protocol, host, port);
-  globalTunnel.initialize({ protocol, host, port });
-}
-
 app.set('port', process.env.PORT || config.node.port);
 // http://stackoverflow.com/a/19965089
 app.use(bodyParser.json({ limit: '500mb' }));
