@@ -3,7 +3,6 @@ module.exports = function (app) {
     require('routes/genome'),
     require('routes/collection'),
     require('routes/download-request'),
-    require('routes/user'),
     require('routes/summary'),
   ]);
 
@@ -13,10 +12,10 @@ module.exports = function (app) {
   ]);
 
   app.use('/zika', (req, res) =>
-    res.redirect('http://edge.wgsa.net/zikv/upload')
+    res.redirect('http://demo.wgsa.net/zikv/collection/vwcofr0w6v07')
   );
 
   app.use('/rensm/brynildsrud', (req, res) =>
-    res.redirect('https://edge.wgsa.net/rensm/collection/8eapb3glwwgh')
+    res.redirect('https://demo.wgsa.net/rensm/collection/ybdr2i0l6hmv')
   );
 };

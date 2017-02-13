@@ -1,18 +1,17 @@
-var amqp = require('amqp');
-var extend = require('extend');
-var os = require('os');
+const amqp = require('amqp');
+const os = require('os');
 
-var appConfig = require('configuration');
+const appConfig = require('configuration');
 
-var LOGGER = require('utils/logging').createLogger('Message Queue');
-var CONNECTION_OPTIONS = {
+const LOGGER = require('utils/logging').createLogger('Message Queue');
+const CONNECTION_OPTIONS = {
   host: appConfig.rabbit.ip,
   port: appConfig.rabbit.port,
   login: appConfig.rabbit.login,
   password: appConfig.rabbit.password,
   heartbeat: 60,
 };
-var EXCHANGE_CONFIG = {
+const EXCHANGE_CONFIG = {
   COLLECTION_ID: {
     name: 'grid-ex',
     type: 'direct',
@@ -54,24 +53,24 @@ var EXCHANGE_CONFIG = {
     },
   },
 };
-var connection;
-var exchanges = {};
+const exchanges = {};
+let connection;
 
 function setDefaultPublishOptions(exchange) {
-  var delegate = exchange.publish.bind(exchange);
-  var DEFAULT_OPTIONS = {
+  const delegate = exchange.publish.bind(exchange);
+  const DEFAULT_OPTIONS = {
     mandatory: true,
     contentType: 'application/json',
     deliveryMode: 1,
     correlationId: os.hostname(),
   };
   exchange.publish = function (topic, message, options) {
-    delegate(topic, message, extend({}, DEFAULT_OPTIONS, options),
-      function (error) {
+    delegate(topic, message, Object.assign({}, DEFAULT_OPTIONS, options),
+      error => {
         if (error) {
-          return LOGGER.error('Error in trying to publish: ' + error);
+          return LOGGER.error(`Error in trying to publish: ${error}`);
         }
-        LOGGER.info(`Message was published: ${topic}`, message);
+        return LOGGER.info(`Message was published: ${topic}`, message);
       }
     );
   };
