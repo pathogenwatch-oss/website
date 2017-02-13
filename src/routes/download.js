@@ -32,10 +32,10 @@ router.get('/file/:filename',
   }
 );
 
-function createFastaFileName(assemblyName = 'file') {
-  return path.extname(assemblyName || '').length ?
-    assemblyName :
-    `${assemblyName}.fasta`;
+function createFastaFileName(genomeName = 'file') {
+  return path.extname(genomeName || '').length ?
+    genomeName :
+    `${genomeName}.fasta`;
 }
 
 router.get('/genome/:id', (req, res, next) => {
@@ -78,7 +78,7 @@ router.get('/genome-archive/:id', (req, res) => {
 
   res.set({
     'Content-Disposition': `attachment;${filename ? ` filename="${filename}.zip"` : ''}`,
-    'Content-type': 'text/plain',
+    'Content-type': 'application/zip',
   });
 
   services.request('download', 'genome-archive-path', { id }).
