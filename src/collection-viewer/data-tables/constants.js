@@ -39,12 +39,14 @@ export const systemDataColumns = {
   },
   __mlst: {
     columnKey: '__mlst',
+    getLabel: () => 'ST',
     valueGetter({ analysis }) {
       if (!analysis.mlst) return null;
       return analysis.mlst.st;
     },
   },
   __mlst_profile: {
+    getLabel: () => 'PROFILE',
     columnKey: '__mlst_profile',
     valueGetter({ analysis }) {
       if (!analysis.mlst) return null;
@@ -74,6 +76,7 @@ export const systemDataColumns = {
   },
   __genotyphi_type: {
     columnKey: '__genotyphi_type',
+    getLabel: () => 'TYPE',
     valueGetter({ analysis }) {
       if (!analysis.genotyphi) return null;
       return analysis.genotyphi.genotype;
@@ -81,9 +84,18 @@ export const systemDataColumns = {
   },
   __genotyphi_snps: {
     columnKey: '__genotyphi_snps',
+    getLabel: () => 'SNPs',
     valueGetter({ analysis }) {
       if (!analysis.genotyphi) return null;
       return analysis.genotyphi.snps;
+    },
+  },
+  __genotyphi_found_loci: {
+    columnKey: '__genotyphi_found_loci',
+    getLabel: () => 'FOUND LOCI',
+    valueGetter({ analysis }) {
+      if (!analysis.genotyphi) return null;
+      return analysis.genotyphi.foundLoci;
     },
   },
   __core_matches: {

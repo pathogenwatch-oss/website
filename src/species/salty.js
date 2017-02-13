@@ -36,10 +36,7 @@ export default {
   publicMetadataColumnNames: [],
   collections: [],
   amrOptions: {
-    customLabels: {
-      SIL: 'OTHER',
-    },
-    antibioticsSeparatorIndex: -1,
+    hiddenColumns: new Set([ 'SIL' ]),
   },
   uiOptions: {
     genotyphi: true,

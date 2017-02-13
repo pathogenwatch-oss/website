@@ -1,7 +1,7 @@
 const { onHeaderClick } = require('./thunks');
 
 import { measureText } from '../table/columnWidth';
-import { createAdvancedViewColumn, checkCustomLabels } from './utils';
+import { createAdvancedViewColumn } from './utils';
 
 import { tableKeys } from '../table/constants';
 
@@ -44,7 +44,6 @@ export function buildColumns({ snp, antibiotics }, profiles) {
                   profiles,
                 ))
               ), []),
-        getLabel: () => checkCustomLabels(key),
         headerClasses: 'wgsa-table-header--expanded wgsa-table-header--group',
         headerTitle: fullName,
         onHeaderClick,

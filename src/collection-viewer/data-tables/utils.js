@@ -1,5 +1,8 @@
-import { tableKeys } from '../table/constants';
+import * as constants from '../table/constants';
+
 import Species from '../../species';
+
+const { tableKeys } = constants;
 
 // TODO: Might be good if `date` and `userDefined` were null
 export function hasMetadata(genomes) {
@@ -10,17 +13,13 @@ export function hasMetadata(genomes) {
   );
 }
 
-export function getTypingColumns(uiOptions) {
-  return [
-    uiOptions.noPopulation ? null : '__wgsa_reference',
-    ...(uiOptions.noMLST ? [] : [ '__mlst', '__mlst_profile' ]),
-    ...(uiOptions.ngMast ? [ '__ng-mast', '__por', '__tbpb' ] : []),
-    ...(uiOptions.genotyphi ? [ '__genotyphi_type', '__genotyphi_snps' ] : []),
-  ].filter(_ => _);
+export function hasTyping({ noPopulation, noMLST, ngMast, genotyphi }) {
+  if (noPopulation && noMLST && !ngMast && !genotyphi) return false;
+  return true;
 }
 
 export function getInitialTable({ genomes }) {
   if (hasMetadata(genomes)) return tableKeys.metadata;
-  if (getTypingColumns(Species.uiOptions).length) return tableKeys.typing;
+  if (hasTyping(Species.uiOptions)) return tableKeys.typing;
   return tableKeys.stats;
 }

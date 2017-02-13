@@ -9,8 +9,6 @@ import { measureText } from '../table/columnWidth';
 import * as constants from '../table/constants';
 import { statuses } from '../../collection-route/constants';
 
-import Species from '../../species';
-
 const systemGroup = {
   group: true,
   system: true,
@@ -131,9 +129,4 @@ export function createReducer({ name, buildColumns }) {
         return state;
     }
   };
-}
-
-export function checkCustomLabels(key) {
-  const { customLabels = {} } = Species.current.amrOptions || {};
-  return (key in customLabels ? customLabels[key] : key.slice(0, 3));
 }
