@@ -20,6 +20,17 @@ const clientPath = path.join(__dirname, 'node_modules', 'wgsa-front-end');
 const { version } = require('./package.json');
 
 app.set('port', process.env.PORT || config.node.port);
+
+let shuttingDown = false;
+app.use((req, res, next) => {
+  if (shuttingDown) {
+    res.header('Connection', 'close');
+    res.status(502).send('Server is shutting down');
+    return;
+  }
+  next();
+});
+
 // http://stackoverflow.com/a/19965089
 app.use(bodyParser.json({ limit: '500mb' }));
 app.use(bodyParser.urlencoded({
@@ -126,6 +137,7 @@ module.exports = () =>
       LOGGER.info(`✔ Express server listening on port ${app.get('port')}`);
 
       process.on('SIGTERM', () => {
+        shuttingDown = true;
         LOGGER.info('Received stop signal (SIGTERM), shutting down gracefully');
         server.close(() => {
           LOGGER.info('Closed out remaining connections');
