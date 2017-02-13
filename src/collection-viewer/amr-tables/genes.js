@@ -1,7 +1,7 @@
 const { onHeaderClick } = require('./thunks');
 
 import { tableKeys } from '../table/constants';
-import { createAdvancedViewColumn } from './utils';
+import { createAdvancedViewColumn, getLabel } from './utils';
 
 export const name = tableKeys.genes;
 
@@ -15,7 +15,8 @@ export function buildColumns({ paar, antibiotics }, profiles) {
           map(({ element, effect }) => createAdvancedViewColumn(
             { key: element, label: element, effect }, 'paar', profiles
           )),
-        headerClasses: 'wgsa-table-header--expanded wgsa-table-header--group',
+        getLabel: () => getLabel(key),
+        headerClasses: 'wgsa-table-header--expanded',
         headerTitle: fullName,
         onHeaderClick,
       });

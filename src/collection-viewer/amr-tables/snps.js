@@ -1,7 +1,7 @@
 const { onHeaderClick } = require('./thunks');
 
 import { measureText } from '../table/columnWidth';
-import { createAdvancedViewColumn } from './utils';
+import { createAdvancedViewColumn, getLabel } from './utils';
 
 import { tableKeys } from '../table/constants';
 
@@ -44,7 +44,8 @@ export function buildColumns({ snp, antibiotics }, profiles) {
                   profiles,
                 ))
               ), []),
-        headerClasses: 'wgsa-table-header--expanded wgsa-table-header--group',
+        getLabel: () => getLabel(key),
+        headerClasses: 'wgsa-table-header--expanded',
         headerTitle: fullName,
         onHeaderClick,
       });

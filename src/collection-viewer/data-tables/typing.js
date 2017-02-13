@@ -49,22 +49,28 @@ const referenceGroup = {
 };
 
 const mlstGroup = {
-  columnKey: 'mlst', group: true, columns: [ '__mlst', '__mlst_profile' ],
+  group: true,
+  columnKey: 'mlst',
+  columns: [ '__mlst', '__mlst_profile' ],
 };
 
 const ngMastGroup = {
-  columnKey: 'ngMast', group: true, columns: [ '__ng-mast', '__por', '__tbpb' ],
+  group: true,
+  columnKey: 'ngMast',
+  columns: [ '__ng-mast', '__por', '__tbpb' ],
 };
 
 const genotyphigroup = {
-  columnKey: 'genotyphi', group: true,
+  group: true,
+  columnKey: 'genotyphi',
   columns: [ '__genotyphi_type', '__genotyphi_snps', '__genotyphi_found_loci' ],
 };
 
 function fillColumnDefs({ columns, ...group }) {
   return {
     ...group,
-    onHeaderClick: () => {},
+    noAction: true,
+    headerClasses: 'wgsa-table-header--unstyled',
     columns: columns.map(key => systemDataColumns[key]),
   };
 }

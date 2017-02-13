@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import FixedTable from '../../fixed-table';
 import TableSwitcher from '../table/Switcher.react';
 
-import { getCollection, getViewer } from '../../collection-route/selectors';
+import { getCollection } from '../../collection-route/selectors';
 import { getActiveGenomes } from '../selectors';
 import { getVisibleTable } from '../table/selectors';
 import { getFiles } from '../downloads/selectors';
@@ -128,6 +128,7 @@ function mergeProps(state, { dispatch }, props) {
         column={columnProps}
         onClick={(event, column) => {
           event.stopPropagation();
+          if (column.noAction) return;
           const handleEvent = column.onHeaderClick || state.onHeaderClick;
           dispatch(handleEvent(event, column));
         }}

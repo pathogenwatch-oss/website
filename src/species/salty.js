@@ -36,6 +36,9 @@ export default {
   publicMetadataColumnNames: [],
   collections: [],
   amrOptions: {
+    customLabels: {
+      SIL: 'OTHER',
+    },
     hiddenColumns: new Set([ 'SIL' ]),
   },
   uiOptions: {

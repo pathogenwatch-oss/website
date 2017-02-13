@@ -15,10 +15,12 @@ export function measureText(text, isBold) {
   return Math.min(text.length, maxChars) * (isBold ? emBoldWidth : emWidth);
 }
 
-export function defaultWidthGetter(row, { valueGetter }, isBold) {
-  const text = valueGetter(row);
-  if (!text || !text.length) return 0;
-  return measureText(text, isBold);
+export function defaultWidthGetter(row, { valueGetter, columnKey }, isBold) {
+  const value = valueGetter(row);
+  if (value === null || typeof value === 'undefined') return 0;
+  const string = String(value);
+  if (!string.length) return 0;
+  return measureText(string, isBold);
 }
 
 export function addColumnWidth(column, { data }) {
@@ -26,7 +28,7 @@ export function addColumnWidth(column, { data }) {
     return column;
   }
 
-  const { getWidth = defaultWidthGetter, cellPadding = 16 } = column;
+  const { getWidth = defaultWidthGetter, cellPadding = 12 } = column;
   const columnHeaderWidth = measureText(getColumnLabel(column)) + cellPadding;
 
   column.width = data.length ? data.reduce((maxWidth, row) =>

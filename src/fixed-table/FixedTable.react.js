@@ -1,15 +1,24 @@
 import React from 'react';
 import { Table, ColumnGroup, Column, Cell } from 'fixed-data-table';
 
-function getClassNames(baseClass, selected, extraClasses) {
+function getClassNames(baseClass, selected, ...extraClasses) {
   return (
     baseClass +
     (selected ? ` ${baseClass}--selected ` : ' ') +
-    (extraClasses || '')
+    (extraClasses.join(' '))
   ).trim();
 }
 
-const getHeaderClassNames = getClassNames.bind(null, 'wgsa-table-header');
+function getHeaderClassNames(column, isSelected) {
+  const { group, headerClasses } = column;
+  return getClassNames(
+    'wgsa-table-header',
+    isSelected,
+    headerClasses,
+    group ? 'wgsa-table-header--group' : null
+  );
+}
+
 const getCellClassNames = getClassNames.bind(null, 'wgsa-table-cell');
 
 const getCellValue = ({ valueGetter }, data) => valueGetter(data);
@@ -56,12 +65,12 @@ export default React.createClass({
   },
 
   renderHeader(columnProps, headerProps) {
-    const { headerClasses, getHeaderContent } = columnProps;
+    const { getHeaderContent } = columnProps;
     const isSelected = this.isSelected(columnProps);
     return (
       <Cell
         {...headerProps}
-        className={getHeaderClassNames(isSelected, headerClasses)}
+        className={getHeaderClassNames(columnProps, isSelected)}
       >
         { getHeaderContent ?
           getHeaderContent(columnProps) :
