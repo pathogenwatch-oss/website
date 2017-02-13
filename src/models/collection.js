@@ -6,7 +6,12 @@ const { setToObjectOptions } = require('./utils');
 
 const schema = new Schema({
   _user: { type: Schema.Types.ObjectId, ref: 'User' },
-  _species: { type: Schema.Types.ObjectId, ref: 'Species', required: true },
+  _species: {
+    type: Schema.Types.ObjectId, ref: 'Species',
+    required() {
+      return !this.reference;
+    },
+  },
   description: String,
   error: String,
   progress: {

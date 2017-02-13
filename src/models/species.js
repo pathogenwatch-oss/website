@@ -24,7 +24,7 @@ setToObjectOptions(schema);
 
 schema.statics.deploy = function (collection) {
   const taxId = collection.uuid;
-  const amr = require('./models/amr'); // sync require to prevent loading in web-api service
+  const amr = require('models/amr'); // sync require to prevent loading in web-api service
   return Promise.all([
     amr.fetchAntibiotics(taxId),
     amr.fetchPaarsnpLibrary(taxId),
