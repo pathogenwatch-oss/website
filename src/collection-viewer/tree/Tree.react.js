@@ -28,11 +28,6 @@ Phylocanvas.plugin(decorate => {
 
     delegate.apply(this, args);
   });
-
-  decorate(Tree, 'cleanup', function (delegate) {
-    this.removeListener('click', this._onInternalNodeSelected);
-    delegate.call(this);
-  });
 });
 
 const fullWidthHeight = {
