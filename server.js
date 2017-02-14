@@ -17,7 +17,13 @@ const LOGGER = logging.getBaseLogger();
 const app = express();
 
 const clientPath = path.join(__dirname, 'node_modules', 'wgsa-front-end');
-const { version } = require('./package.json');
+
+let version = '';
+if (process.env.NODE_ENV === 'production') {
+  version = require('./version.json').version;
+} else {
+  version = require('./package.json').version;
+}
 
 app.set('port', process.env.PORT || config.node.port);
 
@@ -124,7 +130,7 @@ module.exports = () =>
           wiki: config.wikiLocation,
           strategies: [ 'facebook', 'google', 'twitter' ],
           user,
-          wgsaVersion: version,
+          version,
         },
       });
     });
