@@ -25,10 +25,11 @@
   color: rgba(0, 0, 0, 0.54);
   font-size: 12px;
   font-weight: 500;
+  left: calc(100% - 64px);
   letter-spacing: normal;
   line-height: 1;
   position: absolute;
-  right: 16px;
+  right: 0;
   text-align: center;
   top: 16px;
 }
