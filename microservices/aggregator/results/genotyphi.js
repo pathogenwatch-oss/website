@@ -9,6 +9,7 @@ module.exports = (name, { assemblyId }) => {
       genotype: result.genotype,
       snps: result.genotyphiMutations ?
         result.genotyphiMutations.length : undefined,
+      foundLoci: result.foundLoci,
     })).
     then(result => CollectionGenome.addAnalysisResult(uuid, name, result));
 };
