@@ -21,7 +21,7 @@ const AccountLink = React.createClass({
     return (
       <button
         className="cgps-avatar wgsa-account-link"
-        title={config.user ? 'My Account' : 'Sign In'}
+        title={`Main Menu (${config.user ? `Signed in as ${config.user.name}` : 'Not signed in'})`}
         onClick={(e) => this.openLoginMenu(e)}
       >
         <img src={config.user ? config.user.photo : '/images/user.svg'} className="cgps-avatar__image" />

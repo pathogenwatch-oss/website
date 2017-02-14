@@ -16,7 +16,7 @@ const { user } = config;
 const defaultUser = {
   photo: '/images/user.svg',
   name: 'WGSA',
-  email: 'Sign in to your account',
+  email: 'Sign In or Create Account',
 };
 
 const UserDrawer = React.createClass({

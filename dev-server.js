@@ -100,8 +100,9 @@ apiRouter.post('/upload', (req, res, next) => {
   // uploadError = !uploadError;
   return uploadError ?
     setTimeout(() => res.sendStatus(500), 500) :
-    fastaStorage.store(fastaStoragePath, req)
-      .then(({ fileId, metrics, specieator: { taxId, scientificName } }) => {
+    fastaStorage.
+      store(fastaStoragePath, req).
+      then(({ fileId, metrics, specieator: { taxId, scientificName } }) => {
         res.json({
           id: fileId,
           speciesId: taxId,
