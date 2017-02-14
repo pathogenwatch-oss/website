@@ -41,7 +41,7 @@ function flattenCSVs(files) {
 }
 
 export const GENOME_FILE_EXTENSIONS = [
-  '.fa', '.fas', '.fna', '.ffn', '.faa', '.frn', '.genome', '.contig',
+  '.fa', '.fas', '.fna', '.ffn', '.faa', '.frn', '.fasta', '.genome', '.contig',
 ];
 const GENOME_FILE_NAME_REGEX = new RegExp(`(${GENOME_FILE_EXTENSIONS.join('|')})$`, 'i');
 const CSV_FILE_NAME_REGEX = /(.csv)$/i;
