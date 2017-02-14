@@ -23,7 +23,7 @@ export function validateGenomeSize(file) {
   });
 }
 
-const regexp = /^(?:(?:>[^\n]+\n)(?:[ACGTURYKMSWBDHVN]+\n*)+)+$/i;
+const regexp = /^([^\n]+\n)(?:[ACGTURYKMSWBDHVN]+\n*)+$/i;
 
 export function validateGenomeContent(genomeContent) {
   const cleanContent = genomeContent.replace(/\r/g, '');
