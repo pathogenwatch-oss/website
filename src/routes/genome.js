@@ -16,11 +16,30 @@ router.put('/genome', (req, res, next) => {
     .catch(next);
 });
 
+router.get('/genome/stats', (req, res) => {
+  LOGGER.info('Received request to get genome stats data');
+  LOGGER.info('Requested metric:', req.query.metric);
+
+  res.sendStatus(501);
+});
+
+router.get('/genome/map', (req, res) => {
+  LOGGER.info('Received request to get genome marker data');
+
+  res.sendStatus(501);
+});
+
+router.get('/genome/:id', (req, res) => {
+  LOGGER.info('Received request to get single genome');
+
+  res.sendStatus(501);
+});
+
 router.get('/genome', (req, res, next) => {
   LOGGER.info('Received request to get genomes');
 
-  const { user } = req;
-  services.request('genome', 'fetch-list', { user }).
+  const { user, query } = req;
+  services.request('genome', 'fetch-list', { user, query }).
     then(response => res.json(response)).
     catch(next);
 });
