@@ -1,18 +1,14 @@
 const Genome = require('models/genome');
 
-const { scrollingPageSize } = require('configuration');
-const limit = scrollingPageSize || 10;
-
 module.exports = function ({ user, query = {} }) {
-  const { page = 0 } = query;
-  const skip = page * limit;
+  const { skip = 0, limit = 0 } = query;
 
   return (
     Genome.
       find(
         { $or: (user ? [ { _user: user } ] : []).concat({ public: true }) },
         null,
-        { skip, limit }
+        { skip: Number(skip), limit: Number(limit) }
       ).
       populate('_file').
       then(genomes => genomes.map(_ => _.toObject({ user })))
