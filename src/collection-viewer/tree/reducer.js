@@ -8,6 +8,8 @@ import { speciesTrees } from './constants';
 import { COLLECTION, POPULATION } from '../../app/stateKeys/tree';
 import { statuses } from '../../collection-route/constants';
 
+import Species from '../../species';
+
 function setSize(state, step, maxStepFactor) {
   if (step === state.step) return state;
 
@@ -46,7 +48,7 @@ function updateHistory(tree, { image }) {
 }
 
 const initialState = {
-  type: 'rectangular',
+  type: Species.uiOptions.defaultTree || 'rectangular',
   nodeSize: {},
   labelSize: {},
   history: [],
