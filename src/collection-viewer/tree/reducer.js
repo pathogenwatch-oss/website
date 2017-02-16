@@ -47,13 +47,15 @@ function updateHistory(tree, { image }) {
   ];
 }
 
-const initialState = {
-  type: Species.uiOptions.defaultTree || 'rectangular',
-  nodeSize: {},
-  labelSize: {},
-  history: [],
-  selectedInternalNode: null,
-};
+function getInitialState() {
+  return {
+    type: Species.uiOptions.defaultTree || 'rectangular',
+    nodeSize: {},
+    labelSize: {},
+    history: [],
+    selectedInternalNode: null,
+  };
+}
 
 function entities(state = {}, { type, payload }) {
   switch (type) {
@@ -61,6 +63,8 @@ function entities(state = {}, { type, payload }) {
       const { genomes, _species, subtrees, status } = payload.result;
 
       if (status !== statuses.READY) return state;
+
+      const initialState = getInitialState();
 
       return {
         ...state,
@@ -88,7 +92,7 @@ function entities(state = {}, { type, payload }) {
         [payload.stateKey]: {
           name: payload.stateKey,
           newick: payload.result.tree,
-          ...initialState,
+          ...getInitialState(),
         },
       };
     case ACTIONS.SET_TREE:
