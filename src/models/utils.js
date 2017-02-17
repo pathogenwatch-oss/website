@@ -7,3 +7,14 @@ exports.setToObjectOptions = (schema, optionalTransform) =>
       return optionalTransform ? optionalTransform(doc, ret, options) : ret;
     },
   });
+
+exports.addPreSaveHook = schema =>
+  schema.pre('save', function (next) {
+    const date = new Date();
+    if (!this.createdAt) {
+      this.createdAt = date;
+      this.lastAccessedAt = date;
+    }
+    this.lastUpdatedAt = date;
+    next();
+  });

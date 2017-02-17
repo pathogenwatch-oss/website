@@ -1,13 +1,20 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
+const { addPreSaveHook } = require('./utils');
+
 const schema = new Schema({
+  createdAt: Date,
+  email: String,
+  lastAccessedAt: Date,
+  lastUpdatedAt: Date,
+  name: String,
+  organisation: { type: Schema.Types.ObjectId, ref: 'Organisation' },
+  photo: String,
   providerType: String,
   providerId: String,
-  name: String,
-  email: String,
-  photo: String,
-  organisation: { type: Schema.Types.ObjectId, ref: 'Organisation' },
 });
+
+addPreSaveHook(schema);
 
 module.exports = mongoose.model('User', schema);
