@@ -5,10 +5,12 @@ import WGSAMap from '../../map';
 import LeafletPieChartMarker from '../../cgps-commons/LeafletPieChartMarker.react';
 import MarkerControls from '../../cgps-commons/LeafletMarkerControls.react';
 
+import { getMarkerSize, getLassoPath } from '../../map/selectors';
+import { getPositionExtractor } from './selectors';
+
 import { viewByCountry, markerSizeChanged } from '../../map/actions';
 import { filterByLassoPath } from './actions';
-import { getMarkerSize } from '../../map/selectors';
-import { getPositionExtractor } from './selectors';
+
 import { buttonClassname, activeButtonClassname } from '../../map/Map.react';
 import { getMarkers } from './utils';
 
@@ -24,6 +26,7 @@ const ExplorerMap = (props) => (
   <WGSAMap
     className="wgsa-collection-viewer-map"
     stateKey={stateKey}
+    lassoPath={props.lassoPath}
     markers={getMarkers(props)}
     markerComponent={LeafletPieChartMarker}
     markerSize={props.markerSize}
@@ -57,6 +60,7 @@ function mapStateToProps(state) {
     colourGetter: getColourGetter(state),
     positionExtractor: getPositionExtractor(state, { stateKey }),
     markerSize: getMarkerSize(state, { stateKey }),
+    lassoPath: getLassoPath(state, { stateKey }),
   };
 }
 

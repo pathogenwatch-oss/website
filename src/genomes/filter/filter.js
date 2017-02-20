@@ -53,7 +53,7 @@ export const filters = [
     },
   },
   { key: 'area',
-    matches({ metadata: { latitude, longitude } = {} }, path) {
+    matches({ latitude, longitude }, path) {
       if (latitude && longitude) {
         return contains(path, { lat: latitude, lng: longitude });
       }

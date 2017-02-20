@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import WGSAMap from '../../map';
 
-import * as filter from '../../filter';
+import { filterByArea } from '../filter/actions';
 import { showGenomeDrawer } from '../../genome-drawer';
 
 import { getMarkers, getLassoPath } from './selectors';
@@ -17,7 +17,7 @@ const clusterOptions = {
   },
 };
 
-const MapView = ({ lassoPath, markers, onLassoPathChange, onMarkerClick }) => (
+const MapView = ({ lassoPath, markers, onClick, onLassoPathChange, onMarkerClick }) => (
   <div>
     <WGSAMap
       className="wgsa-hub-map-view"
@@ -25,6 +25,7 @@ const MapView = ({ lassoPath, markers, onLassoPathChange, onMarkerClick }) => (
       clusterOptions={clusterOptions}
       lassoPath={lassoPath}
       markers={markers}
+      onClick={onClick}
       onLassoPathChange={onLassoPathChange}
       onMarkerClick={onMarkerClick}
       stateKey={UPLOAD}
@@ -34,14 +35,16 @@ const MapView = ({ lassoPath, markers, onLassoPathChange, onMarkerClick }) => (
 
 function mapStateToProps(state) {
   return {
-    markers: getMarkers(state),
     lassoPath: getLassoPath(state),
+    markers: getMarkers(state),
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    onLassoPathChange: path => dispatch(filter.update(UPLOAD, { key: 'area' }, path)),
+    onLassoPathChange:
+      path => dispatch(filterByArea(path)),
+    onClick: () => dispatch(filterByArea(null)),
     onMarkerClick: ({ id }) => dispatch(showGenomeDrawer(id)),
   };
 }

@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 import LeafletMap from '../cgps-commons/LeafletMap.react';
 
-import { getBounds, getLassoPath } from './selectors';
+import { getBounds } from './selectors';
 
 import CONFIG from '../app/config';
 
@@ -46,7 +46,7 @@ const WGSAMap = props => (
 function mapStateToProps(state, props) {
   return {
     bounds: getBounds(state, props),
-    lassoPath: props.lassoPath || getLassoPath(state, props),
+    lassoPath: props.lassoPath,
   };
 }
 
