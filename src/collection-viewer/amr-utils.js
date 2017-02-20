@@ -2,6 +2,7 @@ import { DEFAULT, CGPS } from '../app/constants';
 
 const stateColours = {
   RESISTANT: DEFAULT.DANGER_COLOUR,
+  INDUCIBLE: '#E68D44',
   INTERMEDIATE: DEFAULT.WARNING_COLOUR,
 };
 export const nonResistantColour = '#fff';
@@ -41,7 +42,7 @@ export function getColour(antibiotic, genome) {
   }
 
   if (isResistant(paarsnp, antibiotic)) {
-    return stateColours[paarsnp.antibiotics[antibiotic].state];
+    return getEffectColour(paarsnp.antibiotics[antibiotic].state);
   }
   return nonResistantColour;
 }
