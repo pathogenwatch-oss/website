@@ -10,10 +10,10 @@ export const getGenomeIdsInPath = createSelector(
   getVisibleGenomes,
   getLassoPath,
   (genomes, path) =>
-    genomes.reduce((ids, { id, position = {} }) => {
+    genomes.reduce((ids, { uuid, position = {} }) => {
       if (!position.latitude || !position.longitude) return ids;
       if (contains(path, { lat: position.latitude, lng: position.longitude })) {
-        return ids.concat(id);
+        return ids.concat(uuid);
       }
       return ids;
     }, [])
