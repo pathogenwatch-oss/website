@@ -4,7 +4,7 @@ import Genomes from './Genomes.react';
 
 import { toggleAside } from '../../header/actions';
 import { prefilter } from '../../prefilter/actions';
-import { fetchGenomes } from '../actions';
+import { fetchGenomes, fetchSummary } from '../actions';
 import { addFiles } from '../thunks';
 
 import { getCollection } from '../../collection-route/selectors';
@@ -23,6 +23,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch, props) {
   return {
+    fetchSummary: () => dispatch(fetchSummary()),
     fetchGenomes: () => dispatch(fetchGenomes()),
     toggleAside: isOpen => dispatch(toggleAside(isOpen)),
     addFiles: files => dispatch(addFiles(files)),

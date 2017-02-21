@@ -4,7 +4,7 @@ import uploads from './uploads';
 import entities from './entities';
 
 import { CREATE_COLLECTION, CHANGE_COLLECTION_METADATA } from '../create-collection-drawer';
-import { SHOW_METRIC, PREFILTER } from '../actions';
+import { SHOW_METRIC, PREFILTER, FETCH_SUMMARY } from '../actions';
 
 function loading(state = false, { type }) {
   switch (type) {
@@ -49,6 +49,16 @@ function prefilter(state = initialPrefilter, { type, payload }) {
   }
 }
 
+const initialSummary = {};
+function summary(state = initialSummary, { type, payload }) {
+  switch (type) {
+    case FETCH_SUMMARY:
+      return payload.result;
+    default:
+      return state;
+  }
+}
+
 export default combineReducers({
   entities,
   collectionMetadata,
@@ -56,4 +66,5 @@ export default combineReducers({
   prefilter,
   selectedMetric,
   uploads,
+  summary,
 });
