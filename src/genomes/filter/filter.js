@@ -11,13 +11,13 @@ export const filters = [
   { key: 'speciesKey',
     queryKey: 'species',
     matches(genome, value) {
-      return genome.speciesKey === value;
+      return genome.speciesId === value;
     },
   },
   { key: 'reference',
     queryKey: 'reference',
     matches(genome, value) {
-      return value === '1' ? genome.reference : !genome.reference;
+      return value === 'true' ? genome.reference : !genome.reference;
     },
   },
   { key: 'owner',

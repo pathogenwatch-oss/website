@@ -2,11 +2,11 @@ import { createAsyncConstants } from '../actions';
 
 import * as api from './api';
 
-export const FETCH_SUMMARY = createAsyncConstants('FETCH_SUMMARY');
+export const FETCH_GENOME_SUMMARY = createAsyncConstants('FETCH_GENOME_SUMMARY');
 
 export function fetchSummary() {
   return {
-    type: FETCH_SUMMARY,
+    type: FETCH_GENOME_SUMMARY,
     payload: {
       promise: api.fetchSummary(),
     },

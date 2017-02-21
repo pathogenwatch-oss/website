@@ -34,6 +34,7 @@ function mapDispatchToProps(dispatch) {
 export default connect(mapStateToProps, mapDispatchToProps)(
   ({ isActive, filterSummary, textValue, updateFilter, clearFilter }) => (
     <FilterAside
+      loading={filterSummary.loading}
       active={isActive}
       clear={clearFilter}
       textValue={textValue}
@@ -43,37 +44,37 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       )}
     >
       <MetadataFilter
-        title="WGSA Species"
+        heading="WGSA Species"
         summary={filterSummary.wgsaSpecies}
         onClick={value => updateFilter(speciesFilter, value)}
       />
       <MetadataFilter
-        title="Other Species"
+        heading="Other Species"
         summary={filterSummary.otherSpecies}
         onClick={value => updateFilter(speciesFilter, value)}
       />
       <MetadataFilter
-        title="Reference"
+        heading="Reference"
         summary={filterSummary.reference}
         onClick={value => updateFilter(referenceFilter, value)}
       />
       <MetadataFilter
-        title="Owner"
+        heading="Owner"
         summary={filterSummary.owner}
         onClick={value => updateFilter(ownershipFilter, value)}
       />
       <MetadataFilter
-        title="Country"
+        heading="Country"
         summary={filterSummary.country}
         onClick={value => updateFilter(countryFilter, value)}
       />
-      <DateFilter
+      {/* <DateFilter
         min={filterSummary.date.min}
         max={filterSummary.date.max}
         years={filterSummary.date.years}
         onChangeMin={value => updateFilter(minDate, value)}
         onChangeMax={value => updateFilter(maxDate, value)}
-      />
+      /> */}
       <LocationListener stateKey={stateKey} filters={filters} />
     </FilterAside>
   )

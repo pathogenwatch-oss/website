@@ -7,7 +7,7 @@ import { selectors as filter } from '../../filter';
 import { stateKey, filters } from './filter';
 import { getCountryName } from '../../utils/country';
 
-import { isSupported } from '../../species';
+import { isSupported, taxIdMap } from '../../species';
 
 export const getFilter = state => filter.getFilter(state, { stateKey });
 
@@ -28,93 +28,63 @@ export const getNumberOfVisibleGenomes = createSelector(
   genomes => genomes.length,
 );
 
-function incrementSummary(map, key, newEntry) {
-  const summary = map.get(key) || {
-    ...newEntry,
-    count: 0,
-  };
-  summary.count++;
-  map.set(key, summary);
-}
-
-function getSummary(map) {
-  return sortBy(Array.from(map.values()), [ 'name' ]);
-}
-
 export const getFilterSummary = createSelector(
-  getOrderedGenomes,
+  ({ genomes }) => genomes.summary,
   filter.getFilter,
-  (genomes, filterState) => {
-    const wgsaSpeciesMap = new Map();
-    const otherSpeciesMap = new Map();
-    const referenceMap = new Map();
-    const ownerMap = new Map();
-    const countryMap = new Map();
-    const yearSet = new Set();
+  ({ loading, speciesId, country, reference, owner }, filterState) => {
+    const wgsaSpecies = [];
+    const otherSpecies = [];
 
-    for (const genome of genomes) {
-      if (genome.speciesKey) {
-        const speciesMap =
-          isSupported(genome) ? wgsaSpeciesMap : otherSpeciesMap;
-        incrementSummary(speciesMap, genome.speciesKey, {
-          name: genome.speciesKey,
-          label: genome.speciesLabel,
-          active: genome.speciesKey === filterState.speciesKey,
-        });
-      }
-
-      if (genome.reference) {
-        incrementSummary(referenceMap, '1', {
-          name: '1',
-          label: 'Reference',
-          active: filterState.reference === '1',
+    for (const key of Object.keys(speciesId)) {
+      if (isSupported({ speciesId: key })) {
+        const species = taxIdMap.get(key);
+        wgsaSpecies.push({
+          key,
+          label: species.formattedShortName,
+          title: species.name,
+          count: speciesId[key].count,
+          active: filterState.speciesKey === key,
         });
       } else {
-        incrementSummary(referenceMap, '0', {
-          name: '0',
-          label: 'Non-reference',
-          active: filterState.reference === '0',
+        otherSpecies.push({
+          key,
+          active: filterState.speciesKey === key,
+          ...speciesId[key],
         });
-      }
-
-      if (genome.owner === 'me') {
-        incrementSummary(ownerMap, 'me', {
-          name: 'me',
-          label: 'Me',
-          active: filterState.owner === 'me',
-        });
-      } else {
-        incrementSummary(ownerMap, 'other', {
-          name: 'other',
-          label: 'Other',
-          active: filterState.owner === 'other',
-        });
-      }
-
-      if (genome.country) {
-        incrementSummary(countryMap, genome.country, {
-          name: genome.country,
-          label: getCountryName(genome.country),
-          active: genome.country === filterState.country,
-        });
-      }
-
-      if (genome.date) {
-        yearSet.add(genome.date.getFullYear());
       }
     }
 
     return {
-      wgsaSpecies: getSummary(wgsaSpeciesMap),
-      otherSpecies: getSummary(otherSpeciesMap),
-      reference: getSummary(referenceMap).reverse(),
-      owner: getSummary(ownerMap),
-      country: getSummary(countryMap),
-      date: {
-        min: filterState.minDate || { year: '', month: '' },
-        max: filterState.maxDate || { year: '', month: '' },
-        years: Array.from(yearSet),
-      },
+      loading,
+      wgsaSpecies: sortBy(wgsaSpecies, 'title'),
+      otherSpecies: sortBy(otherSpecies, 'label'),
+      country: sortBy(
+        Object.keys(country).map(
+          key => ({
+            key,
+            label: getCountryName(key),
+            count: country[key].count,
+            active: filterState.country === key,
+          })
+        ),
+        'label'
+      ),
+      reference: Object.keys(reference).map(
+        key => ({
+          key,
+          label: key === 'true' ? 'Yes' : 'No',
+          count: reference[key].count,
+          active: filterState.reference === key,
+        })
+      ),
+      owner: Object.keys(owner).map(
+        key => ({
+          key,
+          label: key === 'me' ? 'Me' : 'Other',
+          count: owner[key].count,
+          active: filterState.owner === key,
+        })
+      ),
     };
   }
 );

@@ -4,7 +4,7 @@ import uploads from './uploads';
 import entities from './entities';
 
 import { CREATE_COLLECTION, CHANGE_COLLECTION_METADATA } from '../create-collection-drawer';
-import { SHOW_METRIC, PREFILTER, FETCH_SUMMARY } from '../actions';
+import { SHOW_METRIC, FETCH_GENOME_SUMMARY } from '../actions';
 
 function loading(state = false, { type }) {
   switch (type) {
@@ -39,21 +39,13 @@ function collectionMetadata(state = initialMetadata, { type, payload }) {
   }
 }
 
-const initialPrefilter = 'all';
-function prefilter(state = initialPrefilter, { type, payload }) {
-  switch (type) {
-    case PREFILTER:
-      return payload.name;
-    default:
-      return state;
-  }
-}
-
-const initialSummary = {};
+const initialSummary = { speciesId: {}, country: {}, reference: {}, owner: {} };
 function summary(state = initialSummary, { type, payload }) {
   switch (type) {
-    case FETCH_SUMMARY:
-      return payload.result;
+    case FETCH_GENOME_SUMMARY.ATTEMPT:
+      return { ...state, loading: true };
+    case FETCH_GENOME_SUMMARY.SUCCESS:
+      return { ...state, loading: false, ...payload.result };
     default:
       return state;
   }
@@ -63,7 +55,6 @@ export default combineReducers({
   entities,
   collectionMetadata,
   loading,
-  prefilter,
   selectedMetric,
   uploads,
   summary,

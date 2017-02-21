@@ -1,6 +1,7 @@
 import React from 'react';
 
 import FileDragAndDrop from '../../drag-and-drop';
+import ProgressBar from '../../progress-bar';
 
 import Filter from '../filter';
 import Summary from '../summary';
@@ -31,11 +32,7 @@ export default React.createClass({
   },
 
   componentDidUpdate() {
-    const { loading, collection } = this.props;
-
-    if (loading) {
-      componentHandler.upgradeElement(this.refs.loadingBar);
-    }
+    const { collection } = this.props;
 
     if (collection.slug) {
       const { router } = this.context;
@@ -57,7 +54,7 @@ export default React.createClass({
     const { loading } = this.props;
     return (
       <FileDragAndDrop onFiles={this.upload}>
-        { loading && <div ref="loadingBar" className="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>}
+        { loading && <ProgressBar indeterminate /> }
         <div className="wgsa-hipster-style wgsa-filterable-view">
           <Summary />
           {this.props.children}
