@@ -16,13 +16,33 @@ const summaryFields = [
   },
 ];
 
+function getPrefilterCondition({ user, query }) {
+  const { prefilter, uploadedAt } = query;
+  if (prefilter === 'all') {
+    return { binned: false };
+  }
+  if (prefilter === 'user') {
+    return { binned: false, _user: user._id };
+  }
+  if (prefilter === 'upload') {
+    return { binned: false, uploadedAt };
+  }
+  if (prefilter === 'bin') {
+    return { binned: true };
+  }
+  throw new Error(`Invalid genome prefilter: '${prefilter}'`);
+}
+
 module.exports = function (props) {
+  const prefilterAggregation = [ { $match: getPrefilterCondition(props) } ];
   return Promise.all(
     summaryFields.map(({ field, aggregation }) =>
       Genome.aggregate(
-        aggregation ?
-          aggregation(props) :
-          { $group: { _id: `$${field}`, total: { $sum: 1 } } }
+        prefilterAggregation.concat(
+          aggregation ?
+            aggregation(props) :
+            [ { $group: { _id: `$${field}`, total: { $sum: 1 } } } ]
+        )
       )
     )
   ).

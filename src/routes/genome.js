@@ -9,8 +9,8 @@ const LOGGER = require('utils/logging').createLogger('Upload');
 router.get('/genome/summary', (req, res, next) => {
   LOGGER.info('Received request to get genome summary');
 
-  const { user } = req;
-  services.request('genome', 'summary', { user })
+  const { user, query } = req;
+  services.request('genome', 'summary', { user, query })
     .then(response => res.json(response))
     .catch(next);
 });
