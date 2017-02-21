@@ -21,7 +21,7 @@ module.exports = function (props) {
     summaryFields.map(({ field, aggregation }) =>
       Genome.aggregate(
         aggregation ?
-          console.dir(JSON.stringify(aggregation(props))) || aggregation(props) :
+          aggregation(props) :
           { $group: { _id: `$${field}`, total: { $sum: 1 } } }
       )
     )
