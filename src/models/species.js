@@ -3,7 +3,6 @@ const { Schema } = mongoose;
 
 const CollectionGenome = require('models/collectionGenome');
 
-
 const { setToObjectOptions } = require('./utils');
 
 const schema = new Schema({

@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 const slug = require('slug');
 
-const { setToObjectOptions } = require('./utils');
+const { setToObjectOptions, addPreSaveHook } = require('./utils');
 
 const schema = new Schema({
   _user: { type: Schema.Types.ObjectId, ref: 'User' },
@@ -12,8 +12,11 @@ const schema = new Schema({
       return !this.reference;
     },
   },
+  createdAt: Date,
   description: String,
   error: String,
+  lastAccessedAt: Date,
+  lastUpdatedAt: Date,
   progress: {
     completed: Date,
     errors: [ { taskType: String, name: String } ],
@@ -40,6 +43,7 @@ const schema = new Schema({
 });
 
 setToObjectOptions(schema);
+addPreSaveHook(schema);
 
 const commonResults = new Set([ 'mlst', 'paarsnp', 'core' ]);
 const nonReferenceResults = new Set([ 'fp' ]);

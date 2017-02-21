@@ -1,6 +1,6 @@
 {
   "name": "wgsa-middle-end",
-  "version": "5.1.6",
+  "version": "5.2.0",
   "description": "Web API for WGSA",
   "main": "app.js",
   "engines": {
@@ -32,7 +32,7 @@
     "slug": "^0.9.1",
     "uuid": "^3.0.1",
     "wgsa-fasta-store": "gitlab:cgps/wgsa-fasta-store#alpine",
-    "wgsa-front-end": "gitlab:cgps/wgsa-front-end#v5.1.4"
+    "wgsa-front-end": "gitlab:cgps/wgsa-front-end#v5.2.1"
   },
   "devDependencies": {
     "eslint-config-cgps": "github:imperialcollegelondon/eslint-config-cgps",
@@ -54,7 +54,8 @@
     "download": "eval $npm_package_startcmd bin/download.js",
     "reference": "eval $npm_package_startcmd bin/create-reference-collection.js",
     "aggregator": "eval $npm_package_startcmd microservices/bootstrap.js aggregator | bunyan -o short",
-    "repost": "eval $npm_package_startcmd bin/repost-aggregator-errors.js"
+    "repost": "eval $npm_package_startcmd bin/repost-aggregator-errors.js",
+    "metadata": "eval $npm_package_startcmd bin/update-collection-genomes.js"
   },
   "repository": {
     "type": "git",
