@@ -13,6 +13,7 @@ const schema = new Schema({
   year: Number,
   month: Number,
   day: Number,
+  date: Date,
   latitude: Number,
   longitude: Number,
   country: String,

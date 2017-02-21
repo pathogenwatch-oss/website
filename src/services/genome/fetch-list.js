@@ -1,12 +1,42 @@
 const Genome = require('models/genome');
 
+
 module.exports = function ({ user, query = {} }) {
   const { skip = 0, limit = 0 } = query;
+  const { speciesId, reference, owner, country, startDate, endDate } = query;
+
+  const findQuery = { speciesId, country };
+
+  if (reference === 'true') {
+    findQuery.reference = true;
+  } else if (reference === 'false') {
+    findQuery.reference = false;
+  }
+
+  if (owner === 'me') {
+    findQuery._user = user;
+  } else if (owner === 'other') {
+    findQuery._user = { $ne: user };
+    findQuery.public = true;
+  } else {
+    findQuery.$or = (user ? [ { _user: user } ] : []).concat({ public: true });
+  }
+
+  if (startDate) {
+    findQuery.date = { $gte: new Date(startDate) };
+  }
+
+  if (endDate) {
+    findQuery.date = Object.assign(
+      findQuery.date || {},
+      { $lte: new Date(endDate) }
+    );
+  }
 
   return (
     Genome.
       find(
-        { $or: (user ? [ { _user: user } ] : []).concat({ public: true }) },
+        findQuery,
         null,
         { skip: Number(skip), limit: Number(limit) }
       ).
