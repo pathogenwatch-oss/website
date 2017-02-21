@@ -47,8 +47,8 @@ router.put('/genome', (req, res, next) => {
   LOGGER.info('Received request to create genome');
 
   const { user } = req;
-  const { name } = req.query;
-  services.request('genome', 'create', { stream: req, metadata: { name }, user })
+  const { name, uploadedAt } = req.query;
+  services.request('genome', 'create', { stream: req, metadata: { name, uploadedAt }, user })
     .then(response => res.json(response))
     .catch(next);
 });

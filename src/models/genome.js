@@ -21,6 +21,7 @@ const schema = new Schema({
   userDefined: Object,
   public: { type: Boolean, default: false },
   reference: { type: Boolean, default: false },
+  uploadedAt: Date,
   createdAt: Date,
   lastAccessedAt: Date,
   lastUpdatedAt: Date,
