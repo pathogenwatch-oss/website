@@ -1,15 +1,19 @@
 const Genome = require('models/genome');
 
 const summaryFields = [
-  { field: 'speciesId' },
+  { field: 'speciesId',
+    aggregation: () => [
+      { $lookup: { from: 'genomefiles', localField: '_file', foreignField: '_id', as: 'file' } },
+      { $group: { _id: { label: '$file.speciesName', key: '$speciesId' }, count: { $sum: 1 } } },
+    ],
+  },
   { field: 'country' },
   { field: 'reference' },
   { field: 'owner',
     aggregation: ({ user = {} }) => [
-      { $match: { $or: (user._id ? [ { _user: user._id } ] : []).concat({ public: true }) } },
       { $group: {
           _id: { $cond: [ { $eq: [ '$_user', user._id ] }, 'me', 'other' ] },
-          total: { $sum: 1 },
+          count: { $sum: 1 },
         },
       },
     ],
@@ -17,7 +21,7 @@ const summaryFields = [
 ];
 
 function getPrefilterCondition({ user, query }) {
-  const { prefilter, uploadedAt } = query;
+  const { prefilter = 'all', uploadedAt } = query;
   if (prefilter === 'all') {
     return { binned: false };
   }
@@ -34,22 +38,37 @@ function getPrefilterCondition({ user, query }) {
 }
 
 module.exports = function (props) {
-  const prefilterAggregation = [ { $match: getPrefilterCondition(props) } ];
+  const { user = {} } = props;
+  const prefilterAggregation = [ {
+    $match: Object.assign(
+      { $or: (user._id ? [ { _user: user._id } ] : []).concat({ public: true }) },
+      getPrefilterCondition(props)
+    ),
+  } ];
   return Promise.all(
     summaryFields.map(({ field, aggregation }) =>
       Genome.aggregate(
         prefilterAggregation.concat(
           aggregation ?
             aggregation(props) :
-            [ { $group: { _id: `$${field}`, total: { $sum: 1 } } } ]
+            [ { $group: { _id: `$${field}`, count: { $sum: 1 } } } ]
         )
       )
     )
   ).
   then(results =>
     results.map(result =>
-      result.reduce((memo, { _id, total }) => {
-        memo[_id] = total;
+      result.reduce((memo, { _id, count }) => {
+        if (_id === null) return memo;
+        if (typeof _id === 'object') {
+          const previousCount = memo[_id.key] ? memo[_id.key].count : 0;
+          memo[_id.key] = {
+            count: previousCount + count,
+            label: _id.label[0],
+          };
+        } else {
+          memo[_id] = { count };
+        }
         return memo;
       }, {})
     )
