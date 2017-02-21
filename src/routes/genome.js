@@ -6,12 +6,11 @@ const services = require('../services');
 
 const LOGGER = require('utils/logging').createLogger('Upload');
 
-router.put('/genome', (req, res, next) => {
-  LOGGER.info('Received request to create genome');
+router.get('/genome/summary', (req, res, next) => {
+  LOGGER.info('Received request to get genome summary');
 
   const { user } = req;
-  const { name } = req.query;
-  services.request('genome', 'create', { stream: req, metadata: { name }, user })
+  services.request('genome', 'summary', { user })
     .then(response => res.json(response))
     .catch(next);
 });
@@ -42,6 +41,16 @@ router.get('/genome', (req, res, next) => {
   services.request('genome', 'fetch-list', { user, query }).
     then(response => res.json(response)).
     catch(next);
+});
+
+router.put('/genome', (req, res, next) => {
+  LOGGER.info('Received request to create genome');
+
+  const { user } = req;
+  const { name } = req.query;
+  services.request('genome', 'create', { stream: req, metadata: { name }, user })
+    .then(response => res.json(response))
+    .catch(next);
 });
 
 router.post('/genome/:id', (req, res, next) => {

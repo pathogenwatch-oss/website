@@ -5,7 +5,15 @@ module.exports = function ({ user, query = {} }) {
   const { skip = 0, limit = 0 } = query;
   const { speciesId, reference, owner, country, startDate, endDate } = query;
 
-  const findQuery = { speciesId, country };
+  const findQuery = {};
+
+  if (speciesId) {
+    findQuery.speciesId = speciesId;
+  }
+
+  if (country) {
+    findQuery.country = country;
+  }
 
   if (reference === 'true') {
     findQuery.reference = true;
