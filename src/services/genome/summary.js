@@ -6,7 +6,7 @@ const summaryFields = [
   { field: 'reference' },
   { field: 'owner',
     aggregation: ({ user = {} }) => [
-      { $match: { $or: [ { public: true }, { _user: user._id } ] } },
+      { $match: { $or: (user._id ? [ { _user: user._id } ] : []).concat({ public: true }) } },
       { $group: {
           _id: { $cond: [ { $eq: [ '$_user', user._id ] }, 'me', 'other' ] },
           total: { $sum: 1 },
