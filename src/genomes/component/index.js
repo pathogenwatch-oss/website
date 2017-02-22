@@ -19,11 +19,12 @@ function mapStateToProps(state) {
   };
 }
 
-function mapDispatchToProps(dispatch, { prefilter }) {
+function mapDispatchToProps(dispatch, { prefilter, location }) {
   return {
     toggleAside: isOpen => dispatch(toggleAside(isOpen)),
     addFiles: files => dispatch(addFiles(files)),
-    prefilter: () => dispatch(updateFilter({ prefilter })),
+    prefilter: () =>
+      dispatch(updateFilter({ prefilter, ...location.query }, false)),
   };
 }
 

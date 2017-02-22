@@ -9,15 +9,17 @@ export function filterByArea(path) {
   return actions.update(stateKey, { key: 'area' }, path);
 }
 
-export function updateFilter(query) {
+export function updateFilter(query, updateQueryString = true) {
   return (dispatch, getState) => {
-    dispatch(actions.update(stateKey, query));
+    const previous = getFilter(getState());
+    const update = updateQueryString ? actions.update : actions.updateFilter;
+    dispatch(update(stateKey, query));
 
-    const filter = getFilter(getState());
-    if (filter.prefilter !== query.prefilter) {
-      dispatch(fetchSummary(filter));
+    const currentFilter = getFilter(getState());
+    if (previous.prefilter !== query.prefilter) {
+      dispatch(fetchSummary(currentFilter));
     }
-    dispatch(fetchGenomes(filter));
+    dispatch(fetchGenomes(currentFilter));
   };
 }
 
