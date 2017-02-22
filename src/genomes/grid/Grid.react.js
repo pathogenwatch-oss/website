@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import Grid from '../../grid';
 import GenomeCard from '../card';
 
-import { getVisibleGenomes } from '../filter/selectors';
-import { getPrefilter, getTotalGenomes } from '../selectors';
+import { getGenomeList, getTotalGenomes } from '../selectors';
+import { getPrefilter } from '../filter/selectors';
 
 export const GridView = React.createClass({
 
@@ -59,7 +59,7 @@ export const GridView = React.createClass({
 
 function mapStateToProps(state) {
   return {
-    items: getVisibleGenomes(state),
+    items: getGenomeList(state),
     total: getTotalGenomes(state),
     prefilter: getPrefilter(state),
   };

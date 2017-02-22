@@ -22,6 +22,8 @@ export const taxIdMap = new Map(
 
 let currentSpecies = {};
 
+export FormattedSpeciesName from './FormattedSpeciesName.react';
+
 export default {
 
   get list() {

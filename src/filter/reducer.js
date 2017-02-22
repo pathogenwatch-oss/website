@@ -1,17 +1,21 @@
 import { UPDATE_FILTER, CLEAR_FILTER } from './actions';
 
 function applyFilterValue(state = {}, payload) {
-  const { filterKey, filterValue } = payload;
+  const { query } = payload;
 
-  if (filterKey === 'prefilter') {
+  if (Object.keys(query).length === 1 && query.prefilter) {
     return {
-      [filterKey]: filterValue,
+      ...query,
     };
   }
 
   return {
     ...state,
-    [filterKey]: filterValue === state[filterKey] ? null : filterValue,
+    ...Object.keys(query).reduce((memo, key) => {
+      const value = query[key];
+      memo[key] = value === state[key] ? undefined : value;
+      return memo;
+    }, {}),
   };
 }
 

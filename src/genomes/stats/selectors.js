@@ -1,11 +1,11 @@
 import { createSelector } from 'reselect';
 
-import { getVisibleGenomes } from '../filter/selectors';
+import { getGenomeList } from '../selectors';
 
 export const getSelectedMetric = ({ genomes }) => genomes.selectedMetric;
 
 export const getGenomeMetrics = createSelector(
-  getVisibleGenomes,
+  getGenomeList,
   genomes =>
     genomes.reduce((memo, { id, name, metrics }) => {
       if (!metrics) {

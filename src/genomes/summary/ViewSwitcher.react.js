@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 
-import { getPrefilter } from '../selectors';
+import { getPrefilter } from '../filter/selectors';
 
 const mapStateToProps = state => ({
   location: state.location,

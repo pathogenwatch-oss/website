@@ -1,14 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
+import LocationListener from '../../location';
 import FilterAside from '../../filter-aside';
 import DateFilter from '../../date-filter';
 import SummarySection from '../../filter/summary-section';
-import { selectors, LocationListener } from '../../filter';
+import { selectors } from '../../filter';
 
 import { getFilterSummary, getSearchText } from './selectors';
 
-import { stateKey, filters } from './filter';
+import { stateKey } from './index';
 import * as actions from './actions';
 
 function mapStateToProps(state) {
@@ -23,7 +24,7 @@ function mapDispatchToProps(dispatch) {
   return {
     clearFilter: () => dispatch(actions.clearFilter()),
     updateFilter: (filterKey, value) =>
-      dispatch(actions.updateFilter(filterKey, value)),
+      dispatch(actions.updateFilter({ [filterKey]: value })),
   };
 }
 
@@ -73,7 +74,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(
         onChangeMin={value => updateFilter(minDate, value)}
         onChangeMax={value => updateFilter(maxDate, value)}
       /> */}
-      <LocationListener stateKey={stateKey} filters={filters} />
+      <LocationListener update={updateFilter} />
     </FilterAside>
   )
 );

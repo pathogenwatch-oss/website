@@ -23,7 +23,7 @@ function mapDispatchToProps(dispatch, { prefilter }) {
   return {
     toggleAside: isOpen => dispatch(toggleAside(isOpen)),
     addFiles: files => dispatch(addFiles(files)),
-    prefilter: () => dispatch(updateFilter('prefilter', prefilter)),
+    prefilter: () => dispatch(updateFilter({ prefilter })),
   };
 }
 

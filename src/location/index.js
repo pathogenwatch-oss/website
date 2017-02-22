@@ -8,21 +8,21 @@ function push(nextString) {
   });
 }
 
-export function updateQueryString(key, value) {
+export function updateQueryString(query) {
   const qs = queryString.parse(location.search);
   const nextString = queryString.stringify({
     ...qs,
-    [key]: value === qs[key] ? undefined : value,
+    ...Object.keys(query).reduce((memo, key) => {
+      const value = query[key];
+      memo[key] = value === qs[key] ? undefined : value;
+      return memo;
+    }, {}),
   });
   push(nextString);
 }
 
-export function clearQueryString(keys) {
-  const qs = queryString.parse(location.search);
-  const nextString = queryString.stringify(
-    keys.reduce((memo, key) => ({ ...memo, [key]: undefined }), qs)
-  );
-  push(nextString);
+export function clearQueryString() {
+  push();
 }
 
 export const LOCATION_CHANGE = 'LOCATION_CHANGE';

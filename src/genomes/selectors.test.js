@@ -82,16 +82,16 @@ test('getFilter', t => {
   t.is(getFilter(state), filter);
 });
 
-test('getVisibleGenomes with inactive filter', t => {
-  const { getVisibleGenomes, getOrderedGenomes } = selectors;
+test('getGenomeList with inactive filter', t => {
+  const { getGenomeList, getOrderedGenomes } = selectors;
   const state = getTestState();
   const result = getOrderedGenomes(state);
 
-  t.deepEqual(getVisibleGenomes(state), result);
+  t.deepEqual(getGenomeList(state), result);
 });
 
-test('getVisibleGenomes with text filter', t => {
-  const { getVisibleGenomes, getGenomes } = selectors;
+test('getGenomeList with text filter', t => {
+  const { getGenomeList, getGenomes } = selectors;
   const state = getTestState({
     filter: {
       searchText: '123',
@@ -100,11 +100,11 @@ test('getVisibleGenomes with text filter', t => {
   const genomes = getGenomes(state);
   const result = [ genomes['123.fa'] ];
 
-  t.deepEqual(getVisibleGenomes(state), result);
+  t.deepEqual(getGenomeList(state), result);
 });
 
-test('getVisibleGenomes with species filter', t => {
-  const { getVisibleGenomes, getGenomes } = selectors;
+test('getGenomeList with species filter', t => {
+  const { getGenomeList, getGenomes } = selectors;
   const state = getTestState({
     filter: {
       speciesKey: otherSpeciesKey, // salty.name,
@@ -113,10 +113,10 @@ test('getVisibleGenomes with species filter', t => {
   const genomes = getGenomes(state);
   const result = [ genomes['789.fa'] ];
 
-  t.deepEqual(getVisibleGenomes(state), result);
+  t.deepEqual(getGenomeList(state), result);
 });
 
-test.todo('getVisibleGenomes with species and id filter');
+test.todo('getGenomeList with species and id filter');
 
 test('getMetadataFilters', t => {
   const { getMetadataFilters } = selectors;

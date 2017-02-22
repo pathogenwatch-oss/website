@@ -72,7 +72,7 @@ function getIds(genomes, predicate) {
 export function filterByText(text) {
   return (dispatch, getState) => {
     const state = getState();
-    const genomes = selectors.getGenomesAsList(state);
+    const genomes = selectors.getGenomeList(state);
 
     if (!text.length) {
       dispatch(actions.filterGenomes(text, selectors.getGenomeKeys(state)));

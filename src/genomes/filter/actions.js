@@ -1,4 +1,4 @@
-import { stateKey } from './filter';
+import { stateKey } from './index';
 
 import { actions } from '../../filter';
 import { fetchGenomes, fetchSummary } from '../actions';
@@ -9,12 +9,12 @@ export function filterByArea(path) {
   return actions.update(stateKey, { key: 'area' }, path);
 }
 
-export function updateFilter(key, value) {
+export function updateFilter(query) {
   return (dispatch, getState) => {
-    dispatch(actions.update(stateKey, key, value));
+    dispatch(actions.update(stateKey, query));
 
     const filter = getFilter(getState());
-    if (key === 'prefilter') {
+    if (filter.prefilter !== query.prefilter) {
       dispatch(fetchSummary(filter));
     }
     dispatch(fetchGenomes(filter));

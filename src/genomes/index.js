@@ -6,13 +6,13 @@ import GridView from './grid';
 import MapView from './map';
 import StatsView from './stats';
 
-import { prefilters } from './filter';
+const prefilters = [ 'all', 'user', 'bin' ];
 
 export reducer from './reducer';
 
 export default (
   <Route path="genomes">
-    { Object.keys(prefilters).map(prefilter =>
+    { prefilters.map(prefilter =>
       <Route key={prefilter} path={prefilter}
         component={props => <Genomes {...props} prefilter={prefilter} />}
       >

@@ -5,6 +5,8 @@ import { CardMetadata } from '../../card';
 import { formatDay, formatMonth } from '../../utils/Date';
 import { getCountryName } from '../../utils/country';
 
+import { FormattedSpeciesName } from '../../species';
+
 function displayDate({ day, month, year }) {
   if (!day && !month && !year) {
     return null;
@@ -27,20 +29,20 @@ function displayCountry(country) {
   );
 }
 
-function displaySpecies(key, label) {
-  if (!label) return null;
+function displaySpecies(speciesId, title) {
+  if (!title) return null;
   return (
     <CardMetadata title="Species" icon="bug_report">
-      <span title={key}>{label}</span>
+      <FormattedSpeciesName speciesId={speciesId} title={title} />
     </CardMetadata>
   );
 }
 
 export default props => {
-  const { speciesKey, speciesLabel, country, ...metadata } = props;
+  const { speciesId, speciesName, country, ...metadata } = props;
   return (
     <div className="wgsa-card-content">
-      {displaySpecies(speciesKey, speciesLabel)}
+      {displaySpecies(speciesId, speciesName)}
       {displayCountry(country)}
       {displayDate(metadata)}
     </div>

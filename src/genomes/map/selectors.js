@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect';
 
-import { getFilter, getVisibleGenomes } from '../filter/selectors';
+import { getFilter } from '../filter/selectors';
+import { getGenomeList } from '../selectors';
 
 export const getLassoPath = createSelector(
   getFilter,
@@ -8,7 +9,7 @@ export const getLassoPath = createSelector(
 );
 
 export const getMarkers = createSelector(
-  getVisibleGenomes,
+  getGenomeList,
   genomes => genomes.reduce((markers, { id, name, latitude, longitude }) => {
     if (latitude && longitude) {
       markers.push({

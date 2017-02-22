@@ -4,8 +4,6 @@ import {
   REMOVE_GENOME, UNDO_REMOVE_GENOME,
 } from '../actions';
 
-import { taxIdMap, isSupported } from '../../species';
-
 function updateGenomes(state, id, update) {
   const genome = state[id];
   return {
@@ -14,26 +12,15 @@ function updateGenomes(state, id, update) {
   };
 }
 
-function categoriseBySpecies(genome) {
-  const { speciesId, speciesName } = genome;
-  const supported = isSupported(genome);
-  const species = taxIdMap.get(speciesId);
-  return {
-    speciesKey: supported ? species.name : speciesName,
-    speciesLabel: supported ? species.formattedShortName : speciesName,
-  };
-}
-
 export default function (state = {}, { type, payload }) {
   switch (type) {
     case FETCH_GENOMES.SUCCESS: {
       return payload.result.reduce((memo, genome) => {
         memo[genome.id] = {
-          ...categoriseBySpecies(genome),
           ...genome,
         };
         return memo;
-      }, { ...state });
+      }, {});
     }
     case ADD_GENOMES: {
       const { genomes } = payload;
@@ -67,7 +54,6 @@ export default function (state = {}, { type, payload }) {
         ...state,
         [result.id]: { // replace with id from server
           ...temp,
-          ...categoriseBySpecies(result),
           ...result,
         },
       };

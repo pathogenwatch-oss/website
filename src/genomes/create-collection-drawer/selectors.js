@@ -1,13 +1,12 @@
 import { createSelector } from 'reselect';
 
-import * as genomes from '../selectors';
-import { getNumberOfVisibleGenomes, getVisibleGenomes }
-  from '../filter/selectors';
+import { isUploading } from '../selectors';
+import { getGenomeList } from '../selectors';
 
 import { isSupported } from '../../species';
 
 export const getVisibleSpecies = createSelector(
-  getVisibleGenomes,
+  getGenomeList,
   genomes => genomes.reduce((memo, genome) => {
     if (isSupported(genome)) {
       memo.supported.add(genome.speciesId);
@@ -25,7 +24,7 @@ export const isSupportedSpeciesSelected = createSelector(
 
 export const canCreateCollection = createSelector(
   state => state.genomes.loading,
-  genomes.isUploading,
+  isUploading,
   isSupportedSpeciesSelected,
   (loading, uploading, supportSpeciesSelected) =>
     !loading && !uploading && supportSpeciesSelected
@@ -33,9 +32,9 @@ export const canCreateCollection = createSelector(
 
 export const getCollectionSummary = createSelector(
   getVisibleSpecies,
-  getNumberOfVisibleGenomes,
-  ({ supported }, numGenomes) => ({
-    numGenomes,
+  getGenomeList,
+  ({ supported }, genomes) => ({
+    numGenomes: genomes.length,
     speciesId: Array.from(supported)[0],
   })
 );

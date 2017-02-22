@@ -9,7 +9,7 @@ export const getFilter = state => getViewer(state).filter;
 
 export const getVisibleGenomeIds = state => getFilter(state).unfilteredIds;
 
-export const getVisibleGenomes = createSelector(
+export const getGenomeList = createSelector(
   getGenomes,
   getVisibleGenomeIds,
   (genomes, ids) => Array.from(ids).map(id => genomes[id])

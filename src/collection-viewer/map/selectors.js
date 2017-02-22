@@ -3,11 +3,11 @@ import { contains } from 'leaflet-lassoselect/utils';
 
 import { getCountryCentroid } from '../../utils/country';
 
-import { getVisibleGenomes } from '../selectors';
+import { getGenomeList } from '../selectors';
 import { getLassoPath, getViewByCountry } from '../../map/selectors';
 
 export const getGenomeIdsInPath = createSelector(
-  getVisibleGenomes,
+  getGenomeList,
   getLassoPath,
   (genomes, path) =>
     genomes.reduce((ids, { uuid, position = {} }) => {

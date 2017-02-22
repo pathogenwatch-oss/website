@@ -25,7 +25,7 @@ function getCardComponents(props) {
     };
   }
 
-  if (props.speciesKey) {
+  if (props.speciesId) {
     return {
       content: <GenomeMetadata {...props} />,
       footer: <DefaultFooter {...props} />,

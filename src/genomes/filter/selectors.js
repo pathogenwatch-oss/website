@@ -1,31 +1,20 @@
 import { createSelector } from 'reselect';
 import sortBy from 'lodash.sortby';
 
-import { getOrderedGenomes } from '../selectors';
 import { selectors as filter } from '../../filter';
 
-import { stateKey, filters } from './filter';
+import { stateKey } from './index';
 import { getCountryName } from '../../utils/country';
 
 import { isSupported, taxIdMap } from '../../species';
 
 export const getFilter = state => filter.getFilter(state, { stateKey });
 
+export const getPrefilter = state => getFilter(state).prefilter;
+
 export const getSearchText = createSelector(
   getFilter,
   ({ searchText }) => (searchText || ''),
-);
-
-export const getVisibleGenomes = state =>
-  filter.getFilteredItems(state, {
-    filters,
-    stateKey,
-    items: getOrderedGenomes(state),
-  });
-
-export const getNumberOfVisibleGenomes = createSelector(
-  getVisibleGenomes,
-  genomes => genomes.length,
 );
 
 export const getFilterSummary = createSelector(

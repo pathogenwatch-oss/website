@@ -3,11 +3,11 @@ import { updateQueryString, clearQueryString } from '../location';
 export const UPDATE_FILTER = 'UPDATE_FILTER';
 export const CLEAR_FILTER = 'CLEAR_FILTER';
 
-export function updateFilter(stateKey, filterKey, filterValue) {
+export function updateFilter(stateKey, query) {
   return {
     type: UPDATE_FILTER,
     payload: {
-      stateKey, filterKey, filterValue,
+      stateKey, query,
     },
   };
 }
@@ -21,18 +21,17 @@ export function clearFilter(stateKey) {
   };
 }
 
-export function update(stateKey, key, newValue) {
+export function update(stateKey, query) {
   return dispatch => {
-    dispatch(updateFilter(stateKey, key, newValue));
-    if (key !== 'prefilter') {
-      updateQueryString(key, newValue);
-    }
+    dispatch(updateFilter(stateKey, query));
+    delete query.prefilter;
+    updateQueryString(query);
   };
 }
 
-export function clear(stateKey, filters) {
+export function clear(stateKey) {
   return dispatch => {
     dispatch(clearFilter(stateKey));
-    clearQueryString(filters.map(_ => _.queryKey));
+    clearQueryString();
   };
 }
