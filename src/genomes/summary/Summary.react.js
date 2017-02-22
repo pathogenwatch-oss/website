@@ -7,6 +7,7 @@ import ViewSwitcher from './ViewSwitcher.react';
 
 import { getFilter } from '../../filter/selectors';
 import * as selectors from '../selectors';
+import { getTotal } from './selectors';
 
 import { stateKey } from '../filter';
 
@@ -55,7 +56,7 @@ function mapStateToProps(state) {
     batchSize: selectors.getBatchSize(state),
     completedUploads: selectors.getNumCompletedUploads(state),
     visibleGenomes: selectors.getTotalGenomes(state),
-    totalGenomes: selectors.getTotalGenomes(state),
+    totalGenomes: getTotal(state),
     isUpload: getFilter(state, { stateKey }).upload,
   };
 }
