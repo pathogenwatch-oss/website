@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import FilterAside from '../../filter-aside';
-import MetadataFilter from '../../metadata-filter';
+import SummarySection from '../../filter/summary-section';
 import * as filter from '../../filter';
 
 import { stateKey, filters } from './filter';
@@ -38,12 +38,12 @@ export default connect(mapStateToProps, mapDispatchToProps)(
         e.target.value ? new RegExp(e.target.value, 'i') : null
       )}
     >
-      <MetadataFilter
+      <SummarySection
         title="Species"
         summary={filterSummary.species}
         onClick={value => updateFilter(speciesFilter, value)}
       />
-      <MetadataFilter
+      <SummarySection
         title="Owner"
         summary={filterSummary.owner}
         onClick={value => updateFilter(ownershipFilter, value)}

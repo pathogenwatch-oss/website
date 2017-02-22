@@ -13,7 +13,7 @@ export const getFilter = state => filter.getFilter(state, { stateKey });
 
 export const getSearchText = createSelector(
   getFilter,
-  ({ searchRegExp }) => (searchRegExp ? searchRegExp.source : ''),
+  ({ searchText }) => (searchText || ''),
 );
 
 export const getVisibleGenomes = state =>
@@ -35,21 +35,21 @@ export const getFilterSummary = createSelector(
     const wgsaSpecies = [];
     const otherSpecies = [];
 
-    for (const key of Object.keys(speciesId)) {
-      if (isSupported({ speciesId: key })) {
-        const species = taxIdMap.get(key);
+    for (const value of Object.keys(speciesId)) {
+      if (isSupported({ speciesId: value })) {
+        const species = taxIdMap.get(value);
         wgsaSpecies.push({
-          key,
+          value,
           label: species.formattedShortName,
           title: species.name,
-          count: speciesId[key].count,
-          active: filterState.speciesKey === key,
+          count: speciesId[value].count,
+          active: filterState.speciesId === value,
         });
       } else {
         otherSpecies.push({
-          key,
-          active: filterState.speciesKey === key,
-          ...speciesId[key],
+          value,
+          active: filterState.speciesId === value,
+          ...speciesId[value],
         });
       }
     }
@@ -60,29 +60,29 @@ export const getFilterSummary = createSelector(
       otherSpecies: sortBy(otherSpecies, 'label'),
       country: sortBy(
         Object.keys(country).map(
-          key => ({
-            key,
-            label: getCountryName(key),
-            count: country[key].count,
-            active: filterState.country === key,
+          value => ({
+            value,
+            label: getCountryName(value),
+            count: country[value].count,
+            active: filterState.country === value,
           })
         ),
         'label'
       ),
       reference: Object.keys(reference).map(
-        key => ({
-          key,
-          label: key === 'true' ? 'Yes' : 'No',
-          count: reference[key].count,
-          active: filterState.reference === key,
+        value => ({
+          value,
+          label: value === 'true' ? 'Yes' : 'No',
+          count: reference[value].count,
+          active: filterState.reference === value,
         })
       ),
       owner: Object.keys(owner).map(
-        key => ({
-          key,
-          label: key === 'me' ? 'Me' : 'Other',
-          count: owner[key].count,
-          active: filterState.owner === key,
+        value => ({
+          value,
+          label: value === 'me' ? 'Me' : 'Other',
+          count: owner[value].count,
+          active: filterState.owner === value,
         })
       ),
     };

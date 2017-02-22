@@ -3,21 +3,17 @@ import { connect } from 'react-redux';
 
 import FilterAside from '../../filter-aside';
 import DateFilter from '../../date-filter';
-import MetadataFilter from '../../metadata-filter';
-import * as filter from '../../filter';
+import SummarySection from '../../filter/summary-section';
+import { selectors, LocationListener } from '../../filter';
 
 import { getFilterSummary, getSearchText } from './selectors';
 
 import { stateKey, filters } from './filter';
-
-const { LocationListener } = filter;
-const [
-  searchRegExp, speciesFilter, referenceFilter, ownershipFilter, countryFilter, minDate, maxDate,
-] = filters;
+import * as actions from './actions';
 
 function mapStateToProps(state) {
   return {
-    isActive: filter.isActive(state, { stateKey }),
+    isActive: selectors.isActive(state, { stateKey }),
     filterSummary: getFilterSummary(state, { stateKey }),
     textValue: getSearchText(state),
   };
@@ -25,9 +21,9 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    clearFilter: () => dispatch(filter.clear(stateKey, filters)),
-    updateFilter: (filterDef, value) =>
-      dispatch(filter.update(stateKey, filterDef, value)),
+    clearFilter: () => dispatch(actions.clearFilter()),
+    updateFilter: (filterKey, value) =>
+      dispatch(actions.updateFilter(filterKey, value)),
   };
 }
 
@@ -38,35 +34,37 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       active={isActive}
       clear={clearFilter}
       textValue={textValue}
-      textOnChange={e => updateFilter(
-        searchRegExp,
-        e.target.value ? new RegExp(e.target.value, 'i') : null
-      )}
+      textOnChange={e => updateFilter('searchText', e.target.value)}
     >
-      <MetadataFilter
+      <SummarySection
+        filterKey="speciesId"
         heading="WGSA Species"
         summary={filterSummary.wgsaSpecies}
-        onClick={value => updateFilter(speciesFilter, value)}
+        updateFilter={updateFilter}
       />
-      <MetadataFilter
+      <SummarySection
+        filterKey="speciesId"
         heading="Other Species"
         summary={filterSummary.otherSpecies}
-        onClick={value => updateFilter(speciesFilter, value)}
+        updateFilter={updateFilter}
       />
-      <MetadataFilter
+      <SummarySection
+        filterKey="reference"
         heading="Reference"
         summary={filterSummary.reference}
-        onClick={value => updateFilter(referenceFilter, value)}
+        updateFilter={updateFilter}
       />
-      <MetadataFilter
+      <SummarySection
+        filterKey="owner"
         heading="Owner"
         summary={filterSummary.owner}
-        onClick={value => updateFilter(ownershipFilter, value)}
+        updateFilter={updateFilter}
       />
-      <MetadataFilter
+      <SummarySection
+        filterKey="country"
         heading="Country"
         summary={filterSummary.country}
-        onClick={value => updateFilter(countryFilter, value)}
+        updateFilter={updateFilter}
       />
       {/* <DateFilter
         min={filterSummary.date.min}

@@ -14,8 +14,6 @@ export default React.createClass({
     uploads: React.PropTypes.object,
     filterActive: React.PropTypes.bool,
     toggleAside: React.PropTypes.func.isRequired,
-    fetchGenomes: React.PropTypes.func.isRequired,
-    fetchSummary: React.PropTypes.func.isRequired,
     addFiles: React.PropTypes.func.isRequired,
   },
 
