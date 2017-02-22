@@ -20,7 +20,7 @@ export function fetchJson(method, path, data) {
     type: method,
     url: `${SERVER_ADDRESS}${path}`,
     contentType: 'application/json; charset=UTF-8',
-    data: JSON.stringify(data),
+    data: method === 'GET' ? data : JSON.stringify(data),
     dataType: 'json',
     xhrFields: {
       withCredentials: true,

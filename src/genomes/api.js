@@ -1,9 +1,9 @@
 import { fetchJson } from '../utils/Api';
 
-export function fetchGenomes() {
-  return fetchJson('GET', '/api/genome');
+export function fetchGenomes(filter) {
+  return fetchJson('GET', '/api/genome', filter);
 }
 
-export function fetchSummary() {
-  return fetchJson('GET', '/api/genome/summary');
+export function fetchSummary({ prefilter }) {
+  return fetchJson('GET', '/api/genome/summary', { prefilter });
 }

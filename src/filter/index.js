@@ -1,10 +1,12 @@
 import { updateQueryString, clearQueryString } from '../location';
 import * as actions from './actions';
 
-export function update(stateKey, { queryKey, key }, newValue) {
+export function update(stateKey, key, newValue) {
   return dispatch => {
     dispatch(actions.updateFilter(stateKey, key, newValue));
-    if (queryKey) updateQueryString(queryKey, newValue);
+    if (key !== 'prefilter') {
+      updateQueryString(key, newValue);
+    }
   };
 }
 

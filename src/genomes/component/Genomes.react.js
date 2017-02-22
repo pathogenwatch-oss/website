@@ -25,10 +25,6 @@ export default React.createClass({
 
   componentWillMount() {
     this.props.prefilter();
-    this.props.fetchSummary();
-    if (!this.props.uploaded) {
-      this.props.fetchGenomes();
-    }
   },
 
   componentDidUpdate() {
