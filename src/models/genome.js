@@ -75,4 +75,24 @@ schema.statics.updateMetadata = function (_id, _user, metadata) {
   }).then(({ nModified }) => ({ nModified, country }));
 };
 
+schema.statics.getPrefilterCondition = function ({ user = {}, query }) {
+  const hasAccess = user._id ?
+    { $or: [ { _user: user._id }, { public: true } ] } :
+    { public: true };
+  const { prefilter = 'all', uploadedAt } = query;
+  if (prefilter === 'all') {
+    return Object.assign(hasAccess, { binned: false });
+  }
+  if (prefilter === 'user') {
+    return Object.assign(hasAccess, { binned: false, _user: user._id });
+  }
+  if (prefilter === 'upload') {
+    return Object.assign(hasAccess, { binned: false, uploadedAt });
+  }
+  if (prefilter === 'bin') {
+    return Object.assign(hasAccess, { binned: true });
+  }
+  throw new Error(`Invalid genome prefilter: '${prefilter}'`);
+};
+
 module.exports = mongoose.model('Genome', schema);

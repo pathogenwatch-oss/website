@@ -1,11 +1,12 @@
 const Genome = require('models/genome');
 
 
-module.exports = function ({ user, query = {} }) {
+module.exports = function (props) {
+  const { user, query = {} } = props;
   const { skip = 0, limit = 0 } = query;
   const { speciesId, reference, owner, country, startDate, endDate } = query;
 
-  const findQuery = {};
+  const findQuery = Genome.getPrefilterCondition(props);
 
   if (speciesId) {
     findQuery.speciesId = speciesId;
@@ -25,9 +26,6 @@ module.exports = function ({ user, query = {} }) {
     findQuery._user = user;
   } else if (owner === 'other') {
     findQuery._user = { $ne: user };
-    findQuery.public = true;
-  } else {
-    findQuery.$or = (user ? [ { _user: user } ] : []).concat({ public: true });
   }
 
   if (startDate) {
