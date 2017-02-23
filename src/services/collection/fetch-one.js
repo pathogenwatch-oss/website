@@ -15,8 +15,8 @@ function addGenomes(collection) {
     });
 }
 
-module.exports = ({ uuid }) =>
-  services.request('collection', 'fetch-progress', { uuid }).
+module.exports = ({ user, uuid }) =>
+  services.request('collection', 'fetch-progress', { user, uuid }).
     then(collection => (
       collection.status === 'READY' ?
         collection.populate('_species').execPopulate() :

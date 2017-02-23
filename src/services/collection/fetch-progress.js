@@ -52,7 +52,14 @@ function checkStatus(collection) {
   return collection;
 }
 
-module.exports = ({ uuid }) =>
-  Collection.
-    findOne({ uuid }, { 'subtrees.tree': 0, 'subtrees.leafIds': 0 }).
-    then(checkStatus);
+module.exports = ({ user, uuid }) => {
+  const accessTypes = (user ? [ { _user: user } ] : []).concat({ public: true });
+  return (
+    Collection.
+      findOne(
+        { uuid, $or: accessTypes },
+        { 'subtrees.tree': 0, 'subtrees.leafIds': 0 }
+      ).
+      then(checkStatus)
+  );
+};

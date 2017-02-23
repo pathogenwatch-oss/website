@@ -34,9 +34,15 @@ if (config.node.auth) {
 
 router.get('/collection/:uuid', (req, res, next) => {
   LOGGER.info(`Getting collection: ${req.params.uuid}`);
-  return services.request('collection', 'fetch-one', req.params).
+  const { user, params } = req;
+  return services.request('collection', 'fetch-one', { user, uuid: params.uuid }).
     then(response => res.json(response)).
-    catch(next);
+    catch(error => (
+      error.details.message === 'Collection not found' ? // Seneca loses error type :|
+        res.sendStatus(404) :
+        next(error)
+      )
+    );
 });
 
 router.get('/collection/:uuid/subtree/:name', (req, res, next) => {
