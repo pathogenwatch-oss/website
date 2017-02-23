@@ -141,7 +141,7 @@ schema.statics.getPrefilterCondition = function ({ user = {}, query }) {
     return Object.assign(hasAccess, { binned: true });
   }
 
-  throw new Error(`Invalid genome prefilter: '${prefilter}'`);
+  throw new Error(`Invalid collection prefilter: '${prefilter}'`);
 };
 
 module.exports = mongoose.model('Collection', schema);
