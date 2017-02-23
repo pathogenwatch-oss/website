@@ -58,8 +58,8 @@ router.get('/collection/:uuid/subtree/:name', (req, res, next) => {
 router.get('/collection', (req, res, next) => {
   LOGGER.info('Received request to get collections');
 
-  const { user } = req;
-  services.request('collection', 'fetch-list', { user }).
+  const { user, query } = req;
+  services.request('collection', 'fetch-list', { user, query }).
     then(response => res.json(response)).
     catch(next);
 });
