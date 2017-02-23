@@ -1,6 +1,12 @@
 import { FETCH_GENOME_SUMMARY } from '../actions';
 
-const initialState = { speciesId: {}, country: {}, reference: {}, owner: {} };
+const initialState = {
+  total: 0,
+  speciesId: {},
+  country: {},
+  reference: {},
+  owner: {},
+};
 
 export default function (state = initialState, { type, payload }) {
   switch (type) {

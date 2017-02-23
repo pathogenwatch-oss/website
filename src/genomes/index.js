@@ -6,7 +6,7 @@ import GridView from './grid';
 import MapView from './map';
 import StatsView from './stats';
 
-const prefilters = [ 'all', 'user', 'bin' ];
+const prefilters = [ 'all', 'user', 'upload', 'bin' ];
 
 export reducer from './reducer';
 
