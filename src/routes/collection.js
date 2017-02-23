@@ -32,6 +32,15 @@ if (config.node.auth) {
   }
 }
 
+router.get('/collection/summary', (req, res, next) => {
+  LOGGER.info('Received request to get collection summary');
+
+  const { user, query } = req;
+  services.request('collection', 'summary', { user, query })
+    .then(response => res.json(response))
+    .catch(next);
+});
+
 router.get('/collection/:uuid', (req, res, next) => {
   LOGGER.info(`Getting collection: ${req.params.uuid}`);
   return services.request('collection', 'fetch-one', req.params).
