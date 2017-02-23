@@ -80,18 +80,23 @@ schema.statics.getPrefilterCondition = function ({ user = {}, query }) {
     { $or: [ { _user: user._id }, { public: true } ] } :
     { public: true };
   const { prefilter = 'all', uploadedAt } = query;
+
   if (prefilter === 'all') {
     return Object.assign(hasAccess, { binned: false });
   }
+
   if (prefilter === 'user') {
     return Object.assign(hasAccess, { binned: false, _user: user._id });
   }
+
   if (prefilter === 'upload') {
     return Object.assign(hasAccess, { binned: false, uploadedAt });
   }
+
   if (prefilter === 'bin') {
     return Object.assign(hasAccess, { binned: true });
   }
+
   throw new Error(`Invalid genome prefilter: '${prefilter}'`);
 };
 
