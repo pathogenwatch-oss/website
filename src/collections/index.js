@@ -5,7 +5,7 @@ import { Route, Redirect, IndexRedirect } from 'react-router';
 
 import Collections from './Collections.react';
 
-import { prefilters } from './filter';
+const prefilters = [ 'all', 'user', 'bin' ];
 
 export reducer from './reducer';
 

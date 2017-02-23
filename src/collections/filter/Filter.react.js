@@ -1,15 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
+import LocationListener from '../../location';
 import FilterAside from '../../filter-aside';
 import SummarySection from '../../filter/summary-section';
 import * as filter from '../../filter';
 
-import { stateKey, filters } from './filter';
+import { stateKey } from './index';
+import * as actions from './actions';
 import { getFilterSummary, getSearchText } from './selectors';
-
-const { LocationListener } = filter;
-const [ searchRegExp, speciesFilter, ownershipFilter ] = filters;
 
 function mapStateToProps(state) {
   return {
@@ -21,9 +20,9 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    clearFilter: () => dispatch(filter.clear(stateKey, filters)),
-    updateFilter: (filterDef, value) =>
-      dispatch(filter.update(stateKey, filterDef, value)),
+    clearFilter: () => dispatch(actions.clearFilter()),
+    updateFilter: (filterKey, value) =>
+      dispatch(actions.updateFilter({ [filterKey]: value })),
   };
 }
 
@@ -33,22 +32,21 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       active={active}
       clear={clearFilter}
       textValue={searchText}
-      textOnChange={e => updateFilter(
-        searchRegExp,
-        e.target.value ? new RegExp(e.target.value, 'i') : null
-      )}
+      textOnChange={e => updateFilter('searchText', e.target.value)}
     >
       <SummarySection
-        title="Species"
+        filterKey="speciesId"
+        heading="Species"
         summary={filterSummary.species}
-        onClick={value => updateFilter(speciesFilter, value)}
+        updateFilter={updateFilter}
       />
       <SummarySection
-        title="Owner"
+        filterKey="owner"
+        heading="Owner"
         summary={filterSummary.owner}
-        onClick={value => updateFilter(ownershipFilter, value)}
+        updateFilter={updateFilter}
       />
-      <LocationListener stateKey={stateKey} filters={filters} />
+      <LocationListener update={updateFilter} />
     </FilterAside>
   )
 );

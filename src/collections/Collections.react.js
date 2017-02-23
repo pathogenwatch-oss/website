@@ -2,20 +2,17 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import Grid from '../grid';
-import Filter, { stateKey } from './filter';
+import Filter from './filter';
 import { Summary, Totals } from '../filter-summary';
 import CollectionCard from './CollectionCard.react';
 
-import { prefilter } from '../prefilter/actions';
-import { getVisibleCollections } from './filter/selectors';
-import { getTotalCollections } from './selectors';
+import { getCollectionList, getTotalCollections } from './selectors';
 
-import { fetchCollections } from './actions';
+import { updateFilter } from './filter/actions';
 
 const Collections = React.createClass({
 
   componentDidMount() {
-    this.props.fetchCollections();
     this.props.prefilter();
   },
 
@@ -51,15 +48,15 @@ const Collections = React.createClass({
 
 function mapStateToProps(state) {
   return {
-    collections: getVisibleCollections(state),
+    collections: getCollectionList(state),
     total: getTotalCollections(state),
   };
 }
 
-function mapDispatchToProps(dispatch, props) {
+function mapDispatchToProps(dispatch, { prefilter, location }) {
   return {
-    fetchCollections: () => dispatch(fetchCollections()),
-    prefilter: () => dispatch(prefilter(stateKey, props.prefilter)),
+    prefilter: () =>
+      dispatch(updateFilter({ prefilter, ...location.query }, false)),
   };
 }
 

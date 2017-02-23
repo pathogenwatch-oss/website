@@ -1,21 +1,10 @@
 import { createSelector } from 'reselect';
 
-import { selectors as prefilter } from '../prefilter';
+export const getCollections = ({ collections }) => collections.entities;
 
-import { stateKey, prefilters } from './filter';
-
-export const getPrefilter = state => prefilter.getPrefilter(state, { stateKey });
-
-export const getCollections = createSelector(
-  ({ collections }) => collections.entities,
-  getPrefilter,
-  (collections, prefilterKey) =>
-    Object.keys(collections).reduce((memo, key) => {
-      const collection = collections[key];
-      if (prefilters[prefilterKey](collection)) memo.push(collection);
-      return memo;
-    }, [])
+export const getCollectionList = createSelector(
+  getCollections,
+  (collections) => Object.keys(collections).map(key => collections[key])
 );
 
-export const getTotalCollections =
-  state => getCollections(state).length;
+export const getTotalCollections = state => getCollections(state).length;
