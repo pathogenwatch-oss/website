@@ -134,7 +134,7 @@ schema.statics.getPrefilterCondition = function ({ user = {}, query }) {
   }
 
   if (prefilter === 'user') {
-    return Object.assign(hasAccess, { binned: false, _user: user._id });
+    return Object.assign({ binned: false, _user: { $exists: true, $eq: user._id } });
   }
 
   if (prefilter === 'bin') {
