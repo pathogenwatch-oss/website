@@ -60,6 +60,7 @@
 	},
   "downloadFileLocation" : "/path/to/files/",
   "maxFastaFileSize": 10,
+  "looseAccessControl": false,
   "googleMapsKey": "",
   "mapboxKey": "",
   "fastaStoragePath": "/path/to/files/",

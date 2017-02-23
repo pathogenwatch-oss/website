@@ -3,6 +3,7 @@ const CollectionGenome = require('models/collectionGenome');
 const Species = require('models/species');
 
 const { ServiceRequestError } = require('utils/errors');
+const { looseAccessControl } = require('configuration');
 
 function isReady(collection, results) {
   return (
@@ -57,7 +58,7 @@ module.exports = ({ user, uuid }) => {
   return (
     Collection.
       findOne(
-        { uuid, $or: accessTypes },
+        Object.assign({ uuid }, looseAccessControl ? {} : { $or: accessTypes }),
         { 'subtrees.tree': 0, 'subtrees.leafIds': 0 }
       ).
       then(checkStatus)
