@@ -10,14 +10,14 @@ function entities(state = {}, { type, payload }) {
           ...collection,
         };
         return memo;
-      }, { ...state });
+      }, {});
     }
     default:
       return state;
   }
 }
 
-const initialSummary = { speciesId: {}, owner: {} };
+const initialSummary = { total: 0, speciesId: {}, owner: {} };
 function summary(state = initialSummary, { type, payload }) {
   switch (type) {
     case FETCH_COLLECTION_SUMMARY.ATTEMPT:

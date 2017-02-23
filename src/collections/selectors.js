@@ -8,3 +8,7 @@ export const getCollectionList = createSelector(
 );
 
 export const getTotalCollections = state => getCollections(state).length;
+
+export const getSummary = ({ collections }) => collections.summary;
+
+export const getTotal = state => getSummary(state).total;

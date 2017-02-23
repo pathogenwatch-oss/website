@@ -5,8 +5,8 @@ import App from './App.react';
 
 import AccountRoute from '../account';
 import CollectionsRoute from '../collections';
-import CollectionRoute from '../collection-viewer';
 import GenomesRoute from '../genomes';
+import CollectionViewerRoute from '../collection-viewer';
 import DocumentationViewerRoute from '../documentation-viewer';
 
 import NotFound from '../components/NotFound.react';
@@ -26,7 +26,7 @@ export default () => (
       <Redirect from=":species/upload" to="/upload" />
       <Redirect from="upload" to="/genomes/upload" />
       <Redirect from=":species/collection/:id" to="/collection/:id" />
-      {CollectionRoute}
+      {CollectionViewerRoute}
       {DocumentationViewerRoute}
       <Route path="*" component={NotFound} />
     </Route>

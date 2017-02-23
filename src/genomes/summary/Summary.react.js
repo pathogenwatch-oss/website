@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Summary as FilterSummary, Totals } from '../../filter-summary';
+import { Summary as FilterSummary, Totals } from '../../filter/viewing';
 import ProgressBar from '../../progress-bar';
 import ViewSwitcher from './ViewSwitcher.react';
 

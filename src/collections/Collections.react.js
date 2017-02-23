@@ -3,17 +3,35 @@ import { connect } from 'react-redux';
 
 import Grid from '../grid';
 import Filter from './filter';
-import { Summary, Totals } from '../filter-summary';
+import { Summary, Totals } from '../filter/viewing';
 import CollectionCard from './CollectionCard.react';
 
-import { getCollectionList, getTotalCollections } from './selectors';
+import { getCollectionList, getTotal } from './selectors';
 
 import { updateFilter } from './filter/actions';
 
 const Collections = React.createClass({
 
   componentDidMount() {
-    this.props.prefilter();
+    this.props.filter();
+  },
+
+  getEmptyMessage() {
+    const { total, prefilter } = this.props;
+
+    if (prefilter === 'bin' && total === 0) {
+      return (
+        <p className="wgsa-filterable-content wgsa-hub-big-message">
+          Nothing in the bin 👍
+        </p>
+      );
+    }
+
+    return (
+      <p className="wgsa-filterable-content wgsa-hub-big-message">
+        No matches.
+      </p>
+    );
   },
 
   render() {
@@ -28,16 +46,18 @@ const Collections = React.createClass({
               itemType="collection"
             />
           </Summary>
-          <Grid
-            template={CollectionCard}
-            items={collections}
-            columnCount={[ { minWidth: 560, count: 2 }, { minWidth: 1020, count: 3 }, { minWidth: 1580, count: 4 } ]}
-            rightMargin={48}
-            cellArea={400 * 160}
-            rowMinHeight={160}
-            rowMaxHeight={232}
-            rowFooterHeight={36}
-          />
+          { collections.length ?
+            <Grid
+              template={CollectionCard}
+              items={collections}
+              columnCount={[ { minWidth: 560, count: 2 }, { minWidth: 1020, count: 3 }, { minWidth: 1580, count: 4 } ]}
+              rightMargin={48}
+              cellArea={400 * 160}
+              rowMinHeight={160}
+              rowMaxHeight={232}
+              rowFooterHeight={36}
+            /> :
+            this.getEmptyMessage() }
         </div>
         <Filter />
       </div>
@@ -49,13 +69,13 @@ const Collections = React.createClass({
 function mapStateToProps(state) {
   return {
     collections: getCollectionList(state),
-    total: getTotalCollections(state),
+    total: getTotal(state),
   };
 }
 
 function mapDispatchToProps(dispatch, { prefilter, location }) {
   return {
-    prefilter: () =>
+    filter: () =>
       dispatch(updateFilter({ prefilter, ...location.query }, false)),
   };
 }

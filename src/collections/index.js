@@ -15,7 +15,7 @@ export default (
       document.title = 'WGSA | Collections';
     }}
   >
-    { Object.keys(prefilters).map(prefilter =>
+    { prefilters.map(prefilter =>
       <Route key={prefilter} path={prefilter}
         component={props => <Collections {...props} prefilter={prefilter} />}
       />

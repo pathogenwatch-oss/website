@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import LocationListener from '../../location';
-import FilterAside from '../../filter-aside';
+import FilterAside from '../../filter/aside';
 import SummarySection from '../../filter/summary-section';
 import * as filter from '../../filter';
 

@@ -27,13 +27,15 @@ export default function (state = {}, { type, payload }) {
         [payload.stateKey]:
           applyFilterValue(state[payload.stateKey], payload),
       };
-    case CLEAR_FILTER:
+    case CLEAR_FILTER: {
+      const { prefilter } = state[payload.stateKey];
       return {
         ...state,
         [payload.stateKey]: {
-          prefilter: state.prefilter,
+          prefilter,
         },
       };
+    }
     default:
       return state;
   }
