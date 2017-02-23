@@ -1,8 +1,6 @@
-import * as constants from '../table/constants';
+import { tableKeys } from '../constants';
 
 import Species from '../../species';
-
-const { tableKeys } = constants;
 
 // TODO: Might be good if `date` and `userDefined` were null
 export function hasMetadata(genomes) {

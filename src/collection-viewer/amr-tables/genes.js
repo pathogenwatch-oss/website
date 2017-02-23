@@ -1,6 +1,6 @@
 const { onHeaderClick } = require('./thunks');
 
-import { tableKeys } from '../table/constants';
+import { tableKeys } from '../constants';
 import { createAdvancedViewColumn, getLabel } from './utils';
 
 export const name = tableKeys.genes;

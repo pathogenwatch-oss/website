@@ -2,13 +2,15 @@ import { connect } from 'react-redux';
 
 import AboutCollection from './AboutCollection.react';
 
-import { getCollection } from '../../collection-route/selectors';
+import { getViewer } from '../../collection-viewer/selectors';
+
+import { getCollection } from '../../collection-viewer/selectors';
 import { toggleAboutCollection } from './actions';
 
 import Species from '../../species';
 
 function mapStateToProps(state) {
-  const { aboutCollectionOpen } = state.collection.viewer;
+  const { aboutCollectionOpen } = getViewer(state);
   return {
     isOpen: aboutCollectionOpen,
     metadata: getCollection(state).metadata,

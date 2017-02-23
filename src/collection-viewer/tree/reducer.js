@@ -1,12 +1,12 @@
 import { combineReducers } from 'redux';
 
 import { FETCH_COLLECTION }
-  from '../../collection-route/actions';
+  from '../../collection-viewer/actions';
 import * as ACTIONS from './actions';
 
 import { speciesTrees } from './constants';
 import { COLLECTION, POPULATION } from '../../app/stateKeys/tree';
-import { statuses } from '../../collection-route/constants';
+import { statuses } from '../../collection-viewer/constants';
 
 import Species from '../../species';
 

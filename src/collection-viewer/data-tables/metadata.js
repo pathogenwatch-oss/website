@@ -1,4 +1,4 @@
-import { FETCH_COLLECTION } from '../../collection-route/actions';
+import { FETCH_COLLECTION } from '../../collection-viewer/actions';
 import { SET_LABEL_COLUMN } from '../table/actions';
 import { SET_TREE } from '../tree/actions';
 import { onHeaderClick } from './thunks';
@@ -9,11 +9,10 @@ import { hasMetadata } from './utils';
 import { speciesTrees } from '../tree/constants';
 import * as table from '../table/constants';
 import { systemDataColumns } from './constants';
-import { statuses } from '../../collection-route/constants';
+import { tableKeys } from '../constants';
+import { statuses } from '../../collection-viewer/constants';
 
 import Species from '../../species';
-
-const { tableKeys } = table;
 
 const initialState = {
   name: tableKeys.metadata,

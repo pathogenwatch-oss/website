@@ -1,11 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import Search from './search/Search.react';
-import AboutCollection from './about-collection';
+import Search from '../search/Search.react';
+import AboutCollection from '../about-collection';
 
-import { isMenuOpen } from './downloads/selectors';
-import { setMenuActive } from './downloads/actions';
+import { isMenuOpen } from '../downloads/selectors';
+import { setMenuActive } from '../downloads/actions';
 
 function mapStateToProps(state) {
   return {

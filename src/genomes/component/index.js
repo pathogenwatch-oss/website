@@ -5,7 +5,7 @@ import Genomes from './Genomes.react';
 import { toggleAside } from '../../header/actions';
 import { addFiles } from '../thunks';
 
-import { getCollection } from '../../collection-route/selectors';
+import { getCollection } from '../../collection-viewer/selectors';
 import { getTotalGenomes } from '../selectors';
 
 import { updateFilter } from '../filter/actions';

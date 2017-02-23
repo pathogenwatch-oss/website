@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 
-import { getGenomes, getViewer } from '../../collection-route/selectors';
+import { getCollection, getGenomes, getViewer } from '../../collection-viewer/selectors';
 import { getActiveDataTable } from '../table/selectors';
 
 import { titles } from './constants';
@@ -46,7 +46,7 @@ export const getTitle = createSelector(
 
 export const getFilenames = createSelector(
   getTitle,
-  ({ collection }) => collection.uuid,
+  state => getCollection(state).uuid,
   state => getActiveDataTable(state).activeColumn,
   utils.getFilenames
 );

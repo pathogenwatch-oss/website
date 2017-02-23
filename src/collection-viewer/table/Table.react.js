@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import FixedTable from '../../fixed-table';
 import TableSwitcher from '../table/Switcher.react';
 
-import { getCollection } from '../../collection-route/selectors';
+import { getCollection } from '../../collection-viewer/selectors';
 import { getActiveGenomes } from '../selectors';
 import { getVisibleTable } from '../table/selectors';
 import { getFiles } from '../downloads/selectors';

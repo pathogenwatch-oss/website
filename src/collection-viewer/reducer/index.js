@@ -3,7 +3,12 @@ import { combineReducers } from 'redux';
 import collection from './collection';
 import genomes from './genomes';
 
-import { reducer as viewer } from '../../collection-viewer';
+import aboutCollectionOpen from '../about-collection/reducer';
+import downloads from '../downloads/reducer';
+import filter from '../filter/reducer';
+import summary from '../summary/reducer';
+import tree from '../tree/reducer';
+import table from '../table/reducer';
 
 import { RESET_COLLECTION_VIEW } from '../actions';
 
@@ -12,7 +17,12 @@ const reducer = combineReducers({
     genomes,
     collection,
   }),
-  viewer,
+  aboutCollectionOpen,
+  downloads,
+  filter,
+  summary,
+  tree,
+  table,
 });
 
 const initialState = reducer(undefined, {});

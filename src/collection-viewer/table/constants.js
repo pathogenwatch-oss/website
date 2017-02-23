@@ -7,17 +7,9 @@ import { getArchiveDownloadProps } from '../downloads/utils';
 
 import { defaultWidthGetter } from './columnWidth';
 
+import { tableKeys } from '../constants';
 import { CGPS } from '../../app/constants';
 import Species from '../../species';
-
-export const tableKeys = {
-  metadata: 'metadata',
-  typing: 'typing',
-  stats: 'stats',
-  antibiotics: 'antibiotics',
-  snps: 'snps',
-  genes: 'genes',
-};
 
 export const dataTables = new Set([
   tableKeys.metadata,

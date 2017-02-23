@@ -3,7 +3,7 @@ import React from 'react';
 const { onHeaderClick } = require('./thunks');
 
 import * as amr from '../amr-utils';
-import { tableKeys } from '../table/constants';
+import { tableKeys } from '../constants';
 import Species from '../../species';
 
 const isMac =

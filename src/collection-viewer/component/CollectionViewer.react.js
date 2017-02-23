@@ -1,10 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import Layout from './layout/Layout.react';
-import DownloadsMenu from './downloads/DownloadsMenu.react';
+import Layout from '../layout/Layout.react';
+import DownloadsMenu from '../downloads/DownloadsMenu.react';
 
-import { getCollection } from '../collection-route/selectors';
+import { getCollection } from '../selectors';
 
 const CollectionViewer = React.createClass({
 

@@ -1,4 +1,4 @@
-import { FETCH_COLLECTION } from '../../collection-route/actions';
+import { FETCH_COLLECTION } from '../../collection-viewer/actions';
 import { SET_LABEL_COLUMN } from '../table/actions';
 import { onHeaderClick } from './thunks';
 
@@ -6,10 +6,9 @@ import { hasTyping } from './utils';
 
 import { systemDataColumns } from './constants';
 import * as constants from '../table/constants';
+import { tableKeys } from '../constants';
 
 import Species from '../../species';
-
-const { tableKeys } = constants;
 
 const initialState = {
   name: tableKeys.typing,

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Viewer from '../../collection-viewer';
+import Viewer from '../../collection-viewer/component';
 import Progress from '../progress';
 import { LoadSpinner, LoadError } from '../loading/Loading.react';
 

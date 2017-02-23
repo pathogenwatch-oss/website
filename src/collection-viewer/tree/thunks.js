@@ -1,4 +1,4 @@
-import { getCollection } from '../../collection-route/selectors';
+import { getCollection } from '../../collection-viewer/selectors';
 import { getTrees, getVisibleTree, getLeafIds } from './selectors';
 
 import { showToast } from '../../toast';

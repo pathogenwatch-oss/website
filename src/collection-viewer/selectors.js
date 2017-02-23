@@ -1,9 +1,15 @@
 import { createSelector } from 'reselect';
 
-import { getGenomes, getViewer } from '../collection-route/selectors';
 import { getTables, getAMRTableName } from './table/selectors';
 
 import { createColourGetter } from './amr-utils';
+
+export const getViewer = ({ viewer }) => viewer;
+
+export const getCollection = state => getViewer(state).entities.collection;
+
+export const getGenomes = state => getViewer(state).entities.genomes;
+
 
 export const getFilter = state => getViewer(state).filter;
 

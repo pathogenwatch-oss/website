@@ -45,7 +45,7 @@ const ExplorerMap = (props) => (
   </WGSAMap>
 );
 
-import { getGenomes } from '../../collection-route/selectors';
+import { getGenomes } from '../../collection-viewer/selectors';
 import {
   getVisibleGenomeIds,
   getFilteredGenomeIds,

@@ -5,7 +5,7 @@ import App from './App.react';
 
 import AccountRoute from '../account';
 import CollectionsRoute from '../collections';
-import CollectionRoute from '../collection-route';
+import CollectionRoute from '../collection-viewer';
 import GenomesRoute from '../genomes';
 import DocumentationViewerRoute from '../documentation-viewer';
 

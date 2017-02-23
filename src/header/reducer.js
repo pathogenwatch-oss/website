@@ -1,9 +1,9 @@
 import { FETCH_COLLECTION, UPDATE_COLLECTION_PROGRESS, RESET_COLLECTION_VIEW }
-  from '../collection-route/actions';
+  from '../collection-viewer/actions';
 import { HEADER_TOGGLE_ASIDE, HEADER_TOGGLE_USER_DRAWER } from './actions';
 
 
-import { getHeaderClassName } from '../collection-route';
+import { getHeaderClassName } from '../collection-viewer';
 
 const initialState = { hasAside: false };
 

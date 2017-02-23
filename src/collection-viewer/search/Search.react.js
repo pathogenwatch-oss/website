@@ -4,7 +4,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
 
-import { getGenomes } from '../../collection-route/selectors';
+import { getGenomes } from '../../collection-viewer/selectors';
 import { getActiveDataTable } from '../table/selectors';
 import { getFilter } from '../selectors';
 

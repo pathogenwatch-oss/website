@@ -1,13 +1,13 @@
 import React from 'react';
 
-import { FETCH_COLLECTION } from '../../collection-route/actions';
+import { FETCH_COLLECTION } from '../../collection-viewer/actions';
 import { SET_COLOUR_COLUMNS } from '../table/actions';
 import { onHeaderClick } from './thunks';
 
 import * as amr from '../amr-utils';
 import { measureText } from '../table/columnWidth';
 import * as constants from '../table/constants';
-import { statuses } from '../../collection-route/constants';
+import { statuses } from '../../collection-viewer/constants';
 
 import Species from '../../species';
 

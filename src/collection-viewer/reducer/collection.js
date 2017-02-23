@@ -2,7 +2,7 @@ import { CREATE_COLLECTION } from '../../genomes/create-collection-drawer';
 import * as actions from '../actions';
 
 import { sortGenomes, getUuidFromSlug } from '../utils';
-import { statuses } from '../../collection-route/constants';
+import { statuses } from '../../collection-viewer/constants';
 
 import Species from '../../species';
 

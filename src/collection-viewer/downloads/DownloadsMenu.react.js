@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import Overlay from '../../components/overlay';
 import DownloadButton from './DownloadButton.react';
 
-import { getCollection, getGenomes, getViewer } from '../../collection-route/selectors';
+import { getCollection, getGenomes, getViewer } from '../../collection-viewer/selectors';
 import { getTables, hasMetadata, hasTyping } from '../table/selectors';
 import { getActiveGenomeIds } from '../selectors';
 

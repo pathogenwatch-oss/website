@@ -3,12 +3,13 @@ import { combineReducers } from 'redux';
 import { metadata, typing, stats } from '../data-tables';
 import { antibiotics, snps, genes } from '../amr-tables';
 
-import { FETCH_COLLECTION } from '../../collection-route/actions';
+import { FETCH_COLLECTION } from '../../collection-viewer/actions';
 import { SET_TABLE } from './actions';
 
 import { getInitialTable } from '../data-tables/utils';
 
-import { tableKeys, dataTables, amrTables } from './constants';
+import { dataTables, amrTables } from './constants';
+import { tableKeys } from '../constants';
 
 function visible(state = tableKeys.metadata, { type, payload }) {
   switch (type) {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { getGenomes } from '../../collection-route/selectors';
+import { getGenomes } from '../../collection-viewer/selectors';
 import { getFilter, getColourGetter } from '../selectors';
 import { getActiveDataTable } from '../table/selectors';
 import { getVisibleTree } from './selectors';

@@ -3,7 +3,7 @@ const { onHeaderClick } = require('./thunks');
 import { measureText } from '../table/columnWidth';
 import { createAdvancedViewColumn, getLabel } from './utils';
 
-import { tableKeys } from '../table/constants';
+import { tableKeys } from '../constants';
 
 export const name = tableKeys.snps;
 

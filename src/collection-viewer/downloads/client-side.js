@@ -2,7 +2,7 @@ import PromiseWorker from 'promise-worker';
 
 import getCSVWorker from 'worker?name=csv.worker.js!./CsvWorker';
 
-import { tableKeys } from '../table/constants';
+import { tableKeys } from '../constants';
 
 function ungroup(column) {
   if (column.hidden) return [];

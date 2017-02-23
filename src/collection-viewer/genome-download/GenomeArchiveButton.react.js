@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import DownloadButton from '../downloads/DownloadButton.react';
 
-import { getCollection } from '../../collection-route/selectors';
+import { getCollection } from '../../collection-viewer/selectors';
 import { getActiveGenomes } from '../selectors';
 import { getFiles } from '../downloads/selectors';
 
