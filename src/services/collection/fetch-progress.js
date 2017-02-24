@@ -53,12 +53,12 @@ function checkStatus(collection) {
   return collection;
 }
 
-module.exports = ({ user, uuid }) => {
+module.exports = ({ user, uuid, aggregator }) => {
   const accessTypes = (user ? [ { _user: user } ] : []).concat({ public: true });
   return (
     Collection.
       findOne(
-        Object.assign({ uuid }, looseAccessControl ? {} : { $or: accessTypes }),
+        Object.assign({ uuid }, (looseAccessControl || aggregator) ? {} : { $or: accessTypes }),
         { 'subtrees.tree': 0, 'subtrees.leafIds': 0 }
       ).
       then(checkStatus)

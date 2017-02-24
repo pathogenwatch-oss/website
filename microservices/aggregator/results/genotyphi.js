@@ -2,9 +2,10 @@ const CollectionGenome = require('models/collectionGenome');
 const mainStorage = require('services/storage')('main');
 const { GENOTYPHI_RESULT } = require('utils/documentKeys');
 
-module.exports = (name, { assemblyId }) => {
+module.exports = (name, { assemblyId, documentKeys }) => {
   const { uuid } = assemblyId;
-  return mainStorage.retrieve(`${GENOTYPHI_RESULT}_${uuid}`).
+  const resultDocKey = documentKeys.find(_ => _.indexOf(GENOTYPHI_RESULT) === 0);
+  return mainStorage.retrieve(resultDocKey).
     then(result => ({
       genotype: result.genotype,
       snps: result.genotyphiMutations ?

@@ -77,9 +77,10 @@ function addSTSuffix(uuid, st) {
   );
 }
 
-module.exports = (name, { assemblyId, speciesId }) => {
+module.exports = (name, { assemblyId, speciesId, documentKeys }) => {
   const { uuid } = assemblyId;
-  return mainStorage.retrieve(`${MLST_RESULT}_${uuid}`).
+  const resultDocKey = documentKeys.find(_ => _.indexOf(MLST_RESULT) === 0);
+  return mainStorage.retrieve(resultDocKey).
     then(({ alleles }) =>
       getMLSTAlleleDetails(alleles).
       then(results => createMLSTCode(alleles, results)).

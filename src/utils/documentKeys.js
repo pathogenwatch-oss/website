@@ -12,4 +12,5 @@ module.exports = {
   NGMAST_RESULT: 'NGMASTR',
   PAARSNP_LIBRARY: 'PSL',
   PAARSNP_RESULT: 'PSR',
+  SEQUENCE_TYPE: 'ST',
 };

@@ -2,9 +2,10 @@ const CollectionGenome = require('models/collectionGenome');
 const mainStorage = require('services/storage')('main');
 const { PAARSNP_RESULT } = require('utils/documentKeys');
 
-module.exports = (taskName, { assemblyId }) => {
+module.exports = (taskName, { assemblyId, documentKeys }) => {
   const { uuid } = assemblyId;
-  return mainStorage.retrieve(`${PAARSNP_RESULT}_${uuid}`).
+  const resultDocKey = documentKeys.find(_ => _.indexOf(PAARSNP_RESULT) === 0);
+  return mainStorage.retrieve(resultDocKey).
     then(result => ({
       antibiotics: result.antibioticProfiles ?
         result.antibioticProfiles.reduce(
