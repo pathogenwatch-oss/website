@@ -19,11 +19,10 @@ module.exports = function (props) {
     Genome.getSummary(genomeFields, props),
   ]).
   then(([ deployedSpeciesIds, collectionSummary, genomeSummary ]) => ({
-    wgsaSpecies: Object.keys(collectionSummary.speciesId).
+    wgsaSpecies: deployedSpeciesIds.
       map(speciesId => ({
         speciesId,
-        deployed: deployedSpeciesIds.includes(speciesId),
-        totalCollections: collectionSummary.speciesId[speciesId].count,
+        totalCollections: (collectionSummary.speciesId[speciesId] || { count: 0 }).count,
         totalGenomes: (genomeSummary.speciesId[speciesId] || { count: 0 }).count,
       })),
     otherSpecies: Object.keys(genomeSummary.speciesId).
