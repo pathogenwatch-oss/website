@@ -1,8 +1,9 @@
 import React from 'react';
-import { Router, Route, browserHistory, Redirect, IndexRedirect } from 'react-router';
+import { Router, Route, browserHistory, Redirect, IndexRoute } from 'react-router';
 
 import App from './App.react';
 
+import Home from '../home';
 import AccountRoute from '../account';
 import CollectionsRoute from '../collections';
 import GenomesRoute from '../genomes';
@@ -16,7 +17,7 @@ import Species from '../species';
 export default () => (
   <Router history={browserHistory}>
     <Route path="/" component={App}>
-      <IndexRedirect to="collections" />
+      <IndexRoute component={Home} />
       {AccountRoute}
       {CollectionsRoute}
       {GenomesRoute}
