@@ -13,7 +13,7 @@ function formatResult([ { subTypeAssignment }, { references } ]) {
 
 module.exports = (name, { assemblyId, speciesId, documentKeys }) => {
   const { uuid } = assemblyId;
-  const resultDocKey = documentKeys.find(_ => _.indexOf(FP_RESULT) === 0);
+  const resultDocKey = documentKeys.find(_ => _.indexOf(`${FP_RESULT}_`) === 0);
   return Promise.all([
     mainStorage.retrieve(resultDocKey),
     Species.getLatest(speciesId),

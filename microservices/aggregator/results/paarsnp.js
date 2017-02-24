@@ -4,7 +4,7 @@ const { PAARSNP_RESULT } = require('utils/documentKeys');
 
 module.exports = (taskName, { assemblyId, documentKeys }) => {
   const { uuid } = assemblyId;
-  const resultDocKey = documentKeys.find(_ => _.indexOf(PAARSNP_RESULT) === 0);
+  const resultDocKey = documentKeys.find(_ => _.indexOf(`${PAARSNP_RESULT}_`) === 0);
   return mainStorage.retrieve(resultDocKey).
     then(result => ({
       antibiotics: result.antibioticProfiles ?

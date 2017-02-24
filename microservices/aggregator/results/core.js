@@ -4,7 +4,7 @@ const { CORE_RESULT } = require('utils/documentKeys');
 
 module.exports = (name, { assemblyId, documentKeys }) => {
   const { uuid } = assemblyId;
-  const resultDocKey = documentKeys.find(_ => _.indexOf(CORE_RESULT) === 0);
+  const resultDocKey = documentKeys.find(_ => _.indexOf(`${CORE_RESULT}_`) === 0);
   return mainStorage.retrieve(resultDocKey).
     then(result => ({
       size: result.kernelSize,

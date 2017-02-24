@@ -4,7 +4,7 @@ const { NGMAST_RESULT } = require('utils/documentKeys');
 
 module.exports = (name, { assemblyId, documentKeys }) => {
   const { uuid } = assemblyId;
-  const resultDocKey = documentKeys.find(_ => _.indexOf(NGMAST_RESULT) === 0);
+  const resultDocKey = documentKeys.find(_ => _.indexOf(`${NGMAST_RESULT}_`) === 0);
   return mainStorage.retrieve(resultDocKey).
     then(result => ({
       ngmast: result.ngmast,
