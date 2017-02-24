@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 const slug = require('slug');
 
-const { setToObjectOptions, addPreSaveHook } = require('./utils');
+const { setToObjectOptions, addPreSaveHook, getSummary } = require('./utils');
 
 const schema = new Schema({
   _user: { type: Schema.Types.ObjectId, ref: 'User' },
@@ -142,6 +142,10 @@ schema.statics.getPrefilterCondition = function ({ user = {}, query }) {
   }
 
   throw new Error(`Invalid collection prefilter: '${prefilter}'`);
+};
+
+schema.statics.getSummary = function (fields, props) {
+  return getSummary(this, fields, props);
 };
 
 module.exports = mongoose.model('Collection', schema);

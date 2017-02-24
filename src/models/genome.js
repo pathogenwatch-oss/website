@@ -3,7 +3,7 @@ const { Schema } = mongoose;
 
 const geocoding = require('geocoding');
 
-const { setToObjectOptions, addPreSaveHook } = require('./utils');
+const { setToObjectOptions, addPreSaveHook, getSummary } = require('./utils');
 
 const schema = new Schema({
   _file: { type: Schema.Types.ObjectId, ref: 'GenomeFile' },
@@ -101,6 +101,10 @@ schema.statics.getPrefilterCondition = function ({ user = {}, query }) {
   }
 
   throw new Error(`Invalid genome prefilter: '${prefilter}'`);
+};
+
+schema.statics.getSummary = function (fields, props) {
+  return getSummary(this, fields, props);
 };
 
 module.exports = mongoose.model('Genome', schema);
