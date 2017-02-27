@@ -12,9 +12,11 @@ export default React.createClass({
   propTypes: {
     hasGenomes: React.PropTypes.bool,
     uploads: React.PropTypes.object,
-    filterActive: React.PropTypes.bool,
     toggleAside: React.PropTypes.func.isRequired,
     addFiles: React.PropTypes.func.isRequired,
+    isUploading: React.PropTypes.bool,
+    prefilter: React.PropTypes.string,
+    filter: React.PropTypes.func,
   },
 
   contextTypes: {
@@ -22,15 +24,15 @@ export default React.createClass({
   },
 
   componentWillMount() {
-    this.props.prefilter();
+    this.props.filter();
   },
 
-  componentDidUpdate() {
-    const { collection } = this.props;
-
-    if (collection.slug) {
-      const { router } = this.context;
-      router.push(`/collection/${collection.slug}`);
+  componentDidUpdate(previous) {
+    const { prefilter, isUploading, filter } = this.props;
+    if (prefilter === 'upload') {
+      if (previous.isUploading && !isUploading) {
+        filter();
+      }
     }
   },
 
@@ -39,9 +41,10 @@ export default React.createClass({
   },
 
   upload(newFiles) {
-    const { addFiles, toggleAside } = this.props;
+    const { addFiles } = this.props;
     addFiles(newFiles);
-    toggleAside(true);
+    const { router } = this.context;
+    router.push('/genomes/upload');
   },
 
   render() {

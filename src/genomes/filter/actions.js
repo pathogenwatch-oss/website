@@ -4,6 +4,7 @@ import { actions } from '../../filter';
 import { fetchGenomes, fetchSummary } from '../actions';
 
 import { getFilter } from './selectors';
+import { getUploadedAt } from '../uploads/selectors';
 
 export function filterByArea(path) {
   return actions.update(stateKey, { key: 'area' }, path);
@@ -11,15 +12,24 @@ export function filterByArea(path) {
 
 export function updateFilter(query, updateQueryString = true) {
   return (dispatch, getState) => {
-    const previous = getFilter(getState());
     const update = updateQueryString ? actions.update : actions.updateFilter;
     dispatch(update(stateKey, query));
 
-    const currentFilter = getFilter(getState());
-    if (previous.prefilter !== query.prefilter) {
-      dispatch(fetchSummary(currentFilter));
+    const state = getState();
+    const currentFilter = getFilter(state);
+    const uploadedAt = getUploadedAt(state);
+
+    const filterQuery = { ...currentFilter };
+
+    if (currentFilter.prefilter === 'upload') {
+      // if (!uploadedAt) return;
+      filterQuery.uploadedAt = uploadedAt;
     }
-    dispatch(fetchGenomes(currentFilter));
+
+    if ('prefilter' in query) {
+      dispatch(fetchSummary(filterQuery));
+    }
+    dispatch(fetchGenomes(filterQuery));
   };
 }
 

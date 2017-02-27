@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { browserHistory } from 'react-router';
 
 import { CardMetadata } from '../../card';
 
@@ -92,7 +93,17 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     onSubmit:
-      (e) => { e.preventDefault(); dispatch(createCollection()); },
+      (e) => {
+        e.preventDefault();
+        dispatch(createCollection())
+          .then(({ slug }) => {
+            if (slug) {
+              browserHistory.push(`/collection/${slug}`);
+            } else {
+              console.error('Failed to create collection');
+            }
+          });
+      },
     onFormChange:
       ({ target }) => dispatch(changeCollectionMetadata(
         target.id.split('collection-')[1],

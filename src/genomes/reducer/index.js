@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 
-import uploads from './uploads';
+import uploads from '../uploads/reducer';
 import entities from './entities';
 import summary from '../summary/reducer';
 

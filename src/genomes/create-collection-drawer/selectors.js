@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 
-import { isUploading } from '../selectors';
+import { isUploading } from '../uploads/selectors';
 import { getGenomeList } from '../selectors';
 
 import { isSupported } from '../../species';

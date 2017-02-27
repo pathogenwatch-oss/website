@@ -1,6 +1,6 @@
 import { readAsText } from 'promise-file-reader';
 
-import actions from '../actions';
+import { updateGenomeProgress } from '../uploads/actions';
 
 import MetadataUtils from '../../utils/Metadata';
 import { API_ROOT, postJson } from '../../utils/Api';
@@ -83,7 +83,7 @@ function getCustomXHR(id, dispatch) {
         Math.floor(percentComplete / 10) * 10;
 
       if (percentRounded > previousPercent) {
-        dispatch(actions.updateGenomeProgress(id, percentRounded));
+        dispatch(updateGenomeProgress(id, percentRounded));
         previousPercent = percentRounded;
       }
     }
@@ -96,7 +96,7 @@ export function update(id, metadata) {
   return postJson(`/genome/${id}`, metadata);
 }
 
-function create(file, id, dispatch) {
+function create({ file, id, uploadedAt }, dispatch) {
   return (
     validateGenomeSize(file).
       then(readAsText).
@@ -104,7 +104,7 @@ function create(file, id, dispatch) {
       then(data =>
         $.ajax({
           type: 'PUT',
-          url: `${API_ROOT}/genome?name=${encodeURIComponent(file.name)}`,
+          url: `${API_ROOT}/genome?${$.param({ name: file.name, uploadedAt })}`,
           contentType: 'text/plain; charset=UTF-8',
           data,
           dataType: 'json',
@@ -114,8 +114,10 @@ function create(file, id, dispatch) {
   );
 }
 
-export function upload({ id, file, metadata, ...props }, dispatch) {
-  return create(file, id, dispatch).
+export function upload(genome, dispatch) {
+  console.log(genome);
+  const { id, file, metadata, ...props } = genome;
+  return create(genome, dispatch).
     then((result) =>
       (metadata ?
         update(result.id, props).

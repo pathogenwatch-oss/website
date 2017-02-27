@@ -9,6 +9,8 @@ import DefaultFooter from './DefaultFooter.react';
 import GenomeError from './GenomeError.react';
 import ErrorFooter from './ErrorFooter.react';
 
+import { statuses } from '../uploads/constants';
+
 function getProgressBar(progress) {
   return (
     progress === 100 ?
@@ -18,25 +20,26 @@ function getProgressBar(progress) {
 }
 
 function getCardComponents(props) {
-  if (props.error) {
-    return {
-      content: <GenomeError {...props} />,
-      footer: <ErrorFooter {...props} />,
-    };
+  switch (props.status) {
+    case statuses.ERROR:
+      return {
+        content: <GenomeError {...props} />,
+        footer: <ErrorFooter {...props} />,
+      };
+    case statuses.UPLOADING:
+      return {
+        content: getProgressBar(props.progress),
+      };
+    case statuses.PENDING:
+      return {
+        content: <small>Upload pending</small>,
+      };
+    default:
+      return {
+        content: <GenomeMetadata {...props} />,
+        footer: <DefaultFooter {...props} />,
+      };
   }
-
-  if (props.speciesId) {
-    return {
-      content: <GenomeMetadata {...props} />,
-      footer: <DefaultFooter {...props} />,
-    };
-  }
-
-  if (props.uploadAttempted) {
-    return { content: getProgressBar(props.progress) };
-  }
-
-  return { content: <small>Upload pending</small> };
 }
 
 export default props => {

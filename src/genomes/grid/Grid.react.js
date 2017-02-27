@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import Grid from '../../grid';
 import GenomeCard from '../card';
 
-import { getGenomeList, getTotalGenomes } from '../selectors';
+import { getGridItems } from './selectors';
 import { getPrefilter } from '../filter/selectors';
 
 export const GridView = React.createClass({
@@ -18,9 +18,9 @@ export const GridView = React.createClass({
   },
 
   getEmptyMessage() {
-    const { total, prefilter } = this.props;
+    const { items, prefilter } = this.props;
 
-    if (prefilter === 'upload' && total === 0) {
+    if (prefilter === 'upload' && items.length === 0) {
       return (
         <p className="wgsa-filterable-content wgsa-hub-big-message">
           Drag and drop files to begin.
@@ -28,7 +28,7 @@ export const GridView = React.createClass({
       );
     }
 
-    if (prefilter === 'bin' && total === 0) {
+    if (prefilter === 'bin' && items.length === 0) {
       return (
         <p className="wgsa-filterable-content wgsa-hub-big-message">
           Nothing in the bin 👍
@@ -59,8 +59,7 @@ export const GridView = React.createClass({
 
 function mapStateToProps(state) {
   return {
-    items: getGenomeList(state),
-    total: getTotalGenomes(state),
+    items: getGridItems(state),
     prefilter: getPrefilter(state),
   };
 }

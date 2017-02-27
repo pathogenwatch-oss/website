@@ -4,6 +4,6 @@ export function fetchGenomes(filter) {
   return fetchJson('GET', '/api/genome', filter);
 }
 
-export function fetchSummary({ prefilter }) {
-  return fetchJson('GET', '/api/genome/summary', { prefilter });
+export function fetchSummary({ prefilter, uploadedAt }) {
+  return fetchJson('GET', '/api/genome/summary', { prefilter, uploadedAt });
 }

@@ -6,7 +6,8 @@ import ProgressBar from '../../progress-bar';
 import ViewSwitcher from './ViewSwitcher.react';
 
 import { getFilter } from '../../filter/selectors';
-import * as selectors from '../selectors';
+import { getBatchSize, getNumCompletedUploads } from '../uploads/selectors';
+import { getTotalGenomes } from '../selectors';
 import { getTotal } from './selectors';
 
 import { stateKey } from '../filter';
@@ -53,9 +54,9 @@ const Summary = React.createClass({
 
 function mapStateToProps(state) {
   return {
-    batchSize: selectors.getBatchSize(state),
-    completedUploads: selectors.getNumCompletedUploads(state),
-    visibleGenomes: selectors.getTotalGenomes(state),
+    batchSize: getBatchSize(state),
+    completedUploads: getNumCompletedUploads(state),
+    visibleGenomes: getTotalGenomes(state),
     totalGenomes: getTotal(state),
     isUpload: getFilter(state, { stateKey }).upload,
   };

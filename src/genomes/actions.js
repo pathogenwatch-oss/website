@@ -24,60 +24,29 @@ export function fetchGenomes(filter) {
   };
 }
 
-export const ADD_GENOMES = 'ADD_GENOMES';
+export const MOVE_TO_BIN = 'MOVE_TO_BIN';
 
-function addGenomes(genomes) {
+export function moveToBin(id) {
   return {
-    type: ADD_GENOMES,
-    payload: { genomes },
-  };
-}
-
-export const UPLOAD_GENOME = createAsyncConstants('UPLOAD_GENOME');
-
-export const UPDATE_GENOME_PROGRESS = 'UPDATE_GENOME_PROGRESS';
-
-function updateGenomeProgress(id, progress) {
-  return {
-    type: UPDATE_GENOME_PROGRESS,
-    payload: {
-      id,
-      progress,
-    },
-  };
-}
-
-export const REMOVE_GENOME = 'REMOVE_GENOME';
-
-function removeGenome(id) {
-  return {
-    type: REMOVE_GENOME,
+    type: MOVE_TO_BIN,
     payload: { id },
   };
 }
 
-export const UNDO_REMOVE_GENOME = 'UNDO_REMOVE_GENOME';
+export const UNDO_MOVE_TO_BIN = 'UNDO_MOVE_TO_BIN';
 
-function undoRemoveGenome(id) {
+export function undoMoveToBin(id) {
   return {
-    type: UNDO_REMOVE_GENOME,
+    type: UNDO_MOVE_TO_BIN,
     payload: { id },
   };
 }
 
 export const SHOW_METRIC = 'SHOW_METRIC';
 
-function showMetric(metric) {
+export function showMetric(metric) {
   return {
     type: SHOW_METRIC,
     payload: { metric },
   };
 }
-
-export default {
-  addGenomes,
-  updateGenomeProgress,
-  removeGenome,
-  undoRemoveGenome,
-  showMetric,
-};

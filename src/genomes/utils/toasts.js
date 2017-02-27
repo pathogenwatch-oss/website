@@ -2,11 +2,11 @@ import React from 'react';
 
 import actions from '../actions';
 
-export function undoRemoveGenome(genome, dispatch) {
+export function undoMoveToBin(genome, dispatch) {
   return {
     action: {
       label: 'Undo',
-      onClick: () => dispatch(actions.undoRemoveGenome(genome.id)),
+      onClick: () => dispatch(actions.undoMoveToBin(genome.id)),
     },
     message: (
       <span><strong>{genome.name}</strong> removed.</span>

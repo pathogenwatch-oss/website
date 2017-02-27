@@ -2,26 +2,42 @@ import React from 'react';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
 
-import { removeGenome } from '../thunks';
-import actions from '../actions';
+import { moveToBin } from '../thunks';
+import { undoMoveToBin } from '../actions';
+import { removeGenome } from '../uploads/actions';
+
+import { statuses } from '../uploads/constants';
 
 function mapDispatchToProps(dispatch, { genome }) {
   return {
-    onClick: () => dispatch(
-      genome.binned ? actions.undoRemoveGenome(genome.id) : removeGenome(genome)
-    ),
+    actions: {
+      removeGenome: () => dispatch(removeGenome(genome.id)),
+      moveToBin: () => dispatch(moveToBin(genome)),
+      undoMoveToBIn: () => dispatch(undoMoveToBin(genome.id)),
+    },
   };
 }
 
 export default connect(null, mapDispatchToProps)(
-  ({ onClick, primary, className, genome = {} }) => {
-    if (genome.owner !== 'me') return null;
+  ({ actions, primary, className, genome = {} }) => {
+    if (genome.owner !== 'me' || !genome.uploaded) return null;
+
+    if (genome.status === statuses.ERROR) {
+      return (
+        <button
+          className="mdl-button wgsa-button--text"
+          onClick={actions.removeGenome}
+        >
+          Remove
+        </button>
+      );
+    }
 
     if (genome.binned) {
       return (
         <button
           className="mdl-button wgsa-button--text"
-          onClick={onClick}
+          onClick={actions.undoMoveToBin}
           title="Restore from Bin"
         >
           Restore
@@ -32,7 +48,7 @@ export default connect(null, mapDispatchToProps)(
     return primary ? (
       <button
         className="mdl-button mdl-button--primary wgsa-button--text"
-        onClick={onClick}
+        onClick={actions.moveToBin}
         title="Move to Bin"
       >
         Move to Bin
@@ -40,7 +56,7 @@ export default connect(null, mapDispatchToProps)(
     ) : (
       <button
         className={classnames('mdl-button mdl-button--icon', className)}
-        onClick={onClick}
+        onClick={actions.moveToBin}
         title="Move to Bin"
       >
         <i className="material-icons">delete</i>
