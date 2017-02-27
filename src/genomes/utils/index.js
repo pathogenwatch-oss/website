@@ -24,7 +24,7 @@ function parseMetadata(row) {
   } = row;
 
   return {
-    metadata: true,
+    hasMetadata: true,
     name: displayname || name || filename,
     year: year ? parseInt(year, 10) : null,
     month: month ? parseInt(month, 10) : null,
@@ -32,7 +32,12 @@ function parseMetadata(row) {
     latitude: latitude ? parseFloat(latitude) : null,
     longitude: longitude ? parseFloat(longitude) : null,
     pmid: pmid || null,
-    userDefined,
+    userDefined:
+      Object.keys(userDefined)
+        .reduce((memo, key) => {
+          memo[key.replace('.', '')] = userDefined[key];
+          return memo;
+        }, {}),
   };
 }
 
@@ -41,7 +46,7 @@ function flattenCSVs(files) {
 }
 
 export const GENOME_FILE_EXTENSIONS = [
-  '.fa', '.fas', '.fna', '.ffn', '.faa', '.frn', '.fasta', '.genome', '.contig',
+  '.fa', '.fas', '.fna', '.ffn', '.faa', '.frn', '.fasta', '.genome', '.contig', '.dna',
 ];
 const GENOME_FILE_NAME_REGEX = new RegExp(`(${GENOME_FILE_EXTENSIONS.join('|')})$`, 'i');
 const CSV_FILE_NAME_REGEX = /(.csv)$/i;
@@ -115,11 +120,10 @@ function create({ file, id, uploadedAt }, dispatch) {
 }
 
 export function upload(genome, dispatch) {
-  console.log(genome);
-  const { id, file, metadata, ...props } = genome;
+  const { id, file, hasMetadata, ...props } = genome;
   return create(genome, dispatch).
     then((result) =>
-      (metadata ?
+      (hasMetadata ?
         update(result.id, props).
           then(updateResult => ({ ...result, ...updateResult })) :
         result
