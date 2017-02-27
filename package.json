@@ -33,7 +33,7 @@
     "classnames": "^2.2.5",
     "css-loader": "^0.26.1",
     "ejs": "^2.5.1",
-    "eslint-config-cgps": "github:imperialcollegelondon/eslint-config-cgps#v1.1.0",
+    "eslint-config-cgps": "github:imperialcollegelondon/eslint-config-cgps#v1.1.1",
     "express": "^4.12.2",
     "file-loader": "^0.9.0",
     "fixed-data-table": "^0.6.0",
