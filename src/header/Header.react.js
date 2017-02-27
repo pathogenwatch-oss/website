@@ -3,6 +3,7 @@ import './styles.css';
 import React from 'react';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
+import { Link } from 'react-router';
 
 import UserDrawer from './UserDrawer.react';
 import AccountLink from './AccountLink.react';
@@ -26,9 +27,9 @@ export default connect(mapStateToProps)(
       <UserDrawer visible={userDrawerOpen} />
       <div className="mdl-layout__header-row">
         <AccountLink />
-        <span className="mdl-layout-title">
+        <Link to="/" className="mdl-layout-title">
           <img src="/images/WGSA.FINAL.svg" className="wgsa-header-logo" />
-        </span>
+        </Link>
         {content || <DefaultContent hasAside={hasAside} />}
       </div>
     </header>
