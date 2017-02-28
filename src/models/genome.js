@@ -8,6 +8,7 @@ const { setToObjectOptions, addPreSaveHook, getSummary } = require('./utils');
 const schema = new Schema({
   _file: { type: Schema.Types.ObjectId, ref: 'GenomeFile' },
   _user: { type: Schema.Types.ObjectId, ref: 'User' },
+  _session: String,
   name: { type: String, required: true, index: 'text' },
   speciesId: String,
   year: Number,
@@ -36,6 +37,7 @@ setToObjectOptions(schema, (_, genome, { user = {} }) => {
   genome.metrics = genome._file.metrics;
   delete genome._file;
   delete genome._user;
+  delete genome._session;
   return genome;
 });
 
@@ -75,8 +77,8 @@ schema.statics.updateMetadata = function (_id, _user, metadata) {
   }).then(({ nModified }) => ({ nModified, country }));
 };
 
-schema.statics.getPrefilterCondition = function ({ user = null, query }) {
-  const hasAccess = { $or: [ { _user: user }, { public: true } ] };
+schema.statics.getPrefilterCondition = function ({ user = null, query, sessionID }) {
+  const hasAccess = { $or: [ { _user: user }, { _session: sessionID }, { public: true } ] };
   const { prefilter = 'all', uploadedAt } = query;
 
   if (prefilter === 'all') {

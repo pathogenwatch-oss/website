@@ -9,8 +9,8 @@ const LOGGER = require('utils/logging').createLogger('Upload');
 router.get('/genome/summary', (req, res, next) => {
   LOGGER.info('Received request to get genome summary');
 
-  const { user, query } = req;
-  services.request('genome', 'summary', { user, query })
+  const { user, query, sessionID } = req;
+  services.request('genome', 'summary', { user, query, sessionID })
     .then(response => res.json(response))
     .catch(next);
 });
@@ -37,8 +37,8 @@ router.get('/genome/:id', (req, res) => {
 router.get('/genome', (req, res, next) => {
   LOGGER.info('Received request to get genomes');
 
-  const { user, query } = req;
-  services.request('genome', 'fetch-list', { user, query }).
+  const { user, query, sessionID } = req;
+  services.request('genome', 'fetch-list', { user, query, sessionID }).
     then(response => res.json(response)).
     catch(next);
 });
@@ -46,9 +46,9 @@ router.get('/genome', (req, res, next) => {
 router.put('/genome', (req, res, next) => {
   LOGGER.info('Received request to create genome');
 
-  const { user } = req;
+  const { user, sessionID } = req;
   const { name, uploadedAt } = req.query;
-  services.request('genome', 'create', { stream: req, metadata: { name, uploadedAt }, user })
+  services.request('genome', 'create', { stream: req, metadata: { name, uploadedAt }, user, sessionID })
     .then(response => res.json(response))
     .catch(next);
 });
