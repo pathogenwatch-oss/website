@@ -5,14 +5,15 @@ import entities from './entities';
 import summary from '../summary/reducer';
 
 import { CREATE_COLLECTION, CHANGE_COLLECTION_METADATA } from '../create-collection-drawer';
-import { SHOW_METRIC } from '../actions';
+import { SHOW_METRIC, FETCH_GENOMES } from '../actions';
 
-function loading(state = false, { type }) {
+import { statuses } from '../constants';
+
+function waiting(state = false, { type }) {
   switch (type) {
     case CREATE_COLLECTION.ATTEMPT:
       return true;
     case CREATE_COLLECTION.SUCCESS:
-      return false;
     case CREATE_COLLECTION.FAILURE:
       return false;
     default:
@@ -40,11 +41,26 @@ function collectionMetadata(state = initialMetadata, { type, payload }) {
   }
 }
 
+const initialStatus = null;
+function status(state = initialStatus, { type }) {
+  switch (type) {
+    case FETCH_GENOMES.ATTEMPT:
+      return statuses.LOADING;
+    case FETCH_GENOMES.FAILURE:
+      return statuses.ERROR;
+    case FETCH_GENOMES.SUCCESS:
+      return statuses.OK;
+    default:
+      return state;
+  }
+}
+
 export default combineReducers({
   entities,
   collectionMetadata,
-  loading,
   selectedMetric,
-  uploads,
+  status,
   summary,
+  uploads,
+  waiting,
 });

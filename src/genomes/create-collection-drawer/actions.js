@@ -4,6 +4,8 @@ import { getCollectionMetadata } from './selectors';
 import { createAsyncConstants } from '../../actions';
 import { createCollectionRequest } from './api';
 
+import { showToast } from '../../toast';
+
 export const CREATE_COLLECTION = createAsyncConstants('CREATE_COLLECTION');
 
 function createCollectionAction(files, metadata) {
@@ -23,7 +25,12 @@ export function createCollection() {
     const state = getState();
     const genomes = getGenomeList(state);
     const metadata = getCollectionMetadata(state);
-    dispatch(createCollectionAction(genomes, metadata));
+    dispatch(createCollectionAction(genomes, metadata)).
+      catch(() => dispatch(
+        showToast({
+          message: 'Your collection could not be created at this time, please try again later.',
+        })
+      ));
   };
 }
 

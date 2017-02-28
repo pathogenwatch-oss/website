@@ -15,6 +15,7 @@ export default React.createClass({
     toggleAside: React.PropTypes.func.isRequired,
     addFiles: React.PropTypes.func.isRequired,
     isUploading: React.PropTypes.bool,
+    waiting: React.PropTypes.bool,
     prefilter: React.PropTypes.string,
     filter: React.PropTypes.func,
   },
@@ -48,10 +49,10 @@ export default React.createClass({
   },
 
   render() {
-    const { loading } = this.props;
+    const { waiting } = this.props;
     return (
       <FileDragAndDrop onFiles={this.upload}>
-        { loading && <ProgressBar indeterminate /> }
+        { waiting && <ProgressBar indeterminate /> }
         <div className="wgsa-hipster-style wgsa-filterable-view">
           <Summary />
           {this.props.children}

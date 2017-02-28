@@ -7,6 +7,9 @@ import GenomeCard from '../card';
 import { getGridItems } from './selectors';
 import { getPrefilter } from '../filter/selectors';
 import { getTotal } from '../summary/selectors';
+import { getStatus } from '../selectors';
+
+import { statuses } from '../constants';
 
 export const GridView = React.createClass({
 
@@ -19,23 +22,29 @@ export const GridView = React.createClass({
   },
 
   getEmptyMessage() {
-    const { items, total, prefilter } = this.props;
-    const isEmpty = items.length === 0 && total === 0;
+    const { total, prefilter } = this.props;
 
-    if (prefilter === 'upload' && isEmpty) {
-      return (
-        <p className="wgsa-filterable-content wgsa-hub-big-message">
-          Drag and drop files to begin.
-        </p>
-      );
-    }
-
-    if (prefilter === 'bin' && isEmpty) {
-      return (
-        <p className="wgsa-filterable-content wgsa-hub-big-message">
-          Nothing in the bin 👍
-        </p>
-      );
+    if (total === 0) {
+      switch (prefilter) {
+        case 'upload':
+          return (
+            <p className="wgsa-filterable-content wgsa-hub-big-message">
+              Drag and drop files to begin.
+            </p>
+          );
+        case 'bin':
+          return (
+            <p className="wgsa-filterable-content wgsa-hub-big-message">
+              Nothing in the bin 👍
+            </p>
+          );
+        default:
+          return (
+            <p className="wgsa-filterable-content wgsa-hub-big-message">
+              Something went wrong. 😞
+            </p>
+          );
+      }
     }
 
     return (
@@ -46,7 +55,24 @@ export const GridView = React.createClass({
   },
 
   render() {
-    const { items } = this.props;
+    const { items, status } = this.props;
+
+    if (status === statuses.LOADING) {
+      return (
+        <p className="wgsa-filterable-content wgsa-hub-big-message">
+          Loading... ⌛
+        </p>
+      );
+    }
+
+    if (status === statuses.ERROR) {
+      return (
+        <p className="wgsa-filterable-content wgsa-hub-big-message">
+          Something went wrong. 😞
+        </p>
+      );
+    }
+
     return items.length ? (
       <Grid
         template={GenomeCard}
@@ -64,6 +90,7 @@ function mapStateToProps(state) {
     items: getGridItems(state),
     prefilter: getPrefilter(state),
     total: getTotal(state),
+    status: getStatus(state),
   };
 }
 

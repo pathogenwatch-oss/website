@@ -5,16 +5,15 @@ import Genomes from './Genomes.react';
 import { toggleAside } from '../../header/actions';
 import { addFiles } from '../uploads/actions';
 
-import { getTotalGenomes } from '../selectors';
+import { getTotalGenomes, isWaiting } from '../selectors';
 import { isUploading, getTotalErrors } from '../uploads/selectors';
 
 import { updateFilter } from '../filter/actions';
 
 function mapStateToProps(state, { prefilter }) {
-  const { genomes } = state;
   return {
     hasGenomes: getTotalGenomes(state) > 0,
-    loading: genomes.loading,
+    waiting: isWaiting(state),
     isUploading: isUploading(state),
     showErrorSummary: prefilter === 'upload' && getTotalErrors(state) > 0,
   };

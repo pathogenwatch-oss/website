@@ -8,8 +8,10 @@ import ErrorSummary from '../uploads/ErrorSummary.react';
 
 import { getPrefilter } from '../filter/selectors';
 import * as uploads from '../uploads/selectors';
-import { getTotalGenomes } from '../selectors';
+import { getTotalGenomes, getStatus } from '../selectors';
 import { getTotal } from './selectors';
+
+import { statuses } from '../constants';
 
 const Summary = React.createClass({
 
@@ -24,7 +26,11 @@ const Summary = React.createClass({
   },
 
   render() {
-    const { completedUploads, batchSize, prefilter } = this.props;
+    const { status, completedUploads, batchSize, prefilter } = this.props;
+
+    if (status !== statuses.OK || this.props.visibleGenomes === 0) {
+      return <FilterSummary />;
+    }
 
     if (prefilter === 'upload') {
       if (this.props.isUploading) {
@@ -41,10 +47,6 @@ const Summary = React.createClass({
 
       if (this.props.totalErroredUploads > 0) {
         return <ErrorSummary />;
-      }
-
-      if (this.props.visibleGenomes === 0) {
-        return <FilterSummary />;
       }
     }
 
@@ -76,6 +78,7 @@ function mapStateToProps(state) {
     totalErroredUploads: uploads.getTotalErrors(state),
     visibleGenomes: getTotalGenomes(state),
     totalGenomes: getTotal(state),
+    status: getStatus(state),
   };
 }
 

@@ -1,6 +1,8 @@
 import { createSelector } from 'reselect';
 
-export const getGenomes = ({ genomes }) => genomes.entities;
+export const getGenomeState = ({ genomes }) => genomes;
+
+export const getGenomes = state => getGenomeState(state).entities;
 
 export const getGenomeList = createSelector(
   getGenomes,
@@ -15,3 +17,7 @@ export const getGenomeKeys = createSelector(
 export const getGenome = (state, id) => getGenomes(state)[id];
 
 export const getTotalGenomes = (state) => getGenomeList(state).length;
+
+export const isWaiting = state => getGenomeState(state).waiting;
+
+export const getStatus = state => getGenomeState(state).status;

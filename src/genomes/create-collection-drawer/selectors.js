@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 
 import { isUploading } from '../uploads/selectors';
-import { getGenomeList } from '../selectors';
+import { getGenomeList, isWaiting } from '../selectors';
 
 import { isSupported } from '../../species';
 
@@ -23,11 +23,11 @@ export const isSupportedSpeciesSelected = createSelector(
 );
 
 export const canCreateCollection = createSelector(
-  state => state.genomes.loading,
+  isWaiting,
   isUploading,
   isSupportedSpeciesSelected,
-  (loading, uploading, supportSpeciesSelected) =>
-    !loading && !uploading && supportSpeciesSelected
+  (waiting, uploading, supportSpeciesSelected) =>
+    !waiting && !uploading && supportSpeciesSelected
 );
 
 export const getCollectionSummary = createSelector(
