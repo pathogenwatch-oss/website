@@ -4,9 +4,10 @@ import { connect } from 'react-redux';
 import { Summary as FilterSummary, Totals } from '../../filter/viewing';
 import ProgressBar from '../../progress-bar';
 import ViewSwitcher from './ViewSwitcher.react';
+import ErrorSummary from '../uploads/ErrorSummary.react';
 
 import { getPrefilter } from '../filter/selectors';
-import { isUploading, getBatchSize, getNumCompletedUploads } from '../uploads/selectors';
+import * as uploads from '../uploads/selectors';
 import { getTotalGenomes } from '../selectors';
 import { getTotal } from './selectors';
 
@@ -23,31 +24,43 @@ const Summary = React.createClass({
   },
 
   render() {
-    const { isUploading, completedUploads, batchSize, visibleGenomes, totalGenomes } = this.props;
+    const { completedUploads, batchSize, prefilter } = this.props;
+
+    if (prefilter === 'upload') {
+      if (this.props.isUploading) {
+        return (
+          <FilterSummary className="wgsa-hub-summary">
+            <ProgressBar
+              className="wgsa-filter-summary__count"
+              progress={(completedUploads / batchSize) * 100}
+              label={`${completedUploads}/${batchSize}`}
+            />
+          </FilterSummary>
+        );
+      }
+
+      if (this.props.totalErroredUploads > 0) {
+        return <ErrorSummary />;
+      }
+
+      if (this.props.visibleGenomes === 0) {
+        return <FilterSummary />;
+      }
+    }
+
     return (
       <FilterSummary className="wgsa-hub-summary">
-        { isUploading ?
-            <ErrorSummary /> :
-
-        }
         <div className="wgsa-button-group">
           <i className="material-icons" title="View">visibility</i>
           <ViewSwitcher title="Grid" />
           <ViewSwitcher view="map" title="Map" />
           <ViewSwitcher view="stats" title="Stats" />
         </div>
-        { isUploading ?
-          <ProgressBar
-            className="wgsa-filter-summary__count"
-            progress={(completedUploads / batchSize) * 100}
-            label={`${completedUploads}/${batchSize}`}
-          /> :
-          <Totals
-            visible={visibleGenomes}
-            total={totalGenomes}
-            itemType="genome"
-          />
-        }
+        <Totals
+          visible={this.props.visibleGenomes}
+          total={this.props.totalGenomes}
+          itemType="genome"
+        />
       </FilterSummary>
     );
   },
@@ -57,9 +70,10 @@ const Summary = React.createClass({
 function mapStateToProps(state) {
   return {
     prefilter: getPrefilter(state),
-    isUploading: isUploading(state),
-    batchSize: getBatchSize(state),
-    completedUploads: getNumCompletedUploads(state),
+    isUploading: uploads.isUploading(state),
+    batchSize: uploads.getBatchSize(state),
+    completedUploads: uploads.getNumCompletedUploads(state),
+    totalErroredUploads: uploads.getTotalErrors(state),
     visibleGenomes: getTotalGenomes(state),
     totalGenomes: getTotal(state),
   };

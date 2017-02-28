@@ -6,6 +6,7 @@ import GenomeCard from '../card';
 
 import { getGridItems } from './selectors';
 import { getPrefilter } from '../filter/selectors';
+import { getTotal } from '../summary/selectors';
 
 export const GridView = React.createClass({
 
@@ -18,9 +19,10 @@ export const GridView = React.createClass({
   },
 
   getEmptyMessage() {
-    const { items, prefilter } = this.props;
+    const { items, total, prefilter } = this.props;
+    const isEmpty = items.length === 0 && total === 0;
 
-    if (prefilter === 'upload' && items.length === 0) {
+    if (prefilter === 'upload' && isEmpty) {
       return (
         <p className="wgsa-filterable-content wgsa-hub-big-message">
           Drag and drop files to begin.
@@ -28,7 +30,7 @@ export const GridView = React.createClass({
       );
     }
 
-    if (prefilter === 'bin' && items.length === 0) {
+    if (prefilter === 'bin' && isEmpty) {
       return (
         <p className="wgsa-filterable-content wgsa-hub-big-message">
           Nothing in the bin 👍
@@ -61,6 +63,7 @@ function mapStateToProps(state) {
   return {
     items: getGridItems(state),
     prefilter: getPrefilter(state),
+    total: getTotal(state),
   };
 }
 

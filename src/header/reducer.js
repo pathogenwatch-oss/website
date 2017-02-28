@@ -1,16 +1,28 @@
 import { FETCH_COLLECTION, UPDATE_COLLECTION_PROGRESS, RESET_COLLECTION_VIEW }
   from '../collection-viewer/actions';
-import { HEADER_TOGGLE_ASIDE, HEADER_TOGGLE_USER_DRAWER } from './actions';
+import {
+  HEADER_TOGGLE_ASIDE,
+  HEADER_TOGGLE_USER_DRAWER,
+  HEADER_TOGGLE_ASIDE_DISABLED,
+} from './actions';
 
 
 import { getHeaderClassName } from '../collection-viewer';
 
-const initialState = { hasAside: false };
+const initialState = {
+  asideVisible: false,
+  asideDisabled: false,
+  userDrawerVisible: false,
+};
 
 export default function (state = initialState, { type, payload }) {
   switch (type) {
     case HEADER_TOGGLE_ASIDE:
-      return { ...state, hasAside: payload.isOpen };
+      return {
+        ...state,
+        userDrawerVisible: false,
+        asideVisible: payload.isOpen,
+      };
     case FETCH_COLLECTION.SUCCESS:
     case UPDATE_COLLECTION_PROGRESS:
       return {
@@ -25,8 +37,14 @@ export default function (state = initialState, { type, payload }) {
     case HEADER_TOGGLE_USER_DRAWER:
       return {
         ...state,
-        hasAside: false,
-        userDrawerOpen: payload.isOpen,
+        asideVisible: false,
+        userDrawerVisible: payload.isOpen,
+      };
+    case HEADER_TOGGLE_ASIDE_DISABLED:
+      return {
+        ...state,
+        asideVisible: false,
+        asideDisabled: payload.isDisabled,
       };
     default:
       return state;

@@ -3,9 +3,11 @@ import { connect } from 'react-redux';
 
 import NavLink from '../location';
 
+import { isAsideVisible } from './selectors';
+
 import { toggleAside } from './actions';
 
-export const DefaultContent = ({ hasAside, onClick, asideDisabled }) => (
+export const DefaultContent = ({ asideVisible, toggle, asideDisabled }) => (
   <span className="mdl-layout-spacer mdl-layout-spacer--flex">
     <div className="mdl-layout-spacer" />
     <nav className="mdl-navigation wgsa-header-nav">
@@ -16,18 +18,24 @@ export const DefaultContent = ({ hasAside, onClick, asideDisabled }) => (
     </nav>
     <button
       className="mdl-button mdl-button--icon wgsa-search-button"
-      onClick={onClick}
+      onClick={() => toggle(asideVisible)}
       disabled={asideDisabled}
     >
-      <i className="material-icons">{hasAside ? 'chevron_right' : 'search'}</i>
+      <i className="material-icons">{asideVisible ? 'chevron_right' : 'search'}</i>
     </button>
   </span>
 );
 
-function mapDispatchToProps(dispatch, { hasAside }) {
+function mapStateToProps(state) {
   return {
-    onClick: () => dispatch(toggleAside(!hasAside)),
+    asideVisible: isAsideVisible(state),
   };
 }
 
-export default connect(null, mapDispatchToProps)(DefaultContent);
+function mapDispatchToProps(dispatch) {
+  return {
+    toggle: asideVisible => dispatch(toggleAside(!asideVisible)),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(DefaultContent);

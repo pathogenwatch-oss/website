@@ -13,8 +13,8 @@ const ErrorSummary = React.createClass({
     return (
       <Summary className="wgsa-hub-summary">
         <span className="wgsa-error-message">{totalErrors} files could not be uploaded.</span>
-        <button className="mdl-button mdl-button--primary" onCLick={onRetry}>Retry all</button>
-        <button className="mdl-button" onCLick={onRemove}>Remove all</button>
+        <button className="mdl-button mdl-button--primary" onClick={onRetry}>Retry all</button>
+        <button className="mdl-button" onClick={onRemove}>Remove all</button>
       </Summary>
     );
   },

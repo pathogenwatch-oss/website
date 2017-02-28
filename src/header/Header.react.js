@@ -9,28 +9,28 @@ import UserDrawer from './UserDrawer.react';
 import AccountLink from './AccountLink.react';
 import DefaultContent from './DefaultContent.react';
 
-import { selector as getHeader } from './index';
+import { getHeader } from './selectors';
 
 function mapStateToProps(state) {
   return getHeader(state);
 }
 
 export default connect(mapStateToProps)(
-  ({ hasAside, userDrawerOpen, content, className }) => (
+  ({ asideVisible, userDrawerVisible, content, className }) => (
     <header className={
       classnames(
         'mdl-layout__header mdl-layout__header--scroll wgsa-header',
-        { 'wgsa-has-aside': hasAside },
+        { 'wgsa-has-aside': asideVisible },
         className,
       )}
     >
-      <UserDrawer visible={userDrawerOpen} />
+      <UserDrawer visible={userDrawerVisible} />
       <div className="mdl-layout__header-row">
         <AccountLink />
         <Link to="/" className="mdl-layout-title">
           <img src="/images/WGSA.FINAL.svg" className="wgsa-header-logo" />
         </Link>
-        {content || <DefaultContent hasAside={hasAside} />}
+        {content || <DefaultContent />}
       </div>
     </header>
   )

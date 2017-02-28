@@ -1,6 +1,8 @@
 import { createSelector } from 'reselect';
 import sortBy from 'lodash.sortby';
 
+import { getPrefilter } from '../filter/selectors';
+
 import { isFailedUpload } from '../utils/validation';
 import { statuses } from '../uploads/constants';
 
@@ -60,4 +62,16 @@ export const getErroredUploads = createSelector(
 export const getTotalErrors = createSelector(
   getErroredUploads,
   erroredUploads => erroredUploads.length
+);
+
+export const isAsideDisabled = createSelector(
+  getPrefilter,
+  isUploading,
+  getTotalErrors,
+  (prefilter, uploading, errors) => {
+    if (prefilter === 'upload') {
+      return uploading || errors > 0;
+    }
+    return false;
+  }
 );
