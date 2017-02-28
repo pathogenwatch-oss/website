@@ -77,9 +77,13 @@ schema.statics.updateMetadata = function (_id, _user, metadata) {
   }).then(({ nModified }) => ({ nModified, country }));
 };
 
-schema.statics.getPrefilterCondition = function ({ user = null, query, sessionID }) {
-  const hasAccess = { $or: [ { _user: user }, { _session: sessionID }, { public: true } ] };
-  const { prefilter = 'all', uploadedAt } = query;
+schema.statics.getPrefilterCondition = function ({ user, query, sessionID }) {
+  const hasAccess = { $or: [ { public: true }, { _session: sessionID } ] };
+  if (user) {
+    hasAccess.$or.push({ _user: user._id });
+  }
+
+  const { prefilter = 'all', uploadedAt = null } = query;
 
   if (prefilter === 'all') {
     return Object.assign(hasAccess, { binned: false });
@@ -90,7 +94,7 @@ schema.statics.getPrefilterCondition = function ({ user = null, query, sessionID
   }
 
   if (prefilter === 'upload') {
-    return Object.assign(hasAccess, { binned: false, uploadedAt: { $exists: true, $eq: uploadedAt } });
+    return Object.assign(hasAccess, { binned: false, uploadedAt: uploadedAt ? new Date(uploadedAt) : { $exists: true, $eq: '' } });
   }
 
   if (prefilter === 'bin') {
