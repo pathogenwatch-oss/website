@@ -1,10 +1,7 @@
 import { createAsyncConstants } from '../../actions';
 
-import { showToast } from '../../toast';
-
 import * as selectors from './selectors';
 import * as utils from '../utils';
-import * as toasts from '../utils/toasts';
 
 export const ADD_GENOMES = 'ADD_GENOMES';
 
@@ -58,17 +55,6 @@ export function uploadFiles(files) {
             upload();
             return;
           }
-
-          const state = getState();
-          if (selectors.isUploading(state)) return;
-
-          const failedUploads = selectors.getFailedUploads(state);
-          if (!failedUploads.length) return;
-
-          dispatch(showToast(toasts.retryAll(
-            failedUploads.length,
-            () => dispatch(uploadFiles(failedUploads))
-          )));
         });
         upload();
       }
@@ -83,13 +69,37 @@ export function addFiles(newFiles) {
     );
 }
 
-export const REMOVE_GENOME = 'REMOVE_GENOME';
+export const REMOVE_GENOMES = 'REMOVE_GENOMES';
 
-export function removeGenome(id) {
+export function removeGenomes(ids) {
   return {
-    type: REMOVE_GENOME,
+    type: REMOVE_GENOMES,
     payload: {
-      id,
+      ids,
     },
+  };
+}
+
+export function retryAll() {
+  return (dispatch, getState) => {
+    const state = getState();
+    if (selectors.isUploading(state)) return;
+
+    const failedUploads = selectors.getFailedUploads(state);
+    if (!failedUploads.length) return;
+
+    dispatch(uploadFiles(failedUploads));
+  };
+}
+
+export function removeAll() {
+  return (dispatch, getState) => {
+    const state = getState();
+    if (selectors.isUploading(state)) return;
+
+    const erroredUploads = selectors.getErroredUploads(state);
+    if (!erroredUploads.length) return;
+
+    dispatch(removeGenomes(erroredUploads.map(_ => _.id)));
   };
 }

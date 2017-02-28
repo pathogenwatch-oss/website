@@ -5,12 +5,10 @@ import { Summary as FilterSummary, Totals } from '../../filter/viewing';
 import ProgressBar from '../../progress-bar';
 import ViewSwitcher from './ViewSwitcher.react';
 
-import { getFilter } from '../../filter/selectors';
-import { getBatchSize, getNumCompletedUploads } from '../uploads/selectors';
+import { getPrefilter } from '../filter/selectors';
+import { isUploading, getBatchSize, getNumCompletedUploads } from '../uploads/selectors';
 import { getTotalGenomes } from '../selectors';
 import { getTotal } from './selectors';
-
-import { stateKey } from '../filter';
 
 const Summary = React.createClass({
 
@@ -25,16 +23,20 @@ const Summary = React.createClass({
   },
 
   render() {
-    const { completedUploads, batchSize, visibleGenomes, totalGenomes } = this.props;
+    const { isUploading, completedUploads, batchSize, visibleGenomes, totalGenomes } = this.props;
     return (
       <FilterSummary className="wgsa-hub-summary">
+        { isUploading ?
+            <ErrorSummary /> :
+
+        }
         <div className="wgsa-button-group">
           <i className="material-icons" title="View">visibility</i>
           <ViewSwitcher title="Grid" />
           <ViewSwitcher view="map" title="Map" />
           <ViewSwitcher view="stats" title="Stats" />
         </div>
-        { batchSize ?
+        { isUploading ?
           <ProgressBar
             className="wgsa-filter-summary__count"
             progress={(completedUploads / batchSize) * 100}
@@ -54,11 +56,12 @@ const Summary = React.createClass({
 
 function mapStateToProps(state) {
   return {
+    prefilter: getPrefilter(state),
+    isUploading: isUploading(state),
     batchSize: getBatchSize(state),
     completedUploads: getNumCompletedUploads(state),
     visibleGenomes: getTotalGenomes(state),
     totalGenomes: getTotal(state),
-    isUpload: getFilter(state, { stateKey }).upload,
   };
 }
 

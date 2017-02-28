@@ -44,3 +44,10 @@
   align-items: center;
   justify-content: center;
 }
+
+.wgsa-error-message {
+  color: #d11b1b;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 500;
+}

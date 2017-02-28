@@ -4,14 +4,14 @@ import classnames from 'classnames';
 
 import { moveToBin } from '../thunks';
 import { undoMoveToBin } from '../actions';
-import { removeGenome } from '../uploads/actions';
+import { removeGenomes } from '../uploads/actions';
 
 import { statuses } from '../uploads/constants';
 
 function mapDispatchToProps(dispatch, { genome }) {
   return {
     actions: {
-      removeGenome: () => dispatch(removeGenome(genome.id)),
+      removeGenome: () => dispatch(removeGenomes([ genome.id ])),
       moveToBin: () => dispatch(moveToBin(genome)),
       undoMoveToBIn: () => dispatch(undoMoveToBin(genome.id)),
     },

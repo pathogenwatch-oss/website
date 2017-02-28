@@ -1,12 +1,19 @@
 import { createSelector } from 'reselect';
 
-import { getUploadedGenomeList } from '../uploads/selectors';
-import { getGenomes, getGenomeList } from '../selectors';
+import { isUploading, getUploadedGenomeList, getTotalErrors } from '../uploads/selectors';
+import { getGenomeList } from '../selectors';
+import { getPrefilter } from '../filter/selectors';
 
 export const getGridItems = createSelector(
-  getGenomes,
+  getPrefilter,
+  isUploading,
+  getTotalErrors,
   getGenomeList,
   getUploadedGenomeList,
-  (genomes, genomeList, uploadedGenomes) =>
-    uploadedGenomes.filter(({ id }) => !(id in genomes)).concat(genomeList)
+  (prefilter, uploading, totalErrors, genomeList, uploadedGenomes) => {
+    if (prefilter === 'upload' && (uploading || totalErrors)) {
+      return uploadedGenomes;
+    }
+    return genomeList;
+  }
 );

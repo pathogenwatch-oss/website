@@ -89,11 +89,13 @@ export default function (state = initialState, { type, payload }) {
         entities: updateGenomes(entities, id, { progress }),
       };
     }
-    case actions.REMOVE_GENOME: {
-      const { id } = payload;
+    case actions.REMOVE_GENOMES: {
+      const { ids } = payload;
       const { entities } = state;
 
-      delete entities[id];
+      for (const id of ids) {
+        delete entities[id];
+      }
 
       return {
         ...state,

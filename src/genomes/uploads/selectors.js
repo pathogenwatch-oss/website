@@ -2,6 +2,7 @@ import { createSelector } from 'reselect';
 import sortBy from 'lodash.sortby';
 
 import { isFailedUpload } from '../utils/validation';
+import { statuses } from '../uploads/constants';
 
 export const getUploads = ({ genomes }) => genomes.uploads;
 
@@ -49,4 +50,14 @@ export const getNumCompletedUploads = createSelector(
 export const getFailedUploads = createSelector(
   getUploadedGenomeList,
   genomes => genomes.filter(genome => isFailedUpload(genome))
+);
+
+export const getErroredUploads = createSelector(
+  getUploadedGenomeList,
+  genomes => genomes.filter(genome => genome.status === statuses.ERROR)
+);
+
+export const getTotalErrors = createSelector(
+  getErroredUploads,
+  erroredUploads => erroredUploads.length
 );
