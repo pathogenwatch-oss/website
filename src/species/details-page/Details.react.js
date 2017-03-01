@@ -4,11 +4,6 @@ import { Link } from 'react-router';
 
 import { taxIdMap } from '../index';
 
-const sectionStyle = {
-  width: '80%',
-  margin: '32px auto',
-};
-
 import { getWgsaSpecies } from '../selectors';
 
 import { fetchSummary } from '../actions';
@@ -72,10 +67,10 @@ const Details = React.createClass({
             <div className="wgsa-section-divider">
               <h3 className="wgsa-section-title">Reference Downloads</h3>
               <ul>
-                <li><a href={`/species/${nickname}/core_representatives.csv`}>Core Representatives</a></li>
-                <li><a href={`/species/${nickname}/reference_fastas.zip`}>Sequences</a></li>
-                <li><a href={`/species/${nickname}/reference_annotations.zip`}>Annotations</a></li>
-                <li><a href={`/species/${nickname}/reference_metadata.csv`}>Metadata</a></li>
+                <li><a href={`/download/species/${nickname}/core_representatives.csv`}>Core Representatives</a></li>
+                <li><a href={`/download/species/${nickname}/reference_fastas.zip`}>Sequences</a></li>
+                <li><a href={`/download/species/${nickname}/reference_annotations.zip`}>Annotations</a></li>
+                <li><a href={`/download/species/${nickname}/reference_metadata.csv`}>Metadata</a></li>
               </ul>
             </div>
           </div>

@@ -7,7 +7,7 @@ import { isAsideVisible } from './selectors';
 
 import { toggleAside } from './actions';
 
-export const DefaultContent = ({ asideVisible, toggle, asideDisabled }) => (
+const DefaultContent = ({ asideVisible, toggle, asideEnabled = false }) => (
   <span className="mdl-layout-spacer mdl-layout-spacer--flex">
     <div className="mdl-layout-spacer" />
     <nav className="mdl-navigation wgsa-header-nav">
@@ -19,7 +19,7 @@ export const DefaultContent = ({ asideVisible, toggle, asideDisabled }) => (
     <button
       className="mdl-button mdl-button--icon wgsa-search-button"
       onClick={() => toggle(asideVisible)}
-      disabled={asideDisabled}
+      disabled={!asideEnabled}
     >
       <i className="material-icons">{asideVisible ? 'chevron_right' : 'search'}</i>
     </button>

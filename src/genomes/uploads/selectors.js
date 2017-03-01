@@ -64,14 +64,14 @@ export const getTotalErrors = createSelector(
   erroredUploads => erroredUploads.length
 );
 
-export const isAsideDisabled = createSelector(
+export const isAsideEnabled = createSelector(
   getPrefilter,
   isUploading,
   getTotalErrors,
   (prefilter, uploading, errors) => {
     if (prefilter === 'upload') {
-      return uploading || errors > 0;
+      return !(uploading || errors > 0);
     }
-    return false;
+    return true;
   }
 );

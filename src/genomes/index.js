@@ -12,12 +12,12 @@ const prefilters = [ 'all', 'user', 'upload', 'bin' ];
 export reducer from './reducer';
 
 import DefaultContent from '../header/DefaultContent.react';
-import { isAsideDisabled } from './uploads/selectors';
+import { isAsideEnabled } from './uploads/selectors';
 
 const GenomeHeader = connect(
-  state => ({ asideDisabled: isAsideDisabled(state) })
+  state => ({ asideEnabled: isAsideEnabled(state) })
 )(
-  ({ asideDisabled }) => <DefaultContent asideDisabled={asideDisabled} />
+  ({ asideEnabled }) => <DefaultContent asideEnabled={asideEnabled} />
 );
 
 export default (

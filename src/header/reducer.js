@@ -3,7 +3,6 @@ import { FETCH_COLLECTION, UPDATE_COLLECTION_PROGRESS, RESET_COLLECTION_VIEW }
 import {
   HEADER_TOGGLE_ASIDE,
   HEADER_TOGGLE_USER_DRAWER,
-  HEADER_TOGGLE_ASIDE_DISABLED,
 } from './actions';
 
 
@@ -11,7 +10,6 @@ import { getHeaderClassName } from '../collection-viewer';
 
 const initialState = {
   asideVisible: false,
-  asideDisabled: false,
   userDrawerVisible: false,
 };
 
@@ -39,12 +37,6 @@ export default function (state = initialState, { type, payload }) {
         ...state,
         asideVisible: false,
         userDrawerVisible: payload.isOpen,
-      };
-    case HEADER_TOGGLE_ASIDE_DISABLED:
-      return {
-        ...state,
-        asideVisible: false,
-        asideDisabled: payload.isDisabled,
       };
     default:
       return state;

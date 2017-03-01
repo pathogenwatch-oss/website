@@ -66,7 +66,7 @@
   margin: 0 auto;
   max-width: 960px;
   padding: 40px;
-  @media(min-width: 1600px) {
+  @media (min-width: 1600px) {
     max-width: 1280px;
   }
 }
@@ -74,13 +74,15 @@
 .wgsa-page-title {
   font-size: 24px;
   line-height: 32px;
-  margin: 8px 0 16px;
+  margin-top: 8px;
+  margin-bottom: 16px;
   color: #673c90;
 }
 
 .wgsa-section-divider {
   border-top: 1px solid #673c90;
-  padding: 16px 0;
+  padding-top: 16px;
+  padding-bottom: 16px;
 }
 
 .wgsa-section-title {

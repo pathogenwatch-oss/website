@@ -1,3 +1,7 @@
+.wgsa-genome-card .wgsa-card-content {
+  height: 64px;
+}
+
 .wgsa-genome-card p {
   margin: 0;
   font-size: 14px;

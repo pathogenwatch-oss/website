@@ -4,8 +4,6 @@ import { Route } from 'react-router';
 import Markdown from './Markdown.react';
 import NotFound from '../components/NotFound.react';
 
-import { DefaultContent } from '../header/DefaultContent.react';
-
 import CONFIG from '../app/config';
 
 function getWikiPageMarkdown(page = 'Home') {
@@ -24,7 +22,6 @@ export default (
         .then(markdown => callback(null, () => <Markdown page={params.page} markdown={markdown} />))
         .catch(() => callback(null, () => <NotFound />));
     }}
-    header={<DefaultContent asideDisabled />}
     onEnter={() => {
       document.title = 'WGSA | Documentation';
     }}

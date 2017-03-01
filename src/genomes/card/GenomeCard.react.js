@@ -46,7 +46,7 @@ export default props => {
   const { name, reference } = props;
   const { content, footer = null } = getCardComponents(props);
   return (
-    <Card className="wgsa-genome-card">
+    <Card className="wgsa-genome-card wgsa-card--bordered">
       <h2 className="wgsa-card-title" title={name}>{name}</h2>
       { reference &&
         <span className="wgsa-genome-card__badge mdl-chip__contact" title="Reference Genome">R</span>

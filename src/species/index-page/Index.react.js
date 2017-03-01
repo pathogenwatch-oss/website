@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 
 import { FormattedSpeciesName, taxIdMap } from '../index';
-import Card, { CardMetadata } from '../../card';
+import { CardMetadata } from '../../card';
 
 import { getWgsaSpecies, getOtherSpecies } from '../selectors';
 
@@ -33,50 +33,48 @@ const Index = React.createClass({
   render() {
     const { wgsaSpecies, otherSpecies } = this.props;
     return (
-      <div className="wgsa-home-page">
-        <h2>WGSA Species</h2>
-        <section>
-          {
-            wgsaSpecies.map(({ speciesId, totalCollections, totalGenomes }) =>
-              <Card className="wgsa-species-card">
-                <h3>
-                  <FormattedSpeciesName speciesId={speciesId} />
+      <div className="wgsa-page">
+        <div className="wgsa-page-margin mdl-grid">
+          <h2 className="wgsa-section-divider wgsa-page-title mdl-cell mdl-cell--12-col">WGSA Species</h2>
+          { wgsaSpecies.map(({ speciesId, totalCollections, totalGenomes }) =>
+              <div className="wgsa-card wgsa-section-divider mdl-cell mdl-cell--3-col">
+                <h3 className="wgsa-section-title">
+                  <FormattedSpeciesName speciesId={speciesId} fullName />
                 </h3>
                 <CardMetadata icon="collections" title="collections">
                   <Link to={`/collections?speciesId=${speciesId}`} title="Browse collections">
-                    {totalCollections} collections
+                    {totalCollections} collection{totalCollections === 1 ? '' : 's'}
                   </Link>
                 </CardMetadata>
                 <CardMetadata icon="bug_report" title="genomes">
                   <Link to={`/genomes?speciesId=${speciesId}`} title="Browse genomes">
-                    {totalGenomes} genomes
+                    {totalGenomes} genome{totalGenomes === 1 ? '' : 's'}
                   </Link>
                 </CardMetadata>
-                <Link
-                  className="mdl-button mdl-button--primary wgsa-button--text"
-                  to={`/species/${taxIdMap.get(speciesId).nickname}`}
-                >
-                  View Details
-                </Link>
-              </Card>
-            )
-          }
-        </section>
-        <h2>Other Species</h2>
-        <section>
-          {
-            otherSpecies.map(({ speciesId, speciesName, totalGenomes }) =>
-              <Card className="wgsa-species-card">
-                <h3>{ speciesName }</h3>
-                <CardMetadata icon="bug_report" title="genomes">
-                  <Link to={`/genomes?speciesId=${speciesId}`} title="Browse genomes">
-                    {totalGenomes} genomes
+                <footer className="wgsa-card-footer">
+                  <Link
+                    className="mdl-button mdl-button--primary wgsa-button--text"
+                    to={`/species/${taxIdMap.get(speciesId).nickname}`}
+                  >
+                    Species Home
                   </Link>
-              </CardMetadata>
-              </Card>
-            )
-          }
-        </section>
+                </footer>
+              </div>
+            ) }
+            <h2 className="wgsa-page-title mdl-cell mdl-cell--12-col">Other Species</h2>
+            { otherSpecies.map(({ speciesId, speciesName, totalGenomes }) =>
+                <div className="wgsa-card wgsa-section-divider mdl-cell mdl-cell--3-col">
+                  <h3 className="wgsa-section-title">
+                    {speciesName}
+                  </h3>
+                  <CardMetadata icon="bug_report" title="genomes">
+                    <Link to={`/genomes?speciesId=${speciesId}`} title="Browse genomes">
+                      {totalGenomes} genomes
+                    </Link>
+                  </CardMetadata>
+                </div>
+              ) }
+        </div>
       </div>
     );
   },
