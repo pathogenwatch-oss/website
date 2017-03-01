@@ -18,19 +18,22 @@ module.exports = function (props) {
     Collection.getSummary(collectionsFields, props),
     Genome.getSummary(genomeFields, props),
   ]).
-  then(([ deployedSpeciesIds, collectionSummary, genomeSummary ]) => ({
-    wgsaSpecies: deployedSpeciesIds.
-      map(speciesId => ({
-        speciesId,
-        totalCollections: (collectionSummary.speciesId[speciesId] || { count: 0 }).count,
-        totalGenomes: (genomeSummary.speciesId[speciesId] || { count: 0 }).count,
-      })),
-    otherSpecies: Object.keys(genomeSummary.speciesId).
-      filter(speciesId => !(speciesId in collectionSummary.speciesId)).
-      map(speciesId => ({
-        speciesId,
-        speciesName: genomeSummary.speciesId[speciesId].label,
-        totalGenomes: genomeSummary.speciesId[speciesId].count,
-      })),
-  }));
+  then(([ deployedSpeciesIds, collectionSummary, genomeSummary ]) => {
+    const deployedSpecies = new Set(deployedSpeciesIds);
+    return {
+      wgsaSpecies: deployedSpeciesIds
+        .map(speciesId => ({
+          speciesId,
+          totalCollections: (collectionSummary.speciesId[speciesId] || { count: 0 }).count,
+          totalGenomes: (genomeSummary.speciesId[speciesId] || { count: 0 }).count,
+        })),
+      otherSpecies: Object.keys(genomeSummary.speciesId)
+        .filter(speciesId => !(deployedSpecies.has(speciesId)))
+        .map(speciesId => ({
+          speciesId,
+          speciesName: genomeSummary.speciesId[speciesId].label,
+          totalGenomes: genomeSummary.speciesId[speciesId].count,
+        })),
+    };
+  });
 };
