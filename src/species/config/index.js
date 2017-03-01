@@ -9,7 +9,6 @@ const definitions =
     memo[nickname] = {
       id,
       nickname,
-      ncbiUrl: `https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?mode=Info&id=${id}`,
       ...require(`./${nickname}`).default,
     };
     return memo;

@@ -1,13 +1,3 @@
-.wgsa-species-details {
-  text-align: center;
-  max-width: 1024px;
-  margin: auto;
-}
-
-.wgsa-species-details > img {
-  border-radius: 50%;
-}
-
-.wgsa-species-details > p {
-  text-align: left;
+.wgsa-species-citations {
+  font-size: 13px;
 }

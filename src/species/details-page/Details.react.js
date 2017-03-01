@@ -33,25 +33,52 @@ const Details = React.createClass({
 
   render() {
     const { speciesId, totalGenomes, totalCollections } = this.props;
-    const { nickname, formattedName, definitionText, desc, ncbiUrl } = taxIdMap.get(speciesId);
+    const { nickname, formattedName, definitionText, desc } = taxIdMap.get(speciesId);
     return (
-      <div className="wgsa-hipster-style wgsa-filterable-view">
-        <div className="wgsa-species-details">
-          <h1>{formattedName}</h1>
-          <img src={`/images/${nickname}.jpg`} />
-          <h4>{definitionText}</h4>
-          <h5>Taxonomy ID: <a href={ncbiUrl} title="View species in NCBI taxonomy browser" target="_blank" rel="noopener">{speciesId}</a></h5>
-          <p>{desc}</p>
-        </div>
-        <div className="wgsa-hub-stats-group" style={sectionStyle}>
-          <Link className="wgsa-hub-stats-section" to="account/collections">
-            <h3 className="wgsa-hub-stats-heading">Collections</h3>
-            <p className="wgsa-hub-stats-value wgsa-hub-stats-value--large">{totalCollections}</p>
-          </Link>
-          <Link className="wgsa-hub-stats-section" to="account/genomes">
-            <h3 className="wgsa-hub-stats-heading">Genomes</h3>
-            <p className="wgsa-hub-stats-value wgsa-hub-stats-value--large">{totalGenomes}</p>
-          </Link>
+      <div className="wgsa-page">
+        <div className="wgsa-page-margin mdl-grid">
+          <div className="wgsa-section-divider mdl-cell mdl-cell--12-col">
+            <h1 className="wgsa-page-title">{formattedName}</h1>
+            <p>{definitionText}</p>
+          </div>
+          <div className="wgsa-section-divider mdl-cell mdl-cell--3-col mdl-typography--text-center">
+            <p className="wgsa-avatar-image">
+              <img src={`/images/${nickname}.jpg`} />
+            </p>
+            <p><strong>Taxonomy ID:</strong> {speciesId}</p>
+            <p>
+              <a href={`https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?mode=Info&id=${speciesId}`} target="_blank" rel="noopener">
+                View in NCBI taxonomy browser
+              </a>
+            </p>
+          </div>
+          <div className="wgsa-section-divider mdl-cell mdl-cell--6-col">
+            <h2 className="wgsa-section-title">About</h2>
+            <p>{desc}</p>
+          </div>
+          <div className="mdl-cell mdl-cell--3-col">
+            <div className="wgsa-section-divider">
+              <h3 className="wgsa-section-title">Collections</h3>
+              <Link className="wgsa-figure" to="account/collections" title="Browse collections">
+                {totalCollections}
+              </Link>
+            </div>
+            <div className="wgsa-section-divider">
+              <h3 className="wgsa-section-title">Genomes</h3>
+              <Link className="wgsa-figure" to="account/genomes" title="Browse genomes">
+                {totalGenomes}
+              </Link>
+            </div>
+            <div className="wgsa-section-divider">
+              <h3 className="wgsa-section-title">Reference Downloads</h3>
+              <ul>
+                <li><a href={`/species/${nickname}/core_representatives.csv`}>Core Representatives</a></li>
+                <li><a href={`/species/${nickname}/reference_fastas.zip`}>Sequences</a></li>
+                <li><a href={`/species/${nickname}/reference_annotations.zip`}>Annotations</a></li>
+                <li><a href={`/species/${nickname}/reference_metadata.csv`}>Metadata</a></li>
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
     );
