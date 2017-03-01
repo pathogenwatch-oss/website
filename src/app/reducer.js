@@ -6,9 +6,9 @@ import { reducer as filters } from '../filter';
 import { reducer as genomeDrawer } from '../genome-drawer';
 import { reducer as genomes } from '../genomes';
 import { reducer as header } from '../header';
-import { reducer as home } from '../home';
 import { reducer as location } from '../location/';
 import { reducer as maps } from '../map';
+import { reducer as species } from '../species';
 import { reducer as toast } from '../toast';
 import { reducer as summary } from '../summary';
 
@@ -18,10 +18,10 @@ export default combineReducers({
   collections,
   filters,
   header,
-  home,
   genomes,
   location,
   maps,
+  species,
   toast,
   summary,
 });

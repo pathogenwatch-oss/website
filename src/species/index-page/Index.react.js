@@ -4,12 +4,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 
-import { FormattedSpeciesName } from '../species';
-import Card, { CardMetadata } from '../card';
+import { FormattedSpeciesName, taxIdMap } from '../index';
+import Card, { CardMetadata } from '../../card';
 
-import { getWgsaSpecies, getOtherSpecies } from './selectors';
+import { getWgsaSpecies, getOtherSpecies } from '../selectors';
 
-import { fetchSummary } from './actions';
+import { fetchSummary } from '../actions';
 
 function mapStateToProps(state) {
   return {
@@ -24,7 +24,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-const Home = React.createClass({
+const Index = React.createClass({
 
   componentDidMount() {
     this.props.fetch();
@@ -37,11 +37,10 @@ const Home = React.createClass({
         <h2>WGSA Species</h2>
         <section>
           {
-            wgsaSpecies.map(({ speciesId, totalCollections, totalGenomes, deployed }) =>
+            wgsaSpecies.map(({ speciesId, totalCollections, totalGenomes }) =>
               <Card className="wgsa-species-card">
                 <h3>
                   <FormattedSpeciesName speciesId={speciesId} />
-                  { deployed && <span title="Deployed">&nbsp;👍</span>}
                 </h3>
                 <CardMetadata icon="collections" title="collections">
                   <Link to={`/collections?speciesId=${speciesId}`} title="Browse collections">
@@ -52,7 +51,13 @@ const Home = React.createClass({
                   <Link to={`/genomes?speciesId=${speciesId}`} title="Browse genomes">
                     {totalGenomes} genomes
                   </Link>
-              </CardMetadata>
+                </CardMetadata>
+                <Link
+                  className="mdl-button mdl-button--primary wgsa-button--text"
+                  to={`/species/${taxIdMap.get(speciesId).nickname}`}
+                >
+                  View Details
+                </Link>
               </Card>
             )
           }
@@ -78,4 +83,4 @@ const Home = React.createClass({
 
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default connect(mapStateToProps, mapDispatchToProps)(Index);
