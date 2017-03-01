@@ -5,7 +5,7 @@ import ProgressBar from '../../progress-bar';
 
 import Filter from '../filter';
 import Summary from '../summary';
-import SubselectionDrawer from '../subselection';
+import SelectionDrawer from '../selection';
 
 export default React.createClass({
 
@@ -58,7 +58,7 @@ export default React.createClass({
           {this.props.children}
         </div>
         <Filter />
-        <SubselectionDrawer />
+        <SelectionDrawer />
       </FileDragAndDrop>
     );
   },

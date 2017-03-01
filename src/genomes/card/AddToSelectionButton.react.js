@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { toggleSelectedGenomes } from '../subselection/actions';
-import { getSelectedGenomes } from '../subselection/selectors';
+import { toggleSelectedGenomes } from '../selection/actions';
+import { getSelectedGenomes } from '../selection/selectors';
 
 function mapStateToProps(state, { genome }) {
   return {

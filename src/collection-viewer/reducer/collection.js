@@ -1,4 +1,4 @@
-import { CREATE_COLLECTION } from '../../genomes/create-collection-drawer';
+import { CREATE_COLLECTION } from '../../genomes/create-collection-form';
 import * as actions from '../actions';
 
 import { sortGenomes, getUuidFromSlug } from '../utils';
