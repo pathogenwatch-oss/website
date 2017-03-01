@@ -35,7 +35,8 @@ const Index = React.createClass({
     return (
       <div className="wgsa-page">
         <div className="wgsa-page-margin mdl-grid">
-          <h2 className="wgsa-section-divider wgsa-page-title mdl-cell mdl-cell--12-col">WGSA Species</h2>
+          <h1 className="wgsa-page-divider wgsa-page-title mdl-cell mdl-cell--12-col">Species</h1>
+          <h2 className="wgsa-section-title mdl-cell mdl-cell--12-col">WGSA Species</h2>
           { wgsaSpecies.map(({ speciesId, totalCollections, totalGenomes }) =>
               <div className="wgsa-card wgsa-section-divider mdl-cell mdl-cell--3-col">
                 <h3 className="wgsa-section-title">
@@ -61,7 +62,7 @@ const Index = React.createClass({
                 </footer>
               </div>
             ) }
-            <h2 className="wgsa-page-title mdl-cell mdl-cell--12-col">Other Species</h2>
+            <h2 className="wgsa-section-title mdl-cell mdl-cell--12-col">Other Species</h2>
             { otherSpecies.map(({ speciesId, speciesName, totalGenomes }) =>
                 <div className="wgsa-card wgsa-section-divider mdl-cell mdl-cell--3-col">
                   <h3 className="wgsa-section-title">

@@ -76,11 +76,17 @@
   line-height: 32px;
   margin-top: 8px;
   margin-bottom: 16px;
-  color: #673c90;
+  color: #AC65A6;
+}
+
+.wgsa-page-divider {
+  border-top: 2px solid #ababab;
+  padding-top: 16px;
+  padding-bottom: 16px;
 }
 
 .wgsa-section-divider {
-  border-top: 1px solid #673c90;
+  border-top: 1px solid #ababab;
   padding-top: 16px;
   padding-bottom: 16px;
 }
@@ -89,7 +95,8 @@
   font-size: 14px;
   font-weight: 500;
   line-height: 20px;
-  margin: 0 0 16px;
+  margin-top: 0;
+  margin-bottom: 16px;
   color: rgba(0, 0, 0, 0.87);
   font-family: Roboto, Helvetica, Arial, sans-serif;
 }
