@@ -7,14 +7,41 @@
   box-sizing: border-box;
 }
 
+.wgsa-card-header {
+  margin-bottom: 6px;
+  padding-right: 32px;
+  position: relative;
+}
+
 .wgsa-card-title {
-  font-size: 1.5rem;
-  line-height: 2rem;
-  margin: 0 0 0.5rem;
-  white-space: nowrap;
+  color: #673c90;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  margin: 0;
   overflow: hidden;
   text-overflow: ellipsis;
-  color: #673c90;
+  white-space: nowrap;
+}
+
+.wgsa-card-subtitle {
+  color: #3c7383;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wgsa-card-header__button {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.wgsa-card-header__button button {
+  height: 24px;
+  width: 24px;
+  min-width: 24px;
 }
 
 .wgsa-card-content {
@@ -43,16 +70,17 @@
 
 .wgsa-card-metadata {
   align-items: bottom;
+  color: rgba(0, 0, 0, 0.87);
   display: flex;
   justify-content: flex-start;
-  margin-bottom: 4px;
-  color: rgba(0, 0, 0, 0.87);
+  line-height: 20px;
 }
 
 .wgsa-card-metadata i {
   font-size: 16px;
   padding-right: 4px;
   line-height: 18px;
+  cursor: help;
 }
 
 .wgsa-card-metadata span {

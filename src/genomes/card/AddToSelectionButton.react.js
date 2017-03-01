@@ -19,12 +19,12 @@ function mapDispatchToProps(dispatch, { genome }) {
 export default connect(mapStateToProps, mapDispatchToProps)(
   ({ isSelected, onClick }) => (
     <button
-      className="mdl-button mdl-button--icon"
+      className="mdl-button mdl-button--icon mdl-js-ripple-effect mdl-button--primary"
       onClick={onClick}
       title={ isSelected ? 'Remove from selection' : 'Add to selection' }
     >
       <i className="material-icons">
-        { isSelected ? 'add_circle' : 'add_circle_outline' }
+        { isSelected ? 'remove_circle' : 'add_circle_outline' }
       </i>
     </button>
   )

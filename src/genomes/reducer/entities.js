@@ -1,3 +1,5 @@
+import dateSince from 'date-since';
+
 import { FETCH_GENOMES, MOVE_TO_BIN, UNDO_MOVE_TO_BIN } from '../actions';
 
 export default function (state = {}, { type, payload }) {
@@ -6,6 +8,7 @@ export default function (state = {}, { type, payload }) {
       return payload.result.reduce((memo, genome) => {
         memo[genome.id] = {
           ...genome,
+          createdAt: dateSince(new Date(genome.createdAt)),
         };
         return memo;
       }, {});
