@@ -32,8 +32,11 @@ const Details = React.createClass({
     return (
       <div className="wgsa-page">
         <div className="wgsa-page-margin mdl-grid">
-          <div className="wgsa-section-divider mdl-cell mdl-cell--12-col">
-            <h1 className="wgsa-page-title">{formattedName}</h1>
+          <div className="mdl-cell mdl-cell--12-col">
+            <div className="wgsa-page-breadcrumb">
+              <Link to="/">Back to Home</Link>
+            </div>
+            <h1 className="wgsa-page-divider wgsa-page-title">{formattedName}</h1>
             <p>{definitionText}</p>
           </div>
           <div className="wgsa-section-divider mdl-cell mdl-cell--3-col mdl-typography--text-center">
