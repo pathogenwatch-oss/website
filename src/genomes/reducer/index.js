@@ -3,6 +3,7 @@ import { combineReducers } from 'redux';
 import uploads from '../uploads/reducer';
 import entities from './entities';
 import summary from '../summary/reducer';
+import subselection from '../subselection/reducer';
 
 import { CREATE_COLLECTION, CHANGE_COLLECTION_METADATA } from '../create-collection-drawer';
 import { SHOW_METRIC, FETCH_GENOMES } from '../actions';
@@ -60,6 +61,7 @@ export default combineReducers({
   collectionMetadata,
   selectedMetric,
   status,
+  subselection,
   summary,
   uploads,
   waiting,

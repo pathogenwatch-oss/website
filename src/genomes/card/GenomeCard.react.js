@@ -5,9 +5,10 @@ import ProgressBar from '../../progress-bar';
 
 import GenomeMetadata from './GenomeMetadata.react';
 import DefaultFooter from './DefaultFooter.react';
-
 import GenomeError from './GenomeError.react';
 import ErrorFooter from './ErrorFooter.react';
+import AddToSelectionButton from './AddToSelectionButton.react';
+import { FormattedSpeciesName } from '../../species';
 
 import { statuses } from '../uploads/constants';
 
@@ -43,14 +44,19 @@ function getCardComponents(props) {
 }
 
 export default props => {
-  const { name, reference } = props;
+  const { name, speciesId, speciesName } = props;
   const { content, footer = null } = getCardComponents(props);
   return (
     <Card className="wgsa-genome-card wgsa-card--bordered">
-      <h2 className="wgsa-card-title" title={name}>{name}</h2>
-      { reference &&
-        <span className="wgsa-genome-card__badge mdl-chip__contact" title="Reference Genome">R</span>
-      }
+      <header className="wgsa-card-header">
+        <h2 className="wgsa-card-title" title={name}>{name}</h2>
+        <p className="wgsa-card-subtitle">
+          <FormattedSpeciesName speciesId={speciesId} title={speciesName} fullName />
+        </p>
+        <span className="wgsa-card-header__button">
+          <AddToSelectionButton genome={props} />
+        </span>
+      </header>
       { content }
       { footer }
     </Card>

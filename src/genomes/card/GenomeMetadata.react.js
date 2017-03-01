@@ -29,22 +29,37 @@ function displayCountry(country) {
   );
 }
 
-function displaySpecies(speciesId, title) {
-  if (!title) return null;
+function displayAccessLevel(props) {
+  if (props.reference) {
+    return (
+      <CardMetadata title="Access" icon="book">
+        Reference
+      </CardMetadata>
+    );
+  }
+
+  if (props.public) {
+    return (
+      <CardMetadata title="Access" icon="language">
+        Public
+      </CardMetadata>
+    );
+  }
+
   return (
-    <CardMetadata title="Species" icon="bug_report">
-      <FormattedSpeciesName speciesId={speciesId} title={title} />
+    <CardMetadata title="Access" icon="lock_outline">
+      Private
     </CardMetadata>
   );
 }
 
 export default props => {
-  const { speciesId, speciesName, country, ...metadata } = props;
+  const { country, ...metadata } = props;
   return (
     <div className="wgsa-card-content">
-      {displaySpecies(speciesId, speciesName)}
       {displayCountry(country)}
       {displayDate(metadata)}
+      {displayAccessLevel(props)}
     </div>
   );
 };
