@@ -33,13 +33,14 @@ const Details = React.createClass({
 
   render() {
     const { speciesId, totalGenomes, totalCollections } = this.props;
-    const { nickname, formattedName, definitionText, desc } = taxIdMap.get(speciesId);
+    const { nickname, formattedName, definitionText, desc, ncbiUrl } = taxIdMap.get(speciesId);
     return (
       <div className="wgsa-hipster-style wgsa-filterable-view">
         <div className="wgsa-species-details">
           <h1>{formattedName}</h1>
           <img src={`/images/${nickname}.jpg`} />
           <h4>{definitionText}</h4>
+          <h5>Taxonomy ID: <a href={ncbiUrl} title="View species in NCBI taxonomy browser" target="_blank" rel="noopener">{speciesId}</a></h5>
           <p>{desc}</p>
         </div>
         <div className="wgsa-hub-stats-group" style={sectionStyle}>
