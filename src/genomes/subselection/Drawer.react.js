@@ -3,11 +3,11 @@ import { connect } from 'react-redux';
 
 import Drawer from '../../drawer';
 
-import { getSelectedGenomes } from './selectors';
+import { getSelectedGenomeList } from './selectors';
 
 function mapStateToProps(state) {
   return {
-    items: getSelectedGenomes(state),
+    items: getSelectedGenomeList(state),
   };
 }
 

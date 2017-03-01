@@ -1,22 +1,31 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { selectGenomes } from '../subselection/actions';
+import { toggleSelectedGenomes } from '../subselection/actions';
+import { getSelectedGenomes } from '../subselection/selectors';
 
-function mapDispatchToProps(dispatch, { genome }) {
+function mapStateToProps(state, { genome }) {
   return {
-    onClick: () => dispatch(selectGenomes([ genome ])),
+    isSelected: (genome.id in getSelectedGenomes(state)),
   };
 }
 
-export default connect(null, mapDispatchToProps)(
-  ({ onClick }) => (
+function mapDispatchToProps(dispatch, { genome }) {
+  return {
+    onClick: () => dispatch(toggleSelectedGenomes([ genome ])),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(
+  ({ isSelected, onClick }) => (
     <button
       className="mdl-button mdl-button--icon"
       onClick={onClick}
-      title="Add to selection"
+      title={ isSelected ? 'Remove from selection' : 'Add to selection' }
     >
-      <i className="material-icons">add_circle_outline</i>
+      <i className="material-icons">
+        { isSelected ? 'add_circle' : 'add_circle_outline' }
+      </i>
     </button>
   )
 );

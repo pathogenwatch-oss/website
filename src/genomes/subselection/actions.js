@@ -15,3 +15,12 @@ export function unselectGenomes(genomes) {
     payload: { genomes },
   };
 }
+
+export const TOGGLE_SELECTED_GENOMES = 'TOGGLE_SELECTED_GENOMES';
+
+export function toggleSelectedGenomes(genomes) {
+  return {
+    type: TOGGLE_SELECTED_GENOMES,
+    payload: { genomes },
+  };
+}
