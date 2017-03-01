@@ -33,7 +33,7 @@ const Details = React.createClass({
 
   render() {
     const { speciesId, totalGenomes, totalCollections } = this.props;
-    const { nickname, formattedName, definitionText, desc } = taxIdMap.get(speciesId);
+    const { nickname, formattedName, definitionText, desc, imageAltText } = taxIdMap.get(speciesId);
     return (
       <div className="wgsa-page">
         <div className="wgsa-page-margin mdl-grid">
@@ -43,7 +43,7 @@ const Details = React.createClass({
           </div>
           <div className="wgsa-section-divider mdl-cell mdl-cell--3-col mdl-typography--text-center">
             <p className="wgsa-avatar-image">
-              <img src={`/images/${nickname}.jpg`} />
+              <img src={`/images/${nickname}.jpg`} alt={imageAltText} />
             </p>
             <p><strong>Taxonomy ID:</strong> {speciesId}</p>
             <p>
