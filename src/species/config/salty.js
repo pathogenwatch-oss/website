@@ -33,6 +33,7 @@ export default {
       </ol>
     </span>
   ),
+  imageAltText: 'Salmonella Typhimurium colonies on a Hektoen enteric agar plate',
   publicMetadataColumnNames: [],
   collections: [],
   amrOptions: {
