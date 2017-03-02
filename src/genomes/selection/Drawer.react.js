@@ -18,7 +18,7 @@ function mapStateToProps(state) {
 function showCreateCollectionForm(selectedGenomeSummary) {
   const speciesIds = Object.keys(selectedGenomeSummary);
   if (speciesIds.length === 0) {
-    return <p>Please select a supported species.</p>;
+    return <p>Please select a supported species to create a collection.</p>;
   }
 
   if (speciesIds.length === 1) {
@@ -39,11 +39,21 @@ function showCreateCollectionForm(selectedGenomeSummary) {
   );
 }
 
+function getSelectionTitle(selectedGenomes) {
+  return (
+    <span>
+      <span className="wgsa-genome-total">{selectedGenomes.length}</span> {` Genome${selectedGenomes.length === 1 ? '' : 's'} selected`}
+    </span>
+  );
+}
+
 export default connect(mapStateToProps)(({ selectedGenomes, selectedGenomeSummary }) => (
   <Drawer
-    title={`${selectedGenomes.length} genome${selectedGenomes.length === 1 ? '' : 's'} selected.`}
+    title={getSelectionTitle(selectedGenomes)}
     visible={selectedGenomes.length > 0}
   >
-    { showCreateCollectionForm(selectedGenomeSummary) }
+    <div className="wgsa-drawer__content">
+      { showCreateCollectionForm(selectedGenomeSummary) }
+    </div>
   </Drawer>
 ));
