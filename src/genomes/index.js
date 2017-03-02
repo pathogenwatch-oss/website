@@ -3,6 +3,7 @@ import { Route, Redirect, IndexRoute, IndexRedirect } from 'react-router';
 import { connect } from 'react-redux';
 
 import Genomes from './component';
+import ListView from './list';
 import GridView from './grid';
 import MapView from './map';
 import StatsView from './stats';
@@ -27,9 +28,10 @@ export default (
         component={props => <Genomes {...props} prefilter={prefilter} />}
       >
         <IndexRoute
-          component={GridView}
+          component={ListView}
           header={<GenomeHeader />}
         />
+        <Route path="grid" component={GridView} />
         <Route path="map" component={MapView} />
         <Route path="stats" component={StatsView} />
       </Route>
