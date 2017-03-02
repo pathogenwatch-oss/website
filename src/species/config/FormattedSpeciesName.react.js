@@ -4,7 +4,7 @@ import { taxIdMap } from './index';
 
 export default ({ speciesId, title, fullName = false }) => (
   <span title={title}>
-    { console.log(speciesId, taxIdMap.has(speciesId)) || taxIdMap.has(speciesId) ?
+    { taxIdMap.has(speciesId) ?
       taxIdMap.get(speciesId)[fullName ? 'formattedName' : 'formattedShortName'] :
       title }
   </span>
