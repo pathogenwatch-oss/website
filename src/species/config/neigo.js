@@ -12,13 +12,9 @@ export default {
   shortName,
   formattedShortName,
   maxGenomeSize: 4 * Math.pow(10, 6),
-  // gcRange: {
-  //   min: 31,
-  //   max: 35,
-  // },
   desc: (
     <p>
-      {formattedName} is a species of gram-negative coffee bean-shaped diplococci bacteria responsible for the sexually transmitted infection gonorrhea.
+      <strong>{formattedName}</strong> is a species of gram-negative coffee bean-shaped diplococci bacteria responsible for the sexually transmitted infection gonorrhea.
     </p>
   ),
   taxonomy: [

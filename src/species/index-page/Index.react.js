@@ -40,7 +40,7 @@ const Index = React.createClass({
             <h2 className="wgsa-section-title">WGSA Species</h2>
           </div>
           { wgsaSpecies.map(({ speciesId, totalCollections, totalGenomes }) =>
-              <div className="wgsa-card wgsa-section-divider mdl-cell mdl-cell--3-col">
+              <div key={speciesId} className="wgsa-card wgsa-section-divider mdl-cell mdl-cell--3-col">
                 <h3 className="wgsa-section-title">
                   <FormattedSpeciesName speciesId={speciesId} fullName />
                 </h3>
@@ -66,7 +66,7 @@ const Index = React.createClass({
             ) }
             <h2 className="wgsa-section-title mdl-cell mdl-cell--12-col">Other Species</h2>
             { otherSpecies.map(({ speciesId, speciesName, totalGenomes }) =>
-                <div className="wgsa-card wgsa-section-divider mdl-cell mdl-cell--3-col">
+                <div key={speciesId} className="wgsa-card wgsa-section-divider mdl-cell mdl-cell--3-col">
                   <h3 className="wgsa-section-title">
                     {speciesName}
                   </h3>

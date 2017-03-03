@@ -40,7 +40,7 @@ const CreateCollectionForm = React.createClass({
 
     if (!speciesId) return null; // Prevent form erroring when species not supplied
     return (
-      <form className="wgsa-drawer__content wgsa-create-collection-form" onSubmit={this.props.onSubmit}>
+      <form className="wgsa-create-collection-form" onSubmit={this.props.onSubmit}>
         <span className="wgsa-card-metadata-inliner wgsa-collection-summary">
           <CardMetadata title="Species" icon="bug_report">
             {taxIdMap.get(speciesId).formattedShortName}

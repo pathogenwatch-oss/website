@@ -53,9 +53,9 @@ const Details = React.createClass({
             </div>
           </div>
           <div className="mdl-cell mdl-cell--6-col">
-          <div className="wgsa-section-divider">
-            <h2 className="wgsa-section-title">About</h2>
-            <p>{desc}</p>
+            <div className="wgsa-section-divider">
+              <h2 className="wgsa-section-title">About</h2>
+              {desc}
             </div>
             <div className="wgsa-section-divider">
               <h2 className="wgsa-section-title">Taxonomy</h2>

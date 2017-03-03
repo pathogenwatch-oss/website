@@ -13,7 +13,8 @@ export const getSelectedGenomeSummary = createSelector(
   getSelectedGenomeList,
   selectedGenomes => selectedGenomes.reduce((memo, genome) => {
     if (isSupported(genome)) {
-      memo[genome.speciesId] = (memo[genome.speciesId] || 0) + 1;
+      memo[genome.speciesId] = memo[genome.speciesId] || [];
+      memo[genome.speciesId].push(genome);
     }
     return memo;
   }, {})
