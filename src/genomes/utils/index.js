@@ -7,6 +7,8 @@ import { API_ROOT, postJson } from '../../utils/Api';
 
 import { validateGenomeSize, validateGenomeContent } from './validation';
 
+import { DEFAULT } from '../../app/constants';
+
 function parseMetadata(row) {
   if (!row) return undefined;
 
@@ -45,10 +47,7 @@ function flattenCSVs(files) {
   return files.reduce((memo, { data = {} }) => memo.concat(data), []);
 }
 
-export const GENOME_FILE_EXTENSIONS = [
-  '.fa', '.fas', '.fna', '.ffn', '.faa', '.frn', '.fasta', '.genome', '.contig', '.dna',
-];
-const GENOME_FILE_NAME_REGEX = new RegExp(`(${GENOME_FILE_EXTENSIONS.join('|')})$`, 'i');
+const GENOME_FILE_NAME_REGEX = new RegExp(`(${DEFAULT.GENOME_FILE_EXTENSIONS.join('|')})$`, 'i');
 const CSV_FILE_NAME_REGEX = /(.csv)$/i;
 
 export function mapCSVsToGenomes(files) {
