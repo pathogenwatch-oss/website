@@ -24,3 +24,12 @@ export function toggleSelectedGenomes(genomes) {
     payload: { genomes },
   };
 }
+
+export const SET_GENOME_SELECTION = 'SET_GENOME_SELECTION';
+
+export function setSelection(genomes) {
+  return {
+    type: SET_GENOME_SELECTION,
+    payload: { genomes },
+  };
+}

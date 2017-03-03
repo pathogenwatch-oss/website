@@ -1,33 +1,39 @@
-import { SELECT_GENOMES, UNSELECT_GENOMES, TOGGLE_SELECTED_GENOMES } from './actions';
+import * as actions from './actions';
 
 const initialState = {};
 
+const addToSelection = (memo, { id, name, speciesId }) => {
+  memo[id] = { id, name, speciesId };
+  return memo;
+};
+
+const removeFromSelection = (memo, { id }) => {
+  delete memo[id];
+  return memo;
+};
+
 export default function (state = initialState, { type, payload }) {
   switch (type) {
-    case SELECT_GENOMES:
+    case actions.SELECT_GENOMES:
       return (
-        payload.genomes.reduce((memo, { id, name, speciesId }) => {
-          memo[id] = { id, name, speciesId };
-          return memo;
-        }, { ...state })
+        payload.genomes.reduce(addToSelection, { ...state })
       );
-    case UNSELECT_GENOMES:
+    case actions.UNSELECT_GENOMES:
       return (
-        payload.genomes.reduce((memo, { id }) => {
-          delete memo[id];
-          return memo;
-        }, { ...state })
+        payload.genomes.reduce(removeFromSelection, { ...state })
       );
-    case TOGGLE_SELECTED_GENOMES:
+    case actions.TOGGLE_SELECTED_GENOMES:
       return (
-        payload.genomes.reduce((memo, { id, name, speciesId }) => {
-          if (id in memo) {
-            delete memo[id];
-          } else {
-            memo[id] = { id, name, speciesId };
+        payload.genomes.reduce((memo, genome) => {
+          if (genome.id in memo) {
+            return removeFromSelection(memo, genome);
           }
-          return memo;
+          return addToSelection(memo, genome);
         }, { ...state })
+      );
+    case actions.SET_GENOME_SELECTION:
+      return (
+        payload.genomes.reduce(addToSelection, {})
       );
     default:
       return state;
