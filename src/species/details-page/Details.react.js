@@ -52,7 +52,7 @@ const Details = React.createClass({
           </div>
           <div className="wgsa-section-divider mdl-cell mdl-cell--6-col">
             <h2 className="wgsa-section-title">About</h2>
-            <p>{desc}</p>
+            {desc}
           </div>
           <div className="mdl-cell mdl-cell--3-col">
             <div className="wgsa-section-divider">
