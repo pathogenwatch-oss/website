@@ -1,5 +1,3 @@
-import { GENOME_FILE_EXTENSIONS } from '../genomes/utils';
-
 export const CGPS = {
   COLOURS: {
     GREEN_LIGHT: '#d0e9dc', // 149° 36% 86%
@@ -13,6 +11,10 @@ export const CGPS = {
     GREY_DARK: '#ababab', // 75% of GREY
   },
 };
+
+const GENOME_FILE_EXTENSIONS = [
+  '.fa', '.fas', '.fna', '.ffn', '.faa', '.frn', '.fasta', '.genome', '.contig', '.dna',
+];
 
 export const DEFAULT = {
   SHAPE: 'circle',
@@ -33,5 +35,6 @@ export const DEFAULT = {
       LONGITUDE: 5.85082183,
     },
   },
-  SUPPORTED_FILE_EXTENSIONS: [ '.csv' ].concat(GENOME_FILE_EXTENSIONS).join(','),
+  GENOME_FILE_EXTENSIONS,
+  SUPPORTED_FILE_EXTENSIONS: [ '.csv' ].concat(GENOME_FILE_EXTENSIONS),
 };

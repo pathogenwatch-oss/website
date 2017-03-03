@@ -102,7 +102,7 @@ export default React.createClass({
               <i className="material-icons">add</i>
             </button>
         }
-        <input type="file" multiple="multiple" accept={DEFAULT.SUPPORTED_FILE_EXTENSIONS} ref="fileInput" style={fileInputStyle} onChange={this.handleFileInputChange} />
+        <input type="file" multiple="multiple" accept={DEFAULT.SUPPORTED_FILE_EXTENSIONS.join(',')} ref="fileInput" style={fileInputStyle} onChange={this.handleFileInputChange} />
       </div>
     );
   },
