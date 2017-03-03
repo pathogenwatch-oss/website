@@ -21,6 +21,16 @@ export default {
       {formattedName} is a species of gram-negative coffee bean-shaped diplococci bacteria responsible for the sexually transmitted infection gonorrhea.
     </p>
   ),
+  taxonomy: [
+    { taxId: 131567, scientificName: 'Cellular organisms', rank: 'no rank' },
+    { taxId: 2, scientificName: 'Bacteria', rank: 'superkingdom' },
+    { taxId: 1224, scientificName: 'Proteobacteria', rank: 'phylum' },
+    { taxId: 28216, scientificName: 'Betaproteobacteria', rank: 'class' },
+    { taxId: 206351, scientificName: 'Neisseriales', rank: 'order' },
+    { taxId: 481, scientificName: 'Neisseriaceae', rank: 'family' },
+    { taxId: 482, scientificName: 'Neisseria', rank: 'genus' },
+    { taxId: 485, scientificName: 'Neisseria gonorrhoeae', rank: 'species' },
+  ],
   publicMetadataColumnNames: [],
   collections: [],
   uiOptions: {

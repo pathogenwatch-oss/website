@@ -24,6 +24,17 @@ export default {
       agents for infectious disease.
     </p>
   ),
+  taxonomy: [
+    { taxId: 131567, scientificName: 'Cellular organisms', rank: 'no rank' },
+    { taxId: 2, scientificName: 'Bacteria', rank: 'superkingdom' },
+    { taxId: 1783272, scientificName: 'Terrabacteria group', rank: 'no rank' },
+    { taxId: 1239, scientificName: 'Firmicutes', rank: 'phylum' },
+    { taxId: 91061, scientificName: 'Bacilli', rank: 'class' },
+    { taxId: 1385, scientificName: 'Bacillales', rank: 'order' },
+    { taxId: 90964, scientificName: 'Staphylococcaceae', rank: 'family' },
+    { taxId: 1279, scientificName: 'Staphylococcus', rank: 'genus' },
+    { taxId: 1280, scientificName: 'Staphylococcus aureus', rank: 'species' },
+  ],
   maxGenomeSize: 3.5 * Math.pow(10, 6),
   gcRange: {
     min: 31,
