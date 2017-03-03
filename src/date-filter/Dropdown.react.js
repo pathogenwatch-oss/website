@@ -101,18 +101,18 @@ export default React.createClass({
 
 });
 
-const materialMenuShow = MaterialMenu.prototype.show;
-MaterialMenu.prototype.show = function(e) {
-  const forRect = this.forElement_.parentElement.getBoundingClientRect();
-  const remainingHeight = document.documentElement.clientHeight - forRect.bottom;
-  const requiredHeight = Math.min(320, this.element_.offsetHeight);
-  if (requiredHeight > remainingHeight) {
-    this.container_.style.maxHeight = '320px';
-    this.container_.style.marginTop = `-${requiredHeight - remainingHeight}px`;
-  } else {
-    this.container_.style.maxHeight = `${remainingHeight}px`;
-    this.container_.style.marginTop = '';
-  }
-  this.container_.style.overflowY = 'auto';
-  materialMenuShow.call(this, e);
-};
+// const materialMenuShow = MaterialMenu.prototype.show;
+// MaterialMenu.prototype.show = function(e) {
+//   const forRect = this.forElement_.parentElement.getBoundingClientRect();
+//   const remainingHeight = document.documentElement.clientHeight - forRect.bottom;
+//   const requiredHeight = Math.min(320, this.element_.offsetHeight);
+//   if (requiredHeight > remainingHeight) {
+//     this.container_.style.maxHeight = '320px';
+//     this.container_.style.marginTop = `-${requiredHeight - remainingHeight}px`;
+//   } else {
+//     this.container_.style.maxHeight = `${remainingHeight}px`;
+//     this.container_.style.marginTop = '';
+//   }
+//   this.container_.style.overflowY = 'auto';
+//   materialMenuShow.call(this, e);
+// };

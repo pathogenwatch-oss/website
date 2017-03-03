@@ -128,3 +128,16 @@
   padding: 16px 0 24px;
   text-decoration: none;
 }
+
+.wgsa-inline-chip {
+  margin: 2px;
+}
+
+.wgsa-tab-actions {
+  align-self: stretch;
+  flex-grow: 1;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0 8px;
+}

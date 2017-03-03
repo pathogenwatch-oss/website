@@ -35,7 +35,7 @@ const CreateCollectionForm = React.createClass({
   firstInput: null,
 
   render() {
-    const { metadata: { title, description } } = this.props;
+    const { metadata: { title, description }, canCreateCollection } = this.props;
     const { speciesId, numGenomes } = this.props.collectionSummary;
 
     if (!speciesId) return null; // Prevent form erroring when species not supplied
@@ -56,6 +56,7 @@ const CreateCollectionForm = React.createClass({
             id="collection-title"
             value={title}
             onChange={this.props.onFormChange}
+            disabled={!canCreateCollection}
           />
           <label className="mdl-textfield__label" htmlFor="collection-title">Title</label>
         </div>
@@ -67,12 +68,14 @@ const CreateCollectionForm = React.createClass({
             id="collection-description"
             value={description}
             onChange={this.props.onFormChange}
+            disabled={!canCreateCollection}
           />
           <label className="mdl-textfield__label" htmlFor="collection-description">Description</label>
         </div>
         <div className="wgsa-drawer-actions">
           <button
             className="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
+            disabled={!canCreateCollection}
           >
             Create
           </button>
@@ -85,6 +88,7 @@ const CreateCollectionForm = React.createClass({
 
 function mapStateToProps(state) {
   return {
+    canCreateCollection: selectors.canCreateCollection(state),
     collectionSummary: selectors.getCollectionSummary(state),
     metadata: selectors.getCollectionMetadata(state),
   };

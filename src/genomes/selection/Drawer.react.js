@@ -4,44 +4,9 @@ import { connect } from 'react-redux';
 import Drawer from '../../drawer';
 import CreateCollectionForm from '../create-collection-form';
 
-import { getSelectedGenomeList, getSelectedGenomeSummary } from './selectors';
+import { getSelectedGenomeList } from './selectors';
 
-import { setSelection } from './actions';
-
-import { FormattedSpeciesName } from '../../species';
-
-function showCreateCollectionForm(selectedGenomeSummary, onClick) {
-  const speciesIds = Object.keys(selectedGenomeSummary);
-  if (speciesIds.length === 0) {
-    return <p>Please select a supported species to create a collection.</p>;
-  }
-
-  if (speciesIds.length === 1) {
-    return <CreateCollectionForm />;
-  }
-
-  return (
-    <div>
-      <p>To create a collection, please select <strong>one species</strong> below:</p>
-      <p>
-        { speciesIds.map(id =>
-            <button
-              key={id}
-              className="mdl-chip mdl-chip--contact wgsa-species-chip"
-              onClick={() => onClick(selectedGenomeSummary[id])}
-            >
-              <span className="mdl-chip__contact">
-                { selectedGenomeSummary[id].length }
-              </span>
-              <span className="mdl-chip__text">
-                <FormattedSpeciesName speciesId={id} />
-              </span>
-            </button>
-          ) }
-      </p>
-    </div>
-  );
-}
+import { setSelection, unselectGenomes } from './actions';
 
 function getSelectionTitle(selectedGenomes) {
   return (
@@ -52,27 +17,80 @@ function getSelectionTitle(selectedGenomes) {
   );
 }
 
-const SelectionDrawer = ({ selectedGenomes, selectedGenomeSummary, onClick }) => (
-  <Drawer
-    title={getSelectionTitle(selectedGenomes)}
-    visible={selectedGenomes.length > 0}
-  >
-    <div className="wgsa-drawer__content">
-      { showCreateCollectionForm(selectedGenomeSummary, onClick) }
-    </div>
-  </Drawer>
-);
+const SelectionDrawer = React.createClass({
+
+  componentDidUpdate() {
+    if (this.tabs) {
+      componentHandler.upgradeElement(this.tabs);
+    }
+    if (this.menu) {
+      componentHandler.upgradeElement(this.menu);
+    }
+  },
+
+  render() {
+    const { selectedGenomes, removeGenome, clearSelection } = this.props;
+    return (
+      <Drawer
+        title={getSelectionTitle(selectedGenomes)}
+        visible={selectedGenomes.length > 0}
+      >
+        <div ref={el => { this.tabs = el; }} className="wgsa-selection-tabs mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+          <div className="mdl-tabs__tab-bar mdl-tabs__tab-bar--start">
+            <a href="#create-collection-panel" className="mdl-tabs__tab is-active">Create Collection</a>
+            <a href="#selection-panel" className="mdl-tabs__tab">Selection</a>
+            <div className="wgsa-tab-actions">
+              <button
+                id="selection-drawer-actions"
+                className="mdl-button mdl-js-button mdl-button--icon"
+              >
+                <i className="material-icons">more_vert</i>
+              </button>
+              <ul
+                ref={el => { this.menu = el; }}
+                className="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
+                htmlFor="selection-drawer-actions"
+              >
+                <li className="mdl-menu__item" onClick={clearSelection}>Download</li>
+                <li className="mdl-menu__item" onClick={clearSelection}>Clear All</li>
+              </ul>
+            </div>
+          </div>
+          <div className="mdl-tabs__panel is-active" id="create-collection-panel">
+            <CreateCollectionForm />
+          </div>
+          <div className="mdl-tabs__panel" id="selection-panel">
+            { selectedGenomes.map(genome =>
+                <span key={genome.id} className="mdl-chip mdl-chip--deletable wgsa-inline-chip">
+                  <span className="mdl-chip__text">{genome.name}</span>
+                  <button
+                    type="button"
+                    title="Remove genome"
+                    className="mdl-chip__action"
+                    onClick={() => removeGenome(genome)}
+                  >
+                      <i className="material-icons">remove_circle_outline</i>
+                  </button>
+                </span>
+            )}
+          </div>
+        </div>
+      </Drawer>
+    );
+  },
+
+});
 
 function mapStateToProps(state) {
   return {
-    selectedGenomeSummary: getSelectedGenomeSummary(state),
     selectedGenomes: getSelectedGenomeList(state),
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    onClick: genomes => dispatch(setSelection(genomes)),
+    clearSelection: () => dispatch(setSelection([])),
+    removeGenome: genome => dispatch(unselectGenomes([ genome ])),
   };
 }
 
