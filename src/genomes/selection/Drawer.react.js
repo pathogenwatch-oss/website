@@ -8,6 +8,8 @@ import { getSelectedGenomeList } from './selectors';
 
 import { setSelection, unselectGenomes } from './actions';
 
+import { downloadGenomes } from './api';
+
 function getSelectionTitle(selectedGenomes) {
   return (
     <span>
@@ -51,7 +53,7 @@ const SelectionDrawer = React.createClass({
                 className="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
                 htmlFor="selection-drawer-actions"
               >
-                <li className="mdl-menu__item" onClick={clearSelection}>Download</li>
+                <li className="mdl-menu__item" onClick={() => downloadGenomes(selectedGenomes)}>Download</li>
                 <li className="mdl-menu__item" onClick={clearSelection}>Clear All</li>
               </ul>
             </div>
