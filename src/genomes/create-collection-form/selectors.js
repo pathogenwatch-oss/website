@@ -1,42 +1,38 @@
 import { createSelector } from 'reselect';
 
+import { getSelectedGenomeList } from '../selection/selectors';
 import { isUploading } from '../uploads/selectors';
-import { getGenomeList, isWaiting } from '../selectors';
+import { isWaiting } from '../selectors';
 
 import { isSupported } from '../../species';
 
-export const getVisibleSpecies = createSelector(
-  getGenomeList,
-  genomes => genomes.reduce((memo, genome) => {
+export const getSelectedGenomeSummary = createSelector(
+  getSelectedGenomeList,
+  selectedGenomes => selectedGenomes.reduce((memo, genome) => {
     if (isSupported(genome)) {
-      memo.supported.add(genome.speciesId);
-    } else {
-      memo.unsupported.add(genome.speciesKey); // no species id for unsupported
+      memo[genome.speciesId] = memo[genome.speciesId] || [];
+      memo[genome.speciesId].push(genome);
     }
     return memo;
-  }, { supported: new Set(), unsupported: new Set() })
-);
-
-export const isSupportedSpeciesSelected = createSelector(
-  getVisibleSpecies,
-  species => species.unsupported.size === 0 && species.supported.size === 1
+  }, {})
 );
 
 export const canCreateCollection = createSelector(
   isWaiting,
   isUploading,
-  isSupportedSpeciesSelected,
-  (waiting, uploading, supportSpeciesSelected) =>
-    !waiting && !uploading && supportSpeciesSelected
+  getSelectedGenomeSummary,
+  (waiting, uploading, selectedSummary) =>
+    !waiting && !uploading && Object.keys(selectedSummary).length === 1
 );
 
 export const getCollectionSummary = createSelector(
-  getVisibleSpecies,
-  getGenomeList,
-  ({ supported }, genomes) => ({
-    numGenomes: genomes.length,
-    speciesId: Array.from(supported)[0],
-  })
+  getSelectedGenomeSummary,
+  (summary) => {
+    const speciesId = Object.keys(summary)[0];
+    const numGenomes = summary[speciesId].length;
+
+    return { speciesId, numGenomes };
+  }
 );
 
 export const getCollectionMetadata = state => state.genomes.collectionMetadata;

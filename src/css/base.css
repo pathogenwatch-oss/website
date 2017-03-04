@@ -18,6 +18,12 @@ a {
   text-decoration: none;
 }
 
+a:hover,
+a:focus,
+a:active {
+  text-decoration: underline;
+}
+
 strong, b {
   font-weight: 700;
 }

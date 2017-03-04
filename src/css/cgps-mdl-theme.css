@@ -68,8 +68,13 @@
 
 /* Tabs */
 
+.mdl-tabs__tab-bar--start {
+  justify-content: flex-start;
+}
+
 .mdl-tabs__tab {
   font-weight: 500;
+  text-decoration: none !important;
 }
 
 .mdl-tabs__tab.is-active {
@@ -82,15 +87,6 @@
 .mdl-tabs.is-upgraded .mdl-tabs__tab.is-active:after {
   background-color: #673c90;
   background: #673c90;
-}
-
-.wgsa-tab-actions {
-  align-self: stretch;
-  flex-grow: 1;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  padding: 0 8px;
 }
 
 /* Spinner */
@@ -171,4 +167,12 @@
 
 .mdl-icon-toggle.is-checked .mdl-icon-toggle__label {
   color: #673c90;
+}
+
+
+/* Chip */
+
+.mdl-chip--deletable .mdl-chip__action {
+  color: #673c90;
+  opacity: 1;
 }

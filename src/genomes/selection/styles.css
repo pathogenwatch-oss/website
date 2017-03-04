@@ -1,0 +1,13 @@
+.wgsa-genome-total {
+  color: #87c7a6;
+}
+
+.wgsa-selection-summary {
+  padding: 16px;
+}
+
+.wgsa-selection-tabs > .mdl-tabs__panel {
+  padding: 16px;
+  height: 240px;
+  overflow-y: auto;
+}

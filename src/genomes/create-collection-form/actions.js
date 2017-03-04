@@ -1,4 +1,4 @@
-import { getGenomeList } from '../selectors';
+import { getSelectedGenomeList } from '../selection/selectors';
 import { getCollectionMetadata } from './selectors';
 
 import { createAsyncConstants } from '../../actions';
@@ -23,7 +23,7 @@ function createCollectionAction(files, metadata) {
 export function createCollection() {
   return (dispatch, getState) => {
     const state = getState();
-    const genomes = getGenomeList(state);
+    const genomes = getSelectedGenomeList(state);
     const metadata = getCollectionMetadata(state);
     dispatch(createCollectionAction(genomes, metadata)).
       catch(() => dispatch(

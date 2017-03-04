@@ -9,7 +9,7 @@ import ChartTooltip from '../../chart-tooltip';
 import * as selectors from './selectors';
 
 import { showGenomeDrawer } from '../../genome-drawer';
-import actions from '../actions';
+import { showMetric } from '../actions';
 
 const TooltipContent = ({ payload, data }) => {
   if (!payload) return null;
@@ -41,7 +41,7 @@ const mapStateToButton = (state, ownProps) => {
 
 function mapDispatchToButton(dispatch, ownProps) {
   return {
-    onClick: () => dispatch(actions.showMetric(ownProps.metric)),
+    onClick: () => dispatch(showMetric(ownProps.metric)),
   };
 }
 
