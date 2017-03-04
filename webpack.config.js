@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
 
 const srcFolder = path.join(__dirname, 'src');
 
@@ -92,6 +93,13 @@ const prodConfig = {
       'process.env': {
         NODE_ENV: JSON.stringify('production'),
       },
+    }),
+    new SWPrecacheWebpackPlugin({
+      cacheId: 'wgsa-assets',
+      minify: true,
+      runtimeCaching: [
+        { urlPattern: /[^\/]/ },
+      ],
     }),
   ]),
   module: {
