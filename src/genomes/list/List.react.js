@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import Grid from '../../grid';
 import GenomeCard from '../card';
 
-import { getGridItems } from '../grid/selectors';
+import { getGridItems } from '../selectors';
 import { getPrefilter } from '../filter/selectors';
 import { getTotal } from '../summary/selectors';
 import { getStatus } from '../selectors';

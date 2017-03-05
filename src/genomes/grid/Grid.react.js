@@ -7,9 +7,9 @@ import GenomeCard from '../card';
 import { getGridItems } from './selectors';
 import { getPrefilter } from '../filter/selectors';
 import { getTotal } from '../summary/selectors';
-import { getStatus } from '../selectors';
 
 import { statuses } from '../constants';
+import { getGridItems } from '../selectors';
 
 export const GridView = React.createClass({
 
