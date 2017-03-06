@@ -11,6 +11,11 @@ import Router from './Router.react';
 
 import store from './store';
 
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/service-worker.js')
+    .then(console.log);
+}
+
 function renderApp(Root) {
   render((
     <Provider store={store}>

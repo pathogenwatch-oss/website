@@ -16,6 +16,7 @@ export default () => (
   <Router history={browserHistory}>
     <Route path="/" component={App}>
       <IndexRedirect to="species" />
+      <Redirect from="index.html" to="/" />
       {SpeciesRoute}
       {AccountRoute}
       {CollectionsRoute}
