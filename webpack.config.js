@@ -1,6 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
+const swPrecacheConfig = require('./sw-precache.config.js');
 
 const srcFolder = path.join(__dirname, 'src');
 
@@ -94,27 +95,9 @@ const prodConfig = {
         NODE_ENV: JSON.stringify('production'),
       },
     }),
-    new SWPrecacheWebpackPlugin({
-      cacheId: 'wgsa-assets',
-      minify: true,
-      navigateFallback: '/index.html',
-      staticFileGlobs: [
-        'public/*.*',
-        'public/images/*.*',
-      ],
-      dynamicUrlToDependencies: {
-        '/index.html': [ 'views/index.ejs' ],
-      },
-      stripPrefix: 'public',
-      runtimeCaching: [
-        { urlPattern: /\.(js|css|png|jpg|jpeg|gif|svg|woff2)$/,
-          handler: 'cacheFirst',
-        },
-        { urlPattern: /^https?:\/\/fonts\.googleapis\.com/,
-          handler: 'cacheFirst',
-        },
-      ],
-    }),
+    new SWPrecacheWebpackPlugin(
+      Object.assign(swPrecacheConfig, { minify: true })
+    ),
   ]),
   module: {
     loaders,
