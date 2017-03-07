@@ -28,10 +28,6 @@ const Summary = React.createClass({
   render() {
     const { status, completedUploads, batchSize, prefilter } = this.props;
 
-    if (status !== statuses.OK || this.props.visibleGenomes === 0) {
-      return <FilterSummary />;
-    }
-
     if (prefilter === 'upload') {
       if (this.props.isUploading) {
         return (
@@ -48,6 +44,10 @@ const Summary = React.createClass({
       if (this.props.totalErroredUploads > 0) {
         return <ErrorSummary />;
       }
+    }
+
+    if (status !== statuses.OK || this.props.visibleGenomes === 0) {
+      return <FilterSummary />;
     }
 
     return (
