@@ -40,6 +40,7 @@ export default function (state = initialState, { type, payload }) {
         batch: new Set([ ...state.batch, ...ids ]),
         queue: [ ...state.queue, ...ids ],
         entities: payload.genomes.reduce((memo, genome) => {
+          delete genome.error;
           memo[genome.id] = { ...genome, uploadedAt, status: statuses.PENDING };
           return memo;
         }, { ...state.entities }),
