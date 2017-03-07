@@ -51,7 +51,12 @@ export default props => {
       <header className="wgsa-card-header">
         <h2 className="wgsa-card-title" title={name}>{name}</h2>
         <p className="wgsa-card-subtitle">
-          <FormattedSpeciesName speciesId={speciesId} title={speciesName} fullName />
+          { speciesName ?
+            <FormattedSpeciesName
+              speciesId={speciesId}
+              title={speciesName}
+              fullName
+            /> : <span>&nbsp;</span> }
         </p>
         <span className="wgsa-card-header__button">
           <AddToSelectionButton genome={props} />
