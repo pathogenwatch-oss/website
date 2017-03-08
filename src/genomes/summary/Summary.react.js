@@ -10,6 +10,9 @@ import { getPrefilter } from '../filter/selectors';
 import * as uploads from '../uploads/selectors';
 import { getTotalGenomes, getStatus } from '../selectors';
 import { getTotal } from './selectors';
+import { getSelectedGenomeList } from '../selection/selectors';
+
+import { selectAll, setSelection } from '../selection/actions';
 
 import { statuses } from '../constants';
 
@@ -46,7 +49,7 @@ const Summary = React.createClass({
       }
     }
 
-    if (status !== statuses.OK || this.props.visibleGenomes === 0) {
+    if (status !== statuses.OK || this.props.numVisibleGenomes === 0) {
       return <FilterSummary />;
     }
 
@@ -59,10 +62,20 @@ const Summary = React.createClass({
           <ViewSwitcher view="stats" title="Stats" />
         </div>
         <Totals
-          visible={this.props.visibleGenomes}
+          visible={this.props.numVisibleGenomes}
           total={this.props.totalGenomes}
           itemType="genome"
         />
+        <button
+          className="mdl-button mdl-button--primary"
+          onClick={this.props.onSelectAll}
+        >
+          Select All
+        </button>
+        { this.props.showClearAll &&
+          <button className="mdl-button" onClick={this.props.onClearAll}>
+            Clear
+          </button> }
       </FilterSummary>
     );
   },
@@ -76,10 +89,18 @@ function mapStateToProps(state) {
     batchSize: uploads.getBatchSize(state),
     completedUploads: uploads.getNumCompletedUploads(state),
     totalErroredUploads: uploads.getTotalErrors(state),
-    visibleGenomes: getTotalGenomes(state),
+    numVisibleGenomes: getTotalGenomes(state),
     totalGenomes: getTotal(state),
     status: getStatus(state),
+    showClearAll: getSelectedGenomeList(state).length > 0,
   };
 }
 
-export default connect(mapStateToProps)(Summary);
+function mapDispatchToProps(dispatch) {
+  return {
+    onSelectAll: () => dispatch(selectAll()),
+    onClearAll: () => dispatch(setSelection([])),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Summary);

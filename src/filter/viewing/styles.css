@@ -12,14 +12,14 @@
   position: relative;
 }
 
-.wgsa-filter-summary > :first-child {
+.wgsa-filter-summary > * {
   margin: 0;
-  margin-right: 16px;
+  /*margin-right: 16px;*/
 }
 
 .wgsa-filter-summary__count {
   font-size: 13px;
-  margin: 0;
+  margin: 0 16px;
 }
 
 .wgsa-filter-summary__count > span {
