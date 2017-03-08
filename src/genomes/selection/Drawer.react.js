@@ -9,12 +9,15 @@ import { getSelectedGenomeList } from './selectors';
 import { setSelection, unselectGenomes } from './actions';
 
 import { downloadGenomes } from './api';
+import config from '../../app/config';
+
+const { maxArchiveSize = 100 } = config;
 
 function getSelectionTitle(selectedGenomes) {
   return (
     <span>
       <span className="wgsa-genome-total">{selectedGenomes.length}</span>&nbsp;
-      {` Genome${selectedGenomes.length === 1 ? '' : 's'} selected`}
+      {` Genome${selectedGenomes.length === 1 ? '' : 's'} Selected`}
     </span>
   );
 }
@@ -25,13 +28,17 @@ const SelectionDrawer = React.createClass({
     if (this.tabs) {
       componentHandler.upgradeElement(this.tabs);
     }
-    if (this.menu) {
-      componentHandler.upgradeElement(this.menu);
+  },
+
+  getDownloadTitle() {
+    if (this.props.disableDownload) {
+      return `Cannot download more than ${maxArchiveSize} genomes in a single archive.`;
     }
+    return 'Download as archive';
   },
 
   render() {
-    const { selectedGenomes, removeGenome, clearSelection } = this.props;
+    const { selectedGenomes, removeGenome, disableDownload } = this.props;
     return (
       <Drawer
         title={getSelectionTitle(selectedGenomes)}
@@ -44,18 +51,13 @@ const SelectionDrawer = React.createClass({
             <div className="wgsa-tab-actions">
               <button
                 id="selection-drawer-actions"
-                className="mdl-button mdl-js-button mdl-button--icon"
+                className="mdl-button mdl-js-button mdl-button--icon mdl-button--primary"
+                title={this.getDownloadTitle()}
+                disabled={disableDownload}
+                onClick={() => downloadGenomes(selectedGenomes)}
               >
-                <i className="material-icons">more_vert</i>
+                <i className="material-icons">file_download</i>
               </button>
-              <ul
-                ref={el => { this.menu = el; }}
-                className="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
-                htmlFor="selection-drawer-actions"
-              >
-                <li className="mdl-menu__item" onClick={() => downloadGenomes(selectedGenomes)}>Download</li>
-                <li className="mdl-menu__item" onClick={clearSelection}>Clear All</li>
-              </ul>
             </div>
           </div>
           <div className="mdl-tabs__panel is-active" id="create-collection-panel">
@@ -84,8 +86,10 @@ const SelectionDrawer = React.createClass({
 });
 
 function mapStateToProps(state) {
+  const selectedGenomes = getSelectedGenomeList(state);
   return {
-    selectedGenomes: getSelectedGenomeList(state),
+    selectedGenomes,
+    disableDownload: selectedGenomes.length > maxArchiveSize,
   };
 }
 
