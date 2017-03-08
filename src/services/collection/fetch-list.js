@@ -3,7 +3,7 @@ const Collection = require('models/collection');
 module.exports = function (props) {
   const { user, query = {} } = props;
   const { skip = 0, limit = 0, searchText } = query;
-  const { speciesId, owner, startDate, endDate } = query;
+  const { organismId, owner, startDate, endDate } = query;
 
   const findQuery = Collection.getPrefilterCondition(props);
 
@@ -11,8 +11,8 @@ module.exports = function (props) {
     findQuery.$text = { $search: searchText };
   }
 
-  if (speciesId) {
-    findQuery.speciesId = speciesId;
+  if (organismId) {
+    findQuery.organismId = organismId;
   }
 
   if (owner === 'me') {
@@ -41,7 +41,7 @@ module.exports = function (props) {
           pmid: 1,
           public: 1,
           size: 1,
-          speciesId: 1,
+          organismId: 1,
           status: 1,
           title: 1,
           uuid: 1,

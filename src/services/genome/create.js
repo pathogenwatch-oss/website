@@ -5,19 +5,19 @@ const Genome = require('models/genome');
 const { ServiceRequestError } = require('utils/errors');
 
 function createGenomeDocument({ name, uploadedAt }, reference, { user, sessionID }, genomeFileDoc) {
-  const { speciesId, speciesName, metrics } = genomeFileDoc;
+  const { organismId, organismName, metrics } = genomeFileDoc;
   return (
     Genome.create({
       _file: genomeFileDoc._id,
       _user: user,
       _session: sessionID,
       name,
-      speciesId,
+      organismId,
       reference,
       public: reference,
       uploadedAt,
     }).
-    then(({ _id }) => ({ id: _id, speciesId, speciesName, metrics }))
+    then(({ _id }) => ({ id: _id, organismId, organismName, metrics }))
   );
 }
 

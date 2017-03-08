@@ -3,13 +3,13 @@ const { ServiceRequestError } = require('utils/errors');
 
 const Collection = require('models/collection');
 const Genome = require('models/genome');
-const Species = require('models/species');
+const Organism = require('models/organism');
 
 const { maxCollectionSize = 0 } = require('configuration');
 
-function createCollection({ speciesId, genomeIds, title, description, user }) {
-  if (!speciesId) {
-    return Promise.reject(new ServiceRequestError('No species ID provided'));
+function createCollection({ organismId, genomeIds, title, description, user }) {
+  if (!organismId) {
+    return Promise.reject(new ServiceRequestError('No organism ID provided'));
   }
 
   if (!genomeIds || !genomeIds.length) {
@@ -22,14 +22,14 @@ function createCollection({ speciesId, genomeIds, title, description, user }) {
 
   const size = genomeIds.length;
   return (
-    Species.getLatest(speciesId).
-      then(species =>
+    Organism.getLatest(organismId).
+      then(organism =>
         Collection.create({
-          _species: species,
+          _organism: organism,
           _user: user,
           description,
           size,
-          speciesId,
+          organismId,
           title,
         })
       )
@@ -43,14 +43,14 @@ function getGenomes(ids) {
 }
 
 module.exports = message => {
-  const { genomeIds, speciesId } = message;
+  const { genomeIds, organismId } = message;
 
   return Promise.all([
     createCollection(message),
     getGenomes(genomeIds),
   ]).
     then(([ collection, genomes ]) =>
-      request('backend', 'new-collection', { genomes, speciesId }).
+      request('backend', 'new-collection', { genomes, organismId }).
         then(({ collectionId, collectionGenomes }) =>
           Promise.all([
             collection.addUUID(collectionId),
@@ -58,7 +58,7 @@ module.exports = message => {
           ]).then(() => {
             request('backend', 'submit', {
               collectionId,
-              speciesId,
+              organismId,
               collectionGenomes,
             });
             return { slug: collection.slug };

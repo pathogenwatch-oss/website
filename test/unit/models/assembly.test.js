@@ -15,7 +15,7 @@ describe('Model: Assembly', function () {
 
   it('should add user-defined metadata', function () {
     var assemblyModel = require('models/assembly');
-    var ids = { assemblyId: '123', speciesId: '1280', collectionId: 'abc' };
+    var ids = { assemblyId: '123', organismId: '1280', collectionId: 'abc' };
     var rawMetadata = {
       assemblyName: 'name',
       year: 2015,
@@ -39,7 +39,7 @@ describe('Model: Assembly', function () {
 
   it('should contain a "position" object', function () {
     var assemblyModel = require('models/assembly');
-    var ids = { assemblyId: '123', speciesId: '1280' };
+    var ids = { assemblyId: '123', organismId: '1280' };
     var rawMetadata = {
       assemblyName: 'name',
       latitude: 42,

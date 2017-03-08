@@ -1,7 +1,7 @@
 const Collection = require('models/collection');
 
 const summaryFields = [
-  { field: 'speciesId' },
+  { field: 'organismId' },
   { field: 'owner',
     aggregation: ({ user = {} }) => [
       { $group: {

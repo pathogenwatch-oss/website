@@ -5,7 +5,7 @@
       "realm": "",
       "file": "",
       "collections": [
-        { "speciesId": "", "collectionId": "" }
+        { "organismId": "", "collectionId": "" }
       ]
     }
 	},

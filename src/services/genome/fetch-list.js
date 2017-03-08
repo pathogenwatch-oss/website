@@ -4,7 +4,7 @@ const Genome = require('models/genome');
 module.exports = function (props) {
   const { user, query = {} } = props;
   const { skip = 0, limit = 0, searchText } = query;
-  const { speciesId, reference, owner, country, startDate, endDate } = query;
+  const { organismId, reference, owner, country, startDate, endDate } = query;
 
   const findQuery = Genome.getPrefilterCondition(props);
 
@@ -12,8 +12,8 @@ module.exports = function (props) {
     findQuery.$text = { $search: searchText };
   }
 
-  if (speciesId) {
-    findQuery.speciesId = speciesId;
+  if (organismId) {
+    findQuery.organismId = organismId;
   }
 
   if (country) {

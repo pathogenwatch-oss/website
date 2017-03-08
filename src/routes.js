@@ -4,12 +4,12 @@ module.exports = function (app) {
     require('routes/collection'),
     require('routes/download-request'),
     require('routes/summary'),
-    require('routes/species'),
+    require('routes/organism'),
   ]);
 
   app.use('/download/', [
     require('routes/download'),
-    require('routes/speciesDownloads'),
+    require('routes/organismDownloads'),
   ]);
 
   app.use('/zika', (req, res) =>

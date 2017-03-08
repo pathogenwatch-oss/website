@@ -3,8 +3,8 @@ const { Schema } = mongoose;
 
 const schema = new Schema({
   fileId: { type: String, index: true },
-  speciesId: String,
-  speciesName: String,
+  organismId: String,
+  organismName: String,
   metrics: {
     totalNumberOfContigs: Number, // totalContigs
     assemblyN50Data: { // n50
