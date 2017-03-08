@@ -4,18 +4,18 @@ import Markdown from 'react-markdown';
 
 import Card, { CardMetadata } from '../card';
 
-import { taxIdMap } from '../species';
+import { taxIdMap } from '../organisms';
 
 const renderers = {
   Paragraph: (props) => <span>{props.children}</span>,
 };
 
-export default ({ title, description, slug, pubmedLink, size, speciesId }) => (
+export default ({ title, description, slug, pubmedLink, size, organismId }) => (
   <Card>
     <Markdown containerTagName="h2" className="wgsa-card-title" source={title} renderers={renderers} />
     <span className="wgsa-card-metadata-inliner">
-      <CardMetadata title="Species" icon="bug_report">
-        {taxIdMap.get(speciesId).formattedShortName}
+      <CardMetadata title="Organisms" icon="bug_report">
+        {taxIdMap.get(organismId).formattedShortName}
       </CardMetadata>
       <CardMetadata icon="insert_drive_file">
         {size} genomes

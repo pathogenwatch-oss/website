@@ -8,7 +8,7 @@ import DefaultFooter from './DefaultFooter.react';
 import GenomeError from './GenomeError.react';
 import ErrorFooter from './ErrorFooter.react';
 import AddToSelectionButton from './AddToSelectionButton.react';
-import { FormattedSpeciesName } from '../../species';
+import { FormattedName } from '../../organisms';
 
 import { statuses } from '../uploads/constants';
 
@@ -44,17 +44,17 @@ function getCardComponents(genome) {
 }
 
 export default ({ item }) => {
-  const { name, speciesId, speciesName } = item;
+  const { name, organismId, organismName } = item;
   const { content, footer = null } = getCardComponents(item);
   return (
     <Card className="wgsa-genome-card wgsa-card--bordered">
       <header className="wgsa-card-header">
         <h2 className="wgsa-card-title" title={name}>{name}</h2>
         <p className="wgsa-card-subtitle">
-          { speciesName ?
-              <FormattedSpeciesName
-                speciesId={speciesId}
-                title={speciesName}
+          { organismName ?
+              <FormattedName
+                organismId={organismId}
+                title={organismName}
                 fullName
               /> :
               <span>&nbsp;</span> }

@@ -9,7 +9,7 @@ import { measureText } from '../table/columnWidth';
 import * as constants from '../table/constants';
 import { statuses } from '../../collection-viewer/constants';
 
-import Species from '../../species';
+import Organisms from '../../organisms';
 
 const systemGroup = {
   group: true,
@@ -100,11 +100,11 @@ export function createReducer({ name, buildColumns }) {
   return function (state = initialState, { type, payload }) {
     switch (type) {
       case FETCH_COLLECTION.SUCCESS: {
-        const { genomes, _species, status } = payload.result;
+        const { genomes, organism, status } = payload.result;
         if (status !== statuses.READY) return state;
 
         const paarsnpResults = getPaarsnpResults(genomes);
-        const columns = buildColumns(_species.resistance, paarsnpResults);
+        const columns = buildColumns(organism.resistance, paarsnpResults);
         return {
           ...state,
           columns: [ systemGroup ].concat(
@@ -134,6 +134,6 @@ export function createReducer({ name, buildColumns }) {
 }
 
 export function getLabel(key) {
-  const { customLabels = {} } = Species.current.amrOptions || {};
+  const { customLabels = {} } = Organisms.current.amrOptions || {};
   return customLabels[key] || key;
 }

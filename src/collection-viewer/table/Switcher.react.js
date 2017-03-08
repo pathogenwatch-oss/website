@@ -5,7 +5,7 @@ import classnames from 'classnames';
 import { getVisibleTableName, hasMetadata, hasTyping } from './selectors';
 import { setTable } from './actions';
 import { tableKeys } from '../constants';
-import Species from '../../species';
+import Organisms from '../../organisms';
 
 function mapStateToProps(state) {
   return {
@@ -43,7 +43,7 @@ const TableSwitcher =
   connect(state => ({
     hasMetadata: hasMetadata(state),
     hasTyping: hasTyping(state),
-    hasAMR: !Species.uiOptions.noAMR,
+    hasAMR: !Organisms.uiOptions.noAMR,
   }))(
   props => (
     <div

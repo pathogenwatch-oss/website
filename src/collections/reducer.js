@@ -17,7 +17,7 @@ function entities(state = {}, { type, payload }) {
   }
 }
 
-const initialSummary = { total: 0, speciesId: {}, owner: {} };
+const initialSummary = { total: 0, organismId: {}, owner: {} };
 function summary(state = initialSummary, { type, payload }) {
   switch (type) {
     case FETCH_COLLECTION_SUMMARY.ATTEMPT:

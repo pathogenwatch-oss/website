@@ -9,7 +9,7 @@ import { defaultWidthGetter } from './columnWidth';
 
 import { tableKeys } from '../constants';
 import { CGPS } from '../../app/constants';
-import Species from '../../species';
+import Organisms from '../../organisms';
 
 export const dataTables = new Set([
   tableKeys.metadata,
@@ -128,7 +128,7 @@ export const nameColumnProps = {
         <div onClick={(e) => e.stopPropagation()}>
           { data.__isPublic && data.collectionId ?
             <a className="mdl-button mdl-button--icon"
-              href={`/${Species.nickname}/collection/${data.collectionId}`}
+              href={`/${Organisms.nickname}/collection/${data.collectionId}`}
               title="View Original Collection"
               target="_blank" rel="noopener"
             >
