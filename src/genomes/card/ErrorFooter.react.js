@@ -11,7 +11,7 @@ const Footer = ({ children }) => (
   </footer>
 );
 
-export default (genome) => {
+export default ({ genome }) => {
   switch (genome.error) {
     case errors.INVALID_GENOME_CONTENT:
     case errors.INVALID_GENOME_SIZE:

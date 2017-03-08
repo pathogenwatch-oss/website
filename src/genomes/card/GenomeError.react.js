@@ -11,8 +11,8 @@ const Error = ({ message, children }) => (
   </div>
 );
 
-function getError(file) {
-  switch (file.error) {
+function getError(genome) {
+  switch (genome.error) {
     case errors.INVALID_GENOME_CONTENT:
       return <Error message="This is not a valid genome file." />;
     case errors.INVALID_GENOME_SIZE:
@@ -26,8 +26,8 @@ function getError(file) {
   }
 }
 
-export default (file) => (
+export default ({ genome }) => (
   <div className="wgsa-card-content">
-    { getError(file) }
+    { getError(genome) }
   </div>
 );

@@ -20,16 +20,16 @@ function getProgressBar(progress) {
   );
 }
 
-function getCardComponents(props) {
-  switch (props.status) {
+function getCardComponents(genome) {
+  switch (genome.status) {
     case statuses.ERROR:
       return {
-        content: <GenomeError {...props} />,
-        footer: <ErrorFooter {...props} />,
+        content: <GenomeError genome={genome} />,
+        footer: <ErrorFooter genome={genome} />,
       };
     case statuses.UPLOADING:
       return {
-        content: getProgressBar(props.progress),
+        content: getProgressBar(genome.progress),
       };
     case statuses.PENDING:
       return {
@@ -37,29 +37,30 @@ function getCardComponents(props) {
       };
     default:
       return {
-        content: <GenomeMetadata {...props} />,
-        footer: <DefaultFooter {...props} />,
+        content: <GenomeMetadata genome={genome} />,
+        footer: <DefaultFooter genome={genome} />,
       };
   }
 }
 
-export default props => {
-  const { name, speciesId, speciesName } = props;
-  const { content, footer = null } = getCardComponents(props);
+export default ({ item }) => {
+  const { name, speciesId, speciesName } = item;
+  const { content, footer = null } = getCardComponents(item);
   return (
     <Card className="wgsa-genome-card wgsa-card--bordered">
       <header className="wgsa-card-header">
         <h2 className="wgsa-card-title" title={name}>{name}</h2>
         <p className="wgsa-card-subtitle">
           { speciesName ?
-            <FormattedSpeciesName
-              speciesId={speciesId}
-              title={speciesName}
-              fullName
-            /> : <span>&nbsp;</span> }
+              <FormattedSpeciesName
+                speciesId={speciesId}
+                title={speciesName}
+                fullName
+              /> :
+              <span>&nbsp;</span> }
         </p>
         <span className="wgsa-card-header__button">
-          <AddToSelectionButton genome={props} />
+          <AddToSelectionButton genome={item} />
         </span>
       </header>
       { content }
