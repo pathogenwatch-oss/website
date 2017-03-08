@@ -20,10 +20,12 @@ if (!serviceName) {
     mongo.connect(),
   ]).
   then(connections => {
-    process.on('SIGTERM', () => {
-      LOGGER.info('Received stop signal (SIGTERM), shutting down.');
-      process.exit();
-    });
+    process.on('SIGTERM', () =>
+      mongo.close().then(() => {
+        LOGGER.info('Received stop signal (SIGTERM), shutting down.');
+        process.exit();
+      })
+    );
 
     require(`./${serviceName}`)(formatConnections(connections));
   }).

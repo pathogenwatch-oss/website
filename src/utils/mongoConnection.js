@@ -28,3 +28,4 @@ mongoose.set('debug', (...args) => LOGGER.debug(args));
 
 module.exports.connect = connect;
 module.exports.dbUrl = dbUrl;
+module.exports.close = () => mongoose.connection.close();

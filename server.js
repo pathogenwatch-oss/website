@@ -141,7 +141,10 @@ module.exports = () =>
       process.on('SIGTERM', () => {
         shuttingDown = true;
         LOGGER.info('Received stop signal (SIGTERM), shutting down gracefully');
-        server.close(() => {
+        Promise.all([
+          mongoConnection.close(),
+          new Promise((resolve) => server.close(resolve)),
+        ]).then(() => {
           LOGGER.info('Closed out remaining connections');
           process.exit();
         });
