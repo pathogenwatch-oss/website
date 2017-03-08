@@ -1,6 +1,6 @@
-import './styles.css';
-
 import React from 'react';
+
+import SaveForOffline from '../offline';
 
 export default React.createClass({
 
@@ -32,6 +32,7 @@ export default React.createClass({
             <dt className="wgsa-hub-stats-heading">Created</dt>
             <dd className="wgsa-hub-stats-value">{metadata.dateCreated}</dd>
           </dl>
+          <SaveForOffline />
         </div>
       </div>
     );

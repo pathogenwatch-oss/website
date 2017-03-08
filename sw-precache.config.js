@@ -17,4 +17,7 @@ module.exports = {
       handler: 'cacheFirst',
     },
   ],
+  importScripts: [
+    '/sw-fetch-handler.js',
+  ],
 };

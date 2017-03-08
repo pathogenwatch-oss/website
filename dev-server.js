@@ -24,7 +24,8 @@ app.use(bodyParser.json());
 app.get('/service-worker.js', (req, res) => {
   res.set('Content-Type', 'text/javascript');
   swPrecache.generate(require('./sw-precache.config.js'))
-    .then(res.send);
+    .then(file => res.send(file))
+    .catch(console.error);
 });
 
 app.use(express.static('public'));

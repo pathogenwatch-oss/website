@@ -9,6 +9,7 @@ import filter from '../filter/reducer';
 import summary from '../summary/reducer';
 import tree from '../tree/reducer';
 import table from '../table/reducer';
+import offline from '../offline/reducer';
 
 import { RESET_COLLECTION_VIEW } from '../actions';
 
@@ -23,6 +24,7 @@ const reducer = combineReducers({
   summary,
   tree,
   table,
+  offline,
 });
 
 const initialState = reducer(undefined, {});
