@@ -9,7 +9,7 @@ self.addEventListener('fetch', event => {
   if (requestUrl.pathname.indexOf('/api') === 0) {
     event.respondWith(
       caches.match(event.request).
-        then(response => console.log(response) || response || fetch(event.request))
+        then(response => response || fetch(event.request))
     );
   }
   // }

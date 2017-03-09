@@ -11,10 +11,13 @@ module.exports = {
   stripPrefix: 'public',
   runtimeCaching: [
     { urlPattern: /\.(js|css|png|jpg|jpeg|gif|svg|woff2)$/,
-      handler: 'cacheFirst',
+      handler: 'networkFirst',
     },
     { urlPattern: /^https?:\/\/fonts\.googleapis\.com/,
-      handler: 'cacheFirst',
+      handler: 'networkFirst',
+    },
+    { urlPattern: /^https?:\/\/api\.mapbox\.com/,
+      handler: 'networkFirst',
     },
   ],
   importScripts: [
