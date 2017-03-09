@@ -3,8 +3,9 @@ import { connect } from 'react-redux';
 
 import WGSAMap from '../../map';
 
-import { filterByArea } from '../filter/actions';
+import { setSelection } from '../selection/actions';
 import { showGenomeDrawer } from '../../genome-drawer';
+import { selectByArea } from './actions';
 
 import { getMarkers, getLassoPath } from './selectors';
 import { UPLOAD } from '../../app/stateKeys/map';
@@ -42,9 +43,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    onLassoPathChange:
-      path => dispatch(filterByArea(path)),
-    onClick: () => dispatch(filterByArea(null)),
+    onLassoPathChange: path => dispatch(selectByArea(path)),
+    onClick: () => dispatch(setSelection([])),
     onMarkerClick: ({ id }) => dispatch(showGenomeDrawer(id)),
   };
 }
