@@ -18,9 +18,9 @@ a {
   text-decoration: none;
 }
 
-a:hover,
-a:focus,
-a:active {
+a[href]:hover,
+a[href]:focus,
+a[href]:active {
   text-decoration: underline;
 }
 

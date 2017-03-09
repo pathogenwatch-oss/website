@@ -7,7 +7,7 @@
   margin: 0 16px 8px;
   box-sizing: border-box;
   border: 1px solid transparent;
-  text-decoration: none;
+  text-decoration: none !important;
   background: #3C7383;
 }
 
