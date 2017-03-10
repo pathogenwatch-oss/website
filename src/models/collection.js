@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 const slug = require('slug');
 
-const { setToObjectOptions, addPreSaveHook } = require('./utils');
+const { setToObjectOptions, addPreSaveHook, getSummary } = require('./utils');
 
 const schema = new Schema({
   _user: { type: Schema.Types.ObjectId, ref: 'User' },
@@ -13,6 +13,7 @@ const schema = new Schema({
     },
   },
   createdAt: Date,
+  binned: { type: Boolean, default: false },
   description: String,
   error: String,
   lastAccessedAt: Date,
@@ -37,7 +38,7 @@ const schema = new Schema({
     totalCollection: Number,
     totalPublic: Number,
   } ],
-  title: String,
+  title: { type: String, index: 'text' },
   tree: String,
   uuid: { type: String, index: true },
 });
@@ -120,6 +121,31 @@ schema.virtual('slug').get(function () {
 
 schema.statics.findByUuid = function (uuid, projection) {
   return this.findOne({ uuid }, projection);
+};
+
+schema.statics.getPrefilterCondition = function ({ user = {}, query }) {
+  const hasAccess = user._id ?
+    { $or: [ { _user: user._id }, { public: true } ] } :
+    { public: true };
+  const { prefilter = 'all' } = query;
+
+  if (prefilter === 'all') {
+    return Object.assign(hasAccess, { binned: false });
+  }
+
+  if (prefilter === 'user') {
+    return { binned: false, _user: { $exists: true, $eq: user._id } };
+  }
+
+  if (prefilter === 'bin') {
+    return Object.assign(hasAccess, { binned: true });
+  }
+
+  throw new Error(`Invalid collection prefilter: '${prefilter}'`);
+};
+
+schema.statics.getSummary = function (fields, props) {
+  return getSummary(this, fields, props);
 };
 
 module.exports = mongoose.model('Collection', schema);

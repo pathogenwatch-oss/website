@@ -44,7 +44,7 @@ app.use(bodyParser.urlencoded({
   limit: '50mb',
 }));
 
-logging.initHttpLogging(app, process.env.NODE_ENV || 'development');
+logging.initHttpLogging(app, process.env.NODE_ENV || 'none');
 
 module.exports = () =>
   Promise.all([
@@ -100,12 +100,8 @@ module.exports = () =>
       next();
     });
 
-    if (process.env.NODE_ENV !== 'production') {
-      app.use((req, res, next) => {
-        res.header('Access-Control-Allow-Origin', 'http://localhost:8080');
-        res.header('Access-Control-Allow-Credentials', 'true');
-        next();
-      });
+    if (process.env.NODE_ENV === 'development') {
+      app.use(require('./src/dev'));
     }
 
     require('routes.js')(app);
@@ -145,7 +141,10 @@ module.exports = () =>
       process.on('SIGTERM', () => {
         shuttingDown = true;
         LOGGER.info('Received stop signal (SIGTERM), shutting down gracefully');
-        server.close(() => {
+        Promise.all([
+          mongoConnection.close(),
+          new Promise((resolve) => server.close(resolve)),
+        ]).then(() => {
           LOGGER.info('Closed out remaining connections');
           process.exit();
         });

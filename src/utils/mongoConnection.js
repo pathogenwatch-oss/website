@@ -14,8 +14,14 @@ const replicaset = mongoConfig.replicaset;
 
 const dbUrl = `mongodb://${hostname}:${port}/${database}${replicaset ? `?replicaSet=${replicaset}` : ''}`;
 
+const handleError = error => {
+  LOGGER.error(error);
+  process.exit(1);
+};
+
 function connect(callback) {
-  mongoose.connection.on('error', (error) => LOGGER.error(error));
+  mongoose.connection.on('error', handleError);
+  mongoose.connection.on('disconnected', () => handleError('disconnected event'));
   if (callback) {
     mongoose.connection.once('open', callback);
   }
@@ -28,3 +34,4 @@ mongoose.set('debug', (...args) => LOGGER.debug(args));
 
 module.exports.connect = connect;
 module.exports.dbUrl = dbUrl;
+module.exports.close = () => mongoose.connection.close();
