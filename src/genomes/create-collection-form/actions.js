@@ -9,13 +9,13 @@ import { showToast } from '../../toast';
 export const CREATE_COLLECTION = createAsyncConstants('CREATE_COLLECTION');
 
 function createCollectionAction(files, metadata) {
-  const speciesId = files[0].speciesId;
+  const organismId = files[0].organismId;
   return {
     type: CREATE_COLLECTION,
     payload: {
-      speciesId,
+      organismId,
       metadata,
-      promise: createCollectionRequest(files, speciesId, metadata),
+      promise: createCollectionRequest(files, organismId, metadata),
     },
   };
 }

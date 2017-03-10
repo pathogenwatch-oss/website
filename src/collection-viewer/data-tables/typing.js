@@ -8,7 +8,7 @@ import { systemDataColumns } from './constants';
 import * as constants from '../table/constants';
 import { tableKeys } from '../constants';
 
-import Species from '../../species';
+import Organisms from '../../organisms';
 
 const initialState = {
   name: tableKeys.typing,
@@ -88,7 +88,7 @@ export function getTypingColumnGroups(uiOptions) {
 export default function (state = initialState, { type, payload }) {
   switch (type) {
     case FETCH_COLLECTION.SUCCESS: {
-      const active = hasTyping(Species.uiOptions);
+      const active = hasTyping(Organisms.uiOptions);
 
       if (!active) {
         return {
@@ -102,7 +102,7 @@ export default function (state = initialState, { type, payload }) {
         active,
         columns: [
           leadingSystemGroup,
-          ...getTypingColumnGroups(Species.uiOptions),
+          ...getTypingColumnGroups(Organisms.uiOptions),
           trailingSystemGroup,
         ],
       };

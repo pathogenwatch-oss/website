@@ -2,8 +2,8 @@ import * as actions from './actions';
 
 const initialState = {};
 
-const addToSelection = (memo, { id, name, speciesId }) => {
-  memo[id] = { id, name, speciesId };
+const addToSelection = (memo, { id, name, organismId }) => {
+  memo[id] = { id, name, organismId };
   return memo;
 };
 

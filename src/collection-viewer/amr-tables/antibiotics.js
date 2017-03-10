@@ -4,7 +4,7 @@ const { onHeaderClick } = require('./thunks');
 
 import * as amr from '../amr-utils';
 import { tableKeys } from '../constants';
-import Species from '../../species';
+import Organisms from '../../organisms';
 
 const isMac =
   (navigator && navigator.platform &&
@@ -49,7 +49,7 @@ function createColumn({ key, fullName }) {
 export const name = tableKeys.antibiotics;
 
 export function buildColumns({ antibiotics }) {
-  const { hiddenColumns = new Set() } = Species.current.amrOptions || {};
+  const { hiddenColumns = new Set() } = Organisms.current.amrOptions || {};
   return (
     antibiotics.
       filter(({ key }) => !hiddenColumns.has(key)).

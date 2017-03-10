@@ -8,7 +8,7 @@ import { reducer as genomes } from '../genomes';
 import { reducer as header } from '../header';
 import { reducer as location } from '../location/';
 import { reducer as maps } from '../map';
-import { reducer as species } from '../species';
+import { reducer as organisms } from '../organisms';
 import { reducer as toast } from '../toast';
 import { reducer as summary } from '../summary';
 
@@ -21,7 +21,7 @@ export default combineReducers({
   genomes,
   location,
   maps,
-  species,
+  organisms,
   toast,
   summary,
 });

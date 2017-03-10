@@ -60,16 +60,16 @@ export function getCollection(collectionId) {
   return fetchJson('GET', `/api/collection/${collectionId}`);
 }
 
-export function requestFile({ speciesId, idType = 'genome', format }, requestBody) {
+export function requestFile({ organismId, idType = 'genome', format }, requestBody) {
   return postJson(
-    `/species/${speciesId}/download/type/${idType}/format/${format}`,
+    `/organisms/${organismId}/download/type/${idType}/format/${format}`,
     requestBody
   );
 }
 
-export function makeFileRequest(format, id, speciesId) {
+export function makeFileRequest(format, id, organismId) {
   return () => requestFile(
-    { speciesId, format },
+    { organismId, format },
     { idList: Array.isArray(id) ? id : [ id ] }
   );
 }

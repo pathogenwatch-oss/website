@@ -1,6 +1,6 @@
 import { FETCH_SPECIES_SUMMARY } from './actions';
 
-const initialState = { wgsaSpecies: [], otherSpecies: [] };
+const initialState = { wgsaOrganisms: [], otherOrganisms: [] };
 
 export default function (state = initialState, { type, payload }) {
   switch (type) {

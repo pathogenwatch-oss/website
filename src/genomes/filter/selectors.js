@@ -6,7 +6,7 @@ import { selectors as filter } from '../../filter';
 import { stateKey } from './index';
 import { getCountryName } from '../../utils/country';
 
-import { isSupported, taxIdMap } from '../../species';
+import { isSupported, taxIdMap } from '../../organisms';
 
 export const getFilter = state => filter.getFilter(state, { stateKey });
 
@@ -20,33 +20,33 @@ export const getSearchText = createSelector(
 export const getFilterSummary = createSelector(
   ({ genomes }) => genomes.summary,
   filter.getFilter,
-  ({ loading, speciesId, country, reference, owner }, filterState) => {
-    const wgsaSpecies = [];
-    const otherSpecies = [];
+  ({ loading, organismId, country, reference, owner }, filterState) => {
+    const wgsaOrganisms = [];
+    const otherOrganisms = [];
 
-    for (const value of Object.keys(speciesId)) {
-      if (isSupported({ speciesId: value })) {
-        const species = taxIdMap.get(value);
-        wgsaSpecies.push({
+    for (const value of Object.keys(organismId)) {
+      if (isSupported({ organismId: value })) {
+        const organism = taxIdMap.get(value);
+        wgsaOrganisms.push({
           value,
-          label: species.formattedShortName,
-          title: species.name,
-          count: speciesId[value].count,
-          active: filterState.speciesId === value,
+          label: organism.formattedShortName,
+          title: organism.name,
+          count: organismId[value].count,
+          active: filterState.organismId === value,
         });
       } else {
-        otherSpecies.push({
+        otherOrganisms.push({
           value,
-          active: filterState.speciesId === value,
-          ...speciesId[value],
+          active: filterState.organismId === value,
+          ...organismId[value],
         });
       }
     }
 
     return {
       loading,
-      wgsaSpecies: sortBy(wgsaSpecies, 'title'),
-      otherSpecies: sortBy(otherSpecies, 'label'),
+      wgsaOrganisms: sortBy(wgsaOrganisms, 'title'),
+      otherOrganisms: sortBy(otherOrganisms, 'label'),
       country: sortBy(
         Object.keys(country).map(
           value => ({
