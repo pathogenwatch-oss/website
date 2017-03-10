@@ -3,7 +3,7 @@ import { Router, Route, browserHistory, Redirect, IndexRedirect } from 'react-ro
 
 import App from './App.react';
 
-import { SpeciesRoute } from '../species';
+import { OrganismsRoute } from '../organisms';
 import AccountRoute from '../account';
 import CollectionsRoute from '../collections';
 import GenomesRoute from '../genomes';
@@ -15,14 +15,14 @@ import NotFound from '../components/NotFound.react';
 export default () => (
   <Router history={browserHistory}>
     <Route path="/" component={App}>
-      <IndexRedirect to="species" />
-      {SpeciesRoute}
+      <IndexRedirect to="organisms" />
+      {OrganismsRoute}
       {AccountRoute}
       {CollectionsRoute}
       {GenomesRoute}
-      <Redirect from=":species/upload" to="/upload" />
+      <Redirect from=":organism/upload" to="/upload" />
       <Redirect from="upload" to="/genomes/upload" />
-      <Redirect from=":species/collection/:id" to="/collection/:id" />
+      <Redirect from=":organism/collection/:id" to="/collection/:id" />
       {CollectionViewerRoute}
       {DocumentationViewerRoute}
       <Route path="*" component={NotFound} />

@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import AddToSelectionButton from './AddToSelectionButton.react';
-import { FormattedSpeciesName } from '../../species';
+import { FormattedName } from '../../organisms';
 
 import { toggleSelectedGenomes } from '../selection/actions';
 
@@ -15,7 +15,7 @@ const Header = ({ genome, onClick }) => {
       <h2 className="wgsa-card-title" title={name}>{name}</h2>
       <p className="wgsa-card-subtitle">
         { speciesName ?
-            <FormattedSpeciesName
+            <FormattedName
               speciesId={speciesId}
               title={speciesName}
               fullName

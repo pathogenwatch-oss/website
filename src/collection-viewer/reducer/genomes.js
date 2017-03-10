@@ -14,8 +14,8 @@ function flagGenomes(genomes, flag) {
 export default function (state = {}, { type, payload }) {
   switch (type) {
     case actions.FETCH_COLLECTION.SUCCESS: {
-      const { genomes = [], _species } = payload.result;
-      const { references = [] } = _species;
+      const { genomes = [], organism } = payload.result;
+      const { references = [] } = organism;
       return {
         ...state,
         ...flagGenomes(genomes, 'isCollection'),

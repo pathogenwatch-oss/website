@@ -54,6 +54,14 @@ export function mapCSVsToGenomes(files) {
   const csvFiles = files.filter(({ name }) => CSV_FILE_NAME_REGEX.test(name));
   const genomeFiles = files.filter(({ name }) => GENOME_FILE_NAME_REGEX.test(name));
 
+  if (genomeFiles.length === 0) {
+    return Promise.reject({
+      toast: {
+        message: 'No files recognised, please ensure that your files have supported file extensions.',
+      },
+    });
+  }
+
   return Promise.all(
     csvFiles.map(file =>
       readAsText(file).

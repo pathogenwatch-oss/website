@@ -3,6 +3,8 @@ import { createAsyncConstants } from '../../actions';
 import * as selectors from './selectors';
 import * as utils from '../utils';
 
+import { showToast } from '../../toast';
+
 export const ADD_GENOMES = 'ADD_GENOMES';
 
 export function addGenomes(genomes) {
@@ -64,9 +66,13 @@ export function uploadFiles(files) {
 
 export function addFiles(newFiles) {
   return (dispatch) =>
-    utils.mapCSVsToGenomes(newFiles).then(
-      parsedFiles => dispatch(uploadFiles(parsedFiles))
-    );
+    utils.mapCSVsToGenomes(newFiles)
+      .then(parsedFiles => dispatch(uploadFiles(parsedFiles)))
+      .catch(error => {
+        if (error.toast) {
+          dispatch(showToast(error.toast));
+        }
+      });
 }
 
 export const REMOVE_GENOMES = 'REMOVE_GENOMES';

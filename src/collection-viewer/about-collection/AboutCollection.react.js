@@ -13,7 +13,7 @@ export default React.createClass({
   },
 
   render() {
-    const { species, metadata, onButtonClick } = this.props;
+    const { organisms, metadata, onButtonClick } = this.props;
     return (
       <div className={this.getClassName()}>
         <button className="mdl-button mdl-button--icon" title="About Collection" onClick={onButtonClick}>
@@ -25,8 +25,8 @@ export default React.createClass({
           </h4>
           <p>{metadata.description}</p>
           <dl>
-            <dt className="wgsa-hub-stats-heading">Species</dt>
-            <dd className="wgsa-hub-stats-value">{species}</dd>
+            <dt className="wgsa-hub-stats-heading">Organisms</dt>
+            <dd className="wgsa-hub-stats-value">{organisms}</dd>
           </dl>
           <dl>
             <dt className="wgsa-hub-stats-heading">Created</dt>

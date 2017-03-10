@@ -4,20 +4,20 @@ import { Redirect, Route, IndexRoute } from 'react-router';
 import Index from './index-page';
 import Details from './details-page';
 
-const supportedSpecies = require('../../universal/species');
+const supportedOrganisms = require('../../universal/organisms');
 
 export default (
-  <Route key="species" path="species">
+  <Route path="organisms">
     <IndexRoute component={Index} />
-    { supportedSpecies.map(({ nickname }) =>
+    { supportedOrganisms.map(({ nickname }) =>
         <Redirect key={`${nickname}-redirect`} from={`/${nickname}`} to={nickname} />
     )}
-    { supportedSpecies.map(
+    { supportedOrganisms.map(
         ({ id, nickname }) =>
           <Route
             key={nickname}
             path={nickname}
-            component={props => <Details {...props} speciesId={id} />}
+            component={props => <Details {...props} organismId={id} />}
           />
     )}
   </Route>

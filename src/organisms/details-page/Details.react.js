@@ -4,13 +4,13 @@ import { Link } from 'react-router';
 
 import { taxIdMap } from '../index';
 
-import { getWgsaSpecies } from '../selectors';
+import { getWgsaOrganisms } from '../selectors';
 
 import { fetchSummary } from '../actions';
 
-function mapStateToProps(state, { speciesId }) {
+function mapStateToProps(state, { organismId }) {
   return {
-    ...(getWgsaSpecies(state).find(_ => _.speciesId === speciesId.toString())),
+    ...(getWgsaOrganisms(state).find(_ => _.organismId === organismId.toString())),
   };
 }
 
@@ -27,8 +27,8 @@ const Details = React.createClass({
   },
 
   render() {
-    const { speciesId, totalGenomes, totalCollections } = this.props;
-    const { nickname, formattedName, definitionText, desc, imageAltText, taxonomy } = taxIdMap.get(speciesId);
+    const { organismId, totalGenomes, totalCollections } = this.props;
+    const { nickname, formattedName, definitionText, desc, imageAltText, taxonomy } = taxIdMap.get(organismId);
     return (
       <div className="wgsa-page">
         <div className="wgsa-page-margin mdl-grid">
@@ -44,9 +44,9 @@ const Details = React.createClass({
               <p className="wgsa-avatar-image">
                 <img src={`/images/${nickname}.jpg`} alt={imageAltText} />
               </p>
-              <p><strong>Taxonomy ID:</strong> {speciesId}</p>
+              <p><strong>Taxonomy ID:</strong> {organismId}</p>
               <p>
-                <a href={`https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?mode=Tree&id=${speciesId}`} target="_blank" rel="noopener">
+                <a href={`https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?mode=Tree&id=${organismId}`} target="_blank" rel="noopener">
                   View in NCBI taxonomy browser
                 </a>
               </p>
@@ -89,10 +89,10 @@ const Details = React.createClass({
             <div className="wgsa-section-divider">
               <h3 className="wgsa-section-title">Reference Downloads</h3>
               <ul>
-                <li><a href={`/download/species/${nickname}/core_representatives.csv`}>Core Representatives</a></li>
-                <li><a href={`/download/species/${nickname}/reference_fastas.zip`}>Sequences</a></li>
-                <li><a href={`/download/species/${nickname}/reference_annotations.zip`}>Annotations</a></li>
-                <li><a href={`/download/species/${nickname}/reference_metadata.csv`}>Metadata</a></li>
+                <li><a href={`/download/organism/${nickname}/core_representatives.csv`}>Core Representatives</a></li>
+                <li><a href={`/download/organism/${nickname}/reference_fastas.zip`}>Sequences</a></li>
+                <li><a href={`/download/organism/${nickname}/reference_annotations.zip`}>Annotations</a></li>
+                <li><a href={`/download/organism/${nickname}/reference_metadata.csv`}>Metadata</a></li>
               </ul>
             </div>
           </div>

@@ -1,6 +1,6 @@
 import { tableKeys } from '../constants';
 
-import Species from '../../species';
+import Organisms from '../../organisms';
 
 // TODO: Might be good if `date` and `userDefined` were null
 export function hasMetadata(genomes) {
@@ -18,6 +18,6 @@ export function hasTyping({ noPopulation, noMLST, ngMast, genotyphi }) {
 
 export function getInitialTable({ genomes }) {
   if (hasMetadata(genomes)) return tableKeys.metadata;
-  if (hasTyping(Species.uiOptions)) return tableKeys.typing;
+  if (hasTyping(Organisms.uiOptions)) return tableKeys.typing;
   return tableKeys.stats;
 }

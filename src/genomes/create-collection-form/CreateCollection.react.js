@@ -7,26 +7,26 @@ import { getSelectedGenomeSummary } from './selectors';
 
 import { setSelection } from '../selection/actions';
 
-import { FormattedSpeciesName } from '../../species';
+import { FormattedName } from '../../organisms';
 
 const CreateCollection = React.createClass({
 
   render() {
     const { selectedGenomeSummary, onClick } = this.props;
-    const speciesIds = Object.keys(selectedGenomeSummary);
-    if (speciesIds.length === 0) {
-      return <p>Please select a supported species to create a collection.</p>;
+    const organismIds = Object.keys(selectedGenomeSummary);
+    if (organismIds.length === 0) {
+      return <p>Please select a supported organism to create a collection.</p>;
     }
 
-    if (speciesIds.length === 1) {
+    if (organismIds.length === 1) {
       return <CreateCollectionForm />;
     }
 
     return (
       <div>
-        <p>To create a collection, please select <strong>one species</strong> below:</p>
+        <p>To create a collection, please select <strong>one organism</strong> below:</p>
         <p>
-          { speciesIds.map(id =>
+          { organismIds.map(id =>
               <button
                 key={id}
                 className="mdl-chip mdl-chip--contact wgsa-inline-chip"
@@ -36,7 +36,7 @@ const CreateCollection = React.createClass({
                   { selectedGenomeSummary[id].length }
                 </span>
                 <span className="mdl-chip__text">
-                  <FormattedSpeciesName speciesId={id} />
+                  <FormattedName organismId={id} />
                 </span>
               </button>
             ) }

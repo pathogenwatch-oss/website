@@ -4,11 +4,11 @@ import { FETCH_COLLECTION }
   from '../../collection-viewer/actions';
 import * as ACTIONS from './actions';
 
-import { speciesTrees } from './constants';
+import { simpleTrees } from './constants';
 import { COLLECTION, POPULATION } from '../../app/stateKeys/tree';
 import { statuses } from '../../collection-viewer/constants';
 
-import Species from '../../species';
+import Organisms from '../../organisms';
 
 function setSize(state, step, maxStepFactor) {
   if (step === state.step) return state;
@@ -49,7 +49,7 @@ function updateHistory(tree, { image }) {
 
 function getInitialState() {
   return {
-    type: Species.uiOptions.defaultTree || 'rectangular',
+    type: Organisms.uiOptions.defaultTree || 'rectangular',
     nodeSize: {},
     labelSize: {},
     history: [],
@@ -60,7 +60,7 @@ function getInitialState() {
 function entities(state = {}, { type, payload }) {
   switch (type) {
     case FETCH_COLLECTION.SUCCESS: {
-      const { genomes, _species, subtrees, status } = payload.result;
+      const { genomes, organism, subtrees, status } = payload.result;
 
       if (status !== statuses.READY) return state;
 
@@ -76,8 +76,8 @@ function entities(state = {}, { type, payload }) {
         },
         [POPULATION]: {
           name: POPULATION,
-          newick: _species.tree,
-          leafIds: _species.references.map(_ => _.uuid),
+          newick: organism.tree,
+          leafIds: organism.references.map(_ => _.uuid),
           ...initialState,
         },
         ...subtrees.reduce((memo, { tree, ...subtree }) => {
@@ -206,7 +206,7 @@ function loading(state = false, { type }) {
 function lastSubtree(state = null, { type, payload }) {
   switch (type) {
     case ACTIONS.SET_TREE:
-      return speciesTrees.has(payload.name) ? state : payload.name;
+      return simpleTrees.has(payload.name) ? state : payload.name;
     default:
       return state;
   }
