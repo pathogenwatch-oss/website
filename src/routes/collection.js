@@ -9,8 +9,8 @@ const config = require('configuration');
 router.put('/collection', (req, res, next) => {
   LOGGER.info('Received request to create collection');
   const { user } = req;
-  const { genomeIds, title, description, speciesId } = req.body;
-  const message = { user, genomeIds, title, description, speciesId };
+  const { genomeIds, title, description, organismId } = req.body;
+  const message = { user, genomeIds, title, description, organismId };
 
   return services.
     request('collection', 'create', message).
@@ -23,9 +23,9 @@ if (config.node.auth) {
   const { realm, file, collections } = config.node.auth;
   const basic = auth.basic({ realm, file });
   const middleware = auth.connect(basic);
-  for (const { speciesId, collectionId } of collections) {
+  for (const { organismId, collectionId } of collections) {
     router.get(`/collection/${collectionId}`, middleware, (req, res, next) => {
-      LOGGER.info(`Requesting authorized collection: ${speciesId}/${collectionId}`);
+      LOGGER.info(`Requesting authorized collection: ${organismId}/${collectionId}`);
       req.params.uuid = collectionId;
       next();
     });

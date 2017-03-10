@@ -10,7 +10,7 @@ const schema = new Schema({
   _user: { type: Schema.Types.ObjectId, ref: 'User' },
   _session: String,
   name: { type: String, required: true, index: 'text' },
-  speciesId: String,
+  organismId: String,
   year: Number,
   month: Number,
   day: Number,
@@ -33,7 +33,7 @@ setToObjectOptions(schema, (_, genome, { user = {} }) => {
   const { _user } = genome;
   const { id } = user;
   genome.owner = (_user && id && _user.toString() === id) ? 'me' : 'other';
-  genome.speciesName = genome._file.speciesName;
+  genome.organismName = genome._file.organismName;
   genome.metrics = genome._file.metrics;
   delete genome._file;
   delete genome._user;

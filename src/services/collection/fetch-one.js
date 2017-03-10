@@ -19,6 +19,6 @@ module.exports = ({ user, uuid }) =>
   services.request('collection', 'fetch-progress', { user, uuid }).
     then(collection => (
       collection.status === 'READY' ?
-        collection.populate('_species').execPopulate() :
+        collection.populate('_organism').execPopulate() :
         collection
     )).then(_ => addGenomes(_.toObject()));

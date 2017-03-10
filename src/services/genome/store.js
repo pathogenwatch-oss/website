@@ -15,8 +15,8 @@ function getGenomeFileDocument({ fileId, filePath }) {
         ({ metrics, specieator: { taxId, scientificName } }) =>
           GenomeFile.create({
             fileId,
-            speciesId: taxId,
-            speciesName: scientificName,
+            organismId: taxId,
+            organismName: scientificName,
             metrics,
           })
       );

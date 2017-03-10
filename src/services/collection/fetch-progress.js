@@ -1,6 +1,6 @@
 const Collection = require('models/collection');
 const CollectionGenome = require('models/collectionGenome');
-const Species = require('models/species');
+const Organism = require('models/organism');
 
 const { ServiceRequestError } = require('utils/errors');
 const { looseAccessControl } = require('configuration');
@@ -43,7 +43,7 @@ function checkStatus(collection) {
         if (isReady(collection, results)) {
           return (
             collection.reference ?
-              Species.deploy(collection) :
+              Organism.deploy(collection) :
               collection.ready()
           );
         }

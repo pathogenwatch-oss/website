@@ -5,13 +5,13 @@ const services = require('services');
 
 const LOGGER = require('utils/logging').createLogger('Download requests');
 
-router.post('/species/:speciesId/download/type/:idType/format/:fileFormat',
+router.post('/organism/:organismId/download/type/:idType/format/:fileFormat',
   (req, res, next) => {
     const downloadRequest = {
       idType: req.params.idType === 'genome' ? 'assembly' : req.params.idType,
       format: req.params.fileFormat,
       idList: req.body.idList,
-      speciesId: req.params.speciesId,
+      organismId: req.params.organismId,
     };
 
     LOGGER.info(

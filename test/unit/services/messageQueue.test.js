@@ -40,7 +40,7 @@ describe('Service: Message Queue', function () {
       var NOTIFICATION_IDS = {
         assemblyId: 'assembly1',
         collectionId: 'collection1',
-        speciesId: '1280',
+        organismId: '1280',
       };
       messageQueueService.newAssemblyNotificationQueue(
         NOTIFICATION_IDS, {
@@ -50,7 +50,7 @@ describe('Service: Message Queue', function () {
         }, function (queue) {
           assert(queue.bind.calledWith(
             NOTIFICATION_EXCHANGE_NAME,
-            NOTIFICATION_IDS.speciesId + '.*.ASSEMBLY.' + NOTIFICATION_IDS.assemblyId
+            NOTIFICATION_IDS.organismId + '.*.ASSEMBLY.' + NOTIFICATION_IDS.assemblyId
           ));
 
           done();

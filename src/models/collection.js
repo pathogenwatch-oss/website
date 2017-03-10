@@ -6,8 +6,8 @@ const { setToObjectOptions, addPreSaveHook, getSummary } = require('./utils');
 
 const schema = new Schema({
   _user: { type: Schema.Types.ObjectId, ref: 'User' },
-  _species: {
-    type: Schema.Types.ObjectId, ref: 'Species',
+  _organism: {
+    type: Schema.Types.ObjectId, ref: 'Organism',
     required() {
       return !this.reference;
     },
@@ -29,7 +29,7 @@ const schema = new Schema({
   public: { type: Boolean, default: false },
   reference: Boolean,
   size: Number,
-  speciesId: String,
+  organismId: String,
   status: { type: String, default: 'PENDING' },
   subtrees: [ {
     name: String,
@@ -43,12 +43,16 @@ const schema = new Schema({
   uuid: { type: String, index: true },
 });
 
-setToObjectOptions(schema);
+setToObjectOptions(schema, (_, collection) => {
+  collection.organism = collection._organism;
+  delete collection._organism;
+  return collection;
+});
 addPreSaveHook(schema);
 
 const commonResults = new Set([ 'mlst', 'paarsnp', 'core' ]);
 const nonReferenceResults = new Set([ 'fp' ]);
-const speciesSpecificResults = {
+const organismSpecificResults = {
   90370: new Set([ 'genotyphi' ]),
   485: new Set([ 'ngmast' ]),
 };
@@ -81,8 +85,8 @@ schema.methods.resultRequired = function (type) {
     return true;
   }
 
-  if (this.speciesId in speciesSpecificResults) {
-    return speciesSpecificResults[this.speciesId].has(type);
+  if (this.organismId in organismSpecificResults) {
+    return organismSpecificResults[this.organismId].has(type);
   }
 
   return false;
@@ -96,8 +100,8 @@ schema.virtual('totalGenomeResults').get(function () {
   return (
     commonResults.size +
     (this.reference ? 0 : nonReferenceResults.size) +
-    (this.speciesId in speciesSpecificResults ?
-      speciesSpecificResults[this.speciesId].size : 0)
+    (this.organismId in organismSpecificResults ?
+      organismSpecificResults[this.organismId].size : 0)
   );
 });
 
