@@ -9,15 +9,16 @@ import { toggleSelectedGenomes } from '../selection/actions';
 const stopPropagation = e => e.stopPropagation();
 
 const Header = ({ genome, onClick }) => {
-  const { name, speciesId, speciesName } = genome;
+  const { name, organismId, organismName } = genome;
+  console.log(organismId)
   return (
     <header className="wgsa-card-header" onClick={onClick}>
       <h2 className="wgsa-card-title" title={name}>{name}</h2>
       <p className="wgsa-card-subtitle">
-        { speciesName ?
+        { organismName ?
             <FormattedName
-              speciesId={speciesId}
-              title={speciesName}
+              organismId={organismId}
+              title={organismName}
               fullName
             /> :
             <span>&nbsp;</span> }
