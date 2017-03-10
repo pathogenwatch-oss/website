@@ -10,26 +10,26 @@ const renderers = {
   Paragraph: (props) => <span>{props.children}</span>,
 };
 
-export default ({ title, description, slug, pubmedLink, size, speciesId }) => (
+export default ({ item }) => (
   <Card>
-    <Markdown containerTagName="h2" className="wgsa-card-title" source={title} renderers={renderers} />
+    <Markdown containerTagName="h2" className="wgsa-card-title" source={item.title} renderers={renderers} />
     <span className="wgsa-card-metadata-inliner">
       <CardMetadata title="Species" icon="bug_report">
-        {taxIdMap.get(speciesId).formattedShortName}
+        {taxIdMap.get(item.speciesId).formattedShortName}
       </CardMetadata>
       <CardMetadata icon="insert_drive_file">
-        {size} genomes
+        {item.size} genomes
       </CardMetadata>
     </span>
-    <Markdown source={description} />
+    <Markdown source={item.description} />
     <div className="wgsa-card-footer">
       <Link
         className="mdl-button mdl-button--primary wgsa-button--text"
-        to={`/collection/${slug}`}
+        to={`/collection/${item.slug}`}
       >
         View Collection
       </Link>
-      { pubmedLink && <a className="mdl-button wgsa-button--text" href={pubmedLink} target="_blank" rel="noopener">Pubmed</a>}
+      { item.pubmedLink && <a className="mdl-button wgsa-button--text" href={item.pubmedLink} target="_blank" rel="noopener">Pubmed</a>}
     </div>
   </Card>
 );
