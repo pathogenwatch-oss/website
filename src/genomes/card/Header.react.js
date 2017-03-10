@@ -10,7 +10,6 @@ const stopPropagation = e => e.stopPropagation();
 
 const Header = ({ genome, onClick }) => {
   const { name, organismId, organismName } = genome;
-  console.log(organismId)
   return (
     <header className="wgsa-card-header" onClick={onClick}>
       <h2 className="wgsa-card-title" title={name}>{name}</h2>
