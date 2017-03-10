@@ -1,22 +1,12 @@
 import { getGenomesInPath } from './selectors';
 
 import { setSelection } from '../selection/actions';
+import { changeLassoPath } from '../../map/actions';
 
-export const SET_LASSO_PATH = 'SET_LASSO_PATH';
-
-export function setLassoPath(path) {
-  return {
-    type: SET_LASSO_PATH,
-    payload: {
-      path,
-    },
-  };
-}
-
-export function selectByArea(path) {
+export function selectByArea(stateKey, path) {
   return (dispatch, getState) => {
-    dispatch(setLassoPath(path));
+    dispatch(changeLassoPath(stateKey, path));
     const state = getState();
-    dispatch(setSelection(getGenomesInPath(state)));
+    dispatch(setSelection(getGenomesInPath(state, { stateKey })));
   };
 }

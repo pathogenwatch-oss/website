@@ -4,7 +4,6 @@ import uploads from '../uploads/reducer';
 import entities from './entities';
 import summary from '../summary/reducer';
 import selection from '../selection/reducer';
-import map from '../map/reducer';
 
 import { CREATE_COLLECTION, CHANGE_COLLECTION_METADATA } from '../create-collection-form';
 import { SHOW_METRIC, FETCH_GENOMES } from '../actions';
@@ -66,5 +65,4 @@ export default combineReducers({
   summary,
   uploads,
   waiting,
-  map,
 });
