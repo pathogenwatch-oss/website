@@ -30,7 +30,7 @@ module.exports = function (message) {
 
   return aggregateResult(message).
     then(() =>
-      services.request('collection', 'fetch-progress', { uuid: message.collectionId }).
+      services.request('collection', 'fetch-progress', { uuid: message.collectionId, aggregator: true }).
         then(collection => {
           if (collection.reference) return;
 

@@ -11,10 +11,11 @@ function formatResult([ { subTypeAssignment }, { references } ]) {
   };
 }
 
-module.exports = (name, { assemblyId, speciesId }) => {
+module.exports = (name, { assemblyId, speciesId, documentKeys }) => {
   const { uuid } = assemblyId;
+  const resultDocKey = documentKeys.find(_ => _.indexOf(`${FP_RESULT}_`) === 0);
   return Promise.all([
-    mainStorage.retrieve(`${FP_RESULT}_${uuid}`),
+    mainStorage.retrieve(resultDocKey),
     Species.getLatest(speciesId),
   ]).
     then(formatResult).
