@@ -14,7 +14,10 @@
 
 .wgsa-filter-summary > * {
   margin: 0;
-  /*margin-right: 16px;*/
+}
+
+.wgsa-filter-summary > :first-child {
+  margin-left: 0;
 }
 
 .wgsa-filter-summary__count {

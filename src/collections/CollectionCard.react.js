@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router';
 import Markdown from 'react-markdown';
+import dateSince from 'date-since';
 
 import Card, { CardMetadata } from '../card';
-
-import { taxIdMap } from '../organisms';
+import { FormattedName } from '../organisms';
 
 const renderers = {
   Paragraph: (props) => <span>{props.children}</span>,
@@ -12,16 +12,25 @@ const renderers = {
 
 export default ({ item }) => (
   <Card>
-    <Markdown containerTagName="h2" className="wgsa-card-title" source={item.title} renderers={renderers} />
-    <span className="wgsa-card-metadata-inliner">
-      <CardMetadata title="Organisms" icon="bug_report">
-        {taxIdMap.get(item.organismId).formattedShortName}
-      </CardMetadata>
+    <span className="wgsa-card-metadata-overview">
       <CardMetadata icon="insert_drive_file">
         {item.size} genomes
       </CardMetadata>
+      <CardMetadata title="Created" icon="history">
+        {dateSince(new Date(item.createdAt))} ago
+      </CardMetadata>
     </span>
-    <Markdown source={item.description} />
+    { item.title ?
+      <Markdown containerTagName="h2" className="wgsa-card-title" source={item.title} renderers={renderers} /> :
+      <h2 className="wgsa-card-title">{'(Untitled Collection)'}</h2>
+    }
+    <p className="wgsa-card-subtitle">
+      <FormattedName organismId={item.organismId} fullName />
+    </p>
+    { item.description ?
+      <Markdown source={item.description} /> :
+      <p>(no description)</p>
+    }
     <div className="wgsa-card-footer">
       <Link
         className="mdl-button mdl-button--primary wgsa-button--text"
