@@ -11,7 +11,7 @@ const renderers = {
 };
 
 export default ({ item }) => (
-  <Card>
+  <Card className="wgsa-card--bordered">
     <span className="wgsa-card-metadata-overview">
       <CardMetadata icon="insert_drive_file">
         {item.size} genomes
