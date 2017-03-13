@@ -1,9 +1,7 @@
-const path = require('path');
 const express = require('express');
 const router = express.Router();
 
 const services = require('services');
-const CollectionGenome = require('models/collectionGenome');
 
 const LOGGER = require('utils/logging').createLogger('Downloads');
 
@@ -32,14 +30,10 @@ router.get('/file/:filename',
   }
 );
 
-function createFastaFileName(genomeName = 'file') {
-  return path.extname(genomeName || '').length ?
-    genomeName :
-    `${genomeName}.fasta`;
-}
-
 router.get('/genome/:id', (req, res, next) => {
-  const { id } = req.params;
+  const { user, params, query } = req;
+  const { id } = params;
+  const { type } = query;
 
   if (!id) {
     LOGGER.error('Missing id');
@@ -48,15 +42,14 @@ router.get('/genome/:id', (req, res, next) => {
 
   LOGGER.info(`Received request for fasta: ${id}`);
 
-  return CollectionGenome.findById(id).
-    then(({ fileId, name }) => {
+  return services.request('genome', 'download', { user, type, id }).
+    then(({ filePath, fileName }) => {
       res.set({
-        'Content-Disposition': `attachment; filename="${createFastaFileName(name)}"`,
+        'Content-Disposition': `attachment; filename="${fileName}"`,
         'Content-type': 'text/plain',
       });
-      return services.request('genome', 'file-path', { fileId });
+      return res.sendFile(filePath);
     }).
-    then(filePath => res.sendFile(filePath)).
     catch(next);
 });
 
