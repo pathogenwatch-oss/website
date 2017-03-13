@@ -4,6 +4,7 @@ import React from 'react';
 import Drawer from '../drawer';
 import RemoveButton from '../genomes/card/RemoveButton.react';
 import AddToSelectionButton from '../genomes/card/AddToSelectionButton.react';
+import DownloadLink from '../download/GenomeFileLink.react';
 import N50Chart from './N50Chart.react';
 
 const GenomeStats = ({ metrics }) => (
@@ -59,6 +60,7 @@ const GenomeDrawerContent = React.createClass({
             <a href="#n50-panel" className="mdl-tabs__tab">N50</a>
             <div className="wgsa-tab-actions">
               <AddToSelectionButton genome={genome} />
+              <DownloadLink id={genome.id} name={genome.name} />
               <RemoveButton genome={genome} />
             </div>
           </div>

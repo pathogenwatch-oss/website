@@ -32,7 +32,7 @@ const SelectionDrawer = React.createClass({
 
   getDownloadTitle() {
     if (this.props.disableDownload) {
-      return `Cannot download more than ${maxArchiveSize} genomes in a single archive.`;
+      return `A single archive cannot contain more than ${maxArchiveSize} genomes.`;
     }
     return 'Download as archive';
   },

@@ -1,6 +1,5 @@
 import { SERVER_ADDRESS } from '../../utils/Api';
 
-export GenomeFileLink from './GenomeFileLink.react';
 export GenomeArchiveButton from './GenomeArchiveButton.react';
 
 export function createGenomeArchiveLink({ fileId }, filename) {
