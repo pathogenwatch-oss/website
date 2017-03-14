@@ -3,7 +3,7 @@ import sortBy from 'lodash.sortby';
 
 import { selectors as filter } from '../../filter';
 
-import { taxIdMap } from '../../species';
+import { taxIdMap } from '../../organisms';
 
 import { stateKey } from './index';
 
@@ -19,17 +19,17 @@ export const getSearchText = createSelector(
 export const getFilterSummary = createSelector(
   ({ collections }) => collections.summary,
   getFilter,
-  ({ loading, speciesId, owner }, filterState) => ({
+  ({ loading, organismId, owner }, filterState) => ({
     loading,
-    species: sortBy(
-      Object.keys(speciesId).map(value => {
-        const species = taxIdMap.get(value);
+    organism: sortBy(
+      Object.keys(organismId).map(value => {
+        const organism = taxIdMap.get(value);
         return {
           value,
-          label: species.formattedShortName,
-          title: species.name,
-          count: speciesId[value].count,
-          active: filterState.speciesId === value,
+          label: organism.formattedShortName,
+          title: organism.name,
+          count: organismId[value].count,
+          active: filterState.organismId === value,
         };
       }),
       'title'

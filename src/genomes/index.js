@@ -32,7 +32,9 @@ export default (
           header={<GenomeHeader />}
         />
         <Route path="grid" component={GridView} />
-        <Route path="map" component={MapView} />
+        <Route path="map"
+          component={props => <MapView {...props} stateKey={`GENOMES_${prefilter.toUpperCase()}`} />}
+        />
         <Route path="stats" component={StatsView} />
       </Route>
     )}

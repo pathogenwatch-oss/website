@@ -5,8 +5,6 @@ import { CardMetadata } from '../../card';
 import { formatDay, formatMonth } from '../../utils/Date';
 import { getCountryName } from '../../utils/country';
 
-import { FormattedSpeciesName } from '../../species';
-
 function displayDate({ day, month, year }) {
   if (!day && !month && !year) {
     return null;
@@ -53,13 +51,13 @@ function displayAccessLevel(props) {
   );
 }
 
-export default props => {
-  const { country, ...metadata } = props;
+export default ({ genome }) => {
+  const { country, ...metadata } = genome;
   return (
     <div className="wgsa-card-content">
       {displayCountry(country)}
       {displayDate(metadata)}
-      {displayAccessLevel(props)}
+      {displayAccessLevel(genome)}
     </div>
   );
 };

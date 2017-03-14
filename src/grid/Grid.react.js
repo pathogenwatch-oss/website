@@ -74,7 +74,7 @@ export default React.createClass({
                   const item = items[columnIndex + rowIndex * columnCount];
                   return item ?
                     <GridItem key={key} style={style}>
-                      { React.createElement(template, item) }
+                      { React.createElement(template, { item }) }
                     </GridItem> :
                     null;
                 }}

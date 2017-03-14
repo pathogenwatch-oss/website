@@ -9,13 +9,13 @@
   justify-content: flex-start;
 }
 
-.wgsa-species-card {
+.wgsa-organism-card {
   width: 240px;
   margin: 16px;
   padding: 16px;
 }
 
-.wgsa-species-card h3 {
+.wgsa-organism-card h3 {
   font-size: 24px;
   margin: 16px 0;
 }

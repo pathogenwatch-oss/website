@@ -3,12 +3,11 @@ import React from 'react';
 import Card from '../../card';
 import ProgressBar from '../../progress-bar';
 
+import Header from './Header.react';
 import GenomeMetadata from './GenomeMetadata.react';
 import DefaultFooter from './DefaultFooter.react';
 import GenomeError from './GenomeError.react';
 import ErrorFooter from './ErrorFooter.react';
-import AddToSelectionButton from './AddToSelectionButton.react';
-import { FormattedSpeciesName } from '../../species';
 
 import { statuses } from '../uploads/constants';
 
@@ -20,16 +19,16 @@ function getProgressBar(progress) {
   );
 }
 
-function getCardComponents(props) {
-  switch (props.status) {
+function getCardComponents(genome) {
+  switch (genome.status) {
     case statuses.ERROR:
       return {
-        content: <GenomeError {...props} />,
-        footer: <ErrorFooter {...props} />,
+        content: <GenomeError genome={genome} />,
+        footer: <ErrorFooter genome={genome} />,
       };
     case statuses.UPLOADING:
       return {
-        content: getProgressBar(props.progress),
+        content: getProgressBar(genome.progress),
       };
     case statuses.PENDING:
       return {
@@ -37,26 +36,17 @@ function getCardComponents(props) {
       };
     default:
       return {
-        content: <GenomeMetadata {...props} />,
-        footer: <DefaultFooter {...props} />,
+        content: <GenomeMetadata genome={genome} />,
+        footer: <DefaultFooter genome={genome} />,
       };
   }
 }
 
-export default props => {
-  const { name, speciesId, speciesName } = props;
-  const { content, footer = null } = getCardComponents(props);
+export default ({ item }) => {
+  const { content, footer = null } = getCardComponents(item);
   return (
     <Card className="wgsa-genome-card wgsa-card--bordered">
-      <header className="wgsa-card-header">
-        <h2 className="wgsa-card-title" title={name}>{name}</h2>
-        <p className="wgsa-card-subtitle">
-          <FormattedSpeciesName speciesId={speciesId} title={speciesName} fullName />
-        </p>
-        <span className="wgsa-card-header__button">
-          <AddToSelectionButton genome={props} />
-        </span>
-      </header>
+      <Header genome={item} />
       { content }
       { footer }
     </Card>

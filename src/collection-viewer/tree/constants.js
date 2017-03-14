@@ -1,7 +1,7 @@
 import { POPULATION, COLLECTION } from '../../app/stateKeys/tree';
 import { CGPS, DEFAULT } from '../../app/constants';
 
-export const speciesTrees = new Set([ POPULATION, COLLECTION ]);
+export const simpleTrees = new Set([ POPULATION, COLLECTION ]);
 
 export const titles = {
   [POPULATION]: 'Population',

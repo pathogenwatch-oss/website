@@ -14,6 +14,7 @@
   margin-bottom: 6px;
   padding-right: 32px;
   position: relative;
+  cursor: pointer;
 }
 
 .wgsa-card-title {
@@ -30,6 +31,7 @@
 
 .wgsa-card-subtitle {
   color: #3c7383;
+  font-weight: 500;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -97,4 +99,16 @@
 
 .wgsa-card-metadata-inliner .wgsa-card-metadata:first-child {
   margin-left: 0;
+}
+
+.wgsa-card-metadata-overview {
+  float: right;
+
+}
+
+.wgsa-card-metadata-overview .wgsa-card-metadata {
+  justify-content: flex-end;
+  font-size: 13px;
+  line-height: 20px;
+  color: rgba(0, 0, 0, 0.54);
 }

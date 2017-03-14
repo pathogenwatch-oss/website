@@ -4,19 +4,19 @@ import * as actions from '../actions';
 import { sortGenomes, getUuidFromSlug } from '../utils';
 import { statuses } from '../../collection-viewer/constants';
 
-import Species from '../../species';
+import Organisms from '../../organisms';
 
 const initialState = { id: null, genomeIds: new Set(), metadata: {} };
 
 export default function (state = initialState, { type, payload }) {
   switch (type) {
     case CREATE_COLLECTION.SUCCESS: {
-      const { result, speciesId, metadata } = payload;
+      const { result, organismId, metadata } = payload;
       return {
         ...state,
         slug: result.slug,
         uuid: getUuidFromSlug(result.slug),
-        speciesId,
+        organismId,
         metadata,
         status: statuses.PROCESSING,
       };
@@ -30,13 +30,13 @@ export default function (state = initialState, { type, payload }) {
     case actions.FETCH_COLLECTION.SUCCESS: {
       const { genomes = [], ...result } = payload.result;
 
-      Species.current = result.speciesId;
+      Organisms.current = result.organismId;
 
       return {
         ...state,
         genomeIds: new Set(sortGenomes(genomes).map(_ => _.uuid)),
         uuid: result.uuid,
-        speciesId: result.speciesId,
+        organismId: result.organismId,
         metadata: {
           title: result.title,
           description: result.description,

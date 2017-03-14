@@ -38,15 +38,15 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       textOnChange={e => updateFilter('searchText', e.target.value)}
     >
       <SummarySection
-        filterKey="speciesId"
-        heading="WGSA Species"
-        summary={filterSummary.wgsaSpecies}
+        filterKey="organismId"
+        heading="WGSA Organisms"
+        summary={filterSummary.wgsaOrganisms}
         updateFilter={updateFilter}
       />
       <SummarySection
-        filterKey="speciesId"
-        heading="Other Species"
-        summary={filterSummary.otherSpecies}
+        filterKey="organismId"
+        heading="Other Organisms"
+        summary={filterSummary.otherOrganisms}
         updateFilter={updateFilter}
       />
       <SummarySection

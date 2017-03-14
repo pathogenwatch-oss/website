@@ -1,3 +1,5 @@
+import { getGenomeList } from '../selectors';
+
 export const SELECT_GENOMES = 'SELECT_GENOMES';
 
 export function selectGenomes(genomes) {
@@ -31,5 +33,13 @@ export function setSelection(genomes) {
   return {
     type: SET_GENOME_SELECTION,
     payload: { genomes },
+  };
+}
+
+export function selectAll() {
+  return (dispatch, getState) => {
+    const state = getState();
+    const genomes = getGenomeList(state);
+    dispatch(selectGenomes(genomes));
   };
 }

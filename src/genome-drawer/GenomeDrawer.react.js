@@ -3,6 +3,7 @@ import React from 'react';
 
 import Drawer from '../drawer';
 import RemoveButton from '../genomes/card/RemoveButton.react';
+import AddToSelectionButton from '../genomes/card/AddToSelectionButton.react';
 import N50Chart from './N50Chart.react';
 
 const GenomeStats = ({ metrics }) => (
@@ -57,6 +58,7 @@ const GenomeDrawerContent = React.createClass({
             <a href="#metrics-panel" className="mdl-tabs__tab is-active">Metrics</a>
             <a href="#n50-panel" className="mdl-tabs__tab">N50</a>
             <div className="wgsa-tab-actions">
+              <AddToSelectionButton genome={genome} />
               <RemoveButton genome={genome} />
             </div>
           </div>

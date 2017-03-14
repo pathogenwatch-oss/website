@@ -1,2 +1,4 @@
-export const UPLOAD = 'UPLOAD';
+export const GENOMES_ALL = 'GENOMES_ALL';
+export const GENOMES_UPLOAD = 'GENOMES_UPLOAD';
+export const GENOMES_USER = 'GENOMES_USER';
 export const COLLECTION = 'COLLECTION';

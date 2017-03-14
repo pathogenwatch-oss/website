@@ -1,18 +1,18 @@
 import { createSelector } from 'reselect';
 
 import { getGenomeList } from '../selectors';
+import { getSelectedGenomes } from '../selection/selectors';
 
 export const getSelectedMetric = ({ genomes }) => genomes.selectedMetric;
 
 export const getGenomeMetrics = createSelector(
   getGenomeList,
-  genomes =>
-    genomes.reduce((memo, { id, name, metrics }) => {
-      if (!metrics) {
-        return memo;
-      }
-      return [ ...memo, { id, name, ...metrics } ];
-    }, [])
+  genomes => genomes.reduce((memo, { id, name, metrics }) => {
+    if (!metrics) {
+      return memo;
+    }
+    return [ ...memo, { id, name, ...metrics } ];
+  }, [])
 );
 
 function average(list, property) {
@@ -52,13 +52,18 @@ export const getMetricRange = createSelector(
   }), { min: 0, max: 0 })
 );
 
-export const getSelectedChartData = createSelector(
+export const getChartData = createSelector(
   getGenomeMetrics,
+  getSelectedGenomes,
   getSelectedMetric,
-  (metrics, selectedMetric) => metrics.map((_, i) => ({
-    key: i,
-    id: _.id,
-    name: _.name,
-    value: Number(_[selectedMetric]),
-  }))
+  (metrics, selection, selectedMetric) =>
+    metrics.reduce((memo, value, i) => {
+      memo[value.id in selection ? 'selected' : 'unselected'].push({
+        key: i,
+        id: value.id,
+        name: value.name,
+        value: Number(value[selectedMetric]),
+      });
+      return memo;
+    }, { selected: [], unselected: [] })
 );
