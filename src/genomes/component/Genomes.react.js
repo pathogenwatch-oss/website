@@ -50,10 +50,8 @@ const Compnent = React.createClass({
   },
 
   upload(newFiles) {
-    const { addFiles } = this.props;
-    addFiles(newFiles);
-    const { router } = this.context;
-    router.push('/genomes/upload');
+    this.props.addFiles(newFiles);
+    this.context.router.push('/genomes/upload');
   },
 
   renderEmptyMessage() {
@@ -89,8 +87,8 @@ const Compnent = React.createClass({
     );
   },
 
-  render() {
-    const { items, status, waiting } = this.props;
+  renderContent() {
+    const { items, status } = this.props;
 
     if (status === statuses.LOADING) {
       return (
@@ -112,12 +110,16 @@ const Compnent = React.createClass({
       return this.renderEmptyMessage();
     }
 
+    return this.props.children;
+  },
+
+  render() {
     return (
       <FileDragAndDrop onFiles={this.upload}>
-        { waiting && <ProgressBar indeterminate /> }
+        { this.props.waiting && <ProgressBar indeterminate /> }
         <div className="wgsa-hipster-style wgsa-filterable-view">
           <Summary />
-          {this.props.children}
+          {this.renderContent()}
         </div>
         <Filter />
         <SelectionDrawer />

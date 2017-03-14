@@ -57,8 +57,8 @@ const Summary = React.createClass({
       <FilterSummary className="wgsa-hub-summary">
         <div className="wgsa-button-group">
           <i className="material-icons" title="View">visibility</i>
-          <ViewSwitcher title="List" />
-          <ViewSwitcher view="grid" title="Grid" />
+          <ViewSwitcher title="Grid" />
+          <ViewSwitcher view="list" title="List" />
           <ViewSwitcher view="map" title="Map" />
           <ViewSwitcher view="stats" title="Stats" />
         </div>

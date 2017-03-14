@@ -28,10 +28,10 @@ export default (
         component={props => <Genomes {...props} prefilter={prefilter} />}
       >
         <IndexRoute
-          component={ListView}
+          component={GridView}
           header={<GenomeHeader />}
         />
-        <Route path="grid" component={GridView} />
+        <Route path="list" component={ListView} />
         <Route path="map"
           component={props => <MapView {...props} stateKey={`GENOMES_${prefilter.toUpperCase()}`} />}
         />

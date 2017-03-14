@@ -22,7 +22,9 @@ const ListItem = ({ item, onClick }) => {
             <span>&nbsp;</span> }
       </span>
       <Metadata genome={item} tableCell />
-      <AddToSelectionButton genome={item} />
+      <span onClick={e => e.stopPropagation()}>
+        <AddToSelectionButton genome={item} />
+      </span>
     </div>
   );
 };
