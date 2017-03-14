@@ -21,14 +21,14 @@ const Collections = React.createClass({
 
     if (prefilter === 'bin' && total === 0) {
       return (
-        <p className="wgsa-filterable-content wgsa-hub-big-message">
+        <p className="wgsa-hub-big-message">
           Nothing in the bin 👍
         </p>
       );
     }
 
     return (
-      <p className="wgsa-filterable-content wgsa-hub-big-message">
+      <p className="wgsa-hub-big-message">
         No matches.
       </p>
     );
