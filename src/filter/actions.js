@@ -25,6 +25,7 @@ export function update(stateKey, query) {
   return dispatch => {
     dispatch(updateFilter(stateKey, query));
     delete query.prefilter;
+    delete query.sort;
     updateQueryString(query);
   };
 }

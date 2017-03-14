@@ -9,7 +9,7 @@ import ChartTooltip from '../../chart-tooltip';
 import * as selectors from './selectors';
 
 import { showGenomeDrawer } from '../../genome-drawer';
-import { showMetric } from '../actions';
+import { showMetric } from './actions';
 
 const TooltipContent = ({ payload }) => {
   if (!payload) return null;

@@ -8,7 +8,7 @@ import { showToast } from '../../toast';
 
 export const CREATE_COLLECTION = createAsyncConstants('CREATE_COLLECTION');
 
-function createCollectionAction(files, metadata) {
+function requestCreateCollection(files, metadata) {
   const organismId = files[0].organismId;
   return {
     type: CREATE_COLLECTION,
@@ -25,7 +25,7 @@ export function createCollection() {
     const state = getState();
     const genomes = getSelectedGenomeList(state);
     const metadata = getCollectionMetadata(state);
-    dispatch(createCollectionAction(genomes, metadata)).
+    dispatch(requestCreateCollection(genomes, metadata)).
       catch(() => dispatch(
         showToast({
           message: 'Your collection could not be created at this time, please try again later.',

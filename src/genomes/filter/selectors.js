@@ -11,6 +11,7 @@ import { isSupported, taxIdMap } from '../../organisms';
 export const getFilter = state => filter.getFilter(state, { stateKey });
 
 export const getPrefilter = state => getFilter(state).prefilter;
+export const getSort = state => getFilter(state).sort;
 
 export const getSearchText = createSelector(
   getFilter,

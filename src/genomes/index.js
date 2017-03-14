@@ -14,9 +14,13 @@ export reducer from './reducer';
 import DefaultContent from '../header/DefaultContent.react';
 import { isAsideEnabled } from './uploads/selectors';
 
-const GenomeHeader = connect(
-  state => ({ asideEnabled: isAsideEnabled(state) })
-)(
+function mapStateToProps(state) {
+  return {
+    asideEnabled: isAsideEnabled(state),
+  };
+}
+
+const GenomeHeader = connect(mapStateToProps)(
   ({ asideEnabled }) => <DefaultContent asideEnabled={asideEnabled} />
 );
 

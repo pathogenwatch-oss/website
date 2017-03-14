@@ -5,6 +5,7 @@ import { Summary as FilterSummary, Totals } from '../../filter/viewing';
 import ProgressBar from '../../progress-bar';
 import ViewSwitcher from './ViewSwitcher.react';
 import ErrorSummary from '../uploads/ErrorSummary.react';
+import SortBy from './SortBy.react';
 
 import { getPrefilter } from '../filter/selectors';
 import * as uploads from '../uploads/selectors';
@@ -76,6 +77,7 @@ const Summary = React.createClass({
           <button className="mdl-button" onClick={this.props.onClearAll}>
             Clear
           </button> }
+        <SortBy />
       </FilterSummary>
     );
   },
