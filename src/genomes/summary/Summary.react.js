@@ -67,16 +67,16 @@ const Summary = React.createClass({
           total={this.props.totalGenomes}
           itemType="genome"
         />
-        <button
-          className="mdl-button mdl-button--primary"
-          onClick={this.props.onSelectAll}
-        >
-          Select All
-        </button>
-        { this.props.showClearAll &&
-          <button className="mdl-button" onClick={this.props.onClearAll}>
-            Clear
-          </button> }
+        { this.props.hasSelection ?
+            <button className="mdl-button" onClick={this.props.onClearAll}>
+              Clear Selection
+            </button> :
+            <button
+              className="mdl-button mdl-button--primary"
+              onClick={this.props.onSelectAll}
+            >
+              Select All
+            </button> }
         <SortBy />
       </FilterSummary>
     );
@@ -94,7 +94,7 @@ function mapStateToProps(state) {
     numVisibleGenomes: getTotalGenomes(state),
     totalGenomes: getTotal(state),
     status: getStatus(state),
-    showClearAll: getSelectedGenomeList(state).length > 0,
+    hasSelection: getSelectedGenomeList(state).length > 0,
   };
 }
 

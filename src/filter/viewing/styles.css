@@ -4,6 +4,7 @@
   font-size: 13px;
   height: 4rem;
   min-height: 4rem;
+  min-width: 800px;
   position: relative;
 }
 
@@ -16,13 +17,17 @@
   margin: 0;
 }
 
+.wgsa-filter-summary > :not(:first-child) {
+  margin-left: 16px;
+}
+
 .wgsa-filter-summary > :first-child {
   margin-left: 0;
 }
 
 .wgsa-filter-summary__count {
   font-size: 13px;
-  margin: 0 16px;
+  /*margin: 0 16px;*/
 }
 
 .wgsa-filter-summary__count > span {
