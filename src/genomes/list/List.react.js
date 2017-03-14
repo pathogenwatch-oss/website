@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import Grid from '../../grid';
-import GenomeCard from '../card';
+import ListItem from './ListItem.react';
 
 import { getGridItems } from '../selectors';
 
@@ -21,10 +21,12 @@ export const ListView = React.createClass({
 
     return (
       <Grid
-        template={GenomeCard}
+        className="wgsa-genome-list-view"
+        template={ListItem}
         items={items}
         columnCount={1}
-        rowHeight={64}
+        rowHeight={40}
+        rightMargin={64}
       />
     );
   },
