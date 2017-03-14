@@ -5,24 +5,40 @@ import { CardMetadata } from '../../card';
 import { formatDay, formatMonth } from '../../utils/Date';
 import { getCountryName } from '../../utils/country';
 
-function displayDate({ day, month, year }) {
-  if (!day && !month && !year) {
+function displayDate(data, isTableCell) {
+  if (isTableCell) {
+    return (
+      <CardMetadata>{data.year || ''}</CardMetadata>
+    );
+  }
+
+  if (!data.day && !data.month && !data.year) {
     return null;
   }
+
   return (
     <CardMetadata title="Date" icon="date_range">
-      {day ? `${formatDay(day)} ` : ''}
-      {month ? `${formatMonth(month)} ` : ''}
-      {year || ''}
+      {data.day ? `${formatDay(data.day)} ` : ''}
+      {data.month ? `${formatMonth(data.month)} ` : ''}
+      {data.year || ''}
     </CardMetadata>
   );
 }
 
-function displayCountry(country) {
+function displayCountry(country, isTableCell) {
+  const countryName = getCountryName(country);
+  if (isTableCell) {
+    return (
+      <CardMetadata>
+        <span title={countryName}>{countryName}</span>
+      </CardMetadata>
+    );
+  }
+
   if (!country) return null;
   return (
     <CardMetadata title="Country" icon="place">
-      <span>{getCountryName(country)}</span>
+      {countryName}
     </CardMetadata>
   );
 }
@@ -51,12 +67,12 @@ function displayAccessLevel(props) {
   );
 }
 
-export default ({ genome }) => {
+export default ({ genome, tableCell }) => {
   const { country, ...metadata } = genome;
   return (
     <div className="wgsa-card-content">
-      {displayCountry(country)}
-      {displayDate(metadata)}
+      {displayCountry(country, tableCell)}
+      {displayDate(metadata, tableCell)}
       {displayAccessLevel(genome)}
     </div>
   );

@@ -63,19 +63,19 @@ const Compnent = React.createClass({
       switch (prefilter) {
         case 'upload':
           return (
-            <p className="wgsa-filterable-content wgsa-hub-big-message">
+            <p className="wgsa-hub-big-message">
               Drag and drop files to begin.
             </p>
           );
         case 'bin':
           return (
-            <p className="wgsa-filterable-content wgsa-hub-big-message">
+            <p className="wgsa-hub-big-message">
               Nothing in the bin 👍
             </p>
           );
         default:
           return (
-            <p className="wgsa-filterable-content wgsa-hub-big-message">
+            <p className="wgsa-hub-big-message">
               Something went wrong. 😞
             </p>
           );
@@ -83,7 +83,7 @@ const Compnent = React.createClass({
     }
 
     return (
-      <p className="wgsa-filterable-content wgsa-hub-big-message">
+      <p className="wgsa-hub-big-message">
         No matches.
       </p>
     );
@@ -94,7 +94,7 @@ const Compnent = React.createClass({
 
     if (status === statuses.LOADING) {
       return (
-        <p className="wgsa-filterable-content wgsa-hub-big-message">
+        <p className="wgsa-hub-big-message">
           Loading... ⌛
         </p>
       );
@@ -102,7 +102,7 @@ const Compnent = React.createClass({
 
     if (status === statuses.ERROR) {
       return (
-        <p className="wgsa-filterable-content wgsa-hub-big-message">
+        <p className="wgsa-hub-big-message">
           Something went wrong. 😞
         </p>
       );
