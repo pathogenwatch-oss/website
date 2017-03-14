@@ -3,7 +3,7 @@ const Genome = require('models/genome');
 
 module.exports = function (props) {
   const { user, query = {} } = props;
-  const { skip = 0, limit = 0, searchText } = query;
+  const { skip = 0, limit = 0, searchText, sort = 'name' } = query;
   const { organismId, reference, owner, country, startDate, endDate } = query;
 
   const findQuery = Genome.getPrefilterCondition(props);
@@ -48,7 +48,7 @@ module.exports = function (props) {
       find(
         findQuery,
         null,
-        { skip: Number(skip), limit: Number(limit) }
+        { skip: Number(skip), limit: Number(limit), sort: { [sort]: 1 } }
       ).
       populate('_file').
       then(genomes => genomes.map(_ => _.toObject({ user })))
