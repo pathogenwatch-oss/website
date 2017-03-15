@@ -12,7 +12,7 @@ const getFiles = {
       populate('_file').
       then(genomes =>
         genomes.map(({ name, _file }) => ({ name, id: _file.fileId }))),
-  collectionGenome: ids =>
+  collection: ids =>
     CollectionGenome.
       find({ _id: { $in: ids } }, { fileId: 1, name: 1 }).
       then(genomes =>
@@ -24,5 +24,8 @@ module.exports = ({ type, ids }) => {
   if (!ids || !ids.length) throw new ServiceRequestError('Missing Ids');
 
   return getFiles[type](ids).
-    then(files => fastaStorage.archive(fastaStoragePath, files));
+    then(files => {
+      if (!files.length) throw new ServiceRequestError('No files found');
+      return fastaStorage.archive(fastaStoragePath, files);
+    });
 };
