@@ -1,8 +1,6 @@
 import React from 'react';
 import classnames from 'classnames';
 
-import DownloadIcon from './DownloadIcon.react';
-
 import { statuses } from './constants';
 
 export default React.createClass({
@@ -17,9 +15,6 @@ export default React.createClass({
     filename: React.PropTypes.string,
     onClick: React.PropTypes.func,
     label: React.PropTypes.string,
-    color: React.PropTypes.string,
-    isArchive: React.PropTypes.bool,
-    iconOnly: React.PropTypes.bool,
   },
 
   componentDidUpdate(previous) {
@@ -30,23 +25,14 @@ export default React.createClass({
   },
 
   render() {
-    const {
-      status, link, filename, onClick, label, color, isArchive, iconOnly,
-    } = this.props;
+    const { status, link, filename, onClick, label } = this.props;
 
-    const title = `Download ${label}`;
+    const title = this.props.title || `Download ${label}`;
     const classNames = classnames(
       'wgsa-download-button',
-      { 'mdl-button mdl-button--icon': iconOnly }
+      { 'mdl-button mdl-button--icon': !label }
     );
-
-    const icon = (
-      <DownloadIcon
-        status={status}
-        color={color}
-        isArchive={isArchive}
-      />
-    );
+    const icon = React.cloneElement(this.props.children, { status });
 
     return status === statuses.SUCCESS ? (
       <a ref={el => { this.link = el; }}
@@ -57,12 +43,17 @@ export default React.createClass({
         className={classNames}
       >
         {icon}
-        {!iconOnly && label}
+        {label}
       </a>
     ) : (
-      <button onClick={onClick} title={title} className={classNames}>
+      <button
+        onClick={onClick}
+        title={title}
+        className={classNames}
+        disabled={this.props.disabled}
+      >
         {icon}
-        {!iconOnly && <span>{label}</span>}
+        {label && <span>{label}</span>}
       </button>
     );
   },

@@ -2,23 +2,30 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import DownloadButton from './DownloadButton.react';
+import DownloadIcon from './DownloadIcon.react.js';
 
 import { getDownloadState } from './selectors';
 
 import { downloadGenomeArchive } from './actions';
 
 import { createGenomeArchiveLink } from './utils';
+import { CGPS } from '../app/constants';
+const { COLOURS } = CGPS;
 
-const Button = ({ status, link, filename, label, onClick }) => (
+const Button = ({ status, link, filename, title, onClick, disabled }) => (
   <DownloadButton
     status={status}
     link={link}
     filename={filename}
+    title={title}
     onClick={onClick}
-    label={label}
-    isArchive
-    iconOnly
-  />
+    disabled={disabled}
+  >
+    <DownloadIcon
+      isArchive
+      color={disabled ? COLOURS.GREY_DARK : COLOURS.PURPLE}
+    />
+  </DownloadButton>
 );
 
 Button.PropTypes = {

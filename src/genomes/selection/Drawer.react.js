@@ -32,9 +32,9 @@ const SelectionDrawer = React.createClass({
 
   getDownloadTitle() {
     if (this.props.disableDownload) {
-      return `A single archive cannot contain more than ${maxArchiveSize} genomes.`;
+      return `A single archive cannot contain more than ${maxArchiveSize} genomes at this time.`;
     }
-    return 'Download as archive';
+    return 'Download Selection';
   },
 
   render() {
@@ -51,8 +51,9 @@ const SelectionDrawer = React.createClass({
             <div className="wgsa-tab-actions">
               <GenomeArchiveButton
                 ids={this.props.selectedGenomeIds}
-                label="Selection"
                 filename="wgsa-genome-selection"
+                title={this.getDownloadTitle()}
+                disabled={disableDownload}
               />
             </div>
           </div>
