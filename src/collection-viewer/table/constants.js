@@ -1,7 +1,7 @@
 import React from 'react';
 
 import DownloadButton from '../downloads/DownloadButton.react';
-import { GenomeFileLink } from '../../download';
+import { GenomeFileLink } from '../../downloads';
 import { GenomeArchiveButton } from '../genome-download';
 
 import { getArchiveDownloadProps } from '../downloads/utils';

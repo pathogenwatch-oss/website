@@ -1,7 +1,9 @@
 import React from 'react';
 import classnames from 'classnames';
 
-import DownloadIcon from '../../downloads/DownloadIcon.react';
+import DownloadIcon from './DownloadIcon.react';
+
+import { statuses } from './constants';
 
 export default React.createClass({
 
@@ -21,45 +23,46 @@ export default React.createClass({
   },
 
   componentDidUpdate(previous) {
-    const { loading, link } = this.props;
-    if (previous.loading && (!loading && link)) {
-      this.refs.link.click();
+    const { status } = this.props;
+    if (previous.status === statuses.LOADING && status === statuses.SUCCESS) {
+      this.link.click();
     }
   },
 
   render() {
     const {
-      loading, error, description, link, filename,
-      onClick, label, color, isArchive, iconOnly,
+      status, link, filename, onClick, label, color, isArchive, iconOnly,
     } = this.props;
 
-    const title = `Download ${description}`;
+    const title = `Download ${label}`;
     const classNames = classnames(
       'wgsa-download-button',
       { 'mdl-button mdl-button--icon': iconOnly }
     );
 
-    return link ? (
-      <a ref="link"
+    const icon = (
+      <DownloadIcon
+        status={status}
+        color={color}
+        isArchive={isArchive}
+      />
+    );
+
+    return status === statuses.SUCCESS ? (
+      <a ref={el => { this.link = el; }}
         href={link || '#'}
         target="_blank" rel="noopener"
         download={filename}
         title={title}
         className={classNames}
       >
-          <DownloadIcon hasLink color={color} />
-          {!iconOnly && description}
+        {icon}
+        {!iconOnly && label}
       </a>
     ) : (
       <button onClick={onClick} title={title} className={classNames}>
-        <DownloadIcon
-          loading={loading}
-          error={error}
-          color={color}
-          label={label}
-          isArchive={isArchive}
-        />
-        {!iconOnly && <span>{description}</span>}
+        {icon}
+        {!iconOnly && <span>{label}</span>}
       </button>
     );
   },
