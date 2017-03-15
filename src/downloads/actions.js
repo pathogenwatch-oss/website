@@ -14,12 +14,14 @@ export function requestDownload(format, stateKey, promise) {
         promise,
       },
     })
-    .catch(() => dispatch(showToast({
-      message: 'Failed to generate download, please try again later.',
-    })));
+    .catch(error => console.error(error) ||
+      dispatch(showToast({
+        message: 'Failed to generate download, please try again later.',
+      }))
+    );
 }
 
-export function downloadGenomeArchive({ ids, type = 'genome' }) {
+export function downloadGenomeArchive(ids, type = 'genome') {
   return requestDownload(
     'genome_archive',
     JSON.stringify(ids),

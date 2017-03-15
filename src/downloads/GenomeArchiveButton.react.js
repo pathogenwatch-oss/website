@@ -41,9 +41,9 @@ function mapStateToProps(state, { ids, filename }) {
   return { status, link: createGenomeArchiveLink(result, filename) };
 }
 
-function mapDispatchToProps(dispatch, props) {
+function mapDispatchToProps(dispatch, { ids, type }) {
   return {
-    onClick: () => dispatch(downloadGenomeArchive(props)),
+    onClick: () => dispatch(downloadGenomeArchive(ids, type)),
   };
 }
 
