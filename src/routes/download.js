@@ -31,7 +31,7 @@ router.get('/file/:filename',
 );
 
 router.get('/genome/:id', (req, res, next) => {
-  const { user, params, query } = req;
+  const { user, params, query, sessionID } = req;
   const { id } = params;
   const { type } = query;
 
@@ -42,7 +42,7 @@ router.get('/genome/:id', (req, res, next) => {
 
   LOGGER.info(`Received request for fasta: ${id}`);
 
-  return services.request('genome', 'download', { user, type, id }).
+  return services.request('genome', 'download', { user, sessionID, type, id }).
     then(({ filePath, fileName }) => {
       res.set({
         'Content-Disposition': `attachment; filename="${fileName}"`,
@@ -54,11 +54,12 @@ router.get('/genome/:id', (req, res, next) => {
 });
 
 router.put('/genome-archive', (req, res, next) => {
+  const { user, sessionID } = req;
   const { type, ids } = req.body;
 
   LOGGER.info(`Received request for ${type} archive of ${ids.length} files`);
 
-  return services.request('download', 'create-genome-archive', { type, ids }).
+  return services.request('download', 'create-genome-archive', { user, sessionID, type, ids }).
     then(fileId => res.json({ fileId })).
     catch(next);
 });

@@ -8,9 +8,9 @@ function createFastaFileName(genomeName = 'file') {
     `${genomeName}.fasta`;
 }
 
-module.exports = function ({ id, user, type }) {
+module.exports = function ({ id, user, sessionID, type }) {
   return (
-    request('genome', 'fetch-one', { id, user, type })
+    request('genome', 'fetch-one', { id, user, sessionID, type })
       .then(genome => Promise.all([
         Promise.resolve(createFastaFileName(genome.name)),
         request('genome', 'file-path', { fileId: genome.fileId || genome._file.fileId }),
