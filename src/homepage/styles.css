@@ -1,0 +1,21 @@
+.jumbotron {
+  background-image: url('/images/worldmap.svg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 100%;
+  padding: 3.125% 0 6.25%;
+}
+
+.jumbotron img {
+  width: 480px;
+  margin: 0 auto;
+  display: block;
+  transform: translateX(-12.5%);
+}
+
+.jumbotron h1 {
+  color: #673c90;
+  font-size: 24px;
+  text-align: center;
+}

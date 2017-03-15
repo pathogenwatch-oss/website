@@ -1,8 +1,9 @@
 import React from 'react';
-import { Router, Route, browserHistory, Redirect, IndexRedirect } from 'react-router';
+import { Router, Route, browserHistory, Redirect } from 'react-router';
 
 import App from './App.react';
 
+import HomepageRoute from '../homepage';
 import { OrganismsRoute } from '../organisms';
 import AccountRoute from '../account';
 import CollectionsRoute from '../collections';
@@ -15,7 +16,7 @@ import NotFound from '../components/NotFound.react';
 export default () => (
   <Router history={browserHistory}>
     <Route path="/" component={App}>
-      <IndexRedirect to="organisms" />
+      {HomepageRoute}
       {OrganismsRoute}
       {AccountRoute}
       {CollectionsRoute}
