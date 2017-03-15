@@ -5,10 +5,12 @@
   background-position: center;
   width: 100%;
   padding: 3.125% 0 6.25%;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .jumbotron img {
-  width: 480px;
+  width: 400px;
   margin: 0 auto;
   display: block;
   transform: translateX(-12.5%);
