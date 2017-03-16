@@ -1,12 +1,5 @@
-const path = require('path');
-
 const { request } = require('services/bus');
-
-function createFastaFileName(genomeName = 'file') {
-  return path.extname(genomeName || '').length ?
-    genomeName :
-    `${genomeName}.fasta`;
-}
+const { createFastaFileName } = require('services/utils');
 
 module.exports = function ({ id, user, sessionID, type }) {
   return (

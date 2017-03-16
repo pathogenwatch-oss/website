@@ -1,3 +1,4 @@
+const path = require('path');
 
 module.exports.getSummary = function (model, summaryFields, props) {
   const prefilterCondition = model.getPrefilterCondition(props);
@@ -37,4 +38,10 @@ module.exports.getSummary = function (model, summaryFields, props) {
 
     return summary;
   });
+};
+
+module.exports.createFastaFileName = function (genomeName = 'file') {
+  const ext = path.extname(genomeName);
+  if (ext.length === 0) return `${genomeName}.fasta`;
+  return `${path.basename(genomeName, ext)}.fasta`;
 };
