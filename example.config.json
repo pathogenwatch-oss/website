@@ -23,8 +23,8 @@
 		}
 	},
 	"rabbit": {
-		"ip": "127.0.0.1",
-		"port": "5672",
+		"host": "",
+		"port": "",
 		"login": "",
 		"password": ""
 	},

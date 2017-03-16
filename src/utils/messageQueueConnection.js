@@ -4,13 +4,16 @@ const os = require('os');
 const appConfig = require('configuration');
 
 const LOGGER = require('utils/logging').createLogger('Message Queue');
-const CONNECTION_OPTIONS = {
-  host: appConfig.rabbit.ip,
-  port: appConfig.rabbit.port,
-  login: appConfig.rabbit.login,
-  password: appConfig.rabbit.password,
-  heartbeat: 60,
-};
+
+const {
+  host = 'localhost',
+  port = '5672',
+  login, password,
+  vhost = '/',
+  heartbeat = 60,
+} = appConfig.rabbit;
+
+const CONNECTION_OPTIONS = { host, port, login, password, vhost, heartbeat };
 const EXCHANGE_CONFIG = {
   COLLECTION_ID: {
     name: 'grid-ex',
