@@ -49,6 +49,7 @@ const schema = new Schema({
     genotyphi: {
       genotype: String,
       snps: Number,
+      foundLoci: Number,
     },
   },
 });
