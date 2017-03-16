@@ -10,14 +10,14 @@ const mongoConnection = require('utils/mongoConnection');
 const readMetadata = require('./read-metadata');
 
 const {
-  speciesId,
+  organismId,
   csvFile,
   fastaDir,
 } = argv.opts;
 
-console.log({ speciesId, csvFile, fastaDir });
+console.log({ organismId, csvFile, fastaDir });
 
-if (!speciesId || !csvFile || !fastaDir) {
+if (!organismId || !csvFile || !fastaDir) {
   console.log('Missing arguments');
   process.exit(1);
 }
@@ -37,8 +37,8 @@ function createGenome(metadata) {
 
 mongoConnection.connect().
   then(() => Promise.all([
-    Genome.remove({ speciesId, reference: true }),
-    Collection.remove({ uuid: speciesId, reference: true }), // for testing
+    Genome.remove({ organismId, reference: true }),
+    Collection.remove({ uuid: organismId, reference: true }), // for testing
   ])).
   then(() =>
     readMetadata(csvFile).
@@ -52,13 +52,13 @@ mongoConnection.connect().
   then(collectionGenomes =>
     Collection.create({
       size: collectionGenomes.length,
-      speciesId,
-      title: `temp ${speciesId} reference collection`,
+      organismId,
+      title: `temp ${organismId} reference collection`,
       reference: true,
     }).
     then(collection =>
       Promise.all([
-        collection.addUUID(speciesId),
+        collection.addUUID(organismId),
         request('collection', 'add-genomes', { collection, collectionGenomes }),
       ])
     )
