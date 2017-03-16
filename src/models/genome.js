@@ -77,7 +77,7 @@ schema.statics.updateMetadata = function (_id, _user, metadata) {
   }).then(({ nModified }) => ({ nModified, country }));
 };
 
-schema.statics.getPrefilterCondition = function ({ user, query, sessionID }) {
+schema.statics.getPrefilterCondition = function ({ user, query = {}, sessionID }) {
   const hasAccess = { $or: [ { public: true }, { _session: sessionID } ] };
   if (user) {
     hasAccess.$or.push({ _user: user._id });

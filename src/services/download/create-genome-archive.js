@@ -4,25 +4,37 @@ const { fastaStoragePath } = require('configuration');
 const Genome = require('models/genome');
 const CollectionGenome = require('models/collectionGenome');
 const { ServiceRequestError } = require('utils/errors');
+const { createFastaFileName } = require('services/utils');
 
 const getFiles = {
-  genome: ids =>
-    Genome.
-      find({ _id: { $in: ids } }, { _file: 1, name: 1 }).
-      populate('_file').
-      then(genomes =>
-        genomes.map(({ name, _file }) => ({ name, id: _file.fileId }))),
-  collectionGenome: ids =>
+  genome: (credentials, ids) => {
+    const query = Object.assign(
+      {}, Genome.getPrefilterCondition(credentials), { _id: { $in: ids } }
+    );
+    return (
+      Genome.
+        find(query, { _file: 1, name: 1 }).
+        populate('_file').
+        then(genomes =>
+          genomes.map(({ name, _file }) =>
+            ({ name: createFastaFileName(name), id: _file.fileId })))
+    );
+  },
+  collection: (_, ids) =>
     CollectionGenome.
       find({ _id: { $in: ids } }, { fileId: 1, name: 1 }).
       then(genomes =>
-        genomes.map(({ name, fileId }) => ({ name, id: fileId }))),
+        genomes.map(({ name, fileId }) =>
+          ({ name: createFastaFileName(name), id: fileId }))),
 };
 
-module.exports = ({ type, ids }) => {
+module.exports = ({ user, sessionID, type, ids }) => {
   if (!(type in getFiles)) throw new ServiceRequestError('Invalid type');
   if (!ids || !ids.length) throw new ServiceRequestError('Missing Ids');
 
-  return getFiles[type](ids).
-    then(files => fastaStorage.archive(fastaStoragePath, files));
+  return getFiles[type]({ user, sessionID }, ids).
+    then(files => {
+      if (files.length !== ids.length) throw new ServiceRequestError('Not all files found/accessible');
+      return fastaStorage.archive(fastaStoragePath, files);
+    });
 };

@@ -1,12 +1,26 @@
 const Genome = require('models/genome');
+const CollectionGenome = require('models/collectionGenome');
+const { ServiceRequestError } = require('utils/errors');
 
-module.exports = function ({ id, user }) {
-  return (
-    Genome.
-      findOne({
-        _id: id,
-        $or: (user ? [ { _user: user } ] : []).concat({ public: true }),
-      }).
-      populate('_file')
-  );
+const fetch = {
+  genome: (credentials, id) => {
+    const query = Object.assign(
+      {}, Genome.getPrefilterCondition(credentials), { _id: id }
+    );
+    return Genome.findOne(query).populate('_file');
+  },
+  collection: (_, id) =>
+    CollectionGenome.
+      findOne({ _id: id }),
+};
+
+module.exports = ({ user, sessionID, type = 'genome', id }) => {
+  if (!(type in fetch)) throw new ServiceRequestError('Invalid type');
+  if (!id) throw new ServiceRequestError('Missing Id');
+
+  return fetch[type]({ user, sessionID }, id).
+    then(record => {
+      if (!record) throw new ServiceRequestError('Not found or access denied.');
+      return record;
+    });
 };
