@@ -32,8 +32,8 @@
     "serve-favicon": "^2.2.0",
     "slug": "^0.9.1",
     "uuid": "^3.0.1",
-    "wgsa-fasta-store": "gitlab:cgps/wgsa-fasta-store#alpine",
-    "wgsa-front-end": "gitlab:cgps/wgsa-front-end#v5.3.0"
+    "wgsa-fasta-store": "gitlab:cgps/wgsa-fasta-store#v2.3.1",
+    "wgsa-front-end": "gitlab:cgps/wgsa-front-end#v5.4.0"
   },
   "devDependencies": {
     "eslint-config-cgps": "github:imperialcollegelondon/eslint-config-cgps",
