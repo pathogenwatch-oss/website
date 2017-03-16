@@ -23,7 +23,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(
   ({ isSelectable, isSelected, onClick }) => (
    isSelectable ? (
       <button
-        className="mdl-button mdl-button--icon mdl-js-ripple-effect mdl-button--primary"
+        className="mdl-button mdl-button--icon mdl-button--primary"
         onClick={onClick}
         title={ isSelected ? 'Remove from Selection' : 'Add to Selection' }
       >
