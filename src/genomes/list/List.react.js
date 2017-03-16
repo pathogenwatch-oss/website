@@ -24,7 +24,7 @@ export const ListView = React.createClass({
         className="wgsa-genome-list-view"
         template={ListItem}
         items={items}
-        columnCount={[ { minWidth: 1200, count: 2 } ]}
+        columnCount={1}
         rowHeight={40}
         rightMargin={48}
       />

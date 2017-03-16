@@ -31,11 +31,12 @@ export default (
           component={GridView}
           header={<GenomeHeader />}
         />
-        <Route path="list" component={ListView} />
+        <Route path="list" component={ListView} header={<GenomeHeader />} />
         <Route path="map"
           component={props => <MapView {...props} stateKey={`GENOMES_${prefilter.toUpperCase()}`} />}
+          header={<GenomeHeader />}
         />
-        <Route path="stats" component={StatsView} />
+        <Route path="stats" component={StatsView} header={<GenomeHeader />} />
       </Route>
     )}
     <Redirect from="*" to="all" />
