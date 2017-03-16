@@ -111,13 +111,16 @@
   margin-left: 8px;
 }
 
+.wgsa-card-metadata-inliner .wgsa-card-metadata::after {
+  display: none;
+}
+
 .wgsa-card-metadata-inliner .wgsa-card-metadata:first-child {
   margin-left: 0;
 }
 
 .wgsa-card-metadata-overview {
   float: right;
-
 }
 
 .wgsa-card-metadata-overview .wgsa-card-metadata {
