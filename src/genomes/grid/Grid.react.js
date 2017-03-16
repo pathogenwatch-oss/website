@@ -24,7 +24,7 @@ export const GridView = React.createClass({
         template={GenomeCard}
         items={items}
         columnWidth={256}
-        rowHeight={176}
+        rowHeight={160}
       />
     );
   },

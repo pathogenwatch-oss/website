@@ -21,19 +21,6 @@
   position: relative;
 }
 
-.wgsa-genome-list-item .wgsa-card-title::after,
-.wgsa-genome-list-item .wgsa-card-subtitle::after,
-.wgsa-genome-list-item .wgsa-card-metadata::after {
-  content: '';
-  background: linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(255,255,255,1) 75%);
-  width: 16px;
-  position: absolute;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  z-index: 1;
-}
-
 .wgsa-genome-list-item:hover *::after,
 .wgsa-genome-list-item:focus *::after {
   background: linear-gradient(to right, rgba(0,0,0,0) 0%, rgb(238,238,238) 75%);
@@ -42,7 +29,6 @@
 .wgsa-genome-list-item > .wgsa-card-title,
 .wgsa-genome-list-item > .wgsa-card-subtitle {
   width: 25%;
-  text-overflow: clip;
 }
 
 .wgsa-genome-list-item .wgsa-card-content {
