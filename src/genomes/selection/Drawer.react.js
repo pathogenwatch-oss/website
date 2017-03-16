@@ -24,10 +24,12 @@ function getSelectionTitle(selectedGenomes) {
 
 const SelectionDrawer = React.createClass({
 
+  componentDidMount() {
+    this.upgradeElements();
+  },
+
   componentDidUpdate() {
-    if (this.tabs) {
-      componentHandler.upgradeElement(this.tabs);
-    }
+    this.upgradeElements();
   },
 
   getDownloadTitle() {
@@ -35,6 +37,12 @@ const SelectionDrawer = React.createClass({
       return `A single archive cannot contain more than ${maxArchiveSize} genomes at this time.`;
     }
     return 'Download Selection';
+  },
+
+  upgradeElements() {
+    if (this.tabs) {
+      componentHandler.upgradeElement(this.tabs);
+    }
   },
 
   render() {

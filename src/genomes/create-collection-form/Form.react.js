@@ -42,7 +42,7 @@ const CreateCollectionForm = React.createClass({
     return (
       <form className="wgsa-create-collection-form" onSubmit={this.props.onSubmit}>
         <span className="wgsa-card-metadata-inliner wgsa-collection-summary">
-          <CardMetadata title="Organisms" icon="bug_report">
+          <CardMetadata title="Organism" icon="bug_report">
             {taxIdMap.get(organismId).formattedShortName}
           </CardMetadata>
           <CardMetadata icon="insert_drive_file">
