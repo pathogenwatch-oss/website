@@ -1,5 +1,5 @@
 const CollectionGenome = require('models/collectionGenome');
-const Species = require('models/species');
+const Organism = require('models/organism');
 const mainStorage = require('services/storage')('main');
 const { FP_RESULT } = require('utils/documentKeys');
 
@@ -16,7 +16,7 @@ module.exports = (name, { assemblyId, speciesId, documentKeys }) => {
   const resultDocKey = documentKeys.find(_ => _.indexOf(`${FP_RESULT}_`) === 0);
   return Promise.all([
     mainStorage.retrieve(resultDocKey),
-    Species.getLatest(speciesId),
+    Organism.getLatest(speciesId),
   ]).
     then(formatResult).
     then(result => CollectionGenome.addAnalysisResult(uuid, name, result));
