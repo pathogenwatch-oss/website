@@ -74,12 +74,20 @@ export function addDownloadProps(row, { downloads }, dispatch) {
 
 export function getArchiveDownloadProps(state, downloads, dispatch) {
   const { collection, data } = state; // not full state :/
-  return createPropsForDownloads(downloads, {
-    id: data.map(_ => _.uuid),
-    getFileName: () => formatCollectionFilename(collection),
-  }, dispatch);
+  const format = 'wgsa_gff';
+  return {
+    gff: createDownloadProps({
+      format,
+      download: downloads[format],
+      id: data.map(_ => _.id),
+      getFileName: () => formatCollectionFilename(collection),
+    }, dispatch),
+    genome: {
+      ids: data.map(_ => _.id),
+      filename: formatCollectionFilename(collection),
+    },
+  };
 }
-
 
 export function createDefaultLink(keyMap, filename) {
   const key = Object.keys(keyMap)[0];

@@ -59,7 +59,7 @@ const Index = React.createClass({
                     className="mdl-button mdl-button--primary wgsa-button--text"
                     to={`/organisms/${taxIdMap.get(organismId).nickname}`}
                   >
-                    Organisms Home
+                    Organism Home
                   </Link>
                 </footer>
               </div>

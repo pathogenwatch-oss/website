@@ -2,13 +2,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import Drawer from '../../drawer';
+import { GenomeArchiveButton } from '../../downloads';
 import CreateCollectionForm from '../create-collection-form';
 
-import { getSelectedGenomeList } from './selectors';
+import { getSelectedGenomeIds, getSelectedGenomeList } from './selectors';
 
 import { setSelection, unselectGenomes } from './actions';
 
-import { downloadGenomes } from './api';
 import config from '../../app/config';
 
 const { maxArchiveSize = 100 } = config;
@@ -32,9 +32,9 @@ const SelectionDrawer = React.createClass({
 
   getDownloadTitle() {
     if (this.props.disableDownload) {
-      return `Cannot download more than ${maxArchiveSize} genomes in a single archive.`;
+      return `A single archive cannot contain more than ${maxArchiveSize} genomes at this time.`;
     }
-    return 'Download as archive';
+    return 'Download Selection';
   },
 
   render() {
@@ -49,15 +49,12 @@ const SelectionDrawer = React.createClass({
             <a href="#create-collection-panel" className="mdl-tabs__tab is-active">Create Collection</a>
             <a href="#selection-panel" className="mdl-tabs__tab">Selection</a>
             <div className="wgsa-tab-actions">
-              <button
-                id="selection-drawer-actions"
-                className="mdl-button mdl-js-button mdl-button--icon mdl-button--primary"
+              <GenomeArchiveButton
+                ids={this.props.selectedGenomeIds}
+                filename="wgsa-genome-selection"
                 title={this.getDownloadTitle()}
                 disabled={disableDownload}
-                onClick={() => downloadGenomes(selectedGenomes)}
-              >
-                <i className="material-icons">file_download</i>
-              </button>
+              />
             </div>
           </div>
           <div className="mdl-tabs__panel is-active" id="create-collection-panel">
@@ -73,7 +70,7 @@ const SelectionDrawer = React.createClass({
                     className="mdl-chip__action"
                     onClick={() => removeGenome(genome)}
                   >
-                      <i className="material-icons">remove_circle_outline</i>
+                    <i className="material-icons">remove_circle_outline</i>
                   </button>
                 </span>
             )}
@@ -89,6 +86,7 @@ function mapStateToProps(state) {
   const selectedGenomes = getSelectedGenomeList(state);
   return {
     selectedGenomes,
+    selectedGenomeIds: getSelectedGenomeIds(state),
     disableDownload: selectedGenomes.length > maxArchiveSize,
   };
 }
