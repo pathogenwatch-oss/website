@@ -21,6 +21,7 @@ const EXCHANGE_CONFIG = {
     options: {
       passive: false,
       confirm: true,
+      durable: true,
     },
   },
   NOTIFICATION: {
@@ -29,6 +30,7 @@ const EXCHANGE_CONFIG = {
     options: {
       passive: false,
       confirm: true,
+      durable: true,
     },
   },
   SERVICES: {
@@ -37,6 +39,7 @@ const EXCHANGE_CONFIG = {
     options: {
       passive: false,
       confirm: true,
+      durable: true,
     },
   },
   TASK: {
@@ -45,6 +48,7 @@ const EXCHANGE_CONFIG = {
     options: {
       passive: false,
       confirm: true,
+      durable: true,
     },
   },
   UPLOAD: {
@@ -53,6 +57,7 @@ const EXCHANGE_CONFIG = {
     options: {
       passive: false,
       confirm: true,
+      durable: true,
     },
   },
 };
