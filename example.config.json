@@ -10,7 +10,7 @@
     }
 	},
 	"couchbase": {
-		"ip": "127.0.0.1",
+		"host": "127.0.0.1",
 		"buckets": {
 			"main": {
 				"name": "wgsa",
@@ -29,7 +29,7 @@
 		"password": ""
 	},
   "mongodb": {
-    "hostname": "localhost",
+    "host": "localhost",
     "port": 27017,
     "database": "wgsa",
     "replicaset": ""

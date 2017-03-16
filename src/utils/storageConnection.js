@@ -4,7 +4,7 @@ const appConfig = require('configuration');
 const LOGGER = require('utils/logging').createLogger('Storage');
 
 const DEFAULT_HOSTNAME = '127.0.0.1';
-const HOSTNAMES = appConfig.couchbase.ip || DEFAULT_HOSTNAME;
+const HOSTNAMES = appConfig.couchbase.host || DEFAULT_HOSTNAME;
 const ADDRESS = HOSTNAMES;
 // var ADDRESS = 'couchbase://' + HOSTNAMES;
 
