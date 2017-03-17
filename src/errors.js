@@ -21,7 +21,7 @@ module.exports = function handleErrors(app) {
   app.use((error, req, res, next) => {
     LOGGER.error(error);
 
-    if (error instanceof ServiceRequestError) {
+    if (ServiceRequestError.is(error)) {
       return res.sendStatus(400);
     }
 

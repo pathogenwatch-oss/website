@@ -26,7 +26,7 @@ router.get('/file/:filename',
 
         stream.pipe(res);
       }).
-      catch(error => next(error));
+      catch(next);
   }
 );
 
@@ -59,24 +59,27 @@ router.put('/genome-archive', (req, res, next) => {
 
   LOGGER.info(`Received request for ${type} archive of ${ids.length} files`);
 
-  return services.request('download', 'create-genome-archive', { user, sessionID, type, ids }).
-    then(fileId => res.json({ fileId })).
-    catch(next);
+  return services.request('download', 'create-genome-archive', { user, sessionID, type, ids })
+    .then(fileId => res.json({ fileId }))
+    .catch(next);
 });
 
-router.get('/genome-archive/:id', (req, res) => {
+router.get('/genome-archive/:id', (req, res, next) => {
+  const { user, sessionID } = req;
   const { id } = req.params;
   const { filename } = req.query;
 
   LOGGER.info(`Received request for fasta archive: ${id} ${filename}`);
 
-  res.set({
-    'Content-Disposition': `attachment;${filename ? ` filename="${filename}.zip"` : ''}`,
-    'Content-type': 'application/zip',
-  });
-
-  services.request('download', 'genome-archive-path', { id }).
-    then(archivePath => res.sendFile(archivePath));
+  services.request('download', 'genome-archive-path', { id, user, sessionID })
+    .then(archivePath =>
+      res.set({
+        'Content-Disposition': `attachment;${filename ? ` filename="${filename}.zip"` : ''}`,
+        'Content-type': 'application/zip',
+      })
+      .sendFile(archivePath)
+    )
+    .catch(next);
 });
 
 module.exports = router;
