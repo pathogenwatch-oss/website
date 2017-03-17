@@ -4,6 +4,7 @@
   font-size: 13px;
   height: 4rem;
   min-height: 4rem;
+  min-width: 640px;
   position: relative;
 }
 
@@ -23,6 +24,7 @@
 .wgsa-filter-summary__count {
   font-size: 13px;
   margin: 0 16px;
+  white-space: nowrap;
 }
 
 .wgsa-filter-summary__count > span {

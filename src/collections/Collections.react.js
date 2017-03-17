@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import Grid from '../grid';
 import Filter from './filter';
-import { Summary, Totals } from '../filter/viewing';
+import { Summary, Totals } from '../filter/summary';
 import CollectionCard from './CollectionCard.react';
 
 import { getCollectionList, getTotal } from './selectors';
