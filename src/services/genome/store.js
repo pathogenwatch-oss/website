@@ -12,10 +12,10 @@ function getGenomeFileDocument({ fileId, filePath }) {
     then(fasta => {
       if (fasta) return fasta;
       return processFasta(filePath).then(
-        ({ metrics, specieator: { taxId, scientificName } }) =>
+        ({ metrics, specieator: { speciesTaxId, scientificName } }) =>
           GenomeFile.create({
             fileId,
-            organismId: taxId,
+            organismId: speciesTaxId,
             organismName: scientificName,
             metrics,
           })
