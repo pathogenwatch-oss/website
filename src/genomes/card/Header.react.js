@@ -12,8 +12,8 @@ const Header = ({ genome, onClick }) => {
   const { name, organismId, organismName } = genome;
   return (
     <header className="wgsa-card-header" onClick={onClick}>
-      <h2 className="wgsa-card-title" title={name}>{name}</h2>
-      <p className="wgsa-card-subtitle">
+      <h2 className="wgsa-card-title wgsa-overflow-fade" title={name}>{name}</h2>
+      <p className="wgsa-card-subtitle wgsa-overflow-fade">
         { organismName ?
             <FormattedName
               organismId={organismId}
