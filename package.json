@@ -56,7 +56,8 @@
     "reference": "eval $npm_package_startcmd bin/create-reference-collection.js",
     "aggregator": "eval $npm_package_startcmd microservices/bootstrap.js aggregator | bunyan -o short",
     "repost": "eval $npm_package_startcmd bin/repost-aggregator-errors.js",
-    "metadata": "eval $npm_package_startcmd bin/update-collection-genomes.js"
+    "metadata": "eval $npm_package_startcmd bin/update-collection-genomes.js",
+    "migrate": "NODE_PATH=$npm_package_nodepath mm"
   },
   "repository": {
     "type": "git",
