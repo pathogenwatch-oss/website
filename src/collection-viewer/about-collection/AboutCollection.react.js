@@ -2,13 +2,14 @@ import './styles.css';
 
 import React from 'react';
 import classnames from 'classnames';
+import Markdown from 'react-markdown';
 
-export default ({ organisms, metadata, onButtonClick }) => (
+export default ({ organism, metadata, isOpen, onButtonClick }) => (
   <div
     className={classnames(
       'wgsa-about-collection-dropdown',
       'wgsa-header-dropdown wgsa-header-dropdown--right',
-      { 'wgsa-header-dropdown--is-open': this.props.isOpen }
+      { 'wgsa-header-dropdown--is-open': isOpen }
     )}
   >
     <button
@@ -22,10 +23,10 @@ export default ({ organisms, metadata, onButtonClick }) => (
       <h4 className="wgsa-about-collection-dropdown__title">
         {metadata.title || 'About Collection'}
       </h4>
-      <p>{metadata.description}</p>
+      <Markdown source={metadata.description} />
       <dl>
-        <dt className="wgsa-hub-stats-heading">Organisms</dt>
-        <dd className="wgsa-hub-stats-value">{organisms}</dd>
+        <dt className="wgsa-hub-stats-heading">Organism</dt>
+        <dd className="wgsa-hub-stats-value">{organism}</dd>
       </dl>
       <dl>
         <dt className="wgsa-hub-stats-heading">Created</dt>
