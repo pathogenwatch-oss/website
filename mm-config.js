@@ -1,9 +1,7 @@
-const config = require('./config.json');
+const { dbUrl } = require('./src/utils/mongoConnection.js');
 
 module.exports = {
-  host: config.mongodb.hostname,
-  port: config.mongodb.port,
-  db: config.mongodb.database,
+  url: dbUrl,
   collection: 'migrations',
   directory: 'migrations',
 };
