@@ -48,12 +48,22 @@ module.exports = message => {
   return Promise.all([
     createCollection(message),
     getGenomes(genomeIds),
-  ])
-  .then(([ collection, genomes ]) =>
-    request('backend', 'new-collection', { genomes, organismId })
-      .then(({ collectionId, collectionGenomes }) =>
-        collection.addUUID(collectionId)
-          .then(() => request('collection', 'submit', { collectionId: collection._id, collectionGenomes }))
-      )
-  );
+  ]).
+    then(([ collection, genomes ]) =>
+      request('backend', 'new-collection', { genomes, organismId }).
+        then(({ collectionId, collectionGenomes }) =>
+          Promise.all([
+            collection.addUUID(collectionId),
+            request('collection', 'add-genomes', { collection, collectionGenomes }),
+          ]).then(() => {
+            request('backend', 'submit', {
+              collectionId,
+              organismId,
+              collectionGenomes,
+            });
+            return { slug: collection.slug };
+          })
+        ).
+        catch(error => collection.failed(error))
+    );
 };

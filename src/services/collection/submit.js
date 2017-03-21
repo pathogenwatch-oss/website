@@ -5,7 +5,7 @@ const Collection = require('models/collection');
 module.exports = message => {
   const { collectionId, collectionGenomes } = message;
 
-  return Collection.findbyId(collectionId)
+  return Collection.findById(collectionId)
     .then(collection =>
       request('collection', 'add-genomes', { collection, collectionGenomes })
         .then(() => {

@@ -2,15 +2,13 @@ const Collection = require('models/collection');
 const { request } = require('services');
 
 function createGenome(metadata, getGenomeFile, reference) {
-  const { uuid } = metadata;
   const stream = getGenomeFile(metadata);
   return (
     request('genome', 'create', { stream, metadata, reference }).
       then(({ id }) =>
         request('genome', 'edit', { id, metadata }).
           then(() => request('genome', 'fetch-one', { id }))
-      ).
-      then(genome => ({ uuid, genome }))
+      )
   );
 }
 
