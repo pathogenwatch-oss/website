@@ -23,11 +23,11 @@ export function validateGenomeSize(file) {
   });
 }
 
-const regexp = /^([^\n]+\n)(?:[ACGTURYKMSWBDHVN]+\n*)+$/i;
+const regexp = /^([^\n]+\n)(?:[ACGTURYKMSWBDHVN]+\n)+$/i;
 
 export function validateGenomeContent(genomeContent) {
   const cleanContent = genomeContent.replace(/\r/g, '');
-  if (cleanContent.split(/\n>/).every((contig) => regexp.test(contig))) {
+  if (cleanContent.split(/>/).every(contig => regexp.test(contig.replace(/\n+$/, '\n')))) {
     return cleanContent;
   }
   throw genomeValidationErrors.INVALID_GENOME_CONTENT;
