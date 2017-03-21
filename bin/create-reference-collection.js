@@ -8,7 +8,7 @@ const CollectionGenome = require('models/collectionGenome');
 const { request } = require('services');
 const mongoConnection = require('utils/mongoConnection');
 
-const readMetadata = require('./read-metadata');
+const readCsv = require('./utils/read-csv');
 
 const {
   organismId,
@@ -39,14 +39,18 @@ function createGenome(metadata) {
 mongoConnection.connect().
   then(() => Promise.all([
     Genome.remove({ organismId, reference: true }),
-    Collection.find({ uuid: organismId, reference: true })
-      .then(collection => Promise.all([
-        collection.remove(),
-        CollectionGenome.remove({ _collection: collection._id }),
-      ])),
+    Collection.findOne({ uuid: organismId, reference: true })
+      .then(collection => (
+        collection ?
+          Promise.all([
+            collection.remove(),
+            CollectionGenome.remove({ _collection: collection._id }),
+          ]) :
+          Promise.resolve()
+        )),
   ])).
   then(() =>
-    readMetadata(csvFile).
+    readCsv(csvFile).
       then(rows => rows.reduce((memo, row) =>
         memo.then(genomes =>
           createGenome(row).then(genome => genomes.concat(genome))
