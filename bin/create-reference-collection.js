@@ -4,6 +4,7 @@ const path = require('path');
 
 const Collection = require('models/collection');
 const Genome = require('models/genome');
+const CollectionGenome = require('models/collectionGenome');
 const { request } = require('services');
 const mongoConnection = require('utils/mongoConnection');
 
@@ -38,7 +39,11 @@ function createGenome(metadata) {
 mongoConnection.connect().
   then(() => Promise.all([
     Genome.remove({ organismId, reference: true }),
-    Collection.remove({ uuid: organismId, reference: true }), // for testing
+    Collection.find({ uuid: organismId, reference: true })
+      .then(collection => Promise.all([
+        collection.remove(),
+        CollectionGenome.remove({ _collection: collection._id }),
+      ])),
   ])).
   then(() =>
     readMetadata(csvFile).
