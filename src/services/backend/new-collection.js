@@ -11,10 +11,10 @@ function mapUuidsToGenomes(uuids, genomes) {
       unusedIds.has(pair) && pair.checksum === genome._file.fileId
     );
     unusedIds.delete(idPair);
-    return {
-      uuid: idPair.uuid,
+    return [
+      idPair.uuid,
       genome,
-    };
+    ];
   });
 }
 
@@ -39,7 +39,7 @@ module.exports = ({ genomes }) => {
 
         resolve({
           collectionId,
-          collectionGenomes: mapUuidsToGenomes(assemblyIds, genomes),
+          uuidToGenome: mapUuidsToGenomes(assemblyIds, genomes),
         });
       });
 
