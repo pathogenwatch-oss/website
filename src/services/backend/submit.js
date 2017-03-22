@@ -1,8 +1,8 @@
 const messageQueueService = require('services/messageQueue');
 const services = require('services');
 
-module.exports = ({ collectionGenomes, collectionId, organismId }) => {
-  for (const { uuid, genome } of collectionGenomes) {
+module.exports = ({ organismId, collectionId, uuidToGenome }) => {
+  for (const [ uuid, genome ] of uuidToGenome) {
     services.request('genome', 'file-path', genome._file.toObject()).
       then(filePath => {
         const { fileId } = genome._file;

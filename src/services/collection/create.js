@@ -49,31 +49,29 @@ function getCollectionAndGenomes(message) {
   ]);
 }
 
-function getCollectionUUID(collection, genomes, { organismId, predefinedIds }) {
-  if (predefinedIds) {
-    const { collectionId, collectionGenomes } = predefinedIds;
-    return Promise.resolve({ collection, collectionId, collectionGenomes });
+function getCollectionUUID(genomes, { organismId, ids }) {
+  if (ids) {
+    const { collectionId, uuidToGenome } = ids;
+    return Promise.resolve({ collectionId, uuidToGenome });
   }
 
-  return (
-    request('backend', 'new-collection', { genomes, organismId })
-      .then(({ collectionId, collectionGenomes }) => ({ collection, collectionId, collectionGenomes }))
-  );
+  return request('backend', 'new-collection', { genomes, organismId });
 }
 
-function saveCollectionUUID({ collection, collectionId, collectionGenomes }) {
+function saveCollectionUUID({ collection, ids }) {
+  const { collectionId, uuidToGenome } = ids;
   return (
     Promise.all([
       collection.addUUID(collectionId),
-      request('collection', 'add-genomes', { collection, collectionGenomes }),
+      request('collection', 'add-genomes', { collection, uuidToGenome }),
     ])
-    .then(() => ({ collection, collectionGenomes }))
+    .then(() => ({ collection, uuidToGenome }))
   );
 }
 
-function submitCollection({ collection, collectionGenomes }) {
+function submitCollection({ collection, uuidToGenome }) {
   const { uuid, organismId } = collection;
-  return request('backend', 'submit', { collectionId: uuid, organismId, collectionGenomes });
+  return request('backend', 'submit', { organismId, collectionId: uuid, uuidToGenome });
 }
 
 module.exports = function (message) {
@@ -81,6 +79,7 @@ module.exports = function (message) {
     .then(getCollectionAndGenomes)
     .then(([ collection, genomes ]) =>
       getCollectionUUID(collection, genomes, message)
+        .then(ids => ({ collection, ids }))
         .then(saveCollectionUUID)
         .then(submitCollection)
         .then(() => ({ slug: collection.slug }))
