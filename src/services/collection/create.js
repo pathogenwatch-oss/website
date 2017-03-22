@@ -49,6 +49,15 @@ function getCollectionAndGenomes(message) {
   ]);
 }
 
+function checkGenomeOrganismIds([ collection, genomes ]) {
+  for (const genome of genomes) {
+    if (genome.organismId !== collection.organismId) {
+      throw new ServiceRequestError(`A ${collection.organismId} collection cannot include genome (id: ${genome.id}, organismId ${genome.organismId})`);
+    }
+  }
+  return [ collection, genomes ];
+}
+
 function getCollectionUUID(genomes, { organismId, ids }) {
   if (ids) {
     const { collectionId, uuidToGenome } = ids;
@@ -77,6 +86,7 @@ function submitCollection({ collection, uuidToGenome }) {
 module.exports = function (message) {
   return Promise.resolve(message)
     .then(getCollectionAndGenomes)
+    .then(checkGenomeOrganismIds)
     .then(([ collection, genomes ]) =>
       getCollectionUUID(genomes, message)
         .then(ids => ({ collection, ids }))
