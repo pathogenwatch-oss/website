@@ -78,11 +78,14 @@ module.exports = function (message) {
   return Promise.resolve(message)
     .then(getCollectionAndGenomes)
     .then(([ collection, genomes ]) =>
-      getCollectionUUID(collection, genomes, message)
+      getCollectionUUID(genomes, message)
         .then(ids => ({ collection, ids }))
         .then(saveCollectionUUID)
         .then(submitCollection)
         .then(() => ({ slug: collection.slug }))
-        .catch(error => collection.failed(error))
+        .catch(error => {
+          collection.failed(error);
+          throw error;
+        })
     );
 };
