@@ -12,9 +12,10 @@ const storeGenomes = require('./store-genomes');
 const {
   organismId,
   collectionId,
+  apiUrl = 'http://www.wgsa.net/api',
 } = argv.opts;
 
-console.log({ organismId, collectionId });
+console.log({ organismId, collectionId, apiUrl });
 
 if (!organismId || !collectionId) {
   LOGGER.error('Missing arguments');
@@ -22,11 +23,19 @@ if (!organismId || !collectionId) {
 }
 
 function getCollectionUrl() {
-  return `http://www.wgsa.net/api/species/${organismId}/collection/${collectionId}`;
+  return `${apiUrl}/species/${organismId}/collection/${collectionId}`;
+}
+
+function getDownloadUrl() {
+  return `${apiUrl}/species/${organismId}/download/type/assembly/format/fasta`;
+}
+
+function getGenomeFileUrl(id) {
+  return `${apiUrl}/species/${organismId}/download/file/${id}?prettyFileName=file`;
 }
 
 function getJson(url) {
-  LOGGER.info('GET', url)
+  LOGGER.info('GET', url);
   return new Promise((resolve, reject) =>
     request(url, (error, response, body) => {
       if (error) {
@@ -74,7 +83,7 @@ function fetchAndUnzip(uri, filename) {
   return new Promise((resolve, reject) =>
     request({ uri, encoding: null }, (error, response, body) => {
       if (error) return reject(error);
-      resolve(
+      return resolve(
         jszip.loadAsync(body)
           .then(zip => zip.file(filename).nodeStream())
       );
@@ -84,12 +93,9 @@ function fetchAndUnzip(uri, filename) {
 
 function getGenomeFile({ assemblyId, name }) {
   return (
-    postJson('http://www.wgsa.net/api/species/1280/download/type/assembly/format/fasta', { idList: [ assemblyId ] })
+    postJson(getDownloadUrl(), { idList: [ assemblyId ] })
       .then(response => Object.keys(response)[0])
-      .then(id => fetchAndUnzip(
-        `http://www.wgsa.net/api/species/1280/download/file/${id}?prettyFileName=file`,
-        `${name}.fa`
-      ))
+      .then(id => fetchAndUnzip(getGenomeFileUrl(id), `${name}.fa`))
   );
 }
 
@@ -97,7 +103,7 @@ function createCollection(genomes) {
   return services.request('collection', 'create', { organismId, genomeIds: genomes.map(_ => _.id) });
 }
 
-module.exports = function ({ mqConnection }) {
+module.exports = function () {
   return Promise.resolve()
     .then(getCollectionUrl)
     .then(getCollectionJson)
