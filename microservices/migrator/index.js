@@ -99,8 +99,35 @@ function getGenomeFile({ assemblyId, name }) {
   );
 }
 
-function createCollection(genomes) {
-  return services.request('collection', 'create', { organismId, genomeIds: genomes.map(_ => _.id) });
+function createCollectionListDocument(uuidToGenome) {
+  console.dir(uuidToGenome);
+  const couchbase = require('services/storage')('main');
+  const documentKey = `CL_${collectionId}`;
+  return couchbase.store(documentKey, {
+    type: 'CL',
+    documentKey,
+    assemblyIdentifiers:
+      uuidToGenome.map(([ uuid, genome ]) => ({
+        uuid,
+        checksum: genome._file.fileId,
+      })),
+  });
+}
+
+function createCollection(uuidToGenome) {
+  return (
+    createCollectionListDocument(uuidToGenome)
+      .then(() =>
+        services.request('collection', 'create', {
+          organismId,
+          genomeIds: uuidToGenome.map(([ , genome ]) => genome.id),
+          ids: {
+            collectionId,
+            uuidToGenome,
+          },
+        })
+      )
+  );
 }
 
 module.exports = function () {

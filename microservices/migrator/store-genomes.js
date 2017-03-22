@@ -15,9 +15,12 @@ function createGenome(metadata, getGenomeFile) {
 
 module.exports = function (genomes, getGenomeFile) {
   return genomes.reduce((memo, row) =>
-    memo.then(_ =>
+    memo.then(previous =>
       createGenome(row, getGenomeFile)
-        .then(genome => _.concat(genome))
+        .then(genome => {
+          previous.push([ row.assemblyId, genome ]);
+          return previous;
+        })
     ),
     Promise.resolve([])
   );
