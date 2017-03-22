@@ -1,24 +1,25 @@
 const fs = require('fs');
 
-const regexp = /^([^\n]+\n)(?:[ACGTURYKMSWBDHVN]+\n)+$/i;
+const sequenceDataRegex = /^[ACGTURYKMSWBDHVN]+$/i;
+const ignoreLineRegex = /^>|^;/;
 
-function validateGenomeContent(genomeContent, filename) {
+function validateGenomeContent(genomeContent) {
   const cleanContent = genomeContent.replace(/\r/g, '');
-  const contigs = cleanContent.split(/>/);
-  for (let i = 0; i < contigs.length; i++) {
-    const contig = contigs[i];
-    const valid = regexp.test(contig.replace(/\n+$/, '\n'));
-    console.log(
-      `Contig ${i + 1} (${filename}):`, valid ? '✅ Passed.' : '😢 failed.'
-    );
-    // if (!valid) {
-    //   console.dir(contig);
-    // }
+  const lines = cleanContent.split('\n');
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    if (line.length === 0 || ignoreLineRegex.test(line)) continue;
+    if (!sequenceDataRegex.test(line)) {
+      console.error('Invalid sequence data at line', i);
+      // throw genomeValidationErrors.INVALID_GENOME_CONTENT;
+    }
   }
+  return cleanContent;
 }
 
 const dir = process.argv[2];
 const files = fs.readdirSync(dir);
+// const files = [ dir ];
 
 process.chdir(dir);
 
