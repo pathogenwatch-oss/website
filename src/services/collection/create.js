@@ -42,28 +42,48 @@ function getGenomes(ids) {
     populate('_file');
 }
 
-module.exports = message => {
-  const { genomeIds, organismId } = message;
-
+function getCollectionAndGenomes(message) {
   return Promise.all([
     createCollection(message),
-    getGenomes(genomeIds),
-  ]).
-    then(([ collection, genomes ]) =>
-      request('backend', 'new-collection', { genomes, organismId }).
-        then(({ collectionId, collectionGenomes }) =>
-          Promise.all([
-            collection.addUUID(collectionId),
-            request('collection', 'add-genomes', { collection, collectionGenomes }),
-          ]).then(() => {
-            request('backend', 'submit', {
-              collectionId,
-              organismId,
-              collectionGenomes,
-            });
-            return { slug: collection.slug };
-          })
-        ).
-        catch(error => collection.failed(error))
+    getGenomes(message.genomeIds),
+  ]);
+}
+
+function getCollectionUUID(collection, genomes, { organismId, predefinedIds }) {
+  if (predefinedIds) {
+    const { collectionId, collectionGenomes } = predefinedIds;
+    return Promise.resolve({ collection, collectionId, collectionGenomes });
+  }
+
+  return (
+    request('backend', 'new-collection', { genomes, organismId })
+      .then(({ collectionId, collectionGenomes }) => ({ collection, collectionId, collectionGenomes }))
+  );
+}
+
+function saveCollectionUUID({ collection, collectionId, collectionGenomes }) {
+  return (
+    Promise.all([
+      collection.addUUID(collectionId),
+      request('collection', 'add-genomes', { collection, collectionGenomes }),
+    ])
+    .then(() => ({ collection, collectionGenomes }))
+  );
+}
+
+function submitCollection({ collection, collectionGenomes }) {
+  const { uuid, organismId } = collection;
+  return request('backend', 'submit', { collectionId: uuid, organismId, collectionGenomes });
+}
+
+module.exports = function (message) {
+  return Promise.resolve(message)
+    .then(getCollectionAndGenomes)
+    .then(([ collection, genomes ]) =>
+      getCollectionUUID(collection, genomes, message)
+        .then(saveCollectionUUID)
+        .then(submitCollection)
+        .then(() => ({ slug: collection.slug }))
+        .catch(error => collection.failed(error))
     );
 };
