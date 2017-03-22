@@ -29,7 +29,7 @@ function displayCountry(country, isTableCell) {
   const countryName = getCountryName(country);
   if (isTableCell) {
     return (
-      <CardMetadata>
+      <CardMetadata fadeOverflow>
         <span title={countryName}>{countryName}</span>
       </CardMetadata>
     );
@@ -37,7 +37,7 @@ function displayCountry(country, isTableCell) {
 
   if (!country) return null;
   return (
-    <CardMetadata title="Country" icon="place">
+    <CardMetadata fadeOverflow title="Country" icon="place">
       {countryName}
     </CardMetadata>
   );
