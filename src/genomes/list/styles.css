@@ -72,6 +72,7 @@
   font-weight: 500;
   outline: none;
   padding: 0;
+  line-height: 20px;
 }
 
 .wgsa-genome-list-header .active {

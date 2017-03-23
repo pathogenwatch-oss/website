@@ -46,7 +46,7 @@ function displayCountry(country, isTableCell) {
 function displayAccessLevel(props) {
   if (props.reference) {
     return (
-      <CardMetadata title="Access" icon="book">
+      <CardMetadata fadeOverflow title="Access" icon="book">
         Reference
       </CardMetadata>
     );
@@ -54,14 +54,14 @@ function displayAccessLevel(props) {
 
   if (props.public) {
     return (
-      <CardMetadata title="Access" icon="language">
+      <CardMetadata fadeOverflow title="Access" icon="language">
         Public
       </CardMetadata>
     );
   }
 
   return (
-    <CardMetadata title="Access" icon="lock_outline">
+    <CardMetadata fadeOverflow title="Access" icon="lock_outline">
       Private
     </CardMetadata>
   );
