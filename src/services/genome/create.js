@@ -21,13 +21,13 @@ function createGenomeDocument({ name, uploadedAt }, reference, { user, sessionID
   );
 }
 
-module.exports = ({ stream, metadata, reference, user, sessionID }) => {
+module.exports = ({ timeout$, stream, metadata, reference, user, sessionID }) => {
   if (!stream) {
     return Promise.reject(new ServiceRequestError('No stream provided'));
   }
 
   return (
-    request('genome', 'store', { stream })
+    request('genome', 'store', { timeout$, stream })
       .then(genomeFileDoc =>
         createGenomeDocument(metadata, reference, { user, sessionID }, genomeFileDoc)
       )
