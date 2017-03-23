@@ -37,7 +37,7 @@ export default (
         />
         <Route path="list" component={ListView} header={<GenomeHeader />} />
         <Route path="map"
-          component={props => <MapView {...props} stateKey={`GENOMES_${prefilter.toUpperCase()}`} />}
+          component={props => <MapView {...props} stateKey={`GENOME_${prefilter.toUpperCase()}`} />}
           header={<GenomeHeader />}
         />
         <Route path="stats" component={StatsView} header={<GenomeHeader />} />
