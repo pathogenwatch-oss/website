@@ -29,6 +29,7 @@ export const ListView = React.createClass({
         rowHeight={40}
         rightMargin={48}
         header={<Header />}
+        headerHeight={25}
       />
     );
   },

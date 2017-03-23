@@ -5,7 +5,6 @@ import { Summary as FilterSummary, Totals } from '../../filter/summary';
 import ProgressBar from '../../progress-bar';
 import ViewSwitcher from './ViewSwitcher.react';
 import ErrorSummary from '../uploads/ErrorSummary.react';
-import SortBy from './SortBy.react';
 
 import { getPrefilter } from '../filter/selectors';
 import * as uploads from '../uploads/selectors';
@@ -78,7 +77,6 @@ const Summary = React.createClass({
             >
               Select All
             </button> }
-        <SortBy />
       </FilterSummary>
     );
   },

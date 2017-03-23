@@ -28,12 +28,11 @@ export default function (state = {}, { type, payload }) {
           applyFilterValue(state[payload.stateKey], payload),
       };
     case CLEAR_FILTER: {
-      const { prefilter, sort } = state[payload.stateKey];
+      const { prefilter } = state[payload.stateKey];
       return {
         ...state,
         [payload.stateKey]: {
           prefilter,
-          sort,
         },
       };
     }

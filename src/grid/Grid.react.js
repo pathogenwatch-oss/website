@@ -61,7 +61,7 @@ export default React.createClass({
   },
 
   render() {
-    const { template, items } = this.props;
+    const { template, items, headerHeight = 0 } = this.props;
     return (
       <div className={classnames('wgsa-content-margin-left', this.props.className)}>
         {this.props.header}
@@ -85,7 +85,7 @@ export default React.createClass({
                 rowCount={Math.ceil(items.length / columnCount)}
                 rowHeight={this.getRowHeight(columnWidth)}
                 width={width}
-                height={height}
+                height={height - headerHeight}
               />
             );
           }}
