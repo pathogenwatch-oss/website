@@ -100,7 +100,6 @@ function getGenomeFile({ assemblyId, name }) {
 }
 
 function createCollectionListDocument(uuidToGenome) {
-  console.dir(uuidToGenome);
   const couchbase = require('services/storage')('main');
   const documentKey = `CL_${collectionId}`;
   return couchbase.store(documentKey, {
@@ -135,7 +134,7 @@ module.exports = function () {
     .then(getCollectionUrl)
     .then(getCollectionJson)
     .then(parseGenomes)
-    .then(genomes => storeGenomes(genomes, getGenomeFile, LOGGER))
+    .then(genomes => storeGenomes(genomes, getGenomeFile, {}, LOGGER))
     .then(createCollection)
     .then(result => {
       LOGGER.info(result);

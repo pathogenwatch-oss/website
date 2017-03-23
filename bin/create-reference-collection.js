@@ -42,7 +42,7 @@ mongoConnection.connect()
         )),
   ]))
   .then(() => readCsv(csvFile))
-  .then(rows => storeGenomes(rows, getGenomeFile))
+  .then(rows => storeGenomes(rows, getGenomeFile, { reference: true }))
   .then(uuidToGenome =>
     Collection.create({
       size: uuidToGenome.length,
@@ -57,6 +57,6 @@ mongoConnection.connect()
       ])
     )
   )
-  .then(() => process.exit(0)).
-  catch(console.error)
+  .then(() => process.exit(0))
+  .catch(console.error)
     .then(() => process.exit(1));
