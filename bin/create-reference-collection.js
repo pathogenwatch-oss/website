@@ -8,7 +8,8 @@ const CollectionGenome = require('models/collectionGenome');
 const { request } = require('services');
 const mongoConnection = require('utils/mongoConnection');
 
-const readCsv = require('./utils/read-csv');
+const readCsv = require('../utils/read-csv');
+const storeGenomes = require('../utils/store-genomes');
 
 const {
   organismId,
@@ -23,21 +24,12 @@ if (!organismId || !csvFile || !fastaDir) {
   process.exit(1);
 }
 
-function createGenome(metadata) {
-  const { filename, uuid } = metadata;
-  const stream = fs.createReadStream(path.join(fastaDir, filename));
-  return (
-    request('genome', 'create', { stream, metadata, reference: true }).
-      then(({ id }) =>
-        request('genome', 'edit', { id, metadata }).
-          then(() => request('genome', 'fetch-one', { id }))
-      ).
-      then(genome => ({ uuid, genome }))
-  );
+function getGenomeFile({ filename }) {
+  return Promise.resolve(fs.createReadStream(path.join(fastaDir, filename)));
 }
 
-mongoConnection.connect().
-  then(() => Promise.all([
+mongoConnection.connect()
+  .then(() => Promise.all([
     Genome.remove({ organismId, reference: true }),
     Collection.findOne({ uuid: organismId, reference: true })
       .then(collection => (
@@ -48,30 +40,23 @@ mongoConnection.connect().
           ]) :
           Promise.resolve()
         )),
-  ])).
-  then(() =>
-    readCsv(csvFile).
-      then(rows => rows.reduce((memo, row) =>
-        memo.then(genomes =>
-          createGenome(row).then(genome => genomes.concat(genome))
-        ),
-        Promise.resolve([])
-      ))
-  ).
-  then(uuidToGenome =>
+  ]))
+  .then(() => readCsv(csvFile))
+  .then(rows => storeGenomes(rows, getGenomeFile))
+  .then(uuidToGenome =>
     Collection.create({
       size: uuidToGenome.length,
       organismId,
       title: `temp ${organismId} reference collection`,
       reference: true,
-    }).
-    then(collection =>
+    })
+    .then(collection =>
       Promise.all([
         collection.addUUID(organismId),
         request('collection', 'add-genomes', { collection, uuidToGenome }),
       ])
     )
-  ).
-  then(() => process.exit(0)).
-  catch(console.error).
-    then(() => process.exit(1));
+  )
+  .then(() => process.exit(0)).
+  catch(console.error)
+    .then(() => process.exit(1));

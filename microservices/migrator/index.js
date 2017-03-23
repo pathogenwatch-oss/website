@@ -7,7 +7,7 @@ const jszip = require('jszip');
 
 const services = require('services');
 
-const storeGenomes = require('./store-genomes');
+const storeGenomes = require('../../utils/store-genomes');
 
 const {
   organismId,
@@ -73,7 +73,7 @@ function parseGenomes({ assemblies }) {
       year, month, day,
       latitude, longitude,
       userDefined,
-      assemblyId,
+      uuid: assemblyId,
     };
   });
 }
