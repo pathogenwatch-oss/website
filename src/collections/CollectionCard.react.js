@@ -21,7 +21,7 @@ export default ({ item }) => (
       </CardMetadata>
     </span>
     { item.title ?
-      <Markdown containerTagName="h2" className="wgsa-card-title" source={item.title} renderers={renderers} /> :
+      <Markdown containerTagName="h2" className="wgsa-card-title wgsa-overflow-fade" source={item.title} renderers={renderers} /> :
       <h2 className="wgsa-card-title">{'(Untitled Collection)'}</h2>
     }
     <p className="wgsa-card-subtitle">
