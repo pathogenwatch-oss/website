@@ -6,7 +6,7 @@
 }
 
 .wgsa-card--bordered {
-  border-top: 1px solid color(#a386bd tint(25%));
+  border-top: 1px solid rgba(0, 0, 0, 0.28);
   padding: 16px 0;
 }
 

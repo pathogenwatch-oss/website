@@ -10,9 +10,9 @@ import { showGenomeDrawer } from '../../genome-drawer';
 const ListItem = ({ item, onClick }) => {
   const { name, organismId, organismName } = item;
   return (
-    <div className="wgsa-genome-list-item wgsa-card--bordered" onClick={onClick} title="View Details">
-      <span className="wgsa-card-title wgsa-overflow-fade" title={name}>{name}</span>
-      <span className="wgsa-card-subtitle wgsa-overflow-fade">
+    <div className="wgsa-genome-list-item wgsa-genome-list-item--selectable wgsa-card--bordered" onClick={onClick} title="View Details">
+      <span className="wgsa-overflow-fade" title={name}>{name}</span>
+      <span className="wgsa-overflow-fade">
         { organismName ?
             <FormattedName
               organismId={organismId}

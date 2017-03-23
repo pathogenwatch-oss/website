@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import Grid from '../../grid';
 import ListItem from './ListItem.react';
+import Header from './Header.react';
 
 import { getGridItems } from '../selectors';
 
@@ -27,6 +28,7 @@ export const ListView = React.createClass({
         columnCount={1}
         rowHeight={40}
         rightMargin={48}
+        header={<Header />}
       />
     );
   },
