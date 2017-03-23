@@ -58,9 +58,9 @@ mongoConnection.connect().
         Promise.resolve([])
       ))
   ).
-  then(collectionGenomes =>
+  then(uuidToGenome =>
     Collection.create({
-      size: collectionGenomes.length,
+      size: uuidToGenome.length,
       organismId,
       title: `temp ${organismId} reference collection`,
       reference: true,
@@ -68,7 +68,7 @@ mongoConnection.connect().
     then(collection =>
       Promise.all([
         collection.addUUID(organismId),
-        request('collection', 'add-genomes', { collection, collectionGenomes }),
+        request('collection', 'add-genomes', { collection, uuidToGenome }),
       ])
     )
   ).

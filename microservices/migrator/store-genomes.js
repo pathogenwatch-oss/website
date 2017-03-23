@@ -13,15 +13,18 @@ function createGenome(metadata, getGenomeFile) {
   );
 }
 
-module.exports = function (genomes, getGenomeFile) {
-  return genomes.reduce((memo, row) =>
-    memo.then(previous =>
-      createGenome(row, getGenomeFile)
-        .then(genome => {
-          previous.push([ row.assemblyId, genome ]);
-          return previous;
-        })
-    ),
+module.exports = function (genomes, getGenomeFile, LOGGER) {
+  return genomes.reduce(
+    (memo, row, i) => {
+      LOGGER.info(`Genome ${i + 1} of ${genomes.length}`);
+      return memo.then(previous =>
+        createGenome(row, getGenomeFile)
+          .then(genome => {
+            previous.push([ row.assemblyId, genome ]);
+            return previous;
+          })
+        );
+    },
     Promise.resolve([])
   );
 };

@@ -135,7 +135,7 @@ module.exports = function () {
     .then(getCollectionUrl)
     .then(getCollectionJson)
     .then(parseGenomes)
-    .then(genomes => storeGenomes(genomes, getGenomeFile))
+    .then(genomes => storeGenomes(genomes, getGenomeFile, LOGGER))
     .then(createCollection)
     .then(result => {
       LOGGER.info(result);
