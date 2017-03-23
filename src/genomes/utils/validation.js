@@ -1,38 +1,39 @@
-import CONFIG from '../../app/config';
+import config from '../../app/config';
 
-export const genomeValidationErrors = {
-  INVALID_GENOME_SIZE: 'INVALID_GENOME_SIZE',
-  INVALID_GENOME_CONTENT: 'INVALID_GENOME_CONTENT',
-  EMPTY_FILE: 'EMPTY_FILE',
-};
+export function InvalidGenomeError(message) {
+  this.message = message;
+}
 
-export const genomeValidationErrorSet =
-  new Set(Object.keys(genomeValidationErrors));
-
-const MAX_GENOME_FILE_SIZE = CONFIG.maxGenomeFileSize * 1048576;
+const MAX_GENOME_FILE_SIZE = config.maxGenomeFileSize * 1048576;
 
 export function validateGenomeSize(file) {
   return new Promise((resolve, reject) => {
     if (file.size === 0) {
-      reject(genomeValidationErrors.EMPTY_FILE);
+      reject(new InvalidGenomeError('This is an empty file.'));
     } else if (file.size > MAX_GENOME_FILE_SIZE) {
-      reject(genomeValidationErrors.INVALID_GENOME_SIZE);
+      reject(new InvalidGenomeError(`This file is larger than ${config.maxGenomeFileSize} MB.`));
     } else {
       resolve(file);
     }
   });
 }
 
-const regexp = /^([^\n]+\n)(?:[ACGTURYKMSWBDHVN]+\n*)+$/i;
+const sequenceDataRegex = /^[ACGTURYKMSWBDHVN]+$/i;
+const ignoreLineRegex = /^>|^;/;
 
 export function validateGenomeContent(genomeContent) {
   const cleanContent = genomeContent.replace(/\r/g, '');
-  if (cleanContent.split(/\n>/).every((contig) => regexp.test(contig))) {
-    return cleanContent;
+  const lines = cleanContent.split('\n');
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    if (line.length === 0 || ignoreLineRegex.test(line)) continue;
+    if (!sequenceDataRegex.test(line)) {
+      throw new InvalidGenomeError(`Invalid sequence data at line ${i + 1}`);
+    }
   }
-  throw genomeValidationErrors.INVALID_GENOME_CONTENT;
+  return cleanContent;
 }
 
 export function isFailedUpload({ error }) {
-  return error && !genomeValidationErrorSet.has(error);
+  return error && !error instanceof InvalidGenomeError;
 }

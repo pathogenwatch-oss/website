@@ -64,6 +64,7 @@ export default React.createClass({
     const { template, items } = this.props;
     return (
       <div className={classnames('wgsa-content-margin-left', this.props.className)}>
+        {this.props.header}
         <AutoSizer>
           {({ height, width }) => {
             const columnCount = this.getColumnCount(width);

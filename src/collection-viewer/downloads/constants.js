@@ -1,7 +1,5 @@
 import * as clientSide from './client-side';
 
-import { createGenomeArchiveLink } from '../genome-download';
-
 import Organisms from '../../organisms';
 
 export const fileTypes = {
@@ -74,11 +72,6 @@ export const fileTypes = {
   score_matrix: {
     description: 'Score Matrix',
     filenameSegment: 'score_matrix',
-  },
-  genome_archive: {
-    createLink: createGenomeArchiveLink,
-    filenameSegment: 'genomes',
-    hideFromMenu: () => true,
   },
   wgsa_gff: {
     description: 'Annotations',

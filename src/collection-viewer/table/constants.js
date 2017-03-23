@@ -1,7 +1,8 @@
 import React from 'react';
 
 import DownloadButton from '../downloads/DownloadButton.react';
-import { GenomeFileLink, GenomeArchiveButton } from '../genome-download';
+import { GenomeFileLink } from '../../downloads';
+import { GenomeArchiveButton } from '../../downloads';
 
 import { getArchiveDownloadProps } from '../downloads/utils';
 
@@ -55,9 +56,14 @@ export const downloadColumnProps = {
   getHeaderContent({ archiveDownloads }) {
     return (
       <span className="wgsa-table-downloads" onClick={(e) => e.stopPropagation()}>
-        <GenomeArchiveButton />
+        <GenomeArchiveButton
+          ids={archiveDownloads.genome.ids}
+          type="collection"
+          filename={archiveDownloads.genome.filename}
+          title="Download Genomes"
+        />
         <DownloadButton
-          {...archiveDownloads.wgsa_gff}
+          {...archiveDownloads.gff}
           isArchive
           color={CGPS.COLOURS.GREEN}
           iconOnly
@@ -71,7 +77,7 @@ export const downloadColumnProps = {
   getCellContents(_, { __downloads, id, name }) {
     return (
       <span className="wgsa-table-downloads" onClick={(e) => e.stopPropagation()}>
-        <GenomeFileLink id={id} name={name} />
+        <GenomeFileLink id={id} name={name} type="collection" />
         <DownloadButton
           { ...__downloads.wgsa_gff }
           label=".gff"

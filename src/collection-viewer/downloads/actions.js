@@ -13,7 +13,7 @@ export function setMenuActive(active) {
   };
 }
 
-export const REQUEST_DOWNLOAD = createAsyncConstants('REQUEST_DOWNLOAD');
+export const REQUEST_DOWNLOAD = createAsyncConstants('REQUEST_DOWNLOAD_OLD');
 
 export function requestDownload(args) {
   const {

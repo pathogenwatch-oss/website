@@ -2,11 +2,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import Grid from '../../grid';
-import GenomeCard from '../card';
+import ListItem from './ListItem.react';
+import Header from './Header.react';
 
 import { getGridItems } from '../selectors';
 
-export const GridView = React.createClass({
+export const ListView = React.createClass({
 
   propTypes: {
     items: React.PropTypes.array,
@@ -21,10 +22,13 @@ export const GridView = React.createClass({
 
     return (
       <Grid
-        template={GenomeCard}
+        className="wgsa-genome-list-view"
+        template={ListItem}
         items={items}
-        columnWidth={256}
-        rowHeight={160}
+        columnCount={1}
+        rowHeight={40}
+        rightMargin={48}
+        header={<Header />}
       />
     );
   },
@@ -37,4 +41,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(GridView);
+export default connect(mapStateToProps)(ListView);
