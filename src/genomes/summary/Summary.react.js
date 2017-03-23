@@ -67,16 +67,17 @@ const Summary = React.createClass({
           total={this.props.totalGenomes}
           itemType="genome"
         />
-        { this.props.hasSelection ?
-            <button className="mdl-button" onClick={this.props.onClearAll}>
-              Clear Selection
-            </button> :
-            <button
-              className="mdl-button mdl-button--primary"
-              onClick={this.props.onSelectAll}
-            >
-              Select All
-            </button> }
+        <button
+          className="mdl-button mdl-button--primary"
+          onClick={this.props.onSelectAll}
+        >
+          Select All
+        </button>
+        { this.props.hasSelection &&
+          <button className="mdl-button" onClick={this.props.onClearAll}>
+            Clear Selection
+          </button>
+        }
       </FilterSummary>
     );
   },
