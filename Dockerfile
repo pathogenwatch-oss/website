@@ -1,7 +1,9 @@
 FROM node:7.4.0-alpine
 
 COPY ./node_modules/mash-node-native/scripts /tmp/
-RUN sh /tmp/install-build-dependencies.sh && \
+RUN http_proxy=http://wwwcache.sanger.ac.uk:3128 \
+    http_proxy=http://wwwcache.sanger.ac.uk:3128 \
+    sh /tmp/install-build-dependencies.sh && \
     sh /tmp/install-dependencies-alpine.sh && \
     sh /tmp/remove-build-dependencies.sh
 
@@ -19,4 +21,5 @@ RUN apk add --no-cache --virtual couchbase-deps \
 
 ENV NODE_PATH=/opt/wgsa/middle-end/src \
     NODE_ENV=production
+
 CMD [ "node", "start.js" ]
