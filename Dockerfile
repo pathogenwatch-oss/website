@@ -1,9 +1,7 @@
 FROM node:7.4.0-alpine
 
 COPY ./node_modules/mash-node-native/scripts /tmp/
-RUN http_proxy=http://wwwcache.sanger.ac.uk:3128 \
-    http_proxy=http://wwwcache.sanger.ac.uk:3128 \
-    sh /tmp/install-build-dependencies.sh && \
+RUN sh /tmp/install-build-dependencies.sh && \
     sh /tmp/install-dependencies-alpine.sh && \
     sh /tmp/remove-build-dependencies.sh
 

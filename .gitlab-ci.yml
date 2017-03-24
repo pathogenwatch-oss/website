@@ -11,5 +11,5 @@ build:
     - curl https://gitlab.com/cgps/mash-node-native/raw/master/scripts/install-build-dependencies.sh | sh
     - npm install --production
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
-    - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME .
+    - docker build --build-arg http_proxy=$http_proxy --build-arg https_proxy=$https_proxy -t $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME .
     - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
