@@ -5,9 +5,10 @@ build:
     - tags
   script:
     - docker ps >> /dev/null
-    - apk add --update git nodejs
+    - apk add --update git nodejs python curl
     - git config --global url.https://gitlab-ci-token:$CI_JOB_TOKEN@gitlab.com/.insteadOf git://gitlab.com/
     - git config --global url.https://gitlab-ci-token:$CI_JOB_TOKEN@gitlab.com/cgps.insteadOf git@gitlab.com:cgps
+    - curl https://gitlab.com/cgps/mash-node-native/raw/master/scripts/install-build-dependencies.sh | sh
     - npm install --production
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
     - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME .
