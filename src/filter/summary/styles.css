@@ -15,10 +15,7 @@
 
 .wgsa-filter-summary > * {
   margin: 0;
-}
-
-.wgsa-filter-summary > :not(:first-child) {
-  margin-left: 16px;
+  margin-right: 8px;
 }
 
 .wgsa-filter-summary > :first-child {
@@ -27,7 +24,8 @@
 
 .wgsa-filter-summary__count {
   font-size: 13px;
-  margin: 0 16px;
+  margin-left: 8px;
+  margin-right: 8px;
   white-space: nowrap;
 }
 
