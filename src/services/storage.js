@@ -17,7 +17,10 @@ function store(key, value, callback) {
     })
   ).
   then(cas => (callback ? callback(null, cas) : cas)).
-  catch(error => (callback ? callback(error) : error));
+  catch(error => {
+    if (callback) callback(error);
+    throw error;
+  });
 }
 
 function retrieve(key, callback) {
@@ -32,7 +35,10 @@ function retrieve(key, callback) {
     })
   ).
   then(value => (callback ? callback(null, value) : value)).
-  catch(error => (callback ? callback(error) : error));
+  catch(error => {
+    if (callback) callback(error);
+    throw error;
+  });
 }
 
 function retrieveMany(keys, callback) {
@@ -59,7 +65,10 @@ function retrieveMany(keys, callback) {
     then(value =>
       (callback ? callback(null, value) : value)
     ).
-    catch(error => (callback ? callback(error) : error));
+    catch(error => {
+      if (callback) callback(error);
+      throw error;
+    });
 }
 
 Storage.prototype.store = store;
