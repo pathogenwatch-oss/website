@@ -91,9 +91,9 @@ function fetchAndUnzip(uri, filename) {
   );
 }
 
-function getGenomeFile({ assemblyId, name }) {
+function getGenomeFile({ uuid, name }) {
   return (
-    postJson(getDownloadUrl(), { idList: [ assemblyId ] })
+    postJson(getDownloadUrl(), { idList: [ uuid ] })
       .then(response => Object.keys(response)[0])
       .then(id => fetchAndUnzip(getGenomeFileUrl(id), `${name}.fa`))
   );

@@ -15,16 +15,15 @@ function createGenome(metadata, getGenomeFile, options) {
 
 module.exports = function (genomes, getGenomeFile, options, LOGGER) {
   return genomes.reduce(
-    (memo, row, i) => {
-      if (LOGGER) LOGGER.info(`Genome ${i + 1} of ${genomes.length}`);
-      return memo.then(previous =>
+    (memo, row, i) =>
+      memo.then(previous =>
         createGenome(row, getGenomeFile, options)
           .then(genome => {
             previous.push([ row.uuid, genome ]);
+            if (LOGGER) LOGGER.info(`Genome ${i + 1} of ${genomes.length}`);
             return previous;
           })
-        );
-    },
+        ),
     Promise.resolve([])
   );
 };
