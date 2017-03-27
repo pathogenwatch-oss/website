@@ -76,13 +76,13 @@ const Details = React.createClass({
           <div className="mdl-cell mdl-cell--3-col">
             <div className="wgsa-section-divider">
               <h3 className="wgsa-section-title">Collections</h3>
-              <Link className="wgsa-figure" to="account/collections" title="Browse collections">
+              <Link className="wgsa-figure" to={`/collections/all?organismId=${organismId}`} title="Browse Collections">
                 {totalCollections}
               </Link>
             </div>
             <div className="wgsa-section-divider">
               <h3 className="wgsa-section-title">Genomes</h3>
-              <Link className="wgsa-figure" to="account/genomes" title="Browse genomes">
+              <Link className="wgsa-figure" to={`/genomes/all?organismId=${organismId}`} title="Browse Genomes">
                 {totalGenomes}
               </Link>
             </div>
