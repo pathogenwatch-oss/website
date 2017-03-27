@@ -2,6 +2,7 @@
 # App config
 ###################
 config.json
+version.json
 
 ###################
 # SSL
