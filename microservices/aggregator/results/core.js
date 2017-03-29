@@ -2,10 +2,9 @@ const CollectionGenome = require('models/collectionGenome');
 const mainStorage = require('services/storage')('main');
 const { CORE_RESULT } = require('utils/documentKeys');
 
-module.exports = (name, { assemblyId, documentKeys }) => {
+module.exports = (name, { assemblyId }) => {
   const { uuid } = assemblyId;
-  const resultDocKey = documentKeys.find(_ => _.indexOf(`${CORE_RESULT}_`) === 0);
-  return mainStorage.retrieve(resultDocKey).
+  return mainStorage.retrieve(`${CORE_RESULT}_${uuid}`).
     then(result => ({
       size: result.kernelSize,
       percentMatched: result.percentKernelMatched,
