@@ -59,7 +59,8 @@
     "repost": "eval $npm_package_startcmd bin/repost-aggregator-errors.js",
     "metadata": "eval $npm_package_startcmd bin/update-collection-genomes.js",
     "mongo-migrate": "NODE_PATH=$npm_package_nodepath mm",
-    "migrate-collection": "eval $npm_package_startcmd microservices/bootstrap.js migrator"
+    "migrate-collection": "eval $npm_package_startcmd microservices/bootstrap.js migrator",
+    "rerun-collection": "eval $npm_package_startcmd microservices/bootstrap.js rerunner"
   },
   "repository": {
     "type": "git",
