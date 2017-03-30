@@ -1,7 +1,8 @@
 import React from 'react';
 
 import DownloadButton from '../downloads/DownloadButton.react';
-import { GenomeFileLink, GenomeArchiveButton } from '../genome-download';
+import { GenomeFileLink } from '../../downloads';
+import { GenomeArchiveButton } from '../../downloads';
 
 import { getArchiveDownloadProps } from '../downloads/utils';
 
@@ -9,7 +10,7 @@ import { defaultWidthGetter } from './columnWidth';
 
 import { tableKeys } from '../constants';
 import { CGPS } from '../../app/constants';
-import Species from '../../species';
+import Organisms from '../../organisms';
 
 export const dataTables = new Set([
   tableKeys.metadata,
@@ -55,9 +56,14 @@ export const downloadColumnProps = {
   getHeaderContent({ archiveDownloads }) {
     return (
       <span className="wgsa-table-downloads" onClick={(e) => e.stopPropagation()}>
-        <GenomeArchiveButton />
+        <GenomeArchiveButton
+          ids={archiveDownloads.genome.ids}
+          type="collection"
+          filename={archiveDownloads.genome.filename}
+          title="Download Genomes"
+        />
         <DownloadButton
-          {...archiveDownloads.wgsa_gff}
+          {...archiveDownloads.gff}
           isArchive
           color={CGPS.COLOURS.GREEN}
           iconOnly
@@ -71,7 +77,7 @@ export const downloadColumnProps = {
   getCellContents(_, { __downloads, id, name }) {
     return (
       <span className="wgsa-table-downloads" onClick={(e) => e.stopPropagation()}>
-        <GenomeFileLink id={id} name={name} />
+        <GenomeFileLink id={id} name={name} type="collection" />
         <DownloadButton
           { ...__downloads.wgsa_gff }
           label=".gff"
@@ -128,7 +134,7 @@ export const nameColumnProps = {
         <div onClick={(e) => e.stopPropagation()}>
           { data.__isPublic && data.collectionId ?
             <a className="mdl-button mdl-button--icon"
-              href={`/${Species.nickname}/collection/${data.collectionId}`}
+              href={`/${Organisms.nickname}/collection/${data.collectionId}`}
               title="View Original Collection"
               target="_blank" rel="noopener"
             >

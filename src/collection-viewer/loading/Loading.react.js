@@ -8,7 +8,7 @@ import Spinner from '../../components/Spinner.react';
 
 import { statuses } from '../constants';
 
-import Species from '../../species';
+import Organisms from '../../organisms';
 import { CGPS } from '../../app/constants';
 
 const backgroundStyle = {
@@ -56,9 +56,9 @@ export const LoadSpinner = React.createClass({
 const fatalTasks = new Set([ 'CORE', 'FP' ]);
 
 function getFailedGenomes(errors) {
-  return errors.reduce((memo, { taskType, genomeName }) => {
+  return errors.reduce((memo, { taskType, name }) => {
     if (fatalTasks.has(taskType)) {
-      memo.push(genomeName);
+      memo.push(name);
     }
     return memo;
   }, []);
@@ -85,7 +85,7 @@ function getStatusMessage({ collection }) {
       <p className="mdl-typography--title">
         Please upload your files again.
       </p>,
-      <Link to={`/${Species.nickname}/upload`} className="mdl-button mdl-button--raised">Go Back</Link>,
+      <Link to={`/${Organisms.nickname}/upload`} className="mdl-button mdl-button--raised">Go Back</Link>,
     ];
   }
   if (status === statuses.FAILED) {
@@ -94,9 +94,9 @@ function getStatusMessage({ collection }) {
     return [
       <h1>We're sorry, something went wrong.</h1>,
       totalFail ? <p className="mdl-typography--title">All {size} genomes were rejected.</p> : null,
-      !totalFail && failedGenomes.length ? <p className="mdl-typography--title">{failedGenomes.length} of {size} genomes were rejected:</p> : null,
+      !totalFail && failedGenomes.length ? <p className="mdl-typography--title">{failedGenomes.length} {failedGenomes.length === 1 ? 'genome was' : 'genomes were'} rejected:</p> : null,
       !totalFail && failedGenomes.length ? <ul className="wgsa-failed-genomes">{failedGenomes.map(genomeName => <li key={genomeName}>{genomeName}</li>)}</ul> : null,
-      <Link to={`/${Species.nickname}/upload`} className="mdl-button mdl-button--raised">Try Again</Link>,
+      <Link to={`/${Organisms.nickname}/upload`} className="mdl-button mdl-button--raised">Try Again</Link>,
     ];
   }
 }

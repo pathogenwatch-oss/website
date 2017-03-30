@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import LocationListener from '../../location';
 import FilterAside from '../../filter/aside';
-import SummarySection from '../../filter/summary-section';
+import AsideSection from '../../filter/aside-section';
 import * as filter from '../../filter';
 
 import { stateKey } from './index';
@@ -34,13 +34,13 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       textValue={searchText}
       textOnChange={e => updateFilter('searchText', e.target.value)}
     >
-      <SummarySection
-        filterKey="speciesId"
-        heading="Species"
-        summary={filterSummary.species}
+      <AsideSection
+        filterKey="organismId"
+        heading="Organisms"
+        summary={filterSummary.organism}
         updateFilter={updateFilter}
       />
-      <SummarySection
+      <AsideSection
         filterKey="owner"
         heading="Owner"
         summary={filterSummary.owner}

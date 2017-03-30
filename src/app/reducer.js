@@ -1,27 +1,29 @@
 import { combineReducers } from 'redux';
 
-import { reducer as viewer } from '../collection-viewer';
 import { reducer as collections } from '../collections';
+import { reducer as downloads } from '../downloads';
 import { reducer as filters } from '../filter';
 import { reducer as genomeDrawer } from '../genome-drawer';
 import { reducer as genomes } from '../genomes';
 import { reducer as header } from '../header';
 import { reducer as location } from '../location/';
 import { reducer as maps } from '../map';
-import { reducer as species } from '../species';
+import { reducer as organisms } from '../organisms';
 import { reducer as toast } from '../toast';
 import { reducer as summary } from '../summary';
+import { reducer as viewer } from '../collection-viewer';
 
 export default combineReducers({
-  genomeDrawer,
-  viewer,
   collections,
+  downloads,
   filters,
   header,
+  genomeDrawer,
   genomes,
   location,
   maps,
-  species,
+  organisms,
   toast,
   summary,
+  viewer,
 });

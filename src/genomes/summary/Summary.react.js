@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Summary as FilterSummary, Totals } from '../../filter/viewing';
+import { Summary as FilterSummary, Totals } from '../../filter/summary';
 import ProgressBar from '../../progress-bar';
 import ViewSwitcher from './ViewSwitcher.react';
 import ErrorSummary from '../uploads/ErrorSummary.react';
@@ -10,6 +10,9 @@ import { getPrefilter } from '../filter/selectors';
 import * as uploads from '../uploads/selectors';
 import { getTotalGenomes, getStatus } from '../selectors';
 import { getTotal } from './selectors';
+import { getSelectedGenomeList } from '../selection/selectors';
+
+import { selectAll, setSelection } from '../selection/actions';
 
 import { statuses } from '../constants';
 
@@ -27,10 +30,6 @@ const Summary = React.createClass({
 
   render() {
     const { status, completedUploads, batchSize, prefilter } = this.props;
-
-    if (status !== statuses.OK || this.props.visibleGenomes === 0) {
-      return <FilterSummary />;
-    }
 
     if (prefilter === 'upload') {
       if (this.props.isUploading) {
@@ -50,19 +49,35 @@ const Summary = React.createClass({
       }
     }
 
+    if (status !== statuses.OK || this.props.numVisibleGenomes === 0) {
+      return <FilterSummary />;
+    }
+
     return (
       <FilterSummary className="wgsa-hub-summary">
         <div className="wgsa-button-group">
           <i className="material-icons" title="View">visibility</i>
           <ViewSwitcher title="Grid" />
+          <ViewSwitcher view="list" title="List" />
           <ViewSwitcher view="map" title="Map" />
           <ViewSwitcher view="stats" title="Stats" />
         </div>
         <Totals
-          visible={this.props.visibleGenomes}
+          visible={this.props.numVisibleGenomes}
           total={this.props.totalGenomes}
           itemType="genome"
         />
+        <button
+          className="mdl-button mdl-button--primary"
+          onClick={this.props.onSelectAll}
+        >
+          Select All
+        </button>
+        { this.props.hasSelection &&
+          <button className="mdl-button" onClick={this.props.onClearAll}>
+            Clear Selection
+          </button>
+        }
       </FilterSummary>
     );
   },
@@ -76,10 +91,18 @@ function mapStateToProps(state) {
     batchSize: uploads.getBatchSize(state),
     completedUploads: uploads.getNumCompletedUploads(state),
     totalErroredUploads: uploads.getTotalErrors(state),
-    visibleGenomes: getTotalGenomes(state),
+    numVisibleGenomes: getTotalGenomes(state),
     totalGenomes: getTotal(state),
     status: getStatus(state),
+    hasSelection: getSelectedGenomeList(state).length > 0,
   };
 }
 
-export default connect(mapStateToProps)(Summary);
+function mapDispatchToProps(dispatch) {
+  return {
+    onSelectAll: () => dispatch(selectAll()),
+    onClearAll: () => dispatch(setSelection([])),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Summary);

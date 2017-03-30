@@ -1,7 +1,7 @@
 import { utils } from 'phylocanvas';
 
 import { getColumnLabel } from '../table/utils';
-import Species from '../../species';
+import Organisms from '../../organisms';
 import { POPULATION } from '../../app/stateKeys/tree';
 import { leafStyles, titles } from './constants';
 
@@ -39,7 +39,7 @@ const TREE_LABELS_SUFFIX = 'tree_labels.txt';
 export function getFilenames(title, collectionId, column) {
   const formattedTitle = title.toLowerCase();
   const formattedColumnLabel = getColumnLabel(column).toLowerCase();
-  const PREFIX = `wgsa_${Species.nickname}_${collectionId}_${formattedTitle}`;
+  const PREFIX = `wgsa_${Organisms.nickname}_${collectionId}_${formattedTitle}`;
   return {
     image: `${PREFIX}_tree.png`,
     leafLabels:

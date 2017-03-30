@@ -75,3 +75,8 @@ export const isAsideEnabled = createSelector(
     return true;
   }
 );
+
+export const isRetryable = createSelector(
+  getFailedUploads,
+  failures => !!failures.length
+);

@@ -1,8 +1,6 @@
 import * as clientSide from './client-side';
 
-import { createGenomeArchiveLink } from '../genome-download';
-
-import Species from '../../species';
+import Organisms from '../../organisms';
 
 export const fileTypes = {
   metadata_csv: {
@@ -35,7 +33,7 @@ export const fileTypes = {
     getFileContents: clientSide.generateAMRProfile,
     createLink: clientSide.createCSVLink,
     hideFromMenu() {
-      const { uiOptions = {} } = Species.current;
+      const { uiOptions = {} } = Organisms.current;
       return uiOptions.noAMR;
     },
   },
@@ -45,7 +43,7 @@ export const fileTypes = {
     getFileContents: clientSide.generateAMRSNPs,
     createLink: clientSide.createCSVLink,
     hideFromMenu() {
-      const { uiOptions = {} } = Species.current;
+      const { uiOptions = {} } = Organisms.current;
       return uiOptions.noAMR;
     },
   },
@@ -55,7 +53,7 @@ export const fileTypes = {
     getFileContents: clientSide.generateAMRGenes,
     createLink: clientSide.createCSVLink,
     hideFromMenu() {
-      const { uiOptions = {} } = Species.current;
+      const { uiOptions = {} } = Organisms.current;
       return uiOptions.noAMR;
     },
   },
@@ -74,11 +72,6 @@ export const fileTypes = {
   score_matrix: {
     description: 'Score Matrix',
     filenameSegment: 'score_matrix',
-  },
-  genome_archive: {
-    createLink: createGenomeArchiveLink,
-    filenameSegment: 'genomes',
-    hideFromMenu: () => true,
   },
   wgsa_gff: {
     description: 'Annotations',

@@ -33,7 +33,7 @@
   font-size: 12px;
   padding: 4px 8px;
   outline: none;
-  text-decoration: none;
+  text-decoration: none !important;
   transition: .28s cubic-bezier(.4,0,.2,1);
   transition-property: background-color, color;
 }

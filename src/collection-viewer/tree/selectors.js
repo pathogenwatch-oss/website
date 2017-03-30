@@ -7,7 +7,7 @@ import { titles, speciesTrees } from './constants';
 import * as utils from './utils';
 
 import { POPULATION, COLLECTION } from '../../app/stateKeys/tree';
-import Species from '../../species';
+import Organisms from '../../organisms';
 
 export const getTreeState = state => getViewer(state).tree;
 
@@ -32,7 +32,7 @@ export const getSingleTree = createSelector(
   getTrees,
   trees => {
     const collectionTree = trees[COLLECTION];
-    if (Species.uiOptions.noPopulation) return COLLECTION;
+    if (Organisms.uiOptions.noPopulation) return COLLECTION;
     if (!(collectionTree && collectionTree.newick)) return POPULATION;
     return null;
   }

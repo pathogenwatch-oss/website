@@ -2,36 +2,51 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import Drawer from '../../drawer';
+import { GenomeArchiveButton } from '../../downloads';
 import CreateCollectionForm from '../create-collection-form';
 
-import { getSelectedGenomeList } from './selectors';
+import { getSelectedGenomeIds, getSelectedGenomeList } from './selectors';
 
 import { setSelection, unselectGenomes } from './actions';
 
-import { downloadGenomes } from './api';
+import config from '../../app/config';
+
+const { maxArchiveSize = 100 } = config;
 
 function getSelectionTitle(selectedGenomes) {
   return (
     <span>
       <span className="wgsa-genome-total">{selectedGenomes.length}</span>&nbsp;
-      {` Genome${selectedGenomes.length === 1 ? '' : 's'} selected`}
+      {` Genome${selectedGenomes.length === 1 ? '' : 's'} Selected`}
     </span>
   );
 }
 
 const SelectionDrawer = React.createClass({
 
+  componentDidMount() {
+    this.upgradeElements();
+  },
+
   componentDidUpdate() {
+    this.upgradeElements();
+  },
+
+  getDownloadTitle() {
+    if (this.props.disableDownload) {
+      return `A single archive cannot contain more than ${maxArchiveSize} genomes at this time.`;
+    }
+    return 'Download Selection';
+  },
+
+  upgradeElements() {
     if (this.tabs) {
       componentHandler.upgradeElement(this.tabs);
-    }
-    if (this.menu) {
-      componentHandler.upgradeElement(this.menu);
     }
   },
 
   render() {
-    const { selectedGenomes, removeGenome, clearSelection } = this.props;
+    const { selectedGenomes, removeGenome, disableDownload } = this.props;
     return (
       <Drawer
         title={getSelectionTitle(selectedGenomes)}
@@ -42,20 +57,12 @@ const SelectionDrawer = React.createClass({
             <a href="#create-collection-panel" className="mdl-tabs__tab is-active">Create Collection</a>
             <a href="#selection-panel" className="mdl-tabs__tab">Selection</a>
             <div className="wgsa-tab-actions">
-              <button
-                id="selection-drawer-actions"
-                className="mdl-button mdl-js-button mdl-button--icon"
-              >
-                <i className="material-icons">more_vert</i>
-              </button>
-              <ul
-                ref={el => { this.menu = el; }}
-                className="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
-                htmlFor="selection-drawer-actions"
-              >
-                <li className="mdl-menu__item" onClick={() => downloadGenomes(selectedGenomes)}>Download</li>
-                <li className="mdl-menu__item" onClick={clearSelection}>Clear All</li>
-              </ul>
+              <GenomeArchiveButton
+                ids={this.props.selectedGenomeIds}
+                filename="wgsa-genome-selection"
+                title={this.getDownloadTitle()}
+                disabled={disableDownload}
+              />
             </div>
           </div>
           <div className="mdl-tabs__panel is-active" id="create-collection-panel">
@@ -71,7 +78,7 @@ const SelectionDrawer = React.createClass({
                     className="mdl-chip__action"
                     onClick={() => removeGenome(genome)}
                   >
-                      <i className="material-icons">remove_circle_outline</i>
+                    <i className="material-icons">remove_circle_outline</i>
                   </button>
                 </span>
             )}
@@ -84,8 +91,11 @@ const SelectionDrawer = React.createClass({
 });
 
 function mapStateToProps(state) {
+  const selectedGenomes = getSelectedGenomeList(state);
   return {
-    selectedGenomes: getSelectedGenomeList(state),
+    selectedGenomes,
+    selectedGenomeIds: getSelectedGenomeIds(state),
+    disableDownload: selectedGenomes.length > maxArchiveSize,
   };
 }
 

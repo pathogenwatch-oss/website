@@ -34,6 +34,17 @@ export default function (state = {}, { type, payload }) {
           markerSize: payload.size,
         },
       };
+    case 'SET_GENOME_SELECTION':
+      if (payload.genomes.length) return state;
+      return Object.keys(state).reduce((memo, stateKey) => {
+        const currentState = state[stateKey];
+        memo[stateKey] =
+          stateKey.indexOf('GENOMES') === 0 ? {
+            ...currentState,
+            lassoPath: null,
+          } : currentState;
+        return memo;
+      }, {});
     default:
       return state;
   }

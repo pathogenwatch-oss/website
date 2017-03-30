@@ -9,14 +9,14 @@ import ChartTooltip from '../../chart-tooltip';
 import * as selectors from './selectors';
 
 import { showGenomeDrawer } from '../../genome-drawer';
-import { showMetric } from '../actions';
+import { showMetric } from './actions';
 
-const TooltipContent = ({ payload, data }) => {
+const TooltipContent = ({ payload }) => {
   if (!payload) return null;
   const [ index, metric ] = payload;
   return (
     <ChartTooltip
-      heading={data[index.value].name}
+      heading={index.payload.name}
       description="value"
       value={metric.value}
     />
@@ -78,17 +78,27 @@ export const StatsView =
                 domain={[ 0, Math.ceil(range.max * 1.25) ]}
               />
               <Scatter
-                data={chartData}
+                data={chartData.unselected}
                 fill="#a386bd"
+                opacity={chartData.selected.length ? 0.25 : 1}
                 isAnimationActive={false}
                 className="wgsa-clickable-point"
                 onClick={onPointClick}
               />
+              { chartData.selected.length &&
+                <Scatter
+                  data={chartData.selected}
+                  fill="#673c90"
+                  isAnimationActive={false}
+                  className="wgsa-clickable-point"
+                  onClick={onPointClick}
+                />
+              }
               <Tooltip
                 cursor={{ stroke: 'none' }}
                 offset={8}
                 isAnimationActive={false}
-                content={<TooltipContent data={chartData} />}
+                content={<TooltipContent />}
               />
             </ScatterChart>
           </ResponsiveContainer>
@@ -117,7 +127,7 @@ function mapStateToProps(state) {
     average: selectors.getMetricAverage(state),
     stDev: selectors.getMetricStDev(state),
     range: selectors.getMetricRange(state),
-    chartData: selectors.getSelectedChartData(state),
+    chartData: selectors.getChartData(state),
   };
 }
 

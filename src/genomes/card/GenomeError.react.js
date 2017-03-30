@@ -1,7 +1,6 @@
 import React from 'react';
 
-import { genomeValidationErrors as errors } from '../utils/validation';
-import config from '../../app/config';
+import { InvalidGenomeError } from '../utils/validation';
 
 const Error = ({ message, children }) => (
   <div className="wgsa-hub-card__metadata wgsa-hub-card-error">
@@ -11,23 +10,17 @@ const Error = ({ message, children }) => (
   </div>
 );
 
-function getError(file) {
-  switch (file.error) {
-    case errors.INVALID_GENOME_CONTENT:
-      return <Error message="This is not a valid genome file." />;
-    case errors.INVALID_GENOME_SIZE:
-      return <Error message={`This file is larger than ${config.maxGenomeFileSize} MB.`} />;
-    case errors.EMPTY_FILE:
-      return <Error message="This is an empty file." />;
-    default:
-      return (
-        <Error message="File could not be uploaded." />
-      );
+function getError(genome) {
+  if (genome.error instanceof InvalidGenomeError) {
+    return <Error message={genome.error.message} />;
   }
+  return (
+    <Error message="File could not be uploaded." />
+  );
 }
 
-export default (file) => (
+export default ({ genome }) => (
   <div className="wgsa-card-content">
-    { getError(file) }
+    { getError(genome) }
   </div>
 );

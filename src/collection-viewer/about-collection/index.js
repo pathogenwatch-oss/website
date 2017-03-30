@@ -9,14 +9,14 @@ import { getViewer } from '../../collection-viewer/selectors';
 import { getCollection } from '../../collection-viewer/selectors';
 import { toggleAboutCollection } from './actions';
 
-import Species from '../../species';
+import Organisms from '../../organisms';
 
 function mapStateToProps(state) {
   const { aboutCollectionOpen } = getViewer(state);
   return {
     isOpen: aboutCollectionOpen,
     metadata: getCollection(state).metadata,
-    species: Species.current.formattedName,
+    organism: Organisms.current.formattedName,
   };
 }
 

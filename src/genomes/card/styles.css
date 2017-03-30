@@ -1,5 +1,5 @@
 .wgsa-genome-card .wgsa-card-content {
-  height: 64px;
+  height: 56px;
 }
 
 .wgsa-genome-card p {
@@ -24,7 +24,7 @@
 .wgsa-hub-card-error i {
   position: absolute;
   font-size: 20px;
-  top: 22px;
+  top: 16px;
   right: 0;
 }
 

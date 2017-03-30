@@ -6,10 +6,6 @@ import { fetchGenomes, fetchSummary } from '../actions';
 import { getFilter } from './selectors';
 import { getUploadedAt } from '../uploads/selectors';
 
-export function filterByArea(path) {
-  return actions.update(stateKey, { key: 'area' }, path);
-}
-
 export function updateFilter(query, updateQueryString = true) {
   return (dispatch, getState) => {
     const update = updateQueryString ? actions.update : actions.updateFilter;

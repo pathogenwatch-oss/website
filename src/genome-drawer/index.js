@@ -2,7 +2,7 @@ import './styles.css';
 
 import { connect } from 'react-redux';
 
-import { REMOVE_GENOME } from '../genomes/actions';
+import { MOVE_TO_BIN } from '../genomes/actions';
 
 import GenomeDrawer from './GenomeDrawer.react';
 
@@ -24,7 +24,7 @@ export function reducer(state = initialState, { type, payload }) {
       return {
         id: payload.id,
       };
-    case REMOVE_GENOME:
+    case MOVE_TO_BIN:
       return state.id === payload.id ? initialState : state;
     default:
       return state;

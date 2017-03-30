@@ -6,13 +6,13 @@ import { onHeaderClick } from './thunks';
 import { getUserDefinedValue } from '../table/utils';
 import { hasMetadata } from './utils';
 
-import { speciesTrees } from '../tree/constants';
+import { simpleTrees } from '../tree/constants';
 import * as table from '../table/constants';
 import { systemDataColumns } from './constants';
 import { tableKeys } from '../constants';
 import { statuses } from '../../collection-viewer/constants';
 
-import Species from '../../species';
+import Organisms from '../../organisms';
 
 const initialState = {
   name: tableKeys.metadata,
@@ -83,7 +83,7 @@ export default function (state = initialState, { type, payload }) {
 
       if (status !== statuses.READY) return state;
 
-      const { publicMetadataColumnNames = [] } = Species.current;
+      const { publicMetadataColumnNames = [] } = Organisms.current;
 
       if (!hasMetadata(genomes)) {
         return {
@@ -116,7 +116,7 @@ export default function (state = initialState, { type, payload }) {
     }
     case SET_TREE: {
       const columnProps =
-        speciesTrees.has(payload.name) ?
+        simpleTrees.has(payload.name) ?
           state.columnProps :
           state.publicMetadataColumnProps;
 

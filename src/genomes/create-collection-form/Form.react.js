@@ -8,7 +8,7 @@ import * as selectors from './selectors';
 
 import { createCollection, changeCollectionMetadata } from './actions';
 
-import { taxIdMap } from '../../species';
+import { taxIdMap } from '../../organisms';
 
 const CreateCollectionForm = React.createClass({
 
@@ -36,14 +36,14 @@ const CreateCollectionForm = React.createClass({
 
   render() {
     const { metadata: { title, description }, canCreateCollection } = this.props;
-    const { speciesId, numGenomes } = this.props.collectionSummary;
+    const { organismId, numGenomes } = this.props.collectionSummary;
 
-    if (!speciesId) return null; // Prevent form erroring when species not supplied
+    if (!organismId) return null; // Prevent form erroring when organism not supplied
     return (
       <form className="wgsa-create-collection-form" onSubmit={this.props.onSubmit}>
         <span className="wgsa-card-metadata-inliner wgsa-collection-summary">
-          <CardMetadata title="Species" icon="bug_report">
-            {taxIdMap.get(speciesId).formattedShortName}
+          <CardMetadata title="Organism" icon="bug_report">
+            {taxIdMap.get(organismId).formattedShortName}
           </CardMetadata>
           <CardMetadata icon="insert_drive_file">
             {numGenomes} Genome{numGenomes > 1 ? 's' : ''}
