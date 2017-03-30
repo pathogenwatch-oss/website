@@ -1,10 +1,12 @@
+import './styles.css';
+
 import { connect } from 'react-redux';
 
 import SaveForOffline from './SaveForOffline.react';
 
 import { getStatus } from './selectors';
 
-import { saveForOffline } from './actions';
+import { checkStatus, saveForOffline } from './actions';
 
 function mapStateToProps(state) {
   return {
@@ -14,6 +16,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
+    checkStatus: () => dispatch(checkStatus()),
     onSave: () => dispatch(saveForOffline()),
   };
 }

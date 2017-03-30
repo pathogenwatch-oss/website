@@ -3,7 +3,7 @@ import { createSelector } from 'reselect';
 import { getCollection, getGenomes, getViewer } from '../../collection-viewer/selectors';
 import { getActiveDataTable } from '../table/selectors';
 
-import { titles, speciesTrees } from './constants';
+import { titles, simpleTrees } from './constants';
 import * as utils from './utils';
 
 import { POPULATION, COLLECTION } from '../../app/stateKeys/tree';
@@ -63,5 +63,5 @@ export const getLastSubtree = createSelector(
 
 export const getSubtreeNames = createSelector(
   getTrees,
-  trees => Object.keys(trees).filter(name => !speciesTrees.has(name))
+  trees => Object.keys(trees).filter(name => !simpleTrees.has(name))
 );

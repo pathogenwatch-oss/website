@@ -32,7 +32,7 @@ export default ({ organism, metadata, isOpen, onButtonClick }) => (
         <dt className="wgsa-hub-stats-heading">Created</dt>
         <dd className="wgsa-hub-stats-value">{metadata.dateCreated}</dd>
       </dl>
+      <SaveForOffline />
     </div>
-    <SaveForOffline />
   </div>
 );

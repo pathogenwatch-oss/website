@@ -10,7 +10,7 @@ module.exports = {
   },
   stripPrefix: 'public',
   runtimeCaching: [
-    { urlPattern: /\.(js|css|png|jpg|jpeg|gif|svg|woff2)$/,
+    { urlPattern: /^https?:\/\/.+\.(js|css|png|jpg|jpeg|gif|svg|woff2)$/,
       handler: 'networkFirst',
     },
     { urlPattern: /^https?:\/\/fonts\.googleapis\.com/,

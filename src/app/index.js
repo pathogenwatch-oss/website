@@ -33,7 +33,7 @@ if ('serviceWorker' in navigator) {
             store.dispatch({
               type: 'TOAST_SHOW',
               payload: {
-                message: 'Refresh to complete offline installation.',
+                message: 'Offline mode is ready to use 👍',
               },
             });
           }

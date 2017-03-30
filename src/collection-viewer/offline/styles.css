@@ -1,0 +1,21 @@
+.wgsa-save-for-offline {
+  text-align: center;
+}
+
+.wgsa-save-for-offline > p {
+  clear: both;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0;
+}
+
+.wgsa-save-for-offline i {
+  margin-right: 4px;
+  color: rgb(72, 153, 111);
+}
+
+.wgsa-save-for-offline .mdl-spinner {
+  margin-left: 8px;
+  margin-bottom: -8px;
+}

@@ -15,6 +15,22 @@ function setStatus(status) {
   };
 }
 
+export function checkStatus() {
+  return (dispatch, getState) => {
+    const state = getState();
+    const { uuid } = getCollection(state);
+
+    dispatch(setStatus(statuses.SAVING));
+    return (
+      caches
+        .has(`wgsa-collection-${uuid}`)
+        .then(isSaved =>
+          dispatch(setStatus(isSaved ? statuses.SAVED : statuses.UNSAVED))
+        )
+    );
+  };
+}
+
 export function saveForOffline() {
   return (dispatch, getState) => {
     const state = getState();
@@ -32,7 +48,7 @@ export function saveForOffline() {
               .concat(`${API_ROOT}/collection/${uuid}`)
           )
         )
-        .then(() => dispatch(setStatus(statuses.SAVED)))
+        .then(() => window.location.reload())
     );
   };
 }
