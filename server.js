@@ -111,7 +111,7 @@ module.exports = () =>
 
     app.use('/', (req, res, next) => {
       // crude file matching
-      if (req.path.match(/\.[a-z]{1,4}$/) || req.xhr) {
+      if (req.path !== '/index.html' && req.path.match(/\.[a-z]{1,4}$/) || req.xhr) {
         return next();
       }
       const user = req.user ?
