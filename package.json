@@ -34,7 +34,7 @@
     "slug": "^0.9.1",
     "uuid": "^3.0.1",
     "wgsa-fasta-store": "gitlab:cgps/wgsa-fasta-store#v2.5.3",
-    "wgsa-front-end": "gitlab:cgps/wgsa-front-end#v5.6.1"
+    "wgsa-front-end": "gitlab:cgps/wgsa-front-end#v5.6.2"
   },
   "devDependencies": {
     "eslint-config-cgps": "github:imperialcollegelondon/eslint-config-cgps",
@@ -60,7 +60,7 @@
     "metadata": "eval $npm_package_startcmd bin/update-collection-genomes.js",
     "mongo-migrate": "NODE_PATH=$npm_package_nodepath mm",
     "migrate-collection": "eval $npm_package_startcmd microservices/bootstrap.js migrator",
-    "rerun-collection": "eval $npm_package_startcmd microservices/bootstrap.js rerunner"
+    "rerun-collection": "echo $npm_package_startcmd microservices/bootstrap.js rerunner"
   },
   "repository": {
     "type": "git",
