@@ -8,8 +8,8 @@ const LOGGER = require('utils/logging').createLogger('Summary');
 router.get('/summary', (req, res, next) => {
   LOGGER.info('Received request to get summary');
 
-  const { user } = req;
-  services.request('summary', 'fetch', { user }).
+  const { user, sessionID } = req;
+  services.request('summary', 'fetch', { user, sessionID }).
     then(response => res.json(response)).
     catch(next);
 });
