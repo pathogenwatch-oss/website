@@ -90,9 +90,9 @@ export const systemDataColumns = {
       return analysis.genotyphi.snps;
     },
   },
-  __genotyphi_found_loci: {
-    columnKey: '__genotyphi_found_loci',
-    getLabel: () => 'FOUND LOCI',
+  __genotyphi_snps_called: {
+    columnKey: '__genotyphi_snps_called',
+    getLabel: () => 'SNPs CALLED',
     valueGetter({ analysis }) {
       if (!analysis.genotyphi) return null;
       return analysis.genotyphi.foundLoci;

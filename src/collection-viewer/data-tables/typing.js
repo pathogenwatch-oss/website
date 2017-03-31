@@ -62,7 +62,7 @@ const ngMastGroup = {
 const genotyphigroup = {
   group: true,
   columnKey: 'genotyphi',
-  columns: [ '__genotyphi_type', '__genotyphi_snps', '__genotyphi_found_loci' ],
+  columns: [ '__genotyphi_type', '__genotyphi_snps_called' ],
 };
 
 function fillColumnDefs({ columns, ...group }) {
