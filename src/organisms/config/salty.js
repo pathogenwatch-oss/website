@@ -57,6 +57,10 @@ export default {
       SIL: 'OTHER',
     },
     hiddenColumns: new Set([ 'SIL' ]),
+    paarOverrides: [
+      { gene: 'tetR(A)', from: 'SIL', to: 'TCY' },
+      { gene: 'tetR(B)', from: 'SIL', to: 'TCY' },
+    ],
   },
   uiOptions: {
     genotyphi: true,
