@@ -1,9 +1,9 @@
 .wgsa-save-for-offline {
   text-align: center;
+  clear: both;
 }
 
 .wgsa-save-for-offline > p {
-  clear: both;
   display: flex;
   align-items: center;
   justify-content: center;
