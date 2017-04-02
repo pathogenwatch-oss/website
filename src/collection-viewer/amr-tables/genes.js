@@ -8,6 +8,7 @@ function applyPaarOverrides(paar) {
   const { paarOverrides = [] } = Organisms.current.amrOptions || {};
 
   for (const { gene, from, to } of paarOverrides) {
+    if (!(from in paar)) continue;
     const geneDef = paar[from].find(_ => _.element === gene);
     if (!geneDef) continue;
 
