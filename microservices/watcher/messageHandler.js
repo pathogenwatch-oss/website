@@ -30,15 +30,13 @@ function runTask(fileId, task, version) {
 module.exports = function handleMessage(fileId, task, version) {
   return Analysis.findOne({ fileId, task, version })
     .then(model => {
-      if (model) {
-        return model.results;
-      }
+      if (model) return model.results;
       return (
         runTask(fileId, task, version)
-          .then(results =>
-            Analysis.create({ fileId, task, version, results })
-          )
-          .then(({ results }) => results)
+          .then(results => {
+            Analysis.create({ fileId, task, version, results });
+            return results;
+          })
       );
     });
 };
