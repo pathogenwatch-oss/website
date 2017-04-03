@@ -1,11 +1,21 @@
 import { updateQueryString, clearQueryString } from '../location';
 
 export const UPDATE_FILTER = 'UPDATE_FILTER';
+export const SET_FILTER = 'SET_FILTER';
 export const CLEAR_FILTER = 'CLEAR_FILTER';
 
 export function updateFilter(stateKey, query) {
   return {
     type: UPDATE_FILTER,
+    payload: {
+      stateKey, query,
+    },
+  };
+}
+
+export function setFilter(stateKey, query) {
+  return {
+    type: SET_FILTER,
     payload: {
       stateKey, query,
     },

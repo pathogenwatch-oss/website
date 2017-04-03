@@ -1,4 +1,4 @@
-import { UPDATE_FILTER, CLEAR_FILTER } from './actions';
+import { UPDATE_FILTER, SET_FILTER, CLEAR_FILTER } from './actions';
 
 function applyFilterValue(state = {}, payload) {
   const { query } = payload;
@@ -26,6 +26,13 @@ export default function (state = {}, { type, payload }) {
         ...state,
         [payload.stateKey]:
           applyFilterValue(state[payload.stateKey], payload),
+      };
+    case SET_FILTER:
+      return {
+        ...state,
+        [payload.stateKey]: {
+          ...payload.query,
+        },
       };
     case CLEAR_FILTER: {
       const { prefilter } = state[payload.stateKey];
