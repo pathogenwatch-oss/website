@@ -8,7 +8,7 @@ import { getUploadedAt } from '../uploads/selectors';
 
 export function updateFilter(query, updateQueryString = true) {
   return (dispatch, getState) => {
-    const update = updateQueryString ? actions.update : actions.updateFilter;
+    const update = updateQueryString ? actions.update : actions.setFilter;
     dispatch(update(stateKey, query));
 
     const state = getState();

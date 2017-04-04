@@ -45,12 +45,12 @@ const Index = React.createClass({
                   <FormattedName organismId={organismId} fullName />
                 </h3>
                 <CardMetadata icon="collections" title="Collections">
-                  <Link to={`/collections?organismId=${organismId}`} title="Browse collections">
+                  <Link to={`/collections?organismId=${organismId}`} title="Browse Collections">
                     {totalCollections} Collection{totalCollections === 1 ? '' : 's'}
                   </Link>
                 </CardMetadata>
                 <CardMetadata icon="insert_drive_file" title="Genomes">
-                  <Link to={`/genomes?organismId=${organismId}`} title="Browse genomes">
+                  <Link to={`/genomes?organismId=${organismId}`} title="Browse Genomes">
                     {totalGenomes} Genome{totalGenomes === 1 ? '' : 's'}
                   </Link>
                 </CardMetadata>
@@ -71,7 +71,7 @@ const Index = React.createClass({
                     {organismName}
                   </h3>
                   <CardMetadata icon="insert_drive_file" title="Genomes">
-                    <Link to={`/genomes?organismId=${organismId}`} title="Browse genomes">
+                    <Link to={`/genomes?organismId=${organismId}`} title="Browse Genomes">
                       {totalGenomes} Genome{totalGenomes === 1 ? '' : 's'}
                     </Link>
                   </CardMetadata>
