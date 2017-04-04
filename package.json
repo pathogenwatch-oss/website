@@ -48,7 +48,7 @@
   "startcmd": "NODE_PATH=$npm_package_nodepath node $npm_package_nodeopts",
   "testcmd": "NODE_PATH=$npm_package_nodepath NODE_ENV='testing' mocha -t 60000 --reporter spec",
   "scripts": {
-    "start": "eval $npm_package_startcmd start.js | bunyan -o short",
+    "start": "eval $npm_package_startcmd start.js --seneca.log.quiet | bunyan -o short",
     "test": "eval $npm_package_testcmd 'test/unit/**/*.test.js'",
     "test-example": "eval $npm_package_testcmd 'test/example.test.js'",
     "e2e": "eval $npm_package_testcmd 'test/e2e/**/*.test.js'",

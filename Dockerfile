@@ -1,23 +1,40 @@
 FROM node:7.4.0-alpine
 
-COPY ./node_modules/mash-node-native/scripts /tmp/
-RUN sh /tmp/install-build-dependencies.sh && \
-    sh /tmp/install-dependencies-alpine.sh && \
-    sh /tmp/remove-build-dependencies.sh
-
 COPY . /opt/wgsa/middle-end
 
-WORKDIR /opt/wgsa/middle-end
-RUN apk add --no-cache --virtual couchbase-deps \
+RUN apk add --update --no-cache --virtual build-deps \
+      autoconf \
+      automake \
+      file \
+      g++ \
+      gcc \
+      git \
+      gsl-dev \
+      libtool \
+      linux-headers \
+      make \
       python \
-      && \
-    sh /tmp/install-build-dependencies.sh && \
-    npm rebuild && \
-    sh /tmp/remove-build-dependencies.sh && \
-    apk del --purge couchbase-deps && \
-    rm -r /tmp
+      zlib-dev && \
+    git clone --depth 1 --branch alpine https://gitlab.com/cgps/mash/capnproto.git && \
+      cd ./capnproto/c++ && \
+      autoreconf -i && \
+      ./configure --enable-shared CXXFLAGS=-fPIC && \
+      make -j6 check && \
+      make install && \
+      cd ../.. && \
+      rm -rf capnproto && \
+    cd /opt/wgsa/middle-end/node_modules/mash-original && \
+      ./bootstrap.sh && \
+      ./configure CXXFLAGS=-fPIC && \
+      CPPFLAGS="-fPIC" make && \
+      make install && \
+    cd /opt/wgsa/middle-end/ && \
+      npm rebuild && \
+    apk del --purge build-deps
 
 ENV NODE_PATH=/opt/wgsa/middle-end/src \
     NODE_ENV=production
 
-CMD [ "node", "start.js" ]
+WORKDIR /opt/wgsa/middle-end
+
+CMD [ "node", "start.js", "--seneca.log.quiet" ]
