@@ -1,0 +1,8 @@
+[
+  {
+    "organismId": "1280",
+    "task": "mlst",
+    "version": "1",
+    "retries": 3
+  }
+]

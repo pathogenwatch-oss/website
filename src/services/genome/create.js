@@ -3,6 +3,7 @@ const { request } = require('services/bus');
 const Genome = require('models/genome');
 
 const { ServiceRequestError } = require('utils/errors');
+const submitGenome = require('microservices/runner/submit');
 
 function createGenomeDocument({ name, uploadedAt }, reference, { user, sessionID }, genomeFileDoc) {
   const { organismId, organismName, metrics } = genomeFileDoc;
@@ -16,8 +17,11 @@ function createGenomeDocument({ name, uploadedAt }, reference, { user, sessionID
       reference,
       public: reference,
       uploadedAt,
-    }).
-    then(({ _id }) => ({ id: _id, organismId, organismName, metrics }))
+    })
+    .then((genome) =>
+      submitGenome(genome)
+        .then(() => ({ id: genome._id, organismId, organismName, metrics }))
+    )
   );
 }
 
