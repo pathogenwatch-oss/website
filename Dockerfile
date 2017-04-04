@@ -37,4 +37,4 @@ ENV NODE_PATH=/opt/wgsa/middle-end/src \
 
 WORKDIR /opt/wgsa/middle-end
 
-CMD [ "node", "start.js" ]
+CMD [ "node", "start.js", "--seneca.log.quiet" ]
