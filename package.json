@@ -58,7 +58,7 @@
     "download": "eval $npm_package_startcmd bin/download.js",
     "reference": "eval $npm_package_startcmd bin/create-reference-collection.js",
     "aggregator": "eval $npm_package_startcmd microservices/bootstrap.js aggregator | bunyan -o short",
-    "watcher": "eval $npm_package_startcmd microservices/bootstrap.js watcher | bunyan -o short",
+    "runner": "eval $npm_package_startcmd microservices/bootstrap.js runner | bunyan -o short",
     "repost": "eval $npm_package_startcmd bin/repost-aggregator-errors.js",
     "metadata": "eval $npm_package_startcmd bin/update-collection-genomes.js",
     "mongo-migrate": "NODE_PATH=$npm_package_nodepath mm",

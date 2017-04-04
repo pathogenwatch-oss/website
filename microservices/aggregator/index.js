@@ -1,7 +1,7 @@
 const handle = require('./handler');
 
 const messageQueueUtil = require('utils/messageQueueConnection');
-const LOGGER = require('utils/logging').createLogger('watcher');
+const LOGGER = require('utils/logging').createLogger('runner');
 const QUEUE_OPTIONS = { durable: true, autoDelete: false };
 
 module.exports = function ({ mqConnection }) {
