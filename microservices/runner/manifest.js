@@ -1,7 +1,7 @@
-const services = require('services.json');
+const services = require('../../services.json');
 
-function getServicesByOrganism(organismId) {
+module.exports = function getServicesByOrganism(organismId) {
+  console.log(services, organismId);
+  console.log(services.filter(_ => _.organismId === organismId));
   return services.filter(_ => _.organismId === organismId);
-}
-
-module.exports = getServicesByOrganism;
+};

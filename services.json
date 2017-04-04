@@ -4,5 +4,11 @@
     "task": "mlst",
     "version": "1",
     "retries": 3
+  },
+  {
+    "organismId": "1280",
+    "task": "test",
+    "version": "1",
+    "retries": 3
   }
 ]

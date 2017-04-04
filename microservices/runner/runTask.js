@@ -1,19 +1,24 @@
-const LOGGER = require('utils/logging').createLogger('runner');
-
-const Analysis = require('models/analysis');
-
+const fs = require('fs');
 const docker = require('docker-run');
 
+const Analysis = require('models/analysis');
+const fastaStorage = require('wgsa-fasta-store');
+const { fastaStoragePath } = require('configuration');
+
+const LOGGER = require('utils/logging').createLogger('runner');
+
 function getImageName(task, version) {
-  return `wgsa-task-${task}:${version}`;
+  return `registry.gitlab.com/cgps/wgsa/tasks/${task}:v${version}`;
 }
 
 function runTask(fileId, task, version) {
   return new Promise((resolve, reject) => {
     const container = docker(getImageName(task, version));
+    const stream = fs.createReadStream(fastaStorage.getFilePath(fastaStoragePath, fileId));
+    stream.pipe(container.stdin);
     const buffer = [];
     container.stdout.on('data', (data) => {
-      LOGGER.info('stdout', data);
+      LOGGER.info('stdout', data.toString());
       buffer.push(data.toString());
     });
     container.on('exit', (exitCode) => {

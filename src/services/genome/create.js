@@ -3,7 +3,7 @@ const { request } = require('services/bus');
 const Genome = require('models/genome');
 
 const { ServiceRequestError } = require('utils/errors');
-const submitGenome = require('microservices/runner/submit');
+const submitGenome = require('../../../microservices/runner/submit');
 
 function createGenomeDocument({ name, uploadedAt }, reference, { user, sessionID }, genomeFileDoc) {
   const { organismId, organismName, metrics } = genomeFileDoc;
