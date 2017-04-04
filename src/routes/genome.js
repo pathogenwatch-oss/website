@@ -48,7 +48,7 @@ router.put('/genome', (req, res, next) => {
 
   const { user, sessionID } = req;
   const { name, uploadedAt } = req.query;
-  services.request('genome', 'create', { timeout$: 60000, stream: req, metadata: { name, uploadedAt }, user, sessionID })
+  services.request('genome', 'create', { timeout$: 1000 * 60 * 5, stream: req, metadata: { name, uploadedAt }, user, sessionID })
     .then(response => res.json(response))
     .catch(next);
 });
