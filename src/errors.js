@@ -29,6 +29,7 @@ module.exports = function handleErrors(app) {
       return res.sendStatus(404);
     }
 
-    return res.sendStatus(500);
+    res.sendStatus(500);
+    req.socket.destroy();
   });
 };
