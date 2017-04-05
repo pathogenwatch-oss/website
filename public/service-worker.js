@@ -1,8 +1,7 @@
 importScripts('https://raw.githubusercontent.com/GoogleChrome/sw-toolbox/master/sw-toolbox.js');
 
 const cacheName = 'wgsa-asset-cache';
-
-toolbox.options.cache.name = cacheName;
+toolbox.options.cache.name = 'wgsa-runtime-cache';
 
 self.addEventListener('install', () => self.skipWaiting());
 
