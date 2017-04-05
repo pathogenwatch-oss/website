@@ -1,7 +1,5 @@
 const path = require('path');
 const webpack = require('webpack');
-const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
-const swPrecacheConfig = require('./sw-precache.config.js');
 
 const srcFolder = path.join(__dirname, 'src');
 
@@ -95,9 +93,6 @@ const prodConfig = {
         NODE_ENV: JSON.stringify('production'),
       },
     }),
-    new SWPrecacheWebpackPlugin(
-      Object.assign(swPrecacheConfig, { minify: false })
-    ),
   ]),
   module: {
     loaders,
