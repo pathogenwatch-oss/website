@@ -96,7 +96,7 @@ const prodConfig = {
       },
     }),
     new SWPrecacheWebpackPlugin(
-      Object.assign(swPrecacheConfig, { minify: true })
+      Object.assign(swPrecacheConfig, { minify: false })
     ),
   ]),
   module: {

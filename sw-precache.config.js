@@ -1,12 +1,15 @@
 module.exports = {
   cacheId: 'wgsa',
-  navigateFallback: '/index.html',
-  staticFileGlobs: [
-    'public/*.*',
-    'public/images/*.*',
+  navigateFallback: '/offline',
+  navigateFallbackWhitelist: [
+    /^(?!\/(auth|signout)\/)/,
   ],
+  // staticFileGlobs: [
+  //   'public/*.*',
+  //   'public/images/*.*',
+  // ],
   dynamicUrlToDependencies: {
-    '/index.html': [ 'views/index.ejs' ],
+    '/offline': [ 'views/index.ejs' ],
   },
   stripPrefix: 'public',
   runtimeCaching: [
