@@ -35,7 +35,7 @@ const CreateCollectionForm = React.createClass({
   firstInput: null,
 
   render() {
-    const { metadata: { title, description }, canCreateCollection } = this.props;
+    const { metadata: { title, description, pmid }, canCreateCollection } = this.props;
     const { organismId, numGenomes } = this.props.collectionSummary;
 
     if (!organismId) return null; // Prevent form erroring when organism not supplied
@@ -71,6 +71,18 @@ const CreateCollectionForm = React.createClass({
             disabled={!canCreateCollection}
           />
           <label className="mdl-textfield__label" htmlFor="collection-description">Description</label>
+        </div>
+        <div ref={this.addToFormElements} className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+          <input
+            className="mdl-textfield__input"
+            type="text"
+            id="collection-pmid"
+            value={pmid}
+            onChange={this.props.onFormChange}
+            disabled={!canCreateCollection}
+            pattern="[0-9]*"
+          />
+          <label className="mdl-textfield__label" htmlFor="collection-pmid">PubMed identifier (PMID)</label>
         </div>
         <div className="wgsa-drawer-actions">
           <button

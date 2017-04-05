@@ -1,6 +1,6 @@
 import { CHANGE_COLLECTION_METADATA } from './actions';
 
-const initialMetadata = { title: '', description: '' };
+const initialMetadata = { title: '', description: '', pmid: '' };
 
 export default function (state = initialMetadata, { type, payload }) {
   switch (type) {
