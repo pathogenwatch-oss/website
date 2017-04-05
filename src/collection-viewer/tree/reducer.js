@@ -90,6 +90,7 @@ function entities(state = {}, { type, payload }) {
       return {
         ...state,
         [payload.stateKey]: {
+          ...state[payload.stateKey],
           name: payload.stateKey,
           newick: payload.result.tree,
           ...getInitialState(),
