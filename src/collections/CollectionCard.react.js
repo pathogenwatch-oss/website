@@ -10,6 +10,18 @@ const renderers = {
   Paragraph: (props) => <span>{props.children}</span>,
 };
 
+const statusIcons = {
+  READY: 'done',
+  PROCESSING: 'hourglass_empty',
+  FAILED: 'warning',
+};
+
+const statusText = {
+  READY: 'done',
+  PROCESSING: 'in progress',
+  FAILED: 'failed',
+};
+
 export default ({ item }) => {
   const createdAt = new Date(item.createdAt);
   const { status } = item;
@@ -22,6 +34,11 @@ export default ({ item }) => {
         <CardMetadata tooltip={createdAt.toLocaleString()} icon="history">
           {dateSince(createdAt)} ago
         </CardMetadata>
+        { status !== 'READY' &&
+          <CardMetadata title="Status" icon={statusIcons[status]}>
+            {statusText[status]}
+          </CardMetadata>
+        }
       </span>
       { item.title ?
         <Markdown containerTagName="h2" className="wgsa-card-title wgsa-overflow-fade" source={item.title} renderers={renderers} /> :
