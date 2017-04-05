@@ -7,7 +7,7 @@ const Organism = require('models/organism');
 
 const { maxCollectionSize = 0 } = require('configuration');
 
-function createCollection({ organismId, genomeIds, title, description, user }) {
+function createCollection({ organismId, genomeIds, title, description, pmid, user }) {
   if (!organismId) {
     return Promise.reject(new ServiceRequestError('No organism ID provided'));
   }
@@ -28,8 +28,9 @@ function createCollection({ organismId, genomeIds, title, description, user }) {
           _organism: organism,
           _user: user,
           description,
-          size,
           organismId,
+          pmid,
+          size,
           title,
         })
       )
