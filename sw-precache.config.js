@@ -1,6 +1,9 @@
 module.exports = {
   cacheId: 'wgsa',
   navigateFallback: '/index.html',
+  navigateFallbackWhitelist: [
+    /^(?!\/(download|auth|signout)\/)/,
+  ],
   staticFileGlobs: [
     'public/*.*',
     'public/images/*.*',
