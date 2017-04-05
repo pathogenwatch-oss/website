@@ -11,7 +11,7 @@ router.post('/organism/:organismId/download/type/:idType/format/:fileFormat',
       idType: req.params.idType === 'genome' ? 'assembly' : req.params.idType,
       format: req.params.fileFormat,
       idList: req.body.idList,
-      organismId: req.params.organismId,
+      speciesId: req.params.organismId,
     };
 
     LOGGER.info(
