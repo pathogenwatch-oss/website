@@ -9,7 +9,7 @@ module.exports = function (app) {
 
   app.use('/download/', [
     require('routes/download'),
-    require('routes/organismDownloads'),
+    require('routes/organism-download'),
   ]);
 
   app.use('/zika', (req, res) =>
