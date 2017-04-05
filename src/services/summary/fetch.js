@@ -1,5 +1,6 @@
 const Collection = require('models/collection');
 const Genome = require('models/genome');
+const Organism = require('models/organism');
 
 module.exports = function (props) {
   const { user } = props;
@@ -9,10 +10,11 @@ module.exports = function (props) {
       user ? Collection.count({ binned: false, _user: user }) : Promise.resolve(0),
       Genome.count(Genome.getPrefilterCondition(props)),
       user ? Genome.count({ binned: false, _user: user }) : Promise.resolve(0),
+      Organism.deployedOrganismIds(),
     ]).
     then(
-      ([ allCollections, userCollections, allGenomes, userGenomes ]) =>
-        ({ allCollections, userCollections, allGenomes, userGenomes })
+      ([ allCollections, userCollections, allGenomes, userGenomes, deployedOrganisms ]) =>
+        ({ allCollections, userCollections, allGenomes, userGenomes, deployedOrganisms })
     )
   );
 };

@@ -55,4 +55,8 @@ schema.statics.getLatest = function (taxId) {
   );
 };
 
+schema.statics.deployedOrganismIds = function () {
+  return this.distinct('taxId');
+};
+
 module.exports = mongoose.model('Organism', schema);
