@@ -8,7 +8,7 @@ const downloadUtils = require('wgsa-front-end/universal/downloads');
 
 const LOGGER = require('utils/logging').createLogger('Organism Downloads');
 
-router.get('/:nickname/:type', (req, res, next) => {
+router.get('/organism/:nickname/:type', (req, res, next) => {
   const { nickname, type } = req.params;
   const { contentType } = downloads[type];
 
