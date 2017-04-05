@@ -20,7 +20,7 @@ router.post('/organism/:organismId/download/type/:idType/format/:fileFormat',
 
     services.request('backend', 'request-download', { request: downloadRequest }).
       then(result => res.json(result)).
-      catch(error => next(error));
+      catch(next);
   }
 );
 
