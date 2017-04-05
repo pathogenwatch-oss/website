@@ -2,7 +2,7 @@ const Collection = require('models/collection');
 const CollectionGenome = require('models/collectionGenome');
 const Organism = require('models/organism');
 
-const { ServiceRequestError } = require('utils/errors');
+const { NotFoundError } = require('utils/errors');
 const { looseAccessControl } = require('configuration');
 
 function isReady(collection, results) {
@@ -36,7 +36,7 @@ function calculateProgress(collection, results) {
 }
 
 function checkStatus(collection) {
-  if (!collection) throw new ServiceRequestError('Collection not found');
+  if (!collection) throw new NotFoundError('Collection not found');
   if (collection.isProcessing) {
     return CollectionGenome.countResults(collection).
       then(results => {
@@ -55,11 +55,11 @@ function checkStatus(collection) {
 
 module.exports = ({ user = null, uuid, aggregator }) => {
   return (
-    Collection.
-      findOne(
+    Collection
+      .findOne(
         Object.assign({ uuid }, (looseAccessControl || aggregator) ? {} : { $or: [ { _user: user }, { public: true } ] }),
         { 'subtrees.tree': 0, 'subtrees.leafIds': 0 }
-      ).
-      then(checkStatus)
+      )
+      .then(checkStatus)
   );
 };
