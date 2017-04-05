@@ -11,6 +11,7 @@ function enqueueGenome([ genome, services ]) {
   for (const { task, version, retries } of services) {
     queue.enqueue({
       genomeId: genome.id,
+      organismId: genome.organismId,
       fileId: genome._file.fileId,
       task,
       version,

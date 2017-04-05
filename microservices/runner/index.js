@@ -5,8 +5,8 @@ const Genome = require('models/genome');
 const runTask = require('./runTask');
 const queue = require('./queue');
 
-function onMessage({ genomeId, fileId, task, version }) {
-  return runTask(fileId, task, version)
+function onMessage({ genomeId, organismId, fileId, task, version }) {
+  return runTask(organismId, fileId, task, version)
     .then(results => {
       LOGGER.info(' results', genomeId, task, results);
       return Genome.addAnalysisResult(genomeId, task, results);

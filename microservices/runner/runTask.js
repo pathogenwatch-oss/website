@@ -11,14 +11,13 @@ function getImageName(task, version) {
   return `registry.gitlab.com/cgps/wgsa/tasks/${task}:v${version}`;
 }
 
-function runTask(fileId, task, version) {
+function runTask(organismId, fileId, task, version) {
   return new Promise((resolve, reject) => {
-    const container = docker(getImageName(task, version));
+    const container = docker(getImageName(task, version), { env: { WGSA_organismId: organismId } });
     const stream = fs.createReadStream(fastaStorage.getFilePath(fastaStoragePath, fileId));
     stream.pipe(container.stdin);
     const buffer = [];
     container.stdout.on('data', (data) => {
-      LOGGER.info('stdout', data.toString());
       buffer.push(data.toString());
     });
     container.on('exit', (exitCode) => {
@@ -37,12 +36,12 @@ function runTask(fileId, task, version) {
   });
 }
 
-module.exports = function handleMessage(fileId, task, version) {
+module.exports = function handleMessage(organismId, fileId, task, version) {
   return Analysis.findOne({ fileId, task, version })
     .then(model => {
       if (model) return model.results;
       return (
-        runTask(fileId, task, version)
+        runTask(organismId, fileId, task, version)
           .then(results => {
             Analysis.create({ fileId, task, version, results });
             return results;
