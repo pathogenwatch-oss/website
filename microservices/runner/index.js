@@ -10,9 +10,6 @@ function onMessage({ genomeId, fileId, task, version }) {
     .then(results => {
       LOGGER.info(' results', genomeId, task, results);
       return Genome.addAnalysisResult(genomeId, task, results);
-    })
-    .catch(error => {
-      LOGGER.error(error);
     });
 }
 

@@ -23,7 +23,12 @@ function runTask(fileId, task, version) {
     });
     container.on('exit', (exitCode) => {
       LOGGER.info('exit', exitCode);
-      resolve(JSON.parse(buffer.join('')));
+      if (exitCode !== 0) {
+        container.stderr.setEncoding('utf8');
+        reject({ exitCode, strerr: container.stderr.read() });
+      } else {
+        resolve(JSON.parse(buffer.join('')));
+      }
     });
     container.on('spawn', (containerId) => {
       LOGGER.info('spawn', containerId);
