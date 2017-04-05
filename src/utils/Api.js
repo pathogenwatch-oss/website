@@ -62,7 +62,7 @@ export function getCollection(collectionId) {
 
 export function requestFile({ organismId, idType = 'genome', format }, requestBody) {
   return postJson(
-    `/organisms/${organismId}/download/type/${idType}/format/${format}`,
+    `/organism/${organismId}/download/type/${idType}/format/${format}`,
     requestBody
   );
 }
