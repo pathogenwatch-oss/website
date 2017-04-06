@@ -3,6 +3,8 @@ image: docker:latest
 build:
   only:
     - tags
+  cache:
+    - node_modules
   script:
     - docker ps >> /dev/null
     - apk add --update git nodejs
