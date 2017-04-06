@@ -30,7 +30,8 @@ RUN apk add --update --no-cache --virtual build-deps \
       make install && \
     cd /opt/wgsa/middle-end/ && \
       npm rebuild && \
-    apk del --purge build-deps
+    apk del --purge build-deps && \
+    apk add --update --no-cache gsl
 
 ENV NODE_PATH=/opt/wgsa/middle-end/src \
     NODE_ENV=production
