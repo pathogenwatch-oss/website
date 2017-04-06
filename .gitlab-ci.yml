@@ -4,8 +4,8 @@ build:
   only:
     - tags
   cache:
-    - untracked: true
-    - paths:
+    untracked: true
+    paths:
       - node_modules/
   script:
     - docker ps >> /dev/null
