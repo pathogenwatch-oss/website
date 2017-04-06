@@ -22,13 +22,20 @@ export function checkStatus() {
 
     dispatch(setStatus(statuses.SAVING));
     return (
-      caches
-        .has(`wgsa-collection-${uuid}`)
-        .then(isSaved =>
-          dispatch(setStatus(isSaved ? statuses.SAVED : statuses.UNSAVED))
-        )
+      Promise.all([
+        navigator.serviceWorker.getRegistrations(),
+        caches.has(`wgsa-collection-${uuid}`),
+      ])
+      .then(([ registrations, hasCache ]) => registrations.length && hasCache)
+      .then(isSaved =>
+        dispatch(setStatus(isSaved ? statuses.SAVED : statuses.UNSAVED))
+      )
     );
   };
+}
+
+function registerServiceWorker() {
+  return navigator.serviceWorker.register('/service-worker.js');
 }
 
 export function saveForOffline() {
@@ -38,17 +45,13 @@ export function saveForOffline() {
     const subtrees = getSubtreeNames(state);
 
     dispatch(setStatus(statuses.SAVING));
-    return (
-      caches
-        .open(`wgsa-collection-${uuid}`)
-        .then(cache =>
-          cache.addAll(
-            subtrees
-              .map(subtree => `${API_ROOT}/collection/${uuid}/subtree/${subtree}`)
-              .concat(`${API_ROOT}/collection/${uuid}`)
-          )
-        )
-        .then(() => window.location.reload())
-    );
+    registerServiceWorker()
+      .then(() => caches.open(`wgsa-collection-${uuid}`))
+      .then(cache => cache.addAll(
+        subtrees
+          .map(subtree => `${API_ROOT}/collection/${uuid}/subtree/${subtree}`)
+          .concat(`${API_ROOT}/collection/${uuid}`)
+      ))
+      .then(() => window.location.reload());
   };
 }

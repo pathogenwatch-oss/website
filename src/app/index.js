@@ -11,37 +11,6 @@ import Router from './Router.react';
 
 import store from './store';
 
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/service-worker.js')
-    .then(registration => {
-      let serviceWorker;
-      if (registration.installing) {
-        serviceWorker = registration.installing;
-        console.log('sw installing');
-      } else if (registration.waiting) {
-        serviceWorker = registration.waiting;
-        console.log('sw waiting');
-      } else if (registration.active) {
-        serviceWorker = registration.active;
-        console.log('sw active');
-      }
-      if (serviceWorker) {
-        const initialState = serviceWorker.state;
-        console.log(serviceWorker.state);
-        serviceWorker.addEventListener('statechange', e => {
-          if (initialState === 'installing' && e.target.state === 'activated') {
-            store.dispatch({
-              type: 'TOAST_SHOW',
-              payload: {
-                message: 'Offline mode is ready to use 👍',
-              },
-            });
-          }
-        });
-      }
-    });
-}
-
 function renderApp(Root) {
   render((
     <Provider store={store}>

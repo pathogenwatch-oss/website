@@ -19,7 +19,7 @@ export default React.createClass({
   },
 
   isSupported() {
-    return ('caches' in window);
+    return ('caches' in window && 'serviceWorker' in navigator);
   },
 
   render() {
@@ -39,6 +39,7 @@ export default React.createClass({
               >
                 { status === statuses.SAVING ? <Spinner /> : 'Save for Offline' }
               </button> }
+          { status !== statuses.SAVED && <p>(Page will refresh once saved)</p> }
         </div>
       );
     }
