@@ -3,7 +3,6 @@ const CollectionGenome = require('models/collectionGenome');
 const Organism = require('models/organism');
 
 const { NotFoundError } = require('utils/errors');
-const { looseAccessControl } = require('configuration');
 
 function isReady(collection, results) {
   return (
@@ -53,13 +52,7 @@ function checkStatus(collection) {
   return collection;
 }
 
-module.exports = ({ user = null, uuid, aggregator }) => {
-  return (
-    Collection
-      .findOne(
-        Object.assign({ uuid }, (looseAccessControl || aggregator) ? {} : { $or: [ { _user: user }, { public: true } ] }),
-        { 'subtrees.tree': 0, 'subtrees.leafIds': 0 }
-      )
-      .then(checkStatus)
-  );
-};
+module.exports = ({ uuid }) =>
+  Collection
+    .findByUuid(uuid, { 'subtrees.tree': 0, 'subtrees.leafIds': 0 })
+    .then(checkStatus);
