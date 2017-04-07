@@ -2,7 +2,7 @@ const Collection = require('models/collection');
 const CollectionGenome = require('models/collectionGenome');
 const Organism = require('models/organism');
 
-const { ServiceRequestError } = require('utils/errors');
+const { NotFoundError } = require('utils/errors');
 
 function isReady(collection, results) {
   return (
@@ -35,7 +35,7 @@ function calculateProgress(collection, results) {
 }
 
 function checkStatus(collection) {
-  if (!collection) throw new ServiceRequestError('Collection not found');
+  if (!collection) throw new NotFoundError('Collection not found');
   if (collection.isProcessing) {
     return CollectionGenome.countResults(collection).
       then(results => {

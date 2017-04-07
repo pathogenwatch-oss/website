@@ -1,6 +1,6 @@
 const Genome = require('models/genome');
 const CollectionGenome = require('models/collectionGenome');
-const { ServiceRequestError } = require('utils/errors');
+const { ServiceRequestError, NotFoundError } = require('utils/errors');
 
 const fetch = {
   genome: (credentials, id) => {
@@ -20,7 +20,7 @@ module.exports = ({ user, sessionID, type = 'genome', id }) => {
 
   return fetch[type]({ user, sessionID }, id).
     then(record => {
-      if (!record) throw new ServiceRequestError('Not found or access denied.');
+      if (!record) throw new NotFoundError('Not found or access denied.');
       return record;
     });
 };

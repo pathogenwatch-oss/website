@@ -16,9 +16,10 @@ function addGenomes(collection) {
 }
 
 module.exports = ({ user, uuid }) =>
-  services.request('collection', 'fetch-progress', { user, uuid }).
-    then(collection => (
+  services.request('collection', 'fetch-progress', { user, uuid })
+    .then(collection => (
       collection.status === 'READY' ?
         collection.populate('_organism').execPopulate() :
         collection
-    )).then(_ => addGenomes(_.toObject()));
+    ))
+    .then(_ => addGenomes(_.toObject()));
