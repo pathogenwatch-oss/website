@@ -1,6 +1,6 @@
 export const statuses = {
-  UPLOADING: 0,
-  ERROR: 1,
-  SUCCESS: 2,
-  PENDING: 3,
+  UPLOADING: 'UPLOADING',
+  ERROR: 'ERROR',
+  SUCCESS: 'SUCCESS',
+  PENDING: 'PENDING',
 };

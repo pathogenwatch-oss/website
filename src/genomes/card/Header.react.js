@@ -6,6 +6,8 @@ import { FormattedName } from '../../organisms';
 
 import { toggleSelectedGenomes } from '../selection/actions';
 
+import { statuses as uploadStatuses } from '../uploads/constants';
+
 const stopPropagation = e => e.stopPropagation();
 
 const Header = ({ genome, onClick }) => {
@@ -22,9 +24,10 @@ const Header = ({ genome, onClick }) => {
             /> :
             <span>&nbsp;</span> }
       </p>
-      <span className="wgsa-card-header__button" onClick={stopPropagation}>
-        <AddToSelectionButton genome={genome} />
-      </span>
+      { !(genome.status in uploadStatuses) &&
+        <span className="wgsa-card-header__button" onClick={stopPropagation}>
+          <AddToSelectionButton genome={genome} />
+        </span> }
     </header>
   );
 };
