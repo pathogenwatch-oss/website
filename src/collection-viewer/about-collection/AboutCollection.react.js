@@ -3,6 +3,7 @@ import classnames from 'classnames';
 import Markdown from 'react-markdown';
 
 import SaveForOffline from '../offline';
+import PubMedLink from '../../components/PubMedLink.react';
 
 export default ({ organism, metadata, isOpen, onButtonClick }) => (
   <div
@@ -23,7 +24,14 @@ export default ({ organism, metadata, isOpen, onButtonClick }) => (
       <h4 className="wgsa-about-collection-dropdown__title">
         {metadata.title || 'About Collection'}
       </h4>
-      <Markdown source={metadata.description} />
+      { metadata.description ?
+          <Markdown source={metadata.description} /> :
+          <p>(no description)</p> }
+      <p>
+        <PubMedLink pmid={metadata.pmid}>
+          View Publication
+        </PubMedLink>
+      </p>
       <dl>
         <dt className="wgsa-hub-stats-heading">Organism</dt>
         <dd className="wgsa-hub-stats-value">{organism}</dd>

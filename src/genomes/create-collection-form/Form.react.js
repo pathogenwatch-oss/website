@@ -82,7 +82,7 @@ const CreateCollectionForm = React.createClass({
             disabled={!canCreateCollection}
             pattern="[0-9]*"
           />
-          <label className="mdl-textfield__label" htmlFor="collection-pmid">PubMed identifier (PMID)</label>
+          <label className="mdl-textfield__label" htmlFor="collection-pmid">PMID</label>
         </div>
         <div className="wgsa-drawer-actions">
           <button

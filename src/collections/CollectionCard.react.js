@@ -5,6 +5,7 @@ import dateSince from 'date-since';
 
 import Card, { CardMetadata } from '../card';
 import { FormattedName } from '../organisms';
+import PubMedLink from '../components/PubMedLink.react';
 
 const renderers = {
   Paragraph: (props) => <span>{props.children}</span>,
@@ -17,9 +18,9 @@ const statusIcons = {
 };
 
 const statusText = {
-  READY: 'done',
-  PROCESSING: 'in progress',
-  FAILED: 'failed',
+  READY: 'Ready',
+  PROCESSING: 'In progress',
+  FAILED: 'Failed',
 };
 
 export default ({ item }) => {
@@ -29,7 +30,7 @@ export default ({ item }) => {
     <Card className="wgsa-card--bordered">
       <span className="wgsa-card-metadata-overview">
         <CardMetadata title="Size" icon="insert_drive_file">
-          {item.size} genomes
+          {item.size} genome{item.size === 1 ? '' : 's'}
         </CardMetadata>
         <CardMetadata tooltip={createdAt.toLocaleString()} icon="history">
           {dateSince(createdAt)} ago
@@ -58,17 +59,10 @@ export default ({ item }) => {
         >
           View Collection
         </Link>
-        { item.pmid &&
-          <a
-            className="mdl-button wgsa-button--text"
-            href={`http://www.ncbi.nlm.nih.gov/pubmed/${item.pmid}`}
-            target="_blank"
-            rel="noopener"
-            title="View Publication"
-          >
-            Pubmed
-          </a>
-        }
+        <PubMedLink
+          className="mdl-button wgsa-button--text"
+          pmid={item.pmid}
+        />
       </div>
     </Card>
   );
