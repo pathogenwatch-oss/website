@@ -1,6 +1,11 @@
 .wgsa-save-for-offline {
   text-align: center;
   clear: both;
+  padding-top: 8px;
+}
+
+.wgsa-save-for-offline button {
+  margin-bottom: 8px;
 }
 
 .wgsa-save-for-offline > p {

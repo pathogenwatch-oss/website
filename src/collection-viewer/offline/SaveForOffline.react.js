@@ -37,8 +37,9 @@ export default React.createClass({
                 onClick={this.props.onSave}
                 disabled={status === statuses.SAVING}
               >
-                { status === statuses.SAVING ? <Spinner /> : 'Save for Offline' }
+                Save for Offline Use
               </button> }
+          { status === statuses.SAVING && <Spinner /> }
           { status !== statuses.SAVED && <p>(Page will refresh once saved)</p> }
         </div>
       );
