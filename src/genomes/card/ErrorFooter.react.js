@@ -1,7 +1,6 @@
 import React from 'react';
 
 import RemoveButton from './RemoveButton.react';
-import RetryButton from './RetryButton.react';
 
 import { InvalidGenomeError } from '../utils/validation';
 
@@ -21,7 +20,6 @@ export default ({ genome }) => {
   }
   return (
     <Footer>
-      {/* <RetryButton genome={genome} /> */}
       <RemoveButton genome={genome} className="wgsa-icon-button--small" />
     </Footer>
   );
