@@ -21,7 +21,7 @@ export default ({ genome }) => {
   }
   return (
     <Footer>
-      <RetryButton genome={genome} />
+      {/* <RetryButton genome={genome} /> */}
       <RemoveButton genome={genome} className="wgsa-icon-button--small" />
     </Footer>
   );
