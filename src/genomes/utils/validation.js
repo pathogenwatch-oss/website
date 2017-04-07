@@ -35,5 +35,5 @@ export function validateGenomeContent(genomeContent) {
 }
 
 export function isFailedUpload({ error }) {
-  return error && !error instanceof InvalidGenomeError;
+  return error && !(error instanceof InvalidGenomeError);
 }
