@@ -5,7 +5,6 @@ const formattedName = (<em>{name}</em>);
 const shortName = 'R. salmoninarum';
 const formattedShortName = (<em>{shortName}</em>);
 
-
 export default {
   name,
   formattedName,
