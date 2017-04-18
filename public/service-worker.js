@@ -9,7 +9,7 @@ const cachePatterns = [
   /^https?:\/\/fonts\.googleapis\.com/,
   /^https?:\/\/api\.mapbox\.com/,
 ];
-//
+
 function shouldCache(request) {
   return (
     request.method === 'GET' &&
@@ -17,7 +17,7 @@ function shouldCache(request) {
   );
 }
 
-const nonNavigationPaths = /^\/(api|download|zika|rensm)\//;
+const nonNavigationPaths = /^\/(api|download)\//;
 
 function isNavigation(event) {
   return (
