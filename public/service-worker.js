@@ -17,8 +17,17 @@ function shouldCache(request) {
   );
 }
 
+const nonNavigationPaths = /^\/(api|download|zika|rensm)\//;
+
+function isNavigation(event) {
+  return (
+    event.request.mode === 'navigate' &&
+    nonNavigationPaths.test(event.request.pathname) === false
+  );
+}
+
 self.addEventListener('fetch', event => {
-  if (event.request.mode === 'navigate') {
+  if (isNavigation(event)) {
     event.respondWith(
       caches.open(assetCache).then(cache =>
         fetch(event.request)
