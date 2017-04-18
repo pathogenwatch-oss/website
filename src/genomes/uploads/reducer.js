@@ -41,7 +41,12 @@ export default function (state = initialState, { type, payload }) {
         queue: [ ...state.queue, ...ids ],
         entities: payload.genomes.reduce((memo, genome) => {
           delete genome.error;
-          memo[genome.id] = { ...genome, uploadedAt, status: statuses.PENDING };
+          memo[genome.id] = {
+            ...genome,
+            uploadedAt,
+            status: statuses.PENDING,
+            progress: 0,
+          };
           return memo;
         }, { ...state.entities }),
       };

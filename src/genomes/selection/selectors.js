@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 
-import { isSupported } from '../../organisms';
+import { getDeployedOrganismIds } from '../../summary/selectors';
 
 export const getSelectedGenomes = ({ genomes }) => genomes.selection;
 
@@ -17,5 +17,7 @@ export const getSelectedGenomeList = createSelector(
 
 export const getSelectedSupportedGenomesList = createSelector(
   getSelectedGenomeList,
-  genomes => genomes.filter(genome => isSupported(genome))
+  getDeployedOrganismIds,
+  (genomes, deployedIds) =>
+    genomes.filter(genome => deployedIds.has(genome.organismId))
 );
