@@ -12,11 +12,7 @@ const mongoConnection = require('utils/mongoConnection');
 const readCsv = require('../utils/read-csv');
 const storeGenomes = require('../utils/store-genomes');
 
-const {
-  organismId,
-  csvFile,
-  fastaDir,
-} = argv.opts;
+const { organismId, csvFile, fastaDir } = argv.opts;
 
 console.log({ organismId, csvFile, fastaDir });
 
@@ -31,9 +27,8 @@ function getGenomeFile({ filename }) {
 
 function addDummyOrganismRecord() {
   return Organism.create({
-    deployed: new Date(),
-    resistance: { antibiotics: [], paar: {}, snp: {} },
     taxId: organismId,
+    deployed: new Date(),
   });
 }
 
@@ -59,8 +54,8 @@ function createReferenceCollection() {
 }
 
 function isSimpleSupport() {
-  const organism =
-    require('wgsa-front-end/universal/organism')[organismId] || {};
+  const organisms = require('wgsa-front-end/universal/organisms');
+  const organism = organisms.find(_ => _.id === organismId) || {};
   return organism.simple;
 }
 
