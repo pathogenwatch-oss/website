@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import FileDragAndDrop from '../../drag-and-drop';
 import ProgressBar from '../../progress-bar';
+import Overlay from '../../overlay';
 
 import Filter from '../filter';
 import Summary from '../summary';
@@ -15,7 +16,7 @@ import { getStatus } from '../selectors';
 
 import { statuses } from '../constants';
 
-const Compnent = React.createClass({
+const Component = React.createClass({
 
   propTypes: {
     hasGenomes: React.PropTypes.bool,
@@ -90,17 +91,6 @@ const Compnent = React.createClass({
   renderContent() {
     const { items, status } = this.props;
 
-    if (status === statuses.LOADING) {
-      return (
-        <div>
-          {this.props.children}
-          <p className="wgsa-big-message-overlay">
-            Loading... ⌛
-          </p>
-        </div>
-      );
-    }
-
     if (status === statuses.ERROR) {
       return (
         <p className="wgsa-hub-big-message">
@@ -126,6 +116,11 @@ const Compnent = React.createClass({
         </div>
         <Filter />
         <SelectionDrawer />
+        <Overlay visible={this.props.status === statuses.LOADING}>
+          <p className="wgsa-big-message">
+            Loading... ⌛
+          </p>
+        </Overlay>
       </FileDragAndDrop>
     );
   },
@@ -141,4 +136,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(Compnent);
+export default connect(mapStateToProps)(Component);
