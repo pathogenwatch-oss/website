@@ -8,10 +8,12 @@ import selectedMetric from './stats/reducer';
 import collectionMetadata from './create-collection-form/reducer';
 
 import { CREATE_COLLECTION } from './create-collection-form';
-import { FETCH_GENOMES, MOVE_TO_BIN, UNDO_MOVE_TO_BIN } from './actions';
+import { FETCH_GENOMES, FETCH_GENOME_SUMMARY, MOVE_TO_BIN, UNDO_MOVE_TO_BIN } from './actions';
 
 function entities(state = {}, { type, payload }) {
   switch (type) {
+    case FETCH_GENOME_SUMMARY.ATTEMPT:
+      return {};
     case FETCH_GENOMES.SUCCESS: {
       return payload.result.reduce((memo, genome) => {
         memo[genome.id] = {

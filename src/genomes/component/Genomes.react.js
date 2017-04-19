@@ -26,7 +26,7 @@ const Component = React.createClass({
     isUploading: React.PropTypes.bool,
     waiting: React.PropTypes.bool,
     prefilter: React.PropTypes.string,
-    filter: React.PropTypes.func,
+    fetch: React.PropTypes.func,
   },
 
   contextTypes: {
@@ -34,14 +34,14 @@ const Component = React.createClass({
   },
 
   componentWillMount() {
-    this.props.filter();
+    this.props.fetch();
   },
 
   componentDidUpdate(previous) {
-    const { prefilter, isUploading, filter } = this.props;
+    const { prefilter, isUploading, fetch } = this.props;
     if (prefilter === 'upload') {
       if (previous.isUploading && !isUploading) {
-        filter();
+        fetch();
       }
     }
   },
@@ -97,6 +97,10 @@ const Component = React.createClass({
           Something went wrong. 😞
         </p>
       );
+    }
+
+    if (items.length === 0 && status === statuses.LOADING) {
+      return null;
     }
 
     if (items.length === 0) {
