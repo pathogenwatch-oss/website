@@ -92,9 +92,12 @@ const Compnent = React.createClass({
 
     if (status === statuses.LOADING) {
       return (
-        <p className="wgsa-hub-big-message">
-          Loading... ⌛
-        </p>
+        <div>
+          {this.props.children}
+          <p className="wgsa-big-message-overlay">
+            Loading... ⌛
+          </p>
+        </div>
       );
     }
 
