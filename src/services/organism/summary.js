@@ -14,7 +14,7 @@ const genomeFields = [
 
 module.exports = function (props) {
   return Promise.all([
-    Organism.distinct('taxId'),
+    Organism.deployedOrganismIds(),
     Collection.getSummary(collectionsFields, props),
     Genome.getSummary(genomeFields, props),
   ]).
