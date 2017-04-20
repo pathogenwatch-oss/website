@@ -1,12 +1,17 @@
+.wgsa-homepage {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  height: 100%;
+  background: #fff;
+}
+
 .jumbotron {
-  background-image: url('/images/worldmap.svg');
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
   width: 100%;
-  padding: 3.125% 0 6.25%;
+  padding: 64px 0 32px;
   max-width: 1200px;
   margin: 0 auto;
+  flex-grow: 1;
 }
 
 .jumbotron img {
@@ -20,4 +25,76 @@
   color: #673c90;
   font-size: 24px;
   text-align: center;
+}
+
+.showcase {
+  position: relative;
+}
+
+.showcase img {
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.showcase__link {
+  width: 32px;
+  height: 32px;
+  background-color: #673c90;
+  position: absolute !important;
+  border-radius: 999px;
+  display: block;
+  z-index: 1;
+  cursor: pointer;
+}
+
+.showcase__link--small {
+  width: 16px;
+  height: 16px;
+}
+
+.showcase__link--large {
+  width: 48px;
+  height: 48px;
+}
+
+.showcase__link--1 {
+  left: 50%;
+  top: 50%;
+  animation-delay: 0.25s;
+}
+
+.showcase__link--2 {
+  left: 30.5%;
+  top: 32%;
+  animation-delay: 0.5s;
+}
+
+.showcase__link--3 {
+  left: 68%;
+  top: 48%;
+  animation-delay: 0.75s;
+}
+
+.showcase__link--4 {
+  left: 35%;
+  top: 60%;
+  animation-delay: 1s;
+}
+
+.showcase__link--5 {
+  left: 64%;
+  top: 47%;
+  animation-delay: 1.25s;
+}
+
+.showcase__link--6 {
+  left: 66%;
+  top: 28%;
+  animation-delay: 1.5s;
+}
+
+.showcase__link--7 {
+  left: 44%;
+  top: 26%;
+  animation-delay: 1.75s;
 }
