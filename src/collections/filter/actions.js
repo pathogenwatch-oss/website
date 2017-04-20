@@ -8,7 +8,7 @@ import { getFilter } from './selectors';
 export function updateFilter(query, updateQueryString = true) {
   return (dispatch, getState) => {
     const previous = getFilter(getState());
-    const update = updateQueryString ? actions.update : actions.updateFilter;
+    const update = updateQueryString ? actions.update : actions.setFilter;
     dispatch(update(stateKey, query));
 
     const currentFilter = getFilter(getState());

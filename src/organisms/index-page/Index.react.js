@@ -40,18 +40,18 @@ const Index = React.createClass({
             <h2 className="wgsa-section-title">WGSA Organisms</h2>
           </div>
           { wgsaOrganisms.map(({ organismId, totalCollections, totalGenomes }) =>
-              <div key={organismId} className="wgsa-card wgsa-section-divider mdl-cell mdl-cell--3-col">
+              <div key={organismId} className="wgsa-organism-card wgsa-card wgsa-card--bordered mdl-cell mdl-cell--3-col">
                 <h3 className="wgsa-section-title">
                   <FormattedName organismId={organismId} fullName />
                 </h3>
-                <CardMetadata icon="collections" title="collections">
-                  <Link to={`/collections?organismId=${organismId}`} title="Browse collections">
-                    {totalCollections} collection{totalCollections === 1 ? '' : 's'}
+                <CardMetadata icon="collections" title="Collections">
+                  <Link to={`/collections?organismId=${organismId}`} title="Browse Collections">
+                    {totalCollections} Collection{totalCollections === 1 ? '' : 's'}
                   </Link>
                 </CardMetadata>
-                <CardMetadata icon="bug_report" title="genomes">
-                  <Link to={`/genomes?organismId=${organismId}`} title="Browse genomes">
-                    {totalGenomes} genome{totalGenomes === 1 ? '' : 's'}
+                <CardMetadata icon="insert_drive_file" title="Genomes">
+                  <Link to={`/genomes?organismId=${organismId}`} title="Browse Genomes">
+                    {totalGenomes} Genome{totalGenomes === 1 ? '' : 's'}
                   </Link>
                 </CardMetadata>
                 <footer className="wgsa-card-footer">
@@ -59,20 +59,20 @@ const Index = React.createClass({
                     className="mdl-button mdl-button--primary wgsa-button--text"
                     to={`/organisms/${taxIdMap.get(organismId).nickname}`}
                   >
-                    Organisms Home
+                    Organism Home
                   </Link>
                 </footer>
               </div>
             ) }
             <h2 className="wgsa-section-title mdl-cell mdl-cell--12-col">Other Organisms</h2>
             { otherOrganisms.map(({ organismId, organismName, totalGenomes }) =>
-                <div key={organismId} className="wgsa-card wgsa-section-divider mdl-cell mdl-cell--3-col">
+                <div key={organismId} className="wgsa-organism-card wgsa-card wgsa-card--bordered mdl-cell mdl-cell--3-col">
                   <h3 className="wgsa-section-title">
                     {organismName}
                   </h3>
-                  <CardMetadata icon="bug_report" title="genomes">
-                    <Link to={`/genomes?organismId=${organismId}`} title="Browse genomes">
-                      {totalGenomes} genomes
+                  <CardMetadata icon="insert_drive_file" title="Genomes">
+                    <Link to={`/genomes?organismId=${organismId}`} title="Browse Genomes">
+                      {totalGenomes} Genome{totalGenomes === 1 ? '' : 's'}
                     </Link>
                   </CardMetadata>
                 </div>

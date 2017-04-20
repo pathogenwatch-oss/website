@@ -72,16 +72,20 @@ const UserDrawer = React.createClass({
           { !user && <hr /> }
           <nav className="mdl-navigation">
             <h2 className="wgsa-navigation-header">Collections</h2>
-            <NavLink to="/collections/all" badge={allCollections} icon="collections">All Collections</NavLink>
+            <NavLink to="/collections/all" badge={allCollections} icon="collections">
+              { user ? 'All' : 'Public' } Collections
+            </NavLink>
             { user && <NavLink to="/collections/user" badge={userCollections} icon="person">My Collections</NavLink> }
-            <NavLink to="/collections/bin" icon="delete">Bin</NavLink>
+            { user && <NavLink to="/collections/bin" icon="delete">Bin</NavLink> }
           </nav>
           <hr />
           <nav className="mdl-navigation">
             <h2 className="wgsa-navigation-header">Genomes</h2>
-            <NavLink to="/genomes/all" badge={allGenomes} icon="bug_report">All Genomes</NavLink>
+            <NavLink to="/genomes/all" badge={allGenomes} icon="bug_report">
+              { user ? 'All' : 'Public' } Genomes
+            </NavLink>
             { user && <NavLink to="/genomes/user" badge={userGenomes} icon="person">My Genomes</NavLink> }
-            <NavLink to="/genomes/bin" icon="delete">Bin</NavLink>
+            { user && <NavLink to="/genomes/bin" icon="delete">Bin</NavLink> }
             <NavLink to="/genomes/upload" icon="cloud_upload">Upload</NavLink>
           </nav>
           <hr />

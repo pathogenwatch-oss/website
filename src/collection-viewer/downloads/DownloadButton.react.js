@@ -1,7 +1,7 @@
 import React from 'react';
 import classnames from 'classnames';
 
-import DownloadIcon from './DownloadIcon.react';
+import DownloadIcon from '../../downloads/DownloadIcon.react';
 
 export default React.createClass({
 

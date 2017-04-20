@@ -120,7 +120,7 @@
 }
 
 .mdl-button--raised.mdl-button--colored {
-  background: #673c90;
+  background: #673c90 !important;
 }
 
 .mdl-button--raised.mdl-button--colored:hover,

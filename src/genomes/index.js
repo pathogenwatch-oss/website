@@ -3,6 +3,7 @@ import { Route, Redirect, IndexRoute, IndexRedirect } from 'react-router';
 import { connect } from 'react-redux';
 
 import Genomes from './component';
+import ListView from './list';
 import GridView from './grid';
 import MapView from './map';
 import StatsView from './stats';
@@ -14,9 +15,13 @@ export reducer from './reducer';
 import DefaultContent from '../header/DefaultContent.react';
 import { isAsideEnabled } from './uploads/selectors';
 
-const GenomeHeader = connect(
-  state => ({ asideEnabled: isAsideEnabled(state) })
-)(
+function mapStateToProps(state) {
+  return {
+    asideEnabled: isAsideEnabled(state),
+  };
+}
+
+const GenomeHeader = connect(mapStateToProps)(
   ({ asideEnabled }) => <DefaultContent asideEnabled={asideEnabled} />
 );
 
@@ -30,10 +35,12 @@ export default (
           component={GridView}
           header={<GenomeHeader />}
         />
+        <Route path="list" component={ListView} header={<GenomeHeader />} />
         <Route path="map"
-          component={props => <MapView {...props} stateKey={`GENOMES_${prefilter.toUpperCase()}`} />}
+          component={props => <MapView {...props} stateKey={`GENOME_${prefilter.toUpperCase()}`} />}
+          header={<GenomeHeader />}
         />
-        <Route path="stats" component={StatsView} />
+        <Route path="stats" component={StatsView} header={<GenomeHeader />} />
       </Route>
     )}
     <Redirect from="*" to="all" />

@@ -41,6 +41,7 @@ export default function (state = initialState, { type, payload }) {
           title: result.title,
           description: result.description,
           dateCreated: new Date(result.progress.completed).toLocaleDateString(),
+          pmid: result.pmid,
         },
         progress: result.progress,
         status: result.status,

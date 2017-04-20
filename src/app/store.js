@@ -6,11 +6,9 @@ import rootReducer from './reducer';
 
 const middleware = [ promiseToThunk, thunk ];
 
-const isDev = process.env.NODE_ENV !== 'production';
-
 const store = compose(
   applyMiddleware(...middleware),
-  isDev && window.devToolsExtension ? window.devToolsExtension() : f => f
+  window.devToolsExtension ? window.devToolsExtension() : f => f
 )(createStore)(rootReducer);
 
 export default store;

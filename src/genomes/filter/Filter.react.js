@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import LocationListener from '../../location';
 import FilterAside from '../../filter/aside';
 import DateFilter from '../../date-filter';
-import SummarySection from '../../filter/summary-section';
+import AsideSection from '../../filter/aside-section';
 import { selectors } from '../../filter';
 
 import { getFilterSummary, getSearchText } from './selectors';
@@ -37,31 +37,31 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       textValue={textValue}
       textOnChange={e => updateFilter('searchText', e.target.value)}
     >
-      <SummarySection
+      <AsideSection
         filterKey="organismId"
         heading="WGSA Organisms"
         summary={filterSummary.wgsaOrganisms}
         updateFilter={updateFilter}
       />
-      <SummarySection
+      <AsideSection
         filterKey="organismId"
         heading="Other Organisms"
         summary={filterSummary.otherOrganisms}
         updateFilter={updateFilter}
       />
-      <SummarySection
+      <AsideSection
         filterKey="reference"
         heading="Reference"
         summary={filterSummary.reference}
         updateFilter={updateFilter}
       />
-      <SummarySection
+      <AsideSection
         filterKey="owner"
         heading="Owner"
         summary={filterSummary.owner}
         updateFilter={updateFilter}
       />
-      <SummarySection
+      <AsideSection
         filterKey="country"
         heading="Country"
         summary={filterSummary.country}

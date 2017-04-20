@@ -1,18 +1,14 @@
 import { createSelector } from 'reselect';
 
-import { getSelectedGenomeList } from '../selection/selectors';
+import { getSelectedSupportedGenomesList } from '../selection/selectors';
 import { isUploading } from '../uploads/selectors';
 import { isWaiting } from '../selectors';
 
-import { isSupported } from '../../organisms';
-
 export const getSelectedGenomeSummary = createSelector(
-  getSelectedGenomeList,
+  getSelectedSupportedGenomesList,
   selectedGenomes => selectedGenomes.reduce((memo, genome) => {
-    if (isSupported(genome)) {
-      memo[genome.organismId] = memo[genome.organismId] || [];
-      memo[genome.organismId].push(genome);
-    }
+    memo[genome.organismId] = memo[genome.organismId] || [];
+    memo[genome.organismId].push(genome);
     return memo;
   }, {})
 );

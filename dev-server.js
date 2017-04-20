@@ -4,6 +4,7 @@ const webpack = require('webpack');
 const express = require('express');
 const bodyParser = require('body-parser');
 const fastaStorage = require('wgsa-fasta-store');
+const swPrecache = require('sw-precache');
 
 const config = require('./webpack.config.js');
 const compiler = webpack(config);
@@ -19,6 +20,13 @@ app.use(require('webpack-dev-middleware')(compiler, {
 app.use(require('webpack-hot-middleware')(compiler));
 
 app.use(bodyParser.json());
+
+app.get('/service-worker.js', (req, res) => {
+  res.set('Content-Type', 'text/javascript');
+  swPrecache.generate(require('./sw-precache.config.js'))
+    .then(file => res.send(file))
+    .catch(console.error);
+});
 
 app.use(express.static('public'));
 

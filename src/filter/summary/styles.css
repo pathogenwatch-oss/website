@@ -4,6 +4,7 @@
   font-size: 13px;
   height: 4rem;
   min-height: 4rem;
+  min-width: 800px;
   position: relative;
 }
 
@@ -14,6 +15,7 @@
 
 .wgsa-filter-summary > * {
   margin: 0;
+  margin-right: 8px;
 }
 
 .wgsa-filter-summary > :first-child {
@@ -22,7 +24,9 @@
 
 .wgsa-filter-summary__count {
   font-size: 13px;
-  margin: 0 16px;
+  margin-left: 8px;
+  margin-right: 8px;
+  white-space: nowrap;
 }
 
 .wgsa-filter-summary__count > span {

@@ -6,14 +6,16 @@ import { FormattedName } from '../../organisms';
 
 import { toggleSelectedGenomes } from '../selection/actions';
 
+import { statuses as uploadStatuses } from '../uploads/constants';
+
 const stopPropagation = e => e.stopPropagation();
 
 const Header = ({ genome, onClick }) => {
   const { name, organismId, organismName } = genome;
   return (
     <header className="wgsa-card-header" onClick={onClick}>
-      <h2 className="wgsa-card-title" title={name}>{name}</h2>
-      <p className="wgsa-card-subtitle">
+      <h2 className="wgsa-card-title wgsa-overflow-fade" title={name}>{name}</h2>
+      <p className="wgsa-card-subtitle wgsa-overflow-fade">
         { organismName ?
             <FormattedName
               organismId={organismId}
@@ -22,9 +24,10 @@ const Header = ({ genome, onClick }) => {
             /> :
             <span>&nbsp;</span> }
       </p>
-      <span className="wgsa-card-header__button" onClick={stopPropagation}>
-        <AddToSelectionButton genome={genome} />
-      </span>
+      { !(genome.status in uploadStatuses) &&
+        <span className="wgsa-card-header__button" onClick={stopPropagation}>
+          <AddToSelectionButton genome={genome} />
+        </span> }
     </header>
   );
 };

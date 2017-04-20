@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Summary as FilterSummary, Totals } from '../../filter/viewing';
+import { Summary as FilterSummary, Totals } from '../../filter/summary';
 import ProgressBar from '../../progress-bar';
 import ViewSwitcher from './ViewSwitcher.react';
 import ErrorSummary from '../uploads/ErrorSummary.react';
@@ -58,6 +58,7 @@ const Summary = React.createClass({
         <div className="wgsa-button-group">
           <i className="material-icons" title="View">visibility</i>
           <ViewSwitcher title="Grid" />
+          <ViewSwitcher view="list" title="List" />
           <ViewSwitcher view="map" title="Map" />
           <ViewSwitcher view="stats" title="Stats" />
         </div>
@@ -72,10 +73,11 @@ const Summary = React.createClass({
         >
           Select All
         </button>
-        { this.props.showClearAll &&
+        { this.props.hasSelection &&
           <button className="mdl-button" onClick={this.props.onClearAll}>
-            Clear
-          </button> }
+            Clear Selection
+          </button>
+        }
       </FilterSummary>
     );
   },
@@ -92,7 +94,7 @@ function mapStateToProps(state) {
     numVisibleGenomes: getTotalGenomes(state),
     totalGenomes: getTotal(state),
     status: getStatus(state),
-    showClearAll: getSelectedGenomeList(state).length > 0,
+    hasSelection: getSelectedGenomeList(state).length > 0,
   };
 }
 

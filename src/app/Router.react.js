@@ -17,6 +17,7 @@ export default () => (
   <Router history={browserHistory}>
     <Route path="/" component={App}>
       {HomepageRoute}
+      <Redirect from="index.html" to="/" />
       {OrganismsRoute}
       {AccountRoute}
       {CollectionsRoute}
