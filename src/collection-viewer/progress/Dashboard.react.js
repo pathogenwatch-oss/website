@@ -23,16 +23,16 @@ export default React.createClass({
   render() {
     const { results = {} } = this.props;
     const { fp, core, mlst, paarsnp } = results;
-    const { noMLST, noAMR, genotyphi, ngmast } = Organisms.uiOptions;
+    const { noMLST, noAMR, genotyphi, ngMast } = Organisms.uiOptions;
 
     return (
       <div className="wgsa-genome-analyses">
         <div className="mdl-grid">
           <ProgressIndicator title="CORE" percentage={core} />
           { noMLST ? null : <ProgressIndicator title="MLST" percentage={mlst} /> }
-          { noAMR ? null : <ProgressIndicator title="PAARSNP" percentage={paarsnp} /> }
           { genotyphi ? <ProgressIndicator title="GENOTYPHI" percentage={results.genotyphi} /> : null }
-          { ngmast ? <ProgressIndicator title="NG-MAST" percentage={results.ngmast} /> : null }
+          { ngMast ? <ProgressIndicator title="NG-MAST" percentage={results.ngmast} /> : null }
+          { noAMR ? null : <ProgressIndicator title="PAARSNP" percentage={paarsnp} /> }
           <div className="wgsa-tree-progress-card">
             <span className="wgsa-tree-progress-card__title mdl-card__actions">TREES</span>
             <div className="wgsa-tree-progress-card__status">
