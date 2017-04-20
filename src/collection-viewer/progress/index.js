@@ -4,6 +4,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import Dashboard from './Dashboard.react';
+import Errors from './Errors.react';
 
 import { subscribe, unsubscribe } from '../../utils/Notification';
 
@@ -56,6 +57,8 @@ const UploadProgress = React.createClass({
   },
 
   render() {
+    const { progress } = this.props.collection;
+    const { errors = [] } = progress;
     return (
       <div className="wgsa-upload-progress">
         <main className="wgsa-upload-progress-container">
@@ -65,7 +68,13 @@ const UploadProgress = React.createClass({
               If upload fails to progress, please refresh at a later time.
             </div>
           </div>
-          <Dashboard {...this.props.collection.progress} />
+          <Dashboard {...progress} />
+          { errors.length &&
+            <div className="wgsa-upload-progress-section mdl-cell mdl-cell--12-col">
+              <div className="wgsa-card-heading">Warnings</div>
+              <Errors errors={errors} />
+            </div>
+          }
         </main>
       </div>
     );

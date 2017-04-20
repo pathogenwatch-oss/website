@@ -6,7 +6,7 @@ const iconStyle = {
   color: DEFAULT.WARNING_COLOUR,
 };
 
-const taskTypes = new Set([ 'PAARSNP', 'MLST' ]);
+const taskTypes = new Set([ 'PAARSNP', 'MLST', 'GENOTYPHI', 'NGMAST' ]);
 
 export default React.createClass({
 
@@ -15,18 +15,9 @@ export default React.createClass({
   },
 
   getMessage({ taskType, name }) {
-    if (taskType === 'PAARSNP') {
-      return (
-        <span>AMR predictions could not be determined for <strong>{name}</strong></span>
-      );
-    }
-    if (taskType === 'MLST') {
-      return (
-        <span>MLST prediction could not be determined for <strong>{name}</strong></span>
-      );
-    }
-
-    return null;
+    return (
+      <span>{taskType} prediction could not be determined for <strong>{name}</strong></span>
+    );
   },
 
   render() {
@@ -43,8 +34,7 @@ export default React.createClass({
               <i className="material-icons" style={iconStyle}>warning</i>
               { this.getMessage(error) }
             </li>
-          ))
-        }
+          )) }
       </ul>
     );
   },
