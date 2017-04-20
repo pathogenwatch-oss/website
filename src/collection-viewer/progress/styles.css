@@ -28,6 +28,7 @@
 
 .wgsa-upload-progress-section {
   background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.14);
 }
 
 .wgsa-collection-url-display {
@@ -73,7 +74,7 @@
 
 .wgsa-overview-upload-ready-card {
   min-height: 136px;
-  border: 1px solid rgba(0, 0, 0, 0.12);
+  border: 1px solid rgba(0, 0, 0, 0.14);
   font-weight: 400;
   z-index: 0;
 }
@@ -134,4 +135,14 @@
 
 .wgsa-upload-review-button .mdl-button__ripple-container .mdl-ripple {
   background: #fff;
+}
+
+.wgsa-upload-warning {
+  margin-left: 16px;
+  display: flex;
+  align-items: center;
+}
+
+.wgsa-upload-warning .material-icons {
+  margin: 16px;
 }

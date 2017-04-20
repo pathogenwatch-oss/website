@@ -14,15 +14,15 @@ export default React.createClass({
     errors: React.PropTypes.array,
   },
 
-  getMessage({ taskType, genomeName }) {
+  getMessage({ taskType, name }) {
     if (taskType === 'PAARSNP') {
       return (
-        <span>Antimicrobial resistance predictions will not be available for <strong>{genomeName}</strong></span>
+        <span>AMR predictions could not be determined for <strong>{name}</strong></span>
       );
     }
     if (taskType === 'MLST') {
       return (
-        <span>MLST prediction will not be available for <strong>{genomeName}</strong></span>
+        <span>MLST prediction could not be determined for <strong>{name}</strong></span>
       );
     }
 
@@ -37,13 +37,11 @@ export default React.createClass({
     }
 
     return (
-      <ul className="wgsa-upload-errors mdl-list">
+      <ul>
         { errors.map((error, index) => (
-            <li key={index} className="mdl-list__item">
-              <span className="mdl-list__item-primary-content">
-                <i className="material-icons mdl-list__item-icon" style={iconStyle}>warning</i>
-                { this.getMessage(error) }
-              </span>
+            <li key={index} className="wgsa-upload-warning">
+              <i className="material-icons" style={iconStyle}>warning</i>
+              { this.getMessage(error) }
             </li>
           ))
         }

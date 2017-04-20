@@ -26,14 +26,17 @@ export default React.createClass({
   render() {
     const { results = {}, errors = [] } = this.props;
     const { core, mlst, paarsnp } = results;
-    const { noMLST, noAMR } = Organisms.uiOptions;
+    const { noMLST, noAMR, genotyphi, ngmast } = Organisms.uiOptions;
+    console.log(Organisms)
     return (
       <div className="mdl-grid">
-        <div className="wgsa-upload-progress-section mdl-cell mdl-cell--12-col mdl-shadow--2dp">
+        <div className="mdl-cell mdl-cell--12-col">
           <div className="wgsa-genome-analyses mdl-grid">
             <ProgressIndicator title="CORE" percentage={core} />
             { noMLST ? null : <ProgressIndicator title="MLST" percentage={mlst} /> }
             { noAMR ? null : <ProgressIndicator title="PAARSNP" percentage={paarsnp} /> }
+            { genotyphi ? <ProgressIndicator title="GENOTYPHI" percentage={results.genotyphi} /> : null }
+            { ngmast ? <ProgressIndicator title="GENOTYPHI" percentage={results.ngmast} /> : null }
             <div className="wgsa-overview-upload-ready-card mdl-card mdl-cell mdl-cell--3-col">
               <div className="mdl-card__title mdl-card--expand" style={{ fontSize: '16px' }}>
                 { (core >= 100) ? <Spinner /> : 'PENDING' }
@@ -42,8 +45,8 @@ export default React.createClass({
             </div>
           </div>
         </div>
-        <div className="wgsa-upload-progress-section mdl-cell mdl-cell--12-col mdl-shadow--2dp">
-          <div className="wgsa-card-heading">Messages</div>
+        <div className="wgsa-upload-progress-section mdl-cell mdl-cell--12-col">
+          <div className="wgsa-card-heading">Warnings</div>
           <Errors errors={errors} />
         </div>
       </div>
