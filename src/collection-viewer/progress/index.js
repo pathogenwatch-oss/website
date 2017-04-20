@@ -41,7 +41,7 @@ const UploadProgress = React.createClass({
       'WGSA',
       '|',
       `(${percentage}%)`,
-      `${metadata.title || 'Upload Progress'}`,
+      `${metadata.title || 'Analysis Progress'}`,
     ].join(' ');
   },
 
@@ -58,7 +58,7 @@ const UploadProgress = React.createClass({
 
   render() {
     const { progress } = this.props.collection;
-    const { errors = [] } = progress;
+    const { errors = [], results = {} } = progress;
     return (
       <div className="wgsa-upload-progress">
         <main className="wgsa-upload-progress-container">
@@ -68,7 +68,7 @@ const UploadProgress = React.createClass({
               If upload fails to progress, please refresh at a later time.
             </div>
           </div>
-          <Dashboard {...progress} />
+          <Dashboard results={results} />
           { errors.length &&
             <div className="wgsa-upload-progress-section mdl-cell mdl-cell--12-col">
               <div className="wgsa-card-heading">Warnings</div>
