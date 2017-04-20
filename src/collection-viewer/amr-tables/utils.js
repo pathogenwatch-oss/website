@@ -50,7 +50,7 @@ export function createAdvancedViewColumn(element, profileKey, profiles) {
     addState({ data }) {
       if (!data.length) return this;
       this.hidden = data.every(({ analysis }) =>
-        analysis.paarsnp && notPresent(analysis.paarsnp[profileKey], key)
+        !analysis.paarsnp || notPresent(analysis.paarsnp[profileKey], key)
       );
       this.width = this.getWidth() + 16;
       return this;
