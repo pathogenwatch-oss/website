@@ -26,6 +26,8 @@ function createColumn({ key, fullName }) {
     },
     cellPadding: 16,
     getCellContents(props, { analysis }) {
+      if (!analysis.paarsnp) return null;
+
       const { antibiotics } = analysis.paarsnp;
       const isResistant =
         amr.isResistant(analysis.paarsnp, props.columnKey);

@@ -28,9 +28,9 @@ export function buildColumns({ snp, antibiotics }, profiles) {
                   if (!data.length) return this;
                   this.hidden =
                     snp[key][gene].every(({ snpName }) =>
-                      data.every(
-                        ({ analysis }) =>
-                          analysis.paarsnp.snp.indexOf(`${gene}_${snpName}`) === -1
+                      data.every(({ analysis }) =>
+                        analysis.paarsnp &&
+                        analysis.paarsnp.snp.indexOf(`${gene}_${snpName}`) === -1
                       )
                     );
                   return this;

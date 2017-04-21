@@ -4,6 +4,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import Dashboard from './Dashboard.react';
+import Errors from './Errors.react';
 
 import { subscribe, unsubscribe } from '../../utils/Notification';
 
@@ -40,7 +41,7 @@ const UploadProgress = React.createClass({
       'WGSA',
       '|',
       `(${percentage}%)`,
-      `${metadata.title || 'Upload Progress'}`,
+      `${metadata.title || 'Analysis Progress'}`,
     ].join(' ');
   },
 
@@ -56,16 +57,24 @@ const UploadProgress = React.createClass({
   },
 
   render() {
+    const { progress } = this.props.collection;
+    const { errors = [], results = {} } = progress;
     return (
       <div className="wgsa-upload-progress">
         <main className="wgsa-upload-progress-container">
-          <div className="wgsa-collection-url-display wgsa-upload-progress-section mdl-shadow--2dp">
+          <div className="wgsa-collection-url-display wgsa-upload-progress-section">
             <div className="mdl-card__supporting-text">
               Final results will be available at the current address.<br />
               If upload fails to progress, please refresh at a later time.
             </div>
           </div>
-          <Dashboard {...this.props.collection.progress} />
+          <Dashboard results={results} />
+          { errors.length &&
+            <div className="wgsa-upload-progress-section mdl-cell mdl-cell--12-col">
+              <div className="wgsa-card-heading">Warnings</div>
+              <Errors errors={errors} />
+            </div>
+          }
         </main>
       </div>
     );

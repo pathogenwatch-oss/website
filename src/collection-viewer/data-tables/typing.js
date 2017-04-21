@@ -55,7 +55,7 @@ const mlstGroup = {
 
 const ngMastGroup = {
   group: true,
-  columnKey: 'ngMast',
+  columnKey: 'ng-Mast',
   columns: [ '__ng-mast', '__por', '__tbpb' ],
 };
 
