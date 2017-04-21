@@ -57,7 +57,7 @@ const UploadProgress = React.createClass({
   },
 
   render() {
-    const { progress } = this.props.collection;
+    const { progress = {} } = this.props.collection;
     const { errors = [], results = {} } = progress;
     return (
       <div className="wgsa-upload-progress">
@@ -69,11 +69,11 @@ const UploadProgress = React.createClass({
             </div>
           </div>
           <Dashboard results={results} />
-          { errors.length &&
+          { errors.length ?
             <div className="wgsa-upload-progress-section mdl-cell mdl-cell--12-col">
               <div className="wgsa-card-heading">Warnings</div>
               <Errors errors={errors} />
-            </div>
+            </div> : null
           }
         </main>
       </div>

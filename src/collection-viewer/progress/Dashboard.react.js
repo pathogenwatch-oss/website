@@ -22,7 +22,7 @@ export default React.createClass({
 
   render() {
     const { results = {} } = this.props;
-    const { fp, core, mlst, paarsnp } = results;
+    const { core, mlst, paarsnp } = results;
     const { noMLST, noAMR, genotyphi, ngMast } = Organisms.uiOptions;
 
     return (
@@ -36,8 +36,8 @@ export default React.createClass({
           <div className="wgsa-tree-progress-card">
             <span className="wgsa-tree-progress-card__title mdl-card__actions">TREES</span>
             <div className="wgsa-tree-progress-card__status">
-              { (fp >= 100) && <Spinner /> }
-              { (fp >= 100) ? 'BUILDING' : 'PENDING' }
+              { (core >= 100) && <Spinner /> }
+              { (core >= 100) ? 'BUILDING' : 'PENDING' }
             </div>
           </div>
         </div>
