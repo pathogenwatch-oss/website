@@ -5,7 +5,6 @@ const formattedName = (<em>{name}</em>);
 const shortName = 'Zika';
 const formattedShortName = (<em>{shortName}</em>);
 
-
 export default {
   name,
   formattedName,
