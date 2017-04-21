@@ -14,7 +14,7 @@ module.exports = function ({ request }) {
         queue.destroy();
 
         if (message.taskStatus !== 'SUCCESS') {
-          return reject(`${message.format} generation failed: ${message.taskStatus}`);
+          return reject(new Error(`${message.format} generation failed: ${message.taskStatus}`));
         }
 
         resolve(message.fileNamesMap);
