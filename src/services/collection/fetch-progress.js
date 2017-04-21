@@ -34,11 +34,20 @@ function calculateProgress(collection, results) {
   return collection;
 }
 
+function factorErrors(results, errors = []) {
+  for (const error of errors) {
+    const result = results.find(_ => _.type === error.taskType.toLowerCase());
+    if (result) result.count++;
+  }
+  return results;
+}
+
 function checkStatus(collection) {
   if (!collection) throw new NotFoundError('Collection not found');
   if (collection.isProcessing) {
-    return CollectionGenome.countResults(collection).
-      then(results => {
+    return CollectionGenome.countResults(collection)
+      .then(results => factorErrors(results, collection.progress.errors))
+      .then(results => {
         if (isReady(collection, results)) {
           return (
             collection.reference ?
