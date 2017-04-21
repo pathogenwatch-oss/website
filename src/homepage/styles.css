@@ -1,10 +1,14 @@
 .wgsa-homepage {
   background: #fff;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  overflow-y: auto;
 }
 
 .homepage-section-link {
-  /*padding-bottom: 64px;*/
-  /*display: block;*/
   font-size: 20px;
   text-transform: uppercase;
   display: flex;
@@ -26,6 +30,61 @@
   display: flex;
 }
 
+.wgsa-homepage section.alt {
+  background: #efefef;
+}
+
+.wgsa-homepage__content {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 40px;
+}
+
+.wgsa-homepage h2 {
+  color: #673c90;
+}
+
+.wgsa-homepage table {
+  border-collapse: collapse;
+}
+
+.wgsa-homepage th, td {
+  text-align: center;
+  padding: 4px 8px;
+  border-left: 1px solid rgba(0, 0, 0, 0.14);
+  font-size: 16px;
+}
+
+.wgsa-homepage th:first-child,
+.wgsa-homepage td:first-child {
+  border-left: none;
+}
+
+.wgsa-homepage th {
+  color: #673c90;
+  font-weight: 500;
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+.wgsa-homepage td {
+  border-top: 1px solid rgba(0, 0, 0, 0.14);
+  vertical-align: middle;
+}
+
+.wgsa-homepage td:first-child {
+  text-align: right;
+  font-weight: 500;
+}
+
+.wgsa-homepage table i {
+  color: #AC65A6;
+}
+
+
+
+/* Jumbotron */
+
 .jumbotron {
   width: 100%;
   padding: 64px 0 32px;
@@ -45,6 +104,10 @@
   font-size: 24px;
   text-align: center;
 }
+
+
+
+/* Showcase */
 
 .showcase {
   position: relative;
@@ -122,6 +185,10 @@
   animation-delay: 1.75s;
 }
 
+
+
+/* Footer */
+
 .cgps-footer {
   color: #fff;
   position: relative;
@@ -129,26 +196,25 @@
   text-align: center;
 }
 
-  .cgps-footer .mdl-mega-footer--top-section::after {
-    border-bottom: none;
-  }
+.cgps-footer .mdl-mega-footer--top-section::after {
+  border-bottom: none;
+}
 
-  .cgps-footer .mdl-mega-footer--middle-section::after {
-    border-bottom: none;
-  }
+.cgps-footer .mdl-mega-footer--middle-section::after {
+  border-bottom: none;
+}
 
-  .cgps-footer .mdl-mega-footer--bottom-section {
-    position: relative;
-  }
+.cgps-footer .mdl-mega-footer--bottom-section {
+  position: relative;
+}
 
-  .cgps-footer .mdl-mega-footer--bottom-section a {
-    margin-right: 2em;
-  }
+.cgps-footer .mdl-mega-footer--bottom-section a {
+  margin-right: 2em;
+}
 
-  .cgps-footer .mdl-mega-footer--right-section a {
-    margin-bottom: 0;
-  }
-
+.cgps-footer .mdl-mega-footer--right-section a {
+  margin-bottom: 0;
+}
 
 .cgps-contact-link {
   padding: 1em 0;

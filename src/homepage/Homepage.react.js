@@ -24,129 +24,135 @@ export default React.createClass({
           <Link className="showcase__link showcase__link--6 wgsa-sonar-effect" />
           <Link className="showcase__link showcase__link--7 showcase__link--small wgsa-sonar-effect" />
           <footer className="homepage-section-footer">
-            <a href="#about" className="homepage-section-link title-font">
+            <a href="#how-it-works" className="homepage-section-link title-font">
               <i className="material-icons">expand_more</i> How it works
             </a>
           </footer>
         </section>
-        <section className="how-it-works">
-          <h2>How WGSA Works</h2>
-          <ol>
-            <li>Upload</li>
-            <li>Analyse</li>
-            <li>Explore</li>
-          </ol>
+        <section id="how-it-works">
+          <div className="wgsa-homepage__content">
+            <h2>How WGSA Works</h2>
+            <ol>
+              <li><h3>Upload</h3></li>
+              <li><h3>Analyse</h3></li>
+              <li><h3>Explore</h3></li>
+            </ol>
+          </div>
         </section>
-        <section className="analysis-matrix">
-          <h2>Analysis Matrix</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>Organism</th>
-                <th>Core Genome</th>
-                <th>MLST</th>
-                <th>PAARSNP</th>
-                <th>Genotyphi</th>
-                <th>NG-MAST</th>
-                <th>Population Search</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><FormattedName organismId="1280" fullName /></td>
-                <td><i className="material-icons">check_circle</i></td>
-                <td><i className="material-icons">check_circle</i></td>
-                <td><i className="material-icons">check_circle</i></td>
-                <td></td>
-                <td></td>
-                <td><i className="material-icons">check_circle</i></td>
-              </tr>
-              <tr>
-                <td><FormattedName organismId="90370" fullName /></td>
-                <td><i className="material-icons">check_circle</i></td>
-                <td><i className="material-icons">check_circle</i></td>
-                <td><i className="material-icons">check_circle</i></td>
-                <td><i className="material-icons">check_circle</i></td>
-                <td></td>
-                <td><i className="material-icons">check_circle</i></td>
-              </tr>
-              <tr>
-                <td><FormattedName organismId="485" fullName /></td>
-                <td><i className="material-icons">check_circle</i></td>
-                <td><i className="material-icons">check_circle</i></td>
-                <td><i className="material-icons">check_circle</i></td>
-                <td></td>
-                <td><i className="material-icons">check_circle</i></td>
-                <td><i className="material-icons">check_circle</i></td>
-              </tr>
-              <tr>
-                <td><FormattedName organismId="1313" fullName /></td>
-                <td><i className="material-icons">check_circle</i></td>
-                <td><i className="material-icons">check_circle</i></td>
-                <td><i className="material-icons">check_circle</i></td>
-                <td></td>
-                <td></td>
-                <td><i className="material-icons">check_circle</i></td>
-              </tr>
-              <tr>
-                <td><FormattedName organismId="64320" fullName /></td>
-                <td><i className="material-icons">check_circle</i></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-              </tr>
-              <tr>
-                <td><FormattedName organismId="1646" fullName /></td>
-                <td><i className="material-icons">check_circle</i></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-              </tr>
-            </tbody>
-          </table>
+        <section id="analysis-matrix">
+          <div className="wgsa-homepage__content">
+            <h2>Analysis Matrix</h2>
+            <table>
+              <thead>
+                <tr>
+                  <th>Organism</th>
+                  <th>Core Genome</th>
+                  <th>MLST</th>
+                  <th>PAARSNP</th>
+                  <th>Genotyphi</th>
+                  <th>NG-MAST</th>
+                  <th>Population Search</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><FormattedName organismId="1280" fullName /></td>
+                  <td><i className="material-icons">check_circle</i></td>
+                  <td><i className="material-icons">check_circle</i></td>
+                  <td><i className="material-icons">check_circle</i></td>
+                  <td></td>
+                  <td></td>
+                  <td><i className="material-icons">check_circle</i></td>
+                </tr>
+                <tr>
+                  <td><FormattedName organismId="90370" fullName /></td>
+                  <td><i className="material-icons">check_circle</i></td>
+                  <td><i className="material-icons">check_circle</i></td>
+                  <td><i className="material-icons">check_circle</i></td>
+                  <td><i className="material-icons">check_circle</i></td>
+                  <td></td>
+                  <td><i className="material-icons">check_circle</i></td>
+                </tr>
+                <tr>
+                  <td><FormattedName organismId="485" fullName /></td>
+                  <td><i className="material-icons">check_circle</i></td>
+                  <td><i className="material-icons">check_circle</i></td>
+                  <td><i className="material-icons">check_circle</i></td>
+                  <td></td>
+                  <td><i className="material-icons">check_circle</i></td>
+                  <td><i className="material-icons">check_circle</i></td>
+                </tr>
+                <tr>
+                  <td><FormattedName organismId="1313" fullName /></td>
+                  <td><i className="material-icons">check_circle</i></td>
+                  <td><i className="material-icons">check_circle</i></td>
+                  <td><i className="material-icons">check_circle</i></td>
+                  <td></td>
+                  <td></td>
+                  <td><i className="material-icons">check_circle</i></td>
+                </tr>
+                <tr>
+                  <td><FormattedName organismId="64320" fullName /></td>
+                  <td><i className="material-icons">check_circle</i></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td><FormattedName organismId="1646" fullName /></td>
+                  <td><i className="material-icons">check_circle</i></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </section>
-        <section className="features">
-          <h2>Features</h2>
-          <table>
-            <thead>
-              <tr>
-                <th></th>
-                <th>Anonymous User</th>
-                <th>Signed-in User</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Access Public Genomes</td>
-                <td><i className="material-icons">check_circle</i></td>
-                <td><i className="material-icons">check_circle</i></td>
-              </tr>
-              <tr>
-                <td>Collection Size</td>
-                <td>150</td>
-                <td>2000</td>
-              </tr>
-              <tr>
-                <td>Private Genomes/Collections</td>
-                <td></td>
-                <td><i className="material-icons">check_circle</i></td>
-              </tr>
-              <tr>
-                <td>Publish Collections</td>
-                <td></td>
-                <td>Coming Soon</td>
-              </tr>
-              <tr>
-                <td>Edit Collection/Genome Metadata</td>
-                <td></td>
-                <td>Coming Soon</td>
-              </tr>
-            </tbody>
-          </table>
+        <section id="features">
+          <div className="wgsa-homepage__content">
+            <h2>Features</h2>
+            <table>
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>Anonymous User</th>
+                  <th>Signed-in User</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Access Public Genomes</td>
+                  <td><i className="material-icons">check_circle</i></td>
+                  <td><i className="material-icons">check_circle</i></td>
+                </tr>
+                <tr>
+                  <td>Collection Size</td>
+                  <td>150</td>
+                  <td>2000</td>
+                </tr>
+                <tr>
+                  <td>Private Genomes/Collections</td>
+                  <td></td>
+                  <td><i className="material-icons">check_circle</i></td>
+                </tr>
+                <tr>
+                  <td>Publish Collections</td>
+                  <td></td>
+                  <td>Coming Soon</td>
+                </tr>
+                <tr>
+                  <td>Edit Collection/Genome Metadata</td>
+                  <td></td>
+                  <td>Coming Soon</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </section>
         <footer className="cgps-footer mdl-mega-footer">
           <div className="mdl-mega-footer--top-section">
