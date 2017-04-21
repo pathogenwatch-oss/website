@@ -24,3 +24,10 @@
 .wgsa-create-collection-form textarea {
   resize: none;
 }
+
+.wgsa-supported-organism-list {
+  font-weight: 500;
+  color: #3c7383;
+  list-style: outside;
+  margin-left: 16px;
+}

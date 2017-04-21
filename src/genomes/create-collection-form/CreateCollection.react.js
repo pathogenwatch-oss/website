@@ -2,20 +2,32 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import CreateCollectionForm from './Form.react';
+import { FormattedName } from '../../organisms';
 
 import { getSelectedGenomeSummary } from './selectors';
+import { getDeployedOrganismIds } from '../../summary/selectors';
 
 import { setSelection } from '../selection/actions';
-
-import { FormattedName } from '../../organisms';
 
 const CreateCollection = React.createClass({
 
   render() {
-    const { selectedGenomeSummary, onClick } = this.props;
+    const { selectedGenomeSummary, deployedOrganisms, onClick } = this.props;
     const organismIds = Object.keys(selectedGenomeSummary);
     if (organismIds.length === 0) {
-      return <p>Please select a supported organism to create a collection.</p>;
+      return (
+        <p>
+          Please select a supported organism to create a collection.<br />
+          Supported organisms are:
+          <ul className="wgsa-supported-organism-list">
+            { Array.from(deployedOrganisms).map(organismId =>
+              <li key={organismId}>
+                <FormattedName fullName organismId={organismId} />
+              </li>
+            )}
+          </ul>
+        </p>
+      );
     }
 
     if (organismIds.length === 1) {
@@ -50,6 +62,7 @@ const CreateCollection = React.createClass({
 function mapStateToProps(state) {
   return {
     selectedGenomeSummary: getSelectedGenomeSummary(state),
+    deployedOrganisms: getDeployedOrganismIds(state),
   };
 }
 
