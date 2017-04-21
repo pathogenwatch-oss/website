@@ -1,5 +1,3 @@
-import '../css/sonar.css';
-
 import React from 'react';
 import { Link } from 'react-router';
 
@@ -23,13 +21,13 @@ export default React.createClass({
           <Link className="showcase__link showcase__link--5 showcase__link--large wgsa-sonar-effect" />
           <Link className="showcase__link showcase__link--6 wgsa-sonar-effect" />
           <Link className="showcase__link showcase__link--7 showcase__link--small wgsa-sonar-effect" />
-          <footer className="homepage-section-footer">
-            <a href="#how-it-works" className="homepage-section-link title-font">
+          <footer>
+            <a href="#how-it-works" className="mdl-button mdl-button--primary">
               <i className="material-icons">expand_more</i> How it works
             </a>
           </footer>
         </section>
-        <section id="how-it-works">
+        <section id="how-it-works" className="alt">
           <div className="wgsa-homepage__content">
             <h2>How WGSA Works</h2>
             <ol>
@@ -39,19 +37,26 @@ export default React.createClass({
             </ol>
           </div>
         </section>
-        <section id="analysis-matrix">
+        <section id="organisms">
           <div className="wgsa-homepage__content">
-            <h2>Analysis Matrix</h2>
-            <table>
+            <h2>Organisms</h2>
+            <table className="wgsa-organism-table">
+              <colgroup>
+                <col className="wgsa-title-column" />
+                <col className="wgsa-feature-column" />
+                <col className="wgsa-feature-column" />
+                <col className="wgsa-feature-column" />
+                <col className="wgsa-feature-column" />
+                <col className="wgsa-feature-column" />
+              </colgroup>
               <thead>
                 <tr>
                   <th>Organism</th>
                   <th>Core Genome</th>
                   <th>MLST</th>
                   <th>PAARSNP</th>
-                  <th>Genotyphi</th>
-                  <th>NG-MAST</th>
                   <th>Population Search</th>
+                  <th>Other</th>
                 </tr>
               </thead>
               <tbody>
@@ -60,9 +65,8 @@ export default React.createClass({
                   <td><i className="material-icons">check_circle</i></td>
                   <td><i className="material-icons">check_circle</i></td>
                   <td><i className="material-icons">check_circle</i></td>
-                  <td></td>
-                  <td></td>
                   <td><i className="material-icons">check_circle</i></td>
+                  <td></td>
                 </tr>
                 <tr>
                   <td><FormattedName organismId="90370" fullName /></td>
@@ -70,31 +74,27 @@ export default React.createClass({
                   <td><i className="material-icons">check_circle</i></td>
                   <td><i className="material-icons">check_circle</i></td>
                   <td><i className="material-icons">check_circle</i></td>
-                  <td></td>
-                  <td><i className="material-icons">check_circle</i></td>
+                  <td>Genotyphi</td>
                 </tr>
                 <tr>
                   <td><FormattedName organismId="485" fullName /></td>
                   <td><i className="material-icons">check_circle</i></td>
                   <td><i className="material-icons">check_circle</i></td>
                   <td><i className="material-icons">check_circle</i></td>
-                  <td></td>
                   <td><i className="material-icons">check_circle</i></td>
-                  <td><i className="material-icons">check_circle</i></td>
+                  <td>NG-MAST</td>
                 </tr>
                 <tr>
                   <td><FormattedName organismId="1313" fullName /></td>
                   <td><i className="material-icons">check_circle</i></td>
                   <td><i className="material-icons">check_circle</i></td>
                   <td><i className="material-icons">check_circle</i></td>
-                  <td></td>
-                  <td></td>
                   <td><i className="material-icons">check_circle</i></td>
+                  <td></td>
                 </tr>
                 <tr>
                   <td><FormattedName organismId="64320" fullName /></td>
                   <td><i className="material-icons">check_circle</i></td>
-                  <td></td>
                   <td></td>
                   <td></td>
                   <td></td>
@@ -107,48 +107,52 @@ export default React.createClass({
                   <td></td>
                   <td></td>
                   <td></td>
-                  <td></td>
                 </tr>
               </tbody>
             </table>
           </div>
+          <footer>
+            <Link to="/organisms" className="mdl-button mdl-button--primary">
+              <i className="material-icons">bug_report</i> Browse Organisms
+            </Link>
+          </footer>
         </section>
-        <section id="features">
+        <section id="features" className="alt">
           <div className="wgsa-homepage__content">
             <h2>Features</h2>
-            <table>
+            <table className="wgsa-features-table">
+              <colgroup>
+                <col />
+                <col />
+              </colgroup>
               <thead>
-                <tr>
-                  <th></th>
+                <tr className="title-font">
                   <th>Anonymous User</th>
                   <th>Signed-in User</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td>Access Public Genomes</td>
-                  <td><i className="material-icons">check_circle</i></td>
-                  <td><i className="material-icons">check_circle</i></td>
+                  <td>Access public genomes</td>
+                  <td>Access public genomes</td>
                 </tr>
                 <tr>
-                  <td>Collection Size</td>
-                  <td>150</td>
-                  <td>2000</td>
+                  <td>
+                    <span className="wgsa-feature-figure">150</span>
+                    <small>genomes per collection</small>
+                  </td>
+                  <td>
+                    <span className="wgsa-feature-figure">2000</span>
+                    <small>genomes per collection</small>
+                  </td>
                 </tr>
                 <tr>
-                  <td>Private Genomes/Collections</td>
-                  <td></td>
-                  <td><i className="material-icons">check_circle</i></td>
+                  <td>&mdash;</td>
+                  <td>Private genomes & collections</td>
                 </tr>
                 <tr>
-                  <td>Publish Collections</td>
-                  <td></td>
-                  <td>Coming Soon</td>
-                </tr>
-                <tr>
-                  <td>Edit Collection/Genome Metadata</td>
-                  <td></td>
-                  <td>Coming Soon</td>
+                  <td>&mdash;</td>
+                  <td>Publish collections to public data</td>
                 </tr>
               </tbody>
             </table>

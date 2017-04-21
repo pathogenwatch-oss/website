@@ -1,0 +1,39 @@
+.wgsa-organism-table {
+  border-collapse: collapse;
+  margin: 0 auto;
+}
+
+.wgsa-feature-column {
+  width: 120px;
+}
+
+.wgsa-organism-table tbody tr:nth-child(odd) {
+  background: #efefef
+}
+
+.wgsa-organism-table th, td {
+  text-align: center;
+  padding: 8px;
+  font-size: 16px;
+}
+
+.wgsa-organism-table th:first-child,
+.wgsa-organism-table td:first-child {
+  text-align: left;
+  font-weight: 500;
+  padding-left: 16px;
+}
+
+.wgsa-organism-table th {
+  color: #673c90;
+  font-weight: 500;
+}
+
+.wgsa-organism-table td {
+  vertical-align: middle;
+}
+
+
+.wgsa-organism-table i {
+  color: #AC65A6;
+}
