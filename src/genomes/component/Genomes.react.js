@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import FileDragAndDrop from '../../drag-and-drop';
 import ProgressBar from '../../progress-bar';
+import Overlay from '../../overlay';
 
 import Filter from '../filter';
 import Summary from '../summary';
@@ -15,7 +16,7 @@ import { getStatus } from '../selectors';
 
 import { statuses } from '../constants';
 
-const Compnent = React.createClass({
+const Component = React.createClass({
 
   propTypes: {
     hasGenomes: React.PropTypes.bool,
@@ -25,7 +26,7 @@ const Compnent = React.createClass({
     isUploading: React.PropTypes.bool,
     waiting: React.PropTypes.bool,
     prefilter: React.PropTypes.string,
-    filter: React.PropTypes.func,
+    fetch: React.PropTypes.func,
   },
 
   contextTypes: {
@@ -33,14 +34,14 @@ const Compnent = React.createClass({
   },
 
   componentWillMount() {
-    this.props.filter();
+    this.props.fetch();
   },
 
   componentDidUpdate(previous) {
-    const { prefilter, isUploading, filter } = this.props;
+    const { prefilter, isUploading, fetch } = this.props;
     if (prefilter === 'upload') {
       if (previous.isUploading && !isUploading) {
-        filter();
+        fetch();
       }
     }
   },
@@ -90,20 +91,16 @@ const Compnent = React.createClass({
   renderContent() {
     const { items, status } = this.props;
 
-    if (status === statuses.LOADING) {
-      return (
-        <p className="wgsa-hub-big-message">
-          Loading... ⌛
-        </p>
-      );
-    }
-
     if (status === statuses.ERROR) {
       return (
         <p className="wgsa-hub-big-message">
           Something went wrong. 😞
         </p>
       );
+    }
+
+    if (items.length === 0 && status === statuses.LOADING) {
+      return null;
     }
 
     if (items.length === 0) {
@@ -123,6 +120,11 @@ const Compnent = React.createClass({
         </div>
         <Filter />
         <SelectionDrawer />
+        <Overlay visible={this.props.status === statuses.LOADING}>
+          <p className="wgsa-big-message">
+            Loading... ⌛
+          </p>
+        </Overlay>
       </FileDragAndDrop>
     );
   },
@@ -138,4 +140,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(Compnent);
+export default connect(mapStateToProps)(Component);
