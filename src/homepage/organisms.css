@@ -10,16 +10,14 @@
 .wgsa-organism-table th {
   vertical-align: bottom;
   border-bottom: 2px solid #ebeff2;
+  color: #673c90;
+  font-weight: 500;
 }
 
 .wgsa-organism-table th, td {
   text-align: center;
   padding: 12px;
   font-size: 16px;
-}
-
-.wgsa-organism-table tr:not(:last-child) td {
-  border-bottom: 1px solid #ebeff2;
 }
 
 .wgsa-organism-table th:first-child,
@@ -32,16 +30,14 @@
   text-align: right;
 }
 
-.wgsa-organism-table th {
-  color: #673c90;
-  font-weight: 500;
+.wgsa-organism-table tr:not(:last-child) td {
+  border-bottom: 1px solid #ebeff2;
 }
 
 .wgsa-organism-table td {
   vertical-align: middle;
 }
-
-
+  
 .wgsa-organism-table i {
   color: #B25EA1;
 }

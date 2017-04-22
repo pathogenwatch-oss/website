@@ -62,39 +62,39 @@ export default React.createClass({
               <tbody>
                 <tr>
                   <td><FormattedName organismId="1280" fullName /></td>
-                  <td><i className="material-icons">check_circle</i></td>
-                  <td><i className="material-icons">check_circle</i></td>
-                  <td><i className="material-icons">check_circle</i></td>
-                  <td><i className="material-icons">check_circle</i></td>
+                  <td><i className="material-icons">check</i></td>
+                  <td><i className="material-icons">check</i></td>
+                  <td><i className="material-icons">check</i></td>
+                  <td><i className="material-icons">check</i></td>
                   <td></td>
                 </tr>
                 <tr>
                   <td><FormattedName organismId="90370" fullName /></td>
-                  <td><i className="material-icons">check_circle</i></td>
-                  <td><i className="material-icons">check_circle</i></td>
-                  <td><i className="material-icons">check_circle</i></td>
-                  <td><i className="material-icons">check_circle</i></td>
-                  <td>Genotyphi</td>
+                  <td><i className="material-icons">check</i></td>
+                  <td><i className="material-icons">check</i></td>
+                  <td><i className="material-icons">check</i></td>
+                  <td><i className="material-icons">check</i></td>
+                  <td><small>Genotyphi</small></td>
                 </tr>
                 <tr>
                   <td><FormattedName organismId="485" fullName /></td>
-                  <td><i className="material-icons">check_circle</i></td>
-                  <td><i className="material-icons">check_circle</i></td>
-                  <td><i className="material-icons">check_circle</i></td>
-                  <td><i className="material-icons">check_circle</i></td>
-                  <td>NG-MAST</td>
+                  <td><i className="material-icons">check</i></td>
+                  <td><i className="material-icons">check</i></td>
+                  <td><i className="material-icons">check</i></td>
+                  <td><i className="material-icons">check</i></td>
+                  <td><small>NG-MAST</small></td>
                 </tr>
                 <tr>
                   <td><FormattedName organismId="1313" fullName /></td>
-                  <td><i className="material-icons">check_circle</i></td>
-                  <td><i className="material-icons">check_circle</i></td>
-                  <td><i className="material-icons">check_circle</i></td>
-                  <td><i className="material-icons">check_circle</i></td>
+                  <td><i className="material-icons">check</i></td>
+                  <td><i className="material-icons">check</i></td>
+                  <td><i className="material-icons">check</i></td>
+                  <td><i className="material-icons">check</i></td>
                   <td></td>
                 </tr>
                 <tr>
                   <td><FormattedName organismId="64320" fullName /></td>
-                  <td><i className="material-icons">check_circle</i></td>
+                  <td><i className="material-icons">check</i></td>
                   <td></td>
                   <td></td>
                   <td></td>
@@ -102,7 +102,7 @@ export default React.createClass({
                 </tr>
                 <tr>
                   <td><FormattedName organismId="1646" fullName /></td>
-                  <td><i className="material-icons">check_circle</i></td>
+                  <td><i className="material-icons">check</i></td>
                   <td></td>
                   <td></td>
                   <td></td>
