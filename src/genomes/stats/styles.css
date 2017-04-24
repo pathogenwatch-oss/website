@@ -1,6 +1,5 @@
 .wgsa-hub-stats-view {
   flex-grow: 1;
-  padding-right: 3.5rem;
   overflow-x: hidden;
   overflow-y: auto;
 }
@@ -9,18 +8,21 @@
   display: flex;
   max-width: 1024px;
   margin: 0 auto;
+  justify-content: space-around;
 }
 
 .wgsa-hub-stats-section {
   box-sizing: border-box;
   margin: 0;
-  padding-right: 24px;
   width: 100%;
+  padding: 0 8px;
 }
 
 .wgsa-hub-stats-section--small {
   float: left;
   width: 50%;
+  padding-left: 0;
+  padding-right: 24px;
 }
 
 .wgsa-hub-stats-heading {
@@ -34,19 +36,14 @@
   border-top: 1px solid #673c90;
 }
 
-.wgsa-hub-stats-heading--large {
-  padding-top: 8px;
-  font-size: 1.25rem;
-  line-height: 1.5;
-}
-
 .wgsa-hub-stats-heading > button {
   background: none;
   border: none;
   color: rgba(0, 0, 0, 0.54);
-  font-size: inherit;
+  font-family: inherit;
+  font-size: 16px;
   line-height: inherit;
-  margin-right: 24px;
+  margin-right: 16px;
   outline: none;
   padding: 0;
 }
@@ -63,12 +60,6 @@
   line-height: 1.1;
   margin: 0;
   text-align: center;
-}
-
-.wgsa-hub-stats-value--large {
-  color: rgba(0, 0, 0, 0.87);
-  font-size: 2rem;
-  font-weight: 300;
 }
 
 .wgsa-clickable-point {

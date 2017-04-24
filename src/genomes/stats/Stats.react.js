@@ -53,16 +53,16 @@ const ChartButton = connect(mapStateToButton, mapDispatchToButton)(
 
 export const StatsView =
   ({ average, stDev, range = {}, chartData, onPointClick }) => (
-      <div className="wgsa-hub-stats-view wgsa-content-margin-left">
+      <div className="wgsa-hub-stats-view">
         <div className="wgsa-hub-stats-section">
-          <h2 className="wgsa-hub-stats-heading wgsa-hub-stats-heading--large">
+          <nav className="wgsa-hub-stats-heading">
             {charts.map(props =>
               <ChartButton key={props.metric} {...props} />
             )}
-          </h2>
-          <ResponsiveContainer height={320}>
+          </nav>
+          <ResponsiveContainer height={160}>
             <ScatterChart
-              margin={{ top: 16, bottom: 16, left: 0, right: 0 }}
+              margin={{ top: 0, bottom: 0, left: 0, right: 0 }}
               className="wgsa-selectable-chart"
             >
               <XAxis
@@ -78,22 +78,12 @@ export const StatsView =
                 domain={[ 0, Math.ceil(range.max * 1.25) ]}
               />
               <Scatter
-                data={chartData.unselected}
+                data={chartData}
                 fill="#a386bd"
-                opacity={chartData.selected.length ? 0.25 : 1}
                 isAnimationActive={false}
                 className="wgsa-clickable-point"
                 onClick={onPointClick}
               />
-              { chartData.selected.length &&
-                <Scatter
-                  data={chartData.selected}
-                  fill="#673c90"
-                  isAnimationActive={false}
-                  className="wgsa-clickable-point"
-                  onClick={onPointClick}
-                />
-              }
               <Tooltip
                 cursor={{ stroke: 'none' }}
                 offset={8}

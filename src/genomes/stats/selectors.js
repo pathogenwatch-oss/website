@@ -1,13 +1,16 @@
 import { createSelector } from 'reselect';
 
-import { getGenomeList } from '../selectors';
-import { getSelectedGenomes } from '../selection/selectors';
+import { getSelectedGenomeIds } from '../selection/selectors';
+import { getGenomes } from '../selectors';
 
 export const getSelectedMetric = ({ genomes }) => genomes.selectedMetric;
 
 export const getGenomeMetrics = createSelector(
-  getGenomeList,
-  genomes => genomes.reduce((memo, { id, name, metrics }) => {
+  getSelectedGenomeIds,
+  getGenomes,
+  (ids, genomes) => ids.reduce((memo, id) => {
+    if (!(id in genomes)) return memo;
+    const { name, metrics } = genomes[id];
     if (!metrics) {
       return memo;
     }
@@ -54,16 +57,15 @@ export const getMetricRange = createSelector(
 
 export const getChartData = createSelector(
   getGenomeMetrics,
-  getSelectedGenomes,
   getSelectedMetric,
-  (metrics, selection, selectedMetric) =>
+  (metrics, selectedMetric) =>
     metrics.reduce((memo, value, i) => {
-      memo[value.id in selection ? 'selected' : 'unselected'].push({
+      memo.push({
         key: i,
         id: value.id,
         name: value.name,
         value: Number(value[selectedMetric]),
       });
       return memo;
-    }, { selected: [], unselected: [] })
+    }, [])
 );

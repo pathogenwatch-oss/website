@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import Drawer from '../../drawer';
 import { GenomeArchiveButton } from '../../downloads';
 import CreateCollectionForm from '../create-collection-form';
+import Stats from '../stats';
 
 import { getSelectedGenomeIds, getSelectedGenomeList } from './selectors';
 
@@ -56,6 +57,7 @@ const SelectionDrawer = React.createClass({
           <div className="mdl-tabs__tab-bar mdl-tabs__tab-bar--start">
             <a href="#create-collection-panel" className="mdl-tabs__tab is-active">Create Collection</a>
             <a href="#selection-panel" className="mdl-tabs__tab">Selection</a>
+            <a href="#stats-panel" className="mdl-tabs__tab">Stats</a>
             <div className="wgsa-tab-actions">
               <GenomeArchiveButton
                 ids={this.props.selectedGenomeIds}
@@ -82,6 +84,9 @@ const SelectionDrawer = React.createClass({
                   </button>
                 </span>
             )}
+          </div>
+          <div className="mdl-tabs__panel is-active" id="stats-panel">
+            <Stats />
           </div>
         </div>
       </Drawer>
