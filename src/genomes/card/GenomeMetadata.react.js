@@ -30,7 +30,9 @@ function displayCountry(country, isTableCell) {
   if (isTableCell) {
     return (
       <CardMetadata fadeOverflow>
-        <span title={countryName}>{countryName}</span>
+        <span title={countryName}>
+          <strong>{country.toUpperCase()}</strong> - {countryName}
+        </span>
       </CardMetadata>
     );
   }
