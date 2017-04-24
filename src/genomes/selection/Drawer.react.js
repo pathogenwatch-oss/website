@@ -85,7 +85,7 @@ const SelectionDrawer = React.createClass({
                 </span>
             )}
           </div>
-          <div className="mdl-tabs__panel is-active" id="stats-panel">
+          <div className="mdl-tabs__panel" id="stats-panel">
             <Stats />
           </div>
         </div>
