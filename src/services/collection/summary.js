@@ -3,7 +3,8 @@ const Collection = require('models/collection');
 const summaryFields = [
   { field: 'organismId' },
   { field: 'owner',
-    aggregation: ({ user = {} }) => [
+    requiredProps: [ 'user' ],
+    aggregation: ({ user }) => [
       { $group: {
           _id: { $cond: [ { $eq: [ '$_user', user._id ] }, 'me', 'other' ] },
           count: { $sum: 1 },

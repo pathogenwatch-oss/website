@@ -1,6 +1,5 @@
 const Genome = require('models/genome');
 
-
 module.exports = function (props) {
   const { user, query = {} } = props;
   const { skip = 0, limit = 0, searchText, sort = 'createdAt-' } = query;
@@ -28,10 +27,12 @@ module.exports = function (props) {
     findQuery.reference = false;
   }
 
-  if (owner === 'me') {
-    findQuery._user = user;
-  } else if (owner === 'other') {
-    findQuery._user = { $ne: user };
+  if (user) {
+    if (owner === 'me') {
+      findQuery._user = user;
+    } else if (owner === 'other') {
+      findQuery._user = { $ne: user };
+    }
   }
 
   if (startDate) {

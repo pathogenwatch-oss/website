@@ -15,10 +15,12 @@ module.exports = function (props) {
     findQuery.organismId = organismId;
   }
 
-  if (owner === 'me') {
-    findQuery._user = user;
-  } else if (owner === 'other') {
-    findQuery._user = { $ne: user };
+  if (user) {
+    if (owner === 'me') {
+      findQuery._user = user;
+    } else if (owner === 'other') {
+      findQuery._user = { $ne: user };
+    }
   }
 
   if (startDate) {

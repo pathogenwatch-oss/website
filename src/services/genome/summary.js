@@ -10,7 +10,8 @@ const summaryFields = [
   { field: 'country' },
   { field: 'reference' },
   { field: 'owner',
-    aggregation: ({ user = {} }) => [
+    requiredProps: [ 'user' ],
+    aggregation: ({ user }) => [
       { $group: {
           _id: { $cond: [ { $eq: [ '$_user', user._id ] }, 'me', 'other' ] },
           count: { $sum: 1 },

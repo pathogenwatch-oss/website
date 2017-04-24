@@ -19,9 +19,12 @@ exports.addPreSaveHook = schema =>
     next();
   });
 
-exports.getSummary = function (model, summaryFields, props) {
+exports.getSummary = function (model, allSummaryFields, props) {
   const prefilterCondition = model.getPrefilterCondition(props);
   const prefilterStage = [ { $match: prefilterCondition } ];
+  const summaryFields = allSummaryFields.filter(
+    ({ requiredProps = [] }) => requiredProps.every(prop => props[prop])
+  );
   return Promise.all([
     model.count(prefilterCondition),
     ...summaryFields.map(({ field, aggregation }) =>
