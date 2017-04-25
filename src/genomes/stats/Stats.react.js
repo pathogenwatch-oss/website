@@ -58,7 +58,7 @@ export const StatsView =
       <div className="wgsa-hub-stats-view">
         <div className="wgsa-hub-stats-section">
           <nav className="wgsa-button-group">
-            <i title="Compare" className="material-icons">compare_arrows</i>
+            <i title="Metrics" className="material-icons">timeline</i>
             {charts.map(props =>
               <ChartButton key={props.metric} {...props} />
             )}

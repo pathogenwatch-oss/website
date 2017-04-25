@@ -53,7 +53,7 @@ const GenomeDrawerContent = React.createClass({
   render() {
     const { genome } = this.props;
     return (
-      <div className="wgsa-genome-drawer-content">
+      <div className="wgsa-genome-drawer-content wgsa-drawer__content">
         <div className="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
           <div className="mdl-tabs__tab-bar">
             <a href="#metrics-panel" className="mdl-tabs__tab is-active">Metrics</a>
