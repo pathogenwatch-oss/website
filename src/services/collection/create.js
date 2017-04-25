@@ -5,7 +5,14 @@ const Collection = require('models/collection');
 const Genome = require('models/genome');
 const Organism = require('models/organism');
 
-const { maxCollectionSize = 0 } = require('configuration');
+const { maxCollectionSize = { anonymous: 0, loggedIn: 0 } } = require('configuration');
+
+function getMaxCollectionSize(user) {
+  if (user) {
+    return maxCollectionSize.loggedIn;
+  }
+  return maxCollectionSize.anonymous;
+}
 
 function createCollection({ organismId, genomeIds, title, description, pmid, user }) {
   if (!organismId) {
@@ -16,7 +23,8 @@ function createCollection({ organismId, genomeIds, title, description, pmid, use
     return Promise.reject(new ServiceRequestError('No genome IDs provided'));
   }
 
-  if (maxCollectionSize && genomeIds.length > maxCollectionSize) {
+  const maxSize = getMaxCollectionSize(user);
+  if (maxSize && genomeIds.length > maxSize) {
     return Promise.reject(new ServiceRequestError('Too many genome IDs provided'));
   }
 
