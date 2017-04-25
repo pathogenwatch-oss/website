@@ -127,7 +127,7 @@ schema.statics.findByUuid = function (uuid, projection) {
   return this.findOne({ uuid }, projection);
 };
 
-schema.statics.getPrefilterCondition = function ({ user = {}, query = {} }) {
+schema.statics.getPrefilterCondition = function ({ user, query = {} }) {
   const { prefilter = 'all' } = query;
 
   if (prefilter === 'all') {
