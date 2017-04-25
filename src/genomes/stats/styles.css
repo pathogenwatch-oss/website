@@ -4,6 +4,11 @@
   overflow-y: auto;
 }
 
+.wgsa-hub-stats-view nav {
+  justify-content: center;
+  margin: 0 0 16px;
+}
+
 .wgsa-hub-stats-group {
   display: flex;
   max-width: 1024px;

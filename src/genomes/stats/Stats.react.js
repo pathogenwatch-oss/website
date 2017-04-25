@@ -3,6 +3,7 @@ import {
   ResponsiveContainer, ScatterChart, Scatter, XAxis, YAxis, Tooltip,
 } from 'recharts';
 import { connect } from 'react-redux';
+import classnames from 'classnames';
 
 import ChartTooltip from '../../chart-tooltip';
 
@@ -33,7 +34,6 @@ const charts = [
 
 const mapStateToButton = (state, ownProps) => {
   const selectedMetric = selectors.getSelectedMetric(state);
-
   return {
     className: selectedMetric === ownProps.metric ? 'active' : '',
   };
@@ -47,7 +47,9 @@ function mapDispatchToButton(dispatch, ownProps) {
 
 const ChartButton = connect(mapStateToButton, mapDispatchToButton)(
   ({ title, className, onClick }) => (
-    <button className={className} onClick={onClick}>{title}</button>
+    <button className={classnames('wgsa-button-group__item', className)} onClick={onClick}>
+      {title}
+    </button>
   )
 );
 
@@ -55,12 +57,13 @@ export const StatsView =
   ({ average, stDev, range = {}, chartData, onPointClick }) => (
       <div className="wgsa-hub-stats-view">
         <div className="wgsa-hub-stats-section">
-          <nav className="wgsa-hub-stats-heading">
+          <nav className="wgsa-button-group">
+            <i title="Compare" className="material-icons">compare_arrows</i>
             {charts.map(props =>
               <ChartButton key={props.metric} {...props} />
             )}
           </nav>
-          <ResponsiveContainer height={160}>
+          <ResponsiveContainer height={208}>
             <ScatterChart
               margin={{ top: 0, bottom: 0, left: 0, right: 0 }}
               className="wgsa-selectable-chart"
