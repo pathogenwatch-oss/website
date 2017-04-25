@@ -1,11 +1,24 @@
 const Genome = require('models/genome');
 
+function getSort(sort) {
+  const sortOrder = (sort.slice(-1) === '-') ? -1 : 1;
+  const sortKey = sortOrder === 1 ? sort : sort.substr(0, sort.length - 1);
+
+  if (sortKey === 'date') {
+    return { year: sortOrder, month: sortOrder, day: sortOrder };
+  }
+
+  if (sortKey === 'access') {
+    return { public: sortOrder, reference: sortOrder };
+  }
+
+  return { [sortKey]: sortOrder };
+}
+
 module.exports = function (props) {
   const { user, query = {} } = props;
   const { skip = 0, limit = 0, searchText, sort = 'createdAt-' } = query;
   const { organismId, reference, owner, country, startDate, endDate } = query;
-  const sortOrder = (sort.slice(-1) === '-') ? -1 : 1;
-  const sortKey = sortOrder === 1 ? sort : sort.substr(0, sort.length - 1);
 
   const findQuery = Genome.getPrefilterCondition(props);
 
@@ -47,13 +60,16 @@ module.exports = function (props) {
   }
 
   return (
-    Genome.
-      find(
+    Genome
+      .find(
         findQuery,
-        null,
-        { skip: Number(skip), limit: Number(limit), sort: { [sortKey]: sortOrder } }
-      ).
-      populate('_file').
-      then(genomes => genomes.map(_ => _.toObject({ user })))
+        null, {
+          skip: Number(skip),
+          limit: Number(limit),
+          sort: getSort(sort),
+        }
+      )
+      .populate('_file')
+      .then(genomes => genomes.map(_ => _.toObject({ user })))
   );
 };
