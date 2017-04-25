@@ -1,0 +1,39 @@
+.wgsa-features-table {
+  /*border-collapse: collapse;*/
+  border-spacing: 40px 0;
+  margin: 0 auto 32px;
+}
+
+.wgsa-features-table col {
+  width: 320px;
+  background: #fff;
+  border: 1px solid #ccc;
+}
+
+.wgsa-features-table th,
+.wgsa-features-table td {
+  padding: 16px;
+  border-left: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+}
+
+.wgsa-features-table th {
+  font-weight: 500;
+  font-size: 34px;
+  line-height: 40px;
+  color: #673c90;
+  padding: 32px;
+  border-top: 1px solid #ccc;
+}
+
+.wgsa-features-table tr:last-child td {
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 40px;
+}
+
+.wgsa-feature-figure {
+  font-size: 40px;
+  color: #3c7383;
+  display: block;
+  margin-bottom: 8px;
+}
