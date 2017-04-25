@@ -128,21 +128,22 @@ schema.statics.findByUuid = function (uuid, projection) {
 };
 
 schema.statics.getPrefilterCondition = function ({ user = {}, query = {} }) {
-  const hasAccess = user._id ?
-    { $or: [ { _user: user._id }, { public: true } ] } :
-    { public: true };
   const { prefilter = 'all' } = query;
 
   if (prefilter === 'all') {
+    const hasAccess = { $or: [ { public: true } ] };
+    if (user) {
+      hasAccess.$or.push({ _user: user._id });
+    }
     return Object.assign(hasAccess, { binned: false });
   }
 
   if (prefilter === 'user') {
-    return { binned: false, _user: { $exists: true, $eq: user._id } };
+    return { binned: false, _user: user._id };
   }
 
   if (prefilter === 'bin') {
-    return Object.assign(hasAccess, { binned: true });
+    return { binned: true, _user: user._id };
   }
 
   throw new Error(`Invalid collection prefilter: '${prefilter}'`);

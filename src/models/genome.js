@@ -78,30 +78,26 @@ schema.statics.updateMetadata = function (_id, _user, metadata) {
 };
 
 schema.statics.getPrefilterCondition = function ({ user, query = {}, sessionID }) {
-  const hasAccess = { $or: [ { public: true } ] };
-  if (user) {
-    hasAccess.$or.push({ _user: user._id });
-  }
-
   const { prefilter = 'all', uploadedAt = null } = query;
 
   if (prefilter === 'all') {
+    const hasAccess = { $or: [ { public: true } ] };
+    if (user) {
+      hasAccess.$or.push({ _user: user._id });
+    }
     return Object.assign(hasAccess, { binned: false });
   }
 
   if (prefilter === 'user') {
-    return { binned: false, _user: { $exists: true, $eq: user } };
+    return { binned: false, _user: user._id };
   }
 
   if (prefilter === 'upload') {
-    if (sessionID) {
-      hasAccess.$or.push({ _session: sessionID });
-    }
-    return Object.assign(hasAccess, { binned: false, uploadedAt: uploadedAt ? new Date(uploadedAt) : { $exists: true, $eq: '' } });
+    return { binned: false, _session: sessionID, uploadedAt };
   }
 
   if (prefilter === 'bin') {
-    return Object.assign({ binned: true, _user: { $exists: true, $eq: user } });
+    return { binned: true, _user: user._id };
   }
 
   throw new Error(`Invalid genome prefilter: '${prefilter}'`);

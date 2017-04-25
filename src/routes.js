@@ -1,5 +1,20 @@
+
+function prefilterValidation(req, res, next) {
+  const { query = {}, user } = req;
+  const { prefilter } = query;
+
+  if (prefilter === 'user' || prefilter === 'bin') {
+    if (!user || !user._id) {
+      res.sendStatus(401);
+    }
+  }
+
+  next();
+}
+
 module.exports = function (app) {
   app.use('/api/', [
+    prefilterValidation,
     require('routes/genome'),
     require('routes/collection'),
     require('routes/download-request'),
