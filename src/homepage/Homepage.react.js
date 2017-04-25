@@ -3,6 +3,14 @@ import { Link } from 'react-router';
 
 import { FormattedName } from '../organisms';
 
+import CONFIG from '../app/config';
+const { maxCollectionSize = {} } = CONFIG;
+
+function getCollectionSizeLimit(user) {
+  const limit = maxCollectionSize[user] || 0;
+  return limit === 0 ? 'Unlimited' : limit;
+}
+
 export default React.createClass({
 
   render() {
@@ -138,11 +146,11 @@ export default React.createClass({
                 </tr>
                 <tr>
                   <td>
-                    <span className="wgsa-feature-figure">150</span>
+                    <span className="wgsa-feature-figure">{getCollectionSizeLimit('anonymous')}</span>
                     <small>genomes per collection</small>
                   </td>
                   <td>
-                    <span className="wgsa-feature-figure">2000</span>
+                    <span className="wgsa-feature-figure">{getCollectionSizeLimit('loggedIn')}</span>
                     <small>genomes per collection</small>
                   </td>
                 </tr>
