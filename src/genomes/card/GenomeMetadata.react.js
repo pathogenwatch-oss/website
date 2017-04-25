@@ -2,13 +2,17 @@ import React from 'react';
 
 import { CardMetadata } from '../../card';
 
-import { formatDay, formatMonth } from '../../utils/Date';
+import { getFormattedDateString } from '../../utils/Date';
 import { getCountryName } from '../../utils/country';
 
 function displayDate(data, isTableCell) {
+  const formattedDateString = getFormattedDateString(data);
+
   if (isTableCell) {
     return (
-      <CardMetadata>{data.year || ''}</CardMetadata>
+      <CardMetadata tooltip={formattedDateString}>
+        <span>{formattedDateString}</span>
+      </CardMetadata>
     );
   }
 
@@ -18,9 +22,7 @@ function displayDate(data, isTableCell) {
 
   return (
     <CardMetadata title="Date" icon="date_range">
-      {data.day ? `${formatDay(data.day)} ` : ''}
-      {data.month ? `${formatMonth(data.month)} ` : ''}
-      {data.year || ''}
+      {formattedDateString}
     </CardMetadata>
   );
 }
@@ -30,7 +32,11 @@ function displayCountry(country, isTableCell) {
   if (isTableCell) {
     return (
       <CardMetadata fadeOverflow>
-        <span title={countryName}>{countryName}</span>
+        { country ?
+          <span title={countryName}>
+            <strong>{country.toUpperCase()}</strong> - {countryName}
+          </span> :
+          '-' }
       </CardMetadata>
     );
   }
