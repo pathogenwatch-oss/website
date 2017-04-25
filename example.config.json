@@ -59,6 +59,10 @@
 		"encrypted": false
 	},
   "downloadFileLocation" : "/path/to/files/",
+	"maxCollectionSize": {
+		"anonymous": 150,
+		"loggedIn": 2000
+	},
   "maxFastaFileSize": 10,
   "looseAccessControl": false,
   "googleMapsKey": "",
