@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import classnames from 'classnames';
 
 import Drawer from '../../drawer';
 import { GenomeArchiveButton } from '../../downloads';
@@ -23,14 +24,33 @@ function getSelectionTitle(selectedGenomes) {
   );
 }
 
+const Tab = ({ onClick, id, activeTab, children }) => (
+  <a
+    href={`#${id}`}
+    onClick={e => onClick(e, id)}
+    className={classnames('mdl-tabs__tab', { 'is-active': id === activeTab })}
+  >
+    {children}
+  </a>
+);
+
+const TabContent = ({ isActive, children }) => (
+  isActive ?
+    <div className="mdl-tabs__panel is-active">{children}</div> :
+    null
+);
+
 const SelectionDrawer = React.createClass({
 
-  componentDidMount() {
-    this.upgradeElements();
+  getInitialState() {
+    return {
+      activeTab: 'create-collection-panel',
+    };
   },
 
-  componentDidUpdate() {
-    this.upgradeElements();
+  onTabClick(e, activeTab) {
+    e.preventDefault();
+    this.setState({ activeTab });
   },
 
   getDownloadTitle() {
@@ -40,24 +60,19 @@ const SelectionDrawer = React.createClass({
     return 'Download Selection';
   },
 
-  upgradeElements() {
-    if (this.tabs) {
-      componentHandler.upgradeElement(this.tabs);
-    }
-  },
-
   render() {
     const { selectedGenomes, removeGenome, disableDownload } = this.props;
+    const { activeTab } = this.state;
     return (
       <Drawer
         title={getSelectionTitle(selectedGenomes)}
         visible={selectedGenomes.length > 0}
       >
-        <div ref={el => { this.tabs = el; }} className="wgsa-selection-tabs mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+        <div className="wgsa-selection-tabs mdl-tabs is-upgraded">
           <div className="mdl-tabs__tab-bar mdl-tabs__tab-bar--start">
-            <a href="#create-collection-panel" className="mdl-tabs__tab is-active">Create Collection</a>
-            <a href="#selection-panel" className="mdl-tabs__tab">Selection</a>
-            <a href="#stats-panel" className="mdl-tabs__tab">Stats</a>
+            <Tab id="create-collection-panel" onClick={this.onTabClick} activeTab={activeTab}>Create Collection</Tab>
+            <Tab id="selection-panel" onClick={this.onTabClick} activeTab={activeTab}>Selection</Tab>
+            <Tab id="stats-panel" onClick={this.onTabClick} activeTab={activeTab}>Stats</Tab>
             <div className="wgsa-tab-actions">
               <GenomeArchiveButton
                 ids={this.props.selectedGenomeIds}
@@ -67,10 +82,10 @@ const SelectionDrawer = React.createClass({
               />
             </div>
           </div>
-          <div className="mdl-tabs__panel is-active" id="create-collection-panel">
+          <TabContent isActive={activeTab === 'create-collection-panel'}>
             <CreateCollectionForm />
-          </div>
-          <div className="mdl-tabs__panel" id="selection-panel">
+          </TabContent>
+          <TabContent isActive={activeTab === 'selection-panel'}>
             { selectedGenomes.map(genome =>
                 <span key={genome.id} className="mdl-chip mdl-chip--deletable wgsa-inline-chip">
                   <span className="mdl-chip__text">{genome.name}</span>
@@ -84,10 +99,10 @@ const SelectionDrawer = React.createClass({
                   </button>
                 </span>
             )}
-          </div>
-          <div className="mdl-tabs__panel" id="stats-panel">
+          </TabContent>
+          <TabContent isActive={activeTab === 'stats-panel'}>
             <Stats />
-          </div>
+          </TabContent>
         </div>
       </Drawer>
     );
