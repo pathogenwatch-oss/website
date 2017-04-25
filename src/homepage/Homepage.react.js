@@ -38,10 +38,19 @@ export default React.createClass({
         <section id="how-it-works" className="alt">
           <div className="wgsa-homepage__content">
             <h2>How WGSA Works</h2>
-            <ol>
-              <li><h3>Upload</h3></li>
-              <li><h3>Analyse</h3></li>
-              <li><h3>Explore</h3></li>
+            <ol className="wgsa-how-it-works">
+              <li>
+                <i className="material-icons">cloud_upload</i>
+                <h3>Upload</h3>
+              </li>
+              <li>
+                <i className="material-icons">settings</i>
+                <h3>Analyse</h3>
+              </li>
+              <li>
+                <i className="material-icons">find_in_page</i>
+                <h3>Explore</h3>
+              </li>
             </ol>
           </div>
         </section>

@@ -1,0 +1,34 @@
+.wgsa-how-it-works {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.wgsa-how-it-works li {
+  flex-grow: 1;
+  text-align: center;
+}
+
+.wgsa-how-it-works li:not(:last-child) {
+  border-right: 1px solid #ccc;
+}
+
+.wgsa-how-it-works h3 {
+  color: #3c7383;
+}
+
+.wgsa-how-it-works .material-icons {
+  border: 1px solid #ccc;
+  background-color: #F7F7F7;
+  color: #673c90;
+  border-radius: 500em;
+  line-height: 1;
+  padding: 16px;
+  width: 64px;
+  height: 64px;
+  text-align: center;
+  line-height: 64px;
+  font-size: 64px;
+}
