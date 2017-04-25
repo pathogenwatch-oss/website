@@ -122,6 +122,7 @@ module.exports = () =>
         frontEndConfig: {
           pusherKey: config.pusher.key,
           mapboxKey: config.mapboxKey,
+          maxCollectionSize: config.maxCollectionSize,
           maxFastaFileSize: config.maxFastaFileSize,
           wiki: config.wikiLocation,
           strategies: [ 'facebook', 'google', 'twitter' ],

@@ -1,6 +1,6 @@
 {
-	"node": {
-		"port": "80",
+  "node": {
+    "port": "80",
     "auth": {
       "realm": "",
       "file": "",
@@ -8,60 +8,61 @@
         { "organismId": "", "collectionId": "" }
       ]
     }
-	},
-	"couchbase": {
-		"host": "127.0.0.1",
-		"buckets": {
-			"main": {
-				"name": "wgsa",
-				"password": ""
-			},
-			"sequences": {
-				"name": "wgsa_sequences",
-				"password": ""
-			}
-		}
-	},
-	"rabbit": {
-		"host": "",
-		"port": "",
-		"login": "",
-		"password": ""
-	},
+  },
+  "couchbase": {
+    "host": "",
+    "buckets": {
+      "main": {
+        "name": "wgsa",
+        "password": ""
+      },
+      "sequences": {
+        "name": "wgsa_sequences",
+        "password": ""
+      }
+    }
+  },
+  "rabbit": {
+    "host": "",
+    "port": "",
+    "login": "",
+    "password": ""
+  },
   "mongodb": {
-    "host": "localhost",
+    "host": "",
     "port": 27017,
     "database": "wgsa",
     "replicaset": ""
   },
-
   "passport": {
-		"url": "",
-		"strategies": {
-			"facebook": {
-				"clientID": "",
-				"clientSecret": ""
-			},
-			"google": {
-				"clientID": "",
-				"clientSecret": ""
-			},
-			"twitter": {
-				"consumerKey": "",
-				"consumerSecret": ""
-			}
-		}
-	},
-	"pusher": {
-		"appId": "",
-		"key": "",
-		"secret": "",
-		"encrypted": false
-	},
+    "url": "",
+    "strategies": {
+      "facebook": {
+        "clientID": "",
+        "clientSecret": ""
+      },
+      "google": {
+        "clientID": "",
+        "clientSecret": ""
+      },
+      "twitter": {
+        "consumerKey": "",
+        "consumerSecret": ""
+      }
+    }
+  },
+  "pusher": {
+    "appId": "",
+    "key": "",
+    "secret": "",
+    "encrypted": false
+  },
   "downloadFileLocation" : "/path/to/files/",
+  "maxCollectionSize": {
+    "anonymous": 150,
+    "loggedIn": 2000
+  },
   "maxFastaFileSize": 10,
-  "looseAccessControl": false,
-  "googleMapsKey": "",
   "mapboxKey": "",
   "fastaStoragePath": "/path/to/files/",
   "wikiLocation": "https://raw.githubusercontent.com/wiki/ImperialCollegeLondon/wgsa-documentation"
