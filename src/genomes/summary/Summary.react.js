@@ -58,7 +58,6 @@ const Summary = React.createClass({
           <ViewSwitcher title="Grid" />
           <ViewSwitcher view="list" title="List" />
           <ViewSwitcher view="map" title="Map" />
-          <ViewSwitcher view="stats" title="Stats" />
         </div>
         <Totals
           visible={this.props.numVisibleGenomes}

@@ -27,10 +27,10 @@ export default React.createClass({
 
     return (
       <LineChart
-        width={440}
-        height={240}
+        width={540}
+        height={320}
         data={data}
-        margin={{ top: 16, right: 8, left: 16, bottom: 16 }}
+        margin={{ top: 16, right: 16, left: 16, bottom: 0 }}
       >
         <XAxis dataKey="name" tickFormatter={() => null} />
         <YAxis tickLine={false} />

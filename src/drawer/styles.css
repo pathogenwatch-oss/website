@@ -1,9 +1,9 @@
 .wgsa-drawer-container {
   bottom: 0;
   height: 0;
-  right: 11rem;
+  right: 144px;
   position: fixed;
-  min-width: 34rem;
+  min-width: 540px;
   z-index: 1;
 }
 
@@ -11,19 +11,19 @@
   background-color: #fff;
   color: rgba(0, 0, 0, 0.54);
   position: absolute;
-  top: -3rem;
+  top: -48px;
   transition: .28s cubic-bezier(.4,0,.2,1);
   transition-property: transform, box-shadow;
-  width: 34.5rem;
+  width: 540px;
 }
 
 .wgsa-drawer--open {
   box-shadow: 0 1px 5px 0 rgba(0,0,0,0.2),0 2px 2px 0 rgba(0,0,0,0.14),0 3px 1px -2px rgba(0,0,0,0.12);
-  transform: translateY(calc(-100% + 3rem));
+  transform: translateY(calc(-100% + 48px));
 }
 
 .wgsa-drawer-enter {
-  transform: translateY(3rem);
+  transform: translateY(48px);
 }
 
 .wgsa-drawer-enter.wgsa-drawer-enter-active {
@@ -37,20 +37,20 @@
 }
 
 .wgsa-drawer-leave.wgsa-drawer-leave-active {
-  transform: translateY(3rem);
+  transform: translateY(48px);
   transition: .28s cubic-bezier(.4,0,.2,1);
   transition-property: transform;
 }
 
 @keyframes drawer-open {
   0% {
-    transform: translateY(3rem);
+    transform: translateY(48px);
   }
   50% {
     transform: translateY(0);
   }
   100% {
-    transform: translateY(calc(-100% + 3rem));
+    transform: translateY(calc(-100% + 48px));
     box-shadow: 0 1px 5px 0 rgba(0,0,0,0.2),0 2px 2px 0 rgba(0,0,0,0.14),0 3px 1px -2px rgba(0,0,0,0.12);
   }
 }
@@ -59,7 +59,7 @@
   animation-duration: .56s;
   animation-fill-mode: both;
   animation-timing-function: cubic-bezier(0.1, 0.7, 1.0, 0.1, 0.1, 0.7, 1.0, 0.1);
-  transform: translateY(calc(-100% + 3rem));
+  transform: translateY(calc(-100% + 48px));
   box-shadow: 0 1px 5px 0 rgba(0,0,0,0.2),0 2px 2px 0 rgba(0,0,0,0.14),0 3px 1px -2px rgba(0,0,0,0.12);
 }
 
@@ -78,7 +78,7 @@
   background: #222;
   color: #fff;
   display: flex;
-  height: 3rem;
+  height: 48px;
   padding-top: 2px;
   padding-left: 24px;
   padding-right: 8px;
@@ -88,11 +88,7 @@
 }
 
 .wgsa-drawer__content {
-  background: #fff;
-  border-left: 1px solid rgba(0, 0, 0, 0.14);
-  border-right: 1px solid rgba(0, 0, 0, 0.14);
-  min-height: 16rem;
-  padding: 1.5rem 1.75rem;
+  min-height: 400px;
 }
 
 .wgsa-drawer-actions {

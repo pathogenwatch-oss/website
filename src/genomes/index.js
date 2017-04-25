@@ -6,7 +6,6 @@ import Genomes from './component';
 import ListView from './list';
 import GridView from './grid';
 import MapView from './map';
-import StatsView from './stats';
 
 const prefilters = [ 'all', 'user', 'upload', 'bin' ];
 
@@ -40,7 +39,6 @@ export default (
           component={props => <MapView {...props} stateKey={`GENOME_${prefilter.toUpperCase()}`} />}
           header={<GenomeHeader />}
         />
-        <Route path="stats" component={StatsView} header={<GenomeHeader />} />
       </Route>
     )}
     <Redirect from="*" to="all" />
