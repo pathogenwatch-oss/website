@@ -29,6 +29,10 @@
   font-size: 32px;
 }
 
+.wgsa-homepage > section:not(.showcase) {
+  padding: 40px;
+}
+
 .wgsa-homepage section.alt {
   background: #efefef;
 }
@@ -36,7 +40,6 @@
 .wgsa-homepage__content {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 40px;
 }
 
 .wgsa-homepage h2 {
@@ -170,4 +173,12 @@
   left: 0;
   right: 0;
   display: flex;
+}
+
+
+.showcase .mdl-button {
+  font-size: 34px;
+  text-transform: capitalize;
+  line-height: 40px;
+  padding-bottom: 8px;
 }

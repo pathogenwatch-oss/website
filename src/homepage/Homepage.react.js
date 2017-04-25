@@ -30,26 +30,29 @@ export default React.createClass({
           <Link className="showcase__link showcase__link--6 wgsa-sonar-effect" />
           <Link className="showcase__link showcase__link--7 showcase__link--small wgsa-sonar-effect" />
           <footer>
-            <a href="#how-it-works" className="mdl-button mdl-button--primary">
+            <a href="#how-it-works" className="mdl-button mdl-button--primary title-font">
               <i className="material-icons">expand_more</i> How it works
             </a>
           </footer>
         </section>
-        <section id="how-it-works" className="alt">
+        <section id="how-it-works" className="alt wgsa-how-it-works">
           <div className="wgsa-homepage__content">
             <h2>How WGSA Works</h2>
-            <ol className="wgsa-how-it-works">
+            <ol>
               <li>
                 <i className="material-icons">cloud_upload</i>
                 <h3>Upload</h3>
+                <p>Upload genome assemblies and metadata, or view all publicly available genomes.</p>
               </li>
               <li>
                 <i className="material-icons">settings</i>
                 <h3>Analyse</h3>
+                <p>Generate results including MLST, AMR predictions, clustering of genomes, and interactive visualisation of metadata.</p>
               </li>
               <li>
                 <i className="material-icons">find_in_page</i>
                 <h3>Explore</h3>
+                <p>Compare results with publicly available genomes within a species reference tree.</p>
               </li>
             </ol>
           </div>
