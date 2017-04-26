@@ -21,7 +21,7 @@ export const getSearchText = createSelector(
 export const getFilterSummary = createSelector(
   ({ genomes }) => genomes.summary,
   filter.getFilter,
-  ({ loading, organismId, country, reference, owner }, filterState) => {
+  ({ loading, organismId, country, reference, owner, uploadedAt }, filterState) => {
     const wgsaOrganisms = [];
     const otherOrganisms = [];
 
@@ -75,6 +75,17 @@ export const getFilterSummary = createSelector(
           active: filterState.owner === value,
         })
       ),
+      uploadedAt: sortBy(
+        Object.keys(uploadedAt), iso => new Date() - new Date(iso)
+      ).map(value => {
+        const date = new Date(value);
+        return {
+          value,
+          label: date.toLocaleString(),
+          count: uploadedAt[value].count,
+          active: filterState.uploadedAt === value,
+        };
+      }),
     };
   }
 );

@@ -6,6 +6,7 @@ const initialState = {
   country: {},
   reference: {},
   owner: {},
+  uploadedAt: {},
 };
 
 export default function (state = initialState, { type, payload }) {
