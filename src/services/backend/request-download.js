@@ -29,11 +29,11 @@ function sendToBackend(request) {
 }
 
 module.exports = function ({ format, organismId, idList }) {
-  return CollectionGenome.find({ uuid: { $in: idList } }, { fileId: 1 })
+  return CollectionGenome.find({ uuid: { $in: idList } }, { name: 1, fileId: 1 })
     .lean()
     .then(results => ({
       format,
-      idList: results.map(_ => _.fileId),
+      idList: results.map(({ name, fileId }) => ({ name, checksum: fileId })),
       idType: 'assembly',
       speciesId: organismId,
     }))
