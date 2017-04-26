@@ -1,5 +1,7 @@
 import * as actions from './actions';
 
+import { isOverSelectionLimit } from './utils';
+
 const initialState = {};
 
 const addToSelection = (memo, { id, name, organismId }) => {
@@ -14,10 +16,23 @@ const removeFromSelection = (memo, { id }) => {
 
 export default function (state = initialState, { type, payload }) {
   switch (type) {
-    case actions.SELECT_GENOMES:
+    case actions.SELECT_GENOMES: {
+      const nextSelectionSize = payload.genomes.length + Object.keys(state).length;
+      if (isOverSelectionLimit(nextSelectionSize)) {
+        return state;
+      }
       return (
         payload.genomes.reduce(addToSelection, { ...state })
       );
+    }
+    case actions.SET_GENOME_SELECTION: {
+      if (isOverSelectionLimit(payload.genomes.length)) {
+        return state;
+      }
+      return (
+        payload.genomes.reduce(addToSelection, {})
+      );
+    }
     case actions.UNSELECT_GENOMES:
       return (
         payload.genomes.reduce(removeFromSelection, { ...state })
@@ -30,10 +45,6 @@ export default function (state = initialState, { type, payload }) {
           }
           return addToSelection(memo, genome);
         }, { ...state })
-      );
-    case actions.SET_GENOME_SELECTION:
-      return (
-        payload.genomes.reduce(addToSelection, {})
       );
     default:
       return state;

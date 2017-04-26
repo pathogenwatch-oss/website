@@ -5,14 +5,13 @@ import { Summary as FilterSummary, Totals } from '../../filter/summary';
 import ProgressBar from '../../progress-bar';
 import ViewSwitcher from './ViewSwitcher.react';
 import ErrorSummary from '../uploads/ErrorSummary.react';
+import SelectAll from '../selection/SelectAll.react';
+import ClearSelection from '../selection/ClearSelection.react';
 
 import { getPrefilter } from '../filter/selectors';
 import * as uploads from '../uploads/selectors';
 import { getTotalGenomes } from '../selectors';
 import { getTotal } from './selectors';
-import { getSelectedGenomeList } from '../selection/selectors';
-
-import { selectAll, setSelection } from '../selection/actions';
 
 const Summary = React.createClass({
 
@@ -64,17 +63,8 @@ const Summary = React.createClass({
           total={this.props.totalGenomes}
           itemType="genome"
         />
-        <button
-          className="mdl-button mdl-button--primary"
-          onClick={this.props.onSelectAll}
-        >
-          Select All
-        </button>
-        { this.props.hasSelection &&
-          <button className="mdl-button" onClick={this.props.onClearAll}>
-            Clear Selection
-          </button>
-        }
+        <SelectAll />
+        <ClearSelection />
       </FilterSummary>
     );
   },
@@ -90,15 +80,7 @@ function mapStateToProps(state) {
     totalErroredUploads: uploads.getTotalErrors(state),
     numVisibleGenomes: getTotalGenomes(state),
     totalGenomes: getTotal(state),
-    hasSelection: getSelectedGenomeList(state).length > 0,
   };
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    onSelectAll: () => dispatch(selectAll()),
-    onClearAll: () => dispatch(setSelection([])),
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Summary);
+export default connect(mapStateToProps)(Summary);
