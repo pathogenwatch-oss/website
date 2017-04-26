@@ -18,7 +18,7 @@ function getSort(sort) {
 module.exports = function (props) {
   const { user, query = {} } = props;
   const { skip = 0, limit = 0, searchText, sort = 'createdAt-' } = query;
-  const { organismId, reference, owner, country, startDate, endDate } = query;
+  const { organismId, reference, owner, country, startDate, endDate, uploadedAt } = query;
 
   const findQuery = Genome.getPrefilterCondition(props);
 
@@ -57,6 +57,10 @@ module.exports = function (props) {
       findQuery.date || {},
       { $lte: new Date(endDate) }
     );
+  }
+
+  if (uploadedAt) {
+    findQuery.uploadedAt = uploadedAt;
   }
 
   return (

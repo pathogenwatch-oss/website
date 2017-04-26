@@ -55,6 +55,8 @@ exports.getSummary = function (model, summaryFields, props) {
                 count: previousCount + count,
                 label: _id.label[0],
               };
+            } else if (_id instanceof Date) {
+              memo[_id.toISOString()] = { count };
             } else {
               memo[_id] = { count };
             }
