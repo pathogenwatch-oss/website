@@ -1,16 +1,13 @@
 import { createSelector } from 'reselect';
 
-import { getSelectedGenomeIds } from '../selection/selectors';
-import { getGenomes } from '../selectors';
+import { getSelectedGenomeList } from '../selection/selectors';
 
 export const getSelectedMetric = ({ genomes }) => genomes.selectedMetric;
 
 export const getGenomeMetrics = createSelector(
-  getSelectedGenomeIds,
-  getGenomes,
-  (ids, genomes) => ids.reduce((memo, id) => {
-    if (!(id in genomes)) return memo;
-    const { name, metrics } = genomes[id];
+  getSelectedGenomeList,
+  genomes => genomes.reduce((memo, genome) => {
+    const { id, name, metrics } = genome;
     if (!metrics) {
       return memo;
     }

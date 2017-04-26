@@ -1,25 +1,30 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { isSelectAllDisabled } from './selectors';
-
-import { selectAll } from '../selection/actions';
-
+import { isSelectAllDisabled, isSelectionLimitReached } from './selectors';
+import { selectAll } from './actions';
 import { getSelectionLimit } from './utils';
 
-function getTitle(disabled) {
-  if (disabled) {
-    return `Selection is limited to ${getSelectionLimit()} genomes. Please refine your search.`;
+function getTitle(isLimitReached, isDisabled) {
+  const limit = getSelectionLimit();
+
+  if (isLimitReached) {
+    return `Selection limit of ${limit} genomes reached.`;
   }
+
+  if (isDisabled) {
+    return `Selection is limited to ${limit} genomes. Please refine your search.`;
+  }
+
   return null;
 }
 
-const SelectAll = ({ disabled, onClick }) => (
+const SelectAll = ({ isDisabled, isLimitReached, onClick }) => (
   <button
     className="mdl-button mdl-button--primary"
     onClick={onClick}
-    disabled={disabled}
-    title={getTitle(disabled)}
+    disabled={isDisabled}
+    title={getTitle(isLimitReached, isDisabled)}
   >
     Select All
   </button>
@@ -27,7 +32,8 @@ const SelectAll = ({ disabled, onClick }) => (
 
 function mapStateToProps(state) {
   return {
-    disabled: isSelectAllDisabled(state),
+    isLimitReached: isSelectionLimitReached(state),
+    isDisabled: isSelectAllDisabled(state),
   };
 }
 

@@ -4,8 +4,8 @@ import { isOverSelectionLimit } from './utils';
 
 const initialState = {};
 
-const addToSelection = (memo, { id, name, organismId }) => {
-  memo[id] = { id, name, organismId };
+const addToSelection = (memo, { id, name, organismId, metrics }) => {
+  memo[id] = { id, name, organismId, metrics };
   return memo;
 };
 
@@ -25,6 +25,10 @@ export default function (state = initialState, { type, payload }) {
         payload.genomes.reduce(addToSelection, { ...state })
       );
     }
+    case actions.UNSELECT_GENOMES:
+      return (
+        payload.genomes.reduce(removeFromSelection, { ...state })
+      );
     case actions.SET_GENOME_SELECTION: {
       if (isOverSelectionLimit(payload.genomes.length)) {
         return state;
@@ -33,19 +37,6 @@ export default function (state = initialState, { type, payload }) {
         payload.genomes.reduce(addToSelection, {})
       );
     }
-    case actions.UNSELECT_GENOMES:
-      return (
-        payload.genomes.reduce(removeFromSelection, { ...state })
-      );
-    case actions.TOGGLE_SELECTED_GENOMES:
-      return (
-        payload.genomes.reduce((memo, genome) => {
-          if (genome.id in memo) {
-            return removeFromSelection(memo, genome);
-          }
-          return addToSelection(memo, genome);
-        }, { ...state })
-      );
     default:
       return state;
   }

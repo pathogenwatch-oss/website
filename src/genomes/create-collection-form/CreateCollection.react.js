@@ -16,9 +16,11 @@ const CreateCollection = React.createClass({
     const organismIds = Object.keys(selectedGenomeSummary);
     if (organismIds.length === 0) {
       return (
-        <p>
-          Please select a supported organism to create a collection.<br />
-          Supported organisms are:
+        <div>
+          <p>
+            Please select a supported organism to create a collection.<br />
+            Supported organisms are:
+          </p>
           <ul className="wgsa-supported-organism-list">
             { Array.from(deployedOrganisms).map(organismId =>
               <li key={organismId}>
@@ -26,7 +28,7 @@ const CreateCollection = React.createClass({
               </li>
             )}
           </ul>
-        </p>
+        </div>
       );
     }
 

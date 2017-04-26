@@ -3,7 +3,7 @@ import { createSelector } from 'reselect';
 import { getDeployedOrganismIds } from '../../summary/selectors';
 import { getGenomeList } from '../selectors';
 
-import { isOverSelectionLimit } from './utils';
+import { isOverSelectionLimit, getSelectionLimit } from './utils';
 
 export const getSelectedGenomes = ({ genomes }) => genomes.selection;
 
@@ -26,6 +26,12 @@ export const getSelectedSupportedGenomesList = createSelector(
 );
 
 export const isSelectAllDisabled = createSelector(
+  getSelectedGenomeList,
   getGenomeList,
-  genomes => isOverSelectionLimit(genomes.length)
+  (selected, visible) => isOverSelectionLimit(selected.length + visible.length)
+);
+
+export const isSelectionLimitReached = createSelector(
+  getSelectedGenomeIds,
+  ids => ids.length === getSelectionLimit()
 );

@@ -1,9 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { getSelectedGenomeList } from '../selection/selectors';
-
-import { setSelection } from '../selection/actions';
+import { getSelectedGenomeList } from './selectors';
+import { setSelection } from './actions';
 
 const ClearSelection = ({ hasSelection, onClick }) => (
     hasSelection ?

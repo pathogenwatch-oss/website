@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import AddToSelectionButton from './AddToSelectionButton.react';
 import { FormattedName } from '../../organisms';
 
-import { toggleSelectedGenomes } from '../selection/actions';
+import { toggleSelection } from '../selection/actions';
 
 import { statuses as uploadStatuses } from '../uploads/constants';
 
@@ -32,10 +32,9 @@ const Header = ({ genome, onClick }) => {
   );
 };
 
-
 function mapDispatchToProps(dispatch, { genome }) {
   return {
-    onClick: () => dispatch(toggleSelectedGenomes([ genome ])),
+    onClick: () => dispatch(toggleSelection(genome)),
   };
 }
 
