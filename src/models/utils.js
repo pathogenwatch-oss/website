@@ -45,12 +45,11 @@ exports.getSummary = function (model, summaryFields, props) {
   return aggregateSummaryFields(model, summaryFields, props)
     .then(([ total, ...results ]) => {
       const summary = { total };
-
       results.forEach((result, index) => {
         summary[summaryFields[index].field] = result.reduce(
           (memo, { _id, count }) => {
             if (_id === null) return memo;
-            if (typeof _id === 'object') {
+            if (_id.key && _id.label) {
               const previousCount = memo[_id.key] ? memo[_id.key].count : 0;
               memo[_id.key] = {
                 count: previousCount + count,

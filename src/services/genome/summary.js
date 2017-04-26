@@ -21,6 +21,15 @@ const summaryFields = [
       ];
     },
   },
+  { field: 'uploadedAt',
+    aggregation: ({ user }) => {
+      if (!user) return null;
+      return [
+        { $match: { _user: user._id } },
+        { $group: { _id: '$uploadedAt', count: { $sum: 1 } } },
+      ];
+    },
+  },
 ];
 
 module.exports = function (props) {
