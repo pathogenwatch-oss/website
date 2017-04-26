@@ -5,20 +5,16 @@ const services = require('services');
 
 const LOGGER = require('utils/logging').createLogger('Download requests');
 
-router.post('/organism/:organismId/download/type/:idType/format/:fileFormat',
+router.post('/organism/:organismId/download/type/:idType/format/:format',
   (req, res, next) => {
-    const downloadRequest = {
-      idType: req.params.idType === 'genome' ? 'assembly' : req.params.idType,
-      format: req.params.fileFormat,
-      idList: req.body.idList,
-      speciesId: req.params.organismId,
-    };
+    const { format, organismId } = req.params;
+    const { idList } = req.body;
 
     LOGGER.info(
-      `Received request for download: ${downloadRequest.idType}, ${downloadRequest.format}`
+      `Received request for download: ${format}`
     );
 
-    services.request('backend', 'request-download', { request: downloadRequest }).
+    services.request('backend', 'request-download', { format, organismId, idList }).
       then(result => res.json(result)).
       catch(next);
   }

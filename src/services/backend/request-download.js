@@ -1,9 +1,11 @@
 const messageQueueService = require('services/messageQueue');
 
+const CollectionGenome = require('models/collectionGenome');
+
 const LOGGER = require('utils/logging').createLogger('File');
 
-module.exports = function ({ request }) {
-  return new Promise((resolve, reject) => {
+function sendToBackend(request) {
+  return new Promise((resolve, reject) =>
     messageQueueService.newFileRequestQueue(queue => {
       queue.subscribe((error, message) => {
         if (error) {
@@ -22,6 +24,18 @@ module.exports = function ({ request }) {
 
       messageQueueService.getUploadExchange()
         .publish('file', request, { replyTo: queue.name });
-    });
-  });
+    })
+  );
+}
+
+module.exports = function ({ format, organismId, idList }) {
+  return CollectionGenome.find({ uuid: { $in: idList } }, { fileId: 1 })
+    .lean()
+    .then(results => ({
+      format,
+      idList: results.map(_ => _.fileId),
+      idType: 'assembly',
+      speciesId: organismId,
+    }))
+    .then(sendToBackend);
 };
