@@ -14,7 +14,7 @@ router.post('/organism/:organismId/download/type/:idType/format/:format',
       `Received request for download: ${format}`
     );
 
-    services.request('backend', 'request-download', { format, organismId, idList }).
+    services.request('backend', 'request-download', { $timeout: 1000 * 60 * 2, format, organismId, idList }).
       then(result => res.json(result)).
       catch(next);
   }
