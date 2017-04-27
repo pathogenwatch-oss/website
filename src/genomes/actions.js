@@ -25,14 +25,6 @@ export function fetchGenomes(filter) {
   };
 }
 
-export const RESET_GENOMES = 'RESET_GENOMES';
-
-export function resetGenomes() {
-  return {
-    type: RESET_GENOMES,
-  };
-}
-
 export const MOVE_TO_BIN = 'MOVE_TO_BIN';
 
 export function moveToBin(id) {
