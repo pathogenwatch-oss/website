@@ -1,5 +1,4 @@
 import { combineReducers } from 'redux';
-import dateSince from 'date-since';
 
 import uploads from './uploads/reducer';
 import summary from './summary/reducer';
@@ -18,10 +17,7 @@ function entities(state = {}, { type, payload }) {
       return {};
     case actions.FETCH_GENOMES.SUCCESS: {
       return payload.result.reduce((memo, genome) => {
-        memo[genome.id] = {
-          ...genome,
-          createdAt: dateSince(new Date(genome.createdAt)),
-        };
+        memo[genome.id] = genome;
         return memo;
       }, {});
     }

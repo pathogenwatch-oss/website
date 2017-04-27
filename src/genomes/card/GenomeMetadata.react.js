@@ -2,7 +2,7 @@ import React from 'react';
 
 import { CardMetadata } from '../../card';
 
-import { getFormattedDateString } from '../../utils/Date';
+import { getFormattedDateString, formatDateTime } from '../../utils/Date';
 import { getCountryName } from '../../utils/country';
 
 function displayDate(data, isTableCell) {
@@ -67,8 +67,8 @@ function displayAccessLevel(props) {
   }
 
   return (
-    <CardMetadata fadeOverflow title="Access" icon="lock_outline">
-      Private
+    <CardMetadata fadeOverflow title="Uploaded At" icon="access_time">
+      {formatDateTime(props.uploadedAt)}
     </CardMetadata>
   );
 }

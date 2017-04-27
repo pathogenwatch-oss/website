@@ -8,6 +8,7 @@ function entities(state = {}, { type, payload }) {
       return payload.result.reduce((memo, collection) => {
         memo[collection.id] = {
           ...collection,
+          createdAt: new Date(collection.createdAt),
         };
         return memo;
       }, {});

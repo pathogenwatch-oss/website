@@ -7,6 +7,7 @@ import { stateKey } from './index';
 import { getCountryName } from '../../utils/country';
 
 import { isSupported, taxIdMap } from '../../organisms';
+import { formatDateTime } from '../../utils/Date';
 
 export const getFilter = state => filter.getFilter(state, { stateKey });
 
@@ -75,17 +76,18 @@ export const getFilterSummary = createSelector(
           active: filterState.owner === value,
         })
       ),
-      uploadedAt: sortBy(
-        Object.keys(uploadedAt), iso => new Date() - new Date(iso)
-      ).map(value => {
-        const date = new Date(value);
-        return {
-          value,
-          label: date.toLocaleString(),
-          count: uploadedAt[value].count,
-          active: filterState.uploadedAt === value,
-        };
-      }),
+      uploadedAt:
+        Object.keys(uploadedAt)
+          .sort((a, b) => new Date(b) - new Date(a))
+          .map(value => {
+            const date = new Date(value);
+            return {
+              value,
+              label: formatDateTime(date),
+              count: uploadedAt[value].count,
+              active: filterState.uploadedAt === value,
+            };
+          }),
     };
   }
 );
