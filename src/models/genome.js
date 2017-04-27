@@ -78,7 +78,7 @@ schema.statics.updateMetadata = function (_id, _user, metadata) {
 };
 
 schema.statics.getPrefilterCondition = function ({ user, query = {}, sessionID }) {
-  const { prefilter = 'all', uploadedAt = null } = query;
+  const { prefilter = 'all', uploadedAt } = query;
 
   if (prefilter === 'all') {
     const hasAccess = { $or: [ { public: true } ] };
@@ -93,7 +93,7 @@ schema.statics.getPrefilterCondition = function ({ user, query = {}, sessionID }
   }
 
   if (prefilter === 'upload') {
-    return { binned: false, _session: sessionID, uploadedAt };
+    return { binned: false, _session: sessionID, uploadedAt: new Date(uploadedAt || null) };
   }
 
   if (prefilter === 'bin') {

@@ -8,7 +8,15 @@ const summaryFields = [
     ],
   },
   { field: 'country' },
-  { field: 'reference' },
+  { field: 'reference',
+    aggregation: ({ query = {} }) => {
+      console.log(query);
+      if (query.prefilter === 'upload') return null;
+      return [
+        { $group: { _id: '$reference', count: { $sum: 1 } } },
+      ];
+    },
+  },
   { field: 'owner',
     aggregation: ({ user }) => {
       if (!user) return null;
