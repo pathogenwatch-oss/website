@@ -6,6 +6,9 @@ module.exports.up = function (done) {
   db.collection('genomefiles').aggregate(
     [
       {
+        $match: { speciesId: { $exists: true }, speciesName: { $exists: true } },
+      },
+      {
         $addFields: { organismId: '$speciesId', organismName: '$speciesName' },
       },
       {
@@ -24,6 +27,9 @@ module.exports.down = function (done) {
   const { db } = this;
   db.collection('genomefiles').aggregate(
     [
+      {
+        $match: { organismId: { $exists: true }, organismName: { $exists: true } },
+      },
       {
         $addFields: { speciesId: '$organismId', speciesName: '$organismName' },
       },
