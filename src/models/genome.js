@@ -43,6 +43,14 @@ setToObjectOptions(schema, (_, genome, { user = {} }) => {
 
 addPreSaveHook(schema);
 
+schema.pre('save', function (next) {
+  const { year, month = 1, day = 1 } = this;
+  if (year) {
+    this.date = new Date(year, month - 1, day);
+  }
+  next();
+});
+
 function getCountryCode(latitude, longitude) {
   if (latitude && longitude) {
     return geocoding.getCountryCode(
