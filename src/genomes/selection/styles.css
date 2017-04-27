@@ -12,5 +12,7 @@
 
 .wgsa-selection-tabs > .mdl-tabs__panel {
   padding: 16px;
+  max-height: 351px; /* 400px - 48px header - 1px border */
   overflow-y: auto;
+  box-sizing: border-box;
 }
