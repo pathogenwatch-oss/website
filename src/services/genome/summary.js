@@ -10,16 +10,16 @@ const summaryFields = [
   { field: 'country' },
   { field: 'reference',
     aggregation: ({ query = {} }) => {
-      console.log(query);
-      if (query.prefilter === 'upload') return null;
+      if (query.prefilter !== 'all') return null;
       return [
         { $group: { _id: '$reference', count: { $sum: 1 } } },
       ];
     },
   },
   { field: 'owner',
-    aggregation: ({ user }) => {
+    aggregation: ({ user, query = {} }) => {
       if (!user) return null;
+      if (query.prefilter !== 'all') return null;
       return [
         { $group: {
             _id: { $cond: [ { $eq: [ '$_user', user._id ] }, 'me', 'other' ] },
@@ -30,8 +30,9 @@ const summaryFields = [
     },
   },
   { field: 'uploadedAt',
-    aggregation: ({ user }) => {
+    aggregation: ({ user, query = {} }) => {
       if (!user) return null;
+      if (query.prefilter === 'upload') return null;
       return [
         { $match: { _user: user._id } },
         { $group: { _id: '$uploadedAt', count: { $sum: 1 } } },

@@ -29,12 +29,12 @@ function aggregateSummaryFields(model, summaryFields, props) {
         aggregation(props) :
         [ { $group: { _id: `$${field}`, count: { $sum: 1 } } } ];
 
-    if (aggregationStage === null) return memo;
     memo.push(
-      model.aggregate(
-        prefilterStage.concat(aggregationStage)
-      )
+      aggregationStage === null ?
+        Promise.resolve([]) :
+        model.aggregate(prefilterStage.concat(aggregationStage))
     );
+
     return memo;
   }, [ model.count(prefilterCondition) ]);
 

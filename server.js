@@ -65,6 +65,18 @@ module.exports = () =>
       next();
     });
 
+    if (process.env.NODE_ENV === 'development') {
+      app.use(require('./src/dev'));
+    }
+
+    app.use((req, res, next) => {
+      if (req.method === 'OPTIONS') {
+        res.sendStatus(200);
+      } else {
+        next();
+      }
+    });
+
     // required for passport.js
     app.use(cookieParser());
     app.use(
@@ -88,21 +100,6 @@ module.exports = () =>
     });
 
     app.use(express.static(path.join(clientPath, 'public')));
-
-    // CORS
-    app.use((req, res, next) => {
-      res.header('Access-Control-Allow-Origin', '*');
-      res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
-      res.header(
-        'Access-Control-Allow-Headers',
-        'Origin, X-Requested-With, Content-Type, Accept'
-      );
-      next();
-    });
-
-    if (process.env.NODE_ENV === 'development') {
-      app.use(require('./src/dev'));
-    }
 
     require('routes.js')(app);
 

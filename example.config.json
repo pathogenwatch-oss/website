@@ -65,8 +65,5 @@
   "maxFastaFileSize": 10,
   "mapboxKey": "",
   "fastaStoragePath": "/path/to/files/",
-  "wikiLocation": "https://raw.githubusercontent.com/wiki/ImperialCollegeLondon/wgsa-documentation",
-  "dev": {
-    "sessionID": ""
-  }
+  "wikiLocation": "https://raw.githubusercontent.com/wiki/ImperialCollegeLondon/wgsa-documentation"
 }

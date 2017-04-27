@@ -6,6 +6,7 @@ function prefilterValidation(req, res, next) {
   if (prefilter === 'user' || prefilter === 'bin') {
     if (!user || !user._id) {
       res.sendStatus(401);
+      return;
     }
   }
 
