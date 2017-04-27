@@ -29,7 +29,8 @@ export default React.createClass({
         onClick={this.props.hide}
         className={classnames(
           'wgsa-overlay',
-          { 'wgsa-overlay--is-visible': this.props.isVisible }
+          { 'wgsa-overlay--is-visible': this.props.isVisible },
+          { 'wgsa-overlay--no-content': !this.props.children }
         )}
       >
         <div className="mdl-shadow--4dp" onClick={e => e.stopPropagation()}>

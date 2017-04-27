@@ -17,6 +17,10 @@
   justify-content: center;
 }
 
+.wgsa-overlay--no-content {
+  z-index: auto;
+}
+
 .wgsa-overlay--is-visible {
   visibility: visible;
   opacity: 1;

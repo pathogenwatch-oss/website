@@ -4,7 +4,7 @@
   right: 144px;
   position: fixed;
   min-width: 540px;
-  z-index: 1;
+  z-index: 3;
 }
 
 .wgsa-drawer {
@@ -94,4 +94,9 @@
 .wgsa-drawer-actions {
   display: flex;
   justify-content: flex-end;
+}
+
+.wgsa-drawer--disabled .wgsa-drawer__header {
+  background: #666;
+  cursor: default;
 }

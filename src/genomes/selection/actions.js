@@ -1,4 +1,5 @@
 import { getGenomeList } from '../selectors';
+import { getSelectedGenomes } from './selectors';
 
 export const SELECT_GENOMES = 'SELECT_GENOMES';
 
@@ -18,21 +19,25 @@ export function unselectGenomes(genomes) {
   };
 }
 
-export const TOGGLE_SELECTED_GENOMES = 'TOGGLE_SELECTED_GENOMES';
-
-export function toggleSelectedGenomes(genomes) {
-  return {
-    type: TOGGLE_SELECTED_GENOMES,
-    payload: { genomes },
-  };
-}
-
 export const SET_GENOME_SELECTION = 'SET_GENOME_SELECTION';
 
 export function setSelection(genomes) {
   return {
     type: SET_GENOME_SELECTION,
     payload: { genomes },
+  };
+}
+
+export function toggleSelection(genome) {
+  return (dispatch, getState) => {
+    const state = getState();
+    const selection = getSelectedGenomes(state);
+
+    if (genome.id in selection) {
+      dispatch(unselectGenomes([ genome ]));
+    } else {
+      dispatch(selectGenomes([ genome ]));
+    }
   };
 }
 

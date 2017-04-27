@@ -2,6 +2,8 @@ import { createSelector } from 'reselect';
 
 import { getDeployedOrganismIds } from '../../summary/selectors';
 
+import { getSelectionLimit } from './utils';
+
 export const getSelectedGenomes = ({ genomes }) => genomes.selection;
 
 export const getSelectedGenomeIds = createSelector(
@@ -20,4 +22,9 @@ export const getSelectedSupportedGenomesList = createSelector(
   getDeployedOrganismIds,
   (genomes, deployedIds) =>
     genomes.filter(genome => deployedIds.has(genome.organismId))
+);
+
+export const isSelectionLimitReached = createSelector(
+  getSelectedGenomeIds,
+  ids => ids.length > getSelectionLimit()
 );
