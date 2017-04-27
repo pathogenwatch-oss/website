@@ -95,3 +95,8 @@
   display: flex;
   justify-content: flex-end;
 }
+
+.wgsa-drawer--disabled .wgsa-drawer__header {
+  background: #666;
+  cursor: default;
+}

@@ -4,19 +4,26 @@ import { connect } from 'react-redux';
 import Drawer from '../../drawer';
 import Tabs from './Tabs.react';
 
-import { getSelectedGenomeList } from './selectors';
+import { getSelectedGenomeList, isSelectionLimitReached } from './selectors';
 
-function getSelectionTitle(selectedGenomes) {
-  return (
-    <span>
-      <span className="wgsa-genome-total">{selectedGenomes.length}</span>&nbsp;
-      {` Genome${selectedGenomes.length === 1 ? '' : 's'} Selected`}
-    </span>
-  );
-}
+import { getSelectionLimit } from './utils';
 
-const SelectionDrawer = ({ visible, title }) => (
-  <Drawer title={title} visible={visible}>
+const SelectionTitle = ({ total, isLimitReached }) => (
+  <span
+    title={isLimitReached ? `Selection limit of ${getSelectionLimit()} genomes reached.` : null}
+  >
+    <span className="wgsa-genome-total">{total}</span>&nbsp;
+    {` Genome${total === 1 ? '' : 's'} Selected`}&nbsp;
+    {isLimitReached ? `(Limit is ${getSelectionLimit()}, please refine your selection)` : null}
+  </span>
+);
+
+const SelectionDrawer = ({ visible, total, isLimitReached }) => (
+  <Drawer
+    title={<SelectionTitle total={total} isLimitReached={isLimitReached} />}
+    visible={visible}
+    disabled={isLimitReached}
+  >
     <Tabs />
   </Drawer>
 );
@@ -25,7 +32,8 @@ function mapStateToProps(state) {
   const selectedGenomes = getSelectedGenomeList(state);
   return {
     visible: selectedGenomes.length > 0,
-    title: getSelectionTitle(selectedGenomes),
+    total: selectedGenomes.length,
+    isLimitReached: isSelectionLimitReached(state),
   };
 }
 

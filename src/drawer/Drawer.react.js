@@ -12,12 +12,14 @@ export default React.createClass({
     visible: React.PropTypes.bool,
     isOpen: React.PropTypes.bool,
     onClose: React.PropTypes.func,
+    disabled: React.PropTypes.bool,
   },
 
   getDefaultProps() {
     return {
       visible: false,
       isOpen: false,
+      disabled: false,
     };
   },
 
@@ -28,6 +30,10 @@ export default React.createClass({
   },
 
   onHeaderClick() {
+    if (this.props.disabled) {
+      return;
+    }
+
     if (this.props.isOpen) {
       this.props.onClose();
       return;
@@ -59,15 +65,18 @@ export default React.createClass({
             key={this.props.animationKey || 'wgsa-drawer'}
             className={classnames(
               'wgsa-drawer',
-              { 'wgsa-drawer--open': !this.props.isOpen && this.state.open },
-              { 'wgsa-open-drawer': this.props.isOpen }
+              { 'wgsa-drawer--open': !this.props.isOpen && this.state.open,
+                'wgsa-open-drawer': this.props.isOpen,
+                'wgsa-drawer--disabled': this.props.disabled }
             )}
           >
             <header className="wgsa-drawer__header" onClick={this.onHeaderClick}>
               {this.props.title}
-              <button className="mdl-button mdl-button--icon">
-                <i className="material-icons">{`expand_${this.state.open ? 'more' : 'less'}`}</i>
-              </button>
+              {this.props.disabled ?
+                null :
+                <button className="mdl-button mdl-button--icon">
+                  <i className="material-icons">{`expand_${this.state.open ? 'more' : 'less'}`}</i>
+                </button>}
             </header>
             {React.cloneElement(this.props.children, { open: this.state.open })}
           </aside>

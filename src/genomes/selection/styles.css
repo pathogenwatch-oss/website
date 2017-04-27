@@ -2,6 +2,10 @@
   color: #87c7a6;
 }
 
+.wgsa-drawer--disabled .wgsa-genome-total {
+  color: #FF7272;
+}
+
 .wgsa-selection-summary {
   padding: 16px;
 }
