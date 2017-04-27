@@ -10,6 +10,8 @@ import collectionMetadata from './create-collection-form/reducer';
 import { CREATE_COLLECTION } from './create-collection-form';
 import * as actions from './actions';
 
+import { shouldNotFetch } from './utils';
+
 function entities(state = {}, { type, payload }) {
   switch (type) {
     case actions.FETCH_GENOME_SUMMARY.ATTEMPT:
@@ -43,8 +45,6 @@ function entities(state = {}, { type, payload }) {
         },
       };
     }
-    case actions.RESET_GENOMES:
-      return {};
     default:
       return state;
   }
@@ -65,10 +65,12 @@ function waiting(state = false, { type }) {
 }
 
 const initialStatus = null;
-function status(state = initialStatus, { type }) {
+function status(state = initialStatus, { type, payload }) {
   switch (type) {
-    case actions.FETCH_GENOMES.ATTEMPT:
+    case actions.FETCH_GENOMES.ATTEMPT: {
+      if (shouldNotFetch(payload.filter)) return state;
       return statuses.LOADING;
+    }
     case actions.FETCH_GENOMES.FAILURE:
       return statuses.ERROR;
     case actions.FETCH_GENOMES.SUCCESS:

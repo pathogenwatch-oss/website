@@ -137,3 +137,7 @@ export function upload(genome, dispatch) {
       )
     );
 }
+
+export function shouldNotFetch({ prefilter, uploadedAt }) {
+  return (prefilter === 'upload' && !uploadedAt);
+}

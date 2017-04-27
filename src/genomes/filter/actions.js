@@ -1,7 +1,7 @@
 import { stateKey } from './index';
 
 import { actions } from '../../filter';
-import { fetchGenomes, fetchSummary, resetGenomes } from '../actions';
+import { fetchGenomes, fetchSummary } from '../actions';
 
 import { getFilter } from './selectors';
 import { getUploadedAt } from '../uploads/selectors';
@@ -18,10 +18,6 @@ export function updateFilter(query, updateQueryString = true) {
     const filterQuery = { ...currentFilter };
 
     if (filterQuery.prefilter === 'upload') {
-      if (!uploadedAt) {
-        dispatch(resetGenomes());
-        return;
-      }
       filterQuery.uploadedAt = uploadedAt;
     }
 
