@@ -46,6 +46,10 @@ module.exports = function (props) {
     } else if (owner === 'other') {
       findQuery._user = { $ne: user };
     }
+
+    if (uploadedAt) {
+      findQuery.uploadedAt = uploadedAt;
+    }
   }
 
   if (startDate) {
@@ -57,10 +61,6 @@ module.exports = function (props) {
       findQuery.date || {},
       { $lte: new Date(endDate) }
     );
-  }
-
-  if (uploadedAt) {
-    findQuery.uploadedAt = uploadedAt;
   }
 
   return (
