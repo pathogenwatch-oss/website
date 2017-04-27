@@ -22,7 +22,7 @@ export const getSearchText = createSelector(
 export const getFilterSummary = createSelector(
   ({ genomes }) => genomes.summary,
   filter.getFilter,
-  ({ loading, organismId, country, reference, owner, uploadedAt }, filterState) => {
+  ({ loading, organismId, country, reference, owner, uploadedAt, date }, filterState) => {
     const wgsaOrganisms = [];
     const otherOrganisms = [];
 
@@ -45,8 +45,14 @@ export const getFilterSummary = createSelector(
       }
     }
 
+    const { startDate = date.min, endDate = date.max } = filterState
+
     return {
       loading,
+      date: {
+        bounds: [ date.min, date.max ],
+        values: [ startDate, endDate ],
+      },
       wgsaOrganisms: sortBy(wgsaOrganisms, 'title'),
       otherOrganisms: sortBy(otherOrganisms, 'label'),
       country: sortBy(

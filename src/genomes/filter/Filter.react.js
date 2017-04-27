@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import LocationListener from '../../location';
 import FilterAside from '../../filter/aside';
-import DateFilter from '../../date-filter';
+import DateRange from '../../components/date-range';
 import AsideSection from '../../filter/aside-section';
 import { selectors } from '../../filter';
 
@@ -37,6 +37,15 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       textValue={textValue}
       textOnChange={e => updateFilter('searchText', e.target.value)}
     >
+      <section className="wgsa-filter__section">
+        <h3>Date</h3>
+        <DateRange
+          bounds={filterSummary.date.bounds}
+          values={filterSummary.date.values}
+          onChangeMin={value => updateFilter('startDate', value.toISOString())}
+          onChangeMax={value => updateFilter('endDate', value.toISOString())}
+        />
+      </section>
       <AsideSection
         filterKey="organismId"
         heading="WGSA Organisms"
@@ -73,13 +82,6 @@ export default connect(mapStateToProps, mapDispatchToProps)(
         summary={filterSummary.country}
         updateFilter={updateFilter}
       />
-      {/* <DateFilter
-        min={filterSummary.date.min}
-        max={filterSummary.date.max}
-        years={filterSummary.date.years}
-        onChangeMin={value => updateFilter(minDate, value)}
-        onChangeMax={value => updateFilter(maxDate, value)}
-      /> */}
       <LocationListener update={updateFilter} />
     </FilterAside>
   )
