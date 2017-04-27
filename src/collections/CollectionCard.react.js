@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import Markdown from 'react-markdown';
-import dateSince from 'date-since';
+import dateSince from 'date-fns/distance_in_words';
 
 import Card, { CardMetadata } from '../card';
 import { FormattedName } from '../organisms';
@@ -24,16 +24,16 @@ const statusText = {
 };
 
 export default ({ item }) => {
-  const createdAt = new Date(item.createdAt);
-  const { status } = item;
+  const now = new Date();
+  const { createdAt, status, size } = item;
   return (
     <Card className="wgsa-card--bordered">
       <span className="wgsa-card-metadata-overview">
         <CardMetadata title="Size" icon="insert_drive_file">
-          {item.size} genome{item.size === 1 ? '' : 's'}
+          {size} genome{size === 1 ? '' : 's'}
         </CardMetadata>
         <CardMetadata tooltip={createdAt.toLocaleString()} icon="history">
-          {dateSince(createdAt)} ago
+          {dateSince(createdAt, now)} ago
         </CardMetadata>
         { status !== 'READY' &&
           <CardMetadata title="Status" icon={statusIcons[status]}>

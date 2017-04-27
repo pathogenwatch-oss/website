@@ -2,7 +2,6 @@ import { getCollection } from '../selectors';
 import { getSubtreeNames } from '../tree/selectors';
 
 import { statuses } from './constants';
-import { API_ROOT } from '../../utils/Api';
 
 export const SET_OFFLINE_STATUS = 'SET_OFFLINE_STATUS';
 
@@ -49,8 +48,8 @@ export function saveForOffline() {
       .then(() => caches.open(`wgsa-collection-${uuid}`))
       .then(cache => cache.addAll(
         subtrees
-          .map(subtree => `${API_ROOT}/collection/${uuid}/subtree/${subtree}`)
-          .concat(`${API_ROOT}/collection/${uuid}`)
+          .map(subtree => `/api/collection/${uuid}/subtree/${subtree}`)
+          .concat(`/api/collection/${uuid}`)
       ))
       .then(() => window.location.reload());
   };

@@ -17,8 +17,7 @@ export function updateFilter(query, updateQueryString = true) {
 
     const filterQuery = { ...currentFilter };
 
-    if (currentFilter.prefilter === 'upload') {
-      // if (!uploadedAt) return;
+    if (filterQuery.prefilter === 'upload') {
       filterQuery.uploadedAt = uploadedAt;
     }
 

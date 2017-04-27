@@ -3,7 +3,7 @@ import { readAsText } from 'promise-file-reader';
 import { updateGenomeProgress } from '../uploads/actions';
 
 import MetadataUtils from '../../utils/Metadata';
-import { API_ROOT, postJson } from '../../utils/Api';
+import { fetchJson, fetchText } from '../../utils/Api';
 
 import { validateGenomeSize, validateGenomeContent } from './validation';
 
@@ -83,29 +83,8 @@ export function mapCSVsToGenomes(files) {
     );
 }
 
-function getCustomXHR(id, dispatch) {
-  const xhr = new window.XMLHttpRequest();
-
-  let previousPercent = 0;
-
-  xhr.upload.addEventListener('progress', evt => {
-    if (evt.lengthComputable) {
-      const percentComplete = (evt.loaded / evt.total) * 100;
-      const percentRounded =
-        Math.floor(percentComplete / 10) * 10;
-
-      if (percentRounded > previousPercent) {
-        dispatch(updateGenomeProgress(id, percentRounded));
-        previousPercent = percentRounded;
-      }
-    }
-  }, false);
-
-  return xhr;
-}
-
 export function update(id, metadata) {
-  return postJson(`/genome/${id}`, metadata);
+  return fetchJson('POST', `/api/genome/${id}`, metadata);
 }
 
 function create({ file, id, uploadedAt }, dispatch) {
@@ -114,20 +93,18 @@ function create({ file, id, uploadedAt }, dispatch) {
       then(readAsText).
       then(validateGenomeContent).
       then(data =>
-        $.ajax({
-          type: 'PUT',
-          url: `${API_ROOT}/genome?${$.param({ name: file.name, uploadedAt })}`,
-          contentType: 'text/plain; charset=UTF-8',
+        fetchText(
+          'PUT',
+          `/api/genome?${$.param({ name: file.name, uploadedAt })}`,
           data,
-          dataType: 'json',
-          xhr: () => getCustomXHR(id, dispatch),
-        })
+          percent => dispatch(updateGenomeProgress(id, percent))
+        )
       )
   );
 }
 
 export function upload(genome, dispatch) {
-  const { id, file, hasMetadata, ...props } = genome;
+  const { hasMetadata, ...props } = genome;
   return create(genome, dispatch).
     then((result) =>
       (hasMetadata ?
@@ -136,4 +113,8 @@ export function upload(genome, dispatch) {
         result
       )
     );
+}
+
+export function shouldNotFetch({ prefilter, uploadedAt }) {
+  return (prefilter === 'upload' && !uploadedAt);
 }

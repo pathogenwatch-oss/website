@@ -3,11 +3,11 @@ import { showToast } from '../../toast';
 
 import { fileTypes } from './constants';
 
-import { SERVER_ADDRESS } from '../../utils/Api';
+import { getServerPath } from '../../utils/Api';
 import Organisms from '../../organisms';
 
 export const encode = encodeURIComponent;
-export const downloadPath = `${SERVER_ADDRESS}/download/file`;
+export const downloadPath = getServerPath('/download/file');
 
 export function getInitialFileState() {
   return fileTypes;

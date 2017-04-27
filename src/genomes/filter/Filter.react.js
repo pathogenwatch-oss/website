@@ -62,6 +62,12 @@ export default connect(mapStateToProps, mapDispatchToProps)(
         updateFilter={updateFilter}
       />
       <AsideSection
+        filterKey="uploadedAt"
+        heading="Uploaded At"
+        summary={filterSummary.uploadedAt}
+        updateFilter={updateFilter}
+      />
+      <AsideSection
         filterKey="country"
         heading="Country"
         summary={filterSummary.country}

@@ -1,5 +1,4 @@
 import { combineReducers } from 'redux';
-import dateSince from 'date-since';
 
 import uploads from './uploads/reducer';
 import summary from './summary/reducer';
@@ -8,22 +7,21 @@ import selectedMetric from './stats/reducer';
 import collectionMetadata from './create-collection-form/reducer';
 
 import { CREATE_COLLECTION } from './create-collection-form';
-import { FETCH_GENOMES, FETCH_GENOME_SUMMARY, MOVE_TO_BIN, UNDO_MOVE_TO_BIN } from './actions';
+import * as actions from './actions';
+
+import { shouldNotFetch } from './utils';
 
 function entities(state = {}, { type, payload }) {
   switch (type) {
-    case FETCH_GENOME_SUMMARY.ATTEMPT:
+    case actions.FETCH_GENOME_SUMMARY.ATTEMPT:
       return {};
-    case FETCH_GENOMES.SUCCESS: {
+    case actions.FETCH_GENOMES.SUCCESS: {
       return payload.result.reduce((memo, genome) => {
-        memo[genome.id] = {
-          ...genome,
-          createdAt: dateSince(new Date(genome.createdAt)),
-        };
+        memo[genome.id] = genome;
         return memo;
       }, {});
     }
-    case MOVE_TO_BIN: {
+    case actions.MOVE_TO_BIN: {
       const { id } = payload;
       return {
         ...state,
@@ -33,7 +31,7 @@ function entities(state = {}, { type, payload }) {
         },
       };
     }
-    case UNDO_MOVE_TO_BIN: {
+    case actions.UNDO_MOVE_TO_BIN: {
       const { id } = payload;
       return {
         ...state,
@@ -63,13 +61,15 @@ function waiting(state = false, { type }) {
 }
 
 const initialStatus = null;
-function status(state = initialStatus, { type }) {
+function status(state = initialStatus, { type, payload }) {
   switch (type) {
-    case FETCH_GENOMES.ATTEMPT:
+    case actions.FETCH_GENOMES.ATTEMPT: {
+      if (shouldNotFetch(payload.filter)) return state;
       return statuses.LOADING;
-    case FETCH_GENOMES.FAILURE:
+    }
+    case actions.FETCH_GENOMES.FAILURE:
       return statuses.ERROR;
-    case FETCH_GENOMES.SUCCESS:
+    case actions.FETCH_GENOMES.SUCCESS:
       return statuses.OK;
     default:
       return state;

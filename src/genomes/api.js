@@ -1,9 +1,19 @@
 import { fetchJson } from '../utils/Api';
+import { shouldNotFetch } from './utils';
 
-export function fetchGenomes(filter) {
-  return fetchJson('GET', '/api/genome', filter);
+function skipFetch(filter, defaultValue) {
+  if (shouldNotFetch(filter)) {
+    return Promise.resolve(defaultValue);
+  }
+  return false;
 }
 
-export function fetchSummary({ prefilter, uploadedAt }) {
-  return fetchJson('GET', '/api/genome/summary', { prefilter, uploadedAt });
+export function fetchGenomes(filter) {
+  return skipFetch(filter, []) || fetchJson('GET', '/api/genome', filter);
+}
+
+export function fetchSummary(filter) {
+  const { prefilter, uploadedAt } = filter;
+  return skipFetch(filter, {}) ||
+    fetchJson('GET', '/api/genome/summary', { prefilter, uploadedAt });
 }

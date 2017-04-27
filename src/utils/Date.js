@@ -53,3 +53,17 @@ export function getFormattedDateString(date) {
 
   return year;
 }
+
+import isToday from 'date-fns/is_today';
+import isYesterday from 'date-fns/is_yesterday';
+import format from 'date-fns/format';
+
+export function formatDateTime(date) {
+  if (isToday(date)) {
+    return `Today ${format(date, 'HH:mm')}`;
+  }
+  if (isYesterday(date)) {
+    return `Yesterday ${format(date, 'HH:mm')}`;
+  }
+  return format(date, 'DD MMM YYYY HH:mm');
+}

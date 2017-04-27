@@ -3,7 +3,7 @@ import React from 'react';
 import DownloadIcon from './DownloadIcon.react';
 
 import { CGPS, DEFAULT } from '../app/constants';
-import { SERVER_ADDRESS } from '../utils/Api';
+import { getServerPath } from '../utils/Api';
 
 function formatGenomeFilename(genomeName) {
   for (const ext in DEFAULT.GENOME_FILE_EXTENSIONS) {
@@ -15,7 +15,7 @@ function formatGenomeFilename(genomeName) {
 }
 
 function createLink(type, id) {
-  const link = `${SERVER_ADDRESS}/download/genome/${id}`;
+  const link = getServerPath(`/download/genome/${id}`);
   if (type) return `${link}?type=${type}`;
   return link;
 }
