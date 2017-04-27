@@ -1,4 +1,4 @@
-import { FETCH_GENOME_SUMMARY } from '../actions';
+import { FETCH_GENOME_SUMMARY, RESET_GENOMES } from '../actions';
 
 const initialState = {
   total: 0,
@@ -15,6 +15,8 @@ export default function (state = initialState, { type, payload }) {
       return { ...state, loading: true };
     case FETCH_GENOME_SUMMARY.SUCCESS:
       return { ...state, loading: false, ...payload.result };
+    case RESET_GENOMES:
+      return initialState;
     default:
       return state;
   }
