@@ -39,6 +39,7 @@ const summaryFields = [
       ];
     },
   },
+  { field: 'date', range: true },
 ];
 
 module.exports = function (props) {
