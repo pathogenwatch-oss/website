@@ -14,7 +14,7 @@ const SelectionTitle = ({ total, isLimitReached }) => (
   >
     <span className="wgsa-genome-total">{total}</span>&nbsp;
     {` Genome${total === 1 ? '' : 's'} Selected`}&nbsp;
-    {isLimitReached ? `(Limit is ${getSelectionLimit()}, please refine your selection)` : null}
+    {isLimitReached ? `(limit is ${getSelectionLimit()}, please refine your selection)` : null}
   </span>
 );
 
