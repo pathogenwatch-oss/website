@@ -18,7 +18,7 @@ function getSort(sort) {
 module.exports = function (props) {
   const { user, query = {} } = props;
   const { skip = 0, limit = 0, searchText, sort = 'createdAt-' } = query;
-  const { organismId, reference, owner, country, startDate, endDate, uploadedAt } = query;
+  const { organismId, reference, owner, country, minDate, maxDate, uploadedAt } = query;
 
   const findQuery = Genome.getPrefilterCondition(props);
 
@@ -52,14 +52,14 @@ module.exports = function (props) {
     }
   }
 
-  if (startDate) {
-    findQuery.date = { $gte: new Date(startDate) };
+  if (minDate) {
+    findQuery.date = { $exists: true, $gte: new Date(minDate) };
   }
 
-  if (endDate) {
+  if (maxDate) {
     findQuery.date = Object.assign(
       findQuery.date || {},
-      { $lte: new Date(endDate) }
+      { $exists: true, $lte: new Date(maxDate) }
     );
   }
 
