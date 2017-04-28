@@ -1,30 +1,38 @@
-.wgsa-date-filter {
+.rc-slider {
+  margin-bottom: 8px;
+}
+
+.rc-slider-handle {
+  border-color: #a386bd;
+  background-color: #a386bd;
+}
+
+.rc-slider--inactive .rc-slider-handle {
+  border-color: #ccc;
+  background-color: #ccc;
+}
+
+.rc-slider-handle:hover,
+.rc-slider-handle:focus,
+.rc-slider-handle:active {
+  border-color: #673c90;
+  background: #673c90;
+}
+
+.rc-slider-track {
+  background-color: #a386bd;
+}
+
+.rc-slider--inactive .rc-slider-track {
+  background-color: #ccc;
+}
+
+.rc-slider label {
   display: flex;
   justify-content: space-between;
-  margin-top: -20px;
-}
-
-.wgsa-date-filter__dropdown:first-child {
-  width: calc(40% - 8px);
-}
-
-.wgsa-date-filter__dropdown:last-child {
-  width: calc(60% - 8px);
-}
-
-.wgsa-date-filter__dropdown > .mdl-menu__container:not(.is-visible) {
-  height: 0 !important;
-}
-
-.wgsa-date-filter__dropdown > .mdl-menu__container.is-visible {
-  box-shadow: 0 1px 5px 0 rgba(0,0,0,0.2),0 2px 2px 0 rgba(0,0,0,0.14),0 3px 1px -2px rgba(0,0,0,0.12);
-  transition-property: box-shadow;
-  transition-delay: 0.15s;
-  transition-duration: 0.15s;
-}
-
-.wgsa-date-filter__dropdown > input {
-  cursor: pointer;
-  padding-left: 16px;
-  box-sizing: border-box;
+  padding: 8px 0;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(0, 0, 0, .54);
+  pointer-events: none;
 }

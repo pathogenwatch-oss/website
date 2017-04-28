@@ -42,8 +42,8 @@ export default connect(mapStateToProps, mapDispatchToProps)(
         <DateRange
           bounds={filterSummary.date.bounds}
           values={filterSummary.date.values}
-          onChangeMin={value => updateFilter('startDate', value.toISOString())}
-          onChangeMax={value => updateFilter('endDate', value.toISOString())}
+          onChangeMin={value => updateFilter('minDate', value.toISOString())}
+          onChangeMax={value => updateFilter('maxDate', value.toISOString())}
         />
       </section>
       <AsideSection

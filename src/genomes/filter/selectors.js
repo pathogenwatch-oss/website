@@ -45,13 +45,11 @@ export const getFilterSummary = createSelector(
       }
     }
 
-    const { startDate = date.min, endDate = date.max } = filterState
-
     return {
       loading,
       date: {
         bounds: [ date.min, date.max ],
-        values: [ startDate, endDate ],
+        values: [ filterState.minDate, filterState.maxDate ],
       },
       wgsaOrganisms: sortBy(wgsaOrganisms, 'title'),
       otherOrganisms: sortBy(otherOrganisms, 'label'),

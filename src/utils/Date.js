@@ -77,6 +77,6 @@ export function dateToInteger(date) {
 
 import addMonths from 'date-fns/add_months';
 
-export function integerToDate(days) {
-  return addMonths(referencePoint, days);
+export function integerToDate(int) {
+  return addMonths(referencePoint, int);
 }
