@@ -19,3 +19,19 @@ module.exports.up = function (done) {
     .then(() => done())
     .catch(done);
 };
+
+module.exports.down = function (done) {
+  // use this.db for MongoDB communication, and this.log() for logging
+  const { db } = this;
+  db.collection('genomes')
+    .find({ date: { $exists: true } })
+    .toArray()
+    .then(docs =>
+      Promise.all(docs.map(doc =>
+        db.collection('genomes')
+          .update({ _id: doc._id }, { $unset: { date: true } })
+      ))
+    )
+    .then(() => done())
+    .catch(done);
+};
