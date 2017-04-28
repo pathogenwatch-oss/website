@@ -1,5 +1,6 @@
 import React from 'react';
 import Range from 'rc-slider/lib/Range';
+import format from 'date-fns/format';
 
 import { dateToInteger, integerToDate } from '../../utils/Date';
 
@@ -17,6 +18,9 @@ export default ({ bounds, values = bounds, onChangeMin, onChangeMax }) => {
         if (min !== minValue) onChangeMin(integerToDate(min));
         if (max !== maxValue) onChangeMax(integerToDate(max));
       }}
-    />
+    >
+      <span>{format(values[0], 'MMM YYYY')}</span>
+      <span>{format(values[1], 'MMM YYYY')}</span>
+    </Range>
   );
 };

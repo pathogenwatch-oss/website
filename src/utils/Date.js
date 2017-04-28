@@ -68,15 +68,15 @@ export function formatDateTime(date) {
   return format(date, 'DD MMM YYYY HH:mm');
 }
 
-import difference from 'date-fns/difference_in_days';
+import difference from 'date-fns/difference_in_calendar_months';
 
 const referencePoint = new Date('0001-01-01T00:00:00Z');
 export function dateToInteger(date) {
   return difference(date, referencePoint);
 }
 
-import addDays from 'date-fns/add_days';
+import addMonths from 'date-fns/add_months';
 
 export function integerToDate(days) {
-  return addDays(referencePoint, days);
+  return addMonths(referencePoint, days);
 }
