@@ -5,6 +5,13 @@ const geocoding = require('geocoding');
 
 const { setToObjectOptions, addPreSaveHook, getSummary } = require('./utils');
 
+function getDate(year, month = 1, day = 1) {
+  if (year) {
+    return new Date(year, month - 1, day);
+  }
+  return undefined;
+}
+
 const schema = new Schema({
   _file: { type: Schema.Types.ObjectId, ref: 'GenomeFile' },
   _user: { type: Schema.Types.ObjectId, ref: 'User' },
@@ -44,9 +51,8 @@ setToObjectOptions(schema, (_, genome, { user = {} }) => {
 addPreSaveHook(schema);
 
 schema.pre('save', function (next) {
-  const { year, month = 1, day = 1 } = this;
-  if (year) {
-    this.date = new Date(year, month - 1, day);
+  if (this.year) {
+    this.date = getDate(this.year, this.month, this.day);
   }
   next();
 });
@@ -77,6 +83,7 @@ schema.statics.updateMetadata = function (_id, _user, metadata) {
     year,
     month,
     day,
+    date: getDate(year, month, day),
     latitude,
     longitude,
     country,
