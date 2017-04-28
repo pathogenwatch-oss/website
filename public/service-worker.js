@@ -4,6 +4,16 @@ self.addEventListener('install', () => self.skipWaiting());
 
 self.addEventListener('activate', () => self.clients.claim());
 
+const nonNavigationPaths = /^\/(api|download)\//;
+
+function isNavigation(event) {
+  const url = new URL(event.request.url);
+  return (
+    event.request.mode === 'navigate' &&
+    nonNavigationPaths.test(url.pathname) === false
+  );
+}
+
 const cachePatterns = [
   /^https?:\/\/.+\.(js|css|png|jpg|jpeg|gif|svg|woff2)$/,
   /^https?:\/\/fonts\.googleapis\.com/,
@@ -17,16 +27,19 @@ function shouldCache(request) {
   );
 }
 
-const nonNavigationPaths = /^\/(api|download)\//;
+const fallbackPaths = /^\/api\/collection\//;
 
-function isNavigation(event) {
+function shouldFallback(request) {
+  const url = new URL(request.url);
   return (
-    event.request.mode === 'navigate' &&
-    nonNavigationPaths.test(event.request.pathname) === false
+    request.method === 'GET' &&
+    url.origin === location.origin &&
+    fallbackPaths.test(url.pathname)
   );
 }
 
 self.addEventListener('fetch', event => {
+  // Navigation caching
   if (isNavigation(event)) {
     event.respondWith(
       caches.open(assetCache).then(cache =>
@@ -41,6 +54,7 @@ self.addEventListener('fetch', event => {
     return;
   }
 
+  // Asset caching
   if (shouldCache(event.request)) {
     event.respondWith(
       caches.open(assetCache).then(cache =>
@@ -54,8 +68,11 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  event.respondWith(
-    fetch(event.request) // network-first
-      .catch(() => caches.match(event.request)) // fallback to cache
-  );
+  // API caching
+  if (shouldFallback(event.request)) {
+    event.respondWith(
+      fetch(event.request) // network-first
+        .catch(() => caches.match(event.request)) // fallback to cache
+    );
+  }
 });
