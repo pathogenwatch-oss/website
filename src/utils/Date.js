@@ -67,3 +67,16 @@ export function formatDateTime(date) {
   }
   return format(date, 'DD MMM YYYY HH:mm');
 }
+
+import difference from 'date-fns/difference_in_calendar_months';
+
+const referencePoint = new Date('0001-01-01T00:00:00Z');
+export function dateToInteger(date) {
+  return difference(date, referencePoint);
+}
+
+import addMonths from 'date-fns/add_months';
+
+export function integerToDate(int) {
+  return addMonths(referencePoint, int);
+}

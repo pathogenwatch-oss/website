@@ -7,6 +7,10 @@ const initialState = {
   reference: {},
   owner: {},
   uploadedAt: {},
+  date: {
+    min: new Date(null),
+    max: new Date(),
+  },
 };
 
 export default function (state = initialState, { type, payload }) {
