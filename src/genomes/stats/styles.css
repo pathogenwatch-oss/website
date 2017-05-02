@@ -67,6 +67,16 @@
   text-align: center;
 }
 
+.wgsa-hub-stats-value--large {
+  font-size: 34px;
+  font-weight: 300;
+  color: rgba(0, 0, 0, 0.54);
+}
+
+.wgsa-hub-stats-value--large:hover {
+  text-decoration: none;
+}
+
 .wgsa-clickable-point {
   cursor: pointer;
 }

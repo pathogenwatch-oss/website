@@ -1,0 +1,27 @@
+.wgsa-profile-avatar {
+  padding: 16px;
+}
+
+.wgsa-profile-avatar .cgps-avatar__image {
+  margin-bottom: 8px;
+  /*width: 80px;
+  height: 80px;*/
+}
+
+.wgsa-profile-avatar .cgps-avatar__name {
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.wgsa-profile-counter:hover,
+.wgsa-profile-counter:focus,
+.wgsa-profile-counter:active {
+  text-decoration: none !important;
+}
+
+.wgsa-profile-counter:hover > .wgsa-hub-stats-heading,
+.wgsa-profile-counter:focus > .wgsa-hub-stats-heading,
+.wgsa-profile-counter:active > .wgsa-hub-stats-heading{
+  text-decoration: underline;
+}
