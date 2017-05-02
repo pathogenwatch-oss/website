@@ -1,13 +1,8 @@
 import { createSelector } from 'reselect';
 
-import { getGenomes } from '../genomes/selectors';
+const getAccount = ({ account }) => account;
 
-export const getBinnedGenomes = createSelector(
-  getGenomes,
-  genomes =>
-    Object.keys(genomes).reduce((memo, key) => {
-      const genome = genomes[key];
-      if (genome.owner === 'me' && genome.binned) memo.push(genome);
-      return memo;
-    }, [])
+export const getActivity = createSelector(
+  getAccount,
+  ({ entities, activity }) => entities.activity || activity,
 );

@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
 
+import { reducer as account } from '../account';
 import { reducer as collections } from '../collections';
 import { reducer as downloads } from '../downloads';
 import { reducer as filters } from '../filter';
@@ -14,6 +15,7 @@ import { reducer as summary } from '../summary';
 import { reducer as viewer } from '../collection-viewer';
 
 export default combineReducers({
+  account,
   collections,
   downloads,
   filters,
