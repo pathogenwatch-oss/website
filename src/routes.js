@@ -21,6 +21,7 @@ module.exports = function (app) {
     require('routes/download-request'),
     require('routes/summary'),
     require('routes/organism'),
+    require('routes/account'),
   ]);
 
   app.use('/download/', [
