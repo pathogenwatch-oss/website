@@ -4,7 +4,6 @@ const webpack = require('webpack');
 const express = require('express');
 const bodyParser = require('body-parser');
 const fastaStorage = require('wgsa-fasta-store');
-const swPrecache = require('sw-precache');
 
 const config = require('./webpack.config.js');
 const compiler = webpack(config);
