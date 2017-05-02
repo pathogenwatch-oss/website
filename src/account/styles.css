@@ -35,7 +35,6 @@
   display: flex;
   margin-bottom: 8px;
   align-items: center;
-  justify-content: space-between;
 }
 
 .wgsa-activity-item i {
@@ -50,9 +49,8 @@
   margin: 0;
 }
 
-.wgsa-activity-item > :last-child {
-  flex-grow: 1;
-  text-align: right;
+.wgsa-activity-item__time {
+  margin-left: auto;
   margin-right: 0;
   cursor: help;
 }

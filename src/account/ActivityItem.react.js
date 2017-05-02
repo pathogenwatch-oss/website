@@ -25,6 +25,8 @@ export default (item) => (
   <li className="wgsa-activity-item">
     <i className="material-icons">{icons[item.type]}</i>
     {content[item.type](item)}
-    <span title={item.formattedDate}>{distanceInWordsToNow(item.date)} ago</span>
+    <span className="wgsa-activity-item__time" title={item.formattedDate}>
+      {distanceInWordsToNow(item.date)} ago
+    </span>
   </li>
 );
