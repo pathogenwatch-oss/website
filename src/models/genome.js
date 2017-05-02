@@ -36,17 +36,24 @@ const schema = new Schema({
   lastUpdatedAt: Date,
 });
 
-setToObjectOptions(schema, (_, genome, { user = {} }) => {
-  const { _user } = genome;
+function toObject(genome, user = {}) {
   const { id } = user;
+  const { _user } = genome;
   genome.owner = (_user && id && _user.toString() === id) ? 'me' : 'other';
   genome.organismName = genome._file.organismName;
   genome.metrics = genome._file.metrics;
   delete genome._file;
   delete genome._user;
   delete genome._session;
+  if (!genome.id) {
+    genome.id = genome._id;
+    delete genome._id;
+  }
   return genome;
-});
+}
+
+setToObjectOptions(schema, (_, genome, { user }) => toObject(genome, user));
+schema.statics.toObject = toObject;
 
 addPreSaveHook(schema);
 
