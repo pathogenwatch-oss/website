@@ -95,4 +95,10 @@
 
 .wgsa-nav-badge[data-badge]::after {
   background: #673c90;
+  width: auto;
+  min-width: 22px;
+  border-radius: 11px;
+  padding-left: 6px;
+  padding-right: 6px;
+  box-sizing: border-box;
 }
