@@ -4,13 +4,13 @@ import { connect } from 'react-redux';
 import AddToSelectionButton from './AddToSelectionButton.react';
 import { FormattedName } from '../../organisms';
 
-import { toggleSelection } from '../selection/actions';
+import { getUploadedGenomeList } from '../uploads/selectors';
 
-import { statuses as uploadStatuses } from '../uploads/constants';
+import { toggleSelection } from '../selection/actions';
 
 const stopPropagation = e => e.stopPropagation();
 
-const Header = ({ genome, onClick }) => {
+const Header = ({ genome, isNotUploading, onClick }) => {
   const { name, organismId, organismName } = genome;
   return (
     <header className="wgsa-card-header" onClick={onClick}>
@@ -24,7 +24,7 @@ const Header = ({ genome, onClick }) => {
             /> :
             <span>&nbsp;</span> }
       </p>
-      { !(genome.status in uploadStatuses) &&
+      { isNotUploading &&
         <span className="wgsa-card-header__button" onClick={stopPropagation}>
           <AddToSelectionButton genome={genome} />
         </span> }
@@ -32,10 +32,17 @@ const Header = ({ genome, onClick }) => {
   );
 };
 
+function mapStateToProps(state, { genome }) {
+  const uploadedGenomes = getUploadedGenomeList(state);
+  return {
+    isNotUploading: uploadedGenomes.indexOf(genome) === -1,
+  };
+}
+
 function mapDispatchToProps(dispatch, { genome }) {
   return {
     onClick: () => dispatch(toggleSelection(genome)),
   };
 }
 
-export default connect(null, mapDispatchToProps)(Header);
+export default connect(mapStateToProps, mapDispatchToProps)(Header);
