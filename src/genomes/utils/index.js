@@ -57,7 +57,7 @@ export function mapCSVsToGenomes(files) {
   if (genomeFiles.length === 0) {
     return Promise.reject({
       toast: {
-        message: 'No files recognised, please ensure that your files have supported file extensions.',
+        message: 'Could not process these files. Please ensure that your files include at least one genome and have supported file extensions.',
       },
     });
   }
