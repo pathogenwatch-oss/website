@@ -73,6 +73,13 @@ export default React.createClass({
     }
   },
 
+  onClick(event) {
+    if (this.props.onClick &&
+      event.target.classList.contains('leaflet-container')) {
+      this.props.onClick(event);
+    }
+  },
+
   getBounds() {
     const { markers } = this.props;
     if (!markers || markers.length === 0) {
@@ -160,7 +167,7 @@ export default React.createClass({
             this.props.className
           )
         }
-        onClick={this.props.onClick || (() => {})}
+        onClick={this.onClick}
       >
         <Map
           animate={false}

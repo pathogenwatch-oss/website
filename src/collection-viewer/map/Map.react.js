@@ -68,9 +68,8 @@ function mapDispatchToProps(dispatch) {
   return {
     onClick: event => {
       if (event.metaKey || event.ctrlKey) return; // helps with inaccurate marker selection
-      if (event.target.classList.contains('leaflet-container')) {
-        dispatch(filterByLassoPath(stateKey, null));
-      }
+
+      dispatch(filterByLassoPath(stateKey, null));
     },
     onLassoPathChange: path => dispatch(filterByLassoPath(stateKey, path)),
     onMarkerClick: ({ id, highlighted }, event) => {
