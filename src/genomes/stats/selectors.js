@@ -58,10 +58,16 @@ export const getChartData = createSelector(
   (metrics, selectedMetric) =>
     metrics.reduce((memo, value, i) => {
       memo.push({
-        key: i,
-        id: value.id,
-        name: value.name,
-        value: Number(value[selectedMetric]),
+        label: value.name,
+        data: [
+          {
+            x: i + 1,
+            y: Number(value[selectedMetric]),
+            r: 4,
+          },
+        ],
+        backgroundColor: '#a386bd',
+        hoverBackgroundColor: '#673c90',
       });
       return memo;
     }, [])
