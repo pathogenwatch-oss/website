@@ -143,6 +143,12 @@
   bottom: -60px;
 }
 
+.wgsa-tree-progress-card:nth-child(2) {
+  width: 320px;
+  left: -88px;
+  right: auto;
+}
+
 .wgsa-tree-progress-card__title,
 .wgsa-tree-progress-card__status {
   text-align: center;
