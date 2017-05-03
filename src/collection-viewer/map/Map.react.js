@@ -66,9 +66,15 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    onClick: () => dispatch(filterByLassoPath(stateKey, null)),
+    onClick: event => {
+      if (event.metaKey || event.ctrlKey) return; // helps with inaccurate marker selection
+      if (event.target.classList.contains('leaflet-container')) {
+        dispatch(filterByLassoPath(stateKey, null));
+      }
+    },
     onLassoPathChange: path => dispatch(filterByLassoPath(stateKey, path)),
     onMarkerClick: ({ id, highlighted }, event) => {
+      event.stopPropagation();
       if (event.metaKey || event.ctrlKey) {
         dispatch(highlighted ? removeFromFilter(id) : appendToFilter(id));
       } else {
