@@ -8,6 +8,7 @@ import Overlay from '../../overlay';
 import Filter from '../filter';
 import Summary from '../summary';
 import SelectionDrawer from '../selection';
+import Instructions from '../uploads/Instructions.react';
 
 import { getGridItems } from '../selectors';
 import { getPrefilter } from '../filter/selectors';
@@ -62,9 +63,7 @@ const Component = React.createClass({
       switch (prefilter) {
         case 'upload':
           return (
-            <p className="wgsa-hub-big-message">
-              Drag and drop files to begin.
-            </p>
+            <Instructions />
           );
         case 'bin':
           return (

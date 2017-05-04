@@ -1,0 +1,44 @@
+.wgsa-upload-instuctions {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 800px;
+  margin: 0 auto;
+  align-content: flex-start;
+  justify-content: center;
+}
+
+.wgsa-upload-instuctions > * {
+  padding: 0 16px;
+}
+
+.wgsa-upload-instuctions > h2 {
+  width: 100%;
+  @media (min-width: 1280px) {
+    text-align: center;
+  }
+}
+
+.wgsa-upload-instuctions > div {
+  width: 50%;
+  box-sizing: border-box;
+}
+
+.wgsa-upload-instuctions li,
+.wgsa-upload-instuctions strong {
+  color: #673c90;
+  font-weight: 500;
+}
+
+
+.wgsa-upload-instuctions li {
+  display: inline-block;
+  margin-right: 0.333em;
+}
+
+.wgsa-upload-instuctions li::after {
+  content: ','
+}
+
+.wgsa-upload-instuctions li:last-child::after {
+  display: none;
+}
