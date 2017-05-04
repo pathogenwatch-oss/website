@@ -44,9 +44,9 @@ router.get('/collection/summary', (req, res, next) => {
 router.get('/collection/:uuid', (req, res, next) => {
   LOGGER.info(`Getting collection: ${req.params.uuid}`);
   const { user, params } = req;
-  return services.request('collection', 'fetch-one', { user, uuid: params.uuid }).
-    then(response => res.json(response)).
-    catch(error => (
+  return services.request('collection', 'fetch-one', { user, uuid: params.uuid })
+    .then(response => res.json(response))
+    .catch(error => (
       error.details.message === 'Collection not found' ? // Seneca loses error type :|
         res.sendStatus(404) :
         next(error)
@@ -56,18 +56,18 @@ router.get('/collection/:uuid', (req, res, next) => {
 
 router.get('/collection/:uuid/subtree/:name', (req, res, next) => {
   LOGGER.info('Received request for subtree', req.params);
-  return services.request('collection', 'subtree', req.params).
-    then(response => res.json(response)).
-    catch(next);
+  return services.request('collection', 'subtree', req.params)
+    .then(response => res.json(response))
+    .catch(next);
 });
 
 router.get('/collection', (req, res, next) => {
   LOGGER.info('Received request to get collections');
 
   const { user, query } = req;
-  services.request('collection', 'fetch-list', { user, query }).
-    then(response => res.json(response)).
-    catch(next);
+  services.request('collection', 'fetch-list', { user, query })
+    .then(response => res.json(response))
+    .catch(next);
 });
 
 module.exports = router;

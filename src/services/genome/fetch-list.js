@@ -74,6 +74,7 @@ module.exports = function (props) {
         }
       )
       .populate('_file')
-      .then(genomes => genomes.map(_ => _.toObject({ user })))
+      .lean()
+      .then(genomes => genomes.map(_ => Genome.toObject(_, user)))
   );
 };

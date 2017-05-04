@@ -35,34 +35,33 @@ module.exports = function (props) {
   }
 
   return (
-    Collection.
-      find(
-        findQuery,
-        { _user: 1,
-          description: 1,
-          pmid: 1,
-          public: 1,
-          size: 1,
-          organismId: 1,
-          status: 1,
-          title: 1,
-          uuid: 1,
-          createdAt: 1,
-        }, {
-          skip: Number(skip),
-          limit: Number(limit),
-          sort: { createdAt: -1 },
-        }
-      ).
-      then(collections => collections.map(doc => {
-        const collection = doc.toObject();
+    Collection
+      .find(findQuery, {
+        _user: 1,
+        description: 1,
+        pmid: 1,
+        public: 1,
+        size: 1,
+        organismId: 1,
+        status: 1,
+        title: 1,
+        uuid: 1,
+        createdAt: 1,
+      }, {
+        skip: Number(skip),
+        limit: Number(limit),
+        sort: { createdAt: -1 },
+      })
+      .lean()
+      .then(collections => collections.map(collection => {
         const { _user } = collection;
         const { id } = user || {};
         collection.owner = _user && _user.toString() === id ? 'me' : 'other';
-        collection.id = doc._id.toString();
-        collection.slug = doc.slug;
+        collection.id = collection._id.toString();
+        collection.slug = collection.slug;
         delete collection._user;
         delete collection.uuid;
+        delete collection._id;
         return collection;
       }))
   );
