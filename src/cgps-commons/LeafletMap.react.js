@@ -74,8 +74,7 @@ export default React.createClass({
   },
 
   onClick(event) {
-    if (this.props.onClick &&
-      event.target.classList.contains('leaflet-container')) {
+    if (this.props.onClick) {
       this.props.onClick(event);
     }
   },

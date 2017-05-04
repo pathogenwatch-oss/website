@@ -22,29 +22,6 @@ import {
   removeFromFilter,
 } from '../filter/actions';
 
-const ExplorerMap = (props) => (
-  <WGSAMap
-    className="wgsa-collection-viewer-map"
-    stateKey={stateKey}
-    lassoPath={props.lassoPath}
-    markers={getMarkers(props)}
-    markerComponent={LeafletPieChartMarker}
-    markerSize={props.markerSize}
-    onClick={props.onClick}
-    onLassoPathChange={props.onLassoPathChange}
-    onMarkerClick={props.onMarkerClick}
-  >
-    {props.children}
-    <MarkerControls
-      className={buttonClassname}
-      activeClassName={activeButtonClassname}
-      markerSize={props.markerSize}
-      onMarkerSizeChange={props.onMarkerSizeChange}
-      onViewByCountryChange={props.onViewByCountryChange}
-    />
-  </WGSAMap>
-);
-
 import { getGenomes } from '../../collection-viewer/selectors';
 import {
   getVisibleGenomeIds,
@@ -66,11 +43,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    onClick: event => {
-      if (event.metaKey || event.ctrlKey) return; // helps with inaccurate marker selection
-
-      dispatch(filterByLassoPath(stateKey, null));
-    },
+    dispatch,
     onLassoPathChange: path => dispatch(filterByLassoPath(stateKey, path)),
     onMarkerClick: ({ id, highlighted }, event) => {
       event.stopPropagation();
@@ -80,10 +53,47 @@ function mapDispatchToProps(dispatch) {
         dispatch(activateFilter(id));
       }
     },
-    onMarkerSizeChange: markerSize => dispatch(markerSizeChanged(stateKey, markerSize)),
+    onMarkerSizeChange:
+      markerSize => dispatch(markerSizeChanged(stateKey, markerSize)),
     onViewByCountryChange:
       active => dispatch(viewByCountry(stateKey, active)),
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ExplorerMap);
+function mergeProps(mappedState, { dispatch, ...mappedDispatch }, ownProps) {
+  return {
+    ...ownProps,
+    ...mappedState,
+    ...mappedDispatch,
+    onClick: () => {
+      if (mappedState.lassoPath) {
+        dispatch(filterByLassoPath(stateKey, null));
+      }
+    },
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(
+  (props) => (
+    <WGSAMap
+      className="wgsa-collection-viewer-map"
+      stateKey={stateKey}
+      lassoPath={props.lassoPath}
+      markers={getMarkers(props)}
+      markerComponent={LeafletPieChartMarker}
+      markerSize={props.markerSize}
+      onClick={props.onClick}
+      onLassoPathChange={props.onLassoPathChange}
+      onMarkerClick={props.onMarkerClick}
+    >
+      {props.children}
+      <MarkerControls
+        className={buttonClassname}
+        activeClassName={activeButtonClassname}
+        markerSize={props.markerSize}
+        onMarkerSizeChange={props.onMarkerSizeChange}
+        onViewByCountryChange={props.onViewByCountryChange}
+      />
+    </WGSAMap>
+  )
+);

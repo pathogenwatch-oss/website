@@ -25,7 +25,10 @@ const Summary = ({ summary, isExpanded, onClick, onSliceClick }) => (
       'wgsa-collection-viewer-summary mdl-shadow--2dp',
       { 'wgsa-collection-viewer-summary--expanded': isExpanded }
     )}
-    onClick={() => onClick(!isExpanded)}
+    onClick={e => {
+      e.stopPropagation();
+      onClick(!isExpanded);
+    }}
   >
     <PieChart
       className="wgsa-summary-chart"
