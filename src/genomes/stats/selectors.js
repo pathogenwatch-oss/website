@@ -55,20 +55,14 @@ export const getMetricRange = createSelector(
 export const getChartData = createSelector(
   getGenomeMetrics,
   getSelectedMetric,
-  (metrics, selectedMetric) =>
-    metrics.reduce((memo, value, i) => {
-      memo.push({
-        label: value.name,
-        data: [
-          {
-            x: i + 1,
-            y: Number(value[selectedMetric]),
-            r: 4,
-          },
-        ],
-        backgroundColor: '#a386bd',
-        hoverBackgroundColor: '#673c90',
-      });
-      return memo;
-    }, [])
+  (metrics, selectedMetric) => ({
+    label: selectedMetric,
+    data: metrics.map((value, x) => ({
+      x,
+      y: Number(value[selectedMetric]),
+      label: value.name,
+    })),
+    backgroundColor: '#a386bd',
+    borderColor: '#a386bd',
+  })
 );

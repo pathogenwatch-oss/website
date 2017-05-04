@@ -42,38 +42,51 @@ export const StatsView = React.createClass({
   componentDidMount() {
     const { chartData = [] } = this.props;
     this.chart = new Chart(this.canvas, {
-      type: 'bubble',
-      data: { datasets: chartData },
+      type: 'line',
+      data: { datasets: [ chartData ] },
       options: {
+        animation: false,
+        showLines: false,
         legend: {
           display: false,
+        },
+        tooltips: {
+          displayColors: false,
+          callbacks: {
+            title: (points, { datasets }) =>
+              points.map(({ index, datasetIndex }) =>
+                datasets[datasetIndex].data[index].label
+              ).join(', '),
+            label: ({ index, datasetIndex }, { datasets }) =>
+              datasets[datasetIndex].data[index].y,
+          },
         },
         scales: {
           xAxes: [
             {
+              type: 'linear',
+              position: 'bottom',
               ticks: { display: false },
               scaleLabel: { display: false },
               beginAtZero: true,
-              max: chartData.length,
             },
           ],
         },
         elements: {
           points: {
             borderWidth: 1,
+            backgroundColor: '#a386bd',
             borderColor: '#a386bd',
           },
         },
       },
     });
-    Chart.defaults.global.animation.duration = 0;
-    Chart.defaults.global.hover.animationDuration = 0;
   },
 
   componentDidUpdate(previous) {
     const { chartData } = this.props;
     if (chartData !== previous.chartData) {
-      this.chart.data.datasets = chartData;
+      this.chart.data.datasets = [ chartData ];
       this.chart.update();
     }
   },
