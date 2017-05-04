@@ -1,5 +1,4 @@
 import React from 'react';
-import classnames from 'classnames';
 import Cookies from 'universal-cookie';
 
 const cookies = new Cookies();
@@ -18,8 +17,6 @@ export default React.createClass({
   },
 
   render() {
-    const { consent } = this.state;
-
     if (this.state.consent) {
       return null;
     }
@@ -35,7 +32,7 @@ export default React.createClass({
           className="mdl-button mdl-button--raised mdl-button--colored"
           onClick={this.onClick}
         >
-          I agree
+          That's ok
         </button>
       </div>
     );
