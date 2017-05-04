@@ -48,8 +48,11 @@ module.exports = function (props) {
           title: 1,
           uuid: 1,
           createdAt: 1,
-        },
-        { skip: Number(skip), limit: Number(limit) }
+        }, {
+          skip: Number(skip),
+          limit: Number(limit),
+          sort: { createdAt: -1 },
+        }
       ).
       then(collections => collections.map(doc => {
         const collection = doc.toObject();
