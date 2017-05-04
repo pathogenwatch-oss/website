@@ -74,6 +74,7 @@
     "shortid": "^2.2.1",
     "style-loader": "^0.13.0",
     "testdouble": "^1.6.1",
+    "universal-cookie": "^2.0.5",
     "webpack": "^1.13.2",
     "webpack-dev-middleware": "^1.4.0",
     "webpack-hot-middleware": "^2.6.0",

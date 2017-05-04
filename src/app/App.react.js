@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import classnames from 'classnames';
 
 import Header from '../header';
+import ConsentBanner from '../components/consent-banner';
 import Toast from '../toast';
 import GenomeDrawer from '../genome-drawer';
 
@@ -63,6 +64,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(React.createClass({
           <Toast />
           <GenomeDrawer />
         </div>
+        <ConsentBanner />
       </div>
     );
   },
