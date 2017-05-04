@@ -27,3 +27,7 @@
 .wgsa-genome-drawer-content .wgsa-drawer-actions {
   padding-right: 24px;
 }
+
+.wgsa-genome-drawer-content canvas {
+  margin: 0 16px 16px;
+}

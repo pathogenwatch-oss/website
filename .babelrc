@@ -4,7 +4,6 @@
     [ "env" ]
   ],
   "plugins": [
-    "recharts",
     "transform-object-rest-spread",
     "transform-export-extensions"
   ]

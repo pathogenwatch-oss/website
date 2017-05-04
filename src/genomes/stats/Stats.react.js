@@ -1,28 +1,12 @@
 import React from 'react';
-import {
-  ResponsiveContainer, ScatterChart, Scatter, XAxis, YAxis, Tooltip,
-} from 'recharts';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
-
-import ChartTooltip from '../../chart-tooltip';
+import Chart from 'chart.js';
 
 import * as selectors from './selectors';
 
 import { showGenomeDrawer } from '../../genome-drawer';
 import { showMetric } from './actions';
-
-const TooltipContent = ({ payload }) => {
-  if (!payload) return null;
-  const [ index, metric ] = payload;
-  return (
-    <ChartTooltip
-      heading={index.payload.name}
-      description="value"
-      value={metric.value}
-    />
-  );
-};
 
 const charts = [
   { title: 'Genome Length', metric: 'totalNumberOfNucleotidesInDnaStrings' },
@@ -53,8 +37,63 @@ const ChartButton = connect(mapStateToButton, mapDispatchToButton)(
   )
 );
 
-export const StatsView =
-  ({ average, stDev, range = {}, chartData, onPointClick }) => (
+export const StatsView = React.createClass({
+
+  componentDidMount() {
+    const { chartData = [] } = this.props;
+    this.chart = new Chart(this.canvas, {
+      type: 'line',
+      data: { datasets: [ chartData ] },
+      options: {
+        animation: false,
+        showLines: false,
+        legend: {
+          display: false,
+        },
+        tooltips: {
+          displayColors: false,
+          callbacks: {
+            title: (points, { datasets }) =>
+              points.map(({ index, datasetIndex }) =>
+                datasets[datasetIndex].data[index].label
+              ).join(', '),
+            label: ({ index, datasetIndex }, { datasets }) =>
+              datasets[datasetIndex].data[index].y,
+          },
+        },
+        scales: {
+          xAxes: [
+            {
+              type: 'linear',
+              position: 'bottom',
+              ticks: { display: false },
+              scaleLabel: { display: false },
+              beginAtZero: true,
+            },
+          ],
+        },
+        elements: {
+          points: {
+            borderWidth: 1,
+            backgroundColor: '#a386bd',
+            borderColor: '#a386bd',
+          },
+        },
+      },
+    });
+  },
+
+  componentDidUpdate(previous) {
+    const { chartData } = this.props;
+    if (chartData !== previous.chartData) {
+      this.chart.data.datasets = [ chartData ];
+      this.chart.update();
+    }
+  },
+
+  render() {
+    const { average, stDev, range = {} } = this.props;
+    return (
       <div className="wgsa-hub-stats-view">
         <div className="wgsa-hub-stats-section">
           <nav className="wgsa-button-group">
@@ -63,38 +102,7 @@ export const StatsView =
               <ChartButton key={props.metric} {...props} />
             )}
           </nav>
-          <ResponsiveContainer height={208}>
-            <ScatterChart
-              margin={{ top: 0, bottom: 0, left: 0, right: 0 }}
-              className="wgsa-selectable-chart"
-            >
-              <XAxis
-                dataKey="key"
-                name="name"
-                tickFormatter={() => null}
-                domain={[ -1, 'dataMax + 1' ]}
-              />
-              <YAxis
-                dataKey="value"
-                name="metric"
-                tickLine={false}
-                domain={[ 0, Math.ceil(range.max * 1.25) ]}
-              />
-              <Scatter
-                data={chartData}
-                fill="#a386bd"
-                isAnimationActive={false}
-                className="wgsa-clickable-point"
-                onClick={onPointClick}
-              />
-              <Tooltip
-                cursor={{ stroke: 'none' }}
-                offset={8}
-                isAnimationActive={false}
-                content={<TooltipContent />}
-              />
-            </ScatterChart>
-          </ResponsiveContainer>
+          <canvas ref={el => { this.canvas = el; }} width="400" height="160" />
         </div>
         <div className="wgsa-hub-stats-group">
           <dl className="wgsa-hub-stats-section">
@@ -114,6 +122,9 @@ export const StatsView =
         </div>
       </div>
     );
+  },
+
+});
 
 function mapStateToProps(state) {
   return {
