@@ -9,7 +9,7 @@ export default React.createClass({
   componentDidMount() {
     const { metrics } = this.props;
     const { sumsOfNucleotidesInDnaStrings, assemblyN50Data } = metrics;
-
+    console.log(metrics);
     const chartData = {
       label: 'N50',
       backgroundColor: '#a386bd',
@@ -34,10 +34,13 @@ export default React.createClass({
           displayColors: false,
           callbacks: {
             title: (points, { datasets }) =>
-              points.map(({ index, datasetIndex }) =>
-                datasets[datasetIndex].data[index].y
-              ).join(', '),
-            label: () => null,
+              'Sum: '.concat(
+                points.map(({ index, datasetIndex }) =>
+                  datasets[datasetIndex].data[index].y
+                ).join(', ')
+              ),
+            label: ({ index, datasetIndex }, { datasets }) =>
+              `Size: ${datasets[datasetIndex].data[index].y - (index > 0 ? datasets[datasetIndex].data[index - 1].y : 0)}`,
           },
         },
         scales: {
@@ -71,6 +74,7 @@ export default React.createClass({
           style: '#ccc',
           dash: true,
           text: `Contig ${assemblyN50Data.sequenceNumber}`,
+          textStyle: 'rgba(0, 0, 0, 0.54)',
         } ],
       },
     });

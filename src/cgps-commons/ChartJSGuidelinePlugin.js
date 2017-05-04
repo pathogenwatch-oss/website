@@ -1,41 +1,27 @@
 const defaultFont = '14px "Roboto", "Helvetica", "Arial", sans-serif';
+const defaultStyle = 'rgba(0,0,0,.54)';
+const defaultLineWidth = 2;
 
 export default function (Chart) {
   Chart.pluginService.register({
     beforeDatasetsDraw(chartInstance) {
-      var yValue;
-      var yScale = chartInstance.scales['y-axis-0'];
-      var xScale = chartInstance.scales['x-axis-0'];
-      var canvas = chartInstance.chart;
-      var ctx = canvas.ctx;
-      var index;
-      var line;
-      var style;
+      const yScale = chartInstance.scales['y-axis-0'];
+      const xScale = chartInstance.scales['x-axis-0'];
+      const canvas = chartInstance.chart;
+      const ctx = canvas.ctx;
 
       if (chartInstance.options.horizontalLine) {
-        for (index = 0; index < chartInstance.options.horizontalLine.length; index++) {
+        for (let index = 0; index < chartInstance.options.horizontalLine.length; index++) {
           ctx.save();
-          line = chartInstance.options.horizontalLine[index];
-
-          if (!line.style) {
-            style = 'rgba(169,169,169, .6)';
-          } else {
-            style = line.style;
-          }
-
-          if (line.y) {
-            yValue = yScale.getPixelForValue(line.y);
-          } else {
-            yValue = 0;
-          }
-
-          ctx.lineWidth = 2;
+          const line = chartInstance.options.horizontalLine[index];
+          const yValue = line.y ? yScale.getPixelForValue(line.y) : 0;
 
           if (yValue) {
             ctx.beginPath();
             ctx.moveTo(xScale.getPixelForValue(xScale.min), yValue);
             ctx.lineTo(xScale.getPixelForValue(xScale.max), yValue);
-            ctx.strokeStyle = style;
+            ctx.lineWidth = line.lineWidth || defaultLineWidth;
+            ctx.strokeStyle = line.style || defaultStyle;
             if (line.dash) {
               ctx.setLineDash([ 8, 8 ]);
             }
@@ -43,7 +29,7 @@ export default function (Chart) {
           }
 
           if (line.text) {
-            ctx.fillStyle = style;
+            ctx.fillStyle = line.textStyle || line.style || defaultStyle;
             ctx.textBaseline = 'top'
             ctx.textAlign = 'right'
             ctx.font = line.font || defaultFont;
@@ -57,39 +43,23 @@ export default function (Chart) {
 
   Chart.pluginService.register({
     beforeDatasetsDraw(chartInstance) {
-      var xValue;
-      var xScale = chartInstance.scales['x-axis-0'];
-      var yScale = chartInstance.scales['y-axis-0'];
-      var canvas = chartInstance.chart;
-      var ctx = canvas.ctx;
-      var index;
-      var line;
-      var style;
+      const xScale = chartInstance.scales['x-axis-0'];
+      const yScale = chartInstance.scales['y-axis-0'];
+      const canvas = chartInstance.chart;
+      const ctx = canvas.ctx;
 
       if (chartInstance.options.verticalLine) {
-        for (index = 0; index < chartInstance.options.verticalLine.length; index++) {
+        for (let index = 0; index < chartInstance.options.verticalLine.length; index++) {
           ctx.save();
-          line = chartInstance.options.verticalLine[index];
-
-          if (!line.style) {
-            style = 'rgba(0,0,0,.54)';
-          } else {
-            style = line.style;
-          }
-
-          if (line.x) {
-            xValue = xScale.getPixelForValue(line.x);
-          } else {
-            xValue = 0;
-          }
-
-          ctx.lineWidth = 2;
+          const line = chartInstance.options.verticalLine[index];
+          const xValue = line.x ? xScale.getPixelForValue(line.x) : 0;
 
           if (xValue) {
             ctx.beginPath();
             ctx.moveTo(xValue, yScale.getPixelForValue(yScale.min));
             ctx.lineTo(xValue, yScale.getPixelForValue(yScale.max));
-            ctx.strokeStyle = style;
+            ctx.lineWidth = line.lineWidth || defaultLineWidth;
+            ctx.strokeStyle = line.style || defaultStyle;
             if (line.dash) {
               ctx.setLineDash([ 8, 8 ]);
             }
@@ -97,7 +67,7 @@ export default function (Chart) {
           }
 
           if (line.text) {
-            ctx.fillStyle = 'rgba(0,0,0,.54)';
+            ctx.fillStyle = line.textStyle || line.style || defaultStyle;
             ctx.font = line.font || defaultFont;
             ctx.textBaseline = 'top'
             ctx.fillText(line.text, xValue + 8, yScale.getPixelForValue(yScale.max));
