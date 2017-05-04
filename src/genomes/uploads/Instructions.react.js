@@ -6,7 +6,7 @@ import { DEFAULT } from '../../app/constants';
 
 export default () => (
   <section className="wgsa-upload-instuctions">
-    <h2 className="wgsa-upload-instuctions__title">Drag and drop files to begin.</h2>
+    <h2>Drag and drop files to begin.</h2>
     <div>
       <h3>Genomic Data</h3>
       <p>
@@ -23,13 +23,13 @@ export default () => (
       <p>Files should contain a column <strong>filename</strong> containing the names of genome files uploaded at the same time.</p>
       <p>To make full use of metadata, we strongly recommend including the following columns:</p>
       <ul>
-        <li>day</li>
-        <li>month</li>
-        <li>year</li>
         <li>latitude</li>
         <li>longitude</li>
+        <li>year</li>
+        <li>month</li>
+        <li>day</li>
       </ul>
-      <p>Additional columns may be included to explore within your dataset.</p>
+      <p>When providing a date, month and day are optional. Additional columns may be included to explore within your dataset.</p>
       <a href="/example-metadata.csv" download="wgsa-example-metadata.csv">
         Download an example metadata file
       </a>

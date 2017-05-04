@@ -11,7 +11,7 @@
   padding: 0 16px;
 }
 
-.wgsa-upload-instuctions__title {
+.wgsa-upload-instuctions > h2 {
   width: 100%;
   @media (min-width: 1280px) {
     text-align: center;
