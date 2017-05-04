@@ -21,6 +21,7 @@
   margin: 0;
   width: 100%;
   padding: 0 8px;
+  text-align: center;
 }
 
 .wgsa-hub-stats-section--small {
@@ -39,6 +40,7 @@
   color: #673c90;
   font-weight: 400;
   border-top: 1px solid #673c90;
+  text-align: left;
 }
 
 .wgsa-hub-stats-heading > button {
@@ -65,6 +67,16 @@
   line-height: 1.1;
   margin: 0;
   text-align: center;
+}
+
+.wgsa-hub-stats-value--large {
+  font-size: 34px;
+  font-weight: 300;
+  color: rgba(0, 0, 0, 0.54);
+}
+
+.wgsa-hub-stats-value--large:hover {
+  text-decoration: none;
 }
 
 .wgsa-clickable-point {

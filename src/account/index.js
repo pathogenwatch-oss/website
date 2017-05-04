@@ -1,3 +1,5 @@
+import './styles.css';
+
 import React from 'react';
 import { Route, IndexRoute } from 'react-router';
 
@@ -11,6 +13,8 @@ function requireLogin(nextState, replace) {
 }
 
 const UserGenomes = props => (<Genomes {...props} user />);
+
+export reducer from './reducer';
 
 export default (
   <Route path="account" onEnter={requireLogin}>
