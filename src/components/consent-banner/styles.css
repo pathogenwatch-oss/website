@@ -1,0 +1,28 @@
+.wgsa-consent-banner {
+  height: 56px;
+  box-sizing: border-box;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #fff;
+  border-top: 1px solid #e8e8e8;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0 16px;
+  z-index: 3; /* same as header */
+}
+
+.wgsa-consent-banner > span {
+  color: #673c90;
+  margin: 0 8px;
+  font-size: 24px;
+}
+
+.wgsa-consent-banner > div {
+  flex-grow: 1;
+  margin: 0 8px;
+  /*height: 56px;*/
+  /*line-height: 58px;*/
+}
