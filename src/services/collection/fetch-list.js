@@ -35,8 +35,8 @@ module.exports = function (props) {
   }
 
   return (
-    Collection.
-      find(
+    Collection
+      .find(
         findQuery,
         { _user: 1,
           description: 1,
@@ -50,16 +50,18 @@ module.exports = function (props) {
           createdAt: 1,
         },
         { skip: Number(skip), limit: Number(limit) }
-      ).
-      then(collections => collections.map(doc => {
-        const collection = doc.toObject();
+      )
+      .lean()
+      .then(collections => collections.map(collection => {
+        // const collection = doc.toObject();
         const { _user } = collection;
         const { id } = user || {};
         collection.owner = _user && _user.toString() === id ? 'me' : 'other';
-        collection.id = doc._id.toString();
-        collection.slug = doc.slug;
+        collection.id = collection._id.toString();
+        collection.slug = collection.slug;
         delete collection._user;
         delete collection.uuid;
+        delete collection._id;
         return collection;
       }))
   );

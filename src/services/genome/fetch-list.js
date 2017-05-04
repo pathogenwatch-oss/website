@@ -73,10 +73,8 @@ module.exports = function (props) {
           sort: getSort(sort),
         }
       )
-      // .lean()
       .populate('_file')
       .lean()
-      // .stream({ transform: JSON.stringify })
       .then(genomes => genomes.map(_ => Genome.toObject(_, user)))
   );
 };

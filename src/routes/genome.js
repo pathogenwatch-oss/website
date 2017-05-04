@@ -40,7 +40,6 @@ router.get('/genome', (req, res, next) => {
   const { user, query, sessionID } = req;
   services.request('genome', 'fetch-list', { user, query, sessionID }).
     then(response => res.json(response)).
-    // then(response => response.pipe(res)).
     catch(next);
 });
 
