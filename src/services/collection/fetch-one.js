@@ -7,10 +7,11 @@ function addGenomes(collection) {
     return collection;
   }
 
-  return CollectionGenome.
-    find({ _collection: collection.id }, { _collection: 0, fileId: 0 }).
-    then(genomes => {
-      collection.genomes = genomes.map(_ => _.toObject());
+  return CollectionGenome
+    .find({ _collection: collection.id }, { _collection: 0, fileId: 0 })
+    .lean()
+    .then(genomes => {
+      collection.genomes = genomes;
       return collection;
     });
 }
