@@ -3,7 +3,7 @@ import { readAsText } from 'promise-file-reader';
 import { updateGenomeProgress } from '../uploads/actions';
 
 import MetadataUtils from '../../utils/Metadata';
-import { fetchJson, fetchText } from '../../utils/Api';
+import { fetchJson, fetchBinary } from '../../utils/Api';
 
 import { validateGenomeSize, validateGenomeContent } from './validation';
 
@@ -87,13 +87,22 @@ export function update(id, metadata) {
   return fetchJson('POST', `/api/genome/${id}`, metadata);
 }
 
+import JSZip from 'jszip';
+
+function compressContent(text) {
+  const zip = new JSZip();
+  zip.file('fasta', text);
+  return zip.generateAsync({ type: 'arraybuffer', compression: 'DEFLATE' });
+}
+
 function create({ file, id, uploadedAt }, dispatch) {
   return (
-    validateGenomeSize(file).
-      then(readAsText).
-      then(validateGenomeContent).
-      then(data =>
-        fetchText(
+    validateGenomeSize(file)
+      .then(readAsText)
+      .then(validateGenomeContent)
+      .then(compressContent)
+      .then(data =>
+        fetchBinary(
           'PUT',
           `/api/genome?${$.param({ name: file.name, uploadedAt })}`,
           data,

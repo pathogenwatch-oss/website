@@ -32,7 +32,7 @@ export function fetchJson(method, path, data) {
 
 export function fetchText(method, path, data, progressFn) {
   return ajax({
-    type: 'PUT',
+    type: method,
     url: getServerPath(path),
     contentType: 'text/plain; charset=UTF-8',
     data,
@@ -57,6 +57,17 @@ export function fetchText(method, path, data, progressFn) {
 
       return xhr;
     } : undefined,
+  });
+}
+
+export function fetchBinary(method, path, body) {
+  return fetch(getServerPath(path), {
+    method,
+    body,
+    headers: {
+      'Content-Type': 'application/zip',
+    },
+    credentials: 'include',
   });
 }
 
