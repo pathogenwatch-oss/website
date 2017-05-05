@@ -43,12 +43,35 @@ router.get('/genome', (req, res, next) => {
     catch(next);
 });
 
+const JSZip = require('jszip');
+
+function getStream(req) {
+  // if (req.headers['Content-Type'] === 'application/zip') {
+    return (
+      JSZip
+        .loadAsync(req.body, { compression: 'DEFLATE' })
+        .then(zip => zip.file('fasta').nodeStream())
+    );
+  // }
+  // return Promise.resolve(req);
+}
+
 router.put('/genome', (req, res, next) => {
   LOGGER.info('Received request to create genome');
 
   const { user, sessionID } = req;
   const { name, uploadedAt } = req.query;
-  services.request('genome', 'create', { timeout$: 1000 * 60 * 5, stream: req, metadata: { name, uploadedAt }, user, sessionID })
+
+  getStream(req)
+    .then(stream =>
+      services.request('genome', 'create', {
+        timeout$: 1000 * 60 * 5,
+        stream,
+        metadata: { name, uploadedAt },
+        user,
+        sessionID,
+      })
+    )
     .then(response => res.json(response))
     .catch(next);
 });
