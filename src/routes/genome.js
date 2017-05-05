@@ -1,9 +1,9 @@
 const express = require('express');
-
-const router = express.Router();
+const zlib = require('zlib');
 
 const services = require('../services');
 
+const router = express.Router();
 const LOGGER = require('utils/logging').createLogger('Upload');
 
 router.get('/genome/summary', (req, res, next) => {
@@ -42,8 +42,6 @@ router.get('/genome', (req, res, next) => {
     then(response => res.json(response)).
     catch(next);
 });
-
-const zlib = require('zlib');
 
 function getStream(req) {
   if (req.headers['content-type'] === 'application/zip') {
