@@ -8,6 +8,7 @@ import { fetchJson, fetchBinary } from '../../utils/Api';
 import { validateGenomeSize, validateGenomeContent } from './validation';
 
 import { DEFAULT } from '../../app/constants';
+import getCompressWorker from 'worker?name=compress.worker.js!./compressWorker';
 
 function parseMetadata(row) {
   if (!row) return undefined;
@@ -87,12 +88,15 @@ export function update(id, metadata) {
   return fetchJson('POST', `/api/genome/${id}`, metadata);
 }
 
-import JSZip from 'jszip';
-
 function compressContent(text) {
-  const zip = new JSZip();
-  zip.file('fasta', text);
-  return zip.generateAsync({ type: 'arraybuffer', compression: 'DEFLATE' });
+  return new Promise((resolve, reject) => {
+    const worker = getCompressWorker();
+    worker.onmessage = function (event) {
+      resolve(event.data);
+    };
+    worker.onerror = reject;
+    worker.postMessage(text);
+  });
 }
 
 function create({ file, id, uploadedAt }, dispatch) {

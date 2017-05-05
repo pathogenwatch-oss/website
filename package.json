@@ -46,6 +46,7 @@
     "leaflet.markercluster": "github:leaflet/leaflet.markercluster#leaflet-0.7",
     "lodash.sortby": "^4.7.0",
     "lz-string": "^1.4.4",
+    "pako": "^1.0.5",
     "papaparse": "^4.1.1",
     "phylocanvas": "^2.8.1",
     "phylocanvas-plugin-context-menu": "^3.10.1",
