@@ -43,17 +43,13 @@ router.get('/genome', (req, res, next) => {
     catch(next);
 });
 
-const JSZip = require('jszip');
+const zlib = require('zlib');
 
 function getStream(req) {
-  // if (req.headers['Content-Type'] === 'application/zip') {
-    return (
-      JSZip
-        .loadAsync(req.body, { compression: 'DEFLATE' })
-        .then(zip => zip.file('fasta').nodeStream())
-    );
-  // }
-  // return Promise.resolve(req);
+  if (req.headers['content-type'] === 'application/zip') {
+    return req.pipe(zlib.createInflate());
+  }
+  return req;
 }
 
 router.put('/genome', (req, res, next) => {
@@ -62,18 +58,15 @@ router.put('/genome', (req, res, next) => {
   const { user, sessionID } = req;
   const { name, uploadedAt } = req.query;
 
-  getStream(req)
-    .then(stream =>
-      services.request('genome', 'create', {
-        timeout$: 1000 * 60 * 5,
-        stream,
-        metadata: { name, uploadedAt },
-        user,
-        sessionID,
-      })
-    )
-    .then(response => res.json(response))
-    .catch(next);
+  services.request('genome', 'create', {
+    timeout$: 1000 * 60 * 5,
+    stream: getStream(req),
+    metadata: { name, uploadedAt },
+    user,
+    sessionID,
+  })
+  .then(response => res.json(response))
+  .catch(next);
 });
 
 router.post('/genome/:id', (req, res, next) => {

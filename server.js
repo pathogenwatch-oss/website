@@ -43,7 +43,6 @@ app.use(bodyParser.urlencoded({
   extended: true,
   limit: '50mb',
 }));
-app.use(bodyParser.raw({ inflate: false, type: 'application/zip', limit: '10mb' }));
 
 logging.initHttpLogging(app, process.env.NODE_ENV || 'none');
 
