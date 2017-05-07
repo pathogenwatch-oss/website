@@ -1,9 +1,6 @@
 import { readAsText } from 'promise-file-reader';
 
-import { updateGenomeProgress } from '../uploads/actions';
-
 import MetadataUtils from '../../utils/Metadata';
-import { fetchJson, fetchBinary } from '../../utils/Api';
 
 import { validateGenomeSize, validateGenomeContent } from './validation';
 
@@ -84,11 +81,7 @@ export function mapCSVsToGenomes(files) {
     );
 }
 
-export function update(id, metadata) {
-  return fetchJson('POST', `/api/genome/${id}`, metadata);
-}
-
-function compressContent(text) {
+export function compress(text) {
   return new Promise((resolve, reject) => {
     const worker = getCompressWorker();
     worker.onmessage = function (event) {
@@ -99,33 +92,12 @@ function compressContent(text) {
   });
 }
 
-function create({ file, id, uploadedAt }, dispatch) {
+export function validate(genome) {
   return (
-    validateGenomeSize(file)
+    validateGenomeSize(genome.file)
       .then(readAsText)
       .then(validateGenomeContent)
-      .then(compressContent)
-      .then(data =>
-        fetchBinary(
-          'PUT',
-          `/api/genome?${$.param({ name: file.name, uploadedAt })}`,
-          data,
-          percent => dispatch(updateGenomeProgress(id, percent))
-        )
-      )
   );
-}
-
-export function upload(genome, dispatch) {
-  const { hasMetadata, ...props } = genome;
-  return create(genome, dispatch).
-    then((result) =>
-      (hasMetadata ?
-        update(result.id, props).
-          then(updateResult => ({ ...result, ...updateResult })) :
-        result
-      )
-    );
 }
 
 export function shouldNotFetch({ prefilter, uploadedAt }) {

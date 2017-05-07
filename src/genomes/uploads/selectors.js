@@ -8,14 +8,14 @@ import { statuses } from '../uploads/constants';
 
 export const getUploads = ({ genomes }) => genomes.uploads;
 
-export const getUploadQueue = createSelector(
+const getUploadQueue = createSelector(
   getUploads,
   uploads => uploads.queue,
 );
 
-export const getUploading = createSelector(
+const getProcessing = createSelector(
   getUploads,
-  uploads => uploads.uploading,
+  uploads => uploads.processing,
 );
 
 export const getBatchSize = state => getUploads(state).batch.size;
@@ -34,13 +34,13 @@ export const getUploadedGenomeList =
 
 export const getNumRemainingUploads = createSelector(
   getUploadQueue,
-  getUploading,
+  getProcessing,
   (queue, uploading) => queue.length + uploading.size,
 );
 
 export const isUploading = createSelector(
-  getUploading,
-  uploading => uploading.size > 0,
+  getProcessing,
+  processing => processing.size > 0,
 );
 
 export const getNumCompletedUploads = createSelector(
