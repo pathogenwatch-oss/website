@@ -9,7 +9,6 @@ export default React.createClass({
   componentDidMount() {
     const { metrics } = this.props;
     const { sumsOfNucleotidesInDnaStrings, assemblyN50Data } = metrics;
-    console.log(metrics);
     const chartData = {
       label: 'N50',
       backgroundColor: '#a386bd',
