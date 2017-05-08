@@ -1,7 +1,8 @@
+// N.B. this defines the sort order!
 export const statuses = {
-  PENDING: 0,
+  UPLOADING: 0,
   COMPRESSING: 1,
-  UPLOADING: 2,
-  ERROR: 3,
-  SUCCESS: 4,
+  ERROR: 2,
+  SUCCESS: 3,
+  PENDING: 4,
 };
