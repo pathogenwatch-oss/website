@@ -30,11 +30,11 @@ export function fetchJson(method, path, data) {
   });
 }
 
-export function fetchBinary(method, path, data, progressFn) {
+export function fetchRaw(method, path, contentType, data, progressFn) {
   return ajax({
     type: method,
     url: getServerPath(path),
-    contentType: 'application/zip',
+    contentType,
     data,
     processData: false,
     dataType: 'json',

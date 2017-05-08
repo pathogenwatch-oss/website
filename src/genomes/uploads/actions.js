@@ -88,20 +88,29 @@ function processGenome(id) {
         id,
         promise:
           utils.validate(genome)
-            .then(data => dispatch(compressGenome(id, data)))
+            .then(data => {
+              if (selectors.getSettingValue(getState(), 'compression')) {
+                return dispatch(compressGenome(id, data));
+              }
+              return data;
+            })
             .then(data => dispatch(uploadGenome(genome, data))),
       },
     }).catch(() => {});
   };
 }
 
-const processLimit = 5;
+const defaultProcessLimit = 5;
 
 export function processFiles(files) {
   return (dispatch, getState) => {
     dispatch(addGenomes(files));
 
-    if (selectors.isUploading(getState())) return;
+    const state = getState();
+    if (selectors.isUploading(state)) return;
+
+    const isIndividual = selectors.getSettingValue(state, 'individual');
+    const processLimit = isIndividual ? 1 : defaultProcessLimit;
 
     (function processNext() {
       const { queue, processing } = selectors.getUploads(getState());
@@ -162,5 +171,17 @@ export function removeAll() {
     if (!erroredUploads.length) return;
 
     dispatch(removeGenomes(erroredUploads.map(_ => _.id)));
+  };
+}
+
+export const UPLOAD_SETTING_CHANGED = 'UPLOAD_SETTING_CHANGED';
+
+export function changeUploadSetting(setting, value) {
+  return {
+    type: UPLOAD_SETTING_CHANGED,
+    payload: {
+      setting,
+      value,
+    },
   };
 }

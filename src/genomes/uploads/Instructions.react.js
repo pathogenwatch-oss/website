@@ -1,8 +1,35 @@
 import './styles.css';
 
 import React from 'react';
+import { connect } from 'react-redux';
+
+import Switch from '../../components/switch';
+
+import { getSettingValue } from './selectors';
+
+import { changeUploadSetting } from './actions';
 
 import { DEFAULT } from '../../app/constants';
+
+function mapStateToProps(state, { setting }) {
+  return {
+    checked: getSettingValue(state, setting),
+  };
+}
+
+function mapDispatchToProps(dispatch, { setting }) {
+  return {
+    onChange: checked => dispatch(changeUploadSetting(setting, checked)),
+  };
+}
+
+const SettingsSwitch = connect(mapStateToProps, mapDispatchToProps)(
+  ({ checked, onChange, children }) => (
+    <Switch checked={checked} onChange={onChange}>
+      {children}
+    </Switch>
+  )
+);
 
 export default () => (
   <section className="wgsa-upload-instuctions">
@@ -16,6 +43,19 @@ export default () => (
         {DEFAULT.GENOME_FILE_EXTENSIONS.map(ext => <li key={ext}>{ext}</li>)}
       </ul>
       <p>Please ensure that there is <strong>one file per genome</strong>.</p>
+      <h3>Settings</h3>
+      <p>
+        <SettingsSwitch setting="compression">
+          <strong>Enable Compression</strong>
+        </SettingsSwitch>
+        <small>Recommended for slow connections.</small>
+      </p>
+      <p>
+        <SettingsSwitch setting="individual">
+          <strong>Upload Files Individually</strong>
+        </SettingsSwitch>
+        <small>Recommended for unstable connections.</small>
+      </p>
     </div>
     <div>
       <h3>Metadata</h3>

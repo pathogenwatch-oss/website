@@ -1,9 +1,10 @@
-import { fetchJson, fetchBinary } from '../../utils/Api';
+import { fetchJson, fetchRaw } from '../../utils/Api';
 
 export function upload({ file, uploadedAt }, data, progressFn) {
-  return fetchBinary(
+  return fetchRaw(
     'PUT',
     `/api/genome?${$.param({ name: file.name, uploadedAt })}`,
+    data instanceof Uint8Array ? 'application/zip' : 'text/plain',
     data,
     progressFn
   );

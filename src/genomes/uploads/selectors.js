@@ -80,3 +80,8 @@ export const isRetryable = createSelector(
   getFailedUploads,
   failures => !!failures.length
 );
+
+export const getSettings = state => getUploads(state).settings;
+
+export const getSettingValue =
+  (state, setting) => getSettings(state)[setting];

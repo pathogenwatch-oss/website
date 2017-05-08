@@ -176,3 +176,24 @@
   color: #673c90;
   opacity: 1;
 }
+
+
+/* Toggle Switch */
+
+.mdl-switch {
+  line-height: 24px;
+  cursor: pointer;
+}
+
+.mdl-switch__input {
+  visibility: hidden;
+  margin-right: 24px;
+}
+
+.mdl-switch.is-checked .mdl-switch__thumb {
+  background: #673c90;
+}
+
+.mdl-switch.is-checked .mdl-switch__track {
+  background: #a386bd;
+}

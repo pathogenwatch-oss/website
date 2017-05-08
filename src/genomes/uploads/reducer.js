@@ -16,6 +16,10 @@ const initialState = {
   processing: new Set(),
   uploadedAt: null,
   entities: {},
+  settings: {
+    compression: false,
+    individual: false,
+  },
 };
 
 export default function (state = initialState, { type, payload }) {
@@ -128,6 +132,15 @@ export default function (state = initialState, { type, payload }) {
       return {
         ...state,
         entities: { ...entities },
+      };
+    }
+    case actions.UPLOAD_SETTING_CHANGED: {
+      return {
+        ...state,
+        settings: {
+          ...state.settings,
+          [payload.setting]: payload.value,
+        },
       };
     }
     default:
