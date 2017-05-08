@@ -92,7 +92,7 @@ export default function (state = initialState, { type, payload }) {
         entities: updateGenomes(
           entities,
           result.id, // use new id from server
-          { ...original, ...result }
+          { ...original, ...result, status: statuses.SUCCESS }
         ),
       };
     }

@@ -43,13 +43,23 @@ export const UPLOAD_GENOME = createAsyncConstants('UPLOAD_GENOME');
 
 export function uploadGenome(genome, data) {
   return dispatch => {
+    const { id, hasMetadata, ...metadata } = genome;
     const progressFn =
-      percent => dispatch(genomeUploadProgress(genome.id, percent));
+      percent => dispatch(genomeUploadProgress(id, percent));
+
     return dispatch({
       type: UPLOAD_GENOME,
       payload: {
-        id: genome.id,
-        promise: api.upload(genome, data, progressFn),
+        id,
+        promise:
+          api.upload(genome, data, progressFn)
+            .then(uploadResult => {
+              if (hasMetadata) {
+                return api.update(uploadResult.id, metadata)
+                  .then(updateResult => ({ ...uploadResult, ...updateResult }));
+              }
+              return uploadResult;
+            }),
       },
     });
   };
@@ -79,12 +89,7 @@ function processGenome(id) {
         promise:
           utils.validate(genome)
             .then(data => dispatch(compressGenome(id, data)))
-            .then(data => dispatch(uploadGenome(genome, data)))
-            .then(result => (
-              genome.hasMetadata ?
-                dispatch(updateGenome(result.id, genome)) :
-                result
-            )),
+            .then(data => dispatch(uploadGenome(genome, data))),
       },
     }).catch(() => {});
   };

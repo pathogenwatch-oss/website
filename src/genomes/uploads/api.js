@@ -6,8 +6,7 @@ export function upload({ file, uploadedAt }, data, progressFn) {
     `/api/genome?${$.param({ name: file.name, uploadedAt })}`,
     data,
     progressFn
-  )
-  .then(response => response.json());
+  );
 }
 
 export function update(id, metadata) {

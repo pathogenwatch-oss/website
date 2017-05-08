@@ -30,12 +30,13 @@ export function fetchJson(method, path, data) {
   });
 }
 
-export function fetchText(method, path, data, progressFn) {
+export function fetchBinary(method, path, data, progressFn) {
   return ajax({
     type: method,
     url: getServerPath(path),
-    contentType: 'text/plain; charset=UTF-8',
+    contentType: 'application/zip',
     data,
+    processData: false,
     dataType: 'json',
     xhr: progressFn ? function () {
       const xhr = new window.XMLHttpRequest();
@@ -57,17 +58,6 @@ export function fetchText(method, path, data, progressFn) {
 
       return xhr;
     } : undefined,
-  });
-}
-
-export function fetchBinary(method, path, body) {
-  return fetch(getServerPath(path), {
-    method,
-    body,
-    headers: {
-      'Content-Type': 'application/zip',
-    },
-    credentials: 'include',
   });
 }
 

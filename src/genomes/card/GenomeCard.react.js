@@ -47,7 +47,7 @@ function getCardComponents(genome) {
       };
     case statuses.PENDING:
       return {
-        content: <small>Upload pending</small>,
+        content: <small>Pending</small>,
       };
     default:
       return {
