@@ -30,12 +30,13 @@ export function fetchJson(method, path, data) {
   });
 }
 
-export function fetchText(method, path, data, progressFn) {
+export function fetchRaw(method, path, contentType, data, progressFn) {
   return ajax({
-    type: 'PUT',
+    type: method,
     url: getServerPath(path),
-    contentType: 'text/plain; charset=UTF-8',
+    contentType,
     data,
+    processData: false,
     dataType: 'json',
     xhr: progressFn ? function () {
       const xhr = new window.XMLHttpRequest();

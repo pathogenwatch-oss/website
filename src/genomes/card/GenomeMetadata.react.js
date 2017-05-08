@@ -67,7 +67,7 @@ function displayAccessLevel(props) {
   }
 
   return (
-    <CardMetadata fadeOverflow title="Uploaded At" icon="access_time">
+    <CardMetadata fadeOverflow title="Uploaded At" icon="file_upload">
       {formatDateTime(props.uploadedAt)}
     </CardMetadata>
   );

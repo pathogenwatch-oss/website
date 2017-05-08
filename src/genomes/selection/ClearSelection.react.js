@@ -7,7 +7,7 @@ import { setSelection } from './actions';
 const ClearSelection = ({ hasSelection, onClick }) => (
     hasSelection ?
     <button className="mdl-button" onClick={onClick}>
-      Clear Selection
+      Clear All
     </button> :
     null
 );

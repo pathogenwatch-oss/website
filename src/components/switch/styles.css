@@ -1,0 +1,14 @@
+.wgsa-settings-switch {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.wgsa-settings-switch > :first-child {
+  flex-grow: 1;
+}
+
+.wgsa-settings-switch .mdl-switch {
+  width: auto;
+  text-align: right;
+}

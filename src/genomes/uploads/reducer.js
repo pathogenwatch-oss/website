@@ -2,17 +2,6 @@ import * as actions from './actions';
 
 import { statuses } from './constants';
 
-function handleUploadCompletion(state, id) {
-  const { queue, uploading, batch } = state;
-  uploading.delete(id);
-
-  return {
-    ...state,
-    uploading: new Set(uploading),
-    batch: queue.length + uploading.size === 0 ? new Set() : batch,
-  };
-}
-
 function updateGenomes(state, id, update) {
   const genome = state[id];
   return {
@@ -24,9 +13,13 @@ function updateGenomes(state, id, update) {
 const initialState = {
   batch: new Set(),
   queue: [],
-  uploading: new Set(),
+  processing: new Set(),
   uploadedAt: null,
   entities: {},
+  settings: {
+    compression: false,
+    individual: false,
+  },
 };
 
 export default function (state = initialState, { type, payload }) {
@@ -51,22 +44,43 @@ export default function (state = initialState, { type, payload }) {
         }, { ...state.entities }),
       };
     }
+    case actions.PROCESS_GENOME.ATTEMPT: {
+      return {
+        ...state,
+        queue: state.queue.slice(1),
+        processing: new Set([ ...state.processing, payload.id ]),
+      };
+    }
+    case actions.COMPRESS_GENOME.ATTEMPT: {
+      const { id } = payload;
+      const { entities } = state;
+      return {
+        ...state,
+        entities: updateGenomes(entities, id, { status: statuses.COMPRESSING }),
+      };
+    }
     case actions.UPLOAD_GENOME.ATTEMPT: {
       const { id } = payload;
       const { entities } = state;
       return {
         ...state,
-        queue: state.queue.slice(1),
-        uploading: new Set([ ...state.uploading, payload.id ]),
         entities: updateGenomes(entities, id, { status: statuses.UPLOADING }),
       };
     }
-    case actions.UPLOAD_GENOME.FAILURE: {
+    case actions.GENOME_UPLOAD_PROGRESS: {
+      const { id, progress } = payload;
+      const { entities } = state;
+      return {
+        ...state,
+        entities: updateGenomes(entities, id, { progress }),
+      };
+    }
+    case actions.UPLOAD_GENOME.FAILURE:
+    case actions.UPDATE_GENOME.FAILURE: {
       const { id, error } = payload;
       const { entities } = state;
       return {
         ...state,
-        ...handleUploadCompletion(state, payload.id),
         entities: updateGenomes(entities, id, { error, status: statuses.ERROR }),
       };
     }
@@ -79,20 +93,32 @@ export default function (state = initialState, { type, payload }) {
 
       return {
         ...state,
-        ...handleUploadCompletion(state, payload.id),
         entities: updateGenomes(
           entities,
-          result.id,
+          result.id, // use new id from server
           { ...original, ...result, status: statuses.SUCCESS }
         ),
       };
     }
-    case actions.UPDATE_GENOME_PROGRESS: {
-      const { id, progress } = payload;
+    case actions.UPDATE_GENOME.SUCCESS: {
+      const { id, result } = payload;
       const { entities } = state;
+      const status = statuses.SUCCESS;
+
       return {
         ...state,
-        entities: updateGenomes(entities, id, { progress }),
+        entities: updateGenomes(entities, id, { ...result, status }),
+      };
+    }
+    case actions.PROCESS_GENOME.SUCCESS:
+    case actions.PROCESS_GENOME.FAILURE: {
+      const { queue, processing, batch } = state;
+      processing.delete(payload.id);
+
+      return {
+        ...state,
+        processing: new Set(processing),
+        batch: queue.length + processing.size === 0 ? new Set() : batch,
       };
     }
     case actions.REMOVE_GENOMES: {
@@ -106,6 +132,15 @@ export default function (state = initialState, { type, payload }) {
       return {
         ...state,
         entities: { ...entities },
+      };
+    }
+    case actions.UPLOAD_SETTING_CHANGED: {
+      return {
+        ...state,
+        settings: {
+          ...state.settings,
+          [payload.setting]: payload.value,
+        },
       };
     }
     default:

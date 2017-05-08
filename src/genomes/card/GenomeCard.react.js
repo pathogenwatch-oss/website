@@ -14,8 +14,14 @@ import { statuses } from '../uploads/constants';
 function getProgressBar(progress) {
   return (
     progress === 100 ?
-      <ProgressBar indeterminate /> :
-      <ProgressBar progress={progress} />
+      <div>
+        <ProgressBar indeterminate />
+        <small>Estimating Organism</small>
+      </div> :
+      <div>
+        <ProgressBar progress={progress} />
+        <small>Uploading</small>
+      </div>
   );
 }
 
@@ -26,13 +32,22 @@ function getCardComponents(genome) {
         content: <GenomeError genome={genome} />,
         footer: <ErrorFooter genome={genome} />,
       };
+    case statuses.COMPRESSING:
+      return {
+        content: (
+          <div>
+            <ProgressBar indeterminate />
+            <small>Compressing</small>
+          </div>
+        ),
+      };
     case statuses.UPLOADING:
       return {
         content: getProgressBar(genome.progress),
       };
     case statuses.PENDING:
       return {
-        content: <small>Upload pending</small>,
+        content: <small>Pending</small>,
       };
     default:
       return {
