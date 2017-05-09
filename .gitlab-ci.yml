@@ -12,8 +12,5 @@ build:
     - apk add --update git nodejs
     - git config --global url.https://gitlab-ci-token:$CI_JOB_TOKEN@gitlab.com/.insteadOf git://gitlab.com/
     - git config --global url.https://gitlab-ci-token:$CI_JOB_TOKEN@gitlab.com/cgps.insteadOf git@gitlab.com:cgps
-    - npm install --production --ignore-scripts
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
-    - tag=$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
-    - docker build --build-arg http_proxy=$http_proxy --build-arg https_proxy=$https_proxy -t $tag .
-    - docker push $tag
+    - ./bin/build-image.sh $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
