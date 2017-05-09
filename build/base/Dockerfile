@@ -27,4 +27,5 @@ RUN apk add --update --no-cache --virtual build-deps \
       ./configure CXXFLAGS=-fPIC && \
       CPPFLAGS="-fPIC" make && \
       make install && \
+      rm -rf /mash-original && \
     apk del --purge build-deps

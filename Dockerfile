@@ -7,10 +7,12 @@ COPY . /opt/wgsa/middle-end
 RUN apk add --update --no-cache --virtual build-deps \
       g++ \
       make \
-      python && \
+      gsl-dev \
+      python \
+      zlib-dev && \
     cd /opt/wgsa/middle-end/ && \
       npm rebuild && \
-    apk del --purge build-deps && \
+    apk del --purge build-deps
 
 ENV NODE_PATH=/opt/wgsa/middle-end/src \
     NODE_ENV=production
