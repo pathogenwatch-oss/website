@@ -52,7 +52,7 @@ export default ({ item }) => {
         <Markdown source={item.description} /> :
         <p>(no description)</p>
       }
-      <div className="wgsa-card-footer">
+      <div className="wgsa-card-footer wgsa-card-footer--fixed">
         <Link
           className="mdl-button mdl-button--primary wgsa-button--text"
           to={`/collection/${item.slug}`}

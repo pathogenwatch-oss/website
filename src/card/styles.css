@@ -63,6 +63,13 @@
   align-items: center;
 }
 
+.wgsa-card-footer--fixed {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
 .wgsa-card:hover .wgsa-card-footer,
 .wgsa-card-footer--visible {
   visibility: visible;
