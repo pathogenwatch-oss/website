@@ -43,8 +43,17 @@ const schema = new Schema({
   uuid: { type: String, index: true },
 });
 
-setToObjectOptions(schema, (_, collection) => {
-  collection.organism = collection._organism;
+setToObjectOptions(schema, (doc, collection, { user }) => {
+  const { _user } = collection;
+  const { id } = user || {};
+  collection.owner = _user && _user.toString() === id ? 'me' : 'other';
+  collection.id = doc._id.toString();
+  collection.slug = doc.slug;
+  delete collection._user;
+  delete collection._id;
+  if (typeof collection._organism === 'object') {
+    collection.organism = collection._organism;
+  }
   delete collection._organism;
   return collection;
 });

@@ -52,17 +52,6 @@ module.exports = function (props) {
         limit: Number(limit),
         sort: { createdAt: -1 },
       })
-      .then(collections => collections.map(collection => {
-        const doc = collection.toObject();
-        const { _user } = collection;
-        const { id } = user || {};
-        doc.owner = _user && _user.toString() === id ? 'me' : 'other';
-        doc.id = collection._id.toString();
-        doc.slug = collection.slug;
-        delete doc._user;
-        delete doc.uuid;
-        delete doc._id;
-        return doc;
-      }))
+      .then(collections => collections.map(_ => _.toObject()))
   );
 };

@@ -23,4 +23,4 @@ module.exports = ({ user, uuid }) =>
         collection.populate('_organism').execPopulate() :
         collection
     ))
-    .then(_ => addGenomes(_.toObject()));
+    .then(collection => addGenomes(collection.toObject()));
