@@ -15,10 +15,12 @@ module.exports = function (props) {
     findQuery.organismId = organismId;
   }
 
-  if (owner === 'me') {
-    findQuery._user = user;
-  } else if (owner === 'other') {
-    findQuery._user = { $ne: user };
+  if (user) {
+    if (owner === 'me') {
+      findQuery._user = user;
+    } else if (owner === 'other') {
+      findQuery._user = { $ne: user };
+    }
   }
 
   if (startDate) {
@@ -33,32 +35,34 @@ module.exports = function (props) {
   }
 
   return (
-    Collection.
-      find(
-        findQuery,
-        { _user: 1,
-          description: 1,
-          pmid: 1,
-          public: 1,
-          size: 1,
-          organismId: 1,
-          status: 1,
-          title: 1,
-          uuid: 1,
-          createdAt: 1,
-        },
-        { skip: Number(skip), limit: Number(limit) }
-      ).
-      then(collections => collections.map(doc => {
-        const collection = doc.toObject();
+    Collection
+      .find(findQuery, {
+        _user: 1,
+        description: 1,
+        pmid: 1,
+        public: 1,
+        size: 1,
+        organismId: 1,
+        status: 1,
+        title: 1,
+        uuid: 1,
+        createdAt: 1,
+      }, {
+        skip: Number(skip),
+        limit: Number(limit),
+        sort: { createdAt: -1 },
+      })
+      .then(collections => collections.map(collection => {
+        const doc = collection.toObject();
         const { _user } = collection;
         const { id } = user || {};
-        collection.owner = _user && _user.toString() === id ? 'me' : 'other';
-        collection.id = doc._id.toString();
-        collection.slug = doc.slug;
-        delete collection._user;
-        delete collection.uuid;
-        return collection;
+        doc.owner = _user && _user.toString() === id ? 'me' : 'other';
+        doc.id = collection._id.toString();
+        doc.slug = collection.slug;
+        delete doc._user;
+        delete doc.uuid;
+        delete doc._id;
+        return doc;
       }))
   );
 };

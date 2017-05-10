@@ -7,18 +7,20 @@ function addGenomes(collection) {
     return collection;
   }
 
-  return CollectionGenome.
-    find({ _collection: collection.id }, { _collection: 0, fileId: 0 }).
-    then(genomes => {
-      collection.genomes = genomes.map(_ => _.toObject());
+  return CollectionGenome
+    .find({ _collection: collection.id }, { _collection: 0, fileId: 0 })
+    .lean()
+    .then(genomes => {
+      collection.genomes = genomes;
       return collection;
     });
 }
 
 module.exports = ({ user, uuid }) =>
-  services.request('collection', 'fetch-progress', { user, uuid }).
-    then(collection => (
+  services.request('collection', 'fetch-progress', { user, uuid })
+    .then(collection => (
       collection.status === 'READY' ?
         collection.populate('_organism').execPopulate() :
         collection
-    )).then(_ => addGenomes(_.toObject()));
+    ))
+    .then(_ => addGenomes(_.toObject()));

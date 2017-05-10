@@ -1,6 +1,6 @@
 {
   "name": "wgsa-middle-end",
-  "version": "5.5.13",
+  "version": "5.8.1",
   "description": "Web API for WGSA",
   "main": "app.js",
   "engines": {
@@ -34,7 +34,7 @@
     "slug": "^0.9.1",
     "uuid": "^3.0.1",
     "wgsa-fasta-store": "gitlab:cgps/wgsa-fasta-store#v2.6.1",
-    "wgsa-front-end": "gitlab:cgps/wgsa-front-end#v5.6.2"
+    "wgsa-front-end": "gitlab:cgps/wgsa-front-end#v5.9.1"
   },
   "devDependencies": {
     "eslint-config-cgps": "github:imperialcollegelondon/eslint-config-cgps",
@@ -58,7 +58,7 @@
     "aggregator": "eval $npm_package_startcmd microservices/bootstrap.js aggregator | bunyan -o short",
     "repost": "eval $npm_package_startcmd bin/repost-aggregator-errors.js",
     "metadata": "eval $npm_package_startcmd bin/update-collection-genomes.js",
-    "mongo-migrate": "NODE_PATH=$npm_package_nodepath mm",
+    "mm": "NODE_PATH=$npm_package_nodepath mm",
     "migrate-collection": "eval $npm_package_startcmd microservices/bootstrap.js migrator",
     "rerun-collection": "echo $npm_package_startcmd microservices/bootstrap.js rerunner"
   },

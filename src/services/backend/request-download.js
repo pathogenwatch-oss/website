@@ -1,9 +1,11 @@
 const messageQueueService = require('services/messageQueue');
 
+const CollectionGenome = require('models/collectionGenome');
+
 const LOGGER = require('utils/logging').createLogger('File');
 
-module.exports = function ({ request }) {
-  return new Promise((resolve, reject) => {
+function sendToBackend(request) {
+  return new Promise((resolve, reject) =>
     messageQueueService.newFileRequestQueue(queue => {
       queue.subscribe((error, message) => {
         if (error) {
@@ -14,7 +16,7 @@ module.exports = function ({ request }) {
         queue.destroy();
 
         if (message.taskStatus !== 'SUCCESS') {
-          return reject(`${message.format} generation failed: ${message.taskStatus}`);
+          return reject(new Error(`${message.format} generation failed: ${message.taskStatus}`));
         }
 
         resolve(message.fileNamesMap);
@@ -22,6 +24,18 @@ module.exports = function ({ request }) {
 
       messageQueueService.getUploadExchange()
         .publish('file', request, { replyTo: queue.name });
-    });
-  });
+    })
+  );
+}
+
+module.exports = function ({ format, organismId, idList }) {
+  return CollectionGenome.find({ uuid: { $in: idList } }, { name: 1, fileId: 1 })
+    .lean()
+    .then(results => ({
+      format,
+      idList: results.map(({ name, fileId }) => ({ name, checksum: fileId })),
+      idType: 'assembly',
+      speciesId: organismId,
+    }))
+    .then(sendToBackend);
 };

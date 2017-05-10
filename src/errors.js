@@ -1,4 +1,4 @@
-const { ServiceRequestError } = require('./utils/errors');
+const { ServiceRequestError, NotFoundError } = require('./utils/errors');
 
 const LOGGER = require('utils/logging').createLogger('Error handler');
 
@@ -23,6 +23,10 @@ module.exports = function handleErrors(app) {
 
     if (ServiceRequestError.is(error)) {
       return res.sendStatus(400);
+    }
+
+    if (NotFoundError.is(error)) {
+      return res.sendStatus(404);
     }
 
     if (isNotFoundInStorage(error)) {

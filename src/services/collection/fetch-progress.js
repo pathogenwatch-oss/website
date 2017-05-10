@@ -2,8 +2,7 @@ const Collection = require('models/collection');
 const CollectionGenome = require('models/collectionGenome');
 const Organism = require('models/organism');
 
-const { ServiceRequestError } = require('utils/errors');
-const { looseAccessControl } = require('configuration');
+const { NotFoundError } = require('utils/errors');
 
 function isReady(collection, results) {
   return (
@@ -35,11 +34,20 @@ function calculateProgress(collection, results) {
   return collection;
 }
 
+function factorErrors(results, errors = []) {
+  for (const error of errors) {
+    const result = results.find(_ => _.type === error.taskType.toLowerCase());
+    if (result) result.count++;
+  }
+  return results;
+}
+
 function checkStatus(collection) {
-  if (!collection) throw new ServiceRequestError('Collection not found');
+  if (!collection) throw new NotFoundError('Collection not found');
   if (collection.isProcessing) {
-    return CollectionGenome.countResults(collection).
-      then(results => {
+    return CollectionGenome.countResults(collection)
+      .then(results => factorErrors(results, collection.progress.errors))
+      .then(results => {
         if (isReady(collection, results)) {
           return (
             collection.reference ?
@@ -53,13 +61,7 @@ function checkStatus(collection) {
   return collection;
 }
 
-module.exports = ({ user = null, uuid, aggregator }) => {
-  return (
-    Collection.
-      findOne(
-        Object.assign({ uuid }, (looseAccessControl || aggregator) ? {} : { $or: [ { _user: user }, { public: true } ] }),
-        { 'subtrees.tree': 0, 'subtrees.leafIds': 0 }
-      ).
-      then(checkStatus)
-  );
-};
+module.exports = ({ uuid }) =>
+  Collection
+    .findByUuid(uuid, { 'subtrees.tree': 0, 'subtrees.leafIds': 0 })
+    .then(checkStatus);

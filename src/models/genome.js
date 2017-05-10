@@ -5,6 +5,13 @@ const geocoding = require('geocoding');
 
 const { setToObjectOptions, addPreSaveHook, getSummary } = require('./utils');
 
+function getDate(year, month = 1, day = 1) {
+  if (year) {
+    return new Date(year, month - 1, day);
+  }
+  return undefined;
+}
+
 const schema = new Schema({
   _file: { type: Schema.Types.ObjectId, ref: 'GenomeFile' },
   _user: { type: Schema.Types.ObjectId, ref: 'User' },
@@ -29,19 +36,33 @@ const schema = new Schema({
   lastUpdatedAt: Date,
 });
 
-setToObjectOptions(schema, (_, genome, { user = {} }) => {
-  const { _user } = genome;
+function toObject(genome, user = {}) {
   const { id } = user;
+  const { _user } = genome;
   genome.owner = (_user && id && _user.toString() === id) ? 'me' : 'other';
   genome.organismName = genome._file.organismName;
   genome.metrics = genome._file.metrics;
   delete genome._file;
   delete genome._user;
   delete genome._session;
+  if (!genome.id) {
+    genome.id = genome._id;
+    delete genome._id;
+  }
   return genome;
-});
+}
+
+setToObjectOptions(schema, (_, genome, { user }) => toObject(genome, user));
+schema.statics.toObject = toObject;
 
 addPreSaveHook(schema);
+
+schema.pre('save', function (next) {
+  if (this.year) {
+    this.date = getDate(this.year, this.month, this.day);
+  }
+  next();
+});
 
 function getCountryCode(latitude, longitude) {
   if (latitude && longitude) {
@@ -69,6 +90,7 @@ schema.statics.updateMetadata = function (_id, _user, metadata) {
     year,
     month,
     day,
+    date: getDate(year, month, day),
     latitude,
     longitude,
     country,
@@ -78,30 +100,26 @@ schema.statics.updateMetadata = function (_id, _user, metadata) {
 };
 
 schema.statics.getPrefilterCondition = function ({ user, query = {}, sessionID }) {
-  const hasAccess = { $or: [ { public: true } ] };
-  if (sessionID) {
-    hasAccess.$or.push({ _session: sessionID });
-  }
-  if (user) {
-    hasAccess.$or.push({ _user: user._id });
-  }
-
-  const { prefilter = 'all', uploadedAt = null } = query;
+  const { prefilter = 'all', uploadedAt } = query;
 
   if (prefilter === 'all') {
+    const hasAccess = { $or: [ { public: true } ] };
+    if (user) {
+      hasAccess.$or.push({ _user: user._id });
+    }
     return Object.assign(hasAccess, { binned: false });
   }
 
   if (prefilter === 'user') {
-    return { binned: false, _user: { $exists: true, $eq: user } };
+    return { binned: false, _user: user._id };
   }
 
   if (prefilter === 'upload') {
-    return Object.assign(hasAccess, { binned: false, uploadedAt: uploadedAt ? new Date(uploadedAt) : { $exists: true, $eq: '' } });
+    return { binned: false, _session: sessionID, uploadedAt: new Date(uploadedAt || null) };
   }
 
   if (prefilter === 'bin') {
-    return Object.assign({ binned: true, _user: { $exists: true, $eq: user } });
+    return { binned: true, _user: user._id };
   }
 
   throw new Error(`Invalid genome prefilter: '${prefilter}'`);

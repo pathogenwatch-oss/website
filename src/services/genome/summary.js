@@ -8,16 +8,38 @@ const summaryFields = [
     ],
   },
   { field: 'country' },
-  { field: 'reference' },
-  { field: 'owner',
-    aggregation: ({ user = {} }) => [
-      { $group: {
-          _id: { $cond: [ { $eq: [ '$_user', user._id ] }, 'me', 'other' ] },
-          count: { $sum: 1 },
-        },
-      },
-    ],
+  { field: 'reference',
+    aggregation: ({ query = {} }) => {
+      if (query.prefilter !== 'all') return null;
+      return [
+        { $group: { _id: '$reference', count: { $sum: 1 } } },
+      ];
+    },
   },
+  { field: 'owner',
+    aggregation: ({ user, query = {} }) => {
+      if (!user) return null;
+      if (query.prefilter !== 'all') return null;
+      return [
+        { $group: {
+            _id: { $cond: [ { $eq: [ '$_user', user._id ] }, 'me', 'other' ] },
+            count: { $sum: 1 },
+          },
+        },
+      ];
+    },
+  },
+  { field: 'uploadedAt',
+    aggregation: ({ user, query = {} }) => {
+      if (!user) return null;
+      if (query.prefilter === 'upload') return null;
+      return [
+        { $match: { _user: user._id } },
+        { $group: { _id: '$uploadedAt', count: { $sum: 1 } } },
+      ];
+    },
+  },
+  { field: 'date', range: true },
 ];
 
 module.exports = function (props) {

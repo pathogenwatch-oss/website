@@ -1,9 +1,9 @@
 const express = require('express');
-
-const router = express.Router();
+const zlib = require('zlib');
 
 const services = require('../services');
 
+const router = express.Router();
 const LOGGER = require('utils/logging').createLogger('Upload');
 
 router.get('/genome/summary', (req, res, next) => {
@@ -43,14 +43,28 @@ router.get('/genome', (req, res, next) => {
     catch(next);
 });
 
+function getStream(req) {
+  if (req.headers['content-type'] === 'application/zip') {
+    return req.pipe(zlib.createInflate());
+  }
+  return req;
+}
+
 router.put('/genome', (req, res, next) => {
   LOGGER.info('Received request to create genome');
 
   const { user, sessionID } = req;
   const { name, uploadedAt } = req.query;
-  services.request('genome', 'create', { timeout$: 60000, stream: req, metadata: { name, uploadedAt }, user, sessionID })
-    .then(response => res.json(response))
-    .catch(next);
+
+  services.request('genome', 'create', {
+    timeout$: 1000 * 60 * 5,
+    stream: getStream(req),
+    metadata: { name, uploadedAt },
+    user,
+    sessionID,
+  })
+  .then(response => res.json(response))
+  .catch(next);
 });
 
 router.post('/genome/:id', (req, res, next) => {
