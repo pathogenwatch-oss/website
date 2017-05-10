@@ -6,6 +6,7 @@
   right: 0;
   overflow-y: scroll;
   display: flex;
+  height: auto;
 }
 
 .wgsa-loading-content {
@@ -50,7 +51,7 @@
 .wgsa-loading-container .mdl-button:active {
   color: #fff;
   background: #673c90;
-  box-shadow: 0 8px 10px 0 rgba(0,0,0,.28),0 2px 20px 0 rgba(0,0,0,.24),0 4px 8px -2px rgba(0,0,0,.4);
+  text-decoration: none;
 }
 
 .wgsa-failed-genomes {
