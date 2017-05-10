@@ -1,13 +1,8 @@
 .wgsa-upload-instuctions {
   display: flex;
   flex-wrap: wrap;
-  max-width: 800px;
   align-content: flex-start;
   justify-content: space-between;
-}
-
-.wgsa-upload-instuctions > h2 {
-  width: 100%;
 }
 
 .wgsa-upload-instuctions > div {

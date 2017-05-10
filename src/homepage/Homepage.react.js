@@ -158,14 +158,14 @@ export default React.createClass({
                 </tr>
                 <tr>
                   <td>
-                    Save Collections for offline use
+                    Save collections for offline use
                     <br />
                     <Link to="/offline">
                       <small>Find out more</small>
                     </Link>
                   </td>
                   <td>
-                    Save Collections for offline use
+                    Save collections for offline use
                     <br />
                     <Link to="/offline">
                       <small>Find out more</small>
