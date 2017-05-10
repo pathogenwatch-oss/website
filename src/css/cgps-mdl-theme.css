@@ -56,7 +56,6 @@
 }
 
 .mdl-layout__content {
-  background: #efefef;
   position: relative;
   overflow: visible !important;
 }
@@ -120,7 +119,7 @@
 }
 
 .mdl-button--raised.mdl-button--colored {
-  background: #673c90 !important;
+  background: #673c90;
 }
 
 .mdl-button--raised.mdl-button--colored:hover,

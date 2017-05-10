@@ -1,7 +1,10 @@
 import { getCollection } from '../selectors';
 import { getSubtreeNames } from '../tree/selectors';
 
+import { getServerPath } from '../../utils/Api.js';
 import { statuses } from './constants';
+
+import { saveToOfflineList } from '../../offline/utils';
 
 export const SET_OFFLINE_STATUS = 'SET_OFFLINE_STATUS';
 
@@ -40,17 +43,25 @@ function registerServiceWorker() {
 export function saveForOffline() {
   return (dispatch, getState) => {
     const state = getState();
-    const { uuid } = getCollection(state);
+    const collection = getCollection(state);
+    const { uuid } = collection;
     const subtrees = getSubtreeNames(state);
 
+    const cacheKey = `wgsa-collection-${uuid}`;
     dispatch(setStatus(statuses.SAVING));
     registerServiceWorker()
-      .then(() => caches.open(`wgsa-collection-${uuid}`))
+      .then(() => caches.open(cacheKey))
       .then(cache => cache.addAll(
         subtrees
-          .map(subtree => `/api/collection/${uuid}/subtree/${subtree}`)
-          .concat(`/api/collection/${uuid}`)
+          .map(subtree => getServerPath(`/api/collection/${uuid}/subtree/${subtree}`))
+          .concat(getServerPath(`/api/collection/${uuid}`))
       ))
-      .then(() => window.location.reload());
+      .then(() => saveToOfflineList(collection))
+      .then(() => window.location.reload())
+      .catch(error => {
+        caches.delete(cacheKey);
+        dispatch(setStatus(statuses.ERRORED));
+        throw error;
+      });
   };
 }

@@ -24,9 +24,8 @@ const CollectionViewer = React.createClass({
 });
 
 function mapStateToProps(state) {
-  const { metadata = {} } = getCollection(state);
   return {
-    title: metadata.title,
+    title: getCollection(state).title,
   };
 }
 

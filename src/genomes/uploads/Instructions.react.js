@@ -32,7 +32,7 @@ const SettingsSwitch = connect(mapStateToProps, mapDispatchToProps)(
 );
 
 export default () => (
-  <section className="wgsa-upload-instuctions">
+  <section className="wgsa-page wgsa-upload-instuctions">
     <h2>Drag and drop files to begin.</h2>
     <div>
       <h3>Genomic Data</h3>
@@ -69,7 +69,7 @@ export default () => (
         <li>month</li>
         <li>day</li>
       </ul>
-      <p>When providing a date, month and day are optional. Additional columns may be included to explore within your dataset.</p>
+      <p>When providing a date, month and day are optional. Additional metadata may be included and will be saved.</p>
       <a href="/example-metadata.csv" download="wgsa-example-metadata.csv">
         Download an example metadata file
       </a>

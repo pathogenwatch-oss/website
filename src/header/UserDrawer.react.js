@@ -81,7 +81,7 @@ const UserDrawer = React.createClass({
           <hr />
           <nav className="mdl-navigation">
             <h2 className="wgsa-navigation-header">Genomes</h2>
-            <NavLink to="/genomes/all" badge={allGenomes} icon="bug_report">
+            <NavLink to="/genomes/all" badge={allGenomes} icon="insert_drive_file">
               { user ? 'All' : 'Public' } Genomes
             </NavLink>
             { user && <NavLink to="/genomes/user" badge={userGenomes} icon="person">My Genomes</NavLink> }
@@ -90,6 +90,7 @@ const UserDrawer = React.createClass({
           </nav>
           <hr />
           <nav className="mdl-navigation">
+            <NavLink to="/organisms" icon="bug_report" activeOnIndexOnly>All Organisms</NavLink>
             <NavLink to="/documentation" icon="help">Documentation</NavLink>
             <NavLink to="https://gitlab.com/cgps/wgsa.net/issues" external icon="feedback">Feedback</NavLink>
           </nav>

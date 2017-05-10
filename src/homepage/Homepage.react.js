@@ -158,6 +158,22 @@ export default React.createClass({
                 </tr>
                 <tr>
                   <td>
+                    Save Collections for offline use
+                    <br />
+                    <Link to="/offline">
+                      <small>Find out more</small>
+                    </Link>
+                  </td>
+                  <td>
+                    Save Collections for offline use
+                    <br />
+                    <Link to="/offline">
+                      <small>Find out more</small>
+                    </Link>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
                     <span className="wgsa-feature-figure">{getCollectionSizeLimit('anonymous')}</span>
                     <small>genomes per collection</small>
                   </td>

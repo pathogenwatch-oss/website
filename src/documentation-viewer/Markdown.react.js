@@ -4,6 +4,8 @@ import React from 'react';
 import Markdown from 'react-markdown';
 import { Link } from 'react-router';
 
+import Breadcrumb from '../components/Breadcrumb.react';
+
 function rewriteMarkdown(markdown) {
   return markdown.replace(
     /\[\[([^\]]+)\]\]/g,
@@ -27,15 +29,15 @@ const renderers = {
 };
 
 export default ({ page, markdown }) => (
-  <div className="wgsa-wiki-page">
+  <div className="wgsa-wiki-page wgsa-page">
     { page ?
-      <div className="wgsa-wiki-breadcrumb wgsa-content-margin">
-        <Link to="/documentation">Documentation Home</Link>&nbsp;&raquo;&nbsp;{page}
-      </div> :
+      <Breadcrumb>
+        <Link to="/documentation">Documentation Home</Link>
+        {page}
+      </Breadcrumb> :
       null
     }
     <Markdown
-      className="wgsa-content-margin"
       source={rewriteMarkdown(markdown)}
       renderers={renderers}
     />

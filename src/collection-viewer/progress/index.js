@@ -36,12 +36,11 @@ const UploadProgress = React.createClass({
 
   setDocumentTitle() {
     const { collection, percentage = 0 } = this.props;
-    const { metadata = {} } = collection;
     document.title = [
       'WGSA',
       '|',
       `(${percentage}%)`,
-      `${metadata.title || 'Analysis Progress'}`,
+      `${collection.title || 'Analysis Progress'}`,
     ].join(' ');
   },
 

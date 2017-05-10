@@ -6,7 +6,7 @@ import { statuses } from '../../collection-viewer/constants';
 
 import Organisms from '../../organisms';
 
-const initialState = { id: null, genomeIds: new Set(), metadata: {} };
+const initialState = { id: null, genomeIds: new Set() };
 
 export default function (state = initialState, { type, payload }) {
   switch (type) {
@@ -36,13 +36,13 @@ export default function (state = initialState, { type, payload }) {
         ...state,
         genomeIds: new Set(sortGenomes(genomes).map(_ => _.uuid)),
         uuid: result.uuid,
+        slug: result.slug,
+        size: result.size,
         organismId: result.organismId,
-        metadata: {
-          title: result.title,
-          description: result.description,
-          dateCreated: new Date(result.progress.completed).toLocaleDateString(),
-          pmid: result.pmid,
-        },
+        title: result.title,
+        description: result.description,
+        createdAt: result.createdAt,
+        pmid: result.pmid,
         progress: result.progress,
         status: result.status,
       };

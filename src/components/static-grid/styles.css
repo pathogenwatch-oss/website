@@ -1,0 +1,30 @@
+.wgsa-static-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+.wgsa-static-grid > * {
+  margin-right: 16px;
+}
+
+.wgsa-compact-grid > * {
+  flex-basis: calc(25% - 16px);
+  @media (min-width: 1280px) {
+    flex-basis: calc(16.666% - 16px);
+  }
+}
+
+.wgsa-comfortable-grid {
+  padding: 16px 0;
+}
+
+.wgsa-comfortable-grid > * {
+  margin-right: 24px;
+  margin-bottom: 8px;
+  flex-basis: calc(50% - 24px);
+  height: 184px;
+  @media (min-width: 1280px) {
+    flex-basis: calc(33.333% - 24px);
+  }
+}
