@@ -1,10 +1,20 @@
 import React from 'react';
 import { Route } from 'react-router';
 
-export reducer from './reducer';
+import content from './Offline.react';
+import header from './Header.react';
 
-import Offline from './Offline.react';
+import { isOffline } from './utils';
+
+export reducer from './reducer';
+export { isOffline } from './utils';
 
 export default (
-  <Route path="offline" component={Offline} />
+  <Route
+    path="offline"
+    components={{
+      content,
+      header: isOffline() ? header : null,
+    }}
+  />
 );

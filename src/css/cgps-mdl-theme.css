@@ -2,7 +2,6 @@
 
 .mdl-layout__header {
   background-color: #fff;
-  color: #673c90 !important;
   min-height: 64px;
   display: block; /* overrides display: none on small screens! */
   transition: .28s cubic-bezier(.4,0,.2,1);

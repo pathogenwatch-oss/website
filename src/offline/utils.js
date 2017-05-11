@@ -32,3 +32,7 @@ export function saveToOfflineList(collection) {
 export function isSupported() {
   return ('caches' in window && 'serviceWorker' in navigator);
 }
+
+export function isOffline() {
+  return !navigator.onLine;
+}

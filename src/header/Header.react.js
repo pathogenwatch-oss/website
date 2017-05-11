@@ -16,7 +16,11 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps)(
-  ({ asideVisible, userDrawerVisible, content, className }) => (
+  ({ asideVisible, userDrawerVisible, className,
+    drawerLink = <AccountLink />,
+    drawer = <UserDrawer visible={userDrawerVisible} />,
+    children = <DefaultContent />,
+  }) => (
     <header className={
       classnames(
         'mdl-layout__header mdl-layout__header--scroll wgsa-header',
@@ -24,13 +28,13 @@ export default connect(mapStateToProps)(
         className,
       )}
     >
-      <UserDrawer visible={userDrawerVisible} />
+      {drawer}
       <div className="mdl-layout__header-row">
-        <AccountLink />
+        {drawerLink}
         <Link to="/" className="mdl-layout-title">
           <img src="/images/WGSA.FINAL.svg" className="wgsa-header-logo" />
         </Link>
-        {content || <DefaultContent />}
+        {children}
       </div>
     </header>
   )

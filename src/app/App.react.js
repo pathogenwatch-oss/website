@@ -48,7 +48,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(React.createClass({
 
   onLocationChange() {
     const { location, router } = this.props;
-    if (/^\/(offline|collection\/)/.test(location.pathname) || navigator.onLine) {
+    if (navigator.onLine || /^\/(offline|collection\/)/.test(location.pathname)) {
       this.props.onLocationChange();
     } else if (location.pathname !== '/offline') {
       router.push('/offline');
@@ -56,8 +56,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(React.createClass({
   },
 
   render() {
-    const { routes } = this.props;
-    const { header } = routes[routes.length - 1];
+    const { routes, header } = this.props;
     return (
       <div className="mdl-layout__container">
         <div ref="layout"
@@ -66,9 +65,9 @@ export default connect(mapStateToProps, mapDispatchToProps)(React.createClass({
             `wgsa-page--${this.props.pageSlug}`,
           )}
         >
-          <Header content={header} />
+          { header || <Header /> }
           <main className="mdl-layout__content">
-            {this.props.children}
+            {this.props.content || this.props.children}
           </main>
           <Toast />
           <GenomeDrawer />

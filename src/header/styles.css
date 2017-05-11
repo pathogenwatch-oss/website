@@ -20,11 +20,23 @@
   width: 88px;
 }
 
-.mdl-layout__header--primary .wgsa-header-logo {
+.wgsa-header--inverse {
+  background-color: rgba(0, 0, 0, 0.54);
+}
+
+.mdl-layout__header--primary .wgsa-header-logo,
+.wgsa-header--inverse .wgsa-header-logo {
   filter: grayscale(1) brightness(5);
 }
 
-.wgsa-header-nav .mdl-navigation__link {
+.wgsa-header-content {
+  display: flex;
+  flex-grow: 1;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.wgsa-header-content .mdl-navigation__link {
   color: rgba(0, 0, 0, 0.54);
   font-weight: 500 !important;
   margin: 0 1rem;
@@ -33,8 +45,8 @@
   text-transform: uppercase;
 }
 
-.mdl-layout-spacer .mdl-layout-spacer--flex {
-  flex-basis: 0;
+.wgsa-header--inverse .mdl-navigation__link {
+  color: #fff;
 }
 
 .wgsa-account-link {
@@ -53,8 +65,15 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  line-height: 44px;
+  line-height: 40px;
   overflow: hidden;
+  display: inline-block;
+  text-align: center;
+  background-color: #ccc;
+}
+
+.wgsa-header--inverse .cgps-avatar {
+  color: rgba(0, 0, 0, 0.54);
 }
 
 .wgsa-account-header {

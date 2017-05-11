@@ -17,7 +17,7 @@ const Supported = () => (
   <div className="wgsa-page wgsa-compact-page">
     <h1>Offline Mode</h1>
     <p>Offline mode allows you to save specific collections for use even when you lose network connectivity.</p>
-    <h2>How to</h2>
+    <h2>How to Save Collections</h2>
     <p>
       When viewing a collection, on the right side of the header bar is a <i className="material-icons">info</i> icon.
       Clicking this icon will reveal the <strong>Save for Offline</strong> button.
@@ -39,7 +39,7 @@ const Intro = () => (isSupported() ? <Supported /> : <NotSupported />);
 
 const CollectionList = ({ collections }) => (
   <div className="wgsa-page">
-    <h1>Offline Collections</h1>
+    <h1>Saved Collections</h1>
     <StaticGrid
       items={collections}
       template={CollectionCard}
