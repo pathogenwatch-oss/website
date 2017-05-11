@@ -41,7 +41,7 @@ const UserDrawer = React.createClass({
   },
 
   render() {
-    const { allCollections, allGenomes, userCollections, userGenomes } = this.props;
+    const { allCollections, allGenomes, userCollections, userGenomes, offlineCollections = 0 } = this.props;
     const { strategies = [] } = config;
     return (
       <div
@@ -76,6 +76,7 @@ const UserDrawer = React.createClass({
               { user ? 'All' : 'Public' } Collections
             </NavLink>
             { user && <NavLink to="/collections/user" badge={userCollections} icon="person">My Collections</NavLink> }
+            <NavLink to="/offline" badge={offlineCollections} icon="signal_wifi_off">Offline Collections</NavLink>
             { user && <NavLink to="/collections/bin" icon="delete">Bin</NavLink> }
           </nav>
           <hr />
