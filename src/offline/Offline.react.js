@@ -39,7 +39,7 @@ const Intro = () => (isSupported() ? <Supported /> : <NotSupported />);
 
 const CollectionList = ({ collections }) => (
   <div className="wgsa-page">
-    <h1>Saved Collections</h1>
+    <h1>Offline Collections</h1>
     <StaticGrid
       items={collections}
       template={CollectionCard}
@@ -52,6 +52,7 @@ const Offline = React.createClass({
 
   componentDidMount() {
     this.props.loadCollections();
+    document.title = 'WGSA | Offline';
   },
 
   render() {

@@ -36,13 +36,22 @@ export default connect(mapStateToProps, mapDispatchToProps)(React.createClass({
   componentDidMount() {
     componentHandler.upgradeDom();
     this.menuButton = document.querySelector('.mdl-layout__drawer-button');
-    this.props.onLocationChange();
+    this.onLocationChange();
     this.props.fetchSummary();
   },
 
   componentDidUpdate(previous) {
     if (this.props.location !== previous.location) {
+      this.onLocationChange();
+    }
+  },
+
+  onLocationChange() {
+    const { location, router } = this.props;
+    if (/^\/(offline|collection\/)/.test(location.pathname) || navigator.onLine) {
       this.props.onLocationChange();
+    } else if (location.pathname !== '/offline') {
+      router.push('/offline');
     }
   },
 
