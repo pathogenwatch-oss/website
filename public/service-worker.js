@@ -33,7 +33,7 @@ function shouldFallback(request) {
   const url = new URL(request.url);
   return (
     request.method === 'GET' &&
-    url.origin === location.origin &&
+    (url.hostname === 'localhost' || url.origin === location.origin) &&
     fallbackPaths.test(url.pathname)
   );
 }
