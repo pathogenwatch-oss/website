@@ -1,5 +1,3 @@
-import './styles.css';
-
 import React from 'react';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
@@ -19,7 +17,7 @@ const OfflineLink = () => (
     className="cgps-avatar wgsa-account-link"
     title="Menu not available in Offline mode."
   >
-    <span className="cgps-avatar__image wgsa-offline-icon">
+    <span className="cgps-avatar__image">
       <i className="material-icons">signal_wifi_off</i>
     </span>
   </Link>
@@ -32,8 +30,8 @@ const OfflineContent = () => (
 );
 
 const Header = ({
-  asideVisible, userDrawerVisible, className, offline,
-  children = (offline ? <OfflineContent /> : <DefaultContent />),
+  asideEnabled, asideVisible, userDrawerVisible, className, offline,
+  children = (offline ? <OfflineContent /> : <DefaultContent asideEnabled={asideEnabled} />),
 }) => (
   <header className={
     classnames(

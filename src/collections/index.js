@@ -3,7 +3,7 @@ import './styles.css';
 import React from 'react';
 import { Route, Redirect, IndexRedirect } from 'react-router';
 
-import DefaultContent from '../header/DefaultContent.react';
+import Header from '../header';
 import Collections from './Collections.react';
 
 const prefilters = [ 'all', 'user', 'bin' ];
@@ -18,8 +18,10 @@ export default (
   >
     { prefilters.map(prefilter =>
       <Route key={prefilter} path={prefilter}
-        header={<DefaultContent asideEnabled />}
-        component={props => <Collections {...props} prefilter={prefilter} />}
+        components={{
+          header: () => <Header asideEnabled />,
+          content: props => <Collections {...props} prefilter={prefilter} />,
+        }}
       />
     )}
     <Redirect from="*" to="all" />

@@ -48,6 +48,10 @@
   font-size: 15px;
 }
 
+.wgsa-filter__search i {
+  color: #673c90;
+}
+
 .wgsa-filter__content {
   bottom: 0;
   left: 0;

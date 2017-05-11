@@ -49,6 +49,10 @@
   color: #fff;
 }
 
+.wgsa-search-button {
+  color: #673c90;
+}
+
 .wgsa-account-link {
   position: absolute;
   left: 16px;
