@@ -51,12 +51,12 @@ export default connect(mapStateToProps, mapDispatchToProps)(React.createClass({
     if (navigator.onLine || /^\/(offline|collection\/)/.test(location.pathname)) {
       this.props.onLocationChange();
     } else if (location.pathname !== '/offline') {
-      router.push('/offline');
+      router.replace('/offline');
     }
   },
 
   render() {
-    const { routes, header } = this.props;
+    const { header = <Header /> } = this.props;
     return (
       <div className="mdl-layout__container">
         <div ref="layout"
@@ -65,7 +65,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(React.createClass({
             `wgsa-page--${this.props.pageSlug}`,
           )}
         >
-          { header || <Header /> }
+          { header }
           <main className="mdl-layout__content">
             {this.props.content || this.props.children}
           </main>

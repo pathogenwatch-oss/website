@@ -9,7 +9,7 @@ import { getStatus, getCollections } from './selectors';
 
 import { loadCollections } from './actions';
 
-import { isSupported } from './utils';
+import { isSupported, isOffline } from './utils';
 
 import { statuses } from './constants';
 
@@ -40,6 +40,7 @@ const Intro = () => (isSupported() ? <Supported /> : <NotSupported />);
 const CollectionList = ({ collections }) => (
   <div className="wgsa-page">
     <h1>Saved Collections</h1>
+    { isOffline() ? null : <p>These collections will be available when you are offline.</p>}
     <StaticGrid
       items={collections}
       template={CollectionCard}
