@@ -10,7 +10,7 @@
 
 .wgsa-compact-grid > * {
   flex-basis: calc(25% - 16px);
-  @media (min-width: 1280px) {
+  @media (min-width: 1600px) {
     flex-basis: calc(16.666% - 16px);
   }
 }
