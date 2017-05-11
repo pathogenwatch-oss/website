@@ -50,10 +50,10 @@ export default connect(mapStateToProps, mapDispatchToProps)(React.createClass({
     const { routes } = this.props;
     const { header } = routes[routes.length - 1];
     return (
-      <div className="mdl-layout__container has-scrolling-header">
+      <div className="mdl-layout__container">
         <div ref="layout"
           className={classnames(
-            'mdl-layout mdl-layout--fixed-header',
+            'mdl-layout',
             `wgsa-page--${this.props.pageSlug}`,
           )}
         >

@@ -55,11 +55,6 @@
   align-items: center;
 }
 
-.mdl-layout__content {
-  position: relative;
-  overflow: visible !important;
-}
-
 .mdl-grid--internal {
   padding: 0;
   margin: -8px;
