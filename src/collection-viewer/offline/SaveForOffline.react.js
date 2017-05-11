@@ -15,7 +15,7 @@ export default React.createClass({
   },
 
   componentDidMount() {
-    if (this.isSupported()) {
+    if (isSupported()) {
       this.props.checkStatus();
     }
   },
