@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 
 import { FormattedName } from '../organisms';
 
@@ -22,13 +22,13 @@ export default React.createClass({
         </section>
         <section className="showcase">
           <img src="/images/worldmap.svg" />
-          <Link className="showcase__link showcase__link--1 wgsa-sonar-effect" />
-          <Link className="showcase__link showcase__link--2 showcase__link--large wgsa-sonar-effect" />
-          <Link className="showcase__link showcase__link--3 showcase__link--small wgsa-sonar-effect" />
-          <Link className="showcase__link showcase__link--4 wgsa-sonar-effect" />
-          <Link className="showcase__link showcase__link--5 showcase__link--large wgsa-sonar-effect" />
-          <Link className="showcase__link showcase__link--6 wgsa-sonar-effect" />
-          <Link className="showcase__link showcase__link--7 showcase__link--small wgsa-sonar-effect" />
+          <Link to="#" className="showcase__link showcase__link--1 wgsa-sonar-effect" />
+          <Link to="#" className="showcase__link showcase__link--2 showcase__link--large wgsa-sonar-effect" />
+          <Link to="#" className="showcase__link showcase__link--3 showcase__link--small wgsa-sonar-effect" />
+          <Link to="#" className="showcase__link showcase__link--4 wgsa-sonar-effect" />
+          <Link to="#" className="showcase__link showcase__link--5 showcase__link--large wgsa-sonar-effect" />
+          <Link to="#" className="showcase__link showcase__link--6 wgsa-sonar-effect" />
+          <Link to="#" className="showcase__link showcase__link--7 showcase__link--small wgsa-sonar-effect" />
           <footer>
             <a href="#how-it-works" className="mdl-button mdl-button--primary title-font">
               <i className="material-icons">expand_more</i> How it works

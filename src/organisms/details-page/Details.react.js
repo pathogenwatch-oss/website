@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 
 import Breadcrumb from '../../components/Breadcrumb.react';
 
@@ -64,7 +64,7 @@ const Details = React.createClass({
             <ul>
               {
                 taxonomy.map(({ taxId, scientificName, rank }) =>
-                  <li>
+                  <li key={taxId}>
                     <a href={`https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?mode=Info&id=${taxId}`} target="_blank" rel="noopener">
                       {scientificName}
                     </a>

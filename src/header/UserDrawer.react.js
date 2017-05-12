@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import LoginLink from '../cgps-commons/LoginLink.react';
 import NavLink from '../location';
-import AccountHeader from 'cgps-commons/Avatar/Link.react';
+import AccountHeader from '../cgps-commons/AvatarLink.react';
 
 import { getSummary } from '../summary/selectors';
 

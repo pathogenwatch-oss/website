@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route } from 'react-router';
+import { Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import HeaderContainer from '../header';
@@ -40,12 +40,16 @@ const Header = connect(mapStateToProps)(
     </HeaderContainer>
 );
 
+const path = 'collection/:slug';
+
+export const HeaderRoute = (
+  <Route path={path}>
+    <Header />
+  </Route>
+);
+
 export default (
-  <Route
-    path="collection/:slug"
-    components={{
-      content: CollectionRoute,
-      header: Header,
-    }}
-  />
+  <Route path={path}>
+    <CollectionRoute />
+  </Route>
 );

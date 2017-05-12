@@ -6,10 +6,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
 
-import Header from '../header';
 import ConsentBanner from '../components/consent-banner';
 import Toast from '../toast';
 import GenomeDrawer from '../genome-drawer';
+
+import Header from './Header.react';
+import Content from './Content.react';
 
 import { fetchSummary } from '../summary/actions';
 import { locationChange } from '../location';
@@ -56,7 +58,6 @@ export default connect(mapStateToProps, mapDispatchToProps)(React.createClass({
   },
 
   render() {
-    const { header = <Header /> } = this.props;
     return (
       <div className="mdl-layout__container">
         <div ref="layout"
@@ -65,9 +66,9 @@ export default connect(mapStateToProps, mapDispatchToProps)(React.createClass({
             `wgsa-page--${this.props.pageSlug}`,
           )}
         >
-          { header }
+          <Header />
           <main className="mdl-layout__content">
-            {this.props.content || this.props.children}
+            <Content />
           </main>
           <Toast />
           <GenomeDrawer />

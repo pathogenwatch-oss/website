@@ -40,6 +40,12 @@ const Component = React.createClass({
 
   componentDidUpdate(previous) {
     const { prefilter, isUploading, fetch } = this.props;
+
+    if (previous.prefilter !== prefilter) {
+      fetch();
+      return;
+    }
+
     if (prefilter === 'upload') {
       if (previous.isUploading && !isUploading) {
         fetch();
@@ -53,7 +59,7 @@ const Component = React.createClass({
 
   upload(newFiles) {
     this.props.addFiles(newFiles);
-    this.context.router.push('/genomes/upload');
+    history.push('/genomes/upload');
   },
 
   renderEmptyMessage() {
@@ -133,7 +139,6 @@ const Component = React.createClass({
 function mapStateToProps(state) {
   return {
     items: getGridItems(state),
-    prefilter: getPrefilter(state),
     total: getTotal(state),
     status: getStatus(state),
   };

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 
 export default ({ photo, name, email }) => (
   <Link className="cgps-avatar cgps-avatar--mini mdl-color-text--blue-grey-50" to="/account">

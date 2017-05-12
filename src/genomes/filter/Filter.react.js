@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import LocationListener from '../../location';
+import { LocationListener } from '../../location';
 import FilterAside from '../../filter/aside';
 import DateRange from '../../components/date-range';
 import AsideSection from '../../filter/aside-section';

@@ -13,6 +13,8 @@ function entities(state = {}, { type, payload }) {
         return memo;
       }, {});
     }
+    case FETCH_COLLECTIONS.FAILURE:
+      return {};
     default:
       return state;
   }
