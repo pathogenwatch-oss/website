@@ -3,7 +3,7 @@ import { Switch, Redirect, Route } from 'react-router-dom';
 
 import HomepageRoute from '../homepage';
 import OrganismsRoute, { OrganismDetails, OrganismRedirects } from '../organisms/route';
-// import AccountRoute from '../account';
+import AccountRoute from '../account';
 import CollectionsRoute from '../collections';
 import GenomesRoute from '../genomes';
 // import CollectionViewerRoute from '../collection-viewer';
@@ -19,7 +19,7 @@ export default () => (
     {OrganismsRoute}
     {OrganismDetails}
     {OrganismRedirects}
-    {/* {AccountRoute} */}
+    {AccountRoute}
     {CollectionsRoute}
     <Redirect from="/collections/*" to="/collections/all" />
     <Redirect exact from="/collections" to="/collections/all" />,

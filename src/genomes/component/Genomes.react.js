@@ -11,7 +11,6 @@ import SelectionDrawer from '../selection';
 import Instructions from '../uploads/Instructions.react';
 
 import { getGridItems } from '../selectors';
-import { getPrefilter } from '../filter/selectors';
 import { getTotal } from '../summary/selectors';
 import { getStatus } from '../selectors';
 
