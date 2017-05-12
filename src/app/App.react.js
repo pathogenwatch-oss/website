@@ -49,11 +49,11 @@ export default connect(mapStateToProps, mapDispatchToProps)(React.createClass({
   },
 
   onLocationChange() {
-    const { location, router } = this.props;
+    const { location, history } = this.props;
     if (navigator.onLine || /^\/(offline|collection\/)/.test(location.pathname)) {
       this.props.onLocationChange();
     } else if (location.pathname !== '/offline') {
-      router.replace('/offline');
+      history.replace('/offline');
     }
   },
 
