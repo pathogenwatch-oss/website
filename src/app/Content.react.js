@@ -6,7 +6,7 @@ import OrganismsRoute, { OrganismDetails, OrganismRedirects } from '../organisms
 import AccountRoute from '../account';
 import CollectionsRoute from '../collections';
 import GenomesRoute from '../genomes';
-// import CollectionViewerRoute from '../collection-viewer';
+import CollectionViewerRoute from '../collection-viewer';
 // import DocumentationViewerRoute from '../documentation-viewer';
 // import OfflineRoute from '../offline';
 
@@ -28,9 +28,9 @@ export default () => (
     <Redirect exact from="/genomes" to="/genomes/all" />
     <Redirect from="/:organism/upload" to="/upload" />
     <Redirect from="/upload" to="/genomes/upload" />
-    {/*
     {CollectionViewerRoute}
-    <Redirect from="/:organism/collection/:id" to="/collection/:id" />
+    <Redirect from="/:organism/collection/:slug" to="/collection/:slug" />
+    {/*
     {DocumentationViewerRoute}
     {OfflineRoute} */}
     <Route component={NotFound} />
