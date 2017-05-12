@@ -7,7 +7,7 @@ import AccountRoute from '../account';
 import CollectionsRoute from '../collections';
 import GenomesRoute from '../genomes';
 import CollectionViewerRoute from '../collection-viewer';
-// import DocumentationViewerRoute from '../documentation-viewer';
+import DocumentationViewerRoute from '../documentation-viewer';
 // import OfflineRoute from '../offline';
 
 import NotFound from '../components/NotFound.react';
@@ -30,9 +30,8 @@ export default () => (
     <Redirect from="/upload" to="/genomes/upload" />
     {CollectionViewerRoute}
     <Redirect from="/:organism/collection/:slug" to="/collection/:slug" />
-    {/*
     {DocumentationViewerRoute}
-    {OfflineRoute} */}
+    {/* {OfflineRoute} */}
     <Route component={NotFound} />
   </Switch>
 );
