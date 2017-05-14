@@ -15,6 +15,8 @@ const Styler = React.createClass({
   componentDidUpdate(previous) {
     const { phylocanvas, genomes, filter } = this.props;
 
+    if (previous.genomes === genomes && previous.filter === filter) return;
+
     for (const leaf of phylocanvas.leaves) {
       const { id } = leaf;
       const genome = genomes[id];

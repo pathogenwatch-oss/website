@@ -65,10 +65,8 @@ export default React.createClass({
       fillCanvas: true,
     });
 
-    phylocanvas.setTreeType('rectangular');
-
     phylocanvas.padding = 64;
-    phylocanvas.showLabels = true;
+    phylocanvas.showLabels = false;
     phylocanvas.hoverLabel = true;
     phylocanvas.branchColour = DEFAULT.COLOUR;
     phylocanvas.highlightColour = phylocanvas.selectedColour = CGPS.COLOURS.PURPLE;
