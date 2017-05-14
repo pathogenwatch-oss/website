@@ -1,17 +1,17 @@
 import { connect } from 'react-redux';
 
-import Tree from '../tree';
-import PopulationStyler from '../tree/PopulationStyler.react';
-import StandardStyler from '../tree/StandardStyler.react';
+import Tree from './Tree.react';
+import PopulationStyler from './PopulationStyler.react';
+import StandardStyler from './StandardStyler.react';
 
-import * as selectors from '../tree/selectors';
+import * as selectors from './selectors';
 import {
   treeLoaded,
   subtreeLoaded,
   treeClicked,
   typeChanged,
   internalNodeSelected,
-} from '../tree/thunks';
+} from './thunks';
 
 import { POPULATION } from '../../app/stateKeys/tree';
 
