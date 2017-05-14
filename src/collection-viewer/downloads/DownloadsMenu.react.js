@@ -6,9 +6,8 @@ import { connect } from 'react-redux';
 import Overlay from '../../components/overlay';
 import DownloadButton from './DownloadButton.react';
 
-import { getCollection, getGenomes, getViewer } from '../../collection-viewer/selectors';
+import * as viewer from '../selectors';
 import { getTables, hasMetadata, hasTyping } from '../table/selectors';
-import { getActiveGenomeIds } from '../selectors';
 
 import { setMenuActive } from './actions';
 
@@ -45,10 +44,10 @@ DownloadsMenu.PropTypes = {
 
 function mapStateToProps(state) {
   return {
-    collection: getCollection(state),
-    downloads: getViewer(state).downloads,
-    genomes: getGenomes(state),
-    genomeIds: getActiveGenomeIds(state),
+    collection: viewer.getCollection(state),
+    downloads: viewer.getViewer(state).downloads,
+    genomes: viewer.getGenomes(state),
+    genomeIds: viewer.getActiveGenomeIds(state),
     hasMetadata: hasMetadata(state),
     hasTyping: hasTyping(state),
     tables: getTables(state),

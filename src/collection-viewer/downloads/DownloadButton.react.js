@@ -8,8 +8,6 @@ export default React.createClass({
   displayName: 'DownloadButton',
 
   propTypes: {
-    loading: React.PropTypes.bool,
-    error: React.PropTypes.bool,
     description: React.PropTypes.string,
     link: React.PropTypes.string,
     filename: React.PropTypes.string,
@@ -29,7 +27,7 @@ export default React.createClass({
 
   render() {
     const {
-      loading, error, description, link, filename,
+      status, description, link, filename,
       onClick, label, color, isArchive, iconOnly,
     } = this.props;
 
@@ -53,8 +51,7 @@ export default React.createClass({
     ) : (
       <button onClick={onClick} title={title} className={classNames}>
         <DownloadIcon
-          loading={loading}
-          error={error}
+          status={status}
           color={color}
           label={label}
           isArchive={isArchive}
