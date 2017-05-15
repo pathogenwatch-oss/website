@@ -43,7 +43,7 @@ self.addEventListener('fetch', event => {
   if (isNavigation(event)) {
     event.respondWith(
       caches.open(assetCache).then(cache =>
-        fetch(event.request)
+        fetch(event.request, { credentials: 'include' })
           .then(response => {
             cache.put('/index.html', response.clone()); // update on every navigation
             return response;
@@ -71,7 +71,7 @@ self.addEventListener('fetch', event => {
   // API caching
   if (shouldFallback(event.request)) {
     event.respondWith(
-      fetch(event.request) // network-first
+      fetch(event.request, { credentials: 'include' }) // network-first
         .then(response =>
           (response.status === 200 ?
             response :
