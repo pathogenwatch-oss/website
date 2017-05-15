@@ -7,7 +7,7 @@ import { isAsideVisible } from './selectors';
 
 import { toggleAside } from './actions';
 
-const DefaultContent = ({ asideVisible, toggle, asideEnabled = true }) => (
+const DefaultContent = ({ asideVisible, toggle, asideEnabled = false }) => (
   <nav className="wgsa-header-content mdl-navigation">
     <NavLink to="/collections/all">Collections</NavLink>
     <NavLink to="/genomes/all">Genomes</NavLink>
