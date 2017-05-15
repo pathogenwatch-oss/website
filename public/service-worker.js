@@ -72,7 +72,12 @@ self.addEventListener('fetch', event => {
   if (shouldFallback(event.request)) {
     event.respondWith(
       fetch(event.request) // network-first
-        .catch(() => caches.match(event.request)) // fallback to cache
+        .then(response =>
+          (response.status === 200 ?
+            response :
+            caches.match(event.request)) // online fallback
+        )
+        .catch(() => caches.match(event.request)) // offline fallback
     );
   }
 });
