@@ -13,8 +13,11 @@ import { updateFilter } from './filter/actions';
 
 const Collections = React.createClass({
 
-  componentDidMount() {
+  componentWillMount() {
     document.title = 'WGSA | Collections';
+  },
+
+  componentDidMount() {
     this.props.filter();
   },
 

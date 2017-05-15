@@ -23,7 +23,7 @@ const Supported = () => (
       Clicking this icon will reveal the <strong>Save for Offline</strong> button.
       Click this button and allow the page to refresh and your collection should be available offline, hurrah!
     </p>
-    <p>Saved collections are listed on this page to refer to when you need them.</p>
+    <p>You haven't saved any collections yet! Saved collections are listed on this page when you need them.</p>
   </div>
 );
 
@@ -51,9 +51,12 @@ const CollectionList = ({ collections }) => (
 
 const Offline = React.createClass({
 
+  componentWillMount() {
+    document.title = 'WGSA | Offline';
+  },
+
   componentDidMount() {
     this.props.loadCollections();
-    document.title = 'WGSA | Offline';
   },
 
   render() {

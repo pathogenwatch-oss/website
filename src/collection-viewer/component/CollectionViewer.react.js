@@ -8,7 +8,7 @@ import { getCollection } from '../selectors';
 
 const CollectionViewer = React.createClass({
 
-  componentDidMount() {
+  componentWillMount() {
     document.title = `WGSA | ${this.props.title || 'Explore Collection'}`;
   },
 

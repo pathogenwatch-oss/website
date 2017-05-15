@@ -13,6 +13,10 @@ function getCollectionSizeLimit(user) {
 
 export default React.createClass({
 
+  componentWillMount() {
+    document.title = 'WGSA | Whole Genome Sequence Analysis';
+  },
+
   render() {
     return (
       <div className="wgsa-homepage">
