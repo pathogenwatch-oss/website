@@ -65,8 +65,6 @@ export default React.createClass({
       fillCanvas: true,
     });
 
-    phylocanvas.setTreeType('rectangular');
-
     phylocanvas.padding = 64;
     phylocanvas.showLabels = true;
     phylocanvas.hoverLabel = true;
