@@ -13,9 +13,7 @@ import { defaultLeafStyle } from './constants';
 const Styler = React.createClass({
 
   componentDidUpdate(previous) {
-    const { phylocanvas, genomes, filter } = this.props;
-
-    if (previous.genomes === genomes && previous.filter === filter) return;
+    const { phylocanvas, genomes, filter, selectedInternalNode } = this.props;
 
     for (const leaf of phylocanvas.leaves) {
       const { id } = leaf;
@@ -39,8 +37,8 @@ const Styler = React.createClass({
       const node = phylocanvas.originalTree.branches[previous.selectedInternalNode];
       if (node) node.highlighted = false;
     }
-    if (this.props.selectedInternalNode && filter.active) {
-      const node = phylocanvas.originalTree.branches[this.props.selectedInternalNode];
+    if (selectedInternalNode && filter.active) {
+      const node = phylocanvas.originalTree.branches[selectedInternalNode];
       if (node) node.highlighted = true;
     }
 
