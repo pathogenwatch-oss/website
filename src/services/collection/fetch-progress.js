@@ -61,7 +61,15 @@ function checkStatus(collection) {
   return collection;
 }
 
-module.exports = ({ uuid }) =>
-  Collection
-    .findByUuid(uuid, { 'subtrees.tree': 0, 'subtrees.leafIds': 0 })
-    .then(checkStatus);
+module.exports = ({ uuid, withLeafIds = false }) => {
+  const projection = Object.assign(
+    { 'subtrees.tree': 0 },
+    withLeafIds ? {} : { 'subtrees.leafIds': 0 }
+  );
+
+  return (
+    Collection
+      .findByUuid(uuid, projection)
+      .then(checkStatus)
+  );
+};
