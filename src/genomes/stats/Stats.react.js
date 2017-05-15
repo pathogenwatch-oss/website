@@ -1,7 +1,8 @@
+/* global Chart */
+
 import React from 'react';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
-import Chart from 'chart.js';
 
 import * as selectors from './selectors';
 

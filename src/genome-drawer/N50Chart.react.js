@@ -1,5 +1,6 @@
+/* global Chart */
+
 import React from 'react';
-import Chart from 'chart.js';
 
 import addGuideLinesPlugin from '../cgps-commons/ChartJSGuidelinePlugin';
 addGuideLinesPlugin(Chart);

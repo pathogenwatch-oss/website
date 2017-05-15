@@ -29,7 +29,6 @@
     "babel-preset-react": "^6.3.13",
     "body-parser": "^1.14.1",
     "cgps-commons": "gitlab:cgps/commons",
-    "chart.js": "^2.5.0",
     "classnames": "^2.2.5",
     "css-loader": "^0.26.1",
     "date-fns": "^1.28.4",
