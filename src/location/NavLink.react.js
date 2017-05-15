@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
 
@@ -32,7 +32,7 @@ export default connect(mapStateToProps)(
       >
         { icon && <i className="material-icons">{icon}</i>}
         <span>{children}</span>
-        { badge ? <span className="wgsa-nav-badge mdl-badge" data-badge={badge}></span> : null}
+        { badge !== null ? <span className="wgsa-nav-badge mdl-badge" data-badge={badge}></span> : null}
       </Link>
     )
   )

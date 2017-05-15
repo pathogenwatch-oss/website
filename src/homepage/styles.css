@@ -4,17 +4,6 @@
 @import "footer.css";
 @import "../css/sonar.css";
 
-.wgsa-homepage {
-  background: #fff;
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  overflow-x: hidden;
-  overflow-y: auto;
-}
-
 .homepage-section-link {
   font-size: 20px;
   text-transform: uppercase;
@@ -44,6 +33,7 @@
 
 .wgsa-homepage h2 {
   color: #673c90;
+  text-align: center;
 }
 
 .wgsa-homepage > section footer {

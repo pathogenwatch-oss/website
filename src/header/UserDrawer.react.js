@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import LoginLink from '../cgps-commons/LoginLink.react';
 import NavLink from '../location';
-import AccountHeader from 'cgps-commons/Avatar/Link.react';
+import AccountHeader from './AccountHeader.react';
 
 import { getSummary } from '../summary/selectors';
 
@@ -12,12 +12,6 @@ import { toggleUserDrawer } from './actions';
 
 import config from '../app/config';
 const { user } = config;
-
-const defaultUser = {
-  photo: '/images/user.svg',
-  name: 'WGSA',
-  email: 'Sign In or Create Account',
-};
 
 const UserDrawer = React.createClass({
 
@@ -41,7 +35,7 @@ const UserDrawer = React.createClass({
   },
 
   render() {
-    const { allCollections, allGenomes, userCollections, userGenomes } = this.props;
+    const { allCollections, allGenomes, userCollections, userGenomes, offlineCollections = 0 } = this.props;
     const { strategies = [] } = config;
     return (
       <div
@@ -51,12 +45,7 @@ const UserDrawer = React.createClass({
       >
         <div className={classnames('mdl-layout__drawer', { 'is-visible': this.props.visible })}>
           <span className="mdl-layout-title">
-            <AccountHeader
-              user={user || defaultUser}
-              linkTo={user ? '/account' : null}
-              image="top"
-              className="wgsa-account-header"
-            />
+            <AccountHeader user={user} />
             <img src="/images/WGSA.Icon.FINAL.svg" />
             { config.version &&
               <small className="wgsa-version">
@@ -76,12 +65,13 @@ const UserDrawer = React.createClass({
               { user ? 'All' : 'Public' } Collections
             </NavLink>
             { user && <NavLink to="/collections/user" badge={userCollections} icon="person">My Collections</NavLink> }
+            <NavLink to="/offline" badge={offlineCollections} icon="signal_wifi_off">Offline Collections</NavLink>
             { user && <NavLink to="/collections/bin" icon="delete">Bin</NavLink> }
           </nav>
           <hr />
           <nav className="mdl-navigation">
             <h2 className="wgsa-navigation-header">Genomes</h2>
-            <NavLink to="/genomes/all" badge={allGenomes} icon="bug_report">
+            <NavLink to="/genomes/all" badge={allGenomes} icon="insert_drive_file">
               { user ? 'All' : 'Public' } Genomes
             </NavLink>
             { user && <NavLink to="/genomes/user" badge={userGenomes} icon="person">My Genomes</NavLink> }
@@ -90,6 +80,7 @@ const UserDrawer = React.createClass({
           </nav>
           <hr />
           <nav className="mdl-navigation">
+            <NavLink to="/organisms" icon="bug_report" activeOnIndexOnly>All Organisms</NavLink>
             <NavLink to="/documentation" icon="help">Documentation</NavLink>
             <NavLink to="https://gitlab.com/cgps/wgsa.net/issues" external icon="feedback">Feedback</NavLink>
           </nav>

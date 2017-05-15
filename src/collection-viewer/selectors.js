@@ -42,3 +42,13 @@ export const getColourGetter = createSelector(
   getAMRTableName,
   (tables, name) => createColourGetter(name, tables[name].activeColumns)
 );
+
+export const getCollectionMetadata = createSelector(
+  getCollection,
+  collection => ({
+    title: collection.title,
+    description: collection.description,
+    dateCreated: new Date(collection.createdAt).toLocaleDateString(),
+    pmid: collection.pmid,
+  })
+);

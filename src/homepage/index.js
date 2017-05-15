@@ -1,8 +1,8 @@
 import './styles.css';
 
 import React from 'react';
-import { IndexRoute } from 'react-router';
+import { Route } from 'react-router-dom';
 
 import Homepage from './Homepage.react';
 
-export default <IndexRoute component={Homepage} />;
+export default <Route exact path="/" component={Homepage} />;

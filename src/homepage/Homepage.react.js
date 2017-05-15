@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 
 import { FormattedName } from '../organisms';
 
@@ -13,6 +13,10 @@ function getCollectionSizeLimit(user) {
 
 export default React.createClass({
 
+  componentWillMount() {
+    document.title = 'WGSA | Whole Genome Sequence Analysis';
+  },
+
   render() {
     return (
       <div className="wgsa-homepage">
@@ -22,13 +26,13 @@ export default React.createClass({
         </section>
         <section className="showcase">
           <img src="/images/worldmap.svg" />
-          <Link className="showcase__link showcase__link--1 wgsa-sonar-effect" />
-          <Link className="showcase__link showcase__link--2 showcase__link--large wgsa-sonar-effect" />
-          <Link className="showcase__link showcase__link--3 showcase__link--small wgsa-sonar-effect" />
-          <Link className="showcase__link showcase__link--4 wgsa-sonar-effect" />
-          <Link className="showcase__link showcase__link--5 showcase__link--large wgsa-sonar-effect" />
-          <Link className="showcase__link showcase__link--6 wgsa-sonar-effect" />
-          <Link className="showcase__link showcase__link--7 showcase__link--small wgsa-sonar-effect" />
+          <Link to="#" className="showcase__link showcase__link--1 wgsa-sonar-effect" />
+          <Link to="#" className="showcase__link showcase__link--2 showcase__link--large wgsa-sonar-effect" />
+          <Link to="#" className="showcase__link showcase__link--3 showcase__link--small wgsa-sonar-effect" />
+          <Link to="#" className="showcase__link showcase__link--4 wgsa-sonar-effect" />
+          <Link to="#" className="showcase__link showcase__link--5 showcase__link--large wgsa-sonar-effect" />
+          <Link to="#" className="showcase__link showcase__link--6 wgsa-sonar-effect" />
+          <Link to="#" className="showcase__link showcase__link--7 showcase__link--small wgsa-sonar-effect" />
           <footer>
             <a href="#how-it-works" className="mdl-button mdl-button--primary title-font">
               <i className="material-icons">expand_more</i> How it works
@@ -155,6 +159,22 @@ export default React.createClass({
                 <tr>
                   <td>Access public genomes</td>
                   <td>Access public genomes</td>
+                </tr>
+                <tr>
+                  <td>
+                    Save collections for offline use
+                    <br />
+                    <Link to="/offline">
+                      <small>Find out more</small>
+                    </Link>
+                  </td>
+                  <td>
+                    Save collections for offline use
+                    <br />
+                    <Link to="/offline">
+                      <small>Find out more</small>
+                    </Link>
+                  </td>
                 </tr>
                 <tr>
                   <td>

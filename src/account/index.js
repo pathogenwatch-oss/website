@@ -1,25 +1,19 @@
 import './styles.css';
 
 import React from 'react';
-import { Route, IndexRoute } from 'react-router';
+import { Route } from 'react-router-dom';
 
-import Genomes from '../genomes/component';
+import RequireLogin from './RequireLogin.react';
 import Profile from './Profile.react';
-
-import config from '../app/config';
-
-function requireLogin(nextState, replace) {
-  if (!config.user) replace('/');
-}
-
-const UserGenomes = props => (<Genomes {...props} user />);
 
 export reducer from './reducer';
 
+const AccountRoute = (props) => (
+  <RequireLogin {...props}>
+    <Profile />
+  </RequireLogin>
+);
+
 export default (
-  <Route path="account" onEnter={requireLogin}>
-    <IndexRoute component={Profile} />
-    <Route path="collections" component={() => <h1>collections</h1>} />
-    <Route path="genomes" component={UserGenomes} />
-  </Route>
+  <Route path="/account" component={AccountRoute} />
 );

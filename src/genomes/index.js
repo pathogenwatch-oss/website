@@ -1,47 +1,26 @@
 import React from 'react';
-import { Route, Redirect, IndexRoute, IndexRedirect } from 'react-router';
-import { connect } from 'react-redux';
+import { Route, Switch } from 'react-router-dom';
 
 import Genomes from './component';
+import Header from './Header.react';
 import ListView from './list';
 import GridView from './grid';
 import MapView from './map';
 
-const prefilters = [ 'all', 'user', 'upload', 'bin' ];
-
 export reducer from './reducer';
 
-import DefaultContent from '../header/DefaultContent.react';
-import { isAsideEnabled } from './uploads/selectors';
+const path = '/genomes/:prefilter(all|user|upload|bin)';
 
-function mapStateToProps(state) {
-  return {
-    asideEnabled: isAsideEnabled(state),
-  };
-}
-
-const GenomeHeader = connect(mapStateToProps)(
-  ({ asideEnabled }) => <DefaultContent asideEnabled={asideEnabled} />
+const GenomeRoute = props => (
+  <Genomes {...props}>
+    <Switch>
+      <Route path={`${path}/list`} component={ListView} />
+      <Route path={`${path}/map`} component={MapView} />
+      <Route component={GridView} />
+    </Switch>
+  </Genomes>
 );
 
-export default (
-  <Route path="genomes">
-    { prefilters.map(prefilter =>
-      <Route key={prefilter} path={prefilter}
-        component={props => <Genomes {...props} prefilter={prefilter} />}
-      >
-        <IndexRoute
-          component={GridView}
-          header={<GenomeHeader />}
-        />
-        <Route path="list" component={ListView} header={<GenomeHeader />} />
-        <Route path="map"
-          component={props => <MapView {...props} stateKey={`GENOME_${prefilter.toUpperCase()}`} />}
-          header={<GenomeHeader />}
-        />
-      </Route>
-    )}
-    <Redirect from="*" to="all" />
-    <IndexRedirect to="all" />
-  </Route>
-);
+export const HeaderRoute = <Route path={path} component={Header} />;
+
+export default (<Route path={path} component={GenomeRoute} />);

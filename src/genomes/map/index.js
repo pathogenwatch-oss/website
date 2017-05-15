@@ -1,3 +1,11 @@
 import './styles.css';
+import React from 'react';
 
-export default from './MapView.react';
+import MapView from './MapView.react';
+
+function createStateKey(match) {
+  if (!match) return null;
+  return `GENOME_${match.params.prefilter}`;
+}
+
+export default ({ match }) => <MapView stateKey={createStateKey(match)} />;

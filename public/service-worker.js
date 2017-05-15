@@ -33,7 +33,7 @@ function shouldFallback(request) {
   const url = new URL(request.url);
   return (
     request.method === 'GET' &&
-    url.origin === location.origin &&
+    (url.hostname === 'localhost' || url.origin === location.origin) &&
     fallbackPaths.test(url.pathname)
   );
 }
@@ -43,7 +43,7 @@ self.addEventListener('fetch', event => {
   if (isNavigation(event)) {
     event.respondWith(
       caches.open(assetCache).then(cache =>
-        fetch(event.request)
+        fetch(event.request, { credentials: 'include' })
           .then(response => {
             cache.put('/index.html', response.clone()); // update on every navigation
             return response;
@@ -71,8 +71,13 @@ self.addEventListener('fetch', event => {
   // API caching
   if (shouldFallback(event.request)) {
     event.respondWith(
-      fetch(event.request) // network-first
-        .catch(() => caches.match(event.request)) // fallback to cache
+      fetch(event.request, { credentials: 'include' }) // network-first
+        .then(response =>
+          (response.status === 200 ?
+            response :
+            caches.match(event.request)) // online fallback
+        )
+        .catch(() => caches.match(event.request)) // offline fallback
     );
   }
 });

@@ -1,12 +1,7 @@
-import { FETCH_COLLECTION, UPDATE_COLLECTION_PROGRESS, RESET_COLLECTION_VIEW }
-  from '../collection-viewer/actions';
 import {
   HEADER_TOGGLE_ASIDE,
   HEADER_TOGGLE_USER_DRAWER,
 } from './actions';
-
-
-import { getHeaderClassName } from '../collection-viewer';
 
 const initialState = {
   asideVisible: false,
@@ -20,17 +15,6 @@ export default function (state = initialState, { type, payload }) {
         ...state,
         userDrawerVisible: false,
         asideVisible: payload.isOpen,
-      };
-    case FETCH_COLLECTION.SUCCESS:
-    case UPDATE_COLLECTION_PROGRESS:
-      return {
-        ...state,
-        className: getHeaderClassName((payload.result || payload.progress).status),
-      };
-    case RESET_COLLECTION_VIEW:
-      return {
-        ...state,
-        className: null,
       };
     case HEADER_TOGGLE_USER_DRAWER:
       return {

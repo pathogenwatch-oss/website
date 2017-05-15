@@ -1,25 +1,13 @@
 .wgsa-upload-instuctions {
   display: flex;
   flex-wrap: wrap;
-  max-width: 800px;
-  margin: 0 auto;
   align-content: flex-start;
-  justify-content: center;
-}
-
-.wgsa-upload-instuctions > * {
-  padding: 0 16px;
-}
-
-.wgsa-upload-instuctions > h2 {
-  width: 100%;
-  @media (min-width: 1280px) {
-    text-align: center;
-  }
+  justify-content: space-between;
+  min-height: 540px;
 }
 
 .wgsa-upload-instuctions > div {
-  width: 50%;
+  width: calc(50% - 16px);
   box-sizing: border-box;
 }
 

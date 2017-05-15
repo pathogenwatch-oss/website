@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import Markdown from 'react-markdown';
 import dateSince from 'date-fns/distance_in_words';
 

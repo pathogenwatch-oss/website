@@ -2,7 +2,6 @@
 
 .mdl-layout__header {
   background-color: #fff;
-  color: #673c90 !important;
   min-height: 64px;
   display: block; /* overrides display: none on small screens! */
   transition: .28s cubic-bezier(.4,0,.2,1);
@@ -53,12 +52,6 @@
 .mdl-layout-spacer--flex {
   display: flex;
   align-items: center;
-}
-
-.mdl-layout__content {
-  background: #efefef;
-  position: relative;
-  overflow: visible !important;
 }
 
 .mdl-grid--internal {
@@ -120,7 +113,7 @@
 }
 
 .mdl-button--raised.mdl-button--colored {
-  background: #673c90 !important;
+  background: #673c90;
 }
 
 .mdl-button--raised.mdl-button--colored:hover,

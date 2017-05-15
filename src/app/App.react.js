@@ -6,10 +6,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
 
-import Header from '../header';
 import ConsentBanner from '../components/consent-banner';
 import Toast from '../toast';
 import GenomeDrawer from '../genome-drawer';
+
+import Header from './Header.react';
+import Content from './Content.react';
 
 import { fetchSummary } from '../summary/actions';
 import { locationChange } from '../location';
@@ -36,30 +38,37 @@ export default connect(mapStateToProps, mapDispatchToProps)(React.createClass({
   componentDidMount() {
     componentHandler.upgradeDom();
     this.menuButton = document.querySelector('.mdl-layout__drawer-button');
-    this.props.onLocationChange();
+    this.onLocationChange();
     this.props.fetchSummary();
   },
 
   componentDidUpdate(previous) {
     if (this.props.location !== previous.location) {
+      this.onLocationChange();
+    }
+  },
+
+  onLocationChange() {
+    const { location, history } = this.props;
+    if (navigator.onLine || /^\/(offline|collection\/)/.test(location.pathname)) {
       this.props.onLocationChange();
+    } else if (location.pathname !== '/offline') {
+      history.replace('/offline');
     }
   },
 
   render() {
-    const { routes } = this.props;
-    const { header } = routes[routes.length - 1];
     return (
-      <div className="mdl-layout__container has-scrolling-header">
+      <div className="mdl-layout__container">
         <div ref="layout"
           className={classnames(
-            'mdl-layout mdl-layout--fixed-header',
+            'mdl-layout',
             `wgsa-page--${this.props.pageSlug}`,
           )}
         >
-          <Header content={header} />
+          <Header />
           <main className="mdl-layout__content">
-            {this.props.children}
+            <Content />
           </main>
           <Toast />
           <GenomeDrawer />

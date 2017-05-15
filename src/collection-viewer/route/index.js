@@ -19,8 +19,8 @@ function mapStateToProps(state) {
   };
 }
 
-function mapDispatchToProps(dispatch, { params: { slug } }) {
-  const uuid = getUuidFromSlug(slug);
+function mapDispatchToProps(dispatch, { match }) {
+  const uuid = getUuidFromSlug(match.params.slug);
   return {
     fetch: () => dispatch(actions.fetchCollection(uuid)),
     updateProgress: results => (
