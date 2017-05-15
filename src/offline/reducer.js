@@ -17,7 +17,10 @@ export default function (state = initialState, { type, payload }) {
     case OFFLINE_LOAD_COLLECTIONS.SUCCESS:
       return {
         status: statuses.SUCCESS,
-        collections: payload.result,
+        collections: payload.result.map(collection => ({
+          ...collection,
+          createdAt: new Date(collection.createdAt),
+        })),
       };
     default:
       return state;
