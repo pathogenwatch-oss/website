@@ -18,6 +18,7 @@ function addGenomes(collection) {
 
 module.exports = ({ user, uuid }) =>
   services.request('collection', 'fetch-progress', { user, uuid })
+    .then(collection => collection.ensureAccess(user))
     .then(collection => (
       collection.status === 'READY' ?
         collection.populate('_organism').execPopulate() :

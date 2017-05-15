@@ -108,7 +108,7 @@ schema.methods.ensureAccess = function (user) {
     return this;
   }
 
-  if (user._id === this._user) {
+  if (user && this._user && this._user.equals(user._id)) {
     return this;
   }
 
