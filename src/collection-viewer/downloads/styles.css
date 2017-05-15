@@ -71,9 +71,6 @@
 /* pushes icon in download menu up a bit for alignment */
 .wgsa-download-button:not(.mdl-button--icon) .material-icons {
   margin-left: -4px;
-}
-
-button.wgsa-download-button:not(.mdl-button--icon) .material-icons {
   margin-top: -4px;
 }
 

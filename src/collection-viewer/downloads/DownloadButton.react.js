@@ -3,6 +3,8 @@ import classnames from 'classnames';
 
 import DownloadIcon from '../../downloads/DownloadIcon.react';
 
+import { statuses } from '../../downloads/constants';
+
 export default React.createClass({
 
   displayName: 'DownloadButton',
@@ -19,8 +21,13 @@ export default React.createClass({
   },
 
   componentDidUpdate(previous) {
-    const { loading, link } = this.props;
-    if (previous.loading && (!loading && link)) {
+    const { status, link } = this.props;
+
+    if (previous.status !== statuses.LOADING) {
+      return;
+    }
+
+    if (status === statuses.SUCCESS && link) {
       this.refs.link.click();
     }
   },
@@ -45,8 +52,8 @@ export default React.createClass({
         title={title}
         className={classNames}
       >
-          <DownloadIcon hasLink color={color} />
-          {!iconOnly && description}
+        <DownloadIcon hasLink color={color} />
+        {!iconOnly && <span>{description}</span>}
       </a>
     ) : (
       <button onClick={onClick} title={title} className={classNames}>
