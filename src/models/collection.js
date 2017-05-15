@@ -3,6 +3,7 @@ const { Schema } = mongoose;
 const slug = require('slug');
 
 const { setToObjectOptions, addPreSaveHook, getSummary } = require('./utils');
+const { NotFoundError } = require('../utils/errors');
 
 const schema = new Schema({
   _user: { type: Schema.Types.ObjectId, ref: 'User' },
@@ -27,6 +28,7 @@ const schema = new Schema({
   },
   pmid: String,
   public: { type: Boolean, default: false },
+  private: { type: Boolean, default: false },
   reference: Boolean,
   size: Number,
   organismId: String,
@@ -99,6 +101,18 @@ schema.methods.resultRequired = function (type) {
   }
 
   return false;
+};
+
+schema.methods.ensureAccess = function (user) {
+  if (!this.private) {
+    return this;
+  }
+
+  if (user._id === this._user) {
+    return this;
+  }
+
+  throw new NotFoundError('No collection found for this user');
 };
 
 schema.virtual('isProcessing').get(function () {
