@@ -3,7 +3,6 @@ import './styles.css';
 import React from 'react';
 import Markdown from 'react-markdown';
 import { Link } from 'react-router';
-import classnames from 'classnames';
 
 function rewriteMarkdown(markdown) {
   return markdown.replace(
@@ -28,7 +27,7 @@ const renderers = {
 };
 
 export default ({ page, markdown }) => (
-  <div className={classnames('wgsa-wiki-page', { 'wgsa-wiki-homepage': !page })}>
+  <div className="wgsa-wiki-page">
     { page ?
       <div className="wgsa-wiki-breadcrumb wgsa-content-margin">
         <Link to="/documentation">Documentation Home</Link>&nbsp;&raquo;&nbsp;{page}

@@ -24,18 +24,15 @@
 }
 
 .wgsa-wiki-page h1 {
-  font-size: 45px;
-  line-height: 48px;
+  font-size: 32px;
 }
 
 .wgsa-wiki-page h2 {
-  font-size: 34px;
-  line-height: 40px;
+  font-size: 28px;
 }
 
 .wgsa-wiki-page h3 {
   font-size: 24px;
-  line-height: 32px;
 }
 
 .wgsa-wiki-page h4 {
@@ -52,8 +49,4 @@
 
 .wgsa-wiki-page blockquote p {
   display: inline-block;
-}
-
-.wgsa-wiki-homepage {
-  margin-top: 64px;
 }
