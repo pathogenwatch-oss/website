@@ -1,11 +1,11 @@
 import React from 'react';
-import { Route } from 'react-router';
+import { Route } from 'react-router-dom';
 
-import content from './Offline.react';
+import OfflineRoute from './Offline.react';
 
 export reducer from './reducer';
 export { isOffline } from './utils';
 
 export default (
-  <Route path="offline" component={content} />
+  <Route path="/offline" component={OfflineRoute} />
 );

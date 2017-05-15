@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import { parse } from 'query-string';
 
 import Genomes from './Genomes.react';
 
@@ -10,21 +11,25 @@ import { isUploading, getTotalErrors } from '../uploads/selectors';
 
 import { updateFilter } from '../filter/actions';
 
-function mapStateToProps(state, { prefilter }) {
+function mapStateToProps(state, { match }) {
+  const { prefilter } = match.params;
   return {
     hasGenomes: getTotalGenomes(state) > 0,
     waiting: isWaiting(state),
     isUploading: isUploading(state),
     showErrorSummary: prefilter === 'upload' && getTotalErrors(state) > 0,
+    prefilter,
   };
 }
 
-function mapDispatchToProps(dispatch, { prefilter, location }) {
+function mapDispatchToProps(dispatch, { match, location }) {
+  const query = parse(location.search);
+  const { prefilter } = match.params;
   return {
     toggleAside: isOpen => dispatch(toggleAside(isOpen)),
     addFiles: files => dispatch(addFiles(files)),
     fetch: () =>
-      dispatch(updateFilter({ prefilter, ...location.query }, false)),
+      dispatch(updateFilter({ prefilter, ...query }, false)),
   };
 }
 

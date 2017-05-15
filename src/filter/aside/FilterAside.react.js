@@ -3,7 +3,7 @@ import './styles.css';
 import React from 'react';
 import classnames from 'classnames';
 
-import ProgressBar from '../../progress-bar';
+// import ProgressBar from '../../progress-bar';
 
 export default ({ loading, active, textValue, textOnChange, clear, children }) => (
   <aside className={classnames('wgsa-filter', { 'wgsa-filter--active': active })}>

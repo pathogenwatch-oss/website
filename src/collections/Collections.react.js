@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { parse } from 'query-string';
 
 import Grid from '../grid';
 import Filter from './filter';
@@ -13,7 +14,14 @@ import { updateFilter } from './filter/actions';
 const Collections = React.createClass({
 
   componentDidMount() {
+    document.title = 'WGSA | Collections';
     this.props.filter();
+  },
+
+  componentDidUpdate(previous) {
+    if (previous.match !== this.props.match) {
+      this.props.filter();
+    }
   },
 
   getEmptyMessage() {
@@ -73,10 +81,12 @@ function mapStateToProps(state) {
   };
 }
 
-function mapDispatchToProps(dispatch, { prefilter, location }) {
+function mapDispatchToProps(dispatch, { match, location }) {
+  const { prefilter } = match.params;
+  const query = parse(location.search);
   return {
     filter: () =>
-      dispatch(updateFilter({ prefilter, ...location.query }, false)),
+      dispatch(updateFilter({ prefilter, ...query }, false)),
   };
 }
 

@@ -1,20 +1,25 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
+import classnames from 'classnames';
 
 import { getPrefilter } from '../filter/selectors';
 
-const mapStateToProps = state => ({
-  location: state.location,
-  base: `/genomes/${getPrefilter(state)}`,
-});
+const mapStateToProps = (state, { view }) => {
+  const base = `/genomes/${getPrefilter(state)}`;
+  return {
+    location: state.location,
+    link: view ? `${base}/${view}` : base,
+  };
+};
 
-const ViewSwitcher = ({ title, base, view = '' }) => (
+const ViewSwitcher = ({ location, title, link }) => (
   <Link
-    to={view ? `${base}/${view}` : base}
-    className="wgsa-button-group__item"
-    activeClassName="active"
-    onlyActiveOnIndex
+    to={link}
+    className={classnames(
+      'wgsa-button-group__item',
+      { active: location.pathname === link }
+    )}
   >
     {title}
   </Link>

@@ -1,8 +1,8 @@
 import React from 'react';
-import { Route } from 'react-router';
+import { Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import HeaderContainer from '../header';
+import { Header } from '../header';
 import CollectionRoute from './route';
 import ViewerHeaderContent from './component/Header.react';
 import ProcessingHeaderContent from './progress/Header.react';
@@ -33,19 +33,19 @@ function getHeaderContent(status) {
   }
 }
 
-const Header = connect(mapStateToProps)(
+const ViewerHeader = connect(mapStateToProps)(
   ({ status }) =>
-    <HeaderContainer className={getHeaderClassName(status)}>
+    <Header className={getHeaderClassName(status)}>
       {getHeaderContent(status)}
-    </HeaderContainer>
+    </Header>
+);
+
+const path = '/collection/:slug';
+
+export const HeaderRoute = (
+  <Route path={path} component={ViewerHeader} />
 );
 
 export default (
-  <Route
-    path="collection/:slug"
-    components={{
-      content: CollectionRoute,
-      header: Header,
-    }}
-  />
+  <Route path={path} component={CollectionRoute} />
 );

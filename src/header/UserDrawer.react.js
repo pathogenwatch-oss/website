@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import LoginLink from '../cgps-commons/LoginLink.react';
 import NavLink from '../location';
-import AccountHeader from 'cgps-commons/Avatar/Link.react';
+import AccountHeader from './AccountHeader.react';
 
 import { getSummary } from '../summary/selectors';
 
@@ -12,12 +12,6 @@ import { toggleUserDrawer } from './actions';
 
 import config from '../app/config';
 const { user } = config;
-
-const defaultUser = {
-  photo: '/images/user.svg',
-  name: 'WGSA',
-  email: 'Sign In or Create Account',
-};
 
 const UserDrawer = React.createClass({
 
@@ -51,12 +45,7 @@ const UserDrawer = React.createClass({
       >
         <div className={classnames('mdl-layout__drawer', { 'is-visible': this.props.visible })}>
           <span className="mdl-layout-title">
-            <AccountHeader
-              user={user || defaultUser}
-              linkTo={user ? '/account' : null}
-              image="top"
-              className="wgsa-account-header"
-            />
+            <AccountHeader user={user} />
             <img src="/images/WGSA.Icon.FINAL.svg" />
             { config.version &&
               <small className="wgsa-version">
