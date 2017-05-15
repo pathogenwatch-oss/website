@@ -88,9 +88,8 @@ button.wgsa-download-button:not(.mdl-button--icon) .material-icons {
 }
 
 .wgsa-menu-button {
-  background-color: #673c90;
   color: #fff;
-  padding-right: 12px;
+  padding: 0 12px;
   text-decoration: none;
 }
 
