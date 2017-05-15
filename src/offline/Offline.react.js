@@ -19,11 +19,13 @@ const Supported = () => (
     <p>Offline mode allows you to save specific collections for use even when you lose network connectivity.</p>
     <h2>How to Save Collections</h2>
     <p>
-      When viewing a collection, on the right side of the header bar is a <i className="material-icons">info</i> icon.
-      Clicking this icon will reveal the <strong>Save for Offline</strong> button.
-      Click this button and allow the page to refresh and your collection should be available offline, hurrah!
+      <img src="/images/save-for-offline.png" />
     </p>
-    <p>You haven't saved any collections yet! Saved collections are listed on this page when you need them.</p>
+    <p>
+      When viewing a collection, click on the <i className="material-icons">info</i> icon in header bar, revealing the <strong>Save for Offline Use</strong> button.
+      Click this button, allow the page to refresh and your collection should be available offline, hurrah!
+    </p>
+    <p>Saved collections are listed on this page when you need them.</p>
   </div>
 );
 
@@ -33,7 +35,7 @@ const NotSupported = () => (
     <p>Unfortunately your browser does not support the technology needed for Offline Mode.</p>
     <p>We're super sorry. 😞</p>
   </div>
-)
+);
 
 const Intro = () => (isSupported() ? <Supported /> : <NotSupported />);
 
