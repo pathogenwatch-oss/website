@@ -27,7 +27,13 @@ const Styler = React.createClass({
           fillStyle: subtree ? CGPS.COLOURS.PURPLE_LIGHT : CGPS.COLOURS.GREY,
         },
       });
-      leaf.label = `${genome.name} (${totalCollection}) [${totalPublic}]`;
+
+      if (totalCollection > 0) {
+        leaf.label = `${genome.name} (${totalCollection}) [${totalPublic}]`;
+      } else {
+        leaf.label = genome.name;
+      }
+
       leaf.highlighted = (filter.active &&
         leafIds.some(uuid => filter.ids.has(uuid)));
       leaf.interactive = !!subtree;
