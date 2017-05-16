@@ -40,6 +40,19 @@ function registerServiceWorker() {
   return navigator.serviceWorker.register('/service-worker.js');
 }
 
+function cacheCollectionRequest(cache, uuid) {
+  const collectionUrl = getServerPath(`/api/collection/${uuid}`);
+
+  return (
+    fetch(collectionUrl, { credentials: 'include' })
+      .then(response => (
+        response.ok ?
+          cache.put(collectionUrl, response) :
+          Promise.reject(new Error('Failed to fetch collection data'))
+      ))
+  );
+}
+
 export function saveForOffline() {
   return (dispatch, getState) => {
     const state = getState();
@@ -48,16 +61,16 @@ export function saveForOffline() {
     const subtrees = getSubtreeNames(state);
 
     const cacheKey = `wgsa-collection-${uuid}`;
+
     dispatch(setStatus(statuses.SAVING));
     registerServiceWorker()
       .then(() => caches.open(cacheKey))
-      .then(cache => cache.addAll(
-        subtrees
-          .map(subtree => getServerPath(`/api/collection/${uuid}/subtree/${subtree}`))
-          .concat(
-            fetch(getServerPath(`/api/collection/${uuid}`), { credentials: 'include' })
-          )
-      ))
+      .then(cache => Promise.all([
+        cacheCollectionRequest(cache, uuid),
+        cache.addAll(subtrees.map(subtree =>
+          getServerPath(`/api/collection/${uuid}/subtree/${subtree}`))
+        ),
+      ]))
       .then(() => saveToOfflineList(collection))
       .then(() => window.location.reload())
       .catch(error => {
