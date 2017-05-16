@@ -54,7 +54,9 @@ export function saveForOffline() {
       .then(cache => cache.addAll(
         subtrees
           .map(subtree => getServerPath(`/api/collection/${uuid}/subtree/${subtree}`))
-          .concat(getServerPath(`/api/collection/${uuid}`))
+          .concat(
+            fetch(getServerPath(`/api/collection/${uuid}`), { credentials: 'include' })
+          )
       ))
       .then(() => saveToOfflineList(collection))
       .then(() => window.location.reload())

@@ -43,7 +43,7 @@ self.addEventListener('fetch', event => {
   if (isNavigation(event)) {
     event.respondWith(
       caches.open(assetCache).then(cache =>
-        fetch(event.request, { credentials: 'include' })
+        fetch(event.request)
           .then(response => {
             cache.put('/index.html', response.clone()); // update on every navigation
             return response;
