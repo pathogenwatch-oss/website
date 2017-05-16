@@ -74,10 +74,10 @@ export const downloadColumnProps = {
   cellClasses: 'wgsa-table-cell--skinny',
   fixedWidth: 68,
   flexGrow: 0,
-  getCellContents(_, { __downloads, id, name }) {
+  getCellContents(_, { __downloads, id, _id, name }) {
     return (
       <span className="wgsa-table-downloads" onClick={(e) => e.stopPropagation()}>
-        <GenomeFileLink id={id} name={name} type="collection" />
+        <GenomeFileLink id={id || _id} name={name} type="collection" />
         <DownloadButton
           { ...__downloads.wgsa_gff }
           label=".gff"
