@@ -12,7 +12,9 @@ import { fetchSummary } from '../actions';
 
 function mapStateToProps(state, { organismId }) {
   return {
-    ...(getWgsaOrganisms(state).find(_ => _.organismId === organismId.toString())),
+    ...(
+      getWgsaOrganisms(state).find(_ => _.organismId === organismId.toString())
+    ),
   };
 }
 

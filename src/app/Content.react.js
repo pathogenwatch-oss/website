@@ -12,6 +12,12 @@ import OfflineRoute from '../offline';
 
 import NotFound from '../components/NotFound.react';
 
+const RedirectWithQuery = ({ from, to }) => (
+  <Route exact path={from}
+    render={({ location }) => <Redirect to={`${to}${location.search}`} />}
+  />
+);
+
 export default () => (
   <Switch>
     {HomepageRoute}
@@ -22,10 +28,10 @@ export default () => (
     {AccountRoute}
     {CollectionsRoute}
     <Redirect from="/collections/*" to="/collections/all" />
-    <Redirect exact from="/collections" to="/collections/all" />,
+    <RedirectWithQuery from="/collections" to="/collections/all" />,
     {GenomesRoute}
     <Redirect from="/genomes/*" to="/genomes/all" />
-    <Redirect exact from="/genomes" to="/genomes/all" />
+    <RedirectWithQuery from="/genomes" to="/genomes/all" />
     <Redirect from="/:organism/upload" to="/upload" />
     <Redirect from="/upload" to="/genomes/upload" />
     {CollectionViewerRoute}
