@@ -33,7 +33,7 @@ module.exports = function ({ format, organismId, idList }) {
     .lean()
     .then(results => ({
       format,
-      idList: results.map(({ name, fileId }) => ({ name, checksum: fileId })),
+      idList: results.map(({ name, fileId }) => ({ name, key: fileId })),
       idType: 'assembly',
       speciesId: organismId,
     }))
