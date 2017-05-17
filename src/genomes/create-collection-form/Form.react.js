@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { browserHistory } from 'react-router';
 
 import { CardMetadata } from '../../card';
 
@@ -9,6 +8,7 @@ import * as selectors from './selectors';
 import { createCollection, changeCollectionMetadata } from './actions';
 
 import { taxIdMap } from '../../organisms';
+import { history } from '../../app';
 
 const CreateCollectionForm = React.createClass({
 
@@ -114,7 +114,7 @@ function mapDispatchToProps(dispatch) {
         dispatch(createCollection())
           .then(({ slug }) => {
             if (slug) {
-              browserHistory.push(`/collection/${slug}`);
+              history.push(`/collection/${slug}`);
             } else {
               console.error('Failed to create collection');
             }

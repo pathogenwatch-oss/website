@@ -15,6 +15,7 @@ import { getTotal } from '../summary/selectors';
 import { getStatus } from '../selectors';
 
 import { statuses } from '../constants';
+import { history } from '../../app';
 
 const Component = React.createClass({
 

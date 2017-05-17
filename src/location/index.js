@@ -1,8 +1,9 @@
 import queryString from 'query-string';
-import { browserHistory } from 'react-router';
+
+import { history } from '../app';
 
 function push(nextString = '') {
-  browserHistory.push({
+  history.push({
     pathname: location.pathname,
     search: nextString.length ? `?${nextString.replace(/%20/g, '+')}` : '',
   });
