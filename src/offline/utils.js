@@ -36,3 +36,16 @@ export function isSupported() {
 export function isOffline() {
   return !navigator.onLine;
 }
+
+export function createCacheKey(uuid) {
+  return `wgsa-collection-${uuid}`;
+}
+
+export function removeItem(uuid) {
+  return Promise.all([
+    getOfflineList()
+      .then(collections => collections.filter(_ => _.uuid !== uuid))
+      .then(setOfflineList),
+    caches.delete(createCacheKey(uuid)),
+  ]);
+}

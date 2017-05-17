@@ -1,4 +1,4 @@
-import { OFFLINE_LOAD_COLLECTIONS } from './actions';
+import { OFFLINE_LOAD_COLLECTIONS, OFFLINE_REMOVE_COLLECTION } from './actions';
 
 import { statuses } from './constants';
 
@@ -15,6 +15,7 @@ export default function (state = initialState, { type, payload }) {
         status: statuses.LOADING,
       };
     case OFFLINE_LOAD_COLLECTIONS.SUCCESS:
+    case OFFLINE_REMOVE_COLLECTION.SUCCESS:
       return {
         status: statuses.SUCCESS,
         collections: payload.result.map(collection => ({

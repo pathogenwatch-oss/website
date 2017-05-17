@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import StaticGrid from '../components/static-grid';
 import CollectionCard from '../collections/CollectionCard.react';
 import Spinner from '../components/Spinner.react';
+import RemoveOfflineCollection from './RemoveOfflineCollection.react';
 
 import { getStatus, getCollections } from './selectors';
 
@@ -32,12 +33,18 @@ const Supported = () => (
 const NotSupported = () => (
   <div className="wgsa-page wgsa-compact-page">
     <h1>Oh no!</h1>
-    <p>Unfortunately your browser does not support the technology needed for Offline Mode.</p>
+    <p>Unfortunately your browser does not support Offline Mode.</p>
     <p>We're super sorry. 😞</p>
   </div>
 );
 
 const Intro = () => (isSupported() ? <Supported /> : <NotSupported />);
+
+const template = props => (
+  <CollectionCard {...props}
+    footerLink={<RemoveOfflineCollection uuid={props.item.uuid} />}
+  />
+);
 
 const CollectionList = ({ collections }) => (
   <div className="wgsa-page">
@@ -45,7 +52,7 @@ const CollectionList = ({ collections }) => (
     { isOffline() ? null : <p>These collections will be available when you are offline.</p>}
     <StaticGrid
       items={collections}
-      template={CollectionCard}
+      template={template}
       keyProp="uuid"
     />
   </div>

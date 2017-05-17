@@ -3,6 +3,7 @@
   position: relative;
   height: 100%;
   box-sizing: border-box;
+  overflow-y: hidden;
 }
 
 .wgsa-card--bordered {
@@ -60,7 +61,8 @@
   display: flex;
   flex-direction: row-reverse;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-end;
+  background: #fff;
 }
 
 .wgsa-card-footer--fixed {
@@ -134,4 +136,13 @@
   top: 0;
   bottom: 0;
   z-index: 1;
+}
+
+.wgsa-confirm-action p {
+  margin-top: 8px;
+  margin-bottom: 0;
+}
+
+.wgsa-confirm-action button + button {
+  margin-left: 24px;
 }

@@ -4,7 +4,7 @@ import { getSubtreeNames } from '../tree/selectors';
 import { getServerPath } from '../../utils/Api.js';
 import { statuses } from './constants';
 
-import { saveToOfflineList } from '../../offline/utils';
+import { saveToOfflineList, createCacheKey } from '../../offline/utils';
 
 export const SET_OFFLINE_STATUS = 'SET_OFFLINE_STATUS';
 
@@ -26,7 +26,7 @@ export function checkStatus() {
     return (
       Promise.all([
         navigator.serviceWorker.getRegistrations(),
-        caches.has(`wgsa-collection-${uuid}`),
+        caches.has(createCacheKey(uuid)),
       ])
       .then(([ registrations, hasCache ]) => registrations.length && hasCache)
       .then(isSaved =>
@@ -60,7 +60,7 @@ export function saveForOffline() {
     const { uuid } = collection;
     const subtrees = getSubtreeNames(state);
 
-    const cacheKey = `wgsa-collection-${uuid}`;
+    const cacheKey = createCacheKey(uuid);
 
     dispatch(setStatus(statuses.SAVING));
     registerServiceWorker()

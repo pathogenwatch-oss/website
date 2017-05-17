@@ -55,7 +55,11 @@ export default React.createClass({
       );
     }
 
-    return null;
+    return (
+      <div className="wgsa-save-for-offline">
+        <p>Your browser does not support Offline Mode 😞.</p>
+      </div>
+    );
   },
 
 });

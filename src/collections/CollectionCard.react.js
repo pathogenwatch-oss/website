@@ -23,7 +23,7 @@ const statusText = {
   FAILED: 'Failed',
 };
 
-export default ({ item }) => {
+export default ({ item, footerLink }) => {
   const now = new Date();
   const { createdAt, status, size } = item;
   return (
@@ -59,10 +59,12 @@ export default ({ item }) => {
         >
           View Collection
         </Link>
-        <PubMedLink
-          className="mdl-button wgsa-button--text"
-          pmid={item.pmid}
-        />
+        { footerLink ||
+          <PubMedLink
+            className="mdl-button wgsa-button--text"
+            pmid={item.pmid}
+          />
+        }
       </div>
     </Card>
   );
