@@ -74,7 +74,7 @@ function getCountryCode(latitude, longitude) {
   return null;
 }
 
-schema.statics.updateMetadata = function (_id, _user, metadata) {
+schema.statics.updateMetadata = function (_id, { user, sessionID }, metadata) {
   const {
     name,
     year = null,
@@ -85,7 +85,15 @@ schema.statics.updateMetadata = function (_id, _user, metadata) {
     pmid,
     userDefined } = metadata;
   const country = getCountryCode(latitude, longitude);
-  return this.update({ _id, _user }, {
+
+  const query = { _id };
+  if (user) {
+    query._user = user;
+  } else if (sessionID) {
+    query._session = sessionID;
+  }
+
+  return this.update(query, {
     name,
     year,
     month,
