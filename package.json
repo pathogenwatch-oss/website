@@ -60,7 +60,7 @@
     "metadata": "eval $npm_package_startcmd bin/update-collection-genomes.js",
     "mm": "NODE_PATH=$npm_package_nodepath mm",
     "migrate-collection": "eval $npm_package_startcmd microservices/bootstrap.js migrator",
-    "rerun-collection": "echo $npm_package_startcmd microservices/bootstrap.js rerunner"
+    "rerun-collection": "eval $npm_package_startcmd microservices/bootstrap.js rerunner"
   },
   "repository": {
     "type": "git",
