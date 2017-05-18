@@ -1,4 +1,5 @@
 const { request } = require('services');
+const Genome = require('models/genome');
 
 function createGenome(metadata, getGenomeFile, options) {
   return (
@@ -6,8 +7,8 @@ function createGenome(metadata, getGenomeFile, options) {
       .then(stream =>
         request('genome', 'create', Object.assign({ stream, metadata }, options))
           .then(({ id }) =>
-            request('genome', 'edit', { id, metadata })
-              .then(() => request('genome', 'fetch-one', { id }))
+            request('genome', 'edit', Object.assign({ id, metadata }, options))
+              .then(() => Genome.findById(id).populate('_file'))
           )
       )
   );
