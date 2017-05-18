@@ -10,7 +10,7 @@ const path = '/organisms';
 
 export const OrganismRedirects =
   supportedOrganisms.map(({ nickname }) =>
-    <Redirect key={`${nickname}-redirect`}
+    <Redirect key={`${nickname}-redirect`} exact
       from={`/${nickname}`} to={`${path}/${nickname}`}
     />
   );
