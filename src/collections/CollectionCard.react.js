@@ -49,7 +49,7 @@ export default ({ item, footerLink }) => {
         <FormattedName organismId={item.organismId} fullName />
       </p>
       { item.description ?
-        <Markdown source={item.description} /> :
+        <Markdown className="wgsa-card-description" source={item.description} /> :
         <p>(no description)</p>
       }
       <div className="wgsa-card-footer wgsa-card-footer--fixed">

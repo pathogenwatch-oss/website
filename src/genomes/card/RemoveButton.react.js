@@ -20,7 +20,7 @@ function mapDispatchToProps(dispatch, { genome }) {
 
 export default connect(null, mapDispatchToProps)(
   ({ actions, primary, className, genome = {} }) => {
-    if (genome.owner !== 'me' || !genome.uploaded) return null;
+    if (genome.owner !== 'me') return null;
 
     if (genome.status === statuses.ERROR) {
       return (
