@@ -6,6 +6,7 @@ const request = require('request');
 const jszip = require('jszip');
 
 const services = require('services');
+const Collection = require('models/collection');
 
 const storeGenomes = require('../../utils/store-genomes');
 
@@ -20,6 +21,18 @@ console.log({ organismId, collectionId, apiUrl });
 if (!organismId || !collectionId) {
   LOGGER.error('Missing arguments');
   process.exit(1);
+}
+
+function checkCollection() {
+  return (
+    Collection.findOne({ uuid: collectionId })
+      .then(doc => {
+        if (doc) {
+          console.error('Collection exists in mongo');
+          process.exit(1);
+        }
+      })
+  );
 }
 
 function getCollectionUrl() {
@@ -99,42 +112,23 @@ function getGenomeFile({ uuid, name }) {
   );
 }
 
-function createCollectionListDocument(uuidToGenome) {
-  const couchbase = require('services/storage')('main');
-  const documentKey = `CL_${collectionId}`;
-  return couchbase.store(documentKey, {
-    type: 'CL',
-    documentKey,
-    assemblyIdentifiers:
-      uuidToGenome.map(([ uuid, genome ]) => ({
-        uuid,
-        checksum: genome._file.fileId,
-      })),
-  });
-}
-
-function createCollection(uuidToGenome) {
+function createCollection(genomeIds) {
   return (
-    createCollectionListDocument(uuidToGenome)
-      .then(() =>
-        services.request('collection', 'create', {
-          organismId,
-          genomeIds: uuidToGenome.map(([ , genome ]) => genome.id),
-          ids: {
-            collectionId,
-            uuidToGenome,
-          },
-        })
-      )
+    services.request('collection', 'create', {
+      organismId,
+      genomeIds,
+      collectionId,
+    })
   );
 }
 
 module.exports = function () {
-  return Promise.resolve()
+  return checkCollection()
     .then(getCollectionUrl)
     .then(getCollectionJson)
     .then(parseGenomes)
     .then(genomes => storeGenomes(genomes, getGenomeFile, {}, LOGGER))
+    .then(_ => _.map(([ , genome ]) => genome.id))
     .then(createCollection)
     .then(result => {
       LOGGER.info(result);

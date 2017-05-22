@@ -71,9 +71,28 @@ function retrieveMany(keys, callback) {
     });
 }
 
+function remove(key, callback) {
+  return new Promise((resolve, reject) =>
+    this.connection.remove(key, (error, result) => {
+      if (error) {
+        LOGGER.error(`✗ Failed to remove "${key}": ${error}`);
+        return reject(error);
+      }
+      LOGGER.info(`Successfully removed ${key}`);
+      return resolve(result.cas);
+    })
+  )
+  .then(cas => (callback ? callback(null, cas) : cas))
+  .catch(error => {
+    if (callback) callback(error);
+    throw error;
+  });
+}
+
 Storage.prototype.store = store;
 Storage.prototype.retrieve = retrieve;
 Storage.prototype.retrieveMany = retrieveMany;
+Storage.prototype.remove = remove;
 
 const STORAGE_TYPES = {
   main: new Storage('main'),

@@ -67,13 +67,18 @@ function checkGenomeOrganismIds([ collection, genomes ]) {
   return [ collection, genomes ];
 }
 
-function getCollectionUUID(genomes, { organismId, ids }) {
-  if (ids) {
-    const { collectionId, uuidToGenome } = ids;
-    return Promise.resolve({ collectionId, uuidToGenome });
-  }
-
-  return request('backend', 'new-collection', { genomes, organismId });
+function getCollectionUUID(genomes, { organismId, collectionId }) {
+  return (
+    request('backend', 'new-collection', { genomes, organismId })
+      .then(ids => {
+        if (collectionId) {
+          const message = { oldId: ids.collectionId, newId: collectionId };
+          return request('backend', 'set-collection-id', message)
+            .then(() => ({ collectionId, uuidToGenome: ids.uuidToGenome }));
+        }
+        return ids;
+      })
+  );
 }
 
 function saveCollectionUUID({ collection, ids }) {
