@@ -12,7 +12,7 @@ const icons = {
 const content = {
   genome: ({ count, date }) =>
     <Link to={`/genomes/user?uploadedAt=${date}`}>
-      Uploaded <strong>{count}</strong> genome{count === 1 ? '' : ''}
+      Uploaded <strong>{count}</strong> genome{count === 1 ? '' : 's'}
     </Link>,
   collection: ({ size, organismId, title, slug }) => (
     <Link to={`/collection/${slug}`}>
