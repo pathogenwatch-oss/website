@@ -13,7 +13,7 @@ import { onTableClick, onRowClick } from './thunks';
 
 import { addColumnWidth } from '../table/columnWidth';
 import { addDownloadProps } from '../downloads/utils';
-import { getColumnLabel } from './utils';
+import { getColumnLabel, setFixedGroupMinWidth } from './utils';
 
 const preventDefault = e => e.preventDefault();
 
@@ -37,7 +37,7 @@ const Table = React.createClass({
   },
 
   shouldComponentUpdate(previous) {
-    const { data, columns, filter } = this.props;
+    const { data, columns, filter, width } = this.props;
     return (
       data !== previous.data ||
       columns !== previous.columns ||
@@ -116,10 +116,15 @@ function mapStateToColumn(column, state, dispatch) {
 function mergeProps(state, { dispatch }, props) {
   const { data, columns, activeColumns } = state;
 
+  const mappedColumns =
+    columns.map(column => mapStateToColumn(column, state, dispatch));
+
+  setFixedGroupMinWidth(mappedColumns, props.width);
+
   return {
     ...props,
     activeColumns,
-    columns: columns.map(column => mapStateToColumn(column, state, dispatch)),
+    columns: mappedColumns,
     data: data.map(row => addDownloadProps(row, state, dispatch)),
     onClick: event => {
       if (event.target.classList.contains('fixedDataTableLayout_rowsContainer')) {

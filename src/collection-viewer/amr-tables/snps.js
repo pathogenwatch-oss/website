@@ -20,7 +20,7 @@ export function buildColumns({ snp, antibiotics }, profiles) {
               columns.concat({
                 cellClasses: 'wgsa-table-cell--resistance',
                 columnKey: gene,
-                fixedWidth: measureText(gene, true) + 16,
+                fixedWidth: measureText(gene, true) + 8,
                 flexGrow: 0,
                 getCellContents() {},
                 getLabel: () => `${gene}_`,
@@ -35,7 +35,7 @@ export function buildColumns({ snp, antibiotics }, profiles) {
                     );
                   return this;
                 },
-                headerClasses: 'wgsa-table-header--unstyled',
+                headerClasses: 'wgsa-table-header--unstyled wgsa-table-header--expanded',
               },
               snp[key][gene].
                 map(({ snpName, effect }) => createAdvancedViewColumn(
