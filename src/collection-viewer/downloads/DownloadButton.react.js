@@ -52,7 +52,12 @@ export default React.createClass({
         title={title}
         className={classNames}
       >
-        <DownloadIcon hasLink label={label} color={color} />
+        <DownloadIcon
+          hasLink
+          isArchive={isArchive}
+          label={label}
+          color={color}
+        />
         {!iconOnly && <span>{description}</span>}
       </a>
     ) : (

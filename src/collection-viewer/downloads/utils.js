@@ -79,7 +79,7 @@ export function getArchiveDownloadProps(state, downloads, dispatch) {
     gff: createDownloadProps({
       format,
       download: downloads[format],
-      id: data.map(_ => _.id || _._id),
+      id: data.map(_ => _.uuid),
       getFileName: () => formatCollectionFilename(collection),
     }, dispatch),
     genome: {
