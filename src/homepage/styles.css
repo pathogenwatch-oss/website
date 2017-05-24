@@ -58,7 +58,7 @@
 /* Jumbotron */
 
 .jumbotron {
-  padding: 64px 0 32px;
+  padding: 32px 32px 16px !important;
   max-width: 1280px;
   margin: 0 auto;
 }
@@ -82,9 +82,12 @@
 
 .showcase {
   position: relative;
+  min-height: calc(36.1vw + 1px);
+  display: block;
   @media (max-width: 1200px) {
-    width: 125%;
-    transform: translateX(-10%);
+    width: calc(137.5%);
+    min-height: calc(50.6vw + 1px);
+    transform: translateX(-13.333%);
   }
 }
 
