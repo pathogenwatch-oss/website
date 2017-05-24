@@ -7,7 +7,7 @@ import { systemDataColumns } from '../data-tables/constants';
 
 import { isResistant, hasElement } from '../amr-utils';
 
-const nameColumnData = {
+const nameColumn = {
   columnKey: '__name',
   label: 'NAME',
   valueGetter({ name }) {
@@ -15,8 +15,26 @@ const nameColumnData = {
   },
 };
 
+const latitudeColumn = {
+  columnKey: '__latitude',
+  label: 'LATITUDE',
+  valueGetter({ position }) {
+    return position && position.latitude ? position.latitude : '';
+  },
+};
+
+const longitudeColumn = {
+  columnKey: '__longitude',
+  label: 'LONGITUDE',
+  valueGetter({ position }) {
+    return position && position.longitude ? position.longitude : '';
+  },
+};
+
 const definedColumns = {
-  [nameColumnData.columnKey]: nameColumnData,
+  [nameColumn.columnKey]: nameColumn,
+  [latitudeColumn.columnKey]: latitudeColumn,
+  [longitudeColumn.columnKey]: longitudeColumn,
   ...systemDataColumns,
 };
 

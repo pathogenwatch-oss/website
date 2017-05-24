@@ -10,14 +10,15 @@ function ungroup(column) {
   return column.columns.reduce((columns, c) => columns.concat(ungroup(c)), []);
 }
 
-function convertTableToCSV(table) {
+function convertTableToCSV(table, additionalColumnKeys = []) {
   return function (state) {
     const { genomes, genomeIds, tables } = state;
     const columnKeys =
-      tables[table].columns.
-        reduce((flat, column) => flat.concat(ungroup(column)), []).
-        filter(_ => 'valueGetter' in _).
-        map(_ => _.columnKey);
+      tables[table].columns
+        .reduce((memo, column) => memo.concat(ungroup(column)), [])
+        .filter(_ => 'valueGetter' in _)
+        .map(_ => _.columnKey)
+        .concat(additionalColumnKeys);
 
     const rows = genomeIds.map(id => genomes[id]);
 
@@ -31,7 +32,9 @@ function convertTableToCSV(table) {
   };
 }
 
-export const generateMetadataFile = convertTableToCSV(tableKeys.metadata);
+export const generateMetadataFile = convertTableToCSV(
+  tableKeys.metadata, [ '__latitude', '__longitude' ]
+);
 export const generateTypingFile = convertTableToCSV(tableKeys.typing);
 export const generateStatsFile = convertTableToCSV(tableKeys.stats);
 export const generateAMRProfile = convertTableToCSV(tableKeys.antibiotics);
