@@ -28,13 +28,26 @@ function sendToBackend(request) {
   );
 }
 
-module.exports = function ({ format, organismId, idList }) {
-  return CollectionGenome.find({ uuid: { $in: idList } }, { name: 1, fileId: 1 })
-    .lean()
-    .then(results => ({
+function mapIdList(uuids, idType) {
+  if (idType === 'collection') {
+    return Promise.resolve(uuids.map(uuid => ({ key: uuid })));
+  }
+
+  return (
+    CollectionGenome.find({ uuid: { $in: uuids } }, { name: 1, fileId: 1 })
+      .lean()
+      .then(results =>
+        results.map(({ name, fileId }) => ({ name, key: fileId }))
+      )
+  );
+}
+
+module.exports = function ({ format, organismId, uuids, idType }) {
+  return mapIdList(uuids, idType)
+    .then(idList => ({
       format,
-      idList: results.map(({ name, fileId }) => ({ name, key: fileId })),
-      idType: 'assembly',
+      idList,
+      idType: idType === 'genome' ? 'assembly' : 'collection',
       speciesId: organismId,
     }))
     .then(sendToBackend);
