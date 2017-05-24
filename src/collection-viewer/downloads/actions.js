@@ -17,8 +17,7 @@ export const REQUEST_DOWNLOAD = createAsyncConstants('REQUEST_DOWNLOAD_OLD');
 
 export function requestDownload(args) {
   const {
-    format, id, filename, organismId,
-    getFileContents = makeFileRequest(format, id, organismId),
+    format, id, filename, getFileContents = makeFileRequest(args),
   } = args;
 
   return {

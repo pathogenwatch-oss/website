@@ -73,6 +73,11 @@ export const fileTypes = {
     description: 'Score Matrix',
     filenameSegment: 'score_matrix',
   },
+  variance_summary: {
+    description: 'Variance Summary',
+    filenameSegment: 'variance_summary',
+    idType: 'collection',
+  },
   wgsa_gff: {
     description: 'Annotations',
     filenameSegment: 'annotations',

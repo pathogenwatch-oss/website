@@ -39,6 +39,7 @@ export function createDownloadProps(params, dispatch) {
         format,
         id,
         getFileContents,
+        idType: download.idType,
         organismId: Organisms.id,
         filename: `wgsa_${getFileName()}_${filenameSegment}`,
       })

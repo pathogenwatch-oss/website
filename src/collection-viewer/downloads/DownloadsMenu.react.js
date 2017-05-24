@@ -54,9 +54,12 @@ function mapStateToProps(state) {
   };
 }
 
+const isCollection = collection => collection.idType === 'collection';
+
 function mergeProps(state, { dispatch }) {
   const { genomes, collection, genomeIds, downloads } = state;
   const { menuOpen, files } = downloads;
+
   return {
     menuOpen,
     counts: getCounts(genomes, genomeIds),
@@ -69,9 +72,8 @@ function mergeProps(state, { dispatch }) {
         map(format => {
           const download = files[format];
           return createDownloadProps({
-            format,
-            download,
-            id: genomeIds,
+            format, download,
+            id: isCollection(download) ? collection.uuid : genomeIds,
             getFileName: () => `${formatCollectionFilename(collection)}`,
             getFileContents: download.getFileContents &&
               (() => download.getFileContents(state)),

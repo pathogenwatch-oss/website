@@ -74,9 +74,9 @@ export function requestFile({ organismId, idType = 'genome', format }, requestBo
   );
 }
 
-export function makeFileRequest(format, id, organismId) {
+export function makeFileRequest({ format, id, organismId, idType }) {
   return () => requestFile(
-    { organismId, format },
-    { idList: Array.isArray(id) ? id : [ id ] }
+    { organismId, idType, format },
+    { uuids: Array.isArray(id) ? id : [ id ] }
   );
 }
