@@ -121,7 +121,11 @@ function mergeProps(state, { dispatch }, props) {
     activeColumns,
     columns: columns.map(column => mapStateToColumn(column, state, dispatch)),
     data: data.map(row => addDownloadProps(row, state, dispatch)),
-    onClick: (event) => dispatch(onTableClick(event)),
+    onClick: event => {
+      if (event.target.classList.contains('fixedDataTableLayout_rowsContainer')) {
+        dispatch(onTableClick());
+      }
+    },
     onRowClick: row => dispatch(onRowClick(row)),
     getDefaultHeaderContent: columnProps => (
       <DefaultColumnHeader

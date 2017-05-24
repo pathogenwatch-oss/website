@@ -2,14 +2,8 @@ import { resetFilter, activateFilter } from '../filter/actions';
 
 import { getFilter } from '../selectors';
 
-export function onTableClick({ target }) {
-  return dispatch => {
-    if (target.classList.contains('public_Scrollbar_face') ||
-        target.classList.contains('public_Scrollbar_main')) {
-      return;
-    }
-    dispatch(resetFilter());
-  };
+export function onTableClick() {
+  return resetFilter();
 }
 
 export function onRowClick(genome) {
