@@ -69,6 +69,10 @@ function getSequenceType(alleles, code, speciesId) {
 }
 
 function addSTSuffix(uuid, st) {
+  if (st === UNKNOWN_ST_DISPLAY) {
+    return Promise.resolve();
+  }
+
   return (
     CollectionGenome.findByUuid(uuid, { name: 1 }).
       then(({ name }) =>
