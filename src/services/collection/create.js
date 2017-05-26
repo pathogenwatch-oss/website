@@ -67,17 +67,9 @@ function checkGenomeOrganismIds([ collection, genomes ]) {
   return [ collection, genomes ];
 }
 
-function getCollectionUUID(genomes, { organismId, collectionId }) {
+function getCollectionUUID(genomes, organismId) {
   return (
     request('backend', 'new-collection', { genomes, organismId })
-      .then(ids => {
-        if (collectionId) {
-          const message = { oldId: ids.collectionId, newId: collectionId };
-          return request('backend', 'set-collection-id', message)
-            .then(() => ({ collectionId, uuidToGenome: ids.uuidToGenome }));
-        }
-        return ids;
-      })
   );
 }
 
@@ -102,11 +94,11 @@ module.exports = function (message) {
     .then(getCollectionAndGenomes)
     .then(checkGenomeOrganismIds)
     .then(([ collection, genomes ]) =>
-      getCollectionUUID(genomes, message)
+      getCollectionUUID(genomes, message.organismId)
         .then(ids => ({ collection, ids }))
         .then(saveCollectionUUID)
         .then(submitCollection)
-        .then(() => ({ slug: collection.slug }))
+        .then(() => ({ slug: collection.slug, uuid: collection.uuid }))
         .catch(error => {
           collection.failed(error);
           throw error;

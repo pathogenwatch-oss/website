@@ -25,10 +25,10 @@ if (!organismId || !collectionId) {
 
 function checkCollection() {
   return (
-    Collection.findOne({ uuid: collectionId })
+    Collection.findOne({ $or: [ { uuid: collectionId }, { alias: collectionId } ] })
       .then(doc => {
         if (doc) {
-          console.error('Collection exists in mongo');
+          console.error('Collection exists in mongo:', doc.uuid);
           process.exit(1);
         }
       })
@@ -113,13 +113,7 @@ function getGenomeFile({ uuid, name }) {
 }
 
 function createCollection(genomeIds) {
-  return (
-    services.request('collection', 'create', {
-      organismId,
-      genomeIds,
-      collectionId,
-    })
-  );
+  return services.request('collection', 'create', { organismId, genomeIds });
 }
 
 module.exports = function () {
@@ -132,7 +126,8 @@ module.exports = function () {
     .then(createCollection)
     .then(result => {
       LOGGER.info(result);
-      setTimeout(() => process.exit(0), 1000 * 5);
+      Collection.alias(result.uuid, collectionId)
+        .then(() => setTimeout(() => process.exit(0), 1000 * 5));
     })
     .catch(error => {
       LOGGER.error(error);

@@ -177,4 +177,8 @@ schema.statics.getSummary = function (fields, props) {
   return getSummary(this, fields, props);
 };
 
+schema.statics.alias = function (uuid, alias) {
+  return this.update({ uuid }, { $set: { alias } });
+};
+
 module.exports = mongoose.model('Collection', schema);
