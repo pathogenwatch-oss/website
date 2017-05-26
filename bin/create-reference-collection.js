@@ -29,6 +29,11 @@ function addDummyOrganismRecord() {
   return Organism.create({
     taxId: organismId,
     deployed: new Date(),
+    resistance: {
+      antibiotics: [],
+      paar: {},
+      snp: {},
+    },
   });
 }
 

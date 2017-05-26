@@ -24,7 +24,7 @@ function getAlleleKeys(alleles) {
 function getMLSTAlleleDetails(alleles) {
   const queryKeys = getAlleleKeys(alleles);
   if (!queryKeys || !queryKeys.length) {
-    return {};
+    return Promise.resolve({});
   }
   return sequencesStorage.retrieveMany(queryKeys).
     then(({ results }) => results);
@@ -80,20 +80,20 @@ function addSTSuffix(uuid, st) {
 module.exports = (name, { assemblyId, speciesId, documentKeys }) => {
   const { uuid } = assemblyId;
   const resultDocKey = documentKeys.find(_ => _.indexOf(`${MLST_RESULT}_`) === 0);
-  return mainStorage.retrieve(resultDocKey).
-    then(({ alleles }) =>
-      getMLSTAlleleDetails(alleles).
-      then(results => createMLSTCode(alleles, results)).
-      then(code => getSequenceType(alleles, code, speciesId)).
-      then(result => ({
-        st: result.sequenceType,
-        code: result.code,
-      })).
-      then(result => Promise.all([
-        CollectionGenome.addAnalysisResult(uuid, name, result),
-        uuid.indexOf(`${speciesId}_`) === 0 ?
-          addSTSuffix(uuid, result.st) :
-          Promise.resolve(),
-      ]))
+  return mainStorage.retrieve(resultDocKey)
+    .then(({ alleles }) =>
+      getMLSTAlleleDetails(alleles)
+        .then(results => createMLSTCode(alleles, results))
+        .then(code => getSequenceType(alleles, code, speciesId))
+        .then(result => ({
+          st: result.sequenceType,
+          code: result.code,
+        }))
+        .then(result => Promise.all([
+          CollectionGenome.addAnalysisResult(uuid, name, result),
+          uuid.indexOf(`${speciesId}_`) === 0 ?
+            addSTSuffix(uuid, result.st) :
+            Promise.resolve(),
+        ]))
     );
 };
