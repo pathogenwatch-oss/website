@@ -29,11 +29,5 @@ module.exports = function (app) {
     require('routes/organism-download'),
   ]);
 
-  app.use('/zika', (req, res) =>
-    res.redirect('http://demo.wgsa.net/zikv/collection/vwcofr0w6v07')
-  );
-
-  app.use('/rensm/brynildsrud', (req, res) =>
-    res.redirect('https://demo.wgsa.net/rensm/collection/ybdr2i0l6hmv')
-  );
+  app.use(require('routes/redirects'));
 };

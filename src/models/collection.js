@@ -13,6 +13,7 @@ const schema = new Schema({
       return !this.reference;
     },
   },
+  alias: { type: String, index: true },
   createdAt: Date,
   binned: { type: Boolean, default: false },
   description: String,
