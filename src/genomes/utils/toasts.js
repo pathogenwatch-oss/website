@@ -1,15 +1,16 @@
 import React from 'react';
 
-import * as actions from '../actions';
-
-export function undoMoveToBin(genome, dispatch) {
+export function undoMoveToBin(genome, onClick) {
   return {
     action: {
       label: 'Undo',
-      onClick: () => dispatch(actions.undoMoveToBin(genome.id)),
+      onClick,
     },
     message: (
-      <span><strong>{genome.name}</strong> removed.</span>
+      <span>
+        <strong>{genome.name}</strong>&nbsp;
+        {genome.binned ? 'restored' : 'moved to bin'}.
+      </span>
     ),
   };
 }

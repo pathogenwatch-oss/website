@@ -24,21 +24,3 @@ export function fetchGenomes(filter) {
     },
   };
 }
-
-export const MOVE_TO_BIN = 'MOVE_TO_BIN';
-
-export function moveToBin(id) {
-  return {
-    type: MOVE_TO_BIN,
-    payload: { id },
-  };
-}
-
-export const UNDO_MOVE_TO_BIN = 'UNDO_MOVE_TO_BIN';
-
-export function undoMoveToBin(id) {
-  return {
-    type: UNDO_MOVE_TO_BIN,
-    payload: { id },
-  };
-}
