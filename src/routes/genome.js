@@ -67,6 +67,18 @@ router.put('/genome', (req, res, next) => {
   .catch(next);
 });
 
+router.post('/genome/:id/binned', (req, res, next) => {
+  const { id } = req.params;
+  const { user, body } = req;
+  const { status } = body;
+
+  LOGGER.info('Received request to bin genome:', status);
+
+  services.request('genome', 'bin', { id, user, status })
+    .then(response => res.json(response))
+    .catch(next);
+});
+
 router.post('/genome/:id', (req, res, next) => {
   LOGGER.info('Received request to edit genome');
 
