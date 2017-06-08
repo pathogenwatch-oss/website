@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
 
-import { moveToBin } from '../thunks';
+import { moveToBin } from './actions';
 import { removeGenomes } from '../uploads/actions';
 
 import { statuses } from '../uploads/constants';
