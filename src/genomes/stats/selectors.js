@@ -1,11 +1,12 @@
 import { createSelector } from 'reselect';
 
-import { getSelectedGenomeList } from '../selection/selectors';
+import { getGenomeList } from '../selectors';
+import { getSelectedGenomeIds } from '../selection/selectors';
 
 export const getSelectedMetric = ({ genomes }) => genomes.selectedMetric;
 
 export const getGenomeMetrics = createSelector(
-  getSelectedGenomeList,
+  getGenomeList,
   genomes => genomes.reduce((memo, genome) => {
     const { id, name, metrics } = genome;
     if (!metrics) {
@@ -52,17 +53,42 @@ export const getMetricRange = createSelector(
   }), { min: 0, max: 0 })
 );
 
-export const getChartData = createSelector(
+export const getMetricsBySelection = createSelector(
   getGenomeMetrics,
+  getSelectedGenomeIds,
+  (metrics, selectedIds) => metrics.reduce((memo, metric, i) => {
+    metric.index = i;
+    if (selectedIds.indexOf(metric.id) === -1) {
+      memo.unselected.push(metric);
+    } else {
+      memo.selected.push(metric);
+    }
+    return memo;
+  }, { selected: [], unselected: [] })
+);
+
+function formatMetrics(metrics, selectedMetric) {
+  return metrics.map((value) => ({
+    x: value.index,
+    y: Number(value[selectedMetric]),
+    label: value.name,
+    id: value.id,
+  }));
+}
+
+export const getChartData = createSelector(
+  getMetricsBySelection,
   getSelectedMetric,
-  (metrics, selectedMetric) => ({
-    label: selectedMetric,
-    data: metrics.map((value, x) => ({
-      x,
-      y: Number(value[selectedMetric]),
-      label: value.name,
-    })),
-    backgroundColor: '#a386bd',
-    borderColor: '#a386bd',
-  })
+  (metrics, selectedMetric) => [
+    { label: `${selectedMetric} (selected)`,
+      data: formatMetrics(metrics.selected, selectedMetric),
+      backgroundColor: '#673c90',
+      borderColor: '#673c90',
+    },
+    { label: `${selectedMetric} (unselected)`,
+      data: formatMetrics(metrics.unselected, selectedMetric),
+      backgroundColor: metrics.selected.length ? '#ddd' : '#a386bd',
+      borderColor: metrics.selected.length ? '#ddd' : '#a386bd',
+    },
+  ]
 );

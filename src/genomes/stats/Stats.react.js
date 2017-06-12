@@ -38,30 +38,40 @@ const ChartButton = connect(mapStateToButton, mapDispatchToButton)(
   )
 );
 
+function getClickHandler(chartData, onPointClick) {
+  return (event, [ item ]) => {
+    if (item) {
+      const original = chartData[item._datasetIndex].data[item._index];
+      onPointClick(original.id);
+    }
+  };
+}
+
 export const StatsView = React.createClass({
 
   componentDidMount() {
     const { chartData = [] } = this.props;
     this.chart = new Chart(this.canvas, {
       type: 'line',
-      data: { datasets: [ chartData ] },
+      data: { datasets: chartData },
       options: {
         animation: false,
-        showLines: false,
+        elements: {
+          points: {
+            borderWidth: 1,
+            backgroundColor: '#a386bd',
+            borderColor: '#a386bd',
+          },
+        },
+        hover: {
+          mode: 'point',
+          intersect: true,
+        },
         legend: {
           display: false,
         },
-        tooltips: {
-          displayColors: false,
-          callbacks: {
-            title: (points, { datasets }) =>
-              points.map(({ index, datasetIndex }) =>
-                datasets[datasetIndex].data[index].label
-              ).join(', '),
-            label: ({ index, datasetIndex }, { datasets }) =>
-              datasets[datasetIndex].data[index].y,
-          },
-        },
+        onClick: getClickHandler(chartData, this.props.onPointClick),
+        showLines: false,
         scales: {
           xAxes: [
             {
@@ -73,11 +83,15 @@ export const StatsView = React.createClass({
             },
           ],
         },
-        elements: {
-          points: {
-            borderWidth: 1,
-            backgroundColor: '#a386bd',
-            borderColor: '#a386bd',
+        tooltips: {
+          displayColors: false,
+          callbacks: {
+            title: (points, { datasets }) =>
+              points.map(({ index, datasetIndex }) =>
+              datasets[datasetIndex].data[index].label
+            ).join(', '),
+            label: ({ index, datasetIndex }, { datasets }) =>
+            datasets[datasetIndex].data[index].y,
           },
         },
       },
@@ -85,9 +99,10 @@ export const StatsView = React.createClass({
   },
 
   componentDidUpdate(previous) {
-    const { chartData } = this.props;
+    const { chartData, onPointClick } = this.props;
     if (chartData !== previous.chartData) {
-      this.chart.data.datasets = [ chartData ];
+      this.chart.data.datasets = chartData;
+      this.chart.options.onClick = getClickHandler(chartData, onPointClick);
       this.chart.update();
     }
   },
@@ -95,7 +110,7 @@ export const StatsView = React.createClass({
   render() {
     const { average, stDev, range = {} } = this.props;
     return (
-      <div className="wgsa-hub-stats-view">
+      <div className="wgsa-hub-stats-view wgsa-content-margin">
         <div className="wgsa-hub-stats-section">
           <nav className="wgsa-button-group">
             <i title="Metric" className="material-icons">timeline</i>
@@ -138,7 +153,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    onPointClick: ({ id }) => dispatch(showGenomeDrawer(id)),
+    onPointClick: id => dispatch(showGenomeDrawer(id)),
   };
 }
 
