@@ -9,10 +9,6 @@
   margin: 0 0 16px;
 }
 
-.wgsa-hub-stats-view canvas {
-  margin-bottom: 16px;
-}
-
 .wgsa-hub-stats-group {
   display: flex;
   max-width: 1024px;
@@ -83,6 +79,6 @@
   text-decoration: none;
 }
 
-.wgsa-clickable-point {
-  cursor: pointer;
+.wgsa-stats-chart {
+  margin-bottom: 16px;
 }

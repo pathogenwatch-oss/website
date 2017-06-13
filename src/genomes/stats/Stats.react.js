@@ -3,6 +3,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
+import { AutoSizer } from 'react-virtualized';
 
 import * as selectors from './selectors';
 
@@ -47,6 +48,29 @@ function getClickHandler(chartData, onPointClick) {
   };
 }
 
+const ChartResizer = React.createClass({
+
+  componentDidUpdate(previous) {
+    const { width, height, chart } = this.props;
+
+    if (!chart) return;
+
+    if (width !== previous.width || height !== previous.height) {
+      chart.resize();
+    }
+  },
+
+  render() {
+    const { width, height } = this.props;
+    return (
+      <div className="wgsa-stats-chart" style={{ width, height }}>
+        {this.props.children}
+      </div>
+    );
+  },
+
+});
+
 export const StatsView = React.createClass({
 
   componentDidMount() {
@@ -70,6 +94,7 @@ export const StatsView = React.createClass({
         legend: {
           display: false,
         },
+        maintainAspectRatio: false,
         onClick: getClickHandler(chartData, this.props.onPointClick),
         showLines: false,
         scales: {
@@ -109,33 +134,42 @@ export const StatsView = React.createClass({
 
   render() {
     const { average, stDev, range = {} } = this.props;
+
     return (
       <div className="wgsa-hub-stats-view wgsa-content-margin">
-        <div className="wgsa-hub-stats-section">
-          <nav className="wgsa-button-group">
-            <i title="Metric" className="material-icons">timeline</i>
-            {charts.map(props =>
-              <ChartButton key={props.metric} {...props} />
-            )}
-          </nav>
-          <canvas ref={el => { this.canvas = el; }} width="400" height="160" />
-        </div>
-        <div className="wgsa-hub-stats-group">
-          <dl className="wgsa-hub-stats-section">
-            <dt className="wgsa-hub-stats-heading">Average</dt>
-            <dd className="wgsa-hub-stats-value">{average}</dd>
-          </dl>
-          <dl className="wgsa-hub-stats-section">
-            <dt className="wgsa-hub-stats-heading">Standard Deviation</dt>
-            <dd className="wgsa-hub-stats-value">{stDev}</dd>
-          </dl>
-          <dl className="wgsa-hub-stats-section">
-            <dt className="wgsa-hub-stats-heading">Range</dt>
-            <dd className="wgsa-hub-stats-value">
-              {`${range.min} - ${range.max}`}
-            </dd>
-          </dl>
-        </div>
+        <AutoSizer>
+          {({ height, width }) =>
+            <div style={{ height, width, position: 'relative' }}>
+              <div className="wgsa-hub-stats-section">
+                <nav className="wgsa-button-group">
+                  <i title="Metric" className="material-icons">timeline</i>
+                  {charts.map(props =>
+                    <ChartButton key={props.metric} {...props} />
+                  )}
+                </nav>
+                <ChartResizer height={height - 184} width={width} chart={this.chart}>
+                  <canvas ref={el => { this.canvas = el; }} />
+                </ChartResizer>
+              </div>
+              <div className="wgsa-hub-stats-group">
+                <dl className="wgsa-hub-stats-section">
+                  <dt className="wgsa-hub-stats-heading">Average</dt>
+                  <dd className="wgsa-hub-stats-value">{average}</dd>
+                </dl>
+                <dl className="wgsa-hub-stats-section">
+                  <dt className="wgsa-hub-stats-heading">Standard Deviation</dt>
+                  <dd className="wgsa-hub-stats-value">{stDev}</dd>
+                </dl>
+                <dl className="wgsa-hub-stats-section">
+                  <dt className="wgsa-hub-stats-heading">Range</dt>
+                  <dd className="wgsa-hub-stats-value">
+                    {`${range.min} - ${range.max}`}
+                  </dd>
+                </dl>
+              </div>
+            </div>
+          }
+        </AutoSizer>
       </div>
     );
   },
