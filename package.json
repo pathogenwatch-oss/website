@@ -65,13 +65,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/ImperialCollegeLondon/wgst-front.git"
+    "url": "https://gitlab.com/cgps/wgsa-middle-end.git"
   },
-  "author": "Imperial College London",
+  "author": "The Centre for Genomic Pathogen Surveillance",
   "bugs": {
-    "url": "https://github.com/ImperialCollegeLondon/wgst-front/issues"
+    "url": "https://gitlab.com/cgps/wgsa-central/issues"
   },
-  "homepage": "https://github.com/ImperialCollegeLondon/wgst-front",
+  "homepage": "https://www.wgsa.net",
   "moduleRoots": [
     "src"
   ]
