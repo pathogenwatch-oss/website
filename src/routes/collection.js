@@ -41,6 +41,19 @@ router.get('/collection/summary', (req, res, next) => {
     .catch(next);
 });
 
+router.post('/collection/:id/binned', (req, res, next) => {
+  const { id } = req.params;
+  const { user, body } = req;
+  const { status } = body;
+
+  LOGGER.info('Received request to bin collection:', status);
+
+  services.request('collection', 'bin', { id, user, status })
+    .then(response => res.json(response))
+    .catch(next);
+});
+
+
 router.get('/collection/:uuid', (req, res, next) => {
   LOGGER.info(`Getting collection: ${req.params.uuid}`);
   const { user, params } = req;

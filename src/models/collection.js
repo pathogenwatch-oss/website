@@ -16,6 +16,7 @@ const schema = new Schema({
   alias: { type: String, index: true },
   createdAt: Date,
   binned: { type: Boolean, default: false },
+  binnedDate: Date,
   description: String,
   error: String,
   lastAccessedAt: Date,
