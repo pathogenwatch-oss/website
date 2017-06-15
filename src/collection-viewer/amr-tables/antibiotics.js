@@ -11,7 +11,7 @@ const isMac =
     navigator.platform.toUpperCase().indexOf('MAC') >= 0);
 const modifierKey = isMac ? 'Cmd' : 'Ctrl';
 
-function createColumn({ key, fullName }) {
+function createColumn({ key, displayName = key, fullName }) {
   const columnKey = key;
   const hoverName = fullName || key;
 
@@ -20,11 +20,14 @@ function createColumn({ key, fullName }) {
     headerClasses: 'wgsa-table-header--expanded',
     headerTitle: `${hoverName ? `${hoverName} - ` : ''}${modifierKey} + click to select multiple`,
     cellClasses: 'wgsa-table-cell--resistance',
+    cellPadding: 16,
     flexGrow: 0,
+    getLabel() {
+      return displayName;
+    },
     getWidth() {
       return 32;
     },
-    cellPadding: 16,
     getCellContents(props, { analysis }) {
       if (!analysis.paarsnp) return null;
 

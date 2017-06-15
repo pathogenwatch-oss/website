@@ -1,7 +1,7 @@
 const { onHeaderClick } = require('./thunks');
 
 import { tableKeys } from '../constants';
-import { createAdvancedViewColumn, getLabel } from './utils';
+import { createAdvancedViewColumn } from './utils';
 import Organisms from '../../organisms';
 
 function applyPaarOverrides(paar) {
@@ -25,7 +25,7 @@ export const name = tableKeys.genes;
 export function buildColumns({ paar, antibiotics }, profiles) {
   applyPaarOverrides(paar);
 
-  return antibiotics.reduce((groups, { key, fullName }) => {
+  return antibiotics.reduce((groups, { key, displayName = key, fullName }) => {
     if (key in paar) {
       groups.push({
         group: true,
@@ -34,7 +34,7 @@ export function buildColumns({ paar, antibiotics }, profiles) {
           .map(({ element, effect }) => createAdvancedViewColumn(
             { key: element, label: element, effect }, 'paar', profiles
           )),
-        getLabel: () => getLabel(key),
+        getLabel: () => displayName,
         headerClasses: 'wgsa-table-header--expanded',
         headerTitle: fullName,
         onHeaderClick,

@@ -37,7 +37,7 @@ const Table = React.createClass({
   },
 
   shouldComponentUpdate(previous) {
-    const { data, columns, filter, width } = this.props;
+    const { data, columns, filter } = this.props;
     return (
       data !== previous.data ||
       columns !== previous.columns ||

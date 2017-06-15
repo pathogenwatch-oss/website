@@ -1,14 +1,14 @@
 const { onHeaderClick } = require('./thunks');
 
 import { measureText } from '../table/columnWidth';
-import { createAdvancedViewColumn, getLabel } from './utils';
+import { createAdvancedViewColumn } from './utils';
 
 import { tableKeys } from '../constants';
 
 export const name = tableKeys.snps;
 
 export function buildColumns({ snp, antibiotics }, profiles) {
-  return antibiotics.reduce((groups, { key, fullName }) => {
+  return antibiotics.reduce((groups, { key, displayName = key, fullName }) => {
     if (key in snp) {
       groups.push({
         group: true,
@@ -44,7 +44,7 @@ export function buildColumns({ snp, antibiotics }, profiles) {
                   profiles,
                 ))
               ), []),
-        getLabel: () => getLabel(key),
+        getLabel: () => displayName,
         headerClasses: 'wgsa-table-header--expanded',
         headerTitle: fullName,
         onHeaderClick,
