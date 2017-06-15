@@ -9,6 +9,8 @@ import { measureText } from '../table/columnWidth';
 import * as constants from '../table/constants';
 import { statuses } from '../../collection-viewer/constants';
 
+import Organisms from '../../organisms';
+
 const systemGroup = {
   group: true,
   system: true,
@@ -129,4 +131,11 @@ export function createReducer({ name, buildColumns }) {
         return state;
     }
   };
+}
+
+export function getAntibioticLabel({ key, displayName }) {
+  if (displayName) return displayName;
+  // provide backwards compatibility
+  const { customLabels = {} } = Organisms.current.amrOptions || {};
+  return customLabels[key] || key;
 }

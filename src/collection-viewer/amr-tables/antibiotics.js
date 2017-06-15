@@ -5,15 +5,16 @@ const { onHeaderClick } = require('./thunks');
 import * as amr from '../amr-utils';
 import { tableKeys } from '../constants';
 import Organisms from '../../organisms';
+import { getAntibioticLabel } from './utils';
 
 const isMac =
   (navigator && navigator.platform &&
     navigator.platform.toUpperCase().indexOf('MAC') >= 0);
 const modifierKey = isMac ? 'Cmd' : 'Ctrl';
 
-function createColumn({ key, displayName = key, fullName }) {
-  const columnKey = key;
-  const hoverName = fullName || key;
+function createColumn(antibiotic) {
+  const columnKey = antibiotic.key;
+  const hoverName = antibiotic.fullName || columnKey;
 
   return {
     columnKey,
@@ -22,9 +23,7 @@ function createColumn({ key, displayName = key, fullName }) {
     cellClasses: 'wgsa-table-cell--resistance',
     cellPadding: 16,
     flexGrow: 0,
-    getLabel() {
-      return displayName;
-    },
+    label: getAntibioticLabel(antibiotic),
     getWidth() {
       return 32;
     },
@@ -46,7 +45,7 @@ function createColumn({ key, displayName = key, fullName }) {
       }
       return null;
     },
-    valueGetter: genome => amr.getColour(key, genome),
+    valueGetter: genome => amr.getColour(columnKey, genome),
     onHeaderClick,
   };
 }
@@ -56,8 +55,8 @@ export const name = tableKeys.antibiotics;
 export function buildColumns({ antibiotics }) {
   const { hiddenColumns = new Set() } = Organisms.current.amrOptions || {};
   return (
-    antibiotics.
-      filter(({ key }) => !hiddenColumns.has(key)).
-      map(createColumn)
+    antibiotics
+      .filter(({ key }) => !hiddenColumns.has(key))
+      .map(createColumn)
   );
 }

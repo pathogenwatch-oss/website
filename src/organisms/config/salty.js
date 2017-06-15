@@ -53,6 +53,9 @@ export default {
   publicMetadataColumnNames: [],
   collections: [],
   amrOptions: {
+    customLabels: {
+      SIL: 'OTHER',
+    },
     hiddenColumns: new Set([ 'SIL' ]),
     paarOverrides: [
       { gene: 'tetR(A)', from: 'SIL', to: 'TCY' },

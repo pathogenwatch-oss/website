@@ -1,22 +1,27 @@
 const { onHeaderClick } = require('./thunks');
 
 import { measureText } from '../table/columnWidth';
-import { createAdvancedViewColumn } from './utils';
+import { createAdvancedViewColumn, getAntibioticLabel } from './utils';
 
 import { tableKeys } from '../constants';
 
 export const name = tableKeys.snps;
 
 export function buildColumns({ snp, antibiotics }, profiles) {
-  return antibiotics.reduce((groups, { key, displayName = key, fullName }) => {
+  return antibiotics.reduce((groups, antibiotic) => {
+    const { key, fullName } = antibiotic;
     if (key in snp) {
       groups.push({
         group: true,
         columnKey: `snp_${key}`,
+        label: getAntibioticLabel(antibiotic),
+        onHeaderClick,
+        headerClasses: 'wgsa-table-header--expanded',
+        headerTitle: fullName,
         columns:
-          Object.keys(snp[key]).
-            sort().
-            reduce((columns, gene) =>
+          Object.keys(snp[key])
+            .sort()
+            .reduce((columns, gene) =>
               columns.concat({
                 cellClasses: 'wgsa-table-cell--resistance',
                 columnKey: gene,
@@ -37,17 +42,13 @@ export function buildColumns({ snp, antibiotics }, profiles) {
                 },
                 headerClasses: 'wgsa-table-header--unstyled wgsa-table-header--expanded',
               },
-              snp[key][gene].
-                map(({ snpName, effect }) => createAdvancedViewColumn(
+              snp[key][gene]
+                .map(({ snpName, effect }) => createAdvancedViewColumn(
                   { key: `${gene}_${snpName}`, label: snpName, effect },
                   'snp',
                   profiles,
                 ))
               ), []),
-        getLabel: () => displayName,
-        headerClasses: 'wgsa-table-header--expanded',
-        headerTitle: fullName,
-        onHeaderClick,
       });
     }
     return groups;
