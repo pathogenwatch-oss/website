@@ -35,7 +35,9 @@ const UserDrawer = React.createClass({
   },
 
   render() {
-    const { allCollections, allGenomes, userCollections, userGenomes, offlineCollections = 0 } = this.props;
+    const { allCollections, allGenomes, binnedGenomes } = this.props;
+    const { userCollections, userGenomes, offlineCollections = 0, binnedCollections } = this.props;
+    const { numOrganisms } = this.props;
     const { strategies = [] } = config;
     return (
       <div
@@ -66,7 +68,7 @@ const UserDrawer = React.createClass({
             </NavLink>
             { user && <NavLink to="/collections/user" badge={userCollections} icon="person">My Collections</NavLink> }
             <NavLink to="/offline" badge={offlineCollections} icon="signal_wifi_off">Offline Collections</NavLink>
-            { user && <NavLink to="/collections/bin" icon="delete">Bin</NavLink> }
+            { user && <NavLink to="/collections/bin" badge={binnedCollections} icon="delete">Bin</NavLink> }
           </nav>
           <hr />
           <nav className="mdl-navigation">
@@ -75,12 +77,12 @@ const UserDrawer = React.createClass({
               { user ? 'All' : 'Public' } Genomes
             </NavLink>
             { user && <NavLink to="/genomes/user" badge={userGenomes} icon="person">My Genomes</NavLink> }
-            { user && <NavLink to="/genomes/bin" icon="delete">Bin</NavLink> }
+            { user && <NavLink to="/genomes/bin" badge={binnedGenomes} icon="delete">Bin</NavLink> }
             <NavLink to="/genomes/upload" icon="cloud_upload">Upload</NavLink>
           </nav>
           <hr />
           <nav className="mdl-navigation">
-            <NavLink to="/organisms" icon="bug_report" activeOnIndexOnly>All Organisms</NavLink>
+            <NavLink to="/organisms" icon="bug_report" badge={numOrganisms} activeOnIndexOnly>All Organisms</NavLink>
             <NavLink to="/documentation" icon="help">Documentation</NavLink>
             <NavLink to="https://gitlab.com/cgps/wgsa.net/issues" external icon="feedback">Feedback</NavLink>
           </nav>

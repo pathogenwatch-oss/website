@@ -17,3 +17,7 @@ export function fetchSummary(filter) {
   return skipFetch(filter, {}) ||
     fetchJson('GET', '/api/genome/summary', { prefilter, uploadedAt });
 }
+
+export function binGenome(id, status) {
+  return fetchJson('POST', `/api/genome/${id}/binned`, { status });
+}

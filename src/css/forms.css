@@ -40,7 +40,7 @@ fieldset > legend {
   width: 28px;
   min-width: 28px;
   margin-left: -6px;
-  margin-bottom: 2px;
+  align-self: baseline;
 }
 
 .wgsa-icon-button--small > i {

@@ -2,8 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
 
-import { moveToBin } from '../thunks';
-import { undoMoveToBin } from '../actions';
+import { moveToBin } from './actions';
 import { removeGenomes } from '../uploads/actions';
 
 import { statuses } from '../uploads/constants';
@@ -12,8 +11,8 @@ function mapDispatchToProps(dispatch, { genome }) {
   return {
     actions: {
       removeGenome: () => dispatch(removeGenomes([ genome.id ])),
-      moveToBin: () => dispatch(moveToBin(genome)),
-      undoMoveToBIn: () => dispatch(undoMoveToBin(genome.id)),
+      moveToBin: () => dispatch(moveToBin(genome, true)),
+      undoMoveToBin: () => dispatch(moveToBin(genome, false)),
     },
   };
 }
