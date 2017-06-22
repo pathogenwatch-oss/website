@@ -30,6 +30,7 @@ const schema = new Schema({
   public: { type: Boolean, default: false },
   reference: { type: Boolean, default: false },
   binned: { type: Boolean, default: false },
+  binnedDate: Date,
   uploadedAt: Date,
   createdAt: Date,
   lastAccessedAt: Date,
