@@ -2,6 +2,8 @@ import { createSelector } from 'reselect';
 
 export const getCollections = ({ collections }) => collections.entities;
 
+export const getStatus = ({ collections }) => collections.status;
+
 export const getCollectionList = createSelector(
   getCollections,
   (collections) => Object.keys(collections).map(key => collections[key])

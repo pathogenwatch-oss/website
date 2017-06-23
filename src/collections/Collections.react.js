@@ -6,10 +6,13 @@ import Grid from '../grid';
 import Filter from './filter';
 import { Summary, Totals } from '../filter/summary';
 import CollectionCard from './CollectionCard.react';
+import Overlay from '../overlay';
 
-import { getCollectionList, getTotal } from './selectors';
+import { getCollectionList, getTotal, getStatus } from './selectors';
 
 import { updateFilter } from './filter/actions';
+
+import { statuses } from './constants';
 
 const Collections = React.createClass({
 
@@ -43,8 +46,41 @@ const Collections = React.createClass({
     );
   },
 
+  getContent() {
+    const { status, collections } = this.props;
+
+    if (status === statuses.ERROR) {
+      return (
+        <p className="wgsa-hub-big-message">
+          Something went wrong. 😞
+        </p>
+      );
+    }
+
+    if (collections.length === 0 && status === statuses.LOADING) {
+      return null;
+    }
+
+    if (collections.length === 0) {
+      return this.getEmptyMessage();
+    }
+
+    return (
+      <Grid
+        template={CollectionCard}
+        items={collections}
+        columnCount={[ { minWidth: 560, count: 2 }, { minWidth: 1020, count: 3 }, { minWidth: 1580, count: 4 } ]}
+        rightMargin={48}
+        cellArea={400 * 160}
+        rowMinHeight={160}
+        rowMaxHeight={232}
+        rowFooterHeight={36}
+      />
+    );
+  },
+
   render() {
-    const { collections, total } = this.props;
+    const { collections, total, status } = this.props;
     return (
       <div>
         <div className="wgsa-hipster-style wgsa-filterable-view">
@@ -55,20 +91,14 @@ const Collections = React.createClass({
               itemType="collection"
             />
           </Summary>
-          { collections.length ?
-            <Grid
-              template={CollectionCard}
-              items={collections}
-              columnCount={[ { minWidth: 560, count: 2 }, { minWidth: 1020, count: 3 }, { minWidth: 1580, count: 4 } ]}
-              rightMargin={48}
-              cellArea={400 * 160}
-              rowMinHeight={160}
-              rowMaxHeight={232}
-              rowFooterHeight={36}
-            /> :
-            this.getEmptyMessage() }
+          { this.getContent() }
         </div>
         <Filter />
+        <Overlay visible={status === statuses.LOADING}>
+          <p className="wgsa-big-message">
+            Loading... ⌛
+          </p>
+        </Overlay>
       </div>
     );
   },
@@ -81,6 +111,7 @@ function mapStateToProps(state, { match }) {
     prefilter,
     collections: getCollectionList(state),
     total: getTotal(state),
+    status: getStatus(state),
   };
 }
 
