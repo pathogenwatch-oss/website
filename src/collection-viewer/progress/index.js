@@ -2,6 +2,7 @@ import './styles.css';
 
 import React from 'react';
 import { connect } from 'react-redux';
+import removeMarkdown from 'remove-markdown';
 
 import Dashboard from './Dashboard.react';
 import Errors from './Errors.react';
@@ -36,11 +37,13 @@ const UploadProgress = React.createClass({
 
   setDocumentTitle() {
     const { collection, percentage = 0 } = this.props;
+    const { title } = collection;
+    const sanitisedTitle = title ? removeMarkdown(title) : 'Analysis Progress';
     document.title = [
       'WGSA',
       '|',
       `(${percentage}%)`,
-      `${collection.title || 'Analysis Progress'}`,
+      `${sanitisedTitle}`,
     ].join(' ');
   },
 
