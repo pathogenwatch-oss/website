@@ -47,6 +47,7 @@ module.exports = function (props) {
         title: 1,
         uuid: 1,
         createdAt: 1,
+        binned: 1,
       }, {
         skip: Number(skip),
         limit: Number(limit),
