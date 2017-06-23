@@ -36,11 +36,9 @@ fieldset > legend {
 }
 
 .wgsa-icon-button--small {
-  height: 28px;
   width: 28px;
   min-width: 28px;
   margin-left: -6px;
-  align-self: baseline;
 }
 
 .wgsa-icon-button--small > i {
