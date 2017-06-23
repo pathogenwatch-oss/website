@@ -7,3 +7,7 @@ export function fetchCollections(filter) {
 export function fetchSummary({ prefilter }) {
   return fetchJson('GET', '/api/collection/summary', { prefilter });
 }
+
+export function binCollection(id, status) {
+  return fetchJson('POST', `/api/collection/${id}/binned`, { status });
+}

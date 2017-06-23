@@ -76,6 +76,10 @@
   visibility: visible;
 }
 
+.wgsa-card-footer .mdl-button--icon {
+  align-self: baseline;
+}
+
 .wgsa-card-metadata {
   align-items: bottom;
   color: rgba(0, 0, 0, 0.87);

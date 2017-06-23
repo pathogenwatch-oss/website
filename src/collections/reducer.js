@@ -2,6 +2,8 @@ import { combineReducers } from 'redux';
 
 import { FETCH_COLLECTIONS, FETCH_COLLECTION_SUMMARY } from './actions';
 
+import { statuses } from './constants';
+
 function entities(state = {}, { type, payload }) {
   switch (type) {
     case FETCH_COLLECTIONS.SUCCESS: {
@@ -32,7 +34,21 @@ function summary(state = initialSummary, { type, payload }) {
   }
 }
 
+function status(state = statuses.LOADING, { type }) {
+  switch (type) {
+    case FETCH_COLLECTIONS.ATTEMPT:
+      return statuses.LOADING;
+    case FETCH_COLLECTIONS.SUCCESS:
+      return statuses.SUCCESS;
+    case FETCH_COLLECTIONS.FAILURE:
+      return statuses.ERROR;
+    default:
+      return state;
+  }
+}
+
 export default combineReducers({
   entities,
+  status,
   summary,
 });

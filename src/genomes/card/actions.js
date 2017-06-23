@@ -8,10 +8,10 @@ import { getFilter } from '../../filter/selectors';
 import { binGenome } from '../api';
 import * as toasts from '../utils/toasts';
 
-export function moveToBin(genome, status, undoable = true) {
+export function setBinnedStatus(genome, status, undoable = true) {
   return (dispatch, getState) => {
     const currentFilter = getFilter(getState(), { stateKey });
-    const undo = () => dispatch(moveToBin(genome, !status, false));
+    const undo = () => dispatch(setBinnedStatus(genome, !status, false));
     return (
       binGenome(genome.id, status)
         .then(() => Promise.all([

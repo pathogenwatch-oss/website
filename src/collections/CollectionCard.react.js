@@ -6,6 +6,7 @@ import dateSince from 'date-fns/distance_in_words';
 import Card, { CardMetadata } from '../card';
 import { FormattedName } from '../organisms';
 import PubMedLink from '../components/PubMedLink.react';
+import RemoveButton from './RemoveButton.react';
 
 const renderers = {
   Paragraph: (props) => <span>{props.children}</span>,
@@ -22,6 +23,18 @@ const statusText = {
   PROCESSING: 'In progress',
   FAILED: 'Failed',
 };
+
+function getFooterLink(collection) {
+  if (collection.owner === 'other') {
+    return (
+      <PubMedLink
+        className="mdl-button wgsa-button--text"
+        pmid={collection.pmid}
+      />
+    );
+  }
+  return <RemoveButton collection={collection} />;
+}
 
 export default ({ item, footerLink }) => {
   const now = new Date();
@@ -59,12 +72,7 @@ export default ({ item, footerLink }) => {
         >
           View Collection
         </Link>
-        { footerLink ||
-          <PubMedLink
-            className="mdl-button wgsa-button--text"
-            pmid={item.pmid}
-          />
-        }
+        { footerLink || getFooterLink(item) }
       </div>
     </Card>
   );
