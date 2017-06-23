@@ -6,6 +6,7 @@ import Header from './Header.react';
 import ListView from './list';
 import GridView from './grid';
 import MapView from './map';
+import StatsView from './stats';
 
 export reducer from './reducer';
 
@@ -16,6 +17,7 @@ const GenomeRoute = props => (
     <Switch>
       <Route path={`${path}/list`} component={ListView} />
       <Route path={`${path}/map`} component={MapView} />
+      <Route path={`${path}/stats`} component={StatsView} />
       <Route component={GridView} />
     </Switch>
   </Genomes>

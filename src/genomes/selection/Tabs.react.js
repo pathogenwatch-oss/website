@@ -4,7 +4,6 @@ import classnames from 'classnames';
 
 import { GenomeArchiveButton } from '../../downloads';
 import CreateCollectionForm from '../create-collection-form';
-import Stats from '../stats';
 
 import { getSelectedGenomeIds, getSelectedGenomeList } from './selectors';
 
@@ -58,7 +57,6 @@ const SelectionDrawer = React.createClass({
         <div className="mdl-tabs__tab-bar mdl-tabs__tab-bar--start">
           <Tab id="create-collection-panel" onClick={this.onTabClick} activeTab={activeTab}>Create Collection</Tab>
           <Tab id="selection-panel" onClick={this.onTabClick} activeTab={activeTab}>Selection</Tab>
-          <Tab id="stats-panel" onClick={this.onTabClick} activeTab={activeTab}>Stats</Tab>
           <div className="wgsa-tab-actions">
             <GenomeArchiveButton
               ids={this.props.selectedGenomeIds}
@@ -85,9 +83,6 @@ const SelectionDrawer = React.createClass({
                 </button>
               </span>
           )}
-        </TabContent>
-        <TabContent isActive={activeTab === 'stats-panel'}>
-          <Stats />
         </TabContent>
       </div>
     );
