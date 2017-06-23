@@ -25,7 +25,6 @@ const statusText = {
 };
 
 function getFooterLink(collection) {
-  console.log(collection.owner);
   if (collection.owner === 'other') {
     return (
       <PubMedLink

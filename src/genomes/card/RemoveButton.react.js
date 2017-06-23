@@ -3,8 +3,7 @@ import { connect } from 'react-redux';
 
 import RemoveButton from '../../components/RemoveButton.react';
 
-import { moveToBin } from '../thunks';
-import { undoMoveToBin } from '../actions';
+import { moveToBin } from './actions';
 import { removeGenomes } from '../uploads/actions';
 
 import { statuses } from '../uploads/constants';
@@ -12,8 +11,8 @@ import { statuses } from '../uploads/constants';
 function mapDispatchToProps(dispatch, { genome }) {
   return {
     removeGenome: () => dispatch(removeGenomes([ genome.id ])),
-    moveToBin: () => dispatch(moveToBin(genome)),
-    restoreFromBin: () => dispatch(undoMoveToBin(genome.id)),
+    moveToBin: () => dispatch(moveToBin(genome, true)),
+    restoreFromBin: () => dispatch(moveToBin(genome, false)),
   };
 }
 
