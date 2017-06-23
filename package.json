@@ -69,6 +69,7 @@
     "redbox-react": "^1.1.1",
     "redux": "^3.6.0",
     "redux-thunk": "^2.1.0",
+    "remove-markdown": "^0.2.0",
     "reselect": "^2.5.3",
     "shortid": "^2.2.1",
     "style-loader": "^0.13.0",

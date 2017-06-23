@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import removeMarkdown from 'remove-markdown';
 
 import Layout from '../layout/Layout.react';
 import DownloadsMenu from '../downloads/DownloadsMenu.react';
@@ -9,7 +10,9 @@ import { getCollection } from '../selectors';
 const CollectionViewer = React.createClass({
 
   componentWillMount() {
-    document.title = `WGSA | ${this.props.title || 'Explore Collection'}`;
+    const { title } = this.props;
+    const sanitisedTitle = title ? removeMarkdown(title) : 'Explore Collection';
+    document.title = `WGSA | ${sanitisedTitle}`;
   },
 
   render() {
