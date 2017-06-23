@@ -13,11 +13,11 @@ function fetchAntibiotics(taxId) {
     const master = results[ANTIMICROBIAL_MASTER].antimicrobials;
     const { antibiotics } = results[`${ANTIMICROBIAL_SPECIES}_${taxId}`];
 
-    return antibiotics.reduce((memo, { antibioticKey }) => {
+    return antibiotics.reduce((memo, { antibioticKey, displayName }) => {
       const am = master.find(_ => _.key === antibioticKey);
       if (!am) return memo;
       const { key, antimicrobialClass, fullName } = am;
-      memo.push({ key, antimicrobialClass, fullName });
+      memo.push({ key, antimicrobialClass, fullName, displayName });
       return memo;
     }, []);
   });
