@@ -6,7 +6,7 @@ import dateSince from 'date-fns/distance_in_words';
 import Card, { CardMetadata } from '../card';
 import { FormattedName } from '../organisms';
 import PubMedLink from '../components/PubMedLink.react';
-import RemoveButton from '../components/RemoveButton.react';
+import RemoveButton from './RemoveButton.react';
 
 const renderers = {
   Paragraph: (props) => <span>{props.children}</span>,
@@ -33,7 +33,7 @@ function getFooterLink(collection) {
       />
     );
   }
-  return <RemoveButton item={collection} />;
+  return <RemoveButton collection={collection} />;
 }
 
 export default ({ item, footerLink }) => {

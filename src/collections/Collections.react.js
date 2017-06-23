@@ -15,20 +15,18 @@ const Collections = React.createClass({
 
   componentWillMount() {
     document.title = 'WGSA | Collections';
-  },
-
-  componentDidMount() {
     this.props.filter();
   },
 
   componentDidUpdate(previous) {
-    if (previous.match !== this.props.match) {
+    if (previous.prefilter !== this.props.prefilter) {
       this.props.filter();
     }
   },
 
   getEmptyMessage() {
-    const { total, prefilter } = this.props;
+    const { total, match } = this.props;
+    const { prefilter } = match.params;
 
     if (prefilter === 'bin' && total === 0) {
       return (
@@ -77,8 +75,10 @@ const Collections = React.createClass({
 
 });
 
-function mapStateToProps(state) {
+function mapStateToProps(state, { match }) {
+  const { prefilter } = match.params;
   return {
+    prefilter,
     collections: getCollectionList(state),
     total: getTotal(state),
   };
