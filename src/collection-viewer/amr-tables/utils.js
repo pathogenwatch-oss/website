@@ -133,7 +133,9 @@ export function createReducer({ name, buildColumns }) {
   };
 }
 
-export function getLabel(key) {
+export function getAntibioticLabel({ key, displayName }) {
+  if (displayName) return displayName;
+  // provide backwards compatibility
   const { customLabels = {} } = Organisms.current.amrOptions || {};
   return customLabels[key] || key;
 }

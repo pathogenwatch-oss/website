@@ -1,7 +1,7 @@
 import registerPromiseWorker from 'promise-worker/register';
 import Papa from 'papaparse';
 
-import { formatColumnKeyAsLabel, getUserDefinedValue } from '../table/utils';
+import { getUserDefinedValue } from '../table/utils';
 
 import { systemDataColumns } from '../data-tables/constants';
 
@@ -63,8 +63,8 @@ const csvOptions = {
   },
 };
 
-function mapToGetters(columnKeys, table) {
-  return columnKeys.map(key => {
+function mapToGetters(columns, table) {
+  return columns.map(({ key }) => {
     if (key in definedColumns) {
       return definedColumns[key].valueGetter;
     }
@@ -73,18 +73,19 @@ function mapToGetters(columnKeys, table) {
   });
 }
 
-function mapToLabel(key, table) {
-  const { formatLabel } = csvOptions[table];
-  if (formatLabel) return formatColumnKeyAsLabel(key);
-  return key in definedColumns ? (definedColumns[key].label || key) : key;
+function getLabel({ key, label }) {
+  if (key in definedColumns) {
+    return definedColumns[key].label || label;
+  }
+  return label;
 }
 
 registerPromiseWorker((message) => {
-  const { table, columnKeys, rows } = message;
-  const valueGetters = mapToGetters(columnKeys, table);
+  const { table, columns, rows } = message;
+  const valueGetters = mapToGetters(columns, table);
 
   return Papa.unparse({
-    fields: columnKeys.map(key => mapToLabel(key, table)),
+    fields: columns.map(getLabel),
     data: rows.map(row => valueGetters.map(getter => getter(row))),
   });
 });

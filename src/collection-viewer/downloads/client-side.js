@@ -2,6 +2,7 @@ import PromiseWorker from 'promise-worker';
 
 import getCSVWorker from 'worker?name=csv.worker.js!./CsvWorker';
 
+import { getColumnLabel } from '../table/utils';
 import { tableKeys } from '../constants';
 
 function ungroup(column) {
@@ -13,12 +14,12 @@ function ungroup(column) {
 function convertTableToCSV(table, additionalColumnKeys = []) {
   return function (state) {
     const { genomes, genomeIds, tables } = state;
-    const columnKeys =
+    const columns =
       tables[table].columns
         .reduce((memo, column) => memo.concat(ungroup(column)), [])
         .filter(_ => 'valueGetter' in _)
-        .map(_ => _.columnKey)
-        .concat(additionalColumnKeys);
+        .map(column => ({ key: column.columnKey, label: getColumnLabel(column) }))
+        .concat(additionalColumnKeys.map(key => ({ key })));
 
     const rows = genomeIds.map(id => genomes[id]);
 
@@ -26,7 +27,7 @@ function convertTableToCSV(table, additionalColumnKeys = []) {
       new PromiseWorker(getCSVWorker()).postMessage({
         table,
         rows,
-        columnKeys: Array.from(new Set(columnKeys)), // quick hack for unique columns
+        columns: Array.from(new Set(columns)), // quick hack for unique columns
       })
     );
   };

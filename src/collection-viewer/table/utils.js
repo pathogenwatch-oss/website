@@ -12,11 +12,9 @@ export const formatColumnKeyAsLabel =
       toUpperCase();
 
 export function getColumnLabel(props) {
-  return (
-    props.getLabel ?
-      props.getLabel() :
-      formatColumnKeyAsLabel(props.columnKey)
-  );
+  if (props.label) return props.label;
+  if (props.getLabel) return props.getLabel();
+  return formatColumnKeyAsLabel(props.columnKey);
 }
 
 function getTotalWidth(columns) {
