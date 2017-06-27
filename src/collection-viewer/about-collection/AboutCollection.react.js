@@ -4,6 +4,7 @@ import Markdown from 'react-markdown';
 
 import SaveForOffline from '../offline';
 import PubMedLink from '../../components/PubMedLink.react';
+import MarkdownHeading from '../../components/MarkdownHeading.react';
 
 export default ({ organism, metadata, isOpen, onButtonClick }) => (
   <div
@@ -21,9 +22,12 @@ export default ({ organism, metadata, isOpen, onButtonClick }) => (
       <i className="material-icons">info</i>
     </button>
     <div className="wgsa-header-dropdown__content">
-      <h4 className="wgsa-about-collection-dropdown__title">
-        {metadata.title || 'About Collection'}
-      </h4>
+      <MarkdownHeading
+        className="wgsa-about-collection-dropdown__title"
+        level="4"
+      >
+        { metadata.title || 'About Collection' }
+      </MarkdownHeading>
       { metadata.description ?
           <Markdown source={metadata.description} /> :
           <p>(no description)</p> }

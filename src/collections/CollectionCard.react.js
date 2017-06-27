@@ -7,10 +7,7 @@ import Card, { CardMetadata } from '../card';
 import { FormattedName } from '../organisms';
 import PubMedLink from '../components/PubMedLink.react';
 import RemoveButton from './RemoveButton.react';
-
-const renderers = {
-  Paragraph: (props) => <span>{props.children}</span>,
-};
+import MarkdownHeading from '../components/MarkdownHeading.react';
 
 const statusIcons = {
   READY: 'done',
@@ -55,7 +52,12 @@ export default ({ item, footerLink }) => {
         }
       </span>
       { item.title ?
-        <Markdown containerTagName="h2" className="wgsa-card-title wgsa-overflow-fade" source={item.title} renderers={renderers} /> :
+        <MarkdownHeading
+          level="2"
+          className="wgsa-card-title wgsa-overflow-fade"
+        >
+          {item.title}
+        </MarkdownHeading> :
         <h2 className="wgsa-card-title">{'(Untitled Collection)'}</h2>
       }
       <p className="wgsa-card-subtitle">
