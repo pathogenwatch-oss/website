@@ -53,26 +53,8 @@ export const LoadSpinner = React.createClass({
 
 });
 
-const fatalTasks = new Set([ 'CORE', 'FP' ]);
-
-function getFailedGenomes(errors) {
-  return errors.reduce((memo, { taskType, name }) => {
-    if (fatalTasks.has(taskType)) {
-      memo.push(name);
-    }
-    return memo;
-  }, []);
-}
-
 function getStatusMessage({ collection }) {
-  if (!collection.slug) {
-    return [
-      <h1>We're sorry, something went wrong.</h1>,
-      <p className="mdl-typography--title">Please try again later.</p>,
-    ];
-  }
-
-  const { status, size, progress: { errors } } = collection;
+  const { status } = collection;
   if (status === statuses.NOT_FOUND) {
     return [
       <h1>We're sorry, this collection cannot be found.</h1>,
@@ -88,17 +70,11 @@ function getStatusMessage({ collection }) {
       <Link to={`/${Organisms.nickname}/upload`} className="mdl-button mdl-button--raised">Go Back</Link>,
     ];
   }
-  if (status === statuses.FAILED) {
-    const failedGenomes = getFailedGenomes(errors);
-    const totalFail = size === failedGenomes.length;
-    return [
-      <h1>We're sorry, something went wrong.</h1>,
-      totalFail ? <p className="mdl-typography--title">All {size} genomes were rejected.</p> : null,
-      !totalFail && failedGenomes.length ? <p className="mdl-typography--title">{failedGenomes.length} {failedGenomes.length === 1 ? 'genome was' : 'genomes were'} rejected:</p> : null,
-      !totalFail && failedGenomes.length ? <ul className="wgsa-failed-genomes">{failedGenomes.map(genomeName => <li key={genomeName}>{genomeName}</li>)}</ul> : null,
-      <Link to={`/${Organisms.nickname}/upload`} className="mdl-button mdl-button--raised">Try Again</Link>,
-    ];
-  }
+
+  return [
+    <h1>We're sorry, something went wrong with this collection.</h1>,
+    <button onClick={() => history.go(-1)} className="mdl-button mdl-button--raised">Go Back</button>,
+  ];
 }
 
 export const LoadError = React.createClass({
