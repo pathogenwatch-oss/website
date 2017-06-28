@@ -1,5 +1,7 @@
 import React from 'react';
 
+import MarkdownInline from '../components/MarkdownInline.react';
+
 export function undoMoveToBin({ title, binned }, onClick) {
   return {
     action: {
@@ -8,7 +10,7 @@ export function undoMoveToBin({ title, binned }, onClick) {
     },
     message: (
       <span>
-        {title ? <strong>{title}</strong> : 'Collection'}&nbsp;
+        {title ? <MarkdownInline tag="strong">{title}</MarkdownInline> : 'Collection'}&nbsp;
         {binned ? 'restored' : 'moved to bin'}.
       </span>
     ),
