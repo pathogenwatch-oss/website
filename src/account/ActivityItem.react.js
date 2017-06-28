@@ -2,6 +2,7 @@ import React from 'react';
 import distanceInWordsToNow from 'date-fns/distance_in_words_to_now';
 import { Link } from 'react-router-dom';
 
+import MarkdownInline from '../components/MarkdownInline.react';
 import { FormattedName } from '../organisms';
 
 const icons = {
@@ -16,7 +17,7 @@ const content = {
     </Link>,
   collection: ({ size, organismId, title, slug }) => (
     <Link to={`/collection/${slug}`}>
-      Created collection <strong>{title}</strong> (<FormattedName fullName organismId={organismId} />, <strong>{size}</strong> genomes)
+      Created collection <MarkdownInline tag="strong">{title}</MarkdownInline> (<FormattedName fullName organismId={organismId} />, <strong>{size}</strong> genomes)
     </Link>
   ),
 };

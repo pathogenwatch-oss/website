@@ -30,7 +30,7 @@ const ActivityList = React.createClass({
     if (activity && Array.isArray(activity)) {
       return (
         <ul className="wgsa-activity-list">
-          {activity.map(item => <ActivityItem key={item.date} {...item} />)};
+          {activity.map(item => <ActivityItem key={item.date} {...item} />)}
         </ul>
       );
     }
