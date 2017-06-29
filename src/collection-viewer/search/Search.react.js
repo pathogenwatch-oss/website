@@ -4,6 +4,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
 
+import SearchDropdown from './SearchDropdown.react';
+
 import { getGenomes } from '../../collection-viewer/selectors';
 import { getActiveDataTable } from '../table/selectors';
 import { getFilter } from '../selectors';
@@ -51,9 +53,9 @@ const Search = React.createClass({
     return (
       <div className="wgsa-search-box-container">
         <div className={classnames(
-          'wgsa-search-box',
-          { 'wgsa-search-box--active': focus }
-        )}
+            'wgsa-search-box',
+            { 'wgsa-search-box--active': focus }
+          )}
           onClick={this.handleClick}
         >
           <i className="wgsa-search-box__icon material-icons">search</i>
@@ -67,6 +69,7 @@ const Search = React.createClass({
           <p className="wgsa-search-box__numbers">
             {filteredAmount} of {totalAmount}
           </p>
+          <SearchDropdown isOpen={focus} />
         </div>
       </div>
     );

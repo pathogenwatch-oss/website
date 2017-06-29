@@ -18,6 +18,7 @@
   cursor: text;
   min-width: 320px;
   max-width: 640px;
+  position: relative;
 }
 
 .wgsa-search-box:hover,
@@ -51,4 +52,49 @@
 
 .wgsa-search-box__numbers {
   margin: 0;
+}
+
+
+/* Dropdown */
+
+.wgsa-search-dropdown-container {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(100% + 16px);
+}
+
+.wgsa-search-dropdown {
+  width: 100%;
+  height: 240px;
+  background: #efefef;
+  border-radius: 4px;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.wgsa-search-dropdown-enter {
+  opacity: 0;
+}
+
+.wgsa-search-dropdown-enter.wgsa-search-dropdown-enter-active {
+  opacity: 1;
+  transition: .28s cubic-bezier(.4,0,.2,1);
+  transition-property: opacity;
+}
+
+.wgsa-search-dropdown-leave {
+  opacity: 1;
+}
+
+.wgsa-search-dropdown-leave.wgsa-search-dropdown-leave-active {
+  opacity: 0;
+  transition: .28s cubic-bezier(.4,0,.2,1);
+  transition-property: opacity;
+}
+
+.wgsa-search-dropdown__heading {
+  margin: 0 0 16px;
+  font-size: 14px;
+  line-height: 1;
 }
