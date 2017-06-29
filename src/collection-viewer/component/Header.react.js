@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import Search from '../search/Search.react';
 import AboutCollection from '../about-collection';
+import ResetButton from '../filter/ResetButton.react';
 
 import { isMenuOpen } from '../downloads/selectors';
 import { setMenuActive } from '../downloads/actions';
@@ -25,6 +26,7 @@ export default connect(mapStateToProps, null, mergeProps)(
     <span className="mdl-layout-spacer mdl-layout-spacer--flex">
       <Search />
       <nav className="wgsa-header-collection-options mdl-navigation" onClick={e => e.stopPropagation()}>
+        <ResetButton />
         <button className="wgsa-menu-button mdl-button" onClick={downloadMenuButtonClick}>
           <i className="wgsa-button-icon material-icons">file_download</i>
           <span>Downloads</span>
