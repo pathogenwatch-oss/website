@@ -82,16 +82,19 @@
   background: #673c90;
 }
 
-/* Spinner */
 
-.mdl-spinner .mdl-spinner__layer-1,
-.mdl-spinner .mdl-spinner__layer-3 {
-  border-color: #673c90;
-}
+/* Spinner */
 
 .mdl-spinner .mdl-spinner__layer-2,
 .mdl-spinner .mdl-spinner__layer-4 {
   border-color: #87c7a6;
+}
+
+.mdl-spinner .mdl-spinner__layer-1,
+.mdl-spinner--single-colour .mdl-spinner__layer-2,
+.mdl-spinner .mdl-spinner__layer-3,
+.mdl-spinner--single-colour .mdl-spinner__layer-4 {
+  border-color: #673c90;
 }
 
 

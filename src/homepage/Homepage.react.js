@@ -1,7 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import Leaflet from 'leaflet';
 
 import { FormattedName } from '../organisms';
+import Spinner from '../components/Spinner.react';
+
+import { getShowcaseCollections } from './api';
 
 import CONFIG from '../app/config';
 const { maxCollectionSize = {} } = CONFIG;
@@ -13,8 +17,43 @@ function getCollectionSizeLimit(user) {
 
 export default React.createClass({
 
+  getInitialState() {
+    return {
+      collections: [],
+    };
+  },
+
   componentWillMount() {
     document.title = 'WGSA | Whole Genome Sequence Analysis';
+    getShowcaseCollections()
+      .then(collections => this.setState({ collections }));
+  },
+
+  renderCollectionLinks() {
+    const { collections } = this.state;
+    if (collections.length) {
+      const div = document.createElement('div');
+      div.style = { width: 100, height: 100 };
+      const map = Leaflet.map(div);
+
+      return collections.map(({ uuid, slug, centroid }, index) => {
+        const point = map.project(centroid);
+        console.log(point, centroid, index);
+        return (
+          <Link
+            key={uuid}
+            to={`/collection/${slug}`}
+            className="showcase__link wgsa-sonar-effect"
+            style={{
+              left: `${point.x * 100}%`,
+              top: `${point.y * 100}%`,
+              animationDelay: `${0.25 * index}s`,
+            }}
+          />
+        );
+      });
+    }
+    return <Spinner singleColour />;
   },
 
   render() {
@@ -26,13 +65,14 @@ export default React.createClass({
         </section>
         <section className="showcase">
           <img src="/images/worldmap.svg" />
-          <Link to="#" className="showcase__link showcase__link--1 wgsa-sonar-effect" />
+          {this.renderCollectionLinks()}
+          {/* <Link to="#" className="showcase__link showcase__link--1 wgsa-sonar-effect" />
           <Link to="#" className="showcase__link showcase__link--2 showcase__link--large wgsa-sonar-effect" />
           <Link to="#" className="showcase__link showcase__link--3 showcase__link--small wgsa-sonar-effect" />
           <Link to="#" className="showcase__link showcase__link--4 wgsa-sonar-effect" />
           <Link to="#" className="showcase__link showcase__link--5 showcase__link--large wgsa-sonar-effect" />
           <Link to="#" className="showcase__link showcase__link--6 wgsa-sonar-effect" />
-          <Link to="#" className="showcase__link showcase__link--7 showcase__link--small wgsa-sonar-effect" />
+          <Link to="#" className="showcase__link showcase__link--7 showcase__link--small wgsa-sonar-effect" /> */}
           <footer>
             <a href="#how-it-works" className="mdl-button mdl-button--primary title-font">
               <i className="material-icons">expand_more</i> How it works

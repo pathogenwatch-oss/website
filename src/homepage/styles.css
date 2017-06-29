@@ -96,6 +96,13 @@
   object-fit: cover;
 }
 
+.showcase .mdl-spinner {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -14px;
+}
+
 .showcase__link {
   width: calc(1.666666% + 1px); /* 32/1920 */
   height: calc(4.444444% + 1px); /* 32/720 */
