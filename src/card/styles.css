@@ -99,7 +99,6 @@
 .wgsa-card-metadata span {
   white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .wgsa-card-metadata-inliner {
