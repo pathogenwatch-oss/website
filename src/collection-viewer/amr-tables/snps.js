@@ -43,11 +43,14 @@ export function buildColumns({ snp, antibiotics }, profiles) {
                 headerClasses: 'wgsa-table-header--unstyled wgsa-table-header--expanded',
               },
               snp[key][gene]
-                .map(({ snpName, effect }) => createAdvancedViewColumn(
-                  { key: `${gene}_${snpName}`, label: snpName, effect },
-                  'snp',
-                  profiles,
-                ))
+                .map(({ snpName, effect }) => {
+                  const id = `${gene}_${snpName}`;
+                  return createAdvancedViewColumn(
+                    { key: id, displayName: id, label: snpName, effect },
+                    'snp',
+                    profiles,
+                  );
+                })
               ), []),
       });
     }

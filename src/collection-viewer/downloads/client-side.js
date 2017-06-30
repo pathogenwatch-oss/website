@@ -5,30 +5,28 @@ import getCSVWorker from 'worker?name=csv.worker.js!./CsvWorker';
 import { getColumnLabel } from '../table/utils';
 import { tableKeys } from '../constants';
 
-function ungroup(column) {
-  if (column.hidden) return [];
-  if (!column.group) return column;
-  return column.columns.reduce((columns, c) => columns.concat(ungroup(c)), []);
+function getUniqueValueColumns(memo, column) {
+  if (column.group) return column.columns.reduce(getUniqueValueColumns, memo);
+  if (column.columnKey in memo || column.hidden || !column.valueGetter) {
+    return memo;
+  }
+  memo[column.columnKey] = column;
+  return memo;
 }
 
 function convertTableToCSV(table, additionalColumnKeys = []) {
-  return function (state) {
-    const { genomes, genomeIds, tables } = state;
-    const columns =
-      tables[table].columns
-        .reduce((memo, column) => memo.concat(ungroup(column)), [])
-        .filter(_ => 'valueGetter' in _)
-        .map(column => ({ key: column.columnKey, label: getColumnLabel(column) }))
+  return function ({ genomes, genomeIds, tables }) {
+    let columns = tables[table].columns.reduce(getUniqueValueColumns, {});
+    columns =
+      Object.keys(columns)
+        .map(key => ({
+          key,
+          label: columns[key].displayName || getColumnLabel(columns[key]),
+        }))
         .concat(additionalColumnKeys.map(key => ({ key })));
-
     const rows = genomeIds.map(id => genomes[id]);
-
     return (
-      new PromiseWorker(getCSVWorker()).postMessage({
-        table,
-        rows,
-        columns: Array.from(new Set(columns)), // quick hack for unique columns
-      })
+      new PromiseWorker(getCSVWorker()).postMessage({ table, rows, columns })
     );
   };
 }
