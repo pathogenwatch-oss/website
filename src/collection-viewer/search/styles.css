@@ -1,11 +1,14 @@
 .wgsa-search-box-container {
-  display: flex;
-  justify-content: center;
   height: 40px;
   user-select: none;
   font-size: 21px;
   flex-grow: 1;
-  position: relative;
+  margin: 0 auto;
+  min-width: 320px;
+  max-width: 560px;
+  @media (min-width: 1024px) {
+    max-width: 640px;
+  }
 }
 
 .wgsa-search-box {
@@ -13,16 +16,13 @@
   display: flex;
   background: rgba(255, 255, 255, 0.14);
   padding: 0 16px;
-  margin: 0 16px;
+  box-sizing: border-box;
   align-items: center;
   border-radius: 2px;
   cursor: text;
-}
-
-.wgsa-search-box,
-.wgsa-search-dropdown {
-  min-width: 320px;
-  max-width: 640px;
+  min-height: 100%;
+  margin: 0 0 16px;
+  width: 100%;
 }
 
 .wgsa-search-box > .mdl-chip {
@@ -72,19 +72,14 @@
 /* Dropdown */
 
 .wgsa-search-dropdown-container {
-  position: absolute;
-  left: 16px;
-  right: 16px;
-  top: calc(100% + 16px);
+  width: 100%;
 }
 
 .wgsa-search-dropdown {
-  width: 100%;
   max-height: 88vh;
   background: #efefef;
   border-radius: 4px;
   padding: 16px;
-  box-sizing: border-box;
   overflow-y: auto;
   cursor: auto;
 }
