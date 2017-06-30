@@ -9,6 +9,7 @@ const initialState = {
   text: '',
   terms: [],
   category: null,
+  cursor: 0,
 };
 
 export default function (state = initialState, { type, payload }) {
@@ -22,12 +23,14 @@ export default function (state = initialState, { type, payload }) {
       return {
         ...state,
         text: payload,
+        cursor: 0,
       };
     case SEARCH_CATEGORY_SELECTED:
       return {
         ...state,
-        category: payload,
+        category: payload.category,
         text: '',
+        cursor: 0,
       };
     default:
       return state;

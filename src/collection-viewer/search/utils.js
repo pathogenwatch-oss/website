@@ -9,9 +9,9 @@ export function mapColumnsToSearchCategories(columns, tableName, matcher) {
       const subcategories =
         mapColumnsToSearchCategories(column.columns, tableName, matcher);
       for (const category of subcategories) {
-        if (columnKeys.has(category.columnKey)) continue;
+        if (columnKeys.has(category.key)) continue;
         categories.push(category);
-        columnKeys.add(category.columnKey);
+        columnKeys.add(category.key);
       }
       continue;
     }
@@ -28,9 +28,20 @@ export function mapColumnsToSearchCategories(columns, tableName, matcher) {
     categories.push({
       label,
       tableName,
-      columnKey,
+      key: columnKey,
     });
     columnKeys.add(columnKey);
   }
   return categories;
+}
+
+export function findColumn(columns, columnKey) {
+  for (const column of columns) {
+    if (column.columnKey === columnKey) return column;
+    if (column.group) {
+      const subcolumn = findColumn(column.columns, columnKey);
+      if (subcolumn) return subcolumn;
+    }
+  }
+  return null;
 }

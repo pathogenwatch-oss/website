@@ -5,20 +5,21 @@ import { getFilter } from '../selectors';
 
 import { resetFilter } from './actions';
 
-const ResetButton = ({ onClick, disabled }) => (
-  <button
-    className="mdl-button mdl-button--icon"
-    onClick={onClick}
-    disabled={disabled}
-    title="Reset Selection"
-  >
-    <i className="material-icons">clear</i>
-  </button>
+const ResetButton = ({ onClick, visible }) => (
+  visible ?
+    <button
+      className="mdl-button mdl-button--icon"
+      onClick={onClick}
+      title="Reset Selection"
+    >
+      <i className="material-icons">clear</i>
+    </button>
+  : null
 );
 
 function mapStateToProps(state) {
   return {
-    disabled: !getFilter(state).active,
+    visible: getFilter(state).active,
   };
 }
 

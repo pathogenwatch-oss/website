@@ -3,9 +3,9 @@ import { connect } from 'react-redux';
 // import classnames from 'classnames';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
-import { getSearchCategories, getDropdownVisibility } from './selectors';
+import { getSearchItems, getDropdownVisibility } from './selectors';
 
-import { selectSearchCategory } from './actions';
+import { selectSearchCategory, changeDropdownVisibility } from './actions';
 
 const SearchDropdown = React.createClass({
 
@@ -21,7 +21,7 @@ const SearchDropdown = React.createClass({
   },
 
   render() {
-    const { isOpen, categories, onCategorySelect } = this.props;
+    const { isOpen, sections, onItemSelect, close } = this.props;
     return (
       <ReactCSSTransitionGroup
         className="wgsa-search-dropdown-container"
@@ -31,15 +31,18 @@ const SearchDropdown = React.createClass({
       >
         { isOpen ?
           <div className="wgsa-search-dropdown">
+            <button className="wgsa-search-dropdown__close mdl-button mdl-button--icon" onClick={close}>
+              <i className="material-icons">clear</i>
+            </button>
             <h2 className="wgsa-search-dropdown__heading">Recent Searches</h2>
-            {categories.map(({ name, columns }) =>
-              <section key={name}>
-                <h2 className="wgsa-search-dropdown__heading">{name}</h2>
+            {sections.map(({ heading, items }) =>
+              <section key={heading}>
+                <h2 className="wgsa-search-dropdown__heading">{heading}</h2>
                 <ul>
-                  { columns.map(category =>
-                    <li key={category.columnKey}>
-                      <button className="mdl-chip" onClick={() => onCategorySelect(category)}>
-                        <span className="mdl-chip__text">{category.label}</span>
+                  { items.map(item =>
+                    <li key={item.key}>
+                      <button className="mdl-chip" onClick={() => onItemSelect(item)}>
+                        <span className="mdl-chip__text">{item.label}</span>
                       </button>
                     </li>
                   )}
@@ -57,14 +60,16 @@ const SearchDropdown = React.createClass({
 
 function mapStateToProps(state) {
   return {
-    categories: getSearchCategories(state),
     isOpen: getDropdownVisibility(state),
+    // recent: getRecentSearches(state),
+    sections: getSearchItems(state),
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    onCategorySelect: category => dispatch(selectSearchCategory(category)),
+    onItemSelect: category => dispatch(selectSearchCategory(category)),
+    close: () => dispatch(changeDropdownVisibility(false)),
   };
 }
 

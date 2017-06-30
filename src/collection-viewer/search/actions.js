@@ -21,6 +21,8 @@ export const SEARCH_CATEGORY_SELECTED = 'SEARCH_CATEGORY_SELECTED';
 export function selectSearchCategory(category) {
   return {
     type: SEARCH_CATEGORY_SELECTED,
-    payload: category,
+    payload: {
+      category,
+    },
   };
 }
