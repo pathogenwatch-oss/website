@@ -1,5 +1,6 @@
 .wgsa-page--collection {
   background: #efefef;
+  overflow-y: hidden;
 }
 
 .wgsa-pane-overlay {

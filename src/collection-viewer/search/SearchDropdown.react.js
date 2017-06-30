@@ -31,14 +31,20 @@ const SearchDropdown = React.createClass({
         { isOpen ?
           <div className="wgsa-search-dropdown">
             <h2 className="wgsa-search-dropdown__heading">Recent Searches</h2>
-            <h2 className="wgsa-search-dropdown__heading">Search for...</h2>
-            <ul>
-              {categories.map(category =>
-                <li key={category.id} className="mdl-chip">
-                  <span className="mdl-chip__text"><strong>{category.label}</strong></span>
-                </li>
-              )}
-            </ul>
+            {categories.map(({ name, columns }) =>
+              <section key={name}>
+                <h2 className="wgsa-search-dropdown__heading">{name}</h2>
+                <ul>
+                  { columns.map(({ id, label }) =>
+                    <li key={id}>
+                      <button className="mdl-chip">
+                        <span className="mdl-chip__text"><strong>{label}</strong></span>
+                      </button>
+                    </li>
+                  )}
+              </ul>
+              </section>
+            )}
           </div> :
           null
         }

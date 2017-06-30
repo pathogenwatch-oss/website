@@ -69,7 +69,7 @@ const Search = React.createClass({
           <p className="wgsa-search-box__numbers">
             {filteredAmount} of {totalAmount}
           </p>
-          <SearchDropdown isOpen={focus} />
+          <SearchDropdown isOpen={focus || true} />
         </div>
       </div>
     );
