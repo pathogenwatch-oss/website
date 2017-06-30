@@ -10,6 +10,7 @@ import summary from '../summary/reducer';
 import tree from '../tree/reducer';
 import table from '../table/reducer';
 import offline from '../offline/reducer';
+import search from '../search/reducer';
 
 import { RESET_COLLECTION_VIEW } from '../actions';
 
@@ -25,6 +26,7 @@ const reducer = combineReducers({
   tree,
   table,
   offline,
+  search,
 });
 
 const initialState = reducer(undefined, {});

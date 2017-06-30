@@ -1,37 +1,30 @@
 import { createSelector } from 'reselect';
 
+import { getViewer } from '../selectors';
 import { getTables } from '../table/selectors';
 
-import { getColumnLabel } from '../table/utils';
+import { mapColumnsToSearchCategories } from './utils';
 
-function mapColumnsToSearchCategories(columns) {
-  let categories = [];
-  for (const column of columns) {
-    if (column.group) {
-      categories = categories.concat(mapColumnsToSearchCategories(column.columns));
-      continue;
-    }
+export const getSearch = state => getViewer(state).search;
 
-    if (column.columnKey === '__name' ||
-        column.system ||
-        column.hidden) continue;
-
-    categories.push({
-      id: column.columnKey,
-      label: getColumnLabel(column),
-    });
-  }
-  return categories;
-}
+export const getSearchText = state => getSearch(state).text;
+export const getSearchTextMatcher = createSelector(
+  getSearchText,
+  text => (text.length ? new RegExp(text, 'i') : null)
+);
 
 export const getSearchCategories = createSelector(
   getTables,
-  tables => Object.keys(tables).reduce((memo, name) => {
+  getSearchTextMatcher,
+  (tables, matcher) => Object.keys(tables).reduce((memo, name) => {
     const table = tables[name];
-    memo.push({
-      name,
-      columns: mapColumnsToSearchCategories(table.columns, name),
-    });
+    const columns = mapColumnsToSearchCategories(table.columns, name, matcher);
+    if (columns.length) {
+      memo.push({ name, columns });
+    }
     return memo;
   }, [])
 );
+
+export const getSelectedCategory = state => getSearch(state).category;
+export const getDropdownVisibility = state => getSearch(state).visible;

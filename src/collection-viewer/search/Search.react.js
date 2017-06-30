@@ -6,13 +6,10 @@ import classnames from 'classnames';
 
 import SearchDropdown from './SearchDropdown.react';
 
-import { getGenomes } from '../../collection-viewer/selectors';
-import { getActiveDataTable } from '../table/selectors';
 import { getFilter } from '../selectors';
+import { getSearchText, getDropdownVisibility } from './selectors';
 
-import { activateFilter, resetFilter } from '../filter/actions';
-
-import { getColumnLabel } from '../table/utils';
+import { changeSearchText, changeDropdownVisibility } from './actions';
 
 const Search = React.createClass({
 
@@ -25,31 +22,24 @@ const Search = React.createClass({
     handleChange: React.PropTypes.func,
   },
 
-  getInitialState() {
-    return {
-      focus: false,
-    };
+  getPlaceholder() {
+    if (this.props.dropdownVisible) {
+      return 'FILTER COLUMNS';
+    }
+    return 'SEARCH';
   },
 
   handleChange(event) {
     this.props.handleChange(event.target.value);
   },
 
-  handleFocus() {
-    this.setState({ focus: true });
-  },
-
-  handleBlur() {
-    this.setState({ focus: false });
-  },
-
   handleClick() {
     this.refs.input.focus();
+    this.props.openDropdown();
   },
 
   render() {
-    const { totalAmount, filteredAmount, filterColumnName } = this.props;
-    const { focus } = this.state;
+    const { totalAmount, filteredAmount, searchText } = this.props;
     return (
       <div className="wgsa-search-box-container">
         <div className={classnames(
@@ -61,15 +51,14 @@ const Search = React.createClass({
           <i className="wgsa-search-box__icon material-icons">search</i>
           <input ref="input"
             className="wgsa-search-box__input"
-            placeholder={`SEARCH ${filterColumnName}`}
+            placeholder={this.getPlaceholder()}
             onChange={this.handleChange}
-            onFocus={this.handleFocus}
-            onBlur={this.handleBlur}
+            value={searchText}
           />
           <p className="wgsa-search-box__numbers">
             {filteredAmount} of {totalAmount}
           </p>
-          <SearchDropdown isOpen={focus || true} />
+          <SearchDropdown />
         </div>
       </div>
     );
@@ -79,38 +68,20 @@ const Search = React.createClass({
 
 function mapStateToProps(state) {
   const filter = getFilter(state);
-  const { activeColumn } = getActiveDataTable(state);
   const totalAmount = filter.unfilteredIds.length;
   return {
-    displayProps: {
-      totalAmount,
-      filteredAmount: filter.active ? filter.ids.size : totalAmount,
-      filterColumnName: getColumnLabel(activeColumn),
-    },
-    activeColumn,
-    genomes: [ ...filter.unfilteredIds ].map(id => getGenomes(state)[id]),
+    totalAmount,
+    filteredAmount: filter.active ? filter.ids.size : totalAmount,
+    searchText: getSearchText(state),
+    dropdownVisible: getDropdownVisibility(state),
   };
 }
 
-function mergeProps({ displayProps, activeColumn, genomes }, { dispatch }) {
+function mapDispatchToProps(dispatch) {
   return {
-    ...displayProps,
-    handleChange(text) {
-      if (!text || !text.length) {
-        dispatch(resetFilter());
-        return;
-      }
-      const matcher = new RegExp(text, 'i');
-      dispatch(activateFilter(
-        genomes.reduce((set, genome) => {
-          if (String(activeColumn.valueGetter(genome)).match(matcher)) {
-            set.add(genome.uuid);
-          }
-          return set;
-        }, new Set())
-      ));
-    },
+    handleChange: text => dispatch(changeSearchText(text)),
+    openDropdown: () => dispatch(changeDropdownVisibility(true)),
   };
 }
 
-export default connect(mapStateToProps, null, mergeProps)(Search);
+export default connect(mapStateToProps, mapDispatchToProps)(Search);

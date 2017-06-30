@@ -66,12 +66,13 @@
 
 .wgsa-search-dropdown {
   width: 100%;
-  height: 240px;
+  max-height: 88vh;
   background: #efefef;
   border-radius: 4px;
   padding: 16px;
   box-sizing: border-box;
   overflow-y: auto;
+  cursor: auto;
 }
 
 .wgsa-search-dropdown-enter {
@@ -101,8 +102,16 @@
   text-transform: capitalize;
 }
 
+.wgsa-search-dropdown ul {
+  margin-left: -4px;
+}
+
 .wgsa-search-dropdown li {
   display: inline-block;
   margin-left: 4px;
   margin-bottom: 4px;
+}
+
+.wgsa-search-dropdown .mdl-chip {
+  font-weight: 500;
 }

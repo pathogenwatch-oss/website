@@ -3,7 +3,9 @@ import { connect } from 'react-redux';
 // import classnames from 'classnames';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
-import { getSearchCategories } from './selectors';
+import { getSearchCategories, getDropdownVisibility } from './selectors';
+
+import { selectSearchCategory } from './actions';
 
 const SearchDropdown = React.createClass({
 
@@ -19,8 +21,7 @@ const SearchDropdown = React.createClass({
   },
 
   render() {
-    const { isOpen, categories } = this.props;
-    console.log(categories);
+    const { isOpen, categories, onCategorySelect } = this.props;
     return (
       <ReactCSSTransitionGroup
         className="wgsa-search-dropdown-container"
@@ -35,10 +36,10 @@ const SearchDropdown = React.createClass({
               <section key={name}>
                 <h2 className="wgsa-search-dropdown__heading">{name}</h2>
                 <ul>
-                  { columns.map(({ id, label }) =>
-                    <li key={id}>
-                      <button className="mdl-chip">
-                        <span className="mdl-chip__text"><strong>{label}</strong></span>
+                  { columns.map(category =>
+                    <li key={category.columnKey}>
+                      <button className="mdl-chip" onClick={() => onCategorySelect(category)}>
+                        <span className="mdl-chip__text">{category.label}</span>
                       </button>
                     </li>
                   )}
@@ -57,7 +58,14 @@ const SearchDropdown = React.createClass({
 function mapStateToProps(state) {
   return {
     categories: getSearchCategories(state),
+    isOpen: getDropdownVisibility(state),
   };
 }
 
-export default connect(mapStateToProps)(SearchDropdown);
+function mapDispatchToProps(dispatch) {
+  return {
+    onCategorySelect: category => dispatch(selectSearchCategory(category)),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SearchDropdown);
