@@ -45,7 +45,7 @@ function notPresent(profileSection, element) {
 }
 
 export function createAdvancedViewColumn(element, profileKey, profiles) {
-  const { key, label, effect } = element;
+  const { key, displayName, label, effect } = element;
   return {
     addState({ data }) {
       if (!data.length) return this;
@@ -56,12 +56,11 @@ export function createAdvancedViewColumn(element, profileKey, profiles) {
       return this;
     },
     columnKey: key,
+    displayName,
+    label,
     cellClasses: 'wgsa-table-cell--resistance',
     cellPadding: 16,
     flexGrow: 0,
-    getLabel() {
-      return label;
-    },
     getWidth() {
       return measureText(label, true) + 4;
     },
