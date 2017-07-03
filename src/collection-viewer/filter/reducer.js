@@ -1,18 +1,41 @@
 import {
-  SET_UNFILTERED_IDS,
   ACTIVATE_FILTER,
   APPEND_TO_FILTER,
   REMOVE_FROM_FILTER,
   RESET_FILTER,
 } from './actions';
-
 import { TREE_LOADED } from '../tree/actions';
+import { SEARCH_ITEM_SELECTED, SEARCH_ITEM_REMOVED } from '../search/actions';
 
 const initialState = {
   active: false,
   unfilteredIds: [], // An array to allow indentical ids arrays not to cause an update
   ids: new Set(),
 };
+
+function append(state, ids) {
+  return {
+    ...state,
+    active: true,
+    ids: new Set([ ...state.ids, ...ids ]),
+  };
+}
+
+function remove(state, ids) {
+  const newIds = Array.from(state.ids).filter(id => !ids.has(id));
+  if (newIds.length) {
+    return {
+      ...state,
+      active: true,
+      ids: new Set(newIds),
+    };
+  }
+  return {
+    ...state,
+    active: false,
+    ids: initialState.ids,
+  };
+}
 
 export default function (state = initialState, { type, payload = {} }) {
   const { ids } = payload;
@@ -35,25 +58,9 @@ export default function (state = initialState, { type, payload = {} }) {
         ids,
       };
     case APPEND_TO_FILTER:
-      return {
-        ...state,
-        active: true,
-        ids: new Set([ ...state.ids, ...ids ]),
-      };
+      return append(state, ids);
     case REMOVE_FROM_FILTER: {
-      const newIds = Array.from(state.ids).filter(id => !ids.has(id));
-      if (newIds.length) {
-        return {
-          ...state,
-          active: true,
-          ids: new Set(newIds),
-        };
-      }
-      return {
-        ...state,
-        active: false,
-        ids: initialState.ids,
-      };
+      return remove(state, ids);
     }
     case RESET_FILTER:
       return {
@@ -61,6 +68,16 @@ export default function (state = initialState, { type, payload = {} }) {
         active: false,
         ids: initialState.ids,
       };
+    case SEARCH_ITEM_SELECTED: {
+      const { item = {} } = payload;
+      if (!item.ids) return state;
+      return append(state, item.ids);
+    }
+    case SEARCH_ITEM_REMOVED: {
+      const { item = {} } = payload;
+      if (!item.value) return state;
+      return remove(state, new Set(item.value.ids));
+    }
     default:
       return state;
   }

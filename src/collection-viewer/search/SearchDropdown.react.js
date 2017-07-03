@@ -3,10 +3,13 @@ import { connect } from 'react-redux';
 import classnames from 'classnames';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
+import SearchTerm from './SearchTerm.react';
+
 import {
   getSearchItems,
   getDropdownVisibility,
   getItemAtCursor,
+  getRecentSearches,
 } from './selectors';
 
 import { selectSearchItem, changeDropdownVisibility } from './actions';
@@ -20,7 +23,7 @@ const SearchDropdown = React.createClass({
   },
 
   render() {
-    const { isOpen, sections, activeItem, onItemSelect, close } = this.props;
+    const { isOpen, sections, activeItem, recent, selectItem, close } = this.props;
     return (
       <ReactCSSTransitionGroup
         className="wgsa-search-dropdown-container"
@@ -34,6 +37,21 @@ const SearchDropdown = React.createClass({
               <i className="material-icons">clear</i>
             </button>
             <h2 className="wgsa-search-dropdown__heading">Recent Searches</h2>
+            <ul>
+              {recent.map(term =>
+                <li key={term.key}>
+                  <button
+                    className="mdl-chip"
+                    onClick={() => selectItem(term)}
+                  >
+                    <span className="mdl-chip__text">
+                      <small>{term.category.label}:&nbsp;</small>
+                      <strong>{term.value.label}</strong>
+                    </span>
+                  </button>
+                </li>
+              )}
+            </ul>
             {sections.map(({ heading, items, placeholder }) =>
               <section key={heading}>
                 <h2 className="wgsa-search-dropdown__heading">{heading}</h2>
@@ -45,7 +63,7 @@ const SearchDropdown = React.createClass({
                         className={classnames(
                           'mdl-chip', { 'mdl-chip--active': item === activeItem }
                         )}
-                        onClick={() => onItemSelect(item)}
+                        onClick={() => selectItem(item)}
                       >
                         <span className="mdl-chip__text">{item.label}</span>
                       </button>
@@ -66,7 +84,7 @@ const SearchDropdown = React.createClass({
 function mapStateToProps(state) {
   return {
     isOpen: getDropdownVisibility(state),
-    // recent: getRecentSearches(state),
+    recent: getRecentSearches(state),
     sections: getSearchItems(state),
     activeItem: getItemAtCursor(state),
   };
@@ -74,7 +92,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    onItemSelect: item => dispatch(selectSearchItem(item)),
+    selectItem: item => dispatch(selectSearchItem(item)),
     close: () => dispatch(changeDropdownVisibility(false)),
   };
 }

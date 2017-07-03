@@ -6,6 +6,8 @@ import {
   SEARCH_CURSOR_MOVED,
 } from './actions.js';
 
+import { RESET_FILTER } from '../filter/actions';
+
 import { createSearchTerm } from './utils';
 
 const initialState = {
@@ -55,7 +57,7 @@ export default function (state = initialState, { type, payload }) {
         return {
           ...state,
           terms: new Set(terms),
-          recent: new Set([ ...state.recent, payload.item ]),
+          recent: new Set([ payload.item, ...state.recent ]),
           text: '',
           cursor: 0,
         };
@@ -72,7 +74,7 @@ export default function (state = initialState, { type, payload }) {
       return {
         ...state,
         terms: new Set(terms.slice(0, -1)),
-        recent: new Set([ ...state.recent, terms[terms.length - 1] ]),
+        recent: new Set([ terms[terms.length - 1], ...state.recent ]),
         text: '',
         cursor: 0,
       };
@@ -81,6 +83,12 @@ export default function (state = initialState, { type, payload }) {
       return {
         ...state,
         cursor: Math.max(0, state.cursor + payload.delta),
+      };
+    case RESET_FILTER:
+      return {
+        ...state,
+        terms: new Set(),
+        recent: new Set([ ...Array.from(state.terms).reverse(), ...state.recent ]),
       };
     default:
       return state;

@@ -16,6 +16,7 @@ export const getSearchTextMatcher = createSelector(
 export const getSelectedCategory = state => getSearch(state).category;
 export const getDropdownVisibility = state => getSearch(state).visible;
 export const getSearchCursor = state => getSearch(state).cursor;
+export const getRecentSearches = state => Array.from(getSearch(state).recent);
 
 const getTableColumns = createSelector(
   getTables,
@@ -47,10 +48,10 @@ const getColumnValues = createSelector(
       const value = column.valueGetter(genome);
       if (value === null || typeof value === 'undefined') continue;
       const matches = matcher && matcher.test(value);
-      if (matches) contains.push(genome.id);
+      if (matches) contains.push(genome.uuid);
       if (matcher ? matches : value.length) {
         const item = map.get(value) || { key: value, label: value, ids: [] };
-        item.ids.push(genome.id);
+        item.ids.push(genome.uuid);
         map.set(value, item);
       }
     }
