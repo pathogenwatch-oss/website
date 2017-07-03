@@ -1,8 +1,8 @@
 .wgsa-search-box-container {
   height: 40px;
   user-select: none;
-  font-size: 21px;
   flex-grow: 1;
+  /*flex-shrink: 1;*/
   margin: 0 auto;
   min-width: 320px;
   max-width: 560px;
@@ -12,8 +12,8 @@
 }
 
 .wgsa-search-box {
-  flex-grow: 1;
   display: flex;
+  flex-wrap: nowrap;
   background: rgba(255, 255, 255, 0.14);
   padding: 0 16px;
   box-sizing: border-box;
@@ -29,6 +29,16 @@
   background: rgba(0, 0, 0, 0.14);
   color: #fff;
   margin-left: 4px;
+}
+
+.wgsa-search-box > .mdl-chip--deletable .mdl-chip__action {
+  color: #fff;
+  opacity: 0.54;
+}
+
+.wgsa-search-box > .mdl-chip--deletable .mdl-chip__action:hover,
+.wgsa-search-box > .mdl-chip--deletable .mdl-chip__action:focus {
+  opacity: 1;
 }
 
 .wgsa-search-box > button:last-child {
@@ -82,6 +92,13 @@
   padding: 16px;
   overflow-y: auto;
   cursor: auto;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 0.54);
+}
+
+.wgsa-search-dropdown p {
+  margin: 0;
+  font-size: 14px;
 }
 
 .wgsa-search-dropdown-enter {

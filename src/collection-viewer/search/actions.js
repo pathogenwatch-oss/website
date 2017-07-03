@@ -16,13 +16,35 @@ export function changeSearchText(text) {
   };
 }
 
-export const SEARCH_CATEGORY_SELECTED = 'SEARCH_CATEGORY_SELECTED';
+export const SEARCH_ITEM_SELECTED = 'SEARCH_ITEM_SELECTED';
 
-export function selectSearchCategory(category) {
+export function selectSearchItem(item) {
   return {
-    type: SEARCH_CATEGORY_SELECTED,
+    type: SEARCH_ITEM_SELECTED,
     payload: {
-      category,
+      item,
+    },
+  };
+}
+
+export const SEARCH_ITEM_REMOVED = 'SEARCH_ITEM_REMOVED';
+
+export function removeSearchItem(item) {
+  return {
+    type: SEARCH_ITEM_REMOVED,
+    payload: {
+      item,
+    },
+  };
+}
+
+export const SEARCH_CURSOR_MOVED = 'SEARCH_CURSOR_MOVED';
+
+export function moveCursor(delta) {
+  return {
+    type: SEARCH_CURSOR_MOVED,
+    payload: {
+      delta,
     },
   };
 }

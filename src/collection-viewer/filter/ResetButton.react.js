@@ -12,7 +12,7 @@ const ResetButton = ({ onClick, visible }) => (
       onClick={onClick}
       title="Reset Selection"
     >
-      <i className="material-icons">clear</i>
+      <i className="material-icons">cancel</i>
     </button>
   : null
 );

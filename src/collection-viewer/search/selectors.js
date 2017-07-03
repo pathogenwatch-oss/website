@@ -10,11 +10,12 @@ export const getSearch = state => getViewer(state).search;
 export const getSearchText = state => getSearch(state).text;
 export const getSearchTextMatcher = createSelector(
   getSearchText,
-  text => (text.length ? new RegExp(text, 'i') : null)
+  text => (text.length ? new RegExp(text.replace('?', '\\?'), 'i') : null)
 );
 
 export const getSelectedCategory = state => getSearch(state).category;
 export const getDropdownVisibility = state => getSearch(state).visible;
+export const getSearchCursor = state => getSearch(state).cursor;
 
 const getTableColumns = createSelector(
   getTables,
@@ -56,8 +57,9 @@ const getColumnValues = createSelector(
 
     return [
       { heading: 'Contains',
+        placeholder: text.length ? '' : 'Type a phrase to search by',
         items: contains.length ? [ { key: 'contains', label: text, ids: contains } ] : [] },
-      { heading: 'Matches', items: Array.from(map.values()) },
+      { heading: 'Matches', items: Array.from(map.values()), placeholder: 'No results' },
     ];
   }
 );
@@ -68,3 +70,17 @@ export const getSearchItems = state => {
   }
   return getTableColumns(state);
 };
+
+export const getItemAtCursor = createSelector(
+  getSearchItems,
+  getSearchCursor,
+  (sections, cursor) => {
+    let i = cursor;
+    for (const { items } of sections) {
+      if (i >= items.length) { i -= items.length; continue; }
+      return items[i];
+    }
+    const { items } = sections[sections.length - 1];
+    return items[items.length - 1] || null;
+  }
+);

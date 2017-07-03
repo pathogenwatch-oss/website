@@ -6,6 +6,7 @@ import classnames from 'classnames';
 
 import SearchDropdown from './SearchDropdown.react';
 import ResetButton from '../filter/ResetButton.react';
+import SearchTerm from './SearchTerm.react';
 
 import { getFilter } from '../selectors';
 import { getSearch } from './selectors';
@@ -13,8 +14,11 @@ import { getSearch } from './selectors';
 import {
   changeSearchText,
   changeDropdownVisibility,
-  selectSearchCategory,
+  removeSearchItem,
+  moveCursor,
 } from './actions';
+
+import { selectItemAtCursor } from './thunks';
 
 const Search = React.createClass({
 
@@ -29,7 +33,8 @@ const Search = React.createClass({
 
   componentDidUpdate(previous) {
     const { search } = this.props;
-    if (previous.search.category === null && search.category) {
+    if (previous.search.category === null && search.category ||
+        previous.search.terms !== search.terms) {
       this.refs.input.focus();
     }
   },
@@ -49,9 +54,12 @@ const Search = React.createClass({
     this.props.handleChange(event.target.value);
   },
 
+  handleFocus() {
+    this.props.openDropdown(true);
+  },
+
   handleClick() {
     this.refs.input.focus();
-    this.props.openDropdown();
   },
 
   handleKeyboard(e) {
@@ -61,18 +69,22 @@ const Search = React.createClass({
     if (e.keyCode === 39 || e.keyCode === 40) {
       this.props.moveCursor(1);
     }
-    const { text, category } = this.props.search;
-    if (e.keyCode === 8 && category && text.length === 0) {
-      this.props.deselectCategory();
+    const { text, visible } = this.props.search;
+    if (e.keyCode === 8 && text.length === 0) {
+      this.props.removeItem();
     }
     if (e.keyCode === 13) {
-      this.props.selectCategoryAtCursor();
+      this.props.selectItemAtCursor();
+    }
+    if (e.keyCode === 27 && visible) {
+      this.props.openDropdown(false);
+      this.refs.input.blur();
     }
   },
 
   render() {
-    const { totalAmount, filteredAmount, search } = this.props;
-    const { category, text, visible } = search;
+    const { totalAmount, filteredAmount, search, removeItem } = this.props;
+    const { text, visible, terms } = search;
     return (
       <div className="wgsa-search-box-container">
         <div className={classnames(
@@ -82,13 +94,24 @@ const Search = React.createClass({
           onClick={this.handleClick}
         >
           <i className="wgsa-search-box__icon material-icons">search</i>
-          { category &&
-            <span className="mdl-chip">
-              <strong className="mdl-chip__text">{category.label}:</strong>
-            </span> }
+          { Array.from(terms).map(term =>
+            <SearchTerm
+              key={term.key}
+              category={term.category}
+              value={term.value}
+              action={() => removeItem(term)}
+            />
+          )}
+          { search.category &&
+            <SearchTerm
+              category={search.category}
+              action={() => removeItem()}
+            />
+          }
           <input ref="input"
             className="wgsa-search-box__input"
             placeholder={this.getPlaceholder()}
+            onFocus={this.handleFocus}
             onChange={this.handleChange}
             onKeyDown={this.handleKeyboard}
             value={text}
@@ -118,8 +141,10 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     handleChange: text => dispatch(changeSearchText(text)),
-    openDropdown: () => dispatch(changeDropdownVisibility(true)),
-    deselectCategory: () => dispatch(selectSearchCategory(null)),
+    openDropdown: visible => dispatch(changeDropdownVisibility(visible)),
+    removeItem: item => dispatch(removeSearchItem(item)),
+    selectItemAtCursor: () => dispatch(selectItemAtCursor()),
+    moveCursor: delta => dispatch(moveCursor(delta)),
   };
 }
 

@@ -1,15 +1,20 @@
 import {
   SEARCH_DROPDOWN_VISIBILITY,
   SEARCH_TEXT_CHANGED,
-  SEARCH_CATEGORY_SELECTED,
+  SEARCH_ITEM_SELECTED,
+  SEARCH_ITEM_REMOVED,
+  SEARCH_CURSOR_MOVED,
 } from './actions.js';
+
+import { createSearchTerm } from './utils';
 
 const initialState = {
   visible: false,
   text: '',
-  terms: [],
+  terms: new Set(),
   category: null,
   cursor: 0,
+  recent: new Set(),
 };
 
 export default function (state = initialState, { type, payload }) {
@@ -25,12 +30,57 @@ export default function (state = initialState, { type, payload }) {
         text: payload,
         cursor: 0,
       };
-    case SEARCH_CATEGORY_SELECTED:
+    case SEARCH_ITEM_SELECTED: {
+      if (state.category === null) {
+        return {
+          ...state,
+          category: payload.item,
+          text: '',
+          cursor: 0,
+        };
+      }
+      const term = createSearchTerm(state.category, payload.item);
       return {
         ...state,
-        category: payload.category,
+        category: null,
+        terms: new Set([ ...state.terms, term ]),
         text: '',
         cursor: 0,
+      };
+    }
+    case SEARCH_ITEM_REMOVED: {
+      if (payload.item) {
+        const terms = state.terms;
+        terms.delete(payload.item);
+        return {
+          ...state,
+          terms: new Set(terms),
+          recent: new Set([ ...state.recent, payload.item ]),
+          text: '',
+          cursor: 0,
+        };
+      }
+      if (state.category) {
+        return {
+          ...state,
+          category: null,
+          text: '',
+          cursor: 0,
+        };
+      }
+      const terms = Array.from(state.terms);
+      return {
+        ...state,
+        terms: new Set(terms.slice(0, -1)),
+        recent: new Set([ ...state.recent, terms[terms.length - 1] ]),
+        text: '',
+        cursor: 0,
+      };
+    }
+    case SEARCH_CURSOR_MOVED:
+      return {
+        ...state,
+        cursor: Math.max(0, state.cursor + payload.delta),
       };
     default:
       return state;

@@ -45,3 +45,11 @@ export function findColumn(columns, columnKey) {
   }
   return null;
 }
+
+export function createSearchTerm(category, value) {
+  return {
+    key: `${category.key}_${value.key}`,
+    category,
+    value,
+  };
+}

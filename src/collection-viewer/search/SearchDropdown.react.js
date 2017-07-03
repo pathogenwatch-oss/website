@@ -1,11 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
-// import classnames from 'classnames';
+import classnames from 'classnames';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
-import { getSearchItems, getDropdownVisibility } from './selectors';
+import {
+  getSearchItems,
+  getDropdownVisibility,
+  getItemAtCursor,
+} from './selectors';
 
-import { selectSearchCategory, changeDropdownVisibility } from './actions';
+import { selectSearchItem, changeDropdownVisibility } from './actions';
 
 const SearchDropdown = React.createClass({
 
@@ -15,13 +19,8 @@ const SearchDropdown = React.createClass({
     open: React.PropTypes.bool,
   },
 
-  getInitialState() {
-    return {
-    };
-  },
-
   render() {
-    const { isOpen, sections, onItemSelect, close } = this.props;
+    const { isOpen, sections, activeItem, onItemSelect, close } = this.props;
     return (
       <ReactCSSTransitionGroup
         className="wgsa-search-dropdown-container"
@@ -35,13 +34,19 @@ const SearchDropdown = React.createClass({
               <i className="material-icons">clear</i>
             </button>
             <h2 className="wgsa-search-dropdown__heading">Recent Searches</h2>
-            {sections.map(({ heading, items }) =>
+            {sections.map(({ heading, items, placeholder }) =>
               <section key={heading}>
                 <h2 className="wgsa-search-dropdown__heading">{heading}</h2>
+                {(placeholder && !items.length) && <p>({placeholder})</p>}
                 <ul>
                   { items.map(item =>
                     <li key={item.key}>
-                      <button className="mdl-chip" onClick={() => onItemSelect(item)}>
+                      <button
+                        className={classnames(
+                          'mdl-chip', { 'mdl-chip--active': item === activeItem }
+                        )}
+                        onClick={() => onItemSelect(item)}
+                      >
                         <span className="mdl-chip__text">{item.label}</span>
                       </button>
                     </li>
@@ -63,12 +68,13 @@ function mapStateToProps(state) {
     isOpen: getDropdownVisibility(state),
     // recent: getRecentSearches(state),
     sections: getSearchItems(state),
+    activeItem: getItemAtCursor(state),
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    onItemSelect: category => dispatch(selectSearchCategory(category)),
+    onItemSelect: item => dispatch(selectSearchItem(item)),
     close: () => dispatch(changeDropdownVisibility(false)),
   };
 }
