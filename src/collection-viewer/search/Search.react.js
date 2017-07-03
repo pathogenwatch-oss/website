@@ -94,14 +94,14 @@ const Search = React.createClass({
           onClick={this.handleClick}
         >
           <i className="wgsa-search-box__icon material-icons">search</i>
-          { Array.from(terms).map(term =>
+          {/* { Array.from(terms).map(term =>
             <SearchTerm
               key={term.key}
               category={term.category}
               value={term.value}
               action={() => removeItem(term)}
             />
-          )}
+          )} */}
           { search.category &&
             <SearchTerm
               category={search.category}

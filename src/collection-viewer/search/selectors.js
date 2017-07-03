@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 
-import { getViewer, getActiveGenomes } from '../selectors';
+import { getViewer, getGenomeList } from '../selectors';
 import { getTables } from '../table/selectors';
 
 import { mapColumnsToSearchCategories, findColumn } from './utils';
@@ -17,6 +17,7 @@ export const getSelectedCategory = state => getSearch(state).category;
 export const getDropdownVisibility = state => getSearch(state).visible;
 export const getSearchCursor = state => getSearch(state).cursor;
 export const getRecentSearches = state => Array.from(getSearch(state).recent);
+export const getSearchTerms = state => Array.from(getSearch(state).terms);
 
 const getTableColumns = createSelector(
   getTables,
@@ -36,7 +37,7 @@ const getColumnValues = createSelector(
   getTables,
   getSearchText,
   getSearchTextMatcher,
-  getActiveGenomes,
+  getGenomeList,
   (category, tables, text, matcher, genomes) => {
     const table = tables[category.tableName];
     const column = findColumn(table.columns, category.key);
@@ -58,7 +59,7 @@ const getColumnValues = createSelector(
 
     return [
       { heading: 'Contains',
-        placeholder: text.length ? '' : 'Type a phrase to search by',
+        placeholder: text.length ? '' : 'Enter text',
         items: contains.length ? [ { key: 'contains', label: text, ids: contains } ] : [] },
       { heading: 'Matches', items: Array.from(map.values()), placeholder: 'No results' },
     ];

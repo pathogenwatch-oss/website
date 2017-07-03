@@ -10,9 +10,14 @@ import {
   getDropdownVisibility,
   getItemAtCursor,
   getRecentSearches,
+  getSearchTerms,
 } from './selectors';
 
-import { selectSearchItem, changeDropdownVisibility } from './actions';
+import {
+  selectSearchItem,
+  changeDropdownVisibility,
+  removeSearchItem,
+} from './actions';
 
 const SearchDropdown = React.createClass({
 
@@ -22,8 +27,56 @@ const SearchDropdown = React.createClass({
     open: React.PropTypes.bool,
   },
 
+  renderCurrentFilter() {
+    const { current, removeItem } = this.props;
+    if (!current.length) return null;
+    return (
+      <section>
+        <h2 className="wgsa-search-dropdown__heading">Current Filter</h2>
+        <ul>
+          {current.map(term =>
+            <li key={term.key}>
+              <SearchTerm
+                category={term.category}
+                value={term.value}
+                action={() => removeItem(term)}
+              />
+            </li>
+          )}
+        </ul>
+        <hr />
+      </section>
+    );
+  },
+
+  renderRecentTerms() {
+    const { recent, selectItem } = this.props;
+    if (!recent.length) return null;
+    return (
+      <section>
+        <h2 className="wgsa-search-dropdown__heading">Recently Used</h2>
+        <ul>
+          {recent.map(term =>
+            <li key={term.key}>
+              <button
+                className="mdl-chip"
+                onClick={() => selectItem(term)}
+              >
+                <span className="mdl-chip__text">
+                  <small>{term.category.label}:&nbsp;</small>
+                  <strong>{term.value.label}</strong>
+                </span>
+              </button>
+            </li>
+          )}
+        </ul>
+        <hr />
+      </section>
+    );
+  },
+
   render() {
-    const { isOpen, sections, activeItem, recent, selectItem, close } = this.props;
+    const { isOpen, sections, activeItem, selectItem, close } = this.props;
     return (
       <ReactCSSTransitionGroup
         className="wgsa-search-dropdown-container"
@@ -36,23 +89,9 @@ const SearchDropdown = React.createClass({
             <button className="wgsa-search-dropdown__close mdl-button mdl-button--icon" onClick={close}>
               <i className="material-icons">clear</i>
             </button>
-            <h2 className="wgsa-search-dropdown__heading">Recent Searches</h2>
-            <ul>
-              {recent.map(term =>
-                <li key={term.key}>
-                  <button
-                    className="mdl-chip"
-                    onClick={() => selectItem(term)}
-                  >
-                    <span className="mdl-chip__text">
-                      <small>{term.category.label}:&nbsp;</small>
-                      <strong>{term.value.label}</strong>
-                    </span>
-                  </button>
-                </li>
-              )}
-            </ul>
-            {sections.map(({ heading, items, placeholder }) =>
+            { this.renderCurrentFilter() }
+            { this.renderRecentTerms() }
+            { sections.map(({ heading, items, placeholder }) =>
               <section key={heading}>
                 <h2 className="wgsa-search-dropdown__heading">{heading}</h2>
                 {(placeholder && !items.length) && <p>({placeholder})</p>}
@@ -84,6 +123,7 @@ const SearchDropdown = React.createClass({
 function mapStateToProps(state) {
   return {
     isOpen: getDropdownVisibility(state),
+    current: getSearchTerms(state),
     recent: getRecentSearches(state),
     sections: getSearchItems(state),
     activeItem: getItemAtCursor(state),
@@ -93,6 +133,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     selectItem: item => dispatch(selectSearchItem(item)),
+    removeItem: item => dispatch(removeSearchItem(item)),
     close: () => dispatch(changeDropdownVisibility(false)),
   };
 }

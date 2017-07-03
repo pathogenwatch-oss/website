@@ -2,7 +2,6 @@
   height: 40px;
   user-select: none;
   flex-grow: 1;
-  /*flex-shrink: 1;*/
   margin: 0 auto;
   min-width: 320px;
   max-width: 560px;
@@ -86,14 +85,17 @@
 }
 
 .wgsa-search-dropdown {
-  max-height: 88vh;
+  max-height: 80vh;
   background: #efefef;
+  background: #fff;
   border-radius: 4px;
   padding: 16px;
   overflow-y: auto;
   cursor: auto;
   font-weight: 400;
   color: rgba(0, 0, 0, 0.54);
+  border: 1px solid rgba(0, 0, 0, 0.27);
+  position: relative;
 }
 
 .wgsa-search-dropdown p {
@@ -122,8 +124,10 @@
 }
 
 .wgsa-search-dropdown__close {
-  float: right;
   color: rgba(0, 0, 0, 0.54);
+  position: absolute;
+  top: 8px;
+  right: 8px;
 }
 
 .wgsa-search-dropdown__heading {
@@ -145,4 +149,9 @@
 
 .wgsa-search-dropdown .mdl-chip {
   font-weight: 500;
+  /*background: #fff;*/
+}
+
+.wgsa-search-dropdown .mdl-chip__action {
+  color: rgba(0, 0, 0, 0.54);
 }
