@@ -4,7 +4,11 @@ import { getViewer, getGenomeList } from '../selectors';
 import { getTables } from '../table/selectors';
 
 import { tableDisplayNames } from '../constants';
-import { mapColumnsToSearchCategories, findColumn } from './utils';
+import {
+  mapColumnsToSearchCategories,
+  findColumn,
+  getValueLabel,
+} from './utils';
 
 export const getSearch = state => getViewer(state).search;
 
@@ -33,6 +37,8 @@ const getTableColumns = createSelector(
   }, [])
 );
 
+const sortByFrequency = (a, b) => b.ids.length - a.ids.length;
+
 const getColumnValues = createSelector(
   getSelectedCategory,
   getTables,
@@ -52,7 +58,8 @@ const getColumnValues = createSelector(
       const matches = matcher && matcher.test(value);
       if (matches) contains.push(genome.uuid);
       if (matcher ? matches : value.length) {
-        const item = map.get(value) || { key: value, label: value, ids: [] };
+        const label = getValueLabel(value, category.tableName);
+        const item = map.get(value) || { key: value, label, ids: [] };
         item.ids.push(genome.uuid);
         map.set(value, item);
       }
@@ -62,7 +69,9 @@ const getColumnValues = createSelector(
       { heading: 'Contains',
         placeholder: text.length ? '' : 'Enter text',
         items: contains.length ? [ { key: 'contains', label: text, ids: contains } ] : [] },
-      { heading: 'Matches', items: Array.from(map.values()), placeholder: 'No results' },
+      { heading: 'Matches',
+        items: Array.from(map.values()).sort(sortByFrequency),
+        placeholder: 'No results' },
     ];
   }
 );

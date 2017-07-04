@@ -180,6 +180,18 @@
   color: #fff;
 }
 
+.mdl-chip__contact {
+  background: #a386bd;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.mdl-chip__contact--muted,
+.mdl-chip--alt .mdl-chip__contact {
+  background: rgba(0, 0, 0, 0.27);
+}
+
 /* Toggle Switch */
 
 .mdl-switch {

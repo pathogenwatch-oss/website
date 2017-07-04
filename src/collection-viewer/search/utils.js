@@ -1,5 +1,6 @@
 import { getColumnLabel } from '../table/utils';
 import { tableKeys } from '../constants';
+import { getColourState, nonResistantColour } from '../amr-utils';
 
 export function mapColumnsToSearchCategories(columns, tableName, matcher) {
   const categories = [];
@@ -53,4 +54,14 @@ export function createSearchTerm(category, value) {
     category,
     value,
   };
+}
+
+export function getValueLabel(value, table) {
+  if (table === tableKeys.antibiotics) {
+    return getColourState(value);
+  }
+  if (table === tableKeys.snps || table === tableKeys.genes) {
+    return value === nonResistantColour ? 'ABSENT' : 'PRESENT';
+  }
+  return value;
 }

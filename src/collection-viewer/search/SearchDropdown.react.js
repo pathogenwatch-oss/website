@@ -3,8 +3,6 @@ import { connect } from 'react-redux';
 import classnames from 'classnames';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
-import SearchTerm from './SearchTerm.react';
-
 import {
   getSearchItems,
   getDropdownVisibility,
@@ -39,11 +37,16 @@ const SearchDropdown = React.createClass({
         <ul>
           {current.map(term =>
             <li key={term.key}>
-              <SearchTerm
-                category={term.category}
-                value={term.value}
-                action={() => removeTerm(term)}
-              />
+              <span className="mdl-chip mdl-chip--deletable mdl-chip--contact mdl-chip--alt">
+                <span className="mdl-chip__contact">{term.value.ids.length}</span>
+                <span className="mdl-chip__text">
+                  <small>{term.category.label}:&nbsp;</small>
+                  <strong>{term.value.label}</strong>
+                </span>
+                <button className="mdl-chip__action" onClick={() => removeTerm(term)} title="Remove">
+                  <i className="material-icons">cancel</i>
+                </button>
+              </span>
             </li>
           )}
         </ul>
@@ -62,10 +65,11 @@ const SearchDropdown = React.createClass({
           {recent.map(term =>
             <li key={term.key}>
               <button
-                className="mdl-chip"
+                className="mdl-chip mdl-chip--contact"
                 onClick={() => selectItem(term)}
               >
                 <span className="mdl-chip__text">
+                  <span className="mdl-chip__contact mdl-chip__contact--muted">{term.value.ids.length}</span>
                   <small>{term.category.label}:&nbsp;</small>
                   <strong>{term.value.label}</strong>
                 </span>
@@ -101,10 +105,12 @@ const SearchDropdown = React.createClass({
             { this.renderRecentTerms() }
             <section>
               { category ?
-                <SearchTerm
-                  category={category}
-                  action={() => removeCategory()}
-                /> :
+                <span className="mdl-chip mdl-chip--deletable">
+                  <span className="mdl-chip__text">{category.label}</span>
+                  <button className="mdl-chip__action" onClick={() => removeCategory()}>
+                    <i className="material-icons">cancel</i>
+                  </button>
+                </span> :
                 <h2 className="wgsa-search-dropdown__heading">Choose Column &ndash; Use arrow keys to navigate</h2>
               }
             </section>
@@ -118,10 +124,13 @@ const SearchDropdown = React.createClass({
                       <li key={item.key}>
                         <button
                           className={classnames(
-                            'mdl-chip', { 'mdl-chip--active': item === activeItem }
+                            'mdl-chip',
+                            { 'mdl-chip--active': item === activeItem,
+                              'mdl-chip--contact': item.ids }
                           )}
                           onClick={() => selectItem(item)}
                         >
+                          {item.ids && <span className="mdl-chip__contact">{item.ids.length}</span>}
                           <span className="mdl-chip__text">{item.label}</span>
                         </button>
                       </li>
