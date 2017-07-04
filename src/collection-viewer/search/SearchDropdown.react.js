@@ -15,10 +15,12 @@ import {
 } from './selectors';
 
 import {
-  selectSearchItem,
   changeDropdownVisibility,
-  removeSearchItem,
+  removeSearchTerm,
+  selectSearchCategory,
 } from './actions';
+
+import { selectSearchItem } from './thunks';
 
 const SearchDropdown = React.createClass({
 
@@ -29,7 +31,7 @@ const SearchDropdown = React.createClass({
   },
 
   renderCurrentFilter() {
-    const { current, removeItem } = this.props;
+    const { current, removeTerm } = this.props;
     if (!current.length) return null;
     return (
       <section>
@@ -40,7 +42,7 @@ const SearchDropdown = React.createClass({
               <SearchTerm
                 category={term.category}
                 value={term.value}
-                action={() => removeItem(term)}
+                action={() => removeTerm(term)}
               />
             </li>
           )}
@@ -78,7 +80,7 @@ const SearchDropdown = React.createClass({
 
   render() {
     const { isOpen, sections, activeItem, close, category } = this.props;
-    const { selectItem, removeItem } = this.props;
+    const { selectItem, removeCategory } = this.props;
     return (
       <ReactCSSTransitionGroup
         className="wgsa-search-dropdown-container"
@@ -101,7 +103,7 @@ const SearchDropdown = React.createClass({
               { category ?
                 <SearchTerm
                   category={category}
-                  action={() => removeItem()}
+                  action={() => removeCategory()}
                 /> :
                 <h2 className="wgsa-search-dropdown__heading">Choose Column</h2>
               }
@@ -151,7 +153,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     selectItem: item => dispatch(selectSearchItem(item)),
-    removeItem: item => dispatch(removeSearchItem(item)),
+    removeTerm: item => dispatch(removeSearchTerm(item)),
+    removeCategory: () => dispatch(selectSearchCategory(null)),
     close: () => dispatch(changeDropdownVisibility(false)),
   };
 }

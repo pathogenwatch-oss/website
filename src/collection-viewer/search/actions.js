@@ -16,25 +16,32 @@ export function changeSearchText(text) {
   };
 }
 
-export const SEARCH_ITEM_SELECTED = 'SEARCH_ITEM_SELECTED';
+export const SEARCH_CATEGORY_SELECTED = 'SEARCH_CATEGORY_SELECTED';
 
-export function selectSearchItem(item) {
+export function selectSearchCategory(category) {
   return {
-    type: SEARCH_ITEM_SELECTED,
+    type: SEARCH_CATEGORY_SELECTED,
     payload: {
-      item,
+      category,
     },
   };
 }
 
-export const SEARCH_ITEM_REMOVED = 'SEARCH_ITEM_REMOVED';
+export const SEARCH_TERM_ADDED = 'SEARCH_TERM_ADDED';
 
-export function removeSearchItem(item) {
+export function addSearchTerm(term) {
   return {
-    type: SEARCH_ITEM_REMOVED,
-    payload: {
-      item,
-    },
+    type: SEARCH_TERM_ADDED,
+    payload: term,
+  };
+}
+
+export const SEARCH_TERM_REMOVED = 'SEARCH_TERM_REMOVED';
+
+export function removeSearchTerm(term) {
+  return {
+    type: SEARCH_TERM_REMOVED,
+    payload: term,
   };
 }
 

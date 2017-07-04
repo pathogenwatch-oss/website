@@ -12,7 +12,7 @@ import { getSearch } from './selectors';
 import {
   changeSearchText,
   changeDropdownVisibility,
-  removeSearchItem,
+  selectSearchCategory,
   moveCursor,
 } from './actions';
 
@@ -53,7 +53,10 @@ const Search = React.createClass({
   },
 
   handleFocus() {
-    this.props.openDropdown(true);
+    const { visible } = this.props.search;
+    if (!visible) {
+      this.props.openDropdown(true);
+    }
   },
 
   handleClick() {
@@ -67,9 +70,9 @@ const Search = React.createClass({
     if (e.keyCode === 39 || e.keyCode === 40) {
       this.props.moveCursor(1);
     }
-    const { text, visible } = this.props.search;
-    if (e.keyCode === 8 && text.length === 0) {
-      this.props.removeItem();
+    const { text, category, visible } = this.props.search;
+    if (e.keyCode === 8 && category && text.length === 0) {
+      this.props.removeCategory();
     }
     if (e.keyCode === 13) {
       this.props.selectItemAtCursor();
@@ -91,14 +94,6 @@ const Search = React.createClass({
           onClick={this.handleClick}
         >
           <i className="wgsa-search-box__icon material-icons">search</i>
-          {/* { Array.from(terms).map(term =>
-            <SearchTerm
-              key={term.key}
-              category={term.category}
-              value={term.value}
-              action={() => removeItem(term)}
-            />
-          )} */}
           <input ref="input"
             className="wgsa-search-box__input"
             placeholder={this.getPlaceholder()}
@@ -126,7 +121,7 @@ function mapDispatchToProps(dispatch) {
   return {
     handleChange: text => dispatch(changeSearchText(text)),
     openDropdown: visible => dispatch(changeDropdownVisibility(visible)),
-    removeItem: item => dispatch(removeSearchItem(item)),
+    removeCategory: () => dispatch(selectSearchCategory(null)),
     selectItemAtCursor: () => dispatch(selectItemAtCursor()),
     moveCursor: delta => dispatch(moveCursor(delta)),
   };

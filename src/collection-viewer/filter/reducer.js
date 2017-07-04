@@ -5,7 +5,7 @@ import {
   RESET_FILTER,
 } from './actions';
 import { TREE_LOADED } from '../tree/actions';
-import { SEARCH_ITEM_SELECTED, SEARCH_ITEM_REMOVED } from '../search/actions';
+import { SEARCH_TERM_ADDED, SEARCH_TERM_REMOVED } from '../search/actions';
 
 const initialState = {
   active: false,
@@ -68,15 +68,11 @@ export default function (state = initialState, { type, payload = {} }) {
         active: false,
         ids: initialState.ids,
       };
-    case SEARCH_ITEM_SELECTED: {
-      const { item = {} } = payload;
-      if (!item.ids) return state;
-      return append(state, item.ids);
+    case SEARCH_TERM_ADDED: {
+      return append(state, payload.value.ids);
     }
-    case SEARCH_ITEM_REMOVED: {
-      const { item = {} } = payload;
-      if (!item.value) return state;
-      return remove(state, new Set(item.value.ids));
+    case SEARCH_TERM_REMOVED: {
+      return remove(state, new Set(payload.value.ids));
     }
     default:
       return state;
