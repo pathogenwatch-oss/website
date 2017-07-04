@@ -3,6 +3,7 @@ import { createSelector } from 'reselect';
 import { getViewer, getGenomeList } from '../selectors';
 import { getTables } from '../table/selectors';
 
+import { tableDisplayNames } from '../constants';
 import { mapColumnsToSearchCategories, findColumn } from './utils';
 
 export const getSearch = state => getViewer(state).search;
@@ -22,11 +23,11 @@ export const getSearchTerms = state => Array.from(getSearch(state).terms);
 const getTableColumns = createSelector(
   getTables,
   getSearchTextMatcher,
-  (tables, matcher) => Object.keys(tables).reduce((memo, name) => {
-    const table = tables[name];
-    const items = mapColumnsToSearchCategories(table.columns, name, matcher);
+  (tables, matcher) => Object.keys(tables).reduce((memo, key) => {
+    const table = tables[key];
+    const items = mapColumnsToSearchCategories(table.columns, key, matcher);
     if (items.length) {
-      memo.push({ heading: name, items });
+      memo.push({ heading: tableDisplayNames[key], items });
     }
     return memo;
   }, [])

@@ -1,4 +1,5 @@
 import { getColumnLabel } from '../table/utils';
+import { tableKeys } from '../constants';
 
 export function mapColumnsToSearchCategories(columns, tableName, matcher) {
   const categories = [];
@@ -18,7 +19,7 @@ export function mapColumnsToSearchCategories(columns, tableName, matcher) {
 
     const { columnKey } = column;
 
-    if (columnKey === '__name' && tableName !== 'metadata') continue;
+    if (columnKey === '__name' && tableName !== tableKeys.metadata) continue;
     if (!column.valueGetter || column.hidden) continue;
     if (columnKeys.has(columnKey)) continue;
 

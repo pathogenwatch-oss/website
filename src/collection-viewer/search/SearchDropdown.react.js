@@ -105,7 +105,7 @@ const SearchDropdown = React.createClass({
                   category={category}
                   action={() => removeCategory()}
                 /> :
-                <h2 className="wgsa-search-dropdown__heading">Choose Column</h2>
+                <h2 className="wgsa-search-dropdown__heading">Choose Column &ndash; Use arrow keys to navigate</h2>
               }
             </section>
             <div className="wgsa-search-dropdown__values">
