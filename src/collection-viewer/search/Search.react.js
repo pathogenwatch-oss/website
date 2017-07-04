@@ -5,10 +5,8 @@ import { connect } from 'react-redux';
 import classnames from 'classnames';
 
 import SearchDropdown from './SearchDropdown.react';
-import ResetButton from '../filter/ResetButton.react';
-import SearchTerm from './SearchTerm.react';
+import FilterStatus from '../filter/FilterStatus.react';
 
-import { getFilter } from '../selectors';
 import { getSearch } from './selectors';
 
 import {
@@ -83,8 +81,7 @@ const Search = React.createClass({
   },
 
   render() {
-    const { totalAmount, filteredAmount, search, removeItem } = this.props;
-    const { text, visible, terms } = search;
+    const { text, visible } = this.props.search;
     return (
       <div className="wgsa-search-box-container">
         <div className={classnames(
@@ -102,12 +99,6 @@ const Search = React.createClass({
               action={() => removeItem(term)}
             />
           )} */}
-          { search.category &&
-            <SearchTerm
-              category={search.category}
-              action={() => removeItem()}
-            />
-          }
           <input ref="input"
             className="wgsa-search-box__input"
             placeholder={this.getPlaceholder()}
@@ -116,10 +107,7 @@ const Search = React.createClass({
             onKeyDown={this.handleKeyboard}
             value={text}
           />
-          <p className="wgsa-search-box__numbers">
-            {filteredAmount} of {totalAmount}
-          </p>
-          <ResetButton />
+          <FilterStatus />
         </div>
         <SearchDropdown />
       </div>
@@ -129,11 +117,7 @@ const Search = React.createClass({
 });
 
 function mapStateToProps(state) {
-  const filter = getFilter(state);
-  const totalAmount = filter.unfilteredIds.length;
   return {
-    totalAmount,
-    filteredAmount: filter.active ? filter.ids.size : totalAmount,
     search: getSearch(state),
   };
 }

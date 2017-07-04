@@ -14,7 +14,7 @@
   display: flex;
   flex-wrap: nowrap;
   background: rgba(255, 255, 255, 0.14);
-  padding: 0 16px;
+  padding: 0 8px;
   box-sizing: border-box;
   align-items: center;
   border-radius: 2px;
@@ -27,22 +27,6 @@
 .wgsa-search-box > .mdl-chip {
   background: rgba(0, 0, 0, 0.14);
   color: #fff;
-  margin-left: 4px;
-}
-
-.wgsa-search-box > .mdl-chip--deletable .mdl-chip__action {
-  color: #fff;
-  opacity: 0.54;
-}
-
-.wgsa-search-box > .mdl-chip--deletable .mdl-chip__action:hover,
-.wgsa-search-box > .mdl-chip--deletable .mdl-chip__action:focus {
-  opacity: 1;
-}
-
-.wgsa-search-box > button:last-child {
-  margin-left: 8px;
-  margin-right: -8px;
 }
 
 .wgsa-search-box:hover,
@@ -50,9 +34,13 @@
   background: rgba(255, 255, 255, 0.25);
 }
 
+.wgsa-search-box__icon {
+  margin: 0 8px;
+}
+
 .wgsa-search-box__input {
   flex-grow: 1;
-  margin: 0 8px;
+  margin: 0 4px;
   background: none;
   border: none;
   border-radius: 2px;
@@ -73,8 +61,14 @@
   font-size: 13px;
 }
 
-.wgsa-search-box__numbers {
-  margin: 0;
+.wgsa-filter-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.wgsa-filter-status > span {
+  margin: 8px;
 }
 
 
@@ -89,17 +83,23 @@
   background: #efefef;
   background: #fff;
   border-radius: 4px;
-  padding: 16px;
-  overflow-y: auto;
+  overflow: hidden;
   cursor: auto;
   font-weight: 400;
   color: rgba(0, 0, 0, 0.54);
   border: 1px solid rgba(0, 0, 0, 0.27);
   position: relative;
+  display: flex;
+  flex-direction: column;
+  padding-top: 16px;
+}
+
+.wgsa-search-dropdown section {
+  margin: 0 16px 16px;
 }
 
 .wgsa-search-dropdown p {
-  margin: 0;
+  margin: 8px 0;
   font-size: 14px;
 }
 
@@ -131,7 +131,7 @@
 }
 
 .wgsa-search-dropdown__heading {
-  margin: 0 0 16px;
+  margin: 0;
   font-size: 14px;
   line-height: 1;
   text-transform: capitalize;
@@ -149,9 +149,13 @@
 
 .wgsa-search-dropdown .mdl-chip {
   font-weight: 500;
-  /*background: #fff;*/
 }
 
-.wgsa-search-dropdown .mdl-chip__action {
-  color: rgba(0, 0, 0, 0.54);
+.wgsa-search-dropdown__values {
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+.wgsa-search-dropdown hr {
+  margin: 0;
 }
