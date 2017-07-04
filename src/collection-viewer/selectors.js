@@ -10,8 +10,23 @@ export const getCollection = state => getViewer(state).entities.collection;
 
 export const getGenomes = state => getViewer(state).entities.genomes;
 
-
-export const getFilter = state => getViewer(state).filter;
+export const getFilter = createSelector(
+  state => getViewer(state).filter,
+  state => getViewer(state).search.terms,
+  (filter, terms) => {
+    if (terms.size) {
+      return {
+        ...filter,
+        ids: new Set(
+          Array.from(terms)
+            .reduce((memo, { value }) => memo.concat(value.ids), [])
+        ),
+        active: true,
+      };
+    }
+    return filter;
+  }
+);
 
 export const getVisibleGenomeIds = state => getFilter(state).unfilteredIds;
 

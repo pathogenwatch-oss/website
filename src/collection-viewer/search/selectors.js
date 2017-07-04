@@ -21,8 +21,18 @@ export const getSearchTextMatcher = createSelector(
 export const getSelectedCategory = state => getSearch(state).category;
 export const getDropdownVisibility = state => getSearch(state).visible;
 export const getSearchCursor = state => getSearch(state).cursor;
-export const getRecentSearches = state => Array.from(getSearch(state).recent);
-export const getSearchTerms = state => Array.from(getSearch(state).terms);
+export const getRecentSearches = createSelector(
+  getSearch,
+  search => Array.from(search.recent)
+);
+export const getSearchTerms = createSelector(
+  getSearch,
+  search => Array.from(search.terms)
+);
+export const getSearchTermIds = createSelector(
+  getSearchTerms,
+  terms => terms.reduce((memo, { value }) => memo.concat(value.ids))
+);
 
 const getTableColumns = createSelector(
   getTables,
