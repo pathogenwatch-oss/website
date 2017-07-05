@@ -5,17 +5,24 @@ import {
   SEARCH_TERM_ADDED,
   SEARCH_TERM_REMOVED,
   SEARCH_CURSOR_MOVED,
+  SEARCH_SORT_SELECTED,
+  SEARCH_OPERATOR_SELECTED,
 } from './actions.js';
+
+import { sortKeys } from './constants';
 
 import { RESET_FILTER } from '../filter/actions';
 
 const initialState = {
-  visible: false,
-  text: '',
-  terms: new Set(),
   category: null,
   cursor: 0,
+  operators: {},
+  nextOperator: 'OR',
   recent: new Set(),
+  sort: sortKeys.FREQ_DESC,
+  text: '',
+  terms: new Set(),
+  visible: false,
 };
 
 function addToRecent(state, terms) {
@@ -47,20 +54,26 @@ export default function (state = initialState, { type, payload }) {
       return {
         ...state,
         category: null,
-        terms: new Set([ payload, ...state.terms ]),
-        recent: new Set(state.recent),
-        text: '',
         cursor: 0,
+        operators: state.terms.size ? {
+          ...state.operators,
+          [payload.key]: state.nextOperator,
+        } : state.operators,
+        recent: new Set(state.recent),
+        terms: new Set([ ...state.terms, payload ]),
+        text: '',
       };
     }
     case SEARCH_TERM_REMOVED: {
       state.terms.delete(payload);
+      delete state.operators[payload.key];
       return {
         ...state,
-        terms: new Set(state.terms),
-        recent: addToRecent(state, [ payload ]),
-        text: '',
         cursor: 0,
+        operators: { ...state.operators },
+        recent: addToRecent(state, [ payload ]),
+        terms: new Set(state.terms),
+        text: '',
       };
     }
     case SEARCH_CURSOR_MOVED:
@@ -71,9 +84,23 @@ export default function (state = initialState, { type, payload }) {
     case RESET_FILTER:
       return {
         ...state,
-        terms: new Set(),
         recent: addToRecent(state, state.terms),
+        terms: new Set(),
+        termKeys: new Set(),
+        operators: {},
       };
+    case SEARCH_SORT_SELECTED:
+      return {
+        ...state,
+        sort: payload,
+      };
+    case SEARCH_OPERATOR_SELECTED: {
+      if (payload === state.nextOperator) return state;
+      return {
+        ...state,
+        nextOperator: payload,
+      };
+    }
     default:
       return state;
   }

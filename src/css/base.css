@@ -43,6 +43,20 @@ button, select {
   font-family: inherit;
 }
 
+select {
+  padding: 2px 4px;
+  border: none;
+  font-size: 13px;
+  font-weight: 500;
+  background: none;
+}
+
+select:hover,
+select:focus,
+select:active {
+  outline: none;
+}
+
 a {
   font-weight: 400;
   color: #673c90;

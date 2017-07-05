@@ -155,10 +155,10 @@ export const systemDataColumns = {
     },
   },
   __GC_Content: {
-    columnKey: '__GC_Content',
+    columnKey: '__%_GC_Content',
     valueGetter({ metrics }) {
       return metrics && metrics.gcContent ?
-        `${metrics.gcContent}%` :
+        metrics.gcContent :
         null;
     },
   },

@@ -10,17 +10,37 @@ export const getCollection = state => getViewer(state).entities.collection;
 
 export const getGenomes = state => getViewer(state).entities.genomes;
 
+const getSearchIds = createSelector(
+  state => getViewer(state).search.terms,
+  state => getViewer(state).search.operators,
+  (terms, operators) => {
+    const intersections = [];
+    let intersection = null;
+    for (const { key, value } of terms) {
+      const operator = operators[key];
+      if (operator === 'OR') {
+        intersections.push(intersection);
+        intersection = value.ids;
+      } else if (intersection) {
+        intersection = intersection.filter(id => value.ids.indexOf(id) !== -1);
+      } else {
+        intersection = value.ids;
+      }
+    }
+    if (intersection) intersections.push(intersection);
+    return new Set(intersections.reduce((memo, ids) => memo.concat(ids), []));
+  }
+);
+
 export const getFilter = createSelector(
   state => getViewer(state).filter,
   state => getViewer(state).search.terms,
-  (filter, terms) => {
-    if (terms.size) {
+  getSearchIds,
+  (filter, searchTerms, searchIds) => {
+    if (searchTerms.size) {
       return {
         ...filter,
-        ids: new Set(
-          Array.from(terms)
-            .reduce((memo, { value }) => memo.concat(value.ids), [])
-        ),
+        ids: searchIds,
         active: true,
       };
     }

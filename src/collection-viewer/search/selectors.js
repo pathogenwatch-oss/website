@@ -8,27 +8,43 @@ import {
   mapColumnsToSearchCategories,
   findColumn,
   getValueLabel,
+  getExpressionMatcher,
+  sortFns,
 } from './utils';
 
 export const getSearch = state => getViewer(state).search;
 
+export const getSelectedCategory = state => getSearch(state).category;
 export const getSearchText = state => getSearch(state).text;
 export const getSearchTextMatcher = createSelector(
+  getSelectedCategory,
   getSearchText,
-  text => (text.length ? new RegExp(text.replace('?', '\\?'), 'i') : null)
+  (category, text) => {
+    if (!text.length) return null;
+    if (category && category.numeric) {
+      return getExpressionMatcher(text);
+    }
+    return new RegExp(text.replace('?', '\\?'), 'i');
+  }
 );
 
-export const getSelectedCategory = state => getSearch(state).category;
 export const getDropdownVisibility = state => getSearch(state).visible;
 export const getSearchCursor = state => getSearch(state).cursor;
+export const getSearchSort = state => getSearch(state).sort;
+export const getSearchTermKeys = state => getSearch(state).termKeys;
+export const getNextOperator = state => getSearch(state).nextOperator;
+export const getSearchOperators = state => getSearch(state).operators;
+
 export const getRecentSearches = createSelector(
   getSearch,
   search => Array.from(search.recent)
 );
+
 export const getSearchTerms = createSelector(
   getSearch,
   search => Array.from(search.terms)
 );
+
 export const getSearchTermIds = createSelector(
   getSearchTerms,
   terms => terms.reduce((memo, { value }) => memo.concat(value.ids))
@@ -47,7 +63,26 @@ const getTableColumns = createSelector(
   }, [])
 );
 
-const sortByFrequency = (a, b) => b.ids.length - a.ids.length;
+function getContainsSection(category, text, ids) {
+  const items =
+    ids.length ?
+      [ { key: 'contains', label: text, ids } ] :
+      [];
+  let placeholder = '';
+  if (!text.length) {
+    placeholder = category.numeric ?
+      'Enter expression: <, >, <=, >=' :
+      'Enter text';
+  }
+  return {
+    heading: category.numeric ? 'Expression' : 'Contains',
+    placeholder,
+    items,
+  };
+}
+
+const isSelected = (terms, category, value) =>
+  terms.some(term => term.category.key === category.key && term.value.key === value);
 
 const getColumnValues = createSelector(
   getSelectedCategory,
@@ -55,7 +90,9 @@ const getColumnValues = createSelector(
   getSearchText,
   getSearchTextMatcher,
   getGenomeList,
-  (category, tables, text, matcher, genomes) => {
+  getSearchSort,
+  getSearchTerms,
+  (category, tables, text, matcher, genomes, sort, terms) => {
     const table = tables[category.tableName];
     const column = findColumn(table.columns, category.key);
 
@@ -65,10 +102,12 @@ const getColumnValues = createSelector(
     for (const genome of genomes) {
       const value = column.valueGetter(genome);
       if (value === null || typeof value === 'undefined') continue;
-      const matches = matcher && matcher.test(value);
+      console.log(terms, category, value);
+      if (terms.length && isSelected(terms, category, value)) continue;
+      const label = getValueLabel(value, category.tableName);
+      const matches = matcher && matcher.test(label);
       if (matches) contains.push(genome.uuid);
-      if (matcher ? matches : value.length) {
-        const label = getValueLabel(value, category.tableName);
+      if (matcher ? matches : label) {
         const item = map.get(value) || { key: value, label, ids: [] };
         item.ids.push(genome.uuid);
         map.set(value, item);
@@ -76,12 +115,12 @@ const getColumnValues = createSelector(
     }
 
     return [
-      { heading: 'Contains',
-        placeholder: text.length ? '' : 'Enter text',
-        items: contains.length ? [ { key: 'contains', label: text, ids: contains } ] : [] },
+      getContainsSection(category, text, contains),
       { heading: 'Matches',
-        items: Array.from(map.values()).sort(sortByFrequency),
-        placeholder: 'No results' },
+        items: Array.from(map.values()).sort(sortFns[sort]),
+        placeholder: 'No results',
+        sort: true,
+      },
     ];
   }
 );

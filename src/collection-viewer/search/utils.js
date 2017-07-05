@@ -31,6 +31,7 @@ export function mapColumnsToSearchCategories(columns, tableName, matcher) {
       label,
       tableName,
       key: columnKey,
+      numeric: tableName === tableKeys.stats,
     });
     columnKeys.add(columnKey);
   }
@@ -63,5 +64,47 @@ export function getValueLabel(value, table) {
   if (table === tableKeys.snps || table === tableKeys.genes) {
     return value === nonResistantColour ? 'ABSENT' : 'PRESENT';
   }
-  return value;
+  return String(value);
 }
+
+const comparators = {
+  '>': (b, a) => a > b,
+  '>=': (b, a) => a >= b,
+  '<': (b, a) => a < b,
+  '<=': (b, a) => a <= b,
+};
+
+export function getExpressionMatcher(text) {
+  const conditions = [];
+  const cleanText = text.replace(' ', '');
+  let operator;
+  if (cleanText[0] === '<' || cleanText[0] === '>') {
+    operator = cleanText[0];
+    if (cleanText[1] === '=') {
+      operator += '=';
+    }
+    const number = cleanText.slice(operator.length);
+    if (!number.length && isNaN(number)) return null;
+    conditions.push(comparators[operator].bind(null, Number(number)));
+  }
+  return {
+    test: conditions.length ?
+      value => conditions.every(condition => condition(value)) :
+      () => false,
+  };
+}
+
+export const sortFns = {
+  FREQ_DESC: (a, b) => b.ids.length - a.ids.length,
+  FREQ_ASC: (a, b) => a.ids.length - b.ids.length,
+  VALUE_DESC: (a, b) => {
+    if (a.label > b.label) return -1;
+    if (a.label < b.label) return 1;
+    return 0;
+  },
+  VALUE_ASC: (a, b) => {
+    if (a.label > b.label) return 1;
+    if (a.label < b.label) return -1;
+    return 0;
+  },
+};

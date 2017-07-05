@@ -55,3 +55,21 @@ export function moveCursor(delta) {
     },
   };
 }
+
+export const SEARCH_SORT_SELECTED = 'SEARCH_SORT_SELECTED';
+
+export function selectSort(sort) {
+  return {
+    type: SEARCH_SORT_SELECTED,
+    payload: sort,
+  };
+}
+
+export const SEARCH_OPERATOR_SELECTED = 'SEARCH_OPERATOR_SELECTED';
+
+export function selectNextOperator(operator) {
+  return {
+    type: SEARCH_OPERATOR_SELECTED,
+    payload: operator,
+  };
+}

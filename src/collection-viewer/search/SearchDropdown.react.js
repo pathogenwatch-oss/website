@@ -3,6 +3,9 @@ import { connect } from 'react-redux';
 import classnames from 'classnames';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
+import SortSelect from './SortSelect.react';
+import LogicalOperator from './LogicalOperator.react';
+
 import {
   getSearchItems,
   getDropdownVisibility,
@@ -10,6 +13,7 @@ import {
   getRecentSearches,
   getSearchTerms,
   getSelectedCategory,
+  getSearchOperators,
 } from './selectors';
 
 import {
@@ -29,7 +33,7 @@ const SearchDropdown = React.createClass({
   },
 
   renderCurrentFilter() {
-    const { current, removeTerm } = this.props;
+    const { current, removeTerm, operators } = this.props;
     if (!current.length) return null;
     return (
       <section>
@@ -37,6 +41,7 @@ const SearchDropdown = React.createClass({
         <ul>
           {current.map(term =>
             <li key={term.key}>
+              { operators[term.key] && <span className="wgsa-search-operator">{operators[term.key]}</span> }
               <span className="mdl-chip mdl-chip--deletable mdl-chip--contact mdl-chip--alt">
                 <span className="mdl-chip__contact">{term.value.ids.length}</span>
                 <span className="mdl-chip__text">
@@ -49,6 +54,12 @@ const SearchDropdown = React.createClass({
               </span>
             </li>
           )}
+          <li>
+            &nbsp;
+            <LogicalOperator operator="OR" />
+            &nbsp;
+            <LogicalOperator operator="AND" />
+          </li>
         </ul>
         <hr />
       </section>
@@ -115,8 +126,9 @@ const SearchDropdown = React.createClass({
               }
             </section>
             <div className="wgsa-search-dropdown__values">
-              { sections.map(({ heading, items, placeholder }) =>
+              { sections.map(({ heading, items, placeholder, sort }) =>
                 <section key={heading}>
+                  { sort && <SortSelect /> }
                   <h3 className="wgsa-search-dropdown__heading">{heading}</h3>
                   {(placeholder && !items.length) && <p>({placeholder})</p>}
                   <ul>
@@ -156,6 +168,7 @@ function mapStateToProps(state) {
     recent: getRecentSearches(state),
     sections: getSearchItems(state),
     activeItem: getItemAtCursor(state),
+    operators: getSearchOperators(state),
   };
 }
 

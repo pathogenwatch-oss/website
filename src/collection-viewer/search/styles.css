@@ -167,3 +167,19 @@
 .wgsa-search-dropdown hr {
   margin: 0;
 }
+
+.wgsa-search-dropdown aside {
+  float: right;
+}
+
+.wgsa-search-dropdown label {
+  font-weight: 500;
+  font-size: 13px;
+}
+
+.wgsa-search-operator {
+  margin-right: 4px;
+  vertical-align: bottom;
+  font-size: 13px;
+  font-weight: 500;
+}
