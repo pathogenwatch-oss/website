@@ -81,8 +81,9 @@ function getContainsSection(category, text, ids) {
   };
 }
 
-const isSelected = (terms, category, value) =>
-  terms.some(term => term.category.key === category.key && term.value.key === value);
+const isSelected = (terms, category, value) => terms.some(
+  term => term.category.key === category.key && term.value.key === value
+);
 
 const getColumnValues = createSelector(
   getSelectedCategory,
@@ -102,7 +103,6 @@ const getColumnValues = createSelector(
     for (const genome of genomes) {
       const value = column.valueGetter(genome);
       if (value === null || typeof value === 'undefined') continue;
-      console.log(terms, category, value);
       if (terms.length && isSelected(terms, category, value)) continue;
       const label = getValueLabel(value, category.tableName);
       const matches = matcher && matcher.test(label);
