@@ -25,7 +25,12 @@ const initialState = {
 };
 
 function addToRecent(state, terms) {
-  return new Set([ ...terms, ...state.recent ].slice(0, 3));
+  const next = new Set();
+  for (const term of [ ...terms, ...state.recent ]) {
+    next.add(term);
+    if (next.size === 3) break;
+  }
+  return next;
 }
 
 export default function (state = initialState, { type, payload }) {
