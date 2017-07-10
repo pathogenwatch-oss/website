@@ -82,7 +82,6 @@ export function treeClicked(event, phylocanvas) {
       }
     } else {
       const nodeIds = phylocanvas.getNodeIdsWithFlag(phylocanvas.clickFlag);
-
       if (nodeIds.length) {
         dispatch(activateFilter(nodeIds));
       }

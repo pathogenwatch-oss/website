@@ -20,6 +20,8 @@ Phylocanvas.plugin(decorate => {
     const [ event ] = args;
     const node = this.getNodeAtMousePosition(event);
 
+    if (!node) return;
+
     if (event.shiftKey && node) {
       node.toggleCollapsed();
       this.draw();
