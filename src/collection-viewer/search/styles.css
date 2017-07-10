@@ -178,8 +178,24 @@
 }
 
 .wgsa-search-operator {
-  margin-right: 4px;
   vertical-align: bottom;
   font-size: 13px;
   font-weight: 500;
+}
+
+li > .wgsa-search-operator {
+  margin-left: 4px;
+}
+
+.wgsa-search-operator > span {
+  padding-left: 12px;
+}
+
+ul > .wgsa-search-operator {
+  display: block;
+  margin-bottom: -12px;
+}
+
+ul:last-of-type > .wgsa-search-operator {
+  margin-bottom: 0;
 }

@@ -13,7 +13,6 @@ import {
   getRecentSearches,
   getSearchTerms,
   getSelectedCategory,
-  getSearchOperators,
 } from './selectors';
 
 import {
@@ -33,34 +32,40 @@ const SearchDropdown = React.createClass({
   },
 
   renderCurrentFilter() {
-    const { current, removeTerm, operators } = this.props;
+    const { current, removeTerm } = this.props;
     if (!current.length) return null;
     return (
       <section>
         <h2 className="wgsa-search-dropdown__heading">Current Filter</h2>
-        <ul>
-          {current.map(term =>
-            <li key={term.key}>
-              { operators[term.key] && <span className="wgsa-search-operator">{operators[term.key]}</span> }
-              <span className="mdl-chip mdl-chip--deletable mdl-chip--contact mdl-chip--alt">
-                <span className="mdl-chip__contact">{term.value.ids.length}</span>
-                <span className="mdl-chip__text">
-                  <small>{term.category.label}:&nbsp;</small>
-                  <strong>{term.value.label}</strong>
+        {current.map((terms, index) =>
+          <ul key={index}>
+            {terms.map((term, termIndex) =>
+              <li key={term.key}>
+                <span className="mdl-chip mdl-chip--deletable mdl-chip--contact mdl-chip--alt">
+                  <span className="mdl-chip__contact">{term.value.ids.length}</span>
+                  <span className="mdl-chip__text">
+                    <small>{term.category.label}:&nbsp;</small>
+                    <strong>{term.value.label}</strong>
+                  </span>
+                  <button className="mdl-chip__action" onClick={() => removeTerm(term, index)} title="Remove">
+                    <i className="material-icons">cancel</i>
+                  </button>
                 </span>
-                <button className="mdl-chip__action" onClick={() => removeTerm(term)} title="Remove">
-                  <i className="material-icons">cancel</i>
-                </button>
-              </span>
-            </li>
-          )}
-          <li>
-            &nbsp;
-            <LogicalOperator operator="OR" />
-            &nbsp;
-            <LogicalOperator operator="AND" />
-          </li>
-        </ul>
+                { termIndex < terms.length - 1 && <span className="wgsa-search-operator">AND</span> }
+              </li>)}
+              <li>
+                <LogicalOperator operator="AND" index={index} />
+              </li>
+              { index < current.length - 1 &&
+                <li className="wgsa-search-operator">
+                  <span>OR</span>
+                </li> }
+              { index === current.length - 1 &&
+                <li className="wgsa-search-operator">
+                  <LogicalOperator operator="OR" index={current.length} />
+                </li> }
+          </ul>
+        )}
         <hr />
       </section>
     );
@@ -168,14 +173,13 @@ function mapStateToProps(state) {
     recent: getRecentSearches(state),
     sections: getSearchItems(state),
     activeItem: getItemAtCursor(state),
-    operators: getSearchOperators(state),
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     selectItem: item => dispatch(selectSearchItem(item)),
-    removeTerm: item => dispatch(removeSearchTerm(item)),
+    removeTerm: (item, intersection) => dispatch(removeSearchTerm(item, intersection)),
     removeCategory: () => dispatch(selectSearchCategory(null)),
     close: () => dispatch(changeDropdownVisibility(false)),
   };

@@ -38,10 +38,13 @@ export function addSearchTerm(term) {
 
 export const SEARCH_TERM_REMOVED = 'SEARCH_TERM_REMOVED';
 
-export function removeSearchTerm(term) {
+export function removeSearchTerm(term, intersection) {
   return {
     type: SEARCH_TERM_REMOVED,
-    payload: term,
+    payload: {
+      term,
+      intersection,
+    },
   };
 }
 

@@ -31,9 +31,6 @@ export const getSearchTextMatcher = createSelector(
 export const getDropdownVisibility = state => getSearch(state).visible;
 export const getSearchCursor = state => getSearch(state).cursor;
 export const getSearchSort = state => getSearch(state).sort;
-export const getSearchTermKeys = state => getSearch(state).termKeys;
-export const getNextOperator = state => getSearch(state).nextOperator;
-export const getSearchOperators = state => getSearch(state).operators;
 
 export const getRecentSearches = createSelector(
   getSearch,
@@ -42,12 +39,12 @@ export const getRecentSearches = createSelector(
 
 export const getSearchTerms = createSelector(
   getSearch,
-  search => Array.from(search.terms)
+  search => search.intersections
 );
 
-export const getSearchTermIds = createSelector(
-  getSearchTerms,
-  terms => terms.reduce((memo, { value }) => memo.concat(value.ids))
+const getCurrentIntersection = createSelector(
+  getSearch,
+  search => search.intersections[search.currentIntersection]
 );
 
 const getTableColumns = createSelector(
@@ -92,7 +89,7 @@ const getColumnValues = createSelector(
   getSearchTextMatcher,
   getGenomeList,
   getSearchSort,
-  getSearchTerms,
+  getCurrentIntersection,
   (category, tables, text, matcher, genomes, sort, terms) => {
     const table = tables[category.tableName];
     const column = findColumn(table.columns, category.key);
@@ -103,7 +100,7 @@ const getColumnValues = createSelector(
     for (const genome of genomes) {
       const value = column.valueGetter(genome);
       if (value === null || typeof value === 'undefined') continue;
-      if (terms.length && isSelected(terms, category, value)) continue;
+      if (terms && terms.length && isSelected(terms, category, value)) continue;
       const label = getValueLabel(value, category.tableName);
       const matches = matcher && matcher.test(label);
       if (matches) contains.push(genome.uuid);

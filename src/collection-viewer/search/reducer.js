@@ -16,12 +16,11 @@ import { RESET_FILTER } from '../filter/actions';
 const initialState = {
   category: null,
   cursor: 0,
-  operators: {},
-  nextOperator: 'OR',
+  currentIntersection: 0,
+  intersections: [],
   recent: new Set(),
   sort: sortKeys.FREQ_DESC,
   text: '',
-  terms: new Set(),
   visible: false,
 };
 
@@ -50,29 +49,39 @@ export default function (state = initialState, { type, payload }) {
         cursor: 0,
       };
     case SEARCH_TERM_ADDED: {
-      state.recent.delete(payload);
+      const { currentIntersection } = state;
+      const intersections = Array.from(state.intersections);
+      const terms = (intersections[currentIntersection] || []);
+      if (terms.some(term => term.key === payload.key)) return state;
+      intersections[currentIntersection] = terms.concat(payload);
       return {
         ...state,
         category: null,
         cursor: 0,
-        operators: state.terms.size ? {
-          ...state.operators,
-          [payload.key]: state.nextOperator,
-        } : state.operators,
-        recent: new Set(state.recent),
-        terms: new Set([ ...state.terms, payload ]),
+        intersections,
+        recent: addToRecent(state, [ payload ]),
         text: '',
       };
     }
     case SEARCH_TERM_REMOVED: {
-      state.terms.delete(payload);
-      delete state.operators[payload.key];
+      const { term, intersection } = payload;
+      const intersections = Array.from(state.intersections);
+      const terms = Array.from(intersections[intersection]);
+      if (terms.length === 1) {
+        intersections.splice(intersection, 1);
+      } else {
+        terms.splice(terms.indexOf(term), 1);
+        intersections[intersection] = terms;
+      }
+      const currentIntersection =
+        state.currentIntersection in intersections ?
+          state.currentIntersection : Math.max(0, intersections.length - 1);
       return {
         ...state,
         cursor: 0,
-        operators: { ...state.operators },
-        recent: addToRecent(state, [ payload ]),
-        terms: new Set(state.terms),
+        currentIntersection,
+        intersections,
+        recent: addToRecent(state, [ term ]),
         text: '',
       };
     }
@@ -83,11 +92,8 @@ export default function (state = initialState, { type, payload }) {
       };
     case RESET_FILTER:
       return {
-        ...state,
-        recent: addToRecent(state, state.terms),
-        terms: new Set(),
-        termKeys: new Set(),
-        operators: {},
+        ...initialState,
+        recent: state.recent,
       };
     case SEARCH_SORT_SELECTED:
       return {
@@ -95,10 +101,10 @@ export default function (state = initialState, { type, payload }) {
         sort: payload,
       };
     case SEARCH_OPERATOR_SELECTED: {
-      if (payload === state.nextOperator) return state;
+      if (payload === state.currentIntersection) return state;
       return {
         ...state,
-        nextOperator: payload,
+        currentIntersection: payload,
       };
     }
     default:

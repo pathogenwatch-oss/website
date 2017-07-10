@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
 
-import { getNextOperator } from './selectors';
+import { getSearch } from './selectors';
 
 import { selectNextOperator } from './actions';
 
@@ -15,15 +15,15 @@ const LogicalOperator = ({ operator, active, onClick }) => (
   </button>
 );
 
-function mapStateToProps(state, { operator }) {
+function mapStateToProps(state, { index }) {
   return {
-    active: getNextOperator(state) === operator,
+    active: getSearch(state).currentIntersection === index,
   };
 }
 
-function mapDispatchToProps(dispatch, { operator }) {
+function mapDispatchToProps(dispatch, { index }) {
   return {
-    onClick: () => dispatch(selectNextOperator(operator)),
+    onClick: () => dispatch(selectNextOperator(index)),
   };
 }
 
