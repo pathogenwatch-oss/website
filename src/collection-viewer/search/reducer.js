@@ -11,7 +11,7 @@ import {
 
 import { sortKeys } from './constants';
 
-import { RESET_FILTER } from '../filter/actions';
+import { RESET_FILTER, ACTIVATE_FILTER } from '../filter/actions';
 
 const initialState = {
   category: null,
@@ -95,11 +95,6 @@ export default function (state = initialState, { type, payload }) {
         ...state,
         cursor: Math.max(0, state.cursor + payload.delta),
       };
-    case RESET_FILTER:
-      return {
-        ...initialState,
-        recent: state.recent,
-      };
     case SEARCH_SORT_SELECTED:
       return {
         ...state,
@@ -112,6 +107,12 @@ export default function (state = initialState, { type, payload }) {
         currentIntersection: payload,
       };
     }
+    case RESET_FILTER:
+    case ACTIVATE_FILTER:
+      return {
+        ...initialState,
+        recent: state.recent,
+      };
     default:
       return state;
   }
