@@ -14,7 +14,7 @@ const Styler = React.createClass({
 
   componentDidUpdate(previous) {
     const { phylocanvas, genomes, filter, selectedInternalNode } = this.props;
-
+    console.log(filter.highlighted);
     for (const leaf of phylocanvas.leaves) {
       const { id } = leaf;
       const genome = genomes[id];
@@ -28,9 +28,12 @@ const Styler = React.createClass({
         },
       });
 
-      leaf.radius = colour === nonResistantColour ? 0 : 1;
+      if (colour === nonResistantColour) leaf.radius = 0;
+      else if (filter.active) leaf.radius = filter.ids.has(id) ? 1 : 0;
+      else leaf.radius = 1;
+
       leaf.label = this.props.getLabel(genome);
-      leaf.highlighted = filter.active && filter.ids.has(id);
+      leaf.highlighted = filter.highlighted.has(id);
     }
 
     if (previous.selectedInternalNode) {

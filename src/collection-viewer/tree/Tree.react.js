@@ -16,6 +16,12 @@ import { DEFAULT, CGPS } from '../../app/constants';
 Phylocanvas.plugin(contextMenuPlugin);
 
 Phylocanvas.plugin(decorate => {
+  decorate(Tree, 'nodesUpdated', function (delegate, args) {
+    const [ , flag, append ] = args;
+    if (flag === this.clickFlag && typeof append === 'undefined') return;
+    delegate.apply(this, args);
+  });
+
   decorate(Tree, 'clicked', function (delegate, args) {
     const [ event ] = args;
     const node = this.getNodeAtMousePosition(event);
@@ -29,6 +35,12 @@ Phylocanvas.plugin(decorate => {
     }
 
     delegate.apply(this, args);
+
+    this.nodesUpdated(
+      this.getNodeIdsWithFlag(this.clickFlag),
+      this.clickFlag,
+      event.metaKey || event.ctrlKey
+    );
   });
 });
 

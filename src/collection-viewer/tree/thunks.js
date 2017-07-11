@@ -3,7 +3,8 @@ import { getTrees, getVisibleTree, getLeafIds } from './selectors';
 
 import { showToast } from '../../toast';
 import * as actions from './actions';
-import { activateFilter } from '../filter/actions';
+import { activateFilter, appendToFilter } from '../filter/actions';
+import { filterKeys } from '../filter/constants';
 
 import { getSubtree } from './api';
 
@@ -82,8 +83,17 @@ export function treeClicked(event, phylocanvas) {
       }
     } else {
       const nodeIds = phylocanvas.getNodeIdsWithFlag(phylocanvas.clickFlag);
-      if (nodeIds.length) {
-        dispatch(activateFilter(nodeIds));
+
+      if (nodeIds.length === 1) {
+        const [ id ] = nodeIds;
+        const action = event.append ? appendToFilter : activateFilter;
+        dispatch(action([ id ], filterKeys.HIGHLIGHT));
+      } else {
+        dispatch(
+          event.append ?
+            appendToFilter(nodeIds, filterKeys.HIGHLIGHT) :
+            activateFilter(nodeIds, filterKeys.VISIBILITY)
+        );
       }
     }
   };
