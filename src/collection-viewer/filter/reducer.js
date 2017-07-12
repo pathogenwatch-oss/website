@@ -44,7 +44,7 @@ export default function (state = initialState, { type, payload = {} }) {
         ...state,
         [filterKeys.HIGHLIGHT]:
           payload.key === filterKeys.VISIBILITY ?
-            initialState[filterKeys.HIGHLIGHT] : // reset highlight when visiblity changes
+            initialState[filterKeys.HIGHLIGHT] : // reset highlight when visibility changes
             state[filterKeys.HIGHLIGHT],
         [payload.key]: {
           ...state[payload.key],

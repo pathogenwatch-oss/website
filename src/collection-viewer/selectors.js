@@ -23,18 +23,18 @@ const getSearchIds = createSelector(
 );
 
 export const getFilter = createSelector(
-  state => getViewer(state).filter,
+  state => getViewer(state).filter[filterKeys.VISIBILITY],
   state => getViewer(state).search.intersections,
   getSearchIds,
   (filter, searchTerms, searchIds) => {
     if (searchTerms.length) {
       return {
-        ...filter[filterKeys.VISIBILITY],
+        ...filter,
         ids: new Set(searchIds),
         active: true,
       };
     }
-    return filter[filterKeys.VISIBILITY];
+    return filter;
   }
 );
 
@@ -65,8 +65,8 @@ export const getActiveGenomes = createSelector(
   getGenomes,
   getActiveGenomeIds,
   getHighlightedIds,
-  (genomes, ids, highlighted) =>
-    Array.from(highlighted.size ? highlighted : ids).map(id => genomes[id])
+  (genomes, visible, highlighted) =>
+    Array.from(highlighted.size ? highlighted : visible).map(id => genomes[id])
 );
 
 export const getColourGetter = createSelector(
