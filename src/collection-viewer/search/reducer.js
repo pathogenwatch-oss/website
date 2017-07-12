@@ -12,6 +12,7 @@ import {
 import { sortKeys } from './constants';
 
 import { RESET_FILTER, ACTIVATE_FILTER } from '../filter/actions';
+import { filterKeys } from '../filter/constants';
 
 const initialState = {
   category: null,
@@ -107,8 +108,14 @@ export default function (state = initialState, { type, payload }) {
         currentIntersection: payload,
       };
     }
+    case ACTIVATE_FILTER: {
+      if (payload.key !== filterKeys.VISIBILITY) return state;
+      return {
+        ...initialState,
+        recent: state.recent,
+      };
+    }
     case RESET_FILTER:
-    case ACTIVATE_FILTER:
       return {
         ...initialState,
         recent: state.recent,

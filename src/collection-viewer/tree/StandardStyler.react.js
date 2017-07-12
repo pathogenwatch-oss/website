@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { getGenomes } from '../../collection-viewer/selectors';
-import { getFilter, getColourGetter } from '../selectors';
+import { getFilter, getColourGetter, getHighlightedIds } from '../selectors';
 import { getActiveDataTable } from '../table/selectors';
 import { getVisibleTree } from './selectors';
 
@@ -13,8 +13,10 @@ import { defaultLeafStyle } from './constants';
 const Styler = React.createClass({
 
   componentDidUpdate(previous) {
-    const { phylocanvas, genomes, filter, selectedInternalNode } = this.props;
-    console.log(filter.highlighted);
+    const {
+      phylocanvas, genomes, filter, selectedInternalNode, highlightedIds,
+    } = this.props;
+
     for (const leaf of phylocanvas.leaves) {
       const { id } = leaf;
       const genome = genomes[id];
@@ -33,7 +35,7 @@ const Styler = React.createClass({
       else leaf.radius = 1;
 
       leaf.label = this.props.getLabel(genome);
-      leaf.highlighted = filter.highlighted.has(id);
+      leaf.highlighted = highlightedIds.has(id);
     }
 
     if (previous.selectedInternalNode) {
@@ -61,6 +63,7 @@ function mapStateToProps(state) {
     getColour: getColourGetter(state),
     getLabel: getActiveDataTable(state).activeColumn.valueGetter,
     filter: getFilter(state),
+    highlightedIds: getHighlightedIds(state),
     treeType: tree.type,
     loaded: tree.loaded,
     selectedInternalNode: tree.selectedInternalNode,

@@ -3,6 +3,7 @@ import { createSelector } from 'reselect';
 import { getTables, getAMRTableName } from './table/selectors';
 
 import { createColourGetter } from './amr-utils';
+import { filterKeys } from './filter/constants';
 
 export const getViewer = ({ viewer }) => viewer;
 
@@ -28,26 +29,31 @@ export const getFilter = createSelector(
   (filter, searchTerms, searchIds) => {
     if (searchTerms.length) {
       return {
-        ...filter,
+        ...filter[filterKeys.VISIBILITY],
         ids: new Set(searchIds),
         active: true,
       };
     }
-    return filter;
+    return filter[filterKeys.VISIBILITY];
   }
 );
 
-export const getVisibleGenomeIds = state => getFilter(state).unfilteredIds;
+export const getUnfilteredGenomeIds = state => getFilter(state).unfilteredIds;
 
 export const getGenomeList = createSelector(
   getGenomes,
-  getVisibleGenomeIds,
+  getUnfilteredGenomeIds,
   (genomes, ids) => Array.from(ids).map(id => genomes[id])
 );
 
 export const getFilteredGenomeIds = createSelector(
-  getFilter,
-  filter => filter.ids
+  state => getViewer(state).filter,
+  filter => filter[filterKeys.VISIBILITY].ids
+);
+
+export const getHighlightedIds = createSelector(
+  state => getViewer(state).filter,
+  filter => filter[filterKeys.HIGHLIGHT].ids
 );
 
 export const getActiveGenomeIds = createSelector(
@@ -58,7 +64,9 @@ export const getActiveGenomeIds = createSelector(
 export const getActiveGenomes = createSelector(
   getGenomes,
   getActiveGenomeIds,
-  (genomes, ids) => Array.from(ids).map(id => genomes[id])
+  getHighlightedIds,
+  (genomes, ids, highlighted) =>
+    Array.from(highlighted.size ? highlighted : ids).map(id => genomes[id])
 );
 
 export const getColourGetter = createSelector(

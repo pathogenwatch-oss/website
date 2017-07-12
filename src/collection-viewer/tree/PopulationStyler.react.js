@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { getGenomes } from '../../collection-viewer/selectors';
-import { getFilter } from '../selectors';
+import { getHighlightedIds } from '../selectors';
 import { getTrees } from './selectors';
 
 import { leafStyles, defaultLeafStyle } from './constants';
@@ -11,7 +11,7 @@ import { CGPS } from '../../app/constants';
 const Styler = React.createClass({
 
   componentDidUpdate() {
-    const { phylocanvas, genomes, trees, filter } = this.props;
+    const { phylocanvas, genomes, trees, highlightedIds } = this.props;
 
     for (const leaf of phylocanvas.leaves) {
       const { id } = leaf;
@@ -34,8 +34,8 @@ const Styler = React.createClass({
         leaf.label = genome.name;
       }
 
-      leaf.highlighted = (filter.active &&
-        leafIds.some(uuid => filter.ids.has(uuid)));
+      leaf.highlighted = (highlightedIds.size &&
+        leafIds.some(uuid => highlightedIds.has(uuid)));
       leaf.interactive = !!subtree;
     }
 
@@ -52,7 +52,7 @@ function mapStateToProps(state) {
   return {
     genomes: getGenomes(state),
     trees: getTrees(state),
-    filter: getFilter(state),
+    highlightedIds: getHighlightedIds(state),
   };
 }
 

@@ -1,4 +1,4 @@
 export const filterKeys = {
-  VISIBILITY: 'ids',
-  HIGHLIGHT: 'highlighted',
+  VISIBILITY: 'VISIBILITY',
+  HIGHLIGHT: 'HIGHLIGHT',
 };

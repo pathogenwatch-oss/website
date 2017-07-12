@@ -26,8 +26,6 @@ Phylocanvas.plugin(decorate => {
     const [ event ] = args;
     const node = this.getNodeAtMousePosition(event);
 
-    if (!node) return;
-
     if (event.shiftKey && node) {
       node.toggleCollapsed();
       this.draw();
@@ -100,7 +98,6 @@ export default React.createClass({
     phylocanvas._onInternalNodeSelected = event => {
       const node = phylocanvas.getNodeAtMousePosition(event);
       if (node && !node.leaf) this.props.onInternalNodeSelected(node);
-      else this.props.onInternalNodeSelected();
     };
     phylocanvas.on('click', phylocanvas._onInternalNodeSelected);
     phylocanvas.on('error', error => console.error(error));

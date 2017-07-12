@@ -9,11 +9,18 @@ import { SEARCH_TERM_ADDED } from '../search/actions';
 
 import { filterKeys } from '../filter/constants';
 
+const emptySet = new Set();
+
 const initialState = {
-  active: false,
-  unfilteredIds: [], // An array to allow indentical ids arrays not to cause an update
-  [filterKeys.VISIBILITY]: new Set(),
-  [filterKeys.HIGHLIGHT]: new Set(),
+  [filterKeys.VISIBILITY]: {
+    unfilteredIds: [],
+    ids: emptySet,
+    active: false,
+  },
+  [filterKeys.HIGHLIGHT]: {
+    ids: emptySet,
+    active: false,
+  },
 };
 
 export default function (state = initialState, { type, payload = {} }) {
@@ -21,57 +28,73 @@ export default function (state = initialState, { type, payload = {} }) {
   switch (type) {
     case TREE_LOADED: {
       const { leafIds } = payload;
-      const reset = state.active && !leafIds.some(id => state.ids.has(id));
-
+      const filter = state[filterKeys.VISIBILITY];
+      const reset = filter.active && !leafIds.some(id => filter.ids.has(id));
       return {
         ...state,
-        unfilteredIds: leafIds,
-        [filterKeys.VISIBILITY]: reset ? new Set() : state.ids,
-        active: reset ? false : state.active,
+        [filterKeys.VISIBILITY]: {
+          unfilteredIds: leafIds,
+          ids: reset ? new Set() : filter.ids,
+          active: reset ? false : filter.active,
+        },
       };
     }
     case ACTIVATE_FILTER: {
       return {
         ...state,
-        [filterKeys.HIGHLIGHT]: initialState[filterKeys.HIGHLIGHT],
-        active: payload.key === filterKeys.VISIBILITY ? true : state.active,
-        [payload.key]: ids,
+        [filterKeys.HIGHLIGHT]:
+          payload.key === filterKeys.VISIBILITY ?
+            initialState[filterKeys.HIGHLIGHT] : // reset highlight when visiblity changes
+            state[filterKeys.HIGHLIGHT],
+        [payload.key]: {
+          ...state[payload.key],
+          ids,
+          active: true,
+        },
       };
     }
     case APPEND_TO_FILTER: {
-      if (payload.key === filterKeys.HIGHLIGHT) {
-        return {
-          ...state,
-          highlighted: new Set([ ...state.highlighted, ...ids ]),
-        };
-      }
+      const filter = state[payload.key];
       return {
         ...state,
-        active: payload.key === filterKeys.VISIBILITY ? true : state.active,
-        [payload.key]: new Set([ ...state[payload.key], ...ids ]),
+        [payload.key]: {
+          ...filter,
+          ids: new Set([ ...filter.ids, ...ids ]),
+          active: true,
+        },
       };
     }
     case REMOVE_FROM_FILTER: {
-      const newIds = Array.from(state[payload.key]).filter(id => !ids.has(id));
+      const filter = state[payload.key];
+      const newIds = Array.from(filter.ids).filter(id => !ids.has(id));
       if (newIds.length) {
         return {
           ...state,
-          active: payload.key === filterKeys.VISIBILITY ? true : state.active,
-          [payload.key]: new Set(newIds),
+          [payload.key]: {
+            ...filter,
+            ids: new Set(newIds),
+            active: true,
+          },
         };
       }
       return {
         ...state,
-        active: payload.key === filterKeys.VISIBILITY ? false : state.active,
-        [payload.key]: initialState[payload.key],
+        [payload.key]: {
+          ...filter,
+          ids: emptySet,
+          active: false,
+        },
       };
     }
     case RESET_FILTER:
     case SEARCH_TERM_ADDED:
       return {
         ...state,
-        active: payload.key === filterKeys.VISIBILITY ? false : state.active,
-        [payload.key]: initialState[payload.key],
+        [payload.key]: {
+          ...state[payload.key],
+          ids: emptySet,
+          active: false,
+        },
       };
     default:
       return state;

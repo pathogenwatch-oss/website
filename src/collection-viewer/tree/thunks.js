@@ -3,12 +3,16 @@ import { getTrees, getVisibleTree, getLeafIds } from './selectors';
 
 import { showToast } from '../../toast';
 import * as actions from './actions';
-import { activateFilter, appendToFilter } from '../filter/actions';
-import { filterKeys } from '../filter/constants';
+import {
+  activateFilter,
+  appendToFilter,
+  resetFilter,
+} from '../filter/actions';
 
 import { getSubtree } from './api';
 
 import { POPULATION, COLLECTION } from '../../app/stateKeys/tree';
+import { filterKeys } from '../filter/constants';
 
 function fetchTree(name) {
   return (dispatch, getState) => {
@@ -88,6 +92,8 @@ export function treeClicked(event, phylocanvas) {
         const [ id ] = nodeIds;
         const action = event.append ? appendToFilter : activateFilter;
         dispatch(action([ id ], filterKeys.HIGHLIGHT));
+      } else if (nodeIds.length === 0) {
+        dispatch(resetFilter(filterKeys.HIGHLIGHT));
       } else {
         dispatch(
           event.append ?
