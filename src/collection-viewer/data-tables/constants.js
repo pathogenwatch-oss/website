@@ -97,6 +97,7 @@ export const systemDataColumns = {
       if (!analysis.genotyphi) return null;
       return analysis.genotyphi.foundLoci;
     },
+    numeric: true,
   },
   __core_matches: {
     columnKey: '__core_matches',
@@ -105,6 +106,7 @@ export const systemDataColumns = {
         analysis.core.size :
         null;
     },
+    numeric: true,
   },
   '__%_core_families': {
     columnKey: '__%_core_families',
@@ -113,6 +115,7 @@ export const systemDataColumns = {
         analysis.core.percentMatched :
         null;
     },
+    numeric: true,
   },
   '__%_non-core': {
     columnKey: '__%_non-core',
@@ -121,6 +124,7 @@ export const systemDataColumns = {
         (100 - analysis.core.percentAssemblyMatched).toFixed(1) :
         null;
     },
+    numeric: true,
   },
   __genome_length: {
     columnKey: '__genome_length',
@@ -129,6 +133,7 @@ export const systemDataColumns = {
         metrics.totalNumberOfNucleotidesInDnaStrings :
         null;
     },
+    numeric: true,
   },
   __n50: {
     columnKey: '__n50',
@@ -137,6 +142,7 @@ export const systemDataColumns = {
         metrics.contigN50 :
         null;
     },
+    numeric: true,
   },
   '__no._contigs': {
     columnKey: '__no._contigs',
@@ -145,6 +151,7 @@ export const systemDataColumns = {
         metrics.totalNumberOfContigs :
         null;
     },
+    numeric: true,
   },
   '__non-ATCG': {
     columnKey: '__non-ATCG',
@@ -153,6 +160,7 @@ export const systemDataColumns = {
         metrics.totalNumberOfNsInDnaStrings :
         null;
     },
+    numeric: true,
   },
   __GC_Content: {
     columnKey: '__%_GC_Content',
@@ -161,5 +169,6 @@ export const systemDataColumns = {
         metrics.gcContent :
         null;
     },
+    numeric: true,
   },
 };

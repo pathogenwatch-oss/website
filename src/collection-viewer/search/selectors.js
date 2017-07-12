@@ -68,7 +68,7 @@ function getContainsSection(category, text, ids) {
   let placeholder = '';
   if (!text.length) {
     placeholder = category.numeric ?
-      'Enter expression: <, >, <=, >=' :
+      'Enter expression: =, <, >, <=, >=' :
       'Enter text';
   }
   return {

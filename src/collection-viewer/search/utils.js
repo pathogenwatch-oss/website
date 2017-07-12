@@ -31,7 +31,7 @@ export function mapColumnsToSearchCategories(columns, tableName, matcher) {
       label,
       tableName,
       key: columnKey,
-      numeric: tableName === tableKeys.stats,
+      numeric: column.numeric,
     });
     columnKeys.add(columnKey);
   }
@@ -68,6 +68,7 @@ export function getValueLabel(value, table) {
 }
 
 const comparators = {
+  '=': (a, b) => a === b,
   '>': (b, a) => a > b,
   '>=': (b, a) => a >= b,
   '<': (b, a) => a < b,
@@ -75,22 +76,25 @@ const comparators = {
 };
 
 export function getExpressionMatcher(text) {
-  const conditions = [];
   const cleanText = text.replace(' ', '');
   let operator;
+
   if (cleanText[0] === '<' || cleanText[0] === '>') {
     operator = cleanText[0];
     if (cleanText[1] === '=') {
       operator += '=';
     }
-    const number = cleanText.slice(operator.length);
-    if (!number.length && isNaN(number)) return null;
-    conditions.push(comparators[operator].bind(null, Number(number)));
+  } else if (cleanText[0] === '=') {
+    operator = '=';
   }
+
+  if (!operator) return null;
+
+  const number = cleanText.slice(operator.length);
+  if (!number.length && isNaN(number)) return null;
+  const test = comparators[operator].bind(null, Number(number));
   return {
-    test: conditions.length ?
-      value => conditions.every(condition => condition(value)) :
-      () => false,
+    test: value => test(Number(value)),
   };
 }
 
