@@ -108,18 +108,14 @@ export default function (state = initialState, { type, payload }) {
         currentIntersection: payload,
       };
     }
-    case ACTIVATE_FILTER: {
+    case ACTIVATE_FILTER:
+    case RESET_FILTER: {
       if (payload.key !== filterKeys.VISIBILITY) return state;
       return {
         ...initialState,
         recent: state.recent,
       };
     }
-    case RESET_FILTER:
-      return {
-        ...initialState,
-        recent: state.recent,
-      };
     default:
       return state;
   }
