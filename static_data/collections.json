@@ -1,0 +1,41 @@
+[
+  {
+    "createdAt": "2017-07-12T20:22:53.165Z",
+    "organismId": "485",
+    "size": 224,
+    "uuid": "2eth4b0pkk38",
+    "title": "Spain + Portugal",
+    "status": "READY",
+    "public": true,
+    "binned": false,
+    "id": "1",
+    "owner": "other",
+    "slug": "2eth4b0pkk38"
+  },
+  {
+    "createdAt": "2017-07-12T20:22:53.165Z",
+    "organismId": "90370",
+    "size": 1,
+    "uuid": "aog90v5yykxf",
+    "title": "Single Typhi Test",
+    "status": "READY",
+    "public": true,
+    "binned": false,
+    "id": "2",
+    "owner": "other",
+    "slug": "aog90v5yykxf"
+  },
+  {
+    "createdAt": "2017-07-12T20:22:53.165Z",
+    "organismId": "90370",
+    "size": 2409,
+    "uuid": "n6pycauddaxg",
+    "title": "Big Typhi Collection",
+    "status": "READY",
+    "public": true,
+    "binned": false,
+    "id": "3",
+    "owner": "other",
+    "slug": "n6pycauddaxg"
+  }
+]
