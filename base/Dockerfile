@@ -1,4 +1,4 @@
-FROM node:7.4.0-alpine
+FROM node:boron-alpine
 
 RUN apk add --update --no-cache --virtual build-deps \
       autoconf \
