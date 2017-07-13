@@ -10,4 +10,4 @@ docker build \
   -f ./base/Dockerfile \
   ./base
 
-docker push registry.gitlab.com/cgps/wgsa-middle-end:base
+docker push registry.gitlab.com/cgps/wgsa-middle-end/base:v2

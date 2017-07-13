@@ -1,4 +1,4 @@
-FROM registry.gitlab.com/cgps/wgsa-middle-end:base
+FROM registry.gitlab.com/cgps/wgsa-middle-end/base:v2
 
 RUN apk add --update --no-cache gsl
 
