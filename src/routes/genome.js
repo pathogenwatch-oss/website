@@ -83,8 +83,8 @@ router.post('/genome/:id', (req, res, next) => {
   LOGGER.info('Received request to edit genome');
 
   const { id } = req.params;
-  const { body, user } = req;
-  services.request('genome', 'edit', { id, user, metadata: body })
+  const { body, user, sessionID } = req;
+  services.request('genome', 'edit', { id, user, sessionID, metadata: body })
     .then(response => res.json(response))
     .catch(next);
 });
