@@ -14,8 +14,8 @@ const SortSelect = ({ active, onChange }) => (
       <select value={active} onChange={onChange}>
         <option value={sortKeys.FREQ_DESC}>Frequency: High to Low</option>
         <option value={sortKeys.FREQ_ASC}>Frequency: Low to High</option>
-        <option value={sortKeys.VALUE_DESC}>Value: High to Low</option>
-        <option value={sortKeys.VALUE_ASC}>Value: Low to High</option>
+        <option value={sortKeys.VALUE_ASC}>Value: Ascending</option>
+        <option value={sortKeys.VALUE_DESC}>Value: Descending</option>
       </select>
     </label>
   </aside>
