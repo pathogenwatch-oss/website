@@ -166,10 +166,31 @@
 /* Chip */
 
 .mdl-chip--deletable .mdl-chip__action {
-  color: #673c90;
+  color: inherit;
+  opacity: 0.54;
+}
+
+.mdl-chip--deletable .mdl-chip__action:hover,
+.mdl-chip--deletable .mdl-chip__action:focus {
   opacity: 1;
 }
 
+.mdl-chip--alt {
+  background: #3c7383;
+  color: #fff;
+}
+
+.mdl-chip__contact {
+  background: #a386bd;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.mdl-chip__contact--muted,
+.mdl-chip--alt .mdl-chip__contact {
+  background: rgba(0, 0, 0, 0.27);
+}
 
 /* Toggle Switch */
 

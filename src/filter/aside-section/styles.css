@@ -4,13 +4,6 @@
   max-width: 100%;
 }
 
-.mdl-chip__contact {
-  background: #a386bd;
-  color: #fff;
-  font-size: 12px;
-  font-weight: 500;
-}
-
 .wgsa-filter .mdl-chip__text {
   max-width: 80%;
   overflow: hidden;

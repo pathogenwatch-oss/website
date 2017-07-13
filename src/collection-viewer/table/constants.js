@@ -26,6 +26,7 @@ export const amrTables = new Set([
 
 export const leftSpacerColumn = {
   columnKey: '__spacer_l',
+  system: true,
   getHeaderContent() {},
   fixed: true,
   fixedWidth: 1,
@@ -35,6 +36,7 @@ export const leftSpacerColumn = {
 
 export const rightSpacerColumn = {
   columnKey: '__spacer_r',
+  system: true,
   getHeaderContent() {},
   fixedWidth: 24,
   flexGrow: 1,
@@ -50,6 +52,7 @@ export const nameColumnData = {
 
 export const downloadColumnProps = {
   columnKey: '__downloads',
+  system: true,
   fixed: true,
   headerClasses: 'wgsa-table-cell--skinny',
   getHeaderContent({ archiveDownloads }) {

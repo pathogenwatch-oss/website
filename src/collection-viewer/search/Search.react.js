@@ -4,13 +4,19 @@ import React from 'react';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
 
-import { getGenomes } from '../../collection-viewer/selectors';
-import { getActiveDataTable } from '../table/selectors';
-import { getFilter } from '../selectors';
+import SearchDropdown from './SearchDropdown.react';
+import FilterStatus from '../filter/FilterStatus.react';
 
-import { activateFilter, resetFilter } from '../filter/actions';
+import { getSearch } from './selectors';
 
-import { getColumnLabel } from '../table/utils';
+import {
+  changeSearchText,
+  changeDropdownVisibility,
+  selectSearchCategory,
+  moveCursor,
+} from './actions';
+
+import { selectItemAtCursor } from './thunks';
 
 const Search = React.createClass({
 
@@ -23,10 +29,24 @@ const Search = React.createClass({
     handleChange: React.PropTypes.func,
   },
 
-  getInitialState() {
-    return {
-      focus: false,
-    };
+  componentDidUpdate(previous) {
+    const { search } = this.props;
+    if (!search.visible) return;
+    if (previous.search.category !== search.category ||
+        previous.search.terms !== search.terms) {
+      this.refs.input.focus();
+    }
+  },
+
+  getPlaceholder() {
+    const { category, visible } = this.props.search;
+    if (category) {
+      return `FILTER ${category.label}`;
+    }
+    if (visible) {
+      return 'FILTER COLUMNS';
+    }
+    return 'SEARCH';
   },
 
   handleChange(event) {
@@ -34,40 +54,58 @@ const Search = React.createClass({
   },
 
   handleFocus() {
-    this.setState({ focus: true });
-  },
-
-  handleBlur() {
-    this.setState({ focus: false });
+    const { visible } = this.props.search;
+    if (!visible) {
+      this.props.openDropdown(true);
+    }
   },
 
   handleClick() {
     this.refs.input.focus();
   },
 
+  handleKeyboard(e) {
+    if (e.keyCode === 37 || e.keyCode === 38) {
+      this.props.moveCursor(-1);
+    }
+    if (e.keyCode === 39 || e.keyCode === 40) {
+      this.props.moveCursor(1);
+    }
+    const { text, category, visible } = this.props.search;
+    if (e.keyCode === 8 && category && text.length === 0) {
+      this.props.removeCategory();
+    }
+    if (e.keyCode === 13) {
+      this.props.selectItemAtCursor();
+    }
+    if (e.keyCode === 27 && visible) {
+      this.props.openDropdown(false);
+      this.refs.input.blur();
+    }
+  },
+
   render() {
-    const { totalAmount, filteredAmount, filterColumnName } = this.props;
-    const { focus } = this.state;
+    const { text, visible } = this.props.search;
     return (
       <div className="wgsa-search-box-container">
         <div className={classnames(
-          'wgsa-search-box',
-          { 'wgsa-search-box--active': focus }
-        )}
+            'wgsa-search-box',
+            { 'wgsa-search-box--active': visible }
+          )}
           onClick={this.handleClick}
         >
           <i className="wgsa-search-box__icon material-icons">search</i>
           <input ref="input"
             className="wgsa-search-box__input"
-            placeholder={`SEARCH ${filterColumnName}`}
-            onChange={this.handleChange}
+            placeholder={this.getPlaceholder()}
             onFocus={this.handleFocus}
-            onBlur={this.handleBlur}
+            onChange={this.handleChange}
+            onKeyDown={this.handleKeyboard}
+            value={text}
           />
-          <p className="wgsa-search-box__numbers">
-            {filteredAmount} of {totalAmount}
-          </p>
+          <FilterStatus />
         </div>
+        <SearchDropdown />
       </div>
     );
   },
@@ -75,39 +113,19 @@ const Search = React.createClass({
 });
 
 function mapStateToProps(state) {
-  const filter = getFilter(state);
-  const { activeColumn } = getActiveDataTable(state);
-  const totalAmount = filter.unfilteredIds.length;
   return {
-    displayProps: {
-      totalAmount,
-      filteredAmount: filter.active ? filter.ids.size : totalAmount,
-      filterColumnName: getColumnLabel(activeColumn),
-    },
-    activeColumn,
-    genomes: [ ...filter.unfilteredIds ].map(id => getGenomes(state)[id]),
+    search: getSearch(state),
   };
 }
 
-function mergeProps({ displayProps, activeColumn, genomes }, { dispatch }) {
+function mapDispatchToProps(dispatch) {
   return {
-    ...displayProps,
-    handleChange(text) {
-      if (!text || !text.length) {
-        dispatch(resetFilter());
-        return;
-      }
-      const matcher = new RegExp(text, 'i');
-      dispatch(activateFilter(
-        genomes.reduce((set, genome) => {
-          if (String(activeColumn.valueGetter(genome)).match(matcher)) {
-            set.add(genome.uuid);
-          }
-          return set;
-        }, new Set())
-      ));
-    },
+    handleChange: text => dispatch(changeSearchText(text)),
+    openDropdown: visible => dispatch(changeDropdownVisibility(visible)),
+    removeCategory: () => dispatch(selectSearchCategory(null)),
+    selectItemAtCursor: () => dispatch(selectItemAtCursor()),
+    moveCursor: delta => dispatch(moveCursor(delta)),
   };
 }
 
-export default connect(mapStateToProps, null, mergeProps)(Search);
+export default connect(mapStateToProps, mapDispatchToProps)(Search);

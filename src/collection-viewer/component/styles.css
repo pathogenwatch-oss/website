@@ -1,5 +1,6 @@
 .wgsa-page--collection {
   background: #efefef;
+  overflow-y: hidden;
 }
 
 .wgsa-pane-overlay {
@@ -77,4 +78,12 @@
 .wgsa-pane-button--active:hover,
 .wgsa-pane-button--active:focus:not(:active) {
   background-color: #673c90;
+}
+
+.wgsa-header-collection-options > * {
+  margin-left: 8px;
+}
+
+.wgsa-header-collection-options > :first-child {
+  margin-left: 0;
 }

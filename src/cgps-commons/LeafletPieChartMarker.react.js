@@ -10,6 +10,10 @@ export default React.createClass({
 
   shouldComponentUpdate(next) {
     const { marker } = this.props;
+    if (marker.id.length !== next.marker.id.length) return true;
+    for (const id of marker.id) {
+      if (next.marker.id.indexOf(id) === -1) return true;
+    }
     if (marker.highlighted !== next.marker.highlighted) return true;
     if (marker.slices.size !== next.marker.slices.size) return true;
     const slices = marker.slices.entries();

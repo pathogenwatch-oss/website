@@ -9,7 +9,7 @@ import { getActiveGenomes } from '../selectors';
 import { getVisibleTable } from '../table/selectors';
 import { getFiles } from '../downloads/selectors';
 
-import { onTableClick, onRowClick } from './thunks';
+import { onRowClick } from './thunks';
 
 import { addColumnWidth } from '../table/columnWidth';
 import { addDownloadProps } from '../downloads/utils';
@@ -126,11 +126,6 @@ function mergeProps(state, { dispatch }, props) {
     activeColumns,
     columns: mappedColumns,
     data: data.map(row => addDownloadProps(row, state, dispatch)),
-    onClick: event => {
-      if (event.target.classList.contains('fixedDataTableLayout_rowsContainer')) {
-        dispatch(onTableClick());
-      }
-    },
     onRowClick: row => dispatch(onRowClick(row)),
     getDefaultHeaderContent: columnProps => (
       <DefaultColumnHeader

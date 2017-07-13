@@ -104,7 +104,6 @@ div.wgsa-tree-icon:active {
 .wgsa-select-tree-type:hover,
 .wgsa-select-tree-type:focus,
 .wgsa-select-tree-type:active {
-  outline: none;
   background: rgba(255, 255, 255, 0.87);
 }
 

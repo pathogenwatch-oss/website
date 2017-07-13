@@ -45,18 +45,22 @@ apiRouter.get('/species/:speciesId/collection/:id/status', (req, res) => {
   res.json({ status: 'READY' });
 });
 
+apiRouter.get('/collection/summary', (req, res) => {
+  setTimeout(() => {
+    res.sendFile(`${__dirname}/static_data/collection-summary.json`);
+  }, 0);
+});
+
 apiRouter.get('/collection/:id', (req, res) => {
   setTimeout(() => {
     res.sendFile(`${getCollectionPath(req.params.id)}/collection.json`);
   }, 0);
 });
 
-apiRouter.get('/species/:speciesId/reference', (req, res) => {
-  res.sendFile(`${getCollectionPath(req.params.speciesId)}/reference.json`);
-});
-
-apiRouter.get('/species/:speciesId/resistance', (req, res) => {
-  res.sendFile(`${getCollectionPath(req.params.speciesId)}/resistance.json`);
+apiRouter.get('/collection', (req, res) => {
+  setTimeout(() => {
+    res.sendFile(`${__dirname}/static_data/collections.json`);
+  }, 0);
 });
 
 // let subtreeError = false;

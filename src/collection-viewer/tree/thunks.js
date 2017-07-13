@@ -3,11 +3,16 @@ import { getTrees, getVisibleTree, getLeafIds } from './selectors';
 
 import { showToast } from '../../toast';
 import * as actions from './actions';
-import { activateFilter, resetFilter } from '../filter/actions';
+import {
+  activateFilter,
+  appendToFilter,
+  resetFilter,
+} from '../filter/actions';
 
 import { getSubtree } from './api';
 
 import { POPULATION, COLLECTION } from '../../app/stateKeys/tree';
+import { filterKeys } from '../filter/constants';
 
 function fetchTree(name) {
   return (dispatch, getState) => {
@@ -79,16 +84,22 @@ export function treeClicked(event, phylocanvas) {
       if (nodeIds.length === 1) {
         const name = nodeIds[0];
         dispatch(displayTree(name));
-      } else {
-        dispatch(resetFilter());
       }
     } else {
       const nodeIds = phylocanvas.getNodeIdsWithFlag(phylocanvas.clickFlag);
 
-      if (nodeIds.length) {
-        dispatch(activateFilter(nodeIds));
+      if (nodeIds.length === 1) {
+        const [ id ] = nodeIds;
+        const action = event.append ? appendToFilter : activateFilter;
+        dispatch(action([ id ], filterKeys.HIGHLIGHT));
+      } else if (nodeIds.length === 0) {
+        dispatch(resetFilter(filterKeys.HIGHLIGHT));
       } else {
-        dispatch(resetFilter());
+        dispatch(
+          event.append ?
+            appendToFilter(nodeIds, filterKeys.HIGHLIGHT) :
+            activateFilter(nodeIds, filterKeys.VISIBILITY)
+        );
       }
     }
   };
