@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { Header } from '../header';
-import { isAsideEnabled } from './uploads/selectors';
+import { isAsideEnabled } from './selectors';
 
 function mapStateToProps(state) {
   return {

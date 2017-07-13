@@ -3,7 +3,6 @@ import { parse } from 'query-string';
 
 import Genomes from './Genomes.react';
 
-import { toggleAside } from '../../header/actions';
 import { addFiles } from '../uploads/actions';
 
 import { getTotalGenomes, isWaiting } from '../selectors';
@@ -26,7 +25,6 @@ function mapDispatchToProps(dispatch, { match, location }) {
   const query = parse(location.search);
   const { prefilter } = match.params;
   return {
-    toggleAside: isOpen => dispatch(toggleAside(isOpen)),
     addFiles: files => dispatch(addFiles(files)),
     fetch: () =>
       dispatch(updateFilter({ prefilter, ...query }, false)),

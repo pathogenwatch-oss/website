@@ -36,7 +36,7 @@ const Header = ({
   <header className={
     classnames(
       'mdl-layout__header mdl-layout__header--scroll wgsa-header',
-      { 'wgsa-has-aside': asideVisible, 'wgsa-header--inverse': offline },
+      { 'wgsa-has-aside': asideEnabled && asideVisible, 'wgsa-header--inverse': offline },
       className,
     )}
   >

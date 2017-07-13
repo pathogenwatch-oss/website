@@ -22,7 +22,6 @@ const Component = React.createClass({
   propTypes: {
     hasGenomes: React.PropTypes.bool,
     uploads: React.PropTypes.object,
-    toggleAside: React.PropTypes.func.isRequired,
     addFiles: React.PropTypes.func.isRequired,
     isUploading: React.PropTypes.bool,
     waiting: React.PropTypes.bool,
@@ -51,10 +50,6 @@ const Component = React.createClass({
         fetch();
       }
     }
-  },
-
-  componentWillUnmount() {
-    this.props.toggleAside(false);
   },
 
   upload(newFiles) {

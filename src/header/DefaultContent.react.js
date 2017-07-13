@@ -25,9 +25,9 @@ const DefaultContent = ({ asideVisible, toggle, asideEnabled = false }) => (
   </nav>
 );
 
-function mapStateToProps(state) {
+function mapStateToProps(state, { asideEnabled = false }) {
   return {
-    asideVisible: isAsideVisible(state),
+    asideVisible: asideEnabled && isAsideVisible(state),
   };
 }
 
