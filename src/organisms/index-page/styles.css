@@ -1,3 +1,13 @@
+.wgsa-organism-card {
+  text-decoration: none !important;
+}
+
 .wgsa-organism-card h3 {
   color: #3c7383;
+}
+
+.wgsa-organism-card[href]:hover h3,
+.wgsa-organism-card[href]:focus h3,
+.wgsa-organism-card[href]:active h3 {
+  text-decoration: underline !important;
 }

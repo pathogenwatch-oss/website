@@ -10,6 +10,11 @@ export default {
   formattedName,
   shortName,
   formattedShortName,
+  desc: (
+    <p>
+      <strong>Zika virus (ZIKV)</strong> is a member of the virus family <em>Flaviviridae</em>. It is spread by daytime-active <em>Aedes</em> mosquitoes, such as <em>A. aegypti</em> and <em>A. albopictus</em>. Its name comes from the Zika Forest of Uganda, where the virus was first isolated in 1947.
+    </p>
+  ),
   taxonomy: [
     { taxId: 10239, scientificName: 'Viruses', rank: 'superkingdom' },
     { taxId: 439488, scientificName: 'ssRNA viruses', rank: 'no rank' },
