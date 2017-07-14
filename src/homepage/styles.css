@@ -85,15 +85,17 @@
   min-height: calc(36.1vw + 1px);
   display: block;
   @media (max-width: 1200px) {
-    width: calc(137.5%);
+    /*width: calc(137.5%);*/
     min-height: calc(50.6vw + 1px);
-    transform: translateX(-13.333%);
+    /*transform: translateX(-13.333%);*/
   }
+  margin: 0 auto;
 }
 
 .showcase img {
   max-width: 100%;
   object-fit: cover;
+  margin: 0 auto;
 }
 
 .showcase .mdl-spinner {
@@ -104,8 +106,10 @@
 }
 
 .showcase__link {
-  width: calc(1.666666% + 1px); /* 32/1920 */
-  height: calc(4.444444% + 1px); /* 32/720 */
+  /*width: calc(1.666666% + 1px);*/
+  /* 32/1920 */
+  /*height: calc(4.444444% + 1px);*/
+  /* 32/720 */
   background-color: #673c90;
   position: absolute !important;
   border-radius: 999px;

@@ -15,6 +15,24 @@ function getCollectionSizeLimit(user) {
   return limit === 0 ? 'Unlimited' : limit;
 }
 
+function get_xy(lat, lng){  //http://stackoverflow.com/questions/14329691/covert-latitude-longitude-point-to-a-pixels-x-y-on-mercator-projection
+	var mapWidth=2058;
+	var mapHeight=1746;
+	var factor=.404;
+	var x_adj=-391;
+	var y_adj=37;
+	// get x value
+	var x = (mapWidth*(180+lng)/360)%mapWidth+(mapWidth/2);
+
+	//convert from degrees to radians
+	var latRad = lat*Math.PI/180;
+
+	// get y value
+	var mercN = Math.log(Math.tan((Math.PI/4)+(latRad/2)));
+	var y = (mapHeight/2)-(mapWidth*mercN/(2*Math.PI));
+	return { x: x*factor+x_adj, y: y*factor+y_adj}
+}
+
 export default React.createClass({
 
   getInitialState() {
@@ -33,11 +51,11 @@ export default React.createClass({
     const { collections } = this.state;
     if (collections.length) {
       const div = document.createElement('div');
-      div.style = { width: 100, height: 100 };
-      const map = Leaflet.map(div);
+      div.style = { width: 640, height: 640 * 0.62 };
+      var scale = 640/887;
 
-      return collections.map(({ uuid, slug, centroid }, index) => {
-        const point = map.project(centroid);
+      return collections.map(({ uuid, slug, size, centroid }, index) => {
+        const point = get_xy(centroid.lat, centroid.lon);
         console.log(point, centroid, index);
         return (
           <Link
@@ -45,9 +63,12 @@ export default React.createClass({
             to={`/collection/${slug}`}
             className="showcase__link wgsa-sonar-effect"
             style={{
-              left: `${point.x * 100}%`,
-              top: `${point.y * 100}%`,
+              left: `${point.x * scale}px`,
+              top: `${point.y * scale}px`,
+              transform: 'translate(-50%, -50%)',
               animationDelay: `${0.25 * index}s`,
+              width: Math.min(Math.max(8, size * 0.125), 32),
+              height: Math.min(Math.max(8, size * 0.125), 32),
             }}
           />
         );
@@ -63,8 +84,8 @@ export default React.createClass({
           <img src="/images/WGSA.FINAL.svg" alt="WGSA" />
           <h1>Global AMR surveillance through Whole Genome Sequencing</h1>
         </section>
-        <section className="showcase">
-          <img src="/images/worldmap.svg" />
+        <section className="showcase" style={{ width: 640, height: 480 }}>
+          <img src="/images/mercator.svg" />
           {this.renderCollectionLinks()}
           {/* <Link to="#" className="showcase__link showcase__link--1 wgsa-sonar-effect" />
           <Link to="#" className="showcase__link showcase__link--2 showcase__link--large wgsa-sonar-effect" />
