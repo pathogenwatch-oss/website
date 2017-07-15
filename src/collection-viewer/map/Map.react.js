@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import WGSAMap from '../../map';
-import LeafletPieChartMarker from '../../cgps-commons/LeafletPieChartMarker.react';
+import LeafletPieChartMarker, { isMarker } from '../../cgps-commons/LeafletPieChartMarker.react';
 import MarkerControls from '../../cgps-commons/LeafletMarkerControls.react';
 
 import { getMarkerSize, getLassoPath } from '../../map/selectors';
@@ -69,7 +69,8 @@ function mergeProps(mappedState, { dispatch, ...mappedDispatch }, ownProps) {
     ...ownProps,
     ...mappedState,
     ...mappedDispatch,
-    onClick: () => {
+    onClick: ({ originalEvent }) => {
+      if (isMarker(originalEvent.target)) return;
       if (mappedState.lassoPath) {
         dispatch(filterByLassoPath(stateKey, null));
       }
