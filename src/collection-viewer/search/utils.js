@@ -91,7 +91,7 @@ export function getExpressionMatcher(text) {
   if (!operator) return null;
 
   const number = cleanText.slice(operator.length);
-  if (!number.length && isNaN(number)) return null;
+  if (!number.length || isNaN(number)) return null;
   const test = comparators[operator].bind(null, Number(number));
   return {
     test: value => test(Number(value)),
