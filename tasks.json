@@ -4,5 +4,8 @@
   ],
   "1280": [
     { "task": "mlst", "version": "1" }
+  ],
+  "90370": [
+    { "task": "mlst", "version": "1" }
   ]
 }

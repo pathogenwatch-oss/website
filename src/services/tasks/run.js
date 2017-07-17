@@ -13,7 +13,7 @@ function getImageName(task, version) {
 
 function runTask(organismId, fileId, task, version) {
   return new Promise((resolve, reject) => {
-    const container = docker(getImageName(task, version), { env: { WGSA_organismId: organismId } });
+    const container = docker(getImageName(task, version), { env: { WGSA_ORGANISM_ID: organismId } });
     const stream = fs.createReadStream(fastaStorage.getFilePath(fastaStoragePath, fileId));
     stream.pipe(container.stdin);
     const buffer = [];
