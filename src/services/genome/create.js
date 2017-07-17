@@ -4,20 +4,17 @@ const Genome = require('models/genome');
 
 const { ServiceRequestError } = require('utils/errors');
 
-function createGenomeDocument({ name, uploadedAt }, reference, { user, sessionID }, genomeFileDoc) {
-  const { organismId, organismName, metrics } = genomeFileDoc;
+function createGenomeDocument({ name, uploadedAt }, { reference, user, sessionID }) {
   return (
     Genome.create({
-      _file: genomeFileDoc._id,
       _user: user,
       _session: sessionID,
       name,
-      organismId,
       reference,
       public: reference,
       uploadedAt,
     }).
-    then(({ _id }) => ({ id: _id, organismId, organismName, metrics }))
+    then(({ _id }) => _id)
   );
 }
 
@@ -28,8 +25,12 @@ module.exports = ({ timeout$, stream, metadata, reference, user, sessionID }) =>
 
   return (
     request('genome', 'store', { timeout$, stream })
-      .then(genomeFileDoc =>
-        createGenomeDocument(metadata, reference, { user, sessionID }, genomeFileDoc)
-      )
+      .then(({ fileId, filePath }) => {
+        createGenomeDocument(metadata, { reference, user, sessionID })
+          .then(genomeId => {
+            request('genome', 'process', { genomeId, fileId, filePath, sessionID });
+            return { id: genomeId };
+          });
+      })
   );
 };
