@@ -27,6 +27,7 @@ const schema = new Schema({
   country: String,
   pmid: String,
   userDefined: Object,
+  analysis: Object,
   public: { type: Boolean, default: false },
   reference: { type: Boolean, default: false },
   binned: { type: Boolean, default: false },
@@ -74,6 +75,10 @@ function getCountryCode(latitude, longitude) {
   }
   return null;
 }
+
+schema.statics.addAnalysisResult = function (_id, name, result) {
+  return this.update({ _id }, { [`analysis.${name.toLowerCase()}`]: result });
+};
 
 schema.statics.updateMetadata = function (_id, { user, sessionID }, metadata) {
   const {

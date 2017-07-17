@@ -1,7 +1,7 @@
 const handle = require('./handler');
 
 const messageQueueUtil = require('utils/messageQueueConnection');
-const LOGGER = require('utils/logging').createLogger('aggregator');
+const LOGGER = require('utils/logging').createLogger('runner');
 const QUEUE_OPTIONS = { durable: true, autoDelete: false };
 
 module.exports = function ({ mqConnection }) {
@@ -9,11 +9,9 @@ module.exports = function ({ mqConnection }) {
 
   function onMessage(message, _, __, { queue }) {
     // messages from different sources can be different formats
-    if (message.data && Buffer.isBuffer(message.data)) {
-      message = JSON.parse(message.data.toString());
-    }
-
-    const { assemblyId = {} } = message;
+    const { assemblyId = {} } = (message.data && Buffer.isBuffer(message.data))
+      ? JSON.parse(message.data.toString())
+      : message;
     const assemblyIdString = assemblyId.uuid || 'N/A';
 
     LOGGER.info(`Processing message:
@@ -27,12 +25,12 @@ Collection: ${message.collectionId}`);
       then(() => queue.shift()).
       catch(error => {
         LOGGER.error(error);
-        SERVICES.publish('aggregator-error', { error, message });
+        SERVICES.publish('watcher-error', { error, message });
         queue.shift();
       });
   }
 
-  mqConnection.queue('aggregator-queue', QUEUE_OPTIONS, queue => {
+  mqConnection.queue('watcher-queue', QUEUE_OPTIONS, queue => {
     queue.bind(NOTIFICATION.name, '*.*.ASSEMBLY.*');
     queue.bind(NOTIFICATION.name, '*.*.COLLECTION.*');
     queue.bind(NOTIFICATION.name, '*.matrix'); // for reference core results
@@ -40,8 +38,8 @@ Collection: ${message.collectionId}`);
     LOGGER.info(`${queue.name} is open.`);
   });
 
-  mqConnection.queue('aggregator-errors-queue', QUEUE_OPTIONS, queue => {
-    queue.bind(SERVICES.name, 'aggregator-error');
+  mqConnection.queue('watcher-errors-queue', QUEUE_OPTIONS, queue => {
+    queue.bind(SERVICES.name, 'watcher-error');
     LOGGER.info(`${queue.name} is open.`);
   });
 };

@@ -18,8 +18,9 @@ if (!serviceName) {
     storage.connect(),
     messageQueue.connect(),
     mongo.connect(),
-  ]).
-  then(connections => {
+  ])
+  .then(formatConnections)
+  .then(connections => {
     process.on('SIGTERM', () =>
       mongo.close().then(() => {
         LOGGER.info('Received stop signal (SIGTERM), shutting down.');
@@ -27,9 +28,9 @@ if (!serviceName) {
       })
     );
 
-    require(`./${serviceName}`)(formatConnections(connections));
-  }).
-  catch(error => {
+    require(`./${serviceName}`)(connections);
+  })
+  .catch(error => {
     LOGGER.error(error);
     return process.exit(1);
   });
