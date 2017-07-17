@@ -16,6 +16,9 @@ import { getStatus } from '../selectors';
 
 import { statuses } from '../constants';
 import { history } from '../../app';
+import config from '../../app/config';
+
+import { subscribe, unsubscribe } from '../../utils/Notification';
 
 const Component = React.createClass({
 
@@ -46,10 +49,17 @@ const Component = React.createClass({
     }
 
     if (prefilter === 'upload') {
-      if (previous.isUploading && !isUploading) {
-        fetch();
+      if (!previous.isUploading && isUploading) {
+        subscribe(config.id, 'analysis', console.log);
       }
+      // if (previous.isUploading && !isUploading) {
+      //   fetch();
+      // }
     }
+  },
+
+  componentWillUnmount() {
+    unsubscribe(config.id);
   },
 
   upload(newFiles) {
