@@ -53,8 +53,8 @@ function getStream(req) {
 router.put('/genome', (req, res, next) => {
   LOGGER.info('Received request to create genome');
 
-  const { user, sessionID, clientId } = req;
-  const { name, uploadedAt } = req.query;
+  const { user, sessionID } = req;
+  const { name, uploadedAt, clientId } = req.query;
 
   services.request('genome', 'create', {
     timeout$: 1000 * 60 * 5,
