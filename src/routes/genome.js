@@ -53,7 +53,7 @@ function getStream(req) {
 router.put('/genome', (req, res, next) => {
   LOGGER.info('Received request to create genome');
 
-  const { user, sessionID } = req;
+  const { user, sessionID, clientId } = req;
   const { name, uploadedAt } = req.query;
 
   services.request('genome', 'create', {
@@ -62,6 +62,7 @@ router.put('/genome', (req, res, next) => {
     metadata: { name, uploadedAt },
     user,
     sessionID,
+    clientId,
   })
   .then(response => res.json(response))
   .catch(next);

@@ -12,10 +12,10 @@ router.put('/collection', (req, res, next) => {
   const { genomeIds, title, description, pmid, organismId } = req.body;
   const message = { user, genomeIds, title, description, pmid, organismId };
 
-  return services
-    .request('collection', 'submit-genomes', message)
-    .then(result => res.json(result))
-    .catch(next);
+  return services.
+    request('collection', 'create', message).
+    then(result => res.json(result)).
+    catch(next);
 });
 
 if (config.node.auth) {

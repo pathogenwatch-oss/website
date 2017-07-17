@@ -46,7 +46,7 @@
     "supertest": "^1.0.1"
   },
   "nodepath": "./src",
-  "nodeopts": "--inspect",
+  "nodeopts": "",
   "startcmd": "NODE_PATH=$npm_package_nodepath node $npm_package_nodeopts",
   "testcmd": "NODE_PATH=$npm_package_nodepath NODE_ENV='testing' mocha -t 60000 --reporter spec",
   "scripts": {

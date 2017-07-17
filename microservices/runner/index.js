@@ -1,16 +1,16 @@
 const LOGGER = require('utils/logging').createLogger('runner');
 
-const Genome = require('models/genome');
-
-const runTask = require('./runTask');
-const queue = require('./queue');
+const { request } = require('services');
+const queue = require('services/taskQueue');
 
 function onMessage({ genomeId, organismId, fileId, task, version }) {
-  return runTask(organismId, fileId, task, version)
-    .then(results => {
-      LOGGER.info(' results', genomeId, task, results);
-      return Genome.addAnalysisResult(genomeId, task, results);
-    });
+  return (
+    request('tasks', 'run', { organismId, fileId, task, version })
+      .then(result => {
+        LOGGER.info('results', genomeId, task, result);
+        return request('genome', 'add-analysis', { genomeId, task, result });
+      })
+  );
 }
 
 module.exports = function () {

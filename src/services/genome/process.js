@@ -1,25 +1,17 @@
-const fastaStorage = require('wgsa-fasta-store');
-const processFasta = require('wgsa-fasta-store/fasta-processor');
-const { fastaStoragePath } = require('configuration');
-fastaStorage.setup(fastaStoragePath);
 const { request } = require('services/bus');
 
-const GenomeFile = require('models/genomeFile');
+const Genome = require('models/genome');
 
-module.exports = ({ genomeId, fileId, filePath, sessionID }) =>
-  GenomeFile.findOne({ fileId })
-    .then(fasta => {
-      if (fasta) return fasta;
-      return processFasta(filePath).then(
-        ({ metrics, specieator: { speciesTaxId, scientificName } }) =>
-          GenomeFile.create({
-            fileId,
-            organismId: speciesTaxId,
-            organismName: scientificName,
-            metrics,
-          })
-      );
-    })
-    .then(genomeFile =>
-      request('genome', 'analysis', { genomeId, type: 'species', result: genomeFile, sessionID })
-    );
+const { tasks } = require('configuration');
+
+module.exports = function ({ genomeId, fileId, filePath, clientId }) {
+  return request('tasks', 'run', { fileId, task: tasks.species.taskName, version: tasks.species.version })
+    .then(result => {
+      const organismId = result.speciesTaxId;
+      return Promise.all([
+        Genome.update({ _id: genomeId }, { organismId }),
+        request('genome', 'add-analysis', { genomeId, task: tasks.species.taskName, result, clientId }),
+        request('tasks', 'submit-genome', { organismId, genomeId, fileId, filePath, clientId }),
+      ]);
+    });
+};

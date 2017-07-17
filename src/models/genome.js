@@ -13,11 +13,11 @@ function getDate(year, month = 1, day = 1) {
 }
 
 const schema = new Schema({
-  _file: { type: Schema.Types.ObjectId, ref: 'GenomeFile' },
   _user: { type: Schema.Types.ObjectId, ref: 'User' },
   _session: String,
   name: { type: String, required: true, index: 'text' },
   organismId: String,
+  fileId: String,
   year: Number,
   month: Number,
   day: Number,

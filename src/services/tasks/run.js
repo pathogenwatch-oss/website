@@ -8,7 +8,7 @@ const { fastaStoragePath } = require('configuration');
 const LOGGER = require('utils/logging').createLogger('runner');
 
 function getImageName(task, version) {
-  return `registry.gitlab.com/cgps/wgsa/tasks/${task}:v${version}`;
+  return `registry.gitlab.com/cgps/wgsa-tasks/${task}:v${version}`;
 }
 
 function runTask(organismId, fileId, task, version) {
@@ -36,7 +36,7 @@ function runTask(organismId, fileId, task, version) {
   });
 }
 
-module.exports = function handleMessage(organismId, fileId, task, version) {
+module.exports = function handleMessage({ organismId, fileId, task, version }) {
   return Analysis.findOne({ fileId, task, version })
     .then(model => {
       if (model) return model.results;

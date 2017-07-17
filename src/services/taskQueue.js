@@ -1,21 +1,17 @@
 /* eslint no-param-reassign: 0 */
 
-const MongoClient = require('mongodb').MongoClient;
 const MessageQueue = require('mongo-message-queue');
 const mQueue = new MessageQueue();
 const Q = require('q');
+const mongoose = require('mongoose');
 
-const mongo = require('utils/mongoConnection');
 const LOGGER = require('utils/logging').createLogger('queue');
 
 const QUEUE_NAME = 'wgsa-tasks';
 
-mQueue.databasePromise = function () {
-  return Q.resolve(MongoClient.connect(mongo.dbUrl));
-};
-
 mQueue.processingTimeout = 5 * 60 * 1000;
 mQueue.maxWorkers = 1;
+mQueue.databasePromise = () => Q.resolve(mongoose.connection);
 
 module.exports.enqueue = function (message) {
   LOGGER.info('Adding message', message);

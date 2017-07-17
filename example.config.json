@@ -65,5 +65,12 @@
   "maxFastaFileSize": 10,
   "mapboxKey": "",
   "fastaStoragePath": "/path/to/files/",
-  "wikiLocation": "https://raw.githubusercontent.com/wiki/ImperialCollegeLondon/wgsa-documentation"
+  "wikiLocation": "https://raw.githubusercontent.com/wiki/ImperialCollegeLondon/wgsa-documentation",
+  "tasks": {
+    "species": {
+      "taskName": "specieator",
+      "version": "1"
+    },
+    "retries": 3
+  }
 }
