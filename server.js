@@ -125,6 +125,7 @@ module.exports = () =>
           strategies: [ 'facebook', 'google', 'twitter' ],
           user,
           version,
+          id: req.sessionID,
         },
       });
     });

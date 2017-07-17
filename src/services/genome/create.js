@@ -14,7 +14,7 @@ function createGenomeDocument({ name, uploadedAt }, { reference, user, sessionID
       public: reference,
       uploadedAt,
     }).
-    then(({ _id }) => _id)
+    then(({ _id }) => _id.toString())
   );
 }
 
@@ -25,12 +25,12 @@ module.exports = ({ timeout$, stream, metadata, reference, user, sessionID }) =>
 
   return (
     request('genome', 'store', { timeout$, stream })
-      .then(({ fileId, filePath }) => {
+      .then(({ fileId, filePath }) =>
         createGenomeDocument(metadata, { reference, user, sessionID })
           .then(genomeId => {
             request('genome', 'process', { genomeId, fileId, filePath, sessionID });
             return { id: genomeId };
-          });
-      })
+          })
+      )
   );
 };
