@@ -13,7 +13,7 @@ const task = 'specieator';
 module.exports = function ({ genomeId, fileId, filePath, clientId }) {
   return request('tasks', 'run', { fileId, task, version })
     .then(result => {
-      const organismId = result.speciesTaxId;
+      const { organismId } = result;
       return Promise.all([
         Genome.update({ _id: genomeId }, { organismId }),
         request('genome', 'add-analysis', { genomeId, task, version, result, clientId }),
