@@ -7,8 +7,8 @@ function onMessage({ genomeId, organismId, fileId, task, version, clientId }) {
   return (
     request('tasks', 'run', { organismId, fileId, task, version })
       .then(result => {
-        LOGGER.info('results', genomeId, task, result);
-        return request('genome', 'add-analysis', { genomeId, task, result, clientId });
+        LOGGER.info('results', genomeId, task, version, result);
+        return request('genome', 'add-analysis', { genomeId, task, version, result, clientId });
       })
   );
 }
