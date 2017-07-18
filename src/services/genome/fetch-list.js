@@ -73,7 +73,6 @@ module.exports = function (props) {
           sort: getSort(sort),
         }
       )
-      .populate('_file')
       .lean()
       .then(genomes => genomes.map(_ => Genome.toObject(_, user)))
   );

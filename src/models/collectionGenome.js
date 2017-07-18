@@ -5,6 +5,7 @@ const { setToObjectOptions } = require('./utils');
 
 const schema = new Schema({
   _collection: { type: Schema.Types.ObjectId, ref: 'Collection' },
+  _genome: { type: Schema.Types.ObjectId, ref: 'Genome' },
   fileId: { type: String, required: true },
   uuid: { type: String, required: true },
   name: { type: String, required: true },
@@ -20,20 +21,25 @@ const schema = new Schema({
   country: String,
   pmid: String,
   userDefined: Object,
-  metrics: Object,
   analysis: {
-    fp: {
-      subtype: String,
-      referenceName: String,
-    },
-    mlst: {
-      st: String,
-      code: String,
-    },
     core: {
       size: Number,
       percentMatched: Number,
       percentAssemblyMatched: Number,
+    },
+    fp: {
+      subtype: String,
+      referenceName: String,
+    },
+    genotyphi: {
+      genotype: String,
+      snps: Number,
+      foundLoci: Number,
+    },
+    metrics: Object,
+    mlst: {
+      st: String,
+      code: String,
     },
     paarsnp: {
       // [ { name: String, state: String, mechanisms: [ String ] } ],
@@ -45,11 +51,6 @@ const schema = new Schema({
       ngmast: String,
       por: String,
       tbpb: String,
-    },
-    genotyphi: {
-      genotype: String,
-      snps: Number,
-      foundLoci: Number,
     },
   },
 });

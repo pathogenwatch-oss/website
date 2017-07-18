@@ -42,9 +42,6 @@ function toObject(genome, user = {}) {
   const { id } = user;
   const { _user } = genome;
   genome.owner = (_user && id && _user.toString() === id) ? 'me' : 'other';
-  genome.organismName = genome._file.organismName;
-  genome.metrics = genome._file.metrics;
-  delete genome._file;
   delete genome._user;
   delete genome._session;
   if (!genome.id) {

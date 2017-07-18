@@ -7,7 +7,7 @@ const fetch = {
     const query = Object.assign(
       {}, Genome.getPrefilterCondition(credentials), { _id: id }
     );
-    return Genome.findOne(query).populate('_file');
+    return Genome.findOne(query);
   },
   collection: (_, id) =>
     CollectionGenome.

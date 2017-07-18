@@ -15,11 +15,10 @@ const getFiles = {
     );
     return (
       Genome.
-        find(query, { _file: 1, name: 1 }).
-        populate('_file').
+        find(query, { name: 1 }).
         then(genomes =>
-          genomes.map(({ name, _file }) =>
-            ({ name: createFastaFileName(name), id: _file.fileId })))
+          genomes.map(({ name, fileId }) =>
+            ({ name: createFastaFileName(name), id: fileId })))
     );
   },
   collection: (_, ids) =>

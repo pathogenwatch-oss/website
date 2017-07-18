@@ -8,7 +8,7 @@ function mapUuidsToGenomes(uuids, genomes) {
   const unusedIds = new Set(uuids);
   return genomes.map(genome => {
     const idPair = uuids.find(pair =>
-      unusedIds.has(pair) && pair.checksum === genome._file.fileId
+      unusedIds.has(pair) && pair.checksum === genome.fileId
     );
     unusedIds.delete(idPair);
     return [
@@ -20,7 +20,7 @@ function mapUuidsToGenomes(uuids, genomes) {
 
 module.exports = ({ genomes }) => {
   const message = {
-    checksums: genomes.map(_ => _._file.fileId),
+    checksums: genomes.map(_ => _.fileId),
     collectionOperation: COLLECTION_OPERATIONS.CREATE,
   };
 

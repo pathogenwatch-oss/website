@@ -3,11 +3,11 @@ const CollectionGenome = require('models/collectionGenome');
 module.exports = function ({ collection, uuidToGenome }) {
   return CollectionGenome.insertMany(
     uuidToGenome.map(([ uuid, genome ]) => {
-      const { name, year, month, day, latitude, longitude, country, pmid, userDefined } = genome;
-      const { fileId, metrics } = genome._file;
+      const { _id, fileId, name, year, month, day, latitude, longitude, country, pmid, userDefined, analysis } = genome;
       return {
         uuid,
         _collection: collection._id,
+        _genome: _id,
         fileId,
         name,
         date: { year, month, day },
@@ -15,7 +15,7 @@ module.exports = function ({ collection, uuidToGenome }) {
         country,
         pmid,
         userDefined,
-        metrics,
+        analysis,
       };
     })
   );

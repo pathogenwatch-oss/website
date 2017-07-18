@@ -3,8 +3,7 @@ const Genome = require('models/genome');
 const summaryFields = [
   { field: 'organismId',
     aggregation: () => [
-      { $lookup: { from: 'genomefiles', localField: '_file', foreignField: '_id', as: 'file' } },
-      { $group: { _id: { label: '$file.organismName', key: '$organismId' }, count: { $sum: 1 } } },
+      { $group: { _id: { label: '$analysis.specieator.organismName', key: '$organismId' }, count: { $sum: 1 } } },
     ],
   },
   { field: 'country' },

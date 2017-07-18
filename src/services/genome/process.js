@@ -2,9 +2,12 @@ const { request } = require('services/bus');
 
 const Genome = require('models/genome');
 
-const { tasks } = require('configuration');
+const DEFAULT_TASKS_CONFIG = {
+  specieator: { version: 1 },
+  retries: 3,
+};
+const { tasks = DEFAULT_TASKS_CONFIG } = require('configuration');
 const { version } = tasks.specieator;
-
 const task = 'specieator';
 
 module.exports = function ({ genomeId, fileId, filePath, clientId }) {

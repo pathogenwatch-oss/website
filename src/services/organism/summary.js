@@ -6,8 +6,7 @@ const collectionsFields = [ { field: 'organismId' } ];
 const genomeFields = [
   { field: 'organismId',
     aggregation: () => [
-      { $lookup: { from: 'genomefiles', localField: '_file', foreignField: '_id', as: 'file' } },
-      { $group: { _id: { label: '$file.organismName', key: '$organismId' }, count: { $sum: 1 } } },
+      { $group: { _id: { label: '$analysis.specieator.organismName', key: '$organismId' }, count: { $sum: 1 } } },
     ],
   },
 ];
