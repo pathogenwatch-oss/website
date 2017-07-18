@@ -128,45 +128,45 @@ export const systemDataColumns = {
   },
   __genome_length: {
     columnKey: '__genome_length',
-    valueGetter({ metrics }) {
-      return metrics ?
-        metrics.length :
+    valueGetter({ analysis }) {
+      return analysis.metrics ?
+        analysis.metrics.length :
         null;
     },
     numeric: true,
   },
   __n50: {
     columnKey: '__n50',
-    valueGetter({ metrics }) {
-      return metrics ?
-        metrics.N50 :
+    valueGetter({ analysis }) {
+      return analysis.metrics ?
+        analysis.metrics.N50 :
         null;
     },
     numeric: true,
   },
   '__no._contigs': {
     columnKey: '__no._contigs',
-    valueGetter({ metrics }) {
-      return metrics ?
-        metrics.contigs :
+    valueGetter({ analysis }) {
+      return analysis.metrics ?
+        analysis.metrics.contigs :
         null;
     },
     numeric: true,
   },
   '__non-ATCG': {
     columnKey: '__non-ATCG',
-    valueGetter({ metrics }) {
-      return metrics ?
-        metrics.nonATCG :
+    valueGetter({ analysis }) {
+      return analysis.metrics ?
+        analysis.metrics.nonATCG :
         null;
     },
     numeric: true,
   },
-  __GC_Content: {
+  '__%_GC_Content': {
     columnKey: '__%_GC_Content',
-    valueGetter({ metrics }) {
-      return metrics && metrics.gcContent ?
-        metrics.gcContent :
+    valueGetter({ analysis }) {
+      return analysis.metrics ?
+        analysis.metrics.gcContent :
         null;
     },
     numeric: true,
