@@ -7,6 +7,7 @@ const userAccounts = require('cgps-user-accounts/src');
 const userStore = require('utils/userStore');
 const http = require('http');
 const path = require('path');
+const crypto = require('crypto');
 
 const config = require('configuration.js');
 const logging = require('utils/logging');
@@ -114,6 +115,10 @@ module.exports = () =>
       const user = req.user ?
         { name: req.user.name, email: req.user.email, photo: req.user.photo } :
         null;
+
+      const hash = crypto.createHash('sha1');
+      hash.update(req.user ? req.user.id : req.sessionID);
+
       return res.render('index', {
         googleMapsKey: config.googleMapsKey,
         frontEndConfig: {
@@ -125,7 +130,7 @@ module.exports = () =>
           strategies: [ 'facebook', 'google', 'twitter' ],
           user,
           version,
-          id: req.sessionID,
+          clientId: hash.digest('hex'),
         },
       });
     });
