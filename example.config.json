@@ -67,8 +67,7 @@
   "fastaStoragePath": "/path/to/files/",
   "wikiLocation": "https://raw.githubusercontent.com/wiki/ImperialCollegeLondon/wgsa-documentation",
   "tasks": {
-    "organism": {
-      "taskName": "specieator",
+    "specieator": {
       "version": "1"
     },
     "retries": 3
