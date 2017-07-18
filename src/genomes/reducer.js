@@ -1,6 +1,5 @@
 import { combineReducers } from 'redux';
 
-import uploads from './uploads/reducer';
 import summary from './summary/reducer';
 import selection from './selection/reducer';
 import selectedMetric from './stats/reducer';
@@ -20,26 +19,6 @@ function entities(state = {}, { type, payload }) {
         memo[genome.id] = genome;
         return memo;
       }, {});
-    }
-    case actions.MOVE_TO_BIN: {
-      const { id } = payload;
-      return {
-        ...state,
-        [id]: {
-          ...state[id],
-          binned: true,
-        },
-      };
-    }
-    case actions.UNDO_MOVE_TO_BIN: {
-      const { id } = payload;
-      return {
-        ...state,
-        [id]: {
-          ...state[id],
-          binned: false,
-        },
-      };
     }
     default:
       return state;
@@ -83,6 +62,5 @@ export default combineReducers({
   status,
   selection,
   summary,
-  uploads,
   waiting,
 });

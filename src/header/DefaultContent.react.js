@@ -11,7 +11,7 @@ const DefaultContent = ({ asideVisible, toggle, asideEnabled = false }) => (
   <nav className="wgsa-header-content mdl-navigation">
     <NavLink to="/collections/all">Collections</NavLink>
     <NavLink to="/genomes/all">Genomes</NavLink>
-    <NavLink to="/genomes/upload">Upload</NavLink>
+    <NavLink to="/upload">Upload</NavLink>
     <NavLink to="/documentation">Documentation</NavLink>
     <button
       className="mdl-button mdl-button--icon wgsa-search-button"

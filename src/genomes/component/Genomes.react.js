@@ -62,7 +62,7 @@ const Component = React.createClass({
 
   upload(newFiles) {
     this.props.addFiles(newFiles);
-    history.push('/genomes/upload');
+    history.push('/upload');
   },
 
   renderEmptyMessage() {
