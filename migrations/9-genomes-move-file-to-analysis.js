@@ -20,20 +20,16 @@ module.exports.up = function (done) {
                 { _id: doc._id },
                 { $set: {
                   'analysis.metrics': {
+                    length: file.metrics.totalNumberOfNucleotidesInDnaStrings,
                     contigs: file.metrics.totalNumberOfContigs,
+                    smallestContig: file.metrics.smallestNumberOfNucleotidesInDnaStrings,
+                    largestContig: file.metrics.biggestNumberOfNucleotidesInDnaStrings,
+                    averageContig: file.metrics.averageNumberOfNucleotidesInDnaStrings,
                     N50: file.metrics.contigN50,
-                    nucleotides: file.metrics.totalNumberOfNucleotidesInDnaStrings,
+                    N50Contig: file.metrics.assemblyN50Data.sequenceNumber,
                     nonATCG: file.metrics.totalNumberOfNsInDnaStrings,
-                    averageNucleotides: file.metrics.averageNumberOfNucleotidesInDnaStrings,
-                    minNucleotides: file.metrics.smallestNumberOfNucleotidesInDnaStrings,
-                    maxNucleotides: file.metrics.biggestNumberOfNucleotidesInDnaStrings,
                     gcContent: file.metrics.gcContent,
-                    N50Data: file.metrics.sumsOfNucleotidesInDnaStrings,
-                    N50Contig: {
-                      index: file.metrics.assemblyN50Data.sequenceNumber,
-                      sum: file.metrics.assemblyN50Data.sum,
-                      length: file.metrics.assemblyN50Data.sequenceLength,
-                    },
+                    contigSums: file.metrics.sumsOfNucleotidesInDnaStrings,
                   },
                   'analysis.specieator': {
                     organismName: file.organismName,
