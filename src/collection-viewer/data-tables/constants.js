@@ -130,7 +130,7 @@ export const systemDataColumns = {
     columnKey: '__genome_length',
     valueGetter({ metrics }) {
       return metrics ?
-        metrics.totalNumberOfNucleotidesInDnaStrings :
+        metrics.length :
         null;
     },
     numeric: true,
@@ -139,7 +139,7 @@ export const systemDataColumns = {
     columnKey: '__n50',
     valueGetter({ metrics }) {
       return metrics ?
-        metrics.contigN50 :
+        metrics.N50 :
         null;
     },
     numeric: true,
@@ -148,7 +148,7 @@ export const systemDataColumns = {
     columnKey: '__no._contigs',
     valueGetter({ metrics }) {
       return metrics ?
-        metrics.totalNumberOfContigs :
+        metrics.contigs :
         null;
     },
     numeric: true,
@@ -157,7 +157,7 @@ export const systemDataColumns = {
     columnKey: '__non-ATCG',
     valueGetter({ metrics }) {
       return metrics ?
-        metrics.totalNumberOfNsInDnaStrings :
+        metrics.nonATCG :
         null;
     },
     numeric: true,

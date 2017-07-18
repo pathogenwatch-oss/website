@@ -38,6 +38,7 @@ const Component = React.createClass({
 
   componentWillMount() {
     this.props.fetch();
+    subscribe(config.clientId, 'analysis', console.log);
   },
 
   componentDidUpdate(previous) {
@@ -49,17 +50,14 @@ const Component = React.createClass({
     }
 
     if (prefilter === 'upload') {
-      if (!previous.isUploading && isUploading) {
-        subscribe(config.id, 'analysis', console.log);
+      if (previous.isUploading && !isUploading) {
+        fetch();
       }
-      // if (previous.isUploading && !isUploading) {
-      //   fetch();
-      // }
     }
   },
 
   componentWillUnmount() {
-    unsubscribe(config.id);
+    unsubscribe(config.clientId);
   },
 
   upload(newFiles) {

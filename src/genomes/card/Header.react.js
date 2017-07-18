@@ -11,7 +11,8 @@ import { toggleSelection } from '../selection/actions';
 const stopPropagation = e => e.stopPropagation();
 
 const Header = ({ genome, isNotUploading, onClick }) => {
-  const { name, organismId, organismName } = genome;
+  const { name, organismId, analysis } = genome;
+  const { organismName } = analysis.specieator;
   return (
     <header className="wgsa-card-header" onClick={onClick}>
       <h2 className="wgsa-card-title wgsa-overflow-fade" title={name}>{name}</h2>

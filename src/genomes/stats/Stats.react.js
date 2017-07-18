@@ -11,10 +11,10 @@ import { showGenomeDrawer } from '../../genome-drawer';
 import { showMetric } from './actions';
 
 const charts = [
-  { title: 'Genome Length', metric: 'totalNumberOfNucleotidesInDnaStrings' },
-  { title: 'N50', metric: 'contigN50' },
-  { title: 'No. Contigs', metric: 'totalNumberOfContigs' },
-  { title: 'Non-ATCG', metric: 'totalNumberOfNsInDnaStrings' },
+  { title: 'Genome Length', metric: 'length' },
+  { title: 'N50', metric: 'N50' },
+  { title: 'No. Contigs', metric: 'contigs' },
+  { title: 'Non-ATCG', metric: 'nonATCG' },
   { title: 'GC Content', metric: 'gcContent' },
 ];
 

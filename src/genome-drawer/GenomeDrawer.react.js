@@ -11,31 +11,31 @@ const GenomeStats = ({ metrics }) => (
   <dl className="wgsa-hub-stats-view">
     <span className="wgsa-hub-stats-section wgsa-hub-stats-section--small">
       <dt className="wgsa-hub-stats-heading">Genome Length</dt>
-      <dd className="wgsa-hub-stats-value">{metrics.totalNumberOfNucleotidesInDnaStrings}</dd>
+      <dd className="wgsa-hub-stats-value">{metrics.length}</dd>
     </span>
     <span className="wgsa-hub-stats-section wgsa-hub-stats-section--small">
       <dt className="wgsa-hub-stats-heading">No. Contigs</dt>
-      <dd className="wgsa-hub-stats-value">{metrics.totalNumberOfContigs}</dd>
+      <dd className="wgsa-hub-stats-value">{metrics.contigs}</dd>
     </span>
     <span className="wgsa-hub-stats-section wgsa-hub-stats-section--small">
       <dt className="wgsa-hub-stats-heading">Smallest Contig</dt>
-      <dd className="wgsa-hub-stats-value">{metrics.smallestNumberOfNucleotidesInDnaStrings}</dd>
+      <dd className="wgsa-hub-stats-value">{metrics.smallestContig}</dd>
     </span>
     <span className="wgsa-hub-stats-section wgsa-hub-stats-section--small">
       <dt className="wgsa-hub-stats-heading">Largest Contig</dt>
-      <dd className="wgsa-hub-stats-value">{metrics.biggestNumberOfNucleotidesInDnaStrings}</dd>
+      <dd className="wgsa-hub-stats-value">{metrics.largestContig}</dd>
     </span>
     <span className="wgsa-hub-stats-section wgsa-hub-stats-section--small">
       <dt className="wgsa-hub-stats-heading">Average Contig Length</dt>
-      <dd className="wgsa-hub-stats-value">{metrics.averageNumberOfNucleotidesInDnaStrings}</dd>
+      <dd className="wgsa-hub-stats-value">{metrics.averageContig}</dd>
     </span>
     <span className="wgsa-hub-stats-section wgsa-hub-stats-section--small">
       <dt className="wgsa-hub-stats-heading">N50</dt>
-      <dd className="wgsa-hub-stats-value">{metrics.contigN50}</dd>
+      <dd className="wgsa-hub-stats-value">{metrics.N50}</dd>
     </span>
     <span className="wgsa-hub-stats-section wgsa-hub-stats-section--small">
       <dt className="wgsa-hub-stats-heading">Non-ATCG</dt>
-      <dd className="wgsa-hub-stats-value">{metrics.totalNumberOfNsInDnaStrings}</dd>
+      <dd className="wgsa-hub-stats-value">{metrics.nonATCG}</dd>
     </span>
     <span className="wgsa-hub-stats-section wgsa-hub-stats-section--small">
       <dt className="wgsa-hub-stats-heading">GC Content</dt>
@@ -65,10 +65,10 @@ const GenomeDrawerContent = React.createClass({
             </div>
           </div>
           <div className="mdl-tabs__panel is-active" id="metrics-panel">
-            { genome && <GenomeStats metrics={genome.metrics} /> }
+            { genome && <GenomeStats metrics={genome.analysis.metrics} /> }
           </div>
           <div className="mdl-tabs__panel" id="n50-panel">
-            { genome && <N50Chart metrics={genome.metrics} /> }
+            { genome && <N50Chart metrics={genome.analysis.metrics} /> }
           </div>
         </div>
       </div>

@@ -9,7 +9,7 @@ export default React.createClass({
 
   componentDidMount() {
     const { metrics } = this.props;
-    const { sumsOfNucleotidesInDnaStrings, assemblyN50Data } = metrics;
+    const { contigSums, N50Contig } = metrics;
     const chartData = {
       label: 'N50',
       backgroundColor: '#a386bd',
@@ -17,7 +17,7 @@ export default React.createClass({
       pointBorderColor: '#a386bd',
       // lineColor: 'rgba(0, 0, 0, 0.54)',
       data: [ { x: 0, y: 0 } ].concat(
-        sumsOfNucleotidesInDnaStrings.map((y, x) => ({ x: x + 1, y }))
+        contigSums.map((y, x) => ({ x: x + 1, y }))
       ),
     };
 
@@ -50,7 +50,7 @@ export default React.createClass({
               position: 'bottom',
               ticks: {
                 display: false,
-                max: sumsOfNucleotidesInDnaStrings.length + 1,
+                max: contigSums.length + 1,
               },
               scaleLabel: { display: false },
               beginAtZero: true,
@@ -64,16 +64,16 @@ export default React.createClass({
           ],
         },
         horizontalLine: [ {
-          y: metrics.totalNumberOfNucleotidesInDnaStrings / 2,
+          y: metrics.length / 2,
           style: '#3c7383',
-          text: metrics.totalNumberOfNucleotidesInDnaStrings / 2,
+          text: metrics.length / 2,
           dash: true,
         } ],
         verticalLine: [ {
-          x: assemblyN50Data.sequenceNumber,
+          x: N50Contig,
           style: '#ccc',
           dash: true,
-          text: `Contig ${assemblyN50Data.sequenceNumber}`,
+          text: `Contig ${N50Contig}`,
           textStyle: 'rgba(0, 0, 0, 0.54)',
         } ],
       },

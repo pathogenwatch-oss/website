@@ -1,6 +1,6 @@
 import { SHOW_METRIC } from './actions';
 
-const initialState = 'totalNumberOfNucleotidesInDnaStrings';
+const initialState = 'length';
 
 export default function (state = initialState, { type, payload }) {
   switch (type) {
