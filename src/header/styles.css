@@ -12,6 +12,12 @@
   margin-right: 255px;
 }
 
+@media (max-width: 1024px) {
+  .wgsa-has-aside .sm-hide {
+    display: none;
+  }
+}
+
 .wgsa-header ~ .mdl-layout__content {
   z-index: auto;
 }
