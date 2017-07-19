@@ -13,6 +13,7 @@ const DefaultContent = ({ asideVisible, toggle, asideEnabled = false }) => (
     <NavLink to="/genomes/all">Genomes</NavLink>
     <NavLink to="/genomes/upload">Upload</NavLink>
     <NavLink to="/documentation">Documentation</NavLink>
+    <NavLink to="https://gitlab.com/cgps/wgsa.net/issues" external>Feedback</NavLink>
     <button
       className="mdl-button mdl-button--icon wgsa-search-button"
       onClick={() => toggle(asideVisible)}
