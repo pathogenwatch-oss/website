@@ -10,20 +10,6 @@ import ErrorFooter from './ErrorFooter.react';
 
 import { statuses } from '../constants';
 
-function getProgressBar(progress) {
-  return (
-    progress === 100 ?
-      <div>
-        <ProgressBar indeterminate />
-        <small>Estimating Organism</small>
-      </div> :
-      <div>
-        <ProgressBar progress={progress} />
-        <small>Uploading</small>
-      </div>
-  );
-}
-
 function getCardComponents(genome) {
   switch (genome.status) {
     case statuses.ERROR:
@@ -42,7 +28,12 @@ function getCardComponents(genome) {
       };
     case statuses.UPLOADING:
       return {
-        content: getProgressBar(genome.progress),
+        content: (
+          <div>
+            <ProgressBar progress={genome.progress} />
+            <small>Uploading</small>
+          </div>
+        ),
       };
     case statuses.PENDING:
       return {

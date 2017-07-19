@@ -8,7 +8,7 @@ import { Summary } from '../filter/summary';
 
 import { getUploadedGenomeList } from './selectors';
 
-import { addFiles } from './actions';
+import { addFiles, receiveUploadAnalysis } from './actions';
 
 import { subscribe, unsubscribe } from '../utils/Notification';
 
@@ -16,22 +16,8 @@ import config from '../app/config';
 
 const Component = React.createClass({
 
-  propTypes: {
-    hasGenomes: React.PropTypes.bool,
-    uploads: React.PropTypes.object,
-    addFiles: React.PropTypes.func.isRequired,
-    isUploading: React.PropTypes.bool,
-    waiting: React.PropTypes.bool,
-    prefilter: React.PropTypes.string,
-    fetch: React.PropTypes.func,
-  },
-
-  contextTypes: {
-    router: React.PropTypes.object,
-  },
-
   componentWillMount() {
-    subscribe(config.clientId, 'analysis', console.log);
+    subscribe(config.clientId, 'analysis', this.props.receiveAnalysis);
   },
 
   componentWillUnmount() {
@@ -74,6 +60,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     addFiles: files => dispatch(addFiles(files)),
+    receiveAnalysis: msg => dispatch(receiveUploadAnalysis(msg)),
   };
 }
 

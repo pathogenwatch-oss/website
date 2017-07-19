@@ -100,7 +100,7 @@ function processGenome(id) {
   };
 }
 
-const defaultProcessLimit = 3;
+const defaultProcessLimit = 5;
 
 export function processFiles(files) {
   return (dispatch, getState) => {
@@ -183,5 +183,14 @@ export function changeUploadSetting(setting, value) {
       setting,
       value,
     },
+  };
+}
+
+export const UPLOAD_ANALYSIS_RECEIVED = 'UPLOAD_ANALYSIS_RECEIVED';
+
+export function receiveUploadAnalysis(msg) {
+  return {
+    type: UPLOAD_ANALYSIS_RECEIVED,
+    payload: msg,
   };
 }

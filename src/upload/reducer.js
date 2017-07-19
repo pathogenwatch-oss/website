@@ -5,7 +5,6 @@ import { statuses } from './constants';
 function updateGenomes(state, id, update) {
   const genome = state[id];
   const next = { ...genome, ...update };
-  console.log(genome, update, next);
   return {
     ...state,
     [id]: next,
@@ -116,13 +115,18 @@ export default function (state = initialState, { type, payload }) {
     }
     case actions.PROCESS_GENOME.SUCCESS:
     case actions.PROCESS_GENOME.FAILURE: {
-      const { queue, processing, batch } = state;
+      const { queue, processing, batch, entities } = state;
+      const { id, error } = payload;
       processing.delete(payload.id);
 
       return {
         ...state,
         processing: new Set(processing),
         batch: queue.length + processing.size === 0 ? new Set() : batch,
+        entities:
+          error ?
+            updateGenomes(entities, id, { error, status: statuses.ERROR }) :
+            state.entities,
       };
     }
     case actions.REMOVE_GENOMES: {
@@ -145,6 +149,19 @@ export default function (state = initialState, { type, payload }) {
           ...state.settings,
           [payload.setting]: payload.value,
         },
+      };
+    }
+    case actions.UPLOAD_ANALYSIS_RECEIVED: {
+      const { entities, serverIds } = state;
+      const id = serverIds[payload.id];
+      if (!id) return state;
+      const analysis = entities[id].analysis || {};
+      return {
+        ...state,
+        entities:
+          updateGenomes(entities, id, {
+            analysis: { ...analysis, [payload.task]: payload.result },
+          }),
       };
     }
     default:
