@@ -1,7 +1,6 @@
 import { createSelector } from 'reselect';
-import sortBy from 'lodash.sortby';
 
-import { isFailedUpload } from '../genomes/utils/validation';
+import { isFailedUpload } from './utils/validation';
 import { statuses } from './constants';
 
 export const getUploads = ({ upload }) => upload;
@@ -16,7 +15,8 @@ const getProcessing = createSelector(
   uploads => uploads.processing,
 );
 
-export const getBatchSize = state => getUploads(state).batch.size;
+export const getBatch = state => getUploads(state).batch;
+export const getBatchSize = state => getBatch(state).size;
 export const getUploadedGenomes = state => getUploads(state).entities;
 export const getUploadedAt = state => getUploads(state).uploadedAt;
 export const getGenome = (state, id) => getUploadedGenomes(state)[id];
@@ -24,7 +24,7 @@ export const getGenome = (state, id) => getUploadedGenomes(state)[id];
 export const getUploadedGenomeList =
   createSelector(
     getUploadedGenomes,
-    genomes => sortBy(genomes, [ 'status', 'name' ])
+    genomes => Object.keys(genomes).map(id => genomes[id])
   );
 
 export const getFilesInProgress = createSelector(

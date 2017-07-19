@@ -1,7 +1,7 @@
 import { createAsyncConstants } from '../actions';
 
 import * as selectors from './selectors';
-import * as utils from '../genomes/utils';
+import * as utils from './utils';
 import * as api from './api';
 
 import { showToast } from '../toast';

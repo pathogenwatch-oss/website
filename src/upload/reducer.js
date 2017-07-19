@@ -22,6 +22,7 @@ const initialState = {
     compression: false,
     individual: false,
   },
+  serverIds: {},
 };
 
 export default function (state = initialState, { type, payload }) {
@@ -87,18 +88,20 @@ export default function (state = initialState, { type, payload }) {
       };
     }
     case actions.UPLOAD_GENOME.SUCCESS: {
-      const { id } = payload;
+      const { id, result } = payload;
       const { entities } = state;
-
-      const original = entities[id];
 
       return {
         ...state,
         entities: updateGenomes(
           entities,
-          id, // use new id from server
-          { ...original, status: statuses.SUCCESS }
+          id,
+          { status: statuses.SUCCESS }
         ),
+        serverIds: {
+          ...state.serverIds,
+          [result.id]: id,
+        },
       };
     }
     case actions.UPDATE_GENOME.SUCCESS: {

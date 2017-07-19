@@ -3,10 +3,9 @@ import { parse } from 'query-string';
 
 import Genomes from './Genomes.react';
 
-import { addFiles } from '../uploads/actions';
+import { addFiles } from '../../upload/actions';
 
 import { getTotalGenomes, isWaiting } from '../selectors';
-import { isUploading, getTotalErrors } from '../uploads/selectors';
 
 import { updateFilter } from '../filter/actions';
 
@@ -15,8 +14,6 @@ function mapStateToProps(state, { match }) {
   return {
     hasGenomes: getTotalGenomes(state) > 0,
     waiting: isWaiting(state),
-    isUploading: isUploading(state),
-    showErrorSummary: prefilter === 'upload' && getTotalErrors(state) > 0,
     prefilter,
   };
 }

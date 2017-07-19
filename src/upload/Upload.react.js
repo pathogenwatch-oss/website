@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import FileDragAndDrop from '../drag-and-drop';
 import Instructions from './Instructions.react';
 import Progress from './Progress.react';
+import { Summary } from '../filter/summary';
 
 import { getUploadedGenomeList } from './selectors';
 
@@ -55,6 +56,7 @@ const Component = React.createClass({
     return (
       <FileDragAndDrop onFiles={this.upload}>
         <div className="wgsa-hipster-style wgsa-filterable-view">
+          <Summary />
           {this.renderContent()}
         </div>
       </FileDragAndDrop>

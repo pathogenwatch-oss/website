@@ -8,7 +8,6 @@ import Overlay from '../../overlay';
 import Filter from '../filter';
 import Summary from '../summary';
 import SelectionDrawer from '../selection';
-import Instructions from '../uploads/Instructions.react';
 
 import { getGridItems } from '../selectors';
 import { getTotal } from '../summary/selectors';
@@ -42,17 +41,11 @@ const Component = React.createClass({
   },
 
   componentDidUpdate(previous) {
-    const { prefilter, isUploading, fetch } = this.props;
+    const { prefilter, fetch } = this.props;
 
     if (previous.prefilter !== prefilter) {
       fetch();
       return;
-    }
-
-    if (prefilter === 'upload') {
-      if (previous.isUploading && !isUploading) {
-        fetch();
-      }
     }
   },
 
@@ -70,10 +63,6 @@ const Component = React.createClass({
 
     if (total === 0) {
       switch (prefilter) {
-        case 'upload':
-          return (
-            <Instructions />
-          );
         case 'bin':
           return (
             <p className="wgsa-hub-big-message">

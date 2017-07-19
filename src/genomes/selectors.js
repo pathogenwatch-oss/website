@@ -1,14 +1,5 @@
 import { createSelector } from 'reselect';
 
-import {
-  isUploading,
-  getUploadedGenomeList,
-  getTotalErrors,
-  getUploadedAt
-} from './uploads/selectors';
-import { getPrefilter } from './filter/selectors';
-import { getTotal } from './summary/selectors';
-
 export const getGenomeState = ({ genomes }) => genomes;
 
 export const getGenomes = state => getGenomeState(state).entities;
@@ -31,29 +22,6 @@ export const isWaiting = state => getGenomeState(state).waiting;
 
 export const getStatus = state => getGenomeState(state).status;
 
-export const getGridItems = createSelector(
-  getPrefilter,
-  isUploading,
-  getTotalErrors,
-  getGenomeList,
-  getUploadedGenomeList,
-  (prefilter, uploading, totalErrors, genomeList, uploadedGenomes) => {
-    if (prefilter === 'upload' && (uploading || totalErrors)) {
-      return uploadedGenomes;
-    }
-    return genomeList;
-  }
-);
+export const getGridItems = getGenomeList;
 
-export const isAsideEnabled = createSelector(
-  getPrefilter,
-  isUploading,
-  getTotalErrors,
-  getUploadedAt,
-  (prefilter, uploading, errors, uploadedAt) => {
-    if (prefilter === 'upload') {
-      return uploadedAt && !(uploading || errors > 0);
-    }
-    return true;
-  }
-);
+export const isAsideEnabled = () => true;
