@@ -15,9 +15,6 @@ import { getStatus } from '../selectors';
 
 import { statuses } from '../constants';
 import { history } from '../../app';
-import config from '../../app/config';
-
-import { subscribe, unsubscribe } from '../../utils/Notification';
 
 const Component = React.createClass({
 
@@ -37,7 +34,6 @@ const Component = React.createClass({
 
   componentWillMount() {
     this.props.fetch();
-    subscribe(config.clientId, 'analysis', console.log);
   },
 
   componentDidUpdate(previous) {
@@ -47,10 +43,6 @@ const Component = React.createClass({
       fetch();
       return;
     }
-  },
-
-  componentWillUnmount() {
-    unsubscribe(config.clientId);
   },
 
   upload(newFiles) {
