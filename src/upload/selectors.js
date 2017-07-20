@@ -20,6 +20,7 @@ export const getBatchSize = state => getBatch(state).size;
 export const getUploadedGenomes = state => getUploads(state).entities;
 export const getUploadedAt = state => getUploads(state).uploadedAt;
 export const getGenome = (state, id) => getUploadedGenomes(state)[id];
+export const getAnalyses = state => getUploads(state).analyses;
 
 export const getUploadedGenomeList =
   createSelector(

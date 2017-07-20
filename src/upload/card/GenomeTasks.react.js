@@ -29,8 +29,7 @@ function TaskStatus({ task, result }) {
   );
 }
 
-export default ({ genome }) => {
-  const { analysis } = genome;
+export default ({ analysis }) => {
   if (!analysis) return null;
   return (
     <div className="wgsa-card-content">

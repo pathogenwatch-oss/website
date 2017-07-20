@@ -13,8 +13,8 @@ function getSubtitle(status) {
   return <span>&nbsp;</span>;
 }
 
-export default ({ genome }) => {
-  const { name, organismId, analysis = {}, status } = genome;
+export default ({ genome, analysis = {} }) => {
+  const { name, organismId, status } = genome;
   const { organismName } = analysis.specieator || {};
   return (
     <header className="wgsa-card-header">

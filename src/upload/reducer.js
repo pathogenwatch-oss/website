@@ -22,6 +22,7 @@ const initialState = {
     individual: false,
   },
   serverIds: {},
+  analyses: {},
 };
 
 export default function (state = initialState, { type, payload }) {
@@ -95,12 +96,8 @@ export default function (state = initialState, { type, payload }) {
         entities: updateGenomes(
           entities,
           id,
-          { status: statuses.SUCCESS }
+          { status: statuses.SUCCESS, genomeId: result.id }
         ),
-        serverIds: {
-          ...state.serverIds,
-          [result.id]: id,
-        },
       };
     }
     case actions.UPDATE_GENOME.SUCCESS: {
@@ -152,17 +149,21 @@ export default function (state = initialState, { type, payload }) {
       };
     }
     case actions.UPLOAD_ANALYSIS_RECEIVED: {
-      const { entities, serverIds } = state;
-      const id = serverIds[payload.id];
-      if (!id) return state;
-      const { props = {} } = payload;
-      const analysis = entities[id].analysis || props.analysis || {};
+      const { analyses } = state;
+      const { id, props = {} } = payload;
+      const analysis = analyses[id] || {};
+      const pending = props.pending ?
+        props.pending.reduce((memo, task) => {
+          memo[task] = null;
+          return memo;
+        }, {}) :
+        {};
       return {
         ...state,
-        entities:
-          updateGenomes(entities, id, {
-            analysis: { ...analysis, [payload.task]: payload.result },
-          }),
+        analyses: {
+          ...analyses,
+          [id]: { ...analysis, ...pending, [payload.task]: payload.result }
+        },
       };
     }
     default:
