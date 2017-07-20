@@ -28,6 +28,7 @@ const schema = new Schema({
   pmid: String,
   userDefined: Object,
   analysis: Object,
+  pending: { type: Array, default: null },
   public: { type: Boolean, default: false },
   reference: { type: Boolean, default: false },
   binned: { type: Boolean, default: false },
@@ -73,13 +74,16 @@ function getCountryCode(latitude, longitude) {
   return null;
 }
 
-schema.statics.addAnalysisResult = function (_id, task, result) {
+schema.statics.addAnalysisResult = function (_id, task, result, props) {
   const update = {
-    [`analysis.${task.toLowerCase()}`]: result,
+    $set: { [`analysis.${task.toLowerCase()}`]: result },
   };
 
   if (task === 'specieator') {
     update.organismId = result.organismId;
+    update.pending = props.pending;
+  } else {
+    update.$pull = { pending: task };
   }
 
   return this.update({ _id }, update);
