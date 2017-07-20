@@ -4,7 +4,7 @@ import Card from '../../card';
 import ProgressBar from '../../progress-bar';
 
 import Header from './Header.react';
-import GenomeMetadata from '../../genomes/card/GenomeMetadata.react';
+import GenomeTasks from './GenomeTasks.react';
 import GenomeError from './GenomeError.react';
 import ErrorFooter from './ErrorFooter.react';
 
@@ -41,7 +41,7 @@ function getCardComponents(genome) {
       };
     default:
       return {
-        content: <GenomeMetadata genome={genome} />,
+        content: <GenomeTasks genome={genome} />,
       };
   }
 }

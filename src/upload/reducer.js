@@ -155,7 +155,8 @@ export default function (state = initialState, { type, payload }) {
       const { entities, serverIds } = state;
       const id = serverIds[payload.id];
       if (!id) return state;
-      const analysis = entities[id].analysis || {};
+      const { props = {} } = payload;
+      const analysis = entities[id].analysis || props.analysis || {};
       return {
         ...state,
         entities:
