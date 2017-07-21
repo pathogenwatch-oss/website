@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import FileDragAndDrop from '../drag-and-drop';
 import Instructions from './Instructions.react';
 import Progress from './Progress.react';
-import { Summary } from '../filter/summary';
+import Summary from './Summary.react';
 
 import { getUploadedGenomeList } from './selectors';
 

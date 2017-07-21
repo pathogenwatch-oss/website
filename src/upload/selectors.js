@@ -25,7 +25,7 @@ export const getAnalyses = state => getUploads(state).analyses;
 export const getUploadedGenomeList =
   createSelector(
     getUploadedGenomes,
-    genomes => console.log(genomes) || Object.keys(genomes).map(id => genomes[id])
+    genomes => Object.keys(genomes).map(id => genomes[id])
   );
 
 export const getFilesInProgress = createSelector(
@@ -75,3 +75,64 @@ export const getSettings = state => getUploads(state).settings;
 
 export const getSettingValue =
   (state, setting) => getSettings(state)[setting];
+
+export const getSummary = createSelector(
+  getUploadedGenomeList,
+  files => {
+    const summary = {};
+    for (const file of files) {
+      summary[file.status] = (summary[file.status] || 0) + 1;
+    }
+    return {
+      total: files.length,
+      completed: summary[statuses.SUCCESS] || 0,
+      errored: summary[statuses.ERROR] || 0,
+      pending: summary[statuses.PENDING] || 0,
+      uploading: summary[statuses.UPLOADING] || 0,
+      compressing: summary[statuses.COMPRESSING] || 0,
+    };
+  }
+);
+
+function getSequenceTypeSummary(analyses) {
+  const summary = {};
+  for (const analysis of analyses) {
+    if (analysis.mlst) {
+      const { st } = analysis.mlst;
+      summary[st] = (summary[st] || 0) + 1;
+    }
+  }
+  return Object.keys(summary).map(st => ({ st, total: summary[st] }));
+}
+
+export const getAnalysisSummary = createSelector(
+  getUploadedGenomeList,
+  getAnalyses,
+  (files, analyses) => {
+    const summary = {};
+    let pending = 0;
+    for (const file of files) {
+      const analysis = {
+        ...(file.analysis || {}),
+        ...(analyses[file.genomeId] || {}),
+      };
+      if (!analysis.specieator) {
+        pending++;
+      } else {
+        summary[analysis.specieator.organismId] =
+          (summary[analysis.specieator.organismId] || []).concat(analysis);
+      }
+    }
+    const result = [];
+    for (const organismId of Object.keys(summary)) {
+      const organismAnalyses = summary[organismId];
+      result.push({
+        organismId,
+        organismName: organismAnalyses[0].specieator.organismName,
+        total: organismAnalyses.length,
+        sequenceTypes: getSequenceTypeSummary(organismAnalyses),
+      });
+    }
+    return result;
+  }
+);

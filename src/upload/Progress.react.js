@@ -3,27 +3,34 @@ import './styles.css';
 import React from 'react';
 import { connect } from 'react-redux';
 
-import Grid from '../grid';
-import Card from './card/Card.react';
-
 import * as upload from './selectors';
 
-const Progress = ({ files }) => (
-  <Grid
-    template={Card}
-    items={files}
-    columnWidth={256}
-    rowHeight={160}
-  />
+const Progress = ({ summary }) => (
+  <ul className="wgsa-content-margin">
+    {summary.map(organism =>
+      <li key={organism.organismId}>
+        <div className="mdl-chip mdl-chip--contact">
+          <div className="mdl-chip__contact">{organism.total}</div>
+          <div className="mdl-chip__text">{organism.organismName}</div>
+        </div>
+          <ul style={{ marginLeft: 24 }}>
+            {organism.sequenceTypes.map(({ st, total }) =>
+              <li key={st}>
+                <div className="mdl-chip mdl-chip--contact mdl-chip--active">
+                  <div className="mdl-chip__contact">{total}</div>
+                  <div className="mdl-chip__text">ST{st}</div>
+                </div>
+              </li>
+            )}
+          </ul>
+      </li>
+    )}
+  </ul>
 );
 
 function mapStateToProps(state) {
   return {
-    files: upload.getUploadedGenomeList(state),
-    isUploading: upload.isUploading(state),
-    batchSize: upload.getBatchSize(state),
-    completedUploads: upload.getNumCompletedUploads(state),
-    totalErroredUploads: upload.getTotalErrors(state),
+    summary: upload.getAnalysisSummary(state),
   };
 }
 

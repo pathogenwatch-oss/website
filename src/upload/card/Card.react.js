@@ -14,7 +14,6 @@ import { getAnalyses } from '../selectors';
 import { statuses } from '../constants';
 
 function getCardComponents(genome, analysis) {
-  console.log(analysis);
   switch (genome.status) {
     case statuses.ERROR:
       return {

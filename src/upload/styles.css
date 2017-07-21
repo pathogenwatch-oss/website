@@ -37,3 +37,7 @@
 .wgsa-upload-progress {
   min-width: 640px;
 }
+
+.wgsa-upload-summary {
+  height: 128px;
+}
