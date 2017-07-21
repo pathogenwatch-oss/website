@@ -80,8 +80,8 @@ schema.statics.addAnalysisResult = function (_id, task, result, props) {
   };
 
   if (task === 'specieator') {
-    update.organismId = result.organismId;
-    update.pending = props.pending;
+    update.$set.organismId = result.organismId;
+    update.$set.pending = props.pending;
   } else {
     update.$pull = { pending: task };
   }
