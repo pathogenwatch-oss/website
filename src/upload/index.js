@@ -7,4 +7,4 @@ import Upload from './Upload.react';
 
 export reducer from './reducer';
 
-export default <Route path="/upload" component={Upload} />;
+export default <Route path="/upload/:uploadedAt?" component={Upload} />;

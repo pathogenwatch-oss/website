@@ -25,7 +25,7 @@ export const getAnalyses = state => getUploads(state).analyses;
 export const getUploadedGenomeList =
   createSelector(
     getUploadedGenomes,
-    genomes => Object.keys(genomes).map(id => genomes[id])
+    genomes => console.log(genomes) || Object.keys(genomes).map(id => genomes[id])
   );
 
 export const getFilesInProgress = createSelector(

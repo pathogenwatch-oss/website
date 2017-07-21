@@ -48,7 +48,7 @@ function flattenCSVs(files) {
 const GENOME_FILE_NAME_REGEX = new RegExp(`(${DEFAULT.GENOME_FILE_EXTENSIONS.join('|')})$`, 'i');
 const CSV_FILE_NAME_REGEX = /(.csv)$/i;
 
-export function mapCSVsToGenomes(files) {
+export function mapCSVsToGenomes(files, uploadedAt) {
   const csvFiles = files.filter(({ name }) => CSV_FILE_NAME_REGEX.test(name));
   const genomeFiles = files.filter(({ name }) => GENOME_FILE_NAME_REGEX.test(name));
 
@@ -73,6 +73,7 @@ export function mapCSVsToGenomes(files) {
           id: `${file.name}__${Date.now()}_${index}`,
           name: file.name,
           file,
+          uploadedAt,
           ...parseMetadata(row),
           owner: 'me',
           uploaded: true,

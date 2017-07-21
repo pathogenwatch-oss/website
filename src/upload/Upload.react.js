@@ -9,6 +9,7 @@ import { Summary } from '../filter/summary';
 import { getUploadedGenomeList } from './selectors';
 
 import { addFiles, receiveUploadAnalysis } from './actions';
+import { fetchGenomes } from './actions';
 
 import { subscribe, unsubscribe } from '../utils/Notification';
 
@@ -18,6 +19,11 @@ const Component = React.createClass({
 
   componentWillMount() {
     subscribe(config.clientId, 'analysis', this.props.receiveAnalysis);
+  },
+
+  componentDidMount() {
+    const { uploadedAt, fetch } = this.props;
+    if (uploadedAt) fetch(uploadedAt);
   },
 
   componentWillUnmount() {
@@ -51,9 +57,11 @@ const Component = React.createClass({
 
 });
 
-function mapStateToProps(state) {
+function mapStateToProps(state, { match }) {
+  const { uploadedAt } = match.params;
   return {
     files: getUploadedGenomeList(state),
+    uploadedAt,
   };
 }
 
@@ -61,6 +69,7 @@ function mapDispatchToProps(dispatch) {
   return {
     addFiles: files => dispatch(addFiles(files)),
     receiveAnalysis: msg => dispatch(receiveUploadAnalysis(msg)),
+    fetch: uploadedAt => dispatch(fetchGenomes(uploadedAt)),
   };
 }
 

@@ -5,6 +5,7 @@ import * as utils from './utils';
 import * as api from './api';
 
 import { showToast } from '../toast';
+import { history } from '../app';
 
 export const ADD_GENOMES = 'ADD_GENOMES';
 
@@ -129,8 +130,10 @@ export function processFiles(files) {
 }
 
 export function addFiles(newFiles) {
+  const uploadedAt = new Date().toISOString();
+  history.push(`/upload/${uploadedAt}`);
   return (dispatch) =>
-    utils.mapCSVsToGenomes(newFiles)
+    utils.mapCSVsToGenomes(newFiles, uploadedAt)
       .then(parsedFiles => dispatch(processFiles(parsedFiles)))
       .catch(error => {
         if (error.toast) {
@@ -192,5 +195,16 @@ export function receiveUploadAnalysis(msg) {
   return {
     type: UPLOAD_ANALYSIS_RECEIVED,
     payload: msg,
+  };
+}
+
+export const UPLOAD_FETCH_GENOMES = createAsyncConstants('UPLOAD_FETCH_GENOMES');
+
+export function fetchGenomes(uploadedAt) {
+  return {
+    type: UPLOAD_FETCH_GENOMES,
+    payload: {
+      promise: api.fetchGenomes(uploadedAt),
+    },
   };
 }

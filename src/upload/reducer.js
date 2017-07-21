@@ -15,7 +15,6 @@ const initialState = {
   batch: new Set(),
   queue: [],
   processing: new Set(),
-  uploadedAt: null,
   entities: {},
   settings: {
     compression: false,
@@ -29,17 +28,14 @@ export default function (state = initialState, { type, payload }) {
   switch (type) {
     case actions.ADD_GENOMES: {
       const ids = payload.genomes.map(_ => _.id);
-      const uploadedAt = state.uploadedAt || new Date().toISOString();
       return {
         ...state,
-        uploadedAt,
         batch: new Set([ ...state.batch, ...ids ]),
         queue: [ ...state.queue, ...ids ],
         entities: payload.genomes.reduce((memo, genome) => {
           delete genome.error;
           memo[genome.id] = {
             ...genome,
-            uploadedAt,
             status: statuses.PENDING,
             progress: 0,
           };
@@ -162,8 +158,21 @@ export default function (state = initialState, { type, payload }) {
         ...state,
         analyses: {
           ...analyses,
-          [id]: { ...analysis, ...pending, [payload.task]: payload.result }
+          [id]: { ...analysis, ...pending, [payload.task]: payload.result },
         },
+      };
+    }
+    case actions.UPLOAD_FETCH_GENOMES.SUCCESS: {
+      return {
+        ...state,
+        entities: payload.result.reduce((memo, genome) => {
+          memo[genome.id] = {
+            ...genome,
+            status: statuses.SUCCESS,
+            genomeId: genome.id,
+          };
+          return memo;
+        }, { ...state.entities }),
       };
     }
     default:

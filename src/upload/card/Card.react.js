@@ -14,6 +14,7 @@ import { getAnalyses } from '../selectors';
 import { statuses } from '../constants';
 
 function getCardComponents(genome, analysis) {
+  console.log(analysis);
   switch (genome.status) {
     case statuses.ERROR:
       return {
@@ -50,8 +51,9 @@ function getCardComponents(genome, analysis) {
 }
 
 function mapStateToProps(state, { item }) {
+  const analysis = getAnalyses(state)[item.genomeId] || {};
   return {
-    analysis: getAnalyses(state)[item.genomeId],
+    analysis: { ...(item.analysis || {}), ...analysis },
   };
 }
 

@@ -15,3 +15,7 @@ export function upload({ file, uploadedAt }, data, progressFn) {
 export function update(id, metadata) {
   return fetchJson('POST', `/api/genome/${id}`, metadata);
 }
+
+export function fetchGenomes(uploadedAt) {
+  return fetchJson('GET', '/api/genome', { prefilter: 'upload', uploadedAt });
+}
