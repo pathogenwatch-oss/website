@@ -4,6 +4,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import FileCard from './card/Card.react';
+import AnalysisChart from './AnalysisChart.react';
 
 import * as upload from './selectors';
 
@@ -12,7 +13,7 @@ const Progress = ({ inProgress, errored, summary }) => (
     <div>
       <div className="wgsa-section-divider">
         <h2 className="wgsa-section-title">Files</h2>
-        { inProgress.map(file => <FileCard item={file} />) }
+        { inProgress.map(file => <FileCard key={file.id} item={file} />) }
         { summary.pending > 0 ?
           <p>
             +{summary.pending} file{summary.pending === 1 ? '' : 's'}.
@@ -24,26 +25,15 @@ const Progress = ({ inProgress, errored, summary }) => (
       { summary.errored > 0 &&
         <div className="wgsa-section-divider">
           <h2 className="wgsa-section-title">Errors ({ summary.errored })</h2>
-          { errored.map(file => <FileCard item={file} />) }
+          { errored.map(file => <FileCard key={file.id} item={file} />) }
         </div> }
     </div>
     <div className="wgsa-section-divider">
       <h2 className="wgsa-section-title">Analysis</h2>
+      <AnalysisChart />
     </div>
   </div>
 );
-
-function formatSunburstData(data) {
-  return {
-    name: 'sunburst',
-    children: data.map(({ organismId, organismName, sequenceTypes }) =>
-      ({
-        name: `${organismName} (${organismId})`,
-        children: sequenceTypes.map(({ st, total }) => ({ name: `ST: ${st}`, size: total })),
-      })
-    ),
-  };
-}
 
 function mapStateToProps(state) {
   return {

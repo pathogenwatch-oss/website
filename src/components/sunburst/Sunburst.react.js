@@ -29,76 +29,100 @@ function getColour(name) {
   return colourMap.get(name);
 }
 
-function getFillColour({ depth, name, parent }) {
+function getFillColour({ depth, data, parent }) {
+  console.log(arguments);
   if (depth === 0) {
     return '#ffffff';
   }
 
   if (depth === 1) {
-    return getColour(name);
+    return getColour(data.name);
   }
 
-  return d3.hsl(getColour(parent.name)).brighter(0.5);
+  return d3.hsl(getColour(parent.data.name)).brighter(0.5);
 }
 
-function getLabelText({ depth, name, parent }) {
+function getLabelText({ depth, data, parent }) {
   if (depth === 1) {
-    return name;
+    return data.name;
   }
 
-  return `${getLabelText(parent)}\n${name}`;
+  return `${getLabelText(parent)}\n${data.name}`;
+}
+
+const width = 960;
+const height = 700;
+const radius = (Math.min(width, height) / 2) - 10;
+
+const formatNumber = d3.format(',d');
+
+const x = d3.scaleLinear()
+    .range([ 0, 2 * Math.PI ]);
+
+const y = d3.scaleSqrt()
+    .range([ 0, radius ]);
+
+// const partition = d3.partition();
+window.partition = d3.partition();
+
+const arc = d3.arc()
+    .startAngle(d => Math.max(0, Math.min(2 * Math.PI, x(d.x0))))
+    .endAngle(d => Math.max(0, Math.min(2 * Math.PI, x(d.x1))))
+    .innerRadius(d => Math.max(0, y(d.y0)))
+    .outerRadius(d => Math.max(0, y(d.y1)));
+
+function arcTweenData(a, i) {
+  // (a.x0s ? a.x0s : 0) -- grab the prev saved x0 or set to 0 (for 1st time through)
+  // avoids the stash() and allows the sunburst to grow into being
+  var oi = d3.interpolate({ x0: (a.x0s ? a.x0s : 0), x1: (a.x1s ? a.x1s : 0) }, a);
+  function tween(t) {
+    var b = oi(t);
+    a.x0s = b.x0;
+    a.x1s = b.x1;
+    return arc(b);
+  }
+  if (i == 0) {
+    // If we are on the first arc, adjust the x domain to match the root node
+    // at the current zoom level. (We only need to do this once.)
+    var xd = d3.interpolate(x.domain(), [root.x0, root.x1]);
+    return function (t) {
+      x.domain(xd(t));
+      return tween(t);
+    };
+  } else {
+    return tween;
+  }
 }
 
 export default React.createClass({
 
   componentDidMount() {
-    const width = 960;
-    const height = 700;
-    const radius = (Math.min(width, height) / 2) - 10;
-
-    const formatNumber = d3.format(',d');
-
-    const x = d3.scale.linear().range([ 0, 2 * Math.PI ]);
-
-    const y = d3.scale.sqrt().range([ 0, radius ]);
-
-    // const color = d3.scale.category20();
-
-    const partition = d3.layout.partition().value(d => d.size);
-
-    const arc = d3.svg.arc()
-      .startAngle(d => Math.max(0, Math.min(2 * Math.PI, x(d.x))))
-      .endAngle(d => Math.max(0, Math.min(2 * Math.PI, x(d.x + d.dx))))
-      .innerRadius(d => Math.max(0, y(d.y)))
-      .outerRadius(d => Math.max(0, y(d.y + d.dy)));
-
     const svg = (
       d3.select(this.refs.chart).append('svg')
-        .attr('width', width)
-        .attr('height', height)
+        .attr('viewBox', `0 0 ${width} ${height}`)
         .append('g')
         .attr('transform', `translate(${width / 2},${height / 2})`)
     );
 
-    this.path = (
-      svg.selectAll('path')
-        .data(partition.nodes(this.props.data))
-        .enter().append('path')
+    const root = d3.hierarchy(this.props.data);
+    root.sum(d => d.size);
+    window.root = root;
+    svg.selectAll('path')
+        .data(partition(root).descendants())
+      .enter().append('path')
         .attr('d', arc)
-        .attr('class', d => `arc-depth-${d.depth}`)
         .style('fill', getFillColour)
         .on('click', d => {
-          this.label.text('');
-          this.svg.transition()
-            .duration(750)
-            .tween('scale', () => {
-              const xd = d3.interpolate(x.domain(), [ d.x, d.x + d.dx ]);
-              const yd = d3.interpolate(y.domain(), [ d.y, 1 ]);
-              const yr = d3.interpolate(y.range(), [ d.y ? 20 : 0, radius ]);
-              return function (t) { x.domain(xd(t)); y.domain(yd(t)).range(yr(t)); };
-            })
-          .selectAll('path')
-            .attrTween('d', dd => function () { return arc(dd); });
+          svg.transition()
+              .duration(750)
+              .tween('scale', () => {
+                const xd = d3.interpolate(x.domain(), [ d.x0, d.x1 ]);
+                const yd = d3.interpolate(y.domain(), [ d.y0, 1 ]);
+                const yr = d3.interpolate(y.range(), [ d.y0 ? 20 : 0, radius ]);
+                return t => { x.domain(xd(t)); y.domain(yd(t)).range(yr(t)); };
+              })
+            .selectAll('path')
+              .attrTween('d', dd => function () { return arc(dd); });
         })
         .on('mouseover', d => {
           if (d.depth > 0) {
@@ -106,18 +130,23 @@ export default React.createClass({
           }
         })
         .append('title')
-        .text(d => `${d.name}\n${formatNumber(d.value)}`)
-      );
+        .text(d => `${d.data.name}\n${formatNumber(d.value)}`);
 
     this.label = svg.append('text').attr('transform', 'translate(0,0)');
 
     d3.select(self.frameElement).style('height', `${height}px`);
 
-    this.svg = svg;
+    window.svg = svg;
   },
 
   componentDidUpdate() {
-    this.svg.transition().duration(750);
+    console.log(this.props);
+
+    window.root = d3.hierarchy(this.props.data);
+    root.sum(d => d.size);
+    svg.selectAll('path')
+        .data(partition(root).descendants())
+        .transition().duration(1000).attrTween("d", arcTweenData);
   },
 
   render() {
