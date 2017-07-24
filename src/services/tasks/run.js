@@ -24,7 +24,7 @@ function runTask(organismId, fileId, task, version) {
       LOGGER.info('exit', exitCode);
       if (exitCode !== 0) {
         container.stderr.setEncoding('utf8');
-        reject({ exitCode, strerr: container.stderr.read() });
+        reject(new Error(container.stderr.read()));
       } else {
         resolve(JSON.parse(buffer.join('')));
       }
