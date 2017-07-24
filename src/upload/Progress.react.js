@@ -3,34 +3,30 @@ import './styles.css';
 import React from 'react';
 import { connect } from 'react-redux';
 
+import Sunburst from '../components/sunburst';
 import * as upload from './selectors';
 
 const Progress = ({ summary }) => (
-  <ul className="wgsa-content-margin">
-    {summary.map(organism =>
-      <li key={organism.organismId}>
-        <div className="mdl-chip mdl-chip--contact">
-          <div className="mdl-chip__contact">{organism.total}</div>
-          <div className="mdl-chip__text">{organism.organismName}</div>
-        </div>
-          <ul style={{ marginLeft: 24 }}>
-            {organism.sequenceTypes.map(({ st, total }) =>
-              <li key={st}>
-                <div className="mdl-chip mdl-chip--contact mdl-chip--active">
-                  <div className="mdl-chip__contact">{total}</div>
-                  <div className="mdl-chip__text">ST{st}</div>
-                </div>
-              </li>
-            )}
-          </ul>
-      </li>
-    )}
-  </ul>
+  <div className="wgsa-content-margin">
+    <Sunburst data={summary} />
+  </div>
 );
+
+function formatSunburstData(data) {
+  return {
+    name: 'sunburst',
+    children: data.map(({ organismId, organismName, sequenceTypes }) =>
+      ({
+        name: `${organismName} (${organismId})`,
+        children: sequenceTypes.map(({ st, total }) => ({ name: `ST: ${st}`, size: total })),
+      })
+    ),
+  };
+}
 
 function mapStateToProps(state) {
   return {
-    summary: upload.getAnalysisSummary(state),
+    summary: formatSunburstData(upload.getAnalysisSummary(state)),
   };
 }
 
