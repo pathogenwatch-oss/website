@@ -4,7 +4,6 @@ import { InvalidGenomeError } from '../utils/validation';
 
 const Error = ({ message, children }) => (
   <div className="wgsa-hub-card__metadata wgsa-hub-card-error">
-    <i className="material-icons">warning</i>
     <p>{message}</p>
     {children}
   </div>

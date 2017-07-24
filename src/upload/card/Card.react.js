@@ -30,17 +30,18 @@ function getCardComponents(genome, analysis) {
         ),
       };
     case statuses.UPLOADING:
+    case statuses.PENDING:
       return {
         content: (
           <div>
-            <ProgressBar progress={genome.progress} />
+            <ProgressBar progress={genome.progress || 0} />
             <small>Uploading</small>
           </div>
         ),
       };
-    case statuses.PENDING:
+    case statuses.SUCCESS:
       return {
-        content: <small>Pending</small>,
+        content: <small>Succeeded 👍</small>,
       };
     default:
       return {

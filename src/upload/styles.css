@@ -46,3 +46,42 @@
 .wgsa-upload-progress > :last-child {
   width: calc(75% - 16px);
 }
+
+.wgsa-upload-card-list {
+  display: block;
+  overflow: hidden;
+}
+
+.wgsa-upload-card-enter {
+  opacity: 0;
+}
+
+.wgsa-upload-card-enter.wgsa-upload-card-enter-active {
+  opacity: 1;
+  transition: .28s cubic-bezier(.4,0,.2,1);
+  transition-property: opacity;
+  transition-delay: .28s;
+}
+
+.wgsa-upload-card-leave {
+  transform: translateX(0);
+}
+
+.wgsa-upload-card-leave.wgsa-upload-card-leave-active {
+  transform: translateX(-100%);
+  transition: .28s cubic-bezier(.4,0,.2,1);
+  transition-property: transform;
+  transition-delay: .28s;
+}
+
+.wgsa-upload-progress .wgsa-card-header i {
+  position: absolute;
+  right: 0;
+  top: 0;
+  font-size: 18px;
+  color: #d11b1b;
+}
+
+.wgsa-upload-progress .wgsa-card-content {
+  height: auto;
+}
