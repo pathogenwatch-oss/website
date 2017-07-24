@@ -35,9 +35,14 @@
 /* Progress */
 
 .wgsa-upload-progress {
-  min-width: 640px;
+  display: flex;
+  justify-content: space-between;
 }
 
-.wgsa-upload-summary {
-  height: 128px;
+.wgsa-upload-progress > :first-child {
+  width: 25%;
+}
+
+.wgsa-upload-progress > :last-child {
+  width: calc(75% - 16px);
 }

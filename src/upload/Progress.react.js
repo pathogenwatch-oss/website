@@ -3,34 +3,41 @@ import './styles.css';
 import React from 'react';
 import { connect } from 'react-redux';
 
+import FileCard from './card/Card.react';
+
 import * as upload from './selectors';
 
-const Progress = ({ summary }) => (
-  <ul className="wgsa-content-margin">
-    {summary.map(organism =>
-      <li key={organism.organismId}>
-        <div className="mdl-chip mdl-chip--contact">
-          <div className="mdl-chip__contact">{organism.total}</div>
-          <div className="mdl-chip__text">{organism.organismName}</div>
-        </div>
-          <ul style={{ marginLeft: 24 }}>
-            {organism.sequenceTypes.map(({ st, total }) =>
-              <li key={st}>
-                <div className="mdl-chip mdl-chip--contact mdl-chip--active">
-                  <div className="mdl-chip__contact">{total}</div>
-                  <div className="mdl-chip__text">ST{st}</div>
-                </div>
-              </li>
-            )}
-          </ul>
-      </li>
-    )}
-  </ul>
+const Progress = ({ inProgress, errored, summary }) => (
+  <div className="wgsa-content-margin wgsa-upload-progress">
+    <div>
+      <div className="wgsa-section-divider">
+        <h2 className="wgsa-section-title">Files</h2>
+        { inProgress.map(file => <FileCard item={file} />) }
+        { summary.pending > 0 ?
+          <p>
+            +{summary.pending} file{summary.pending === 1 ? '' : 's'}.
+          </p> :
+          <p>
+            {summary.completed} file{summary.completed === 1 ? '' : 's'} uploaded successfully.
+          </p>}
+      </div>
+      { summary.errored > 0 &&
+        <div className="wgsa-section-divider">
+          <h2 className="wgsa-section-title">Errors ({ summary.errored })</h2>
+          { errored.map(file => <FileCard item={file} />) }
+        </div> }
+    </div>
+    <div className="wgsa-section-divider">
+      <h2 className="wgsa-section-title">Analysis</h2>
+    </div>
+  </div>
 );
 
 function mapStateToProps(state) {
   return {
-    summary: upload.getAnalysisSummary(state),
+    inProgress: upload.getFilesInProgress(state),
+    errored: upload.getErroredUploads(state),
+    summary: upload.getSummary(state),
   };
 }
 

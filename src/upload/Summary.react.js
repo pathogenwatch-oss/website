@@ -23,24 +23,25 @@ const Summary = React.createClass({
 
   render() {
     const { summary } = this.props;
-    if (summary.total) {
-      return (
-        <FilterSummary className="wgsa-upload-summary">
-          <div style={{ margin: 16 }}>
-            <CircularProgress radius="40" strokeWidth="8" percentage={(summary.completed / summary.total) * 100} />
-          </div>
-          {/* <ProgressBar
-            className="wgsa-filter-summary__count"
-            progress={(summary.completed / summary.total) * 100}
-            label={`${summary.completed}/${summary.total}`}
-          /> */}
-        </FilterSummary>
-      );
-    }
 
-    if (this.props.totalErroredUploads > 0) {
+    if (summary.errored) {
       return <ErrorSummary />;
     }
+
+    // if (summary.total) {
+    //   return (
+    //     <FilterSummary className="wgsa-upload-summary">
+    //       <div style={{ margin: 16 }}>
+    //         <CircularProgress radius="40" strokeWidth="8" percentage={(summary.completed / summary.total) * 100} />
+    //       </div>
+    //       {/* <ProgressBar
+    //         className="wgsa-filter-summary__count"
+    //         progress={(summary.completed / summary.total) * 100}
+    //         label={`${summary.completed}/${summary.total}`}
+    //       /> */}
+    //     </FilterSummary>
+    //   );
+    // }
 
     return <FilterSummary />;
   },
@@ -50,7 +51,6 @@ const Summary = React.createClass({
 function mapStateToProps(state) {
   return {
     isUploading: uploads.isUploading(state),
-    totalErroredUploads: uploads.getTotalErrors(state),
     summary: uploads.getSummary(state),
   };
 }

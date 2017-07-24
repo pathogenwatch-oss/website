@@ -60,7 +60,7 @@ export default connect(mapStateToProps)(
   ({ item, analysis }) => {
     const { content, footer = null } = getCardComponents(item, analysis);
     return (
-      <Card className="wgsa-genome-card wgsa-card--bordered">
+      <Card className="wgsa-genome-card">
         <Header genome={item} analysis={analysis} />
         { content }
         { footer }
