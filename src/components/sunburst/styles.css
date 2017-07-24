@@ -1,3 +1,7 @@
 .wgsa-sunburst path {
   stroke: #fff;
 }
+
+.wgsa-sunburst .arc-depth-0 {
+  fill: #fff !important;
+}

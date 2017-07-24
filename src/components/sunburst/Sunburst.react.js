@@ -2,6 +2,45 @@
 
 import React from 'react';
 
+const colours = [
+  '#834B96',
+  '#B668A6',
+  '#756E94',
+  '#97B5BE',
+  '#92A3B8',
+  '#E8E0EE',
+  '#BFABCF',
+  '#CFC1DB',
+  '#9070AC',
+  '#A389BB',
+  '#8968A7',
+  '#9D81B6',
+];
+
+const colourMap = new Map();
+let usedColours = 0;
+
+function getColour(name) {
+  if (!colourMap.has(name)) {
+    const newColour = colours[(usedColours++) % colours.length];
+    colourMap.set(name, newColour);
+  }
+
+  return colourMap.get(name);
+}
+
+function getFillColour({ depth, name, parent }) {
+  if (depth === 0) {
+    return '#ffffff';
+  }
+
+  if (depth === 1) {
+    return getColour(name);
+  }
+
+  return d3.hsl(getColour(parent.name)).brighter(0.5);
+}
+
 export default React.createClass({
 
   componentDidMount() {
@@ -15,7 +54,7 @@ export default React.createClass({
 
     const y = d3.scale.sqrt().range([ 0, radius ]);
 
-    const color = d3.scale.category20c();
+    // const color = d3.scale.category20();
 
     const partition = d3.layout.partition().value(d => d.size);
 
@@ -38,7 +77,8 @@ export default React.createClass({
         .data(partition.nodes(this.props.data))
         .enter().append('path')
         .attr('d', arc)
-        .style('fill', (d) => color((d.children ? d : d.parent).name))
+        .attr('class', (d, i) => `arc-depth-${d.depth}`)
+        .style('fill', getFillColour)
         .on('click', d => {
           this.svg.transition()
             .duration(750)
