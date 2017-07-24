@@ -33,6 +33,18 @@ const Progress = ({ inProgress, errored, summary }) => (
   </div>
 );
 
+function formatSunburstData(data) {
+  return {
+    name: 'sunburst',
+    children: data.map(({ organismId, organismName, sequenceTypes }) =>
+      ({
+        name: `${organismName} (${organismId})`,
+        children: sequenceTypes.map(({ st, total }) => ({ name: `ST: ${st}`, size: total })),
+      })
+    ),
+  };
+}
+
 function mapStateToProps(state) {
   return {
     inProgress: upload.getFilesInProgress(state),
