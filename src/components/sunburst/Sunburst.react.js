@@ -41,6 +41,14 @@ function getFillColour({ depth, name, parent }) {
   return d3.hsl(getColour(parent.name)).brighter(0.5);
 }
 
+function getLabelText({ depth, name, parent }) {
+  if (depth === 1) {
+    return name;
+  }
+
+  return `${getLabelText(parent)}\n${name}`;
+}
+
 export default React.createClass({
 
   componentDidMount() {
@@ -77,9 +85,10 @@ export default React.createClass({
         .data(partition.nodes(this.props.data))
         .enter().append('path')
         .attr('d', arc)
-        .attr('class', (d, i) => `arc-depth-${d.depth}`)
+        .attr('class', d => `arc-depth-${d.depth}`)
         .style('fill', getFillColour)
         .on('click', d => {
+          this.label.text('');
           this.svg.transition()
             .duration(750)
             .tween('scale', () => {
@@ -91,9 +100,16 @@ export default React.createClass({
           .selectAll('path')
             .attrTween('d', dd => function () { return arc(dd); });
         })
+        .on('mouseover', d => {
+          if (d.depth > 0) {
+            this.label.text(getLabelText(d));
+          }
+        })
         .append('title')
         .text(d => `${d.name}\n${formatNumber(d.value)}`)
       );
+
+    this.label = svg.append('text').attr('transform', 'translate(0,0)');
 
     d3.select(self.frameElement).style('height', `${height}px`);
 

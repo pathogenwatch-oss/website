@@ -1,5 +1,11 @@
 .wgsa-sunburst path {
   stroke: #fff;
+  cursor: pointer;
+}
+
+.wgsa-sunburst text {
+  text-anchor: middle;
+  dominant-baseline: middle;
 }
 
 .wgsa-sunburst .arc-depth-0 {
