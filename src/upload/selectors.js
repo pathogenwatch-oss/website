@@ -102,7 +102,7 @@ function getSequenceTypeSummary(analyses) {
       summary[st] = (summary[st] || 0) + 1;
     }
   }
-  return Object.keys(summary).map(st => ({ st, total: summary[st] }));
+  return Object.keys(summary).map(st => ({ label: `ST ${st}`, total: summary[st] }));
 }
 
 export const getAnalysisSummary = createSelector(
@@ -127,12 +127,12 @@ export const getAnalysisSummary = createSelector(
     for (const organismId of Object.keys(summary)) {
       const organismAnalyses = summary[organismId];
       result.push({
-        organismId,
-        organismName: organismAnalyses[0].specieator.organismName,
+        label: `${organismAnalyses[0].specieator.organismName} (${organismId})`,
         total: organismAnalyses.length,
         sequenceTypes: getSequenceTypeSummary(organismAnalyses),
       });
     }
+    if (pending) result.push({ label: 'Pending', total: pending });
     return result;
   }
 );

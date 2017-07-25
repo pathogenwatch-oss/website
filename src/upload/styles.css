@@ -45,6 +45,7 @@
 
 .wgsa-upload-progress > :last-child {
   width: calc(75% - 16px);
+  position: relative;
 }
 
 .wgsa-upload-card-list {
@@ -84,4 +85,11 @@
 
 .wgsa-upload-progress .wgsa-card-content {
   height: auto;
+}
+
+.wgsa-analysis-chart {
+  /*height: 100%;*/
+  width: calc(100vh - 200px);
+  max-width: 100%;
+  margin: 0 auto;
 }

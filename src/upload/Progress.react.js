@@ -38,7 +38,7 @@ const Progress = ({ inProgress, errored, summary }) => (
     </div>
     <div className="wgsa-section-divider">
       <h2 className="wgsa-section-title">Analysis</h2>
-      {/* <AnalysisChart /> */}
+      <AnalysisChart />
     </div>
   </div>
 );
