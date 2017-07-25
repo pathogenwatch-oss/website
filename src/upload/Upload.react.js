@@ -48,7 +48,7 @@ const Component = React.createClass({
     return (
       <FileDragAndDrop onFiles={this.upload}>
         <div className="wgsa-hipster-style wgsa-filterable-view">
-          <Summary />
+          <Summary uploadedAt={this.props.uploadedAt} />
           {this.renderContent()}
         </div>
       </FileDragAndDrop>

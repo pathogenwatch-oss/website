@@ -3,6 +3,8 @@ import { createSelector } from 'reselect';
 import { isFailedUpload } from './utils/validation';
 import { statuses } from './constants';
 
+import { getOrganismName } from '../organisms';
+
 export const getUploads = ({ upload }) => upload;
 
 const getUploadQueue = createSelector(
@@ -127,7 +129,7 @@ export const getAnalysisSummary = createSelector(
     for (const organismId of Object.keys(summary)) {
       const organismAnalyses = summary[organismId];
       result.push({
-        label: `${organismAnalyses[0].specieator.organismName} (${organismId})`,
+        label: getOrganismName(organismId, organismAnalyses[0].specieator.organismName),
         total: organismAnalyses.length,
         sequenceTypes: getSequenceTypeSummary(organismAnalyses),
       });
@@ -135,4 +137,9 @@ export const getAnalysisSummary = createSelector(
     if (pending) result.push({ label: 'Pending', total: pending });
     return result;
   }
+);
+
+export const isSpecieationComplete = createSelector(
+  getAnalysisSummary,
+  summary => summary.length && summary[summary.length - 1].label !== 'Pending',
 );

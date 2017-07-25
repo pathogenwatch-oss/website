@@ -5,7 +5,6 @@ import './styles.css';
 import React from 'react';
 import { connect } from 'react-redux';
 
-// import Sunburst from '../components/sunburst';
 import * as upload from './selectors';
 
 const colours = [
@@ -21,6 +20,21 @@ const colours = [
   '#A389BB',
   '#8968A7',
   '#9D81B6',
+];
+
+const lightColours = [
+  '#B285C1',
+  '#D7ACCF',
+  '#AEAAC0',
+  '#D6E2E5',
+  '#D1D8E1',
+  '#FFFFFF',
+  '#F0ECF4',
+  '#FFFFFF',
+  '#C3B1D2',
+  '#D7CBE1',
+  '#BBA8CC',
+  '#CFC1DC',
 ];
 
 const colourMap = new Map();
@@ -159,7 +173,7 @@ function formatChartData(data) {
     let sum = total;
     for (const st of sequenceTypes) {
       stData.data.push(st.total);
-      stData.backgroundColor.push(colour);
+      stData.backgroundColor.push(lightColours[colours.indexOf(colour)]);
       stData.labels.push(st.label);
       stData.parents.push(organismIndex);
       sum -= st.total;

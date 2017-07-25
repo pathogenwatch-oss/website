@@ -1,9 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 import { Summary as FilterSummary } from '../filter/summary';
-// import ProgressBar from '../progress-bar';
-import CircularProgress from '../components/CircularProgress.react';
 
 import ErrorSummary from './ErrorSummary.react';
 
@@ -22,26 +21,22 @@ const Summary = React.createClass({
   },
 
   render() {
-    const { summary } = this.props;
-
+    const { summary, isSpecieationComplete, uploadedAt } = this.props;
+    console.log(uploadedAt)
     if (summary.errored) {
       return <ErrorSummary />;
     }
 
-    // if (summary.total) {
-    //   return (
-    //     <FilterSummary className="wgsa-upload-summary">
-    //       <div style={{ margin: 16 }}>
-    //         <CircularProgress radius="40" strokeWidth="8" percentage={(summary.completed / summary.total) * 100} />
-    //       </div>
-    //       {/* <ProgressBar
-    //         className="wgsa-filter-summary__count"
-    //         progress={(summary.completed / summary.total) * 100}
-    //         label={`${summary.completed}/${summary.total}`}
-    //       /> */}
-    //     </FilterSummary>
-    //   );
-    // }
+    if (uploadedAt && isSpecieationComplete) {
+      return (
+        <FilterSummary className="wgsa-upload-summary">
+          <Link className="mdl-button mdl-button--primary" to={`/genomes?uploadedAt=${uploadedAt}`}>View Genomes</Link>
+          <button className="mdl-button">
+            Create Collection
+          </button>
+        </FilterSummary>
+      );
+    }
 
     return <FilterSummary />;
   },
@@ -50,8 +45,8 @@ const Summary = React.createClass({
 
 function mapStateToProps(state) {
   return {
-    isUploading: uploads.isUploading(state),
     summary: uploads.getSummary(state),
+    isSpecieationComplete: uploads.isSpecieationComplete(state),
   };
 }
 
