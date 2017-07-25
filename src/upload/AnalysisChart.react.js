@@ -37,6 +37,21 @@ function getColour(name) {
   return colourMap.get(name);
 }
 
+function toggleOrganism(index, chart) {
+  const [ sts ] = chart.config.data.datasets;
+  const organismsMeta = chart.getDatasetMeta(1);
+  const isSelected = organismsMeta.data[index].selected;
+  for (const [ i, meta ] of organismsMeta.data.entries()) {
+    meta.hidden = isSelected ? false : i !== index;
+    meta.selected = i !== index ? false : !meta.selected;
+  }
+  const stMeta = chart.getDatasetMeta(0);
+  for (let i = 0; i < sts.parents.length; i++) {
+    stMeta.data[i].hidden = organismsMeta.data[sts.parents[i]].hidden;
+  }
+  chart.update();
+}
+
 const AnalysisChart = React.createClass({
 
   componentDidMount() {
@@ -46,7 +61,8 @@ const AnalysisChart = React.createClass({
       options: {
         responsive: true,
         animation: {
-          animateRotate: false,
+          animateRotate: true,
+          animateScale: true,
         },
         tooltips: {
           displayColors: false,
@@ -74,31 +90,32 @@ const AnalysisChart = React.createClass({
               }));
             },
           },
-          onClick: (e, legendItem) => {
-            const index = legendItem.index;
-            const chart = this.chart;
-            const [ sts ] = chart.config.data.datasets;
-            const organismsMeta = chart.getDatasetMeta(1);
-            if (organismsMeta.data[index]) {
-              organismsMeta.data[index].hidden = !organismsMeta.data[index].hidden;
-            }
-            const stMeta = chart.getDatasetMeta(0);
-            for (let i = 0; i < sts.parents.length; i++) {
-              if (sts.parents[i] === index) {
-                stMeta.data[i].hidden = !stMeta.data[i].hidden;
-              }
-            }
-            chart.update();
-          },
+          onClick: (e, item) => toggleOrganism(item.index, this.chart),
+        },
+        onClick: (e, [ item ]) => {
+          if (item._datasetIndex === 0) {
+            toggleOrganism(this.chart.data.datasets[0].parents[item._index], this.chart);
+          } else {
+            toggleOrganism(item._index, this.chart);
+          }
         },
       },
     });
   },
 
   componentDidUpdate() {
-    const { datasets, labels } = this.props.data;
-    this.chart.data.datasets = datasets;
-    this.chart.data.labels = labels;
+    const { datasets } = this.props.data;
+    for (const dataset of datasets) {
+      const current = this.chart.data.datasets.find(_ => _.label === dataset.label);
+      if (current) {
+        current.data = dataset.data;
+        current.backgroundColor = dataset.backgroundColor;
+        current.labels = dataset.labels;
+        current.parents = dataset.parents;
+      } else {
+        this.chart.data.datasets.push(dataset);
+      }
+    }
     this.chart.update();
   },
 
@@ -146,7 +163,6 @@ function formatChartData(data) {
       stData,
       organisms,
     ],
-    labels: data.map(({ label }) => label),
   };
 }
 
