@@ -63,7 +63,7 @@ function reduceResult(result) {
         const previousCount = memo[_id.key] ? memo[_id.key].count : 0;
         memo[_id.key] = {
           count: previousCount + count,
-          label: _id.label[0],
+          label: Array.isArray(_id.label) ? _id.label[0] : _id.label,
         };
       } else if (_id instanceof Date) {
         memo[_id.toISOString()] = { count };

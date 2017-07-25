@@ -16,7 +16,7 @@ function getSort(sort) {
 }
 
 module.exports = function (props) {
-  const { user, query = {} } = props;
+  const { user, sessionID, query = {} } = props;
   const { skip = 0, limit = 0, searchText, sort = 'createdAt-' } = query;
   const { organismId, reference, owner, country, minDate, maxDate, uploadedAt } = query;
 
@@ -46,10 +46,10 @@ module.exports = function (props) {
     } else if (owner === 'other') {
       findQuery._user = { $ne: user };
     }
+  }
 
-    if (uploadedAt) {
-      findQuery.uploadedAt = uploadedAt;
-    }
+  if (uploadedAt && (user || sessionID)) {
+    findQuery.uploadedAt = new Date(uploadedAt);
   }
 
   if (minDate) {

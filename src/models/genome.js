@@ -130,6 +130,9 @@ schema.statics.getPrefilterCondition = function ({ user, query = {}, sessionID }
     if (user) {
       hasAccess.$or.push({ _user: user._id });
     }
+    if (uploadedAt && sessionID) {
+      hasAccess.$or.push({ _session: sessionID });
+    }
     return Object.assign(hasAccess, { binned: false });
   }
 
