@@ -59,6 +59,13 @@ const AnalysisChart = React.createClass({
       type: 'doughnut',
       data: this.props.data,
       options: {
+        pieceLabel: {
+          mode: 'percentage',
+          precision: 2,
+          fontSize: 11,
+          fontStyle: '500',
+          fontFamily: 'Roboto',
+        },
         responsive: true,
         animation: {
           animateRotate: true,
@@ -93,6 +100,14 @@ const AnalysisChart = React.createClass({
           onClick: (e, item) => toggleOrganism(item.index, this.chart),
         },
         onClick: (e, [ item ]) => {
+          if (!item) {
+            const organismsMeta = this.chart.getDatasetMeta(1);
+            const meta = organismsMeta.data.find(_ => _.selected);
+            if (meta) {
+              toggleOrganism(meta._index, this.chart);
+            }
+            return;
+          }
           if (item._datasetIndex === 0) {
             toggleOrganism(this.chart.data.datasets[0].parents[item._index], this.chart);
           } else {
