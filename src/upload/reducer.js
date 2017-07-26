@@ -22,6 +22,7 @@ const initialState = {
   },
   serverIds: {},
   analyses: {},
+  selectedOrganism: null,
 };
 
 export default function (state = initialState, { type, payload }) {
@@ -165,6 +166,7 @@ export default function (state = initialState, { type, payload }) {
     case actions.UPLOAD_FETCH_GENOMES.SUCCESS: {
       return {
         ...state,
+        selectedOrganism: null,
         entities: payload.result.reduce((memo, genome) => {
           memo[genome.id] = {
             ...genome,
@@ -175,6 +177,11 @@ export default function (state = initialState, { type, payload }) {
         }, { ...state.entities }),
       };
     }
+    case actions.UPLOAD_ORGANISM_SELECTED:
+      return {
+        ...state,
+        selectedOrganism: payload.organismId,
+      };
     default:
       return state;
   }

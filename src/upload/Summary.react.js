@@ -6,7 +6,7 @@ import { Summary as FilterSummary } from '../filter/summary';
 
 import ErrorSummary from './ErrorSummary.react';
 
-import * as uploads from './selectors';
+import * as upload from './selectors';
 
 const Summary = React.createClass({
 
@@ -20,6 +20,13 @@ const Summary = React.createClass({
     ].join(' ');
   },
 
+  getGenomesLink() {
+    const { uploadedAt, selectedOrganism } = this.props;
+    let link = `/genomes?uploadedAt=${uploadedAt}`;
+    if (selectedOrganism) link += `&organismId=${selectedOrganism}`;
+    return link;
+  },
+
   render() {
     const { summary, isSpecieationComplete, uploadedAt } = this.props;
 
@@ -28,10 +35,11 @@ const Summary = React.createClass({
     }
 
     if (uploadedAt && isSpecieationComplete) {
+      const link = this.getGenomesLink();
       return (
         <FilterSummary className="wgsa-upload-summary">
-          <Link className="mdl-button mdl-button--primary" to={`/genomes?uploadedAt=${uploadedAt}`}>View Genomes</Link>
-          <Link className="mdl-button" to={`/genomes?uploadedAt=${uploadedAt}&createCollection=1`}>Create Collection</Link>
+          <Link className="mdl-button mdl-button--primary" to={link}>View Genomes</Link>
+          <Link className="mdl-button" to={`${link}&createCollection=1`}>Create Collection</Link>
         </FilterSummary>
       );
     }
@@ -43,8 +51,9 @@ const Summary = React.createClass({
 
 function mapStateToProps(state) {
   return {
-    summary: uploads.getSummary(state),
-    isSpecieationComplete: uploads.isSpecieationComplete(state),
+    summary: upload.getSummary(state),
+    isSpecieationComplete: upload.isSpecieationComplete(state),
+    selectedOrganism: upload.getSelectedOrganism(state),
   };
 }
 

@@ -3,10 +3,10 @@ import { getSelectedGenomes } from './selectors';
 
 export const SELECT_GENOMES = 'SELECT_GENOMES';
 
-export function selectGenomes(genomes) {
+export function selectGenomes(genomes, focus = false) {
   return {
     type: SELECT_GENOMES,
-    payload: { genomes },
+    payload: { genomes, focus },
   };
 }
 
@@ -41,10 +41,18 @@ export function toggleSelection(genome) {
   };
 }
 
-export function selectAll() {
+export function selectAll(focus) {
   return (dispatch, getState) => {
     const state = getState();
     const genomes = getGenomeList(state);
-    dispatch(selectGenomes(genomes));
+    dispatch(selectGenomes(genomes, focus));
+  };
+}
+
+export const SELECTION_DRAWER_OPENED = 'SELECTION_DRAWER_OPENED';
+
+export function toggleDrawer() {
+  return {
+    type: SELECTION_DRAWER_OPENED,
   };
 }

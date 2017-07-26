@@ -28,7 +28,7 @@ function mapDispatchToProps(dispatch, { match, location }) {
       dispatch(updateFilter({ prefilter, ...query }, false))
         .then(() => {
           if (query.createCollection) {
-            dispatch(selectAll());
+            dispatch(selectAll(true));
           }
         }),
   };

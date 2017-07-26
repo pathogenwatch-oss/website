@@ -60,8 +60,8 @@ const Component = React.createClass({
 function mapStateToProps(state, { match }) {
   const { uploadedAt } = match.params;
   return {
-    files: getUploadedGenomeList(state),
     uploadedAt,
+    files: getUploadedGenomeList(state),
   };
 }
 

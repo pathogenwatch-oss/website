@@ -23,6 +23,7 @@ export const getUploadedGenomes = state => getUploads(state).entities;
 export const getUploadedAt = state => getUploads(state).uploadedAt;
 export const getGenome = (state, id) => getUploadedGenomes(state)[id];
 export const getAnalyses = state => getUploads(state).analyses;
+export const getSelectedOrganism = state => getUploads(state).selectedOrganism;
 
 export const getUploadedGenomeList =
   createSelector(
@@ -129,6 +130,7 @@ export const getAnalysisSummary = createSelector(
     for (const organismId of Object.keys(summary)) {
       const organismAnalyses = summary[organismId];
       result.push({
+        organismId,
         label: getOrganismName(organismId, organismAnalyses[0].specieator.organismName),
         total: organismAnalyses.length,
         sequenceTypes: getSequenceTypeSummary(organismAnalyses),

@@ -1,5 +1,4 @@
 import React from 'react';
-// import classnames from 'classnames';
 
 import Drawer from '../drawer';
 import RemoveButton from '../genomes/card/RemoveButton.react';
@@ -54,8 +53,8 @@ const GenomeDrawerContent = React.createClass({
 
 });
 
-export default ({ genome, onClose, ...props }) => (
-  <Drawer {...props} isOpen onClose={onClose} animationKey={genome && genome.name}>
+export default ({ genome, close, ...props }) => (
+  <Drawer {...props} isOpen={!!genome} onHeaderClick={close} animationKey={genome && genome.name}>
     <GenomeDrawerContent genome={genome} />
   </Drawer>
 );

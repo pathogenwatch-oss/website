@@ -7,6 +7,10 @@
   width: 100%;
 }
 
+.wgsa-create-collection-form .mdl-textfield--small {
+  width: 33.333%;
+}
+
 .wgsa-create-collection-form .mdl-textfield__label {
   top: 1.25rem;
 }

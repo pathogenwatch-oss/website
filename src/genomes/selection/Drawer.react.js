@@ -4,7 +4,13 @@ import { connect } from 'react-redux';
 import Drawer from '../../drawer';
 import Tabs from './Tabs.react';
 
-import { getSelectedGenomeList, isSelectionLimitReached } from './selectors';
+import {
+  getSelectedGenomeList,
+  isSelectionLimitReached,
+  isDrawerOpen,
+} from './selectors';
+
+import { toggleDrawer } from './actions';
 
 import { getSelectionLimit } from './utils';
 
@@ -18,12 +24,13 @@ const SelectionTitle = ({ total, isLimitReached }) => (
   </span>
 );
 
-const SelectionDrawer = ({ isOpen = false, visible, total, isLimitReached }) => (
+const SelectionDrawer = ({ isOpen, visible, total, isLimitReached, toggle }) => (
   <Drawer
     isOpen={isOpen}
     title={<SelectionTitle total={total} isLimitReached={isLimitReached} />}
     visible={visible}
     disabled={isLimitReached}
+    onHeaderClick={toggle}
   >
     <Tabs />
   </Drawer>
@@ -35,7 +42,14 @@ function mapStateToProps(state) {
     visible: selectedGenomes.length > 0,
     total: selectedGenomes.length,
     isLimitReached: isSelectionLimitReached(state),
+    isOpen: isDrawerOpen(state),
   };
 }
 
-export default connect(mapStateToProps)(SelectionDrawer);
+function mapDispatchToProps(dispatch) {
+  return {
+    toggle: () => dispatch(toggleDrawer()),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SelectionDrawer);

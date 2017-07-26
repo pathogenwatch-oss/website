@@ -33,7 +33,7 @@ const CreateCollection = React.createClass({
     }
 
     if (organismIds.length === 1) {
-      return <CreateCollectionForm />;
+      return <CreateCollectionForm visible={this.props.visible} />;
     }
 
     return (

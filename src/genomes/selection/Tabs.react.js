@@ -67,7 +67,7 @@ const SelectionDrawer = React.createClass({
           </div>
         </div>
         <TabContent isActive={activeTab === 'create-collection-panel'}>
-          <CreateCollectionForm />
+          <CreateCollectionForm visible={this.props.visible} />
         </TabContent>
         <TabContent isActive={activeTab === 'selection-panel'}>
           { selectedGenomes.map(genome =>

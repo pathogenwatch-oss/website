@@ -208,3 +208,14 @@ export function fetchGenomes(uploadedAt) {
     },
   };
 }
+
+export const UPLOAD_ORGANISM_SELECTED = 'UPLOAD_ORGANISM_SELECTED';
+
+export function selectOrganism(organismId) {
+  return {
+    type: UPLOAD_ORGANISM_SELECTED,
+    payload: {
+      organismId,
+    },
+  };
+}

@@ -2,8 +2,6 @@ import './styles.css';
 
 import { connect } from 'react-redux';
 
-import { MOVE_TO_BIN } from '../genomes/actions';
-
 import GenomeDrawer from './GenomeDrawer.react';
 
 export const SHOW_GENOME_DETAILS = 'SHOW_GENOME_DETAILS';
@@ -24,8 +22,6 @@ export function reducer(state = initialState, { type, payload }) {
       return {
         id: payload.id,
       };
-    case MOVE_TO_BIN:
-      return state.id === payload.id ? initialState : state;
     default:
       return state;
   }
@@ -38,17 +34,15 @@ function getSelectedGenome({ genomeDrawer, genomes }) {
 
 function mapStateToProps(state) {
   const genome = getSelectedGenome(state);
-  const visible = genome !== null;
   return {
-    visible,
-    title: visible ? genome.name : null,
+    title: genome ? genome.name : null,
     genome,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    onClose: () => dispatch(showGenomeDrawer(null)),
+    close: () => dispatch(showGenomeDrawer(null)),
   };
 }
 

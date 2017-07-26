@@ -22,6 +22,10 @@
   margin-left: 0;
 }
 
+.wgsa-filter-summary > .mdl-button {
+  padding: 0 8px;
+}
+
 .wgsa-filter-summary__count {
   font-size: 13px;
   margin-left: 8px;

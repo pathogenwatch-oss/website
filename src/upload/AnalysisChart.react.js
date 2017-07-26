@@ -7,6 +7,8 @@ import { connect } from 'react-redux';
 
 import * as upload from './selectors';
 
+import { selectOrganism } from './actions';
+
 const colours = [
   '#834B96',
   '#B668A6',
@@ -52,7 +54,7 @@ function getColour(name) {
 }
 
 function toggleOrganism(index, chart) {
-  const [ sts ] = chart.config.data.datasets;
+  const [ sts, organisms ] = chart.config.data.datasets;
   const organismsMeta = chart.getDatasetMeta(1);
   const isSelected = organismsMeta.data[index].selected;
   for (const [ i, meta ] of organismsMeta.data.entries()) {
@@ -64,6 +66,7 @@ function toggleOrganism(index, chart) {
     stMeta.data[i].hidden = organismsMeta.data[sts.parents[i]].hidden;
   }
   chart.update();
+  return organismsMeta.data[index].selected ? organisms.organismIds[index] : null;
 }
 
 const AnalysisChart = React.createClass({
@@ -111,21 +114,21 @@ const AnalysisChart = React.createClass({
               }));
             },
           },
-          onClick: (e, item) => toggleOrganism(item.index, this.chart),
+          onClick: (e, item) => this.toggleOrganism(item.index),
         },
         onClick: (e, [ item ]) => {
           if (!item) {
             const organismsMeta = this.chart.getDatasetMeta(1);
             const meta = organismsMeta.data.find(_ => _.selected);
             if (meta) {
-              toggleOrganism(meta._index, this.chart);
+              this.toggleOrganism(meta._index);
             }
             return;
           }
           if (item._datasetIndex === 0) {
-            toggleOrganism(this.chart.data.datasets[0].parents[item._index], this.chart);
+            this.toggleOrganism(this.chart.data.datasets[0].parents[item._index]);
           } else {
-            toggleOrganism(item._index, this.chart);
+            this.toggleOrganism(item._index);
           }
         },
       },
@@ -148,6 +151,11 @@ const AnalysisChart = React.createClass({
     this.chart.update();
   },
 
+  toggleOrganism(index) {
+    const id = toggleOrganism(index, this.chart);
+    this.props.selectOrganism(id);
+  },
+
   render() {
     return (
       <div className="wgsa-analysis-chart">
@@ -159,16 +167,17 @@ const AnalysisChart = React.createClass({
 });
 
 function formatChartData(data) {
-  const organisms = { label: 'Organism', data: [], backgroundColor: [], labels: [] };
+  const organisms = { label: 'Organism', data: [], backgroundColor: [], labels: [], organismIds: [] };
   const stData = { label: 'Sequence Type', data: [], backgroundColor: [], labels: [], parents: [] };
 
   let organismIndex = 0;
-  for (const { label, total, sequenceTypes = [] } of data) {
+  for (const { label, total, sequenceTypes = [], organismId } of data) {
     organisms.data.push(total);
 
     const colour = getColour(label);
     organisms.backgroundColor.push(colour);
     organisms.labels.push(label);
+    organisms.organismIds.push(organismId);
 
     let sum = total;
     for (const st of sequenceTypes) {
@@ -201,4 +210,10 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(AnalysisChart);
+function mapDispatchToProps(dispatch) {
+  return {
+    selectOrganism: id => dispatch(selectOrganism(id)),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AnalysisChart);
