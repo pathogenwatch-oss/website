@@ -22,7 +22,7 @@ const Summary = React.createClass({
 
   render() {
     const { summary, isSpecieationComplete, uploadedAt } = this.props;
-    console.log(uploadedAt)
+
     if (summary.errored) {
       return <ErrorSummary />;
     }
@@ -31,9 +31,7 @@ const Summary = React.createClass({
       return (
         <FilterSummary className="wgsa-upload-summary">
           <Link className="mdl-button mdl-button--primary" to={`/genomes?uploadedAt=${uploadedAt}`}>View Genomes</Link>
-          <button className="mdl-button">
-            Create Collection
-          </button>
+          <Link className="mdl-button" to={`/genomes?uploadedAt=${uploadedAt}&createCollection=1`}>Create Collection</Link>
         </FilterSummary>
       );
     }

@@ -18,8 +18,9 @@ const SelectionTitle = ({ total, isLimitReached }) => (
   </span>
 );
 
-const SelectionDrawer = ({ visible, total, isLimitReached }) => (
+const SelectionDrawer = ({ isOpen = false, visible, total, isLimitReached }) => (
   <Drawer
+    isOpen={isOpen}
     title={<SelectionTitle total={total} isLimitReached={isLimitReached} />}
     visible={visible}
     disabled={isLimitReached}

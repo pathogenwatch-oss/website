@@ -18,7 +18,7 @@ export function updateFilter(query, updateQueryString = true) {
     if ('prefilter' in query) {
       dispatch(fetchSummary(filterQuery));
     }
-    dispatch(fetchGenomes(filterQuery));
+    return dispatch(fetchGenomes(filterQuery));
   };
 }
 

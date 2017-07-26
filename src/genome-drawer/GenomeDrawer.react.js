@@ -5,44 +5,11 @@ import Drawer from '../drawer';
 import RemoveButton from '../genomes/card/RemoveButton.react';
 import AddToSelectionButton from '../genomes/card/AddToSelectionButton.react';
 import DownloadLink from '../downloads/GenomeFileLink.react';
-import N50Chart from './N50Chart.react';
 
-const GenomeStats = ({ metrics }) => (
-  <dl className="wgsa-hub-stats-view">
-    <span className="wgsa-hub-stats-section wgsa-hub-stats-section--small">
-      <dt className="wgsa-hub-stats-heading">Genome Length</dt>
-      <dd className="wgsa-hub-stats-value">{metrics.length}</dd>
-    </span>
-    <span className="wgsa-hub-stats-section wgsa-hub-stats-section--small">
-      <dt className="wgsa-hub-stats-heading">No. Contigs</dt>
-      <dd className="wgsa-hub-stats-value">{metrics.contigs}</dd>
-    </span>
-    <span className="wgsa-hub-stats-section wgsa-hub-stats-section--small">
-      <dt className="wgsa-hub-stats-heading">Smallest Contig</dt>
-      <dd className="wgsa-hub-stats-value">{metrics.smallestContig}</dd>
-    </span>
-    <span className="wgsa-hub-stats-section wgsa-hub-stats-section--small">
-      <dt className="wgsa-hub-stats-heading">Largest Contig</dt>
-      <dd className="wgsa-hub-stats-value">{metrics.largestContig}</dd>
-    </span>
-    <span className="wgsa-hub-stats-section wgsa-hub-stats-section--small">
-      <dt className="wgsa-hub-stats-heading">Average Contig Length</dt>
-      <dd className="wgsa-hub-stats-value">{metrics.averageContig}</dd>
-    </span>
-    <span className="wgsa-hub-stats-section wgsa-hub-stats-section--small">
-      <dt className="wgsa-hub-stats-heading">N50</dt>
-      <dd className="wgsa-hub-stats-value">{metrics.N50}</dd>
-    </span>
-    <span className="wgsa-hub-stats-section wgsa-hub-stats-section--small">
-      <dt className="wgsa-hub-stats-heading">Non-ATCG</dt>
-      <dd className="wgsa-hub-stats-value">{metrics.nonATCG}</dd>
-    </span>
-    <span className="wgsa-hub-stats-section wgsa-hub-stats-section--small">
-      <dt className="wgsa-hub-stats-heading">GC Content</dt>
-      <dd className="wgsa-hub-stats-value">{metrics.gcContent}%</dd>
-    </span>
-  </dl>
-);
+import GenomeMetadata from './GenomeMetadata.react';
+import GenomeStats from './GenomeStats.react';
+import N50Chart from './N50Chart.react';
+import GenomeAnalysis from './GenomeAnalysis.react';
 
 const GenomeDrawerContent = React.createClass({
 
@@ -52,23 +19,33 @@ const GenomeDrawerContent = React.createClass({
 
   render() {
     const { genome } = this.props;
+    const { analysis = {} } = genome;
+    const { metrics } = analysis;
     return (
       <div className="wgsa-genome-drawer-content wgsa-drawer__content">
         <div className="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
           <div className="mdl-tabs__tab-bar">
-            <a href="#metrics-panel" className="mdl-tabs__tab is-active">Metrics</a>
+            <a href="#metadata-panel" className="mdl-tabs__tab is-active">Metadata</a>
+            <a href="#metrics-panel" className="mdl-tabs__tab">Metrics</a>
             <a href="#n50-panel" className="mdl-tabs__tab">N50</a>
+            <a href="#analysis-panel" className="mdl-tabs__tab">Analysis</a>
             <div className="wgsa-tab-actions">
               <RemoveButton genome={genome} />
               <DownloadLink id={genome.id} name={genome.name} />
               <AddToSelectionButton genome={genome} />
             </div>
           </div>
-          <div className="mdl-tabs__panel is-active" id="metrics-panel">
-            { genome && <GenomeStats metrics={genome.analysis.metrics} /> }
+          <div className="mdl-tabs__panel is-active" id="metadata-panel">
+            <GenomeMetadata genome={genome} />
+          </div>
+          <div className="mdl-tabs__panel" id="metrics-panel">
+            { metrics && <GenomeStats metrics={metrics} /> }
           </div>
           <div className="mdl-tabs__panel" id="n50-panel">
-            { genome && <N50Chart metrics={genome.analysis.metrics} /> }
+            { metrics && <N50Chart metrics={metrics} /> }
+          </div>
+          <div className="mdl-tabs__panel" id="analysis-panel">
+            <GenomeAnalysis analysis={analysis} />
           </div>
         </div>
       </div>
