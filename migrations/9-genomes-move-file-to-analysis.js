@@ -19,6 +19,7 @@ module.exports.up = function (done) {
               .update(
                 { _id: doc._id },
                 { $set: {
+                  fileId: file.fileId,
                   'analysis.metrics': {
                     length: file.metrics.totalNumberOfNucleotidesInDnaStrings,
                     contigs: file.metrics.totalNumberOfContigs,
