@@ -151,6 +151,57 @@ schema.statics.getPrefilterCondition = function ({ user, query = {}, sessionID }
   throw new Error(`Invalid genome prefilter: '${prefilter}'`);
 };
 
+schema.statics.getFilterQuery = function (props) {
+  const { user, query = {} } = props;
+  const { searchText } = query;
+  const { organismId, reference, owner, country, minDate, maxDate, uploadedAt } = query;
+
+  const findQuery = this.getPrefilterCondition(props);
+
+  if (searchText) {
+    findQuery.$text = { $search: searchText };
+  }
+
+  if (organismId) {
+    findQuery.organismId = organismId;
+  }
+
+  if (country) {
+    findQuery.country = country;
+  }
+
+  if (reference === 'true') {
+    findQuery.reference = true;
+  } else if (reference === 'false') {
+    findQuery.reference = false;
+  }
+
+  if (user) {
+    if (owner === 'me') {
+      findQuery._user = user;
+    } else if (owner === 'other') {
+      findQuery._user = { $ne: user };
+    }
+
+    if (uploadedAt) {
+      findQuery.uploadedAt = uploadedAt;
+    }
+  }
+
+  if (minDate) {
+    findQuery.date = { $exists: true, $gte: new Date(minDate) };
+  }
+
+  if (maxDate) {
+    findQuery.date = Object.assign(
+      findQuery.date || {},
+      { $exists: true, $lte: new Date(maxDate) }
+    );
+  }
+
+  return findQuery;
+};
+
 schema.statics.getSummary = function (fields, props) {
   return getSummary(this, fields, props);
 };
