@@ -12,10 +12,16 @@ import { shouldNotFetch } from './utils';
 
 function entities(state = {}, { type, payload }) {
   switch (type) {
-    case actions.FETCH_GENOME_SUMMARY.ATTEMPT:
+    case actions.FETCH_GENOMES.ATTEMPT:
       return {};
     case actions.FETCH_GENOMES.SUCCESS: {
       return payload.result.reduce((memo, genome) => {
+        memo[genome.id] = genome;
+        return memo;
+      }, {});
+    }
+    case actions.FETCH_GENOME_SUMMARY.SUCCESS: {
+      return payload.result.genomes.reduce((memo, genome) => {
         memo[genome.id] = genome;
         return memo;
       }, {});
@@ -42,13 +48,12 @@ function waiting(state = false, { type }) {
 const initialStatus = null;
 function status(state = initialStatus, { type, payload }) {
   switch (type) {
-    case actions.FETCH_GENOMES.ATTEMPT: {
-      if (shouldNotFetch(payload.filter)) return state;
+    case actions.FETCH_GENOME_SUMMARY.ATTEMPT: {
       return statuses.LOADING;
     }
-    case actions.FETCH_GENOMES.FAILURE:
+    case actions.FETCH_GENOME_SUMMARY.FAILURE:
       return statuses.ERROR;
-    case actions.FETCH_GENOMES.SUCCESS:
+    case actions.FETCH_GENOME_SUMMARY.SUCCESS:
       return statuses.OK;
     default:
       return state;

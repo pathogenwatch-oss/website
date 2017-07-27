@@ -13,9 +13,8 @@ export function fetchGenomes(filter) {
 }
 
 export function fetchSummary(filter) {
-  const { prefilter, uploadedAt } = filter;
   return skipFetch(filter, {}) ||
-    fetchJson('GET', '/api/genome/summary', { prefilter, uploadedAt });
+    fetchJson('GET', '/api/genome/summary', filter);
 }
 
 export function binGenome(id, status) {

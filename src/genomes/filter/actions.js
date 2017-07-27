@@ -1,7 +1,7 @@
 import { stateKey } from './index';
 
 import { actions } from '../../filter';
-import { fetchGenomes, fetchSummary } from '../actions';
+import { fetchSummary } from '../actions';
 
 import { getFilter } from './selectors';
 
@@ -15,10 +15,7 @@ export function updateFilter(query, updateQueryString = true) {
 
     const filterQuery = { ...currentFilter };
 
-    if ('prefilter' in query) {
-      dispatch(fetchSummary(filterQuery));
-    }
-    return dispatch(fetchGenomes(filterQuery));
+    return dispatch(fetchSummary(filterQuery));
   };
 }
 
@@ -27,6 +24,6 @@ export function clearFilter() {
     dispatch(actions.clear(stateKey));
 
     const filter = getFilter(getState());
-    dispatch(fetchGenomes(filter));
+    return dispatch(fetchSummary(filter));
   };
 }

@@ -28,6 +28,7 @@ export const getFilterSummary = createSelector(
     const {
       loading, organismId, country, reference, owner, uploadedAt, date,
     } = summary;
+    const sequenceType = summary['analysis.mlst.st'] || {};
 
     const wgsaOrganisms = [];
     const otherOrganisms = [];
@@ -59,6 +60,16 @@ export const getFilterSummary = createSelector(
       },
       wgsaOrganisms: sortBy(wgsaOrganisms, 'title'),
       otherOrganisms: sortBy(otherOrganisms, 'label'),
+      sequenceTypes: sortBy(
+        Object.keys(sequenceType).map(
+          value => ({
+            value,
+            label: `ST ${value}`,
+            count: sequenceType[value].count,
+            active: filterState.sequenceType === value,
+          })
+        )
+      ),
       country: sortBy(
         Object.keys(country).map(
           value => ({
