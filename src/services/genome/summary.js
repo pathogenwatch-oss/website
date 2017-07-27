@@ -39,6 +39,15 @@ const summaryFields = [
     },
   },
   { field: 'date', range: true },
+  { field: 'sequenceType',
+    aggregation: ({ query = {} }) => {
+      if (!query.organismId) return null;
+      return [
+        { $match: { organismId: query.organismId } },
+        { $group: { _id: '$analysis.mlst.st', count: { $sum: 1 } } },
+      ];
+    },
+  },
 ];
 
 module.exports = function (props) {

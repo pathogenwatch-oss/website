@@ -58,7 +58,7 @@ function aggregateSummaryFields(model, summaryFields, props) {
 function reduceResult(result) {
   return result.reduce(
     (memo, { _id, count }) => {
-      if (_id === null) return memo;
+      if (_id === null || typeof _id === 'undefined') return memo;
       if (_id.key && _id.label) {
         const previousCount = memo[_id.key] ? memo[_id.key].count : 0;
         memo[_id.key] = {
