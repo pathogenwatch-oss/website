@@ -39,11 +39,10 @@ const summaryFields = [
     },
   },
   { field: 'date', range: true },
-  { field: 'sequenceType',
+  { field: 'analysis.mlst.st',
     aggregation: ({ query = {} }) => {
       if (!query.organismId) return null;
       return [
-        { $match: { organismId: query.organismId } },
         { $group: { _id: '$analysis.mlst.st', count: { $sum: 1 } } },
       ];
     },

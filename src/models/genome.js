@@ -152,9 +152,9 @@ schema.statics.getPrefilterCondition = function ({ user, query = {}, sessionID }
 };
 
 schema.statics.getFilterQuery = function (props) {
-  const { user, query = {} } = props;
+  const { user, query = {}, sessionID } = props;
   const { searchText } = query;
-  const { organismId, reference, owner, country, minDate, maxDate, uploadedAt } = query;
+  const { organismId, reference, owner, country, minDate, maxDate, uploadedAt, sequenceType } = query;
 
   const findQuery = this.getPrefilterCondition(props);
 
@@ -182,10 +182,10 @@ schema.statics.getFilterQuery = function (props) {
     } else if (owner === 'other') {
       findQuery._user = { $ne: user };
     }
+  }
 
-    if (uploadedAt) {
-      findQuery.uploadedAt = uploadedAt;
-    }
+  if (uploadedAt && (user || sessionID)) {
+    findQuery.uploadedAt = new Date(uploadedAt);
   }
 
   if (minDate) {
@@ -197,6 +197,10 @@ schema.statics.getFilterQuery = function (props) {
       findQuery.date || {},
       { $exists: true, $lte: new Date(maxDate) }
     );
+  }
+
+  if (organismId && sequenceType) {
+    findQuery['analysis.mlst.st'] = sequenceType;
   }
 
   return findQuery;

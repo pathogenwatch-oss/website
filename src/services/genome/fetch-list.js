@@ -16,57 +16,13 @@ function getSort(sort) {
 }
 
 module.exports = function (props) {
-  const { user, sessionID, query = {} } = props;
-  const { skip = 0, limit = 0, searchText, sort = 'createdAt-' } = query;
-  const { organismId, reference, owner, country, minDate, maxDate, uploadedAt } = query;
-
-  const findQuery = Genome.getPrefilterCondition(props);
-
-  if (searchText) {
-    findQuery.$text = { $search: searchText };
-  }
-
-  if (organismId) {
-    findQuery.organismId = organismId;
-  }
-
-  if (country) {
-    findQuery.country = country;
-  }
-
-  if (reference === 'true') {
-    findQuery.reference = true;
-  } else if (reference === 'false') {
-    findQuery.reference = false;
-  }
-
-  if (user) {
-    if (owner === 'me') {
-      findQuery._user = user;
-    } else if (owner === 'other') {
-      findQuery._user = { $ne: user };
-    }
-  }
-
-  if (uploadedAt && (user || sessionID)) {
-    findQuery.uploadedAt = new Date(uploadedAt);
-  }
-
-  if (minDate) {
-    findQuery.date = { $exists: true, $gte: new Date(minDate) };
-  }
-
-  if (maxDate) {
-    findQuery.date = Object.assign(
-      findQuery.date || {},
-      { $exists: true, $lte: new Date(maxDate) }
-    );
-  }
+  const { user, query = {} } = props;
+  const { skip = 0, limit = 0, sort = 'createdAt-' } = query;
 
   return (
     Genome
       .find(
-        findQuery,
+        Genome.getFilterQuery(props),
         null, {
           skip: Number(skip),
           limit: Number(limit),

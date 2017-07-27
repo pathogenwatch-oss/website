@@ -10,8 +10,11 @@ router.get('/genome/summary', (req, res, next) => {
   LOGGER.info('Received request to get genome summary');
 
   const { user, query, sessionID } = req;
-  services.request('genome', 'summary', { user, query, sessionID })
-    .then(response => res.json(response))
+  Promise.all([
+    services.request('genome', 'summary', { user, query, sessionID }),
+    services.request('genome', 'fetch-list', { user, query, sessionID }),
+  ])
+    .then(([ summary, genomes ]) => res.json({ summary, genomes }))
     .catch(next);
 });
 
