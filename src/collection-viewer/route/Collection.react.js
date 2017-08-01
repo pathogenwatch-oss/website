@@ -49,7 +49,7 @@ export default React.createClass({
 
     if (collection.status && collection.status !== statuses.READY) {
       return (
-        <LoadError collection={collection} />
+        <LoadError collection={collection} location={this.props.location} />
       );
     }
 

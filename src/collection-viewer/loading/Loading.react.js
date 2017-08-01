@@ -53,12 +53,15 @@ export const LoadSpinner = React.createClass({
 
 });
 
-function getStatusMessage({ collection }) {
+function getStatusMessage({ collection, location }) {
   const { status } = collection;
   if (status === statuses.NOT_FOUND) {
+    const { organism } = location.state || {};
     return [
       <h1>We're sorry, this collection cannot be found.</h1>,
       <p className="mdl-typography--title">Please ensure that the address is correct, and if so, please try again later.</p>,
+      organism &&
+        <p>Looking for an old collection? It will be available at <a href={`https://archive.wgsa.net/${organism}${location.pathname}`}>archive.wgsa.net</a> for a short time.<br />Please <a href="mailto:cgps@sanger.ac.uk">contact us</a> if you would like your data migrated to the new site.</p>,
     ];
   }
   if (status === statuses.ABORTED) {
