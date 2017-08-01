@@ -2,7 +2,7 @@ import config from '../../app/config';
 
 export function getSelectionLimit() {
   const { user, maxCollectionSize } = config;
-  if (!maxCollectionSize) return null;
+  if (!maxCollectionSize || user.admin) return null;
 
   const { anonymous, loggedIn } = maxCollectionSize;
   return user ? loggedIn : anonymous;
