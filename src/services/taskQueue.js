@@ -5,23 +5,38 @@ const mQueue = new MessageQueue();
 const Q = require('q');
 const mongoose = require('mongoose');
 
+const config = require('configuration');
 const LOGGER = require('utils/logging').createLogger('queue');
 
-const QUEUE_NAME = 'wgsa-tasks';
-
-mQueue.processingTimeout = 5 * 60 * 1000;
+mQueue.processingTimeout = config.tasks.timeout || 1 * 60 * 1000;
 mQueue.maxWorkers = 1;
+
 mQueue.databasePromise = () => Q.resolve(mongoose.connection);
 
-module.exports.enqueue = function (message) {
-  LOGGER.info('Adding message', message);
-  mQueue.enqueue(QUEUE_NAME, message)
+module.exports.setMaxWorkers = function (max = 1) {
+  mQueue.maxWorkers = max;
+};
+
+const queues = {
+  tasks: 'tasks',
+  specieator: 'specieator',
+};
+
+module.exports.queues = queues;
+
+module.exports.enqueue = function (queue, message) {
+  if (!(queue in queues)) {
+    LOGGER.error(`Queue ${queue} not recognised.`);
+    throw new Error(`Queue ${queue} not recognised.`);
+  }
+  LOGGER.info('Adding message', message, 'to', queue);
+  mQueue.enqueue(queue, message)
     .catch(err => LOGGER.error(err));
 };
 
-module.exports.dequeue = function (callback) {
-  mQueue.registerWorker(QUEUE_NAME, (queueItem) => {
-    LOGGER.info('Handling message', queueItem);
+module.exports.dequeue = function (queue, callback) {
+  mQueue.registerWorker(queue, (queueItem) => {
+    LOGGER.info('Handling message', queueItem, 'from', queue);
     return callback(queueItem.message)
       .then(() => 'Completed')
       .catch(err => {

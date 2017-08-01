@@ -1,18 +1,42 @@
 const LOGGER = require('utils/logging').createLogger('runner');
 
-const { request } = require('services');
-const queue = require('services/taskQueue');
+const argv = require('named-argv');
 
-function onMessage({ genomeId, organismId, fileId, task, version, clientId }) {
-  return (
-    request('tasks', 'run', { organismId, fileId, task, version })
-      .then(result => {
-        LOGGER.info('results', genomeId, task, version, result);
-        return request('genome', 'add-analysis', { genomeId, task, version, result, clientId });
-      })
-  );
+const { request } = require('services');
+const taskQueue = require('services/taskQueue');
+
+const { queue, workers = 1 } = argv.opts;
+
+if (queue && !(queue in taskQueue.queues)) {
+  LOGGER.error(`Queue ${queue} not recognised, exiting...`);
+  process.exit(1);
 }
 
+taskQueue.setMaxWorkers(workers);
+
+const { tasks, specieator } = taskQueue.queues;
+
 module.exports = function () {
-  queue.dequeue(onMessage);
+  if (!queue || queue === 'tasks') {
+    taskQueue.dequeue(tasks, ({ genomeId, organismId, fileId, task, version, clientId }) =>
+      request('tasks', 'run', { organismId, fileId, task, version })
+        .then(result => {
+          LOGGER.info('results', genomeId, task, version, result);
+          return request('genome', 'add-analysis', { genomeId, task, version, result, clientId });
+        })
+    );
+  }
+
+  if (!queue || queue === 'specieator') {
+    taskQueue.dequeue(specieator, ({ genomeId, fileId, task, version, clientId }) =>
+      request('tasks', 'run', { fileId, task, version })
+        .then(result => {
+          LOGGER.info('results', genomeId, task, version, result);
+          return request('genome', 'add-analysis', { genomeId, task, version, result, clientId })
+            .then(() =>
+              request('tasks', 'submit-genome', { genomeId, fileId, organismId: result.organismId, clientId })
+            );
+        })
+    );
+  }
 };

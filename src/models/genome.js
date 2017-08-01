@@ -74,17 +74,20 @@ function getCountryCode(latitude, longitude) {
   return null;
 }
 
-schema.statics.addAnalysisResult = function (_id, task, result, props) {
+schema.statics.addPendingTasks = function (_id, pending) {
+  return this.update({ _id }, { $push: { pending: { $each: pending } } });
+};
+
+schema.statics.addAnalysisResult = function (_id, task, result) {
   const update = {
     $set: { [`analysis.${task.toLowerCase()}`]: result },
   };
 
   if (task === 'specieator') {
     update.$set.organismId = result.organismId;
-    update.$set.pending = props.pending;
-  } else {
-    update.$pull = { pending: task };
   }
+
+  update.$pull = { pending: task };
 
   return this.update({ _id }, update);
 };
@@ -208,15 +211,6 @@ schema.statics.getFilterQuery = function (props) {
 
 schema.statics.getSummary = function (fields, props) {
   return getSummary(this, fields, props);
-};
-
-schema.statics.initialiseAnalysis = function (_id, tasks) {
-  const analysis = tasks.reduce((memo, { task }) => {
-    memo[task] = null;
-    return memo;
-  }, {});
-  return this.update({ _id }, { analysis })
-    .then(() => analysis);
 };
 
 module.exports = mongoose.model('Genome', schema);
