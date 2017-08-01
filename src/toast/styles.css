@@ -44,20 +44,6 @@
   background-color: rgba(158, 158, 158, .2);
 }
 
-.wgsa-toast a {
-  color: #fff;
-  text-decoration: underline;
-}
-
-.wgsa-toast a:hover {
-  text-decoration: none;
-}
-
-.wgsa-toast a:focus,
-.wgsa-toast a:active {
-  font-weight: 500;
-}
-
 .wgsa-toast__action {
   text-transform: uppercase;
   color: #87c7a6;
@@ -68,13 +54,6 @@
 .wgsa-toast__message {
   font-size: 14px;
   flex-grow: 1;
-}
-
-.wgsa-toast__message .mdl-button {
-  color: #87c7a6;
-  margin-left: -8px;
-  padding-left: 8px;
-  padding-right: 8px;
 }
 
 .wgsa-toast__dismiss {

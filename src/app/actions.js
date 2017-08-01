@@ -4,18 +4,18 @@ import React from 'react';
 
 import { showToast, hideToast } from '../toast';
 
-const preferenceKey = 'cookie-consent-given';
+const flag = 'cookie-consent-given';
 
 function dontShowAgain(dispatch) {
-  localforage.setItem(preferenceKey, true)
+  localforage.setItem(flag, true)
     .then(() => dispatch(hideToast()));
 }
 
 export function showIntroToast() {
   return dispatch => {
-    localforage.getItem(preferenceKey)
-      .then(hidden => {
-        if (hidden) return;
+    localforage.getItem(flag)
+      .then(consented => {
+        if (consented) return;
 
         dispatch(
           showToast({
