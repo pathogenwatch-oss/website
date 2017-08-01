@@ -13,6 +13,7 @@ const schema = new Schema({
   photo: String,
   providerType: String,
   providerId: String,
+  admin: { type: Boolean, default: undefined },
 });
 
 addPreSaveHook(schema);
