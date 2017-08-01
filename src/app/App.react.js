@@ -6,7 +6,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
 
-import ConsentBanner from '../components/consent-banner';
 import Toast from '../toast';
 import GenomeDrawer from '../genome-drawer';
 
@@ -15,6 +14,7 @@ import Content from './Content.react';
 
 import { fetchSummary } from '../summary/actions';
 import { locationChange } from '../location';
+import { showIntroToast } from './actions';
 
 function mapStateToProps({ location }) {
   return {
@@ -26,6 +26,7 @@ function mapDispatchToProps(dispatch, { location }) {
   return {
     onLocationChange: () => dispatch(locationChange(location)),
     fetchSummary: () => dispatch(fetchSummary()),
+    showIntroToast: () => dispatch(showIntroToast()),
   };
 }
 
@@ -40,6 +41,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(React.createClass({
     this.menuButton = document.querySelector('.mdl-layout__drawer-button');
     this.onLocationChange();
     this.props.fetchSummary();
+    this.props.showIntroToast();
   },
 
   componentDidUpdate(previous) {
@@ -73,7 +75,6 @@ export default connect(mapStateToProps, mapDispatchToProps)(React.createClass({
           <Toast />
           <GenomeDrawer />
         </div>
-        <ConsentBanner />
       </div>
     );
   },

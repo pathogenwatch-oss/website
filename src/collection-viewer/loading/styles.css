@@ -33,7 +33,7 @@
   color: #555;
   letter-spacing: normal;
   margin: 0 auto 24px;
-  line-height: 1.2;
+  line-height: 1.5;
 }
 
 .wgsa-loading-container p:last-child {
@@ -80,7 +80,6 @@
   display: block;
   margin: 16px auto 0;
 }
-
 
 .wgsa-loading-overlay {
   position: absolute;

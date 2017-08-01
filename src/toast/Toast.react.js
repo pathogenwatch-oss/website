@@ -23,7 +23,7 @@ const ToastContainer = React.createClass({
   },
 
   render() {
-    const { visible, message, action, onCloseButtonClick } = this.props;
+    const { visible, message, action, onCloseButtonClick, closeButton = true } = this.props;
     return (
       <ReactCSSTransitionGroup
         className="wgsa-toast-container"
@@ -43,13 +43,15 @@ const ToastContainer = React.createClass({
               {action.label}
             </button>
           }
-          <button
-            ref="closeButton"
-            onClick={onCloseButtonClick}
-            className="wgsa-toast__dismiss mdl-button mdl-button--icon"
-          >
-            <i className="material-icons">close</i>
-          </button>
+          { closeButton &&
+            <button
+              ref="closeButton"
+              onClick={onCloseButtonClick}
+              className="wgsa-toast__dismiss mdl-button mdl-button--icon"
+            >
+              <i className="material-icons">close</i>
+            </button>
+          }
         </aside> }
       </ReactCSSTransitionGroup>
     );
