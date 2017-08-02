@@ -5,7 +5,7 @@ import './styles.css';
 import React from 'react';
 import { connect } from 'react-redux';
 
-import * as upload from '../selectors';
+import * as upload from './selectors';
 
 import { selectOrganism } from './actions';
 

@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 import Switch from '../../components/switch';
 
-import { getSettingValue } from '../selectors';
+import { getSettingValue } from './selectors';
 
 import { changeUploadSetting } from './actions';
 

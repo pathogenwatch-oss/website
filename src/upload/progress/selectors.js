@@ -1,29 +1,29 @@
 import { createSelector } from 'reselect';
 
-import { isFailedUpload } from './utils/validation';
-import { statuses } from './constants';
+import { isFailedUpload } from '../utils/validation';
+import { statuses } from '../constants';
 
-import { getOrganismName } from '../organisms';
+import { getOrganismName } from '../../organisms';
 
-export const getUploads = ({ upload }) => upload;
+export const getProgress = ({ upload }) => upload.progress;
 
 const getUploadQueue = createSelector(
-  getUploads,
+  getProgress,
   uploads => uploads.queue,
 );
 
 const getProcessing = createSelector(
-  getUploads,
+  getProgress,
   uploads => uploads.processing,
 );
 
-export const getBatch = state => getUploads(state).batch;
+export const getBatch = state => getProgress(state).batch;
 export const getBatchSize = state => getBatch(state).size;
-export const getUploadedGenomes = state => getUploads(state).entities;
-export const getUploadedAt = state => getUploads(state).uploadedAt;
+export const getUploadedGenomes = state => getProgress(state).entities;
+export const getUploadedAt = state => getProgress(state).uploadedAt;
 export const getGenome = (state, id) => getUploadedGenomes(state)[id];
-export const getAnalyses = state => getUploads(state).analyses;
-export const getSelectedOrganism = state => getUploads(state).selectedOrganism;
+export const getAnalyses = state => getProgress(state).analyses;
+export const getSelectedOrganism = state => getProgress(state).selectedOrganism;
 
 export const getUploadedGenomeList =
   createSelector(
@@ -73,11 +73,6 @@ export const isRetryable = createSelector(
   getFailedUploads,
   failures => !!failures.length
 );
-
-export const getSettings = state => getUploads(state).settings;
-
-export const getSettingValue =
-  (state, setting) => getSettings(state)[setting];
 
 export const getSummary = createSelector(
   getUploadedGenomeList,

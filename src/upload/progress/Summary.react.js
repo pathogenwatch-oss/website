@@ -2,13 +2,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import { Summary as FilterSummary } from '../../filter/summary';
-
+import Summary from '../Summary.react';
 import ErrorSummary from './ErrorSummary.react';
 
-import * as upload from '../selectors';
+import * as upload from './selectors';
 
-const Summary = React.createClass({
+const Component = React.createClass({
 
   componentDidUpdate() {
     const { summary } = this.props;
@@ -28,24 +27,30 @@ const Summary = React.createClass({
   },
 
   render() {
-    const { summary, isSpecieationComplete, uploadedAt } = this.props;
+    const { summary, isSpecieationComplete } = this.props;
 
     if (summary.errored) {
       return <ErrorSummary />;
     }
 
-    if (uploadedAt && isSpecieationComplete) {
+    if (isSpecieationComplete) {
       const link = this.getGenomesLink();
       return (
-        <FilterSummary className="wgsa-upload-summary">
-          <Link className="mdl-button mdl-button--primary" to={link}>View Genomes</Link>
-          <Link className="mdl-button" to={`${link}&createCollection=1`}>Create Collection</Link>
-        </FilterSummary>
+        <Summary>
+          <div className="wgsa-upload-actions">
+            <Link className="mdl-button" to={`${link}&createCollection=1`}>
+              Create Collection
+            </Link>
+            <Link className="mdl-button mdl-button--alt" to={link}>
+              View Genomes
+            </Link>
+          </div>
+        </Summary>
       );
     }
 
     return (
-      <FilterSummary />
+      <Summary />
     );
   },
 
@@ -59,4 +64,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(Summary);
+export default connect(mapStateToProps)(Component);

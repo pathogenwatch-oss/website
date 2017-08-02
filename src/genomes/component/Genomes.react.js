@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import FileDragAndDrop from '../../drag-and-drop';
 import ProgressBar from '../../progress-bar';
 import Overlay from '../../overlay';
 
@@ -14,7 +13,6 @@ import { getTotal } from '../summary/selectors';
 import { getStatus } from '../selectors';
 
 import { statuses } from '../constants';
-// import { history } from '../../app';
 
 const Component = React.createClass({
 
@@ -44,11 +42,6 @@ const Component = React.createClass({
       return;
     }
   },
-
-  // upload(newFiles) {
-  //   this.props.addFiles(newFiles);
-  //   history.push('/upload');
-  // },
 
   renderEmptyMessage() {
     const { total, prefilter } = this.props;
@@ -101,7 +94,7 @@ const Component = React.createClass({
 
   render() {
     return (
-      <FileDragAndDrop onFiles={this.upload}>
+      <div>
         { this.props.waiting && <ProgressBar indeterminate /> }
         <div className="wgsa-hipster-style wgsa-filterable-view">
           <Summary />
@@ -114,7 +107,7 @@ const Component = React.createClass({
             Loading... ⌛
           </p>
         </Overlay>
-      </FileDragAndDrop>
+      </div>
     );
   },
 

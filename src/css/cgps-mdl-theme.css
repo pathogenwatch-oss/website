@@ -108,6 +108,10 @@
   color: #673c90 !important;
 }
 
+.mdl-button--alt {
+  color: #3c7383 !important;
+}
+
 .mdl-button--primary[disabled] {
   color: rgba(0, 0, 0, 0.54) !important;
 }

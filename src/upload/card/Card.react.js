@@ -1,5 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
 
 import Card from '../../card';
 import ProgressBar from '../../progress-bar';
@@ -8,8 +7,6 @@ import Header from './Header.react';
 import GenomeTasks from './GenomeTasks.react';
 import GenomeError from './GenomeError.react';
 import ErrorFooter from './ErrorFooter.react';
-
-import { getAnalyses } from '../selectors';
 
 import { statuses } from '../constants';
 
@@ -50,22 +47,14 @@ function getCardComponents(genome, analysis) {
   }
 }
 
-function mapStateToProps(state, { item }) {
-  const analysis = getAnalyses(state)[item.genomeId] || {};
-  return {
-    analysis: { ...(item.analysis || {}), ...analysis },
-  };
-}
 
-export default connect(mapStateToProps)(
-  ({ item, analysis }) => {
-    const { content, footer = null } = getCardComponents(item, analysis);
-    return (
-      <Card className="wgsa-genome-card">
-        <Header genome={item} analysis={analysis} />
-        { content }
-        { footer }
-      </Card>
-    );
-  }
-);
+export default ({ item, analysis }) => {
+  const { content, footer = null } = getCardComponents(item, analysis);
+  return (
+    <Card className="wgsa-genome-card">
+      <Header genome={item} />
+      { content }
+      { footer }
+    </Card>
+  );
+};

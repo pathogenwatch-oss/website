@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { Summary } from '../../filter/summary';
-import { getTotalErrors, isRetryable } from '../selectors';
+import { getTotalErrors, isRetryable } from './selectors';
 
 import { retryAll, removeAll } from './actions';
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { removeGenomes } from '../actions';
+import { removeGenomes } from '../progress/actions';
 
 function mapDispatchToProps(dispatch, { genome }) {
   return {

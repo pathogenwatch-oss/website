@@ -4,9 +4,9 @@ import { connect } from 'react-redux';
 import Progress from './Progress.react';
 import Summary from './Summary.react';
 
-import { getUploadedGenomeList } from '../selectors';
+import { getUploadedGenomeList } from './selectors';
 
-import { receiveUploadAnalysis, fetchGenomes } from './actions';
+import { receiveUploadAnalysis, fetchGenomes, processFiles } from './actions';
 
 import { subscribe, unsubscribe } from '../../utils/Notification';
 
@@ -15,12 +15,15 @@ import config from '../../app/config';
 const Component = React.createClass({
 
   componentWillMount() {
-    subscribe(config.clientId, 'analysis', this.props.receiveAnalysis);
-  },
-
-  componentDidMount() {
-    const { uploadedAt, fetch } = this.props;
-    if (uploadedAt) fetch(uploadedAt);
+    subscribe(config.clientId, 'analysis', this.props.receiveAnalysis)
+      .then(() => {
+        const { hasFiles, startUpload, fetch, uploadedAt } = this.props;
+        if (hasFiles) {
+          startUpload();
+        } else {
+          fetch(uploadedAt);
+        }
+      });
   },
 
   componentWillUnmount() {
@@ -31,7 +34,7 @@ const Component = React.createClass({
     return (
       <div className="wgsa-hipster-style wgsa-filterable-view">
         <Summary uploadedAt={this.props.uploadedAt} />
-         <Progress />
+        <Progress />
       </div>
     );
   },
@@ -42,7 +45,7 @@ function mapStateToProps(state, { match }) {
   const { uploadedAt } = match.params;
   return {
     uploadedAt,
-    files: getUploadedGenomeList(state),
+    hasFiles: getUploadedGenomeList(state).length > 0,
   };
 }
 
@@ -50,6 +53,7 @@ function mapDispatchToProps(dispatch) {
   return {
     receiveAnalysis: msg => dispatch(receiveUploadAnalysis(msg)),
     fetch: uploadedAt => dispatch(fetchGenomes(uploadedAt)),
+    startUpload: () => dispatch(processFiles()),
   };
 }
 
