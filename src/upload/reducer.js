@@ -1,4 +1,12 @@
-import * as actions from './actions';
+import * as upload from './actions';
+import * as progress from './progress/actions';
+import * as instructions from './instructions/actions';
+
+const actions = {
+  ...upload,
+  ...progress,
+  ...instructions,
+};
 
 import { statuses } from './constants';
 

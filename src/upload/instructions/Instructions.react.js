@@ -3,13 +3,13 @@ import './styles.css';
 import React from 'react';
 import { connect } from 'react-redux';
 
-import Switch from '../components/switch';
+import Switch from '../../components/switch';
 
-import { getSettingValue } from './selectors';
+import { getSettingValue } from '../selectors';
 
 import { changeUploadSetting } from './actions';
 
-import { DEFAULT } from '../app/constants';
+import { DEFAULT } from '../../app/constants';
 
 function mapStateToProps(state, { setting }) {
   return {

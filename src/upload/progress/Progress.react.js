@@ -4,10 +4,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
-import FileCard from './card/Card.react';
+import FileCard from '../card/Card.react';
 import AnalysisChart from './AnalysisChart.react';
 
-import * as upload from './selectors';
+import * as upload from '../selectors';
 
 const Progress = ({ inProgress, errored, summary }) => (
   <div className="wgsa-content-margin wgsa-upload-progress">

@@ -1,10 +1,22 @@
 import './styles.css';
 
 import React from 'react';
-import { Route } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 
-import Upload from './Upload.react';
+import Progress from './progress';
+import Instructions from './instructions';
+import Previous from './previous';
 
 export reducer from './reducer';
 
-export default <Route path="/upload/:uploadedAt?" component={Upload} />;
+const path = '/upload';
+
+const Router = () => (
+  <Switch>
+    <Route path={`${path}/previous`} component={Previous} />
+    <Route path={`${path}/:uploadedAt`} component={Progress} />
+    <Route component={Instructions} />
+  </Switch>
+);
+
+export default <Route path={path} component={Router} />;

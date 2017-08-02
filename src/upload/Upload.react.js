@@ -35,20 +35,29 @@ const Component = React.createClass({
   },
 
   renderContent() {
-    const { files } = this.props;
+    const { files, location } = this.props;
 
     if (files.length === 0) {
-      return <Instructions />;
+      console.log(location);
+      return (
+        location.hash === '#previous' ?
+          <h1>Previous</h1> :
+          <Instructions />
+      );
     }
 
     return <Progress />;
   },
 
   render() {
+    const { location } = this.props;
     return (
       <FileDragAndDrop onFiles={this.upload}>
         <div className="wgsa-hipster-style wgsa-filterable-view">
-          <Summary uploadedAt={this.props.uploadedAt} />
+          <Summary
+            uploadedAt={this.props.uploadedAt}
+            previous={location.hash === '#previous'}
+          />
           {this.renderContent()}
         </div>
       </FileDragAndDrop>
