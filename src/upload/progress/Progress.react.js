@@ -17,7 +17,7 @@ const Analysis = ({ data }) => (
         <ul>
           { mlstTotal > 0 &&
             <li>
-              <strong>MLST</strong>: {mlstTotal}/{total}
+              MLST: {mlstTotal}/{total}
             </li> }
         </ul>
       </li>
@@ -34,8 +34,8 @@ const Progress = ({ inProgress, errored, summary, analysis }) => (
           <ReactCSSTransitionGroup
             className="wgsa-upload-card-list"
             transitionName="wgsa-upload-card"
-            transitionEnterTimeout={540}
-            transitionLeaveTimeout={540}
+            transitionEnterTimeout={280}
+            transitionLeave={false}
           >
             { inProgress.map(file => <FileCard key={file.id} item={file} />) }
           </ReactCSSTransitionGroup>
@@ -43,14 +43,14 @@ const Progress = ({ inProgress, errored, summary, analysis }) => (
             +{summary.pending} file{summary.pending === 1 ? '' : 's'}.
           </p>
         </div> }
-      { (analysis.length && analysis[0].key !== 'pending') &&
+      { (!!analysis.length && analysis[0].key !== 'pending') &&
         <div className="wgsa-section-divider">
           <h2 className="wgsa-section-title">Organisms</h2>
           <Analysis data={analysis} />
         </div> }
       { summary.errored > 0 &&
         <div className="wgsa-section-divider">
-          <h2 className="wgsa-section-title">Errors ({ summary.errored })</h2>
+          <h2 className="wgsa-section-title">Errors</h2>
           { errored.map(file => <FileCard key={file.id} item={file} />) }
         </div> }
     </div>

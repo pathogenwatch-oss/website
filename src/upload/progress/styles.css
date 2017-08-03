@@ -25,7 +25,6 @@
   opacity: 1;
   transition: .28s cubic-bezier(.4,0,.2,1);
   transition-property: opacity;
-  transition-delay: .28s;
 }
 
 .wgsa-upload-card-leave {
@@ -36,7 +35,6 @@
   transform: translateX(-100%);
   transition: .28s cubic-bezier(.4,0,.2,1);
   transition-property: transform;
-  transition-delay: .28s;
 }
 
 .wgsa-upload-progress .wgsa-card-header i {
