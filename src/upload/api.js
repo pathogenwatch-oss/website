@@ -17,5 +17,9 @@ export function update(id, metadata) {
 }
 
 export function fetchGenomes(uploadedAt) {
-  return fetchJson('GET', '/api/genome', { prefilter: 'upload', uploadedAt });
+  return fetchJson('GET', '/api/genome', { uploadedAt });
+}
+
+export function fetchUploads() {
+  return fetchJson('GET', '/api/uploads');
 }

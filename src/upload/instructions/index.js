@@ -9,14 +9,24 @@ import Summary from '../Summary.react';
 
 import { addFiles } from './actions';
 
-const Component = ({ onFiles }) => (
-  <FileDragAndDrop onFiles={onFiles}>
-    <div className="wgsa-hipster-style wgsa-filterable-view">
-      <Summary />
-      <Instructions />
-    </div>
-  </FileDragAndDrop>
-);
+const Component = React.createClass({
+
+  componentWillMount() {
+    document.title = 'WGSA | Upload';
+  },
+
+  render() {
+    return (
+      <FileDragAndDrop onFiles={this.props.onFiles}>
+        <div className="wgsa-hipster-style wgsa-filterable-view">
+          <Summary />
+          <Instructions />
+        </div>
+      </FileDragAndDrop>
+    );
+  },
+
+});
 
 function mapDispatchToProps(dispatch) {
   return {

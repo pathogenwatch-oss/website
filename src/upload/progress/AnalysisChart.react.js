@@ -35,6 +35,7 @@ const AnalysisChart = React.createClass({
         pieceLabel: {
           mode: 'percentage',
           precision: 2,
+          fontColor: '#fff',
           fontSize: 11,
           fontStyle: '500',
           fontFamily: 'Roboto',

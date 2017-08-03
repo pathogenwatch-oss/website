@@ -9,13 +9,17 @@ import * as upload from './selectors';
 
 const Component = React.createClass({
 
+  componentDidMount() {
+    document.title = 'WGSA | Upload';
+  },
+
   componentDidUpdate() {
     const { summary } = this.props;
     document.title = [
       'WGSA',
       '|',
       summary.total ? `(${summary.completed}/${summary.total})` : '',
-      'Genomes',
+      'Upload',
     ].join(' ');
   },
 
