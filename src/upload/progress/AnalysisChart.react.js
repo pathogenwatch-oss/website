@@ -5,53 +5,9 @@ import './styles.css';
 import React from 'react';
 import { connect } from 'react-redux';
 
-import * as upload from './selectors';
+import { getChartData } from './selectors';
 
 import { selectOrganism } from './actions';
-
-const colours = [
-  '#834B96',
-  '#B668A6',
-  '#756E94',
-  '#97B5BE',
-  '#92A3B8',
-  '#E8E0EE',
-  '#BFABCF',
-  '#CFC1DB',
-  '#9070AC',
-  '#A389BB',
-  '#8968A7',
-  '#9D81B6',
-];
-
-const lightColours = [
-  '#B285C1',
-  '#D7ACCF',
-  '#AEAAC0',
-  '#D6E2E5',
-  '#D1D8E1',
-  '#FFFFFF',
-  '#F0ECF4',
-  '#FFFFFF',
-  '#C3B1D2',
-  '#D7CBE1',
-  '#BBA8CC',
-  '#CFC1DC',
-];
-
-const colourMap = new Map();
-let usedColours = 0;
-
-function getColour(name) {
-  if (name === 'Pending') return '#ccc';
-
-  if (!colourMap.has(name)) {
-    const newColour = colours[(usedColours++) % colours.length];
-    colourMap.set(name, newColour);
-  }
-
-  return colourMap.get(name);
-}
 
 function toggleOrganism(index, chart) {
   const [ sts, organisms ] = chart.config.data.datasets;
@@ -166,47 +122,9 @@ const AnalysisChart = React.createClass({
 
 });
 
-function formatChartData(data) {
-  const organisms = { label: 'Organism', data: [], backgroundColor: [], labels: [], organismIds: [] };
-  const stData = { label: 'Sequence Type', data: [], backgroundColor: [], labels: [], parents: [] };
-
-  let organismIndex = 0;
-  for (const { label, total, sequenceTypes = [], organismId } of data) {
-    organisms.data.push(total);
-
-    const colour = getColour(label);
-    organisms.backgroundColor.push(colour);
-    organisms.labels.push(label);
-    organisms.organismIds.push(organismId);
-
-    let sum = total;
-    for (const st of sequenceTypes) {
-      stData.data.push(st.total);
-      stData.backgroundColor.push(lightColours[colours.indexOf(colour)]);
-      stData.labels.push(st.label);
-      stData.parents.push(organismIndex);
-      sum -= st.total;
-    }
-    if (sum > 0) {
-      stData.data.push(sum);
-      stData.backgroundColor.push('#fefefe');
-      stData.labels.push('Unknown ST');
-      stData.parents.push(organismIndex);
-    }
-    organismIndex++;
-  }
-
-  return {
-    datasets: [
-      stData,
-      organisms,
-    ],
-  };
-}
-
 function mapStateToProps(state) {
   return {
-    data: formatChartData(upload.getAnalysisSummary(state)),
+    data: getChartData(state),
   };
 }
 

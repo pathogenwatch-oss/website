@@ -10,13 +10,8 @@ export function subscribe(channelId, message, callback) {
     pusher = new Pusher(CONFIG.pusherKey, { encrypted: true });
   }
 
-  return new Promise((resolve) => {
-    let channel = null;
-    pusher.connection.bind('connected', () => {
-      resolve(channel.bind(message, callback));
-    });
-    channel = pusher.subscribe(channelId);
-  });
+  const channel = pusher.subscribe(channelId);
+  return channel.bind(message, callback);
 }
 
 export function unsubscribe(channelId) {

@@ -2,20 +2,20 @@ import * as actions from './actions';
 
 import { statuses } from '../constants';
 
-function updateGenome(state, id, update) {
-  const genome = state[id];
-  const next = { ...genome, ...update };
+function updateFile(state, id, update) {
+  const file = state[id];
+  const next = { ...file, ...update };
   return {
     ...state,
     [id]: next,
   };
 }
 
-function initialiseEntities(state, genomes) {
-  return genomes.reduce((memo, genome) => {
-    delete genome.error;
-    memo[genome.id] = {
-      ...genome,
+function initialiseFiles(state, files) {
+  return files.reduce((memo, file) => {
+    delete file.error;
+    memo[file.id] = {
+      ...file,
       status: statuses.PENDING,
       progress: 0,
     };
@@ -24,11 +24,11 @@ function initialiseEntities(state, genomes) {
 }
 
 const initialState = {
-  batch: new Set(),
+  files: {},
   queue: [],
   processing: new Set(),
-  entities: {},
-  serverIds: {},
+
+  genomes: {},
   analyses: {},
   selectedOrganism: null,
 };
@@ -39,10 +39,9 @@ export default function (state = initialState, { type, payload }) {
       const ids = payload.genomes.map(_ => _.id);
       return {
         ...initialState,
-        batch: new Set(ids),
         queue: ids,
         uploadedAt: payload.uploadedAt,
-        entities: initialiseEntities({}, payload.genomes),
+        files: initialiseFiles({}, payload.genomes),
       };
     }
     case actions.UPLOAD_REQUEUE_FILES: {
@@ -50,7 +49,7 @@ export default function (state = initialState, { type, payload }) {
       return {
         ...state,
         queue: ids,
-        entities: initialiseEntities({ ...state.entities }, payload.genomes),
+        files: initialiseFiles({ ...state.files }, payload.genomes),
       };
     }
     case actions.PROCESS_GENOME.ATTEMPT: {
@@ -62,87 +61,83 @@ export default function (state = initialState, { type, payload }) {
     }
     case actions.COMPRESS_GENOME.ATTEMPT: {
       const { id } = payload;
-      const { entities } = state;
+      const { files } = state;
       return {
         ...state,
-        entities: updateGenome(entities, id, { status: statuses.COMPRESSING }),
+        files: updateFile(files, id, { status: statuses.COMPRESSING }),
       };
     }
     case actions.UPLOAD_GENOME.ATTEMPT: {
       const { id } = payload;
-      const { entities } = state;
+      const { files } = state;
       return {
         ...state,
-        entities: updateGenome(entities, id, { status: statuses.UPLOADING }),
+        files: updateFile(files, id, { status: statuses.UPLOADING }),
       };
     }
     case actions.GENOME_UPLOAD_PROGRESS: {
       const { id, progress } = payload;
-      const { entities } = state;
+      const { files } = state;
       return {
         ...state,
-        entities: updateGenome(entities, id, { progress }),
+        files: updateFile(files, id, { progress }),
       };
     }
     case actions.UPLOAD_GENOME.FAILURE:
     case actions.UPDATE_GENOME.FAILURE: {
       const { id, error } = payload;
-      const { entities } = state;
+      const { files } = state;
       return {
         ...state,
-        entities: updateGenome(entities, id, { error, status: statuses.ERROR }),
+        files: updateFile(files, id, { error, status: statuses.ERROR }),
       };
     }
     case actions.UPLOAD_GENOME.SUCCESS: {
       const { id, result } = payload;
-      const { entities } = state;
+      const { files } = state;
 
       return {
         ...state,
-        entities: updateGenome(
-          entities,
-          id,
-          { status: statuses.SUCCESS, genomeId: result.id }
-        ),
+        files: updateFile(files, id, { status: statuses.SUCCESS }),
+        genomes: { ...state.genomes, [result.id]: result },
       };
     }
     case actions.UPDATE_GENOME.SUCCESS: {
       const { id, result } = payload;
-      const { entities } = state;
+      const { files } = state;
       const status = statuses.SUCCESS;
 
       return {
         ...state,
-        entities: updateGenome(entities, id, { ...result, status }),
+        files: updateFile(files, id, { ...result, status }),
       };
     }
     case actions.PROCESS_GENOME.SUCCESS:
     case actions.PROCESS_GENOME.FAILURE: {
-      const { queue, processing, batch, entities } = state;
+      const { processing, files } = state;
       const { id, error } = payload;
       processing.delete(payload.id);
 
       return {
         ...state,
         processing: new Set(processing),
-        batch: queue.length + processing.size === 0 ? new Set() : batch,
-        entities:
+        files:
           error ?
-            updateGenome(entities, id, { error, status: statuses.ERROR }) :
-            state.entities,
+            updateFile(files, id, { error, status: statuses.ERROR }) :
+            state.files,
       };
     }
     case actions.REMOVE_GENOMES: {
       const { ids } = payload;
-      const { entities } = state;
+      const { files } = state;
 
       for (const id of ids) {
-        delete entities[id];
+        delete files[id];
       }
 
       return {
         ...state,
-        entities: { ...entities },
+        files: { ...files },
       };
     }
     case actions.UPLOAD_ANALYSIS_RECEIVED: {
@@ -167,7 +162,7 @@ export default function (state = initialState, { type, payload }) {
       return {
         ...state,
         selectedOrganism: null,
-        entities: payload.result.reduce((memo, genome) => {
+        genomes: payload.result.reduce((memo, genome) => {
           memo[genome.id] = {
             ...genome,
             status: statuses.SUCCESS,

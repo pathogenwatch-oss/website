@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import Progress from './Progress.react';
 import Summary from './Summary.react';
 
-import { getUploadedGenomeList } from './selectors';
+import { getUploadedFileList, isUploading } from './selectors';
 
 import { receiveUploadAnalysis, fetchGenomes, processFiles } from './actions';
 
@@ -15,15 +15,19 @@ import config from '../../app/config';
 const Component = React.createClass({
 
   componentWillMount() {
-    subscribe(config.clientId, 'analysis', this.props.receiveAnalysis)
-      .then(() => {
-        const { hasFiles, startUpload, fetch, uploadedAt } = this.props;
-        if (hasFiles) {
-          startUpload();
-        } else {
-          fetch(uploadedAt);
-        }
-      });
+    subscribe(config.clientId, 'analysis', this.props.receiveAnalysis);
+    const { hasFiles, startUpload, fetch } = this.props;
+    if (hasFiles) {
+      startUpload();
+    } else {
+      fetch();
+    }
+  },
+
+  componentDidUpdate(previous) {
+    if (previous.isUploading && !this.props.isUploading) {
+      this.props.fetch();
+    }
   },
 
   componentWillUnmount() {
@@ -41,18 +45,18 @@ const Component = React.createClass({
 
 });
 
-function mapStateToProps(state, { match }) {
-  const { uploadedAt } = match.params;
+function mapStateToProps(state) {
   return {
-    uploadedAt,
-    hasFiles: getUploadedGenomeList(state).length > 0,
+    isUploading: isUploading(state),
+    hasFiles: getUploadedFileList(state).length > 0,
   };
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch, { match }) {
+  const { uploadedAt } = match.params;
   return {
     receiveAnalysis: msg => dispatch(receiveUploadAnalysis(msg)),
-    fetch: uploadedAt => dispatch(fetchGenomes(uploadedAt)),
+    fetch: () => dispatch(fetchGenomes(uploadedAt)),
     startUpload: () => dispatch(processFiles()),
   };
 }

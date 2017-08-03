@@ -60,3 +60,13 @@
 .wgsa-upload-actions {
   margin-left: auto;
 }
+
+.wgsa-upload-progress li {
+  line-height: 1.25;
+  margin-bottom: 8px;
+}
+
+.wgsa-upload-progress li > ul {
+  margin-top: 8px;
+  margin-left: 16px;
+}

@@ -6,7 +6,7 @@ import Instructions from './Instructions.react';
 import Progress from './Progress.react';
 import Summary from './Summary.react';
 
-import { getUploadedGenomeList } from './selectors';
+import { getUploadedFileList } from './selectors';
 
 import { addFiles, receiveUploadAnalysis } from './actions';
 import { fetchGenomes } from './actions';
@@ -70,7 +70,7 @@ function mapStateToProps(state, { match }) {
   const { uploadedAt } = match.params;
   return {
     uploadedAt,
-    files: getUploadedGenomeList(state),
+    files: getUploadedFileList(state),
   };
 }
 
