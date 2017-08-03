@@ -93,4 +93,12 @@ router.post('/genome/:id', (req, res, next) => {
     .catch(next);
 });
 
+router.get('/uploads', (req, res, next) => {
+  LOGGER.info('Received request to get upload sessions');
+  const { user, sessionID } = req;
+  services.request('genome', 'fetch-uploads', { user, sessionID })
+    .then(response => res.json(response))
+    .catch(next);
+});
+
 module.exports = router;

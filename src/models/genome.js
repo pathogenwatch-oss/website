@@ -140,10 +140,6 @@ schema.statics.getPrefilterCondition = function ({ user, query = {}, sessionID }
     return { binned: false, _user: user._id };
   }
 
-  if (prefilter === 'upload') {
-    return { binned: false, _session: sessionID, uploadedAt: new Date(uploadedAt || null) };
-  }
-
   if (prefilter === 'bin') {
     return { binned: true, _user: user._id };
   }
