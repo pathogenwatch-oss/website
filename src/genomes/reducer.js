@@ -8,8 +8,6 @@ import collectionMetadata from './create-collection-form/reducer';
 import { CREATE_COLLECTION } from './create-collection-form';
 import * as actions from './actions';
 
-import { shouldNotFetch } from './utils';
-
 function entities(state = {}, { type, payload }) {
   switch (type) {
     case actions.FETCH_GENOMES.ATTEMPT:

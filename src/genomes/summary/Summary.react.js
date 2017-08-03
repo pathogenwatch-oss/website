@@ -18,8 +18,7 @@ const Summary = ({ numVisibleGenomes, totalGenomes }) => {
     <FilterSummary className="wgsa-hub-summary">
       <div className="wgsa-button-group">
         <i className="material-icons" title="View">visibility</i>
-        <ViewSwitcher title="Grid" />
-        <ViewSwitcher view="list" title="List" />
+        <ViewSwitcher title="List" />
         <ViewSwitcher view="map" title="Map" />
         <ViewSwitcher view="stats" title="Stats" />
       </div>
