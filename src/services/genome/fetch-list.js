@@ -17,15 +17,15 @@ function getSort(sort) {
 
 module.exports = function (props) {
   const { user, query = {} } = props;
-  const { skip = 0, limit = 0, sort = 'createdAt-' } = query;
+  const { startIndex = 0, stopIndex = 49, sort = 'createdAt-' } = query;
 
   return (
     Genome
       .find(
         Genome.getFilterQuery(props),
         null, {
-          skip: Number(skip),
-          limit: Number(limit),
+          skip: Number(startIndex),
+          limit: Number(stopIndex) - Number(startIndex) + 1,
           sort: getSort(sort),
         }
       )
