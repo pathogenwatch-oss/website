@@ -7,7 +7,7 @@ import ListItem from './ListItem.react';
 
 import { InfiniteLoader, List } from 'react-virtualized';
 
-import { getGridItems } from '../selectors';
+import { getGenomes, getListIndices } from '../selectors';
 import { getTotal } from '../summary/selectors';
 
 import { fetchGenomes } from '../actions';
@@ -34,22 +34,22 @@ export const ListView = React.createClass({
   },
 
   render() {
-    const { items, total, fetch } = this.props;
+    const { items, total, fetch, indices } = this.props;
 
     return (
       <InfiniteLoader
-        isRowLoaded={({ index }) => }
+        isRowLoaded={({ index }) => !!indices[index]}
         loadMoreRows={fetch}
         rowCount={total}
       >
         {({ onRowsRendered, registerChild }) => (
           <List
-            height={200}
+            height={100}
             onRowsRendered={onRowsRendered}
             ref={registerChild}
             rowCount={total}
-            rowHeight={20}
-            rowRenderer={rowRenderer}
+            rowHeight={33}
+            rowRenderer={({ key, index, style }) => <ListItem key={key} style={style} item={items[indices[index]]} />}
             width={300}
           />
         )}
@@ -73,7 +73,8 @@ export const ListView = React.createClass({
 
 function mapStateToProps(state) {
   return {
-    items: getGridItems(state),
+    items: getGenomes(state),
+    indices: getListIndices(state),
     total: getTotal(state),
   };
 }

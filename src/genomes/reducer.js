@@ -10,19 +10,40 @@ import * as actions from './actions';
 
 function entities(state = {}, { type, payload }) {
   switch (type) {
-    case actions.FETCH_GENOMES.ATTEMPT:
+    case actions.FETCH_GENOME_SUMMARY.ATTEMPT:
       return {};
     case actions.FETCH_GENOMES.SUCCESS: {
       return payload.result.reduce((memo, genome) => {
         memo[genome.id] = genome;
         return memo;
-      }, {});
+      }, { ...state });
     }
     case actions.FETCH_GENOME_SUMMARY.SUCCESS: {
       return payload.result.genomes.reduce((memo, genome) => {
         memo[genome.id] = genome;
         return memo;
       }, {});
+    }
+    default:
+      return state;
+  }
+}
+
+function indices(state = {}, { type, payload }) {
+  switch (type) {
+    case actions.FETCH_GENOME_SUMMARY.ATTEMPT:
+      return {};
+    case actions.FETCH_GENOME_SUMMARY.SUCCESS: {
+      return payload.result.genomes.reduce((memo, genome, index) => {
+        memo[index] = genome.id;
+        return memo;
+      }, {});
+    }
+    case actions.FETCH_GENOMES.SUCCESS: {
+      return payload.result.reduce((memo, genome, index) => {
+        memo[index + payload.filter.startIndex] = genome.id;
+        return memo;
+      }, { ...state });
     }
     default:
       return state;
@@ -60,6 +81,7 @@ function status(state = initialStatus, { type, payload }) {
 
 export default combineReducers({
   entities,
+  indices,
   collectionMetadata,
   selectedMetric,
   status,

@@ -25,3 +25,5 @@ export const getStatus = state => getGenomeState(state).status;
 export const getGridItems = getGenomeList;
 
 export const isAsideEnabled = () => true;
+
+export const getListIndices = state => getGenomeState(state).indices;

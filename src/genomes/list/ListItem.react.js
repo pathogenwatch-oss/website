@@ -7,11 +7,16 @@ import Metadata from '../card/GenomeMetadata.react.js';
 
 import { showGenomeDrawer } from '../../genome-drawer';
 
-const ListItem = ({ item, onClick }) => {
+const ListItem = ({ item, onClick, style }) => {
   const { name, organismId, analysis = {} } = item;
   const { specieator } = analysis;
   return (
-    <div className="wgsa-genome-list-item wgsa-genome-list-item--selectable wgsa-card--bordered" onClick={onClick} title="View Details">
+    <div
+      className="wgsa-genome-list-item wgsa-genome-list-item--selectable wgsa-card--bordered"
+      style={style}
+      onClick={onClick}
+      title="View Details"
+    >
       <span className="wgsa-overflow-fade" title={name}>{name}</span>
       <span className="wgsa-overflow-fade">
         { specieator ?
