@@ -45,6 +45,8 @@ export default React.createClass({
   getInitialState() {
     return {
       locations: [],
+      collections: [],
+      focus: false,
     };
   },
 
@@ -57,7 +59,28 @@ export default React.createClass({
           }
           return memo;
         }, []),
+        collections,
       }));
+  },
+
+  startCarousel() {
+    const { collections } = this.state;
+    this._interval = setInterval(() => {
+      const { uuid } = collections[Math.floor(Math.random() * collections.length)];
+      this.setState({ uuid });
+    }, 1000);
+  },
+
+  stopCarousel() {
+    clearInterval(this._interval);
+  },
+
+  componentDidUpdate(_, previous) {
+    const { collections } = this.state;
+
+    if (previous.collections.length === 0 && collections.length > 0) {
+      this.startCarousel();
+    }
   },
 
   renderCollectionLinks() {
@@ -70,7 +93,10 @@ export default React.createClass({
         markerComponent={Marker}
         propsForMarkers={{
           selectedCollection: this.state.uuid,
-          setCollection: uuid => this.setState({ uuid }),
+          setCollection: uuid => {
+            this.setState({ uuid });
+            this.stopCarousel();
+          },
         }}
       />
     );
@@ -89,8 +115,11 @@ export default React.createClass({
           zoom={2}
           minZoom={2}
           boundsOptions={{ animate: false }}
+          scrollWheelZoom={false}
+          onFocus={({ target }) => { target.scrollWheelZoom.enable(); }}
+          onBlur={({ target }) => { target.scrollWheelZoom.disable(); }}
           onMoveend={({ target }) => { this.map = target; }}
-          ref={(map) => { this.leafletMap = map; }}
+          ref={map => { this.leafletMap = map; }}
           style={{ width: '100%', height: '100%' }}
         >
           <TileLayer
