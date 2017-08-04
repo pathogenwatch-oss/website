@@ -3,8 +3,14 @@
 .showcase {
   position: relative;
   height: calc(100vh - 336px);
+  min-height: 640px;
   display: block;
   margin: 0px auto 0;
+  background: #efefef;
+}
+
+.showcase .wgsa-homepage__content {
+  height: 100%;
 }
 
 .showcase .leaflet-container {
@@ -77,4 +83,22 @@
 
 .wgsa-showcase-collection h3 {
   font-size: 20px;
+}
+
+.wgsa-showcase-tooltip-enter {
+  opacity: 0;
+}
+
+.wgsa-showcase-tooltip-enter.wgsa-showcase-tooltip-enter-active {
+  opacity: 1;
+  transition: opacity .28s cubic-bezier(0.165,0.840,0.440,1.000);
+}
+
+.wgsa-showcase-tooltip-leave {
+  opacity: 1;
+}
+
+.wgsa-showcase-tooltip-leave.wgsa-showcase-tooltip-leave-active {
+  opacity: 0;
+  transition: opacity .28s cubic-bezier(0.165,0.840,0.440,1.000);
 }

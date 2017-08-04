@@ -3,6 +3,7 @@ import { Map, TileLayer } from 'react-leaflet';
 import MarkerLayer from 'react-leaflet-marker-layer';
 import classnames from 'classnames';
 import { Link } from 'react-router-dom';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 import MarkdownHeading from '../components/MarkdownHeading.react';
 import Spinner from '../components/Spinner.react';
@@ -23,10 +24,13 @@ const Marker = React.createClass({
 
   render() {
     const { style, marker, selectedCollection, setCollection } = this.props;
-    const { uuid } = marker.collection;
+    const { uuid, organismId } = marker.collection;
     return (
       <Link
-        style={{ ...style, animationDelay: `${0.125 * marker.index}s` }}
+        style={{
+          ...style,
+          animationDelay: `${0.125 * marker.index}s`,
+        }}
         to={`/collection/${uuid}`}
         className={classnames(
           'showcase__link', {
@@ -70,6 +74,10 @@ export default React.createClass({
         }, []),
         collections,
       }));
+  },
+
+  componentWillUnmount() {
+    this.stopCarousel();
   },
 
   setCollection() {
@@ -118,29 +126,38 @@ export default React.createClass({
     const { locations, uuid, collections } = this.state;
     return (
       <section className="showcase">
-        <Map
-          animate={false}
-          zoomControl={false}
-          center={[ 44, 13.5 ]}
-          zoom={2}
-          minZoom={2}
-          boundsOptions={{ animate: false }}
-          scrollWheelZoom={false}
-          onFocus={({ target }) => { target.scrollWheelZoom.enable(); }}
-          onBlur={({ target }) => { target.scrollWheelZoom.disable(); }}
-          onMoveend={({ target }) => { this.map = target; }}
-          ref={map => { this.leafletMap = map; }}
-          style={{ width: '100%', height: '100%' }}
-        >
-          <TileLayer
-            noWrap
-            attribution={ATTRIBUTION}
-            url={`https://api.mapbox.com/styles/v1/cgpsdev/cj5y3b7aq0rru2spdrcdnjxsm/tiles/256/{z}/{x}/{y}?access_token=${CONFIG.mapboxKey}`}
-          />
-          {this.renderCollectionLinks()}
-        </Map>
-        { locations.length === 0 && <Spinner singleColour /> }
-        { !!uuid && <SelectedCollection collection={collections.find(_ => _.uuid === uuid)} /> }
+        <div className="wgsa-homepage__content">
+          <Map
+            animate={false}
+            zoomControl={false}
+            center={[ 44, 13.5 ]}
+            zoom={2}
+            minZoom={2}
+            boundsOptions={{ animate: false }}
+            scrollWheelZoom={false}
+            onFocus={({ target }) => { target.scrollWheelZoom.enable(); }}
+            onBlur={({ target }) => { target.scrollWheelZoom.disable(); }}
+            onMoveend={({ target }) => { this.map = target; }}
+            ref={map => { this.leafletMap = map; }}
+            style={{ width: '100%', height: '100%' }}
+            >
+              <TileLayer
+                noWrap
+                attribution={ATTRIBUTION}
+                url={`https://api.mapbox.com/styles/v1/cgpsdev/cj5y3b7aq0rru2spdrcdnjxsm/tiles/256/{z}/{x}/{y}?access_token=${CONFIG.mapboxKey}`}
+              />
+              {this.renderCollectionLinks()}
+            </Map>
+            { locations.length === 0 && <Spinner singleColour /> }
+            <ReactCSSTransitionGroup
+              transitionName="wgsa-showcase-tooltip"
+              transitionEnterTimeout={280}
+              transitionLeaveTimeout={280}
+            >
+            { !!uuid &&
+              <SelectedCollection key={uuid} collection={collections.find(_ => _.uuid === uuid)} /> }
+            </ReactCSSTransitionGroup>
+        </div>
       </section>
     );
   },
