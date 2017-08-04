@@ -59,8 +59,13 @@
 
 .jumbotron {
   padding: 32px 32px 0 !important;
-  max-width: 1280px;
   margin: 0 auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  background: linear-gradient(to top, rgba(255,255,255,0) 0%, rgb(255,255,255) 75%);
 }
 
 .jumbotron img {

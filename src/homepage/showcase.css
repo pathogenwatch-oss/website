@@ -4,24 +4,22 @@
   position: relative;
   height: calc(100vh - 336px);
   display: block;
-  margin: 0 auto;
+  margin: 0px auto 0;
 }
 
 .showcase .leaflet-container {
   background: #efefef;
 }
 
-.showcase-curvature {
-  position: absolute;
-  top: -1px;
-  z-index: 1;
-  object-fit: cover;
-  width: 100%;
-  background-image: url("/images/curvature.svg");
-  background-size: cover;
-  background-position: top center;
-  background-repeat: no-repeat;
-  height: 1.75vw;
+.showcase .leaflet-control-attribution {
+  float: right !important;
+  text-align: right;
+  background: rgba(239, 239, 239, 0.5);
+  font-size: 10px;
+}
+
+.showcase .leaflet-control-attribution a {
+  color: #673c90;
 }
 
 .showcase .mdl-spinner {
@@ -62,10 +60,21 @@
   display: flex;
 }
 
+.wgsa-showcase-collection {
+  position: absolute;
+  padding: 16px;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #555;
+  background-color: rgba(239, 239, 239, 0.54);
+  border-radius: 2px;
+}
 
-.showcase .mdl-button {
-  font-size: 34px;
-  text-transform: capitalize;
-  line-height: 40px;
-  padding-bottom: 8px;
+.wgsa-showcase-collection > * {
+  margin: 0;
+}
+
+.wgsa-showcase-collection h3 {
+  font-size: 20px;
 }

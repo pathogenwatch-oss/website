@@ -4,13 +4,15 @@ import MarkerLayer from 'react-leaflet-marker-layer';
 import classnames from 'classnames';
 import { Link } from 'react-router-dom';
 
+import MarkdownHeading from '../components/MarkdownHeading.react';
 import Spinner from '../components/Spinner.react';
+import { FormattedName } from '../organisms';
 
 import { getShowcaseCollections } from './api';
 
 const ATTRIBUTION = `
   Map data &copy;
-  <a href='http://openstreetmap.org'>OpenStreetMap</a> contributors,
+  <a href='http://openstreetmap.org'>OpenStreetMap</a> contributors
   <a href='http://creativecommons.org/licenses/by-sa/2.0/'>CC-BY-SA</a>,
   Imagery © <a href='http://mapbox.com'>Mapbox</a>
 `;
@@ -40,6 +42,13 @@ const Marker = React.createClass({
 
 });
 
+const SelectedCollection = ({ collection }) => (
+  <div className="wgsa-showcase-collection">
+    <MarkdownHeading level="3">{collection.title}</MarkdownHeading>
+    <p>{collection.size} <FormattedName fullName organismId={collection.organismId} /> genomes</p>
+  </div>
+);
+
 export default React.createClass({
 
   getInitialState() {
@@ -63,12 +72,14 @@ export default React.createClass({
       }));
   },
 
-  startCarousel() {
+  setCollection() {
     const { collections } = this.state;
-    this._interval = setInterval(() => {
-      const { uuid } = collections[Math.floor(Math.random() * collections.length)];
-      this.setState({ uuid });
-    }, 1000);
+    const { uuid } = collections[Math.floor(Math.random() * collections.length)];
+    this.setState({ uuid });
+  },
+
+  startCarousel() {
+    this._interval = setInterval(this.setCollection, 5000);
   },
 
   stopCarousel() {
@@ -79,6 +90,7 @@ export default React.createClass({
     const { collections } = this.state;
 
     if (previous.collections.length === 0 && collections.length > 0) {
+      this.setCollection();
       this.startCarousel();
     }
   },
@@ -103,15 +115,13 @@ export default React.createClass({
   },
 
   render() {
-    const { locations } = this.state;
+    const { locations, uuid, collections } = this.state;
     return (
       <section className="showcase">
-        <div className="showcase-curvature" />
-        { locations.length === 0 && <Spinner singleColour /> }
         <Map
           animate={false}
           zoomControl={false}
-          center={[ 35, 13.5 ]}
+          center={[ 44, 13.5 ]}
           zoom={2}
           minZoom={2}
           boundsOptions={{ animate: false }}
@@ -125,10 +135,12 @@ export default React.createClass({
           <TileLayer
             noWrap
             attribution={ATTRIBUTION}
-            url={`https://api.mapbox.com/styles/v1/cgpsdev/cj5y18lnc0vrl2rpjce4mhjv3/tiles/256/{z}/{x}/{y}?access_token=${CONFIG.mapboxKey}`}
+            url={`https://api.mapbox.com/styles/v1/cgpsdev/cj5y3b7aq0rru2spdrcdnjxsm/tiles/256/{z}/{x}/{y}?access_token=${CONFIG.mapboxKey}`}
           />
           {this.renderCollectionLinks()}
         </Map>
+        { locations.length === 0 && <Spinner singleColour /> }
+        { !!uuid && <SelectedCollection collection={collections.find(_ => _.uuid === uuid)} /> }
       </section>
     );
   },
