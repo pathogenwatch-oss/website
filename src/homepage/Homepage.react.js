@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Leaflet from 'leaflet';
+import classnames from 'classnames';
 
 import { FormattedName } from '../organisms';
 import Spinner from '../components/Spinner.react';
@@ -54,25 +55,31 @@ export default React.createClass({
       div.style = { width: 640, height: 640 * 0.62 };
       var scale = 640/887;
 
-      return collections.map(({ uuid, slug, size, centroid }, index) => {
-        const point = get_xy(centroid.lat, centroid.lon);
-        console.log(point, centroid, index);
-        return (
-          <Link
-            key={uuid}
-            to={`/collection/${slug}`}
-            className="showcase__link wgsa-sonar-effect"
-            style={{
-              left: `${point.x * scale}px`,
-              top: `${point.y * scale}px`,
-              transform: 'translate(-50%, -50%)',
-              animationDelay: `${0.25 * index}s`,
-              width: Math.min(Math.max(8, size * 0.125), 32),
-              height: Math.min(Math.max(8, size * 0.125), 32),
-            }}
-          />
-        );
-      });
+      return collections.reduce((memo, { uuid, title, size, locations }) => {
+        for (const { lat, lon } of locations) {
+          const point = get_xy(lat, lon);
+          memo.push(
+            <Link
+              key={`${uuid}_${lat}_${lon}`}
+              to={`/collection/${uuid}`}
+              className={classnames(
+                'showcase__link', {
+                  'active wgsa-sonar-effect': this.state.uuid === uuid,
+                  inactive: this.state.uuid && this.state.uuid !== uuid,
+                })
+              }
+              style={{
+                left: `${point.x * scale}px`,
+                top: `${point.y * scale}px`,
+                transform: 'translate(-50%, -50%)',
+                animationDelay: '0s',
+              }}
+              onMouseMove={() => this.setState({ uuid })}
+              onMouseLeave={() => this.setState({ uuid: null })}
+            />);
+        }
+        return memo;
+      }, []);
     }
     return <Spinner singleColour />;
   },
