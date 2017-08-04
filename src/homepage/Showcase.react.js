@@ -24,7 +24,7 @@ const Marker = React.createClass({
 
   render() {
     const { style, marker, selectedCollection, setCollection } = this.props;
-    const { uuid, organismId } = marker.collection;
+    const { uuid } = marker.collection;
     return (
       <Link
         style={{
