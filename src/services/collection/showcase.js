@@ -1,19 +1,17 @@
 const Collection = require('models/collection');
 
 module.exports = function () {
-  const query = { public: true, centroid: { $exists: true }, binned: false };
-
   return (
-    Collection
-      .find(query, {
-        description: 1,
-        pmid: 1,
-        size: 1,
-        organismId: 1,
-        title: 1,
-        uuid: 1,
-        centroid: 1,
-      })
-      .then(collections => collections.map(_ => _.toObject()))
+    Collection.aggregate([
+      { $match: { public: true, showcase: true, binned: false } },
+      { $project: { uuid: 1, title: 1, size: 1 } },
+      { $lookup: { from: 'collectiongenomes', foreignField: '_collection', localField: '_id', as: 'genomes' } },
+      { $project: { uuid: 1, title: 1, size: 1, 'genomes.position': 1 } },
+      { $unwind: '$genomes' },
+      { $match: { 'genomes.position.latitude': { $exists: true }, 'genomes.position.longitude': { $exists: true } } },
+      { $group: { _id: { lat: '$genomes.position.latitude', lon: '$genomes.position.longitude', uuid: '$uuid', title: '$title', size: '$size' } } },
+      { $group: { _id: { uuid: '$_id.uuid', title: '$_id.title', size: '$_id.size' }, locations: { $push: { lat: '$_id.lat', lon: '$_id.lon' } } } },
+      { $project: { uuid: '$_id.uuid', title: '$_id.title', size: '$_id.size', locations: 1, _id: 0 } },
+    ])
   );
 };

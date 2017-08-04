@@ -45,10 +45,7 @@ const schema = new Schema({
   title: { type: String, index: 'text' },
   tree: String,
   uuid: { type: String, index: true },
-  centroid: {
-    lat: Number,
-    lon: Number,
-  },
+  showcase: Boolean,
 });
 
 setToObjectOptions(schema, (doc, collection, { user }) => {
