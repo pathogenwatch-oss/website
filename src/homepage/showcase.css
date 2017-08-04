@@ -1,0 +1,70 @@
+@import "../css/sonar.css";
+
+.showcase {
+  position: relative;
+  height: calc(100vh - 336px);
+  display: block;
+  margin: 0 auto;
+}
+
+.showcase .leaflet-container {
+  background: #efefef;
+}
+
+.showcase-curvature {
+  position: absolute;
+  top: -1px;
+  z-index: 1;
+  object-fit: cover;
+  width: 100%;
+  background-image: url("/images/curvature.svg");
+  background-size: cover;
+  background-position: top center;
+  background-repeat: no-repeat;
+  height: 1.75vw;
+}
+
+.showcase .mdl-spinner {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -14px;
+}
+
+.showcase__link {
+  width: 12px;
+  height: 12px;
+  background-color: #3c7383;
+  position: absolute !important;
+  border-radius: 999px;
+  display: block;
+  z-index: 1;
+  cursor: pointer;
+  opacity: 0.5;
+}
+
+.showcase__link.active {
+  background-color: #673c90;
+  opacity: 1;
+  z-index: 1;
+}
+
+.showcase__link.inactive {
+  z-index: 0;
+}
+
+.showcase footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+}
+
+
+.showcase .mdl-button {
+  font-size: 34px;
+  text-transform: capitalize;
+  line-height: 40px;
+  padding-bottom: 8px;
+}

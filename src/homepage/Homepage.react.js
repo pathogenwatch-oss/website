@@ -1,12 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Leaflet from 'leaflet';
-import classnames from 'classnames';
 
 import { FormattedName } from '../organisms';
-import Spinner from '../components/Spinner.react';
-
-import { getShowcaseCollections } from './api';
+import Showcase from './Showcase.react';
 
 import CONFIG from '../app/config';
 const { maxCollectionSize = {} } = CONFIG;
@@ -16,72 +12,10 @@ function getCollectionSizeLimit(user) {
   return limit === 0 ? 'Unlimited' : limit;
 }
 
-function get_xy(lat, lng){  //http://stackoverflow.com/questions/14329691/covert-latitude-longitude-point-to-a-pixels-x-y-on-mercator-projection
-	var mapWidth=2058;
-	var mapHeight=1746;
-	var factor=.404;
-	var x_adj=-391;
-	var y_adj=37;
-	// get x value
-	var x = (mapWidth*(180+lng)/360)%mapWidth+(mapWidth/2);
-
-	//convert from degrees to radians
-	var latRad = lat*Math.PI/180;
-
-	// get y value
-	var mercN = Math.log(Math.tan((Math.PI/4)+(latRad/2)));
-	var y = (mapHeight/2)-(mapWidth*mercN/(2*Math.PI));
-	return { x: x*factor+x_adj, y: y*factor+y_adj}
-}
-
 export default React.createClass({
-
-  getInitialState() {
-    return {
-      collections: [],
-    };
-  },
 
   componentWillMount() {
     document.title = 'WGSA | Whole Genome Sequence Analysis';
-    getShowcaseCollections()
-      .then(collections => this.setState({ collections }));
-  },
-
-  renderCollectionLinks() {
-    const { collections } = this.state;
-    if (collections.length) {
-      const div = document.createElement('div');
-      div.style = { width: 640, height: 640 * 0.62 };
-      var scale = 640/887;
-
-      return collections.reduce((memo, { uuid, title, size, locations }) => {
-        for (const { lat, lon } of locations) {
-          const point = get_xy(lat, lon);
-          memo.push(
-            <Link
-              key={`${uuid}_${lat}_${lon}`}
-              to={`/collection/${uuid}`}
-              className={classnames(
-                'showcase__link', {
-                  'active wgsa-sonar-effect': this.state.uuid === uuid,
-                  inactive: this.state.uuid && this.state.uuid !== uuid,
-                })
-              }
-              style={{
-                left: `${point.x * scale}px`,
-                top: `${point.y * scale}px`,
-                transform: 'translate(-50%, -50%)',
-                animationDelay: '0s',
-              }}
-              onMouseMove={() => this.setState({ uuid })}
-              onMouseLeave={() => this.setState({ uuid: null })}
-            />);
-        }
-        return memo;
-      }, []);
-    }
-    return <Spinner singleColour />;
   },
 
   render() {
@@ -91,22 +25,7 @@ export default React.createClass({
           <img src="/images/WGSA.FINAL.svg" alt="WGSA" />
           <h1>Global AMR surveillance through Whole Genome Sequencing</h1>
         </section>
-        <section className="showcase" style={{ width: 640, height: 480 }}>
-          <img src="/images/mercator.svg" />
-          {this.renderCollectionLinks()}
-          {/* <Link to="#" className="showcase__link showcase__link--1 wgsa-sonar-effect" />
-          <Link to="#" className="showcase__link showcase__link--2 showcase__link--large wgsa-sonar-effect" />
-          <Link to="#" className="showcase__link showcase__link--3 showcase__link--small wgsa-sonar-effect" />
-          <Link to="#" className="showcase__link showcase__link--4 wgsa-sonar-effect" />
-          <Link to="#" className="showcase__link showcase__link--5 showcase__link--large wgsa-sonar-effect" />
-          <Link to="#" className="showcase__link showcase__link--6 wgsa-sonar-effect" />
-          <Link to="#" className="showcase__link showcase__link--7 showcase__link--small wgsa-sonar-effect" /> */}
-          <footer>
-            <a href="#how-it-works" className="mdl-button mdl-button--primary title-font">
-              <i className="material-icons">expand_more</i> How it works
-            </a>
-          </footer>
-        </section>
+        <Showcase />
         <section id="how-it-works" className="alt wgsa-how-it-works">
           <div className="wgsa-homepage__content">
             <h2>How WGSA Works</h2>

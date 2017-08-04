@@ -1,8 +1,8 @@
+@import "showcase.css";
 @import "how-it-works.css";
 @import "organisms.css";
 @import "features.css";
 @import "footer.css";
-@import "../css/sonar.css";
 
 .homepage-section-link {
   font-size: 20px;
@@ -58,7 +58,7 @@
 /* Jumbotron */
 
 .jumbotron {
-  padding: 32px 32px 16px !important;
+  padding: 32px 32px 0 !important;
   max-width: 1280px;
   margin: 0 auto;
 }
@@ -74,71 +74,5 @@
   color: #673c90;
   font-size: 24px;
   text-align: center;
-}
-
-
-
-/* Showcase */
-
-.showcase {
-  position: relative;
-  min-height: calc(36.1vw + 1px);
-  display: block;
-  @media (max-width: 1200px) {
-    /*width: calc(137.5%);*/
-    min-height: calc(50.6vw + 1px);
-    /*transform: translateX(-13.333%);*/
-  }
-  margin: 0 auto;
-}
-
-.showcase img {
-  max-width: 100%;
-  object-fit: cover;
-  margin: 0 auto;
-}
-
-.showcase .mdl-spinner {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  margin-left: -14px;
-}
-
-.showcase__link {
-  width: 12px;
-  height: 12px;
-  background-color: #3c7383;
-  position: absolute !important;
-  border-radius: 999px;
-  display: block;
-  z-index: 1;
-  cursor: pointer;
-  opacity: 0.5;
-}
-
-.showcase__link.active {
-  background-color: #673c90;
-  opacity: 1;
-  z-index: 1;
-}
-
-.showcase__link.inactive {
-  z-index: 0;
-}
-
-.showcase footer {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  display: flex;
-}
-
-
-.showcase .mdl-button {
-  font-size: 34px;
-  text-transform: capitalize;
-  line-height: 40px;
-  padding-bottom: 8px;
+  margin-bottom: 16px;
 }
