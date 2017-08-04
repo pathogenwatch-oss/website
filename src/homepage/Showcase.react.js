@@ -1,6 +1,8 @@
 import React from 'react';
-import { Map, TileLayer, Marker } from 'react-leaflet';
+import { Map, TileLayer } from 'react-leaflet';
+import MarkerLayer from 'react-leaflet-marker-layer';
 import classnames from 'classnames';
+import { Link } from 'react-router-dom';
 
 import Spinner from '../components/Spinner.react';
 
@@ -13,66 +15,76 @@ const ATTRIBUTION = `
   Imagery © <a href='http://mapbox.com'>Mapbox</a>
 `;
 
-const viewport = [
-  [ 70.5, 180 ],
-  [ -56, -152 ],
-];
-
 import CONFIG from '../app/config';
+
+const Marker = React.createClass({
+
+  render() {
+    const { style, marker, selectedCollection, setCollection } = this.props;
+    const { uuid } = marker.collection;
+    return (
+      <Link
+        style={{ ...style, animationDelay: `${0.125 * marker.index}s` }}
+        to={`/collection/${uuid}`}
+        className={classnames(
+          'showcase__link', {
+            'active wgsa-sonar-effect': selectedCollection === uuid,
+            inactive: selectedCollection && selectedCollection !== uuid,
+          })
+        }
+        onMouseEnter={() => setCollection(uuid)}
+        onMouseLeave={() => setCollection(null)}
+      />
+    );
+  },
+
+});
 
 export default React.createClass({
 
   getInitialState() {
     return {
-      collections: [],
+      locations: [],
     };
   },
 
   componentWillMount() {
     getShowcaseCollections()
-      .then(collections => this.setState({ collections }));
+      .then(collections => this.setState({
+        locations: collections.reduce((memo, { locations, ...collection }) => {
+          for (const [ index, { lat, lon } ] of locations.entries()) {
+            memo.push({ lat, lon, collection, index });
+          }
+          return memo;
+        }, []),
+      }));
   },
 
-  // renderCollectionLinks() {
-  //   const { collections } = this.state;
-  //   if (collections.length) {
-  //     return collections.reduce((memo, { uuid, title, size, locations }) => {
-  //       for (const { lat, lon } of locations) {
-  //         memo.push(
-  //           <Link
-  //             key={`${uuid}_${lat}_${lon}`}
-  //             to={`/collection/${uuid}`}
-  //             className={classnames(
-  //               'showcase__link', {
-  //                 'active wgsa-sonar-effect': this.state.uuid === uuid,
-  //                 inactive: this.state.uuid && this.state.uuid !== uuid,
-  //               })
-  //             }
-  //             style={{
-  //               left: `${point.x * scale}px`,
-  //               top: `${point.y * scale}px`,
-  //               transform: 'translate(-50%, -50%)',
-  //               animationDelay: '0s',
-  //             }}
-  //             onMouseMove={() => this.setState({ uuid })}
-  //             onMouseLeave={() => this.setState({ uuid: null })}
-  //           />);
-  //       }
-  //       return memo;
-  //     }, []);
-  //   }
-  //   return <Spinner singleColour />;
-  // },
+  renderCollectionLinks() {
+    const { locations } = this.state;
+    return (
+      <MarkerLayer
+        markers={locations}
+        latitudeExtractor={_ => _.lat}
+        longitudeExtractor={_ => _.lon}
+        markerComponent={Marker}
+        propsForMarkers={{
+          selectedCollection: this.state.uuid,
+          setCollection: uuid => this.setState({ uuid }),
+        }}
+      />
+    );
+  },
 
   render() {
+    const { locations } = this.state;
     return (
       <section className="showcase">
         <div className="showcase-curvature" />
+        { locations.length === 0 && <Spinner singleColour /> }
         <Map
           animate={false}
           zoomControl={false}
-          // bounds={viewport}
-          // maxBounds={viewport}
           center={[ 35, 13.5 ]}
           zoom={2}
           minZoom={2}
@@ -84,28 +96,12 @@ export default React.createClass({
           <TileLayer
             noWrap
             attribution={ATTRIBUTION}
-            url={`https://api.mapbox.com/styles/v1/cgpsdev/cj5xxcbvt0mie2rpb1sa27ezh/tiles/256/{z}/{x}/{y}?access_token=${CONFIG.mapboxKey}`}
+            url={`https://api.mapbox.com/styles/v1/cgpsdev/cj5y18lnc0vrl2rpjce4mhjv3/tiles/256/{z}/{x}/{y}?access_token=${CONFIG.mapboxKey}`}
           />
+          {this.renderCollectionLinks()}
         </Map>
       </section>
     );
-
-    // <section className="showcase" style={{ width: 640, height: 480 }}>
-    //   <img src="/images/mercator.svg" />
-    //   {this.renderCollectionLinks()}
-    //   {/* <Link to="#" className="showcase__link showcase__link--1 wgsa-sonar-effect" />
-    //   <Link to="#" className="showcase__link showcase__link--2 showcase__link--large wgsa-sonar-effect" />
-    //   <Link to="#" className="showcase__link showcase__link--3 showcase__link--small wgsa-sonar-effect" />
-    //   <Link to="#" className="showcase__link showcase__link--4 wgsa-sonar-effect" />
-    //   <Link to="#" className="showcase__link showcase__link--5 showcase__link--large wgsa-sonar-effect" />
-    //   <Link to="#" className="showcase__link showcase__link--6 wgsa-sonar-effect" />
-    //   <Link to="#" className="showcase__link showcase__link--7 showcase__link--small wgsa-sonar-effect" /> */}
-    //   <footer>
-    //     <a href="#how-it-works" className="mdl-button mdl-button--primary title-font">
-    //       <i className="material-icons">expand_more</i> How it works
-    //     </a>
-    //   </footer>
-    // </section>
   },
 
 });
