@@ -66,22 +66,29 @@
   display: flex;
 }
 
-.wgsa-showcase-collection {
+.wgsa-showcase-tooltip-wrapper {
   position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 96px;
+  display: flex;
+  justify-content: center;
+  height: 0;
+}
+
+.wgsa-showcase-tooltip {
   padding: 16px;
-  bottom: 16px;
-  left: 50%;
-  transform: translateX(-50%);
   color: #555;
   background-color: rgba(239, 239, 239, 0.54);
   border-radius: 2px;
+  position: absolute; /* Creates "morph" fade transition */
 }
 
-.wgsa-showcase-collection > * {
+.wgsa-showcase-tooltip > * {
   margin: 0;
 }
 
-.wgsa-showcase-collection h3 {
+.wgsa-showcase-tooltip h3 {
   font-size: 20px;
   line-height: 1.2;
 }

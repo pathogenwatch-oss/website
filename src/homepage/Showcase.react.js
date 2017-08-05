@@ -47,7 +47,7 @@ const Marker = React.createClass({
 });
 
 const SelectedCollection = ({ collection }) => (
-  <div className="wgsa-showcase-collection">
+  <div className="wgsa-showcase-tooltip">
     <MarkdownHeading level="3">{collection.title}</MarkdownHeading>
     <p>{collection.size} <FormattedName fullName organismId={collection.organismId} /> genomes</p>
   </div>
@@ -140,23 +140,24 @@ export default React.createClass({
             onMoveend={({ target }) => { this.map = target; }}
             ref={map => { this.leafletMap = map; }}
             style={{ width: '100%', height: '100%' }}
-            >
-              <TileLayer
-                noWrap
-                attribution={ATTRIBUTION}
-                url={`https://api.mapbox.com/styles/v1/cgpsdev/cj5y3b7aq0rru2spdrcdnjxsm/tiles/256/{z}/{x}/{y}?access_token=${CONFIG.mapboxKey}`}
-              />
-              {this.renderCollectionLinks()}
-            </Map>
-            { locations.length === 0 && <Spinner singleColour /> }
-            <ReactCSSTransitionGroup
-              transitionName="wgsa-showcase-tooltip"
-              transitionEnterTimeout={280}
-              transitionLeaveTimeout={280}
-            >
+          >
+            <TileLayer
+              noWrap
+              attribution={ATTRIBUTION}
+              url={`https://api.mapbox.com/styles/v1/cgpsdev/cj5y3b7aq0rru2spdrcdnjxsm/tiles/256/{z}/{x}/{y}?access_token=${CONFIG.mapboxKey}`}
+            />
+            {this.renderCollectionLinks()}
+          </Map>
+          { locations.length === 0 && <Spinner singleColour /> }
+          <ReactCSSTransitionGroup
+            className="wgsa-showcase-tooltip-wrapper"
+            transitionName="wgsa-showcase-tooltip"
+            transitionEnterTimeout={280}
+            transitionLeaveTimeout={280}
+          >
             { !!uuid &&
               <SelectedCollection key={uuid} collection={collections.find(_ => _.uuid === uuid)} /> }
-            </ReactCSSTransitionGroup>
+          </ReactCSSTransitionGroup>
         </div>
       </section>
     );
