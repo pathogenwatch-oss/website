@@ -9,7 +9,7 @@ const Sort = props =>
   <SortBy stateKey={stateKey} update={updateFilter} {...props} />;
 
 export default () => (
-  <div className="wgsa-list-wrapper">
+  <div className="wgsa-list-header-container">
     <div className="wgsa-genome-list-item wgsa-genome-list-header wgsa-content-margin-right">
       <Sort sortKey="name">Name</Sort>
       <Sort sortKey="organismId">Organism</Sort>
