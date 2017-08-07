@@ -15,19 +15,29 @@ function getSort(sort) {
   return { [sortKey]: sortOrder };
 }
 
+const config = require('configuration');
+
+const maxLimit = config.maxCollectionSize.loggedIn || 500;
+
 module.exports = function (props) {
   const { user, query = {} } = props;
-  const { startIndex = 0, stopIndex = 49, sort = 'createdAt-' } = query;
+  const { skip = 0, limit = maxLimit, sort = 'createdAt-' } = query;
 
   return (
     Genome
       .find(
         Genome.getFilterQuery(props),
-        null, {
-          skip: Number(startIndex),
-          limit: Number(stopIndex) - Number(startIndex) + 1,
-          sort: getSort(sort),
-        }
+        { name: 1,
+          organismId: 1,
+          organismName: '$analysis.specieator.organismName',
+          date: 1,
+          country: 1,
+          reference: 1,
+          public: 1,
+          uploadedAt: 1,
+          _user: 1,
+        },
+        { skip: Number(skip), limit: Math.min(Number(limit), maxLimit), sort: getSort(sort) }
       )
       .lean()
       .then(genomes => genomes.map(_ => Genome.toObject(_, user)))
