@@ -32,6 +32,7 @@ export const ListView = React.createClass({
           isRowLoaded={({ index }) => !!indices[index]}
           loadMoreRows={fetch}
           rowCount={total}
+          minimumBatchSize={500}
         >
           {({ onRowsRendered, registerChild }) =>
             <AutoSizer>
@@ -78,7 +79,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetch: ({ startIndex }) => dispatch(fetchGenomes({ skip: startIndex })),
+    fetch: ({ startIndex, stopIndex }) =>
+      dispatch(fetchGenomes({ skip: startIndex, limit: stopIndex - startIndex + 1 })),
   };
 }
 
