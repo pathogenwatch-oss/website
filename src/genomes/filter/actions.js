@@ -1,7 +1,7 @@
 import { stateKey } from './index';
 
 import { actions } from '../../filter';
-import { fetchSummary } from '../actions';
+import { fetchSummary, fetchGenomes } from '../actions';
 
 import { getFilter } from './selectors';
 
@@ -14,6 +14,11 @@ export function updateFilter(query, updateQueryString = true) {
     const currentFilter = getFilter(state);
 
     const filterQuery = { ...currentFilter };
+
+    const queryKeys = Object.keys(query);
+    if (queryKeys.length === 1 && queryKeys[0] === 'sort') {
+      return dispatch(fetchGenomes());
+    }
 
     return dispatch(fetchSummary(filterQuery));
   };
