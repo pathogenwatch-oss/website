@@ -10,8 +10,6 @@ import * as actions from './actions';
 
 function entities(state = {}, { type, payload }) {
   switch (type) {
-    case actions.FETCH_GENOME_SUMMARY.ATTEMPT:
-      return {};
     case actions.FETCH_GENOMES.SUCCESS: {
       return payload.result.reduce((memo, genome) => {
         memo[genome.id] = genome;
@@ -31,8 +29,6 @@ function entities(state = {}, { type, payload }) {
 
 function indices(state = {}, { type, payload }) {
   switch (type) {
-    case actions.FETCH_GENOME_SUMMARY.ATTEMPT:
-      return {};
     case actions.FETCH_GENOME_SUMMARY.SUCCESS: {
       return payload.result.genomes.reduce((memo, genome, index) => {
         memo[index] = genome.id;
@@ -66,11 +62,10 @@ function waiting(state = false, { type }) {
 }
 
 const initialStatus = null;
-function status(state = initialStatus, { type, payload }) {
+function status(state = initialStatus, { type }) {
   switch (type) {
-    case actions.FETCH_GENOME_SUMMARY.ATTEMPT: {
+    case actions.FETCH_GENOME_SUMMARY.ATTEMPT:
       return statuses.LOADING;
-    }
     case actions.FETCH_GENOME_SUMMARY.FAILURE:
       return statuses.ERROR;
     case actions.FETCH_GENOME_SUMMARY.SUCCESS:
