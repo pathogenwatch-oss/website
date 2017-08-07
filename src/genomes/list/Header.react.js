@@ -17,6 +17,6 @@ export default () => (
       <Sort sortKey="date">Date</Sort>
       <Sort sortKey="access">Access</Sort>
     </div>
-    <span className="wgsa-card-metadata" style={{ width: 32 }}></span>
+    <span className="wgsa-card-metadata" style={{ width: 32 }} />
   </div>
 );

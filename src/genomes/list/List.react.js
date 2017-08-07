@@ -3,30 +3,21 @@ import { connect } from 'react-redux';
 
 // import Grid from '../../grid';
 import ListItem from './ListItem.react';
-// import Header from './Header.react';
+import Header from './Header.react';
 
-import { InfiniteLoader, List } from 'react-virtualized';
+import { InfiniteLoader, List, AutoSizer } from 'react-virtualized';
 
 import { getGenomes, getListIndices } from '../selectors';
 import { getTotal } from '../summary/selectors';
 
 import { fetchGenomes } from '../actions';
 
-function rowRenderer({ key, index, style }) {
-  return (
-    <div
-      key={key}
-      style={style}
-    >
-      {index}
-    </div>
-  );
-}
+const headerHeight = 25;
 
 export const ListView = React.createClass({
 
   propTypes: {
-    items: React.PropTypes.array,
+    items: React.PropTypes.object.isRequired,
   },
 
   componentWillMount() {
@@ -37,36 +28,43 @@ export const ListView = React.createClass({
     const { items, total, fetch, indices } = this.props;
 
     return (
-      <InfiniteLoader
-        isRowLoaded={({ index }) => !!indices[index]}
-        loadMoreRows={fetch}
-        rowCount={total}
-      >
-        {({ onRowsRendered, registerChild }) => (
-          <List
-            height={100}
-            onRowsRendered={onRowsRendered}
-            ref={registerChild}
-            rowCount={total}
-            rowHeight={33}
-            rowRenderer={({ key, index, style }) => <ListItem key={key} style={style} item={items[indices[index]]} />}
-            width={300}
-          />
-        )}
-      </InfiniteLoader>
+      <div className="wgsa-content-margin-left">
+        <Header />
+        <InfiniteLoader
+          isRowLoaded={({ index }) => !!indices[index]}
+          loadMoreRows={fetch}
+          rowCount={total}
+        >
+          {({ onRowsRendered, registerChild }) =>
+            <AutoSizer>
+              {({ width, height }) => (
+                <List
+                  height={height - headerHeight}
+                  onRowsRendered={onRowsRendered}
+                  ref={registerChild}
+                  rowCount={total}
+                  rowHeight={40}
+                  rowRenderer={({ key, index, style }) => {
+                    const itemId = indices[index];
+                    if (itemId) {
+                      return <ListItem key={key} style={style} item={items[itemId]} />;
+                    }
+                    return (
+                      <div key={key} style={{ ...style, width: 'calc(100% - 64px)' }} className="wgsa-genome-list-placeholder">
+                        <span
+                          style={{ width: Math.floor(Math.random() * 200) }}
+                        />
+                      </div>
+                    );
+                  }}
+                  width={width}
+                />
+              )}
+            </AutoSizer>
+          }
+        </InfiniteLoader>
+      </div>
     );
-    // return (
-    //   <Grid
-    //     className="wgsa-genome-list-view"
-    //     template={ListItem}
-    //     items={items}
-    //     columnCount={1}
-    //     rowHeight={40}
-    //     rightMargin={48}
-    //     header={<Header />}
-    //     headerHeight={25}
-    //   />
-    // );
   },
 
 });
@@ -81,7 +79,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetch: props => dispatch(fetchGenomes(props)),
+    fetch: ({ startIndex }) => dispatch(fetchGenomes({ skip: startIndex })),
   };
 }
 

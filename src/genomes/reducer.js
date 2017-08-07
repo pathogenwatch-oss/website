@@ -41,7 +41,7 @@ function indices(state = {}, { type, payload }) {
     }
     case actions.FETCH_GENOMES.SUCCESS: {
       return payload.result.reduce((memo, genome, index) => {
-        memo[index + payload.filter.startIndex] = genome.id;
+        memo[index + payload.filter.skip] = genome.id;
         return memo;
       }, { ...state });
     }

@@ -19,7 +19,6 @@ const Component = React.createClass({
   propTypes: {
     hasGenomes: React.PropTypes.bool,
     uploads: React.PropTypes.object,
-    addFiles: React.PropTypes.func.isRequired,
     isUploading: React.PropTypes.bool,
     waiting: React.PropTypes.bool,
     prefilter: React.PropTypes.string,

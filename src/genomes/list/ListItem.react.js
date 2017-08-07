@@ -13,7 +13,7 @@ const ListItem = ({ item, onClick, style }) => {
   return (
     <div
       className="wgsa-genome-list-item wgsa-genome-list-item--selectable wgsa-card--bordered"
-      style={style}
+      style={{ ...style, width: 'calc(100% - 64px)' }}
       onClick={onClick}
       title="View Details"
     >

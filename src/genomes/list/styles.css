@@ -86,3 +86,18 @@
   height: 20px;
   line-height: 20px;
 }
+
+.wgsa-genome-list-placeholder {
+  border-top: 1px solid #ccc;
+  display: flex;
+  align-items: center;
+}
+
+.wgsa-genome-list-placeholder span {
+  display: inline-block;
+  height: 1em;
+  background-color: #DDD;
+  margin-left: 8px;
+  border-radius: 2px;
+  min-width: 80px;
+}
