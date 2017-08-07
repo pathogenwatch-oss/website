@@ -2,6 +2,7 @@ import { FETCH_GENOME_SUMMARY } from '../actions';
 
 const initialState = {
   total: 0,
+  visible: 0,
   organismId: {},
   country: {},
   reference: {},

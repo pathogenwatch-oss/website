@@ -6,7 +6,7 @@ import ListItem from './ListItem.react';
 import Header from './Header.react';
 
 import { getGenomes, getListIndices } from '../selectors';
-import { getTotal } from '../summary/selectors';
+import { getVisible } from '../summary/selectors';
 
 import { fetchGenomes } from '../actions';
 
@@ -72,7 +72,7 @@ function mapStateToProps(state) {
   return {
     items: getGenomes(state),
     indices: getListIndices(state),
-    total: getTotal(state),
+    total: getVisible(state),
   };
 }
 

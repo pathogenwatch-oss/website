@@ -6,11 +6,10 @@ import ViewSwitcher from './ViewSwitcher.react';
 import SelectAll from '../selection/SelectAll.react';
 import ClearSelection from '../selection/ClearSelection.react';
 
-import { getTotalGenomes } from '../selectors';
-import { getTotal } from './selectors';
+import { getVisible, getTotal } from './selectors';
 
-const Summary = ({ numVisibleGenomes, totalGenomes }) => {
-  if (numVisibleGenomes === 0) {
+const Summary = ({ visibleGenomes, totalGenomes }) => {
+  if (visibleGenomes === 0) {
     return <FilterSummary />;
   }
 
@@ -23,7 +22,7 @@ const Summary = ({ numVisibleGenomes, totalGenomes }) => {
         <ViewSwitcher view="stats" title="Stats" />
       </div>
       <Totals
-        visible={numVisibleGenomes}
+        visible={visibleGenomes}
         total={totalGenomes}
         itemType="genome"
       />
@@ -35,7 +34,7 @@ const Summary = ({ numVisibleGenomes, totalGenomes }) => {
 
 function mapStateToProps(state) {
   return {
-    numVisibleGenomes: getTotalGenomes(state),
+    visibleGenomes: getVisible(state),
     totalGenomes: getTotal(state),
   };
 }
