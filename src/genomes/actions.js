@@ -24,6 +24,7 @@ export function fetchGenomes(options) {
       type: FETCH_GENOMES,
       payload: {
         filter,
+        options,
         promise: api.fetchGenomes({ ...filter, ...options }),
       },
     });
