@@ -42,13 +42,14 @@
   "devDependencies": {
     "eslint-config-cgps": "github:imperialcollegelondon/eslint-config-cgps",
     "mocha": "^2.1.0",
+    "nodemon": "^1.11.0",
     "rewire": "^2.1.4",
     "sinon": "^1.12.2",
     "supertest": "^1.0.1"
   },
   "nodepath": "./src",
   "nodeopts": "",
-  "startcmd": "NODE_PATH=$npm_package_nodepath node $npm_package_nodeopts",
+  "startcmd": "NODE_PATH=$npm_package_nodepath nodemon $npm_package_nodeopts",
   "testcmd": "NODE_PATH=$npm_package_nodepath NODE_ENV='testing' mocha -t 60000 --reporter spec",
   "scripts": {
     "start": "eval $npm_package_startcmd start.js --seneca.log.quiet | bunyan -o short",

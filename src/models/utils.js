@@ -54,7 +54,7 @@ function aggregateSummaryFields(model, summaryFields, props) {
     }
 
     return memo;
-  }, [ model.count(model.getPrefilterCondition(props)) ]);
+  }, [ model.count(model.getPrefilterCondition(props)), model.count(filterQuery) ]);
 
   return Promise.all(aggregations);
 }
@@ -81,8 +81,8 @@ function reduceResult(result) {
 
 exports.getSummary = function (model, summaryFields, props) {
   return aggregateSummaryFields(model, summaryFields, props)
-    .then(([ total, ...results ]) => {
-      const summary = { total };
+    .then(([ total, visible, ...results ]) => {
+      const summary = { total, visible };
       results.forEach((result, index) => {
         const { field, range } = summaryFields[index];
         if (range) {
