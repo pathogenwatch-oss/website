@@ -9,10 +9,11 @@ import { toggleAside } from './actions';
 
 const DefaultContent = ({ asideVisible, toggle, asideEnabled = false }) => (
   <nav className="wgsa-header-content mdl-navigation">
-    <NavLink to="/collections/all">Collections</NavLink>
-    <NavLink to="/genomes/all">Genomes</NavLink>
+    <NavLink to="/collections">Collections</NavLink>
+    <NavLink to="/genomes">Genomes</NavLink>
     <NavLink to="/upload">Upload</NavLink>
-    <NavLink to="/documentation">Documentation</NavLink>
+    <NavLink to="/documentation" className="sm-hide">Documentation</NavLink>
+    <NavLink to="https://gitlab.com/cgps/wgsa.net/issues" className="sm-hide" external>Feedback</NavLink>
     <button
       className="mdl-button mdl-button--icon wgsa-search-button"
       onClick={() => toggle(asideVisible)}

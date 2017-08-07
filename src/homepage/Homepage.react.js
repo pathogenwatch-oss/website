@@ -19,6 +19,7 @@ export default React.createClass({
   },
 
   render() {
+    const { deployedOrganisms } = this.props;
     return (
       <div className="wgsa-homepage">
         <section className="jumbotron">
@@ -71,54 +72,60 @@ export default React.createClass({
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td><FormattedName organismId="1280" fullName /></td>
-                  <td><i className="material-icons">check</i></td>
-                  <td><i className="material-icons">check</i></td>
-                  <td><i className="material-icons">check</i></td>
-                  <td><i className="material-icons">check</i></td>
-                  <td></td>
-                </tr>
-                {/* <tr>
-                  <td><FormattedName organismId="90370" fullName /></td>
-                  <td><i className="material-icons">check</i></td>
-                  <td><i className="material-icons">check</i></td>
-                  <td><i className="material-icons">check</i></td>
-                  <td><i className="material-icons">check</i></td>
-                  <td><small>Genotyphi</small></td>
-                </tr> */}
-                <tr>
-                  <td><FormattedName organismId="485" fullName /></td>
-                  <td><i className="material-icons">check</i></td>
-                  <td><i className="material-icons">check</i></td>
-                  <td><i className="material-icons">check</i></td>
-                  <td><i className="material-icons">check</i></td>
-                  <td><small>NG-MAST</small></td>
-                </tr>
-                {/* <tr>
-                  <td><FormattedName organismId="1313" fullName /></td>
-                  <td><i className="material-icons">check</i></td>
-                  <td><i className="material-icons">check</i></td>
-                  <td><i className="material-icons">check</i></td>
-                  <td><i className="material-icons">check</i></td>
-                  <td></td>
-                </tr> */}
-                <tr>
-                  <td><FormattedName organismId="64320" fullName /></td>
-                  <td><i className="material-icons">check</i></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                </tr>
-                <tr>
-                  <td><FormattedName organismId="1646" fullName /></td>
-                  <td><i className="material-icons">check</i></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                </tr>
+                { deployedOrganisms.has('1280') &&
+                  <tr>
+                    <td><FormattedName organismId="1280" fullName /></td>
+                    <td><i className="material-icons">check</i></td>
+                    <td><i className="material-icons">check</i></td>
+                    <td><i className="material-icons">check</i></td>
+                    <td><i className="material-icons">check</i></td>
+                    <td></td>
+                  </tr> }
+                { deployedOrganisms.has('90370') &&
+                  <tr>
+                    <td><FormattedName organismId="90370" fullName /></td>
+                    <td><i className="material-icons">check</i></td>
+                    <td><i className="material-icons">check</i></td>
+                    <td><i className="material-icons">check</i></td>
+                    <td><i className="material-icons">check</i></td>
+                    <td><small>Genotyphi</small></td>
+                  </tr> }
+                { deployedOrganisms.has('485') &&
+                  <tr>
+                    <td><FormattedName organismId="485" fullName /></td>
+                    <td><i className="material-icons">check</i></td>
+                    <td><i className="material-icons">check</i></td>
+                    <td><i className="material-icons">check</i></td>
+                    <td><i className="material-icons">check</i></td>
+                    <td><small>NG-MAST</small></td>
+                  </tr> }
+                { deployedOrganisms.has('1313') &&
+                  <tr>
+                    <td><FormattedName organismId="1313" fullName /></td>
+                    <td><i className="material-icons">check</i></td>
+                    <td><i className="material-icons">check</i></td>
+                    <td><i className="material-icons">check</i></td>
+                    <td><i className="material-icons">check</i></td>
+                    <td></td>
+                  </tr> }
+                { deployedOrganisms.has('64320') &&
+                  <tr>
+                    <td><FormattedName organismId="64320" fullName /></td>
+                    <td><i className="material-icons">check</i></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr> }
+                { deployedOrganisms.has('1646') &&
+                  <tr>
+                    <td><FormattedName organismId="1646" fullName /></td>
+                    <td><i className="material-icons">check</i></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr> }
               </tbody>
             </table>
           </div>

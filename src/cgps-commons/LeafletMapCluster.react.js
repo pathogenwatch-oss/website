@@ -30,6 +30,8 @@ class MarkerCluster extends MapLayer {
   }
 
   addMarkers(markers) {
+    this.leafletElement.eachLayer(this.removeMarker.bind(this));
+
     if (!Array.isArray(markers) || markers.length === 0) {
       return;
     }
@@ -38,8 +40,6 @@ class MarkerCluster extends MapLayer {
       Leaflet.marker(position, { id, icon, title, layerId }).
         on('click', this.props.onMarkerClick)
     );
-
-    this.leafletElement.eachLayer(this.removeMarker.bind(this));
 
     this.leafletElement.addLayers(layers);
   }
