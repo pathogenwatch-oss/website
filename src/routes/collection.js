@@ -83,4 +83,12 @@ router.get('/collection', (req, res, next) => {
     .catch(next);
 });
 
+router.get('/showcase', (req, res, next) => {
+  LOGGER.info('Received request to get showcase');
+
+  services.request('collection', 'showcase')
+    .then(response => res.json(response))
+    .catch(next);
+});
+
 module.exports = router;

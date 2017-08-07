@@ -9,7 +9,7 @@ const { maxCollectionSize = { anonymous: 0, loggedIn: 0 } } = require('configura
 
 function getMaxCollectionSize(user) {
   if (user) {
-    return maxCollectionSize.loggedIn;
+    return user.admin ? null : maxCollectionSize.loggedIn;
   }
   return maxCollectionSize.anonymous;
 }

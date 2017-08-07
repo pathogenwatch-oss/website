@@ -6,8 +6,8 @@ docker build \
   --build-arg https_proxy=$https_proxy \
   --build-arg HTTP_PROXY=$http_proxy  \
   --build-arg HTTPS_PROXY=$https_proxy \
-  -t registry.gitlab.com/cgps/wgsa-middle-end:base \
+  -t registry.gitlab.com/cgps/wgsa-middle-end/base:v3 \
   -f ./base/Dockerfile \
   ./base
 
-docker push registry.gitlab.com/cgps/wgsa-middle-end/base:v2
+docker push registry.gitlab.com/cgps/wgsa-middle-end/base:v3
