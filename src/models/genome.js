@@ -177,9 +177,9 @@ schema.statics.getFilterQuery = function (props) {
 
   if (user) {
     if (owner === 'me') {
-      findQuery._user = user;
+      findQuery._user = user._id;
     } else if (owner === 'other') {
-      findQuery._user = { $ne: user };
+      findQuery._user = { $ne: user._id };
     }
   }
 
