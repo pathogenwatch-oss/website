@@ -20,8 +20,8 @@ const ListItem = ({ item }) => {
 
 const Header = () => (
   <div className="wgsa-genome-list-item wgsa-genome-list-header wgsa-content-margin-right">
-    <h3>Date Uploaded</h3>
-    <h3>Files</h3>
+    <h3 className="wgsa-list-header-cell">Date Uploaded</h3>
+    <h3 className="wgsa-list-header-cell">Files</h3>
   </div>
 );
 

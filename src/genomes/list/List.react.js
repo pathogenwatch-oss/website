@@ -1,11 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { InfiniteLoader, List, AutoSizer } from 'react-virtualized';
 
-// import Grid from '../../grid';
 import ListItem from './ListItem.react';
 import Header from './Header.react';
-
-import { InfiniteLoader, List, AutoSizer } from 'react-virtualized';
 
 import { getGenomes, getListIndices } from '../selectors';
 import { getTotal } from '../summary/selectors';
@@ -46,11 +44,12 @@ export const ListView = React.createClass({
                   rowHeight={40}
                   rowRenderer={({ key, index, style }) => {
                     const itemId = indices[index];
+                    const styleWithMargin = { ...style, width: 'calc(100% - 80px' };
                     if (itemId) {
-                      return <ListItem key={key} style={style} item={items[itemId]} />;
+                      return <ListItem key={key} style={styleWithMargin} item={items[itemId]} />;
                     }
                     return (
-                      <div key={key} style={{ ...style, width: 'calc(100% - 64px)' }} className="wgsa-genome-list-placeholder">
+                      <div key={key} style={styleWithMargin} className="wgsa-genome-list-placeholder">
                         <span
                           style={{ width: Math.floor(Math.random() * 200) }}
                         />
