@@ -19,7 +19,7 @@ const initialState = {
     systemDataColumns.__n50,
     systemDataColumns['__no._contigs'],
     systemDataColumns['__non-ATCG'],
-    systemDataColumns.__GC_Content,
+    systemDataColumns['__%_GC_Content'],
     constants.rightSpacerColumn,
   ],
   onHeaderClick,

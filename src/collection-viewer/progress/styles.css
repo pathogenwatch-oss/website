@@ -1,11 +1,11 @@
-.wgsa-fileupload-progressbar-container {
+.wgsa-collection-progressbar-container {
   position: absolute;
   left: 0;
   right: 0;
   top: 64px;
 }
 
-.wgsa-fileupload-progressbar.mdl-progress {
+.wgsa-collection-progressbar.mdl-progress {
   width: 100%;
   z-index: -1;
 }
@@ -14,11 +14,11 @@
   font-size: 10px;
 }
 
-.wgsa-upload-progress-container {
+.wgsa-collection-progress-container {
   margin: 16px;
 }
 
-.wgsa-upload-progress-section {
+.wgsa-collection-progress-section {
   background: #fff;
   border: 1px solid rgba(0, 0, 0, 0.14);
   max-width: 640px;
@@ -37,7 +37,7 @@
   padding: 0;
 }
 
-.wgsa-upload-progress-table {
+.wgsa-collection-progress-table {
   margin: 16px 0px;
 }
 

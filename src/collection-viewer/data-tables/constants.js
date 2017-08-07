@@ -97,6 +97,7 @@ export const systemDataColumns = {
       if (!analysis.genotyphi) return null;
       return analysis.genotyphi.foundLoci;
     },
+    numeric: true,
   },
   __core_matches: {
     columnKey: '__core_matches',
@@ -105,6 +106,7 @@ export const systemDataColumns = {
         analysis.core.size :
         null;
     },
+    numeric: true,
   },
   '__%_core_families': {
     columnKey: '__%_core_families',
@@ -113,6 +115,7 @@ export const systemDataColumns = {
         analysis.core.percentMatched :
         null;
     },
+    numeric: true,
   },
   '__%_non-core': {
     columnKey: '__%_non-core',
@@ -121,45 +124,51 @@ export const systemDataColumns = {
         (100 - analysis.core.percentAssemblyMatched).toFixed(1) :
         null;
     },
+    numeric: true,
   },
   __genome_length: {
     columnKey: '__genome_length',
-    valueGetter({ metrics }) {
-      return metrics ?
-        metrics.totalNumberOfNucleotidesInDnaStrings :
+    valueGetter({ analysis }) {
+      return analysis.metrics ?
+        analysis.metrics.length :
         null;
     },
+    numeric: true,
   },
   __n50: {
     columnKey: '__n50',
-    valueGetter({ metrics }) {
-      return metrics ?
-        metrics.contigN50 :
+    valueGetter({ analysis }) {
+      return analysis.metrics ?
+        analysis.metrics.N50 :
         null;
     },
+    numeric: true,
   },
   '__no._contigs': {
     columnKey: '__no._contigs',
-    valueGetter({ metrics }) {
-      return metrics ?
-        metrics.totalNumberOfContigs :
+    valueGetter({ analysis }) {
+      return analysis.metrics ?
+        analysis.metrics.contigs :
         null;
     },
+    numeric: true,
   },
   '__non-ATCG': {
     columnKey: '__non-ATCG',
-    valueGetter({ metrics }) {
-      return metrics ?
-        metrics.totalNumberOfNsInDnaStrings :
+    valueGetter({ analysis }) {
+      return analysis.metrics ?
+        analysis.metrics.nonATCG :
         null;
     },
+    numeric: true,
   },
-  __GC_Content: {
-    columnKey: '__GC_Content',
-    valueGetter({ metrics }) {
-      return metrics && metrics.gcContent ?
-        `${metrics.gcContent}%` :
+  '__%_GC_Content': {
+    columnKey: '__%_GC_Content',
+    valueGetter({ analysis }) {
+      return analysis.metrics ?
+        analysis.metrics.gcContent :
         null;
     },
+    numeric: true,
   },
 };

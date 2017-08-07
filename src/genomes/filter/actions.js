@@ -1,10 +1,9 @@
 import { stateKey } from './index';
 
 import { actions } from '../../filter';
-import { fetchGenomes, fetchSummary } from '../actions';
+import { fetchSummary } from '../actions';
 
 import { getFilter } from './selectors';
-import { getUploadedAt } from '../uploads/selectors';
 
 export function updateFilter(query, updateQueryString = true) {
   return (dispatch, getState) => {
@@ -13,18 +12,10 @@ export function updateFilter(query, updateQueryString = true) {
 
     const state = getState();
     const currentFilter = getFilter(state);
-    const uploadedAt = getUploadedAt(state);
 
     const filterQuery = { ...currentFilter };
 
-    if (filterQuery.prefilter === 'upload') {
-      filterQuery.uploadedAt = uploadedAt;
-    }
-
-    if ('prefilter' in query) {
-      dispatch(fetchSummary(filterQuery));
-    }
-    dispatch(fetchGenomes(filterQuery));
+    return dispatch(fetchSummary(filterQuery));
   };
 }
 
@@ -33,6 +24,6 @@ export function clearFilter() {
     dispatch(actions.clear(stateKey));
 
     const filter = getFilter(getState());
-    dispatch(fetchGenomes(filter));
+    return dispatch(fetchSummary(filter));
   };
 }

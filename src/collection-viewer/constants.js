@@ -14,3 +14,12 @@ export const tableKeys = {
   snps: 'snps',
   genes: 'genes',
 };
+
+export const tableDisplayNames = {
+  [tableKeys.metadata]: 'Metadata',
+  [tableKeys.typing]: 'Typing',
+  [tableKeys.stats]: 'Stats',
+  [tableKeys.antibiotics]: 'Antibiotics',
+  [tableKeys.snps]: 'SNPs',
+  [tableKeys.genes]: 'Genes',
+};

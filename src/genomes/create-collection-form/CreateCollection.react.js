@@ -33,7 +33,7 @@ const CreateCollection = React.createClass({
     }
 
     if (organismIds.length === 1) {
-      return <CreateCollectionForm />;
+      return <CreateCollectionForm visible={this.props.visible} />;
     }
 
     return (
@@ -50,7 +50,7 @@ const CreateCollection = React.createClass({
                   { selectedGenomeSummary[id].length }
                 </span>
                 <span className="mdl-chip__text">
-                  <FormattedName organismId={id} />
+                  <FormattedName fullName organismId={id} />
                 </span>
               </button>
             ) }

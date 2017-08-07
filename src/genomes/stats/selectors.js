@@ -8,11 +8,11 @@ export const getSelectedMetric = ({ genomes }) => genomes.selectedMetric;
 export const getGenomeMetrics = createSelector(
   getGenomeList,
   genomes => genomes.reduce((memo, genome) => {
-    const { id, name, metrics } = genome;
-    if (!metrics) {
+    const { id, name, analysis } = genome;
+    if (!analysis.metrics) {
       return memo;
     }
-    return [ ...memo, { id, name, ...metrics } ];
+    return [ ...memo, { id, name, ...analysis.metrics } ];
   }, [])
 );
 

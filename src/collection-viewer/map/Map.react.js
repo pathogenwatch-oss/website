@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import WGSAMap from '../../map';
-import LeafletPieChartMarker from '../../cgps-commons/LeafletPieChartMarker.react';
+import LeafletPieChartMarker, { isMarker } from '../../cgps-commons/LeafletPieChartMarker.react';
 import MarkerControls from '../../cgps-commons/LeafletMarkerControls.react';
 
 import { getMarkerSize, getLassoPath } from '../../map/selectors';
@@ -20,20 +20,23 @@ import {
   activateFilter,
   appendToFilter,
   removeFromFilter,
+  resetFilter,
 } from '../filter/actions';
 
 import { getGenomes } from '../../collection-viewer/selectors';
 import {
-  getVisibleGenomeIds,
-  getFilteredGenomeIds,
+  getActiveGenomeIds,
+  getHighlightedIds,
   getColourGetter,
 } from '../selectors';
+
+import { filterKeys } from '../filter/constants';
 
 function mapStateToProps(state) {
   return {
     genomes: getGenomes(state),
-    visibleIds: getVisibleGenomeIds(state),
-    filteredIds: getFilteredGenomeIds(state),
+    visibleIds: getActiveGenomeIds(state),
+    filteredIds: getHighlightedIds(state),
     colourGetter: getColourGetter(state),
     positionExtractor: getPositionExtractor(state, { stateKey }),
     markerSize: getMarkerSize(state, { stateKey }),
@@ -48,9 +51,10 @@ function mapDispatchToProps(dispatch) {
     onMarkerClick: ({ id, highlighted }, event) => {
       event.stopPropagation();
       if (event.metaKey || event.ctrlKey) {
-        dispatch(highlighted ? removeFromFilter(id) : appendToFilter(id));
+        const action = highlighted ? removeFromFilter : appendToFilter;
+        dispatch(action(id, filterKeys.HIGHLIGHT));
       } else {
-        dispatch(activateFilter(id));
+        dispatch(activateFilter(id, filterKeys.HIGHLIGHT));
       }
     },
     onMarkerSizeChange:
@@ -65,10 +69,12 @@ function mergeProps(mappedState, { dispatch, ...mappedDispatch }, ownProps) {
     ...ownProps,
     ...mappedState,
     ...mappedDispatch,
-    onClick: () => {
+    onClick: ({ originalEvent }) => {
+      if (isMarker(originalEvent.target)) return;
       if (mappedState.lassoPath) {
         dispatch(filterByLassoPath(stateKey, null));
       }
+      dispatch(resetFilter(filterKeys.HIGHLIGHT));
     },
   };
 }

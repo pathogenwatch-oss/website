@@ -4,7 +4,7 @@ import {
 } from './actions';
 
 const initialState = {
-  asideVisible: false,
+  asideVisible: true,
   userDrawerVisible: false,
 };
 

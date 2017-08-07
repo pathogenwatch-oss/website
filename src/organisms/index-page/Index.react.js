@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import { FormattedName, taxIdMap } from '../index';
 import { CardMetadata } from '../../card';
 import StaticGrid from '../../components/static-grid';
+import Spinner from '../../components/Spinner.react';
 
 import { getWgsaOrganisms, getOtherOrganisms } from '../selectors';
 
@@ -14,6 +15,7 @@ import { fetchSummary } from '../actions';
 
 function mapStateToProps(state) {
   return {
+    loading: state.organisms.loading,
     wgsaOrganisms: getWgsaOrganisms(state),
     otherOrganisms: getOtherOrganisms(state),
   };
@@ -27,7 +29,12 @@ function mapDispatchToProps(dispatch) {
 
 const WGSAOrganism =
   ({ item: { organismId, totalCollections, totalGenomes } }) => (
-    <div key={organismId} className="wgsa-organism-card wgsa-card wgsa-card--bordered">
+    <Link
+      key={organismId}
+      className="wgsa-organism-card wgsa-card wgsa-card--bordered"
+      to={`/organisms/${taxIdMap.get(organismId).nickname}`}
+      title="Organism Home"
+    >
       <h3 className="wgsa-section-title">
         <FormattedName organismId={organismId} fullName />
       </h3>
@@ -41,15 +48,7 @@ const WGSAOrganism =
           {totalGenomes} Genome{totalGenomes === 1 ? '' : 's'}
         </Link>
       </CardMetadata>
-      <footer className="wgsa-card-footer">
-        <Link
-          className="mdl-button mdl-button--primary wgsa-button--text"
-          to={`/organisms/${taxIdMap.get(organismId).nickname}`}
-        >
-          Organism Home
-        </Link>
-      </footer>
-    </div>
+    </Link>
   );
 
 const OtherOrganism =
@@ -73,18 +72,19 @@ const Index = React.createClass({
   },
 
   render() {
-    const { wgsaOrganisms, otherOrganisms } = this.props;
+    const { loading, wgsaOrganisms, otherOrganisms } = this.props;
     return (
       <div className="wgsa-page">
         <h1>Organisms</h1>
-        <h2>WGSA Organisms</h2>
+        { loading && <Spinner />}
+        { !!otherOrganisms.length && <h2>WGSA Organisms</h2> }
         <StaticGrid
           density="compact"
           items={wgsaOrganisms}
           template={WGSAOrganism}
           keyProp="organismId"
         />
-        <h2>Other Organisms</h2>
+        { !!otherOrganisms.length && <h2>Other Organisms</h2> }
         <StaticGrid
           density="compact"
           items={otherOrganisms}

@@ -1,7 +1,6 @@
 import { createSelector } from 'reselect';
 
 import { getSelectedSupportedGenomesList } from '../selection/selectors';
-import { isUploading } from '../uploads/selectors';
 import { isWaiting } from '../selectors';
 
 export const getSelectedGenomeSummary = createSelector(
@@ -15,10 +14,9 @@ export const getSelectedGenomeSummary = createSelector(
 
 export const canCreateCollection = createSelector(
   isWaiting,
-  isUploading,
   getSelectedGenomeSummary,
-  (waiting, uploading, selectedSummary) =>
-    !waiting && !uploading && Object.keys(selectedSummary).length === 1
+  (waiting, selectedSummary) =>
+    !waiting && Object.keys(selectedSummary).length === 1
 );
 
 export const getCollectionSummary = createSelector(

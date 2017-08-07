@@ -14,10 +14,13 @@ const CreateCollectionForm = React.createClass({
 
   componentDidMount() {
     componentHandler.upgradeElements(Array.from(this.formElements));
+    if (this.props.visible) {
+      this.firstInput.focus();
+    }
   },
 
   componentDidUpdate(previously) {
-    if (!previously.open && this.props.open) {
+    if (!previously.visible && this.props.visible) {
       this.firstInput.focus();
     }
   },
@@ -72,7 +75,7 @@ const CreateCollectionForm = React.createClass({
           />
           <label className="mdl-textfield__label" htmlFor="collection-description">Description</label>
         </div>
-        <div ref={this.addToFormElements} className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <div ref={this.addToFormElements} className="mdl-textfield mdl-textfield--small mdl-js-textfield mdl-textfield--floating-label">
           <input
             className="mdl-textfield__input"
             type="text"

@@ -79,14 +79,14 @@ export default React.createClass({
                   <td><i className="material-icons">check</i></td>
                   <td></td>
                 </tr>
-                <tr>
+                {/* <tr>
                   <td><FormattedName organismId="90370" fullName /></td>
                   <td><i className="material-icons">check</i></td>
                   <td><i className="material-icons">check</i></td>
                   <td><i className="material-icons">check</i></td>
                   <td><i className="material-icons">check</i></td>
                   <td><small>Genotyphi</small></td>
-                </tr>
+                </tr> */}
                 <tr>
                   <td><FormattedName organismId="485" fullName /></td>
                   <td><i className="material-icons">check</i></td>
@@ -95,14 +95,14 @@ export default React.createClass({
                   <td><i className="material-icons">check</i></td>
                   <td><small>NG-MAST</small></td>
                 </tr>
-                <tr>
+                {/* <tr>
                   <td><FormattedName organismId="1313" fullName /></td>
                   <td><i className="material-icons">check</i></td>
                   <td><i className="material-icons">check</i></td>
                   <td><i className="material-icons">check</i></td>
                   <td><i className="material-icons">check</i></td>
                   <td></td>
-                </tr>
+                </tr> */}
                 <tr>
                   <td><FormattedName organismId="64320" fullName /></td>
                   <td><i className="material-icons">check</i></td>
@@ -175,25 +175,36 @@ export default React.createClass({
                 </tr>
                 <tr>
                   <td>&mdash;</td>
-                  <td>Private genomes & collections</td>
+                  <td>Persistent genomes & collections</td>
                 </tr>
-                <tr>
+                {/* <tr>
                   <td>&mdash;</td>
                   <td>Publish collections to public data</td>
-                </tr>
+                </tr> */}
               </tbody>
             </table>
           </div>
+          <footer>
+            { CONFIG.user ?
+              <Link to="/account" className="mdl-button mdl-button--primary">
+                <i className="material-icons">account_box</i> Go to Account
+              </Link> :
+              <button onClick={this.props.openMenu} className="mdl-button mdl-button--primary">
+                <i className="material-icons">account_circle</i> Sign in
+              </button> }
+          </footer>
         </section>
         <footer className="cgps-footer mdl-mega-footer">
           <div className="mdl-mega-footer--top-section">
             <div className="mdl-mega-footer--left-section">
-              <img className="cgps-supporting-logo" src="images/cgps_logo.png" />
+              <a href="http://www.pathogensurveillance.net" target="_blank" rel="noopener">
+                <img className="cgps-supporting-logo" src="images/cgps_logo.png" />
+              </a>
               <img className="cgps-supporting-logo" src="images/imperial.png" />
               <img className="cgps-supporting-logo" src="images/wellcome_trust.png" />
             </div>
             <div className="mdl-mega-footer--right-section">
-              <a className="cgps-contact-link cgps-contact-link--twitter" target="_blank" href="https://www.twitter.com/TheCGPS">
+              <a className="cgps-contact-link cgps-contact-link--twitter" target="_blank" rel="noopener" href="https://www.twitter.com/TheCGPS">
                 <i className="cgps-contact-link__icon"></i>@<span>TheCGPS</span>
               </a>
               <a className="cgps-contact-link cgps-contact-link--email" href="mailto:info@pathogensurveillance.net"><i className="material-icons cgps-contact-link__icon">mail_outline</i><span>info@pathogensurveillance.net</span></a>

@@ -11,7 +11,7 @@ export default React.createClass({
     children: React.PropTypes.node,
     visible: React.PropTypes.bool,
     isOpen: React.PropTypes.bool,
-    onClose: React.PropTypes.func,
+    onHeaderClick: React.PropTypes.func,
     disabled: React.PropTypes.bool,
   },
 
@@ -23,32 +23,15 @@ export default React.createClass({
     };
   },
 
-  getInitialState() {
-    return {
-      open: this.props.isOpen,
-    };
-  },
-
   onHeaderClick() {
     if (this.props.disabled) {
       return;
     }
-
-    if (this.props.isOpen) {
-      this.props.onClose();
-      return;
-    }
-
-    this.setState({
-      open: !this.state.open,
-    });
+    this.props.onHeaderClick();
   },
 
   isOverlayVisible() {
-    if (this.props.isOpen) {
-      return this.props.visible;
-    }
-    return this.state.open;
+    return this.props.isOpen;
   },
 
   render() {
@@ -60,13 +43,13 @@ export default React.createClass({
         transitionLeaveTimeout={280 * (this.props.isOpen ? 2 : 1)}
       >
         <Overlay isVisible={this.isOverlayVisible()} hide={this.onHeaderClick} />
-        { this.props.visible ?
+        { (this.props.visible || this.props.isOpen) ?
           <aside
             key={this.props.animationKey || 'wgsa-drawer'}
             className={classnames(
               'wgsa-drawer',
-              { 'wgsa-drawer--open': !this.props.isOpen && this.state.open,
-                'wgsa-open-drawer': this.props.isOpen,
+              { 'wgsa-drawer--open': this.props.visible && this.props.isOpen,
+                'wgsa-open-drawer': !this.props.visible && this.props.isOpen,
                 'wgsa-drawer--disabled': this.props.disabled }
             )}
           >
@@ -75,10 +58,10 @@ export default React.createClass({
               {this.props.disabled ?
                 null :
                 <button className="mdl-button mdl-button--icon">
-                  <i className="material-icons">{`expand_${this.state.open ? 'more' : 'less'}`}</i>
+                  <i className="material-icons">{`expand_${this.props.isOpen ? 'more' : 'less'}`}</i>
                 </button>}
             </header>
-            {React.cloneElement(this.props.children, { open: this.state.open })}
+            { React.cloneElement(this.props.children, { visible: this.props.isOpen }) }
           </aside>
           : null }
       </ReactCSSTransitionGroup>

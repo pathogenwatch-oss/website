@@ -1,0 +1,70 @@
+.wgsa-upload-progress {
+  display: flex;
+  justify-content: space-between;
+}
+
+.wgsa-upload-progress > :first-child {
+  width: 25%;
+}
+
+.wgsa-upload-progress > :last-child {
+  width: calc(75% - 16px);
+  position: relative;
+}
+
+.wgsa-upload-card-list {
+  display: block;
+  overflow: hidden;
+}
+
+.wgsa-upload-card-enter {
+  opacity: 0;
+}
+
+.wgsa-upload-card-enter.wgsa-upload-card-enter-active {
+  opacity: 1;
+  transition: .28s cubic-bezier(.4,0,.2,1);
+  transition-property: opacity;
+}
+
+.wgsa-upload-card-leave {
+  transform: translateX(0);
+}
+
+.wgsa-upload-card-leave.wgsa-upload-card-leave-active {
+  transform: translateX(-100%);
+  transition: .28s cubic-bezier(.4,0,.2,1);
+  transition-property: transform;
+}
+
+.wgsa-upload-progress .wgsa-card-header i {
+  position: absolute;
+  right: 0;
+  top: 0;
+  font-size: 18px;
+  color: #d11b1b;
+}
+
+.wgsa-upload-progress .wgsa-card-content {
+  height: auto;
+}
+
+.wgsa-analysis-chart {
+  width: calc(100vh - 200px);
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.wgsa-upload-actions {
+  margin-left: auto;
+}
+
+.wgsa-upload-progress li {
+  line-height: 1.25;
+  margin-bottom: 8px;
+}
+
+.wgsa-upload-progress li > ul {
+  margin-top: 8px;
+  margin-left: 16px;
+}

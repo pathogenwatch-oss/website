@@ -1,28 +1,24 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import FileDragAndDrop from '../../drag-and-drop';
 import ProgressBar from '../../progress-bar';
 import Overlay from '../../overlay';
 
 import Filter from '../filter';
 import Summary from '../summary';
 import SelectionDrawer from '../selection';
-import Instructions from '../uploads/Instructions.react';
 
 import { getGridItems } from '../selectors';
 import { getTotal } from '../summary/selectors';
 import { getStatus } from '../selectors';
 
 import { statuses } from '../constants';
-import { history } from '../../app';
 
 const Component = React.createClass({
 
   propTypes: {
     hasGenomes: React.PropTypes.bool,
     uploads: React.PropTypes.object,
-    toggleAside: React.PropTypes.func.isRequired,
     addFiles: React.PropTypes.func.isRequired,
     isUploading: React.PropTypes.bool,
     waiting: React.PropTypes.bool,
@@ -39,27 +35,12 @@ const Component = React.createClass({
   },
 
   componentDidUpdate(previous) {
-    const { prefilter, isUploading, fetch } = this.props;
+    const { prefilter, fetch } = this.props;
 
     if (previous.prefilter !== prefilter) {
       fetch();
       return;
     }
-
-    if (prefilter === 'upload') {
-      if (previous.isUploading && !isUploading) {
-        fetch();
-      }
-    }
-  },
-
-  componentWillUnmount() {
-    this.props.toggleAside(false);
-  },
-
-  upload(newFiles) {
-    this.props.addFiles(newFiles);
-    history.push('/genomes/upload');
   },
 
   renderEmptyMessage() {
@@ -67,10 +48,6 @@ const Component = React.createClass({
 
     if (total === 0) {
       switch (prefilter) {
-        case 'upload':
-          return (
-            <Instructions />
-          );
         case 'bin':
           return (
             <p className="wgsa-hub-big-message">
@@ -117,7 +94,7 @@ const Component = React.createClass({
 
   render() {
     return (
-      <FileDragAndDrop onFiles={this.upload}>
+      <div>
         { this.props.waiting && <ProgressBar indeterminate /> }
         <div className="wgsa-hipster-style wgsa-filterable-view">
           <Summary />
@@ -130,7 +107,7 @@ const Component = React.createClass({
             Loading... ⌛
           </p>
         </Overlay>
-      </FileDragAndDrop>
+      </div>
     );
   },
 

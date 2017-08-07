@@ -59,6 +59,12 @@ export default connect(mapStateToProps, mapDispatchToProps)(
         updateFilter={updateFilter}
       />
       <AsideSection
+        filterKey="sequenceType"
+        heading="Sequence Type"
+        summary={filterSummary.sequenceTypes}
+        updateFilter={updateFilter}
+      />
+      <AsideSection
         filterKey="reference"
         heading="Reference"
         summary={filterSummary.reference}

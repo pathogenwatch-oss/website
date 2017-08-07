@@ -78,7 +78,7 @@ const UserDrawer = React.createClass({
             </NavLink>
             { user && <NavLink to="/genomes/user" badge={userGenomes} icon="person">My Genomes</NavLink> }
             { user && <NavLink to="/genomes/bin" badge={binnedGenomes} icon="delete">Bin</NavLink> }
-            <NavLink to="/genomes/upload" icon="cloud_upload">Upload</NavLink>
+            <NavLink to="/upload" icon="cloud_upload">Upload</NavLink>
           </nav>
           <hr />
           <nav className="mdl-navigation">

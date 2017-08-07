@@ -1,0 +1,7 @@
+.wgsa-upload-summary {
+  /*justify-content: center;*/
+}
+
+.wgsa-upload-summary .mdl-button {
+  text-decoration: none !important;
+}

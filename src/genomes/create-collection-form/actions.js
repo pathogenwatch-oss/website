@@ -26,8 +26,8 @@ export function createCollection() {
     const genomes = getSelectedSupportedGenomesList(state);
     const metadata = getCollectionMetadata(state);
 
-    return dispatch(requestCreateCollection(organismId, genomes, metadata)).
-      catch(() => dispatch(
+    return dispatch(requestCreateCollection(organismId, genomes, metadata))
+      .catch(() => dispatch(
         showToast({
           message: 'Your collection could not be created at this time, please try again later.',
         })

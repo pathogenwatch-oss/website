@@ -4,12 +4,26 @@ import classnames from 'classnames';
 import MarkerHighlight from '../cgps-commons/MarkerHighlight.react.js';
 import PieChart from '../cgps-commons/PieChart.react.js';
 
+const className = 'leaflet-marker-icon';
+
+export function isMarker(element) {
+  return (
+    element.ownerSVGElement &&
+    element.ownerSVGElement.parentNode &&
+    element.ownerSVGElement.parentNode.classList.contains(className)
+  );
+}
+
 export default React.createClass({
 
   displayName: 'LeafletPieChartMarker',
 
   shouldComponentUpdate(next) {
     const { marker } = this.props;
+    if (marker.id.length !== next.marker.id.length) return true;
+    for (const id of marker.id) {
+      if (next.marker.id.indexOf(id) === -1) return true;
+    }
     if (marker.highlighted !== next.marker.highlighted) return true;
     if (marker.slices.size !== next.marker.slices.size) return true;
     const slices = marker.slices.entries();
@@ -32,7 +46,7 @@ export default React.createClass({
       <div
         style={style}
         className={classnames(
-          'leaflet-marker-icon',
+          className,
           { highlighted: marker.highlighted }
         )}
         onClick={event => {

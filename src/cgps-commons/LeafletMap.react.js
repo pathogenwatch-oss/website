@@ -166,9 +166,9 @@ export default React.createClass({
             this.props.className
           )
         }
-        onClick={this.onClick}
       >
         <Map
+          onClick={this.onClick}
           animate={false}
           center={center}
           zoom={zoom}
