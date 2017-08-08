@@ -28,8 +28,8 @@ function aggregateResult(message) {
 module.exports = function (message) {
   if (message.action !== 'CREATE') return Promise.resolve();
 
-  return aggregateResult(message).
-    then(() =>
+  return aggregateResult(message)
+    .then(() =>
       services.request('collection', 'fetch-progress', { uuid: message.collectionId, aggregator: true }).
         then(collection => {
           if (collection.reference) return;
