@@ -16,6 +16,8 @@ export const ListView = React.createClass({
 
   propTypes: {
     items: React.PropTypes.object.isRequired,
+    indices: React.PropTypes.object.isRequired,
+    total: React.PropTypes.number.isRequired,
   },
 
   componentWillMount() {
@@ -24,15 +26,16 @@ export const ListView = React.createClass({
 
   render() {
     const { items, total, fetch, indices } = this.props;
-
     return (
       <div className="wgsa-content-margin-left">
         <Header />
         <InfiniteLoader
-          isRowLoaded={({ index }) => !!indices[index]}
-          loadMoreRows={fetch}
+          isRowLoaded={({ index }) => indices[index]}
+          loadMoreRows={({ startIndex, stopIndex }) =>
+            fetch({ skip: startIndex, limit: stopIndex - startIndex + 1 })
+          }
           rowCount={total}
-          minimumBatchSize={500}
+          minimumBatchSize={100}
         >
           {({ onRowsRendered, registerChild }) =>
             <AutoSizer>
@@ -46,7 +49,7 @@ export const ListView = React.createClass({
                   rowRenderer={({ key, index, style }) => {
                     const itemId = indices[index];
                     const styleWithMargin = { ...style, width: 'calc(100% - 80px' };
-                    if (itemId) {
+                    if (typeof itemId === 'string') {
                       return <ListItem key={key} style={styleWithMargin} item={items[itemId]} />;
                     }
                     return (
@@ -79,8 +82,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetch: ({ startIndex, stopIndex }) =>
-      dispatch(fetchGenomes({ skip: startIndex, limit: stopIndex - startIndex + 1 })),
+    fetch: query => dispatch(fetchGenomes(query)),
   };
 }
 

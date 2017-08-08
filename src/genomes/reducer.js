@@ -35,6 +35,22 @@ function indices(state = {}, { type, payload }) {
         return memo;
       }, {});
     }
+    case actions.FETCH_GENOMES.ATTEMPT: {
+      const { skip = 0, limit = 0 } = payload.options;
+      const nextState = { ... state };
+      for (let i = skip; i < skip + limit; i++) {
+        nextState[i] = true;
+      }
+      return nextState;
+    }
+    case actions.FETCH_GENOMES.FAILURE: {
+      const { skip = 0, limit = 0 } = payload.options;
+      const nextState = { ... state };
+      for (let i = skip; i < skip + limit; i++) {
+        nextState[i] = undefined;
+      }
+      return nextState;
+    }
     case actions.FETCH_GENOMES.SUCCESS: {
       const { skip = 0 } = payload.options;
       return payload.result.reduce((memo, genome, index) => {
