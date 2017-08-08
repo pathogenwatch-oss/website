@@ -18,17 +18,23 @@ router.get('/genome/summary', (req, res, next) => {
     .catch(next);
 });
 
-router.get('/genome/stats', (req, res) => {
+router.get('/genome/stats', (req, res, next) => {
   LOGGER.info('Received request to get genome stats data');
-  LOGGER.info('Requested metric:', req.query.metric);
+  // LOGGER.info('Requested metric:', req.query.metric);
 
-  res.sendStatus(501);
+  const { user, query, sessionID } = req;
+  services.request('genome', 'fetch-stats', { user, query, sessionID })
+    .then(response => res.json(response))
+    .catch(next);
 });
 
-router.get('/genome/map', (req, res) => {
+router.get('/genome/map', (req, res, next) => {
   LOGGER.info('Received request to get genome marker data');
 
-  res.sendStatus(501);
+  const { user, query, sessionID } = req;
+  services.request('genome', 'fetch-map', { user, query, sessionID })
+    .then(response => res.json(response))
+    .catch(next);
 });
 
 router.get('/genome/:id', (req, res) => {
