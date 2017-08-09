@@ -113,7 +113,11 @@ module.exports = () =>
         return next();
       }
       const user = req.user ?
-        { name: req.user.name, email: req.user.email, photo: req.user.photo } :
+        { name: req.user.name,
+          email: req.user.email,
+          photo: req.user.photo,
+          admin: req.user.admin || undefined,
+        } :
         null;
 
       const hash = crypto.createHash('sha1');

@@ -21,6 +21,8 @@ const schema = new Schema({
   error: String,
   lastAccessedAt: Date,
   lastUpdatedAt: Date,
+  locations: Array,
+  organismId: String,
   progress: {
     completed: Date,
     errors: [ { taskType: String, name: String } ],
@@ -32,8 +34,8 @@ const schema = new Schema({
   public: { type: Boolean, default: false },
   private: { type: Boolean, default: false },
   reference: Boolean,
+  showcase: Boolean,
   size: Number,
-  organismId: String,
   status: { type: String, default: 'PENDING' },
   subtrees: [ {
     name: String,
@@ -45,7 +47,6 @@ const schema = new Schema({
   title: { type: String, index: 'text' },
   tree: String,
   uuid: { type: String, index: true },
-  showcase: Boolean,
 });
 
 setToObjectOptions(schema, (doc, collection, { user }) => {
