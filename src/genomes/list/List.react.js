@@ -8,9 +8,11 @@ import Header from './Header.react';
 import { getGenomes, getListIndices } from '../selectors';
 import { getVisible } from '../summary/selectors';
 
-import { fetchGenomes } from '../actions';
+import { fetchGenomeList } from '../actions';
 
 const headerHeight = 25;
+const rowHeight = 40;
+const offset = 64 + 56 + headerHeight;
 
 export const ListView = React.createClass({
 
@@ -24,11 +26,19 @@ export const ListView = React.createClass({
     document.title = 'WGSA | Genomes';
   },
 
+  hasScrollbar() {
+    const { total } = this.props;
+    console.log(total * rowHeight, window.innerHeight - offset)
+    return (
+      total * rowHeight >= window.innerHeight - offset
+    );
+  },
+
   render() {
     const { items, total, fetch, indices } = this.props;
     return (
       <div className="wgsa-content-margin-left">
-        <Header />
+        <Header hasScrollbar={this.hasScrollbar()} />
         <InfiniteLoader
           isRowLoaded={({ index }) => indices[index]}
           loadMoreRows={({ startIndex, stopIndex }) =>
@@ -45,7 +55,7 @@ export const ListView = React.createClass({
                   onRowsRendered={onRowsRendered}
                   ref={registerChild}
                   rowCount={total}
-                  rowHeight={40}
+                  rowHeight={rowHeight}
                   rowRenderer={({ key, index, style }) => {
                     const itemId = indices[index];
                     const styleWithMargin = { ...style, width: 'calc(100% - 80px' };
@@ -82,7 +92,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetch: query => dispatch(fetchGenomes(query)),
+    fetch: query => dispatch(fetchGenomeList(query)),
   };
 }
 

@@ -2,29 +2,19 @@ import React from 'react';
 
 import { CardMetadata } from '../../card';
 
-import { getFormattedDateString, formatDateTime } from '../../utils/Date';
+import { formatDate, formatDateTime } from '../../utils/Date';
 import { getCountryName } from '../../utils/country';
 
-function displayDate(data, isTableCell) {
-  const formattedDateString = getFormattedDateString(data);
-
-  if (isTableCell) {
+function displayDate(date) {
+  if (date) {
+    const formattedDate = formatDate(date);
     return (
-      <CardMetadata tooltip={formattedDateString}>
-        <span>{formattedDateString}</span>
+      <CardMetadata fadeOverflow tooltip={formattedDate}>
+        <span>{formattedDate}</span>
       </CardMetadata>
     );
   }
-
-  if (!data.day && !data.month && !data.year) {
-    return null;
-  }
-
-  return (
-    <CardMetadata title="Date" icon="date_range">
-      {formattedDateString}
-    </CardMetadata>
-  );
+  return <CardMetadata />;
 }
 
 function displayCountry(country, isTableCell) {
@@ -74,11 +64,11 @@ function displayAccessLevel(props) {
 }
 
 export default ({ genome, tableCell }) => {
-  const { country, ...metadata } = genome;
+  const { country, date } = genome;
   return (
     <div className="wgsa-card-content">
       {displayCountry(country, tableCell)}
-      {displayDate(metadata, tableCell)}
+      {displayDate(date, tableCell)}
       {displayAccessLevel(genome)}
     </div>
   );

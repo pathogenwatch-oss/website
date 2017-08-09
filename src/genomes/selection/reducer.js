@@ -1,5 +1,5 @@
 import * as actions from './actions';
-import { FETCH_GENOMES } from '../actions';
+import { FETCH_GENOME_LIST } from '../actions';
 
 const initialState = {
   drawerOpen: false,
@@ -41,8 +41,8 @@ export default function (state = initialState, { type, payload }) {
         ...state,
         drawerOpen: !state.drawerOpen,
       };
-    case FETCH_GENOMES.SUCCESS:
-    case FETCH_GENOMES.ERROR:
+    case FETCH_GENOME_LIST.SUCCESS:
+    case FETCH_GENOME_LIST.ERROR:
       return {
         ...state,
         drawerOpen: false,

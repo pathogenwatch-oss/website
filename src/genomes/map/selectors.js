@@ -1,26 +1,14 @@
 import { createSelector } from 'reselect';
 
-import { getGenomeList } from '../selectors';
+import { getGenomeState } from '../selectors';
 import { getLassoPath } from '../../map/selectors';
 
 import { contains } from 'leaflet-lassoselect/utils';
 
-export const getMarkers = createSelector(
-  getGenomeList,
-  genomes => genomes.reduce((markers, { id, name, latitude, longitude }) => {
-    if (latitude && longitude) {
-      markers.push({
-        id,
-        title: name,
-        position: [ latitude, longitude ],
-      });
-    }
-    return markers;
-  }, [])
-);
+export const getMarkers = state => getGenomeState(state).map;
 
 export const getGenomesInPath = createSelector(
-  getGenomeList,
+  getMarkers,
   getLassoPath,
   (genomes, path) => (
     path ?

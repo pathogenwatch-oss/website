@@ -8,7 +8,7 @@ import { stateKey } from '../filter';
 const Sort = props =>
   <SortBy stateKey={stateKey} update={updateFilter} {...props} />;
 
-export default () => (
+export default ({ hasScrollbar = true }) => (
   <div className="wgsa-list-header-container">
     <div className="wgsa-genome-list-item wgsa-genome-list-header wgsa-content-margin-right">
       <Sort sortKey="name">Name</Sort>
@@ -20,6 +20,7 @@ export default () => (
       </div>
       <span className="wgsa-card-metadata" style={{ width: 32 }} />
     </div>
-    <div style={{ overflowY: 'scroll', visibility: 'hidden' }}></div>
+    { hasScrollbar &&
+      <div style={{ overflowY: 'scroll', visibility: 'hidden' }}></div> }
   </div>
 );

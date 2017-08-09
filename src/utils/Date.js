@@ -68,6 +68,10 @@ export function formatDateTime(date) {
   return format(date, 'DD MMM YYYY HH:mm');
 }
 
+export function formatDate(date) {
+  return format(date, 'DD MMM YYYY');
+}
+
 import difference from 'date-fns/difference_in_calendar_months';
 
 const referencePoint = new Date('0001-01-01T00:00:00Z');

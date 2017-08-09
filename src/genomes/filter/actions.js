@@ -1,7 +1,7 @@
 import { stateKey } from './index';
 
 import { actions } from '../../filter';
-import { fetchSummary, fetchGenomes } from '../actions';
+import { fetchGenomeSummary, fetchGenomeList } from '../actions';
 
 import { getFilter } from './selectors';
 
@@ -17,10 +17,10 @@ export function updateFilter(query, updateQueryString = true) {
 
     const queryKeys = Object.keys(query);
     if (queryKeys.length === 1 && queryKeys[0] === 'sort') {
-      return dispatch(fetchGenomes());
+      return dispatch(fetchGenomeList());
     }
 
-    return dispatch(fetchSummary(filterQuery));
+    return dispatch(fetchGenomeSummary(filterQuery));
   };
 }
 
@@ -29,6 +29,6 @@ export function clearFilter() {
     dispatch(actions.clear(stateKey));
 
     const filter = getFilter(getState());
-    return dispatch(fetchSummary(filter));
+    return dispatch(fetchGenomeSummary(filter));
   };
 }

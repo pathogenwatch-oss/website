@@ -4,13 +4,14 @@ import summary from './summary/reducer';
 import selection from './selection/reducer';
 import selectedMetric from './stats/reducer';
 import collectionMetadata from './create-collection-form/reducer';
+import map from './map/reducer';
 
 import { CREATE_COLLECTION } from './create-collection-form';
 import * as actions from './actions';
 
 function entities(state = {}, { type, payload }) {
   switch (type) {
-    case actions.FETCH_GENOMES.SUCCESS: {
+    case actions.FETCH_GENOME_LIST.SUCCESS: {
       return payload.result.reduce((memo, genome) => {
         memo[genome.id] = genome;
         return memo;
@@ -35,7 +36,7 @@ function indices(state = {}, { type, payload }) {
         return memo;
       }, {});
     }
-    case actions.FETCH_GENOMES.ATTEMPT: {
+    case actions.FETCH_GENOME_LIST.ATTEMPT: {
       const { skip = 0, limit = 0 } = payload.options;
       const nextState = { ... state };
       for (let i = skip; i < skip + limit; i++) {
@@ -43,7 +44,7 @@ function indices(state = {}, { type, payload }) {
       }
       return nextState;
     }
-    case actions.FETCH_GENOMES.FAILURE: {
+    case actions.FETCH_GENOME_LIST.FAILURE: {
       const { skip = 0, limit = 0 } = payload.options;
       const nextState = { ... state };
       for (let i = skip; i < skip + limit; i++) {
@@ -51,7 +52,7 @@ function indices(state = {}, { type, payload }) {
       }
       return nextState;
     }
-    case actions.FETCH_GENOMES.SUCCESS: {
+    case actions.FETCH_GENOME_LIST.SUCCESS: {
       const { skip = 0 } = payload.options;
       return payload.result.reduce((memo, genome, index) => {
         memo[index + skip] = genome.id;
@@ -81,10 +82,16 @@ const initialStatus = null;
 function status(state = initialStatus, { type }) {
   switch (type) {
     case actions.FETCH_GENOME_SUMMARY.ATTEMPT:
+    case actions.FETCH_GENOME_MAP.ATTEMPT:
+    case actions.FETCH_GENOME_STATS.ATTEMPT:
       return statuses.LOADING;
     case actions.FETCH_GENOME_SUMMARY.FAILURE:
+    case actions.FETCH_GENOME_MAP.FAILURE:
+    case actions.FETCH_GENOME_STATS.FAILURE:
       return statuses.ERROR;
     case actions.FETCH_GENOME_SUMMARY.SUCCESS:
+    case actions.FETCH_GENOME_MAP.SUCCESS:
+    case actions.FETCH_GENOME_STATS.SUCCESS:
       return statuses.OK;
     default:
       return state;
@@ -100,4 +107,5 @@ export default combineReducers({
   selection,
   summary,
   waiting,
+  map,
 });
