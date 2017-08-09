@@ -1,8 +1,8 @@
+@import "showcase.css";
 @import "how-it-works.css";
 @import "organisms.css";
 @import "features.css";
 @import "footer.css";
-@import "../css/sonar.css";
 
 .homepage-section-link {
   font-size: 20px;
@@ -58,9 +58,14 @@
 /* Jumbotron */
 
 .jumbotron {
-  padding: 32px 32px 16px !important;
-  max-width: 1280px;
+  padding: 32px 32px 0 !important;
   margin: 0 auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  background: linear-gradient(to top, rgba(255,255,255,0) 0%, rgb(255,255,255) 75%);
 }
 
 .jumbotron img {
@@ -74,103 +79,5 @@
   color: #673c90;
   font-size: 24px;
   text-align: center;
-}
-
-
-
-/* Showcase */
-
-.showcase {
-  position: relative;
-  min-height: calc(36.1vw + 1px);
-  display: block;
-  @media (max-width: 1200px) {
-    width: calc(137.5%);
-    min-height: calc(50.6vw + 1px);
-    transform: translateX(-13.333%);
-  }
-}
-
-.showcase img {
-  max-width: 100%;
-  object-fit: cover;
-}
-
-.showcase__link {
-  width: calc(1.666666% + 1px); /* 32/1920 */
-  height: calc(4.444444% + 1px); /* 32/720 */
-  background-color: #673c90;
-  position: absolute !important;
-  border-radius: 999px;
-  display: block;
-  z-index: 1;
-  cursor: pointer;
-}
-
-.showcase__link--small {
-  width: calc(0.833333% + 1px); /* 16/1920 */
-  height: calc(2.222222% + 1px); /* 16/720 */
-}
-
-.showcase__link--large {
-  width: calc(2.5% + 1px); /* 48/1920 */
-  height: calc(6.666666% + 1px); /* 48/720 */
-}
-
-.showcase__link--1 {
-  left: 50%;
-  top: 50%;
-  animation-delay: 0.25s;
-}
-
-.showcase__link--2 {
-  left: 30.5%;
-  top: 32%;
-  animation-delay: 0.5s;
-}
-
-.showcase__link--3 {
-  left: 68%;
-  top: 48%;
-  animation-delay: 0.75s;
-}
-
-.showcase__link--4 {
-  left: 35%;
-  top: 60%;
-  animation-delay: 1s;
-}
-
-.showcase__link--5 {
-  left: 64%;
-  top: 47%;
-  animation-delay: 1.25s;
-}
-
-.showcase__link--6 {
-  left: 66%;
-  top: 28%;
-  animation-delay: 1.5s;
-}
-
-.showcase__link--7 {
-  left: 44%;
-  top: 26%;
-  animation-delay: 1.75s;
-}
-
-.showcase footer {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  display: flex;
-}
-
-
-.showcase .mdl-button {
-  font-size: 34px;
-  text-transform: capitalize;
-  line-height: 40px;
-  padding-bottom: 8px;
+  margin-bottom: 0;
 }

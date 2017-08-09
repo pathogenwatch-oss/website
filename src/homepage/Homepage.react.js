@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import { FormattedName } from '../organisms';
+import Showcase from './Showcase.react';
 
 import CONFIG from '../app/config';
 const { maxCollectionSize = {} } = CONFIG;
@@ -25,21 +26,7 @@ export default React.createClass({
           <img src="/images/WGSA.FINAL.svg" alt="WGSA" />
           <h1>Global AMR surveillance through Whole Genome Sequencing</h1>
         </section>
-        <section className="showcase">
-          <img src="/images/worldmap.svg" />
-          <Link to="#" className="showcase__link showcase__link--1 wgsa-sonar-effect" />
-          <Link to="#" className="showcase__link showcase__link--2 showcase__link--large wgsa-sonar-effect" />
-          <Link to="#" className="showcase__link showcase__link--3 showcase__link--small wgsa-sonar-effect" />
-          <Link to="#" className="showcase__link showcase__link--4 wgsa-sonar-effect" />
-          <Link to="#" className="showcase__link showcase__link--5 showcase__link--large wgsa-sonar-effect" />
-          <Link to="#" className="showcase__link showcase__link--6 wgsa-sonar-effect" />
-          <Link to="#" className="showcase__link showcase__link--7 showcase__link--small wgsa-sonar-effect" />
-          <footer>
-            <a href="#how-it-works" className="mdl-button mdl-button--primary title-font">
-              <i className="material-icons">expand_more</i> How it works
-            </a>
-          </footer>
-        </section>
+        <Showcase />
         <section id="how-it-works" className="alt wgsa-how-it-works">
           <div className="wgsa-homepage__content">
             <h2>How WGSA Works</h2>
