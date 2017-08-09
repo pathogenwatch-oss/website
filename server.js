@@ -21,7 +21,7 @@ const clientPath = path.join(__dirname, 'node_modules', 'wgsa-front-end');
 
 let version = '';
 if (process.env.NODE_ENV === 'production') {
-  version = require('./version.json').version;
+  version = process.env.WGSA_VERSION;
 } else {
   version = require('./package.json').version;
 }

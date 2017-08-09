@@ -84,15 +84,6 @@ schema.statics.countResults = function (collection) {
   ]);
 };
 
-schema.statics.countUniqueSubtypes = function (collection) {
-  return this.aggregate([
-    { $match: { _collection: collection._id } },
-    { $project: { 'analysis.fp.subtype': 1 } },
-    { $group: { _id: '$analysis.fp.subtype', count: { $sum: 1 } } },
-    { $project: { subtype: '$_id', _id: 0, count: 1 } },
-  ]);
-};
-
 schema.statics.findByUuid = function (uuid, projection) {
   return this.findOne({ uuid }, projection);
 };
