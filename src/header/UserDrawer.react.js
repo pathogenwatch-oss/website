@@ -51,7 +51,7 @@ const UserDrawer = React.createClass({
             <img src="/images/WGSA.Icon.FINAL.svg" />
             { config.version &&
               <small className="wgsa-version">
-                v{config.version}
+                {config.version}
               </small>
             }
           </span>
