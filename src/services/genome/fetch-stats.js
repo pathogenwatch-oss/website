@@ -17,7 +17,8 @@ module.exports = function (props) {
       })
       .lean()
       .then(
-        docs => docs.map(({ name, analysis }) => ({
+        docs => docs.map(({ _id, name, analysis }) => ({
+          id: _id,
           name,
           length: analysis.metrics.length,
           N50: analysis.metrics.N50,
