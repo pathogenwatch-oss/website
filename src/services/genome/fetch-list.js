@@ -29,7 +29,7 @@ module.exports = function (props) {
         Genome.getFilterQuery(props),
         { name: 1,
           organismId: 1,
-          organismName: '$analysis.specieator.organismName',
+          'analysis.specieator.organismName': 1,
           date: 1,
           country: 1,
           reference: 1,
