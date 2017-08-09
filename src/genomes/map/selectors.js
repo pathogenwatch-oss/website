@@ -5,7 +5,8 @@ import { getLassoPath } from '../../map/selectors';
 
 import { contains } from 'leaflet-lassoselect/utils';
 
-export const getMarkers = state => getGenomeState(state).map;
+export const getMarkers = state => getGenomeState(state).map.markers;
+export const getFilter = state => getGenomeState(state).map.filter;
 
 export const getGenomesInPath = createSelector(
   getMarkers,

@@ -2,7 +2,7 @@ import { combineReducers } from 'redux';
 
 import summary from './summary/reducer';
 import selection from './selection/reducer';
-import selectedMetric from './stats/reducer';
+import stats from './stats/reducer';
 import collectionMetadata from './create-collection-form/reducer';
 import map from './map/reducer';
 
@@ -102,7 +102,7 @@ export default combineReducers({
   entities,
   indices,
   collectionMetadata,
-  selectedMetric,
+  stats,
   status,
   selection,
   summary,

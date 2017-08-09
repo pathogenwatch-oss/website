@@ -1,20 +1,11 @@
 import { createSelector } from 'reselect';
 
-import { getGenomeList } from '../selectors';
+import { getGenomeState } from '../selectors';
 import { getSelectedGenomeIds } from '../selection/selectors';
 
-export const getSelectedMetric = ({ genomes }) => genomes.selectedMetric;
-
-export const getGenomeMetrics = createSelector(
-  getGenomeList,
-  genomes => genomes.reduce((memo, genome) => {
-    const { id, name, analysis } = genome;
-    if (!analysis.metrics) {
-      return memo;
-    }
-    return [ ...memo, { id, name, ...analysis.metrics } ];
-  }, [])
-);
+export const getSelectedMetric = state => getGenomeState(state).stats.metric;
+export const getGenomeMetrics = state => getGenomeState(state).stats.entities;
+export const getFilter = state => getGenomeState(state).stats.filter;
 
 function average(list, property) {
   return (

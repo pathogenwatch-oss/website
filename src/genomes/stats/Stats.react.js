@@ -6,9 +6,11 @@ import classnames from 'classnames';
 import { AutoSizer } from 'react-virtualized';
 
 import * as selectors from './selectors';
+import { getFilter } from '../filter/selectors';
 
 import { showGenomeDrawer } from '../../genome-drawer';
 import { showMetric } from './actions';
+import { fetchGenomeStats } from '../actions';
 
 const charts = [
   { title: 'Genome Length', metric: 'length' },
@@ -74,10 +76,18 @@ const ChartResizer = React.createClass({
 export const StatsView = React.createClass({
 
   componentDidMount() {
-    const { chartData = [] } = this.props;
+    const { chartData = [], previousFilter, filter, fetch } = this.props;
+
+    let data;
+    if (previousFilter !== filter) {
+      fetch();
+    } else {
+      data = { datasets: chartData };
+    }
+
     this.chart = new Chart(this.canvas, {
       type: 'line',
-      data: { datasets: chartData },
+      data,
       options: {
         animation: false,
         elements: {
@@ -124,7 +134,12 @@ export const StatsView = React.createClass({
   },
 
   componentDidUpdate(previous) {
-    const { chartData, onPointClick } = this.props;
+    const { chartData, onPointClick, filter, fetch } = this.props;
+
+    if (previous.filter !== filter) {
+      fetch();
+    }
+
     if (chartData !== previous.chartData) {
       this.chart.data.datasets = chartData;
       this.chart.options.onClick = getClickHandler(chartData, onPointClick);
@@ -182,12 +197,15 @@ function mapStateToProps(state) {
     stDev: selectors.getMetricStDev(state),
     range: selectors.getMetricRange(state),
     chartData: selectors.getChartData(state),
+    filter: getFilter(state),
+    previousFilter: selectors.getFilter(state),
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     onPointClick: id => dispatch(showGenomeDrawer(id)),
+    fetch: () => dispatch(fetchGenomeStats()),
   };
 }
 

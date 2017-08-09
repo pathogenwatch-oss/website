@@ -8,7 +8,7 @@ import { showGenomeDrawer } from '../../genome-drawer';
 import { selectByArea } from './actions';
 import { fetchGenomeMap } from '../actions';
 
-import { getMarkers } from './selectors';
+import { getMarkers, getFilter as getPreviousFilter } from './selectors';
 import { getLassoPath } from '../../map/selectors';
 import { getFilter } from '../filter/selectors';
 
@@ -23,7 +23,10 @@ const clusterOptions = {
 const MapView = React.createClass({
 
   componentDidMount() {
-    this.props.fetch();
+    const { filter, previousFilter, fetch } = this.props;
+    if (filter !== previousFilter) {
+      fetch();
+    }
   },
 
   componentWillReceiveProps(previous) {
@@ -58,10 +61,13 @@ const MapView = React.createClass({
 });
 
 function mapStateToProps(state, props) {
+  const filter = getFilter(state);
+  const previousFilter = getPreviousFilter(state);
   return {
+    filter,
+    previousFilter,
+    markers: filter === previousFilter ? getMarkers(state) : [],
     lassoPath: getLassoPath(state, props),
-    markers: getMarkers(state),
-    filter: getFilter(state),
   };
 }
 
