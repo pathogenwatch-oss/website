@@ -43,10 +43,10 @@ class MarkerCluster extends MapLayer {
 
     const newLayers = [];
 
-    for (const { id, latitude, longitude, title, icon = defaultIcon } of markers) {
+    for (const { id, latitude, longitude, name, icon = defaultIcon } of markers) {
       if (latitude && longitude) {
         newLayers.push(
-          Leaflet.marker([ latitude, longitude ], { id, icon, title, layerId })
+          Leaflet.marker([ latitude, longitude ], { id, icon, title: name, layerId })
             .on('click', this.props.onMarkerClick)
         );
       }
