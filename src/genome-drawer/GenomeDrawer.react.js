@@ -9,7 +9,7 @@ import Spinner from '../components/Spinner.react';
 import GenomeMetadata from './GenomeMetadata.react';
 import GenomeStats from './GenomeStats.react';
 import N50Chart from './N50Chart.react';
-import GenomeAnalysis from './GenomeAnalysis.react';
+import GenomeAnalysis from './analysis';
 
 const GenomeDrawerContent = React.createClass({
 

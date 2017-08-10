@@ -1,0 +1,15 @@
+.wgsa-mlst-profile {
+  margin: 0 auto;
+}
+
+.wgsa-mlst-profile-hit:not(:last-child)::after {
+  content: ", "
+}
+
+.wgsa-mlst-profile .material-icons {
+  color: #555;
+}
+
+.wgsa-mlst-profile [title] {
+  cursor: help;
+}
