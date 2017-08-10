@@ -10,17 +10,17 @@ const fetch = {
     return Genome.findOne(query);
   },
   collection: (_, id) =>
-    CollectionGenome.
-      findOne({ _id: id }),
+    CollectionGenome
+      .findOne({ _id: id }),
 };
 
 module.exports = ({ user, sessionID, type = 'genome', id }) => {
   if (!(type in fetch)) throw new ServiceRequestError('Invalid type');
   if (!id) throw new ServiceRequestError('Missing Id');
 
-  return fetch[type]({ user, sessionID }, id).
-    then(record => {
-      if (!record) throw new NotFoundError('Not found or access denied.');
+  return fetch[type]({ user, sessionID }, id)
+    .then(record => {
+      if (!record) throw new NotFoundError('Not found or access denied');
       return record;
     });
 };

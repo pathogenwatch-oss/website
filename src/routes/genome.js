@@ -37,10 +37,15 @@ router.get('/genome/map', (req, res, next) => {
     .catch(next);
 });
 
-router.get('/genome/:id', (req, res) => {
-  LOGGER.info('Received request to get single genome');
+router.get('/genome/:id', (req, res, next) => {
+  const { user, sessionID, params } = req;
+  const { id } = params;
 
-  res.sendStatus(501);
+  LOGGER.info(`Received request to get single genome ${id}`);
+
+  services.request('genome', 'fetch-one', { user, sessionID, id })
+    .then(response => res.json(response))
+    .catch(next);
 });
 
 router.get('/genome', (req, res, next) => {
