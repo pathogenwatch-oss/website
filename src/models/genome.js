@@ -209,4 +209,19 @@ schema.statics.getSummary = function (fields, props) {
   return getSummary(this, fields, props);
 };
 
+schema.statics.getSort = function (sort = 'createdAt-') {
+  const sortOrder = (sort.slice(-1) === '-') ? -1 : 1;
+  const sortKey = sortOrder === 1 ? sort : sort.substr(0, sort.length - 1);
+
+  if (sortKey === 'date') {
+    return { year: sortOrder, month: sortOrder, day: sortOrder };
+  }
+
+  if (sortKey === 'access') {
+    return { public: sortOrder, reference: sortOrder };
+  }
+
+  return { [sortKey]: sortOrder };
+};
+
 module.exports = mongoose.model('Genome', schema);

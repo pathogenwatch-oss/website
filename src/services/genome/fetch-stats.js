@@ -14,6 +14,8 @@ module.exports = function (props) {
         'analysis.metrics.contigs': 1,
         'analysis.metrics.nonATCG': 1,
         'analysis.metrics.gcContent': 1,
+      }, {
+        sort: Genome.getSort(props.sort),
       })
       .lean()
       .then(

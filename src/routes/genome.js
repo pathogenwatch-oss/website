@@ -20,7 +20,6 @@ router.get('/genome/summary', (req, res, next) => {
 
 router.get('/genome/stats', (req, res, next) => {
   LOGGER.info('Received request to get genome stats data');
-  // LOGGER.info('Requested metric:', req.query.metric);
 
   const { user, query, sessionID } = req;
   services.request('genome', 'fetch-stats', { user, query, sessionID })
