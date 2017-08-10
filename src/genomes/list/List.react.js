@@ -28,7 +28,6 @@ export const ListView = React.createClass({
 
   hasScrollbar() {
     const { total } = this.props;
-    console.log(total * rowHeight, window.innerHeight - offset)
     return (
       total * rowHeight >= window.innerHeight - offset
     );
