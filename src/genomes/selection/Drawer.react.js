@@ -12,15 +12,10 @@ import {
 
 import { toggleDrawer } from './actions';
 
-import { getSelectionLimit } from './utils';
-
-const SelectionTitle = ({ total, isLimitReached }) => (
-  <span
-    title={isLimitReached ? `Selection limit of ${getSelectionLimit()} genomes reached.` : null}
-  >
+const SelectionTitle = ({ total }) => (
+  <span>
     <span className="wgsa-genome-total">{total}</span>&nbsp;
     {` Genome${total === 1 ? '' : 's'} Selected`}&nbsp;
-    {isLimitReached ? `(limit is ${getSelectionLimit()}, please refine your selection)` : null}
   </span>
 );
 

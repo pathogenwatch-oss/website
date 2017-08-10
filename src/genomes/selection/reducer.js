@@ -3,11 +3,11 @@ import { FETCH_GENOME_LIST } from '../actions';
 
 const initialState = {
   drawerOpen: false,
-  entities: {},
+  genomes: {},
 };
 
-const addToSelection = (memo, { id, name, organismId, metrics }) => {
-  memo[id] = { id, name, organismId, metrics };
+const addToSelection = (memo, { id, name, organismId }) => {
+  memo[id] = { id, name, organismId };
   return memo;
 };
 
@@ -21,19 +21,19 @@ export default function (state = initialState, { type, payload }) {
     case actions.SELECT_GENOMES: {
       return {
         ...state,
-        entities: payload.genomes.reduce(addToSelection, { ...state.entities }),
+        genomes: payload.genomes.reduce(addToSelection, { ...state.genomes }),
         drawerOpen: payload.focus,
       };
     }
     case actions.UNSELECT_GENOMES:
       return {
         ...state,
-        entities: payload.genomes.reduce(removeFromSelection, { ...state.entities }),
+        genomes: payload.genomes.reduce(removeFromSelection, { ...state.genomes }),
       };
     case actions.SET_GENOME_SELECTION: {
       return {
         ...state,
-        entities: payload.genomes.reduce(addToSelection, {}),
+        genomes: payload.genomes.reduce(addToSelection, {}),
       };
     }
     case actions.SELECTION_DRAWER_OPENED:
