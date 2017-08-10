@@ -1,6 +1,6 @@
 const { request } = require('services/bus');
 
-const getTasksByOrganism = require('manifest.js');
+const { getTasksByOrganism } = require('manifest.js');
 
 const DEFAULT_TASKS_CONFIG = {
   specieator: { version: 1 },

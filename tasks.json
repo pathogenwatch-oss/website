@@ -1,11 +1,5 @@
 {
-  "all": [
-    { "task": "metrics", "version": "1" }
-  ],
-  "1280": [
-    { "task": "mlst", "version": "1" }
-  ],
   "90370": [
-    { "task": "mlst", "version": "1" }
+    { "task": "mlst", "version": "hello-world" }
   ]
 }

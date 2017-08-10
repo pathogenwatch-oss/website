@@ -1,6 +1,6 @@
 const LOGGER = require('utils/logging').createLogger('runner');
 
-const getTasksByOrganism = require('manifest.js');
+const { getTasksByOrganism } = require('manifest.js');
 const queue = require('../taskQueue');
 const Genome = require('models/genome');
 

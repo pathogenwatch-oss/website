@@ -5,11 +5,9 @@ const Analysis = require('models/analysis');
 const fastaStorage = require('wgsa-fasta-store');
 const { fastaStoragePath } = require('configuration');
 
-const LOGGER = require('utils/logging').createLogger('runner');
+const { getImageName } = require('manifest.js');
 
-function getImageName(task, version) {
-  return `registry.gitlab.com/cgps/wgsa-tasks/${task}:v${version}`;
-}
+const LOGGER = require('utils/logging').createLogger('runner');
 
 function runTask(organismId, fileId, task, version) {
   return new Promise((resolve, reject) => {
