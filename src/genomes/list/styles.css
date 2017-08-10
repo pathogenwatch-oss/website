@@ -26,6 +26,11 @@
   position: relative;
 }
 
+.wgsa-genome-list-cell {
+  padding: 0 4px;
+  box-sizing: border-box;
+}
+
 .wgsa-genome-list-item--selectable:hover *::after,
 .wgsa-genome-list-item--selectable:focus *::after {
   background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgb(238,238,238) 75%);
@@ -43,8 +48,9 @@
 .wgsa-genome-list-item .wgsa-card-content {
   display: flex;
   justify-content: center;
-  width: calc(50% - 32px);
+  width: calc(50% - 40px);
   background: none;
+  padding: 0;
 }
 
 .wgsa-genome-list-item .wgsa-card-content i:empty {
@@ -83,7 +89,6 @@
   font-size: inherit;
   font-weight: 500;
   outline: none;
-  padding: 0;
   line-height: 20px;
 }
 

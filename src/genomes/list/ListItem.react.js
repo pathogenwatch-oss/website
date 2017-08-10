@@ -17,8 +17,8 @@ const ListItem = ({ item, onClick, style }) => {
       onClick={onClick}
       title="View Details"
     >
-      <span className="wgsa-overflow-fade" title={name}>{name}</span>
-      <span className="wgsa-overflow-fade">
+      <span className="wgsa-genome-list-cell wgsa-overflow-fade" title={name}>{name}</span>
+      <span className="wgsa-genome-list-cell wgsa-overflow-fade">
         { specieator ?
             <FormattedName
               organismId={organismId}
@@ -28,7 +28,7 @@ const ListItem = ({ item, onClick, style }) => {
             <span>&nbsp;</span> }
       </span>
       <Metadata genome={item} tableCell />
-      <span onClick={e => e.stopPropagation()}>
+      <span onClick={e => e.stopPropagation()} className="wgsa-genome-list-cell">
         <AddToSelectionButton genome={item} />
       </span>
     </div>

@@ -6,7 +6,7 @@ import { updateFilter } from '../filter/actions';
 import { stateKey } from '../filter';
 
 const Sort = props =>
-  <SortBy stateKey={stateKey} update={updateFilter} {...props} />;
+  <SortBy className="wgsa-genome-list-cell" stateKey={stateKey} update={updateFilter} {...props} />;
 
 export default ({ hasScrollbar = true }) => (
   <div className="wgsa-list-header-container">
@@ -18,7 +18,9 @@ export default ({ hasScrollbar = true }) => (
         <Sort sortKey="date">Date</Sort>
         <Sort sortKey="access">Access</Sort>
       </div>
-      <span className="wgsa-card-metadata" style={{ width: 32 }} />
+      <div className="wgsa-genome-list-cell">
+        <div style={{ width: 32 }} />
+      </div>
     </div>
     { hasScrollbar &&
       <div style={{ overflowY: 'scroll', visibility: 'hidden' }}></div> }
