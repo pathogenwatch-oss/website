@@ -13,7 +13,7 @@ export function showGenomeDrawer(id) {
   };
 }
 
-export const CLOSE_DRAWER = createAsyncConstants('CLOSE_DRAWER');
+export const CLOSE_DRAWER = 'CLOSE_DRAWER';
 
 export function closeDrawer() {
   return {

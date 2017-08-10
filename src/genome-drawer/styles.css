@@ -2,6 +2,12 @@
   overflow: hidden;
 }
 
+.wgsa-drawer-loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .wgsa-genome-drawer-content .mdl-tabs__tab-bar {
   justify-content: flex-start;
 }

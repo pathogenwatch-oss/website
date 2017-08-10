@@ -4,6 +4,7 @@ import Drawer from '../drawer';
 import RemoveButton from '../genomes/card/RemoveButton.react';
 import AddToSelectionButton from '../genomes/card/AddToSelectionButton.react';
 import DownloadLink from '../downloads/GenomeFileLink.react';
+import Spinner from '../components/Spinner.react';
 
 import GenomeMetadata from './GenomeMetadata.react';
 import GenomeStats from './GenomeStats.react';
@@ -53,8 +54,16 @@ const GenomeDrawerContent = React.createClass({
 
 });
 
-export default ({ genome, close, ...props }) => (
-  <Drawer {...props} isOpen={!!genome} onHeaderClick={close} animationKey={genome && genome.name}>
-    <GenomeDrawerContent genome={genome} />
-  </Drawer>
-);
+export default ({ genome, loading, close }) => {
+  const isOpen = !!loading || !!genome;
+  const title = genome ? genome.name : null;
+  return (
+    <Drawer title={title} isOpen={isOpen} onHeaderClick={close} animationKey={genome && genome.name}>
+      { loading ?
+        <div className="wgsa-drawer__content wgsa-drawer-loader">
+          <Spinner />
+        </div> :
+        <GenomeDrawerContent genome={genome} /> }
+    </Drawer>
+  );
+};
