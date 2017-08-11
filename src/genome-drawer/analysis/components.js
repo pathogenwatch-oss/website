@@ -7,6 +7,20 @@ function hasValue(value) {
   );
 }
 
+function formatValue(value) {
+  if (React.isValidElement(value)) return value;
+
+  if (Array.isArray(value)) {
+    return <em>Array</em>;
+  }
+
+  if (typeof value === 'object') {
+    return <em>Object</em>;
+  }
+
+  return value;
+}
+
 export const Metadata = ({ title, large = false, label, children }) => (
   hasValue(children) ?
   <span
@@ -17,7 +31,7 @@ export const Metadata = ({ title, large = false, label, children }) => (
     title={title}
   >
     <dt className="wgsa-hub-stats-heading">{label}</dt>
-    <dd className="wgsa-hub-stats-value">{children}</dd>
+    <dd className="wgsa-hub-stats-value">{formatValue(children)}</dd>
   </span> :
   null
 );
@@ -26,7 +40,7 @@ export const Section = ({ heading, version, children }) => (
   <div className="wgsa-analysis-section">
     <h2 className="wgsa-analysis-view-title">
       {heading}
-      <span className="wgsa-analysis-version">v{version}</span>
+      <span className="wgsa-analysis-version">{version}</span>
     </h2>
     {children}
   </div>

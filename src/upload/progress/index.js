@@ -45,8 +45,10 @@ const Component = React.createClass({
 
 });
 
-function mapStateToProps(state) {
+function mapStateToProps(state, { match }) {
+  const { uploadedAt } = match.params;
   return {
+    uploadedAt,
     isUploading: isUploading(state),
     hasFiles: getUploadedFileList(state).length > 0,
   };

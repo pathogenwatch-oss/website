@@ -12,6 +12,10 @@
   margin-right: 255px;
 }
 
+.wgsa-has-aside ~ .mdl-layout__content ~ .wgsa-drawer-container--expanded {
+  margin-right: 0;
+}
+
 @media (max-width: 1024px) {
   .wgsa-has-aside .sm-hide {
     display: none;

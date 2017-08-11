@@ -74,6 +74,8 @@
   line-height: 1.1;
   margin: 0;
   text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .wgsa-hub-stats-value--large {

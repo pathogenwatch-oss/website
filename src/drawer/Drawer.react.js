@@ -23,11 +23,18 @@ export default React.createClass({
     };
   },
 
+  getInitialState() {
+    return {
+      expanded: false,
+    };
+  },
+
   onHeaderClick() {
     if (this.props.disabled) {
       return;
     }
-    this.props.onHeaderClick();
+    // this.props.onHeaderClick();
+    this.setState({ expanded: !this.state.expanded });
   },
 
   isOverlayVisible() {
@@ -37,7 +44,10 @@ export default React.createClass({
   render() {
     return (
       <ReactCSSTransitionGroup
-        className="wgsa-drawer-container"
+        className={classnames(
+          'wgsa-drawer-container',
+          { 'wgsa-drawer-container--expanded': this.state.expanded }
+        )}
         transitionName={`wgsa${this.props.isOpen ? '-open-' : '-'}drawer`}
         transitionEnterTimeout={280 * (this.props.isOpen ? 2 : 1)}
         transitionLeaveTimeout={280 * (this.props.isOpen ? 2 : 1)}
