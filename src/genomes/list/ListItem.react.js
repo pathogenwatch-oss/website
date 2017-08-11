@@ -37,7 +37,7 @@ const ListItem = ({ item, onClick, style }) => {
 
 function mapDispatchToProps(dispatch, { item }) {
   return {
-    onClick: () => dispatch(showGenomeDrawer(item.id)),
+    onClick: () => dispatch(showGenomeDrawer(item)),
   };
 }
 

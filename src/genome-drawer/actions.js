@@ -4,10 +4,11 @@ import { fetchGenome } from './api';
 
 export const SHOW_GENOME_DETAILS = createAsyncConstants('SHOW_GENOME_DETAILS');
 
-export function showGenomeDrawer(id) {
+export function showGenomeDrawer({ id, name }) {
   return {
     type: SHOW_GENOME_DETAILS,
     payload: {
+      name,
       promise: fetchGenome(id),
     },
   };

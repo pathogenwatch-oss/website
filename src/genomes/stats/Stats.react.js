@@ -45,7 +45,7 @@ function getClickHandler(chartData, onPointClick) {
   return (event, [ item ]) => {
     if (item) {
       const original = chartData[item._datasetIndex].data[item._index];
-      onPointClick(original.id);
+      onPointClick(original);
     }
   };
 }
@@ -204,7 +204,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    onPointClick: id => dispatch(showGenomeDrawer(id)),
+    onPointClick: item => dispatch(showGenomeDrawer(item)),
     fetch: () => dispatch(fetchGenomeStats()),
   };
 }

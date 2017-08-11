@@ -20,6 +20,7 @@ export default React.createClass({
       visible: false,
       isOpen: false,
       disabled: false,
+      expandable: false,
     };
   },
 
@@ -33,7 +34,15 @@ export default React.createClass({
     if (this.props.disabled) {
       return;
     }
-    // this.props.onHeaderClick();
+    if (this.state.expanded) {
+      this.setState({ expanded: false });
+      return;
+    }
+    this.props.onHeaderClick();
+  },
+
+  toggleExpanded(e) {
+    e.stopPropagation();
     this.setState({ expanded: !this.state.expanded });
   },
 
@@ -46,7 +55,7 @@ export default React.createClass({
       <ReactCSSTransitionGroup
         className={classnames(
           'wgsa-drawer-container',
-          { 'wgsa-drawer-container--expanded': this.state.expanded }
+          { 'wgsa-drawer-container--expanded': this.props.isOpen && this.state.expanded }
         )}
         transitionName={`wgsa${this.props.isOpen ? '-open-' : '-'}drawer`}
         transitionEnterTimeout={280 * (this.props.isOpen ? 2 : 1)}
@@ -65,11 +74,14 @@ export default React.createClass({
           >
             <header className="wgsa-drawer__header" onClick={this.onHeaderClick}>
               {this.props.title}
-              {this.props.disabled ?
-                null :
-                <button className="mdl-button mdl-button--icon">
-                  <i className="material-icons">{`expand_${this.props.isOpen ? 'more' : 'less'}`}</i>
-                </button>}
+              { !this.props.disabled && this.props.expandable &&
+                <button
+                  className="mdl-button mdl-button--icon"
+                  title={this.state.expanded ? 'Dock' : 'Fullscreen'}
+                  onClick={this.toggleExpanded}
+                >
+                  <i className="material-icons">{this.state.expanded ? 'fullscreen_exit' : 'fullscreen'}</i>
+                </button> }
             </header>
             { React.cloneElement(this.props.children, { visible: this.props.isOpen }) }
           </aside>

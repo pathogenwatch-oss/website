@@ -12,14 +12,13 @@
   height: 100%;
 }
 
-
 .wgsa-genome-drawer-content .mdl-tabs__tab-bar {
   justify-content: flex-start;
 }
 
 .wgsa-genome-drawer-content .mdl-tabs__panel {
   padding: 16px 0 0;
-  height: calc(100% - 116px);
+  height: calc(100% - 64px);
   overflow-y: auto;
 }
 
@@ -33,8 +32,12 @@
   margin-bottom: 16px;
 }
 
+.wgsa-genome-drawer-content .wgsa-hub-stats-section--small {
+  height: 60px;
+}
+
 .wgsa-genome-drawer-content .wgsa-hub-stats-heading {
-  margin-bottom: 12px;
+  margin-bottom: 8px;
 }
 
 .wgsa-genome-drawer-content .wgsa-drawer-actions {

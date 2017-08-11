@@ -1,7 +1,7 @@
 .wgsa-drawer-container {
   bottom: 0;
   height: 0;
-  right: 128px;
+  right: 96px;
   position: fixed;
   min-width: 540px;
   z-index: 3;
@@ -114,7 +114,7 @@
 }
 
 .wgsa-drawer__content {
-  min-height: 400px;
+  height: 400px;
 }
 
 .wgsa-drawer-actions {

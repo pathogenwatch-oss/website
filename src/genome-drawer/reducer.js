@@ -1,16 +1,18 @@
 import { SHOW_GENOME_DETAILS, CLOSE_DRAWER } from './actions';
 
-const initialState = { genome: null, loading: false, error: false };
+const initialState = { name: null, genome: null, loading: false, error: false };
 
 export default function (state = initialState, { type, payload }) {
   switch (type) {
     case SHOW_GENOME_DETAILS.ATTEMPT:
       return {
+        name: payload.name,
         genome: null,
         loading: true,
       };
     case SHOW_GENOME_DETAILS.SUCCESS:
       return {
+        ...state,
         genome: payload.result,
         loading: false,
       };

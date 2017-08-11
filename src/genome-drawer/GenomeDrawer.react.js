@@ -54,11 +54,10 @@ const GenomeDrawerContent = React.createClass({
 
 });
 
-export default ({ genome, loading, close }) => {
+export default ({ name, genome, loading, close }) => {
   const isOpen = !!loading || !!genome;
-  const title = genome ? genome.name : null;
   return (
-    <Drawer title={title} isOpen={isOpen} onHeaderClick={close} animationKey={genome && genome.name}>
+    <Drawer expandable title={name} isOpen={isOpen} onHeaderClick={close} animationKey={genome && genome.name}>
       { loading ?
         <div className="wgsa-drawer__content wgsa-drawer-loader">
           <Spinner />
