@@ -3,9 +3,11 @@
     { "task": "metrics", "version": "v1" }
   ],
   "1280": [
-    { "task": "mlst", "version": "v1" }
+    { "task": "mlst", "version": "v1" },
+    { "task": "paarsnp", "version": "v1" }
   ],
   "90370": [
-    { "task": "mlst", "version": "v1" }
+    { "task": "mlst", "version": "v1" },
+    { "task": "paarsnp", "version": "v1" }
   ]
 }

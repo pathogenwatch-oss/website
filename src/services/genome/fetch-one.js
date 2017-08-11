@@ -3,11 +3,13 @@ const CollectionGenome = require('models/collectionGenome');
 const { ServiceRequestError, NotFoundError } = require('utils/errors');
 
 const fetch = {
-  genome: (credentials, id) => {
-    const query = Object.assign(
-      {}, Genome.getPrefilterCondition(credentials), { _id: id }
-    );
-    return Genome.findOne(query);
+  genome: ({ user, sessionID }, _id) => {
+    const $or = [ { public: true } ];
+
+    if (user) $or.push({ _user: user._id });
+    else if (sessionID) $or.push({ _session: sessionID });
+
+    return Genome.findOne({ _id, $or });
   },
   collection: (_, id) =>
     CollectionGenome

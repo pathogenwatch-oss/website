@@ -103,10 +103,19 @@ router.post('/genome/:id', (req, res, next) => {
     .catch(next);
 });
 
-router.get('/uploads', (req, res, next) => {
+router.get('/upload/:uploadedAt', (req, res, next) => {
   LOGGER.info('Received request to get upload sessions');
   const { user, sessionID } = req;
-  services.request('genome', 'fetch-uploads', { user, sessionID })
+  const { uploadedAt } = req.params;
+  services.request('genome', 'fetch-upload', { user, sessionID, query: { uploadedAt } })
+    .then(response => res.json(response))
+    .catch(next);
+});
+
+router.get('/upload', (req, res, next) => {
+  LOGGER.info('Received request to get upload sessions');
+  const { user, sessionID } = req;
+  services.request('genome', 'fetch-upload-list', { user, sessionID })
     .then(response => res.json(response))
     .catch(next);
 });
