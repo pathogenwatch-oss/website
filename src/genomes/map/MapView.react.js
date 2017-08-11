@@ -75,7 +75,7 @@ function mapDispatchToProps(dispatch, { stateKey }) {
   return {
     onLassoPathChange: path => dispatch(selectByArea(stateKey, path)),
     onClick: () => dispatch(setSelection([])),
-    onMarkerClick: marker => dispatch(showGenomeDrawer(marker)),
+    onMarkerClick: marker => dispatch(showGenomeDrawer(marker.id, marker.title)),
     fetch: () => dispatch(fetchGenomeMap()),
   };
 }
