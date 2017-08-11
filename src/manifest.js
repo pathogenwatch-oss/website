@@ -1,7 +1,7 @@
 const tasks = require('../tasks.json');
 
 function getImageName(task, version) {
-  return `registry.gitlab.com/cgps/${task}:${version}`;
+  return `registry.gitlab.com/cgps/wgsa-tasks/${task}:${version}`;
 }
 
 module.exports.getImageName = getImageName;
