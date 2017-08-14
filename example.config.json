@@ -71,6 +71,10 @@
     "specieator": {
       "version": "1"
     },
-    "retries": 3
+    "retries": 3,
+    "registry": {
+			"username": "",
+			"password": ""
+		}
   }
 }
