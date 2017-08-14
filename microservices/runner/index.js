@@ -3,6 +3,7 @@ const LOGGER = require('utils/logging').createLogger('runner');
 const argv = require('named-argv');
 
 const { request } = require('services');
+const pull = require('services/tasks/pull');
 const taskQueue = require('services/taskQueue');
 
 const { queue, workers = 1 } = argv.opts;
@@ -16,7 +17,7 @@ taskQueue.setMaxWorkers(workers);
 
 const { tasks, specieator } = taskQueue.queues;
 
-module.exports = function () {
+function subscribeToQueues() {
   if (!queue || queue === 'tasks') {
     taskQueue.dequeue(tasks, ({ genomeId, organismId, fileId, task, version, clientId }) =>
       request('tasks', 'run', { organismId, fileId, task, version })
@@ -39,4 +40,13 @@ module.exports = function () {
         })
     );
   }
+}
+
+module.exports = function () {
+  pull({ queue })
+    .catch(err => {
+      LOGGER.error(err);
+      process.exit(1);
+    })
+    .then(subscribeToQueues);
 };
