@@ -83,7 +83,7 @@ export const isRetryable = createSelector(
   failures => !!failures.length
 );
 
-export const getSummary = createSelector(
+export const getFileSummary = createSelector(
   getUploadedFileList,
   files => {
     const summary = {};
@@ -101,19 +101,30 @@ export const getSummary = createSelector(
   }
 );
 
-function getSequenceTypeSummary(analyses) {
-  const summary = {};
-  let mlstTotal = 0;
+function getAnalysisBreakdown(analyses) {
+  const mlst = { total: 0, sts: {} };
+  const paarsnp = { label: 'PAARSNP', total: 0 };
+
   for (const analysis of analyses) {
     if (analysis.mlst) {
       const { st } = analysis.mlst;
-      summary[st] = (summary[st] || 0) + 1;
-      mlstTotal++;
+      mlst.sts[st] = (mlst.sts[st] || 0) + 1;
+      mlst.total++;
+    }
+    if (analysis.paarsnp) {
+      paarsnp.total++;
     }
   }
+
   return {
-    mlstTotal,
-    sequenceTypes: Object.keys(summary).map(st => ({ label: `ST ${st}`, total: summary[st] })),
+    mlst: {
+      label: 'MLST',
+      total: mlst.total,
+      sequenceTypes: Object.keys(mlst.sts).map(st => ({
+        label: `ST ${st}`, total: mlst.sts[st],
+      })),
+    },
+    paarsnp,
   };
 }
 
@@ -143,7 +154,7 @@ export const getAnalysisSummary = createSelector(
         key: organismId,
         label: getOrganismName(organismId, organismAnalyses[0].specieator.organismName),
         total: organismAnalyses.length,
-        ...getSequenceTypeSummary(organismAnalyses),
+        ...getAnalysisBreakdown(organismAnalyses),
       });
     }
     if (pending) result.push({ key: 'pending', label: 'Pending', total: pending });
@@ -158,7 +169,7 @@ export const getChartData = createSelector(
     const stData = { label: 'Sequence Type', data: [], backgroundColor: [], labels: [], parents: [] };
 
     let organismIndex = 0;
-    for (const { label, total, sequenceTypes = [], key } of data) {
+    for (const { label, total, key, mlst = {} } of data) {
       organisms.data.push(total);
 
       const colour = getColour(label);
@@ -167,6 +178,7 @@ export const getChartData = createSelector(
       organisms.organismIds.push(key);
 
       let sum = total;
+      const { sequenceTypes = [] } = mlst;
       for (const st of sequenceTypes) {
         stData.data.push(st.total);
         stData.backgroundColor.push(getLightColour(colour));

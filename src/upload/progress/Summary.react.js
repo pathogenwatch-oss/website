@@ -62,7 +62,7 @@ const Component = React.createClass({
 
 function mapStateToProps(state) {
   return {
-    summary: upload.getSummary(state),
+    summary: upload.getFileSummary(state),
     isSpecieationComplete: upload.isSpecieationComplete(state),
     selectedOrganism: upload.getSelectedOrganism(state),
   };
