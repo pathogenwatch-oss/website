@@ -9,5 +9,9 @@
   "90370": [
     { "task": "mlst", "version": "v1" },
     { "task": "paarsnp", "version": "v1" }
+  ],
+  "1313": [
+    { "task": "mlst", "version": "v1" },
+    { "task": "paarsnp", "version": "v1" }
   ]
 }

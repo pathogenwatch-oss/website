@@ -184,4 +184,40 @@ schema.statics.alias = function (uuid, alias) {
   return this.update({ uuid }, { $set: { alias } });
 };
 
+schema.statics.getFilterQuery = function (props) {
+  const { user, query = {} } = props;
+  const { searchText, organismId, owner, startDate, endDate } = query;
+
+  const findQuery = this.getPrefilterCondition(props);
+
+  if (searchText) {
+    findQuery.$text = { $search: searchText };
+  }
+
+  if (organismId) {
+    findQuery.organismId = organismId;
+  }
+
+  if (user) {
+    if (owner === 'me') {
+      findQuery._user = user;
+    } else if (owner === 'other') {
+      findQuery._user = { $ne: user };
+    }
+  }
+
+  if (startDate) {
+    findQuery.createdAt = { $gte: new Date(startDate) };
+  }
+
+  if (endDate) {
+    findQuery.createdAt = Object.assign(
+      findQuery.createdAt || {},
+      { $lte: new Date(endDate) }
+    );
+  }
+
+  return findQuery;
+};
+
 module.exports = mongoose.model('Collection', schema);
