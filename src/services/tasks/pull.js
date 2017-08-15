@@ -1,5 +1,3 @@
-const docker = require('docker-remote-api');
-
 const LOGGER = require('utils/logging').createLogger('runner');
 
 const { getImages, getImageName, getSpecieatorTask } = require('manifest.js');
