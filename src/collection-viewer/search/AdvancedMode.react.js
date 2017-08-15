@@ -95,6 +95,19 @@ const AdvancedMode = React.createClass({
     );
   },
 
+  getColumnHeading(sections) {
+    if (sections.length) {
+      return (
+        <h2 className="wgsa-search-dropdown__heading">
+          Choose Column &ndash; Use arrow keys to navigate
+        </h2>
+      );
+    }
+    return (
+      <span>(No matching column)</span>
+    );
+  },
+
   render() {
     const { sections, activeItem, category } = this.props;
     const { selectItem, removeCategory } = this.props;
@@ -110,7 +123,7 @@ const AdvancedMode = React.createClass({
                 <i className="material-icons">cancel</i>
               </button>
             </span> :
-            <h2 className="wgsa-search-dropdown__heading">Choose Column &ndash; Use arrow keys to navigate</h2>
+            this.getColumnHeading(sections)
           }
         </section>
         <div className="wgsa-search-dropdown__values">

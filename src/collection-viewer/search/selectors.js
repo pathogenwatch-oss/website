@@ -141,6 +141,7 @@ export const getItemAtCursor = createSelector(
   getSearchItems,
   getSearchCursor,
   (sections, cursor) => {
+    if (sections.length === 0) return null;
     let i = cursor;
     for (const { items } of sections) {
       if (i >= items.length) { i -= items.length; continue; }
