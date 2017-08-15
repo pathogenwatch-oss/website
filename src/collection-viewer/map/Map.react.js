@@ -92,14 +92,14 @@ export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(
       onLassoPathChange={props.onLassoPathChange}
       onMarkerClick={props.onMarkerClick}
     >
-      {/* {props.children}
+      {props.children}
       <MarkerControls
         className={buttonClassname}
         activeClassName={activeButtonClassname}
         markerSize={props.markerSize}
         onMarkerSizeChange={props.onMarkerSizeChange}
         onViewByCountryChange={props.onViewByCountryChange}
-      /> */}
+      />
     </WGSAMap>
   )
 );

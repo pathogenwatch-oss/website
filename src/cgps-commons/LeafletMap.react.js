@@ -47,7 +47,7 @@ export default React.createClass({
   },
 
   componentDidUpdate(prevProps) {
-    if (prevProps.markers === null && this.props.markers) {
+    if (prevProps.markers.length === 0 && this.props.markers) {
       this.refitMapBounds();
     }
   },
