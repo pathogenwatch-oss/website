@@ -26,7 +26,12 @@ function pullImage(name) {
   return new Promise((resolve, reject) => {
     LOGGER.info(`Pulling image ${name}`);
     const p = dockerPull(name, options, err => (err ? reject(err) : resolve()));
-    p.on('progress', () => LOGGER.info(`${name} pulled %d new layers and %d/%d bytes`, p.layers, p.transferred, p.length));
+    p.on('progress', () => {
+      if (p._layers !== p.layers) {
+        LOGGER.info(`${name} pulled %d new layers and %d/%d bytes`, p.layers, p.transferred, p.length)
+      }
+      p._layers = p.layers;
+    });
   });
 }
 
