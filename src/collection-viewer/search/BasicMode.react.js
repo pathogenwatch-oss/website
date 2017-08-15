@@ -5,7 +5,7 @@ import Switch from '../../components/switch';
 
 import { isExactMatch } from './selectors';
 
-import { toggleSearchExactMatch } from './actions';
+import { searchExactMatchToggled } from './thunks';
 
 const BasicMode = React.createClass({
 
@@ -34,7 +34,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    toggleExactMatch: () => dispatch(toggleSearchExactMatch()),
+    toggleExactMatch: () => dispatch(searchExactMatchToggled()),
   };
 }
 

@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 
 import { getViewer, getGenomeList } from '../selectors';
-import { getTables } from '../table/selectors';
+import { getTables, getActiveDataTable } from '../table/selectors';
 
 import { tableDisplayNames } from '../constants';
 import { modes } from './constants';
@@ -13,6 +13,7 @@ import {
   getTextMatcher,
   sortFns,
 } from './utils';
+import { getColumnLabel } from '../table/utils';
 
 export const getSearch = state => getViewer(state).search;
 
@@ -149,5 +150,22 @@ export const getItemAtCursor = createSelector(
     }
     const { items } = sections[sections.length - 1];
     return items[items.length - 1] || null;
+  }
+);
+
+export const getSearchPlaceholder = createSelector(
+  getSearch,
+  getActiveDataTable,
+  ({ advanced, category, visible }, table) => {
+    if (!advanced) {
+      return `FILTER ${getColumnLabel(table.activeColumn)}`;
+    }
+    if (category) {
+      return `FILTER ${category.label}`;
+    }
+    if (visible) {
+      return 'FILTER COLUMNS';
+    }
+    return 'SEARCH';
   }
 );

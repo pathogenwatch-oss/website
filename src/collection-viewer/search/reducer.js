@@ -38,6 +38,15 @@ function addToRecent(state, terms) {
   return next;
 }
 
+function applyBasicSearchTerm(state, term) {
+  if (!term) return state;
+  return {
+    ...state,
+    intersections: [ [ term ] ],
+    text: term.value.label,
+  };
+}
+
 export default function (state = initialState, { type, payload }) {
   switch (type) {
     case SEARCH_TOGGLE_MODE:
@@ -48,7 +57,7 @@ export default function (state = initialState, { type, payload }) {
       };
     case SEARCH_TOGGLE_EXACT_MATCH:
       return {
-        ...state,
+        ...applyBasicSearchTerm(state, payload),
         exact: !state.exact,
       };
     case SEARCH_DROPDOWN_VISIBILITY:
@@ -71,11 +80,7 @@ export default function (state = initialState, { type, payload }) {
       };
     case SEARCH_TERM_ADDED: {
       if (!state.advanced) {
-        return {
-          ...state,
-          intersections: [ [ payload ] ],
-          text: payload.value.label,
-        };
+        return applyBasicSearchTerm(state, payload);
       }
       const { currentIntersection } = state;
       const intersections = Array.from(state.intersections);

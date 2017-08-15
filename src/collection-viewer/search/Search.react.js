@@ -7,7 +7,7 @@ import classnames from 'classnames';
 import SearchDropdown from './SearchDropdown.react';
 import FilterStatus from '../filter/FilterStatus.react';
 
-import { getSearch } from './selectors';
+import { getSearch, getSearchPlaceholder } from './selectors';
 
 import {
   changeDropdownVisibility,
@@ -32,24 +32,10 @@ const Search = React.createClass({
     const { search } = this.props;
     if (!search.visible) return;
     if (previous.search.category !== search.category ||
-        previous.search.terms !== search.terms) {
+        previous.search.terms !== search.terms ||
+        previous.search.advanced !== search.advanced) {
       this.refs.input.focus();
     }
-  },
-
-  getPlaceholder() {
-    const { category, visible, advanced } = this.props.search;
-
-    if (!advanced) {
-      return 'FILTER NAME';
-    }
-    if (category) {
-      return `FILTER ${category.label}`;
-    }
-    if (visible) {
-      return 'FILTER COLUMNS';
-    }
-    return 'SEARCH';
   },
 
   handleChange(event) {
@@ -100,7 +86,7 @@ const Search = React.createClass({
           <i className="wgsa-search-box__icon material-icons">search</i>
           <input ref="input"
             className="wgsa-search-box__input"
-            placeholder={this.getPlaceholder()}
+            placeholder={this.props.placeholder}
             onFocus={this.handleFocus}
             onChange={this.handleChange}
             onKeyDown={this.handleKeyboard}
@@ -118,6 +104,7 @@ const Search = React.createClass({
 function mapStateToProps(state) {
   return {
     search: getSearch(state),
+    placeholder: getSearchPlaceholder(state),
   };
 }
 

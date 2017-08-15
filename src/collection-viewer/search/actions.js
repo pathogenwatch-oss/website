@@ -87,8 +87,9 @@ export function toggleSearchMode() {
 
 export const SEARCH_TOGGLE_EXACT_MATCH = 'SEARCH_TOGGLE_EXACT_MATCH';
 
-export function toggleSearchExactMatch() {
+export function toggleSearchExactMatch(term) {
   return {
     type: SEARCH_TOGGLE_EXACT_MATCH,
+    payload: term,
   };
 }

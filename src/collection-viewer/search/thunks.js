@@ -2,14 +2,15 @@ import {
   selectSearchCategory,
   addSearchTerm,
   changeSearchText,
+  toggleSearchExactMatch,
 } from './actions';
 import { resetFilter } from '../filter/actions';
 
 import { getSearch, getItemAtCursor } from './selectors';
 import { getGenomeList } from '../selectors';
-import { getTables } from '../table/selectors';
+import { getActiveDataTable, getDataTableName } from '../table/selectors';
 
-import { createSearchTerm, getTextMatcher, findColumn } from './utils';
+import { createSearchTerm, createBasicSearchTerm } from './utils';
 
 export function selectSearchItem(item) {
   return (dispatch, getState) => {
@@ -34,6 +35,13 @@ export function selectItemAtCursor() {
   };
 }
 
+function getBasicSearchTerm(state, text, exact) {
+  const tableName = getDataTableName(state);
+  const table = getActiveDataTable(state);
+  const genomes = getGenomeList(state);
+  return createBasicSearchTerm(tableName, table, genomes, text, exact);
+}
+
 export function searchTextChanged(text) {
   return (dispatch, getState) => {
     const state = getState();
@@ -44,21 +52,18 @@ export function searchTextChanged(text) {
     } else if (text.length === 0) {
       dispatch(resetFilter());
     } else {
-      const category = { label: 'NAME', tableName: 'metadata', key: '__name' };
-      const genomes = getGenomeList(state);
-      const table = getTables(state)[category.tableName];
-      const ids = [];
-      const matcher = getTextMatcher(text, exact);
-      const column = findColumn(table.columns, category.key);
-      for (const genome of genomes) {
-        const value = column.valueGetter(genome);
-        if (matcher.test(value)) {
-          ids.push(genome.uuid);
-        }
-      }
-      const item = { key: 'contains', label: text, ids };
-      const term = createSearchTerm(category, item);
+      const term = getBasicSearchTerm(state, text, exact);
       dispatch(addSearchTerm(term));
     }
+  };
+}
+
+export function searchExactMatchToggled() {
+  return (dispatch, getState) => {
+    const state = getState();
+    const search = getSearch(state);
+    const { text, exact } = search;
+    const term = text.length ? getBasicSearchTerm(state, text, !exact) : false;
+    dispatch(toggleSearchExactMatch(term));
   };
 }
