@@ -67,6 +67,15 @@ export function getValueLabel(value, table) {
   return String(value);
 }
 
+const flags = 'i';
+export function getTextMatcher(text, isExact = false) {
+  const cleanText = text.replace('?', '\\?');
+  if (isExact) {
+    return new RegExp(`^${cleanText}$`, flags);
+  }
+  return new RegExp(cleanText, flags);
+}
+
 const comparators = {
   '=': (a, b) => a === b,
   '>': (b, a) => a > b,

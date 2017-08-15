@@ -1,4 +1,6 @@
 import {
+  SEARCH_TOGGLE_MODE,
+  SEARCH_TOGGLE_EXACT_MATCH,
   SEARCH_DROPDOWN_VISIBILITY,
   SEARCH_TEXT_CHANGED,
   SEARCH_CATEGORY_SELECTED,
@@ -15,6 +17,8 @@ import { RESET_FILTER, ACTIVATE_FILTER } from '../filter/actions';
 import { filterKeys } from '../filter/constants';
 
 const initialState = {
+  advanced: false,
+  exact: false,
   category: null,
   cursor: 0,
   currentIntersection: 0,
@@ -36,6 +40,16 @@ function addToRecent(state, terms) {
 
 export default function (state = initialState, { type, payload }) {
   switch (type) {
+    case SEARCH_TOGGLE_MODE:
+      return {
+        ...state,
+        advanced: !state.advanced,
+      };
+    case SEARCH_TOGGLE_EXACT_MATCH:
+      return {
+        ...state,
+        exact: !state.exact,
+      };
     case SEARCH_DROPDOWN_VISIBILITY:
       return {
         ...state,
@@ -55,6 +69,13 @@ export default function (state = initialState, { type, payload }) {
         cursor: 0,
       };
     case SEARCH_TERM_ADDED: {
+      if (!state.advanced) {
+        return {
+          ...state,
+          intersections: [ [ payload ] ],
+          text: payload.value.label,
+        };
+      }
       const { currentIntersection } = state;
       const intersections = Array.from(state.intersections);
       const terms = (intersections[currentIntersection] || []);

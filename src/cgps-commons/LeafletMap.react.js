@@ -110,12 +110,10 @@ export default React.createClass({
   renderMarkers() {
     const { markers, cluster, markerComponent, highlightedColour } = this.props;
 
-    if (!markers) return null;
-
     if (cluster) {
       return (
         <MapCluster
-          markers={this.props.markers}
+          markers={markers || []}
           onMarkerClick={this.onClusterMarkerClick}
           options={this.props.clusterOptions}
         />
@@ -125,7 +123,7 @@ export default React.createClass({
     if (markerComponent) {
       return (
         <MarkerLayer
-          markers={markers}
+          markers={markers || []}
           latitudeExtractor={({ position }) => position[0]}
           longitudeExtractor={({ position }) => position[1]}
           markerComponent={markerComponent}
@@ -133,6 +131,8 @@ export default React.createClass({
         />
       );
     }
+
+    if (!markers) return null;
 
     return markers.map(({ position, title, icon = DefaultIcon }, index) => (
       <Marker
@@ -183,7 +183,6 @@ export default React.createClass({
             url={`https://api.mapbox.com/styles/v1/mapbox/${mapboxStyle}/tiles/{z}/{x}/{y}?access_token=${mapboxKey}`}
           />
           { this.renderMarkers() }
-          {/* { this.renderDefaultMarkers() } */}
           <Lasso
             className={this.props.buttonClassname}
             initialPath={this.props.lassoPath}

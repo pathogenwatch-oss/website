@@ -10,13 +10,12 @@ import FilterStatus from '../filter/FilterStatus.react';
 import { getSearch } from './selectors';
 
 import {
-  changeSearchText,
   changeDropdownVisibility,
   selectSearchCategory,
   moveCursor,
 } from './actions';
 
-import { selectItemAtCursor } from './thunks';
+import { selectItemAtCursor, searchTextChanged } from './thunks';
 
 const Search = React.createClass({
 
@@ -39,7 +38,11 @@ const Search = React.createClass({
   },
 
   getPlaceholder() {
-    const { category, visible } = this.props.search;
+    const { category, visible, advanced } = this.props.search;
+
+    if (!advanced) {
+      return 'FILTER NAME';
+    }
     if (category) {
       return `FILTER ${category.label}`;
     }
@@ -120,7 +123,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    handleChange: text => dispatch(changeSearchText(text)),
+    handleChange: text => dispatch(searchTextChanged(text)),
     openDropdown: visible => dispatch(changeDropdownVisibility(visible)),
     removeCategory: () => dispatch(selectSearchCategory(null)),
     selectItemAtCursor: () => dispatch(selectItemAtCursor()),

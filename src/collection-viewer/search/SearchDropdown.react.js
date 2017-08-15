@@ -1,27 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import classnames from 'classnames';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
-import SortSelect from './SortSelect.react';
-import LogicalOperator from './LogicalOperator.react';
+import Fade from '../../components/fade';
+import AdvancedMode from './AdvancedMode.react';
+import BasicMode from './BasicMode.react';
 
-import {
-  getSearchItems,
-  getDropdownVisibility,
-  getItemAtCursor,
-  getRecentSearches,
-  getSearchTerms,
-  getSelectedCategory,
-} from './selectors';
+import { getDropdownVisibility, getSearchMode } from './selectors';
 
-import {
-  changeDropdownVisibility,
-  removeSearchTerm,
-  selectSearchCategory,
-} from './actions';
+import { changeDropdownVisibility, toggleSearchMode } from './actions';
 
-import { selectSearchItem } from './thunks';
+import { modes } from './constants';
 
 const SearchDropdown = React.createClass({
 
@@ -31,135 +19,44 @@ const SearchDropdown = React.createClass({
     open: React.PropTypes.bool,
   },
 
-  renderCurrentFilter() {
-    const { current, removeTerm } = this.props;
-    if (!current.length) return null;
-    return (
-      <section>
-        <h2 className="wgsa-search-dropdown__heading">Current Filter</h2>
-        {current.map((terms, index) =>
-          <ul key={index}>
-            {terms.map((term, termIndex) =>
-              <li key={term.key}>
-                <span className="mdl-chip mdl-chip--deletable mdl-chip--contact mdl-chip--alt">
-                  <span className="mdl-chip__contact">{term.value.ids.length}</span>
-                  <span className="mdl-chip__text">
-                    <small>{term.category.label}:&nbsp;</small>
-                    <strong>{term.value.label}</strong>
-                  </span>
-                  <button className="mdl-chip__action" onClick={() => removeTerm(term, index)} title="Remove">
-                    <i className="material-icons">cancel</i>
-                  </button>
-                </span>
-                { termIndex < terms.length - 1 && <span className="wgsa-search-operator">AND</span> }
-              </li>)}
-              <li>
-                <LogicalOperator operator="AND" index={index} />
-              </li>
-              { index < current.length - 1 &&
-                <li className="wgsa-search-operator">
-                  <span>OR</span>
-                </li> }
-              { index === current.length - 1 &&
-                <li className="wgsa-search-operator">
-                  <LogicalOperator operator="OR" index={current.length} />
-                </li> }
-          </ul>
-        )}
-        <hr />
-      </section>
-    );
-  },
-
-  renderRecentTerms() {
-    const { recent, selectItem } = this.props;
-    if (!recent.length) return null;
-    return (
-      <section>
-        <h2 className="wgsa-search-dropdown__heading">Recently Used</h2>
-        <ul>
-          {recent.map(term =>
-            <li key={term.key}>
-              <button
-                className="mdl-chip mdl-chip--contact"
-                onClick={() => selectItem(term)}
-              >
-                <span className="mdl-chip__text">
-                  <span className="mdl-chip__contact mdl-chip__contact--muted">{term.value.ids.length}</span>
-                  <small>{term.category.label}:&nbsp;</small>
-                  <strong>{term.value.label}</strong>
-                </span>
-              </button>
-            </li>
-          )}
-        </ul>
-        <hr />
-      </section>
-    );
+  renderContent(mode) {
+    if (mode === modes.ADVANCED) {
+      return <AdvancedMode key={mode} />;
+    }
+    if (mode === modes.BASIC) {
+      return <BasicMode key={mode} />;
+    }
+    return null;
   },
 
   render() {
-    const { isOpen, sections, activeItem, close, category } = this.props;
-    const { selectItem, removeCategory } = this.props;
+    const { isOpen, close, mode, toggleMode } = this.props;
     return (
-      <ReactCSSTransitionGroup
-        className="wgsa-search-dropdown-container"
-        transitionName="wgsa-search-dropdown"
-        transitionEnterTimeout={280}
-        transitionLeaveTimeout={280}
-      >
+      <Fade className="wgsa-search-dropdown-container">
         { isOpen ?
           <div className="wgsa-search-dropdown">
-            <button
-              className="wgsa-search-dropdown__close mdl-button mdl-button--icon"
-              onClick={close}
-              title="Close Dropdown"
-            >
-              <i className="material-icons">clear</i>
-            </button>
-            { this.renderCurrentFilter() }
-            { this.renderRecentTerms() }
-            <section>
-              { category ?
-                <span className="mdl-chip mdl-chip--deletable">
-                  <span className="mdl-chip__text">{category.label}</span>
-                  <button className="mdl-chip__action" onClick={() => removeCategory()}>
-                    <i className="material-icons">cancel</i>
-                  </button>
-                </span> :
-                <h2 className="wgsa-search-dropdown__heading">Choose Column &ndash; Use arrow keys to navigate</h2>
-              }
-            </section>
-            <div className="wgsa-search-dropdown__values">
-              { sections.map(({ heading, items, placeholder, sort }) =>
-                <section key={heading}>
-                  { sort && <SortSelect /> }
-                  <h3 className="wgsa-search-dropdown__heading">{heading}</h3>
-                  {(placeholder && !items.length) && <p>({placeholder})</p>}
-                  <ul>
-                    { items.map(item =>
-                      <li key={item.key}>
-                        <button
-                          className={classnames(
-                            'mdl-chip',
-                            { 'mdl-chip--active': item === activeItem,
-                              'mdl-chip--contact': item.ids }
-                          )}
-                          onClick={() => selectItem(item)}
-                        >
-                          {item.ids && <span className="mdl-chip__contact">{item.ids.length}</span>}
-                          <span className="mdl-chip__text">{item.label}</span>
-                        </button>
-                      </li>
-                    )}
-                </ul>
-                </section>
-              )}
+            <div className="wgsa-search-dropdown__controls">
+              <button
+                className="mdl-button wgsa-button--text"
+                onClick={toggleMode}
+                title="Toggle Search Mode"
+              >
+                Use { mode === modes.BASIC ? 'Advanced' : 'Basic' }
+              </button>
+              <button
+                className="wgsa-search-dropdown__close mdl-button mdl-button--icon"
+                onClick={close}
+                title="Close Dropdown"
+              >
+                <i className="material-icons">clear</i>
+              </button>
             </div>
+            <Fade out={false} className="wgsa-search-dropdown__content">
+              { this.renderContent(mode) }
+            </Fade>
           </div> :
-          null
-        }
-      </ReactCSSTransitionGroup>
+          null }
+      </Fade>
     );
   },
 
@@ -167,20 +64,14 @@ const SearchDropdown = React.createClass({
 
 function mapStateToProps(state) {
   return {
+    mode: getSearchMode(state),
     isOpen: getDropdownVisibility(state),
-    category: getSelectedCategory(state),
-    current: getSearchTerms(state),
-    recent: getRecentSearches(state),
-    sections: getSearchItems(state),
-    activeItem: getItemAtCursor(state),
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    selectItem: item => dispatch(selectSearchItem(item)),
-    removeTerm: (item, intersection) => dispatch(removeSearchTerm(item, intersection)),
-    removeCategory: () => dispatch(selectSearchCategory(null)),
+    toggleMode: () => dispatch(toggleSearchMode()),
     close: () => dispatch(changeDropdownVisibility(false)),
   };
 }

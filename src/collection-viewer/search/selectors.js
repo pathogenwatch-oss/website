@@ -4,11 +4,13 @@ import { getViewer, getGenomeList } from '../selectors';
 import { getTables } from '../table/selectors';
 
 import { tableDisplayNames } from '../constants';
+import { modes } from './constants';
 import {
   mapColumnsToSearchCategories,
   findColumn,
   getValueLabel,
   getExpressionMatcher,
+  getTextMatcher,
   sortFns,
 } from './utils';
 
@@ -24,13 +26,19 @@ export const getSearchTextMatcher = createSelector(
     if (category && category.numeric) {
       return getExpressionMatcher(text);
     }
-    return new RegExp(text.replace('?', '\\?'), 'i');
+    return getTextMatcher(text);
   }
 );
 
 export const getDropdownVisibility = state => getSearch(state).visible;
 export const getSearchCursor = state => getSearch(state).cursor;
 export const getSearchSort = state => getSearch(state).sort;
+export const getSearchMode = state => (
+  getSearch(state).advanced ?
+    modes.ADVANCED :
+    modes.BASIC
+);
+export const isExactMatch = state => getSearch(state).exact;
 
 export const getRecentSearches = createSelector(
   getSearch,
