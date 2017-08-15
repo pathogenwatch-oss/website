@@ -3,6 +3,7 @@ import {
   addSearchTerm,
   changeSearchText,
 } from './actions';
+import { resetFilter } from '../filter/actions';
 
 import { getSearch, getItemAtCursor } from './selectors';
 import { getGenomeList } from '../selectors';
@@ -40,6 +41,8 @@ export function searchTextChanged(text) {
     const { advanced, exact } = search;
     if (advanced) {
       dispatch(changeSearchText(text));
+    } else if (text.length === 0) {
+      dispatch(resetFilter());
     } else {
       const category = { label: 'NAME', tableName: 'metadata', key: '__name' };
       const genomes = getGenomeList(state);

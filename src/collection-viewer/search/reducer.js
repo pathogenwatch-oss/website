@@ -44,6 +44,7 @@ export default function (state = initialState, { type, payload }) {
       return {
         ...state,
         advanced: !state.advanced,
+        text: '',
       };
     case SEARCH_TOGGLE_EXACT_MATCH:
       return {
@@ -135,6 +136,9 @@ export default function (state = initialState, { type, payload }) {
       return {
         ...initialState,
         recent: state.recent,
+        visible: !state.advanced,
+        exact: state.exact,
+        advanced: state.advanced,
       };
     }
     default:
