@@ -8,11 +8,13 @@ function getConnections(name) {
   if (name === 'runner') {
     return Promise.resolve({ mongoConnection: mongo.connect() });
   }
-  return Promise.all({
-    storageConnection: require('utils/storageConnection').connect(),
-    mqConnection: require('utils/messageQueueConnection').connect(),
-    mongoConnection: mongo.connect(),
-  });
+  return Promise.all([
+    require('utils/storageConnection').connect(),
+    require('utils/messageQueueConnection').connect(),
+    mongo.connect(),
+  ]).then(([ storageConnection, mqConnection, mongoConnection ]) => ({
+    storageConnection, mqConnection, mongoConnection,
+  }));
 }
 
 if (!serviceName) {
