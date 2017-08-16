@@ -31,7 +31,6 @@ export const getSearchTextMatcher = createSelector(
   }
 );
 
-export const getDropdownVisibility = state => getSearch(state).visible;
 export const getSearchCursor = state => getSearch(state).cursor;
 export const getSearchSort = state => getSearch(state).sort;
 export const getSearchMode = state => (
@@ -39,6 +38,7 @@ export const getSearchMode = state => (
     modes.ADVANCED :
     modes.BASIC
 );
+export const isAdvancedMode = state => getSearch(state).advanced;
 export const isExactMatch = state => getSearch(state).exact;
 
 export const getRecentSearches = createSelector(
@@ -156,16 +156,13 @@ export const getItemAtCursor = createSelector(
 export const getSearchPlaceholder = createSelector(
   getSearch,
   getActiveDataTable,
-  ({ advanced, category, visible }, table) => {
-    if (!advanced) {
-      return `FILTER ${getColumnLabel(table.activeColumn)}`;
-    }
+  ({ advanced, category }, table) => {
     if (category) {
       return `FILTER ${category.label}`;
     }
-    if (visible) {
+    if (advanced) {
       return 'FILTER COLUMNS';
     }
-    return 'SEARCH';
+    return `FILTER ${getColumnLabel(table.activeColumn)}`;
   }
 );

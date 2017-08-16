@@ -13,6 +13,8 @@ import {
   changeDropdownVisibility,
   selectSearchCategory,
   moveCursor,
+  toggleSearchMode,
+  toggleSearchExactMatch,
 } from './actions';
 
 import { selectItemAtCursor, searchTextChanged } from './thunks';
@@ -30,7 +32,6 @@ const Search = React.createClass({
 
   componentDidUpdate(previous) {
     const { search } = this.props;
-    if (!search.visible) return;
     if (previous.search.category !== search.category ||
         previous.search.terms !== search.terms ||
         previous.search.advanced !== search.advanced) {
@@ -40,13 +41,6 @@ const Search = React.createClass({
 
   handleChange(event) {
     this.props.handleChange(event.target.value);
-  },
-
-  handleFocus() {
-    const { visible } = this.props.search;
-    if (!visible) {
-      this.props.openDropdown(true);
-    }
   },
 
   handleClick() {
@@ -68,13 +62,14 @@ const Search = React.createClass({
       this.props.selectItemAtCursor();
     }
     if (e.keyCode === 27 && visible) {
-      this.props.openDropdown(false);
+      this.props.toggleMode();
       this.refs.input.blur();
     }
   },
 
   render() {
-    const { text, visible } = this.props.search;
+    const { toggleMode, toggleExactMatch, search } = this.props;
+    const { text, visible, advanced, exact } = search;
     return (
       <div className="wgsa-search-box-container">
         <div className={classnames(
@@ -84,10 +79,30 @@ const Search = React.createClass({
           onClick={this.handleClick}
         >
           <i className="wgsa-search-box__icon material-icons">search</i>
+          <button
+            className={classnames(
+              'mdl-button mdl-button--icon',
+              { active: advanced }
+            )}
+            onClick={toggleMode}
+            title="Toggle Advanced Search"
+          >
+            <i className="material-icons">add_box</i>
+          </button>
+          <button
+            className={classnames(
+              'mdl-button mdl-button--icon',
+              { active: exact && !advanced }
+            )}
+            disabled={advanced}
+            onClick={toggleExactMatch}
+            title="Toggle Exact Match"
+          >
+            <i className="material-icons">explicit</i>
+          </button>
           <input ref="input"
             className="wgsa-search-box__input"
             placeholder={this.props.placeholder}
-            onFocus={this.handleFocus}
             onChange={this.handleChange}
             onKeyDown={this.handleKeyboard}
             value={text}
@@ -115,6 +130,8 @@ function mapDispatchToProps(dispatch) {
     removeCategory: () => dispatch(selectSearchCategory(null)),
     selectItemAtCursor: () => dispatch(selectItemAtCursor()),
     moveCursor: delta => dispatch(moveCursor(delta)),
+    toggleMode: () => dispatch(toggleSearchMode()),
+    toggleExactMatch: () => dispatch(toggleSearchExactMatch()),
   };
 }
 

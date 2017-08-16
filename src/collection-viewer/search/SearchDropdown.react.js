@@ -3,13 +3,8 @@ import { connect } from 'react-redux';
 
 import Fade from '../../components/fade';
 import AdvancedMode from './AdvancedMode.react';
-import BasicMode from './BasicMode.react';
 
-import { getDropdownVisibility, getSearchMode } from './selectors';
-
-import { changeDropdownVisibility, toggleSearchMode } from './actions';
-
-import { modes } from './constants';
+import { isAdvancedMode } from './selectors';
 
 const SearchDropdown = React.createClass({
 
@@ -19,41 +14,13 @@ const SearchDropdown = React.createClass({
     open: React.PropTypes.bool,
   },
 
-  renderContent(mode) {
-    if (mode === modes.ADVANCED) {
-      return <AdvancedMode key={mode} />;
-    }
-    if (mode === modes.BASIC) {
-      return <BasicMode key={mode} />;
-    }
-    return null;
-  },
-
   render() {
-    const { isOpen, close, mode, toggleMode } = this.props;
+    const { isOpen } = this.props;
     return (
       <Fade className="wgsa-search-dropdown-container">
         { isOpen ?
           <div className="wgsa-search-dropdown">
-            <div className="wgsa-search-dropdown__controls">
-              <button
-                className="mdl-button wgsa-button--text"
-                onClick={toggleMode}
-                title="Toggle Search Mode"
-              >
-                Use { mode === modes.BASIC ? 'Advanced' : 'Basic' }
-              </button>
-              <button
-                className="wgsa-search-dropdown__close mdl-button mdl-button--icon"
-                onClick={close}
-                title="Close Dropdown"
-              >
-                <i className="material-icons">clear</i>
-              </button>
-            </div>
-            <Fade out={false} className="wgsa-search-dropdown__content">
-              { this.renderContent(mode) }
-            </Fade>
+            <AdvancedMode />
           </div> :
           null }
       </Fade>
@@ -64,16 +31,8 @@ const SearchDropdown = React.createClass({
 
 function mapStateToProps(state) {
   return {
-    mode: getSearchMode(state),
-    isOpen: getDropdownVisibility(state),
+    isOpen: isAdvancedMode(state),
   };
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    toggleMode: () => dispatch(toggleSearchMode()),
-    close: () => dispatch(changeDropdownVisibility(false)),
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(SearchDropdown);
+export default connect(mapStateToProps)(SearchDropdown);

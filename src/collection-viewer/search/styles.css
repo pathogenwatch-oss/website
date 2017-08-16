@@ -29,18 +29,33 @@
   color: #fff;
 }
 
+.wgsa-search-box button {
+  opacity: 0.54;
+  min-width: 24px;
+  width: 24px;
+  background: none !important;
+  margin: 2px;
+}
+
+.wgsa-search-box button:hover,
+.wgsa-search-box button:focus,
+.wgsa-search-box button.active {
+  opacity: 1;
+}
+
 .wgsa-search-box:hover,
 .wgsa-search-box--active {
   background: rgba(255, 255, 255, 0.25);
 }
 
 .wgsa-search-box__icon {
-  margin: 0 8px;
+  margin-left: 8px;
+  margin-right: 2px;
 }
 
 .wgsa-search-box__input {
   flex-grow: 1;
-  margin: 0 4px;
+  margin: 0 8px;
   background: none;
   border: none;
   border-radius: 2px;
@@ -71,15 +86,14 @@
   margin: 8px;
 }
 
-.wgsa-filter-status > button {
-  opacity: 0.54;
+.wgsa-advanced-search-button {
+  min-width: 0;
+  height: 28px;
+  padding: 2px;
+  color: #fff;
+  line-height: 1;
+  border-radius: 16px;
 }
-
-.wgsa-filter-status > button:hover,
-.wgsa-filter-status > button:focus {
-  opacity: 1;
-}
-
 
 /* Dropdown */
 
@@ -96,9 +110,6 @@
   color: rgba(0, 0, 0, 0.54);
   border: 1px solid rgba(0, 0, 0, 0.27);
   position: relative;
-}
-
-.wgsa-search-dropdown__content {
   padding-top: 16px;
   overflow: hidden;
   max-height: 80vh;

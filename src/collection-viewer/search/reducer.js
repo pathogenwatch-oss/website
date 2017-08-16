@@ -1,7 +1,6 @@
 import {
   SEARCH_TOGGLE_MODE,
   SEARCH_TOGGLE_EXACT_MATCH,
-  SEARCH_DROPDOWN_VISIBILITY,
   SEARCH_TEXT_CHANGED,
   SEARCH_CATEGORY_SELECTED,
   SEARCH_TERM_ADDED,
@@ -26,7 +25,6 @@ const initialState = {
   recent: new Set(),
   sort: sortKeys.FREQ_DESC,
   text: '',
-  visible: false,
 };
 
 function addToRecent(state, terms) {
@@ -59,11 +57,6 @@ export default function (state = initialState, { type, payload }) {
       return {
         ...applyBasicSearchTerm(state, payload),
         exact: !state.exact,
-      };
-    case SEARCH_DROPDOWN_VISIBILITY:
-      return {
-        ...state,
-        visible: payload,
       };
     case SEARCH_TEXT_CHANGED:
       return {
@@ -141,7 +134,6 @@ export default function (state = initialState, { type, payload }) {
       return {
         ...initialState,
         recent: state.recent,
-        visible: !state.advanced,
         exact: state.exact,
         advanced: state.advanced,
       };
