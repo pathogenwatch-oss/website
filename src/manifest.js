@@ -2,7 +2,6 @@ const tasks = require('../tasks.json');
 
 const config = require('configuration');
 const { specieator } = config.tasks || {};
-const specieatorTask = 'specieator';
 
 function getImageName(task, version) {
   return `registry.gitlab.com/cgps/wgsa-tasks/${task}:${version}`;
@@ -31,8 +30,8 @@ module.exports.getTasks = function () {
 };
 
 module.exports.getSpecieatorTask = function () {
-  const { version = 'v1' } = specieator;
-  return { task: specieatorTask, version };
+  const { task = 'specieator', version = 'v1' } = specieator;
+  return { task, version };
 };
 
 module.exports.getTasksByOrganism = function (organismId, speciesId, genusId) {
@@ -46,7 +45,7 @@ module.exports.getTasksByOrganism = function (organismId, speciesId, genusId) {
   const keys = new Set();
   for (const taskList of taskLists) {
     for (const task of taskList) {
-      const taskKey = task.name + task.version;
+      const taskKey = task.task + task.version;
       if (!keys.has(taskKey)) {
         keys.add(taskKey);
         uniqueTasks.push(task);
