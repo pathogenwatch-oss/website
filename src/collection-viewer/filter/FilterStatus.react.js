@@ -5,13 +5,18 @@ import { getFilter } from '../selectors';
 
 import { resetFilter } from './actions';
 
-const FilterStatus = ({ active, filteredAmount, totalAmount, clear }) => (
-  <span className="wgsa-filter-status">
+const FilterStatus = ({ active, filteredAmount, totalAmount, clear, children }) => (
+  <span className="wgsa-filter-status" onClick={e => e.stopPropagation()}>
     <span>{filteredAmount} of {totalAmount}</span>
-    { active &&
-      <button className="mdl-button mdl-button--icon" onClick={clear} title="Clear Filter">
-        <i className="material-icons">cancel</i>
-      </button> }
+    {children}
+    <button
+      className="mdl-button mdl-button--icon"
+      onClick={clear}
+      title="Clear Filter"
+      disabled={!active}
+    >
+      <i className="material-icons">cancel</i>
+    </button>
   </span>
 );
 
@@ -27,10 +32,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    clear: e => {
-      e.stopPropagation();
-      dispatch(resetFilter());
-    },
+    clear: () => dispatch(resetFilter()),
   };
 }
 

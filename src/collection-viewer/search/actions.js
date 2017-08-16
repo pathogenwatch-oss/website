@@ -76,3 +76,20 @@ export function selectNextOperator(operator) {
     payload: operator,
   };
 }
+
+export const SEARCH_TOGGLE_MODE = 'SEARCH_TOGGLE_MODE';
+
+export function toggleSearchMode() {
+  return {
+    type: SEARCH_TOGGLE_MODE,
+  };
+}
+
+export const SEARCH_TOGGLE_EXACT_MATCH = 'SEARCH_TOGGLE_EXACT_MATCH';
+
+export function toggleSearchExactMatch(term) {
+  return {
+    type: SEARCH_TOGGLE_EXACT_MATCH,
+    payload: term,
+  };
+}

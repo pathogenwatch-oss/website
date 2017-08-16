@@ -4,3 +4,8 @@ export const sortKeys = {
   VALUE_DESC: 'VALUE_DESC',
   VALUE_ASC: 'VALUE_ASC',
 };
+
+export const modes = {
+  BASIC: 0,
+  ADVANCED: 1,
+};

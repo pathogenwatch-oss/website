@@ -1,5 +1,6 @@
 import {
-  SEARCH_DROPDOWN_VISIBILITY,
+  SEARCH_TOGGLE_MODE,
+  SEARCH_TOGGLE_EXACT_MATCH,
   SEARCH_TEXT_CHANGED,
   SEARCH_CATEGORY_SELECTED,
   SEARCH_TERM_ADDED,
@@ -15,6 +16,8 @@ import { RESET_FILTER, ACTIVATE_FILTER } from '../filter/actions';
 import { filterKeys } from '../filter/constants';
 
 const initialState = {
+  advanced: false,
+  exact: false,
   category: null,
   cursor: 0,
   currentIntersection: 0,
@@ -22,7 +25,6 @@ const initialState = {
   recent: new Set(),
   sort: sortKeys.FREQ_DESC,
   text: '',
-  visible: false,
 };
 
 function addToRecent(state, terms) {
@@ -34,12 +36,27 @@ function addToRecent(state, terms) {
   return next;
 }
 
+function applyBasicSearchTerm(state, term) {
+  if (!term) return state;
+  return {
+    ...state,
+    intersections: [ [ term ] ],
+    text: term.value.label,
+  };
+}
+
 export default function (state = initialState, { type, payload }) {
   switch (type) {
-    case SEARCH_DROPDOWN_VISIBILITY:
+    case SEARCH_TOGGLE_MODE:
       return {
         ...state,
-        visible: payload,
+        advanced: !state.advanced,
+        text: '',
+      };
+    case SEARCH_TOGGLE_EXACT_MATCH:
+      return {
+        ...applyBasicSearchTerm(state, payload),
+        exact: !state.exact,
       };
     case SEARCH_TEXT_CHANGED:
       return {
@@ -55,6 +72,9 @@ export default function (state = initialState, { type, payload }) {
         cursor: 0,
       };
     case SEARCH_TERM_ADDED: {
+      if (!state.advanced) {
+        return applyBasicSearchTerm(state, payload);
+      }
       const { currentIntersection } = state;
       const intersections = Array.from(state.intersections);
       const terms = (intersections[currentIntersection] || []);
@@ -114,6 +134,8 @@ export default function (state = initialState, { type, payload }) {
       return {
         ...initialState,
         recent: state.recent,
+        exact: state.exact,
+        advanced: state.advanced,
       };
     }
     default:
