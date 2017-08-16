@@ -54,16 +54,15 @@ const Search = React.createClass({
     if (e.keyCode === 39 || e.keyCode === 40) {
       this.props.moveCursor(1);
     }
-    const { text, category, visible } = this.props.search;
+    const { text, category } = this.props.search;
     if (e.keyCode === 8 && category && text.length === 0) {
       this.props.removeCategory();
     }
     if (e.keyCode === 13) {
       this.props.selectItemAtCursor();
     }
-    if (e.keyCode === 27 && visible) {
+    if (e.keyCode === 27) {
       this.props.toggleMode();
-      this.refs.input.blur();
     }
   },
 
@@ -92,9 +91,8 @@ const Search = React.createClass({
           <button
             className={classnames(
               'mdl-button mdl-button--icon',
-              { active: exact && !advanced }
+              { active: exact }
             )}
-            disabled={advanced}
             onClick={toggleExactMatch}
             title="Toggle Exact Match"
           >

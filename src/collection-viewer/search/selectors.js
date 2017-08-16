@@ -19,18 +19,6 @@ export const getSearch = state => getViewer(state).search;
 
 export const getSelectedCategory = state => getSearch(state).category;
 export const getSearchText = state => getSearch(state).text;
-export const getSearchTextMatcher = createSelector(
-  getSelectedCategory,
-  getSearchText,
-  (category, text) => {
-    if (!text.length) return null;
-    if (category && category.numeric) {
-      return getExpressionMatcher(text);
-    }
-    return getTextMatcher(text);
-  }
-);
-
 export const getSearchCursor = state => getSearch(state).cursor;
 export const getSearchSort = state => getSearch(state).sort;
 export const getSearchMode = state => (
@@ -40,6 +28,19 @@ export const getSearchMode = state => (
 );
 export const isAdvancedMode = state => getSearch(state).advanced;
 export const isExactMatch = state => getSearch(state).exact;
+
+export const getSearchTextMatcher = createSelector(
+  getSelectedCategory,
+  getSearchText,
+  isExactMatch,
+  (category, text, exact) => {
+    if (!text.length) return null;
+    if (category && category.numeric) {
+      return getExpressionMatcher(text);
+    }
+    return getTextMatcher(text, exact);
+  }
+);
 
 export const getRecentSearches = createSelector(
   getSearch,
