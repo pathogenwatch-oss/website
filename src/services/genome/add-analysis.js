@@ -4,8 +4,8 @@ const Genome = require('models/genome');
 
 const formatters = {
   paarsnp: result => ({
-    antibiotics: result.antibioticProfiles ?
-      result.antibioticProfiles.reduce(
+    antibiotics: result.resistanceProfile ?
+      result.resistanceProfile.reduce(
         (memo, { agent, resistanceState, resistanceSets }) => {
           memo[agent.name] = {
             state: resistanceState,
