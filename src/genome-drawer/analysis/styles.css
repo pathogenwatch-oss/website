@@ -1,5 +1,9 @@
-.wgsa-mlst-profile {
+.wgsa-analysis-section table {
   margin: 0 auto;
+}
+
+.wgsa-analysis-section [title]:not(a) {
+  cursor: help;
 }
 
 .wgsa-mlst-profile-hit:not(:last-child)::after {
@@ -8,8 +12,4 @@
 
 .wgsa-mlst-profile .material-icons {
   color: #555;
-}
-
-.wgsa-mlst-profile [title] {
-  cursor: help;
 }

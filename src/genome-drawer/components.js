@@ -38,9 +38,9 @@ export const Metadata = ({ title, large = false, label, children }) => (
 
 export const Section = ({ heading, version, children }) => (
   <div className="wgsa-analysis-section">
-    <h2 className="wgsa-analysis-view-title">
+    <h2 className="wgsa-analysis-title">
       {heading}
-      <span className="wgsa-analysis-version">{version}</span>
+      { version && <span className="wgsa-analysis-version">{version}</span> }
     </h2>
     {children}
   </div>

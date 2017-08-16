@@ -132,3 +132,7 @@
   align-items: center;
   padding: 0 8px;
 }
+
+.wgsa-tab-actions__label {
+  margin-right: auto;
+}

@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-import addGuideLinesPlugin from '../cgps-commons/ChartJSGuidelinePlugin';
+import addGuideLinesPlugin from '../../cgps-commons/ChartJSGuidelinePlugin';
 addGuideLinesPlugin(Chart);
 
 export default React.createClass({

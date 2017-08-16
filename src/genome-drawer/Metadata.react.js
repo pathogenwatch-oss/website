@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { Section } from './components';
 import { FormattedName } from '../organisms';
 
 import { getFormattedDateString, formatDateTime } from '../utils/Date';
@@ -35,16 +36,13 @@ export default ({ genome }) => {
         </dl>
       </div>
       { Object.keys(userDefined).length > 0 &&
-        <div className="wgsa-analysis-section">
-          <h2 className="wgsa-analysis-view-title">
-            User defined
-          </h2>
+        <Section heading="User defined">
           <dl className="wgsa-hub-stats-view">
             { Object.keys(userDefined).map(key =>
               <Metadata key={key} label={key}>{userDefined[key]}</Metadata>
             )}
           </dl>
-        </div> }
+        </Section> }
     </div>
   );
 };

@@ -6,10 +6,8 @@ import AddToSelectionButton from '../genomes/card/AddToSelectionButton.react';
 import DownloadLink from '../downloads/GenomeFileLink.react';
 import Spinner from '../components/Spinner.react';
 
-import GenomeMetadata from './GenomeMetadata.react';
-import GenomeStats from './GenomeStats.react';
-import N50Chart from './N50Chart.react';
-import GenomeAnalysis from './analysis';
+import Metadata from './Metadata.react';
+import getAnalysisTabs from './analysis';
 
 const GenomeDrawerContent = React.createClass({
 
@@ -19,34 +17,34 @@ const GenomeDrawerContent = React.createClass({
 
   render() {
     const { genome } = this.props;
-    const { analysis = {} } = genome;
-    const { metrics } = analysis;
+    const { analysis = {}, pending = [] } = genome;
+    const analysisTabs = getAnalysisTabs(analysis);
     return (
       <div className="wgsa-genome-drawer-content wgsa-drawer__content">
         <div className="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
           <div className="mdl-tabs__tab-bar">
             <a href="#metadata-panel" className="mdl-tabs__tab is-active">Metadata</a>
-            <a href="#metrics-panel" className="mdl-tabs__tab">Metrics</a>
-            <a href="#n50-panel" className="mdl-tabs__tab">N50</a>
-            <a href="#analysis-panel" className="mdl-tabs__tab">Analysis</a>
+            {
+              analysisTabs.map(({ key }) => <a key={key} href={`#${key.toLowerCase()}-panel`} className="mdl-tabs__tab">{key}</a>)
+            }
             <div className="wgsa-tab-actions">
+              { pending.length > 0 && <span className="wgsa-tab-actions__label">+{pending.length} pending</span>}
               <RemoveButton genome={genome} />
               <DownloadLink id={genome.id} name={genome.name} />
               <AddToSelectionButton genome={genome} />
             </div>
           </div>
           <div className="mdl-tabs__panel is-active" id="metadata-panel">
-            <GenomeMetadata genome={genome} />
+            <Metadata genome={genome} />
           </div>
-          <div className="mdl-tabs__panel" id="metrics-panel">
-            { metrics && <GenomeStats metrics={metrics} /> }
-          </div>
-          <div className="mdl-tabs__panel" id="n50-panel">
-            { metrics && <N50Chart metrics={metrics} /> }
-          </div>
-          <div className="mdl-tabs__panel" id="analysis-panel">
-            <GenomeAnalysis analysis={analysis} />
-          </div>
+          {
+            analysisTabs.map(({ key, component }) =>
+              <div
+                key={key}
+                id={`${key.toLowerCase()}-panel`}
+                className="mdl-tabs__panel"
+              >{component}</div>)
+          }
         </div>
       </div>
     );
@@ -57,7 +55,7 @@ const GenomeDrawerContent = React.createClass({
 export default ({ name, genome, loading, close }) => {
   const isOpen = !!loading || !!genome;
   return (
-    <Drawer expandable title={name} isOpen={isOpen} onHeaderClick={close} animationKey={genome && genome.name}>
+    <Drawer title={name} isOpen={isOpen} onHeaderClick={close} animationKey={genome && genome.name}>
       { loading ?
         <div className="wgsa-drawer__content wgsa-drawer-loader">
           <Spinner />

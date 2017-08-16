@@ -1,24 +1,24 @@
 import React from 'react';
 
-import { Section, Metadata } from './components';
+import { Section, Metadata } from '../components';
 
-export default ({ result }) => (
-  <Section heading="PAARSNP" version={result.__v}>
+export default ({ __v, antibiotics = {}, snp =[], paar = [] }) => (
+  <Section heading="PAARSNP" version={__v}>
     <dl className="wgsa-hub-stats-view">
       <Metadata large label="Antibiotics">
         <table>
           <thead>
             <tr>
-              { Object.keys(result.antibiotics).map(key => <th key={key}>{key}</th>) }
+              { Object.keys(antibiotics).map(key => <th key={key}>{key}</th>) }
             </tr>
           </thead>
           <tbody>
             <tr>
-              { Object.keys(result.antibiotics).map(key => {
-                const { state } = result.antibiotics[key];
+              { Object.keys(antibiotics).map(key => {
+                const { state } = antibiotics[key];
                 return (
                   <td key={key}>
-                    { state !== 'UNKNOWN' &&
+                    { state !== 'UNKNOWN' && state !== 'NOT_FOUND' &&
                       <i
                         title={state}
                         className={`material-icons wgsa-amr--${state.toLowerCase()}`}
@@ -32,8 +32,8 @@ export default ({ result }) => (
           </tbody>
         </table>
       </Metadata>
-      <Metadata label="SNPs">{result.snp.join(', ')}</Metadata>
-      <Metadata label="Genes">{result.paar.join(', ')}</Metadata>
+      <Metadata label="SNPs">{snp.join(', ')}</Metadata>
+      <Metadata label="Genes">{paar.join(', ')}</Metadata>
     </dl>
   </Section>
 );

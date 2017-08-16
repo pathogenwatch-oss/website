@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Section, Metadata } from './components';
+import { Section, Metadata } from '../components';
 
 export default (results = {}) => (
   Object.keys(results).map(key => {

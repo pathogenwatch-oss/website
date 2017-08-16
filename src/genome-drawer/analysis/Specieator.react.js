@@ -1,11 +1,20 @@
 import React from 'react';
 
-import { Section, Metadata } from './components';
+import { Section, Metadata } from '../components';
 
 export default ({ result }) => (
   <Section heading="Specieation" version={result.__v}>
     <dl className="wgsa-hub-stats-view">
-      <Metadata label="Taxonomy ID">{result.organismId}</Metadata>
+      <Metadata label="Taxonomy ID">
+        <a
+          href={`https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?mode=Tree&id=${result.organismId}`}
+          target="_blank"
+          rel="noopener"
+          title="View in NCBI taxonomy browser"
+        >
+          {result.organismId}
+        </a>
+      </Metadata>
       <Metadata label="Organism Name">{result.organismName}</Metadata>
       <Metadata label="Reference">
         <a href={`http://www.ncbi.nlm.nih.gov/assembly/${result.referenceId}/`} target="_blank" rel="noopener">
