@@ -9,12 +9,13 @@ const { getImageName } = require('manifest.js');
 
 const LOGGER = require('utils/logging').createLogger('runner');
 
-function runTask(organismId, fileId, task, version) {
+function runTask(fileId, task, version, organismId, speciesId, genusId) {
   return new Promise((resolve, reject) => {
     const container = docker(getImageName(task, version), {
       env: {
-        WGSA_organismId: organismId,
-        WGSA_ORGANISM_ID: organismId,
+        WGSA_ORGANISM_TAXID: organismId,
+        WGSA_SPECIES_TAXID: speciesId,
+        WGSA_GENUS_TAXID: genusId,
       },
     });
     const stream = fs.createReadStream(fastaStorage.getFilePath(fastaStoragePath, fileId));
@@ -39,12 +40,12 @@ function runTask(organismId, fileId, task, version) {
   });
 }
 
-module.exports = function handleMessage({ organismId, fileId, task, version }) {
+module.exports = function handleMessage({ fileId, task, version, organismId, speciesId, genusId }) {
   return Analysis.findOne({ fileId, task, version })
     .then(model => {
       if (model) return model.results;
       return (
-        runTask(organismId, fileId, task, version)
+        runTask(fileId, task, version, organismId, speciesId, genusId)
           .then(results => {
             Analysis.create({ fileId, task, version, results });
             return results;
