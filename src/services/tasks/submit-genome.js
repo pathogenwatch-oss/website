@@ -1,37 +1,22 @@
 const LOGGER = require('utils/logging').createLogger('runner');
 
+const { request } = require('services/bus');
+
 const { getTasksByOrganism } = require('manifest.js');
-const queue = require('../taskQueue');
 const Genome = require('models/genome');
 
-const config = require('configuration');
-
-module.exports = function ({ genomeId, fileId, organismId, clientId }) {
-  const tasks = getTasksByOrganism(organismId);
+module.exports = function ({ genomeId, fileId, organismId, speciesId, genusId, clientId }) {
+  const tasks = getTasksByOrganism(organismId, speciesId, genusId);
 
   if (tasks.length === 0) {
     return;
   }
 
   const taskNames = tasks.map(_ => _.task);
-  LOGGER.info(
-    `Submitting tasks [${taskNames}] for genome ${genomeId}`
-  );
+  LOGGER.info(`Submitting tasks [${taskNames}] for genome ${genomeId}`);
 
   Genome.addPendingTasks(genomeId, taskNames)
     .then(() => {
-      for (const { task, version, retries = config.tasks.retries } of tasks) {
-        queue.enqueue(
-          queue.queues.tasks, {
-            genomeId,
-            organismId,
-            fileId,
-            clientId,
-            task,
-            version,
-            retries,
-          }
-        );
-      }
+      request('tasks', 'enqueue', { genomeId, fileId, organismId, speciesId, genusId, clientId, tasks });
     });
 };

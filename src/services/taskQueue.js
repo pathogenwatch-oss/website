@@ -30,8 +30,10 @@ module.exports.enqueue = function (queue, message) {
     throw new Error(`Queue ${queue} not recognised.`);
   }
   LOGGER.info('Adding message', message, 'to', queue);
-  mQueue.enqueue(queue, message)
-    .catch(err => LOGGER.error(err));
+  return (
+    mQueue.enqueue(queue, message)
+      .catch(err => LOGGER.error(err))
+  );
 };
 
 module.exports.dequeue = function (queue, callback) {

@@ -19,8 +19,8 @@ const { tasks, specieator } = taskQueue.queues;
 
 function subscribeToQueues() {
   if (!queue || queue === 'tasks') {
-    taskQueue.dequeue(tasks, ({ genomeId, organismId, fileId, task, version, clientId }) =>
-      request('tasks', 'run', { organismId, fileId, task, version })
+    taskQueue.dequeue(tasks, ({ genomeId, organismId, speciesId, genusId, fileId, task, version, clientId }) =>
+      request('tasks', 'run', { organismId, speciesId, genusId, fileId, task, version })
         .then(result => {
           LOGGER.info('results', genomeId, task, version, result);
           return request('genome', 'add-analysis', { genomeId, task, version, result, clientId });
@@ -34,9 +34,10 @@ function subscribeToQueues() {
         .then(result => {
           LOGGER.info('results', genomeId, task, version, result);
           return request('genome', 'add-analysis', { genomeId, task, version, result, clientId })
-            .then(() =>
-              request('tasks', 'submit-genome', { genomeId, fileId, organismId: result.organismId, clientId })
-            );
+            .then(() => {
+              const { organismId, speciesId, genusId } = result;
+              return request('tasks', 'submit-genome', { genomeId, fileId, organismId, speciesId, genusId, clientId })
+            });
         })
     );
   }

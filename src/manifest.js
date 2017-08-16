@@ -35,9 +35,24 @@ module.exports.getSpecieatorTask = function () {
   return { task: specieatorTask, version };
 };
 
-module.exports.getTasksByOrganism = function (organismId) {
-  if (organismId in tasks) {
-    return tasks.all.concat(tasks[organismId]);
+module.exports.getTasksByOrganism = function (organismId, speciesId, genusId) {
+  const taskLists = [];
+
+  if (organismId in tasks) taskLists.push(tasks[organismId]);
+  if (speciesId in tasks) taskLists.push(tasks[speciesId]);
+  if (genusId in tasks) taskLists.push(tasks[genusId]);
+
+  const uniqueTasks = [ ...tasks.all ];
+  const keys = new Set();
+  for (const taskList of taskLists) {
+    for (const task of taskList) {
+      const taskKey = task.name + task.version;
+      if (!keys.has(taskKey)) {
+        keys.add(taskKey);
+        uniqueTasks.push(task);
+      }
+    }
   }
-  return tasks.all;
+
+  return uniqueTasks;
 };
