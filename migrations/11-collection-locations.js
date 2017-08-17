@@ -1,12 +1,14 @@
-module.exports.id = '11-collection-locations';
+module.exports.id = require('./utils/getMigrationId.js')(__filename);
+
+const updateDocs = require('./utils/updateDocs.js');
 
 module.exports.up = function (done) {
   // use this.db for MongoDB communication, and this.log() for logging
   const { db } = this;
 
-  db.collection('collections')
-    .find({}, { _id: 1 })
-    .map(({ _id }) =>
+  updateDocs(
+    db.collection('collections').find({}, { _id: 1 }),
+    ({ _id }) =>
       db.collection('collectiongenomes').aggregate([
         { $match: { _collection: _id, 'position.latitude': { $exists: true }, 'position.longitude': { $exists: true } } },
         { $project: { position: 1 } },
@@ -15,18 +17,15 @@ module.exports.up = function (done) {
       ])
       .toArray()
       .then(docs =>
-        db.collection('collections')
-          .update(
-            { _id },
-            { $set:
-              { locations: docs.map(({ position }) => ([ position.lat, position.lon ])) },
-            }
-          )
+      db.collection('collections')
+        .update(
+          { _id },
+          { $set: { locations: docs.map(({ position }) => ([ position.lat, position.lon ])) } }
+        )
       )
-    )
-    .toArray()
-    .then(() => done())
-    .catch(done);
+  )
+  .then(() => done())
+  .catch(done);
 };
 
 module.exports.down = function (done) {

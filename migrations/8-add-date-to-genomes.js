@@ -1,23 +1,24 @@
-module.exports.id = '8-date-to-genomes';
+module.exports.id = require('./utils/getMigrationId.js')(__filename);
 
-function convertToDate({ year, month, day }) {
-  return new Date(year, (month || 1) - 1, day || 1);
-}
+const updateDocs = require('./utils/updateDocs.js');
 
 module.exports.up = function (done) {
   // use this.db for MongoDB communication, and this.log() for logging
   const { db } = this;
-  db.collection('genomes')
-    .find({ year: { $exists: true, $ne: null }, date: { $exists: false } })
-    .toArray()
-    .then(docs =>
-      Promise.all(docs.map(doc =>
-        db.collection('genomes')
-          .update({ _id: doc._id }, { $set: { date: convertToDate(doc) } })
-      ))
-    )
-    .then(() => done())
-    .catch(done);
+
+  updateDocs(
+    db.collection('genomes').find(
+      { year: { $exists: true, $ne: null }, date: { $exists: false } },
+      { _id: 1, year: 1, month: 1, day: 1 }
+    ),
+    ({ _id, year, month, day }) =>
+      db.collection('genomes').update(
+        { _id },
+        { $set: { date: new Date(year, (month || 1) - 1, day || 1) } }
+      )
+  )
+  .then(() => done())
+  .catch(done);
 };
 
 module.exports.down = function (done) {
