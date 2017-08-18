@@ -15,7 +15,8 @@
     { "task": "paarsnp", "version": "v2" }
   ],
   "90370": [
-    { "task": "paarsnp", "version": "v2" }
+    { "task": "paarsnp", "version": "v2" },
+    { "task": "genotyphi", "version": "v1" }
   ],
 
   "138": [
