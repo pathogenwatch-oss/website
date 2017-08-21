@@ -4,19 +4,19 @@
   ],
 
   "485": [
-    { "task": "paarsnp", "version": "v2" }
+    { "task": "paarsnp", "version": "v3" }
   ],
   "1280": [
     { "task": "mlst", "version": "v3" },
-    { "task": "paarsnp", "version": "v2" }
+    { "task": "paarsnp", "version": "v3" }
   ],
   "1313": [
     { "task": "mlst", "version": "v3" },
-    { "task": "paarsnp", "version": "v2" }
+    { "task": "paarsnp", "version": "v3" }
   ],
   "90370": [
-    { "task": "paarsnp", "version": "v2" },
-    { "task": "genotyphi", "version": "v1" }
+    { "task": "paarsnp", "version": "v3" },
+    { "task": "genotyphi", "version": "v2" }
   ],
 
   "138": [

@@ -16,6 +16,7 @@ function runTask(fileId, task, version, organismId, speciesId, genusId) {
         WGSA_ORGANISM_TAXID: organismId,
         WGSA_SPECIES_TAXID: speciesId,
         WGSA_GENUS_TAXID: genusId,
+        WGSA_FILE_ID: fileId,
       },
     });
     const stream = fs.createReadStream(fastaStorage.getFilePath(fastaStoragePath, fileId));
@@ -29,12 +30,20 @@ function runTask(fileId, task, version, organismId, speciesId, genusId) {
       if (exitCode !== 0) {
         container.stderr.setEncoding('utf8');
         reject(new Error(container.stderr.read()));
+      } else if (buffer.length === 0) {
+        reject(new Error('No output received.'));
       } else {
-        resolve(JSON.parse(buffer.join('')));
+        let output;
+        try {
+          output = JSON.parse(buffer.join(''));
+        } catch (e) {
+          reject(e);
+        }
+        resolve(output);
       }
     });
     container.on('spawn', (containerId) => {
-      LOGGER.info('spawn', containerId);
+      LOGGER.info('spawn', containerId, 'for file', fileId);
     });
     container.on('error', reject);
   });
