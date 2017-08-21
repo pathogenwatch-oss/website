@@ -5,3 +5,22 @@
 .wgsa-upload-summary .mdl-button {
   text-decoration: none !important;
 }
+
+.wgsa-genome-card p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 500;
+}
+
+.wgsa-genome-card a {
+  color: #AC65A6;
+}
+
+.wgsa-hub-card-error {
+  color: #d11b1b;
+}
+
+.wgsa-hub-card-error p {
+  white-space: normal;
+}

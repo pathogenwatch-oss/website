@@ -12,9 +12,9 @@ const ErrorSummary = React.createClass({
     const { totalErrors, retryable, onRetry, onRemove } = this.props;
     return (
       <Summary className="wgsa-hub-summary">
-        <span className="wgsa-error-message">{totalErrors} files could not be uploaded.</span>
-        {retryable && <button className="mdl-button mdl-button--primary" onClick={onRetry}>Retry All</button>}
-        <button className="mdl-button" onClick={onRemove}>Remove All</button>
+        <span className="wgsa-error-message">{totalErrors} file{totalErrors === 1 ? '' : 's'} could not be uploaded.</span>
+        {retryable && <button className="mdl-button mdl-button--primary" onClick={onRetry}>Retry {totalErrors === 1 ? 'It' : 'Them'}</button>}
+        <button className="mdl-button" onClick={onRemove}>Remove {totalErrors === 1 ? 'It' : 'Them'}</button>
       </Summary>
     );
   },
