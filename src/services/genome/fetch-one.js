@@ -23,6 +23,6 @@ module.exports = ({ user, sessionID, type = 'genome', id }) => {
   return fetch[type]({ user, sessionID }, id)
     .then(record => {
       if (!record) throw new NotFoundError('Not found or access denied');
-      return record;
+      return record.toObject();
     });
 };

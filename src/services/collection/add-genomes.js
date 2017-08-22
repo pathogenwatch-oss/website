@@ -13,9 +13,10 @@ function getLocations(uuidToGenome) {
 
 module.exports = function ({ collection, uuidToGenome }) {
   return Promise.all([
-    CollectionGenome.insertMany(
+    CollectionGenome.insertRaw(
       uuidToGenome.map(([ uuid, genome ]) => {
-        const { _id, fileId, name, year, month, day, latitude, longitude, country, pmid, userDefined, analysis } = genome;
+        const { _id, fileId, name, year, month, day, latitude, longitude, country, pmid, userDefined } = genome;
+        const { metrics } = genome.analysis;
         return {
           uuid,
           _collection: collection._id,
@@ -27,7 +28,9 @@ module.exports = function ({ collection, uuidToGenome }) {
           country,
           pmid,
           userDefined,
-          analysis,
+          analysis: {
+            metrics,
+          },
         };
       })
     ),
