@@ -16,15 +16,15 @@ const schema = new Schema({
   _user: { type: Schema.Types.ObjectId, ref: 'User' },
   _session: String,
   name: { type: String, required: true, index: 'text' },
-  organismId: String,
+  organismId: { type: String, index: true },
   fileId: String,
   year: Number,
   month: Number,
   day: Number,
-  date: Date,
+  date: { type: Date, index: true },
   latitude: Number,
   longitude: Number,
-  country: String,
+  country: { type: String, index: true },
   pmid: String,
   userDefined: Object,
   analysis: Object,
@@ -34,10 +34,12 @@ const schema = new Schema({
   binned: { type: Boolean, default: false },
   binnedDate: Date,
   uploadedAt: Date,
-  createdAt: Date,
+  createdAt: { type: Date, index: true },
   lastAccessedAt: Date,
   lastUpdatedAt: Date,
 });
+
+schema.index({ name: 1 });
 
 function toObject(genome, user = {}) {
   const { id } = user;
@@ -209,13 +211,14 @@ schema.statics.getSummary = function (fields, props) {
   return getSummary(this, fields, props);
 };
 
+const sortKeys = new Set([
+  'createdAt', 'name', 'organismId', 'country', 'date', 'access',
+]);
 schema.statics.getSort = function (sort = 'createdAt-') {
   const sortOrder = (sort.slice(-1) === '-') ? -1 : 1;
   const sortKey = sortOrder === 1 ? sort : sort.substr(0, sort.length - 1);
 
-  if (sortKey === 'date') {
-    return { year: sortOrder, month: sortOrder, day: sortOrder };
-  }
+  if (!sortKeys.has(sortKey)) return null;
 
   if (sortKey === 'access') {
     return { public: sortOrder, reference: sortOrder };
