@@ -40,6 +40,7 @@ const schema = new Schema({
 });
 
 schema.index({ name: 1 });
+schema.index({ public: 1, reference: 1 });
 
 function toObject(genome, user = {}) {
   const { id } = user;
