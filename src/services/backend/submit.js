@@ -3,9 +3,9 @@ const services = require('services');
 
 module.exports = ({ organismId, collectionId, uuidToGenome }) => {
   for (const [ uuid, genome ] of uuidToGenome) {
-    services.request('genome', 'file-path', genome.fileId).
+    const { fileId } = genome;
+    services.request('genome', 'file-path', { fileId }).
       then(filePath => {
-        const { fileId } = genome;
         messageQueueService.getTaskExchange().publish(`${organismId}.all`, {
           collectionId,
           speciesId: organismId,
