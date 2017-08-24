@@ -4,6 +4,7 @@ import './styles.css';
 
 import React from 'react';
 import { connect } from 'react-redux';
+import 'chart.piecelabel.js';
 
 import { getChartData } from './selectors';
 
@@ -33,7 +34,7 @@ const AnalysisChart = React.createClass({
       data: this.props.data,
       options: {
         pieceLabel: {
-          mode: 'percentage',
+          render: ({ dataset, index, percentage }) => `${dataset.labels[index]}\n${percentage}%`,
           precision: 2,
           fontColor: '#fff',
           fontSize: 11,
