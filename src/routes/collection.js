@@ -57,7 +57,7 @@ router.post('/collection/:id/binned', (req, res, next) => {
 router.get('/collection/:uuid', (req, res, next) => {
   LOGGER.info(`Getting collection: ${req.params.uuid}`);
   const { user, params } = req;
-  return services.request('collection', 'fetch-one', { user, uuid: params.uuid })
+  return services.request('collection', 'fetch-one', { user, uuid: params.uuid, withLeafIds: true })
     .then(response => res.json(response))
     .catch(error => (
       error.details.message === 'Collection not found' ? // Seneca loses error type :|
