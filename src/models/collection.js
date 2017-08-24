@@ -38,7 +38,8 @@ const schema = new Schema({
   subtrees: [ {
     name: String,
     tree: String,
-    leafIds: [ String ],
+    collectionIds: [ String ],
+    publicIds: [ String ],
     totalCollection: Number,
     totalPublic: Number,
   } ],

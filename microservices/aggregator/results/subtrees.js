@@ -3,24 +3,30 @@ const CollectionGenome = require('models/collectionGenome');
 const mainStorage = require('services/storage')('main');
 const { CORE_TREE_RESULT } = require('utils/documentKeys');
 
-function parseSubtrees(collectionId, results, fileIds) {
+function parseSubtrees(collectionId, results, uuids) {
   return Object.keys(results).map(documentKey => {
     const subtype =
       documentKey.replace(`${CORE_TREE_RESULT}_${collectionId}_`, '');
     const { newickTree, leafIdentifiers } = results[documentKey];
 
-    const leafIdSet = new Set(leafIdentifiers);
-    let count = 0;
-    for (const id of fileIds) {
-      if (leafIdSet.has(id)) count++;
+    const idSet = new Set(uuids);
+    const collectionIds = [];
+    const publicIds = [];
+    for (const id of leafIdentifiers) {
+      if (idSet.has(id)) {
+        collectionIds.push(id);
+      } else if (id !== subtype) {
+        publicIds.push(id);
+      }
     }
 
     return {
       name: subtype,
       tree: newickTree,
-      leafIds: leafIdentifiers,
-      totalCollection: count,
-      totalPublic: leafIdentifiers.length - count - 1, // -1 for reference
+      collectionIds,
+      publicIds,
+      totalCollection: collectionIds.length,
+      totalPublic: publicIds.length,
     };
   });
 }
@@ -39,8 +45,8 @@ module.exports = (taskName, { collectionId, documentKeys }) =>
     Collection.findByUuid(collectionId, { _id: 1 })
       .then(getUuids),
   ])
-  .then(([ { results, erroredKeys }, fileIds ]) => {
+  .then(([ { results, erroredKeys }, uuids ]) => {
     if (erroredKeys.length) throw new Error(`Failed to find ${erroredKeys}`);
-    return parseSubtrees(collectionId, results, fileIds);
+    return parseSubtrees(collectionId, results, uuids);
   })
   .then(subtrees => Collection.update({ uuid: collectionId }, { subtrees }));
