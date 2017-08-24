@@ -15,7 +15,7 @@ const OfflineLink = () => (
   <Link
     to="/offline"
     className="cgps-avatar wgsa-account-link"
-    title="Menu not available in Offline mode."
+    title="View Saved Collections"
   >
     <span className="cgps-avatar__image">
       <i className="material-icons">signal_wifi_off</i>
@@ -23,15 +23,9 @@ const OfflineLink = () => (
   </Link>
 );
 
-const OfflineContent = () => (
-  <span className="wgsa-header-content">
-    <span className="mdl-navigation__link">Offline Mode</span>
-  </span>
-);
-
 const Header = ({
   asideEnabled, asideVisible, userDrawerVisible, className, offline,
-  children = (offline ? <OfflineContent /> : <DefaultContent asideEnabled={asideEnabled} />),
+  children = <DefaultContent asideEnabled={asideEnabled} />,
 }) => (
   <header className={
     classnames(

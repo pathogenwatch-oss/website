@@ -7,7 +7,17 @@ import { isAsideVisible } from './selectors';
 
 import { toggleAside } from './actions';
 
-const DefaultContent = ({ asideVisible, toggle, asideEnabled = false }) => (
+import { isOffline } from '../offline';
+
+const OfflineContent = () => (
+  <span className="wgsa-header-content">
+    <span className="mdl-navigation__link">Offline Mode</span>
+  </span>
+);
+
+const DefaultContent = ({ offline, asideVisible, toggle, asideEnabled = false }) => (
+  offline ?
+  <OfflineContent /> :
   <nav className="wgsa-header-content mdl-navigation">
     <NavLink to="/collections/all">Collections</NavLink>
     <NavLink to="/genomes/all">Genomes</NavLink>
@@ -29,6 +39,7 @@ const DefaultContent = ({ asideVisible, toggle, asideEnabled = false }) => (
 function mapStateToProps(state, { asideEnabled = false }) {
   return {
     asideVisible: asideEnabled && isAsideVisible(state),
+    offline: isOffline(),
   };
 }
 
