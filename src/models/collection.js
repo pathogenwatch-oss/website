@@ -30,6 +30,7 @@ const schema = new Schema({
   },
   pmid: String,
   public: { type: Boolean, default: false },
+  published: { type: Boolean, default: false },
   private: { type: Boolean, default: false },
   reference: Boolean,
   size: Number,
