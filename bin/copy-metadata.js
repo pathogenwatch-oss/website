@@ -29,6 +29,7 @@ function getCollectionGenomes([ srcId, destIds ]) {
 }
 
 const limit = 100;
+const referenceCount = 19;
 
 function updateCollectionGenomes([ srcGenomes, destGenomes ]) {
   for (const d of destGenomes) {
@@ -42,16 +43,23 @@ function updateCollectionGenomes([ srcGenomes, destGenomes ]) {
       console.log(d.fileId);
     }
   }
-  if (srcGenomes.length !== destGenomes.length) {
+  if (srcGenomes.length - referenceCount !== destGenomes.length) {
     throw new Error(`Genome count does not match. src: ${srcGenomes.length} dest: ${destGenomes.length}`);
   }
 
   return mapLimit(srcGenomes, limit, ({ _id, fileId, userDefined }) => {
     const dest = destGenomes.find(_ => _.fileId === fileId);
-    if (!dest) throw new Error(`Dest genome not found: ${_id}`);
+    if (!dest) {
+      console.log(`Dest genome not found: ${_id}`);
+      return Promise.resolve();
+    }
+    const reverseUserDefined = {};
+    for (const key of Object.keys(userDefined).reverse()) {
+      if (key) reverseUserDefined[key] = userDefined[key];
+    }
     return CollectionGenome.update(
       { _id: dest._id },
-      { $set: { userDefined }, $unset: { userDefined: 1 } }
+      { $set: { userDefined: reverseUserDefined } }
     );
   });
 }
