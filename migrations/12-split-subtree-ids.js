@@ -51,9 +51,6 @@ module.exports.up = function (done) {
 
 module.exports.down = function (done) {
   // use this.db for MongoDB communication, and this.log() for logging
-  const { db } = this;
-  db.collection('genomes')
-    .update({ date: { $exists: true } }, { $unset: { date: true } })
-    .then(() => done())
-    .catch(done);
+  // const { db } = this;
+  throw new Error('Not Implemented');
 };
