@@ -61,10 +61,12 @@ function checkStatus(collection) {
   return collection;
 }
 
-module.exports = ({ uuid, withLeafIds = false }) => {
+module.exports = ({ uuid, withIds = false }) => {
   const projection = Object.assign(
     { 'subtrees.tree': 0 },
-    withLeafIds ? {} : { 'subtrees.leafIds': 0 }
+    withIds ?
+      { 'subtrees.publicIds': 0 } :
+      { 'subtrees.publicIds': 0, 'subtrees.collectionIds': 0 }
   );
 
   return (
