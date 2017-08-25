@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { getGenomes } from '../../collection-viewer/selectors';
-import { getHighlightedIds } from '../selectors';
+import { getFilter, getHighlightedIds } from '../selectors';
 import { getTrees } from './selectors';
 
 import { leafStyles, defaultLeafStyle } from './constants';
@@ -11,13 +11,13 @@ import { CGPS } from '../../app/constants';
 const Styler = React.createClass({
 
   componentDidUpdate() {
-    const { phylocanvas, genomes, trees, highlightedIds } = this.props;
+    const { phylocanvas, genomes, trees, highlightedIds, filter } = this.props;
 
     for (const leaf of phylocanvas.leaves) {
       const { id } = leaf;
       const genome = genomes[id];
       const subtree = trees[id];
-      const { leafIds = [], totalCollection = 0, totalPublic = 0 } =
+      const { collectionIds = [], totalCollection = 0, totalPublic = 0 } =
         subtree || {};
 
       leaf.setDisplay({
@@ -34,8 +34,19 @@ const Styler = React.createClass({
         leaf.label = genome.name;
       }
 
-      leaf.highlighted = (highlightedIds.size &&
-        leafIds.some(uuid => highlightedIds.has(uuid)));
+      let isFiltered = !filter.active;
+      let isHighlighted = false;
+      for (const uuid of collectionIds) {
+        if (!isFiltered) {
+          isFiltered = filter.active && filter.ids.has(uuid);
+        }
+        if (!isHighlighted) {
+          isHighlighted = highlightedIds.size && highlightedIds.has(uuid);
+        }
+        if (isHighlighted && isFiltered) break;
+      }
+      leaf.radius = isFiltered ? 1 : 0;
+      leaf.highlighted = isHighlighted;
       leaf.interactive = !!subtree;
     }
 
@@ -53,6 +64,7 @@ function mapStateToProps(state) {
     genomes: getGenomes(state),
     trees: getTrees(state),
     highlightedIds: getHighlightedIds(state),
+    filter: getFilter(state),
   };
 }
 
