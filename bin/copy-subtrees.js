@@ -91,7 +91,7 @@ function validateCollections([ src, dest, srcGenomes, destGenomes ]) {
   if (srcGenomes.length !== destGenomes.length) {
     throw new Error('Collection genomes do not match.');
   }
-  return [ src, dest, srcGenomes, destGenomes ]; 
+  return [ src, dest, srcGenomes, destGenomes ];
 }
 
 function copyMetadata([ src, dest, srcGenomes, destGenomes ]) {
@@ -119,9 +119,11 @@ function copySubtrees([ src, dest, srcGenomes, destGenomes ]) {
     if (!originalSubtree) {
       throw new Error(`Cannot find subtree for ${subtree.name}`);
     }
-    subtree.tree = pruneTree(subtree.name, subtree.tree, subtree.leafIds.filter(id => srcIds.has(id)));
-    subtree.tree = cleanTree(subtree.name, subtree.tree, subtree.leafIds.filter(id => destIds.has(id)));
-    subtree.leafIds = subtree.leafIds.filter(id => !srcIds.has(id));
+    const leafIds = subtree.collectionIds.concat(subtree.publicIds);
+    subtree.tree = pruneTree(subtree.name, subtree.tree, leafIds.filter(id => srcIds.has(id)));
+    subtree.tree = cleanTree(subtree.name, subtree.tree, leafIds.filter(id => destIds.has(id)));
+    subtree.publicIds = subtree.publicIds.filter(id => !destIds.has(id));
+    subtree.collectionIds = leafIds.filter(id => destIds.has(id));
     subtree.totalPublic -= subtree.totalCollection;
   }
 

@@ -46,9 +46,10 @@ function updateCollectionTree([ destCollection, srcGenomes, destGenomes ]) {
 
     for (const subtree of destCollection.subtrees) {
       subtree.tree = subtree.tree.replace(destGenome.uuid, srcGenome.uuid);
-      for (let i = 0; i < subtree.leafIds.length; i++) {
-        if (subtree.leafIds[i] === destGenome.uuid) {
-          subtree.leafIds[i] = srcGenome.uuid;
+      const leafIds = subtree.collectionIds.concat(subtree.publicIds);
+      for (let i = 0; i < leafIds.length; i++) {
+        if (leafIds[i] === destGenome.uuid) {
+          leafIds[i] = srcGenome.uuid;
         }
       }
     }
