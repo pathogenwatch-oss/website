@@ -16,8 +16,8 @@ function addGenomes(collection) {
     });
 }
 
-module.exports = ({ user, uuid }) =>
-  services.request('collection', 'fetch-progress', { user, uuid })
+module.exports = ({ user, uuid, withIds = false }) =>
+  services.request('collection', 'fetch-progress', { user, uuid, withIds })
     .then(collection => collection.ensureAccess(user))
     .then(collection => (
       collection.status === 'READY' ?

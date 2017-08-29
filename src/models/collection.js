@@ -32,6 +32,7 @@ const schema = new Schema({
   },
   pmid: String,
   public: { type: Boolean, default: false },
+  published: { type: Boolean, default: false },
   private: { type: Boolean, default: false },
   reference: Boolean,
   showcase: Boolean,
@@ -40,7 +41,8 @@ const schema = new Schema({
   subtrees: [ {
     name: String,
     tree: String,
-    leafIds: [ String ],
+    collectionIds: [ String ],
+    publicIds: [ String ],
     totalCollection: Number,
     totalPublic: Number,
   } ],
