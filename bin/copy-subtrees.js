@@ -6,57 +6,7 @@ const argv = require('named-argv');
 const Collection = require('models/collection');
 const CollectionGenome = require('models/collectionGenome');
 
-function getPrunedLeafString([ leafString, firstChar, lastChar ]) {
-  switch (firstChar + lastChar) {
-    case ',,':
-      return ',';
-    case '(,':
-      return '(';
-    case ',)':
-      return ')';
-    case '()':
-      return '';
-    default:
-      throw new Error(`Invalid leaf string: '${leafString}'`);
-  }
-}
-
-function pruneLeaf(name, newick, leafId) {
-  const regex = new RegExp(`([(,])${leafId}:[^,)]+([,)])`, 'g');
-  const match = regex.exec(newick);
-  if (!match || match.length === 0) {
-    throw new Error(`Cannot find leaf '${leafId}' in tree '${name}'`);
-  }
-  const prunedLeafString = getPrunedLeafString(match);
-  return newick.replace(regex, prunedLeafString);
-}
-
-function pruneTree(name, newick, leafIds) {
-  let prunedTree = newick;
-  for (const leafId of leafIds) {
-    prunedTree = pruneLeaf(name, prunedTree, leafId);
-  }
-  return prunedTree;
-}
-
-function cleanLeaf(name, newick, leafId) {
-  const regex = new RegExp(`[(]${leafId}:([^)]+)[)]:([^,)]+)([,)])`, 'g');
-  const match = regex.exec(newick);
-  if (!match || match.length === 0 || !match[0]) {
-    return newick;
-    // throw new Error(`Cannot find leaf '${leafId}' in tree '${name}'`);
-  }
-  const dist = parseFloat(match[1]) + parseFloat(match[2]);
-  return newick.replace(regex, `${leafId}:${dist}${match[3]}`);
-}
-
-function cleanTree(name, newick, leafIds) {
-  let prunedTree = newick;
-  for (const leafId of leafIds) {
-    prunedTree = cleanLeaf(name, prunedTree, leafId);
-  }
-  return prunedTree;
-}
+const { prune, clean } = require('../utils/subtrees');
 
 function parseQuery() {
   const { src, dest } = argv.opts;
@@ -112,16 +62,13 @@ function copySubtrees([ src, dest, srcGenomes, destGenomes ]) {
   const destIds = new Set(destGenomes);
 
   for (const subtree of dest.subtrees) {
-    if (subtree.name === '90370_11909_3') {
-      console.log('90370_11909_3');
-    }
     const originalSubtree = originalSubtrees.filter(t => t.name === subtree.name);
     if (!originalSubtree) {
       throw new Error(`Cannot find subtree for ${subtree.name}`);
     }
     const leafIds = subtree.collectionIds.concat(subtree.publicIds);
-    subtree.tree = pruneTree(subtree.name, subtree.tree, leafIds.filter(id => srcIds.has(id)));
-    subtree.tree = cleanTree(subtree.name, subtree.tree, leafIds.filter(id => destIds.has(id)));
+    subtree.tree = prune(subtree.tree, leafIds.filter(id => srcIds.has(id)), subtree.name);
+    subtree.tree = clean(subtree.tree, leafIds.filter(id => destIds.has(id)), subtree.name);
     subtree.publicIds = subtree.publicIds.filter(id => !destIds.has(id));
     subtree.collectionIds = leafIds.filter(id => destIds.has(id));
     subtree.totalPublic -= subtree.totalCollection;

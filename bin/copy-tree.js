@@ -9,6 +9,8 @@ const Collection = require('models/collection');
 const CollectionGenome = require('models/collectionGenome');
 const mapLimit = require('promise-map-limit');
 
+const { prune, clean } = require('../utils/subtrees');
+
 function getIds() {
   const { src, dest } = argv.opts;
   if (src && dest) {
@@ -37,6 +39,17 @@ function updateCollectionTree([ destCollection, srcGenomes, destGenomes ]) {
     throw new Error(`Genome count does not match. src: ${srcGenomes.length} dest: ${destGenomes.length}`);
   }
 
+  const srcUuidByFileId = srcGenomes.reduce((p, c) => { p[c.uuid] = c.fileId; return p; }, {});
+  const destFileIds = new Set(destGenomes.map(x => x.fileId));
+
+  for (const subtree of destCollection.subtrees) {
+    const duplicatedIds = subtree.publicIds.filter(id => destFileIds.has(srcUuidByFileId[id]));
+    subtree.tree = prune(subtree.tree, duplicatedIds, subtree.name);
+    subtree.tree = clean(subtree.tree, subtree.collectionIds, subtree.name);
+    subtree.publicIds = subtree.publicIds.filter(id => !duplicatedIds.includes(id));
+    subtree.totalPublic = subtree.publicIds.length;
+  }
+
   for (const destGenome of destGenomes) {
     const srcGenome = srcGenomes.find(x => x.fileId === destGenome.fileId);
     if (!srcGenome) {
@@ -46,14 +59,20 @@ function updateCollectionTree([ destCollection, srcGenomes, destGenomes ]) {
 
     for (const subtree of destCollection.subtrees) {
       subtree.tree = subtree.tree.replace(destGenome.uuid, srcGenome.uuid);
-      const leafIds = subtree.collectionIds.concat(subtree.publicIds);
-      for (let i = 0; i < leafIds.length; i++) {
-        if (leafIds[i] === destGenome.uuid) {
-          leafIds[i] = srcGenome.uuid;
+      for (let i = 0; i < subtree.publicIds.length; i++) {
+        if (subtree.publicIds[i] === destGenome.uuid) {
+          subtree.publicIds[i] = srcGenome.uuid;
+        }
+      }
+      for (let i = 0; i < subtree.collectionIds.length; i++) {
+        if (subtree.collectionIds[i] === destGenome.uuid) {
+          subtree.collectionIds[i] = srcGenome.uuid;
         }
       }
     }
   }
+
+  destCollection.published = true;
 
   return [ destCollection, srcGenomes, destGenomes ];
 }
