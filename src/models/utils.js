@@ -6,6 +6,7 @@ exports.setToObjectOptions = (schema, optionalTransform) =>
       delete ret.__v;
       return optionalTransform ? optionalTransform(doc, ret, options) : ret;
     },
+    retainKeyOrder: true,
   });
 
 exports.addPreSaveHook = schema =>
