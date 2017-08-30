@@ -19,6 +19,10 @@ const formatters = {
     snp: result.snparResult ?
       result.snparResult.resistanceMutationIds || [] : [],
   }),
+  genotyphi: result => ({
+    type: result.genotype,
+    snpsCalled: result.foundLoci,
+  }),
 };
 
 function formatResult(task, version, result) {
