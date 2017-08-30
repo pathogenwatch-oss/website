@@ -18,6 +18,7 @@
 
 .wgsa-genome-drawer-content .mdl-tabs__tab {
   padding: 0 16px;
+  white-space: nowrap;
 }
 
 .wgsa-genome-drawer-content .mdl-tabs__panel {
