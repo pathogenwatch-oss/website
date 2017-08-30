@@ -104,6 +104,7 @@ export const getFileSummary = createSelector(
 function getAnalysisBreakdown(analyses) {
   const mlst = { total: 0, sts: {} };
   const paarsnp = { label: 'PAARSNP', total: 0 };
+  const genotyphi = { label: 'Genotyphi', total: 0 };
 
   for (const analysis of analyses) {
     if (analysis.mlst) {
@@ -111,9 +112,8 @@ function getAnalysisBreakdown(analyses) {
       mlst.sts[st] = (mlst.sts[st] || 0) + 1;
       mlst.total++;
     }
-    if (analysis.paarsnp) {
-      paarsnp.total++;
-    }
+    if (analysis.paarsnp) paarsnp.total++;
+    if (analysis.genotyphi) genotyphi.total++;
   }
 
   return {
@@ -125,6 +125,7 @@ function getAnalysisBreakdown(analyses) {
       })),
     },
     paarsnp,
+    genotyphi,
   };
 }
 
