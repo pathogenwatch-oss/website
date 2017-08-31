@@ -4,7 +4,8 @@
   ],
 
   "485": [
-    { "task": "paarsnp", "version": "v3" }
+    { "task": "paarsnp", "version": "v3" },
+    { "task": "ngmast", "version": "v1" }
   ],
   "1280": [
     { "task": "mlst", "version": "v3" },
