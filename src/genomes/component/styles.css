@@ -1,0 +1,22 @@
+.wgsa-genomes {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.wgsa-genomes .wgsa-filterable-view {
+  flex-grow: 1;
+}
+
+.wgsa-genomes-content {
+  flex-grow: 1;
+  position: relative;
+}
+
+.wgsa-genomes-content > * {
+  height: 100%;
+}

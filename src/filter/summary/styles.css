@@ -28,8 +28,7 @@
 
 .wgsa-filter-summary__count {
   font-size: 13px;
-  margin-left: 8px;
-  margin-right: 8px;
+  margin: 0 8px;
   white-space: nowrap;
 }
 

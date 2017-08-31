@@ -1,0 +1,9 @@
+.wgsa-genomes > header {
+  display: flex;
+  align-items: center;
+  height: 48px;
+}
+
+.wgsa-genomes .wgsa-selection-summary {
+  margin-left: auto;
+}

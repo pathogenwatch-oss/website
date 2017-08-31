@@ -1,19 +1,25 @@
+import './styles.css';
+
 import { connect } from 'react-redux';
 import { parse } from 'query-string';
 
 import Genomes from './Genomes.react';
 
-import { getTotalGenomes, isWaiting } from '../selectors';
+import { getTotalGenomes, getGridItems, getStatus } from '../selectors';
+import { getTotal } from '../summary/selectors';
 
 import { updateFilter } from '../filter/actions';
 import { selectAll } from '../selection/actions';
 
+
 function mapStateToProps(state, { match }) {
   const { prefilter } = match.params;
   return {
-    hasGenomes: getTotalGenomes(state) > 0,
-    waiting: isWaiting(state),
     prefilter,
+    hasGenomes: getTotalGenomes(state) > 0,
+    items: getGridItems(state),
+    total: getTotal(state),
+    status: getStatus(state),
   };
 }
 
