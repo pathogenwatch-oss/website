@@ -15,6 +15,7 @@ module.exports = function (props) {
         { name: 1,
           organismId: 1,
           'analysis.specieator.organismName': 1,
+          'analysis.mlst.st': 1,
           date: 1,
           country: 1,
           reference: 1,
@@ -25,6 +26,16 @@ module.exports = function (props) {
         { skip: Number(skip), limit: Math.min(Number(limit), maxLimit), sort: Genome.getSort(sort) }
       )
       .lean()
-      .then(genomes => genomes.map(_ => Genome.toObject(_, user)))
+      .then(genomes => genomes.map(genome => {
+        const { analysis = {} } = genome;
+        if (analysis.specieator) {
+          genome.organismName = analysis.specieator.organismName;
+        }
+        if (analysis.mlst) {
+          genome.st = analysis.mlst.st;
+        }
+        genome.analysis = undefined;
+        return Genome.toObject(genome, user);
+      }))
   );
 };
