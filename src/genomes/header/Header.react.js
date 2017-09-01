@@ -5,15 +5,14 @@ import { Totals } from '../../filter/summary';
 import ViewSwitcher from './ViewSwitcher.react';
 import SelectAll from '../selection/SelectAll.react';
 import ClearSelection from '../selection/ClearSelection.react';
+import FilterHeader from '../filter/Header.react';
 import SelectionSummary from '../selection/Summary.react';
 
 import { getVisible, getTotal } from './selectors';
 
 const Header = ({ visibleGenomes, totalGenomes }) => (
   <header>
-    <button className="mdl-button mdl-button--icon">
-      <i className="material-icons">tune</i>
-    </button>
+    <FilterHeader />
     <div className="wgsa-button-group">
       <i className="material-icons" title="View">visibility</i>
       <ViewSwitcher title="List" />

@@ -10,14 +10,13 @@ const Sort = props =>
 
 export default ({ hasScrollbar = true }) => (
   <div className="wgsa-list-header-container">
-    <div className="wgsa-genome-list-item wgsa-genome-list-header wgsa-content-margin-right">
+    <div className="wgsa-genome-list-item wgsa-genome-list-header">
       <Sort sortKey="name">Name</Sort>
       <Sort sortKey="organismId">Organism</Sort>
-      <div className="wgsa-card-content">
-        <Sort sortKey="country">Country</Sort>
-        <Sort sortKey="date">Date</Sort>
-        <Sort sortKey="access">Access</Sort>
-      </div>
+      <Sort sortKey="st">ST</Sort>
+      <Sort sortKey="country">Country</Sort>
+      <Sort sortKey="date">Date</Sort>
+      <Sort sortKey="access">Access</Sort>
       <div className="wgsa-genome-list-cell">
         <div style={{ width: 32 }} />
       </div>

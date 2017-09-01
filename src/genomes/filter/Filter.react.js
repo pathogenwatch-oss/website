@@ -7,16 +7,88 @@ import DateRange from '../../components/date-range';
 import AsideSection from '../../filter/aside-section';
 import { selectors } from '../../filter';
 
-import { getFilterSummary, getSearchText } from './selectors';
+import { getFilterSummary, getSearchText, isFilterOpen } from './selectors';
 
 import { stateKey } from './index';
 import * as actions from './actions';
+
+const Filter = ({ isOpen, isActive, filterSummary, textValue, updateFilter, clearFilter }) => {
+  if (!isOpen) {
+    return null;
+  }
+
+  return (
+    <div className="wgsa-genome-filter">
+      <FilterAside
+        loading={filterSummary.loading}
+        active={isActive}
+        clear={clearFilter}
+        textValue={textValue}
+        textOnChange={e => updateFilter('searchText', e.target.value)}
+      >
+        <section className="wgsa-filter__section">
+          <h3>Date</h3>
+          <DateRange
+            bounds={filterSummary.date.bounds}
+            values={filterSummary.date.values}
+            onChangeMin={value => updateFilter('minDate', value.toISOString())}
+            onChangeMax={value => updateFilter('maxDate', value.toISOString())}
+          />
+        </section>
+        <AsideSection
+          filterKey="organismId"
+          heading="WGSA Organisms"
+          summary={filterSummary.wgsaOrganisms}
+          updateFilter={updateFilter}
+        />
+        <AsideSection
+          filterKey="organismId"
+          heading="Other Organisms"
+          summary={filterSummary.otherOrganisms}
+          updateFilter={updateFilter}
+        />
+        <AsideSection
+          filterKey="sequenceType"
+          heading="Sequence Type"
+          summary={filterSummary.sequenceTypes}
+          updateFilter={updateFilter}
+        />
+        <AsideSection
+          filterKey="reference"
+          heading="Reference"
+          summary={filterSummary.reference}
+          updateFilter={updateFilter}
+        />
+        <AsideSection
+          filterKey="owner"
+          heading="Owner"
+          summary={filterSummary.owner}
+          updateFilter={updateFilter}
+        />
+        <AsideSection
+          filterKey="uploadedAt"
+          heading="Uploaded At"
+          summary={filterSummary.uploadedAt}
+          updateFilter={updateFilter}
+        />
+        <AsideSection
+          filterKey="country"
+          heading="Country"
+          summary={filterSummary.country}
+          updateFilter={updateFilter}
+        />
+        <LocationListener update={updateFilter} />
+      </FilterAside>
+    </div>
+  );
+};
 
 function mapStateToProps(state) {
   return {
     isActive: selectors.isActive(state, { stateKey }),
     filterSummary: getFilterSummary(state, { stateKey }),
     textValue: getSearchText(state),
+    isOpen: isFilterOpen(state),
   };
 }
 
@@ -28,67 +100,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(
-  ({ isActive, filterSummary, textValue, updateFilter, clearFilter }) => (
-    <FilterAside
-      loading={filterSummary.loading}
-      active={isActive}
-      clear={clearFilter}
-      textValue={textValue}
-      textOnChange={e => updateFilter('searchText', e.target.value)}
-    >
-      <section className="wgsa-filter__section">
-        <h3>Date</h3>
-        <DateRange
-          bounds={filterSummary.date.bounds}
-          values={filterSummary.date.values}
-          onChangeMin={value => updateFilter('minDate', value.toISOString())}
-          onChangeMax={value => updateFilter('maxDate', value.toISOString())}
-        />
-      </section>
-      <AsideSection
-        filterKey="organismId"
-        heading="WGSA Organisms"
-        summary={filterSummary.wgsaOrganisms}
-        updateFilter={updateFilter}
-      />
-      <AsideSection
-        filterKey="organismId"
-        heading="Other Organisms"
-        summary={filterSummary.otherOrganisms}
-        updateFilter={updateFilter}
-      />
-      <AsideSection
-        filterKey="sequenceType"
-        heading="Sequence Type"
-        summary={filterSummary.sequenceTypes}
-        updateFilter={updateFilter}
-      />
-      <AsideSection
-        filterKey="reference"
-        heading="Reference"
-        summary={filterSummary.reference}
-        updateFilter={updateFilter}
-      />
-      <AsideSection
-        filterKey="owner"
-        heading="Owner"
-        summary={filterSummary.owner}
-        updateFilter={updateFilter}
-      />
-      <AsideSection
-        filterKey="uploadedAt"
-        heading="Uploaded At"
-        summary={filterSummary.uploadedAt}
-        updateFilter={updateFilter}
-      />
-      <AsideSection
-        filterKey="country"
-        heading="Country"
-        summary={filterSummary.country}
-        updateFilter={updateFilter}
-      />
-      <LocationListener update={updateFilter} />
-    </FilterAside>
-  )
-);
+export default connect(mapStateToProps, mapDispatchToProps)(Filter);

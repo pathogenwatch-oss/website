@@ -32,3 +32,11 @@ export function clearFilter() {
     return dispatch(fetchGenomeSummary(filter));
   };
 }
+
+export const GENOMES_FILTER_OPENED = 'GENOMES_FILTER_OPENED';
+
+export function toggleFilter() {
+  return {
+    type: GENOMES_FILTER_OPENED,
+  };
+}

@@ -8,15 +8,40 @@
   right: 0;
 }
 
-.wgsa-genomes .wgsa-filterable-view {
+.wgsa-genomes .wgsa-genomes-content {
   flex-grow: 1;
+  box-sizing: border-box;
+  display: flex;
+  overflow: hidden;
 }
 
-.wgsa-genomes-content {
+.wgsa-genomes .wgsa-genomes-view {
   flex-grow: 1;
   position: relative;
 }
 
-.wgsa-genomes-content > * {
+.wgsa-genomes .wgsa-genome-filter {
+  width: 255px;
+  /*position: relative;*/
+}
+
+.wgsa-genomes .wgsa-genome-filter > aside {
+  width: 255px;
+  position: absolute;
+  bottom: 0;
+  top: 0;
+  right: 0;
+}
+
+.wgsa-genomes .wgsa-genome-selection {
+  width: 255px;
+  position: relative;
+  bottom: 0;
+  top: 0;
+  right: 0;
+  overflow: auto;
+}
+
+.wgsa-genomes-view > * {
   height: 100%;
 }

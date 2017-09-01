@@ -2,7 +2,7 @@ import * as actions from './actions';
 import { FETCH_GENOME_LIST } from '../actions';
 
 const initialState = {
-  drawerOpen: false,
+  isOpen: false,
   genomes: {},
 };
 
@@ -22,7 +22,7 @@ export default function (state = initialState, { type, payload }) {
       return {
         ...state,
         genomes: payload.genomes.reduce(addToSelection, { ...state.genomes }),
-        drawerOpen: payload.focus,
+        isOpen: payload.focus,
       };
     }
     case actions.UNSELECT_GENOMES:
@@ -39,13 +39,13 @@ export default function (state = initialState, { type, payload }) {
     case actions.SELECTION_DRAWER_OPENED:
       return {
         ...state,
-        drawerOpen: !state.drawerOpen,
+        isOpen: !state.isOpen,
       };
     case FETCH_GENOME_LIST.SUCCESS:
     case FETCH_GENOME_LIST.ERROR:
       return {
         ...state,
-        drawerOpen: false,
+        isOpen: false,
       };
     default:
       return state;

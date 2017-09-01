@@ -21,13 +21,15 @@
 .wgsa-filter__header {
   border-bottom: 1px solid rgba(0, 0, 0, 0.14);
   position: relative;
+  height: 48px;
+  box-sizing: border-box;
 }
 
 .wgsa-filter__search {
   padding: 0 16px;
   display: flex;
   align-items: center;
-  height: 64px;
+  height: 100%;
 }
 
 .wgsa-filter__search input {
@@ -49,7 +51,7 @@
   position: absolute;
   overflow-y: auto;
   right: 0;
-  top: 64px;
+  top: 48px;
 }
 
 .wgsa-filter__content:empty::after {

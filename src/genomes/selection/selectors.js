@@ -6,7 +6,7 @@ import { isOverSelectionLimit } from './utils';
 
 export const getSelection = ({ genomes }) => genomes.selection;
 export const getSelectedGenomes = state => getSelection(state).genomes;
-export const isDrawerOpen = state => getSelection(state).drawerOpen;
+export const isSelectionOpen = state => getSelection(state).isOpen;
 
 export const getSelectedGenomeIds = createSelector(
   getSelectedGenomes,

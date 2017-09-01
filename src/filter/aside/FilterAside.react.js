@@ -5,7 +5,7 @@ import classnames from 'classnames';
 
 export default ({ active, textValue, textOnChange, clear, children }) => (
   <aside className={classnames('wgsa-filter', { 'wgsa-filter--active': active })}>
-    <header className="wgsa-filter__header mdl-layout__header mdl-layout__header--scroll">
+    <header className="wgsa-filter__header">
       <label className="wgsa-filter__search">
         <i className="material-icons">search</i>
         <input

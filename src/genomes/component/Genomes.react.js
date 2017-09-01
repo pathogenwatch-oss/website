@@ -1,4 +1,5 @@
 import React from 'react';
+import classnames from 'classnames';
 
 import Overlay from '../../overlay';
 
@@ -86,11 +87,17 @@ export default React.createClass({
 
   render() {
     return (
-      <div className="wgsa-genomes">
+      <div
+        className={classnames(
+          'wgsa-genomes',
+          { 'has-filter': this.props.isFilterOpen,
+            'has-selection': this.props.isSelectionOpen }
+        )}
+      >
         <Header />
-        <div className="wgsa-filterable-view">
+        <div className="wgsa-genomes-content">
           <Filter />
-          <div className="wgsa-genomes-content">
+          <div className="wgsa-genomes-view">
             {this.renderContent()}
           </div>
           <Selection />

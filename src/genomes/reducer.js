@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 
 import summary from './summary/reducer';
+import filter from './filter/reducer';
 import selection from './selection/reducer';
 import stats from './stats/reducer';
 import collectionMetadata from './create-collection-form/reducer';
@@ -99,6 +100,7 @@ function status(state = initialStatus, { type }) {
 }
 
 export default combineReducers({
+  filter,
   entities,
   indices,
   collectionMetadata,
