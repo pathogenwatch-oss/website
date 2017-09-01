@@ -32,26 +32,28 @@ export default React.createClass({
     const minValue = dateToInteger(minDate);
     const maxValue = dateToInteger(maxDate);
     return (
-      <Range
-        min={minBound}
-        max={maxBound}
-        value={[ minValue, maxValue ]}
-        onChange={([ min, max ]) => this.setState({ min: integerToDate(min), max: endOfMonth(integerToDate(max)) })}
-        onAfterChange={([ min, max ]) => {
-          if (min !== (values[0] ? dateToInteger(values[0]) : minBound)) {
-            onChangeMin(integerToDate(min));
-          }
-          if (max !== (values[1] ? dateToInteger(values[1]) : maxBound)) {
-            onChangeMax(endOfMonth(integerToDate(max)));
-          }
-        }}
-        className={classnames({ 'rc-slider--inactive': this.isInactive() })}
-      >
-        <label>
-          <span>{format(minDate, 'MMM YYYY')}</span>
-          <span>{format(maxDate, 'MMM YYYY')}</span>
-        </label>
-      </Range>
+      <div className="wgsa-date-range">
+        <Range
+          min={minBound}
+          max={maxBound}
+          value={[ minValue, maxValue ]}
+          onChange={([ min, max ]) => this.setState({ min: integerToDate(min), max: endOfMonth(integerToDate(max)) })}
+          onAfterChange={([ min, max ]) => {
+            if (min !== (values[0] ? dateToInteger(values[0]) : minBound)) {
+              onChangeMin(integerToDate(min));
+            }
+            if (max !== (values[1] ? dateToInteger(values[1]) : maxBound)) {
+              onChangeMax(endOfMonth(integerToDate(max)));
+            }
+          }}
+          className={classnames({ 'rc-slider--inactive': this.isInactive() })}
+        >
+          <label>
+            <span>{format(minDate, 'MMM YYYY')}</span>
+            <span>{format(maxDate, 'MMM YYYY')}</span>
+          </label>
+        </Range>
+      </div>
     );
   },
 

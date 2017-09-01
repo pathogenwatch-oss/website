@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { LocationListener } from '../../location';
 import FilterAside from '../../filter/aside';
 import DateRange from '../../components/date-range';
-import AsideSection from '../../filter/aside-section';
+import FilterSection from '../../filter/section';
 import { selectors } from '../../filter';
 
 import { getFilterSummary, getSearchText, isFilterOpen } from './selectors';
@@ -26,55 +26,64 @@ const Filter = ({ isOpen, isActive, filterSummary, textValue, updateFilter, clea
         textValue={textValue}
         textOnChange={e => updateFilter('searchText', e.target.value)}
       >
-        <section className="wgsa-filter__section">
-          <h3>Date</h3>
+        <FilterSection
+          filterKey="organismId"
+          heading="WGSA Organisms"
+          icon="bug_report"
+          summary={filterSummary.wgsaOrganisms}
+          updateFilter={updateFilter}
+        />
+        <FilterSection
+          filterKey="organismId"
+          heading="Other Organisms"
+          icon="bug_report"
+          summary={filterSummary.otherOrganisms}
+          updateFilter={updateFilter}
+        />
+        <FilterSection
+          filterKey="sequenceType"
+          heading="Sequence Type"
+          icon="new_releases"
+          summary={filterSummary.sequenceTypes}
+          updateFilter={updateFilter}
+        />
+        <FilterSection
+          filterKey="country"
+          heading="Country"
+          icon="language"
+          summary={filterSummary.country}
+          updateFilter={updateFilter}
+        />
+        <FilterSection
+          heading="Date"
+          icon="date_range"
+        >
           <DateRange
             bounds={filterSummary.date.bounds}
             values={filterSummary.date.values}
             onChangeMin={value => updateFilter('minDate', value.toISOString())}
             onChangeMax={value => updateFilter('maxDate', value.toISOString())}
           />
-        </section>
-        <AsideSection
-          filterKey="organismId"
-          heading="WGSA Organisms"
-          summary={filterSummary.wgsaOrganisms}
-          updateFilter={updateFilter}
-        />
-        <AsideSection
-          filterKey="organismId"
-          heading="Other Organisms"
-          summary={filterSummary.otherOrganisms}
-          updateFilter={updateFilter}
-        />
-        <AsideSection
-          filterKey="sequenceType"
-          heading="Sequence Type"
-          summary={filterSummary.sequenceTypes}
-          updateFilter={updateFilter}
-        />
-        <AsideSection
+        </FilterSection>
+        <FilterSection
           filterKey="reference"
           heading="Reference"
+          icon="book"
           summary={filterSummary.reference}
           updateFilter={updateFilter}
         />
-        <AsideSection
+        <FilterSection
           filterKey="owner"
           heading="Owner"
+          icon="person"
           summary={filterSummary.owner}
           updateFilter={updateFilter}
         />
-        <AsideSection
+        <FilterSection
           filterKey="uploadedAt"
           heading="Uploaded At"
+          icon="cloud_upload"
           summary={filterSummary.uploadedAt}
-          updateFilter={updateFilter}
-        />
-        <AsideSection
-          filterKey="country"
-          heading="Country"
-          summary={filterSummary.country}
           updateFilter={updateFilter}
         />
         <LocationListener update={updateFilter} />
