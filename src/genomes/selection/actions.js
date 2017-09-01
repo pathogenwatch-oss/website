@@ -2,7 +2,6 @@ import React from 'react';
 
 import { getGenomeList } from '../selectors';
 import { getSelectedGenomes, getSelectionSize } from './selectors';
-import { getVisible } from '../summary/selectors';
 
 import { showToast } from '../../toast';
 
@@ -51,10 +50,12 @@ export function toggleSelection(genome) {
 export function selectAll(focus) {
   return (dispatch, getState) => {
     const state = getState();
-    const visible = getVisible(state);
-    const selection = getSelectionSize(state);
+    const selectionSize = getSelectionSize(state);
+    const genomes = getGenomeList(state);
+    const selection = getSelectedGenomes(state);
+    const toBeSelected = genomes.filter(({ id }) => !(id in selection));
 
-    if (isOverSelectionLimit(visible + selection)) {
+    if (isOverSelectionLimit(toBeSelected.length + selectionSize)) {
       dispatch(showToast({
         message: (
           <span>
@@ -63,9 +64,16 @@ export function selectAll(focus) {
         ),
       }));
     } else {
-      const genomes = getGenomeList(state);
-      dispatch(selectGenomes(genomes, focus));
+      dispatch(selectGenomes(toBeSelected, focus));
     }
+  };
+}
+
+export function unselectAll(focus) {
+  return (dispatch, getState) => {
+    const state = getState();
+    const genomes = getGenomeList(state);
+    dispatch(unselectGenomes(genomes, focus));
   };
 }
 

@@ -52,6 +52,7 @@
   overflow-y: auto;
   right: 0;
   top: 48px;
+  padding-top: 8px;
 }
 
 .wgsa-filter__content:empty::after {

@@ -7,9 +7,9 @@ import { toggleDrawer } from './actions';
 
 const Summary = ({ size, onClick }) => (
   <div className="wgsa-selection-summary">
-    <button className="mdl-chip mdl-chip--contact" onClick={onClick}>
-      <span className="mdl-chip__contact">{size}</span>
-      <span className="mdl-chip__text">Shopping Cart</span>
+    <button className="mdl-chip mdl-chip--alt" onClick={onClick}>
+      {/* <span className="mdl-chip__contact">{size}</span> */}
+      <span className="mdl-chip__text">Create Collection ({size} Genomes)</span>
     </button>
   </div>
 );

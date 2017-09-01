@@ -2,11 +2,12 @@
   border-top: 1px solid transparent;
   border-bottom: 1px solid transparent;
   box-sizing: border-box;
-  padding: 0 16px 8px;
+  padding: 0 16px;
 }
 
 .wgsa-filter-section.is-open {
   border-color: rgba(0, 0, 0, 0.12);
+  padding-bottom: 8px;
 }
 
 .wgsa-filter-section:first-child,
@@ -20,18 +21,20 @@
 
 .wgsa-filter-section > h3 {
   display: flex;
-  font-size: 16px;
+  font-size: 14px;
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
   font-weight: 500;
   color: rgba(0, 0, 0, 0.54);
   margin: 0;
-  height: 48px;
+  height: 40px;
   align-items: center;
   cursor: pointer;
 }
 
 .wgsa-filter-section > h3 :first-child {
   margin-right: 16px;
+  font-size: 20px;
+  height: 22px;
 }
 
 .wgsa-filter-section > h3 :last-child {

@@ -46,14 +46,14 @@
   width: 7.5%;
 }
 
-.wgsa-genome-list-cell:last-child {
-  width: 40px;
-}
-
 .wgsa-genome-list-cell > i {
   font-size: 16px;
   padding-right: 4px;
   vertical-align: top;
+}
+
+.wgsa-genome-list-cell button {
+  padding: 0;
 }
 
 @media (max-width: 1024px) {
@@ -134,6 +134,10 @@
   color: #673c90;
 }
 
+.wgsa-genome-list-header :first-child {
+  display: flex;
+}
+
 .wgsa-genome-list-header i {
   height: 20px;
   line-height: 20px;
@@ -156,4 +160,14 @@
 
 .ReactVirtualized__List {
   outline: none;
+}
+
+.wgsa-view-genome-details {
+  position: absolute;
+  right: 8px;
+  display: none;
+}
+
+.wgsa-genome-list-item:hover .wgsa-view-genome-details {
+  display: block;
 }

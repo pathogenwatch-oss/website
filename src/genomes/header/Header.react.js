@@ -3,8 +3,6 @@ import { connect } from 'react-redux';
 
 import { Totals } from '../../filter/summary';
 import ViewSwitcher from './ViewSwitcher.react';
-import SelectAll from '../selection/SelectAll.react';
-import ClearSelection from '../selection/ClearSelection.react';
 import FilterHeader from '../filter/Header.react';
 import SelectionSummary from '../selection/Summary.react';
 
@@ -24,8 +22,6 @@ const Header = ({ visibleGenomes, totalGenomes }) => (
       total={totalGenomes}
       itemType="genome"
     />
-    <SelectAll />
-    <ClearSelection />
     <SelectionSummary />
   </header>
 );

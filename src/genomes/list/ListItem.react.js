@@ -1,7 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import AddToSelectionButton from '../card/AddToSelectionButton.react';
+import { toggleSelection } from '../selection/actions';
+
+import AddToSelection from '../selection/AddToSelection.react';
 import { FormattedName } from '../../organisms';
 import { formatDate, formatDateTime } from '../../utils/Date';
 import { getCountryName } from '../../utils/country';
@@ -46,7 +48,7 @@ const displayAccessLevel = (props) => {
   );
 };
 
-const ListItem = ({ item, onClick, style }) => {
+const ListItem = ({ item, onClick, style, onViewGenome }) => {
   const { name, organismId, organismName, st, country } = item;
   const countryName = country ? getCountryName(country) : null;
   const date = item.date ? formatDate(item.date) : null;
@@ -55,9 +57,11 @@ const ListItem = ({ item, onClick, style }) => {
       className="wgsa-genome-list-item wgsa-genome-list-item--selectable wgsa-card--bordered"
       style={style}
       onClick={onClick}
-      title="View Details"
     >
-      <Cell title={name}>{name}</Cell>
+      <Cell title={name} onClick={e => e.stopPropagation()}>
+        <AddToSelection genome={item} />
+        {name}
+      </Cell>
       <Cell>
         { organismName ?
             <FormattedName
@@ -79,16 +83,21 @@ const ListItem = ({ item, onClick, style }) => {
         <Cell title={date}>{date}</Cell> :
         EmptyCell }
       {displayAccessLevel(item)}
-      <span onClick={e => e.stopPropagation()} className="wgsa-genome-list-cell">
-        <AddToSelectionButton genome={item} />
-      </span>
+      <button
+        className="wgsa-view-genome-details mdl-button mdl-button--icon"
+        title="View Details"
+        onClick={onViewGenome}
+      >
+        <i className="material-icons">info_outline</i>
+      </button>
     </div>
   );
 };
 
 function mapDispatchToProps(dispatch, { item }) {
   return {
-    onClick: () => dispatch(showGenomeDrawer(item.id, item.name)),
+    onViewGenome: e => e.stopPropagation() || dispatch(showGenomeDrawer(item.id, item.name)),
+    onClick: () => dispatch(toggleSelection(item)),
   };
 }
 

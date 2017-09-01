@@ -12,3 +12,16 @@
   overflow-y: auto;
   box-sizing: border-box;
 }
+
+.wgsa-genome-checkbox {
+  background: none;
+  border: none;
+  outline: none;
+  color: #3c7383 !important;
+  vertical-align: middle;
+  margin-right: 8px;
+}
+
+.wgsa-genome-checkbox > .material-icons {
+  font-size: 20px;
+}

@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect';
 
+import { getGenomeList } from '../selectors';
 import { getDeployedOrganismIds } from '../../summary/selectors';
 
 import { isOverSelectionLimit } from './utils';
@@ -31,4 +32,10 @@ export const getSelectedSupportedGenomesList = createSelector(
 export const isSelectionLimitReached = createSelector(
   getSelectedGenomeIds,
   ids => isOverSelectionLimit(ids.length)
+);
+
+export const areAllSelected = createSelector(
+  getSelectedGenomes,
+  getGenomeList,
+  (selection, genomes) => genomes.every(({ id }) => (id in selection))
 );

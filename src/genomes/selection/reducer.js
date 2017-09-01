@@ -22,7 +22,7 @@ export default function (state = initialState, { type, payload }) {
       return {
         ...state,
         genomes: payload.genomes.reduce(addToSelection, { ...state.genomes }),
-        isOpen: payload.focus,
+        isOpen: payload.focus || state.isOpen,
       };
     }
     case actions.UNSELECT_GENOMES:
