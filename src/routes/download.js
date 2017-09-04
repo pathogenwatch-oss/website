@@ -1,7 +1,9 @@
 const express = require('express');
+const csv = require('csv');
 const router = express.Router();
 
 const services = require('services');
+const Genome = require('models/genome');
 
 const LOGGER = require('utils/logging').createLogger('Downloads');
 
@@ -80,6 +82,131 @@ router.get('/genome-archive/:id', (req, res, next) => {
       .sendFile(archivePath)
     )
     .catch(next);
+});
+
+function downloadAnalysisResults(ids, task, projection, transformer, options = {}, response) {
+  const { header = true, quotedString = true } = options;
+
+  if (!ids || typeof(ids) !== 'string' || ids === '') {
+    LOGGER.error('Missing ids');
+    return response.sendStatus(400);
+  }
+
+  const query = {
+    _id: { $in: ids.split(' ') },
+    [`analysis.${task}`]: { $exists: true },
+  };
+  const cursor = Genome.find(query, projection);
+
+  response.setHeader('Content-disposition', `attachment; filename=${task.csv}`);
+  response.writeHead(200, { 'Content-Type': 'text/csv' });
+  response.flushHeaders();
+
+  return cursor
+    .cursor()
+    .pipe(csv.transform(transformer))
+    .pipe(csv.stringify({ header, quotedString }))
+    .pipe(response);
+}
+
+router.get('/analysis/mlst', (req, res) => {
+  const options = req.query;
+  const { ids } = options;
+  const task = 'mlst';
+  const projection = {
+    name: 1,
+    'analysis.mlst.__v': 1,
+    'analysis.mlst.st': 1,
+    'analysis.mlst.code': 1,
+  };
+  const transformer = ({ _id, name, analysis }) => ({
+    id: _id.toString(),
+    name,
+    version: analysis.mlst.__v,
+    st: analysis.mlst.st,
+    code: analysis.mlst.code,
+  });
+  downloadAnalysisResults(ids, task, projection, transformer, options, res);
+});
+
+router.get('/analysis/specieator', (req, res) => {
+  const options = req.query;
+  const { ids } = options;
+  const task = 'specieator';
+  const projection = { name: 1, 'analysis.specieator': 1 };
+  const transformer = ({ _id, name, analysis }) => ({
+    id: _id.toString(),
+    name,
+    version: analysis.specieator.__v,
+    organismName: analysis.specieator.organismName,
+    organismId: analysis.specieator.organismId,
+    speciesId: analysis.specieator.speciesId,
+    genusId: analysis.specieator.genusId,
+    referenceId: analysis.specieator.referenceId,
+    matchingHashes: analysis.specieator.matchingHashes,
+    pValue: analysis.specieator.pValue,
+    mashDistance: analysis.specieator.mashDistance,
+  });
+  downloadAnalysisResults(ids, task, projection, transformer, options, res);
+});
+
+router.get('/analysis/paarsnp', (req, res) => {
+  const options = req.query;
+  const { ids } = options;
+  const task = 'paarsnp';
+  const projection = {
+    name: 1,
+    'analysis.paarsnp.__v': 1,
+    'analysis.paarsnp.antibiotics': 1,
+  };
+  const transformer = ({ _id, name, analysis }) => {
+    const doc = { id: _id.toString(), name, version: analysis.paarsnp.__v };
+    for (const key of Object.keys(analysis.paarsnp.antibiotics)) {
+      doc[key] = analysis.paarsnp.antibiotics[key].state;
+    }
+    return doc;
+  };
+  downloadAnalysisResults(ids, task, projection, transformer, options, res);
+});
+
+router.get('/analysis/genotyphi', (req, res) => {
+  const options = req.query;
+  const { ids } = options;
+  const task = 'genotyphi';
+  const projection = {
+    name: 1,
+    'analysis.genotyphi.__v': 1,
+    'analysis.genotyphi.genotype': 1,
+  };
+  const transformer = ({ _id, name, analysis }) => ({
+    id: _id.toString(),
+    name,
+    version: analysis.genotyphi.__v,
+    genotype: analysis.genotyphi.genotype,
+  });
+  downloadAnalysisResults(ids, task, projection, transformer, options, res);
+});
+
+router.get('/analysis/ngmast', (req, res) => {
+  const options = req.query;
+  const { ids } = options;
+  const task = 'ngmast';
+  const projection = {
+    name: 1,
+    'analysis.ngmast.__v': 1,
+    'analysis.ngmast.ngmast': 1,
+    'analysis.ngmast.por': 1,
+    'analysis.ngmast.tbpb': 1,
+  };
+  const transformer = ({ _id, name, analysis }) => ({
+    id: _id.toString(),
+    name,
+    version: analysis.ngmast.__v,
+    ngmast: analysis.ngmast.ngmast,
+    por: analysis.ngmast.por,
+    tbpb: analysis.ngmast.tbpb,
+  });
+  downloadAnalysisResults(ids, task, projection, transformer, options, res);
 });
 
 module.exports = router;
