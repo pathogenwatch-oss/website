@@ -2,9 +2,9 @@ import React from 'react';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
 
-import LoginLink from '../cgps-commons/LoginLink.react';
 import NavLink from '../location';
 import AccountHeader from './AccountHeader.react';
+import SignInNav from './SignInNav.react';
 
 import { getSummary } from '../summary/selectors';
 
@@ -55,11 +55,7 @@ const UserDrawer = React.createClass({
               </small>
             }
           </span>
-          { !user &&
-            <nav className="mdl-navigation">
-              { strategies.map(provider => <LoginLink key={provider} provider={provider} />) }
-            </nav>
-          }
+          <SignInNav />
           { !user && <hr /> }
           <nav className="mdl-navigation">
             <h2 className="wgsa-navigation-header">Collections</h2>

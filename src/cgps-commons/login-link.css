@@ -1,6 +1,6 @@
-.cgps-login-link {
+.cgps-login-link,
+.cgps-login-controls {
   display: block;
-  cursor: pointer;
   border-radius: 4px;
   height: 40px;
   line-height: 40px;
@@ -9,6 +9,10 @@
   border: 1px solid transparent;
   text-decoration: none !important;
   background: #3C7383;
+}
+
+.cgps-login-link {
+  cursor: pointer;
 }
 
 .cgps-login-link:hover {
@@ -71,4 +75,29 @@
 .cgps-avatar--centered {
   margin: 16px auto;
   text-align: center;
+}
+
+.cgps-login-controls {
+  display: flex;
+  align-items: center;
+  border-radius: 2px;
+  border: 1px solid #3C7383;
+}
+
+.cgps-login-controls > input {
+  flex-grow: 1;
+  box-sizing: border-box;
+  height: 100%;
+  border: 1px solid transparent;
+  margin: 0px;
+  padding: 1px 2px;
+}
+
+.cgps-login-controls > button {
+  height: 100%;
+  border: none;
+  margin: 0px;
+  background: #3C7383;
+  cursor: pointer;
+  color: #fff;
 }
