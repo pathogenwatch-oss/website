@@ -1,7 +1,9 @@
 const express = require('express');
+const csv = require('csv');
 const router = express.Router();
 
 const services = require('services');
+const Genome = require('models/genome');
 
 const LOGGER = require('utils/logging').createLogger('Downloads');
 
@@ -80,6 +82,36 @@ router.get('/genome-archive/:id', (req, res, next) => {
       .sendFile(archivePath)
     )
     .catch(next);
+});
+
+router.get('/analysis/mlst', (req, res) => {
+  const { ids, header = true, quotedString = true } = req.query;
+
+  if (!ids || typeof(ids) !== 'string' || ids === '') {
+    LOGGER.error('Missing ids');
+    return res.sendStatus(400);
+  }
+
+  const query = { _id: { $in: ids.split(' ') }, 'analysis.mlst': { $exists: true } };
+  const projection = { name: 1, 'analysis.mlst.st': 1, 'analysis.mlst.code': 1 };
+  const cursor = Genome.find(query, projection);
+  const transformer = (doc) => ({
+    id: doc._id.toString(),
+    name: doc.name,
+    st: doc.analysis.mlst.st,
+    code: doc.analysis.mlst.code,
+  });
+
+  const filename = 'mlst.csv';
+  res.setHeader('Content-disposition', `attachment; filename=${filename}`);
+  res.writeHead(200, { 'Content-Type': 'text/csv' });
+  res.flushHeaders();
+
+  return cursor
+    .cursor()
+    .pipe(csv.transform(transformer))
+    .pipe(csv.stringify({ header, quotedString }))
+    .pipe(res);
 });
 
 module.exports = router;
