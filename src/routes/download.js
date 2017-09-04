@@ -84,34 +84,49 @@ router.get('/genome-archive/:id', (req, res, next) => {
     .catch(next);
 });
 
-router.get('/analysis/mlst', (req, res) => {
-  const { ids, header = true, quotedString = true } = req.query;
+function downloadAnalysisResults(ids, task, projection, transformer, options = {}, response) {
+  const { header = true, quotedString = true } = options;
 
   if (!ids || typeof(ids) !== 'string' || ids === '') {
     LOGGER.error('Missing ids');
-    return res.sendStatus(400);
+    return response.sendStatus(400);
   }
 
-  const query = { _id: { $in: ids.split(' ') }, 'analysis.mlst': { $exists: true } };
-  const projection = { name: 1, 'analysis.mlst.st': 1, 'analysis.mlst.code': 1 };
+  const query = {
+    _id: { $in: ids.split(' ') },
+    [`analysis.${task}`]: { $exists: true },
+  };
   const cursor = Genome.find(query, projection);
-  const transformer = (doc) => ({
-    id: doc._id.toString(),
-    name: doc.name,
-    st: doc.analysis.mlst.st,
-    code: doc.analysis.mlst.code,
-  });
 
-  const filename = 'mlst.csv';
-  res.setHeader('Content-disposition', `attachment; filename=${filename}`);
-  res.writeHead(200, { 'Content-Type': 'text/csv' });
-  res.flushHeaders();
+  response.setHeader('Content-disposition', `attachment; filename=${task.csv}`);
+  response.writeHead(200, { 'Content-Type': 'text/csv' });
+  response.flushHeaders();
 
   return cursor
     .cursor()
     .pipe(csv.transform(transformer))
     .pipe(csv.stringify({ header, quotedString }))
-    .pipe(res);
+    .pipe(response);
+}
+
+router.get('/analysis/mlst', (req, res) => {
+  const options = req.query;
+  const { ids } = options;
+  const task = 'mlst';
+  const projection = {
+    name: 1,
+    'analysis.mlst.__v': 1,
+    'analysis.mlst.st': 1,
+    'analysis.mlst.code': 1,
+  };
+  const transformer = ({ _id, name, analysis }) => ({
+    id: _id.toString(),
+    name,
+    version: analysis.mlst.__v,
+    st: analysis.mlst.st,
+    code: analysis.mlst.code,
+  });
+  downloadAnalysisResults(ids, task, projection, transformer, options, res);
 });
 
 module.exports = router;
