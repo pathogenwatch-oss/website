@@ -166,11 +166,16 @@ export const getAnalysisSummary = createSelector(
   }
 );
 
+function getSpeciesCode(organismName) {
+  const [ , firstPart, secondPart ] = organismName.match(/^(.)\S* (..).*$/);
+  return `${firstPart}. ${secondPart}.`;
+}
+
 export const getChartData = createSelector(
   getAnalysisSummary,
   data => {
-    const organisms = { label: 'Organism', data: [], backgroundColor: [], labels: [], organismIds: [] };
-    const stData = { label: 'Sequence Type', data: [], backgroundColor: [], labels: [], parents: [] };
+    const organisms = { label: 'Organism', data: [], backgroundColor: [], labels: [], organismIds: [], shortLabels: [], total: 0 };
+    const stData = { label: 'Sequence Type', data: [], backgroundColor: [], labels: [], parents: [], total: 0 };
 
     let organismIndex = 0;
     for (const { label, total, key, mlst = {} } of data) {
@@ -179,7 +184,9 @@ export const getChartData = createSelector(
       const colour = getColour(label);
       organisms.backgroundColor.push(colour);
       organisms.labels.push(label);
+      organisms.shortLabels.push(getSpeciesCode(label));
       organisms.organismIds.push(key);
+      organisms.total += total;
 
       let sum = total;
       const { sequenceTypes = [] } = mlst;

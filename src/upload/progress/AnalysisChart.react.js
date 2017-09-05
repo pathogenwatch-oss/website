@@ -36,7 +36,7 @@ const AnalysisChart = React.createClass({
       data: this.props.data,
       options: {
         pieceLabel: {
-          render: ({ dataset, index, percentage }) => `${dataset.labels[index]}\n${percentage}%`,
+          render: ({ dataset, index }) => ((dataset.shortLabels || dataset.labels)[index]),
           precision: 2,
           fontColor: '#fff',
           fontSize: 11,
@@ -55,8 +55,11 @@ const AnalysisChart = React.createClass({
               points.map(({ index, datasetIndex }) =>
                 datasets[datasetIndex].labels[index]
             ).join(', '),
-            label: ({ index, datasetIndex }, { datasets }) =>
-              datasets[datasetIndex].data[index],
+            label: ({ index, datasetIndex }, { datasets }) => {
+              const dataset = datasets[datasetIndex];
+              const total = datasetIndex === 1 ? dataset.total : datasets[1].data[dataset.parents[index]];
+              return `${dataset.data[index]} out of ${total}`;
+            },
           },
         },
         _legend: {
@@ -103,7 +106,9 @@ const AnalysisChart = React.createClass({
         current.data = dataset.data;
         current.backgroundColor = dataset.backgroundColor;
         current.labels = dataset.labels;
+        current.shortLabels = dataset.shortLabels;
         current.parents = dataset.parents;
+        current.total = dataset.total;
       } else {
         this.chart.data.datasets.push(dataset);
       }
