@@ -4,9 +4,11 @@ import './styles.css';
 
 import React from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+
 import 'chart.piecelabel.js';
 
-import { getChartData } from './selectors';
+import { getChartData, getSelectedOrganism, isSpecieationComplete } from './selectors';
 
 import { selectOrganism } from './actions';
 
@@ -109,6 +111,13 @@ const AnalysisChart = React.createClass({
     this.chart.update();
   },
 
+  getGenomesLink() {
+    const { uploadedAt, selectedOrganism } = this.props;
+    let link = `/genomes?uploadedAt=${uploadedAt}`;
+    if (selectedOrganism) link += `&organismId=${selectedOrganism}`;
+    return link;
+  },
+
   toggleOrganism(index) {
     const id = toggleOrganism(index, this.chart);
     this.props.selectOrganism(id);
@@ -118,6 +127,14 @@ const AnalysisChart = React.createClass({
     return (
       <div className="wgsa-analysis-chart">
         <canvas ref={el => { this.canvas = el; }} />
+        { this.props.isSpecieationComplete &&
+          <Link
+            className="mdl-button mdl-button--alt wgsa-view-genomes-button"
+            to={this.getGenomesLink()}
+          >
+            View Genomes
+          </Link>
+        }
       </div>
     );
   },
@@ -127,6 +144,8 @@ const AnalysisChart = React.createClass({
 function mapStateToProps(state) {
   return {
     data: getChartData(state),
+    isSpecieationComplete: isSpecieationComplete(state),
+    selectedOrganism: getSelectedOrganism(state),
   };
 }
 

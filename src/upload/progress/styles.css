@@ -53,15 +53,7 @@
   width: calc(100vh - 200px);
   max-width: 100%;
   margin: 0 auto;
-}
-
-.wgsa-upload-actions {
-  margin-left: auto;
-  margin-right: 0;
-}
-
-.wgsa-upload-actions .mdl-button {
-  margin-left: 8px;
+  position: relative;
 }
 
 .wgsa-upload-progress li {
@@ -72,4 +64,11 @@
 .wgsa-upload-progress li > ul {
   margin-top: 8px;
   margin-left: 16px;
+}
+
+.wgsa-view-genomes-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }

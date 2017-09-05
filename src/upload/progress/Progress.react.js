@@ -32,7 +32,7 @@ const Analysis = ({ data }) => (
   </ul>
 );
 
-const Progress = ({ inProgress, errored, files, analysis }) => (
+const Progress = ({ inProgress, errored, files, analysis, uploadedAt }) => (
   <div className="wgsa-content-margin wgsa-upload-progress">
     <div>
       { files.pending > 0 &&
@@ -63,7 +63,7 @@ const Progress = ({ inProgress, errored, files, analysis }) => (
     </div>
     <div className="wgsa-section-divider">
       <h2 className="wgsa-section-title">Analysis</h2>
-      <AnalysisChart />
+      <AnalysisChart uploadedAt={uploadedAt} />
     </div>
   </div>
 );
