@@ -57,7 +57,7 @@ const AnalysisChart = React.createClass({
               datasets[datasetIndex].data[index],
           },
         },
-        legend: {
+        _legend: {
           labels: {
             generateLabels: chart => {
               const organisms = chart.config.data.datasets[1];
