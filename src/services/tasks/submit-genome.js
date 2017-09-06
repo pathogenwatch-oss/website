@@ -18,5 +18,14 @@ module.exports = function ({ genomeId, fileId, organismId, speciesId, genusId, c
   Genome.addPendingTasks(genomeId, taskNames)
     .then(() => {
       request('tasks', 'enqueue', { genomeId, fileId, organismId, speciesId, genusId, clientId, tasks });
+    })
+    .then(() => {
+      if (clientId) {
+        request('notification', 'send', {
+          channel: clientId,
+          topic: 'pending',
+          message: { id: genomeId, taskNames },
+        });
+      }
     });
 };

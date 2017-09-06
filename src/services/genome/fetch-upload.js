@@ -11,6 +11,7 @@ module.exports = function (props) {
           'analysis.specieator': 1,
           'analysis.mlst': 1,
           uploadedAt: 1,
+          pending: 1,
         },
       )
       .lean()
