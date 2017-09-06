@@ -35,14 +35,6 @@ const AnalysisChart = React.createClass({
       type: 'doughnut',
       data: this.props.data,
       options: {
-        pieceLabel: {
-          render: ({ dataset, index }) => ((dataset.shortLabels || dataset.labels)[index]),
-          precision: 2,
-          fontColor: '#fff',
-          fontSize: 11,
-          fontStyle: '500',
-          fontFamily: 'Roboto',
-        },
         responsive: true,
         animation: {
           animateRotate: true,
@@ -58,26 +50,17 @@ const AnalysisChart = React.createClass({
             label: ({ index, datasetIndex }, { datasets }) => {
               const dataset = datasets[datasetIndex];
               const total = datasetIndex === 1 ? dataset.total : datasets[1].data[dataset.parents[index]];
-              return `${dataset.data[index]} out of ${total}`;
+              return `${dataset.data[index]} / ${total}, ${(100 * dataset.data[index] / total).toFixed(1)}%`;
             },
           },
         },
-        _legend: {
-          labels: {
-            generateLabels: chart => {
-              const organisms = chart.config.data.datasets[1];
-              const meta = chart.getDatasetMeta(1);
-              return organisms.labels.map((text, i) => ({
-                fillStyle: organisms.backgroundColor[i],
-                hidden: isNaN(organisms.data[i]) || meta.data[i].hidden,
-                index: i,
-                lineWidth: 2,
-                strokeStyle: '#fff',
-                text,
-              }));
-            },
-          },
-          onClick: (e, item) => this.toggleOrganism(item.index),
+        pieceLabel: {
+          render: ({ dataset, index }) => ((dataset.shortLabels || dataset.labels)[index]),
+          precision: 2,
+          fontColor: '#fff',
+          fontSize: 13,
+          fontStyle: '400',
+          fontFamily: 'Roboto',
         },
         onClick: (e, [ item ]) => {
           if (!item) {

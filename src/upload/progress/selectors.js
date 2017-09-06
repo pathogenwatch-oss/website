@@ -167,8 +167,12 @@ export const getAnalysisSummary = createSelector(
 );
 
 function getSpeciesCode(organismName) {
-  const [ , firstPart, secondPart ] = organismName.match(/^(.)\S* (..).*$/);
-  return `${firstPart}. ${secondPart}.`;
+  const match = organismName.match(/^(.)\S* (..).*$/);
+  if (match) {
+    const [ , firstPart, secondPart ] = match;
+    return `${firstPart}. ${secondPart}.`;
+  }
+  return organismName;
 }
 
 export const getChartData = createSelector(

@@ -1,4 +1,4 @@
-const colours = [
+const baseColours = [
   '#834B96',
   '#B668A6',
   '#756E94',
@@ -13,20 +13,37 @@ const colours = [
   '#9D81B6',
 ];
 
-const lightColours = [
-  '#B285C1',
-  '#D7ACCF',
-  '#AEAAC0',
-  '#D6E2E5',
-  '#D1D8E1',
-  '#FFFFFF',
-  '#F0ECF4',
-  '#FFFFFF',
-  '#C3B1D2',
-  '#D7CBE1',
-  '#BBA8CC',
-  '#CFC1DC',
-];
+function lightenDarkenColor(colour, amt) {
+  let usePound = false;
+  let col = colour;
+
+  if (col[0] === '#') {
+    col = col.slice(1);
+    usePound = true;
+  }
+
+  const num = parseInt(col, 16);
+
+  let r = (num >> 16) + amt;
+
+  if (r > 255) r = 255;
+  else if (r < 0) r = 0;
+
+  let b = ((num >> 8) & 0x00FF) + amt;
+
+  if (b > 255) b = 255;
+  else if (b < 0) b = 0;
+
+  let g = (num & 0x0000FF) + amt;
+
+  if (g > 255) g = 255;
+  else if (g < 0) g = 0;
+
+  return (usePound ? '#' : '') + (g | (b << 8) | (r << 16)).toString(16);
+}
+
+const darkColours = baseColours.map(c => lightenDarkenColor(c, -20));
+const lightColours = baseColours.map(c => lightenDarkenColor(c, 20));
 
 const colourMap = new Map();
 let usedColours = 0;
@@ -35,7 +52,7 @@ export function getColour(name) {
   if (name === 'Pending') return '#ccc';
 
   if (!colourMap.has(name)) {
-    const newColour = colours[(usedColours++) % colours.length];
+    const newColour = darkColours[(usedColours++) % darkColours.length];
     colourMap.set(name, newColour);
   }
 
@@ -43,5 +60,5 @@ export function getColour(name) {
 }
 
 export function getLightColour(colour) {
-  return lightColours[colours.indexOf(colour)];
+  return lightColours[darkColours.indexOf(colour)];
 }
