@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 
 import { isFailedUpload } from '../utils/validation';
-import { getColour, getLightColour } from '../utils/chart';
+import { getColourGenerator, getLightColour } from '../../utils/colours';
 import { statuses } from '../constants';
 
 import { getOrganismName } from '../../organisms';
@@ -151,17 +151,21 @@ export const getAnalysisSummary = createSelector(
           (summary[analysis.specieator.organismId] || []).concat(analysis);
       }
     }
+    const getColour = getColourGenerator();
     const result = [];
     for (const organismId of Object.keys(summary)) {
       const organismAnalyses = summary[organismId];
+      const label = getOrganismName(organismId, organismAnalyses[0].specieator.organismName);
+      const colour = getColour(label);
       result.push({
         key: organismId,
-        label: getOrganismName(organismId, organismAnalyses[0].specieator.organismName),
+        label,
+        colour,
         total: organismAnalyses.length,
         ...getAnalysisBreakdown(organismAnalyses),
       });
     }
-    if (pending) result.push({ key: 'pending', label: 'Pending', total: pending });
+    if (pending) result.push({ key: 'pending', label: 'Pending', total: pending, colour: '#ccc' });
     return result;
   }
 );
@@ -182,10 +186,9 @@ export const getChartData = createSelector(
     const stData = { label: 'Sequence Type', data: [], backgroundColor: [], labels: [], parents: [], total: 0 };
 
     let organismIndex = 0;
-    for (const { label, total, key, mlst = {} } of data) {
+    for (const { label, colour, total, key, mlst = {} } of data) {
       organisms.data.push(total);
 
-      const colour = getColour(label);
       organisms.backgroundColor.push(colour);
       organisms.labels.push(label);
       organisms.shortLabels.push(getSpeciesCode(label));

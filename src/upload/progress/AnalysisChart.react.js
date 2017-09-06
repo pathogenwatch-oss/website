@@ -117,7 +117,7 @@ const AnalysisChart = React.createClass({
         <canvas ref={el => { this.canvas = el; }} />
         { this.props.isSpecieationComplete &&
           <Link
-            className="mdl-button mdl-button--alt wgsa-view-genomes-button"
+            className="mdl-shadow--2dp wgsa-view-genomes-button"
             to={this.getGenomesLink()}
           >
             View Genomes

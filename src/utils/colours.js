@@ -1,43 +1,64 @@
-const colours = [
+const baseColours = [
   '#834B96',
   '#B668A6',
   '#756E94',
   '#97B5BE',
   '#92A3B8',
+  '#E8E0EE',
   '#BFABCF',
+  '#CFC1DB',
   '#9070AC',
   '#A389BB',
   '#8968A7',
   '#9D81B6',
 ];
 
-const lightColours = [
-  '#B285C1',
-  '#D7ACCF',
-  '#AEAAC0',
-  '#D6E2E5',
-  '#D1D8E1',
-  '#F0ECF4',
-  '#C3B1D2',
-  '#D7CBE1',
-  '#BBA8CC',
-  '#CFC1DC',
-];
+function lightenDarkenColor(colour, amt) {
+  let usePound = false;
+  let col = colour;
 
-const colourMap = new Map();
-let usedColours = 0;
-
-export function getColour(name) {
-  if (name === 'Pending') return '#ccc';
-
-  if (!colourMap.has(name)) {
-    const newColour = colours[(usedColours++) % colours.length];
-    colourMap.set(name, newColour);
+  if (col[0] === '#') {
+    col = col.slice(1);
+    usePound = true;
   }
 
-  return colourMap.get(name);
+  const num = parseInt(col, 16);
+
+  let r = (num >> 16) + amt;
+
+  if (r > 255) r = 255;
+  else if (r < 0) r = 0;
+
+  let b = ((num >> 8) & 0x00FF) + amt;
+
+  if (b > 255) b = 255;
+  else if (b < 0) b = 0;
+
+  let g = (num & 0x0000FF) + amt;
+
+  if (g > 255) g = 255;
+  else if (g < 0) g = 0;
+
+  return (usePound ? '#' : '') + (g | (b << 8) | (r << 16)).toString(16);
 }
 
-export function getLightColour(name) {
-  return lightColours[colours.indexOf(getColour(name))];
+const darkColours = baseColours.map(c => lightenDarkenColor(c, -20));
+const lightColours = baseColours.map(c => lightenDarkenColor(c, 20));
+
+export function getColourGenerator() {
+  const colourMap = new Map();
+  let usedColours = 0;
+
+  return (name) => {
+    if (!colourMap.has(name)) {
+      const newColour = darkColours[(usedColours++) % darkColours.length];
+      colourMap.set(name, newColour);
+    }
+
+    return colourMap.get(name);
+  };
+}
+
+export function getLightColour(colour) {
+  return lightColours[darkColours.indexOf(colour)];
 }

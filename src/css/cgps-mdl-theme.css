@@ -129,6 +129,9 @@
   background: #a386bd !important;
 }
 
+a.mdl-button {
+  text-decoration: none !important;
+}
 
 /* Slider */
 

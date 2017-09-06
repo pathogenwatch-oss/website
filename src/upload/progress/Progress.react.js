@@ -10,9 +10,10 @@ import AnalysisChart from './AnalysisChart.react';
 import * as upload from './selectors';
 
 const Analysis = ({ data }) => (
-  <ul>
-    { data.map(({ key, label, total, ...analyses }) =>
+  <ul className="wgsa-upload-legend">
+    { data.map(({ key, label, total, colour, ...analyses }) =>
       <li key={key}>
+        <i className="material-icons" style={{ color: colour }}>stop</i>
         <strong>{label}</strong>: {total}
         <ul>
           {Object.keys(analyses).map(analysisKey => {
