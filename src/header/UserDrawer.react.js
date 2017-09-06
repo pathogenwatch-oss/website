@@ -24,6 +24,12 @@ const UserDrawer = React.createClass({
     window.addEventListener('keyup', this.handleEscKey);
   },
 
+  componentDidUpdate(previous) {
+    if ((previous.location !== this.props.location) && this.props.visible) {
+      this.props.closeMenu();
+    }
+  },
+
   componentWillUnmount() {
     window.removeEventListener('keyup', this.handleEscKey);
   },
@@ -35,25 +41,29 @@ const UserDrawer = React.createClass({
   },
 
   render() {
-    const { allCollections, allGenomes, binnedGenomes } = this.props;
-    const { userCollections, userGenomes, offlineCollections = 0, binnedCollections } = this.props;
-    const { numOrganisms } = this.props;
-    const { strategies = [] } = config;
+    const { summary } = this.props;
+    const {
+      allCollections, allGenomes, binnedGenomes,
+      userCollections, userGenomes, offlineCollections = 0, binnedCollections,
+      numOrganisms,
+    } = summary;
     return (
       <div
         className={classnames('mdl-layout__obfuscator', { 'is-visible': this.props.visible })}
         onClick={this.props.closeMenu}
         onKeyUp={this.handleEscKey}
       >
-        <div className={classnames('mdl-layout__drawer', { 'is-visible': this.props.visible })}>
+        <div
+          className={classnames('mdl-layout__drawer', { 'is-visible': this.props.visible })}
+          onClick={e => e.stopPropagation()}
+        >
           <span className="mdl-layout-title">
             <AccountHeader user={user} />
             <img src="/images/WGSA.Icon.FINAL.svg" />
             { config.version &&
               <small className="wgsa-version">
                 {config.version}
-              </small>
-            }
+              </small> }
           </span>
           <SignInNav />
           { !user && <hr /> }
@@ -85,8 +95,7 @@ const UserDrawer = React.createClass({
           { user &&
             <nav className="mdl-navigation">
               <NavLink to="/signout" external icon="exit_to_app">Sign Out</NavLink>
-            </nav>
-          }
+            </nav> }
           <footer className="wgsa-menu-footer">
             <a className="cgps-logo" target="_blank" rel="noopener" href="http://www.pathogensurveillance.net">
               <img src="/images/CGPS.SHORT.FINAL.svg" />
@@ -101,7 +110,10 @@ const UserDrawer = React.createClass({
 });
 
 function mapStateToProps(state) {
-  return getSummary(state);
+  return {
+    summary: getSummary(state),
+    location: state.location,
+  };
 }
 
 function mapDispatchToProps(dispatch) {

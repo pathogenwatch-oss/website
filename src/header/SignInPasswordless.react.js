@@ -1,8 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import classnames from 'classnames';
-
 import { showToast } from '../toast';
 import { sendSignInToken } from './api';
 
@@ -36,12 +34,17 @@ const SignInPasswordless = React.createClass({
   },
 
   submitForm(e) {
+    e.preventDefault();
     const { email } = this.state;
-    e.stopPropagation();
+    if (!email.length) return;
     sendSignInToken(email)
       .then(() => {
         this.setState({ showControls: false });
-        this.props.onEmailSent(`Sign in token has been sent to ${email}`);
+        this.props.onRequestSent(`Your sign-in link has been sent to ${email}.`);
+      })
+      .catch(error => {
+        console.error(error);
+        this.props.onRequestFailed('Something went wrong, please try again later.');
       });
   },
 
@@ -50,20 +53,22 @@ const SignInPasswordless = React.createClass({
 
     if (showControls) {
       return (
-        <div className="cgps-login-controls">
+        <form
+          className="cgps-login-controls"
+          onSubmit={this.submitForm}
+        >
           <input
             type="email"
             value={email}
             placeholder="Email address"
-            onClick={this.showControls}
             onChange={this.emailInputChange}
             onKeyUp={this.emailInputKeyUp}
             ref={el => { this.emailInput = el; }}
           />
-          <button onClick={this.submitForm}>
-            <i className="material-icons">vpn_key</i>
+          <button type="submit">
+            <i className="material-icons">send</i>
           </button>
-        </div>
+        </form>
       );
     }
 
@@ -79,7 +84,8 @@ const SignInPasswordless = React.createClass({
 
 function mapDispatchToProps(dispatch) {
   return {
-    onEmailSent: (message) => dispatch(showToast({ message })),
+    onRequestSent: (message) => dispatch(showToast({ message })),
+    onRequestFailed: (message) => dispatch(showToast({ message })),
   };
 }
 
