@@ -4,9 +4,11 @@ import './styles.css';
 
 import React from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+
 import 'chart.piecelabel.js';
 
-import { getChartData } from './selectors';
+import { getChartData, getSelectedOrganism, isSpecieationComplete } from './selectors';
 
 import { selectOrganism } from './actions';
 
@@ -33,14 +35,6 @@ const AnalysisChart = React.createClass({
       type: 'doughnut',
       data: this.props.data,
       options: {
-        pieceLabel: {
-          render: ({ dataset, index, percentage }) => `${dataset.labels[index]}\n${percentage}%`,
-          precision: 2,
-          fontColor: '#fff',
-          fontSize: 11,
-          fontStyle: '500',
-          fontFamily: 'Roboto',
-        },
         responsive: true,
         animation: {
           animateRotate: true,
@@ -53,26 +47,20 @@ const AnalysisChart = React.createClass({
               points.map(({ index, datasetIndex }) =>
                 datasets[datasetIndex].labels[index]
             ).join(', '),
-            label: ({ index, datasetIndex }, { datasets }) =>
-              datasets[datasetIndex].data[index],
-          },
-        },
-        legend: {
-          labels: {
-            generateLabels: chart => {
-              const organisms = chart.config.data.datasets[1];
-              const meta = chart.getDatasetMeta(1);
-              return organisms.labels.map((text, i) => ({
-                fillStyle: organisms.backgroundColor[i],
-                hidden: isNaN(organisms.data[i]) || meta.data[i].hidden,
-                index: i,
-                lineWidth: 2,
-                strokeStyle: '#fff',
-                text,
-              }));
+            label: ({ index, datasetIndex }, { datasets }) => {
+              const dataset = datasets[datasetIndex];
+              const total = datasetIndex === 1 ? dataset.total : datasets[1].data[dataset.parents[index]];
+              return `${dataset.data[index]} / ${total}, ${(100 * dataset.data[index] / total).toFixed(1)}%`;
             },
           },
-          onClick: (e, item) => this.toggleOrganism(item.index),
+        },
+        pieceLabel: {
+          render: ({ dataset, index }) => ((dataset.shortLabels || dataset.labels)[index]),
+          precision: 2,
+          fontColor: '#fff',
+          fontSize: 13,
+          fontStyle: '400',
+          fontFamily: 'Roboto',
         },
         onClick: (e, [ item ]) => {
           if (!item) {
@@ -101,12 +89,21 @@ const AnalysisChart = React.createClass({
         current.data = dataset.data;
         current.backgroundColor = dataset.backgroundColor;
         current.labels = dataset.labels;
+        current.shortLabels = dataset.shortLabels;
         current.parents = dataset.parents;
+        current.total = dataset.total;
       } else {
         this.chart.data.datasets.push(dataset);
       }
     }
     this.chart.update();
+  },
+
+  getGenomesLink() {
+    const { uploadedAt, selectedOrganism } = this.props;
+    let link = `/genomes?uploadedAt=${uploadedAt}`;
+    if (selectedOrganism) link += `&organismId=${selectedOrganism}`;
+    return link;
   },
 
   toggleOrganism(index) {
@@ -118,6 +115,14 @@ const AnalysisChart = React.createClass({
     return (
       <div className="wgsa-analysis-chart">
         <canvas ref={el => { this.canvas = el; }} />
+        { this.props.isSpecieationComplete &&
+          <Link
+            className="mdl-shadow--2dp wgsa-view-genomes-button"
+            to={this.getGenomesLink()}
+          >
+            View Genomes
+          </Link>
+        }
       </div>
     );
   },
@@ -127,6 +132,8 @@ const AnalysisChart = React.createClass({
 function mapStateToProps(state) {
   return {
     data: getChartData(state),
+    isSpecieationComplete: isSpecieationComplete(state),
+    selectedOrganism: getSelectedOrganism(state),
   };
 }
 

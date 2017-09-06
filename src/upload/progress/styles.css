@@ -53,23 +53,44 @@
   width: calc(100vh - 200px);
   max-width: 100%;
   margin: 0 auto;
+  position: relative;
 }
 
-.wgsa-upload-actions {
-  margin-left: auto;
-  margin-right: 0;
+.wgsa-view-genomes-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
-.wgsa-upload-actions .mdl-button {
-  margin-left: 8px;
+.wgsa-view-genomes-button {
+  background-color: #3C7383;
+  color: #fff;
+  padding: 8px;
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  text-transform: uppercase;
 }
 
-.wgsa-upload-progress li {
+.wgsa-view-genomes-button:hover {
+  text-decoration: none !important;
+  background-color: #975FAA;
+}
+
+.wgsa-upload-legend > li > .material-icons {
+  vertical-align: middle;
+}
+
+.wgsa-upload-legend li {
   line-height: 1.25;
   margin-bottom: 8px;
 }
 
-.wgsa-upload-progress li > ul {
+.wgsa-upload-legend li > ul {
   margin-top: 8px;
-  margin-left: 16px;
+  margin-left: 24px;
 }

@@ -10,9 +10,10 @@ import AnalysisChart from './AnalysisChart.react';
 import * as upload from './selectors';
 
 const Analysis = ({ data }) => (
-  <ul>
-    { data.map(({ key, label, total, ...analyses }) =>
+  <ul className="wgsa-upload-legend">
+    { data.map(({ key, label, total, colour, ...analyses }) =>
       <li key={key}>
+        <i className="material-icons" style={{ color: colour }}>stop</i>
         <strong>{label}</strong>: {total}
         <ul>
           {Object.keys(analyses).map(analysisKey => {
@@ -32,7 +33,7 @@ const Analysis = ({ data }) => (
   </ul>
 );
 
-const Progress = ({ inProgress, errored, files, analysis }) => (
+const Progress = ({ inProgress, errored, files, analysis, uploadedAt }) => (
   <div className="wgsa-content-margin wgsa-upload-progress">
     <div>
       { files.pending > 0 &&
@@ -63,7 +64,7 @@ const Progress = ({ inProgress, errored, files, analysis }) => (
     </div>
     <div className="wgsa-section-divider">
       <h2 className="wgsa-section-title">Analysis</h2>
-      <AnalysisChart />
+      <AnalysisChart uploadedAt={uploadedAt} />
     </div>
   </div>
 );

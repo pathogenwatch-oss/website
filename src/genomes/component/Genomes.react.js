@@ -1,26 +1,20 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import classnames from 'classnames';
 
-import ProgressBar from '../../progress-bar';
 import Overlay from '../../overlay';
 
 import Filter from '../filter';
-import Summary from '../summary';
-import SelectionDrawer from '../selection';
-
-import { getGridItems } from '../selectors';
-import { getTotal } from '../summary/selectors';
-import { getStatus } from '../selectors';
+import Header from '../header';
+import Selection from '../selection';
 
 import { statuses } from '../constants';
 
-const Component = React.createClass({
+export default React.createClass({
 
   propTypes: {
     hasGenomes: React.PropTypes.bool,
     uploads: React.PropTypes.object,
     isUploading: React.PropTypes.bool,
-    waiting: React.PropTypes.bool,
     prefilter: React.PropTypes.string,
     fetch: React.PropTypes.func,
   },
@@ -93,14 +87,21 @@ const Component = React.createClass({
 
   render() {
     return (
-      <div>
-        { this.props.waiting && <ProgressBar indeterminate /> }
-        <div className="wgsa-hipster-style wgsa-filterable-view">
-          <Summary />
-          {this.renderContent()}
+      <div
+        className={classnames(
+          'wgsa-genomes',
+          { 'has-filter': this.props.isFilterOpen,
+            'has-selection': this.props.isSelectionOpen }
+        )}
+      >
+        <Header />
+        <div className="wgsa-genomes-content">
+          <Filter />
+          <div className="wgsa-genomes-view">
+            {this.renderContent()}
+          </div>
+          <Selection />
         </div>
-        <Filter />
-        <SelectionDrawer />
         <Overlay visible={this.props.status === statuses.LOADING}>
           <p className="wgsa-big-message">
             Loading... ⌛
@@ -111,13 +112,3 @@ const Component = React.createClass({
   },
 
 });
-
-function mapStateToProps(state) {
-  return {
-    items: getGridItems(state),
-    total: getTotal(state),
-    status: getStatus(state),
-  };
-}
-
-export default connect(mapStateToProps)(Component);

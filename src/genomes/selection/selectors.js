@@ -1,12 +1,13 @@
 import { createSelector } from 'reselect';
 
+import { getGenomeList } from '../selectors';
 import { getDeployedOrganismIds } from '../../summary/selectors';
 
 import { isOverSelectionLimit } from './utils';
 
 export const getSelection = ({ genomes }) => genomes.selection;
 export const getSelectedGenomes = state => getSelection(state).genomes;
-export const isDrawerOpen = state => getSelection(state).drawerOpen;
+export const isSelectionOpen = state => getSelection(state).isOpen;
 
 export const getSelectedGenomeIds = createSelector(
   getSelectedGenomes,
@@ -31,4 +32,10 @@ export const getSelectedSupportedGenomesList = createSelector(
 export const isSelectionLimitReached = createSelector(
   getSelectedGenomeIds,
   ids => isOverSelectionLimit(ids.length)
+);
+
+export const areAllSelected = createSelector(
+  getSelectedGenomes,
+  getGenomeList,
+  (selection, genomes) => genomes.every(({ id }) => (id in selection))
 );

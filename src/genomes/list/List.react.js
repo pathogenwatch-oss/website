@@ -36,7 +36,7 @@ export const ListView = React.createClass({
   render() {
     const { items, total, fetch, indices } = this.props;
     return (
-      <div className="wgsa-content-margin-left">
+      <div className="wgsa-genome-list-view">
         <Header hasScrollbar={this.hasScrollbar()} />
         <InfiniteLoader
           isRowLoaded={({ index }) => indices[index]}
@@ -57,7 +57,7 @@ export const ListView = React.createClass({
                   rowHeight={rowHeight}
                   rowRenderer={({ key, index, style }) => {
                     const itemId = indices[index];
-                    const styleWithMargin = { ...style, width: 'calc(100% - 80px' };
+                    const styleWithMargin = { ...style, width: 'calc(100% - 32px' };
                     if (typeof itemId === 'string') {
                       return <ListItem key={key} style={styleWithMargin} item={items[itemId]} />;
                     }

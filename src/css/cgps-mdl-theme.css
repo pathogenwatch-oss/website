@@ -129,6 +129,9 @@
   background: #a386bd !important;
 }
 
+a.mdl-button {
+  text-decoration: none !important;
+}
 
 /* Slider */
 
@@ -145,18 +148,16 @@
 /* Checkbox */
 
 .mdl-checkbox__box-outline {
-  width: 20px;
-  height: 20px;
-  border-color: #673c90 !important;
+  border-color: #3c7383 !important;
 }
 
 .mdl-checkbox.is-checked .mdl-checkbox__tick-outline {
-  background-color: #673c90;
+  background-color: #3c7383;
 }
 
-.mdl-checkbox__label {
+/*.mdl-checkbox__label {
   font-size: 13px;
-}
+}*/
 
 
 /* Icon Toggle */

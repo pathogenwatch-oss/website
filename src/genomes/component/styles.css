@@ -1,0 +1,47 @@
+.wgsa-genomes {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.wgsa-genomes .wgsa-genomes-content {
+  flex-grow: 1;
+  box-sizing: border-box;
+  display: flex;
+  overflow: hidden;
+}
+
+.wgsa-genomes .wgsa-genomes-view {
+  flex-grow: 1;
+  position: relative;
+}
+
+.wgsa-genomes .wgsa-genome-filter {
+  width: 255px;
+}
+
+.wgsa-genomes .wgsa-genome-filter > aside {
+  width: 255px;
+  position: absolute;
+  bottom: 0;
+  top: 0;
+  right: 0;
+  z-index: 1;
+}
+
+.wgsa-genomes .wgsa-genome-selection {
+  width: 255px;
+  position: relative;
+  bottom: 0;
+  top: 0;
+  right: 0;
+  overflow: auto;
+}
+
+.wgsa-genomes-view > * {
+  height: 100%;
+}

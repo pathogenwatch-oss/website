@@ -3,8 +3,6 @@ import { connect } from 'react-redux';
 
 import { Summary as FilterSummary, Totals } from '../../filter/summary';
 import ViewSwitcher from './ViewSwitcher.react';
-import SelectAll from '../selection/SelectAll.react';
-import ClearSelection from '../selection/ClearSelection.react';
 
 import { getVisible, getTotal } from './selectors';
 
@@ -26,8 +24,6 @@ const Summary = ({ visibleGenomes, totalGenomes }) => {
         total={totalGenomes}
         itemType="genome"
       />
-      <SelectAll />
-      <ClearSelection />
     </FilterSummary>
   );
 };
