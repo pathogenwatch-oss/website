@@ -131,7 +131,7 @@ module.exports = () =>
           maxCollectionSize: config.maxCollectionSize,
           maxFastaFileSize: config.maxFastaFileSize,
           wiki: config.wikiLocation,
-          strategies: [ 'facebook', 'google', 'twitter' ],
+          strategies: Object.keys(config.passport.strategies || {}),
           user,
           version,
           clientId: hash.digest('hex'),
