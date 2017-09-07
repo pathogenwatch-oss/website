@@ -33,7 +33,8 @@ const Search = React.createClass({
   componentDidUpdate(previous) {
     const { search } = this.props;
     if (previous.search.category !== search.category ||
-        previous.search.terms !== search.terms ||
+        previous.search.intersections !== search.intersections ||
+        previous.search.currentIntersection !== search.currentIntersection ||
         previous.search.advanced !== search.advanced) {
       this.refs.input.focus();
     }
