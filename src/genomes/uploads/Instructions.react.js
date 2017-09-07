@@ -4,6 +4,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import Switch from '../../components/switch';
+import { FormattedName } from '../../organisms';
 
 import { getSettingValue } from './selectors';
 
@@ -39,7 +40,7 @@ export default () => (
       <p>
         Genomic data should be in <a href="https://en.wikipedia.org/wiki/FASTA_format" target="_blank" rel="noopener">multi-FASTA format</a> with one of the following extensions:
       </p>
-      <ul>
+      <ul className="inline">
         {DEFAULT.GENOME_FILE_EXTENSIONS.map(ext => <li key={ext}>{ext}</li>)}
       </ul>
       <p>Please ensure that there is <strong>one file per genome</strong>.</p>
@@ -62,7 +63,7 @@ export default () => (
       <p>Metadata should be provided in <a href="https://en.wikipedia.org/wiki/Comma-separated_values" target="_blank" rel="noopener">CSV format</a> with the extension <strong>.csv</strong>.</p>
       <p>Files should contain a column <strong>filename</strong> containing the names of genome files uploaded at the same time.</p>
       <p>To make full use of metadata, we strongly recommend including the following columns:</p>
-      <ul>
+      <ul className="inline">
         <li>latitude</li>
         <li>longitude</li>
         <li>year</li>
@@ -70,9 +71,19 @@ export default () => (
         <li>day</li>
       </ul>
       <p>When providing a date, month and day are optional. Additional metadata may be included and will be saved.</p>
-      <a href="/example-metadata.csv" download="wgsa-example-metadata.csv">
-        Download an example metadata file
-      </a>
+      <h3>CSV Templates</h3>
+      <ul>
+        <li>
+          <a href="/wgsa-general-metadata-template.csv" download="wgsa-general-metadata-template.csv">
+            General
+          </a>
+        </li>
+        <li>
+          <a href="/wgsa-typhi-metadata-template.csv" download="wgsa-typhi-metadata-template.csv">
+            <FormattedName organismId="90370" fullName />
+          </a>
+        </li>
+      </ul>
     </div>
   </section>
 );
