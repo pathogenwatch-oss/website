@@ -84,7 +84,7 @@ const ListItem = ({ item, onClick, style, onViewGenome }) => {
         EmptyCell }
       {displayAccessLevel(item)}
       <button
-        className="wgsa-view-genome-details mdl-button mdl-button--icon"
+        className="wgsa-view-genome-details mdl-button"
         title="View Details"
         onClick={onViewGenome}
       >

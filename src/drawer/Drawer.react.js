@@ -17,6 +17,7 @@ export default React.createClass({
 
   getDefaultProps() {
     return {
+      actions: [],
       visible: false,
       isOpen: false,
       disabled: false,
@@ -58,11 +59,11 @@ export default React.createClass({
           { 'wgsa-drawer-container--expanded': this.props.isOpen && this.state.expanded }
         )}
         transitionName={`wgsa${this.props.isOpen ? '-open-' : '-'}drawer`}
-        transitionEnterTimeout={280 * (this.props.isOpen ? 2 : 1)}
-        transitionLeaveTimeout={280 * (this.props.isOpen ? 2 : 1)}
+        transitionEnterTimeout={280}
+        transitionLeaveTimeout={280}
       >
         <Overlay isVisible={this.isOverlayVisible()} hide={this.onHeaderClick} />
-        { (this.props.visible || this.props.isOpen) ?
+        { (this.props.isOpen) ?
           <aside
             key={this.props.animationKey || 'wgsa-drawer'}
             className={classnames(
@@ -75,16 +76,19 @@ export default React.createClass({
           >
             <header className="wgsa-drawer__header" onClick={this.onHeaderClick}>
               {this.props.title}
-              { !this.props.disabled && this.props.expandable &&
-                <button
-                  className="mdl-button mdl-button--icon"
-                  title={this.state.expanded ? 'Dock' : 'Fullscreen'}
-                  onClick={this.toggleExpanded}
-                >
-                  <i className="material-icons">{this.state.expanded ? 'fullscreen_exit' : 'fullscreen'}</i>
-                </button> }
+              <div className="wgsa-drawer-actions" onClick={e => e.stopPropagation()}>
+                {this.props.actions}
+                { !this.props.disabled && this.props.expandable &&
+                  <button
+                    className="mdl-button mdl-button--icon"
+                    title={this.state.expanded ? 'Dock' : 'Fullscreen'}
+                    onClick={this.toggleExpanded}
+                  >
+                    <i className="material-icons">{this.state.expanded ? 'fullscreen_exit' : 'fullscreen'}</i>
+                  </button> }
+              </div>
             </header>
-            { React.cloneElement(this.props.children, { visible: this.props.isOpen }) }
+            { this.props.children }
           </aside>
           : null }
       </ReactCSSTransitionGroup>

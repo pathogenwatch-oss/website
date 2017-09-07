@@ -1,5 +1,6 @@
 .wgsa-drawer.wgsa-genome-drawer {
-  width: 580px;
+  /*width: 580px;*/
+  height: 450px;
 }
 
 .wgsa-genome-drawer-content {
@@ -93,6 +94,19 @@
 }
 
 .wgsa-genome-drawer .mdl-tabs__tab {
-  padding: 0 8px;
-  font-size: 13px;
+  padding: 0 10px;
+}
+
+.wgsa-drawer-actions .material-icons {
+  color: #fff !important;
+}
+
+.wgsa-drawer-actions .wgsa-download-label {
+  color: #222 !important;
+}
+
+.wgsa-tab-actions {
+  position: absolute;
+  top: 8px;
+  right: 8px;
 }

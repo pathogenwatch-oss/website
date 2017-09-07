@@ -2,7 +2,8 @@ import React from 'react';
 
 import Drawer from '../drawer';
 import RemoveButton from '../genomes/card/RemoveButton.react';
-import AddToSelectionButton from '../genomes/card/AddToSelectionButton.react';
+import AddToSelection from '../genomes/selection/AddToSelection.react';
+
 import DownloadLink from '../downloads/GenomeFileLink.react';
 import Spinner from '../components/Spinner.react';
 
@@ -18,30 +19,29 @@ const GenomeDrawerContent = React.createClass({
 
   render() {
     const { genome } = this.props;
-    const { analysis = {}, pending = [] } = genome;
+    const { analysis = {}, pending = [], userDefined = null } = genome;
     const analysisTabs = getAnalysisTabs(analysis);
+    const hasMetadata = userDefined && Object.keys(userDefined).length > 0;
     return (
       <div className="wgsa-genome-drawer-content wgsa-drawer__content">
         <div className="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
           <div className="mdl-tabs__tab-bar">
             <a href="#overview-panel" className="mdl-tabs__tab is-active">Overview</a>
-            <a href="#metadata-panel" className="mdl-tabs__tab">Metadata</a>
+            { hasMetadata && <a href="#metadata-panel" className="mdl-tabs__tab">Metadata</a>}
             {
               analysisTabs.map(({ key }) => <a key={key} href={`#${key.toLowerCase()}-panel`} className="mdl-tabs__tab">{key}</a>)
             }
             <div className="wgsa-tab-actions">
               { pending.length > 0 && <span className="wgsa-tab-actions__label">+{pending.length} pending</span>}
-              <RemoveButton genome={genome} />
-              <DownloadLink id={genome.id} name={genome.name} />
-              <AddToSelectionButton genome={genome} />
             </div>
           </div>
           <div className="mdl-tabs__panel is-active" id="overview-panel">
             <Overview genome={genome} />
           </div>
-          <div className="mdl-tabs__panel" id="metadata-panel">
-            <Metadata genome={genome} />
-          </div>
+          { hasMetadata &&
+            <div className="mdl-tabs__panel" id="metadata-panel">
+              <Metadata genome={genome} />
+            </div> }
           {
             analysisTabs.map(({ key, component }) =>
               <div
@@ -64,8 +64,13 @@ export default ({ name, genome, loading, close }) => {
       title={name}
       isOpen={isOpen}
       onHeaderClick={close}
-      animationKey={genome && genome.name}
+      animationKey="genome-drawer"
       className="wgsa-genome-drawer"
+      actions={genome ? [
+        <RemoveButton key="remove" genome={genome} />,
+        <DownloadLink key="download" id={genome.id} name={genome.name} />,
+        <AddToSelection key="select" genome={genome} className="mdl-button mdl-button--icon" />,
+      ] : []}
     >
       { loading ?
         <div className="wgsa-drawer__content wgsa-drawer-loader">

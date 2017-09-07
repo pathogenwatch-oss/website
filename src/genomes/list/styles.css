@@ -1,5 +1,10 @@
 .wgsa-genome-list-view {
   margin-left: 32px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
 }
 
 .wgsa-genome-list-view .wgsa-grid-item {
@@ -164,10 +169,26 @@
 
 .wgsa-view-genome-details {
   position: absolute;
-  right: 8px;
+  top: 0;
+  right: 0;
+  z-index: 1;
   display: none;
+  height: 40px;
+  width: 40px;
+  min-width: 0;
+  border-radius: 0px;
+  background: none !important;
+  padding: 0;
 }
 
 .wgsa-genome-list-item:hover .wgsa-view-genome-details {
   display: block;
+}
+
+.wgsa-genome-list-item .wgsa-genome-checkbox {
+  margin-right: 8px;
+}
+
+.wgsa-genome-list-item .wgsa-genome-checkbox > .material-icons {
+  font-size: 20px;
 }
