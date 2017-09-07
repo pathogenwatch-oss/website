@@ -1,5 +1,6 @@
 import { getCollection } from '../../collection-viewer/selectors';
 import { getTrees, getVisibleTree, getLeafIds } from './selectors';
+import { getFilterState } from '../selectors';
 
 import { showToast } from '../../toast';
 import * as actions from './actions';
@@ -76,6 +77,7 @@ export function treeClicked(event, phylocanvas) {
       return;
     }
 
+    const state = getState();
     const stateKey = getVisibleTree(getState()).name;
 
     if (stateKey === POPULATION) {
@@ -93,7 +95,12 @@ export function treeClicked(event, phylocanvas) {
         const action = event.append ? appendToFilter : activateFilter;
         dispatch(action([ id ], filterKeys.HIGHLIGHT));
       } else if (nodeIds.length === 0) {
-        dispatch(resetFilter(filterKeys.HIGHLIGHT));
+        const filterState = getFilterState(state);
+        if (filterState[filterKeys.HIGHLIGHT].active) {
+          dispatch(resetFilter(filterKeys.HIGHLIGHT));
+        } else if (filterState[filterKeys.VISIBILITY].active) {
+          dispatch(resetFilter(filterKeys.VISIBILITY));
+        }
       } else {
         dispatch(
           event.append ?
