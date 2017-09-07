@@ -2,13 +2,18 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { getDeployedOrganismIds } from '../../summary/selectors';
+import { isOffline } from '../../offline';
 
 import { taxIdMap } from './index';
 
 function mapStateToProps(state, { organismId }) {
   const deployedOrganisms = getDeployedOrganismIds(state);
+  const offline = isOffline();
   return {
-    isDeployed: deployedOrganisms && deployedOrganisms.has(organismId),
+    isDeployed:
+      offline ?
+        taxIdMap.has(organismId) :
+        deployedOrganisms && deployedOrganisms.has(organismId),
   };
 }
 

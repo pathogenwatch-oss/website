@@ -15,7 +15,7 @@ const FilterStatus = ({ active, filteredAmount, totalAmount, clear, children }) 
       title="Clear Filter"
       disabled={!active}
     >
-      <i className="material-icons">cancel</i>
+      <i className="material-icons">backspace</i>
     </button>
   </span>
 );

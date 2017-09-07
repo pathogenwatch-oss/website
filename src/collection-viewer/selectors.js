@@ -22,6 +22,8 @@ const getSearchIds = createSelector(
   }, [])
 );
 
+export const getFilterState = state => getViewer(state).filter;
+
 export const getFilter = createSelector(
   state => getViewer(state).filter[filterKeys.VISIBILITY],
   state => getViewer(state).search.intersections,
@@ -47,12 +49,12 @@ export const getGenomeList = createSelector(
 );
 
 export const getFilteredGenomeIds = createSelector(
-  state => getViewer(state).filter,
+  getFilterState,
   filter => filter[filterKeys.VISIBILITY].ids
 );
 
 export const getHighlightedIds = createSelector(
-  state => getViewer(state).filter,
+  getFilterState,
   filter => filter[filterKeys.HIGHLIGHT].ids
 );
 

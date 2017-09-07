@@ -44,8 +44,8 @@ const RemoveOfflineCollection = React.createClass({
         onClick={this.warn}
         disabled={disabled}
         title={disabled ?
-          'Collections can only be removed when online.' :
-          'This cannot be undone.'
+          'Remove this collection when you are online again 🙂' :
+          'Requires confirmation.'
         }
       >
         Remove
