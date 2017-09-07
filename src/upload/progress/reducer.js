@@ -114,13 +114,15 @@ export default function (state = initialState, { type, payload }) {
     }
     case actions.PROCESS_GENOME.SUCCESS:
     case actions.PROCESS_GENOME.FAILURE: {
-      const { processing, files } = state;
+      const { files } = state;
       const { id, error } = payload;
+
+      const processing = new Set(state.processing);
       processing.delete(payload.id);
 
       return {
         ...state,
-        processing: new Set(processing),
+        processing,
         files:
           error ?
             updateFile(files, id, { error, status: statuses.ERROR }) :

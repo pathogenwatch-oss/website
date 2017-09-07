@@ -121,8 +121,7 @@ const AnalysisChart = React.createClass({
             to={this.getGenomesLink()}
           >
             View Genomes
-          </Link>
-        }
+          </Link> }
       </div>
     );
   },

@@ -103,7 +103,7 @@ export const getFileSummary = createSelector(
 
 function getAnalysisBreakdown(analyses) {
   const mlst = { total: 0, sts: {} };
-  const paarsnp = { label: 'PAARSNP', total: 0 };
+  const paarsnp = { label: 'AMR', total: 0 };
   const genotyphi = { label: 'Genotyphi', total: 0 };
   const ngmast = { label: 'NG-MAST', total: 0 };
 
@@ -224,5 +224,5 @@ export const getChartData = createSelector(
 
 export const isSpecieationComplete = createSelector(
   getAnalysisSummary,
-  summary => summary.length && summary[summary.length - 1].label !== 'Pending',
+  summary => summary.length > 0 && summary[summary.length - 1].label !== 'Pending',
 );

@@ -21,7 +21,7 @@ const Analysis = ({ data }) => (
             if (analysis.total) {
               return (
                 <li key={analysisKey}>
-                  {analysis.label}: {analysis.total}/{total}
+                  {analysis.label}: {analysis.total === total ? '✔️' : `${analysis.total}/${total}`}
                 </li>
               );
             }
@@ -33,33 +33,37 @@ const Analysis = ({ data }) => (
   </ul>
 );
 
-const Progress = ({ inProgress, errored, files, analysis, uploadedAt }) => (
+const Progress = ({ inProgress, errored, files, analysis, uploadedAt, isUploading, totalGenomes }) => (
   <div className="wgsa-content-margin wgsa-upload-progress">
     <div>
-      { files.pending > 0 &&
-        <div className="wgsa-section-divider">
-          <h2 className="wgsa-section-title">Files</h2>
-          <ReactCSSTransitionGroup
-            className="wgsa-upload-card-list"
-            transitionName="wgsa-upload-card"
-            transitionEnterTimeout={280}
-            transitionLeave={false}
-          >
-            { inProgress.map(file => <FileCard key={file.id} item={file} />) }
-          </ReactCSSTransitionGroup>
+      <div className="wgsa-section-divider">
+        <h2 className="wgsa-section-title">Files</h2>
+        <ReactCSSTransitionGroup
+          className="wgsa-upload-card-list"
+          transitionName="wgsa-upload-card"
+          transitionEnterTimeout={280}
+          transitionLeave={false}
+        >
+          { inProgress.map(file => <FileCard key={file.id} item={file} />) }
+        </ReactCSSTransitionGroup>
+        { files.pending > 0 &&
           <p>
             +{files.pending} file{files.pending === 1 ? '' : 's'}.
-          </p>
+          </p> }
+        { !isUploading && totalGenomes > 0 &&
+          <p>
+            {totalGenomes} file{totalGenomes === 1 ? '' : 's'} uploaded successfully.
+          </p> }
+      </div>
+      { files.errored > 0 &&
+        <div className="wgsa-section-divider">
+          <h2 className="wgsa-section-title">Errors</h2>
+          { errored.map(file => <FileCard key={file.id} item={file} />) }
         </div> }
       { (!!analysis.length && analysis[0].key !== 'pending') &&
         <div className="wgsa-section-divider">
           <h2 className="wgsa-section-title">Organisms</h2>
           <Analysis data={analysis} />
-        </div> }
-      { files.errored > 0 &&
-        <div className="wgsa-section-divider">
-          <h2 className="wgsa-section-title">Errors</h2>
-          { errored.map(file => <FileCard key={file.id} item={file} />) }
         </div> }
     </div>
     <div className="wgsa-section-divider">
@@ -75,6 +79,8 @@ function mapStateToProps(state) {
     errored: upload.getErroredUploads(state),
     files: upload.getFileSummary(state),
     analysis: upload.getAnalysisSummary(state),
+    isUploading: upload.isUploading(state),
+    totalGenomes: upload.getUploadedGenomeList(state).length,
   };
 }
 
