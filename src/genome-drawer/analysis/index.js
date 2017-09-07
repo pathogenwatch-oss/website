@@ -17,10 +17,10 @@ export default (analysis) => {
 
   if (metrics) tabs.push({ key: 'Metrics', component: <Metrics result={metrics} /> });
   if (mlst) tabs.push({ key: 'MLST', component: <MLST result={mlst} /> });
-  if (paarsnp) tabs.push({ key: 'PAARSNP', component: <PAARSNP {...paarsnp} /> });
-  if (specieator) tabs.push({ key: 'Specieator', component: <Specieator result={specieator} /> });
+  if (paarsnp) tabs.push({ key: 'AMR', component: <PAARSNP {...paarsnp} /> });
   if (genotyphi) tabs.push({ key: 'Genotyphi', component: <Genotyphi {...genotyphi} /> });
   if (ngmast) tabs.push({ key: 'NG-MAST', component: <NgMast {...ngmast} /> });
+  if (specieator) tabs.push({ key: 'Species', component: <Specieator result={specieator} /> });
   if (Object.keys(rest).length) tabs.push({ key: 'Other', component: renderGenericResults(rest) });
 
   return tabs;

@@ -67,6 +67,7 @@ export default React.createClass({
             key={this.props.animationKey || 'wgsa-drawer'}
             className={classnames(
               'wgsa-drawer',
+              this.props.className,
               { 'wgsa-drawer--open': this.props.visible && this.props.isOpen,
                 'wgsa-open-drawer': !this.props.visible && this.props.isOpen,
                 'wgsa-drawer--disabled': this.props.disabled }
