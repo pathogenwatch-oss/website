@@ -207,6 +207,7 @@ div.wgsa-tree-icon:active {
   border-bottom: 2px solid #555;
   margin: 0;
   position: relative;
+  overflow: visible;
 }
 
 .wgsa-tree-scalebar__bar::before,
