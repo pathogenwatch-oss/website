@@ -1,12 +1,17 @@
 import { createSelector } from 'reselect';
 
 import { getViewer, getGenomeList } from '../selectors';
-import { getTables, getActiveDataTable } from '../table/selectors';
+import {
+  getTables,
+  getActiveDataTable,
+  getVisibleTableName,
+} from '../table/selectors';
 
 import { tableDisplayNames } from '../constants';
 import { modes } from './constants';
 import {
   mapColumnsToSearchCategories,
+  getNameCategory,
   findColumn,
   getValueLabel,
   getExpressionMatcher,
@@ -60,9 +65,14 @@ const getCurrentIntersection = createSelector(
 const getTableColumns = createSelector(
   getTables,
   getSearchTextMatcher,
-  (tables, matcher) => Object.keys(tables).reduce((memo, key) => {
+  getVisibleTableName,
+  (tables, matcher, visibleTable) => Object.keys(tables).reduce((memo, key) => {
     const table = tables[key];
     const items = mapColumnsToSearchCategories(table.columns, key, matcher);
+    // ensure name category is always visible under "metadata" section
+    if (table === tables.metadata) {
+      items.unshift(getNameCategory(visibleTable));
+    }
     if (items.length) {
       memo.push({ heading: tableDisplayNames[key], items });
     }

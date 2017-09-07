@@ -20,7 +20,7 @@ export function mapColumnsToSearchCategories(columns, tableName, matcher) {
 
     const { columnKey } = column;
 
-    if (columnKey === '__name' && tableName !== tableKeys.metadata) continue;
+    if (columnKey === '__name') continue;
     if (!column.valueGetter || column.hidden) continue;
     if (columnKeys.has(columnKey)) continue;
 
@@ -36,6 +36,14 @@ export function mapColumnsToSearchCategories(columns, tableName, matcher) {
     columnKeys.add(columnKey);
   }
   return categories;
+}
+
+export function getNameCategory(tableName) {
+  return {
+    tableName,
+    key: '__name',
+    label: 'NAME',
+  };
 }
 
 export function findColumn(columns, columnKey) {
