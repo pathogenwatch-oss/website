@@ -38,11 +38,13 @@ export function mapColumnsToSearchCategories(columns, tableName, matcher) {
   return categories;
 }
 
-export function getNameCategory(tableName) {
+export function getNameCategory(tableName, matcher) {
+  const label = 'NAME';
+  if (matcher && !matcher.test(label)) return null;
   return {
     tableName,
+    label,
     key: '__name',
-    label: 'NAME',
   };
 }
 

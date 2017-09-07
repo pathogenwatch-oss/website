@@ -69,9 +69,11 @@ const getTableColumns = createSelector(
   (tables, matcher, visibleTable) => Object.keys(tables).reduce((memo, key) => {
     const table = tables[key];
     const items = mapColumnsToSearchCategories(table.columns, key, matcher);
-    // ensure name category is always visible under "metadata" section
+    // ensure name category is always visible under "metadata" section,
+    // even if metadata table not visible
     if (table === tables.metadata) {
-      items.unshift(getNameCategory(visibleTable));
+      const category = getNameCategory(visibleTable, matcher);
+      if (category) items.unshift(category);
     }
     if (items.length) {
       memo.push({ heading: tableDisplayNames[key], items });
