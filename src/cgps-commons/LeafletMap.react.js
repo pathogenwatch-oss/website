@@ -37,17 +37,23 @@ export default React.createClass({
     buttonClassname: React.PropTypes.string,
     onBoundsChange: React.PropTypes.func,
     onLassoPathChange: React.PropTypes.func,
+    refitOnMarkerChange: React.PropTypes.bool,
   },
 
   getDefaultProps() {
     return {
       cluster: false,
       markers: [],
+      refitOnMarkerChange: true,
     };
   },
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.markers.length === 0 && this.props.markers) {
+  componentDidUpdate(previous) {
+    if (this.props.refitOnMarkerChange) {
+      if (previous.markers !== this.props.markers) {
+        this.refitMapBounds();
+      }
+    } else if (previous.markers.length === 0 && this.props.markers) {
       this.refitMapBounds();
     }
   },
@@ -106,7 +112,7 @@ export default React.createClass({
     if (point) {
       this.leafletMap.leafletElement.panTo(point);
     } else {
-      this.leafletMap.leafletElement.fitBounds(this.getBounds());
+      this.leafletMap.leafletElement.fitBounds(this.getBounds(), { maxZoom: 5 });
     }
   },
 

@@ -17,15 +17,19 @@
   font-weight: 500;
 }
 
-.wgsa-upload-instuctions li {
+ul.inline li {
   display: inline-block;
   margin-right: 0.333em;
 }
 
-.wgsa-upload-instuctions li::after {
+ul.inline li::after {
   content: ','
 }
 
-.wgsa-upload-instuctions li:last-child::after {
+ul.inline li:last-child::after {
   display: none;
+}
+
+.wgsa-upload-instuctions h3 {
+  margin-bottom: 8px;
 }
