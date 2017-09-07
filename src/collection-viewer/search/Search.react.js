@@ -7,16 +7,17 @@ import classnames from 'classnames';
 import SearchDropdown from './SearchDropdown.react';
 import FilterStatus from '../filter/FilterStatus.react';
 
-import { getSearch } from './selectors';
+import { getSearch, getSearchPlaceholder } from './selectors';
 
 import {
-  changeSearchText,
   changeDropdownVisibility,
   selectSearchCategory,
   moveCursor,
+  toggleSearchMode,
+  toggleSearchExactMatch,
 } from './actions';
 
-import { selectItemAtCursor } from './thunks';
+import { selectItemAtCursor, searchTextChanged } from './thunks';
 
 const Search = React.createClass({
 
@@ -31,33 +32,15 @@ const Search = React.createClass({
 
   componentDidUpdate(previous) {
     const { search } = this.props;
-    if (!search.visible) return;
     if (previous.search.category !== search.category ||
-        previous.search.terms !== search.terms) {
+        previous.search.terms !== search.terms ||
+        previous.search.advanced !== search.advanced) {
       this.refs.input.focus();
     }
   },
 
-  getPlaceholder() {
-    const { category, visible } = this.props.search;
-    if (category) {
-      return `FILTER ${category.label}`;
-    }
-    if (visible) {
-      return 'FILTER COLUMNS';
-    }
-    return 'SEARCH';
-  },
-
   handleChange(event) {
     this.props.handleChange(event.target.value);
-  },
-
-  handleFocus() {
-    const { visible } = this.props.search;
-    if (!visible) {
-      this.props.openDropdown(true);
-    }
   },
 
   handleClick() {
@@ -71,21 +54,21 @@ const Search = React.createClass({
     if (e.keyCode === 39 || e.keyCode === 40) {
       this.props.moveCursor(1);
     }
-    const { text, category, visible } = this.props.search;
+    const { text, category } = this.props.search;
     if (e.keyCode === 8 && category && text.length === 0) {
       this.props.removeCategory();
     }
     if (e.keyCode === 13) {
       this.props.selectItemAtCursor();
     }
-    if (e.keyCode === 27 && visible) {
-      this.props.openDropdown(false);
-      this.refs.input.blur();
+    if (e.keyCode === 27) {
+      this.props.toggleMode();
     }
   },
 
   render() {
-    const { text, visible } = this.props.search;
+    const { toggleMode, toggleExactMatch, search } = this.props;
+    const { text, visible, advanced, exact } = search;
     return (
       <div className="wgsa-search-box-container">
         <div className={classnames(
@@ -95,10 +78,29 @@ const Search = React.createClass({
           onClick={this.handleClick}
         >
           <i className="wgsa-search-box__icon material-icons">search</i>
+          <button
+            className={classnames(
+              'mdl-button mdl-button--icon',
+              { active: advanced }
+            )}
+            onClick={toggleMode}
+            title="Toggle Advanced Search"
+          >
+            <i className="material-icons">add_box</i>
+          </button>
+          <button
+            className={classnames(
+              'mdl-button mdl-button--icon',
+              { active: exact }
+            )}
+            onClick={toggleExactMatch}
+            title="Toggle Exact Match"
+          >
+            <i className="material-icons">explicit</i>
+          </button>
           <input ref="input"
             className="wgsa-search-box__input"
-            placeholder={this.getPlaceholder()}
-            onFocus={this.handleFocus}
+            placeholder={this.props.placeholder}
             onChange={this.handleChange}
             onKeyDown={this.handleKeyboard}
             value={text}
@@ -115,16 +117,19 @@ const Search = React.createClass({
 function mapStateToProps(state) {
   return {
     search: getSearch(state),
+    placeholder: getSearchPlaceholder(state),
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    handleChange: text => dispatch(changeSearchText(text)),
+    handleChange: text => dispatch(searchTextChanged(text)),
     openDropdown: visible => dispatch(changeDropdownVisibility(visible)),
     removeCategory: () => dispatch(selectSearchCategory(null)),
     selectItemAtCursor: () => dispatch(selectItemAtCursor()),
     moveCursor: delta => dispatch(moveCursor(delta)),
+    toggleMode: () => dispatch(toggleSearchMode()),
+    toggleExactMatch: () => dispatch(toggleSearchExactMatch()),
   };
 }
 

@@ -1,5 +1,5 @@
 export function getMarkers({ positionExtractor, genomes, visibleIds, filteredIds, colourGetter }) {
-  if (visibleIds.length === 0) return null;
+  if (visibleIds.length === 0) return [];
 
   const markers = new Map();
 

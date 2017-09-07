@@ -1,36 +1,46 @@
 import { createSelector } from 'reselect';
 
 import { getViewer, getGenomeList } from '../selectors';
-import { getTables } from '../table/selectors';
+import { getTables, getActiveDataTable } from '../table/selectors';
 
 import { tableDisplayNames } from '../constants';
+import { modes } from './constants';
 import {
   mapColumnsToSearchCategories,
   findColumn,
   getValueLabel,
   getExpressionMatcher,
+  getTextMatcher,
   sortFns,
 } from './utils';
+import { getColumnLabel } from '../table/utils';
 
 export const getSearch = state => getViewer(state).search;
 
 export const getSelectedCategory = state => getSearch(state).category;
 export const getSearchText = state => getSearch(state).text;
+export const getSearchCursor = state => getSearch(state).cursor;
+export const getSearchSort = state => getSearch(state).sort;
+export const getSearchMode = state => (
+  getSearch(state).advanced ?
+    modes.ADVANCED :
+    modes.BASIC
+);
+export const isAdvancedMode = state => getSearch(state).advanced;
+export const isExactMatch = state => getSearch(state).exact;
+
 export const getSearchTextMatcher = createSelector(
   getSelectedCategory,
   getSearchText,
-  (category, text) => {
+  isExactMatch,
+  (category, text, exact) => {
     if (!text.length) return null;
     if (category && category.numeric) {
       return getExpressionMatcher(text);
     }
-    return new RegExp(text.replace('?', '\\?'), 'i');
+    return getTextMatcher(text, exact);
   }
 );
-
-export const getDropdownVisibility = state => getSearch(state).visible;
-export const getSearchCursor = state => getSearch(state).cursor;
-export const getSearchSort = state => getSearch(state).sort;
 
 export const getRecentSearches = createSelector(
   getSearch,
@@ -133,6 +143,7 @@ export const getItemAtCursor = createSelector(
   getSearchItems,
   getSearchCursor,
   (sections, cursor) => {
+    if (sections.length === 0) return null;
     let i = cursor;
     for (const { items } of sections) {
       if (i >= items.length) { i -= items.length; continue; }
@@ -140,5 +151,19 @@ export const getItemAtCursor = createSelector(
     }
     const { items } = sections[sections.length - 1];
     return items[items.length - 1] || null;
+  }
+);
+
+export const getSearchPlaceholder = createSelector(
+  getSearch,
+  getActiveDataTable,
+  ({ advanced, category }, table) => {
+    if (category) {
+      return `FILTER ${category.label}`;
+    }
+    if (advanced) {
+      return 'FILTER COLUMNS';
+    }
+    return `FILTER ${getColumnLabel(table.activeColumn)}`;
   }
 );

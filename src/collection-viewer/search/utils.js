@@ -67,6 +67,15 @@ export function getValueLabel(value, table) {
   return String(value);
 }
 
+const flags = 'i';
+export function getTextMatcher(text, isExact = false) {
+  const cleanText = text.replace('?', '\\?');
+  if (isExact) {
+    return new RegExp(`^${cleanText}$`, flags);
+  }
+  return new RegExp(cleanText, flags);
+}
+
 const comparators = {
   '=': (a, b) => a === b,
   '>': (b, a) => a > b,
@@ -112,3 +121,26 @@ export const sortFns = {
     return 0;
   },
 };
+
+export function createBasicSearchTerm(tableName, table, genomes, text, exact) {
+  const column = table.activeColumn;
+  const category = {
+    tableName,
+    label: column.displayName || getColumnLabel(column),
+    key: column.columnKey,
+    numeric: column.numeric,
+  };
+  const ids = [];
+  const matcher =
+    column.numeric ?
+      getExpressionMatcher(text) :
+      getTextMatcher(text, exact);
+  for (const genome of genomes) {
+    const value = column.valueGetter(genome);
+    if (matcher.test(value)) {
+      ids.push(genome.uuid);
+    }
+  }
+  const item = { key: exact ? text : 'contains', label: text, ids };
+  return createSearchTerm(category, item);
+}
