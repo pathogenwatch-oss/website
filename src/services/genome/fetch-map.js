@@ -2,7 +2,7 @@ const Genome = require('models/genome');
 
 module.exports = function (props) {
   const query = Object.assign(
-    { latitude: { $exists: true }, longitude: { $exists: true } },
+    { latitude: { $exists: true, $ne: null }, longitude: { $exists: true, $ne: null } },
     Genome.getFilterQuery(props)
   );
   return (
