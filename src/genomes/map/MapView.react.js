@@ -49,6 +49,7 @@ const MapView = React.createClass({
           clusterOptions={clusterOptions}
           lassoPath={lassoPath}
           markers={markers}
+          markerIds={markers}
           onClick={onClick}
           onLassoPathChange={onLassoPathChange}
           onMarkerClick={onMarkerClick}

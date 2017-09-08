@@ -39,14 +39,16 @@ export const systemDataColumns = {
   },
   __mlst: {
     columnKey: '__mlst',
-    getLabel: () => 'ST',
+    label: 'ST',
+    displayName: 'MLST ST',
     valueGetter({ analysis }) {
       if (!analysis.mlst) return null;
       return analysis.mlst.st;
     },
   },
   __mlst_profile: {
-    getLabel: () => 'PROFILE',
+    label: 'PROFILE',
+    displayName: 'MLST PROFILE',
     columnKey: '__mlst_profile',
     valueGetter({ analysis }) {
       if (!analysis.mlst) return null;
@@ -55,6 +57,7 @@ export const systemDataColumns = {
   },
   '__ng-mast': {
     columnKey: '__ng-mast',
+    displayName: 'NG-MAST TYPE',
     valueGetter({ analysis }) {
       if (!analysis.ngmast) return null;
       return analysis.ngmast.ngmast;
@@ -62,6 +65,7 @@ export const systemDataColumns = {
   },
   __por: {
     columnKey: '__por',
+    displayName: 'NG-MAST POR',
     valueGetter({ analysis }) {
       if (!analysis.ngmast) return null;
       return analysis.ngmast.por;
@@ -69,6 +73,7 @@ export const systemDataColumns = {
   },
   __tbpb: {
     columnKey: '__tbpb',
+    displayName: 'NG-MAST TBQB',
     valueGetter({ analysis }) {
       if (!analysis.ngmast) return null;
       return analysis.ngmast.tbpb;
@@ -76,7 +81,8 @@ export const systemDataColumns = {
   },
   __genotyphi_type: {
     columnKey: '__genotyphi_type',
-    getLabel: () => 'TYPE',
+    label: 'TYPE',
+    displayName: 'GENOTYPHI TYPE',
     valueGetter({ analysis }) {
       if (!analysis.genotyphi) return null;
       return analysis.genotyphi.genotype;
@@ -84,7 +90,7 @@ export const systemDataColumns = {
   },
   __genotyphi_snps: {
     columnKey: '__genotyphi_snps',
-    getLabel: () => 'SNPs',
+    label: 'SNPs',
     valueGetter({ analysis }) {
       if (!analysis.genotyphi) return null;
       return analysis.genotyphi.snps;
@@ -92,7 +98,8 @@ export const systemDataColumns = {
   },
   __genotyphi_snps_called: {
     columnKey: '__genotyphi_snps_called',
-    getLabel: () => 'SNPs CALLED',
+    label: 'SNPs CALLED',
+    displayName: 'GENOTYPHI SNPs CALLED',
     valueGetter({ analysis }) {
       if (!analysis.genotyphi) return null;
       return analysis.genotyphi.foundLoci;
@@ -164,6 +171,7 @@ export const systemDataColumns = {
   },
   '__%_GC_Content': {
     columnKey: '__%_GC_Content',
+    label: '% GC CONTENT',
     valueGetter({ analysis }) {
       return analysis.metrics ?
         analysis.metrics.gcContent :

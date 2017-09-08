@@ -23,6 +23,7 @@ export default React.createClass({
     height: React.PropTypes.number,
     width: React.PropTypes.number,
     className: React.PropTypes.string,
+    markerIds: React.PropTypes.array,
     markers: React.PropTypes.arrayOf(React.PropTypes.object),
     markerComponent: React.PropTypes.func,
     markerSize: React.PropTypes.number,
@@ -44,13 +45,14 @@ export default React.createClass({
     return {
       cluster: false,
       markers: [],
+      markerIds: [],
       refitOnMarkerChange: true,
     };
   },
 
   componentDidUpdate(previous) {
     if (this.props.refitOnMarkerChange) {
-      if (previous.markers !== this.props.markers) {
+      if (previous.markerIds !== this.props.markerIds) {
         this.refitMapBounds();
       }
     } else if (previous.markers.length === 0 && this.props.markers) {
@@ -117,7 +119,9 @@ export default React.createClass({
   },
 
   renderMarkers() {
-    const { markers, cluster, markerComponent, highlightedColour } = this.props;
+    const {
+      markers, cluster, markerComponent, highlightedColour,
+    } = this.props;
 
     if (cluster) {
       return (

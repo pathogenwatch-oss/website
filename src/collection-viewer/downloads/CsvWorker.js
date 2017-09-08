@@ -41,15 +41,12 @@ const definedColumns = {
 const csvOptions = {
   metadata: {
     valueGetter: getUserDefinedValue,
-    formatLabel: true,
   },
   typing: {
     valueGetter: getUserDefinedValue,
-    formatLabel: true,
   },
   stats: {
     valueGetter: getUserDefinedValue,
-    formatLabel: true,
   },
   antibiotics: {
     valueGetter: (antibiotic, { analysis: { paarsnp } }) =>
@@ -73,19 +70,11 @@ function mapToGetters(columns, table) {
   });
 }
 
-function getLabel({ key, label }) {
-  if (key in definedColumns) {
-    return definedColumns[key].label || label;
-  }
-  return label;
-}
-
 registerPromiseWorker((message) => {
   const { table, columns, rows } = message;
   const valueGetters = mapToGetters(columns, table);
-
   return Papa.unparse({
-    fields: columns.map(getLabel),
+    fields: columns.map(_ => _.label),
     data: rows.map(row => valueGetters.map(getter => getter(row))),
   });
 });

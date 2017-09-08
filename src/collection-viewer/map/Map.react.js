@@ -6,13 +6,12 @@ import LeafletPieChartMarker, { isMarker } from '../../cgps-commons/LeafletPieCh
 import MarkerControls from '../../cgps-commons/LeafletMarkerControls.react';
 
 import { getMarkerSize, getLassoPath } from '../../map/selectors';
-import { getPositionExtractor } from './selectors';
+import { getMarkers, getMarkerIds } from './selectors';
 
 import { viewByCountry, markerSizeChanged } from '../../map/actions';
 import { filterByLassoPath } from './actions';
 
 import { buttonClassname, activeButtonClassname } from '../../map/Map.react';
-import { getMarkers } from './utils';
 
 import { COLLECTION as stateKey } from '../../app/stateKeys/map';
 
@@ -23,25 +22,16 @@ import {
   resetFilter,
 } from '../filter/actions';
 
-import { getGenomes } from '../../collection-viewer/selectors';
-import {
-  getActiveGenomeIds,
-  getHighlightedIds,
-  getColourGetter,
-} from '../selectors';
-
 import { filterKeys } from '../filter/constants';
 
 function mapStateToProps(state) {
-  return {
-    genomes: getGenomes(state),
-    visibleIds: getActiveGenomeIds(state),
-    filteredIds: getHighlightedIds(state),
-    colourGetter: getColourGetter(state),
-    positionExtractor: getPositionExtractor(state, { stateKey }),
+  const props = {
+    markerIds: getMarkerIds(state, { stateKey }),
     markerSize: getMarkerSize(state, { stateKey }),
     lassoPath: getLassoPath(state, { stateKey }),
+    markers: getMarkers(state, { stateKey }),
   };
+  return props;
 }
 
 function mapDispatchToProps(dispatch) {
@@ -85,7 +75,8 @@ export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(
       className="wgsa-collection-viewer-map"
       stateKey={stateKey}
       lassoPath={props.lassoPath}
-      markers={getMarkers(props)}
+      markers={props.markers}
+      markerIds={props.markerIds}
       markerComponent={LeafletPieChartMarker}
       markerSize={props.markerSize}
       onClick={props.onClick}

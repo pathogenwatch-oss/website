@@ -28,6 +28,7 @@ const WGSAMap = props => (
     buttonClassname={buttonClassname}
     lassoPath={props.lassoPath}
     markers={props.markers}
+    markerIds={props.markerIds}
     markerComponent={props.markerComponent}
     markerSize={props.markerSize}
     mapboxKey={CONFIG.mapboxKey}

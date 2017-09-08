@@ -14,7 +14,7 @@ function getUniqueValueColumns(memo, column) {
   return memo;
 }
 
-function convertTableToCSV(table, additionalColumnKeys = []) {
+function convertTableToCSV(table, additionalColumns = []) {
   return function ({ genomes, genomeIds, tables }) {
     let columns = tables[table].columns.reduce(getUniqueValueColumns, {});
     columns =
@@ -23,7 +23,7 @@ function convertTableToCSV(table, additionalColumnKeys = []) {
           key,
           label: columns[key].displayName || getColumnLabel(columns[key]),
         }))
-        .concat(additionalColumnKeys.map(key => ({ key })));
+        .concat(additionalColumns);
     const rows = genomeIds.map(id => genomes[id]);
     return (
       new PromiseWorker(getCSVWorker()).postMessage({ table, rows, columns })
@@ -32,7 +32,10 @@ function convertTableToCSV(table, additionalColumnKeys = []) {
 }
 
 export const generateMetadataFile = convertTableToCSV(
-  tableKeys.metadata, [ '__latitude', '__longitude' ]
+  tableKeys.metadata, [
+    { key: '__latitude', label: 'LATITUDE' },
+    { key: '__longitude', label: 'LONGITUDE' },
+  ]
 );
 export const generateTypingFile = convertTableToCSV(tableKeys.typing);
 export const generateStatsFile = convertTableToCSV(tableKeys.stats);
