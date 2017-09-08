@@ -67,7 +67,7 @@ function mapStateToProps(state, props) {
   return {
     filter,
     previousFilter,
-    markers: filter === previousFilter ? getMarkers(state) : [],
+    markers: getMarkers(state),
     lassoPath: getLassoPath(state, props),
   };
 }
