@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { createSelector } from 'reselect';
 import sortBy from 'lodash.sortby';
 
@@ -9,6 +11,9 @@ import { getCountryName } from '../../utils/country';
 
 import { taxIdMap } from '../../organisms';
 import { formatDateTime } from '../../utils/Date';
+
+import { isNovel } from '../../utils/mlst';
+import ST from '../../genome-drawer/analysis/ST.react';
 
 export const getFilter = state => filter.getFilter(state, { stateKey });
 
@@ -64,11 +69,15 @@ export const getFilterSummary = createSelector(
         Object.keys(sequenceType).map(
           value => ({
             value,
-            label: `ST ${value}`,
+            novel: isNovel(value),
+            label: (<ST id={value} />),
+            title: `ST ${value}`,
             count: sequenceType[value].count,
             active: filterState.sequenceType === value,
           })
-        )
+        ),
+        'novel',
+        'value'
       ),
       country: sortBy(
         Object.keys(country).map(

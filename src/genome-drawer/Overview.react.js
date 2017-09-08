@@ -6,6 +6,7 @@ import { getFormattedDateString, formatDateTime } from '../utils/Date';
 import { getCountryName } from '../utils/country';
 
 import { Metadata } from './components';
+import ST from './analysis/ST.react';
 
 function getAMROverview({ antibiotics }) {
   const resistances = [];
@@ -34,7 +35,7 @@ export default ({ genome }) => {
               <em>Pending</em>
             }
           </Metadata>
-          { mlst && <Metadata label="Sequence Type">{mlst.st}</Metadata> }
+          { mlst && <Metadata label="Sequence Type"><ST id={mlst.st} /></Metadata> }
           { paarsnp && <Metadata label="AMR">{getAMROverview(paarsnp)}</Metadata> }
           { genotyphi && <Metadata label="Genotype">{genotyphi.type}</Metadata>}
           { ngmast && <Metadata label="NG-MAST">{ngmast.ngmast}</Metadata> }

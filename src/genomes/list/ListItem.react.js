@@ -9,6 +9,7 @@ import { formatDate, formatDateTime } from '../../utils/Date';
 import { getCountryName } from '../../utils/country';
 
 import { showGenomeDrawer } from '../../genome-drawer';
+import ST from '../../genome-drawer/analysis/ST.react';
 
 const Cell = ({ title, icon, children }) => (
   <span
@@ -72,7 +73,7 @@ const ListItem = ({ item, onClick, style, onViewGenome }) => {
             <span>&nbsp;</span> }
       </Cell>
       { st ?
-        <Cell>{st}</Cell> :
+        <Cell><ST id={st} /></Cell> :
         EmptyCell }
       { country ?
         <Cell title={countryName}>

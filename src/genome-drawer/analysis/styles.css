@@ -13,3 +13,14 @@
 .wgsa-mlst-profile .material-icons {
   color: #555;
 }
+
+.wgsa-mlst-hit {
+  cursor: help;
+}
+
+.wgsa-mlst-hit > .material-icons{
+  vertical-align: middle;
+  padding-bottom: 3px;
+  font-size: 16px;
+  color: #555;
+}
