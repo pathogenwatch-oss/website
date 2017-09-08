@@ -3,7 +3,7 @@ import classnames from 'classnames';
 
 function hasValue(value) {
   return (
-    typeof value !== 'undefined' && value !== null
+    value !== '' && typeof value !== 'undefined' && value !== null
   );
 }
 

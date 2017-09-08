@@ -1,12 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import classnames from 'classnames';
 
 import { toggleSelection } from './actions';
 import { getSelectedGenomes } from './selectors';
 
-const AddToSelection = ({ isSelected, onClick }) => (
+const AddToSelection = ({ isSelected, onClick, className }) => (
   <button
-    className="wgsa-genome-checkbox"
+    className={classnames('wgsa-genome-checkbox', className)}
     onClick={onClick}
     title={isSelected ? 'Remove from Selection' : 'Add to Selection'}
   >
