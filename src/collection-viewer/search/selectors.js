@@ -170,11 +170,8 @@ export const getSearchPlaceholder = createSelector(
   getSearch,
   getActiveDataTable,
   ({ advanced, category }, table) => {
-    if (category) {
-      return `FILTER ${category.label}`;
-    }
     if (advanced) {
-      return 'FILTER COLUMNS';
+      return `FILTER ${category ? category.label : 'COLUMNS'}`;
     }
     return `FILTER ${getColumnLabel(table.activeColumn)}`;
   }
