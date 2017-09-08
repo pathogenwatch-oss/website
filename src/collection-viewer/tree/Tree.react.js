@@ -32,7 +32,11 @@ Phylocanvas.plugin(decorate => {
       return;
     }
 
+    const dragging = this.dragging;
+
     delegate.apply(this, args);
+
+    if (dragging) return;
 
     this.nodesUpdated(
       this.getNodeIdsWithFlag(this.clickFlag),
