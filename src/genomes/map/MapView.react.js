@@ -26,6 +26,7 @@ const MapView = ({ stateKey, lassoPath, markers, onClick, onLassoPathChange, onM
       clusterOptions={clusterOptions}
       lassoPath={lassoPath}
       markers={markers}
+      markerIds={markers}
       onClick={onClick}
       onLassoPathChange={onLassoPathChange}
       onMarkerClick={onMarkerClick}
