@@ -66,17 +66,10 @@ const Filter = ({ isOpen, isActive, filterSummary, textValue, updateFilter, clea
           />
         </FilterSection>
         <FilterSection
-          filterKey="reference"
-          heading="Reference"
-          icon="book"
-          summary={filterSummary.reference}
-          updateFilter={updateFilter}
-        />
-        <FilterSection
-          filterKey="owner"
-          heading="Owner"
-          icon="person"
-          summary={filterSummary.owner}
+          filterKey="type"
+          heading="Type"
+          icon="label"
+          summary={filterSummary.type}
           updateFilter={updateFilter}
         />
         <FilterSection

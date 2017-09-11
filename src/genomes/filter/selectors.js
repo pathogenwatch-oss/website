@@ -57,6 +57,32 @@ export const getFilterSummary = createSelector(
       }
     }
 
+    const type = [];
+    if (reference && reference.true) {
+      type.push({
+        value: 'reference',
+        label: 'Reference',
+        count: reference.true.count,
+        active: filterState.type === 'reference',
+      });
+    }
+    if (summary.public && summary.public.true) {
+      type.push({
+        value: 'public',
+        label: 'Public',
+        count: summary.public.true.count,
+        active: filterState.type === 'public',
+      });
+    }
+    if (owner && owner.me) {
+      type.push({
+        value: 'owner',
+        label: 'Uploaded by Me',
+        count: owner.me.count,
+        active: filterState.type === 'owner',
+      });
+    }
+
     return {
       loading,
       date: {
@@ -90,22 +116,7 @@ export const getFilterSummary = createSelector(
         ),
         'label'
       ),
-      reference: Object.keys(reference).map(
-        value => ({
-          value,
-          label: value === 'true' ? 'Yes' : 'No',
-          count: reference[value].count,
-          active: filterState.reference === value,
-        })
-      ),
-      owner: Object.keys(owner).map(
-        value => ({
-          value,
-          label: value === 'me' ? 'Me' : 'Other',
-          count: owner[value].count,
-          active: filterState.owner === value,
-        })
-      ),
+      type,
       uploadedAt:
         Object.keys(uploadedAt)
           .sort((a, b) => new Date(b) - new Date(a))
