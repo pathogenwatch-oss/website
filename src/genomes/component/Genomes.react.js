@@ -5,7 +5,6 @@ import Overlay from '../../overlay';
 
 import Filter from '../filter';
 import Header from '../header';
-import Selection from '../selection';
 
 import { statuses } from '../constants';
 
@@ -100,7 +99,6 @@ export default React.createClass({
           <div className="wgsa-genomes-view">
             {this.renderContent()}
           </div>
-          <Selection />
         </div>
         <Overlay visible={this.props.status === statuses.LOADING}>
           <p className="wgsa-big-message">

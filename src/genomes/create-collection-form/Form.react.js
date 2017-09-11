@@ -48,9 +48,6 @@ const CreateCollectionForm = React.createClass({
           <CardMetadata title="Organism" icon="bug_report">
             {taxIdMap.get(organismId).formattedName}
           </CardMetadata>
-          <CardMetadata icon="insert_drive_file">
-            {numGenomes} Genome{numGenomes > 1 ? 's' : ''}
-          </CardMetadata>
         </span>
         <div ref={this.addToFormElements} className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
           <input
@@ -75,7 +72,7 @@ const CreateCollectionForm = React.createClass({
           />
           <label className="mdl-textfield__label" htmlFor="collection-description">Description</label>
         </div>
-        <div ref={this.addToFormElements} className="mdl-textfield mdl-textfield--small mdl-js-textfield mdl-textfield--floating-label">
+        <div ref={this.addToFormElements} className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
           <input
             className="mdl-textfield__input"
             type="text"
@@ -87,12 +84,12 @@ const CreateCollectionForm = React.createClass({
           />
           <label className="mdl-textfield__label" htmlFor="collection-pmid">PMID</label>
         </div>
-        <div className="wgsa-drawer-actions">
+        <div className="mdl-typography--text-center">
           <button
             className="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
             disabled={!canCreateCollection}
           >
-            Create
+            Create Now
           </button>
         </div>
       </form>

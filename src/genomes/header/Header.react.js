@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Totals } from '../../filter/summary';
 import ViewSwitcher from './ViewSwitcher.react';
 import FilterHeader from '../filter/Header.react';
-import SelectionSummary from '../selection/Summary.react';
+import SelectionSummary from '../selection';
 
 import { getVisible, getTotal } from './selectors';
 

@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
+import CreateCollection from '../create-collection-form';
+
 import { getSelectedGenomeIds, getSelectedGenomeList, isSelectionOpen } from './selectors';
 
 import { setSelection, unselectGenomes } from './actions';
@@ -28,6 +30,7 @@ const Selection = ({ selectedGenomes, removeGenome, isOpen }) => {
           </span>
         )
       }
+      <CreateCollection />
     </div>
   );
 };

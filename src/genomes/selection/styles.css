@@ -20,3 +20,37 @@
   color: #3c7383 !important;
   vertical-align: middle;
 }
+
+.wgsa-selection-summary {
+  position: fixed;
+  right: 16px;
+  z-index: 3;
+}
+
+.wgsa-selection-summary .wgsa-sonar-effect {
+  position: relative;
+  z-index: 1;
+}
+
+.wgsa-selection-summary .wgsa-sonar-effect::after {
+  animation-delay: 0s;
+  animation-iteration-count: 1;
+}
+
+.wgsa-selection-summary .wgsa-overlay {
+  background: none;
+  cursor: pointer;
+}
+
+.wgsa-genome-selection-dropdown {
+  width: 400px;
+  height: 268px;
+  position: absolute;
+  top: 40px;
+  right: -8px;
+  overflow: auto;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.14);
+  padding: 16px;
+  border-radius: 2px;
+}

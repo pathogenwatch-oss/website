@@ -1,3 +1,3 @@
 import './styles.css';
 
-export default from './Selection.react';
+export default from './Summary.react';

@@ -127,6 +127,7 @@
 .wgsa-overflow-fade {
   overflow: hidden;
   white-space: nowrap;
+  position: relative;
 }
 
 .wgsa-overflow-fade::after {

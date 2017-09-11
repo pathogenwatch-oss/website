@@ -33,15 +33,6 @@
   z-index: 1;
 }
 
-.wgsa-genomes .wgsa-genome-selection {
-  width: 255px;
-  position: relative;
-  bottom: 0;
-  top: 0;
-  right: 0;
-  overflow: auto;
-}
-
 .wgsa-genomes-view > * {
   height: 100%;
 }
