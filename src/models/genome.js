@@ -157,7 +157,7 @@ schema.statics.getPrefilterCondition = function ({ user, query = {}, sessionID }
 schema.statics.getFilterQuery = function (props) {
   const { user, query = {}, sessionID } = props;
   const { searchText } = query;
-  const { organismId, reference, owner, country, minDate, maxDate, uploadedAt, sequenceType } = query;
+  const { organismId, type, country, minDate, maxDate, uploadedAt, sequenceType } = query;
 
   const findQuery = this.getPrefilterCondition(props);
 
@@ -173,18 +173,13 @@ schema.statics.getFilterQuery = function (props) {
     findQuery.country = country;
   }
 
-  if (reference === 'true') {
+  if (type === 'reference') {
     findQuery.reference = true;
-  } else if (reference === 'false') {
+  } else if (type === 'public') {
+    findQuery.public = true;
     findQuery.reference = false;
-  }
-
-  if (user) {
-    if (owner === 'me') {
-      findQuery._user = user._id;
-    } else if (owner === 'other') {
-      findQuery._user = { $ne: user._id };
-    }
+  } else if (user && type === 'owner') {
+    findQuery._user = user._id;
   }
 
   if (uploadedAt && (user || sessionID)) {

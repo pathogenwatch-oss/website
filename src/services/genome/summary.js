@@ -9,9 +9,18 @@ const summaryFields = [
   { field: 'country' },
   { field: 'reference',
     aggregation: ({ query = {} }) => {
-      if (query.prefilter !== 'all') return null;
+      if (query.prefilter !== 'all' || query.type === 'public') return null;
       return [
         { $group: { _id: '$reference', count: { $sum: 1 } } },
+      ];
+    },
+  },
+  { field: 'public',
+    aggregation: ({ query = {} }) => {
+      if (query.prefilter !== 'all') return null;
+      return [
+        { $match: { reference: false } },
+        { $group: { _id: '$public', count: { $sum: 1 } } },
       ];
     },
   },
@@ -20,7 +29,8 @@ const summaryFields = [
       if (!user) return null;
       if (query.prefilter !== 'all') return null;
       return [
-        { $group: {
+        {
+          $group: {
             _id: { $cond: [ { $eq: [ '$_user', user._id ] }, 'me', 'other' ] },
             count: { $sum: 1 },
           },
