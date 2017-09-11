@@ -11,7 +11,7 @@ export default React.createClass({
     children: React.PropTypes.node,
     visible: React.PropTypes.bool,
     isOpen: React.PropTypes.bool,
-    onHeaderClick: React.PropTypes.func,
+    onClose: React.PropTypes.func,
     disabled: React.PropTypes.bool,
   },
 
@@ -31,7 +31,7 @@ export default React.createClass({
     };
   },
 
-  onHeaderClick() {
+  onClose() {
     if (this.props.disabled) {
       return;
     }
@@ -39,7 +39,7 @@ export default React.createClass({
       this.setState({ expanded: false });
       return;
     }
-    this.props.onHeaderClick();
+    this.props.onClose();
   },
 
   toggleExpanded(e) {
@@ -62,7 +62,7 @@ export default React.createClass({
         transitionEnterTimeout={280}
         transitionLeaveTimeout={280}
       >
-        <Overlay isVisible={this.isOverlayVisible()} hide={this.onHeaderClick} />
+        <Overlay isVisible={this.isOverlayVisible()} hide={this.onClose} />
         { (this.props.isOpen) ?
           <aside
             key={this.props.animationKey || 'wgsa-drawer'}
@@ -74,7 +74,7 @@ export default React.createClass({
                 'wgsa-drawer--disabled': this.props.disabled }
             )}
           >
-            <header className="wgsa-drawer__header" onClick={this.onHeaderClick}>
+            <header className="wgsa-drawer__header">
               {this.props.title}
               <div className="wgsa-drawer-actions" onClick={e => e.stopPropagation()}>
                 {this.props.actions}
@@ -86,6 +86,13 @@ export default React.createClass({
                   >
                     <i className="material-icons">{this.state.expanded ? 'fullscreen_exit' : 'fullscreen'}</i>
                   </button> }
+                <button
+                  className="mdl-button mdl-button--icon"
+                  title="Close Drawer"
+                  onClick={this.onClose}
+                >
+                  <i className="material-icons">close</i>
+                </button>
               </div>
             </header>
             { this.props.children }

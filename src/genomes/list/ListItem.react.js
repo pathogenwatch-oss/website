@@ -61,7 +61,9 @@ const ListItem = ({ item, onClick, style, onViewGenome }) => {
     >
       <Cell title={name} onClick={e => e.stopPropagation()}>
         <AddToSelection genome={item} />
-        {name}
+        <button title="View Details" className="wgsa-link-button" onClick={onViewGenome}>
+          {name}
+        </button>
       </Cell>
       <Cell>
         { organismName ?
@@ -84,13 +86,6 @@ const ListItem = ({ item, onClick, style, onViewGenome }) => {
         <Cell title={date}>{date}</Cell> :
         EmptyCell }
       {displayAccessLevel(item)}
-      <button
-        className="wgsa-view-genome-details mdl-button"
-        title="View Details"
-        onClick={onViewGenome}
-      >
-        <i className="material-icons">info_outline</i>
-      </button>
     </div>
   );
 };

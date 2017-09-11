@@ -61,15 +61,19 @@ export default ({ name, genome, loading, close }) => {
   const isOpen = !!loading || !!genome;
   return (
     <Drawer
-      title={name}
+      title={
+        <span className="wgsa-genome-drawer-title">
+          <AddToSelection key="select" genome={genome} className="mdl-button mdl-button--icon" />
+          {name}
+        </span>
+      }
       isOpen={isOpen}
-      onHeaderClick={close}
+      onClose={close}
       animationKey="genome-drawer"
       className="wgsa-genome-drawer"
       actions={genome ? [
-        <RemoveButton key="remove" genome={genome} />,
         <DownloadLink key="download" id={genome.id} name={genome.name} />,
-        <AddToSelection key="select" genome={genome} className="mdl-button mdl-button--icon" />,
+        <RemoveButton key="remove" genome={genome} />,
       ] : []}
     >
       { loading ?

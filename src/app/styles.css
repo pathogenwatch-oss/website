@@ -147,3 +147,13 @@
 .wgsa-tab-actions__label {
   margin-right: auto;
 }
+
+.wgsa-link-button {
+  background: none;
+  border: none;
+  outline: none;
+  font-family: inherit;
+  font-size: inherit;
+  color: color(#3c7383 shade(20%));
+  text-decoration: underline;
+}
