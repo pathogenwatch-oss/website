@@ -22,8 +22,11 @@ module.exports = function (props) {
           public: 1,
           uploadedAt: 1,
           _user: 1,
-        },
-        { skip: Number(skip), limit: Math.min(Number(limit), maxLimit), sort: Genome.getSort(sort) }
+        }, {
+          skip: Number(skip),
+          limit: Math.min(Number(limit), maxLimit),
+          sort: Genome.getSort(sort),
+        }
       )
       .lean()
       .then(genomes => genomes.map(genome => {

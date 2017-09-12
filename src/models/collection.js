@@ -14,7 +14,7 @@ const schema = new Schema({
     },
   },
   alias: { type: String, index: true },
-  createdAt: Date,
+  createdAt: { type: Date, index: true },
   binned: { type: Boolean, default: false },
   binnedDate: Date,
   description: String,
@@ -33,6 +33,7 @@ const schema = new Schema({
   pmid: String,
   public: { type: Boolean, default: false },
   published: { type: Boolean, default: false },
+  publicationYear: { type: Number, index: true },
   private: { type: Boolean, default: false },
   reference: Boolean,
   showcase: Boolean,
@@ -188,7 +189,9 @@ schema.statics.alias = function (uuid, alias) {
 
 schema.statics.getFilterQuery = function (props) {
   const { query = {} } = props;
-  const { searchText, organismId, type, startDate, endDate } = query;
+  const {
+    searchText, organismId, type, minDate, maxDate, publicationYear,
+  } = query;
 
   const findQuery = this.getPrefilterCondition(props);
 
@@ -206,18 +209,34 @@ schema.statics.getFilterQuery = function (props) {
     findQuery.public = false;
   }
 
-  if (startDate) {
-    findQuery.createdAt = { $gte: new Date(startDate) };
+  if (minDate) {
+    findQuery.createdAt = { $gte: new Date(minDate) };
   }
 
-  if (endDate) {
+  if (maxDate) {
     findQuery.createdAt = Object.assign(
       findQuery.createdAt || {},
-      { $lte: new Date(endDate) }
+      { $lte: new Date(maxDate) }
     );
   }
 
+  if (publicationYear && !isNaN(publicationYear)) {
+    findQuery.publicationYear = Number(publicationYear);
+  }
+
   return findQuery;
+};
+
+const sortKeys = new Set([
+  'createdAt', 'title', 'size', 'publicationYear',
+]);
+schema.statics.getSort = function (sort = 'createdAt-') {
+  const sortOrder = (sort.slice(-1) === '-') ? -1 : 1;
+  const sortKey = sortOrder === 1 ? sort : sort.substr(0, sort.length - 1);
+
+  if (!sortKeys.has(sortKey)) return null;
+
+  return { [sortKey]: sortOrder };
 };
 
 module.exports = mongoose.model('Collection', schema);

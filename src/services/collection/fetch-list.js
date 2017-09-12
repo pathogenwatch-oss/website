@@ -2,7 +2,7 @@ const Collection = require('models/collection');
 
 module.exports = function (props) {
   const { user, query = {} } = props;
-  const { skip = 0, limit = 0 } = query;
+  const { skip = 0, limit = 0, sort } = query;
 
   const findQuery = Collection.getFilterQuery(props);
 
@@ -23,7 +23,7 @@ module.exports = function (props) {
       }, {
         skip: Number(skip),
         limit: Number(limit),
-        sort: { createdAt: -1 },
+        sort: Collection.getSort(sort),
       })
       .then(collections => collections.map(_ => _.toObject({ user })))
   );

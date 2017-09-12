@@ -14,6 +14,8 @@ const summaryFields = [
       },
     ],
   },
+  { field: 'createdAt', range: true, queryKeys: [ 'minDate', 'maxDate' ] },
+  { field: 'publicationYear' },
 ];
 
 module.exports = function (props) {
