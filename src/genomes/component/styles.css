@@ -1,6 +1,5 @@
 .wgsa-genomes {
   display: flex;
-  flex-direction: column;
   position: absolute;
   top: 0;
   bottom: 0;
@@ -8,31 +7,37 @@
   right: 0;
 }
 
-.wgsa-genomes .wgsa-genomes-content {
+.wgsa-genomes > .wgsa-filter {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  transform: translateX(-100%);
+  transition: .28s cubic-bezier(.4,0,.2,1);
+  transition-property: transform;
+  z-index: 1;
+}
+
+.has-filter > .wgsa-filter {
+  transform: translateX(0);
+  position: static;
+}
+
+.wgsa-genomes-content {
   flex-grow: 1;
   box-sizing: border-box;
   display: flex;
+  flex-direction: column;
   overflow: hidden;
+}
+
+.wgsa-genomes-content > header {
+  padding: 0 32px;
+  height: 48px;
+  display: flex;
+  align-items: center;
 }
 
 .wgsa-genomes .wgsa-genomes-view {
   flex-grow: 1;
   position: relative;
-}
-
-.wgsa-genomes .wgsa-genome-filter {
-  width: 255px;
-}
-
-.wgsa-genomes .wgsa-genome-filter > aside {
-  width: 255px;
-  position: absolute;
-  bottom: 0;
-  top: 0;
-  right: 0;
-  z-index: 1;
-}
-
-.wgsa-genomes-view > * {
-  height: 100%;
 }

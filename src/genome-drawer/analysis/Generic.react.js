@@ -7,7 +7,7 @@ export default (results = {}) => (
     const { __v, ...props } = results[key];
     return (
       <Section key={key} heading={key} version={__v}>
-        <dl className="wgsa-hub-stats-view">
+        <dl>
           { Object.keys(props).map(prop =>
               <Metadata key={prop} label={prop}>{props[prop]}</Metadata>
           )}

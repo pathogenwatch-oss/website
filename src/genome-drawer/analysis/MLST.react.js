@@ -22,7 +22,7 @@ const Hit = ({ id }) => {
 
 export default ({ result }) => (
   <Section heading="MLST" version={result.__v}>
-    <dl className="wgsa-hub-stats-view">
+    <dl>
       <Metadata label="Sequence Type"><ST id={result.st} /></Metadata>
       <Metadata label="Scheme">
         <a href={result.url} target="_blank" rel="noopener">{result.url}</a>

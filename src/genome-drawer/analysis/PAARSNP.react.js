@@ -4,7 +4,7 @@ import { Section, Metadata } from '../components';
 
 export default ({ __v, antibiotics = {}, snp =[], paar = [] }) => (
   <Section heading="PAARSNP" version={__v}>
-    <dl className="wgsa-hub-stats-view">
+    <dl>
       <Metadata large label="Antibiotics">
         <table>
           <thead>

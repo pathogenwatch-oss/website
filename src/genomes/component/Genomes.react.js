@@ -93,12 +93,10 @@ export default React.createClass({
             'has-selection': this.props.isSelectionOpen }
         )}
       >
-        <Header />
+        <Filter />
         <div className="wgsa-genomes-content">
-          <Filter />
-          <div className="wgsa-genomes-view">
-            {this.renderContent()}
-          </div>
+          <Header />
+          {this.renderContent()}
         </div>
         <Overlay visible={this.props.status === statuses.LOADING}>
           <p className="wgsa-big-message">

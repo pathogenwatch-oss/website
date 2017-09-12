@@ -42,7 +42,7 @@ const MapView = React.createClass({
   render() {
     const { stateKey, lassoPath, markers, onClick, onLassoPathChange, onMarkerClick } = this.props;
     return (
-      <div>
+      <div className="wgsa-genomes-map">
         <WGSAMap
           className="wgsa-hub-map-view"
           cluster

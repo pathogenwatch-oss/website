@@ -1,10 +1,11 @@
-.wgsa-hub-stats-view {
+.wgsa-genome-stats {
   flex-grow: 1;
   overflow-x: hidden;
   overflow-y: auto;
+  margin: 16px 32px 0;
 }
 
-.wgsa-hub-stats-view nav {
+.wgsa-genome-stats nav {
   justify-content: center;
   margin: 0 0 16px;
 }

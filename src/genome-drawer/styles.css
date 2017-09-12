@@ -1,5 +1,4 @@
 .wgsa-drawer.wgsa-genome-drawer {
-  /*width: 580px;*/
   height: 450px;
 }
 
@@ -36,7 +35,7 @@
   overflow-y: auto;
 }
 
-.wgsa-genome-drawer-content .wgsa-hub-stats-view {
+.wgsa-genome-drawer-content dl {
   padding-left: 24px;
   padding-right: 0;
   margin: 0;

@@ -4,7 +4,7 @@ import { Section } from '../components';
 
 export default ({ __v, ngmast, por, tbpb }) => (
   <Section heading="NG-MAST" version={__v}>
-    <dl className="wgsa-hub-stats-view">
+    <dl>
       <table>
         <thead>
           <tr>

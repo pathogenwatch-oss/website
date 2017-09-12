@@ -25,7 +25,7 @@ export default ({ genome }) => {
   return (
     <div className="wgsa-genome-overview">
       <div className="wgsa-analysis-section">
-        <dl className="wgsa-hub-stats-view">
+        <dl>
           <Metadata label="Organism">
             { specieator ?
               <FormattedName fullName

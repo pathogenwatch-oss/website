@@ -63,7 +63,11 @@ export default ({ name, genome, loading, close }) => {
     <Drawer
       title={
         <span className="wgsa-genome-drawer-title">
-          <AddToSelection key="select" genome={genome} className="mdl-button mdl-button--icon" />
+          { genome &&
+            <AddToSelection
+              genome={genome}
+              className="mdl-button mdl-button--icon"
+            /> }
           {name}
         </span>
       }

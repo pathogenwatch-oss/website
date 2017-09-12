@@ -6,7 +6,7 @@ import N50Chart from './N50Chart.react';
 
 export default ({ result }) => (
   <div>
-    <dl className="wgsa-hub-stats-view">
+    <dl>
       <span className="wgsa-hub-stats-section wgsa-hub-stats-section--small">
         <dt className="wgsa-hub-stats-heading">Genome Length</dt>
         <dd className="wgsa-hub-stats-value">{result.length}</dd>

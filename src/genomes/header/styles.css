@@ -8,9 +8,6 @@
 .wgsa-genomes .wgsa-filter-header {
   padding-right: 8px;
 }
-.wgsa-genomes.has-filter .wgsa-filter-header {
-  margin-left: 255px;
-}
 
 .wgsa-genomes .wgsa-selection-summary {
   margin-left: auto;

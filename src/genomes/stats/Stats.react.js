@@ -151,7 +151,7 @@ export const StatsView = React.createClass({
     const { average, stDev, range = {} } = this.props;
 
     return (
-      <div className="wgsa-hub-stats-view wgsa-content-margin">
+      <div className="wgsa-genome-stats">
         <AutoSizer>
           {({ height, width }) =>
             <div style={{ height, width, position: 'relative' }}>

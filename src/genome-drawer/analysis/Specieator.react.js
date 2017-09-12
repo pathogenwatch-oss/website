@@ -4,7 +4,7 @@ import { Section, Metadata } from '../components';
 
 export default ({ result }) => (
   <Section heading="Specieation" version={result.__v}>
-    <dl className="wgsa-hub-stats-view">
+    <dl>
       <Metadata label="Taxonomy ID">
         <a
           href={`https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?mode=Tree&id=${result.organismId}`}

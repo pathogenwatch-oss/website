@@ -5,7 +5,6 @@
   bottom: 0;
   left: 0;
   right: 0;
-  color: #555;
 }
 
 .wgsa-collections > .wgsa-filter {
@@ -15,6 +14,7 @@
   transform: translateX(-100%);
   transition: .28s cubic-bezier(.4,0,.2,1);
   transition-property: transform;
+  z-index: 1;
 }
 
 .has-filter > .wgsa-filter {
