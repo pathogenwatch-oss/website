@@ -88,13 +88,13 @@ export default React.createClass({
     return (
       <div
         className={classnames(
-          'wgsa-genomes',
+          'wgsa-genomes wgsa-filter-container',
           { 'has-filter': this.props.isFilterOpen,
             'has-selection': this.props.isSelectionOpen }
         )}
       >
         <Filter />
-        <div className="wgsa-genomes-content">
+        <div className="wgsa-filter-content">
           <Header />
           {this.renderContent()}
         </div>

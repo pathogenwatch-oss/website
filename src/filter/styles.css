@@ -1,4 +1,4 @@
-.wgsa-genomes {
+.wgsa-filter-container {
   display: flex;
   position: absolute;
   top: 0;
@@ -7,7 +7,7 @@
   right: 0;
 }
 
-.wgsa-genomes > .wgsa-filter {
+.wgsa-filter-container > .wgsa-filter {
   position: absolute;
   top: 0;
   bottom: 0;
@@ -17,12 +17,12 @@
   z-index: 1;
 }
 
-.has-filter > .wgsa-filter {
+.wgsa-filter-container.has-filter > .wgsa-filter {
   transform: translateX(0);
   position: static;
 }
 
-.wgsa-genomes-content {
+.wgsa-filter-content {
   flex-grow: 1;
   box-sizing: border-box;
   display: flex;
@@ -30,14 +30,14 @@
   overflow: hidden;
 }
 
-.wgsa-genomes-content > header {
+.wgsa-filter-content > header {
   padding: 0 32px;
   height: 48px;
   display: flex;
   align-items: center;
 }
 
-.wgsa-genomes .wgsa-genomes-view {
+.wgsa-filter-view {
   flex-grow: 1;
   position: relative;
 }

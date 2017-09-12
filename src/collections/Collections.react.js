@@ -69,7 +69,7 @@ const Collections = React.createClass({
 
     return (
       <Grid
-        className="wgsa-collections-view"
+        className="wgsa-filter-view"
         template={CollectionCard}
         items={collections}
         columnCount={[ { minWidth: 560, count: 2 }, { minWidth: 1020, count: 3 }, { minWidth: 1580, count: 4 } ]}
@@ -87,12 +87,12 @@ const Collections = React.createClass({
     return (
       <div
         className={classnames(
-          'wgsa-collections',
+          'wgsa-collections wgsa-filter-container',
           { 'has-filter': this.props.isFilterOpen }
         )}
       >
         <Filter />
-        <div className="wgsa-collections-content">
+        <div className="wgsa-filter-content">
           <Header />
           { this.getContent() }
         </div>
