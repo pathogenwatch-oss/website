@@ -22,8 +22,8 @@ const Header = ({ visibleCollections, totalCollections, activeSort, onSortChange
       <select value={activeSort} onChange={onSortChange}>
         <option value="createdAt-">Created: Most Recent</option>
         <option value="createdAt">Created: Least Recent</option>
-        <option value="size-">Size: High to Low</option>
         <option value="size">Size: Low to High</option>
+        <option value="size-">Size: High to Low</option>
         <option value="title">Title: Ascending</option>
         <option value="title-">Title: Descending</option>
         <option value="publicationYear">Published: Ascending</option>
