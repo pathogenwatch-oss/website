@@ -7,36 +7,21 @@ const summaryFields = [
     ],
   },
   { field: 'country' },
-  { field: 'reference',
-    aggregation: ({ query = {} }) => {
-      if (query.prefilter !== 'all' || query.type === 'public') return null;
-      return [
-        { $group: { _id: '$reference', count: { $sum: 1 } } },
-      ];
-    },
-  },
-  { field: 'public',
-    aggregation: ({ query = {} }) => {
-      if (query.prefilter !== 'all') return null;
-      return [
-        { $match: { reference: false } },
-        { $group: { _id: '$public', count: { $sum: 1 } } },
-      ];
-    },
-  },
-  { field: 'owner',
-    aggregation: ({ user, query = {} }) => {
-      if (!user) return null;
-      if (query.prefilter !== 'all') return null;
-      return [
-        {
-          $group: {
-            _id: { $cond: [ { $eq: [ '$_user', user._id ] }, 'me', 'other' ] },
-            count: { $sum: 1 },
+  { field: 'type',
+    aggregation: ({}) => [
+      {
+        $group: {
+          _id: {
+            $cond: [
+              { $eq: [ '$reference', true ] },
+              'reference',
+              { $cond: [ { $eq: [ '$public', true ] }, 'public', 'private' ] },
+            ],
           },
+          count: { $sum: 1 },
         },
-      ];
-    },
+      },
+    ],
   },
   { field: 'uploadedAt',
     aggregation: ({ user, query = {} }) => {
@@ -48,7 +33,7 @@ const summaryFields = [
       ];
     },
   },
-  { field: 'date', range: true },
+  { field: 'date', range: true, queryKeys: [ 'minDate', 'maxDate' ] },
   { field: 'analysis.mlst.st',
     aggregation: ({ query = {} }) => {
       if (!query.organismId) return null;
@@ -56,6 +41,7 @@ const summaryFields = [
         { $group: { _id: '$analysis.mlst.st', count: { $sum: 1 } } },
       ];
     },
+    queryKeys: [ 'sequenceType' ],
   },
 ];
 

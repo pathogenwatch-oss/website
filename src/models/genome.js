@@ -178,8 +178,9 @@ schema.statics.getFilterQuery = function (props) {
   } else if (type === 'public') {
     findQuery.public = true;
     findQuery.reference = false;
-  } else if (user && type === 'owner') {
-    findQuery._user = user._id;
+  } else if (type === 'private') {
+    findQuery.public = false;
+    findQuery.reference = false;
   }
 
   if (uploadedAt && (user || sessionID)) {

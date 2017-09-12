@@ -30,9 +30,7 @@ const sumAggregation = field => [
 ];
 
 function aggregateSummaryFields(model, summaryFields, props) {
-  const filterQuery = model.getFilterQuery(props);
-
-  const aggregations = summaryFields.reduce((memo, { field, aggregation, range }) => {
+  const aggregations = summaryFields.reduce((memo, { field, aggregation, range, queryKeys = [ field ] }) => {
     let aggregationStage = null;
 
     if (aggregation) {
@@ -46,16 +44,19 @@ function aggregateSummaryFields(model, summaryFields, props) {
     if (!aggregationStage) {
       memo.push(Promise.resolve([]));
     } else {
-      const filterCondition = Object.assign({}, filterQuery);
-      if (field in filterCondition) {
-        delete filterCondition[field];
+      const query = {};
+      for (const key of Object.keys(props.query)) {
+        if (!queryKeys.includes(key)) {
+          query[key] = props.query[key];
+        }
       }
-      const prefilterStage = [ { $match: filterCondition }, ...aggregationStage ];
+      const $match = model.getFilterQuery(Object.assign({}, props, { query }));
+      const prefilterStage = [ { $match }, ...aggregationStage ];
       memo.push(model.aggregate(prefilterStage));
     }
 
     return memo;
-  }, [ model.count(model.getPrefilterCondition(props)), model.count(filterQuery) ]);
+  }, [ model.count(model.getPrefilterCondition(props)), model.count(model.getFilterQuery(props)) ]);
 
   return Promise.all(aggregations);
 }

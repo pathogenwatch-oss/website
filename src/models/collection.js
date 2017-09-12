@@ -187,8 +187,8 @@ schema.statics.alias = function (uuid, alias) {
 };
 
 schema.statics.getFilterQuery = function (props) {
-  const { user, query = {} } = props;
-  const { searchText, organismId, owner, startDate, endDate } = query;
+  const { query = {} } = props;
+  const { searchText, organismId, type, startDate, endDate } = query;
 
   const findQuery = this.getPrefilterCondition(props);
 
@@ -200,12 +200,10 @@ schema.statics.getFilterQuery = function (props) {
     findQuery.organismId = organismId;
   }
 
-  if (user) {
-    if (owner === 'me') {
-      findQuery._user = user;
-    } else if (owner === 'other') {
-      findQuery._user = { $ne: user };
-    }
+  if (type === 'public') {
+    findQuery.public = true;
+  } else if (type === 'private') {
+    findQuery.public = false;
   }
 
   if (startDate) {
