@@ -9,7 +9,7 @@ import { getActiveSort } from '../filter/selectors';
 
 import { updateFilter } from '../filter/actions';
 
-const Header = ({ visibleCollections, totalCollections, activeSort, onSortChange }) => (
+const Header = ({ visibleCollections, totalCollections, activeSort = 'createdAt-', onSortChange }) => (
   <header>
     <FilterHeader />
     <Totals
