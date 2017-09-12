@@ -59,6 +59,7 @@
   font-size: 16px;
   padding-right: 4px;
   vertical-align: top;
+  line-height: 20px;
 }
 
 .wgsa-genome-list-cell button {

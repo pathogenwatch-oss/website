@@ -37,13 +37,15 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       <AsideSection
         filterKey="organismId"
         heading="Organisms"
+        icon="bug_report"
         summary={filterSummary.organism}
         updateFilter={updateFilter}
       />
       <AsideSection
-        filterKey="owner"
-        heading="Owner"
-        summary={filterSummary.owner}
+        filterKey="type"
+        heading="Type"
+        icon="label"
+        summary={filterSummary.type}
         updateFilter={updateFilter}
       />
       <LocationListener update={updateFilter} />

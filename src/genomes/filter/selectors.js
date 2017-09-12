@@ -31,7 +31,7 @@ export const getFilterSummary = createSelector(
   getDeployedOrganismIds,
   (summary, filterState, deployedOrganisms) => {
     const {
-      loading, organismId, country, reference, owner, uploadedAt, date,
+      loading, organismId, country, type, uploadedAt, date,
     } = summary;
     const sequenceType = summary['analysis.mlst.st'] || {};
 
@@ -55,32 +55,6 @@ export const getFilterSummary = createSelector(
           ...organismId[value],
         });
       }
-    }
-
-    const type = [];
-    if (reference && reference.true) {
-      type.push({
-        value: 'reference',
-        label: 'Reference',
-        count: reference.true.count,
-        active: filterState.type === 'reference',
-      });
-    }
-    if (summary.public && summary.public.true) {
-      type.push({
-        value: 'public',
-        label: 'Public',
-        count: summary.public.true.count,
-        active: filterState.type === 'public',
-      });
-    }
-    if (owner && owner.me) {
-      type.push({
-        value: 'owner',
-        label: 'Uploaded by Me',
-        count: owner.me.count,
-        active: filterState.type === 'owner',
-      });
     }
 
     return {
@@ -116,15 +90,25 @@ export const getFilterSummary = createSelector(
         ),
         'label'
       ),
-      type,
+      type: sortBy(
+        Object.keys(type).map(
+          value => ({
+            value,
+            label: value,
+            count: type[value].count,
+            active: filterState.type === value,
+          })
+        ),
+        'label'
+      ),
       uploadedAt:
         Object.keys(uploadedAt)
           .sort((a, b) => new Date(b) - new Date(a))
           .map(value => {
-            const date = new Date(value);
+            const dateValue = new Date(value);
             return {
               value,
-              label: formatDateTime(date),
+              label: formatDateTime(dateValue),
               count: uploadedAt[value].count,
               active: filterState.uploadedAt === value,
             };

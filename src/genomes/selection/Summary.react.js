@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import SelectionDropdown from './SelectionDropdown.react';
-import Overlay from '../../components/overlay';
 
 import { getSelectionSize, isSelectionOpen } from './selectors';
 
@@ -19,7 +18,7 @@ const Summary = React.createClass({
   },
 
   render() {
-    const { size, isOpen, onClick } = this.props;
+    const { size, onClick } = this.props;
     return (
       <div className="wgsa-selection-summary">
         <button className="mdl-chip mdl-chip--contact mdl-chip--active" onClick={onClick}>
@@ -28,7 +27,6 @@ const Summary = React.createClass({
             Create Collection
           </span>
         </button>
-        {/* <Overlay isVisible={isOpen} hide={onClick} /> */}
         <SelectionDropdown />
       </div>
     );

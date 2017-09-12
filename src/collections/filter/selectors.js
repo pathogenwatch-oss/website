@@ -34,13 +34,16 @@ export const getFilterSummary = createSelector(
       }),
       'title'
     ),
-    owner: Object.keys(owner).map(
+    type: Object.keys(owner).map(
       value => ({
-        value,
-        label: value === 'me' ? 'Me' : 'Other',
+        value: value === 'me' ? 'private' : 'public',
+        label: value === 'me' ? 'Private' : 'Public',
         count: owner[value].count,
-        active: filterState.owner === value,
+        active: filterState.type === value,
       })
     ),
   })
 );
+
+export const getCollectionFilter = ({ collections }) => collections.filter;
+export const isFilterOpen = state => getCollectionFilter(state).isOpen;

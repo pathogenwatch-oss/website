@@ -43,8 +43,8 @@ const displayAccessLevel = (props) => {
   }
 
   return (
-    <Cell title="Uploaded At" icon="file_upload">
-      {formatDateTime(props.uploadedAt)}
+    <Cell title={`Uploaded at ${props.uploadedAt}`} icon="person">
+      Private
     </Cell>
   );
 };

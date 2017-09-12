@@ -1,5 +1,7 @@
 import { combineReducers } from 'redux';
 
+import filter from './filter/reducer';
+
 import { FETCH_COLLECTIONS, FETCH_COLLECTION_SUMMARY } from './actions';
 
 import { statuses } from './constants';
@@ -49,6 +51,7 @@ function status(state = statuses.LOADING, { type }) {
 
 export default combineReducers({
   entities,
+  filter,
   status,
   summary,
 });

@@ -5,8 +5,7 @@ const initialState = {
   visible: 0,
   organismId: {},
   country: {},
-  reference: {},
-  owner: {},
+  type: {},
   uploadedAt: {},
   date: {
     min: new Date(null),

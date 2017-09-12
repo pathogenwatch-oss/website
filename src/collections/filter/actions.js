@@ -27,3 +27,11 @@ export function clearFilter() {
     dispatch(fetchCollections(filter));
   };
 }
+
+export const COLLECTIONS_FILTER_OPENED = 'COLLECTIONS_FILTER_OPENED';
+
+export function toggleFilter() {
+  return {
+    type: COLLECTIONS_FILTER_OPENED,
+  };
+}
