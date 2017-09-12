@@ -5,17 +5,20 @@ const FilterSection = React.createClass({
 
   getInitialState() {
     return {
-      isOpen: false,
+      isOpen: undefined,
     };
   },
 
-  toggle() {
-    this.setState({ isOpen: !this.state.isOpen });
+  toggle(isOpen) {
+    this.setState({ isOpen: !isOpen });
   },
 
   render() {
-    const { heading, icon, summary = [], updateFilter, filterKey, children } = this.props;
-    const { isOpen } = this.state;
+    const {
+      heading, icon, summary = [], updateFilter, filterKey, className, children,
+      expanded = summary.some(_ => _.active),
+    } = this.props;
+    const { isOpen = expanded } = this.state;
 
     if (!children && !summary.length) {
       return null;
@@ -23,9 +26,11 @@ const FilterSection = React.createClass({
 
     return (
       <section
-        className={classnames('wgsa-filter-section', { 'is-open': isOpen })}
+        className={classnames(
+          'wgsa-filter-section', className, { 'is-open': isOpen })
+        }
       >
-        <h3 onClick={this.toggle}>
+        <h3 onClick={() => this.toggle(isOpen)}>
           <i className="material-icons">{icon}</i>
           {heading}
           <i className="material-icons">{isOpen ? 'expand_less' : 'expand_more'}</i>

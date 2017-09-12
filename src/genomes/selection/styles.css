@@ -24,6 +24,9 @@
 .wgsa-selection-summary {
   position: fixed;
   right: 16px;
+}
+
+.mdl-layout:not(.user-drawer-visible) .wgsa-selection-summary {
   z-index: 3;
 }
 

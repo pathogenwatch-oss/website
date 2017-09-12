@@ -59,10 +59,11 @@ export const getFilterSummary = createSelector(
 
     return {
       loading,
-      date: {
+      date: date.min && date.max ? {
         bounds: [ date.min, date.max ],
         values: [ filterState.minDate, filterState.maxDate ],
-      },
+        active: !!(filterState.minDate || filterState.maxDate),
+      } : null,
       wgsaOrganisms: sortBy(wgsaOrganisms, 'title'),
       otherOrganisms: sortBy(otherOrganisms, 'label'),
       sequenceTypes: sortBy(

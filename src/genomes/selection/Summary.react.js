@@ -10,19 +10,26 @@ import { toggleDrawer } from './actions';
 const Summary = React.createClass({
 
   componentDidUpdate(previous) {
+    if (this.animating) return;
     if (this.props.size !== previous.size) {
       this.sonarEl.classList.remove('wgsa-sonar-effect');
       void this.sonarEl.offsetWidth;
       this.sonarEl.classList.add('wgsa-sonar-effect');
+      this.animating = true;
+      setTimeout(() => { this.animating = false; }, 1400);
     }
   },
+
+  animating: false,
 
   render() {
     const { size, onClick } = this.props;
     return (
       <div className="wgsa-selection-summary">
         <button className="mdl-chip mdl-chip--contact mdl-chip--active" onClick={onClick}>
-          <span ref={el => { this.sonarEl = el; }} className="mdl-chip__contact">{size}</span>
+          <span ref={el => { this.sonarEl = el; }} className="mdl-chip__contact">
+            {size}
+          </span>
           <span className="mdl-chip__text">
             Create Collection
           </span>

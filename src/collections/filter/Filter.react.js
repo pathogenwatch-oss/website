@@ -42,6 +42,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(
         updateFilter={updateFilter}
       />
       <AsideSection
+        className="capitalised"
         filterKey="type"
         heading="Type"
         icon="label"

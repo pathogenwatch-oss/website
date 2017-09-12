@@ -57,15 +57,18 @@ const Filter = ({ isOpen, isActive, filterSummary, textValue, updateFilter, clea
         <FilterSection
           heading="Date"
           icon="date_range"
+          expanded={filterSummary.date && filterSummary.date.active}
         >
-          <DateRange
-            bounds={filterSummary.date.bounds}
-            values={filterSummary.date.values}
-            onChangeMin={value => updateFilter('minDate', value.toISOString())}
-            onChangeMax={value => updateFilter('maxDate', value.toISOString())}
-          />
+          { filterSummary.date &&
+            <DateRange
+              bounds={filterSummary.date.bounds}
+              values={filterSummary.date.values}
+              onChangeMin={value => updateFilter('minDate', value.toISOString())}
+              onChangeMax={value => updateFilter('maxDate', value.toISOString())}
+            /> }
         </FilterSection>
         <FilterSection
+          className="capitalised"
           filterKey="type"
           heading="Type"
           icon="label"

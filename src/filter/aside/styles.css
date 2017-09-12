@@ -7,7 +7,6 @@
   left: 0;
   bottom: 0;
   width: 255px;
-  z-index: 3;
   background: #fff;
   border-right: 1px solid rgba(0, 0, 0, 0.14);
   position: relative;
@@ -53,16 +52,6 @@
   right: 0;
   top: 48px;
   padding-top: 8px;
-}
-
-.wgsa-filter__content:empty::after {
-  content: '😴 Loading...';
-  position: absolute;
-  top: 32px;
-  left: 0;
-  right: 0;
-  text-align: center;
-  color: rgba(0, 0, 0, 0.54);
 }
 
 .wgsa-filter--active .wgsa-filter__content {

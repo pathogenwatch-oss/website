@@ -7,10 +7,7 @@ const initialState = {
   country: {},
   type: {},
   uploadedAt: {},
-  date: {
-    min: new Date(null),
-    max: new Date(),
-  },
+  date: {},
 };
 
 export default function (state = initialState, { type, payload }) {

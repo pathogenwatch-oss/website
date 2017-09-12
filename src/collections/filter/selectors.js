@@ -19,7 +19,7 @@ export const getSearchText = createSelector(
 export const getFilterSummary = createSelector(
   ({ collections }) => collections.summary,
   getFilter,
-  ({ loading, organismId, owner }, filterState) => ({
+  ({ loading, organismId, type }, filterState) => ({
     loading,
     organism: sortBy(
       Object.keys(organismId).map(value => {
@@ -34,13 +34,16 @@ export const getFilterSummary = createSelector(
       }),
       'title'
     ),
-    type: Object.keys(owner).map(
-      value => ({
-        value: value === 'me' ? 'private' : 'public',
-        label: value === 'me' ? 'Private' : 'Public',
-        count: owner[value].count,
-        active: filterState.type === value,
-      })
+    type: sortBy(
+      Object.keys(type).map(
+        value => ({
+          value,
+          label: value,
+          count: type[value].count,
+          active: filterState.type === value,
+        })
+      ),
+      'label'
     ),
   })
 );
