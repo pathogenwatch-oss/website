@@ -10,6 +10,7 @@ import { stateKey } from './index';
 export const getFilter = state => filter.getFilter(state, { stateKey });
 
 export const getPrefilter = state => getFilter(state).prefilter;
+export const getActiveSort = state => getFilter(state).sort;
 
 export const getSearchText = createSelector(
   getFilter,
@@ -19,7 +20,7 @@ export const getSearchText = createSelector(
 export const getFilterSummary = createSelector(
   ({ collections }) => collections.summary,
   getFilter,
-  ({ loading, organismId, type }, filterState) => ({
+  ({ loading, organismId, type, publicationYear, createdAt }, filterState) => ({
     loading,
     organism: sortBy(
       Object.keys(organismId).map(value => {
@@ -45,6 +46,21 @@ export const getFilterSummary = createSelector(
       ),
       'label'
     ),
+    publicationYear: sortBy(
+      Object.keys(publicationYear).map(
+        value => ({
+          value,
+          label: value,
+          count: publicationYear[value].count,
+          active: filterState.publicationYear === value,
+        })
+      ),
+      'label'
+    ),
+    date: createdAt.min && createdAt.max ? {
+      bounds: [ createdAt.min, createdAt.max ],
+      values: [ filterState.minDate, filterState.maxDate ],
+    } : null,
   })
 );
 

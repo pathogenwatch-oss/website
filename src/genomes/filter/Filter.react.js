@@ -3,8 +3,9 @@ import { connect } from 'react-redux';
 
 import { LocationListener } from '../../location';
 import FilterAside from '../../filter/aside';
-import DateRange from '../../components/date-range';
 import FilterSection from '../../filter/section';
+import DateSection from '../../filter/date-section';
+
 import { selectors } from '../../filter';
 
 import { getFilterSummary, getSearchText, isFilterOpen } from './selectors';
@@ -48,19 +49,7 @@ const Filter = ({ isActive, filterSummary, textValue, updateFilter, clearFilter 
       summary={filterSummary.country}
       updateFilter={updateFilter}
     />
-    <FilterSection
-      heading="Date"
-      icon="date_range"
-      expanded={filterSummary.date && filterSummary.date.active}
-    >
-      { filterSummary.date &&
-        <DateRange
-          bounds={filterSummary.date.bounds}
-          values={filterSummary.date.values}
-          onChangeMin={value => updateFilter('minDate', value.toISOString())}
-          onChangeMax={value => updateFilter('maxDate', value.toISOString())}
-        /> }
-    </FilterSection>
+    <DateSection summary={filterSummary.date} updateFilter={updateFilter} />
     <FilterSection
       className="capitalised"
       filterKey="type"

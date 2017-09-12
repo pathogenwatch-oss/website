@@ -5,7 +5,7 @@ import { toggleSelection } from '../selection/actions';
 
 import AddToSelection from '../selection/AddToSelection.react';
 import { FormattedName } from '../../organisms';
-import { formatDate, formatDateTime } from '../../utils/Date';
+import { formatDate } from '../../utils/Date';
 import { getCountryName } from '../../utils/country';
 
 import { showGenomeDrawer } from '../../genome-drawer';
@@ -36,7 +36,7 @@ const displayAccessLevel = (props) => {
 
   if (props.public) {
     return (
-      <Cell title="Access" icon="language">
+      <Cell title="Access" icon="public">
         Public
       </Cell>
     );
