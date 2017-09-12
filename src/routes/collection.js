@@ -36,9 +36,12 @@ router.get('/collection/summary', (req, res, next) => {
   LOGGER.info('Received request to get collection summary');
 
   const { user, query } = req;
-  services.request('collection', 'summary', { user, query })
-    .then(response => res.json(response))
-    .catch(next);
+  Promise.all([
+    services.request('collection', 'summary', { user, query }),
+    services.request('collection', 'fetch-list', { user, query }),
+  ])
+  .then(([ summary, collections ]) => res.json({ summary, collections }))
+  .catch(next);
 });
 
 router.post('/collection/:id/binned', (req, res, next) => {
