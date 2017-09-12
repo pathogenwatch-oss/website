@@ -26,7 +26,7 @@ export const getFilterSummary = createSelector(
         const organism = taxIdMap.get(value);
         return {
           value,
-          label: organism.formattedShortName,
+          label: organism.formattedName,
           title: organism.name,
           count: organismId[value].count,
           active: filterState.organismId === value,

@@ -1,11 +1,14 @@
 import React from 'react';
 import classnames from 'classnames';
 
+
+
 const FilterSection = React.createClass({
 
   getInitialState() {
+    const { summary, expanded = summary.some(_ => _.active) } = this.props;
     return {
-      isOpen: undefined,
+      isOpen: expanded,
     };
   },
 
@@ -16,9 +19,8 @@ const FilterSection = React.createClass({
   render() {
     const {
       heading, icon, summary = [], updateFilter, filterKey, className, children,
-      expanded = summary.some(_ => _.active),
     } = this.props;
-    const { isOpen = expanded } = this.state;
+    const { isOpen } = this.state;
 
     if (!children && !summary.length) {
       return null;
@@ -56,4 +58,9 @@ const FilterSection = React.createClass({
 
 });
 
-export default FilterSection;
+export default props => {
+  if (props.children || props.summary && props.summary.length) {
+    return <FilterSection {...props} />;
+  }
+  return null;
+};
