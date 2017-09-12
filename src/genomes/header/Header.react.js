@@ -8,23 +8,26 @@ import SelectionSummary from '../selection';
 
 import { getVisible, getTotal } from './selectors';
 
-const Header = ({ visibleGenomes, totalGenomes }) => (
-  <header>
-    <FilterHeader />
-    <div className="wgsa-button-group">
-      <i className="material-icons" title="View">visibility</i>
-      <ViewSwitcher title="List" />
-      <ViewSwitcher view="map" title="Map" />
-      <ViewSwitcher view="stats" title="Stats" />
-    </div>
-    <Totals
-      visible={visibleGenomes}
-      total={totalGenomes}
-      itemType="genome"
-    />
-    <SelectionSummary />
-  </header>
-);
+const Header = ({ visibleGenomes, totalGenomes }) => {
+  if (totalGenomes === 0) return <header></header>;
+  return (
+    <header>
+      <FilterHeader />
+      <div className="wgsa-button-group">
+        <i className="material-icons" title="View">visibility</i>
+        <ViewSwitcher title="List" />
+        <ViewSwitcher view="map" title="Map" />
+        <ViewSwitcher view="stats" title="Stats" />
+      </div>
+      <Totals
+        visible={visibleGenomes}
+        total={totalGenomes}
+        itemType="genome"
+      />
+      <SelectionSummary />
+    </header>
+  );
+};
 
 function mapStateToProps(state) {
   return {
