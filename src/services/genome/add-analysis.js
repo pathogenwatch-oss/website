@@ -33,16 +33,16 @@ function formatResult(task, version, result) {
   );
 }
 
-module.exports = function ({ genomeId, task, version, result, props, clientId }) {
-  const update = formatResult(task, version, result);
+module.exports = function ({ genomeId, uploadedAt, task, version, result, clientId }) {
+  const formattedResult = formatResult(task, version, result);
   return (
-    Genome.addAnalysisResult(genomeId, task, update)
+    Genome.addAnalysisResult(genomeId, task, formattedResult)
       .then(() => {
         if (clientId) {
           request('notification', 'send', {
             channel: clientId,
-            topic: 'analysis',
-            message: { id: genomeId, task, result: update, props },
+            topic: `analysis-${uploadedAt}`,
+            message: { id: genomeId, task, result: formattedResult },
           });
         }
       })

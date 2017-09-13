@@ -19,24 +19,24 @@ const { tasks, specieator } = taskQueue.queues;
 
 function subscribeToQueues() {
   if (!queue || queue === 'tasks') {
-    taskQueue.dequeue(tasks, ({ genomeId, organismId, speciesId, genusId, fileId, task, version, clientId }) =>
+    taskQueue.dequeue(tasks, ({ genomeId, organismId, speciesId, genusId, fileId, uploadedAt, task, version, clientId }) =>
       request('tasks', 'run', { organismId, speciesId, genusId, fileId, task, version })
         .then(result => {
           LOGGER.info('results', genomeId, task, version, result);
-          return request('genome', 'add-analysis', { genomeId, task, version, result, clientId });
+          return request('genome', 'add-analysis', { genomeId, uploadedAt, task, version, result, clientId });
         })
     );
   }
 
   if (!queue || queue === 'specieator') {
-    taskQueue.dequeue(specieator, ({ genomeId, fileId, task, version, clientId }) =>
+    taskQueue.dequeue(specieator, ({ genomeId, fileId, uploadedAt, task, version, clientId }) =>
       request('tasks', 'run', { fileId, task, version })
         .then(result => {
           LOGGER.info('results', genomeId, task, version, result);
-          return request('genome', 'add-analysis', { genomeId, task, version, result, clientId })
+          return request('genome', 'add-analysis', { genomeId, uploadedAt, task, version, result, clientId })
             .then(() => {
               const { organismId, speciesId, genusId } = result;
-              return request('tasks', 'submit-genome', { genomeId, fileId, organismId, speciesId, genusId, clientId })
+              return request('tasks', 'submit-genome', { genomeId, fileId, uploadedAt, organismId, speciesId, genusId, clientId })
             });
         })
     );
