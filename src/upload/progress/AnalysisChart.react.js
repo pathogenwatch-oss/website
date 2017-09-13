@@ -5,10 +5,15 @@ import './styles.css';
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-
+import classnames from 'classnames';
 import 'chart.piecelabel.js';
 
-import { getChartData, getSelectedOrganism, isSpecieationComplete } from './selectors';
+import {
+  getChartData,
+  getSelectedOrganism,
+  isSpecieationComplete,
+  isAnalysisComplete,
+} from './selectors';
 
 import { selectOrganism } from './actions';
 
@@ -115,9 +120,12 @@ const AnalysisChart = React.createClass({
     return (
       <div className="wgsa-analysis-chart">
         <canvas ref={el => { this.canvas = el; }} />
-        { this.props.isSpecieationComplete &&
+        { this.props.specieationComplete &&
           <Link
-            className="mdl-shadow--2dp wgsa-view-genomes-button"
+            className={classnames(
+              'mdl-shadow--2dp wgsa-view-genomes-button',
+              { 'wgsa-sonar-effect': this.props.analysisComplete }
+            )}
             to={this.getGenomesLink()}
           >
             View Genomes
@@ -131,7 +139,8 @@ const AnalysisChart = React.createClass({
 function mapStateToProps(state) {
   return {
     data: getChartData(state),
-    isSpecieationComplete: isSpecieationComplete(state),
+    specieationComplete: isSpecieationComplete(state),
+    analysisComplete: isAnalysisComplete(state),
     selectedOrganism: getSelectedOrganism(state),
   };
 }

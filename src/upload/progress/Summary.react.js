@@ -23,19 +23,13 @@ const Component = React.createClass({
   },
 
   render() {
-    const { summary, overallProgress } = this.props;
+    const { summary } = this.props;
 
     if (summary.errored) {
       return <ErrorSummary />;
     }
 
-    return (
-      <Summary>
-        <span>
-          {overallProgress.done} of {overallProgress.total}
-        </span>
-      </Summary>
-    );
+    return <Summary />;
   },
 
 });
@@ -43,7 +37,6 @@ const Component = React.createClass({
 function mapStateToProps(state) {
   return {
     summary: upload.getFileSummary(state),
-    overallProgress: upload.getOverallProgress(state),
   };
 }
 

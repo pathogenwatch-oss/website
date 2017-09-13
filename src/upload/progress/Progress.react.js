@@ -6,6 +6,7 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 import FileCard from '../card/Card.react';
 import AnalysisChart from './AnalysisChart.react';
+import ProgressBar from '../../progress-bar';
 
 import * as upload from './selectors';
 
@@ -18,10 +19,12 @@ const Analysis = ({ data }) => (
         <ul>
           {Object.keys(analyses).map(analysisKey => {
             const analysis = analyses[analysisKey];
-            if (analysis.total) {
+            if (analysis.active) {
               return (
                 <li key={analysisKey}>
-                  {analysis.label}: {analysis.total === total ? '✔️' : `${analysis.total}/${total}`}
+                  { analysis.total === total ?
+                    `${analysis.label} ✔️` :
+                    `${analysis.label}: ${analysis.total}/${total}` }
                 </li>
               );
             }
@@ -33,11 +36,41 @@ const Analysis = ({ data }) => (
   </ul>
 );
 
-const Progress = ({ inProgress, errored, files, analysis, uploadedAt, isUploading, totalGenomes }) => (
+const Overview = connect(
+  state => ({
+    isUploading: upload.isUploading(state),
+    totalGenomes: upload.getUploadedGenomeList(state).length,
+    progress: upload.getOverallProgress(state),
+  })
+)(({ isUploading, totalGenomes, progress }) => {
+  if (isUploading || totalGenomes === 0) return null;
+
+  const { speciation, tasks } = progress;
+
+  const speciationPct = speciation.done / totalGenomes * 100;
+  const tasksPct = tasks.done / tasks.total * 100;
+
+  if (speciationPct === 100 && tasksPct === 100) {
+    return <strong>Analysis Complete 🎉</strong>;
+  }
+
+  return (
+    <div className="wgsa-upload-progress-overview">
+      <p>
+        {totalGenomes} file{totalGenomes === 1 ? '' : 's'} uploaded successfully.
+      </p>
+      <ProgressBar label="Speciation" progress={speciationPct} />
+      { speciationPct === 100 &&
+        <ProgressBar label="Tasks" progress={tasksPct} /> }
+    </div>
+  );
+});
+
+const Progress = ({ inProgress, errored, files, analysis, uploadedAt }) => (
   <div className="wgsa-content-margin wgsa-upload-progress">
     <div>
       <div className="wgsa-section-divider">
-        <h2 className="wgsa-section-title">Files</h2>
+        <h2 className="wgsa-section-title">Progress</h2>
         <ReactCSSTransitionGroup
           className="wgsa-upload-card-list"
           transitionName="wgsa-upload-card"
@@ -50,10 +83,7 @@ const Progress = ({ inProgress, errored, files, analysis, uploadedAt, isUploadin
           <p>
             +{files.pending} file{files.pending === 1 ? '' : 's'}.
           </p> }
-        { !isUploading && totalGenomes > 0 &&
-          <p>
-            {totalGenomes} file{totalGenomes === 1 ? '' : 's'} uploaded successfully.
-          </p> }
+        <Overview />
       </div>
       { files.errored > 0 &&
         <div className="wgsa-section-divider">
@@ -79,8 +109,6 @@ function mapStateToProps(state) {
     errored: upload.getErroredUploads(state),
     files: upload.getFileSummary(state),
     analysis: upload.getAnalysisSummary(state),
-    isUploading: upload.isUploading(state),
-    totalGenomes: upload.getUploadedGenomeList(state).length,
   };
 }
 

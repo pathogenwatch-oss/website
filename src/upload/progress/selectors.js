@@ -102,33 +102,36 @@ export const getFileSummary = createSelector(
 );
 
 function getAnalysisBreakdown(analyses) {
-  const mlst = { total: 0, sts: {} };
-  const paarsnp = { label: 'AMR', total: 0 };
-  const genotyphi = { label: 'Genotyphi', total: 0 };
-  const ngmast = { label: 'NG-MAST', total: 0 };
+  const breakdown = {
+    mlst: { label: 'MLST', active: false, total: 0 },
+    paarsnp: { active: false, label: 'AMR', total: 0 },
+    genotyphi: { active: false, label: 'Genotyphi', total: 0 },
+    ngmast: { active: false, label: 'NG-MAST', total: 0 },
+    metrics: { active: false, label: 'Metrics', total: 0 },
+  };
+  const sts = {};
 
   for (const analysis of analyses) {
-    if (analysis.mlst) {
-      const { st } = analysis.mlst;
-      mlst.sts[st] = (mlst.sts[st] || 0) + 1;
-      mlst.total++;
+    for (const key of Object.keys(analysis)) {
+      if (key in breakdown) {
+        breakdown[key].active = true;
+        if (analysis[key]) breakdown[key].total++;
+      }
+      if (key === 'mlst' && analysis.mlst) {
+        const { st } = analysis.mlst;
+        sts[st] = (sts[st] || 0) + 1;
+      }
     }
-    if (analysis.paarsnp) paarsnp.total++;
-    if (analysis.genotyphi) genotyphi.total++;
-    if (analysis.ngmast) ngmast.total++;
   }
 
   return {
+    ...breakdown,
     mlst: {
-      label: 'MLST',
-      total: mlst.total,
-      sequenceTypes: Object.keys(mlst.sts).map(st => ({
-        label: `ST ${st}`, total: mlst.sts[st],
+      ...breakdown.mlst,
+      sequenceTypes: Object.keys(sts).map(st => ({
+        label: `ST ${st}`, total: sts[st],
       })),
     },
-    paarsnp,
-    genotyphi,
-    ngmast,
   };
 }
 
@@ -225,21 +228,46 @@ export const getChartData = createSelector(
 export const getOverallProgress = createSelector(
   getAnalyses,
   (analyses) => {
-    let pending = 0;
-    let total = 0;
+    const overall = { pending: 0, done: 0, total: 0 };
+    const speciation = { pending: 0, done: 0, total: 0 };
+    const tasks = { pending: 0, done: 0, total: 0 };
 
     for (const id of Object.keys(analyses)) {
       for (const task of Object.keys(analyses[id])) {
-        total++;
-        if (analyses[id][task] === null) pending++;
+        const isPending = analyses[id][task] === null;
+
+        overall.total++;
+        overall[isPending ? 'pending' : 'done']++;
+
+        if (task === 'specieator') {
+          speciation.total++;
+          speciation[isPending ? 'pending' : 'done']++;
+        } else {
+          tasks.total++;
+          tasks[isPending ? 'pending' : 'done']++;
+        }
       }
     }
-
-    return { done: total - pending, pending, total };
+    return {
+      speciation,
+      tasks,
+      overall,
+    };
   }
 );
 
 export const isSpecieationComplete = createSelector(
-  getAnalysisSummary,
-  summary => summary.length > 0 ? summary[summary.length - 1].label !== 'Pending' : null,
+  getUploadedGenomeList,
+  getOverallProgress,
+  (genomes, { speciation }) => {
+    if (genomes.length === 0) return null;
+    return speciation.total > 0 && speciation.done === speciation.total;
+  }
+);
+
+export const isAnalysisComplete = createSelector(
+  isSpecieationComplete,
+  getOverallProgress,
+  (speciationComplete, { overall }) =>
+    speciationComplete && overall.done === overall.total,
 );
