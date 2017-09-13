@@ -143,6 +143,7 @@ export function fetchGenomes(uploadedAt) {
   return {
     type: UPLOAD_FETCH_GENOMES,
     payload: {
+      uploadedAt,
       promise: api.fetchGenomes(uploadedAt),
     },
   };

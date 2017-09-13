@@ -28,6 +28,7 @@ const initialState = {
   queue: [],
   processing: new Set(),
 
+  uploadedAt: null,
   genomes: {},
   analyses: {},
   selectedOrganism: null,
@@ -153,6 +154,10 @@ export default function (state = initialState, { type, payload }) {
           [id]: { ...analysis, [payload.task]: payload.result },
         },
       };
+    }
+    case actions.UPLOAD_FETCH_GENOMES.ATTEMPT: {
+      if (state.uploadedAt === payload.uploadedAt) return state;
+      return initialState;
     }
     case actions.UPLOAD_FETCH_GENOMES.SUCCESS: {
       const nextGenomes = {};
