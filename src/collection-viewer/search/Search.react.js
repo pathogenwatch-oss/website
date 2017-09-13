@@ -13,6 +13,7 @@ import {
   changeDropdownVisibility,
   selectSearchCategory,
   moveCursor,
+  moveIntersection,
   toggleSearchMode,
   toggleSearchExactMatch,
 } from './actions';
@@ -49,18 +50,25 @@ const Search = React.createClass({
   },
 
   handleKeyboard(e) {
-    if (e.keyCode === 37 || e.keyCode === 38) {
-      this.props.moveCursor(-1);
-    }
-    if (e.keyCode === 39 || e.keyCode === 40) {
-      this.props.moveCursor(1);
-    }
     const { text, category } = this.props.search;
-    if (e.keyCode === 8 && category && text.length === 0) {
-      this.props.removeCategory();
-    }
-    if (e.keyCode === 13) {
-      this.props.selectItemAtCursor();
+    switch (e.keyCode) {
+      case 37:
+        this.props.moveCursor(-1); break;
+      case 39:
+        this.props.moveCursor(1); break;
+      case 38:
+        this.props.moveIntersection(-1); break;
+      case 40:
+        this.props.moveIntersection(1); break;
+      case 8: {
+        if (category && text.length === 0) {
+          this.props.removeCategory();
+        }
+        break;
+      }
+      case 13:
+        this.props.selectItemAtCursor(); break;
+      default:
     }
   },
 
@@ -126,6 +134,7 @@ function mapDispatchToProps(dispatch) {
     removeCategory: () => dispatch(selectSearchCategory(null)),
     selectItemAtCursor: () => dispatch(selectItemAtCursor()),
     moveCursor: delta => dispatch(moveCursor(delta)),
+    moveIntersection: delta => dispatch(moveIntersection(delta)),
     toggleMode: () => dispatch(toggleSearchMode()),
     toggleExactMatch: () => dispatch(toggleSearchExactMatch()),
   };

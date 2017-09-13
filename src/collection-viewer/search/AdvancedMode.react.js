@@ -33,7 +33,7 @@ const AdvancedMode = React.createClass({
     if (!current.length) return null;
     return (
       <section>
-        <h2 className="wgsa-search-dropdown__heading">Current Filter</h2>
+        <h2 className="wgsa-search-dropdown__heading">Current Filter &ndash; Use up and down arrow keys to change section</h2>
         {current.map((terms, index) =>
           <ul key={index}>
             {terms.map((term, termIndex) =>
@@ -95,11 +95,18 @@ const AdvancedMode = React.createClass({
     );
   },
 
-  getColumnHeading(sections) {
+  getColumnHeading(category, sections) {
+    if (category) {
+      return (
+        <h2 className="wgsa-search-dropdown__heading">
+          Choose Value &ndash; Use left and right arrow keys to navigate, use backspace to cancel
+        </h2>
+      );
+    }
     if (sections.length) {
       return (
         <h2 className="wgsa-search-dropdown__heading">
-          Choose Column &ndash; Use arrow keys to navigate
+          Choose Column &ndash; Use left and right arrow keys to navigate
         </h2>
       );
     }
@@ -116,15 +123,14 @@ const AdvancedMode = React.createClass({
         { this.renderCurrentFilter() }
         { this.renderRecentTerms() }
         <section>
-          { category ?
+          { this.getColumnHeading(category, sections) }
+          { !!category &&
             <span className="mdl-chip mdl-chip--deletable">
               <span className="mdl-chip__text">{category.label}</span>
               <button className="mdl-chip__action" onClick={() => removeCategory()}>
                 <i className="material-icons">cancel</i>
               </button>
-            </span> :
-            this.getColumnHeading(sections)
-          }
+            </span> }
         </section>
         <div className="wgsa-search-dropdown__values">
           { sections.map(({ heading, items, placeholder, sort }) =>

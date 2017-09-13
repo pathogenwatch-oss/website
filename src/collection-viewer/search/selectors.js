@@ -85,14 +85,12 @@ const getTableColumns = createSelector(
 function getContainsSection(category, text, ids) {
   const items =
     ids.length ?
-      [ { key: 'contains', label: text, ids } ] :
+      [ { key: `contains_${text}`, label: text, ids, isExpression: true } ] :
       [];
-  let placeholder = '';
-  if (!text.length) {
-    placeholder = category.numeric ?
+  const placeholder =
+    category.numeric ?
       'Enter expression: =, <, >, <=, >=' :
       'Enter text';
-  }
   return {
     heading: category.numeric ? 'Expression' : 'Contains',
     placeholder,

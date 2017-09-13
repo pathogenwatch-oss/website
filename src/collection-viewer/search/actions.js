@@ -59,6 +59,17 @@ export function moveCursor(delta) {
   };
 }
 
+export const SEARCH_INTERSECTION_MOVED = 'SEARCH_INTERSECTION_MOVED';
+
+export function moveIntersection(delta) {
+  return {
+    type: SEARCH_INTERSECTION_MOVED,
+    payload: {
+      delta,
+    },
+  };
+}
+
 export const SEARCH_SORT_SELECTED = 'SEARCH_SORT_SELECTED';
 
 export function selectSort(sort) {

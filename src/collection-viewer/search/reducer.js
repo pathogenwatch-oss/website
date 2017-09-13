@@ -6,10 +6,12 @@ import {
   SEARCH_TERM_ADDED,
   SEARCH_TERM_REMOVED,
   SEARCH_CURSOR_MOVED,
+  SEARCH_INTERSECTION_MOVED,
   SEARCH_SORT_SELECTED,
   SEARCH_OPERATOR_SELECTED,
 } from './actions.js';
 
+import { doesNotIntersect } from './utils';
 import { sortKeys } from './constants';
 
 import { RESET_FILTER, ACTIVATE_FILTER } from '../filter/actions';
@@ -64,13 +66,22 @@ export default function (state = initialState, { type, payload }) {
         text: payload,
         cursor: 0,
       };
-    case SEARCH_CATEGORY_SELECTED:
+    case SEARCH_CATEGORY_SELECTED: {
+      const { intersections, currentIntersection } = state;
+      const { category } = payload;
+      const terms = intersections[currentIntersection] || [];
+      let nextIntersection = currentIntersection;
+      if (category && doesNotIntersect(category, terms)) {
+        nextIntersection = intersections.length;
+      }
       return {
         ...state,
         category: payload.category,
+        currentIntersection: nextIntersection,
         text: '',
         cursor: 0,
       };
+    }
     case SEARCH_TERM_ADDED: {
       if (!state.advanced) {
         return applyBasicSearchTerm(state, payload);
@@ -109,6 +120,17 @@ export default function (state = initialState, { type, payload }) {
         intersections,
         recent: addToRecent(state, [ term ]),
         text: '',
+      };
+    }
+    case SEARCH_INTERSECTION_MOVED: {
+      const { intersections, currentIntersection } = state;
+      const nextIntersection = currentIntersection + payload.delta;
+      if (nextIntersection < 0 || nextIntersection > intersections.length) {
+        return state;
+      }
+      return {
+        ...state,
+        currentIntersection: nextIntersection,
       };
     }
     case SEARCH_CURSOR_MOVED:

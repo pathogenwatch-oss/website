@@ -140,6 +140,10 @@
   line-height: 1;
 }
 
+.wgsa-search-dropdown__heading + .mdl-chip {
+  margin-top: 8px;
+}
+
 .wgsa-search-dropdown ul {
   margin-left: -4px;
 }

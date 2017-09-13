@@ -154,3 +154,9 @@ export function createBasicSearchTerm(tableName, table, genomes, text, exact) {
   const item = { key: exact ? text : 'contains', label: text, ids };
   return createSearchTerm(category, item);
 }
+
+export function doesNotIntersect(category, terms) {
+  return terms.some(term =>
+    !term.value.isExpression && term.category.key === category.key
+  );
+}
