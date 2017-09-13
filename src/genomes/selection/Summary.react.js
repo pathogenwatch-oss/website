@@ -22,11 +22,15 @@ const Summary = React.createClass({
 
   animating: false,
 
+  onKeyUp(e) {
+    if (e.key === 'Escape') this.props.toggle();
+  },
+
   render() {
-    const { size, onClick } = this.props;
+    const { size, toggle } = this.props;
     return (
-      <div className="wgsa-selection-summary">
-        <button className="mdl-chip mdl-chip--contact mdl-chip--active" onClick={onClick}>
+      <div className="wgsa-selection-summary" onKeyUp={this.onKeyUp}>
+        <button className="mdl-chip mdl-chip--contact mdl-chip--active" onClick={toggle}>
           <span ref={el => { this.sonarEl = el; }} className="mdl-chip__contact">
             {size}
           </span>
@@ -50,7 +54,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    onClick: () => dispatch(toggleDrawer()),
+    toggle: () => dispatch(toggleDrawer()),
   };
 }
 

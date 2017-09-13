@@ -82,7 +82,6 @@
 
 .wgsa-card-metadata {
   align-items: bottom;
-  color: rgba(0, 0, 0, 0.87);
   display: flex;
   justify-content: flex-start;
   line-height: 20px;
@@ -121,7 +120,6 @@
   justify-content: flex-end;
   font-size: 13px;
   line-height: 20px;
-  color: rgba(0, 0, 0, 0.54);
 }
 
 .wgsa-overflow-fade {

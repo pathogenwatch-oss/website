@@ -61,8 +61,13 @@
   background: #a386bd;
   color: #fff;
   font-weight: 500;
+  box-sizing: border-box;
 }
 
 .mdl-chip--active .mdl-chip__contact {
   background: #673c90;
+}
+
+.mdl-chip--active:active {
+  background: #a386bd;
 }
