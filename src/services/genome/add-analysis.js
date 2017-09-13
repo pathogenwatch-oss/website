@@ -8,6 +8,7 @@ const formatters = {
       result.resistanceProfile.reduce(
         (memo, { agent, resistanceState, resistanceSets }) => {
           memo[agent.name] = {
+            fullName: agent.fullName,
             state: resistanceState,
             mechanisms: resistanceSets.map(_ => _.resistanceSetName),
           };
