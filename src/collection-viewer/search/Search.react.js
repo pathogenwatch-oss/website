@@ -68,18 +68,23 @@ const Search = React.createClass({
       }
       case 13:
         this.props.selectItemAtCursor(); break;
+      case 27: {
+        e.stopPropagation(); // prevent clash with overlay
+        this.props.toggleMode();
+        break;
+      }
       default:
     }
   },
 
   render() {
     const { toggleMode, toggleExactMatch, search } = this.props;
-    const { text, visible, advanced, exact } = search;
+    const { text, advanced, exact } = search;
     return (
       <div className="wgsa-search-box-container">
         <div className={classnames(
             'wgsa-search-box',
-            { 'wgsa-search-box--active': visible }
+            { 'wgsa-search-box--active': advanced }
           )}
           onClick={this.handleClick}
         >
