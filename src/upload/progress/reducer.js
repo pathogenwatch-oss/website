@@ -166,8 +166,10 @@ export default function (state = initialState, { type, payload }) {
           pending: undefined,
         };
         const pendingAnalysis = {};
-        for (const task of genome.pending) {
-          pendingAnalysis[task] = null;
+        if (genome.pending) {
+          for (const task of genome.pending) {
+            pendingAnalysis[task] = null;
+          }
         }
         nextAnalyses[genome.id] = {
           ...pendingAnalysis,
