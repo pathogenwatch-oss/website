@@ -222,7 +222,24 @@ export const getChartData = createSelector(
   }
 );
 
+export const getOverallProgress = createSelector(
+  getAnalyses,
+  (analyses) => {
+    let pending = 0;
+    let total = 0;
+
+    for (const id of Object.keys(analyses)) {
+      for (const task of Object.keys(analyses[id])) {
+        total++;
+        if (analyses[id][task] === null) pending++;
+      }
+    }
+
+    return { done: total - pending, pending, total };
+  }
+);
+
 export const isSpecieationComplete = createSelector(
   getAnalysisSummary,
-  summary => summary.length > 0 && summary[summary.length - 1].label !== 'Pending',
+  summary => summary.length > 0 ? summary[summary.length - 1].label !== 'Pending' : null,
 );
