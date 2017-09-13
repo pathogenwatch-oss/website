@@ -62,6 +62,9 @@ const Search = React.createClass({
     if (e.keyCode === 13) {
       this.props.selectItemAtCursor();
     }
+    if (e.keyCode === 27) {
+      this.props.toggleMode();
+    }
   },
 
   render() {

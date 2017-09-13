@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import Fade from '../../components/fade';
-import Overlay from '../../components/overlay';
 import AdvancedMode from './AdvancedMode.react';
 
 import { isAdvancedMode } from './selectors';
@@ -24,11 +23,10 @@ const SearchDropdown = React.createClass({
       <Fade className="wgsa-search-dropdown-container">
         { isOpen ?
           <div className="wgsa-search-dropdown">
-            <button onClick={close} className="mdl-button">
-              Close
+            <button onClick={close} className="mdl-button mdl-button--icon">
+              <i className="material-icons">close</i>
             </button>
             <AdvancedMode />
-            <Overlay hide={close} isVisible />
           </div> :
           null }
       </Fade>
