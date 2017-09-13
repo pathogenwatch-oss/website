@@ -9,18 +9,18 @@ export default ({ __v, antibiotics = {}, snp =[], paar = [] }) => (
         <table>
           <thead>
             <tr>
-              { Object.keys(antibiotics).map(key => <th key={key}>{key}</th>) }
+              { Object.keys(antibiotics).map(key => <th key={key} title={antibiotics[key].fullName}>{key}</th>) }
             </tr>
           </thead>
           <tbody>
             <tr>
               { Object.keys(antibiotics).map(key => {
-                const { state } = antibiotics[key];
+                const { state, fullName } = antibiotics[key];
                 return (
                   <td key={key}>
                     { state !== 'UNKNOWN' && state !== 'NOT_FOUND' &&
                       <i
-                        title={state}
+                        title={`${fullName}: ${state}`}
                         className={`material-icons wgsa-amr--${state.toLowerCase()}`}
                       >
                         lens
