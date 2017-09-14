@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import Progress from './Progress.react';
 import Summary from './Summary.react';
 
-import { getUploadedFileList, isUploading, isSpecieationComplete } from './selectors';
+import { getUploadedFileList, isUploadPending, isSpecieationComplete } from './selectors';
 
 import { receiveUploadAnalysis, fetchGenomes, processFiles } from './actions';
 
@@ -27,7 +27,7 @@ const Component = React.createClass({
 
   componentDidUpdate(previous) {
     const uploadComplete = (previous.isUploading && !this.props.isUploading);
-    const specieationComplete = (previous.isSpecieationComplete === false && this.props.isSpecieationComplete)
+    const specieationComplete = (previous.isSpecieationComplete === false && this.props.isSpecieationComplete);
     if (uploadComplete || specieationComplete) {
       this.props.fetch();
     }
@@ -52,7 +52,7 @@ function mapStateToProps(state, { match }) {
   const { uploadedAt } = match.params;
   return {
     uploadedAt,
-    isUploading: isUploading(state),
+    isUploading: isUploadPending(state),
     isSpecieationComplete: isSpecieationComplete(state),
     hasFiles: getUploadedFileList(state).length > 0,
   };

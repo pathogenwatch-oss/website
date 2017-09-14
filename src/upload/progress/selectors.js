@@ -57,6 +57,11 @@ export const isUploading = createSelector(
   processing => processing.size > 0,
 );
 
+export const isUploadPending = createSelector(
+  getNumRemainingUploads,
+  remaining => remaining > 0
+);
+
 export const getNumCompletedUploads = createSelector(
   getBatchSize,
   getNumRemainingUploads,
@@ -227,8 +232,8 @@ export const getChartData = createSelector(
 
 export const getOverallProgress = createSelector(
   getAnalyses,
-  (analyses) => {
-    const overall = { pending: 0, done: 0, total: 0 };
+  getUploadedGenomes,
+  (analyses, genomes) => {
     const speciation = { pending: 0, done: 0, total: 0 };
     const tasks = { pending: 0, done: 0, total: 0 };
 
@@ -236,38 +241,40 @@ export const getOverallProgress = createSelector(
       for (const task of Object.keys(analyses[id])) {
         const isPending = analyses[id][task] === null;
 
-        overall.total++;
-        overall[isPending ? 'pending' : 'done']++;
-
         if (task === 'specieator') {
           speciation.total++;
-          speciation[isPending ? 'pending' : 'done']++;
-        } else {
+          if (isPending) speciation.pending++;
+        } else if (id in genomes && genomes[id].speciated) {
           tasks.total++;
-          tasks[isPending ? 'pending' : 'done']++;
+          if (isPending) tasks.pending++;
         }
       }
     }
+
+    speciation.done = speciation.total - speciation.pending;
+    tasks.done = tasks.total - tasks.pending;
+
     return {
       speciation,
       tasks,
-      overall,
     };
   }
 );
 
 export const isSpecieationComplete = createSelector(
+  isUploadPending,
   getUploadedGenomeList,
   getOverallProgress,
-  (genomes, { speciation }) => {
+  (uploadPending, genomes, { speciation }) => {
+    if (uploadPending) return null;
     if (genomes.length === 0) return null;
-    return speciation.total > 0 && speciation.done === speciation.total;
+    return speciation.done === genomes.length;
   }
 );
 
 export const isAnalysisComplete = createSelector(
   isSpecieationComplete,
   getOverallProgress,
-  (speciationComplete, { overall }) =>
-    speciationComplete && overall.done === overall.total,
+  (speciationComplete, { tasks }) =>
+    speciationComplete && tasks.total > 0 && tasks.done === tasks.total,
 );

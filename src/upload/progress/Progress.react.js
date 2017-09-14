@@ -10,27 +10,28 @@ import ProgressBar from '../../progress-bar';
 
 import * as upload from './selectors';
 
-const Analysis = ({ data }) => (
+const Analysis = ({ data, showBreakdown }) => (
   <ul className="wgsa-upload-legend">
     { data.map(({ key, label, total, colour, ...analyses }) =>
       <li key={key}>
         <i className="material-icons" style={{ color: colour }}>stop</i>
         <strong>{label}</strong>: {total}
-        <ul>
-          {Object.keys(analyses).map(analysisKey => {
-            const analysis = analyses[analysisKey];
-            if (analysis.active) {
-              return (
-                <li key={analysisKey}>
-                  { analysis.total === total ?
-                    `${analysis.label} ✔️` :
-                    `${analysis.label}: ${analysis.total}/${total}` }
-                </li>
-              );
-            }
-            return null;
-          })}
-        </ul>
+        { showBreakdown &&
+          <ul>
+            {Object.keys(analyses).map(analysisKey => {
+              const analysis = analyses[analysisKey];
+              if (analysis.active) {
+                return (
+                  <li key={analysisKey}>
+                    { analysis.total === total ?
+                      `${analysis.label} ✔️` :
+                      `${analysis.label}: ${analysis.total}/${total}` }
+                  </li>
+                );
+              }
+              return null;
+            })}
+          </ul> }
       </li>
     ) }
   </ul>
@@ -41,8 +42,9 @@ const Overview = connect(
     isUploading: upload.isUploading(state),
     totalGenomes: upload.getUploadedGenomeList(state).length,
     progress: upload.getOverallProgress(state),
+    complete: upload.isAnalysisComplete(state),
   })
-)(({ isUploading, totalGenomes, progress }) => {
+)(({ isUploading, totalGenomes, progress, complete }) => {
   if (isUploading || totalGenomes === 0) return null;
 
   const { speciation, tasks } = progress;
@@ -50,7 +52,7 @@ const Overview = connect(
   const speciationPct = speciation.done / totalGenomes * 100;
   const tasksPct = tasks.done / tasks.total * 100;
 
-  if (speciationPct === 100 && tasksPct === 100) {
+  if (complete) {
     return <strong>Analysis Complete 🎉</strong>;
   }
 
@@ -66,7 +68,7 @@ const Overview = connect(
   );
 });
 
-const Progress = ({ inProgress, errored, files, analysis, uploadedAt }) => (
+const Progress = ({ inProgress, errored, files, analysis, uploadedAt, specieationComplete }) => (
   <div className="wgsa-content-margin wgsa-upload-progress">
     <div>
       <div className="wgsa-section-divider">
@@ -93,7 +95,7 @@ const Progress = ({ inProgress, errored, files, analysis, uploadedAt }) => (
       { (!!analysis.length && analysis[0].key !== 'pending') &&
         <div className="wgsa-section-divider">
           <h2 className="wgsa-section-title">Organisms</h2>
-          <Analysis data={analysis} />
+          <Analysis data={analysis} showBreakdown={specieationComplete} />
         </div> }
     </div>
     <div className="wgsa-section-divider">
@@ -109,6 +111,7 @@ function mapStateToProps(state) {
     errored: upload.getErroredUploads(state),
     files: upload.getFileSummary(state),
     analysis: upload.getAnalysisSummary(state),
+    specieationComplete: upload.isSpecieationComplete(state),
   };
 }
 
