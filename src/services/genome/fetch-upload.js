@@ -8,9 +8,15 @@ module.exports = function (props) {
         Genome.getFilterQuery(props),
         { name: 1,
           organismId: 1,
-          'analysis.specieator': 1,
-          'analysis.mlst': 1,
+          'analysis.specieator.organismId': 1,
+          'analysis.specieator.organismName': 1,
+          'analysis.mlst.st': 1,
+          'analysis.metrics.__v': 1,
+          'analysis.paarsnp.__v': 1,
+          'analysis.genotyphi.__v': 1,
+          'analysis.ngmast.__v': 1,
           uploadedAt: 1,
+          pending: 1,
         },
       )
       .lean()
