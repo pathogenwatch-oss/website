@@ -29,9 +29,7 @@ const Component = React.createClass({
       return <ErrorSummary />;
     }
 
-    return (
-      <Summary />
-    );
+    return <Summary />;
   },
 
 });

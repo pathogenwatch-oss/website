@@ -6,38 +6,73 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 import FileCard from '../card/Card.react';
 import AnalysisChart from './AnalysisChart.react';
+import ProgressBar from '../../progress-bar';
 
 import * as upload from './selectors';
 
-const Analysis = ({ data }) => (
+const Analysis = ({ data, showBreakdown }) => (
   <ul className="wgsa-upload-legend">
     { data.map(({ key, label, total, colour, ...analyses }) =>
       <li key={key}>
         <i className="material-icons" style={{ color: colour }}>stop</i>
         <strong>{label}</strong>: {total}
-        <ul>
-          {Object.keys(analyses).map(analysisKey => {
-            const analysis = analyses[analysisKey];
-            if (analysis.total) {
-              return (
-                <li key={analysisKey}>
-                  {analysis.label}: {analysis.total === total ? '✔️' : `${analysis.total}/${total}`}
-                </li>
-              );
-            }
-            return null;
-          })}
-        </ul>
+        { showBreakdown &&
+          <ul>
+            {Object.keys(analyses).map(analysisKey => {
+              const analysis = analyses[analysisKey];
+              if (analysis.active) {
+                return (
+                  <li key={analysisKey}>
+                    { analysis.total === total ?
+                      `${analysis.label} ✔️` :
+                      `${analysis.label}: ${analysis.total}/${total}` }
+                  </li>
+                );
+              }
+              return null;
+            })}
+          </ul> }
       </li>
     ) }
   </ul>
 );
 
-const Progress = ({ inProgress, errored, files, analysis, uploadedAt, isUploading, totalGenomes }) => (
+const Overview = connect(
+  state => ({
+    isUploading: upload.isUploading(state),
+    totalGenomes: upload.getUploadedGenomeList(state).length,
+    progress: upload.getOverallProgress(state),
+    complete: upload.isAnalysisComplete(state),
+  })
+)(({ isUploading, totalGenomes, progress, complete }) => {
+  if (isUploading || totalGenomes === 0) return null;
+
+  const { speciation, tasks } = progress;
+
+  const speciationPct = speciation.done / totalGenomes * 100;
+  const tasksPct = tasks.done / tasks.total * 100;
+
+  if (complete) {
+    return <strong>Analysis Complete 🎉</strong>;
+  }
+
+  return (
+    <div className="wgsa-upload-progress-overview">
+      <p>
+        {totalGenomes} file{totalGenomes === 1 ? '' : 's'} uploaded successfully.
+      </p>
+      <ProgressBar label="Speciation" progress={speciationPct} />
+      { speciationPct === 100 &&
+        <ProgressBar label="Tasks" progress={tasksPct} /> }
+    </div>
+  );
+});
+
+const Progress = ({ inProgress, errored, files, analysis, uploadedAt, specieationComplete }) => (
   <div className="wgsa-content-margin wgsa-upload-progress">
     <div>
       <div className="wgsa-section-divider">
-        <h2 className="wgsa-section-title">Files</h2>
+        <h2 className="wgsa-section-title">Progress</h2>
         <ReactCSSTransitionGroup
           className="wgsa-upload-card-list"
           transitionName="wgsa-upload-card"
@@ -50,10 +85,7 @@ const Progress = ({ inProgress, errored, files, analysis, uploadedAt, isUploadin
           <p>
             +{files.pending} file{files.pending === 1 ? '' : 's'}.
           </p> }
-        { !isUploading && totalGenomes > 0 &&
-          <p>
-            {totalGenomes} file{totalGenomes === 1 ? '' : 's'} uploaded successfully.
-          </p> }
+        <Overview />
       </div>
       { files.errored > 0 &&
         <div className="wgsa-section-divider">
@@ -63,7 +95,7 @@ const Progress = ({ inProgress, errored, files, analysis, uploadedAt, isUploadin
       { (!!analysis.length && analysis[0].key !== 'pending') &&
         <div className="wgsa-section-divider">
           <h2 className="wgsa-section-title">Organisms</h2>
-          <Analysis data={analysis} />
+          <Analysis data={analysis} showBreakdown={specieationComplete} />
         </div> }
     </div>
     <div className="wgsa-section-divider">
@@ -79,8 +111,7 @@ function mapStateToProps(state) {
     errored: upload.getErroredUploads(state),
     files: upload.getFileSummary(state),
     analysis: upload.getAnalysisSummary(state),
-    isUploading: upload.isUploading(state),
-    totalGenomes: upload.getUploadedGenomeList(state).length,
+    specieationComplete: upload.isSpecieationComplete(state),
   };
 }
 

@@ -28,6 +28,7 @@ const initialState = {
   queue: [],
   processing: new Set(),
 
+  uploadedAt: null,
   genomes: {},
   analyses: {},
   selectedOrganism: null,
@@ -144,34 +145,50 @@ export default function (state = initialState, { type, payload }) {
     }
     case actions.UPLOAD_ANALYSIS_RECEIVED: {
       const { analyses } = state;
-      const { id, props = {} } = payload;
+      const { id } = payload;
       const analysis = analyses[id] || {};
-      const pending = props.pending ?
-        props.pending.reduce((memo, task) => {
-          memo[task] = null;
-          return memo;
-        }, {}) :
-        {};
       return {
         ...state,
         analyses: {
           ...analyses,
-          [id]: { ...analysis, ...pending, [payload.task]: payload.result },
+          [id]: { ...analysis, [payload.task]: payload.result },
         },
       };
     }
+    case actions.UPLOAD_FETCH_GENOMES.ATTEMPT: {
+      if (state.uploadedAt === payload.uploadedAt) return state;
+      return initialState;
+    }
     case actions.UPLOAD_FETCH_GENOMES.SUCCESS: {
+      const nextGenomes = {};
+      const nextAnalyses = {};
+      for (const genome of payload.result) {
+        nextGenomes[genome.id] = {
+          ...genome,
+          status: statuses.SUCCESS,
+          speciated: genome.analysis && !!genome.analysis.specieator,
+          genomeId: genome.id,
+          analysis: undefined,
+          pending: undefined,
+        };
+        const pendingAnalysis = {};
+        if (genome.pending) {
+          for (const task of genome.pending) {
+            pendingAnalysis[task] = null;
+          }
+        }
+        nextAnalyses[genome.id] = {
+          ...pendingAnalysis,
+          ...genome.analysis,
+          ...(state.analyses[genome.id] || {}),
+        };
+      }
+
       return {
         ...state,
         selectedOrganism: null,
-        genomes: payload.result.reduce((memo, genome) => {
-          memo[genome.id] = {
-            ...genome,
-            status: statuses.SUCCESS,
-            genomeId: genome.id,
-          };
-          return memo;
-        }, {}),
+        genomes: nextGenomes,
+        analyses: nextAnalyses,
       };
     }
     case actions.UPLOAD_ORGANISM_SELECTED:

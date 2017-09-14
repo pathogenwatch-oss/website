@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import Progress from './Progress.react';
 import Summary from './Summary.react';
 
-import { getUploadedFileList, isUploading } from './selectors';
+import { getUploadedFileList, isUploadPending, isSpecieationComplete } from './selectors';
 
 import { receiveUploadAnalysis, fetchGenomes, processFiles } from './actions';
 
@@ -15,7 +15,8 @@ import config from '../../app/config';
 const Component = React.createClass({
 
   componentWillMount() {
-    subscribe(config.clientId, 'analysis', this.props.receiveAnalysis);
+    const { uploadedAt } = this.props;
+    subscribe(config.clientId, `analysis-${uploadedAt}`, this.props.receiveAnalysis);
     const { hasFiles, startUpload, fetch } = this.props;
     if (hasFiles) {
       startUpload();
@@ -25,7 +26,9 @@ const Component = React.createClass({
   },
 
   componentDidUpdate(previous) {
-    if (previous.isUploading && !this.props.isUploading) {
+    const uploadComplete = (previous.isUploading && !this.props.isUploading);
+    const specieationComplete = (previous.isSpecieationComplete === false && this.props.isSpecieationComplete);
+    if (uploadComplete || specieationComplete) {
       this.props.fetch();
     }
   },
@@ -49,7 +52,8 @@ function mapStateToProps(state, { match }) {
   const { uploadedAt } = match.params;
   return {
     uploadedAt,
-    isUploading: isUploading(state),
+    isUploading: isUploadPending(state),
+    isSpecieationComplete: isSpecieationComplete(state),
     hasFiles: getUploadedFileList(state).length > 0,
   };
 }
