@@ -10,16 +10,16 @@ import ST from './analysis/ST.react';
 
 function getAMROverview({ antibiotics }) {
   const resistances = [];
-  for (const key of Object.keys(antibiotics)) {
-    if (antibiotics[key].state !== 'NOT_FOUND') {
-      resistances.push(key);
+  for (const { name, state } of antibiotics) {
+    if (state !== 'NOT_FOUND') {
+      resistances.push(name);
     }
   }
   return resistances.join(', ');
 }
 
 export default ({ genome }) => {
-  const { uploadedAt, analysis = {}, country, year } = genome;
+  const { uploadedAt, analysis = {}, country } = genome;
   const { specieator, mlst, paarsnp, genotyphi, ngmast } = analysis;
   const date = getFormattedDateString(genome);
   return (

@@ -31,15 +31,15 @@ export default ({ result }) => (
         <table className="wgsa-mlst-profile">
           <thead>
             <tr>
-              { Object.keys(result.alleles).map(gene => <th key={gene}>{gene}</th>) }
+              { result.alleles.map(({ gene }) => <th key={gene}>{gene}</th>) }
             </tr>
           </thead>
           <tbody>
             <tr>
-              { Object.keys(result.alleles).map(gene =>
+              { result.alleles.map(({ gene, hits }) =>
                 <td key={gene}>
-                  {result.alleles[gene].length ?
-                    result.alleles[gene].map(({ id }) => <Hit key={id} id={id} />) :
+                  {hits.length ?
+                    hits.map(id => <Hit key={id} id={id} />) :
                     <span title="Not Found">&mdash;</span>
                   }
                 </td>
