@@ -3,7 +3,17 @@ const Genome = require('models/genome');
 const summaryFields = [
   { field: 'organismId',
     aggregation: () => [
-      { $group: { _id: { label: '$analysis.specieator.organismName', key: '$organismId' }, count: { $sum: 1 } } },
+      { $group: { _id: { label: '$analysis.speciator.organismName', key: '$organismId' }, count: { $sum: 1 } } },
+    ],
+  },
+  { field: 'speciesId',
+    aggregation: () => [
+      { $group: { _id: { label: '$analysis.speciator.speciesName', key: '$analysis.speciator.speciesId' }, count: { $sum: 1 } } },
+    ],
+  },
+  { field: 'genusId',
+    aggregation: () => [
+      { $group: { _id: { label: '$analysis.speciator.genusName', key: '$analysis.speciator.genusId' }, count: { $sum: 1 } } },
     ],
   },
   { field: 'country' },
