@@ -19,7 +19,7 @@ module.exports.setMaxWorkers = function (max = 1) {
 
 const queues = {
   tasks: 'tasks',
-  specieator: 'specieator',
+  speciator: 'speciator',
 };
 
 module.exports.queues = queues;

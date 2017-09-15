@@ -15,7 +15,7 @@ if (queue && !(queue in taskQueue.queues)) {
 
 taskQueue.setMaxWorkers(workers);
 
-const { tasks, specieator } = taskQueue.queues;
+const { tasks, speciator } = taskQueue.queues;
 
 function subscribeToQueues() {
   if (!queue || queue === 'tasks') {
@@ -28,8 +28,8 @@ function subscribeToQueues() {
     );
   }
 
-  if (!queue || queue === 'specieator') {
-    taskQueue.dequeue(specieator, ({ genomeId, fileId, uploadedAt, task, version, clientId }) =>
+  if (!queue || queue === 'speciator') {
+    taskQueue.dequeue(speciator, ({ genomeId, fileId, uploadedAt, task, version, clientId }) =>
       request('tasks', 'run', { fileId, task, version })
         .then(result => {
           LOGGER.info('results', genomeId, task, version, result);

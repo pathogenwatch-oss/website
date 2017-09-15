@@ -29,7 +29,7 @@ module.exports = ({ timeout$, stream, metadata, reference, user, sessionID, clie
       .then(({ fileId }) =>
         createGenomeDocument(metadata, { fileId, reference, user, sessionID })
           .then(genomeId => {
-            request('genome', 'specieate', { genomeId, fileId, uploadedAt: metadata.uploadedAt, clientId });
+            request('genome', 'speciate', { genomeId, fileId, uploadedAt: metadata.uploadedAt, clientId });
             return { id: genomeId };
           })
       )

@@ -87,7 +87,7 @@ schema.statics.addAnalysisResult = function (_id, task, result) {
     $set: { [`analysis.${task.toLowerCase()}`]: result },
   };
 
-  if (task === 'specieator') {
+  if (task === 'speciator') {
     update.$set.organismId = result.organismId;
   }
 

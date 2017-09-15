@@ -14,7 +14,7 @@ module.exports = function (props) {
         Genome.getFilterQuery(props),
         { name: 1,
           organismId: 1,
-          'analysis.specieator.organismName': 1,
+          'analysis.speciator.organismName': 1,
           'analysis.mlst.st': 1,
           date: 1,
           country: 1,
@@ -31,8 +31,8 @@ module.exports = function (props) {
       .lean()
       .then(genomes => genomes.map(genome => {
         const { analysis = {} } = genome;
-        if (analysis.specieator) {
-          genome.organismName = analysis.specieator.organismName;
+        if (analysis.speciator) {
+          genome.organismName = analysis.speciator.organismName;
         }
         if (analysis.mlst) {
           genome.st = analysis.mlst.st;

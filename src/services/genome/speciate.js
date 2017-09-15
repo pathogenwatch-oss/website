@@ -1,8 +1,8 @@
 const { request } = require('services/bus');
 
-const { getSpecieatorTask } = require('../../manifest');
+const { getSpeciatorTask } = require('../../manifest');
 
 module.exports = function ({ genomeId, fileId, uploadedAt, clientId }) {
-  const tasks = [ getSpecieatorTask() ];
+  const tasks = [ getSpeciatorTask() ];
   return request('tasks', 'enqueue', { genomeId, fileId, uploadedAt, clientId, tasks });
 };

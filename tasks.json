@@ -1,359 +1,357 @@
 {
-  "all": [
-    { "task": "metrics", "version": "v1" }
+  "138": [
+    { "task": "mlst", "version": "v4" }
   ],
-
+  "159": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "171": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "196": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "197": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "198": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "201": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "206": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "210": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "213": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "222": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "234": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "287": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "294": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "470": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "480": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "482": [
+    { "task": "mlst", "version": "v4" }
+  ],
   "485": [
     { "task": "paarsnp", "version": "v3" },
     { "task": "ngmast", "version": "v1" }
   ],
+  "504": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "517": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "546": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "550": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "562": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "571": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "573": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "629": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "633": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "635": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "642": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "662": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "666": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "670": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "672": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "727": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "747": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "774": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "784": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "837": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "870": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "948": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "953": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "1255": [
+    { "task": "mlst", "version": "v4" }
+  ],
   "1280": [
-    { "task": "mlst", "version": "v3" },
+    { "task": "mlst", "version": "v4" },
     { "task": "paarsnp", "version": "v3" }
   ],
+  "1282": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "1283": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "1303": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "1307": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "1308": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "1311": [
+    { "task": "mlst", "version": "v4" }
+  ],
   "1313": [
-    { "task": "mlst", "version": "v3" },
+    { "task": "mlst", "version": "v4" },
     { "task": "paarsnp", "version": "v3" }
+  ],
+  "1314": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "1329": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "1349": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "1351": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "1352": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "1396": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "1402": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "1423": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "1464": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "1491": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "1504": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "1624": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "1639": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "1717": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "2099": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "2100": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "2104": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "2109": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "2110": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "2116": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "2371": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "2751": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "5476": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "5482": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "5722": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "28035": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "28080": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "28105": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "28196": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "28251": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "28450": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "28898": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "28901": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "28903": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "29486": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "29521": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "29574": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "33970": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "34085": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "36809": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "38293": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "38323": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "40324": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "51291": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "52443": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "52584": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "69966": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "75658": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "75985": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "79923": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "84377": [
+    { "task": "mlst", "version": "v4" }
+  ],
+  "87882": [
+    { "task": "mlst", "version": "v4" }
   ],
   "90370": [
     { "task": "paarsnp", "version": "v3" },
-    { "task": "genotyphi", "version": "v2" }
-  ],
-
-  "138": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "159": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "171": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "196": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "197": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "198": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "201": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "206": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "210": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "213": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "222": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "234": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "287": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "294": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "470": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "480": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "482": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "504": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "517": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "546": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "550": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "562": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "571": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "573": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "629": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "633": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "635": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "642": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "662": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "666": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "670": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "672": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "727": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "747": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "774": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "784": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "837": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "870": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "948": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "953": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "1255": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "1282": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "1283": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "1303": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "1307": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "1308": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "1311": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "1314": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "1329": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "1349": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "1351": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "1352": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "1396": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "1402": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "1423": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "1464": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "1491": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "1504": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "1624": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "1639": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "1717": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "2099": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "2100": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "2104": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "2109": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "2110": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "2116": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "2371": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "2751": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "5476": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "5482": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "5722": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "28035": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "28080": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "28105": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "28196": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "28251": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "28450": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "28898": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "28901": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "28903": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "29486": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "29521": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "29574": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "33970": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "34085": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "36809": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "38293": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "38323": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "40324": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "51291": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "52443": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "52584": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "69966": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "75658": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "75985": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "79923": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "84377": [
-    { "task": "mlst", "version": "v3" }
-  ],
-  "87882": [
-    { "task": "mlst", "version": "v3" }
+    { "task": "genotyphi", "version": "v3" }
   ],
   "96345": [
-    { "task": "mlst", "version": "v3" }
+    { "task": "mlst", "version": "v4" }
   ],
   "104267": [
-    { "task": "mlst", "version": "v3" }
+    { "task": "mlst", "version": "v4" }
   ],
   "104628": [
-    { "task": "mlst", "version": "v3" }
+    { "task": "mlst", "version": "v4" }
   ],
   "132406": [
-    { "task": "mlst", "version": "v3" }
+    { "task": "mlst", "version": "v4" }
   ],
   "260714": [
-    { "task": "mlst", "version": "v3" }
+    { "task": "mlst", "version": "v4" }
   ],
   "283734": [
-    { "task": "mlst", "version": "v3" }
+    { "task": "mlst", "version": "v4" }
   ],
   "315405": [
-    { "task": "mlst", "version": "v3" }
+    { "task": "mlst", "version": "v4" }
   ],
   "413496": [
-    { "task": "mlst", "version": "v3" }
+    { "task": "mlst", "version": "v4" }
   ],
   "444888": [
-    { "task": "mlst", "version": "v3" }
+    { "task": "mlst", "version": "v4" }
   ],
   "746128": [
-    { "task": "mlst", "version": "v3" }
+    { "task": "mlst", "version": "v4" }
   ],
   "751907": [
-    { "task": "mlst", "version": "v3" }
+    { "task": "mlst", "version": "v4" }
   ],
   "1287055": [
-    { "task": "mlst", "version": "v3" }
+    { "task": "mlst", "version": "v4" }
   ],
   "1855823": [
-    { "task": "mlst", "version": "v3" }
+    { "task": "mlst", "version": "v4" }
+  ],
+  "all": [
+    { "task": "metrics", "version": "v1" }
   ]
 }

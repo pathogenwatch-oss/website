@@ -65,7 +65,7 @@
     "reference": "eval $npm_package_startcmd bin/create-reference-collection.js",
     "aggregator": "eval $npm_package_startcmd microservices/bootstrap.js aggregator | bunyan -o short",
     "runner": "eval $npm_package_startcmd microservices/bootstrap.js runner | bunyan -o short",
-    "specieator": "eval $npm_package_startcmd microservices/bootstrap.js runner --queue=specieator | bunyan -o short",
+    "speciator": "eval $npm_package_startcmd microservices/bootstrap.js runner --queue=speciator | bunyan -o short",
     "tasks": "eval $npm_package_startcmd microservices/bootstrap.js runner --queue=tasks | bunyan -o short",
     "repost": "eval $npm_package_startcmd bin/repost-aggregator-errors.js",
     "metadata": "eval $npm_package_startcmd bin/update-collection-genomes.js",
