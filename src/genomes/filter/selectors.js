@@ -31,7 +31,7 @@ export const getFilterSummary = createSelector(
   getDeployedOrganismIds,
   (summary, filterState, deployedOrganisms) => {
     const {
-      loading, organismId, country, type, uploadedAt, date,
+      loading, organismId, speciesId, genusId, country, type, uploadedAt, date,
     } = summary;
     const sequenceType = summary['analysis.mlst.st'] || {};
 
@@ -78,6 +78,28 @@ export const getFilterSummary = createSelector(
         ),
         'novel',
         'value'
+      ),
+      speciesId: sortBy(
+        Object.keys(speciesId).map(
+          value => ({
+            value,
+            label: speciesId[value].label,
+            count: speciesId[value].count,
+            active: filterState.speciesId === value,
+          })
+        ),
+        'label'
+      ),
+      genusId: sortBy(
+        Object.keys(genusId).map(
+          value => ({
+            value,
+            label: genusId[value].label,
+            count: genusId[value].count,
+            active: filterState.genusId === value,
+          })
+        ),
+        'label'
       ),
       country: sortBy(
         Object.keys(country).map(
