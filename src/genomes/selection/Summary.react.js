@@ -30,12 +30,15 @@ const Summary = React.createClass({
     const { size, toggle } = this.props;
     return (
       <div className="wgsa-selection-summary" onKeyUp={this.onKeyUp}>
-        <button className="mdl-chip mdl-chip--contact mdl-chip--active" onClick={toggle}>
-          <span ref={el => { this.sonarEl = el; }} className="mdl-chip__contact">
-            {size}
+        <button className="mdl-chip mdl-chip--contact" onClick={toggle}>
+          <span className="mdl-chip__text">
+            Download
           </span>
           <span className="mdl-chip__text">
             Create Collection
+          </span>
+          <span ref={el => { this.sonarEl = el; }} className="mdl-chip__contact">
+            {size}
           </span>
         </button>
         <SelectionDropdown />

@@ -57,3 +57,27 @@
   padding: 16px;
   border-radius: 2px;
 }
+
+.wgsa-selection-summary .mdl-chip {
+  padding-right: 0;
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+.wgsa-selection-summary .mdl-chip__contact {
+  margin-right: 0;
+}
+
+.wgsa-selection-summary .mdl-chip__text {
+  padding-left: 24px;
+  padding-right: 16px;
+  border-radius: 0 16px 16px 0;
+  background: #673c90;
+  color: #fff;
+  font-weight: 500;
+  margin-left: -16px;
+}
+
+.mdl-chip__text:nth-of-type(odd) {
+  background: #3c7383;
+}
