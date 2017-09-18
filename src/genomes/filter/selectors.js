@@ -36,7 +36,6 @@ export const getFilterSummary = createSelector(
     const sequenceType = summary['analysis.mlst.st'] || {};
 
     const wgsaOrganisms = [];
-    const otherOrganisms = [];
 
     for (const value of Object.keys(organismId)) {
       if (deployedOrganisms.has(value)) {
@@ -48,12 +47,6 @@ export const getFilterSummary = createSelector(
           count: organismId[value].count,
           active: filterState.organismId === value,
         });
-      } else {
-        otherOrganisms.push({
-          value,
-          active: filterState.organismId === value,
-          ...organismId[value],
-        });
       }
     }
 
@@ -64,7 +57,6 @@ export const getFilterSummary = createSelector(
         values: [ filterState.minDate, filterState.maxDate ],
       } : null,
       wgsaOrganisms: sortBy(wgsaOrganisms, 'title'),
-      otherOrganisms: sortBy(otherOrganisms, 'label'),
       sequenceTypes: sortBy(
         Object.keys(sequenceType).map(
           value => ({

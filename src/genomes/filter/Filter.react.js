@@ -29,13 +29,6 @@ const Filter = ({ isActive, filterSummary, textValue, updateFilter, clearFilter 
       updateFilter={updateFilter}
     />
     <FilterSection
-      filterKey="organismId"
-      heading="Other Organisms"
-      icon="bug_report"
-      summary={filterSummary.otherOrganisms}
-      updateFilter={updateFilter}
-    />
-    <FilterSection
       filterKey="speciesId"
       heading="Species"
       icon="bug_report"
