@@ -1,0 +1,47 @@
+.wgsa-modal-container {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.wgsa-modal {
+  position: relative;
+  width: 80%;
+  background-color: #fff;
+  color: rgba(0, 0, 0, 0.54);
+  max-width: 800px;
+  transform: none;
+  height: 80%;
+  max-height: 800px;
+  display: flex;
+  flex-direction: column;
+}
+
+.wgsa-modal > header {
+  align-items: center;
+  background: #222;
+  color: #fff;
+  display: flex;
+  min-height: 48px;
+  height: 48px;
+  padding-top: 2px;
+  padding-left: 16px;
+  padding-right: 8px;
+  justify-content: space-between;
+  font-weight: 500;
+}
+
+.wgsa-modal > header + * {
+  flex-grow: 1;
+}
+
+.wgsa-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+}

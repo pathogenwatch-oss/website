@@ -6,20 +6,24 @@ export default React.createClass({
 
   getInitialState() {
     return {
-      antibiotic: null,
+      antibiotic: undefined,
     };
   },
 
   getTableHeaders() {
     const { antibiotics = [] } = this.props;
-    const { antibiotic } = this.state;
-    return antibiotics.map(({ name, fullName }) =>
+    const { antibiotic = {} } = this.state;
+    return antibiotics.map((ab) =>
       <th
-        key={name}
-        title={fullName}
-        className={classnames({ active: antibiotic && antibiotic.name === name })}
+        key={ab.name}
+        title={ab.fullName}
+        className={classnames(
+          'wgsa-amr',
+          antibiotic.name === ab.name ? 'active' : 'inactive'
+        )}
+        onClick={() => this.setState({ antibiotic: ab })}
       >
-        {name}
+        {ab.name}
       </th>
     );
   },
@@ -43,9 +47,19 @@ export default React.createClass({
     });
   },
 
+  displayMechanisms(result) {
+    const { antibiotic } = this.state;
+
+    if (!antibiotic) {
+      return <em>(Select Antibiotic)</em>;
+    }
+
+    const mechanisms = antibiotic.mechanisms.filter(m => result.includes(m)).join(', ');
+    return mechanisms || ' ';
+  },
+
   render() {
     const { __v, snp = [], paar = [] } = this.props;
-    const { antibiotic } = this.state;
     return (
       <Section heading="PAARSNP" version={__v}>
         <dl>
@@ -63,14 +77,12 @@ export default React.createClass({
               </tbody>
             </table>
           </Metadata>
-          { antibiotic &&
-            <Metadata label="SNPs">
-              {antibiotic.mechanisms.filter(m => snp.includes(m)).join(', ')}
-            </Metadata> }
-          { antibiotic &&
-            <Metadata label="Genes">
-              {antibiotic.mechanisms.filter(m => paar.includes(m)).join(', ')}
-            </Metadata> }
+          <Metadata label="SNPs">
+            { this.displayMechanisms(snp) }
+          </Metadata>
+          <Metadata label="Genes">
+            { this.displayMechanisms(paar) }
+          </Metadata>
         </dl>
       </Section>
     );
