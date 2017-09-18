@@ -5,11 +5,13 @@ import { Link } from 'react-router-dom';
 
 const className = 'cgps-avatar cgps-avatar--top wgsa-account-header';
 
+const defaultImage = '/images/user-signed-in.svg';
+
 export default function AvatarLink({ user }) {
   if (user) {
     return (
       <Link className={className} to="/account" >
-        <img src={user.photo} className="cgps-avatar__image" />
+        <img src={user.photo || defaultImage} className="cgps-avatar__image" />
         <div className="cgps-avatar__name" title={user.name}>{user.name}</div>
         <div className="cgps-avatar__contact" title={user.email}>{user.email}</div>
       </Link>
