@@ -13,6 +13,11 @@ const LIMIT = 5;
 const speciatorQueue = 'speciator';
 
 function getImageNames(queue) {
+  if (!queue) {
+    const { task, version } = getSpeciatorTask();
+    return getImages().concat(getImageName(task, version));
+  }
+
   if (queue === speciatorQueue) {
     const { task, version } = getSpeciatorTask();
     return [ getImageName(task, version) ];
@@ -28,7 +33,7 @@ function pullImage(name) {
     const p = dockerPull(name, options, err => (err ? reject(err) : resolve()));
     p.on('progress', () => {
       if (p._layers !== p.layers) {
-        LOGGER.info(`${name} pulled %d new layers and %d/%d bytes`, p.layers, p.transferred, p.length)
+        LOGGER.info(`${name} pulled %d new layers and %d/%d bytes`, p.layers, p.transferred, p.length);
       }
       p._layers = p.layers;
     });
