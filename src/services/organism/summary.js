@@ -6,7 +6,7 @@ const collectionsFields = [ { field: 'organismId' } ];
 const genomeFields = [
   { field: 'organismId',
     aggregation: () => [
-      { $group: { _id: { label: '$analysis.specieator.organismName', key: '$organismId' }, count: { $sum: 1 } } },
+      { $group: { _id: { label: '$analysis.speciator.organismName', key: '$organismId' }, count: { $sum: 1 } } },
     ],
   },
 ];

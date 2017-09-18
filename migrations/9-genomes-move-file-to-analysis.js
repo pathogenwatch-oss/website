@@ -35,7 +35,7 @@ module.exports.up = function (done) {
                 gcContent: metrics.gcContent,
                 contigSums: metrics.sumsOfNucleotidesInDnaStrings,
               },
-              'analysis.specieator': { organismName, organismId },
+              'analysis.speciator': { organismName, organismId },
             },
               $unset: { _file: 1 },
             }

@@ -1,6 +1,6 @@
 const LOGGER = require('utils/logging').createLogger('runner');
 
-const { getImages, getImageName, getSpecieatorTask } = require('manifest.js');
+const { getImages, getImageName, getSpeciatorTask } = require('manifest.js');
 const { tasks } = require('configuration.js');
 const { username = 'anon', password = '' } = tasks.registry || {};
 
@@ -10,11 +10,11 @@ const mapLimit = require('promise-map-limit');
 
 const LIMIT = 5;
 
-const specieatorQueue = 'specieator';
+const speciatorQueue = 'speciator';
 
 function getImageNames(queue) {
-  if (queue === specieatorQueue) {
-    const { task, version } = getSpecieatorTask();
+  if (queue === speciatorQueue) {
+    const { task, version } = getSpeciatorTask();
     return [ getImageName(task, version) ];
   }
 

@@ -129,23 +129,23 @@ router.get('/analysis/mlst', (req, res) => {
   downloadAnalysisResults(ids, task, projection, transformer, options, res);
 });
 
-router.get('/analysis/specieator', (req, res) => {
+router.get('/analysis/speciator', (req, res) => {
   const options = req.query;
   const { ids } = options;
-  const task = 'specieator';
-  const projection = { name: 1, 'analysis.specieator': 1 };
+  const task = 'speciator';
+  const projection = { name: 1, 'analysis.speciator': 1 };
   const transformer = ({ _id, name, analysis }) => ({
     id: _id.toString(),
     name,
-    version: analysis.specieator.__v,
-    organismName: analysis.specieator.organismName,
-    organismId: analysis.specieator.organismId,
-    speciesId: analysis.specieator.speciesId,
-    genusId: analysis.specieator.genusId,
-    referenceId: analysis.specieator.referenceId,
-    matchingHashes: analysis.specieator.matchingHashes,
-    pValue: analysis.specieator.pValue,
-    mashDistance: analysis.specieator.mashDistance,
+    version: analysis.speciator.__v,
+    organismName: analysis.speciator.organismName,
+    organismId: analysis.speciator.organismId,
+    speciesId: analysis.speciator.speciesId,
+    genusId: analysis.speciator.genusId,
+    referenceId: analysis.speciator.referenceId,
+    matchingHashes: analysis.speciator.matchingHashes,
+    pValue: analysis.speciator.pValue,
+    mashDistance: analysis.speciator.mashDistance,
   });
   downloadAnalysisResults(ids, task, projection, transformer, options, res);
 });

@@ -4,12 +4,12 @@ const mapLimit = require('promise-map-limit');
 
 require('services');
 const Genome = require('models/genome');
-const submit = require('services/genome/specieate');
+const submit = require('services/genome/speciate');
 
 const limit = 1000;
 
 function parseQuery() {
-  const { query = '{ "analysis.specieator": { "$exists": false } }' } = argv.opts;
+  const { query = '{ "analysis.speciator": { "$exists": false } }' } = argv.opts;
   return JSON.parse(query);
 }
 

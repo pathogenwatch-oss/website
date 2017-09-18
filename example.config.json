@@ -68,8 +68,8 @@
   "wikiLocation": "https://raw.githubusercontent.com/wiki/ImperialCollegeLondon/wgsa-documentation",
   "tasks": {
     "timeout": 300000,
-    "specieator": {
-      "version": "1"
+    "speciation": {
+      "task": "speciator", "version": "v3"
     },
     "retries": 3,
     "registry": {
