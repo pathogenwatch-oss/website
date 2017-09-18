@@ -152,18 +152,18 @@ export const getAnalysisSummary = createSelector(
         ...(genome.analysis || {}),
         ...(analyses[genome.id] || {}),
       };
-      if (!analysis.specieator) {
+      if (!analysis.speciator) {
         pending++;
       } else {
-        summary[analysis.specieator.organismId] =
-          (summary[analysis.specieator.organismId] || []).concat(analysis);
+        summary[analysis.speciator.organismId] =
+          (summary[analysis.speciator.organismId] || []).concat(analysis);
       }
     }
     const getColour = getColourGenerator();
     const result = [];
     for (const organismId of Object.keys(summary)) {
       const organismAnalyses = summary[organismId];
-      const label = getOrganismName(organismId, organismAnalyses[0].specieator.organismName);
+      const label = getOrganismName(organismId, organismAnalyses[0].speciator.organismName);
       const colour = getColour(label);
       result.push({
         key: organismId,
@@ -241,7 +241,7 @@ export const getOverallProgress = createSelector(
       for (const task of Object.keys(analyses[id])) {
         const isPending = analyses[id][task] === null;
 
-        if (task === 'specieator') {
+        if (task === 'speciator') {
           speciation.total++;
           if (isPending) speciation.pending++;
         } else if (id in genomes && genomes[id].speciated) {

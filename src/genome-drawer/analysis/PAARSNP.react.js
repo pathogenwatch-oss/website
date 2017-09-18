@@ -17,7 +17,7 @@ export default React.createClass({
       <th
         key={name}
         title={fullName}
-        className={classnames({ active: antibiotic.name === name })}
+        className={classnames({ active: antibiotic && antibiotic.name === name })}
       >
         {name}
       </th>

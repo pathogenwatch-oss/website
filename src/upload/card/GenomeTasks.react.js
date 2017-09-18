@@ -2,7 +2,7 @@ import React from 'react';
 
 import { CardMetadata } from '../../card';
 
-const ignoredTasks = new Set([ 'specieator', 'metrics' ]);
+const ignoredTasks = new Set([ 'speciator', 'metrics' ]);
 
 function showResult(task, result) {
   switch (task) {

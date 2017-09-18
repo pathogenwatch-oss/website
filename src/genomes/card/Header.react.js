@@ -10,7 +10,7 @@ const stopPropagation = e => e.stopPropagation();
 
 const Header = ({ genome, onClick }) => {
   const { name, organismId, analysis = {} } = genome;
-  const { organismName } = analysis.specieator || {};
+  const { organismName } = analysis.speciator || {};
   return (
     <header className="wgsa-card-header" onClick={onClick}>
       <h2 className="wgsa-card-title wgsa-overflow-fade" title={name}>{name}</h2>

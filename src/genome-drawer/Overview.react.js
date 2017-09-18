@@ -20,17 +20,17 @@ function getAMROverview({ antibiotics }) {
 
 export default ({ genome }) => {
   const { uploadedAt, analysis = {}, country } = genome;
-  const { specieator, mlst, paarsnp, genotyphi, ngmast } = analysis;
+  const { speciator, mlst, paarsnp, genotyphi, ngmast } = analysis;
   const date = getFormattedDateString(genome);
   return (
     <div className="wgsa-genome-overview">
       <div className="wgsa-analysis-section">
         <dl>
           <Metadata label="Organism">
-            { specieator ?
+            { speciator ?
               <FormattedName fullName
-                organismId={specieator.organismId}
-                title={specieator.organismName}
+                organismId={speciator.organismId}
+                title={speciator.organismName}
               /> :
               <em>Pending</em>
             }

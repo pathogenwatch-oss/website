@@ -166,7 +166,7 @@ export default function (state = initialState, { type, payload }) {
         nextGenomes[genome.id] = {
           ...genome,
           status: statuses.SUCCESS,
-          speciated: genome.analysis && !!genome.analysis.specieator,
+          speciated: genome.analysis && !!genome.analysis.speciator,
           genomeId: genome.id,
           analysis: undefined,
           pending: undefined,
