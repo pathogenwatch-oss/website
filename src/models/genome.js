@@ -42,6 +42,8 @@ const schema = new Schema({
 schema.index({ name: 1 });
 schema.index({ public: 1, reference: 1 });
 schema.index({ 'analysis.mlst.st': 1 });
+schema.index({ 'analysis.speciator.speciesId': 1 });
+schema.index({ 'analysis.speciator.genusId': 1 });
 
 function toObject(genome, user = {}) {
   const { id } = user;
@@ -157,7 +159,7 @@ schema.statics.getPrefilterCondition = function ({ user, query = {}, sessionID }
 schema.statics.getFilterQuery = function (props) {
   const { user, query = {}, sessionID } = props;
   const { searchText } = query;
-  const { organismId, type, country, minDate, maxDate, uploadedAt, sequenceType } = query;
+  const { organismId, speciesId, genusId, type, country, minDate, maxDate, uploadedAt, sequenceType } = query;
 
   const findQuery = this.getPrefilterCondition(props);
 
@@ -167,6 +169,14 @@ schema.statics.getFilterQuery = function (props) {
 
   if (organismId) {
     findQuery.organismId = organismId;
+  }
+
+  if (speciesId) {
+    findQuery['analysis.speciator.speciesId'] = speciesId;
+  }
+
+  if (genusId) {
+    findQuery['analysis.speciator.genusId'] = genusId;
   }
 
   if (country) {

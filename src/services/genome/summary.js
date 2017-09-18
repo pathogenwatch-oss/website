@@ -1,9 +1,23 @@
+const organisms = require('wgsa-front-end/universal/organisms');
 const Genome = require('models/genome');
+
+const wgsaOrganisms = organisms.map(_ => _.id);
 
 const summaryFields = [
   { field: 'organismId',
     aggregation: () => [
-      { $group: { _id: { label: '$analysis.specieator.organismName', key: '$organismId' }, count: { $sum: 1 } } },
+      { $match: { organismId: { $in: wgsaOrganisms } } },
+      { $group: { _id: { label: '$analysis.speciator.organismName', key: '$organismId' }, count: { $sum: 1 } } },
+    ],
+  },
+  { field: 'speciesId',
+    aggregation: () => [
+      { $group: { _id: { label: '$analysis.speciator.speciesName', key: '$analysis.speciator.speciesId' }, count: { $sum: 1 } } },
+    ],
+  },
+  { field: 'genusId',
+    aggregation: () => [
+      { $group: { _id: { label: '$analysis.speciator.genusName', key: '$analysis.speciator.genusId' }, count: { $sum: 1 } } },
     ],
   },
   { field: 'country' },
@@ -36,7 +50,7 @@ const summaryFields = [
   { field: 'date', range: true, queryKeys: [ 'minDate', 'maxDate' ] },
   { field: 'analysis.mlst.st',
     aggregation: ({ query = {} }) => {
-      if (!query.organismId) return null;
+      if (!query.organismId && !query.speciesId && !query.genusId) return null;
       return [
         { $group: { _id: '$analysis.mlst.st', count: { $sum: 1 } } },
       ];
