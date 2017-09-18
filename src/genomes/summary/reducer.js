@@ -4,6 +4,8 @@ const initialState = {
   total: 0,
   visible: 0,
   organismId: {},
+  speciesId: {},
+  genusId: {},
   country: {},
   type: {},
   uploadedAt: {},
