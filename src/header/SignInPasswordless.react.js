@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { showToast } from '../toast';
 import { sendSignInToken } from './api';
 
+import Spinner from '../components/Spinner.react';
+
 const SignInPasswordless = React.createClass({
 
   propTypes: {
@@ -12,6 +14,7 @@ const SignInPasswordless = React.createClass({
 
   getInitialState() {
     return {
+      waiting: false,
       showControls: false,
       email: '',
     };
@@ -37,12 +40,14 @@ const SignInPasswordless = React.createClass({
     e.preventDefault();
     const { email } = this.state;
     if (!email.length) return;
+    this.setState({ waiting: true });
     sendSignInToken(email)
       .then(() => {
-        this.setState({ showControls: false });
+        this.setState({ showControls: false, waiting: false });
         this.props.onRequestSent(`Your sign-in link has been sent to ${email}.`);
       })
       .catch(error => {
+        this.setState({ waiting: false });
         console.error(error);
         this.props.onRequestFailed('Something went wrong, please try again later.');
       });
@@ -63,10 +68,13 @@ const SignInPasswordless = React.createClass({
             placeholder="Email address"
             onChange={this.emailInputChange}
             onKeyUp={this.emailInputKeyUp}
+            disabled={this.state.waiting}
             ref={el => { this.emailInput = el; }}
           />
           <button type="submit">
-            <i className="material-icons">send</i>
+            { this.state.waiting ?
+              <Spinner singleColour /> :
+              <i className="material-icons">send</i> }
           </button>
         </form>
       );

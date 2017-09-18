@@ -115,3 +115,10 @@
   padding-right: 6px;
   box-sizing: border-box;
 }
+
+.cgps-login-controls .mdl-spinner__layer-1,
+.cgps-login-controls .mdl-spinner__layer-2,
+.cgps-login-controls .mdl-spinner__layer-3,
+.cgps-login-controls .mdl-spinner__layer-4 {
+  border-color: #87c7a6;
+}
