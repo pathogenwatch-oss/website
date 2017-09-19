@@ -1,3 +1,5 @@
+import './styles.css';
+
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -19,10 +21,10 @@ const ListItem = ({ item }) => {
 };
 
 const Header = () => (
-  <div className="wgsa-genome-list-item wgsa-genome-list-header wgsa-content-margin-right">
+  <header className="wgsa-genome-list-item wgsa-genome-list-header">
     <h3 className="wgsa-list-header-cell">Date Uploaded</h3>
     <h3 className="wgsa-list-header-cell">Files</h3>
-  </div>
+  </header>
 );
 
 const Previous = React.createClass({
@@ -35,7 +37,7 @@ const Previous = React.createClass({
   render() {
     const { loading, error, uploads } = this.props;
     return (
-      <div className="wgsa-hipster-style wgsa-filterable-view">
+      <div className="wgsa-hipster-style wgsa-previous-uploads">
         <Summary previous />
         { !!uploads.length ?
           <Grid
@@ -44,7 +46,6 @@ const Previous = React.createClass({
             items={uploads}
             columnCount={1}
             rowHeight={40}
-            rightMargin={48}
             header={<Header />}
             headerHeight={25}
           /> :
