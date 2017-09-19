@@ -44,6 +44,7 @@ schema.index({ public: 1, reference: 1 });
 schema.index({ 'analysis.mlst.st': 1 });
 schema.index({ 'analysis.speciator.speciesId': 1 });
 schema.index({ 'analysis.speciator.genusId': 1 });
+schema.index({ 'analysis.speciator.organismName': 1 });
 
 function toObject(genome, user = {}) {
   const { id } = user;
@@ -220,7 +221,7 @@ schema.statics.getSummary = function (fields, props) {
 };
 
 const sortKeys = new Set([
-  'createdAt', 'name', 'organismId', 'country', 'date', 'type', 'st',
+  'createdAt', 'name', 'organism', 'country', 'date', 'type', 'st',
 ]);
 schema.statics.getSort = function (sort = 'createdAt-') {
   const sortOrder = (sort.slice(-1) === '-') ? -1 : 1;
@@ -234,6 +235,10 @@ schema.statics.getSort = function (sort = 'createdAt-') {
 
   if (sortKey === 'st') {
     return { 'analysis.mlst.st': sortOrder };
+  }
+
+  if (sortKey === 'organism') {
+    return { 'analysis.speciator.organismName': sortOrder };
   }
 
   return { [sortKey]: sortOrder };
