@@ -85,22 +85,22 @@ router.get('/genome-archive/:id', (req, res, next) => {
 });
 
 function downloadAnalysisResults(ids, task, projection, transformer, options = {}, response) {
-  const { header = true, quotedString = true } = options;
+  const { header = true, quotedString = true, user, sessionID, organismId } = options;
 
   if (!ids || typeof(ids) !== 'string' || ids === '') {
     LOGGER.error('Missing ids');
     return response.sendStatus(400);
   }
 
-  const query = {
-    _id: { $in: ids.split(' ') },
-    [`analysis.${task}`]: { $exists: true },
-  };
+  const query = Object.assign(
+    { _id: { $in: ids.split(',') }, [`analysis.${task}`]: { $exists: true } },
+    Genome.getPrefilterCondition({ user, sessionID })
+  );
   const cursor = Genome.find(query, projection);
+  const filename = `wgsa-${organismId}-${task}-${Date.now()}.csv`;
 
-  response.setHeader('Content-disposition', `attachment; filename=${task.csv}`);
-  response.writeHead(200, { 'Content-Type': 'text/csv' });
-  response.flushHeaders();
+  response.setHeader('Content-Disposition', `attachment; filename=${filename}`);
+  response.setHeader('Content-Type', 'text/csv');
 
   return cursor
     .cursor()
@@ -109,29 +109,52 @@ function downloadAnalysisResults(ids, task, projection, transformer, options = {
     .pipe(response);
 }
 
+router.get('/analysis/:task', (req, res, next) => {
+  const { ids, organismId } = req.query;
+  if (!ids || typeof (ids) !== 'string' || ids === '') {
+    LOGGER.error('Missing ids');
+    return res.sendStatus(400);
+  }
+  if (!organismId || typeof (organismId) !== 'string' || organismId === '') {
+    LOGGER.error('Missing Organism Id');
+    return res.sendStatus(400);
+  }
+  next();
+});
+
 router.get('/analysis/mlst', (req, res) => {
-  const options = req.query;
-  const { ids } = options;
+  const { user, sessionID, query } = req;
+  const { ids, organismId } = query;
+  const options = { user, sessionID, organismId };
   const task = 'mlst';
   const projection = {
     name: 1,
     'analysis.mlst.__v': 1,
     'analysis.mlst.st': 1,
-    'analysis.mlst.code': 1,
+    'analysis.mlst.alleles.gene': 1,
+    'analysis.mlst.alleles.hits': 1,
   };
-  const transformer = ({ _id, name, analysis }) => ({
-    id: _id.toString(),
-    name,
-    version: analysis.mlst.__v,
-    st: analysis.mlst.st,
-    code: analysis.mlst.code,
-  });
+  const transformer = ({ _id, name, analysis }) => {
+    const result = {
+      id: _id.toString(),
+      name,
+      version: analysis.mlst.__v,
+      st: analysis.mlst.st,
+    };
+
+    for (const { gene, hits } of analysis.mlst.alleles) {
+      result[gene] = hits.join(',');
+    }
+
+    return result;
+  };
   downloadAnalysisResults(ids, task, projection, transformer, options, res);
 });
 
 router.get('/analysis/speciator', (req, res) => {
-  const options = req.query;
-  const { ids } = options;
+  const { user, sessionID, query } = req;
+  const { ids, organismId } = query;
+  const options = { user, sessionID, organismId };
   const task = 'speciator';
   const projection = { name: 1, 'analysis.speciator': 1 };
   const transformer = ({ _id, name, analysis }) => ({
@@ -151,8 +174,9 @@ router.get('/analysis/speciator', (req, res) => {
 });
 
 router.get('/analysis/paarsnp', (req, res) => {
-  const options = req.query;
-  const { ids } = options;
+  const { user, sessionID, query } = req;
+  const options = { user, sessionID, query };
+  const { ids } = query;
   const task = 'paarsnp';
   const projection = {
     name: 1,
@@ -170,8 +194,9 @@ router.get('/analysis/paarsnp', (req, res) => {
 });
 
 router.get('/analysis/genotyphi', (req, res) => {
-  const options = req.query;
-  const { ids } = options;
+  const { user, sessionID, query } = req;
+  const { ids, organismId } = query;
+  const options = { user, sessionID, organismId };
   const task = 'genotyphi';
   const projection = {
     name: 1,
@@ -188,8 +213,9 @@ router.get('/analysis/genotyphi', (req, res) => {
 });
 
 router.get('/analysis/ngmast', (req, res) => {
-  const options = req.query;
-  const { ids } = options;
+  const { user, sessionID, query } = req;
+  const { ids, organismId } = query;
+  const options = { user, sessionID, organismId };
   const task = 'ngmast';
   const projection = {
     name: 1,
