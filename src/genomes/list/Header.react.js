@@ -19,7 +19,7 @@ export default ({ hasScrollbar = true }) => (
           Name
         </SortBy>
       </span>
-      <Sort sortKey="organismId">Organism</Sort>
+      <Sort sortKey="organism">Organism</Sort>
       <Sort sortKey="st">ST</Sort>
       <Sort sortKey="country">Country</Sort>
       <Sort sortKey="date">Date</Sort>

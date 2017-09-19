@@ -1,9 +1,17 @@
 import React from 'react';
 
+import { createAsyncConstants } from '../../actions';
+
 import { getGenomeList } from '../selectors';
-import { getSelectedGenomes, getSelectionSize } from './selectors';
+import {
+  getSelectedGenomes,
+  getSelectionSize,
+  getSelectedGenomeIds,
+} from './selectors';
 
 import { showToast } from '../../toast';
+
+import * as api from './api';
 
 import { isOverSelectionLimit, getSelectionLimit } from './utils';
 
@@ -91,5 +99,19 @@ export function toggleDropdown(view = null) {
   return {
     type: SELECTION_DROPDOWN_OPENED,
     payload: view,
+  };
+}
+
+export const SELECTION_FETCH_DOWNLOADS = createAsyncConstants('SELECTION_FETCH_DOWNLOADS');
+
+export function fetchDownloads() {
+  return (dispatch, getState) => {
+    const ids = getSelectedGenomeIds(getState());
+    dispatch({
+      type: SELECTION_FETCH_DOWNLOADS,
+      payload: {
+        promise: api.fetchDownloads(ids),
+      },
+    });
   };
 }

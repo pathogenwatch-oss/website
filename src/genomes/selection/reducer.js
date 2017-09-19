@@ -1,9 +1,15 @@
 import * as actions from './actions';
 import { FETCH_GENOME_LIST } from '../actions';
 
+import { statuses } from '../../app/constants';
+
 const initialState = {
   dropdown: null,
   genomes: {},
+  download: {
+    status: null,
+    summary: null,
+  },
 };
 
 const addToSelection = (memo, { id, name, organismId }) => {
@@ -48,6 +54,31 @@ export default function (state = initialState, { type, payload }) {
       };
     case actions.CLEAR_GENOME_SELECTION:
       return initialState;
+    case actions.SELECTION_FETCH_DOWNLOADS.ATTEMPT:
+      return {
+        ...state,
+        download: {
+          ...state.download,
+          status: statuses.LOADING,
+        },
+      };
+    case actions.SELECTION_FETCH_DOWNLOADS.FAILURE:
+      return {
+        ...state,
+        download: {
+          ...state.download,
+          status: statuses.ERROR,
+        },
+      };
+    case actions.SELECTION_FETCH_DOWNLOADS.SUCCESS:
+      return {
+        ...state,
+        download: {
+          ...state.download,
+          status: statuses.SUCCESS,
+          summary: payload.result,
+        },
+      };
     default:
       return state;
   }

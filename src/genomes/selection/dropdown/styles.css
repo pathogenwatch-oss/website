@@ -1,0 +1,12 @@
+.wgsa-genome-selection-dropdown {
+  width: 400px;
+  height: 268px;
+  position: absolute;
+  top: 40px;
+  right: -8px;
+  overflow: auto;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.14);
+  padding: 16px;
+  border-radius: 2px;
+}

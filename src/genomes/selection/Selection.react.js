@@ -1,55 +1,84 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import classnames from 'classnames';
 
-import { getSelectedGenomeIds, getSelectedGenomeList } from './selectors';
+import SelectionDropdown from './dropdown';
 
-import { unselectGenomes, clearSelection } from './actions';
-import { showGenomeDrawer } from '../../genome-drawer/actions';
+import { getSelectionSize, getSelectionDropdownView } from './selectors';
 
-const Selection = ({ selectedGenomes, showGenome, removeGenome, clearAll }) => (
-  <div className="wgsa-genome-selection">
-    <button className="mdl-button wgsa-clear-selection" onClick={clearAll}>
-      Clear All
-    </button>
-    <h3>Selected Genomes</h3>
-    { selectedGenomes.map(genome =>
-        <span
-          key={genome.id}
-          className="mdl-chip mdl-chip--deletable wgsa-inline-chip"
+import { toggleDropdown } from './actions';
+
+const Summary = React.createClass({
+
+  componentDidUpdate(previous) {
+    if (this.animating) return;
+    if (this.props.size !== previous.size) {
+      this.sonarEl.classList.remove('wgsa-sonar-effect');
+      void this.sonarEl.offsetWidth;
+      this.sonarEl.classList.add('wgsa-sonar-effect');
+      this.animating = true;
+      setTimeout(() => { this.animating = false; }, 1400);
+    }
+  },
+
+  animating: false,
+
+  onKeyUp(e) {
+    if (e.key === 'Escape') this.props.toggle();
+  },
+
+  render() {
+    const { size, toggle, view } = this.props;
+    return (
+      <div className="wgsa-selection-summary" onKeyUp={this.onKeyUp}>
+        <span className={classnames(
+            'mdl-chip mdl-chip--contact wgsa-selection-tabs',
+            view && `wgsa-selection-tabs-${view}`
+          )}
+          title={size === 0 ? 'No Genomes Selected' : undefined}
         >
           <button
-            className="mdl-chip__text"
-            onClick={() => showGenome(genome)}
+            ref={el => { this.sonarEl = el; }}
+            className="mdl-chip__contact"
+            onClick={() => toggle('selection')}
+            title={size > 0 ? 'View Selection' : undefined}
+            disabled={size === 0}
           >
-            {genome.name}
+            {size}
           </button>
           <button
-            type="button"
-            title="Remove genome"
-            className="mdl-chip__action"
-            onClick={() => removeGenome(genome)}
+            className="mdl-chip__text"
+            onClick={() => toggle('collection')}
+            disabled={size === 0}
           >
-            <i className="material-icons">remove_circle_outline</i>
+            Create Collection
+          </button>
+          <button
+            className="mdl-chip__text"
+            onClick={() => toggle('download')}
+            disabled={size === 0}
+          >
+            Download
           </button>
         </span>
-      ) }
-  </div>
-);
+        <SelectionDropdown />
+      </div>
+    );
+  },
+
+});
 
 function mapStateToProps(state) {
-  const selectedGenomes = getSelectedGenomeList(state);
   return {
-    selectedGenomes,
-    selectedGenomeIds: getSelectedGenomeIds(state),
+    size: getSelectionSize(state),
+    view: getSelectionDropdownView(state),
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    clearAll: () => dispatch(clearSelection()),
-    removeGenome: genome => dispatch(unselectGenomes([ genome ])),
-    showGenome: genome => dispatch(showGenomeDrawer(genome.id, genome.name)),
+    toggle: (view) => dispatch(toggleDropdown(view)),
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Selection);
+export default connect(mapStateToProps, mapDispatchToProps)(Summary);
