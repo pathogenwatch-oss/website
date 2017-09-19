@@ -132,14 +132,14 @@ schema.statics.updateMetadata = function (_id, { user, sessionID }, metadata) {
 };
 
 schema.statics.getPrefilterCondition = function ({ user, query = {}, sessionID }) {
-  const { prefilter = 'all', uploadedAt } = query;
+  const { prefilter = 'all' } = query;
 
   if (prefilter === 'all') {
     const hasAccess = { $or: [ { public: true } ] };
     if (user) {
       hasAccess.$or.push({ _user: user._id });
     }
-    if (uploadedAt && sessionID) {
+    if (sessionID) {
       hasAccess.$or.push({ _session: sessionID });
     }
     return Object.assign(hasAccess, { binned: false });

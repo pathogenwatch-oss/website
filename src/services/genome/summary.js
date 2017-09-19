@@ -38,11 +38,13 @@ const summaryFields = [
     ],
   },
   { field: 'uploadedAt',
-    aggregation: ({ user, query = {} }) => {
-      if (!user) return null;
-      if (query.prefilter === 'upload') return null;
+    aggregation: ({ user, sessionID }) => {
+      if (!user && !sessionID) return null;
+      const $match = { $or: [] };
+      if (user) $match.$or.push({ _user: user._id });
+      if (sessionID) $match.$or.push({ _session: sessionID });
       return [
-        { $match: { _user: user._id } },
+        { $match },
         { $group: { _id: '$uploadedAt', count: { $sum: 1 } } },
       ];
     },
