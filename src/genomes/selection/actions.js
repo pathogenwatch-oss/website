@@ -34,6 +34,14 @@ export function setSelection(genomes) {
   };
 }
 
+export const CLEAR_GENOME_SELECTION = 'CLEAR_GENOME_SELECTION';
+
+export function clearSelection() {
+  return {
+    type: CLEAR_GENOME_SELECTION,
+  };
+}
+
 export function toggleSelection(genome) {
   return (dispatch, getState) => {
     const state = getState();
@@ -77,10 +85,11 @@ export function unselectAll(focus) {
   };
 }
 
-export const SELECTION_DRAWER_OPENED = 'SELECTION_DRAWER_OPENED';
+export const SELECTION_DROPDOWN_OPENED = 'SELECTION_DROPDOWN_OPENED';
 
-export function toggleDrawer() {
+export function toggleDropdown(view = null) {
   return {
-    type: SELECTION_DRAWER_OPENED,
+    type: SELECTION_DROPDOWN_OPENED,
+    payload: view,
   };
 }

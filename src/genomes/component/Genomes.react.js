@@ -89,8 +89,7 @@ export default React.createClass({
       <div
         className={classnames(
           'wgsa-genomes wgsa-filter-container',
-          { 'has-filter': this.props.isFilterOpen,
-            'has-selection': this.props.isSelectionOpen }
+          { 'has-filter': this.props.isFilterOpen }
         )}
       >
         <Filter />

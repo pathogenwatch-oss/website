@@ -5,7 +5,6 @@ import Genomes from './Genomes.react';
 
 import { getTotalGenomes, getGridItems, getStatus } from '../selectors';
 import { isFilterOpen } from '../filter/selectors';
-import { isSelectionOpen } from '../selection/selectors';
 import { getTotal } from '../summary/selectors';
 
 import { updateFilter } from '../filter/actions';
@@ -21,7 +20,6 @@ function mapStateToProps(state, { match }) {
     total: getTotal(state),
     status: getStatus(state),
     isFilterOpen: isFilterOpen(state),
-    isSelectionOpen: isSelectionOpen(state),
   };
 }
 

@@ -1,16 +1,19 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
+import Selection from './Selection.react';
 import CreateCollection from '../create-collection-form';
 import Fade from '../../components/fade';
 
-import { isSelectionOpen } from './selectors';
+import { getSelectionDropdownView } from './selectors';
 
-const Selection = ({ isOpen }) => (
+const Dropdown = ({ view }) => (
   <Fade>
-    { isOpen ?
+    { view ?
       <div className="wgsa-genome-selection-dropdown mdl-shadow--2dp">
-        <CreateCollection visible />
+        { view === 'selection' && <Selection />}
+        { view === 'collection' && <CreateCollection visible />}
+        { view === 'download' && <h1>Download</h1>}
       </div> :
       null }
   </Fade>
@@ -18,8 +21,8 @@ const Selection = ({ isOpen }) => (
 
 function mapStateToProps(state) {
   return {
-    isOpen: isSelectionOpen(state),
+    view: getSelectionDropdownView(state),
   };
 }
 
-export default connect(mapStateToProps)(Selection);
+export default connect(mapStateToProps)(Dropdown);

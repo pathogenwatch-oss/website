@@ -58,17 +58,22 @@
   border-radius: 2px;
 }
 
-.wgsa-selection-summary .mdl-chip {
+.wgsa-selection-tabs {
   padding-right: 0;
   display: flex;
-  flex-direction: row-reverse;
 }
 
-.wgsa-selection-summary .mdl-chip__contact {
+.wgsa-selection-tabs button {
+  border: none;
+  outline: none;
+  line-height: 20px;
+}
+
+.wgsa-selection-tabs .mdl-chip__contact {
   margin-right: 0;
 }
 
-.wgsa-selection-summary .mdl-chip__text {
+.wgsa-selection-tabs .mdl-chip__text {
   padding-left: 24px;
   padding-right: 16px;
   border-radius: 0 16px 16px 0;
@@ -78,6 +83,38 @@
   margin-left: -16px;
 }
 
-.mdl-chip__text:nth-of-type(odd) {
+.wgsa-selection-tabs .mdl-chip__text:nth-of-type(odd) {
   background: #3c7383;
+}
+
+.wgsa-selection-tabs > :first-child {
+  z-index: 2;
+}
+
+.wgsa-selection-tabs > :nth-child(2) {
+  z-index: 1;
+}
+
+.wgsa-selection-tabs-selection > :not(:first-child),
+.wgsa-selection-tabs-collection > :not(:nth-child(2)),
+.wgsa-selection-tabs-download > :not(:last-child) {
+  filter: grayscale(1) brightness(1.25);
+}
+
+.wgsa-genome-selection .mdl-chip__text {
+  border: none;
+  outline: none;
+  background: none;
+}
+
+.wgsa-genome-selection h3 {
+  margin: 0 0 16px;
+  font-size: 16px;
+  line-height: 1.2;
+}
+
+.wgsa-clear-selection {
+  position: absolute;
+  top: 8px;
+  right: 8px;
 }

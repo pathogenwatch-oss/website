@@ -1,53 +1,54 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import CreateCollection from '../create-collection-form';
+import { getSelectedGenomeIds, getSelectedGenomeList } from './selectors';
 
-import { getSelectedGenomeIds, getSelectedGenomeList, isSelectionOpen } from './selectors';
+import { unselectGenomes, clearSelection } from './actions';
+import { showGenomeDrawer } from '../../genome-drawer/actions';
 
-import { setSelection, unselectGenomes } from './actions';
-
-const Selection = ({ selectedGenomes, removeGenome, isOpen }) => {
-  if (!isOpen) return null;
-
-  return (
-    <div className="wgsa-genome-selection">
-      {
-        selectedGenomes.map(genome =>
-          <span
-            key={genome.id}
-            className="mdl-chip mdl-chip--deletable wgsa-inline-chip"
+const Selection = ({ selectedGenomes, showGenome, removeGenome, clearAll }) => (
+  <div className="wgsa-genome-selection">
+    <button className="mdl-button wgsa-clear-selection" onClick={clearAll}>
+      Clear All
+    </button>
+    <h3>Selected Genomes</h3>
+    { selectedGenomes.map(genome =>
+        <span
+          key={genome.id}
+          className="mdl-chip mdl-chip--deletable wgsa-inline-chip"
+        >
+          <button
+            className="mdl-chip__text"
+            onClick={() => showGenome(genome)}
           >
-            <span className="mdl-chip__text">{genome.name}</span>
-            <button
-              type="button"
-              title="Remove genome"
-              className="mdl-chip__action"
-              onClick={() => removeGenome(genome)}
-            >
-              <i className="material-icons">remove_circle_outline</i>
-            </button>
-          </span>
-        )
-      }
-      <CreateCollection />
-    </div>
-  );
-};
+            {genome.name}
+          </button>
+          <button
+            type="button"
+            title="Remove genome"
+            className="mdl-chip__action"
+            onClick={() => removeGenome(genome)}
+          >
+            <i className="material-icons">remove_circle_outline</i>
+          </button>
+        </span>
+      ) }
+  </div>
+);
 
 function mapStateToProps(state) {
   const selectedGenomes = getSelectedGenomeList(state);
   return {
     selectedGenomes,
     selectedGenomeIds: getSelectedGenomeIds(state),
-    isOpen: isSelectionOpen(state),
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    clearSelection: () => dispatch(setSelection([])),
+    clearAll: () => dispatch(clearSelection()),
     removeGenome: genome => dispatch(unselectGenomes([ genome ])),
+    showGenome: genome => dispatch(showGenomeDrawer(genome.id, genome.name)),
   };
 }
 

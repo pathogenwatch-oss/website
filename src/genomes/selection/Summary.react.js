@@ -1,11 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import classnames from 'classnames';
 
 import SelectionDropdown from './SelectionDropdown.react';
 
-import { getSelectionSize, isSelectionOpen } from './selectors';
+import { getSelectionSize, getSelectionDropdownView } from './selectors';
 
-import { toggleDrawer } from './actions';
+import { toggleDropdown } from './actions';
 
 const Summary = React.createClass({
 
@@ -27,20 +28,28 @@ const Summary = React.createClass({
   },
 
   render() {
-    const { size, toggle } = this.props;
+    const { size, toggle, view } = this.props;
     return (
       <div className="wgsa-selection-summary" onKeyUp={this.onKeyUp}>
-        <button className="mdl-chip mdl-chip--contact" onClick={toggle}>
-          <span className="mdl-chip__text">
-            Download
-          </span>
-          <span className="mdl-chip__text">
-            Create Collection
-          </span>
-          <span ref={el => { this.sonarEl = el; }} className="mdl-chip__contact">
+        <span className={classnames(
+            'mdl-chip mdl-chip--contact wgsa-selection-tabs',
+            view && `wgsa-selection-tabs-${view}`
+          )}
+        >
+          <button
+            ref={el => { this.sonarEl = el; }}
+            className="mdl-chip__contact"
+            onClick={() => toggle('selection')}
+          >
             {size}
-          </span>
-        </button>
+          </button>
+          <button className="mdl-chip__text" onClick={() => toggle('collection')}>
+            Create Collection
+          </button>
+          <button className="mdl-chip__text" onClick={() => toggle('download')}>
+            Download
+          </button>
+        </span>
         <SelectionDropdown />
       </div>
     );
@@ -51,13 +60,13 @@ const Summary = React.createClass({
 function mapStateToProps(state) {
   return {
     size: getSelectionSize(state),
-    isOpen: isSelectionOpen(state),
+    view: getSelectionDropdownView(state),
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    toggle: () => dispatch(toggleDrawer()),
+    toggle: (view) => dispatch(toggleDropdown(view)),
   };
 }
 
