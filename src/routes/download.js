@@ -235,4 +235,30 @@ router.get('/analysis/ngmast', (req, res) => {
   downloadAnalysisResults(ids, task, projection, transformer, options, res);
 });
 
+router.get('/analysis/cgmlst', (req, res) => {
+  const { user, sessionID, query } = req;
+  const { ids, organismId } = query;
+  const options = { user, sessionID, organismId };
+  const task = 'mlst';
+  const projection = {
+    name: 1,
+    'analysis.mlst.__v': 1,
+    'analysis.mlst.st': 1,
+    'analysis.mlst.alleles.gene': 1,
+    'analysis.mlst.alleles.hits': 1,
+  };
+  const transformer = ({ _id, name, analysis }, callback) => {
+    const result = [];
+
+    for (const { gene, hits } of analysis.mlst.alleles) {
+      for (const hit of hits) {
+        result.push({ id: _id.toString(), name, gene, hit });
+      }
+    }
+
+    callback(null, ...result);
+  };
+  downloadAnalysisResults(ids, task, projection, transformer, options, res);
+});
+
 module.exports = router;
