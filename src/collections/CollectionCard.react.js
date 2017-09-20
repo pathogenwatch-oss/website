@@ -39,7 +39,7 @@ export default ({ item, footerLink }) => {
   return (
     <Card className="wgsa-card--bordered">
       <span className="wgsa-card-metadata-overview">
-        <CardMetadata title="Size" icon="insert_drive_file">
+        <CardMetadata title="Size" icon="wgsa_genome">
           {size} genome{size === 1 ? '' : 's'}
         </CardMetadata>
         <CardMetadata tooltip={createdAt.toLocaleString()} icon="history">

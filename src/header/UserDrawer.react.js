@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import NavLink from '../location';
 import AccountHeader from './AccountHeader.react';
 import SignInNav from './SignInNav.react';
+import GenomeIcon from '../components/GenomeIcon.react';
 
 import { getSummary } from '../summary/selectors';
 
@@ -79,7 +80,7 @@ const UserDrawer = React.createClass({
           <hr />
           <nav className="mdl-navigation">
             <h2 className="wgsa-navigation-header">Genomes</h2>
-            <NavLink to="/genomes/all" badge={allGenomes} icon="insert_drive_file">
+            <NavLink to="/genomes/all" badge={allGenomes} icon={<GenomeIcon />}>
               { user ? 'All' : 'Public' } Genomes
             </NavLink>
             { user && <NavLink to="/genomes/user" badge={userGenomes} icon="person">My Genomes</NavLink> }

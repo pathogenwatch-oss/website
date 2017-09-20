@@ -31,7 +31,7 @@ export default connect(mapStateToProps)(
         )}
         to={to}
       >
-        { icon && <i className="material-icons">{icon}</i>}
+        { typeof icon === 'string' ? <i className="material-icons">{icon}</i> : icon }
         <span>{children}</span>
         { badge !== null ? <span className="wgsa-nav-badge mdl-badge" data-badge={badge}></span> : null}
       </Link>

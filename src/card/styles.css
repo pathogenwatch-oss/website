@@ -81,17 +81,22 @@
 }
 
 .wgsa-card-metadata {
-  align-items: bottom;
   display: flex;
   justify-content: flex-start;
+  align-items: center;
   line-height: 20px;
   position: relative;
 }
 
-.wgsa-card-metadata i {
+.wgsa-card-metadata .material-icons {
   font-size: 16px;
-  padding-right: 4px;
   line-height: 18px;
+  height: 18px;
+  width: 15px; /* Hacked to make the SVG icon look crisp */
+  padding-right: 5px;
+}
+
+.wgsa-card-metadata .material-icons[title] {
   cursor: help;
 }
 
