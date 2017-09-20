@@ -175,8 +175,8 @@ router.get('/analysis/speciator', (req, res) => {
 
 router.get('/analysis/paarsnp', (req, res) => {
   const { user, sessionID, query } = req;
-  const options = { user, sessionID, query };
-  const { ids } = query;
+  const { ids, organismId } = query;
+  const options = { user, sessionID, organismId };
   const task = 'paarsnp';
   const projection = {
     name: 1,
@@ -201,7 +201,7 @@ router.get('/analysis/genotyphi', (req, res) => {
   const projection = {
     name: 1,
     'analysis.genotyphi.__v': 1,
-    'analysis.genotyphi.genotype': 1,
+    'analysis.genotyphi.type': 1,
   };
   const transformer = ({ _id, name, analysis }) => ({
     id: _id.toString(),
