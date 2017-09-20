@@ -19,7 +19,7 @@ const RedirectWithQuery = ({ from, to }) => (
   />
 );
 
-const CollectionRedirect = () => (
+const getCollectionRedirect = () => (
   <Route exact path="/:organism/collection/:slug"
     render={({ match }) =>
       <Redirect to={{
@@ -49,7 +49,7 @@ export default () => (
     <RedirectWithQuery from="/genomes" to="/genomes/all" />
     <Redirect from="/:organism/upload" to="/upload" />
     {OrganismRedirects}
-    <CollectionRedirect />
-    <Route component={NotFound} />
+    {getCollectionRedirect()}
+    <Route path="/" component={NotFound} />
   </Switch>
 );
