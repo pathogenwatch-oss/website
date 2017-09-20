@@ -1,12 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
+import AccountImage from '../account/AccountImage.react';
+
 import { toggleUserDrawer } from './actions';
 
 import config from '../app/config';
-
-const { user = { photo: '/images/user.svg' } } = config;
-const photo = user.photo || '/images/user-signed-in.svg';
 
 const AccountLink = React.createClass({
 
@@ -27,7 +26,7 @@ const AccountLink = React.createClass({
         title={`Main Menu (${config.user ? `Signed in as ${config.user.name}` : 'Not signed in'})`}
         onClick={(e) => this.openLoginMenu(e)}
       >
-        <img src={photo} className="cgps-avatar__image" />
+        <AccountImage />
       </button>
     );
   },
