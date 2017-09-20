@@ -17,7 +17,7 @@ const Section = ({ organismId, organismName, total, tasks }) => (
     <ul>
       { Object.keys(tasks).map(task =>
         <li key={task}>
-          <a href={`http://localhost:8001/download/analysis/${task}?organismId=${organismId}&ids=${tasks[task].join(',')}`}>
+          <a href={`/download/analysis/${task}?organismId=${organismId}&ids=${tasks[task].join(',')}`}>
             <strong>{analysisLabels[task]}</strong> ({tasks[task].length}/{total})
           </a>
         </li>

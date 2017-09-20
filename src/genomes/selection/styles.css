@@ -9,6 +9,7 @@
 .wgsa-selection-summary {
   position: fixed;
   right: 16px;
+  z-index: 1;
 }
 
 .mdl-layout:not(.user-drawer-visible) .wgsa-selection-summary {

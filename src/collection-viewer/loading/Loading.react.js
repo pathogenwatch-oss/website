@@ -83,7 +83,7 @@ function getStatusMessage({ collection, location }) {
   }
 
   return [
-    <h1>We're sorry, something went wrong with this collection.</h1>,
+    <h1>We're sorry, something went wrong.</h1>,
     <button onClick={() => history.go(-1)} className="mdl-button mdl-button--raised">Go Back</button>,
   ];
 }
