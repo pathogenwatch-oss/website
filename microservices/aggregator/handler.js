@@ -1,14 +1,7 @@
-const notificationDispatcher = require('services/notificationDispatcher');
-
 const services = require('services');
 
 const handlers = {
-  MLST: require('./results/mlst'),
-  PAARSNP: require('./results/paarsnp'),
-  CORE: require('./results/core'),
   FP: require('./results/fp'),
-  NGM: require('./results/ngmast'),
-  GENOTYPHI: require('./results/genotyphi'),
   CORE_MUTANT_TREE: require('./results/collection-tree'),
   SUBMATRIX: require('./results/subtrees'),
 };
@@ -27,17 +20,9 @@ function aggregateResult(message) {
 
 module.exports = function (message) {
   if (message.action !== 'CREATE') return Promise.resolve();
-
+  const { collectionId } = message;
   return aggregateResult(message)
     .then(() =>
-      services.request('collection', 'fetch-progress', { uuid: message.collectionId, aggregator: true }).
-        then(collection => {
-          if (collection.reference) return;
-
-          const { status, progress } = collection.toObject();
-          notificationDispatcher.publishNotification(
-            message.collectionId, 'progress', { status, progress }
-          );
-        })
+      services.request('collection', 'send-progress', { collectionId })
     );
 };

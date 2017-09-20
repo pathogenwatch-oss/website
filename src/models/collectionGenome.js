@@ -57,8 +57,8 @@ const schema = new Schema({
 
 setToObjectOptions(schema);
 
-schema.statics.addAnalysisResult = function (uuid, name, result) {
-  return this.update({ uuid }, { [`analysis.${name.toLowerCase()}`]: result });
+schema.statics.addAnalysisResult = function (_id, key, result) {
+  return this.update({ _id }, { [`analysis.${key.toLowerCase()}`]: result });
 };
 
 const projectResultsByType = {

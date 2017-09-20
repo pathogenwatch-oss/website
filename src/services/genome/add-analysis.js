@@ -1,6 +1,7 @@
 const { request } = require('services/bus');
 
 const Genome = require('models/genome');
+const CollectionGenome = require('models/collectionGenome');
 
 const formatters = {
   mlst: ({ st, url, genes, alleles }) => ({
@@ -39,8 +40,18 @@ function formatResult(task, version, result) {
   );
 }
 
-module.exports = function ({ genomeId, uploadedAt, task, version, result, clientId }) {
+module.exports = function ({ genomeId, collectionId, uploadedAt, task, version, result, clientId }) {
   const formattedResult = formatResult(task, version, result);
+
+  if (collectionId) {
+    return (
+      CollectionGenome.addAnalysisResult(genomeId, task, formattedResult)
+        .then(() =>
+          request('collection', 'send-progress', { uuid: collectionId })
+        )
+    );
+  }
+
   return (
     Genome.addAnalysisResult(genomeId, task, formattedResult)
       .then(() => {
