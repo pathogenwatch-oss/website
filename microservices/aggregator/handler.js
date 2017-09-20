@@ -1,6 +1,7 @@
 const services = require('services');
 
 const handlers = {
+  CORE: require('./results/core'),
   FP: require('./results/fp'),
   CORE_MUTANT_TREE: require('./results/collection-tree'),
   SUBMATRIX: require('./results/subtrees'),

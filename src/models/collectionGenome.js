@@ -57,8 +57,8 @@ const schema = new Schema({
 
 setToObjectOptions(schema);
 
-schema.statics.addAnalysisResult = function (_id, key, result) {
-  return this.update({ _id }, { [`analysis.${key.toLowerCase()}`]: result });
+schema.statics.addAnalysisResult = function (uuid, key, result) {
+  return this.update({ uuid }, { [`analysis.${key.toLowerCase()}`]: result });
 };
 
 const projectResultsByType = {
@@ -91,7 +91,6 @@ schema.statics.findByUuid = function (uuid, projection) {
 schema.statics.insertRaw = function (docs, options) {
   return new Promise((resolve, reject) => {
     this.collection.insertMany(docs, options, error => {
-      console.log('callback', error);
       if (error) {
         reject(error);
       }

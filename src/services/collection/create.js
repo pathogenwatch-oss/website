@@ -84,7 +84,7 @@ function saveCollectionUUID({ collection, ids }) {
 
 function submitCollection({ collection, uuidToGenome }) {
   const { uuid, organismId } = collection;
-  return request('backend', 'submit', { organismId, collectionId: uuid, uuidToGenome });
+  return request('collection', 'submit', { organismId, collectionId: uuid, uuidToGenome });
 }
 
 module.exports = function (message) {
