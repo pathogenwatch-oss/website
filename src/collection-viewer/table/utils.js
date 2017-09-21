@@ -1,7 +1,7 @@
 export { getFormattedDateString } from '../../utils/Date';
 
 export const getUserDefinedValue =
-  (column, { userDefined = {} }) => userDefined[column];
+  (column, { userDefined }) => (userDefined ? userDefined[column] : undefined);
 
 export const formatColumnKeyAsLabel =
   columnkey =>
