@@ -51,11 +51,15 @@ export default React.createClass({
     const { antibiotic } = this.state;
 
     if (!antibiotic) {
-      return <em>(Select Antibiotic)</em>;
+      return '(Select Antibiotic)';
     }
 
-    const mechanisms = antibiotic.mechanisms.filter(m => result.includes(m)).join(', ');
-    return mechanisms || ' ';
+    const mechanisms = antibiotic.mechanisms.filter(m => result.includes(m));
+    return (
+      <ul>
+        { mechanisms.map(m => <li>{m}</li>) }
+      </ul>
+    );
   },
 
   render() {
