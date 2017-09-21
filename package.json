@@ -39,7 +39,7 @@
     "serve-favicon": "^2.2.0",
     "slug": "^0.9.1",
     "uuid": "^3.0.1",
-    "wgsa-fasta-store": "gitlab:cgps/wgsa-fasta-store#v2.6.1",
+    "wgsa-fasta-store": "gitlab:cgps/wgsa-fasta-store#v3.0.0",
     "wgsa-front-end": "gitlab:cgps/wgsa-front-end#v6.0.0-1"
   },
   "devDependencies": {
