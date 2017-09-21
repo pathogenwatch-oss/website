@@ -310,7 +310,7 @@
   ],
   "90370": [
     { "task": "paarsnp", "version": "v3" },
-    { "task": "genotyphi", "version": "v3" }
+    { "task": "genotyphi", "version": "v4" }
   ],
   "96345": [
     { "task": "mlst", "version": "v4" }
