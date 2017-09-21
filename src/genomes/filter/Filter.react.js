@@ -23,7 +23,7 @@ const Filter = ({ isActive, filterSummary, textValue, updateFilter, clearFilter 
   >
     <FilterSection
       filterKey="organismId"
-      heading="WGSA Organisms"
+      heading="WGSA Organism"
       icon="bug_report"
       summary={filterSummary.wgsaOrganisms}
       updateFilter={updateFilter}

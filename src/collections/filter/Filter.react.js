@@ -38,7 +38,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(
     >
       <FilterSection
         filterKey="organismId"
-        heading="Organisms"
+        heading="Organism"
         icon="bug_report"
         summary={filterSummary.organism}
         updateFilter={updateFilter}
