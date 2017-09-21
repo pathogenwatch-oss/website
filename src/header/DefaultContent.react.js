@@ -18,6 +18,6 @@ export default ({ offline = isOffline() }) => (
     <NavLink to="/genomes">Genomes</NavLink>
     <NavLink to="/upload">Upload</NavLink>
     <NavLink to="/documentation" className="sm-hide">Documentation</NavLink>
-    <NavLink to="https://gitlab.com/cgps/wgsa.net/issues" className="sm-hide" external>Feedback</NavLink>
+    <NavLink to="mailto:cgps@sanger.ac.uk" className="sm-hide" external>Contact</NavLink>
   </nav>
 );

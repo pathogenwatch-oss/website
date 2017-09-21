@@ -18,7 +18,7 @@ function mapStateToProps({ location }) {
 export default connect(mapStateToProps)(
   ({ className, icon, to, activeOnIndexOnly, activePathname, external, badge, children }) => (
     external ? (
-      <a href={to} className={classnames('mdl-navigation__link', className)}>
+      <a href={to} target="_blank" rel="noopener" className={classnames('mdl-navigation__link', className)}>
         { icon && <i className="material-icons">{icon}</i>}
         <span>{children}</span>
       </a>
