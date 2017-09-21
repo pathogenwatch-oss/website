@@ -47,7 +47,7 @@ module.exports = function ({ genomeId, collectionId, uploadedAt, task, version, 
     return (
       CollectionGenome.addAnalysisResult(genomeId, task, formattedResult)
         .then(() =>
-          request('collection', 'send-progress', { uuid: collectionId })
+          request('collection', 'send-progress', { collectionId })
         )
     );
   }

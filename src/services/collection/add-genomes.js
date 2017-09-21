@@ -16,7 +16,6 @@ module.exports = function ({ collection, uuidToGenome }) {
     CollectionGenome.insertRaw(
       uuidToGenome.map(([ uuid, genome ]) => {
         const { _id, fileId, name, year, month, day, latitude, longitude, country, pmid, userDefined } = genome;
-        const { metrics } = genome.analysis;
         return {
           uuid,
           _collection: collection._id,
@@ -28,9 +27,7 @@ module.exports = function ({ collection, uuidToGenome }) {
           country,
           pmid,
           userDefined,
-          analysis: {
-            metrics,
-          },
+          analysis: {},
         };
       })
     ),

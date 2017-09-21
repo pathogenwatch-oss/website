@@ -9,17 +9,17 @@ module.exports = function ({ genomeId, collectionId, fileId, organismId, species
   const tasks = getTasksByOrganism(organismId, speciesId, genusId, collectionId);
 
   if (tasks.length === 0) {
-    return;
+    return Promise.resolve();
   }
 
   const taskNames = tasks.map(_ => _.task);
   const type = collectionId ? 'collectiongenome' : 'genome';
   LOGGER.info(`Submitting tasks [${taskNames}] for ${type} ${genomeId}`);
 
-  (collectionId ?
-    Promise.resolve() :
-    Genome.addPendingTasks(genomeId, taskNames))
-    .then(() => {
-      request('tasks', 'enqueue', { genomeId, collectionId, fileId, organismId, speciesId, genusId, uploadedAt, clientId, tasks });
-    });
+  return (
+    (collectionId ? Promise.resolve() : Genome.addPendingTasks(genomeId, taskNames))
+    .then(() => request(
+      'tasks', 'enqueue', { genomeId, collectionId, fileId, organismId, speciesId, genusId, uploadedAt, clientId, tasks }
+    ))
+  );
 };

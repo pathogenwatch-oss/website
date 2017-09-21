@@ -12,12 +12,21 @@ const mongoConnection = require('utils/mongoConnection');
 const readCsv = require('../utils/read-csv');
 const storeGenomes = require('../utils/store-genomes');
 
+const organisms = require('wgsa-front-end/universal/organisms');
+
 const { organismId, csvFile, fastaDir } = argv.opts;
 
 console.log({ organismId, csvFile, fastaDir });
 
 if (!organismId || !csvFile || !fastaDir) {
   console.log('Missing arguments');
+  process.exit(1);
+}
+
+const organism = organisms.find(_ => _.id === organismId);
+
+if (!organism) {
+  console.log('Organism not found');
   process.exit(1);
 }
 
@@ -37,6 +46,14 @@ function addDummyOrganismRecord() {
   });
 }
 
+function submitCollectionGenomes(collectionId, uuidToGenome) {
+  const { speciesId, genusId } = organism;
+  return Promise.all(uuidToGenome.map(([ genomeId, genome ]) => {
+    const { fileId, uploadedAt } = genome;
+    return request('tasks', 'submit-genome', { genomeId, collectionId, fileId, uploadedAt, organismId, speciesId, genusId });
+  }));
+}
+
 function createReferenceCollection() {
   return (
     readCsv(csvFile)
@@ -52,16 +69,11 @@ function createReferenceCollection() {
           Promise.all([
             collection.addUUID(organismId),
             request('collection', 'add-genomes', { collection, uuidToGenome }),
+            submitCollectionGenomes(collection.uuid, uuidToGenome),
           ])
         )
       )
   );
-}
-
-function isSimpleSupport() {
-  const organisms = require('wgsa-front-end/universal/organisms');
-  const organism = organisms.find(_ => _.id === organismId) || {};
-  return organism.simple;
 }
 
 mongoConnection.connect()
@@ -78,7 +90,7 @@ mongoConnection.connect()
         )),
   ]))
   .then(() => (
-    isSimpleSupport() ?
+    organism.simple ?
       addDummyOrganismRecord() :
       createReferenceCollection()
   ))
