@@ -14,7 +14,8 @@
   font-weight: 500;
 }
 
-.wgsa-organism-table th, td {
+.wgsa-organism-table th,
+.wgsa-organism-table td {
   text-align: center;
   padding: 12px;
   font-size: 16px;
@@ -37,7 +38,7 @@
 .wgsa-organism-table td {
   vertical-align: middle;
 }
-  
+
 .wgsa-organism-table i {
   color: #B25EA1;
 }

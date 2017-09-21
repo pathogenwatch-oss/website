@@ -2,10 +2,23 @@
   margin: 0 auto;
 }
 
+.wgsa-analysis-section th,
+.wgsa-analysis-section td {
+  padding: 4px 8px;
+  color: rgba(0, 0, 0, 0.87);
+  text-align: center;
+}
+
 .wgsa-analysis-section th {
   transition: .28s cubic-bezier(.4,0,.2,1);
   transition-property: background-color, color;
   border-radius: 4px;
+}
+
+.wgsa-analysis-section th.inactive,
+.wgsa-analysis-section th.active {
+  font-size: 13px;
+  padding: 0 8px;
 }
 
 .wgsa-analysis-section th.inactive {
