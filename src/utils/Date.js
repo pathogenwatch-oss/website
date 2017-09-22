@@ -59,6 +59,7 @@ import isYesterday from 'date-fns/is_yesterday';
 import format from 'date-fns/format';
 
 export function formatDateTime(date) {
+  if (!date) return null;
   if (isToday(date)) {
     return `Today ${format(date, 'HH:mm')}`;
   }

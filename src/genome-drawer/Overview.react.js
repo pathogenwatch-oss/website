@@ -37,7 +37,7 @@ export default ({ genome }) => {
           </Metadata>
           { mlst && <Metadata label="Sequence Type"><ST id={mlst.st} /></Metadata> }
           { paarsnp && <Metadata label="AMR">{getAMROverview(paarsnp)}</Metadata> }
-          { genotyphi && <Metadata label="Genotype">{genotyphi.type}</Metadata>}
+          { genotyphi && <Metadata label="Genotype">{genotyphi.genotype}</Metadata>}
           { ngmast && <Metadata label="NG-MAST">{ngmast.ngmast}</Metadata> }
           { country && <Metadata label="Country">{getCountryName(country)}</Metadata> }
           <Metadata label="Date">{date}</Metadata>

@@ -81,8 +81,8 @@ export const systemDataColumns = {
   },
   __genotyphi_type: {
     columnKey: '__genotyphi_type',
-    label: 'TYPE',
-    displayName: 'GENOTYPHI TYPE',
+    label: 'GENOTYPE',
+    displayName: 'GENOTYPHI GENOTYPE',
     valueGetter({ analysis }) {
       if (!analysis.genotyphi) return null;
       return analysis.genotyphi.genotype;
