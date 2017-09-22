@@ -46,7 +46,7 @@
 }
 
 .wgsa-selection-tabs button[disabled] {
-  cursor: auto;
+  cursor: not-allowed;
 }
 
 .wgsa-selection-tabs .mdl-chip__contact {

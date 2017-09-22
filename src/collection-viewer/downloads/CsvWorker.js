@@ -9,7 +9,6 @@ import { isResistant, hasElement } from '../amr-utils';
 
 const nameColumn = {
   columnKey: '__name',
-  label: 'NAME',
   valueGetter({ name }) {
     return name;
   },
@@ -17,7 +16,6 @@ const nameColumn = {
 
 const latitudeColumn = {
   columnKey: '__latitude',
-  label: 'LATITUDE',
   valueGetter({ position }) {
     return position && position.latitude ? position.latitude : '';
   },
@@ -25,7 +23,6 @@ const latitudeColumn = {
 
 const longitudeColumn = {
   columnKey: '__longitude',
-  label: 'LONGITUDE',
   valueGetter({ position }) {
     return position && position.longitude ? position.longitude : '';
   },
@@ -38,26 +35,14 @@ const definedColumns = {
   ...systemDataColumns,
 };
 
-const csvOptions = {
-  metadata: {
-    valueGetter: getUserDefinedValue,
-  },
-  typing: {
-    valueGetter: getUserDefinedValue,
-  },
-  stats: {
-    valueGetter: getUserDefinedValue,
-  },
-  antibiotics: {
-    valueGetter: (antibiotic, { analysis: { paarsnp } }) =>
+const valueGettersByTable = {
+  metadata: getUserDefinedValue,
+  typing: getUserDefinedValue,
+  stats: getUserDefinedValue,
+  antibiotics: (antibiotic, { analysis: { paarsnp } }) =>
       (isResistant(paarsnp, antibiotic) ? 1 : 0),
-  },
-  snps: {
-    valueGetter: (snp, genome) => (hasElement(genome, 'snp', snp) ? 1 : 0),
-  },
-  genes: {
-    valueGetter: (gene, genome) => (hasElement(genome, 'paar', gene) ? 1 : 0),
-  },
+  snps: (snp, genome) => (hasElement(genome, 'snp', snp) ? 1 : 0),
+  genes: (gene, genome) => (hasElement(genome, 'paar', gene) ? 1 : 0),
 };
 
 function mapToGetters(columns, table) {
@@ -65,7 +50,7 @@ function mapToGetters(columns, table) {
     if (key in definedColumns) {
       return definedColumns[key].valueGetter;
     }
-    const { valueGetter } = csvOptions[table];
+    const valueGetter = valueGettersByTable[table];
     return row => valueGetter(key, row);
   });
 }

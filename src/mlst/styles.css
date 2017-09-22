@@ -1,0 +1,23 @@
+.wgsa-mlst-profile-hit:not(:last-child)::after {
+  content: ", ";
+}
+
+.wgsa-mlst-profile-section:not(:last-child)::after {
+  content: "_";
+}
+
+.wgsa-mlst-profile .material-icons {
+  color: #555;
+}
+
+.wgsa-mlst-hit {
+  cursor: help;
+}
+
+.wgsa-mlst-hit > .material-icons,
+.wgsa-mlst-profile-section > .material-icons {
+  color: #555;
+  font-size: 16px;
+  height: 20px;
+  vertical-align: middle;
+}

@@ -6,7 +6,7 @@ import { getFormattedDateString, formatDateTime } from '../utils/Date';
 import { getCountryName } from '../utils/country';
 
 import { Metadata } from './components';
-import ST from './analysis/ST.react';
+import ST from '../mlst/ST.react';
 
 function getAMROverview({ antibiotics }) {
   const resistances = [];

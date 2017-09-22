@@ -9,7 +9,7 @@ import { formatDate } from '../../utils/Date';
 import { getCountryName } from '../../utils/country';
 
 import { showGenomeDrawer } from '../../genome-drawer';
-import ST from '../../genome-drawer/analysis/ST.react';
+import { ST } from '../../mlst';
 
 const Cell = ({ title, icon, children }) => (
   <span

@@ -12,8 +12,7 @@ import { getCountryName } from '../../utils/country';
 import { taxIdMap } from '../../organisms';
 import { formatDateTime } from '../../utils/Date';
 
-import { isNovel } from '../../utils/mlst';
-import ST from '../../genome-drawer/analysis/ST.react';
+import { ST, isNovel } from '../../mlst';
 
 export const getFilter = state => filter.getFilter(state, { stateKey });
 
