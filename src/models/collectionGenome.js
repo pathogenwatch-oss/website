@@ -40,6 +40,7 @@ const schema = new Schema({
     mlst: {
       st: String,
       code: String,
+      alleles: Array,
     },
     paarsnp: {
       // [ { name: String, state: String, mechanisms: [ String ] } ],
