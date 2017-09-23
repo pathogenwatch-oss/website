@@ -4,6 +4,7 @@ import Papa from 'papaparse';
 import { getUserDefinedValue } from '../table/utils';
 
 import { systemDataColumns } from '../data-tables/constants';
+import { createCode } from '../../mlst/utils';
 
 import { isResistant, hasElement } from '../amr-utils';
 
@@ -28,11 +29,31 @@ const longitudeColumn = {
   },
 };
 
+const mlstColumn = {
+  columnKey: '__mlst',
+  valueGetter({ analysis }) {
+    if (!analysis.mlst) return '';
+    return analysis.mlst.st;
+  },
+};
+
+const mlstProfileColumn = {
+  columnKey: '__mlst_profile',
+  valueGetter({ analysis }) {
+    if (!analysis.mlst) return null;
+    const { code, alleles } = analysis.mlst;
+    if (code) return code;
+    return createCode(alleles);
+  },
+};
+
 const definedColumns = {
   [nameColumn.columnKey]: nameColumn,
   [latitudeColumn.columnKey]: latitudeColumn,
   [longitudeColumn.columnKey]: longitudeColumn,
   ...systemDataColumns,
+  [mlstColumn.columnKey]: mlstColumn,
+  [mlstProfileColumn.columnKey]: mlstProfileColumn,
 };
 
 const valueGettersByTable = {
