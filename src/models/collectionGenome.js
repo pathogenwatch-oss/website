@@ -58,8 +58,21 @@ const schema = new Schema({
 
 setToObjectOptions(schema);
 
+const formatters = {
+  paarsnp: result => Object.assign({}, result, {
+    antibiotics: result.antibiotics.reduce((memo, antibiotic) => {
+      memo[antibiotic.name] = antibiotic;
+      return memo;
+    }, {}),
+  }),
+};
+
 schema.statics.addAnalysisResult = function (uuid, key, result) {
-  return this.update({ uuid }, { [`analysis.${key.toLowerCase()}`]: result });
+  const formattedResult = key in formatters ? formatters[key](result) : result;
+  return this.update(
+    { uuid },
+    { [`analysis.${key.toLowerCase()}`]: formattedResult }
+  );
 };
 
 const projectResultsByType = {
