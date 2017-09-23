@@ -8,7 +8,10 @@ const stateColours = {
 export const nonResistantColour = '#fff';
 const stateColourMap = Object.keys(stateColours).reduce(
   (map, key) => map.set(stateColours[key], key),
-  new Map().set(nonResistantColour, 'UNKNOWN')
+  new Map([
+    [ nonResistantColour, 'UNKNOWN' ],
+    [ nonResistantColour, 'NOT_FOUND' ],
+  ])
 );
 export const getColourState = colour => stateColourMap.get(colour);
 
@@ -18,8 +21,8 @@ export function getEffectColour(effect) {
 
 export function isResistant({ antibiotics }, antibiotic) {
   if (!(antibiotic in antibiotics)) return false;
-
-  return antibiotics[antibiotic].state !== 'UNKNOWN';
+  const { state } = antibiotics[antibiotic];
+  return state in stateColours;
 }
 
 export function hasElement(genome, type, element) {
