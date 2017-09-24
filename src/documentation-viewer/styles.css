@@ -6,3 +6,7 @@
 .wgsa-wiki-page blockquote p {
   display: inline-block;
 }
+
+.wgsa-wiki-page pre {
+  overflow-x: auto;
+}
