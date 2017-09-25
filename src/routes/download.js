@@ -58,19 +58,20 @@ router.get('/genome/:id', (req, res, next) => {
 router.get('/archive/:type', (req, res, next) => {
   const { user, sessionID } = req;
   const { type } = req.params;
-  const { ids } = req.query;
+  const { filename = 'wgsa-genomes.zip', ids } = req.query;
 
   if (!ids || !ids.length) return res.sendStatus(400);
+  const splitIds = ids.split(',');
 
-  LOGGER.info(`Received request for ${type} archive of ${ids.length} files`);
+  LOGGER.info(`Received request for ${type} archive of ${splitIds.length} files`);
 
   return (
     services.request('download', 'fetch-genomes',
-        { user, sessionID, type, ids: ids.split(','), projection: { name: 1, fileId: 1 } })
+        { user, sessionID, type, ids: splitIds, projection: { name: 1, fileId: 1 } })
       .then(genomes =>
         services.request('download', 'create-genome-archive', { genomes }))
       .then(stream => {
-        res.setHeader('Content-Disposition', 'attachment; filename=genomes.zip');
+        res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
         res.setHeader('Content-Type', 'application/zip');
         stream.pipe(res);
       })
