@@ -131,8 +131,7 @@ router.get('/analysis/mlst', (req, res) => {
     name: 1,
     'analysis.mlst.__v': 1,
     'analysis.mlst.st': 1,
-    'analysis.mlst.alleles.gene': 1,
-    'analysis.mlst.alleles.hits': 1,
+    'analysis.mlst.alleles': 1,
   };
   const transformer = ({ _id, name, analysis }) => {
     const result = {
@@ -246,16 +245,22 @@ router.get('/analysis/cgmlst', (req, res) => {
     name: 1,
     'analysis.mlst.__v': 1,
     'analysis.mlst.st': 1,
-    'analysis.mlst.alleles.gene': 1,
-    'analysis.mlst.alleles.hits': 1,
+    'analysis.mlst.matches': 1,
   };
   const transformer = ({ _id, name, analysis }, callback) => {
     const result = [];
 
-    for (const { gene, hits } of analysis.mlst.alleles) {
-      for (const hit of hits) {
-        result.push({ id: _id.toString(), name, gene, hit });
-      }
+    for (const { gene, id, start, end, contig } of analysis.mlst.matches) {
+      result.push({
+        id: _id.toString(),
+        name,
+        gene,
+        alleleId: id,
+        start,
+        end,
+        contig,
+        direction: start > end ? 'reverse' : 'forwards',
+      });
     }
 
     callback(null, ...result);

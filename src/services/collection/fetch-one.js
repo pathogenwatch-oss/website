@@ -8,7 +8,13 @@ function addGenomes(collection) {
   }
 
   return CollectionGenome
-    .find({ _collection: collection.id }, { _collection: 0, fileId: 0 })
+    .find({ _collection: collection.id }, {
+      _collection: 0,
+      fileId: 0,
+      'analysis.core.matches': 0,
+      'analysis.mlst.matches': 0,
+      'analysis.paarsnp.matches': 0,
+    })
     .lean()
     .then(genomes => {
       collection.genomes = genomes;
