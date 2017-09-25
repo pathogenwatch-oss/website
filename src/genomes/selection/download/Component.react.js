@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import Spinner from '../../../components/Spinner.react';
 import { FormattedName } from '../../../organisms';
 
-import { getSelectionDownloads, getSelectedGenomes } from '../selectors';
+import { getSelectionDownloads, getSelectedGenomeList } from '../selectors';
 
 import { fetchDownloads } from '../actions';
 
@@ -39,7 +39,7 @@ const Download = React.createClass({
   },
 
   render() {
-    const { download } = this.props;
+    const { download, selection } = this.props;
     const { status, summary } = download;
     if (status === statuses.LOADING) {
       return <Spinner />;
@@ -47,13 +47,17 @@ const Download = React.createClass({
     if (status === statuses.ERROR) {
       return <p>Something went wrong. 😞</p>;
     }
+    const ids = selection.map(_ => _.id);
     if (status === statuses.SUCCESS) {
       return (
-        <ul>
-          { Object.keys(summary).map(key =>
-            <Section key={key} {...summary[key]} />
-          ) }
-        </ul>
+        <div>
+          <ul>
+            { Object.keys(summary).map(key =>
+              <Section key={key} {...summary[key]} />
+            ) }
+          </ul>
+          <a href={`/download/archive/genome?ids=${ids}`}>Archive</a>
+        </div>
       );
     }
     return null;
@@ -64,7 +68,7 @@ const Download = React.createClass({
 function mapStateToProps(state) {
   return {
     download: getSelectionDownloads(state),
-    selection: getSelectedGenomes(state),
+    selection: getSelectedGenomeList(state),
   };
 }
 

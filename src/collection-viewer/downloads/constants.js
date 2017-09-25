@@ -29,7 +29,7 @@ export const fileTypes = {
   },
   amr_profile_csv: {
     description: 'AMR Profile',
-    filenameSegment: 'amr_profile.csv',
+    filenameSegment: 'amr-profile.csv',
     getFileContents: clientSide.generateAMRProfile,
     createLink: clientSide.createCSVLink,
     hideFromMenu() {
@@ -39,7 +39,7 @@ export const fileTypes = {
   },
   amr_snps_csv: {
     description: 'AMR SNPs',
-    filenameSegment: 'amr_snps.csv',
+    filenameSegment: 'amr-snps.csv',
     getFileContents: clientSide.generateAMRSNPs,
     createLink: clientSide.createCSVLink,
     hideFromMenu() {
@@ -49,7 +49,7 @@ export const fileTypes = {
   },
   amr_genes_csv: {
     description: 'AMR Genes',
-    filenameSegment: 'amr_genes.csv',
+    filenameSegment: 'amr-genes.csv',
     getFileContents: clientSide.generateAMRGenes,
     createLink: clientSide.createCSVLink,
     hideFromMenu() {
@@ -59,23 +59,23 @@ export const fileTypes = {
   },
   concatenated_core_genes_collection: {
     description: 'Concatenated Core Genes',
-    filenameSegment: 'concatenated_core_genes',
+    filenameSegment: 'concatenated-core-genes',
   },
   kernel_checksum_distribution: {
     description: 'Core Allele Distribution',
-    filenameSegment: 'core_allele_distribution',
+    filenameSegment: 'core-allele-distribution',
   },
   differences_matrix: {
     description: 'Difference Matrix',
-    filenameSegment: 'difference_matrix',
+    filenameSegment: 'difference-matrix',
   },
   score_matrix: {
     description: 'Score Matrix',
-    filenameSegment: 'score_matrix',
+    filenameSegment: 'score-matrix',
   },
   variance_summary: {
     description: 'Variance Summary',
-    filenameSegment: 'variance_summary',
+    filenameSegment: 'variance-summary',
     idType: 'collection',
   },
   wgsa_gff: {

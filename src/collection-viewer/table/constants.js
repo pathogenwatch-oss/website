@@ -56,14 +56,10 @@ export const downloadColumnProps = {
   fixed: true,
   headerClasses: 'wgsa-table-cell--skinny',
   getHeaderContent({ archiveDownloads }) {
+    const { ids, filename } = archiveDownloads.genome;
     return (
       <span className="wgsa-table-downloads" onClick={(e) => e.stopPropagation()}>
-        <GenomeArchiveButton
-          ids={archiveDownloads.genome.ids}
-          type="collection"
-          filename={archiveDownloads.genome.filename}
-          title="Download Genomes"
-        />
+        <GenomeArchiveButton ids={ids} filename={filename} />
         <DownloadButton
           {...archiveDownloads.gff}
           isArchive
