@@ -10,7 +10,7 @@
   color: #555;
 }
 
-.wgsa-mlst-hit {
+.wgsa-mlst-hit[title] {
   cursor: help;
 }
 

@@ -14,9 +14,18 @@ export default React.createClass({
   },
 
   render() {
-    const { id } = this.props;
+    const { id, textOnly } = this.props;
     if (isNovel(id)) {
       return (
+        textOnly ?
+        <span
+          ref={el => { this.el = el; }}
+          onClick={e => e.stopPropagation()}
+          className="wgsa-mlst-hit"
+          title={`Novel Allele: ${id}\n(Click to Copy)`}
+        >
+          ({id.slice(0, 4)})
+        </span> :
         <i
           ref={el => { this.el = el; }}
           onClick={e => e.stopPropagation()}
