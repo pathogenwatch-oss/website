@@ -40,6 +40,7 @@ const schema = new Schema({
     mlst: {
       st: String,
       code: String,
+      alleles: Array,
     },
     paarsnp: {
       // [ { name: String, state: String, mechanisms: [ String ] } ],
@@ -57,8 +58,21 @@ const schema = new Schema({
 
 setToObjectOptions(schema);
 
-schema.statics.addAnalysisResult = function (uuid, name, result) {
-  return this.update({ uuid }, { [`analysis.${name.toLowerCase()}`]: result });
+const formatters = {
+  paarsnp: result => Object.assign({}, result, {
+    antibiotics: result.antibiotics.reduce((memo, antibiotic) => {
+      memo[antibiotic.name] = antibiotic;
+      return memo;
+    }, {}),
+  }),
+};
+
+schema.statics.addAnalysisResult = function (uuid, key, result) {
+  const formattedResult = key in formatters ? formatters[key](result) : result;
+  return this.update(
+    { uuid },
+    { [`analysis.${key.toLowerCase()}`]: formattedResult }
+  );
 };
 
 const projectResultsByType = {
@@ -91,7 +105,6 @@ schema.statics.findByUuid = function (uuid, projection) {
 schema.statics.insertRaw = function (docs, options) {
   return new Promise((resolve, reject) => {
     this.collection.insertMany(docs, options, error => {
-      console.log('callback', error);
       if (error) {
         reject(error);
       }

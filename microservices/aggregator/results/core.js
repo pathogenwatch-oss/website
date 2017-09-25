@@ -5,11 +5,11 @@ const { CORE_RESULT } = require('utils/documentKeys');
 module.exports = (name, { assemblyId, documentKeys }) => {
   const { uuid } = assemblyId;
   const resultDocKey = documentKeys.find(_ => _.indexOf(`${CORE_RESULT}_`) === 0);
-  return mainStorage.retrieve(resultDocKey).
-    then(result => ({
+  return mainStorage.retrieve(resultDocKey)
+    .then(result => ({
       size: result.kernelSize,
       percentMatched: result.percentKernelMatched,
       percentAssemblyMatched: result.percentAssemblyMatched,
-    })).
-    then(result => CollectionGenome.addAnalysisResult(uuid, name, result));
+    }))
+    .then(result => CollectionGenome.addAnalysisResult(uuid, name, result));
 };

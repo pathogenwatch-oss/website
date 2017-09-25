@@ -201,13 +201,15 @@ router.get('/analysis/genotyphi', (req, res) => {
   const projection = {
     name: 1,
     'analysis.genotyphi.__v': 1,
-    'analysis.genotyphi.type': 1,
+    'analysis.genotyphi.genotype': 1,
+    'analysis.genotyphi.foundLoci': 1,
   };
   const transformer = ({ _id, name, analysis }) => ({
     id: _id.toString(),
     name,
     version: analysis.genotyphi.__v,
     genotype: analysis.genotyphi.genotype,
+    snpsCalled: analysis.genotyphi.foundLoci,
   });
   downloadAnalysisResults(ids, task, projection, transformer, options, res);
 });

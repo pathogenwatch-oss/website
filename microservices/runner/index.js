@@ -19,11 +19,11 @@ const { tasks, speciator } = taskQueue.queues;
 
 function subscribeToQueues() {
   if (!queue || queue === 'tasks') {
-    taskQueue.dequeue(tasks, ({ genomeId, organismId, speciesId, genusId, fileId, uploadedAt, task, version, clientId }) =>
+    taskQueue.dequeue(tasks, ({ genomeId, collectionId, organismId, speciesId, genusId, fileId, uploadedAt, task, version, clientId }) =>
       request('tasks', 'run', { organismId, speciesId, genusId, fileId, task, version })
         .then(result => {
-          LOGGER.info('results', genomeId, task, version, result);
-          return request('genome', 'add-analysis', { genomeId, uploadedAt, task, version, result, clientId });
+          LOGGER.info('results', genomeId, collectionId, task, version, result);
+          return request('genome', 'add-analysis', { genomeId, collectionId, uploadedAt, task, version, result, clientId });
         })
     );
   }
@@ -36,7 +36,7 @@ function subscribeToQueues() {
           return request('genome', 'add-analysis', { genomeId, uploadedAt, task, version, result, clientId })
             .then(() => {
               const { organismId, speciesId, genusId } = result;
-              return request('tasks', 'submit-genome', { genomeId, fileId, uploadedAt, organismId, speciesId, genusId, clientId })
+              return request('tasks', 'submit-genome', { genomeId, fileId, uploadedAt, organismId, speciesId, genusId, clientId });
             });
         })
     );

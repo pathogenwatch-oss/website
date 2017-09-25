@@ -34,17 +34,22 @@ module.exports.getSpeciatorTask = function () {
   return { task, version };
 };
 
-module.exports.getTasksByOrganism = function (organismId, speciesId, genusId) {
-  const taskLists = [];
+const collectionIgnore = new Set(
+  config.tasks ? config.tasks.collectionIgnore : undefined
+);
+
+module.exports.getTasksByOrganism = function (organismId, speciesId, genusId, collectionId) {
+  const taskLists = [ tasks.all ];
 
   if (organismId in tasks) taskLists.push(tasks[organismId]);
   if (speciesId in tasks) taskLists.push(tasks[speciesId]);
   if (genusId in tasks) taskLists.push(tasks[genusId]);
 
-  const uniqueTasks = [ ...tasks.all ];
+  const uniqueTasks = [];
   const keys = new Set();
   for (const taskList of taskLists) {
     for (const task of taskList) {
+      if (collectionId && collectionIgnore.has(task.task)) continue;
       const taskKey = task.task + task.version;
       if (!keys.has(taskKey)) {
         keys.add(taskKey);

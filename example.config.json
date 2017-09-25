@@ -75,6 +75,7 @@
     "registry": {
 			"username": "",
 			"password": ""
-		}
+		},
+    "collectionIgnore": [ "cgmlst" ]
   }
 }
