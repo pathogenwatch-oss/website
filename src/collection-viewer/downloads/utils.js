@@ -18,8 +18,8 @@ export function createDownloadKey(id) {
   return typeof id === 'string' ? id : JSON.stringify(id);
 }
 
-export function formatCollectionFilename({ uuid }) {
-  return [ Organisms.nickname, uuid ].join('_');
+export function formatCollectionFilename({ uuid }, suffix = '') {
+  return [ 'wgsa', Organisms.nickname, uuid, suffix ].join('-');
 }
 
 const errorToast = {
@@ -41,7 +41,7 @@ export function createDownloadProps(params, dispatch) {
         getFileContents,
         idType: download.idType,
         organismId: Organisms.id,
-        filename: `wgsa_${getFileName()}_${filenameSegment}`,
+        filename: getFileName(null, filenameSegment),
       })
     )
     .catch(() => dispatch(showToast(errorToast))),
@@ -81,11 +81,11 @@ export function getArchiveDownloadProps(state, downloads, dispatch) {
       format,
       download: downloads[format],
       id: data.map(_ => _.uuid),
-      getFileName: () => formatCollectionFilename(collection),
+      getFileName: () => formatCollectionFilename(collection, 'annotations.zip'),
     }, dispatch),
     genome: {
       ids: data.map(_ => _.id || _._id),
-      filename: formatCollectionFilename(collection),
+      filename: formatCollectionFilename(collection, 'genomes.zip'),
     },
   };
 }

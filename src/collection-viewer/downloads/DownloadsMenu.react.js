@@ -74,7 +74,7 @@ function mergeProps(state, { dispatch }) {
           return createDownloadProps({
             format, download,
             id: isCollection(download) ? collection.uuid : genomeIds,
-            getFileName: () => `${formatCollectionFilename(collection)}`,
+            getFileName: () => `${formatCollectionFilename(collection, download.filenameSegment)}`,
             getFileContents: download.getFileContents &&
               (() => download.getFileContents(state)),
           }, dispatch);
