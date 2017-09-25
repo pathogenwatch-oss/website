@@ -1,24 +1,8 @@
 import React from 'react';
 
-import { isNovel } from '../../utils/mlst';
-
 import { Section, Metadata } from '../components';
 
-import ST from './ST.react';
-
-const Hit = ({ id }) => {
-  if (isNovel(id)) {
-    return (
-      <i
-        className="material-icons wgsa-mlst-profile-hit"
-        title={`Novel allele: ${id}`}
-      >
-        new_releases
-      </i>
-    );
-  }
-  return <span className="wgsa-mlst-profile-hit">{id}</span>;
-};
+import { ST, Hit } from '../../mlst';
 
 export default ({ result }) => (
   <Section heading="MLST" version={result.__v}>
@@ -40,8 +24,7 @@ export default ({ result }) => (
                 <td key={gene}>
                   {hits.length ?
                     hits.map(id => <Hit key={id} id={id} />) :
-                    <span title="Not Found">&mdash;</span>
-                  }
+                    <span title="Not Found">&mdash;</span> }
                 </td>
               )}
             </tr>

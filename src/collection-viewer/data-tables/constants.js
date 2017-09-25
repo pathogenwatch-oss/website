@@ -1,5 +1,10 @@
 import React from 'react';
 
+// imports must not include css to remain compatible with csv generator
+import ST from '../../mlst/ST.react';
+import Profile from '../../mlst/Profile.react';
+
+import { isNovel, createCode } from '../../mlst/utils';
 import { getFormattedDateString } from '../table/utils';
 
 export const systemDataColumns = {
@@ -42,17 +47,31 @@ export const systemDataColumns = {
     label: 'ST',
     displayName: 'MLST ST',
     valueGetter({ analysis }) {
+      if (!analysis.mlst) return 0;
+      const { st } = analysis.mlst;
+      if (isNovel(st)) return `(${st.slice(0, 4)})`;
+      return st;
+    },
+    display({ analysis }) {
       if (!analysis.mlst) return null;
-      return analysis.mlst.st;
+      return <ST id={analysis.mlst.st} textOnly />;
     },
   },
   __mlst_profile: {
+    columnKey: '__mlst_profile',
     label: 'PROFILE',
     displayName: 'MLST PROFILE',
-    columnKey: '__mlst_profile',
     valueGetter({ analysis }) {
       if (!analysis.mlst) return null;
-      return analysis.mlst.code;
+      const { code, alleles } = analysis.mlst;
+      if (code) return code;
+      return createCode(alleles, 4);
+    },
+    display({ analysis }) {
+      if (!analysis.mlst) return null;
+      const { code, alleles } = analysis.mlst;
+      if (code) return code;
+      return <Profile alleles={alleles} textOnly />;
     },
   },
   '__ng-mast': {

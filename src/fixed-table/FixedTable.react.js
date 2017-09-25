@@ -21,7 +21,8 @@ function getHeaderClassNames(column, isSelected) {
 
 const getCellClassNames = getClassNames.bind(null, 'wgsa-table-cell');
 
-const getCellValue = ({ valueGetter }, data) => valueGetter(data);
+const getCellValue =
+  ({ valueGetter, display = valueGetter }, data) => display(data);
 
 function isVisible(column) {
   return (
