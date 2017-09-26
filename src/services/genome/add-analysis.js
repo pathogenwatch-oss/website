@@ -5,6 +5,8 @@ const CollectionGenome = require('models/collectionGenome');
 
 const formatters = require('utils/formatters');
 
+const notifiableTasks = new Set([ 'speciator', 'mlst' ]);
+
 function formatResult(task, version, result) {
   const format = formatters[task];
   return Object.assign(
@@ -28,11 +30,12 @@ module.exports = function ({ genomeId, collectionId, uploadedAt, task, version, 
   return (
     Genome.addAnalysisResult(genomeId, task, formattedResult)
       .then(() => {
+        const notification = notifiableTasks.has(task) ? formattedResult : {};
         if (clientId) {
           request('notification', 'send', {
             channel: clientId,
             topic: `analysis-${uploadedAt}`,
-            message: { id: genomeId, task, result: formattedResult },
+            message: { id: genomeId, task, result: notification },
           });
         }
       })
