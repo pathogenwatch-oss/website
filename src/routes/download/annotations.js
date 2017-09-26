@@ -5,7 +5,10 @@ const CollectionGenome = require('models/collectionGenome');
 
 const LOGGER = require('utils/logging').createLogger('Downloads');
 
-const gffTransformer = (input) => {
+const header = '##gff-version 3.2.1';
+
+const gffTransformer = input => {
+  if (input === header) return `${input}\n`;
   const output = [
     input.sequence,
     input.source,
@@ -21,11 +24,13 @@ const gffTransformer = (input) => {
   ]
   .map(value => (value === null ? '.' : value));
 
-  return output.join('\t') + '\n';
+  return `${output.join('\t')}\n`;
 };
 
 function convertDocumentToGFF({ name, analysis }, stream) {
   const { core, mlst, paarsnp } = analysis;
+
+  stream.write(header);
 
   for (const { id, partial, matches } of core.matches) {
     for (const match of matches) {
