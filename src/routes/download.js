@@ -55,33 +55,28 @@ router.get('/genome/:id', (req, res, next) => {
     catch(next);
 });
 
-router.put('/genome-archive', (req, res, next) => {
+router.get('/archive/:type', (req, res, next) => {
   const { user, sessionID } = req;
-  const { type, ids } = req.body;
+  const { type } = req.params;
+  const { filename = 'wgsa-genomes.zip', ids } = req.query;
 
-  LOGGER.info(`Received request for ${type} archive of ${ids.length} files`);
+  if (!ids || !ids.length) return res.sendStatus(400);
+  const splitIds = ids.split(',');
 
-  return services.request('download', 'create-genome-archive', { user, sessionID, type, ids })
-    .then(fileId => res.json({ fileId }))
-    .catch(next);
-});
+  LOGGER.info(`Received request for ${type} archive of ${splitIds.length} files`);
 
-router.get('/genome-archive/:id', (req, res, next) => {
-  const { user, sessionID } = req;
-  const { id } = req.params;
-  const { filename } = req.query;
-
-  LOGGER.info(`Received request for fasta archive: ${id} ${filename}`);
-
-  services.request('download', 'genome-archive-path', { id, user, sessionID })
-    .then(archivePath =>
-      res.set({
-        'Content-Disposition': `attachment;${filename ? ` filename="${filename}.zip"` : ''}`,
-        'Content-type': 'application/zip',
+  return (
+    services.request('download', 'fetch-genomes',
+        { user, sessionID, type, ids: splitIds, projection: { name: 1, fileId: 1 } })
+      .then(genomes =>
+        services.request('download', 'create-genome-archive', { genomes }))
+      .then(stream => {
+        res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
+        res.setHeader('Content-Type', 'application/zip');
+        stream.pipe(res);
       })
-      .sendFile(archivePath)
-    )
-    .catch(next);
+      .catch(next)
+  );
 });
 
 function downloadAnalysisResults(ids, task, projection, transformer, options = {}, response) {
