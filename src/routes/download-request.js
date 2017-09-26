@@ -20,7 +20,7 @@ router.post('/organism/:organismId/download/type/:idType/format/:format',
     }
 
     const options = {
-      $timeout: 1000 * 60 * 2, format, organismId, uuids, idType,
+      timeout$: 1000 * 60 * 2, format, organismId, uuids, idType,
     };
 
     services.request('backend', 'request-download', options)
