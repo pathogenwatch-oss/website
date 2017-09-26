@@ -32,10 +32,10 @@ function convertDocumentToGFF({ name, analysis }, stream) {
 
   stream.write(header);
 
-  for (const { id, partial, matches } of core.matches) {
+  for (const { partial, matches } of core.matches) {
     for (const match of matches) {
       stream.write({
-        sequence: id,
+        sequence: match.query.id,
         source: 'WGSA_Core',
         type: 'CDS',
         start: match.query.start,

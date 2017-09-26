@@ -1,12 +1,9 @@
 const express = require('express');
 const csv = require('csv');
 const router = express.Router();
-const archiver = require('archiver');
-const transform = require('stream-transform');
 
 const services = require('services');
 const Genome = require('models/genome');
-const CollectionGenome = require('models/collectionGenome');
 
 const LOGGER = require('utils/logging').createLogger('Downloads');
 
