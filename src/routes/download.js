@@ -240,17 +240,16 @@ router.get('/analysis/cgmlst', (req, res) => {
   const { user, sessionID, query } = req;
   const { ids, organismId } = query;
   const options = { user, sessionID, organismId };
-  const task = 'mlst';
+  const task = 'cgmlst';
   const projection = {
     name: 1,
-    'analysis.mlst.__v': 1,
-    'analysis.mlst.st': 1,
-    'analysis.mlst.matches': 1,
+    'analysis.cgmlst.__v': 1,
+    'analysis.cgmlst.st': 1,
+    'analysis.cgmlst.matches': 1,
   };
   const transformer = ({ _id, name, analysis }, callback) => {
     const result = [];
-
-    for (const { gene, id, start, end, contig } of analysis.mlst.matches) {
+    for (const { gene, id, start, end, contig } of analysis.cgmlst.matches) {
       result.push({
         id: _id.toString(),
         name,
