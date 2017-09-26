@@ -1,13 +1,15 @@
 import React from 'react';
 
-import DownloadIcon from './DownloadIcon.react.js';
+import DownloadIcon from '../../downloads/DownloadIcon.react.js';
 
-import { CGPS } from '../app/constants';
+import { getServerPath } from '../../utils/Api';
+
+import { CGPS } from '../../app/constants';
 const { COLOURS } = CGPS;
 
 export default ({ ids, filename }) => (
   <a
-    href={`/download/archive/collection?filename=${filename}&ids=${ids.join(',')}`}
+    href={getServerPath(`/download/archive/collection?filename=${filename}&ids=${ids.join(',')}`)}
     target="_blank" rel="noopener"
     download={filename}
     title="Download Genomes"
