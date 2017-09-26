@@ -45,7 +45,7 @@ module.exports = (name, { assemblyId, documentKeys }) => {
   const resultDocKey = documentKeys.find(_ => _.indexOf(`${CORE_RESULT}_`) === 0);
   const rawResultDocKey = documentKeys.find(_ => _.indexOf(`${CORE_RAW_RESULT}_`) === 0);
   return mainStorage.retrieveMany([ resultDocKey, rawResultDocKey ])
-    .then(({ results }) => results)
+    .then(({ results }) => [ results[resultDocKey], results[rawResultDocKey] ])
     .then(([ result, rawResult ]) => ({
       size: result.kernelSize,
       percentMatched: result.percentKernelMatched,

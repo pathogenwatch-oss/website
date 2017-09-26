@@ -1,9 +1,12 @@
 const express = require('express');
 const csv = require('csv');
 const router = express.Router();
+const archiver = require('archiver');
+const transform = require('stream-transform');
 
 const services = require('services');
 const Genome = require('models/genome');
+const CollectionGenome = require('models/collectionGenome');
 
 const LOGGER = require('utils/logging').createLogger('Downloads');
 
@@ -80,7 +83,7 @@ router.get('/archive/:type', (req, res, next) => {
 });
 
 function downloadAnalysisResults(ids, task, projection, transformer, options = {}, response) {
-  const { header = true, quotedString = true, user, sessionID, organismId } = options;
+  const { header = true, quotedString = true, user, sessionID } = options;
 
   if (!ids || typeof(ids) !== 'string' || ids === '') {
     LOGGER.error('Missing ids');
@@ -92,7 +95,7 @@ function downloadAnalysisResults(ids, task, projection, transformer, options = {
     Genome.getPrefilterCondition({ user, sessionID })
   );
   const cursor = Genome.find(query, projection);
-  const filename = `wgsa-${organismId}-${task}-${Date.now()}.csv`;
+  const filename = `wgsa-${task}-${Date.now()}.csv`;
 
   response.setHeader('Content-Disposition', `attachment; filename=${filename}`);
   response.setHeader('Content-Type', 'text/csv');
@@ -119,8 +122,8 @@ router.get('/analysis/:task', (req, res, next) => {
 
 router.get('/analysis/mlst', (req, res) => {
   const { user, sessionID, query } = req;
-  const { ids, organismId } = query;
-  const options = { user, sessionID, organismId };
+  const { ids } = query;
+  const options = { user, sessionID };
   const task = 'mlst';
   const projection = {
     name: 1,
@@ -147,8 +150,8 @@ router.get('/analysis/mlst', (req, res) => {
 
 router.get('/analysis/speciator', (req, res) => {
   const { user, sessionID, query } = req;
-  const { ids, organismId } = query;
-  const options = { user, sessionID, organismId };
+  const { ids } = query;
+  const options = { user, sessionID };
   const task = 'speciator';
   const projection = { name: 1, 'analysis.speciator': 1 };
   const transformer = ({ _id, name, analysis }) => ({
@@ -169,8 +172,8 @@ router.get('/analysis/speciator', (req, res) => {
 
 router.get('/analysis/paarsnp', (req, res) => {
   const { user, sessionID, query } = req;
-  const { ids, organismId } = query;
-  const options = { user, sessionID, organismId };
+  const { ids } = query;
+  const options = { user, sessionID };
   const task = 'paarsnp';
   const projection = {
     name: 1,
@@ -189,8 +192,8 @@ router.get('/analysis/paarsnp', (req, res) => {
 
 router.get('/analysis/genotyphi', (req, res) => {
   const { user, sessionID, query } = req;
-  const { ids, organismId } = query;
-  const options = { user, sessionID, organismId };
+  const { ids } = query;
+  const options = { user, sessionID };
   const task = 'genotyphi';
   const projection = {
     name: 1,
@@ -210,8 +213,8 @@ router.get('/analysis/genotyphi', (req, res) => {
 
 router.get('/analysis/ngmast', (req, res) => {
   const { user, sessionID, query } = req;
-  const { ids, organismId } = query;
-  const options = { user, sessionID, organismId };
+  const { ids } = query;
+  const options = { user, sessionID };
   const task = 'ngmast';
   const projection = {
     name: 1,
@@ -233,8 +236,8 @@ router.get('/analysis/ngmast', (req, res) => {
 
 router.get('/analysis/cgmlst', (req, res) => {
   const { user, sessionID, query } = req;
-  const { ids, organismId } = query;
-  const options = { user, sessionID, organismId };
+  const { ids } = query;
+  const options = { user, sessionID };
   const task = 'cgmlst';
   const projection = {
     name: 1,
@@ -261,5 +264,7 @@ router.get('/analysis/cgmlst', (req, res) => {
   };
   downloadAnalysisResults(ids, task, projection, transformer, options, res);
 });
+
+router.get('/annotations', require('./annotations'));
 
 module.exports = router;
