@@ -138,7 +138,7 @@ function convertDocumentToGFF({ name, analysis }, stream) {
 }
 
 module.exports = (req, res, next) => {
-  const { ids, filename = `wgsa-annotations-${Date.now()}` } = req.query;
+  const { ids, filename = `wgsa-annotations-${Date.now()}.zip` } = req.query;
 
   if (!ids || typeof(ids) !== 'string' || ids === '') {
     LOGGER.error('Missing ids');
@@ -147,7 +147,6 @@ module.exports = (req, res, next) => {
 
   try {
     const $in = ids.split(',');
-
     const query = {
       _id: { $in },
       'analysis.core': { $exists: true },
@@ -163,7 +162,7 @@ module.exports = (req, res, next) => {
     const cursor = CollectionGenome.find(query, projection);
 
     if ($in.length > 1) {
-      res.setHeader('Content-Disposition', `attachment; filename=${filename}.zip`);
+      res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
       res.setHeader('Content-Type', 'application/zip');
 
       const archive = archiver.create('zip');
