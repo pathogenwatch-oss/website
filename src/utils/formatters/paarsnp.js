@@ -47,8 +47,8 @@ function mergeMatches(paar = {}, snpar = {}) {
             id: searchStatistics.querySequenceId,
           },
         });
-        for (const { casualMutations } of snpResistanceElements) {
-          for (const mutation of casualMutations) {
+        for (const { causalMutations } of snpResistanceElements) {
+          for (const mutation of causalMutations) {
             matches.push({
               id: searchStatistics.querySequenceId,
               source: 'WGSA_SNPAR',
