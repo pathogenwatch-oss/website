@@ -9,14 +9,14 @@
     { "task": "mlst", "version": "v4" }
   ],
   "195": [
-    { "task": "cgmlst", "version": "v1" }
+    { "task": "cgmlst", "version": "v2" }
   ],
   "196": [
     { "task": "mlst", "version": "v4" }
   ],
   "197": [
     { "task": "mlst", "version": "v4" },
-    { "task": "cgmlst", "version": "v1" }
+    { "task": "cgmlst", "version": "v2" }
   ],
   "198": [
     { "task": "mlst", "version": "v4" }
@@ -57,10 +57,10 @@
   "485": [
     { "task": "paarsnp", "version": "v3" },
     { "task": "ngmast", "version": "v1" },
-    { "task": "cgmlst", "version": "v1" }
+    { "task": "cgmlst", "version": "v2" }
   ],
   "487": [
-    { "task": "cgmlst", "version": "v1" }
+    { "task": "cgmlst", "version": "v2" }
   ],
   "504": [
     { "task": "mlst", "version": "v4" }
@@ -137,7 +137,7 @@
   "1280": [
     { "task": "mlst", "version": "v4" },
     { "task": "paarsnp", "version": "v3" },
-    { "task": "cgmlst", "version": "v1" }
+    { "task": "cgmlst", "version": "v2" }
   ],
   "1282": [
     { "task": "mlst", "version": "v4" }
@@ -198,7 +198,7 @@
     { "task": "mlst", "version": "v4" }
   ],
   "1637": [
-    { "task": "cgmlst", "version": "v1" }
+    { "task": "cgmlst", "version": "v2" }
   ],
   "1639": [
     { "task": "mlst", "version": "v4" }
