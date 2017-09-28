@@ -8,7 +8,7 @@ const mongoose = require('mongoose');
 const config = require('configuration');
 const LOGGER = require('utils/logging').createLogger('queue');
 
-mQueue.processingTimeout = config.tasks.timeout || 1 * 60 * 1000;
+mQueue.processingTimeout = (config.tasks.timeout || 60) * 1000;
 mQueue.maxWorkers = 1;
 
 mQueue.databasePromise = () => Q.resolve(mongoose.connection);
