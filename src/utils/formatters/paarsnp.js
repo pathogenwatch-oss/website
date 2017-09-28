@@ -1,8 +1,8 @@
 function mergeMatches(paar = {}, snpar = {}) {
   const matches = [];
-  for (const { resistanceSetName, agents } of paar.completeResistanceSets) {
-    if (resistanceSetName in paar.blastMatches) {
-      for (const match of paar.blastMatches[resistanceSetName]) {
+  for (const { resistanceSetName, agents, elementIds } of paar.completeResistanceSets) {
+    for (const elementId of elementIds) {
+      for (const match of (paar.blastMatches[elementId] || [])) {
         matches.push({
           agents,
           id: resistanceSetName,
