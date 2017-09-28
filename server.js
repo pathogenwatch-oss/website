@@ -118,7 +118,7 @@ module.exports = () =>
           photo: req.user.photo,
           admin: req.user.admin || undefined,
         } :
-        null;
+        undefined;
 
       const hash = crypto.createHash('sha1');
       hash.update(req.user ? req.user.id : req.sessionID);
