@@ -49,24 +49,24 @@ export const getDownloadSummary = createSelector(
   ({ summary }) => {
     if (!summary) return [];
 
-    return Object.keys(summary).map(key => {
-      const item = summary[key];
-      const ids = new Set();
+    return summary.map(item => {
+      const allIds = new Set();
       const tasks = [];
-      for (const name of Object.keys(item.tasks)) {
+      for (const { task, ids, sources } of item.tasks) {
         tasks.push({
-          name,
-          label: analysisLabels[name],
-          ids: item.tasks[name],
+          ids,
+          sources,
+          name: task,
+          label: analysisLabels[task] || task,
         });
-        for (const id of item.tasks[name]) {
-          ids.add(id);
+        for (const id of ids) {
+          allIds.add(id);
         }
       }
       return {
         ...item,
-        ids: Array.from(ids),
-        tasks: sortBy(tasks, 'label'),
+        ids: Array.from(allIds),
+        tasks: sortBy(tasks, _ => _.label.toUpperCase()),
       };
     });
   }

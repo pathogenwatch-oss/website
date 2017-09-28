@@ -14,19 +14,22 @@ import { fetchDownloads } from '../actions';
 
 import { statuses } from '../../../app/constants';
 
+import { getServerPath } from '../../../utils/Api';
+
 const Section = ({ organismId, organismName, total, tasks, ids }) => (
   <li>
     <FormattedName fullName organismId={organismId} title={organismName} />
     <ul className="wgsa-genome-download-list">
       <li>
-        <a href={`/download/archive/genome?ids=${ids}`}>
+        <a href={getServerPath(`/download/archive/genome?ids=${ids}`)}>
           <strong>FASTA files</strong>
         </a>
       </li>
       { tasks.map(task =>
         <li key={task.name}>
-          <a href={`/download/analysis/${task.name}?organismId=${organismId}&ids=${task.ids.join(',')}`}>
+          <a href={getServerPath(`/download/analysis/${task.name}?organismId=${organismId}&ids=${task.ids.join(',')}`)}>
             <strong>{task.label}</strong>
+            {task.sources.length > 0 && <small>&nbsp;({task.sources.join(', ')})</small>}
           </a>
           <span>{task.ids.length}/{total}</span>
         </li>
@@ -47,6 +50,14 @@ const Download = React.createClass({
     }
   },
 
+  showAllOrganisms(summary, ids) {
+    return (
+      summary.length === 0 ||
+      summary.length === 1 && summary[0].ids.length !== ids.length ||
+      summary.length > 1
+    );
+  },
+
   render() {
     const { status, summary, selection } = this.props;
     if (status === statuses.LOADING) {
@@ -60,16 +71,17 @@ const Download = React.createClass({
       return (
         <div className="wgsa-genome-downloads">
           <ul>
-            <li>
-              All Organisms
-              <ul className="wgsa-genome-download-list">
-                <li>
-                  <a href={`/download/archive/genome?ids=${ids}`}>
-                    <strong>FASTA files</strong>
-                  </a>
-                </li>
-              </ul>
-            </li>
+            { this.showAllOrganisms(summary, ids) &&
+              <li>
+                All Organisms
+                <ul className="wgsa-genome-download-list">
+                  <li>
+                    <a href={getServerPath(`/download/archive/genome?ids=${ids}`)}>
+                      <strong>FASTA files</strong>
+                    </a>
+                  </li>
+                </ul>
+              </li> }
             { summary.map(item => <Section key={item.organismId} {...item} />) }
           </ul>
         </div>
