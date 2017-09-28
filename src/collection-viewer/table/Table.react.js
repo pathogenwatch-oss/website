@@ -124,8 +124,8 @@ function mergeProps(state, { dispatch }, props) {
   return {
     ...props,
     activeColumns,
+    data,
     columns: mappedColumns,
-    data: data.map(row => addDownloadProps(row, state, dispatch)),
     onRowClick: row => dispatch(onRowClick(row)),
     getDefaultHeaderContent: columnProps => (
       <DefaultColumnHeader

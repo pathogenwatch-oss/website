@@ -42,21 +42,18 @@ const Summary = React.createClass({
             className="mdl-chip__contact"
             onClick={() => toggle('selection')}
             title={size > 0 ? 'View Selection' : undefined}
-            disabled={size === 0}
           >
             {size}
           </button>
           <button
             className="mdl-chip__text"
             onClick={() => toggle('collection')}
-            disabled={size === 0}
           >
             Create Collection
           </button>
           <button
             className="mdl-chip__text"
             onClick={() => toggle('download')}
-            disabled={size === 0}
           >
             Download
           </button>

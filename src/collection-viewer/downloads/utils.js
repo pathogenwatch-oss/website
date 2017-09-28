@@ -48,44 +48,13 @@ export function createDownloadProps(params, dispatch) {
   };
 }
 
-function createPropsForDownloads(downloads, params, dispatch) {
-  const { id, getFileName } = params;
-
-  return Object.keys(downloads).reduce((memo, format) => ({
-    ...memo,
-    [format]: createDownloadProps({
-      format,
-      download: downloads[format],
-      id,
-      getFileName,
-    }, dispatch),
-  }), {});
-}
-
-export function addDownloadProps(row, { downloads }, dispatch) {
-  const { uuid, name } = row;
-  return {
-    ...row,
-    __downloads: createPropsForDownloads(downloads, {
-      id: uuid,
-      getFileName: () => name,
-    }, dispatch),
-  };
-}
-
-export function getArchiveDownloadProps(state, downloads, dispatch) {
+export function getArchiveDownloadProps(state) {
   const { collection, data } = state; // not full state :/
-  const format = 'wgsa_gff';
   return {
-    gff: createDownloadProps({
-      format,
-      download: downloads[format],
-      id: data.map(_ => _.uuid),
-      getFileName: () => formatCollectionFilename(collection, 'annotations.zip'),
-    }, dispatch),
-    genome: {
-      ids: data.map(_ => _.id || _._id),
-      filename: formatCollectionFilename(collection, 'genomes.zip'),
+    ids: data.map(_ => _.id || _._id),
+    filenames: {
+      genome: formatCollectionFilename(collection, 'genomes.zip'),
+      annotation: formatCollectionFilename(collection, 'annotations.zip'),
     },
   };
 }

@@ -10,4 +10,5 @@ export const analysisLabels = {
   paarsnp: 'AMR',
   ngmast: 'NG-MAST',
   genotyphi: 'Genotyphi',
+  cgmlst: 'cgMLST',
 };
