@@ -8,7 +8,7 @@ const mongoose = require('mongoose');
 const config = require('configuration');
 const LOGGER = require('utils/logging').createLogger('queue');
 
-mQueue.processingTimeout = config.tasks.timeout || 1 * 60 * 1000;
+mQueue.processingTimeout = (config.tasks.timeout || 60) * 1000;
 mQueue.maxWorkers = 1;
 
 mQueue.databasePromise = () => Q.resolve(mongoose.connection);
@@ -45,7 +45,7 @@ module.exports.dequeue = function (queue, callback) {
         LOGGER.error(err);
         const { retries = 1 } = queueItem.message;
         queueItem.releasedReason = err.message;
-        if ((queueItem.retryCount || 0) < retries) {
+        if ((queueItem.retryCount || 0) < retries - 1) {
           queueItem.nextReceivableTime = new Date(Date.now() + (30 * 1000));
           return 'Retry';
         }

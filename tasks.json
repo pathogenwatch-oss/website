@@ -8,11 +8,15 @@
   "171": [
     { "task": "mlst", "version": "v4" }
   ],
+  "195": [
+    { "task": "cgmlst", "version": "v1" }
+  ],
   "196": [
     { "task": "mlst", "version": "v4" }
   ],
   "197": [
-    { "task": "mlst", "version": "v4" }
+    { "task": "mlst", "version": "v4" },
+    { "task": "cgmlst", "version": "v1" }
   ],
   "198": [
     { "task": "mlst", "version": "v4" }
@@ -52,7 +56,11 @@
   ],
   "485": [
     { "task": "paarsnp", "version": "v3" },
-    { "task": "ngmast", "version": "v1" }
+    { "task": "ngmast", "version": "v1" },
+    { "task": "cgmlst", "version": "v1" }
+  ],
+  "487": [
+    { "task": "cgmlst", "version": "v1" }
   ],
   "504": [
     { "task": "mlst", "version": "v4" }
@@ -128,7 +136,8 @@
   ],
   "1280": [
     { "task": "mlst", "version": "v4" },
-    { "task": "paarsnp", "version": "v3" }
+    { "task": "paarsnp", "version": "v3" },
+    { "task": "cgmlst", "version": "v1" }
   ],
   "1282": [
     { "task": "mlst", "version": "v4" }
@@ -187,6 +196,9 @@
   ],
   "1624": [
     { "task": "mlst", "version": "v4" }
+  ],
+  "1637": [
+    { "task": "cgmlst", "version": "v1" }
   ],
   "1639": [
     { "task": "mlst", "version": "v4" }

@@ -80,7 +80,7 @@ router.get('/archive/:type', (req, res, next) => {
 });
 
 function downloadAnalysisResults(ids, task, projection, transformer, options = {}, response) {
-  const { header = true, quotedString = true, user, sessionID, organismId } = options;
+  const { header = true, quotedString = true, user, sessionID } = options;
 
   if (!ids || typeof(ids) !== 'string' || ids === '') {
     LOGGER.error('Missing ids');
@@ -92,7 +92,7 @@ function downloadAnalysisResults(ids, task, projection, transformer, options = {
     Genome.getPrefilterCondition({ user, sessionID })
   );
   const cursor = Genome.find(query, projection);
-  const filename = `wgsa-${organismId}-${task}-${Date.now()}.csv`;
+  const filename = `wgsa-${task}-${Date.now()}.csv`;
 
   response.setHeader('Content-Disposition', `attachment; filename=${filename}`);
   response.setHeader('Content-Type', 'text/csv');
@@ -119,20 +119,19 @@ router.get('/analysis/:task', (req, res, next) => {
 
 router.get('/analysis/mlst', (req, res) => {
   const { user, sessionID, query } = req;
-  const { ids, organismId } = query;
-  const options = { user, sessionID, organismId };
+  const { ids } = query;
+  const options = { user, sessionID };
   const task = 'mlst';
   const projection = {
     name: 1,
     'analysis.mlst.__v': 1,
     'analysis.mlst.st': 1,
-    'analysis.mlst.alleles.gene': 1,
-    'analysis.mlst.alleles.hits': 1,
+    'analysis.mlst.alleles': 1,
   };
   const transformer = ({ _id, name, analysis }) => {
     const result = {
-      id: _id.toString(),
-      name,
+      genomeId: _id.toString(),
+      genomeName: name,
       version: analysis.mlst.__v,
       st: analysis.mlst.st,
     };
@@ -148,13 +147,13 @@ router.get('/analysis/mlst', (req, res) => {
 
 router.get('/analysis/speciator', (req, res) => {
   const { user, sessionID, query } = req;
-  const { ids, organismId } = query;
-  const options = { user, sessionID, organismId };
+  const { ids } = query;
+  const options = { user, sessionID };
   const task = 'speciator';
   const projection = { name: 1, 'analysis.speciator': 1 };
   const transformer = ({ _id, name, analysis }) => ({
-    id: _id.toString(),
-    name,
+    genomeId: _id.toString(),
+    genomeName: name,
     version: analysis.speciator.__v,
     organismName: analysis.speciator.organismName,
     organismId: analysis.speciator.organismId,
@@ -170,8 +169,8 @@ router.get('/analysis/speciator', (req, res) => {
 
 router.get('/analysis/paarsnp', (req, res) => {
   const { user, sessionID, query } = req;
-  const { ids, organismId } = query;
-  const options = { user, sessionID, organismId };
+  const { ids } = query;
+  const options = { user, sessionID };
   const task = 'paarsnp';
   const projection = {
     name: 1,
@@ -179,9 +178,13 @@ router.get('/analysis/paarsnp', (req, res) => {
     'analysis.paarsnp.antibiotics': 1,
   };
   const transformer = ({ _id, name, analysis }) => {
-    const doc = { id: _id.toString(), name, version: analysis.paarsnp.__v };
-    for (const key of Object.keys(analysis.paarsnp.antibiotics)) {
-      doc[key] = analysis.paarsnp.antibiotics[key].state;
+    const doc = {
+      genomeId: _id.toString(),
+      genomeName: name,
+      version: analysis.paarsnp.__v,
+    };
+    for (const { state, fullName } of analysis.paarsnp.antibiotics) {
+      doc[fullName] = state;
     }
     return doc;
   };
@@ -190,8 +193,8 @@ router.get('/analysis/paarsnp', (req, res) => {
 
 router.get('/analysis/genotyphi', (req, res) => {
   const { user, sessionID, query } = req;
-  const { ids, organismId } = query;
-  const options = { user, sessionID, organismId };
+  const { ids } = query;
+  const options = { user, sessionID };
   const task = 'genotyphi';
   const projection = {
     name: 1,
@@ -200,8 +203,8 @@ router.get('/analysis/genotyphi', (req, res) => {
     'analysis.genotyphi.foundLoci': 1,
   };
   const transformer = ({ _id, name, analysis }) => ({
-    id: _id.toString(),
-    name,
+    genomeId: _id.toString(),
+    genomeName: name,
     version: analysis.genotyphi.__v,
     genotype: analysis.genotyphi.genotype,
     snpsCalled: analysis.genotyphi.foundLoci,
@@ -211,8 +214,8 @@ router.get('/analysis/genotyphi', (req, res) => {
 
 router.get('/analysis/ngmast', (req, res) => {
   const { user, sessionID, query } = req;
-  const { ids, organismId } = query;
-  const options = { user, sessionID, organismId };
+  const { ids } = query;
+  const options = { user, sessionID };
   const task = 'ngmast';
   const projection = {
     name: 1,
@@ -222,8 +225,8 @@ router.get('/analysis/ngmast', (req, res) => {
     'analysis.ngmast.tbpb': 1,
   };
   const transformer = ({ _id, name, analysis }) => ({
-    id: _id.toString(),
-    name,
+    genomeId: _id.toString(),
+    genomeName: name,
     version: analysis.ngmast.__v,
     ngmast: analysis.ngmast.ngmast,
     por: analysis.ngmast.por,
@@ -234,28 +237,36 @@ router.get('/analysis/ngmast', (req, res) => {
 
 router.get('/analysis/cgmlst', (req, res) => {
   const { user, sessionID, query } = req;
-  const { ids, organismId } = query;
-  const options = { user, sessionID, organismId };
-  const task = 'mlst';
+  const { ids } = query;
+  const options = { user, sessionID };
+  const task = 'cgmlst';
   const projection = {
     name: 1,
-    'analysis.mlst.__v': 1,
-    'analysis.mlst.st': 1,
-    'analysis.mlst.alleles.gene': 1,
-    'analysis.mlst.alleles.hits': 1,
+    'analysis.cgmlst.__v': 1,
+    'analysis.cgmlst.st': 1,
+    'analysis.cgmlst.matches': 1,
   };
   const transformer = ({ _id, name, analysis }, callback) => {
     const result = [];
-
-    for (const { gene, hits } of analysis.mlst.alleles) {
-      for (const hit of hits) {
-        result.push({ id: _id.toString(), name, gene, hit });
-      }
+    for (const { gene, id, start, end, contig } of analysis.cgmlst.matches) {
+      result.push({
+        genomeId: _id.toString(),
+        genomeName: name,
+        version: analysis.cgmlst.__v,
+        gene,
+        alleleId: id,
+        start,
+        end,
+        contig,
+        direction: start > end ? 'reverse' : 'forwards',
+      });
     }
 
     callback(null, ...result);
   };
   downloadAnalysisResults(ids, task, projection, transformer, options, res);
 });
+
+router.get('/annotations', require('./annotations'));
 
 module.exports = router;

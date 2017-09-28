@@ -26,6 +26,7 @@ const schema = new Schema({
       size: Number,
       percentMatched: Number,
       percentAssemblyMatched: Number,
+      matches: Array,
     },
     fp: {
       subtype: String,
@@ -41,12 +42,14 @@ const schema = new Schema({
       st: String,
       code: String,
       alleles: Array,
+      matches: Array,
     },
     paarsnp: {
       // [ { name: String, state: String, mechanisms: [ String ] } ],
       antibiotics: Schema.Types.Mixed,
       paar: Schema.Types.Mixed,
       snp: Schema.Types.Mixed,
+      matches: Array,
     },
     ngmast: {
       ngmast: String,

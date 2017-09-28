@@ -2,7 +2,7 @@ const Genome = require('../../models/genome');
 const { ObjectId } = require('mongoose').Types;
 
 const taskNames = [
-  'mlst', 'speciator', 'paarsnp', 'genotyphi', 'ngmast',
+  'mlst', 'speciator', 'paarsnp', 'genotyphi', 'ngmast', 'cgmlst',
 ];
 
 module.exports = function ({ user, sessionID, ids }) {
@@ -24,7 +24,7 @@ module.exports = function ({ user, sessionID, ids }) {
       { $facet: taskNames.reduce((memo, task) => {
         memo[task] = [
           { $match: { [`analysis.${task}`]: { $exists: true } } },
-          { $group: { _id: { organismId: '$organismId' }, ids: { $push: '$_id' } } },
+          { $group: { _id: { organismId: '$organismId' }, genomeIds: { $push: '$_id' }, sources: { $addToSet: `$analysis.${task}.source` } } },
         ];
         return memo;
       }, {}) },
@@ -33,13 +33,13 @@ module.exports = function ({ user, sessionID, ids }) {
   .then(([ organsisms, [ organismsByTask ] ]) => {
     const summary = {};
     for (const organism of organsisms) {
-      summary[organism.organismId] = Object.assign({ tasks: {} }, organism);
+      summary[organism.organismId] = Object.assign({ tasks: [] }, organism);
     }
     for (const task of Object.keys(organismsByTask)) {
-      for (const organism of organismsByTask[task]) {
-        summary[organism._id.organismId].tasks[task] = organism.ids;
+      for (const { _id, genomeIds, sources } of organismsByTask[task]) {
+        summary[_id.organismId].tasks.push({ ids: genomeIds, sources, task });
       }
     }
-    return summary;
+    return Object.keys(summary).map(key => summary[key]);
   });
 };
