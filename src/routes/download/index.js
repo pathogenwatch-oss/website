@@ -130,8 +130,8 @@ router.get('/analysis/mlst', (req, res) => {
   };
   const transformer = ({ _id, name, analysis }) => {
     const result = {
-      id: _id.toString(),
-      name,
+      genomeId: _id.toString(),
+      genomeName: name,
       version: analysis.mlst.__v,
       st: analysis.mlst.st,
     };
@@ -152,8 +152,8 @@ router.get('/analysis/speciator', (req, res) => {
   const task = 'speciator';
   const projection = { name: 1, 'analysis.speciator': 1 };
   const transformer = ({ _id, name, analysis }) => ({
-    id: _id.toString(),
-    name,
+    genomeId: _id.toString(),
+    genomeName: name,
     version: analysis.speciator.__v,
     organismName: analysis.speciator.organismName,
     organismId: analysis.speciator.organismId,
@@ -178,9 +178,13 @@ router.get('/analysis/paarsnp', (req, res) => {
     'analysis.paarsnp.antibiotics': 1,
   };
   const transformer = ({ _id, name, analysis }) => {
-    const doc = { id: _id.toString(), name, version: analysis.paarsnp.__v };
-    for (const key of Object.keys(analysis.paarsnp.antibiotics)) {
-      doc[key] = analysis.paarsnp.antibiotics[key].state;
+    const doc = {
+      genomeId: _id.toString(),
+      genomeName: name,
+      version: analysis.paarsnp.__v,
+    };
+    for (const { state, fullName } of analysis.paarsnp.antibiotics) {
+      doc[fullName] = state;
     }
     return doc;
   };
@@ -199,8 +203,8 @@ router.get('/analysis/genotyphi', (req, res) => {
     'analysis.genotyphi.foundLoci': 1,
   };
   const transformer = ({ _id, name, analysis }) => ({
-    id: _id.toString(),
-    name,
+    genomeId: _id.toString(),
+    genomeName: name,
     version: analysis.genotyphi.__v,
     genotype: analysis.genotyphi.genotype,
     snpsCalled: analysis.genotyphi.foundLoci,
@@ -221,8 +225,8 @@ router.get('/analysis/ngmast', (req, res) => {
     'analysis.ngmast.tbpb': 1,
   };
   const transformer = ({ _id, name, analysis }) => ({
-    id: _id.toString(),
-    name,
+    genomeId: _id.toString(),
+    genomeName: name,
     version: analysis.ngmast.__v,
     ngmast: analysis.ngmast.ngmast,
     por: analysis.ngmast.por,
@@ -246,8 +250,9 @@ router.get('/analysis/cgmlst', (req, res) => {
     const result = [];
     for (const { gene, id, start, end, contig } of analysis.cgmlst.matches) {
       result.push({
-        id: _id.toString(),
-        name,
+        genomeId: _id.toString(),
+        genomeName: name,
+        version: analysis.cgmlst.__v,
         gene,
         alleleId: id,
         start,
