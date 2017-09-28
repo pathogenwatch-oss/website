@@ -1,3 +1,5 @@
+const getSource = require('../sources');
+
 module.exports = ({ st, url, genes, alleles }) => {
   const formattedAlleles = [];
   const matches = [];
@@ -16,6 +18,7 @@ module.exports = ({ st, url, genes, alleles }) => {
   return {
     st,
     url,
+    source: getSource(url),
     alleles: formattedAlleles,
     matches,
   };
