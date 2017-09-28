@@ -4,22 +4,31 @@ import { connect } from 'react-redux';
 import Spinner from '../../../components/Spinner.react';
 import { FormattedName } from '../../../organisms';
 
-import { getSelectionDownloads, getSelectedGenomeList } from '../selectors';
+import {
+  getSelectionDownloads,
+  getSelectedGenomeList,
+  getDownloadSummary,
+} from '../selectors';
 
 import { fetchDownloads } from '../actions';
 
 import { statuses } from '../../../app/constants';
-import { analysisLabels } from '../../constants';
 
-const Section = ({ organismId, organismName, total, tasks }) => (
+const Section = ({ organismId, organismName, total, tasks, ids }) => (
   <li>
     <FormattedName fullName organismId={organismId} title={organismName} />
-    <ul>
-      { Object.keys(tasks).map(task =>
-        <li key={task}>
-          <a href={`/download/analysis/${task}?organismId=${organismId}&ids=${tasks[task].join(',')}`}>
-            <strong>{analysisLabels[task]}</strong> ({tasks[task].length}/{total})
+    <ul className="wgsa-genome-download-list">
+      <li>
+        <a href={`/download/archive/genome?ids=${ids}`}>
+          <strong>FASTA files</strong>
+        </a>
+      </li>
+      { tasks.map(task =>
+        <li key={task.name}>
+          <a href={`/download/analysis/${task.name}?organismId=${organismId}&ids=${task.ids.join(',')}`}>
+            <strong>{task.label}</strong>
           </a>
+          <span>{task.ids.length}/{total}</span>
         </li>
       ) }
     </ul>
@@ -39,8 +48,7 @@ const Download = React.createClass({
   },
 
   render() {
-    const { download, selection } = this.props;
-    const { status, summary } = download;
+    const { status, summary, selection } = this.props;
     if (status === statuses.LOADING) {
       return <Spinner />;
     }
@@ -50,13 +58,20 @@ const Download = React.createClass({
     const ids = selection.map(_ => _.id);
     if (status === statuses.SUCCESS) {
       return (
-        <div>
+        <div className="wgsa-genome-downloads">
           <ul>
-            { Object.keys(summary).map(key =>
-              <Section key={key} {...summary[key]} />
-            ) }
+            <li>
+              All Organisms
+              <ul className="wgsa-genome-download-list">
+                <li>
+                  <a href={`/download/archive/genome?ids=${ids}`}>
+                    <strong>FASTA files</strong>
+                  </a>
+                </li>
+              </ul>
+            </li>
+            { summary.map(item => <Section key={item.organismId} {...item} />) }
           </ul>
-          <a href={`/download/archive/genome?ids=${ids}`}>Archive</a>
         </div>
       );
     }
@@ -67,7 +82,8 @@ const Download = React.createClass({
 
 function mapStateToProps(state) {
   return {
-    download: getSelectionDownloads(state),
+    status: getSelectionDownloads(state).status,
+    summary: getDownloadSummary(state),
     selection: getSelectedGenomeList(state),
   };
 }

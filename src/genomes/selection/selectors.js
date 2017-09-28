@@ -1,9 +1,12 @@
 import { createSelector } from 'reselect';
+import sortBy from 'lodash.sortby';
 
 import { getGenomeList } from '../selectors';
 import { getDeployedOrganismIds } from '../../summary/selectors';
 
 import { isOverSelectionLimit } from './utils';
+
+import { analysisLabels } from '../constants';
 
 export const getSelection = ({ genomes }) => genomes.selection;
 export const getSelectedGenomes = state => getSelection(state).genomes;
@@ -39,4 +42,32 @@ export const areAllSelected = createSelector(
   getSelectedGenomes,
   getGenomeList,
   (selection, genomes) => genomes.every(({ id }) => (id in selection))
+);
+
+export const getDownloadSummary = createSelector(
+  getSelectionDownloads,
+  ({ summary }) => {
+    if (!summary) return [];
+
+    return Object.keys(summary).map(key => {
+      const item = summary[key];
+      const ids = new Set();
+      const tasks = [];
+      for (const name of Object.keys(item.tasks)) {
+        tasks.push({
+          name,
+          label: analysisLabels[name],
+          ids: item.tasks[name],
+        });
+        for (const id of item.tasks[name]) {
+          ids.add(id);
+        }
+      }
+      return {
+        ...item,
+        ids: Array.from(ids),
+        tasks: sortBy(tasks, 'label'),
+      };
+    });
+  }
 );
