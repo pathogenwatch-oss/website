@@ -14,15 +14,7 @@ const CreateCollectionForm = React.createClass({
 
   componentDidMount() {
     componentHandler.upgradeElements(Array.from(this.formElements));
-    if (this.props.visible) {
-      this.firstInput.focus();
-    }
-  },
-
-  componentDidUpdate(previously) {
-    if (!previously.visible && this.props.visible) {
-      this.firstInput.focus();
-    }
+    this.firstInput.focus();
   },
 
   addToFormElements(element) {

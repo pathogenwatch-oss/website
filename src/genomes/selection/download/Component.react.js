@@ -27,7 +27,7 @@ const Section = ({ organismId, organismName, total, tasks, ids }) => (
       </li>
       { tasks.map(task =>
         <li key={task.name}>
-          <a href={getServerPath(`/download/analysis/${task.name}?organismId=${organismId}&ids=${task.ids.join(',')}`)}>
+          <a href={getServerPath(`/download/analysis/${task.name}?ids=${task.ids.join(',')}`)}>
             <strong>{task.label}</strong>
             {task.sources.length > 0 && <small>&nbsp;({task.sources.join(', ')})</small>}
           </a>
