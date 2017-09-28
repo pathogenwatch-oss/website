@@ -66,7 +66,7 @@ function convertDocumentToGFF({ name, analysis }, stream) {
       end,
       score: null, // match.identity,
       reversed: end < start,
-      phase: (start - 1) % 3,
+      phase: null,
       attributes: {
         ID: `MLST_${contig}_${start}_${end}`,
         name: `${gene}_${id}`,
