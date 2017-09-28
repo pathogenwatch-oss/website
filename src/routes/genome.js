@@ -41,8 +41,12 @@ router.get('/genome/:id', (req, res, next) => {
   const { id } = params;
 
   LOGGER.info(`Received request to get single genome ${id}`);
-
-  services.request('genome', 'fetch-one', { user, sessionID, id })
+  const projection = {
+    'analysis.cgmlst': 0,
+    'analysis.mlst.matches': 0,
+    'analysis.paarsnp.matches': 0,
+  };
+  services.request('genome', 'fetch-one', { user, sessionID, id, projection })
     .then(response => res.json(response))
     .catch(next);
 });
