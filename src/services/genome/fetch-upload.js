@@ -15,6 +15,7 @@ module.exports = function (props) {
           'analysis.paarsnp.__v': 1,
           'analysis.genotyphi.__v': 1,
           'analysis.ngmast.__v': 1,
+          'analysis.cgmlst.__v': 1,
           uploadedAt: 1,
           pending: 1,
         },
