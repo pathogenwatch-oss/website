@@ -50,7 +50,7 @@ const Component = React.createClass({
     }
 
     const { position } = this.props;
-    if (previous.position !== position && position > 0) {
+    if (uploadComplete && previous.position !== position && position > 0) {
       this.poll();
       return;
     }

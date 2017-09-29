@@ -65,7 +65,9 @@ const Overview = connect(
       <ProgressBar label="Speciation" progress={speciationPct} />
       { speciationPct === 100 &&
         <ProgressBar label="Tasks" progress={tasksPct} /> }
-      { position > 0 && <p>{position} jobs till next result.</p> }
+      { position > 0 ?
+        <p>{position} job{position === 1 ? '' : 's'} till next result.</p> :
+        <p>Results processing.</p> }
     </div>
   );
 });
