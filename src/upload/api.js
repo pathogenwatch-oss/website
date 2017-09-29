@@ -23,3 +23,7 @@ export function fetchGenomes(uploadedAt) {
 export function fetchUploads() {
   return fetchJson('GET', '/api/upload');
 }
+
+export function fetchQueuePosition(uploadedAt) {
+  return fetchJson('GET', `/api/upload/${uploadedAt}/position`);
+}

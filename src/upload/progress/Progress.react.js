@@ -43,8 +43,9 @@ const Overview = connect(
     totalGenomes: upload.getUploadedGenomeList(state).length,
     progress: upload.getOverallProgress(state),
     complete: upload.isAnalysisComplete(state),
+    position: upload.getQueuePosition(state),
   })
-)(({ isUploading, totalGenomes, progress, complete }) => {
+)(({ isUploading, totalGenomes, progress, complete, position }) => {
   if (isUploading || totalGenomes === 0) return null;
 
   const { speciation, tasks } = progress;
@@ -64,6 +65,7 @@ const Overview = connect(
       <ProgressBar label="Speciation" progress={speciationPct} />
       { speciationPct === 100 &&
         <ProgressBar label="Tasks" progress={tasksPct} /> }
+      { position > 0 && <p>{position} jobs till next result.</p> }
     </div>
   );
 });
