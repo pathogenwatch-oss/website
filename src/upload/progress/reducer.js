@@ -159,7 +159,10 @@ export default function (state = initialState, { type, payload }) {
     }
     case actions.UPLOAD_FETCH_GENOMES.ATTEMPT: {
       if (state.uploadedAt === payload.uploadedAt) return state;
-      return initialState;
+      return {
+        ...initialState,
+        uploadedAt: payload.uploadedAt,
+      };
     }
     case actions.UPLOAD_FETCH_GENOMES.SUCCESS: {
       const nextGenomes = {};
