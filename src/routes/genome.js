@@ -107,13 +107,24 @@ router.post('/genome/:id', (req, res, next) => {
     .catch(next);
 });
 
+router.get('/upload/:uploadedAt/position', (req, res, next) => {
+  LOGGER.info('Received request to get upload position');
+  const { uploadedAt } = req.params;
+  services.request('tasks', 'queue-position', { uploadedAt })
+    .then(result => res.json(result))
+    .catch(next);
+});
+
 router.get('/upload/:uploadedAt', (req, res, next) => {
-  LOGGER.info('Received request to get upload sessions');
+  LOGGER.info('Received request to get upload session');
   const { user, sessionID } = req;
   const { uploadedAt } = req.params;
-  services.request('genome', 'fetch-upload', { user, sessionID, query: { uploadedAt } })
-    .then(response => res.json(response))
-    .catch(next);
+  Promise.all([
+    services.request('genome', 'fetch-upload', { user, sessionID, query: { uploadedAt } }),
+    services.request('tasks', 'queue-position', { uploadedAt }),
+  ])
+  .then(([ files, { position } ]) => res.json({ files, position }))
+  .catch(next);
 });
 
 router.get('/upload', (req, res, next) => {
