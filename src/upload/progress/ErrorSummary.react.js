@@ -2,19 +2,24 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { Summary } from '../../filter/summary';
-import { getTotalErrors, isRetryable } from './selectors';
+import { getTotalErrors, getTotalFailures, isRetryable } from './selectors';
 
 import { retryAll, removeAll } from './actions';
 
 const ErrorSummary = React.createClass({
 
   render() {
-    const { totalErrors, retryable, onRetry, onRemove } = this.props;
+    const { totalErrors, totalFailures, retryable, onRetry, onRemove } = this.props;
     return (
       <Summary className="wgsa-hub-summary">
         <span className="wgsa-error-message">{totalErrors} file{totalErrors === 1 ? '' : 's'} could not be uploaded.</span>
-        {retryable && <button className="mdl-button mdl-button--primary" onClick={onRetry}>Retry {totalErrors === 1 ? 'It' : 'Them'}</button>}
-        <button className="mdl-button" onClick={onRemove}>Remove {totalErrors === 1 ? 'It' : 'Them'}</button>
+        {retryable &&
+          <button className="mdl-button mdl-button--primary" onClick={onRetry}>
+            Retry {totalFailures} Failed Upload{totalFailures === 1 ? '' : 's'}
+          </button>}
+        <button className="mdl-button" onClick={onRemove}>
+          Remove All
+        </button>
       </Summary>
     );
   },
@@ -24,6 +29,7 @@ const ErrorSummary = React.createClass({
 function mapStateToProps(state) {
   return {
     totalErrors: getTotalErrors(state),
+    totalFailures: getTotalFailures(state),
     retryable: isRetryable(state),
   };
 }

@@ -112,7 +112,7 @@ const Progress = ({ inProgress, errored, files, analysis, uploadedAt, specieatio
 function mapStateToProps(state) {
   return {
     inProgress: upload.getFilesInProgress(state),
-    errored: upload.getErroredUploads(state),
+    errored: upload.getInvalidUploads(state),
     files: upload.getFileSummary(state),
     analysis: upload.getAnalysisSummary(state),
     specieationComplete: upload.isSpecieationComplete(state),

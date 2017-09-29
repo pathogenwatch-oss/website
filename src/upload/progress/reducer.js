@@ -46,11 +46,11 @@ export default function (state = initialState, { type, payload }) {
       };
     }
     case actions.UPLOAD_REQUEUE_FILES: {
-      const ids = payload.genomes.map(_ => _.id);
+      const ids = payload.files.map(_ => _.id);
       return {
         ...state,
         queue: ids,
-        files: initialiseFiles({ ...state.files }, payload.genomes),
+        files: initialiseFiles({ ...state.files }, payload.files),
       };
     }
     case actions.PROCESS_GENOME.ATTEMPT: {

@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 
-import { isFailedUpload } from '../utils/validation';
+import { isInvalidUpload, isFailedUpload } from '../utils/validation';
 import { getColourGenerator, getLightColour } from '../../utils/colours';
 import { statuses } from '../constants';
 
@@ -75,6 +75,21 @@ export const getFailedUploads = createSelector(
   genomes => genomes.filter(genome => isFailedUpload(genome))
 );
 
+export const getTotalFailures = createSelector(
+  getFailedUploads,
+  failedUploads => failedUploads.length
+);
+
+export const getInvalidUploads = createSelector(
+  getUploadedFileList,
+  genomes => genomes.filter(genome => isInvalidUpload(genome))
+);
+
+export const getTotalInvalid = createSelector(
+  getInvalidUploads,
+  invalidUploads => invalidUploads.length
+);
+
 export const getErroredUploads = createSelector(
   getUploadedFileList,
   genomes => genomes.filter(genome => genome.status === statuses.ERROR)
@@ -86,8 +101,9 @@ export const getTotalErrors = createSelector(
 );
 
 export const isRetryable = createSelector(
+  isUploading,
   getFailedUploads,
-  failures => !!failures.length
+  (uploading, failures) => !uploading && !!failures.length
 );
 
 export const getFileSummary = createSelector(
