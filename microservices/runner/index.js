@@ -13,6 +13,8 @@ if (queue && !(queue in taskQueue.queues)) {
   process.exit(1);
 }
 
+process.on('uncaughtException', err => console.error('uncaught', err));
+
 taskQueue.setMaxWorkers(workers);
 
 const { tasks, speciator } = taskQueue.queues;
