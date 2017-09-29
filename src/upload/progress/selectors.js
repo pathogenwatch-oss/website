@@ -108,12 +108,12 @@ export const getFileSummary = createSelector(
 
 function getAnalysisBreakdown(analyses) {
   const breakdown = {
-    mlst: { active: false, label: 'MLST', total: 0 },
     paarsnp: { active: false, label: 'AMR', total: 0 },
-    genotyphi: { active: false, label: 'Genotyphi', total: 0 },
-    ngmast: { active: false, label: 'NG-MAST', total: 0 },
-    metrics: { active: false, label: 'Metrics', total: 0 },
     cgmlst: { active: false, label: 'cgMLST', total: 0 },
+    genotyphi: { active: false, label: 'Genotyphi', total: 0 },
+    metrics: { active: false, label: 'Metrics', total: 0 },
+    mlst: { active: false, label: 'MLST', total: 0 },
+    ngmast: { active: false, label: 'NG-MAST', total: 0 },
   };
   const sts = {};
 
@@ -130,15 +130,12 @@ function getAnalysisBreakdown(analyses) {
     }
   }
 
-  return {
-    ...breakdown,
-    mlst: {
-      ...breakdown.mlst,
-      sequenceTypes: Object.keys(sts).map(st => ({
-        label: `ST ${st}`, total: sts[st],
-      })),
-    },
-  };
+  breakdown.mlst.sequenceTypes =
+    Object.keys(sts).map(st => ({
+      label: `ST ${st}`, total: sts[st],
+    }));
+
+  return breakdown;
 }
 
 export const getAnalysisSummary = createSelector(
