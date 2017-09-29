@@ -24,6 +24,8 @@ export const getGenome = (state, id) => getUploadedFiles(state)[id];
 export const getAnalyses = state => getProgress(state).analyses;
 export const getUploadedGenomes = state => getProgress(state).genomes;
 export const getSelectedOrganism = state => getProgress(state).selectedOrganism;
+export const getQueuePosition = state => getProgress(state).position;
+export const getLastMessageReceived = state => getProgress(state).lastMessageReceived;
 
 export const getUploadedFileList = createSelector(
   getUploadedFiles,
