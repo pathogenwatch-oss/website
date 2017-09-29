@@ -18,7 +18,7 @@ const Component = React.createClass({
   render() {
     return (
       <FileDragAndDrop onFiles={this.props.onFiles}>
-        <div className="wgsa-hipster-style wgsa-filterable-view">
+        <div className="wgsa-hipster-style">
           <Summary />
           <Instructions />
         </div>

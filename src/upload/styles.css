@@ -6,6 +6,10 @@
   text-decoration: none !important;
 }
 
+.wgsa-genome-card {
+  margin-bottom: 8px;
+}
+
 .wgsa-genome-card p {
   margin: 0;
   font-size: 14px;
@@ -19,6 +23,11 @@
 
 .wgsa-hub-card-error {
   color: #d11b1b;
+}
+
+.wgsa-genome-card .wgsa-button--text {
+  height: 24px;
+  line-height: 1;
 }
 
 .wgsa-hub-card-error p {

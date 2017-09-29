@@ -73,7 +73,7 @@ const Component = React.createClass({
 
   render() {
     return (
-      <div className="wgsa-hipster-style wgsa-filterable-view">
+      <div className="wgsa-hipster-style">
         <Summary />
         <Progress uploadedAt={this.props.uploadedAt} />
       </div>

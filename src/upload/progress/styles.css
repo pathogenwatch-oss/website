@@ -98,3 +98,11 @@
 .wgsa-upload-progress-overview p {
   margin-bottom: 0;
 }
+
+.wgsa-upload-progress-overview .wgsa-progress-bar {
+  justify-content: space-between;
+}
+
+.wgsa-upload-progress-overview .wgsa-progress-bar > label {
+  width: 120px;
+}

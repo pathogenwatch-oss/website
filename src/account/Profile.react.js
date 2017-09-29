@@ -14,7 +14,7 @@ const Profile = ({ userCollections, userGenomes }) => {
   if (!user) return null;
 
   return (
-    <div className="wgsa-hipster-style wgsa-filterable-view">
+    <div className="wgsa-hipster-style">
       <div className="cgps-avatar cgps-avatar--centered wgsa-profile-avatar">
         <AccountImage />
         <div className="cgps-avatar__name title-font" title={user.name}>{user.name}</div>
