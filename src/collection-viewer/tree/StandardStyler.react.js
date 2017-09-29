@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { getGenomes } from '../../collection-viewer/selectors';
 import { getFilter, getColourGetter, getHighlightedIds } from '../selectors';
 import { getActiveDataTable } from '../table/selectors';
-import { getVisibleTree } from './selectors';
+import { getVisibleTree, getSelectedInternalNode } from './selectors';
 
 import { nonResistantColour } from '../amr-utils';
 import { getLeafStyle } from './utils';
@@ -42,7 +42,7 @@ const Styler = React.createClass({
       const node = phylocanvas.originalTree.branches[previous.selectedInternalNode];
       if (node) node.highlighted = false;
     }
-    if (selectedInternalNode && filter.active) {
+    if (selectedInternalNode) {
       const node = phylocanvas.originalTree.branches[selectedInternalNode];
       if (node) node.highlighted = true;
     }
@@ -66,7 +66,7 @@ function mapStateToProps(state) {
     highlightedIds: getHighlightedIds(state),
     treeType: tree.type,
     loaded: tree.loaded,
-    selectedInternalNode: tree.selectedInternalNode,
+    selectedInternalNode: getSelectedInternalNode(state),
   };
 }
 
