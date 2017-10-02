@@ -29,6 +29,7 @@ const schema = new Schema({
   userDefined: Object,
   analysis: Object,
   pending: { type: Array, default: null },
+  errored: { type: Array, default: null },
   public: { type: Boolean, default: false },
   reference: { type: Boolean, default: false },
   binned: { type: Boolean, default: false },
@@ -97,6 +98,13 @@ schema.statics.addAnalysisResult = function (_id, task, result) {
   update.$pull = { pending: task };
 
   return this.update({ _id }, update);
+};
+
+schema.statics.addAnalysisError = function (_id, task) {
+  return this.update({ _id }, {
+    $addToSet: { errored: task },
+    $pull: { pending: task },
+  });
 };
 
 schema.statics.updateMetadata = function (_id, { user, sessionID }, metadata) {
