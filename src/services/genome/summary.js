@@ -12,11 +12,13 @@ const summaryFields = [
   },
   { field: 'speciesId',
     aggregation: () => [
+      { $match: { 'analysis.speciator.speciesId': { $exists: true } } },
       { $group: { _id: { label: '$analysis.speciator.speciesName', key: '$analysis.speciator.speciesId' }, count: { $sum: 1 } } },
     ],
   },
   { field: 'genusId',
     aggregation: () => [
+      { $match: { 'analysis.speciator.genusId': { $exists: true } } },
       { $group: { _id: { label: '$analysis.speciator.genusName', key: '$analysis.speciator.genusId' }, count: { $sum: 1 } } },
     ],
   },
