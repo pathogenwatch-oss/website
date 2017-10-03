@@ -18,6 +18,7 @@ module.exports = function (props) {
           'analysis.cgmlst.__v': 1,
           uploadedAt: 1,
           pending: 1,
+          errored: 1,
         },
       )
       .lean()
