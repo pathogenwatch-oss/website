@@ -151,7 +151,10 @@ export default function (state = initialState, { type, payload }) {
         ...state,
         analyses: {
           ...analyses,
-          [id]: { ...analysis, [payload.task]: payload.result },
+          [id]: {
+            ...analysis,
+            [payload.task]: payload.error ? false : payload.result,
+          },
         },
       };
     }
@@ -166,15 +169,23 @@ export default function (state = initialState, { type, payload }) {
         nextGenomes[genome.id] = {
           ...genome,
           status: statuses.SUCCESS,
-          speciated: genome.analysis && !!genome.analysis.speciator,
+          speciated:
+            (genome.analysis && !!genome.analysis.speciator) ||
+            genome.errored.indexOf('speciator') !== -1,
           genomeId: genome.id,
           analysis: undefined,
           pending: undefined,
+          errored: undefined,
         };
         const pendingAnalysis = {};
         if (genome.pending) {
           for (const task of genome.pending) {
             pendingAnalysis[task] = null;
+          }
+        }
+        if (genome.errored) {
+          for (const task of genome.errored) {
+            pendingAnalysis[task] = false;
           }
         }
         nextAnalyses[genome.id] = {

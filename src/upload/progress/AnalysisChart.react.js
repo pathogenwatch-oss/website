@@ -13,6 +13,7 @@ import {
   getSelectedOrganism,
   isSpecieationComplete,
   isAnalysisComplete,
+  hasErrors,
 } from './selectors';
 
 import { selectOrganism } from './actions';
@@ -140,7 +141,7 @@ function mapStateToProps(state) {
   return {
     data: getChartData(state),
     specieationComplete: isSpecieationComplete(state),
-    analysisComplete: isAnalysisComplete(state),
+    sonar: isAnalysisComplete(state) && !hasErrors(state),
     selectedOrganism: getSelectedOrganism(state),
   };
 }

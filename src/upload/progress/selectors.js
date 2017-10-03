@@ -5,6 +5,7 @@ import { getColourGenerator, getLightColour } from '../../utils/colours';
 import { statuses } from '../constants';
 
 import { getOrganismName } from '../../organisms';
+import { DEFAULT } from '../../app/constants';
 
 export const getProgress = ({ upload }) => upload.progress;
 
@@ -108,12 +109,12 @@ export const getFileSummary = createSelector(
 
 function getAnalysisBreakdown(analyses) {
   const breakdown = {
-    paarsnp: { active: false, label: 'AMR', total: 0 },
-    cgmlst: { active: false, label: 'cgMLST', total: 0 },
-    genotyphi: { active: false, label: 'Genotyphi', total: 0 },
-    metrics: { active: false, label: 'Metrics', total: 0 },
-    mlst: { active: false, label: 'MLST', total: 0 },
-    ngmast: { active: false, label: 'NG-MAST', total: 0 },
+    paarsnp: { active: false, label: 'AMR', total: 0, errors: 0 },
+    cgmlst: { active: false, label: 'cgMLST', total: 0, errors: 0 },
+    genotyphi: { active: false, label: 'Genotyphi', total: 0, errors: 0 },
+    metrics: { active: false, label: 'Metrics', total: 0, errors: 0 },
+    mlst: { active: false, label: 'MLST', total: 0, errors: 0 },
+    ngmast: { active: false, label: 'NG-MAST', total: 0, errors: 0 },
   };
   const sts = {};
 
@@ -121,7 +122,8 @@ function getAnalysisBreakdown(analyses) {
     for (const key of Object.keys(analysis)) {
       if (key in breakdown) {
         breakdown[key].active = true;
-        if (analysis[key]) breakdown[key].total++;
+        if (analysis[key] !== null) breakdown[key].total++;
+        if (analysis[key] === false) breakdown[key].errors++;
       }
       if (key === 'mlst' && analysis.mlst) {
         const { st } = analysis.mlst;
@@ -135,6 +137,14 @@ function getAnalysisBreakdown(analyses) {
       label: `ST ${st}`, total: sts[st],
     }));
 
+  if (breakdown.mlst.errors) {
+    breakdown.mlst.sequenceTypes.push({
+      label: 'Error',
+      total: breakdown.mlst.errors,
+      colour: DEFAULT.DANGER_COLOUR,
+    });
+  }
+
   return breakdown;
 }
 
@@ -145,13 +155,16 @@ export const getAnalysisSummary = createSelector(
   (remainingUploads, genomes, analyses) => {
     const summary = {};
     let pending = remainingUploads;
+    let errored = 0;
     for (const genome of genomes) {
       const analysis = {
         ...(genome.analysis || {}),
         ...(analyses[genome.id] || {}),
       };
-      if (!analysis.speciator) {
+      if (!('speciator' in analysis) || analysis.speciator === null) {
         pending++;
+      } else if (analysis.speciator === false) {
+        errored++;
       } else {
         summary[analysis.speciator.organismId] =
           (summary[analysis.speciator.organismId] || []).concat(analysis);
@@ -172,6 +185,7 @@ export const getAnalysisSummary = createSelector(
       });
     }
     if (pending) result.push({ key: 'pending', label: 'Pending', total: pending, colour: '#ccc' });
+    if (errored) result.push({ key: 'error', label: 'Error', total: errored, colour: DEFAULT.DANGER_COLOUR });
     return result;
   }
 );
@@ -205,7 +219,7 @@ export const getChartData = createSelector(
       const { sequenceTypes = [] } = mlst;
       for (const st of sequenceTypes) {
         stData.data.push(st.total);
-        stData.backgroundColor.push(getLightColour(colour));
+        stData.backgroundColor.push(st.colour || getLightColour(colour));
         stData.labels.push(st.label);
         stData.parents.push(organismIndex);
         sum -= st.total;
@@ -234,14 +248,19 @@ export const getOverallProgress = createSelector(
   (analyses, genomes) => {
     const speciation = { pending: 0, done: 0, total: 0 };
     const tasks = { pending: 0, done: 0, total: 0 };
+    let errors = 0;
 
     for (const id of Object.keys(analyses)) {
       for (const task of Object.keys(analyses[id])) {
         const isPending = analyses[id][task] === null;
+        const isError = analyses[id][task] === false;
+
+        if (isError) errors++;
 
         if (task === 'speciator') {
           speciation.total++;
           if (isPending) speciation.pending++;
+          if (isError) tasks.total++;
         } else if (id in genomes && genomes[id].speciated) {
           tasks.total++;
           if (isPending) tasks.pending++;
@@ -255,6 +274,7 @@ export const getOverallProgress = createSelector(
     return {
       speciation,
       tasks,
+      errors,
     };
   }
 );
@@ -275,4 +295,9 @@ export const isAnalysisComplete = createSelector(
   getOverallProgress,
   (speciationComplete, { tasks }) =>
     speciationComplete && tasks.total > 0 && tasks.done === tasks.total,
+);
+
+export const hasErrors = createSelector(
+  getOverallProgress,
+  ({ errors }) => errors > 0
 );
