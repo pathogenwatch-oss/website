@@ -70,6 +70,8 @@ const formatters = {
   }),
 };
 
+schema.statics.formatters = formatters;
+
 schema.statics.addAnalysisResult = function (uuid, key, result) {
   const formattedResult = key in formatters ? formatters[key](result) : result;
   return this.update(
