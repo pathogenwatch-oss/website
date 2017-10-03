@@ -125,7 +125,7 @@ const AnalysisChart = React.createClass({
           <Link
             className={classnames(
               'mdl-shadow--2dp wgsa-view-genomes-button',
-              { 'wgsa-sonar-effect': this.props.analysisComplete }
+              { 'wgsa-sonar-effect': this.props.sonar }
             )}
             to={this.getGenomesLink()}
           >
