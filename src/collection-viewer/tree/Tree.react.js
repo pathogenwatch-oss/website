@@ -100,6 +100,7 @@ export default React.createClass({
     phylocanvas.on('updated', event => this.props.onUpdated(event, phylocanvas));
     phylocanvas.on('typechanged', () => this.props.onTypeChanged(phylocanvas));
     phylocanvas._onInternalNodeSelected = event => {
+      if (event.metaKey || event.ctrlKey) return;
       const node = phylocanvas.getNodeAtMousePosition(event);
       if (node && !node.leaf) this.props.onInternalNodeSelected(node);
     };

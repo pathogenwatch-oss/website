@@ -65,3 +65,8 @@ export const getSubtreeNames = createSelector(
   getTrees,
   trees => Object.keys(trees).filter(name => !simpleTrees.has(name))
 );
+
+export const getSelectedInternalNode = createSelector(
+  state => getTreeState(state).selectedInternalNode,
+  ({ trees, active }) => trees[active]
+);
