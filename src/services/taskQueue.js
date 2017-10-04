@@ -36,7 +36,7 @@ module.exports.enqueue = function (queue, message) {
   );
 };
 
-module.exports.dequeue = function (queue, callback) {
+module.exports.dequeue = function (queue, callback, reject) {
   mQueue.registerWorker(queue, (queueItem) => {
     LOGGER.info('Handling message', queueItem, 'from', queue);
     return callback(queueItem.message)
@@ -50,6 +50,7 @@ module.exports.dequeue = function (queue, callback) {
           return 'Retry';
         }
         queueItem.rejectionReason = `Gave up after ${retries} retries.`;
+        if (reject) reject(queueItem.message);
         return 'Rejected';
       });
   });
