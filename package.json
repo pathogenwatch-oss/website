@@ -35,6 +35,7 @@
     "promise-map-limit": "^1.0.0",
     "promisify-node": "^0.4.0",
     "pusher": "^1.1.0",
+    "request": "2.81.0",
     "sanitize-filename": "^1.5.3",
     "seneca": "^3.2.2",
     "serve-favicon": "^2.2.0",
