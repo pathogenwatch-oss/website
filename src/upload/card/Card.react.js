@@ -6,7 +6,6 @@ import ProgressBar from '../../progress-bar';
 import Header from './Header.react';
 import GenomeTasks from './GenomeTasks.react';
 import GenomeError from './GenomeError.react';
-import ErrorFooter from './ErrorFooter.react';
 
 import { statuses } from '../constants';
 
@@ -15,7 +14,6 @@ function getCardComponents(genome, analysis) {
     case statuses.ERROR:
       return {
         content: <GenomeError genome={genome} />,
-        footer: <ErrorFooter genome={genome} />,
       };
     case statuses.COMPRESSING:
       return {

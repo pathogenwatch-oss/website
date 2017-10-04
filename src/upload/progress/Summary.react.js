@@ -23,9 +23,9 @@ const Component = React.createClass({
   },
 
   render() {
-    const { summary } = this.props;
+    const { isUploading, summary } = this.props;
 
-    if (summary.errored) {
+    if (!isUploading && summary.errored) {
       return <ErrorSummary />;
     }
 
@@ -37,6 +37,7 @@ const Component = React.createClass({
 function mapStateToProps(state) {
   return {
     summary: upload.getFileSummary(state),
+    isUploading: upload.isUploading(state),
   };
 }
 

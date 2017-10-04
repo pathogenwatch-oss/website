@@ -206,3 +206,15 @@ export function removeAll() {
     dispatch(removeGenomes(erroredUploads.map(_ => _.id)));
   };
 }
+
+export const UPLOAD_FETCH_POSITION = createAsyncConstants('UPLOAD_FETCH_POSITION');
+
+export function fetchQueuePosition(uploadedAt) {
+  return {
+    type: UPLOAD_FETCH_POSITION,
+    payload: {
+      uploadedAt,
+      promise: api.fetchQueuePosition(uploadedAt),
+    },
+  };
+}

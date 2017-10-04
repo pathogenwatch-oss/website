@@ -46,11 +46,11 @@ export default function (state = initialState, { type, payload }) {
       };
     }
     case actions.UPLOAD_REQUEUE_FILES: {
-      const ids = payload.genomes.map(_ => _.id);
+      const ids = payload.files.map(_ => _.id);
       return {
         ...state,
         queue: ids,
-        files: initialiseFiles({ ...state.files }, payload.genomes),
+        files: initialiseFiles({ ...state.files }, payload.files),
       };
     }
     case actions.PROCESS_GENOME.ATTEMPT: {
@@ -156,16 +156,22 @@ export default function (state = initialState, { type, payload }) {
             [payload.task]: payload.error ? false : payload.result,
           },
         },
+        lastMessageReceived: new Date(),
+        position: 0,
       };
     }
     case actions.UPLOAD_FETCH_GENOMES.ATTEMPT: {
       if (state.uploadedAt === payload.uploadedAt) return state;
-      return initialState;
+      return {
+        ...initialState,
+        uploadedAt: payload.uploadedAt,
+      };
     }
     case actions.UPLOAD_FETCH_GENOMES.SUCCESS: {
       const nextGenomes = {};
       const nextAnalyses = {};
-      for (const genome of payload.result) {
+      const { files, position } = payload.result;
+      for (const genome of files) {
         nextGenomes[genome.id] = {
           ...genome,
           status: statuses.SUCCESS,
@@ -197,6 +203,7 @@ export default function (state = initialState, { type, payload }) {
 
       return {
         ...state,
+        position,
         selectedOrganism: null,
         genomes: nextGenomes,
         analyses: nextAnalyses,
@@ -206,6 +213,11 @@ export default function (state = initialState, { type, payload }) {
       return {
         ...state,
         selectedOrganism: payload.organismId,
+      };
+    case actions.UPLOAD_FETCH_POSITION.SUCCESS:
+      return {
+        ...state,
+        position: payload.result.position,
       };
     default:
       return state;
