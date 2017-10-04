@@ -105,16 +105,12 @@ function downloadAnalysisResults(ids, task, projection, transformer, options = {
 }
 
 router.get('/analysis/:task', (req, res, next) => {
-  const { ids, organismId } = req.query;
+  const { ids } = req.query;
   if (!ids || typeof (ids) !== 'string' || ids === '') {
     LOGGER.error('Missing ids');
     return res.sendStatus(400);
   }
-  if (!organismId || typeof (organismId) !== 'string' || organismId === '') {
-    LOGGER.error('Missing Organism Id');
-    return res.sendStatus(400);
-  }
-  next();
+  return next();
 });
 
 router.get('/analysis/mlst', (req, res) => {
