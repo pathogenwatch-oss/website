@@ -13,6 +13,7 @@ import {
   getSelectedOrganism,
   isSpecieationComplete,
   isAnalysisComplete,
+  hasErrors,
 } from './selectors';
 
 import { selectOrganism } from './actions';
@@ -124,7 +125,7 @@ const AnalysisChart = React.createClass({
           <Link
             className={classnames(
               'mdl-shadow--2dp wgsa-view-genomes-button',
-              { 'wgsa-sonar-effect': this.props.analysisComplete }
+              { 'wgsa-sonar-effect': this.props.sonar }
             )}
             to={this.getGenomesLink()}
           >
@@ -140,7 +141,7 @@ function mapStateToProps(state) {
   return {
     data: getChartData(state),
     specieationComplete: isSpecieationComplete(state),
-    analysisComplete: isAnalysisComplete(state),
+    sonar: isAnalysisComplete(state) && !hasErrors(state),
     selectedOrganism: getSelectedOrganism(state),
   };
 }
