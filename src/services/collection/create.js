@@ -84,7 +84,13 @@ function saveCollectionUUID({ collection, ids }) {
 
 function submitCollection({ collection, uuidToGenome }) {
   const { uuid, organismId } = collection;
-  return request('collection', 'submit', { organismId, collectionId: uuid, uuidToGenome });
+  const uploadedAt = collection.progress.started;
+  return request('collection', 'submit', {
+    organismId,
+    uuidToGenome,
+    uploadedAt,
+    collectionId: uuid,
+  });
 }
 
 module.exports = function (message) {

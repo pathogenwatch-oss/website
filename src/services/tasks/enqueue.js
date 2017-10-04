@@ -8,7 +8,20 @@ module.exports = function ({ genomeId, collectionId, fileId, organismId, species
   const name = organismId ? queues.tasks : queues.speciator;
   const promises = tasks.map(({ task, version, retries = defaultRetries, timeout = defaultTimeout }) =>
     enqueue(
-      name, { genomeId, collectionId, fileId, organismId, speciesId, genusId, uploadedAt, clientId, task, version, retries, timeout }
+      name, {
+        genomeId,
+        collectionId,
+        fileId,
+        organismId,
+        speciesId,
+        genusId,
+        uploadedAt: new Date(uploadedAt),
+        clientId,
+        task,
+        version,
+        retries,
+        timeout,
+      }
     )
   );
   return Promise.all(promises);
