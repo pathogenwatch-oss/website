@@ -25,7 +25,11 @@ const Analysis = ({ data, showBreakdown }) => (
                   <li key={analysisKey}>
                     { analysis.total === total ?
                       `${analysis.label} ✔️` :
-                      `${analysis.label}: ${analysis.total}/${total}` }
+                      `${analysis.label}: ${analysis.total} / ${total}` }
+                    { analysis.errors > 0 &&
+                      <small style={{ float: 'right' }}>
+                        &nbsp;{analysis.errors} error{analysis.errors === 1 ? '' : 's'}
+                      </small>}
                   </li>
                 );
               }
@@ -44,8 +48,9 @@ const Overview = connect(
     progress: upload.getOverallProgress(state),
     complete: upload.isAnalysisComplete(state),
     position: upload.getQueuePosition(state),
+    hasErrors: upload.hasErrors(state),
   })
-)(({ isUploading, totalGenomes, progress, complete, position }) => {
+)(({ isUploading, totalGenomes, progress, complete, position, hasErrors }) => {
   if (isUploading || totalGenomes === 0) return null;
 
   const { speciation, tasks } = progress;
@@ -53,8 +58,12 @@ const Overview = connect(
   const speciationPct = speciation.done / totalGenomes * 100;
   const tasksPct = tasks.done / tasks.total * 100;
 
+  if (complete && hasErrors) {
+    return <strong>Analysis complete, with errors.</strong>;
+  }
+
   if (complete) {
-    return <strong>Analysis Complete 🎉</strong>;
+    return <strong>Analysis complete 🎉</strong>;
   }
 
   return (
