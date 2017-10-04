@@ -217,7 +217,7 @@ schema.statics.getFilterQuery = function (props) {
     );
   }
 
-  if (organismId && sequenceType) {
+  if (sequenceType && (organismId || speciesId || genusId)) {
     findQuery['analysis.mlst.st'] = sequenceType;
   }
 
