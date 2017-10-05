@@ -3,7 +3,7 @@ import React from 'react';
 import { Section, Metadata } from '../components';
 
 export default ({ result }) => (
-  <Section heading="Specieation" version={result.__v}>
+  <Section heading="Speciation" version={result.__v}>
     <dl>
       <Metadata label="Taxonomy ID">
         <a
