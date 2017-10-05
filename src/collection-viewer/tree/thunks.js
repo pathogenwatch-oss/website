@@ -98,7 +98,7 @@ export function treeClicked(event, phylocanvas) {
         const filterState = getFilterState(state);
         if (filterState[filterKeys.HIGHLIGHT].active) {
           dispatch(resetFilter(filterKeys.HIGHLIGHT));
-        } else if (filterState[filterKeys.VISIBILITY].active) {
+        } else {
           dispatch(resetFilter(filterKeys.VISIBILITY));
         }
       } else {
