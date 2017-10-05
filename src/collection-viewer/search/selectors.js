@@ -98,10 +98,6 @@ function getContainsSection(category, text, ids) {
   };
 }
 
-const isSelected = (terms, category, value) => terms.some(
-  term => term.category.key === category.key && term.value.key === value
-);
-
 const getColumnValues = createSelector(
   getSelectedCategory,
   getTables,
@@ -110,7 +106,7 @@ const getColumnValues = createSelector(
   getGenomeList,
   getSearchSort,
   getCurrentIntersection,
-  (category, tables, text, matcher, genomes, sort, terms) => {
+  (category, tables, text, matcher, genomes, sort, currentTerms = []) => {
     const table = tables[category.tableName];
     const column = findColumn(table.columns, category.key);
 
@@ -120,7 +116,10 @@ const getColumnValues = createSelector(
     for (const genome of genomes) {
       const value = column.valueGetter(genome);
       if (value === null || typeof value === 'undefined') continue;
-      if (terms && terms.length && isSelected(terms, category, value)) continue;
+      if (currentTerms.some(term =>
+        (term.category.key === category.key && term.value.key === value) || // value already selected
+        !term.value.ids.includes(genome.uuid) // genome not in intersection
+      )) continue;
       const label = getValueLabel(value, category.tableName);
       const matches = matcher && matcher.test(label);
       if (matches) contains.push(genome.uuid);
