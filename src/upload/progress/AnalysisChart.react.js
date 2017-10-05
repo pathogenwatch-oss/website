@@ -94,6 +94,7 @@ const AnalysisChart = React.createClass({
       if (current) {
         current.data = dataset.data;
         current.backgroundColor = dataset.backgroundColor;
+        current.organismIds = dataset.organismIds;
         current.labels = dataset.labels;
         current.shortLabels = dataset.shortLabels;
         current.parents = dataset.parents;
