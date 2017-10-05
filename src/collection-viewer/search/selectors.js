@@ -40,10 +40,12 @@ export const getSearchTextMatcher = createSelector(
   isExactMatch,
   (category, text, exact) => {
     if (!text.length) return null;
+    let matcher;
     if (category && category.numeric) {
-      return getExpressionMatcher(text);
+      matcher = getExpressionMatcher(text);
     }
-    return getTextMatcher(text, exact);
+    if (!matcher) matcher = getTextMatcher(text, exact);
+    return matcher;
   }
 );
 

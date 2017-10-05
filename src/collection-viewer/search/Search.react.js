@@ -15,10 +15,13 @@ import {
   moveCursor,
   moveIntersection,
   toggleSearchMode,
-  toggleSearchExactMatch,
 } from './actions';
 
-import { selectItemAtCursor, searchTextChanged } from './thunks';
+import {
+  selectItemAtCursor,
+  searchTextChanged,
+  searchExactMatchToggled,
+} from './thunks';
 
 const Search = React.createClass({
 
@@ -141,7 +144,7 @@ function mapDispatchToProps(dispatch) {
     moveCursor: delta => dispatch(moveCursor(delta)),
     moveIntersection: delta => dispatch(moveIntersection(delta)),
     toggleMode: () => dispatch(toggleSearchMode()),
-    toggleExactMatch: () => dispatch(toggleSearchExactMatch()),
+    toggleExactMatch: () => dispatch(searchExactMatchToggled()),
   };
 }
 

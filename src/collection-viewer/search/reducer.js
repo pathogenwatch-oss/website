@@ -39,7 +39,7 @@ function addToRecent(state, terms) {
 }
 
 function applyBasicSearchTerm(state, term) {
-  if (!term) return state;
+  if (!term || state.advanced) return state;
   return {
     ...state,
     intersections: [ [ term ] ],
@@ -55,11 +55,12 @@ export default function (state = initialState, { type, payload }) {
         advanced: !state.advanced,
         text: '',
       };
-    case SEARCH_TOGGLE_EXACT_MATCH:
+    case SEARCH_TOGGLE_EXACT_MATCH: {
       return {
         ...applyBasicSearchTerm(state, payload),
         exact: !state.exact,
       };
+    }
     case SEARCH_TEXT_CHANGED:
       return {
         ...state,

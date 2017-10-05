@@ -110,7 +110,9 @@ export function getExpressionMatcher(text) {
   if (!operator) return null;
 
   const number = cleanText.slice(operator.length);
-  if (!number.length || isNaN(number)) return null;
+  if (isNaN(number)) return null;
+  if (!number.length) return { test: () => true }; // wait for number
+
   const test = comparators[operator].bind(null, Number(number));
   return {
     test: value => test(Number(value)),
@@ -141,13 +143,12 @@ export function createBasicSearchTerm(tableName, table, genomes, text, exact) {
     numeric: column.numeric,
   };
   const ids = [];
-  const matcher =
-    column.numeric ?
-      getExpressionMatcher(text) :
-      getTextMatcher(text, exact);
+  let matcher;
+  if (column.numeric) matcher = getExpressionMatcher(text);
+  if (!matcher) matcher = getTextMatcher(text, exact);
   for (const genome of genomes) {
     const value = column.valueGetter(genome);
-    if (matcher.test(value)) {
+    if (matcher && matcher.test(value)) {
       ids.push(genome.uuid);
     }
   }
