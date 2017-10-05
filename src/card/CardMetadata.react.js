@@ -1,12 +1,20 @@
 import React from 'react';
 import classnames from 'classnames';
 
-export default ({ children, tooltip, title, icon, fadeOverflow }) => (
+import GenomeIcon from '../components/GenomeIcon.react';
+
+function showIcon(icon, title) {
+  if (!icon) return null;
+  if (icon === 'wgsa_genome') return <GenomeIcon title={title} />;
+  return <i title={title} className="material-icons">{icon}</i>;
+}
+
+export default ({ className, children, tooltip, title, icon, fadeOverflow }) => (
   <div
-    className={classnames('wgsa-card-metadata', { 'wgsa-overflow-fade': fadeOverflow })}
+    className={classnames(className, 'wgsa-card-metadata', { 'wgsa-overflow-fade': fadeOverflow })}
     title={tooltip}
   >
-    <i title={title} className="material-icons">{icon}</i>
+    {showIcon(icon, title)}
     {children}
   </div>
 );

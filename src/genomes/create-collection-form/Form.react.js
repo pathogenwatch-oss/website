@@ -14,12 +14,7 @@ const CreateCollectionForm = React.createClass({
 
   componentDidMount() {
     componentHandler.upgradeElements(Array.from(this.formElements));
-  },
-
-  componentDidUpdate(previously) {
-    if (!previously.open && this.props.open) {
-      this.firstInput.focus();
-    }
+    this.firstInput.focus();
   },
 
   addToFormElements(element) {
@@ -42,11 +37,11 @@ const CreateCollectionForm = React.createClass({
     return (
       <form className="wgsa-create-collection-form" onSubmit={this.props.onSubmit}>
         <span className="wgsa-card-metadata-inliner wgsa-collection-summary">
+          <CardMetadata title="Size" icon="wgsa_genome">
+            <span>{numGenomes} Genome{numGenomes === 1 ? '' : 's'}</span>
+          </CardMetadata>
           <CardMetadata title="Organism" icon="bug_report">
             {taxIdMap.get(organismId).formattedName}
-          </CardMetadata>
-          <CardMetadata icon="insert_drive_file">
-            {numGenomes} Genome{numGenomes > 1 ? 's' : ''}
           </CardMetadata>
         </span>
         <div ref={this.addToFormElements} className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
@@ -84,12 +79,12 @@ const CreateCollectionForm = React.createClass({
           />
           <label className="mdl-textfield__label" htmlFor="collection-pmid">PMID</label>
         </div>
-        <div className="wgsa-drawer-actions">
+        <div className="mdl-typography--text-center">
           <button
             className="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
             disabled={!canCreateCollection}
           >
-            Create
+            Create Now
           </button>
         </div>
       </form>

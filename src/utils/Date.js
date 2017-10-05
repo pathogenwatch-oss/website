@@ -59,6 +59,7 @@ import isYesterday from 'date-fns/is_yesterday';
 import format from 'date-fns/format';
 
 export function formatDateTime(date) {
+  if (!date) return null;
   if (isToday(date)) {
     return `Today ${format(date, 'HH:mm')}`;
   }
@@ -66,6 +67,10 @@ export function formatDateTime(date) {
     return `Yesterday ${format(date, 'HH:mm')}`;
   }
   return format(date, 'DD MMM YYYY HH:mm');
+}
+
+export function formatDate(date) {
+  return format(date, 'DD MMM YYYY');
 }
 
 import difference from 'date-fns/difference_in_calendar_months';

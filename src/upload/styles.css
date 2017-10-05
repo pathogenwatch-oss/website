@@ -1,0 +1,35 @@
+.wgsa-upload-summary {
+  /*justify-content: center;*/
+}
+
+.wgsa-upload-summary .mdl-button {
+  text-decoration: none !important;
+}
+
+.wgsa-genome-card {
+  margin-bottom: 8px;
+}
+
+.wgsa-genome-card p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 500;
+}
+
+.wgsa-genome-card a {
+  color: #AC65A6;
+}
+
+.wgsa-hub-card-error {
+  color: #d11b1b;
+}
+
+.wgsa-genome-card .wgsa-button--text {
+  height: 24px;
+  line-height: 1;
+}
+
+.wgsa-hub-card-error p {
+  white-space: normal;
+}

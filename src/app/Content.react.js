@@ -9,6 +9,7 @@ import GenomesRoute from '../genomes';
 import CollectionViewerRoute from '../collection-viewer';
 import DocumentationViewerRoute from '../documentation-viewer';
 import OfflineRoute from '../offline';
+import UploadRoute from '../upload';
 
 import NotFound from '../components/NotFound.react';
 
@@ -18,7 +19,7 @@ const RedirectWithQuery = ({ from, to }) => (
   />
 );
 
-const CollectionRedirect = () => (
+const getCollectionRedirect = () => (
   <Route exact path="/:organism/collection/:slug"
     render={({ match }) =>
       <Redirect to={{
@@ -40,15 +41,15 @@ export default () => (
     {CollectionViewerRoute}
     {DocumentationViewerRoute}
     {OfflineRoute}
+    {UploadRoute}
     <Redirect from="/index.html" to="/" />
     <Redirect from="/collections/*" to="/collections/all" />
     <RedirectWithQuery from="/collections" to="/collections/all" />,
     <Redirect from="/genomes/*" to="/genomes/all" />
     <RedirectWithQuery from="/genomes" to="/genomes/all" />
-    <Redirect from="/upload" to="/genomes/upload" />
-    <Redirect from="/:organism/upload" to="/genomes/upload" />
+    <Redirect from="/:organism/upload" to="/upload" />
     {OrganismRedirects}
-    <CollectionRedirect />
-    <Route component={NotFound} />
+    {getCollectionRedirect()}
+    <Route path="/" component={NotFound} />
   </Switch>
 );

@@ -30,24 +30,29 @@ class MarkerCluster extends MapLayer {
   }
 
   addMarkers(markers) {
-    this.leafletElement.eachLayer(this.removeMarker.bind(this));
+    const layers = this.leafletElement.getLayers();
+    for (const layer of layers) {
+      if (layer.options.layerId === layerId) {
+        this.leafletElement.removeLayer(layer);
+      }
+    }
 
     if (!Array.isArray(markers) || markers.length === 0) {
       return;
     }
 
-    const layers = markers.map(({ id, position, title, icon = defaultIcon }) =>
-      Leaflet.marker(position, { id, icon, title, layerId }).
-        on('click', this.props.onMarkerClick)
-    );
+    const newLayers = [];
 
-    this.leafletElement.addLayers(layers);
-  }
-
-  removeMarker(marker) {
-    if (marker.options.layerId === layerId) {
-      this.leafletElement.removeLayer(marker);
+    for (const { id, latitude, longitude, name, icon = defaultIcon } of markers) {
+      if (latitude && longitude) {
+        newLayers.push(
+          Leaflet.marker([ latitude, longitude ], { id, icon, title: name, layerId })
+            .on('click', this.props.onMarkerClick)
+        );
+      }
     }
+
+    this.leafletElement.addLayers(newLayers);
   }
 
   render() {

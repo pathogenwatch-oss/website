@@ -1,5 +1,10 @@
 import React from 'react';
 
+// imports must not include css to remain compatible with csv generator
+import ST from '../../mlst/ST.react';
+import Profile from '../../mlst/Profile.react';
+
+import { isNovel, createCode } from '../../mlst/utils';
 import { getFormattedDateString } from '../table/utils';
 
 export const systemDataColumns = {
@@ -42,17 +47,31 @@ export const systemDataColumns = {
     label: 'ST',
     displayName: 'MLST ST',
     valueGetter({ analysis }) {
+      if (!analysis.mlst) return 0;
+      const { st } = analysis.mlst;
+      if (isNovel(st)) return `(${st.slice(0, 4)})`;
+      return st;
+    },
+    display({ analysis }) {
       if (!analysis.mlst) return null;
-      return analysis.mlst.st;
+      return <ST id={analysis.mlst.st} textOnly />;
     },
   },
   __mlst_profile: {
+    columnKey: '__mlst_profile',
     label: 'PROFILE',
     displayName: 'MLST PROFILE',
-    columnKey: '__mlst_profile',
     valueGetter({ analysis }) {
       if (!analysis.mlst) return null;
-      return analysis.mlst.code;
+      const { code, alleles } = analysis.mlst;
+      if (code) return code;
+      return createCode(alleles, 4);
+    },
+    display({ analysis }) {
+      if (!analysis.mlst) return null;
+      const { code, alleles } = analysis.mlst;
+      if (code) return code;
+      return <Profile alleles={alleles} textOnly />;
     },
   },
   '__ng-mast': {
@@ -81,8 +100,8 @@ export const systemDataColumns = {
   },
   __genotyphi_type: {
     columnKey: '__genotyphi_type',
-    label: 'TYPE',
-    displayName: 'GENOTYPHI TYPE',
+    label: 'GENOTYPE',
+    displayName: 'GENOTYPHI GENOTYPE',
     valueGetter({ analysis }) {
       if (!analysis.genotyphi) return null;
       return analysis.genotyphi.genotype;
@@ -135,46 +154,46 @@ export const systemDataColumns = {
   },
   __genome_length: {
     columnKey: '__genome_length',
-    valueGetter({ metrics }) {
-      return metrics ?
-        metrics.totalNumberOfNucleotidesInDnaStrings :
+    valueGetter({ analysis }) {
+      return analysis.metrics ?
+        analysis.metrics.length :
         null;
     },
     numeric: true,
   },
   __n50: {
     columnKey: '__n50',
-    valueGetter({ metrics }) {
-      return metrics ?
-        metrics.contigN50 :
+    valueGetter({ analysis }) {
+      return analysis.metrics ?
+        analysis.metrics.N50 :
         null;
     },
     numeric: true,
   },
   '__no._contigs': {
     columnKey: '__no._contigs',
-    valueGetter({ metrics }) {
-      return metrics ?
-        metrics.totalNumberOfContigs :
+    valueGetter({ analysis }) {
+      return analysis.metrics ?
+        analysis.metrics.contigs :
         null;
     },
     numeric: true,
   },
   '__non-ATCG': {
     columnKey: '__non-ATCG',
-    valueGetter({ metrics }) {
-      return metrics ?
-        metrics.totalNumberOfNsInDnaStrings :
+    valueGetter({ analysis }) {
+      return analysis.metrics ?
+        analysis.metrics.nonATCG :
         null;
     },
     numeric: true,
   },
-  __GC_Content: {
-    columnKey: '__GC_Content',
+  '__%_GC_Content': {
+    columnKey: '__%_GC_Content',
     label: '% GC CONTENT',
-    valueGetter({ metrics }) {
-      return metrics && metrics.gcContent ?
-        metrics.gcContent :
+    valueGetter({ analysis }) {
+      return analysis.metrics ?
+        analysis.metrics.gcContent :
         null;
     },
     numeric: true,

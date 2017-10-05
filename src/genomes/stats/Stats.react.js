@@ -6,15 +6,17 @@ import classnames from 'classnames';
 import { AutoSizer } from 'react-virtualized';
 
 import * as selectors from './selectors';
+import { getFilter } from '../filter/selectors';
 
 import { showGenomeDrawer } from '../../genome-drawer';
 import { showMetric } from './actions';
+import { fetchGenomeStats } from '../actions';
 
 const charts = [
-  { title: 'Genome Length', metric: 'totalNumberOfNucleotidesInDnaStrings' },
-  { title: 'N50', metric: 'contigN50' },
-  { title: 'No. Contigs', metric: 'totalNumberOfContigs' },
-  { title: 'Non-ATCG', metric: 'totalNumberOfNsInDnaStrings' },
+  { title: 'Genome Length', metric: 'length' },
+  { title: 'N50', metric: 'N50' },
+  { title: 'No. Contigs', metric: 'contigs' },
+  { title: 'Non-ATCG', metric: 'nonATCG' },
   { title: 'GC Content', metric: 'gcContent' },
 ];
 
@@ -43,7 +45,7 @@ function getClickHandler(chartData, onPointClick) {
   return (event, [ item ]) => {
     if (item) {
       const original = chartData[item._datasetIndex].data[item._index];
-      onPointClick(original.id);
+      onPointClick(original);
     }
   };
 }
@@ -74,10 +76,18 @@ const ChartResizer = React.createClass({
 export const StatsView = React.createClass({
 
   componentDidMount() {
-    const { chartData = [] } = this.props;
+    const { chartData = [], previousFilter, filter, fetch } = this.props;
+
+    let data;
+    if (previousFilter !== filter) {
+      fetch();
+    } else {
+      data = { datasets: chartData };
+    }
+
     this.chart = new Chart(this.canvas, {
       type: 'line',
-      data: { datasets: chartData },
+      data,
       options: {
         animation: false,
         elements: {
@@ -124,7 +134,12 @@ export const StatsView = React.createClass({
   },
 
   componentDidUpdate(previous) {
-    const { chartData, onPointClick } = this.props;
+    const { chartData, onPointClick, filter, fetch } = this.props;
+
+    if (previous.filter !== filter) {
+      fetch();
+    }
+
     if (chartData !== previous.chartData) {
       this.chart.data.datasets = chartData;
       this.chart.options.onClick = getClickHandler(chartData, onPointClick);
@@ -136,7 +151,7 @@ export const StatsView = React.createClass({
     const { average, stDev, range = {} } = this.props;
 
     return (
-      <div className="wgsa-hub-stats-view wgsa-content-margin">
+      <div className="wgsa-genome-stats">
         <AutoSizer>
           {({ height, width }) =>
             <div style={{ height, width, position: 'relative' }}>
@@ -182,12 +197,15 @@ function mapStateToProps(state) {
     stDev: selectors.getMetricStDev(state),
     range: selectors.getMetricRange(state),
     chartData: selectors.getChartData(state),
+    filter: getFilter(state),
+    previousFilter: selectors.getFilter(state),
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    onPointClick: id => dispatch(showGenomeDrawer(id)),
+    onPointClick: item => dispatch(showGenomeDrawer(item.id, item.label)),
+    fetch: () => dispatch(fetchGenomeStats()),
   };
 }
 

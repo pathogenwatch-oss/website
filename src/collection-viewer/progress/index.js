@@ -62,9 +62,9 @@ const UploadProgress = React.createClass({
     const { progress = {} } = this.props.collection;
     const { errors = [], results = {} } = progress;
     return (
-      <div className="wgsa-upload-progress">
-        <main className="wgsa-upload-progress-container">
-          <div className="wgsa-collection-url-display wgsa-upload-progress-section">
+      <div className="wgsa-collection-progress">
+        <main className="wgsa-collection-progress-container">
+          <div className="wgsa-collection-url-display wgsa-collection-progress-section">
             <div className="mdl-card__supporting-text">
               Final results will be available at the current address.<br />
               If upload fails to progress, please refresh at a later time.
@@ -72,7 +72,7 @@ const UploadProgress = React.createClass({
           </div>
           <Dashboard results={results} />
           { errors.length ?
-            <div className="wgsa-upload-progress-section mdl-cell mdl-cell--12-col">
+            <div className="wgsa-collection-progress-section mdl-cell mdl-cell--12-col">
               <div className="wgsa-card-heading">Warnings</div>
               <Errors errors={errors} />
             </div> : null

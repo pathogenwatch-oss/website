@@ -5,7 +5,7 @@ import { showGenomeDrawer } from '../../genome-drawer';
 
 function mapDispatchToProps(dispatch, { genome }) {
   return {
-    onClick: () => dispatch(showGenomeDrawer(genome.id)),
+    onClick: () => dispatch(showGenomeDrawer(genome.id, genome.name)),
   };
 }
 

@@ -15,8 +15,9 @@ export function measureText(text, isBold) {
   return Math.min(text.length, maxChars) * (isBold ? emBoldWidth : emWidth);
 }
 
-export function defaultWidthGetter(row, { valueGetter, columnKey }, isBold) {
-  const value = valueGetter(row);
+export function defaultWidthGetter(row, column, isBold) {
+  const { valueGetter, getTextToMeasure = valueGetter } = column;
+  const value = getTextToMeasure(row);
   if (value === null || typeof value === 'undefined') return 0;
   const string = String(value);
   if (!string.length) return 0;

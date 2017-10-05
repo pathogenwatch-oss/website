@@ -24,13 +24,13 @@ const OfflineLink = () => (
 );
 
 const Header = ({
-  asideEnabled, asideVisible, userDrawerVisible, className, offline,
+  asideEnabled, userDrawerVisible, className, offline,
   children = <DefaultContent asideEnabled={asideEnabled} />,
 }) => (
   <header className={
     classnames(
       'mdl-layout__header mdl-layout__header--scroll wgsa-header',
-      { 'wgsa-has-aside': asideEnabled && asideVisible, 'wgsa-header--inverse': offline },
+      { 'wgsa-header--inverse': offline },
       className,
     )}
   >

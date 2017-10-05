@@ -83,6 +83,11 @@ ul {
   padding-left: 0;
 }
 
+ul.bulleted {
+  list-style: outside;
+  padding-left: 16px;
+}
+
 sup {
   color: #673c90;
 }

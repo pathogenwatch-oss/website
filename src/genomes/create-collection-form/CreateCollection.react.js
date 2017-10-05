@@ -50,7 +50,7 @@ const CreateCollection = React.createClass({
                   { selectedGenomeSummary[id].length }
                 </span>
                 <span className="mdl-chip__text">
-                  <FormattedName organismId={id} />
+                  <FormattedName fullName organismId={id} />
                 </span>
               </button>
             ) }

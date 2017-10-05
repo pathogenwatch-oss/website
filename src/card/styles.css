@@ -11,7 +11,6 @@
 }
 
 .wgsa-card-header {
-  margin-bottom: 6px;
   padding-right: 24px;
   position: relative;
   cursor: pointer;
@@ -81,18 +80,22 @@
 }
 
 .wgsa-card-metadata {
-  align-items: bottom;
-  color: rgba(0, 0, 0, 0.87);
   display: flex;
   justify-content: flex-start;
+  align-items: center;
   line-height: 20px;
   position: relative;
 }
 
-.wgsa-card-metadata i {
+.wgsa-card-metadata .material-icons {
   font-size: 16px;
-  padding-right: 4px;
   line-height: 18px;
+  height: 18px;
+  width: 15px; /* Hacked to make the SVG icon look crisp */
+  padding-right: 5px;
+}
+
+.wgsa-card-metadata .material-icons[title] {
   cursor: help;
 }
 
@@ -121,12 +124,12 @@
   justify-content: flex-end;
   font-size: 13px;
   line-height: 20px;
-  color: rgba(0, 0, 0, 0.54);
 }
 
 .wgsa-overflow-fade {
   overflow: hidden;
   white-space: nowrap;
+  position: relative;
 }
 
 .wgsa-overflow-fade::after {

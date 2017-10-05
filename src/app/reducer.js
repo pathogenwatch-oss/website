@@ -14,6 +14,7 @@ import { reducer as organisms } from '../organisms';
 import { reducer as toast } from '../toast';
 import { reducer as summary } from '../summary';
 import { reducer as viewer } from '../collection-viewer';
+import { reducer as upload } from '../upload';
 
 export default combineReducers({
   account,
@@ -29,5 +30,6 @@ export default combineReducers({
   organisms,
   toast,
   summary,
+  upload,
   viewer,
 });

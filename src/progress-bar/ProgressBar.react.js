@@ -1,4 +1,5 @@
 import React from 'react';
+import classnames from 'classnames';
 
 export default React.createClass({
 
@@ -34,11 +35,16 @@ export default React.createClass({
 
   render() {
     const { className, indeterminate, label } = this.props;
-    const classes = `${className} mdl-progress mdl-js-progress ${indeterminate ? 'mdl-progress__indeterminate' : ''}`.trim();
     return (
       <div className="wgsa-progress-bar">
         { label ? <label className="wgsa-progress-bar__label">{label}</label> : null }
-        <div ref="progressBar" className={classes} />
+        <div ref="progressBar"
+          className={classnames(
+            className,
+            'mdl-progress mdl-js-progress',
+            { 'mdl-progress__indeterminate': indeterminate }
+          )}
+        />
       </div>
     );
   },

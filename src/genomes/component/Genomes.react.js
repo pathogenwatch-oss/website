@@ -1,30 +1,19 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import classnames from 'classnames';
 
-import FileDragAndDrop from '../../drag-and-drop';
-import ProgressBar from '../../progress-bar';
 import Overlay from '../../overlay';
 
 import Filter from '../filter';
-import Summary from '../summary';
-import SelectionDrawer from '../selection';
-import Instructions from '../uploads/Instructions.react';
-
-import { getGridItems } from '../selectors';
-import { getTotal } from '../summary/selectors';
-import { getStatus } from '../selectors';
+import Header from '../header';
 
 import { statuses } from '../constants';
-import { history } from '../../app';
 
-const Component = React.createClass({
+export default React.createClass({
 
   propTypes: {
     hasGenomes: React.PropTypes.bool,
     uploads: React.PropTypes.object,
-    addFiles: React.PropTypes.func.isRequired,
     isUploading: React.PropTypes.bool,
-    waiting: React.PropTypes.bool,
     prefilter: React.PropTypes.string,
     fetch: React.PropTypes.func,
   },
@@ -38,23 +27,12 @@ const Component = React.createClass({
   },
 
   componentDidUpdate(previous) {
-    const { prefilter, isUploading, fetch } = this.props;
+    const { prefilter, fetch } = this.props;
 
     if (previous.prefilter !== prefilter) {
       fetch();
       return;
     }
-
-    if (prefilter === 'upload') {
-      if (previous.isUploading && !isUploading) {
-        fetch();
-      }
-    }
-  },
-
-  upload(newFiles) {
-    this.props.addFiles(newFiles);
-    history.push('/genomes/upload');
   },
 
   renderEmptyMessage() {
@@ -62,10 +40,6 @@ const Component = React.createClass({
 
     if (total === 0) {
       switch (prefilter) {
-        case 'upload':
-          return (
-            <Instructions />
-          );
         case 'bin':
           return (
             <p className="wgsa-hub-big-message">
@@ -112,31 +86,24 @@ const Component = React.createClass({
 
   render() {
     return (
-      <FileDragAndDrop onFiles={this.upload}>
-        { this.props.waiting && <ProgressBar indeterminate /> }
-        <div className="wgsa-hipster-style wgsa-filterable-view">
-          <Summary />
+      <div
+        className={classnames(
+          'wgsa-genomes wgsa-filter-container',
+          { 'has-filter': this.props.isFilterOpen }
+        )}
+      >
+        <Filter />
+        <div className="wgsa-filter-content">
+          <Header />
           {this.renderContent()}
         </div>
-        <Filter />
-        <SelectionDrawer />
         <Overlay visible={this.props.status === statuses.LOADING}>
           <p className="wgsa-big-message">
             Loading... ⌛
           </p>
         </Overlay>
-      </FileDragAndDrop>
+      </div>
     );
   },
 
 });
-
-function mapStateToProps(state) {
-  return {
-    items: getGridItems(state),
-    total: getTotal(state),
-    status: getStatus(state),
-  };
-}
-
-export default connect(mapStateToProps)(Component);

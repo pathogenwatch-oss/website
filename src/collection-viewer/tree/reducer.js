@@ -2,6 +2,8 @@ import { combineReducers } from 'redux';
 
 import { FETCH_COLLECTION }
   from '../../collection-viewer/actions';
+import { RESET_FILTER, ACTIVATE_FILTER } from '../filter/actions';
+import { SEARCH_TERM_ADDED } from '../search/actions';
 import * as ACTIONS from './actions';
 
 import { simpleTrees } from './constants';
@@ -53,7 +55,6 @@ function getInitialState() {
     nodeSize: {},
     labelSize: {},
     history: [],
-    selectedInternalNode: null,
   };
 }
 
@@ -170,14 +171,6 @@ function entities(state = {}, { type, payload }) {
           ...payload.snapshot,
         },
       };
-    case ACTIONS.INTERNAL_NODE_SELECTED:
-      return {
-        ...state,
-        [payload.stateKey]: {
-          ...state[payload.stateKey],
-          selectedInternalNode: payload.nodeId,
-        },
-      };
     default:
       return state;
   }
@@ -213,9 +206,47 @@ function lastSubtree(state = null, { type, payload }) {
   }
 }
 
+function clearSelected(state) {
+  return {
+    ...state,
+    trees: {
+      ...state.trees,
+      [state.active]: null,
+    },
+  };
+}
+
+function selectedInternalNode(state = { active: COLLECTION, trees: {} }, { type, payload }) {
+  switch (type) {
+    case ACTIONS.SET_TREE:
+      return {
+        ...state,
+        active: payload.name,
+      };
+    case ACTIONS.INTERNAL_NODE_SELECTED:
+      return {
+        ...state,
+        trees: {
+          ...state.trees,
+          [payload.stateKey]: payload.nodeId,
+        },
+      };
+    case ACTIVATE_FILTER:
+    case RESET_FILTER: {
+      if (payload.key !== 'VISIBILITY') return state;
+      return clearSelected(state);
+    }
+    case SEARCH_TERM_ADDED:
+      return clearSelected(state);
+    default:
+      return state;
+  }
+}
+
 export default combineReducers({
   entities,
   visible,
   loading,
   lastSubtree,
+  selectedInternalNode,
 });

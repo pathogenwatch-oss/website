@@ -1,45 +1,64 @@
 import { combineReducers } from 'redux';
 
-import uploads from './uploads/reducer';
 import summary from './summary/reducer';
+import filter from './filter/reducer';
 import selection from './selection/reducer';
-import selectedMetric from './stats/reducer';
+import stats from './stats/reducer';
 import collectionMetadata from './create-collection-form/reducer';
+import map from './map/reducer';
 
 import { CREATE_COLLECTION } from './create-collection-form';
 import * as actions from './actions';
 
-import { shouldNotFetch } from './utils';
-
 function entities(state = {}, { type, payload }) {
   switch (type) {
-    case actions.FETCH_GENOME_SUMMARY.ATTEMPT:
-      return {};
-    case actions.FETCH_GENOMES.SUCCESS: {
+    case actions.FETCH_GENOME_LIST.SUCCESS: {
       return payload.result.reduce((memo, genome) => {
+        memo[genome.id] = genome;
+        return memo;
+      }, { ...state });
+    }
+    case actions.FETCH_GENOME_SUMMARY.SUCCESS: {
+      return payload.result.genomes.reduce((memo, genome) => {
         memo[genome.id] = genome;
         return memo;
       }, {});
     }
-    case actions.MOVE_TO_BIN: {
-      const { id } = payload;
-      return {
-        ...state,
-        [id]: {
-          ...state[id],
-          binned: true,
-        },
-      };
+    default:
+      return state;
+  }
+}
+
+function indices(state = {}, { type, payload }) {
+  switch (type) {
+    case actions.FETCH_GENOME_SUMMARY.SUCCESS: {
+      return payload.result.genomes.reduce((memo, genome, index) => {
+        memo[index] = genome.id;
+        return memo;
+      }, {});
     }
-    case actions.UNDO_MOVE_TO_BIN: {
-      const { id } = payload;
-      return {
-        ...state,
-        [id]: {
-          ...state[id],
-          binned: false,
-        },
-      };
+    case actions.FETCH_GENOME_LIST.ATTEMPT: {
+      const { skip = 0, limit = 0 } = payload.options;
+      const nextState = { ... state };
+      for (let i = skip; i < skip + limit; i++) {
+        nextState[i] = true;
+      }
+      return nextState;
+    }
+    case actions.FETCH_GENOME_LIST.FAILURE: {
+      const { skip = 0, limit = 0 } = payload.options;
+      const nextState = { ... state };
+      for (let i = skip; i < skip + limit; i++) {
+        nextState[i] = undefined;
+      }
+      return nextState;
+    }
+    case actions.FETCH_GENOME_LIST.SUCCESS: {
+      const { skip = 0 } = payload.options;
+      return payload.result.reduce((memo, genome, index) => {
+        memo[index + skip] = genome.id;
+        return memo;
+      }, { ...state });
     }
     default:
       return state;
@@ -61,15 +80,19 @@ function waiting(state = false, { type }) {
 }
 
 const initialStatus = null;
-function status(state = initialStatus, { type, payload }) {
+function status(state = initialStatus, { type }) {
   switch (type) {
-    case actions.FETCH_GENOMES.ATTEMPT: {
-      if (shouldNotFetch(payload.filter)) return state;
+    case actions.FETCH_GENOME_SUMMARY.ATTEMPT:
+    case actions.FETCH_GENOME_MAP.ATTEMPT:
+    case actions.FETCH_GENOME_STATS.ATTEMPT:
       return statuses.LOADING;
-    }
-    case actions.FETCH_GENOMES.FAILURE:
+    case actions.FETCH_GENOME_SUMMARY.FAILURE:
+    case actions.FETCH_GENOME_MAP.FAILURE:
+    case actions.FETCH_GENOME_STATS.FAILURE:
       return statuses.ERROR;
-    case actions.FETCH_GENOMES.SUCCESS:
+    case actions.FETCH_GENOME_SUMMARY.SUCCESS:
+    case actions.FETCH_GENOME_MAP.SUCCESS:
+    case actions.FETCH_GENOME_STATS.SUCCESS:
       return statuses.OK;
     default:
       return state;
@@ -77,12 +100,14 @@ function status(state = initialStatus, { type, payload }) {
 }
 
 export default combineReducers({
+  filter,
   entities,
+  indices,
   collectionMetadata,
-  selectedMetric,
+  stats,
   status,
   selection,
   summary,
-  uploads,
   waiting,
+  map,
 });

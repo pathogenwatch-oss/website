@@ -3,21 +3,23 @@ import { parse } from 'query-string';
 
 import Genomes from './Genomes.react';
 
-import { addFiles } from '../uploads/actions';
-
-import { getTotalGenomes, isWaiting } from '../selectors';
-import { isUploading, getTotalErrors } from '../uploads/selectors';
+import { getTotalGenomes, getGridItems, getStatus } from '../selectors';
+import { isFilterOpen } from '../filter/selectors';
+import { getTotal } from '../summary/selectors';
 
 import { updateFilter } from '../filter/actions';
+import { selectAll } from '../selection/actions';
+
 
 function mapStateToProps(state, { match }) {
   const { prefilter } = match.params;
   return {
-    hasGenomes: getTotalGenomes(state) > 0,
-    waiting: isWaiting(state),
-    isUploading: isUploading(state),
-    showErrorSummary: prefilter === 'upload' && getTotalErrors(state) > 0,
     prefilter,
+    hasGenomes: getTotalGenomes(state) > 0,
+    items: getGridItems(state),
+    total: getTotal(state),
+    status: getStatus(state),
+    isFilterOpen: isFilterOpen(state),
   };
 }
 
@@ -25,9 +27,13 @@ function mapDispatchToProps(dispatch, { match, location }) {
   const query = parse(location.search);
   const { prefilter } = match.params;
   return {
-    addFiles: files => dispatch(addFiles(files)),
     fetch: () =>
-      dispatch(updateFilter({ prefilter, ...query }, false)),
+      dispatch(updateFilter({ prefilter, ...query }, false))
+        .then(() => {
+          if (query.createCollection) {
+            dispatch(selectAll(true));
+          }
+        }),
   };
 }
 

@@ -1,10 +1,9 @@
 import { stateKey } from './index';
 
 import { actions } from '../../filter';
-import { fetchGenomes, fetchSummary } from '../actions';
+import { fetchGenomeSummary, fetchGenomeList } from '../actions';
 
 import { getFilter } from './selectors';
-import { getUploadedAt } from '../uploads/selectors';
 
 export function updateFilter(query, updateQueryString = true) {
   return (dispatch, getState) => {
@@ -13,18 +12,15 @@ export function updateFilter(query, updateQueryString = true) {
 
     const state = getState();
     const currentFilter = getFilter(state);
-    const uploadedAt = getUploadedAt(state);
 
     const filterQuery = { ...currentFilter };
 
-    if (filterQuery.prefilter === 'upload') {
-      filterQuery.uploadedAt = uploadedAt;
+    const queryKeys = Object.keys(query);
+    if (queryKeys.length === 1 && queryKeys[0] === 'sort') {
+      return dispatch(fetchGenomeList());
     }
 
-    if ('prefilter' in query) {
-      dispatch(fetchSummary(filterQuery));
-    }
-    dispatch(fetchGenomes(filterQuery));
+    return dispatch(fetchGenomeSummary(filterQuery));
   };
 }
 
@@ -33,6 +29,14 @@ export function clearFilter() {
     dispatch(actions.clear(stateKey));
 
     const filter = getFilter(getState());
-    dispatch(fetchGenomes(filter));
+    return dispatch(fetchGenomeSummary(filter));
+  };
+}
+
+export const GENOMES_FILTER_OPENED = 'GENOMES_FILTER_OPENED';
+
+export function toggleFilter() {
+  return {
+    type: GENOMES_FILTER_OPENED,
   };
 }

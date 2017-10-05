@@ -4,33 +4,18 @@ import { connect } from 'react-redux';
 import RemoveButton from '../../components/RemoveButton.react';
 
 import { setBinnedStatus } from './actions';
-import { removeGenomes } from '../uploads/actions';
 
-import { statuses } from '../uploads/constants';
 
 function mapDispatchToProps(dispatch, { genome }) {
   return {
-    removeGenome: () => dispatch(removeGenomes([ genome.id ])),
     moveToBin: () => dispatch(setBinnedStatus(genome, true)),
     restoreFromBin: () => dispatch(setBinnedStatus(genome, false)),
   };
 }
 
 export default connect(null, mapDispatchToProps)(
-  ({ genome = {}, removeGenome, ...props }) => {
+  ({ genome = {}, ...props }) => {
     if (genome.owner !== 'me') return null;
-
-    if (genome.status === statuses.ERROR) {
-      return (
-        <button
-          className="mdl-button wgsa-button--text"
-          onClick={removeGenome}
-        >
-          Remove
-        </button>
-      );
-    }
-
     return (
       <RemoveButton item={genome} {...props} />
     );

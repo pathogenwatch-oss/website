@@ -24,7 +24,7 @@ export default React.createClass({
       <div className="wgsa-homepage">
         <section className="jumbotron">
           <img src="/images/WGSA.FINAL.svg" alt="WGSA" />
-          <h1>Global AMR surveillance through Whole Genome Sequencing</h1>
+          <h1>Global Pathogen Surveillance through Whole Genome Sequencing</h1>
         </section>
         <Showcase />
         <section id="how-it-works" className="alt wgsa-how-it-works">
@@ -52,7 +52,14 @@ export default React.createClass({
         <section id="organisms">
           <div className="wgsa-homepage__content">
             <h2>Organisms</h2>
+            <p className="lead">
+              WGSA provides species and taxonomy prediction for over 60,000 variants of bacteria, viruses and fungi, and basic quality metrics for assemblies.
+            </p>
+            <p className="lead">
+              <strong>MLST</strong> prediction is available for over 100 species, and <strong>Core Genome MLST</strong> (cgMLST) is available for 6 species.
+            </p>
             <table className="wgsa-organism-table">
+              <caption>Detailed Analyses</caption>
               <colgroup>
                 <col className="wgsa-title-column" />
                 <col className="wgsa-feature-column" />
@@ -65,8 +72,7 @@ export default React.createClass({
                 <tr>
                   <th>Organism</th>
                   <th>Core Genome</th>
-                  <th>MLST</th>
-                  <th>PAARSNP</th>
+                  <th>AMR Prediction</th>
                   <th>Population Search</th>
                   <th>Other</th>
                 </tr>
@@ -78,13 +84,11 @@ export default React.createClass({
                     <td><i className="material-icons">check</i></td>
                     <td><i className="material-icons">check</i></td>
                     <td><i className="material-icons">check</i></td>
-                    <td><i className="material-icons">check</i></td>
                     <td></td>
                   </tr> }
                 { deployedOrganisms.has('90370') &&
                   <tr>
                     <td><FormattedName organismId="90370" fullName /></td>
-                    <td><i className="material-icons">check</i></td>
                     <td><i className="material-icons">check</i></td>
                     <td><i className="material-icons">check</i></td>
                     <td><i className="material-icons">check</i></td>
@@ -96,13 +100,11 @@ export default React.createClass({
                     <td><i className="material-icons">check</i></td>
                     <td><i className="material-icons">check</i></td>
                     <td><i className="material-icons">check</i></td>
-                    <td><i className="material-icons">check</i></td>
                     <td><small>NG-MAST</small></td>
                   </tr> }
                 { deployedOrganisms.has('1313') &&
                   <tr>
                     <td><FormattedName organismId="1313" fullName /></td>
-                    <td><i className="material-icons">check</i></td>
                     <td><i className="material-icons">check</i></td>
                     <td><i className="material-icons">check</i></td>
                     <td><i className="material-icons">check</i></td>
@@ -115,13 +117,11 @@ export default React.createClass({
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td></td>
                   </tr> }
                 { deployedOrganisms.has('1646') &&
                   <tr>
                     <td><FormattedName organismId="1646" fullName /></td>
                     <td><i className="material-icons">check</i></td>
-                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>

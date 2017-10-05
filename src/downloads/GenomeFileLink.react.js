@@ -1,6 +1,6 @@
 import React from 'react';
 
-import DownloadIcon from './DownloadIcon.react';
+import DownloadIcon from '../downloads/DownloadIcon.react';
 
 import { CGPS, DEFAULT } from '../app/constants';
 import { getServerPath } from '../utils/Api';

@@ -39,3 +39,9 @@ export const DEFAULT = {
   GENOME_FILE_EXTENSIONS,
   SUPPORTED_FILE_EXTENSIONS: [ '.csv' ].concat(GENOME_FILE_EXTENSIONS),
 };
+
+export const statuses = {
+  LOADING: 0,
+  ERROR: 1,
+  SUCCESS: 2,
+};
