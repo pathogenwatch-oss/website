@@ -14,7 +14,7 @@ function getMaxCollectionSize(user) {
   return maxCollectionSize.anonymous;
 }
 
-function createCollection({ organismId, genomeIds, title, description, pmid, user }) {
+function createCollection({ organismId, genomeIds, title, description, pmid, user, sessionID }) {
   if (!organismId) {
     return Promise.reject(new ServiceRequestError('No organism ID provided'));
   }
@@ -35,6 +35,7 @@ function createCollection({ organismId, genomeIds, title, description, pmid, use
         Collection.create({
           _organism: organism,
           _user: user,
+          _session: !user ? sessionID : undefined,
           description,
           organismId,
           pmid,

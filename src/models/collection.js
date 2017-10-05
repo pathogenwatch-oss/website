@@ -13,6 +13,7 @@ const schema = new Schema({
       return !this.reference;
     },
   },
+  _session: String,
   alias: { type: String, index: true },
   createdAt: { type: Date, index: true },
   binned: { type: Boolean, default: false },

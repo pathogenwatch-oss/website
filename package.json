@@ -12,7 +12,7 @@
     "body-parser": "^1.10.1",
     "boundingbox": "^0.1.0",
     "bunyan": "^1.3.2",
-    "cgps-user-accounts": "gitlab:cgps/cgps-user-accounts#v1.4.1",
+    "cgps-user-accounts": "gitlab:cgps/cgps-user-accounts#v1.6.0",
     "connect-mongo": "^1.3.2",
     "cookie-parser": "^1.4.3",
     "couchbase": "^2.0.12",
