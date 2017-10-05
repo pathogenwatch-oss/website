@@ -69,7 +69,7 @@
   "tasks": {
     "timeout": 300000,
     "speciation": {
-      "task": "speciator", "version": "v3"
+      "task": "speciator", "version": "v1"
     },
     "retries": 3,
     "registry": {
