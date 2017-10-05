@@ -58,54 +58,56 @@ const UserDrawer = React.createClass({
           className={classnames('mdl-layout__drawer', { 'is-visible': this.props.visible })}
           onClick={e => e.stopPropagation()}
         >
-          <span className="mdl-layout-title">
-            <AccountHeader user={user} />
-            <img src="/images/WGSA.Icon.FINAL.svg" />
-            { config.version &&
-              <small className="wgsa-version">
-                {config.version}
-              </small> }
-          </span>
-          <SignInNav />
-          { !user && <hr /> }
-          <nav className="mdl-navigation">
-            <h2 className="wgsa-navigation-header">Collections</h2>
-            <NavLink to="/collections/all" badge={allCollections} icon="collections">
-              { user ? 'All' : 'Public' } Collections
-            </NavLink>
-            { user && <NavLink to="/collections/user" badge={userCollections} icon="person">My Collections</NavLink> }
-            <NavLink to="/offline" badge={offlineCollections} icon="signal_wifi_off">Offline Collections</NavLink>
-            { user && <NavLink to="/collections/bin" badge={binnedCollections} icon="delete">Bin</NavLink> }
-          </nav>
-          <hr />
-          <nav className="mdl-navigation">
-            <h2 className="wgsa-navigation-header">Genomes</h2>
-            <NavLink to="/genomes/all" badge={allGenomes} icon={<GenomeIcon />}>
-              { user ? 'All' : 'Public' } Genomes
-            </NavLink>
-            { user && <NavLink to="/genomes/user" badge={userGenomes} icon="person">My Genomes</NavLink> }
-            { user && <NavLink to="/genomes/bin" badge={binnedGenomes} icon="delete">Bin</NavLink> }
-            <NavLink to="/upload" icon="cloud_upload">Upload</NavLink>
-          </nav>
-          <hr />
-          <nav className="mdl-navigation">
-            <NavLink to="/organisms" icon="bug_report" badge={numOrganisms} activeOnIndexOnly>All Organisms</NavLink>
-            <NavLink to="/documentation" icon="help">Documentation</NavLink>
-            <NavLink to="https://gitlab.com/cgps/wgsa.net/issues" external icon="feedback">Feedback</NavLink>
-          </nav>
-          { user &&
+          <div className="wgsa-drawer-content">
+            <span className="mdl-layout-title">
+              <AccountHeader user={user} />
+              <img src="/images/WGSA.Icon.FINAL.svg" />
+              { config.version &&
+                <small className="wgsa-version">
+                  {config.version}
+                </small> }
+            </span>
+            <SignInNav />
+            { !user && <hr /> }
             <nav className="mdl-navigation">
-              <a href="/signout" className="mdl-navigation__link">
-                <i className="material-icons">exit_to_app</i>
-                <span>Sign Out</span>
+              <h2 className="wgsa-navigation-header">Collections</h2>
+              <NavLink to="/collections/all" badge={allCollections} icon="collections">
+                { user ? 'All' : 'Public' } Collections
+              </NavLink>
+              { user && <NavLink to="/collections/user" badge={userCollections} icon="person">My Collections</NavLink> }
+              <NavLink to="/offline" badge={offlineCollections} icon="signal_wifi_off">Offline Collections</NavLink>
+              { user && <NavLink to="/collections/bin" badge={binnedCollections} icon="delete">Bin</NavLink> }
+            </nav>
+            <hr />
+            <nav className="mdl-navigation">
+              <h2 className="wgsa-navigation-header">Genomes</h2>
+              <NavLink to="/genomes/all" badge={allGenomes} icon={<GenomeIcon />}>
+                { user ? 'All' : 'Public' } Genomes
+              </NavLink>
+              { user && <NavLink to="/genomes/user" badge={userGenomes} icon="person">My Genomes</NavLink> }
+              { user && <NavLink to="/genomes/bin" badge={binnedGenomes} icon="delete">Bin</NavLink> }
+              <NavLink to="/upload" icon="cloud_upload">Upload</NavLink>
+            </nav>
+            <hr />
+            <nav className="mdl-navigation">
+              <NavLink to="/organisms" icon="bug_report" badge={numOrganisms} activeOnIndexOnly>All Organisms</NavLink>
+              <NavLink to="/documentation" icon="help">Documentation</NavLink>
+              <NavLink to="https://gitlab.com/cgps/wgsa.net/issues" external icon="feedback">Feedback</NavLink>
+            </nav>
+            { user &&
+              <nav className="mdl-navigation">
+                <a href="/signout" className="mdl-navigation__link">
+                  <i className="material-icons">exit_to_app</i>
+                  <span>Sign Out</span>
+                </a>
+              </nav> }
+            <footer className="wgsa-menu-footer">
+              <a className="cgps-logo" target="_blank" rel="noopener" href="http://www.pathogensurveillance.net">
+                <img src="/images/CGPS.SHORT.FINAL.svg" />
               </a>
-            </nav> }
-          <footer className="wgsa-menu-footer">
-            <a className="cgps-logo" target="_blank" rel="noopener" href="http://www.pathogensurveillance.net">
-              <img src="/images/CGPS.SHORT.FINAL.svg" />
-            </a>
-            <a className="contact-email" href="mailto:cgps@sanger.ac.uk">cgps@sanger.ac.uk</a>
-          </footer>
+              <a className="contact-email" href="mailto:cgps@sanger.ac.uk">cgps@sanger.ac.uk</a>
+            </footer>
+          </div>
         </div>
       </div>
     );

@@ -99,20 +99,28 @@
   margin-left: 24px;
 }
 
-.wgsa-nav-badge {
-  position: absolute;
-  right: 16px;
-  margin-top: 12px;
+.wgsa-nav-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-right: auto;
 }
 
-.wgsa-nav-badge[data-badge]::after {
+.wgsa-nav-badge {
   background: #673c90;
+  color: #fff;
   width: auto;
+  height: 22px;
   min-width: 22px;
   border-radius: 11px;
-  padding-left: 6px;
-  padding-right: 6px;
+  padding: 0 6px;
   box-sizing: border-box;
+  font-size: 12px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  margin-right: 8px;
 }
 
 .cgps-login-controls .mdl-spinner__layer-1,
