@@ -52,7 +52,7 @@ const Previous = React.createClass({
           <div className="wgsa-content-margin">
             { loading && <Spinner /> }
             { error && <p>Failed to fetch previous uploads 😞</p> }
-            { uploads.length === 0 && <p>No previous uploads found.</p> }
+            { !loading && uploads.length === 0 && <p>No previous uploads found.</p> }
           </div> }
       </div>
     );

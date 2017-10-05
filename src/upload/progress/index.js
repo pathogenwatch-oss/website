@@ -44,15 +44,18 @@ const Component = React.createClass({
       this.props.fetch();
     }
 
-    if (this.props.isAnalysisComplete && this.interval) {
-      clearInterval(this.interval);
+    if (this.props.isAnalysisComplete) {
+      this.stopPolling();
       return;
     }
 
     const { position } = this.props;
-    if (uploadComplete && previous.position !== position && position > 0) {
+    if (!previous.uploadComplete && uploadComplete && position > 0) {
       this.poll();
-      return;
+    }
+
+    if (previous.position !== position && position > 0) {
+      this.poll();
     }
 
     if (this.props.lastMessageReceived !== previous.lastMessageReceived) {
@@ -62,11 +65,16 @@ const Component = React.createClass({
 
   componentWillUnmount() {
     unsubscribe(config.clientId);
+    this.stopPolling();
   },
 
   poll() {
-    if (this.interval) clearInterval(this.interval);
+    this.stopPolling();
     this.interval = setInterval(this.props.fetchPosition, 60000);
+  },
+
+  stopPolling() {
+    if (this.interval) clearInterval(this.interval);
   },
 
   interval: null,
