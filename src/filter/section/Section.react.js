@@ -1,7 +1,12 @@
 import React from 'react';
 import classnames from 'classnames';
 
-
+function formatCount(count) {
+  if (count > 9999) {
+    return `${Math.round(count / 1000)}K`;
+  }
+  return count;
+}
 
 const FilterSection = React.createClass({
 
@@ -48,7 +53,7 @@ const FilterSection = React.createClass({
             )}
             onClick={() => updateFilter(filterKey, value)}
           >
-            <span className="mdl-chip__contact">{count}</span>
+            <span className="mdl-chip__contact">{formatCount(count)}</span>
             <span className="mdl-chip__text">{label || value}</span>
           </button>
         ))}
