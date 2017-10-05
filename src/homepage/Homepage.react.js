@@ -24,7 +24,7 @@ export default React.createClass({
       <div className="wgsa-homepage">
         <section className="jumbotron">
           <img src="/images/WGSA.FINAL.svg" alt="WGSA" />
-          <h1>Global AMR surveillance through Whole Genome Sequencing</h1>
+          <h1>Global Pathogen Surveillance through Whole Genome Sequencing</h1>
         </section>
         <Showcase />
         <section id="how-it-works" className="alt wgsa-how-it-works">

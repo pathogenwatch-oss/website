@@ -95,7 +95,10 @@ const UserDrawer = React.createClass({
           </nav>
           { user &&
             <nav className="mdl-navigation">
-              <NavLink to="/signout" external icon="exit_to_app">Sign Out</NavLink>
+              <a href="/signout" className="mdl-navigation__link">
+                <i className="material-icons">exit_to_app</i>
+                <span>Sign Out</span>
+              </a>
             </nav> }
           <footer className="wgsa-menu-footer">
             <a className="cgps-logo" target="_blank" rel="noopener" href="http://www.pathogensurveillance.net">
