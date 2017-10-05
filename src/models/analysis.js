@@ -13,4 +13,6 @@ const schema = new Schema({
 
 // addPreSaveHook(schema);
 
+schema.index({ task: 1, version: 1, fileId: 1 });
+
 module.exports = mongoose.model('Analysis', schema);
