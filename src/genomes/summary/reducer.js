@@ -10,6 +10,7 @@ const initialState = {
   type: {},
   uploadedAt: {},
   date: {},
+  resistant: {},
 };
 
 export default function (state = initialState, { type, payload }) {

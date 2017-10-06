@@ -41,6 +41,11 @@
   margin-left: auto;
 }
 
+.wgsa-filter-section p {
+  font-size: 13px;
+  line-height: 1.5;
+}
+
 .wgsa-filter .mdl-chip {
   display: block;
   margin-bottom: 8px;

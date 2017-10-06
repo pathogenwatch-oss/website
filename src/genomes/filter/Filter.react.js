@@ -13,6 +13,8 @@ import { getFilterSummary, getSearchText, isFilterOpen } from './selectors';
 import { stateKey } from './index';
 import * as actions from './actions';
 
+
+
 const Filter = ({ isActive, filterSummary, textValue, updateFilter, clearFilter }) => (
   <FilterAside
     loading={filterSummary.loading}
@@ -47,6 +49,16 @@ const Filter = ({ isActive, filterSummary, textValue, updateFilter, clearFilter 
       heading="Sequence Type"
       icon="new_releases"
       summary={filterSummary.sequenceTypes}
+      updateFilter={updateFilter}
+    >
+      { (filterSummary.wgsaOrganisms.length || filterSummary.speciesId.length || filterSummary.genusId.length) && !filterSummary.sequenceTypes.length ?
+        <p>Select an organism, species, or genus to filter by sequence type.</p> : null }
+    </FilterSection>
+    <FilterSection
+      filterKey="resistance"
+      heading="Resistance"
+      icon="local_pharmacy"
+      summary={filterSummary.antibiotics}
       updateFilter={updateFilter}
     />
     <FilterSection

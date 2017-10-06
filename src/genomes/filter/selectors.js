@@ -33,6 +33,7 @@ export const getFilterSummary = createSelector(
       loading, organismId, speciesId, genusId, country, type, uploadedAt, date,
     } = summary;
     const sequenceType = summary['analysis.mlst.st'] || {};
+    const antibiotics = summary['analysis.paarsnp.antibiotics.fullName'] || {};
 
     const wgsaOrganisms = [];
 
@@ -126,6 +127,17 @@ export const getFilterSummary = createSelector(
               active: filterState.uploadedAt === value,
             };
           }),
+      antibiotics: sortBy(
+        Object.keys(antibiotics).map(
+          value => ({
+            value,
+            label: value,
+            count: antibiotics[value].count,
+            active: filterState.resistance === value,
+          })
+        ),
+        'label'
+      ),
     };
   }
 );
