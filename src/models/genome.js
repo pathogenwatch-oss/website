@@ -170,7 +170,18 @@ schema.statics.getPrefilterCondition = function ({ user, query = {}, sessionID }
 schema.statics.getFilterQuery = function (props) {
   const { user, query = {}, sessionID } = props;
   const { searchText } = query;
-  const { organismId, speciesId, genusId, type, country, minDate, maxDate, uploadedAt, sequenceType } = query;
+  const {
+    organismId,
+    speciesId,
+    genusId,
+    type,
+    country,
+    minDate,
+    maxDate,
+    uploadedAt,
+    sequenceType,
+    resistance,
+  } = query;
 
   const findQuery = this.getPrefilterCondition(props);
 
@@ -221,6 +232,12 @@ schema.statics.getFilterQuery = function (props) {
 
   if (sequenceType && (organismId || speciesId || genusId)) {
     findQuery['analysis.mlst.st'] = sequenceType;
+  }
+
+  if (resistance) {
+    findQuery['analysis.paarsnp.antibiotics'] = {
+      $elemMatch: { fullName: resistance, state: 'RESISTANT' },
+    };
   }
 
   return findQuery;

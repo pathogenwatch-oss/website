@@ -61,6 +61,15 @@ const summaryFields = [
     },
     queryKeys: [ 'sequenceType' ],
   },
+  { field: 'analysis.paarsnp.antibiotics.fullName',
+    aggregation: () => [
+      { $project: { 'analysis.paarsnp.antibiotics': 1 } },
+      { $unwind: '$analysis.paarsnp.antibiotics' },
+      { $match: { 'analysis.paarsnp.antibiotics.state': 'RESISTANT' } },
+      { $group: { _id: '$analysis.paarsnp.antibiotics.fullName', count: { $sum: 1 } } },
+    ],
+    queryKeys: [ 'resistance' ],
+  },
 ];
 
 module.exports = function (props) {
