@@ -53,10 +53,10 @@ export default React.createClass({
           <div className="wgsa-homepage__content">
             <h2>Organisms</h2>
             <p className="lead">
-              <strong>WGSA</strong> provides species and taxonomy prediction for over 60,000 variants of bacteria, viruses and fungi.
+              <strong>WGSA</strong> provides species and taxonomy prediction for over 60,000 variants of bacteria, viruses, and fungi.
             </p>
             <p className="lead">
-              <strong>MLST</strong> prediction is available for over 100 species using schemes from <a href="https://pubmlst.org/">PubMLST</a>, <a href="http://bigsdb.pasteur.fr/">Pasteur</a> and <a href="http://enterobase.warwick.ac.uk">Enterobase</a>.
+              <strong>MLST</strong> prediction is available for over 100 species using schemes from <a href="https://pubmlst.org/">PubMLST</a>, <a href="http://bigsdb.pasteur.fr/">Pasteur</a>, and <a href="http://enterobase.warwick.ac.uk">Enterobase</a>.
             </p>
             <table className="wgsa-organism-table">
               <caption>Further Analyses</caption>
