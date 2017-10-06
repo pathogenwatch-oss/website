@@ -7,7 +7,7 @@ const { setToObjectOptions, addPreSaveHook, getSummary } = require('./utils');
 
 function getDate(year, month = 1, day = 1) {
   if (year) {
-    return new Date(year, month - 1, day);
+    return new Date(year, (month || 1) - 1, day || 1);
   }
   return undefined;
 }
@@ -110,9 +110,9 @@ schema.statics.addAnalysisError = function (_id, task) {
 schema.statics.updateMetadata = function (_id, { user, sessionID }, metadata) {
   const {
     name,
-    year = null,
-    month = null,
-    day = null,
+    year,
+    month,
+    day,
     latitude = null,
     longitude = null,
     pmid,
@@ -125,6 +125,8 @@ schema.statics.updateMetadata = function (_id, { user, sessionID }, metadata) {
   } else if (sessionID) {
     query._session = sessionID;
   }
+
+  console.log({ year, month, day, date: getDate(year, month, day) });
 
   return this.update(query, {
     name,
