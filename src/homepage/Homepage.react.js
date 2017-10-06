@@ -53,13 +53,13 @@ export default React.createClass({
           <div className="wgsa-homepage__content">
             <h2>Organisms</h2>
             <p className="lead">
-              WGSA provides species and taxonomy prediction for over 60,000 variants of bacteria, viruses and fungi, and basic quality metrics for assemblies.
+              <strong>WGSA</strong> provides species and taxonomy prediction for over 60,000 variants of bacteria, viruses and fungi.
             </p>
             <p className="lead">
-              <strong>MLST</strong> prediction is available for over 100 species, and <strong>Core Genome MLST</strong> (cgMLST) is available for 6 species.
+              <strong>MLST</strong> prediction is available for over 100 species using schemes from <a href="https://pubmlst.org/">PubMLST</a>, <a href="http://bigsdb.pasteur.fr/">Pasteur</a> and <a href="http://enterobase.warwick.ac.uk">Enterobase</a>.
             </p>
             <table className="wgsa-organism-table">
-              <caption>Detailed Analyses</caption>
+              <caption>Further Analyses</caption>
               <colgroup>
                 <col className="wgsa-title-column" />
                 <col className="wgsa-feature-column" />
@@ -71,40 +71,87 @@ export default React.createClass({
               <thead>
                 <tr>
                   <th>Organism</th>
-                  <th>Core Genome</th>
+                  <th>cgMLST</th>
                   <th>AMR Prediction</th>
                   <th>Population Search</th>
+                  <th>WGSA Collections</th>
                   <th>Other</th>
                 </tr>
               </thead>
               <tbody>
-                { deployedOrganisms.has('1280') &&
+                <tr>
+                  <td><em>Campylobacter coli</em></td>
+                  <td><i className="material-icons">check</i></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td><em>Campylobacter jejuni</em></td>
+                  <td><i className="material-icons">check</i></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td><em>Listeria</em></td>
+                  <td><i className="material-icons">check</i></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                { deployedOrganisms.has('485') &&
+                <tr>
+                  <td><FormattedName organismId="485" fullName /></td>
+                  <td><i className="material-icons">check</i></td>
+                  <td><i className="material-icons">check</i></td>
+                  <td><i className="material-icons">check</i></td>
+                  <td><i className="material-icons">check</i></td>
+                  <td><small>NG-MAST</small></td>
+                </tr> }
+                <tr>
+                  <td><em>Neisseria meningitidis</em></td>
+                  <td><i className="material-icons">check</i></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                { deployedOrganisms.has('1646') &&
                   <tr>
-                    <td><FormattedName organismId="1280" fullName /></td>
-                    <td><i className="material-icons">check</i></td>
-                    <td><i className="material-icons">check</i></td>
+                    <td><FormattedName organismId="1646" fullName /></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                     <td><i className="material-icons">check</i></td>
                     <td></td>
                   </tr> }
                 { deployedOrganisms.has('90370') &&
                   <tr>
                     <td><FormattedName organismId="90370" fullName /></td>
+                    <td></td>
                     <td><i className="material-icons">check</i></td>
                     <td><i className="material-icons">check</i></td>
                     <td><i className="material-icons">check</i></td>
                     <td><small>Genotyphi</small></td>
                   </tr> }
-                { deployedOrganisms.has('485') &&
+                { deployedOrganisms.has('1280') &&
                   <tr>
-                    <td><FormattedName organismId="485" fullName /></td>
+                    <td><FormattedName organismId="1280" fullName /></td>
                     <td><i className="material-icons">check</i></td>
                     <td><i className="material-icons">check</i></td>
                     <td><i className="material-icons">check</i></td>
-                    <td><small>NG-MAST</small></td>
+                    <td><i className="material-icons">check</i></td>
+                    <td></td>
+                    <td></td>
                   </tr> }
                 { deployedOrganisms.has('1313') &&
                   <tr>
                     <td><FormattedName organismId="1313" fullName /></td>
+                    <td></td>
                     <td><i className="material-icons">check</i></td>
                     <td><i className="material-icons">check</i></td>
                     <td><i className="material-icons">check</i></td>
@@ -113,17 +160,10 @@ export default React.createClass({
                 { deployedOrganisms.has('64320') &&
                   <tr>
                     <td><FormattedName organismId="64320" fullName /></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                     <td><i className="material-icons">check</i></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr> }
-                { deployedOrganisms.has('1646') &&
-                  <tr>
-                    <td><FormattedName organismId="1646" fullName /></td>
-                    <td><i className="material-icons">check</i></td>
-                    <td></td>
-                    <td></td>
                     <td></td>
                   </tr> }
               </tbody>
