@@ -80,6 +80,11 @@ const Download = React.createClass({
                       <strong>FASTA files</strong>
                     </a>
                   </li>
+                  <li>
+                    <a href={getServerPath(`/download/analysis/speciator?ids=${ids}`)}>
+                      <strong>Speciation</strong>
+                    </a>
+                  </li>
                 </ul>
               </li> }
             { summary.map(item => <Section key={item.organismId} {...item} />) }
