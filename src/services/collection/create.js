@@ -14,7 +14,7 @@ function getMaxCollectionSize(user) {
   return maxCollectionSize.anonymous;
 }
 
-function createCollection({ organismId, genomeIds, title, description, pmid, user }) {
+function createCollection({ organismId, genomeIds, title, description, pmid, user, sessionID }) {
   if (!organismId) {
     return Promise.reject(new ServiceRequestError('No organism ID provided'));
   }
@@ -35,6 +35,7 @@ function createCollection({ organismId, genomeIds, title, description, pmid, use
         Collection.create({
           _organism: organism,
           _user: user,
+          _session: !user ? sessionID : undefined,
           description,
           organismId,
           pmid,
@@ -46,9 +47,7 @@ function createCollection({ organismId, genomeIds, title, description, pmid, use
 }
 
 function getGenomes(ids) {
-  return Genome.
-    find({ _id: { $in: ids } }).
-    populate('_file');
+  return Genome.find({ _id: { $in: ids } });
 }
 
 function getCollectionAndGenomes(message) {
@@ -86,7 +85,13 @@ function saveCollectionUUID({ collection, ids }) {
 
 function submitCollection({ collection, uuidToGenome }) {
   const { uuid, organismId } = collection;
-  return request('backend', 'submit', { organismId, collectionId: uuid, uuidToGenome });
+  const uploadedAt = collection.progress.started;
+  return request('collection', 'submit', {
+    organismId,
+    uuidToGenome,
+    uploadedAt,
+    collectionId: uuid,
+  });
 }
 
 module.exports = function (message) {

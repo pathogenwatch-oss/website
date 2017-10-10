@@ -5,6 +5,7 @@ const { setToObjectOptions } = require('./utils');
 
 const schema = new Schema({
   _collection: { type: Schema.Types.ObjectId, ref: 'Collection' },
+  _genome: { type: Schema.Types.ObjectId, ref: 'Genome' },
   fileId: { type: String, required: true },
   uuid: { type: String, required: true },
   name: { type: String, required: true },
@@ -20,44 +21,63 @@ const schema = new Schema({
   country: String,
   pmid: String,
   userDefined: Object,
-  metrics: Object,
   analysis: {
-    fp: {
-      subtype: String,
-      referenceName: String,
-    },
-    mlst: {
-      st: String,
-      code: String,
-    },
     core: {
       size: Number,
       percentMatched: Number,
       percentAssemblyMatched: Number,
+      matches: Array,
     },
-    paarsnp: {
-      // [ { name: String, state: String, mechanisms: [ String ] } ],
-      antibiotics: Schema.Types.Mixed,
-      paar: Schema.Types.Mixed,
-      snp: Schema.Types.Mixed,
-    },
-    ngmast: {
-      ngmast: String,
-      por: String,
-      tbpb: String,
+    fp: {
+      subtype: String,
+      referenceName: String,
     },
     genotyphi: {
       genotype: String,
       snps: Number,
       foundLoci: Number,
     },
+    metrics: Object,
+    mlst: {
+      st: String,
+      code: String,
+      alleles: Array,
+      matches: Array,
+    },
+    paarsnp: {
+      // [ { name: String, state: String, mechanisms: [ String ] } ],
+      antibiotics: Schema.Types.Mixed,
+      paar: Schema.Types.Mixed,
+      snp: Schema.Types.Mixed,
+      matches: Array,
+    },
+    ngmast: {
+      ngmast: String,
+      por: String,
+      tbpb: String,
+    },
   },
 });
 
 setToObjectOptions(schema);
 
-schema.statics.addAnalysisResult = function (uuid, name, result) {
-  return this.update({ uuid }, { [`analysis.${name.toLowerCase()}`]: result });
+const formatters = {
+  paarsnp: result => Object.assign({}, result, {
+    antibiotics: result.antibiotics.reduce((memo, antibiotic) => {
+      memo[antibiotic.name] = antibiotic;
+      return memo;
+    }, {}),
+  }),
+};
+
+schema.statics.formatters = formatters;
+
+schema.statics.addAnalysisResult = function (uuid, key, result) {
+  const formattedResult = key in formatters ? formatters[key](result) : result;
+  return this.update(
+    { uuid },
+    { [`analysis.${key.toLowerCase()}`]: formattedResult }
+  );
 };
 
 const projectResultsByType = {
@@ -90,7 +110,6 @@ schema.statics.findByUuid = function (uuid, projection) {
 schema.statics.insertRaw = function (docs, options) {
   return new Promise((resolve, reject) => {
     this.collection.insertMany(docs, options, error => {
-      console.log('callback', error);
       if (error) {
         reject(error);
       }

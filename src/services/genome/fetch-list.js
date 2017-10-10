@@ -1,80 +1,44 @@
 const Genome = require('models/genome');
 
-function getSort(sort) {
-  const sortOrder = (sort.slice(-1) === '-') ? -1 : 1;
-  const sortKey = sortOrder === 1 ? sort : sort.substr(0, sort.length - 1);
+const config = require('configuration');
 
-  if (sortKey === 'date') {
-    return { year: sortOrder, month: sortOrder, day: sortOrder };
-  }
-
-  if (sortKey === 'access') {
-    return { public: sortOrder, reference: sortOrder };
-  }
-
-  return { [sortKey]: sortOrder };
-}
+const maxLimit = config.maxCollectionSize.loggedIn || 500;
 
 module.exports = function (props) {
   const { user, query = {} } = props;
-  const { skip = 0, limit = 0, searchText, sort = 'createdAt-' } = query;
-  const { organismId, reference, owner, country, minDate, maxDate, uploadedAt } = query;
-
-  const findQuery = Genome.getPrefilterCondition(props);
-
-  if (searchText) {
-    findQuery.$text = { $search: searchText };
-  }
-
-  if (organismId) {
-    findQuery.organismId = organismId;
-  }
-
-  if (country) {
-    findQuery.country = country;
-  }
-
-  if (reference === 'true') {
-    findQuery.reference = true;
-  } else if (reference === 'false') {
-    findQuery.reference = false;
-  }
-
-  if (user) {
-    if (owner === 'me') {
-      findQuery._user = user;
-    } else if (owner === 'other') {
-      findQuery._user = { $ne: user };
-    }
-
-    if (uploadedAt) {
-      findQuery.uploadedAt = uploadedAt;
-    }
-  }
-
-  if (minDate) {
-    findQuery.date = { $exists: true, $gte: new Date(minDate) };
-  }
-
-  if (maxDate) {
-    findQuery.date = Object.assign(
-      findQuery.date || {},
-      { $exists: true, $lte: new Date(maxDate) }
-    );
-  }
+  const { skip = 0, limit = maxLimit, sort } = query;
 
   return (
     Genome
       .find(
-        findQuery,
-        null, {
+        Genome.getFilterQuery(props),
+        { name: 1,
+          organismId: 1,
+          'analysis.speciator.organismName': 1,
+          'analysis.mlst.st': 1,
+          date: 1,
+          country: 1,
+          reference: 1,
+          public: 1,
+          uploadedAt: 1,
+          _user: 1,
+        }, {
           skip: Number(skip),
-          limit: Number(limit),
-          sort: getSort(sort),
+          limit: Math.min(Number(limit), maxLimit),
+          sort: Genome.getSort(sort),
         }
       )
-      .populate('_file')
       .lean()
-      .then(genomes => genomes.map(_ => Genome.toObject(_, user)))
+      .then(genomes => genomes.map(genome => {
+        const { analysis = {} } = genome;
+        if (analysis.speciator) {
+          genome.organismName = analysis.speciator.organismName;
+        }
+        if (analysis.mlst) {
+          genome.st = analysis.mlst.st;
+        }
+        genome.analysis = undefined;
+        return Genome.toObject(genome, user);
+      }))
   );
 };

@@ -20,13 +20,27 @@ router.post('/organism/:organismId/download/type/:idType/format/:format',
     }
 
     const options = {
-      $timeout: 1000 * 60 * 2, format, organismId, uuids, idType,
+      timeout$: 1000 * 60 * 2, format, organismId, uuids, idType,
     };
 
-    services.request('backend', 'request-download', options).
-      then(result => res.json(result)).
-      catch(next);
+    services.request('backend', 'request-download', options)
+      .then(result => res.json(result))
+      .catch(next);
   }
 );
+
+router.get('/download', (req, res, next) => {
+  const { ids } = req.query;
+  const { user, sessionID } = req;
+
+  if (!ids || typeof(ids) !== 'string' || ids === '') {
+    LOGGER.error('Missing ids');
+    return res.sendStatus(400);
+  }
+
+  services.request('download', 'summary', { user, sessionID, ids: ids.split(',') })
+    .then(result => res.json(result))
+    .catch(next);
+});
 
 module.exports = router;

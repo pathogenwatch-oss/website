@@ -4,32 +4,34 @@ const Genome = require('models/genome');
 
 const { ServiceRequestError } = require('utils/errors');
 
-function createGenomeDocument({ name, uploadedAt }, reference, { user, sessionID }, genomeFileDoc) {
-  const { organismId, organismName, metrics } = genomeFileDoc;
+function createGenomeDocument({ name, uploadedAt }, { fileId, reference, user, sessionID }) {
   return (
     Genome.create({
-      _file: genomeFileDoc._id,
       _user: user,
       _session: sessionID,
+      fileId,
       name,
-      organismId,
       reference,
       public: reference,
       uploadedAt,
-    }).
-    then(({ _id }) => ({ id: _id, organismId, organismName, metrics }))
+    })
+    .then(({ _id }) => _id.toString())
   );
 }
 
-module.exports = ({ timeout$, stream, metadata, reference, user, sessionID }) => {
+module.exports = ({ timeout$, stream, metadata, reference, user, sessionID, clientId }) => {
   if (!stream) {
     return Promise.reject(new ServiceRequestError('No stream provided'));
   }
 
   return (
     request('genome', 'store', { timeout$, stream })
-      .then(genomeFileDoc =>
-        createGenomeDocument(metadata, reference, { user, sessionID }, genomeFileDoc)
+      .then(({ fileId }) =>
+        createGenomeDocument(metadata, { fileId, reference, user, sessionID })
+          .then(genomeId => {
+            request('genome', 'speciate', { genomeId, fileId, uploadedAt: metadata.uploadedAt, clientId });
+            return { id: genomeId };
+          })
       )
   );
 };

@@ -13,6 +13,10 @@ function prefilterValidation(req, res, next) {
   next();
 }
 
+function notFound(req, res) {
+  res.sendStatus(404);
+}
+
 module.exports = function (app) {
   app.use('/api/', [
     prefilterValidation,
@@ -22,11 +26,13 @@ module.exports = function (app) {
     require('routes/summary'),
     require('routes/organism'),
     require('routes/account'),
+    notFound,
   ]);
 
   app.use('/download/', [
     require('routes/download'),
     require('routes/organism-download'),
+    notFound,
   ]);
 
   app.use(require('routes/redirects'));

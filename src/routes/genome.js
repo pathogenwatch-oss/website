@@ -10,28 +10,45 @@ router.get('/genome/summary', (req, res, next) => {
   LOGGER.info('Received request to get genome summary');
 
   const { user, query, sessionID } = req;
-  services.request('genome', 'summary', { user, query, sessionID })
+  Promise.all([
+    services.request('genome', 'summary', { user, query, sessionID }),
+    services.request('genome', 'fetch-list', { user, query, sessionID }),
+  ])
+    .then(([ summary, genomes ]) => res.json({ summary, genomes }))
+    .catch(next);
+});
+
+router.get('/genome/stats', (req, res, next) => {
+  LOGGER.info('Received request to get genome stats data');
+
+  const { user, query, sessionID } = req;
+  services.request('genome', 'fetch-stats', { user, query, sessionID })
     .then(response => res.json(response))
     .catch(next);
 });
 
-router.get('/genome/stats', (req, res) => {
-  LOGGER.info('Received request to get genome stats data');
-  LOGGER.info('Requested metric:', req.query.metric);
-
-  res.sendStatus(501);
-});
-
-router.get('/genome/map', (req, res) => {
+router.get('/genome/map', (req, res, next) => {
   LOGGER.info('Received request to get genome marker data');
 
-  res.sendStatus(501);
+  const { user, query, sessionID } = req;
+  services.request('genome', 'fetch-map', { user, query, sessionID })
+    .then(response => res.json(response))
+    .catch(next);
 });
 
-router.get('/genome/:id', (req, res) => {
-  LOGGER.info('Received request to get single genome');
+router.get('/genome/:id', (req, res, next) => {
+  const { user, sessionID, params } = req;
+  const { id } = params;
 
-  res.sendStatus(501);
+  LOGGER.info(`Received request to get single genome ${id}`);
+  const projection = {
+    'analysis.cgmlst': 0,
+    'analysis.mlst.matches': 0,
+    'analysis.paarsnp.matches': 0,
+  };
+  services.request('genome', 'fetch-one', { user, sessionID, id, projection })
+    .then(response => res.json(response))
+    .catch(next);
 });
 
 router.get('/genome', (req, res, next) => {
@@ -54,7 +71,7 @@ router.put('/genome', (req, res, next) => {
   LOGGER.info('Received request to create genome');
 
   const { user, sessionID } = req;
-  const { name, uploadedAt } = req.query;
+  const { name, uploadedAt, clientId } = req.query;
 
   services.request('genome', 'create', {
     timeout$: 1000 * 60 * 5,
@@ -62,6 +79,7 @@ router.put('/genome', (req, res, next) => {
     metadata: { name, uploadedAt },
     user,
     sessionID,
+    clientId,
   })
   .then(response => res.json(response))
   .catch(next);
@@ -85,6 +103,34 @@ router.post('/genome/:id', (req, res, next) => {
   const { id } = req.params;
   const { body, user, sessionID } = req;
   services.request('genome', 'edit', { id, user, sessionID, metadata: body })
+    .then(response => res.json(response))
+    .catch(next);
+});
+
+router.get('/upload/:uploadedAt/position', (req, res, next) => {
+  LOGGER.info('Received request to get upload position');
+  const { uploadedAt } = req.params;
+  services.request('tasks', 'queue-position', { uploadedAt })
+    .then(result => res.json(result))
+    .catch(next);
+});
+
+router.get('/upload/:uploadedAt', (req, res, next) => {
+  LOGGER.info('Received request to get upload session');
+  const { user, sessionID } = req;
+  const { uploadedAt } = req.params;
+  Promise.all([
+    services.request('genome', 'fetch-upload', { user, sessionID, query: { uploadedAt } }),
+    services.request('tasks', 'queue-position', { uploadedAt }),
+  ])
+  .then(([ files, { position } ]) => res.json({ files, position }))
+  .catch(next);
+});
+
+router.get('/upload', (req, res, next) => {
+  LOGGER.info('Received request to get upload sessions');
+  const { user, sessionID } = req;
+  services.request('genome', 'fetch-upload-list', { user, sessionID })
     .then(response => res.json(response))
     .catch(next);
 });

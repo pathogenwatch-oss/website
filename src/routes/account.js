@@ -5,7 +5,7 @@ const services = require('../services');
 
 const LOGGER = require('utils/logging').createLogger('Summary');
 
-router.use((req, res, next) => {
+router.use('/account', (req, res, next) => {
   const { user } = req;
 
   if (!user || !user._id) {

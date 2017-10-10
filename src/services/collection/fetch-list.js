@@ -2,37 +2,9 @@ const Collection = require('models/collection');
 
 module.exports = function (props) {
   const { user, query = {} } = props;
-  const { skip = 0, limit = 0, searchText } = query;
-  const { organismId, owner, startDate, endDate } = query;
+  const { skip = 0, limit = 0, sort } = query;
 
-  const findQuery = Collection.getPrefilterCondition(props);
-
-  if (searchText) {
-    findQuery.$text = { $search: searchText };
-  }
-
-  if (organismId) {
-    findQuery.organismId = organismId;
-  }
-
-  if (user) {
-    if (owner === 'me') {
-      findQuery._user = user;
-    } else if (owner === 'other') {
-      findQuery._user = { $ne: user };
-    }
-  }
-
-  if (startDate) {
-    findQuery.createdAt = { $gte: new Date(startDate) };
-  }
-
-  if (endDate) {
-    findQuery.createdAt = Object.assign(
-      findQuery.createdAt || {},
-      { $lte: new Date(endDate) }
-    );
-  }
+  const findQuery = Collection.getFilterQuery(props);
 
   return (
     Collection
@@ -51,7 +23,7 @@ module.exports = function (props) {
       }, {
         skip: Number(skip),
         limit: Number(limit),
-        sort: { createdAt: -1 },
+        sort: Collection.getSort(sort),
       })
       .then(collections => collections.map(_ => _.toObject({ user })))
   );

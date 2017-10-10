@@ -8,9 +8,9 @@ const config = require('configuration');
 
 router.put('/collection', (req, res, next) => {
   LOGGER.info('Received request to create collection');
-  const { user } = req;
+  const { user, sessionID } = req;
   const { genomeIds, title, description, pmid, organismId } = req.body;
-  const message = { user, genomeIds, title, description, pmid, organismId };
+  const message = { user, sessionID, genomeIds, title, description, pmid, organismId };
 
   return services.
     request('collection', 'create', message).
@@ -36,9 +36,12 @@ router.get('/collection/summary', (req, res, next) => {
   LOGGER.info('Received request to get collection summary');
 
   const { user, query } = req;
-  services.request('collection', 'summary', { user, query })
-    .then(response => res.json(response))
-    .catch(next);
+  Promise.all([
+    services.request('collection', 'summary', { user, query }),
+    services.request('collection', 'fetch-list', { user, query }),
+  ])
+  .then(([ summary, collections ]) => res.json({ summary, collections }))
+  .catch(next);
 });
 
 router.post('/collection/:id/binned', (req, res, next) => {

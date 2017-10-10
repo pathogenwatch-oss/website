@@ -13,14 +13,17 @@ const schema = new Schema({
       return !this.reference;
     },
   },
+  _session: String,
   alias: { type: String, index: true },
-  createdAt: Date,
+  createdAt: { type: Date, index: true },
   binned: { type: Boolean, default: false },
   binnedDate: Date,
   description: String,
   error: String,
   lastAccessedAt: Date,
   lastUpdatedAt: Date,
+  locations: Array,
+  organismId: String,
   progress: {
     completed: Date,
     errors: [ { taskType: String, name: String } ],
@@ -31,10 +34,11 @@ const schema = new Schema({
   pmid: String,
   public: { type: Boolean, default: false },
   published: { type: Boolean, default: false },
+  publicationYear: { type: Number, index: true },
   private: { type: Boolean, default: false },
   reference: Boolean,
+  showcase: Boolean,
   size: Number,
-  organismId: String,
   status: { type: String, default: 'PENDING' },
   subtrees: [ {
     name: String,
@@ -47,7 +51,6 @@ const schema = new Schema({
   title: { type: String, index: 'text' },
   tree: String,
   uuid: { type: String, index: true },
-  showcase: Boolean,
 });
 
 setToObjectOptions(schema, (doc, collection, { user }) => {
@@ -65,13 +68,6 @@ setToObjectOptions(schema, (doc, collection, { user }) => {
   return collection;
 });
 addPreSaveHook(schema);
-
-const commonResults = new Set([ 'mlst', 'paarsnp', 'core' ]);
-const nonReferenceResults = new Set([ 'fp' ]);
-const organismSpecificResults = {
-  90370: new Set([ 'genotyphi' ]),
-  485: new Set([ 'ngmast' ]),
-};
 
 schema.methods.addUUID = function (uuid) {
   this.uuid = uuid;
@@ -92,12 +88,25 @@ schema.methods.ready = function () {
   return this.save();
 };
 
+const commonResults = new Set([ 'core', 'metrics' ]);
+const nonReferenceResults = new Set([ 'fp' ]);
+const standardAnalyses = new Set([ 'mlst', 'paarsnp' ]);
+const standardOrganisms = new Set([ '1280', '90370', '485', '1313' ]);
+const organismSpecificResults = {
+  90370: new Set([ 'genotyphi' ]),
+  485: new Set([ 'ngmast' ]),
+};
+
 schema.methods.resultRequired = function (type) {
   if (commonResults.has(type)) {
     return true;
   }
 
   if (!this.reference && nonReferenceResults.has(type)) {
+    return true;
+  }
+
+  if (standardOrganisms.has(this.organismId) && standardAnalyses.has(type)) {
     return true;
   }
 
@@ -128,6 +137,7 @@ schema.virtual('totalGenomeResults').get(function () {
   return (
     commonResults.size +
     (this.reference ? 0 : nonReferenceResults.size) +
+    (standardOrganisms.has(this.organismId) ? standardAnalyses.size : 0) +
     (this.organismId in organismSpecificResults ?
       organismSpecificResults[this.organismId].size : 0)
   );
@@ -183,6 +193,58 @@ schema.statics.getSummary = function (fields, props) {
 
 schema.statics.alias = function (uuid, alias) {
   return this.update({ uuid }, { $set: { alias } });
+};
+
+schema.statics.getFilterQuery = function (props) {
+  const { query = {} } = props;
+  const {
+    searchText, organismId, type, minDate, maxDate, publicationYear,
+  } = query;
+
+  const findQuery = this.getPrefilterCondition(props);
+
+  if (searchText) {
+    findQuery.$text = { $search: searchText };
+  }
+
+  if (organismId) {
+    findQuery.organismId = organismId;
+  }
+
+  if (type === 'public') {
+    findQuery.public = true;
+  } else if (type === 'private') {
+    findQuery.public = false;
+  }
+
+  if (minDate) {
+    findQuery.createdAt = { $gte: new Date(minDate) };
+  }
+
+  if (maxDate) {
+    findQuery.createdAt = Object.assign(
+      findQuery.createdAt || {},
+      { $lte: new Date(maxDate) }
+    );
+  }
+
+  if (publicationYear && !isNaN(publicationYear)) {
+    findQuery.publicationYear = Number(publicationYear);
+  }
+
+  return findQuery;
+};
+
+const sortKeys = new Set([
+  'createdAt', 'title', 'size', 'publicationYear',
+]);
+schema.statics.getSort = function (sort = 'createdAt-') {
+  const sortOrder = (sort.slice(-1) === '-') ? -1 : 1;
+  const sortKey = sortOrder === 1 ? sort : sort.substr(0, sort.length - 1);
+
+  if (!sortKeys.has(sortKey)) return null;
+
+  return { [sortKey]: sortOrder };
 };
 
 module.exports = mongoose.model('Collection', schema);

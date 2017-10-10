@@ -17,7 +17,7 @@ module.exports = (name, { assemblyId, speciesId, documentKeys }) => {
   return Promise.all([
     mainStorage.retrieve(resultDocKey),
     Organism.getLatest(speciesId),
-  ]).
-    then(formatResult).
-    then(result => CollectionGenome.addAnalysisResult(uuid, name, result));
+  ])
+  .then(formatResult)
+  .then(result => CollectionGenome.addAnalysisResult(uuid, name, result));
 };

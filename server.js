@@ -7,6 +7,7 @@ const userAccounts = require('cgps-user-accounts/src');
 const userStore = require('utils/userStore');
 const http = require('http');
 const path = require('path');
+const crypto = require('crypto');
 
 const config = require('configuration.js');
 const logging = require('utils/logging');
@@ -88,6 +89,7 @@ module.exports = () =>
       })
     );
 
+    const services = require('services');
     // user accounts
     userAccounts(app, {
       userStore,
@@ -97,6 +99,8 @@ module.exports = () =>
       failureRedirect: '/',
       logoutPath: '/signout',
       strategies: config.passport.strategies,
+      onLogin: (req) =>
+        services.request('account', 'claim-data', { session: req.sessionID, user: req.user }),
     });
 
     app.use(express.static(path.join(clientPath, 'public')));
@@ -117,7 +121,11 @@ module.exports = () =>
           photo: req.user.photo,
           admin: req.user.admin || undefined,
         } :
-        null;
+        undefined;
+
+      const hash = crypto.createHash('sha1');
+      hash.update(req.user ? req.user.id : req.sessionID);
+
       return res.render('index', {
         googleMapsKey: config.googleMapsKey,
         frontEndConfig: {
@@ -126,9 +134,10 @@ module.exports = () =>
           maxCollectionSize: config.maxCollectionSize,
           maxFastaFileSize: config.maxFastaFileSize,
           wiki: config.wikiLocation,
-          strategies: [ 'facebook', 'google', 'twitter' ],
+          strategies: Object.keys(config.passport.strategies || {}),
           user,
           version,
+          clientId: hash.digest('hex'),
         },
       });
     });

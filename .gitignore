@@ -31,6 +31,7 @@ wgst-web-client
 
 .idea
 .ftpconfig
+.vscode
 
 fastas
 htpasswd

@@ -30,10 +30,7 @@ const sumAggregation = field => [
 ];
 
 function aggregateSummaryFields(model, summaryFields, props) {
-  const prefilterCondition = model.getPrefilterCondition(props);
-  const prefilterStage = [ { $match: prefilterCondition } ];
-
-  const aggregations = summaryFields.reduce((memo, { field, aggregation, range }) => {
+  const aggregations = summaryFields.reduce((memo, { field, aggregation, range, queryKeys = [ field ] }) => {
     let aggregationStage = null;
 
     if (aggregation) {
@@ -44,14 +41,22 @@ function aggregateSummaryFields(model, summaryFields, props) {
       aggregationStage = sumAggregation(field);
     }
 
-    memo.push(
-      aggregationStage === null ?
-        Promise.resolve([]) :
-        model.aggregate(prefilterStage.concat(aggregationStage))
-    );
+    if (!aggregationStage) {
+      memo.push(Promise.resolve([]));
+    } else {
+      const query = {};
+      for (const key of Object.keys(props.query)) {
+        if (!queryKeys.includes(key)) {
+          query[key] = props.query[key];
+        }
+      }
+      const $match = model.getFilterQuery(Object.assign({}, props, { query }));
+      const prefilterStage = [ { $match }, ...aggregationStage ];
+      memo.push(model.aggregate(prefilterStage));
+    }
 
     return memo;
-  }, [ model.count(prefilterCondition) ]);
+  }, [ model.count(model.getPrefilterCondition(props)), model.count(model.getFilterQuery(props)) ]);
 
   return Promise.all(aggregations);
 }
@@ -59,12 +64,12 @@ function aggregateSummaryFields(model, summaryFields, props) {
 function reduceResult(result) {
   return result.reduce(
     (memo, { _id, count }) => {
-      if (_id === null) return memo;
+      if (_id === null || typeof _id === 'undefined') return memo;
       if (_id.key && _id.label) {
         const previousCount = memo[_id.key] ? memo[_id.key].count : 0;
         memo[_id.key] = {
           count: previousCount + count,
-          label: _id.label[0],
+          label: Array.isArray(_id.label) ? _id.label[0] : _id.label,
         };
       } else if (_id instanceof Date) {
         memo[_id.toISOString()] = { count };
@@ -78,8 +83,8 @@ function reduceResult(result) {
 
 exports.getSummary = function (model, summaryFields, props) {
   return aggregateSummaryFields(model, summaryFields, props)
-    .then(([ total, ...results ]) => {
-      const summary = { total };
+    .then(([ total, visible, ...results ]) => {
+      const summary = { total, visible };
       results.forEach((result, index) => {
         const { field, range } = summaryFields[index];
         if (range) {

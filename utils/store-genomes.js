@@ -8,7 +8,7 @@ function createGenome(metadata, getGenomeFile, options) {
         request('genome', 'create', Object.assign({ stream, metadata }, options))
           .then(({ id }) =>
             request('genome', 'edit', Object.assign({ id, metadata }, options))
-              .then(() => Genome.findById(id).populate('_file'))
+              .then(() => Genome.findById(id))
           )
       )
   );

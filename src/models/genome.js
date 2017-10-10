@@ -7,43 +7,50 @@ const { setToObjectOptions, addPreSaveHook, getSummary } = require('./utils');
 
 function getDate(year, month = 1, day = 1) {
   if (year) {
-    return new Date(year, month - 1, day);
+    return new Date(year, (month || 1) - 1, day || 1);
   }
   return undefined;
 }
 
 const schema = new Schema({
-  _file: { type: Schema.Types.ObjectId, ref: 'GenomeFile' },
   _user: { type: Schema.Types.ObjectId, ref: 'User' },
   _session: String,
   name: { type: String, required: true, index: 'text' },
-  organismId: String,
+  organismId: { type: String, index: true },
+  fileId: String,
   year: Number,
   month: Number,
   day: Number,
-  date: Date,
+  date: { type: Date, index: true },
   latitude: Number,
   longitude: Number,
-  country: String,
+  country: { type: String, index: true },
   pmid: String,
   userDefined: Object,
+  analysis: Object,
+  pending: { type: Array, default: null },
+  errored: { type: Array, default: null },
   public: { type: Boolean, default: false },
   reference: { type: Boolean, default: false },
   binned: { type: Boolean, default: false },
   binnedDate: Date,
   uploadedAt: Date,
-  createdAt: Date,
+  createdAt: { type: Date, index: true },
   lastAccessedAt: Date,
   lastUpdatedAt: Date,
 });
+
+schema.index({ name: 1 });
+schema.index({ public: 1, reference: 1 });
+schema.index({ 'analysis.mlst.st': 1 });
+schema.index({ 'analysis.speciator.speciesId': 1 });
+schema.index({ 'analysis.speciator.genusId': 1 });
+schema.index({ 'analysis.speciator.organismName': 1 });
 
 function toObject(genome, user = {}) {
   const { id } = user;
   const { _user } = genome;
   genome.owner = (_user && id && _user.toString() === id) ? 'me' : 'other';
-  genome.organismName = genome._file.organismName;
-  genome.metrics = genome._file.metrics;
-  delete genome._file;
   delete genome._user;
   delete genome._session;
   if (!genome.id) {
@@ -75,12 +82,37 @@ function getCountryCode(latitude, longitude) {
   return null;
 }
 
+schema.statics.addPendingTasks = function (_id, pending) {
+  return this.update({ _id }, { $push: { pending: { $each: pending } } });
+};
+
+schema.statics.addAnalysisResult = function (_id, task, result) {
+  const update = {
+    $set: { [`analysis.${task.toLowerCase()}`]: result },
+  };
+
+  if (task === 'speciator') {
+    update.$set.organismId = result.organismId;
+  }
+
+  update.$pull = { pending: task };
+
+  return this.update({ _id }, update);
+};
+
+schema.statics.addAnalysisError = function (_id, task) {
+  return this.update({ _id }, {
+    $addToSet: { errored: task },
+    $pull: { pending: task },
+  });
+};
+
 schema.statics.updateMetadata = function (_id, { user, sessionID }, metadata) {
   const {
     name,
-    year = null,
-    month = null,
-    day = null,
+    year,
+    month,
+    day,
     latitude = null,
     longitude = null,
     pmid,
@@ -93,6 +125,8 @@ schema.statics.updateMetadata = function (_id, { user, sessionID }, metadata) {
   } else if (sessionID) {
     query._session = sessionID;
   }
+
+  console.log({ year, month, day, date: getDate(year, month, day) });
 
   return this.update(query, {
     name,
@@ -109,22 +143,21 @@ schema.statics.updateMetadata = function (_id, { user, sessionID }, metadata) {
 };
 
 schema.statics.getPrefilterCondition = function ({ user, query = {}, sessionID }) {
-  const { prefilter = 'all', uploadedAt } = query;
+  const { prefilter = 'all' } = query;
 
   if (prefilter === 'all') {
     const hasAccess = { $or: [ { public: true } ] };
     if (user) {
       hasAccess.$or.push({ _user: user._id });
     }
+    if (sessionID) {
+      hasAccess.$or.push({ _session: sessionID });
+    }
     return Object.assign(hasAccess, { binned: false });
   }
 
   if (prefilter === 'user') {
     return { binned: false, _user: user._id };
-  }
-
-  if (prefilter === 'upload') {
-    return { binned: false, _session: sessionID, uploadedAt: new Date(uploadedAt || null) };
   }
 
   if (prefilter === 'bin') {
@@ -134,8 +167,108 @@ schema.statics.getPrefilterCondition = function ({ user, query = {}, sessionID }
   throw new Error(`Invalid genome prefilter: '${prefilter}'`);
 };
 
+schema.statics.getFilterQuery = function (props) {
+  const { user, query = {}, sessionID } = props;
+  const { searchText } = query;
+  const {
+    organismId,
+    speciesId,
+    genusId,
+    type,
+    country,
+    minDate,
+    maxDate,
+    uploadedAt,
+    sequenceType,
+    resistance,
+  } = query;
+
+  const findQuery = this.getPrefilterCondition(props);
+
+  if (searchText) {
+    findQuery.$text = { $search: searchText };
+  }
+
+  if (organismId) {
+    findQuery.organismId = organismId;
+  }
+
+  if (speciesId) {
+    findQuery['analysis.speciator.speciesId'] = speciesId;
+  }
+
+  if (genusId) {
+    findQuery['analysis.speciator.genusId'] = genusId;
+  }
+
+  if (country) {
+    findQuery.country = country;
+  }
+
+  if (type === 'reference') {
+    findQuery.reference = true;
+  } else if (type === 'public') {
+    findQuery.public = true;
+    findQuery.reference = false;
+  } else if (type === 'private') {
+    findQuery.public = false;
+    findQuery.reference = false;
+  }
+
+  if (uploadedAt && (user || sessionID)) {
+    findQuery.uploadedAt = new Date(uploadedAt);
+  }
+
+  if (minDate) {
+    findQuery.date = { $exists: true, $gte: new Date(minDate) };
+  }
+
+  if (maxDate) {
+    findQuery.date = Object.assign(
+      findQuery.date || {},
+      { $exists: true, $lte: new Date(maxDate) }
+    );
+  }
+
+  if (sequenceType && (organismId || speciesId || genusId)) {
+    findQuery['analysis.mlst.st'] = sequenceType;
+  }
+
+  if (resistance) {
+    findQuery['analysis.paarsnp.antibiotics'] = {
+      $elemMatch: { fullName: resistance, state: 'RESISTANT' },
+    };
+  }
+
+  return findQuery;
+};
+
 schema.statics.getSummary = function (fields, props) {
   return getSummary(this, fields, props);
+};
+
+const sortKeys = new Set([
+  'createdAt', 'name', 'organism', 'country', 'date', 'type', 'st',
+]);
+schema.statics.getSort = function (sort = 'createdAt-') {
+  const sortOrder = (sort.slice(-1) === '-') ? -1 : 1;
+  const sortKey = sortOrder === 1 ? sort : sort.substr(0, sort.length - 1);
+
+  if (!sortKeys.has(sortKey)) return null;
+
+  if (sortKey === 'type') {
+    return { public: sortOrder, reference: sortOrder };
+  }
+
+  if (sortKey === 'st') {
+    return { 'analysis.mlst.st': sortOrder };
+  }
+
+  if (sortKey === 'organism') {
+    return { 'analysis.speciator.organismName': sortOrder };
+  }
+
+  return { [sortKey]: sortOrder };
 };
 
 module.exports = mongoose.model('Genome', schema);

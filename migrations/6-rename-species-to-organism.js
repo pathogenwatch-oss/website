@@ -1,6 +1,7 @@
 module.exports.id = '6-rename-species-to-organism';
 
 module.exports.up = function (done) {
+  return done();
   // use this.db for MongoDB communication, and this.log() for logging
   const { db } = this;
   db.collections()

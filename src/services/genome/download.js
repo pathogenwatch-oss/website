@@ -6,7 +6,7 @@ module.exports = function ({ id, user, sessionID, type }) {
     request('genome', 'fetch-one', { id, user, sessionID, type })
       .then(genome => Promise.all([
         Promise.resolve(createFastaFileName(genome.name)),
-        request('genome', 'file-path', { fileId: genome.fileId || genome._file.fileId }),
+        request('genome', 'file-path', { fileId: genome.fileId }),
       ]))
       .then(([ fileName, filePath ]) => ({ fileName, filePath }))
   );
