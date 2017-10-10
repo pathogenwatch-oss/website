@@ -11,3 +11,7 @@
 .wgsa-organism-card[href]:active h3 {
   text-decoration: underline !important;
 }
+
+.wgsa-organism-card .material-icons {
+  color: #673c90;
+}

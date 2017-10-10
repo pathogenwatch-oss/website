@@ -31,9 +31,10 @@
 
 .wgsa-loading-container p {
   color: #555;
-  letter-spacing: normal;
   margin: 0 auto 24px;
   line-height: 1.5;
+  letter-spacing: normal;
+  font-weight: 500;
 }
 
 .wgsa-loading-container p:last-child {
@@ -68,6 +69,7 @@
 
 .wgsa-loading-container a {
   color: #673c90;
+  text-decoration: underline;
 }
 
 .wgsa-loading-container a:hover,

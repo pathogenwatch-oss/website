@@ -1,9 +1,11 @@
 export const promiseToThunk = () => next => action => {
-  const { type, payload: { promise, ...props } = {} } = action;
+  const { type, payload } = action;
 
-  if (!promise || !promise.then) {
+  if (!payload || !payload.promise || !payload.promise.then) {
     return next(action);
   }
+
+  const { promise, ...props } = payload;
 
   return next(dispatch => {
     dispatch({ type: type.ATTEMPT, payload: { ...props } });

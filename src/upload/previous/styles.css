@@ -1,0 +1,34 @@
+.wgsa-previous-uploads .wgsa-genome-list-view {
+  margin-left: 80px;
+}
+
+.wgsa-previous-uploads .wgsa-genome-list-header {
+  margin-right: 80px;
+}
+
+.wgsa-previous-uploads .wgsa-list-header-cell {
+  justify-content: center;
+}
+
+.wgsa-previous-uploads .wgsa-grid-item {
+  padding-right: 80px;
+}
+
+.wgsa-previous-uploads .wgsa-genome-list-item > * {
+  width: 50%;
+  text-align: center;
+}
+
+@media(min-width: 960px) {
+  .wgsa-previous-uploads .wgsa-genome-list-view {
+    margin-left: calc(50vw - 400px);
+  }
+
+  .wgsa-previous-uploads .wgsa-genome-list-header {
+    margin-right: calc(50vw - 400px);
+  }
+
+  .wgsa-previous-uploads .wgsa-grid-item {
+    padding-right: calc(50vw - 400px);
+  }
+}

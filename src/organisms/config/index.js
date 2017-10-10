@@ -22,6 +22,13 @@ export const taxIdMap = new Map(
 
 let currentOrganisms = {};
 
+export function getOrganismName(taxId, fallback) {
+  if (taxIdMap.has(taxId)) {
+    return taxIdMap.get(taxId).name;
+  }
+  return fallback;
+}
+
 export FormattedName from './FormattedName.react';
 
 export default {

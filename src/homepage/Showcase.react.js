@@ -67,7 +67,7 @@ export default React.createClass({
     getShowcaseCollections()
       .then(collections => this.setState({
         locations: collections.reduce((memo, { locations, ...collection }) => {
-          for (const [ index, { lat, lon } ] of locations.entries()) {
+          for (const [ index, [ lat, lon ] ] of locations.entries()) {
             memo.push({ lat, lon, collection, index });
           }
           return memo;

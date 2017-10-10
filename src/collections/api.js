@@ -4,8 +4,8 @@ export function fetchCollections(filter) {
   return fetchJson('GET', '/api/collection', filter);
 }
 
-export function fetchSummary({ prefilter }) {
-  return fetchJson('GET', '/api/collection/summary', { prefilter });
+export function fetchSummary(filter) {
+  return fetchJson('GET', '/api/collection/summary', filter);
 }
 
 export function binCollection(id, status) {

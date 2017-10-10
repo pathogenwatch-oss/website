@@ -1,14 +1,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { parse } from 'query-string';
+import classnames from 'classnames';
 
 import Grid from '../grid';
 import Filter from './filter';
-import { Summary, Totals } from '../filter/summary';
+import Header from './header';
 import CollectionCard from './CollectionCard.react';
 import Overlay from '../overlay';
 
 import { getCollectionList, getTotal, getStatus } from './selectors';
+import { isFilterOpen } from './filter/selectors';
 
 import { updateFilter } from './filter/actions';
 
@@ -67,10 +69,11 @@ const Collections = React.createClass({
 
     return (
       <Grid
+        className="wgsa-filter-view"
         template={CollectionCard}
         items={collections}
         columnCount={[ { minWidth: 560, count: 2 }, { minWidth: 1020, count: 3 }, { minWidth: 1580, count: 4 } ]}
-        rightMargin={48}
+        rightMargin={16}
         cellArea={400 * 160}
         rowMinHeight={160}
         rowMaxHeight={232}
@@ -80,20 +83,19 @@ const Collections = React.createClass({
   },
 
   render() {
-    const { collections, total, status } = this.props;
+    const { status } = this.props;
     return (
-      <div>
-        <div className="wgsa-hipster-style wgsa-filterable-view">
-          <Summary>
-            <Totals
-              visible={collections.length}
-              total={total}
-              itemType="collection"
-            />
-          </Summary>
+      <div
+        className={classnames(
+          'wgsa-collections wgsa-filter-container',
+          { 'has-filter': this.props.isFilterOpen }
+        )}
+      >
+        <Filter />
+        <div className="wgsa-filter-content">
+          <Header />
           { this.getContent() }
         </div>
-        <Filter />
         <Overlay visible={status === statuses.LOADING}>
           <p className="wgsa-big-message">
             Loading... ⌛
@@ -112,6 +114,7 @@ function mapStateToProps(state, { match }) {
     collections: getCollectionList(state),
     total: getTotal(state),
     status: getStatus(state),
+    isFilterOpen: isFilterOpen(state),
   };
 }
 

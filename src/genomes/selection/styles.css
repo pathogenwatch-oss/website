@@ -1,18 +1,83 @@
-.wgsa-genome-total {
-  color: #87c7a6;
-}
-
-.wgsa-drawer--disabled .wgsa-genome-total {
-  color: #FF7272;
+.wgsa-genome-checkbox {
+  background: none;
+  border: none;
+  outline: none;
+  color: #3c7383 !important;
+  vertical-align: middle;
 }
 
 .wgsa-selection-summary {
-  padding: 16px;
+  position: fixed;
+  right: 16px;
+  z-index: 1;
 }
 
-.wgsa-selection-tabs > .mdl-tabs__panel {
-  padding: 16px;
-  max-height: 351px; /* 400px - 48px header - 1px border */
-  overflow-y: auto;
-  box-sizing: border-box;
+.mdl-layout:not(.user-drawer-visible) .wgsa-selection-summary {
+  z-index: 3;
+}
+
+.wgsa-selection-summary .wgsa-sonar-effect {
+  position: relative;
+  z-index: 1;
+}
+
+.wgsa-selection-summary .wgsa-sonar-effect::after {
+  animation-delay: 0s;
+  animation-iteration-count: 1;
+}
+
+.wgsa-selection-summary .wgsa-overlay {
+  background: none;
+  cursor: pointer;
+}
+
+
+.wgsa-selection-tabs {
+  padding-right: 0;
+  display: flex;
+}
+
+.wgsa-selection-tabs button {
+  border: none;
+  outline: none;
+  line-height: 20px;
+  transition: .28s cubic-bezier(.4,0,.2,1);
+  transition-property: filter;
+}
+
+.wgsa-selection-tabs button[disabled] {
+  cursor: not-allowed;
+}
+
+.wgsa-selection-tabs .mdl-chip__contact {
+  margin-right: 0;
+  padding: 0;
+}
+
+.wgsa-selection-tabs .mdl-chip__text {
+  padding-left: 24px;
+  padding-right: 16px;
+  border-radius: 0 16px 16px 0;
+  background: #673c90;
+  color: #fff;
+  font-weight: 500;
+  margin-left: -16px;
+}
+
+.wgsa-selection-tabs .mdl-chip__text:nth-of-type(odd) {
+  background: #3c7383;
+}
+
+.wgsa-selection-tabs > :first-child {
+  z-index: 2;
+}
+
+.wgsa-selection-tabs > :nth-child(2) {
+  z-index: 1;
+}
+
+.wgsa-selection-tabs-selection > :not(:first-child),
+.wgsa-selection-tabs-collection > :not(:nth-child(2)),
+.wgsa-selection-tabs-download > :not(:last-child) {
+  filter: grayscale(1) brightness(1.25);
 }

@@ -96,11 +96,14 @@ export default React.createClass({
     let east = -1000;
     let south = 1000;
     let west = 1000;
-    for (const { position } of markers) {
-      if (position[0] > north) north = position[0];
-      if (position[0] < south) south = position[0];
-      if (position[1] > east) east = position[1];
-      if (position[1] < west) west = position[1];
+    for (const marker of markers) {
+      if (!marker.position && (!marker.latitude || !marker.longitude)) continue;
+      const latitude = marker.latitude || marker.position[0];
+      const longitude = marker.longitude || marker.position[1];
+      if (latitude > north) north = latitude;
+      if (latitude < south) south = latitude;
+      if (longitude > east) east = longitude;
+      if (longitude < west) west = longitude;
     }
     const southWest = Leaflet.latLng([ south, west ]);
     const northEast = Leaflet.latLng([ north, east ]);

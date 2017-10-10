@@ -1,21 +1,32 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { selectAll } from './actions';
+import { selectAll, unselectAll } from './actions';
+import { areAllSelected } from './selectors';
 
-const SelectAll = ({ onClick }) => (
+const SelectAll = ({ allSelected, select, unselect }) => (
   <button
-    className="mdl-button mdl-button--primary"
-    onClick={onClick}
+    className="wgsa-genome-checkbox"
+    onClick={allSelected ? unselect : select}
+    title={allSelected ? 'Remove from Selection' : 'Add to Selection'}
   >
-    Select All
+    <i className="material-icons">
+      { allSelected ? 'check_box' : 'check_box_outline_blank' }
+    </i>
   </button>
 );
 
-function mapDispatchToProps(dispatch) {
+function mapStateToProps(state) {
   return {
-    onClick: () => dispatch(selectAll()),
+    allSelected: areAllSelected(state),
   };
 }
 
-export default connect(null, mapDispatchToProps)(SelectAll);
+function mapDispatchToProps(dispatch) {
+  return {
+    select: () => dispatch(selectAll()),
+    unselect: () => dispatch(unselectAll()),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SelectAll);

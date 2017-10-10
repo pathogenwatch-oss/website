@@ -122,10 +122,11 @@
   margin: 0 16px 16px;
 }
 
-.wgsa-search-dropdown > button {
+.wgsa-search-dropdown > :first-child {
   position: absolute;
   top: 8px;
   right: 8px;
+  color: inherit;
 }
 
 .wgsa-search-dropdown p {
@@ -137,6 +138,10 @@
   margin: 0;
   font-size: 14px;
   line-height: 1;
+}
+
+.wgsa-search-dropdown__heading + .mdl-chip {
+  margin-top: 8px;
 }
 
 .wgsa-search-dropdown ul {
@@ -164,6 +169,12 @@
 .wgsa-search-dropdown label {
   font-weight: 500;
   font-size: 13px;
+}
+
+.wgsa-search-dropdown .wgsa-overlay {
+  z-index: -1;
+  background: none;
+  top: 64px; /* Work around weird bug with css filter on header logo in Chrome */
 }
 
 .wgsa-advanced-search {

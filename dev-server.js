@@ -3,7 +3,6 @@ const fs = require('fs');
 const webpack = require('webpack');
 const express = require('express');
 const bodyParser = require('body-parser');
-const fastaStorage = require('wgsa-fasta-store');
 
 const config = require('./webpack.config.js');
 const compiler = webpack(config);
@@ -95,27 +94,6 @@ apiRouter.get(
   '/species/:speciesId/download/file/:fileName',
   (req, res) => res.sendFile(`${getCollectionPath(req.params.speciesId)}/metadata.csv`)
 );
-
-const fastaStoragePath = './fastas';
-fastaStorage.setup(fastaStoragePath);
-
-let uploadError = false;
-apiRouter.post('/upload', (req, res, next) => {
-  // uploadError = !uploadError;
-  return uploadError ?
-    setTimeout(() => res.sendStatus(500), 500) :
-    fastaStorage.
-      store(fastaStoragePath, req).
-      then(({ fileId, metrics, specieator: { taxId, scientificName } }) => {
-        res.json({
-          id: fileId,
-          speciesId: taxId,
-          speciesName: scientificName,
-          metrics,
-        });
-      }).
-      catch(error => next(error));
-});
 
 apiRouter.post('/collection', (req, res) =>
   setTimeout(() => res.json({ collectionId: '123' }), 2000)

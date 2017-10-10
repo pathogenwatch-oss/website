@@ -2,36 +2,26 @@ import React from 'react';
 
 import { CardMetadata } from '../../card';
 
-import { getFormattedDateString, formatDateTime } from '../../utils/Date';
+import { formatDate, formatDateTime } from '../../utils/Date';
 import { getCountryName } from '../../utils/country';
 
-function displayDate(data, isTableCell) {
-  const formattedDateString = getFormattedDateString(data);
-
-  if (isTableCell) {
+function displayDate(date) {
+  if (date) {
+    const formattedDate = formatDate(date);
     return (
-      <CardMetadata tooltip={formattedDateString}>
-        <span>{formattedDateString}</span>
+      <CardMetadata className="wgsa-genome-list-cell" fadeOverflow tooltip={formattedDate}>
+        <span>{formattedDate}</span>
       </CardMetadata>
     );
   }
-
-  if (!data.day && !data.month && !data.year) {
-    return null;
-  }
-
-  return (
-    <CardMetadata title="Date" icon="date_range">
-      {formattedDateString}
-    </CardMetadata>
-  );
+  return <CardMetadata />;
 }
 
 function displayCountry(country, isTableCell) {
   const countryName = getCountryName(country);
   if (isTableCell) {
     return (
-      <CardMetadata fadeOverflow>
+      <CardMetadata className="wgsa-genome-list-cell" fadeOverflow>
         { country ?
           <span title={countryName}>
             <strong>{country.toUpperCase()}</strong> - {countryName}
@@ -43,7 +33,7 @@ function displayCountry(country, isTableCell) {
 
   if (!country) return null;
   return (
-    <CardMetadata fadeOverflow title="Country" icon="place">
+    <CardMetadata className="wgsa-genome-list-cell" fadeOverflow title="Country" icon="place">
       {countryName}
     </CardMetadata>
   );
@@ -52,7 +42,7 @@ function displayCountry(country, isTableCell) {
 function displayAccessLevel(props) {
   if (props.reference) {
     return (
-      <CardMetadata fadeOverflow title="Access" icon="book">
+      <CardMetadata className="wgsa-genome-list-cell" fadeOverflow title="Access" icon="book">
         Reference
       </CardMetadata>
     );
@@ -60,25 +50,25 @@ function displayAccessLevel(props) {
 
   if (props.public) {
     return (
-      <CardMetadata fadeOverflow title="Access" icon="language">
+      <CardMetadata className="wgsa-genome-list-cell" fadeOverflow title="Access" icon="language">
         Public
       </CardMetadata>
     );
   }
 
   return (
-    <CardMetadata fadeOverflow title="Uploaded At" icon="file_upload">
+    <CardMetadata className="wgsa-genome-list-cell" fadeOverflow title="Uploaded At" icon="file_upload">
       {formatDateTime(props.uploadedAt)}
     </CardMetadata>
   );
 }
 
 export default ({ genome, tableCell }) => {
-  const { country, ...metadata } = genome;
+  const { country, date } = genome;
   return (
     <div className="wgsa-card-content">
       {displayCountry(country, tableCell)}
-      {displayDate(metadata, tableCell)}
+      {displayDate(date, tableCell)}
       {displayAccessLevel(genome)}
     </div>
   );

@@ -95,11 +95,6 @@ fieldset > legend {
 }
 
 .wgsa-select-box {
-  font-weight: 500;
-}
-
-.wgsa-select-box > select {
-  border: none;
-  background: none;
-  font-size: 14px;
+  font-size: 13px;
+  color: rgba(0, 0, 0, 0.87);
 }

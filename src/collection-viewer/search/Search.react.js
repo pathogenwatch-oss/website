@@ -13,11 +13,15 @@ import {
   changeDropdownVisibility,
   selectSearchCategory,
   moveCursor,
+  moveIntersection,
   toggleSearchMode,
-  toggleSearchExactMatch,
 } from './actions';
 
-import { selectItemAtCursor, searchTextChanged } from './thunks';
+import {
+  selectItemAtCursor,
+  searchTextChanged,
+  searchExactMatchToggled,
+} from './thunks';
 
 const Search = React.createClass({
 
@@ -49,32 +53,41 @@ const Search = React.createClass({
   },
 
   handleKeyboard(e) {
-    if (e.keyCode === 37 || e.keyCode === 38) {
-      this.props.moveCursor(-1);
-    }
-    if (e.keyCode === 39 || e.keyCode === 40) {
-      this.props.moveCursor(1);
-    }
     const { text, category } = this.props.search;
-    if (e.keyCode === 8 && category && text.length === 0) {
-      this.props.removeCategory();
-    }
-    if (e.keyCode === 13) {
-      this.props.selectItemAtCursor();
-    }
-    if (e.keyCode === 27) {
-      this.props.toggleMode();
+    switch (e.keyCode) {
+      case 37:
+        this.props.moveCursor(-1); break;
+      case 39:
+        this.props.moveCursor(1); break;
+      case 38:
+        this.props.moveIntersection(-1); break;
+      case 40:
+        this.props.moveIntersection(1); break;
+      case 8: {
+        if (category && text.length === 0) {
+          this.props.removeCategory();
+        }
+        break;
+      }
+      case 13:
+        this.props.selectItemAtCursor(); break;
+      case 27: {
+        e.stopPropagation(); // prevent clash with overlay
+        this.props.toggleMode();
+        break;
+      }
+      default:
     }
   },
 
   render() {
     const { toggleMode, toggleExactMatch, search } = this.props;
-    const { text, visible, advanced, exact } = search;
+    const { text, advanced, exact } = search;
     return (
       <div className="wgsa-search-box-container">
         <div className={classnames(
             'wgsa-search-box',
-            { 'wgsa-search-box--active': visible }
+            { 'wgsa-search-box--active': advanced }
           )}
           onClick={this.handleClick}
         >
@@ -129,8 +142,9 @@ function mapDispatchToProps(dispatch) {
     removeCategory: () => dispatch(selectSearchCategory(null)),
     selectItemAtCursor: () => dispatch(selectItemAtCursor()),
     moveCursor: delta => dispatch(moveCursor(delta)),
+    moveIntersection: delta => dispatch(moveIntersection(delta)),
     toggleMode: () => dispatch(toggleSearchMode()),
-    toggleExactMatch: () => dispatch(toggleSearchExactMatch()),
+    toggleExactMatch: () => dispatch(searchExactMatchToggled()),
   };
 }
 

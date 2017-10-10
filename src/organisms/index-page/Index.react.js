@@ -38,12 +38,12 @@ const WGSAOrganism =
       <h3 className="wgsa-section-title">
         <FormattedName organismId={organismId} fullName />
       </h3>
-      <CardMetadata icon="collections" title="Collections">
+      <CardMetadata icon="collections">
         <Link to={`/collections?organismId=${organismId}`} title="Browse Collections">
           {totalCollections} Collection{totalCollections === 1 ? '' : 's'}
         </Link>
       </CardMetadata>
-      <CardMetadata icon="insert_drive_file" title="Genomes">
+      <CardMetadata icon="wgsa_genome">
         <Link to={`/genomes?organismId=${organismId}`} title="Browse Genomes">
           {totalGenomes} Genome{totalGenomes === 1 ? '' : 's'}
         </Link>
@@ -54,10 +54,8 @@ const WGSAOrganism =
 const OtherOrganism =
   ({ item: { organismId, organismName, totalGenomes } }) => (
     <div key={organismId} className="wgsa-organism-card wgsa-card wgsa-card--bordered">
-      <h3 className="wgsa-section-title">
-        {organismName}
-      </h3>
-      <CardMetadata icon="insert_drive_file" title="Genomes">
+      <h3 className="wgsa-section-title">{organismName}</h3>
+      <CardMetadata icon="wgsa_genome">
         <Link to={`/genomes?organismId=${organismId}`} title="Browse Genomes">
           {totalGenomes} Genome{totalGenomes === 1 ? '' : 's'}
         </Link>

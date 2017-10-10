@@ -4,12 +4,12 @@ import Papa from 'papaparse';
 import { getUserDefinedValue } from '../table/utils';
 
 import { systemDataColumns } from '../data-tables/constants';
+import { createCode } from '../../mlst/utils';
 
 import { isResistant, hasElement } from '../amr-utils';
 
 const nameColumn = {
   columnKey: '__name',
-  label: 'NAME',
   valueGetter({ name }) {
     return name;
   },
@@ -17,7 +17,6 @@ const nameColumn = {
 
 const latitudeColumn = {
   columnKey: '__latitude',
-  label: 'LATITUDE',
   valueGetter({ position }) {
     return position && position.latitude ? position.latitude : '';
   },
@@ -25,9 +24,26 @@ const latitudeColumn = {
 
 const longitudeColumn = {
   columnKey: '__longitude',
-  label: 'LONGITUDE',
   valueGetter({ position }) {
     return position && position.longitude ? position.longitude : '';
+  },
+};
+
+const mlstColumn = {
+  columnKey: '__mlst',
+  valueGetter({ analysis }) {
+    if (!analysis.mlst) return '';
+    return analysis.mlst.st;
+  },
+};
+
+const mlstProfileColumn = {
+  columnKey: '__mlst_profile',
+  valueGetter({ analysis }) {
+    if (!analysis.mlst) return null;
+    const { code, alleles } = analysis.mlst;
+    if (code) return code;
+    return createCode(alleles);
   },
 };
 
@@ -36,28 +52,18 @@ const definedColumns = {
   [latitudeColumn.columnKey]: latitudeColumn,
   [longitudeColumn.columnKey]: longitudeColumn,
   ...systemDataColumns,
+  [mlstColumn.columnKey]: mlstColumn,
+  [mlstProfileColumn.columnKey]: mlstProfileColumn,
 };
 
-const csvOptions = {
-  metadata: {
-    valueGetter: getUserDefinedValue,
-  },
-  typing: {
-    valueGetter: getUserDefinedValue,
-  },
-  stats: {
-    valueGetter: getUserDefinedValue,
-  },
-  antibiotics: {
-    valueGetter: (antibiotic, { analysis: { paarsnp } }) =>
+const valueGettersByTable = {
+  metadata: getUserDefinedValue,
+  typing: getUserDefinedValue,
+  stats: getUserDefinedValue,
+  antibiotics: (antibiotic, { analysis: { paarsnp } }) =>
       (isResistant(paarsnp, antibiotic) ? 1 : 0),
-  },
-  snps: {
-    valueGetter: (snp, genome) => (hasElement(genome, 'snp', snp) ? 1 : 0),
-  },
-  genes: {
-    valueGetter: (gene, genome) => (hasElement(genome, 'paar', gene) ? 1 : 0),
-  },
+  snps: (snp, genome) => (hasElement(genome, 'snp', snp) ? 1 : 0),
+  genes: (gene, genome) => (hasElement(genome, 'paar', gene) ? 1 : 0),
 };
 
 function mapToGetters(columns, table) {
@@ -65,7 +71,7 @@ function mapToGetters(columns, table) {
     if (key in definedColumns) {
       return definedColumns[key].valueGetter;
     }
-    const { valueGetter } = csvOptions[table];
+    const valueGetter = valueGettersByTable[table];
     return row => valueGetter(key, row);
   });
 }

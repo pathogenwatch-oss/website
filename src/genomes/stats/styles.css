@@ -1,10 +1,11 @@
-.wgsa-hub-stats-view {
+.wgsa-genome-stats {
   flex-grow: 1;
   overflow-x: hidden;
   overflow-y: auto;
+  margin: 16px 32px 0;
 }
 
-.wgsa-hub-stats-view nav {
+.wgsa-genome-stats nav {
   justify-content: center;
   margin: 0 0 16px;
 }
@@ -27,6 +28,13 @@
 .wgsa-hub-stats-section--small {
   float: left;
   width: 50%;
+  padding-left: 0;
+  padding-right: 24px;
+}
+
+.wgsa-hub-stats-section--large {
+  float: left;
+  width: 100%;
   padding-left: 0;
   padding-right: 24px;
 }
@@ -64,9 +72,10 @@
 
 .wgsa-hub-stats-value {
   color: rgba(0, 0, 0, 0.87);
-  line-height: 1.1;
   margin: 0;
   text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .wgsa-hub-stats-value--large {

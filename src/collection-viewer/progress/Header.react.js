@@ -53,8 +53,8 @@ const Header = React.createClass({
         <div style={uploadButtonStyle} className="wgsa-sonar-effect wgsa-upload-review-button mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--6dp">
           {this.props.percentage || 0}%
         </div>
-        <div className="wgsa-fileupload-progressbar-container">
-          <div ref="progressBar" className="wgsa-fileupload-progressbar mdl-progress mdl-js-progress"></div>
+        <div className="wgsa-collection-progressbar-container">
+          <div ref="progressBar" className="wgsa-collection-progressbar mdl-progress mdl-js-progress"></div>
         </div>
       </div>
     );

@@ -2,54 +2,22 @@ import './styles.css';
 
 import { connect } from 'react-redux';
 
-import { MOVE_TO_BIN } from '../genomes/actions';
-
 import GenomeDrawer from './GenomeDrawer.react';
 
-export const SHOW_GENOME_DETAILS = 'SHOW_GENOME_DETAILS';
+import { closeDrawer } from './actions';
 
-export function showGenomeDrawer(id) {
-  return {
-    type: SHOW_GENOME_DETAILS,
-    payload: {
-      id,
-    },
-  };
-}
-
-const initialState = { id: null };
-export function reducer(state = initialState, { type, payload }) {
-  switch (type) {
-    case SHOW_GENOME_DETAILS:
-      return {
-        id: payload.id,
-      };
-    case MOVE_TO_BIN:
-      return state.id === payload.id ? initialState : state;
-    default:
-      return state;
-  }
-}
-
-function getSelectedGenome({ genomeDrawer, genomes }) {
-  const { entities } = genomes;
-  return genomeDrawer.id ? entities[genomeDrawer.id] : null;
-}
-
-function mapStateToProps(state) {
-  const genome = getSelectedGenome(state);
-  const visible = genome !== null;
-  return {
-    visible,
-    title: visible ? genome.name : null,
-    genome,
-  };
+function mapStateToProps({ genomeDrawer }) {
+  return genomeDrawer;
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    onClose: () => dispatch(showGenomeDrawer(null)),
+    close: () => dispatch(closeDrawer(null)),
   };
 }
+
+export { showGenomeDrawer } from './actions';
+
+export reducer from './reducer';
 
 export default connect(mapStateToProps, mapDispatchToProps)(GenomeDrawer);

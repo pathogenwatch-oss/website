@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import ActivityList from './ActivityList.react';
+import AccountImage from './AccountImage.react';
 
 import { getSummary } from '../summary/selectors';
 
@@ -13,9 +14,9 @@ const Profile = ({ userCollections, userGenomes }) => {
   if (!user) return null;
 
   return (
-    <div className="wgsa-hipster-style wgsa-filterable-view">
+    <div className="wgsa-hipster-style">
       <div className="cgps-avatar cgps-avatar--centered wgsa-profile-avatar">
-        <img src={user.photo} className="cgps-avatar__image" />
+        <AccountImage />
         <div className="cgps-avatar__name title-font" title={user.name}>{user.name}</div>
         <div className="cgps-avatar__contact" title={user.email}>{user.email}</div>
       </div>

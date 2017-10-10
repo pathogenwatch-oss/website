@@ -2,9 +2,17 @@
   justify-content: flex-end;
 }
 
+.wgsa-create-collection-form {
+  width: 368px;
+}
+
 .wgsa-create-collection-form .mdl-textfield {
   padding: 1rem 0;
   width: 100%;
+}
+
+.wgsa-create-collection-form .mdl-textfield--small {
+  width: 33.333%;
 }
 
 .wgsa-create-collection-form .mdl-textfield__label {

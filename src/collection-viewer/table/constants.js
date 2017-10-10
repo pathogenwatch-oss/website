@@ -1,8 +1,9 @@
 import React from 'react';
 
-import DownloadButton from '../downloads/DownloadButton.react';
-import { GenomeFileLink } from '../../downloads';
-import { GenomeArchiveButton } from '../../downloads';
+import GenomeFileLink from '../../downloads/GenomeFileLink.react';
+import GenomeArchiveLink from './GenomeArchiveLink.react';
+import AnnotationFileLink from './AnnotationFileLink.react';
+import AnnotationArchiveLink from './AnnotationArchiveLink.react';
 
 import { getArchiveDownloadProps } from '../downloads/utils';
 
@@ -56,36 +57,22 @@ export const downloadColumnProps = {
   fixed: true,
   headerClasses: 'wgsa-table-cell--skinny',
   getHeaderContent({ archiveDownloads }) {
+    const { ids, filenames } = archiveDownloads;
     return (
       <span className="wgsa-table-downloads" onClick={(e) => e.stopPropagation()}>
-        <GenomeArchiveButton
-          ids={archiveDownloads.genome.ids}
-          type="collection"
-          filename={archiveDownloads.genome.filename}
-          title="Download Genomes"
-        />
-        <DownloadButton
-          {...archiveDownloads.gff}
-          isArchive
-          color={CGPS.COLOURS.GREEN}
-          iconOnly
-        />
+        <GenomeArchiveLink ids={ids} filename={filenames.genome} />
+        <AnnotationArchiveLink ids={ids} filename={filenames.annotation} />
       </span>
     );
   },
   cellClasses: 'wgsa-table-cell--skinny',
   fixedWidth: 68,
   flexGrow: 0,
-  getCellContents(_, { __downloads, id, _id, name }) {
+  getCellContents(_, { id, _id, name }) {
     return (
       <span className="wgsa-table-downloads" onClick={(e) => e.stopPropagation()}>
         <GenomeFileLink id={id || _id} name={name} type="collection" />
-        <DownloadButton
-          { ...__downloads.wgsa_gff }
-          label=".gff"
-          color={CGPS.COLOURS.GREEN}
-          iconOnly
-        />
+        <AnnotationFileLink id={id || _id} name={name} />
       </span>
     );
   },

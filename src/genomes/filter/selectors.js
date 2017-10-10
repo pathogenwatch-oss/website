@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { createSelector } from 'reselect';
 import sortBy from 'lodash.sortby';
 
@@ -9,6 +11,8 @@ import { getCountryName } from '../../utils/country';
 
 import { taxIdMap } from '../../organisms';
 import { formatDateTime } from '../../utils/Date';
+
+import { ST, isNovel } from '../../mlst';
 
 export const getFilter = state => filter.getFilter(state, { stateKey });
 
@@ -26,11 +30,12 @@ export const getFilterSummary = createSelector(
   getDeployedOrganismIds,
   (summary, filterState, deployedOrganisms) => {
     const {
-      loading, organismId, country, reference, owner, uploadedAt, date,
+      loading, organismId, speciesId, genusId, country, type, uploadedAt, date,
     } = summary;
+    const sequenceType = summary['analysis.mlst.st'] || {};
+    const antibiotics = summary['analysis.paarsnp.antibiotics.fullName'] || {};
 
     const wgsaOrganisms = [];
-    const otherOrganisms = [];
 
     for (const value of Object.keys(organismId)) {
       if (deployedOrganisms.has(value)) {
@@ -42,23 +47,52 @@ export const getFilterSummary = createSelector(
           count: organismId[value].count,
           active: filterState.organismId === value,
         });
-      } else {
-        otherOrganisms.push({
-          value,
-          active: filterState.organismId === value,
-          ...organismId[value],
-        });
       }
     }
 
     return {
       loading,
-      date: {
+      date: date.min && date.max ? {
         bounds: [ date.min, date.max ],
         values: [ filterState.minDate, filterState.maxDate ],
-      },
+      } : null,
       wgsaOrganisms: sortBy(wgsaOrganisms, 'title'),
-      otherOrganisms: sortBy(otherOrganisms, 'label'),
+      sequenceTypes: sortBy(
+        Object.keys(sequenceType).map(
+          value => ({
+            value,
+            novel: isNovel(value),
+            label: (<ST id={value} />),
+            title: `ST ${value}`,
+            count: sequenceType[value].count,
+            active: filterState.sequenceType === value,
+          })
+        ),
+        'novel',
+        'value'
+      ),
+      speciesId: sortBy(
+        Object.keys(speciesId).map(
+          value => ({
+            value,
+            label: speciesId[value].label,
+            count: speciesId[value].count,
+            active: filterState.speciesId === value,
+          })
+        ),
+        'label'
+      ),
+      genusId: sortBy(
+        Object.keys(genusId).map(
+          value => ({
+            value,
+            label: genusId[value].label,
+            count: genusId[value].count,
+            active: filterState.genusId === value,
+          })
+        ),
+        'label'
+      ),
       country: sortBy(
         Object.keys(country).map(
           value => ({
@@ -70,34 +104,43 @@ export const getFilterSummary = createSelector(
         ),
         'label'
       ),
-      reference: Object.keys(reference).map(
-        value => ({
-          value,
-          label: value === 'true' ? 'Yes' : 'No',
-          count: reference[value].count,
-          active: filterState.reference === value,
-        })
-      ),
-      owner: Object.keys(owner).map(
-        value => ({
-          value,
-          label: value === 'me' ? 'Me' : 'Other',
-          count: owner[value].count,
-          active: filterState.owner === value,
-        })
+      type: sortBy(
+        Object.keys(type).map(
+          value => ({
+            value,
+            label: value,
+            count: type[value].count,
+            active: filterState.type === value,
+          })
+        ),
+        'label'
       ),
       uploadedAt:
         Object.keys(uploadedAt)
           .sort((a, b) => new Date(b) - new Date(a))
           .map(value => {
-            const date = new Date(value);
+            const dateValue = new Date(value);
             return {
               value,
-              label: formatDateTime(date),
+              label: formatDateTime(dateValue),
               count: uploadedAt[value].count,
               active: filterState.uploadedAt === value,
             };
           }),
+      antibiotics: sortBy(
+        Object.keys(antibiotics).map(
+          value => ({
+            value,
+            label: value,
+            count: antibiotics[value].count,
+            active: filterState.resistance === value,
+          })
+        ),
+        'label'
+      ),
     };
   }
 );
+
+export const getGenomeFilter = ({ genomes }) => genomes.filter;
+export const isFilterOpen = state => getGenomeFilter(state).isOpen;
