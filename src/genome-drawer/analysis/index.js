@@ -20,7 +20,7 @@ export default (analysis) => {
   if (paarsnp) tabs.push({ key: 'AMR', component: <PAARSNP {...paarsnp} /> });
   if (genotyphi) tabs.push({ key: 'Genotyphi', component: <Genotyphi {...genotyphi} /> });
   if (ngmast) tabs.push({ key: 'NG-MAST', component: <NgMast {...ngmast} /> });
-  if (speciator) tabs.push({ key: 'Species', component: <Speciator result={speciator} /> });
+  if (speciator) tabs.push({ key: 'Organism', component: <Speciator result={speciator} /> });
   if (Object.keys(rest).length) tabs.push({ key: 'Other', component: renderGenericResults(rest) });
 
   return tabs;
