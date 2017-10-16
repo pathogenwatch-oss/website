@@ -14,7 +14,7 @@ import { tableKeys } from '../constants';
 function visible(state = tableKeys.metadata, { type, payload }) {
   switch (type) {
     case FETCH_COLLECTION.SUCCESS:
-      return getInitialTable(payload.result);
+      return getInitialTable(payload.result.collection);
     case SET_TABLE:
       return payload.name;
     default:
@@ -25,7 +25,7 @@ function visible(state = tableKeys.metadata, { type, payload }) {
 function activeData(state = tableKeys.metadata, { type, payload }) {
   switch (type) {
     case FETCH_COLLECTION.SUCCESS:
-      return getInitialTable(payload.result);
+      return getInitialTable(payload.result.collection);
     case SET_TABLE:
       return dataTables.has(payload.name) ? payload.name : state;
     default:

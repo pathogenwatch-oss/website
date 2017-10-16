@@ -37,6 +37,10 @@
   padding: 0;
 }
 
+.wgsa-collection-url-display :last-child {
+  margin-bottom: 0;
+}
+
 .wgsa-collection-progress-table {
   margin: 16px 0px;
 }

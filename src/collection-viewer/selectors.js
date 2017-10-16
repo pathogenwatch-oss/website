@@ -8,7 +8,6 @@ import { filterKeys } from './filter/constants';
 export const getViewer = ({ viewer }) => viewer;
 
 export const getCollection = state => getViewer(state).entities.collection;
-
 export const getGenomes = state => getViewer(state).entities.genomes;
 
 const getSearchIds = createSelector(
