@@ -30,4 +30,11 @@ module.exports = ({ user, uuid, withIds = false }) =>
         collection.populate('_organism').execPopulate() :
         collection
     ))
-    .then(collection => addGenomes(collection.toObject()));
+    .then(collection => {
+      const uploadedAt = collection.progress.started;
+      return Promise.all([
+        addGenomes(collection.toObject()),
+        services.request('tasks', 'queue-position', { uploadedAt }),
+      ]);
+    })
+    .then(([ collection, { position } ]) => ({ collection, position }));
