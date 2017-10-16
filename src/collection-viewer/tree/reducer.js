@@ -62,7 +62,7 @@ function entities(state = {}, { type, payload }) {
   switch (type) {
     case FETCH_COLLECTION.SUCCESS: {
       const { collection } = payload.result;
-      const { genomes, organism, subtrees, status } = collection;
+      const { genomes, organism, subtrees, status, tree } = collection;
 
       if (status !== statuses.READY) return state;
 
@@ -72,8 +72,8 @@ function entities(state = {}, { type, payload }) {
         ...state,
         [COLLECTION]: {
           name: COLLECTION,
-          newick: payload.result.tree,
-          leafIds: payload.result.tree ? null : genomes.map(_ => _.uuid),
+          newick: tree,
+          leafIds: tree ? null : genomes.map(_ => _.uuid),
           ...initialState,
         },
         [POPULATION]: {
