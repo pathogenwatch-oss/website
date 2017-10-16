@@ -5,9 +5,10 @@ import { fetchQueuePosition } from '../upload/api';
 
 export const FETCH_COLLECTION = createAsyncConstants('FETCH_COLLECTION');
 
-export const fetchCollection = (collectionId) => ({
+export const fetchCollection = (collectionId, results) => ({
   type: FETCH_COLLECTION,
   payload: {
+    results,
     promise: getCollection(collectionId),
   },
 });

@@ -23,7 +23,7 @@ function mapDispatchToProps(dispatch, { match }) {
     fetch: () => dispatch(actions.fetchCollection(uuid)),
     updateProgress: results => (
       results.status === statuses.READY ?
-        dispatch(actions.fetchCollection(uuid)) :
+        dispatch(actions.fetchCollection(uuid, results)) :
         dispatch(actions.updateProgress(results))
     ),
     reset: () => dispatch(actions.resetCollectionView()),

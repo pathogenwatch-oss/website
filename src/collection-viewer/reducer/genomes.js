@@ -15,7 +15,7 @@ export default function (state = {}, { type, payload }) {
   switch (type) {
     case actions.FETCH_COLLECTION.SUCCESS: {
       const { collection } = payload.result;
-      const { genomes = [], organism } = collection;
+      const { genomes = [], organism = {} } = collection;
       const { references = [] } = organism;
       return {
         ...state,
