@@ -32,7 +32,7 @@ export default React.createClass({
           { noMLST ? null : <ProgressIndicator title="MLST" percentage={mlst} /> }
           { genotyphi ? <ProgressIndicator title="GENOTYPHI" percentage={results.genotyphi} /> : null }
           { ngMast ? <ProgressIndicator title="NG-MAST" percentage={results.ngmast} /> : null }
-          { noAMR ? null : <ProgressIndicator title="PAARSNP" percentage={paarsnp} /> }
+          { noAMR ? null : <ProgressIndicator title="AMR" percentage={paarsnp} /> }
           <div className="wgsa-tree-progress-card">
             <span className="wgsa-tree-progress-card__title mdl-card__actions">TREES</span>
             <div className="wgsa-tree-progress-card__status">

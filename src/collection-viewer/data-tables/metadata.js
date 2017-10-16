@@ -79,7 +79,8 @@ export default function (state = initialState, { type, payload }) {
   if (!state.active) return state;
   switch (type) {
     case FETCH_COLLECTION.SUCCESS: {
-      const { genomes, status } = payload.result;
+      const { collection } = payload.result;
+      const { genomes, status } = collection;
 
       if (status !== statuses.READY) return state;
 
