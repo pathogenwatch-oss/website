@@ -28,17 +28,6 @@ export default function (state = initialState, { type, payload }) {
         status: statuses.NOT_FOUND,
       };
     }
-    case actions.FETCH_COLLECTION.ATTEMPT: {
-      if (payload.results) {
-        const { status, progress } = payload.results;
-        return {
-          ...state,
-          status,
-          progress,
-        };
-      }
-      return state;
-    }
     case actions.FETCH_COLLECTION.SUCCESS: {
       const { collection } = payload.result;
       const { genomes = [], ...result } = collection;
