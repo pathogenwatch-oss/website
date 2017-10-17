@@ -52,8 +52,7 @@ apiRouter.get('/collection/summary', (req, res) => {
 
 apiRouter.get('/collection/:id', (req, res) => {
   setTimeout(() => {
-    const collection = require(`${getCollectionPath(req.params.id)}/collection.json`);
-    res.json({ collection, position: 0 });
+    res.sendFile(`${getCollectionPath(req.params.id)}/collection.json`);
   }, 0);
 });
 
