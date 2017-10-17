@@ -61,8 +61,7 @@ function getInitialState() {
 function entities(state = {}, { type, payload }) {
   switch (type) {
     case FETCH_COLLECTION.SUCCESS: {
-      const { collection } = payload.result;
-      const { genomes, organism, subtrees, status, tree } = collection;
+      const { genomes, organism, subtrees, status, tree } = payload.result;
 
       if (status !== statuses.READY) return state;
 
