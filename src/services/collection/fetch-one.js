@@ -22,12 +22,6 @@ function addGenomes(collection) {
     });
 }
 
-function getQueuePosition(collection) {
-  if (collection.status === 'READY') return Promise.resolve({});
-  const uploadedAt = collection.progress.started;
-  return services.request('tasks', 'queue-position', { uploadedAt });
-}
-
 module.exports = ({ user, uuid, withIds = false }) =>
   services.request('collection', 'fetch-progress', { user, uuid, withIds })
     .then(collection => collection.ensureAccess(user))
@@ -41,8 +35,4 @@ module.exports = ({ user, uuid, withIds = false }) =>
         );
       }
       return collection;
-    })
-    .then(collection =>
-      getQueuePosition(collection)
-        .then(({ position = 0 }) => ({ collection, position }))
-    );
+    });
