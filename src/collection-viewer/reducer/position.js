@@ -1,12 +1,10 @@
 import {
-  FETCH_COLLECTION,
   COLLECTION_FETCH_POSITION,
   UPDATE_COLLECTION_PROGRESS,
 } from '../actions';
 
 export default function (state = null, { type, payload }) {
   switch (type) {
-    case FETCH_COLLECTION.SUCCESS:
     case COLLECTION_FETCH_POSITION.SUCCESS:
       return payload.result.position;
     case UPDATE_COLLECTION_PROGRESS: {

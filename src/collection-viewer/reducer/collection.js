@@ -29,8 +29,7 @@ export default function (state = initialState, { type, payload }) {
       };
     }
     case actions.FETCH_COLLECTION.SUCCESS: {
-      const { collection } = payload.result;
-      const { genomes = [], ...result } = collection;
+      const { genomes = [], ...result } = payload.result;
 
       Organisms.current = result.organismId;
 

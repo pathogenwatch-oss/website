@@ -99,8 +99,7 @@ export function createReducer({ name, buildColumns }) {
   return function (state = initialState, { type, payload }) {
     switch (type) {
       case FETCH_COLLECTION.SUCCESS: {
-        const { collection } = payload.result;
-        const { genomes, organism, status } = collection;
+        const { genomes, organism, status } = payload.result;
         if (status !== statuses.READY) return state;
 
         const paarsnpResults = getPaarsnpResults(genomes);

@@ -40,7 +40,7 @@ const UploadProgress = React.createClass({
     }
 
     if (!previous.collection.progress && collection.progress) {
-      this.poll();
+      this.fetchPosition();
     }
   },
 
@@ -62,7 +62,7 @@ const UploadProgress = React.createClass({
   },
 
   subscribeToNotifications() {
-    const { collection, position, updateProgress } = this.props;
+    const { collection, updateProgress } = this.props;
     if (collection.uuid && !this.notificationChannel) {
       this.notificationChannel = subscribe(
         collection.uuid, // get collection id from url
@@ -70,14 +70,27 @@ const UploadProgress = React.createClass({
         updateProgress
       );
     }
-    if (collection.progress && position > 0) {
-      this.poll();
+    this.fetchPosition();
+  },
+
+  fetchPosition() {
+    const { collection } = this.props;
+    if (collection.progress) {
+      const { started } = collection.progress;
+      this.props.fetchPosition(started).then(this.poll);
     }
   },
 
   poll() {
-    this.stopPolling();
-    this.interval = setInterval(this.props.fetchPosition, 30 * 1000);
+    const { collection } = this.props;
+    if (collection.progress) {
+      const { started } = collection.progress;
+      this.stopPolling();
+      this.interval = setInterval(
+        () => this.props.fetchPosition(started),
+        30 * 1000
+      );
+    }
   },
 
   stopPolling() {
@@ -126,14 +139,10 @@ function mapStateToProps(state) {
   };
 }
 
-function mapDispatchToProps(dispatch, { collection = {} }) {
-  if (collection.progress) {
-    const { started } = collection.progress;
-    return {
-      fetchPosition: () => dispatch(fetchPosition(started)),
-    };
-  }
-  return {};
+function mapDispatchToProps(dispatch) {
+  return {
+    fetchPosition: started => dispatch(fetchPosition(started)),
+  };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(UploadProgress);
