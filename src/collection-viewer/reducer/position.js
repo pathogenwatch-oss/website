@@ -8,7 +8,7 @@ export default function (state = null, { type, payload }) {
   switch (type) {
     case FETCH_COLLECTION.SUCCESS:
     case COLLECTION_FETCH_POSITION.SUCCESS:
-      return payload.result.position;
+      return payload.result.position || state;
     case UPDATE_COLLECTION_PROGRESS: {
       const { results = {} } = payload.progress;
       const { core, fp, ...queuedTasks } = results;
