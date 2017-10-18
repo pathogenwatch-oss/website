@@ -1,24 +1,29 @@
-const { request } = require('services');
-const { queues } = require('../taskQueue');
+const { enqueue, queues } = require('../taskQueue');
 
-module.exports = function ({ genomeId, collectionId, fileId, organismId, speciesId, genusId, uploadedAt, clientId, tasks }) {
-  const queue = organismId ? queues.cache : queues.speciator;
-  const promises = tasks.map(({ task, version, retries, timeout }) =>
-    request('tasks', 'enqueue-one', {
-      queue,
+const config = require('configuration');
+const defaultRetries = config.tasks.retries || 3;
+const defaultTimeout = config.tasks.timeout || 30;
+
+module.exports = function ({
+  genomeId, collectionId, fileId, organismId, speciesId, genusId,
+  queue = organismId ? queues.tasks : queues.speciator,
+  uploadedAt, clientId,
+  task, version, retries = defaultRetries, timeout = defaultTimeout,
+}) {
+  return enqueue(
+    queue, {
       genomeId,
       collectionId,
       fileId,
       organismId,
       speciesId,
       genusId,
-      uploadedAt,
+      uploadedAt: new Date(uploadedAt),
       clientId,
       task,
       version,
-      retries,
       timeout,
-    })
+      retries,
+    }
   );
-  return Promise.all(promises);
 };

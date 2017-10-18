@@ -17,29 +17,9 @@ process.on('uncaughtException', err => console.error('uncaught', err));
 
 taskQueue.setMaxWorkers(workers);
 
-const { tasks, speciator, cache } = taskQueue.queues;
+const { tasks, speciator } = taskQueue.queues;
 
 function subscribeToQueues() {
-  if (!queue || queue === cache) {
-    taskQueue.dequeue(
-      cache,
-      ({ genomeId, collectionId, organismId, speciesId, genusId, fileId, uploadedAt, task, version, clientId, timeout }) =>
-        request('tasks', 'cached', { fileId, task, version })
-          .then(result => {
-            if (result) {
-              LOGGER.info('Got result', genomeId, collectionId, task, version);
-              return request('genome', 'add-analysis', { genomeId, collectionId, uploadedAt, task, version, result, clientId });
-            }
-            return request(
-              'tasks',
-              'enqueue-one',
-              { queue: tasks, genomeId, collectionId, fileId, organismId, speciesId, genusId, uploadedAt, clientId, task, version, timeout }
-            );
-          }),
-      message => request('genome', 'add-error', message)
-    );
-  }
-
   if (!queue || queue === tasks) {
     taskQueue.dequeue(
       tasks,

@@ -18,8 +18,38 @@ module.exports = function ({ genomeId, collectionId, fileId, organismId, species
 
   return (
     (collectionId ? Promise.resolve() : Genome.addPendingTasks(genomeId, taskNames))
-    .then(() => request(
-      'tasks', 'enqueue', { genomeId, collectionId, fileId, organismId, speciesId, genusId, uploadedAt, clientId, tasks }
-    ))
+    .then(() => {
+      const promises = tasks.map(({ task, version, retries, timeout }) =>
+        request('tasks', 'cached', { fileId, task, version })
+          .then(result => {
+            if (result) {
+              return request('genome', 'add-analysis', {
+                genomeId,
+                collectionId,
+                uploadedAt,
+                task,
+                version,
+                result,
+                clientId,
+              });
+            }
+            return request('tasks', 'enqueue', {
+              genomeId,
+              collectionId,
+              fileId,
+              organismId,
+              speciesId,
+              genusId,
+              uploadedAt,
+              clientId,
+              task,
+              version,
+              retries,
+              timeout,
+            });
+          })
+      );
+      return Promise.all(promises);
+    })
   );
 };
