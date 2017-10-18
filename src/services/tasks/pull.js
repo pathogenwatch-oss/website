@@ -5,12 +5,11 @@ const { tasks } = require('configuration.js');
 const { username = 'anon', password = '' } = tasks.registry || {};
 
 const dockerPull = require('docker-pull');
-
 const mapLimit = require('promise-map-limit');
 
-const LIMIT = 5;
+const { queues } = require('../taskQueue');
 
-const speciatorQueue = 'speciator';
+const LIMIT = 5;
 
 function getImageNames(queue) {
   if (!queue) {
@@ -18,7 +17,9 @@ function getImageNames(queue) {
     return getImages().concat(getImageName(task, version));
   }
 
-  if (queue === speciatorQueue) {
+  if (queue === queues.cache) return [];
+
+  if (queue === queues.speciator) {
     const { task, version } = getSpeciatorTask();
     return [ getImageName(task, version) ];
   }
