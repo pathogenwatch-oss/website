@@ -51,13 +51,16 @@ function runTask(fileId, task, version, organismId, speciesId, genusId) {
 }
 
 module.exports = function ({ fileId, task, version, organismId, speciesId, genusId }) {
-  return request('tasks', 'cached', { fileId, task, version })
-    .then(cachedResult =>
-      cachedResult ||
+  return request('tasks', 'find', { fileId, task, version })
+    .then(cachedResults =>
+      cachedResults ||
       runTask(fileId, task, version, organismId, speciesId, genusId)
-        .then(results => {
-          Analysis.create({ fileId, task, version, results });
-          return results;
-        })
+        .then(results =>
+          Analysis.update(
+            { fileId, task, version },
+            { fileId, task, version, results },
+            { upsert: true }
+          )
+          .then(() => results))
     );
 };
