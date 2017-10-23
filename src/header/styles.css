@@ -69,6 +69,10 @@
   color: rgba(0, 0, 0, 0.54);
 }
 
+.wgsa-header--inverse .cgps-avatar__image {
+  background: rgba(255, 255, 255, 0.54);
+}
+
 .wgsa-account-header {
   background: rgba(245, 245, 245, 0.87);
   box-sizing: border-box;
