@@ -4,15 +4,15 @@ import classnames from 'classnames';
 
 import Overlay from '../components/overlay';
 
-export default React.createClass({
+export default createClass({
 
   propTypes: {
-    title: React.PropTypes.node,
-    children: React.PropTypes.node,
-    visible: React.PropTypes.bool,
-    isOpen: React.PropTypes.bool,
-    onClose: React.PropTypes.func,
-    disabled: React.PropTypes.bool,
+    title: PropTypes.node,
+    children: PropTypes.node,
+    visible: PropTypes.bool,
+    isOpen: PropTypes.bool,
+    onClose: PropTypes.func,
+    disabled: PropTypes.bool,
   },
 
   getDefaultProps() {

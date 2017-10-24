@@ -34,7 +34,7 @@ function toggleOrganism(index, chart) {
   return organismsMeta.data[index].selected ? organisms.organismIds[index] : null;
 }
 
-const AnalysisChart = React.createClass({
+const AnalysisChart = createClass({
 
   componentDidMount() {
     this.chart = new Chart(this.canvas, {

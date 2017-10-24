@@ -61,10 +61,10 @@ class MarkerCluster extends MapLayer {
 }
 
 MarkerCluster.propTypes = {
-  map: React.PropTypes.object,
-  markers: React.PropTypes.array,
-  onMarkerClick: React.PropTypes.func,
-  options: React.PropTypes.object,
+  map: PropTypes.object,
+  markers: PropTypes.array,
+  onMarkerClick: PropTypes.func,
+  options: PropTypes.object,
 };
 
 MarkerCluster.defaultProps = {

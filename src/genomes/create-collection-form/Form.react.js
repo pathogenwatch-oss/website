@@ -10,7 +10,7 @@ import { createCollection, changeCollectionMetadata } from './actions';
 import { taxIdMap } from '../../organisms';
 import { history } from '../../app';
 
-const CreateCollectionForm = React.createClass({
+const CreateCollectionForm = createClass({
 
   componentDidMount() {
     componentHandler.upgradeElements(Array.from(this.formElements));

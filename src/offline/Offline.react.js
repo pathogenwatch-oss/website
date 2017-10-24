@@ -58,7 +58,7 @@ const CollectionList = ({ collections }) => (
   </div>
 );
 
-const Offline = React.createClass({
+const Offline = createClass({
 
   componentWillMount() {
     document.title = 'WGSA | Offline';

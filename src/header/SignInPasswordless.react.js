@@ -6,10 +6,10 @@ import { sendSignInToken } from './api';
 
 import Spinner from '../components/Spinner.react';
 
-const SignInPasswordless = React.createClass({
+const SignInPasswordless = createClass({
 
   propTypes: {
-    onEmailSent: React.PropTypes.func,
+    onEmailSent: PropTypes.func,
   },
 
   getInitialState() {

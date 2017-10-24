@@ -2,7 +2,7 @@ import React from 'react';
 import classnames from 'classnames';
 import { Section, Metadata } from '../components';
 
-export default React.createClass({
+export default createClass({
 
   getInitialState() {
     return {

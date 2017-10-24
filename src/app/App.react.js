@@ -31,10 +31,10 @@ function mapDispatchToProps(dispatch, { location }) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(React.createClass({
+export default connect(mapStateToProps, mapDispatchToProps)(createClass({
 
   propTypes: {
-    children: React.PropTypes.element,
+    children: PropTypes.element,
   },
 
   componentDidMount() {

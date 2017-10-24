@@ -6,7 +6,7 @@ import { getTotalErrors, getTotalFailures, isRetryable } from './selectors';
 
 import { retryAll, removeAll } from './actions';
 
-const ErrorSummary = React.createClass({
+const ErrorSummary = createClass({
 
   render() {
     const { totalErrors, totalFailures, retryable, onRetry, onRemove } = this.props;

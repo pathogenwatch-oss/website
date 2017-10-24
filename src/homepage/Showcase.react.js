@@ -20,7 +20,7 @@ const ATTRIBUTION = `
 
 import CONFIG from '../app/config';
 
-const Marker = React.createClass({
+const Marker = createClass({
 
   render() {
     const { style, marker, selectedCollection, setCollection } = this.props;
@@ -53,7 +53,7 @@ const SelectedCollection = ({ collection }) => (
   </div>
 );
 
-export default React.createClass({
+export default createClass({
 
   getInitialState() {
     return {

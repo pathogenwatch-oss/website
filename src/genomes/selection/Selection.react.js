@@ -8,7 +8,7 @@ import { getSelectionSize, getSelectionDropdownView } from './selectors';
 
 import { toggleDropdown } from './actions';
 
-const Summary = React.createClass({
+const Summary = createClass({
 
   componentDidUpdate(previous) {
     if (this.animating) return;

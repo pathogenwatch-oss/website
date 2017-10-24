@@ -12,7 +12,7 @@ import Overview from './Overview.react';
 import Metadata from './Metadata.react';
 import getAnalysisTabs from './analysis';
 
-const GenomeDrawerContent = React.createClass({
+const GenomeDrawerContent = createClass({
 
   componentDidMount() {
     componentHandler.upgradeDom();

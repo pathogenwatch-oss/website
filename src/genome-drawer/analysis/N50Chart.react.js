@@ -5,7 +5,7 @@ import React from 'react';
 import addGuideLinesPlugin from '../../cgps-commons/ChartJSGuidelinePlugin';
 addGuideLinesPlugin(Chart);
 
-export default React.createClass({
+export default createClass({
 
   componentDidMount() {
     const { metrics } = this.props;

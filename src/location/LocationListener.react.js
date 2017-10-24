@@ -1,11 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-const LocationListener = React.createClass({
+const LocationListener = createClass({
 
   propTypes: {
-    query: React.PropTypes.object,
-    onChange: React.PropTypes.func.isRequired,
+    query: PropTypes.object,
+    onChange: PropTypes.func.isRequired,
   },
 
   componentDidUpdate(previous) {

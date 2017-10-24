@@ -5,7 +5,7 @@ import { removeOfflineCollection } from './actions';
 
 import { isOffline } from './utils';
 
-const RemoveOfflineCollection = React.createClass({
+const RemoveOfflineCollection = createClass({
 
   getInitialState() {
     return {

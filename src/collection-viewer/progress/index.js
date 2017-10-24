@@ -13,12 +13,12 @@ import { fetchPosition } from '../actions';
 
 import { subscribe, unsubscribe } from '../../utils/Notification';
 
-const UploadProgress = React.createClass({
+const UploadProgress = createClass({
 
   propTypes: {
-    updateProgress: React.PropTypes.func,
-    progress: React.PropTypes.object,
-    metadata: React.PropTypes.object,
+    updateProgress: PropTypes.func,
+    progress: PropTypes.object,
+    metadata: PropTypes.object,
   },
 
   componentWillMount() {

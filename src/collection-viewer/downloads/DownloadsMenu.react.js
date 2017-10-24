@@ -36,10 +36,10 @@ const DownloadsMenu = ({ menuOpen, files, counts = {}, closeMenu }) => (
 );
 
 DownloadsMenu.PropTypes = {
-  menuOpen: React.PropTypes.bool,
-  files: React.PropTypes.array,
-  counts: React.PropTypes.object,
-  closeMenu: React.PropTypes.func,
+  menuOpen: PropTypes.bool,
+  files: PropTypes.array,
+  counts: PropTypes.object,
+  closeMenu: PropTypes.func,
 };
 
 function mapStateToProps(state) {

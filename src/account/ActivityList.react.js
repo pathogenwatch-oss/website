@@ -10,7 +10,7 @@ import { fetchActivity } from './actions';
 
 import { statuses } from './constants';
 
-const ActivityList = React.createClass({
+const ActivityList = createClass({
 
   componentDidMount() {
     this.props.fetch();

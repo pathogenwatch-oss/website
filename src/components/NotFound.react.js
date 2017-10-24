@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-export default connect()(React.createClass({
+export default connect()(createClass({
 
   goBack(e) {
     if (window.history) {

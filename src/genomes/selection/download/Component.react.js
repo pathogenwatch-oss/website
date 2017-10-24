@@ -38,7 +38,7 @@ const Section = ({ organismId, organismName, total, tasks, ids }) => (
   </li>
 );
 
-const Download = React.createClass({
+const Download = createClass({
 
   componentDidMount() {
     this.props.fetch();

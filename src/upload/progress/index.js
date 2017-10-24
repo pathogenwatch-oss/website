@@ -24,7 +24,7 @@ import { subscribe, unsubscribe } from '../../utils/Notification';
 
 import config from '../../app/config';
 
-const Component = React.createClass({
+const Component = createClass({
 
   componentWillMount() {
     const { uploadedAt } = this.props;

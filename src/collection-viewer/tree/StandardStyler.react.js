@@ -10,7 +10,7 @@ import { nonResistantColour } from '../amr-utils';
 import { getLeafStyle } from './utils';
 import { defaultLeafStyle } from './constants';
 
-const Styler = React.createClass({
+const Styler = createClass({
 
   componentDidUpdate(previous) {
     const {

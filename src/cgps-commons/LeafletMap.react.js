@@ -15,30 +15,30 @@ const ATTRIBUTION = `
   Imagery © <a href='http://mapbox.com'>Mapbox</a>
 `;
 
-export default React.createClass({
+export default createClass({
 
   displayName: 'LeafletMap',
 
   propTypes: {
-    height: React.PropTypes.number,
-    width: React.PropTypes.number,
-    className: React.PropTypes.string,
-    markerIds: React.PropTypes.array,
-    markers: React.PropTypes.arrayOf(React.PropTypes.object),
-    markerComponent: React.PropTypes.func,
-    markerSize: React.PropTypes.number,
-    cluster: React.PropTypes.bool,
-    clusterOptions: React.PropTypes.object,
+    height: PropTypes.number,
+    width: PropTypes.number,
+    className: PropTypes.string,
+    markerIds: PropTypes.array,
+    markers: PropTypes.arrayOf(PropTypes.object),
+    markerComponent: PropTypes.func,
+    markerSize: PropTypes.number,
+    cluster: PropTypes.bool,
+    clusterOptions: PropTypes.object,
     center: PropTypes.latlng,
-    zoom: React.PropTypes.number,
-    highlightedColour: React.PropTypes.string,
-    lassoPath: React.PropTypes.array,
-    mapboxStyle: React.PropTypes.string,
-    mapboxKey: React.PropTypes.string,
-    buttonClassname: React.PropTypes.string,
-    onBoundsChange: React.PropTypes.func,
-    onLassoPathChange: React.PropTypes.func,
-    refitOnMarkerChange: React.PropTypes.bool,
+    zoom: PropTypes.number,
+    highlightedColour: PropTypes.string,
+    lassoPath: PropTypes.array,
+    mapboxStyle: PropTypes.string,
+    mapboxKey: PropTypes.string,
+    buttonClassname: PropTypes.string,
+    onBoundsChange: PropTypes.func,
+    onLassoPathChange: PropTypes.func,
+    refitOnMarkerChange: PropTypes.bool,
   },
 
   getDefaultProps() {

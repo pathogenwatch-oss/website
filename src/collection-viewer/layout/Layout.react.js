@@ -1,4 +1,3 @@
-import 'react-split-pane/styles.css';
 import './styles.css';
 
 import React from 'react';
@@ -10,7 +9,7 @@ import Map from '../map';
 import Summary from '../summary';
 import Table from '../table';
 
-export default React.createClass({
+export default createClass({
 
   displayName: 'Layout',
 

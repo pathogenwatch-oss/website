@@ -63,7 +63,7 @@ const OtherOrganism =
     </div>
   );
 
-const Index = React.createClass({
+const Index = createClass({
 
   componentDidMount() {
     this.props.fetch();

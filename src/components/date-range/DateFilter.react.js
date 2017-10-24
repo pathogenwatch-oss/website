@@ -6,7 +6,7 @@ import classnames from 'classnames';
 
 import { dateToInteger, integerToDate } from '../../utils/Date';
 
-export default React.createClass({
+export default createClass({
 
   getInitialState() {
     const [ min, max ] = this.props.values;

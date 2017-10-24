@@ -1,16 +1,16 @@
 import React from 'react';
 import classnames from 'classnames';
 
-export default React.createClass({
+export default createClass({
 
   displayName: 'LeafletMarkerControls',
 
   propTypes: {
-    className: React.PropTypes.string,
-    activeClassName: React.PropTypes.string,
-    markerSize: React.PropTypes.number,
-    onMarkerSizeChange: React.PropTypes.func,
-    onViewByCountryChange: React.PropTypes.func,
+    className: PropTypes.string,
+    activeClassName: PropTypes.string,
+    markerSize: PropTypes.number,
+    onMarkerSizeChange: PropTypes.func,
+    onViewByCountryChange: PropTypes.func,
   },
 
   getDefaultProps() {

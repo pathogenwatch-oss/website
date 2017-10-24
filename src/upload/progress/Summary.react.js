@@ -6,7 +6,7 @@ import ErrorSummary from './ErrorSummary.react';
 
 import * as upload from './selectors';
 
-const Component = React.createClass({
+const Component = createClass({
 
   componentDidMount() {
     document.title = 'WGSA | Upload';

@@ -1,15 +1,15 @@
 import React from 'react';
 import classnames from 'classnames';
 
-export default React.createClass({
+export default createClass({
 
   displayName: 'Progress Bar',
 
   propTypes: {
-    className: React.PropTypes.string,
-    progress: React.PropTypes.number,
-    indeterminate: React.PropTypes.bool,
-    label: React.PropTypes.string,
+    className: PropTypes.string,
+    progress: PropTypes.number,
+    indeterminate: PropTypes.bool,
+    label: PropTypes.string,
   },
 
   componentDidMount() {

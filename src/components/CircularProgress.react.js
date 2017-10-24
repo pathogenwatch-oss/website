@@ -51,9 +51,9 @@ export default class CircularProgress extends React.Component {
 }
 
 CircularProgress.propTypes = {
-  radius: React.PropTypes.string,
-  percentage: React.PropTypes.number,
-  strokeWidth: React.PropTypes.string,
+  radius: PropTypes.string,
+  percentage: PropTypes.number,
+  strokeWidth: PropTypes.string,
 };
 
 CircularProgress.defaultProps = {

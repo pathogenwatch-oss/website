@@ -9,7 +9,7 @@ import { getDeployedOrganismIds } from '../../summary/selectors';
 
 import { setSelection } from '../selection/actions';
 
-const CreateCollection = React.createClass({
+const CreateCollection = createClass({
 
   render() {
     const { selectedGenomeSummary, deployedOrganisms, onClick } = this.props;

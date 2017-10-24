@@ -50,7 +50,7 @@ function getClickHandler(chartData, onPointClick) {
   };
 }
 
-const ChartResizer = React.createClass({
+const ChartResizer = createClass({
 
   componentDidUpdate(previous) {
     const { width, height, chart } = this.props;
@@ -73,7 +73,7 @@ const ChartResizer = React.createClass({
 
 });
 
-export const StatsView = React.createClass({
+export const StatsView = createClass({
 
   componentDidMount() {
     const { chartData = [], previousFilter, filter, fetch } = this.props;

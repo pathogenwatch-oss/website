@@ -14,7 +14,7 @@ function getWikiPageMarkdown(page = 'Home') {
   });
 }
 
-const DocumentationViewerRoute = React.createClass({
+const DocumentationViewerRoute = createClass({
 
   getInitialState() {
     return {

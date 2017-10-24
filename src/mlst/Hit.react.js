@@ -2,7 +2,7 @@ import React from 'react';
 
 import { isNovel } from './utils';
 
-export default React.createClass({
+export default createClass({
 
   componentDidMount() {
     const { id } = this.props;

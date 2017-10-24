@@ -8,13 +8,13 @@ const fileInputStyle = {
   opacity: 0,
 };
 
-export default React.createClass({
+export default createClass({
 
   displayName: 'DragAndDrop',
 
   propTypes: {
-    onFiles: React.PropTypes.func.isRequired,
-    noAddButton: React.PropTypes.bool,
+    onFiles: PropTypes.func.isRequired,
+    noAddButton: PropTypes.bool,
   },
 
   getInitialState() {

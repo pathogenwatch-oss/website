@@ -6,16 +6,16 @@ import { LoadSpinner, LoadError } from '../loading/Loading.react';
 
 import { statuses } from '../constants';
 
-export default React.createClass({
+export default createClass({
 
   displayName: 'Explorer',
 
   propTypes: {
-    updateProgress: React.PropTypes.func,
-    fetch: React.PropTypes.func,
-    reset: React.PropTypes.func,
-    status: React.PropTypes.string,
-    progress: React.PropTypes.object,
+    updateProgress: PropTypes.func,
+    fetch: PropTypes.func,
+    reset: PropTypes.func,
+    status: PropTypes.string,
+    progress: PropTypes.object,
   },
 
   componentDidMount() {
