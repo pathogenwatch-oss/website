@@ -15,8 +15,8 @@ export function setBinnedStatus(genome, status, undoable = true) {
     return (
       binGenome(genome.id, status)
         .then(() => Promise.all([
-          dispatch(actions.fetchGenomes(currentFilter)),
-          dispatch(actions.fetchSummary(currentFilter)),
+          dispatch(actions.fetchGenomeList()),
+          dispatch(actions.fetchGenomeSummary(currentFilter)),
           dispatch(fetchSummary()),
         ]))
         .then(() => undoable && dispatch(showToast(toasts.undoMoveToBin(genome, undo))))
