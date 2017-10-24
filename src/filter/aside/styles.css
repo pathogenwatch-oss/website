@@ -67,6 +67,7 @@
   transform: translateY(100%);
   transition: .28s cubic-bezier(.4,0,.2,1);
   transition-property: transform;
+  text-align: center;
 }
 
 .wgsa-filter--active .wgsa-filter__footer {

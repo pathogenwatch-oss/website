@@ -1,5 +1,6 @@
 import React from 'react';
 import classnames from 'classnames';
+import { Link } from 'react-router-dom';
 
 import Overlay from '../../overlay';
 
@@ -36,7 +37,14 @@ export default React.createClass({
   },
 
   renderEmptyMessage() {
-    const { total, prefilter } = this.props;
+    const { total, prefilter, filterActive } = this.props;
+    if (filterActive) {
+      return (
+        <p className="wgsa-hub-big-message">
+          No matches, please refine your search.
+        </p>
+      );
+    }
 
     if (total === 0) {
       switch (prefilter) {
@@ -49,7 +57,7 @@ export default React.createClass({
         default:
           return (
             <p className="wgsa-hub-big-message">
-              Something went wrong. 😞
+              <Link to="/upload">Upload some genomes first. 🙂</Link>
             </p>
           );
       }
@@ -57,7 +65,7 @@ export default React.createClass({
 
     return (
       <p className="wgsa-hub-big-message">
-        No matches.
+        Something went wrong. 😞
       </p>
     );
   },
