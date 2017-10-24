@@ -1,6 +1,6 @@
 import { createAsyncConstants } from '../../actions';
 
-import { makeFileRequest } from '../../utils/Api';
+import { makeFileRequest } from '../api';
 
 export const SET_MENU_ACTIVE = 'SET_MENU_ACTIVE';
 
@@ -13,12 +13,11 @@ export function setMenuActive(active) {
   };
 }
 
-export const REQUEST_DOWNLOAD = createAsyncConstants('REQUEST_DOWNLOAD');
+export const REQUEST_DOWNLOAD = createAsyncConstants('REQUEST_DOWNLOAD_OLD');
 
 export function requestDownload(args) {
   const {
-    format, id, filename, speciesId,
-    getFileContents = makeFileRequest(format, id, speciesId),
+    format, id, filename, getFileContents = makeFileRequest(args),
   } = args;
 
   return {

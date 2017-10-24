@@ -1,38 +1,23 @@
 import React from 'react';
-import { connect } from 'react-redux';
 
 import NavLink from '../location';
-// import AccountLink from './AccountLink.react';
 
-import { toggleAside } from './index';
+import { isOffline } from '../offline';
 
-const links = [
-  { text: 'Home', link: '/', activeOnIndexOnly: true },
-  { text: 'Upload', link: '/upload' },
-  { text: 'Documentation', link: '/documentation' },
-];
-
-export const DefaultContent = ({ hasAside, onClick, asideDisabled }) => (
-  <span className="mdl-layout-spacer mdl-layout-spacer--flex">
-    <div className="mdl-layout-spacer" />
-    <nav className="mdl-navigation">
-      { links.map(props => <NavLink key={props.link} {...props} />) }
-      {/* <AccountLink /> */}
-    </nav>
-    <button
-      className="mdl-button mdl-button--icon wgsa-search-button"
-      onClick={onClick}
-      disabled={asideDisabled}
-    >
-      <i className="material-icons">{hasAside ? 'chevron_right' : 'search'}</i>
-    </button>
+const OfflineContent = () => (
+  <span className="wgsa-header-content">
+    <span className="mdl-navigation__link">Offline Mode</span>
   </span>
 );
 
-function mapDispatchToProps(dispatch, { hasAside }) {
-  return {
-    onClick: () => dispatch(toggleAside(!hasAside)),
-  };
-}
-
-export default connect(null, mapDispatchToProps)(DefaultContent);
+export default ({ offline = isOffline() }) => (
+  offline ?
+  <OfflineContent /> :
+  <nav className="wgsa-header-content mdl-navigation">
+    <NavLink to="/collections">Collections</NavLink>
+    <NavLink to="/genomes">Genomes</NavLink>
+    <NavLink to="/upload">Upload</NavLink>
+    <NavLink to="/documentation" className="sm-hide">Documentation</NavLink>
+    <NavLink to="mailto:cgps@sanger.ac.uk" className="sm-hide" external>Contact</NavLink>
+  </nav>
+);

@@ -3,7 +3,6 @@ const fs = require('fs');
 const webpack = require('webpack');
 const express = require('express');
 const bodyParser = require('body-parser');
-const fastaStorage = require('wgsa-fasta-store');
 
 const config = require('./webpack.config.js');
 const compiler = webpack(config);
@@ -45,18 +44,22 @@ apiRouter.get('/species/:speciesId/collection/:id/status', (req, res) => {
   res.json({ status: 'READY' });
 });
 
+apiRouter.get('/collection/summary', (req, res) => {
+  setTimeout(() => {
+    res.sendFile(`${__dirname}/static_data/collection-summary.json`);
+  }, 0);
+});
+
 apiRouter.get('/collection/:id', (req, res) => {
   setTimeout(() => {
     res.sendFile(`${getCollectionPath(req.params.id)}/collection.json`);
   }, 0);
 });
 
-apiRouter.get('/species/:speciesId/reference', (req, res) => {
-  res.sendFile(`${getCollectionPath(req.params.speciesId)}/reference.json`);
-});
-
-apiRouter.get('/species/:speciesId/resistance', (req, res) => {
-  res.sendFile(`${getCollectionPath(req.params.speciesId)}/resistance.json`);
+apiRouter.get('/collection', (req, res) => {
+  setTimeout(() => {
+    res.sendFile(`${__dirname}/static_data/collections.json`);
+  }, 0);
 });
 
 // let subtreeError = false;
@@ -92,26 +95,6 @@ apiRouter.get(
   (req, res) => res.sendFile(`${getCollectionPath(req.params.speciesId)}/metadata.csv`)
 );
 
-const fastaStoragePath = './fastas';
-fastaStorage.setup(fastaStoragePath);
-
-let uploadError = false;
-apiRouter.post('/upload', (req, res, next) => {
-  // uploadError = !uploadError;
-  return uploadError ?
-    setTimeout(() => res.sendStatus(500), 500) :
-    fastaStorage.store(fastaStoragePath, req)
-      .then(({ fileId, metrics, specieator: { taxId, scientificName } }) => {
-        res.json({
-          id: fileId,
-          speciesId: taxId,
-          speciesName: scientificName,
-          metrics,
-        });
-      }).
-      catch(error => next(error));
-});
-
 apiRouter.post('/collection', (req, res) =>
   setTimeout(() => res.json({ collectionId: '123' }), 2000)
 );
@@ -120,12 +103,8 @@ app.use('/api', apiRouter);
 
 app.set('view engine', 'ejs');
 
-const wgsaVersion = require('./package.json').version;
 app.use('/', (req, res) => res.render('index', {
-  frontEndConfig: Object.assign(
-    JSON.parse(fs.readFileSync('./config.json')),
-    { wgsaVersion }
-  ),
+  frontEndConfig: JSON.parse(fs.readFileSync('./config.json')),
 }));
 
 app.listen(process.env.PORT || 8080, '0.0.0.0');

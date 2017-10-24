@@ -1,10 +1,21 @@
-import { UPDATE_FILTER, CLEAR_FILTER } from './actions';
+import { UPDATE_FILTER, SET_FILTER, CLEAR_FILTER } from './actions';
 
 function applyFilterValue(state = {}, payload) {
-  const { filterKey, filterValue } = payload;
+  const { query } = payload;
+
+  if (Object.keys(query).length === 1 && query.prefilter) {
+    return {
+      ...query,
+    };
+  }
+
   return {
     ...state,
-    [filterKey]: filterValue === state[filterKey] ? null : filterValue,
+    ...Object.keys(query).reduce((memo, key) => {
+      const value = query[key];
+      memo[key] = value === state[key] ? undefined : value;
+      return memo;
+    }, {}),
   };
 }
 
@@ -16,11 +27,22 @@ export default function (state = {}, { type, payload }) {
         [payload.stateKey]:
           applyFilterValue(state[payload.stateKey], payload),
       };
-    case CLEAR_FILTER:
+    case SET_FILTER:
       return {
         ...state,
-        [payload.stateKey]: {},
+        [payload.stateKey]: {
+          ...payload.query,
+        },
       };
+    case CLEAR_FILTER: {
+      const { prefilter } = state[payload.stateKey];
+      return {
+        ...state,
+        [payload.stateKey]: {
+          prefilter,
+        },
+      };
+    }
     default:
       return state;
   }

@@ -2,54 +2,22 @@ import './styles.css';
 
 import { connect } from 'react-redux';
 
-import { REMOVE_FASTA } from '../hub/actions';
+import GenomeDrawer from './GenomeDrawer.react';
 
-import GenomeDetails from './GenomeDrawer.react';
+import { closeDrawer } from './actions';
 
-export const SHOW_ASSEMBLY_DETAILS = 'SHOW_ASSEMBLY_DETAILS';
-
-export function showGenomeDetails(name) {
-  return {
-    type: SHOW_ASSEMBLY_DETAILS,
-    payload: {
-      name,
-    },
-  };
-}
-
-const initialState = { name: null };
-export function reducer(state = initialState, { type, payload }) {
-  switch (type) {
-    case SHOW_ASSEMBLY_DETAILS:
-      return {
-        name: payload.name,
-      };
-    case REMOVE_FASTA:
-      return state.name === payload.name ? initialState : state;
-    default:
-      return state;
-  }
-}
-
-function getSelectedGenome({ genomeDrawer, hub }) {
-  const { fastas } = hub.entities;
-  return genomeDrawer.name ? fastas[genomeDrawer.name] : null;
-}
-
-function mapStateToProps(state) {
-  const genome = getSelectedGenome(state);
-  const visible = genome !== null;
-  return {
-    visible,
-    title: visible ? genome.name : null,
-    genome,
-  };
+function mapStateToProps({ genomeDrawer }) {
+  return genomeDrawer;
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    onClose: () => dispatch(showGenomeDetails(null)),
+    close: () => dispatch(closeDrawer(null)),
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(GenomeDetails);
+export { showGenomeDrawer } from './actions';
+
+export reducer from './reducer';
+
+export default connect(mapStateToProps, mapDispatchToProps)(GenomeDrawer);

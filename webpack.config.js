@@ -20,8 +20,8 @@ const rules = [
   { test: /.css$/, use: [ 'style-loader', 'css-loader', 'postcss-loader' ] },
   { test: /\.(png|jpg|jpeg|gif)$/, use: 'file' },
   { test: /\.js$/,
-    // loader: (process.env.NODE_ENV === 'production' ? '' : 'react-hot-loader!').concat(`babel-loader?${JSON.stringify(babelSettings)}`),
-    loader: `babel-loader?${JSON.stringify(babelSettings)}`,
+    loader: (process.env.NODE_ENV === 'production' ? '' : 'react-hot!').concat(`babel?${JSON.stringify(babelSettings)}`),
+    // loader: `babel?${JSON.stringify(babelSettings)}`,
     include: [
       /(src|universal|cgps-commons)/,
       path.join(__dirname, 'node_modules', 'promise-file-reader'),

@@ -1,39 +1,73 @@
 .wgsa-card {
   background: white;
-  border-top: 1px solid color(#a386bd tint(25%));
-  padding: 1.25rem 0;
   position: relative;
   height: 100%;
   box-sizing: border-box;
 }
 
+.wgsa-card--bordered {
+  border-top: 1px solid rgba(0, 0, 0, 0.28);
+  padding: 16px 0;
+}
+
+.wgsa-card-header {
+  padding-right: 24px;
+  position: relative;
+  cursor: pointer;
+}
+
 .wgsa-card-title {
-  font-size: 1.5rem;
-  line-height: 2rem;
-  margin: 0 0 0.5rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
   color: #673c90;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  margin: 0;
+  overflow: hidden;
+  position: relative;
+  white-space: nowrap;
+}
+
+.wgsa-card-subtitle {
+  color: #3c7383;
+  font-weight: 500;
+  overflow: hidden;
+  position: relative;
+  white-space: nowrap;
+}
+
+.wgsa-card-header__button {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.wgsa-card-header__button button {
+  height: 24px;
+  width: 24px;
+  min-width: 24px;
 }
 
 .wgsa-card-content {
   background: #fff;
   box-sizing: border-box;
-  height: 100%;
   padding: 0;
 }
 
 .wgsa-card-footer {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
   visibility: hidden;
   display: flex;
   flex-direction: row-reverse;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-end;
+  background: #fff;
+}
+
+.wgsa-card-footer--fixed {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }
 
 .wgsa-card:hover .wgsa-card-footer,
@@ -41,24 +75,33 @@
   visibility: visible;
 }
 
-.wgsa-card-metadata {
-  align-items: bottom;
-  display: flex;
-  justify-content: flex-start;
-  margin-bottom: 4px;
-  color: rgba(0, 0, 0, 0.87);
+.wgsa-card-footer .mdl-button--icon {
+  align-self: baseline;
 }
 
-.wgsa-card-metadata i {
+.wgsa-card-metadata {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  line-height: 20px;
+  position: relative;
+}
+
+.wgsa-card-metadata .material-icons {
   font-size: 16px;
-  padding-right: 4px;
   line-height: 18px;
+  height: 18px;
+  width: 15px; /* Hacked to make the SVG icon look crisp */
+  padding-right: 5px;
+}
+
+.wgsa-card-metadata .material-icons[title] {
+  cursor: help;
 }
 
 .wgsa-card-metadata span {
   white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .wgsa-card-metadata-inliner {
@@ -71,4 +114,49 @@
 
 .wgsa-card-metadata-inliner .wgsa-card-metadata:first-child {
   margin-left: 0;
+}
+
+.wgsa-card-metadata-overview {
+  float: right;
+}
+
+.wgsa-card-metadata-overview .wgsa-card-metadata {
+  justify-content: flex-end;
+  font-size: 13px;
+  line-height: 20px;
+}
+
+.wgsa-overflow-fade {
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+}
+
+.wgsa-overflow-fade::after {
+  content: '';
+  background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 75%);
+  width: 16px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 1;
+}
+
+.wgsa-confirm-action p {
+  margin-top: 8px;
+  margin-bottom: 0;
+}
+
+.wgsa-confirm-action button + button {
+  margin-left: 24px;
+}
+
+.wgsa-card-description {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 80px;
+  overflow-y: hidden;
 }

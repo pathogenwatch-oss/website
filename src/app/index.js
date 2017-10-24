@@ -6,24 +6,19 @@ import 'phylocanvas/polyfill';
 import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
+import { Router, Route } from 'react-router-dom';
+import createBrowserHistory from 'history/createBrowserHistory';
 
-import Router from './Router.react';
+import App from './App.react';
 
 import store from './store';
 
-function renderApp(Root) {
-  render((
-    <Provider store={store}>
-      <Root />
-    </Provider>
-  ), document.getElementById('wgsa'));
-}
+export const history = createBrowserHistory();
 
-renderApp(Router);
-
-// if (module.hot) {
-//   module.hot.accept('./Router.react', () => {
-//     const NextRouter = require('./Router.react').default;
-//     renderApp(NextRouter);
-//   });
-// }
+render((
+  <Provider store={store}>
+    <Router history={history}>
+      <Route component={App} />
+    </Router>
+  </Provider>
+), document.getElementById('wgsa'));

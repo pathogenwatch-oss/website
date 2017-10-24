@@ -1,0 +1,123 @@
+.wgsa-drawer-container {
+  bottom: 0;
+  height: 0;
+  right: 96px;
+  position: fixed;
+  min-width: 540px;
+  z-index: 3;
+}
+
+.wgsa-drawer-container--expanded {
+  right: 0;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.wgsa-drawer {
+  background-color: #fff;
+  color: rgba(0, 0, 0, 0.54);
+  position: absolute;
+  top: -48px;
+  transition: .28s cubic-bezier(.4,0,.2,1);
+  transition-property: transform, box-shadow;
+  width: 540px;
+}
+
+.wgsa-drawer-container--expanded .wgsa-drawer {
+  position: relative;
+  width: 80%;
+  top: 0;
+  transform: none;
+  height: 80%;
+  display: flex;
+  flex-direction: column;
+}
+
+.wgsa-drawer-container--expanded .wgsa-drawer__content {
+  flex-grow: 1;
+}
+
+.wgsa-drawer--open {
+  box-shadow: 0 1px 5px 0 rgba(0,0,0,0.2),0 2px 2px 0 rgba(0,0,0,0.14),0 3px 1px -2px rgba(0,0,0,0.12);
+  transform: translateY(calc(-100% + 48px));
+}
+
+.wgsa-drawer-enter {
+  transform: translateY(48px);
+}
+
+.wgsa-drawer-enter.wgsa-drawer-enter-active {
+  transform: translateY(0);
+  transition: .28s cubic-bezier(.4,0,.2,1);
+  transition-property: transform;
+}
+
+.wgsa-drawer-leave {
+  transform: translateY(0);
+}
+
+.wgsa-drawer-leave.wgsa-drawer-leave-active {
+  transform: translateY(48px);
+  transition: .28s cubic-bezier(.4,0,.2,1);
+  transition-property: transform;
+}
+
+@keyframes drawer-open {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(calc(-100% + 48px));
+  }
+}
+
+.wgsa-open-drawer {
+  animation-duration: .28s;
+  animation-fill-mode: both;
+  animation-timing-function: cubic-bezier(0.1, 0.7, 1.0, 0.1, 0.1, 0.7, 1.0, 0.1);
+  transform: translateY(calc(-100% + 48px));
+  box-shadow: 0 1px 5px 0 rgba(0,0,0,0.2),0 2px 2px 0 rgba(0,0,0,0.14),0 3px 1px -2px rgba(0,0,0,0.12);
+}
+
+.wgsa-open-drawer-enter {
+  animation-direction: normal;
+  animation-name: drawer-open;
+}
+
+.wgsa-open-drawer-leave {
+  animation-direction: reverse;
+  animation-name: drawer-open;
+}
+
+.wgsa-drawer__header {
+  align-items: center;
+  background: #222;
+  color: #fff;
+  display: flex;
+  min-height: 48px;
+  height: 48px;
+  padding-top: 2px;
+  padding-left: 24px;
+  padding-right: 8px;
+  justify-content: space-between;
+  font-weight: 500;
+}
+
+.wgsa-drawer__content {
+  height: 400px;
+}
+
+.wgsa-drawer-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.wgsa-drawer--disabled .wgsa-drawer__header {
+  background: #666;
+  cursor: default;
+}

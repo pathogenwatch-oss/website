@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 
-import { getViewer } from '../../collection-route/selectors';
+import { getViewer } from '../../collection-viewer/selectors';
 
 export const getTableState = state => getViewer(state).table;
 

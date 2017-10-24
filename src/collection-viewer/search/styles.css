@@ -1,23 +1,46 @@
 .wgsa-search-box-container {
-  display: flex;
-  justify-content: center;
-  height: 36px;
+  height: 40px;
   user-select: none;
-  font-size: 21px;
   flex-grow: 1;
+  margin: 0 auto;
+  min-width: 320px;
+  max-width: 560px;
+  @media (min-width: 1024px) {
+    max-width: 640px;
+  }
 }
 
 .wgsa-search-box {
-  flex-grow: 1;
   display: flex;
-  background: rgba(255, 255, 255, 0.15);
-  padding: 0 16px;
-  margin: 0 16px;
+  flex-wrap: nowrap;
+  background: rgba(255, 255, 255, 0.14);
+  padding: 0 8px;
+  box-sizing: border-box;
   align-items: center;
   border-radius: 2px;
   cursor: text;
-  min-width: 320px;
-  max-width: 640px;
+  min-height: 100%;
+  margin: 0 0 16px;
+  width: 100%;
+}
+
+.wgsa-search-box > .mdl-chip {
+  background: rgba(0, 0, 0, 0.14);
+  color: #fff;
+}
+
+.wgsa-search-box .mdl-button--icon {
+  opacity: 0.54;
+  min-width: 24px;
+  width: 24px;
+  background: none !important;
+  margin: 2px;
+}
+
+.wgsa-search-box .mdl-button--icon:hover,
+.wgsa-search-box .mdl-button--icon:focus,
+.wgsa-search-box .mdl-button--icon.active {
+  opacity: 1;
 }
 
 .wgsa-search-box:hover,
@@ -25,9 +48,13 @@
   background: rgba(255, 255, 255, 0.25);
 }
 
+.wgsa-search-box__icon {
+  margin-left: 8px;
+  margin-right: 2px;
+}
+
 .wgsa-search-box__input {
   flex-grow: 1;
-  padding: 0 8px;
   margin: 0 8px;
   background: none;
   border: none;
@@ -49,6 +76,148 @@
   font-size: 13px;
 }
 
-.wgsa-search-box__numbers {
+.wgsa-filter-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.wgsa-filter-status > span {
+  margin: 8px;
+}
+
+.wgsa-advanced-search-button {
+  min-width: 0;
+  height: 28px;
+  padding: 2px;
+  color: #fff;
+  line-height: 1;
+  border-radius: 16px;
+}
+
+/* Dropdown */
+
+.wgsa-search-dropdown-container {
+  width: 100%;
+}
+
+.wgsa-search-dropdown {
+  background: #efefef;
+  background: #fff;
+  border-radius: 4px;
+  cursor: auto;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 0.54);
+  border: 1px solid rgba(0, 0, 0, 0.27);
+  position: relative;
+  padding-top: 16px;
+  overflow: hidden;
+  max-height: 80vh;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+.wgsa-search-dropdown section {
+  margin: 0 16px 16px;
+}
+
+.wgsa-search-dropdown > :first-child {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  color: inherit;
+}
+
+.wgsa-search-dropdown p {
+  margin: 8px 0;
+  font-size: 14px;
+}
+
+.wgsa-search-dropdown__heading {
   margin: 0;
+  font-size: 14px;
+  line-height: 1;
+}
+
+.wgsa-search-dropdown__heading + .mdl-chip {
+  margin-top: 8px;
+}
+
+.wgsa-search-dropdown ul {
+  margin-left: -4px;
+}
+
+.wgsa-search-dropdown li {
+  display: inline-block;
+  margin-left: 4px;
+  margin-bottom: 4px;
+}
+
+.wgsa-search-dropdown .mdl-chip {
+  font-weight: 500;
+}
+
+.wgsa-search-dropdown hr {
+  margin: 0;
+}
+
+.wgsa-search-dropdown aside {
+  float: right;
+}
+
+.wgsa-search-dropdown label {
+  font-weight: 500;
+  font-size: 13px;
+}
+
+.wgsa-search-dropdown .wgsa-overlay {
+  z-index: -1;
+  background: none;
+  top: 64px; /* Work around weird bug with css filter on header logo in Chrome */
+}
+
+.wgsa-advanced-search {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.wgsa-search-dropdown__values {
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+.wgsa-search-operator {
+  vertical-align: bottom;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+li > .wgsa-search-operator {
+  margin-left: 4px;
+}
+
+.wgsa-search-operator > span {
+  padding-left: 12px;
+}
+
+ul > .wgsa-search-operator {
+  display: block;
+  margin-bottom: -12px;
+}
+
+ul:last-of-type > .wgsa-search-operator {
+  margin-bottom: 0;
+}
+
+.wgsa-search-dropdown .wgsa-settings-switch {
+  float: left;
+  height: 16px;
+  line-height: 16px;
+  font-size: 14px;
+}
+
+.wgsa-search-dropdown .mdl-switch {
+  margin-right: 4px;
 }

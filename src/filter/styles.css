@@ -1,0 +1,48 @@
+.wgsa-filter-container {
+  display: flex;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.wgsa-filter-container > .wgsa-filter {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  transform: translateX(-100%);
+  transition: .28s cubic-bezier(.4,0,.2,1);
+  transition-property: transform;
+  z-index: 1;
+}
+
+.wgsa-filter-container.has-filter > .wgsa-filter {
+  transform: translateX(0);
+  position: static;
+}
+
+.wgsa-filter-content {
+  flex-grow: 1;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  color: rgba(0, 0, 0, 0.54);
+}
+
+.wgsa-filter-content > header {
+  padding: 0 32px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+}
+
+.wgsa-filter-content > header > :last-child {
+  margin-left: auto;
+}
+
+.wgsa-filter-view {
+  flex-grow: 1;
+  position: relative;
+}

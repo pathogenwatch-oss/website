@@ -1,0 +1,37 @@
+.wgsa-filter-summary {
+  align-items: center;
+  display: flex;
+  font-size: 13px;
+  height: 4rem;
+  min-height: 4rem;
+  min-width: 800px;
+  position: relative;
+}
+
+.wgsa-filter-summary ~ * {
+  flex-grow: 1;
+  position: relative;
+}
+
+.wgsa-filter-summary > * {
+  margin: 0;
+  margin-right: 8px;
+}
+
+.wgsa-filter-summary > :first-child {
+  margin-left: 0;
+}
+
+.wgsa-filter-summary .mdl-button {
+  padding: 0 8px;
+}
+
+.wgsa-filter-summary__count {
+  font-size: 13px;
+  margin: 0 8px;
+  white-space: nowrap;
+}
+
+.wgsa-filter-summary__count > span {
+  color: #673c90;
+}

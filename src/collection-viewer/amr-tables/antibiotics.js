@@ -3,31 +3,33 @@ import React from 'react';
 const { onHeaderClick } = require('./thunks');
 
 import * as amr from '../amr-utils';
-import { tableKeys } from '../table/constants';
-import Species from '../../species';
-import { checkCustomLabels } from './utils';
+import { tableKeys } from '../constants';
+import Organisms from '../../organisms';
+import { getAntibioticLabel } from './utils';
 
 const isMac =
   (navigator && navigator.platform &&
     navigator.platform.toUpperCase().indexOf('MAC') >= 0);
 const modifierKey = isMac ? 'Cmd' : 'Ctrl';
 
-function createColumn({ key, fullName }) {
-  const columnKey = key;
-  const hoverName = checkCustomLabels(key) === key ? (fullName || key) : null;
+function createColumn(antibiotic) {
+  const columnKey = antibiotic.key;
+  const hoverName = antibiotic.fullName || columnKey;
 
   return {
     columnKey,
-    getLabel: () => checkCustomLabels(key),
     headerClasses: 'wgsa-table-header--expanded',
     headerTitle: `${hoverName ? `${hoverName} - ` : ''}${modifierKey} + click to select multiple`,
     cellClasses: 'wgsa-table-cell--resistance',
+    cellPadding: 16,
     flexGrow: 0,
+    label: getAntibioticLabel(antibiotic),
     getWidth() {
       return 32;
     },
-    cellPadding: 16,
     getCellContents(props, { analysis }) {
+      if (!analysis.paarsnp) return null;
+
       const { antibiotics } = analysis.paarsnp;
       const isResistant =
         amr.isResistant(analysis.paarsnp, props.columnKey);
@@ -43,7 +45,7 @@ function createColumn({ key, fullName }) {
       }
       return null;
     },
-    valueGetter: genome => amr.getColour(key, genome),
+    valueGetter: genome => amr.getColour(columnKey, genome),
     onHeaderClick,
   };
 }
@@ -51,21 +53,10 @@ function createColumn({ key, fullName }) {
 export const name = tableKeys.antibiotics;
 
 export function buildColumns({ antibiotics }) {
-  const { antibioticsSeparatorIndex } = Species.current.amrOptions || {};
-
-  if (typeof antibioticsSeparatorIndex === 'undefined') {
-    return antibiotics.map(createColumn);
-  }
-
-  return [
-    ...antibiotics.slice(0, antibioticsSeparatorIndex).map(createColumn),
-    { columnKey: '__group_spacer',
-      getHeaderContent() {},
-      fixedWidth: 40,
-      flexGrow: 0,
-      getCellContents() {},
-      cellClasses: 'wgsa-table-cell--resistance',
-    },
-    ...antibiotics.slice(antibioticsSeparatorIndex).map(createColumn),
-  ];
+  const { hiddenColumns = new Set() } = Organisms.current.amrOptions || {};
+  return (
+    antibiotics
+      .filter(({ key }) => !hiddenColumns.has(key))
+      .map(createColumn)
+  );
 }

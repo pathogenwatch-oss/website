@@ -1,0 +1,38 @@
+.wgsa-date-range {
+  margin-bottom: 24px;
+  padding: 0 8px;
+}
+
+.rc-slider-handle {
+  border-color: #a386bd;
+  background-color: #a386bd;
+}
+
+.rc-slider--inactive .rc-slider-handle {
+  border-color: #ccc;
+  background-color: #ccc;
+}
+
+.rc-slider-handle:hover,
+.rc-slider-handle:focus,
+.rc-slider-handle:active {
+  border-color: #673c90;
+  background: #673c90;
+}
+
+.rc-slider-track {
+  background-color: #a386bd;
+}
+
+.rc-slider--inactive .rc-slider-track {
+  background-color: #ccc;
+}
+
+.rc-slider label {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  font-size: 12px;
+  color: rgba(0, 0, 0, .54);
+  pointer-events: none;
+}

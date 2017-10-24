@@ -1,10 +1,9 @@
 import { SET_LABEL_COLUMN } from '../table/actions';
 
-import * as constants from '../table/constants';
 import { systemDataColumns } from './constants';
+import * as constants from '../table/constants';
+import { tableKeys } from '../constants';
 import { onHeaderClick } from './thunks';
-
-const { tableKeys } = constants;
 
 const initialState = {
   name: tableKeys.stats,
@@ -20,7 +19,7 @@ const initialState = {
     systemDataColumns.__n50,
     systemDataColumns['__no._contigs'],
     systemDataColumns['__non-ATCG'],
-    systemDataColumns.__GC_Content,
+    systemDataColumns['__%_GC_Content'],
     constants.rightSpacerColumn,
   ],
   onHeaderClick,

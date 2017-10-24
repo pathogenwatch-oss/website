@@ -5,7 +5,7 @@ import React from 'react';
 import SplitPane from 'react-split-pane';
 import { AutoSizer } from 'react-virtualized';
 
-import WestContent from './WestContent.react';
+import Tree from '../tree';
 import Map from '../map';
 import Summary from '../summary';
 import Table from '../table';
@@ -34,7 +34,10 @@ export default React.createClass({
           className="wgsa-no-overflow-pane"
           onChange={(verticalSize) => this.setState({ verticalSize })}
         >
-          <WestContent height={this.state.horizontalSize} width={this.state.verticalSize} />
+          <Tree
+            height={this.state.horizontalSize}
+            width={this.state.verticalSize}
+          />
           <Map>
             <Summary />
           </Map>

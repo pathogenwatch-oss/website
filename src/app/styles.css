@@ -1,8 +1,15 @@
 .wgsa-hipster-style {
   color: rgba(0, 0, 0, 0.54);
   background: #fff;
-  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
   font-size: 14px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 
 .cgps-logo {
@@ -26,10 +33,11 @@
   color: rgba(0, 0, 0, 0.54);
   font-size: 12px;
   font-weight: 500;
+  left: calc(100% - 64px);
   letter-spacing: normal;
   line-height: 1;
   position: absolute;
-  right: 16px;
+  right: 0;
   text-align: center;
   top: 16px;
 }
@@ -43,4 +51,106 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.wgsa-error-message {
+  color: #d11b1b;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 500;
+}
+
+.wgsa-page {
+  color: rgba(0, 0, 0, .54);
+  margin: 0 auto;
+  max-width: 960px;
+  padding: 40px 80px;
+  @media (min-width: 1600px) {
+    max-width: 1280px;
+  }
+}
+
+.wgsa-compact-page {
+  max-width: 800px !important;
+}
+
+.wgsa-page-breadcrumb {
+  position: absolute;
+  top: 16px;
+  font-size: 13px;
+}
+
+.wgsa-page-title {
+  margin-top: 8px;
+  color: #AC65A6;
+}
+
+.wgsa-page-divider {
+  border-top: 2px solid #ababab;
+  padding-top: 16px;
+}
+
+.wgsa-section-divider {
+  border-top: 1px solid #ababab;
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+
+.wgsa-section-title {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  margin-top: 0;
+  margin-bottom: 16px;
+  color: rgba(0, 0, 0, 0.87);
+  font-family: Roboto, Helvetica, Arial, sans-serif;
+}
+
+.wgsa-avatar-image {
+  border-radius: 50%;
+  overflow: hidden;
+  width: 160px;
+  height: 160px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.wgsa-avatar-image > img {
+  height: 160px;
+}
+
+.wgsa-figure {
+  text-align: center;
+  display: block;
+  font-size: 32px;
+  font-weight: 300;
+  padding: 16px 0 24px;
+  text-decoration: none;
+}
+
+.wgsa-inline-chip {
+  margin: 2px;
+}
+
+.wgsa-tab-actions {
+  align-self: stretch;
+  flex-grow: 1;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0 8px;
+}
+
+.wgsa-tab-actions__label {
+  margin-right: auto;
+}
+
+.wgsa-link-button {
+  background: none;
+  border: none;
+  outline: none;
+  font-family: inherit;
+  font-size: inherit;
+  color: color(#3c7383 shade(20%));
+  text-decoration: underline;
 }

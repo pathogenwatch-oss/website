@@ -1,15 +1,15 @@
 import React from 'react';
 import classnames from 'classnames';
 
-import DownloadIcon from './DownloadIcon.react';
+import DownloadIcon from '../../downloads/DownloadIcon.react';
+
+import { statuses } from '../../downloads/constants';
 
 export default React.createClass({
 
   displayName: 'DownloadButton',
 
   propTypes: {
-    loading: React.PropTypes.bool,
-    error: React.PropTypes.bool,
     description: React.PropTypes.string,
     link: React.PropTypes.string,
     filename: React.PropTypes.string,
@@ -21,15 +21,20 @@ export default React.createClass({
   },
 
   componentDidUpdate(previous) {
-    const { loading, link } = this.props;
-    if (previous.loading && (!loading && link)) {
+    const { status, link } = this.props;
+
+    if (previous.status !== statuses.LOADING) {
+      return;
+    }
+
+    if (status === statuses.SUCCESS && link) {
       this.refs.link.click();
     }
   },
 
   render() {
     const {
-      loading, error, description, link, filename,
+      status, description, link, filename,
       onClick, label, color, isArchive, iconOnly,
     } = this.props;
 
@@ -47,14 +52,18 @@ export default React.createClass({
         title={title}
         className={classNames}
       >
-          <DownloadIcon hasLink color={color} />
-          {!iconOnly && description}
+        <DownloadIcon
+          hasLink
+          isArchive={isArchive}
+          label={label}
+          color={color}
+        />
+        {!iconOnly && <span>{description}</span>}
       </a>
     ) : (
       <button onClick={onClick} title={title} className={classNames}>
         <DownloadIcon
-          loading={loading}
-          error={error}
+          status={status}
           color={color}
           label={label}
           isArchive={isArchive}

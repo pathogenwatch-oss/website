@@ -50,7 +50,6 @@ div.wgsa-tree-icon:active {
 .wgsa-redraw-original-tree-button {
   border: none;
   color: #673c90;
-  font-family: Roboto, sans-serif;
   position: absolute;
   top: 16px;
   right: 84px;
@@ -105,7 +104,6 @@ div.wgsa-tree-icon:active {
 .wgsa-select-tree-type:hover,
 .wgsa-select-tree-type:focus,
 .wgsa-select-tree-type:active {
-  outline: none;
   background: rgba(255, 255, 255, 0.87);
 }
 
@@ -209,6 +207,7 @@ div.wgsa-tree-icon:active {
   border-bottom: 2px solid #555;
   margin: 0;
   position: relative;
+  overflow: visible;
 }
 
 .wgsa-tree-scalebar__bar::before,

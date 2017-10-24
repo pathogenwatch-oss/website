@@ -1,0 +1,14 @@
+.wgsa-genome-selection-dropdown {
+  box-sizing: border-box;
+  min-width: 100%;
+  max-width: 480px;
+  max-height: calc(100vh - 120px);
+  position: absolute;
+  top: 40px;
+  right: 0;
+  overflow: auto;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.14);
+  padding: 16px;
+  border-radius: 2px;
+}

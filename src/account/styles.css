@@ -1,0 +1,56 @@
+.wgsa-profile-avatar {
+  padding: 16px;
+}
+
+.wgsa-profile-avatar .cgps-avatar__image {
+  margin-bottom: 8px;
+  /*width: 80px;
+  height: 80px;*/
+}
+
+.wgsa-profile-avatar .cgps-avatar__name {
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.wgsa-profile-counter:hover,
+.wgsa-profile-counter:focus,
+.wgsa-profile-counter:active {
+  text-decoration: none !important;
+}
+
+.wgsa-profile-counter:hover > .wgsa-hub-stats-heading,
+.wgsa-profile-counter:focus > .wgsa-hub-stats-heading,
+.wgsa-profile-counter:active > .wgsa-hub-stats-heading{
+  text-decoration: underline;
+}
+
+.wgsa-profile-section {
+  width: 80%;
+  margin: 0 auto 56px !important;
+}
+
+.wgsa-activity-item {
+  display: flex;
+  margin-bottom: 8px;
+  align-items: center;
+}
+
+.wgsa-activity-item i {
+  font-size: 18px;
+}
+
+.wgsa-activity-item > * {
+  margin: 0 16px;
+}
+
+.wgsa-activity-item > :first-child {
+  margin: 0;
+}
+
+.wgsa-activity-item__time {
+  margin-left: auto;
+  margin-right: 0;
+  cursor: help;
+}

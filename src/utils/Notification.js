@@ -15,7 +15,7 @@ export function subscribe(channelId, message, callback) {
 }
 
 export function unsubscribe(channelId) {
-  console.log('[Pusher] Unsubscribing to', channelId);
+  console.log('[Pusher] Unsubscribing from', channelId);
   if (pusher === null) return;
   pusher.unsubscribe(channelId);
   pusher = null;

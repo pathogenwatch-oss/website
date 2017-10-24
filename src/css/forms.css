@@ -36,11 +36,9 @@ fieldset > legend {
 }
 
 .wgsa-icon-button--small {
-  height: 28px;
   width: 28px;
   min-width: 28px;
   margin-left: -6px;
-  margin-bottom: 2px;
 }
 
 .wgsa-icon-button--small > i {
@@ -94,4 +92,9 @@ fieldset > legend {
   vertical-align: middle;
   font-size: 1em;
   margin-left: .25em;
+}
+
+.wgsa-select-box {
+  font-size: 13px;
+  color: rgba(0, 0, 0, 0.87);
 }

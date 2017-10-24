@@ -4,6 +4,8 @@ import { SET_MENU_ACTIVE, REQUEST_DOWNLOAD } from './actions';
 
 import * as utils from './utils';
 
+import { statuses } from '../../downloads/constants';
+
 function menuOpen(state = false, { type, payload }) {
   switch (type) {
     case SET_MENU_ACTIVE: {
@@ -38,15 +40,16 @@ function updateDownloads(state, payload, newStateForKey) {
 function files(state = utils.getInitialFileState(), { type, payload }) {
   switch (type) {
     case REQUEST_DOWNLOAD.ATTEMPT:
-      return updateDownloads(state, payload, { loading: true });
+      return updateDownloads(state, payload, { status: statuses.LOADING });
     case REQUEST_DOWNLOAD.FAILURE:
-      return updateDownloads(state, payload, { error: true });
+      return updateDownloads(state, payload, { status: statuses.ERROR });
     case REQUEST_DOWNLOAD.SUCCESS: {
       const { format, filename, result } = payload;
       const { createLink = utils.createDefaultLink } = state[format];
 
       const link = createLink(result, filename);
-      return updateDownloads(state, payload, { link, filename });
+      const status = statuses.SUCCESS;
+      return updateDownloads(state, payload, { link, filename, status });
     }
     default:
       return state;

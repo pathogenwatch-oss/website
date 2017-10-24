@@ -2,36 +2,41 @@ import PromiseWorker from 'promise-worker';
 
 import getCSVWorker from 'worker-loader?name=csv.worker.js!./CsvWorker';
 
-import { tableKeys } from '../table/constants';
+import { getColumnLabel } from '../table/utils';
+import { tableKeys } from '../constants';
 
-function ungroup(column) {
-  if (column.hidden) return [];
-  if (!column.group) return column;
-  return column.columns.reduce((columns, c) => columns.concat(ungroup(c)), []);
+function getUniqueValueColumns(memo, column) {
+  if (column.group) return column.columns.reduce(getUniqueValueColumns, memo);
+  if (column.columnKey in memo || column.hidden || !column.valueGetter) {
+    return memo;
+  }
+  memo[column.columnKey] = column;
+  return memo;
 }
 
-function convertTableToCSV(table) {
-  return function (state) {
-    const { genomes, genomeIds, tables } = state;
-    const columnKeys =
-      tables[table].columns.
-        reduce((flat, column) => flat.concat(ungroup(column)), []).
-        filter(_ => 'valueGetter' in _).
-        map(_ => _.columnKey);
-
+function convertTableToCSV(table, additionalColumns = []) {
+  return function ({ genomes, genomeIds, tables }) {
+    let columns = tables[table].columns.reduce(getUniqueValueColumns, {});
+    columns =
+      Object.keys(columns)
+        .map(key => ({
+          key,
+          label: columns[key].displayName || getColumnLabel(columns[key]),
+        }))
+        .concat(additionalColumns);
     const rows = genomeIds.map(id => genomes[id]);
-
     return (
-      new PromiseWorker(getCSVWorker()).postMessage({
-        table,
-        rows,
-        columnKeys: Array.from(new Set(columnKeys)), // quick hack for unique columns
-      })
+      new PromiseWorker(getCSVWorker()).postMessage({ table, rows, columns })
     );
   };
 }
 
-export const generateMetadataFile = convertTableToCSV(tableKeys.metadata);
+export const generateMetadataFile = convertTableToCSV(
+  tableKeys.metadata, [
+    { key: '__latitude', label: 'LATITUDE' },
+    { key: '__longitude', label: 'LONGITUDE' },
+  ]
+);
 export const generateTypingFile = convertTableToCSV(tableKeys.typing);
 export const generateStatsFile = convertTableToCSV(tableKeys.stats);
 export const generateAMRProfile = convertTableToCSV(tableKeys.antibiotics);

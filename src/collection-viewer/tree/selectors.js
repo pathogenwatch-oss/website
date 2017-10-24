@@ -1,13 +1,13 @@
 import { createSelector } from 'reselect';
 
-import { getGenomes, getViewer } from '../../collection-route/selectors';
+import { getCollection, getGenomes, getViewer } from '../../collection-viewer/selectors';
 import { getActiveDataTable } from '../table/selectors';
 
-import { titles } from './constants';
+import { titles, simpleTrees } from './constants';
 import * as utils from './utils';
 
 import { POPULATION, COLLECTION } from '../../app/stateKeys/tree';
-import Species from '../../species';
+import Organisms from '../../organisms';
 
 export const getTreeState = state => getViewer(state).tree;
 
@@ -32,7 +32,7 @@ export const getSingleTree = createSelector(
   getTrees,
   trees => {
     const collectionTree = trees[COLLECTION];
-    if (Species.uiOptions.noPopulation) return COLLECTION;
+    if (Organisms.uiOptions.noPopulation) return COLLECTION;
     if (!(collectionTree && collectionTree.newick)) return POPULATION;
     return null;
   }
@@ -46,7 +46,7 @@ export const getTitle = createSelector(
 
 export const getFilenames = createSelector(
   getTitle,
-  ({ collection }) => collection.id,
+  state => getCollection(state).uuid,
   state => getActiveDataTable(state).activeColumn,
   utils.getFilenames
 );
@@ -59,4 +59,14 @@ export const getLastSubtree = createSelector(
       { name: lastSubtree, title: genomes[lastSubtree].name } :
       null
   )
+);
+
+export const getSubtreeNames = createSelector(
+  getTrees,
+  trees => Object.keys(trees).filter(name => !simpleTrees.has(name))
+);
+
+export const getSelectedInternalNode = createSelector(
+  state => getTreeState(state).selectedInternalNode,
+  ({ trees, active }) => trees[active]
 );

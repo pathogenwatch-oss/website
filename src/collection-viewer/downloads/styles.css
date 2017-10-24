@@ -1,7 +1,7 @@
 .wgsa-downloads-menu {
   position: relative;
   padding: 16px;
-  background: url('/assets/img/WGSA.Icon.FINAL.reverse.svg') #fff no-repeat;
+  background: url('/images/WGSA.Icon.FINAL.reverse.svg') #fff no-repeat;
   background-size: 80px;
   background-position: calc(100% + 20px) -20px;
 }
@@ -26,7 +26,6 @@
 
 .wgsa-menu-heading {
   font-size: 14px;
-  font-family: Roboto, sans-serif;
   font-weight: 500;
   letter-spacing: 0;
   line-height: inherit;
@@ -42,7 +41,6 @@
   font-size: 13px;
   padding: 0;
   transition: background .28s cubic-bezier(.4,0,.2,1);
-  font-family: Roboto, sans-serif;
   font-size: 16px;
   line-height: 16px;
   color: rgba(0,0,0,.870588);
@@ -73,9 +71,6 @@
 /* pushes icon in download menu up a bit for alignment */
 .wgsa-download-button:not(.mdl-button--icon) .material-icons {
   margin-left: -4px;
-}
-
-button.wgsa-download-button:not(.mdl-button--icon) .material-icons {
   margin-top: -4px;
 }
 
@@ -90,9 +85,8 @@ button.wgsa-download-button:not(.mdl-button--icon) .material-icons {
 }
 
 .wgsa-menu-button {
-  background-color: #673c90;
   color: #fff;
-  padding-right: 12px;
+  padding: 0 12px;
   text-decoration: none;
 }
 

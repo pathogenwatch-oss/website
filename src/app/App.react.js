@@ -6,40 +6,28 @@ import React from 'react';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
 
-import Header from '../header';
 import Toast from '../toast';
-import NavLink from '../location';
 import GenomeDrawer from '../genome-drawer';
 
+import Header from './Header.react';
+import Content from './Content.react';
+
+import { fetchSummary } from '../summary/actions';
 import { locationChange } from '../location';
+import { showIntroToast } from './actions';
 
-import config from './config';
-
-const menuItems = [
-  { icon: 'home',
-    text: 'Home',
-    link: '/',
-    activeOnIndexOnly: true,
-  },
-  { icon: 'cloud_upload',
-    text: 'Upload',
-    link: '/upload',
-  },
-  { icon: 'description',
-    text: 'Documentation',
-    link: '/documentation',
-  },
-];
-
-function mapStateToProps({ location }) {
+function mapStateToProps({ location, header }) {
   return {
     pageSlug: location.slug,
+    userDrawerVisible: header.userDrawerVisible,
   };
 }
 
 function mapDispatchToProps(dispatch, { location }) {
   return {
     onLocationChange: () => dispatch(locationChange(location)),
+    fetchSummary: () => dispatch(fetchSummary()),
+    showIntroToast: () => dispatch(showIntroToast()),
   };
 }
 
@@ -52,57 +40,44 @@ export default connect(mapStateToProps, mapDispatchToProps)(React.createClass({
   componentDidMount() {
     componentHandler.upgradeDom();
     this.menuButton = document.querySelector('.mdl-layout__drawer-button');
-    this.props.onLocationChange();
+    this.onLocationChange();
+    this.props.fetchSummary();
+    this.props.showIntroToast();
   },
 
   componentDidUpdate(previous) {
     if (this.props.location !== previous.location) {
-      this.hideSidebar();
-      this.props.onLocationChange();
+      this.onLocationChange();
     }
   },
 
-  hideSidebar() {
-    if (this.menuButton.getAttribute('aria-expanded') === 'true') {
-      this.menuButton.click();
+  onLocationChange() {
+    const { location, history } = this.props;
+    if (navigator.onLine || /^\/(offline|collection\/)/.test(location.pathname)) {
+      this.props.onLocationChange();
+    } else if (location.pathname !== '/offline') {
+      history.replace('/offline');
     }
   },
 
   render() {
-    const { routes } = this.props;
-    const { header } = routes[routes.length - 1];
+    const { pageSlug, userDrawerVisible } = this.props;
     return (
-      <div ref="layout"
-        className={classnames(
-          'mdl-layout mdl-js-layout mdl-layout--fixed-header',
-          `wgsa-page--${this.props.pageSlug}`,
-        )}
-      >
-        <Header content={header} />
-        <div className="mdl-layout__drawer">
-          <span className="mdl-layout-title">
-            <img src="/assets/img/WGSA.FINAL.svg" />
-            { config.wgsaVersion &&
-              <small className="wgsa-version">
-                v{config.wgsaVersion}
-              </small>
-            }
-          </span>
-          <nav className="mdl-navigation" onClick={this.hideSidebar}>
-            {menuItems.map(props => (
-              <NavLink key={props.link} {...props} />
-            ))}
-          </nav>
-          <a className="cgps-logo" target="_blank" rel="noopener" href="http://www.pathogensurveillance.net">
-            <img src="/assets/img/CGPS.SHORT.FINAL.svg" />
-          </a>
-          <a className="contact-email" href="mailto:cgps@sanger.ac.uk">cgps@sanger.ac.uk</a>
+      <div className="mdl-layout__container">
+        <div ref="layout"
+          className={classnames(
+            'mdl-layout',
+            `wgsa-page--${pageSlug}`,
+            { 'user-drawer-visible': userDrawerVisible }
+          )}
+        >
+          <Header />
+          <main className="mdl-layout__content">
+            <Content />
+          </main>
+          <Toast />
+          <GenomeDrawer />
         </div>
-        <main className="mdl-layout__content">
-          {this.props.children}
-        </main>
-        <Toast />
-        <GenomeDrawer />
       </div>
     );
   },

@@ -4,13 +4,24 @@ import React from 'react';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
 
-import { getGenomes } from '../../collection-route/selectors';
-import { getActiveDataTable } from '../table/selectors';
-import { getFilter } from '../selectors';
+import SearchDropdown from './SearchDropdown.react';
+import FilterStatus from '../filter/FilterStatus.react';
 
-import { activateFilter, resetFilter } from '../filter/actions';
+import { getSearch, getSearchPlaceholder } from './selectors';
 
-import { getColumnLabel } from '../table/utils';
+import {
+  changeDropdownVisibility,
+  selectSearchCategory,
+  moveCursor,
+  moveIntersection,
+  toggleSearchMode,
+} from './actions';
+
+import {
+  selectItemAtCursor,
+  searchTextChanged,
+  searchExactMatchToggled,
+} from './thunks';
 
 const Search = React.createClass({
 
@@ -23,51 +34,94 @@ const Search = React.createClass({
     handleChange: React.PropTypes.func,
   },
 
-  getInitialState() {
-    return {
-      focus: false,
-    };
+  componentDidUpdate(previous) {
+    const { search } = this.props;
+    if (previous.search.category !== search.category ||
+        previous.search.intersections !== search.intersections ||
+        previous.search.currentIntersection !== search.currentIntersection ||
+        previous.search.advanced !== search.advanced) {
+      this.refs.input.focus();
+    }
   },
 
   handleChange(event) {
     this.props.handleChange(event.target.value);
   },
 
-  handleFocus() {
-    this.setState({ focus: true });
-  },
-
-  handleBlur() {
-    this.setState({ focus: false });
-  },
-
   handleClick() {
     this.refs.input.focus();
   },
 
+  handleKeyboard(e) {
+    const { text, category } = this.props.search;
+    switch (e.keyCode) {
+      case 37:
+        this.props.moveCursor(-1); break;
+      case 39:
+        this.props.moveCursor(1); break;
+      case 38:
+        this.props.moveIntersection(-1); break;
+      case 40:
+        this.props.moveIntersection(1); break;
+      case 8: {
+        if (category && text.length === 0) {
+          this.props.removeCategory();
+        }
+        break;
+      }
+      case 13:
+        this.props.selectItemAtCursor(); break;
+      case 27: {
+        e.stopPropagation(); // prevent clash with overlay
+        this.props.toggleMode();
+        break;
+      }
+      default:
+    }
+  },
+
   render() {
-    const { totalAmount, filteredAmount, filterColumnName } = this.props;
-    const { focus } = this.state;
+    const { toggleMode, toggleExactMatch, search } = this.props;
+    const { text, advanced, exact } = search;
     return (
       <div className="wgsa-search-box-container">
         <div className={classnames(
-          'wgsa-search-box',
-          { 'wgsa-search-box--active': focus }
-        )}
+            'wgsa-search-box',
+            { 'wgsa-search-box--active': advanced }
+          )}
           onClick={this.handleClick}
         >
           <i className="wgsa-search-box__icon material-icons">search</i>
+          <button
+            className={classnames(
+              'mdl-button mdl-button--icon',
+              { active: advanced }
+            )}
+            onClick={toggleMode}
+            title="Toggle Advanced Search"
+          >
+            <i className="material-icons">add_box</i>
+          </button>
+          <button
+            className={classnames(
+              'mdl-button mdl-button--icon',
+              { active: exact }
+            )}
+            onClick={toggleExactMatch}
+            title="Toggle Exact Match"
+          >
+            <i className="material-icons">explicit</i>
+          </button>
           <input ref="input"
             className="wgsa-search-box__input"
-            placeholder={`SEARCH ${filterColumnName}`}
+            placeholder={this.props.placeholder}
             onChange={this.handleChange}
-            onFocus={this.handleFocus}
-            onBlur={this.handleBlur}
+            onKeyDown={this.handleKeyboard}
+            value={text}
           />
-          <p className="wgsa-search-box__numbers">
-            {filteredAmount} of {totalAmount}
-          </p>
+          <FilterStatus />
         </div>
+        <SearchDropdown />
       </div>
     );
   },
@@ -75,39 +129,23 @@ const Search = React.createClass({
 });
 
 function mapStateToProps(state) {
-  const filter = getFilter(state);
-  const { activeColumn } = getActiveDataTable(state);
-  const totalAmount = filter.unfilteredIds.length;
   return {
-    displayProps: {
-      totalAmount,
-      filteredAmount: filter.active ? filter.ids.size : totalAmount,
-      filterColumnName: getColumnLabel(activeColumn),
-    },
-    activeColumn,
-    genomes: [ ...filter.unfilteredIds ].map(id => getGenomes(state)[id]),
+    search: getSearch(state),
+    placeholder: getSearchPlaceholder(state),
   };
 }
 
-function mergeProps({ displayProps, activeColumn, genomes }, { dispatch }) {
+function mapDispatchToProps(dispatch) {
   return {
-    ...displayProps,
-    handleChange(text) {
-      if (!text || !text.length) {
-        dispatch(resetFilter());
-        return;
-      }
-      const matcher = new RegExp(text, 'i');
-      dispatch(activateFilter(
-        genomes.reduce((set, genome) => {
-          if (String(activeColumn.valueGetter(genome)).match(matcher)) {
-            set.add(genome.uuid);
-          }
-          return set;
-        }, new Set())
-      ));
-    },
+    handleChange: text => dispatch(searchTextChanged(text)),
+    openDropdown: visible => dispatch(changeDropdownVisibility(visible)),
+    removeCategory: () => dispatch(selectSearchCategory(null)),
+    selectItemAtCursor: () => dispatch(selectItemAtCursor()),
+    moveCursor: delta => dispatch(moveCursor(delta)),
+    moveIntersection: delta => dispatch(moveIntersection(delta)),
+    toggleMode: () => dispatch(toggleSearchMode()),
+    toggleExactMatch: () => dispatch(searchExactMatchToggled()),
   };
 }
 
-export default connect(mapStateToProps, null, mergeProps)(Search);
+export default connect(mapStateToProps, mapDispatchToProps)(Search);

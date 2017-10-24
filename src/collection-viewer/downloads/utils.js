@@ -3,11 +3,11 @@ import { showToast } from '../../toast';
 
 import { fileTypes } from './constants';
 
-import { SERVER_ADDRESS } from '../../utils/Api';
-import Species from '../../species';
+import { getServerPath } from '../../utils/Api';
+import Organisms from '../../organisms';
 
 export const encode = encodeURIComponent;
-export const downloadPath = `${SERVER_ADDRESS}/download/file`;
+export const downloadPath = getServerPath('/download/file');
 
 export function getInitialFileState() {
   return fileTypes;
@@ -18,8 +18,8 @@ export function createDownloadKey(id) {
   return typeof id === 'string' ? id : JSON.stringify(id);
 }
 
-export function formatCollectionFilename({ id }) {
-  return [ Species.nickname, id ].join('_');
+export function formatCollectionFilename({ uuid }, suffix = '') {
+  return [ 'wgsa', Organisms.nickname, uuid, suffix ].join('-');
 }
 
 const errorToast = {
@@ -39,47 +39,25 @@ export function createDownloadProps(params, dispatch) {
         format,
         id,
         getFileContents,
-        speciesId: Species.id,
-        filename: `wgsa_${getFileName()}_${filenameSegment}`,
+        idType: download.idType,
+        organismId: Organisms.id,
+        filename: getFileName(null, filenameSegment),
       })
     )
     .catch(() => dispatch(showToast(errorToast))),
   };
 }
 
-function createPropsForDownloads(downloads, params, dispatch) {
-  const { id, getFileName } = params;
-
-  return Object.keys(downloads).reduce((memo, format) => ({
-    ...memo,
-    [format]: createDownloadProps({
-      format,
-      download: downloads[format],
-      id,
-      getFileName,
-    }, dispatch),
-  }), {});
-}
-
-export function addDownloadProps(row, { downloads }, dispatch) {
-  const { uuid, name } = row;
+export function getArchiveDownloadProps(state) {
+  const { collection, data } = state; // not full state :/
   return {
-    ...row,
-    __downloads: createPropsForDownloads(downloads, {
-      id: uuid,
-      getFileName: () => name,
-    }, dispatch),
+    ids: data.map(_ => _.id || _._id),
+    filenames: {
+      genome: formatCollectionFilename(collection, 'genomes.zip'),
+      annotation: formatCollectionFilename(collection, 'annotations.zip'),
+    },
   };
 }
-
-export function getArchiveDownloadProps(state, downloads, dispatch) {
-  const { collection, data } = state; // not full state :/
-  return createPropsForDownloads(downloads, {
-    id: data.map(_ => _.uuid),
-    getFileName: () => formatCollectionFilename(collection),
-  }, dispatch);
-}
-
 
 export function createDefaultLink(keyMap, filename) {
   const key = Object.keys(keyMap)[0];

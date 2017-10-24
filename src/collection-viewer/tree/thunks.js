@@ -1,19 +1,25 @@
-import { getCollection } from '../../collection-route/selectors';
+import { getCollection } from '../../collection-viewer/selectors';
 import { getTrees, getVisibleTree, getLeafIds } from './selectors';
+import { getFilterState } from '../selectors';
 
 import { showToast } from '../../toast';
 import * as actions from './actions';
-import { activateFilter, resetFilter } from '../filter/actions';
+import {
+  activateFilter,
+  appendToFilter,
+  resetFilter,
+} from '../filter/actions';
 
 import { getSubtree } from './api';
 
 import { POPULATION, COLLECTION } from '../../app/stateKeys/tree';
+import { filterKeys } from '../filter/constants';
 
 function fetchTree(name) {
   return (dispatch, getState) => {
     const collection = getCollection(getState());
     return dispatch(
-      actions.fetchTree(name, getSubtree(collection.id, name))
+      actions.fetchTree(name, getSubtree(collection.uuid, name))
     );
   };
 }
@@ -71,6 +77,7 @@ export function treeClicked(event, phylocanvas) {
       return;
     }
 
+    const state = getState();
     const stateKey = getVisibleTree(getState()).name;
 
     if (stateKey === POPULATION) {
@@ -79,16 +86,27 @@ export function treeClicked(event, phylocanvas) {
       if (nodeIds.length === 1) {
         const name = nodeIds[0];
         dispatch(displayTree(name));
-      } else {
-        dispatch(resetFilter());
       }
     } else {
       const nodeIds = phylocanvas.getNodeIdsWithFlag(phylocanvas.clickFlag);
 
-      if (nodeIds.length) {
-        dispatch(activateFilter(nodeIds));
+      if (nodeIds.length === 1) {
+        const [ id ] = nodeIds;
+        const action = event.append ? appendToFilter : activateFilter;
+        dispatch(action([ id ], filterKeys.HIGHLIGHT));
+      } else if (nodeIds.length === 0) {
+        const filterState = getFilterState(state);
+        if (filterState[filterKeys.HIGHLIGHT].active) {
+          dispatch(resetFilter(filterKeys.HIGHLIGHT));
+        } else {
+          dispatch(resetFilter(filterKeys.VISIBILITY));
+        }
       } else {
-        dispatch(resetFilter());
+        dispatch(
+          event.append ?
+            appendToFilter(nodeIds, filterKeys.HIGHLIGHT) :
+            activateFilter(nodeIds, filterKeys.VISIBILITY)
+        );
       }
     }
   };

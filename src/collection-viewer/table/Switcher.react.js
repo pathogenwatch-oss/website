@@ -4,8 +4,8 @@ import classnames from 'classnames';
 
 import { getVisibleTableName, hasMetadata, hasTyping } from './selectors';
 import { setTable } from './actions';
-import { tableKeys } from './constants';
-import Species from '../../species';
+import { tableKeys, tableDisplayNames } from '../constants';
+import Organisms from '../../organisms';
 
 function mapStateToProps(state) {
   return {
@@ -20,7 +20,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 const Button = connect(mapStateToProps, mapDispatchToProps)(
-  ({ table, label, displayedTable, showTable }) => (
+  ({ table, displayedTable, showTable }) => (
     <button
       className={classnames(
         'wgsa-button-group__item',
@@ -28,7 +28,7 @@ const Button = connect(mapStateToProps, mapDispatchToProps)(
       )}
       onClick={() => showTable(table)}
     >
-      {label}
+      {tableDisplayNames[table]}
     </button>
   )
 );
@@ -43,7 +43,7 @@ const TableSwitcher =
   connect(state => ({
     hasMetadata: hasMetadata(state),
     hasTyping: hasTyping(state),
-    hasAMR: !Species.uiOptions.noAMR,
+    hasAMR: !Organisms.uiOptions.noAMR,
   }))(
   props => (
     <div
@@ -53,17 +53,17 @@ const TableSwitcher =
       <ButtonGroup>
         <i className="material-icons" title="Data">list</i>
         { props.hasMetadata &&
-          <Button table={tableKeys.metadata} label="Metadata" /> }
+          <Button table={tableKeys.metadata} /> }
         { props.hasTyping &&
-          <Button table={tableKeys.typing} label="Typing" /> }
-        <Button table={tableKeys.stats} label="Stats" />
+          <Button table={tableKeys.typing} /> }
+        <Button table={tableKeys.stats} />
       </ButtonGroup>
       { props.hasAMR &&
         <ButtonGroup>
           <i className="material-icons" title="AMR">local_pharmacy</i>
-          <Button table={tableKeys.antibiotics} label="Antibiotics" />
-          <Button table={tableKeys.snps} label="SNPs" />
-          <Button table={tableKeys.genes} label="Genes" />
+          <Button table={tableKeys.antibiotics} />
+          <Button table={tableKeys.snps} />
+          <Button table={tableKeys.genes} />
         </ButtonGroup> }
     </div>
   )

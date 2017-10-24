@@ -23,10 +23,12 @@ export default React.createClass({
     height: React.PropTypes.number,
     width: React.PropTypes.number,
     className: React.PropTypes.string,
+    markerIds: React.PropTypes.array,
     markers: React.PropTypes.arrayOf(React.PropTypes.object),
     markerComponent: React.PropTypes.func,
     markerSize: React.PropTypes.number,
     cluster: React.PropTypes.bool,
+    clusterOptions: React.PropTypes.object,
     center: PropTypes.latlng,
     zoom: React.PropTypes.number,
     highlightedColour: React.PropTypes.string,
@@ -36,17 +38,24 @@ export default React.createClass({
     buttonClassname: React.PropTypes.string,
     onBoundsChange: React.PropTypes.func,
     onLassoPathChange: React.PropTypes.func,
+    refitOnMarkerChange: React.PropTypes.bool,
   },
 
   getDefaultProps() {
     return {
       cluster: false,
       markers: [],
+      markerIds: [],
+      refitOnMarkerChange: true,
     };
   },
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.markers === null && this.props.markers) {
+  componentDidUpdate(previous) {
+    if (this.props.refitOnMarkerChange) {
+      if (previous.markerIds !== this.props.markerIds) {
+        this.refitMapBounds();
+      }
+    } else if (previous.markers.length === 0 && this.props.markers) {
       this.refitMapBounds();
     }
   },
@@ -72,6 +81,12 @@ export default React.createClass({
     }
   },
 
+  onClick(event) {
+    if (this.props.onClick) {
+      this.props.onClick(event);
+    }
+  },
+
   getBounds() {
     const { markers } = this.props;
     if (!markers || markers.length === 0) {
@@ -81,11 +96,14 @@ export default React.createClass({
     let east = -1000;
     let south = 1000;
     let west = 1000;
-    for (const { position } of markers) {
-      if (position[0] > north) north = position[0];
-      if (position[0] < south) south = position[0];
-      if (position[1] > east) east = position[1];
-      if (position[1] < west) west = position[1];
+    for (const marker of markers) {
+      if (!marker.position && (!marker.latitude || !marker.longitude)) continue;
+      const latitude = marker.latitude || marker.position[0];
+      const longitude = marker.longitude || marker.position[1];
+      if (latitude > north) north = latitude;
+      if (latitude < south) south = latitude;
+      if (longitude > east) east = longitude;
+      if (longitude < west) west = longitude;
     }
     const southWest = Leaflet.latLng([ south, west ]);
     const northEast = Leaflet.latLng([ north, east ]);
@@ -96,20 +114,21 @@ export default React.createClass({
     if (point) {
       this.leafletMap.leafletElement.panTo(point);
     } else {
-      this.leafletMap.leafletElement.fitBounds(this.getBounds());
+      this.leafletMap.leafletElement.fitBounds(this.getBounds(), { maxZoom: 5 });
     }
   },
 
   renderMarkers() {
-    const { markers, cluster, markerComponent, highlightedColour } = this.props;
-
-    if (!markers) return null;
+    const {
+      markers, cluster, markerComponent, highlightedColour,
+    } = this.props;
 
     if (cluster) {
       return (
         <MapCluster
-          markers={this.props.markers}
+          markers={markers || []}
           onMarkerClick={this.onClusterMarkerClick}
+          options={this.props.clusterOptions}
         />
       );
     }
@@ -117,7 +136,7 @@ export default React.createClass({
     if (markerComponent) {
       return (
         <MarkerLayer
-          markers={markers}
+          markers={markers || []}
           latitudeExtractor={({ position }) => position[0]}
           longitudeExtractor={({ position }) => position[1]}
           markerComponent={markerComponent}
@@ -125,6 +144,8 @@ export default React.createClass({
         />
       );
     }
+
+    if (!markers) return null;
 
     return markers.map(({ position, title, icon = DefaultIcon }, index) => (
       <Marker
@@ -160,12 +181,12 @@ export default React.createClass({
         }
       >
         <Map
+          onClick={this.onClick}
           animate={false}
           center={center}
           zoom={zoom}
           zoomControl={false}
           boundsOptions={{ animate: false }}
-          onClick={this.props.onClick || (() => {})}
           onMoveend={({ target }) => { this.map = target; }}
           ref={(map) => { this.leafletMap = map; }}
           style={{ width: '100%', height: '100%' }}
@@ -175,7 +196,6 @@ export default React.createClass({
             url={`https://api.mapbox.com/styles/v1/mapbox/${mapboxStyle}/tiles/{z}/{x}/{y}?access_token=${mapboxKey}`}
           />
           { this.renderMarkers() }
-          {/* { this.renderDefaultMarkers() } */}
           <Lasso
             className={this.props.buttonClassname}
             initialPath={this.props.lassoPath}

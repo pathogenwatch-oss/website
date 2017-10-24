@@ -1,15 +1,15 @@
 import React from 'react';
 
-import { FETCH_COLLECTION } from '../../collection-route/actions';
+import { FETCH_COLLECTION } from '../../collection-viewer/actions';
 import { SET_COLOUR_COLUMNS } from '../table/actions';
 import { onHeaderClick } from './thunks';
 
 import * as amr from '../amr-utils';
 import { measureText } from '../table/columnWidth';
 import * as constants from '../table/constants';
-import { statuses } from '../../collection-route/constants';
+import { statuses } from '../../collection-viewer/constants';
 
-import Species from '../../species';
+import Organisms from '../../organisms';
 
 const systemGroup = {
   group: true,
@@ -45,28 +45,27 @@ function notPresent(profileSection, element) {
 }
 
 export function createAdvancedViewColumn(element, profileKey, profiles) {
-  const { key, label, effect } = element;
+  const { key, displayName, label, effect } = element;
   return {
     addState({ data }) {
       if (!data.length) return this;
       this.hidden = data.every(({ analysis }) =>
-        notPresent(analysis.paarsnp[profileKey], key)
+        !analysis.paarsnp || notPresent(analysis.paarsnp[profileKey], key)
       );
       this.width = this.getWidth() + 16;
       return this;
     },
     columnKey: key,
+    displayName,
+    label,
     cellClasses: 'wgsa-table-cell--resistance',
     cellPadding: 16,
     flexGrow: 0,
-    getLabel() {
-      return label;
-    },
     getWidth() {
       return measureText(label, true) + 4;
     },
-    getCellContents(props, assembly) {
-      return amr.hasElement(assembly, profileKey, key) ? (
+    getCellContents(props, genome) {
+      return amr.hasElement(genome, profileKey, key) ? (
         <i
           className="material-icons wgsa-resistance-icon"
           style={{ color: amr.getEffectColour(effect) }}
@@ -78,7 +77,7 @@ export function createAdvancedViewColumn(element, profileKey, profiles) {
     headerClasses: 'wgsa-table-header--expanded',
     hidden: profiles.every(profile => notPresent(profile[profileKey], key)),
     valueGetter: genome =>
-      amr.getAdvancedColour(key, profileKey, genome),
+      amr.getAdvancedColour(element, profileKey, genome),
     onHeaderClick,
   };
 }
@@ -100,11 +99,11 @@ export function createReducer({ name, buildColumns }) {
   return function (state = initialState, { type, payload }) {
     switch (type) {
       case FETCH_COLLECTION.SUCCESS: {
-        const { genomes, _species, status } = payload.result;
+        const { genomes, organism, status } = payload.result;
         if (status !== statuses.READY) return state;
 
         const paarsnpResults = getPaarsnpResults(genomes);
-        const columns = buildColumns(_species.resistance, paarsnpResults);
+        const columns = buildColumns(organism.resistance, paarsnpResults);
         return {
           ...state,
           columns: [ systemGroup ].concat(
@@ -133,7 +132,9 @@ export function createReducer({ name, buildColumns }) {
   };
 }
 
-export function checkCustomLabels(key) {
-  const { customLabels = {} } = Species.current.amrOptions || {};
-  return (key in customLabels ? customLabels[key] : key.slice(0, 3));
+export function getAntibioticLabel({ key, displayName }) {
+  if (displayName) return displayName;
+  // provide backwards compatibility
+  const { customLabels = {} } = Organisms.current.amrOptions || {};
+  return customLabels[key] || key;
 }

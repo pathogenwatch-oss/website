@@ -6,9 +6,8 @@ import { connect } from 'react-redux';
 import Overlay from '../../components/overlay';
 import DownloadButton from './DownloadButton.react';
 
-import { getCollection, getGenomes, getViewer } from '../../collection-route/selectors';
+import * as viewer from '../selectors';
 import { getTables, hasMetadata, hasTyping } from '../table/selectors';
-import { getActiveGenomeIds } from '../selectors';
 
 import { setMenuActive } from './actions';
 
@@ -45,19 +44,22 @@ DownloadsMenu.PropTypes = {
 
 function mapStateToProps(state) {
   return {
-    collection: getCollection(state),
-    downloads: getViewer(state).downloads,
-    genomes: getGenomes(state),
-    genomeIds: getActiveGenomeIds(state),
+    collection: viewer.getCollection(state),
+    downloads: viewer.getViewer(state).downloads,
+    genomes: viewer.getGenomes(state),
+    genomeIds: viewer.getActiveGenomeIds(state),
     hasMetadata: hasMetadata(state),
     hasTyping: hasTyping(state),
     tables: getTables(state),
   };
 }
 
+const isCollection = collection => collection.idType === 'collection';
+
 function mergeProps(state, { dispatch }) {
   const { genomes, collection, genomeIds, downloads } = state;
   const { menuOpen, files } = downloads;
+
   return {
     menuOpen,
     counts: getCounts(genomes, genomeIds),
@@ -70,10 +72,9 @@ function mergeProps(state, { dispatch }) {
         map(format => {
           const download = files[format];
           return createDownloadProps({
-            format,
-            download,
-            id: genomeIds,
-            getFileName: () => `${formatCollectionFilename(collection)}`,
+            format, download,
+            id: isCollection(download) ? collection.uuid : genomeIds,
+            getFileName: () => `${formatCollectionFilename(collection, download.filenameSegment)}`,
             getFileContents: download.getFileContents &&
               (() => download.getFileContents(state)),
           }, dispatch);

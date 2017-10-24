@@ -1,4 +1,4 @@
-import { getViewer } from '../../collection-route/selectors';
+import { getViewer } from '../../collection-viewer/selectors';
 
 export const isMenuOpen = state =>
   getViewer(state).downloads.menuOpen;

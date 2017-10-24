@@ -1,4 +1,4 @@
-import { FETCH_COLLECTION } from '../../collection-route/actions';
+import { FETCH_COLLECTION } from '../../collection-viewer/actions';
 import { SET_LABEL_COLUMN } from '../table/actions';
 import { SET_TREE } from '../tree/actions';
 import { onHeaderClick } from './thunks';
@@ -6,13 +6,13 @@ import { onHeaderClick } from './thunks';
 import { getUserDefinedValue } from '../table/utils';
 import { hasMetadata } from './utils';
 
-import { speciesTrees } from '../tree/constants';
+import { simpleTrees } from '../tree/constants';
 import * as table from '../table/constants';
 import { systemDataColumns } from './constants';
+import { tableKeys } from '../constants';
+import { statuses } from '../../collection-viewer/constants';
 
-import Species from '../../species';
-
-const { tableKeys } = table;
+import Organisms from '../../organisms';
 
 const initialState = {
   name: tableKeys.metadata,
@@ -79,8 +79,11 @@ export default function (state = initialState, { type, payload }) {
   if (!state.active) return state;
   switch (type) {
     case FETCH_COLLECTION.SUCCESS: {
-      const { genomes } = payload.result;
-      const { publicMetadataColumnNames = [] } = Species.current;
+      const { genomes, status } = payload.result;
+
+      if (status !== statuses.READY) return state;
+
+      const { publicMetadataColumnNames = [] } = Organisms.current;
 
       if (!hasMetadata(genomes)) {
         return {
@@ -113,7 +116,7 @@ export default function (state = initialState, { type, payload }) {
     }
     case SET_TREE: {
       const columnProps =
-        speciesTrees.has(payload.name) ?
+        simpleTrees.has(payload.name) ?
           state.columnProps :
           state.publicMetadataColumnProps;
 

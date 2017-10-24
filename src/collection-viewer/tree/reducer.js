@@ -1,12 +1,16 @@
 import { combineReducers } from 'redux';
 
 import { FETCH_COLLECTION }
-  from '../../collection-route/actions';
+  from '../../collection-viewer/actions';
+import { RESET_FILTER, ACTIVATE_FILTER } from '../filter/actions';
+import { SEARCH_TERM_ADDED } from '../search/actions';
 import * as ACTIONS from './actions';
 
-import { speciesTrees } from './constants';
+import { simpleTrees } from './constants';
 import { COLLECTION, POPULATION } from '../../app/stateKeys/tree';
-import { statuses } from '../../collection-route/constants';
+import { statuses } from '../../collection-viewer/constants';
+
+import Organisms from '../../organisms';
 
 function setSize(state, step, maxStepFactor) {
   if (step === state.step) return state;
@@ -45,33 +49,36 @@ function updateHistory(tree, { image }) {
   ];
 }
 
-const initialState = {
-  type: 'rectangular',
-  nodeSize: {},
-  labelSize: {},
-  history: [],
-  selectedInternalNode: null,
-};
+function getInitialState() {
+  return {
+    type: Organisms.uiOptions.defaultTree || 'rectangular',
+    nodeSize: {},
+    labelSize: {},
+    history: [],
+  };
+}
 
 function entities(state = {}, { type, payload }) {
   switch (type) {
     case FETCH_COLLECTION.SUCCESS: {
-      const { genomes, _species, subtrees, status } = payload.result;
+      const { genomes, organism, subtrees, status, tree } = payload.result;
 
       if (status !== statuses.READY) return state;
+
+      const initialState = getInitialState();
 
       return {
         ...state,
         [COLLECTION]: {
           name: COLLECTION,
-          newick: payload.result.tree,
-          leafIds: payload.result.tree ? null : genomes.map(_ => _.uuid),
+          newick: tree,
+          leafIds: tree ? null : genomes.map(_ => _.uuid),
           ...initialState,
         },
         [POPULATION]: {
           name: POPULATION,
-          newick: _species.tree,
-          leafIds: _species.references.map(_ => _.uuid),
+          newick: organism.tree,
+          leafIds: organism.references.map(_ => _.uuid),
           ...initialState,
         },
         ...subtrees.reduce((memo, { tree, ...subtree }) => {
@@ -84,9 +91,10 @@ function entities(state = {}, { type, payload }) {
       return {
         ...state,
         [payload.stateKey]: {
+          ...state[payload.stateKey],
           name: payload.stateKey,
           newick: payload.result.tree,
-          ...initialState,
+          ...getInitialState(),
         },
       };
     case ACTIONS.SET_TREE:
@@ -163,14 +171,6 @@ function entities(state = {}, { type, payload }) {
           ...payload.snapshot,
         },
       };
-    case ACTIONS.INTERNAL_NODE_SELECTED:
-      return {
-        ...state,
-        [payload.stateKey]: {
-          ...state[payload.stateKey],
-          selectedInternalNode: payload.nodeId,
-        },
-      };
     default:
       return state;
   }
@@ -200,7 +200,44 @@ function loading(state = false, { type }) {
 function lastSubtree(state = null, { type, payload }) {
   switch (type) {
     case ACTIONS.SET_TREE:
-      return speciesTrees.has(payload.name) ? state : payload.name;
+      return simpleTrees.has(payload.name) ? state : payload.name;
+    default:
+      return state;
+  }
+}
+
+function clearSelected(state) {
+  return {
+    ...state,
+    trees: {
+      ...state.trees,
+      [state.active]: null,
+    },
+  };
+}
+
+function selectedInternalNode(state = { active: COLLECTION, trees: {} }, { type, payload }) {
+  switch (type) {
+    case ACTIONS.SET_TREE:
+      return {
+        ...state,
+        active: payload.name,
+      };
+    case ACTIONS.INTERNAL_NODE_SELECTED:
+      return {
+        ...state,
+        trees: {
+          ...state.trees,
+          [payload.stateKey]: payload.nodeId,
+        },
+      };
+    case ACTIVATE_FILTER:
+    case RESET_FILTER: {
+      if (payload.key !== 'VISIBILITY') return state;
+      return clearSelected(state);
+    }
+    case SEARCH_TERM_ADDED:
+      return clearSelected(state);
     default:
       return state;
   }
@@ -211,4 +248,5 @@ export default combineReducers({
   visible,
   loading,
   lastSubtree,
+  selectedInternalNode,
 });

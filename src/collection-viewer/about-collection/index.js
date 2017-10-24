@@ -1,18 +1,22 @@
+import './styles.css';
+
 import { connect } from 'react-redux';
 
 import AboutCollection from './AboutCollection.react';
 
-import { getCollection } from '../../collection-route/selectors';
+import { getViewer } from '../../collection-viewer/selectors';
+
+import { getCollectionMetadata } from '../../collection-viewer/selectors';
 import { toggleAboutCollection } from './actions';
 
-import Species from '../../species';
+import Organisms from '../../organisms';
 
 function mapStateToProps(state) {
-  const { aboutCollectionOpen } = state.collection.viewer;
+  const { aboutCollectionOpen } = getViewer(state);
   return {
     isOpen: aboutCollectionOpen,
-    metadata: getCollection(state).metadata,
-    species: Species.current.formattedName,
+    metadata: getCollectionMetadata(state),
+    organism: Organisms.current.formattedName,
   };
 }
 

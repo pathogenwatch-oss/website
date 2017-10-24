@@ -1,6 +1,5 @@
 import React from 'react';
 import { AutoSizer, Grid } from 'react-virtualized';
-import classnames from 'classnames';
 
 const GridItem = ({ style, children }) => (
   <div style={style} className="wgsa-grid-item">
@@ -61,9 +60,10 @@ export default React.createClass({
   },
 
   render() {
-    const { template, items } = this.props;
+    const { template, items, headerHeight = 0 } = this.props;
     return (
-      <div className={classnames('wgsa-content-margin-left', this.props.className)}>
+      <div className={this.props.className}>
+        {this.props.header}
         <AutoSizer>
           {({ height, width }) => {
             const columnCount = this.getColumnCount(width);
@@ -74,7 +74,7 @@ export default React.createClass({
                   const item = items[columnIndex + rowIndex * columnCount];
                   return item ?
                     <GridItem key={key} style={style}>
-                      { React.createElement(template, item) }
+                      { React.createElement(template, { item }) }
                     </GridItem> :
                     null;
                 }}
@@ -84,7 +84,7 @@ export default React.createClass({
                 rowCount={Math.ceil(items.length / columnCount)}
                 rowHeight={this.getRowHeight(columnWidth)}
                 width={width}
-                height={height}
+                height={height - headerHeight}
               />
             );
           }}

@@ -2,68 +2,61 @@
 
 import CONFIG from '../app/config';
 
-export const SERVER_ADDRESS =
-  CONFIG.api ? `http://${CONFIG.api.address}` : '';
-
-export const API_ROOT = `${SERVER_ADDRESS}/api`;
+export function getServerPath(path) {
+  return (
+    CONFIG.api ? `${CONFIG.api.address}${path}` : path
+  );
+}
 
 function ajax(config) {
   return new Promise((resolve, reject) => {
-    $.ajax(config).
-      done(data => resolve(data)).
-      fail(error => reject(error));
+    $.ajax(
+      process.env.NODE_ENV === 'production' ?
+        config :
+        { ...config, xhrFields: { withCredentials: true } }
+    )
+    .done(data => resolve(data))
+    .fail(error => reject(error));
   });
 }
 
 export function fetchJson(method, path, data) {
   return ajax({
     type: method,
-    url: `${SERVER_ADDRESS}${path}`,
+    url: getServerPath(path),
     contentType: 'application/json; charset=UTF-8',
-    data: JSON.stringify(data),
+    data: method === 'GET' ? data : JSON.stringify(data),
     dataType: 'json',
   });
 }
 
-export function postJson(path, data, progressFn) {
+export function fetchRaw(method, path, contentType, data, progressFn) {
   return ajax({
-    type: 'POST',
-    url: `${API_ROOT}${path}`,
-    contentType: 'application/json; charset=UTF-8',
-    data: JSON.stringify(data),
+    type: method,
+    url: getServerPath(path),
+    contentType,
+    data,
+    processData: false,
     dataType: 'json',
-    xhr() {
+    xhr: progressFn ? function () {
       const xhr = new window.XMLHttpRequest();
 
-      if (progressFn) {
-        xhr.upload.addEventListener('progress', evt => {
-          if (evt.lengthComputable) {
-            const percentComplete = (evt.loaded / evt.total) * 100;
-            progressFn(percentComplete);
+      let previousPercent = 0;
+
+      xhr.upload.addEventListener('progress', evt => {
+        if (evt.lengthComputable) {
+          const percentComplete = (evt.loaded / evt.total) * 100;
+          const percentRounded =
+            Math.floor(percentComplete / 10) * 10;
+
+          if (percentRounded > previousPercent) {
+            progressFn(percentRounded);
+            previousPercent = percentRounded;
           }
-        }, false);
-      }
+        }
+      }, false);
 
       return xhr;
-    },
+    } : undefined,
   });
-}
-
-export function getCollection(collectionId) {
-  console.log(`[WGSA] Getting collection ${collectionId}`);
-  return fetchJson('GET', `/api/collection/${collectionId}`);
-}
-
-export function requestFile({ speciesId, idType = 'genome', format }, requestBody) {
-  return postJson(
-    `/species/${speciesId}/download/type/${idType}/format/${format}`,
-    requestBody
-  );
-}
-
-export function makeFileRequest(format, id, speciesId) {
-  return () => requestFile(
-    { speciesId, format },
-    { idList: Array.isArray(id) ? id : [ id ] }
-  );
 }

@@ -1,55 +1,42 @@
 import React from 'react';
-import { Link } from 'react-router';
+import { connect } from 'react-redux';
 
-import LoginMenu from 'cgps-commons/LoginMenu';
+import AccountImage from '../account/AccountImage.react';
+
+import { toggleUserDrawer } from './actions';
 
 import config from '../app/config';
 
-export default React.createClass({
+const AccountLink = React.createClass({
 
-  getInitialState() {
-    return {
-      isLoginMenuOpen: false,
-    };
+  propTypes: {
+    openMenu: React.PropTypes.func,
   },
 
   openLoginMenu(e) {
     e.stopPropagation();
     e.preventDefault();
-    this.setState({ isLoginMenuOpen: true });
-  },
-
-  closeLoginMenu() {
-    this.setState({ isLoginMenuOpen: false });
+    this.props.openMenu();
   },
 
   render() {
     return (
-      <div>
-        {
-          config.user ?
-            <Link
-              className="cgps-avatar mdl-navigation__link"
-              title="Go to my account"
-              to="/"
-            >
-              <img src={config.user.photo} className="cgps-avatar__image" />
-            </Link> :
-            <a
-              className="cgps-avatar mdl-navigation__link"
-              title="Sign in to your account"
-              onClick={(e) => this.openLoginMenu(e)}
-              href="/signin"
-            ><i className="material-icons">person</i></a>
-        }
-        <LoginMenu
-          title="Sign in to your WGSA account"
-          menuOpen={this.state.isLoginMenuOpen}
-          closeMenu={this.closeLoginMenu}
-          strategies={config.strategies || []}
-        />
-      </div>
+      <button
+        className="cgps-avatar wgsa-account-link"
+        title={`Main Menu (${config.user ? `Signed in as ${config.user.name}` : 'Not signed in'})`}
+        onClick={(e) => this.openLoginMenu(e)}
+      >
+        <AccountImage />
+      </button>
     );
   },
 
 });
+
+function mapDispatchToProps(dispatch) {
+  return {
+    openMenu: () => dispatch(toggleUserDrawer(true)),
+  };
+}
+
+export default connect(null, mapDispatchToProps)(AccountLink);

@@ -2,9 +2,9 @@ import './styles.css';
 
 import React from 'react';
 import Markdown from 'react-markdown';
-import { Link } from 'react-router/es';
+import { Link } from 'react-router-dom';
 
-import { API_ROOT } from '../utils/Api';
+import Breadcrumb from '../components/Breadcrumb.react';
 
 function rewriteMarkdown(markdown) {
   return markdown.replace(
@@ -12,8 +12,6 @@ function rewriteMarkdown(markdown) {
     (a, b) => `[${b}](/documentation/${b.replace(/ /g, '-')})`
   );
 }
-
-const liveApiRoot = 'https://wgsa.net/api';
 
 const renderers = {
   Link: ({ href, title = '', children }) => {
@@ -23,7 +21,7 @@ const renderers = {
       );
     }
     return (
-      <a href={href.replace(liveApiRoot, API_ROOT)} title={title}>
+      <a href={href} title={title}>
         {children}
       </a>
     );
@@ -31,15 +29,15 @@ const renderers = {
 };
 
 export default ({ page, markdown }) => (
-  <div className="wgsa-wiki-page">
+  <div className="wgsa-wiki-page wgsa-page">
     { page ?
-      <div className="wgsa-wiki-breadcrumb wgsa-content-margin">
-        <Link to="/documentation">Documentation Home</Link>&nbsp;&raquo;&nbsp;{page}
-      </div> :
+      <Breadcrumb>
+        <Link to="/documentation">Documentation Home</Link>
+        {page}
+      </Breadcrumb> :
       null
     }
     <Markdown
-      className="wgsa-content-margin"
       source={rewriteMarkdown(markdown)}
       renderers={renderers}
     />

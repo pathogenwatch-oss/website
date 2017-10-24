@@ -4,16 +4,16 @@ import { connect } from 'react-redux';
 import FixedTable from '../../fixed-table';
 import TableSwitcher from '../table/Switcher.react';
 
-import { getCollection, getViewer } from '../../collection-route/selectors';
+import { getCollection } from '../../collection-viewer/selectors';
 import { getActiveGenomes } from '../selectors';
 import { getVisibleTable } from '../table/selectors';
 import { getFiles } from '../downloads/selectors';
 
-import { onTableClick, onRowClick } from './thunks';
+import { onRowClick } from './thunks';
 
 import { addColumnWidth } from '../table/columnWidth';
 import { addDownloadProps } from '../downloads/utils';
-import { getColumnLabel } from './utils';
+import { getColumnLabel, setFixedGroupMinWidth } from './utils';
 
 const preventDefault = e => e.preventDefault();
 
@@ -116,18 +116,23 @@ function mapStateToColumn(column, state, dispatch) {
 function mergeProps(state, { dispatch }, props) {
   const { data, columns, activeColumns } = state;
 
+  const mappedColumns =
+    columns.map(column => mapStateToColumn(column, state, dispatch));
+
+  setFixedGroupMinWidth(mappedColumns, props.width);
+
   return {
     ...props,
     activeColumns,
-    columns: columns.map(column => mapStateToColumn(column, state, dispatch)),
-    data: data.map(row => addDownloadProps(row, state, dispatch)),
-    onClick: (event) => dispatch(onTableClick(event)),
+    data,
+    columns: mappedColumns,
     onRowClick: row => dispatch(onRowClick(row)),
     getDefaultHeaderContent: columnProps => (
       <DefaultColumnHeader
         column={columnProps}
         onClick={(event, column) => {
           event.stopPropagation();
+          if (column.noAction) return;
           const handleEvent = column.onHeaderClick || state.onHeaderClick;
           dispatch(handleEvent(event, column));
         }}

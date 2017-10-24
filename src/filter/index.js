@@ -1,22 +1,7 @@
-import { updateQueryString, clearQueryString } from '../location';
-import * as actions from './actions';
-
-export function update(stateKey, { queryKey, key }, newValue) {
-  return dispatch => {
-    dispatch(actions.updateFilter(stateKey, key, newValue));
-    if (queryKey) updateQueryString(queryKey, newValue);
-  };
-}
-
-export function clear(stateKey, filters) {
-  return dispatch => {
-    dispatch(actions.clearFilter(stateKey));
-    clearQueryString(filters.map(_ => _.queryKey));
-  };
-}
+import './styles.css';
 
 export { isActive } from './selectors';
-export LocationListener from './LocationListener.react';
 export * as actions from './actions';
 export * as selectors from './selectors';
 export reducer from './reducer';
+export SortBy from './sort-by/SortBy.react';

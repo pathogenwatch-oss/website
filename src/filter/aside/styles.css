@@ -1,0 +1,74 @@
+.wgsa-filter {
+  left: 0;
+  bottom: 0;
+  width: 255px;
+  background: #fff;
+  border-right: 1px solid rgba(0, 0, 0, 0.14);
+  position: relative;
+  overflow: hidden;
+}
+
+.wgsa-has-aside ~ .mdl-layout__content .wgsa-filter {
+  transform: translateX(0);
+}
+
+.wgsa-filter__header {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.14);
+  position: relative;
+  height: 48px;
+  box-sizing: border-box;
+}
+
+.wgsa-filter__search {
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.wgsa-filter__search input {
+  border: 0;
+  height: 100%;
+  width: 100%;
+  padding: 0 16px;
+  outline: none;
+  font-size: 15px;
+}
+
+.wgsa-filter__search i {
+  color: #673c90;
+}
+
+.wgsa-filter__content {
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  overflow-y: auto;
+  right: 0;
+  top: 48px;
+  padding-top: 8px;
+}
+
+.wgsa-filter--active .wgsa-filter__content {
+  bottom: 52px;
+}
+
+.wgsa-filter__section {
+  padding: 16px 24px 0;
+}
+.wgsa-filter__footer {
+  background-color: #fff;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 8px;
+  border-top: 1px solid rgba(0, 0, 0, 0.14);
+  transform: translateY(100%);
+  transition: .28s cubic-bezier(.4,0,.2,1);
+  transition-property: transform;
+}
+
+.wgsa-filter--active .wgsa-filter__footer {
+  transform: translateY(0);
+}

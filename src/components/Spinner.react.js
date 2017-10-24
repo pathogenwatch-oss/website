@@ -1,4 +1,5 @@
 import React from 'react';
+import classnames from 'classnames';
 
 export default React.createClass({
 
@@ -8,7 +9,13 @@ export default React.createClass({
 
   render() {
     return (
-      <div ref="spinner" className="mdl-spinner mdl-js-spinner is-active"></div>
+      <div
+        ref="spinner"
+        className={classnames(
+          'mdl-spinner mdl-js-spinner is-active',
+          { 'mdl-spinner--single-colour': this.props.singleColour }
+        )}
+      ></div>
     );
   },
 

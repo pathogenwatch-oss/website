@@ -1,26 +1,25 @@
-import { tableKeys } from '../table/constants';
-import Species from '../../species';
+import { tableKeys } from '../constants';
 
-// TODO: Might be good if `date` and `userDefined` were null
+import Organisms from '../../organisms';
+
 export function hasMetadata(genomes) {
   return (
-    genomes.some(({ date = {}, pmid, userDefined = {} }) =>
-      !!(date.year || pmid || Object.keys(userDefined).length)
-    )
+    genomes.some(({ date, pmid, userDefined }) => !!(
+      (date && date.year) ||
+      pmid ||
+      (userDefined && Object.keys(userDefined).length)
+    ))
   );
 }
 
-export function getTypingColumns(uiOptions) {
-  return [
-    uiOptions.noPopulation ? null : '__wgsa_reference',
-    ...(uiOptions.noMLST ? [] : [ '__mlst', '__mlst_profile' ]),
-    ...(uiOptions.ngMast ? [ '__ng-mast', '__por', '__tbpb' ] : []),
-    ...(uiOptions.genotyphi ? [ '__genotyphi_type', '__genotyphi_snps' ] : []),
-  ].filter(_ => _);
+export function hasTyping({ noPopulation, noMLST, ngMast, genotyphi }) {
+  if (noPopulation && noMLST && !ngMast && !genotyphi) return false;
+  return true;
 }
 
-export function getInitialTable({ genomes }) {
+export function getInitialTable({ status, genomes }) {
+  if (status !== 'READY') return null;
   if (hasMetadata(genomes)) return tableKeys.metadata;
-  if (getTypingColumns(Species.uiOptions).length) return tableKeys.typing;
+  if (hasTyping(Organisms.uiOptions)) return tableKeys.typing;
   return tableKeys.stats;
 }

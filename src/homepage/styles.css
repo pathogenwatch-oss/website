@@ -1,0 +1,83 @@
+@import "showcase.css";
+@import "how-it-works.css";
+@import "organisms.css";
+@import "features.css";
+@import "footer.css";
+
+.homepage-section-link {
+  font-size: 20px;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.homepage-section-link i {
+  margin-right: 8px;
+  font-size: 32px;
+}
+
+.wgsa-homepage > section:not(.showcase) {
+  padding: 40px;
+}
+
+.wgsa-homepage section.alt {
+  background: #efefef;
+}
+
+.wgsa-homepage__content {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.wgsa-homepage h2 {
+  color: #673c90;
+  text-align: center;
+}
+
+.wgsa-homepage > section footer {
+  display: flex;
+  justify-content: center;
+}
+
+.wgsa-homepage .mdl-button {
+  text-decoration: none !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: auto;
+}
+
+.wgsa-homepage .mdl-button > i {
+  margin-top: 8px;
+  font-size: 32px;
+}
+
+
+/* Jumbotron */
+
+.jumbotron {
+  padding: 32px 32px 0 !important;
+  margin: 0 auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  background: linear-gradient(to top, rgba(255,255,255,0) 0%, rgb(255,255,255) 75%);
+}
+
+.jumbotron img {
+  width: 400px;
+  margin: 0 auto;
+  display: block;
+  transform: translateX(-12.5%);
+}
+
+.jumbotron h1 {
+  color: #673c90;
+  font-size: 24px;
+  text-align: center;
+  margin-bottom: 0;
+}

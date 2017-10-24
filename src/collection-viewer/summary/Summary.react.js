@@ -25,8 +25,25 @@ const Summary = ({ summary, isExpanded, onClick, onSliceClick }) => (
       'wgsa-collection-viewer-summary mdl-shadow--2dp',
       { 'wgsa-collection-viewer-summary--expanded': isExpanded }
     )}
-    onClick={() => onClick(!isExpanded)}
+    onClick={e => {
+      e.stopPropagation();
+      if (!isExpanded) {
+        onClick(true);
+      }
+    }}
   >
+    { isExpanded &&
+      <button
+        className="mdl-button mdl-button--icon"
+        onClick={e => {
+          e.stopPropagation();
+          onClick(false);
+        }}
+        title="Close Summary"
+      >
+        <i className="material-icons">clear</i>
+      </button>
+    }
     <PieChart
       className="wgsa-summary-chart"
       slices={getGenomeSummarySlices(summary)}

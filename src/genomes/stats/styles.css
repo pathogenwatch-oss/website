@@ -1,0 +1,93 @@
+.wgsa-genome-stats {
+  flex-grow: 1;
+  overflow-x: hidden;
+  overflow-y: auto;
+  margin: 16px 32px 0;
+}
+
+.wgsa-genome-stats nav {
+  justify-content: center;
+  margin: 0 0 16px;
+}
+
+.wgsa-hub-stats-group {
+  display: flex;
+  max-width: 1024px;
+  margin: 0 auto;
+  justify-content: space-around;
+}
+
+.wgsa-hub-stats-section {
+  box-sizing: border-box;
+  margin: 0;
+  width: 100%;
+  padding: 0 8px;
+  text-align: center;
+}
+
+.wgsa-hub-stats-section--small {
+  float: left;
+  width: 50%;
+  padding-left: 0;
+  padding-right: 24px;
+}
+
+.wgsa-hub-stats-section--large {
+  float: left;
+  width: 100%;
+  padding-left: 0;
+  padding-right: 24px;
+}
+
+.wgsa-hub-stats-heading {
+  font-family: "Roboto Condensed", "Helvetica", "Arial", sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0 0 16px;
+  padding-top: 6px;
+  color: #673c90;
+  font-weight: 400;
+  border-top: 1px solid #673c90;
+  text-align: left;
+}
+
+.wgsa-hub-stats-heading > button {
+  background: none;
+  border: none;
+  color: rgba(0, 0, 0, 0.54);
+  font-family: inherit;
+  font-size: 16px;
+  line-height: inherit;
+  margin-right: 16px;
+  outline: none;
+  padding: 0;
+}
+
+.wgsa-hub-stats-heading > button:hover,
+.wgsa-hub-stats-heading > button:focus,
+.wgsa-hub-stats-heading > button:active,
+.wgsa-hub-stats-heading > button.active {
+  color: #673c90;
+}
+
+.wgsa-hub-stats-value {
+  color: rgba(0, 0, 0, 0.87);
+  margin: 0;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.wgsa-hub-stats-value--large {
+  font-size: 34px;
+  font-weight: 300;
+  color: rgba(0, 0, 0, 0.54);
+}
+
+.wgsa-hub-stats-value--large:hover {
+  text-decoration: none;
+}
+
+.wgsa-stats-chart {
+  margin-bottom: 16px;
+}

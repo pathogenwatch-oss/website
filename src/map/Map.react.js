@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 import LeafletMap from '../cgps-commons/LeafletMap.react';
 
-import { getBounds, getLassoPath } from './selectors';
+import { getBounds } from './selectors';
 
 import CONFIG from '../app/config';
 
@@ -23,10 +23,12 @@ const WGSAMap = props => (
     center={props.bounds.center}
     className={props.className}
     cluster={props.cluster}
+    clusterOptions={props.clusterOptions}
     highlightedColour={CGPS.COLOURS.PURPLE}
     buttonClassname={buttonClassname}
     lassoPath={props.lassoPath}
     markers={props.markers}
+    markerIds={props.markerIds}
     markerComponent={props.markerComponent}
     markerSize={props.markerSize}
     mapboxKey={CONFIG.mapboxKey}
@@ -45,7 +47,7 @@ const WGSAMap = props => (
 function mapStateToProps(state, props) {
   return {
     bounds: getBounds(state, props),
-    lassoPath: props.lassoPath || getLassoPath(state, props),
+    lassoPath: props.lassoPath,
   };
 }
 

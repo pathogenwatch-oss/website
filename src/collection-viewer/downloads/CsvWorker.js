@@ -1,72 +1,86 @@
 import registerPromiseWorker from 'promise-worker/register';
 import Papa from 'papaparse';
 
-import { formatColumnKeyAsLabel, getUserDefinedValue } from '../table/utils';
+import { getUserDefinedValue } from '../table/utils';
 
 import { systemDataColumns } from '../data-tables/constants';
+import { createCode } from '../../mlst/utils';
 
 import { isResistant, hasElement } from '../amr-utils';
 
-const nameColumnData = {
+const nameColumn = {
   columnKey: '__name',
-  label: 'NAME',
   valueGetter({ name }) {
     return name;
   },
 };
 
+const latitudeColumn = {
+  columnKey: '__latitude',
+  valueGetter({ position }) {
+    return position && position.latitude ? position.latitude : '';
+  },
+};
+
+const longitudeColumn = {
+  columnKey: '__longitude',
+  valueGetter({ position }) {
+    return position && position.longitude ? position.longitude : '';
+  },
+};
+
+const mlstColumn = {
+  columnKey: '__mlst',
+  valueGetter({ analysis }) {
+    if (!analysis.mlst) return '';
+    return analysis.mlst.st;
+  },
+};
+
+const mlstProfileColumn = {
+  columnKey: '__mlst_profile',
+  valueGetter({ analysis }) {
+    if (!analysis.mlst) return null;
+    const { code, alleles } = analysis.mlst;
+    if (code) return code;
+    return createCode(alleles);
+  },
+};
+
 const definedColumns = {
-  [nameColumnData.columnKey]: nameColumnData,
+  [nameColumn.columnKey]: nameColumn,
+  [latitudeColumn.columnKey]: latitudeColumn,
+  [longitudeColumn.columnKey]: longitudeColumn,
   ...systemDataColumns,
+  [mlstColumn.columnKey]: mlstColumn,
+  [mlstProfileColumn.columnKey]: mlstProfileColumn,
 };
 
-const csvOptions = {
-  metadata: {
-    valueGetter: getUserDefinedValue,
-    formatLabel: true,
-  },
-  typing: {
-    valueGetter: getUserDefinedValue,
-    formatLabel: true,
-  },
-  stats: {
-    valueGetter: getUserDefinedValue,
-    formatLabel: true,
-  },
-  antibiotics: {
-    valueGetter: (antibiotic, { analysis: { paarsnp } }) =>
+const valueGettersByTable = {
+  metadata: getUserDefinedValue,
+  typing: getUserDefinedValue,
+  stats: getUserDefinedValue,
+  antibiotics: (antibiotic, { analysis: { paarsnp } }) =>
       (isResistant(paarsnp, antibiotic) ? 1 : 0),
-  },
-  snps: {
-    valueGetter: (snp, genome) => (hasElement(genome, 'snp', snp) ? 1 : 0),
-  },
-  genes: {
-    valueGetter: (gene, genome) => (hasElement(genome, 'paar', gene) ? 1 : 0),
-  },
+  snps: (snp, genome) => (hasElement(genome, 'snp', snp) ? 1 : 0),
+  genes: (gene, genome) => (hasElement(genome, 'paar', gene) ? 1 : 0),
 };
 
-function mapToGetters(columnKeys, table) {
-  return columnKeys.map(key => {
+function mapToGetters(columns, table) {
+  return columns.map(({ key }) => {
     if (key in definedColumns) {
       return definedColumns[key].valueGetter;
     }
-    const { valueGetter } = csvOptions[table];
+    const valueGetter = valueGettersByTable[table];
     return row => valueGetter(key, row);
   });
 }
 
-function mapToLabel(key, table) {
-  const { formatLabel } = csvOptions[table];
-  if (formatLabel) return formatColumnKeyAsLabel(key);
-  return key in definedColumns ? (definedColumns[key].label || key) : key;
-}
-
 registerPromiseWorker((message) => {
-  const { table, columnKeys, rows } = message;
-  const valueGetters = mapToGetters(columnKeys, table);
-
+  const { table, columns, rows } = message;
+  const valueGetters = mapToGetters(columns, table);
   return Papa.unparse({
-    fields: columnKeys.map(key => mapToLabel(key, table)),
+    fields: columns.map(_ => _.label),
     data: rows.map(row => valueGetters.map(getter => getter(row))),
   });
 });

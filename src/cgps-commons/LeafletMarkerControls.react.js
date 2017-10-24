@@ -43,7 +43,7 @@ export default React.createClass({
     const { isActive } = this.state;
 
     return (
-      <div>
+      <div onClick={e => e.stopPropagation()}>
         <button
           key="button"
           className={

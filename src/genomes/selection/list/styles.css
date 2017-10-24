@@ -1,0 +1,18 @@
+.wgsa-genome-selection .mdl-chip__text {
+  border: none;
+  outline: none;
+  background: none;
+}
+
+.wgsa-genome-selection h3 {
+  margin: 0 0 16px;
+  font-size: 16px;
+  line-height: 1.2;
+}
+
+.wgsa-clear-selection {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 0 8px;
+}

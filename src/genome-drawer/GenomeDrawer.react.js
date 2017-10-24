@@ -1,46 +1,16 @@
 import React from 'react';
-// import classnames from 'classnames';
 
-import Drawer from '../drawer';
-import RemoveButton from '../genome-card/RemoveButton.react';
-import N50Chart from './N50Chart.react';
+import Modal from '../components/modal';
+import Fade from '../components/fade';
+import RemoveButton from '../genomes/card/RemoveButton.react';
+import AddToSelection from '../genomes/selection/AddToSelection.react';
 
-const GenomeStats = ({ metrics }) => (
-  <dl className="wgsa-hub-stats-view">
-    <span className="wgsa-hub-stats-section wgsa-hub-stats-section--small">
-      <dt className="wgsa-hub-stats-heading">Genome Length</dt>
-      <dd className="wgsa-hub-stats-value">{metrics.totalNumberOfNucleotidesInDnaStrings}</dd>
-    </span>
-    <span className="wgsa-hub-stats-section wgsa-hub-stats-section--small">
-      <dt className="wgsa-hub-stats-heading">No. Contigs</dt>
-      <dd className="wgsa-hub-stats-value">{metrics.totalNumberOfContigs}</dd>
-    </span>
-    <span className="wgsa-hub-stats-section wgsa-hub-stats-section--small">
-      <dt className="wgsa-hub-stats-heading">Smallest Contig</dt>
-      <dd className="wgsa-hub-stats-value">{metrics.smallestNumberOfNucleotidesInDnaStrings}</dd>
-    </span>
-    <span className="wgsa-hub-stats-section wgsa-hub-stats-section--small">
-      <dt className="wgsa-hub-stats-heading">Largest Contig</dt>
-      <dd className="wgsa-hub-stats-value">{metrics.biggestNumberOfNucleotidesInDnaStrings}</dd>
-    </span>
-    <span className="wgsa-hub-stats-section wgsa-hub-stats-section--small">
-      <dt className="wgsa-hub-stats-heading">Average Contig Length</dt>
-      <dd className="wgsa-hub-stats-value">{metrics.averageNumberOfNucleotidesInDnaStrings}</dd>
-    </span>
-    <span className="wgsa-hub-stats-section wgsa-hub-stats-section--small">
-      <dt className="wgsa-hub-stats-heading">N50</dt>
-      <dd className="wgsa-hub-stats-value">{metrics.contigN50}</dd>
-    </span>
-    <span className="wgsa-hub-stats-section wgsa-hub-stats-section--small">
-      <dt className="wgsa-hub-stats-heading">Non-ATCG</dt>
-      <dd className="wgsa-hub-stats-value">{metrics.totalNumberOfNsInDnaStrings}</dd>
-    </span>
-    <span className="wgsa-hub-stats-section wgsa-hub-stats-section--small">
-      <dt className="wgsa-hub-stats-heading">GC Content</dt>
-      <dd className="wgsa-hub-stats-value">{metrics.gcContent}%</dd>
-    </span>
-  </dl>
-);
+import DownloadLink from '../downloads/GenomeFileLink.react';
+import Spinner from '../components/Spinner.react';
+
+import Overview from './Overview.react';
+import Metadata from './Metadata.react';
+import getAnalysisTabs from './analysis';
 
 const GenomeDrawerContent = React.createClass({
 
@@ -50,31 +20,75 @@ const GenomeDrawerContent = React.createClass({
 
   render() {
     const { genome } = this.props;
+    const { analysis = {}, pending = [], userDefined = null } = genome;
+    const analysisTabs = getAnalysisTabs(analysis);
+    const hasMetadata = userDefined && Object.keys(userDefined).length > 0;
     return (
-      <div className="wgsa-genome-drawer-content">
-        <div className="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
-          <div className="mdl-tabs__tab-bar">
-            <a href="#metrics-panel" className="mdl-tabs__tab is-active">Metrics</a>
-            <a href="#n50-panel" className="mdl-tabs__tab">N50</a>
-            <div className="wgsa-tab-actions">
-              <RemoveButton name={genome.name} />
-            </div>
-          </div>
-          <div className="mdl-tabs__panel is-active" id="metrics-panel">
-            { genome && <GenomeStats metrics={genome.metrics} /> }
-          </div>
-          <div className="mdl-tabs__panel" id="n50-panel">
-            { genome && <N50Chart metrics={genome.metrics} /> }
+      <div className="wgsa-genome-drawer-content mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+        <div className="mdl-tabs__tab-bar">
+          <a href="#overview-panel" className="mdl-tabs__tab is-active">Overview</a>
+          { hasMetadata && <a href="#metadata-panel" className="mdl-tabs__tab">Metadata</a>}
+          {
+            analysisTabs.map(({ key }) => <a key={key} href={`#${key.toLowerCase()}-panel`} className="mdl-tabs__tab">{key}</a>)
+          }
+          <div className="wgsa-tab-actions">
+            { pending.length > 0 && <span className="wgsa-tab-actions__label">+{pending.length} pending</span>}
           </div>
         </div>
+        <div className="mdl-tabs__panel is-active" id="overview-panel">
+          <Overview genome={genome} />
+        </div>
+        { hasMetadata &&
+          <div className="mdl-tabs__panel" id="metadata-panel">
+            <Metadata genome={genome} />
+          </div> }
+        {
+          analysisTabs.map(({ key, component }) =>
+            <div
+              key={key}
+              id={`${key.toLowerCase()}-panel`}
+              className="mdl-tabs__panel"
+            >{component}</div>)
+        }
       </div>
     );
   },
 
 });
 
-export default ({ genome, onClose, ...props }) => (
-  <Drawer {...props} isOpen onClose={onClose} animationKey={genome && genome.name}>
-    <GenomeDrawerContent genome={genome} />
-  </Drawer>
-);
+export default ({ name, genome, loading, close }) => {
+  const isOpen = !!loading || !!genome;
+  return (
+    <Fade>
+      { isOpen &&
+        <Modal
+          title={
+            <span className="wgsa-genome-drawer-title">
+              { genome &&
+                <AddToSelection
+                  genome={genome}
+                  className="mdl-button mdl-button--icon"
+                /> }
+              {name}
+            </span>
+          }
+          modal
+          isOpen={isOpen}
+          onClose={close}
+          animationKey="genome-drawer"
+          className="wgsa-genome-drawer"
+          actions={genome ? [
+            <DownloadLink key="download" id={genome.id} name={genome.name} />,
+            <RemoveButton key="remove" genome={genome} />,
+          ] : []}
+        >
+          { loading ?
+            <div className="wgsa-drawer__content wgsa-drawer-loader">
+              <Spinner />
+            </div> :
+            <GenomeDrawerContent genome={genome} />
+          }
+        </Modal> }
+    </Fade>
+  );
+};

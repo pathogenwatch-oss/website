@@ -1,0 +1,27 @@
+.wgsa-hub-big-message,
+.wgsa-big-message {
+  font-size: 1.75rem;
+  line-height: 1.2;
+  color: #a386bd;
+  font-weight: 400;
+  margin-bottom: 0;
+}
+
+.wgsa-hub-big-message {
+  background: #fff;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 64px;
+}
+
+.wgsa-big-message {
+  background: rgba(255, 255, 255, 0.87);
+  padding: 16px;
+  border-radius: 4px;
+}

@@ -1,10 +1,9 @@
-import { FASTA_FILE_EXTENSIONS } from '../hub/utils';
-
 export const CGPS = {
   COLOURS: {
     GREEN_LIGHT: '#d0e9dc', // 149° 36% 86%
     GREEN_MID: '#87c7a6', // 149° 36% 65%
     GREEN: '#48996F', // 149° 36% 44%
+    TURQUOISE: '#3c7383',
     PURPLE_LIGHT: '#a386bd', // 272° 29% 63%
     PURPLE_WARM: '#AC65A6', // 305° 30%, 54%
     PURPLE: '#673c90', // 271° 41% 40%
@@ -13,6 +12,10 @@ export const CGPS = {
     GREY_DARK: '#ababab', // 75% of GREY
   },
 };
+
+const GENOME_FILE_EXTENSIONS = [
+  '.fa', '.fas', '.fna', '.ffn', '.faa', '.frn', '.fasta', '.genome', '.contig', '.dna',
+];
 
 export const DEFAULT = {
   SHAPE: 'circle',
@@ -33,5 +36,12 @@ export const DEFAULT = {
       LONGITUDE: 5.85082183,
     },
   },
-  SUPPORTED_FILE_EXTENSIONS: [ '.csv' ].concat(FASTA_FILE_EXTENSIONS).join(','),
+  GENOME_FILE_EXTENSIONS,
+  SUPPORTED_FILE_EXTENSIONS: [ '.csv' ].concat(GENOME_FILE_EXTENSIONS),
+};
+
+export const statuses = {
+  LOADING: 0,
+  ERROR: 1,
+  SUCCESS: 2,
 };

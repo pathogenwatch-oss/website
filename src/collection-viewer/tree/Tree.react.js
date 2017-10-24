@@ -16,6 +16,12 @@ import { DEFAULT, CGPS } from '../../app/constants';
 Phylocanvas.plugin(contextMenuPlugin);
 
 Phylocanvas.plugin(decorate => {
+  decorate(Tree, 'nodesUpdated', function (delegate, args) {
+    const [ , flag, append ] = args;
+    if (flag === this.clickFlag && typeof append === 'undefined') return;
+    delegate.apply(this, args);
+  });
+
   decorate(Tree, 'clicked', function (delegate, args) {
     const [ event ] = args;
     const node = this.getNodeAtMousePosition(event);
@@ -26,12 +32,17 @@ Phylocanvas.plugin(decorate => {
       return;
     }
 
-    delegate.apply(this, args);
-  });
+    const dragging = this.dragging;
 
-  decorate(Tree, 'cleanup', function (delegate) {
-    this.removeListener('click', this._onInternalNodeSelected);
-    delegate.call(this);
+    delegate.apply(this, args);
+
+    if (dragging) return;
+
+    this.nodesUpdated(
+      this.getNodeIdsWithFlag(this.clickFlag),
+      this.clickFlag,
+      event.metaKey || event.ctrlKey
+    );
   });
 });
 
@@ -70,8 +81,6 @@ export default React.createClass({
       fillCanvas: true,
     });
 
-    phylocanvas.setTreeType('rectangular');
-
     phylocanvas.padding = 64;
     phylocanvas.showLabels = true;
     phylocanvas.hoverLabel = true;
@@ -91,9 +100,9 @@ export default React.createClass({
     phylocanvas.on('updated', event => this.props.onUpdated(event, phylocanvas));
     phylocanvas.on('typechanged', () => this.props.onTypeChanged(phylocanvas));
     phylocanvas._onInternalNodeSelected = event => {
+      if (event.metaKey || event.ctrlKey) return;
       const node = phylocanvas.getNodeAtMousePosition(event);
       if (node && !node.leaf) this.props.onInternalNodeSelected(node);
-      else this.props.onInternalNodeSelected();
     };
     phylocanvas.on('click', phylocanvas._onInternalNodeSelected);
     phylocanvas.on('error', error => console.error(error));

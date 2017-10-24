@@ -1,23 +1,17 @@
 import React from 'react';
 
-import DownloadButton from '../downloads/DownloadButton.react';
-import { FastaFileLink, FastaArchiveButton } from '../fasta-download';
+import GenomeFileLink from '../../downloads/GenomeFileLink.react';
+import GenomeArchiveLink from './GenomeArchiveLink.react';
+import AnnotationFileLink from './AnnotationFileLink.react';
+import AnnotationArchiveLink from './AnnotationArchiveLink.react';
 
 import { getArchiveDownloadProps } from '../downloads/utils';
 
 import { defaultWidthGetter } from './columnWidth';
 
+import { tableKeys } from '../constants';
 import { CGPS } from '../../app/constants';
-import Species from '../../species';
-
-export const tableKeys = {
-  metadata: 'metadata',
-  typing: 'typing',
-  stats: 'stats',
-  antibiotics: 'antibiotics',
-  snps: 'snps',
-  genes: 'genes',
-};
+import Organisms from '../../organisms';
 
 export const dataTables = new Set([
   tableKeys.metadata,
@@ -33,6 +27,7 @@ export const amrTables = new Set([
 
 export const leftSpacerColumn = {
   columnKey: '__spacer_l',
+  system: true,
   getHeaderContent() {},
   fixed: true,
   fixedWidth: 1,
@@ -42,6 +37,7 @@ export const leftSpacerColumn = {
 
 export const rightSpacerColumn = {
   columnKey: '__spacer_r',
+  system: true,
   getHeaderContent() {},
   fixedWidth: 24,
   flexGrow: 1,
@@ -53,39 +49,30 @@ export const nameColumnData = {
   valueGetter({ name }) {
     return name;
   },
-  minWidth: 216,
 };
 
 export const downloadColumnProps = {
   columnKey: '__downloads',
+  system: true,
   fixed: true,
   headerClasses: 'wgsa-table-cell--skinny',
   getHeaderContent({ archiveDownloads }) {
+    const { ids, filenames } = archiveDownloads;
     return (
       <span className="wgsa-table-downloads" onClick={(e) => e.stopPropagation()}>
-        <FastaArchiveButton />
-        <DownloadButton
-          {...archiveDownloads.wgsa_gff}
-          isArchive
-          color={CGPS.COLOURS.GREEN}
-          iconOnly
-        />
+        <GenomeArchiveLink ids={ids} filename={filenames.genome} />
+        <AnnotationArchiveLink ids={ids} filename={filenames.annotation} />
       </span>
     );
   },
   cellClasses: 'wgsa-table-cell--skinny',
   fixedWidth: 68,
   flexGrow: 0,
-  getCellContents(_, { __downloads, id, name }) {
+  getCellContents(_, { id, _id, name }) {
     return (
       <span className="wgsa-table-downloads" onClick={(e) => e.stopPropagation()}>
-        <FastaFileLink id={id} name={name} />
-        <DownloadButton
-          { ...__downloads.wgsa_gff }
-          label=".gff"
-          color={CGPS.COLOURS.GREEN}
-          iconOnly
-        />
+        <GenomeFileLink id={id || _id} name={name} type="collection" />
+        <AnnotationFileLink id={id || _id} name={name} />
       </span>
     );
   },
@@ -136,7 +123,7 @@ export const nameColumnProps = {
         <div onClick={(e) => e.stopPropagation()}>
           { data.__isPublic && data.collectionId ?
             <a className="mdl-button mdl-button--icon"
-              href={`/${Species.nickname}/collection/${data.collectionId}`}
+              href={`/${Organisms.nickname}/collection/${data.collectionId}`}
               title="View Original Collection"
               target="_blank" rel="noopener"
             >

@@ -70,7 +70,7 @@ function renderPaths({ slices, onSliceClick }) {
         key={index}
         data-count={value}
         onClick={(e) => {
-          onSliceClick(slice, e);
+          if (onSliceClick) onSliceClick(slice, e);
         }}
       />
     );

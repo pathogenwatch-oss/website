@@ -2,12 +2,16 @@ import { DEFAULT, CGPS } from '../app/constants';
 
 const stateColours = {
   RESISTANT: DEFAULT.DANGER_COLOUR,
+  INDUCIBLE: '#E68D44',
   INTERMEDIATE: DEFAULT.WARNING_COLOUR,
 };
 export const nonResistantColour = '#fff';
 const stateColourMap = Object.keys(stateColours).reduce(
   (map, key) => map.set(stateColours[key], key),
-  new Map().set(nonResistantColour, 'UNKNOWN')
+  new Map([
+    [ nonResistantColour, 'UNKNOWN' ],
+    [ nonResistantColour, 'NOT_FOUND' ],
+  ])
 );
 export const getColourState = colour => stateColourMap.get(colour);
 
@@ -17,8 +21,8 @@ export function getEffectColour(effect) {
 
 export function isResistant({ antibiotics }, antibiotic) {
   if (!(antibiotic in antibiotics)) return false;
-
-  return antibiotics[antibiotic].state !== 'UNKNOWN';
+  const { state } = antibiotics[antibiotic];
+  return state in stateColours;
 }
 
 export function hasElement(genome, type, element) {
@@ -41,7 +45,7 @@ export function getColour(antibiotic, genome) {
   }
 
   if (isResistant(paarsnp, antibiotic)) {
-    return stateColours[paarsnp.antibiotics[antibiotic].state];
+    return getEffectColour(paarsnp.antibiotics[antibiotic].state);
   }
   return nonResistantColour;
 }
@@ -82,6 +86,6 @@ export function createColourGetter(table, columns) {
     const colours = getColours(columns, genome);
     return colours.size === 1 ?
       Array.from(colours)[0] :
-      getMixedStateColour(table);
+      getMixedStateColour(table, colours);
   };
 }

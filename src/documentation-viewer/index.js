@@ -1,8 +1,7 @@
 import React from 'react';
+import { Route } from 'react-router-dom';
 
 import NotFound from '../components/NotFound.react';
-
-import { DefaultContent } from '../header/DefaultContent.react';
 
 import CONFIG from '../app/config';
 
@@ -14,23 +13,48 @@ function getWikiPageMarkdown(page = 'Home') {
   });
 }
 
-export default {
-  path: 'documentation(/:page)',
-  getComponent({ params }, callback) {
-    Promise.all([
-      getWikiPageMarkdown(params.page),
-      System.import('./Markdown.react'),
-    ]).
-    then(
-      ([ markdown, module ]) => {
-        const Markdown = module.default;
-        callback(null, () => <Markdown page={params.page} markdown={markdown} />);
-      }
-    ).
-    catch(() => callback(null, () => <NotFound />));
+const DocumentationViewerRoute = React.createClass({
+
+  getInitialState() {
+    return {
+      page: 'Home',
+      markdown: null,
+      error: false,
+    };
   },
-  header: <DefaultContent asideDisabled />,
-  onEnter() {
+
+  componentWillMount() {
     document.title = 'WGSA | Documentation';
+    this.fetchPage(this.props);
   },
-};
+
+  componentWillReceiveProps(nextProps) {
+    this.fetchPage(nextProps);
+  },
+
+  fetchPage({ match }) {
+    const { page } = match.params;
+    getWikiPageMarkdown(page)
+      .then(markdown => this.setState({ page, markdown, error: false }))
+      .catch(() => this.setState({ error: true }));
+  },
+
+  render() {
+    const { page, markdown, error } = this.state;
+
+    if (markdown) {
+      return <Markdown page={page} markdown={markdown} />;
+    }
+
+    if (error) {
+      return <NotFound />;
+    }
+
+    return null;
+  },
+
+});
+
+export default (
+  <Route path="/documentation/:page?" component={DocumentationViewerRoute} />
+);

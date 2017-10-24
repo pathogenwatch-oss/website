@@ -1,0 +1,209 @@
+.wgsa-genome-list-view {
+  margin-left: 32px;
+  flex-grow: 1;
+}
+
+.wgsa-genome-list-view .wgsa-grid-item {
+  padding-bottom: 0;
+}
+
+.wgsa-genome-list-item {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding-top: 0;
+  padding-bottom: 0;
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.wgsa-grid-item:first-child > .wgsa-genome-list-item {
+  border-top: none;
+}
+
+.wgsa-genome-list-item--selectable:hover,
+.wgsa-genome-list-item--selectable:focus {
+  background: rgb(238, 238, 238);
+  cursor: pointer;
+  text-decoration: none !important;
+}
+
+.wgsa-genome-list-item > :not(:last-child) {
+  position: relative;
+}
+
+.wgsa-genome-list-cell {
+  padding: 0 4px;
+  box-sizing: border-box;
+  width: 15%;
+}
+
+.wgsa-genome-list-cell:nth-child(1) {
+  width: 25%;
+  height: calc(100% - 2px);
+}
+
+.wgsa-genome-list-cell:nth-child(2) {
+  width: 30%;
+}
+
+.wgsa-genome-list-cell:nth-child(3) {
+  width: 7.5%;
+}
+
+.wgsa-genome-list-cell:nth-child(4) {
+  width: 17.5%;
+}
+
+.wgsa-genome-list-cell:nth-child(5),
+.wgsa-genome-list-cell:nth-child(6) {
+  width: 10%;
+}
+
+.wgsa-genome-list-cell > i {
+  font-size: 16px;
+  padding-right: 4px;
+  vertical-align: top;
+  line-height: 20px;
+}
+
+.wgsa-genome-list-cell button {
+  padding: 0;
+  height: 100%;
+}
+
+@media (max-width: 1024px) {
+  .wgsa-genome-list-cell:nth-child(1) {
+    width: 40%;
+  }
+  .wgsa-genome-list-cell:nth-child(2) {
+    width: 45%;
+  }
+  .wgsa-genome-list-cell:nth-child(3) {
+    width: 15%;
+  }
+  .wgsa-genome-list-cell:nth-child(4),
+  .wgsa-genome-list-cell:nth-child(5),
+  .wgsa-genome-list-cell:nth-child(6) {
+    display: none;
+  }
+}
+
+@media (max-width: 1279px) {
+  .has-filter .wgsa-genome-list-cell:nth-child(1) {
+    width: 40%;
+  }
+  .has-filter .wgsa-genome-list-cell:nth-child(2) {
+    width: 45%;
+  }
+  .has-filter .wgsa-genome-list-cell:nth-child(3) {
+    width: 15%;
+  }
+  .has-filter .wgsa-genome-list-cell:nth-child(4),
+  .has-filter .wgsa-genome-list-cell:nth-child(5),
+  .has-filter .wgsa-genome-list-cell:nth-child(6) {
+    display: none;
+  }
+}
+
+.wgsa-genome-list-item--selectable:hover *::after,
+.wgsa-genome-list-item--selectable:focus *::after {
+  background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgb(238,238,238) 75%);
+}
+
+.wgsa-genome-list-item .wgsa-card-content {
+  display: flex;
+  justify-content: center;
+  width: calc(50% - 40px);
+  background: none;
+  padding: 0;
+}
+
+.wgsa-list-header-container {
+  display: flex;
+  width: 100%;
+}
+
+.wgsa-genome-list-header {
+  font-weight: 500;
+  padding-bottom: 4px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.28);
+  max-height: 20px;
+  margin-right: 32px;
+}
+
+.wgsa-list-header-container > :first-child {
+  flex-grow: 1;
+}
+
+.wgsa-genome-list-header button,
+.wgsa-list-header-cell {
+  align-items: center;
+  border: none;
+  background: none;
+  color: inherit;
+  display: flex;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: 500;
+  outline: none;
+  line-height: 20px;
+}
+
+.wgsa-genome-list-header .active {
+  color: #673c90;
+}
+
+.wgsa-genome-list-header :first-child {
+  display: flex;
+}
+
+.wgsa-genome-list-header i {
+  height: 20px;
+  line-height: 20px;
+}
+
+.wgsa-genome-list-placeholder {
+  border-top: 1px solid #ccc;
+  display: flex;
+  align-items: center;
+}
+
+.wgsa-genome-list-placeholder span {
+  display: inline-block;
+  height: 1em;
+  background-color: #DDD;
+  margin-left: 8px;
+  border-radius: 2px;
+  min-width: 80px;
+}
+
+.ReactVirtualized__List {
+  outline: none;
+}
+
+.wgsa-view-genome-details {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 1;
+  display: none;
+  height: 40px;
+  width: 40px;
+  min-width: 0;
+  border-radius: 0px;
+  background: none !important;
+  padding: 0;
+}
+
+.wgsa-genome-list-item:hover .wgsa-view-genome-details {
+  display: block;
+}
+
+.wgsa-genome-list-item .wgsa-genome-checkbox {
+  margin-right: 8px;
+}
+
+.wgsa-genome-list-item .wgsa-genome-checkbox > .material-icons {
+  font-size: 20px;
+}

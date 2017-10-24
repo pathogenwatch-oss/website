@@ -1,8 +1,93 @@
-h1, h2 {
-  font-family: "Roboto Condensed", "Helvetica", "Arial", sans-serif;
-  font-weight: 400;
+html, body {
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
 }
 
-button {
+h1, h2, h3, h4, .title-font {
+  font-family: "Roboto Condensed", "Helvetica", "Arial", sans-serif;
+  font-weight: 400;
+  color: rgba(0, 0, 0, .54);
+}
+
+h1 {
+  font-size: 45px;
+  line-height: 48px;
+}
+
+h2 {
+  font-size: 34px;
+  line-height: 40px;
+}
+
+h3 {
+  font-size: 24px;
+  line-height: 32px;
+}
+
+h4 {
+  font-size: 20px;
+  line-height: 1;
+}
+
+h5 {
+  font-size: 18px;
+  line-height: 1;
+}
+
+h6 {
+  font-size: 16px;
+  line-height: 1;
+}
+
+button, select {
   cursor: pointer;
+  font-family: inherit;
+}
+
+select {
+  padding: 2px 4px;
+  border: none;
+  font-size: 13px;
+  font-weight: 500;
+  background: none;
+}
+
+select:hover,
+select:focus,
+select:active {
+  outline: none;
+}
+
+a {
+  font-weight: 400;
+  color: #673c90;
+  text-decoration: none;
+}
+
+a[href]:hover,
+a[href]:focus,
+a[href]:active {
+  text-decoration: underline;
+}
+
+strong, b {
+  font-weight: 700;
+}
+
+ol {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+ul.bulleted {
+  list-style: outside;
+  padding-left: 16px;
+}
+
+sup {
+  color: #673c90;
 }

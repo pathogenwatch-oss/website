@@ -1,0 +1,112 @@
+@import "../css/sonar.css";
+
+.showcase {
+  position: relative;
+  height: calc(100vh - 336px);
+  min-height: 640px;
+  display: block;
+  margin: 0px auto 0;
+  background: #efefef;
+}
+
+.showcase .wgsa-homepage__content {
+  height: 100%;
+}
+
+.showcase .leaflet-container {
+  background: #efefef;
+}
+
+.showcase .leaflet-control-attribution {
+  float: right !important;
+  text-align: right;
+  background: rgba(239, 239, 239, 0.5);
+  font-size: 10px;
+}
+
+.showcase .leaflet-control-attribution a {
+  color: #673c90;
+}
+
+.showcase .mdl-spinner {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -14px;
+}
+
+.showcase__link {
+  width: 12px;
+  height: 12px;
+  background-color: #3c7383;
+  position: absolute !important;
+  border-radius: 999px;
+  display: block;
+  z-index: 1;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: background-color 0.28s cubic-bezier(.4,0,.2,1);
+}
+
+.showcase__link.active {
+  background-color: #673c90;
+  opacity: 0.8;
+  z-index: 1;
+}
+
+.showcase__link.inactive {
+  z-index: 0;
+}
+
+.showcase footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+}
+
+.wgsa-showcase-tooltip-wrapper {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 96px;
+  display: flex;
+  justify-content: center;
+  height: 0;
+}
+
+.wgsa-showcase-tooltip {
+  padding: 16px;
+  color: #555;
+  background-color: rgba(239, 239, 239, 0.54);
+  border-radius: 2px;
+  position: absolute; /* Creates "morph" fade transition */
+}
+
+.wgsa-showcase-tooltip > * {
+  margin: 0;
+}
+
+.wgsa-showcase-tooltip h3 {
+  font-size: 20px;
+  line-height: 1.2;
+}
+
+.wgsa-showcase-tooltip-enter {
+  opacity: 0;
+}
+
+.wgsa-showcase-tooltip-enter.wgsa-showcase-tooltip-enter-active {
+  opacity: 1;
+  transition: opacity .28s cubic-bezier(0.165,0.840,0.440,1.000);
+}
+
+.wgsa-showcase-tooltip-leave {
+  opacity: 1;
+}
+
+.wgsa-showcase-tooltip-leave.wgsa-showcase-tooltip-leave-active {
+  opacity: 0;
+  transition: opacity .28s cubic-bezier(0.165,0.840,0.440,1.000);
+}
