@@ -1,6 +1,7 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
 
+import Markdown from './Markdown.react';
 import NotFound from '../components/NotFound.react';
 
 import CONFIG from '../app/config';
