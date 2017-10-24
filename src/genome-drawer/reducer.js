@@ -1,4 +1,5 @@
 import { SHOW_GENOME_DETAILS, CLOSE_DRAWER } from './actions';
+import { FETCH_GENOME_LIST } from '../genomes/actions';
 
 const initialState = { name: null, genome: null, loading: false, error: false };
 
@@ -23,6 +24,7 @@ export default function (state = initialState, { type, payload }) {
         error: true,
       };
     case CLOSE_DRAWER:
+    case FETCH_GENOME_LIST.ATTEMPT:
       return initialState;
     default:
       return state;
