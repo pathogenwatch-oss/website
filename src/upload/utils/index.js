@@ -62,8 +62,7 @@ export function mapCSVsToGenomes(files, uploadedAt) {
 
   return Promise.all(
     csvFiles.map(file =>
-      readAsText(file).
-        then(contents => MetadataUtils.parseCsvToJson(contents))
+      readAsText(file).then(contents => MetadataUtils.parseCsvToJson(contents))
     )
   ).then(parsedFiles => flattenCSVs(parsedFiles))
    .then(rows =>

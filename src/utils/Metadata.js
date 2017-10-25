@@ -9,7 +9,9 @@ function convertFieldNamesToLowerCase(row) {
 
   while (fieldNamesCounter < fieldNames.length) {
     const fieldName = fieldNames[fieldNamesCounter];
-    cleanRow[fieldName.toLowerCase()] = row[fieldName];
+    if (fieldName.length) {
+      cleanRow[fieldName.toLowerCase().trim()] = row[fieldName];
+    }
     fieldNamesCounter = fieldNamesCounter + 1;
   }
 
@@ -17,9 +19,7 @@ function convertFieldNamesToLowerCase(row) {
 }
 
 function transformRawCsv(rows) {
-  return rows.map(
-    convertFieldNamesToLowerCase
-  );
+  return rows.map(convertFieldNamesToLowerCase);
 }
 
 function parseCsvToJson(csv) {
