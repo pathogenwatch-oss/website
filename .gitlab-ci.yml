@@ -9,7 +9,7 @@ build:
       - node_modules/
   script:
     - docker ps >> /dev/null
-    - apk add --update git nodejs bash
+    - apk add --update git nodejs nodejs-npm bash
     - git config --global url.https://gitlab-ci-token:$CI_JOB_TOKEN@gitlab.com/.insteadOf git://gitlab.com/
     - git config --global url.https://gitlab-ci-token:$CI_JOB_TOKEN@gitlab.com/cgps.insteadOf git@gitlab.com:cgps
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
