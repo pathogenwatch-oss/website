@@ -8,6 +8,7 @@ const srcFolder = path.join(__dirname, 'src');
 const resolve = {
   alias: {
     '^': srcFolder,
+    react: path.join(srcFolder, 'react-shim.js'),
   },
   unsafeCache: true,
 };

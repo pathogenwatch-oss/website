@@ -1,7 +1,7 @@
 import React from 'react';
 import classnames from 'classnames';
 import Leaflet from 'leaflet';
-import { Map, TileLayer, Marker, ZoomControl, PropTypes } from 'react-leaflet';
+import { Map, TileLayer, Marker, ZoomControl, PropTypes as LeafletPropTypes } from 'react-leaflet';
 import MarkerLayer from 'react-leaflet-marker-layer';
 
 import MapCluster from './LeafletMapCluster.react';
@@ -29,7 +29,7 @@ export default createClass({
     markerSize: PropTypes.number,
     cluster: PropTypes.bool,
     clusterOptions: PropTypes.object,
-    center: PropTypes.latlng,
+    center: LeafletPropTypes.latlng,
     zoom: PropTypes.number,
     highlightedColour: PropTypes.string,
     lassoPath: PropTypes.array,
