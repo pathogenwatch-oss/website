@@ -42,7 +42,7 @@
     "stream-transform": "^0.1.2",
     "uuid": "^3.0.1",
     "wgsa-fasta-store": "gitlab:cgps/wgsa-fasta-store#v3.0.0",
-    "wgsa-front-end": "gitlab:cgps/wgsa-front-end#v6.1.3"
+    "wgsa-front-end": "gitlab:cgps/wgsa-front-end#v6.1.4"
   },
   "devDependencies": {
     "eslint-config-cgps": "github:imperialcollegelondon/eslint-config-cgps",
