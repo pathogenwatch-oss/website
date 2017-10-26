@@ -20,11 +20,11 @@ const Switch = ({ id, checked, onChange, children, lhs = false }) => (
 Switch.displayName = 'Switch';
 
 Switch.propTypes = {
-  left: PropTypes.object,
-  right: PropTypes.object,
-  id: PropTypes.string,
-  checked: PropTypes.bool,
-  onChange: PropTypes.func,
+  left: React.PropTypes.object,
+  right: React.PropTypes.object,
+  id: React.PropTypes.string,
+  checked: React.PropTypes.bool,
+  onChange: React.PropTypes.func,
 };
 
 export default Switch;

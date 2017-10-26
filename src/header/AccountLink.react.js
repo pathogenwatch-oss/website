@@ -7,10 +7,10 @@ import { toggleUserDrawer } from './actions';
 
 import config from '../app/config';
 
-const AccountLink = createClass({
+const AccountLink = React.createClass({
 
   propTypes: {
-    openMenu: PropTypes.func,
+    openMenu: React.PropTypes.func,
   },
 
   openLoginMenu(e) {

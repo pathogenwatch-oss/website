@@ -3,7 +3,7 @@ import Cookies from 'universal-cookie';
 
 const cookies = new Cookies();
 
-export default createClass({
+export default React.createClass({
 
   getInitialState() {
     return {

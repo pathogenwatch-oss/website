@@ -16,7 +16,7 @@ import { updateFilter } from './filter/actions';
 
 import { statuses } from './constants';
 
-const Collections = createClass({
+const Collections = React.createClass({
 
   componentWillMount() {
     document.title = 'WGSA | Collections';

@@ -23,15 +23,15 @@ import {
   searchExactMatchToggled,
 } from './thunks';
 
-const Search = createClass({
+const Search = React.createClass({
 
   displayName: 'Search',
 
   propTypes: {
-    filteredAmount: PropTypes.number,
-    totalAmount: PropTypes.number,
-    filterColumnName: PropTypes.string,
-    handleChange: PropTypes.func,
+    filteredAmount: React.PropTypes.number,
+    totalAmount: React.PropTypes.number,
+    filterColumnName: React.PropTypes.string,
+    handleChange: React.PropTypes.func,
   },
 
   componentDidUpdate(previous) {

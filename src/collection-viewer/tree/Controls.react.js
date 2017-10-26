@@ -6,15 +6,15 @@ import classnames from 'classnames';
 import { isLoaded, getVisibleTree, getTreeState } from './selectors';
 import { setNodeScale, setLabelScale } from './actions';
 
-const Controls = createClass({
+const Controls = React.createClass({
 
   propTypes: {
-    visible: PropTypes.bool,
-    scales: PropTypes.object,
-    treeType: PropTypes.string,
-    onNodeScaleChange: PropTypes.func,
-    onLabelScaleChange: PropTypes.func,
-    onTreeTypeChange: PropTypes.func,
+    visible: React.PropTypes.bool,
+    scales: React.PropTypes.object,
+    treeType: React.PropTypes.string,
+    onNodeScaleChange: React.PropTypes.func,
+    onLabelScaleChange: React.PropTypes.func,
+    onTreeTypeChange: React.PropTypes.func,
   },
 
   componentDidMount() {

@@ -6,12 +6,12 @@ import { statuses } from './constants';
 
 import { isSupported } from '../../offline/utils';
 
-export default createClass({
+export default React.createClass({
 
   propTypes: {
-    status: PropTypes.number,
-    checkStatus: PropTypes.func,
-    onSave: PropTypes.func,
+    status: React.PropTypes.number,
+    checkStatus: React.PropTypes.func,
+    onSave: React.PropTypes.func,
   },
 
   componentDidMount() {

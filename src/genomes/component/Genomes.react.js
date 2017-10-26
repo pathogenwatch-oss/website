@@ -8,18 +8,18 @@ import Header from '../header';
 
 import { statuses } from '../constants';
 
-export default createClass({
+export default React.createClass({
 
   propTypes: {
-    hasGenomes: PropTypes.bool,
-    uploads: PropTypes.object,
-    isUploading: PropTypes.bool,
-    prefilter: PropTypes.string,
-    fetch: PropTypes.func,
+    hasGenomes: React.PropTypes.bool,
+    uploads: React.PropTypes.object,
+    isUploading: React.PropTypes.bool,
+    prefilter: React.PropTypes.string,
+    fetch: React.PropTypes.func,
   },
 
   contextTypes: {
-    router: PropTypes.object,
+    router: React.PropTypes.object,
   },
 
   componentWillMount() {

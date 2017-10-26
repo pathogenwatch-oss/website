@@ -24,7 +24,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-const Details = createClass({
+const Details = React.createClass({
 
   componentDidMount() {
     this.props.fetch();

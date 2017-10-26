@@ -2,7 +2,7 @@ import React from 'react';
 
 import config from '../app/config';
 
-export default createClass({
+export default React.createClass({
 
   componentWillMount() {
     if (!config.user) {

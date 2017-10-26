@@ -2,7 +2,7 @@ import React from 'react';
 
 import PieChart from '../cgps-commons/PieChart.react.js';
 
-export default createClass({
+export default React.createClass({
 
   displayName: 'PieChartMarker',
 

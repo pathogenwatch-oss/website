@@ -6,10 +6,10 @@ import GenomeCard from '../card';
 
 import { getGridItems } from '../selectors';
 
-export const GridView = createClass({
+export const GridView = React.createClass({
 
   propTypes: {
-    items: PropTypes.array,
+    items: React.PropTypes.array,
   },
 
   componentWillMount() {

@@ -124,13 +124,13 @@ export default class PieChart extends React.Component {
 }
 
 PieChart.propTypes = {
-  className: PropTypes.string,
-  borderWidth: PropTypes.number,
-  borderColour: PropTypes.string,
-  donut: PropTypes.bool,
-  slices: PropTypes.arrayOf(PropTypes.shape({
-    colour: PropTypes.string.isRequired, // hex colour
-    value: PropTypes.number.isRequired,
+  className: React.PropTypes.string,
+  borderWidth: React.PropTypes.number,
+  borderColour: React.PropTypes.string,
+  donut: React.PropTypes.bool,
+  slices: React.PropTypes.arrayOf(React.PropTypes.shape({
+    colour: React.PropTypes.string.isRequired, // hex colour
+    value: React.PropTypes.number.isRequired,
   })).isRequired,
-  onSliceClick: PropTypes.func,
+  onSliceClick: React.PropTypes.func,
 };

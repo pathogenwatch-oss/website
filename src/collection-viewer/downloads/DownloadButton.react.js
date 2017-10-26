@@ -5,19 +5,19 @@ import DownloadIcon from '../../downloads/DownloadIcon.react';
 
 import { statuses } from '../../downloads/constants';
 
-export default createClass({
+export default React.createClass({
 
   displayName: 'DownloadButton',
 
   propTypes: {
-    description: PropTypes.string,
-    link: PropTypes.string,
-    filename: PropTypes.string,
-    onClick: PropTypes.func,
-    label: PropTypes.string,
-    color: PropTypes.string,
-    isArchive: PropTypes.bool,
-    iconOnly: PropTypes.bool,
+    description: React.PropTypes.string,
+    link: React.PropTypes.string,
+    filename: React.PropTypes.string,
+    onClick: React.PropTypes.func,
+    label: React.PropTypes.string,
+    color: React.PropTypes.string,
+    isArchive: React.PropTypes.bool,
+    iconOnly: React.PropTypes.bool,
   },
 
   componentDidUpdate(previous) {

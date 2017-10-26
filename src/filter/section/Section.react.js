@@ -8,7 +8,7 @@ function formatCount(count) {
   return count;
 }
 
-const FilterSection = createClass({
+const FilterSection = React.createClass({
 
   getInitialState() {
     const { summary, expanded = summary.some(_ => _.active) } = this.props;

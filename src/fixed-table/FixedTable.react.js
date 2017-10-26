@@ -32,20 +32,20 @@ function isVisible(column) {
   );
 }
 
-export default createClass({
+export default React.createClass({
 
   displayName: 'FixedTable',
 
   propTypes: {
-    height: PropTypes.number,
-    width: PropTypes.number,
-    tableProps: PropTypes.object,
-    columns: PropTypes.array,
-    data: PropTypes.array,
-    calculatedColumnWidths: PropTypes.array,
-    getDefaultHeaderContent: PropTypes.func,
-    rowClickHandler: PropTypes.func,
-    activeColumns: PropTypes.object,
+    height: React.PropTypes.number,
+    width: React.PropTypes.number,
+    tableProps: React.PropTypes.object,
+    columns: React.PropTypes.array,
+    data: React.PropTypes.array,
+    calculatedColumnWidths: React.PropTypes.array,
+    getDefaultHeaderContent: React.PropTypes.func,
+    rowClickHandler: React.PropTypes.func,
+    activeColumns: React.PropTypes.object,
   },
 
   handleRowClick(e, index) {

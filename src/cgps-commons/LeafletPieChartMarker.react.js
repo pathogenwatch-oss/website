@@ -14,7 +14,7 @@ export function isMarker(element) {
   );
 }
 
-export default createClass({
+export default React.createClass({
 
   displayName: 'LeafletPieChartMarker',
 

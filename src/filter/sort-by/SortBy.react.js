@@ -18,10 +18,10 @@ const SortBy = ({ className, onClick, children, active, sortOrder }) => (
 );
 
 SortBy.PropTypes = {
-  stateKey: PropTypes.string.isRequired,
-  sortKey: PropTypes.string.isRequired,
-  sortOrder: PropTypes.bool,
-  onClick: PropTypes.func,
+  stateKey: React.PropTypes.string.isRequired,
+  sortKey: React.PropTypes.string.isRequired,
+  sortOrder: React.PropTypes.bool,
+  onClick: React.PropTypes.func,
 };
 
 function mapStateToProps(state, props) {

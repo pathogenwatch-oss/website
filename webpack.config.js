@@ -52,11 +52,6 @@ const rules = [
 
 const commonPlugins = [
   new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-  // https://github.com/postcss/postcss-loader/issues/99#issuecomment-255367959
-  new webpack.ProvidePlugin({
-    createClass: 'create-react-class',
-    PropTypes: 'prop-types',
-  }),
 ];
 
 const devConfig = {

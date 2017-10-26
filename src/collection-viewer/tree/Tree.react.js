@@ -52,19 +52,19 @@ const fullWidthHeight = {
   overflow: 'hidden',
 };
 
-export default createClass({
+export default React.createClass({
 
   displayName: 'Tree',
 
   propTypes: {
-    newick: PropTypes.string,
-    leafStyles: PropTypes.object,
-    onLoaded: PropTypes.func,
-    onUpdated: PropTypes.func,
-    onTypeChanged: PropTypes.func,
-    onInternalNodeSelected: PropTypes.func,
-    loading: PropTypes.bool,
-    filenames: PropTypes.object,
+    newick: React.PropTypes.string,
+    leafStyles: React.PropTypes.object,
+    onLoaded: React.PropTypes.func,
+    onUpdated: React.PropTypes.func,
+    onTypeChanged: React.PropTypes.func,
+    onInternalNodeSelected: React.PropTypes.func,
+    loading: React.PropTypes.bool,
+    filenames: React.PropTypes.object,
   },
 
   getInitialState() {

@@ -20,12 +20,12 @@ import {
 
 import { selectSearchItem } from './thunks';
 
-const AdvancedMode = createClass({
+const AdvancedMode = React.createClass({
 
   displayName: 'AdvancedMode',
 
   propTypes: {
-    open: PropTypes.bool,
+    open: React.PropTypes.bool,
   },
 
   renderCurrentFilter() {

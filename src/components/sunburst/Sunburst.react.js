@@ -94,7 +94,7 @@ function arcTweenData(a, i) {
   }
 }
 
-export default createClass({
+export default React.createClass({
 
   componentDidMount() {
     const svg = (

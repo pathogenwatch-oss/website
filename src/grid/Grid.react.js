@@ -7,17 +7,17 @@ const GridItem = ({ style, children }) => (
   </div>
 );
 
-export default createClass({
+export default React.createClass({
 
   propTypes: {
-    className: PropTypes.string,
-    columnWidth: PropTypes.number,
-    columnCount: PropTypes.oneOfType([
-      PropTypes.number, PropTypes.array,
+    className: React.PropTypes.string,
+    columnWidth: React.PropTypes.number,
+    columnCount: React.PropTypes.oneOfType([
+      React.PropTypes.number, React.PropTypes.array,
     ]),
-    items: PropTypes.array,
-    rowHeight: PropTypes.number,
-    template: PropTypes.func,
+    items: React.PropTypes.array,
+    rowHeight: React.PropTypes.number,
+    template: React.PropTypes.func,
   },
 
   getColumnCount(width) {

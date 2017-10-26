@@ -8,10 +8,10 @@ const iconStyle = {
 
 const taskTypes = new Set([ 'PAARSNP', 'MLST', 'GENOTYPHI', 'NGMAST' ]);
 
-export default createClass({
+export default React.createClass({
 
   propTypes: {
-    errors: PropTypes.array,
+    errors: React.PropTypes.array,
   },
 
   getMessage({ taskType, name }) {

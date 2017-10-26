@@ -6,7 +6,7 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 import { hideToast } from './index';
 
-const ToastContainer = createClass({
+const ToastContainer = React.createClass({
 
   displayName: 'ToastContainer',
 

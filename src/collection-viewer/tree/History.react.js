@@ -5,11 +5,11 @@ import classnames from 'classnames';
 import { getVisibleTree } from './selectors';
 import { timeTravel } from './actions';
 
-const History = createClass({
+const History = React.createClass({
 
   propTypes: {
-    tree: PropTypes.object,
-    onClick: PropTypes.func,
+    tree: React.PropTypes.object,
+    onClick: React.PropTypes.func,
   },
 
   getInitialState() {

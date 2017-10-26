@@ -17,19 +17,19 @@ import { getColumnLabel, setFixedGroupMinWidth } from './utils';
 
 const preventDefault = e => e.preventDefault();
 
-const Table = createClass({
+const Table = React.createClass({
 
   displayName: 'Table',
 
   propTypes: {
-    height: PropTypes.number,
-    width: PropTypes.number,
-    tableProps: PropTypes.object,
-    data: PropTypes.array,
-    columns: PropTypes.array,
-    handleHeaderClick: PropTypes.func,
-    dispatch: PropTypes.func,
-    filter: PropTypes.object,
+    height: React.PropTypes.number,
+    width: React.PropTypes.number,
+    tableProps: React.PropTypes.object,
+    data: React.PropTypes.array,
+    columns: React.PropTypes.array,
+    handleHeaderClick: React.PropTypes.func,
+    dispatch: React.PropTypes.func,
+    filter: React.PropTypes.object,
   },
 
   componentDidMount() {

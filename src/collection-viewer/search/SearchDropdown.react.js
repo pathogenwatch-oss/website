@@ -9,13 +9,13 @@ import { isAdvancedMode } from './selectors';
 
 import { toggleSearchMode } from './actions';
 
-const SearchDropdown = createClass({
+const SearchDropdown = React.createClass({
 
   displayName: 'SearchDropdown',
 
   propTypes: {
-    isOpen: PropTypes.bool,
-    close: PropTypes.func,
+    isOpen: React.PropTypes.bool,
+    close: React.PropTypes.func,
   },
 
   render() {

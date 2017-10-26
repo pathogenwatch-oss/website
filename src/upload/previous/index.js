@@ -27,7 +27,7 @@ const Header = () => (
   </header>
 );
 
-const Previous = createClass({
+const Previous = React.createClass({
 
   componentWillMount() {
     this.props.fetch();

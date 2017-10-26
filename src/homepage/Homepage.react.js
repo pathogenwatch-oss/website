@@ -12,7 +12,7 @@ function getCollectionSizeLimit(user) {
   return limit === 0 ? 'Unlimited' : limit;
 }
 
-export default createClass({
+export default React.createClass({
 
   componentWillMount() {
     document.title = 'WGSA | Whole Genome Sequence Analysis';

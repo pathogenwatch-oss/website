@@ -1,7 +1,7 @@
 import React from 'react';
 import classnames from 'classnames';
 
-export default createClass({
+export default React.createClass({
 
   componentDidMount() {
     componentHandler.upgradeElement(this.refs.spinner);

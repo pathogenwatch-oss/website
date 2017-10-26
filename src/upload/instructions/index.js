@@ -9,7 +9,7 @@ import Summary from '../Summary.react';
 
 import { addFiles } from './actions';
 
-const Component = createClass({
+const Component = React.createClass({
 
   componentWillMount() {
     document.title = 'WGSA | Upload';

@@ -20,7 +20,7 @@ const clusterOptions = {
   },
 };
 
-const MapView = createClass({
+const MapView = React.createClass({
 
   componentDidMount() {
     const { filter, previousFilter, fetch } = this.props;

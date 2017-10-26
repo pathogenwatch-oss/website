@@ -15,7 +15,7 @@ const backgroundStyle = {
   background: CGPS.COLOURS.GREY_LIGHT,
 };
 
-const Background = connect()(createClass({
+const Background = connect()(React.createClass({
 
   componentDidMount() {
     componentHandler.upgradeDom();
@@ -34,7 +34,7 @@ const Background = connect()(createClass({
 
 }));
 
-export const LoadSpinner = createClass({
+export const LoadSpinner = React.createClass({
 
   displayName: 'LoadSpinner',
 
@@ -88,7 +88,7 @@ function getStatusMessage({ collection, location }) {
   ];
 }
 
-export const LoadError = createClass({
+export const LoadError = React.createClass({
 
   componentWillMount() {
     document.title = 'WGSA | Error';

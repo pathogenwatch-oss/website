@@ -3,18 +3,18 @@ import classnames from 'classnames';
 
 import { statuses } from './constants';
 
-export default createClass({
+export default React.createClass({
 
   displayName: 'DownloadButton',
 
   propTypes: {
-    loading: PropTypes.bool,
-    error: PropTypes.bool,
-    description: PropTypes.string,
-    link: PropTypes.string,
-    filename: PropTypes.string,
-    onClick: PropTypes.func,
-    label: PropTypes.string,
+    loading: React.PropTypes.bool,
+    error: React.PropTypes.bool,
+    description: React.PropTypes.string,
+    link: React.PropTypes.string,
+    filename: React.PropTypes.string,
+    onClick: React.PropTypes.func,
+    label: React.PropTypes.string,
   },
 
   componentDidUpdate(previous) {

@@ -8,7 +8,7 @@ import { getTrees } from './selectors';
 import { leafStyles, defaultLeafStyle } from './constants';
 import { CGPS } from '../../app/constants';
 
-const Styler = createClass({
+const Styler = React.createClass({
 
   componentDidUpdate() {
     const { phylocanvas, genomes, trees, highlightedIds, filter } = this.props;

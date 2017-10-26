@@ -14,12 +14,12 @@ const headerHeight = 25;
 const rowHeight = 40;
 const offset = 64 + 56 + headerHeight;
 
-export const ListView = createClass({
+export const ListView = React.createClass({
 
   propTypes: {
-    items: PropTypes.object.isRequired,
-    indices: PropTypes.object.isRequired,
-    total: PropTypes.number.isRequired,
+    items: React.PropTypes.object.isRequired,
+    indices: React.PropTypes.object.isRequired,
+    total: React.PropTypes.number.isRequired,
   },
 
   componentWillMount() {

@@ -1,12 +1,12 @@
 import React from 'react';
 import classnames from 'classnames';
 
-export default createClass({
+export default React.createClass({
 
   propTypes: {
-    isVisible: PropTypes.bool.isRequired,
-    hide: PropTypes.func.isRequired,
-    children: PropTypes.node,
+    isVisible: React.PropTypes.bool.isRequired,
+    hide: React.PropTypes.func.isRequired,
+    children: React.PropTypes.node,
   },
 
   componentDidMount() {

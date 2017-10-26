@@ -5,7 +5,7 @@ const style = { width: 80 };
 const LOG10 = Math.log(10);
 const extraDigits = 0;
 
-export default createClass({
+export default React.createClass({
 
   getInitialState() {
     return {

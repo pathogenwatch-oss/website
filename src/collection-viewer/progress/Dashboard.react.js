@@ -14,10 +14,10 @@ const ProgressIndicator = ({ title, percentage }) => (
   </div>
 );
 
-export default createClass({
+export default React.createClass({
 
   propTypes: {
-    results: PropTypes.object,
+    results: React.PropTypes.object,
   },
 
   render() {

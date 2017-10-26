@@ -23,12 +23,12 @@ const uploadButtonStyle = {
   lineHeight: '56px',
 };
 
-const Header = createClass({
+const Header = React.createClass({
 
   displayName: 'UploadProgressHeader',
 
   propTypes: {
-    percentage: PropTypes.number,
+    percentage: React.PropTypes.number,
   },
 
   componentDidMount() {

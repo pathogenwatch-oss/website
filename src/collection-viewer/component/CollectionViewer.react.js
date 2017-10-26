@@ -7,7 +7,7 @@ import DownloadsMenu from '../downloads/DownloadsMenu.react';
 
 import { getCollection } from '../selectors';
 
-const CollectionViewer = createClass({
+const CollectionViewer = React.createClass({
 
   componentWillMount() {
     const { title } = this.props;

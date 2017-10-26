@@ -9,7 +9,7 @@ import Map from '../map';
 import Summary from '../summary';
 import Table from '../table';
 
-export default createClass({
+export default React.createClass({
 
   displayName: 'Layout',
 

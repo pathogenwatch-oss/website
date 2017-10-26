@@ -7,7 +7,7 @@ import { isExactMatch } from './selectors';
 
 import { searchExactMatchToggled } from './thunks';
 
-const BasicMode = createClass({
+const BasicMode = React.createClass({
 
   render() {
     return (

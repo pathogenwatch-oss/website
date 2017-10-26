@@ -14,11 +14,11 @@ import { toggleUserDrawer } from './actions';
 import config from '../app/config';
 const { user } = config;
 
-const UserDrawer = createClass({
+const UserDrawer = React.createClass({
 
   propTypes: {
-    visible: PropTypes.bool,
-    closeMenu: PropTypes.func,
+    visible: React.PropTypes.bool,
+    closeMenu: React.PropTypes.func,
   },
 
   componentDidMount() {

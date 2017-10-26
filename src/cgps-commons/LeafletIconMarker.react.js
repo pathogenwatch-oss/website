@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default createClass({
+export default React.createClass({
 
   displayName: 'LeafletIconMarker',
 
