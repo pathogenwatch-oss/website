@@ -18,6 +18,4 @@ function mapDispatchToProps(dispatch) {
 
 export { showGenomeDrawer } from './actions';
 
-export reducer from './reducer';
-
 export default connect(mapStateToProps, mapDispatchToProps)(GenomeDrawer);

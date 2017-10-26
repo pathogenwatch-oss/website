@@ -35,5 +35,4 @@ const Router = connect(mapStateToProps)(
   }
 );
 
-export reducer from './reducer';
 export default <Route path={path} component={Router} />;

@@ -12,8 +12,6 @@ import { getCollection } from './selectors';
 
 import { statuses } from './constants';
 
-export reducer from './reducer';
-
 const mapStateToProps = state => ({ status: getCollection(state).status });
 
 function getHeaderClassName(status) {

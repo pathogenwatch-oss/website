@@ -7,8 +7,6 @@ import ListView from './list';
 import MapView from './map';
 import StatsView from './stats';
 
-export reducer from './reducer';
-
 const path = '/genomes/:prefilter(all|user|bin)';
 
 const GenomeRoute = props => (
