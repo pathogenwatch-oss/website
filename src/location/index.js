@@ -1,6 +1,6 @@
 import queryString from 'query-string';
 
-import { history } from '../app';
+import { history } from '../app/router';
 
 function push(nextString = '') {
   history.push({

@@ -8,7 +8,7 @@ import * as selectors from './selectors';
 import { createCollection, changeCollectionMetadata } from './actions';
 
 import { taxIdMap } from '../../organisms';
-import { history } from '../../app';
+import { history } from '../../app/router';
 
 const CreateCollectionForm = React.createClass({
 

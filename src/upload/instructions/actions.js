@@ -1,7 +1,7 @@
 import * as utils from '../utils';
 
 import { showToast } from '../../toast';
-import { history } from '../../app';
+import { history } from '../../app/router';
 
 import { addGenomes } from '../progress/actions';
 
