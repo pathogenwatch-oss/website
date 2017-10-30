@@ -47,7 +47,7 @@ function createCollection({ organismId, genomeIds, title, description, pmid, use
 }
 
 function getGenomes(ids) {
-  return Genome.find({ _id: { $in: ids } }, { analysis: 0 });
+  return Genome.find({ _id: { $in: ids } });
 }
 
 function getCollectionAndGenomes(message) {
