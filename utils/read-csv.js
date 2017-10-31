@@ -15,9 +15,9 @@ function parseRows(file) {
   const headers = lines[0].split(',').map(_ => _.toLowerCase());
   console.log('Headers:', headers);
 
-  return lines.slice(1).
-    filter(line => line.length > 0).
-    map(line => {
+  return lines.slice(1)
+    .filter(line => line.length > 0)
+    .map(line => {
       const values = line.split(',');
       return headers.reduce((memo, header, index) => {
         const value = values[index];
@@ -29,13 +29,13 @@ function parseRows(file) {
           memo.userDefined[header] = value;
         }
         return memo;
-      }, { userDefined: {} });
+      }, { userDefined: {}, year: null, month: null, day: null, pmid: null });
     });
 }
 
 module.exports = function (csvFilePath) {
   return (
-    fs.readFile(csvFilePath, 'utf8').
-      then(parseRows)
+    fs.readFile(csvFilePath, 'utf8')
+      .then(parseRows)
   );
 };
