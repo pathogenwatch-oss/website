@@ -47,7 +47,20 @@ function createCollection({ organismId, genomeIds, title, description, pmid, use
 }
 
 function getGenomes(ids) {
-  return Genome.find({ _id: { $in: ids } });
+  return Genome.find({ _id: { $in: ids } }, {
+    fileId: 1,
+    name: 1,
+    year: 1,
+    month: 1,
+    day: 1,
+    latitude: 1,
+    longitude: 1,
+    country: 1,
+    pmid: 1,
+    userDefined: 1,
+    organismId: 1,
+    'analysis.speciator': 1,
+  });
 }
 
 function getCollectionAndGenomes(message) {
