@@ -93,9 +93,24 @@ const projectResultsByType = {
   })),
 };
 
+const filterAnalysis = {
+  analysis: {
+    core: {
+      size: 1,
+    },
+    fp: 1,
+    genotyphi: 1,
+    metrics: 1,
+    mlst: 1,
+    paarsnp: 1,
+    ngmast: 1,
+  },
+};
+
 schema.statics.countResults = function (collection) {
   return this.aggregate([
     { $match: { _collection: collection._id } },
+    { $project: filterAnalysis },
     { $project: projectResultsByType },
     { $unwind: '$analysis' },
     { $group: { _id: '$analysis.type', count: { $sum: '$analysis.count' } } },

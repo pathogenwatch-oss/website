@@ -23,7 +23,7 @@ module.exports = function ({ genomeId, collectionId, uploadedAt, task, version, 
       CollectionGenome.addAnalysisResult(genomeId, task, formattedResult)
         .then(() => {
           if (typeof collectionId === 'string') {
-            return request('collection', 'send-progress', { collectionId });
+            request('collection', 'send-progress', { collectionId });
           }
           return Promise.resolve();
         })

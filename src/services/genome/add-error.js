@@ -10,7 +10,9 @@ module.exports = function ({ genomeId, collectionId, uploadedAt, task, clientId 
         assemblyId: genomeId,
         taskType: task,
       })
-      .then(() => request('collection', 'send-progress', { collectionId }))
+      .then(() => {
+        request('collection', 'send-progress', { collectionId });
+      })
     );
   }
 

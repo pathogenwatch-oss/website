@@ -23,7 +23,7 @@ module.exports = function (message) {
   if (message.action !== 'CREATE') return Promise.resolve();
   const { collectionId } = message;
   return aggregateResult(message)
-    .then(() =>
-      services.request('collection', 'send-progress', { collectionId })
-    );
+    .then(() => {
+      services.request('collection', 'send-progress', { collectionId });
+    });
 };

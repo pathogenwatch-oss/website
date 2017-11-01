@@ -126,8 +126,6 @@ schema.statics.updateMetadata = function (_id, { user, sessionID }, metadata) {
     query._session = sessionID;
   }
 
-  console.log({ year, month, day, date: getDate(year, month, day) });
-
   return this.update(query, {
     name,
     year,
