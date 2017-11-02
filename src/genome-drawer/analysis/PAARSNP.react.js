@@ -2,7 +2,9 @@ import React from 'react';
 import classnames from 'classnames';
 import { Section, Metadata } from '../components';
 
-export default React.createClass({
+import { taxIdMap } from '../../organisms';
+
+const PAARSNP = React.createClass({
 
   getInitialState() {
     return {
@@ -13,7 +15,8 @@ export default React.createClass({
   getTableHeaders() {
     const { antibiotics = [] } = this.props;
     const { antibiotic = {} } = this.state;
-    return antibiotics.map((ab) =>
+
+    return antibiotics.map(ab =>
       <th
         key={ab.name}
         title={ab.fullName}
@@ -93,3 +96,21 @@ export default React.createClass({
   },
 
 });
+
+export default ({ antibiotics, organismId, ...rest }) => {
+  let hiddenColumns = new Set();
+
+  if (taxIdMap.has(organismId)) {
+    const { amrOptions = {} } = taxIdMap.get(organismId);
+    if (amrOptions && amrOptions.hiddenColumns) {
+      hiddenColumns = amrOptions.hiddenColumns;
+    }
+  }
+
+  const filteredAntibiotics =
+    hiddenColumns.size ?
+      antibiotics.filter(({ name }) => !hiddenColumns.has(name)) :
+      antibiotics;
+
+  return <PAARSNP antibiotics={filteredAntibiotics} {...rest} />;
+};
