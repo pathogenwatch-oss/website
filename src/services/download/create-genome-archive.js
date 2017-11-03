@@ -10,7 +10,5 @@ module.exports = ({ genomes }) => {
   const files = genomes.map(({ name, fileId }) =>
     ({ name: createFastaFileName(name), id: fileId }));
 
-  return (
-    fastaStorage.archive(fastaStoragePath, files)
-  );
+  return fastaStorage.archive(fastaStoragePath, files);
 };

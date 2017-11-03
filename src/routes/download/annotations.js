@@ -1,5 +1,6 @@
-const archiver = require('archiver');
 const transform = require('stream-transform');
+const ZipStream = require('zip-stream');
+const async = require('async');
 
 const CollectionGenome = require('models/collectionGenome');
 
@@ -7,7 +8,7 @@ const LOGGER = require('utils/logging').createLogger('Downloads');
 
 const header = '##gff-version 3.2.1';
 
-const gffTransformer = input => {
+function gffTransformer(input) {
   if (input === header) return `${input}\n`;
   const output = [
     input.sequence,
@@ -25,10 +26,10 @@ const gffTransformer = input => {
   .map(value => (value === null ? '.' : value));
 
   return `${output.join('\t')}\n`;
-};
+}
 
-function convertDocumentToGFF({ name, analysis }, stream) {
-  const { core, mlst, paarsnp } = analysis;
+function convertDocumentToGFF(doc, stream) {
+  const { core, mlst, paarsnp } = doc.analysis;
 
   stream.write(header);
 
@@ -138,21 +139,22 @@ function convertDocumentToGFF({ name, analysis }, stream) {
 }
 
 module.exports = (req, res, next) => {
-  const { ids, filename = `wgsa-annotations-${Date.now()}.zip` } = req.query;
+  const { ids = '', collection, filename = `wgsa-annotations-${Date.now()}.zip` } = req.query;
 
-  if (!ids || typeof(ids) !== 'string' || ids === '') {
-    LOGGER.error('Missing ids');
+  if ((!ids || typeof(ids) !== 'string' || ids === '') && !collection) {
+    LOGGER.error('ids or collection not provided.');
     return res.sendStatus(400);
   }
 
+  req.on('close', () => console.log('CLOSED'));
+
   try {
     const $in = ids.split(',');
-    const query = {
-      _id: { $in },
+    const query = Object.assign({
       'analysis.core': { $exists: true },
       'analysis.mlst': { $exists: true },
       'analysis.paarsnp': { $exists: true },
-    };
+    }, collection ? { _collection: collection } : { _id: { $in } });
     const projection = {
       name: 1,
       'analysis.core.matches': 1,
@@ -161,27 +163,48 @@ module.exports = (req, res, next) => {
     };
     const cursor = CollectionGenome.find(query, projection);
 
-    if ($in.length > 1) {
+    if (collection || $in.length > 1) {
       res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
       res.setHeader('Content-Type', 'application/zip');
 
-      const archive = archiver.create('zip');
+      const archive = new ZipStream();
 
       archive.on('error', next);
 
       archive.pipe(res);
 
-      cursor
-        .cursor()
-        .on('data', doc => {
+      const _cursor = cursor.lean().cursor();
+
+      async.doUntil(done => {
+        _cursor.next((error, doc) => {
+          if (error) {
+            done(error);
+            return;
+          }
+          if (!doc) {
+            done(null, true);
+            return;
+          }
           const stream = transform(gffTransformer);
-          archive.append(stream, { name: `${doc.name}.gff` });
+          archive.entry(stream, { name: `${doc.name}.gff` }, (err) => {
+            if (err) {
+              done(err);
+              return;
+            }
+            done(null, false);
+          });
           convertDocumentToGFF(doc, stream);
           stream.end();
-        })
-        .on('end', () => {
-          archive.finalize();
         });
+      },
+      isDone => isDone,
+      (error) => {
+        if (error) {
+          next(error);
+          return;
+        }
+        archive.finish();
+      });
     } else {
       cursor.then(([ doc ]) => {
         const stream = transform(gffTransformer);

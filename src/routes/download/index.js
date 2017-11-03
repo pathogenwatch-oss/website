@@ -71,6 +71,7 @@ router.get('/archive/:type', (req, res, next) => {
       .then(genomes =>
         services.request('download', 'create-genome-archive', { genomes }))
       .then(stream => {
+        stream.on('error', next);
         res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
         res.setHeader('Content-Type', 'application/zip');
         stream.pipe(res);
@@ -124,15 +125,15 @@ router.get('/analysis/mlst', (req, res) => {
     'analysis.mlst.st': 1,
     'analysis.mlst.alleles': 1,
   };
-  const transformer = ({ _id, name, analysis }) => {
+  const transformer = function (doc) {
     const result = {
-      genomeId: _id.toString(),
-      genomeName: name,
-      version: analysis.mlst.__v,
-      st: analysis.mlst.st,
+      genomeId: doc._id.toString(),
+      genomeName: doc.name,
+      version: doc.analysis.mlst.__v,
+      st: doc.analysis.mlst.st,
     };
 
-    for (const { gene, hits } of analysis.mlst.alleles) {
+    for (const { gene, hits } of doc.analysis.mlst.alleles) {
       result[gene] = hits.join(',');
     }
 
@@ -142,26 +143,28 @@ router.get('/analysis/mlst', (req, res) => {
 });
 
 router.get('/analysis/speciator', (req, res) => {
-  const { user, sessionID, query } = req;
-  const { ids } = query;
+  const { user, sessionID } = req;
+  const { ids } = req.query;
   const options = { user, sessionID };
   const task = 'speciator';
   const projection = { name: 1, 'analysis.speciator': 1 };
-  const transformer = ({ _id, name, analysis }) => ({
-    genomeId: _id.toString(),
-    genomeName: name,
-    version: analysis.speciator.__v,
-    organismName: analysis.speciator.organismName,
-    organismId: analysis.speciator.organismId,
-    speciesName: analysis.speciator.speciesName,
-    speciesId: analysis.speciator.speciesId,
-    genusName: analysis.speciator.genusName,
-    genusId: analysis.speciator.genusId,
-    referenceId: analysis.speciator.referenceId,
-    matchingHashes: analysis.speciator.matchingHashes,
-    pValue: analysis.speciator.pValue,
-    mashDistance: analysis.speciator.mashDistance,
-  });
+  const transformer = function (doc) {
+    return {
+      genomeId: doc._id.toString(),
+      genomeName: doc.name,
+      version: doc.analysis.speciator.__v,
+      organismName: doc.analysis.speciator.organismName,
+      organismId: doc.analysis.speciator.organismId,
+      speciesName: doc.analysis.speciator.speciesName,
+      speciesId: doc.analysis.speciator.speciesId,
+      genusName: doc.analysis.speciator.genusName,
+      genusId: doc.analysis.speciator.genusId,
+      referenceId: doc.analysis.speciator.referenceId,
+      matchingHashes: doc.analysis.speciator.matchingHashes,
+      pValue: doc.analysis.speciator.pValue,
+      mashDistance: doc.analysis.speciator.mashDistance,
+    };
+  };
   downloadAnalysisResults(ids, task, projection, transformer, options, res);
 });
 
@@ -175,16 +178,16 @@ router.get('/analysis/paarsnp', (req, res) => {
     'analysis.paarsnp.__v': 1,
     'analysis.paarsnp.antibiotics': 1,
   };
-  const transformer = ({ _id, name, analysis }) => {
-    const doc = {
-      genomeId: _id.toString(),
-      genomeName: name,
-      version: analysis.paarsnp.__v,
+  const transformer = function (doc) {
+    const result = {
+      genomeId: doc._id.toString(),
+      genomeName: doc.name,
+      version: doc.analysis.paarsnp.__v,
     };
-    for (const { state, fullName } of analysis.paarsnp.antibiotics) {
-      doc[fullName] = state;
+    for (const { state, fullName } of doc.analysis.paarsnp.antibiotics) {
+      result[fullName] = state;
     }
-    return doc;
+    return result;
   };
   downloadAnalysisResults(ids, task, projection, transformer, options, res);
 });
@@ -200,13 +203,15 @@ router.get('/analysis/genotyphi', (req, res) => {
     'analysis.genotyphi.genotype': 1,
     'analysis.genotyphi.foundLoci': 1,
   };
-  const transformer = ({ _id, name, analysis }) => ({
-    genomeId: _id.toString(),
-    genomeName: name,
-    version: analysis.genotyphi.__v,
-    genotype: analysis.genotyphi.genotype,
-    snpsCalled: analysis.genotyphi.foundLoci,
-  });
+  const transformer = function (doc) {
+    return {
+      genomeId: doc._id.toString(),
+      genomeName: doc.name,
+      version: doc.analysis.genotyphi.__v,
+      genotype: doc.analysis.genotyphi.genotype,
+      snpsCalled: doc.analysis.genotyphi.foundLoci,
+    };
+  };
   downloadAnalysisResults(ids, task, projection, transformer, options, res);
 });
 
@@ -222,14 +227,16 @@ router.get('/analysis/ngmast', (req, res) => {
     'analysis.ngmast.por': 1,
     'analysis.ngmast.tbpb': 1,
   };
-  const transformer = ({ _id, name, analysis }) => ({
-    genomeId: _id.toString(),
-    genomeName: name,
-    version: analysis.ngmast.__v,
-    ngmast: analysis.ngmast.ngmast,
-    por: analysis.ngmast.por,
-    tbpb: analysis.ngmast.tbpb,
-  });
+  const transformer = function (doc) {
+    return {
+      genomeId: doc._id.toString(),
+      genomeName: doc.name,
+      version: doc.analysis.ngmast.__v,
+      ngmast: doc.analysis.ngmast.ngmast,
+      por: doc.analysis.ngmast.por,
+      tbpb: doc.analysis.ngmast.tbpb,
+    };
+  };
   downloadAnalysisResults(ids, task, projection, transformer, options, res);
 });
 
@@ -244,13 +251,13 @@ router.get('/analysis/cgmlst', (req, res) => {
     'analysis.cgmlst.st': 1,
     'analysis.cgmlst.matches': 1,
   };
-  const transformer = ({ _id, name, analysis }, callback) => {
+  const transformer = function (doc, callback) {
     const result = [];
-    for (const { gene, id, start, end, contig } of analysis.cgmlst.matches) {
+    for (const { gene, id, start, end, contig } of doc.analysis.cgmlst.matches) {
       result.push({
-        genomeId: _id.toString(),
-        genomeName: name,
-        version: analysis.cgmlst.__v,
+        genomeId: doc._id.toString(),
+        genomeName: doc.name,
+        version: doc.analysis.cgmlst.__v,
         gene,
         alleleId: id,
         start,
@@ -259,7 +266,6 @@ router.get('/analysis/cgmlst', (req, res) => {
         direction: start > end ? 'reverse' : 'forwards',
       });
     }
-
     callback(null, ...result);
   };
   downloadAnalysisResults(ids, task, projection, transformer, options, res);
