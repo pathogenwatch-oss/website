@@ -79,7 +79,7 @@ export default ({ name, genome, loading, close }) => {
           className="wgsa-genome-drawer"
           actions={genome ? [
             <DownloadLink key="download" id={genome.id} name={genome.name} />,
-            <RemoveButton key="remove" genome={genome} />,
+            <RemoveButton key="remove" genome={genome} onRemove={close} />,
           ] : []}
         >
           { loading ?

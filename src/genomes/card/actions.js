@@ -1,5 +1,5 @@
 import { showToast } from '../../toast';
-import * as actions from '../actions';
+import { fetchGenomeList, fetchGenomeSummary } from '../actions';
 import { fetchSummary } from '../../summary/actions';
 
 import { stateKey } from '../filter';
@@ -15,8 +15,8 @@ export function setBinnedStatus(genome, status, undoable = true) {
     return (
       binGenome(genome.id, status)
         .then(() => Promise.all([
-          dispatch(actions.fetchGenomes(currentFilter)),
-          dispatch(actions.fetchSummary(currentFilter)),
+          dispatch(fetchGenomeList()),
+          dispatch(fetchGenomeSummary(currentFilter)),
           dispatch(fetchSummary()),
         ]))
         .then(() => undoable && dispatch(showToast(toasts.undoMoveToBin(genome, undo))))
