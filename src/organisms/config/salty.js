@@ -36,6 +36,7 @@ export default {
       </ol>
     </span>
   ),
+  imageCredit: 'Dave Goulding',
   taxonomy: [
     { taxId: 131567, scientificName: 'Cellular organisms', rank: 'no rank' },
     { taxId: 2, scientificName: 'Bacteria', rank: 'superkingdom' },
@@ -52,7 +53,6 @@ export default {
       scientificName: 'Salmonella enterica subsp. enterica serovar Typhi',
       rank: 'no rank' },
   ],
-  imageAltText: 'Salmonella Typhimurium colonies on a Hektoen enteric agar plate',
   publicMetadataColumnNames: [],
   collections: [],
   amrOptions: {
