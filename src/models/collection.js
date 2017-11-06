@@ -1,9 +1,14 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 const slug = require('slug');
+const rand = require('rand-token');
 
 const { setToObjectOptions, addPreSaveHook, getSummary } = require('./utils');
 const { NotFoundError } = require('../utils/errors');
+
+const uuidGenerator = rand.generator({
+  chars: 'abcdefghijklnmopqrstuvwxyz1234567890',
+});
 
 const schema = new Schema({
   _user: { type: Schema.Types.ObjectId, ref: 'User' },
@@ -39,7 +44,7 @@ const schema = new Schema({
   reference: Boolean,
   showcase: Boolean,
   size: Number,
-  status: { type: String, default: 'PENDING' },
+  status: { type: String, default: 'PROCESSING' },
   subtrees: [ {
     name: String,
     tree: String,
@@ -50,7 +55,7 @@ const schema = new Schema({
   } ],
   title: { type: String, index: 'text' },
   tree: String,
-  uuid: { type: String, index: true },
+  uuid: { type: String, index: true, default: () => uuidGenerator.generate(12) },
 });
 
 setToObjectOptions(schema, (doc, collection, { user }) => {
@@ -68,12 +73,6 @@ setToObjectOptions(schema, (doc, collection, { user }) => {
   return collection;
 });
 addPreSaveHook(schema);
-
-schema.methods.addUUID = function (uuid) {
-  this.uuid = uuid;
-  this.status = 'PROCESSING';
-  return this.save();
-};
 
 schema.methods.failed = function (error) {
   this.status = 'FAILED';

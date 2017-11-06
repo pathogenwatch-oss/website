@@ -17,10 +17,10 @@ process.on('uncaughtException', err => console.error('uncaught', err));
 
 taskQueue.setMaxWorkers(workers);
 
-const { tasks, speciator } = taskQueue.queues;
+const { tasks, speciator, trees } = taskQueue.queues;
 
 function subscribeToQueues() {
-  if (!queue || queue === 'tasks') {
+  if (!queue || queue === tasks) {
     taskQueue.dequeue(
       tasks,
       ({ genomeId, collectionId, organismId, speciesId, genusId, fileId, uploadedAt, task, version, clientId, timeout }) =>
@@ -33,7 +33,7 @@ function subscribeToQueues() {
     );
   }
 
-  if (!queue || queue === 'speciator') {
+  if (!queue || queue === speciator) {
     taskQueue.dequeue(
       speciator,
       ({ genomeId, fileId, uploadedAt, task, version, clientId, timeout }) =>
@@ -47,7 +47,21 @@ function subscribeToQueues() {
               });
           }),
       message => request('genome', 'add-error', message)
-    )
+    );
+  }
+
+  if (!queue || queue === trees) {
+    taskQueue.dequeue(
+      trees,
+      ({ collectionId, organismId, requires, uploadedAt, task, version, clientId, timeout }) =>
+        request('tasks', 'run-collection', { collectionId, organismId, requires, task, version, timeout$: timeout * 1000 })
+          .then(result => {
+            LOGGER.info('Got result', collectionId, task, version);
+            console.dir(result);
+            // return request('genome', 'add-analysis', { collectionId, uploadedAt, task, version, result, clientId });
+          }),
+      message => request('genome', 'add-error', message)
+    );
   }
 }
 

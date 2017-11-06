@@ -137,7 +137,8 @@
   "1280": [
     { "task": "mlst", "version": "v1" },
     { "task": "paarsnp", "version": "v1" },
-    { "task": "cgmlst", "version": "v1" }
+    { "task": "cgmlst", "version": "v1" },
+    { "task": "core", "version": "v1" }
   ],
   "1282": [
     { "task": "mlst", "version": "v1" }

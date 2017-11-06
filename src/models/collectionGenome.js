@@ -22,12 +22,7 @@ const schema = new Schema({
   pmid: String,
   userDefined: Object,
   analysis: {
-    core: {
-      size: Number,
-      percentMatched: Number,
-      percentAssemblyMatched: Number,
-      matches: Array,
-    },
+    core: Object,
     fp: {
       subtype: String,
       referenceName: String,
@@ -72,10 +67,10 @@ const formatters = {
 
 schema.statics.formatters = formatters;
 
-schema.statics.addAnalysisResult = function (uuid, key, result) {
+schema.statics.addAnalysisResult = function (_id, key, result) {
   const formattedResult = key in formatters ? formatters[key](result) : result;
   return this.update(
-    { uuid },
+    { _id },
     { [`analysis.${key.toLowerCase()}`]: formattedResult }
   );
 };
@@ -96,7 +91,7 @@ const projectResultsByType = {
 const filterAnalysis = {
   analysis: {
     core: {
-      size: 1,
+      __v: 1,
     },
     fp: 1,
     genotyphi: 1,
@@ -124,11 +119,12 @@ schema.statics.findByUuid = function (uuid, projection) {
 
 schema.statics.insertRaw = function (docs, options) {
   return new Promise((resolve, reject) => {
-    this.collection.insertMany(docs, options, error => {
+    this.collection.insertMany(docs, options, (error, result) => {
       if (error) {
         reject(error);
       }
-      resolve(docs);
+
+      resolve(result.insertedIds);
     });
   });
 };
