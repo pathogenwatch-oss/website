@@ -1,6 +1,6 @@
 const docker = require('docker-run');
 const crypto = require('crypto');
-const stringify = require('streaming-json-stringify');
+const stringify = require('json-stream-stringify');
 
 const Analysis = require('models/analysis');
 const CollectionGenome = require('../../models/collectionGenome');
@@ -25,10 +25,14 @@ function runTask(task, version, collectionId, requires, organismId) {
         return memo;
       }, {})
     ).lean().cursor();
-    stream.pipe(stringify()).pipe(container.stdin);
+    stream.on('data', data => {
+      container.stdin.write(JSON.stringify(data));
+      container.stdin.write('\n');
+    });
+    stream.on('end', () => container.stdin.end());
+    // stringify(stream).pipe(container.stdin);
     const buffer = [];
     container.stdout.on('data', (data) => {
-      console.log(data.toString());
       buffer.push(data.toString());
     });
     container.on('exit', (exitCode) => {

@@ -1,16 +1,18 @@
 const fs = require('fs');
 const docker = require('docker-run');
+const fastaStorage = require('wgsa-fasta-store');
 
 const Analysis = require('models/analysis');
-const fastaStorage = require('wgsa-fasta-store');
-const { fastaStoragePath } = require('configuration');
+const TaskLog = require('models/taskLog');
 
+const { fastaStoragePath } = require('configuration');
 const { getImageName } = require('manifest.js');
 
 const LOGGER = require('utils/logging').createLogger('runner');
 
 function runTask(fileId, task, version, organismId, speciesId, genusId) {
   return new Promise((resolve, reject) => {
+    const startTime = process.hrtime();
     const container = docker(getImageName(task, version), {
       env: {
         WGSA_ORGANISM_TAXID: organismId,
@@ -27,6 +29,9 @@ function runTask(fileId, task, version, organismId, speciesId, genusId) {
     });
     container.on('exit', (exitCode) => {
       LOGGER.info('exit', exitCode);
+      const [ durationS, durationNs ] = process.hrtime(startTime);
+      const duration = Math.round(durationS * 1000 + durationNs / 1e6);
+      TaskLog.create({ fileId, task, version, organismId, speciesId, genusId, duration, exitCode });
       if (exitCode !== 0) {
         container.stderr.setEncoding('utf8');
         reject(new Error(container.stderr.read()));
