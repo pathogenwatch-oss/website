@@ -56,6 +56,7 @@ const schema = new Schema({
   title: { type: String, index: 'text' },
   tree: String,
   uuid: { type: String, index: true, default: () => uuidGenerator.generate(12) },
+  analysis: Object,
 });
 
 setToObjectOptions(schema, (doc, collection, { user }) => {
@@ -244,6 +245,15 @@ schema.statics.getSort = function (sort = 'createdAt-') {
   if (!sortKeys.has(sortKey)) return null;
 
   return { [sortKey]: sortOrder };
+};
+
+schema.statics.addAnalysisResult = function (_id, key, __v, result) {
+  const update = {};
+  if (key === 'tree') {
+    update.tree = result.newick;
+    update['analysis.tree'] = { __v };
+  }
+  return this.update({ _id }, update);
 };
 
 module.exports = mongoose.model('Collection', schema);

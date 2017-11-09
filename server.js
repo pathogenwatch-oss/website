@@ -11,7 +11,6 @@ const crypto = require('crypto');
 
 const config = require('configuration.js');
 const logging = require('utils/logging');
-const messageQueueConnection = require('utils/messageQueueConnection');
 const mongoConnection = require('utils/mongoConnection');
 
 const LOGGER = logging.getBaseLogger();
@@ -48,10 +47,8 @@ app.use(bodyParser.urlencoded({
 logging.initHttpLogging(app, process.env.NODE_ENV || 'none');
 
 module.exports = () =>
-  Promise.all([
-    messageQueueConnection.connect(),
-    mongoConnection.connect(),
-  ]).then(() => {
+  mongoConnection.connect()
+  .then(() => {
     // security
     app.use((req, res, next) => {
       res.header('X-Frame-Options', 'SAMEORIGIN');

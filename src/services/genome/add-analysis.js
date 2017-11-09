@@ -19,15 +19,7 @@ module.exports = function ({ genomeId, fileId, collectionId, uploadedAt, task, v
   const formattedResult = formatResult(task, version, result);
 
   if (collectionId) {
-    return (
-      CollectionGenome.addAnalysisResult(genomeId, task, formattedResult)
-        .then(() => {
-          if (typeof collectionId === 'string') {
-            request('collection', 'send-progress', { collectionId });
-          }
-          return Promise.resolve();
-        })
-    );
+    return CollectionGenome.addAnalysisResult(genomeId, task, formattedResult);
   }
 
   return (
