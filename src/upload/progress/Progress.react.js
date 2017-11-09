@@ -27,7 +27,7 @@ const Analysis = ({ data, showBreakdown }) => (
                       `${analysis.label} ✔️` :
                       `${analysis.label}: ${analysis.total} / ${total}` }
                     { analysis.errors > 0 &&
-                      <small style={{ float: 'right' }}>
+                      <small>
                         &nbsp;{analysis.errors} error{analysis.errors === 1 ? '' : 's'}
                       </small>}
                   </li>

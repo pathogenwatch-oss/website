@@ -82,7 +82,7 @@ const Component = React.createClass({
   render() {
     return (
       <div className="wgsa-hipster-style">
-        <Summary />
+        <Summary uploadedAt={this.props.uploadedAt} />
         <Progress uploadedAt={this.props.uploadedAt} />
       </div>
     );

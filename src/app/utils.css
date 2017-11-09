@@ -1,5 +1,6 @@
 .wgsa-content-margin {
   margin: 0 80px;
+  min-width: 800px;
 }
 
 .wgsa-content-margin-left {

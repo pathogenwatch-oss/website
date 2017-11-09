@@ -50,7 +50,7 @@
 }
 
 .wgsa-analysis-chart {
-  width: calc(100vh - 200px);
+  width: 100vh;
   max-width: 100%;
   margin: -16px auto 0;
   position: relative;
@@ -58,12 +58,9 @@
 
 .wgsa-view-genomes-button {
   position: absolute;
-  top: 50%;
+  top: calc(50% + 4.5px);
   left: 50%;
   transform: translate(-50%, -50%);
-}
-
-.wgsa-view-genomes-button {
   background-color: #3C7383;
   color: #fff;
   padding: 8px;
