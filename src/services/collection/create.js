@@ -14,6 +14,18 @@ function getMaxCollectionSize(user) {
   return maxCollectionSize.anonymous;
 }
 
+function checkAnalysis(genomeIds) {
+  return Genome.count(
+    { _id: { $in: genomeIds }, 'analysis.core': { $exists: true } }
+  )
+  .then(count => {
+    if (count !== genomeIds.length) {
+      throw new ServiceRequestError('Genome analysis not ready.');
+    }
+    return genomeIds;
+  });
+}
+
 function getGenomes(genomeIds) {
   return Genome.find({ _id: { $in: genomeIds } }, {
     fileId: 1,
@@ -92,6 +104,7 @@ module.exports = function (message) {
   }
 
   return Promise.resolve(genomeIds)
+    .then(checkAnalysis)
     .then(getGenomes)
     .then(genomes => checkGenomeOrganismIds(genomes, organismId))
     .then(genomes => createCollection(genomes, message))
