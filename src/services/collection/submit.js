@@ -1,9 +1,19 @@
+const mapLimit = require('promise-map-limit');
+
 const { request } = require('services/bus');
 
 module.exports = ({ organismId, collectionId, collectionGenomes, uploadedAt }) => {
-  for (const genome of collectionGenomes) {
+  mapLimit(collectionGenomes, 10, genome => {
     const { fileId, analysis } = genome;
     const { speciesId, genusId } = analysis.speciator;
-    request('tasks', 'submit-genome', { genomeId: genome._id, collectionId, fileId, uploadedAt, organismId, speciesId, genusId });
-  }
+    return request('tasks', 'submit-genome', {
+      genomeId: genome._id,
+      collectionId,
+      fileId,
+      uploadedAt,
+      organismId,
+      speciesId,
+      genusId,
+    });
+  });
 };

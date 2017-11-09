@@ -15,7 +15,7 @@ function formatResult(task, version, result) {
   );
 }
 
-module.exports = function ({ genomeId, collectionId, uploadedAt, task, version, result, clientId }) {
+module.exports = function ({ genomeId, fileId, collectionId, uploadedAt, task, version, result, clientId }) {
   const formattedResult = formatResult(task, version, result);
 
   if (collectionId) {
@@ -41,6 +41,11 @@ module.exports = function ({ genomeId, collectionId, uploadedAt, task, version, 
             message: { id: genomeId, task, result: notification },
           });
         }
+      })
+      .then(() => {
+        if (task !== 'speciator') return Promise.resolve();
+        const { organismId, speciesId, genusId } = result;
+        return request('tasks', 'submit-genome', { genomeId, fileId, uploadedAt, organismId, speciesId, genusId, clientId });
       })
   );
 };

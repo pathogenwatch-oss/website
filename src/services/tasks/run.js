@@ -2,6 +2,7 @@ const fs = require('fs');
 const docker = require('docker-run');
 const fastaStorage = require('wgsa-fasta-store');
 
+const { request } = require('services');
 const Analysis = require('models/analysis');
 const TaskLog = require('models/taskLog');
 
@@ -54,16 +55,17 @@ function runTask(fileId, task, version, organismId, speciesId, genusId) {
   });
 }
 
-module.exports = function handleMessage({ fileId, task, version, organismId, speciesId, genusId }) {
-  return Analysis.findOne({ fileId, task, version })
-    .then(model => {
-      if (model) return model.results;
-      return (
-        runTask(fileId, task, version, organismId, speciesId, genusId)
-          .then(results => {
-            Analysis.create({ fileId, task, version, results });
-            return results;
-          })
-      );
-    });
+module.exports = function ({ fileId, task, version, organismId, speciesId, genusId }) {
+  return request('tasks', 'find', { fileId, task, version })
+    .then(cachedResults =>
+      cachedResults ||
+      runTask(fileId, task, version, organismId, speciesId, genusId)
+        .then(results =>
+          Analysis.update(
+            { fileId, task, version },
+            { fileId, task, version, results },
+            { upsert: true }
+          )
+          .then(() => results))
+    );
 };

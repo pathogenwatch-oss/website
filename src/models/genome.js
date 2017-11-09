@@ -82,8 +82,8 @@ function getCountryCode(latitude, longitude) {
   return null;
 }
 
-schema.statics.addPendingTasks = function (_id, pending) {
-  return this.update({ _id }, { $push: { pending: { $each: pending } } });
+schema.statics.addPendingTask = function (_id, task) {
+  return this.update({ _id }, { $push: { pending: task } });
 };
 
 schema.statics.addAnalysisResult = function (_id, task, result) {

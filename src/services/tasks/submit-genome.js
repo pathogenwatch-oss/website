@@ -1,9 +1,10 @@
-const LOGGER = require('utils/logging').createLogger('runner');
+const mapLimit = require('promise-map-limit');
 
 const { request } = require('services/bus');
 
 const { getTasksByOrganism } = require('manifest.js');
-const Genome = require('models/genome');
+
+const LOGGER = require('utils/logging').createLogger('runner');
 
 module.exports = function ({ genomeId, collectionId, fileId, organismId, speciesId, genusId, uploadedAt, clientId }) {
   const tasks = getTasksByOrganism(organismId, speciesId, genusId, collectionId);
@@ -16,10 +17,20 @@ module.exports = function ({ genomeId, collectionId, fileId, organismId, species
   const type = collectionId ? 'collectiongenome' : 'genome';
   LOGGER.info(`Submitting tasks [${taskNames}] for ${type} ${genomeId}`);
 
-  return (
-    (collectionId ? Promise.resolve() : Genome.addPendingTasks(genomeId, taskNames))
-    .then(() => request(
-      'tasks', 'enqueue', { genomeId, collectionId, fileId, organismId, speciesId, genusId, uploadedAt, clientId, tasks }
-    ))
+  return mapLimit(tasks, 1, ({ task, version, retries, timeout }) =>
+    request('tasks', 'enqueue', {
+      genomeId,
+      collectionId,
+      fileId,
+      organismId,
+      speciesId,
+      genusId,
+      uploadedAt,
+      clientId,
+      task,
+      version,
+      retries,
+      timeout,
+    })
   );
 };

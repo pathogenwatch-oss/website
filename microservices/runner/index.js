@@ -19,46 +19,28 @@ taskQueue.setMaxWorkers(workers);
 
 const { tasks, speciator, trees } = taskQueue.queues;
 
-function subscribeToQueues() {
-  if (!queue || queue === tasks) {
+function subscribeToQueue(queueName) {
+  if (queueName === tasks || queueName === speciator) {
     taskQueue.dequeue(
-      tasks,
+      queueName,
       ({ genomeId, collectionId, organismId, speciesId, genusId, fileId, uploadedAt, task, version, clientId, timeout }) =>
         request('tasks', 'run', { organismId, speciesId, genusId, fileId, task, version, timeout$: timeout * 1000 })
           .then(result => {
             LOGGER.info('Got result', genomeId, collectionId, task, version);
-            return request('genome', 'add-analysis', { genomeId, collectionId, uploadedAt, task, version, result, clientId });
+            return request('genome', 'add-analysis', { genomeId, fileId, collectionId, uploadedAt, task, version, result, clientId });
           }),
       message => request('genome', 'add-error', message)
     );
   }
 
-  if (!queue || queue === speciator) {
+  if (queueName === trees) {
     taskQueue.dequeue(
-      speciator,
-      ({ genomeId, fileId, uploadedAt, task, version, clientId, timeout }) =>
-        request('tasks', 'run', { fileId, task, version, timeout$: timeout * 1000 })
-          .then(result => {
-            LOGGER.info('Got result', genomeId, task, version);
-            return request('genome', 'add-analysis', { genomeId, uploadedAt, task, version, result, clientId })
-              .then(() => {
-                const { organismId, speciesId, genusId } = result;
-                return request('tasks', 'submit-genome', { genomeId, fileId, uploadedAt, organismId, speciesId, genusId, clientId });
-              });
-          }),
-      message => request('genome', 'add-error', message)
-    );
-  }
-
-  if (!queue || queue === trees) {
-    taskQueue.dequeue(
-      trees,
-      ({ collectionId, organismId, requires, uploadedAt, task, version, clientId, timeout }) =>
+      queueName,
+      ({ collectionId, organismId, requires, task, version, clientId, timeout }) =>
         request('tasks', 'run-collection', { collectionId, organismId, requires, task, version, timeout$: timeout * 1000 })
           .then(result => {
             LOGGER.info('Got result', collectionId, task, version);
-            console.dir(result);
-            // return request('genome', 'add-analysis', { collectionId, uploadedAt, task, version, result, clientId });
+            return request('collection', 'add-analysis', { collectionId, task, version, result, clientId });
           }),
       message => request('genome', 'add-error', message)
     );
@@ -71,5 +53,8 @@ module.exports = function () {
       LOGGER.error(err);
       process.exit(1);
     })
-    .then(subscribeToQueues);
+    .then(() => {
+      if (queue) subscribeToQueue(queue);
+      else Object.keys(taskQueue.queues).map(subscribeToQueue);
+    });
 };
