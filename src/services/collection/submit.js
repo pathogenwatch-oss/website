@@ -6,7 +6,7 @@ const { enqueue, queues } = require('../taskQueue');
 const config = require('configuration');
 const retries = config.tasks.retries || 3;
 const timeout = config.tasks.timeout || 30;
-const { name = 'tree', version = 'v1' } = config.tasks.trees || {};
+const { name = 'tree', version = 'v1', requires = [ 'core' ] } = config.tasks.trees || {};
 
 module.exports = ({ organismId, collectionId, uuid, collectionGenomes, uploadedAt }) => {
   mapLimit(collectionGenomes, 10, genome => {
@@ -20,6 +20,7 @@ module.exports = ({ organismId, collectionId, uuid, collectionGenomes, uploadedA
       organismId,
       speciesId,
       genusId,
+      clientId: uuid,
     });
   })
   .then(() => enqueue(queues.trees, {
@@ -31,5 +32,6 @@ module.exports = ({ organismId, collectionId, uuid, collectionGenomes, uploadedA
     version,
     retries,
     timeout,
+    requires,
   }));
 };

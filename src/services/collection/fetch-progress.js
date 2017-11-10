@@ -7,7 +7,7 @@ const { NotFoundError } = require('utils/errors');
 function isReady(collection, results) {
   return (
     (collection.size < 3 || collection.tree) &&
-    (collection.reference || collection.subtrees.length) &&
+    // (collection.reference || collection.subtrees.length) &&
     results.every(({ type, count }) => (
       collection.resultRequired(type) ?
         count === collection.size :

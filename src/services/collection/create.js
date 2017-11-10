@@ -14,13 +14,27 @@ function getMaxCollectionSize(user) {
   return maxCollectionSize.anonymous;
 }
 
-function checkAnalysis(genomeIds) {
-  return Genome.count(
-    { _id: { $in: genomeIds }, 'analysis.core': { $exists: true } }
-  )
+function validate({ genomeIds, organismId, user }) {
+  if (!organismId) {
+    throw new ServiceRequestError('No organism ID provided');
+  }
+  if (!genomeIds || !genomeIds.length) {
+    throw new ServiceRequestError('No genome IDs provided');
+  }
+
+  const maxSize = getMaxCollectionSize(user);
+  if (maxSize && genomeIds.length > maxSize) {
+    throw new ServiceRequestError('Too many genome IDs provided');
+  }
+
+  return Genome.count({
+    _id: { $in: genomeIds },
+    organismId,
+    'analysis.core': { $exists: true },
+  })
   .then(count => {
     if (count !== genomeIds.length) {
-      throw new ServiceRequestError('Genome analysis not ready.');
+      throw new ServiceRequestError('Invalid collection request.');
     }
     return genomeIds;
   });
@@ -41,15 +55,6 @@ function getGenomes(genomeIds) {
     organismId: 1,
     'analysis.speciator': 1,
   });
-}
-
-function checkGenomeOrganismIds(genomes, organismId) {
-  for (const genome of genomes) {
-    if (genome.organismId !== organismId) {
-      throw new ServiceRequestError(`A ${organismId} collection cannot include genome (id: ${genome.id}, organismId ${genome.organismId})`);
-    }
-  }
-  return genomes;
 }
 
 function createCollection(genomes, { organismId, title, description, pmid, user, sessionID }) {
@@ -76,37 +81,22 @@ function createCollection(genomes, { organismId, title, description, pmid, user,
 }
 
 function submitCollection({ collection, collectionGenomes }) {
-  const { uuid, organismId } = collection;
+  const { _id, uuid, organismId } = collection;
   const uploadedAt = collection.progress.started;
   request('collection', 'submit', {
     organismId,
     collectionGenomes,
     uploadedAt,
-    collectionId: uuid,
+    collectionId: _id,
+    uuid,
   });
   return collection;
 }
 
 module.exports = function (message) {
-  const { genomeIds, organismId, user } = message;
-
-  if (!organismId) {
-    return Promise.reject(new ServiceRequestError('No organism ID provided'));
-  }
-
-  if (!genomeIds || !genomeIds.length) {
-    return Promise.reject(new ServiceRequestError('No genome IDs provided'));
-  }
-
-  const maxSize = getMaxCollectionSize(user);
-  if (maxSize && genomeIds.length > maxSize) {
-    return Promise.reject(new ServiceRequestError('Too many genome IDs provided'));
-  }
-
-  return Promise.resolve(genomeIds)
-    .then(checkAnalysis)
+  return Promise.resolve(message)
+    .then(validate)
     .then(getGenomes)
-    .then(genomes => checkGenomeOrganismIds(genomes, organismId))
     .then(genomes => createCollection(genomes, message))
     .then(submitCollection)
     .then(({ slug, uuid }) => ({ slug, uuid }));

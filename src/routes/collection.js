@@ -14,7 +14,7 @@ router.put('/collection', (req, res, next) => {
 
   return services.
     request('collection', 'create', message).
-    then(result => res.json(result)).
+    then(result => res.status(201).json(result)).
     catch(next);
 });
 

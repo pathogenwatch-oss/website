@@ -11,7 +11,7 @@ module.exports = function ({ genomeId, collectionId, uploadedAt, task, clientId 
         taskType: task,
       })
       .then(() => {
-        request('collection', 'send-progress', { collectionId });
+        request('collection', 'send-progress', { clientId });
       })
     );
   }

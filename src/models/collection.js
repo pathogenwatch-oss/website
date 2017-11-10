@@ -89,7 +89,7 @@ schema.methods.ready = function () {
 };
 
 const commonResults = new Set([ 'core', 'metrics' ]);
-const nonReferenceResults = new Set([ 'fp' ]);
+const nonReferenceResults = new Set([ ]);
 const standardAnalyses = new Set([ 'mlst', 'paarsnp' ]);
 const standardOrganisms = new Set([ '1280', '90370', '485', '1313' ]);
 const organismSpecificResults = {
@@ -250,7 +250,7 @@ schema.statics.getSort = function (sort = 'createdAt-') {
 schema.statics.addAnalysisResult = function (_id, key, __v, result) {
   const update = {};
   if (key === 'tree') {
-    update.tree = result.newick;
+    update.tree = result.tree;
     update['analysis.tree'] = { __v };
   }
   return this.update({ _id }, update);
