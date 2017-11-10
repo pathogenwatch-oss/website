@@ -102,7 +102,7 @@ const Progress = ({ inProgress, errored, files, analysis, uploadedAt, specieatio
       </div>
       { files.errored > 0 &&
         <div className="wgsa-section-divider">
-          <h2 className="wgsa-section-title">Errors</h2>
+          <h2 className="wgsa-section-title">Validation Errors</h2>
           { errored.map(file => <FileCard key={file.id} item={file} />) }
         </div> }
       { (!!analysis.length && analysis[0].key !== 'pending') &&
