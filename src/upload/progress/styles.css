@@ -50,20 +50,16 @@
 }
 
 .wgsa-analysis-chart {
-  width: calc(100vh - 200px);
-  max-width: 100%;
-  margin: -16px auto 0;
+  flex-grow: 1;
+  max-height: 640px;
   position: relative;
 }
 
 .wgsa-view-genomes-button {
   position: absolute;
-  top: 50%;
+  top: calc(50% + 4.5px);
   left: 50%;
   transform: translate(-50%, -50%);
-}
-
-.wgsa-view-genomes-button {
   background-color: #3C7383;
   color: #fff;
   padding: 8px;
@@ -105,4 +101,9 @@
 
 .wgsa-upload-progress-overview .wgsa-progress-bar > label {
   width: 120px;
+}
+
+.wgsa-flex-section {
+  display: flex;
+  flex-direction: column;
 }

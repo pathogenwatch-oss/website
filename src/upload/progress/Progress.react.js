@@ -27,7 +27,7 @@ const Analysis = ({ data, showBreakdown }) => (
                       `${analysis.label} ✔️` :
                       `${analysis.label}: ${analysis.total} / ${total}` }
                     { analysis.errors > 0 &&
-                      <small style={{ float: 'right' }}>
+                      <small>
                         &nbsp;{analysis.errors} error{analysis.errors === 1 ? '' : 's'}
                       </small>}
                   </li>
@@ -102,7 +102,7 @@ const Progress = ({ inProgress, errored, files, analysis, uploadedAt, specieatio
       </div>
       { files.errored > 0 &&
         <div className="wgsa-section-divider">
-          <h2 className="wgsa-section-title">Errors</h2>
+          <h2 className="wgsa-section-title">Validation Errors</h2>
           { errored.map(file => <FileCard key={file.id} item={file} />) }
         </div> }
       { (!!analysis.length && analysis[0].key !== 'pending') &&
@@ -111,7 +111,7 @@ const Progress = ({ inProgress, errored, files, analysis, uploadedAt, specieatio
           <Analysis data={analysis} showBreakdown={specieationComplete} />
         </div> }
     </div>
-    <div className="wgsa-section-divider">
+    <div className="wgsa-section-divider wgsa-flex-section">
       <h2 className="wgsa-section-title">Analysis</h2>
       <AnalysisChart uploadedAt={uploadedAt} />
     </div>

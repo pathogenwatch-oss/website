@@ -9,7 +9,7 @@ import { retryAll, removeAll } from './actions';
 const ErrorSummary = React.createClass({
 
   render() {
-    const { totalErrors, totalFailures, retryable, onRetry, onRemove } = this.props;
+    const { totalErrors, totalFailures, retryable, onRetry, onRemove, children } = this.props;
     return (
       <Summary className="wgsa-hub-summary">
         <span className="wgsa-error-message">{totalErrors} file{totalErrors === 1 ? '' : 's'} could not be uploaded.</span>
@@ -18,8 +18,9 @@ const ErrorSummary = React.createClass({
             Retry {totalFailures} Failed Upload{totalFailures === 1 ? '' : 's'}
           </button>}
         <button className="mdl-button" onClick={onRemove}>
-          Remove All
+          Remove { totalFailures > 1 && 'All' }
         </button>
+        {children}
       </Summary>
     );
   },
