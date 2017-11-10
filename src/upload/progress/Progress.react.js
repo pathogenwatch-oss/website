@@ -111,7 +111,7 @@ const Progress = ({ inProgress, errored, files, analysis, uploadedAt, specieatio
           <Analysis data={analysis} showBreakdown={specieationComplete} />
         </div> }
     </div>
-    <div className="wgsa-section-divider">
+    <div className="wgsa-section-divider wgsa-flex-section">
       <h2 className="wgsa-section-title">Analysis</h2>
       <AnalysisChart uploadedAt={uploadedAt} />
     </div>

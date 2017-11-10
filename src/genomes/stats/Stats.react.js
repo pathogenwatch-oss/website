@@ -5,6 +5,8 @@ import { connect } from 'react-redux';
 import classnames from 'classnames';
 import { AutoSizer } from 'react-virtualized';
 
+import ChartResizer from '../../components/chart-resizer';
+
 import * as selectors from './selectors';
 import { getFilter } from '../filter/selectors';
 
@@ -49,29 +51,6 @@ function getClickHandler(chartData, onPointClick) {
     }
   };
 }
-
-const ChartResizer = React.createClass({
-
-  componentDidUpdate(previous) {
-    const { width, height, chart } = this.props;
-
-    if (!chart) return;
-
-    if (width !== previous.width || height !== previous.height) {
-      chart.resize();
-    }
-  },
-
-  render() {
-    const { width, height } = this.props;
-    return (
-      <div className="wgsa-stats-chart" style={{ width: width - 8, height }}>
-        {this.props.children}
-      </div>
-    );
-  },
-
-});
 
 export const StatsView = React.createClass({
 
@@ -165,7 +144,12 @@ export const StatsView = React.createClass({
                   <ChartButton key={props.metric} {...props} />
                 )}
               </nav>
-              <ChartResizer height={height - 184} width={width} chart={this.chart}>
+              <ChartResizer
+                className="wgsa-stats-chart"
+                height={height - 184}
+                width={width - 8}
+                chart={this.chart}
+              >
                 <canvas ref={el => { this.canvas = el; }} />
               </ChartResizer>
               <div className="wgsa-hub-stats-group">

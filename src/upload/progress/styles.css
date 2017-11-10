@@ -50,9 +50,8 @@
 }
 
 .wgsa-analysis-chart {
-  width: 100vh;
-  max-width: 100%;
-  margin: -16px auto 0;
+  flex-grow: 1;
+  max-height: 640px;
   position: relative;
 }
 
@@ -102,4 +101,9 @@
 
 .wgsa-upload-progress-overview .wgsa-progress-bar > label {
   width: 120px;
+}
+
+.wgsa-flex-section {
+  display: flex;
+  flex-direction: column;
 }
