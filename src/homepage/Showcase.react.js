@@ -27,6 +27,7 @@ const Marker = React.createClass({
     const { uuid } = marker.collection;
     return (
       <Link
+        ref={el => { this.ref = el; }}
         style={{
           ...style,
           animationDelay: `${0.125 * marker.index}s`,
@@ -63,17 +64,27 @@ export default React.createClass({
     };
   },
 
-  componentWillMount() {
+  componentDidMount() {
     getShowcaseCollections()
       .then(collections => this.setState({
         locations: collections.reduce((memo, { locations, ...collection }) => {
           for (const [ index, [ lat, lon ] ] of locations.entries()) {
-            memo.push({ lat, lon, collection, index });
+            if (lat !== null && lon !== null) {
+              memo.push({ lat, lon, collection, index });
+            }
           }
           return memo;
         }, []),
         collections,
       }));
+  },
+
+  componentDidUpdate(_, previous) {
+    const { collections } = this.state;
+    if (previous.collections.length === 0 && collections.length > 0) {
+      this.setCollection();
+      this.startCarousel();
+    }
   },
 
   componentWillUnmount() {
@@ -92,15 +103,6 @@ export default React.createClass({
 
   stopCarousel() {
     clearInterval(this._interval);
-  },
-
-  componentDidUpdate(_, previous) {
-    const { collections } = this.state;
-
-    if (previous.collections.length === 0 && collections.length > 0) {
-      this.setCollection();
-      this.startCarousel();
-    }
   },
 
   renderCollectionLinks() {

@@ -41,7 +41,7 @@ export default React.createClass({
   },
 
   componentDidMount() {
-    this.lasso = L.lassoSelect({
+    this.lasso = L.featureGroup.lassoSelect({
       finishedTooltip: 'Click outside the region to cancel the filter.',
       polyline: {
         color: '#673c90',

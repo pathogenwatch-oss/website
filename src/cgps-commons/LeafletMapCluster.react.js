@@ -13,7 +13,6 @@ class MarkerCluster extends MapLayer {
 
   componentWillMount() {
     super.componentWillMount();
-    this.leafletElement = Leaflet.markerClusterGroup(this.props.options);
   }
 
   componentDidMount() {
@@ -27,6 +26,11 @@ class MarkerCluster extends MapLayer {
 
   componentDidUpdate() {
     this.addMarkers(this.props.markers);
+  }
+
+  createLeafletElement() {
+    this.leafletElement = Leaflet.markerClusterGroup(this.props.options);
+    return this.leafletElement;
   }
 
   addMarkers(markers) {
