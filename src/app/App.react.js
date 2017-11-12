@@ -60,6 +60,10 @@ export default connect(mapStateToProps, mapDispatchToProps)(React.createClass({
     }
   },
 
+  componentDidCatch(e) {
+    console.log(e);
+  },
+
   render() {
     const { pageSlug, userDrawerVisible } = this.props;
     return (
