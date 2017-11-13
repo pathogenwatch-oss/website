@@ -34,6 +34,12 @@ module.exports.getSpeciatorTask = function () {
   return { task, version };
 };
 
+module.exports.getTreesTask = function () {
+  const { trees = {} } = config.tasks || {};
+  const { task = 'tree', version = 'v1', requires = [ 'core' ] } = trees;
+  return { task, version, requires };
+};
+
 const collectionIgnore = new Set(
   config.tasks ? config.tasks.collectionIgnore : undefined
 );

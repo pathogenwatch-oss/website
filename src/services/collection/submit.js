@@ -3,12 +3,11 @@ const mapLimit = require('promise-map-limit');
 const { request } = require('services/bus');
 const { enqueue, queues } = require('../taskQueue');
 
-const config = require('configuration');
-const retries = config.tasks.retries || 3;
-const timeout = config.tasks.timeout || 30;
-const { name = 'tree', version = 'v1', requires = [ 'core' ] } = config.tasks.trees || {};
+const { getTreesTask } = require('../../manifest');
 
 module.exports = ({ organismId, collectionId, uuid, collectionGenomes, uploadedAt }) => {
+  const { task, version, requires } = getTreesTask();
+
   mapLimit(collectionGenomes, 10, genome => {
     const { fileId, analysis } = genome;
     const { speciesId, genusId } = analysis.speciator;
@@ -28,10 +27,8 @@ module.exports = ({ organismId, collectionId, uuid, collectionGenomes, uploadedA
     organismId,
     uploadedAt,
     clientId: uuid,
-    task: name,
+    task,
     version,
-    retries,
-    timeout,
     requires,
   }));
 };

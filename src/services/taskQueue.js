@@ -8,7 +8,10 @@ const mongoose = require('mongoose');
 const config = require('configuration');
 const LOGGER = require('utils/logging').createLogger('queue');
 
-mQueue.processingTimeout = (config.tasks.timeout || 60) * 1000;
+const defaultRetries = config.tasks.retries || 3;
+const defaultTimeout = config.tasks.timeout || 30;
+
+mQueue.processingTimeout = (defaultTimeout || 60) * 1000;
 mQueue.maxWorkers = 1;
 
 mQueue.databasePromise = () => Q.resolve(mongoose.connection);
@@ -23,6 +26,7 @@ const queues = {
   trees: 'trees',
 };
 
+
 module.exports.queues = queues;
 
 module.exports.enqueue = function (queue, message) {
@@ -32,7 +36,7 @@ module.exports.enqueue = function (queue, message) {
   }
   LOGGER.info('Adding message', message, 'to', queue);
   return (
-    mQueue.enqueue(queue, message)
+    mQueue.enqueue(queue, { retries: defaultRetries, timeout: defaultTimeout, ...message })
       .catch(err => LOGGER.error(err))
   );
 };

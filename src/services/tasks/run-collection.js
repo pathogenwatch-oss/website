@@ -1,3 +1,6 @@
+/* eslint no-param-reassign: ["error", { "props": false }] */
+/* eslint no-params: 0 */
+
 const docker = require('docker-run');
 const crypto = require('crypto');
 
@@ -19,9 +22,9 @@ function runTask(task, version, collectionId, requires, organismId) {
     });
     const stream = CollectionGenome.collection.find(
       { _collection: collectionId },
-      requires.reduce((memo, requiredTask) => {
-        memo[`analysis.${requiredTask}`] = 1;
-        return memo;
+      requires.reduce((projection, requiredTask) => {
+        projection[`analysis.${requiredTask}`] = 1;
+        return projection;
       }, {}),
       { raw: true }
     );
