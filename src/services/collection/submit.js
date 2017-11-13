@@ -1,34 +1,16 @@
-const mapLimit = require('promise-map-limit');
+const path = require('path');
 
-const { request } = require('services/bus');
-const { enqueue, queues } = require('../taskQueue');
+const WorkerNodes = require('worker-nodes');
+const workers = new WorkerNodes(path.resolve(path.join(__dirname), '..', 'submit-worker.js'));
 
-const { getTreesTask } = require('../../manifest');
-
-module.exports = ({ organismId, collectionId, uuid, collectionGenomes, uploadedAt }) => {
-  const { task, version, requires } = getTreesTask();
-
-  mapLimit(collectionGenomes, 10, genome => {
-    const { fileId, analysis } = genome;
-    const { speciesId, genusId } = analysis.speciator;
-    return request('tasks', 'submit-genome', {
-      genomeId: genome._id,
-      collectionId,
-      fileId,
-      uploadedAt,
-      organismId,
-      speciesId,
-      genusId,
-      clientId: uuid,
-    });
-  })
-  .then(() => enqueue(queues.trees, {
-    collectionId,
+module.exports = ({ organismId, speciesId, genusId, collectionId, uuid, uploadedAt }) => {
+  return workers.call({
+    collectionId: collectionId.toString(),
     organismId,
+    speciesId,
+    genusId,
+    uuid,
     uploadedAt,
-    clientId: uuid,
-    task,
-    version,
-    requires,
-  }));
+  })
+  .then(msg => console.log(msg));
 };

@@ -18,7 +18,7 @@ module.exports = function ({
   uploadedAt, clientId,
   task, version, retries = defaultRetries, timeout = defaultTimeout,
 }) {
-  request('tasks', 'find', { fileId, task, version })
+  return request('tasks', 'find', { fileId, task, version })
     .then(result => {
       if (result) {
         return request('genome', 'add-analysis', {
