@@ -1,15 +1,7 @@
-const { request } = require('services/bus');
-
-const { getSpeciatorTask } = require('../../manifest');
+const path = require('path');
+const WorkerNodes = require('worker-nodes');
+const workers = new WorkerNodes(path.resolve(path.join(__dirname), '..', 'speciate-worker.js'));
 
 module.exports = function ({ genomeId, fileId, uploadedAt, clientId }) {
-  const { task, version } = getSpeciatorTask();
-  return request('tasks', 'enqueue', {
-    genomeId,
-    fileId,
-    uploadedAt,
-    clientId,
-    task,
-    version,
-  });
+  return workers.call({ genomeId, fileId, uploadedAt, clientId });
 };

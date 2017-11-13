@@ -1,5 +1,4 @@
 const path = require('path');
-
 const WorkerNodes = require('worker-nodes');
 const workers = new WorkerNodes(path.resolve(path.join(__dirname), '..', 'submit-worker.js'));
 
@@ -11,6 +10,5 @@ module.exports = ({ organismId, speciesId, genusId, collectionId, uuid, uploaded
     genusId,
     uuid,
     uploadedAt,
-  })
-  .then(msg => console.log(msg));
+  });
 };
