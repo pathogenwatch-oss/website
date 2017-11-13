@@ -71,6 +71,9 @@
     "speciation": {
       "task": "speciator", "version": "v1"
     },
+    "trees": {
+      "task": "tree", "version": "t3", "requires": [ "core" ]
+    },
     "retries": 3,
     "registry": {
 			"username": "",
