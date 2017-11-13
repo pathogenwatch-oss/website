@@ -19,6 +19,7 @@
     "docker-pull": "github:imperialcollegelondon/docker-pull",
     "docker-run": "^3.0.0",
     "ejs": "^2.5.1",
+    "event-stream": "^3.3.4",
     "express": "^4.10.7",
     "express-session": "^1.14.2",
     "geocoding": "gitlab:cgps/geocoding#v2.0.0",
