@@ -14,12 +14,8 @@ const { getImageName } = require('manifest.js');
 const LOGGER = require('utils/logging').createLogger('runner');
 
 function runTask(task, version, collectionId, requires, organismId) {
-  return CollectionGenome.find({ _collection: collectionId }, { fileId: 1 }).lean()
+  return CollectionGenome.find({ _collection: collectionId }, { fileId: 1 }, { sort: { fileId: 1 } }).lean()
     .then(fileIds => new Promise((resolve, reject) => {
-      const fileIdByGenomeId = fileIds.reduce((memo, doc) => {
-        memo[doc._id] = doc.fileId;
-        return memo;
-      }, {});
       const container = docker(getImageName(task, version), {
         env: {
           WGSA_ORGANISM_TAXID: organismId,
@@ -27,29 +23,38 @@ function runTask(task, version, collectionId, requires, organismId) {
         },
         remove: false,
       });
-      const stream = CollectionGenome.collection.find(
+
+      const scoresStream = ScoreCache.collection.find(
+        { fileId: { $in: fileIds.map(_ => _.fileId) } },
+        fileIds.reduce((projection, { fileId }) => {
+          projection[`scores.${fileId}`] = 1;
+          return projection;
+        }, { fileId: 1 }),
+        { raw: true, sort: { fileId: 1 } }
+      );
+
+      const genomesStream = CollectionGenome.collection.find(
         { _collection: collectionId },
         requires.reduce((projection, requiredTask) => {
           projection[`analysis.${requiredTask}`] = 1;
           return projection;
         }, { fileId: 1 }),
-        { raw: true }
+        { raw: true, sort: { fileId: 1 } }
       );
-      stream.pipe(container.stdin);
+
+      genomesStream.pause();
 
       container.stdout
         .pipe(es.split())
         .on('data', (data) => {
           try {
             const doc = JSON.parse(data);
-            if (doc.id && doc.scores) {
+            if (doc.fileId && doc.scores) {
               const update = {};
               for (const key of Object.keys(doc.scores)) {
-                update[`scores.${fileIdByGenomeId[key]}`] = doc.scores[key];
+                update[`scores.${key}`] = doc.scores[key];
               }
-              console.log({ fileId: fileIdByGenomeId[doc.id], version }, update);
-              ScoreCache.update({ fileId: fileIdByGenomeId[doc.id], version }, update, { upsert: true })
-                .then(updated => console.log({ updated }));
+              ScoreCache.update({ fileId: doc.fileId, version }, update, { upsert: true }).exec();
             } else {
               resolve(doc);
             }
@@ -57,6 +62,15 @@ function runTask(task, version, collectionId, requires, organismId) {
             reject(e);
           }
         });
+
+      es.merge(
+        scoresStream,
+        genomesStream
+      )
+      .pipe(container.stdin);
+      // .pipe(require('fs').createWriteStream('input.bson'));
+
+      scoresStream.on('end', () => genomesStream.resume());
 
       container.on('exit', (exitCode) => {
         LOGGER.info('exit', exitCode);
