@@ -7,3 +7,22 @@
   color: #673c90;
   font-size: 40px;
 }
+
+.wgsa-genomes-map-popup {
+  background: #fff;
+  color: #673c90;
+  white-space: nowrap;
+  padding: 8px;
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  margin: 0;
+  max-height: 400px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-width: 320px;
+}
+
+.wgsa-genomes-map-popup button {
+  text-transform: none;
+}

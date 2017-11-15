@@ -16,27 +16,24 @@ import { getFilter } from '../filter/selectors';
 const Marker = React.createClass({
 
   render() {
-    const { marker, style, onClick, popup } = this.props;
-    const hasPopup = popup === marker.position.join(',');
+    const { marker, style, popup } = this.props;
     return (
       <div className={classnames(
         'wgsa-marker-cluster',
-        { 'has-popup': hasPopup }
+        { 'has-popup': popup === marker }
       )}
         style={style}
         onClick={event => {
           event.stopPropagation();
           event.nativeEvent.stopImmediatePropagation();
-          onClick({ marker, event });
+          if (marker.genomes.length === 1) {
+            this.props.showGenomeDrawer(marker.genomes[0]);
+          } else {
+            this.props.toggleMarkerPopup(marker);
+          }
         }}
       >
         {marker.genomes.length}
-        {hasPopup &&
-          <ul className="wgsa-marker-popup mdl-shadow--2dp">
-            {marker.genomes.map(({ id, name }) =>
-              <li key={id}>{name}</li>
-            )}
-          </ul>}
       </div>
     );
   },
@@ -66,7 +63,7 @@ const MapView = React.createClass({
   },
 
   render() {
-    const { stateKey, lassoPath, markers, onClick, onLassoPathChange, onMarkerClick, popup } = this.props;
+    const { stateKey, lassoPath, markers, onClick, onLassoPathChange, popup } = this.props;
     return (
       <div className="wgsa-genomes-map">
         <WGSAMap
@@ -75,12 +72,29 @@ const MapView = React.createClass({
           markers={markers}
           markerIds={markers}
           markerComponent={Marker}
-          markerProps={{ popup }}
+          markerProps={{
+            popup,
+            showGenomeDrawer: this.props.showGenomeDrawer,
+            toggleMarkerPopup: this.props.toggleMarkerPopup,
+          }}
           onClick={onClick}
           onLassoPathChange={onLassoPathChange}
-          onMarkerClick={onMarkerClick}
           stateKey={stateKey}
         />
+        { popup &&
+          <ul className="wgsa-genomes-map-popup mdl-shadow--2dp">
+            {popup.genomes.map(genome =>
+              <li key={genome.id}>
+                <button
+                  className="mdl-button"
+                  onClick={() => this.props.showGenomeDrawer(genome)}
+                >
+                  {genome.name}
+                </button>
+              </li>
+            )}
+          </ul>
+        }
       </div>
     );
   },
@@ -103,13 +117,8 @@ function mapDispatchToProps(dispatch, { stateKey }) {
   return {
     onLassoPathChange: path => dispatch(selectByArea(stateKey, path)),
     onClick: () => dispatch(setSelection([])),
-    onMarkerClick: ({ genomes, position }) => {
-      if (genomes.length === 1) {
-        dispatch(showGenomeDrawer(genomes[0].id, genomes[0].name));
-      } else {
-        dispatch(toggleMarkerPopup(position));
-      }
-    },
+    showGenomeDrawer: ({ id, name }) => dispatch(showGenomeDrawer(id, name)),
+    toggleMarkerPopup: (marker) => dispatch(toggleMarkerPopup(marker)),
     fetch: () => dispatch(fetchGenomeMap()),
   };
 }

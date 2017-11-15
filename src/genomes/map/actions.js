@@ -13,9 +13,9 @@ export function selectByArea(stateKey, path) {
 
 export const TOGGLE_MARKER_POPUP = 'TOGGLE_MARKER_POPUP';
 
-export function toggleMarkerPopup(position) {
+export function toggleMarkerPopup(marker) {
   return {
     type: TOGGLE_MARKER_POPUP,
-    payload: position.join(','),
+    payload: marker,
   };
 }
