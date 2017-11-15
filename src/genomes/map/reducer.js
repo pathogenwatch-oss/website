@@ -21,11 +21,18 @@ export default function (state = initialState, { type, payload }) {
         filter: payload.filter,
       };
     }
-    case TOGGLE_MARKER_POPUP:
+    case TOGGLE_MARKER_POPUP: {
+      if (!payload) {
+        return {
+          ...state,
+          popup: null,
+        };
+      }
       return {
         ...state,
         popup: state.popup === payload ? null : payload,
       };
+    }
     default:
       return state;
   }

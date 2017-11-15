@@ -116,7 +116,10 @@ function mapStateToProps(state, props) {
 function mapDispatchToProps(dispatch, { stateKey }) {
   return {
     onLassoPathChange: path => dispatch(selectByArea(stateKey, path)),
-    onClick: () => dispatch(setSelection([])),
+    onClick: () => {
+      dispatch(setSelection([]));
+      dispatch(toggleMarkerPopup());
+    },
     showGenomeDrawer: ({ id, name }) => dispatch(showGenomeDrawer(id, name)),
     toggleMarkerPopup: (marker) => dispatch(toggleMarkerPopup(marker)),
     fetch: () => dispatch(fetchGenomeMap()),
