@@ -252,6 +252,8 @@ schema.statics.addAnalysisResult = function (_id, key, __v, result) {
   if (key === 'tree') {
     update.tree = result.tree;
     update['analysis.tree'] = { __v };
+  } else if (key === 'subtree') {
+    update.subtrees = { $push: result };
   }
   return this.update({ _id }, update);
 };

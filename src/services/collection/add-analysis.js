@@ -8,5 +8,9 @@ module.exports = function ({ collectionId, task, version, result, clientId }) {
       .then(() => {
         request('collection', 'send-progress', { clientId });
       })
+      .then(() => {
+        if (task !== 'tree') return null;
+        return request('tasks', 'enqueue-subtrees', { collectionId, clientId });
+      })
   );
 };

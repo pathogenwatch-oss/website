@@ -13,8 +13,15 @@ const { getImageName } = require('manifest.js');
 
 const LOGGER = require('utils/logging').createLogger('runner');
 
-function runTask(task, version, collectionId, requires, organismId) {
-  return CollectionGenome.find({ _collection: collectionId }, { fileId: 1 }, { sort: { fileId: 1 } }).lean()
+function runTask(task, version, collectionId, subtype, requires, organismId) {
+  const query = subtype ?
+    { 'analysis.core.fp': subtype, $or: [ { _collection: collectionId }, { published: true } ] } :
+    { _collection: collectionId };
+  return CollectionGenome.find(
+      query,
+      { fileId: 1 },
+      { sort: { fileId: 1 } })
+    .lean()
     .then(fileIds => new Promise((resolve, reject) => {
       const container = docker(getImageName(task, version), {
         env: {
@@ -43,6 +50,7 @@ function runTask(task, version, collectionId, requires, organismId) {
       );
 
       genomesStream.pause();
+      scoresStream.on('end', () => genomesStream.resume());
 
       container.stdout
         .pipe(es.split())
@@ -70,8 +78,6 @@ function runTask(task, version, collectionId, requires, organismId) {
       .pipe(container.stdin);
       // .pipe(require('fs').createWriteStream('input.bson'));
 
-      scoresStream.on('end', () => genomesStream.resume());
-
       container.on('exit', (exitCode) => {
         LOGGER.info('exit', exitCode);
         if (exitCode !== 0) {
@@ -86,7 +92,7 @@ function runTask(task, version, collectionId, requires, organismId) {
     }));
 }
 
-module.exports = function handleMessage({ collectionId, task, version, requires, organismId }) {
+module.exports = function handleMessage({ task, version, requires, organismId, collectionId, subtype }) {
   return CollectionGenome.find({ _collection: collectionId }, { fileId: 1 }, { sort: { fileId: 1 } })
     .then(results => {
       const hash = crypto.createHash('sha1');
@@ -100,7 +106,7 @@ module.exports = function handleMessage({ collectionId, task, version, requires,
         .then(model => {
           if (model) return model.results;
           return (
-            runTask(task, version, collectionId, requires, organismId)
+            runTask(task, version, collectionId, subtype, requires, organismId)
               .then(results => {
                 // Analysis.create({ fileId, task, version, results });
                 return results;

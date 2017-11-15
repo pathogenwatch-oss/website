@@ -52,6 +52,7 @@ const schema = new Schema({
       tbpb: String,
     },
   },
+  published: Boolean,
 });
 
 setToObjectOptions(schema);

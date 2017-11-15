@@ -36,8 +36,8 @@ function subscribeToQueue(queueName) {
   if (queueName === trees) {
     taskQueue.dequeue(
       queueName,
-      ({ collectionId, organismId, requires, task, version, clientId, timeout }) =>
-        request('tasks', 'run-collection', { collectionId, organismId, requires, task, version, timeout$: timeout * 1000 })
+      ({ task, version, requires, organismId, collectionId, subtype, clientId, timeout }) =>
+        request('tasks', 'run-collection', { task, version, requires, organismId, collectionId, subtype, clientId, timeout$: timeout * 1000 })
           .then(result => {
             LOGGER.info('Got result', collectionId, task, version);
             return request('collection', 'add-analysis', { collectionId, task, version, result, clientId });
