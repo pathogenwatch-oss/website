@@ -10,3 +10,12 @@ export function selectByArea(stateKey, path) {
     dispatch(setSelection(getGenomesInPath(state, { stateKey })));
   };
 }
+
+export const TOGGLE_MARKER_POPUP = 'TOGGLE_MARKER_POPUP';
+
+export function toggleMarkerPopup(position) {
+  return {
+    type: TOGGLE_MARKER_POPUP,
+    payload: position.join(','),
+  };
+}

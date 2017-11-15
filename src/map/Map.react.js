@@ -30,6 +30,7 @@ const WGSAMap = props => (
     markers={props.markers}
     markerIds={props.markerIds}
     markerComponent={props.markerComponent}
+    markerProps={props.markerProps}
     markerSize={props.markerSize}
     mapboxKey={CONFIG.mapboxKey}
     mapboxStyle="light-v9"
