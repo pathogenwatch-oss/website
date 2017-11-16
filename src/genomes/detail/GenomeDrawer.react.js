@@ -1,12 +1,12 @@
 import React from 'react';
 
-import Modal from '../components/modal';
-import Fade from '../components/fade';
-import RemoveButton from '../genomes/card/RemoveButton.react';
-import AddToSelection from '../genomes/selection/AddToSelection.react';
+import Modal from '../../components/modal';
+import Fade from '../../components/fade';
+import RemoveButton from './RemoveButton.react';
+import AddToSelection from '../../genomes/selection/AddToSelection.react';
 
-import DownloadLink from '../downloads/GenomeFileLink.react';
-import Spinner from '../components/Spinner.react';
+import DownloadLink from '../../downloads/GenomeFileLink.react';
+import Spinner from '../../components/Spinner.react';
 
 import Overview from './Overview.react';
 import Metadata from './Metadata.react';
@@ -66,10 +66,10 @@ export default ({ name, genome, loading, close }) => {
             <span className="wgsa-genome-drawer-title">
               { genome &&
                 <AddToSelection
-                  genome={genome}
+                  genomes={[ genome ]}
                   className="mdl-button mdl-button--icon"
                 /> }
-              {name || genome.name}
+              {genome ? genome.name : name}
             </span>
           }
           modal

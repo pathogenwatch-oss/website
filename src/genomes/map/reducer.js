@@ -1,5 +1,6 @@
 import { FETCH_GENOME_MAP } from '../actions';
-import { TOGGLE_MARKER_POPUP } from './actions';
+import { SHOW_MARKER_POPUP, CLOSE_MARKER_POPUP } from './actions';
+import { MAP_LASSO_CHANGE } from '../../map/actions';
 
 const initialState = {
   markers: [],
@@ -9,12 +10,12 @@ const initialState = {
 
 export default function (state = initialState, { type, payload }) {
   switch (type) {
-    case FETCH_GENOME_MAP.ATTEMPT: {
+    case FETCH_GENOME_MAP.ATTEMPT:
+    case CLOSE_MARKER_POPUP:
       return {
         ...state,
         popup: initialState.popup,
       };
-    }
     case FETCH_GENOME_MAP.SUCCESS: {
       return {
         ...state,
@@ -22,7 +23,7 @@ export default function (state = initialState, { type, payload }) {
         filter: payload.filter,
       };
     }
-    case TOGGLE_MARKER_POPUP.ATTEMPT: {
+    case SHOW_MARKER_POPUP.ATTEMPT: {
       return {
         ...state,
         popup: {
@@ -31,7 +32,7 @@ export default function (state = initialState, { type, payload }) {
         },
       };
     }
-    case TOGGLE_MARKER_POPUP.SUCCESS: {
+    case SHOW_MARKER_POPUP.SUCCESS: {
       return {
         ...state,
         popup: {
@@ -39,6 +40,15 @@ export default function (state = initialState, { type, payload }) {
           genomes: payload.result,
         },
       };
+    }
+    case MAP_LASSO_CHANGE: {
+      if (!payload.path) {
+        return {
+          ...state,
+          popup: initialState.popup,
+        };
+      }
+      return state;
     }
     default:
       return state;

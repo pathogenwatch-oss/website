@@ -1,5 +1,5 @@
 import { SHOW_GENOME_DETAILS, CLOSE_DRAWER } from './actions';
-import { FETCH_GENOME_LIST } from '../genomes/actions';
+import { FETCH_GENOME_LIST } from '../actions';
 
 const initialState = { name: null, genome: null, loading: false, error: false };
 

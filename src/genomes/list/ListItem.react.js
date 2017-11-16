@@ -8,7 +8,7 @@ import { FormattedName } from '../../organisms';
 import { formatDate } from '../../utils/Date';
 import { getCountryName } from '../../utils/country';
 
-import { showGenomeDrawer } from '../../genome-drawer';
+import { showGenomeDrawer } from '../../genomes/detail';
 import { ST } from '../../mlst';
 
 const Cell = ({ title, icon, children }) => (
@@ -60,7 +60,7 @@ const ListItem = ({ item, onClick, style, onViewGenome }) => {
       onClick={onClick}
     >
       <Cell title={name} onClick={e => e.stopPropagation()}>
-        <AddToSelection genome={item} />
+        <AddToSelection genomes={[ item ]} />
         <button title="View Details" className="wgsa-link-button" onClick={onViewGenome}>
           {name}
         </button>

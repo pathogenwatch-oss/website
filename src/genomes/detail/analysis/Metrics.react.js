@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Section, Metadata } from '../components';
+import { Section } from '../components';
 
 import N50Chart from './N50Chart.react';
 

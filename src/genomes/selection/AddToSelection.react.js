@@ -17,16 +17,16 @@ const AddToSelection = ({ isSelected, onClick, className }) => (
   </button>
 );
 
-function mapStateToProps(state, { genome }) {
+function mapStateToProps(state, { genomes }) {
   const selection = getSelectedGenomes(state);
   return {
-    isSelected: (genome.id in selection),
+    isSelected: genomes.every(genome => (genome.id in selection)),
   };
 }
 
-function mapDispatchToProps(dispatch, { genome }) {
+function mapDispatchToProps(dispatch, { genomes }) {
   return {
-    onClick: e => e.stopPropagation() || dispatch(toggleSelection([ genome ])),
+    onClick: e => e.stopPropagation() || dispatch(toggleSelection(genomes)),
   };
 }
 

@@ -194,7 +194,8 @@
   border: 2px solid color(#a386bd alpha(60%) lightness(75%));
 }
 
-.wgsa-marker-cluster:hover {
+.wgsa-marker-cluster:hover,
+.wgsa-marker-cluster.has-popup {
   cursor: pointer;
   background: color(#673c90 alpha(75%));
   border: 2px solid color(#673c90 alpha(60%) lightness(75%));
@@ -203,4 +204,3 @@
 .wgsa-marker-cluster.has-popup {
   z-index: 1;
 }
-

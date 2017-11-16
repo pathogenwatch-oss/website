@@ -5,11 +5,10 @@ import classnames from 'classnames';
 import WGSAMap from '../../map';
 import { FormattedName } from '../../organisms';
 import AddToSelection from '../selection/AddToSelection.react';
-import AddListToSelection from '../selection/AddListToSelection.react';
+import Spinner from '../../components/Spinner.react';
 
-import { setSelection } from '../selection/actions';
-import { showGenomeDrawer } from '../../genome-drawer';
-import { selectByArea, toggleMarkerPopup } from './actions';
+import { showGenomeDrawer } from '../../genomes/detail';
+import { selectByArea, showMarkerPopup, closeMarkerPopup } from './actions';
 import { fetchGenomeMap } from '../actions';
 
 import { getMarkers, getFilter as getPreviousFilter, getPopup, getPopupList } from './selectors';
@@ -20,19 +19,21 @@ const Marker = React.createClass({
 
   render() {
     const { marker, style, popup } = this.props;
+    const hasPopup = popup.position === marker.position;
     return (
       <div className={classnames(
         'wgsa-marker-cluster',
-        { 'has-popup': popup.position === marker.position }
+        { 'has-popup': hasPopup }
       )}
         style={style}
         onClick={event => {
           event.stopPropagation();
           event.nativeEvent.stopImmediatePropagation();
-          if (marker.genomes.length === 1) {
+          if (hasPopup) this.props.closePopup();
+          else if (marker.genomes.length === 1) {
             this.props.showGenomeDrawer(marker.genomes[0]);
           } else {
-            this.props.toggleMarkerPopup(marker);
+            this.props.showMarkerPopup(marker);
           }
         }}
       >
@@ -43,16 +44,20 @@ const Marker = React.createClass({
 
 });
 
-const Popup = ({ list, onItemClick }) => (
+const Popup = ({ list, onItemClick, close }) => (
+  list.length ?
   <aside className="wgsa-genomes-map-popup mdl-shadow--2dp">
     <header>
-      <AddListToSelection genomes={list} />
+      <AddToSelection genomes={list} />
       <h2 className="h4">{list.length} Genome{list.length === 1 ? '' : 's'}</h2>
+      <button className="mdl-button mdl-button--icon" onClick={close}>
+        <i className="material-icons">close</i>
+      </button>
     </header>
-    <ul className="">
+    <ul>
       {list.map(genome =>
         <li key={genome.id}>
-          <AddToSelection genome={genome} />
+          <AddToSelection genomes={[ genome ]} />
           <span className="wgsa-checklist-content">
             <button
               title="View Details"
@@ -70,6 +75,9 @@ const Popup = ({ list, onItemClick }) => (
         </li>
       )}
     </ul>
+  </aside> :
+  <aside className="wgsa-genomes-map-popup mdl-shadow--2dp is-loading">
+    <Spinner />
   </aside>
 );
 
@@ -97,7 +105,7 @@ const MapView = React.createClass({
   },
 
   render() {
-    const { stateKey, lassoPath, markers, onClick, onLassoPathChange, popup, popupList } = this.props;
+    const { stateKey, lassoPath, markers, onLassoPathChange, popup, popupList } = this.props;
     return (
       <div className="wgsa-genomes-map">
         <WGSAMap
@@ -108,14 +116,24 @@ const MapView = React.createClass({
           markerComponent={Marker}
           markerProps={{
             popup,
+            closePopup: this.props.closePopup,
             showGenomeDrawer: this.props.showGenomeDrawer,
-            toggleMarkerPopup: this.props.toggleMarkerPopup,
+            showMarkerPopup: this.props.showMarkerPopup,
           }}
-          onClick={onClick}
+          onClick={() => {
+            if (lassoPath) {
+              this.props.onLassoPathChange(null);
+            }
+          }}
           onLassoPathChange={onLassoPathChange}
           stateKey={stateKey}
         />
-        { popup && <Popup list={popupList} onItemClick={this.props.showGenomeDrawer} /> }
+        { popup.position &&
+          <Popup
+            list={popupList}
+            onItemClick={this.props.showGenomeDrawer}
+            close={this.props.closePopup}
+          /> }
       </div>
     );
   },
@@ -138,12 +156,11 @@ function mapStateToProps(state, props) {
 function mapDispatchToProps(dispatch, { stateKey }) {
   return {
     onLassoPathChange: path => dispatch(selectByArea(stateKey, path)),
-    onClick: () => {
-      dispatch(setSelection([]));
-    },
     showGenomeDrawer: (id) => dispatch(showGenomeDrawer(id)),
-    toggleMarkerPopup: (marker) => dispatch(toggleMarkerPopup(marker)),
+    showMarkerPopup: ({ genomes, position }) =>
+      dispatch(showMarkerPopup(genomes, position)),
     fetch: () => dispatch(fetchGenomeMap()),
+    closePopup: () => dispatch(closeMarkerPopup()),
   };
 }
 

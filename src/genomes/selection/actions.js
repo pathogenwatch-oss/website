@@ -54,7 +54,7 @@ export function toggleSelection(genomes) {
   return (dispatch, getState) => {
     const state = getState();
     const selection = getSelectedGenomes(state);
-
+    console.log(genomes.every(genome => genome.id in selection));
     if (genomes.every(genome => genome.id in selection)) {
       dispatch(unselectGenomes(genomes));
     } else {

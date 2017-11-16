@@ -10,7 +10,7 @@ import ChartResizer from '../../components/chart-resizer';
 import * as selectors from './selectors';
 import { getFilter } from '../filter/selectors';
 
-import { showGenomeDrawer } from '../../genome-drawer';
+import { showGenomeDrawer } from '../../genomes/detail';
 import { showMetric } from './actions';
 import { fetchGenomeStats } from '../actions';
 

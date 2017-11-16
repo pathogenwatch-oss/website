@@ -2,7 +2,7 @@ import React from 'react';
 import classnames from 'classnames';
 import { Section, Metadata } from '../components';
 
-import { taxIdMap } from '../../organisms';
+import { taxIdMap } from '../../../organisms';
 
 const PAARSNP = React.createClass({
 
