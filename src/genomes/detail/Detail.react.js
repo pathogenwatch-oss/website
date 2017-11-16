@@ -12,7 +12,7 @@ import Overview from './Overview.react';
 import Metadata from './Metadata.react';
 import getAnalysisTabs from './analysis';
 
-const GenomeDrawerContent = React.createClass({
+const Content = React.createClass({
 
   componentDidMount() {
     componentHandler.upgradeDom();
@@ -69,7 +69,9 @@ export default ({ name, genome, loading, close }) => {
                   genomes={[ genome ]}
                   className="mdl-button mdl-button--icon"
                 /> }
-              {genome ? genome.name : name}
+              <span>
+                {genome ? genome.name : name}
+              </span>
             </span>
           }
           modal
@@ -86,7 +88,7 @@ export default ({ name, genome, loading, close }) => {
             <div className="wgsa-drawer__content wgsa-drawer-loader">
               <Spinner />
             </div> :
-            <GenomeDrawerContent genome={genome} />
+            <Content genome={genome} />
           }
         </Modal> }
     </Fade>

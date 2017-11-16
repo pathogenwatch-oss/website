@@ -2,7 +2,7 @@ import './styles.css';
 
 import { connect } from 'react-redux';
 
-import GenomeDrawer from './GenomeDrawer.react';
+import Detail from './Detail.react';
 
 import { closeDrawer } from './actions';
 
@@ -18,4 +18,4 @@ function mapDispatchToProps(dispatch) {
 
 export { showGenomeDrawer } from './actions';
 
-export default connect(mapStateToProps, mapDispatchToProps)(GenomeDrawer);
+export default connect(mapStateToProps, mapDispatchToProps)(Detail);
