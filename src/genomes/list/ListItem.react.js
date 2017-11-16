@@ -93,7 +93,7 @@ const ListItem = ({ item, onClick, style, onViewGenome }) => {
 function mapDispatchToProps(dispatch, { item }) {
   return {
     onViewGenome: e => e.stopPropagation() || dispatch(showGenomeDrawer(item.id, item.name)),
-    onClick: () => dispatch(toggleSelection(item)),
+    onClick: () => dispatch(toggleSelection([ item ])),
   };
 }
 

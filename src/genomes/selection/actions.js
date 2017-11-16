@@ -50,15 +50,15 @@ export function clearSelection() {
   };
 }
 
-export function toggleSelection(genome) {
+export function toggleSelection(genomes) {
   return (dispatch, getState) => {
     const state = getState();
     const selection = getSelectedGenomes(state);
 
-    if (genome.id in selection) {
-      dispatch(unselectGenomes([ genome ]));
+    if (genomes.every(genome => genome.id in selection)) {
+      dispatch(unselectGenomes(genomes));
     } else {
-      dispatch(selectGenomes([ genome ]));
+      dispatch(selectGenomes(genomes));
     }
   };
 }

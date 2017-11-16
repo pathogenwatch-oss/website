@@ -1,3 +1,5 @@
+import sortBy from 'lodash.sortby';
+
 import { createSelector } from 'reselect';
 
 import { getGenomeState } from '../selectors';
@@ -9,13 +11,26 @@ export const getMarkers = state => getGenomeState(state).map.markers;
 export const getFilter = state => getGenomeState(state).map.filter;
 export const getPopup = state => getGenomeState(state).map.popup;
 
+export const getPopupList = createSelector(
+  getPopup,
+  (popup) => {
+    const list = [];
+    for (const { genomes, organismId, organismName } of popup.genomes) {
+      for (const { id, name } of genomes) {
+        list.push({ id, name, organismId, organismName });
+      }
+    }
+    return sortBy(list, 'name');
+  }
+);
+
 export const getGenomesInPath = createSelector(
   getMarkers,
   getLassoPath,
   (markers, path) => (
     path ?
       markers.reduce((memo, { position, genomes }) => {
-        const { latitude, longitude } = position;
+        const [ latitude, longitude ] = position;
         if (!latitude || !longitude) return memo;
         if (contains(path, { lat: latitude, lng: longitude })) {
           return memo.concat(genomes);

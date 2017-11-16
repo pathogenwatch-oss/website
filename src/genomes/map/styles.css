@@ -10,21 +10,79 @@
 
 .wgsa-genomes-map-popup {
   background: #fff;
-  color: #673c90;
   white-space: nowrap;
-  padding: 8px;
   position: absolute;
   top: 16px;
   left: 16px;
   margin: 0;
-  max-height: 400px;
+  max-height: 440px;
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  line-height: 16px;
+  z-index: 1;
+}
+
+.wgsa-genomes-map-popup h2, h3 {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  margin: 0;
+  text-overflow: ellipsis;
+}
+
+.wgsa-genomes-map-popup h2 {
+  padding: 8px 16px;
+}
+
+.wgsa-genomes-map-popup h3 {
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.wgsa-genomes-map-popup ul {
+  margin: 0;
   overflow-y: auto;
   overflow-x: hidden;
-  max-width: 240px;
+  flex-grow: 1;
+  border-top: 1px solid rgba(0, 0, 0, 0.14);
+}
+
+.wgsa-genomes-map-popup li {
+  border-top: 1px solid rgba(0, 0, 0, 0.14);
+  padding: 8px 0;
+  display: flex;
+  align-items: flex-start;
+}
+
+.wgsa-genomes-map-popup li:first-child {
+  border-width: 0;
+}
+
+.wgsa-genomes-map-popup .wgsa-genome-checkbox {
+  padding: 0 16px;
 }
 
 .wgsa-genomes-map-popup button {
-  text-transform: none;
-  width: 100%;
-  text-overflow: ellipsis;
+  display: block;
+}
+
+.wgsa-genomes-map-popup button:hover,
+.wgsa-genomes-map-popup button:focus,
+.wgsa-genomes-map-popup button:active {
+  text-decoration: underline;
+}
+
+.wgsa-checklist-content {
+  display: block;
+}
+
+.wgsa-checklist-content > :first-child {
+  line-height: 22px;
+}
+
+.wgsa-checklist-content > :last-child {
+  font-size: 13px;
+  display: block;
+  line-height: 1;
+  margin-top: 4px;
 }

@@ -69,7 +69,7 @@ export default ({ name, genome, loading, close }) => {
                   genome={genome}
                   className="mdl-button mdl-button--icon"
                 /> }
-              {name}
+              {name || genome.name}
             </span>
           }
           modal

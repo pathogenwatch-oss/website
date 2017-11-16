@@ -3,13 +3,16 @@ import { connect } from 'react-redux';
 import classnames from 'classnames';
 
 import WGSAMap from '../../map';
+import { FormattedName } from '../../organisms';
+import AddToSelection from '../selection/AddToSelection.react';
+import AddListToSelection from '../selection/AddListToSelection.react';
 
 import { setSelection } from '../selection/actions';
 import { showGenomeDrawer } from '../../genome-drawer';
 import { selectByArea, toggleMarkerPopup } from './actions';
 import { fetchGenomeMap } from '../actions';
 
-import { getMarkers, getFilter as getPreviousFilter, getPopup } from './selectors';
+import { getMarkers, getFilter as getPreviousFilter, getPopup, getPopupList } from './selectors';
 import { getLassoPath } from '../../map/selectors';
 import { getFilter } from '../filter/selectors';
 
@@ -20,7 +23,7 @@ const Marker = React.createClass({
     return (
       <div className={classnames(
         'wgsa-marker-cluster',
-        { 'has-popup': popup === marker }
+        { 'has-popup': popup.position === marker.position }
       )}
         style={style}
         onClick={event => {
@@ -40,6 +43,36 @@ const Marker = React.createClass({
 
 });
 
+const Popup = ({ list, onItemClick }) => (
+  <aside className="wgsa-genomes-map-popup mdl-shadow--2dp">
+    <header>
+      <AddListToSelection genomes={list} />
+      <h2 className="h4">{list.length} Genome{list.length === 1 ? '' : 's'}</h2>
+    </header>
+    <ul className="">
+      {list.map(genome =>
+        <li key={genome.id}>
+          <AddToSelection genome={genome} />
+          <span className="wgsa-checklist-content">
+            <button
+              title="View Details"
+              className="wgsa-link-button"
+              onClick={() => onItemClick(genome.id)}
+            >
+              {genome.name}
+            </button>
+            <FormattedName
+              fullName
+              organismId={genome.organismId}
+              title={genome.organismName}
+            />
+          </span>
+        </li>
+      )}
+    </ul>
+  </aside>
+);
+
 const MapView = React.createClass({
 
   componentDidMount() {
@@ -58,12 +91,13 @@ const MapView = React.createClass({
   shouldComponentUpdate(next) {
     return (
       next.markers !== this.props.markers ||
-      next.popup !== this.props.popup
+      next.popup !== this.props.popup ||
+      next.lassoPath !== this.lassoPath
     );
   },
 
   render() {
-    const { stateKey, lassoPath, markers, onClick, onLassoPathChange, popup } = this.props;
+    const { stateKey, lassoPath, markers, onClick, onLassoPathChange, popup, popupList } = this.props;
     return (
       <div className="wgsa-genomes-map">
         <WGSAMap
@@ -81,20 +115,7 @@ const MapView = React.createClass({
           onLassoPathChange={onLassoPathChange}
           stateKey={stateKey}
         />
-        { popup &&
-          <ul className="wgsa-genomes-map-popup mdl-shadow--2dp">
-            {popup.genomes.map(genome =>
-              <li key={genome.id}>
-                <button
-                  className="mdl-button"
-                  onClick={() => this.props.showGenomeDrawer(genome)}
-                >
-                  {genome.name}
-                </button>
-              </li>
-            )}
-          </ul>
-        }
+        { popup && <Popup list={popupList} onItemClick={this.props.showGenomeDrawer} /> }
       </div>
     );
   },
@@ -110,6 +131,7 @@ function mapStateToProps(state, props) {
     markers: getMarkers(state),
     lassoPath: getLassoPath(state, props),
     popup: getPopup(state),
+    popupList: getPopupList(state),
   };
 }
 
@@ -118,9 +140,8 @@ function mapDispatchToProps(dispatch, { stateKey }) {
     onLassoPathChange: path => dispatch(selectByArea(stateKey, path)),
     onClick: () => {
       dispatch(setSelection([]));
-      dispatch(toggleMarkerPopup());
     },
-    showGenomeDrawer: ({ id, name }) => dispatch(showGenomeDrawer(id, name)),
+    showGenomeDrawer: (id) => dispatch(showGenomeDrawer(id)),
     toggleMarkerPopup: (marker) => dispatch(toggleMarkerPopup(marker)),
     fetch: () => dispatch(fetchGenomeMap()),
   };
