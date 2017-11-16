@@ -85,6 +85,15 @@ router.put('/genome', (req, res, next) => {
   .catch(next);
 });
 
+router.post('/genome/selection', (req, res, next) => {
+  LOGGER.info('Received request to get selection');
+  const { user, sessionID } = req;
+  const ids = req.body;
+  services.request('genome', 'selection', { user, sessionID, ids })
+    .then(response => res.json(response))
+    .catch(next);
+});
+
 router.post('/genome/:id/binned', (req, res, next) => {
   const { id } = req.params;
   const { user, body } = req;

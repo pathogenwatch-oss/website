@@ -9,7 +9,7 @@ module.exports = function (props) {
     Genome
       .aggregate([
         { $match: query },
-        { $group: { _id: { latitude: '$latitude', longitude: '$longitude' }, genomes: { $push: { id: '$_id', name: '$name', organismId: '$organismId' } } } },
+        { $group: { _id: { latitude: '$latitude', longitude: '$longitude' }, genomes: { $push: '$_id' } } },
         { $project: { _id: 0, position: [ '$_id.latitude', '$_id.longitude' ], genomes: 1 } },
       ])
   );
