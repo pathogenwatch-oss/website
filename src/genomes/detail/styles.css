@@ -108,9 +108,14 @@
 
 .wgsa-genome-drawer-title {
   display: flex;
-  align-items: center;
 }
 
 .wgsa-genome-drawer-title > :first-child {
   margin-right: 4px;
+}
+
+.wgsa-genome-drawer-title > span {
+  display: block;
+  line-height: 31px;
+  margin-top: 1px;
 }
