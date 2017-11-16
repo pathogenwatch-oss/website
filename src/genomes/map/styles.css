@@ -20,10 +20,11 @@
   max-height: 400px;
   overflow-y: auto;
   overflow-x: hidden;
-  max-width: 320px;
+  max-width: 240px;
 }
 
 .wgsa-genomes-map-popup button {
   text-transform: none;
   width: 100%;
+  text-overflow: ellipsis;
 }
