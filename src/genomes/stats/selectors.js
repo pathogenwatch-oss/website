@@ -60,7 +60,7 @@ export const getMetricsBySelection = createSelector(
 
 function formatMetrics(metrics, selectedMetric) {
   return metrics.map((value) => ({
-    x: value.index,
+    x: value.index + 1,
     y: Number(value[selectedMetric]),
     label: value.name,
     id: value.id,
@@ -82,4 +82,9 @@ export const getChartData = createSelector(
       borderColor: metrics.selected.length ? '#ddd' : '#a386bd',
     },
   ]
+);
+
+export const getNumberOfDatapoints = createSelector(
+  getGenomeMetrics,
+  metrics => metrics.length
 );

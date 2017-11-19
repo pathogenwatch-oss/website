@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { parse } from 'query-string';
 import classnames from 'classnames';
+import { Link } from 'react-router-dom';
 
 import Grid from '../grid';
 import Filter from './filter';
@@ -10,7 +11,7 @@ import CollectionCard from './CollectionCard.react';
 import Overlay from '../overlay';
 
 import { getCollectionList, getTotal, getStatus } from './selectors';
-import { isFilterOpen } from './filter/selectors';
+import { isFilterOpen, isActive } from './filter/selectors';
 
 import { updateFilter } from './filter/actions';
 
@@ -30,7 +31,7 @@ const Collections = React.createClass({
   },
 
   getEmptyMessage() {
-    const { total, match } = this.props;
+    const { total, match, filterActive } = this.props;
     const { prefilter } = match.params;
 
     if (prefilter === 'bin' && total === 0) {
@@ -41,9 +42,17 @@ const Collections = React.createClass({
       );
     }
 
+    if (filterActive) {
+      return (
+        <p className="wgsa-hub-big-message">
+          No matches, please refine your search.
+        </p>
+      );
+    }
+
     return (
       <p className="wgsa-hub-big-message">
-        No matches.
+        <Link to="/genomes">Create a collection first. 🙂</Link>
       </p>
     );
   },
@@ -115,6 +124,7 @@ function mapStateToProps(state, { match }) {
     total: getTotal(state),
     status: getStatus(state),
     isFilterOpen: isFilterOpen(state),
+    filterActive: isActive(state),
   };
 }
 

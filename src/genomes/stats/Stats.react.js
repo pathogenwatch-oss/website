@@ -5,10 +5,12 @@ import { connect } from 'react-redux';
 import classnames from 'classnames';
 import { AutoSizer } from 'react-virtualized';
 
+import ChartResizer from '../../components/chart-resizer';
+
 import * as selectors from './selectors';
 import { getFilter } from '../filter/selectors';
 
-import { showGenomeDrawer } from '../../genome-drawer';
+import { showGenomeDrawer } from '../../genomes/detail';
 import { showMetric } from './actions';
 import { fetchGenomeStats } from '../actions';
 
@@ -50,33 +52,10 @@ function getClickHandler(chartData, onPointClick) {
   };
 }
 
-const ChartResizer = React.createClass({
-
-  componentDidUpdate(previous) {
-    const { width, height, chart } = this.props;
-
-    if (!chart) return;
-
-    if (width !== previous.width || height !== previous.height) {
-      chart.resize();
-    }
-  },
-
-  render() {
-    const { width, height } = this.props;
-    return (
-      <div className="wgsa-stats-chart" style={{ width, height }}>
-        {this.props.children}
-      </div>
-    );
-  },
-
-});
-
 export const StatsView = React.createClass({
 
   componentDidMount() {
-    const { chartData = [], previousFilter, filter, fetch } = this.props;
+    const { chartData = [], previousFilter, filter, fetch, count } = this.props;
 
     let data;
     if (previousFilter !== filter) {
@@ -90,6 +69,7 @@ export const StatsView = React.createClass({
       data,
       options: {
         animation: false,
+        responsive: false,
         elements: {
           points: {
             borderWidth: 1,
@@ -112,7 +92,7 @@ export const StatsView = React.createClass({
             {
               type: 'linear',
               position: 'bottom',
-              ticks: { display: false },
+              ticks: { display: false, min: 0, max: count + 1 },
               scaleLabel: { display: false },
               beginAtZero: true,
             },
@@ -134,16 +114,19 @@ export const StatsView = React.createClass({
   },
 
   componentDidUpdate(previous) {
-    const { chartData, onPointClick, filter, fetch } = this.props;
+    const { chartData, onPointClick, filter, fetch, count } = this.props;
 
     if (previous.filter !== filter) {
       fetch();
+      return;
     }
 
     if (chartData !== previous.chartData) {
       this.chart.data.datasets = chartData;
       this.chart.options.onClick = getClickHandler(chartData, onPointClick);
+      this.chart.options.scales.xAxes[0].ticks.max = count + 1;
       this.chart.update();
+      this.chart.resize();
     }
   },
 
@@ -155,17 +138,20 @@ export const StatsView = React.createClass({
         <AutoSizer>
           {({ height, width }) =>
             <div style={{ height, width, position: 'relative' }}>
-              <div className="wgsa-hub-stats-section">
-                <nav className="wgsa-button-group">
-                  <i title="Metric" className="material-icons">timeline</i>
-                  {charts.map(props =>
-                    <ChartButton key={props.metric} {...props} />
-                  )}
-                </nav>
-                <ChartResizer height={height - 184} width={width} chart={this.chart}>
-                  <canvas ref={el => { this.canvas = el; }} />
-                </ChartResizer>
-              </div>
+              <nav className="wgsa-button-group">
+                <i title="Metric" className="material-icons">timeline</i>
+                {charts.map(props =>
+                  <ChartButton key={props.metric} {...props} />
+                )}
+              </nav>
+              <ChartResizer
+                className="wgsa-stats-chart"
+                height={height - 184}
+                width={width - 8}
+                chart={this.chart}
+              >
+                <canvas ref={el => { this.canvas = el; }} />
+              </ChartResizer>
               <div className="wgsa-hub-stats-group">
                 <dl className="wgsa-hub-stats-section">
                   <dt className="wgsa-hub-stats-heading">Average</dt>
@@ -197,6 +183,7 @@ function mapStateToProps(state) {
     stDev: selectors.getMetricStDev(state),
     range: selectors.getMetricRange(state),
     chartData: selectors.getChartData(state),
+    count: selectors.getNumberOfDatapoints(state),
     filter: getFilter(state),
     previousFilter: selectors.getFilter(state),
   };

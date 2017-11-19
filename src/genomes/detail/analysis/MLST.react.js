@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Section, Metadata } from '../components';
 
-import { ST, Hit } from '../../mlst';
+import { ST, Hit } from '../../../mlst';
 
 export default ({ result }) => (
   <Section heading="MLST" version={result.__v}>

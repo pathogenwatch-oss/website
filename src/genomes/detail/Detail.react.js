@@ -1,18 +1,18 @@
 import React from 'react';
 
-import Modal from '../components/modal';
-import Fade from '../components/fade';
-import RemoveButton from '../genomes/card/RemoveButton.react';
-import AddToSelection from '../genomes/selection/AddToSelection.react';
+import Modal from '../../components/modal';
+import Fade from '../../components/fade';
+import RemoveButton from './RemoveButton.react';
+import AddToSelection from '../../genomes/selection/AddToSelection.react';
 
-import DownloadLink from '../downloads/GenomeFileLink.react';
-import Spinner from '../components/Spinner.react';
+import DownloadLink from '../../downloads/GenomeFileLink.react';
+import Spinner from '../../components/Spinner.react';
 
 import Overview from './Overview.react';
 import Metadata from './Metadata.react';
 import getAnalysisTabs from './analysis';
 
-const GenomeDrawerContent = React.createClass({
+const Content = React.createClass({
 
   componentDidMount() {
     componentHandler.upgradeDom();
@@ -66,10 +66,12 @@ export default ({ name, genome, loading, close }) => {
             <span className="wgsa-genome-drawer-title">
               { genome &&
                 <AddToSelection
-                  genome={genome}
+                  genomes={[ genome ]}
                   className="mdl-button mdl-button--icon"
                 /> }
-              {name}
+              <span>
+                {genome ? genome.name : name}
+              </span>
             </span>
           }
           modal
@@ -79,14 +81,14 @@ export default ({ name, genome, loading, close }) => {
           className="wgsa-genome-drawer"
           actions={genome ? [
             <DownloadLink key="download" id={genome.id} name={genome.name} />,
-            <RemoveButton key="remove" genome={genome} />,
+            <RemoveButton key="remove" genome={genome} onRemove={close} />,
           ] : []}
         >
           { loading ?
             <div className="wgsa-drawer__content wgsa-drawer-loader">
               <Spinner />
             </div> :
-            <GenomeDrawerContent genome={genome} />
+            <Content genome={genome} />
           }
         </Modal> }
     </Fade>

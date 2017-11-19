@@ -8,34 +8,40 @@ h1, h2, h3, h4, .title-font {
   color: rgba(0, 0, 0, .54);
 }
 
-h1 {
+h1, .h1 {
   font-size: 45px;
   line-height: 48px;
 }
 
-h2 {
+h2, .h2 {
   font-size: 34px;
   line-height: 40px;
 }
 
-h3 {
+h3, .h3 {
   font-size: 24px;
   line-height: 32px;
 }
 
-h4 {
+h4, .h4 {
   font-size: 20px;
   line-height: 1;
 }
 
-h5 {
+h5, .h5 {
   font-size: 18px;
   line-height: 1;
 }
 
-h6 {
+h6, .h6 {
   font-size: 16px;
   line-height: 1;
+}
+
+button {
+  border: none;
+  background: none;
+  padding: 0;
 }
 
 button, select {

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { getSelectedGenomeIds, getSelectedGenomeList } from '../selectors';
 
 import { unselectGenomes, clearSelection } from '../actions';
-import { showGenomeDrawer } from '../../../genome-drawer/actions';
+import { showGenomeDrawer } from '../../../genomes/detail/actions';
 
 const Selection = ({ selectedGenomes, showGenome, removeGenome, clearAll }) => (
   <div className="wgsa-genome-selection">

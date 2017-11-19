@@ -32,7 +32,7 @@ const Details = React.createClass({
 
   render() {
     const { organismId, totalGenomes, totalCollections } = this.props;
-    const { nickname, formattedName, definitionText, desc, imageAltText, taxonomy } = taxIdMap.get(organismId);
+    const { nickname, formattedName, definitionText, desc, imageCredit, taxonomy } = taxIdMap.get(organismId);
     return (
       <div className="wgsa-page mdl-grid">
         <div className="mdl-cell mdl-cell--12-col">
@@ -46,8 +46,10 @@ const Details = React.createClass({
         <div className="mdl-cell mdl-cell--3-col">
           <div className="wgsa-section-divider mdl-typography--text-center">
             <p className="wgsa-avatar-image">
-              <img src={`/images/${nickname}.jpg`} alt={imageAltText} />
+              <img src={`/images/${nickname}.jpg`} />
             </p>
+            { imageCredit &&
+              <p><strong>Image:</strong> {imageCredit}</p> }
             <p><strong>Taxonomy ID:</strong> {organismId}</p>
             <p>
               <a href={`https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?mode=Tree&id=${organismId}`} target="_blank" rel="noopener">

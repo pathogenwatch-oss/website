@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import classnames from 'classnames';
 
 import Toast from '../toast';
-import GenomeDrawer from '../genome-drawer';
+import GenomeDetail from '../genomes/detail';
 
 import Header from './Header.react';
 import Content from './Content.react';
@@ -80,7 +80,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(React.createClass({
             <Content />
           </main>
           <Toast />
-          <GenomeDrawer />
+          <GenomeDetail />
         </div>
       </div>
     );

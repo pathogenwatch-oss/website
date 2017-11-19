@@ -1,12 +1,12 @@
 import React from 'react';
 
-import { FormattedName } from '../organisms';
+import { FormattedName } from '../../organisms';
 
-import { getFormattedDateString, formatDateTime } from '../utils/Date';
-import { getCountryName } from '../utils/country';
+import { getFormattedDateString, formatDateTime } from '../../utils/Date';
+import { getCountryName } from '../../utils/country';
 
 import { Metadata } from './components';
-import ST from '../mlst/ST.react';
+import ST from '../../mlst/ST.react';
 
 function getAMROverview({ antibiotics }) {
   const resistances = [];

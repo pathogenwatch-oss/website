@@ -23,13 +23,21 @@ const Component = React.createClass({
   },
 
   render() {
-    const { isUploading, summary } = this.props;
+    const { isUploading, summary, uploadedAt } = this.props;
+
+    const uploadedAtDisplay = (
+      <p style={{ marginLeft: 'auto' }}>
+        Uploaded: <strong>{new Date(uploadedAt).toLocaleString()}</strong>
+      </p>
+    );
 
     if (!isUploading && summary.errored) {
-      return <ErrorSummary />;
+      return <ErrorSummary>{uploadedAtDisplay}</ErrorSummary>;
     }
 
-    return <Summary />;
+    return (
+      <Summary>{uploadedAtDisplay}</Summary>
+    );
   },
 
 });

@@ -120,7 +120,7 @@ export default React.createClass({
 
   renderMarkers() {
     const {
-      markers, cluster, markerComponent, highlightedColour,
+      markers, cluster, markerComponent, highlightedColour, markerProps = {},
     } = this.props;
 
     if (cluster) {
@@ -140,7 +140,11 @@ export default React.createClass({
           latitudeExtractor={({ position }) => position[0]}
           longitudeExtractor={({ position }) => position[1]}
           markerComponent={markerComponent}
-          propsForMarkers={{ onClick: this.onMarkerLayerClick, highlightedColour }}
+          propsForMarkers={{
+            ...markerProps,
+            onClick: this.onMarkerLayerClick,
+            highlightedColour,
+          }}
         />
       );
     }
