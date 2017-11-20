@@ -33,8 +33,8 @@ export const getFilterSummary = createSelector(
     const {
       loading, organismId, speciesId, genusId, country, type, uploadedAt, date,
     } = summary;
-    const sequenceType = summary['analysis.mlst.st'] || {};
-    const antibiotics = summary['analysis.paarsnp.antibiotics.fullName'] || {};
+    const sequenceType = summary.st || {};
+    const antibiotics = summary.amr || {};
 
     const wgsaOrganisms = [];
 
