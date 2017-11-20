@@ -18,9 +18,22 @@ function getAMROverview({ antibiotics }) {
   return resistances.join(', ');
 }
 
+function getTask({ analysis = {}, tasks = [] }, taskName) {
+  if (taskName in analysis) {
+    return tasks.find(
+      _ => _.task === taskName && _.version === analysis[taskName]
+    ).results;
+  }
+  return null;
+}
+
 export default ({ genome }) => {
-  const { uploadedAt, analysis = {}, country } = genome;
-  const { speciator, mlst, paarsnp, genotyphi, ngmast } = analysis;
+  const { uploadedAt, country } = genome;
+  const speciator = getTask(genome, 'speciator');
+  const mlst = getTask(genome, 'mlst');
+  const paarsnp = getTask(genome, 'paarsnp');
+  const genotyphi = getTask(genome, 'genotyphi');
+  const ngmast = getTask(genome, 'ngmast');
   const date = getFormattedDateString(genome);
   return (
     <div className="wgsa-genome-overview">

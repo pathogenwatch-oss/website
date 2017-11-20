@@ -60,7 +60,7 @@ const PAARSNP = React.createClass({
     const mechanisms = antibiotic.mechanisms.filter(m => result.includes(m));
     return (
       <ul>
-        { mechanisms.map(m => <li>{m}</li>) }
+        { mechanisms.map(m => <li key={m}>{m}</li>) }
       </ul>
     );
   },
@@ -97,7 +97,9 @@ const PAARSNP = React.createClass({
 
 });
 
-export default ({ antibiotics, organismId, ...rest }) => {
+export default ({ result, genome }) => {
+  const { antibiotics, ...rest } = result;
+  const { organismId } = genome;
   let hiddenColumns = new Set();
 
   if (taxIdMap.has(organismId)) {
