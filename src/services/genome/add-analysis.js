@@ -47,23 +47,17 @@ module.exports = function ({ genomeId, fileId, collectionId, uploadedAt, task, v
     .then(update =>
       Genome.update({ _id: genomeId }, update)
         .then(() => {
-          console.log({
-            channel: clientId,
-            topic: `analysis-${uploadedAt.toISOString()}`,
-            message: { id: genomeId, task, result: update.$set },
-          });
           if (clientId) {
             const result = notifiableTasks.has(task) ? update.$set : null;
             request('notification', 'send', {
               channel: clientId,
               topic: `analysis-${uploadedAt.toISOString()}`,
-              message: { id: genomeId, task, result },
+              message: { id: genomeId, task, version, result },
             });
           }
         })
         .then(() => {
           if (task !== 'speciator') return Promise.resolve();
-          console.log(update);
           const { organismId, speciesId, genusId } = update.$set;
           return request('tasks', 'submit-genome', { genomeId, fileId, uploadedAt, organismId, speciesId, genusId, clientId });
         })
