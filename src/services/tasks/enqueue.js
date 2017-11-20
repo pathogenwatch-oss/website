@@ -18,9 +18,9 @@ module.exports = function ({
   uploadedAt, clientId,
   task, version, retries = defaultRetries, timeout = defaultTimeout,
 }) {
-  return request('tasks', 'find', { fileId, task, version })
-    .then(result => {
-      if (result) {
+  return request('tasks', 'exists', { fileId, task, version })
+    .then(exists => {
+      if (exists) {
         return request('genome', 'add-analysis', {
           genomeId,
           fileId,
@@ -28,7 +28,6 @@ module.exports = function ({
           uploadedAt: new Date(uploadedAt),
           task,
           version,
-          result,
           clientId,
         });
       }

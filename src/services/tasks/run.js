@@ -66,6 +66,6 @@ module.exports = function ({ fileId, task, version, organismId, speciesId, genus
             { fileId, task, version, results },
             { upsert: true }
           )
-          .then(() => results))
+        )
     );
 };

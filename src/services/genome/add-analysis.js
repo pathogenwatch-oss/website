@@ -2,42 +2,70 @@ const { request } = require('services/bus');
 
 const Genome = require('models/genome');
 const CollectionGenome = require('models/collectionGenome');
-
-const formatters = require('utils/formatters');
+const Analysis = require('models/analysis');
 
 const notifiableTasks = new Set([ 'speciator', 'mlst' ]);
 
-function formatResult(task, version, result) {
-  const format = formatters[task];
-  return Object.assign(
-    { __v: version },
-    format ? format(result, version) : result
-  );
+function createAnalysisUpdate(fileId, task, version) {
+  const update = {
+    $set: { [`analysis.${task.toLowerCase()}`]: version },
+  };
+  update.$pull = { pending: task };
+
+  return new Promise((resolve) => {
+    if (task === 'speciator') {
+      return Analysis.findOne(
+        { fileId, task, version },
+        { 'results.organismId': 1, 'results.organismName': 1, 'results.speciesId': 1, 'results.speciesName': 1, 'results.genusId': 1, 'results.genusName': 1 }
+      )
+        .then(({ results }) => resolve(results));
+    }
+
+    if (task === 'mlst') {
+      return Analysis.findOne({ fileId, task, version }, { 'results.st': 1 })
+        .then(({ results }) => resolve(results));
+    }
+
+    // TODO: PAARSNP
+
+    return resolve();
+  })
+  .then((patch = {}) => {
+    Object.assign(update.$set, patch);
+    return update;
+  });
 }
 
-module.exports = function ({ genomeId, fileId, collectionId, uploadedAt, task, version, result, clientId }) {
-  const formattedResult = formatResult(task, version, result);
-
+module.exports = function ({ genomeId, fileId, collectionId, uploadedAt, task, version, clientId }) {
   if (collectionId) {
-    return CollectionGenome.addAnalysisResult(genomeId, task, formattedResult);
+    return CollectionGenome.update(
+      { _id: genomeId },
+      { [`analysis.${task.toLowerCase()}`]: version });
   }
 
-  return (
-    Genome.addAnalysisResult(genomeId, task, formattedResult)
-      .then(() => {
-        const notification = notifiableTasks.has(task) ? formattedResult : {};
-        if (clientId) {
-          request('notification', 'send', {
+  return createAnalysisUpdate(fileId, task, version)
+    .then(update =>
+      Genome.update({ _id: genomeId }, update)
+        .then(() => {
+          console.log({
             channel: clientId,
             topic: `analysis-${uploadedAt.toISOString()}`,
-            message: { id: genomeId, task, result: notification },
+            message: { id: genomeId, task, result: update.$set },
           });
-        }
-      })
-      .then(() => {
-        if (task !== 'speciator') return Promise.resolve();
-        const { organismId, speciesId, genusId } = result;
-        return request('tasks', 'submit-genome', { genomeId, fileId, uploadedAt, organismId, speciesId, genusId, clientId });
-      })
-  );
+          if (clientId) {
+            const result = notifiableTasks.has(task) ? update.$set : null;
+            request('notification', 'send', {
+              channel: clientId,
+              topic: `analysis-${uploadedAt.toISOString()}`,
+              message: { id: genomeId, task, result },
+            });
+          }
+        })
+        .then(() => {
+          if (task !== 'speciator') return Promise.resolve();
+          console.log(update);
+          const { organismId, speciesId, genusId } = update.$set;
+          return request('tasks', 'submit-genome', { genomeId, fileId, uploadedAt, organismId, speciesId, genusId, clientId });
+        })
+    );
 };

@@ -25,9 +25,9 @@ function subscribeToQueue(queueName) {
       queueName,
       ({ genomeId, collectionId, organismId, speciesId, genusId, fileId, uploadedAt, task, version, clientId, timeout }) =>
         request('tasks', 'run', { organismId, speciesId, genusId, fileId, task, version, timeout$: timeout * 1000 })
-          .then(result => {
+          .then(() => {
             LOGGER.info('Got result', genomeId, collectionId, task, version);
-            return request('genome', 'add-analysis', { genomeId, fileId, collectionId, uploadedAt, task, version, result, clientId });
+            return request('genome', 'add-analysis', { genomeId, fileId, collectionId, uploadedAt, task, version, clientId });
           }),
       message => request('genome', 'add-error', message)
     );

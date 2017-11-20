@@ -17,6 +17,12 @@ const schema = new Schema({
   _session: String,
   name: { type: String, required: true, index: 'text' },
   organismId: { type: String, index: true },
+  speciesId: { type: String, index: true },
+  genusId: { type: String, index: true },
+  organismName: { type: String, index: true },
+  speciesName: { type: String },
+  genusName: { type: String },
+  st: { type: String, index: true },
   fileId: String,
   year: Number,
   month: Number,
@@ -42,10 +48,6 @@ const schema = new Schema({
 
 schema.index({ name: 1 });
 schema.index({ public: 1, reference: 1 });
-schema.index({ 'analysis.mlst.st': 1 });
-schema.index({ 'analysis.speciator.speciesId': 1 });
-schema.index({ 'analysis.speciator.genusId': 1 });
-schema.index({ 'analysis.speciator.organismName': 1 });
 
 function toObject(genome, user = {}) {
   const { id } = user;
@@ -84,20 +86,6 @@ function getCountryCode(latitude, longitude) {
 
 schema.statics.addPendingTask = function (_id, task) {
   return this.update({ _id }, { $push: { pending: task } });
-};
-
-schema.statics.addAnalysisResult = function (_id, task, result) {
-  const update = {
-    $set: { [`analysis.${task.toLowerCase()}`]: result },
-  };
-
-  if (task === 'speciator') {
-    update.$set.organismId = result.organismId;
-  }
-
-  update.$pull = { pending: task };
-
-  return this.update({ _id }, update);
 };
 
 schema.statics.addAnalysisError = function (_id, task) {
