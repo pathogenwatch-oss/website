@@ -30,7 +30,6 @@ const initialState = {
 
   uploadedAt: null,
   genomes: {},
-  analyses: {},
   selectedOrganism: null,
 };
 
@@ -144,16 +143,20 @@ export default function (state = initialState, { type, payload }) {
       };
     }
     case actions.UPLOAD_ANALYSIS_RECEIVED: {
-      const { analyses } = state;
-      const { id } = payload;
-      const analysis = analyses[id] || {};
+      const { genomes } = state;
+      const { id, task, version, result = {}, error } = payload;
+      const genome = genomes[id] || { analysis: {} };
       return {
         ...state,
-        analyses: {
-          ...analyses,
+        genomes: {
+          ...genomes,
           [id]: {
-            ...analysis,
-            [payload.task]: payload.error ? false : payload.result,
+            ...genome,
+            analysis: {
+              ...genome.analysis,
+              [task]: error ? false : version,
+            },
+            ...(result || {}),
           },
         },
         lastMessageReceived: new Date(),
@@ -169,20 +172,8 @@ export default function (state = initialState, { type, payload }) {
     }
     case actions.UPLOAD_FETCH_GENOMES.SUCCESS: {
       const nextGenomes = {};
-      const nextAnalyses = {};
       const { files, position } = payload.result;
       for (const genome of files) {
-        nextGenomes[genome.id] = {
-          ...genome,
-          status: statuses.SUCCESS,
-          speciated:
-            (genome.analysis && !!genome.analysis.speciator) ||
-            genome.errored.indexOf('speciator') !== -1,
-          genomeId: genome.id,
-          analysis: undefined,
-          pending: undefined,
-          errored: undefined,
-        };
         const pendingAnalysis = {};
         if (genome.pending) {
           for (const task of genome.pending) {
@@ -194,10 +185,18 @@ export default function (state = initialState, { type, payload }) {
             pendingAnalysis[task] = false;
           }
         }
-        nextAnalyses[genome.id] = {
-          ...pendingAnalysis,
-          ...genome.analysis,
-          ...(state.analyses[genome.id] || {}),
+
+        nextGenomes[genome.id] = {
+          ...genome,
+          status: statuses.SUCCESS,
+          speciated:
+            (genome.analysis && !!genome.analysis.speciator) ||
+            genome.errored.indexOf('speciator') !== -1,
+          genomeId: genome.id,
+          analysis: {
+            ...genome.analysis,
+            ...pendingAnalysis,
+          },
         };
       }
 
@@ -206,7 +205,6 @@ export default function (state = initialState, { type, payload }) {
         position,
         selectedOrganism: null,
         genomes: nextGenomes,
-        analyses: nextAnalyses,
       };
     }
     case actions.UPLOAD_ORGANISM_SELECTED:
