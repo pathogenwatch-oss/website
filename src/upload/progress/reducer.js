@@ -95,11 +95,17 @@ export default function (state = initialState, { type, payload }) {
     case actions.UPLOAD_GENOME.SUCCESS: {
       const { id, result } = payload;
       const { files } = state;
-
+      const genome = state.genomes[result.id] || { analysis: {} };
       return {
         ...state,
         files: updateFile(files, id, { status: statuses.SUCCESS }),
-        genomes: { ...state.genomes, [result.id]: result },
+        genomes: {
+          ...state.genomes,
+          [result.id]: {
+            ...genome,
+            ...result,
+          },
+        },
       };
     }
     case actions.UPDATE_GENOME.SUCCESS: {

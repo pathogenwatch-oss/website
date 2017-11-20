@@ -97,7 +97,7 @@ function processGenome(id) {
             })
             .then(data => dispatch(uploadGenome(genome, data))),
       },
-    }).catch(() => {});
+    }).catch((error) => error);
   };
 }
 
