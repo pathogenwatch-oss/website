@@ -7,19 +7,19 @@ const summaryFields = [
   { field: 'organismId',
     aggregation: () => [
       { $match: { organismId: { $in: wgsaOrganisms } } },
-      { $group: { _id: { label: '$analysis.speciator.organismName', key: '$organismId' }, count: { $sum: 1 } } },
+      { $group: { _id: { label: '$organismName', key: '$organismId' }, count: { $sum: 1 } } },
     ],
   },
   { field: 'speciesId',
     aggregation: () => [
-      { $match: { 'analysis.speciator.speciesId': { $exists: true } } },
-      { $group: { _id: { label: '$analysis.speciator.speciesName', key: '$analysis.speciator.speciesId' }, count: { $sum: 1 } } },
+      { $match: { speciesId: { $exists: true } } },
+      { $group: { _id: { label: '$speciesName', key: '$speciesId' }, count: { $sum: 1 } } },
     ],
   },
   { field: 'genusId',
     aggregation: () => [
-      { $match: { 'analysis.speciator.genusId': { $exists: true } } },
-      { $group: { _id: { label: '$analysis.speciator.genusName', key: '$analysis.speciator.genusId' }, count: { $sum: 1 } } },
+      { $match: { genusId: { $exists: true } } },
+      { $group: { _id: { label: '$genusName', key: '$genusId' }, count: { $sum: 1 } } },
     ],
   },
   { field: 'country' },
@@ -52,21 +52,20 @@ const summaryFields = [
     },
   },
   { field: 'date', range: true, queryKeys: [ 'minDate', 'maxDate' ] },
-  { field: 'analysis.mlst.st',
+  { field: 'st',
     aggregation: ({ query = {} }) => {
       if (!query.organismId && !query.speciesId && !query.genusId) return null;
       return [
-        { $group: { _id: '$analysis.mlst.st', count: { $sum: 1 } } },
+        { $group: { _id: '$st', count: { $sum: 1 } } },
       ];
     },
     queryKeys: [ 'sequenceType' ],
   },
-  { field: 'analysis.paarsnp.antibiotics.fullName',
+  { field: 'amr',
     aggregation: () => [
-      { $project: { 'analysis.paarsnp.antibiotics': 1 } },
-      { $unwind: '$analysis.paarsnp.antibiotics' },
-      { $match: { 'analysis.paarsnp.antibiotics.state': 'RESISTANT' } },
-      { $group: { _id: '$analysis.paarsnp.antibiotics.fullName', count: { $sum: 1 } } },
+      { $project: { amr: 1 } },
+      { $unwind: '$amr' },
+      { $group: { _id: '$amr', count: { $sum: 1 } } },
     ],
     queryKeys: [ 'resistance' ],
   },

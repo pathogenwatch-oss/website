@@ -26,7 +26,17 @@ function createAnalysisUpdate(fileId, task, version) {
         .then(({ results }) => resolve(results));
     }
 
-    // TODO: PAARSNP
+    if (task === 'paarsnp') {
+      return Analysis.findOne({ fileId, task, version }, { 'results.antibiotics': 1 })
+        .then(({ results }) => {
+          const amr = results.antibiotics.reduce((memo, ab) => {
+            if (ab.state === 'NOT_FOUND' || ab.state === 'UNKNOWN') return memo;
+            memo.push(`${ab.fullName}-${ab.state.slice(0, 3)}`);
+            return memo;
+          }, []);
+          resolve({ amr });
+        });
+    }
 
     return resolve();
   })

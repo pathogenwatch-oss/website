@@ -13,37 +13,38 @@ function getDate(year, month = 1, day = 1) {
 }
 
 const schema = new Schema({
-  _user: { type: Schema.Types.ObjectId, ref: 'User' },
   _session: String,
-  name: { type: String, required: true, index: 'text' },
-  organismId: { type: String, index: true },
-  speciesId: { type: String, index: true },
-  genusId: { type: String, index: true },
-  organismName: { type: String, index: true },
-  speciesName: { type: String },
-  genusName: { type: String },
-  st: { type: String, index: true },
-  fileId: String,
-  year: Number,
-  month: Number,
-  day: Number,
-  date: { type: Date, index: true },
-  latitude: Number,
-  longitude: Number,
-  country: { type: String, index: true },
-  pmid: String,
-  userDefined: Object,
+  _user: { type: Schema.Types.ObjectId, ref: 'User' },
+  amr: [ String ],
   analysis: Object,
-  pending: { type: Array, default: null },
-  errored: { type: Array, default: null },
-  public: { type: Boolean, default: false },
-  reference: { type: Boolean, default: false },
   binned: { type: Boolean, default: false },
   binnedDate: Date,
-  uploadedAt: Date,
+  country: { type: String, index: true },
   createdAt: { type: Date, index: true },
+  date: { type: Date, index: true },
+  day: Number,
+  errored: { type: Array, default: null },
+  fileId: String,
+  genusId: { type: String, index: true },
+  genusName: { type: String },
   lastAccessedAt: Date,
   lastUpdatedAt: Date,
+  latitude: Number,
+  longitude: Number,
+  month: Number,
+  name: { type: String, required: true, index: 'text' },
+  organismId: { type: String, index: true },
+  organismName: { type: String, index: true },
+  pending: { type: Array, default: null },
+  pmid: String,
+  public: { type: Boolean, default: false },
+  reference: { type: Boolean, default: false },
+  speciesId: { type: String, index: true },
+  speciesName: { type: String },
+  st: { type: String, index: true },
+  uploadedAt: Date,
+  userDefined: Object,
+  year: Number,
 });
 
 schema.index({ name: 1 });
@@ -180,11 +181,11 @@ schema.statics.getFilterQuery = function (props) {
   }
 
   if (speciesId) {
-    findQuery['analysis.speciator.speciesId'] = speciesId;
+    findQuery.speciesId = speciesId;
   }
 
   if (genusId) {
-    findQuery['analysis.speciator.genusId'] = genusId;
+    findQuery.genusId = genusId;
   }
 
   if (country) {
@@ -217,13 +218,11 @@ schema.statics.getFilterQuery = function (props) {
   }
 
   if (sequenceType && (organismId || speciesId || genusId)) {
-    findQuery['analysis.mlst.st'] = sequenceType;
+    findQuery.st = sequenceType;
   }
 
   if (resistance) {
-    findQuery['analysis.paarsnp.antibiotics'] = {
-      $elemMatch: { fullName: resistance, state: 'RESISTANT' },
-    };
+    findQuery.amr = resistance;
   }
 
   return findQuery;
@@ -247,11 +246,11 @@ schema.statics.getSort = function (sort = 'createdAt-') {
   }
 
   if (sortKey === 'st') {
-    return { 'analysis.mlst.st': sortOrder };
+    return { st: sortOrder };
   }
 
   if (sortKey === 'organism') {
-    return { 'analysis.speciator.organismName': sortOrder };
+    return { organismName: sortOrder };
   }
 
   return { [sortKey]: sortOrder };
