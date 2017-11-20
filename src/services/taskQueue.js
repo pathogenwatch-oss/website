@@ -48,7 +48,6 @@ module.exports.dequeue = function (queue, callback, reject) {
       .then(() => 'Completed')
       .catch(err => {
         LOGGER.error(err);
-        process.exit(1);
         const { retries = 1 } = queueItem.message;
         queueItem.releasedReason = err.message;
         if ((queueItem.retryCount || 0) < retries - 1) {
