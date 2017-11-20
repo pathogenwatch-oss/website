@@ -1,27 +1,21 @@
-const Genome = require('models/genome');
-const CollectionGenome = require('models/collectionGenome');
+const Analysis = require('models/analysis');
 const { ServiceRequestError, NotFoundError } = require('utils/errors');
+const { request } = require('services');
 
-const fetch = {
-  genome: ({ user, sessionID }, _id, projection = {}) => {
-    const $or = [ { public: true } ];
+const taskNames = [
+  'speciator', 'metrics', 'mlst', 'paarsnp', 'genotyphi', 'ngmast',
+];
 
-    if (user) $or.push({ _user: user._id });
-    else if (sessionID) $or.push({ _session: sessionID });
-
-    return Genome.findOne({ _id, $or }, projection);
-  },
-  collection: (_, id, projection = {}) =>
-    CollectionGenome.findOne({ _id: id }, projection),
-};
-
-module.exports = ({ user, sessionID, type = 'genome', id, projection }) => {
-  if (!(type in fetch)) throw new ServiceRequestError('Invalid type');
+module.exports = ({ user, sessionID, id }) => {
   if (!id) throw new ServiceRequestError('Missing Id');
 
-  return fetch[type]({ user, sessionID }, id, projection)
-    .then(record => {
-      if (!record) throw new NotFoundError('Not found or access denied');
-      return record.toObject({ user });
+  return request('genome', 'authorise', { user, sessionID, id })
+    .then(genome => {
+      if (!genome) throw new NotFoundError('Not found or access denied');
+      return Analysis.find({
+        fileId: genome.fileId,
+        task: { $in: taskNames },
+      }, { _id: 0, fileId: 0, __v: 0, 'results.matches': 0 })
+      .then(tasks => Object.assign(genome, { tasks }));
     });
 };
