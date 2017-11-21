@@ -72,7 +72,7 @@
       "task": "speciator", "version": "v1"
     },
     "trees": {
-      "task": "tree", "version": "v1", "requires": [ "core" ]
+      "task": "tree", "version": "v1", "requires": [ { "task": "core", "version": "v1" } ]
     },
     "retries": 3,
     "registry": {

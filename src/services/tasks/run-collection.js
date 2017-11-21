@@ -2,27 +2,31 @@
 /* eslint no-params: 0 */
 
 const docker = require('docker-run');
-const crypto = require('crypto');
 const es = require('event-stream');
+const BSON = require('bson');
+
+const bson = new BSON();
 
 const Analysis = require('models/analysis');
-const CollectionGenome = require('../../models/collectionGenome');
+const Collection = require('../../models/collection');
 const ScoreCache = require('../../models/scoreCache');
 
 const { getImageName } = require('manifest.js');
 
 const LOGGER = require('utils/logging').createLogger('runner');
 
-function runTask(task, version, collectionId, subtype, requires, organismId) {
-  const query = subtype ?
-    { 'analysis.core.fp': subtype, $or: [ { _collection: collectionId }, { published: true } ] } :
-    { _collection: collectionId };
-  return CollectionGenome.find(
-      query,
-      { fileId: 1 },
-      { sort: { fileId: 1 } })
+function runTask(task, version, requires, collectionId, metadata) {
+  const { subtree, organismId } = metadata;
+  // const query = subtree ?
+  //   { 'analysis.core.fp': subtree, $or: [ { _collection: collectionId }, { published: true } ] } :
+  //   { _collection: collectionId };
+  return Collection.findOne(
+      { _id: collectionId },
+      { 'genomes._id': 1, 'genomes.fileId': 1 },
+      { sort: { 'genomes.fileId': 1 } }
+    )
     .lean()
-    .then(fileIds => new Promise((resolve, reject) => {
+    .then(({ genomes }) => new Promise((resolve, reject) => {
       const container = docker(getImageName(task, version), {
         env: {
           WGSA_ORGANISM_TAXID: organismId,
@@ -31,21 +35,22 @@ function runTask(task, version, collectionId, subtype, requires, organismId) {
         remove: false,
       });
 
+      const fileIds = genomes.map(_ => _.fileId);
+
+      container.stdin.write(bson.serialize({ ids: genomes.map(_ => _._id.toString()) }));
+
       const scoresStream = ScoreCache.collection.find(
-        { fileId: { $in: fileIds.map(_ => _.fileId) } },
-        fileIds.reduce((projection, { fileId }) => {
+        { fileId: { $in: fileIds } },
+        genomes.reduce((projection, { fileId }) => {
           projection[`scores.${fileId}`] = 1;
           return projection;
         }, { fileId: 1 }),
         { raw: true, sort: { fileId: 1 } }
       );
 
-      const genomesStream = CollectionGenome.collection.find(
-        { _collection: collectionId },
-        requires.reduce((projection, requiredTask) => {
-          projection[`analysis.${requiredTask}`] = 1;
-          return projection;
-        }, { fileId: 1 }),
+      const genomesStream = Analysis.collection.find(
+        { fileId: { $in: fileIds }, $or: requires },
+        { 'results.varianceData': 1, fileId: 1 },
         { raw: true, sort: { fileId: 1 } }
       );
 
@@ -92,26 +97,6 @@ function runTask(task, version, collectionId, subtype, requires, organismId) {
     }));
 }
 
-module.exports = function handleMessage({ task, version, requires, organismId, collectionId, subtype }) {
-  return CollectionGenome.find({ _collection: collectionId }, { fileId: 1 }, { sort: { fileId: 1 } })
-    .then(results => {
-      const hash = crypto.createHash('sha1');
-      for (const { fileId } of results) {
-        hash.update(fileId);
-      }
-      return hash.digest('hex');
-    })
-    .then(fileId =>
-      Analysis.findOne({ fileId, task, version })
-        .then(model => {
-          if (model) return model.results;
-          return (
-            runTask(task, version, collectionId, subtype, requires, organismId)
-              .then(results => {
-                // Analysis.create({ fileId, task, version, results });
-                return results;
-              })
-          );
-        })
-    );
+module.exports = function handleMessage({ task, version, requires, collectionId, metadata }) {
+  return runTask(task, version, requires, collectionId, metadata);
 };

@@ -17,7 +17,7 @@ process.on('uncaughtException', err => console.error('uncaught', err));
 
 taskQueue.setMaxWorkers(workers);
 
-const { tasks, speciator, trees } = taskQueue.queues;
+const { tasks, speciator, collections } = taskQueue.queues;
 
 function subscribeToQueue(queueName) {
   if (queueName === tasks || queueName === speciator) {
@@ -33,11 +33,11 @@ function subscribeToQueue(queueName) {
     );
   }
 
-  if (queueName === trees) {
+  if (queueName === collections) {
     taskQueue.dequeue(
       queueName,
-      ({ task, version, requires, organismId, collectionId, subtype, clientId, timeout }) =>
-        request('tasks', 'run-collection', { task, version, requires, organismId, collectionId, subtype, clientId, timeout$: timeout * 1000 })
+      ({ task, version, requires, collectionId, metadata, clientId, timeout }) =>
+        request('tasks', 'run-collection', { task, version, requires, collectionId, metadata, clientId, timeout$: timeout * 1000 })
           .then(result => {
             LOGGER.info('Got result', collectionId, task, version);
             return request('collection', 'add-analysis', { collectionId, task, version, result, clientId });

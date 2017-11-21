@@ -8,14 +8,16 @@ const { getTreesTask } = require('../../manifest');
 const { task, version, requires } = getTreesTask();
 
 function enqueueTree(collectionId, organismId, clientId, subtree) {
-  return enqueue(queues.trees, {
+  return enqueue(queues.collections, {
     collectionId,
-    organismId,
     clientId,
     task,
     version,
     requires,
-    subtree,
+    metadata: {
+      organismId,
+      subtree,
+    },
   });
 }
 
