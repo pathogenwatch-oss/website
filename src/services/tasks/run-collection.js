@@ -37,8 +37,6 @@ function runTask(task, version, requires, collectionId, metadata) {
 
       const fileIds = genomes.map(_ => _.fileId);
 
-      container.stdin.write(bson.serialize({ ids: genomes.map(_ => _._id.toString()) }));
-
       const scoresStream = ScoreCache.collection.find(
         { fileId: { $in: fileIds } },
         genomes.reduce((projection, { fileId }) => {
@@ -47,15 +45,14 @@ function runTask(task, version, requires, collectionId, metadata) {
         }, { fileId: 1 }),
         { raw: true, sort: { fileId: 1 } }
       );
+      scoresStream.pause();
 
       const genomesStream = Analysis.collection.find(
         { fileId: { $in: fileIds }, $or: requires },
         { 'results.varianceData': 1, fileId: 1 },
         { raw: true, sort: { fileId: 1 } }
       );
-
       genomesStream.pause();
-      scoresStream.on('end', () => genomesStream.resume());
 
       container.stdout
         .pipe(es.split())
@@ -76,12 +73,20 @@ function runTask(task, version, requires, collectionId, metadata) {
           }
         });
 
+      const idStream = es.through();
+
       es.merge(
+        idStream,
         scoresStream,
         genomesStream
       )
       .pipe(container.stdin);
       // .pipe(require('fs').createWriteStream('input.bson'));
+
+      scoresStream.on('end', () => genomesStream.resume());
+
+      const ids = genomes.map(_ => _._id.toString());
+      idStream.end(bson.serialize({ ids }), () => scoresStream.resume());
 
       container.on('exit', (exitCode) => {
         LOGGER.info('exit', exitCode);
