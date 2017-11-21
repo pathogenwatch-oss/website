@@ -2,13 +2,15 @@ const { request } = require('services/bus');
 const { ServiceRequestError } = require('utils/errors');
 
 const Collection = require('models/collection');
-const CollectionGenome = require('models/collectionGenome');
 const Genome = require('models/genome');
 const Organism = require('models/organism');
 
 const { getTasksByOrganism } = require('../../manifest.js');
 
-const { maxCollectionSize = { anonymous: 0, loggedIn: 0 } } = require('configuration');
+const {
+  maxCollectionSize = { anonymous: 0, loggedIn: 0 },
+  tasks: { collectionIgnore = [] },
+} = require('configuration');
 
 function getMaxCollectionSize(user) {
   if (user) {
@@ -90,7 +92,9 @@ function addGenomes(genomes) {
 function getAnalysis({ organismId, speciesId, genusId }) {
   const tasks = getTasksByOrganism(organismId, speciesId, genusId);
   return tasks.reduce((memo, { task, version }) => {
-    memo[task] = version;
+    if (!collectionIgnore.includes(task)) {
+      memo[task] = version;
+    }
     return memo;
   }, {});
 }

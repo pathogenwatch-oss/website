@@ -1,6 +1,7 @@
-const Collection = require('models/collection');
+const Collection = require('../../models/collection');
 const CollectionGenome = require('models/collectionGenome');
 const Organism = require('models/organism');
+const Analysis = require('models/analysis');
 
 const { NotFoundError } = require('utils/errors');
 
@@ -29,8 +30,7 @@ function calculateProgress(collection, results) {
   if (collection.tree) totalResults++;
   if (collection.subtrees.length) totalResults++;
 
-  collection.progress.percent =
-    Math.floor(totalResults * 100 / collection.totalResultsExpected);
+  collection.progress.percent = Math.floor(totalResults * 100 / collection.totalResultsExpected);
   return collection;
 }
 
@@ -61,17 +61,21 @@ function checkStatus(collection) {
   return collection;
 }
 
-module.exports = ({ uuid, withIds = false }) => {
-  const projection = Object.assign(
-    { 'subtrees.tree': 0 },
-    withIds ?
-      { 'subtrees.publicIds': 0 } :
-      { 'subtrees.publicIds': 0, 'subtrees.collectionIds': 0 }
-  );
-
-  return (
-    Collection
-      .findByUuid(uuid, projection)
-      .then(checkStatus)
-  );
-};
+module.exports = ({ uuid }) =>
+  Collection
+    .findByUuid(uuid)
+    .then(collection => {
+      const { analysis, genomes } = collection;
+      return Analysis.count({
+        fileId: { $in: genomes.map(_ => _.fileId) },
+        $or: Object.keys(analysis).map(task => ({ task, version: analysis[task] })),
+      })
+      .then(total => {
+        const totalExpected = genomes.length * Object.keys(analysis).length;
+        if (total === totalExpected) {
+          return collection.ready();
+        }
+        collection.progress.percent = Math.floor(total * 100 / totalExpected);
+        return collection;
+      });
+    });
