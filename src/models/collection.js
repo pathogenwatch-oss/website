@@ -20,11 +20,29 @@ const schema = new Schema({
   },
   _session: String,
   alias: { type: String, index: true },
+  analysis: Object,
   createdAt: { type: Date, index: true },
   binned: { type: Boolean, default: false },
   binnedDate: Date,
   description: String,
   error: String,
+  genomes: [ {
+    _genome: { type: Schema.Types.ObjectId, ref: 'Genome' },
+    fileId: { type: String, required: true, index: true },
+    name: { type: String, required: true },
+    date: {
+      year: Number,
+      month: Number,
+      day: Number,
+    },
+    position: {
+      latitude: Number,
+      longitude: Number,
+    },
+    country: String,
+    pmid: String,
+    userDefined: Object,
+  } ],
   lastAccessedAt: Date,
   lastUpdatedAt: Date,
   locations: Array,
@@ -32,9 +50,9 @@ const schema = new Schema({
   progress: {
     completed: Date,
     errors: [ { taskType: String, name: String } ],
-    started: { type: Date, default: Date.now },
-    results: Object,
     percent: Number,
+    results: Object,
+    started: { type: Date, default: Date.now },
   },
   pmid: String,
   public: { type: Boolean, default: false },
@@ -56,7 +74,6 @@ const schema = new Schema({
   title: { type: String, index: 'text' },
   tree: String,
   uuid: { type: String, index: true, default: () => uuidGenerator.generate(12) },
-  analysis: Object,
 });
 
 setToObjectOptions(schema, (doc, collection, { user }) => {
@@ -256,6 +273,12 @@ schema.statics.addAnalysisResult = function (_id, key, __v, result) {
     update.subtrees = { $push: result };
   }
   return this.update({ _id }, update);
+};
+
+schema.statics.getGenomes = function (_id, projection = {}) {
+  return this.findOne({ _id }, { genomes: projection })
+    .lean()
+    .then(collection => collection.genomes);
 };
 
 module.exports = mongoose.model('Collection', schema);

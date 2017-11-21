@@ -1,8 +1,6 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
-const { addPreSaveHook } = require('./utils');
-
 const schema = new Schema({
   createdAt: Date,
   task: String,
@@ -11,8 +9,15 @@ const schema = new Schema({
   results: Object,
 });
 
-// addPreSaveHook(schema);
-
 schema.index({ fileId: 1, task: 1, version: 1 });
+
+schema.statics.getResults = function (fileId, task, version, projection = {}) {
+  return this.find({
+    fileId: { $in: Array.isArray(fileId) ? fileId : [ fileId ] },
+    task,
+    version,
+  }, Object.assign({ fileId: 1 }, projection))
+  .lean();
+};
 
 module.exports = mongoose.model('Analysis', schema);

@@ -6,6 +6,8 @@ const CollectionGenome = require('models/collectionGenome');
 const Genome = require('models/genome');
 const Organism = require('models/organism');
 
+const { getTasksByOrganism } = require('../../manifest.js');
+
 const { maxCollectionSize = { anonymous: 0, loggedIn: 0 } } = require('configuration');
 
 function getMaxCollectionSize(user) {
@@ -54,7 +56,8 @@ function getGenomes(genomeIds) {
     pmid: 1,
     userDefined: 1,
     organismId: 1,
-    'analysis.speciator': 1,
+    speciesId: 1,
+    genusId: 1,
   });
 }
 
@@ -66,6 +69,30 @@ function getLocations(genomes) {
     }
   }
   return Object.values(locations);
+}
+
+function addGenomes(genomes) {
+  return genomes.map(genome => {
+    const { _id, fileId, name, year, month, day, latitude, longitude, country, pmid, userDefined } = genome;
+    return {
+      _genome: _id,
+      fileId,
+      name,
+      date: { year, month, day },
+      position: { latitude, longitude },
+      country,
+      pmid,
+      userDefined,
+    };
+  });
+}
+
+function getAnalysis({ organismId, speciesId, genusId }) {
+  const tasks = getTasksByOrganism(organismId, speciesId, genusId);
+  return tasks.reduce((memo, { task, version }) => {
+    memo[task] = version;
+    return memo;
+  }, {});
 }
 
 function createCollection(genomes, { organismId, title, description, pmid, user, sessionID }) {
@@ -82,49 +109,22 @@ function createCollection(genomes, { organismId, title, description, pmid, user,
           pmid,
           size,
           title,
+          locations: getLocations(genomes),
+          genomes: addGenomes(genomes),
+          analysis: getAnalysis(genomes[0]),
         })
       )
-      .then(collection => ({ collection, genomes }))
   );
 }
 
-function addGenomes({ collection, genomes }) {
-  const docs = genomes.map(genome => {
-    const { _id, fileId, name, year, month, day, latitude, longitude, country, pmid, userDefined } = genome;
-    return {
-      _collection: collection._id,
-      _genome: _id,
-      fileId,
-      name,
-      date: { year, month, day },
-      position: { latitude, longitude },
-      country,
-      pmid,
-      userDefined,
-      analysis: {},
-    };
-  });
-
-  return Promise.all([
-    CollectionGenome.insertRaw(docs),
-    Collection.update({ _id: collection._id }, { locations: getLocations(genomes) }),
-  ])
-  .then(() => ({ collection, genomes }));
-}
-
-function submitCollection({ collection, genomes }) {
+function submitCollection(collection) {
   const { _id, uuid, organismId } = collection;
-  const uploadedAt = collection.progress.started;
-  const { speciesId, genusId } = genomes[0].analysis.speciator;
-  request('collection', 'submit', {
+  return request('collection', 'submit', {
     organismId,
-    speciesId,
-    genusId,
-    uploadedAt,
     collectionId: _id,
-    uuid,
-  });
-  return collection;
+    clientId: uuid,
+  })
+  .then(() => collection);
 }
 
 module.exports = function (message) {
@@ -132,7 +132,6 @@ module.exports = function (message) {
     .then(validate)
     .then(getGenomes)
     .then(genomes => createCollection(genomes, message))
-    .then(addGenomes)
     .then(submitCollection)
     .then(({ slug, uuid }) => ({ slug, uuid }));
 };

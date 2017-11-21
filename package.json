@@ -44,7 +44,6 @@
     "uuid": "^3.0.1",
     "wgsa-fasta-store": "gitlab:cgps/wgsa-fasta-store#v4.0.0",
     "wgsa-front-end": "gitlab:cgps/wgsa-front-end#v6.2.1",
-    "worker-nodes": "^1.6.0",
     "zip-stream": "^1.2.0"
   },
   "devDependencies": {
