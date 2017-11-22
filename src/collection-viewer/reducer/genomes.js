@@ -3,8 +3,22 @@ import { FETCH_TREE } from '../../collection-viewer/tree/actions';
 
 function flagGenomes(genomes, flag) {
   return genomes.reduce((memo, genome) => {
-    memo[genome.uuid] = {
+    const analysis = { ...genome.analysis };
+    if (Array.isArray(genome.analysis.paarsnp)) {
+      const { antibiotics = [] } = genome.analysis.paarsnp;
+      analysis.paarsnp = {
+        ...genome.analysis.paarsnp,
+        antibiotics: antibiotics.reduce((abs, antibiotic) => {
+          abs[antibiotic.name] = antibiotic;
+          return abs;
+        }, {}),
+      };
+    }
+    const uuid = genome.uuid || genome._id;
+    memo[uuid] = {
       ...genome,
+      uuid,
+      analysis,
       [`__${flag}`]: true,
     };
     return memo;
