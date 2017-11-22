@@ -38,6 +38,11 @@ function createAnalysisUpdate(fileId, task, version) {
         });
     }
 
+    if (task === 'core') {
+      return Analysis.findOne({ fileId, task, version }, { 'results.fp.subTypeAssignment': 1 })
+        .then(({ results }) => resolve({ fp: results.fp.subTypeAssignment }));
+    }
+
     return resolve();
   })
   .then((patch = {}) => {

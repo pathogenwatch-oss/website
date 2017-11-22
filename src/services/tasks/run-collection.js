@@ -7,26 +7,48 @@ const BSON = require('bson');
 
 const bson = new BSON();
 
-const Analysis = require('models/analysis');
+const Analysis = require('../../models/analysis');
 const Collection = require('../../models/collection');
+const Genome = require('../../models/genome');
 const ScoreCache = require('../../models/scoreCache');
 
 const { getImageName } = require('manifest.js');
 
 const LOGGER = require('utils/logging').createLogger('runner');
 
+function getGenomes(collectionId, subtree) {
+  if (subtree) {
+    return Promise.all([
+      Genome.find({ population: true, fp: subtree }, { fileId: 1 }).lean(),
+      Collection.findOne(
+        { _id: collectionId, 'genomes.subtree': subtree },
+        { 'genomes._id': 1, 'genomes.fileId': 1 },
+        { sort: { 'genomes.fileId': 1 } }
+      )
+      .lean(),
+    ])
+    .then(([ population, collection ]) =>
+      [ ...population, ...collection.genomes ].sort((a, b) => {
+        if (a.fileId < b.fileId) return 1;
+        if (a.fileId > b.fileId) return -1;
+        return 0;
+      })
+    );
+  }
+  return Collection.findOne(
+    { _id: collectionId },
+    { 'genomes._id': 1, 'genomes.fileId': 1 },
+    { sort: { 'genomes.fileId': 1 } }
+  )
+  .lean()
+  .then(({ genomes }) => genomes);
+}
+
 function runTask(task, version, requires, collectionId, metadata) {
   const { subtree, organismId } = metadata;
-  // const query = subtree ?
-  //   { 'analysis.core.fp': subtree, $or: [ { _collection: collectionId }, { published: true } ] } :
-  //   { _collection: collectionId };
-  return Collection.findOne(
-      { _id: collectionId },
-      { 'genomes._id': 1, 'genomes.fileId': 1 },
-      { sort: { 'genomes.fileId': 1 } }
-    )
-    .lean()
-    .then(({ genomes }) => new Promise((resolve, reject) => {
+  return getGenomes(collectionId, subtree)
+    .then(genomes => new Promise((resolve, reject) => {
+      console.dir(genomes);
       const container = docker(getImageName(task, version), {
         env: {
           WGSA_ORGANISM_TAXID: organismId,

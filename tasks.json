@@ -140,7 +140,7 @@
       { "task": "mlst", "version": "t1" },
       { "task": "paarsnp", "version": "t1" },
       { "task": "cgmlst", "version": "t1" },
-      { "task": "core", "version": "t3" }
+      { "task": "core", "version": "t5" }
     ],
     "1282": [
       { "task": "mlst", "version": "t1" }
@@ -372,8 +372,8 @@
   },
   "collection": {
     "1280": [
-      { "task": "tree", "version": "t3", "requires": [ { "task": "core", "version": "t3" } ] },
-      { "task": "subtree", "version": "t3", "requires": [ { "task": "core", "version": "t3" } ] }
+      { "task": "tree", "version": "t5", "requires": [ { "task": "core", "version": "t5" } ] },
+      { "task": "subtree", "version": "t5", "requires": [ { "task": "core", "version": "t5" } ] }
     ]
   }
 }

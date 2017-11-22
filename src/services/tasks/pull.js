@@ -12,19 +12,21 @@ const { queues } = require('../taskQueue');
 const LIMIT = 5;
 
 function getImageNames(queue) {
-  if (!queue) {
-    const { task, version } = getSpeciatorTask();
-    return getImages().concat(getImageName(task, version));
-  }
-
-  if (queue === queues.cache) return [];
+  const { task, version } = getSpeciatorTask();
 
   if (queue === queues.speciator) {
-    const { task, version } = getSpeciatorTask();
     return [ getImageName(task, version) ];
   }
 
-  return getImages();
+  if (queue === queues.collections) return getImages('collection');
+
+  if (queue === queues.tasks) return getImages('genome');
+
+  return [
+    getImageName(task, version),
+    ...getImages('genome'),
+    ...getImages('collection'),
+  ];
 }
 
 const options = { host: null, version: 'v2', username, password };

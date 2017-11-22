@@ -4,7 +4,7 @@ const Collection = require('../../models/collection');
 
 module.exports = function ({ collectionId, task, version, result, metadata, clientId }) {
   return (
-    Collection.addAnalysisResult(collectionId, task, version, result)
+    Collection.addAnalysisResult(collectionId, task, version, metadata, result)
       .then(() => {
         request('collection', 'send-progress', { clientId });
       })

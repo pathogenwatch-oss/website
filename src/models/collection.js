@@ -42,6 +42,7 @@ const schema = new Schema({
     country: String,
     pmid: String,
     userDefined: Object,
+    subtree: String,
   } ],
   lastAccessedAt: Date,
   lastUpdatedAt: Date,
@@ -264,13 +265,16 @@ schema.statics.getSort = function (sort = 'createdAt-') {
   return { [sortKey]: sortOrder };
 };
 
-schema.statics.addAnalysisResult = function (_id, key, version, result) {
+schema.statics.addAnalysisResult = function (_id, task, version, metadata, result) {
   const update = {};
-  if (key === 'tree') {
+  if (task === 'tree') {
     update.tree = result.tree;
     update['analysis.tree'] = version;
-  } else if (key === 'subtree') {
-    update.subtrees = { $push: result };
+  } else if (task === 'subtree') {
+    update.$push = {
+      subtrees: { name: metadata.subtree, tree: result.tree },
+    };
+    update['analysis.subtree'] = version;
   }
   return this.update({ _id }, update);
 };

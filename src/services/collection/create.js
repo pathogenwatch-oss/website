@@ -60,6 +60,7 @@ function getGenomes(genomeIds) {
     organismId: 1,
     speciesId: 1,
     genusId: 1,
+    fp: 1,
   });
 }
 
@@ -75,7 +76,7 @@ function getLocations(genomes) {
 
 function addGenomes(genomes) {
   return genomes.map(genome => {
-    const { _id, fileId, name, year, month, day, latitude, longitude, country, pmid, userDefined } = genome;
+    const { _id, fileId, name, year, month, day, latitude, longitude, country, pmid, userDefined, fp } = genome;
     return {
       _genome: _id,
       fileId,
@@ -85,6 +86,7 @@ function addGenomes(genomes) {
       country,
       pmid,
       userDefined,
+      subtree: fp,
     };
   });
 }

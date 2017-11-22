@@ -18,11 +18,11 @@ function getImages(section) {
   return Array.from(imageNames);
 }
 
-module.exports.getImages = function () {
-  return [
-    ...getImages(tasks.genome),
-    ...getImages(tasks.collection),
-  ];
+module.exports.getImages = function (sectionName) {
+  if (sectionName in tasks) {
+    return getImages(tasks[sectionName]);
+  }
+  throw new Error('Unrecognised task section.');
 };
 
 module.exports.getSpeciatorTask = function () {
