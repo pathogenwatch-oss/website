@@ -85,8 +85,7 @@ function runTask(task, version, requires, collectionId, metadata) {
 
       scoresStream.on('end', () => genomesStream.resume());
 
-      const ids = genomes.map(_ => _._id.toString());
-      idStream.end(bson.serialize({ ids }), () => scoresStream.resume());
+      idStream.end(bson.serialize({ genomes }), () => scoresStream.resume());
 
       container.on('exit', (exitCode) => {
         LOGGER.info('exit', exitCode);

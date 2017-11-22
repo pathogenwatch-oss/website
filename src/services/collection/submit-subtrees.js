@@ -3,23 +3,7 @@ const Analysis = require('models/analysis');
 
 const { enqueue, queues } = require('../taskQueue');
 
-const { getTreesTask } = require('../../manifest');
-
-const { task, version, requires } = getTreesTask();
-
-function enqueueTree(collectionId, organismId, clientId, subtree) {
-  return enqueue(queues.collections, {
-    collectionId,
-    clientId,
-    task,
-    version,
-    requires,
-    metadata: {
-      organismId,
-      subtree,
-    },
-  });
-}
+const { getCollectionTask } = require('../../manifest');
 
 function getUniqueFps(collectionId) {
   return Collection.findOne(
@@ -40,11 +24,21 @@ function getUniqueFps(collectionId) {
 }
 
 module.exports = function ({ organismId, collectionId, clientId }) {
-  return Promise.all([
-    enqueueTree(collectionId, organismId, clientId),
-    getUniqueFps(collectionId)
-      .then(fps => Promise.all(
-        fps.map(subtree => enqueueTree(collectionId, organismId, clientId, subtree))
-      )),
-  ]);
+  const { task, version, requires } = getCollectionTask(organismId, 'subtree');
+  return getUniqueFps(collectionId)
+    .then(fps => Promise.all(
+      fps.map(subtree =>
+        enqueue(queues.collections, {
+          collectionId,
+          clientId,
+          task,
+          version,
+          requires,
+          metadata: {
+            organismId,
+            subtree,
+          },
+        })
+      )
+    ));
 };

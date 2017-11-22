@@ -1,8 +1,8 @@
 const { request } = require('services/bus');
 
-const Collection = require('models/collection');
+const Collection = require('../../models/collection');
 
-module.exports = function ({ collectionId, task, version, result, clientId }) {
+module.exports = function ({ collectionId, task, version, result, metadata, clientId }) {
   return (
     Collection.addAnalysisResult(collectionId, task, version, result)
       .then(() => {
@@ -10,7 +10,8 @@ module.exports = function ({ collectionId, task, version, result, clientId }) {
       })
       .then(() => {
         if (task !== 'tree') return null;
-        return request('tasks', 'enqueue-subtrees', { collectionId, clientId });
+        const { organismId } = metadata;
+        return request('collection', 'submit-subtrees', { collectionId, organismId, clientId });
       })
   );
 };

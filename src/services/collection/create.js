@@ -123,7 +123,7 @@ function createCollection(genomes, { organismId, title, description, pmid, user,
 
 function submitCollection(collection) {
   const { _id, uuid, organismId } = collection;
-  return request('collection', 'submit', {
+  return request('collection', 'submit-tree', {
     organismId,
     collectionId: _id,
     clientId: uuid,

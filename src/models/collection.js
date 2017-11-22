@@ -264,11 +264,11 @@ schema.statics.getSort = function (sort = 'createdAt-') {
   return { [sortKey]: sortOrder };
 };
 
-schema.statics.addAnalysisResult = function (_id, key, __v, result) {
+schema.statics.addAnalysisResult = function (_id, key, version, result) {
   const update = {};
   if (key === 'tree') {
     update.tree = result.tree;
-    update['analysis.tree'] = { __v };
+    update['analysis.tree'] = version;
   } else if (key === 'subtree') {
     update.subtrees = { $push: result };
   }

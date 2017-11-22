@@ -3,10 +3,10 @@ const LOGGER = require('utils/logging').createLogger('runner');
 const argv = require('named-argv');
 
 const { request } = require('services');
-const pull = require('services/tasks/pull');
+const pullTaskImages = require('services/tasks/pull');
 const taskQueue = require('services/taskQueue');
 
-const { queue, workers = 1 } = argv.opts;
+const { queue, workers = 1, pull = 1 } = argv.opts;
 
 if (queue && !(queue in taskQueue.queues)) {
   LOGGER.error(`Queue ${queue} not recognised, exiting...`);
@@ -40,19 +40,24 @@ function subscribeToQueue(queueName) {
         request('tasks', 'run-collection', { task, version, requires, collectionId, metadata, clientId, timeout$: timeout * 1000 })
           .then(result => {
             LOGGER.info('Got result', collectionId, task, version);
-            return request('collection', 'add-analysis', { collectionId, task, version, result, clientId });
+            return request('collection', 'add-analysis', { collectionId, task, version, result, metadata, clientId });
           }),
-      message => request('genome', 'add-error', message)
+      message => request('collection', 'add-error', message)
     );
   }
 }
 
-module.exports = function () {
-  pull({ queue })
+function pullImages() {
+  if (pull === '0') return Promise.resolve();
+  return pullTaskImages({ queue })
     .catch(err => {
       LOGGER.error(err);
       process.exit(1);
-    })
+    });
+}
+
+module.exports = function () {
+  pullImages()
     .then(() => {
       if (queue) subscribeToQueue(queue);
       else Object.keys(taskQueue.queues).map(subscribeToQueue);
