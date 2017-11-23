@@ -23,7 +23,7 @@ module.exports = function ({ genomeId, collectionId, uploadedAt, task, clientId 
           request('notification', 'send', {
             channel: clientId,
             topic: `analysis-${uploadedAt}`,
-            message: { id: genomeId, task, result: {}, error: true },
+            message: { genomeId, results: [ { task, error: true } ] },
           });
         }
       })

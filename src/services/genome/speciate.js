@@ -17,11 +17,12 @@ function jumpQueue({ genomeId, fileId, uploadedAt, clientId }, doc) {
   .then(cachedResults =>
     Genome.addAnalysisResults(genomeId, doc, ...cachedResults)
       .then(() => {
-        const existingTasks = new Set(cachedResults.map(_ => _.task));
-        const missingTasks = tasks.filter(_ => !existingTasks.has(_.task));
+        const existingTasks = [ doc, ...cachedResults ];
+        const existingTasknames = new Set(cachedResults.map(_ => _.task));
+        const missingTasks = tasks.filter(_ => !existingTasknames.has(_.task));
 
-        if (clientId && existingTasks.size > 0) {
-          notify({ genomeId, clientId, uploadedAt, tasks: [ doc, ...cachedResults ] });
+        if (clientId && existingTasks.length > 0) {
+          notify({ genomeId, clientId, uploadedAt, tasks: existingTasks });
         }
 
         if (missingTasks.length === 0) return Promise.resolve();
