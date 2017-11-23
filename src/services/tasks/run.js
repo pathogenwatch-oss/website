@@ -70,7 +70,7 @@ module.exports = function ({ task, version, metadata }) {
             { fileId, task, version },
             { fileId, task, version, results },
             { upsert: true }
-          );
+          ).exec();
           return { fileId, task, version, results };
         })
     )
