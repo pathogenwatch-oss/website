@@ -127,6 +127,7 @@ export const getFileSummary = createSelector(
 function getAnalysisBreakdown(genomes) {
   const breakdown = {
     paarsnp: { active: false, label: 'AMR', total: 0, errors: 0 },
+    core: { active: false, label: 'Core', total: 0, errors: 0 },
     cgmlst: { active: false, label: 'cgMLST', total: 0, errors: 0 },
     genotyphi: { active: false, label: 'Genotyphi', total: 0, errors: 0 },
     metrics: { active: false, label: 'Metrics', total: 0, errors: 0 },

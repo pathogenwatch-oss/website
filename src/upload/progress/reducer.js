@@ -150,20 +150,25 @@ export default function (state = initialState, { type, payload }) {
     }
     case actions.UPLOAD_ANALYSIS_RECEIVED: {
       const { genomes } = state;
-      const { id, task, version, result = {}, error } = payload;
-      const genome = genomes[id] || { analysis: {} };
+      const { genomeId, results } = payload;
+      const genome = genomes[genomeId] || {};
+      const nextGenome = {
+        ...genome,
+        analysis: {
+          ...genome.analysis || {},
+        },
+      };
+      for (const { task, version, result, error } of results) {
+        nextGenome.analysis[task] = error ? false : version;
+        if (result) {
+          Object.assign(nextGenome, result);
+        }
+      }
       return {
         ...state,
         genomes: {
           ...genomes,
-          [id]: {
-            ...genome,
-            analysis: {
-              ...genome.analysis,
-              [task]: error ? false : version,
-            },
-            ...(result || {}),
-          },
+          [genomeId]: nextGenome,
         },
         lastMessageReceived: new Date(),
         position: 0,
