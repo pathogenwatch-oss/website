@@ -21,7 +21,7 @@ module.exports = function ({ genomeId, fileId, organismId, speciesId, genusId, t
     .then(() => Promise.all(
       tasks.map(({ task, version, retries, timeout }) =>
         enqueue(
-          task in queues ? task : queues.tasks,
+          task in queues ? task : queues.task,
           { task, version, retries, timeout, metadata }
         )
       )

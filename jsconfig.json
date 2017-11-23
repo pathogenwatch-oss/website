@@ -1,12 +1,8 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
-    "baseUrl": ".",
+    "baseUrl": "./",
     "paths": {
-      "~/*": [
-        "./src/*"
-      ]
-    },
-    "mapRoot": "./src/"
+      "*": [ "*", "src/*" ]
+    }
   }
 }

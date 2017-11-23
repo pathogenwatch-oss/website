@@ -6,9 +6,10 @@ const { request } = require('services');
 const pullTaskImages = require('services/tasks/pull');
 const taskQueue = require('services/taskQueue');
 
+const { queues } = taskQueue;
 const { queue, workers = 1, pull = 1 } = argv.opts;
 
-if (queue && !(queue in taskQueue.queues)) {
+if (queue && !(queue in queues)) {
   LOGGER.error(`Queue ${queue} not recognised, exiting...`);
   process.exit(1);
 }
@@ -17,10 +18,8 @@ process.on('uncaughtException', err => console.error('uncaught', err));
 
 taskQueue.setMaxWorkers(workers);
 
-const { tasks, speciator, collections } = taskQueue.queues;
-
 function subscribeToQueue(queueName) {
-  if (queueName === speciator) {
+  if (queueName === queues.genome) {
     taskQueue.dequeue(
       queueName,
       ({ metadata }) => request('genome', 'speciate', metadata),
@@ -28,20 +27,16 @@ function subscribeToQueue(queueName) {
     );
   }
 
-  if (queueName === tasks || queueName === speciator) {
+  if (queueName === queues.task) {
     taskQueue.dequeue(
       queueName,
-      ({ genomeId, collectionId, organismId, speciesId, genusId, fileId, uploadedAt, task, version, clientId, timeout }) =>
-        request('tasks', 'run', { organismId, speciesId, genusId, fileId, task, version, timeout$: timeout * 1000 })
-          .then(() => {
-            LOGGER.info('Got result', genomeId, collectionId, task, version);
-            return request('genome', 'add-analysis', { genomeId, fileId, collectionId, uploadedAt, task, version, clientId });
-          }),
+      ({ task, version, timeout, metadata }) =>
+        request('tasks', 'run', { task, version, timeout$: timeout * 1000, metadata }),
       message => request('genome', 'add-error', message)
     );
   }
 
-  if (queueName === collections) {
+  if (queueName === queues.collection) {
     taskQueue.dequeue(
       queueName,
       ({ task, version, requires, collectionId, metadata, clientId, timeout }) =>
@@ -68,6 +63,6 @@ module.exports = function () {
   pullImages()
     .then(() => {
       if (queue) subscribeToQueue(queue);
-      else Object.keys(taskQueue.queues).map(subscribeToQueue);
+      else Object.keys(queues).map(subscribeToQueue);
     });
 };

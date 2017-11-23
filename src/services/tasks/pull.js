@@ -14,13 +14,13 @@ const LIMIT = 5;
 function getImageNames(queue) {
   const { task, version } = getSpeciatorTask();
 
-  if (queue === queues.speciator) {
+  if (queue === queues.genome) {
     return [ getImageName(task, version) ];
   }
 
-  if (queue === queues.collections) return getImages('collection');
+  if (queue === queues.collection) return getImages('collection');
 
-  if (queue === queues.tasks) return getImages('genome');
+  if (queue === queues.task) return getImages('genome');
 
   return [
     getImageName(task, version),

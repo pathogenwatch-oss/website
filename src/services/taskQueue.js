@@ -9,9 +9,9 @@ const config = require('configuration');
 const LOGGER = require('utils/logging').createLogger('queue');
 
 const defaultRetries = config.tasks.retries || 3;
-const timeout = config.tasks.timeout || 30;
+const defaultTimeout = config.tasks.timeout || 30;
 
-mQueue.processingTimeout = (timeout || 60) * 1000;
+mQueue.processingTimeout = (defaultTimeout || 60) * 1000;
 mQueue.maxWorkers = 1;
 
 mQueue.databasePromise = () => Q.resolve(mongoose.connection);
@@ -21,9 +21,9 @@ module.exports.setMaxWorkers = function (max = 1) {
 };
 
 const queues = {
-  tasks: 'tasks',
-  speciator: 'speciator',
-  collections: 'collections',
+  collection: 'collection',
+  genome: 'genome',
+  task: 'task',
 };
 
 
@@ -36,8 +36,13 @@ module.exports.enqueue = function (queue, message) {
   }
   LOGGER.info('Adding message', message, 'to', queue);
   return (
-    mQueue.enqueue(queue, Object.assign({ retries: defaultRetries, timeout }, message))
-      .catch(err => LOGGER.error(err))
+    mQueue.enqueue(queue, Object.assign(
+      message, {
+        retries: message.retries || defaultRetries,
+        timeout: message.timeout || defaultTimeout,
+      }
+    ))
+    .catch(err => LOGGER.error(err))
   );
 };
 

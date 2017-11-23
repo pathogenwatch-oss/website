@@ -6,6 +6,7 @@ const Analysis = require('models/analysis');
 const TaskLog = require('models/taskLog');
 const Genome = require('models/genome');
 
+const notify = require('services/genome/notify');
 const { fastaStoragePath } = require('configuration');
 const { getImageName } = require('manifest.js');
 
@@ -30,9 +31,11 @@ function runTask(fileId, task, version, organismId, speciesId, genusId) {
     });
     container.on('exit', (exitCode) => {
       LOGGER.info('exit', exitCode);
+
       const [ durationS, durationNs ] = process.hrtime(startTime);
       const duration = Math.round(durationS * 1000 + durationNs / 1e6);
       TaskLog.create({ fileId, task, version, organismId, speciesId, genusId, duration, exitCode });
+
       if (exitCode !== 0) {
         container.stderr.setEncoding('utf8');
         reject(new Error(container.stderr.read()));
@@ -55,7 +58,8 @@ function runTask(fileId, task, version, organismId, speciesId, genusId) {
   });
 }
 
-module.exports = function ({ genomeId, fileId, task, version, organismId, speciesId, genusId }) {
+module.exports = function ({ task, version, metadata }) {
+  const { organismId, speciesId, genusId, fileId, genomeId, uploadedAt, clientId } = metadata;
   return Analysis.findOne({ fileId, task, version })
     .lean()
     .then(cached =>
@@ -70,8 +74,10 @@ module.exports = function ({ genomeId, fileId, task, version, organismId, specie
           return { fileId, task, version, results };
         })
     )
-    .then(result =>
-      Genome.addAnalysisResults(genomeId, result)
-        .then(() => result)
+    .then(doc =>
+      Genome.addAnalysisResults(genomeId, doc)
+        .then(() => {
+          notify({ genomeId, clientId, uploadedAt, tasks: [ doc ] });
+        })
     );
 };
