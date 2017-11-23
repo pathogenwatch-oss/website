@@ -15,7 +15,6 @@ function getDate(year, month = 1, day = 1) {
 const schema = new Schema({
   _session: String,
   _user: { type: Schema.Types.ObjectId, ref: 'User' },
-  amr: [ String ],
   analysis: Object,
   binned: { type: Boolean, default: false },
   binnedDate: Date,
@@ -25,25 +24,17 @@ const schema = new Schema({
   day: Number,
   errored: { type: Array, default: null },
   fileId: String,
-  fp: String,
-  genusId: { type: String, index: true },
-  genusName: { type: String },
   lastAccessedAt: Date,
   lastUpdatedAt: Date,
   latitude: Number,
   longitude: Number,
   month: Number,
   name: { type: String, required: true, index: 'text' },
-  organismId: { type: String, index: true },
-  organismName: { type: String, index: true },
   pending: { type: Array, default: null },
   pmid: String,
   population: { type: Boolean, default: false },
   public: { type: Boolean, default: false },
   reference: { type: Boolean, default: false },
-  speciesId: { type: String, index: true },
-  speciesName: { type: String },
-  st: { type: String, index: true },
   uploadedAt: Date,
   userDefined: Object,
   year: Number,
@@ -87,9 +78,31 @@ function getCountryCode(latitude, longitude) {
   return null;
 }
 
-schema.statics.addPendingTask = function (_id, task) {
-  return this.update({ _id }, { $push: { pending: task } });
+schema.statics.addPendingTasks = function (_id, tasks) {
+  return this.update({ _id }, { $pushAll: { pending: tasks } });
 };
+
+schema.statics.addAnalysisResult = function (_id, task, __v, result) {
+  const update = {
+    $set: { [`analysis.${task.toLowerCase()}`]: Object.assign({ __v }, result) },
+  };
+
+  update.$pull = { pending: task };
+
+  return this.update({ _id }, update);
+};
+
+schema.statics.addAnalysisResults = function (_id, ...analyses) {
+  const update = { $set: {}, $pullAll: { pending: [] } };
+
+  for (const { task, version, results } of analyses) {
+    update.$set[`analysis.${task.toLowerCase()}`] = Object.assign({ __v: version }, results);
+    update.$pullAll.pending.push(task);
+  }
+
+  return this.update({ _id }, update);
+};
+
 
 schema.statics.addAnalysisError = function (_id, task) {
   return this.update({ _id }, {

@@ -20,6 +20,14 @@ taskQueue.setMaxWorkers(workers);
 const { tasks, speciator, collections } = taskQueue.queues;
 
 function subscribeToQueue(queueName) {
+  if (queueName === speciator) {
+    taskQueue.dequeue(
+      queueName,
+      ({ metadata }) => request('genome', 'speciate', metadata),
+      message => request('genome', 'add-error', message)
+    );
+  }
+
   if (queueName === tasks || queueName === speciator) {
     taskQueue.dequeue(
       queueName,

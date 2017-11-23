@@ -2,9 +2,9 @@ const fs = require('fs');
 const docker = require('docker-run');
 const fastaStorage = require('wgsa-fasta-store');
 
-const { request } = require('services');
 const Analysis = require('models/analysis');
 const TaskLog = require('models/taskLog');
+const Genome = require('models/genome');
 
 const { fastaStoragePath } = require('configuration');
 const { getImageName } = require('manifest.js');
@@ -55,17 +55,23 @@ function runTask(fileId, task, version, organismId, speciesId, genusId) {
   });
 }
 
-module.exports = function ({ fileId, task, version, organismId, speciesId, genusId }) {
-  return request('tasks', 'find', { fileId, task, version })
-    .then(cachedResults =>
-      cachedResults ||
+module.exports = function ({ genomeId, fileId, task, version, organismId, speciesId, genusId }) {
+  return Analysis.findOne({ fileId, task, version })
+    .lean()
+    .then(cached =>
+      cached ||
       runTask(fileId, task, version, organismId, speciesId, genusId)
-        .then(results =>
+        .then(results => {
           Analysis.update(
             { fileId, task, version },
             { fileId, task, version, results },
             { upsert: true }
-          )
-        )
+          );
+          return { fileId, task, version, results };
+        })
+    )
+    .then(result =>
+      Genome.addAnalysisResults(genomeId, result)
+        .then(() => result)
     );
 };

@@ -28,10 +28,10 @@ module.exports = ({ timeout$, stream, metadata, reference, user, sessionID, clie
     request('genome', 'store', { timeout$, stream })
       .then(({ fileId }) =>
         createGenomeDocument(metadata, { fileId, reference, user, sessionID })
-          .then(genomeId => {
-            request('genome', 'speciate', { genomeId, fileId, uploadedAt: metadata.uploadedAt, clientId });
-            return { id: genomeId };
-          })
+          .then(genomeId =>
+            request('tasks', 'submit-genome', { genomeId, fileId, uploadedAt: metadata.uploadedAt, clientId })
+              .then(() => ({ id: genomeId }))
+          )
       )
   );
 };
