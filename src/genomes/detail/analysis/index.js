@@ -24,7 +24,7 @@ export default (genome) => {
   if (genotyphi) tabs.push({ key: 'Genotyphi', component: <VersionSwitcher taskName="genotyphi" component={Genotyphi} genome={genome} /> });
   if (ngmast) tabs.push({ key: 'NG-MAST', component: <VersionSwitcher taskName="ngmast" component={NgMast} genome={genome} /> });
   if (speciator) tabs.push({ key: 'Organism', component: <VersionSwitcher taskName="speciator" component={Speciator} genome={genome} /> });
-  if (Object.keys(rest).length) tabs.push({ key: 'Other', component: renderGenericResults(rest, genome.tasks) });
+  if (Object.keys(rest).length) tabs.push({ key: 'Other', component: renderGenericResults(rest) });
 
   return tabs;
 };

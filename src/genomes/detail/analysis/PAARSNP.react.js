@@ -66,32 +66,30 @@ const PAARSNP = React.createClass({
   },
 
   render() {
-    const { __v, snp = [], paar = [] } = this.props;
+    const { snp = [], paar = [] } = this.props;
     return (
-      <Section heading="PAARSNP" version={__v}>
-        <dl>
-          <Metadata large label="Antibiotics">
-            <table>
-              <thead>
-                <tr>
-                  { this.getTableHeaders() }
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  { this.getTableCells() }
-                </tr>
-              </tbody>
-            </table>
-          </Metadata>
-          <Metadata label="SNPs">
-            { this.displayMechanisms(snp) }
-          </Metadata>
-          <Metadata label="Genes">
-            { this.displayMechanisms(paar) }
-          </Metadata>
-        </dl>
-      </Section>
+      <dl>
+        <Metadata large label="Antibiotics">
+          <table>
+            <thead>
+              <tr>
+                { this.getTableHeaders() }
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                { this.getTableCells() }
+              </tr>
+            </tbody>
+          </table>
+        </Metadata>
+        <Metadata label="SNPs">
+          { this.displayMechanisms(snp) }
+        </Metadata>
+        <Metadata label="Genes">
+          { this.displayMechanisms(paar) }
+        </Metadata>
+      </dl>
     );
   },
 

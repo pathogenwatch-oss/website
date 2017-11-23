@@ -52,17 +52,13 @@ export const VersionSwitcher = React.createClass({
     const { genome, taskName } = this.props;
     const { analysis } = genome;
     return {
-      version: analysis[taskName],
+      version: analysis[taskName].__v,
     };
   },
 
   getResult() {
     const { genome, taskName } = this.props;
-    const { tasks } = genome;
-    return tasks.find(_ =>
-      _.task === taskName &&
-      _.version === this.state.version
-    ).results;
+    return genome.analysis[taskName];
   },
 
   render() {

@@ -19,12 +19,7 @@ function getAMROverview({ antibiotics }) {
 }
 
 function getTask({ analysis = {}, tasks = [] }, taskName) {
-  if (taskName in analysis) {
-    return tasks.find(
-      _ => _.task === taskName && _.version === analysis[taskName]
-    ).results;
-  }
-  return null;
+  return analysis[taskName];
 }
 
 export default ({ genome }) => {
