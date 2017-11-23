@@ -100,11 +100,11 @@
   font-size: 11px;
   font-weight: 500;
   height: 20px;
-  line-height: 1;
   margin: 0 0 4px;
   text-overflow: ellipsis;
   white-space: nowrap;
-  padding: 0 6px;
+  padding: 1px 6px 0px;
+  line-height: 1;
 }
 
 .wgsa-selectable-column-heading--active,
