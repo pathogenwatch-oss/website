@@ -42,6 +42,11 @@ const schema = new Schema({
 
 schema.index({ name: 1 });
 schema.index({ public: 1, reference: 1 });
+schema.index({ 'analysis.mlst.st': 1 });
+schema.index({ 'analysis.speciator.organismId': 1 });
+schema.index({ 'analysis.speciator.speciesId': 1 });
+schema.index({ 'analysis.speciator.genusId': 1 });
+schema.index({ 'analysis.speciator.organismName': 1 });
 
 function toObject(genome, user = {}) {
   const { id } = user;
@@ -191,18 +196,6 @@ schema.statics.getFilterQuery = function (props) {
     findQuery.$text = { $search: searchText };
   }
 
-  if (organismId) {
-    findQuery.organismId = organismId;
-  }
-
-  if (speciesId) {
-    findQuery.speciesId = speciesId;
-  }
-
-  if (genusId) {
-    findQuery.genusId = genusId;
-  }
-
   if (country) {
     findQuery.country = country;
   }
@@ -232,12 +225,26 @@ schema.statics.getFilterQuery = function (props) {
     );
   }
 
+  if (organismId) {
+    findQuery['analysis.speciator.organismId'] = organismId;
+  }
+
+  if (speciesId) {
+    findQuery['analysis.speciator.speciesId'] = speciesId;
+  }
+
+  if (genusId) {
+    findQuery['analysis.speciator.genusId'] = genusId;
+  }
+
   if (sequenceType && (organismId || speciesId || genusId)) {
-    findQuery.st = sequenceType;
+    findQuery['analysis.mlst.st'] = sequenceType;
   }
 
   if (resistance) {
-    findQuery.amr = resistance;
+    findQuery['analysis.paarsnp.antibiotics'] = {
+      $elemMatch: { fullName: resistance, state: 'RESISTANT' },
+    };
   }
 
   return findQuery;
@@ -261,11 +268,11 @@ schema.statics.getSort = function (sort = 'createdAt-') {
   }
 
   if (sortKey === 'st') {
-    return { st: sortOrder };
+    return { 'analysis.mlst.st': sortOrder };
   }
 
   if (sortKey === 'organism') {
-    return { organismName: sortOrder };
+    return { 'analysis.speciator.organismName': sortOrder };
   }
 
   return { [sortKey]: sortOrder };

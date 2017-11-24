@@ -1,66 +1,47 @@
-const services = require('services');
-const Analysis = require('models/analysis');
+const Genome = require('models/genome');
 
-const projections = {
-  core: {
-    'results.fp.subTypeAssignment': 1,
-    'results.coreSummary': 1,
-  },
-  mlst: {
-    'results.st': 1,
-    'results.alleles': 1,
-  },
-  paarsnp: {
-    'results.antibiotics': 1,
-    'results.paar': 1,
-    'results.snp': 1,
-  },
+const { request } = require('services');
+
+const projection = {
+  country: 1,
+  createdAt: 1,
+  year: 1,
+  month: 1,
+  day: 1,
+  name: 1,
+  pmid: 1,
+  userDefined: 1,
+  latitude: 1,
+  longitude: 1,
+  'analysis.metrics': 1,
+  'analysis.genotyphi': 1,
+  'analysis.ngmast': 1,
+  'analysis.core.fp.subTypeAssignment': 1,
+  'analysis.core.coreSummary': 1,
+  'analysis.mlst.st': 1,
+  'analysis.mlst.alleles': 1,
+  'analysis.paarsnp.antibiotics': 1,
+  'analysis.paarsnp.paar': 1,
+  'analysis.paarsnp.snp': 1,
 };
 
-function addGenomes(collection) {
-  if (collection.status !== 'READY') {
-    return collection;
-  }
-
-  const { analysis, genomes } = collection;
-  const tasknames = Object.keys(analysis);
-  return Promise.all(
-    tasknames.map(task =>
-      Analysis.find(
-        { fileId: { $in: genomes.map(_ => _.fileId) }, task, version: analysis[task] },
-        Object.assign({ fileId: 1, task: 1 }, projections[task] || { results: 1 })
-      )
-    )
-  ).then(analyses => {
-    const analysisByFileId = {};
-    for (let i = 0; i < tasknames.length; i++) {
-      for (const doc of analyses[i]) {
-        const memo = analysisByFileId[doc.fileId] || [];
-        memo.push(doc);
-        analysisByFileId[doc.fileId] = memo;
-      }
-    }
-    for (const genome of genomes) {
-      genome.analysis = {};
-      for (const { task, results } of analysisByFileId[genome.fileId]) {
-        genome.analysis[task] = results;
-      }
-    }
-    return collection;
-  });
+function getGenomes(collection) {
+  return Genome.find({ _id: { $in: collection.genomes } }, projection)
+    .lean()
+    .then(genomes => genomes.map(doc => Genome.toObject(doc)));
 }
 
 module.exports = ({ user, uuid }) =>
-  services.request('collection', 'fetch-progress', { user, uuid })
-    .then(collection => collection.ensureAccess(user))
-    .then(collection => {
-      if (collection.status === 'READY') {
-        return (
-          collection
-            .populate('_organism')
-            .execPopulate()
-            .then(_ => addGenomes(_.toObject()))
-        );
-      }
-      return collection;
-    });
+  request('collection', 'authenticate', { user, uuid })
+    .then(collection =>
+      collection
+        .populate('_organism')
+        .execPopulate()
+        .then(getGenomes)
+        .then(genomes => {
+          const doc = collection.toObject();
+          doc.genomes = genomes;
+          doc.status = 'READY';
+          return doc;
+        })
+    );

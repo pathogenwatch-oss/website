@@ -4,7 +4,6 @@ const slug = require('slug');
 const rand = require('rand-token');
 
 const { setToObjectOptions, addPreSaveHook, getSummary } = require('./utils');
-const { NotFoundError } = require('../utils/errors');
 
 const uuidGenerator = rand.generator({
   chars: 'abcdefghijklnmopqrstuvwxyz1234567890',
@@ -20,30 +19,12 @@ const schema = new Schema({
   },
   _session: String,
   alias: { type: String, index: true },
-  analysis: Object,
   createdAt: { type: Date, index: true },
   binned: { type: Boolean, default: false },
   binnedDate: Date,
   description: String,
   error: String,
-  genomes: [ {
-    _genome: { type: Schema.Types.ObjectId, ref: 'Genome' },
-    fileId: { type: String, required: true, index: true },
-    name: { type: String, required: true },
-    date: {
-      year: Number,
-      month: Number,
-      day: Number,
-    },
-    position: {
-      latitude: Number,
-      longitude: Number,
-    },
-    country: String,
-    pmid: String,
-    userDefined: Object,
-    subtree: String,
-  } ],
+  genomes: [ { type: Schema.Types.ObjectId, ref: 'Genome' } ],
   lastAccessedAt: Date,
   lastUpdatedAt: Date,
   locations: Array,
@@ -63,7 +44,6 @@ const schema = new Schema({
   reference: Boolean,
   showcase: Boolean,
   size: Number,
-  status: { type: String, default: 'PROCESSING' },
   subtrees: [ {
     name: String,
     tree: String,
@@ -133,18 +113,6 @@ schema.methods.resultRequired = function (type) {
   }
 
   return false;
-};
-
-schema.methods.ensureAccess = function (user) {
-  if (!this.private) {
-    return this;
-  }
-
-  if (user && this._user && this._user.equals(user._id)) {
-    return this;
-  }
-
-  throw new NotFoundError('No collection found for this user');
 };
 
 schema.virtual('isProcessing').get(function () {
@@ -277,12 +245,6 @@ schema.statics.addAnalysisResult = function (_id, task, version, metadata, resul
     update['analysis.subtree'] = version;
   }
   return this.update({ _id }, update);
-};
-
-schema.statics.getGenomes = function (_id, projection = {}) {
-  return this.findOne({ _id }, { genomes: projection })
-    .lean()
-    .then(collection => collection.genomes);
 };
 
 module.exports = mongoose.model('Collection', schema);

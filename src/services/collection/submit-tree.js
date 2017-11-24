@@ -4,7 +4,7 @@ const { getCollectionTask } = require('../../manifest');
 
 module.exports = function ({ organismId, collectionId, clientId }) {
   const { task, version, requires } = getCollectionTask(organismId, 'tree');
-  return enqueue(queues.collections, {
+  return enqueue(queues.collection, {
     collectionId,
     clientId,
     task,

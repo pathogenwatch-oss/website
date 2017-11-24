@@ -34,7 +34,7 @@ function validate({ genomeIds, organismId, user }) {
 
   return Genome.count({
     _id: { $in: genomeIds },
-    organismId,
+    'analysis.speciator.organismId': organismId,
     'analysis.core': { $exists: true },
   })
   .then(count => {
@@ -46,22 +46,7 @@ function validate({ genomeIds, organismId, user }) {
 }
 
 function getGenomes(genomeIds) {
-  return Genome.find({ _id: { $in: genomeIds } }, {
-    fileId: 1,
-    name: 1,
-    year: 1,
-    month: 1,
-    day: 1,
-    latitude: 1,
-    longitude: 1,
-    country: 1,
-    pmid: 1,
-    userDefined: 1,
-    organismId: 1,
-    speciesId: 1,
-    genusId: 1,
-    fp: 1,
-  });
+  return Genome.find({ _id: { $in: genomeIds } }, { latitude: 1, longitude: 1 });
 }
 
 function getLocations(genomes) {
@@ -72,33 +57,6 @@ function getLocations(genomes) {
     }
   }
   return Object.values(locations);
-}
-
-function addGenomes(genomes) {
-  return genomes.map(genome => {
-    const { _id, fileId, name, year, month, day, latitude, longitude, country, pmid, userDefined, fp } = genome;
-    return {
-      _genome: _id,
-      fileId,
-      name,
-      date: { year, month, day },
-      position: { latitude, longitude },
-      country,
-      pmid,
-      userDefined,
-      subtree: fp,
-    };
-  });
-}
-
-function getAnalysis({ organismId, speciesId, genusId }) {
-  const tasks = getTasksByOrganism(organismId, speciesId, genusId);
-  return tasks.reduce((memo, { task, version }) => {
-    if (!collectionIgnore.includes(task)) {
-      memo[task] = version;
-    }
-    return memo;
-  }, {});
 }
 
 function createCollection(genomes, { organismId, title, description, pmid, user, sessionID }) {
@@ -116,8 +74,7 @@ function createCollection(genomes, { organismId, title, description, pmid, user,
           size,
           title,
           locations: getLocations(genomes),
-          genomes: addGenomes(genomes),
-          analysis: getAnalysis(genomes[0]),
+          genomes: genomes.map(_ => _._id),
         })
       )
   );
