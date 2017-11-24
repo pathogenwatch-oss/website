@@ -1,6 +1,6 @@
 import React from 'react';
 import classnames from 'classnames';
-import { Section, Metadata } from '../components';
+import { Metadata } from '../components';
 
 import { taxIdMap } from '../../../organisms';
 
