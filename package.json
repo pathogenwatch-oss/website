@@ -40,7 +40,7 @@
     "stream-transform": "^0.1.2",
     "uuid": "^3.0.1",
     "wgsa-fasta-store": "gitlab:cgps/wgsa-fasta-store#v4.0.0",
-    "wgsa-front-end": "gitlab:cgps/wgsa-front-end#v6.3.0",
+    "wgsa-front-end": "gitlab:cgps/wgsa-front-end#v6.3.1",
     "zip-stream": "^1.2.0"
   },
   "devDependencies": {
