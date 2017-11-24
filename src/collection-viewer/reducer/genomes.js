@@ -4,10 +4,10 @@ import { FETCH_TREE } from '../../collection-viewer/tree/actions';
 function flagGenomes(genomes, flag) {
   return genomes.reduce((memo, genome) => {
     const analysis = { ...genome.analysis };
-    if (Array.isArray(genome.analysis.paarsnp)) {
-      const { antibiotics = [] } = genome.analysis.paarsnp;
+    if (Array.isArray(analysis.paarsnp.antibiotics)) {
+      const { antibiotics = [] } = analysis.paarsnp;
       analysis.paarsnp = {
-        ...genome.analysis.paarsnp,
+        ...analysis.paarsnp,
         antibiotics: antibiotics.reduce((abs, antibiotic) => {
           abs[antibiotic.name] = antibiotic;
           return abs;
@@ -19,6 +19,15 @@ function flagGenomes(genomes, flag) {
       ...genome,
       uuid,
       analysis,
+      position: genome.position || {
+        latitude: genome.latitude,
+        longitude: genome.longitude,
+      },
+      date: genome.date || {
+        year: genome.year,
+        month: genome.month,
+        day: genome.day,
+      },
       [`__${flag}`]: true,
     };
     return memo;
