@@ -103,7 +103,7 @@
   margin: 0 0 4px;
   text-overflow: ellipsis;
   white-space: nowrap;
-  padding: 1px 6px 0px;
+  padding: 0.5px 6px 0px;
   line-height: 1;
 }
 
