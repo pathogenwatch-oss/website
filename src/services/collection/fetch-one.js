@@ -28,7 +28,7 @@ const projection = {
 function getGenomes(collection) {
   return Genome.find({ _id: { $in: collection.genomes } }, projection)
     .lean()
-    .then(genomes => genomes.map(doc => Genome.toObject(doc)));
+    .then(genomes => genomes.map(doc => Object.assign(doc, { uuid: doc._id })));
 }
 
 module.exports = ({ user, uuid }) =>
