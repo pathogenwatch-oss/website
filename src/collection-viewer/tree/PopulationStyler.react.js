@@ -17,7 +17,7 @@ const Styler = React.createClass({
       const { id } = leaf;
       const genome = genomes[id];
       const subtree = trees[id];
-      const { collectionIds = [], totalCollection = 0, totalPublic = 0 } =
+      const { collectionIds = [], size = 0, populationSize = 0 } =
         subtree || {};
 
       leaf.setDisplay({
@@ -28,8 +28,9 @@ const Styler = React.createClass({
         },
       });
 
+      const totalCollection = size - populationSize;
       if (totalCollection > 0) {
-        leaf.label = `${genome.name} (${totalCollection}) [${totalPublic}]`;
+        leaf.label = `${genome.name} (${totalCollection}) [${populationSize}]`;
       } else {
         leaf.label = genome.name;
       }

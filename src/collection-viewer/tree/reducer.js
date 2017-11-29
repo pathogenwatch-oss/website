@@ -61,18 +61,17 @@ function getInitialState() {
 function entities(state = {}, { type, payload }) {
   switch (type) {
     case FETCH_COLLECTION.SUCCESS: {
-      const { genomes, organism, subtrees, status, tree } = payload.result;
-
-      if (status !== statuses.READY) return state;
+      const { genomes, organism, subtrees, tree = {} } = payload.result;
 
       const initialState = getInitialState();
 
       return {
         ...state,
         [COLLECTION]: {
+          newick: null,
+          ...tree,
           name: COLLECTION,
-          newick: tree,
-          leafIds: tree ? null : genomes.map(_ => _.uuid),
+          leafIds: genomes.map(_ => _.uuid),
           ...initialState,
         },
         [POPULATION]: {
@@ -81,8 +80,8 @@ function entities(state = {}, { type, payload }) {
           leafIds: organism.references.map(_ => _.uuid),
           ...initialState,
         },
-        ...subtrees.reduce((memo, { tree, ...subtree }) => {
-          memo[subtree.name] = { ...subtree, newick: tree, ...initialState };
+        ...subtrees.reduce((memo, subtree) => {
+          memo[subtree.name] = { ...subtree, ...initialState };
           return memo;
         }, {}),
       };
@@ -93,7 +92,7 @@ function entities(state = {}, { type, payload }) {
         [payload.stateKey]: {
           ...state[payload.stateKey],
           name: payload.stateKey,
-          newick: payload.result.tree,
+          newick: payload.result.newick,
           ...getInitialState(),
         },
       };
