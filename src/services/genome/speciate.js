@@ -6,7 +6,7 @@ const { getSpeciatorTask, getTasksByOrganism } = require('manifest');
 
 const notify = require('services/genome/notify');
 
-function jumpQueue({ genomeId, fileId, uploadedAt, clientId }, doc) {
+function submitTasks({ genomeId, fileId, uploadedAt, clientId }, doc) {
   const { organismId, speciesId, genusId } = doc.results;
   const tasks = getTasksByOrganism(organismId, speciesId, genusId);
   return Analysis.find({
@@ -43,19 +43,25 @@ function jumpQueue({ genomeId, fileId, uploadedAt, clientId }, doc) {
 
 const config = require('configuration');
 const defaultTimeout = config.tasks.timeout || 30;
+const maxRetries = config.tasks.retries || 3;
 
-module.exports = function (message) {
+const speciatorTask = getSpeciatorTask();
+
+module.exports = function findTask(message, retries = 0) {
   const { genomeId, fileId, uploadedAt, clientId } = message;
-  const speciatorTask = getSpeciatorTask();
   const { task, version, timeout = defaultTimeout } = speciatorTask;
 
   return Analysis.findOne({ fileId, task, version })
     .lean()
     .then(doc => {
       if (doc) {
-        return jumpQueue(message, doc);
+        return submitTasks(message, doc);
       }
       const metadata = { genomeId, fileId, uploadedAt, clientId };
-      return request('tasks', 'run', { task, version, timeout$: timeout * 1000, metadata });
+      return request('tasks', 'run', { task, version, timeout$: timeout * 1000, metadata })
+        .then(() => {
+          if (retries === maxRetries) return null;
+          return findTask(message, retries + 1);
+        });
     });
 };

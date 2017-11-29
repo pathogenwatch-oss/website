@@ -71,8 +71,10 @@ router.get('/collection/:uuid', (req, res, next) => {
 });
 
 router.get('/collection/:uuid/subtree/:name', (req, res, next) => {
-  LOGGER.info('Received request for subtree', req.params);
-  return services.request('collection', 'subtree', req.params)
+  LOGGER.info('Received request for tree', req.params);
+  const { user } = req;
+  const { uuid, name } = req.params;
+  return services.request('collection', 'subtree', { user, uuid, name })
     .then(response => res.json(response))
     .catch(next);
 });

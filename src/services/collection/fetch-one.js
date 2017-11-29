@@ -3,41 +3,32 @@ const Genome = require('models/genome');
 const { request } = require('services');
 
 const projection = {
-  country: 1,
+  _user: 1,
+  _organism: 1,
   createdAt: 1,
-  year: 1,
-  month: 1,
-  day: 1,
-  name: 1,
+  description: 1,
+  genomes: 1,
+  organismId: 1,
   pmid: 1,
-  userDefined: 1,
-  latitude: 1,
-  longitude: 1,
-  'analysis.metrics': 1,
-  'analysis.genotyphi': 1,
-  'analysis.ngmast': 1,
-  'analysis.core.fp.subTypeAssignment': 1,
-  'analysis.core.coreSummary': 1,
-  'analysis.mlst.st': 1,
-  'analysis.mlst.alleles': 1,
-  'analysis.paarsnp.antibiotics': 1,
-  'analysis.paarsnp.paar': 1,
-  'analysis.paarsnp.snp': 1,
+  size: 1,
+  tree: 1,
+  'subtrees.name': 1,
+  'subtrees.size': 1,
+  'subtrees.populationSize': 1,
+  'subtrees.status': 1,
+  'subtrees.task': 1,
+  'subtrees.version': 1,
+  title: 1,
+  uuid: 1,
 };
 
-function getGenomes(collection) {
-  return Genome.find({ _id: { $in: collection.genomes } }, projection)
-    .lean()
-    .then(genomes => genomes.map(doc => Object.assign(doc, { uuid: doc._id })));
-}
-
 module.exports = ({ user, uuid }) =>
-  request('collection', 'authenticate', { user, uuid })
+  request('collection', 'authorise', { user, uuid, projection })
     .then(collection =>
       collection
         .populate('_organism')
         .execPopulate()
-        .then(getGenomes)
+        .then(() => Genome.getCollection(collection.genomes))
         .then(genomes => {
           const doc = collection.toObject();
           doc.genomes = genomes;

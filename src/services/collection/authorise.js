@@ -1,8 +1,8 @@
 const Collection = require('models/collection');
 const { NotFoundError } = require('../../utils/errors');
 
-module.exports = ({ user, uuid, projection = {} }) =>
-  Collection.findByUuid(uuid, projection)
+module.exports = ({ user, uuid, query = {}, projection = {} }) =>
+  Collection.findOne(Object.assign({ uuid }, query), projection)
     .then(collection => {
       if (!collection.private) {
         return collection;

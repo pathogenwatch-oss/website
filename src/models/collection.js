@@ -9,6 +9,17 @@ const uuidGenerator = rand.generator({
   chars: 'abcdefghijklnmopqrstuvwxyz1234567890',
 });
 
+const Tree = new Schema({
+  name: String,
+  newick: String,
+  size: Number,
+  populationIds: [ { type: Schema.Types.ObjectId, ref: 'Genome' } ],
+  populationSize: Number,
+  status: String,
+  task: String,
+  version: String,
+});
+
 const schema = new Schema({
   _user: { type: Schema.Types.ObjectId, ref: 'User' },
   _organism: {
@@ -29,13 +40,6 @@ const schema = new Schema({
   lastUpdatedAt: Date,
   locations: Array,
   organismId: String,
-  progress: {
-    completed: Date,
-    errors: [ { taskType: String, name: String } ],
-    percent: Number,
-    results: Object,
-    started: { type: Date, default: Date.now },
-  },
   pmid: String,
   public: { type: Boolean, default: false },
   published: { type: Boolean, default: false },
@@ -44,16 +48,9 @@ const schema = new Schema({
   reference: Boolean,
   showcase: Boolean,
   size: Number,
-  subtrees: [ {
-    name: String,
-    tree: String,
-    collectionIds: [ String ],
-    publicIds: [ String ],
-    totalCollection: Number,
-    totalPublic: Number,
-  } ],
+  subtrees: [ Tree ],
   title: { type: String, index: 'text' },
-  tree: String,
+  tree: Tree,
   uuid: { type: String, index: true, default: () => uuidGenerator.generate(12) },
 });
 
@@ -114,25 +111,6 @@ schema.methods.resultRequired = function (type) {
 
   return false;
 };
-
-schema.virtual('isProcessing').get(function () {
-  return this.status === 'PROCESSING';
-});
-
-schema.virtual('totalGenomeResults').get(function () {
-  return (
-    commonResults.size +
-    (this.reference ? 0 : nonReferenceResults.size) +
-    (standardOrganisms.has(this.organismId) ? standardAnalyses.size : 0) +
-    (this.organismId in organismSpecificResults ?
-      organismSpecificResults[this.organismId].size : 0)
-  );
-});
-
-const totalTreeResults = 2;
-schema.virtual('totalResultsExpected').get(function () {
-  return this.size * this.totalGenomeResults + totalTreeResults;
-});
 
 function toSlug(text) {
   if (!text) return '';
@@ -235,15 +213,33 @@ schema.statics.getSort = function (sort = 'createdAt-') {
 
 schema.statics.addAnalysisResult = function (_id, task, version, metadata, result) {
   const update = {};
+
   if (task === 'tree') {
-    update.tree = result.tree;
-    update['analysis.tree'] = version;
-  } else if (task === 'subtree') {
-    update.$push = {
-      subtrees: { name: metadata.subtree, tree: result.tree },
+    update.tree = {
+      task,
+      version,
+      name: 'collection',
+      status: 'READY',
+      newick: result.tree,
+      size: result.size,
     };
-    update['analysis.subtree'] = version;
   }
+
+  if (task === 'subtree') {
+    update.$push = {
+      subtrees: {
+        task,
+        version,
+        name: metadata.subtree,
+        status: 'READY',
+        newick: result.tree,
+        size: result.size,
+        populationIds: result.populationIds,
+        populationSize: result.populationIds.length,
+      },
+    };
+  }
+
   return this.update({ _id }, update);
 };
 

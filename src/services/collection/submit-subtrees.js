@@ -1,5 +1,5 @@
 const Collection = require('models/collection');
-const Analysis = require('models/analysis');
+const Genome = require('models/genome');
 
 const { enqueue, queues } = require('../taskQueue');
 
@@ -8,16 +8,19 @@ const { getCollectionTask } = require('../../manifest');
 function getUniqueFps(collectionId) {
   return Collection.findOne(
     { _id: collectionId },
-    { 'genomes.fileId': 1, 'analysis.core': 1 }
+    { genomes: 1 }
   )
     .lean()
-    .then(({ analysis, genomes }) =>
-      Analysis.getResults(genomes.map(_ => _.fileId), 'core', analysis.core, { 'results.fp.subTypeAssignment': 1 })
+    .then(({ genomes }) =>
+      Genome.find(
+        { _id: { $in: genomes }, 'analysis.core.fp.reference': { $exists: true } },
+        { 'analysis.core.fp.reference': 1 }
+      ).lean()
     )
-    .then(analyses => {
+    .then(genomes => {
       const fps = new Set();
-      for (const { results } of analyses) {
-        fps.add(results.fp.subTypeAssignment);
+      for (const { analysis } of genomes) {
+        fps.add(analysis.core.fp.reference);
       }
       return Array.from(fps);
     });
@@ -28,7 +31,7 @@ module.exports = function ({ organismId, collectionId, clientId }) {
   return getUniqueFps(collectionId)
     .then(fps => Promise.all(
       fps.map(subtree =>
-        enqueue(queues.collections, {
+        enqueue(queues.collection, {
           collectionId,
           clientId,
           task,

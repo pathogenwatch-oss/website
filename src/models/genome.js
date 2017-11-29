@@ -23,7 +23,7 @@ const schema = new Schema({
   date: { type: Date, index: true },
   day: Number,
   errored: { type: Array, default: null },
-  fileId: String,
+  fileId: { type: String, index: true },
   lastAccessedAt: Date,
   lastUpdatedAt: Date,
   latitude: Number,
@@ -276,6 +276,36 @@ schema.statics.getSort = function (sort = 'createdAt-') {
   }
 
   return { [sortKey]: sortOrder };
+};
+
+schema.statics.getCollection = function (ids) {
+  return this.find(
+    { _id: { $in: ids } }, {
+      country: 1,
+      createdAt: 1,
+      year: 1,
+      month: 1,
+      day: 1,
+      name: 1,
+      pmid: 1,
+      userDefined: 1,
+      latitude: 1,
+      longitude: 1,
+      reference: 1,
+      'analysis.metrics': 1,
+      'analysis.genotyphi': 1,
+      'analysis.ngmast': 1,
+      'analysis.core.fp.subTypeAssignment': 1,
+      'analysis.core.coreSummary': 1,
+      'analysis.mlst.st': 1,
+      'analysis.mlst.alleles': 1,
+      'analysis.paarsnp.antibiotics': 1,
+      'analysis.paarsnp.paar': 1,
+      'analysis.paarsnp.snp': 1,
+    }
+  )
+  .lean()
+  .then(genomes => genomes.map(doc => Object.assign(doc, { uuid: doc._id })));
 };
 
 module.exports = mongoose.model('Genome', schema);

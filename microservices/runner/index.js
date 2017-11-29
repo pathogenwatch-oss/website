@@ -7,7 +7,7 @@ const pullTaskImages = require('services/tasks/pull');
 const taskQueue = require('services/taskQueue');
 
 const { queues } = taskQueue;
-const { queue, workers = 1, pull = 1 } = argv.opts;
+const { queue, pull = 1 } = argv.opts;
 
 if (queue && !(queue in queues)) {
   LOGGER.error(`Queue ${queue} not recognised, exiting...`);
@@ -16,7 +16,7 @@ if (queue && !(queue in queues)) {
 
 process.on('uncaughtException', err => console.error('uncaught', err));
 
-taskQueue.setMaxWorkers(workers);
+taskQueue.setMaxWorkers(argv.opts.workers || 1);
 
 function subscribeToQueue(queueName) {
   if (queueName === queues.genome) {
@@ -39,8 +39,8 @@ function subscribeToQueue(queueName) {
   if (queueName === queues.collection) {
     taskQueue.dequeue(
       queueName,
-      ({ task, version, requires, collectionId, metadata, clientId, timeout }) =>
-        request('tasks', 'run-collection', { task, version, requires, collectionId, metadata, clientId, timeout$: timeout * 1000 })
+      ({ task, version, requires, workers, collectionId, metadata, clientId, timeout }) =>
+        request('tasks', 'run-collection', { task, version, requires, workers, collectionId, metadata, clientId, timeout$: timeout * 1000 })
           .then(result => {
             LOGGER.info('Got result', collectionId, task, version);
             return request('collection', 'add-analysis', { collectionId, task, version, result, metadata, clientId });

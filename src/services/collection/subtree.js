@@ -1,21 +1,17 @@
-const Collection = require('models/collection');
-const CollectionGenome = require('models/collectionGenome');
+const { request } = require('services');
+const Genome = require('models/genome');
 
 const { NotFoundError } = require('utils/errors');
 
-function addPublicGenomes({ tree, publicIds }) {
-  return (
-    CollectionGenome
-      .find({ uuid: { $in: publicIds } })
-      .then(genomes => ({ tree, genomes }))
-  );
-}
-
-module.exports = ({ uuid, name }) =>
-  Collection
-    .find({ uuid, 'subtrees.name': name }, { 'subtrees.$': 1 })
-    .then(result => {
-      if (!result.length) throw new NotFoundError('Not found');
-      return result[0];
+module.exports = ({ user, uuid, name }) => {
+  const query = { 'subtrees.name': name };
+  const projection = { 'subtrees.$': 1 };
+  return request('collection', 'authorise', { user, uuid, query, projection })
+    .then(collection => {
+      if (!collection || collection.subtrees.length === 0) throw new NotFoundError('Not found');
+      return collection.subtrees[0];
     })
-    .then(({ subtrees: [ subtree ] }) => addPublicGenomes(subtree));
+    .then(({ populationIds, newick }) =>
+      Genome.getCollection(populationIds).then(genomes => ({ newick, genomes }))
+    );
+};
