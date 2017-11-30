@@ -8,13 +8,15 @@ const es = require('event-stream');
 const Collection = require('../../models/collection');
 const Genome = require('../../models/genome');
 const ScoreCache = require('../../models/scoreCache');
-const TaskLog = require('models/taskLog');
+const TaskLog = require('../../models/taskLog');
 
-const { getImageName } = require('manifest.js');
+const { getImageName } = require('../../manifest.js');
+const { request } = require('../../services');
 
-const LOGGER = require('utils/logging').createLogger('runner');
+const LOGGER = require('../../utils/logging').createLogger('runner');
 
-function getGenomes(metadata) {
+function getGenomes(spec, metadata) {
+  const { task } = spec;
   const { collectionId, name } = metadata;
   return Collection.findOne(
     { _id: collectionId },
@@ -22,7 +24,7 @@ function getGenomes(metadata) {
   )
   .lean()
   .then(({ genomes }) => {
-    const query = name ?
+    const query = task === 'subtree' ?
     {
       'analysis.core.fp.reference': name,
       $or: [ { _id: { $in: genomes } }, { population: true } ],
@@ -77,6 +79,8 @@ function getInputStream(spec, genomes) {
 
 function handleContainerOutput(container, spec, metadata, genomes, resolve, reject) {
   const { task, version } = spec;
+  const { clientId } = metadata;
+  let progress = 0;
   container.stdout
     .pipe(es.split())
     .on('data', (data) => {
@@ -88,6 +92,10 @@ function handleContainerOutput(container, spec, metadata, genomes, resolve, reje
             update[`scores.${key}`] = doc.scores[key];
           }
           ScoreCache.update({ fileId: doc.fileId, version }, update, { upsert: true }).exec();
+          if (doc.progress > progress) {
+            progress = doc.progress;
+            request('collection', 'send-progress', { clientId, task, progress });
+          }
         } else {
           const populationIds = [];
           if (task === 'subtree') {
@@ -154,7 +162,7 @@ function createContainer(spec, metadata) {
 }
 
 function runTask(spec, metadata) {
-  return getGenomes(metadata)
+  return getGenomes(spec, metadata)
     .then(genomes => new Promise((resolve, reject) => {
       const container = createContainer(spec, metadata);
 
