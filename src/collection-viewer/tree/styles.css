@@ -227,3 +227,13 @@ div.wgsa-tree-icon:active {
 .wgsa-tree-scalebar__bar::after {
   right: 0;
 }
+
+.wgsa-tree-progress {
+  flex-direction: column;
+}
+
+.wgsa-tree-progress > * {
+  margin-bottom: 8px;
+  font-weight: 500 !important;
+  text-transform: uppercase;
+}

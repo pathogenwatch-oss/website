@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 
-import { FETCH_COLLECTION }
-  from '../../collection-viewer/actions';
+import { FETCH_COLLECTION, UPDATE_COLLECTION_PROGRESS }
+  from '../actions';
 import { RESET_FILTER, ACTIVATE_FILTER } from '../filter/actions';
 import { SEARCH_TERM_ADDED } from '../search/actions';
 import * as ACTIONS from './actions';
@@ -85,6 +85,19 @@ function entities(state = {}, { type, payload }) {
           return memo;
         }, {}),
       };
+    }
+    case UPDATE_COLLECTION_PROGRESS: {
+      if (payload.task === 'tree' && payload.result) {
+        return {
+          ...state,
+          [COLLECTION]: {
+            ...state[COLLECTION],
+            newick: payload.result.newick,
+            status: 'READY',
+          },
+        };
+      }
+      return state;
     }
     case ACTIONS.FETCH_TREE.SUCCESS:
       return {

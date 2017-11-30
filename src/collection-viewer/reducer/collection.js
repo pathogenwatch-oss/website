@@ -47,14 +47,6 @@ export default function (state = initialState, { type, payload }) {
         status: statuses.READY,
       };
     }
-    case actions.UPDATE_COLLECTION_PROGRESS: {
-      const { status, progress } = payload;
-      return {
-        ...state,
-        status,
-        progress,
-      };
-    }
     default:
       return state;
   }
