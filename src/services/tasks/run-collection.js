@@ -132,7 +132,7 @@ function handleContainerOutput(container, spec, metadata, genomes, resolve, reje
           ScoreCache.update({ fileId: doc.fileId, version }, update, { upsert: true }).exec();
           if (doc.progress > progress) {
             progress = doc.progress * 0.99;
-            request('collection', 'send-progress', { clientId, task, progress });
+            request('collection', 'send-progress', { clientId, payload: { task, name: metadata.name, progress } });
           }
         } else {
           const populationIds = [];
