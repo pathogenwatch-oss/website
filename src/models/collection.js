@@ -15,7 +15,7 @@ const Tree = new Schema({
   size: Number,
   populationIds: [ { type: Schema.Types.ObjectId, ref: 'Genome' } ],
   populationSize: Number,
-  status: String,
+  status: { type: String, default: 'PENDING' },
   task: String,
   version: String,
 });
@@ -211,36 +211,38 @@ schema.statics.getSort = function (sort = 'createdAt-') {
   return { [sortKey]: sortOrder };
 };
 
-schema.statics.addAnalysisResult = function (_id, task, version, metadata, result) {
-  const update = {};
+schema.statics.addAnalysisResult = function (_id, task, version, result) {
+  const { name, size, newick, populationIds } = result;
 
   if (task === 'tree') {
-    update.tree = {
-      task,
-      version,
-      name: 'collection',
-      status: 'READY',
-      newick: result.tree,
-      size: result.size,
-    };
+    return this.update({ _id }, {
+      tree: {
+        task,
+        version,
+        name: 'collection',
+        status: 'READY',
+        newick: result.newick,
+        size: result.size,
+      },
+    });
   }
 
   if (task === 'subtree') {
-    update.$push = {
-      subtrees: {
-        task,
-        version,
-        name: metadata.subtree,
-        status: 'READY',
-        newick: result.tree,
-        size: result.size,
-        populationIds: result.populationIds,
-        populationSize: result.populationIds.length,
+    return this.update({ _id, 'subtrees.name': name }, {
+      $set: {
+        'subtrees.$': {
+          task,
+          version,
+          name,
+          status: 'READY',
+          newick,
+          size,
+          populationIds,
+          populationSize: populationIds.length,
+        },
       },
-    };
+    });
   }
-
-  return this.update({ _id }, update);
 };
 
 module.exports = mongoose.model('Collection', schema);

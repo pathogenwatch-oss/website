@@ -26,7 +26,6 @@ const queues = {
   task: 'task',
 };
 
-
 module.exports.queues = queues;
 
 module.exports.enqueue = function (queue, message) {
@@ -35,11 +34,12 @@ module.exports.enqueue = function (queue, message) {
     throw new Error(`Queue ${queue} not recognised.`);
   }
   LOGGER.info('Adding message', message, 'to', queue);
+  const { spec = {} } = message;
   return (
     mQueue.enqueue(queue, Object.assign(
       message, {
-        retries: message.retries || defaultRetries,
-        timeout: message.timeout || defaultTimeout,
+        retries: spec.retries || defaultRetries,
+        timeout: spec.timeout || defaultTimeout,
       }
     ))
     .catch(err => LOGGER.error(err))

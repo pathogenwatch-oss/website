@@ -22,7 +22,7 @@ function subscribeToQueue(queueName) {
   if (queueName === queues.genome) {
     taskQueue.dequeue(
       queueName,
-      ({ metadata }) => request('genome', 'speciate', metadata),
+      ({ metadata, timeout }) => request('genome', 'speciate', { timeout$: timeout * 1000, metadata }),
       message => request('genome', 'add-error', message)
     );
   }
@@ -39,11 +39,11 @@ function subscribeToQueue(queueName) {
   if (queueName === queues.collection) {
     taskQueue.dequeue(
       queueName,
-      ({ task, version, requires, workers, collectionId, metadata, clientId, timeout }) =>
-        request('tasks', 'run-collection', { task, version, requires, workers, collectionId, metadata, clientId, timeout$: timeout * 1000 })
+      ({ spec, metadata, timeout }) =>
+        request('tasks', 'run-collection', { spec, metadata, timeout$: timeout * 1000 })
           .then(result => {
-            LOGGER.info('Got result', collectionId, task, version);
-            return request('collection', 'add-analysis', { collectionId, task, version, result, metadata, clientId });
+            LOGGER.info('Got result', metadata.collectionId, spec.task, spec.version);
+            return request('collection', 'add-analysis', { spec, metadata, result });
           }),
       message => request('collection', 'add-error', message)
     );

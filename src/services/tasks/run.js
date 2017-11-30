@@ -52,7 +52,7 @@ function runTask(fileId, task, version, organismId, speciesId, genusId) {
       }
     });
     container.on('spawn', (containerId) => {
-      LOGGER.info('spawn', containerId, 'for file', fileId);
+      LOGGER.info('spawn', containerId, 'for task', task, 'file', fileId);
     });
     container.on('error', reject);
   });

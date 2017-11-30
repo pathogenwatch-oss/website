@@ -3,15 +3,13 @@ const { enqueue, queues } = require('../taskQueue');
 const { getCollectionTask } = require('../../manifest');
 
 module.exports = function ({ organismId, collectionId, clientId }) {
-  const { task, version, requires } = getCollectionTask(organismId, 'tree');
+  const spec = getCollectionTask(organismId, 'tree');
   return enqueue(queues.collection, {
-    collectionId,
-    clientId,
-    task,
-    version,
-    requires,
+    spec,
     metadata: {
       organismId,
+      collectionId,
+      clientId,
     },
   });
 };

@@ -46,7 +46,10 @@ function validate({ genomeIds, organismId, user }) {
 }
 
 function getGenomes(genomeIds) {
-  return Genome.find({ _id: { $in: genomeIds } }, { latitude: 1, longitude: 1 });
+  return Genome.find(
+    { _id: { $in: genomeIds } },
+    { latitude: 1, longitude: 1, 'analysis.core.fp.reference': 1 }
+  );
 }
 
 function getLocations(genomes) {
@@ -57,6 +60,23 @@ function getLocations(genomes) {
     }
   }
   return Object.values(locations);
+}
+
+function getSubtrees(genomes) {
+  const fps = new Set();
+  for (const { analysis = {} } of genomes) {
+    if (analysis.core && analysis.core.fp && analysis.core.fp.reference) {
+      fps.add(analysis.core.fp.reference);
+    }
+  }
+  const subtrees = [];
+  for (const name of Array.from(fps)) {
+    subtrees.push({
+      name,
+      status: 'PENDING',
+    });
+  }
+  return subtrees;
 }
 
 function createCollection(genomes, { organismId, title, description, pmid, user, sessionID }) {
@@ -74,7 +94,11 @@ function createCollection(genomes, { organismId, title, description, pmid, user,
           size,
           title,
           locations: getLocations(genomes),
+          subtrees: getSubtrees(genomes),
           genomes: genomes.map(_ => _._id),
+          tree: {
+            name: 'collection',
+          },
         })
       )
   );

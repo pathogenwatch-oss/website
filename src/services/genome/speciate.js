@@ -48,14 +48,14 @@ const maxRetries = config.tasks.retries || 3;
 const speciatorTask = getSpeciatorTask();
 
 module.exports = function findTask(message, retries = 0) {
-  const { genomeId, fileId, uploadedAt, clientId } = message;
+  const { genomeId, fileId, uploadedAt, clientId } = message.metadata;
   const { task, version, timeout = defaultTimeout } = speciatorTask;
 
   return Analysis.findOne({ fileId, task, version })
     .lean()
     .then(doc => {
       if (doc) {
-        return submitTasks(message, doc);
+        return submitTasks(message.metadata, doc);
       }
       const metadata = { genomeId, fileId, uploadedAt, clientId };
       return request('tasks', 'run', { task, version, timeout$: timeout * 1000, metadata })
