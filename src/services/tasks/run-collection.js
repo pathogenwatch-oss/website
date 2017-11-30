@@ -24,14 +24,13 @@ function getGenomes(spec, metadata) {
   )
   .lean()
   .then(({ genomes }) => {
-    const query = task === 'subtree' ?
-    {
-      'analysis.core.fp.reference': name,
-      $or: [ { _id: { $in: genomes } }, { population: true } ],
-    } :
-    {
-      _id: { $in: genomes },
-    };
+    let query = { _id: { $in: genomes } };
+    if (task === 'subtree') {
+      query = {
+        'analysis.core.fp.reference': name,
+        $or: [ { _id: { $in: genomes } }, { population: true } ],
+      };
+    }
     return Genome
       .find(query, { fileId: 1 }, { sort: { fileId: 1 } })
       .lean()
@@ -40,6 +39,45 @@ function getGenomes(spec, metadata) {
         doc.population = !ids.has(doc._id.toString());
         return doc;
       }));
+  });
+}
+
+function getGenomesInCache(genomes) {
+  return ScoreCache.find(
+    { fileId: { $in: genomes.map(_ => _.fileId) } },
+    genomes.reduce(
+      (projection, { fileId }) => {
+        projection[`scores.${fileId}`] = 1;
+        return projection;
+      },
+      { fileId: 1 }
+    ),
+    { sort: { fileId: 1 } }
+  )
+  .then(docs => {
+    const cacheByFileId = {};
+    for (const doc of docs) {
+      cacheByFileId[doc.fileId] = doc.scores;
+    }
+
+    const missingFileIds = new Set();
+    for (let i = genomes.length - 1; i > 0; i--) {
+      if (genomes[i].fileId in cacheByFileId) {
+        for (let j = 0; j < i; j++) {
+          if (!(genomes[j].fileId in cacheByFileId[genomes[i].fileId])) {
+            missingFileIds.add(genomes[i].fileId);
+            missingFileIds.add(genomes[j].fileId);
+          }
+        }
+      } else {
+        missingFileIds.add(genomes[i].fileId);
+        for (let j = 0; j < i; j++) {
+          missingFileIds.add(genomes[j].fileId);
+        }
+      }
+    }
+
+    return Array.from(missingFileIds);
   });
 }
 
