@@ -72,6 +72,7 @@ function entities(state = {}, { type, payload }) {
           ...tree,
           name: COLLECTION,
           leafIds: genomes.map(_ => _.uuid),
+          progress: 0,
           ...initialState,
         },
         [POPULATION]: {
@@ -87,7 +88,18 @@ function entities(state = {}, { type, payload }) {
       };
     }
     case UPDATE_COLLECTION_PROGRESS: {
-      if (payload.task === 'tree' && payload.result) {
+      if (payload.task !== 'tree') return state;
+      const tree = state[COLLECTION];
+      if (payload.progress && payload.progress > tree.progress) {
+        return {
+          ...state,
+          [COLLECTION]: {
+            ...tree,
+            progress: Math.floor(payload.progress),
+          },
+        };
+      }
+      if (payload.result) {
         return {
           ...state,
           [COLLECTION]: {

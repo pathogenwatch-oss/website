@@ -1,10 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import Spinner from '../../components/Spinner.react';
+// import Spinner from '../../components/Spinner.react';
+import CircularProgress from '../../components/CircularProgress.react';
 
 import { subscribe, unsubscribe } from '../../utils/Notification';
 import { getCollection } from '../selectors';
+import { getVisibleTree } from './selectors';
 
 import { updateProgress } from '../actions';
 
@@ -21,10 +23,6 @@ const Progress = React.createClass({
     }
   },
 
-  componentDidUpdate() {
-    // do progress
-  },
-
   componentWillUnmount() {
     unsubscribe(this.props.uuid, 'progress');
   },
@@ -32,8 +30,12 @@ const Progress = React.createClass({
   render() {
     return (
       <div className="wgsa-loading-overlay wgsa-tree-progress">
-        <Spinner />
-        <p>Awaiting Tree</p>
+        <CircularProgress
+          radius="80"
+          strokeWidth="8"
+          percentage={this.props.progress || 1}
+        />
+        <p>Tree in progress</p>
       </div>
     );
   },
@@ -43,6 +45,7 @@ const Progress = React.createClass({
 function mapStateToProps(state) {
   return {
     uuid: getCollection(state).uuid,
+    progress: getVisibleTree(state).progress,
   };
 }
 
