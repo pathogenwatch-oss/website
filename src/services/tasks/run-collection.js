@@ -4,6 +4,7 @@
 
 const docker = require('docker-run');
 const es = require('event-stream');
+const BSON = require('bson');
 
 const Collection = require('../../models/collection');
 const Genome = require('../../models/genome');
@@ -14,6 +15,7 @@ const { getImageName } = require('../../manifest.js');
 const { request } = require('../../services');
 
 const LOGGER = require('../../utils/logging').createLogger('runner');
+const bson = new BSON();
 
 function getGenomes(spec, metadata) {
   const { task } = spec;
@@ -81,8 +83,24 @@ function getGenomesInCache(genomes) {
   });
 }
 
-function getInputStream(spec, genomes) {
+function attachInputStream(container, spec, genomes, uncachedFileIds) {
   const { requires } = spec;
+
+  const docsStream = Genome.collection.find(
+    {
+      _id: { $in: genomes.map(_ => _._id) },
+      fileIds: { $in: uncachedFileIds },
+    },
+    requires.reduce((memo, required) => {
+      const projection = required.field ?
+        `analysis.${required.task}.${required.field}` :
+        `analysis.${required.task}`;
+      memo[projection] = 1;
+      return memo;
+    }, { fileId: 1 }),
+    { raw: true, sort: { fileId: 1 } }
+  );
+  docsStream.pause();
 
   const scoresStream = ScoreCache.collection.find(
     { fileId: { $in: genomes.map(_ => _.fileId) } },
@@ -93,26 +111,20 @@ function getInputStream(spec, genomes) {
     { raw: true, sort: { fileId: 1 } }
   );
   scoresStream.pause();
+  scoresStream.on('end', () => docsStream.resume());
 
-  const genomesStream = Genome.collection.find(
-    { _id: { $in: genomes.map(_ => _._id) } },
-    requires.reduce((memo, required) => {
-      const projection = required.field ?
-        `analysis.${required.task}.${required.field}` :
-        `analysis.${required.task}`;
-      memo[projection] = 1;
-      return memo;
-    }, { fileId: 1 }),
-    { raw: true, sort: { fileId: 1 } }
-  );
-  genomesStream.pause();
+  const genomesStream = es.through();
 
-  scoresStream.on('end', () => genomesStream.resume());
-
-  return es.merge(
+  const stream = es.merge(
+    genomesStream,
     scoresStream,
-    genomesStream
+    docsStream
   );
+
+  stream.pipe(container.stdin);
+    // .pipe(require('fs').createWriteStream('tree-input.bson'));
+
+  genomesStream.end(bson.serialize({ genomes }), () => scoresStream.resume());
 }
 
 function handleContainerOutput(container, spec, metadata, genomes, resolve, reject) {
@@ -201,15 +213,17 @@ function createContainer(spec, metadata) {
 
 function runTask(spec, metadata) {
   return getGenomes(spec, metadata)
-    .then(genomes => new Promise((resolve, reject) => {
+    .then(genomes =>
+      getGenomesInCache(genomes).then(uncachedFileIds => ({ genomes, uncachedFileIds }))
+    )
+    .then(({ genomes, uncachedFileIds }) => new Promise((resolve, reject) => {
       const container = createContainer(spec, metadata);
 
       handleContainerOutput(container, spec, metadata, genomes, resolve, reject);
 
       handleContainerExit(container, spec, metadata, reject);
 
-      getInputStream(spec, genomes).pipe(container.stdin);
-        // .pipe(require('fs').createWriteStream('tree-input.bson'));
+      attachInputStream(container, spec, genomes, uncachedFileIds);
     }));
 }
 
