@@ -6,14 +6,13 @@ const rand = require('rand-token');
 const { setToObjectOptions, addPreSaveHook, getSummary } = require('./utils');
 
 const uuidGenerator = rand.generator({
-  chars: 'abcdefghijklnmopqrstuvwxyz1234567890',
+  chars: 'abcdefghijklmnopqrstuvwxyz1234567890',
 });
 
 const Tree = new Schema({
   name: String,
   newick: String,
   size: Number,
-  populationIds: [ { type: Schema.Types.ObjectId, ref: 'Genome' } ],
   populationSize: Number,
   status: { type: String, default: 'PENDING' },
   task: String,
@@ -22,12 +21,7 @@ const Tree = new Schema({
 
 const schema = new Schema({
   _user: { type: Schema.Types.ObjectId, ref: 'User' },
-  _organism: {
-    type: Schema.Types.ObjectId, ref: 'Organism',
-    required() {
-      return !this.reference;
-    },
-  },
+  _reference: { type: Schema.Types.ObjectId, ref: 'Reference' },
   _session: String,
   alias: { type: String, index: true },
   createdAt: { type: Date, index: true },
@@ -45,7 +39,6 @@ const schema = new Schema({
   published: { type: Boolean, default: false },
   publicationYear: { type: Number, index: true },
   private: { type: Boolean, default: false },
-  reference: Boolean,
   showcase: Boolean,
   size: Number,
   subtrees: [ Tree ],
@@ -62,10 +55,10 @@ setToObjectOptions(schema, (doc, collection, { user }) => {
   collection.slug = doc.slug;
   delete collection._user;
   delete collection._id;
-  if (typeof collection._organism === 'object') {
-    collection.organism = collection._organism;
+  if (typeof collection._reference === 'object') {
+    collection.reference = collection._reference;
   }
-  delete collection._organism;
+  delete collection._reference;
   return collection;
 });
 addPreSaveHook(schema);
@@ -212,34 +205,27 @@ schema.statics.getSort = function (sort = 'createdAt-') {
 };
 
 schema.statics.addAnalysisResult = function (_id, task, version, result) {
-  const { name, size, newick, populationIds } = result;
+  const { name, size, newick, populationSize } = result;
+
+  const tree = {
+    task,
+    version,
+    name,
+    status: 'READY',
+    newick,
+    size,
+    populationSize,
+  };
 
   if (task === 'tree') {
-    return this.update({ _id }, {
-      tree: {
-        task,
-        version,
-        name: 'collection',
-        status: 'READY',
-        newick: result.newick,
-        size: result.size,
-      },
-    });
+    tree.name = 'collection';
+    return this.update({ _id }, { tree });
   }
 
   if (task === 'subtree') {
     return this.update({ _id, 'subtrees.name': name }, {
       $set: {
-        'subtrees.$': {
-          task,
-          version,
-          name,
-          status: 'READY',
-          newick,
-          size,
-          populationIds,
-          populationSize: populationIds.length,
-        },
+        'subtrees.$': tree,
       },
     });
   }

@@ -131,22 +131,23 @@ function handleContainerOutput(container, spec, metadata, genomes, resolve, reje
           }
           ScoreCache.update({ fileId: doc.fileId, version }, update, { upsert: true }).exec();
           if (doc.progress > progress) {
-            progress = doc.progress * 0.99;
-            request('collection', 'send-progress', { clientId, payload: { task, name: metadata.name, progress } });
+            progress = Math.floor(doc.progress * 0.99);
+            const payload = { task, name: metadata.name, progress };
+            request('collection', 'send-progress', { clientId, payload });
           }
         } else {
-          const populationIds = [];
+          let populationSize = 0;
           if (task === 'subtree') {
-            for (const { _id, population } of genomes) {
+            for (const { population } of genomes) {
               if (population) {
-                populationIds.push(_id);
+                populationSize++;
               }
             }
           }
           const { newick } = doc;
           resolve({
             newick,
-            populationIds,
+            populationSize,
             name: metadata.name,
             size: genomes.length,
           });

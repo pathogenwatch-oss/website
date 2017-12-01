@@ -278,9 +278,9 @@ schema.statics.getSort = function (sort = 'createdAt-') {
   return { [sortKey]: sortOrder };
 };
 
-schema.statics.getCollection = function (ids) {
+schema.statics.getForCollection = function (query) {
   return this.find(
-    { _id: { $in: ids } }, {
+    query, {
       country: 1,
       createdAt: 1,
       year: 1,
@@ -299,9 +299,7 @@ schema.statics.getCollection = function (ids) {
       'analysis.core.coreSummary': 1,
       'analysis.mlst.st': 1,
       'analysis.mlst.alleles': 1,
-      'analysis.paarsnp.antibiotics': 1,
-      'analysis.paarsnp.paar': 1,
-      'analysis.paarsnp.snp': 1,
+      'analysis.paarsnp.profile': 1,
     }
   )
   .lean()

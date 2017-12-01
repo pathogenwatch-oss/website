@@ -138,7 +138,7 @@
     ],
     "1280": [
       { "task": "mlst", "version": "t1" },
-      { "task": "paarsnp", "version": "t1" },
+      { "task": "paarsnp", "version": "t2" },
       { "task": "core", "version": "t5" }
     ],
     "1282": [
@@ -371,7 +371,7 @@
   },
   "collection": {
     "1280": [
-      { "task": "tree", "version": "t5", "requires": [ { "task": "core", "version": "t5", "field": "variance" } ], "workers": 8 },
+      { "task": "tree", "version": "t5", "requires": [ { "task": "core", "version": "t5", "field": "variance" } ], "workers": 1 },
       { "task": "subtree", "version": "t5", "requires": [ { "task": "core", "version": "t5", "field": "variance" } ], "workers": 8 }
     ]
   }

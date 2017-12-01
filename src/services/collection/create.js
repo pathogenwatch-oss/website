@@ -3,14 +3,9 @@ const { ServiceRequestError } = require('utils/errors');
 
 const Collection = require('models/collection');
 const Genome = require('models/genome');
-const Organism = require('models/organism');
+const Reference = require('models/reference');
 
-const { getTasksByOrganism } = require('../../manifest.js');
-
-const {
-  maxCollectionSize = { anonymous: 0, loggedIn: 0 },
-  tasks: { collectionIgnore = [] },
-} = require('configuration');
+const { maxCollectionSize = { anonymous: 0, loggedIn: 0 } } = require('configuration');
 
 function getMaxCollectionSize(user) {
   if (user) {
@@ -82,10 +77,10 @@ function getSubtrees(genomes) {
 function createCollection(genomes, { organismId, title, description, pmid, user, sessionID }) {
   const size = genomes.length;
   return (
-    Organism.getLatest(organismId)
-      .then(organism =>
+    Reference.getLatest(organismId)
+      .then(reference =>
         Collection.create({
-          _organism: organism,
+          _reference: reference,
           _user: user,
           _session: !user ? sessionID : undefined,
           description,
