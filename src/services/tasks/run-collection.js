@@ -89,7 +89,7 @@ function attachInputStream(container, spec, genomes, uncachedFileIds) {
   const docsStream = Genome.collection.find(
     {
       _id: { $in: genomes.map(_ => _._id) },
-      fileIds: { $in: uncachedFileIds },
+      fileId: { $in: uncachedFileIds },
     },
     requires.reduce((memo, required) => {
       const projection = required.field ?
@@ -121,7 +121,8 @@ function attachInputStream(container, spec, genomes, uncachedFileIds) {
     docsStream
   );
 
-  stream.pipe(container.stdin);
+  stream
+    .pipe(container.stdin);
     // .pipe(require('fs').createWriteStream('tree-input.bson'));
 
   genomesStream.end(bson.serialize({ genomes }), () => scoresStream.resume());
@@ -130,7 +131,7 @@ function attachInputStream(container, spec, genomes, uncachedFileIds) {
 function handleContainerOutput(container, spec, metadata, genomes, resolve, reject) {
   const { task, version } = spec;
   const { clientId } = metadata;
-  let progress = 0;
+  let lastProgress = 0;
   container.stdout
     .pipe(es.split())
     .on('data', (data) => {
@@ -142,9 +143,12 @@ function handleContainerOutput(container, spec, metadata, genomes, resolve, reje
             update[`scores.${key}`] = doc.scores[key];
           }
           ScoreCache.update({ fileId: doc.fileId, version }, update, { upsert: true }).exec();
-          if (doc.progress > progress) {
-            progress = doc.progress * 0.99;
-            request('collection', 'send-progress', { clientId, payload: { task, name: metadata.name, progress } });
+          const progress = doc.progress * 0.99;
+          if (progress > lastProgress) {
+            if ((process - lastProgress) >= 1) {
+              request('collection', 'send-progress', { clientId, payload: { task, name: metadata.name, progress } });
+            }
+            lastProgress = process;
           }
         } else {
           const populationIds = [];
