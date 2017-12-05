@@ -4,7 +4,7 @@ const { request } = require('services');
 
 const projection = {
   _user: 1,
-  _reference: 1,
+  _organism: 1,
   createdAt: 1,
   description: 1,
   genomes: 1,
@@ -26,7 +26,7 @@ module.exports = ({ user, uuid }) =>
   request('collection', 'authorise', { user, uuid, projection })
     .then(collection =>
       collection
-        .populate('_reference')
+        .populate('_organism')
         .execPopulate()
         .then(() => Genome.getForCollection({ _id: { $in: collection.genomes } }))
         .then(genomes => {

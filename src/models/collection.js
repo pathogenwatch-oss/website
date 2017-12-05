@@ -21,7 +21,12 @@ const Tree = new Schema({
 
 const schema = new Schema({
   _user: { type: Schema.Types.ObjectId, ref: 'User' },
-  _reference: { type: Schema.Types.ObjectId, ref: 'Reference' },
+  _organism: {
+    type: Schema.Types.ObjectId, ref: 'Organism',
+    required() {
+      return !this.reference;
+    },
+  },
   _session: String,
   alias: { type: String, index: true },
   createdAt: { type: Date, index: true },
@@ -39,6 +44,7 @@ const schema = new Schema({
   published: { type: Boolean, default: false },
   publicationYear: { type: Number, index: true },
   private: { type: Boolean, default: false },
+  reference: Boolean,
   showcase: Boolean,
   size: Number,
   subtrees: [ Tree ],
@@ -55,10 +61,10 @@ setToObjectOptions(schema, (doc, collection, { user }) => {
   collection.slug = doc.slug;
   delete collection._user;
   delete collection._id;
-  if (typeof collection._reference === 'object') {
-    collection.reference = collection._reference;
+  if (typeof collection._organism === 'object') {
+    collection.organism = collection._organism;
   }
-  delete collection._reference;
+  delete collection._organism;
   return collection;
 });
 addPreSaveHook(schema);
