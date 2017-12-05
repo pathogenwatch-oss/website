@@ -3,7 +3,7 @@ const { ServiceRequestError } = require('utils/errors');
 
 const Collection = require('models/collection');
 const Genome = require('models/genome');
-const Reference = require('models/reference');
+const Organism = require('models/organism');
 
 const { maxCollectionSize = { anonymous: 0, loggedIn: 0 } } = require('configuration');
 
@@ -77,10 +77,10 @@ function getSubtrees(genomes) {
 function createCollection(genomes, { organismId, title, description, pmid, user, sessionID }) {
   const size = genomes.length;
   return (
-    Reference.getLatest(organismId)
-      .then(reference =>
+    Organism.getLatest(organismId)
+      .then(organism =>
         Collection.create({
-          _reference: reference,
+          _organism: organism,
           _user: user,
           _session: !user ? sessionID : undefined,
           description,
