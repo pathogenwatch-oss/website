@@ -1,4 +1,4 @@
-const Organism = require('models/organism');
+const Reference = require('models/reference');
 const Collection = require('models/collection');
 const Genome = require('models/genome');
 
@@ -13,7 +13,7 @@ const genomeFields = [
 
 module.exports = function (props) {
   return Promise.all([
-    Organism.deployedOrganismIds(),
+    Reference.distinct('organismId'),
     Collection.getSummary(collectionsFields, props),
     Genome.getSummary(genomeFields, props),
   ]).

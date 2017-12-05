@@ -149,18 +149,18 @@ function handleContainerOutput(container, spec, metadata, genomes, resolve, reje
             lastProgress = progress;
           }
         } else {
-          const populationIds = [];
+          let populationSize = 0;
           if (task === 'subtree') {
-            for (const { _id, population } of genomes) {
+            for (const { population } of genomes) {
               if (population) {
-                populationIds.push(_id);
+                populationSize++;
               }
             }
           }
           const { newick } = doc;
           resolve({
             newick,
-            populationIds,
+            populationSize,
             name: metadata.name,
             size: genomes.length,
           });

@@ -8,7 +8,8 @@ module.exports = function ({ spec, metadata, result }) {
   return (
     Collection.addAnalysisResult(collectionId, task, version, result)
       .then(() => {
-        request('collection', 'send-progress', { clientId, payload: { task, name: metadata.name, result } });
+        const payload = { task, name: metadata.name, result };
+        request('collection', 'send-progress', { clientId, payload });
         if (task === 'tree') {
           const { organismId } = metadata;
           return request('collection', 'submit-subtrees', { collectionId, organismId, clientId });
