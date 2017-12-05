@@ -10,6 +10,7 @@ module.exports = function ({ organismId, collectionId, clientId }) {
       organismId,
       collectionId,
       clientId,
+      name: 'collection',
     },
   });
 };

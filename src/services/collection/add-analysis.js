@@ -4,15 +4,14 @@ const Collection = require('../../models/collection');
 
 module.exports = function ({ spec, metadata, result }) {
   const { task, version } = spec;
-  const { collectionId, clientId } = metadata;
+  const { collectionId, clientId, name } = metadata;
   return (
     Collection.addAnalysisResult(collectionId, task, version, result)
       .then(() => {
-        const payload = { task, name: metadata.name, result };
+        const payload = { task, name, status: 'READY' };
         request('collection', 'send-progress', { clientId, payload });
         if (task === 'tree') {
-          const { organismId } = metadata;
-          return request('collection', 'submit-subtrees', { collectionId, organismId, clientId });
+          return request('collection', 'submit-subtrees', metadata);
         }
         return null;
       })

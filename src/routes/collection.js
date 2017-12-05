@@ -56,6 +56,15 @@ router.post('/collection/:id/binned', (req, res, next) => {
     .catch(next);
 });
 
+router.get('/collection/:uuid/tree/:name', (req, res, next) => {
+  LOGGER.info('Received request for tree', req.params);
+  const { user } = req;
+  const { uuid, name } = req.params;
+  const treeType = (name === 'collection') ? 'tree' : 'subtree';
+  return services.request('collection', treeType, { user, uuid, name })
+    .then(response => res.json(response))
+    .catch(next);
+});
 
 router.get('/collection/:uuid', (req, res, next) => {
   LOGGER.info(`Getting collection: ${req.params.uuid}`);
@@ -68,15 +77,6 @@ router.get('/collection/:uuid', (req, res, next) => {
         next(error)
       )
     );
-});
-
-router.get('/collection/:uuid/subtree/:name', (req, res, next) => {
-  LOGGER.info('Received request for tree', req.params);
-  const { user } = req;
-  const { uuid, name } = req.params;
-  return services.request('collection', 'subtree', { user, uuid, name })
-    .then(response => res.json(response))
-    .catch(next);
 });
 
 router.get('/collection', (req, res, next) => {
