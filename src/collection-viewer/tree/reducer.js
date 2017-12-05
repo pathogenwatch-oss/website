@@ -99,16 +99,6 @@ function entities(state = {}, { type, payload }) {
           },
         };
       }
-      if (payload.result) {
-        return {
-          ...state,
-          [COLLECTION]: {
-            ...state[COLLECTION],
-            newick: payload.result.newick,
-            status: 'READY',
-          },
-        };
-      }
       return state;
     }
     case ACTIONS.FETCH_TREE.SUCCESS:
@@ -118,6 +108,7 @@ function entities(state = {}, { type, payload }) {
           ...state[payload.stateKey],
           name: payload.stateKey,
           newick: payload.result.newick,
+          status: payload.result.status,
           ...getInitialState(),
         },
       };

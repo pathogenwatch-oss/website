@@ -47,6 +47,7 @@ export default function (state = {}, { type, payload }) {
     }
     case FETCH_TREE.SUCCESS: {
       const { genomes } = payload.result;
+      if (!genomes) return state;
       return {
         ...state,
         ...flagGenomes(genomes, 'isPublic'),

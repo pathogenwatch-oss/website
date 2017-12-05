@@ -8,7 +8,7 @@ import { subscribe, unsubscribe } from '../../utils/Notification';
 import { getCollection } from '../selectors';
 import { getVisibleTree } from './selectors';
 
-import { updateProgress } from '../actions';
+import { handleTreeProgress } from './thunks';
 
 const Progress = React.createClass({
 
@@ -51,7 +51,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    updateProgress: results => dispatch(updateProgress(results)),
+    updateProgress: results => dispatch(handleTreeProgress(results)),
   };
 }
 
