@@ -1,6 +1,6 @@
 const Collection = require('models/collection');
 const Genome = require('models/genome');
-const Reference = require('models/reference');
+const Organism = require('models/organism');
 
 module.exports = function (props) {
   const { user } = props;
@@ -14,7 +14,7 @@ module.exports = function (props) {
       user ? Genome.count({ binned: true, _user: user }) : Promise.resolve(0),
       Genome.distinct('organismId', Genome.getPrefilterCondition(props))
         .then(result => result.length),
-      Reference.distinct('organismId'),
+      Organism.distinct('taxId'),
     ]).
     then(([
       allCollections,

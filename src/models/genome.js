@@ -300,7 +300,9 @@ schema.statics.getForCollection = function (query) {
       'analysis.core.coreSummary': 1,
       'analysis.mlst.st': 1,
       'analysis.mlst.alleles': 1,
-      'analysis.paarsnp.profile': 1,
+      'analysis.paarsnp.antibiotics': 1,
+      'analysis.paarsnp.paar': 1,
+      'analysis.paarsnp.snp': 1,
     }
   )
   .lean()
