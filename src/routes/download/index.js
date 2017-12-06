@@ -273,4 +273,7 @@ router.get('/analysis/cgmlst', (req, res) => {
 
 router.get('/annotations', require('./annotations'));
 
+router.get('/collection/:uuid/:type-matrix', require('./score-matrix'));
+
+
 module.exports = router;
