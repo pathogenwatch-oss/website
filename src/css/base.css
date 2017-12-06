@@ -1,5 +1,8 @@
 html, body {
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 h1, h2, h3, h4, .title-font {
@@ -41,7 +44,8 @@ h6, .h6 {
 button {
   border: none;
   background: none;
-  padding: 0;
+  /* Really wanted this to help, but it breaks places where browser-specific padding is required */
+  /* padding: 0; */
 }
 
 button, select {
