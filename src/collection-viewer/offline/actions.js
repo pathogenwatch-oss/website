@@ -32,6 +32,7 @@ export function checkStatus() {
       .then(isSaved =>
         dispatch(setStatus(isSaved ? statuses.SAVED : statuses.UNSAVED))
       )
+      .catch(() => dispatch(setStatus(statuses.ERRORED)))
     );
   };
 }
