@@ -12,10 +12,14 @@ function getSubtrees(collectionId) {
 
 module.exports = function ({ organismId, collectionId, clientId }) {
   const spec = getCollectionTask(organismId, 'subtree');
+  if (!spec) return Promise.resolve();
   return getSubtrees(collectionId)
     .then(subtrees => Promise.all(
       subtrees.map(({ name }) =>
-        enqueue(queues.collection, { spec, metadata: { organismId, collectionId, name, clientId } })
+        enqueue(
+          queues.collection,
+          { spec, metadata: { organismId, collectionId, name, clientId } }
+        )
       )
     ));
 };

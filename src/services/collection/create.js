@@ -1,5 +1,7 @@
+
 const { request } = require('services/bus');
 const { ServiceRequestError } = require('utils/errors');
+const { getCollectionTask } = require('manifest');
 
 const Collection = require('models/collection');
 const Genome = require('models/genome');
@@ -57,7 +59,9 @@ function getLocations(genomes) {
   return Object.values(locations);
 }
 
-function getSubtrees(genomes) {
+function getSubtrees(organismId, genomes) {
+  const spec = getCollectionTask(organismId, 'subtree');
+  if (!spec) return null;
   const fps = new Set();
   for (const { analysis = {} } of genomes) {
     if (analysis.core && analysis.core.fp && analysis.core.fp.reference) {
@@ -89,7 +93,7 @@ function createCollection(genomes, { organismId, title, description, pmid, user,
           size,
           title,
           locations: getLocations(genomes),
-          subtrees: getSubtrees(genomes),
+          subtrees: getSubtrees(organismId, genomes),
           genomes: genomes.map(_ => _._id),
           tree: {
             name: 'collection',
