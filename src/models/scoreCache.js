@@ -5,6 +5,7 @@ const schema = new Schema({
   fileId: String,
   version: String,
   scores: Object,
+  differences: Object,
 });
 
 schema.index({ fileId: 1, version: 1 });

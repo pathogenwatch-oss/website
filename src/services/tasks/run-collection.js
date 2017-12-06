@@ -142,6 +142,9 @@ function handleContainerOutput(container, spec, metadata, genomes, resolve, reje
           for (const key of Object.keys(doc.scores)) {
             update[`scores.${key}`] = doc.scores[key];
           }
+          for (const key of Object.keys(doc.differences)) {
+            update[`differences.${key}`] = doc.differences[key];
+          }
           ScoreCache.update({ fileId: doc.fileId, version }, update, { upsert: true }).exec();
           const progress = doc.progress * 0.99;
           if ((progress - lastProgress) >= 1) {
