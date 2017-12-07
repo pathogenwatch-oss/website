@@ -111,10 +111,7 @@ export default React.createClass({
                     { deployedOrganisms.has('485') &&
                     <i className="material-icons">check</i> }
                   </td>
-                  <td>
-                    { deployedOrganisms.has('485') &&
-                    <i className="material-icons">check</i> }
-                  </td>
+                  <td></td>
                   <td><small>NG-MAST</small></td>
                 </tr>
                 <tr>
