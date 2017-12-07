@@ -90,15 +90,21 @@ function attachInputStream(container, spec, genomes, uncachedFileIds) {
     {
       _id: { $in: genomes.map(_ => _._id) },
       fileId: { $in: uncachedFileIds },
+      'analysis.core.profile.filter': false,
+      'analysis.core.profile.alleles.duplicate': false,
     },
-    requires.reduce((memo, required) => {
-      const projection = required.field ?
-        `analysis.${required.task}.${required.field}` :
-        `analysis.${required.task}`;
-      memo[projection] = 1;
-      return memo;
-    }, { fileId: 1 }),
-    { raw: true, sort: { fileId: 1 } }
+    {
+      fileId: 1,
+      'analysis.core.profile.familyId': 1,
+      'analysis.core.profile.filter': 1,
+      'analysis.core.profile.alleles.id': 1,
+      'analysis.core.profile.alleles.rR': 1,
+      'analysis.core.profile.alleles.mutations': 1,
+    },
+    {
+      raw: true,
+      sort: { fileId: 1 },
+    }
   );
   docsStream.pause();
 
@@ -122,8 +128,8 @@ function attachInputStream(container, spec, genomes, uncachedFileIds) {
   );
 
   stream
-    .pipe(container.stdin);
-    // .pipe(require('fs').createWriteStream('tree-input.bson'));
+    // .pipe(container.stdin);
+    .pipe(require('fs').createWriteStream('tree-input.bson'));
 
   genomesStream.end(bson.serialize({ genomes }), () => scoresStream.resume());
 }

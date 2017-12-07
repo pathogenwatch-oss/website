@@ -1,40 +1,20 @@
 const Genome = require('models/genome');
-const ScoreCache = require('../../models/scoreCache');
 
 const { request } = require('services');
-const { ServiceRequestError } = require('utils/errors');
 
 function getCollectionGenomes({ genomes }) {
   return Genome
     .find(
       { _id: { $in: genomes } },
-      { name: 1, 'analysis.core.variance': 1 },
+    {
+      name: 1,
+      'analysis.core.profile.familyId': 1,
+      'analysis.core.profile.alleles.id': 1,
+    },
       { sort: { name: 1 } }
     )
     .lean()
     .cursor();
-}
-
-function getCache(genomes, type) {
-  const fieldName = (type === 'score') ? 'scores' : 'differences';
-  return ScoreCache.find(
-    { fileId: { $in: genomes.map(_ => _.fileId) } },
-    genomes.reduce(
-      (projection, { fileId }) => {
-        projection[`${fieldName}.${fileId}`] = 1;
-        return projection;
-      },
-      { fileId: 1 }
-    ),
-    { sort: { fileId: 1 } }
-  )
-  .then(cache => {
-    const cacheByFileId = {};
-    for (const doc of cache) {
-      cacheByFileId[doc.fileId] = doc[fieldName];
-    }
-    return cacheByFileId;
-  });
 }
 
 function generateMatrix(genomesByFamilyId, genomes, stream) {
@@ -73,9 +53,9 @@ function generateData(genomes, stream) {
   const labels = [];
   genomes.on('data', genome => {
     labels.push({ _id: genome._id.toString(), name: genome.name });
-    for (const familyId of Object.keys(genome.analysis.core.variance)) {
+    for (const { familyId, alleles } of genome.analysis.core.profile) {
       const allelesByGenomeId = genomesByFamilyId[familyId] || {};
-      allelesByGenomeId[genome._id] = genome.analysis.core.variance[familyId].map(_ => _.alleleId);
+      allelesByGenomeId[genome._id] = alleles.map(_ => _.id);
       genomesByFamilyId[familyId] = allelesByGenomeId;
     }
   });

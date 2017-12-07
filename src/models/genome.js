@@ -42,7 +42,12 @@ const schema = new Schema({
 
 schema.index({ name: 1 });
 schema.index({ public: 1, reference: 1 });
-schema.index({ _id: 1, fileId: 1 });
+schema.index({
+  _id: 1,
+  fileId: 1,
+  'analysis.core.profile.filter': 1,
+  'analysis.core.profile.alleles.duplicate': 1,
+});
 schema.index({ 'analysis.mlst.st': 1 });
 schema.index({ 'analysis.speciator.organismId': 1 });
 schema.index({ 'analysis.speciator.speciesId': 1 });

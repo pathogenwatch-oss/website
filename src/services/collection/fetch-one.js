@@ -33,6 +33,7 @@ module.exports = ({ user, uuid }) =>
           const doc = collection.toObject();
           doc.genomes = genomes;
           doc.status = 'READY';
+          doc.subtrees = doc.subtrees || [];
           return doc;
         })
     );
