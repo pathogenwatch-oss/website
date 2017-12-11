@@ -4,17 +4,8 @@ const LOGGER = require('utils/logging').createLogger('microservice');
 
 const serviceName = process.argv[2];
 
-function getConnections(name) {
-  if (name === 'runner') {
-    return Promise.resolve({ mongoConnection: mongo.connect() });
-  }
-  return Promise.all([
-    require('utils/storageConnection').connect(),
-    require('utils/messageQueueConnection').connect(),
-    mongo.connect(),
-  ]).then(([ storageConnection, mqConnection, mongoConnection ]) => ({
-    storageConnection, mqConnection, mongoConnection,
-  }));
+function getConnections() {
+  return Promise.resolve({ mongoConnection: mongo.connect() });
 }
 
 if (!serviceName) {
