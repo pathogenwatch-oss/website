@@ -26,7 +26,12 @@ module.exports = ({ user, uuid }) =>
   request('collection', 'authorise', { user, uuid, projection })
     .then(collection =>
       collection
-        .populate('_organism')
+        .populate('_organism', {
+          tree: 1,
+          resistance: 1,
+          'references.name': 1,
+          'references.uuid': 1,
+        })
         .execPopulate()
         .then(() => Genome.getForCollection({ _id: { $in: collection.genomes } }))
         .then(genomes => {

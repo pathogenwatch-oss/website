@@ -139,7 +139,7 @@
     "1280": [
       { "task": "mlst", "version": "t1" },
       { "task": "paarsnp", "version": "t1" },
-      { "task": "core", "version": "t5" }
+      { "task": "core", "version": "t12" }
     ],
     "1282": [
       { "task": "mlst", "version": "t1" }
@@ -305,7 +305,7 @@
       { "task": "mlst", "version": "t1" }
     ],
     "64320": [
-      { "task": "core", "version": "t9" }
+      { "task": "core", "version": "t12" }
     ],
     "69966": [
       { "task": "mlst", "version": "t1" }
@@ -326,7 +326,7 @@
       { "task": "mlst", "version": "t1" }
     ],
     "90370": [
-      { "task": "core", "version": "t9" },
+      { "task": "core", "version": "t12" },
       { "task": "paarsnp", "version": "t1" },
       { "task": "genotyphi", "version": "t1" }
     ],
@@ -375,15 +375,15 @@
   },
   "collection": {
     "1280": [
-      { "task": "tree", "version": "t9", "requires": [ { "task": "core", "version": "t9", "field": "variance" } ], "workers": 8 },
-      { "task": "subtree", "version": "t9", "requires": [ { "task": "core", "version": "t9", "field": "variance" } ], "workers": 8 }
+      { "task": "tree", "version": "t12", "requires": [ { "task": "core", "version": "t12", "field": "variance" } ], "workers": 8 },
+      { "task": "subtree", "version": "t12", "requires": [ { "task": "core", "version": "t12", "field": "variance" } ], "workers": 8 }
     ],
     "90370": [
-      { "task": "tree", "version": "t9", "requires": [ { "task": "core", "version": "t9", "field": "variance" } ], "workers": 8 },
-      { "task": "subtree", "version": "t9", "requires": [ { "task": "core", "version": "t9", "field": "variance" } ], "workers": 8 }
+      { "task": "tree", "version": "t12", "requires": [ { "task": "core", "version": "t12", "field": "variance" } ], "workers": 8 },
+      { "task": "subtree", "version": "t12", "requires": [ { "task": "core", "version": "t12", "field": "variance" } ], "workers": 8 }
     ],
     "64320": [
-      { "task": "tree", "version": "t9", "requires": [ { "task": "core", "version": "t9", "field": "variance" } ], "workers": 8 }
+      { "task": "tree", "version": "t12", "requires": [ { "task": "core", "version": "t12", "field": "variance" } ], "workers": 8 }
     ]
   }
 }
