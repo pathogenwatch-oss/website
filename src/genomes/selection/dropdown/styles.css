@@ -12,3 +12,7 @@
   padding: 16px;
   border-radius: 2px;
 }
+
+.wgsa-genome-selection-dropdown p:last-child {
+  margin-bottom: 0;
+}

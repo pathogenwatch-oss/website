@@ -83,6 +83,7 @@
   text-overflow: ellipsis;
   overflow-x: hidden;
   max-width: 100%;
+  padding: 0;
 }
 
 .wgsa-checklist-content > :first-child {

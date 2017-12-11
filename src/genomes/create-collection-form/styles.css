@@ -39,3 +39,11 @@
   list-style: outside;
   margin-left: 16px;
 }
+
+.wgsa-not-enough-genomes {
+  width: 240px;
+}
+
+.wgsa-not-enough-genomes strong {
+  white-space: nowrap;
+}
