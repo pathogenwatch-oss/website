@@ -1,6 +1,6 @@
 {
   "name": "wgsa-middle-end",
-  "version": "6.2.2-1",
+  "version": "7.0.0-0",
   "description": "Web API for WGSA",
   "main": "app.js",
   "engines": {
