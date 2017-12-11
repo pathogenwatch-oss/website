@@ -128,8 +128,8 @@ function attachInputStream(container, spec, genomes, uncachedFileIds) {
   );
 
   stream
-    // .pipe(container.stdin);
-    .pipe(require('fs').createWriteStream('tree-input.bson'));
+    .pipe(container.stdin);
+    // .pipe(require('fs').createWriteStream('tree-input.bson'));
 
   genomesStream.end(bson.serialize({ genomes }), () => scoresStream.resume());
 }
