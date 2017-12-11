@@ -4,7 +4,7 @@ const updateDocs = require('./utils/updateDocs.js');
 
 function formatTree(tree, taxId) {
   if (tree) {
-    const regexp = new RegExp(`^${taxId}_`, 'g');
+    const regexp = new RegExp(`${taxId}_`, 'g');
     return tree.replace(regexp, '');
   }
 
@@ -12,7 +12,7 @@ function formatTree(tree, taxId) {
 }
 
 function formatReferences(references, taxId) {
-  const regexp = new RegExp(`^${taxId}_`, 'g');
+  const regexp = new RegExp(`^${taxId}_`);
   for (const reference of references) {
     reference.uuid = reference.uuid.replace(regexp, '');
   }
