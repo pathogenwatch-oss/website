@@ -4,7 +4,7 @@ import { FETCH_TREE } from '../../collection-viewer/tree/actions';
 function flagGenomes(genomes, flag) {
   return genomes.reduce((memo, genome) => {
     const analysis = { ...genome.analysis };
-    if (Array.isArray(analysis.paarsnp.antibiotics)) {
+    if (analysis.paarsnp && Array.isArray(analysis.paarsnp.antibiotics)) {
       const { antibiotics = [] } = analysis.paarsnp;
       analysis.paarsnp = {
         ...analysis.paarsnp,
