@@ -66,3 +66,15 @@ export const getSelectedInternalNode = createSelector(
   state => getTreeState(state).selectedInternalNode,
   ({ trees, active }) => trees[active]
 );
+
+export const areTreesComplete = createSelector(
+  getTrees,
+  trees => {
+    for (const key of Object.keys(trees)) {
+      if (trees[key].status === 'PENDING') {
+        return false;
+      }
+    }
+    return true;
+  }
+);

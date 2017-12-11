@@ -17,24 +17,50 @@ const Styler = React.createClass({
       const { id } = leaf;
       const genome = genomes[id];
       const subtree = trees[id];
-      const { collectionIds = [], size = 0, populationSize = 0 } =
-        subtree || {};
+      const {
+        collectionIds = [],
+        status = 'PENDING',
+        size = 0,
+        populationSize = 0,
+        progress = 0,
+      } = subtree || {};
 
-      leaf.setDisplay({
-        ...(subtree ? leafStyles.subtree : leafStyles.reference),
-        leafStyle: {
-          ...defaultLeafStyle,
-          fillStyle: subtree ? CGPS.COLOURS.PURPLE_LIGHT : CGPS.COLOURS.GREY,
-        },
-      });
-
-      const totalCollection = size - populationSize;
-      if (totalCollection > 0) {
-        leaf.label = `${genome.name} (${totalCollection}) [${populationSize}]`;
+      // styles
+      if (!subtree) {
+        leaf.setDisplay({
+          ...leafStyles.reference,
+          leafStyle: {
+            ...defaultLeafStyle,
+            fillStyle: CGPS.COLOURS.GREY,
+          },
+        });
       } else {
-        leaf.label = genome.name;
+        leaf.setDisplay({
+          ...leafStyles.subtree,
+          leafStyle: {
+            ...defaultLeafStyle,
+            fillStyle: CGPS.COLOURS.PURPLE_LIGHT,
+          },
+        });
       }
 
+      // labels
+      if (!subtree) {
+        leaf.label = genome.name;
+      } else if (status === 'PENDING') {
+        leaf.label = `${genome.name}: ${progress}%`;
+      } else if (status === 'READY') {
+        const totalCollection = size - populationSize;
+        if (populationSize > 0) {
+          leaf.label = `${genome.name} (${totalCollection}) [${populationSize}]`;
+        } else if (totalCollection > 0) {
+          leaf.label = `${genome.name} (${totalCollection})`;
+        } else {
+          leaf.label = genome.name;
+        }
+      }
+
+      // the rest
       let isFiltered = !filter.active;
       let isHighlighted = false;
       for (const uuid of collectionIds) {
@@ -48,7 +74,7 @@ const Styler = React.createClass({
       }
       leaf.radius = isFiltered ? 1 : 0;
       leaf.highlighted = isHighlighted;
-      leaf.interactive = !!subtree;
+      leaf.interactive = !!subtree && status === 'READY';
     }
 
     phylocanvas.draw();

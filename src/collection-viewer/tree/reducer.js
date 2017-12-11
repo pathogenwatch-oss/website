@@ -8,7 +8,6 @@ import * as ACTIONS from './actions';
 
 import { simpleTrees } from './constants';
 import { COLLECTION, POPULATION } from '../../app/stateKeys/tree';
-import { statuses } from '../../collection-viewer/constants';
 
 import Organisms from '../../organisms';
 
@@ -88,16 +87,39 @@ function entities(state = {}, { type, payload }) {
       };
     }
     case UPDATE_COLLECTION_PROGRESS: {
-      if (payload.task !== 'tree') return state;
-      const tree = state[COLLECTION];
-      if (payload.progress && payload.progress > tree.progress) {
-        return {
-          ...state,
-          [COLLECTION]: {
-            ...tree,
-            progress: Math.floor(payload.progress),
-          },
-        };
+      if (payload.task === 'tree') {
+        const tree = state[COLLECTION];
+        if (payload.progress && payload.progress > tree.progress) {
+          return {
+            ...state,
+            [COLLECTION]: {
+              ...tree,
+              progress: Math.floor(payload.progress),
+            },
+          };
+        }
+      }
+      if (payload.task === 'subtree') {
+        const tree = state[payload.name];
+        if (payload.status) {
+          return {
+            ...state,
+            [payload.name]: {
+              ...tree,
+              status: payload.status,
+              size: payload.size,
+              populationSize: payload.populationSize,
+            },
+          };
+        } else if (payload.progress && payload.progress > tree.progress) {
+          return {
+            ...state,
+            [COLLECTION]: {
+              ...tree,
+              progress: Math.floor(payload.progress),
+            },
+          };
+        }
       }
       return state;
     }
