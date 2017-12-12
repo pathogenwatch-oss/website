@@ -20,20 +20,20 @@ function notFound(req, res) {
 module.exports = function (app) {
   app.use('/api/', [
     prefilterValidation,
-    require('routes/genome'),
-    require('routes/collection'),
-    require('routes/download-request'),
-    require('routes/summary'),
-    require('routes/organism'),
-    require('routes/account'),
+    require('./genome'),
+    require('./collection'),
+    require('./download-request'),
+    require('./summary'),
+    require('./organism'),
+    require('./account'),
     notFound,
   ]);
 
   app.use('/download/', [
-    require('routes/download'),
-    require('routes/organism-download'),
+    require('./download'),
+    require('./organism-download'),
     notFound,
   ]);
 
-  app.use(require('routes/redirects'));
+  app.use(require('./redirects'));
 };

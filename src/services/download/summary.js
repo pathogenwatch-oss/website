@@ -13,7 +13,7 @@ module.exports = function ({ user, sessionID, ids }) {
         { _id: { $in }, 'analysis.speciator': { $exists: true } },
         Genome.getPrefilterCondition({ user, sessionID })
       ) },
-      { $group: { _id: { organismId: '$organismId', organismName: '$analysis.speciator.organismName' }, count: { $sum: 1 } } },
+      { $group: { _id: { organismId: '$analysis.speciator.organismId', organismName: '$analysis.speciator.organismName' }, count: { $sum: 1 } } },
       { $project: { organismId: '$_id.organismId', organismName: '$_id.organismName', total: '$count', _id: 0 } },
     ]),
     Genome.aggregate([
@@ -24,7 +24,7 @@ module.exports = function ({ user, sessionID, ids }) {
       { $facet: taskNames.reduce((memo, task) => {
         memo[task] = [
           { $match: { [`analysis.${task}`]: { $exists: true } } },
-          { $group: { _id: { organismId: '$organismId' }, genomeIds: { $push: '$_id' }, sources: { $addToSet: `$analysis.${task}.source` } } },
+          { $group: { _id: { organismId: '$analysis.speciator.organismId' }, genomeIds: { $push: '$_id' }, sources: { $addToSet: `$analysis.${task}.source` } } },
         ];
         return memo;
       }, {}) },

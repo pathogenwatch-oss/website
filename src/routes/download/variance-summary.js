@@ -1,23 +1,18 @@
-const { ObjectId } = require('mongoose').Types;
-
 const Genome = require('models/genome');
 
 const { request } = require('services');
 
-function getCollectionGenomes({ genomes }, genomeIds) {
-  const query = { _id: { $in: genomes } };
-  if (genomeIds) {
-    const ids = new Set(genomeIds);
-    query._id.$in = genomes.filter(id => ids.has(id.toString()));
-  }
+function getCollectionGenomes({ genomes }) {
   return Genome
-    .find(query, {
+    .find(
+      { _id: { $in: genomes } },
+    {
       name: 1,
-      'analysis.core.profile.familyId': 1,
-      'analysis.core.profile.alleles.id': 1,
-    }, {
-      sort: { name: 1 },
-    })
+      'analysis.core.fp.reference': 1,
+      'analysis.core.profile.filter': 1,
+    },
+      { sort: { name: 1 } }
+    )
     .lean()
     .cursor();
 }
@@ -54,6 +49,7 @@ function generateMatrix(genomesByFamilyId, genomes, stream) {
 }
 
 function generateData(genomes, stream) {
+  const 
   const genomesByFamilyId = {};
   const labels = [];
   genomes.on('data', genome => {
@@ -77,19 +73,12 @@ function generateData(genomes, stream) {
 module.exports = (req, res, next) => {
   const { user } = req;
   const { uuid } = req.params;
-  const { ids } = req.body;
-  const { filename = 'core-allele-distribution' } = req.query;
+  const { filename = 'variance-summary' } = req.query;
 
   if (!uuid || typeof uuid !== 'string') {
     res.status(400).send('`uuid` parameter is required.');
     return;
   }
-
-  if (ids && typeof ids !== 'string') {
-    res.status(400).send('`ids` parameter is invalid.');
-    return;
-  }
-  const genomeIds = ids ? ids.split(',') : null;
 
   res.set({
     'Content-Disposition': `attachment; filename="${filename}.csv"`,
@@ -97,7 +86,7 @@ module.exports = (req, res, next) => {
   });
 
   request('collection', 'authorise', { user, uuid, projection: { genomes: 1 } })
-    .then(collection => getCollectionGenomes(collection, genomeIds))
+    .then(getCollectionGenomes)
     .then(genomes => generateData(genomes, res))
     .catch(next);
 };

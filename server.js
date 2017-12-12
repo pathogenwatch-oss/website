@@ -102,7 +102,7 @@ module.exports = () =>
 
     app.use(express.static(path.join(clientPath, 'public')));
 
-    require('routes.js')(app);
+    require('routes')(app);
 
     app.set('view engine', 'ejs');
     app.set('views', path.join(clientPath, 'views'));
