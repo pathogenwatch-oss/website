@@ -1,21 +1,5 @@
 import React from 'react';
 
-export function getCounts(genomes, ids) {
-  return ids.reduce((memo, id) => {
-    const { __isReference, __isCollection } = genomes[id];
-    if (__isReference) {
-      memo.reference++;
-      return memo;
-    }
-    if (__isCollection) {
-      memo.collection++;
-      return memo;
-    }
-    memo.public++;
-    return memo;
-  }, { reference: 0, collection: 0, public: 0 });
-}
-
 export function showCounts(counts) {
   const { reference, collection } = counts;
   return (

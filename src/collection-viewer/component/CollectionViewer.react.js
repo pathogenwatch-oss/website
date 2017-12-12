@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import removeMarkdown from 'remove-markdown';
 
 import Layout from '../layout/Layout.react';
-import DownloadsMenu from '../downloads/DownloadsMenu.react';
+import DownloadsMenu from '../downloads';
 
 import { getCollection } from '../selectors';
 
