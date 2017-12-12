@@ -9,7 +9,9 @@ const uuidGenerator = rand.generator({
   chars: 'abcdefghijklmnopqrstuvwxyz1234567890',
 });
 
-const Tree = new Schema({
+const isLeafId = /[0-9a-f]{24}/g;
+
+const Tree = {
   name: String,
   newick: String,
   size: Number,
@@ -17,7 +19,7 @@ const Tree = new Schema({
   status: { type: String, default: 'PENDING' },
   task: String,
   version: String,
-});
+};
 
 const schema = new Schema({
   _user: { type: Schema.Types.ObjectId, ref: 'User' },
@@ -235,6 +237,11 @@ schema.statics.addAnalysisResult = function (_id, task, version, result) {
       },
     });
   }
+};
+
+schema.statics.getSubtreeIds = function (subtree) {
+  const { newick } = subtree;
+  return newick.match(isLeafId) || [];
 };
 
 module.exports = mongoose.model('Collection', schema);

@@ -275,6 +275,9 @@ router.get('/annotations', require('./annotations'));
 
 router.get('/collection/:uuid/:type-matrix', require('./score-matrix'));
 
-router.post('/collection/:uuid/:core-allele-distribution', require('./core-allele-distribution'));
+router.post('/collection/:uuid/core-allele-distribution', require('./core-allele-distribution'));
+
+router.get('/collection/:uuid/variance-summary', require('./variance-summary'));
+
 
 module.exports = router;
