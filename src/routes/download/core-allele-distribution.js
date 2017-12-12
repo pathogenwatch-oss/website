@@ -5,11 +5,13 @@ const Genome = require('models/genome');
 const { request } = require('services');
 
 function getCollectionGenomes({ genomes }, genomeIds) {
-  const query = { _id: { $in: genomes } };
-  if (genomeIds) {
-    const ids = new Set(genomeIds);
-    query._id.$in = genomes.filter(id => ids.has(id.toString()));
-  }
+  const query = {
+    _id: { $in: genomeIds },
+    $or: [
+      { _id: { $in: genomes } },
+      { public: true },
+    ],
+  };
   return Genome
     .find(query, {
       name: 1,

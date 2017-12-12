@@ -108,7 +108,7 @@ function generateMatrix(results, stream) {
 
   for (const result of results) {
     const line = [
-      result.label,
+      result.label.replace(/,/g, ''),
       result.totalCollection,
       result.totalPopulation,
       '',
@@ -129,6 +129,9 @@ function generateMatrix(results, stream) {
     stream.write('\n');
   }
 
+  stream.write('\n');
+  stream.write('Notes:1. WGSA Gene Representative Sites includes sites that vary when compared to the WGSA family reference alleles');
+  stream.write('\n');
   stream.end();
 }
 

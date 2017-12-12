@@ -4,9 +4,16 @@ const ScoreCache = require('../../models/scoreCache');
 const { request } = require('services');
 const { ServiceRequestError } = require('utils/errors');
 
-function getCollectionGenomes({ genomes }) {
+function getCollectionGenomes({ genomes }, genomeIds) {
+  const query = {
+    _id: { $in: genomeIds },
+    $or: [
+      { _id: { $in: genomes } },
+      { public: true },
+    ],
+  };
   return Genome
-    .find({ _id: { $in: genomes } }, { fileId: 1, name: 1 }, { sort: { name: 1 } })
+    .find(query, { fileId: 1, name: 1 }, { sort: { name: 1 } })
     .lean();
 }
 
@@ -32,7 +39,7 @@ function getCache(genomes, type) {
   });
 }
 
-function generateMatrix(genomes, cacheByFileId, stream) {
+function generateMatrix({ genomes, cache }, stream) {
   {
     const line = [ 'Name' ];
     for (const genomeA of genomes) {
@@ -47,10 +54,10 @@ function generateMatrix(genomes, cacheByFileId, stream) {
     for (const genomeB of genomes) {
       if (genomeA === genomeB) {
         line.push(0);
-      } else if (genomeA.fileId in cacheByFileId && genomeB.fileId in cacheByFileId[genomeA.fileId]) {
-        line.push(cacheByFileId[genomeA.fileId][genomeB.fileId]);
-      } else if (genomeB.fileId in cacheByFileId && genomeA.fileId in cacheByFileId[genomeB.fileId]) {
-        line.push(cacheByFileId[genomeB.fileId][genomeA.fileId]);
+      } else if (genomeA.fileId in cache && genomeB.fileId in cache[genomeA.fileId]) {
+        line.push(cache[genomeA.fileId][genomeB.fileId]);
+      } else if (genomeB.fileId in cache && genomeA.fileId in cache[genomeB.fileId]) {
+        line.push(cache[genomeB.fileId][genomeA.fileId]);
       } else {
         throw new ServiceRequestError(`Missing score for ${genomeA.fileId} ${genomeB.fileId}`);
       }
@@ -65,6 +72,7 @@ function generateMatrix(genomes, cacheByFileId, stream) {
 module.exports = (req, res, next) => {
   const { user } = req;
   const { uuid, type } = req.params;
+  const { ids } = req.body;
   const { filename = `${type}-matrix` } = req.query;
 
   if (!type || typeof type !== 'string') {
@@ -82,16 +90,23 @@ module.exports = (req, res, next) => {
     return;
   }
 
+  if (ids && typeof ids !== 'string') {
+    res.status(400).send('`ids` parameter is invalid.');
+    return;
+  }
+  const genomeIds = ids ? ids.split(',') : null;
+
   res.set({
     'Content-Disposition': `attachment; filename="${filename}.csv"`,
     'Content-type': 'text/csv',
   });
 
   request('collection', 'authorise', { user, uuid, projection: { genomes: 1 } })
-    .then(getCollectionGenomes)
-    .then(genomes =>
-      getCache(genomes, type)
-        .then(cache => generateMatrix(genomes, cache, res))
-    )
+    .then(async (collection) => {
+      const genomes = await getCollectionGenomes(collection, genomeIds);
+      const cache = await getCache(genomes, type);
+      return { genomes, cache };
+    })
+    .then(data => generateMatrix(data, res))
     .catch(next);
 };

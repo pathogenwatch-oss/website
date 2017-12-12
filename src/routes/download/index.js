@@ -273,7 +273,7 @@ router.get('/analysis/cgmlst', (req, res) => {
 
 router.get('/annotations', require('./annotations'));
 
-router.get('/collection/:uuid/:type-matrix', require('./score-matrix'));
+router.post('/collection/:uuid/:type-matrix', require('./score-matrix'));
 
 router.post('/collection/:uuid/core-allele-distribution', require('./core-allele-distribution'));
 
