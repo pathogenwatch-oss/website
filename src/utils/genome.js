@@ -3,7 +3,7 @@ import React from 'react';
 export function showCounts(counts) {
   const { reference, collection } = counts;
   return (
-    <p style={{ margin: '24px 24px 0' }}>
+    <p>
       { reference ? <strong>{reference} Reference</strong> : null }
       { (reference && collection) ? (<span>,&nbsp;</span>) : null }
       { collection ? (
