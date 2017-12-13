@@ -68,10 +68,10 @@ function entities(state = {}, { type, payload }) {
         ...state,
         [COLLECTION]: {
           newick: null,
+          status: 'PENDING',
           ...tree,
           name: COLLECTION,
           leafIds: genomes.map(_ => _.uuid),
-          progress: 0,
           ...initialState,
         },
         [POPULATION]: {
@@ -81,7 +81,11 @@ function entities(state = {}, { type, payload }) {
           ...initialState,
         },
         ...subtrees.reduce((memo, subtree) => {
-          memo[subtree.name] = { ...subtree, ...initialState };
+          memo[subtree.name] = {
+            status: 'PENDING',
+            ...subtree,
+            ...initialState,
+          };
           return memo;
         }, {}),
       };
@@ -89,11 +93,22 @@ function entities(state = {}, { type, payload }) {
     case UPDATE_COLLECTION_PROGRESS: {
       if (payload.task === 'tree') {
         const tree = state[COLLECTION];
+        if (payload.status) {
+          return {
+            ...state,
+            [COLLECTION]: {
+              ...tree,
+              status: payload.status,
+              progress: 0,
+            },
+          };
+        }
         if (payload.progress && payload.progress > tree.progress) {
           return {
             ...state,
             [COLLECTION]: {
               ...tree,
+              status: 'IN PROGRESS',
               progress: Math.floor(payload.progress),
             },
           };

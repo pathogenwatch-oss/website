@@ -9,24 +9,38 @@ import { getVisibleTree } from './selectors';
 const Progress = React.createClass({
 
   render() {
-    return (
-      <div className="wgsa-loading-overlay wgsa-tree-progress">
-        <CircularProgress
-          radius="80"
-          strokeWidth="8"
-          percentage={this.props.progress || 1}
-        />
-        <p>Tree in progress</p>
-      </div>
-    );
+    const { status, progress } = this.props;
+
+    if (status === 'PENDING') {
+      return (
+        <div className="wgsa-loading-overlay wgsa-tree-progress">
+          <p className="wgsa-blink">Tree pending</p>
+          <p>Queue position: 1</p>
+        </div>
+      );
+    }
+
+    if (status === 'IN PROGRESS') {
+      return (
+        <div className="wgsa-loading-overlay wgsa-tree-progress">
+          <CircularProgress
+            radius="80"
+            strokeWidth="8"
+            percentage={progress || 0}
+          />
+          <p>Tree in progress</p>
+        </div>
+      );
+    }
+
+    return null;
   },
 
 });
 
 function mapStateToProps(state) {
-  return {
-    progress: getVisibleTree(state).progress,
-  };
+  const { status, progress } = getVisibleTree(state);
+  return { status, progress };
 }
 
 export default connect(mapStateToProps)(Progress);
