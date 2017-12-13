@@ -32,54 +32,6 @@ router.get('/file/:filename',
   }
 );
 
-router.get('/genome/:id', (req, res, next) => {
-  const { user, params, query, sessionID } = req;
-  const { id } = params;
-  const { type } = query;
-
-  if (!id) {
-    LOGGER.error('Missing id');
-    return res.sendStatus(400);
-  }
-
-  LOGGER.info(`Received request for fasta: ${id}`);
-
-  return services.request('genome', 'download', { user, sessionID, type, id }).
-    then(({ filePath, fileName }) => {
-      res.set({
-        'Content-Disposition': `attachment; filename="${fileName}"`,
-        'Content-type': 'text/plain',
-      });
-      return res.sendFile(filePath);
-    }).
-    catch(next);
-});
-
-router.get('/archive/:type', (req, res, next) => {
-  const { user, sessionID } = req;
-  const { type } = req.params;
-  const { filename = 'wgsa-genomes.zip', ids } = req.query;
-
-  if (!ids || !ids.length) return res.sendStatus(400);
-  const splitIds = ids.split(',');
-
-  LOGGER.info(`Received request for ${type} archive of ${splitIds.length} files`);
-
-  return (
-    services.request('download', 'fetch-genomes',
-        { user, sessionID, type, ids: splitIds, projection: { name: 1, fileId: 1 } })
-      .then(genomes =>
-        services.request('download', 'create-genome-archive', { genomes }))
-      .then(stream => {
-        stream.on('error', next);
-        res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
-        res.setHeader('Content-Type', 'application/zip');
-        stream.pipe(res);
-      })
-      .catch(next)
-  );
-});
-
 function downloadAnalysisResults(ids, task, projection, transformer, options = {}, response) {
   const { header = true, quotedString = true, user, sessionID } = options;
 
@@ -271,13 +223,7 @@ router.get('/analysis/cgmlst', (req, res) => {
   downloadAnalysisResults(ids, task, projection, transformer, options, res);
 });
 
-router.get('/collection/:uuid/annotations', require('./annotations'));
-
-router.post('/collection/:uuid/:type-matrix', require('./score-matrix'));
-
-router.post('/collection/:uuid/core-allele-distribution', require('./core-allele-distribution'));
-
-router.get('/collection/:uuid/variance-summary', require('./variance-summary'));
-
+router.use('/genome', require('./genome'));
+router.use('/collection', require('./collection'));
 
 module.exports = router;

@@ -170,26 +170,21 @@ function convertDocumentToGFF(doc, stream) {
 
 function generateData(collection, genomeIds, filename, res, next) {
   const cursor = getCollectionGenomes(collection, genomeIds);
-  console.error(genomeIds, genomeIds.length);
   if (genomeIds && genomeIds.length === 1) {
     cursor.then(([ doc ]) => {
-      console.error({doc});
       const stream = transform(gffTransformer);
-      res.setHeader('Content-Disposition', `attachment; filename=${filename || doc.name}.gff`);
+      res.setHeader('Content-Disposition', `attachment; filename=${filename || `${doc.name}.gff`}`);
       res.setHeader('Content-Type', 'text/plain');
       stream.pipe(res);
       convertDocumentToGFF(doc, stream);
       stream.end();
     });
-  }
-  else {
+  } else {
     res.setHeader('Content-Disposition', `attachment; filename=${filename || 'wgsa-annotations.zip'}`);
     res.setHeader('Content-Type', 'application/zip');
 
     const archive = new ZipStream();
-
     archive.on('error', next);
-
     archive.pipe(res);
 
     const _cursor = cursor.lean().cursor();
@@ -230,23 +225,9 @@ function generateData(collection, genomeIds, filename, res, next) {
 module.exports = (req, res, next) => {
   const { user } = req;
   const { uuid } = req.params;
-  const { ids } = req.query;
+  const { ids } = req.method === 'GET' ? req.query : req.body;
   const { filename } = req.query;
-
-  if (!uuid || typeof uuid !== 'string') {
-    LOGGER.error('uuid not provided.');
-    res.status(400).send('`uuid` parameter is required.');
-    return;
-  }
-
-  if (ids && typeof ids !== 'string') {
-    LOGGER.error('ids parameter is invalid.');
-    res.status(400).send('`ids` parameter is invalid.');
-    return;
-  }
   const genomeIds = ids ? ids.split(',') : null;
-
-  req.on('close', () => console.log('CLOSED'));
 
   request('collection', 'authorise', { user, uuid, projection: { genomes: 1 } })
     .then(collection => generateData(collection, genomeIds, filename, res, next))

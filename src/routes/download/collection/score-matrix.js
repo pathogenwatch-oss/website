@@ -1,5 +1,5 @@
 const Genome = require('models/genome');
-const ScoreCache = require('../../models/scoreCache');
+const ScoreCache = require('models/scoreCache');
 
 const { request } = require('services');
 const { ServiceRequestError } = require('utils/errors');

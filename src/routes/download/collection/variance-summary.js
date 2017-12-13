@@ -7,7 +7,7 @@ const ScoreCache = require('models/scoreCache');
 const { request } = require('services');
 const { ServiceRequestError } = require('utils/errors');
 
-const { calculateStats } = require('../../utils/stats');
+const { calculateStats } = require('utils/stats');
 
 function getGenomes(genomeIds) {
   const query = {

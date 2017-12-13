@@ -107,6 +107,7 @@ function attachInputStream(container, spec, genomes, uncachedFileIds) {
     }
   );
   docsStream.pause();
+  // docsStream.on('end', () => console.log('docs ended'));
 
   const scoresStream = ScoreCache.collection.find(
     { fileId: { $in: genomes.map(_ => _.fileId) } },
@@ -141,6 +142,7 @@ function handleContainerOutput(container, spec, metadata, genomes, resolve, reje
   container.stdout
     .pipe(es.split())
     .on('data', (data) => {
+      if (!data) return;
       try {
         const doc = JSON.parse(data);
         if (doc.fileId && doc.scores) {
