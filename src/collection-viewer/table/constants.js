@@ -5,7 +5,7 @@ import GenomeArchiveLink from './GenomeArchiveLink.react';
 import AnnotationFileLink from './AnnotationFileLink.react';
 import AnnotationArchiveLink from './AnnotationArchiveLink.react';
 
-import { getArchiveDownloadProps } from '../downloads/utils';
+import { formatCollectionFilename } from '../downloads/utils';
 
 import { defaultWidthGetter } from './columnWidth';
 
@@ -76,10 +76,17 @@ export const downloadColumnProps = {
       </span>
     );
   },
-  addState({ downloads, ...state }, dispatch) {
+  addState(state) {
+    const { collection, data } = state; // not full state :/
     return {
       ...this,
-      archiveDownloads: getArchiveDownloadProps(state, downloads, dispatch),
+      archiveDownloads: {
+        ids: data.map(_ => _.id || _._id),
+        filenames: {
+          genome: formatCollectionFilename(collection, 'genomes.zip'),
+          annotation: formatCollectionFilename(collection, 'annotations.zip'),
+        },
+      },
     };
   },
 };
