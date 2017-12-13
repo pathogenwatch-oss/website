@@ -1,5 +1,3 @@
-const { ObjectId } = require('mongoose').Types;
-
 const Genome = require('models/genome');
 
 const { request } = require('services');

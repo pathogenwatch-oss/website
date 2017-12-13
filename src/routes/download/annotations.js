@@ -2,11 +2,37 @@ const transform = require('stream-transform');
 const ZipStream = require('zip-stream');
 const async = require('async');
 
-const CollectionGenome = require('models/collectionGenome');
-
+const Genome = require('models/genome');
+const { request } = require('services');
 const LOGGER = require('utils/logging').createLogger('Downloads');
 
 const header = '##gff-version 3.2.1';
+
+function getCollectionGenomes({ genomes }, genomeIds) {
+  const query = {
+    _id: { $in: genomeIds },
+    $or: [
+      { _id: { $in: genomes } },
+      { public: true },
+    ],
+    'analysis.core': { $exists: true },
+    'analysis.mlst': { $exists: true },
+    'analysis.paarsnp': { $exists: true },
+  };
+  const projection = {
+    name: 1,
+    'analysis.core.profile': 1,
+    'analysis.mlst.matches': 1,
+    'analysis.paarsnp': 1,
+  };
+  const options = {
+    sort: {
+      name: 1,
+    },
+  };
+  return Genome
+    .find(query, projection, options);
+}
 
 function gffTransformer(input) {
   if (input === header) return `${input}\n`;
@@ -33,31 +59,34 @@ function convertDocumentToGFF(doc, stream) {
 
   stream.write(header);
 
-  for (const { partial, matches } of core.matches) {
-    for (const match of matches) {
+  // const profile = core.profile;
+  const profile = core.profile.map(x => x.familyId).sort().map(x => core.profile.find(y => y.familyId === x));
+  for (const { familyId, refLength, alleles } of profile) {
+    for (const allele of alleles) {
       stream.write({
-        sequence: match.query.id,
+        sequence: allele.qId,
         source: 'WGSA_Core',
         type: 'CDS',
-        start: match.query.start,
-        end: match.query.stop,
-        score: match.identity,
-        reversed: match.reversed,
-        phase: (match.reference.start - 1) % 3,
+        start: allele.qR[0],
+        end: allele.qR[1],
+        score: allele.pid,
+        reversed: (allele.qR[0] > allele.qR[1]),
+        phase: (allele.rR[0] - 1) % 3,
         attributes: {
-          ID: `CORE_${match.query.id}_${match.query.start}_${match.query.stop}`,
-          name: match.reference.id,
-          target: `${match.reference.id} ${match.reference.start} ${match.reference.length}`,
-          targetLength: match.reference.length,
+          ID: `CORE_${allele.qId}_${allele.qR[0]}_${allele.qR[1]}`,
+          name: familyId,
+          target: `${familyId} ${allele.rR[0]} ${refLength}`,
+          targetLength: refLength,
           notes: [
-            `Paralogue ${matches.length}`,
-            partial ? 'Partial Match' : 'Complete Match',
+            `Paralogue ${alleles.length}`,
+            allele.full ? 'Complete Match' : 'Partial Match',
           ].join(','),
-          evalue: match.evalue,
+          evalue: allele.evalue,
         },
       });
     }
   }
+
   for (const { gene, id, start, end, contig } of mlst.matches) {
     stream.write({
       sequence: contig,
@@ -78,6 +107,7 @@ function convertDocumentToGFF(doc, stream) {
       },
     });
   }
+
   for (const match of paarsnp.matches) {
     if (match.source === 'WGSA_PAAR') {
       stream.write({
@@ -138,84 +168,87 @@ function convertDocumentToGFF(doc, stream) {
   }
 }
 
-module.exports = (req, res, next) => {
-  const { ids = '', collection, filename = `wgsa-annotations-${Date.now()}.zip` } = req.query;
-
-  if ((!ids || typeof(ids) !== 'string' || ids === '') && !collection) {
-    LOGGER.error('ids or collection not provided.');
-    return res.sendStatus(400);
+function generateData(collection, genomeIds, filename, res, next) {
+  const cursor = getCollectionGenomes(collection, genomeIds);
+  console.error(genomeIds, genomeIds.length);
+  if (genomeIds && genomeIds.length === 1) {
+    cursor.then(([ doc ]) => {
+      console.error({doc});
+      const stream = transform(gffTransformer);
+      res.setHeader('Content-Disposition', `attachment; filename=${filename || doc.name}.gff`);
+      res.setHeader('Content-Type', 'text/plain');
+      stream.pipe(res);
+      convertDocumentToGFF(doc, stream);
+      stream.end();
+    });
   }
+  else {
+    res.setHeader('Content-Disposition', `attachment; filename=${filename || 'wgsa-annotations.zip'}`);
+    res.setHeader('Content-Type', 'application/zip');
 
-  req.on('close', () => console.log('CLOSED'));
+    const archive = new ZipStream();
 
-  try {
-    const $in = ids.split(',');
-    const query = Object.assign({
-      'analysis.core': { $exists: true },
-      'analysis.mlst': { $exists: true },
-      'analysis.paarsnp': { $exists: true },
-    }, collection ? { _collection: collection } : { _id: { $in } });
-    const projection = {
-      name: 1,
-      'analysis.core.matches': 1,
-      'analysis.mlst.matches': 1,
-      'analysis.paarsnp': 1,
-    };
-    const cursor = CollectionGenome.find(query, projection);
+    archive.on('error', next);
 
-    if (collection || $in.length > 1) {
-      res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
-      res.setHeader('Content-Type', 'application/zip');
+    archive.pipe(res);
 
-      const archive = new ZipStream();
+    const _cursor = cursor.lean().cursor();
 
-      archive.on('error', next);
-
-      archive.pipe(res);
-
-      const _cursor = cursor.lean().cursor();
-
-      async.doUntil(done => {
-        _cursor.next((error, doc) => {
-          if (error) {
-            done(error);
-            return;
-          }
-          if (!doc) {
-            done(null, true);
-            return;
-          }
-          const stream = transform(gffTransformer);
-          archive.entry(stream, { name: `${doc.name}.gff` }, (err) => {
-            if (err) {
-              done(err);
-              return;
-            }
-            done(null, false);
-          });
-          convertDocumentToGFF(doc, stream);
-          stream.end();
-        });
-      },
-      isDone => isDone,
-      (error) => {
+    async.doUntil(done => {
+      _cursor.next((error, doc) => {
         if (error) {
-          next(error);
+          done(error);
           return;
         }
-        archive.finish();
-      });
-    } else {
-      cursor.then(([ doc ]) => {
+        if (!doc) {
+          done(null, true);
+          return;
+        }
         const stream = transform(gffTransformer);
-        res.setHeader('Content-Disposition', `attachment; filename=${doc.name}.gff`);
-        res.setHeader('Content-Type', 'text/plain');
-        stream.pipe(res);
+        archive.entry(stream, { name: `${doc.name}.gff` }, (err) => {
+          if (err) {
+            done(err);
+            return;
+          }
+          done(null, false);
+        });
         convertDocumentToGFF(doc, stream);
         stream.end();
       });
-    }
-  } catch (err) {
-    next(err);
+    },
+    isDone => isDone,
+    (error) => {
+      if (error) {
+        next(error);
+        return;
+      }
+      archive.finish();
+    });
   }
+}
+
+module.exports = (req, res, next) => {
+  const { user } = req;
+  const { uuid } = req.params;
+  const { ids } = req.query;
+  const { filename } = req.query;
+
+  if (!uuid || typeof uuid !== 'string') {
+    LOGGER.error('uuid not provided.');
+    res.status(400).send('`uuid` parameter is required.');
+    return;
+  }
+
+  if (ids && typeof ids !== 'string') {
+    LOGGER.error('ids parameter is invalid.');
+    res.status(400).send('`ids` parameter is invalid.');
+    return;
+  }
+  const genomeIds = ids ? ids.split(',') : null;
+
+  req.on('close', () => console.log('CLOSED'));
+
+  request('collection', 'authorise', { user, uuid, projection: { genomes: 1 } })
+    .then(collection => generateData(collection, genomeIds, filename, res, next))
+    .catch(next);
 };

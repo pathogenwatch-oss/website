@@ -271,7 +271,7 @@ router.get('/analysis/cgmlst', (req, res) => {
   downloadAnalysisResults(ids, task, projection, transformer, options, res);
 });
 
-router.get('/annotations', require('./annotations'));
+router.get('/collection/:uuid/annotations', require('./annotations'));
 
 router.post('/collection/:uuid/:type-matrix', require('./score-matrix'));
 
