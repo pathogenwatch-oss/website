@@ -137,7 +137,8 @@ function attachInputStream(container, spec, genomes, uncachedFileIds) {
 
 function handleContainerOutput(container, spec, metadata, genomes, resolve, reject) {
   const { task, version } = spec;
-  const { clientId } = metadata;
+  const { clientId, name } = metadata;
+  request('collection', 'send-progress', { clientId, payload: { task, name, status: 'IN PROGRESS' } });
   let lastProgress = 0;
   container.stdout
     .pipe(es.split())
@@ -156,7 +157,7 @@ function handleContainerOutput(container, spec, metadata, genomes, resolve, reje
           ScoreCache.update({ fileId: doc.fileId, version }, update, { upsert: true }).exec();
           const progress = doc.progress * 0.99;
           if ((progress - lastProgress) >= 1) {
-            request('collection', 'send-progress', { clientId, payload: { task, name: metadata.name, progress } });
+            request('collection', 'send-progress', { clientId, payload: { task, name, progress } });
             lastProgress = progress;
           }
         } else {
@@ -177,6 +178,7 @@ function handleContainerOutput(container, spec, metadata, genomes, resolve, reje
           });
         }
       } catch (e) {
+        request('collection', 'send-progress', { clientId, payload: { task, name, status: 'ERROR' } });
         reject(e);
       }
     });
@@ -184,7 +186,7 @@ function handleContainerOutput(container, spec, metadata, genomes, resolve, reje
 
 function handleContainerExit(container, spec, metadata, reject) {
   const { task, version } = spec;
-  const { organismId, collectionId } = metadata;
+  const { organismId, collectionId, clientId, name } = metadata;
   let startTime = process.hrtime();
 
   container.on('spawn', (containerId) => {
@@ -200,12 +202,16 @@ function handleContainerExit(container, spec, metadata, reject) {
     TaskLog.create({ collectionId, task, version, organismId, duration, exitCode });
 
     if (exitCode !== 0) {
+      request('collection', 'send-progress', { clientId, payload: { task, name, status: 'ERROR' } });
       container.stderr.setEncoding('utf8');
       reject(new Error(container.stderr.read()));
     }
   });
 
-  container.on('error', reject);
+  container.on('error', (e) => {
+    request('collection', 'send-progress', { clientId, payload: { task, name, status: 'ERROR' } });
+    reject(e);
+  });
 }
 
 function createContainer(spec, metadata) {
