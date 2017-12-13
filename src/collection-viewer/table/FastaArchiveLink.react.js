@@ -10,10 +10,10 @@ const { COLOURS } = CGPS;
 
 export default ({ uuid, ids, filename }) => (
   <DownloadLink
-    action={getServerPath(`/download/collection/${uuid}/annotations?filename=${filename}`)}
-    title="Download Annotations"
+    action={getServerPath(`/download/collection/${uuid}/fastas?filename=${filename}`)}
+    title="Download Genomes"
     ids={ids}
   >
-    <DownloadIcon isArchive color={COLOURS.GREEN} />
+    <DownloadIcon isArchive color={COLOURS.PURPLE} />
   </DownloadLink>
 );

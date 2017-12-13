@@ -1,7 +1,7 @@
 import React from 'react';
 
-import GenomeFileLink from '../../downloads/GenomeFileLink.react';
-import GenomeArchiveLink from './GenomeArchiveLink.react';
+import FastaFileLink from './FastaFileLink.react';
+import FastaArchiveLink from './FastaArchiveLink.react';
 import AnnotationFileLink from './AnnotationFileLink.react';
 import AnnotationArchiveLink from './AnnotationArchiveLink.react';
 
@@ -57,22 +57,23 @@ export const downloadColumnProps = {
   fixed: true,
   headerClasses: 'wgsa-table-cell--skinny',
   getHeaderContent({ archiveDownloads }) {
-    const { ids, filenames } = archiveDownloads;
+    const { uuid, ids, filenames } = archiveDownloads;
     return (
       <span className="wgsa-table-downloads" onClick={(e) => e.stopPropagation()}>
-        <GenomeArchiveLink ids={ids} filename={filenames.genome} />
-        <AnnotationArchiveLink ids={ids} filename={filenames.annotation} />
+        <FastaArchiveLink uuid={uuid} ids={ids} filename={filenames.genome} />
+        <AnnotationArchiveLink uuid={uuid} ids={ids} filename={filenames.annotation} />
       </span>
     );
   },
   cellClasses: 'wgsa-table-cell--skinny',
   fixedWidth: 68,
   flexGrow: 0,
-  getCellContents(_, { id, _id, name }) {
+  getCellContents({ archiveDownloads }, { id, _id, name }) {
+    const { uuid } = archiveDownloads;
     return (
       <span className="wgsa-table-downloads" onClick={(e) => e.stopPropagation()}>
-        <GenomeFileLink id={id || _id} name={name} type="collection" />
-        <AnnotationFileLink id={id || _id} name={name} />
+        <FastaFileLink uuid={uuid} id={id || _id} name={name} type="collection" />
+        <AnnotationFileLink uuid={uuid} id={id || _id} name={name} />
       </span>
     );
   },
@@ -86,6 +87,7 @@ export const downloadColumnProps = {
           genome: formatCollectionFilename(collection, 'genomes.zip'),
           annotation: formatCollectionFilename(collection, 'annotations.zip'),
         },
+        uuid: collection.uuid,
       },
     };
   },

@@ -16,21 +16,32 @@ import { statuses } from '../../../app/constants';
 
 import { getServerPath } from '../../../utils/Api';
 
+const DownloadLink = ({ link, ids, children }) => (
+    <form
+      action={link}
+      method="POST"
+      target="_blank"
+    >
+      <button>{children}</button>
+      <input type="hidden" name="ids" value={ids} />
+    </form>
+  );
+
 const Section = ({ organismId, organismName, total, tasks, ids }) => (
   <li>
     <FormattedName fullName organismId={organismId} title={organismName} />
     <ul className="wgsa-genome-download-list">
       <li>
-        <a href={getServerPath(`/download/archive/genome?ids=${ids}`)}>
-          <strong>FASTA files</strong>
-        </a>
+        <DownloadLink link={getServerPath('/download/genome/fasta')} ids={ids}>
+          FASTA files
+        </DownloadLink>
       </li>
       { tasks.map(task =>
         <li key={task.name}>
-          <a href={getServerPath(`/download/analysis/${task.name}?ids=${task.ids.join(',')}`)}>
-            <strong>{task.label}</strong>
+          <DownloadLink link={getServerPath(`/download/analysis/${task.name}`)} ids={task.ids}>
+            {task.label}
             {task.sources.length > 0 && <small>&nbsp;({task.sources.join(', ')})</small>}
-          </a>
+          </DownloadLink>
           <span>{task.ids.length}/{total}</span>
         </li>
       ) }
@@ -76,14 +87,14 @@ const Download = React.createClass({
                 All Organisms
                 <ul className="wgsa-genome-download-list">
                   <li>
-                    <a href={getServerPath(`/download/archive/genome?ids=${ids}`)}>
-                      <strong>FASTA files</strong>
-                    </a>
+                    <DownloadLink link={getServerPath('/download/genome/fasta')} ids={ids}>
+                      FASTA files
+                    </DownloadLink>
                   </li>
                   <li>
-                    <a href={getServerPath(`/download/analysis/speciator?ids=${ids}`)}>
+                    <DownloadLink link={getServerPath('/download/analysis/speciator')} ids={ids}>
                       <strong>Speciation</strong>
-                    </a>
+                    </DownloadLink>
                   </li>
                 </ul>
               </li> }

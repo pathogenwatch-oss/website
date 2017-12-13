@@ -7,12 +7,12 @@ import { getServerPath } from '../../utils/Api';
 
 export default ({ uuid, id, name }) => (
   <a
-    href={getServerPath(`/download/collection/${uuid}/annotations?ids=${id}`)}
-    download={`${name}.gff`}
+    href={getServerPath(`/download/collection/${uuid}/fastas?ids=${id}`)}
+    download={`${name}.fa`}
     target="_blank" rel="noopener"
-    title="Download Annotations"
+    title="Download Genome"
     className="wgsa-download-button mdl-button mdl-button--icon"
   >
-    <DownloadIcon color={CGPS.COLOURS.GREEN} label=".gff" />
+    <DownloadIcon color={CGPS.COLOURS.PURPLE} label=".fa" />
   </a>
 );

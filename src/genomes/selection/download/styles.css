@@ -10,3 +10,15 @@
   display: flex;
   justify-content: space-between;
 }
+
+.wgsa-genome-download-list button {
+  padding: 0;
+  font-size: inherit;
+  color: #673c90;
+  font-weight: 700;
+}
+
+.wgsa-genome-download-list button:hover,
+.wgsa-genome-download-list button:focus {  
+  text-decoration: underline;
+}
