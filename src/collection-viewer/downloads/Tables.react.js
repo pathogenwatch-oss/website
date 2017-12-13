@@ -44,7 +44,7 @@ const DownloadButton = React.createClass({
       return (
         <a
           ref={el => { this.link = el; }}
-          href={`${this.state.link}?filename=${filename}`}
+          href={this.state.link}
           target="_blank" rel="noopener"
           download={filename}
           title={title}
