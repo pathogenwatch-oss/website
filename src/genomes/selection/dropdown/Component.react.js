@@ -12,11 +12,11 @@ import { getSelectionDropdownView, getSelectionSize } from '../selectors';
 const EmptySelection = (
   <div>
     <h3>No Genomes Selected.</h3>
-    <p>Please select genomes by one of the following methods:</p>
+    <p>You can genomes using the following methods:</p>
     <ul className="bulleted">
-      <li>Checkboxes in the List view</li>
-      <li>Lasso on the Map view</li>
-      <li>Checkbox on the Detail view</li>
+      <li><strong>Checkboxes</strong> in the List view</li>
+      <li><strong>Lasso</strong> in the Map view</li>
+      <li><strong>Checkbox</strong> in the Detail view</li>
     </ul>
   </div>
 );
