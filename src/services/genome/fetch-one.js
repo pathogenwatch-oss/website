@@ -9,6 +9,7 @@ const taskNames = [
 const projection = {
   _user: 1,
   _session: 1,
+  binned: 1,
   country: 1,
   createdAt: 1,
   date: 1,

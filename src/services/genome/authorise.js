@@ -9,7 +9,7 @@ module.exports = ({ user, sessionID, id, projection = {} }) => {
   if (user) $or.push({ _user: user._id });
   else if (sessionID) $or.push({ _session: sessionID });
 
-  return Genome.findOne({ _id: id }, projection)
+  return Genome.findOne({ _id: id, $or }, projection)
     .then(record => {
       if (!record) throw new NotFoundError('Not found or access denied');
       return record.toObject({ user });

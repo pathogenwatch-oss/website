@@ -80,14 +80,13 @@ router.put('/genome', (req, res, next) => {
   .catch(next);
 });
 
-router.post('/genome/:id/binned', (req, res, next) => {
-  const { id } = req.params;
+router.post('/genome/bin', (req, res, next) => {
   const { user, body } = req;
-  const { status } = body;
+  const { status, ids } = body;
 
-  LOGGER.info('Received request to bin genome:', status);
+  LOGGER.info('Received request to bin genomes.');
 
-  services.request('genome', 'bin', { id, user, status })
+  services.request('genome', 'bin', { ids, user, status })
     .then(response => res.json(response))
     .catch(next);
 });
