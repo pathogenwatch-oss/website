@@ -6,6 +6,9 @@ import { getSelectedGenomeIds, getSelectedGenomeList } from '../selectors';
 import { unselectGenomes, clearSelection } from '../actions';
 import { showGenomeDrawer, setBinnedFlag } from '../../../genomes/detail/actions';
 
+import config from '../../../app/config';
+const { user } = config;
+
 const Selection = ({ selectedGenomes, showGenome, removeGenome, clearAll, sendToBin }) => (
   <div className="wgsa-genome-selection">
     <div className="wgsa-genome-selection__list">
@@ -33,13 +36,14 @@ const Selection = ({ selectedGenomes, showGenome, removeGenome, clearAll, sendTo
       </ul>
     </div>
     <footer>
-      <button
-        title="Send Selection to Bin"
-        className="mdl-button wgsa-clear-selection"
-        onClick={() => sendToBin(selectedGenomes)}
-      >
-        Send to Bin
-      </button>
+      { user &&
+        <button
+          title="Send Selection to Bin"
+          className="mdl-button wgsa-clear-selection"
+          onClick={() => sendToBin(selectedGenomes)}
+        >
+          Send to Bin
+        </button> }
       <button
         title="Clear Selection"
         className="mdl-button wgsa-clear-selection"
