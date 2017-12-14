@@ -1,18 +1,76 @@
-.wgsa-genome-selection .mdl-chip__text {
-  border: none;
-  outline: none;
-  background: none;
+.wgsa-genome-selection {
+  display: flex;
+  flex-direction: column;
+}
+
+.wgsa-genome-selection > header {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.wgsa-genome-selection > footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.wgsa-genome-selection > header > button {
+  white-space: nowrap;
 }
 
 .wgsa-genome-selection h3 {
-  margin: 0 0 16px;
+  margin: 0;
   font-size: 16px;
   line-height: 1.2;
+  white-space: nowrap;
 }
 
-.wgsa-clear-selection {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  padding: 0 8px;
+.wgsa-genome-selection__list {
+  overflow-x: hidden;
+  overflow-y: auto;
+  flex-grow: 1;
+  width: 320px;
+  margin: 8px -16px;
+  max-height: calc(100vh - 240px);
+}
+
+.wgsa-genome-selection__list > ul {
+  margin: 0;
+  min-height: 100%;
+  min-width: 320px;
+  width: 320px;
+  box-sizing: border-box;
+}
+
+.wgsa-list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: rgba(0, 0, 0, 0.87);
+  padding: 0 16px;
+  height: 32px;
+}
+
+.wgsa-list-item:hover,
+.wgsa-list-item:focus {
+  background: rgba(0, 0, 0, 0.07);
+  cursor: pointer;
+}
+
+.wgsa-list-item > span {
+  max-width: calc(100% - 24px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.wgsa-list-item .mdl-button--icon {
+  color: rgba(0, 0, 0, 0.54);
+  width: 24px;
+  height: 24px;
+  min-width: 0;
+}
+
+.wgsa-list-item .material-icons {
+  font-size: 20px;
 }

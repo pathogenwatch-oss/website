@@ -8,7 +8,7 @@
 }
 
 .wgsa-blink {
-  animation: fade-in 0.5s alternate ease-in-out infinite;
+  animation: fade-in 0.75s alternate ease-out infinite;
 }
 
 .wgsa-tree {
