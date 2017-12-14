@@ -4,17 +4,12 @@ import Papa from 'papaparse';
 
 function convertFieldNamesToLowerCase(row) {
   const fieldNames = Object.keys(row);
-  let fieldNamesCounter = 0;
   const cleanRow = {};
-
-  while (fieldNamesCounter < fieldNames.length) {
-    const fieldName = fieldNames[fieldNamesCounter];
+  for (const fieldName of fieldNames) {
     if (fieldName.length) {
-      cleanRow[fieldName.toLowerCase().trim()] = row[fieldName];
+      cleanRow[fieldName.toLowerCase().trim()] = row[fieldName].trim();
     }
-    fieldNamesCounter = fieldNamesCounter + 1;
   }
-
   return cleanRow;
 }
 
