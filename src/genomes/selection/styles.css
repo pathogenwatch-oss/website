@@ -37,53 +37,10 @@
   cursor: pointer;
 }
 
-
-.wgsa-selection-tabs {
-  padding-right: 0;
-  display: flex;
+.wgsa-selection .mdl-chip__text {
+  font-weight: 400;
 }
 
-.wgsa-selection-tabs button {
-  border: none;
-  outline: none;
-  line-height: 20px;
-  transition: .28s cubic-bezier(.4,0,.2,1);
-  transition-property: filter;
-}
-
-.wgsa-selection-tabs button[disabled] {
-  cursor: not-allowed;
-}
-
-.wgsa-selection-tabs .mdl-chip__contact {
-  margin-right: 0;
-  padding: 0;
-}
-
-.wgsa-selection-tabs .mdl-chip__text {
-  padding-left: 24px;
-  padding-right: 16px;
-  border-radius: 0 16px 16px 0;
-  background: #673c90;
-  color: #fff;
-  font-weight: 500;
-  margin-left: -16px;
-}
-
-.wgsa-selection-tabs .mdl-chip__text:nth-of-type(odd) {
-  background: #3c7383;
-}
-
-.wgsa-selection-tabs > :first-child {
-  z-index: 2;
-}
-
-.wgsa-selection-tabs > :nth-child(2) {
-  z-index: 1;
-}
-
-.wgsa-selection-tabs-selection > :not(:first-child),
-.wgsa-selection-tabs-collection > :not(:nth-child(2)),
-.wgsa-selection-tabs-download > :not(:last-child) {
-  filter: grayscale(1) brightness(1.25);
+.wgsa-selection.mdl-chip--active .mdl-chip__text {
+  font-weight: inherit;
 }

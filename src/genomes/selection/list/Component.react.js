@@ -8,16 +8,6 @@ import { showGenomeDrawer, setBinnedFlag } from '../../../genomes/detail/actions
 
 const Selection = ({ selectedGenomes, showGenome, removeGenome, clearAll, sendToBin }) => (
   <div className="wgsa-genome-selection">
-    <header>
-      <h3>Selected Genomes</h3>
-      <button
-        title="Clear Selection"
-        className="mdl-button wgsa-clear-selection"
-        onClick={clearAll}
-      >
-        Clear
-      </button>
-    </header>
     <div className="wgsa-genome-selection__list">
       <ul>
         {selectedGenomes.map(genome =>
@@ -29,7 +19,7 @@ const Selection = ({ selectedGenomes, showGenome, removeGenome, clearAll, sendTo
           >
             <span>{genome.name}</span>
             <button
-              title="Remove Genome from Selection"
+              title="Remove from Selection"
               onClick={e => {
                 e.stopPropagation();
                 removeGenome(genome);
@@ -49,6 +39,13 @@ const Selection = ({ selectedGenomes, showGenome, removeGenome, clearAll, sendTo
         onClick={() => sendToBin(selectedGenomes)}
       >
         Send to Bin
+      </button>
+      <button
+        title="Clear Selection"
+        className="mdl-button wgsa-clear-selection"
+        onClick={clearAll}
+      >
+        Clear
       </button>
     </footer>
   </div>

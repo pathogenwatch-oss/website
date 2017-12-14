@@ -36,7 +36,7 @@ const Section = ({ organismId, organismName, total, tasks, ids }) => (
           FASTA files
         </DownloadLink>
       </li>
-      { tasks.map(task =>
+      {tasks.map(task =>
         <li key={task.name}>
           <DownloadLink link={getServerPath(`/download/analysis/${task.name}`)} ids={task.ids}>
             {task.label}
@@ -44,7 +44,7 @@ const Section = ({ organismId, organismName, total, tasks, ids }) => (
           </DownloadLink>
           <span>{task.ids.length}/{total}</span>
         </li>
-      ) }
+      )}
     </ul>
   </li>
 );

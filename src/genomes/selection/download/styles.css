@@ -1,3 +1,12 @@
+.wgsa-genome-downloads {
+  overflow-y: auto;
+  margin: 0 -16px;
+}
+
+.wgsa-genome-downloads > ul > li {
+  padding: 0 16px;
+}
+
 .wgsa-genome-selection-dropdown ul:first-child {
   margin-top: 0;
 }
@@ -19,6 +28,10 @@
 }
 
 .wgsa-genome-download-list button:hover,
-.wgsa-genome-download-list button:focus {  
+.wgsa-genome-download-list button:focus {
   text-decoration: underline;
+}
+
+.wgsa-genome-download-list small {
+  font-weight: 400;
 }
