@@ -94,10 +94,11 @@ function attachInputStream(container, spec, genomes, uncachedFileIds) {
     },
     {
       fileId: 1,
-      'analysis.core.profile.familyId': 1,
+      'analysis.core.profile.id': 1,
       'analysis.core.profile.filter': 1,
       'analysis.core.profile.alleles.id': 1,
-      'analysis.core.profile.alleles.rR': 1,
+      'analysis.core.profile.alleles.rstart': 1,
+      'analysis.core.profile.alleles.rstop': 1,
       'analysis.core.profile.alleles.mutations': 1,
     },
     {
