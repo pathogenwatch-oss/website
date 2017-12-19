@@ -90,12 +90,12 @@ function attachInputStream(container, spec, genomes, uncachedFileIds) {
     {
       _id: { $in: genomes.map(_ => _._id) },
       fileId: { $in: uncachedFileIds },
+      'analysis.core.profile.filter': false,
       'analysis.core.profile.alleles.filter': false,
     },
     {
       fileId: 1,
       'analysis.core.profile.id': 1,
-      'analysis.core.profile.filter': 1,
       'analysis.core.profile.alleles.id': 1,
       'analysis.core.profile.alleles.rstart': 1,
       'analysis.core.profile.alleles.rstop': 1,
