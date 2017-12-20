@@ -674,10 +674,6 @@
         "version": "t17"
       },
       {
-        "task": "cgmlst",
-        "version": "t1"
-      },
-      {
         "task": "genotyphi",
         "version": "t1"
       },
