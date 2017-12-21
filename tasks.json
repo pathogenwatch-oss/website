@@ -115,7 +115,7 @@
     "485": [
       {
         "task": "core",
-        "version": "t17"
+        "version": "t18"
       },
       {
         "task": "paarsnp",
@@ -283,7 +283,7 @@
     "1280": [
       {
         "task": "core",
-        "version": "t17"
+        "version": "t18"
       },
       {
         "task": "cgmlst",
@@ -629,7 +629,7 @@
     "64320": [
       {
         "task": "core",
-        "version": "t17"
+        "version": "t18"
       }
     ],
     "69966": [
@@ -671,7 +671,7 @@
     "90370": [
       {
         "task": "core",
-        "version": "t17"
+        "version": "t18"
       },
       {
         "task": "genotyphi",
@@ -771,11 +771,11 @@
     "485": [
       {
         "task": "tree",
-        "version": "t17",
+        "version": "t18",
         "requires": [
           {
             "task": "core",
-            "version": "t17"
+            "version": "t18"
           }
         ],
         "timeout": 900,
@@ -785,11 +785,11 @@
     "1280": [
       {
         "task": "tree",
-        "version": "t17",
+        "version": "t18",
         "requires": [
           {
             "task": "core",
-            "version": "t17"
+            "version": "t18"
           }
         ],
         "timeout": 900,
@@ -797,11 +797,11 @@
       },
       {
         "task": "subtree",
-        "version": "t17",
+        "version": "t18",
         "requires": [
           {
             "task": "core",
-            "version": "t17"
+            "version": "t18"
           }
         ],
         "timeout": 900,
@@ -811,11 +811,11 @@
     "64320": [
       {
         "task": "tree",
-        "version": "t17",
+        "version": "t18",
         "requires": [
           {
             "task": "core",
-            "version": "t17"
+            "version": "t18"
           }
         ],
         "timeout": 900,
@@ -825,11 +825,11 @@
     "90370": [
       {
         "task": "tree",
-        "version": "t17",
+        "version": "t18",
         "requires": [
           {
             "task": "core",
-            "version": "t17"
+            "version": "t18"
           }
         ],
         "timeout": 900,
