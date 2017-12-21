@@ -424,6 +424,10 @@
     ],
     "1639": [
       {
+        "task": "core",
+        "version": "t18"
+      },
+      {
         "task": "mlst",
         "version": "t1"
       }
