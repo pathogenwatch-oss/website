@@ -32,11 +32,11 @@
     ],
     "197": [
       {
-        "task": "mlst",
+        "task": "cgmlst",
         "version": "t1"
       },
       {
-        "task": "cgmlst",
+        "task": "mlst",
         "version": "t1"
       }
     ],
@@ -114,20 +114,20 @@
     ],
     "485": [
       {
-        "task": "core",
-        "version": "t18"
+        "task": "cgmlst",
+        "version": "t1"
       },
       {
-        "task": "paarsnp",
-        "version": "t2"
+        "task": "core",
+        "version": "t18"
       },
       {
         "task": "ngmast",
         "version": "t1"
       },
       {
-        "task": "cgmlst",
-        "version": "t1"
+        "task": "paarsnp",
+        "version": "t2"
       }
     ],
     "487": [
@@ -282,12 +282,12 @@
     ],
     "1280": [
       {
-        "task": "core",
-        "version": "t18"
-      },
-      {
         "task": "cgmlst",
         "version": "t1"
+      },
+      {
+        "task": "core",
+        "version": "t18"
       },
       {
         "task": "mlst",
