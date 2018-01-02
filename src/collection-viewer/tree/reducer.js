@@ -60,26 +60,12 @@ function getInitialState() {
 function entities(state = {}, { type, payload }) {
   switch (type) {
     case FETCH_COLLECTION.SUCCESS: {
-      const { genomes, organism, subtrees, tree = {} } = payload.result;
+      const { genomes, organism, subtrees, tree } = payload.result;
 
       const initialState = getInitialState();
 
-      return {
+      const nextState = {
         ...state,
-        [COLLECTION]: {
-          newick: null,
-          status: 'PENDING',
-          ...tree,
-          name: COLLECTION,
-          leafIds: genomes.map(_ => _.uuid),
-          ...initialState,
-        },
-        [POPULATION]: {
-          name: POPULATION,
-          newick: organism.tree,
-          leafIds: organism.references.map(_ => _.uuid),
-          ...initialState,
-        },
         ...subtrees.reduce((memo, subtree) => {
           memo[subtree.name] = {
             status: 'PENDING',
@@ -89,6 +75,28 @@ function entities(state = {}, { type, payload }) {
           return memo;
         }, {}),
       };
+
+      if (tree) {
+        nextState[COLLECTION] = {
+          newick: null,
+          status: 'PENDING',
+          ...tree,
+          name: COLLECTION,
+          leafIds: genomes.map(_ => _.uuid),
+          ...initialState,
+        };
+      }
+
+      if (organism.tree) {
+        nextState[POPULATION] = {
+          name: POPULATION,
+          newick: organism.tree,
+          leafIds: organism.references.map(_ => _.uuid),
+          ...initialState,
+        };
+      }
+
+      return nextState;
     }
     case UPDATE_COLLECTION_PROGRESS: {
       if (payload.task === 'tree') {

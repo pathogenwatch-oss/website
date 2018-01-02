@@ -37,10 +37,10 @@ const StatusSwitcher = React.createClass({
   },
 
   render() {
-    if (this.props.status === 'PENDING') {
-      return <Progress />;
+    if (this.props.status === 'READY') {
+      return <Tree />;
     }
-    return <Tree />;
+    return <Progress />;
   },
 
 });

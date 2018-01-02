@@ -71,7 +71,7 @@ export const areTreesComplete = createSelector(
   getTrees,
   trees => {
     for (const key of Object.keys(trees)) {
-      if (trees[key].status === 'PENDING') {
+      if (trees[key].status !== 'READY') {
         return false;
       }
     }
