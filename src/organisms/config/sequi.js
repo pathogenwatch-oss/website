@@ -1,6 +1,6 @@
 import React from 'react';
 
-const name = 'Streptococcus equi';
+const name = 'Streptococcus equi subsp. equi';
 const formattedName = (<em>{name}</em>);
 const shortName = 'S. equi';
 const formattedShortName = (<em>{shortName}</em>);
