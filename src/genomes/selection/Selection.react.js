@@ -21,11 +21,11 @@ const Summary = React.createClass({
     }
   },
 
-  animating: false,
-
   onKeyUp(e) {
     if (e.key === 'Escape') this.props.toggle();
   },
+
+  animating: false,
 
   render() {
     const { size, toggle, view } = this.props;

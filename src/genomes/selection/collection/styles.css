@@ -1,0 +1,13 @@
+.wgsa-genome-collection {
+  height: 100%;
+}
+
+.wgsa-genome-collection > header {
+  padding-bottom: 8px;  
+}
+
+.wgsa-genome-collection > footer {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+}

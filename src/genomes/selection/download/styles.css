@@ -1,9 +1,24 @@
 .wgsa-genome-downloads {
-  overflow-y: auto;
-  margin: 0 -16px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
-.wgsa-genome-downloads > ul > li {
+.wgsa-genome-downloads > header {
+  padding-bottom: 8px;  
+}
+
+.wgsa-genome-downloads > footer {
+  padding-top: 8px;
+}
+
+.wgsa-genome-downloads__content {
+  overflow-y: auto;
+  margin: 0 -16px;
+  flex-grow: 1;
+}
+
+.wgsa-genome-downloads__content > ul > li {
   padding: 0 16px;
 }
 

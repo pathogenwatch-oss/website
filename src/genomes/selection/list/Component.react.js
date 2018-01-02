@@ -3,14 +3,18 @@ import { connect } from 'react-redux';
 
 import { getSelectedGenomeIds, getSelectedGenomeList } from '../selectors';
 
-import { unselectGenomes, clearSelection } from '../actions';
+import { unselectGenomes, clearSelection, toggleDropdown } from '../actions';
+
 import { showGenomeDrawer, setBinnedFlag } from '../../../genomes/detail/actions';
 
 import config from '../../../app/config';
 const { user } = config;
 
-const Selection = ({ selectedGenomes, showGenome, removeGenome, clearAll, sendToBin }) => (
+const Selection = ({ selectedGenomes, showGenome, removeGenome, clearAll, sendToBin, toggle }) => (
   <div className="wgsa-genome-selection">
+    <header>
+      Selection
+    </header>
     <div className="wgsa-genome-selection__list">
       <ul>
         {selectedGenomes.map(genome =>
@@ -36,20 +40,36 @@ const Selection = ({ selectedGenomes, showGenome, removeGenome, clearAll, sendTo
       </ul>
     </div>
     <footer>
-      { user &&
+      <div>
         <button
-          title="Send Selection to Bin"
-          className="mdl-button wgsa-clear-selection"
-          onClick={() => sendToBin(selectedGenomes)}
+          title="Clear Selection"
+          className="mdl-button mdl-button--icon wgsa-clear-selection"
+          onClick={clearAll}
+          title="Clear Selection"
         >
-          Send to Bin
-        </button> }
+          <i className="material-icons">remove_shopping_cart</i>
+        </button>
+        { user &&
+          <button
+            title="Send Selection to Bin"
+            className="mdl-button mdl-button--icon wgsa-clear-selection"
+            onClick={() => sendToBin(selectedGenomes)}
+            title="Send to Bin"
+          >
+            <i className="material-icons">delete_sweep</i>
+          </button> }
+      </div>
       <button
-        title="Clear Selection"
-        className="mdl-button wgsa-clear-selection"
-        onClick={clearAll}
+        className="mdl-button"
+        onClick={() => toggle('download')}
       >
-        Clear
+        Download
+      </button>
+      <button
+        className="mdl-button mdl-button--raised mdl-button--colored"
+        onClick={() => toggle('collection')}
+      >
+        Create Collection
       </button>
     </footer>
   </div>
@@ -69,6 +89,7 @@ function mapDispatchToProps(dispatch) {
     removeGenome: genome => dispatch(unselectGenomes([ genome ])),
     showGenome: genome => dispatch(showGenomeDrawer(genome.id, genome.name)),
     sendToBin: genomes => dispatch(setBinnedFlag(genomes, true)),
+    toggle: (view) => dispatch(toggleDropdown(view)),
   };
 }
 

@@ -10,7 +10,7 @@ import {
   getDownloadSummary,
 } from '../selectors';
 
-import { fetchDownloads } from '../actions';
+import { fetchDownloads, toggleDropdown } from '../actions';
 
 import { statuses } from '../../../app/constants';
 
@@ -81,25 +81,38 @@ const Download = React.createClass({
     if (status === statuses.SUCCESS) {
       return (
         <div className="wgsa-genome-downloads">
-          <ul>
-            { this.showAllOrganisms(summary, ids) &&
-              <li>
-                All Organisms
-                <ul className="wgsa-genome-download-list">
-                  <li>
-                    <DownloadLink link={getServerPath('/download/genome/fasta')} ids={ids}>
-                      FASTA files
-                    </DownloadLink>
-                  </li>
-                  <li>
-                    <DownloadLink link={getServerPath('/download/analysis/speciator')} ids={ids}>
-                      <strong>Speciation</strong>
-                    </DownloadLink>
-                  </li>
-                </ul>
-              </li> }
-            { summary.map(item => <Section key={item.organismId} {...item} />) }
-          </ul>
+          <header>
+            Download
+          </header>
+          <div className="wgsa-genome-downloads__content">
+            <ul>
+              { this.showAllOrganisms(summary, ids) &&
+                <li>
+                  All Organisms
+                  <ul className="wgsa-genome-download-list">
+                    <li>
+                      <DownloadLink link={getServerPath('/download/genome/fasta')} ids={ids}>
+                        FASTA files
+                      </DownloadLink>
+                    </li>
+                    <li>
+                      <DownloadLink link={getServerPath('/download/analysis/speciator')} ids={ids}>
+                        <strong>Speciation</strong>
+                      </DownloadLink>
+                    </li>
+                  </ul>
+                </li> }
+              { summary.map(item => <Section key={item.organismId} {...item} />) }
+            </ul>
+          </div>
+          <footer>
+            <button
+              className="mdl-button"
+              onClick={() => this.props.toggle('selection')}
+            >
+              Go back
+            </button>
+          </footer>
         </div>
       );
     }
@@ -119,6 +132,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     fetch: () => dispatch(fetchDownloads()),
+    toggle: (view) => dispatch(toggleDropdown(view)),
   };
 }
 

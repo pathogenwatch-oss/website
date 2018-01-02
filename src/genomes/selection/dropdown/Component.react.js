@@ -2,10 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import Selection from '../list';
-import CreateCollection from '../../create-collection-form';
+import Collection from '../collection';
 import Download from '../download';
 import Fade from '../../../components/fade';
-import SelectionTabs from './SelectionTabs.react';
 
 import { getSelectionDropdownView, getSelectionSize } from '../selectors';
 
@@ -26,9 +25,8 @@ const Dropdown = ({ view, hasSelection }) => (
     { view ?
       <div className="wgsa-genome-selection-dropdown mdl-shadow--2dp">
         { !hasSelection && EmptySelection }
-        { hasSelection && <SelectionTabs /> }
         { hasSelection && view === 'selection' && <Selection />}
-        { hasSelection && view === 'collection' && <CreateCollection />}
+        { hasSelection && view === 'collection' && <Collection />}
         { hasSelection && view === 'download' && <Download />}
       </div> :
       null }
