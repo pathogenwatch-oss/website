@@ -845,6 +845,20 @@
         "timeout": 900,
         "workers": 16
       }
+    ],
+    "148942": [
+      {
+        "task": "tree",
+        "version": "t18",
+        "requires": [
+          {
+            "task": "core",
+            "version": "t18"
+          }
+        ],
+        "timeout": 900,
+        "workers": 16
+      }
     ]
   }
 }
