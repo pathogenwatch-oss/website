@@ -6,7 +6,11 @@ import { isFilterOpen } from './selectors';
 
 const Header = ({ isOpen, onClick }) => (
   <div className="wgsa-filter-header">
-    <button className="mdl-button mdl-button--icon" onClick={onClick}>
+    <button
+      className="mdl-button mdl-button--icon"
+      onClick={onClick}
+      title={isOpen ? 'Hide Filter' : 'Show Filter'}
+    >
       <i className="material-icons">tune</i>
     </button>
   </div>
