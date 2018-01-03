@@ -44,6 +44,14 @@ router.get('/collection/summary', (req, res, next) => {
   .catch(next);
 });
 
+router.get('/collection/position/:uploadedAt', (req, res, next) => {
+  LOGGER.info('Received request to get tree position');
+  const { uploadedAt } = req.params;
+  services.request('tasks', 'queue-position', { uploadedAt, type: 'collection' })
+    .then(result => res.json(result))
+    .catch(next);
+});
+
 router.post('/collection/:id/binned', (req, res, next) => {
   const { id } = req.params;
   const { user, body } = req;
