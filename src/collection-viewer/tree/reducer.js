@@ -90,6 +90,7 @@ function entities(state = {}, { type, payload }) {
       if (organism.tree) {
         nextState[POPULATION] = {
           name: POPULATION,
+          status: 'READY',
           newick: organism.tree,
           leafIds: organism.references.map(_ => _.uuid),
           ...initialState,
@@ -98,6 +99,14 @@ function entities(state = {}, { type, payload }) {
 
       return nextState;
     }
+    case ACTIONS.FETCH_TREE_POSITION.SUCCESS:
+      return {
+        ...state,
+        [payload.stateKey]: {
+          ...state[payload.stateKey],
+          position: payload.result.position,
+        },
+      };
     case UPDATE_COLLECTION_PROGRESS: {
       if (payload.task === 'tree') {
         const tree = state[COLLECTION];

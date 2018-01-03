@@ -1,21 +1,25 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-// import Spinner from '../../components/Spinner.react';
+import Poll from '../../components/Poller.react';
 import CircularProgress from '../../components/CircularProgress.react';
 
 import { getVisibleTree } from './selectors';
+import { getCollection } from '../selectors';
+
+import { fetchTreePosition } from './actions';
 
 const Progress = React.createClass({
 
   render() {
-    const { status, progress } = this.props;
+    const { status, progress, position } = this.props;
 
     if (status === 'PENDING') {
       return (
         <div className="wgsa-loading-overlay wgsa-tree-progress">
           <p className="wgsa-blink">Tree pending</p>
-          <p>Queue position: 1</p>
+          {!!position && <p>Queue position: {position}</p>}
+          <Poll interval={10} fn={this.props.fetchPosition} />
         </div>
       );
     }
@@ -39,8 +43,19 @@ const Progress = React.createClass({
 });
 
 function mapStateToProps(state) {
-  const { status, progress } = getVisibleTree(state);
-  return { status, progress };
+  const { status, progress, position } = getVisibleTree(state);
+  return {
+    status,
+    progress,
+    position,
+    createdAt: getCollection(state).createdAt,
+  };
 }
 
-export default connect(mapStateToProps)(Progress);
+function mapDispatchToProps(dispatch, { date, stateKey }) {
+  return {
+    fetchPosition: () => dispatch(fetchTreePosition(stateKey, date)),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Progress);

@@ -40,16 +40,21 @@ const StatusSwitcher = React.createClass({
     if (this.props.status === 'READY') {
       return <Tree />;
     }
-    return <Progress />;
+    const { createdAt, stateKey } = this.props;
+    return <Progress date={createdAt} stateKey={stateKey} />;
   },
 
 });
 
 function mapStateToProps(state) {
+  const collection = getCollection(state);
+  const tree = getVisibleTree(state);
   return {
+    createdAt: collection.createdAt,
+    status: tree.status,
+    stateKey: tree.name,
     treesComplete: areTreesComplete(state),
-    uuid: getCollection(state).uuid,
-    status: getVisibleTree(state).status,
+    uuid: collection.uuid,
   };
 }
 
