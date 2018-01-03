@@ -39,16 +39,16 @@ function getCache(genomes, type) {
   });
 }
 
-function generateMatrix({ genomes, cache }, stream) {
-  {
-    const line = [ 'Name' ];
-    for (const genomeA of genomes) {
-      line.push(genomeA.name.replace(/,/g, '_'));
-    }
-    stream.write(line.join(','));
-    stream.write('\n');
+function writeMatrixHeader(genomes, stream) {
+  const line = [ 'Name' ];
+  for (const genomeA of genomes) {
+    line.push(genomeA.name.replace(/,/g, '_'));
   }
+  stream.write(line.join(','));
+  stream.write('\n');
+}
 
+function generateMatrix({ genomes, cache }, stream) {
   for (const genomeA of genomes) {
     const line = [ genomeA.name.replace(/,/g, '_') ];
     for (const genomeB of genomes) {
@@ -104,6 +104,7 @@ module.exports = (req, res, next) => {
   request('collection', 'authorise', { user, uuid, projection: { genomes: 1 } })
     .then(async (collection) => {
       const genomes = await getCollectionGenomes(collection, genomeIds);
+      writeMatrixHeader(genomes, res);
       const cache = await getCache(genomes, type);
       return { genomes, cache };
     })

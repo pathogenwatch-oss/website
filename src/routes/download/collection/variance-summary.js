@@ -44,8 +44,7 @@ function getCache(genomes) {
   });
 }
 
-async function generateSubtreeData(collectionGenomes, subtree) {
-  const genomeIds = Collection.getSubtreeIds(subtree);
+async function generateTreeData(label, totalCollection, totalPopulation, genomeIds) {
   const genomes = await getGenomes(genomeIds);
   const cache = await getCache(genomes);
   const scores = [];
@@ -65,9 +64,9 @@ async function generateSubtreeData(collectionGenomes, subtree) {
   }
   const stats = calculateStats(scores.sort());
   const result = {
-    label: subtree.name,
-    totalCollection: subtree.size - subtree.populationSize,
-    totalPopulation: subtree.populationSize,
+    label,
+    totalCollection,
+    total: totalCollection + totalPopulation,
     minScore: stats.min,
     maxScore: stats.max,
     meanScore: stats.mean,
@@ -79,12 +78,7 @@ async function generateSubtreeData(collectionGenomes, subtree) {
   return result;
 }
 
-function generateData({ genomes, subtrees }) {
-  const collectionGenomes = new Set(genomes.map(id => id.toString()));
-  return mapLimit(subtrees, 1, subtree => generateSubtreeData(collectionGenomes, subtree));
-}
-
-function generateMatrix(results, stream) {
+function writeMatrixHeader(stream) {
   const header = [
     '',
     'Number of user assemblies',
@@ -105,33 +99,53 @@ function generateMatrix(results, stream) {
   ];
   stream.write(header.join(','));
   stream.write('\n');
+}
 
-  for (const result of results) {
-    const line = [
-      result.label.replace(/,/g, ''),
-      result.totalCollection,
-      result.totalPopulation,
-      '',
-      '',
-      result.minScore,
-      result.maxScore,
-      result.meanScore,
-      result.stdDev,
-      result.medianScore,
-      '',
-      '',
-      '',
-      '',
-      '',
-      '',
-    ];
-    stream.write(line.join(','));
-    stream.write('\n');
-  }
+function writeMatrixLine(result, stream) {
+  const line = [
+    result.label.replace(/,/g, ''),
+    result.totalCollection,
+    result.total,
+    '',
+    '',
+    result.minScore,
+    result.maxScore,
+    result.meanScore,
+    result.stdDevScore,
+    result.medianScore,
+    result.lowerQuartileScore,
+    result.upperQuartileScore,
+    '',
+    '',
+    '',
+    '',
+  ];
+  stream.write(line.join(','));
+  stream.write('\n');
+}
 
+function writeMatrixFooter(stream) {
   stream.write('\n');
   stream.write('Notes:1. WGSA Gene Representative Sites includes sites that vary when compared to the WGSA family reference alleles');
   stream.write('\n');
+}
+
+async function generateData({ genomes, subtrees }, stream) {
+  // const collectionGenomes = genomes.map(id => id.toString());
+  // const collectionData = await generateTreeData('collection', collectionGenomes.length, 0, collectionGenomes);
+  // writeMatrixLine(collectionData, stream);
+
+  for (const tree of subtrees) {
+    const genomeIds = Collection.getSubtreeIds(tree);
+    const data = await generateTreeData(tree.name, tree.size - tree.populationSize, tree.populationSize, genomeIds);
+    writeMatrixLine(data, stream);
+  }
+}
+
+async function generateMatrix(collection, stream) {
+  writeMatrixHeader(stream);
+  await generateData(collection, stream);
+  writeMatrixFooter(stream);
   stream.end();
 }
 
@@ -151,7 +165,6 @@ module.exports = (req, res, next) => {
   });
 
   request('collection', 'authorise', { user, uuid, projection: { genomes: 1, subtrees: 1 } })
-    .then(generateData)
     .then(results => generateMatrix(results, res))
     .catch(next);
 };

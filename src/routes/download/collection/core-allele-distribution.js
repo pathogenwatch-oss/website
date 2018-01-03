@@ -13,7 +13,7 @@ function getCollectionGenomes({ genomes }, genomeIds) {
   return Genome
     .find(query, {
       name: 1,
-      'analysis.core.profile.familyId': 1,
+      'analysis.core.profile.id': 1,
       'analysis.core.profile.alleles.id': 1,
     }, {
       sort: { name: 1 },
@@ -58,10 +58,10 @@ function generateData(genomes, stream) {
   const labels = [];
   genomes.on('data', genome => {
     labels.push({ _id: genome._id.toString(), name: genome.name });
-    for (const { familyId, alleles } of genome.analysis.core.profile) {
-      const allelesByGenomeId = genomesByFamilyId[familyId] || {};
+    for (const { id, alleles } of genome.analysis.core.profile) {
+      const allelesByGenomeId = genomesByFamilyId[id] || {};
       allelesByGenomeId[genome._id] = alleles.map(_ => _.id);
-      genomesByFamilyId[familyId] = allelesByGenomeId;
+      genomesByFamilyId[id] = allelesByGenomeId;
     }
   });
 
