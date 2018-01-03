@@ -9,9 +9,9 @@ import Fade from '../../../components/fade';
 import { getSelectionDropdownView, getSelectionSize } from '../selectors';
 
 const EmptySelection = (
-  <div>
+  <div style={{ padding: '0 16px' }}>
     <h3>No Genomes Selected.</h3>
-    <p>You can genomes using the following methods:</p>
+    <p>You can select genomes with the following methods:</p>
     <ul className="bulleted">
       <li><strong>Checkboxes</strong> in the List view</li>
       <li><strong>Lasso</strong> in the Map view</li>

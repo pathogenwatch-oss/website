@@ -14,6 +14,12 @@ const Selection = ({ selectedGenomes, showGenome, removeGenome, clearAll, sendTo
   <div className="wgsa-genome-selection">
     <header>
       Selection
+      <button
+        className="wgsa-button--text wgsa-clear-selection"
+        onClick={clearAll}
+      >
+        Clear All
+      </button>
     </header>
     <div className="wgsa-genome-selection__list">
       <ul>
@@ -41,18 +47,10 @@ const Selection = ({ selectedGenomes, showGenome, removeGenome, clearAll, sendTo
     </div>
     <footer>
       <div>
-        <button
-          title="Clear Selection"
-          className="mdl-button mdl-button--icon wgsa-clear-selection"
-          onClick={clearAll}
-          title="Clear Selection"
-        >
-          <i className="material-icons">remove_shopping_cart</i>
-        </button>
         { user &&
           <button
             title="Send Selection to Bin"
-            className="mdl-button mdl-button--icon wgsa-clear-selection"
+            className="mdl-button mdl-button--icon"
             onClick={() => sendToBin(selectedGenomes)}
             title="Send to Bin"
           >

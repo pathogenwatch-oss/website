@@ -9,7 +9,7 @@
 }
 
 .wgsa-genome-selection > header {
-  padding-bottom: 8px;  
+  padding-bottom: 8px;
 }
 
 .wgsa-genome-selection > footer {
@@ -84,4 +84,15 @@
 
 .wgsa-list-item .material-icons {
   font-size: 20px;
+}
+
+.wgsa-clear-selection {
+  float: right;
+  color: inherit;
+}
+
+.wgsa-clear-selection:hover,
+.wgsa-clear-selection:focus,
+.wgsa-clear-selection:active {
+  text-decoration: underline;
 }
