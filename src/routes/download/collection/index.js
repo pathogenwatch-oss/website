@@ -34,4 +34,6 @@ router.post('/:uuid/core-allele-distribution', require('./core-allele-distributi
 
 router.get('/:uuid/variance-summary', require('./variance-summary'));
 
+router.post('/:uuid/speciator', require('./speciator'));
+
 module.exports = router;
