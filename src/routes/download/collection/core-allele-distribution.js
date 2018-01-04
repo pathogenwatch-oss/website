@@ -1,12 +1,17 @@
+const path = require('path');
+const fs = require('fs');
+const { promisify } = require('util');
+const readFile = promisify(fs.readFile);
+const transform = require('stream-transform');
 const Genome = require('models/genome');
 
 const { request } = require('services');
 
-function getCollectionGenomes({ genomes }, genomeIds) {
+function getCollectionGenomes(collection, genomeIds) {
   const query = {
     _id: { $in: genomeIds },
     $or: [
-      { _id: { $in: genomes } },
+      { _id: { $in: collection.genomes } },
       { public: true },
     ],
   };
@@ -22,47 +27,39 @@ function getCollectionGenomes({ genomes }, genomeIds) {
     .cursor();
 }
 
-function generateMatrix(genomesByFamilyId, genomes, stream) {
-  {
-    const line = [ 'Family ID', 'No. genomes', 'No. sequences', 'Avg sequences per genome' ];
-    for (const genome of genomes) {
-      line.push(genome.name.replace(/,/g, '_'));
-    }
-    stream.write(line.join(','));
-    stream.write('\n');
-  }
+function writeLines(columns, genomes, res) {
+  const totalGenomes = {};
+  const totalSequences = {};
+  const stream = transform(data => data.join(',') + '\n');
 
-  for (const familyId of Object.keys(genomesByFamilyId).sort()) {
-    const noGenomes = Object.keys(genomesByFamilyId[familyId]).length;
-    let noSequences = 0;
-    const line = [ familyId.replace(/,/g, '_'), noGenomes, 0, 0 ];
-    for (const genome of genomes) {
-      if (genomesByFamilyId[familyId][genome._id]) {
-        noSequences += genomesByFamilyId[familyId][genome._id].length;
-        line.push(genomesByFamilyId[familyId][genome._id].join(' '));
-      } else {
-        line.push('');
-      }
-    }
-    line[2] = noSequences;
-    line[3] = Math.round(noSequences / noGenomes);
-    stream.write(line.join(','));
-    stream.write('\n');
-  }
+  stream.pipe(res);
 
-  stream.end();
-}
+  const headers = [ '', ...columns ];
+  stream.write(headers);
 
-function generateData(genomes, stream) {
-  const genomesByFamilyId = {};
-  const labels = [];
   genomes.on('data', genome => {
-    labels.push({ _id: genome._id.toString(), name: genome.name });
+    const line = [];
+    line.push(genome.name);
+
+    const allelesByFamilyId = {};
     for (const { id, alleles } of genome.analysis.core.profile) {
-      const allelesByGenomeId = genomesByFamilyId[id] || {};
-      allelesByGenomeId[genome._id] = alleles.map(_ => _.id);
-      genomesByFamilyId[id] = allelesByGenomeId;
+      allelesByFamilyId[id] = alleles;
     }
+
+    for (const familyId of columns) {
+      const cell = [];
+      const alleles = allelesByFamilyId[familyId];
+      if (alleles) {
+        totalGenomes[familyId] = (totalGenomes[familyId] || 0) + 1;
+        totalSequences[familyId] = (totalSequences[familyId] || 0) + alleles.length;
+        for (const allele of alleles) {
+          cell.push(allele.id);
+        }
+        allelesByFamilyId[familyId] = undefined;
+      }
+      line.push(cell.join(' '));
+    }
+    stream.write(line);
   });
 
   genomes.on('error', err => {
@@ -70,15 +67,47 @@ function generateData(genomes, stream) {
   });
 
   genomes.on('end', () => {
-    generateMatrix(genomesByFamilyId, labels, stream);
+    let line = [];
+    line.push('No. genomes');
+    for (const familyId of columns) {
+      line.push(totalGenomes[familyId].toString() || '');
+    }
+    stream.write(line);
+
+    line = [];
+    line.push('No. sequences');
+    for (const familyId of columns) {
+      line.push(totalSequences[familyId].toString() || '');
+    }
+    stream.write(line);
+
+    line = [];
+    line.push('Avg. sequences per genome');
+    for (const familyId of columns) {
+      if (totalGenomes[familyId] > 0) {
+        const avg = Math.round((totalSequences[familyId] || 0) / totalGenomes[familyId]);
+        line.push(avg.toString());
+      }
+    }
+    stream.write(line);
+
+    stream.end();
   });
+}
+
+function getColumns(organismId) {
+  return readFile(path.join('core', `${organismId}.json`))
+    .then(file => {
+      const json = JSON.parse(file);
+      return Object.keys(json.referenceAlleles).sort();
+    });
 }
 
 module.exports = (req, res, next) => {
   const { user } = req;
   const { uuid } = req.params;
   const { ids } = req.body;
-  const { filename = 'core-allele-distribution' } = req.query;
+  const { filename = 'core-allele-distribution.csv' } = req.query;
 
   if (!uuid || typeof uuid !== 'string') {
     res.status(400).send('`uuid` parameter is required.');
@@ -92,12 +121,15 @@ module.exports = (req, res, next) => {
   const genomeIds = ids ? ids.split(',') : null;
 
   res.set({
-    'Content-Disposition': `attachment; filename="${filename}.csv"`,
+    'Content-Disposition': `attachment; filename="${filename}"`,
     'Content-type': 'text/csv',
   });
 
-  request('collection', 'authorise', { user, uuid, projection: { genomes: 1 } })
-    .then(collection => getCollectionGenomes(collection, genomeIds))
-    .then(genomes => generateData(genomes, res))
+  request('collection', 'authorise', { user, uuid, projection: { organismId: 1, genomes: 1 } })
+    .then(async collection => {
+      const columns = await getColumns(collection.organismId);
+      const genomes = getCollectionGenomes(collection, genomeIds);
+      writeLines(columns, genomes, res);
+    })
     .catch(next);
 };
