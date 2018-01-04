@@ -11,6 +11,7 @@ import { showCounts } from '../../utils/genome';
 
 import Tables from './Tables.react';
 import Trees from './Trees.react';
+import Analysis from './Analysis.react';
 
 const DownloadsMenu = ({ menuOpen, counts = {}, closeMenu }) => (
   <Overlay isVisible={menuOpen} hide={closeMenu}>
@@ -18,6 +19,7 @@ const DownloadsMenu = ({ menuOpen, counts = {}, closeMenu }) => (
       <h3 className="mdl-dialog__title">Downloads</h3>
       { Object.keys(counts).length ? showCounts(counts) : null }
       <ul className="wgsa-downloads-menu">
+        <Analysis />
         <Tables />
         <Trees />
       </ul>
