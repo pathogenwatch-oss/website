@@ -119,7 +119,7 @@
       },
       {
         "task": "core",
-        "version": "t18"
+        "version": "t19"
       },
       {
         "task": "ngmast",
@@ -287,7 +287,7 @@
       },
       {
         "task": "core",
-        "version": "t18"
+        "version": "t19"
       },
       {
         "task": "mlst",
@@ -351,6 +351,12 @@
       }
     ],
     "1329": [
+      {
+        "task": "mlst",
+        "version": "t1"
+      }
+    ],
+    "1336": [
       {
         "task": "mlst",
         "version": "t1"
@@ -425,7 +431,7 @@
     "1639": [
       {
         "task": "core",
-        "version": "t18"
+        "version": "t19"
       },
       {
         "task": "mlst",
@@ -633,7 +639,7 @@
     "64320": [
       {
         "task": "core",
-        "version": "t18"
+        "version": "t19"
       }
     ],
     "69966": [
@@ -675,7 +681,7 @@
     "90370": [
       {
         "task": "core",
-        "version": "t18"
+        "version": "t19"
       },
       {
         "task": "genotyphi",
@@ -713,7 +719,7 @@
     "148942": [
       {
         "task": "core",
-        "version": "t18"
+        "version": "t19"
       }
     ],
     "260714": [
@@ -781,11 +787,11 @@
     "485": [
       {
         "task": "tree",
-        "version": "t18",
+        "version": "t19",
         "requires": [
           {
             "task": "core",
-            "version": "t18"
+            "version": "t19"
           }
         ],
         "timeout": 900,
@@ -795,11 +801,11 @@
     "1280": [
       {
         "task": "tree",
-        "version": "t18",
+        "version": "t19",
         "requires": [
           {
             "task": "core",
-            "version": "t18"
+            "version": "t19"
           }
         ],
         "timeout": 900,
@@ -807,11 +813,11 @@
       },
       {
         "task": "subtree",
-        "version": "t18",
+        "version": "t19",
         "requires": [
           {
             "task": "core",
-            "version": "t18"
+            "version": "t19"
           }
         ],
         "timeout": 900,
@@ -821,11 +827,11 @@
     "64320": [
       {
         "task": "tree",
-        "version": "t18",
+        "version": "t19",
         "requires": [
           {
             "task": "core",
-            "version": "t18"
+            "version": "t19"
           }
         ],
         "timeout": 900,
@@ -835,11 +841,11 @@
     "90370": [
       {
         "task": "tree",
-        "version": "t18",
+        "version": "t19",
         "requires": [
           {
             "task": "core",
-            "version": "t18"
+            "version": "t19"
           }
         ],
         "timeout": 900,
@@ -849,11 +855,11 @@
     "148942": [
       {
         "task": "tree",
-        "version": "t18",
+        "version": "t19",
         "requires": [
           {
             "task": "core",
-            "version": "t18"
+            "version": "t19"
           }
         ],
         "timeout": 900,
