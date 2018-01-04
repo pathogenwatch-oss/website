@@ -1,5 +1,6 @@
 const Genome = require('models/genome');
 const ScoreCache = require('models/scoreCache');
+const transform = require('stream-transform');
 
 const { request } = require('services');
 const { ServiceRequestError } = require('utils/errors');
@@ -44,8 +45,7 @@ function writeMatrixHeader(genomes, stream) {
   for (const genomeA of genomes) {
     line.push(genomeA.name.replace(/,/g, '_'));
   }
-  stream.write(line.join(','));
-  stream.write('\n');
+  stream.write(line);
 }
 
 function generateMatrix({ genomes, cache }, stream) {
@@ -62,10 +62,8 @@ function generateMatrix({ genomes, cache }, stream) {
         throw new ServiceRequestError(`Missing score for ${genomeA.fileId} ${genomeB.fileId}`);
       }
     }
-    stream.write(line.join(','));
-    stream.write('\n');
+    stream.write(line);
   }
-
   stream.end();
 }
 
@@ -101,13 +99,16 @@ module.exports = (req, res, next) => {
     'Content-type': 'text/csv',
   });
 
+  const stream = transform(data => data.join(',') + '\n');
+  stream.pipe(res);
+
   request('collection', 'authorise', { user, uuid, projection: { genomes: 1 } })
     .then(async (collection) => {
       const genomes = await getCollectionGenomes(collection, genomeIds);
-      writeMatrixHeader(genomes, res);
+      writeMatrixHeader(genomes, stream);
       const cache = await getCache(genomes, type);
       return { genomes, cache };
     })
-    .then(data => generateMatrix(data, res))
+    .then(data => generateMatrix(data, stream))
     .catch(next);
 };
