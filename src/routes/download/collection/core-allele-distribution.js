@@ -1,20 +1,9 @@
-const path = require('path');
-const fs = require('fs');
-const { promisify } = require('util');
-const readFile = promisify(fs.readFile);
 const transform = require('stream-transform');
 const Genome = require('models/genome');
 
 const { request } = require('services');
 
-function getCollectionGenomes(collection, genomeIds) {
-  const query = {
-    _id: { $in: genomeIds },
-    $or: [
-      { _id: { $in: collection.genomes } },
-      { public: true },
-    ],
-  };
+function getCollectionGenomes(query) {
   return Genome
     .find(query, {
       name: 1,
@@ -34,8 +23,7 @@ function writeLines(columns, genomes, res) {
 
   stream.pipe(res);
 
-  const headers = [ '', ...columns ];
-  stream.write(headers);
+  stream.write(columns);
 
   genomes.on('data', genome => {
     const line = [];
@@ -95,12 +83,8 @@ function writeLines(columns, genomes, res) {
   });
 }
 
-function getColumns(organismId) {
-  return readFile(path.join('core', `${organismId}.json`))
-    .then(file => {
-      const json = JSON.parse(file);
-      return Object.keys(json.referenceAlleles).sort();
-    });
+function getColumns(organismId, query) {
+  return Genome.distinct('analysis.core.profile.id', query);
 }
 
 module.exports = (req, res, next) => {
@@ -125,10 +109,18 @@ module.exports = (req, res, next) => {
     'Content-type': 'text/csv',
   });
 
-  request('collection', 'authorise', { user, uuid, projection: { organismId: 1, genomes: 1 } })
+  request('collection', 'authorise', { user, uuid, projection: { genomes: 1 } })
     .then(async collection => {
-      const columns = await getColumns(collection.organismId);
-      const genomes = getCollectionGenomes(collection, genomeIds);
+      const query = {
+        _id: { $in: genomeIds },
+        $or: [
+          { _id: { $in: collection.genomes } },
+          { public: true },
+        ],
+      };
+      res.write('Family ID,');
+      const columns = await getColumns(query);
+      const genomes = getCollectionGenomes(query);
       writeLines(columns, genomes, res);
     })
     .catch(next);
