@@ -3,12 +3,12 @@ const Genome = require('models/genome');
 
 const transformer = function (doc) {
   return {
-    genomeId: doc._id.toString(),
-    genomeName: doc.name,
-    version: doc.analysis.ngmast.__v,
-    ngmast: doc.analysis.ngmast.ngmast,
-    por: doc.analysis.ngmast.por,
-    tbpb: doc.analysis.ngmast.tbpb,
+    'Genome ID': doc._id.toString(),
+    'Genome Name': doc.name,
+    Version: doc.analysis.ngmast.__v,
+    'NG-Mast': doc.analysis.ngmast.ngmast,
+    POR: doc.analysis.ngmast.por,
+    TBPB: doc.analysis.ngmast.tbpb,
   };
 };
 

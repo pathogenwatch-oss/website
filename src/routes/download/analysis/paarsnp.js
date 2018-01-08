@@ -3,9 +3,9 @@ const Genome = require('models/genome');
 
 const transformer = function (doc) {
   const result = {
-    genomeId: doc._id.toString(),
-    genomeName: doc.name,
-    version: doc.analysis.paarsnp.__v,
+    'Genome ID': doc._id.toString(),
+    'Genome Name': doc.name,
+    Version: doc.analysis.paarsnp.__v,
   };
   for (const { state, fullName } of doc.analysis.paarsnp.antibiotics) {
     result[fullName] = state;

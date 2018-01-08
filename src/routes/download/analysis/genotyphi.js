@@ -3,11 +3,11 @@ const Genome = require('models/genome');
 
 const transformer = function (doc) {
   return {
-    genomeId: doc._id.toString(),
-    genomeName: doc.name,
-    version: doc.analysis.genotyphi.__v,
-    genotype: doc.analysis.genotyphi.genotype,
-    snpsCalled: doc.analysis.genotyphi.foundLoci,
+    'Genome ID': doc._id.toString(),
+    'Genome Name': doc.name,
+    Version: doc.analysis.genotyphi.__v,
+    Genotype: doc.analysis.genotyphi.genotype,
+    'SNPs Called': doc.analysis.genotyphi.foundLoci,
   };
 };
 

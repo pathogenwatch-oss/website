@@ -3,10 +3,10 @@ const Genome = require('models/genome');
 
 const transformer = function (doc) {
   const result = {
-    genomeId: doc._id.toString(),
-    genomeName: doc.name,
-    version: doc.analysis.mlst.__v,
-    st: doc.analysis.mlst.st,
+    'Genome ID': doc._id.toString(),
+    'Genome Name': doc.name,
+    Version: doc.analysis.mlst.__v,
+    ST: doc.analysis.mlst.st,
   };
 
   for (const { gene, hits } of doc.analysis.mlst.alleles) {

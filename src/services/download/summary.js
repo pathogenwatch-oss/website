@@ -2,7 +2,7 @@ const Genome = require('../../models/genome');
 const { ObjectId } = require('mongoose').Types;
 
 const taskNames = [
-  'mlst', 'speciator', 'paarsnp', 'genotyphi', 'ngmast', 'cgmlst',
+  'mlst', 'speciator', 'paarsnp', 'genotyphi', 'ngmast', 'cgmlst', 'metrics',
 ];
 
 module.exports = function ({ user, sessionID, ids }) {
@@ -13,8 +13,8 @@ module.exports = function ({ user, sessionID, ids }) {
         { _id: { $in }, 'analysis.speciator': { $exists: true } },
         Genome.getPrefilterCondition({ user, sessionID })
       ) },
-      { $group: { _id: { organismId: '$analysis.speciator.organismId', organismName: '$analysis.speciator.organismName' }, count: { $sum: 1 } } },
-      { $project: { organismId: '$_id.organismId', organismName: '$_id.organismName', total: '$count', _id: 0 } },
+      { $group: { _id: { speciesId: '$analysis.speciator.speciesId', speciesName: '$analysis.speciator.speciesName' }, count: { $sum: 1 } } },
+      { $project: { speciesId: '$_id.speciesId', speciesName: '$_id.speciesName', total: '$count', _id: 0 } },
     ]),
     Genome.aggregate([
       { $match: Object.assign(
@@ -24,7 +24,7 @@ module.exports = function ({ user, sessionID, ids }) {
       { $facet: taskNames.reduce((memo, task) => {
         memo[task] = [
           { $match: { [`analysis.${task}`]: { $exists: true } } },
-          { $group: { _id: { organismId: '$analysis.speciator.organismId' }, genomeIds: { $push: '$_id' }, sources: { $addToSet: `$analysis.${task}.source` } } },
+          { $group: { _id: { speciesId: '$analysis.speciator.speciesId' }, genomeIds: { $push: '$_id' }, sources: { $addToSet: `$analysis.${task}.source` } } },
         ];
         return memo;
       }, {}) },
@@ -33,11 +33,11 @@ module.exports = function ({ user, sessionID, ids }) {
   .then(([ organsisms, [ organismsByTask ] ]) => {
     const summary = {};
     for (const organism of organsisms) {
-      summary[organism.organismId] = Object.assign({ tasks: [] }, organism);
+      summary[organism.speciesId] = Object.assign({ tasks: [] }, organism);
     }
     for (const task of Object.keys(organismsByTask)) {
       for (const { _id, genomeIds, sources } of organismsByTask[task]) {
-        summary[_id.organismId].tasks.push({ ids: genomeIds, sources, task });
+        summary[_id.speciesId].tasks.push({ ids: genomeIds, sources, task });
       }
     }
     return Object.keys(summary).map(key => summary[key]);

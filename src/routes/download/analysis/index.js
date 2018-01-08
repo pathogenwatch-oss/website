@@ -20,6 +20,8 @@ router.post('/paarsnp', require('./paarsnp'));
 
 router.post('/genotyphi', require('./genotyphi'));
 
+router.post('/metrics', require('./metrics'));
+
 router.post('/ngmast', require('./ngmast'));
 
 router.post('/cgmlst', require('./cgmlst'));

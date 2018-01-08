@@ -5,15 +5,15 @@ const transformer = function (doc, callback) {
   const result = [];
   for (const { gene, id, start, end, contig } of doc.analysis.cgmlst.matches) {
     result.push({
-      genomeId: doc._id.toString(),
-      genomeName: doc.name,
-      version: doc.analysis.cgmlst.__v,
-      gene,
-      alleleId: id,
-      start,
-      end,
-      contig,
-      direction: start > end ? 'reverse' : 'forwards',
+      'Genome ID': doc._id.toString(),
+      'Genome Name': doc.name,
+      Version: doc.analysis.cgmlst.__v,
+      Gene: gene,
+      'Allele ID': id,
+      Start: start,
+      End: end,
+      Contig: contig,
+      Direction: start > end ? 'reverse' : 'forwards',
     });
   }
   callback(null, ...result);
