@@ -1,6 +1,6 @@
 import React from 'react';
 
-const name = 'Streptococcus equi subsp. equi';
+const name = 'Streptococcus equi';
 const formattedName = (<em>{name}</em>);
 const shortName = 'S. equi';
 const formattedShortName = (<em>{shortName}</em>);
@@ -12,7 +12,8 @@ export default {
   formattedShortName,
   desc: (
     <p>
-      <strong>Streptococcus equi subsp. equi</strong>.
+      The bacterium, <strong>Streptococcus equi</strong>, is what causes the disease in equine species (horses, donkeys, mules) called strangles.
+      It got its name because historically, affected horses were sometimes suffocated from inflamed lymph nodes in their upper airway and trachea.
     </p>
   ),
   taxonomy: [
@@ -27,7 +28,6 @@ export default {
     { taxId: 119603, scientificName: 'Staphylococcus', rank: 'genus' },
     { taxId: 1280, scientificName: 'Streptococcus dysgalactiae group', rank: 'species group' },
     { taxId: 1336, scientificName: 'Streptococcus equi', rank: 'species' },
-    { taxId: 148942, scientificName: 'Streptococcus equi subsp. equi', rank: 'subspecies' },
   ],
   maxGenomeSize: 15 * Math.pow(10, 3),
   publicMetadataColumnNames: [],
