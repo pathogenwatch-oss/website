@@ -47,8 +47,12 @@ const Styler = React.createClass({
       // labels
       if (!subtree) {
         leaf.label = genome.name;
-      } else if (status === 'PENDING') {
+      } else if (status === 'IN PROGRESS') {
         leaf.label = `${genome.name}: ${progress}%`;
+      } else if (status === 'ERROR') {
+        leaf.label = `${genome.name}: error, awaiting retry.`;
+      } else if (status === 'FAILED') {
+        leaf.label = `${genome.name}: failed.`;
       } else if (status === 'READY') {
         const totalCollection = size - populationSize;
         if (populationSize > 0) {

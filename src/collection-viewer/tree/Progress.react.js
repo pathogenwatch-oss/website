@@ -37,6 +37,23 @@ const Progress = React.createClass({
       );
     }
 
+    if (status === 'ERROR') {
+      return (
+        <div className="wgsa-loading-overlay wgsa-tree-progress">
+          <p className="danger">Error processing tree</p>
+          <p className="wgsa-blink">Awaiting retry</p>
+        </div>
+      );
+    }
+
+    if (status === 'FAILED') {
+      return (
+        <div className="wgsa-loading-overlay wgsa-tree-progress">
+          <p className="danger">Failed to process tree 😞</p>
+        </div>
+      );
+    }
+
     return null;
   },
 

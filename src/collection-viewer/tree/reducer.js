@@ -69,6 +69,7 @@ function entities(state = {}, { type, payload }) {
         ...subtrees.reduce((memo, subtree) => {
           memo[subtree.name] = {
             status: 'PENDING',
+            lastStatus: Date.now(),
             ...subtree,
             ...initialState,
           };
@@ -80,6 +81,7 @@ function entities(state = {}, { type, payload }) {
         nextState[COLLECTION] = {
           newick: null,
           status: 'PENDING',
+          lastStatus: Date.now(),
           ...tree,
           name: COLLECTION,
           leafIds: genomes.map(_ => _.uuid),
@@ -110,13 +112,14 @@ function entities(state = {}, { type, payload }) {
     case UPDATE_COLLECTION_PROGRESS: {
       if (payload.task === 'tree') {
         const tree = state[COLLECTION];
-        if (payload.status) {
+        if (payload.status && payload.timestamp >= tree.lastStatus) {
           return {
             ...state,
             [COLLECTION]: {
               ...tree,
               status: payload.status,
               progress: 0,
+              lastStatus: payload.timestamp,
             },
           };
         }
@@ -133,12 +136,13 @@ function entities(state = {}, { type, payload }) {
       }
       if (payload.task === 'subtree') {
         const tree = state[payload.name];
-        if (payload.status) {
+        if (payload.status && payload.timestamp >= tree.lastStatus) {
           return {
             ...state,
             [payload.name]: {
               ...tree,
               status: payload.status,
+              lastStatus: payload.timestamp,
               size: payload.size,
               populationSize: payload.populationSize,
             },
