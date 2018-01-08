@@ -71,13 +71,6 @@ setToObjectOptions(schema, (doc, collection, { user }) => {
 });
 addPreSaveHook(schema);
 
-schema.methods.failed = function (error) {
-  this.status = 'FAILED';
-  this.error = error;
-  this.progress.completed = new Date();
-  return this.save().then(() => error);
-};
-
 schema.methods.ready = function () {
   this.status = 'READY';
   this.progress.completed = new Date();

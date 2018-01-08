@@ -44,9 +44,9 @@ function getGenomes(spec, metadata) {
   });
 }
 
-function getGenomesInCache(genomes) {
+function getGenomesInCache(genomes, { version }) {
   return ScoreCache.find(
-    { fileId: { $in: genomes.map(_ => _.fileId) } },
+    { fileId: { $in: genomes.map(_ => _.fileId) }, version },
     genomes.reduce(
       (projection, { fileId }) => {
         projection[`scores.${fileId}`] = 1;
@@ -84,7 +84,7 @@ function getGenomesInCache(genomes) {
 }
 
 function attachInputStream(container, spec, genomes, uncachedFileIds) {
-  const { requires } = spec;
+  const { version } = spec;
 
   const docsStream = Genome.collection.find(
     {
@@ -113,7 +113,7 @@ function attachInputStream(container, spec, genomes, uncachedFileIds) {
   // docsStream.on('end', () => console.log('docs ended'));
 
   const scoresStream = ScoreCache.collection.find(
-    { fileId: { $in: genomes.map(_ => _.fileId) } },
+    { fileId: { $in: genomes.map(_ => _.fileId) }, version },
     genomes.reduce((projection, { fileId }) => {
       projection[`scores.${fileId}`] = 1;
       return projection;
@@ -236,7 +236,7 @@ function createContainer(spec, metadata) {
 function runTask(spec, metadata) {
   return getGenomes(spec, metadata)
     .then(genomes =>
-      getGenomesInCache(genomes).then(uncachedFileIds => ({ genomes, uncachedFileIds }))
+      getGenomesInCache(genomes, spec).then(uncachedFileIds => ({ genomes, uncachedFileIds }))
     )
     .then(({ genomes, uncachedFileIds }) => new Promise((resolve, reject) => {
       const container = createContainer(spec, metadata);

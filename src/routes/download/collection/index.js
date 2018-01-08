@@ -28,7 +28,7 @@ router.post('/:uuid/fastas', require('./fastas'));
 router.get('/:uuid/annotations', require('./annotations'));
 router.post('/:uuid/annotations', require('./annotations'));
 
-router.post('/:uuid/:type-matrix', require('./score-matrix'));
+router.post('/:uuid/:type-matrix', require('./matrix'));
 
 router.post('/:uuid/core-allele-distribution', require('./core-allele-distribution'));
 

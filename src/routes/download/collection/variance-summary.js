@@ -1,5 +1,3 @@
-const mapLimit = require('promise-map-limit');
-
 const Genome = require('models/genome');
 const Collection = require('models/collection');
 const ScoreCache = require('models/scoreCache');
@@ -23,9 +21,9 @@ function getGenomes(genomeIds) {
   return Genome.find(query, projection, options).lean();
 }
 
-function getCache(genomes) {
+function getCache(genomes, { version }) {
   return ScoreCache.find(
-    { fileId: { $in: genomes.map(_ => _.fileId) } },
+    { fileId: { $in: genomes.map(_ => _.fileId) }, version },
     genomes.reduce(
       (projection, { fileId }) => {
         projection[`scores.${fileId}`] = 1;
@@ -44,9 +42,9 @@ function getCache(genomes) {
   });
 }
 
-async function generateTreeData(label, totalCollection, totalPopulation, genomeIds) {
+async function generateTreeData(tree, genomeIds) {
   const genomes = await getGenomes(genomeIds);
-  const cache = await getCache(genomes);
+  const cache = await getCache(genomes, tree);
   const scores = [];
   for (let a = 0; a < genomes.length; a++) {
     const genomeA = genomes[a];
@@ -64,9 +62,9 @@ async function generateTreeData(label, totalCollection, totalPopulation, genomeI
   }
   const stats = calculateStats(scores.sort());
   const result = {
-    label,
-    totalCollection,
-    total: totalCollection + totalPopulation,
+    label: tree.name,
+    totalCollection: tree.size - tree.populationSize,
+    total: tree.size,
     minScore: stats.min,
     maxScore: stats.max,
     meanScore: stats.mean,
@@ -130,14 +128,14 @@ function writeMatrixFooter(stream) {
   stream.write('\n');
 }
 
-async function generateData({ genomes, subtrees }, stream) {
+async function generateData({ genomes, tree, subtrees }, stream) {
   // const collectionGenomes = genomes.map(id => id.toString());
   // const collectionData = await generateTreeData('collection', collectionGenomes.length, 0, collectionGenomes);
   // writeMatrixLine(collectionData, stream);
 
-  for (const tree of subtrees) {
-    const genomeIds = Collection.getSubtreeIds(tree);
-    const data = await generateTreeData(tree.name, tree.size - tree.populationSize, tree.populationSize, genomeIds);
+  for (const subtree of subtrees) {
+    const genomeIds = Collection.getSubtreeIds(subtree);
+    const data = await generateTreeData(subtree, genomeIds);
     writeMatrixLine(data, stream);
   }
 }
@@ -164,7 +162,7 @@ module.exports = (req, res, next) => {
     'Content-type': 'text/csv',
   });
 
-  request('collection', 'authorise', { user, uuid, projection: { genomes: 1, subtrees: 1 } })
+  request('collection', 'authorise', { user, uuid, projection: { genomes: 1, 'tree.version': 1, subtrees: 1 } })
     .then(results => generateMatrix(results, res))
     .catch(next);
 };
