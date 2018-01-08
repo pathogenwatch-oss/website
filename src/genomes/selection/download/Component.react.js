@@ -27,9 +27,9 @@ const DownloadLink = ({ link, ids, children }) => (
     </form>
   );
 
-const Section = ({ organismId, organismName, total, tasks, ids }) => (
+const Section = ({ speciesId, speciesName, total, tasks, ids }) => (
   <li>
-    <FormattedName fullName organismId={organismId} title={organismName} />
+    <FormattedName fullName organismId={speciesId} title={speciesName} />
     <ul className="wgsa-genome-download-list">
       <li>
         <DownloadLink link={getServerPath('/download/genome/fasta')} ids={ids}>
@@ -102,7 +102,7 @@ const Download = React.createClass({
                     </li>
                   </ul>
                 </li> }
-              { summary.map(item => <Section key={item.organismId} {...item} />) }
+              { summary.map(item => <Section key={item.speciesId} {...item} />) }
             </ul>
           </div>
           <footer>
