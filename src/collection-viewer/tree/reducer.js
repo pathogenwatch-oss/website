@@ -69,7 +69,7 @@ function entities(state = {}, { type, payload }) {
         ...subtrees.reduce((memo, subtree) => {
           memo[subtree.name] = {
             status: 'PENDING',
-            lastStatus: Date.now(),
+            lastStatus: 0,
             ...subtree,
             ...initialState,
           };
@@ -81,7 +81,7 @@ function entities(state = {}, { type, payload }) {
         nextState[COLLECTION] = {
           newick: null,
           status: 'PENDING',
-          lastStatus: Date.now(),
+          lastStatus: 0,
           ...tree,
           name: COLLECTION,
           leafIds: genomes.map(_ => _.uuid),
