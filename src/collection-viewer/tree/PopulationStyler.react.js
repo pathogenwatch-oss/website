@@ -1,12 +1,20 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { getGenomes } from '../../collection-viewer/selectors';
-import { getFilter, getHighlightedIds } from '../selectors';
+import { getGenomes, getFilter, getHighlightedIds } from '../selectors';
 import { getTrees } from './selectors';
 
 import { leafStyles, defaultLeafStyle } from './constants';
 import { CGPS } from '../../app/constants';
+
+function includesFp(records, idSet, fp) {
+  for (const id of idSet) {
+    const genome = records[id];
+    const { core } = genome.analysis;
+    if (core.fp.reference === fp) return true;
+  }
+  return false;
+}
 
 const Styler = React.createClass({
 
@@ -15,18 +23,17 @@ const Styler = React.createClass({
 
     for (const leaf of phylocanvas.leaves) {
       const { id } = leaf;
-      const genome = genomes[id];
-      const subtree = trees[id];
+      const reference = genomes[id];
+      const subtree = trees[id] || {};
       const {
-        collectionIds = [],
         status = 'PENDING',
         size = 0,
         populationSize = 0,
         progress = 0,
-      } = subtree || {};
+      } = subtree;
 
       // styles
-      if (!subtree) {
+      if (size === 0) {
         leaf.setDisplay({
           ...leafStyles.reference,
           leafStyle: {
@@ -45,40 +52,44 @@ const Styler = React.createClass({
       }
 
       // labels
-      if (!subtree) {
-        leaf.label = genome.name;
+      if (size === 0) {
+        leaf.label = reference.name;
       } else if (status === 'IN PROGRESS') {
-        leaf.label = `${genome.name}: ${progress}%`;
+        leaf.label = `${reference.name}: ${progress}%`;
       } else if (status === 'ERROR') {
-        leaf.label = `${genome.name}: error, awaiting retry.`;
+        leaf.label = `${reference.name}: error, awaiting retry.`;
       } else if (status === 'FAILED') {
-        leaf.label = `${genome.name}: failed.`;
+        leaf.label = `${reference.name}: failed.`;
       } else if (status === 'READY') {
         const totalCollection = size - populationSize;
         if (populationSize > 0) {
-          leaf.label = `${genome.name} (${totalCollection}) [${populationSize}]`;
+          leaf.label = `${reference.name} (${totalCollection}) [${populationSize}]`;
         } else if (totalCollection > 0) {
-          leaf.label = `${genome.name} (${totalCollection})`;
+          leaf.label = `${reference.name} (${totalCollection})`;
         } else {
-          leaf.label = genome.name;
+          leaf.label = reference.name;
         }
       }
 
       // the rest
-      let isFiltered = !filter.active;
-      let isHighlighted = false;
-      for (const uuid of collectionIds) {
-        if (!isFiltered) {
-          isFiltered = filter.active && filter.ids.has(uuid);
+      if (size === 0) {
+        leaf.radius = 0.666;
+        leaf.highlighted = false;
+        leaf.interactive = false;
+      } else {
+        let isVisible = !filter.active;
+        let isHighlighted = false;
+
+        if (filter.active) {
+          isVisible = includesFp(genomes, filter.ids, id);
         }
-        if (!isHighlighted) {
-          isHighlighted = highlightedIds.size && highlightedIds.has(uuid);
-        }
-        if (isHighlighted && isFiltered) break;
+
+        isHighlighted = includesFp(genomes, highlightedIds, id);
+
+        leaf.radius = isVisible ? 1 : 0;
+        leaf.highlighted = isHighlighted;
+        leaf.interactive = status === 'READY';
       }
-      leaf.radius = isFiltered ? 1 : 0;
-      leaf.highlighted = isHighlighted;
-      leaf.interactive = !!subtree && status === 'READY';
     }
 
     phylocanvas.draw();
