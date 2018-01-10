@@ -1,5 +1,4 @@
 function calculateMedian(numbers) {
-  // console.log(numbers);
   if (numbers.length % 2 === 0) {
     const midPoint = numbers.length / 2;
     return (numbers[midPoint - 1] + numbers[midPoint]) / 2;
@@ -8,12 +7,10 @@ function calculateMedian(numbers) {
 }
 
 function calculateQuartiles(numbers) {
-  const midPoint = Math.floor(numbers.length / 2);
-  const offset = numbers.length % 2;
   return [
-    calculateMedian(numbers.slice(0, midPoint)),
+    calculateMedian(numbers.slice(0, Math.floor(numbers.length / 2))),
     calculateMedian(numbers),
-    calculateMedian(numbers.slice(midPoint + offset)),
+    calculateMedian(numbers.slice(Math.ceil(numbers.length / 2))),
   ];
 }
 
