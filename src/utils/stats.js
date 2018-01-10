@@ -1,15 +1,17 @@
 function calculateMedian(numbers) {
+  // console.log(numbers);
   if (numbers.length % 2 === 0) {
-    return (numbers[numbers.length / 2] + numbers[(numbers.length / 2) + 1]) / 2;
+    const midPoint = numbers.length / 2;
+    return (numbers[midPoint - 1] + numbers[midPoint]) / 2;
   }
   return numbers[Math.floor(numbers.length / 2)];
 }
 
 function calculateQuartiles(numbers) {
   const midPoint = Math.floor(numbers.length / 2);
-  const offset = (numbers.length % 2);
+  const offset = numbers.length % 2;
   return [
-    calculateMedian(numbers.slice(0, midPoint - offset)),
+    calculateMedian(numbers.slice(0, midPoint)),
     calculateMedian(numbers),
     calculateMedian(numbers.slice(midPoint + offset)),
   ];
@@ -49,5 +51,6 @@ function calculateStats(numbers) {
 }
 
 module.exports = {
+  calculateQuartiles,
   calculateStats,
 };
