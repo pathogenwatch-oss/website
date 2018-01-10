@@ -2,33 +2,33 @@ import React from 'react';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
 
+import Multi from './Multi.react';
+
 import { getVisibleTableName, hasMetadata, hasTyping } from './selectors';
 import { setTable } from './actions';
 import { tableKeys, tableDisplayNames } from '../constants';
 import Organisms from '../../organisms';
 
-function mapStateToProps(state) {
+function mapStateToProps(state, { table }) {
   return {
-    displayedTable: getVisibleTableName(state),
+    displayName: tableDisplayNames[table],
+    active: getVisibleTableName(state) === table,
   };
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch, { table }) {
   return {
-    showTable: tableKey => dispatch(setTable(tableKey)),
+    showTable: () => dispatch(setTable(table)),
   };
 }
 
 const Button = connect(mapStateToProps, mapDispatchToProps)(
-  ({ table, displayedTable, showTable }) => (
+  ({ displayName, active, showTable }) => (
     <button
-      className={classnames(
-        'wgsa-button-group__item',
-        { active: displayedTable === table }
-      )}
-      onClick={() => showTable(table)}
+      className={classnames('wgsa-button-group__item', { active })}
+      onClick={showTable}
     >
-      {tableDisplayNames[table]}
+      {displayName}
     </button>
   )
 );
@@ -65,6 +65,7 @@ const TableSwitcher =
           <Button table={tableKeys.snps} />
           <Button table={tableKeys.genes} />
         </ButtonGroup> }
+      <Multi />
     </div>
   )
 );

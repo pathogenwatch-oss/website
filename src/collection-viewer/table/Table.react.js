@@ -6,7 +6,7 @@ import TableSwitcher from '../table/Switcher.react';
 
 import { getCollection } from '../../collection-viewer/selectors';
 import { getActiveGenomes } from '../selectors';
-import { getVisibleTable } from '../table/selectors';
+import { getVisibleTable, getFixedGroupWidth } from '../table/selectors';
 
 import { onRowClick } from './thunks';
 
@@ -91,6 +91,7 @@ function mapStateToProps(state) {
       activeColumn ? new Set([ activeColumn ]) : activeColumns,
     collection: getCollection(state),
     data: getActiveGenomes(state),
+    fixedGroupWidth: getFixedGroupWidth(state),
   };
 }
 
@@ -114,7 +115,7 @@ function mergeProps(state, { dispatch }, props) {
   const mappedColumns =
     columns.map(column => mapStateToColumn(column, state, dispatch));
 
-  setFixedGroupMinWidth(mappedColumns, props.width);
+  setFixedGroupMinWidth(mappedColumns, props.width, state.fixedGroupWidth);
 
   return {
     ...props,

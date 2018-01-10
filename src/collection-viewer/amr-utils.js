@@ -62,30 +62,32 @@ export function getAdvancedColour({ key, effect }, type, genome) {
   return nonResistantColour;
 }
 
-const noActiveColumns = [ { valueGetter: defaultColourGetter } ];
-
 function getColours(columns, genome) {
-  return new Set(
-    Array.from(columns.size ? columns : noActiveColumns).
-      map(column => column.valueGetter(genome))
-  );
+  const colours = [];
+  if (columns.size) {
+    for (const column of columns) {
+      colours.push(column.valueGetter(genome));
+    }
+  } else {
+    colours.push(defaultColourGetter(genome));
+  }
+  return new Set(colours);
 }
 
-// FIXME: name is hard-coded to avoid circular dependency
-function getMixedStateColour(table, colours) {
-  if (table === 'antibiotics') return nonResistantColour;
-
-  colours.delete(nonResistantColour);
-  const remainingColours = Array.from(colours);
-  if (remainingColours.length === 1) return remainingColours[0];
-  return stateColours.RESISTANT;
-}
-
-export function createColourGetter(table, columns) {
+export function createColourGetter(table, multi) {
   return function (genome) {
-    const colours = getColours(columns, genome);
-    return colours.size === 1 ?
-      Array.from(colours)[0] :
-      getMixedStateColour(table, colours);
+    const colours = getColours(table.activeColumns, genome);
+    if (colours.size === 1) {
+      return Array.from(colours)[0];
+    }
+
+    if (multi && colours.has(nonResistantColour)) {
+      return nonResistantColour;
+    }
+
+    colours.delete(nonResistantColour);
+    const remainingColours = Array.from(colours);
+    if (remainingColours.length === 1) return remainingColours[0];
+    return stateColours.RESISTANT;
   };
 }

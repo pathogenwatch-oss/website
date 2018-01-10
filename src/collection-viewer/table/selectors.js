@@ -37,3 +37,21 @@ export const hasTyping = createSelector(
   getTables,
   tables => tables.typing.active
 );
+
+export const isAMRTable = createSelector(
+  getVisibleTableName,
+  getAMRTableName,
+  (visible, amr) => visible === amr
+);
+
+export const getFixedGroupWidth = createSelector(
+  hasMetadata,
+  hasTyping,
+  isAMRTable,
+  (metadata, typing, isAMR) => {
+    let width = isAMR ? 404 : 348; // acount for multi button
+    if (!metadata) width -= 68;
+    if (!typing) width -= 53;
+    return width;
+  }
+);
