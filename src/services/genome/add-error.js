@@ -22,8 +22,8 @@ module.exports = function ({ genomeId, collectionId, uploadedAt, task, clientId 
         if (clientId) {
           request('notification', 'send', {
             channel: clientId,
-            topic: `analysis-${uploadedAt}`,
-            message: { genomeId, results: [ { task, error: true } ] },
+            topic: `analysis-${uploadedAt.toISOString()}`,
+            message: { id: genomeId, task, result: {}, error: true },
           });
         }
       })

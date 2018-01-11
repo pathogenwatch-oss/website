@@ -7,14 +7,10 @@ module.exports = function (props) {
   );
   return (
     Genome
-      .find(query, { latitude: 1, longitude: 1, name: 1, organismId: 1 })
-      .lean()
-      .then(docs => {
-        for (const doc of docs) {
-          doc.id = doc._id;
-          doc._id = undefined;
-        }
-        return docs;
-      })
+      .aggregate([
+        { $match: query },
+        { $group: { _id: { latitude: '$latitude', longitude: '$longitude' }, genomes: { $push: '$_id' } } },
+        { $project: { _id: 0, position: [ '$_id.latitude', '$_id.longitude' ], genomes: 1 } },
+      ])
   );
 };

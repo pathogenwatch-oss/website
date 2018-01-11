@@ -7,7 +7,7 @@ const schema = new Schema({
   _collection: { type: Schema.Types.ObjectId, ref: 'Collection', index: true },
   _genome: { type: Schema.Types.ObjectId, ref: 'Genome' },
   fileId: { type: String, required: true, index: true },
-  uuid: { type: String, required: true },
+  uuid: { type: String, required: true, index: true },
   name: { type: String, required: true },
   date: {
     year: Number,
