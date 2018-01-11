@@ -10,7 +10,7 @@ module.exports = function ({ user, sessionID, ids }) {
   return Promise.all([
     Genome.aggregate([
       { $match: Object.assign(
-        { _id: { $in }, 'analysis.speciator': { $exists: true } },
+        { _id: { $in }, 'analysis.speciator.speciesId': { $exists: true } },
         Genome.getPrefilterCondition({ user, sessionID })
       ) },
       { $group: { _id: { speciesId: '$analysis.speciator.speciesId', speciesName: '$analysis.speciator.speciesName' }, count: { $sum: 1 } } },
@@ -18,7 +18,7 @@ module.exports = function ({ user, sessionID, ids }) {
     ]),
     Genome.aggregate([
       { $match: Object.assign(
-        { _id: { $in }, 'analysis.speciator': { $exists: true } },
+        { _id: { $in }, 'analysis.speciator.speciesId': { $exists: true } },
         Genome.getPrefilterCondition({ user, sessionID })
       ) },
       { $facet: taskNames.reduce((memo, task) => {
@@ -37,7 +37,9 @@ module.exports = function ({ user, sessionID, ids }) {
     }
     for (const task of Object.keys(organismsByTask)) {
       for (const { _id, genomeIds, sources } of organismsByTask[task]) {
-        summary[_id.speciesId].tasks.push({ ids: genomeIds, sources, task });
+        if (_id.speciesId in summary) {
+          summary[_id.speciesId].tasks.push({ ids: genomeIds, sources, task });
+        }
       }
     }
     return Object.keys(summary).map(key => summary[key]);
