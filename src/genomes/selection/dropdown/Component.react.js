@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 import Selection from '../list';
 import Collection from '../collection';
@@ -24,10 +25,17 @@ const Dropdown = ({ view, hasSelection }) => (
   <Fade>
     { view ?
       <div className="wgsa-genome-selection-dropdown mdl-shadow--2dp">
-        { !hasSelection && EmptySelection }
-        { hasSelection && view === 'selection' && <Selection />}
-        { hasSelection && view === 'collection' && <Collection />}
-        { hasSelection && view === 'download' && <Download />}
+        { hasSelection ?
+          <ReactCSSTransitionGroup
+            transitionName={view === 'selection' ? 'slide-right' : 'slide-left'}
+            transitionEnterTimeout={280}
+            transitionLeaveTimeout={280}
+          >
+            {view === 'selection' && <Selection />}
+            {view === 'collection' && <Collection />}
+            {view === 'download' && <Download />}
+          </ ReactCSSTransitionGroup> :
+          EmptySelection }
       </div> :
       null }
   </Fade>

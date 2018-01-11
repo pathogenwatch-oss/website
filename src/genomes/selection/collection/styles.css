@@ -4,10 +4,13 @@
   flex-direction: column;
 }
 
+.wgsa-genome-collection > header + * {
+  padding: 8px 16px 0;
+}
+
 .wgsa-genome-collection .wgsa-create-collection-form {
   height: auto;
   flex-grow: 1;
-  padding: 8px 16px 0;
   box-sizing: border-box;
 }
 

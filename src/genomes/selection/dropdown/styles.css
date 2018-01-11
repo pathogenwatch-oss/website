@@ -42,4 +42,40 @@
 .wgsa-dropdown-footer {
   border-top: 1px solid rgba(0, 0, 0, 0.12);
   min-height: 54px;
+  max-height: 54px;
+  margin-top: auto;
+}
+
+.slide-left-enter {
+  transform: translate(100%);
+}
+.slide-left-enter.slide-left-enter-active {
+  transform: translate(0%);
+  transition: .28s cubic-bezier(.4,0,.2,1);
+  transition-property: transform;
+}
+.slide-left-leave {
+  transform: translate(0%);
+}
+.slide-left-leave.slide-left-leave-active {
+  transform: translate(-100%);
+  transition: .28s cubic-bezier(.4,0,.2,1);
+  transition-property: transform;
+}
+
+.slide-right-enter {
+  transform: translate(-100%);
+}
+.slide-right-enter.slide-right-enter-active {
+  transform: translate(0%);
+  transition: .28s cubic-bezier(.4,0,.2,1);
+  transition-property: transform;
+}
+.slide-right-leave {
+  transform: translate(0%);
+}
+.slide-right-leave.slide-right-leave-active {
+  transform: translate(100%);
+  transition: .28s cubic-bezier(.4,0,.2,1);
+  transition-property: transform;
 }

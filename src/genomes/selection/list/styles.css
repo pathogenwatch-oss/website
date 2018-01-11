@@ -47,7 +47,7 @@
 }
 
 .wgsa-genome-selection__list > ul {
-  margin: 0;
+  margin: 8px 0;
   min-height: 100%;
   min-width: 438px;
   width: 438px;
