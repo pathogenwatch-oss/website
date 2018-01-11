@@ -15,7 +15,11 @@
 .wgsa-genome-selection > footer {
   display: flex;
   justify-content: flex-end;
-  padding-top: 8px;
+  align-items: center;
+  min-height: 40px;
+  margin-top: 8px;
+  margin-bottom: -8px;
+  box-sizing: border-box;
 }
 
 .wgsa-genome-selection > footer > div {
@@ -42,8 +46,10 @@
   overflow-y: auto;
   flex-grow: 1;
   width: 440px;
-  margin: 0 -16px 8px;
-  max-height: calc(100vh - 240px);
+  margin: 0 -16px;
+  border: 0 solid rgba(0, 0, 0, .12);
+  border-top-width: 1px;
+  border-bottom-width: 1px;
 }
 
 .wgsa-genome-selection__list > ul {
