@@ -1,6 +1,6 @@
 const Genome = require('models/genome');
 
-const config = require('config');
+const config = require('configuration');
 
 const { pagination = { min: 100, max: 2500 } } = config;
 
