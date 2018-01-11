@@ -12,7 +12,7 @@ const { user } = config;
 
 const Selection = ({ selectedGenomes, showGenome, removeGenome, clearAll, sendToBin, toggle }) => (
   <div className="wgsa-genome-selection">
-    <header>
+    <header className="wgsa-dropdown-header">
       Selection
       <button
         className="wgsa-button--text wgsa-clear-selection"
@@ -45,7 +45,7 @@ const Selection = ({ selectedGenomes, showGenome, removeGenome, clearAll, sendTo
         )}
       </ul>
     </div>
-    <footer>
+    <footer className="wgsa-dropdown-footer">
       <div>
         { user &&
           <button

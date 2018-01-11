@@ -7,9 +7,9 @@ import { toggleDropdown } from '../actions';
 
 const Collection = ({ toggle }) => (
   <div className="wgsa-genome-collection">
-    <header>Create Collection</header>
+    <header className="wgsa-dropdown-header">Create Collection</header>
     <CreateCollection />
-    <footer>
+    <footer className="wgsa-dropdown-footer">
       <button
         className="mdl-button"
         onClick={() => toggle('selection')}
