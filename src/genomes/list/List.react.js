@@ -10,6 +10,10 @@ import { getVisible } from '../summary/selectors';
 
 import { fetchGenomeList } from '../actions';
 
+import config from '../../app/config';
+
+const { pagination = { min: 100 } } = config;
+
 const headerHeight = 25;
 const rowHeight = 40;
 const offset = 64 + 56 + headerHeight;
@@ -42,7 +46,7 @@ export const ListView = React.createClass({
           isRowLoaded={({ index }) => indices[index]}
           loadMoreRows={fetch}
           rowCount={total}
-          minimumBatchSize={100}
+          minimumBatchSize={pagination.min}
         >
           {({ onRowsRendered, registerChild }) =>
             <AutoSizer>

@@ -1,14 +1,11 @@
 import config from '../../app/config';
 
 export function getSelectionLimit() {
-  const { user, maxCollectionSize } = config;
-  if (!maxCollectionSize || (user && user.admin)) return null;
-
-  const { anonymous, loggedIn } = maxCollectionSize;
-  return user ? loggedIn : anonymous;
+  const { pagination = { max: 2500 } } = config;
+  return pagination.max;
 }
 
 export function isOverSelectionLimit(amount) {
   const limit = getSelectionLimit();
-  return limit ? amount > limit : false;
+  return amount > limit;
 }

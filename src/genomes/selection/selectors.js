@@ -2,6 +2,7 @@ import { createSelector } from 'reselect';
 import sortBy from 'lodash.sortby';
 
 import { getGenomeList } from '../selectors';
+import { getVisible } from '../summary/selectors';
 import { getDeployedOrganismIds } from '../../summary/selectors';
 
 import { isOverSelectionLimit } from './utils';
@@ -39,10 +40,16 @@ export const isSelectionLimitReached = createSelector(
   ids => isOverSelectionLimit(ids.length)
 );
 
-export const areAllSelected = createSelector(
+export const getSelectionStatus = createSelector(
+  getSelectedGenomeIds,
   getSelectedGenomes,
   getGenomeList,
-  (selection, genomes) => genomes.every(({ id }) => (id in selection))
+  getVisible,
+  (ids, selection, genomes, total) => {
+    if (ids.length === 0) return 'UNCHECKED';
+    if (genomes.length === total && genomes.every(({ id }) => (id in selection))) return 'CHECKED';
+    return 'INDETERMINATE';
+  }
 );
 
 export const getDownloadSummary = createSelector(

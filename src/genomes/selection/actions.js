@@ -4,11 +4,8 @@ import { createAsyncConstants } from '../../actions';
 import { fetchGenomeList } from '../actions';
 
 import { getGenomeList, getGenomes, getListIndices } from '../selectors';
-import {
-  getSelectedGenomes,
-  getSelectionSize,
-  getSelectedGenomeIds,
-} from './selectors';
+import { getVisible } from '../summary/selectors';
+import { getSelectedGenomes, getSelectedGenomeIds } from './selectors';
 
 import { showToast } from '../../toast';
 
@@ -75,28 +72,6 @@ export function toggleSelection(genomes) {
   };
 }
 
-export function selectAll(focus) {
-  return (dispatch, getState) => {
-    const state = getState();
-    const selectionSize = getSelectionSize(state);
-    const genomes = getGenomeList(state);
-    const selection = getSelectedGenomes(state);
-    const toBeSelected = genomes.filter(({ id }) => !(id in selection));
-
-    if (isOverSelectionLimit(toBeSelected.length + selectionSize)) {
-      dispatch(showToast({
-        message: (
-          <span>
-            Selection limit is <strong>{getSelectionLimit()}</strong>, please refine your selection.
-          </span>
-        ),
-      }));
-    } else {
-      dispatch(selectGenomes(toBeSelected, focus));
-    }
-  };
-}
-
 export function unselectAll(focus) {
   return (dispatch, getState) => {
     const state = getState();
@@ -143,17 +118,45 @@ export function selectRange(fromIndex, toIndex) {
       const id = indices[i];
       if (id in genomes) {
         selection.push(genomes[id]);
-      } else {
-        // fetch the rest
-        break;
       }
     }
 
     if (selection.length === size) {
-      dispatch(toggleSelection(selection));
+      dispatch(selectGenomes(selection));
     } else {
-      dispatch(fetchGenomeList(start, stop))
-        .then(fetchedGenomes => dispatch(toggleSelection(fetchedGenomes)));
+      if (isOverSelectionLimit(size)) {
+        dispatch(showToast({
+          message: (
+            <span>
+              You have selected the first {getSelectionLimit()} genomes in this range.
+            </span>
+          ),
+        }));
+      }
+      dispatch(fetchGenomeList(start, Math.min(stop, start + getSelectionLimit() - 1)))
+        .then(fetchedGenomes =>
+          dispatch(selectGenomes(fetchedGenomes))
+        );
     }
+  };
+}
+
+export function selectAll() {
+  return (dispatch, getState) => {
+    const state = getState();
+    const total = getVisible(state);
+    const selection = getSelectedGenomes(state);
+    const indices = getListIndices(state);
+
+    let start = 0;
+    for (let i = 0; i < total; i++) {
+      const id = indices[i];
+      if (!(id in selection)) {
+        start = i;
+        break;
+      }
+    }
+
+    dispatch(selectRange(start, total - 1));
   };
 }
