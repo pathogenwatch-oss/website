@@ -1,12 +1,12 @@
 const Genome = require('models/genome');
 
-const config = require('configuration');
+const config = require('config');
 
-const maxLimit = config.maxCollectionSize.loggedIn || 500;
+const { pagination = { min: 100, max: 2500 } } = config;
 
 module.exports = function (props) {
   const { user, query = {} } = props;
-  const { skip = 0, limit = maxLimit, sort } = query;
+  const { skip = 0, limit = pagination.min, sort } = query;
 
   return (
     Genome
@@ -24,7 +24,7 @@ module.exports = function (props) {
           _user: 1,
         }, {
           skip: Number(skip),
-          limit: Math.min(Number(limit), maxLimit),
+          limit: Math.min(Number(limit), pagination.max),
           sort: Genome.getSort(sort),
         }
       )

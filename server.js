@@ -130,6 +130,7 @@ module.exports = () =>
           mapboxKey: config.mapboxKey,
           maxCollectionSize: config.maxCollectionSize,
           maxFastaFileSize: config.maxFastaFileSize,
+          pagination: config.pagination,
           wiki: config.wikiLocation,
           strategies: Object.keys(config.passport.strategies || {}),
           user,

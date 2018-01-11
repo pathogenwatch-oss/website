@@ -9,25 +9,6 @@
       ]
     }
   },
-  "couchbase": {
-    "host": "",
-    "buckets": {
-      "main": {
-        "name": "wgsa",
-        "password": ""
-      },
-      "sequences": {
-        "name": "wgsa_sequences",
-        "password": ""
-      }
-    }
-  },
-  "rabbit": {
-    "host": "",
-    "port": "",
-    "login": "",
-    "password": ""
-  },
   "mongodb": {
     "host": "",
     "port": 27017,
@@ -61,6 +42,10 @@
   "maxCollectionSize": {
     "anonymous": 150,
     "loggedIn": 2000
+  },
+  "pagination": {
+    "min": 100,
+    "max": 2500
   },
   "maxFastaFileSize": 10,
   "mapboxKey": "",
