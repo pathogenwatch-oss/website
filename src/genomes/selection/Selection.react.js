@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import classnames from 'classnames';
 
 import SelectionDropdown from './dropdown';
 
@@ -31,10 +30,8 @@ const Summary = React.createClass({
     const { size, toggle, view } = this.props;
     return (
       <div className="wgsa-selection-summary" onKeyUp={this.onKeyUp}>
-        <button className={classnames(
-            'mdl-chip mdl-chip--contact wgsa-selection',
-            { 'mdl-chip--active': !!view }
-          )}
+        <button
+          className="mdl-chip mdl-chip--contact mdl-chip--active wgsa-selection"
           onClick={() => toggle(view || 'selection')}
           title={size === 0 ? 'No Genomes Selected' : undefined}
         >

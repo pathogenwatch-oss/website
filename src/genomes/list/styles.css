@@ -1,6 +1,7 @@
 .wgsa-genome-list-view {
   margin-left: 32px;
   flex-grow: 1;
+  user-select: none;
 }
 
 .wgsa-genome-list-view .wgsa-grid-item {

@@ -1,9 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { toggleSelection } from '../selection/actions';
-
 import AddToSelection from '../selection/AddToSelection.react';
+
+import { getLastSelectedIndex } from '../selection/selectors';
+
+import { toggleGenome, selectRange } from '../selection/actions';
+
 import { FormattedName } from '../../organisms';
 import { formatDate } from '../../utils/Date';
 import { getCountryName } from '../../utils/country';
@@ -49,10 +52,10 @@ const displayAccessLevel = (props) => {
   );
 };
 
-const ListItem = ({ item, onClick, style, onViewGenome }) => {
-  const { name, organismId, organismName, st, country } = item;
+const ListItem = ({ genome, onClick, style, onViewGenome }) => {
+  const { name, organismId, organismName, st, country } = genome;
   const countryName = country ? getCountryName(country) : null;
-  const date = item.date ? formatDate(item.date) : null;
+  const date = genome.date ? formatDate(genome.date) : null;
   return (
     <div
       className="wgsa-genome-list-item wgsa-genome-list-item--selectable wgsa-card--bordered"
@@ -60,7 +63,7 @@ const ListItem = ({ item, onClick, style, onViewGenome }) => {
       onClick={onClick}
     >
       <Cell title={name} onClick={e => e.stopPropagation()}>
-        <AddToSelection genomes={[ item ]} />
+        <AddToSelection genomes={[ genome ]} />
         <button title="View Details" className="wgsa-link-button" onClick={onViewGenome}>
           {name}
         </button>
@@ -85,16 +88,31 @@ const ListItem = ({ item, onClick, style, onViewGenome }) => {
       { date ?
         <Cell title={date}>{date}</Cell> :
         EmptyCell }
-      {displayAccessLevel(item)}
+      {displayAccessLevel(genome)}
     </div>
   );
 };
 
-function mapDispatchToProps(dispatch, { item }) {
+function mapStateToProps(state) {
   return {
-    onViewGenome: e => e.stopPropagation() || dispatch(showGenomeDrawer(item.id, item.name)),
-    onClick: () => dispatch(toggleSelection([ item ])),
+    lastSelectedIndex: getLastSelectedIndex(state),
   };
 }
 
-export default connect(null, mapDispatchToProps)(ListItem);
+function mergeProps(state, { dispatch }, props) {
+  const { lastSelectedIndex } = state;
+  const { genome, index } = props;
+  return {
+    ...props,
+    onViewGenome: e => e.stopPropagation() || dispatch(showGenomeDrawer(genome.id, genome.name)),
+    onClick: e => {
+      if (e.shiftKey && lastSelectedIndex !== null) {
+        dispatch(selectRange(lastSelectedIndex, index));
+      } else {
+        dispatch(toggleGenome(genome, index));
+      }
+    },
+  };
+}
+
+export default connect(mapStateToProps, null, mergeProps)(ListItem);

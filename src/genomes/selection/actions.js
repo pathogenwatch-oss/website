@@ -1,8 +1,9 @@
 import React from 'react';
 
 import { createAsyncConstants } from '../../actions';
+import { fetchGenomeList } from '../actions';
 
-import { getGenomeList } from '../selectors';
+import { getGenomeList, getGenomes, getListIndices } from '../selectors';
 import {
   getSelectedGenomes,
   getSelectionSize,
@@ -17,10 +18,10 @@ import { isOverSelectionLimit, getSelectionLimit } from './utils';
 
 export const SELECT_GENOMES = 'SELECT_GENOMES';
 
-export function selectGenomes(genomes, focus = false) {
+export function selectGenomes(genomes, index) {
   return {
     type: SELECT_GENOMES,
-    payload: { genomes, focus },
+    payload: { genomes, index },
   };
 }
 
@@ -47,6 +48,18 @@ export const CLEAR_GENOME_SELECTION = 'CLEAR_GENOME_SELECTION';
 export function clearSelection() {
   return {
     type: CLEAR_GENOME_SELECTION,
+  };
+}
+
+export function toggleGenome(genome, index) {
+  return (dispatch, getState) => {
+    const state = getState();
+    const selection = getSelectedGenomes(state);
+    if (genome.id in selection) {
+      dispatch(unselectGenomes([ genome ]));
+    } else {
+      dispatch(selectGenomes([ genome ], index));
+    }
   };
 }
 
@@ -112,5 +125,35 @@ export function fetchDownloads() {
         promise: api.fetchDownloads(ids),
       },
     });
+  };
+}
+
+export function selectRange(fromIndex, toIndex) {
+  return (dispatch, getState) => {
+    const state = getState();
+    const genomes = getGenomes(state);
+    const indices = getListIndices(state);
+
+    const start = Math.min(fromIndex, toIndex);
+    const stop = Math.max(fromIndex, toIndex);
+    const size = stop - start + 1;
+
+    const selection = [];
+    for (let i = start; i <= stop; i++) {
+      const id = indices[i];
+      if (id in genomes) {
+        selection.push(genomes[id]);
+      } else {
+        // fetch the rest
+        break;
+      }
+    }
+
+    if (selection.length === size) {
+      dispatch(toggleSelection(selection));
+    } else {
+      dispatch(fetchGenomeList(start, stop))
+        .then(fetchedGenomes => dispatch(toggleSelection(fetchedGenomes)));
+    }
   };
 }

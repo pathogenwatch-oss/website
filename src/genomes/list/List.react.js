@@ -40,9 +40,7 @@ export const ListView = React.createClass({
         <Header hasScrollbar={this.hasScrollbar()} />
         <InfiniteLoader
           isRowLoaded={({ index }) => indices[index]}
-          loadMoreRows={({ startIndex, stopIndex }) =>
-            fetch({ skip: startIndex, limit: stopIndex - startIndex + 1 })
-          }
+          loadMoreRows={fetch}
           rowCount={total}
           minimumBatchSize={100}
         >
@@ -59,7 +57,7 @@ export const ListView = React.createClass({
                     const itemId = indices[index];
                     const styleWithMargin = { ...style, width: 'calc(100% - 32px' };
                     if (typeof itemId === 'string') {
-                      return <ListItem key={key} style={styleWithMargin} item={items[itemId]} />;
+                      return <ListItem key={key} style={styleWithMargin} genome={items[itemId]} index={index} />;
                     }
                     return (
                       <div key={key} style={styleWithMargin} className="wgsa-genome-list-placeholder">
@@ -91,7 +89,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetch: query => dispatch(fetchGenomeList(query)),
+    fetch: ({ startIndex, stopIndex }) => dispatch(fetchGenomeList(startIndex, stopIndex)),
   };
 }
 

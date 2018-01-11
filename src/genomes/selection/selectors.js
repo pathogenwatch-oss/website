@@ -12,6 +12,7 @@ export const getSelection = ({ genomes }) => genomes.selection;
 export const getSelectedGenomes = state => getSelection(state).genomes;
 export const getSelectionDropdownView = state => getSelection(state).dropdown;
 export const getSelectionDownloads = state => getSelection(state).download;
+export const getLastSelectedIndex = state => getSelection(state).lastSelectedIndex;
 
 export const getSelectedGenomeIds = createSelector(
   getSelectedGenomes,

@@ -42,7 +42,7 @@ function indices(state = {}, { type, payload }) {
       const { skip = 0, limit = 0 } = payload.options;
       const nextState = { ... state };
       for (let i = skip; i < skip + limit; i++) {
-        nextState[i] = true;
+        nextState[i] = state[i] || true;
       }
       return nextState;
     }

@@ -10,6 +10,7 @@ const initialState = {
     status: null,
     summary: null,
   },
+  lastSelectedIndex: null,
 };
 
 const addToSelection = (memo, { id, name, organismId }) => {
@@ -28,6 +29,9 @@ export default function (state = initialState, { type, payload }) {
       return {
         ...state,
         genomes: payload.genomes.reduce(addToSelection, { ...state.genomes }),
+        lastSelectedIndex: typeof payload.index === 'number' ?
+          payload.index :
+          state.lastSelectedIndex,
       };
     }
     case actions.UNSELECT_GENOMES:
