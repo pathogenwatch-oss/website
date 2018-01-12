@@ -129,6 +129,7 @@ module.exports = () =>
           pusherKey: config.pusher.key,
           mapboxKey: config.mapboxKey,
           maxCollectionSize: config.maxCollectionSize,
+          maxDownloadSize: config.maxDownloadSize,
           maxFastaFileSize: config.maxFastaFileSize,
           pagination: config.pagination,
           wiki: config.wikiLocation,
