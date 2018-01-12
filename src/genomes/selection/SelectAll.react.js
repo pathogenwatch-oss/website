@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { selectAll, unselectAll } from './actions';
+import { selectAll } from './actions';
 import { getSelectionStatus } from './selectors';
 
 const iconsByStatus = {
@@ -10,10 +10,10 @@ const iconsByStatus = {
   INDETERMINATE: 'indeterminate_check_box',
 };
 
-const SelectAll = ({ status, select, unselect }) => (
+const SelectAll = ({ status, select }) => (
   <button
     className="wgsa-genome-checkbox"
-    onClick={status === 'CHECKED' ? unselect : select}
+    onClick={select}
     title={status === 'CHECKED' ? 'Remove from Selection' : 'Add to Selection'}
   >
     <i className="material-icons">
@@ -31,7 +31,6 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     select: () => dispatch(selectAll()),
-    unselect: () => dispatch(unselectAll()),
   };
 }
 

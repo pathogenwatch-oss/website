@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import { getSelectedGenomeIds, getSelectedGenomeList } from '../selectors';
 
-import { unselectGenomes, clearSelection, toggleDropdown } from '../actions';
+import { removeFromSelection, clearSelection, toggleDropdown } from '../actions';
 
 import { showGenomeDrawer, setBinnedFlag } from '../../../genomes/detail/actions';
 
@@ -84,7 +84,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     clearAll: () => dispatch(clearSelection()),
-    removeGenome: genome => dispatch(unselectGenomes([ genome ])),
+    removeGenome: genome => dispatch(removeFromSelection([ genome ])),
     showGenome: genome => dispatch(showGenomeDrawer(genome.id, genome.name)),
     sendToBin: genomes => dispatch(setBinnedFlag(genomes, true)),
     toggle: (view) => dispatch(toggleDropdown(view)),

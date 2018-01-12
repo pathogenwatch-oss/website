@@ -5,7 +5,7 @@ import AddToSelection from '../selection/AddToSelection.react';
 
 import { getLastSelectedIndex } from '../selection/selectors';
 
-import { toggleGenome, selectRange } from '../selection/actions';
+import { toggleSelection, selectRange } from '../selection/actions';
 
 import { FormattedName } from '../../organisms';
 import { formatDate } from '../../utils/Date';
@@ -109,7 +109,7 @@ function mergeProps(state, { dispatch }, props) {
       if (e.shiftKey && lastSelectedIndex !== null) {
         dispatch(selectRange(lastSelectedIndex, index));
       } else {
-        dispatch(toggleGenome(genome, index));
+        dispatch(toggleSelection([ genome ], index));
       }
     },
   };

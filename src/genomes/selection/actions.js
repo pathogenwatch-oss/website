@@ -5,80 +5,13 @@ import { fetchGenomeList } from '../actions';
 
 import { getGenomeList, getGenomes, getListIndices } from '../selectors';
 import { getVisible } from '../summary/selectors';
-import { getSelectedGenomes, getSelectedGenomeIds } from './selectors';
+import { getSelectedGenomes, getSelectedGenomeIds, getSelectionStatus } from './selectors';
 
 import { showToast } from '../../toast';
 
 import * as api from './api';
 
 import { isOverSelectionLimit, getSelectionLimit } from './utils';
-
-export const SELECT_GENOMES = 'SELECT_GENOMES';
-
-export function selectGenomes(genomes, index) {
-  return {
-    type: SELECT_GENOMES,
-    payload: { genomes, index },
-  };
-}
-
-export const UNSELECT_GENOMES = 'UNSELECT_GENOMES';
-
-export function unselectGenomes(genomes) {
-  return {
-    type: UNSELECT_GENOMES,
-    payload: { genomes },
-  };
-}
-
-export const SET_GENOME_SELECTION = 'SET_GENOME_SELECTION';
-
-export function setSelection(genomes) {
-  return {
-    type: SET_GENOME_SELECTION,
-    payload: { genomes },
-  };
-}
-
-export const CLEAR_GENOME_SELECTION = 'CLEAR_GENOME_SELECTION';
-
-export function clearSelection() {
-  return {
-    type: CLEAR_GENOME_SELECTION,
-  };
-}
-
-export function toggleGenome(genome, index) {
-  return (dispatch, getState) => {
-    const state = getState();
-    const selection = getSelectedGenomes(state);
-    if (genome.id in selection) {
-      dispatch(unselectGenomes([ genome ]));
-    } else {
-      dispatch(selectGenomes([ genome ], index));
-    }
-  };
-}
-
-export function toggleSelection(genomes) {
-  return (dispatch, getState) => {
-    const state = getState();
-    const selection = getSelectedGenomes(state);
-    if (genomes.every(genome => genome.id in selection)) {
-      dispatch(unselectGenomes(genomes));
-    } else {
-      dispatch(selectGenomes(genomes));
-    }
-  };
-}
-
-export function unselectAll(focus) {
-  return (dispatch, getState) => {
-    const state = getState();
-    const genomes = getGenomeList(state);
-    dispatch(unselectGenomes(genomes, focus));
-  };
-}
 
 export const SELECTION_DROPDOWN_OPENED = 'SELECTION_DROPDOWN_OPENED';
 
@@ -103,6 +36,53 @@ export function fetchDownloads() {
   };
 }
 
+export const SET_GENOME_SELECTION = 'SET_GENOME_SELECTION';
+
+export function setSelection(genomes) {
+  return {
+    type: SET_GENOME_SELECTION,
+    payload: { genomes },
+  };
+}
+
+export const CLEAR_GENOME_SELECTION = 'CLEAR_GENOME_SELECTION';
+
+export function clearSelection() {
+  return {
+    type: CLEAR_GENOME_SELECTION,
+  };
+}
+
+export const APPEND_GENOME_SELECTION = 'APPEND_GENOME_SELECTION';
+
+export function appendToSelection(genomes, index) {
+  return {
+    type: APPEND_GENOME_SELECTION,
+    payload: { genomes, index },
+  };
+}
+
+export const REMOVE_GENOME_SELECTION = 'REMOVE_GENOME_SELECTION';
+
+export function removeFromSelection(genomes) {
+  return {
+    type: REMOVE_GENOME_SELECTION,
+    payload: { genomes },
+  };
+}
+
+export function toggleSelection(genomes, index) {
+  return (dispatch, getState) => {
+    const state = getState();
+    const selection = getSelectedGenomes(state);
+    if (genomes.every(genome => genome.id in selection)) {
+      dispatch(removeFromSelection(genomes));
+    } else {
+      dispatch(appendToSelection(genomes, index));
+    }
+  };
+}
+
 export function selectRange(fromIndex, toIndex) {
   return (dispatch, getState) => {
     const state = getState();
@@ -122,7 +102,7 @@ export function selectRange(fromIndex, toIndex) {
     }
 
     if (selection.length === size) {
-      dispatch(selectGenomes(selection));
+      dispatch(appendToSelection(selection));
     } else {
       if (isOverSelectionLimit(size)) {
         dispatch(showToast({
@@ -135,7 +115,7 @@ export function selectRange(fromIndex, toIndex) {
       }
       dispatch(fetchGenomeList(start, Math.min(stop, start + getSelectionLimit() - 1)))
         .then(fetchedGenomes =>
-          dispatch(selectGenomes(fetchedGenomes))
+          dispatch(appendToSelection(fetchedGenomes))
         );
     }
   };
@@ -144,19 +124,26 @@ export function selectRange(fromIndex, toIndex) {
 export function selectAll() {
   return (dispatch, getState) => {
     const state = getState();
-    const total = getVisible(state);
-    const selection = getSelectedGenomes(state);
-    const indices = getListIndices(state);
+    const selectionStatus = getSelectionStatus(state);
 
-    let start = 0;
-    for (let i = 0; i < total; i++) {
-      const id = indices[i];
-      if (!(id in selection)) {
-        start = i;
-        break;
+    if (selectionStatus === 'CHECKED') {
+      const genomes = getGenomeList(state);
+      dispatch(removeFromSelection(genomes));
+    } else {
+      const total = getVisible(state);
+      const selection = getSelectedGenomes(state);
+      const indices = getListIndices(state);
+
+      let start = 0;
+      for (let i = 0; i < total; i++) {
+        const id = indices[i];
+        if (!(id in selection)) {
+          start = i;
+          break;
+        }
       }
-    }
 
-    dispatch(selectRange(start, total - 1));
+      dispatch(selectRange(start, total - 1));
+    }
   };
 }
