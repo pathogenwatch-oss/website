@@ -24,9 +24,10 @@ function mapStateToProps(state, { genomes }) {
   };
 }
 
-function mapDispatchToProps(dispatch, { genomes }) {
+function mapDispatchToProps(dispatch, { genomes, index, onClick }) {
   return {
-    onClick: e => e.stopPropagation() || dispatch(toggleSelection(genomes)),
+    onClick: onClick ||
+      (e => e.stopPropagation() || dispatch(toggleSelection(genomes, index))),
   };
 }
 

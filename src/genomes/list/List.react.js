@@ -46,8 +46,8 @@ export const ListView = React.createClass({
 
   getRowClassName(index) {
     const { lastSelectedIndex } = this.props;
-    const { mouseOverIndex } = this.state;
-    if (lastSelectedIndex !== null && mouseOverIndex !== null) {
+    const { mouseOverIndex, range } = this.state;
+    if (lastSelectedIndex !== null && range && mouseOverIndex !== null) {
       const startIndex = Math.min(lastSelectedIndex, mouseOverIndex);
       const stopIndex = Math.max(lastSelectedIndex, mouseOverIndex);
       if (startIndex <= index && index <= stopIndex) {
@@ -60,7 +60,16 @@ export const ListView = React.createClass({
   render() {
     const { items, total, fetch, indices } = this.props;
     return (
-      <div className="wgsa-genome-list-view">
+      <div
+        className="wgsa-genome-list-view"
+        tabIndex="0"
+        onKeyDown={e => {
+          this.setState({ range: e.shiftKey });
+        }}
+        onKeyUp={() => {
+          this.setState({ range: false });
+        }}
+      >
         <Header hasScrollbar={this.hasScrollbar()} />
         <InfiniteLoader
           isRowLoaded={({ index }) => indices[index]}
@@ -89,11 +98,7 @@ export const ListView = React.createClass({
                           index={index}
                           className={this.getRowClassName(index)}
                           onMouseOver={e => {
-                            if (e.shiftKey) {
-                              this.setState({ mouseOverIndex: index });
-                            } else if (this.state.mouseOverIndex !== null) {
-                              this.setState({ mouseOverIndex: null });
-                            }
+                            this.setState({ mouseOverIndex: index });
                           }}
                         />
                       );

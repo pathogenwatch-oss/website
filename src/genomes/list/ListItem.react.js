@@ -15,10 +15,11 @@ import { getCountryName } from '../../utils/country';
 import { showGenomeDrawer } from '../../genomes/detail';
 import { ST } from '../../mlst';
 
-const Cell = ({ title, icon, children }) => (
+const Cell = ({ title, icon, children, onClick }) => (
   <span
     className="wgsa-genome-list-cell wgsa-overflow-fade"
     title={title}
+    onClick={onClick}
   >
     { icon && <i title={title} className="material-icons">{icon}</i> }
     {children}
@@ -53,7 +54,7 @@ const displayAccessLevel = (props) => {
   );
 };
 
-const ListItem = ({ genome, onClick, style, onViewGenome, className, onMouseOver }) => {
+const ListItem = ({ index, genome, onClick, style, onViewGenome, className, onMouseOver }) => {
   const { name, organismId, organismName, st, country } = genome;
   const countryName = country ? getCountryName(country) : null;
   const date = genome.date ? formatDate(genome.date) : null;
@@ -64,8 +65,8 @@ const ListItem = ({ genome, onClick, style, onViewGenome, className, onMouseOver
       onClick={onClick}
       onMouseOver={onMouseOver}
     >
-      <Cell title={name} onClick={e => e.stopPropagation()}>
-        <AddToSelection genomes={[ genome ]} />
+      <Cell title={name}>
+        <AddToSelection genomes={[ genome ]} index={index} onClick={onClick} />
         <button title="View Details" className="wgsa-link-button" onClick={onViewGenome}>
           {name}
         </button>
@@ -108,6 +109,7 @@ function mergeProps(state, { dispatch }, props) {
     ...props,
     onViewGenome: e => e.stopPropagation() || dispatch(showGenomeDrawer(genome.id, genome.name)),
     onClick: e => {
+      e.stopPropagation();
       if (e.shiftKey && lastSelectedIndex !== null) {
         dispatch(selectRange(lastSelectedIndex, index));
       } else {
