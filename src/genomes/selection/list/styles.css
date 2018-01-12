@@ -39,19 +39,8 @@
   white-space: nowrap;
 }
 
-.wgsa-genome-selection__list {
-  overflow-x: hidden;
-  overflow-y: auto;
-  flex-grow: 1;
-  width: 438px; /* 440px - 1px border either side */
-}
-
-.wgsa-genome-selection__list > ul {
-  margin: 8px 0;
-  min-height: 100%;
-  min-width: 438px;
-  width: 438px;
-  box-sizing: border-box;
+.wgsa-genome-selection-list .ReactVirtualized__Grid__innerScrollContainer {
+  margin-top: 16px; 
 }
 
 .wgsa-list-item {

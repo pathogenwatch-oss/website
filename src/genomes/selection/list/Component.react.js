@@ -26,6 +26,7 @@ const Selection = ({ selectedGenomes, showGenome, removeGenome, clearAll, sendTo
       height={278}
       width={438}
       style={{ overflowX: 'hidden' }}
+      className="wgsa-genome-selection-list"
       rowCount={selectedGenomes.length}
       rowHeight={32}
       rowRenderer={({ key, index, style }) => {
@@ -36,7 +37,7 @@ const Selection = ({ selectedGenomes, showGenome, removeGenome, clearAll, sendTo
             title="Click to View"
             className="wgsa-list-item"
             onClick={() => showGenome(genome)}
-            style={{ ...style, width: 440 }}
+            style={{ ...style, width: 440, top: style.top + 8 }}
           >
             <span>{genome.name}</span>
             <button
