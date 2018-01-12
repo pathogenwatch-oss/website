@@ -3,8 +3,8 @@ import { combineReducers } from 'redux';
 import { metadata, typing, stats } from '../data-tables';
 import { antibiotics, snps, genes } from '../amr-tables';
 
-import { FETCH_COLLECTION } from '../../collection-viewer/actions';
-import { SET_TABLE } from './actions';
+import { FETCH_COLLECTION } from '../actions';
+import { SET_TABLE, AMR_TOGGLE_MULTI } from './actions';
 
 import { getInitialTable } from '../data-tables/utils';
 
@@ -42,6 +42,15 @@ function activeAMR(state = tableKeys.antibiotics, { type, payload }) {
   }
 }
 
+function multi(state = false, { type }) {
+  switch (type) {
+    case AMR_TOGGLE_MULTI:
+      return !state;
+    default:
+      return state;
+  }
+}
+
 export default combineReducers({
   entities: combineReducers({
     metadata,
@@ -54,4 +63,5 @@ export default combineReducers({
   visible,
   activeAMR,
   activeData,
+  multi,
 });
