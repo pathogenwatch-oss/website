@@ -16,13 +16,8 @@
   margin-bottom: 0;
 }
 
-.wgsa-genome-selection-dropdown .wgsa-button-group {
-  justify-content: center;
-  margin-bottom: 16px;
-}
-
-.wgsa-genome-selection-dropdown h3 {
-  margin-top: 16px;
+.wgsa-selection-message {
+  padding: 0 32px;
 }
 
 .wgsa-dropdown-header,

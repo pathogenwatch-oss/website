@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import Spinner from '../../../components/Spinner.react';
 import { FormattedName } from '../../../organisms';
+import Limiter from '../Limiter.react';
 
 import {
   getSelectionDownloads,
@@ -52,15 +53,16 @@ const Section = ({ speciesId, speciesName, total, tasks, ids }) => {
   );
 };
 
-const Download = React.createClass({
+const Content = React.createClass({
 
   componentDidMount() {
     this.props.fetch();
   },
 
   componentDidUpdate(previous) {
-    if (previous.selection !== this.props.selection) {
-      this.props.fetch();
+    const { selection, fetch } = this.props;
+    if (previous.selection !== selection) {
+      fetch();
     }
   },
 
@@ -72,7 +74,7 @@ const Download = React.createClass({
     );
   },
 
-  renderContent() {
+  render() {
     const { status, summary, selection } = this.props;
 
     if (status === statuses.LOADING) {
@@ -110,28 +112,29 @@ const Download = React.createClass({
     return null;
   },
 
-  render() {
-    return (
-      <div className="wgsa-genome-downloads">
-        <header className="wgsa-dropdown-header">
-          Download
-        </header>
-        <div className="wgsa-genome-downloads__content">
-          {this.renderContent()}
-        </div>
-        <footer className="wgsa-dropdown-footer">
-          <button
-            className="mdl-button"
-            onClick={() => this.props.toggle('selection')}
-          >
-            Go back
-          </button>
-        </footer>
-      </div>
-    );
-  },
-
 });
+
+
+const Download = ({ goBack, ...props }) => (
+  <div className="wgsa-genome-downloads">
+    <header className="wgsa-dropdown-header">
+      Download
+    </header>
+    <div className="wgsa-genome-downloads__content">
+      <Limiter type="maxDownloadSize">
+        <Content {...props} />
+      </Limiter>
+    </div>
+    <footer className="wgsa-dropdown-footer">
+      <button
+        className="mdl-button"
+        onClick={goBack}
+      >
+        Go back
+      </button>
+    </footer>
+  </div>
+);
 
 function mapStateToProps(state) {
   return {
@@ -144,7 +147,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     fetch: () => dispatch(fetchDownloads()),
-    toggle: (view) => dispatch(toggleDropdown(view)),
+    goBack: () => dispatch(toggleDropdown('selection')),
   };
 }
 

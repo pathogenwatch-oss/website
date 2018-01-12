@@ -10,7 +10,7 @@ import { getDeployedOrganismIds } from '../../summary/selectors';
 import { setSelection } from '../selection/actions';
 
 const NoSupportedOrganism = ({ deployedOrganisms }) => (
-  <div>
+  <div className="wgsa-create-collection-message">
     <p>
       To create a collection, please select genomes designated as one of the following organisms:
     </p>
@@ -25,7 +25,7 @@ const NoSupportedOrganism = ({ deployedOrganisms }) => (
 );
 
 const NotEnoughGenomes = ({ organismId, deficit }) => (
-  <div className="wgsa-not-enough-genomes">
+  <div className="wgsa-create-collection-message">
     <p>
       Population search is not currently supported for <strong><FormattedName fullName organismId={organismId} /></strong>.
     </p>
@@ -37,7 +37,7 @@ const NotEnoughGenomes = ({ organismId, deficit }) => (
 );
 
 const SelectOrganism = ({ summary, onClick }) => (
-  <div>
+  <div className="wgsa-create-collection-message">
     <p>To create a collection, please select <strong>one organism</strong> below:</p>
     <p>
       { Object.keys(summary).map(id =>
