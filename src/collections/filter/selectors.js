@@ -8,6 +8,7 @@ import { taxIdMap } from '../../organisms';
 import { stateKey } from './index';
 
 export const getFilter = state => filter.getFilter(state, { stateKey });
+export const isActive = state => filter.isActive(state, { stateKey });
 
 export const getPrefilter = state => getFilter(state).prefilter;
 export const getActiveSort = state => getFilter(state).sort;

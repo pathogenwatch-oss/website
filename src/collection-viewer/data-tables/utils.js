@@ -17,7 +17,8 @@ export function hasTyping({ noPopulation, noMLST, ngMast, genotyphi }) {
   return true;
 }
 
-export function getInitialTable({ genomes }) {
+export function getInitialTable({ status, genomes }) {
+  if (status !== 'READY') return null;
   if (hasMetadata(genomes)) return tableKeys.metadata;
   if (hasTyping(Organisms.uiOptions)) return tableKeys.typing;
   return tableKeys.stats;

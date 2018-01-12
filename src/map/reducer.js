@@ -39,7 +39,7 @@ export default function (state = {}, { type, payload }) {
       return Object.keys(state).reduce((memo, stateKey) => {
         const currentState = state[stateKey];
         memo[stateKey] =
-          stateKey.indexOf('GENOMES') === 0 ? {
+          stateKey.indexOf('GENOME') === 0 ? {
             ...currentState,
             lassoPath: null,
           } : currentState;

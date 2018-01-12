@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import Collection from './Collection.react';
 
 import { getCollection } from '../selectors';
-import { getProgressPercentage } from '../progress/selectors.js';
+
 
 import * as actions from '../actions';
 
@@ -12,10 +12,8 @@ import { getUuidFromSlug } from '../utils';
 import { statuses } from '../constants';
 
 function mapStateToProps(state) {
-  const collection = getCollection(state);
   return {
-    collection,
-    percentage: getProgressPercentage(state),
+    collection: getCollection(state),
   };
 }
 

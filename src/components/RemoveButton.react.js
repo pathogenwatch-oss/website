@@ -7,11 +7,11 @@ export default ({ moveToBin, restoreFromBin, primary, className, item = {} }) =>
   if (item.binned) {
     return (
       <button
-        className="mdl-button wgsa-button--text"
+        className="mdl-button mdl-button--icon"
         onClick={restoreFromBin}
         title="Restore from Bin"
       >
-        Restore
+        <i className="material-icons">delete_forever</i>
       </button>
     );
   }

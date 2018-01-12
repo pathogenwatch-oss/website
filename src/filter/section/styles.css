@@ -50,6 +50,7 @@
   display: block;
   margin-bottom: 8px;
   max-width: 100%;
+  font-weight: 400;
 }
 
 .wgsa-filter .mdl-chip__text {

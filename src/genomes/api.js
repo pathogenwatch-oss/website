@@ -19,3 +19,7 @@ export function fetchSummary(filter) {
 export function binGenome(id, status) {
   return fetchJson('POST', `/api/genome/${id}/binned`, { status });
 }
+
+export function fetchSelection(ids) {
+  return fetchJson('POST', '/api/genome/selection', ids);
+}

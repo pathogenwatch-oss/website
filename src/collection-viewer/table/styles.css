@@ -19,7 +19,7 @@
   padding: 0 4px;
   color: rgba(0, 0, 0, 0.54);
   cursor: help;
-  font-size: 18px;
+  font-size: 17px;
   border: 1px solid rgba(0, 0, 0, 0.28);
   border-right: none;
 }
@@ -97,13 +97,16 @@
   color: rgba(0, 0, 0, 0.87);
   border: none;
   border-radius: 4px;
+  line-height: 20px;
   font-size: 11px;
   font-weight: 500;
   height: 20px;
-  line-height: 20px;
   margin: 0 0 4px;
   text-overflow: ellipsis;
   white-space: nowrap;
+  /* browser-specific button padding means we must set left and right ONLY here */
+  padding-left: 6px;
+  padding-right: 6px;
 }
 
 .wgsa-selectable-column-heading--active,

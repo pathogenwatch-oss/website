@@ -1,6 +1,6 @@
 import { createAsyncConstants } from '../../actions';
 
-import { makeFileRequest } from '../../utils/Api';
+import { makeFileRequest } from '../api';
 
 export const SET_MENU_ACTIVE = 'SET_MENU_ACTIVE';
 

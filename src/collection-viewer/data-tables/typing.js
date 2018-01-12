@@ -80,9 +80,9 @@ export function getTypingColumnGroups(uiOptions) {
     uiOptions.noMLST ? null : mlstGroup,
     uiOptions.ngMast ? ngMastGroup : null,
     uiOptions.genotyphi ? genotyphigroup : null,
-  ].
-  filter(_ => _).
-  map(fillColumnDefs);
+  ]
+  .filter(_ => _)
+  .map(fillColumnDefs);
 }
 
 export default function (state = initialState, { type, payload }) {

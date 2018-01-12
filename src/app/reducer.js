@@ -4,7 +4,6 @@ import { reducer as account } from '../account';
 import { reducer as collections } from '../collections';
 import { reducer as downloads } from '../downloads';
 import { reducer as filters } from '../filter';
-import { reducer as genomeDrawer } from '../genome-drawer';
 import { reducer as genomes } from '../genomes';
 import { reducer as header } from '../header';
 import { reducer as location } from '../location/';
@@ -22,7 +21,6 @@ export default combineReducers({
   downloads,
   filters,
   header,
-  genomeDrawer,
   genomes,
   location,
   maps,

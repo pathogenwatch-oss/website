@@ -15,6 +15,7 @@ import { formatDateTime } from '../../utils/Date';
 import { ST, isNovel } from '../../mlst';
 
 export const getFilter = state => filter.getFilter(state, { stateKey });
+export const isActive = state => filter.isActive(state, { stateKey });
 
 export const getPrefilter = state => getFilter(state).prefilter;
 export const getSort = state => getFilter(state).sort;

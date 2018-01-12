@@ -7,3 +7,92 @@
   color: #673c90;
   font-size: 40px;
 }
+
+.wgsa-genomes-map-popup {
+  background: #fff;
+  white-space: nowrap;
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  margin: 0;
+  max-height: 432px;
+  max-width: 240px;
+  display: flex;
+  flex-direction: column;
+  line-height: 16px;
+  z-index: 1;
+}
+
+.wgsa-genomes-map-popup.is-loading {
+  padding: 16px;
+}
+
+.wgsa-genomes-map-popup header {
+  display: flex;
+  min-height: 40px;
+  align-items: center;
+  padding-left: 8px;
+}
+
+.wgsa-genomes-map-popup header > :last-child {
+  margin-left: auto;
+  margin-right: 4px;
+}
+
+.wgsa-genomes-map-popup h2 {
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: 500;
+  line-height: inherit;
+  margin: 0;
+}
+
+.wgsa-genomes-map-popup ul {
+  margin: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  flex-grow: 1;
+  border-top: 1px solid rgba(0, 0, 0, 0.14);
+}
+
+.wgsa-genomes-map-popup li {
+  border-top: 1px solid rgba(0, 0, 0, 0.14);
+  padding: 8px;
+  padding-right: 16px;
+  display: flex;
+  align-items: flex-start;
+}
+
+.wgsa-genomes-map-popup li:first-child {
+  border-width: 0;
+}
+
+.wgsa-genomes-map-popup .wgsa-genome-checkbox {
+  padding-right: 8px;
+  height: 24px;
+  line-height: 0;
+}
+
+.wgsa-checklist-content {
+  display: block;
+  min-width: calc(100% - 24px);
+}
+
+.wgsa-checklist-content button {
+  display: block;
+  text-overflow: ellipsis;
+  overflow-x: hidden;
+  max-width: 100%;
+  padding: 0;
+}
+
+.wgsa-checklist-content > :first-child {
+  line-height: 24px;
+}
+
+.wgsa-checklist-content > :last-child {
+  font-size: 13px;
+  display: block;
+  line-height: 1;
+  margin-top: 2px;
+}

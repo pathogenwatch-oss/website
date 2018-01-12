@@ -7,6 +7,9 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import classnames from 'classnames';
 import 'chart.piecelabel.js';
+import { AutoSizer } from 'react-virtualized';
+
+import ChartResizer from '../../components/chart-resizer';
 
 import {
   getChartData,
@@ -41,7 +44,8 @@ const AnalysisChart = React.createClass({
       type: 'doughnut',
       data: this.props.data,
       options: {
-        responsive: true,
+        responsive: false,
+        maintainAspectRatio: false,
         animation: {
           animateRotate: true,
           animateScale: true,
@@ -121,7 +125,17 @@ const AnalysisChart = React.createClass({
   render() {
     return (
       <div className="wgsa-analysis-chart">
-        <canvas ref={el => { this.canvas = el; }} />
+        <AutoSizer>
+          {({ width, height }) => (
+            <ChartResizer
+              height={height}
+              width={width}
+              chart={this.chart}
+            >
+              <canvas ref={el => { this.canvas = el; }} />
+            </ChartResizer>
+          )}
+        </AutoSizer>
         { this.props.specieationComplete &&
           <Link
             className={classnames(

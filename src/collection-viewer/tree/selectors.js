@@ -29,11 +29,10 @@ export const isLoaded = state => getVisibleTree(state).loaded;
 export const getTreeType = state => getVisibleTree(state).type;
 
 export const getSingleTree = createSelector(
-  getTrees,
-  trees => {
-    const collectionTree = trees[COLLECTION];
+  getCollection,
+  (collection) => {
+    if (collection.size < 3) return POPULATION;
     if (Organisms.uiOptions.noPopulation) return COLLECTION;
-    if (!(collectionTree && collectionTree.newick)) return POPULATION;
     return null;
   }
 );

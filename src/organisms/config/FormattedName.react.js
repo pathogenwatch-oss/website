@@ -6,12 +6,12 @@ import { isOffline } from '../../offline';
 
 import { taxIdMap } from './index';
 
-function mapStateToProps(state, { organismId }) {
+function mapStateToProps(state, { organismId, title }) {
   const deployedOrganisms = getDeployedOrganismIds(state);
   const offline = isOffline();
   return {
     isDeployed:
-      offline ?
+      offline || !title ?
         taxIdMap.has(organismId) :
         deployedOrganisms && deployedOrganisms.has(organismId),
   };

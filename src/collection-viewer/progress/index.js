@@ -7,6 +7,10 @@ import removeMarkdown from 'remove-markdown';
 import Dashboard from './Dashboard.react';
 import Errors from './Errors.react';
 
+import { getProgressPercentage, getPosition } from './selectors.js';
+
+import { fetchPosition } from '../actions';
+
 import { subscribe, unsubscribe } from '../../utils/Notification';
 
 const UploadProgress = React.createClass({
@@ -14,7 +18,6 @@ const UploadProgress = React.createClass({
   propTypes: {
     updateProgress: React.PropTypes.func,
     progress: React.PropTypes.object,
-    dispatch: React.PropTypes.func,
     metadata: React.PropTypes.object,
   },
 
@@ -27,12 +30,23 @@ const UploadProgress = React.createClass({
     componentHandler.upgradeDom();
   },
 
-  componentDidUpdate() {
+  componentDidUpdate(previous) {
     this.setDocumentTitle();
+    const { collection, position } = this.props;
+
+    if (position === 0) {
+      this.stopPolling();
+      return;
+    }
+
+    if (!previous.collection.progress && collection.progress) {
+      this.fetchPosition();
+    }
   },
 
   componentWillUnmount() {
     unsubscribe(this.props.collection.uuid, 'progress');
+    this.stopPolling();
   },
 
   setDocumentTitle() {
@@ -56,19 +70,53 @@ const UploadProgress = React.createClass({
         updateProgress
       );
     }
+    this.fetchPosition();
+  },
+
+  fetchPosition() {
+    const { collection } = this.props;
+    if (collection.progress) {
+      const { started } = collection.progress;
+      this.props.fetchPosition(started).then(this.poll);
+    }
+  },
+
+  poll() {
+    const { collection } = this.props;
+    if (collection.progress) {
+      const { started } = collection.progress;
+      this.stopPolling();
+      this.interval = setInterval(
+        () => this.props.fetchPosition(started),
+        30 * 1000
+      );
+    }
+  },
+
+  stopPolling() {
+    if (this.interval) clearInterval(this.interval);
   },
 
   render() {
-    const { progress = {} } = this.props.collection;
+    const { position, collection } = this.props;
+    const { progress = {} } = collection;
     const { errors = [], results = {} } = progress;
     return (
       <div className="wgsa-collection-progress">
         <main className="wgsa-collection-progress-container">
           <div className="wgsa-collection-url-display wgsa-collection-progress-section">
-            <div className="mdl-card__supporting-text">
+            <p className="mdl-card__supporting-text">
               Final results will be available at the current address.<br />
               If upload fails to progress, please refresh at a later time.
-            </div>
+            </p>
+            { position !== null &&
+              <p className="mdl-card__supporting-text">
+                { position === 0 ?
+                  <strong>Results processing.</strong> :
+                  <strong>
+                    {position} job{position === 1 ? '' : 's'} till next result.
+                  </strong> }
+              </p> }
           </div>
           <Dashboard results={results} />
           { errors.length ?
@@ -84,4 +132,17 @@ const UploadProgress = React.createClass({
 
 });
 
-export default connect()(UploadProgress);
+function mapStateToProps(state) {
+  return {
+    percentage: getProgressPercentage(state),
+    position: getPosition(state),
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    fetchPosition: started => dispatch(fetchPosition(started)),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(UploadProgress);

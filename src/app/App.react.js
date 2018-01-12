@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import classnames from 'classnames';
 
 import Toast from '../toast';
-import GenomeDrawer from '../genome-drawer';
+import GenomeDrawer from '../genomes/detail';
 
 import Header from './Header.react';
 import Content from './Content.react';
