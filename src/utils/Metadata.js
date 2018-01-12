@@ -7,7 +7,7 @@ function convertFieldNamesToLowerCase(row) {
   const cleanRow = {};
   for (const fieldName of fieldNames) {
     if (fieldName.length) {
-      cleanRow[fieldName.toLowerCase().trim()] = row[fieldName].trim();
+      cleanRow[fieldName.toLowerCase().trim()] = row[fieldName].trim().replace(/^=*/, '');
     }
   }
   return cleanRow;
