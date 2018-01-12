@@ -13,6 +13,7 @@ function getGenomes(genomeIds) {
   };
   const projection = {
     fileId: 1,
+    'analysis.core.profile.id': 1,
     'analysis.core.profile.filter': 1,
     'analysis.core.profile.alleles.filter': 1,
     'analysis.core.profile.alleles.mutations': 1,
@@ -44,22 +45,17 @@ function getCache(genomes, { version }) {
   });
 }
 
-async function generateTreeData(tree, collectionGenomeIds) {
-  const genomeIds = Collection.getSubtreeIds(tree);
-  const genomes = await getGenomes(genomeIds);
-  const cache = await getCache(genomes, tree);
+
+function generateTreeStats(genomes, cache) {
   const scores = [];
-  let userVariantSites = 0;
-  let publicVariantSites = 0;
-  let userUnfilteredVariantSites = 0;
-  let publicUnfilteredVariantSites = 0;
-  const uniqueUserVariantSites = {};
-  const uniquePublicVariantSites = {};
+
   for (let a = 0; a < genomes.length; a++) {
     const genomeA = genomes[a];
     for (let b = 0; b <= a; b++) {
       const genomeB = genomes[b];
-      if (genomeA === genomeB) {
+      if (a === b) {
+        continue;
+      } else if (genomeA.fileId === genomeB.fileId) {
         scores.push(0);
       } else if (genomeA.fileId in cache && genomeB.fileId in cache[genomeA.fileId]) {
         scores.push(cache[genomeA.fileId][genomeB.fileId]);
@@ -67,59 +63,127 @@ async function generateTreeData(tree, collectionGenomeIds) {
         throw new ServiceRequestError(`Missing score for ${genomeA.fileId} ${genomeB.fileId}`);
       }
     }
+  }
 
+  const stats = calculateStats(scores.sort((a, b) => a - b));
+
+  return stats;
+}
+
+function generateTreeSites(genomes, collectionGenomeIds) {
+  const sitesByFamilyId = {};
+
+  for (const genomeA of genomes) {
     const isCollectionGenome = collectionGenomeIds.has(genomeA._id.toString());
     for (const profile of genomeA.analysis.core.profile) {
-      if (!uniqueUserVariantSites[profile.id]) {
-        uniqueUserVariantSites[profile.id] = new Set();
+      if (!sitesByFamilyId[profile.id]) {
+        sitesByFamilyId[profile.id] = {
+          userFiltered: {},
+          publicFiltered: {},
+          userUnfiltered: {},
+          publicUnfiltered: {},
+          userRepresentative: new Set(),
+          publicRepresentative: new Set(),
+        };
       }
-      if (!uniquePublicVariantSites[profile.id]) {
-        uniquePublicVariantSites[profile.id] = new Set();
-      }
+
+      const sites = sitesByFamilyId[profile.id];
+      const filteredPositions = new Set();
+      const unfilteredPositions = new Set();
+      const unfilteredMutations = new Set();
       for (const allele of profile.alleles) {
-        for (const site of Object.keys(allele.mutations)) {
+        for (const position of Object.keys(allele.mutations)) {
           if (profile.filter === false && allele.filter === false) {
-            if (isCollectionGenome) {
-              userVariantSites++;
-              uniqueUserVariantSites[profile.id].add(site);
-            }
-            publicVariantSites++;
-            uniquePublicVariantSites[profile.id].add(site);
+            filteredPositions.add(position);
           }
-          if (isCollectionGenome) {
-            userUnfilteredVariantSites++;
-          }
-          publicUnfilteredVariantSites++;
+
+          unfilteredPositions.add(position);
+          unfilteredMutations.add(position + allele.mutations[position]);
+
+          sites.userFiltered[position] = 0;
+          sites.publicFiltered[position] = 0;
+          sites.userUnfiltered[position] = 0;
+          sites.publicUnfiltered[position] = 0;
         }
+      }
+
+      for (const position of filteredPositions) {
+        if (isCollectionGenome) {
+          sites.userFiltered[position]++;
+        }
+        sites.publicFiltered[position]++;
+      }
+
+      for (const position of unfilteredPositions) {
+        if (isCollectionGenome) {
+          sites.userUnfiltered[position]++;
+        }
+        sites.publicUnfiltered[position]++;
+      }
+
+      for (const mutation of unfilteredMutations) {
+        if (isCollectionGenome) {
+          sites.userRepresentative.add(mutation);
+        }
+        sites.publicRepresentative.add(mutation);
       }
     }
   }
-  const stats = calculateStats(scores.sort());
-  let userRepresentativeVariantSites = 0;
-  for (const id of Object.keys(uniqueUserVariantSites)) {
-    userRepresentativeVariantSites += uniqueUserVariantSites[id].size;
+
+  const result = {
+    userFiltered: 0,
+    publicFiltered: 0,
+    userUnfiltered: 0,
+    publicUnfiltered: 0,
+    userRepresentative: 0,
+    publicRepresentative: 0,
+  };
+
+  for (const id of Object.keys(sitesByFamilyId)) {
+    const sites = sitesByFamilyId[id];
+
+    for (const count of Object.values(sites.userFiltered)) {
+      if (count > 0 && count < genomes.length) {
+        result.userFiltered++;
+      }
+    }
+    for (const count of Object.values(sites.publicFiltered)) {
+      if (count > 0 && count < genomes.length) {
+        result.publicFiltered++;
+      }
+    }
+    for (const count of Object.values(sites.userUnfiltered)) {
+      if (count > 0 && count < genomes.length) {
+        result.userUnfiltered++;
+      }
+    }
+    for (const count of Object.values(sites.publicUnfiltered)) {
+      if (count > 0 && count < genomes.length) {
+        result.publicUnfiltered++;
+      }
+    }
+
+    result.userRepresentative += sites.userRepresentative.size;
+    result.publicRepresentative += sites.publicRepresentative.size;
   }
-  let publicRepresentativeVariantSites = 0;
-  for (const id of Object.keys(uniquePublicVariantSites)) {
-    publicRepresentativeVariantSites += uniquePublicVariantSites[id].size;
-  }
+
+  return result;
+}
+
+async function generateTreeData(tree, treeGenomeIds, collectionGenomeIds) {
+  const genomes = await getGenomes(treeGenomeIds);
+
+  const cache = await getCache(genomes, tree);
+  const stats = generateTreeStats(genomes, cache);
+
+  const sites = generateTreeSites(genomes, collectionGenomeIds);
+
   const result = {
     label: tree.name,
     totalCollection: tree.size - tree.populationSize,
     total: tree.size,
-    minScore: stats.min,
-    maxScore: stats.max,
-    meanScore: stats.mean,
-    stdDevScore: stats.stdDev,
-    medianScore: stats.median,
-    lowerQuartileScore: stats.lowerQuartile,
-    upperQuartileScore: stats.upperQuartile,
-    userVariantSites,
-    publicVariantSites,
-    userUnfilteredVariantSites,
-    publicUnfilteredVariantSites,
-    userRepresentativeVariantSites,
-    publicRepresentativeVariantSites,
+    stats,
+    sites,
   };
   return result;
 }
@@ -152,19 +216,19 @@ function writeMatrixLine(result, stream) {
     result.label.replace(/,/g, ''),
     result.totalCollection,
     result.total,
-    result.minScore,
-    result.maxScore,
-    result.meanScore,
-    result.stdDevScore,
-    result.medianScore,
-    result.lowerQuartileScore,
-    result.upperQuartileScore,
-    result.userVariantSites,
-    result.publicVariantSites,
-    result.userUnfilteredVariantSites,
-    result.publicUnfilteredVariantSites,
-    result.userRepresentativeVariantSites,
-    result.publicRepresentativeVariantSites,
+    result.stats.min,
+    result.stats.max,
+    result.stats.mean,
+    result.stats.stdDev,
+    result.stats.median,
+    result.stats.lowerQuartile,
+    result.stats.upperQuartile,
+    result.sites.userFiltered,
+    result.sites.publicFiltered,
+    result.sites.userUnfiltered,
+    result.sites.publicUnfiltered,
+    result.sites.userRepresentative,
+    result.sites.publicRepresentative,
   ];
   stream.write(line.join(','));
   stream.write('\n');
@@ -178,12 +242,21 @@ function writeMatrixFooter(stream) {
 
 async function generateData({ genomes, tree, subtrees }, stream) {
   const collectionGenomeIds = new Set(genomes.map(id => id.toString()));
-  // const collectionData = await generateTreeData('collection', collectionGenomes.length, 0, collectionGenomes);
-  // writeMatrixLine(collectionData, stream);
+  const collectionTree = {
+    name: 'collection',
+    size: collectionGenomeIds.size,
+    populationSize: 0,
+    version: tree.version,
+  };
+  const collectionData = await generateTreeData(collectionTree, Array.from(collectionGenomeIds), collectionGenomeIds);
+  writeMatrixLine(collectionData, stream);
 
   for (const subtree of subtrees) {
-    const data = await generateTreeData(subtree, collectionGenomeIds);
-    writeMatrixLine(data, stream);
+    if (subtree.status === 'READY') {
+      const genomeIds = Collection.getSubtreeIds(subtree);
+      const data = await generateTreeData(subtree, genomeIds, collectionGenomeIds);
+      writeMatrixLine(data, stream);
+    }
   }
 }
 
