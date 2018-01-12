@@ -6,6 +6,7 @@ import ListItem from './ListItem.react';
 import Header from './Header.react';
 
 import { getGenomes, getListIndices } from '../selectors';
+import { getLastSelectedIndex } from '../selection/selectors';
 import { getVisible } from '../summary/selectors';
 
 import { fetchGenomeList } from '../actions';
@@ -26,6 +27,12 @@ export const ListView = React.createClass({
     total: React.PropTypes.number.isRequired,
   },
 
+  getInitialState() {
+    return {
+      mouseOverIndex: null,
+    };
+  },
+
   componentWillMount() {
     document.title = 'WGSA | Genomes';
   },
@@ -35,6 +42,19 @@ export const ListView = React.createClass({
     return (
       total * rowHeight >= window.innerHeight - offset
     );
+  },
+
+  getRowClassName(index) {
+    const { lastSelectedIndex } = this.props;
+    const { mouseOverIndex } = this.state;
+    if (lastSelectedIndex !== null && mouseOverIndex !== null) {
+      const startIndex = Math.min(lastSelectedIndex, mouseOverIndex);
+      const stopIndex = Math.max(lastSelectedIndex, mouseOverIndex);
+      if (startIndex <= index && index <= stopIndex) {
+        return 'active';
+      }
+    }
+    return '';
   },
 
   render() {
@@ -61,7 +81,22 @@ export const ListView = React.createClass({
                     const itemId = indices[index];
                     const styleWithMargin = { ...style, width: 'calc(100% - 32px' };
                     if (typeof itemId === 'string') {
-                      return <ListItem key={key} style={styleWithMargin} genome={items[itemId]} index={index} />;
+                      return (
+                        <ListItem
+                          key={key}
+                          style={styleWithMargin}
+                          genome={items[itemId]}
+                          index={index}
+                          className={this.getRowClassName(index)}
+                          onMouseOver={e => {
+                            if (e.shiftKey) {
+                              this.setState({ mouseOverIndex: index });
+                            } else if (this.state.mouseOverIndex !== null) {
+                              this.setState({ mouseOverIndex: null });
+                            }
+                          }}
+                        />
+                      );
                     }
                     return (
                       <div key={key} style={styleWithMargin} className="wgsa-genome-list-placeholder">
@@ -88,6 +123,7 @@ function mapStateToProps(state) {
     items: getGenomes(state),
     indices: getListIndices(state),
     total: getVisible(state),
+    lastSelectedIndex: getLastSelectedIndex(state),
   };
 }
 

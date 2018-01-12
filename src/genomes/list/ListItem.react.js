@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import classnames from 'classnames';
 
 import AddToSelection from '../selection/AddToSelection.react';
 
@@ -52,15 +53,16 @@ const displayAccessLevel = (props) => {
   );
 };
 
-const ListItem = ({ genome, onClick, style, onViewGenome }) => {
+const ListItem = ({ genome, onClick, style, onViewGenome, className, onMouseOver }) => {
   const { name, organismId, organismName, st, country } = genome;
   const countryName = country ? getCountryName(country) : null;
   const date = genome.date ? formatDate(genome.date) : null;
   return (
     <div
-      className="wgsa-genome-list-item wgsa-genome-list-item--selectable wgsa-card--bordered"
+      className={classnames(className, 'wgsa-genome-list-item wgsa-genome-list-item--selectable')}
       style={style}
       onClick={onClick}
+      onMouseOver={onMouseOver}
     >
       <Cell title={name} onClick={e => e.stopPropagation()}>
         <AddToSelection genomes={[ genome ]} />

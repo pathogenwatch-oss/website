@@ -16,6 +16,10 @@
   padding-top: 0;
   padding-bottom: 0;
   color: rgba(0, 0, 0, 0.87);
+
+  &:not(.wgsa-genome-list-header) {
+    border-top: 1px solid rgba(0, 0, 0, .28);
+  }
 }
 
 .wgsa-grid-item:first-child > .wgsa-genome-list-item {
@@ -23,7 +27,8 @@
 }
 
 .wgsa-genome-list-item--selectable:hover,
-.wgsa-genome-list-item--selectable:focus {
+.wgsa-genome-list-item--selectable:focus,
+.wgsa-genome-list-item--selectable.active {
   background: rgb(238, 238, 238);
   cursor: pointer;
   text-decoration: none !important;
@@ -108,7 +113,8 @@
 }
 
 .wgsa-genome-list-item--selectable:hover *::after,
-.wgsa-genome-list-item--selectable:focus *::after {
+.wgsa-genome-list-item--selectable:focus *::after,
+.wgsa-genome-list-item--selectable.active *::after {
   background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgb(238,238,238) 75%);
 }
 

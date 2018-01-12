@@ -1,5 +1,5 @@
 import * as actions from './actions';
-import { FETCH_GENOME_LIST } from '../actions';
+import { FETCH_GENOME_LIST, FETCH_GENOME_SUMMARY } from '../actions';
 
 import { statuses } from '../../app/constants';
 
@@ -82,6 +82,11 @@ export default function (state = initialState, { type, payload }) {
           status: statuses.SUCCESS,
           summary: payload.result,
         },
+      };
+    case FETCH_GENOME_SUMMARY.ATTEMPT:
+      return {
+        ...state,
+        lastSelectedIndex: null,
       };
     default:
       return state;
