@@ -1,6 +1,6 @@
 import React from 'react';
 import classnames from 'classnames';
-import { Section, Metadata } from '../components';
+import { Metadata } from '../components';
 
 import { taxIdMap } from '../../../organisms';
 
@@ -60,44 +60,44 @@ const PAARSNP = React.createClass({
     const mechanisms = antibiotic.mechanisms.filter(m => result.includes(m));
     return (
       <ul>
-        { mechanisms.map(m => <li>{m}</li>) }
+        { mechanisms.map(m => <li key={m}>{m}</li>) }
       </ul>
     );
   },
 
   render() {
-    const { __v, snp = [], paar = [] } = this.props;
+    const { snp = [], paar = [] } = this.props;
     return (
-      <Section heading="PAARSNP" version={__v}>
-        <dl>
-          <Metadata large label="Antibiotics">
-            <table>
-              <thead>
-                <tr>
-                  { this.getTableHeaders() }
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  { this.getTableCells() }
-                </tr>
-              </tbody>
-            </table>
-          </Metadata>
-          <Metadata label="SNPs">
-            { this.displayMechanisms(snp) }
-          </Metadata>
-          <Metadata label="Genes">
-            { this.displayMechanisms(paar) }
-          </Metadata>
-        </dl>
-      </Section>
+      <dl>
+        <Metadata large label="Antibiotics">
+          <table>
+            <thead>
+              <tr>
+                { this.getTableHeaders() }
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                { this.getTableCells() }
+              </tr>
+            </tbody>
+          </table>
+        </Metadata>
+        <Metadata label="SNPs">
+          { this.displayMechanisms(snp) }
+        </Metadata>
+        <Metadata label="Genes">
+          { this.displayMechanisms(paar) }
+        </Metadata>
+      </dl>
     );
   },
 
 });
 
-export default ({ antibiotics, organismId, ...rest }) => {
+export default ({ result, genome }) => {
+  const { antibiotics, ...rest } = result;
+  const { organismId } = genome;
   let hiddenColumns = new Set();
 
   if (taxIdMap.has(organismId)) {

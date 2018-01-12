@@ -1,7 +1,6 @@
 import React from 'react';
 
 import Viewer from '../../collection-viewer/component';
-import Progress from '../progress';
 import { LoadSpinner, LoadError } from '../loading/Loading.react';
 
 import { statuses } from '../constants';
@@ -11,7 +10,6 @@ export default React.createClass({
   displayName: 'Explorer',
 
   propTypes: {
-    updateProgress: React.PropTypes.func,
     fetch: React.PropTypes.func,
     reset: React.PropTypes.func,
     status: React.PropTypes.string,
@@ -22,24 +20,12 @@ export default React.createClass({
     this.props.fetch();
   },
 
-  componentDidUpdate({ status }) {
-    if (status !== this.props.status && this.props.status === statuses.READY) {
-      this.props.fetch();
-    }
-  },
-
   componentWillUnmount() {
     this.props.reset();
   },
 
   render() {
     const { collection } = this.props;
-
-    if (collection.status === statuses.PROCESSING) {
-      return (
-        <Progress {...this.props} />
-      );
-    }
 
     if (collection.status === statuses.READY) {
       return (

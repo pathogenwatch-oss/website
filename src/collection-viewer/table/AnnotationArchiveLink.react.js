@@ -1,5 +1,6 @@
 import React from 'react';
 
+import DownloadLink from './DownloadLink.react';
 import DownloadIcon from '../../downloads/DownloadIcon.react.js';
 
 import { getServerPath } from '../../utils/Api';
@@ -7,17 +8,12 @@ import { getServerPath } from '../../utils/Api';
 import { CGPS } from '../../app/constants';
 const { COLOURS } = CGPS;
 
-export default ({ ids, filename }) => (
-  <a
-    href={getServerPath(`/download/annotations?filename=${filename}&ids=${ids.join(',')}`)}
-    target="_blank" rel="noopener"
-    download={filename}
+export default ({ uuid, ids, filename }) => (
+  <DownloadLink
+    action={getServerPath(`/download/collection/${uuid}/annotations?filename=${filename}`)}
     title="Download Annotations"
-    className="wgsa-download-button mdl-button mdl-button--icon"
+    ids={ids}
   >
-    <DownloadIcon
-      isArchive
-      color={COLOURS.GREEN}
-    />
-  </a>
+    <DownloadIcon isArchive color={COLOURS.GREEN} />
+  </DownloadLink>
 );

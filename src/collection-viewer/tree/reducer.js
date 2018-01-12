@@ -1,14 +1,13 @@
 import { combineReducers } from 'redux';
 
-import { FETCH_COLLECTION }
-  from '../../collection-viewer/actions';
+import { FETCH_COLLECTION, UPDATE_COLLECTION_PROGRESS }
+  from '../actions';
 import { RESET_FILTER, ACTIVATE_FILTER } from '../filter/actions';
 import { SEARCH_TERM_ADDED } from '../search/actions';
 import * as ACTIONS from './actions';
 
 import { simpleTrees } from './constants';
 import { COLLECTION, POPULATION } from '../../app/stateKeys/tree';
-import { statuses } from '../../collection-viewer/constants';
 
 import Organisms from '../../organisms';
 
@@ -61,31 +60,104 @@ function getInitialState() {
 function entities(state = {}, { type, payload }) {
   switch (type) {
     case FETCH_COLLECTION.SUCCESS: {
-      const { genomes, organism, subtrees, status, tree } = payload.result;
-
-      if (status !== statuses.READY) return state;
+      const { genomes, organism, subtrees, tree } = payload.result;
 
       const initialState = getInitialState();
 
-      return {
+      const nextState = {
         ...state,
-        [COLLECTION]: {
-          name: COLLECTION,
-          newick: tree,
-          leafIds: tree ? null : genomes.map(_ => _.uuid),
-          ...initialState,
-        },
-        [POPULATION]: {
-          name: POPULATION,
-          newick: organism.tree,
-          leafIds: organism.references.map(_ => _.uuid),
-          ...initialState,
-        },
-        ...subtrees.reduce((memo, { tree, ...subtree }) => {
-          memo[subtree.name] = { ...subtree, newick: tree, ...initialState };
+        ...subtrees.reduce((memo, subtree) => {
+          memo[subtree.name] = {
+            status: 'PENDING',
+            lastStatus: 0,
+            ...subtree,
+            ...initialState,
+          };
           return memo;
         }, {}),
       };
+
+      if (tree) {
+        nextState[COLLECTION] = {
+          newick: null,
+          status: 'PENDING',
+          lastStatus: 0,
+          ...tree,
+          name: COLLECTION,
+          leafIds: genomes.map(_ => _.uuid),
+          ...initialState,
+        };
+      }
+
+      if (organism.tree) {
+        nextState[POPULATION] = {
+          name: POPULATION,
+          status: 'READY',
+          newick: organism.tree,
+          leafIds: organism.references.map(_ => _.uuid),
+          ...initialState,
+        };
+      }
+
+      return nextState;
+    }
+    case ACTIONS.FETCH_TREE_POSITION.SUCCESS:
+      return {
+        ...state,
+        [payload.stateKey]: {
+          ...state[payload.stateKey],
+          position: payload.result.position,
+        },
+      };
+    case UPDATE_COLLECTION_PROGRESS: {
+      if (payload.task === 'tree') {
+        const tree = state[COLLECTION];
+        if (payload.status && payload.timestamp >= tree.lastStatus) {
+          return {
+            ...state,
+            [COLLECTION]: {
+              ...tree,
+              status: payload.status,
+              progress: 0,
+              lastStatus: payload.timestamp,
+            },
+          };
+        }
+        if (payload.progress && payload.progress > tree.progress) {
+          return {
+            ...state,
+            [COLLECTION]: {
+              ...tree,
+              status: 'IN PROGRESS',
+              progress: Math.floor(payload.progress),
+            },
+          };
+        }
+      }
+      if (payload.task === 'subtree') {
+        const tree = state[payload.name];
+        if (payload.status && payload.timestamp >= tree.lastStatus) {
+          return {
+            ...state,
+            [payload.name]: {
+              ...tree,
+              status: payload.status,
+              lastStatus: payload.timestamp,
+              size: payload.size,
+              populationSize: payload.populationSize,
+            },
+          };
+        } else if (payload.progress && payload.progress > tree.progress) {
+          return {
+            ...state,
+            [COLLECTION]: {
+              ...tree,
+              progress: Math.floor(payload.progress),
+            },
+          };
+        }
+      }
+      return state;
     }
     case ACTIONS.FETCH_TREE.SUCCESS:
       return {
@@ -93,7 +165,8 @@ function entities(state = {}, { type, payload }) {
         [payload.stateKey]: {
           ...state[payload.stateKey],
           name: payload.stateKey,
-          newick: payload.result.tree,
+          newick: payload.result.newick,
+          status: payload.result.status,
           ...getInitialState(),
         },
       };

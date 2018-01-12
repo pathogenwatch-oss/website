@@ -64,7 +64,9 @@ export const getDownloadSummary = createSelector(
         }
       }
       return {
-        ...item,
+        speciesId: item.speciesId,
+        speciesName: item.speciesName,
+        total: item.total,
         ids: Array.from(allIds),
         tasks: sortBy(tasks, _ => _.label.toUpperCase()),
       };

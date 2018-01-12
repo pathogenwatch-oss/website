@@ -22,7 +22,6 @@ const getProcessing = createSelector(
 export const getUploadedFiles = state => getProgress(state).files;
 export const getUploadedAt = state => getProgress(state).uploadedAt;
 export const getGenome = (state, id) => getUploadedFiles(state)[id];
-export const getAnalyses = state => getProgress(state).analyses;
 export const getUploadedGenomes = state => getProgress(state).genomes;
 export const getSelectedOrganism = state => getProgress(state).selectedOrganism;
 export const getQueuePosition = state => getProgress(state).position;
@@ -125,9 +124,10 @@ export const getFileSummary = createSelector(
   }
 );
 
-function getAnalysisBreakdown(analyses) {
+function getAnalysisBreakdown(genomes) {
   const breakdown = {
     paarsnp: { active: false, label: 'AMR', total: 0, errors: 0 },
+    core: { active: false, label: 'Core', total: 0, errors: 0 },
     cgmlst: { active: false, label: 'cgMLST', total: 0, errors: 0 },
     genotyphi: { active: false, label: 'Genotyphi', total: 0, errors: 0 },
     metrics: { active: false, label: 'Metrics', total: 0, errors: 0 },
@@ -136,7 +136,7 @@ function getAnalysisBreakdown(analyses) {
   };
   const sts = {};
 
-  for (const analysis of analyses) {
+  for (const { st, analysis } of genomes) {
     for (const key of Object.keys(analysis)) {
       if (key in breakdown) {
         breakdown[key].active = true;
@@ -144,7 +144,6 @@ function getAnalysisBreakdown(analyses) {
         if (analysis[key] === false) breakdown[key].errors++;
       }
       if (key === 'mlst' && analysis.mlst) {
-        const { st } = analysis.mlst;
         sts[st] = (sts[st] || 0) + 1;
       }
     }
@@ -169,37 +168,33 @@ function getAnalysisBreakdown(analyses) {
 export const getAnalysisSummary = createSelector(
   getNumRemainingUploads,
   getUploadedGenomeList,
-  getAnalyses,
-  (remainingUploads, genomes, analyses) => {
+  (remainingUploads, genomes) => {
     const summary = {};
     let pending = remainingUploads;
     let errored = 0;
     for (const genome of genomes) {
-      const analysis = {
-        ...(genome.analysis || {}),
-        ...(analyses[genome.id] || {}),
-      };
+      const { organismId, analysis } = genome;
       if (!('speciator' in analysis) || analysis.speciator === null) {
         pending++;
       } else if (analysis.speciator === false) {
         errored++;
       } else {
-        summary[analysis.speciator.organismId] =
-          (summary[analysis.speciator.organismId] || []).concat(analysis);
+        summary[organismId] =
+          (summary[organismId] || []).concat(genome);
       }
     }
     const getColour = getColourGenerator();
     const result = [];
     for (const organismId of Object.keys(summary)) {
-      const organismAnalyses = summary[organismId];
-      const label = getOrganismName(organismId, organismAnalyses[0].speciator.organismName);
+      const organismGenomes = summary[organismId];
+      const label = getOrganismName(organismId, organismGenomes[0].organismName);
       const colour = getColour(label);
       result.push({
         key: organismId,
         label,
         colour,
-        total: organismAnalyses.length,
-        ...getAnalysisBreakdown(organismAnalyses),
+        total: organismGenomes.length,
+        ...getAnalysisBreakdown(organismGenomes),
       });
     }
     if (pending) result.push({ key: 'pending', label: 'Pending', total: pending, colour: '#ccc' });
@@ -261,17 +256,17 @@ export const getChartData = createSelector(
 );
 
 export const getOverallProgress = createSelector(
-  getAnalyses,
   getUploadedGenomes,
-  (analyses, genomes) => {
+  (genomes) => {
     const speciation = { pending: 0, done: 0, total: 0 };
     const tasks = { pending: 0, done: 0, total: 0 };
     let errors = 0;
 
-    for (const id of Object.keys(analyses)) {
-      for (const task of Object.keys(analyses[id])) {
-        const isPending = analyses[id][task] === null;
-        const isError = analyses[id][task] === false;
+    for (const id of Object.keys(genomes)) {
+      const { analysis } = genomes[id];
+      for (const task of Object.keys(analysis)) {
+        const isPending = analysis[task] === null;
+        const isError = analysis[task] === false;
 
         if (isError) errors++;
 

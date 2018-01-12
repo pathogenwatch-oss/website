@@ -1,18 +1,24 @@
 .wgsa-collection-summary {
-  justify-content: flex-end;
+  padding-bottom: 8px;
 }
 
 .wgsa-create-collection-form {
-  width: 368px;
+  height: 100%;
+}
+
+.wgsa-create-collection-form footer {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
 }
 
 .wgsa-create-collection-form .mdl-textfield {
-  padding: 1rem 0;
+  padding: 16px 0;
   width: 100%;
 }
 
 .wgsa-create-collection-form .mdl-textfield--small {
-  width: 33.333%;
+  width: 50%;
 }
 
 .wgsa-create-collection-form .mdl-textfield__label {

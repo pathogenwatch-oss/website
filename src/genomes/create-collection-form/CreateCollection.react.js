@@ -12,8 +12,7 @@ import { setSelection } from '../selection/actions';
 const NoSupportedOrganism = ({ deployedOrganisms }) => (
   <div>
     <p>
-      Please select a supported organism to create a collection.<br />
-      Supported organisms are:
+      To create a collection, please select genomes designated as one of the following organisms:
     </p>
     <ul className="wgsa-supported-organism-list">
       { Array.from(deployedOrganisms).map(organismId =>

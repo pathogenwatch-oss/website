@@ -1,12 +1,12 @@
 .wgsa-genome-selection-dropdown {
   box-sizing: border-box;
   min-width: 100%;
-  max-width: 480px;
-  max-height: calc(100vh - 120px);
+  width: 440px;
+  height: 376px;
   position: absolute;
   top: 40px;
   right: 0;
-  overflow: auto;
+  overflow: hidden;
   background: #fff;
   border: 1px solid rgba(0, 0, 0, 0.14);
   padding: 16px;
@@ -15,4 +15,13 @@
 
 .wgsa-genome-selection-dropdown p:last-child {
   margin-bottom: 0;
+}
+
+.wgsa-genome-selection-dropdown .wgsa-button-group {
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.wgsa-genome-selection-dropdown h3 {
+  margin-top: 16px;
 }

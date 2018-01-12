@@ -101,3 +101,7 @@ ul.bulleted {
 sup {
   color: #673c90;
 }
+
+.danger {
+  color: #d11b1b;
+}

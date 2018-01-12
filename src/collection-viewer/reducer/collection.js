@@ -19,7 +19,6 @@ export default function (state = initialState, { type, payload }) {
         uuid: getUuidFromSlug(result.slug),
         organismId,
         metadata,
-        status: statuses.PROCESSING,
       };
     }
     case actions.FETCH_COLLECTION.FAILURE: {
@@ -45,15 +44,7 @@ export default function (state = initialState, { type, payload }) {
         createdAt: result.createdAt,
         pmid: result.pmid,
         progress: result.progress,
-        status: result.status,
-      };
-    }
-    case actions.UPDATE_COLLECTION_PROGRESS: {
-      const { status, progress } = payload;
-      return {
-        ...state,
-        status,
-        progress,
+        status: statuses.READY,
       };
     }
     default:

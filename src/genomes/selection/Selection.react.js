@@ -21,43 +21,32 @@ const Summary = React.createClass({
     }
   },
 
-  animating: false,
-
   onKeyUp(e) {
     if (e.key === 'Escape') this.props.toggle();
   },
+
+  animating: false,
 
   render() {
     const { size, toggle, view } = this.props;
     return (
       <div className="wgsa-selection-summary" onKeyUp={this.onKeyUp}>
-        <span className={classnames(
-            'mdl-chip mdl-chip--contact wgsa-selection-tabs',
-            view && `wgsa-selection-tabs-${view}`
+        <button className={classnames(
+            'mdl-chip mdl-chip--contact wgsa-selection',
+            { 'mdl-chip--active': !!view }
           )}
+          onClick={() => toggle(view || 'selection')}
           title={size === 0 ? 'No Genomes Selected' : undefined}
         >
-          <button
+          <span
             ref={el => { this.sonarEl = el; }}
             className="mdl-chip__contact"
-            onClick={() => toggle('selection')}
             title={size > 0 ? 'View Selection' : undefined}
           >
             {size}
-          </button>
-          <button
-            className="mdl-chip__text"
-            onClick={() => toggle('collection')}
-          >
-            Create Collection
-          </button>
-          <button
-            className="mdl-chip__text"
-            onClick={() => toggle('download')}
-          >
-            Download
-          </button>
-        </span>
+          </span>
+          <span className="mdl-chip__text">Selected Genomes</span>
+        </button>
         <SelectionDropdown />
       </div>
     );

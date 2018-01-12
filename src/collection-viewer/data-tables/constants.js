@@ -38,8 +38,8 @@ export const systemDataColumns = {
   __wgsa_reference: {
     columnKey: '__wgsa_reference',
     valueGetter({ analysis }) {
-      if (!analysis.fp) return null;
-      return analysis.fp.referenceName;
+      if (!analysis.core || !analysis.core.fp) return null;
+      return analysis.core.fp.reference;
     },
   },
   __mlst: {
@@ -128,8 +128,8 @@ export const systemDataColumns = {
   __core_matches: {
     columnKey: '__core_matches',
     valueGetter({ analysis }) {
-      return analysis.core ?
-        analysis.core.size :
+      return analysis.core && analysis.core.summary ?
+        analysis.core.summary.kernelSize :
         null;
     },
     numeric: true,
@@ -137,8 +137,8 @@ export const systemDataColumns = {
   '__%_core_families': {
     columnKey: '__%_core_families',
     valueGetter({ analysis }) {
-      return analysis.core ?
-        analysis.core.percentMatched :
+      return analysis.core && analysis.core.summary ?
+        analysis.core.summary.percentKernelMatched :
         null;
     },
     numeric: true,
@@ -146,8 +146,9 @@ export const systemDataColumns = {
   '__%_non-core': {
     columnKey: '__%_non-core',
     valueGetter({ analysis }) {
-      return analysis.core && analysis.core.percentAssemblyMatched ?
-        (100 - analysis.core.percentAssemblyMatched).toFixed(1) :
+      const { core = {} } = analysis;
+      return core.summary && core.summary.percentAssemblyMatched ?
+        (100 - core.summary.percentAssemblyMatched).toFixed(1) :
         null;
     },
     numeric: true,

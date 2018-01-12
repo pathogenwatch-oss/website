@@ -20,8 +20,8 @@ const Content = React.createClass({
 
   render() {
     const { genome } = this.props;
-    const { analysis = {}, pending = [], userDefined = null } = genome;
-    const analysisTabs = getAnalysisTabs(analysis);
+    const { pending = [], userDefined = null } = genome;
+    const analysisTabs = getAnalysisTabs(genome);
     const hasMetadata = userDefined && Object.keys(userDefined).length > 0;
     return (
       <div className="wgsa-genome-drawer-content mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
@@ -48,7 +48,9 @@ const Content = React.createClass({
               key={key}
               id={`${key.toLowerCase()}-panel`}
               className="mdl-tabs__panel"
-            >{component}</div>)
+            >
+              {component}
+            </div>)
         }
       </div>
     );

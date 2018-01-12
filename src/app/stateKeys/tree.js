@@ -1,2 +1,2 @@
-export const COLLECTION = 'COLLECTION';
+export const COLLECTION = 'collection';
 export const POPULATION = 'POPULATION';
