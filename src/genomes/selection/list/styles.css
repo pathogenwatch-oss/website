@@ -61,6 +61,7 @@
   color: rgba(0, 0, 0, 0.87);
   padding: 0 16px;
   height: 32px;
+  box-sizing: border-box;
 }
 
 .wgsa-list-item:hover,

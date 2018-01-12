@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { List } from 'react-virtualized';
 
 import { getSelectedGenomeIds, getSelectedGenomeList } from '../selectors';
 
@@ -21,14 +22,21 @@ const Selection = ({ selectedGenomes, showGenome, removeGenome, clearAll, sendTo
         Clear All
       </button>
     </header>
-    <div className="wgsa-genome-selection__list">
-      <ul>
-        {selectedGenomes.map(genome =>
+    <List
+      height={278}
+      width={438}
+      style={{ overflowX: 'hidden' }}
+      rowCount={selectedGenomes.length}
+      rowHeight={32}
+      rowRenderer={({ key, index, style }) => {
+        const genome = selectedGenomes[index];
+        return (
           <li
-            key={genome.id}
+            key={key}
             title="Click to View"
             className="wgsa-list-item"
             onClick={() => showGenome(genome)}
+            style={{ ...style, width: 440 }}
           >
             <span>{genome.name}</span>
             <button
@@ -42,9 +50,9 @@ const Selection = ({ selectedGenomes, showGenome, removeGenome, clearAll, sendTo
               <i className="material-icons">clear</i>
             </button>
           </li>
-        )}
-      </ul>
-    </div>
+        );
+      }}
+    />
     <footer className="wgsa-dropdown-footer">
       <div>
         { user &&
