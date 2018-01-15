@@ -4,6 +4,8 @@ import format from 'date-fns/format';
 import endOfMonth from 'date-fns/end_of_month';
 import classnames from 'classnames';
 
+import MonthYearSelector from './MonthYearSelector.react';
+
 import { dateToInteger, integerToDate } from '../../utils/Date';
 
 export default React.createClass({
@@ -47,12 +49,21 @@ export default React.createClass({
             }
           }}
           className={classnames({ 'rc-slider--inactive': this.isInactive() })}
-        >
-          <label>
-            <span>{format(minDate, 'MMM YYYY')}</span>
-            <span>{format(maxDate, 'MMM YYYY')}</span>
-          </label>
-        </Range>
+        />
+        <label>
+          <MonthYearSelector
+            date={minDate}
+            min={bounds[0]}
+            max={maxDate}
+            update={onChangeMin}
+          />
+          <MonthYearSelector
+            date={maxDate}
+            min={minDate}
+            max={bounds[1]}
+            update={onChangeMax}
+          />
+        </label>
       </div>
     );
   },
