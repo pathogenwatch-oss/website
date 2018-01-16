@@ -2,7 +2,6 @@ import React from 'react';
 import format from 'date-fns/format';
 import getYear from 'date-fns/get_year';
 import getMonth from 'date-fns/get_month';
-import isEqual from 'date-fns/is_equal';
 import minDate from 'date-fns/min';
 import maxDate from 'date-fns/max';
 
@@ -31,11 +30,7 @@ export default React.createClass({
 
   setYear(e) {
     const year = parseInt(e.target.value, 10);
-    const { minYear, maxYear, minMonth, maxMonth } = this.state;
-    let month = this.state.month;
-    if (year === minYear && month < minMonth) month = minMonth;
-    else if (year === maxYear && month > maxMonth) month = maxMonth;
-    this.setState({ year, month });
+    this.setState({ year });
   },
 
   parseDates({ date, min, max }) {
@@ -53,11 +48,15 @@ export default React.createClass({
     const { year, month } = this.state;
     const date = new Date(year, month);
 
+    const nextDate = minDate(this.props.max, maxDate(date, this.props.min));
+
+    const nextYear = getYear(nextDate);
+    const nextMonth = getMonth(nextDate);
     const originalYear = getYear(this.props.date);
     const originalMonth = getMonth(this.props.date);
 
-    if (year !== originalYear || month !== originalMonth) {
-      this.props.update(minDate(this.props.max, maxDate(date, this.props.min)));
+    if (nextYear !== originalYear || nextMonth !== originalMonth) {
+      this.props.update(nextDate);
     }
   },
 
