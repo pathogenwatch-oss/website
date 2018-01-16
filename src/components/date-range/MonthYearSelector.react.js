@@ -52,7 +52,11 @@ export default React.createClass({
   update() {
     const { year, month } = this.state;
     const date = new Date(year, month);
-    if (!isEqual(date, this.props.date)) {
+
+    const originalYear = getYear(this.props.date);
+    const originalMonth = getMonth(this.props.date);
+
+    if (year !== originalYear || month !== originalMonth) {
       this.props.update(minDate(this.props.max, maxDate(date, this.props.min)));
     }
   },

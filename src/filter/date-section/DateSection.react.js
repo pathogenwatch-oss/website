@@ -1,4 +1,6 @@
 import React from 'react';
+import startOfMonth from 'date-fns/start_of_month';
+import endOfMonth from 'date-fns/end_of_month';
 
 import FilterSection from '../section';
 import DateRange from '../../components/date-range';
@@ -15,8 +17,8 @@ export default ({ summary, updateFilter }) => {
         <DateRange
           bounds={summary.bounds}
           values={summary.values}
-          onChangeMin={value => updateFilter('minDate', value.toISOString())}
-          onChangeMax={value => updateFilter('maxDate', value.toISOString())}
+          onChangeMin={value => updateFilter('minDate', startOfMonth(value).toISOString())}
+          onChangeMax={value => updateFilter('maxDate', endOfMonth(value).toISOString())}
         />
       </FilterSection>
     );

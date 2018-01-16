@@ -1,7 +1,5 @@
 import React from 'react';
 import Range from 'rc-slider/lib/Range';
-import format from 'date-fns/format';
-import endOfMonth from 'date-fns/end_of_month';
 import classnames from 'classnames';
 
 import MonthYearSelector from './MonthYearSelector.react';
@@ -40,13 +38,13 @@ export default React.createClass({
           min={minBound}
           max={maxBound}
           value={[ minValue, maxValue ]}
-          onChange={([ min, max ]) => this.setState({ min: integerToDate(min), max: endOfMonth(integerToDate(max)) })}
+          onChange={([ min, max ]) => this.setState({ min: integerToDate(min), max: integerToDate(max) })}
           onAfterChange={([ min, max ]) => {
             if (min !== (values[0] ? dateToInteger(values[0]) : minBound)) {
               onChangeMin(integerToDate(min));
             }
             if (max !== (values[1] ? dateToInteger(values[1]) : maxBound)) {
-              onChangeMax(endOfMonth(integerToDate(max)));
+              onChangeMax(integerToDate(max));
             }
           }}
           className={classnames({ 'rc-slider--inactive': this.isInactive() })}

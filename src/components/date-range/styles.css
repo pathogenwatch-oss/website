@@ -30,7 +30,8 @@
 .wgsa-date-range label {
   display: flex;
   justify-content: space-between;
-  padding: 8px 0;
+  align-items: center;
+  height: 32px;
   font-size: 13px;
   color: rgba(0, 0, 0, .54);
 }
