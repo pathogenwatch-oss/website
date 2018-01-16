@@ -12,13 +12,16 @@ export default React.createClass({
 
   getInitialState() {
     return {
-      open: false,
       ...this.parseDates(this.props),
     };
   },
 
-  componentWillReceiveProps(nextProps) {
-    this.setState(this.parseDates(nextProps));
+  componentWillReceiveProps(next) {
+    if (this.props.editing && !next.editing) {
+      this.update();
+    } else {
+      this.setState(this.parseDates(next));
+    }
   },
 
   setMonth(e) {
@@ -31,7 +34,7 @@ export default React.createClass({
     const { minYear, maxYear, minMonth, maxMonth } = this.state;
     let month = this.state.month;
     if (year === minYear && month < minMonth) month = minMonth;
-    if (year === maxYear && month > maxMonth) month = maxMonth;
+    else if (year === maxYear && month > maxMonth) month = maxMonth;
     this.setState({ year, month });
   },
 
@@ -41,29 +44,17 @@ export default React.createClass({
       minYear: getYear(min),
       maxYear: getYear(max),
       month: getMonth(date),
-      minMonth: getMonth(this.props.min),
-      maxMonth: getMonth(this.props.max),
+      minMonth: getMonth(min),
+      maxMonth: getMonth(max),
     };
   },
 
-  open() {
-    this.setState({ open: true, ...this.parseDates(this.props) });
-  },
-
-  submit(e) {
-    e.preventDefault();
+  update() {
     const { year, month } = this.state;
-    this.setState({ open: false });
     const date = new Date(year, month);
     if (!isEqual(date, this.props.date)) {
       this.props.update(minDate(this.props.max, maxDate(date, this.props.min)));
     }
-  },
-
-  cancel(e) {
-    e.stopPropagation();
-    e.preventDefault();
-    this.setState({ open: false });
   },
 
   renderMonths() {
@@ -77,13 +68,13 @@ export default React.createClass({
   render() {
     if (!this.props.date) return null;
 
-    if (this.state.open) {
+    if (this.props.editing) {
       const { year, minYear, maxYear, month } = this.state;
       return (
         <form
           ref={el => { this.form = el; }}
-          className="wgsa-date-selector"
-          onSubmit={this.submit}
+          className="wgsa-month-year-selector"
+          onSubmit={e => e.preventDefault()}
           onClick={e => e.stopPropagation()}
         >
           <select name="month" value={month} onChange={this.setMonth}>
@@ -93,20 +84,17 @@ export default React.createClass({
             name="year" type="number"
             min={minYear} max={maxYear} value={year} onChange={this.setYear}
           />
-          <button type="submit" className="mdl-button mdl-button--icon">
+          <button type="submit" title="Set Date">
             <i className="material-icons">checked</i>
-          </button>
-          <button className="mdl-button mdl-button--icon" onClick={this.cancel}>
-            <i className="material-icons">close</i>
           </button>
         </form>
       );
     }
 
     return (
-      <span onClick={this.open}>
+      <button onClick={this.props.onClick} title="Edit Date">
         {format(this.props.date, 'MMM YYYY')}
-      </span>
+      </button>
     );
   },
 

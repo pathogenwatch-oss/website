@@ -36,6 +36,7 @@ export default React.createClass({
     return (
       <div className="wgsa-date-range">
         <Range
+          id="genome-date-filter"
           min={minBound}
           max={maxBound}
           value={[ minValue, maxValue ]}
@@ -50,18 +51,22 @@ export default React.createClass({
           }}
           className={classnames({ 'rc-slider--inactive': this.isInactive() })}
         />
-        <label>
+        <label htmlFor="genome-date-filter" onSubmit={() => this.setState({ editing: null })}>
           <MonthYearSelector
             date={minDate}
             min={bounds[0]}
             max={maxDate}
             update={onChangeMin}
+            onClick={() => this.setState({ editing: 'min' })}
+            editing={this.state.editing === 'min'}
           />
           <MonthYearSelector
             date={maxDate}
             min={minDate}
             max={bounds[1]}
             update={onChangeMax}
+            onClick={() => this.setState({ editing: 'max' })}
+            editing={this.state.editing === 'max'}
           />
         </label>
       </div>
