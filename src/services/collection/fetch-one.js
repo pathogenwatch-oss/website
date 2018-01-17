@@ -22,8 +22,8 @@ const projection = {
   uuid: 1,
 };
 
-module.exports = ({ user, uuid }) =>
-  request('collection', 'authorise', { user, uuid, projection })
+module.exports = ({ user, id }) =>
+  request('collection', 'authorise', { user, id, projection })
     .then(collection =>
       collection
         .populate('_organism', {

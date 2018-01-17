@@ -64,20 +64,21 @@ router.post('/collection/:id/binned', (req, res, next) => {
     .catch(next);
 });
 
-router.get('/collection/:uuid/tree/:name', (req, res, next) => {
+router.get('/collection/:id/tree/:name', (req, res, next) => {
   LOGGER.info('Received request for tree', req.params);
   const { user } = req;
-  const { uuid, name } = req.params;
+  const { id, name } = req.params;
   const treeType = (name === 'collection') ? 'tree' : 'subtree';
-  return services.request('collection', treeType, { user, uuid, name })
+  return services.request('collection', treeType, { user, id, name })
     .then(response => res.json(response))
     .catch(next);
 });
 
-router.get('/collection/:uuid', (req, res, next) => {
-  LOGGER.info(`Getting collection: ${req.params.uuid}`);
+router.get('/collection/:id', (req, res, next) => {
   const { user, params } = req;
-  return services.request('collection', 'fetch-one', { user, uuid: params.uuid })
+  const { id } = params;
+  LOGGER.info(`Getting collection: ${id}`);
+  return services.request('collection', 'fetch-one', { user, id })
     .then(response => res.json(response))
     .catch(error => (
       error.details.message === 'Collection not found' ? // Seneca loses error type :|

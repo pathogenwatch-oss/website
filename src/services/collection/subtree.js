@@ -9,10 +9,10 @@ function getLeafIds(newick) {
   return newick.match(isLeafId) || [];
 }
 
-module.exports = ({ user, uuid, name }) => {
+module.exports = ({ user, id, name }) => {
   const query = { 'subtrees.name': name };
   const projection = { 'subtrees.$': 1, genomes: 1 };
-  return request('collection', 'authorise', { user, uuid, query, projection })
+  return request('collection', 'authorise', { user, id, query, projection })
     .then(collection => {
       if (!collection || collection.subtrees.length === 0) throw new NotFoundError('Not found');
       const { genomes, subtrees } = collection;

@@ -269,20 +269,15 @@ async function generateMatrix(collection, stream) {
 
 module.exports = (req, res, next) => {
   const { user } = req;
-  const { uuid } = req.params;
+  const { collectionId } = req.params;
   const { filename = 'variance-summary' } = req.query;
-
-  if (!uuid || typeof uuid !== 'string') {
-    res.status(400).send('`uuid` parameter is required.');
-    return;
-  }
 
   res.set({
     'Content-Disposition': `attachment; filename="${filename}.csv"`,
     'Content-type': 'text/csv',
   });
 
-  request('collection', 'authorise', { user, uuid, projection: { genomes: 1, 'tree.version': 1, subtrees: 1 } })
+  request('collection', 'authorise', { user, id: collectionId, projection: { genomes: 1, 'tree.version': 1, subtrees: 1 } })
     .then(results => generateMatrix(results, res))
     .catch(next);
 };

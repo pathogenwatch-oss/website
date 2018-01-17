@@ -89,19 +89,10 @@ function getColumns(organismId, query) {
 
 module.exports = (req, res, next) => {
   const { user } = req;
-  const { uuid } = req.params;
+  const { collectionId } = req.params;
   const { ids } = req.body;
   const { filename = 'core-allele-distribution.csv' } = req.query;
 
-  if (!uuid || typeof uuid !== 'string') {
-    res.status(400).send('`uuid` parameter is required.');
-    return;
-  }
-
-  if (ids && typeof ids !== 'string') {
-    res.status(400).send('`ids` parameter is invalid.');
-    return;
-  }
   const genomeIds = ids ? ids.split(',') : null;
 
   res.set({
@@ -109,7 +100,7 @@ module.exports = (req, res, next) => {
     'Content-type': 'text/csv',
   });
 
-  request('collection', 'authorise', { user, uuid, projection: { genomes: 1 } })
+  request('collection', 'authorise', { user, id: collectionId, projection: { genomes: 1 } })
     .then(async collection => {
       const query = {
         _id: { $in: genomeIds },

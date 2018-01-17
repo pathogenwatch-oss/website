@@ -69,7 +69,7 @@ function generateMatrix({ genomes, cache }, stream) {
 
 module.exports = (req, res, next) => {
   const { user } = req;
-  const { uuid, type } = req.params;
+  const { collectionId, type } = req.params;
   const { ids } = req.body;
   const { filename = `${type}-matrix` } = req.query;
 
@@ -83,15 +83,6 @@ module.exports = (req, res, next) => {
     return;
   }
 
-  if (!uuid || typeof uuid !== 'string') {
-    res.status(400).send('`uuid` parameter is required.');
-    return;
-  }
-
-  if (ids && typeof ids !== 'string') {
-    res.status(400).send('`ids` parameter is invalid.');
-    return;
-  }
   const genomeIds = ids ? ids.split(',') : null;
 
   res.set({
@@ -102,7 +93,7 @@ module.exports = (req, res, next) => {
   const stream = transform(data => data.join(',') + '\n');
   stream.pipe(res);
 
-  request('collection', 'authorise', { user, uuid, projection: { genomes: 1, 'tree.version': 1 } })
+  request('collection', 'authorise', { user, id: collectionId, projection: { genomes: 1, 'tree.version': 1 } })
     .then(async (collection) => {
       const genomes = await getCollectionGenomes(collection, genomeIds);
       writeMatrixHeader(genomes, stream);

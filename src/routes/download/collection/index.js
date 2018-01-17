@@ -3,17 +3,17 @@ const router = express.Router();
 
 const LOGGER = require('utils/logging').createLogger('Downloads');
 
-router.use('/:uuid', (req, res, next) => {
-  const { uuid } = req.params;
-  const { ids } = req.method === 'GET' ? req.query : req.body;
+router.use('/:collectionId', (req, res, next) => {
+  const { collectionId } = req.params;
+  const genomeIds = req.method === 'GET' ? req.query.ids : req.body.ids;
 
-  if (!uuid || typeof uuid !== 'string') {
-    LOGGER.error('uuid not provided.');
-    res.status(400).send('`uuid` parameter is required.');
+  if (!collectionId || typeof collectionId !== 'string') {
+    LOGGER.error('id not provided.');
+    res.status(400).send('`id` parameter is required.');
     return;
   }
 
-  if (ids && typeof ids !== 'string') {
+  if (genomeIds && typeof genomeIds !== 'string') {
     LOGGER.error('ids parameter is invalid.');
     res.status(400).send('`ids` parameter is invalid.');
     return;
@@ -22,18 +22,18 @@ router.use('/:uuid', (req, res, next) => {
   next();
 });
 
-router.get('/:uuid/fastas', require('./fastas'));
-router.post('/:uuid/fastas', require('./fastas'));
+router.get('/:collectionId/fastas', require('./fastas'));
+router.post('/:collectionId/fastas', require('./fastas'));
 
-router.get('/:uuid/annotations', require('./annotations'));
-router.post('/:uuid/annotations', require('./annotations'));
+router.get('/:collectionId/annotations', require('./annotations'));
+router.post('/:collectionId/annotations', require('./annotations'));
 
-router.post('/:uuid/:type-matrix', require('./matrix'));
+router.post('/:collectionId/:type-matrix', require('./matrix'));
 
-router.post('/:uuid/core-allele-distribution', require('./core-allele-distribution'));
+router.post('/:collectionId/core-allele-distribution', require('./core-allele-distribution'));
 
-router.get('/:uuid/variance-summary', require('./variance-summary'));
+router.get('/:collectionId/variance-summary', require('./variance-summary'));
 
-router.post('/:uuid/speciator', require('./speciator'));
+router.post('/:collectionId/speciator', require('./speciator'));
 
 module.exports = router;
