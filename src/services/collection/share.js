@@ -8,22 +8,24 @@ module.exports = function ({ id, user, status }) {
   }
 
   return Collection
-    .find({ _id: id, _user: user._id }, { binned: 1 })
+    .find({ _id: id, _user: user._id }, { link: 1 })
     .then(collection => {
       if (!collection) return new NotFoundError('Incorrect id and user combination.');
 
-      if (status === collection.binned) {
-        return {};
+      if (collection.link) {
+        return collection.link;
       }
+
+      const link = Collection.getShareableLink();
 
       return (
         Collection.update(
           { _id: id, _user: user._id },
-          { binned: status, binnedDate: status ? new Date() : null }
+          { link }
         )
         .then(response => {
           if (response.ok !== 1) throw new ServiceRequestError('Failed to complete bin action');
-          return {};
+          return { link };
         })
       );
     });

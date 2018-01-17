@@ -64,6 +64,17 @@ router.post('/collection/:id/binned', (req, res, next) => {
     .catch(next);
 });
 
+router.get('/collection/:id/share', (req, res, next) => {
+  const { id } = req.params;
+  const { user } = req;
+
+  LOGGER.info('Received request to share collection:', id);
+
+  services.request('collection', 'share', { id, user })
+    .then(response => res.json(response))
+    .catch(next);
+});
+
 router.get('/collection/:id/tree/:name', (req, res, next) => {
   LOGGER.info('Received request for tree', req.params);
   const { user } = req;

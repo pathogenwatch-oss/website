@@ -106,17 +106,17 @@ schema.methods.resultRequired = function (type) {
   return false;
 };
 
-function toSlug(text) {
-  if (!text) return '';
+// function toSlug(text) {
+//   if (!text) return '';
 
-  const slugText = `-${slug(text, { lower: true })}`;
-  return slugText.length > 64 ?
-    slugText.slice(0, 64) :
-    slugText;
-}
+//   const slugText = `-${slug(text, { lower: true })}`;
+//   return slugText.length > 64 ?
+//     slugText.slice(0, 64) :
+//     slugText;
+// }
 
 schema.virtual('slug').get(function () {
-  return `${this.uuid}${toSlug(this.title)}`;
+  return this.link || this.uuid;
 });
 
 schema.statics.findByUuid = function (uuid, projection) {
@@ -235,6 +235,10 @@ schema.statics.addAnalysisResult = function (_id, task, version, result) {
 schema.statics.getSubtreeIds = function (subtree) {
   const { newick } = subtree;
   return newick.match(isLeafId) || [];
+};
+
+schema.statics.getShareableLink = function () {
+  return rand.generate(32);
 };
 
 module.exports = mongoose.model('Collection', schema);
