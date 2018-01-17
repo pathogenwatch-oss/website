@@ -10,6 +10,7 @@ export function fetchGenomeSummary(filter) {
   return {
     type: FETCH_GENOME_SUMMARY,
     payload: {
+      filter,
       promise: fetchSummary(filter),
     },
   };

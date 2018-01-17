@@ -9,7 +9,7 @@ export function undoMoveToBin(total, binned, onClick) {
     message: (
       <span>
         <strong>{total} genome{total === 1 ? '' : 's'}</strong>&nbsp;
-        {binned ? 'restored' : 'moved to bin'}.
+        {binned ? 'restored from' : 'moved to'} bin.
       </span>
     ),
   };

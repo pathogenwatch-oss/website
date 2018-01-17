@@ -14,13 +14,17 @@ import * as actions from './actions';
 function entities(state = {}, { type, payload }) {
   switch (type) {
     case actions.FETCH_GENOME_LIST.SUCCESS: {
+      const { prefilter } = payload.filter;
       return payload.result.reduce((memo, genome) => {
+        if (prefilter === 'bin') genome.binned = true;
         memo[genome.id] = genome;
         return memo;
       }, { ...state });
     }
     case actions.FETCH_GENOME_SUMMARY.SUCCESS: {
+      const { prefilter } = payload.filter;
       return payload.result.genomes.reduce((memo, genome) => {
+        if (prefilter === 'bin') genome.binned = true;
         memo[genome.id] = genome;
         return memo;
       }, {});

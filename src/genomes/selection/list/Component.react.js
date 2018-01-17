@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import { getSelectedGenomeIds, getSelectedGenomeList } from '../selectors';
 
 import { unselectGenomes, clearSelection, toggleDropdown } from '../actions';
-
-import { showGenomeDrawer, setBinnedFlag } from '../../../genomes/detail/actions';
+import { showGenomeDrawer } from '../../detail/actions';
+import { setBinnedFlag } from '../../bin/actions';
 
 import config from '../../../app/config';
 const { user } = config;

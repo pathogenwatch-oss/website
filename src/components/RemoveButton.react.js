@@ -11,7 +11,7 @@ export default ({ moveToBin, restoreFromBin, primary, className, item = {} }) =>
         onClick={restoreFromBin}
         title="Restore from Bin"
       >
-        <i className="material-icons">delete_forever</i>
+        <i className="material-icons">restore</i>
       </button>
     );
   }

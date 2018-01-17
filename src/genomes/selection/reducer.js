@@ -12,8 +12,8 @@ const initialState = {
   },
 };
 
-const addToSelection = (memo, { id, name, organismId }) => {
-  memo[id] = { id, name, organismId };
+const addToSelection = (memo, { id, name, organismId, binned }) => {
+  memo[id] = { id, name, organismId, binned };
   return memo;
 };
 

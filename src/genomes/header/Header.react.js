@@ -5,10 +5,11 @@ import { Totals } from '../../filter/summary';
 import ViewSwitcher from './ViewSwitcher.react';
 import FilterHeader from '../filter/Header.react';
 import SelectionSummary from '../selection';
+import RestoreFromBin from '../bin/RestoreFromBin.react';
 
 import { getVisible, getTotal } from './selectors';
 
-const Header = ({ visibleGenomes, totalGenomes }) => {
+const Header = ({ visibleGenomes, totalGenomes, prefilter }) => {
   if (totalGenomes === 0) return <header></header>;
   return (
     <header>
@@ -24,7 +25,9 @@ const Header = ({ visibleGenomes, totalGenomes }) => {
         total={totalGenomes}
         itemType="genome"
       />
-      <SelectionSummary />
+      { prefilter === 'bin' ?
+        <RestoreFromBin /> :
+        <SelectionSummary /> }
     </header>
   );
 };
