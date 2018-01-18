@@ -24,7 +24,7 @@ module.exports = function ({ id, user, status }) {
           { link }
         )
         .then(response => {
-          if (response.ok !== 1) throw new ServiceRequestError('Failed to complete bin action');
+          if (response.ok !== 1) throw new ServiceRequestError('Failed to complete share action');
           return { link };
         })
       );
