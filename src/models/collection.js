@@ -1,13 +1,8 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
-const slug = require('slug');
 const rand = require('rand-token');
 
-const { setToObjectOptions, addPreSaveHook, getSummary } = require('./utils');
-
-const uuidGenerator = rand.generator({
-  chars: 'abcdefghijklmnopqrstuvwxyz1234567890',
-});
+const { setToObjectOptions, addPreSaveHook, getSummary, toSlug } = require('./utils');
 
 const isLeafId = /[0-9a-f]{24}/g;
 
@@ -21,16 +16,19 @@ const Tree = {
   version: String,
 };
 
+const accessLevels = [ 'private', 'shared', 'public' ];
+
+const randGenerator = rand.generator({
+  chars: 'abcdefghijklmnopqrstuvwxyz1234567890',
+});
+
+const getDefaultToken = () => randGenerator.generate(12);
+
 const schema = new Schema({
   _user: { type: Schema.Types.ObjectId, ref: 'User' },
-  _organism: {
-    type: Schema.Types.ObjectId, ref: 'Organism',
-    required() {
-      return !this.reference;
-    },
-  },
+  _organism: { type: Schema.Types.ObjectId, ref: 'Organism' },
   _session: String,
-  alias: { type: String, index: true },
+  access: { type: String, enum: accessLevels, default: 'private' },
   createdAt: { type: Date, index: true },
   binned: { type: Boolean, default: false },
   binnedDate: Date,
@@ -39,11 +37,9 @@ const schema = new Schema({
   genomes: [ { type: Schema.Types.ObjectId, ref: 'Genome' } ],
   lastAccessedAt: Date,
   lastUpdatedAt: Date,
-  link: { type: String, index: true },
   locations: Array,
   organismId: String,
   pmid: String,
-  public: { type: Boolean, default: false },
   published: { type: Boolean, default: false },
   publicationYear: { type: Number, index: true },
   reference: Boolean,
@@ -51,16 +47,20 @@ const schema = new Schema({
   size: Number,
   subtrees: [ Tree ],
   title: { type: String, index: 'text' },
+  token: { type: String, index: true, unique: true, default: getDefaultToken },
   tree: Tree,
-  uuid: { type: String, index: true, default: () => uuidGenerator.generate(12) },
 });
 
 setToObjectOptions(schema, (doc, collection, { user }) => {
   const { _user } = collection;
   const { id } = user || {};
-  collection.owner = _user && _user.toString() === id ? 'me' : 'other';
+  if (_user && _user.toString() === id) {
+    collection.owner = 'me';
+  } else {
+    collection.owner = 'other';
+    delete collection.access;
+  }
   collection.id = doc._id.toString();
-  collection.slug = doc.slug;
   delete collection._user;
   delete collection._id;
   if (typeof collection._organism === 'object') {
@@ -106,23 +106,6 @@ schema.methods.resultRequired = function (type) {
   return false;
 };
 
-// function toSlug(text) {
-//   if (!text) return '';
-
-//   const slugText = `-${slug(text, { lower: true })}`;
-//   return slugText.length > 64 ?
-//     slugText.slice(0, 64) :
-//     slugText;
-// }
-
-schema.virtual('slug').get(function () {
-  return this.link || this.uuid;
-});
-
-schema.statics.findByUuid = function (uuid, projection) {
-  return this.findOne({ uuid }, projection);
-};
-
 schema.statics.getPrefilterCondition = function ({ user, query = {} }) {
   const { prefilter = 'all' } = query;
 
@@ -147,10 +130,6 @@ schema.statics.getPrefilterCondition = function ({ user, query = {} }) {
 
 schema.statics.getSummary = function (fields, props) {
   return getSummary(this, fields, props);
-};
-
-schema.statics.alias = function (uuid, alias) {
-  return this.update({ uuid }, { $set: { alias } });
 };
 
 schema.statics.getFilterQuery = function (props) {
@@ -237,8 +216,10 @@ schema.statics.getSubtreeIds = function (subtree) {
   return newick.match(isLeafId) || [];
 };
 
-schema.statics.getShareableLink = function () {
-  return rand.generate(32);
+schema.statics.generateToken = function (title) {
+  const sections = [ getDefaultToken() ];
+  if (title) sections.push(toSlug(title));
+  return sections.join('-');
 };
 
 module.exports = mongoose.model('Collection', schema);

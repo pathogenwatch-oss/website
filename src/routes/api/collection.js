@@ -1,10 +1,9 @@
 const express = require('express');
 const router = express.Router();
 
-const services = require('../services');
+const services = require('services');
 
 const LOGGER = require('utils/logging').createLogger('Collection requests');
-const config = require('configuration');
 
 router.put('/collection', (req, res, next) => {
   LOGGER.info('Received request to create collection');
@@ -17,20 +16,6 @@ router.put('/collection', (req, res, next) => {
     then(result => res.status(201).json(result)).
     catch(next);
 });
-
-if (config.node.auth) {
-  const auth = require('http-auth');
-  const { realm, file, collections } = config.node.auth;
-  const basic = auth.basic({ realm, file });
-  const middleware = auth.connect(basic);
-  for (const { organismId, collectionId } of collections) {
-    router.get(`/collection/${collectionId}`, middleware, (req, res, next) => {
-      LOGGER.info(`Requesting authorized collection: ${organismId}/${collectionId}`);
-      req.params.uuid = collectionId;
-      next();
-    });
-  }
-}
 
 router.get('/collection/summary', (req, res, next) => {
   LOGGER.info('Received request to get collection summary');
@@ -52,44 +37,44 @@ router.get('/collection/position/:uploadedAt', (req, res, next) => {
     .catch(next);
 });
 
-router.post('/collection/:id/binned', (req, res, next) => {
-  const { id } = req.params;
+router.post('/collection/:token/binned', (req, res, next) => {
+  const { token } = req.params;
   const { user, body } = req;
   const { status } = body;
 
   LOGGER.info('Received request to bin collection:', status);
 
-  services.request('collection', 'bin', { id, user, status })
+  services.request('collection', 'bin', { token, user, status })
     .then(response => res.json(response))
     .catch(next);
 });
 
-router.get('/collection/:id/share', (req, res, next) => {
-  const { id } = req.params;
+router.get('/collection/:token/share', (req, res, next) => {
+  const { token } = req.params;
   const { user } = req;
 
-  LOGGER.info('Received request to share collection:', id);
+  LOGGER.info('Received request to share collection:', token);
 
-  services.request('collection', 'share', { id, user })
+  services.request('collection', 'share', { token, user })
     .then(response => res.json(response))
     .catch(next);
 });
 
-router.get('/collection/:id/tree/:name', (req, res, next) => {
+router.get('/collection/:token/tree/:name', (req, res, next) => {
   LOGGER.info('Received request for tree', req.params);
   const { user } = req;
-  const { id, name } = req.params;
+  const { token, name } = req.params;
   const treeType = (name === 'collection') ? 'tree' : 'subtree';
-  return services.request('collection', treeType, { user, id, name })
+  return services.request('collection', treeType, { user, token, name })
     .then(response => res.json(response))
     .catch(next);
 });
 
-router.get('/collection/:id', (req, res, next) => {
+router.get('/collection/:token', (req, res, next) => {
   const { user, params } = req;
-  const { id } = params;
-  LOGGER.info(`Getting collection: ${id}`);
-  return services.request('collection', 'fetch-one', { user, id })
+  const { token } = params;
+  LOGGER.info(`Getting collection: ${token}`);
+  return services.request('collection', 'fetch-one', { user, token })
     .then(response => res.json(response))
     .catch(error => (
       error.details.message === 'Collection not found' ? // Seneca loses error type :|

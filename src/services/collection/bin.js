@@ -2,13 +2,13 @@ const Collection = require('models/collection');
 
 const { ServiceRequestError, NotFoundError } = require('utils/errors');
 
-module.exports = function ({ id, user, status }) {
+module.exports = function ({ token, user, status }) {
   if (!user || typeof status !== 'boolean') {
     return new ServiceRequestError('User or status not provided');
   }
 
   return Collection
-    .find({ _id: id, _user: user._id }, { binned: 1 })
+    .find({ token, _user: user._id }, { binned: 1 })
     .then(collection => {
       if (!collection) return new NotFoundError('Incorrect id and user combination.');
 
@@ -18,7 +18,7 @@ module.exports = function ({ id, user, status }) {
 
       return (
         Collection.update(
-          { _id: id, _user: user._id },
+          { token, _user: user._id },
           { binned: status, binnedDate: status ? new Date() : null }
         )
         .then(response => {

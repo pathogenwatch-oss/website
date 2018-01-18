@@ -1,9 +1,11 @@
 const express = require('express');
 const router = express.Router();
 
+const { request } = require('services');
+
 const LOGGER = require('utils/logging').createLogger('Downloads');
 
-router.use('/:collectionId', (req, res, next) => {
+router.use('/:collectionId', async (req, res, next) => {
   const { collectionId } = req.params;
   const genomeIds = req.method === 'GET' ? req.query.ids : req.body.ids;
 
@@ -19,7 +21,13 @@ router.use('/:collectionId', (req, res, next) => {
     return;
   }
 
-  next();
+  try {
+    const { user } = req;
+    await request('collection', 'authorise-genomes', { user, collectionId, genomeIds: genomeIds.split(',') });
+    next();
+  } catch (e) {
+    next(e);
+  }
 });
 
 router.get('/:collectionId/fastas', require('./fastas'));

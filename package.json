@@ -33,6 +33,7 @@
     "promisify-node": "^0.4.0",
     "pusher": "^1.1.0",
     "rand-token": "^0.4.0",
+    "remove-markdown": "^0.2.2",
     "sanitize-filename": "^1.5.3",
     "seneca": "^3.2.2",
     "slug": "^0.9.1",

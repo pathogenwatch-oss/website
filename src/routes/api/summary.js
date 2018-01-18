@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const services = require('../services');
+const services = require('services');
 
 const LOGGER = require('utils/logging').createLogger('Summary');
 

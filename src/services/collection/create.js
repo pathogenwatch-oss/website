@@ -46,7 +46,8 @@ function getGenomes(genomeIds) {
   return Genome.find(
     { _id: { $in: genomeIds } },
     { latitude: 1, longitude: 1, 'analysis.core.fp.reference': 1 }
-  );
+  )
+  .lean();
 }
 
 function getLocations(genomes) {
@@ -87,7 +88,6 @@ function createCollection(genomes, { organismId, title, description, pmid, user,
           _organism: organism,
           _user: user,
           _session: !user ? sessionID : undefined,
-          link: !user ? undefined : Collection.getShareableLink(),
           description,
           organismId,
           pmid,
@@ -96,6 +96,7 @@ function createCollection(genomes, { organismId, title, description, pmid, user,
           locations: getLocations(genomes),
           subtrees: getSubtrees(organismId, genomes),
           genomes: genomes.map(_ => _._id),
+          token: Collection.generateToken(title),
           tree: {
             name: 'collection',
           },
@@ -105,11 +106,11 @@ function createCollection(genomes, { organismId, title, description, pmid, user,
 }
 
 function submitCollection(collection) {
-  const { _id, uuid, organismId } = collection;
+  const { _id, token, organismId } = collection;
   return request('collection', 'submit-tree', {
     organismId,
     collectionId: _id,
-    clientId: uuid,
+    clientId: token,
   })
   .then(() => collection);
 }
@@ -120,5 +121,5 @@ module.exports = function (message) {
     .then(getGenomes)
     .then(genomes => createCollection(genomes, message))
     .then(submitCollection)
-    .then(({ slug, uuid }) => ({ slug, uuid }));
+    .then(({ token }) => ({ token }));
 };

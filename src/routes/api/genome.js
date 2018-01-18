@@ -1,7 +1,7 @@
 const express = require('express');
 const zlib = require('zlib');
 
-const services = require('../services');
+const services = require('services');
 
 const router = express.Router();
 const LOGGER = require('utils/logging').createLogger('Upload');

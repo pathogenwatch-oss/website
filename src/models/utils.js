@@ -1,3 +1,6 @@
+const slug = require('slug');
+const removeMarkdown = require('remove-markdown');
+
 exports.setToObjectOptions = (schema, optionalTransform) =>
   schema.set('toObject', {
     transform(doc, ret, options) {
@@ -96,4 +99,12 @@ exports.getSummary = function (model, summaryFields, props) {
 
       return summary;
     });
+};
+
+exports.toSlug = function (text) {
+  if (!text) return '';
+  const slugText = slug(removeMarkdown(text), { lower: true });
+  return slugText.length > 64 ?
+    slugText.slice(0, 64) :
+    slugText;
 };

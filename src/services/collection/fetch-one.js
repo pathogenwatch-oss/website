@@ -5,6 +5,7 @@ const { request } = require('services');
 const projection = {
   _user: 1,
   _organism: 1,
+  access: 1,
   createdAt: 1,
   description: 1,
   genomes: 1,
@@ -19,11 +20,11 @@ const projection = {
   'subtrees.task': 1,
   'subtrees.version': 1,
   title: 1,
-  uuid: 1,
+  token: 1,
 };
 
-module.exports = ({ user, id }) =>
-  request('collection', 'authorise', { user, id, projection })
+module.exports = ({ user, token }) =>
+  request('collection', 'authorise', { user, token, projection })
     .then(collection =>
       collection
         .populate('_organism', {
@@ -35,10 +36,11 @@ module.exports = ({ user, id }) =>
         .execPopulate()
         .then(() => Genome.getForCollection({ _id: { $in: collection.genomes } }))
         .then(genomes => {
-          const doc = collection.toObject();
+          const doc = collection.toObject({ user });
           doc.genomes = genomes;
           doc.status = 'READY';
           doc.subtrees = doc.subtrees || [];
+          doc.uuid = doc.token;
           return doc;
         })
     );
