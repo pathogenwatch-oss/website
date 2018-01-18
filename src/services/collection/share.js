@@ -11,6 +11,19 @@ module.exports = function ({ id, user, status }) {
     .find({ _id: id, _user: user._id }, { link: 1 })
     .then(collection => {
       if (!collection) return new NotFoundError('Incorrect id and user combination.');
+      
+      if (status === false) {
+        return (
+          Collection.update(
+            { _id: id, _user: user._id },
+            { $unset: { link: 1 } }
+          )
+          .then(response => {
+            if (response.ok !== 1) throw new ServiceRequestError('Failed to complete share action');
+            return {};
+          })
+        ); 
+      }
 
       if (collection.link) {
         return collection.link;
