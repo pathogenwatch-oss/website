@@ -30,7 +30,7 @@ export function addColumnWidth(column, { data }) {
   }
 
   const { getWidth = defaultWidthGetter, cellPadding = 12 } = column;
-  const columnHeaderWidth = measureText(getColumnLabel(column)) + cellPadding;
+  const columnHeaderWidth = measureText(getColumnLabel(column), true) + cellPadding;
 
   column.width = data.length ? data.reduce((maxWidth, row) =>
     Math.max(

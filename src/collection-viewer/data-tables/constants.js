@@ -10,8 +10,8 @@ import { getFormattedDateString } from '../table/utils';
 export const systemDataColumns = {
   __date: {
     columnKey: '__date',
-    valueGetter({ date = {} }) {
-      return getFormattedDateString(date);
+    valueGetter(genome) {
+      return getFormattedDateString(genome);
     },
   },
   __pmid: {
