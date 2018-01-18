@@ -14,7 +14,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch, { match }) {
   return {
-    fetch: () => dispatch(actions.fetchCollection(match.params.slug)),
+    fetch: () => dispatch(actions.fetchCollection(match.params.token)),
     reset: () => dispatch(actions.resetCollectionView()),
   };
 }

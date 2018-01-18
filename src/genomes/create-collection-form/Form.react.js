@@ -110,9 +110,9 @@ function mapDispatchToProps(dispatch) {
       (e) => {
         e.preventDefault();
         dispatch(createCollection())
-          .then(({ slug }) => {
-            if (slug) {
-              history.push(`/collection/${slug}`);
+          .then(({ token }) => {
+            if (token) {
+              history.push(`/collection/${token}`);
             } else {
               console.error('Failed to create collection');
             }
