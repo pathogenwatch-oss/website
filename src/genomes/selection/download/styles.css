@@ -4,26 +4,23 @@
   flex-direction: column;
 }
 
-.wgsa-genome-downloads > header {
-  padding-bottom: 8px;  
-}
-
-.wgsa-genome-downloads > footer {
-  padding-top: 8px;
-}
-
 .wgsa-genome-downloads__content {
   overflow-y: auto;
-  margin: 0 -16px;
+  margin: 0;
   flex-grow: 1;
+}
+
+.wgsa-genome-downloads__content .mdl-spinner {
+  margin: 8px 16px;
+}
+
+.wgsa-genome-downloads__content > ul {
+  margin: 0;
+  padding: 8px 0;
 }
 
 .wgsa-genome-downloads__content > ul > li {
   padding: 0 16px;
-}
-
-.wgsa-genome-selection-dropdown ul:first-child {
-  margin-top: 0;
 }
 
 .wgsa-genome-download-list {

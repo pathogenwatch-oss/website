@@ -46,10 +46,6 @@
   margin-left: 16px;
 }
 
-.wgsa-not-enough-genomes {
-  width: 240px;
-}
-
-.wgsa-not-enough-genomes strong {
+.wgsa-create-collection-message strong {
   white-space: nowrap;
 }

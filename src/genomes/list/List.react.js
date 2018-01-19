@@ -6,9 +6,14 @@ import ListItem from './ListItem.react';
 import Header from './Header.react';
 
 import { getGenomes, getListIndices } from '../selectors';
+import { getLastSelectedIndex } from '../selection/selectors';
 import { getVisible } from '../summary/selectors';
 
 import { fetchGenomeList } from '../actions';
+
+import config from '../../app/config';
+
+const { pagination = { min: 100 } } = config;
 
 const headerHeight = 25;
 const rowHeight = 40;
@@ -22,6 +27,12 @@ export const ListView = React.createClass({
     total: React.PropTypes.number.isRequired,
   },
 
+  getInitialState() {
+    return {
+      mouseOverIndex: null,
+    };
+  },
+
   componentWillMount() {
     document.title = 'WGSA | Genomes';
   },
@@ -33,18 +44,38 @@ export const ListView = React.createClass({
     );
   },
 
+  getRowClassName(index) {
+    const { lastSelectedIndex } = this.props;
+    const { mouseOverIndex, range } = this.state;
+    if (lastSelectedIndex !== null && range && mouseOverIndex !== null) {
+      const startIndex = Math.min(lastSelectedIndex, mouseOverIndex);
+      const stopIndex = Math.max(lastSelectedIndex, mouseOverIndex);
+      if (startIndex <= index && index <= stopIndex) {
+        return 'active';
+      }
+    }
+    return '';
+  },
+
   render() {
     const { items, total, fetch, indices } = this.props;
     return (
-      <div className="wgsa-genome-list-view">
+      <div
+        className="wgsa-genome-list-view"
+        tabIndex="0"
+        onKeyDown={e => {
+          this.setState({ range: e.shiftKey });
+        }}
+        onKeyUp={() => {
+          this.setState({ range: false });
+        }}
+      >
         <Header hasScrollbar={this.hasScrollbar()} />
         <InfiniteLoader
           isRowLoaded={({ index }) => indices[index]}
-          loadMoreRows={({ startIndex, stopIndex }) =>
-            fetch({ skip: startIndex, limit: stopIndex - startIndex + 1 })
-          }
+          loadMoreRows={fetch}
           rowCount={total}
-          minimumBatchSize={100}
+          minimumBatchSize={pagination.min}
         >
           {({ onRowsRendered, registerChild }) =>
             <AutoSizer>
@@ -59,7 +90,18 @@ export const ListView = React.createClass({
                     const itemId = indices[index];
                     const styleWithMargin = { ...style, width: 'calc(100% - 32px' };
                     if (typeof itemId === 'string') {
-                      return <ListItem key={key} style={styleWithMargin} item={items[itemId]} />;
+                      return (
+                        <ListItem
+                          key={key}
+                          style={styleWithMargin}
+                          genome={items[itemId]}
+                          index={index}
+                          className={this.getRowClassName(index)}
+                          onMouseOver={e => {
+                            this.setState({ mouseOverIndex: index });
+                          }}
+                        />
+                      );
                     }
                     return (
                       <div key={key} style={styleWithMargin} className="wgsa-genome-list-placeholder">
@@ -86,12 +128,13 @@ function mapStateToProps(state) {
     items: getGenomes(state),
     indices: getListIndices(state),
     total: getVisible(state),
+    lastSelectedIndex: getLastSelectedIndex(state),
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetch: query => dispatch(fetchGenomeList(query)),
+    fetch: ({ startIndex, stopIndex }) => dispatch(fetchGenomeList(startIndex, stopIndex)),
   };
 }
 

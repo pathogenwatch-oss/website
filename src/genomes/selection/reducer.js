@@ -1,5 +1,5 @@
 import * as actions from './actions';
-import { FETCH_GENOME_LIST } from '../actions';
+import { FETCH_GENOME_LIST, FETCH_GENOME_SUMMARY } from '../actions';
 
 import { statuses } from '../../app/constants';
 
@@ -10,6 +10,7 @@ const initialState = {
     status: null,
     summary: null,
   },
+  lastSelectedIndex: null,
 };
 
 const addToSelection = (memo, { id, name, organismId }) => {
@@ -24,13 +25,16 @@ const removeFromSelection = (memo, { id }) => {
 
 export default function (state = initialState, { type, payload }) {
   switch (type) {
-    case actions.SELECT_GENOMES: {
+    case actions.APPEND_GENOME_SELECTION: {
       return {
         ...state,
         genomes: payload.genomes.reduce(addToSelection, { ...state.genomes }),
+        lastSelectedIndex: typeof payload.index === 'number' ?
+          payload.index :
+          state.lastSelectedIndex,
       };
     }
-    case actions.UNSELECT_GENOMES:
+    case actions.REMOVE_GENOME_SELECTION:
       return {
         ...state,
         genomes: payload.genomes.reduce(removeFromSelection, { ...state.genomes }),
@@ -78,6 +82,11 @@ export default function (state = initialState, { type, payload }) {
           status: statuses.SUCCESS,
           summary: payload.result,
         },
+      };
+    case FETCH_GENOME_SUMMARY.ATTEMPT:
+      return {
+        ...state,
+        lastSelectedIndex: null,
       };
     default:
       return state;

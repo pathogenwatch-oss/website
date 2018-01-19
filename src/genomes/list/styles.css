@@ -1,6 +1,12 @@
 .wgsa-genome-list-view {
   margin-left: 32px;
   flex-grow: 1;
+  user-select: none;
+  outline: none;
+}
+
+.wgsa-genome-list-view .ReactVirtualized__Grid__innerScrollContainer {
+  margin-bottom: 24px;
 }
 
 .wgsa-genome-list-view .wgsa-grid-item {
@@ -15,6 +21,10 @@
   padding-top: 0;
   padding-bottom: 0;
   color: rgba(0, 0, 0, 0.87);
+
+  &:not(.wgsa-genome-list-header) {
+    border-top: 1px solid rgba(0, 0, 0, .28);
+  }
 }
 
 .wgsa-grid-item:first-child > .wgsa-genome-list-item {
@@ -22,7 +32,8 @@
 }
 
 .wgsa-genome-list-item--selectable:hover,
-.wgsa-genome-list-item--selectable:focus {
+.wgsa-genome-list-item--selectable:focus,
+.wgsa-genome-list-item--selectable.active {
   background: rgb(238, 238, 238);
   cursor: pointer;
   text-decoration: none !important;
@@ -107,7 +118,8 @@
 }
 
 .wgsa-genome-list-item--selectable:hover *::after,
-.wgsa-genome-list-item--selectable:focus *::after {
+.wgsa-genome-list-item--selectable:focus *::after,
+.wgsa-genome-list-item--selectable.active *::after {
   background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgb(238,238,238) 75%);
 }
 

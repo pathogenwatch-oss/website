@@ -2,18 +2,18 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import CreateCollection from '../../create-collection-form';
+import Limiter from '../Limiter.react';
 
 import { toggleDropdown } from '../actions';
 
-const Collection = ({ toggle }) => (
+const Collection = ({ goBack }) => (
   <div className="wgsa-genome-collection">
-    <header>Create Collection</header>
-    <CreateCollection />
-    <footer>
-      <button
-        className="mdl-button"
-        onClick={() => toggle('selection')}
-      >
+    <header className="wgsa-dropdown-header">Create Collection</header>
+    <Limiter type="maxCollectionSize">
+      <CreateCollection />
+    </Limiter>
+    <footer className="wgsa-dropdown-footer">
+      <button className="mdl-button" onClick={goBack}>
         Go back
       </button>
     </footer>
@@ -22,7 +22,7 @@ const Collection = ({ toggle }) => (
 
 function mapDispatchToProps(dispatch) {
   return {
-    toggle: (view) => dispatch(toggleDropdown(view)),
+    goBack: () => dispatch(toggleDropdown('selection')),
   };
 }
 

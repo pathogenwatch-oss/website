@@ -1,9 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { List } from 'react-virtualized';
 
 import { getSelectedGenomeIds, getSelectedGenomeList } from '../selectors';
 
-import { unselectGenomes, clearSelection, toggleDropdown } from '../actions';
+import { removeFromSelection, clearSelection, toggleDropdown } from '../actions';
 
 import { showGenomeDrawer, setBinnedFlag } from '../../../genomes/detail/actions';
 
@@ -12,7 +13,7 @@ const { user } = config;
 
 const Selection = ({ selectedGenomes, showGenome, removeGenome, clearAll, sendToBin, toggle }) => (
   <div className="wgsa-genome-selection">
-    <header>
+    <header className="wgsa-dropdown-header">
       Selection
       <button
         className="wgsa-button--text wgsa-clear-selection"
@@ -21,14 +22,22 @@ const Selection = ({ selectedGenomes, showGenome, removeGenome, clearAll, sendTo
         Clear All
       </button>
     </header>
-    <div className="wgsa-genome-selection__list">
-      <ul>
-        {selectedGenomes.map(genome =>
+    <List
+      height={278}
+      width={438}
+      style={{ overflowX: 'hidden' }}
+      className="wgsa-genome-selection-list"
+      rowCount={selectedGenomes.length}
+      rowHeight={32}
+      rowRenderer={({ key, index, style }) => {
+        const genome = selectedGenomes[index];
+        return (
           <li
-            key={genome.id}
+            key={key}
             title="Click to View"
             className="wgsa-list-item"
             onClick={() => showGenome(genome)}
+            style={{ ...style, width: 440, top: style.top + 8 }}
           >
             <span>{genome.name}</span>
             <button
@@ -42,10 +51,10 @@ const Selection = ({ selectedGenomes, showGenome, removeGenome, clearAll, sendTo
               <i className="material-icons">clear</i>
             </button>
           </li>
-        )}
-      </ul>
-    </div>
-    <footer>
+        );
+      }}
+    />
+    <footer className="wgsa-dropdown-footer">
       <div>
         { user &&
           <button
@@ -84,7 +93,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     clearAll: () => dispatch(clearSelection()),
-    removeGenome: genome => dispatch(unselectGenomes([ genome ])),
+    removeGenome: genome => dispatch(removeFromSelection([ genome ])),
     showGenome: genome => dispatch(showGenomeDrawer(genome.id, genome.name)),
     sendToBin: genomes => dispatch(setBinnedFlag(genomes, true)),
     toggle: (view) => dispatch(toggleDropdown(view)),

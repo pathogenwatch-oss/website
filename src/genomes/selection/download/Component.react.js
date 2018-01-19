@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import Spinner from '../../../components/Spinner.react';
 import { FormattedName } from '../../../organisms';
+import Limiter from '../Limiter.react';
 
 import {
   getSelectionDownloads,
@@ -27,37 +28,41 @@ const DownloadLink = ({ link, ids, children }) => (
     </form>
   );
 
-const Section = ({ speciesId, speciesName, total, tasks, ids }) => (
-  <li>
-    <FormattedName fullName organismId={speciesId} title={speciesName} />
-    <ul className="wgsa-genome-download-list">
-      <li>
-        <DownloadLink link={getServerPath('/download/genome/fasta')} ids={ids}>
-          FASTA files
-        </DownloadLink>
-      </li>
-      {tasks.map(task =>
-        <li key={task.name}>
-          <DownloadLink link={getServerPath(`/download/analysis/${task.name}`)} ids={task.ids}>
-            {task.label}
-            {task.sources.length > 0 && <small>&nbsp;({task.sources.join(', ')})</small>}
+const Section = ({ speciesId, speciesName, total, tasks, ids }) => {
+  if (!speciesId) return null;
+  return (
+    <li>
+      <FormattedName fullName organismId={speciesId} title={speciesName} />
+      <ul className="wgsa-genome-download-list">
+        <li>
+          <DownloadLink link={getServerPath('/download/genome/fasta')} ids={ids}>
+            FASTA files
           </DownloadLink>
-          <span>{task.ids.length}/{total}</span>
         </li>
-      )}
-    </ul>
-  </li>
-);
+        {tasks.map(task =>
+          <li key={task.name}>
+            <DownloadLink link={getServerPath(`/download/analysis/${task.name}`)} ids={task.ids}>
+              {task.label}
+              {task.sources.length > 0 && <small>&nbsp;({task.sources.join(', ')})</small>}
+            </DownloadLink>
+            <span>{task.ids.length}/{total}</span>
+          </li>
+        )}
+      </ul>
+    </li>
+  );
+};
 
-const Download = React.createClass({
+const Content = React.createClass({
 
   componentDidMount() {
     this.props.fetch();
   },
 
   componentDidUpdate(previous) {
-    if (previous.selection !== this.props.selection) {
-      this.props.fetch();
+    const { selection, fetch } = this.props;
+    if (previous.selection !== selection) {
+      fetch();
     }
   },
 
@@ -71,55 +76,65 @@ const Download = React.createClass({
 
   render() {
     const { status, summary, selection } = this.props;
+
     if (status === statuses.LOADING) {
       return <Spinner />;
     }
+
     if (status === statuses.ERROR) {
       return <p>Something went wrong. 😞</p>;
     }
-    const ids = selection.map(_ => _.id);
+
     if (status === statuses.SUCCESS) {
+      const ids = selection.map(_ => _.id);
       return (
-        <div className="wgsa-genome-downloads">
-          <header>
-            Download
-          </header>
-          <div className="wgsa-genome-downloads__content">
-            <ul>
-              { this.showAllOrganisms(summary, ids) &&
+        <ul>
+          { this.showAllOrganisms(summary, ids) &&
+            <li>
+              All Organisms
+              <ul className="wgsa-genome-download-list">
                 <li>
-                  All Organisms
-                  <ul className="wgsa-genome-download-list">
-                    <li>
-                      <DownloadLink link={getServerPath('/download/genome/fasta')} ids={ids}>
-                        FASTA files
-                      </DownloadLink>
-                    </li>
-                    <li>
-                      <DownloadLink link={getServerPath('/download/analysis/speciator')} ids={ids}>
-                        <strong>Speciation</strong>
-                      </DownloadLink>
-                    </li>
-                  </ul>
-                </li> }
-              { summary.map(item => <Section key={item.speciesId} {...item} />) }
-            </ul>
-          </div>
-          <footer>
-            <button
-              className="mdl-button"
-              onClick={() => this.props.toggle('selection')}
-            >
-              Go back
-            </button>
-          </footer>
-        </div>
+                  <DownloadLink link={getServerPath('/download/genome/fasta')} ids={ids}>
+                    FASTA files
+                  </DownloadLink>
+                </li>
+                <li>
+                  <DownloadLink link={getServerPath('/download/analysis/speciator')} ids={ids}>
+                    <strong>Speciation</strong>
+                  </DownloadLink>
+                </li>
+              </ul>
+            </li> }
+          { summary.map(item => <Section key={item.speciesId} {...item} />) }
+        </ul>
       );
     }
     return null;
   },
 
 });
+
+
+const Download = ({ goBack, ...props }) => (
+  <div className="wgsa-genome-downloads">
+    <header className="wgsa-dropdown-header">
+      Download
+    </header>
+    <div className="wgsa-genome-downloads__content">
+      <Limiter type="maxDownloadSize">
+        <Content {...props} />
+      </Limiter>
+    </div>
+    <footer className="wgsa-dropdown-footer">
+      <button
+        className="mdl-button"
+        onClick={goBack}
+      >
+        Go back
+      </button>
+    </footer>
+  </div>
+);
 
 function mapStateToProps(state) {
   return {
@@ -132,7 +147,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     fetch: () => dispatch(fetchDownloads()),
-    toggle: (view) => dispatch(toggleDropdown(view)),
+    goBack: () => dispatch(toggleDropdown('selection')),
   };
 }
 

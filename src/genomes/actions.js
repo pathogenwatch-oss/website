@@ -17,10 +17,11 @@ export function fetchGenomeSummary(filter) {
 
 export const FETCH_GENOME_LIST = createAsyncConstants('FETCH_GENOME_LIST');
 
-export function fetchGenomeList(options = {}) {
+export function fetchGenomeList(startIndex, stopIndex) {
+  const options = { skip: startIndex, limit: stopIndex - startIndex + 1 };
   return (dispatch, getState) => {
     const filter = getFilter(getState());
-    dispatch({
+    return dispatch({
       type: FETCH_GENOME_LIST,
       payload: {
         filter,
