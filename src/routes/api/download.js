@@ -5,7 +5,7 @@ const services = require('services');
 
 const LOGGER = require('utils/logging').createLogger('Download');
 
-router.get('/', (req, res, next) => {
+router.get('/download', (req, res, next) => {
   const { ids } = req.query;
   const { user, sessionID } = req;
 

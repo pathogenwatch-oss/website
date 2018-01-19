@@ -36,7 +36,7 @@ router.use('/genome', require('./genome'));
 
 router.use('/collection', require('./collection'));
 
-router.use(require('./organism'));
+router.use('/organism', require('./organism'));
 
 router.use(require('../notFound'));
 
