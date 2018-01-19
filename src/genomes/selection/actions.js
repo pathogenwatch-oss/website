@@ -126,7 +126,7 @@ export function selectAll() {
     const state = getState();
     const selectionStatus = getSelectionStatus(state);
 
-    if (selectionStatus === 'CHECKED') {
+    if (selectionStatus !== 'UNCHECKED') {
       const genomes = getGenomeList(state);
       dispatch(removeFromSelection(genomes));
     } else {

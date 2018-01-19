@@ -10,7 +10,6 @@ const stateColourMap = Object.keys(stateColours).reduce(
   (map, key) => map.set(stateColours[key], key),
   new Map([
     [ nonResistantColour, 'UNKNOWN' ],
-    [ nonResistantColour, 'NOT_FOUND' ],
   ])
 );
 export const getColourState = colour => stateColourMap.get(colour);
