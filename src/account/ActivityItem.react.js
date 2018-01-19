@@ -15,8 +15,8 @@ const content = {
     <Link to={`/genomes/user?uploadedAt=${date}`}>
       Uploaded <strong>{count}</strong> genome{count === 1 ? '' : 's'}
     </Link>,
-  collection: ({ size, organismId, title, slug }) => (
-    <Link to={`/collection/${slug}`}>
+  collection: ({ size, organismId, title, token }) => (
+    <Link to={`/collection/${token}`}>
       Created collection <MarkdownInline tag="strong">{title}</MarkdownInline> (<FormattedName fullName organismId={organismId} />, <strong>{size}</strong> genomes)
     </Link>
   ),

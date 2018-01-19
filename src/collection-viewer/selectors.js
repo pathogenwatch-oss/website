@@ -83,5 +83,7 @@ export const getCollectionMetadata = createSelector(
     description: collection.description,
     dateCreated: new Date(collection.createdAt).toLocaleDateString(),
     pmid: collection.pmid,
+    owner: collection.owner,
+    access: collection.access,
   })
 );

@@ -41,7 +41,7 @@ const ViewerHeader = connect(mapStateToProps)(
     </Header>
 );
 
-const path = '/collection/:slug';
+const path = '/collection/:token';
 
 export const HeaderRoute = (
   <Route path={path} component={ViewerHeader} />

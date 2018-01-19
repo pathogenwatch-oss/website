@@ -10,18 +10,14 @@
 }
 
 .wgsa-about-collection-dropdown dl {
+  display: flex;
   box-sizing: border-box;
-  width: 50%;
-  float: left;
-  margin-top: 0;
+  justify-content: space-between;
+  padding-bottom: 8px;
 }
 
-.wgsa-about-collection-dropdown dl:nth-of-type(odd) {
-  padding-right: 8px;
-}
-
-.wgsa-about-collection-dropdown dl:nth-of-type(even) {
-  padding-left: 8px;
+.wgsa-about-collection-dropdown dl > div {
+  width: calc(50% - 8px);
 }
 
 .wgsa-header-dropdown {

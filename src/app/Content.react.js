@@ -20,10 +20,10 @@ const RedirectWithQuery = ({ from, to }) => (
 );
 
 const getCollectionRedirect = () => (
-  <Route exact path="/:organism/collection/:slug"
+  <Route exact path="/:organism/collection/:token"
     render={({ match }) =>
       <Redirect to={{
-        pathname: `/collection/${match.params.slug}`,
+        pathname: `/collection/${match.params.token}`,
         state: { organism: match.params.organism },
       }}
       /> }
