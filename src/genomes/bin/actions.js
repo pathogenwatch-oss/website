@@ -4,7 +4,7 @@ import { getFilter } from '../../filter/selectors';
 import { showToast } from '../../toast';
 import { fetchGenomeList, fetchGenomeSummary } from '../actions';
 import { fetchSummary } from '../../summary/actions';
-import { unselectGenomes } from '../selection/actions';
+import { removeFromSelection } from '../selection/actions';
 
 import { binGenomes } from '../api';
 import * as toasts from '../utils/toasts';
@@ -17,7 +17,7 @@ export function setBinnedFlag(genomes, isBinned, undoable = true) {
       binGenomes(genomes.map(_ => _.id), isBinned)
         .then(({ binned }) => {
           if (binned === 0) return Promise.resolve();
-          dispatch(unselectGenomes(genomes));
+          dispatch(removeFromSelection(genomes));
           return Promise.all([
             dispatch(fetchGenomeList()),
             dispatch(fetchGenomeSummary(currentFilter)),
