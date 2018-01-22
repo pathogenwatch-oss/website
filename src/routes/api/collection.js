@@ -65,7 +65,7 @@ router.get('/collection/:token/tree/:name', (req, res, next) => {
   const { user } = req;
   const { token, name } = req.params;
   const treeType = (name === 'collection') ? 'tree' : 'subtree';
-  return services.request('collection', treeType, { user, token, name })
+  return services.request('collection', `fetch-${treeType}`, { user, token, name })
     .then(response => res.json(response))
     .catch(next);
 });
