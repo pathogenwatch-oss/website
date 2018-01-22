@@ -24,7 +24,7 @@ const Marker = React.createClass({
 
   render() {
     const { style, marker, selectedCollection, setCollection } = this.props;
-    const { uuid } = marker.collection;
+    const { token, uuid = token } = marker.collection;
     return (
       <Link
         style={{
@@ -82,7 +82,7 @@ export default React.createClass({
 
   setCollection() {
     const { collections } = this.state;
-    const { uuid } = collections[Math.floor(Math.random() * collections.length)];
+    const { token, uuid = token } = collections[Math.floor(Math.random() * collections.length)];
     this.setState({ uuid });
   },
 
@@ -156,7 +156,7 @@ export default React.createClass({
             transitionLeaveTimeout={280}
           >
             { !!uuid &&
-              <SelectedCollection key={uuid} collection={collections.find(_ => _.uuid === uuid)} /> }
+              <SelectedCollection key={uuid} collection={collections.find(_ => _.token === uuid)} /> }
           </ReactCSSTransitionGroup>
         </div>
       </section>
