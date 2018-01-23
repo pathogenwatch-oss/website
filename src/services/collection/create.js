@@ -81,26 +81,25 @@ function getSubtrees(organismId, genomes) {
 
 function createCollection(genomes, { organismId, title, description, pmid, user, sessionID }) {
   const size = genomes.length;
+  const tree = genomes.length >= 3 ? { name: 'collection' } : null;
   return (
     Organism.getLatest(organismId)
       .then(organism =>
         Collection.create({
           _organism: organism,
-          _user: user,
           _session: !user ? sessionID : undefined,
+          _user: user,
           access: user ? 'private' : 'shared',
           description,
+          genomes: genomes.map(_ => _._id),
+          locations: getLocations(genomes),
           organismId,
           pmid,
           size,
-          title,
-          locations: getLocations(genomes),
           subtrees: getSubtrees(organismId, genomes),
-          genomes: genomes.map(_ => _._id),
+          title,
           token: Collection.generateToken(title),
-          tree: {
-            name: 'collection',
-          },
+          tree,
         })
       )
   );
@@ -108,7 +107,8 @@ function createCollection(genomes, { organismId, title, description, pmid, user,
 
 function submitCollection(collection) {
   const { _id, token, organismId } = collection;
-  return request('collection', 'submit-tree', {
+  const submitType = collection.tree ? 'submit-tree' : 'submit-subtrees';
+  return request('collection', submitType, {
     organismId,
     collectionId: _id,
     clientId: token,

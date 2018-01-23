@@ -48,7 +48,7 @@ const schema = new Schema({
   subtrees: [ Tree ],
   title: { type: String, index: 'text' },
   token: { type: String, index: true, unique: true, default: getDefaultToken },
-  tree: Tree,
+  tree: { type: Tree, default: null },
 });
 
 setToObjectOptions(schema, (doc, collection, { user }) => {

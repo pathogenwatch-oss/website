@@ -19,7 +19,7 @@ const bson = new BSON();
 
 function getGenomes(spec, metadata) {
   const { task } = spec;
-  const { collectionId, name } = metadata;
+  const { collectionId, name, organismId } = metadata;
   return Collection.findOne(
     { _id: collectionId },
     { genomes: 1 },
@@ -29,6 +29,7 @@ function getGenomes(spec, metadata) {
     let query = { _id: { $in: genomes } };
     if (task === 'subtree') {
       query = {
+        'analysis.speciator.organismId': organismId,
         'analysis.core.fp.reference': name,
         $or: [ { _id: { $in: genomes } }, { population: true } ],
       };
@@ -36,11 +37,16 @@ function getGenomes(spec, metadata) {
     return Genome
       .find(query, { fileId: 1 }, { sort: { fileId: 1 } })
       .lean()
-      .then(docs => docs.map(doc => {
+      .then(docs => {
+        if (docs.length < 3) {
+          throw new Error('Not enough genomes to make a tree');
+        }
         const ids = new Set(genomes.map(_ => _.toString()));
-        doc.population = !ids.has(doc._id.toString());
-        return doc;
-      }));
+        return docs.map(doc => {
+          doc.population = !ids.has(doc._id.toString());
+          return doc;
+        });
+      });
   });
 }
 
