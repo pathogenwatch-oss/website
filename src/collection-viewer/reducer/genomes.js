@@ -28,7 +28,7 @@ function flagGenomes(genomes, flag) {
         month: genome.month,
         day: genome.day,
       },
-      [`__${genome.reference ? 'isReference' : flag}`]: true,
+      [`__${flag}`]: true,
     };
     return memo;
   }, {});

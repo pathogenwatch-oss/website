@@ -1,6 +1,11 @@
 import { createSelector } from 'reselect';
 
-import { getCollection, getGenomes, getViewer } from '../../collection-viewer/selectors';
+import {
+  getCollection,
+  getGenomes,
+  getViewer,
+  getCollectionGenomeIds,
+} from '../selectors';
 import { getActiveDataTable } from '../table/selectors';
 
 import { titles, simpleTrees } from './constants';
@@ -14,8 +19,19 @@ export const getTreeState = state => getViewer(state).tree;
 export const getTrees = state => getTreeState(state).entities;
 export const isLoading = state => getTreeState(state).loading;
 
-export const getLeafIds = (state, { stateKey }) =>
-  getTrees(state)[stateKey].leafIds;
+export const getLeafIds = (state, { stateKey }) => {
+  const trees = getTrees(state);
+
+  if (stateKey === POPULATION) {
+    return getCollectionGenomeIds(state);
+  }
+
+  if (stateKey in trees) {
+    return trees[stateKey].leafIds;
+  }
+
+  return [];
+};
 
 export const getVisibleTree = createSelector(
   getTreeState,

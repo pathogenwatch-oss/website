@@ -8,7 +8,7 @@ import { getVisibleTree, getSelectedInternalNode } from './selectors';
 
 import { nonResistantColour } from '../amr-utils';
 import { getLeafStyle } from './utils';
-import { defaultLeafStyle } from './constants';
+import { defaultLeafStyle, leafStyles } from './constants';
 
 const Styler = React.createClass({
 
@@ -22,12 +22,16 @@ const Styler = React.createClass({
       const genome = genomes[id];
       const colour = this.props.getColour(genome);
 
+      const style = getLeafStyle(genome);
       leaf.setDisplay({
-        ...getLeafStyle(genome),
+        shape: style.shape,
         leafStyle: {
           ...defaultLeafStyle,
           fillStyle: colour,
         },
+        labelStyle: genome.__isCollection ?
+          leafStyles.collection.labelStyle :
+          style.labelStyle,
       });
 
       if (colour === nonResistantColour) leaf.radius = 0;
