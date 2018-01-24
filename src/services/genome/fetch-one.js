@@ -3,7 +3,7 @@ const { ServiceRequestError } = require('utils/errors');
 const { request } = require('services');
 
 const taskNames = [
-  'speciator', 'metrics', 'mlst', 'paarsnp', 'genotyphi', 'ngmast',
+  'speciator', 'metrics', 'mlst', 'paarsnp', 'genotyphi', 'ngmast', 'core',
 ];
 
 const projection = {
