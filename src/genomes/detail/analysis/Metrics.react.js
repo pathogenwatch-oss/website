@@ -38,7 +38,9 @@ export default ({ result }) => (
         <dd>{result.gcContent}%</dd>
       </div>
     </dl>
-    <h3>N50 chart</h3>
-    <N50Chart metrics={result} />
+    <figure>
+      <figcaption>N50 chart</figcaption>
+      <N50Chart metrics={result} />
+    </figure>
   </div>
 );

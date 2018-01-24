@@ -9,8 +9,10 @@
   overflow-y: auto;
   overflow-x: hidden;
   margin-top: 48px;
+}
 
-  @media (max-width: 1200px) {
+@media (max-width: 1200px) {
+  .wgsa-genome-detail .wgsa-modal {
     left: -5%;
   }
 }
@@ -27,7 +29,10 @@
 .wgsa-genome-detail-title {
   width: 100%;
   text-align: center;
-  @media (max-width: 1200px) {
+}
+
+@media (max-width: 1200px) {
+  .wgsa-genome-detail-title {
     margin-right: 10%;
   }
 }
@@ -48,7 +53,7 @@
 
 .wgsa-genome-detail-content {
   padding: 0 24px;
-  box-sizing: border-box
+  box-sizing: border-box;
 }
 
 .wgsa-genome-detail-content > aside {
@@ -78,14 +83,12 @@
   font-size: 24px;
   line-height: 1;
   color: #673c90;
-}
-
-.wgsa-genome-detail-content h3 {
-  font-size: 20px;
+  padding: 0 8px;
 }
 
 .wgsa-genome-detail-content > section {
   padding-bottom: 24px;
+  position: relative;
 }
 
 .wgsa-genome-detail-content > section + section {
@@ -115,5 +118,63 @@
 }
 
 .wgsa-genome-detail-version {
-  float: right;
+  position: absolute;
+  top: 16px;
+  right: 16px;
+}
+
+.wgsa-analysis-version {
+  margin-left: 8px;
+  font-size: 13px;
+  background: #ccc;
+  padding: 2px 6px;
+  border-radius: 8px;
+  text-transform: none;
+  font-weight: 500;
+}
+
+.wgsa-analysis-version.is-active {
+  background: #3c7383;
+  color: #fff;
+}
+
+.wgsa-genome-detail table {
+  margin: 16px auto;
+  font-size: 16px;
+}
+
+.wgsa-genome-detail table caption,
+.wgsa-genome-detail-content figcaption {
+  text-align: center;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+.wgsa-genome-detail th,
+.wgsa-genome-detail td {
+  padding: 8px;
+  color: rgba(0, 0, 0, 0.87);
+  text-align: center;
+}
+
+.wgsa-genome-detail td {
+  line-height: 1.1;
+}
+
+.wgsa-genome-detail th {
+  border-top: 2px solid rgba(0, 0, 0, 0.87);
+  border-bottom: 2px solid rgba(0, 0, 0, 0.87);
+}
+
+.wgsa-genome-detail-amr-state {
+  text-transform: capitalize;
+  white-space: nowrap;
+}
+
+.wgsa-genome-detail-amr-present {
+  font-weight: 500;
+}
+
+.wgsa-genome-detail-amr tr:not(.wgsa-genome-detail-amr-present) {
+  color: rgba(0, 0, 0, 0.54);
 }

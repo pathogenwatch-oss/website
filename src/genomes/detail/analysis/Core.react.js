@@ -12,11 +12,11 @@ export default ({ result: { fp, summary } }) => (
     </div>
     <div>
       <dt>% Core Families</dt>
-      <dd>{summary.percentKernelMatched}</dd>
+      <dd>{summary.percentKernelMatched}%</dd>
     </div>
     <div>
       <dt>% Non-Core</dt>
-      <dd>{(100 - summary.percentAssemblyMatched).toFixed(1)}</dd>
+      <dd>{(100 - summary.percentAssemblyMatched).toFixed(1)}%</dd>
     </div>
     <div>
       <dt>Complete Alleles</dt>
