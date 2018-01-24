@@ -2,7 +2,6 @@ import { combineReducers } from 'redux';
 
 import collection from './collection';
 import genomes from './genomes';
-import position from './position';
 
 import aboutCollectionOpen from '../about-collection/reducer';
 import downloads from '../downloads/reducer';
@@ -19,7 +18,6 @@ const reducer = combineReducers({
   entities: combineReducers({
     genomes,
     collection,
-    position,
   }),
   aboutCollectionOpen,
   downloads,

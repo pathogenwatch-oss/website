@@ -2,6 +2,7 @@ import { createSelector } from 'reselect';
 import sortBy from 'lodash.sortby';
 
 import { getGenomeList } from '../selectors';
+import { getVisible } from '../summary/selectors';
 import { getDeployedOrganismIds } from '../../summary/selectors';
 
 import { isOverSelectionLimit } from './utils';
@@ -12,6 +13,7 @@ export const getSelection = ({ genomes }) => genomes.selection;
 export const getSelectedGenomes = state => getSelection(state).genomes;
 export const getSelectionDropdownView = state => getSelection(state).dropdown;
 export const getSelectionDownloads = state => getSelection(state).download;
+export const getLastSelectedIndex = state => getSelection(state).lastSelectedIndex;
 
 export const getSelectedGenomeIds = createSelector(
   getSelectedGenomes,
@@ -38,10 +40,16 @@ export const isSelectionLimitReached = createSelector(
   ids => isOverSelectionLimit(ids.length)
 );
 
-export const areAllSelected = createSelector(
+export const getSelectionStatus = createSelector(
+  getSelectedGenomeIds,
   getSelectedGenomes,
   getGenomeList,
-  (selection, genomes) => genomes.every(({ id }) => (id in selection))
+  getVisible,
+  (ids, selection, genomes, total) => {
+    if (ids.length === 0) return 'UNCHECKED';
+    if (genomes.length === total && genomes.every(({ id }) => (id in selection))) return 'CHECKED';
+    return 'INDETERMINATE';
+  }
 );
 
 export const getDownloadSummary = createSelector(
@@ -64,7 +72,9 @@ export const getDownloadSummary = createSelector(
         }
       }
       return {
-        ...item,
+        speciesId: item.speciesId,
+        speciesName: item.speciesName,
+        total: item.total,
         ids: Array.from(allIds),
         tasks: sortBy(tasks, _ => _.label.toUpperCase()),
       };

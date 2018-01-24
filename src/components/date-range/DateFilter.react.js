@@ -1,8 +1,8 @@
 import React from 'react';
 import Range from 'rc-slider/lib/Range';
-import format from 'date-fns/format';
-import endOfMonth from 'date-fns/end_of_month';
 import classnames from 'classnames';
+
+import MonthYearSelector from './MonthYearSelector.react';
 
 import { dateToInteger, integerToDate } from '../../utils/Date';
 
@@ -34,25 +34,39 @@ export default React.createClass({
     return (
       <div className="wgsa-date-range">
         <Range
+          id="genome-date-filter"
           min={minBound}
           max={maxBound}
           value={[ minValue, maxValue ]}
-          onChange={([ min, max ]) => this.setState({ min: integerToDate(min), max: endOfMonth(integerToDate(max)) })}
+          onChange={([ min, max ]) => this.setState({ min: integerToDate(min), max: integerToDate(max) })}
           onAfterChange={([ min, max ]) => {
             if (min !== (values[0] ? dateToInteger(values[0]) : minBound)) {
               onChangeMin(integerToDate(min));
             }
             if (max !== (values[1] ? dateToInteger(values[1]) : maxBound)) {
-              onChangeMax(endOfMonth(integerToDate(max)));
+              onChangeMax(integerToDate(max));
             }
           }}
           className={classnames({ 'rc-slider--inactive': this.isInactive() })}
-        >
-          <label>
-            <span>{format(minDate, 'MMM YYYY')}</span>
-            <span>{format(maxDate, 'MMM YYYY')}</span>
-          </label>
-        </Range>
+        />
+        <label htmlFor="genome-date-filter" onSubmit={() => this.setState({ editing: null })}>
+          <MonthYearSelector
+            date={minDate}
+            min={bounds[0]}
+            max={maxDate}
+            update={onChangeMin}
+            onClick={() => this.setState({ editing: 'min' })}
+            editing={this.state.editing === 'min'}
+          />
+          <MonthYearSelector
+            date={maxDate}
+            min={minDate}
+            max={bounds[1]}
+            update={onChangeMax}
+            onClick={() => this.setState({ editing: 'max' })}
+            editing={this.state.editing === 'max'}
+          />
+        </label>
       </div>
     );
   },

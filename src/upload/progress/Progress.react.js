@@ -76,7 +76,7 @@ const Overview = connect(
         <ProgressBar label="Tasks" progress={tasksPct} /> }
       { position > 0 ?
         <p>{position} job{position === 1 ? '' : 's'} till next result.</p> :
-        <p>Results processing.</p> }
+        <p className="wgsa-blink">Results processing.</p> }
     </div>
   );
 });

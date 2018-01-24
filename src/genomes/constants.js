@@ -5,6 +5,7 @@ export const statuses = {
 };
 
 export const analysisLabels = {
+  metrics: 'Stats',
   mlst: 'MLST',
   speciator: 'Speciation',
   paarsnp: 'AMR',

@@ -10,16 +10,17 @@ import {
   resetFilter,
 } from '../filter/actions';
 
-import { getSubtree } from './api';
+import { getTree } from './api';
 
 import { POPULATION, COLLECTION } from '../../app/stateKeys/tree';
 import { filterKeys } from '../filter/constants';
+import { updateProgress } from '../actions';
 
 function fetchTree(name) {
   return (dispatch, getState) => {
     const collection = getCollection(getState());
     return dispatch(
-      actions.fetchTree(name, getSubtree(collection.uuid, name))
+      actions.fetchTree(name, getTree(collection.uuid, name))
     );
   };
 }
@@ -126,5 +127,14 @@ export function internalNodeSelected(node) {
     const state = getState();
     const stateKey = getVisibleTree(state).name;
     dispatch(actions.internalNodeSelected(stateKey, node ? node.id : null));
+  };
+}
+
+export function handleTreeProgress(payload = {}) {
+  return (dispatch) => {
+    if (payload.task === 'tree' && payload.status === 'READY') {
+      return dispatch(fetchTree(payload.name));
+    }
+    return dispatch(updateProgress(payload));
   };
 }

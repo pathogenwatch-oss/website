@@ -8,7 +8,6 @@ import { isFilterOpen, isActive } from '../filter/selectors';
 import { getTotal } from '../summary/selectors';
 
 import { updateFilter } from '../filter/actions';
-import { selectAll } from '../selection/actions';
 
 function mapStateToProps(state, { match }) {
   const { prefilter } = match.params;
@@ -28,12 +27,7 @@ function mapDispatchToProps(dispatch, { match, location }) {
   const { prefilter } = match.params;
   return {
     fetch: () =>
-      dispatch(updateFilter({ prefilter, ...query }, false))
-        .then(() => {
-          if (query.createCollection) {
-            dispatch(selectAll(true));
-          }
-        }),
+      dispatch(updateFilter({ prefilter, ...query }, false)),
   };
 }
 

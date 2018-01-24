@@ -1,31 +1,36 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { selectAll, unselectAll } from './actions';
-import { areAllSelected } from './selectors';
+import { selectAll } from './actions';
+import { getSelectionStatus } from './selectors';
 
-const SelectAll = ({ allSelected, select, unselect }) => (
+const iconsByStatus = {
+  UNCHECKED: 'check_box_outline_blank',
+  CHECKED: 'check_box',
+  INDETERMINATE: 'indeterminate_check_box',
+};
+
+const SelectAll = ({ status, select }) => (
   <button
     className="wgsa-genome-checkbox"
-    onClick={allSelected ? unselect : select}
-    title={allSelected ? 'Remove from Selection' : 'Add to Selection'}
+    onClick={select}
+    title={status === 'CHECKED' ? 'Remove from Selection' : 'Add to Selection'}
   >
     <i className="material-icons">
-      { allSelected ? 'check_box' : 'check_box_outline_blank' }
+      {iconsByStatus[status]}
     </i>
   </button>
 );
 
 function mapStateToProps(state) {
   return {
-    allSelected: areAllSelected(state),
+    status: getSelectionStatus(state),
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     select: () => dispatch(selectAll()),
-    unselect: () => dispatch(unselectAll()),
   };
 }
 

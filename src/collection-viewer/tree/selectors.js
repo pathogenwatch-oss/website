@@ -19,21 +19,17 @@ export const getLeafIds = (state, { stateKey }) =>
 
 export const getVisibleTree = createSelector(
   getTreeState,
-  ({ visible, entities }) => {
-    const visibleTree = entities[visible];
-    return visibleTree.newick ? visibleTree : entities[POPULATION];
-  }
+  ({ visible, entities }) => entities[visible]
 );
 
 export const isLoaded = state => getVisibleTree(state).loaded;
 export const getTreeType = state => getVisibleTree(state).type;
 
 export const getSingleTree = createSelector(
-  getTrees,
-  trees => {
-    const collectionTree = trees[COLLECTION];
+  getCollection,
+  (collection) => {
+    if (collection.size < 3) return POPULATION;
     if (Organisms.uiOptions.noPopulation) return COLLECTION;
-    if (!(collectionTree && collectionTree.newick)) return POPULATION;
     return null;
   }
 );
@@ -69,4 +65,16 @@ export const getSubtreeNames = createSelector(
 export const getSelectedInternalNode = createSelector(
   state => getTreeState(state).selectedInternalNode,
   ({ trees, active }) => trees[active]
+);
+
+export const areTreesComplete = createSelector(
+  getTrees,
+  trees => {
+    for (const key of Object.keys(trees)) {
+      if (trees[key].status !== 'READY') {
+        return false;
+      }
+    }
+    return true;
+  }
 );

@@ -1,27 +1,20 @@
-.wgsa-downloads-menu {
+.wgsa-downloads {
   position: relative;
-  padding: 16px;
+  padding: 24px 32px;
   background: url('/images/WGSA.Icon.FINAL.reverse.svg') #fff no-repeat;
   background-size: 80px;
   background-position: calc(100% + 20px) -20px;
 }
 
-.wgsa-downloads-menu__list {
-  display: inline-block;
-  vertical-align: top;
-  padding: 8px;
+.wgsa-downloads .mdl-dialog__title {
+  padding: 16px 0;
 }
 
-
-.wgsa-menu {
+.wgsa-downloads-menu {
   list-style: none;
   margin: 0;
   padding: 8px 0;
   display: block;
-}
-
-.wgsa-menu > li:last-child > .wgsa-menu {
-  border: none;
 }
 
 .wgsa-menu-heading {
@@ -35,65 +28,23 @@
   display: block;
 }
 
-.wgsa-menu__item {
-  display: block;
-  white-space: nowrap;
-  font-size: 13px;
-  padding: 0;
-  transition: background .28s cubic-bezier(.4,0,.2,1);
-  font-size: 16px;
-  line-height: 16px;
-  color: rgba(0,0,0,.870588);
+.wgsa-downloads-menu a,
+.wgsa-downloads-menu button {
+  margin: 0;
+  padding: 0 16px;
+  box-sizing: border-box;
 }
 
-.wgsa-menu__item > a,
-.wgsa-menu__item > button {
-  text-align: left;
-  font-size: inherit;
-  font-weight: 400;
-  color: inherit;
-  text-decoration: none;
-  display: block;
-  position: relative;
-  padding: 8px 16px;
+.wgsa-downloads > p {
+  margin: 0;
 }
 
-.wgsa-menu__item > button {
-  width: 100%;
-}
-
-.wgsa-menu__item:hover,
-.wgsa-menu__item:focus,
-.wgsa-menu__item:active {
-  background: rgba(0, 0, 0, 0.09);
-}
-
-/* pushes icon in download menu up a bit for alignment */
-.wgsa-download-button:not(.mdl-button--icon) .material-icons {
-  margin-left: -4px;
-  margin-top: -4px;
-}
-
-.wgsa-menu__item .wgsa-download-icon + span {
-  display: inline-block;
-  vertical-align: middle;
-}
-
-.wgsa-menu__item .mdl-spinner {
-  position: relative;
-  left: -8px;
+.wgsa-downloads-menu h4 {
+  margin-top: 16px;
 }
 
 .wgsa-menu-button {
   color: #fff;
   padding: 0 12px;
   text-decoration: none;
-}
-
-.wgsa-menu-button:hover,
-.wgsa-menu-button:focus:not(:active),
-.wgsa-menu-button:active,
-.wgsa-menu--is-open .wgsa-menu-button {
-  background-color: rgba(255, 255, 255, 0.12);
-  text-shadow: 1px 1px 1px #673c90;
 }

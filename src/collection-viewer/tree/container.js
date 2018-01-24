@@ -18,7 +18,7 @@ import { POPULATION } from '../../app/stateKeys/tree';
 function mapStateToProps(state) {
   const { name, type, loaded, newick, root } = selectors.getVisibleTree(state);
   return {
-    name, type, loaded, newick, root,
+    name, type, loaded, newick, root, status,
     filenames: selectors.getFilenames(state),
     loading: selectors.isLoading(state),
     Styler: name === POPULATION ? PopulationStyler : StandardStyler,

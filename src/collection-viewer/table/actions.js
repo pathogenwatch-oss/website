@@ -43,3 +43,11 @@ export function setColourColumns(table, columns) {
     },
   };
 }
+
+export const AMR_TOGGLE_MULTI = 'AMR_TOGGLE_MULTI';
+
+export function toggleMulti() {
+  return {
+    type: AMR_TOGGLE_MULTI,
+  };
+}

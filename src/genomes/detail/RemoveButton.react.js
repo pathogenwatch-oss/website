@@ -3,13 +3,13 @@ import { connect } from 'react-redux';
 
 import RemoveButton from '../../components/RemoveButton.react';
 
-import { setBinnedStatus } from './actions';
+import { setBinnedFlag } from '../bin/actions';
 
 
 function mapDispatchToProps(dispatch, { genome }) {
   return {
-    moveToBin: () => dispatch(setBinnedStatus(genome, true)),
-    restoreFromBin: () => dispatch(setBinnedStatus(genome, false)),
+    moveToBin: () => dispatch(setBinnedFlag([ genome ], true)),
+    restoreFromBin: () => dispatch(setBinnedFlag([ genome ], false)),
   };
 }
 

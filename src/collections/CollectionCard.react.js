@@ -70,7 +70,7 @@ export default ({ item, footerLink }) => {
       <div className="wgsa-card-footer wgsa-card-footer--fixed">
         <Link
           className="mdl-button mdl-button--primary wgsa-button--text"
-          to={`/collection/${item.slug}`}
+          to={`/collection/${item.token}`}
         >
           View Collection
         </Link>

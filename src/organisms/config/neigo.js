@@ -31,5 +31,6 @@ export default {
   collections: [],
   uiOptions: {
     ngMast: true,
+    noPopulation: true,
   },
 };

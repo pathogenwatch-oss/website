@@ -102,7 +102,7 @@ export default React.createClass({
       >
         <Filter />
         <div className="wgsa-filter-content">
-          <Header />
+          <Header prefilter={this.props.prefilter} />
           {this.renderContent()}
         </div>
         <Overlay visible={this.props.status === statuses.LOADING}>

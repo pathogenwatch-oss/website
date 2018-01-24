@@ -1,5 +1,4 @@
 .wgsa-date-range {
-  margin-bottom: 24px;
   padding: 0 8px;
 }
 
@@ -28,11 +27,53 @@
   background-color: #ccc;
 }
 
-.rc-slider label {
+.wgsa-date-range label {
   display: flex;
   justify-content: space-between;
-  padding: 8px 0;
-  font-size: 12px;
+  align-items: center;
+  height: 32px;
+  font-size: 13px;
   color: rgba(0, 0, 0, .54);
-  pointer-events: none;
+}
+
+.wgsa-date-range label > button {
+  font-size: inherit;
+  color: inherit;
+  outline: none;
+  padding: 0;
+}
+
+.wgsa-month-year-selector {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.wgsa-month-year-selector select,
+.wgsa-month-year-selector input {
+  font-size: 13px;
+  font-weight: 400;
+  color: rgba(0, 0, 0, .54);
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.wgsa-month-year-selector input {
+  border: 1px solid rgba(0, 0, 0, .54);
+  width: 48px;
+  padding: 2px;
+}
+
+.wgsa-month-year-selector button {
+  min-width: 0;
+  padding: 0;
+  width: 16px;
+  outline: none;
+  margin-left: 4px;
+  overflow: hidden;
+}
+
+.wgsa-month-year-selector .material-icons {
+  font-size: 16px;
+  max-width: 16px;
 }

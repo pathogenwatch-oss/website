@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 
-import { getTables, getAMRTableName } from './table/selectors';
+import { getTableState, getAMRTableName } from './table/selectors';
 
 import { createColourGetter } from './amr-utils';
 import { filterKeys } from './filter/constants';
@@ -71,9 +71,9 @@ export const getActiveGenomes = createSelector(
 );
 
 export const getColourGetter = createSelector(
-  getTables,
+  getTableState,
   getAMRTableName,
-  (tables, name) => createColourGetter(name, tables[name].activeColumns)
+  (tables, name) => createColourGetter(tables.entities[name], tables.multi)
 );
 
 export const getCollectionMetadata = createSelector(
@@ -83,5 +83,7 @@ export const getCollectionMetadata = createSelector(
     description: collection.description,
     dateCreated: new Date(collection.createdAt).toLocaleDateString(),
     pmid: collection.pmid,
+    owner: collection.owner,
+    access: collection.access,
   })
 );
