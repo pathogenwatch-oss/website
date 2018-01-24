@@ -25,10 +25,10 @@ export function collapseTreeBranches(node, leafPredicate) {
 }
 
 export function getLeafStyle(genome) {
-  if (genome.__isReference) {
+  if (genome.reference) {
     return leafStyles.reference;
   }
-  if (genome.__isPublic) {
+  if (genome.public) {
     return leafStyles.public;
   }
   return leafStyles.collection;

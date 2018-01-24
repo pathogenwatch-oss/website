@@ -1,9 +1,9 @@
 import React from 'react';
+import ScrollSpy from 'react-scrollspy';
 
 import Modal from '../../components/modal';
 import Fade from '../../components/fade';
 import RemoveButton from './RemoveButton.react';
-import AddToSelection from '../../genomes/selection/AddToSelection.react';
 
 import DownloadLink from '../../downloads/GenomeFileLink.react';
 import Spinner from '../../components/Spinner.react';
@@ -14,44 +14,69 @@ import getAnalysisTabs from './analysis';
 
 const Content = React.createClass({
 
+  getInitialState() {
+    return {
+      active: 'Overview',
+    };
+  },
+
   componentDidMount() {
     componentHandler.upgradeDom();
   },
 
+  setActive(active) {
+    this.setState({ active });
+  },
+
+  scrollTo(key) {
+    if (key in this.sections) {
+      this.sections[key].scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  },
+
+  sections: {},
+
   render() {
     const { genome } = this.props;
     const { pending = [], userDefined = null } = genome;
-    const analysisTabs = getAnalysisTabs(genome);
-    const hasMetadata = userDefined && Object.keys(userDefined).length > 0;
+    const sections = [
+      { key: 'Overview', component: <Overview genome={genome} /> },
+    ];
+    if (userDefined && Object.keys(userDefined).length > 0) {
+      sections.push({ key: 'Metadata', component: <Metadata genome={genome} /> });
+    }
+    sections.push(...getAnalysisTabs(genome));
+    if (pending.length) {
+      sections.push({ key: `+${pending.length} Pending`, component: <ul>{pending.map(task => <li>{task}</li>)}</ul> });
+    }
     return (
-      <div className="wgsa-genome-drawer-content mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
-        <div className="mdl-tabs__tab-bar">
-          <a href="#overview-panel" className="mdl-tabs__tab is-active">Overview</a>
-          { hasMetadata && <a href="#metadata-panel" className="mdl-tabs__tab">Metadata</a>}
-          {
-            analysisTabs.map(({ key }) => <a key={key} href={`#${key.toLowerCase()}-panel`} className="mdl-tabs__tab">{key}</a>)
-          }
-          <div className="wgsa-tab-actions">
-            { pending.length > 0 && <span className="wgsa-tab-actions__label">+{pending.length} pending</span>}
-          </div>
-        </div>
-        <div className="mdl-tabs__panel is-active" id="overview-panel">
-          <Overview genome={genome} />
-        </div>
-        { hasMetadata &&
-          <div className="mdl-tabs__panel" id="metadata-panel">
-            <Metadata genome={genome} />
-          </div> }
-        {
-          analysisTabs.map(({ key, component }) =>
-            <div
-              key={key}
-              id={`${key.toLowerCase()}-panel`}
-              className="mdl-tabs__panel"
-            >
-              {component}
-            </div>)
-        }
+      <div className="wgsa-genome-detail-content">
+        <aside>
+          <ScrollSpy
+            items={sections.map(_ => _.key.toLowerCase())}
+            currentClassName="active"
+            rootEl=".wgsa-genome-detail"
+          >
+          { sections.map(({ key }) =>
+            <li key={key}>
+              <a
+                href={`#${key.toLowerCase()}`}
+                onClick={e => e.preventDefault() || this.scrollTo(key)}
+              >
+                {key}
+              </a>
+            </li>) }
+          </ScrollSpy>
+        </aside>
+        { sections.map(({ key, component }) =>
+          <section
+            key={key}
+            ref={el => { this.sections[key] = el; }}
+            id={`${key.toLowerCase()}`}
+          >
+            <h2>{key}</h2>
+            {component}
+          </section>) }
       </div>
     );
   },
@@ -65,33 +90,25 @@ export default ({ name, genome, loading, close }) => {
       { isOpen &&
         <Modal
           title={
-            <span className="wgsa-genome-drawer-title">
-              { genome &&
-                <AddToSelection
-                  genomes={[ genome ]}
-                  className="mdl-button mdl-button--icon"
-                /> }
-              <span>
-                {genome ? genome.name : name}
-              </span>
+            <span className="wgsa-genome-detail-title">
+              {genome ? genome.name : name}
             </span>
           }
           modal
           isOpen={isOpen}
           onClose={close}
-          animationKey="genome-drawer"
-          className="wgsa-genome-drawer"
+          animationKey="genome-detail"
+          containerClassName="wgsa-genome-detail"
           actions={genome ? [
             <DownloadLink key="download" id={genome.id} name={genome.name} />,
             <RemoveButton key="remove" genome={genome} onRemove={close} />,
           ] : []}
         >
           { loading ?
-            <div className="wgsa-drawer__content wgsa-drawer-loader">
+            <div className="wgsa-genome-detail-content wgsa-genome-detail-loader">
               <Spinner />
             </div> :
-            <Content genome={genome} />
-          }
+            <Content genome={genome} /> }
         </Modal> }
     </Fade>
   );

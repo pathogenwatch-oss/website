@@ -21,18 +21,12 @@ function formatValue(value) {
   return value;
 }
 
-export const Metadata = ({ title, large = false, label, children }) => (
+export const Metadata = ({ label, children }) => (
   hasValue(children) ?
-  <span
-    className={classnames(
-      'wgsa-hub-stats-section',
-      large ? 'wgsa-hub-stats-section--large' : 'wgsa-hub-stats-section--small'
-    )}
-    title={title}
-  >
-    <dt className="wgsa-hub-stats-heading">{label}</dt>
-    <dd className="wgsa-hub-stats-value">{formatValue(children)}</dd>
-  </span> :
+  <div>
+    <dt>{label}</dt>
+    <dd>{formatValue(children)}</dd>
+  </div> :
   null
 );
 
@@ -65,10 +59,10 @@ export const VersionSwitcher = React.createClass({
     const { genome, taskName } = this.props;
     const Component = this.props.component;
     return (
-      <div className="wgsa-analysis-section">
-        <h2 className="wgsa-analysis-title">
+      <div>
+        <aside className="wgsa-genome-detail-version">
           Version:
-          {genome.tasks
+          { genome.tasks
             .filter(_ => _.task === taskName)
             .map(task =>
               <button key={task.version} className={classnames(
@@ -78,8 +72,8 @@ export const VersionSwitcher = React.createClass({
                 onClick={() => this.setState({ version: task.version })}
               >
                 {task.version}
-              </button>)}
-        </h2>
+              </button>) }
+        </aside>
         <Component result={this.getResult()} genome={genome} />
       </div>
     );

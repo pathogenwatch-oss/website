@@ -87,3 +87,16 @@ export const getCollectionMetadata = createSelector(
     access: collection.access,
   })
 );
+
+export const getCollectionGenomeIds = createSelector(
+  getGenomes,
+  genomes => {
+    const collectionGenomes = [];
+    for (const id of Object.keys(genomes)) {
+      if (genomes[id].__isCollection) {
+        collectionGenomes.push(id);
+      }
+    }
+    return collectionGenomes;
+  }
+);

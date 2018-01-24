@@ -12,7 +12,7 @@ import {
 
 import { getTree } from './api';
 
-import { POPULATION, COLLECTION } from '../../app/stateKeys/tree';
+import { POPULATION } from '../../app/stateKeys/tree';
 import { filterKeys } from '../filter/constants';
 import { updateProgress } from '../actions';
 
@@ -54,10 +54,7 @@ export function treeLoaded(phylocanvas) {
       phylocanvas.root.cascadeFlag('interactive', false);
     }
 
-    const leafIds = getLeafIds(state, {
-      stateKey: stateKey === POPULATION ? COLLECTION : stateKey,
-    });
-
+    const leafIds = getLeafIds(state, { stateKey });
     dispatch(actions.treeLoaded(stateKey, phylocanvas, leafIds));
   };
 }

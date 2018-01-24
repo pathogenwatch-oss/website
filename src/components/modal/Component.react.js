@@ -20,7 +20,7 @@ export default React.createClass({
 
   render() {
     return (
-      <div className="wgsa-modal-container">
+      <div className={classnames('wgsa-modal-container', this.props.containerClassName)}>
         <Overlay isVisible hide={this.props.onClose} />
         <aside className={classnames('wgsa-modal', this.props.className)}>
           <header>

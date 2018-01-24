@@ -33,15 +33,7 @@ const Styler = React.createClass({
       } = subtree;
 
       // styles
-      if (size === 0) {
-        leaf.setDisplay({
-          ...leafStyles.reference,
-          leafStyle: {
-            ...defaultLeafStyle,
-            fillStyle: CGPS.COLOURS.GREY,
-          },
-        });
-      } else {
+      if (id in trees) {
         leaf.setDisplay({
           ...leafStyles.subtree,
           leafStyle: {
@@ -49,17 +41,27 @@ const Styler = React.createClass({
             fillStyle: CGPS.COLOURS.PURPLE_LIGHT,
           },
         });
+      } else {
+        leaf.setDisplay({
+          ...leafStyles.reference,
+          leafStyle: {
+            ...defaultLeafStyle,
+            fillStyle: CGPS.COLOURS.GREY,
+          },
+        });
       }
 
       // labels
-      if (size === 0) {
+      if (!(id in trees)) {
         leaf.label = reference.name;
+      } else if (status === 'PENDING') {
+        leaf.label = `${reference.name}: Pending`;
       } else if (status === 'IN PROGRESS') {
         leaf.label = `${reference.name}: ${progress}%`;
       } else if (status === 'ERROR') {
-        leaf.label = `${reference.name}: error, awaiting retry.`;
+        leaf.label = `${reference.name}: Error, awaiting retry`;
       } else if (status === 'FAILED') {
-        leaf.label = `${reference.name}: failed.`;
+        leaf.label = `${reference.name}: Failed`;
       } else if (status === 'READY') {
         const totalCollection = size - populationSize;
         if (populationSize > 0) {
@@ -72,7 +74,7 @@ const Styler = React.createClass({
       }
 
       // the rest
-      if (size === 0) {
+      if (!(id in trees)) {
         leaf.radius = 0.666;
         leaf.highlighted = false;
         leaf.interactive = false;

@@ -135,6 +135,7 @@ function entities(state = {}, { type, payload }) {
         }
       }
       if (payload.task === 'subtree') {
+        if (!(payload.name in state)) return state;
         const tree = state[payload.name];
         if (payload.status && payload.timestamp >= tree.lastStatus) {
           return {
@@ -251,6 +252,11 @@ function entities(state = {}, { type, payload }) {
 
 function visible(state = COLLECTION, { type, payload }) {
   switch (type) {
+    case FETCH_COLLECTION.SUCCESS: {
+      const { tree } = payload.result;
+      if (tree) return COLLECTION;
+      return POPULATION;
+    }
     case ACTIONS.SET_TREE:
       return payload.name;
     default:
