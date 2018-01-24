@@ -65,6 +65,7 @@
     "react-markdown": "^2.4.2",
     "react-redux": "^5.0.1",
     "react-router-dom": "^4.1.1",
+    "react-scrollspy": "^3.3.5",
     "react-split-pane": "^0.1.52",
     "react-virtualized": "^8.0.5",
     "redbox-react": "^1.1.1",
