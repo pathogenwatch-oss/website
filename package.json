@@ -22,7 +22,7 @@
   "devDependencies": {
     "ava": "^0.17.0",
     "babel-core": "^6.26.0",
-    "babel-loader": "^6.4.1",
+    "babel-loader": "^7.1.2",
     "babel-plugin-transform-export-extensions": "^6.22.0",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.6.1",
@@ -77,13 +77,12 @@
     "style-loader": "^0.19.0",
     "testdouble": "^1.6.1",
     "universal-cookie": "^2.0.5",
-    "webpack": "^3.8.1",
+    "webpack": "^3.10.0",
     "webpack-bundle-analyzer": "^2.9.0",
     "webpack-dev-middleware": "^1.12.0",
     "webpack-hot-middleware": "^2.20.0",
     "webpack-monitor": "^1.0.13",
     "why-did-you-update": "0.0.8",
     "worker-loader": "^1.1.0"
-  },
-  "dependencies": {}
+  }
 }
