@@ -1,10 +1,10 @@
 import React from 'react';
 import { Map, TileLayer } from 'react-leaflet';
-import MarkerLayer from 'react-leaflet-marker-layer';
 import classnames from 'classnames';
 import { Link } from 'react-router-dom';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
+import MarkerLayer from '../cgps-commons/LeafletMarkerLayer.react';
 import MarkdownHeading from '../components/MarkdownHeading.react';
 import Spinner from '../components/Spinner.react';
 import { FormattedName } from '../organisms';

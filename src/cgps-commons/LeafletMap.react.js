@@ -2,8 +2,8 @@ import React from 'react';
 import classnames from 'classnames';
 import Leaflet from 'leaflet';
 import { Map, TileLayer, Marker, ZoomControl, PropTypes as LeafletPropTypes } from 'react-leaflet';
-import MarkerLayer from 'react-leaflet-marker-layer';
 
+import MarkerLayer from './LeafletMarkerLayer.react';
 import MapCluster from './LeafletMapCluster.react';
 import Lasso from './LeafletMapLasso.react';
 import DefaultIcon from './LeafletMarkerDefaultIcon';
