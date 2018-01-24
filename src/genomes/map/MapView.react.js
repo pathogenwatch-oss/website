@@ -25,6 +25,7 @@ const Marker = React.createClass({
         'wgsa-marker-cluster',
         { 'has-popup': hasPopup }
       )}
+        ref={el => { this.ref = el; }}
         style={style}
         onClick={event => {
           event.stopPropagation();

@@ -44,6 +44,7 @@ export default React.createClass({
         .map(([ colour, value ]) => ({ colour, value }));
     return (
       <div
+        ref={el => { this.ref = el; }}
         style={style}
         className={classnames(
           className,
