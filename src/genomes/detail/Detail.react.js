@@ -69,13 +69,14 @@ const Content = React.createClass({
           </ScrollSpy>
         </aside>
         { sections.map(({ key, component }) =>
-          <div
+          <section
             key={key}
             ref={el => { this.sections[key] = el; }}
             id={`${key.toLowerCase()}`}
           >
+            <h2>{key}</h2>
             {component}
-          </div>) }
+          </section>) }
       </div>
     );
   },
@@ -97,7 +98,7 @@ export default ({ name, genome, loading, close }) => {
           isOpen={isOpen}
           onClose={close}
           animationKey="genome-detail"
-          className="wgsa-genome-detail"
+          containerClassName="wgsa-genome-detail"
           actions={genome ? [
             <DownloadLink key="download" id={genome.id} name={genome.name} />,
             <RemoveButton key="remove" genome={genome} onRemove={close} />,

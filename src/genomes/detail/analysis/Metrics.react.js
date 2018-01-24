@@ -1,47 +1,44 @@
 import React from 'react';
 
-import { Section } from '../components';
-
 import N50Chart from './N50Chart.react';
 
 export default ({ result }) => (
   <div>
     <dl>
-      <span className="wgsa-hub-stats-section wgsa-hub-stats-section--small">
-        <dt className="wgsa-hub-stats-heading">Genome Length</dt>
-        <dd className="wgsa-hub-stats-value">{result.length}</dd>
-      </span>
-      <span className="wgsa-hub-stats-section wgsa-hub-stats-section--small">
-        <dt className="wgsa-hub-stats-heading">No. Contigs</dt>
-        <dd className="wgsa-hub-stats-value">{result.contigs}</dd>
-      </span>
-      <span className="wgsa-hub-stats-section wgsa-hub-stats-section--small">
-        <dt className="wgsa-hub-stats-heading">Smallest Contig</dt>
-        <dd className="wgsa-hub-stats-value">{result.smallestContig}</dd>
-      </span>
-      <span className="wgsa-hub-stats-section wgsa-hub-stats-section--small">
-        <dt className="wgsa-hub-stats-heading">Largest Contig</dt>
-        <dd className="wgsa-hub-stats-value">{result.largestContig}</dd>
-      </span>
-      <span className="wgsa-hub-stats-section wgsa-hub-stats-section--small">
-        <dt className="wgsa-hub-stats-heading">Average Contig Length</dt>
-        <dd className="wgsa-hub-stats-value">{result.averageContig}</dd>
-      </span>
-      <span className="wgsa-hub-stats-section wgsa-hub-stats-section--small">
-        <dt className="wgsa-hub-stats-heading">N50</dt>
-        <dd className="wgsa-hub-stats-value">{result.N50}</dd>
-      </span>
-      <span className="wgsa-hub-stats-section wgsa-hub-stats-section--small">
-        <dt className="wgsa-hub-stats-heading">Non-ATCG</dt>
-        <dd className="wgsa-hub-stats-value">{result.nonATCG}</dd>
-      </span>
-      <span className="wgsa-hub-stats-section wgsa-hub-stats-section--small">
-        <dt className="wgsa-hub-stats-heading">GC Content</dt>
-        <dd className="wgsa-hub-stats-value">{result.gcContent}%</dd>
-      </span>
+      <div>
+        <dt>Genome Length</dt>
+        <dd>{result.length}</dd>
+      </div>
+      <div>
+        <dt>No. Contigs</dt>
+        <dd>{result.contigs}</dd>
+      </div>
+      <div>
+        <dt>Smallest Contig</dt>
+        <dd>{result.smallestContig}</dd>
+      </div>
+      <div>
+        <dt>Largest Contig</dt>
+        <dd>{result.largestContig}</dd>
+      </div>
+      <div>
+        <dt>Average Contig Length</dt>
+        <dd>{result.averageContig}</dd>
+      </div>
+      <div>
+        <dt>N50</dt>
+        <dd>{result.N50}</dd>
+      </div>
+      <div>
+        <dt>Non-ATCG</dt>
+        <dd>{result.nonATCG}</dd>
+      </div>
+      <div>
+        <dt>GC Content</dt>
+        <dd>{result.gcContent}%</dd>
+      </div>
     </dl>
-    <Section heading="N50 chart">
-      <N50Chart metrics={result} />
-    </Section>
+    <h3>N50 chart</h3>
+    <N50Chart metrics={result} />
   </div>
 );
