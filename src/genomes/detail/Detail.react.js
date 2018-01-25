@@ -20,10 +20,6 @@ const Content = React.createClass({
     };
   },
 
-  componentDidMount() {
-    componentHandler.upgradeDom();
-  },
-
   setActive(active) {
     this.setState({ active });
   },
@@ -91,7 +87,7 @@ export default ({ name, genome, loading, close }) => {
         <Modal
           title={
             <span className="wgsa-genome-detail-title">
-              {genome ? genome.name : name}
+              Genome Report: {genome ? genome.name : name}
             </span>
           }
           modal
@@ -105,8 +101,9 @@ export default ({ name, genome, loading, close }) => {
           ] : []}
         >
           { loading ?
-            <div className="wgsa-genome-detail-content wgsa-genome-detail-loader">
+            <div className="wgsa-genome-detail-loader">
               <Spinner />
+              <p>Loading Report</p>
             </div> :
             <Content genome={genome} /> }
         </Modal> }

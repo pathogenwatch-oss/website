@@ -51,6 +51,19 @@
   color: #222 !important;
 }
 
+.wgsa-genome-detail-loader {
+  height: calc(100vh - 48px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.wgsa-genome-detail-loader p {
+  margin-top: 16px;
+  font-weight: 500;
+}
+
 .wgsa-genome-detail-content {
   padding: 0 24px;
   box-sizing: border-box;
