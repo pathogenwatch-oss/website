@@ -1,6 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
-// const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const WebpackMonitor = require('webpack-monitor');
 
 const srcFolder = path.join(__dirname, 'src');
@@ -112,13 +112,23 @@ const prodConfig = {
       },
     }),
     new webpack.optimize.CommonsChunkPlugin({
-      names: [ 'wgsa', 'vendor', 'manifest' ],
+      name: 'vendor',
+      minChunks: Infinity,
     }),
-    // new BundleAnalyzerPlugin(),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'manifest',
+    }),
+    new webpack.NamedChunksPlugin(),
+    new webpack.NamedModulesPlugin(),
     new WebpackMonitor({
       capture: true,
       target: '../monitor.json',
       launch: true,
+    }),
+    new HtmlWebpackPlugin({
+      filename: '../views/index.ejs',
+      template: '!!ejs-loader!views/template.ejs',
+      inject: false,
     }),
   ]),
   module: {

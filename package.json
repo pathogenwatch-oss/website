@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node dev-server.js",
-    "build": "NODE_ENV=production webpack",
+    "build": "rm public/{wgsa,vendor,manifest}.*.js && NODE_ENV=production webpack",
     "config": "node bin/config.js",
     "test": "ava --require babel-register --watch",
     "release": "./bin/release.sh"
@@ -35,11 +35,13 @@
     "css-loader": "^0.28.7",
     "date-fns": "^1.28.4",
     "ejs": "^2.5.1",
+    "ejs-loader": "^0.3.0",
     "eslint-config-cgps": "github:imperialcollegelondon/eslint-config-cgps#v1.1.1",
     "express": "^4.12.2",
     "file-loader": "^0.10.0",
     "fixed-data-table": "^0.6.0",
     "geocoding": "gitlab:cgps/geocoding",
+    "html-webpack-plugin": "^2.30.1",
     "json-loader": "^0.5.3",
     "leaflet": "^1.2.0",
     "leaflet-lassoselect": "gitlab:cgps/leaflet-lassoselect#leaflet-1.x",
