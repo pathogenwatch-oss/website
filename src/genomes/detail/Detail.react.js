@@ -55,7 +55,7 @@ const Content = React.createClass({
           <ScrollSpy
             items={sections.map(_ => _.key.toLowerCase())}
             currentClassName="active"
-            rootEl=".wgsa-genome-detail"
+            rootEl=".wgsa-genome-detail > .wgsa-modal"
           >
           { sections.map(({ key }) =>
             <li key={key}>
