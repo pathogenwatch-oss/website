@@ -69,13 +69,13 @@
   box-sizing: border-box;
 }
 
-.wgsa-genome-detail-content > aside {
+.wgsa-genome-detail-content > nav {
   position: fixed;
   right: 16px;
   text-align: right;
 }
 
-.wgsa-genome-detail-content > aside a {
+.wgsa-genome-detail-content > nav a {
   color: rgba(255, 255, 255, 0.54);
   font-weight: 500;
   font-size: 16px;
@@ -83,12 +83,12 @@
   text-transform: uppercase;
 }
 
-.wgsa-genome-detail-content > aside a:hover,
-.wgsa-genome-detail-content > aside a:focus {
+.wgsa-genome-detail-content > nav a:hover,
+.wgsa-genome-detail-content > nav a:focus {
   text-decoration: underline;
 }
 
-.wgsa-genome-detail-content > aside .active > a {
+.wgsa-genome-detail-content > nav .active > a {
   color: #fff;
 }
 
@@ -102,6 +102,10 @@
 .wgsa-genome-detail-content > section {
   padding-bottom: 24px;
   position: relative;
+}
+
+.wgsa-genome-detail-content > section:first-of-type h2 {
+  display: none;
 }
 
 .wgsa-genome-detail-content > section + section {

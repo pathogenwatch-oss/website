@@ -47,7 +47,7 @@ const Content = React.createClass({
     }
     return (
       <div className="wgsa-genome-detail-content">
-        <aside>
+        <nav>
           <ScrollSpy
             items={sections.map(_ => _.key.toLowerCase())}
             currentClassName="active"
@@ -63,7 +63,7 @@ const Content = React.createClass({
               </a>
             </li>) }
           </ScrollSpy>
-        </aside>
+        </nav>
         { sections.map(({ key, component }) =>
           <section
             key={key}
