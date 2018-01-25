@@ -104,10 +104,6 @@
   position: relative;
 }
 
-.wgsa-genome-detail-content > section:first-of-type h2 {
-  display: none;
-}
-
 .wgsa-genome-detail-content > section + section {
   border-top: 1px solid rgba(0, 0, 0, 0.14);
 }
