@@ -1,19 +1,21 @@
-.wgsa-genome-detail {
-  overflow-y: auto;
-  overflow-x: hidden;
-  top: 48px !important;
+.wgsa-modal-container.wgsa-genome-detail {
+  height: auto;
+  max-height: none;
+  top: 48px;
+  bottom: unset;
 }
 
 .wgsa-genome-detail .wgsa-overlay {
   background: rgba(0, 0, 0, 0.87);
   top: 48px;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .wgsa-genome-detail .wgsa-modal {
   height: auto;
   max-height: none;
   align-self: flex-start;
-  /* margin-top: 48px; */
 }
 
 @media (max-width: 1200px) {

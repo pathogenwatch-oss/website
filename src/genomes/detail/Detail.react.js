@@ -46,12 +46,12 @@ const Content = React.createClass({
       sections.push({ key: `+${pending.length} Pending`, component: <ul>{pending.map(task => <li>{task}</li>)}</ul> });
     }
     return (
-      <div className="wgsa-genome-detail-content">
+      <div className="wgsa-genome-detail-content" onClick={e => e.stopPropagation()}>
         <nav>
           <ScrollSpy
             items={sections.map(_ => _.key.toLowerCase())}
             currentClassName="active"
-            rootEl=".wgsa-genome-detail"
+            rootEl=".wgsa-genome-detail > .wgsa-overlay"
           >
           { sections.map(({ key }) =>
             <li key={key}>
