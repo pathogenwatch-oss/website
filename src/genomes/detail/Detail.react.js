@@ -46,7 +46,7 @@ const Content = React.createClass({
       sections.push({ key: `+${pending.length} Pending`, component: <ul>{pending.map(task => <li>{task}</li>)}</ul> });
     }
     return (
-      <div className="wgsa-genome-detail-content" onClick={e => e.stopPropagation()}>
+      <div className="wgsa-genome-detail-content">
         <nav>
           <ScrollSpy
             items={sections.map(_ => _.key.toLowerCase())}

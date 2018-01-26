@@ -33,7 +33,9 @@ export default React.createClass({
           { 'wgsa-overlay--no-content': !this.props.children }
         )}
       >
-        {this.props.children}
+        <div className="mdl-shadow--4dp" onClick={e => e.stopPropagation()}>
+          {this.props.children}
+        </div>
       </div>
     );
   },
