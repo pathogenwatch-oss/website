@@ -1,12 +1,17 @@
 import React from 'react';
 
-import { Section, Metadata } from '../components';
-
-export default ({ __v, genotype, foundLoci }) => (
-  <Section heading="Genotyphi" version={__v}>
+export default ({ genotype, foundLoci }) => (
+  <div>
+    <h2>Genotyphi</h2>
     <dl>
-      <Metadata label="Type">{genotype}</Metadata>
-      <Metadata label="SNPs Called">{foundLoci}</Metadata>
+      <div>
+        <dt>Genotype</dt>
+        <dd>{genotype}</dd>
+      </div>
+      <div>
+        <dt>SNPs Called</dt>
+        <dd>{foundLoci}</dd>
+      </div>
     </dl>
-  </Section>
+  </div>
 );

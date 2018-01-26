@@ -31,10 +31,10 @@ export const Metadata = ({ label, children }) => (
 );
 
 export const Section = ({ heading, version, children }) => (
-  <div className="wgsa-analysis-section">
-    <h2 className="wgsa-analysis-title">
+  <div>
+    <h2>
       {heading}
-      {version && <span className="wgsa-analysis-version">{version}</span>}
+      {version && <span className="wgsa-genome-detail-version">{version}</span>}
     </h2>
     {children}
   </div>

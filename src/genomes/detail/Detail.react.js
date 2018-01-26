@@ -36,7 +36,7 @@ const Content = React.createClass({
     const { genome } = this.props;
     const { pending = [], userDefined = null } = genome;
     const sections = [
-      { key: 'Overview', component: <Overview genome={genome} /> },
+      { key: 'Summary', component: <Overview genome={genome} /> },
     ];
     if (userDefined && Object.keys(userDefined).length > 0) {
       sections.push({ key: 'Metadata', component: <Metadata genome={genome} /> });
@@ -51,7 +51,7 @@ const Content = React.createClass({
           <ScrollSpy
             items={sections.map(_ => _.key.toLowerCase())}
             currentClassName="active"
-            rootEl=".wgsa-genome-detail > .wgsa-modal"
+            rootEl=".wgsa-genome-detail"
           >
           { sections.map(({ key }) =>
             <li key={key}>
@@ -70,7 +70,6 @@ const Content = React.createClass({
             ref={el => { this.sections[key] = el; }}
             id={`${key.toLowerCase()}`}
           >
-            <h2>{key}</h2>
             {component}
           </section>) }
       </div>
@@ -87,7 +86,7 @@ export default ({ name, genome, loading, close }) => {
         <Modal
           title={
             <span className="wgsa-genome-detail-title">
-              Genome Report: {genome ? genome.name : name}
+              Genome Report: {genome ? genome.name : name} <DownloadLink key="download" id={genome.id} name={genome.name} />
             </span>
           }
           modal
@@ -95,10 +94,7 @@ export default ({ name, genome, loading, close }) => {
           onClose={close}
           animationKey="genome-detail"
           containerClassName="wgsa-genome-detail"
-          actions={genome ? [
-            <DownloadLink key="download" id={genome.id} name={genome.name} />,
-            <RemoveButton key="remove" genome={genome} onRemove={close} />,
-          ] : []}
+          actions={genome ? <RemoveButton key="remove" genome={genome} onRemove={close} /> : null}
         >
           { loading ?
             <div className="wgsa-genome-detail-loader">

@@ -4,7 +4,8 @@ import N50Chart from './N50Chart.react';
 
 export default ({ result }) => (
   <div>
-    <dl>
+    <h2>Assembly Metrics</h2>
+    <dl className="wgsa-genome-detail-stats-compact">
       <div>
         <dt>Genome Length</dt>
         <dd>{result.length}</dd>

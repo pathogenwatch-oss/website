@@ -1,5 +1,3 @@
-import './styles.css';
-
 import React from 'react';
 
 import { VersionSwitcher } from '../components';
@@ -19,18 +17,6 @@ export default (genome) => {
 
   const tabs = [];
 
-  if (metrics) {
-    tabs.push({
-      key: 'Metrics',
-      component: <VersionSwitcher taskName="metrics" component={Metrics} genome={genome} />,
-    });
-  }
-  if (core) {
-    tabs.push({
-      key: 'Core',
-      component: <VersionSwitcher taskName="core" component={Core} genome={genome} />,
-    });
-  }
   if (mlst) {
     tabs.push({
       key: 'MLST',
@@ -53,6 +39,18 @@ export default (genome) => {
     tabs.push({
       key: 'NG-MAST',
       component: <VersionSwitcher taskName="ngmast" component={NgMast} genome={genome} />,
+    });
+  }
+  if (core) {
+    tabs.push({
+      key: 'Core',
+      component: <VersionSwitcher taskName="core" component={Core} genome={genome} />,
+    });
+  }
+  if (metrics) {
+    tabs.push({
+      key: 'Metrics',
+      component: <VersionSwitcher taskName="metrics" component={Metrics} genome={genome} />,
     });
   }
   if (speciator) {
