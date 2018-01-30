@@ -2,6 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const WebpackMonitor = require('webpack-monitor');
+const NameAllModulesPlugin = require('name-all-modules-plugin');
 
 const srcFolder = path.join(__dirname, 'src');
 
@@ -118,8 +119,14 @@ const prodConfig = {
     new webpack.optimize.CommonsChunkPlugin({
       name: 'manifest',
     }),
-    new webpack.NamedChunksPlugin(),
     new webpack.NamedModulesPlugin(),
+    new webpack.NamedChunksPlugin((chunk) => {
+      if (chunk.name) {
+        return chunk.name;
+      }
+      return chunk.mapModules(m => path.relative(m.context, m.request)).join('_');
+    }),
+    new NameAllModulesPlugin(),
     new WebpackMonitor({
       capture: true,
       target: '../monitor.json',

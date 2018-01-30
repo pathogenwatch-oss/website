@@ -47,6 +47,7 @@
     "leaflet-lassoselect": "gitlab:cgps/leaflet-lassoselect#leaflet-1.x",
     "leaflet.markercluster": "^1.2.0",
     "lodash.sortby": "^4.7.0",
+    "name-all-modules-plugin": "^1.0.1",
     "pako": "^1.0.5",
     "papaparse": "^4.1.1",
     "phylocanvas": "^2.8.1",
