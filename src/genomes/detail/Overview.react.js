@@ -1,53 +1,40 @@
 import React from 'react';
 
 import { FormattedName } from '../../organisms';
+import PubMedLink from '../../components/PubMedLink.react';
 
-import { getFormattedDateString, formatDateTime } from '../../utils/Date';
+import { getFormattedDateString } from '../../utils/Date';
 import { getCountryName } from '../../utils/country';
-
-import { Metadata } from './components';
-import ST from '../../mlst/ST.react';
-
-function getAMROverview({ antibiotics }) {
-  const resistances = [];
-  for (const { name, state } of antibiotics) {
-    if (state !== 'NOT_FOUND') {
-      resistances.push(name);
-    }
-  }
-  return resistances.join(', ');
-}
 
 function getTask({ analysis = {}, tasks = [] }, taskName) {
   return analysis[taskName];
 }
 
 export default ({ genome }) => {
-  const { uploadedAt, country } = genome;
+  const { country, pmid } = genome;
   const speciator = getTask(genome, 'speciator');
-  const mlst = getTask(genome, 'mlst');
-  const paarsnp = getTask(genome, 'paarsnp');
-  const genotyphi = getTask(genome, 'genotyphi');
-  const ngmast = getTask(genome, 'ngmast');
   const date = getFormattedDateString(genome);
   return (
-    <dl>
-      <Metadata label="Organism">
+    <div className="wgsa-genome-detail-summary">
+      <header>
+        <img src="/images/WGSA.FINAL.svg" />
+      </header>
+      <aside>
+        {date}
+        { date && <br /> }
+        {country && getCountryName(country)}
+        { country && <br /> }
+        { pmid && <span>PMID: <PubMedLink pmid={pmid}>{pmid}</PubMedLink></span> }
+      </aside>
+      <h1>{genome.name}</h1>
+      <div className="h4">
         { speciator ?
           <FormattedName fullName
             organismId={speciator.organismId}
             title={speciator.organismName}
           /> :
-          <em>Pending</em>
-        }
-      </Metadata>
-      { mlst && <Metadata label="Sequence Type"><ST id={mlst.st} /></Metadata> }
-      { paarsnp && <Metadata label="AMR">{getAMROverview(paarsnp)}</Metadata> }
-      { genotyphi && <Metadata label="Genotype">{genotyphi.genotype}</Metadata>}
-      { ngmast && <Metadata label="NG-MAST">{ngmast.ngmast}</Metadata> }
-      { country && <Metadata label="Country">{getCountryName(country)}</Metadata> }
-      <Metadata label="Date">{date}</Metadata>
-      <Metadata label="Uploaded">{formatDateTime(uploadedAt)}</Metadata>
-    </dl>
+          <em>Pending speciation</em> }
+      </div>
+    </div>
   );
 };

@@ -20,10 +20,6 @@ const Content = React.createClass({
     };
   },
 
-  componentDidMount() {
-    componentHandler.upgradeDom();
-  },
-
   setActive(active) {
     this.setState({ active });
   },
@@ -40,7 +36,7 @@ const Content = React.createClass({
     const { genome } = this.props;
     const { pending = [], userDefined = null } = genome;
     const sections = [
-      { key: 'Overview', component: <Overview genome={genome} /> },
+      { key: 'Summary', component: <Overview genome={genome} /> },
     ];
     if (userDefined && Object.keys(userDefined).length > 0) {
       sections.push({ key: 'Metadata', component: <Metadata genome={genome} /> });
@@ -51,11 +47,11 @@ const Content = React.createClass({
     }
     return (
       <div className="wgsa-genome-detail-content">
-        <aside>
+        <nav>
           <ScrollSpy
             items={sections.map(_ => _.key.toLowerCase())}
             currentClassName="active"
-            rootEl=".wgsa-genome-detail"
+            rootEl=".wgsa-genome-detail > .wgsa-overlay"
           >
           { sections.map(({ key }) =>
             <li key={key}>
@@ -67,14 +63,13 @@ const Content = React.createClass({
               </a>
             </li>) }
           </ScrollSpy>
-        </aside>
+        </nav>
         { sections.map(({ key, component }) =>
           <section
             key={key}
             ref={el => { this.sections[key] = el; }}
             id={`${key.toLowerCase()}`}
           >
-            <h2>{key}</h2>
             {component}
           </section>) }
       </div>
@@ -91,7 +86,7 @@ export default ({ name, genome, loading, close }) => {
         <Modal
           title={
             <span className="wgsa-genome-detail-title">
-              {genome ? genome.name : name}
+              Genome Report: {genome ? genome.name : name} <DownloadLink key="download" id={genome.id} name={genome.name} />
             </span>
           }
           modal
@@ -99,14 +94,12 @@ export default ({ name, genome, loading, close }) => {
           onClose={close}
           animationKey="genome-detail"
           containerClassName="wgsa-genome-detail"
-          actions={genome ? [
-            <DownloadLink key="download" id={genome.id} name={genome.name} />,
-            <RemoveButton key="remove" genome={genome} onRemove={close} />,
-          ] : []}
+          actions={genome ? <RemoveButton key="remove" genome={genome} onRemove={close} /> : null}
         >
           { loading ?
-            <div className="wgsa-genome-detail-content wgsa-genome-detail-loader">
+            <div className="wgsa-genome-detail-loader">
               <Spinner />
+              <p>Loading Report</p>
             </div> :
             <Content genome={genome} /> }
         </Modal> }

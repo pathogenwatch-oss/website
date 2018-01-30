@@ -82,7 +82,7 @@ export default React.createClass({
 
   render() {
     return (
-      <canvas ref={el => { this.canvas = el; }} width="617" height="320" />
+      <canvas ref={el => { this.canvas = el; }} width="592" height="320" />
     );
   },
 
