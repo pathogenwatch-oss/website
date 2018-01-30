@@ -86,7 +86,7 @@ export default ({ name, genome, loading, close }) => {
         <Modal
           title={
             <span className="wgsa-genome-detail-title">
-              Genome Report: {genome ? genome.name : name} <DownloadLink key="download" id={genome.id} name={genome.name} />
+              Genome Report: {genome ? genome.name : name} { genome && <DownloadLink key="download" id={genome.id} name={genome.name} /> }
             </span>
           }
           modal
