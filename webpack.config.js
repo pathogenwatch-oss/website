@@ -127,7 +127,7 @@ const prodConfig = {
     }),
     new HtmlWebpackPlugin({
       filename: '../views/index.ejs',
-      template: '!!ejs-loader!views/template.ejs',
+      template: 'views/index.tmpl',
       inject: false,
     }),
   ]),

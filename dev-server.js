@@ -103,7 +103,18 @@ app.use('/api', apiRouter);
 
 app.set('view engine', 'ejs');
 
-app.use('/', (req, res) => res.render('index', {
+let tmpl = fs.readFileSync('./views/index.tmpl', 'utf8');
+fs.writeFileSync('./views/dev.ejs', require('lodash').template(tmpl)({
+  htmlWebpackPlugin: {
+    files: {
+      js: [ '/wgsa.js' ],
+      css: [],
+    },
+  },
+}));
+tmpl = null;
+
+app.use('/', (req, res) => res.render('dev', {
   frontEndConfig: JSON.parse(fs.readFileSync('./config.json')),
 }));
 

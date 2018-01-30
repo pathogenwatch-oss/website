@@ -5,7 +5,7 @@ import MetadataUtils from '../../utils/Metadata';
 import { validateGenomeSize, validateGenomeContent } from './validation';
 
 import { DEFAULT } from '../../app/constants';
-import getCompressWorker from 'worker-loader?name=compress.worker.js!./compressWorker';
+import getCompressWorker from 'worker-loader?name=compress-worker.[hash].js!./compressWorker';
 
 function parseMetadata(row) {
   if (!row) return undefined;

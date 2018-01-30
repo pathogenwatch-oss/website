@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node dev-server.js",
-    "build": "rm public/{wgsa,vendor,manifest}.*.js && NODE_ENV=production webpack",
+    "build": "rm -f public/{wgsa,vendor,manifest,{compress,csv}-worker}.*.js && NODE_ENV=production webpack",
     "config": "node bin/config.js",
     "test": "ava --require babel-register --watch",
     "release": "./bin/release.sh"
