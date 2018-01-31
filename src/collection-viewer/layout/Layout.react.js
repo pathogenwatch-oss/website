@@ -25,12 +25,14 @@ export default React.createClass({
       <SplitPane
         split="horizontal"
         defaultSize="68%"
+        resizerClassName="wgsa-resizer"
         onChange={(horizontalSize) => this.setState({ horizontalSize })}
       >
         <SplitPane
           split="vertical"
           defaultSize="50%"
           className="wgsa-no-overflow-pane"
+          resizerClassName="wgsa-resizer"
           onChange={(verticalSize) => this.setState({ verticalSize })}
         >
           <Tree

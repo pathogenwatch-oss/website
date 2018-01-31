@@ -1,8 +1,8 @@
-.wgsa-no-overflow-pane .rsp-pane {
+.wgsa-no-overflow-pane .Pane {
   overflow: hidden;
 }
 
-.rsp-resizer {
+.wgsa-resizer {
   box-sizing: border-box;
   background: rgba(0, 0, 0, 0.24);
   opacity: 1;
@@ -10,12 +10,12 @@
   background-clip: padding-box;
 }
 
-.rsp-resizer:hover {
+.wgsa-resizer:hover {
   transition: all .28s cubic-bezier(.4,0,.2,1);
   background: #a386bd;
 }
 
-.rsp-resizer.horizontal {
+.wgsa-resizer.horizontal {
   height: 7px;
   margin: -3px 0;
   border-top: 3px solid rgba(255, 255, 255, 0);
@@ -24,7 +24,7 @@
   width: 100%;
 }
 
-.rsp-resizer.vertical {
+.wgsa-resizer.vertical {
   width: 7px;
   margin: 0 -3px;
   border-left: 3px solid rgba(255, 255, 255, 0);

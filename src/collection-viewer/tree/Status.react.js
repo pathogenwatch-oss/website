@@ -38,7 +38,7 @@ const StatusSwitcher = React.createClass({
 
   render() {
     if (this.props.status === 'READY') {
-      return <Tree />;
+      return <Tree {...this.props} />;
     }
     const { createdAt, stateKey } = this.props;
     return <Progress date={createdAt} stateKey={stateKey} />;
