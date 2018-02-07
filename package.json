@@ -41,7 +41,7 @@
     "geocoding": "gitlab:cgps/geocoding",
     "json-loader": "^0.5.3",
     "leaflet": "0.7.7",
-    "leaflet-lassoselect": "github:imperialcollegelondon/leaflet-lassoselect",
+    "leaflet-lassoselect": "github:imperialcollegelondon/leaflet-lassoselect#87768417d3289bfdd2709ead2b94697a12f16b49",
     "leaflet.markercluster": "github:leaflet/leaflet.markercluster#leaflet-0.7",
     "lodash.sortby": "^4.7.0",
     "pako": "^1.0.5",
