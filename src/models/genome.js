@@ -13,7 +13,7 @@ function getDate(year, month = 1, day = 1) {
 }
 
 const schema = new Schema({
-  _session: String,
+  _session: { type: String, index: true },
   _user: { type: Schema.Types.ObjectId, ref: 'User' },
   analysis: Object,
   binned: { type: Boolean, default: false },
