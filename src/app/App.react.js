@@ -16,10 +16,11 @@ import { fetchSummary } from '../summary/actions';
 import { locationChange } from '../location';
 import { showIntroToast } from './actions';
 
-function mapStateToProps({ location, header }) {
+function mapStateToProps({ location, header, branding }) {
   return {
     pageSlug: location.slug,
     userDrawerVisible: header.userDrawerVisible,
+    brandingId: branding.id,
   };
 }
 
@@ -65,14 +66,15 @@ export default connect(mapStateToProps, mapDispatchToProps)(React.createClass({
   },
 
   render() {
-    const { pageSlug, userDrawerVisible } = this.props;
+    const { pageSlug, userDrawerVisible, brandingId } = this.props;
     return (
       <div className="mdl-layout__container">
         <div ref="layout"
           className={classnames(
             'mdl-layout',
             `wgsa-page--${pageSlug}`,
-            { 'user-drawer-visible': userDrawerVisible }
+            { 'user-drawer-visible': userDrawerVisible },
+            `cgps-branding--${brandingId}`
           )}
         >
           <Header />

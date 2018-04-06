@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import UserDrawer from './UserDrawer.react';
 import AccountLink from './AccountLink.react';
 import DefaultContent from './DefaultContent.react';
+import { Logo } from '../branding';
 
 import { getHeader } from './selectors';
 
@@ -38,7 +39,7 @@ const Header = ({
     <div className="mdl-layout__header-row">
       { offline ? <OfflineLink /> : <AccountLink />}
       <Link to="/" className="mdl-layout-title">
-        <img src="/images/WGSA.FINAL.svg" className="wgsa-header-logo" />
+        <Logo className="wgsa-header-logo" />
       </Link>
       {children}
     </div>

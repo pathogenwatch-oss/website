@@ -4,6 +4,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import AccountImage from '../account/AccountImage.react';
+import { Name } from '../branding';
 
 const className = 'cgps-avatar cgps-avatar--top wgsa-account-header';
 
@@ -21,7 +22,7 @@ export default function AvatarLink({ user }) {
   return (
     <div className={className}>
       <AccountImage />
-      <div className="cgps-avatar__name" title="WGSA">WGSA</div>
+      <div className="cgps-avatar__name" title="WGSA"><Name /></div>
       <div className="cgps-avatar__contact" title="Sign In or Create Account">
         Sign In or Create Account
       </div>

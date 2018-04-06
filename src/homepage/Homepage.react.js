@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 
 import { FormattedName } from '../organisms';
 import Showcase from './Showcase.react';
+import { Logo, Name } from '../branding';
 
 import CONFIG from '../app/config';
 const { maxCollectionSize = {} } = CONFIG;
@@ -23,13 +24,13 @@ export default React.createClass({
     return (
       <div className="wgsa-homepage">
         <section className="jumbotron">
-          <img src="/images/WGSA.FINAL.svg" alt="WGSA" />
+          <Logo />
           <h1>Global Pathogen Surveillance through Whole Genome Sequencing</h1>
         </section>
         <Showcase />
         <section id="how-it-works" className="alt wgsa-how-it-works">
           <div className="wgsa-homepage__content">
-            <h2>How WGSA Works</h2>
+            <h2>How <Name /> Works</h2>
             <ol>
               <li>
                 <i className="material-icons">cloud_upload</i>
@@ -53,7 +54,7 @@ export default React.createClass({
           <div className="wgsa-homepage__content">
             <h2>Organisms</h2>
             <p className="lead">
-              <strong>WGSA</strong> provides species and taxonomy prediction for over 60,000 variants of bacteria, viruses, and fungi.
+              <strong><Name /></strong> provides species and taxonomy prediction for over 60,000 variants of bacteria, viruses, and fungi.
             </p>
             <p className="lead">
               <strong>MLST</strong> prediction is available for over 100 species using schemes from <a href="https://pubmlst.org/">PubMLST</a>, <a href="http://bigsdb.pasteur.fr/">Pasteur</a>, and <a href="http://enterobase.warwick.ac.uk">Enterobase</a>.
@@ -73,7 +74,7 @@ export default React.createClass({
                   <th>Organism</th>
                   <th>cgMLST</th>
                   <th>AMR Prediction</th>
-                  <th>WGSA Collections</th>
+                  <th><Name /> Collections</th>
                   <th>Population Search</th>
                   <th>Other</th>
                 </tr>

@@ -5,6 +5,7 @@ import PubMedLink from '../../components/PubMedLink.react';
 
 import { getFormattedDateString } from '../../utils/Date';
 import { getCountryName } from '../../utils/country';
+import { Logo } from '../../branding';
 
 function getTask({ analysis = {}, tasks = [] }, taskName) {
   return analysis[taskName];
@@ -17,7 +18,7 @@ export default ({ genome }) => {
   return (
     <div className="wgsa-genome-detail-summary">
       <header>
-        <img src="/images/WGSA.FINAL.svg" />
+        <Logo />
       </header>
       <aside>
         {date}
