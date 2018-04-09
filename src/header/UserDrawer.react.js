@@ -6,6 +6,7 @@ import NavLink from '../location';
 import AccountHeader from './AccountHeader.react';
 import SignInNav from './SignInNav.react';
 import GenomeIcon from '../components/GenomeIcon.react';
+import { Icon } from '../branding';
 
 import { getSummary } from '../summary/selectors';
 
@@ -61,7 +62,7 @@ const UserDrawer = React.createClass({
           <div className="wgsa-drawer-content">
             <span className="mdl-layout-title">
               <AccountHeader user={user} />
-              <img src="/images/WGSA.Icon.FINAL.svg" />
+              <Icon />
               { config.version &&
                 <small className="wgsa-version">
                   {config.version}

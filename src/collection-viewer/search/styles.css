@@ -4,9 +4,9 @@
   flex-grow: 1;
   margin: 0 auto;
   min-width: 320px;
-  max-width: 560px;
+  max-width: 496px;
   @media (min-width: 1024px) {
-    max-width: 640px;
+    max-width: 560px;
   }
 }
 

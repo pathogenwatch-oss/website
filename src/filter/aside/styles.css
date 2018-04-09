@@ -33,6 +33,7 @@
   padding: 0 16px;
   outline: none;
   font-size: 15px;
+  background: transparent;
 }
 
 .wgsa-filter__search i {

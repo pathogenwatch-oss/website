@@ -44,14 +44,21 @@
 }
 
 .wgsa-account-link {
-  position: absolute;
-  left: 16px;
-  top: 12px;
   background: none;
-  color: #673c90;
   border: none;
+  color: #673c90;
+  height: 64px;
+  width: 64px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   outline: none;
   padding: 0;
+}
+
+.mdl-layout__header--primary .wgsa-account-link,
+.wgsa-header--inverse .wgsa-account-link {
+  color: #fff;
 }
 
 .cgps-avatar > :first-child {
