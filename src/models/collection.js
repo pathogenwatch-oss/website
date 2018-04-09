@@ -110,7 +110,7 @@ schema.statics.getPrefilterCondition = function ({ user, query = {} }) {
   const { prefilter = 'all' } = query;
 
   if (prefilter === 'all') {
-    const hasAccess = { $or: [ { public: true } ] };
+    const hasAccess = { $or: [ { access: 'public' } ] };
     if (user) {
       hasAccess.$or.push({ _user: user._id });
     }
@@ -149,9 +149,9 @@ schema.statics.getFilterQuery = function (props) {
   }
 
   if (type === 'public') {
-    findQuery.public = true;
+    findQuery.access = 'public';
   } else if (type === 'private') {
-    findQuery.public = false;
+    findQuery.access = { $in: [ 'private', 'shared' ] };
   }
 
   if (minDate) {
