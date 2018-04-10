@@ -104,16 +104,17 @@ export function selectRange(fromIndex, toIndex) {
     if (selection.length === size) {
       dispatch(appendToSelection(selection));
     } else {
-      if (isOverSelectionLimit(size)) {
-        dispatch(showToast({
-          message: (
-            <span>
-              You have selected the first {getSelectionLimit()} genomes in this range.
-            </span>
-          ),
-        }));
-      }
-      dispatch(fetchGenomeList(start, Math.min(stop, start + getSelectionLimit() - 1)))
+      // if (isOverSelectionLimit(size)) {
+      //   dispatch(showToast({
+      //     message: (
+      //       <span>
+      //         You have selected the first {getSelectionLimit()} unselected genomes in this list.
+      //       </span>
+      //     ),
+      //   }));
+      // }
+      // Math.min(stop, start + getSelectionLimit() - 1)
+      dispatch(fetchGenomeList(start, stop))
         .then(fetchedGenomes =>
           dispatch(appendToSelection(fetchedGenomes))
         );
@@ -126,7 +127,7 @@ export function selectAll() {
     const state = getState();
     const selectionStatus = getSelectionStatus(state);
 
-    if (selectionStatus !== 'UNCHECKED') {
+    if (selectionStatus === 'CHECKED') {
       const genomes = getGenomeList(state);
       dispatch(removeFromSelection(genomes));
     } else {
