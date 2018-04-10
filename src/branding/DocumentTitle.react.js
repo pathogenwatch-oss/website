@@ -1,11 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-const names = {
-  wgsa: 'WGSA',
-  pathogenwatch: 'Pathogenwatch',
-  pathogenDotWatch: 'Pathogenwatch',
-};
+import { names } from './constants';
 
 function updateDocumentTitle(appName, newTitle) {
   document.title = `${appName} | ${newTitle}`;

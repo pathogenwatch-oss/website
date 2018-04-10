@@ -74,7 +74,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(React.createClass({
             'mdl-layout',
             `wgsa-page--${pageSlug}`,
             { 'user-drawer-visible': userDrawerVisible },
-            `cgps-branding--${brandingId}`
+            `cgps-branding--${brandingId.toLowerCase()}`
           )}
         >
           <Header />

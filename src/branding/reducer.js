@@ -2,13 +2,8 @@ import { CHANGE_BRANDING } from './actions';
 
 import { brandings } from './constants';
 
-function getInitalBranding() {
-  return brandings[1];
-  // return brandings[Math.floor(Math.random() * 3)];
-}
-
 const initialState = {
-  id: getInitalBranding(),
+  id: brandings[1],
 };
 
 export default function (state = initialState, action) {

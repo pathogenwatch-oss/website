@@ -1,12 +1,8 @@
 import { connect } from 'react-redux';
 
-const names = {
-  wgsa: 'WGSA',
-  pathogenwatch: 'Pathogenwatch',
-  pathogenDotWatch: 'Pathogenwatch',
-};
+import { names } from './constants';
 
-const Name = ({ brandingId = 'Pathogenwatch' }) => names[brandingId];
+const Name = ({ brandingId }) => names[brandingId];
 
 function mapStateToProps(state) {
   return {

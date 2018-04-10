@@ -2,12 +2,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 const srcs = {
-  wgsa: '/images/WGSA.Icon.FINAL.svg',
-  pathogenwatch: '/images/pathogenwatch-icon.svg',
-  pathogenDotWatch: '/images/pathogenwatch-icon.svg',
+  WGSA: '/images/WGSA.Icon.FINAL.svg',
+  Pathogenwatch: '/images/pathogenwatch-icon.svg',
+  PathogenDotWatch: '/images/pathogenwatch-icon.svg',
 };
 
-const Logo = ({ className, brandingId = 'wgsa' }) => (
+const Logo = ({ className, brandingId }) => (
   <img className={className} src={srcs[brandingId]} />
 );
 
