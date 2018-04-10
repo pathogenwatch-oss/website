@@ -15,7 +15,7 @@ import Analysis from './Analysis.react';
 
 const DownloadsMenu = ({ menuOpen, counts = {}, closeMenu }) => (
   <Overlay isVisible={menuOpen} hide={closeMenu}>
-    <div className="wgsa-downloads">
+    <div className="wgsa-downloads mdl-shadow--4dp">
       <h3 className="mdl-dialog__title">Downloads</h3>
       { Object.keys(counts).length ? showCounts(counts) : null }
       <ul className="wgsa-downloads-menu">
