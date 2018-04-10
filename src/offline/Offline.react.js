@@ -13,6 +13,7 @@ import { loadCollections } from './actions';
 import { isSupported, isOffline } from './utils';
 
 import { statuses } from './constants';
+import DocumentTitle from '../branding/DocumentTitle.react';
 
 const Supported = () => (
   <div className="wgsa-page wgsa-compact-page">
@@ -60,15 +61,11 @@ const CollectionList = ({ collections }) => (
 
 const Offline = React.createClass({
 
-  componentWillMount() {
-    document.title = 'WGSA | Offline';
-  },
-
   componentDidMount() {
     this.props.loadCollections();
   },
 
-  render() {
+  renderContent() {
     const { status, collections } = this.props;
     if (status === statuses.LOADING) {
       return (
@@ -81,6 +78,15 @@ const Offline = React.createClass({
       collections.length ?
         <CollectionList collections={collections} /> :
         <Intro />
+    );
+  },
+
+  render() {
+    return (
+      <React.Fragment>
+        <DocumentTitle title="Offline" />
+        {this.renderContent()}
+      </React.Fragment>
     );
   },
 

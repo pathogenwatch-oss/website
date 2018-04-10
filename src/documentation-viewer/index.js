@@ -3,6 +3,7 @@ import { Route } from 'react-router-dom';
 
 import Markdown from './Markdown.react';
 import NotFound from '../components/NotFound.react';
+import { DocumentTitle } from '../branding';
 
 import CONFIG from '../app/config';
 
@@ -25,7 +26,6 @@ const DocumentationViewerRoute = React.createClass({
   },
 
   componentWillMount() {
-    document.title = 'WGSA | Documentation';
     this.fetchPage(this.props);
   },
 
@@ -40,7 +40,7 @@ const DocumentationViewerRoute = React.createClass({
       .catch(() => this.setState({ error: true }));
   },
 
-  render() {
+  renderContent() {
     const { page, markdown, error } = this.state;
 
     if (markdown) {
@@ -52,6 +52,15 @@ const DocumentationViewerRoute = React.createClass({
     }
 
     return null;
+  },
+
+  render() {
+    return (
+      <React.Fragment>
+        <DocumentTitle title="Documentation" />
+        {this.renderContent()}
+      </React.Fragment>
+    );
   },
 
 });

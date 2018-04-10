@@ -9,6 +9,7 @@ import Filter from './filter';
 import Header from './header';
 import CollectionCard from './CollectionCard.react';
 import Overlay from '../overlay';
+import { DocumentTitle } from '../branding';
 
 import { getCollectionList, getTotal, getStatus } from './selectors';
 import { isFilterOpen, isActive } from './filter/selectors';
@@ -20,7 +21,6 @@ import { statuses } from './constants';
 const Collections = React.createClass({
 
   componentWillMount() {
-    document.title = 'WGSA | Collections';
     this.props.filter();
   },
 
@@ -100,6 +100,7 @@ const Collections = React.createClass({
           { 'has-filter': this.props.isFilterOpen }
         )}
       >
+        <DocumentTitle title="collections" />
         <Filter />
         <div className="wgsa-filter-content">
           <Header />

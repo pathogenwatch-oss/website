@@ -9,6 +9,7 @@ import Summary from '../Summary.react';
 import Grid from '../../grid';
 
 import { fetchUploads } from './actions';
+import DocumentTitle from '../../branding/DocumentTitle.react';
 
 const ListItem = ({ item }) => {
   const { uploadedAt, total } = item;
@@ -27,38 +28,27 @@ const Header = () => (
   </header>
 );
 
-const Previous = React.createClass({
-
-  componentWillMount() {
-    this.props.fetch();
-    document.title = 'WGSA | Previous Uploads';
-  },
-
-  render() {
-    const { loading, error, uploads } = this.props;
-    return (
-      <div className="wgsa-hipster-style wgsa-previous-uploads">
-        <Summary previous />
-        { !!uploads.length ?
-          <Grid
-            className="wgsa-genome-list-view"
-            template={ListItem}
-            items={uploads}
-            columnCount={1}
-            rowHeight={40}
-            header={<Header />}
-            headerHeight={25}
-          /> :
-          <div className="wgsa-content-margin">
-            { loading && <Spinner /> }
-            { error && <p>Failed to fetch previous uploads 😞</p> }
-            { !loading && uploads.length === 0 && <p>No previous uploads found.</p> }
-          </div> }
-      </div>
-    );
-  },
-
-});
+const Previous = ({ loading, error, uploads }) => (
+  <div className="wgsa-hipster-style wgsa-previous-uploads">
+    <DocumentTitle title="Previous Uploads" />
+    <Summary previous />
+    { !!uploads.length ?
+      <Grid
+        className="wgsa-genome-list-view"
+        template={ListItem}
+        items={uploads}
+        columnCount={1}
+        rowHeight={40}
+        header={<Header />}
+        headerHeight={25}
+      /> :
+      <div className="wgsa-content-margin">
+        { loading && <Spinner /> }
+        { error && <p>Failed to fetch previous uploads 😞</p> }
+        { !loading && uploads.length === 0 && <p>No previous uploads found.</p> }
+      </div> }
+  </div>
+);
 
 function mapStateToProps(state) {
   return state.upload.previous;

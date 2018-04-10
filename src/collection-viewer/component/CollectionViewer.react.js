@@ -4,27 +4,17 @@ import removeMarkdown from 'remove-markdown';
 
 import Layout from '../layout/Layout.react';
 import DownloadsMenu from '../downloads';
+import DocumentTitle from '../../branding/DocumentTitle.react';
 
 import { getCollection } from '../selectors';
 
-const CollectionViewer = React.createClass({
-
-  componentWillMount() {
-    const { title } = this.props;
-    const sanitisedTitle = title ? removeMarkdown(title) : 'Explore Collection';
-    document.title = `WGSA | ${sanitisedTitle}`;
-  },
-
-  render() {
-    return (
-      <div>
-        <Layout />
-        <DownloadsMenu />
-      </div>
-    );
-  },
-
-});
+const CollectionViewer = ({ title }) => (
+  <React.Fragment>
+    <DocumentTitle title={title ? removeMarkdown(title) : 'Explore Collection'} />
+    <Layout />
+    <DownloadsMenu />
+  </React.Fragment>
+);
 
 function mapStateToProps(state) {
   return {

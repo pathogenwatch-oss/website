@@ -33,17 +33,6 @@ export const ListView = React.createClass({
     };
   },
 
-  componentWillMount() {
-    document.title = 'WGSA | Genomes';
-  },
-
-  hasScrollbar() {
-    const { total } = this.props;
-    return (
-      total * rowHeight >= window.innerHeight - offset
-    );
-  },
-
   getRowClassName(index) {
     const { lastSelectedIndex } = this.props;
     const { mouseOverIndex, range } = this.state;
@@ -55,6 +44,13 @@ export const ListView = React.createClass({
       }
     }
     return '';
+  },
+
+  hasScrollbar() {
+    const { total } = this.props;
+    return (
+      total * rowHeight >= window.innerHeight - offset
+    );
   },
 
   render() {

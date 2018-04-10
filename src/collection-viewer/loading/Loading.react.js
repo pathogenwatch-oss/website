@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import Spinner from '../../components/Spinner.react';
-import { Logo } from '../../branding';
+import { Logo, DocumentTitle } from '../../branding';
 
 import { statuses } from '../constants';
 
@@ -39,13 +39,10 @@ export const LoadSpinner = React.createClass({
 
   displayName: 'LoadSpinner',
 
-  componentWillMount() {
-    document.title = 'WGSA | Loading...';
-  },
-
   render() {
     return (
       <Background>
+        <DocumentTitle title="Loading..." />
         <Spinner />
         <h1>Loading collection...</h1>
       </Background>
@@ -91,13 +88,10 @@ function getStatusMessage({ collection, location }) {
 
 export const LoadError = React.createClass({
 
-  componentWillMount() {
-    document.title = 'WGSA | Error';
-  },
-
   render() {
     return (
       <Background>
+        <DocumentTitle title="Error" />
         { getStatusMessage(this.props) }
         <p>Please contact <a href="mailto:cgps@sanger.ac.uk">cgps@sanger.ac.uk</a> if problems persist.</p>
       </Background>

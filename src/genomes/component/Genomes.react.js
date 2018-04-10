@@ -8,6 +8,7 @@ import Filter from '../filter';
 import Header from '../header';
 
 import { statuses } from '../constants';
+import DocumentTitle from '../../branding/DocumentTitle.react';
 
 export default React.createClass({
 
@@ -100,6 +101,7 @@ export default React.createClass({
           { 'has-filter': this.props.isFilterOpen }
         )}
       >
+        <DocumentTitle title="Genomes" />
         <Filter />
         <div className="wgsa-filter-content">
           <Header prefilter={this.props.prefilter} />
