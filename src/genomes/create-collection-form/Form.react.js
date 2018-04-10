@@ -59,7 +59,7 @@ const CreateCollectionForm = React.createClass({
           <textarea
             className="mdl-textfield__input"
             type="text"
-            rows="4"
+            rows="3"
             id="collection-description"
             value={description}
             onChange={this.props.onFormChange}
