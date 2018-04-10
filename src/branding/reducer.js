@@ -1,10 +1,6 @@
 import { CHANGE_BRANDING } from './actions';
 
-const brandings = [
-  'wgsa',
-  'pathogenwatch',
-  'pathogenDotWatch',
-];
+import { brandings } from './constants';
 
 function getInitalBranding() {
   return brandings[1];
