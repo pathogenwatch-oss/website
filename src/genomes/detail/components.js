@@ -50,11 +50,6 @@ export const VersionSwitcher = React.createClass({
     };
   },
 
-  getResult() {
-    const { genome, taskName } = this.props;
-    return genome.analysis[taskName];
-  },
-
   render() {
     const { genome, taskName } = this.props;
     const Component = this.props.component;
@@ -74,7 +69,7 @@ export const VersionSwitcher = React.createClass({
                 {task.version}
               </button>) }
         </aside>
-        <Component result={this.getResult()} genome={genome} />
+        <Component result={genome.analysis[taskName]} genome={genome} />
       </div>
     );
   },

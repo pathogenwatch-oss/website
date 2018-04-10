@@ -1,16 +1,16 @@
 import React from 'react';
 
-export default ({ genotype, foundLoci }) => (
+export default ({ result }) => (
   <div>
     <h2>Genotyphi</h2>
     <dl>
       <div>
         <dt>Genotype</dt>
-        <dd>{genotype}</dd>
+        <dd>{result.genotype}</dd>
       </div>
       <div>
         <dt>SNPs Called</dt>
-        <dd>{foundLoci}</dd>
+        <dd>{result.foundLoci}</dd>
       </div>
     </dl>
   </div>
