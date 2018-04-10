@@ -30,15 +30,43 @@
 }
 
 .wgsa-how-it-works .material-icons {
-  border: 1px solid #ccc;
-  background-color: #F7F7F7;
   color: #673c90;
+  background-color: #fff;
+  border: 1px solid #ccc;
   border-radius: 500em;
   line-height: 1;
   padding: 16px;
-  width: 64px;
-  height: 64px;
-  text-align: center;
-  line-height: 64px;
-  font-size: 64px;
+  width: 32px;
+  height: 32px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 28px;
+}
+
+@supports (color: var(--color)) {
+
+  .wgsa-how-it-works .material-icons {
+    border: none;
+    color: #fff;
+    background-color: var(--wgsa-how-it-works-color);
+  }
+
+  .wgsa-how-it-works h3 {
+    color: var(--wgsa-how-it-works-color);
+  }
+
+  .wgsa-how-it-works li:nth-child(1) {
+    --wgsa-how-it-works-color: #3c7383;
+  }
+
+  .wgsa-how-it-works li:nth-child(2) {
+    --wgsa-how-it-works-color: #ac65a6;
+  }
+
+  .wgsa-how-it-works li:nth-child(3) {
+    --wgsa-how-it-works-color: #673c90;
+  }
+
 }

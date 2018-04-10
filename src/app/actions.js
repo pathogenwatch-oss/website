@@ -29,6 +29,7 @@ export function showIntroToast() {
               onClick: () => dontShowAgain(dispatch),
             },
             closeButton: false,
+            autohide: false,
           })
         );
       });

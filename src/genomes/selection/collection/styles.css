@@ -9,10 +9,13 @@
   flex-grow: 1;
   box-sizing: border-box;
   padding: 16px 16px 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .wgsa-genome-collection .wgsa-create-collection-form footer {
   bottom: 8px;
+  right: 8px;
 }
 
 .wgsa-genome-collection .wgsa-create-collection-message {

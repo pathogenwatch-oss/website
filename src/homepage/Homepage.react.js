@@ -27,7 +27,7 @@ export default ({ deployedOrganisms, openMenu }) => (
         <h2>How <Name /> Works</h2>
         <ol>
           <li>
-            <i className="material-icons">cloud_upload</i>
+            <i className="material-icons">file_upload</i>
             <h3>Upload</h3>
             <p>Upload genome assemblies and metadata, or view all publicly available genomes.</p>
           </li>
@@ -37,7 +37,7 @@ export default ({ deployedOrganisms, openMenu }) => (
             <p>Generate results including MLST, AMR predictions, clustering of genomes, and interactive visualisation of metadata.</p>
           </li>
           <li>
-            <i className="material-icons">find_in_page</i>
+            <i className="material-icons">search</i>
             <h3>Explore</h3>
             <p>Compare results with publicly available genomes within a species reference tree.</p>
           </li>

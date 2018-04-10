@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default ({ ngmast, por, tbpb }) => (
+export default ({ result }) => (
   <div>
     <h2>NG-MAST</h2>
     <table>
@@ -13,9 +13,9 @@ export default ({ ngmast, por, tbpb }) => (
       </thead>
       <tbody>
         <tr>
-          <td>{ngmast}</td>
-          <td>{por}</td>
-          <td>{tbpb}</td>
+          <td>{result.ngmast}</td>
+          <td>{result.por}</td>
+          <td>{result.tbpb}</td>
         </tr>
       </tbody>
     </table>
