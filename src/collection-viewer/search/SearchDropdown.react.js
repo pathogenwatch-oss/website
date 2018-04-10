@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import Fade from '../../components/fade';
-import Overlay from '../../components/overlay';
 import AdvancedMode from './AdvancedMode.react';
 
 import { isAdvancedMode } from './selectors';
@@ -28,7 +27,6 @@ const SearchDropdown = React.createClass({
               Close
             </button>
             <AdvancedMode />
-            <Overlay hide={close} isVisible />
           </div> :
           null }
       </Fade>

@@ -103,7 +103,7 @@
 
 .wgsa-navigation-header {
   font-size: inherit;
-  font-family: inherit;
+  font-family: inherit !important;
   font-weight: 500;
   line-height: 40px;
   margin: inherit;
