@@ -8,9 +8,9 @@ module.exports = function ({ token, user, status }) {
   }
 
   return Collection
-    .find({ token, _user: user._id }, { binned: 1 })
+    .findOne({ token, _user: user._id }, { binned: 1 })
     .then(collection => {
-      if (!collection) return new NotFoundError('Incorrect id and user combination.');
+      if (!collection) throw new NotFoundError('Incorrect id and user combination.');
 
       if (status === collection.binned) {
         return {};
