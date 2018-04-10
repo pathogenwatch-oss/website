@@ -11,15 +11,23 @@ const ToastContainer = React.createClass({
   displayName: 'ToastContainer',
 
   componentDidUpdate(previously) {
-    // should only focus when toast becomes visble
-    if (previously.visible) return;
+    if (this.timeout) {
+      clearTimeout(this.timeout);
+    }
+
+    // should only focus when a new toast becomes visible
+    if (previously.visible && !this.props.visible) return;
 
     if (this.props.action && this.refs.actionButton) {
       this.refs.actionButton.focus();
-      return;
+    } else if (this.refs.closeButton) {
+      this.refs.closeButton.focus();
     }
 
-    if (this.refs.closeButton) this.refs.closeButton.focus();
+    const { autohide = true, onCloseButtonClick } = this.props;
+    if (autohide) {
+      this.timeout = setTimeout(onCloseButtonClick, 5000);
+    }
   },
 
   render() {
@@ -41,8 +49,7 @@ const ToastContainer = React.createClass({
               className="wgsa-toast__action mdl-button"
             >
               {action.label}
-            </button>
-          }
+            </button> }
           { closeButton &&
             <button
               ref="closeButton"
@@ -50,8 +57,7 @@ const ToastContainer = React.createClass({
               className="wgsa-toast__dismiss mdl-button mdl-button--icon"
             >
               <i className="material-icons">close</i>
-            </button>
-          }
+            </button> }
         </aside> }
       </ReactCSSTransitionGroup>
     );
