@@ -4,6 +4,7 @@
 
 .wgsa-organism-card h3 {
   color: #3c7383;
+  font-family: inherit !important;
 }
 
 .wgsa-organism-card[href]:hover h3,
