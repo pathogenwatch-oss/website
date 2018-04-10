@@ -22,7 +22,7 @@ export default function AvatarLink({ user }) {
   return (
     <div className={className}>
       <AccountImage />
-      <div className="cgps-avatar__name" title="WGSA"><Name /></div>
+      <div className="cgps-avatar__name"><Name /></div>
       <div className="cgps-avatar__contact" title="Sign in to your account">
         Sign in to your account
       </div>

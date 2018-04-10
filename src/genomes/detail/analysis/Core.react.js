@@ -1,11 +1,12 @@
 import React from 'react';
+import { Name } from '../../../branding';
 
 export default ({ result: { fp, summary } }) => (
   <div>
     <h2>Core</h2>
     <dl>
       <div>
-        <dt>WGSA Reference</dt>
+        <dt><Name /> Reference</dt>
         <dd>{fp.reference}</dd>
       </div>
       <div>

@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { CGPS, DEFAULT } from '../app/constants';
+import { Name } from '../branding';
 
 const fileInputStyle = {
   position: 'fixed',
@@ -93,7 +94,7 @@ export default React.createClass({
                 <span className="wgsa-file-icon__label">.csv</span>
               </span>
             </div>
-            <h3 className="wgsa-drop-indicator__title">Drop to add to WGSA</h3>
+            <h3 className="wgsa-drop-indicator__title">Drop to add to <Name /></h3>
           </div>
         </div>
         {this.props.children}
