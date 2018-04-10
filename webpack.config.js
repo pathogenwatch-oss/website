@@ -29,9 +29,12 @@ const rules = [
         plugins: () => [
           require('postcss-input-style')(),
           require('postcss-cssnext')({
-            feature: {
+            features: {
               autoprefixer: {
-                browsers: [ 'last 2 versions', 'Safari 8' ],
+                browsers: [ 'last 2 versions' ],
+              },
+              customProperties: {
+                warnings: false,
               },
             },
           }),
