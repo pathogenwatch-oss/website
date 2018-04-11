@@ -13,8 +13,6 @@ import { getFilterSummary, getSearchText, isFilterOpen } from './selectors';
 import { stateKey } from './index';
 import * as actions from './actions';
 
-
-
 const Filter = ({ isActive, filterSummary, textValue, updateFilter, clearFilter }) => (
   <FilterAside
     loading={filterSummary.loading}

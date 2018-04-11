@@ -7,6 +7,13 @@ import { getSelectionSize, getSelectionDropdownView } from './selectors';
 
 import { toggleDropdown } from './actions';
 
+function formatCount(count) {
+  if (count > 9999) {
+    return `${Math.round(count / 1000)}K`;
+  }
+  return count;
+}
+
 const Summary = React.createClass({
 
   componentDidUpdate(previous) {
@@ -40,7 +47,7 @@ const Summary = React.createClass({
             className="mdl-chip__contact"
             title={size > 0 ? 'View Selection' : undefined}
           >
-            {size}
+            {formatCount(size)}
           </span>
           <span className="mdl-chip__text">Selected Genomes</span>
         </button>
