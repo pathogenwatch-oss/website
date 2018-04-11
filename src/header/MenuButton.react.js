@@ -18,7 +18,7 @@ const MenuButton = React.createClass({
   render() {
     return (
       <button
-        className="wgsa-account-link"
+        className="wgsa-main-menu-button"
         title="Main Menu"
         onClick={(e) => this.openLoginMenu(e)}
       >

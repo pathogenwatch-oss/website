@@ -17,12 +17,10 @@ import { isOffline } from '../offline';
 const OfflineLink = () => (
   <Link
     to="/offline"
-    className="cgps-avatar wgsa-account-link"
+    className="wgsa-main-menu-button"
     title="View Saved Collections"
   >
-    <span className="cgps-avatar__image">
-      <i className="material-icons">signal_wifi_off</i>
-    </span>
+    <i className="material-icons">signal_wifi_off</i>
   </Link>
 );
 
