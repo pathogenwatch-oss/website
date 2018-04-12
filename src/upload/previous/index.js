@@ -28,27 +28,38 @@ const Header = () => (
   </header>
 );
 
-const Previous = ({ loading, error, uploads }) => (
-  <div className="wgsa-hipster-style wgsa-previous-uploads">
-    <DocumentTitle title="Previous Uploads" />
-    <Summary previous />
-    { !!uploads.length ?
-      <Grid
-        className="wgsa-genome-list-view"
-        template={ListItem}
-        items={uploads}
-        columnCount={1}
-        rowHeight={40}
-        header={<Header />}
-        headerHeight={25}
-      /> :
-      <div className="wgsa-content-margin">
-        { loading && <Spinner /> }
-        { error && <p>Failed to fetch previous uploads 😞</p> }
-        { !loading && uploads.length === 0 && <p>No previous uploads found.</p> }
-      </div> }
-  </div>
-);
+class Previous extends React.Component {
+
+  componentDidMount() {
+    this.props.fetch();
+  }
+
+  render() {
+    const { loading, error, uploads } = this.props;
+    return (
+      <div className="wgsa-hipster-style wgsa-previous-uploads">
+        <DocumentTitle title="Previous Uploads" />
+        <Summary previous />
+        { !!uploads.length ?
+          <Grid
+            className="wgsa-genome-list-view"
+            template={ListItem}
+            items={uploads}
+            columnCount={1}
+            rowHeight={40}
+            header={<Header />}
+            headerHeight={25}
+          /> :
+          <div className="wgsa-content-margin">
+            { loading && <Spinner /> }
+            { error && <p>Failed to fetch previous uploads 😞</p> }
+            { !loading && uploads.length === 0 && <p>No previous uploads found.</p> }
+          </div> }
+      </div>
+    );
+  }
+
+}
 
 function mapStateToProps(state) {
   return state.upload.previous;
