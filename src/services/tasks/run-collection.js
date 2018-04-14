@@ -233,7 +233,6 @@ function createContainer(spec, metadata) {
       WGSA_COLLECTION_ID: collectionId,
       WGSA_WORKERS: workers,
     },
-    remove: false,
   });
 
   return container;
