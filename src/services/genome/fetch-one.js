@@ -40,16 +40,18 @@ const projection = {
   'analysis.paarsnp.snp': 1,
 };
 
-module.exports = ({ user, sessionID, id }) => {
+module.exports = async ({ user, sessionID, id }) => {
   if (!id) throw new ServiceRequestError('Missing Id');
 
-  return request('genome', 'authorise', { user, sessionID, id, projection })
-    .then(genome =>
-      Analysis.find(
-        { fileId: genome.fileId, task: { $in: taskNames } },
-        { _id: 0, task: 1, version: 1 }
-      )
-      .lean()
-      .then(tasks => Object.assign(genome, { tasks }))
-    );
+  const genome = await request('genome', 'authorise', { user, sessionID, id, projection });
+
+  const [ tasks, clusters ] = await Promise.all([
+    Analysis.find(
+      { fileId: genome.fileId, task: { $in: taskNames } },
+      { _id: 0, task: 1, version: 1 }
+    ).lean(),
+    request('genome', 'fetch-clusters', { user, sessionID, id }),
+  ]);
+
+  return Object.assign(genome, { tasks, clusters });
 };
