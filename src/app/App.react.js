@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import classnames from 'classnames';
 
 import Toast from '../toast';
-import GenomeDetail from '../genomes/detail';
+import GenomeDetail from '../genomes/report';
 
 import Header from './Header.react';
 import Content from './Content.react';

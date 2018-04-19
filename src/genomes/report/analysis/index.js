@@ -10,9 +10,10 @@ import Speciator from './Speciator.react';
 import Genotyphi from './Genotyphi.react';
 import NgMast from './NgMast.react';
 import renderGenericResults from './Generic.react';
+import Clustering from './Clustering.react';
 
 export default (genome) => {
-  const { analysis = {} } = genome;
+  const { analysis = {}, clusters } = genome;
   const { metrics, core, mlst, paarsnp, genotyphi, ngmast, speciator, ...rest } = analysis;
 
   const tabs = [];
@@ -27,6 +28,12 @@ export default (genome) => {
     tabs.push({
       key: 'AMR',
       component: <VersionSwitcher taskName="paarsnp" component={PAARSNP} genome={genome} />,
+    });
+  }
+  if (clusters) {
+    tabs.push({
+      key: 'Clustering',
+      component: <Clustering result={clusters} />,
     });
   }
   if (genotyphi) {

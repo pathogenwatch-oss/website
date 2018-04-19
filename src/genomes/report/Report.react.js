@@ -78,7 +78,7 @@ const Content = React.createClass({
 
 });
 
-export default ({ name, genome, loading, close }) => {
+const Report = ({ name, genome, loading, close }) => {
   const isOpen = !!loading || !!genome;
   return (
     <Fade>
@@ -106,3 +106,5 @@ export default ({ name, genome, loading, close }) => {
     </Fade>
   );
 };
+
+export default Report;

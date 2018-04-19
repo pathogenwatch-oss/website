@@ -2,20 +2,20 @@ import './styles.css';
 
 import { connect } from 'react-redux';
 
-import Detail from './Detail.react';
+import Detail from './Report.react';
 
-import { closeDrawer } from './actions';
+import { closeReport } from './actions';
 
 function mapStateToProps({ genomes }) {
-  return genomes.detail;
+  return genomes.report;
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    close: () => dispatch(closeDrawer(null)),
+    close: () => dispatch(closeReport(null)),
   };
 }
 
-export { showGenomeDrawer } from './actions';
+export { showGenomeReport } from './actions';
 
 export default connect(mapStateToProps, mapDispatchToProps)(Detail);
