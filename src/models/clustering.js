@@ -7,7 +7,7 @@ const schema = new Schema({
   user: String,
   sessionID: String,
   scheme: String,
-  result: Object,
+  results: Array,
   lastAccessedAt: Date,
   lastUpdatedAt: Date,
   createdAt: Date,

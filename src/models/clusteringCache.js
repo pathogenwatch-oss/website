@@ -5,7 +5,7 @@ const schema = new Schema({
   st: String,
   version: String,
   scheme: String,
-  scores: Object,
+  alleleDifferences: Object,
 });
 
 schema.index({ st: 1, version: 1 });

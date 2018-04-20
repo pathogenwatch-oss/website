@@ -40,7 +40,7 @@ async function getGenomesInCache(genomes, { version }, { scheme }) {
 
   const projection = { st: 1 };
   for (const st of sts) {
-    projection[`scores.${st}`] = 1;
+    projection[`alleleDifferences.${st}`] = 1;
   }
 
   const docs = await ClusteringCache.find(
@@ -51,7 +51,7 @@ async function getGenomesInCache(genomes, { version }, { scheme }) {
 
   const cacheBySt = {};
   for (const doc of docs) {
-    cacheBySt[doc.st] = doc.scores;
+    cacheBySt[doc.st] = doc.alleleDifferences;
   }
 
   const missingSTs = new Set();
@@ -95,7 +95,7 @@ function attachInputStream(container, spec, metadata, genomes, uncachedSTs) {
 
   const projection = { st: 1 };
   for (const st of sts) {
-    projection[`scores.${st}`] = 1;
+    projection[`alleleDifferences.${st}`] = 1;
   }
 
   const { scheme } = metadata;
@@ -128,16 +128,17 @@ function handleContainerOutput(container, spec, metadata, genomes, resolve, reje
   const { scheme, clientId } = metadata;
   request('clustering', 'send-progress', { clientId, payload: { task, status: 'IN PROGRESS' } });
   let lastProgress = 0;
+  const results = [];
   container.stdout
     .pipe(es.split())
     .on('data', (data) => {
       if (!data) return;
       try {
         const doc = JSON.parse(data);
-        if (doc.st && doc.scores) {
+        if (doc.st && doc.alleleDifferences) {
           const update = {};
-          for (const key of Object.keys(doc.scores)) {
-            update[`scores.${key}`] = doc.scores[key];
+          for (const key of Object.keys(doc.alleleDifferences)) {
+            update[`alleleDifferences.${key}`] = doc.alleleDifferences[key];
           }
           ClusteringCache.update({ st: doc.st, version, scheme }, update, { upsert: true }).exec();
           if (doc.progress) {
@@ -148,13 +149,14 @@ function handleContainerOutput(container, spec, metadata, genomes, resolve, reje
             }
           }
         } else {
-          resolve(doc);
+          results.push(doc);
         }
       } catch (e) {
         request('clustering', 'send-progress', { clientId, payload: { task, status: 'ERROR' } });
         reject(e);
       }
-    });
+    })
+    .on('end', () => resolve(results));
 }
 
 function handleContainerExit(container, spec, metadata, reject) {
