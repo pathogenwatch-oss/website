@@ -5,14 +5,18 @@ const { addPreSaveHook } = require('./utils');
 
 const schema = new Schema({
   createdAt: Date,
-  fileId: String,
   task: String,
   version: String,
+  duration: Number,
+  exitCode: String,
+
+  fileId: String,
   organismId: String,
   speciesId: String,
   genusId: String,
-  duration: Number,
-  exitCode: String,
+  user: String,
+  sessionID: String,
+  scheme: String,
 });
 
 addPreSaveHook(schema);
