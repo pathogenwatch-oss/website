@@ -38,6 +38,7 @@ const projection = {
   'analysis.paarsnp.antibiotics': 1,
   'analysis.paarsnp.paar': 1,
   'analysis.paarsnp.snp': 1,
+  'analysis.cgmlst.scheme': 1,
 };
 
 module.exports = async ({ user, sessionID, id }) => {
@@ -45,13 +46,19 @@ module.exports = async ({ user, sessionID, id }) => {
 
   const genome = await request('genome', 'authorise', { user, sessionID, id, projection });
 
-  const [ tasks, clusters ] = await Promise.all([
+  const promises = [
     Analysis.find(
       { fileId: genome.fileId, task: { $in: taskNames } },
       { _id: 0, task: 1, version: 1 }
     ).lean(),
-    request('genome', 'fetch-clusters', { user, sessionID, id }),
-  ]);
+  ];
 
-  return Object.assign(genome, { tasks, clusters });
+  if (genome.analysis.cgmlst) {
+    const { scheme } = genome.analysis.cgmlst;
+    promises.push(request('clustering', 'fetch', { user, sessionID, scheme }));
+  }
+
+  const [ tasks, clustering = null ] = await Promise.all(promises);
+
+  return Object.assign(genome, { tasks, clustering });
 };

@@ -878,5 +878,9 @@
         "workers": 16
       }
     ]
+  },
+  "clustering": {
+    "task": "clustering",
+    "version": "t1"
   }
 }

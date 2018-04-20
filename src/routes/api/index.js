@@ -24,6 +24,7 @@ router.use([
   require('./summary'),
   require('./organism'),
   require('./account'),
+  require('./clustering'),
   require('../notFound'),
 ]);
 
