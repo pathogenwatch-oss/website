@@ -13,8 +13,8 @@ import renderGenericResults from './Generic.react';
 import Clustering from './Clustering.react';
 
 export default (genome) => {
-  const { analysis = {}, clusters } = genome;
-  const { metrics, core, mlst, paarsnp, genotyphi, ngmast, speciator, ...rest } = analysis;
+  const { analysis = {}, clustering } = genome;
+  const { metrics, core, mlst, paarsnp, genotyphi, ngmast, speciator, cgmlst, ...rest } = analysis;
 
   const tabs = [];
 
@@ -30,10 +30,10 @@ export default (genome) => {
       component: <VersionSwitcher taskName="paarsnp" component={PAARSNP} genome={genome} />,
     });
   }
-  if (clusters) {
+  if (cgmlst) {
     tabs.push({
       key: 'Clustering',
-      component: <Clustering result={clusters} />,
+      component: <Clustering scheme={cgmlst.scheme} clustering={clustering} />,
     });
   }
   if (genotyphi) {
