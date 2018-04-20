@@ -2,7 +2,7 @@ const { enqueue, queues, Queue } = require('../taskQueue');
 
 const { getClusteringTask } = require('../../manifest');
 
-const { ServiceRequestError } = require('.././utils/errors');
+const { ServiceRequestError } = require('../../utils/errors');
 
 module.exports = async function ({ user, sessionID, scheme, clientId }) {
   const spec = getClusteringTask(scheme);

@@ -1,6 +1,6 @@
 const LOGGER = require('utils/logging').createLogger('runner');
 
-const { getImages, getImageName, getSpeciatorTask } = require('manifest.js');
+const { getImages, getImageName, getSpeciatorTask, getClusteringTask } = require('manifest.js');
 const { tasks } = require('configuration.js');
 const { username = 'anon', password = '' } = tasks.registry || {};
 
@@ -12,18 +12,24 @@ const { queues } = require('../taskQueue');
 const LIMIT = 5;
 
 function getImageNames(queue) {
-  const { task, version } = getSpeciatorTask();
+  const speciator = getSpeciatorTask();
+  const speciatorImage = getImageName(speciator.task, speciator.version);
 
   if (queue === queues.genome) {
-    return [ getImageName(task, version) ];
+    return [ speciatorImage ];
   }
 
   if (queue === queues.collection) return getImages('collection');
 
   if (queue === queues.task) return getImages('genome');
 
+  if (queue === queues.clustering) {
+    const { task, version } = getClusteringTask();
+    return [ getImageName(task, version) ];
+  }
+
   return [
-    getImageName(task, version),
+    speciatorImage,
     ...getImages('genome'),
     ...getImages('collection'),
   ];

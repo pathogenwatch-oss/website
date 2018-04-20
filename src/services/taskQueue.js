@@ -22,6 +22,7 @@ module.exports.setMaxWorkers = function (max = 1) {
 };
 
 const queues = {
+  clustering: 'clustering',
   collection: 'collection',
   genome: 'genome',
   task: 'task',

@@ -5,7 +5,7 @@ const services = require('services');
 
 const LOGGER = require('utils/logging').createLogger('Summary');
 
-router.post('/clustering/:scheme', async (req, res, next) => {
+router.post('/clustering', async (req, res, next) => {
   const { user, sessionID, body } = req;
   const { scheme, clientId } = body;
 

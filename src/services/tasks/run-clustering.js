@@ -90,7 +90,6 @@ function attachInputStream(container, spec, metadata, genomes, uncachedSTs) {
     }
   );
   docsStream.pause();
-  // docsStream.on('end', () => console.log('docs ended'));
 
   const sts = genomes.map(_ => _.analysis.cgmlst.st);
 
@@ -118,10 +117,10 @@ function attachInputStream(container, spec, metadata, genomes, uncachedSTs) {
 
   stream
     .pipe(container.stdin);
-    // .pipe(require('fs').createWriteStream('tree-input.bson'));
+    // .pipe(require('fs').createWriteStream('input.bson'));
 
-  const genomeInput = genomes.map(g => ({ _id: g._id, st: g.analysis.cgmlst.st }));
-  genomesStream.end(bson.serialize({ genomes: genomeInput }), () => scoresStream.resume());
+  const genomeList = genomes.map(g => ({ _id: g._id, st: g.analysis.cgmlst.st }));
+  genomesStream.end(bson.serialize({ genomes: genomeList }), () => scoresStream.resume());
 }
 
 function handleContainerOutput(container, spec, metadata, genomes, resolve, reject) {
@@ -202,7 +201,7 @@ function createContainer(spec) {
 
 async function runTask(spec, metadata) {
   const genomes = await getGenomes(spec, metadata);
-  const uncachedFileIds = await getGenomesInCache(genomes, spec);
+  const uncachedFileIds = await getGenomesInCache(genomes, spec, metadata);
 
   return new Promise((resolve, reject) => {
     const container = createContainer(spec, metadata);
