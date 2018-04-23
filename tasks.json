@@ -681,7 +681,7 @@
     "90370": [
       {
         "task": "core",
-        "version": "t20"
+        "version": "t32"
       },
       {
         "task": "genotyphi",
@@ -841,11 +841,11 @@
     "90370": [
       {
         "task": "tree",
-        "version": "t20",
+        "version": "t32",
         "requires": [
           {
             "task": "core",
-            "version": "t20"
+            "version": "t32"
           }
         ],
         "timeout": 900,
@@ -855,11 +855,11 @@
     "148942": [
       {
         "task": "tree",
-        "version": "t20",
+        "version": "t32",
         "requires": [
           {
             "task": "core",
-            "version": "t20"
+            "version": "t32"
           }
         ],
         "timeout": 900,
