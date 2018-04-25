@@ -19,7 +19,15 @@ export function fetchGenomeSummary(filter) {
 export const FETCH_GENOME_LIST = createAsyncConstants('FETCH_GENOME_LIST');
 
 export function fetchGenomeList(startIndex, stopIndex) {
-  const options = { skip: startIndex, limit: stopIndex - startIndex + 1 };
+  let skip = undefined;
+  if (typeof startIndex !== 'undefined' && startIndex !== null) {
+    skip = startIndex;
+  }
+  let limit = undefined;
+  if (stopIndex) {
+    limit = stopIndex - startIndex + 1;
+  }
+  const options = { skip, limit };
   return (dispatch, getState) => {
     const filter = getFilter(getState());
     return dispatch({
