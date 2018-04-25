@@ -144,7 +144,11 @@ export default React.createClass({
   },
 
   componentWillUnmount() {
-    this.phylocanvas.cleanup();
+    try {
+      this.phylocanvas.cleanup();
+    } catch (e) {
+      console.error(e);
+    }
   },
 
   phylocanvas: null,

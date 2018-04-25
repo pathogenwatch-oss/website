@@ -19,7 +19,6 @@
   border: 1px solid transparent;
 
   &.active {
-    border-color: rgba(0, 0, 0, 0.07);
 
     & strong,
     & .material-icons {
@@ -30,6 +29,7 @@
   &:hover,
   &.active{
     background: rgba(0, 0, 0, 0.07);
+    border-color: rgba(0, 0, 0, 0.07);
   }
 
   &:not(.active) {

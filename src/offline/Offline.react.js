@@ -43,7 +43,7 @@ const Intro = () => (isSupported() ? <Supported /> : <NotSupported />);
 
 const template = props => (
   <CollectionCard {...props}
-    footerLink={<RemoveOfflineCollection uuid={props.item.uuid} />}
+    footerLink={<RemoveOfflineCollection token={props.item.token} />}
   />
 );
 
@@ -54,7 +54,7 @@ const CollectionList = ({ collections }) => (
     <StaticGrid
       items={collections}
       template={template}
-      keyProp="uuid"
+      keyProp="token"
     />
   </div>
 );

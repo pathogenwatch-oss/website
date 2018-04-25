@@ -42,15 +42,15 @@ export function isOffline() {
   return !navigator.onLine;
 }
 
-export function createCacheKey(uuid) {
-  return `wgsa-collection-${uuid}`;
+export function createCacheKey(token) {
+  return `wgsa-collection-${token}`;
 }
 
-export function removeItem(uuid) {
+export function removeItem(token) {
   return Promise.all([
     getOfflineList()
-      .then(collections => collections.filter(_ => _.uuid !== uuid))
+      .then(collections => collections.filter(_ => _.token !== token))
       .then(setOfflineList),
-    caches.delete(createCacheKey(uuid)),
+    caches.delete(createCacheKey(token)),
   ]);
 }
