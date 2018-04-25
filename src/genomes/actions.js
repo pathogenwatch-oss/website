@@ -24,7 +24,7 @@ export function fetchGenomeList(startIndex, stopIndex) {
     skip = startIndex;
   }
   let limit = undefined;
-  if (stopIndex) {
+  if (startIndex && stopIndex) {
     limit = stopIndex - startIndex + 1;
   }
   const options = { skip, limit };
