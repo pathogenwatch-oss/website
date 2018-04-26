@@ -1,5 +1,6 @@
 import { CREATE_COLLECTION } from '../../genomes/create-collection-form';
 import * as actions from '../actions';
+import { COLLECTION_CHANGE_ACCESS_LEVEL } from '../access/actions';
 
 import { sortGenomes } from '../utils';
 import { statuses } from '../../collection-viewer/constants';
@@ -48,6 +49,22 @@ export default function (state = initialState, { type, payload }) {
         uuid: result.uuid,
       };
     }
+    case COLLECTION_CHANGE_ACCESS_LEVEL.ATTEMPT:
+      return {
+        ...state,
+        access_status: 'LOADING',
+        access: payload.access,
+      };
+    case COLLECTION_CHANGE_ACCESS_LEVEL.SUCCESS:
+      return {
+        ...state,
+        access_status: 'OK',
+      };
+    case COLLECTION_CHANGE_ACCESS_LEVEL.FAILURE:
+      return {
+        ...state,
+        access_status: 'ERROR',
+      };
     default:
       return state;
   }

@@ -1,33 +1,36 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 
-export default ({ access }) => (
+import AccessLevel from './AccessLevel.react';
+import AccessStatus from './AccessStatus.react';
+
+export default () => (
   <section className="wgsa-collection-access">
     <h4>Access</h4>
+    <AccessStatus />
     <ul>
-      <li className={access === 'public' ? 'active' : null}>
-        <i className="material-icons">public</i>
-        <button title="Set Access to Public">
-          <strong>Public</strong>
-          <br />
-          Available to all, added to <Link to="/collections">public collections</Link>.
-        </button>
+      <li>
+        <AccessLevel
+          level="public"
+          icon="public"
+          title="Public"
+          description="Available to all, added to list of public collections."
+        />
       </li>
-      <li className={access === 'shared' ? 'active' : null}>
-        <i className="material-icons">link</i>
-        <button title="Set Access to Shared">
-          <strong>Shared</strong>
-          <br />
-          Available to anyone with the link, no sign-in required.
-        </button>
+      <li>
+        <AccessLevel
+          level="shared"
+          icon="link"
+          title="Shared"
+          description="Available to anyone with the link, no sign-in required."
+        />
       </li>
-      <li className={access === 'private' ? 'active' : null}>
-        <i className="material-icons">lock</i>
-        <button title="Set Access to Private">
-          <strong>Private</strong>
-          <br />
-          Available to you only.
-        </button>
+      <li>
+        <AccessLevel
+          level="private"
+          icon="lock"
+          title="Private"
+          description="Available to you only."
+        />
       </li>
     </ul>
   </section>

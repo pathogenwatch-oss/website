@@ -52,6 +52,7 @@ button, select {
   cursor: pointer;
   font-family: inherit;
   font-size: inherit;
+  font-weight: inherit;
   text-align: inherit;
   line-height: inherit;
 }
@@ -73,13 +74,13 @@ select:active {
 a {
   font-weight: 400;
   color: #673c90;
-  text-decoration: none;
+  text-decoration: underline;
 }
 
 a[href]:hover,
 a[href]:focus,
 a[href]:active {
-  text-decoration: underline;
+  text-decoration: none;
 }
 
 strong, b {
