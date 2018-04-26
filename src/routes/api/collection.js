@@ -49,13 +49,14 @@ router.post('/collection/:token/binned', (req, res, next) => {
     .catch(next);
 });
 
-router.get('/collection/:token/share', (req, res, next) => {
+router.post('/collection/:token/access', (req, res, next) => {
   const { token } = req.params;
-  const { user } = req;
+  const { user, body } = req;
+  const { access } = body;
 
-  LOGGER.info('Received request to share collection:', token);
+  LOGGER.info('Received request to change collection access:', token);
 
-  services.request('collection', 'share', { token, user })
+  services.request('collection', 'access-level', { user, token, access })
     .then(response => res.json(response))
     .catch(next);
 });
