@@ -43,13 +43,16 @@ const projection = {
 module.exports = ({ user, sessionID, id }) => {
   if (!id) throw new ServiceRequestError('Missing Id');
 
-  return request('genome', 'authorise', { user, sessionID, id, projection })
-    .then(genome =>
-      Analysis.find(
-        { fileId: genome.fileId, task: { $in: taskNames } },
-        { _id: 0, task: 1, version: 1 }
-      )
-      .lean()
-      .then(tasks => Object.assign(genome, { tasks }))
-    );
+  return request('genome', 'authorise', { user, sessionID, id, projection });
+
+  // TODO: Removed until task version switching is implemented on front-end
+
+    // .then(genome =>
+    //   Analysis.find(
+    //     { fileId: genome.fileId, task: { $in: taskNames } },
+    //     { _id: 0, task: 1, version: 1 }
+    //   )
+    //   .lean()
+    //   .then(tasks => Object.assign(genome, { tasks }))
+    // );
 };
