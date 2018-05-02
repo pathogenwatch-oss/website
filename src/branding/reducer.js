@@ -3,7 +3,7 @@ import { CHANGE_BRANDING } from './actions';
 import { brandings } from './constants';
 
 const initialState = {
-  id: brandings[1],
+  id: brandings[0],
 };
 
 export default function (state = initialState, action) {
