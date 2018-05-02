@@ -16,26 +16,30 @@ export default ({ genome }) => {
   const speciator = getTask(genome, 'speciator');
   const date = getFormattedDateString(genome);
   return (
-    <div className="wgsa-genome-detail-summary">
+    <div className="wgsa-genome-report-summary">
       <header>
         <Logo />
       </header>
-      <aside>
-        {date}
-        { date && <br /> }
-        {country && getCountryName(country)}
-        { country && <br /> }
-        { pmid && <span>PMID: <PubMedLink pmid={pmid}>{pmid}</PubMedLink></span> }
-      </aside>
-      <h1>{genome.name}</h1>
-      <div className="h4">
-        { speciator ?
-          <FormattedName fullName
-            organismId={speciator.organismId}
-            title={speciator.organismName}
-          /> :
-          <em>Pending speciation</em> }
-      </div>
+      <section className="wgsa-genome-report-summary-content">
+        <div>
+          <h1 title={genome.name}>{genome.name}</h1>
+          <div className="h5">
+            { speciator ?
+              <FormattedName fullName
+                organismId={speciator.organismId}
+                title={speciator.organismName}
+              /> :
+              <em>Pending speciation</em> }
+          </div>
+        </div>
+        <p>
+          {date}
+          { date && <br /> }
+          {country && getCountryName(country)}
+          { country && <br /> }
+          { pmid && <span>PMID: <PubMedLink pmid={pmid}>{pmid}</PubMedLink></span> }
+        </p>
+      </section>
     </div>
   );
 };

@@ -6,10 +6,6 @@ export default ({ result: { fp, summary } }) => (
     <h2>Core</h2>
     <dl>
       <div>
-        <dt><Name /> Reference</dt>
-        <dd>{fp.reference}</dd>
-      </div>
-      <div>
         <dt>Core Matches</dt>
         <dd>{summary.kernelSize}</dd>
       </div>
@@ -28,6 +24,10 @@ export default ({ result: { fp, summary } }) => (
       <div>
         <dt>Families Matched</dt>
         <dd>{summary.familiesMatched}</dd>
+      </div>
+      <div>
+        <dt><Name /> Reference</dt>
+        <dd>{fp.reference}</dd>
       </div>
     </dl>
   </div>

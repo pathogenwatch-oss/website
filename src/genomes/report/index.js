@@ -2,7 +2,7 @@ import './styles.css';
 
 import { connect } from 'react-redux';
 
-import Detail from './Report.react';
+import Report from './Report.react';
 
 import { closeReport } from './actions';
 
@@ -18,4 +18,4 @@ function mapDispatchToProps(dispatch) {
 
 export { showGenomeReport } from './actions';
 
-export default connect(mapStateToProps, mapDispatchToProps)(Detail);
+export default connect(mapStateToProps, mapDispatchToProps)(Report);

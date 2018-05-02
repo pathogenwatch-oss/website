@@ -52,7 +52,8 @@ export const VersionSwitcher = React.createClass({
 
   getVersions() {
     const { genome, taskName } = this.props;
-    return genome.tasks
+    const { tasks = [] } = genome;
+    return tasks
       .filter(_ => _.task === taskName)
       .map(task =>
         <button key={task.version} className={classnames(

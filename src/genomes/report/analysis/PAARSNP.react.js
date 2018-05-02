@@ -20,9 +20,9 @@ export default ({ result, genome }) => {
       antibiotics;
 
   return (
-    <div>
+    <React.Fragment>
       <h2>Antimicrobial Resistance (AMR)</h2>
-      <table cellSpacing="0" className="wgsa-genome-detail-amr">
+      <table cellSpacing="0" className="wgsa-genome-report-amr">
         <caption>Resistance Profile</caption>
         <thead>
           <tr>
@@ -34,15 +34,15 @@ export default ({ result, genome }) => {
         </thead>
         <tbody>
           { filteredAntibiotics.map(({ name, fullName, state, mechanisms }) =>
-            <tr key={name} className={state !== 'NOT_FOUND' ? 'wgsa-genome-detail-amr-present' : ''}>
+            <tr key={name} className={state !== 'NOT_FOUND' ? 'wgsa-genome-report-amr-present' : ''}>
               <td>{name}</td>
               <td>{fullName}</td>
-              <td className="wgsa-genome-detail-amr-state">{state.replace(/_/g, ' ').toLowerCase()}</td>
+              <td className="wgsa-genome-report-amr-state">{state.replace(/_/g, ' ').toLowerCase()}</td>
               <td>{mechanisms.join(', ')}</td>
             </tr>
           ) }
         </tbody>
       </table>
-    </div>
+    </React.Fragment>
   );
 };
