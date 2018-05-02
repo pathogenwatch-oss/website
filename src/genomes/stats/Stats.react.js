@@ -10,7 +10,7 @@ import ChartResizer from '../../components/chart-resizer';
 import * as selectors from './selectors';
 import { getFilter } from '../filter/selectors';
 
-import { showGenomeDrawer } from '../../genomes/detail';
+import { showGenomeReport } from '../../genomes/report';
 import { showMetric } from './actions';
 import { fetchGenomeStats } from '../actions';
 
@@ -191,7 +191,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    onPointClick: item => dispatch(showGenomeDrawer(item.id, item.label)),
+    onPointClick: item => dispatch(showGenomeReport(item.id, item.label)),
     fetch: () => dispatch(fetchGenomeStats()),
   };
 }

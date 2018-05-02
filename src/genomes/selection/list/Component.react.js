@@ -5,7 +5,7 @@ import { List } from 'react-virtualized';
 import { getSelectedGenomeIds, getSelectedGenomeList } from '../selectors';
 
 import { removeFromSelection, clearSelection, toggleDropdown } from '../actions';
-import { showGenomeDrawer } from '../../detail/actions';
+import { showGenomeReport } from '../../report/actions';
 import { setBinnedFlag } from '../../bin/actions';
 
 import config from '../../../app/config';
@@ -94,7 +94,7 @@ function mapDispatchToProps(dispatch) {
   return {
     clearAll: () => dispatch(clearSelection()),
     removeGenome: genome => dispatch(removeFromSelection([ genome ])),
-    showGenome: genome => dispatch(showGenomeDrawer(genome.id, genome.name)),
+    showGenome: genome => dispatch(showGenomeReport(genome.id, genome.name)),
     sendToBin: genomes => dispatch(setBinnedFlag(genomes, true)),
     toggle: (view) => dispatch(toggleDropdown(view)),
   };

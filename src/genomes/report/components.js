@@ -50,27 +50,33 @@ export const VersionSwitcher = React.createClass({
     };
   },
 
+  getVersions() {
+    const { genome, taskName } = this.props;
+    return genome.tasks
+      .filter(_ => _.task === taskName)
+      .map(task =>
+        <button key={task.version} className={classnames(
+          'wgsa-analysis-version', {
+            'is-active': task.version === this.state.version,
+          })}
+          onClick={() => this.setState({ version: task.version })}
+        >
+          {task.version}
+        </button>);
+  },
+
   render() {
     const { genome, taskName } = this.props;
     const Component = this.props.component;
+    const versions = this.getVersions(genome, taskName);
     return (
-      <div>
-        <aside className="wgsa-genome-detail-version">
-          Version:
-          { genome.tasks
-            .filter(_ => _.task === taskName)
-            .map(task =>
-              <button key={task.version} className={classnames(
-                'wgsa-analysis-version', {
-                  'is-active': task.version === this.state.version,
-                })}
-                onClick={() => this.setState({ version: task.version })}
-              >
-                {task.version}
-              </button>) }
-        </aside>
+      <React.Fragment>
+        { versions.length > 0 &&
+          <aside className="wgsa-genome-detail-version">
+            Version: { versions }
+          </aside> }
         <Component result={genome.analysis[taskName]} genome={genome} />
-      </div>
+      </React.Fragment>
     );
   },
 

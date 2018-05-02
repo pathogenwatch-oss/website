@@ -12,7 +12,7 @@ import { FormattedName } from '../../organisms';
 import { formatDate } from '../../utils/Date';
 import { getCountryName } from '../../utils/country';
 
-import { showGenomeDrawer } from '../../genomes/detail';
+import { showGenomeReport } from '../../genomes/report';
 import { ST } from '../../mlst';
 
 const Cell = ({ title, icon, children, onClick }) => (
@@ -107,7 +107,7 @@ function mergeProps(state, { dispatch }, props) {
   const { genome, index } = props;
   return {
     ...props,
-    onViewGenome: e => e.stopPropagation() || dispatch(showGenomeDrawer(genome.id, genome.name)),
+    onViewGenome: e => e.stopPropagation() || dispatch(showGenomeReport(genome.id, genome.name)),
     onClick: e => {
       e.stopPropagation();
       if (e.shiftKey && lastSelectedIndex !== null) {

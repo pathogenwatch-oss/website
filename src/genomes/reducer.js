@@ -6,7 +6,7 @@ import selection from './selection/reducer';
 import stats from './stats/reducer';
 import collectionMetadata from './create-collection-form/reducer';
 import map from './map/reducer';
-import detail from './detail/reducer';
+import report from './report/reducer';
 
 import { CREATE_COLLECTION } from './create-collection-form';
 import * as actions from './actions';
@@ -115,5 +115,5 @@ export default combineReducers({
   summary,
   waiting,
   map,
-  detail,
+  report,
 });
