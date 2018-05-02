@@ -2,7 +2,7 @@ import React from 'react';
 import { Name } from '../../../branding';
 
 export default ({ result: { fp, summary } }) => (
-  <div>
+  <React.Fragment>
     <h2>Core</h2>
     <dl>
       <div>
@@ -30,5 +30,5 @@ export default ({ result: { fp, summary } }) => (
         <dd>{fp.reference}</dd>
       </div>
     </dl>
-  </div>
+  </React.Fragment>
 );

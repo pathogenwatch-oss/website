@@ -3,7 +3,7 @@ import React from 'react';
 import N50Chart from './N50Chart.react';
 
 export default ({ result }) => (
-  <div>
+  <React.Fragment>
     <h2>Assembly Metrics</h2>
     <dl className="wgsa-genome-detail-stats-compact">
       <div>
@@ -43,5 +43,5 @@ export default ({ result }) => (
       <figcaption>N50 chart</figcaption>
       <N50Chart metrics={result} />
     </figure>
-  </div>
+  </React.Fragment>
 );

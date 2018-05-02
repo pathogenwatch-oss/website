@@ -5,7 +5,7 @@ import { Metadata } from '../components';
 import { ST, Hit } from '../../../mlst';
 
 export default ({ result }) => (
-  <div>
+  <React.Fragment>
     <h2>Multilocus Sequence Typing (MLST)</h2>
     <dl>
       <Metadata label="Sequence Type"><ST id={result.st} /></Metadata>
@@ -32,5 +32,5 @@ export default ({ result }) => (
         </tbody>
       </table>
     </dl>
-  </div>
+  </React.Fragment>
 );
