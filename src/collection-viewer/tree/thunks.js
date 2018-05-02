@@ -66,7 +66,8 @@ export function subtreeLoaded(phylocanvas) {
     const state = getState();
     const stateKey = getVisibleTree(state).name;
 
-    dispatch(actions.treeLoaded(stateKey, phylocanvas));
+    const leafIds = getLeafIds(state, { stateKey });
+    dispatch(actions.treeLoaded(stateKey, phylocanvas, leafIds));
     dispatch(actions.addHistorySnapshot(stateKey, phylocanvas));
   };
 }

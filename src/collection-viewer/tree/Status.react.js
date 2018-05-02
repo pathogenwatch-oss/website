@@ -6,9 +6,10 @@ import Progress from './Progress.react';
 import { subscribe, unsubscribe } from '../../utils/Notification';
 
 import { getCollection } from '../selectors';
-import { getVisibleTree, areTreesComplete } from './selectors';
+import { areTreesComplete, getVisibleTree } from './selectors';
 
 import { handleTreeProgress } from './thunks';
+import { COLLECTION } from '../../app/stateKeys/tree';
 
 const StatusSwitcher = React.createClass({
 
@@ -37,24 +38,22 @@ const StatusSwitcher = React.createClass({
   },
 
   render() {
-    if (this.props.status === 'READY') {
+    if (this.props.hasVisibleTree) {
       return <Tree {...this.props} />;
     }
-    const { createdAt, stateKey } = this.props;
-    return <Progress date={createdAt} stateKey={stateKey} />;
+    const { createdAt } = this.props;
+    return <Progress date={createdAt} stateKey={COLLECTION} />;
   },
 
 });
 
 function mapStateToProps(state) {
   const collection = getCollection(state);
-  const tree = getVisibleTree(state);
   return {
     createdAt: collection.createdAt,
-    status: tree.status,
-    stateKey: tree.name,
     treesComplete: areTreesComplete(state),
     uuid: collection.uuid,
+    hasVisibleTree: getVisibleTree(state) !== null,
   };
 }
 

@@ -59,7 +59,7 @@ export default React.createClass({
           <i className="material-icons">tune</i>
         </button>
         <div
-          className={classnames('wgsa-pane-controls', { 'wgsa-pane-controls--visible': isActive })}
+          className={classnames('wgsa-pane-controls wgsa-pane-controls--top', { 'wgsa-pane-controls--visible': isActive })}
         >
           <div className="wgsa-pane-controls__row wgsa-pane-overlay">
             <div className="wgsa-pane-slider">

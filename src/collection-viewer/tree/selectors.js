@@ -35,7 +35,7 @@ export const getLeafIds = (state, { stateKey }) => {
 
 export const getVisibleTree = createSelector(
   getTreeState,
-  ({ visible, entities }) => entities[visible]
+  ({ visible, entities }) => (visible ? entities[visible] : null)
 );
 
 export const isLoaded = state => getVisibleTree(state).loaded;
@@ -53,7 +53,7 @@ export const getSingleTree = createSelector(
 export const getTitle = createSelector(
   getVisibleTree,
   getGenomes,
-  (tree, genomes) => titles[tree.name] || genomes[tree.name].name
+  (tree, genomes) => tree ? (titles[tree.name] || genomes[tree.name].name) : null
 );
 
 export const getFilenames = createSelector(

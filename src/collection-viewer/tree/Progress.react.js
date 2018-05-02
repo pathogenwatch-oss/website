@@ -3,22 +3,35 @@ import { connect } from 'react-redux';
 
 import Poll from '../../components/Poller.react';
 import CircularProgress from '../../components/CircularProgress.react';
+import Fade from '../../components/fade';
 
-import { getVisibleTree } from './selectors';
+import { getTrees } from './selectors';
 import { getCollection } from '../selectors';
 
-import { fetchTreePosition } from './actions';
+import { fetchTreePosition, setTree } from './actions';
+import { COLLECTION } from '../../app/stateKeys/tree';
 
 const Progress = React.createClass({
 
-  render() {
-    const { status, progress, position } = this.props;
+  renderQueuePosition() {
+    const { position } = this.props;
+    if (position === 0) {
+      return 'Awaiting progress';
+    }
+    if (!!position) {
+      return `Queue position: ${position}`;
+    }
+    return 'Awaiting queue position';
+  },
+
+  renderStatus() {
+    const { status, progress } = this.props;
 
     if (status === 'PENDING') {
       return (
-        <div className="wgsa-loading-overlay wgsa-tree-progress">
+        <div className="wgsa-tree-progress mdl-shadow--2dp">
           <p className="wgsa-blink">Tree pending</p>
-          {!!position && <p>Queue position: {position}</p>}
+          <p className="wgsa-muted">{this.renderQueuePosition()}</p>
           <Poll interval={10} fn={this.props.fetchPosition} />
         </div>
       );
@@ -26,21 +39,21 @@ const Progress = React.createClass({
 
     if (status === 'IN PROGRESS') {
       return (
-        <div className="wgsa-loading-overlay wgsa-tree-progress">
+        <div className="wgsa-tree-progress mdl-shadow--2dp">
           <CircularProgress
-            radius="80"
+            radius="40"
             strokeWidth="8"
             percentage={progress || 0}
           />
-          <p>Tree in progress</p>
+          <p className="wgsa-blink">Tree in progress</p>
         </div>
       );
     }
 
     if (status === 'ERROR') {
       return (
-        <div className="wgsa-loading-overlay wgsa-tree-progress">
-          <p className="danger">Error processing tree</p>
+        <div className="wgsa-tree-progress mdl-shadow--2dp">
+          <p className="danger">Error building tree</p>
           <p className="wgsa-blink">Awaiting retry</p>
         </div>
       );
@@ -48,8 +61,17 @@ const Progress = React.createClass({
 
     if (status === 'FAILED') {
       return (
-        <div className="wgsa-loading-overlay wgsa-tree-progress">
-          <p className="danger">Failed to process tree 😞</p>
+        <div className="wgsa-tree-progress mdl-shadow--2dp">
+          <p>😞</p>
+          <p className="danger">Failed to build tree</p>
+        </div>
+      );
+    }
+
+    if (status === 'READY') {
+      return (
+        <div className="wgsa-tree-progress mdl-shadow--2dp">
+          <button className="mdl-button mdl-button--raised mdl-button--colored" onClick={this.props.showTree}>View Tree</button>
         </div>
       );
     }
@@ -57,10 +79,18 @@ const Progress = React.createClass({
     return null;
   },
 
+  render() {
+    return (
+      <Fade>
+        {React.cloneElement(this.renderStatus(), { key: this.props.status })}
+      </Fade>
+    );
+  },
+
 });
 
 function mapStateToProps(state) {
-  const { status, progress, position } = getVisibleTree(state);
+  const { status, progress, position } = getTrees(state)[COLLECTION];
   return {
     status,
     progress,
@@ -72,6 +102,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch, { date, stateKey }) {
   return {
     fetchPosition: () => dispatch(fetchTreePosition(stateKey, date)),
+    showTree: () => dispatch(setTree(COLLECTION)),
   };
 }
 
