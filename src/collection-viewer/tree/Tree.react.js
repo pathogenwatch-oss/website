@@ -174,7 +174,7 @@ export default React.createClass({
       return;
     }
     const { top, left } = $(event.target).offset();
-    this.phylocanvas.contextMenu.open(left - 128, top + 32); // magic numbers to position the menu "bottom-right"
+    this.phylocanvas.contextMenu.open(left - 156, top + 32); // magic numbers to position the menu "bottom-right"
     this.phylocanvas.contextMenu.closed = false;
     this.phylocanvas.tooltip.close();
   },
