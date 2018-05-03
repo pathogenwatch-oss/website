@@ -1,6 +1,6 @@
 
 const { request } = require('services/bus');
-const { ServiceRequestError } = require('utils/errors');
+const { ServiceRequestError, ServiceRequestErrorJSON } = require('utils/errors');
 const { getCollectionTask } = require('manifest');
 
 const Collection = require('models/collection');
@@ -24,8 +24,9 @@ function validate({ genomeIds, organismId, user }) {
     throw new ServiceRequestError('No genome IDs provided');
   }
 
+  const size = genomeIds.length;
   const maxSize = getMaxCollectionSize(user);
-  if (maxSize && genomeIds.length > maxSize) {
+  if (maxSize && size > maxSize) {
     throw new ServiceRequestError('Too many genome IDs provided');
   }
 
@@ -35,8 +36,8 @@ function validate({ genomeIds, organismId, user }) {
     'analysis.core': { $exists: true },
   })
   .then(count => {
-    if (count !== genomeIds.length) {
-      throw new ServiceRequestError('Invalid collection request.');
+    if (count !== size) {
+      throw new ServiceRequestErrorJSON('Core results pending', { pending: size - count });
     }
     return genomeIds;
   });
