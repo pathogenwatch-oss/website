@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect';
+import removeMarkdown from 'remove-markdown';
 
 import { getTableState, getAMRTableName } from './table/selectors';
 
@@ -9,6 +10,11 @@ export const getViewer = ({ viewer }) => viewer;
 
 export const getCollection = state => getViewer(state).entities.collection;
 export const getGenomes = state => getViewer(state).entities.genomes;
+
+export const getCollectionTitle = createSelector(
+  getCollection,
+  ({ title }) => (title ? removeMarkdown(title) : null)
+);
 
 const getSearchIds = createSelector(
   state => getViewer(state).search.intersections,

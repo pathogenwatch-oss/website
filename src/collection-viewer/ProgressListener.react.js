@@ -1,15 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import Tree from './container';
-import Progress from './Progress.react';
-import { subscribe, unsubscribe } from '../../utils/Notification';
+import { subscribe, unsubscribe } from '../utils/Notification';
 
-import { getCollection } from '../selectors';
-import { areTreesComplete, getVisibleTree } from './selectors';
+import { getCollection } from './selectors';
+import { areTreesComplete } from './tree/selectors';
 
-import { handleTreeProgress } from './thunks';
-import { COLLECTION } from '../../app/stateKeys/tree';
+import { handleTreeProgress } from './tree/thunks';
 
 const StatusSwitcher = React.createClass({
 
@@ -38,11 +35,7 @@ const StatusSwitcher = React.createClass({
   },
 
   render() {
-    if (this.props.hasVisibleTree) {
-      return <Tree {...this.props} />;
-    }
-    const { createdAt } = this.props;
-    return <Progress date={createdAt} stateKey={COLLECTION} />;
+    return null;
   },
 
 });
@@ -50,10 +43,8 @@ const StatusSwitcher = React.createClass({
 function mapStateToProps(state) {
   const collection = getCollection(state);
   return {
-    createdAt: collection.createdAt,
     treesComplete: areTreesComplete(state),
     uuid: collection.uuid,
-    hasVisibleTree: getVisibleTree(state) !== null,
   };
 }
 

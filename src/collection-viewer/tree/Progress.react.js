@@ -6,7 +6,6 @@ import CircularProgress from '../../components/CircularProgress.react';
 import Fade from '../../components/fade';
 
 import { getTrees } from './selectors';
-import { getCollection } from '../selectors';
 
 import { fetchTreePosition, setTree } from './actions';
 import { COLLECTION } from '../../app/stateKeys/tree';
@@ -21,7 +20,7 @@ const Progress = React.createClass({
     if (!!position) {
       return `Queue position: ${position}`;
     }
-    return 'Awaiting queue position';
+    return 'Awaiting position';
   },
 
   renderStatus() {
@@ -71,7 +70,12 @@ const Progress = React.createClass({
     if (status === 'READY') {
       return (
         <div className="wgsa-tree-progress mdl-shadow--2dp">
-          <button className="mdl-button mdl-button--raised mdl-button--colored" onClick={this.props.showTree}>View Tree</button>
+          <button
+            className="mdl-button mdl-button--raised mdl-button--colored"
+            onClick={this.props.showTree}
+          >
+            View Tree
+          </button>
         </div>
       );
     }
@@ -82,7 +86,7 @@ const Progress = React.createClass({
   render() {
     return (
       <Fade>
-        {React.cloneElement(this.renderStatus(), { key: this.props.status })}
+        { React.cloneElement(this.renderStatus(), { key: this.props.status }) }
       </Fade>
     );
   },
@@ -95,13 +99,12 @@ function mapStateToProps(state) {
     status,
     progress,
     position,
-    createdAt: getCollection(state).createdAt,
   };
 }
 
-function mapDispatchToProps(dispatch, { date, stateKey }) {
+function mapDispatchToProps(dispatch, { date }) {
   return {
-    fetchPosition: () => dispatch(fetchTreePosition(stateKey, date)),
+    fetchPosition: () => dispatch(fetchTreePosition(COLLECTION, date)),
     showTree: () => dispatch(setTree(COLLECTION)),
   };
 }

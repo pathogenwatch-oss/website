@@ -6,11 +6,13 @@ import { AutoSizer } from 'react-virtualized';
 import { connect } from 'react-redux';
 
 import Tree from '../tree';
+import TreeProgress from '../tree/Progress.react';
 import Map from '../map';
 import Summary from '../summary';
 import Table from '../table';
 
 import { getVisibleTree } from '../tree/selectors';
+import { getCollection } from '../selectors';
 
 const Layout = React.createClass({
 
@@ -45,7 +47,7 @@ const Layout = React.createClass({
     return (
       <Map>
         <Summary />
-        <Tree />
+        <TreeProgress date={this.props.createdAt} />
       </Map>
     );
   },
@@ -71,6 +73,7 @@ const Layout = React.createClass({
 function mapStateToProps(state) {
   return {
     showTree: getVisibleTree(state) !== null,
+    createdAt: getCollection(state).createdAt,
   };
 }
 
