@@ -19,7 +19,7 @@ class ServiceRequestErrorJSON extends Error {
     super(msg);
     this.wgsaType = errorTypes.serviceRequestErrorJSON;
     this.data = data;
-    this.format = this.format.bind(this);
+    this.format = this.format.bind(this); // because of seneca serialisation, I think
   }
   static is(error) {
     return error.wgsaType === errorTypes.serviceRequestErrorJSON;
