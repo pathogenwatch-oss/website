@@ -11,10 +11,24 @@ router.put('/collection', (req, res, next) => {
   const { genomeIds, title, description, pmid, organismId } = req.body;
   const message = { user, sessionID, genomeIds, title, description, pmid, organismId };
 
-  return services.
-    request('collection', 'create', message).
-    then(result => res.status(201).json(result)).
-    catch(next);
+  return services
+    .request('collection', 'create', message)
+    .then(result => res.status(201).json(result))
+    .catch(next);
+});
+
+router.post('/collection/verify', async (req, res, next) => {
+  LOGGER.info('Received request to verify collection input');
+  const { user } = req;
+  const { genomeIds, organismId } = req.body;
+  const message = { user, genomeIds, organismId };
+
+  try {
+    const result = await services.request('collection', 'verify', message);
+    res.json(result);
+  } catch (e) {
+    next(e);
+  }
 });
 
 router.get('/collection/summary', (req, res, next) => {

@@ -1,45 +1,14 @@
 
 const { request } = require('services/bus');
-const { ServiceRequestError } = require('utils/errors');
 const { getCollectionTask } = require('manifest');
 
 const Collection = require('models/collection');
 const Genome = require('models/genome');
 const Organism = require('models/organism');
 
-const { maxCollectionSize = { anonymous: 0, loggedIn: 0 } } = require('configuration');
-
-function getMaxCollectionSize(user) {
-  if (user) {
-    return user.admin ? null : maxCollectionSize.loggedIn;
-  }
-  return maxCollectionSize.anonymous;
-}
-
-function validate({ genomeIds, organismId, user }) {
-  if (!organismId) {
-    throw new ServiceRequestError('No organism ID provided');
-  }
-  if (!genomeIds || !genomeIds.length) {
-    throw new ServiceRequestError('No genome IDs provided');
-  }
-
-  const maxSize = getMaxCollectionSize(user);
-  if (maxSize && genomeIds.length > maxSize) {
-    throw new ServiceRequestError('Too many genome IDs provided');
-  }
-
-  return Genome.count({
-    _id: { $in: genomeIds },
-    'analysis.speciator.organismId': organismId,
-    'analysis.core': { $exists: true },
-  })
-  .then(count => {
-    if (count !== genomeIds.length) {
-      throw new ServiceRequestError('Invalid collection request.');
-    }
-    return genomeIds;
-  });
+async function validate({ genomeIds, organismId, user }) {
+  await request('collection', 'verify', { genomeIds, organismId, user });
+  return genomeIds;
 }
 
 function getGenomes(genomeIds) {
