@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { Header } from '../header';
 import CollectionRoute from './route';
 import ViewerHeaderContent from './component/Header.react';
-import ProcessingHeaderContent from './progress/Header.react';
 import DefaultHeaderContent from '../header/DefaultContent.react';
 
 import { getCollection } from './selectors';
@@ -25,8 +24,6 @@ function getHeaderContent(status) {
   switch (status) {
     case statuses.READY:
       return <ViewerHeaderContent />;
-    case statuses.PROCESSING:
-      return <ProcessingHeaderContent />;
     default:
       return <DefaultHeaderContent />;
   }

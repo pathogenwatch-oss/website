@@ -1,3 +1,3 @@
 import './styles.css';
 
-export default from './Status.react';
+export default from './container.js';

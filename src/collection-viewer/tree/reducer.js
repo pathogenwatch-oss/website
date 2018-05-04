@@ -60,7 +60,7 @@ function getInitialState() {
 function entities(state = {}, { type, payload }) {
   switch (type) {
     case FETCH_COLLECTION.SUCCESS: {
-      const { genomes, organism, subtrees, tree } = payload.result;
+      const { organism, subtrees, tree } = payload.result;
 
       const initialState = getInitialState();
 
@@ -69,6 +69,7 @@ function entities(state = {}, { type, payload }) {
         ...subtrees.reduce((memo, subtree) => {
           memo[subtree.name] = {
             status: 'PENDING',
+            progress: 0,
             lastStatus: 0,
             ...subtree,
             ...initialState,
@@ -81,10 +82,10 @@ function entities(state = {}, { type, payload }) {
         nextState[COLLECTION] = {
           newick: null,
           status: 'PENDING',
+          progress: 0,
           lastStatus: 0,
           ...tree,
           name: COLLECTION,
-          leafIds: genomes.map(_ => _.uuid),
           ...initialState,
         };
       }
@@ -151,7 +152,7 @@ function entities(state = {}, { type, payload }) {
         } else if (payload.progress && payload.progress > tree.progress) {
           return {
             ...state,
-            [COLLECTION]: {
+            [payload.name]: {
               ...tree,
               progress: Math.floor(payload.progress),
             },
@@ -250,11 +251,13 @@ function entities(state = {}, { type, payload }) {
   }
 }
 
-function visible(state = COLLECTION, { type, payload }) {
+function visible(state = null, { type, payload }) {
   switch (type) {
     case FETCH_COLLECTION.SUCCESS: {
       const { tree } = payload.result;
-      if (tree) return COLLECTION;
+      if (tree) {
+        return tree.status === 'READY' ? COLLECTION : state;
+      }
       return POPULATION;
     }
     case ACTIONS.SET_TREE:

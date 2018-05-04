@@ -1,24 +1,25 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import removeMarkdown from 'remove-markdown';
 
 import Layout from '../layout/Layout.react';
 import DownloadsMenu from '../downloads';
 import DocumentTitle from '../../branding/DocumentTitle.react';
+import ProgressListener from '../ProgressListener.react';
 
-import { getCollection } from '../selectors';
+import { getCollectionTitle } from '../selectors';
 
 const CollectionViewer = ({ title }) => (
   <React.Fragment>
-    <DocumentTitle title={title ? removeMarkdown(title) : 'Explore Collection'} />
+    <DocumentTitle title={title} />
     <Layout />
     <DownloadsMenu />
+    <ProgressListener />
   </React.Fragment>
 );
 
 function mapStateToProps(state) {
   return {
-    title: getCollection(state).title,
+    title: getCollectionTitle(state) || 'Explore Collection',
   };
 }
 

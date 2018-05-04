@@ -10,7 +10,7 @@
 
 .wgsa-pane-controls {
   position: absolute;
-  bottom: 16px;
+  bottom: 24px;
   right: 16px;
   display: flex;
   flex-direction: column;
@@ -21,6 +21,11 @@
   transition-property: opacity;
   visibility: hidden;
   opacity: 0;
+}
+
+.wgsa-pane-controls--top {
+  bottom: auto;
+  top: 56px;
 }
 
 .wgsa-pane-controls--visible {

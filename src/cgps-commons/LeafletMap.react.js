@@ -50,6 +50,10 @@ export default React.createClass({
     };
   },
 
+  componentDidMount() {
+    this.refitMapBounds();
+  },
+
   componentDidUpdate(previous) {
     if (this.props.refitOnMarkerChange) {
       if (previous.markerIds !== this.props.markerIds) {
@@ -206,7 +210,7 @@ export default React.createClass({
             onPathChange={this.props.onLassoPathChange}
           />
           <ZoomControl
-            position="bottomleft"
+            position="bottomright"
           />
         </Map>
         {this.props.children}
