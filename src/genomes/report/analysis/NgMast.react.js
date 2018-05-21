@@ -1,23 +1,21 @@
 import React from 'react';
 
 export default ({ result }) => (
-  <div>
+  <React.Fragment>
     <h2>NG-MAST</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>NG-MAST</th>
-          <th>POR</th>
-          <th>TBPB</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>{result.ngmast}</td>
-          <td>{result.por}</td>
-          <td>{result.tbpb}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+    <dl className="wgsa-genome-report-stats-compact">
+      <div>
+        <dt>NG-MAST</dt>
+        <dd>{result.ngmast}</dd>
+      </div>
+      <div>
+        <dt>POR</dt>
+        <dd>{result.por}</dd>
+      </div>
+      <div>
+        <dt>TBPB</dt>
+        <dd>{result.tbpb}</dd>
+      </div>
+    </dl>
+  </React.Fragment>
 );

@@ -3,7 +3,7 @@ import React from 'react';
 import { Metadata } from '../components';
 
 export default ({ result }) => (
-  <div>
+  <React.Fragment>
     <h2>Organism Prediction</h2>
     <dl>
       <Metadata label="Taxonomy ID">
@@ -26,5 +26,5 @@ export default ({ result }) => (
       <Metadata label="p-value">{result.pValue}</Metadata>
       <Metadata label="Matching Hashes">{result.matchingHashes}</Metadata>
     </dl>
-  </div>
+  </React.Fragment>
 );

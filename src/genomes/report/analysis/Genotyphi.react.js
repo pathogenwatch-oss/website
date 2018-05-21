@@ -1,7 +1,7 @@
 import React from 'react';
 
 export default ({ result }) => (
-  <div>
+  <React.Fragment>
     <h2>Genotyphi</h2>
     <dl>
       <div>
@@ -13,5 +13,5 @@ export default ({ result }) => (
         <dd>{result.foundLoci}</dd>
       </div>
     </dl>
-  </div>
+  </React.Fragment>
 );

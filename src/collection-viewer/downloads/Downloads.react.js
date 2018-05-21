@@ -27,7 +27,7 @@ const DownloadsMenu = ({ menuOpen, counts = {}, closeMenu }) => (
   </Overlay>
 );
 
-DownloadsMenu.PropTypes = {
+DownloadsMenu.propTypes = {
   menuOpen: React.PropTypes.bool,
   counts: React.PropTypes.object,
   closeMenu: React.PropTypes.func,

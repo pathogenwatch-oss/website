@@ -2,13 +2,9 @@ import React from 'react';
 import { Name } from '../../../branding';
 
 export default ({ result: { fp, summary } }) => (
-  <div>
+  <React.Fragment>
     <h2>Core</h2>
     <dl>
-      <div>
-        <dt><Name /> Reference</dt>
-        <dd>{fp.reference}</dd>
-      </div>
       <div>
         <dt>Core Matches</dt>
         <dd>{summary.kernelSize}</dd>
@@ -29,6 +25,10 @@ export default ({ result: { fp, summary } }) => (
         <dt>Families Matched</dt>
         <dd>{summary.familiesMatched}</dd>
       </div>
+      <div>
+        <dt><Name /> Reference</dt>
+        <dd>{fp.reference}</dd>
+      </div>
     </dl>
-  </div>
+  </React.Fragment>
 );

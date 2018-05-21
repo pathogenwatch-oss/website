@@ -29,9 +29,9 @@ export default React.createClass({
           </p>
         );
       case statuses.ERRORED:
-        return <p>Something went wrong. 😞</p>;
+        return <p className="small">Something went wrong. 😞</p>;
       default:
-        return <p>(Page will refresh once saved)</p>;
+        return <p className="small">Page will refresh once saved.</p>;
     }
   },
 

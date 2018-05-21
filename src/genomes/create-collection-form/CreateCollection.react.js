@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import CreateCollectionForm from './Form.react';
 import { FormattedName, taxIdMap } from '../../organisms';
+import Verify from './Verify.react';
 
 import { getSelectedGenomeSummary } from './selectors';
 import { getDeployedOrganismIds } from '../../summary/selectors';
@@ -66,13 +67,18 @@ const CreateCollection = ({ selectedGenomeSummary, deployedOrganisms, onClick })
 
   if (organismIds.length === 1) {
     const organismId = organismIds[0];
-    const count = selectedGenomeSummary[organismId].length;
+    const genomes = selectedGenomeSummary[organismId];
+    const count = genomes.length;
     const { uiOptions = {} } = taxIdMap.get(organismId);
 
     if (uiOptions.noPopulation && count < 3) {
       return <NotEnoughGenomes organismId={organismId} deficit={3 - count} />;
     }
-    return <CreateCollectionForm />;
+    return (
+      <Verify organismId={organismId} genomes={genomes}>
+        <CreateCollectionForm />
+      </Verify>
+    );
   }
 
   return <SelectOrganism summary={selectedGenomeSummary} onClick={onClick} />;

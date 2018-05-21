@@ -3,18 +3,20 @@ import { connect } from 'react-redux';
 
 import { names } from './constants';
 
-function updateDocumentTitle(appName, newTitle) {
-  document.title = `${appName} | ${newTitle}`;
-}
-
 class DocumentTitle extends React.Component {
 
   componentWillMount() {
-    updateDocumentTitle(names[this.props.brandingId], this.props.title);
+    this.updateTitle();
   }
 
   componentDidUpdate() {
-    updateDocumentTitle(names[this.props.brandingId], this.props.title);
+    this.updateTitle();
+  }
+
+  updateTitle() {
+    const title = this.props.children || this.props.title;
+    const appName = names[this.props.brandingId];
+    document.title = `${appName} | ${title}`;
   }
 
   render() {

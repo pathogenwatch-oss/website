@@ -1,3 +1,7 @@
+.wgsa-collection-access {
+  position: relative;
+}
+
 .wgsa-collection-access h4 {
   font-size: 14px;
   margin-top: 16px;
@@ -11,16 +15,18 @@
   margin-right: 8px;
 }
 
-.wgsa-collection-access li {
-  display: flex;
+.wgsa-collection-access button {
   align-items: center;
-  padding: 8px;
-  line-height: 1.5;
   border: 1px solid transparent;
+  color: inherit;
+  display: flex;
+  line-height: 1.5;
+  padding: 8px;
+  transition: .28s cubic-bezier(.4,0,.2,1);
+  transition-property: background, border-color;
+  width: 100%;
 
   &.active {
-    border-color: rgba(0, 0, 0, 0.07);
-
     & strong,
     & .material-icons {
       color: #3c7383;
@@ -30,9 +36,23 @@
   &:hover,
   &.active{
     background: rgba(0, 0, 0, 0.07);
+    border-color: rgba(0, 0, 0, 0.07);
   }
 
   &:not(.active) {
     cursor: pointer;
   }
+}
+
+.wgsa-collection-access-status {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.wgsa-collection-access-status p {
+  font-size: 13px;
+  margin: 0;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.54);
 }

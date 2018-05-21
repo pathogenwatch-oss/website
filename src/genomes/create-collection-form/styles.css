@@ -49,3 +49,11 @@
 .wgsa-create-collection-message strong {
   white-space: nowrap;
 }
+
+.wgsa-collection-verify {
+  padding: 16px;
+}
+
+.wgsa-collection-verify p {
+  margin-bottom: 8px;
+}

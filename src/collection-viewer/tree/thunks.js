@@ -48,7 +48,9 @@ export function displayTree(name) {
 export function treeLoaded(phylocanvas) {
   return (dispatch, getState) => {
     const state = getState();
-    const stateKey = getVisibleTree(state).name;
+    const tree = getVisibleTree(state);
+    if (!tree) return;
+    const stateKey = tree.name;
 
     if (stateKey === POPULATION) {
       phylocanvas.root.cascadeFlag('interactive', false);
@@ -64,7 +66,8 @@ export function subtreeLoaded(phylocanvas) {
     const state = getState();
     const stateKey = getVisibleTree(state).name;
 
-    dispatch(actions.treeLoaded(stateKey, phylocanvas));
+    const leafIds = getLeafIds(state, { stateKey });
+    dispatch(actions.treeLoaded(stateKey, phylocanvas, leafIds));
     dispatch(actions.addHistorySnapshot(stateKey, phylocanvas));
   };
 }
