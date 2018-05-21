@@ -20,7 +20,7 @@ module.exports = ({ user, token, name }) => {
       if (status !== 'READY') return { status };
       const leafIds = getLeafIds(newick);
       return Genome.getForCollection(
-        { _id: { $in: leafIds, $nin: genomes }, public: true, 'analysis.core.fp.reference': name }
+        { _id: { $in: leafIds, $nin: genomes }, population: true, 'analysis.core.fp.reference': name }
       )
       .then(docs => ({ status, newick, genomes: docs }));
     });
