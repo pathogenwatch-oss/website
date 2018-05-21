@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import Detail from './Report.react';
 
-import { closeReport } from './actions';
+import { closeReport, updateClusteringProgress } from './actions';
 
 function mapStateToProps({ genomes }) {
   return genomes.report;
@@ -12,6 +12,7 @@ function mapStateToProps({ genomes }) {
 
 function mapDispatchToProps(dispatch) {
   return {
+    updateClusteringProgress: (payload) => dispatch(updateClusteringProgress(payload)),
     close: () => dispatch(closeReport(null)),
   };
 }

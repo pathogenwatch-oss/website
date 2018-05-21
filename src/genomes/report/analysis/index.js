@@ -13,7 +13,7 @@ import renderGenericResults from './Generic.react';
 import Clustering from './Clustering.react';
 
 export default (genome) => {
-  const { analysis = {}, clustering } = genome;
+  const { analysis = {}, clusteringStatus, clusters, id } = genome;
   const { metrics, core, mlst, paarsnp, genotyphi, ngmast, speciator, cgmlst, ...rest } = analysis;
 
   const tabs = [];
@@ -33,7 +33,7 @@ export default (genome) => {
   if (cgmlst) {
     tabs.push({
       key: 'Clustering',
-      component: <Clustering scheme={cgmlst.scheme} clustering={clustering} />,
+      component: <Clustering genomeId={id} scheme={cgmlst.scheme} />,
     });
   }
   if (genotyphi) {

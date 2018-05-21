@@ -1,11 +1,12 @@
-import { SHOW_GENOME_REPORT, CLOSE_GENOME_REPORT, REQUEST_CLUSTERING } from './actions';
+import { SHOW_GENOME_REPORT, CLOSE_GENOME_REPORT, REQUEST_CLUSTERING, UPDATE_CLUSTERING_PROGRESS, FETCH_CLUSTERS } from './actions';
 import { FETCH_GENOME_LIST } from '../actions';
 
 const initialState = {
   name: null,
   genome: null,
   status: null,
-  clustering: null,
+  clusteringStatus: null,
+  clusters: null,
 };
 
 export default function (state = initialState, { type, payload }) {
@@ -33,18 +34,46 @@ export default function (state = initialState, { type, payload }) {
     case REQUEST_CLUSTERING.ATTEMPT:
       return {
         ...state,
-        clustering: 'LOADING',
+        clusteringStatus: 'LOADING',
       };
-    case REQUEST_CLUSTERING.SUCCESS:
+    case REQUEST_CLUSTERING.SUCCESS: {
+      const { statusCode } = payload.result;
+      if (statusCode === 304) {
+        return {
+          ...state,
+          clusteringStatus: 'READY',
+        };
+      }
       return {
         ...state,
-        clustering: 'PENDING',
+        clusteringStatus: 'PENDING',
       };
+    }
     case REQUEST_CLUSTERING.FAILURE:
       return {
         ...state,
-        clustering: 'ERROR',
+        clusteringStatus: 'ERROR',
       };
+    case UPDATE_CLUSTERING_PROGRESS: {
+      const { status } = payload;
+      return {
+        ...state,
+        clusteringStatus: status,
+      };
+    }
+    case FETCH_CLUSTERS.FAILURE:
+      return {
+        ...state,
+        clusteringStatus: 'ERROR',
+      };
+    case FETCH_CLUSTERS.SUCCESS: {
+      const { result } = payload;
+      return {
+        ...state,
+        clusteringStatus: 'COMPLETE',
+        clusters: result,
+      };
+    }
     default:
       return state;
   }
