@@ -15,7 +15,13 @@ router.post('/clustering', async (req, res, next) => {
     const response = await services.request('clustering', 'submit', { user, sessionID, scheme, clientId });
     res.json(response);
   } catch (e) {
-    next(e);
+    const { msg } = e;
+    if (msg.indexOf('Already queued this job') !== -1) {
+      res.status(304);
+      res.json({ ok: 1 });
+    } else {
+      next(e);
+    }
   }
 });
 

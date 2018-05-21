@@ -53,10 +53,7 @@ module.exports = async ({ user, sessionID, id }) => {
     ).lean(),
   ];
 
-  if (genome.analysis.cgmlst) {
-    const { scheme } = genome.analysis.cgmlst;
-    promises.push(request('clustering', 'fetch', { user, sessionID, scheme }));
-  }
+  promises.push(request('genome', 'fetch-clusters', { user, sessionID, id }));
 
   const [ tasks, clustering = null ] = await Promise.all(promises);
 
