@@ -14,13 +14,17 @@ async function run() {
       pmid: migratee.pmid,
       organismId: migratee.organismId,
     };
-    const token = await request('collection', 'create', message);
+    const { token } = await request('collection', 'create', message);
+
+    const slugSections = token.split('-').slice(1);
+    slugSections.unshift(migratee.uuid);
+
     await Collection.update(
       { token }, {
+        token: slugSections.join('-'),
         access: migratee.public ? 'public' : 'shared',
         showcase: migratee.showcase,
         alias: migratee.uuid,
-        published: migratee.published,
       }
     );
   }
