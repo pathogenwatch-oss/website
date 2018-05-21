@@ -12,6 +12,10 @@ import Overview from './Overview.react';
 import Metadata from './Metadata.react';
 import getAnalysisTabs from './analysis';
 
+import { subscribe, unsubscribe } from '../../utils/Notification';
+
+import config from '../../app/config';
+
 const Content = React.createClass({
 
   getInitialState() {
@@ -78,33 +82,44 @@ const Content = React.createClass({
 
 });
 
-const Report = ({ name, genome, loading, close }) => {
-  const isOpen = !!loading || !!genome;
-  return (
-    <Fade>
-      { isOpen &&
-        <Modal
-          title={
-            <span className="wgsa-genome-detail-title">
-              Genome Report: {genome ? genome.name : name} { genome && <DownloadLink key="download" id={genome.id} name={genome.name} /> }
-            </span>
-          }
-          modal
-          isOpen={isOpen}
-          onClose={close}
-          animationKey="genome-detail"
-          containerClassName="wgsa-genome-detail"
-          actions={genome ? <RemoveButton key="remove" genome={genome} onRemove={close} /> : null}
-        >
-          { loading ?
-            <div className="wgsa-genome-detail-loader">
-              <Spinner />
-              <p>Loading Report</p>
-            </div> :
-            <Content genome={genome} /> }
-        </Modal> }
-    </Fade>
-  );
-};
+const Report = React.createClass({
+  componentWillMount() {
+    subscribe(config.clientId, 'clustering', this.props.updateClusteringProgress);
+  },
+
+  componentWillUnmount() {
+    unsubscribe(config.clientId);
+  },
+
+  render() {
+    const { name, genome, loading, close } = this.props;
+    const isOpen = !!loading || !!genome;
+    return (
+      <Fade>
+        { isOpen &&
+          <Modal
+            title={
+              <span className="wgsa-genome-detail-title">
+                Genome Report: {genome ? genome.name : name} { genome && <DownloadLink key="download" id={genome.id} name={genome.name} /> }
+              </span>
+            }
+            modal
+            isOpen={isOpen}
+            onClose={close}
+            animationKey="genome-detail"
+            containerClassName="wgsa-genome-detail"
+            actions={genome ? <RemoveButton key="remove" genome={genome} onRemove={close} /> : null}
+          >
+            { loading ?
+              <div className="wgsa-genome-detail-loader">
+                <Spinner />
+                <p>Loading Report</p>
+              </div> :
+              <Content genome={genome} /> }
+          </Modal> }
+      </Fade>
+    );
+  },
+});
 
 export default Report;
