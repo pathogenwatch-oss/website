@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 import Spinner from '../../../components/Spinner.react';
 import Notify from '../../../components/Notify.react';
@@ -32,8 +33,13 @@ const Clustering = React.createClass({
                   <p>Running</p><Spinner />
                 </Notify>
               );
-            case 'COMPLETE':
-              return <p>Found loads of clusters: { JSON.stringify(Object.keys(this.props.clusters)) }</p>;
+            case 'COMPLETE': {
+              const { clusters, genomeId } = this.props;
+              const thresholds = Object.keys(clusters).map(t => parseInt(t));
+              thresholds.sort((a, b) => a - b);
+              const bullets = thresholds.map(t => <li key={t}><Link to={`/clusters/${genomeId}?threshold=${t}`}>{ t }: { clusters[t].length }</Link></li>);
+              return <React.Fragment><p>Found clusters:</p><ul>{ bullets }</ul></React.Fragment>;
+            }
             default:
               return (
                 <React.Fragment>
