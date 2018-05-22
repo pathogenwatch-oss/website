@@ -137,7 +137,7 @@ const DownloadsMenu = (props) => {
   );
 };
 
-DownloadsMenu.PropTypes = {
+DownloadsMenu.propTypes = {
   collection: React.PropTypes.object,
   genomes: React.PropTypes.object,
   genomeIds: React.PropTypes.array,

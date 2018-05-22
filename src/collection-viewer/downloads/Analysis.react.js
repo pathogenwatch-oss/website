@@ -38,7 +38,7 @@ const DownloadsMenu = ({ collection, genomeIds, prefix }) => (
   </li>
 );
 
-DownloadsMenu.PropTypes = {
+DownloadsMenu.propTypes = {
   collection: React.PropTypes.object,
   genomeIds: React.PropTypes.array,
   prefix: React.PropTypes.string,
