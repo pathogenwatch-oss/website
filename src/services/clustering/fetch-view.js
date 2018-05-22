@@ -1,0 +1,40 @@
+const Genome = require('models/genome');
+
+const { request } = require('services');
+
+module.exports = async ({ user, sessionID, genomeId, threshold }) => {
+  const clusters = await request('genome', 'fetch-clusters', { user, sessionID, id: genomeId });
+  const thresholds = Object.keys(clusters).map(t => parseInt(t));
+  const clusterSizes = {};
+  for (let i = 0; i < thresholds.length; i++) {
+    const t = thresholds[i];
+    clusterSizes[t] = clusters[t].length;
+  }
+
+  const genomeIds = clusters[threshold] || [];
+  const genomes = await Genome.getForCollection({ _id: { $in: genomeIds } });
+  const now = new Date().toISOString();
+  let genome = {};
+  for (let i = 0; i < genomes.length; i++) {
+    const { _id } = genomes[i];
+    if (_id && _id.toString() === genomeId) {
+      genome = genomes[i];
+      break;
+    }
+  }
+
+  const name = genome.name || 'Unknown';
+  const title = `Clusters for ${name} at threshold ${threshold}`;
+  return {
+    clusterSizes,
+    threshold,
+    createdAt: now,
+    description: title,
+    genomes,
+    size: genomes.length,
+    tree: null,
+    subtrees: [],
+    title,
+    status: 'READY',
+  };
+};
