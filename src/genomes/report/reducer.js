@@ -1,5 +1,6 @@
 import { SHOW_GENOME_REPORT, CLOSE_GENOME_REPORT, REQUEST_CLUSTERING, UPDATE_CLUSTERING_PROGRESS, FETCH_CLUSTERS } from './actions';
 import { FETCH_GENOME_LIST } from '../actions';
+import { LOCATION_CHANGE } from '../../location';
 
 const initialState = {
   name: null,
@@ -74,6 +75,8 @@ export default function (state = initialState, { type, payload }) {
         clusters: result,
       };
     }
+    case LOCATION_CHANGE:
+      return initialState;
     default:
       return state;
   }

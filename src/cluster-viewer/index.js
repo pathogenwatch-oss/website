@@ -4,7 +4,7 @@ import { Route } from 'react-router-dom';
 import Header from '../collection-viewer/Header.react';
 import Cluster from './route';
 
-const path = '/genome/:id/cluster';
+const path = '/clustering/:id';
 
 export const HeaderRoute = (
   <Route path={path} component={Header} />

@@ -7,6 +7,7 @@ import AccountRoute from '../account';
 import CollectionsRoute from '../collections';
 import GenomesRoute from '../genomes';
 import CollectionViewerRoute from '../collection-viewer';
+import ClusterViewerRoute from '../cluster-viewer';
 import DocumentationViewerRoute from '../documentation-viewer';
 import OfflineRoute from '../offline';
 import UploadRoute from '../upload';
@@ -39,6 +40,7 @@ export default () => (
     {CollectionsRoute}
     {GenomesRoute}
     {CollectionViewerRoute}
+    {ClusterViewerRoute}
     {DocumentationViewerRoute}
     {OfflineRoute}
     {UploadRoute}

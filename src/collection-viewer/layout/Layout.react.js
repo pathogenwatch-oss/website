@@ -11,7 +11,7 @@ import Map from '../map';
 import Summary from '../summary';
 import Table from '../table';
 
-import { getVisibleTree } from '../tree/selectors';
+import { getVisibleTree, hasTrees } from '../tree/selectors';
 import { getCollection } from '../selectors';
 
 const Layout = React.createClass({
@@ -24,7 +24,7 @@ const Layout = React.createClass({
   },
 
   renderNorthSection() {
-    if (this.props.isCluster) {
+    if (this.props.treeNeverComing) {
       return (
         <Map>
           <Summary />
@@ -81,9 +81,9 @@ const Layout = React.createClass({
 
 function mapStateToProps(state) {
   return {
+    treeNeverComing: !hasTrees(state),
     showTree: getVisibleTree(state) !== null,
     createdAt: getCollection(state).createdAt,
-    isCluster: getCollection(state).__isCluster,
   };
 }
 
