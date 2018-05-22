@@ -2,8 +2,10 @@ const Clustering = require('../../models/clustering');
 
 module.exports = async function ({ user, sessionID, genomeId, scheme }) {
   const clusters = await Clustering.findOne({ $or: [ { user }, { sessionID } ], scheme });
-  const outputClusters = {};
+  if (!clusters) return {};
   const { results } = clusters;
+
+  const outputClusters = {};
   let clusterId = null;
   for (let i = 0; i < results.length; i++) {
     const { threshold, genomes } = results[i];
