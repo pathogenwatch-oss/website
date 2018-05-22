@@ -1,4 +1,5 @@
 const Genome = require('models/genome');
+const Organism = require('models/organism');
 
 const { request } = require('services');
 
@@ -24,17 +25,24 @@ module.exports = async ({ user, sessionID, genomeId, threshold }) => {
   }
 
   const name = genome.name || 'Unknown';
-  const title = `Clusters for ${name} at threshold ${threshold}`;
+  const { speciator = {} } = genome.analysis;
+  const { organismId = null } = speciator;
+
+  const organism = await Organism.getLatest(organismId, { resistance: 1 });
+
+  const description = `Clusters for ${name} at threshold ${threshold}`;
   return {
     clusterSizes,
     threshold,
     createdAt: now,
-    description: title,
+    description,
     genomes,
     size: genomes.length,
     tree: null,
     subtrees: [],
-    title,
+    title: 'Clusters',
     status: 'READY',
+    organismId,
+    organism,
   };
 };
