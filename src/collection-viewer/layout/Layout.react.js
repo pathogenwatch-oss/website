@@ -24,6 +24,15 @@ const Layout = React.createClass({
   },
 
   renderNorthSection() {
+    if (this.props.isCluster) {
+      return (
+        <Map>
+          <Summary />
+          {/* <ThresholdChart /> */}
+        </Map>
+      );
+    }
+
     if (this.props.showTree) {
       return (
         <SplitPane
@@ -74,6 +83,7 @@ function mapStateToProps(state) {
   return {
     showTree: getVisibleTree(state) !== null,
     createdAt: getCollection(state).createdAt,
+    isCluster: getCollection(state).__isCluster,
   };
 }
 

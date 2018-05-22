@@ -47,6 +47,7 @@ export default function (state = initialState, { type, payload }) {
         title: result.title,
         token: result.token,
         uuid: result.uuid,
+        __isCluster: result.__isCluster,
       };
     }
     case COLLECTION_CHANGE_ACCESS_LEVEL.ATTEMPT:
