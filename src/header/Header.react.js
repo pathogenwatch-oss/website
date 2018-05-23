@@ -4,11 +4,10 @@ import classnames from 'classnames';
 import { Link } from 'react-router-dom';
 
 import UserDrawer from './UserDrawer.react';
-import AccountLink from './AccountLink.react';
-// import MenuButton from './MenuButton.react';
+// import AccountLink from './AccountLink.react';
+import MenuButton from './MenuButton.react';
 import DefaultContent from './DefaultContent.react';
 import { Logo } from '../branding';
-// import BrandingSwitcher from '../branding/Switcher.react';
 
 import { getHeader } from './selectors';
 
@@ -37,10 +36,7 @@ const Header = ({
   >
     <UserDrawer visible={userDrawerVisible} />
     <div className="mdl-layout__header-row">
-      { offline ? <OfflineLink /> : <AccountLink />}
-      {/* <BrandingSwitcher className="mdl-layout-title">
-        <Logo className="wgsa-header-logo" />
-      </BrandingSwitcher> */}
+      { offline ? <OfflineLink /> : <MenuButton />}
       <Link to="/" className="mdl-layout-title">
         <Logo className="wgsa-header-logo" />
       </Link>

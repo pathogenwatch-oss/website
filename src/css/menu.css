@@ -26,10 +26,10 @@
 }
 
 .mdl-layout__drawer .mdl-layout-title > img {
-  width: 160px;
   position: absolute;
-  top: -50%;
-  right: -48px;
+  right: calc(-16px * 2.5);
+  top: calc(-16px * 3);
+  width: calc(16px * 9);
 }
 
 .mdl-layout__drawer .mdl-navigation {

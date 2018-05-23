@@ -1,4 +1,4 @@
-import './styles.css';
+// import './styles.css';
 
 export Name from './Name.react';
 export Logo from './Logo.react';

@@ -18,9 +18,9 @@
 }
 
 .wgsa-loading-logo {
+  margin-left: 0;
   width: 240px;
-  margin-left: -48px; /* width / 5 */
-  padding-bottom: 16px;
+  padding-bottom: 24px;
 }
 
 .wgsa-loading-container h1 {
