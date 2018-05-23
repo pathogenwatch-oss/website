@@ -1,10 +1,6 @@
-const Analysis = require('models/analysis');
+// const Analysis = require('models/analysis');
 const { ServiceRequestError } = require('utils/errors');
 const { request } = require('services');
-
-const taskNames = [
-  'speciator', 'metrics', 'mlst', 'paarsnp', 'genotyphi', 'ngmast', 'core',
-];
 
 const projection = {
   _user: 1,
@@ -38,21 +34,29 @@ const projection = {
   'analysis.paarsnp.antibiotics': 1,
   'analysis.paarsnp.paar': 1,
   'analysis.paarsnp.snp': 1,
+  'analysis.cgmlst.scheme': 1,
 };
 
-module.exports = ({ user, sessionID, id }) => {
+// const taskNames = [
+//   'speciator', 'metrics', 'mlst', 'paarsnp', 'genotyphi', 'ngmast', 'core',
+// ];
+
+module.exports = async ({ user, sessionID, id }) => {
   if (!id) throw new ServiceRequestError('Missing Id');
 
-  return request('genome', 'authorise', { user, sessionID, id, projection });
+  const genome = await request('genome', 'authorise', { user, sessionID, id, projection });
 
-  // TODO: Removed until task version switching is implemented on front-end
+  // TODO: Add task versions back when version-switching added to front-end
 
-    // .then(genome =>
-    //   Analysis.find(
-    //     { fileId: genome.fileId, task: { $in: taskNames } },
-    //     { _id: 0, task: 1, version: 1 }
-    //   )
-    //   .lean()
-    //   .then(tasks => Object.assign(genome, { tasks }))
-    // );
+  const promises = [
+    // Analysis.find(
+    //   { fileId: genome.fileId, task: { $in: taskNames } },
+    //   { _id: 0, task: 1, version: 1 }
+    // ).lean(),
+    request('genome', 'fetch-clusters', { user, sessionID, id }),
+  ];
+
+  const [ /* tasks,*/ clustering = null ] = await Promise.all(promises);
+
+  return Object.assign(genome, { /* tasks,*/ clustering });
 };

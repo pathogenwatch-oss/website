@@ -783,6 +783,18 @@
       }
     ]
   },
+  "upload": {
+    "1280": {
+      "task": "clustering",
+      "version": "t1",
+      "requires": [
+        {
+          "task": "cgmlst",
+          "version": "t1"
+        }
+      ]
+    }
+  },
   "collection": {
     "485": [
       {
@@ -866,5 +878,9 @@
         "workers": 16
       }
     ]
+  },
+  "clustering": {
+    "task": "clustering",
+    "version": "t1"
   }
 }

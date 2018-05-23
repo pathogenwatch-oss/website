@@ -22,10 +22,10 @@ const schema = new Schema({
 
 setToObjectOptions(schema);
 
-schema.statics.getLatest = function (taxId) {
+schema.statics.getLatest = function (taxId, projection = {}) {
   return (
     this.
-      find({ taxId }).
+      find({ taxId }, projection).
       sort({ deployed: -1 }).
       limit(1).
       then(([ doc ]) => doc)

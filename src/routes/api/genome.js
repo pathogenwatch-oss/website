@@ -46,6 +46,16 @@ router.get('/genome/:id', (req, res, next) => {
     .catch(next);
 });
 
+router.get('/genome/:id/clusters', (req, res, next) => {
+  const { user, sessionID, params } = req;
+  const { id } = params;
+
+  LOGGER.info(`Received request to get clusters for genome ${id}`);
+  services.request('genome', 'fetch-clusters', { user, sessionID, id })
+    .then(response => res.json(response))
+    .catch(next);
+});
+
 router.get('/genome', (req, res, next) => {
   LOGGER.info('Received request to get genomes');
 

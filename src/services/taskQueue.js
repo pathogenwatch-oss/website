@@ -4,6 +4,7 @@ const MessageQueue = require('mongo-message-queue');
 const mQueue = new MessageQueue();
 const Q = require('q');
 const mongoose = require('mongoose');
+const Queue = require('../models/queue');
 
 const config = require('configuration');
 const LOGGER = require('utils/logging').createLogger('queue');
@@ -21,11 +22,13 @@ module.exports.setMaxWorkers = function (max = 1) {
 };
 
 const queues = {
+  clustering: 'clustering',
   collection: 'collection',
   genome: 'genome',
   task: 'task',
 };
 
+module.exports.Queue = Queue;
 module.exports.queues = queues;
 
 module.exports.enqueue = function (queue, message) {

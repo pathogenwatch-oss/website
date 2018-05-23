@@ -48,6 +48,19 @@ function subscribeToQueue(queueName) {
       message => request('collection', 'add-error', message)
     );
   }
+
+  if (queueName === queues.clustering) {
+    taskQueue.dequeue(
+      queueName,
+      ({ spec, metadata, timeout }) =>
+        request('tasks', 'run-clustering', { spec, metadata, timeout$: timeout * 1000 })
+          .then(results => {
+            LOGGER.info('Got result', spec.task, spec.version, metadata);
+            return request('clustering', 'upsert', { results, metadata });
+          }),
+      message => request('clustering', 'error', message)
+    );
+  }
 }
 
 function pullImages() {

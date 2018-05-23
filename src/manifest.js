@@ -64,3 +64,7 @@ module.exports.getCollectionTask = function (organismId, task) {
 
   return null;
 };
+
+module.exports.getClusteringTask = function () {
+  return tasks.clustering;
+};
