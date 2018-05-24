@@ -45,8 +45,7 @@ async function getGenomesInCache(genomes, { version }, { scheme }) {
 
   const docs = await ClusteringCache.find(
     { st: { $in: sts }, version, scheme },
-    projection,
-    { sort: { st: 1 } }
+    projection
   );
 
   const cacheBySt = {};
@@ -55,19 +54,14 @@ async function getGenomesInCache(genomes, { version }, { scheme }) {
   }
 
   const missingSTs = new Set();
-  for (let i = sts.length - 1; i > 0; i--) {
-    if (sts[i] in cacheBySt) {
-      for (let j = 0; j < i; j++) {
-        if (!(sts[j] in cacheBySt[sts[i]])) {
-          missingSTs.add(sts[i]);
-          missingSTs.add(sts[j]);
-        }
-      }
-    } else {
-      missingSTs.add(sts[i]);
-      for (let j = 0; j < i; j++) {
-        missingSTs.add(sts[j]);
-      }
+  for (let a = sts.length - 1; a > 0; a--) {
+    const stA = sts[a];
+    for (let b = 0; b < a; b++) {
+      const stB = sts[b];
+      if ((cacheBySt[stA] || {})[stB]) continue;
+      if ((cacheBySt[stB] || {})[stA]) continue;
+      missingSTs.add(stA);
+      missingSTs.add(stB);
     }
   }
   return Array.from(missingSTs);
@@ -86,9 +80,8 @@ function attachInputStream(container, spec, metadata, genomes, uncachedSTs) {
     },
     {
       raw: true,
-      sort: { 'analysis.cgmlst.st': 1 },
     }
-  );
+  ).stream();
   docsStream.pause();
 
   const sts = genomes.map(_ => _.analysis.cgmlst.st);
@@ -102,8 +95,8 @@ function attachInputStream(container, spec, metadata, genomes, uncachedSTs) {
   const scoresStream = ClusteringCache.collection.find(
     { st: { $in: sts }, version, scheme },
     projection,
-    { raw: true, sort: { fileId: 1 } }
-  );
+    { raw: true }
+  ).stream();
   scoresStream.pause();
   scoresStream.on('end', () => docsStream.resume());
 
@@ -123,12 +116,19 @@ function attachInputStream(container, spec, metadata, genomes, uncachedSTs) {
   genomesStream.end(bson.serialize({ genomes: genomeList, thresholds: [ 20, 50, 75, 100, 150, 200 ] }), () => scoresStream.resume());
 }
 
-function handleContainerOutput(container, spec, metadata, genomes, resolve, reject) {
+function handleContainerOutput(container, spec, metadata) {
   const { task, version } = spec;
   const { scheme, clientId } = metadata;
+  let resolve;
+  let reject;
+  const output = new Promise((_resolve, _reject) => {
+    resolve = _resolve;
+    reject = _reject;
+  });
   request('clustering', 'send-progress', { clientId, payload: { task, status: 'IN PROGRESS' } });
   let lastProgress = 0;
   const results = [];
+  const cache = [];
   container.stdout
     .pipe(es.split())
     .on('data', (data) => {
@@ -136,11 +136,21 @@ function handleContainerOutput(container, spec, metadata, genomes, resolve, reje
       try {
         const doc = JSON.parse(data);
         if (doc.st && doc.alleleDifferences) {
-          const update = {};
-          for (const key of Object.keys(doc.alleleDifferences)) {
-            update[`alleleDifferences.${key}`] = doc.alleleDifferences[key];
-          }
-          ClusteringCache.update({ st: doc.st, version, scheme }, update, { upsert: true }).exec();
+          // const update = {};
+          // for (const key of Object.keys(doc.alleleDifferences)) {
+          //   update[`alleleDifferences.${key}`] = doc.alleleDifferences[key];
+          // }
+          // cache.push({
+          //   updateOne: {
+          //     filter: { st: doc.st, version, scheme },
+          //     update,
+          //     upsert: true,
+          //   },
+          // });
+          // if (cache.length > 1000) {
+          //   ClusteringCache.bulkWrite(cache).catch(() => LOGGER.info('Ignoring caching error'));
+          //   cache.splice(0, cache.length);
+          // }
         } else if (doc.progress) {
           const progress = doc.progress * 0.99;
           if ((progress - lastProgress) >= 1) {
@@ -155,13 +165,20 @@ function handleContainerOutput(container, spec, metadata, genomes, resolve, reje
         reject(e);
       }
     })
-    .on('end', () => resolve(results));
+    .on('end', () => resolve({ results, cache }));
+  return output;
 }
 
-function handleContainerExit(container, spec, metadata, reject) {
+function handleContainerExit(container, spec, metadata) {
   const { task, version } = spec;
   const { user, sessionID, scheme, clientId } = metadata;
   let startTime = process.hrtime();
+  let resolve;
+  let reject;
+  const output = new Promise((_resolve, _reject) => {
+    resolve = _resolve;
+    reject = _reject;
+  });
 
   container.on('spawn', (containerId) => {
     startTime = process.hrtime();
@@ -179,6 +196,8 @@ function handleContainerExit(container, spec, metadata, reject) {
       request('clustering', 'send-progress', { clientId, payload: { task, status: 'ERROR' } });
       container.stderr.setEncoding('utf8');
       reject(new Error(container.stderr.read()));
+    } else {
+      resolve();
     }
   });
 
@@ -186,6 +205,8 @@ function handleContainerExit(container, spec, metadata, reject) {
     request('clustering', 'send-progress', { clientId, payload: { task, status: 'ERROR' } });
     reject(e);
   });
+
+  return output;
 }
 
 function createContainer(spec) {
@@ -204,15 +225,15 @@ async function runTask(spec, metadata) {
   const genomes = await getGenomes(spec, metadata);
   const uncachedFileIds = await getGenomesInCache(genomes, spec, metadata);
 
-  return new Promise((resolve, reject) => {
-    const container = createContainer(spec, metadata);
+  const container = createContainer(spec, metadata);
+  const whenOutput = handleContainerOutput(container, spec, metadata);
+  const whenExit = handleContainerExit(container, spec, metadata);
+  attachInputStream(container, spec, metadata, genomes, uncachedFileIds);
 
-    handleContainerOutput(container, spec, metadata, genomes, resolve, reject);
-
-    handleContainerExit(container, spec, metadata, reject);
-
-    attachInputStream(container, spec, metadata, genomes, uncachedFileIds);
-  });
+  await whenExit;
+  const { results, cache } = await whenOutput;
+  // ClusteringCache.bulkWrite(cache).catch(() => LOGGER.info('Ignoring caching error'));
+  return results;
 }
 
 module.exports = function handleMessage({ spec, metadata }) {
