@@ -12,8 +12,9 @@ import { showCounts } from '../../utils/genome';
 import Tables from './Tables.react';
 import Trees from './Trees.react';
 import Analysis from './Analysis.react';
+import { hasTrees } from '../tree/selectors';
 
-const DownloadsMenu = ({ menuOpen, counts = {}, closeMenu }) => (
+const DownloadsMenu = ({ menuOpen, counts = {}, closeMenu, viewHasTrees }) => (
   <Overlay isVisible={menuOpen} hide={closeMenu}>
     <div className="wgsa-downloads mdl-shadow--4dp">
       <h3 className="mdl-dialog__title">Downloads</h3>
@@ -21,7 +22,7 @@ const DownloadsMenu = ({ menuOpen, counts = {}, closeMenu }) => (
       <ul className="wgsa-downloads-menu">
         <Analysis />
         <Tables />
-        <Trees />
+        { viewHasTrees && <Trees /> }
       </ul>
     </div>
   </Overlay>
@@ -35,6 +36,7 @@ DownloadsMenu.propTypes = {
 
 function mapStateToProps(state) {
   return {
+    viewHasTrees: hasTrees(state),
     menuOpen: isMenuOpen(state),
     counts: getCounts(state),
   };

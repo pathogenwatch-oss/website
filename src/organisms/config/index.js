@@ -20,7 +20,7 @@ export const taxIdMap = new Map(
   definitionsAsList.map(organism => [ organism.id, organism ])
 );
 
-let currentOrganisms = {};
+let currentOrganism = {};
 
 export function getOrganismName(taxId, fallback) {
   if (taxIdMap.has(taxId)) {
@@ -38,11 +38,11 @@ export default {
   },
 
   get current() {
-    return currentOrganisms;
+    return currentOrganism;
   },
 
   set current(taxId) {
-    currentOrganisms = taxIdMap.get(taxId);
+    currentOrganism = taxIdMap.get(taxId) || {};
   },
 
   get(nickname) {
@@ -50,27 +50,27 @@ export default {
   },
 
   get id() {
-    return currentOrganisms.id;
+    return currentOrganism.id;
   },
 
   get formattedName() {
-    return currentOrganisms.formattedName;
+    return currentOrganism.formattedName;
   },
 
   get nickname() {
-    return currentOrganisms.nickname;
+    return currentOrganism.nickname;
   },
 
   get uiOptions() {
-    return currentOrganisms.uiOptions || {};
+    return currentOrganism.uiOptions || {};
   },
 
   get maxGenomeSize() {
-    return currentOrganisms.maxGenomeSize || Math.pow(10, 10);
+    return currentOrganism.maxGenomeSize || Math.pow(10, 10);
   },
 
   get gcRange() {
-    return currentOrganisms.gcRange || {};
+    return currentOrganism.gcRange || {};
   },
 
 };

@@ -17,6 +17,7 @@ import Organisms from '../../organisms';
 export const getTreeState = state => getViewer(state).tree;
 
 export const getTrees = state => getTreeState(state).entities;
+export const hasTrees = state => Object.keys(getTrees(state)).length > 0;
 export const isLoading = state => getTreeState(state).loading;
 
 export const getLeafIds = (state, { stateKey }) => {
