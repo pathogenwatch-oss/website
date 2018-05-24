@@ -146,6 +146,10 @@ function handleContainerOutput(container, spec, metadata) {
               upsert: true,
             },
           });
+          if (cache.length > 1000) {
+            ClusteringCache.bulkWrite(cache).catch(() => LOGGER.info('Ignoring caching error'));
+            cache.splice(0, cache.length);
+          }
         } else if (doc.progress) {
           const progress = doc.progress * 0.99;
           if ((progress - lastProgress) >= 1) {
