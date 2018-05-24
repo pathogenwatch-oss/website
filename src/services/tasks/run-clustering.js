@@ -123,9 +123,15 @@ function attachInputStream(container, spec, metadata, genomes, uncachedSTs) {
   genomesStream.end(bson.serialize({ genomes: genomeList, thresholds: [ 20, 50, 75, 100, 150, 200 ] }), () => scoresStream.resume());
 }
 
-function handleContainerOutput(container, spec, metadata, genomes, resolve, reject) {
+function handleContainerOutput(container, spec, metadata) {
   const { task, version } = spec;
   const { scheme, clientId } = metadata;
+  let resolve;
+  let reject;
+  const output = new Promise((_resolve, _reject) => {
+    resolve = _resolve;
+    reject = _reject;
+  });
   request('clustering', 'send-progress', { clientId, payload: { task, status: 'IN PROGRESS' } });
   let lastProgress = 0;
   const results = [];
@@ -156,12 +162,19 @@ function handleContainerOutput(container, spec, metadata, genomes, resolve, reje
       }
     })
     .on('end', () => resolve(results));
+  return output;
 }
 
-function handleContainerExit(container, spec, metadata, reject) {
+function handleContainerExit(container, spec, metadata) {
   const { task, version } = spec;
   const { user, sessionID, scheme, clientId } = metadata;
   let startTime = process.hrtime();
+  let resolve;
+  let reject;
+  const output = new Promise((_resolve, _reject) => {
+    resolve = _resolve;
+    reject = _reject;
+  });
 
   container.on('spawn', (containerId) => {
     startTime = process.hrtime();
@@ -179,6 +192,8 @@ function handleContainerExit(container, spec, metadata, reject) {
       request('clustering', 'send-progress', { clientId, payload: { task, status: 'ERROR' } });
       container.stderr.setEncoding('utf8');
       reject(new Error(container.stderr.read()));
+    } else {
+      resolve();
     }
   });
 
@@ -186,6 +201,8 @@ function handleContainerExit(container, spec, metadata, reject) {
     request('clustering', 'send-progress', { clientId, payload: { task, status: 'ERROR' } });
     reject(e);
   });
+
+  return output;
 }
 
 function createContainer(spec) {
@@ -204,15 +221,13 @@ async function runTask(spec, metadata) {
   const genomes = await getGenomes(spec, metadata);
   const uncachedFileIds = await getGenomesInCache(genomes, spec, metadata);
 
-  return new Promise((resolve, reject) => {
-    const container = createContainer(spec, metadata);
+  const container = createContainer(spec, metadata);
+  const whenOutput = handleContainerOutput(container, spec, metadata);
+  const whenExit = handleContainerExit(container, spec, metadata);
+  attachInputStream(container, spec, metadata, genomes, uncachedFileIds);
 
-    handleContainerOutput(container, spec, metadata, genomes, resolve, reject);
-
-    handleContainerExit(container, spec, metadata, reject);
-
-    attachInputStream(container, spec, metadata, genomes, uncachedFileIds);
-  });
+  await whenExit;
+  return await whenOutput;
 }
 
 module.exports = function handleMessage({ spec, metadata }) {
