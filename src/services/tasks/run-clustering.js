@@ -45,8 +45,7 @@ async function getGenomesInCache(genomes, { version }, { scheme }) {
 
   const docs = await ClusteringCache.find(
     { st: { $in: sts }, version, scheme },
-    projection,
-    { sort: { st: 1 } }
+    projection
   );
 
   const cacheBySt = {};
@@ -55,19 +54,14 @@ async function getGenomesInCache(genomes, { version }, { scheme }) {
   }
 
   const missingSTs = new Set();
-  for (let i = sts.length - 1; i > 0; i--) {
-    if (sts[i] in cacheBySt) {
-      for (let j = 0; j < i; j++) {
-        if (!(sts[j] in cacheBySt[sts[i]])) {
-          missingSTs.add(sts[i]);
-          missingSTs.add(sts[j]);
-        }
-      }
-    } else {
-      missingSTs.add(sts[i]);
-      for (let j = 0; j < i; j++) {
-        missingSTs.add(sts[j]);
-      }
+  for (let a = sts.length - 1; a > 0; a--) {
+    const stA = sts[a];
+    for (let b = 0; b < a; b++) {
+      const stB = sts[b];
+      if ((cacheBySt[stA] || {})[stB]) continue;
+      if ((cacheBySt[stB] || {})[stA]) continue;
+      missingSTs.add(stA);
+      missingSTs.add(stB);
     }
   }
   return Array.from(missingSTs);
@@ -78,7 +72,6 @@ function attachInputStream(container, spec, metadata, genomes, uncachedSTs) {
 
   const docsStream = Genome.collection.find(
     {
-      _id: { $in: genomes.map(_ => _._id) },
       'analysis.cgmlst.st': { $in: uncachedSTs },
     },
     {
@@ -86,9 +79,8 @@ function attachInputStream(container, spec, metadata, genomes, uncachedSTs) {
     },
     {
       raw: true,
-      sort: { 'analysis.cgmlst.st': 1 },
     }
-  );
+  ).stream();
   docsStream.pause();
 
   const sts = genomes.map(_ => _.analysis.cgmlst.st);
@@ -102,8 +94,8 @@ function attachInputStream(container, spec, metadata, genomes, uncachedSTs) {
   const scoresStream = ClusteringCache.collection.find(
     { st: { $in: sts }, version, scheme },
     projection,
-    { raw: true, sort: { fileId: 1 } }
-  );
+    { raw: true }
+  ).stream();
   scoresStream.pause();
   scoresStream.on('end', () => docsStream.resume());
 
