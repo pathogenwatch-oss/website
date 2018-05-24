@@ -68,8 +68,12 @@ const UserDrawer = React.createClass({
                   {config.version}
                 </small> }
             </span>
-            <SignInNav />
-            { !user && <hr /> }
+            <nav className="mdl-navigation">
+              { user ?
+                <NavLink to="/account" icon="account_circle">My Account</NavLink> :
+                <NavLink to="/sign-in" icon="vpn_key">Sign In</NavLink> }
+            </nav>
+            <hr />
             <nav className="mdl-navigation">
               <h2 className="wgsa-navigation-header">Collections</h2>
               <NavLink to="/collections/all" badge={allCollections} icon="collections">
