@@ -72,6 +72,7 @@ function attachInputStream(container, spec, metadata, genomes, uncachedSTs) {
 
   const docsStream = Genome.collection.find(
     {
+      _id: { $in: genomes.map(_ => _._id) },
       'analysis.cgmlst.st': { $in: uncachedSTs },
     },
     {
@@ -135,21 +136,21 @@ function handleContainerOutput(container, spec, metadata) {
       try {
         const doc = JSON.parse(data);
         if (doc.st && doc.alleleDifferences) {
-          const update = {};
-          for (const key of Object.keys(doc.alleleDifferences)) {
-            update[`alleleDifferences.${key}`] = doc.alleleDifferences[key];
-          }
-          cache.push({
-            updateOne: {
-              filter: { st: doc.st, version, scheme },
-              update,
-              upsert: true,
-            },
-          });
-          if (cache.length > 1000) {
-            ClusteringCache.bulkWrite(cache).catch(() => LOGGER.info('Ignoring caching error'));
-            cache.splice(0, cache.length);
-          }
+          // const update = {};
+          // for (const key of Object.keys(doc.alleleDifferences)) {
+          //   update[`alleleDifferences.${key}`] = doc.alleleDifferences[key];
+          // }
+          // cache.push({
+          //   updateOne: {
+          //     filter: { st: doc.st, version, scheme },
+          //     update,
+          //     upsert: true,
+          //   },
+          // });
+          // if (cache.length > 1000) {
+          //   ClusteringCache.bulkWrite(cache).catch(() => LOGGER.info('Ignoring caching error'));
+          //   cache.splice(0, cache.length);
+          // }
         } else if (doc.progress) {
           const progress = doc.progress * 0.99;
           if ((progress - lastProgress) >= 1) {
@@ -231,7 +232,7 @@ async function runTask(spec, metadata) {
 
   await whenExit;
   const { results, cache } = await whenOutput;
-  ClusteringCache.bulkWrite(cache).catch(() => LOGGER.info('Ignoring caching error'));
+  // ClusteringCache.bulkWrite(cache).catch(() => LOGGER.info('Ignoring caching error'));
   return results;
 }
 
