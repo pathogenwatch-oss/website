@@ -120,7 +120,7 @@ function attachInputStream(container, spec, metadata, genomes, uncachedSTs) {
     // .pipe(require('fs').createWriteStream('input.bson'));
 
   const genomeList = genomes.map(g => ({ _id: g._id, st: g.analysis.cgmlst.st }));
-  genomesStream.end(bson.serialize({ genomes: genomeList, thresholds: [ 5, 10, 20, 50, 100, 200, 500, 1000 ] }), () => scoresStream.resume());
+  genomesStream.end(bson.serialize({ genomes: genomeList, thresholds: [ 20, 50, 75, 100, 150, 200 ] }), () => scoresStream.resume());
 }
 
 function handleContainerOutput(container, spec, metadata, genomes, resolve, reject) {
