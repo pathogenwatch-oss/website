@@ -7,6 +7,7 @@ const initialState = {
   genome: null,
   status: null,
   clusteringStatus: null,
+  clusteringProgress: null,
   clusters: null,
 };
 
@@ -36,6 +37,7 @@ export default function (state = initialState, { type, payload }) {
       return {
         ...state,
         clusteringStatus: 'LOADING',
+        clusteringProgress: 0.0,
       };
     case REQUEST_CLUSTERING.SUCCESS: {
       const { statusCode } = payload.result;
@@ -56,10 +58,11 @@ export default function (state = initialState, { type, payload }) {
         clusteringStatus: 'ERROR',
       };
     case UPDATE_CLUSTERING_PROGRESS: {
-      const { status } = payload;
+      const { status, progress = state.clusteringProgress } = payload;
       return {
         ...state,
         clusteringStatus: status,
+        clusteringProgress: progress,
       };
     }
     case FETCH_CLUSTERS.FAILURE:

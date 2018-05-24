@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 import Spinner from '../../../components/Spinner.react';
 import Notify from '../../../components/Notify.react';
-import { getClusteringStatus, getClusters } from '../selectors';
+import { getClusteringStatus, getClusteringProgress, getClusters } from '../selectors';
 import { requestClustering, updateClusteringProgress, fetchClusters } from '../actions';
 
 const Clustering = React.createClass({
@@ -30,7 +30,7 @@ const Clustering = React.createClass({
             case 'READY':
               return (
                 <Notify topic="clustering" onMessage={this.props.updateProgress}>
-                  <p>Running</p><Spinner />
+                  <p>Running ({this.props.progress.toFixed(1)}%)</p><Spinner />
                 </Notify>
               );
             case 'COMPLETE': {
@@ -63,6 +63,7 @@ const Clustering = React.createClass({
 function mapStateToProps(state) {
   return {
     status: getClusteringStatus(state),
+    progress: getClusteringProgress(state),
     clusters: getClusters(state),
   };
 }
