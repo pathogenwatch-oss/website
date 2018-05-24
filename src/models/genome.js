@@ -49,6 +49,7 @@ schema.index({
   'analysis.core.profile.alleles.duplicate': 1,
 });
 schema.index({ 'analysis.mlst.st': 1 });
+schema.index({ 'analysis.cgmlst.st': 1 });
 schema.index({ 'analysis.speciator.organismId': 1 });
 schema.index({ 'analysis.speciator.speciesId': 1 });
 schema.index({ 'analysis.speciator.genusId': 1 });
