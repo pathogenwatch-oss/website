@@ -141,12 +141,11 @@ function handleContainerOutput(container, spec, metadata, genomes, resolve, reje
             update[`alleleDifferences.${key}`] = doc.alleleDifferences[key];
           }
           ClusteringCache.update({ st: doc.st, version, scheme }, update, { upsert: true }).exec();
-          if (doc.progress) {
-            const progress = doc.progress * 0.99;
-            if ((progress - lastProgress) >= 1) {
-              request('clustering', 'send-progress', { clientId, payload: { task, progress } });
-              lastProgress = progress;
-            }
+        } else if (doc.progress) {
+          const progress = doc.progress * 0.99;
+          if ((progress - lastProgress) >= 1) {
+            request('clustering', 'send-progress', { clientId, payload: { task, status: 'IN PROGRESS', progress } });
+            lastProgress = progress;
           }
         } else {
           results.push(doc);
