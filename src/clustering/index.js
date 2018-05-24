@@ -1,15 +1,15 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
 
-import Header from './Header.react';
-import CollectionRoute from './route';
+import Header from '../collection-viewer/Header.react';
+import Cluster from './route';
 
-const path = '/collection/:token';
+const path = '/genome/:id/cluster';
 
 export const HeaderRoute = (
   <Route path={path} component={Header} />
 );
 
 export default (
-  <Route path={path} component={CollectionRoute} />
+  <Route path={path} component={Cluster} />
 );

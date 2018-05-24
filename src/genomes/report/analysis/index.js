@@ -6,14 +6,15 @@ import Metrics from './Metrics.react';
 import Core from './Core.react';
 import MLST from './MLST.react';
 import PAARSNP from './PAARSNP.react';
+import Clustering from './Clustering.react';
 import Speciator from './Speciator.react';
 import Genotyphi from './Genotyphi.react';
 import NgMast from './NgMast.react';
 import renderGenericResults from './Generic.react';
 
 export default (genome) => {
-  const { analysis = {} } = genome;
-  const { metrics, core, mlst, paarsnp, genotyphi, ngmast, speciator, ...rest } = analysis;
+  const { analysis = {}, id } = genome;
+  const { metrics, core, mlst, paarsnp, genotyphi, ngmast, speciator, cgmlst, ...rest } = analysis;
 
   const tabs = [];
 
@@ -27,6 +28,12 @@ export default (genome) => {
     tabs.push({
       key: 'AMR',
       component: <VersionSwitcher taskName="paarsnp" component={PAARSNP} genome={genome} />,
+    });
+  }
+  if (cgmlst) {
+    tabs.push({
+      key: 'Clustering',
+      component: <Clustering genomeId={id} scheme={cgmlst.scheme} />,
     });
   }
   if (genotyphi) {
