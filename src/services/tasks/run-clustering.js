@@ -127,6 +127,7 @@ function handleContainerOutput(container, spec, metadata) {
   request('clustering', 'send-progress', { clientId, payload: { task, status: 'IN PROGRESS' } });
   let lastProgress = 0;
   const results = [];
+  const cache = [];
   container.stdout
     .pipe(es.split())
     .on('data', (data) => {
@@ -138,7 +139,13 @@ function handleContainerOutput(container, spec, metadata) {
           for (const key of Object.keys(doc.alleleDifferences)) {
             update[`alleleDifferences.${key}`] = doc.alleleDifferences[key];
           }
-          ClusteringCache.update({ st: doc.st, version, scheme }, update, { upsert: true }).exec();
+          cache.push({
+            updateOne: {
+              filter: { st: doc.st, version, scheme },
+              update,
+              upsert: true,
+            },
+          });
         } else if (doc.progress) {
           const progress = doc.progress * 0.99;
           if ((progress - lastProgress) >= 1) {
@@ -153,7 +160,7 @@ function handleContainerOutput(container, spec, metadata) {
         reject(e);
       }
     })
-    .on('end', () => resolve(results));
+    .on('end', () => resolve({ results, cache }));
   return output;
 }
 
@@ -219,7 +226,9 @@ async function runTask(spec, metadata) {
   attachInputStream(container, spec, metadata, genomes, uncachedFileIds);
 
   await whenExit;
-  return await whenOutput;
+  const { results, cache } = await whenOutput;
+  ClusteringCache.bulkWrite(cache).catch(() => LOGGER.info('Ignoring caching error'));
+  return results;
 }
 
 module.exports = function handleMessage({ spec, metadata }) {
