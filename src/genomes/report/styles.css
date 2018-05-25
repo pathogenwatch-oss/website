@@ -148,6 +148,9 @@ dl.wgsa-genome-report-stats-compact > div {
   margin-top: 4px;
   font-size: 20px;
   color: rgba(0, 0, 0, 0.87);
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  hyphens: auto;
 }
 
 .wgsa-genome-report figure {
@@ -270,4 +273,13 @@ dl.wgsa-genome-report-stats-compact > div {
 
 .wgsa-genome-report-amr tr:not(.wgsa-genome-report-amr-present) td {
   color: rgba(0, 0, 0, 0.54);
+}
+
+
+.wgsa-genome-report #mlst dl > div:first-child {
+  width: calc(25% - 16px);
+}
+
+.wgsa-genome-report #mlst dl > div:nth-child(2) {
+  width: calc(75% - 16px);
 }
