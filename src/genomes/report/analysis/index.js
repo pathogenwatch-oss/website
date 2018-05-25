@@ -24,18 +24,6 @@ export default (genome) => {
       component: <VersionSwitcher taskName="mlst" component={MLST} genome={genome} />,
     });
   }
-  if (paarsnp) {
-    tabs.push({
-      key: 'AMR',
-      component: <VersionSwitcher taskName="paarsnp" component={PAARSNP} genome={genome} />,
-    });
-  }
-  if (cgmlst) {
-    tabs.push({
-      key: 'Clustering',
-      component: <Clustering genomeId={id} scheme={cgmlst.scheme} />,
-    });
-  }
   if (genotyphi) {
     tabs.push({
       key: 'Genotyphi',
@@ -46,6 +34,18 @@ export default (genome) => {
     tabs.push({
       key: 'NG-MAST',
       component: <VersionSwitcher taskName="ngmast" component={NgMast} genome={genome} />,
+    });
+  }
+  if (paarsnp) {
+    tabs.push({
+      key: 'AMR',
+      component: <VersionSwitcher taskName="paarsnp" component={PAARSNP} genome={genome} />,
+    });
+  }
+  if (cgmlst) {
+    tabs.push({
+      key: 'Clustering',
+      component: <Clustering genomeId={id} scheme={cgmlst.scheme} />,
     });
   }
   if (core) {
