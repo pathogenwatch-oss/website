@@ -881,6 +881,6 @@
   },
   "clustering": {
     "task": "clustering",
-    "version": "t1"
+    "version": "v1.2.2"
   }
 }
