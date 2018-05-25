@@ -15,10 +15,9 @@ export default function (state = initialState, { type, payload }) {
   switch (type) {
     case SHOW_GENOME_REPORT.ATTEMPT:
       return {
+        ...initialState,
         name: payload.name,
-        genome: null,
         status: 'LOADING',
-        clusteringStatus: null,
       };
     case SHOW_GENOME_REPORT.SUCCESS: {
       const { clustering = {}, ...genome } = payload.result;
@@ -37,8 +36,10 @@ export default function (state = initialState, { type, payload }) {
       };
     case CLOSE_GENOME_REPORT:
     case FETCH_GENOME_LIST.ATTEMPT:
+    case LOCATION_CHANGE:
       return {
         ...initialState,
+        clusters: state.clusters,
         clusteringStatus: state.clusteringStatus, // hack to stop the clustering status flickering
       };
     case REQUEST_CLUSTERING.ATTEMPT:
@@ -86,8 +87,6 @@ export default function (state = initialState, { type, payload }) {
         clusters: result,
       };
     }
-    case LOCATION_CHANGE:
-      return initialState;
     default:
       return state;
   }
