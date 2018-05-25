@@ -18,13 +18,18 @@ export default function (state = initialState, { type, payload }) {
         name: payload.name,
         genome: null,
         status: 'LOADING',
+        clusteringStatus: null,
       };
-    case SHOW_GENOME_REPORT.SUCCESS:
+    case SHOW_GENOME_REPORT.SUCCESS: {
+      const { clustering = {}, ...genome } = payload.result;
       return {
         ...state,
-        genome: payload.result,
+        genome,
         status: 'READY',
+        clusters: clustering,
+        clusteringStatus: clustering && Object.keys(clustering).length ? 'COMPLETE' : null,
       };
+    }
     case SHOW_GENOME_REPORT.FAILURE:
       return {
         genome: null,
@@ -32,7 +37,10 @@ export default function (state = initialState, { type, payload }) {
       };
     case CLOSE_GENOME_REPORT:
     case FETCH_GENOME_LIST.ATTEMPT:
-      return initialState;
+      return {
+        ...initialState,
+        clusteringStatus: state.clusteringStatus, // hack to stop the clustering status flickering
+      };
     case REQUEST_CLUSTERING.ATTEMPT:
       return {
         ...state,
@@ -44,7 +52,7 @@ export default function (state = initialState, { type, payload }) {
       if (statusCode === 304) {
         return {
           ...state,
-          clusteringStatus: 'READY',
+          clusteringStatus: 'IN PROGRESS',
         };
       }
       return {

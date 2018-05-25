@@ -26,16 +26,29 @@ const Clustering = React.createClass({
               return <p>Something went wrong :(</p>;
             case 'LOADING':
             case 'PENDING':
-            case 'IN PROGRESS':
-            case 'READY':
               return (
                 <Notify topic="clustering" onMessage={this.props.updateProgress}>
-                  <p>Running ({this.props.progress.toFixed(1)}%)</p><Spinner />
+                  <p>Job queued, please wait ⏳</p><Spinner />
                 </Notify>
               );
+            case 'IN PROGRESS': {
+              const { progress = 0 } = this.props;
+              return (
+                <Notify topic="clustering" onMessage={this.props.updateProgress}>
+                  <p>Running ({progress.toFixed(1)}%)</p><Spinner />
+                </Notify>
+              );
+            }
+            case 'READY':
+              return (
+                <React.Fragment>
+                  <p>Fetching result...</p><Spinner />
+                </React.Fragment>
+              );
             case 'COMPLETE': {
-              const { clusters, genomeId } = this.props;
+              const { clusters = {}, genomeId } = this.props;
               const thresholds = Object.keys(clusters).map(t => parseInt(t));
+              if (thresholds.length === 0) return null;
               thresholds.sort((a, b) => a - b);
               const bullets = thresholds.map(t => {
                 const clusterSize = (clusters[t] || {}).length;
@@ -43,7 +56,7 @@ const Clustering = React.createClass({
                 if (others < 1) return <li key={t}>No cluster found at threshold { t }</li>;
                 return <li key={t}><Link to={`/clustering/${genomeId}?threshold=${t}`}>{ others } other genome{ others !== 1 ? 's' : ''}</Link> at threshold { t }</li>;
               });
-              return <React.Fragment><p>Found in clusters with:</p><ul>{ bullets }</ul></React.Fragment>;
+              return <React.Fragment><p>This genome is found in clusters with:</p><ul>{ bullets }</ul></React.Fragment>;
             }
             default:
               return (
