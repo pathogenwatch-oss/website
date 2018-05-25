@@ -1,8 +1,10 @@
 .wgsa-downloads {
-  background-position: calc(100% + 16px * 2) calc(16px * -1);
-  background-size: calc(16px * 5);
-  background: url('/images/pathogenwatch-icon.svg') #fff no-repeat;
-  min-width: 256px;
+  background-color: #fff;
+  background-image: url('/images/pathogenwatch-icon.svg');
+  background-position: calc(100% + 32px) -16px;
+  background-repeat: no-repeat;
+  background-size: calc(16px * 6);
+  min-width: 240px;
   padding: 24px 32px;
   position: relative;
 }

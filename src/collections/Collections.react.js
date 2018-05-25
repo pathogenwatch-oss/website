@@ -108,7 +108,7 @@ const Collections = React.createClass({
         </div>
         <Overlay visible={status === statuses.LOADING}>
           <p className="wgsa-big-message">
-            Loading... ⌛
+            Loading... ⏳
           </p>
         </Overlay>
       </div>

@@ -109,7 +109,7 @@ export default React.createClass({
         </div>
         <Overlay visible={this.props.status === statuses.LOADING}>
           <p className="wgsa-big-message">
-            Loading... ⌛
+            Loading... ⏳
           </p>
         </Overlay>
       </div>
