@@ -37,8 +37,13 @@ const Clustering = React.createClass({
               const { clusters, genomeId } = this.props;
               const thresholds = Object.keys(clusters).map(t => parseInt(t));
               thresholds.sort((a, b) => a - b);
-              const bullets = thresholds.map(t => <li key={t}><Link to={`/clustering/${genomeId}?threshold=${t}`}>{ t }: { clusters[t].length }</Link></li>);
-              return <React.Fragment><p>Found clusters:</p><ul>{ bullets }</ul></React.Fragment>;
+              const bullets = thresholds.map(t => {
+                const clusterSize = (clusters[t] || {}).length;
+                const others = clusterSize <= 1 ? 0 : clusterSize - 1;
+                if (others < 1) return <li key={t}>No cluster found at threshold { t }</li>;
+                return <li key={t}><Link to={`/clustering/${genomeId}?threshold=${t}`}>{ others } other genome{ others !== 1 ? 's' : ''}</Link> at threshold { t }</li>;
+              });
+              return <React.Fragment><p>Found in clusters with:</p><ul>{ bullets }</ul></React.Fragment>;
             }
             default:
               return (
