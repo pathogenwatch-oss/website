@@ -35,7 +35,7 @@
     "rand-token": "^0.4.0",
     "remove-markdown": "^0.2.2",
     "sanitize-filename": "^1.5.3",
-    "seneca": "^3.2.2",
+    "seneca": "^3.5.0",
     "slug": "^0.9.1",
     "stream-transform": "^0.1.2",
     "wgsa-fasta-store": "gitlab:cgps/wgsa-fasta-store#v4.0.0",
@@ -45,7 +45,7 @@
   "devDependencies": {
     "eslint-config-cgps": "github:imperialcollegelondon/eslint-config-cgps",
     "mocha": "^2.1.0",
-    "nodemon": "^1.11.0",
+    "nodemon": "^1.17.5",
     "rewire": "^2.1.4",
     "sinon": "^1.12.2",
     "supertest": "^1.0.1"
