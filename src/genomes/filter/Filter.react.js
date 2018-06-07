@@ -29,19 +29,21 @@ const Filter = ({ isActive, filterSummary, textValue, updateFilter, clearFilter 
       updateFilter={updateFilter}
     />
     <FilterSection
-      filterKey="speciesId"
-      heading="Species"
-      icon="bug_report"
-      summary={filterSummary.speciesId}
-      updateFilter={updateFilter}
-    />
-    <FilterSection
       filterKey="genusId"
       heading="Genus"
       icon="bug_report"
       summary={filterSummary.genusId}
       updateFilter={updateFilter}
     />
+    <FilterSection
+      filterKey="speciesId"
+      heading="Species"
+      icon="bug_report"
+      summary={filterSummary.speciesId}
+      updateFilter={updateFilter}
+    >
+      { filterSummary.speciesId.length || (!filterSummary.genusId.length) ? null : <p>Select a genus to filter by species.</p> }
+    </FilterSection>
     <FilterSection
       filterKey="sequenceType"
       heading="Sequence Type"

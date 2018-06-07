@@ -8,6 +8,19 @@ function formatCount(count) {
   return count;
 }
 
+const FilterItem = ({ value, title, label, count, active, onClick }) =>
+  <button
+    title={title || label}
+    className={classnames(
+      'mdl-chip mdl-chip--contact',
+      { 'mdl-chip--active': active }
+    )}
+    onClick={() => onClick(value)}
+  >
+    <span className="mdl-chip__contact">{formatCount(count)}</span>
+    <span className="mdl-chip__text">{label || value}</span>
+  </button>;
+
 const FilterSection = React.createClass({
 
   getInitialState() {
@@ -31,32 +44,30 @@ const FilterSection = React.createClass({
       return null;
     }
 
+    const activeItem = summary.find(_ => _.active);
+    const onClick = (value) => updateFilter(filterKey, value);
+
     return (
       <section
         className={classnames(
-          'wgsa-filter-section', className, { 'is-open': isOpen })
+          'wgsa-filter-section', className, { 'is-open': isOpen, active: activeItem })
         }
       >
         <h3 onClick={() => this.toggle(isOpen)}>
           <i className="material-icons">{icon}</i>
-          {heading}
+          <span>{heading}</span>
+          { activeItem && <i className="material-icons" style={{ padding: '0 4px' }}>filter_list</i> }
           <i className="material-icons">{isOpen ? 'expand_less' : 'expand_more'}</i>
         </h3>
         { isOpen && (
-          children || summary.map(({ value, title, label, count, active }) =>
-          <button
-            key={value}
-            title={title || label}
-            className={classnames(
-              'mdl-chip mdl-chip--contact',
-              { 'mdl-chip--active': active }
-            )}
-            onClick={() => updateFilter(filterKey, value)}
-          >
-            <span className="mdl-chip__contact">{formatCount(count)}</span>
-            <span className="mdl-chip__text">{label || value}</span>
-          </button>
-        ))}
+          <React.Fragment>
+            { activeItem && <FilterItem {...activeItem} onClick={onClick} /> }
+            { children ||
+              summary
+                .filter(_ => !_.active)
+                .map(props => <FilterItem key={props.value} {...props} onClick={onClick} />) }
+          </React.Fragment>
+        )}
       </section>
     );
   },
