@@ -25,7 +25,7 @@ const removeFromSelection = (memo, { id }) => {
 
 export default function (state = initialState, { type, payload }) {
   switch (type) {
-    case actions.APPEND_GENOME_SELECTION: {
+    case actions.APPEND_GENOME_SELECTION:
       return {
         ...state,
         genomes: payload.genomes.reduce(addToSelection, { ...state.genomes }),
@@ -33,7 +33,6 @@ export default function (state = initialState, { type, payload }) {
           payload.index :
           state.lastSelectedIndex,
       };
-    }
     case actions.REMOVE_GENOME_SELECTION:
       return {
         ...state,

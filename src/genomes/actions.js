@@ -18,14 +18,16 @@ export function fetchGenomeSummary(filter) {
 
 export const FETCH_GENOME_LIST = createAsyncConstants('FETCH_GENOME_LIST');
 
+const isDefined = value => (typeof value !== 'undefined' && value !== null);
+
 export function fetchGenomeList(startIndex, stopIndex) {
   let skip = undefined;
-  if (typeof startIndex !== 'undefined' && startIndex !== null) {
-    skip = startIndex;
-  }
   let limit = undefined;
-  if (startIndex && stopIndex) {
-    limit = stopIndex - startIndex + 1;
+  if (isDefined(startIndex)) {
+    skip = startIndex;
+    if (isDefined(stopIndex)) {
+      limit = stopIndex - startIndex + 1;
+    }
   }
   const options = { skip, limit };
   return (dispatch, getState) => {

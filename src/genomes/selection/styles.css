@@ -8,6 +8,10 @@
   padding: 0;
 }
 
+.wgsa-genome-checkbox[disabled] {
+  color: rgba(0, 0, 0, 0.28) !important;
+}
+
 .wgsa-genome-checkbox > .material-icons {
   font-size: 20px;
 }

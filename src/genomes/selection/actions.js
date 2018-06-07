@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { createAsyncConstants } from '../../actions';
 import { fetchGenomeList } from '../actions';
 
@@ -7,11 +5,7 @@ import { getGenomeList, getGenomes, getListIndices } from '../selectors';
 import { getVisible } from '../summary/selectors';
 import { getSelectedGenomes, getSelectedGenomeIds, getSelectionStatus } from './selectors';
 
-import { showToast } from '../../toast';
-
 import * as api from './api';
-
-import { isOverSelectionLimit, getSelectionLimit } from './utils';
 
 export const SELECTION_DROPDOWN_OPENED = 'SELECTION_DROPDOWN_OPENED';
 
@@ -104,16 +98,6 @@ export function selectRange(fromIndex, toIndex) {
     if (selection.length === size) {
       dispatch(appendToSelection(selection));
     } else {
-      // if (isOverSelectionLimit(size)) {
-      //   dispatch(showToast({
-      //     message: (
-      //       <span>
-      //         You have selected the first {getSelectionLimit()} unselected genomes in this list.
-      //       </span>
-      //     ),
-      //   }));
-      // }
-      // Math.min(stop, start + getSelectionLimit() - 1)
       dispatch(fetchGenomeList(start, stop))
         .then(fetchedGenomes =>
           dispatch(appendToSelection(fetchedGenomes))

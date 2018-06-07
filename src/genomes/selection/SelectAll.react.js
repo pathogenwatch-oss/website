@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { selectAll } from './actions';
+import { isUnfilteredList } from '../summary/selectors';
 import { getSelectionStatus } from './selectors';
 
 const iconsByStatus = {
@@ -10,11 +11,17 @@ const iconsByStatus = {
   INDETERMINATE: 'indeterminate_check_box',
 };
 
-const SelectAll = ({ status, select }) => (
+function getTitle(status, disabled) {
+  if (disabled) return '"Select All" is not available on the unfiltered list, please select at least one filter criterion.';
+  return status === 'CHECKED' ? 'Remove from Selection' : 'Add to Selection';
+}
+
+const SelectAll = ({ status, disabled, select }) => (
   <button
     className="wgsa-genome-checkbox"
     onClick={select}
-    title={status === 'CHECKED' ? 'Remove from Selection' : 'Add to Selection'}
+    disabled={disabled}
+    title={getTitle(status, disabled)}
   >
     <i className="material-icons">
       {iconsByStatus[status]}
@@ -25,6 +32,7 @@ const SelectAll = ({ status, select }) => (
 function mapStateToProps(state) {
   return {
     status: getSelectionStatus(state),
+    disabled: isUnfilteredList(state),
   };
 }
 
