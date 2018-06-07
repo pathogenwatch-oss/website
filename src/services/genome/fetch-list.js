@@ -1,12 +1,19 @@
 const Genome = require('models/genome');
 
-// const config = require('configuration');
-// const { pagination = { min: 100, max: 2500 } } = config;
+const config = require('configuration');
+const { pagination = { min: 100, max: 2500 } } = config;
+
+function shouldLimit(filters) {
+  const keys = Object.keys(filters);
+  if (keys.length === 1) {
+    return keys[0] === 'prefilter';
+  }
+  return keys.length === 0;
+}
 
 module.exports = function (props) {
   const { user, query = {} } = props;
-  const { skip = 0, limit, sort } = query;
-
+  const { skip = 0, limit = pagination.max, sort, ...filters } = query;
   return (
     Genome
       .find(
@@ -23,8 +30,7 @@ module.exports = function (props) {
           _user: 1,
         }, {
           skip: Number(skip),
-          // limit: Math.min(Number(limit), pagination.max),
-          limit: Number(limit),
+          limit: shouldLimit(filters) ? Math.min(Number(limit), pagination.max) : null,
           sort: Genome.getSort(sort),
         }
       )
