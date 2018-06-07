@@ -24,7 +24,7 @@ export default function AvatarLink({ user }) {
       <AccountImage />
       <div className="cgps-avatar__name"><Name /></div>
       <div className="cgps-avatar__contact" title="Sign in to your account">
-        Sign in to your account
+        Sign in to your account below
       </div>
     </div>
   );
