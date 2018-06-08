@@ -99,6 +99,10 @@
   letter-spacing: normal;
 }
 
+a.wgsa-account-header {
+  text-decoration: underline;
+}
+
 .cgps-avatar > * {
   white-space: nowrap;
   text-overflow: ellipsis;

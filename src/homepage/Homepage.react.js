@@ -18,8 +18,10 @@ export default ({ deployedOrganisms, openMenu }) => (
   <div className="wgsa-homepage">
     <DocumentTitle title="Global Pathogen Surveillance through Whole Genome Sequencing" />
     <section className="jumbotron">
-      <Logo />
-      <h1>Global Pathogen Surveillance through Whole Genome Sequencing</h1>
+      <div className="jumbotron-content">
+        <Logo />
+        <h1><strong>Global Pathogen Surveillance</strong><br /> <span>through</span> Whole Genome Sequencing.</h1>
+      </div>
     </section>
     <Showcase />
     <section id="how-it-works" className="alt wgsa-how-it-works">
@@ -245,7 +247,7 @@ export default ({ deployedOrganisms, openMenu }) => (
       <footer>
         { CONFIG.user ?
           <Link to="/account" className="mdl-button mdl-button--primary">
-            <i className="material-icons">account_box</i> Go to Account
+            <i className="material-icons">account_circle</i> Go to Account
           </Link> :
           <button onClick={openMenu} className="mdl-button mdl-button--primary">
             <i className="material-icons">account_circle</i> Sign in

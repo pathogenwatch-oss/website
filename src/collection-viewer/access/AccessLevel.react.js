@@ -8,7 +8,7 @@ import { getAccessLevel } from './selectors';
 const AccessLevel = ({ onClick, icon, active, title, description }) => (
   <button
     className={classnames({ active })}
-    title={`Set Access to ${title}`}
+    title={`Set Collection to ${title}`}
     onClick={onClick}
     disabled={active}
   >

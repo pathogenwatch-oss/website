@@ -5,8 +5,8 @@
   height: calc(100vh - 336px);
   min-height: 640px;
   display: block;
-  margin: 0px auto 0;
-  background: #efefef;
+  margin: 0;
+  background-color:#efefef;
 }
 
 .showcase .wgsa-homepage__content {

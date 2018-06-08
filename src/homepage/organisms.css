@@ -16,8 +16,9 @@
 .wgsa-organism-table caption {
   font-size: 24px;
   line-height: 2;
-  font-family: "Roboto Condensed", "Helvetica", "Arial", sans-serif;
+  font-family: "Saira Semi Condensed", "Helvetica", "Arial", sans-serif;
   color: #673c90;
+  font-weight: 500;
 }
 
 .wgsa-organism-table th {

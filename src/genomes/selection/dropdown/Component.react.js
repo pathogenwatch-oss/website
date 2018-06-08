@@ -11,7 +11,7 @@ import { getSelectionDropdownView, getSelectionSize } from '../selectors';
 
 const EmptySelection = (
   <div className="wgsa-selection-message">
-    <h3>No Genomes Selected.</h3>
+    <h3>No Genomes Selected</h3>
     <p>You can select genomes with the following methods:</p>
     <ul className="bulleted">
       <li><strong>Checkboxes</strong> in the List view</li>

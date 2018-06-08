@@ -145,6 +145,7 @@ export default React.createClass({
           >
             <TileLayer
               noWrap
+              bounds={[ [ -90, -180 ], [ 90, 180 ] ]}
               attribution={ATTRIBUTION}
               url={`https://api.mapbox.com/styles/v1/cgpsdev/cj5y3b7aq0rru2spdrcdnjxsm/tiles/256/{z}/{x}/{y}?access_token=${CONFIG.mapboxKey}`}
             />

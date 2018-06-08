@@ -23,8 +23,8 @@ const SearchDropdown = React.createClass({
       <Fade className="wgsa-search-dropdown-container">
         { isOpen ?
           <div className="wgsa-search-dropdown">
-            <button onClick={close} className="mdl-button">
-              Close
+            <button onClick={close} className="mdl-button mdl-button--icon">
+              <i className="material-icons">close</i>
             </button>
             <AdvancedMode />
           </div> :

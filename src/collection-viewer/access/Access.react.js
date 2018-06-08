@@ -5,15 +5,15 @@ import AccessStatus from './AccessStatus.react';
 
 export default () => (
   <section className="wgsa-collection-access">
-    <h4>Access</h4>
+    <h4>Sharing</h4>
     <AccessStatus />
     <ul>
       <li>
         <AccessLevel
-          level="public"
-          icon="public"
-          title="Public"
-          description="Available to all, added to list of public collections."
+          level="private"
+          icon="lock"
+          title="Private"
+          description="Available to you only."
         />
       </li>
       <li>
@@ -24,14 +24,14 @@ export default () => (
           description="Available to anyone with the link, no sign-in required."
         />
       </li>
-      <li>
+      {/* <li>
         <AccessLevel
-          level="private"
-          icon="lock"
-          title="Private"
-          description="Available to you only."
+          level="public"
+          icon="public"
+          title="Public"
+          description="Available to all, added to list of public collections."
         />
-      </li>
+      </li> */}
     </ul>
   </section>
 );

@@ -14,6 +14,10 @@
   line-height: 1.5;
 }
 
+.wgsa-profile-counter {
+  padding-bottom: 40px;
+}
+
 .wgsa-profile-counter:hover,
 .wgsa-profile-counter:focus,
 .wgsa-profile-counter:active {
@@ -23,12 +27,12 @@
 .wgsa-profile-counter:hover > .wgsa-hub-stats-heading,
 .wgsa-profile-counter:focus > .wgsa-hub-stats-heading,
 .wgsa-profile-counter:active > .wgsa-hub-stats-heading{
-  text-decoration: underline;
+  text-decoration: none;
 }
 
 .wgsa-profile-section {
   width: 80%;
-  margin: 0 auto 56px !important;
+  margin: 0 auto 8px;
 }
 
 .wgsa-activity-item {
@@ -39,18 +43,18 @@
 
 .wgsa-activity-item i {
   font-size: 18px;
+  color: rgba(0, 0, 0, 0.405);
 }
 
 .wgsa-activity-item > * {
-  margin: 0 16px;
+  margin: 0 8px;
 }
 
-.wgsa-activity-item > :first-child {
+/* .wgsa-activity-item > :first-child {
   margin: 0;
-}
+} */
 
 .wgsa-activity-item__time {
   margin-left: auto;
-  margin-right: 0;
   cursor: help;
 }
