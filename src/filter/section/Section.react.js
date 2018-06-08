@@ -63,9 +63,10 @@ const FilterSection = React.createClass({
           <React.Fragment>
             { activeItem && <FilterItem {...activeItem} onClick={onClick} /> }
             { children ||
-              summary
-                .filter(_ => !_.active)
-                .map(props => <FilterItem key={props.value} {...props} onClick={onClick} />) }
+              summary.map(props => {
+                if (props.active) return null;
+                return <FilterItem key={props.value} {...props} onClick={onClick} />;
+              }) }
           </React.Fragment>
         )}
       </section>
