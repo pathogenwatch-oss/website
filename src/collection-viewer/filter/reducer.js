@@ -41,13 +41,13 @@ export default function (state = initialState, { type, payload = {} }) {
     case TREE_LOADED: {
       const { leafIds } = payload;
       const filter = state[filterKeys.VISIBILITY];
-      const reset = filter.active && !leafIds.some(id => filter.ids.has(id));
+      const shouldClearFilter = filter.active && !leafIds.some(id => filter.ids.has(id));
       return {
         ...state,
         [filterKeys.VISIBILITY]: {
           unfilteredIds: leafIds,
-          ids: reset ? new Set() : filter.ids,
-          active: reset ? false : filter.active,
+          ids: shouldClearFilter ? new Set() : filter.ids,
+          active: shouldClearFilter ? false : filter.active,
         },
       };
     }

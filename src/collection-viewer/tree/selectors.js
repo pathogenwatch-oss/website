@@ -24,6 +24,9 @@ export const getLeafIds = (state, { stateKey }) => {
   const trees = getTrees(state);
 
   if (stateKey === POPULATION) {
+    if (COLLECTION in trees) {
+      return trees[COLLECTION].leafIds;
+    }
     return getCollectionGenomeIds(state);
   }
 
