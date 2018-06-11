@@ -38,9 +38,6 @@ function getGenomes(spec, metadata) {
       .find(query, { fileId: 1 }, { sort: { fileId: 1 } })
       .lean()
       .then(docs => {
-        if (docs.length < 3) {
-          throw new Error('Not enough genomes to make a tree');
-        }
         const ids = new Set(genomes.map(_ => _.toString()));
         return docs.map(doc => {
           doc.population = !ids.has(doc._id.toString());
@@ -238,20 +235,33 @@ function createContainer(spec, metadata) {
   return container;
 }
 
-function runTask(spec, metadata) {
-  return getGenomes(spec, metadata)
-    .then(genomes =>
-      getGenomesInCache(genomes, spec).then(uncachedFileIds => ({ genomes, uncachedFileIds }))
-    )
-    .then(({ genomes, uncachedFileIds }) => new Promise((resolve, reject) => {
-      const container = createContainer(spec, metadata);
+async function runTask(spec, metadata) {
+  const genomes = await getGenomes(spec, metadata);
 
-      handleContainerOutput(container, spec, metadata, genomes, resolve, reject);
+  if (genomes.length <= 1) {
+    throw new Error('Not enough genomes to make a tree');
+  }
 
-      handleContainerExit(container, spec, metadata, reject);
+  if (genomes.length === 2) {
+    return {
+      newick: `(${genomes[0]._id}:0.5,${genomes[1]._id}:0.5);`,
+      size: 2,
+      populationSize: genomes.filter(_ => _.population).length,
+      name: metadata.name,
+    };
+  }
 
-      attachInputStream(container, spec, genomes, uncachedFileIds);
-    }));
+  const uncachedFileIds = await getGenomesInCache(genomes, spec);
+
+  return new Promise((resolve, reject) => {
+    const container = createContainer(spec, metadata);
+
+    handleContainerOutput(container, spec, metadata, genomes, resolve, reject);
+
+    handleContainerExit(container, spec, metadata, reject);
+
+    attachInputStream(container, spec, genomes, uncachedFileIds);
+  });
 }
 
 module.exports = function handleMessage({ spec, metadata }) {
