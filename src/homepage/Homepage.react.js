@@ -257,11 +257,11 @@ export default ({ deployedOrganisms, openMenu }) => (
     <footer className="cgps-footer mdl-mega-footer">
       <div className="mdl-mega-footer--top-section">
         <div className="mdl-mega-footer--left-section">
+          <img className="cgps-supporting-logo" src="images/wellcome-logo-white.png" />
+          <img className="cgps-supporting-logo" src="images/bdi.png" />
           <a href="http://www.pathogensurveillance.net" target="_blank" rel="noopener">
-            <img className="cgps-supporting-logo" src="images/cgps_logo.png" />
+            <img className="cgps-supporting-logo cgps-supporting-logo--cgps" src="images/cgps_logo.png" />
           </a>
-          <img className="cgps-supporting-logo" src="images/imperial.png" />
-          <img className="cgps-supporting-logo" src="images/wellcome_trust.png" />
         </div>
         <div className="mdl-mega-footer--right-section">
           <a className="cgps-contact-link cgps-contact-link--twitter" target="_blank" rel="noopener" href="https://www.twitter.com/TheCGPS">

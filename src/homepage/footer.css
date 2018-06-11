@@ -60,18 +60,14 @@
 }
 
 .cgps-supporting-logo {
-  width: 80%;
   max-width: 200px;
+  max-height: 96px;
   margin: 32px auto;
   display: block;
 }
 
-.cgps-supporting-logo:first-child {
-  width: auto;
-  max-width: 250px;
-  @media (max-width: 1024px) {
-    display: none;
-  }
+.cgps-supporting-logo--cgps {
+  max-width: 280px;
 }
 
 .cgps-footer .mdl-mega-footer--middle-section {
@@ -92,10 +88,7 @@
     float: none;
     text-align: center;
   }
-  .cgps-supporting-logo {
-    width: 160px;
-    max-width: 160px;
-  }
+
   .mdl-mega-footer--left-section {
     margin-bottom: 0;
   }
