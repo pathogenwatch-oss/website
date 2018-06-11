@@ -133,7 +133,7 @@ const prodConfig = {
     new WebpackMonitor({
       capture: true,
       target: '../monitor.json',
-      launch: true,
+      // launch: true,
     }),
     new HtmlWebpackPlugin({
       filename: '../views/index.ejs',
