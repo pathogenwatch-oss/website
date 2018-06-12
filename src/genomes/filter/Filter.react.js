@@ -13,7 +13,15 @@ import { getFilterSummary, getSearchText, isFilterOpen } from './selectors';
 import { stateKey } from './index';
 import * as actions from './actions';
 
-const Filter = ({ isActive, filterSummary, textValue, updateFilter, clearFilter }) => (
+function renderSpeciesIdSection(filterSummary) {
+  const genusActiveItem = filterSummary.genusId.find(_ => _.active);
+  if (genusActiveItem) {
+    return null;
+  }
+  return <p>Select a genus to filter by species.</p>;
+}
+
+const Filter = ({ isActive, filterSummary, textValue, updateFilter, updateMulti, clearFilter }) => (
   <FilterAside
     loading={filterSummary.loading}
     active={isActive}
@@ -33,7 +41,17 @@ const Filter = ({ isActive, filterSummary, textValue, updateFilter, clearFilter 
       heading="Genus"
       icon="bug_report"
       summary={filterSummary.genusId}
-      updateFilter={updateFilter}
+      updateFilter={(key, value) => {
+        const speciesItem = filterSummary.speciesId.find(_ => _.active);
+        if (speciesItem) {
+          updateMulti({
+            genusId: value,
+            speciesId: speciesItem.value,
+          });
+        } else {
+          updateFilter('genusId', value);
+        }
+      }}
     />
     <FilterSection
       filterKey="speciesId"
@@ -42,7 +60,7 @@ const Filter = ({ isActive, filterSummary, textValue, updateFilter, clearFilter 
       summary={filterSummary.speciesId}
       updateFilter={updateFilter}
     >
-      { filterSummary.speciesId.length || (!filterSummary.genusId.length) ? null : <p>Select a genus to filter by species.</p> }
+      { renderSpeciesIdSection(filterSummary) }
     </FilterSection>
     <FilterSection
       filterKey="sequenceType"
@@ -103,6 +121,8 @@ function mapDispatchToProps(dispatch) {
     clearFilter: () => dispatch(actions.clearFilter()),
     updateFilter: (filterKey, value) =>
       dispatch(actions.updateFilter({ [filterKey]: value })),
+    updateMulti: filterMap =>
+      dispatch(actions.updateFilter(filterMap)),
   };
 }
 

@@ -31,14 +31,24 @@
   cursor: pointer;
 }
 
-.wgsa-filter-section > h3 :first-child {
+.wgsa-filter-section > h3 > i:first-child {
   margin-right: 16px;
   font-size: 20px;
   height: 22px;
 }
 
-.wgsa-filter-section > h3 :last-child {
+.wgsa-filter-section > h3 > i:last-child {
   margin-left: auto;
+}
+
+.wgsa-filter-section > h3 > span {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.wgsa-filter-section.active > h3 {
+  color: #673c90;
 }
 
 .wgsa-filter-section p {

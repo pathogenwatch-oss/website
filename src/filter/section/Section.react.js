@@ -30,6 +30,14 @@ const FilterSection = React.createClass({
     };
   },
 
+  componentWillReceiveProps({ summary = [] }) {
+    const activeItem = summary.find(_ => _.active);
+    this.setState({
+      isActive: !!activeItem,
+      isOpen: this.state.isActive ? activeItem : this.state.isOpen,
+    });
+  },
+
   toggle(isOpen) {
     this.setState({ isOpen: !isOpen });
   },
@@ -47,21 +55,28 @@ const FilterSection = React.createClass({
     const activeItem = summary.find(_ => _.active);
     const onClick = (value) => updateFilter(filterKey, value);
 
+    if (activeItem) {
+      const { title, label, value } = activeItem;
+      return (
+        <section className="wgsa-filter-section active">
+          <h3 title={`${heading}: ${title || label}`} onClick={() => onClick(value)}>
+            <i className="material-icons">{icon}</i>
+            <span>{label}</span>
+            <i className="material-icons">filter_list</i>
+          </h3>
+        </section>
+      );
+    }
+
     return (
-      <section
-        className={classnames(
-          'wgsa-filter-section', className, { 'is-open': isOpen, active: activeItem })
-        }
-      >
+      <section className={classnames('wgsa-filter-section', className, { 'is-open': isOpen })}>
         <h3 onClick={() => this.toggle(isOpen)}>
           <i className="material-icons">{icon}</i>
           <span>{heading}</span>
-          { activeItem && <i className="material-icons" style={{ padding: '0 4px' }}>filter_list</i> }
           <i className="material-icons">{isOpen ? 'expand_less' : 'expand_more'}</i>
         </h3>
         { isOpen && (
           <React.Fragment>
-            { activeItem && <FilterItem {...activeItem} onClick={onClick} /> }
             { children ||
               summary.map(props => {
                 if (props.active) return null;
