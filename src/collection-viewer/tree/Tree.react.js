@@ -198,16 +198,14 @@ export default React.createClass({
         >
           <i className="material-icons">tune</i>
         </button>
-        <button
-          ref="redrawOriginalTreeButton"
-          className={classnames(
-            'wgsa-pane-overlay wgsa-redraw-original-tree-button mdl-button mdl-button--icon',
-            { 'wgsa-redraw-original-tree-button--visible': this.props.root !== 'root' }
-          )}
-          title="Redraw Original Tree"
-        >
-          <i className="material-icons">replay</i>
-        </button>
+        { this.props.root !== 'root' &&
+          <button
+            ref="redrawOriginalTreeButton"
+            className="wgsa-pane-overlay wgsa-redraw-original-tree-button mdl-button mdl-button--icon"
+            title="Redraw Original Tree"
+          >
+            <i className="material-icons">replay</i>
+          </button> }
         <button
           ref="menuButton"
           className="mdl-button mdl-js-button mdl-button--icon wgsa-tree-menu-button wgsa-pane-button wgsa-pane-overlay"

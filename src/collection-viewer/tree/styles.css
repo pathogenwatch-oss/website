@@ -67,11 +67,6 @@ div.wgsa-tree-icon:active {
   position: absolute;
   top: 16px;
   right: 84px;
-  visibility: hidden;
-}
-
-.wgsa-redraw-original-tree-button--visible {
-  visibility: visible;
 }
 
 .wgsa-tree-toggle-controls-button {
