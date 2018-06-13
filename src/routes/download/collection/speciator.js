@@ -8,7 +8,7 @@ const { transformer } = require('../utils/speciator');
 
 module.exports = (req, res, next) => {
   const { user } = req;
-  const { collectionId } = req.params;
+  const { token } = req.params;
   const { ids } = req.body;
   const { filename: rawFilename = '' } = req.query;
   const filename = sanitize(rawFilename) || 'speciator.csv';
@@ -20,7 +20,7 @@ module.exports = (req, res, next) => {
     'Content-type': 'text/csv',
   });
 
-  request('collection', 'authorise', { user, id: collectionId, projection: { genomes: 1 } })
+  request('collection', 'authorise', { user, token, projection: { genomes: 1 } })
     .then(collection => {
       const query = {
         _id: { $in: genomeIds },

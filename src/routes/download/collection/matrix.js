@@ -70,7 +70,7 @@ function generateMatrix({ genomes, cache }, stream) {
 
 module.exports = (req, res, next) => {
   const { user } = req;
-  const { collectionId, type } = req.params;
+  const { token, type } = req.params;
   const { ids } = req.body;
 
   if (!type || typeof type !== 'string') {
@@ -96,7 +96,7 @@ module.exports = (req, res, next) => {
   const stream = transform(data => data.join(',') + '\n');
   stream.pipe(res);
 
-  request('collection', 'authorise', { user, id: collectionId, projection: { genomes: 1, 'tree.version': 1 } })
+  request('collection', 'authorise', { user, token, projection: { genomes: 1, 'tree.version': 1 } })
     .then(async (collection) => {
       const genomes = await getCollectionGenomes(collection, genomeIds);
       writeMatrixHeader(genomes, stream);

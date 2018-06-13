@@ -90,7 +90,7 @@ function getColumns(organismId, query) {
 
 module.exports = (req, res, next) => {
   const { user } = req;
-  const { collectionId } = req.params;
+  const { token } = req.params;
   const { ids } = req.body;
 
   const { filename: rawFilename = '' } = req.query;

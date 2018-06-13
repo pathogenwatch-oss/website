@@ -225,13 +225,13 @@ function generateData(collection, genomeIds, filename, res, next) {
 
 module.exports = (req, res, next) => {
   const { user } = req;
-  const { collectionId } = req.params;
+  const { token } = req.params;
   const { ids } = req.method === 'GET' ? req.query : req.body;
   const { filename: rawFilename = '' } = req.query;
   const filename = sanitize(rawFilename) || 'annotations.csv';
   const genomeIds = ids ? ids.split(',') : null;
 
-  request('collection', 'authorise', { user, id: collectionId, projection: { genomes: 1 } })
+  request('collection', 'authorise', { user, token, projection: { genomes: 1 } })
     .then(collection => generateData(collection, genomeIds, filename, res, next))
     .catch(next);
 };

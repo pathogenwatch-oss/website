@@ -271,7 +271,7 @@ async function generateMatrix(collection, stream) {
 
 module.exports = (req, res, next) => {
   const { user } = req;
-  const { collectionId } = req.params;
+  const { token } = req.params;
   const { filename: rawFilename = '' } = req.query;
   const filename = sanitize(rawFilename) || 'variance-summary.csv';
 
@@ -280,7 +280,7 @@ module.exports = (req, res, next) => {
     'Content-type': 'text/csv',
   });
 
-  request('collection', 'authorise', { user, id: collectionId, projection: { genomes: 1, 'tree.version': 1, subtrees: 1 } })
+  request('collection', 'authorise', { user, token, projection: { genomes: 1, 'tree.version': 1, subtrees: 1 } })
     .then(results => generateMatrix(results, res))
     .catch(next);
 };
