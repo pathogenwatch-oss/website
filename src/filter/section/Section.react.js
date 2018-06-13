@@ -43,14 +43,8 @@ const FilterSection = React.createClass({
   },
 
   render() {
-    const {
-      heading, icon, summary = [], updateFilter, filterKey, className, children,
-    } = this.props;
+    const { heading, icon, summary = [], updateFilter, filterKey, children } = this.props;
     const { isOpen } = this.state;
-
-    if (!children && !summary.length) {
-      return null;
-    }
 
     const activeItem = summary.find(_ => _.active);
     const onClick = (value) => updateFilter(filterKey, value);
@@ -58,11 +52,25 @@ const FilterSection = React.createClass({
     if (activeItem) {
       const { title, label, value } = activeItem;
       return (
-        <section className="wgsa-filter-section active">
+        <section className="wgsa-filter-section is-active">
           <h3 title={`${heading}: ${title || label}`} onClick={() => onClick(value)}>
             <i className="material-icons">{icon}</i>
             <span>{label}</span>
             <i className="material-icons">filter_list</i>
+          </h3>
+        </section>
+      );
+    }
+
+    const { disabled, disabledText, className } = this.props;
+
+    if (disabled) {
+      return (
+        <section className="wgsa-filter-section is-disabled">
+          <h3 title={disabledText}>
+            <i className="material-icons">{icon}</i>
+            <span>{heading}</span>
+            {/* <i className="material-icons">{isOpen ? 'expand_less' : 'expand_more'}</i> */}
           </h3>
         </section>
       );
@@ -91,7 +99,7 @@ const FilterSection = React.createClass({
 });
 
 export default props => {
-  if (props.children || props.summary && props.summary.length) {
+  if (props.children || props.disabled || (props.summary && props.summary.length)) {
     return <FilterSection {...props} />;
   }
   return null;

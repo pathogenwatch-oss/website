@@ -47,8 +47,16 @@
   overflow: hidden;
 }
 
-.wgsa-filter-section.active > h3 {
+.wgsa-filter-section.is-active > h3 {
   color: #673c90;
+}
+
+.wgsa-filter-section.is-disabled > h3 {
+  color: rgba(0, 0, 0, 0.36); /* 0.54 * 0.666 */
+}
+
+.wgsa-filter-section.is-disabled:hover > h3 {
+  cursor: help;
 }
 
 .wgsa-filter-section p {

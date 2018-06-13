@@ -109,7 +109,7 @@ export const getFilterSummary = createSelector(
         Object.keys(type).map(
           value => ({
             value,
-            label: value,
+            label: `${value[0].toUpperCase()}${value.slice(1)}`,
             count: type[value].count,
             active: filterState.type === value,
           })
