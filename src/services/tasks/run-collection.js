@@ -6,6 +6,7 @@ const docker = require('docker-run');
 const es = require('event-stream');
 const BSON = require('bson');
 
+const Analysis = require('models/analysis');
 const Collection = require('../../models/collection');
 const Genome = require('../../models/genome');
 const ScoreCache = require('../../models/scoreCache');
@@ -17,37 +18,38 @@ const { request } = require('../../services');
 const LOGGER = require('../../utils/logging').createLogger('runner');
 const bson = new BSON();
 
-function getGenomes(spec, metadata) {
-  const { task } = spec;
-  const { collectionId, name, organismId } = metadata;
-  return Collection.findOne(
+async function getGenomes(task, metadata) {
+  const { collectionId, name: refName, organismId } = metadata;
+  const { genomes } = await Collection.findOne(
     { _id: collectionId },
     { genomes: 1 },
   )
-  .lean()
-  .then(({ genomes }) => {
-    let query = { _id: { $in: genomes } };
-    if (task === 'subtree') {
-      query = {
-        'analysis.speciator.organismId': organismId,
-        'analysis.core.fp.reference': name,
-        $or: [ { _id: { $in: genomes } }, { population: true } ],
-      };
-    }
-    return Genome
-      .find(query, { fileId: 1 }, { sort: { fileId: 1 } })
-      .lean()
-      .then(docs => {
-        if (docs.length < 3) {
-          throw new Error('Not enough genomes to make a tree');
-        }
-        const ids = new Set(genomes.map(_ => _.toString()));
-        return docs.map(doc => {
-          doc.population = !ids.has(doc._id.toString());
-          return doc;
-        });
-      });
-  });
+  .lean();
+
+  let query = { _id: { $in: genomes } };
+  if (task === 'subtree') {
+    query = {
+      'analysis.speciator.organismId': organismId,
+      'analysis.core.fp.reference': refName,
+      $or: [ { _id: { $in: genomes } }, { population: true } ],
+    };
+  }
+
+  const docs = await Genome
+    .find(query, { fileId: 1, name: 1 }, { sort: { fileId: 1 } })
+    .lean();
+
+  if (docs.length < 3) {
+    throw new Error('Not enough genomes to make a tree');
+  }
+  const ids = new Set(genomes.map(_ => _.toString()));
+
+  return docs.map(({ _id, fileId, name }) => ({
+    _id,
+    fileId,
+    name,
+    population: !ids.has(_id.toString()),
+  }));
 }
 
 function getGenomesInCache(genomes, versions) {
@@ -89,32 +91,49 @@ function getGenomesInCache(genomes, versions) {
   });
 }
 
-function attachInputStream(container, spec, genomes, uncachedFileIds) {
-  const { version } = spec;
+function createGenomesStream(genomes, uncachedFileIds, versions) {
+  const genomeLookup = genomes.reduce((acc, genome) => {
+    const { fileId } = genome;
+    if (uncachedFileIds.indexOf(fileId) === -1) return acc;
+    acc[fileId] = acc[fileId] || [];
+    acc[fileId].push(genome);
+    return acc;
+  }, {});
 
-  const docsStream = Genome.collection.find(
-    {
-      _id: { $in: genomes.map(_ => _._id) },
-      fileId: { $in: uncachedFileIds },
-      // 'analysis.core.profile.filter': false,
-      // 'analysis.core.profile.alleles.filter': false,
-    },
-    {
-      name: 1,
-      fileId: 1,
-      'analysis.core.profile.filter': 1,
-      'analysis.core.profile.alleles.filter': 1,
-      'analysis.core.profile.id': 1,
-      'analysis.core.profile.alleles.id': 1,
-      'analysis.core.profile.alleles.rstart': 1,
-      'analysis.core.profile.alleles.rstop': 1,
-      'analysis.core.profile.alleles.mutations': 1,
-    },
-    {
-      raw: true,
-      sort: { fileId: 1 },
+  const cores = Analysis.find({
+    fileId: { $in: uncachedFileIds },
+    task: 'core',
+    version: versions.core,
+  }, {
+    fileId: 1,
+    'results.profile.filter': 1,
+    'results.profile.alleles.filter': 1,
+    'results.profile.id': 1,
+    'results.profile.alleles.id': 1,
+    'results.profile.alleles.rstart': 1,
+    'results.profile.alleles.rstop': 1,
+    'results.profile.alleles.mutations': 1,
+  }).sort({ fileId: 1 }).lean().cursor();
+
+  const reformatCores = es.through(function (core) {
+    const { fileId, results } = core;
+    genomeLookup[fileId] = genomeLookup[fileId] || [];
+    for (const genomeDetails of genomeLookup[fileId]) {
+      const genome = {
+        ...genomeDetails,
+        analysis: { core: results },
+      };
+      this.emit('data', genome);
     }
-  );
+    genomeLookup[fileId] = [];
+  });
+
+  const toRaw = es.map((doc, cb) => cb(null, bson.serialize(doc)));
+  return cores.pipe(reformatCores).pipe(toRaw);
+}
+
+function attachInputStream(container, versions, genomes, uncachedFileIds) {
+  const docsStream = createGenomesStream(genomes, uncachedFileIds, versions);
   docsStream.pause();
   // docsStream.on('end', () => console.log('docs ended'));
 
@@ -237,20 +256,22 @@ function createContainer(spec, metadata) {
   return container;
 }
 
-function runTask(spec, metadata) {
-  return getGenomes(spec, metadata)
-    .then(genomes =>
-      getGenomesInCache(genomes, spec).then(uncachedFileIds => ({ genomes, uncachedFileIds }))
-    )
-    .then(({ genomes, uncachedFileIds }) => new Promise((resolve, reject) => {
-      const container = createContainer(spec, metadata);
+async function runTask(spec, metadata) {
+  const { task, version, requires: taskRequres = [] } = spec;
+  const coreVersion = taskRequres.find(_ => _.task === 'core').version;
+  const versions = { tree: version, core: coreVersion };
+  const genomes = await getGenomes(task, metadata);
+  const uncachedFileIds = await getGenomesInCache(genomes, versions);
 
-      handleContainerOutput(container, spec, metadata, genomes, resolve, reject);
+  return new Promise((resolve, reject) => {
+    const container = createContainer(spec, metadata);
 
-      handleContainerExit(container, spec, metadata, reject);
+    handleContainerOutput(container, task, versions, metadata, genomes, resolve, reject);
 
-      attachInputStream(container, spec, genomes, uncachedFileIds);
-    }));
+    handleContainerExit(container, task, versions, metadata, reject);
+
+    attachInputStream(container, versions, genomes, uncachedFileIds);
+  });
 }
 
 module.exports = function handleMessage({ spec, metadata }) {

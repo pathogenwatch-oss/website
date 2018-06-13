@@ -58,26 +58,19 @@ function runTask(fileId, task, version, organismId, speciesId, genusId) {
   });
 }
 
-module.exports = function ({ task, version, metadata }) {
+module.exports = async function ({ task, version, metadata }) {
   const { organismId, speciesId, genusId, fileId, genomeId, uploadedAt, clientId } = metadata;
-  return Analysis.findOne({ fileId, task, version })
-    .lean()
-    .then(cached =>
-      cached ||
-      runTask(fileId, task, version, organismId, speciesId, genusId)
-        .then(results => {
-          Analysis.update(
-            { fileId, task, version },
-            { fileId, task, version, results },
-            { upsert: true }
-          ).exec();
-          return { fileId, task, version, results };
-        })
-    )
-    .then(doc =>
-      Genome.addAnalysisResults(genomeId, doc)
-        .then(() => {
-          notify({ genomeId, clientId, uploadedAt, tasks: [ doc ] });
-        })
-    );
+  let doc = await Analysis.findOne({ fileId, task, version }).lean();
+  if (!doc) { // The results weren't in the cache
+    const results = await runTask(fileId, task, version, organismId, speciesId, genusId);
+    await Analysis.update(
+      { fileId, task, version },
+      { fileId, task, version, results },
+      { upsert: true }
+    ).exec();
+    doc = { fileId, task, version, results };
+  }
+
+  await Genome.addAnalysisResults(genomeId, doc);
+  notify({ genomeId, clientId, uploadedAt, tasks: [ doc ] });
 };

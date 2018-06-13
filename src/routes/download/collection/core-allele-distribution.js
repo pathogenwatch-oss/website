@@ -1,29 +1,19 @@
 const transform = require('stream-transform');
+const es = require('event-stream');
 const sanitize = require('sanitize-filename');
 const Genome = require('models/genome');
+const Analysis = require('models/analysis');
 
 const { request } = require('services');
-
-function getCollectionGenomes(query) {
-  return Genome
-    .find(query, {
-      name: 1,
-      'analysis.core.profile.id': 1,
-      'analysis.core.profile.alleles.id': 1,
-    }, {
-      sort: { name: 1 },
-    })
-    .lean()
-    .cursor();
-}
 
 function writeLines(columns, genomes, res) {
   const totalGenomes = {};
   const totalSequences = {};
-  const stream = transform(data => data.join(',') + '\n');
 
+  const stream = transform(data => data.join(',') + '\n');
   stream.pipe(res);
 
+  res.write('Family ID,');
   stream.write(columns);
 
   genomes.on('data', genome => {
@@ -84,11 +74,62 @@ function writeLines(columns, genomes, res) {
   });
 }
 
-function getColumns(organismId, query) {
-  return Genome.distinct('analysis.core.profile.id', query);
+function getGenomes(query, fileIds, genomeLookup) {
+  const cores = Analysis.find(query, {
+    fileId: 1,
+    results: 1,
+  }).lean().cursor();
+
+  const coreFormatter = es.through(function (core) {
+    const { fileId, results } = core;
+    genomeLookup[fileId] = genomeLookup[fileId] || [];
+    for (const { name } of genomeLookup[fileId]) {
+      const genome = {
+        name,
+        analysis: { core: results },
+      };
+      this.emit('data', genome);
+    }
+    genomeLookup[fileId] = [];
+  });
+
+  return cores.pipe(coreFormatter);
 }
 
-module.exports = (req, res, next) => {
+function getColumns(query) {
+  let columns = new Set();
+  const cores = Analysis.find(query, {
+    fileId: 1,
+    'results.profile.id': 1,
+  }).lean().cursor();
+
+  return new Promise((resolve, reject) => {
+    cores.on('data', ({ results }) => {
+      const newColumns = (results.profile || []).map(({ id }) => id);
+      columns = new Set([ ...columns, ...newColumns ]);
+    });
+    cores.on('error', err => reject(err));
+    cores.on('end', () => resolve([ ...columns ]));
+  });
+}
+
+function getGenomeSummaries(query) {
+  const genomes = Genome.find(query, { name: 1, fileId: 1 }).lean().cursor();
+  const fileIds = new Set();
+  const genomeLookup = {};
+  return new Promise((resolve, reject) => {
+    genomes.on('data', genome => {
+      const { fileId } = genome;
+      genomeLookup[fileId] = genomeLookup[fileId] || [];
+      genomeLookup[fileId].push(genome);
+      fileIds.add(fileId);
+    });
+    genomes.on('error', err => reject(err));
+    genomes.on('end', () => resolve({ fileIds: [ ...fileIds ], genomeLookup }));
+  });
+}
+
+module.exports = async (req, res, next) => {
   const { user } = req;
   const { token } = req.params;
   const { ids } = req.body;
@@ -102,19 +143,30 @@ module.exports = (req, res, next) => {
     'Content-type': 'text/csv',
   });
 
-  request('collection', 'authorise', { user, id: collectionId, projection: { genomes: 1 } })
-    .then(async collection => {
-      const query = {
-        _id: { $in: genomeIds },
-        $or: [
-          { _id: { $in: collection.genomes } },
-          { public: true },
-        ],
-      };
-      res.write('Family ID,');
-      const columns = await getColumns(query);
-      const genomes = getCollectionGenomes(query);
-      writeLines(columns, genomes, res);
-    })
-    .catch(next);
+  const collection = await request('collection', 'authorise', { user, token, projection: { genomes: 1, 'tree.versions': 1 } });
+  try {
+    const coreVersion = ((collection.tree || {}).versions || {}).core || null;
+    if (!coreVersion) throw new Error("Couldn't create download without core version");
+
+    const genomesQuery = {
+      _id: { $in: genomeIds },
+      $or: [
+        { _id: { $in: collection.genomes } },
+        { public: true },
+      ],
+    };
+    const { fileIds, genomeLookup } = await getGenomeSummaries(genomesQuery);
+
+    const analysisQuery = {
+      task: 'core',
+      fileId: { $in: fileIds },
+      version: coreVersion,
+    };
+    const columns = await getColumns(analysisQuery);
+    const genomes = getGenomes(analysisQuery, fileIds, genomeLookup);
+
+    writeLines(columns, genomes, res);
+  } catch (err) {
+    next(err);
+  }
 };
