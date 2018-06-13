@@ -1,4 +1,5 @@
 const transform = require('stream-transform');
+const sanitize = require('sanitize-filename');
 const Genome = require('models/genome');
 
 const { request } = require('services');
@@ -91,8 +92,9 @@ module.exports = (req, res, next) => {
   const { user } = req;
   const { collectionId } = req.params;
   const { ids } = req.body;
-  const { filename = 'core-allele-distribution.csv' } = req.query;
 
+  const { filename: rawFilename = '' } = req.query;
+  const filename = sanitize(rawFilename) || 'core-allele-distribution.csv';
   const genomeIds = ids ? ids.split(',') : null;
 
   res.set({

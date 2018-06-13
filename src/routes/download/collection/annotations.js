@@ -1,6 +1,7 @@
 const transform = require('stream-transform');
 const ZipStream = require('zip-stream');
 const async = require('async');
+const sanitize = require('sanitize-filename');
 
 const Genome = require('models/genome');
 const { request } = require('services');
@@ -226,7 +227,8 @@ module.exports = (req, res, next) => {
   const { user } = req;
   const { collectionId } = req.params;
   const { ids } = req.method === 'GET' ? req.query : req.body;
-  const { filename } = req.query;
+  const { filename: rawFilename = '' } = req.query;
+  const filename = sanitize(rawFilename) || 'annotations.csv';
   const genomeIds = ids ? ids.split(',') : null;
 
   request('collection', 'authorise', { user, id: collectionId, projection: { genomes: 1 } })

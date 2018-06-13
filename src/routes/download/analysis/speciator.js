@@ -1,3 +1,4 @@
+const sanitize = require('sanitize-filename');
 const csv = require('csv');
 const Genome = require('models/genome');
 
@@ -5,7 +6,8 @@ const { transformer } = require('../utils/speciator');
 
 module.exports = (req, res) => {
   const { user, sessionID } = req;
-  const { filename = 'wgsa-speciator.csv' } = req.query;
+  const { filename: rawFilename = '' } = req.query;
+  const filename = sanitize(rawFilename) || 'speciator.csv';
   const { ids } = req.body;
 
   res.setHeader('Content-Disposition', `attachment; filename=${filename}`);

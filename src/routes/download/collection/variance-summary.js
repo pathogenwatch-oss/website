@@ -1,3 +1,5 @@
+const sanitize = require('sanitize-filename');
+
 const Genome = require('models/genome');
 const Collection = require('models/collection');
 const ScoreCache = require('models/scoreCache');
@@ -270,10 +272,11 @@ async function generateMatrix(collection, stream) {
 module.exports = (req, res, next) => {
   const { user } = req;
   const { collectionId } = req.params;
-  const { filename = 'variance-summary' } = req.query;
+  const { filename: rawFilename = '' } = req.query;
+  const filename = sanitize(rawFilename) || 'variance-summary.csv';
 
   res.set({
-    'Content-Disposition': `attachment; filename="${filename}.csv"`,
+    'Content-Disposition': `attachment; filename="${filename}"`,
     'Content-type': 'text/csv',
   });
 

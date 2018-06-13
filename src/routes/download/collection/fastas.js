@@ -1,3 +1,5 @@
+const sanitize = require('sanitize-filename');
+
 const Genome = require('models/genome');
 const { request } = require('services');
 const { createFastaFileName } = require('services/utils');
@@ -49,7 +51,8 @@ module.exports = (req, res, next) => {
   const { user } = req;
   const { collectionId } = req.params;
   const { ids } = req.method === 'GET' ? req.query : req.body;
-  const { filename = 'wgsa-genomes.zip' } = req.query;
+  const { filename: rawFilename = '' } = req.query;
+  const filename = sanitize(rawFilename) || 'genomes.zip';
   const genomeIds = ids ? ids.split(',') : null;
 
   request('collection', 'authorise', { user, id: collectionId, projection: { genomes: 1 } })

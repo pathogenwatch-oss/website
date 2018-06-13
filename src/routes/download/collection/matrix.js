@@ -1,6 +1,7 @@
 const Genome = require('models/genome');
 const ScoreCache = require('models/scoreCache');
 const transform = require('stream-transform');
+const sanitize = require('sanitize-filename');
 
 const { request } = require('services');
 const { ServiceRequestError } = require('utils/errors');
@@ -71,7 +72,6 @@ module.exports = (req, res, next) => {
   const { user } = req;
   const { collectionId, type } = req.params;
   const { ids } = req.body;
-  const { filename = `${type}-matrix` } = req.query;
 
   if (!type || typeof type !== 'string') {
     res.status(400).send('`type` parameter is required.');
@@ -83,10 +83,13 @@ module.exports = (req, res, next) => {
     return;
   }
 
+  const { filename: rawFilename = '' } = req.query;
+  const filename = sanitize(rawFilename) || `${type}-matrix.csv`;
+
   const genomeIds = ids ? ids.split(',') : null;
 
   res.set({
-    'Content-Disposition': `attachment; filename="${filename}.csv"`,
+    'Content-Disposition': `attachment; filename="${filename}"`,
     'Content-type': 'text/csv',
   });
 

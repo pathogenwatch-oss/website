@@ -1,3 +1,4 @@
+const sanitize = require('sanitize-filename');
 const csv = require('csv');
 const Genome = require('models/genome');
 
@@ -9,7 +10,8 @@ module.exports = (req, res, next) => {
   const { user } = req;
   const { collectionId } = req.params;
   const { ids } = req.body;
-  const { filename = 'speciator.csv' } = req.query;
+  const { filename: rawFilename = '' } = req.query;
+  const filename = sanitize(rawFilename) || 'speciator.csv';
 
   const genomeIds = ids ? ids.split(',') : null;
 
