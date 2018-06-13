@@ -26,9 +26,9 @@ function getGenomes(genomeIds) {
   return Genome.find(query, projection, options).lean();
 }
 
-function getCache(genomes, { version }) {
+function getCache(genomes, versions) {
   return ScoreCache.find(
-    { fileId: { $in: genomes.map(_ => _.fileId) }, version },
+    { fileId: { $in: genomes.map(_ => _.fileId) }, 'versions.core': versions.core, 'versions.tree': versions.tree },
     genomes.reduce(
       (projection, { fileId }) => {
         projection[`scores.${fileId}`] = 1;
@@ -248,7 +248,7 @@ async function generateData({ genomes, tree, subtrees }, stream) {
     name: 'collection',
     size: collectionGenomeIds.size,
     populationSize: 0,
-    version: tree.version,
+    versions: tree.versions,
   };
   const collectionData = await generateTreeData(collectionTree, Array.from(collectionGenomeIds), collectionGenomeIds);
   writeMatrixLine(collectionData, stream);
@@ -280,7 +280,7 @@ module.exports = (req, res, next) => {
     'Content-type': 'text/csv',
   });
 
-  request('collection', 'authorise', { user, token, projection: { genomes: 1, 'tree.version': 1, subtrees: 1 } })
+  request('collection', 'authorise', { user, token, projection: { genomes: 1, 'tree.versions': 1, subtrees: 1 } })
     .then(results => generateMatrix(results, res))
     .catch(next);
 };

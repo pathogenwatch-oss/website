@@ -50,9 +50,9 @@ function getGenomes(spec, metadata) {
   });
 }
 
-function getGenomesInCache(genomes, { version }) {
+function getGenomesInCache(genomes, versions) {
   return ScoreCache.find(
-    { fileId: { $in: genomes.map(_ => _.fileId) }, version },
+    { fileId: { $in: genomes.map(_ => _.fileId) }, 'versions.core': versions.core, 'versions.tree': versions.tree },
     genomes.reduce(
       (projection, { fileId }) => {
         projection[`scores.${fileId}`] = 1;
@@ -119,7 +119,7 @@ function attachInputStream(container, spec, genomes, uncachedFileIds) {
   // docsStream.on('end', () => console.log('docs ended'));
 
   const scoresStream = ScoreCache.collection.find(
-    { fileId: { $in: genomes.map(_ => _.fileId) }, version },
+    { fileId: { $in: genomes.map(_ => _.fileId) }, versions },
     genomes.reduce((projection, { fileId }) => {
       projection[`scores.${fileId}`] = 1;
       return projection;
@@ -144,8 +144,7 @@ function attachInputStream(container, spec, genomes, uncachedFileIds) {
   genomesStream.end(bson.serialize({ genomes }), () => scoresStream.resume());
 }
 
-function handleContainerOutput(container, spec, metadata, genomes, resolve, reject) {
-  const { task, version } = spec;
+function handleContainerOutput(container, task, versions, metadata, genomes, resolve, reject) {
   const { clientId, name } = metadata;
   request('collection', 'send-progress', { clientId, payload: { task, name, status: 'IN PROGRESS' } });
   let lastProgress = 0;
@@ -163,7 +162,7 @@ function handleContainerOutput(container, spec, metadata, genomes, resolve, reje
           for (const key of Object.keys(doc.differences)) {
             update[`differences.${key}`] = doc.differences[key];
           }
-          ScoreCache.update({ fileId: doc.fileId, version }, update, { upsert: true }).exec();
+          ScoreCache.update({ fileId: doc.fileId, 'versions.core': versions.core, 'versions.tree': versions.tree }, update, { upsert: true }).exec();
           const progress = doc.progress * 0.99;
           if ((progress - lastProgress) >= 1) {
             request('collection', 'send-progress', { clientId, payload: { task, name, progress } });
@@ -184,6 +183,7 @@ function handleContainerOutput(container, spec, metadata, genomes, resolve, reje
             populationSize,
             name: metadata.name,
             size: genomes.length,
+            versions,
           });
         }
       } catch (e) {
@@ -193,8 +193,7 @@ function handleContainerOutput(container, spec, metadata, genomes, resolve, reje
     });
 }
 
-function handleContainerExit(container, spec, metadata, reject) {
-  const { task, version } = spec;
+function handleContainerExit(container, task, versions, metadata, reject) {
   const { organismId, collectionId, clientId, name } = metadata;
   let startTime = process.hrtime();
 
@@ -208,7 +207,7 @@ function handleContainerExit(container, spec, metadata, reject) {
 
     const [ durationS, durationNs ] = process.hrtime(startTime);
     const duration = Math.round(durationS * 1000 + durationNs / 1e6);
-    TaskLog.create({ collectionId, task, version, organismId, duration, exitCode });
+    TaskLog.create({ collectionId, task, version: versions.tree, organismId, duration, exitCode });
 
     if (exitCode !== 0) {
       request('collection', 'send-progress', { clientId, payload: { task, name, status: 'ERROR' } });

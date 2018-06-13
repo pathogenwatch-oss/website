@@ -21,8 +21,9 @@ function getCollectionGenomes({ genomes }, genomeIds) {
 
 function getCache({ tree }, genomes, type) {
   const fieldName = (type === 'score') ? 'scores' : 'differences';
+  const { versions } = tree;
   return ScoreCache.find(
-    { fileId: { $in: genomes.map(_ => _.fileId) }, version: tree.version },
+    { fileId: { $in: genomes.map(_ => _.fileId) }, 'versions.core': versions.core, 'versions.tree': versions.tree },
     genomes.reduce(
       (projection, { fileId }) => {
         projection[`${fieldName}.${fileId}`] = 1;
@@ -96,7 +97,7 @@ module.exports = (req, res, next) => {
   const stream = transform(data => data.join(',') + '\n');
   stream.pipe(res);
 
-  request('collection', 'authorise', { user, token, projection: { genomes: 1, 'tree.version': 1 } })
+  request('collection', 'authorise', { user, token, projection: { genomes: 1, 'tree.versions': 1 } })
     .then(async (collection) => {
       const genomes = await getCollectionGenomes(collection, genomeIds);
       writeMatrixHeader(genomes, stream);
