@@ -92,7 +92,7 @@ const UserDrawer = React.createClass({
             <hr />
             <nav className="mdl-navigation">
               <NavLink to="/organisms" icon="bug_report" badge={numOrganisms} activeOnIndexOnly>All Organisms</NavLink>
-              <NavLink to="/documentation" icon="help">Documentation</NavLink>
+              <NavLink to="https://cgps.gitbook.io/pathogenwatch/" external icon="help">Documentation</NavLink>
               <NavLink to="https://gitlab.com/cgps/pathogenwatch/roadmap" external icon="feedback">Feedback</NavLink>
             </nav>
             { user &&

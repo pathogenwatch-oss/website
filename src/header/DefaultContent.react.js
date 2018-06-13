@@ -17,7 +17,7 @@ export default ({ offline = isOffline() }) => (
     <NavLink to="/collections">Collections</NavLink>
     <NavLink to="/genomes">Genomes</NavLink>
     <NavLink to="/upload">Upload</NavLink>
-    <NavLink to="/documentation" className="sm-hide">Documentation</NavLink>
+    <NavLink to="https://cgps.gitbook.io/pathogenwatch/" external className="sm-hide">Documentation</NavLink>
     <NavLink to="mailto:cgps@sanger.ac.uk" className="sm-hide" external>Contact</NavLink>
   </nav>
 );
