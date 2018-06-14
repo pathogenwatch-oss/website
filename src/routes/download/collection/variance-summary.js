@@ -302,7 +302,7 @@ async function generateData({ genomes, tree, subtrees }, stream) {
   writeMatrixLine(collectionData, stream);
 
   for (const subtree of subtrees) {
-    if (subtree.status === 'READY') {
+    if (subtree.status === 'READY' && (subtree.size || 0) >= 3) {
       const genomeIds = Collection.getSubtreeIds(subtree);
       const data = await generateTreeData(subtree, genomeIds, collectionGenomeIds);
       writeMatrixLine(data, stream);
