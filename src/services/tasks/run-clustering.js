@@ -71,16 +71,18 @@ async function getGenomesInCache(genomes, { version }, { scheme }) {
 function attachInputStream(container, spec, metadata, genomes, uncachedSTs) {
   const { version } = spec;
 
-  const reformatAsGenomeDoc = es.map((doc, cb) => cb(null, { analysis: { cgmlst: doc.result } }));
+  const reformatAsGenomeDoc = es.map((doc, cb) => cb(null, { analysis: { cgmlst: doc.results } }));
+  const toRaw = es.map((doc, cb) => cb(null, bson.serialize(doc)));
+
   const docsStream = Analysis
-    .collection
     .find(
       { task: 'cgmlst', 'results.st': { $in: uncachedSTs } },
-      { results: 1 },
-      { raw: true }
+      { results: 1 }
     )
-    .stream()
-    .pipe(reformatAsGenomeDoc);
+    .lean()
+    .cursor()
+    .pipe(reformatAsGenomeDoc)
+    .pipe(toRaw);
   docsStream.pause();
 
   const sts = genomes.map(_ => _.analysis.cgmlst.st);
