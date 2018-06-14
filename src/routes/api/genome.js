@@ -1,10 +1,13 @@
 const express = require('express');
 const zlib = require('zlib');
+const contentLength = require('express-content-length-validator');
 
 const services = require('services');
 
 const router = express.Router();
 const LOGGER = require('utils/logging').createLogger('Upload');
+
+const config = require('configuration');
 
 router.get('/genome/summary', (req, res, next) => {
   LOGGER.info('Received request to get genome summary');
@@ -72,23 +75,27 @@ function getStream(req) {
   return req;
 }
 
-router.put('/genome', (req, res, next) => {
-  LOGGER.info('Received request to create genome');
+router.put(
+  '/genome',
+  contentLength.validateMax({ max: (config.maxFastaFileSize || 10) * 1048576 }),
+  (req, res, next) => {
+    LOGGER.info('Received request to create genome');
 
-  const { user, sessionID } = req;
-  const { name, uploadedAt, clientId } = req.query;
+    const { user, sessionID } = req;
+    const { name, uploadedAt, clientId } = req.query;
 
-  services.request('genome', 'create', {
-    timeout$: 1000 * 60 * 5,
-    stream: getStream(req),
-    metadata: { name, uploadedAt },
-    user,
-    sessionID,
-    clientId,
-  })
-  .then(response => res.json(response))
-  .catch(next);
-});
+    services.request('genome', 'create', {
+      timeout$: 1000 * 60 * 5,
+      stream: getStream(req),
+      metadata: { name, uploadedAt },
+      user,
+      sessionID,
+      clientId,
+    })
+    .then(response => res.json(response))
+    .catch(next);
+  }
+);
 
 router.post('/genome/selection', (req, res, next) => {
   LOGGER.info('Received request to get selection');

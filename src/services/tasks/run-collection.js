@@ -39,9 +39,6 @@ async function getGenomes(task, metadata) {
     .find(query, { fileId: 1, name: 1 }, { sort: { fileId: 1 } })
     .lean();
 
-  if (docs.length < 3) {
-    throw new Error('Not enough genomes to make a tree');
-  }
   const ids = new Set(genomes.map(_ => _.toString()));
 
   return docs.map(({ _id, fileId, name }) => ({
@@ -260,7 +257,19 @@ async function runTask(spec, metadata) {
   const { task, version, requires: taskRequres = [] } = spec;
   const coreVersion = taskRequres.find(_ => _.task === 'core').version;
   const versions = { tree: version, core: coreVersion };
+
   const genomes = await getGenomes(task, metadata);
+  if (genomes.length <= 1) {
+    throw new Error('Not enough genomes to make a tree');
+  } else if (genomes.length === 2) {
+    return {
+      newick: `(${genomes[0]._id}:0.5,${genomes[1]._id}:0.5);`,
+      size: 2,
+      populationSize: genomes.filter(_ => _.population).length,
+      name: metadata.name,
+    };
+  }
+
   const uncachedFileIds = await getGenomesInCache(genomes, versions);
 
   return new Promise((resolve, reject) => {
