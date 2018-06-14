@@ -14,18 +14,7 @@ import { stateKey } from './index';
 import * as actions from './actions';
 
 const Filter = ({ isActive, filterSummary, textValue, updateFilter, updateMulti, clearFilter }) => {
-  if (!filterSummary.genusId.length) {
-    return (
-      <FilterAside
-        loading={filterSummary.loading}
-        active={isActive}
-        clear={clearFilter}
-        textValue={textValue}
-        textOnChange={e => updateFilter('searchText', e.target.value)}
-      />
-    );
-  }
-
+  const hasActiveGenus = filterSummary.genusId.some(_ => _.active);
   return (
     <FilterAside
       loading={filterSummary.loading}
@@ -64,7 +53,7 @@ const Filter = ({ isActive, filterSummary, textValue, updateFilter, updateMulti,
         icon="bug_report"
         summary={filterSummary.speciesId}
         updateFilter={updateFilter}
-        disabled={!filterSummary.speciesId.length}
+        disabled={!filterSummary.speciesId.length || !hasActiveGenus}
         disabledText="Select a genus to filter by species."
       />
       <FilterSection
@@ -73,7 +62,7 @@ const Filter = ({ isActive, filterSummary, textValue, updateFilter, updateMulti,
         icon="new_releases"
         summary={filterSummary.sequenceTypes}
         updateFilter={updateFilter}
-        disabled={!filterSummary.sequenceTypes.length}
+        disabled={!filterSummary.sequenceTypes.length || !hasActiveGenus}
         disabledText="Select an organism, species, or genus to filter by sequence type."
       />
       <FilterSection

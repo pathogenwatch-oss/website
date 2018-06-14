@@ -27,15 +27,27 @@ const FilterSection = React.createClass({
     const { summary, expanded = summary.some(_ => _.active) } = this.props;
     return {
       isOpen: expanded,
+      isActive: expanded,
     };
   },
 
-  componentWillReceiveProps({ summary = [] }) {
-    const activeItem = summary.find(_ => _.active);
-    this.setState({
-      isActive: !!activeItem,
-      isOpen: this.state.isActive ? activeItem : this.state.isOpen,
-    });
+  componentWillReceiveProps(nextProps) {
+    const activeItem = nextProps.summary && nextProps.summary.find(_ => _.active);
+
+    if (activeItem) {
+      this.setState({
+        isActive: true, // cache fact that we have an active item
+      });
+    } else if (this.state.isActive && nextProps.isLoading) {
+      this.setState({
+        isOpen: false,
+      });
+    } else if (this.state.isActive && this.props.isLoading && !nextProps.isLoading) {
+      this.setState({
+        isActive: false,
+        isOpen: true,
+      });
+    }
   },
 
   toggle(isOpen) {
