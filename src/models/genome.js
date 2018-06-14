@@ -42,12 +42,7 @@ const schema = new Schema({
 
 schema.index({ name: 1 });
 schema.index({ public: 1, reference: 1 });
-schema.index({
-  _id: 1,
-  fileId: 1,
-  'analysis.core.profile.filter': 1,
-  'analysis.core.profile.alleles.duplicate': 1,
-});
+
 schema.index({ 'analysis.mlst.st': 1 });
 schema.index({ 'analysis.cgmlst.st': 1 });
 schema.index({ 'analysis.speciator.organismId': 1 });
@@ -94,21 +89,28 @@ schema.statics.addPendingTasks = function (_id, tasks) {
   return this.update({ _id }, { $pushAll: { pending: tasks } });
 };
 
-schema.statics.addAnalysisResult = function (_id, task, __v, result) {
-  const update = {
-    $set: { [`analysis.${task.toLowerCase()}`]: Object.assign({ __v }, result) },
-  };
-
-  update.$pull = { pending: task };
-
-  return this.update({ _id }, update);
-};
+function summariseAnalysis(analysis) {
+  const { task, version, results } = analysis;
+  let summary;
+  // core and cgmlst documents are big so don't store them all on the genome record
+  if (task === 'core') {
+    const { fp = {}, summary: coreSummary = {} } = results;
+    summary = { __v: version, fp, summary: coreSummary };
+  } else if (task === 'cgmlst') {
+    const { st, scheme, source } = results;
+    summary = { __v: version, st, scheme, source };
+  } else {
+    summary = { __v: version, ...results };
+  }
+  return { task, summary };
+}
 
 schema.statics.addAnalysisResults = function (_id, ...analyses) {
   const update = { $set: {}, $pullAll: { pending: [] } };
 
-  for (const { task, version, results } of analyses) {
-    update.$set[`analysis.${task.toLowerCase()}`] = Object.assign({ __v: version }, results);
+  for (const analysis of analyses) {
+    const { task, summary } = summariseAnalysis(analysis);
+    update.$set[`analysis.${task.toLowerCase()}`] = summary;
     update.$pullAll.pending.push(task);
   }
 

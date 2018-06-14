@@ -1,6 +1,7 @@
 const Genome = require('models/genome');
 const ScoreCache = require('models/scoreCache');
 const transform = require('stream-transform');
+const sanitize = require('sanitize-filename');
 
 const { request } = require('services');
 const { ServiceRequestError } = require('utils/errors');
@@ -20,8 +21,9 @@ function getCollectionGenomes({ genomes }, genomeIds) {
 
 function getCache({ tree }, genomes, type) {
   const fieldName = (type === 'score') ? 'scores' : 'differences';
+  const { versions } = tree;
   return ScoreCache.find(
-    { fileId: { $in: genomes.map(_ => _.fileId) }, version: tree.version },
+    { fileId: { $in: genomes.map(_ => _.fileId) }, 'versions.core': versions.core, 'versions.tree': versions.tree },
     genomes.reduce(
       (projection, { fileId }) => {
         projection[`${fieldName}.${fileId}`] = 1;
@@ -69,9 +71,8 @@ function generateMatrix({ genomes, cache }, stream) {
 
 module.exports = (req, res, next) => {
   const { user } = req;
-  const { collectionId, type } = req.params;
+  const { token, type } = req.params;
   const { ids } = req.body;
-  const { filename = `${type}-matrix` } = req.query;
 
   if (!type || typeof type !== 'string') {
     res.status(400).send('`type` parameter is required.');
@@ -83,17 +84,20 @@ module.exports = (req, res, next) => {
     return;
   }
 
+  const { filename: rawFilename = '' } = req.query;
+  const filename = sanitize(rawFilename) || `${type}-matrix.csv`;
+
   const genomeIds = ids ? ids.split(',') : null;
 
   res.set({
-    'Content-Disposition': `attachment; filename="${filename}.csv"`,
+    'Content-Disposition': `attachment; filename="${filename}"`,
     'Content-type': 'text/csv',
   });
 
   const stream = transform(data => data.join(',') + '\n');
   stream.pipe(res);
 
-  request('collection', 'authorise', { user, id: collectionId, projection: { genomes: 1, 'tree.version': 1 } })
+  request('collection', 'authorise', { user, token, projection: { genomes: 1, 'tree.versions': 1 } })
     .then(async (collection) => {
       const genomes = await getCollectionGenomes(collection, genomeIds);
       writeMatrixHeader(genomes, stream);

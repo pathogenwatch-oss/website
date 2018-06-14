@@ -1,3 +1,4 @@
+const sanitize = require('sanitize-filename');
 const csv = require('csv');
 const Genome = require('models/genome');
 
@@ -7,9 +8,10 @@ const { transformer } = require('../utils/speciator');
 
 module.exports = (req, res, next) => {
   const { user } = req;
-  const { collectionId } = req.params;
+  const { token } = req.params;
   const { ids } = req.body;
-  const { filename = 'speciator.csv' } = req.query;
+  const { filename: rawFilename = '' } = req.query;
+  const filename = sanitize(rawFilename) || 'speciator.csv';
 
   const genomeIds = ids ? ids.split(',') : null;
 
@@ -18,7 +20,7 @@ module.exports = (req, res, next) => {
     'Content-type': 'text/csv',
   });
 
-  request('collection', 'authorise', { user, id: collectionId, projection: { genomes: 1 } })
+  request('collection', 'authorise', { user, token, projection: { genomes: 1 } })
     .then(collection => {
       const query = {
         _id: { $in: genomeIds },

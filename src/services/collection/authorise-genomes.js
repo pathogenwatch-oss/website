@@ -3,9 +3,9 @@ const { ServiceRequestError } = require('../../utils/errors');
 
 const { request } = require('services');
 
-module.exports = async ({ user, collectionId, genomeIds }) => {
+module.exports = async ({ user, token, genomeIds }) => {
   const collection = await request('collection', 'authorise', {
-    user, id: collectionId, projection: { genomes: 1 },
+    user, token, projection: { genomes: 1 },
   });
   const count = await Genome.count({
     _id: { $in: genomeIds },

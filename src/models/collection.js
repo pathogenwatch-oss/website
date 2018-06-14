@@ -13,7 +13,10 @@ const Tree = {
   populationSize: Number,
   status: { type: String, default: 'PENDING' },
   task: String,
-  version: String,
+  versions: {
+    core: String,
+    tree: String,
+  },
 };
 
 const accessLevels = [ 'private', 'shared', 'public' ];
@@ -184,12 +187,12 @@ schema.statics.getSort = function (sort = 'createdAt-') {
   return { [sortKey]: sortOrder };
 };
 
-schema.statics.addAnalysisResult = function (_id, task, version, result) {
-  const { name, size, newick, populationSize } = result;
+schema.statics.addAnalysisResult = function (_id, task, result) {
+  const { name, size, newick, populationSize, versions } = result;
 
   const tree = {
     task,
-    version,
+    versions,
     name,
     status: 'READY',
     newick,

@@ -1,3 +1,4 @@
+const sanitize = require('sanitize-filename');
 const csv = require('csv');
 const Genome = require('models/genome');
 
@@ -14,7 +15,8 @@ const transformer = function (doc) {
 
 module.exports = (req, res) => {
   const { user, sessionID } = req;
-  const { filename = 'wgsa-ngmast.csv' } = req.query;
+  const { filename: rawFilename = '' } = req.query;
+  const filename = sanitize(rawFilename) || 'ngmast.csv';
   const { ids } = req.body;
 
   res.setHeader('Content-Disposition', `attachment; filename=${filename}`);

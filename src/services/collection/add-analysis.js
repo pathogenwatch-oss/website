@@ -21,10 +21,10 @@ function getNotificationPayload(task, result) {
 }
 
 module.exports = function ({ spec, metadata, result }) {
-  const { task, version } = spec;
+  const { task } = spec;
   const { collectionId, clientId } = metadata;
   return (
-    Collection.addAnalysisResult(collectionId, task, version, result)
+    Collection.addAnalysisResult(collectionId, task, result)
       .then(() => {
         const payload = getNotificationPayload(task, result);
         request('collection', 'send-progress', { clientId, payload });

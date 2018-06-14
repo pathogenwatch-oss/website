@@ -1,4 +1,5 @@
 const express = require('express');
+const sanitize = require('sanitize-filename');
 const router = express.Router();
 
 const services = require('services');
@@ -30,7 +31,9 @@ router.get('/:id/fasta', (req, res, next) => {
 
 router.post('/fasta', (req, res, next) => {
   const { user, sessionID } = req;
-  const { filename = 'wgsa-genomes.zip' } = req.query;
+  const { filename: rawFilename = '' } = req.query;
+  const filename = sanitize(rawFilename) || 'genomes.zip';
+
   const { ids } = req.body;
 
   if (!ids || !ids.length) return res.sendStatus(400);

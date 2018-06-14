@@ -6,6 +6,7 @@ const docker = require('docker-run');
 const es = require('event-stream');
 const BSON = require('bson');
 
+const Analysis = require('models/analysis');
 const Collection = require('../../models/collection');
 const Genome = require('../../models/genome');
 const ScoreCache = require('../../models/scoreCache');
@@ -17,39 +18,40 @@ const { request } = require('../../services');
 const LOGGER = require('../../utils/logging').createLogger('runner');
 const bson = new BSON();
 
-function getGenomes(spec, metadata) {
-  const { task } = spec;
-  const { collectionId, name, organismId } = metadata;
-  return Collection.findOne(
+async function getGenomes(task, metadata) {
+  const { collectionId, name: refName, organismId } = metadata;
+  const { genomes } = await Collection.findOne(
     { _id: collectionId },
     { genomes: 1 },
   )
-  .lean()
-  .then(({ genomes }) => {
-    let query = { _id: { $in: genomes } };
-    if (task === 'subtree') {
-      query = {
-        'analysis.speciator.organismId': organismId,
-        'analysis.core.fp.reference': name,
-        $or: [ { _id: { $in: genomes } }, { population: true } ],
-      };
-    }
-    return Genome
-      .find(query, { fileId: 1 }, { sort: { fileId: 1 } })
-      .lean()
-      .then(docs => {
-        const ids = new Set(genomes.map(_ => _.toString()));
-        return docs.map(doc => {
-          doc.population = !ids.has(doc._id.toString());
-          return doc;
-        });
-      });
-  });
+  .lean();
+
+  let query = { _id: { $in: genomes } };
+  if (task === 'subtree') {
+    query = {
+      'analysis.speciator.organismId': organismId,
+      'analysis.core.fp.reference': refName,
+      $or: [ { _id: { $in: genomes } }, { population: true } ],
+    };
+  }
+
+  const docs = await Genome
+    .find(query, { fileId: 1, name: 1 }, { sort: { fileId: 1 } })
+    .lean();
+
+  const ids = new Set(genomes.map(_ => _.toString()));
+
+  return docs.map(({ _id, fileId, name }) => ({
+    _id,
+    fileId,
+    name,
+    population: !ids.has(_id.toString()),
+  }));
 }
 
-function getGenomesInCache(genomes, { version }) {
+function getGenomesInCache(genomes, versions) {
   return ScoreCache.find(
-    { fileId: { $in: genomes.map(_ => _.fileId) }, version },
+    { fileId: { $in: genomes.map(_ => _.fileId) }, 'versions.core': versions.core, 'versions.tree': versions.tree },
     genomes.reduce(
       (projection, { fileId }) => {
         projection[`scores.${fileId}`] = 1;
@@ -86,37 +88,54 @@ function getGenomesInCache(genomes, { version }) {
   });
 }
 
-function attachInputStream(container, spec, genomes, uncachedFileIds) {
-  const { version } = spec;
+function createGenomesStream(genomes, uncachedFileIds, versions) {
+  const genomeLookup = genomes.reduce((acc, genome) => {
+    const { fileId } = genome;
+    if (uncachedFileIds.indexOf(fileId) === -1) return acc;
+    acc[fileId] = acc[fileId] || [];
+    acc[fileId].push(genome);
+    return acc;
+  }, {});
 
-  const docsStream = Genome.collection.find(
-    {
-      _id: { $in: genomes.map(_ => _._id) },
-      fileId: { $in: uncachedFileIds },
-      // 'analysis.core.profile.filter': false,
-      // 'analysis.core.profile.alleles.filter': false,
-    },
-    {
-      name: 1,
-      fileId: 1,
-      'analysis.core.profile.filter': 1,
-      'analysis.core.profile.alleles.filter': 1,
-      'analysis.core.profile.id': 1,
-      'analysis.core.profile.alleles.id': 1,
-      'analysis.core.profile.alleles.rstart': 1,
-      'analysis.core.profile.alleles.rstop': 1,
-      'analysis.core.profile.alleles.mutations': 1,
-    },
-    {
-      raw: true,
-      sort: { fileId: 1 },
+  const cores = Analysis.find({
+    fileId: { $in: uncachedFileIds },
+    task: 'core',
+    version: versions.core,
+  }, {
+    fileId: 1,
+    'results.profile.filter': 1,
+    'results.profile.alleles.filter': 1,
+    'results.profile.id': 1,
+    'results.profile.alleles.id': 1,
+    'results.profile.alleles.rstart': 1,
+    'results.profile.alleles.rstop': 1,
+    'results.profile.alleles.mutations': 1,
+  }).sort({ fileId: 1 }).lean().cursor();
+
+  const reformatCores = es.through(function (core) {
+    const { fileId, results } = core;
+    genomeLookup[fileId] = genomeLookup[fileId] || [];
+    for (const genomeDetails of genomeLookup[fileId]) {
+      const genome = {
+        ...genomeDetails,
+        analysis: { core: results },
+      };
+      this.emit('data', genome);
     }
-  );
+    genomeLookup[fileId] = [];
+  });
+
+  const toRaw = es.map((doc, cb) => cb(null, bson.serialize(doc)));
+  return cores.pipe(reformatCores).pipe(toRaw);
+}
+
+function attachInputStream(container, versions, genomes, uncachedFileIds) {
+  const docsStream = createGenomesStream(genomes, uncachedFileIds, versions);
   docsStream.pause();
   // docsStream.on('end', () => console.log('docs ended'));
 
   const scoresStream = ScoreCache.collection.find(
-    { fileId: { $in: genomes.map(_ => _.fileId) }, version },
+    { fileId: { $in: genomes.map(_ => _.fileId) }, versions },
     genomes.reduce((projection, { fileId }) => {
       projection[`scores.${fileId}`] = 1;
       return projection;
@@ -141,8 +160,7 @@ function attachInputStream(container, spec, genomes, uncachedFileIds) {
   genomesStream.end(bson.serialize({ genomes }), () => scoresStream.resume());
 }
 
-function handleContainerOutput(container, spec, metadata, genomes, resolve, reject) {
-  const { task, version } = spec;
+function handleContainerOutput(container, task, versions, metadata, genomes, resolve, reject) {
   const { clientId, name } = metadata;
   request('collection', 'send-progress', { clientId, payload: { task, name, status: 'IN PROGRESS' } });
   let lastProgress = 0;
@@ -160,7 +178,7 @@ function handleContainerOutput(container, spec, metadata, genomes, resolve, reje
           for (const key of Object.keys(doc.differences)) {
             update[`differences.${key}`] = doc.differences[key];
           }
-          ScoreCache.update({ fileId: doc.fileId, version }, update, { upsert: true }).exec();
+          ScoreCache.update({ fileId: doc.fileId, 'versions.core': versions.core, 'versions.tree': versions.tree }, update, { upsert: true }).exec();
           const progress = doc.progress * 0.99;
           if ((progress - lastProgress) >= 1) {
             request('collection', 'send-progress', { clientId, payload: { task, name, progress } });
@@ -181,6 +199,7 @@ function handleContainerOutput(container, spec, metadata, genomes, resolve, reje
             populationSize,
             name: metadata.name,
             size: genomes.length,
+            versions,
           });
         }
       } catch (e) {
@@ -190,8 +209,7 @@ function handleContainerOutput(container, spec, metadata, genomes, resolve, reje
     });
 }
 
-function handleContainerExit(container, spec, metadata, reject) {
-  const { task, version } = spec;
+function handleContainerExit(container, task, versions, metadata, reject) {
   const { organismId, collectionId, clientId, name } = metadata;
   let startTime = process.hrtime();
 
@@ -205,7 +223,7 @@ function handleContainerExit(container, spec, metadata, reject) {
 
     const [ durationS, durationNs ] = process.hrtime(startTime);
     const duration = Math.round(durationS * 1000 + durationNs / 1e6);
-    TaskLog.create({ collectionId, task, version, organismId, duration, exitCode });
+    TaskLog.create({ collectionId, task, version: versions.tree, organismId, duration, exitCode });
 
     if (exitCode !== 0) {
       request('collection', 'send-progress', { clientId, payload: { task, name, status: 'ERROR' } });
@@ -236,13 +254,14 @@ function createContainer(spec, metadata) {
 }
 
 async function runTask(spec, metadata) {
-  const genomes = await getGenomes(spec, metadata);
+  const { task, version, requires: taskRequres = [] } = spec;
+  const coreVersion = taskRequres.find(_ => _.task === 'core').version;
+  const versions = { tree: version, core: coreVersion };
 
+  const genomes = await getGenomes(task, metadata);
   if (genomes.length <= 1) {
     throw new Error('Not enough genomes to make a tree');
-  }
-
-  if (genomes.length === 2) {
+  } else if (genomes.length === 2) {
     return {
       newick: `(${genomes[0]._id}:0.5,${genomes[1]._id}:0.5);`,
       size: 2,
@@ -251,16 +270,16 @@ async function runTask(spec, metadata) {
     };
   }
 
-  const uncachedFileIds = await getGenomesInCache(genomes, spec);
+  const uncachedFileIds = await getGenomesInCache(genomes, versions);
 
   return new Promise((resolve, reject) => {
     const container = createContainer(spec, metadata);
 
-    handleContainerOutput(container, spec, metadata, genomes, resolve, reject);
+    handleContainerOutput(container, task, versions, metadata, genomes, resolve, reject);
 
-    handleContainerExit(container, spec, metadata, reject);
+    handleContainerExit(container, task, versions, metadata, reject);
 
-    attachInputStream(container, spec, genomes, uncachedFileIds);
+    attachInputStream(container, versions, genomes, uncachedFileIds);
   });
 }
 

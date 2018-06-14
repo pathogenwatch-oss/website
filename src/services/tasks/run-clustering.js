@@ -7,6 +7,7 @@ const es = require('event-stream');
 const BSON = require('bson');
 
 const Genome = require('../../models/genome');
+const Analysis = require('../../models/analysis');
 const ClusteringCache = require('../../models/clusteringCache');
 const TaskLog = require('../../models/taskLog');
 
@@ -70,18 +71,18 @@ async function getGenomesInCache(genomes, { version }, { scheme }) {
 function attachInputStream(container, spec, metadata, genomes, uncachedSTs) {
   const { version } = spec;
 
-  const docsStream = Genome.collection.find(
-    {
-      _id: { $in: genomes.map(_ => _._id) },
-      'analysis.cgmlst.st': { $in: uncachedSTs },
-    },
-    {
-      'analysis.cgmlst': 1,
-    },
-    {
-      raw: true,
-    }
-  ).stream();
+  const reformatAsGenomeDoc = es.map((doc, cb) => cb(null, { analysis: { cgmlst: doc.results } }));
+  const toRaw = es.map((doc, cb) => cb(null, bson.serialize(doc)));
+
+  const docsStream = Analysis
+    .find(
+      { task: 'cgmlst', 'results.st': { $in: uncachedSTs } },
+      { results: 1 }
+    )
+    .lean()
+    .cursor()
+    .pipe(reformatAsGenomeDoc)
+    .pipe(toRaw);
   docsStream.pause();
 
   const sts = genomes.map(_ => _.analysis.cgmlst.st);
