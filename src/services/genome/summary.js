@@ -62,7 +62,6 @@ const summaryFields = [
         { $group: { _id: '$analysis.mlst.st', count: { $sum: 1 } } },
       ];
     },
-    queryKeys: [ 'sequenceType' ],
   },
   { field: 'amr',
     aggregation: () => [
@@ -71,7 +70,6 @@ const summaryFields = [
       { $match: { 'analysis.paarsnp.antibiotics.state': 'RESISTANT' } },
       { $group: { _id: '$analysis.paarsnp.antibiotics.fullName', count: { $sum: 1 } } },
     ],
-    queryKeys: [ 'resistance' ],
   },
 ];
 

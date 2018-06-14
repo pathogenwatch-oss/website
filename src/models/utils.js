@@ -33,7 +33,7 @@ const sumAggregation = field => [
 ];
 
 function aggregateSummaryFields(model, summaryFields, props) {
-  const aggregations = summaryFields.reduce((memo, { field, aggregation, range, queryKeys = [ field ] }) => {
+  const aggregations = summaryFields.reduce((memo, { field, aggregation, range, queryKeys = [] }) => {
     let aggregationStage = null;
 
     if (aggregation) {
@@ -47,11 +47,16 @@ function aggregateSummaryFields(model, summaryFields, props) {
     if (!aggregationStage) {
       memo.push(Promise.resolve([]));
     } else {
-      const query = {};
-      for (const key of Object.keys(props.query)) {
-        if (!queryKeys.includes(key)) {
-          query[key] = props.query[key];
+      let query;
+      if (queryKeys.length) { // this is retained to support range aggregations e.g. date
+        query = {};
+        for (const key of Object.keys(props.query)) {
+          if (!queryKeys.includes(key)) {
+            query[key] = props.query[key];
+          }
         }
+      } else {
+        query = props.query;
       }
       const $match = model.getFilterQuery(Object.assign({}, props, { query }));
       const prefilterStage = [ { $match }, ...aggregationStage ];
