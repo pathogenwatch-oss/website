@@ -36,7 +36,7 @@ const FilterSection = React.createClass({
 
     if (activeItem) {
       this.setState({
-        isActive: true, // cache fact that we have an active item
+        isActive: true, // caches fact that we had an active item
       });
     } else if (this.state.isActive && nextProps.isLoading) {
       this.setState({
@@ -111,7 +111,7 @@ const FilterSection = React.createClass({
 });
 
 export default props => {
-  if (props.children || props.disabled || (props.summary && props.summary.length)) {
+  if (props.children || (props.disabled && !props.hidden) || (props.summary && props.summary.length)) {
     return <FilterSection {...props} />;
   }
   return null;

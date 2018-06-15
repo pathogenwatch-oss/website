@@ -53,6 +53,7 @@ const Filter = ({ isActive, filterSummary, textValue, updateFilter, updateMulti,
         icon="bug_report"
         summary={filterSummary.speciesId}
         updateFilter={updateFilter}
+        hidden={!filterSummary.genusId.length}
         disabled={!filterSummary.speciesId.length || !hasActiveGenus}
         disabledText="Select a genus to filter by species."
       />
@@ -62,6 +63,7 @@ const Filter = ({ isActive, filterSummary, textValue, updateFilter, updateMulti,
         icon="new_releases"
         summary={filterSummary.sequenceTypes}
         updateFilter={updateFilter}
+        hidden={!filterSummary.genusId.length}
         disabled={!filterSummary.sequenceTypes.length || !hasActiveGenus}
         disabledText="Select an organism, species, or genus to filter by sequence type."
       />
