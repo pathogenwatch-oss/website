@@ -4,6 +4,7 @@ import { fetchGenomeList } from '../actions';
 import { getGenomeList, getGenomes, getListIndices } from '../selectors';
 import { getVisible } from '../summary/selectors';
 import { getSelectedGenomes, getSelectedGenomeIds, getSelectionStatus } from './selectors';
+import { setStoredSelection, addToStoredSelection, removeFromStoredSelection } from './utils';
 
 import * as api from './api';
 
@@ -33,6 +34,7 @@ export function fetchDownloads() {
 export const SET_GENOME_SELECTION = 'SET_GENOME_SELECTION';
 
 export function setSelection(genomes) {
+  setStoredSelection(genomes);
   return {
     type: SET_GENOME_SELECTION,
     payload: { genomes },
@@ -42,6 +44,7 @@ export function setSelection(genomes) {
 export const CLEAR_GENOME_SELECTION = 'CLEAR_GENOME_SELECTION';
 
 export function clearSelection() {
+  setStoredSelection();
   return {
     type: CLEAR_GENOME_SELECTION,
   };
@@ -50,6 +53,7 @@ export function clearSelection() {
 export const APPEND_GENOME_SELECTION = 'APPEND_GENOME_SELECTION';
 
 export function appendToSelection(genomes, index) {
+  addToStoredSelection(genomes);
   return {
     type: APPEND_GENOME_SELECTION,
     payload: { genomes, index },
@@ -59,6 +63,7 @@ export function appendToSelection(genomes, index) {
 export const REMOVE_GENOME_SELECTION = 'REMOVE_GENOME_SELECTION';
 
 export function removeFromSelection(genomes) {
+  removeFromStoredSelection(genomes);
   return {
     type: REMOVE_GENOME_SELECTION,
     payload: { genomes },
