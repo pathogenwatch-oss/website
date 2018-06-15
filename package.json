@@ -30,6 +30,7 @@
     "babel-preset-react": "^6.24.1",
     "body-parser": "^1.14.1",
     "cgps-commons": "gitlab:cgps/commons",
+    "cgps-user-accounts": "gitlab:cgps/cgps-user-accounts#unified-login",
     "chart.piecelabel.js": "gitlab:cgps/chart.piecelabel.js",
     "classnames": "^2.2.5",
     "create-react-class": "^15.6.2",

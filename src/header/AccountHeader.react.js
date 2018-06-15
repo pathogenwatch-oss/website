@@ -23,8 +23,8 @@ export default function AvatarLink({ user }) {
     <div className={className}>
       <AccountImage />
       <div className="cgps-avatar__name"><Name /></div>
-      <div className="cgps-avatar__contact" title="Anonymous User">
-        Anonymous User
+      <div className="cgps-avatar__contact" title="Browsing anonymously">
+        Browsing anonymously
       </div>
     </div>
   );
