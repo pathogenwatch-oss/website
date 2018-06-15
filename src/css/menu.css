@@ -33,7 +33,11 @@
 }
 
 .mdl-layout__drawer .mdl-navigation {
-  padding-top: 8px;
+  padding-top: 0;
+}
+
+.mdl-layout__drawer hr {
+  margin: 8px 0;
 }
 
 .mdl-layout__drawer .mdl-navigation .mdl-navigation__link {

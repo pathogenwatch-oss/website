@@ -1,3 +1,8 @@
+.cgps-avatar--centered {
+  margin: 16px auto;
+  text-align: center;
+}
+
 .wgsa-profile-avatar {
   padding: 16px;
 }
