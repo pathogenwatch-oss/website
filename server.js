@@ -86,7 +86,6 @@ module.exports = () =>
       })
     );
 
-    const services = require('services');
     // user accounts
     userAccounts(app, {
       userStore,
@@ -96,8 +95,6 @@ module.exports = () =>
       failureRedirect: '/',
       logoutPath: '/signout',
       strategies: config.passport.strategies,
-      onLogin: (req) =>
-        services.request('account', 'claim-data', { session: req.sessionID, user: req.user }),
     });
 
     app.use(express.static(path.join(clientPath, 'public')));
