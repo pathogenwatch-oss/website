@@ -117,8 +117,12 @@ module.exports = () =>
         } :
         undefined;
 
-      const hash = crypto.createHash('sha1');
-      hash.update(req.user ? req.user.id : req.sessionID);
+      let clientId = null;
+      if (req.user) {
+        const hash = crypto.createHash('sha1');
+        hash.update(req.user.id);
+        clientId = hash.digest('hex');
+      }
 
       return res.render('index', {
         googleMapsKey: config.googleMapsKey,
@@ -133,7 +137,7 @@ module.exports = () =>
           strategies: Object.keys(config.passport.strategies || {}),
           user,
           version,
-          clientId: hash.digest('hex'),
+          clientId,
         },
       });
     });
