@@ -9,13 +9,14 @@ const termsLink = (
   </a>
 );
 
-export default () => (
+export default ({ location }) => (
   <div className="pw-signin-page">
     <Login
       appName="Pathogenwatch"
       strategies={[ 'google', 'twitter', 'facebook' ]}
       additional={<Passwordless />}
       termsLink={termsLink}
+      message={location.state && location.state.message}
     />
   </div>
 );

@@ -4,3 +4,10 @@
   align-items: center;
   justify-content: center;
 }
+
+.cgps-login-message {
+  padding: 8px;
+  background-color: #efefef;
+  border-left: 4px solid #AC65A6;
+  font-weight: 500;
+}
