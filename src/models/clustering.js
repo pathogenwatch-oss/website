@@ -5,7 +5,6 @@ const { addPreSaveHook } = require('./utils');
 
 const schema = new Schema({
   user: String,
-  sessionID: String,
   scheme: String,
   results: Array,
   lastAccessedAt: Date,
@@ -16,6 +15,5 @@ const schema = new Schema({
 addPreSaveHook(schema);
 
 schema.index({ user: 1, scheme: 1 });
-schema.index({ sessionID: 1, scheme: 1 });
 
 module.exports = mongoose.model('Clustering', schema);

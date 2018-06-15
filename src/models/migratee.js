@@ -3,7 +3,6 @@ const { Schema } = mongoose;
 
 const schema = new Schema({
   _user: { type: Schema.Types.ObjectId, ref: 'User' },
-  _session: String,
   alias: { type: String, index: true },
   createdAt: { type: Date, index: true },
   description: String,

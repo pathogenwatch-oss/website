@@ -30,7 +30,6 @@ const getDefaultToken = () => randGenerator.generate(12);
 const schema = new Schema({
   _user: { type: Schema.Types.ObjectId, ref: 'User' },
   _organism: { type: Schema.Types.ObjectId, ref: 'Organism' },
-  _session: String,
   access: { type: String, enum: accessLevels, default: 'private' },
   createdAt: { type: Date, index: true },
   binned: { type: Boolean, default: false },

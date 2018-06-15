@@ -20,7 +20,6 @@ const schema = new Schema({
 
   // clustering
   user: String,
-  sessionID: String,
   scheme: String,
 });
 
