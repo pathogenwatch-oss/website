@@ -7,7 +7,7 @@ const services = require('services');
 const LOGGER = require('utils/logging').createLogger('Downloads');
 
 router.get('/:id/fasta', (req, res, next) => {
-  const { user, params, query, sessionID } = req;
+  const { user, params, query } = req;
   const { id } = params;
   const { type } = query;
 
@@ -18,7 +18,7 @@ router.get('/:id/fasta', (req, res, next) => {
 
   LOGGER.info(`Received request for fasta: ${id}`);
 
-  return services.request('genome', 'download', { user, sessionID, type, id }).
+  return services.request('genome', 'download', { user, type, id }).
     then(({ filePath, fileName }) => {
       res.set({
         'Content-Disposition': `attachment; filename="${fileName}"`,
@@ -30,7 +30,7 @@ router.get('/:id/fasta', (req, res, next) => {
 });
 
 router.post('/fasta', (req, res, next) => {
-  const { user, sessionID } = req;
+  const { user } = req;
   const { filename: rawFilename = '' } = req.query;
   const filename = sanitize(rawFilename) || 'genomes.zip';
 
@@ -43,7 +43,7 @@ router.post('/fasta', (req, res, next) => {
 
   return (
     services.request('download', 'fetch-genomes',
-        { user, sessionID, ids: splitIds, projection: { name: 1, fileId: 1 } })
+        { user, ids: splitIds, projection: { name: 1, fileId: 1 } })
       .then(genomes =>
         services.request('download', 'create-genome-archive', { genomes }))
       .then(stream => {

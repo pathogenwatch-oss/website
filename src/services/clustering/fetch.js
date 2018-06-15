@@ -1,11 +1,9 @@
 const Clustering = require('../../models/clustering');
 
-module.exports = async function ({ user, sessionID, genomeId, scheme }) {
+module.exports = async function ({ user, genomeId, scheme }) {
   const query = { scheme };
   if (user) {
     query.user = user._id;
-  } else if (sessionID) {
-    query.sessionID = sessionID;
   }
   const clusters = await Clustering.findOne(query);
   if (!clusters) return {};

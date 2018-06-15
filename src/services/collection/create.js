@@ -48,7 +48,7 @@ function getSubtrees(organismId, genomes) {
   return subtrees;
 }
 
-function createCollection(genomes, { organismId, title, description, pmid, user, sessionID }) {
+function createCollection(genomes, { organismId, title, description, pmid, user }) {
   const size = genomes.length;
   const tree = genomes.length >= 3 ? { name: 'collection' } : null;
   return (
@@ -56,7 +56,6 @@ function createCollection(genomes, { organismId, title, description, pmid, user,
       .then(organism =>
         Collection.create({
           _organism: organism,
-          _session: !user ? sessionID : undefined,
           _user: user,
           access: user ? 'private' : 'shared',
           description,

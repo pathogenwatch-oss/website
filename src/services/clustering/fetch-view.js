@@ -3,9 +3,9 @@ const Organism = require('models/organism');
 
 const { request } = require('services');
 
-module.exports = async ({ user, sessionID, genomeId, threshold }) => {
-  const clusters = await request('genome', 'fetch-clusters', { user, sessionID, id: genomeId });
-  const thresholds = Object.keys(clusters).map(t => parseInt(t));
+module.exports = async ({ user, genomeId, threshold }) => {
+  const clusters = await request('genome', 'fetch-clusters', { user, id: genomeId });
+  const thresholds = Object.keys(clusters).map(t => parseInt(t, 10));
   const clusterSizes = {};
   for (let i = 0; i < thresholds.length; i++) {
     const t = thresholds[i];
