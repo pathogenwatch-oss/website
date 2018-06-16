@@ -135,7 +135,7 @@ function attachInputStream(container, versions, genomes, uncachedFileIds) {
   // docsStream.on('end', () => console.log('docs ended'));
 
   const scoresStream = ScoreCache.collection.find(
-    { fileId: { $in: genomes.map(_ => _.fileId) }, versions },
+    { fileId: { $in: genomes.map(_ => _.fileId) }, 'versions.core': versions.core, 'versions.tree': versions.tree },
     genomes.reduce((projection, { fileId }) => {
       projection[`scores.${fileId}`] = 1;
       return projection;
