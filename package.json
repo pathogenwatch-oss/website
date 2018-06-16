@@ -1,6 +1,6 @@
 {
   "name": "wgsa-front-end",
-  "version": "7.0.0-22",
+  "version": "7.0.0-23",
   "description": "Web client for WGSA",
   "main": "index.js",
   "scripts": {
