@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import Passwordless from 'cgps-user-accounts/src/components/passwordless';
+import Passwordless from 'cgps-user-accounts/components/passwordless';
 
 import Spinner from '../components/Spinner.react';
 
