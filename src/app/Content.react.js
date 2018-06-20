@@ -1,14 +1,15 @@
 import React from 'react';
 import { Switch, Redirect, Route } from 'react-router-dom';
 
-import HomepageRoute from '../homepage';
-import OrganismsRoute, { OrganismDetails, OrganismRedirects } from '../organisms/route';
 import AccountRoute from '../account';
-import CollectionsRoute from '../collections';
-import GenomesRoute from '../genomes';
 import CollectionViewerRoute from '../collection-viewer';
 import ClusterViewerRoute from '../cluster-viewer';
+import CollectionsRoute from '../collections';
+import GenomesRoute from '../genomes';
+import HomepageRoute from '../homepage';
 import OfflineRoute from '../offline';
+import OrganismsRoute, { OrganismDetails, OrganismRedirects } from '../organisms/route';
+import SignInRoute from '../sign-in';
 import UploadRoute from '../upload';
 
 import NotFound from '../components/NotFound.react';
@@ -45,15 +46,16 @@ const RedirectExternal = ({ from, to }) => (
 
 export default () => (
   <Switch>
-    {HomepageRoute}
-    {OrganismsRoute}
-    {OrganismDetails}
     {AccountRoute}
-    {CollectionsRoute}
-    {GenomesRoute}
     {CollectionViewerRoute}
     {ClusterViewerRoute}
+    {CollectionsRoute}
+    {GenomesRoute}
+    {HomepageRoute}
     {OfflineRoute}
+    {OrganismDetails}
+    {OrganismsRoute}
+    {SignInRoute}
     {UploadRoute}
     <RedirectExternal from="/documentation" to="https://cgps.gitbook.io/pathogenwatch/" />
     <Redirect from="/index.html" to="/" />

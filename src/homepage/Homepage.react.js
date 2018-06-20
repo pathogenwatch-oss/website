@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { FormattedName } from '../organisms';
 import Showcase from './Showcase.react';
 import { Logo, Name } from '../branding';
+import SignInLink from '../sign-in/SignInLink.react';
 
 import CONFIG from '../app/config';
 import DocumentTitle from '../branding/DocumentTitle.react';
@@ -14,7 +15,7 @@ function getCollectionSizeLimit(user) {
   return limit === 0 ? 'Unlimited' : limit;
 }
 
-export default ({ deployedOrganisms, openMenu }) => (
+export default ({ deployedOrganisms }) => (
   <div className="wgsa-homepage">
     <DocumentTitle title="Global Pathogen Surveillance through Whole Genome Sequencing" />
     <section className="jumbotron">
@@ -245,13 +246,13 @@ export default ({ deployedOrganisms, openMenu }) => (
         </table>
       </div>
       <footer>
-        { CONFIG.user ?
+        { !!CONFIG.user ?
           <Link to="/account" className="mdl-button mdl-button--primary">
             <i className="material-icons">account_circle</i> Go to Account
           </Link> :
-          <button onClick={openMenu} className="mdl-button mdl-button--primary">
+          <SignInLink className="mdl-button mdl-button--primary">
             <i className="material-icons">account_circle</i> Sign in
-          </button> }
+          </SignInLink> }
       </footer>
     </section>
     <footer className="cgps-footer mdl-mega-footer">

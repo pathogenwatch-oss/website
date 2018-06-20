@@ -2,6 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { List } from 'react-virtualized';
 
+import SignInLink from '../../../sign-in/SignInLink.react';
+
 import { getSelectedGenomeIds, getSelectedGenomeList } from '../selectors';
 
 import { removeFromSelection, clearSelection, toggleDropdown } from '../actions';
@@ -72,12 +74,16 @@ const Selection = ({ selectedGenomes, showGenome, removeGenome, clearAll, sendTo
       >
         Download
       </button>
-      <button
-        className="mdl-button mdl-button--raised mdl-button--colored"
-        onClick={() => toggle('collection')}
-      >
-        Create Collection
-      </button>
+      { !!user ?
+        <button
+          className="mdl-button mdl-button--raised mdl-button--colored"
+          onClick={() => toggle('collection')}
+        >
+          Create Collection
+        </button> :
+        <SignInLink className="mdl-button mdl-button--raised mdl-button--colored">
+          Sign in to Create Collection
+        </SignInLink> }
     </footer>
   </div>
 );

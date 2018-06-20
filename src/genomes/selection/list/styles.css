@@ -24,7 +24,8 @@
   margin-right: auto;
 }
 
-.wgsa-genome-selection > footer > button {
+.wgsa-genome-selection > footer > button,
+.wgsa-genome-selection > footer > a {
   margin-left: 8px;
 }
 
