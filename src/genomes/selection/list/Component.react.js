@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { List } from 'react-virtualized';
+import { Link } from 'react-router-dom';
 
 import { getSelectedGenomeIds, getSelectedGenomeList } from '../selectors';
 
@@ -72,12 +73,19 @@ const Selection = ({ selectedGenomes, showGenome, removeGenome, clearAll, sendTo
       >
         Download
       </button>
-      <button
-        className="mdl-button mdl-button--raised mdl-button--colored"
-        onClick={() => toggle('collection')}
-      >
-        Create Collection
-      </button>
+      { !!user ?
+        <button
+          className="mdl-button mdl-button--raised mdl-button--colored"
+          onClick={() => toggle('collection')}
+        >
+          Create Collection
+        </button> :
+        <Link
+          to={`/sign-in?redirect=${window.location.pathname}`}
+          className="mdl-button mdl-button--raised mdl-button--colored"
+        >
+          Create Collection &ndash; Sign in
+        </Link> }
     </footer>
   </div>
 );
