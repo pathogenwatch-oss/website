@@ -1,7 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { List } from 'react-virtualized';
-import { Link } from 'react-router-dom';
+
+import SignInLink from '../../../sign-in/SignInLink.react';
 
 import { getSelectedGenomeIds, getSelectedGenomeList } from '../selectors';
 
@@ -80,12 +81,9 @@ const Selection = ({ selectedGenomes, showGenome, removeGenome, clearAll, sendTo
         >
           Create Collection
         </button> :
-        <Link
-          to={`/sign-in?redirect=${window.location.pathname}`}
-          className="mdl-button mdl-button--raised mdl-button--colored"
-        >
-          Create Collection &ndash; Sign in
-        </Link> }
+        <SignInLink className="mdl-button mdl-button--raised mdl-button--colored">
+          Sign in to Create Collection
+        </SignInLink> }
     </footer>
   </div>
 );
