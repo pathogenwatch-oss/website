@@ -43,11 +43,9 @@ const summaryFields = [
     ],
   },
   { field: 'uploadedAt',
-    aggregation: ({ user, sessionID }) => {
-      if (!user && !sessionID) return null;
-      const $match = { $or: [] };
-      if (user) $match.$or.push({ _user: user._id });
-      if (sessionID) $match.$or.push({ _session: sessionID });
+    aggregation: ({ user }) => {
+      if (!user) return null;
+      const $match = { _user: user._id };
       return [
         { $match },
         { $group: { _id: '$uploadedAt', count: { $sum: 1 } } },

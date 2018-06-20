@@ -5,7 +5,7 @@ const Genome = require('models/genome');
 const { transformer } = require('../utils/speciator');
 
 module.exports = (req, res) => {
-  const { user, sessionID } = req;
+  const { user } = req;
   const { filename: rawFilename = '' } = req.query;
   const filename = sanitize(rawFilename) || 'speciator.csv';
   const { ids } = req.body;
@@ -15,7 +15,7 @@ module.exports = (req, res) => {
 
   const query = Object.assign(
     { _id: { $in: ids.split(',') }, 'analysis.speciator': { $exists: true } },
-    Genome.getPrefilterCondition({ user, sessionID })
+    Genome.getPrefilterCondition({ user })
   );
   const projection = {
     name: 1,

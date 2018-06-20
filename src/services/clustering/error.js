@@ -2,10 +2,10 @@ const { request } = require('services');
 const Clustering = require('../../models/clustering');
 
 module.exports = async function ({ metadata }) {
-  const { user, sessionID, scheme, clientId } = metadata;
+  const { user, scheme, clientId } = metadata;
 
   await Clustering.update(
-    { $or: [ { user }, { sessionID } ], scheme },
+    { user, scheme },
     { status: 'FAILED' }
   );
 

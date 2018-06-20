@@ -1,13 +1,14 @@
 const Genome = require('models/genome');
 const { ServiceRequestError, NotFoundError } = require('utils/errors');
 
-module.exports = ({ user, sessionID, ids }) => {
+module.exports = ({ user, ids }) => {
   if (!ids) throw new ServiceRequestError('Missing Ids');
 
   const $or = [ { public: true } ];
 
-  if (user) $or.push({ _user: user._id });
-  else if (sessionID) $or.push({ _session: sessionID });
+  if (user) {
+    $or.push({ _user: user._id });
+  }
 
   return Genome.count({ _id: { $in: ids }, $or })
     .then(count => {

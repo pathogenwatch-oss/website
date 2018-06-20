@@ -1,13 +1,7 @@
 const Genome = require('models/genome');
 
-function getMatch({ user, sessionID }) {
-  if (user) return { _user: user._id };
-  if (sessionID) return { _session: sessionID };
-  return null;
-}
-
 module.exports = function (props) {
-  const $match = getMatch(props);
+  const $match = props.user ? { _user: props.user._id } : null;
   if (!$match) return [];
   return (
     Genome.aggregate([

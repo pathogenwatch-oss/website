@@ -4,7 +4,6 @@ const { request } = require('services');
 
 const projection = {
   _user: 1,
-  _session: 1,
   binned: 1,
   country: 1,
   createdAt: 1,
@@ -41,10 +40,10 @@ const projection = {
 //   'speciator', 'metrics', 'mlst', 'paarsnp', 'genotyphi', 'ngmast', 'core',
 // ];
 
-module.exports = async ({ user, sessionID, id }) => {
+module.exports = async ({ user, id }) => {
   if (!id) throw new ServiceRequestError('Missing Id');
 
-  const genome = await request('genome', 'authorise', { user, sessionID, id, projection });
+  const genome = await request('genome', 'authorise', { user, id, projection });
 
   // TODO: Add task versions back when version-switching added to front-end
 
@@ -53,7 +52,7 @@ module.exports = async ({ user, sessionID, id }) => {
     //   { fileId: genome.fileId, task: { $in: taskNames } },
     //   { _id: 0, task: 1, version: 1 }
     // ).lean(),
-    request('genome', 'fetch-clusters', { user, sessionID, id }),
+    request('genome', 'fetch-clusters', { user, id }),
   ];
 
   const [ /* tasks,*/ clustering = null ] = await Promise.all(promises);

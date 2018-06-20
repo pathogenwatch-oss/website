@@ -26,7 +26,7 @@ const transformer = (versions) => (doc, callback) => {
 };
 
 module.exports = async (req, res) => {
-  const { user, sessionID } = req;
+  const { user } = req;
   const { filename: rawFilename = '' } = req.query;
   const filename = sanitize(rawFilename) || 'cgmlst.csv';
   const { ids } = req.body;
@@ -36,7 +36,7 @@ module.exports = async (req, res) => {
 
   const query = Object.assign(
     { _id: { $in: ids.split(',') }, 'analysis.cgmlst': { $exists: true } },
-    Genome.getPrefilterCondition({ user, sessionID })
+    Genome.getPrefilterCondition({ user })
   );
 
   const projection = {
