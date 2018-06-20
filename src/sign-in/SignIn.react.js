@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Login from 'cgps-user-accounts/src/components/login';
+import Login from 'cgps-user-accounts/components/login';
 import Passwordless from './Passwordless.react';
 
 const termsLink = (
