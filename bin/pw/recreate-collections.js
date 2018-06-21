@@ -14,19 +14,23 @@ async function run() {
       pmid: migratee.pmid,
       organismId: migratee.organismId,
     };
-    const { token } = await request('collection', 'create', message);
+    try {
+      const { token } = await request('collection', 'create', message);
 
-    const slugSections = token.split('-').slice(1);
-    slugSections.unshift(migratee.uuid);
+      const slugSections = token.split('-').slice(1);
+      slugSections.unshift(migratee.uuid);
 
-    await Collection.update(
-      { token }, {
-        token: slugSections.join('-'),
-        access: migratee.public ? 'public' : 'shared',
-        showcase: migratee.showcase,
-        alias: migratee.uuid,
-      }
-    );
+      await Collection.update(
+        { token }, {
+          token: slugSections.join('-'),
+          access: migratee.public ? 'public' : 'shared',
+          showcase: migratee.showcase,
+          alias: migratee.uuid,
+          createdAt: migratee.createdAt,
+        }
+      );
+      await migratee.remove();
+    } catch (e) { console.log(e.message); }
   }
 }
 
