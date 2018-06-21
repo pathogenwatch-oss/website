@@ -13,6 +13,7 @@ async function run() {
       description: migratee.description,
       pmid: migratee.pmid,
       organismId: migratee.organismId,
+      user: migratee._user,
     };
     try {
       const { token } = await request('collection', 'create', message);
