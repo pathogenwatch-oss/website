@@ -51,7 +51,7 @@
     "min": 100,
     "max": 2500
   },
-  "maxFastaFileSize": 10,
+  "maxGenomeFileSize": 10,
   "mapboxKey": "",
   "fastaStoragePath": "/path/to/files/",
   "wikiLocation": "https://raw.githubusercontent.com/wiki/ImperialCollegeLondon/wgsa-documentation",

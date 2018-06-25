@@ -131,7 +131,7 @@ module.exports = () =>
           mapboxKey: config.mapboxKey,
           maxCollectionSize: config.maxCollectionSize,
           maxDownloadSize: config.maxDownloadSize,
-          maxFastaFileSize: config.maxFastaFileSize,
+          maxGenomeFileSize: config.maxGenomeFileSize,
           pagination: config.pagination,
           wiki: config.wikiLocation,
           strategies: Object.keys(config.passport.strategies || {}),

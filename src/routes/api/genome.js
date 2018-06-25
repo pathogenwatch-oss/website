@@ -77,7 +77,7 @@ function getStream(req) {
 
 router.put(
   '/genome',
-  contentLength.validateMax({ max: (config.maxFastaFileSize || 10) * 1048576 }),
+  contentLength.validateMax({ max: (config.maxGenomeFileSize || 10) * 1048576 }),
   (req, res, next) => {
     LOGGER.info('Received request to create genome');
 
