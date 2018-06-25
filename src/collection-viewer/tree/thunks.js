@@ -138,3 +138,11 @@ export function handleTreeProgress(payload = {}) {
     return dispatch(updateProgress(payload));
   };
 }
+
+export function resetTreeRoot() {
+  return (dispatch, getState) => {
+    const state = getState();
+    const stateKey = getVisibleTree(state).name;
+    dispatch(actions.resetTreeRoot(stateKey));
+  };
+}
