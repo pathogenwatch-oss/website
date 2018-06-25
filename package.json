@@ -1,6 +1,6 @@
 {
   "name": "wgsa-middle-end",
-  "version": "7.0.0-33",
+  "version": "7.0.0-34",
   "description": "Web API for WGSA",
   "main": "app.js",
   "engines": {
@@ -40,7 +40,7 @@
     "slug": "^0.9.1",
     "stream-transform": "^0.1.2",
     "wgsa-fasta-store": "gitlab:cgps/wgsa-fasta-store#v4.0.0",
-    "wgsa-front-end": "gitlab:cgps/wgsa-front-end#v7.0.0-23",
+    "wgsa-front-end": "gitlab:cgps/wgsa-front-end#v7.0.0-24",
     "zip-stream": "^1.2.0"
   },
   "devDependencies": {
