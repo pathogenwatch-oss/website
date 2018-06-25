@@ -66,7 +66,7 @@ export function subtreeLoaded(phylocanvas) {
     const state = getState();
     const stateKey = getVisibleTree(state).name;
 
-    const leafIds = getLeafIds(state, { stateKey });
+    const leafIds = phylocanvas.leaves.map(_ => _.id);
     dispatch(actions.treeLoaded(stateKey, phylocanvas, leafIds));
     dispatch(actions.addHistorySnapshot(stateKey, phylocanvas));
   };
