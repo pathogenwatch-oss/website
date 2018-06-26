@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 const rand = require('rand-token');
 
-const { setToObjectOptions, addPreSaveHook, getSummary, toSlug } = require('./utils');
+const { setToObjectOptions, addPreSaveHook, getSummary, toSlug, getBinExpiryDate } = require('./utils');
 
 const isLeafId = /[0-9a-f]{24}/g;
 
@@ -124,7 +124,7 @@ schema.statics.getPrefilterCondition = function ({ user, query = {} }) {
   }
 
   if (prefilter === 'bin') {
-    return { binned: true, _user: user._id };
+    return { binned: true, _user: user._id, binnedDate: { $gt: getBinExpiryDate() } };
   }
 
   throw new Error(`Invalid collection prefilter: '${prefilter}'`);

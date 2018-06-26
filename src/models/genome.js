@@ -3,7 +3,7 @@ const { Schema } = mongoose;
 
 const geocoding = require('geocoding');
 
-const { setToObjectOptions, addPreSaveHook, getSummary } = require('./utils');
+const { setToObjectOptions, addPreSaveHook, getSummary, getBinExpiryDate } = require('./utils');
 
 function getDate(year, month = 1, day = 1) {
   if (year) {
@@ -170,7 +170,7 @@ schema.statics.getPrefilterCondition = function ({ user, query = {} }) {
   }
 
   if (prefilter === 'bin') {
-    return { binned: true, _user: user._id };
+    return { binned: true, _user: user._id, binnedDate: { $gt: getBinExpiryDate() } };
   }
 
   throw new Error(`Invalid genome prefilter: '${prefilter}'`);
