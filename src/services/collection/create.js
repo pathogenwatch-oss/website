@@ -29,48 +29,58 @@ function getLocations(genomes) {
   return Object.values(locations);
 }
 
-function getSubtrees(organismId, genomes) {
+function getSubtrees(organismId, genomes, genomeIds) {
   const spec = getCollectionTask(organismId, 'subtree');
   if (!spec) return null;
+
   const fps = new Set();
   for (const { analysis = {} } of genomes) {
     if (analysis.core && analysis.core.fp && analysis.core.fp.reference) {
       fps.add(analysis.core.fp.reference);
     }
   }
-  const subtrees = [];
-  for (const name of Array.from(fps)) {
-    subtrees.push({
-      name,
-      status: 'PENDING',
-    });
-  }
-  return subtrees;
+
+  return Promise.all(
+    Array.from(fps).map(async (name) => {
+      const count = await Genome.count({
+        $or: [ { population: true }, { _id: { $in: genomeIds } } ],
+        'analysis.core.fp.reference': name,
+        'analysis.speciator.organismId': organismId,
+      });
+      if (count > 1) {
+        return {
+          name,
+          status: 'PENDING',
+        };
+      }
+      return null;
+    })
+  ).then(subtrees => subtrees.filter(_ => _ !== null));
 }
 
-function createCollection(genomes, { organismId, title, description, pmid, user }) {
+async function createCollection(genomes, { organismId, title, description, pmid, user }) {
   const size = genomes.length;
   const tree = genomes.length >= 3 ? { name: 'collection' } : null;
-  return (
-    Organism.getLatest(organismId)
-      .then(organism =>
-        Collection.create({
-          _organism: organism,
-          _user: user,
-          access: user ? 'private' : 'shared',
-          description,
-          genomes: genomes.map(_ => _._id),
-          locations: getLocations(genomes),
-          organismId,
-          pmid,
-          size,
-          subtrees: getSubtrees(organismId, genomes),
-          title,
-          token: Collection.generateToken(title),
-          tree,
-        })
-      )
-  );
+
+  const genomeIds = genomes.map(_ => _._id);
+  const organism = await Organism.getLatest(organismId);
+  const subtrees = await getSubtrees(organismId, genomes, genomeIds);
+
+  return Collection.create({
+    _organism: organism,
+    _user: user,
+    access: user ? 'private' : 'shared',
+    description,
+    genomes: genomeIds,
+    locations: getLocations(genomes),
+    organismId,
+    pmid,
+    size,
+    subtrees,
+    title,
+    token: Collection.generateToken(title),
+    tree,
+  });
 }
 
 function submitCollection(collection) {
