@@ -8,12 +8,12 @@ import DateSection from '../../filter/date-section';
 
 import { selectors } from '../../filter';
 
-import { getFilterSummary, getSearchText, isFilterOpen } from './selectors';
+import { getFilterSummary, getSearchText, isFilterOpen, getPrefilter } from './selectors';
 
 import { stateKey } from './index';
 import * as actions from './actions';
 
-const Filter = ({ isActive, filterSummary, textValue, updateFilter, updateMulti, clearFilter }) => {
+const Filter = ({ isActive, filterSummary, textValue, updateFilter, updateMulti, clearFilter, prefilter }) => {
   const hasActiveGenus = filterSummary.genusId.some(_ => _.active);
   return (
     <FilterAside
@@ -22,6 +22,7 @@ const Filter = ({ isActive, filterSummary, textValue, updateFilter, updateMulti,
       clear={clearFilter}
       textValue={textValue}
       textOnChange={e => updateFilter('searchText', e.target.value)}
+      prefilter={prefilter}
     >
       <FilterSection
         filterKey="organismId"
@@ -109,6 +110,7 @@ function mapStateToProps(state) {
     filterSummary: getFilterSummary(state, { stateKey }),
     textValue: getSearchText(state),
     isOpen: isFilterOpen(state),
+    prefilter: getPrefilter(state),
   };
 }
 
