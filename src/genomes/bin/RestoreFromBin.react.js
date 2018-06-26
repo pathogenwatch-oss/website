@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { getSelectedGenomes } from './selectors';
+import { getSelectedGenomeList } from '../selection/selectors';
 
 import { setBinnedFlag } from './actions';
 
@@ -17,7 +17,7 @@ const RestoreFromBin = ({ selectedGenomes, disabled, restore }) => (
 );
 
 function mapStateToProps(state) {
-  const selectedGenomes = getSelectedGenomes(state);
+  const selectedGenomes = getSelectedGenomeList(state);
   return {
     selectedGenomes,
     disabled: selectedGenomes.length === 0,

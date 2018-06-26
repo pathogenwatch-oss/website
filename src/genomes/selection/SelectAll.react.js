@@ -2,8 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { selectAll } from './actions';
-import { isUnfilteredList } from '../summary/selectors';
-import { getSelectionStatus } from './selectors';
+import { getSelectionStatus, isSelectAllDisabled } from './selectors';
 
 const iconsByStatus = {
   UNCHECKED: 'check_box_outline_blank',
@@ -32,7 +31,7 @@ const SelectAll = ({ status, disabled, select }) => (
 function mapStateToProps(state) {
   return {
     status: getSelectionStatus(state),
-    disabled: isUnfilteredList(state),
+    disabled: isSelectAllDisabled(state),
   };
 }
 
