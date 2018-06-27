@@ -52,3 +52,23 @@ export function fetchClusters(genomeId) {
     },
   };
 }
+
+export const UPDATE_CLUSTERING_THRESHOLD = 'UPDATE_CLUSTERING_THRESHOLD'
+
+export function updateClusteringThreshold(threshold) {
+  return {
+    type: UPDATE_CLUSTERING_THRESHOLD,
+    payload: threshold,
+  };
+}
+
+export const UPDATE_CLUSTERING_EDGES = createAsyncConstants('UPDATE_CLUSTERING_EDGES');
+
+export function fetchClusterEdges(genomeId, threshold, sts) {
+  return {
+    type: UPDATE_CLUSTERING_EDGES,
+    payload: {
+      promise: api.fetchClusterEdges(genomeId, threshold, sts),
+    },
+  };
+}

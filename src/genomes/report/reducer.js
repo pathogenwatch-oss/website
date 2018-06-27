@@ -1,4 +1,4 @@
-import { SHOW_GENOME_REPORT, CLOSE_GENOME_REPORT, REQUEST_CLUSTERING, UPDATE_CLUSTERING_PROGRESS, FETCH_CLUSTERS } from './actions';
+import { SHOW_GENOME_REPORT, CLOSE_GENOME_REPORT, REQUEST_CLUSTERING, UPDATE_CLUSTERING_PROGRESS, FETCH_CLUSTERS, UPDATE_CLUSTERING_THRESHOLD } from './actions';
 import { FETCH_GENOME_LIST } from '../actions';
 import { LOCATION_CHANGE } from '../../location';
 
@@ -47,6 +47,7 @@ export default function (state = initialState, { type, payload }) {
         ...state,
         clusteringStatus: 'LOADING',
         clusteringProgress: 0.0,
+        clusteringEdges: null,
       };
     case REQUEST_CLUSTERING.SUCCESS: {
       const { statusCode } = payload.result;
@@ -54,17 +55,20 @@ export default function (state = initialState, { type, payload }) {
         return {
           ...state,
           clusteringStatus: 'IN PROGRESS',
+          clusteringEdges: null,
         };
       }
       return {
         ...state,
         clusteringStatus: 'PENDING',
+        clusteringEdges: null,
       };
     }
     case REQUEST_CLUSTERING.FAILURE:
       return {
         ...state,
         clusteringStatus: 'ERROR',
+        clusteringEdges: null,
       };
     case UPDATE_CLUSTERING_PROGRESS: {
       const { status, progress = state.clusteringProgress } = payload;
@@ -72,12 +76,14 @@ export default function (state = initialState, { type, payload }) {
         ...state,
         clusteringStatus: status,
         clusteringProgress: progress,
+        clusteringEdges: null,
       };
     }
     case FETCH_CLUSTERS.FAILURE:
       return {
         ...state,
         clusteringStatus: 'ERROR',
+        clusteringEdges: null,
       };
     case FETCH_CLUSTERS.SUCCESS: {
       const { result } = payload;
@@ -85,8 +91,15 @@ export default function (state = initialState, { type, payload }) {
         ...state,
         clusteringStatus: 'COMPLETE',
         clusters: result,
+        clusteringEdges: null,
       };
     }
+    case UPDATE_CLUSTERING_THRESHOLD:
+      return {
+        ...state,
+        clusteringThreshold: payload,
+        clusteringEdges: null,
+      };
     default:
       return state;
   }

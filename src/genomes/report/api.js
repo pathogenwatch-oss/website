@@ -13,3 +13,7 @@ export function requestClustering(scheme) {
 export function fetchClusters(id) {
   return fetchJson('GET', `/api/genome/${id}/clusters`);
 }
+
+export function fetchClusterEdges(id, threshold, sts) {
+  return fetchJsonXhr('POST', `/api/clustering/${id}/edges`, { threshold, sts });
+}

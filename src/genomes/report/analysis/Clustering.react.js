@@ -1,15 +1,27 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
 import classnames from 'classnames';
 
 import Spinner from '../../../components/Spinner.react';
 import Notify from '../../../components/Notify.react';
-import { getClusteringStatus, getClusteringProgress, getClusters } from '../selectors';
-import { requestClustering, updateClusteringProgress, fetchClusters } from '../actions';
+import { history } from '../../../app/router';
+import { getClusteringStatus, getClusteringProgress, getClusters, getClusteringThreshold } from '../selectors';
+import { requestClustering, updateClusteringProgress, fetchClusters, updateClusteringThreshold } from '../actions';
+
+import SimpleBarChart from './SimpleBarChart.react';
+
+function buildClusters(threshold, clusterIndex) {
+  const { pi, lambda } = clusterIndex;
+  const nItems = pi.length;
+  const clusters = pi.map(() => 0);
+  for (let i = nItems - 1; i >= 0; i--) {
+    if (lambda[i] > threshold) clusters[i] = i;
+    else clusters[i] = clusters[pi[i]];
+  }
+  return clusters;
+}
 
 const Clustering = React.createClass({
-
   componentDidUpdate() {
     const { status } = this.props;
     if (status === 'READY') {
@@ -17,28 +29,61 @@ const Clustering = React.createClass({
     }
   },
 
-  renderButton(label = 'Cluster Now', primary = true) {
+  renderClusterButton(label = 'Cluster Now', primary = true) {
     return (
       <button
         className={classnames('mdl-button mdl-button--raised', { 'mdl-button--colored': primary })}
-        onClick={this.props.onClick}
+        onClick={this.props.requestClustering}
       >
         {label}
       </button>
     );
   },
 
+  renderViewButton(label = 'View cluster') {
+    const { genomeId, threshold } = this.props;
+    const viewClustering = () => history.push(`/clustering/${genomeId}?threshold=${threshold}`);
+    return (
+      <button
+        className={classnames('mdl-button mdl-button--raised', { 'mdl-button--colored': false })}
+        onClick={viewClustering}
+        style={{ marginLeft: '10px' }}
+      >
+        {label}
+      </button>
+    );
+  },
+
+  renderChart() {
+    const { genomeIdx, clusterIndex } = this.props.clusters;
+    const clusterSizes = [];
+    const thresholds = [];
+    for (let t = 0; t <= 100; t++) {
+      const cluster = buildClusters(t, clusterIndex);
+      const size = cluster.filter(_ => _ === cluster[genomeIdx]).length;
+      clusterSizes.push(size);
+      thresholds.push(t);
+    }
+    const toolTipFunc = (data) => `Cluster of ${data.yLabel} at threshold of ${data.xLabel}`;
+    const onClick = ({ label }) => this.props.updateThreshold(label);
+    return <SimpleBarChart labels={thresholds} values={clusterSizes} onClick={onClick} toolTipFunc={toolTipFunc} />;
+  },
+
+  renderNetwork() {
+    return <p>The network</p>;
+  },
+
   render() {
     return (
       <React.Fragment>
-        <h2>Clustering</h2>
+        <h2>Core Genome Clustering</h2>
         {(() => {
           switch (this.props.status) {
             case 'ERROR':
               return (
                 <React.Fragment>
                   <p>Something went wrong :(</p>
-                  {this.renderButton('Try Again', false)}
+                  {this.renderClusterButton('Try Again', false)}
                 </React.Fragment>
               );
             case 'LOADING':
@@ -63,21 +108,15 @@ const Clustering = React.createClass({
                 </React.Fragment>
               );
             case 'COMPLETE': {
-              const { clusters = {}, genomeId } = this.props;
-              const thresholds = Object.keys(clusters).map(t => parseInt(t));
-              if (thresholds.length === 0) return null;
-              thresholds.sort((a, b) => a - b);
-              const bullets = thresholds.map(t => {
-                const clusterSize = (clusters[t] || {}).length;
-                const others = clusterSize <= 1 ? 0 : clusterSize - 1;
-                if (others < 1) return <li key={t}>No cluster found at threshold { t }</li>;
-                return <li key={t}><Link to={`/clustering/${genomeId}?threshold=${t}`}>{ others } other genome{ others !== 1 ? 's' : ''}</Link> at threshold { t }</li>;
-              });
+              const { clusters } = this.props;
+              window.clusters = clusters;
               return (
                 <React.Fragment>
-                  <p>This genome is found in clusters with:</p>
-                  <ul>{bullets}</ul>
-                  {this.renderButton('Run Again', false)}
+                  {this.renderChart()}
+                  <p style={{ marginTop: '5px' }}>Selected clustering at threshold of { this.props.threshold }</p>
+                  {this.renderNetwork()}
+                  {this.renderClusterButton('Recluster')}
+                  {this.renderViewButton()}
                 </React.Fragment>
               );
             }
@@ -85,7 +124,7 @@ const Clustering = React.createClass({
               return (
                 <React.Fragment>
                   <p>Clusters have not yet been determined for this genome.</p>
-                  {this.renderButton()}
+                  {this.renderClusterButton()}
                 </React.Fragment>
               );
           }
@@ -101,6 +140,7 @@ function mapStateToProps(state) {
     status: getClusteringStatus(state),
     progress: getClusteringProgress(state),
     clusters: getClusters(state),
+    threshold: getClusteringThreshold(state),
   };
 }
 
@@ -108,7 +148,8 @@ function mapDispatchToProps(dispatch, props) {
   return {
     updateProgress: (payload) => dispatch(updateClusteringProgress(payload)),
     fetchClusters: () => dispatch(fetchClusters(props.genomeId)),
-    onClick: () => dispatch(requestClustering(props.scheme)),
+    requestClustering: () => dispatch(requestClustering(props.scheme)),
+    updateThreshold: (threshold) => dispatch(updateClusteringThreshold(threshold)),
   };
 }
 
