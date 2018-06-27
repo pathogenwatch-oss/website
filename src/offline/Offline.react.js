@@ -84,7 +84,7 @@ const Offline = React.createClass({
   render() {
     return (
       <React.Fragment>
-        <DocumentTitle title="Offline" />
+        <DocumentTitle>Offline</DocumentTitle>
         {this.renderContent()}
       </React.Fragment>
     );

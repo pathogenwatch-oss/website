@@ -38,7 +38,7 @@ const Component = React.createClass({
   render() {
     return (
       <React.Fragment>
-        <DocumentTitle title={this.getTitle()} />
+        <DocumentTitle>{this.getTitle()}</DocumentTitle>
         {this.renderContent()}
       </React.Fragment>
     );

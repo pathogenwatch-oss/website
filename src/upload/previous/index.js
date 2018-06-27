@@ -38,7 +38,7 @@ class Previous extends React.Component {
     const { loading, error, uploads } = this.props;
     return (
       <div className="wgsa-hipster-style wgsa-previous-uploads">
-        <DocumentTitle title="Previous Uploads" />
+        <DocumentTitle>Previous Uploads</DocumentTitle>
         <Summary previous />
         { !!uploads.length ?
           <Grid

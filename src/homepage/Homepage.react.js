@@ -17,7 +17,7 @@ function getCollectionSizeLimit(user) {
 
 export default ({ deployedOrganisms }) => (
   <div className="wgsa-homepage">
-    <DocumentTitle title="Global Pathogen Surveillance through Whole Genome Sequencing" />
+    <DocumentTitle>Global Pathogen Surveillance through Whole Genome Sequencing</DocumentTitle>
     <section className="jumbotron">
       <div className="jumbotron-content">
         <Logo />
@@ -265,10 +265,10 @@ export default ({ deployedOrganisms }) => (
           </a>
         </div>
         <div className="mdl-mega-footer--right-section">
-          <a className="cgps-contact-link cgps-contact-link--twitter" target="_blank" rel="noopener" href="https://www.twitter.com/TheCGPS">
-            <i className="cgps-contact-link__icon"></i>@<span>TheCGPS</span>
+          <a className="cgps-contact-link cgps-contact-link--twitter" target="_blank" rel="noopener" href="https://www.twitter.com/Pathogenwatch">
+            <i className="cgps-contact-link__icon"></i>@<span>Pathogenwatch</span>
           </a>
-          <a className="cgps-contact-link cgps-contact-link--email" href="mailto:info@pathogensurveillance.net"><i className="material-icons cgps-contact-link__icon">mail_outline</i><span>info@pathogensurveillance.net</span></a>
+          <a className="cgps-contact-link cgps-contact-link--email" href="mailto:cgps@sanger.ac.uk"><i className="material-icons cgps-contact-link__icon">mail_outline</i><span>cgps@sanger.ac.uk</span></a>
         </div>
       </div>
       <div className="mdl-mega-footer--middle-section">
