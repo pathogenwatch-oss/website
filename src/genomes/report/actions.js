@@ -64,11 +64,11 @@ export function updateClusteringThreshold(threshold) {
 
 export const UPDATE_CLUSTERING_EDGES = createAsyncConstants('UPDATE_CLUSTERING_EDGES');
 
-export function fetchClusterEdges(genomeId, threshold, sts) {
+export function fetchClusterEdges(scheme, genomeId, threshold, sts) {
   return {
     type: UPDATE_CLUSTERING_EDGES,
     payload: {
-      promise: api.fetchClusterEdges(genomeId, threshold, sts),
+      promise: api.fetchClusterEdges(scheme, genomeId, threshold, sts),
     },
   };
 }

@@ -1,4 +1,4 @@
-import { SHOW_GENOME_REPORT, CLOSE_GENOME_REPORT, REQUEST_CLUSTERING, UPDATE_CLUSTERING_PROGRESS, FETCH_CLUSTERS, UPDATE_CLUSTERING_THRESHOLD } from './actions';
+import { SHOW_GENOME_REPORT, CLOSE_GENOME_REPORT, REQUEST_CLUSTERING, UPDATE_CLUSTERING_PROGRESS, FETCH_CLUSTERS, UPDATE_CLUSTERING_THRESHOLD, UPDATE_CLUSTERING_EDGES } from './actions';
 import { FETCH_GENOME_LIST } from '../actions';
 import { LOCATION_CHANGE } from '../../location';
 
@@ -9,6 +9,7 @@ const initialState = {
   clusteringStatus: null,
   clusteringProgress: null,
   clusters: null,
+  clusteringThreshold: 30,
 };
 
 export default function (state = initialState, { type, payload }) {
@@ -99,6 +100,11 @@ export default function (state = initialState, { type, payload }) {
         ...state,
         clusteringThreshold: payload,
         clusteringEdges: null,
+      };
+    case UPDATE_CLUSTERING_EDGES.SUCCESS:
+      return {
+        ...state,
+        clusteringEdges: payload.result.edges,
       };
     default:
       return state;

@@ -39,6 +39,8 @@
   <script src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js" integrity="sha256-c0m8xzX5oOBawsnLVpHnU2ieISOvxi584aNElFl2W6M=" crossorigin="anonymous"></script>
   <script src="//cdn.rawgit.com/localForage/localForage/1.5.0/dist/localforage.min.js"></script>
   <script src="//cdn.rawgit.com/zenorocha/clipboard.js/v1.7.1/dist/clipboard.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/sigma.js/1.2.1/sigma.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/sigma.js/1.2.1/plugins/sigma.layout.forceAtlas2.min.js"></script>
   <script>WGSA_CONFIG = <%= "\<%- JSON.stringify(frontEndConfig) %\>" %>;</script>
 <% for (var file of htmlWebpackPlugin.files.js) { %>
   <script src="<%= file %>"></script><% } %>

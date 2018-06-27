@@ -89,4 +89,4 @@ class SimpleBarChart extends Component {
   }
 }
 
-module.exports = SimpleBarChart;
+export default SimpleBarChart;

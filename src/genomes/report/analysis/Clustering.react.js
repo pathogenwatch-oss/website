@@ -5,10 +5,22 @@ import classnames from 'classnames';
 import Spinner from '../../../components/Spinner.react';
 import Notify from '../../../components/Notify.react';
 import { history } from '../../../app/router';
-import { getClusteringStatus, getClusteringProgress, getClusters, getClusteringThreshold } from '../selectors';
-import { requestClustering, updateClusteringProgress, fetchClusters, updateClusteringThreshold } from '../actions';
+import { getClusteringStatus, getClusteringProgress, getClusters, getClusteringThreshold, getClusteringEdges } from '../selectors';
+import { requestClustering, updateClusteringProgress, fetchClusters, updateClusteringThreshold, fetchClusterEdges } from '../actions';
 
 import SimpleBarChart from './SimpleBarChart.react';
+import SimpleNetwork from './SimpleNetwork.react';
+
+const NODE_COLORS = {
+  0: '#673c90',
+  1: '#b199c7',
+};
+NODE_COLORS[-1] = '#9eb8c0';
+const EDGE_COLORS = {
+  0: '#9a6fc3',
+  1: '#e3dbeb',
+};
+EDGE_COLORS[-1] = '#dae4e7';
 
 function buildClusters(threshold, clusterIndex) {
   const { pi, lambda } = clusterIndex;
@@ -21,11 +33,69 @@ function buildClusters(threshold, clusterIndex) {
   return clusters;
 }
 
+function normalize(arr) {
+  const max = Math.max(...arr);
+  const min = Math.min(...arr);
+  const diff = max - min;
+  if (diff === 0) return arr.map(() => 0.5);
+  return arr.map(el => 0.5 + (el - min) / diff);
+}
+
+function degreesOfSeparation(edges, rootIdx) {
+  const nodes = [];
+
+  let idx = 0;
+  for (let a = 0; idx < edges.length; a++) {
+    const nodeA = { neighbours: [], explored: false, degrees: undefined };
+    nodes.push(nodeA);
+    for (let b = 0; b < a; b++) {
+      const nodeB = nodes[b];
+      if (edges[idx]) {
+        nodeA.neighbours.push(nodeB);
+        nodeB.neighbours.push(nodeA);
+      }
+      idx++;
+    }
+  }
+
+  const root = nodes[rootIdx];
+  let frontier = [ root ];
+
+  for (let degrees = 0; degrees <= 2; degrees++) {
+    let nextFrontier = [];
+    for (let i = 0; i < frontier.length; i++) {
+      const node = frontier[i];
+      if (node.explored) continue;
+      nextFrontier = [ ...nextFrontier, ...node.neighbours ];
+      node.degrees = degrees;
+      node.explored = true;
+    }
+    frontier = nextFrontier;
+  }
+
+  return nodes.map(_ => _.degrees);
+}
+
 const Clustering = React.createClass({
-  componentDidUpdate() {
-    const { status } = this.props;
-    if (status === 'READY') {
+  componentDidUpdate(prevProps) {
+    const params = { ...this.props.clusters };
+    params.threshold = this.props.threshold;
+    params.status = this.props.status;
+
+    const prevParams = { ...prevProps.clusters };
+    prevParams.threshold = prevProps.threshold;
+    prevParams.status = prevProps.status;
+
+    if (params.status === 'READY' && prevParams.status !== 'READY') {
       this.props.fetchClusters();
+    } else if (
+      params.threshold && (params.threshold !== prevParams.threshold) ||
+      params.names && (params.names !== prevParams.names) ||
+      params.genomeIdx && (params.genomeIdx !== prevParams.genomeIdx)
+    ) {
+      const clusters = buildClusters(params.threshold, params.clusterIndex);
+      const sts = params.sts.filter((_, i) => clusters[i] === clusters[params.genomeIdx]);
+      this.props.fetchEdges(this.props.scheme, this.props.genomeId, this.props.threshold, sts);
     }
   },
 
@@ -34,6 +104,7 @@ const Clustering = React.createClass({
       <button
         className={classnames('mdl-button mdl-button--raised', { 'mdl-button--colored': primary })}
         onClick={this.props.requestClustering}
+        style={{ marginLeft: '10px' }}
       >
         {label}
       </button>
@@ -66,11 +137,96 @@ const Clustering = React.createClass({
     }
     const toolTipFunc = (data) => `Cluster of ${data.yLabel} at threshold of ${data.xLabel}`;
     const onClick = ({ label }) => this.props.updateThreshold(label);
-    return <SimpleBarChart labels={thresholds} values={clusterSizes} onClick={onClick} toolTipFunc={toolTipFunc} />;
+    return <SimpleBarChart width={584} height={100} labels={thresholds} values={clusterSizes} onClick={onClick} toolTipFunc={toolTipFunc} />;
+  },
+
+  _connections() {
+    const edges = this.props.edges;
+    let idx = 0;
+    const connections = [];
+    for (let i = 0; idx < edges.length; i++) {
+      connections.push(0);
+      for (let j = 0; j < i; j++) {
+        if (edges[idx]) {
+          connections[i]++;
+          connections[j]++;
+        }
+        idx++;
+      }
+    }
+    return connections;
   },
 
   renderNetwork() {
-    return <p>The network</p>;
+    if (!this.props.edges) return <p>No cluster available</p>;
+    const clusters = buildClusters(this.props.threshold, this.props.clusters.clusterIndex);
+    const names = this.props.clusters.names.filter((_, i) => clusters[i] === clusters[this.props.clusters.genomeIdx]);
+    
+    // Nodes should be sized according to the number of edges they have
+    // They're scaled and normalized to make them look nicer.
+    const connections = this._connections();
+    const sizes = normalize(connections.map(n => n ** 0.3));
+    
+    // We need to keep track of the index of the node which is being shown in the genome report
+    // In the original list of all sts, it was at the position `genomeIdx` but it's
+    // new position among the filtered sts will be smaller.
+    const rootSt = this.props.clusters.sts[this.props.clusters.genomeIdx];
+    const sts = this.props.clusters.sts.filter((_, i) => clusters[i] === clusters[this.props.clusters.genomeIdx]);
+    const rootIdx = sts.indexOf(rootSt);
+    const degrees = degreesOfSeparation(this.props.edges, rootIdx);
+
+    const nodes = [];
+    const edges = [];
+    let idx = 0;
+    for (let i = 0; i < names.length; i++) {
+      nodes.push({
+        _label: names[i].join('|'),
+        id: 'n' + i,
+        size: sizes[i],
+        color: NODE_COLORS[degrees[i]] || NODE_COLORS[-1],
+        zIndex: degrees[i],
+      });
+      for (let j = 0; j < i; j++) {
+        if (this.props.edges[idx]) {
+          const minDegree = Math.min(degrees[i], degrees[j]);
+          edges.push({
+            id: 'e' + idx,
+            source: 'n'+j,
+            target: 'n'+i,
+            color: EDGE_COLORS[minDegree] || EDGE_COLORS[-1],
+            zIndex: minDegree,
+          });
+        }
+        idx++;
+      }
+    }
+
+    const onTimeout = (network) => {
+      const node = network.graph.nodes().find(_ => _.id === 'n'+rootIdx);
+      node.label = node._label;
+    };
+    const overNode = ({ data }, network) => {
+      data.node.label = data.node._label;
+      network.refresh();
+    };
+    const outNode = ({ data }, network) => {
+      if (data.node.id === 'n'+rootIdx) return;
+      data.node.label = undefined;
+      network.refresh();
+    };
+
+    const events = {
+      overNode,
+      outNode,
+    };
+
+    const options = {
+      algorithm: 'forceAtlas2',
+      timeout: 2000,
+      onTimeout,
+    };
+
+    return <SimpleNetwork width={584} height={320} nodes={nodes} edges={edges} events={events} options={options} />;
   },
 
   render() {
@@ -112,11 +268,11 @@ const Clustering = React.createClass({
               window.clusters = clusters;
               return (
                 <React.Fragment>
-                  {this.renderChart()}
-                  <p style={{ marginTop: '5px' }}>Selected clustering at threshold of { this.props.threshold }</p>
                   {this.renderNetwork()}
-                  {this.renderClusterButton('Recluster')}
+                  {this.renderChart()}
+                  <span style={{ marginTop: '5px' }}>Selected clustering at threshold of { this.props.threshold }</span>
                   {this.renderViewButton()}
+                  {this.renderClusterButton('Recluster')}
                 </React.Fragment>
               );
             }
@@ -141,6 +297,7 @@ function mapStateToProps(state) {
     progress: getClusteringProgress(state),
     clusters: getClusters(state),
     threshold: getClusteringThreshold(state),
+    edges: getClusteringEdges(state),
   };
 }
 
@@ -150,6 +307,7 @@ function mapDispatchToProps(dispatch, props) {
     fetchClusters: () => dispatch(fetchClusters(props.genomeId)),
     requestClustering: () => dispatch(requestClustering(props.scheme)),
     updateThreshold: (threshold) => dispatch(updateClusteringThreshold(threshold)),
+    fetchEdges: (scheme, genomeId, threshold, sts) => dispatch(fetchClusterEdges(scheme, genomeId, threshold, sts)),
   };
 }
 
