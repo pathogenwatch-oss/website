@@ -60,5 +60,6 @@
 			"password": ""
 		},
     "workers": 8
-  }
+  },
+  "gaTrackingId": ""
 }
