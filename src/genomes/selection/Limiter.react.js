@@ -7,13 +7,11 @@ import { getSelectionSize } from './selectors';
 import Sorry from './Sorry.react';
 
 const Limiter = ({ type, amount, children }) => {
-  const limits = config[type] || {};
-  const { anonymous = 150, loggedIn = 500 } = limits;
-  const limit = config.user ? loggedIn : anonymous;
+  const limit = config[type] || 1000;
 
   if (amount > limit) {
     return (
-      <Sorry type={type} amount={amount} limit={limit} loggedIn={loggedIn} />
+      <Sorry type={type} amount={amount} limit={limit} />
     );
   }
 

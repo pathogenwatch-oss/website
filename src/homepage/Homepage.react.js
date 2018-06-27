@@ -8,12 +8,7 @@ import SignInLink from '../sign-in/SignInLink.react';
 
 import CONFIG from '../app/config';
 import DocumentTitle from '../branding/DocumentTitle.react';
-const { maxCollectionSize = {} } = CONFIG;
-
-function getCollectionSizeLimit(user) {
-  const limit = maxCollectionSize[user] || 0;
-  return limit === 0 ? 'Unlimited' : limit;
-}
+const { maxCollectionSize = 1000 } = CONFIG;
 
 export default ({ deployedOrganisms }) => (
   <div className="wgsa-homepage">
@@ -225,23 +220,17 @@ export default ({ deployedOrganisms }) => (
               </td>
             </tr>
             <tr>
+              <td />
               <td>
-                <span className="wgsa-feature-figure">{getCollectionSizeLimit('anonymous')}</span>
-                <small>genomes per collection</small>
-              </td>
-              <td>
-                <span className="wgsa-feature-figure">{getCollectionSizeLimit('loggedIn')}</span>
-                <small>genomes per collection</small>
+                Create collections of up to<br /><strong>{maxCollectionSize}</strong> genomes
               </td>
             </tr>
             <tr>
-              <td>&mdash;</td>
-              <td>Persistent genomes & collections</td>
+              <td />
+              <td>
+                Core genome clustering
+              </td>
             </tr>
-            {/* <tr>
-              <td>&mdash;</td>
-              <td>Publish collections to public data</td>
-            </tr> */}
           </tbody>
         </table>
       </div>
