@@ -17,7 +17,7 @@ const renderApp = () => render(
       <Router />
     </Provider>
   </AppContainer>,
-  document.getElementById('wgsa')
+  document.getElementById('pathogenwatch')
 );
 
 if (module.hot) {

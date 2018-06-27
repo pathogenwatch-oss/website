@@ -1,8 +1,9 @@
 const path = require('path');
 const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const WebpackAssetsManifest = require('webpack-assets-manifest');
 const WebpackMonitor = require('webpack-monitor');
 const NameAllModulesPlugin = require('name-all-modules-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 const srcFolder = path.join(__dirname, 'src');
 
@@ -68,7 +69,7 @@ const devConfig = {
   ],
   output: {
     path: __dirname,
-    filename: 'wgsa.js',
+    filename: 'pathogenwatch.js',
     publicPath: '/',
   },
   resolve,
@@ -83,7 +84,7 @@ const devConfig = {
 
 const prodConfig = {
   entry: {
-    wgsa: './src',
+    pathogenwatch: './src',
     vendor: [
       'commonmark',
       'leaflet',
@@ -96,9 +97,9 @@ const prodConfig = {
     ],
   },
   output: {
-    path: path.join(__dirname, 'public'),
+    path: path.join(__dirname, 'public', 'app'),
     filename: '[name].[chunkhash].js',
-    publicPath: '/',
+    publicPath: '/app/',
   },
   resolve,
   plugins: commonPlugins.concat([
@@ -136,11 +137,11 @@ const prodConfig = {
       target: '../monitor.json',
       // launch: true,
     }),
-    new HtmlWebpackPlugin({
-      filename: '../views/index.ejs',
-      template: 'views/index.tmpl',
-      inject: false,
+    new WebpackAssetsManifest({
+      output: '../../assets.json', // relative to output.path
+      publicPath: true,
     }),
+    new CleanWebpackPlugin([ 'public/app', 'assets.json' ]),
   ]),
   module: {
     rules,

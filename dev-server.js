@@ -61,19 +61,12 @@ app.use('/api', apiRouter);
 
 app.set('view engine', 'ejs');
 
-let tmpl = fs.readFileSync('./views/index.tmpl', 'utf8');
-fs.writeFileSync('./views/dev.ejs', require('lodash').template(tmpl)({
-  htmlWebpackPlugin: {
-    files: {
-      js: [ '/wgsa.js' ],
-      css: [],
-    },
-  },
-}));
-tmpl = null;
-
-app.use('/', (req, res) => res.render('dev', {
+app.use('/', (req, res) => res.render('index', {
   frontEndConfig: JSON.parse(fs.readFileSync('./config.json')),
+  files: {
+    scripts: [ '/pathogenwatch.js' ],
+    stylesheets: [],
+  },
 }));
 
 app.listen(process.env.PORT || 8080, '0.0.0.0');
