@@ -39,14 +39,8 @@
     "encrypted": false
   },
   "downloadFileLocation" : "/path/to/files/",
-  "maxCollectionSize": {
-    "anonymous": 150,
-    "loggedIn": 1000
-  },
-  "maxDownloadSize": {
-    "anonymous": 150,
-    "loggedIn": 2500
-  },
+  "maxCollectionSize": 1000,
+  "maxDownloadSize": 2500,
   "pagination": {
     "min": 100,
     "max": 2500
