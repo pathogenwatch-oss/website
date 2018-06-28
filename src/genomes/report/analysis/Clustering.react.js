@@ -5,7 +5,7 @@ import classnames from 'classnames';
 import Spinner from '../../../components/Spinner.react';
 import Notify from '../../../components/Notify.react';
 import { history } from '../../../app/router';
-import { getClusteringStatus, getClusteringProgress, getClusters, getClusteringThreshold, getClusteringEdges } from '../selectors';
+import { getClusteringStatus, getClusteringProgress, getClusters, getClusteringThreshold, getClusteringEdges, getClusteringEdgesStatus } from '../selectors';
 import { requestClustering, updateClusteringProgress, fetchClusters, updateClusteringThreshold, fetchClusterEdges } from '../actions';
 
 import SimpleBarChart from './SimpleBarChart.react';
@@ -168,7 +168,17 @@ const Clustering = React.createClass({
   },
 
   renderNetwork() {
-    if (!this.props.edges) return <div style={{ width: '584px', height: '320px' }}></div>;
+    const width = 584;
+    const height = 320;
+    const { edgesStatus = null } = this.props;
+    if (edgesStatus === 'IN PROGRESS') {
+      return <div style={{ width: `${width}px`, height: `${height}px` }}><p>Fetching cluster...</p><Spinner /></div>;
+    } else if (edgesStatus === null) {
+      return <p>Please pick a threshold from the chart below</p>;
+    } else if (edgesStatus !== 'COMPLETE') {
+      return <div style={{ width: `${width}px`, height: `${height}px` }}><p>Couldn't fetch the cluster, try another threshold</p></div>;
+    }
+    if (!this.props.edges) return <div style={{ width: `${width}px`, height: `${height}px` }}></div>;
     const clusters = buildClusters(this.props.threshold, this.props.clusters.clusterIndex);
     const names = this.props.clusters.names.filter((_, i) => clusters[i] === clusters[this.props.clusters.genomeIdx]);
     
@@ -247,8 +257,8 @@ const Clustering = React.createClass({
     const setModestyEl = function (el) { this.modestyEl = el }.bind(this);
 
     return (<div style={{ position: 'relative' }}>
-      <SimpleNetwork style={style} width={584} height={320} nodes={nodes} edges={edges} events={events} options={options} />
-      <div ref={ setModestyEl } style={{ position: 'absolute', top: '10px', 'z-index': 2 }}><p>Rendering cluster...</p><Spinner /></div>
+      <SimpleNetwork style={style} width={width} height={height} nodes={nodes} edges={edges} events={events} options={options} />
+      <div ref={ setModestyEl } style={{ position: 'absolute', top: '0px', 'z-index': 2 }}><p>Rendering cluster...</p><Spinner /></div>
     </div>);
   },
 
@@ -319,6 +329,7 @@ function mapStateToProps(state) {
     clusters: getClusters(state),
     threshold: getClusteringThreshold(state),
     edges: getClusteringEdges(state),
+    edgesStatus: getClusteringEdgesStatus(state),
   };
 }
 

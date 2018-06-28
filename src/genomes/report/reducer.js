@@ -10,6 +10,7 @@ const initialState = {
   clusteringProgress: null,
   clusters: null,
   clusteringThreshold: 30,
+  clusteringEdgesStatus: 'PENDING',
 };
 
 export default function (state = initialState, { type, payload }) {
@@ -101,10 +102,21 @@ export default function (state = initialState, { type, payload }) {
         clusteringThreshold: payload,
         clusteringEdges: null,
       };
+    case UPDATE_CLUSTERING_EDGES.ATTEMPT:
+      return {
+        ...state,
+        clusteringEdgesStatus: 'IN PROGRESS',
+      }
+    case UPDATE_CLUSTERING_EDGES.FAILURE:
+      return {
+        ...state,
+        clusteringEdgesStatus: 'ERROR',
+      }
     case UPDATE_CLUSTERING_EDGES.SUCCESS:
       return {
         ...state,
         clusteringEdges: payload.result.edges,
+        clusteringEdgesStatus: 'COMPLETE',
       };
     default:
       return state;
