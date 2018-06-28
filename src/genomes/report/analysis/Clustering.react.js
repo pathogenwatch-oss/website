@@ -214,7 +214,8 @@ const Clustering = React.createClass({
     const onTimeout = (network) => {
       const node = network.network.graph.nodes().find(_ => _.id === 'n'+rootIdx);
       node.label = node._label;
-      if (network.root) network.root.style.visibility = 'visible';
+      if (this.modestyEl) this.modestyEl.style.visibility = 'hidden';
+      if (network.root) network.root.style.opacity = 1;
     };
     const overNode = ({ data }, network) => {
       data.node.label = data.node._label;
@@ -238,10 +239,17 @@ const Clustering = React.createClass({
     };
 
     const style = {
-      visibility: 'hidden',
+      opacity: 0.2,
+      'z-index': 1,
+      position: 'relative',
     };
 
-    return <SimpleNetwork style={style} width={584} height={320} nodes={nodes} edges={edges} events={events} options={options} />;
+    const setModestyEl = function (el) { this.modestyEl = el }.bind(this);
+
+    return (<div style={{ position: 'relative' }}>
+      <SimpleNetwork style={style} width={584} height={320} nodes={nodes} edges={edges} events={events} options={options} />
+      <div ref={ setModestyEl } style={{ position: 'absolute', top: '10px', 'z-index': 2 }}><p>Rendering cluster...</p><Spinner /></div>
+    </div>);
   },
 
   render() {
