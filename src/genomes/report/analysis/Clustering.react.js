@@ -77,6 +77,16 @@ function degreesOfSeparation(edges, rootIdx) {
 }
 
 const Clustering = React.createClass({
+  componentDidMount() {
+    const { names, genomeIdx, sts: allSts, clusterIndex } = this.props.clusters || {};
+    const { threshold } = this.props;
+    if (threshold && names && genomeIdx) {
+      const clusters = buildClusters(threshold, clusterIndex);
+      const sts = allSts.filter((_, i) => clusters[i] === clusters[genomeIdx]);
+      this.props.fetchEdges(this.props.scheme, this.props.genomeId, this.props.threshold, sts);
+    }
+  },
+
   componentDidUpdate(prevProps) {
     const params = { ...this.props.clusters };
     params.threshold = this.props.threshold;
@@ -158,7 +168,7 @@ const Clustering = React.createClass({
   },
 
   renderNetwork() {
-    if (!this.props.edges) return <p>No cluster available</p>;
+    if (!this.props.edges) return <div style={{ width: '584px', height: '320px' }}></div>;
     const clusters = buildClusters(this.props.threshold, this.props.clusters.clusterIndex);
     const names = this.props.clusters.names.filter((_, i) => clusters[i] === clusters[this.props.clusters.genomeIdx]);
     
@@ -202,17 +212,18 @@ const Clustering = React.createClass({
     }
 
     const onTimeout = (network) => {
-      const node = network.graph.nodes().find(_ => _.id === 'n'+rootIdx);
+      const node = network.network.graph.nodes().find(_ => _.id === 'n'+rootIdx);
       node.label = node._label;
+      if (network.root) network.root.style.visibility = 'visible';
     };
     const overNode = ({ data }, network) => {
       data.node.label = data.node._label;
-      network.refresh();
+      network.network.refresh();
     };
     const outNode = ({ data }, network) => {
       if (data.node.id === 'n'+rootIdx) return;
       data.node.label = undefined;
-      network.refresh();
+      network.network.refresh();
     };
 
     const events = {
@@ -226,7 +237,11 @@ const Clustering = React.createClass({
       onTimeout,
     };
 
-    return <SimpleNetwork width={584} height={320} nodes={nodes} edges={edges} events={events} options={options} />;
+    const style = {
+      visibility: 'hidden',
+    };
+
+    return <SimpleNetwork style={style} width={584} height={320} nodes={nodes} edges={edges} events={events} options={options} />;
   },
 
   render() {
@@ -264,8 +279,6 @@ const Clustering = React.createClass({
                 </React.Fragment>
               );
             case 'COMPLETE': {
-              const { clusters } = this.props;
-              window.clusters = clusters;
               return (
                 <React.Fragment>
                   {this.renderNetwork()}
