@@ -104,6 +104,7 @@ module.exports = () =>
     app.set('view engine', 'ejs');
     app.set('views', path.join(clientPath, 'views'));
 
+    const files = require(path.join(clientPath, 'assets.js'))();
     app.use('/', (req, res, next) => {
       // crude file matching
       if (req.path !== '/index.html' && req.path.match(/\.[a-z]{1,4}$/) || req.xhr) {
@@ -125,7 +126,8 @@ module.exports = () =>
       }
 
       return res.render('index', {
-        googleMapsKey: config.googleMapsKey,
+        files,
+        gaTrackingId: config.gaTrackingId,
         frontEndConfig: {
           pusherKey: config.pusher.key,
           mapboxKey: config.mapboxKey,
