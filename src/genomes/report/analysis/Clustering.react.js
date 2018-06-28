@@ -170,6 +170,14 @@ const Clustering = React.createClass({
   renderNetwork() {
     const width = 584;
     const height = 320;
+
+    const clusters = buildClusters(this.props.threshold, this.props.clusters.clusterIndex);
+    const names = this.props.clusters.names.filter((_, i) => clusters[i] === clusters[this.props.clusters.genomeIdx]);
+
+    if (names.length <= 1) {
+      return <div style={{ width: `${width}px`, height: `${height}px` }}><p>Please pick a bigger threshold.</p></div>;
+    }
+
     const { edgesStatus = null } = this.props;
     if (edgesStatus === 'IN PROGRESS') {
       return <div style={{ width: `${width}px`, height: `${height}px` }}><p>Fetching cluster...</p><Spinner /></div>;
@@ -179,8 +187,6 @@ const Clustering = React.createClass({
       return <div style={{ width: `${width}px`, height: `${height}px` }}><p>Couldn't fetch the cluster, try another threshold</p></div>;
     }
     if (!this.props.edges) return <div style={{ width: `${width}px`, height: `${height}px` }}></div>;
-    const clusters = buildClusters(this.props.threshold, this.props.clusters.clusterIndex);
-    const names = this.props.clusters.names.filter((_, i) => clusters[i] === clusters[this.props.clusters.genomeIdx]);
     
     // Nodes should be sized according to the number of edges they have
     // They're scaled and normalized to make them look nicer.
