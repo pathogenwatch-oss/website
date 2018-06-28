@@ -4,6 +4,7 @@ const WebpackAssetsManifest = require('webpack-assets-manifest');
 const WebpackMonitor = require('webpack-monitor');
 const NameAllModulesPlugin = require('name-all-modules-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const srcFolder = path.join(__dirname, 'src');
 
@@ -19,30 +20,30 @@ const babelSettings = {
   extends: path.join(__dirname, '/.babelrc'),
 };
 
-const rules = [
-  { test: /\.json$/, use: [ 'json-loader' ] },
-  { test: /\.css$/, use: [
-    'style-loader',
-    { loader: 'css-loader', options: { importLoaders: 1 } },
-    { loader: 'postcss-loader',
-      options: {
-        ident: 'postcss',
-        plugins: () => [
-          require('postcss-input-style')(),
-          require('postcss-cssnext')({
-            features: {
-              autoprefixer: {
-                browsers: [ 'last 2 versions' ],
-              },
-              customProperties: {
-                warnings: false,
-              },
+const cssLoaders = [
+  { loader: 'css-loader', options: { importLoaders: 1 } },
+  { loader: 'postcss-loader',
+    options: {
+      ident: 'postcss',
+      plugins: () => [
+        require('postcss-input-style')(),
+        require('postcss-cssnext')({
+          features: {
+            autoprefixer: {
+              browsers: [ 'last 2 versions' ],
             },
-          }),
-        ],
-      },
+            customProperties: {
+              warnings: false,
+            },
+          },
+        }),
+      ],
     },
-  ] },
+  },
+];
+
+const commonRules = [
+  { test: /\.json$/, use: [ 'json-loader' ] },
   { test: /\.(png|jpg|jpeg|gif)$/, use: 'file' },
   { test: /\.js$/,
     // loader: (process.env.NODE_ENV === 'production' ? '' : 'react-hot-loader!').concat(`babel-loader?${JSON.stringify(babelSettings)}`),
@@ -69,22 +70,26 @@ const devConfig = {
   ],
   output: {
     path: __dirname,
-    filename: 'pathogenwatch.js',
+    filename: 'dev.js',
     publicPath: '/',
   },
   resolve,
-  plugins: commonPlugins.concat([
+  plugins: [
+    ...commonPlugins,
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
-  ]),
+  ],
   module: {
-    rules,
+    rules: [
+      ...commonRules,
+      { test: /\.css$/, use: [ 'style-loader', ...cssLoaders ] },
+    ],
   },
 };
 
 const prodConfig = {
   entry: {
-    pathogenwatch: './src',
+    main: './src',
     vendor: [
       'commonmark',
       'leaflet',
@@ -102,7 +107,8 @@ const prodConfig = {
     publicPath: '/app/',
   },
   resolve,
-  plugins: commonPlugins.concat([
+  plugins: [
+    ...commonPlugins,
     new webpack.LoaderOptionsPlugin({
       minimize: true,
       debug: false,
@@ -142,9 +148,15 @@ const prodConfig = {
       publicPath: true,
     }),
     new CleanWebpackPlugin([ 'public/app', 'assets.json' ]),
-  ]),
+    new ExtractTextPlugin('styles.[contenthash].css'),
+  ],
   module: {
-    rules,
+    rules: [
+      ...commonRules,
+      { test: /\.css$/,
+        use: ExtractTextPlugin.extract({ fallback: 'style-loader', use: cssLoaders }),
+      },
+    ],
   },
 };
 

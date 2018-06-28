@@ -64,7 +64,7 @@ app.set('view engine', 'ejs');
 app.use('/', (req, res) => res.render('index', {
   frontEndConfig: JSON.parse(fs.readFileSync('./config.json')),
   files: {
-    scripts: [ '/pathogenwatch.js' ],
+    scripts: [ '/dev.js' ],
     stylesheets: [],
   },
 }));

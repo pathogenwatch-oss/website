@@ -41,6 +41,7 @@
     "ejs-loader": "^0.3.0",
     "eslint-config-cgps": "github:imperialcollegelondon/eslint-config-cgps#v1.1.1",
     "express": "^4.12.2",
+    "extract-text-webpack-plugin": "^3.0.2",
     "file-loader": "^0.10.0",
     "fixed-data-table": "^0.6.0",
     "geocoding": "gitlab:cgps/geocoding",
