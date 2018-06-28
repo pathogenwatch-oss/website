@@ -4,7 +4,7 @@ import classnames from 'classnames';
 
 import Spinner from '../../../components/Spinner.react';
 import Notify from '../../../components/Notify.react';
-import { history } from '../../../app/router';
+import { Link } from 'react-router-dom';
 import { getClusteringStatus, getClusteringProgress, getClusters, getClusteringThreshold, getClusteringEdges, getClusteringEdgesStatus } from '../selectors';
 import { requestClustering, updateClusteringProgress, fetchClusters, updateClusteringThreshold, fetchClusterEdges } from '../actions';
 
@@ -123,15 +123,14 @@ const Clustering = React.createClass({
 
   renderViewButton(label = 'View cluster') {
     const { genomeId, threshold } = this.props;
-    const viewClustering = () => history.push(`/clustering/${genomeId}?threshold=${threshold}`);
+    const link = `/clustering/${genomeId}?threshold=${threshold}`;
     return (
-      <button
+      <Link
+        to={link}
         className={classnames('mdl-button mdl-button--raised', { 'mdl-button--colored': false })}
-        onClick={viewClustering}
-        style={{ marginLeft: '10px' }}
       >
         {label}
-      </button>
+      </Link>
     );
   },
 
@@ -179,7 +178,7 @@ const Clustering = React.createClass({
     }
 
     const { edgesStatus = null } = this.props;
-    if (edgesStatus === 'IN PROGRESS') {
+    if (edgesStatus === 'IN PROGRESS' || edgesStatus === 'STALE') {
       return <div style={{ width: `${width}px`, height: `${height}px` }}><p>Fetching cluster...</p><Spinner /></div>;
     } else if (edgesStatus === null) {
       return <p>Please pick a threshold from the chart below</p>;
@@ -231,6 +230,7 @@ const Clustering = React.createClass({
       const node = network.network.graph.nodes().find(_ => _.id === 'n'+rootIdx);
       node.label = node._label;
       if (this.modestyEl) this.modestyEl.style.visibility = 'hidden';
+      if (this.modestyEl) this.thresholdEl.style.visibility = 'visible';
       if (network.root) network.root.style.opacity = 1;
     };
     const overNode = ({ data }, network) => {
@@ -248,23 +248,25 @@ const Clustering = React.createClass({
       outNode,
     };
 
+    const timeout = Math.min(Math.max(1000, edges.length / 5), 10000);
     const options = {
       algorithm: 'forceAtlas2',
-      timeout: 2000,
+      timeout,
       onTimeout,
     };
 
     const style = {
       opacity: 0.2,
-      'z-index': 1,
-      position: 'relative',
+      zIndex: 1,
     };
 
     const setModestyEl = function (el) { this.modestyEl = el }.bind(this);
+    const setThresholdEl = function (el) { this.thresholdEl = el }.bind(this);
 
     return (<div style={{ position: 'relative' }}>
       <SimpleNetwork style={style} width={width} height={height} nodes={nodes} edges={edges} events={events} options={options} />
-      <div ref={ setModestyEl } style={{ position: 'absolute', top: '0px', 'z-index': 2 }}><p>Rendering cluster...</p><Spinner /></div>
+      <div ref={ setModestyEl } style={{ position: 'absolute', top: '0px', zIndex: 2 }}><p>Rendering cluster...</p><Spinner /></div>
+      <div ref={ setThresholdEl } style={{ position: 'absolute', top: '0px', zIndex: 3, visibility: 'hidden' }}><p>Clustered at threshold of { this.props.threshold }</p></div>
     </div>);
   },
 
@@ -304,13 +306,15 @@ const Clustering = React.createClass({
               );
             case 'COMPLETE': {
               return (
-                <React.Fragment>
+                <div style={{ position: 'relative' }}>
                   {this.renderNetwork()}
+                  <p style={{ marginTop: 16, marginBottom: 5 }}>Pick a threshold by clicking on the chart below</p>
                   {this.renderChart()}
-                  <span style={{ marginTop: '5px' }}>Selected clustering at threshold of { this.props.threshold }</span>
-                  {this.renderViewButton()}
-                  {this.renderClusterButton('Recluster')}
-                </React.Fragment>
+                  <div style={{ position: 'absolute', right: '0px' }}>
+                    {this.renderViewButton()}
+                    {this.renderClusterButton('Recluster')}
+                  </div>
+                </div>
               );
             }
             default:

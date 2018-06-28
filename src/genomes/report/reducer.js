@@ -10,7 +10,7 @@ const initialState = {
   clusteringProgress: null,
   clusters: null,
   clusteringThreshold: 30,
-  clusteringEdgesStatus: 'PENDING',
+  clusteringEdgesStatus: 'STALE',
 };
 
 export default function (state = initialState, { type, payload }) {
@@ -43,13 +43,14 @@ export default function (state = initialState, { type, payload }) {
         ...initialState,
         clusters: state.clusters,
         clusteringStatus: state.clusteringStatus, // hack to stop the clustering status flickering
+        clusteringEdgesStatus: 'STALE',
       };
     case REQUEST_CLUSTERING.ATTEMPT:
       return {
         ...state,
         clusteringStatus: 'LOADING',
         clusteringProgress: 0.0,
-        clusteringEdges: null,
+        clusteringEdgesStatus: 'STALE',
       };
     case REQUEST_CLUSTERING.SUCCESS: {
       const { statusCode } = payload.result;
@@ -57,20 +58,18 @@ export default function (state = initialState, { type, payload }) {
         return {
           ...state,
           clusteringStatus: 'IN PROGRESS',
-          clusteringEdges: null,
         };
       }
       return {
         ...state,
         clusteringStatus: 'PENDING',
-        clusteringEdges: null,
       };
     }
     case REQUEST_CLUSTERING.FAILURE:
       return {
         ...state,
         clusteringStatus: 'ERROR',
-        clusteringEdges: null,
+        clusteringEdgesStatus: 'ERROR',
       };
     case UPDATE_CLUSTERING_PROGRESS: {
       const { status, progress = state.clusteringProgress } = payload;
@@ -78,7 +77,6 @@ export default function (state = initialState, { type, payload }) {
         ...state,
         clusteringStatus: status,
         clusteringProgress: progress,
-        clusteringEdges: null,
       };
     }
     case FETCH_CLUSTERS.FAILURE:
@@ -86,6 +84,7 @@ export default function (state = initialState, { type, payload }) {
         ...state,
         clusteringStatus: 'ERROR',
         clusteringEdges: null,
+        clusteringEdgesStatus: 'ERROR',
       };
     case FETCH_CLUSTERS.SUCCESS: {
       const { result } = payload;
@@ -94,13 +93,14 @@ export default function (state = initialState, { type, payload }) {
         clusteringStatus: 'COMPLETE',
         clusters: result,
         clusteringEdges: null,
+        clusteringEdgesStatus: 'STALE',
       };
     }
     case UPDATE_CLUSTERING_THRESHOLD:
       return {
         ...state,
         clusteringThreshold: payload,
-        clusteringEdges: null,
+        clusteringEdgesStatus: state.clusteringThreshold !== payload ? 'STALE' : undefined,
       };
     case UPDATE_CLUSTERING_EDGES.ATTEMPT:
       return {
