@@ -104,7 +104,7 @@ module.exports = () =>
     app.set('view engine', 'ejs');
     app.set('views', path.join(clientPath, 'views'));
 
-    const files = require('./utils/assets')(path.join(clientPath, 'assets.json'));
+    const files = require(path.join(clientPath, 'assets.js'))();
     app.use('/', (req, res, next) => {
       // crude file matching
       if (req.path !== '/index.html' && req.path.match(/\.[a-z]{1,4}$/) || req.xhr) {
