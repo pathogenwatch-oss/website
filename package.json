@@ -49,6 +49,7 @@
     "leaflet": "^1.2.0",
     "leaflet-lassoselect": "gitlab:cgps/leaflet-lassoselect#leaflet-1.x",
     "leaflet.markercluster": "^1.2.0",
+    "libmicroreact": "gitlab:cgps/libmicroreact#cookie-notice",
     "lodash.sortby": "^4.7.0",
     "name-all-modules-plugin": "^1.0.1",
     "pako": "^1.0.5",

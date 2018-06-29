@@ -154,3 +154,13 @@
   color: color(#3c7383 shade(20%));
   text-decoration: underline;
 }
+
+.libmr-cookie-consent {
+  background-color: #673c90 !important;
+}
+
+.libmr-cookie-consent h2 {
+  font-family: inherit;
+  font-weight: inherit;
+  color: #fff;
+}
