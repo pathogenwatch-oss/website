@@ -5,13 +5,13 @@ const taskNames = [
   'mlst', 'speciator', 'paarsnp', 'genotyphi', 'ngmast', 'cgmlst', 'metrics',
 ];
 
-module.exports = function ({ user, sessionID, ids }) {
+module.exports = function ({ user, ids }) {
   const $in = ids.map(id => new ObjectId(id));
   return Promise.all([
     Genome.aggregate([
       { $match: Object.assign(
         { _id: { $in }, 'analysis.speciator.speciesId': { $exists: true } },
-        Genome.getPrefilterCondition({ user, sessionID })
+        Genome.getPrefilterCondition({ user })
       ) },
       { $group: { _id: { speciesId: '$analysis.speciator.speciesId', speciesName: '$analysis.speciator.speciesName' }, count: { $sum: 1 } } },
       { $project: { speciesId: '$_id.speciesId', speciesName: '$_id.speciesName', total: '$count', _id: 0 } },
@@ -19,7 +19,7 @@ module.exports = function ({ user, sessionID, ids }) {
     Genome.aggregate([
       { $match: Object.assign(
         { _id: { $in }, 'analysis.speciator.speciesId': { $exists: true } },
-        Genome.getPrefilterCondition({ user, sessionID })
+        Genome.getPrefilterCondition({ user })
       ) },
       { $facet: taskNames.reduce((memo, task) => {
         memo[task] = [

@@ -5,8 +5,6 @@ async function getClusteringData({ scheme, user, sessionID }) {
   const query = { scheme };
   if (user) {
     query.user = user._id;
-  } else if (sessionID) {
-    query.sessionID = sessionID;
   }
   const projection = {
     'results.pi': 1,

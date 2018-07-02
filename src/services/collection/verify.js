@@ -2,16 +2,12 @@ const Genome = require('models/genome');
 const manifest = require('../../manifest');
 const { ServiceRequestError, ServiceRequestErrorJSON } = require('utils/errors');
 
-const { maxCollectionSize = { anonymous: 0, loggedIn: 0 } } = require('configuration');
-
-function getMaxCollectionSize(user) {
-  if (user) {
-    return user.admin ? null : maxCollectionSize.loggedIn;
-  }
-  return maxCollectionSize.anonymous;
-}
+const { maxCollectionSize = 1000 } = require('configuration');
 
 module.exports = async function ({ genomeIds, organismId, user }) {
+  if (!user) {
+    throw new ServiceRequestError('Not authenticated');
+  }
   if (!organismId) {
     throw new ServiceRequestError('No organism ID provided');
   }
@@ -23,8 +19,8 @@ module.exports = async function ({ genomeIds, organismId, user }) {
   if (!task) throw new ServiceRequestError('Unsupported organism');
 
   const size = genomeIds.length;
-  const maxSize = getMaxCollectionSize(user);
-  if (maxSize && size > maxSize) {
+  const maxSize = user.admin ? null : maxCollectionSize;
+  if (maxSize !== null && size > maxSize) {
     throw new ServiceRequestError('Too many genome IDs provided');
   }
 

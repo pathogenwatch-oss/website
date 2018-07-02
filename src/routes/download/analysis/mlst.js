@@ -18,7 +18,7 @@ const transformer = function (doc) {
 };
 
 module.exports = (req, res) => {
-  const { user, sessionID } = req;
+  const { user } = req;
   const { filename: rawFilename = '' } = req.query;
   const filename = sanitize(rawFilename) || 'mlst.csv';
   const { ids } = req.body;
@@ -28,7 +28,7 @@ module.exports = (req, res) => {
 
   const query = Object.assign(
     { _id: { $in: ids.split(',') }, 'analysis.mlst': { $exists: true } },
-    Genome.getPrefilterCondition({ user, sessionID })
+    Genome.getPrefilterCondition({ user })
   );
   const projection = {
     name: 1,

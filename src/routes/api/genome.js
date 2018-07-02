@@ -12,10 +12,10 @@ const config = require('configuration');
 router.get('/genome/summary', (req, res, next) => {
   LOGGER.info('Received request to get genome summary');
 
-  const { user, query, sessionID } = req;
+  const { user, query } = req;
   Promise.all([
-    services.request('genome', 'summary', { user, query, sessionID }),
-    services.request('genome', 'fetch-list', { user, query, sessionID }),
+    services.request('genome', 'summary', { user, query }),
+    services.request('genome', 'fetch-list', { user, query }),
   ])
     .then(([ summary, genomes ]) => res.json({ summary, genomes }))
     .catch(next);
@@ -24,8 +24,8 @@ router.get('/genome/summary', (req, res, next) => {
 router.get('/genome/stats', (req, res, next) => {
   LOGGER.info('Received request to get genome stats data');
 
-  const { user, query, sessionID } = req;
-  services.request('genome', 'fetch-stats', { user, query, sessionID })
+  const { user, query } = req;
+  services.request('genome', 'fetch-stats', { user, query })
     .then(response => res.json(response))
     .catch(next);
 });
@@ -33,28 +33,28 @@ router.get('/genome/stats', (req, res, next) => {
 router.get('/genome/map', (req, res, next) => {
   LOGGER.info('Received request to get genome marker data');
 
-  const { user, query, sessionID } = req;
-  services.request('genome', 'fetch-map', { user, query, sessionID })
+  const { user, query } = req;
+  services.request('genome', 'fetch-map', { user, query })
     .then(response => res.json(response))
     .catch(next);
 });
 
 router.get('/genome/:id', (req, res, next) => {
-  const { user, sessionID, params } = req;
+  const { user, params } = req;
   const { id } = params;
 
   LOGGER.info(`Received request to get single genome ${id}`);
-  services.request('genome', 'fetch-one', { user, sessionID, id })
+  services.request('genome', 'fetch-one', { user, id })
     .then(response => res.json(response))
     .catch(next);
 });
 
 router.get('/genome/:id/clusters', (req, res, next) => {
-  const { user, sessionID, params } = req;
+  const { user, params } = req;
   const { id } = params;
 
   LOGGER.info(`Received request to get clusters for genome ${id}`);
-  services.request('genome', 'fetch-clusters', { user, sessionID, id })
+  services.request('genome', 'fetch-clusters', { user, id })
     .then(response => res.json(response))
     .catch(next);
 });
@@ -62,8 +62,8 @@ router.get('/genome/:id/clusters', (req, res, next) => {
 router.get('/genome', (req, res, next) => {
   LOGGER.info('Received request to get genomes');
 
-  const { user, query, sessionID } = req;
-  services.request('genome', 'fetch-list', { user, query, sessionID }).
+  const { user, query } = req;
+  services.request('genome', 'fetch-list', { user, query }).
     then(response => res.json(response)).
     catch(next);
 });
@@ -77,11 +77,11 @@ function getStream(req) {
 
 router.put(
   '/genome',
-  contentLength.validateMax({ max: (config.maxFastaFileSize || 10) * 1048576 }),
+  contentLength.validateMax({ max: (config.maxGenomeFileSize || 10) * 1048576 }),
   (req, res, next) => {
     LOGGER.info('Received request to create genome');
 
-    const { user, sessionID } = req;
+    const { user } = req;
     const { name, uploadedAt, clientId } = req.query;
 
     services.request('genome', 'create', {
@@ -89,7 +89,6 @@ router.put(
       stream: getStream(req),
       metadata: { name, uploadedAt },
       user,
-      sessionID,
       clientId,
     })
     .then(response => res.json(response))
@@ -99,9 +98,9 @@ router.put(
 
 router.post('/genome/selection', (req, res, next) => {
   LOGGER.info('Received request to get selection');
-  const { user, sessionID } = req;
+  const { user } = req;
   const ids = req.body;
-  services.request('genome', 'selection', { user, sessionID, ids })
+  services.request('genome', 'selection', { user, ids })
     .then(response => res.json(response))
     .catch(next);
 });
@@ -121,8 +120,8 @@ router.post('/genome/:id', (req, res, next) => {
   LOGGER.info('Received request to edit genome');
 
   const { id } = req.params;
-  const { body, user, sessionID } = req;
-  services.request('genome', 'edit', { id, user, sessionID, metadata: body })
+  const { body, user } = req;
+  services.request('genome', 'edit', { id, user, metadata: body })
     .then(response => res.json(response))
     .catch(next);
 });
@@ -137,10 +136,10 @@ router.get('/upload/:uploadedAt/position', (req, res, next) => {
 
 router.get('/upload/:uploadedAt', (req, res, next) => {
   LOGGER.info('Received request to get upload session');
-  const { user, sessionID } = req;
+  const { user } = req;
   const { uploadedAt } = req.params;
   Promise.all([
-    services.request('genome', 'fetch-upload', { user, sessionID, query: { uploadedAt } }),
+    services.request('genome', 'fetch-upload', { user, query: { uploadedAt } }),
     services.request('tasks', 'queue-position', { uploadedAt }),
   ])
   .then(([ files, { position } ]) => res.json({ files, position }))
@@ -149,8 +148,8 @@ router.get('/upload/:uploadedAt', (req, res, next) => {
 
 router.get('/upload', (req, res, next) => {
   LOGGER.info('Received request to get upload sessions');
-  const { user, sessionID } = req;
-  services.request('genome', 'fetch-upload-list', { user, sessionID })
+  const { user } = req;
+  services.request('genome', 'fetch-upload-list', { user })
     .then(response => res.json(response))
     .catch(next);
 });

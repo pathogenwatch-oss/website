@@ -11,10 +11,10 @@ function getFiles(credentials, ids, projection) {
   );
 }
 
-module.exports = ({ user, sessionID, ids, projection = {} }) => {
+module.exports = ({ user, ids, projection = {} }) => {
   if (!ids || !ids.length) throw new ServiceRequestError('Missing Ids');
 
-  return getFiles({ user, sessionID }, ids, projection)
+  return getFiles({ user }, ids, projection)
     .then(genomes => {
       if (genomes.length !== ids.length) {
         throw new NotFoundError();

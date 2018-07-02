@@ -86,7 +86,6 @@ module.exports = () =>
       })
     );
 
-    const services = require('services');
     // user accounts
     userAccounts(app, {
       userStore,
@@ -96,8 +95,6 @@ module.exports = () =>
       failureRedirect: '/',
       logoutPath: '/signout',
       strategies: config.passport.strategies,
-      onLogin: (req) =>
-        services.request('account', 'claim-data', { session: req.sessionID, user: req.user }),
     });
 
     app.use(express.static(path.join(clientPath, 'public')));
@@ -107,6 +104,7 @@ module.exports = () =>
     app.set('view engine', 'ejs');
     app.set('views', path.join(clientPath, 'views'));
 
+    const files = require(path.join(clientPath, 'assets.js'))();
     app.use('/', (req, res, next) => {
       // crude file matching
       if (req.path !== '/index.html' && req.path.match(/\.[a-z]{1,4}$/) || req.xhr) {
@@ -120,23 +118,28 @@ module.exports = () =>
         } :
         undefined;
 
-      const hash = crypto.createHash('sha1');
-      hash.update(req.user ? req.user.id : req.sessionID);
+      let clientId = null;
+      if (req.user) {
+        const hash = crypto.createHash('sha1');
+        hash.update(req.user.id);
+        clientId = hash.digest('hex');
+      }
 
       return res.render('index', {
-        googleMapsKey: config.googleMapsKey,
+        files,
+        gaTrackingId: config.gaTrackingId,
         frontEndConfig: {
           pusherKey: config.pusher.key,
           mapboxKey: config.mapboxKey,
           maxCollectionSize: config.maxCollectionSize,
           maxDownloadSize: config.maxDownloadSize,
-          maxFastaFileSize: config.maxFastaFileSize,
+          maxGenomeFileSize: config.maxGenomeFileSize,
           pagination: config.pagination,
           wiki: config.wikiLocation,
           strategies: Object.keys(config.passport.strategies || {}),
           user,
           version,
-          clientId: hash.digest('hex'),
+          clientId,
         },
       });
     });

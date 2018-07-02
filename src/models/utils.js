@@ -113,3 +113,9 @@ exports.toSlug = function (text) {
     slugText.slice(0, 64) :
     slugText;
 };
+
+exports.getBinExpiryDate = function () {
+  const date = new Date();
+  date.setDate(date.getDate() - 30);
+  return date;
+};

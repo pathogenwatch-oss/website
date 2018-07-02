@@ -3,7 +3,7 @@ const { Schema } = mongoose;
 
 const geocoding = require('geocoding');
 
-const { setToObjectOptions, addPreSaveHook, getSummary } = require('./utils');
+const { setToObjectOptions, addPreSaveHook, getSummary, getBinExpiryDate } = require('./utils');
 
 function getDate(year, month = 1, day = 1) {
   if (year) {
@@ -13,7 +13,6 @@ function getDate(year, month = 1, day = 1) {
 }
 
 const schema = new Schema({
-  _session: { type: String, index: true },
   _user: { type: Schema.Types.ObjectId, ref: 'User' },
   analysis: Object,
   binned: { type: Boolean, default: false },
@@ -55,7 +54,6 @@ function toObject(genome, user = {}) {
   const { _user } = genome;
   genome.owner = (_user && id && _user.toString() === id) ? 'me' : 'other';
   delete genome._user;
-  delete genome._session;
   if (!genome.id) {
     genome.id = genome._id;
     delete genome._id;
@@ -125,7 +123,7 @@ schema.statics.addAnalysisError = function (_id, task) {
   });
 };
 
-schema.statics.updateMetadata = function (_id, { user, sessionID }, metadata) {
+schema.statics.updateMetadata = function (_id, { user }, metadata) {
   const {
     name,
     year,
@@ -140,8 +138,6 @@ schema.statics.updateMetadata = function (_id, { user, sessionID }, metadata) {
   const query = { _id };
   if (user) {
     query._user = user;
-  } else if (sessionID) {
-    query._session = sessionID;
   }
 
   return this.update(query, {
@@ -158,16 +154,13 @@ schema.statics.updateMetadata = function (_id, { user, sessionID }, metadata) {
   }).then(({ nModified }) => ({ nModified, country }));
 };
 
-schema.statics.getPrefilterCondition = function ({ user, query = {}, sessionID }) {
+schema.statics.getPrefilterCondition = function ({ user, query = {} }) {
   const { prefilter = 'all' } = query;
 
   if (prefilter === 'all') {
     const hasAccess = { $or: [ { public: true } ] };
     if (user) {
       hasAccess.$or.push({ _user: user._id });
-    }
-    if (sessionID) {
-      hasAccess.$or.push({ _session: sessionID });
     }
     return Object.assign(hasAccess, { binned: false });
   }
@@ -177,14 +170,14 @@ schema.statics.getPrefilterCondition = function ({ user, query = {}, sessionID }
   }
 
   if (prefilter === 'bin') {
-    return { binned: true, _user: user._id };
+    return { binned: true, _user: user._id, binnedDate: { $gt: getBinExpiryDate() } };
   }
 
   throw new Error(`Invalid genome prefilter: '${prefilter}'`);
 };
 
 schema.statics.getFilterQuery = function (props) {
-  const { user, query = {}, sessionID } = props;
+  const { user, query = {} } = props;
   const { searchText } = query;
   const {
     organismId,
@@ -219,7 +212,7 @@ schema.statics.getFilterQuery = function (props) {
     findQuery.reference = false;
   }
 
-  if (uploadedAt && (user || sessionID)) {
+  if (uploadedAt && (user)) {
     findQuery.uploadedAt = new Date(uploadedAt);
   }
 
