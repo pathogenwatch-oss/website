@@ -22,7 +22,7 @@ const Cookies = React.createClass({
       });
   },
 
-  onClose() {
+  onAccept() {
     localforage.setItem(flag, true)
       .then(() => this.setState({ consented: true }));
   },
@@ -32,7 +32,7 @@ const Cookies = React.createClass({
     return (
       <CookieConsent
         visible={!this.state.consented}
-        onClose={this.onClose}
+        onAccept={this.onAccept}
         appName="Pathogenwatch"
         theme="purple"
         policyLink={
