@@ -7,8 +7,9 @@
     } ]
   ],
   "plugins": [
+    "react-hot-loader/babel",
     "transform-object-rest-spread",
     "transform-export-extensions",
-    "react-hot-loader/babel"
+    "transform-class-properties"
   ]
 }

@@ -125,3 +125,15 @@ export function fetchTreePosition(stateKey, date) {
     },
   };
 }
+
+
+export const RESET_TREE_ROOT = 'RESET_TREE_ROOT';
+
+export function resetTreeRoot(stateKey) {
+  return {
+    type: RESET_TREE_ROOT,
+    payload: {
+      stateKey,
+    },
+  };
+}

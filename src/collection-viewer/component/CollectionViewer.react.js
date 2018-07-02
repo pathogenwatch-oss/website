@@ -10,7 +10,7 @@ import { getCollectionTitle } from '../selectors';
 
 const CollectionViewer = ({ title }) => (
   <React.Fragment>
-    <DocumentTitle title={title} />
+    <DocumentTitle>{title}</DocumentTitle>
     <Layout />
     <DownloadsMenu />
     <ProgressListener />

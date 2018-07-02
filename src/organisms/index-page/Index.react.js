@@ -8,6 +8,7 @@ import { FormattedName, taxIdMap } from '../index';
 import { CardMetadata } from '../../card';
 import StaticGrid from '../../components/static-grid';
 import Spinner from '../../components/Spinner.react';
+import DocumentTitle from '../../branding/DocumentTitle.react';
 
 import { getWgsaOrganisms, getOtherOrganisms } from '../selectors';
 
@@ -73,6 +74,7 @@ const Index = React.createClass({
     const { loading, wgsaOrganisms, otherOrganisms } = this.props;
     return (
       <div className="wgsa-page">
+        <DocumentTitle>Organisms</DocumentTitle>
         <h1>Organisms</h1>
         { loading && <Spinner />}
         { !!otherOrganisms.length && <h2>WGSA Organisms</h2> }

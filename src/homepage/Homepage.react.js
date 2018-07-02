@@ -4,19 +4,15 @@ import { Link } from 'react-router-dom';
 import { FormattedName } from '../organisms';
 import Showcase from './Showcase.react';
 import { Logo, Name } from '../branding';
+import SignInLink from '../sign-in/SignInLink.react';
 
 import CONFIG from '../app/config';
 import DocumentTitle from '../branding/DocumentTitle.react';
-const { maxCollectionSize = {} } = CONFIG;
+const { maxCollectionSize = 1000 } = CONFIG;
 
-function getCollectionSizeLimit(user) {
-  const limit = maxCollectionSize[user] || 0;
-  return limit === 0 ? 'Unlimited' : limit;
-}
-
-export default ({ deployedOrganisms, openMenu }) => (
+export default ({ deployedOrganisms }) => (
   <div className="wgsa-homepage">
-    <DocumentTitle title="Global Pathogen Surveillance through Whole Genome Sequencing" />
+    <DocumentTitle>Global Pathogen Surveillance through Whole Genome Sequencing</DocumentTitle>
     <section className="jumbotron">
       <div className="jumbotron-content">
         <Logo />
@@ -224,34 +220,28 @@ export default ({ deployedOrganisms, openMenu }) => (
               </td>
             </tr>
             <tr>
+              <td />
               <td>
-                <span className="wgsa-feature-figure">{getCollectionSizeLimit('anonymous')}</span>
-                <small>genomes per collection</small>
-              </td>
-              <td>
-                <span className="wgsa-feature-figure">{getCollectionSizeLimit('loggedIn')}</span>
-                <small>genomes per collection</small>
+                Create collections of up to<br /><strong>{maxCollectionSize}</strong> genomes
               </td>
             </tr>
             <tr>
-              <td>&mdash;</td>
-              <td>Persistent genomes & collections</td>
+              <td />
+              <td>
+                Core genome clustering
+              </td>
             </tr>
-            {/* <tr>
-              <td>&mdash;</td>
-              <td>Publish collections to public data</td>
-            </tr> */}
           </tbody>
         </table>
       </div>
       <footer>
-        { CONFIG.user ?
+        { !!CONFIG.user ?
           <Link to="/account" className="mdl-button mdl-button--primary">
             <i className="material-icons">account_circle</i> Go to Account
           </Link> :
-          <button onClick={openMenu} className="mdl-button mdl-button--primary">
+          <SignInLink className="mdl-button mdl-button--primary">
             <i className="material-icons">account_circle</i> Sign in
-          </button> }
+          </SignInLink> }
       </footer>
     </section>
     <footer className="cgps-footer mdl-mega-footer">
@@ -264,10 +254,10 @@ export default ({ deployedOrganisms, openMenu }) => (
           </a>
         </div>
         <div className="mdl-mega-footer--right-section">
-          <a className="cgps-contact-link cgps-contact-link--twitter" target="_blank" rel="noopener" href="https://www.twitter.com/TheCGPS">
-            <i className="cgps-contact-link__icon"></i>@<span>TheCGPS</span>
+          <a className="cgps-contact-link cgps-contact-link--twitter" target="_blank" rel="noopener" href="https://www.twitter.com/Pathogenwatch">
+            <i className="cgps-contact-link__icon"></i>@<span>Pathogenwatch</span>
           </a>
-          <a className="cgps-contact-link cgps-contact-link--email" href="mailto:info@pathogensurveillance.net"><i className="material-icons cgps-contact-link__icon">mail_outline</i><span>info@pathogensurveillance.net</span></a>
+          <a className="cgps-contact-link cgps-contact-link--email" href="mailto:cgps@sanger.ac.uk"><i className="material-icons cgps-contact-link__icon">mail_outline</i><span>cgps@sanger.ac.uk</span></a>
         </div>
       </div>
       <div className="mdl-mega-footer--middle-section">

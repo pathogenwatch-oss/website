@@ -10,13 +10,14 @@ import * as filter from '../../filter';
 
 import { stateKey } from './index';
 import * as actions from './actions';
-import { getFilterSummary, getSearchText } from './selectors';
+import { getFilterSummary, getSearchText, getPrefilter } from './selectors';
 
 function mapStateToProps(state) {
   return {
     active: filter.isActive(state, { stateKey }),
     searchText: getSearchText(state),
     filterSummary: getFilterSummary(state),
+    prefilter: getPrefilter(state),
   };
 }
 
@@ -29,12 +30,13 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(
-  ({ active, searchText, filterSummary, updateFilter, clearFilter }) => (
+  ({ active, searchText, filterSummary, updateFilter, clearFilter, prefilter }) => (
     <FilterAside
       active={active}
       clear={clearFilter}
       textValue={searchText}
       textOnChange={e => updateFilter('searchText', e.target.value)}
+      prefilter={prefilter}
     >
       <FilterSection
         filterKey="organismId"

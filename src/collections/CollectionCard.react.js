@@ -42,7 +42,7 @@ export default ({ item, footerLink }) => {
         <CardMetadata title="Size" icon="wgsa_genome">
           {size} genome{size === 1 ? '' : 's'}
         </CardMetadata>
-        <CardMetadata tooltip={createdAt.toLocaleString()} icon="history">
+        <CardMetadata tooltip={createdAt.toLocaleString()} icon="access_time">
           {dateSince(createdAt, now)} ago
         </CardMetadata>
         { status !== 'READY' &&

@@ -4,7 +4,6 @@ import classnames from 'classnames';
 import { Link } from 'react-router-dom';
 
 import UserDrawer from './UserDrawer.react';
-// import AccountLink from './AccountLink.react';
 import MenuButton from './MenuButton.react';
 import DefaultContent from './DefaultContent.react';
 import { Logo } from '../branding';

@@ -1,17 +1,19 @@
 import './styles.css';
 
 import React from 'react';
-import { Route } from 'react-router-dom';
 
-import RequireLogin from './RequireLogin.react';
+import AuthRoute from '../sign-in/AuthRoute.react';
 import Profile from './Profile.react';
-
-const AccountRoute = (props) => (
-  <RequireLogin {...props}>
-    <Profile />
-  </RequireLogin>
-);
+import DocumentTitle from '../branding/DocumentTitle.react';
 
 export default (
-  <Route path="/account" component={AccountRoute} />
+  <AuthRoute
+    authMessage="Please sign in to visit your account."
+    path="/account"
+    component={() =>
+      <React.Fragment>
+        <DocumentTitle>Account</DocumentTitle>
+        <Profile />
+      </React.Fragment>}
+  />
 );

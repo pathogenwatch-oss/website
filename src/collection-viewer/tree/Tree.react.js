@@ -65,6 +65,7 @@ export default React.createClass({
     onInternalNodeSelected: React.PropTypes.func,
     loading: React.PropTypes.bool,
     filenames: React.PropTypes.object,
+    resetTreeRoot: React.PropTypes.func,
   },
 
   getInitialState() {
@@ -112,9 +113,6 @@ export default React.createClass({
 
     // must be native event to for body click cancellation to work
     this.refs.menuButton.addEventListener('click', e => this.toggleContextMenu(e));
-    // must be native event for timing to work :/
-    this.refs.redrawOriginalTreeButton.addEventListener('click', () => phylocanvas.redrawOriginalTree());
-
     this.loadTree();
   },
 
@@ -133,7 +131,8 @@ export default React.createClass({
     }
 
     if (root !== previous.root && root !== this.phylocanvas.root.id) {
-      this.changeRoot();
+      const drawn = this.changeRoot();
+      if (drawn) return;
     }
 
     if (type && (type !== this.phylocanvas.treeType || !previous.loaded)) {
@@ -158,12 +157,17 @@ export default React.createClass({
   },
 
   changeRoot() {
+    if (this.props.root === 'root') {
+      this.phylocanvas.redrawOriginalTree();
+      return true;
+    }
     const newRoot = this.phylocanvas.originalTree.branches[this.props.root];
     if (newRoot) {
       this.phylocanvas.redrawFromBranch(newRoot);
-    } else {
-      this.phylocanvas.redrawOriginalTree();
+      return false;
     }
+    this.phylocanvas.redrawOriginalTree();
+    return true;
   },
 
   toggleContextMenu(event) {
@@ -203,6 +207,7 @@ export default React.createClass({
             ref="redrawOriginalTreeButton"
             className="wgsa-pane-overlay wgsa-redraw-original-tree-button mdl-button mdl-button--icon"
             title="Redraw Original Tree"
+            onClick={this.props.resetTreeRoot}
           >
             <i className="material-icons">replay</i>
           </button> }

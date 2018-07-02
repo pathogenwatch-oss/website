@@ -66,7 +66,7 @@ export function subtreeLoaded(phylocanvas) {
     const state = getState();
     const stateKey = getVisibleTree(state).name;
 
-    const leafIds = getLeafIds(state, { stateKey });
+    const leafIds = phylocanvas.leaves.map(_ => _.id);
     dispatch(actions.treeLoaded(stateKey, phylocanvas, leafIds));
     dispatch(actions.addHistorySnapshot(stateKey, phylocanvas));
   };
@@ -136,5 +136,13 @@ export function handleTreeProgress(payload = {}) {
       return dispatch(fetchTree(payload.name));
     }
     return dispatch(updateProgress(payload));
+  };
+}
+
+export function resetTreeRoot() {
+  return (dispatch, getState) => {
+    const state = getState();
+    const stateKey = getVisibleTree(state).name;
+    dispatch(actions.resetTreeRoot(stateKey));
   };
 }

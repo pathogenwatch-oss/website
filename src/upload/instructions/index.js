@@ -12,7 +12,7 @@ import DocumentTitle from '../../branding/DocumentTitle.react';
 
 const Component = ({ onFiles }) => (
   <FileDragAndDrop onFiles={onFiles}>
-    <DocumentTitle title="Upload" />
+    <DocumentTitle>Upload</DocumentTitle>
     <div className="wgsa-hipster-style">
       <Summary />
       <Instructions />

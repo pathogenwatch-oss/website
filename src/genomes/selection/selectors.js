@@ -1,9 +1,10 @@
 import { createSelector } from 'reselect';
 import sortBy from 'lodash.sortby';
 
-import { getGenomeList } from '../selectors';
+import { getGenomeList, getTotalGenomes } from '../selectors';
 import { getVisible } from '../summary/selectors';
 import { getDeployedOrganismIds } from '../../summary/selectors';
+import { getPrefilter } from '../filter/selectors';
 
 import { isOverSelectionLimit } from './utils';
 
@@ -17,7 +18,12 @@ export const getLastSelectedIndex = state => getSelection(state).lastSelectedInd
 
 export const getSelectedGenomeIds = createSelector(
   getSelectedGenomes,
-  selection => Object.keys(selection)
+  getPrefilter,
+  (selection, prefilter) => {
+    const ids = Object.keys(selection);
+    if (prefilter === 'bin') return ids.filter(id => selection[id].binned);
+    return ids;
+  }
 );
 
 export const getSelectedGenomeList = createSelector(
@@ -42,12 +48,11 @@ export const isSelectionLimitReached = createSelector(
 
 export const getSelectionStatus = createSelector(
   getSelectedGenomeIds,
-  getSelectedGenomes,
   getGenomeList,
   getVisible,
-  (ids, selection, genomes, total) => {
-    if (ids.length === 0) return 'UNCHECKED';
-    if (genomes.length === total && genomes.every(({ id }) => (id in selection))) return 'CHECKED';
+  (selection, genomes, total) => {
+    if (selection.length === 0) return 'UNCHECKED';
+    if (genomes.length === total && genomes.every(({ id }) => (selection.indexOf(id) !== -1))) return 'CHECKED';
     return 'INDETERMINATE';
   }
 );
@@ -80,4 +85,10 @@ export const getDownloadSummary = createSelector(
       };
     });
   }
+);
+
+export const isSelectAllDisabled = createSelector(
+  getVisible,
+  getTotalGenomes,
+  (total, totalDownloaded) => total > totalDownloaded
 );

@@ -246,6 +246,14 @@ function entities(state = {}, { type, payload }) {
           ...payload.snapshot,
         },
       };
+    case ACTIONS.RESET_TREE_ROOT:
+      return {
+        ...state,
+        [payload.stateKey]: {
+          ...state[payload.stateKey],
+          root: 'root',
+        },
+      };
     default:
       return state;
   }

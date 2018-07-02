@@ -97,7 +97,7 @@ const Verifier = React.createClass({
     }
 
     return (
-      <p className="wgsa-blink">Verifying...</p>
+      <p className="wgsa-blink">Verifying core analysis...</p>
     );
   },
 

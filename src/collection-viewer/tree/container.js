@@ -5,12 +5,14 @@ import PopulationStyler from './PopulationStyler.react';
 import StandardStyler from './StandardStyler.react';
 
 import * as selectors from './selectors';
+
 import {
   treeLoaded,
   subtreeLoaded,
   treeClicked,
   typeChanged,
   internalNodeSelected,
+  resetTreeRoot,
 } from './thunks';
 
 import { POPULATION } from '../../app/stateKeys/tree';
@@ -33,6 +35,7 @@ function mapDispatchToProps(dispatch) {
       dispatch(treeClicked(event, phylocanvas)),
     onTypeChanged: phylocanvas => dispatch(typeChanged(phylocanvas)),
     onInternalNodeSelected: node => dispatch(internalNodeSelected(node)),
+    resetTreeRoot: () => dispatch(resetTreeRoot()),
   };
 }
 

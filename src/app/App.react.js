@@ -8,6 +8,7 @@ import classnames from 'classnames';
 
 import Toast from '../toast';
 import GenomeDetail from '../genomes/report';
+import LocalStorage from './LocalStorage.react';
 
 import Header from './Header.react';
 import Content from './Content.react';
@@ -81,6 +82,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(React.createClass({
           </main>
           <Toast />
           <GenomeDetail />
+          <LocalStorage />
         </div>
       </div>
     );

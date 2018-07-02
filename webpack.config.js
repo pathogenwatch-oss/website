@@ -1,8 +1,10 @@
 const path = require('path');
 const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const WebpackAssetsManifest = require('webpack-assets-manifest');
 const WebpackMonitor = require('webpack-monitor');
 const NameAllModulesPlugin = require('name-all-modules-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const srcFolder = path.join(__dirname, 'src');
 
@@ -18,30 +20,30 @@ const babelSettings = {
   extends: path.join(__dirname, '/.babelrc'),
 };
 
-const rules = [
-  { test: /\.json$/, use: [ 'json-loader' ] },
-  { test: /\.css$/, use: [
-    'style-loader',
-    { loader: 'css-loader', options: { importLoaders: 1 } },
-    { loader: 'postcss-loader',
-      options: {
-        ident: 'postcss',
-        plugins: () => [
-          require('postcss-input-style')(),
-          require('postcss-cssnext')({
-            features: {
-              autoprefixer: {
-                browsers: [ 'last 2 versions' ],
-              },
-              customProperties: {
-                warnings: false,
-              },
+const cssLoaders = [
+  { loader: 'css-loader', options: { importLoaders: 1 } },
+  { loader: 'postcss-loader',
+    options: {
+      ident: 'postcss',
+      plugins: () => [
+        require('postcss-input-style')(),
+        require('postcss-cssnext')({
+          features: {
+            autoprefixer: {
+              browsers: [ 'last 2 versions' ],
             },
-          }),
-        ],
-      },
+            customProperties: {
+              warnings: false,
+            },
+          },
+        }),
+      ],
     },
-  ] },
+  },
+];
+
+const commonRules = [
+  { test: /\.json$/, use: [ 'json-loader' ] },
   { test: /\.(png|jpg|jpeg|gif)$/, use: 'file' },
   { test: /\.js$/,
     // loader: (process.env.NODE_ENV === 'production' ? '' : 'react-hot-loader!').concat(`babel-loader?${JSON.stringify(babelSettings)}`),
@@ -50,6 +52,7 @@ const rules = [
       /(src|universal|cgps-commons)/,
       path.join(__dirname, 'node_modules', 'promise-file-reader'),
       path.join(__dirname, 'node_modules', 'cgps-commons'),
+      path.join(__dirname, 'node_modules', 'cgps-user-accounts', 'components'),
     ],
   },
 ];
@@ -67,22 +70,26 @@ const devConfig = {
   ],
   output: {
     path: __dirname,
-    filename: 'wgsa.js',
+    filename: 'dev.js',
     publicPath: '/',
   },
   resolve,
-  plugins: commonPlugins.concat([
+  plugins: [
+    ...commonPlugins,
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
-  ]),
+  ],
   module: {
-    rules,
+    rules: [
+      ...commonRules,
+      { test: /\.css$/, use: [ 'style-loader', ...cssLoaders ] },
+    ],
   },
 };
 
 const prodConfig = {
   entry: {
-    wgsa: './src',
+    main: './src',
     vendor: [
       'commonmark',
       'leaflet',
@@ -95,12 +102,13 @@ const prodConfig = {
     ],
   },
   output: {
-    path: path.join(__dirname, 'public'),
+    path: path.join(__dirname, 'public', 'app'),
     filename: '[name].[chunkhash].js',
-    publicPath: '/',
+    publicPath: '/app/',
   },
   resolve,
-  plugins: commonPlugins.concat([
+  plugins: [
+    ...commonPlugins,
     new webpack.LoaderOptionsPlugin({
       minimize: true,
       debug: false,
@@ -135,14 +143,20 @@ const prodConfig = {
       target: '../monitor.json',
       // launch: true,
     }),
-    new HtmlWebpackPlugin({
-      filename: '../views/index.ejs',
-      template: 'views/index.tmpl',
-      inject: false,
+    new WebpackAssetsManifest({
+      output: '../../assets.json', // relative to output.path
+      publicPath: true,
     }),
-  ]),
+    new CleanWebpackPlugin([ 'public/app', 'assets.json' ]),
+    new ExtractTextPlugin('styles.[contenthash].css'),
+  ],
   module: {
-    rules,
+    rules: [
+      ...commonRules,
+      { test: /\.css$/,
+        use: ExtractTextPlugin.extract({ fallback: 'style-loader', use: cssLoaders }),
+      },
+    ],
   },
 };
 

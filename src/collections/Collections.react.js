@@ -100,7 +100,7 @@ const Collections = React.createClass({
           { 'has-filter': this.props.isFilterOpen }
         )}
       >
-        <DocumentTitle title="collections" />
+        <DocumentTitle>Collections</DocumentTitle>
         <Filter />
         <div className="wgsa-filter-content">
           <Header />
