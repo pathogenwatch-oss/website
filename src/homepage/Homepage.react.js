@@ -261,7 +261,7 @@ export default ({ deployedOrganisms }) => (
         </div>
       </div>
       <div className="mdl-mega-footer--middle-section">
-        <p className="mdl-typography--font-light cgps-copyright">© 2016 Centre for Genomic Pathogen Surveillance</p>
+        <p className="mdl-typography--font-light cgps-copyright">© 2018 Centre for Genomic Pathogen Surveillance</p>
       </div>
     </footer>
   </div>
