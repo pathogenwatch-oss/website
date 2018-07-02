@@ -230,7 +230,7 @@ const Clustering = React.createClass({
       const node = network.network.graph.nodes().find(_ => _.id === 'n'+rootIdx);
       node.label = node._label;
       if (this.modestyEl) this.modestyEl.style.visibility = 'hidden';
-      if (this.modestyEl) this.thresholdEl.style.visibility = 'visible';
+      if (this.thresholdEl) this.thresholdEl.style.visibility = 'visible';
       if (network.root) network.root.style.opacity = 1;
     };
     const overNode = ({ data }, network) => {

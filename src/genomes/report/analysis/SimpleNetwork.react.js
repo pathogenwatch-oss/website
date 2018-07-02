@@ -47,9 +47,7 @@ class SimpleNetwork extends Component {
       settings: {
         edgeColor: 'default',
         labelColor: 'node',
-        // labelSize: 'proportional',
-        labelThreshold: 0, // hack so that the root node is always shown
-        // labelSizeRatio: 4, // Nice big labels
+        labelThreshold: 0, // hack so that nodes with labels are always shown
       },
     });
 
