@@ -3,27 +3,34 @@ const Organism = require('models/organism');
 
 const { request } = require('services');
 
+function buildClusters(threshold, clusterIndex) {
+  const { pi, lambda } = clusterIndex;
+  const nItems = pi.length;
+  const clusters = pi.map(() => 0);
+  for (let i = nItems - 1; i >= 0; i--) {
+    if (lambda[i] > threshold) clusters[i] = i;
+    else clusters[i] = clusters[pi[i]];
+  }
+  return clusters;
+}
+
 module.exports = async ({ user, sessionID, genomeId, threshold }) => {
-  const clusters = await request('genome', 'fetch-clusters', { user, sessionID, id: genomeId });
-  const thresholds = Object.keys(clusters).map(t => parseInt(t));
-  const clusterSizes = {};
-  for (let i = 0; i < thresholds.length; i++) {
-    const t = thresholds[i];
-    clusterSizes[t] = clusters[t].length;
-  }
+  const clusteringData = await request('genome', 'fetch-clusters', { user, sessionID, id: genomeId });
+  const { clusterIndex, genomeIdx, sts: allSts } = clusteringData;
 
-  const genomeIds = clusters[threshold] || [];
-  const genomes = await Genome.getForCollection({ _id: { $in: genomeIds } });
+  // FIXME: we should probably do this in the frontend so that we don't keep downloading
+  // the same data whenever someone changes a threshold a little bit.
+  const clusters = buildClusters(threshold, clusterIndex);
+  const sts = allSts.filter((_, i) => clusters[i] === clusters[genomeIdx]);
+
+  const query = {
+    'analysis.cgmlst.st': { $in: sts },
+    ...Genome.getPrefilterCondition({ user, sessionID }),
+  };
+  const genomes = await Genome.getForCollection(query);
+
   const now = new Date().toISOString();
-  let genome = {};
-  for (let i = 0; i < genomes.length; i++) {
-    const { _id } = genomes[i];
-    if (_id && _id.toString() === genomeId) {
-      genome = genomes[i];
-      break;
-    }
-  }
-
+  const genome = genomes.find(_ => _._id && _._id.toString() === genomeId);
   const name = genome.name || 'Unknown';
   const { speciator = {} } = genome.analysis;
   const { organismId = null } = speciator;
@@ -32,7 +39,6 @@ module.exports = async ({ user, sessionID, genomeId, threshold }) => {
 
   const description = `Clusters for ${name} at threshold ${threshold}`;
   return {
-    clusterSizes,
     threshold,
     createdAt: now,
     description,
