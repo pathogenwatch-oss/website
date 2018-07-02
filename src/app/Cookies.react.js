@@ -1,10 +1,8 @@
 /* global localforage */
 
-import 'libmicroreact/src/cookie-consent/CookieConsent.css';
-
 import React from 'react';
 
-import CookieConsent from 'libmicroreact/src/cookie-consent/CookieConsent.react';
+import CookieConsent from 'libmicroreact/cookie-consent';
 
 const flag = 'cookie-consent-given';
 
@@ -36,6 +34,7 @@ const Cookies = React.createClass({
         visible={!this.state.consented}
         onClose={this.onClose}
         appName="Pathogenwatch"
+        theme="purple"
         policyLink={
           <a
             target="_blank"

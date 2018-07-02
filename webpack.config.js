@@ -49,7 +49,7 @@ const commonRules = [
     // loader: (process.env.NODE_ENV === 'production' ? '' : 'react-hot-loader!').concat(`babel-loader?${JSON.stringify(babelSettings)}`),
     loader: `babel-loader?${JSON.stringify(babelSettings)}`,
     include: [
-      /(src|universal|cgps-commons)/,
+      /(src|universal|cgps-commons|libmicroreact)/,
       path.join(__dirname, 'node_modules', 'promise-file-reader'),
       path.join(__dirname, 'node_modules', 'cgps-commons'),
       path.join(__dirname, 'node_modules', 'cgps-user-accounts', 'components'),
