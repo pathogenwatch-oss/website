@@ -42,7 +42,7 @@ class SimpleNetwork extends Component {
     }
 
     this.network = new sigma({
-      graph: { nodes, edges },
+      graph,
       container: this.root,
       settings: {
         edgeColor: 'default',
@@ -80,9 +80,8 @@ class SimpleNetwork extends Component {
   }
 
   render() {
-    const setRootEl = function (el) { this.root = el; }.bind(this);
     const { height, width, style } = this.props;
-    return <div style={{ height, width, ...style }} ref={ setRootEl } />;
+    return <div style={{ height, width, ...style }} ref={ el => { this.root = el; } } />;
   }
 }
 

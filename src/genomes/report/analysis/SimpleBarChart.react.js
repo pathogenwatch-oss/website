@@ -84,8 +84,7 @@ class SimpleBarChart extends Component {
   }
 
   render() {
-    const setCanvas = function (el) { this.canvas = el; }.bind(this);
-    return <canvas ref={ setCanvas } width={ this.props.width } height={ this.props.height } />;
+    return <canvas ref={ el => { this.canvas = el; } } width={ this.props.width } height={ this.props.height } />;
   }
 }
 

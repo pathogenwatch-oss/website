@@ -109,25 +109,25 @@ const Clustering = React.createClass({
     }
   },
 
-  renderClusterButton(label = 'Cluster Now', primary = true) {
+  renderClusterButton(label = 'Cluster Now') {
     return (
       <button
-        className={classnames('mdl-button mdl-button--raised', { 'mdl-button--colored': primary })}
+        className={classnames('mdl-button mdl-button--raised')}
         onClick={this.props.requestClustering}
-        style={{ marginLeft: '10px' }}
       >
         {label}
       </button>
     );
   },
 
-  renderViewButton(label = 'View cluster') {
+  renderViewButton(label = 'View cluster', primary = true) {
     const { genomeId, threshold } = this.props;
     const link = `/clustering/${genomeId}?threshold=${threshold}`;
     return (
       <Link
         to={link}
-        className={classnames('mdl-button mdl-button--raised', { 'mdl-button--colored': false })}
+        className={classnames('mdl-button mdl-button--raised', { 'mdl-button--colored': primary })}
+        style={{ marginLeft: '10px' }}
       >
         {label}
       </Link>
@@ -260,13 +260,10 @@ const Clustering = React.createClass({
       zIndex: 1,
     };
 
-    const setModestyEl = function (el) { this.modestyEl = el }.bind(this);
-    const setThresholdEl = function (el) { this.thresholdEl = el }.bind(this);
-
     return (<div style={{ position: 'relative' }}>
       <SimpleNetwork style={style} width={width} height={height} nodes={nodes} edges={edges} events={events} options={options} />
-      <div ref={ setModestyEl } style={{ position: 'absolute', top: '0px', zIndex: 2 }}><p>Rendering cluster...</p><Spinner /></div>
-      <div ref={ setThresholdEl } style={{ position: 'absolute', top: '0px', zIndex: 3, visibility: 'hidden' }}><p>Clustered at threshold of { this.props.threshold }</p></div>
+      <div ref={ el => { this.modestyEl = el; } } style={{ position: 'absolute', top: '0px', zIndex: 2 }}><p>Rendering cluster...</p><Spinner /></div>
+      <div ref={ el => { this.thresholdEl = el; } } style={{ position: 'absolute', top: '0px', zIndex: 3, visibility: 'hidden' }}><p>Clustered at threshold of { this.props.threshold }</p></div>
     </div>);
   },
 
@@ -311,8 +308,8 @@ const Clustering = React.createClass({
                   <p style={{ marginTop: 16, marginBottom: 5 }}>Pick a threshold by clicking on the chart below</p>
                   {this.renderChart()}
                   <div style={{ position: 'absolute', right: '0px' }}>
-                    {this.renderViewButton()}
                     {this.renderClusterButton('Recluster')}
+                    {this.renderViewButton()}
                   </div>
                 </div>
               );
