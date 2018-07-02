@@ -14,8 +14,8 @@ function buildClusters(threshold, clusterIndex) {
   return clusters;
 }
 
-module.exports = async ({ user, sessionID, genomeId, threshold }) => {
-  const clusteringData = await request('genome', 'fetch-clusters', { user, sessionID, id: genomeId });
+module.exports = async ({ user, genomeId, threshold }) => {
+  const clusteringData = await request('genome', 'fetch-clusters', { user, id: genomeId });
   const { clusterIndex, genomeIdx, sts: allSts } = clusteringData;
 
   // FIXME: we should probably do this in the frontend so that we don't keep downloading
@@ -25,7 +25,7 @@ module.exports = async ({ user, sessionID, genomeId, threshold }) => {
 
   const query = {
     'analysis.cgmlst.st': { $in: sts },
-    ...Genome.getPrefilterCondition({ user, sessionID }),
+    ...Genome.getPrefilterCondition({ user }),
   };
   const genomes = await Genome.getForCollection(query);
 

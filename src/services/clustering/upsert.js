@@ -9,6 +9,9 @@ module.exports = async function ({ metadata, results }) {
   if (user) {
     query.user = user._id;
     update.user = user._id;
+  } else {
+    query.public = true;
+    update.public = true;
   }
 
   await Clustering.update(query, update, { upsert: true });

@@ -1,11 +1,11 @@
 const Clustering = require('../../models/clustering');
 
-async function getClusteringData({ scheme, user, sessionID }) {
+async function getClusteringData({ scheme, user }) {
   const query = { scheme };
   if (user) {
     query.user = user._id;
-  } else if (sessionID) {
-    query.sessionID = sessionID;
+  } else {
+    query.public = true;
   }
   const projection = {
     'results.sts': 1,
@@ -30,8 +30,8 @@ const createDistanceLookup = (distances, sts) => {
   };
 };
 
-module.exports = async function ({ user, sessionID, scheme, sts, threshold }) {
-  const clusters = await getClusteringData({ scheme, user, sessionID });
+module.exports = async function ({ user, scheme, sts, threshold }) {
+  const clusters = await getClusteringData({ scheme, user });
   if (!clusters) return {};
 
   const { results } = clusters;

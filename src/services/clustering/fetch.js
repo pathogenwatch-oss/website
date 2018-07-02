@@ -1,10 +1,12 @@
 const Clustering = require('../../models/clustering');
 const Genome = require('../../models/genome');
 
-async function getClusteringData({ scheme, user, sessionID }) {
+async function getClusteringData({ scheme, user }) {
   const query = { scheme };
   if (user) {
     query.user = user._id;
+  } else {
+    query.public = true;
   }
   const projection = {
     'results.pi': 1,
@@ -14,10 +16,10 @@ async function getClusteringData({ scheme, user, sessionID }) {
   return await Clustering.findOne(query, projection);
 }
 
-async function mapStsToGenomeNames({ genomeId, sts, user, sessionID }) {
+async function mapStsToGenomeNames({ genomeId, sts, user }) {
   const namesQuery = {
     'analysis.cgmlst.st': { $in: sts },
-    ...Genome.getPrefilterCondition({ user, sessionID }),
+    ...Genome.getPrefilterCondition({ user }),
   };
   const projection = {
     'analysis.cgmlst.st': 1,
@@ -41,13 +43,13 @@ async function mapStsToGenomeNames({ genomeId, sts, user, sessionID }) {
   };
 }
 
-module.exports = async function ({ user, sessionID, genomeId, scheme }) {
-  const clusters = await getClusteringData({ scheme, user, sessionID });
+module.exports = async function ({ user, genomeId, scheme }) {
+  const clusters = await getClusteringData({ scheme, user });
   if (!clusters) return {};
 
   const { results } = clusters;
   const { pi, lambda, sts = [] } = results.find(_ => _.pi); // Ignore old fashioned results with fixed thresholds
-  const { names, genomeIdx } = await mapStsToGenomeNames({ genomeId, sts, user, sessionID });
+  const { names, genomeIdx } = await mapStsToGenomeNames({ genomeId, sts, user });
 
   return {
     clusterIndex: { pi, lambda },
