@@ -9,9 +9,9 @@ import classnames from 'classnames';
 import Toast from '../toast';
 import GenomeDetail from '../genomes/report';
 import LocalStorage from './LocalStorage.react';
-
 import Header from './Header.react';
 import Content from './Content.react';
+import Cookies from './Cookies.react';
 
 import { fetchSummary } from '../summary/actions';
 import { locationChange } from '../location';
@@ -43,7 +43,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(React.createClass({
     this.menuButton = document.querySelector('.mdl-layout__drawer-button');
     this.onLocationChange();
     this.props.fetchSummary();
-    this.props.showIntroToast();
+    // this.props.showIntroToast();
   },
 
   componentDidUpdate(previous) {
@@ -83,6 +83,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(React.createClass({
           <Toast />
           <GenomeDetail />
           <LocalStorage />
+          <Cookies />
         </div>
       </div>
     );
