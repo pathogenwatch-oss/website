@@ -16,6 +16,8 @@ export function addFiles(newFiles) {
       .catch(error => {
         if (error.toast) {
           dispatch(showToast(error.toast));
+        } else {
+          dispatch(showToast({ message: 'Sorry, something went wrong 😞' }));
         }
       });
 }

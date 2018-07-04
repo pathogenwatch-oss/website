@@ -3,6 +3,7 @@ import { readAsText } from 'promise-file-reader';
 import MetadataUtils from '../../utils/Metadata';
 
 import { validateGenomeSize, validateGenomeContent } from './validation';
+import trimUserDefinedMetadata from '../../../universal/trimUserDefinedMetadata';
 
 import { DEFAULT } from '../../app/constants';
 import getCompressWorker from 'worker-loader?name=compress-worker.[hash].js!./compressWorker';
@@ -12,6 +13,7 @@ function parseMetadata(row) {
 
   const {
     displayname,
+    id,
     name,
     filename,
     year,
@@ -25,19 +27,14 @@ function parseMetadata(row) {
 
   return {
     hasMetadata: true,
-    name: displayname || name || filename,
+    name: (displayname || id || name || filename).slice(0, 256),
     year: year ? parseInt(year, 10) : null,
     month: month ? parseInt(month, 10) : null,
     day: day ? parseInt(day, 10) : null,
     latitude: latitude ? parseFloat(latitude) : null,
     longitude: longitude ? parseFloat(longitude) : null,
-    pmid: pmid || null,
-    userDefined:
-      Object.keys(userDefined)
-        .reduce((memo, key) => {
-          memo[key.replace('.', '')] = userDefined[key];
-          return memo;
-        }, {}),
+    pmid: pmid ? pmid.slice(0, 16) : null,
+    userDefined: trimUserDefinedMetadata(userDefined),
   };
 }
 
@@ -67,7 +64,7 @@ export function mapCSVsToGenomes(files, uploadedAt) {
   ).then(parsedFiles => flattenCSVs(parsedFiles))
    .then(rows =>
       genomeFiles.map((file, index) => {
-        const row = rows.filter(({ filename }) => filename === file.name)[0];
+        const row = rows.find(({ filename }) => filename === file.name);
         return {
           id: `${file.name}__${Date.now()}_${index}`,
           name: file.name,
