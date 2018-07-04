@@ -38,10 +38,10 @@ app.use((req, res, next) => {
 });
 
 // http://stackoverflow.com/a/19965089
-app.use(bodyParser.json({ limit: '500mb' }));
+app.use(bodyParser.json({ limit: '8mb' }));
 app.use(bodyParser.urlencoded({
   extended: true,
-  limit: '50mb',
+  limit: '8mb',
 }));
 
 logging.initHttpLogging(app, process.env.NODE_ENV || 'none');

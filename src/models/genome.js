@@ -2,8 +2,14 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const geocoding = require('geocoding');
+const trimUserDefinedMetadata = require('wgsa-front-end/universal/trimUserDefinedMetadata');
 
-const { setToObjectOptions, addPreSaveHook, getSummary, getBinExpiryDate } = require('./utils');
+const {
+  setToObjectOptions,
+  addPreSaveHook,
+  getSummary,
+  getBinExpiryDate,
+} = require('./utils');
 
 function getDate(year, month = 1, day = 1) {
   if (year) {
@@ -28,9 +34,9 @@ const schema = new Schema({
   latitude: Number,
   longitude: Number,
   month: Number,
-  name: { type: String, required: true, index: 'text' },
+  name: { type: String, required: true, index: 'text', maxLength: 256, trim: true },
   pending: { type: Array, default: null },
-  pmid: String,
+  pmid: { type: String, maxLength: 16 },
   population: { type: Boolean, default: false, index: true },
   public: { type: Boolean, default: false, index: true },
   reference: { type: Boolean, default: false },
@@ -150,7 +156,7 @@ schema.statics.updateMetadata = function (_id, { user }, metadata) {
     longitude,
     country,
     pmid,
-    userDefined,
+    userDefined: trimUserDefinedMetadata(userDefined),
   }).then(({ nModified }) => ({ nModified, country }));
 };
 
