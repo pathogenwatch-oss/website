@@ -1,38 +1,48 @@
-const Reference = require('models/reference');
+const Organism = require('models/organism');
 const Collection = require('models/collection');
 const Genome = require('models/genome');
 
-const collectionsFields = [ { field: 'organismId' } ];
-const genomeFields = [
-  { field: 'organismId',
+async function getSupportedGenomeSummary(props) {
+  const deployedOrganisms = await Organism.distinct('taxId');
+  return Genome.getSummary([
+    { field: 'organismId',
+      aggregation: () => [
+        { $match: { 'analysis.speciator.organismId': { $in: deployedOrganisms } } },
+        { $group: { _id: '$analysis.speciator.organismId', count: { $sum: 1 } } },
+      ] },
+  ], props);
+}
+
+const speciesSummary = [
+  { field: 'speciesId',
     aggregation: () => [
-      { $group: { _id: { label: '$analysis.speciator.organismName', key: '$organismId' }, count: { $sum: 1 } } },
+      { $match: { 'analysis.speciator.speciesId': { $exists: true } } },
+      { $group: { _id: { label: '$analysis.speciator.speciesName', key: '$analysis.speciator.speciesId' }, count: { $sum: 1 } } },
     ],
   },
 ];
 
-module.exports = function (props) {
-  return Promise.all([
-    Reference.distinct('organismId'),
-    Collection.getSummary(collectionsFields, props),
-    Genome.getSummary(genomeFields, props),
-  ]).
-  then(([ deployedOrganismIds, collectionSummary, genomeSummary ]) => {
-    const deployedOrganisms = new Set(deployedOrganismIds);
-    return {
-      wgsaOrganisms: deployedOrganismIds
-        .map(organismId => ({
-          organismId,
-          totalCollections: (collectionSummary.organismId[organismId] || { count: 0 }).count,
-          totalGenomes: (genomeSummary.organismId[organismId] || { count: 0 }).count,
-        })),
-      otherOrganisms: Object.keys(genomeSummary.organismId)
-        .filter(organismId => !(deployedOrganisms.has(organismId)))
-        .map(organismId => ({
-          organismId,
-          organismName: genomeSummary.organismId[organismId].label,
-          totalGenomes: genomeSummary.organismId[organismId].count,
-        })),
-    };
-  });
+module.exports = async function (props) {
+  const [
+    supportedGenomeSummary, collectionSummary, genomeSummary,
+  ] = await Promise.all([
+    getSupportedGenomeSummary(props),
+    Collection.getSummary([ { field: 'organismId' } ], props),
+    Genome.getSummary(speciesSummary, props),
+  ]);
+
+  return {
+    supportedOrganisms: Object.keys(supportedGenomeSummary.organismId)
+      .map(organismId => ({
+        organismId,
+        totalCollections: (collectionSummary.organismId[organismId] || { count: 0 }).count,
+        totalGenomes: (supportedGenomeSummary.organismId[organismId] || { count: 0 }).count,
+      })),
+    allSpecies: Object.keys(genomeSummary.speciesId)
+      .map(speciesId => ({
+        speciesId,
+        speciesName: genomeSummary.speciesId[speciesId].label,
+        totalGenomes: genomeSummary.speciesId[speciesId].count,
+      })),
+  };
 };
