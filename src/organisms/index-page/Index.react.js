@@ -10,15 +10,15 @@ import StaticGrid from '../../components/static-grid';
 import Spinner from '../../components/Spinner.react';
 import DocumentTitle from '../../branding/DocumentTitle.react';
 
-import { getWgsaOrganisms, getOtherOrganisms } from '../selectors';
+import { getSupportedOrganisms, getAllSpecies } from '../selectors';
 
 import { fetchSummary } from '../actions';
 
 function mapStateToProps(state) {
   return {
     loading: state.organisms.loading,
-    wgsaOrganisms: getWgsaOrganisms(state),
-    otherOrganisms: getOtherOrganisms(state),
+    supportedOrganisms: getSupportedOrganisms(state),
+    allSpecies: getAllSpecies(state),
   };
 }
 
@@ -28,13 +28,13 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-const WGSAOrganism =
-  ({ item: { organismId, totalCollections, totalGenomes } }) => (
+const SupportedOrganism =
+  ({ item: { organismId, totalCollections, totalGenomes, organism = taxIdMap.get(organismId) } }) => (
     <Link
       key={organismId}
       className="wgsa-organism-card wgsa-card wgsa-card--bordered"
-      to={`/organisms/${taxIdMap.get(organismId).nickname}`}
-      title="Organism Home"
+      to={`/organisms/${organism.nickname}`}
+      title={`${organism.name} Homepage`}
     >
       <h3 className="wgsa-section-title">
         <FormattedName organismId={organismId} fullName />
@@ -52,12 +52,12 @@ const WGSAOrganism =
     </Link>
   );
 
-const OtherOrganism =
-  ({ item: { organismId, organismName, totalGenomes } }) => (
-    <div key={organismId} className="wgsa-organism-card wgsa-card wgsa-card--bordered">
-      <h3 className="wgsa-section-title">{organismName}</h3>
+const Species =
+  ({ item: { speciesId, speciesName, totalGenomes } }) => (
+    <div key={speciesId} className="wgsa-organism-card wgsa-card wgsa-card--bordered">
+      <h3 className="wgsa-section-title"><em>{speciesName}</em></h3>
       <CardMetadata icon="wgsa_genome">
-        <Link to={`/genomes?organismId=${organismId}`} title="Browse Genomes">
+        <Link to={`/genomes?speciesId=${speciesId}`} title="Browse Genomes">
           {totalGenomes} Genome{totalGenomes === 1 ? '' : 's'}
         </Link>
       </CardMetadata>
@@ -71,24 +71,24 @@ const Index = React.createClass({
   },
 
   render() {
-    const { loading, wgsaOrganisms, otherOrganisms } = this.props;
+    const { loading, supportedOrganisms, allSpecies } = this.props;
     return (
       <div className="wgsa-page">
         <DocumentTitle>Organisms</DocumentTitle>
         <h1>Organisms</h1>
         { loading && <Spinner />}
-        { !!otherOrganisms.length && <h2>WGSA Organisms</h2> }
+        { !!supportedOrganisms.length && <h2>Supported Organisms</h2> }
         <StaticGrid
           density="compact"
-          items={wgsaOrganisms}
-          template={WGSAOrganism}
+          items={supportedOrganisms}
+          template={SupportedOrganism}
           keyProp="organismId"
         />
-        { !!otherOrganisms.length && <h2>Other Organisms</h2> }
+        { !!allSpecies.length && <h2>All Species</h2> }
         <StaticGrid
           density="compact"
-          items={otherOrganisms}
-          template={OtherOrganism}
+          items={allSpecies}
+          template={Species}
           keyProp="organismId"
         />
       </div>
