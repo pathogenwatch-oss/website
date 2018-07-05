@@ -20,7 +20,7 @@ export default ({ genome }) => {
       <header>
         <Logo />
       </header>
-      <section className="wgsa-genome-report-summary-content">
+      <div className="wgsa-genome-report-summary-content">
         <div>
           <h1 title={genome.name}>{genome.name}</h1>
           <div className="h5">
@@ -33,13 +33,16 @@ export default ({ genome }) => {
           </div>
         </div>
         <p>
-          {date}
-          { date && <br /> }
-          {country && getCountryName(country)}
-          { country && <br /> }
-          { pmid && <span>PMID: <PubMedLink pmid={pmid}>{pmid}</PubMedLink></span> }
+          Date:&nbsp;
+          {date ? <strong>{date}</strong> : 'Not specified'}
+          <br />
+          Country:&nbsp;
+          {country ? <strong>{getCountryName(country)}</strong> : 'Not specified'}
+          <br />
+          PMID:&nbsp;
+          {pmid ? <PubMedLink pmid={pmid}>{pmid}</PubMedLink> : 'Not specified'}
         </p>
-      </section>
+      </div>
     </div>
   );
 };
