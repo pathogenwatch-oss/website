@@ -34,13 +34,13 @@ export default ({ genome }) => {
         </div>
         <p>
           Date:&nbsp;
-          {date ? <strong>{date}</strong> : 'Not specified'}
+          <strong>{date || '(unspecified)'}</strong>
           <br />
           Country:&nbsp;
-          {country ? <strong>{getCountryName(country)}</strong> : 'Not specified'}
+          <strong>{country ? getCountryName(country) : '(unspecified)'}</strong>
           <br />
           PMID:&nbsp;
-          {pmid ? <PubMedLink pmid={pmid}>{pmid}</PubMedLink> : 'Not specified'}
+          {pmid ? <PubMedLink pmid={pmid}>{pmid}</PubMedLink> : <strong>(unspecified)</strong>}
         </p>
       </div>
     </div>
