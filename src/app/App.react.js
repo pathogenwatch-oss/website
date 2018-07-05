@@ -3,6 +3,7 @@ import '../css/menu.css';
 import '../css/forms.css';
 
 import React from 'react';
+import { hot } from 'react-hot-loader';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
 
@@ -32,7 +33,7 @@ function mapDispatchToProps(dispatch, { location }) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(React.createClass({
+const App = connect(mapStateToProps, mapDispatchToProps)(React.createClass({
 
   propTypes: {
     children: React.PropTypes.element,
@@ -90,3 +91,5 @@ export default connect(mapStateToProps, mapDispatchToProps)(React.createClass({
   },
 
 }));
+
+export default hot(module)(App);
