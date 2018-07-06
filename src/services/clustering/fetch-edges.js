@@ -1,4 +1,5 @@
 const Clustering = require('../../models/clustering');
+const Genome = require('../../models/genome');
 
 async function getClusteringData({ scheme, user }) {
   const query = { scheme };
@@ -30,7 +31,9 @@ const createDistanceLookup = (distances, sts) => {
   };
 };
 
-module.exports = async function ({ user, scheme, sts, threshold }) {
+module.exports = async function ({ user, genomeId, sts, threshold }) {
+  const scheme = await Genome.lookupCgMlstScheme(genomeId, user);
+  if (!scheme) return {};
   const clusters = await getClusteringData({ scheme, user });
   if (!clusters) return {};
 

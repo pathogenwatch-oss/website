@@ -1,6 +1,7 @@
 const express = require('express');
 const zlib = require('zlib');
 const contentLength = require('express-content-length-validator');
+const { NotFoundError } = require('../../utils/errors');
 
 const services = require('services');
 
@@ -55,9 +56,53 @@ router.get('/genome/:id/clusters', (req, res, next) => {
 
   LOGGER.info(`Received request to get clusters for genome ${id}`);
   services.request('genome', 'fetch-clusters', { user, id })
-    .then(response => res.json(response))
+    .then(response => {
+      if (!response.genomeIdx) {
+        throw new NotFoundError(`${id} was not found in clusters`);
+      }
+      res.json(response);
+    })
     .catch(next);
 });
+
+router.post('/genome/:id/clusters', async (req, res, next) => {
+  const { user, params, body } = req;
+  const { id } = params;
+  const { clientId } = body;
+
+  LOGGER.info('Received request to run clustering for genome', id);
+
+  try {
+    const response = await services.request('clustering', 'submit', { user, genomeId: id, clientId });
+    res.json(response);
+  } catch (e) {
+    const { msg } = e;
+    if (msg.indexOf('Already queued this job') !== -1) {
+      res.status(304);
+      res.json({ ok: 1 });
+    } else {
+      next(e);
+    }
+  }
+});
+
+router.post('/genome/:id/clusters/edges', async (req, res, next) => {
+  const { user, body } = req;
+  const { threshold, sts } = body;
+  const { id } = req.params;
+
+  LOGGER.info('Received request for cluster edges', id);
+
+  try {
+    const response = await services.request('clustering', 'fetch-edges', { user, genomeId: id, threshold, sts });
+    const { edges = [] } = response;
+    if (edges.length <= 0) throw new NotFoundError(`No cluster edges found for ${id} at threshold ${threshold}`);
+    res.json(response);
+  } catch (e) {
+    next(e);
+  }
+});
+
 
 router.get('/genome', (req, res, next) => {
   LOGGER.info('Received request to get genomes');

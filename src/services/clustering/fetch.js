@@ -34,7 +34,8 @@ async function mapStsToGenomeNames({ genomeId, sts, user }) {
     stNamesMap[st].push(name);
   }
 
-  const genomeSt = (stsAndNames.find(_ => '' + _._id === genomeId) || {}).analysis.cgmlst.st;
+  const genome = stsAndNames.find(_ => '' + _._id === genomeId);
+  const genomeSt = genome ? genome.analysis.cgmlst.st : null;
   const genomeIdx = sts.indexOf(genomeSt);
 
   return {
@@ -43,7 +44,8 @@ async function mapStsToGenomeNames({ genomeId, sts, user }) {
   };
 }
 
-module.exports = async function ({ user, genomeId, scheme }) {
+module.exports = async function ({ user, genomeId }) {
+  const scheme = await Genome.lookupCgMlstScheme(genomeId, user);
   const clusters = await getClusteringData({ scheme, user });
   if (!clusters) return {};
 
@@ -56,5 +58,6 @@ module.exports = async function ({ user, genomeId, scheme }) {
     names,
     genomeIdx,
     sts,
+    scheme,
   };
 };
