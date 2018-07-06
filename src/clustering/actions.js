@@ -36,7 +36,7 @@ export function fetch(genomeId) {
   };
 }
 
-export function fetchEdges(genomeId, threshold, sts) {
+export function fetchEdgeMatrix(genomeId, threshold, sts) {
   return {
     type: FETCH_CLUSTER_EDGES,
     payload: {

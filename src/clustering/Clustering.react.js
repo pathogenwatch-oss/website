@@ -23,10 +23,10 @@ const Clustering = React.createClass({
     switch (status) {
       case 'INITIAL_STATUS':
       case 'BUILT_CLUSTERS':
-        this.props.fetch(this.props.genomeId);
+        this.props.fetch(this.props.selectedGenomeId);
         break;
       case 'FETCHED_CLUSTERS':
-        this.props.fetchEdges(this.props);
+        this.props.fetchEdgeMatrix(this.props);
         break;
       case 'FETCHED_EDGES':
         this.props.runLayout(this.props.edgesCount, this.network, LAYOUT_OPTIONS);
@@ -39,9 +39,9 @@ const Clustering = React.createClass({
   componentDidUpdate(prevProps) {
     const { props } = this;
     if (props.status === 'BUILT_CLUSTERS' && prevProps.status !== 'BUILT_CLUSTERS') {
-      props.fetch(this.props.genomeId);
+      props.fetch(this.props.selectedGenomeId);
     } else if (props.status === 'FETCHED_CLUSTERS' && prevProps.status !== 'FETCHED_CLUSTERS') {
-      if (props.clusterNodesCount > 1) props.fetchEdges(props);
+      if (props.clusterNodesCount > 1) props.fetchEdgeMatrix(props);
       else props.skipNetwork('Please pick a bigger threshold to view a network');
     } else if (props.status === 'FETCHED_EDGES' && prevProps.status !== 'FETCHED_EDGES') {
       props.runLayout(props.edgesCount, this.network, LAYOUT_OPTIONS);
@@ -50,7 +50,7 @@ const Clustering = React.createClass({
       prevProps.status !== 'FAILED_FETCHING_CLUSTERS' &&
       props.triedBuilding === false
     ) {
-      props.build(this.props.genomeId);
+      props.build(this.props.selectedGenomeId);
     }
   },
 
@@ -58,7 +58,7 @@ const Clustering = React.createClass({
     return (
       <button
         className={classnames('mdl-button mdl-button--raised', { 'mdl-button--colored': primiary })}
-        onClick={() => this.props.build(this.props.genomeId)}
+        onClick={() => this.props.build(this.props.selectedGenomeId)}
       >
         {label}
       </button>
@@ -66,8 +66,8 @@ const Clustering = React.createClass({
   },
 
   renderViewButton(label = 'View cluster') {
-    const { genomeId, threshold } = this.props;
-    const link = `/clustering/${genomeId}?threshold=${threshold}`;
+    const { selectedGenomeId, threshold } = this.props;
+    const link = `/clustering/${selectedGenomeId}?threshold=${threshold}`;
     return (
       <Link
         to={link}
@@ -89,7 +89,7 @@ const Clustering = React.createClass({
     const width = 584;
     const height = 320;
 
-    if (this.props.names.length <= 1) {
+    if (this.props.clusterSts.length <= 1) {
       return <div style={{ width: `${width}px`, height: `${height}px` }}><p>Please pick a bigger threshold.</p></div>;
     }
 
@@ -120,26 +120,26 @@ const Clustering = React.createClass({
     const edges = [];
     let idx = 0;
     for (let i = 0; i < this.props.clusterNodesCount; i++) {
-      const showLabel = this.props.status === 'COMPLETED_LAYOUT' && i === this.props.rootIdx;
+      const showLabel = this.props.status === 'COMPLETED_LAYOUT' && i === this.props.indexOfSelectedInCluster;
       const id = `n${i}`;
       nodes.push({
-        label: showLabel ? this.props.nodeLabels[i] : undefined,
-        _label: this.props.nodeLabels[i],
+        label: showLabel ? this.props.clusterNodeLabels[i] : undefined,
+        _label: this.props.clusterNodeLabels[i],
         id,
-        size: this.props.nodeSizes[i],
-        color: this.props.nodeColors[i],
-        zIndex: this.props.nodeDegrees[i],
-        x: (this.props.nodePositions[id] || {}).x,
-        y: (this.props.nodePositions[id] || {}).y,
+        size: this.props.getClusterNodeSizes[i],
+        color: this.props.getClusterNodeColors[i],
+        zIndex: this.props.getClusterNodeDegrees[i],
+        x: (this.props.nodeCoordinates[id] || {}).x,
+        y: (this.props.nodeCoordinates[id] || {}).y,
       });
       for (let j = 0; j < i; j++) {
-        if (this.props.edges[idx]) {
+        if (this.props.edgesMatrix[idx]) {
           edges.push({
             id: `e${idx}`,
             source: `n${j}`,
             target: `n${i}`,
             color: this.props.edgeColors[idx],
-            zIndex: this.props.edgeDegrees[idx],
+            zIndex: this.props.getMinDegreeForEdge[idx],
           });
         }
         idx++;
@@ -151,7 +151,7 @@ const Clustering = React.createClass({
       this.network.refresh();
     };
     const outNode = ({ data }) => {
-      if (data.node.id === `n${this.props.rootIdx}`) return;
+      if (data.node.id === `n${this.props.indexOfSelectedInCluster}`) return;
       data.node.label = undefined;
       this.network.refresh();
     };
@@ -244,28 +244,23 @@ const Clustering = React.createClass({
 
 function mapStateToProps(state) {
   return {
-    genomeId: selectors.getGenomeId(state),
+    selectedGenomeId: selectors.getSelectedGenomeId(state),
     status: selectors.getStatus(state),
     threshold: selectors.getThreshold(state),
-    edges: selectors.getEdges(state),
+    edgesMatrix: selectors.getEdgeMatrix(state),
     progress: selectors.getProgress(state),
-    sts: selectors.getSts(state),
-    genomeIdx: selectors.getGenomeIdx(state),
-    names: selectors.getNames(state),
     skipMessage: selectors.getSkipMessage(state),
-    nodePositions: selectors.getNodePositions(state),
+    nodeCoordinates: selectors.getNodeCoordinates(state),
     edgesCount: selectors.getEdgesCount(state),
     edgesExist: selectors.getEdgesExist(state),
     clusterSts: selectors.getClusterSts(state),
     clusterNodesCount: selectors.getClusterNodesCount(state),
-    rootIdx: selectors.getRootIdx(state),
-    nodeNames: selectors.getNodeNames(state),
-    nodeLabels: selectors.getNodeLabels(state),
-    nodeDegrees: selectors.getNodeDegrees(state),
-    nodeColors: selectors.getNodeColors(state),
-    nodeEdgeCounts: selectors.getNodeEdgeCounts(state),
-    nodeSizes: selectors.getNodeSizes(state),
-    edgeDegrees: selectors.getEdgeDegrees(state),
+    indexOfSelectedInCluster: selectors.getIndexOfSelectedInCluster(state),
+    clusterNodeLabels: selectors.getClusterNodeLabels(state),
+    clusterNodeDegrees: selectors.getClusterNodeDegrees(state),
+    clusterNodeColors: selectors.getClusterNodeColors(state),
+    clusterNodeSizes: selectors.getClusterNodeSizes(state),
+    minDegreeForEdge: selectors.getMinDegreeForEdge(state),
     edgeColors: selectors.getEdgeColors(state),
     chartThresholds: selectors.getChartThresholds(state),
     chartClusterSizes: selectors.getChartClusterSizes(state),
@@ -275,11 +270,11 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     updateProgress: (payload) => dispatch(actions.updateProgress(payload)),
-    fetch: (genomeId) => dispatch(actions.fetch(genomeId)),
-    build: (genomeId) => dispatch(actions.build(genomeId)),
+    fetch: (selectedGenomeId) => dispatch(actions.fetch(selectedGenomeId)),
+    build: (selectedGenomeId) => dispatch(actions.build(selectedGenomeId)),
     setThreshold: (threshold) => dispatch(actions.setThreshold(threshold)),
-    fetchEdges: ({ genomeId, threshold, clusterSts }) =>
-      dispatch(actions.fetchEdges(genomeId, threshold, clusterSts)),
+    fetchEdgeMatrix: ({ selectedGenomeId, threshold, clusterSts }) =>
+      dispatch(actions.fetchEdgeMatrix(selectedGenomeId, threshold, clusterSts)),
     runLayout: (nEdges, network, options) => dispatch(actions.runLayout(nEdges, network, options)),
     skipNetwork: (message) => dispatch(actions.skipNetwork(message)),
   };

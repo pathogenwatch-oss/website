@@ -25,15 +25,15 @@ const initialState = {
     lambda: null,
   },
   names: null,
-  sts: null,
-  genomeId: null,
-  genomeIdx: null,
+  allSchemeSts: null,
+  selectedGenomeId: null,
+  indexOfSelectedInAll: null,
   scheme: null,
   threshold: 30,
-  edges: null,
+  edgeMatrix: null,
   triedBuilding: false,
   skipMessage: null,
-  nodePositions: null,
+  nodeCoordinates: null,
 };
 
 export default function (state = initialState, { type, payload }) {
@@ -97,8 +97,8 @@ export default function (state = initialState, { type, payload }) {
           lambda,
         },
         names,
-        sts,
-        genomeIdx,
+        allSchemeSts: sts,
+        indexOfSelectedInAll: genomeIdx,
         scheme,
       };
     }
@@ -116,7 +116,7 @@ export default function (state = initialState, { type, payload }) {
     case FETCH_CLUSTER_EDGES.SUCCESS:
       return {
         ...state,
-        edges: payload.result.edges,
+        edgeMatrix: payload.result.edges,
         status: 'FETCHED_EDGES',
       };
 
@@ -129,7 +129,7 @@ export default function (state = initialState, { type, payload }) {
       return {
         ...state,
         status: 'COMPLETED_LAYOUT',
-        nodePositions: payload.result,
+        nodeCoordinates: payload.result,
       };
 
     case SET_CLUSTER_THRESHOLD:
@@ -137,8 +137,8 @@ export default function (state = initialState, { type, payload }) {
         ...state,
         threshold: payload,
         status: (state.names || []).length > 0 ? 'FETCHED_CLUSTERS' : 'INITIAL_STATUS',
-        edges: null,
-        nodePositions: null,
+        edgeMatrix: null,
+        nodeCoordinates: null,
       };
 
     case SKIP_NETWORK:
@@ -149,10 +149,10 @@ export default function (state = initialState, { type, payload }) {
       };
 
     case SHOW_GENOME_REPORT.ATTEMPT:
-      return payload.genomeId === state.genomeId ? state : { ...initialState, genomeId: payload.genomeId };
+      return payload.genomeId === state.selectedGenomeId ? state : { ...initialState, selectedGenomeId: payload.genomeId };
 
     case SET_CLUSTER_GENOME:
-      return payload === state.genomeId ? state : { ...initialState, genomeId: payload };
+      return payload === state.selectedGenomeId ? state : { ...initialState, selectedGenomeId: payload };
 
     default:
       return state;
