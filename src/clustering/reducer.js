@@ -33,11 +33,12 @@ const initialState = {
   edges: null,
   triedBuilding: false,
   skipMessage: null,
+  nodePositions: null,
 };
 
 export default function (state = initialState, { type, payload }) {
   switch (type) {
-    
+
     case REQUEST_BUILD_CLUSTERS.ATTEMPT:
       return {
         ...state,
@@ -54,17 +55,26 @@ export default function (state = initialState, { type, payload }) {
       return state;
     case SET_CLUSTERING_PROGRESS: {
       if (state.status === 'BUILDING_CLUSTERS') {
-        const update = { progress: payload.progress };
-        if (payload.status === 'READY') update.status = 'BUILT_CLUSTERS';
-        else if (payload.status !== 'IN PROGRESS') update.status = 'FAILED_BUILDING_CLUSTERS';
+        if (payload.status === 'READY') {
+          return {
+            ...state,
+            progress: 100,
+            status: 'BUILT_CLUSTERS',
+          };
+        } else if (payload.status === 'IN PROGRESS') {
+          return {
+            ...state,
+            progress: state.progress < payload.progress ? payload.progress : state.progress,
+          };
+        }
         return {
           ...state,
-          ...update,
+          status: 'FAILED_BUILDING_CLUSTERS',
         };
       }
       return state;
     }
-    
+
     case FETCH_CLUSTERS.ATTEMPT:
       return {
         ...state,
@@ -119,6 +129,7 @@ export default function (state = initialState, { type, payload }) {
       return {
         ...state,
         status: 'COMPLETED_LAYOUT',
+        nodePositions: payload.result,
       };
 
     case SET_CLUSTER_THRESHOLD:
@@ -127,6 +138,7 @@ export default function (state = initialState, { type, payload }) {
         threshold: payload,
         status: (state.names || []).length > 0 ? 'FETCHED_CLUSTERS' : 'INITIAL_STATUS',
         edges: null,
+        nodePositions: null,
       };
 
     case SKIP_NETWORK:
@@ -138,7 +150,7 @@ export default function (state = initialState, { type, payload }) {
 
     case SHOW_GENOME_REPORT.ATTEMPT:
       return payload.genomeId === state.genomeId ? state : { ...initialState, genomeId: payload.genomeId };
-      
+
     case SET_CLUSTER_GENOME:
       return payload === state.genomeId ? state : { ...initialState, genomeId: payload };
 

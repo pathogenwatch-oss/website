@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import classnames from 'classnames';
 import { Link } from 'react-router-dom';
 
-import Spinner from '../components/Spinner.react';
 import Notify from '../components/Notify.react';
 
 import * as selectors from './selectors';
@@ -12,6 +11,11 @@ import * as actions from './actions';
 import SimpleBarChart from './SimpleBarChart.react';
 import SimpleNetwork from './SimpleNetwork.react';
 
+const LAYOUT_OPTIONS = {
+  iterationsPerRender: 100,
+  worker: true,
+  barnesHutOptimize: false,
+};
 
 const Clustering = React.createClass({
   componentDidMount() {
@@ -25,7 +29,7 @@ const Clustering = React.createClass({
         this.props.fetchEdges(this.props);
         break;
       case 'FETCHED_EDGES':
-        this.props.runLayout(this.props.edgesCount);
+        this.props.runLayout(this.props.edgesCount, this.network, LAYOUT_OPTIONS);
         break;
       default:
         break;
@@ -37,21 +41,16 @@ const Clustering = React.createClass({
     if (props.status === 'BUILT_CLUSTERS' && prevProps.status !== 'BUILT_CLUSTERS') {
       props.fetch(this.props.genomeId);
     } else if (props.status === 'FETCHED_CLUSTERS' && prevProps.status !== 'FETCHED_CLUSTERS') {
-      if (props.clusterNodesCount > 1) props.fetchEdges(this.props);
+      if (props.clusterNodesCount > 1) props.fetchEdges(props);
       else props.skipNetwork('Please pick a bigger threshold to view a network');
     } else if (props.status === 'FETCHED_EDGES' && prevProps.status !== 'FETCHED_EDGES') {
-      props.runLayout(props.edgesCount);
+      props.runLayout(props.edgesCount, this.network, LAYOUT_OPTIONS);
     } else if (
-      props.status === 'FAILED_FETCHING_CLUSTERS' && 
+      props.status === 'FAILED_FETCHING_CLUSTERS' &&
       prevProps.status !== 'FAILED_FETCHING_CLUSTERS' &&
       props.triedBuilding === false
     ) {
       props.build(this.props.genomeId);
-    } else if (props.status === 'COMPLETED_LAYOUT' && prevProps.status !== 'COMPLETED_LAYOUT' && this.network) {
-      const node = this.network.graph.nodes().find(_ => _.id === `n${this.props.rootIdx}`);
-      node.label = node._label;
-      this.network.stopForceAtlas2();
-      this.network.refresh();
     }
   },
 
@@ -101,8 +100,8 @@ const Clustering = React.createClass({
       case 'FETCHING_CLUSTERS':
       case 'FETCHED_CLUSTERS':
       case 'FETCHING_EDGES':
+        return <div style={{ width: `${width}px`, height: `${height}px` }}><p className="wgsa-blink">Fetching cluster...</p></div>;
       case 'FETCHED_EDGES':
-        return <div style={{ width: `${width}px`, height: `${height}px` }}><p>Fetching cluster...</p><Spinner /></div>;
       case 'RUNNING_LAYOUT':
       case 'COMPLETED_LAYOUT':
         break;
@@ -121,12 +120,17 @@ const Clustering = React.createClass({
     const edges = [];
     let idx = 0;
     for (let i = 0; i < this.props.clusterNodesCount; i++) {
+      const showLabel = this.props.status === 'COMPLETED_LAYOUT' && i === this.props.rootIdx;
+      const id = `n${i}`;
       nodes.push({
+        label: showLabel ? this.props.nodeLabels[i] : undefined,
         _label: this.props.nodeLabels[i],
-        id: `n${i}`,
+        id,
         size: this.props.nodeSizes[i],
         color: this.props.nodeColors[i],
         zIndex: this.props.nodeDegrees[i],
+        x: (this.props.nodePositions[id] || {}).x,
+        y: (this.props.nodePositions[id] || {}).y,
       });
       for (let j = 0; j < i; j++) {
         if (this.props.edges[idx]) {
@@ -157,27 +161,16 @@ const Clustering = React.createClass({
       outNode: outNode.bind(this),
     };
 
-    const options = {
-      algorithm: 'forceAtlas2',
-    };
-
     const style = {
-      opacity: 0.2,
       zIndex: 1,
+      opacity: this.props.status === 'RUNNING_LAYOUT' ? 0.3 : 1,
     };
-
-    const networkEl = <SimpleNetwork ref={ el => { this.network = el ? el.network : undefined; }} style={style} width={width} height={height} nodes={nodes} edges={edges} events={events} options={options} />;
-    
-    let coverEl;
-    if (this.props.status === 'RUNNING_LAYOUT') {
-      coverEl = <div ref={ el => { this.modestyEl = el; } } style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)', position: 'absolute', top: '0px', zIndex: 2 }}><p>Rendering cluster...</p><Spinner /></div>
-    } else {
-      coverEl = <div ref={ el => { this.modestyEl = el; } } style={{ position: 'absolute', top: '0px', zIndex: 2 }}><p>Clustered at threshold of { this.props.threshold }</p></div>;
-    }
 
     return (<div style={{ position: 'relative' }}>
-      { networkEl }
-      { coverEl }
+      <SimpleNetwork ref={ el => { this.network = (el ? el.network : undefined); }} style={style} width={width} height={height} nodes={nodes} edges={edges} events={events} />
+      <p className="pw-network-cover-message">
+        { this.props.status === 'RUNNING_LAYOUT' ? <span className="wgsa-blink">Rendering cluster...</span> : `Clustered at threshold of ${this.props.threshold}` }
+      </p>
     </div>);
   },
 
@@ -202,18 +195,19 @@ const Clustering = React.createClass({
             case 'INITIAL_STATUS':
               return trySomeClustering;
             case 'FETCHING_CLUSTERS':
-            case 'BUILDING_CLUSTERS': {
+            case 'BUILDING_CLUSTERS':
+            case 'BUILT_CLUSTERS': {
               const { progress = 0 } = this.props;
               if (progress > 0) {
                 return (
                   <Notify topic="clustering" onMessage={this.props.updateProgress}>
-                    <p>Running ({progress.toFixed(1)}%)</p><Spinner />
+                    <p>Running ({progress.toFixed(1)}%)</p>
                   </Notify>
                 );
               }
               return (
                 <Notify topic="clustering" onMessage={this.props.updateProgress}>
-                  <p>Job queued, please wait ⏳</p><Spinner />
+                  <p>Job queued, please wait <span className="wgsa-blink">⏳</span></p>
                 </Notify>
               );
             }
@@ -259,6 +253,7 @@ function mapStateToProps(state) {
     genomeIdx: selectors.getGenomeIdx(state),
     names: selectors.getNames(state),
     skipMessage: selectors.getSkipMessage(state),
+    nodePositions: selectors.getNodePositions(state),
     edgesCount: selectors.getEdgesCount(state),
     edgesExist: selectors.getEdgesExist(state),
     clusterSts: selectors.getClusterSts(state),
@@ -285,7 +280,7 @@ function mapDispatchToProps(dispatch) {
     setThreshold: (threshold) => dispatch(actions.setThreshold(threshold)),
     fetchEdges: ({ genomeId, threshold, clusterSts }) =>
       dispatch(actions.fetchEdges(genomeId, threshold, clusterSts)),
-    runLayout: (nEdges) => dispatch(actions.runLayout(nEdges)),
+    runLayout: (nEdges, network, options) => dispatch(actions.runLayout(nEdges, network, options)),
     skipNetwork: (message) => dispatch(actions.skipNetwork(message)),
   };
 }

@@ -111,6 +111,7 @@ export const getSts = state => getClusterState(state).sts;
 export const getGenomeIdx = state => getClusterState(state).genomeIdx;
 export const getNames = state => getClusterState(state).names;
 export const getSkipMessage = state => getClusterState(state).skipMessage;
+export const getNodePositions = state => getClusterState(state).nodePositions || [];
 export const getEdgesCount = createSelector(
   getEdges,
   edges => (edges || []).length

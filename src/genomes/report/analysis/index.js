@@ -10,10 +10,10 @@ import Speciator from './Speciator.react';
 import Genotyphi from './Genotyphi.react';
 import NgMast from './NgMast.react';
 import renderGenericResults from './Generic.react';
-import Clustering from '../../../clustering/Clustering.react';
+import Clustering from '../../../clustering';
 
 export default (genome) => {
-  const { analysis = {}, id } = genome;
+  const { analysis = {} } = genome;
   const { metrics, core, mlst, paarsnp, genotyphi, ngmast, speciator, cgmlst, ...rest } = analysis;
 
   const tabs = [];

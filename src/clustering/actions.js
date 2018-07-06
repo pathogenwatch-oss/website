@@ -59,13 +59,25 @@ export function setGenomeId(genomeId) {
   };
 }
 
-export function runLayout(nEdges) {
+export function runLayout(nEdges, network, options) {
   return {
     type: RUN_CLUSTER_LAYOUT,
     payload: {
-      promise: new Promise(resolve => {
+      promise: new Promise((resolve, reject) => {
+        if (!network) reject('Need a network object to start layout');
+        if (!network.isForceAtlas2Running()) network.startForceAtlas2(options);
         const timeout = Math.min(Math.max(1000, nEdges / 5), 10000);
-        setTimeout(resolve, timeout);
+        setTimeout(() => {
+          if (!network) reject('Need a network object to stop layout');
+          network.stopForceAtlas2();
+          const nodes = network.graph.nodes();
+          const locations = {};
+          for (const node of nodes) {
+            const { x, y, id } = node;
+            locations[id] = { x, y };
+          }
+          resolve(locations);
+        }, timeout);
       }),
     },
   };

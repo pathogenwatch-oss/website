@@ -38,7 +38,10 @@ class SimpleNetwork extends Component {
 
     // Clean up old plots, if they exist
     if (this.network) {
-      this.network.kill();
+      this.network.graph.clear();
+      this.network.graph.read(graph);
+      this.network.refresh();
+      return;
     }
 
     this.network = new sigma({
@@ -56,18 +59,6 @@ class SimpleNetwork extends Component {
       const eventHandler = this.props.events[eventName];
       this.network.bind(eventName, event => eventHandler(event));
     }
-
-    const { options = {} } = this.props;
-    const { algorithm, ...layoutOptions } = options;
-    if (algorithm === 'forceAtlas2') {
-      this.network.startForceAtlas2({
-        iterationsPerRender: 100,
-        worker: true,
-        barnesHutOptimize: false,
-        ...layoutOptions,
-      });
-    }
-    return;
   }
 
   render() {
