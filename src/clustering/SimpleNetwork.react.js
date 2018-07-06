@@ -53,12 +53,12 @@ class SimpleNetwork extends Component {
 
     const eventNames = Object.keys(this.props.events || {});
     for (const eventName of eventNames) {
-      const eventHandler = this.props.events[eventName].bind(this);
-      this.network.bind(eventName, event => eventHandler(event, this));
+      const eventHandler = this.props.events[eventName];
+      this.network.bind(eventName, event => eventHandler(event));
     }
 
     const { options = {} } = this.props;
-    const { algorithm, timeout, onTimeout, ...layoutOptions } = options;
+    const { algorithm, ...layoutOptions } = options;
     if (algorithm === 'forceAtlas2') {
       this.network.startForceAtlas2({
         iterationsPerRender: 100,
@@ -66,16 +66,7 @@ class SimpleNetwork extends Component {
         barnesHutOptimize: false,
         ...layoutOptions,
       });
-      if (this.timeout) clearTimeout(this.timeout);
-      if (timeout) {
-        this.timeout = setTimeout(() => {
-          this.network.stopForceAtlas2(); // stop updating the graph a bit later
-          if (onTimeout) onTimeout(this);
-          this.network.refresh();
-        }, timeout);
-      }
     }
-
     return;
   }
 

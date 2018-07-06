@@ -2,6 +2,7 @@ import { combineReducers } from 'redux';
 
 import account from '../account/reducer';
 import branding from '../branding/reducer';
+import clustering from '../clustering/reducer';
 import collections from '../collections/reducer';
 import downloads from '../downloads/reducer';
 import filters from '../filter/reducer';
@@ -19,6 +20,7 @@ import upload from '../upload/reducer';
 export default combineReducers({
   account,
   branding,
+  clustering,
   collections,
   downloads,
   filters,
