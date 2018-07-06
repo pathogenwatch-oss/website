@@ -1,4 +1,4 @@
-import { REQUEST_BUILD_CLUSTERS, FETCH_CLUSTERS, FETCH_CLUSTER_EDGES, RUN_CLUSTER_LAYOUT, SET_CLUSTER_THRESHOLD, SET_CLUSTER_GENOME, SET_CLUSTERING_PROGRESS, SKIP_NETWORK } from './actions';
+import { REQUEST_BUILD_CLUSTERS, FETCH_CLUSTERS, FETCH_CLUSTER_EDGES, RUN_CLUSTER_LAYOUT, SET_CLUSTER_THRESHOLD, SET_CLUSTER_GENOME, SET_CLUSTERING_PROGRESS, SKIP_LAYOUT } from './actions';
 import { SHOW_GENOME_REPORT } from '../genomes/report/actions';
 
 // States:
@@ -11,7 +11,6 @@ import { SHOW_GENOME_REPORT } from '../genomes/report/actions';
 //  FETCHED_EDGES
 //  RUNNING_LAYOUT
 //  COMPLETED_LAYOUT
-//  SKIP_NETWORK
 
 //  FAILED_BUILDING_CLUSTERS
 //  FAILED_FETCHING_CLUSTERS
@@ -141,11 +140,11 @@ export default function (state = initialState, { type, payload }) {
         nodeCoordinates: null,
       };
 
-    case SKIP_NETWORK:
+    case SKIP_LAYOUT:
       return {
         ...state,
-        status: 'SKIP_NETWORK',
-        skipMessage: payload,
+        status: 'COMPLETED_LAYOUT',
+        nodeCoordinates: payload,
       };
 
     case SHOW_GENOME_REPORT.ATTEMPT:

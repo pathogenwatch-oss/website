@@ -139,7 +139,7 @@ export const getClusterSts = createSelector(
     return allSts.filter((_, i) => clusters[i] === clusters[indexOfSelectedInAll])
   }
 );
-export const getClusterNodesCount = createSelector(
+export const getNumberOfNodesInCluster = createSelector(
   getClusterSts,
   sts => (sts || []).length
 );
@@ -169,7 +169,7 @@ export const getClusterNodeColors = createSelector(
   getClusterNodeDegrees,
   degrees => (!degrees ? undefined : degrees.map(d => NODE_COLORS[d] || NODE_COLORS[-1]))
 );
-// Nodes should be sized according to the number of edgeMatrix they have
+// Nodes should be sized according to the number of edges they have
 const getEdgesPerClusterNode = createSelector(
   getEdgeMatrix,
   calcEdgesPerNode
@@ -200,4 +200,71 @@ export const getChartClusterSizes = createSelector(
       return thresholdCluster.filter(_ => _ === thresholdCluster[indexOfSelectedInAll]).length;
     });
   }
+);
+
+function calcGraph(status, numberOfNodes, selectedIdx, labels, sizes, nodeColors, nodeZIndex, coordinates, edgesMatrix, edgeColors, edgeZIndex) {
+  const nodes = [];
+  const edges = [];
+  if (numberOfNodes === 0) return { nodes: [], edges: [] };
+  if (numberOfNodes === 1) {
+    return {
+      nodes: [
+        {
+          label: labels[0],
+          _label: labels[0],
+          id: 'n0',
+          size: 1,
+          color: NODE_COLORS[0],
+          zIndex: 0,
+          x: 0,
+          y: 0,
+        },
+      ],
+      edges: [],
+    };
+  }
+  if (!edgesMatrix) return undefined;
+  let idx = 0;
+  for (let i = 0; i < numberOfNodes; i++) {
+    const showLabel = status === 'COMPLETED_LAYOUT' && i === selectedIdx;
+    const id = `n${i}`;
+    nodes.push({
+      label: showLabel ? labels[i] : undefined,
+      _label: labels[i],
+      id,
+      size: sizes[i],
+      color: nodeColors[i],
+      zIndex: nodeZIndex[i],
+      x: (coordinates[id] || {}).x,
+      y: (coordinates[id] || {}).y,
+    });
+    for (let j = 0; j < i; j++) {
+      if (edgesMatrix[idx]) {
+        edges.push({
+          id: `e${idx}`,
+          source: `n${j}`,
+          target: `n${i}`,
+          color: edgeColors[idx],
+          zIndex: edgeZIndex[idx],
+        });
+      }
+      idx++;
+    }
+  }
+  return { nodes, edges };
+}
+
+export const getGraph = createSelector(
+  getStatus,
+  getNumberOfNodesInCluster,
+  getIndexOfSelectedInCluster,
+  getClusterNodeLabels,
+  getClusterNodeSizes,
+  getClusterNodeColors,
+  getClusterNodeDegrees,
+  getNodeCoordinates,
+  getEdgeMatrix,
+  getEdgeColors,
+  getMinDegreeForEdge,
+  calcGraph,
 );

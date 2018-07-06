@@ -17,7 +17,7 @@ class SimpleNetwork extends Component {
   }
 
   update() {
-    const { nodes = [], edges } = this.props;
+    const { nodes = [], edges } = (this.props.graph || {});
     if (!nodes) return;
 
     const graph = {

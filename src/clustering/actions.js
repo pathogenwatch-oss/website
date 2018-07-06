@@ -9,7 +9,7 @@ export const FETCH_CLUSTER_EDGES = createAsyncConstants('FETCH_CLUSTER_EDGES');
 export const RUN_CLUSTER_LAYOUT = createAsyncConstants('RUN_CLUSTER_LAYOUT');
 export const SET_CLUSTER_THRESHOLD = 'SET_CLUSTER_THRESHOLD';
 export const SET_CLUSTER_GENOME = 'SET_CLUSTER_GENOME';
-export const SKIP_NETWORK = 'SKIP_NETWORK';
+export const SKIP_LAYOUT = 'SKIP_LAYOUT';
 
 export function build(genomeId) {
   return {
@@ -59,6 +59,15 @@ export function setGenomeId(genomeId) {
   };
 }
 
+function getNodeCoordinates(nodes) {
+  const locations = {};
+  for (const node of nodes) {
+    const { x, y, id } = node;
+    locations[id] = { x, y };
+  }
+  return locations;
+}
+
 export function runLayout(nEdges, network, options) {
   return {
     type: RUN_CLUSTER_LAYOUT,
@@ -71,21 +80,16 @@ export function runLayout(nEdges, network, options) {
           if (!network) reject('Need a network object to stop layout');
           network.stopForceAtlas2();
           const nodes = network.graph.nodes();
-          const locations = {};
-          for (const node of nodes) {
-            const { x, y, id } = node;
-            locations[id] = { x, y };
-          }
-          resolve(locations);
+          resolve(getNodeCoordinates(nodes));
         }, timeout);
       }),
     },
   };
 }
 
-export function skipNetwork(message) {
+export function skipLayout(nodes) {
   return {
-    type: SKIP_NETWORK,
-    payload: message,
+    type: SKIP_LAYOUT,
+    payload: getNodeCoordinates(nodes),
   };
 }

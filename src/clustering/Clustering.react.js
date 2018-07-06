@@ -41,8 +41,8 @@ const Clustering = React.createClass({
     if (props.status === 'BUILT_CLUSTERS' && prevProps.status !== 'BUILT_CLUSTERS') {
       props.fetch(this.props.selectedGenomeId);
     } else if (props.status === 'FETCHED_CLUSTERS' && prevProps.status !== 'FETCHED_CLUSTERS') {
-      if (props.clusterNodesCount > 1) props.fetchEdgeMatrix(props);
-      else props.skipNetwork('Please pick a bigger threshold to view a network');
+      if (props.numberOfNodesInCluster > 1) props.fetchEdgeMatrix(props);
+      else props.skipLayout(this.props.graph.nodes);
     } else if (props.status === 'FETCHED_EDGES' && prevProps.status !== 'FETCHED_EDGES') {
       props.runLayout(props.edgesCount, this.network, LAYOUT_OPTIONS);
     } else if (
@@ -89,63 +89,28 @@ const Clustering = React.createClass({
     const width = 584;
     const height = 320;
 
-    if (this.props.clusterSts.length <= 1) {
-      return <div style={{ width: `${width}px`, height: `${height}px` }}><p>Please pick a bigger threshold.</p></div>;
-    }
+    const fetchingMessage = <div style={{ width: `${width}px`, height: `${height}px` }}><p className="wgsa-blink">Fetching cluster...</p></div>;
+    const errorMessage = <div style={{ width: `${width}px`, height: `${height}px` }}><p>Couldn't fetch the cluster, try another threshold</p></div>;
 
     switch (this.props.status) {
       case 'INITIAL_STATUS':
       case 'BUILDING_CLUSTERS':
       case 'BUILT_CLUSTERS':
       case 'FETCHING_CLUSTERS':
-      case 'FETCHED_CLUSTERS':
       case 'FETCHING_EDGES':
-        return <div style={{ width: `${width}px`, height: `${height}px` }}><p className="wgsa-blink">Fetching cluster...</p></div>;
+      case 'FETCHED_CLUSTERS':
+        return fetchingMessage;
       case 'FETCHED_EDGES':
       case 'RUNNING_LAYOUT':
       case 'COMPLETED_LAYOUT':
         break;
-      case 'SKIP_NETWORK': {
-        if (!this.props.skipMessage) return undefined;
-        return <div style={{ width: `${width}px`, height: `${height}px` }}><p>{ this.props.skipMessage }</p></div>;
-      }
       case 'FAILED_BUILDING_CLUSTERS':
       case 'FAILED_FETCHING_CLUSTERS':
       case 'FAILED_FETCHING_EDGES':
       default:
-        return <div style={{ width: `${width}px`, height: `${height}px` }}><p>Couldn't fetch the cluster, try another threshold</p></div>;
+        return errorMessage;
     }
   
-    const nodes = [];
-    const edges = [];
-    let idx = 0;
-    for (let i = 0; i < this.props.clusterNodesCount; i++) {
-      const showLabel = this.props.status === 'COMPLETED_LAYOUT' && i === this.props.indexOfSelectedInCluster;
-      const id = `n${i}`;
-      nodes.push({
-        label: showLabel ? this.props.clusterNodeLabels[i] : undefined,
-        _label: this.props.clusterNodeLabels[i],
-        id,
-        size: this.props.getClusterNodeSizes[i],
-        color: this.props.getClusterNodeColors[i],
-        zIndex: this.props.getClusterNodeDegrees[i],
-        x: (this.props.nodeCoordinates[id] || {}).x,
-        y: (this.props.nodeCoordinates[id] || {}).y,
-      });
-      for (let j = 0; j < i; j++) {
-        if (this.props.edgesMatrix[idx]) {
-          edges.push({
-            id: `e${idx}`,
-            source: `n${j}`,
-            target: `n${i}`,
-            color: this.props.edgeColors[idx],
-            zIndex: this.props.getMinDegreeForEdge[idx],
-          });
-        }
-        idx++;
-      }
-    }
-
     const overNode = ({ data }) => {
       data.node.label = data.node._label;
       this.network.refresh();
@@ -167,7 +132,7 @@ const Clustering = React.createClass({
     };
 
     return (<div style={{ position: 'relative' }}>
-      <SimpleNetwork ref={ el => { this.network = (el ? el.network : undefined); }} style={style} width={width} height={height} nodes={nodes} edges={edges} events={events} />
+      <SimpleNetwork ref={ el => { this.network = (el ? el.network : undefined); }} style={style} width={width} height={height} graph={this.props.graph} events={events} />
       <p className="pw-network-cover-message">
         { this.props.status === 'RUNNING_LAYOUT' ? <span className="wgsa-blink">Rendering cluster...</span> : `Clustered at threshold of ${this.props.threshold}` }
       </p>
@@ -254,7 +219,7 @@ function mapStateToProps(state) {
     edgesCount: selectors.getEdgesCount(state),
     edgesExist: selectors.getEdgesExist(state),
     clusterSts: selectors.getClusterSts(state),
-    clusterNodesCount: selectors.getClusterNodesCount(state),
+    numberOfNodesInCluster: selectors.getNumberOfNodesInCluster(state),
     indexOfSelectedInCluster: selectors.getIndexOfSelectedInCluster(state),
     clusterNodeLabels: selectors.getClusterNodeLabels(state),
     clusterNodeDegrees: selectors.getClusterNodeDegrees(state),
@@ -264,6 +229,7 @@ function mapStateToProps(state) {
     edgeColors: selectors.getEdgeColors(state),
     chartThresholds: selectors.getChartThresholds(state),
     chartClusterSizes: selectors.getChartClusterSizes(state),
+    graph: selectors.getGraph(state),
   };
 }
 
@@ -276,7 +242,7 @@ function mapDispatchToProps(dispatch) {
     fetchEdgeMatrix: ({ selectedGenomeId, threshold, clusterSts }) =>
       dispatch(actions.fetchEdgeMatrix(selectedGenomeId, threshold, clusterSts)),
     runLayout: (nEdges, network, options) => dispatch(actions.runLayout(nEdges, network, options)),
-    skipNetwork: (message) => dispatch(actions.skipNetwork(message)),
+    skipLayout: (network) => dispatch(actions.skipLayout(network)),
   };
 }
 
