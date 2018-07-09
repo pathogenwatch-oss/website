@@ -38,10 +38,11 @@ const lookupNamesOfClusterNodes = (indexOfSelectedInAll, clusters, allNames) => 
 function calcDistanceFromSelected(edgeMatrix, indexOfSelectedInCluster) {
   if (!edgeMatrix) return undefined;
   const nodes = [];
+  const MAX_DEGREES = 3;
 
   let idx = 0;
   for (let a = 0; idx < edgeMatrix.length; a++) {
-    const nodeA = { neighbours: [], explored: false, degrees: undefined };
+    const nodeA = { neighbours: [], explored: false, degrees: MAX_DEGREES };
     nodes.push(nodeA);
     for (let b = 0; b < a; b++) {
       const nodeB = nodes[b];
@@ -56,10 +57,9 @@ function calcDistanceFromSelected(edgeMatrix, indexOfSelectedInCluster) {
   const root = nodes[indexOfSelectedInCluster];
   let frontier = [ root ];
 
-  for (let degrees = 0; degrees <= 2; degrees++) {
+  for (let degrees = 0; degrees < MAX_DEGREES; degrees++) {
     let nextFrontier = [];
-    for (let i = 0; i < frontier.length; i++) {
-      const node = frontier[i];
+    for (const node of frontier) {
       if (node.explored) continue;
       nextFrontier = [ ...nextFrontier, ...node.neighbours ];
       node.degrees = degrees;
