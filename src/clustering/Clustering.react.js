@@ -212,6 +212,7 @@ function mapStateToProps(state) {
     selectedGenomeId: selectors.getSelectedGenomeId(state),
     status: selectors.getStatus(state),
     threshold: selectors.getThreshold(state),
+    triedBuilding: selectors.getTriedBuilding(state),
     edgesMatrix: selectors.getEdgeMatrix(state),
     progress: selectors.getProgress(state),
     skipMessage: selectors.getSkipMessage(state),

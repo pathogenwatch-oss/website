@@ -105,6 +105,7 @@ const getIndex = state => getClusterState(state).index || {};
 export const getSelectedGenomeId = state => getClusterState(state).selectedGenomeId;
 export const getStatus = state => getClusterState(state).status;
 export const getThreshold = state => getClusterState(state).threshold;
+export const getTriedBuilding = state => getClusterState(state).triedBuilding;
 export const getEdgeMatrix = state => getClusterState(state).edgeMatrix;
 export const getProgress = state => getClusterState(state).progress;
 const getAllSts = state => getClusterState(state).allSchemeSts;
