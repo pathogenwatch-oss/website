@@ -8,7 +8,7 @@ import SignInLink from '../sign-in/SignInLink.react';
 
 import CONFIG from '../app/config';
 import DocumentTitle from '../branding/DocumentTitle.react';
-const { maxCollectionSize = { anonymous: 1000, loggedIn: 1000 } } = CONFIG;
+const { maxCollectionSize = 1000 } = CONFIG;
 
 export default ({ deployedOrganisms }) => (
   <div className="wgsa-homepage">
@@ -220,11 +220,9 @@ export default ({ deployedOrganisms }) => (
               </td>
             </tr>
             <tr>
+              <td />
               <td>
-                Create collections of up to<br /><strong>{maxCollectionSize.anonymous}</strong> genomes
-              </td>
-              <td>
-                Create collections of up to<br /><strong>{maxCollectionSize.loggedIn}</strong> genomes
+                Create collections of up to<br /><strong>{maxCollectionSize}</strong> genomes
               </td>
             </tr>
             <tr>
