@@ -74,12 +74,12 @@ export default () => (
       <h3>CSV Templates</h3>
       <ul>
         <li>
-          <a href="/wgsa-general-metadata-template.csv" download="wgsa-general-metadata-template.csv">
+          <a href="/pathogenwatch-general-metadata-template.csv" download="pathogenwatch-general-metadata-template.csv">
             General
           </a>
         </li>
         <li>
-          <a href="/wgsa-typhi-metadata-template.csv" download="wgsa-typhi-metadata-template.csv">
+          <a href="/pathogenwatch-typhi-metadata-template.csv" download="pathogenwatch-typhi-metadata-template.csv">
             <FormattedName organismId="90370" fullName />
           </a>
         </li>
