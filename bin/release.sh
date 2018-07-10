@@ -7,7 +7,7 @@ echo Creating new $LEVEL release...
 
 npm run build
 
-git add public views monitor.json
+git add public views monitor.json assets.json
 git commit -m "Build"
 
 npm version $LEVEL

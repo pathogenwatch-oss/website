@@ -13,11 +13,11 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapDispatchToProps)(
+export default connect(null, mapDispatchToProps)(
   ({ showMessage }) =>
     <Passwordless
       getPasswordlessToken={sendSignInToken}
       showMessage={showMessage}
-      spinner={<Spinner />}
+      spinner={Spinner}
     />
 );
