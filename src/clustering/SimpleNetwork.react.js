@@ -33,8 +33,8 @@ class SimpleNetwork extends Component {
     }
 
     // Hack to implement something a bit like a zIndex.
-    graph.nodes.sort((a, b) => a.zIndex < b.zIndex);
-    graph.edges.sort((a, b) => a.zIndex < b.zIndex);
+    graph.nodes.sort((a, b) => b.zIndex - a.zIndex);
+    graph.edges.sort((a, b) => b.zIndex - a.zIndex);
 
     // Clean up old plots, if they exist
     if (this.network) {
