@@ -1,9 +1,7 @@
 import { utils } from 'phylocanvas';
 
-import { getColumnLabel } from '../table/utils';
 import Organisms from '../../organisms';
-import { POPULATION } from '../../app/stateKeys/tree';
-import { leafStyles, titles } from './constants';
+import { leafStyles } from './constants';
 
 export function collapseTreeBranches(node, leafPredicate) {
   if (node.leaf) {
@@ -34,18 +32,14 @@ export function getLeafStyle(genome) {
   return leafStyles.collection;
 }
 
-const TREE_LABELS_SUFFIX = 'tree_labels.txt';
+const TREE_LABELS_SUFFIX = 'tree-labels.txt';
 
-export function getFilenames(title, collectionId, column) {
+export function getFilenames(title, collectionId) {
   const formattedTitle = title.toLowerCase();
-  const formattedColumnLabel = getColumnLabel(column).toLowerCase();
-  const PREFIX = `wgsa_${Organisms.nickname}_${collectionId}_${formattedTitle}`;
+  const PREFIX = `pathogenwatch-${Organisms.nickname}-${collectionId}-${formattedTitle}`;
   return {
-    image: `${PREFIX}_tree.png`,
-    leafLabels:
-      title === titles[POPULATION] ?
-        `${PREFIX}_${TREE_LABELS_SUFFIX}` :
-        `${PREFIX}_${formattedColumnLabel}_${TREE_LABELS_SUFFIX}`,
+    image: `${PREFIX}-tree.png`,
+    leafLabels: `${PREFIX}-${TREE_LABELS_SUFFIX}`,
     newick: `${PREFIX}.nwk`,
   };
 }

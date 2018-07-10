@@ -10,5 +10,5 @@ export function createDownloadKey(id) {
 }
 
 export function formatCollectionFilename({ uuid }, suffix = '') {
-  return [ 'wgsa', Organisms.nickname, uuid, suffix ].join('-');
+  return [ 'pathogenwatch', Organisms.nickname, uuid, suffix ].join('-');
 }
