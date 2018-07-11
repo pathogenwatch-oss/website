@@ -51,6 +51,29 @@ export default ({ deployedOrganisms }) => (
         <p className="lead">
           <strong>MLST</strong> prediction is available for over 100 species using schemes from <a href="https://pubmlst.org/">PubMLST</a>, <a href="http://bigsdb.pasteur.fr/">Pasteur</a>, and <a href="http://enterobase.warwick.ac.uk">Enterobase</a>.
         </p>
+        <p className="lead">
+          <strong>cgMLST</strong> calling and clustering is available for the following schemes:
+        </p>
+        <ul className="pw-homepage-cgmlst-organisms">
+          <li>Acinetobacter baumannii</li>
+          <li>Campylobacter coli</li>
+          <li>Campylobacter jejuni</li>
+          <li>Enterococcus faecium</li>
+          <li>Escherichia</li>
+          <li>Klebsiella pneumoniae</li>
+          <li>Klebsiella quasipneumoniae</li>
+          <li>Klebsiella variicola</li>
+          <li>Listeria</li>
+          <li>Mycobacterium africanum</li>
+          <li>Mycobacterium bovis</li>
+          <li>Mycobacterium canettii</li>
+          <li>Mycobacterium tuberculosis</li>
+          <li>Neisseria gonorrhoeae</li>
+          <li>Neisseria meningitidis</li>
+          <li>Salmonella enterica</li>
+          <li>Shigella</li>
+          <li>Staphylococcus aureus</li>
+        </ul>
         <table className="wgsa-organism-table">
           <caption>Further Analyses</caption>
           <colgroup>
@@ -59,12 +82,10 @@ export default ({ deployedOrganisms }) => (
             <col className="wgsa-feature-column" />
             <col className="wgsa-feature-column" />
             <col className="wgsa-feature-column" />
-            <col className="wgsa-feature-column" />
           </colgroup>
           <thead>
             <tr>
               <th>Organism</th>
-              <th>cgMLST</th>
               <th>AMR Prediction</th>
               <th><Name /> Collections</th>
               <th>Population Search</th>
@@ -73,32 +94,7 @@ export default ({ deployedOrganisms }) => (
           </thead>
           <tbody>
             <tr>
-              <td><em>Campylobacter coli</em></td>
-              <td><i className="material-icons">check</i></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><em>Campylobacter jejuni</em></td>
-              <td><i className="material-icons">check</i></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><em>Listeria</em></td>
-              <td><i className="material-icons">check</i></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
               <td><FormattedName organismId="485" fullName /></td>
-              <td><i className="material-icons">check</i></td>
               <td><i className="material-icons">check</i></td>
               <td>
                 { deployedOrganisms.has('485') &&
@@ -107,26 +103,16 @@ export default ({ deployedOrganisms }) => (
               <td></td>
               <td><small>NG-MAST</small></td>
             </tr>
-            <tr>
-              <td><em>Neisseria meningitidis</em></td>
-              <td><i className="material-icons">check</i></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
             { deployedOrganisms.has('1646') &&
               <tr>
                 <td><FormattedName organismId="1646" fullName /></td>
                 <td></td>
-                <td></td>
                 <td><i className="material-icons">check</i></td>
-                <td></td>
+                <td><i className="material-icons">check</i></td>
                 <td></td>
               </tr> }
             <tr>
               <td><FormattedName organismId="90370" fullName /></td>
-              <td></td>
               <td><i className="material-icons">check</i></td>
               <td>
                 { deployedOrganisms.has('90370') &&
@@ -141,7 +127,6 @@ export default ({ deployedOrganisms }) => (
             <tr>
               <td><FormattedName organismId="1280" fullName /></td>
               <td><i className="material-icons">check</i></td>
-              <td><i className="material-icons">check</i></td>
               <td>
                 { deployedOrganisms.has('1280') &&
                 <i className="material-icons">check</i> }
@@ -154,7 +139,6 @@ export default ({ deployedOrganisms }) => (
             </tr>
             <tr>
               <td><FormattedName organismId="1313" fullName /></td>
-              <td></td>
               <td><i className="material-icons">check</i></td>
               <td>
                 { deployedOrganisms.has('1313') &&
@@ -170,7 +154,6 @@ export default ({ deployedOrganisms }) => (
               <tr>
                 <td><FormattedName organismId="64320" fullName /></td>
                 <td></td>
-                <td></td>
                 <td><i className="material-icons">check</i></td>
                 <td></td>
                 <td></td>
@@ -179,8 +162,8 @@ export default ({ deployedOrganisms }) => (
         </table>
       </div>
       <footer>
-        <Link to="/organisms" className="mdl-button mdl-button--primary">
-          <i className="material-icons">bug_report</i> Browse Organisms
+        <Link to="/organisms" className="mdl-button mdl-button--raised mdl-button--colored">
+          Browse Organisms
         </Link>
       </footer>
     </section>
@@ -236,11 +219,11 @@ export default ({ deployedOrganisms }) => (
       </div>
       <footer>
         { !!CONFIG.user ?
-          <Link to="/account" className="mdl-button mdl-button--primary">
-            <i className="material-icons">account_circle</i> Go to Account
+          <Link to="/account" className="mdl-button mdl-button--raised mdl-button--colored">
+            Go to Account
           </Link> :
-          <SignInLink className="mdl-button mdl-button--primary">
-            <i className="material-icons">account_circle</i> Sign in
+          <SignInLink className="mdl-button mdl-button--raised mdl-button--colored">
+            Sign in
           </SignInLink> }
       </footer>
     </section>

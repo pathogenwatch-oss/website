@@ -6,7 +6,7 @@
 
 .wgsa-organism-table {
   border-collapse: collapse;
-  margin: 0 auto;
+  margin: 0 auto 16px;
 }
 
 .wgsa-feature-column {
@@ -56,4 +56,19 @@
 
 .wgsa-organism-table i {
   color: #B25EA1;
+}
+
+.pw-homepage-cgmlst-organisms {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.pw-homepage-cgmlst-organisms li {
+  font-style: italic;
+  min-width: 160px;
+  width: 25%;
+  padding: 0 8px 8px;
+  text-align: center;
+  white-space: nowrap;
 }
