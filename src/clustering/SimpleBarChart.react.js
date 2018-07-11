@@ -7,25 +7,10 @@ class SimpleBarChart extends Component {
     const {
       labels = [],
       values = [],
-      onClick: parentOnClick,
       backgroundColor = '#b199c7',
       hoverBackgroundColor = '#673c90',
       toolTipFunc = null,
     } = this.props;
-
-    const onClick = (_, chartElemenets) => {
-      let label;
-      let value;
-      try {
-        const target = chartElemenets[0];
-        const { _index: dataIndex } = target;
-        label = this.chart.data.labels[dataIndex];
-        value = this.chart.data.datasets[0].data[dataIndex];
-      } catch (e) {
-        return null;
-      }
-      return parentOnClick({ label, value });
-    };
 
     const tooltips = toolTipFunc === null ? undefined : {
       callbacks: {
@@ -50,7 +35,6 @@ class SimpleBarChart extends Component {
         legend: {
           display: false,
         },
-        onClick,
         scales: {
           xAxes: [ {
             barPercentage: 1,
@@ -83,8 +67,23 @@ class SimpleBarChart extends Component {
     this.chart.update();
   }
 
+  onClick(e) {
+    const chartElements = this.chart.getElementsAtEvent(e);
+    let label;
+    let value;
+    try {
+      const target = chartElements[0];
+      const { _index: dataIndex } = target;
+      label = this.chart.data.labels[dataIndex];
+      value = this.chart.data.datasets[0].data[dataIndex];
+    } catch (err) {
+      return null;
+    }
+    return this.props.onClick({ label, value });
+  }
+
   render() {
-    return <canvas ref={ el => { this.canvas = el; } } width={ this.props.width } height={ this.props.height } />;
+    return <canvas onClick={(e) => this.onClick(e)} ref={ el => { this.canvas = el; } } width={ this.props.width } height={ this.props.height } />;
   }
 }
 

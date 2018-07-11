@@ -72,7 +72,12 @@ const Clustering = React.createClass({
 
   renderChart() {
     const toolTipFunc = (data) => `Cluster of ${data.yLabel} at threshold of ${data.xLabel}`;
-    const onClick = ({ label }) => this.props.setThreshold(label);
+    let clickable = false;
+    const { status } = this.props;
+    if ([ 'FAILED_BUILDING_CLUSTERS', 'FAILED_FETCHING_CLUSTERS', 'FAILED_FETCHING_EDGES', 'COMPLETED_LAYOUT' ].indexOf(status) >= 0) {
+      clickable = true;
+    }
+    const onClick = clickable ? ({ label }) => this.props.setThreshold(label) : () => {};
     return <SimpleBarChart width={584} height={100} labels={this.props.chartThresholds} values={this.props.chartClusterSizes} onClick={onClick} toolTipFunc={toolTipFunc} />;
   },
 
