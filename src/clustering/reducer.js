@@ -33,6 +33,7 @@ const initialState = {
   triedBuilding: false,
   skipMessage: null,
   nodeCoordinates: null,
+  taskId: null,
 };
 
 export default function (state = initialState, { type, payload }) {
@@ -45,15 +46,29 @@ export default function (state = initialState, { type, payload }) {
         progress: 0.0,
         triedBuilding: true,
       };
-    case REQUEST_BUILD_CLUSTERS.FAILURE:
+    case REQUEST_BUILD_CLUSTERS.FAILURE: {
+      if (
+        payload.genomeId !== state.selectedGenomeId ||
+        state.status !== 'BUILDING_CLUSTERS'
+      ) return state;
       return {
         ...state,
         status: 'FAILED_BUILDING_CLUSTERS',
       };
-    case REQUEST_BUILD_CLUSTERS.SUCCESS:
-      return state;
+    }
+    case REQUEST_BUILD_CLUSTERS.SUCCESS: {
+      if (
+        payload.genomeId !== state.selectedGenomeId ||
+        state.status !== 'BUILDING_CLUSTERS'
+      ) return state;
+      return {
+        ...state,
+        taskId: payload.result.taskId,
+      };
+    }
+
     case SET_CLUSTERING_PROGRESS: {
-      if (state.status === 'BUILDING_CLUSTERS') {
+      if (state.status === 'BUILDING_CLUSTERS' && state.taskId === payload.taskId) {
         if (payload.status === 'READY') {
           return {
             ...state,
@@ -79,12 +94,21 @@ export default function (state = initialState, { type, payload }) {
         ...state,
         status: 'FETCHING_CLUSTERS',
       };
-    case FETCH_CLUSTERS.FAILURE:
+    case FETCH_CLUSTERS.FAILURE: {
+      if (
+        payload.genomeId !== state.selectedGenomeId ||
+        state.status !== 'FETCHING_CLUSTERS'
+      ) return state;
       return {
         ...state,
         status: 'FAILED_FETCHING_CLUSTERS',
       };
+    }
     case FETCH_CLUSTERS.SUCCESS: {
+      if (
+        payload.genomeId !== state.selectedGenomeId ||
+        state.status !== 'FETCHING_CLUSTERS'
+      ) return state;
       const { result = {} } = payload;
       const { names, sts, genomeIdx, scheme } = result;
       const { pi, lambda } = result.clusterIndex;
@@ -107,29 +131,43 @@ export default function (state = initialState, { type, payload }) {
         ...state,
         status: 'FETCHING_EDGES',
       };
-    case FETCH_CLUSTER_EDGES.FAILURE:
+    case FETCH_CLUSTER_EDGES.FAILURE: {
+      if (
+        state.status !== 'FETCHING_EDGES' ||
+        state.selectedGenomeId !== payload.genomeId ||
+        state.threshold !== payload.threshold
+      ) return state;
       return {
         ...state,
         status: 'FAILED_FETCHING_EDGES',
       };
-    case FETCH_CLUSTER_EDGES.SUCCESS:
+    }
+    case FETCH_CLUSTER_EDGES.SUCCESS: {
+      if (
+        state.status !== 'FETCHING_EDGES' ||
+        state.selectedGenomeId !== payload.genomeId ||
+        state.threshold !== payload.threshold
+      ) return state;
       return {
         ...state,
         edgeMatrix: payload.result.edges,
         status: 'FETCHED_EDGES',
       };
+    }
 
     case RUN_CLUSTER_LAYOUT.ATTEMPT:
       return {
         ...state,
         status: 'RUNNING_LAYOUT',
       };
-    case RUN_CLUSTER_LAYOUT.SUCCESS:
+    case RUN_CLUSTER_LAYOUT.SUCCESS: {
+      if (payload.result.skip) return state;
       return {
         ...state,
         status: 'COMPLETED_LAYOUT',
-        nodeCoordinates: payload.result,
+        nodeCoordinates: payload.result.coordinates,
       };
+    }
 
     case SET_CLUSTER_THRESHOLD:
       return payload === state.threshold ? state : {
@@ -148,7 +186,7 @@ export default function (state = initialState, { type, payload }) {
       };
 
     case SHOW_GENOME_REPORT.ATTEMPT:
-      return payload.genomeId === state.selectedGenomeId ? state : { ...initialState, selectedGenomeId: payload.genomeId };
+      return { ...initialState, selectedGenomeId: payload.genomeId };
 
     case SET_CLUSTER_GENOME:
       return payload === state.selectedGenomeId ? state : { ...initialState, selectedGenomeId: payload };

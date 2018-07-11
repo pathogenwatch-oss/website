@@ -16,6 +16,7 @@ export function build(genomeId) {
     type: REQUEST_BUILD_CLUSTERS,
     payload: {
       promise: api.requestClustering(genomeId).then(([ , , { status } ]) => ({ statusCode: status })),
+      genomeId,
     },
   };
 }
@@ -32,6 +33,7 @@ export function fetch(genomeId) {
     type: FETCH_CLUSTERS,
     payload: {
       promise: api.fetchClusters(genomeId),
+      genomeId,
     },
   };
 }
@@ -41,6 +43,9 @@ export function fetchEdgeMatrix(genomeId, threshold, sts) {
     type: FETCH_CLUSTER_EDGES,
     payload: {
       promise: api.fetchClusterEdges(genomeId, threshold, sts),
+      genomeId,
+      threshold,
+      sts,
     },
   };
 }
@@ -78,9 +83,13 @@ export function runLayout(nEdges, network, options) {
         const timeout = Math.min(Math.max(1000, nEdges / 5), 10000);
         setTimeout(() => {
           if (!network) reject('Need a network object to stop layout');
-          network.stopForceAtlas2();
-          const nodes = network.graph.nodes();
-          resolve(getNodeCoordinates(nodes));
+          try {
+            network.stopForceAtlas2();
+            const nodes = network.graph.nodes();
+            resolve({ coordinates: getNodeCoordinates(nodes) });
+          } catch (e) {
+            resolve({ skip: true });
+          }
         }, timeout);
       }),
     },
