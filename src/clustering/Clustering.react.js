@@ -19,26 +19,18 @@ const LAYOUT_OPTIONS = {
 
 const Clustering = React.createClass({
   componentDidMount() {
-    const { status } = this.props;
-    switch (status) {
-      case 'INITIAL_STATUS':
-      case 'BUILT_CLUSTERS':
-        this.props.fetch(this.props.selectedGenomeId);
-        break;
-      case 'FETCHED_CLUSTERS':
-        this.props.fetchEdgeMatrix(this.props);
-        break;
-      case 'FETCHED_EDGES':
-        this.props.runLayout(this.props.edgesCount, this.network, LAYOUT_OPTIONS);
-        break;
-      default:
-        break;
-    }
+    this.update();
   },
 
   componentDidUpdate(prevProps) {
+    this.update(prevProps);
+  },
+
+  update(prevProps = {}) {
     const { props } = this;
-    if (props.status === 'BUILT_CLUSTERS' && prevProps.status !== 'BUILT_CLUSTERS') {
+    if (props.status === 'INITIAL_STATUS' && prevProps.status !== 'INITIAL_STATUS') {
+      props.fetch(this.props.selectedGenomeId);
+    } else if (props.status === 'BUILT_CLUSTERS' && prevProps.status !== 'BUILT_CLUSTERS') {
       props.fetch(this.props.selectedGenomeId);
     } else if (props.status === 'FETCHED_CLUSTERS' && prevProps.status !== 'FETCHED_CLUSTERS') {
       if (props.numberOfNodesInCluster > 1) props.fetchEdgeMatrix(props);
