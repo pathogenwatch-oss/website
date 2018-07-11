@@ -54,10 +54,10 @@ const Clustering = React.createClass({
     }
   },
 
-  renderClusterButton(label = 'Cluster Now', primiary = false) {
+  renderClusterButton(label = 'Cluster Now', primary = false) {
     return (
       <button
-        className={classnames('mdl-button mdl-button--raised', { 'mdl-button--colored': primiary })}
+        className={classnames('mdl-button mdl-button--raised', { 'mdl-button--colored': primary })}
         onClick={() => this.props.build(this.props.selectedGenomeId)}
       >
         {label}
@@ -71,8 +71,7 @@ const Clustering = React.createClass({
     return (
       <Link
         to={link}
-        className={classnames('mdl-button mdl-button--raised mdl-button--colored')}
-        style={{ marginLeft: '10px' }}
+        className="mdl-button mdl-button--raised mdl-button--colored pw-cluster-buttons-view"
       >
         {label}
       </Link>
@@ -89,8 +88,8 @@ const Clustering = React.createClass({
     const width = 584;
     const height = 320;
 
-    const fetchingMessage = <div style={{ width: `${width}px`, height: `${height}px` }}><p className="wgsa-blink">Fetching cluster...</p></div>;
-    const errorMessage = <div style={{ width: `${width}px`, height: `${height}px` }}><p>Couldn't fetch the cluster, try another threshold</p></div>;
+    const fetchingMessage = <div style={{ width, height }}><p className="wgsa-blink">Fetching cluster...</p></div>;
+    const errorMessage = <div style={{ width, height }}><p>Couldn't fetch the cluster, try another threshold</p></div>;
 
     switch (this.props.status) {
       case 'INITIAL_STATUS':
@@ -183,11 +182,11 @@ const Clustering = React.createClass({
             case 'COMPLETED_LAYOUT':
             case 'SKIP_NETWORK':
               return (
-                <div style={{ position: 'relative' }}>
+                <div className="pw-cluster-view">
                   {this.renderNetwork()}
-                  <p style={{ marginTop: 16, marginBottom: 5 }}>Pick a threshold by clicking on the chart below</p>
+                  <p className="pw-cluster-chart-intro">Pick a threshold by clicking on the chart below</p>
                   {this.renderChart()}
-                  <div style={{ position: 'absolute', right: '0px' }}>
+                  <div className="pw-cluster-buttons">
                     {this.renderClusterButton('Recluster')}
                     {this.renderViewButton()}
                   </div>
