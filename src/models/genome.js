@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const geocoding = require('geocoding');
-const trimUserDefinedMetadata = require('wgsa-front-end/universal/trimUserDefinedMetadata');
 
 const {
   setToObjectOptions,
@@ -29,6 +28,7 @@ const schema = new Schema({
   day: Number,
   errored: { type: Array, default: null },
   fileId: { type: String, index: true },
+  filename: String,
   lastAccessedAt: Date,
   lastUpdatedAt: Date,
   latitude: Number,
@@ -138,7 +138,9 @@ schema.statics.updateMetadata = function (_id, { user }, metadata) {
     latitude = null,
     longitude = null,
     pmid,
-    userDefined } = metadata;
+    userDefined,
+  } = metadata;
+
   const country = getCountryCode(latitude, longitude);
 
   const query = { _id };
@@ -156,8 +158,9 @@ schema.statics.updateMetadata = function (_id, { user }, metadata) {
     longitude,
     country,
     pmid,
-    userDefined: trimUserDefinedMetadata(userDefined),
-  }).then(({ nModified }) => ({ nModified, country }));
+    userDefined,
+  })
+  .then(({ nModified }) => ({ nModified, country }));
 };
 
 schema.statics.getPrefilterCondition = function ({ user, query = {} }) {
