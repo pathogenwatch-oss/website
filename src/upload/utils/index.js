@@ -2,11 +2,8 @@ import { readAsText } from 'promise-file-reader';
 
 import MetadataUtils from '../../utils/Metadata';
 
-import {
-  validateGenomeSize,
-  validateGenomeContent,
-  validateMetadata,
-} from './validation';
+import { validateGenomeSize, validateGenomeContent } from './validation';
+import validateMetadata from '../../../universal/validateMetadata.js';
 
 import { DEFAULT } from '../../app/constants';
 import getCompressWorker from 'worker-loader?name=compress-worker.[hash].js!./compressWorker';
@@ -24,11 +21,7 @@ function parseMetadata(row) {
 
   const genomeName = displayname || id || name || filename;
 
-  try {
-    validateMetadata({ name: genomeName, ...columns });
-  } catch (e) {
-    throw new Error(e.message);
-  }
+  validateMetadata({ name: genomeName, ...columns });
 
   const {
     year,
@@ -38,7 +31,7 @@ function parseMetadata(row) {
     longitude,
     pmid,
     ...userDefined,
-  } = row;
+  } = columns;
 
   return {
     hasMetadata: true,
