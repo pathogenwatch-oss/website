@@ -46,16 +46,15 @@ module.exports = async ({ user, id }) => {
   const genome = await request('genome', 'authorise', { user, id, projection });
 
   // TODO: Add task versions back when version-switching added to front-end
-
-  const promises = [
+  return genome;
+  // const promises = [
     // Analysis.find(
     //   { fileId: genome.fileId, task: { $in: taskNames } },
     //   { _id: 0, task: 1, version: 1 }
     // ).lean(),
-    request('genome', 'fetch-clusters', { user, id }),
-  ];
+  // ];
 
-  const [ /* tasks,*/ clustering = null ] = await Promise.all(promises);
+  // const [ /* tasks,*/ clustering = null ] = await Promise.all(promises);
 
-  return Object.assign(genome, { /* tasks,*/ clustering });
+  // return Object.assign(genome, { tasks });
 };

@@ -312,4 +312,15 @@ schema.statics.getForCollection = function (query) {
   .then(genomes => genomes.map(doc => Object.assign(doc, { uuid: doc._id })));
 };
 
+schema.statics.lookupCgMlstScheme = async function (genomeId, user) {
+  const query = {
+    _id: genomeId,
+    'analysis.cgmlst.scheme': { $exists: true },
+    ...this.getPrefilterCondition({ user }),
+  };
+  const projection = { 'analysis.cgmlst.scheme': 1 };
+  const genome = await this.findOne(query, projection);
+  return genome ? genome.analysis.cgmlst.scheme : undefined;
+};
+
 module.exports = mongoose.model('Genome', schema);
