@@ -39,6 +39,7 @@
 .wgsa-homepage > section footer {
   display: flex;
   justify-content: center;
+  margin-bottom: 24px;
 }
 
 .wgsa-homepage .mdl-button {

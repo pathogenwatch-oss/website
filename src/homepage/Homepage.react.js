@@ -87,7 +87,7 @@ export default ({ deployedOrganisms }) => (
             <tr>
               <th>Organism</th>
               <th>AMR Prediction</th>
-              <th><Name /> Collections</th>
+              <th>Collections</th>
               <th>Population Search</th>
               <th>Other</th>
             </tr>
@@ -162,8 +162,8 @@ export default ({ deployedOrganisms }) => (
         </table>
       </div>
       <footer>
-        <Link to="/organisms" className="mdl-button mdl-button--raised mdl-button--colored">
-          Browse Organisms
+        <Link to="/genomes" className="mdl-button mdl-button--raised mdl-button--colored">
+          Browse Genomes
         </Link>
       </footer>
     </section>
@@ -184,7 +184,19 @@ export default ({ deployedOrganisms }) => (
           <tbody>
             <tr>
               <td>Access public genomes</td>
-              <td>Access public genomes</td>
+              <td>Upload genomes for analysis</td>
+            </tr>
+            <tr>
+              <td>
+                cgMLST clustering
+                <br />
+                <small>public genomes only</small>
+              </td>
+              <td>
+                cgMLST clustering
+                <br />
+                <small>public and uploaded genomes</small>
+              </td>
             </tr>
             <tr>
               <td>
@@ -203,15 +215,9 @@ export default ({ deployedOrganisms }) => (
               </td>
             </tr>
             <tr>
-              <td />
+              <td>Access public collections</td>
               <td>
                 Create collections of up to<br /><strong>{maxCollectionSize}</strong> genomes
-              </td>
-            </tr>
-            <tr>
-              <td />
-              <td>
-                Core genome clustering
               </td>
             </tr>
           </tbody>
