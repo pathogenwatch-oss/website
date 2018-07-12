@@ -51,3 +51,43 @@ export function isInvalidUpload({ error }) {
 export function isFailedUpload({ error }) {
   return error && !(error instanceof InvalidGenomeError);
 }
+
+export function validateMetadata(row) {
+  const {
+    name = '',
+    year = null,
+    month = null,
+    day = null,
+    latitude = null,
+    longitude = null,
+    pmid = '',
+    ...userDefined,
+  } = row;
+
+  let error;
+
+  if (name.length > 256) {
+    error = 'name is too long';
+  }
+  if (pmid.length > 16) {
+    error = 'pmid is too long';
+  }
+  if (Object.keys(userDefined).length > 64) {
+    error = 'more than 64 user-defined columns';
+  }
+  if (Object.entries(userDefined)
+      .some(([ key, value ]) => key.length > 256 || value.length > 256)
+  ) {
+    error = 'user-defined key or value too long';
+  }
+  if (isNaN(latitude) || isNaN(longitude)) {
+    error = 'latitude or longitude is not a number';
+  }
+  if (isNaN(year) || isNaN(month) || isNaN(day)) {
+    error = 'year/month/day is not a number';
+  }
+
+  if (error) {
+    throw new Error(`Invalid metadata: ${error}`);
+  }
+}

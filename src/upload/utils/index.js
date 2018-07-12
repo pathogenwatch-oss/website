@@ -2,8 +2,11 @@ import { readAsText } from 'promise-file-reader';
 
 import MetadataUtils from '../../utils/Metadata';
 
-import { validateGenomeSize, validateGenomeContent } from './validation';
-import trimUserDefinedMetadata from '../../../universal/trimUserDefinedMetadata';
+import {
+  validateGenomeSize,
+  validateGenomeContent,
+  validateMetadata,
+} from './validation';
 
 import { DEFAULT } from '../../app/constants';
 import getCompressWorker from 'worker-loader?name=compress-worker.[hash].js!./compressWorker';
@@ -16,6 +19,18 @@ function parseMetadata(row) {
     id,
     name,
     filename,
+    ...columns,
+  } = row;
+
+  const genomeName = displayname || id || name || filename;
+
+  try {
+    validateMetadata({ name: genomeName, ...columns });
+  } catch (e) {
+    throw new Error(e.message);
+  }
+
+  const {
     year,
     month,
     day,
@@ -27,14 +42,14 @@ function parseMetadata(row) {
 
   return {
     hasMetadata: true,
-    name: (displayname || id || name || filename).slice(0, 256),
+    name: genomeName,
     year: year ? parseInt(year, 10) : null,
     month: month ? parseInt(month, 10) : null,
     day: day ? parseInt(day, 10) : null,
     latitude: latitude ? parseFloat(latitude) : null,
     longitude: longitude ? parseFloat(longitude) : null,
-    pmid: pmid ? pmid.slice(0, 16) : null,
-    userDefined: trimUserDefinedMetadata(userDefined),
+    pmid: pmid || null,
+    userDefined,
   };
 }
 
