@@ -119,14 +119,14 @@ function attachInputStream(container, spec, metadata, genomes, uncachedSTs) {
 
 function handleContainerOutput(container, spec, metadata) {
   const { task, version } = spec;
-  const { scheme, clientId } = metadata;
+  const { scheme, clientId, taskId } = metadata;
   let resolve;
   let reject;
   const output = new Promise((_resolve, _reject) => {
     resolve = _resolve;
     reject = _reject;
   });
-  request('clustering', 'send-progress', { clientId, payload: { task, status: 'IN PROGRESS' } });
+  request('clustering', 'send-progress', { clientId, payload: { task, status: 'IN PROGRESS', taskId } });
   let lastProgress = 0;
   const results = [];
   const cache = [];
@@ -155,14 +155,14 @@ function handleContainerOutput(container, spec, metadata) {
         } else if (doc.progress) {
           const progress = doc.progress * 0.99;
           if ((progress - lastProgress) >= 1) {
-            request('clustering', 'send-progress', { clientId, payload: { task, status: 'IN PROGRESS', progress } });
+            request('clustering', 'send-progress', { clientId, payload: { task, status: 'IN PROGRESS', progress, taskId } });
             lastProgress = progress;
           }
         } else {
           results.push(doc);
         }
       } catch (e) {
-        request('clustering', 'send-progress', { clientId, payload: { task, status: 'ERROR' } });
+        request('clustering', 'send-progress', { clientId, payload: { task, status: 'ERROR', taskId } });
         reject(e);
       }
     })
@@ -172,7 +172,7 @@ function handleContainerOutput(container, spec, metadata) {
 
 function handleContainerExit(container, spec, metadata) {
   const { task, version } = spec;
-  const { user, scheme, clientId } = metadata;
+  const { user, scheme, clientId, taskId } = metadata;
   let startTime = process.hrtime();
   let resolve;
   let reject;
@@ -194,7 +194,7 @@ function handleContainerExit(container, spec, metadata) {
     TaskLog.create({ task, version, user, scheme, duration, exitCode });
 
     if (exitCode !== 0) {
-      request('clustering', 'send-progress', { clientId, payload: { task, status: 'ERROR' } });
+      request('clustering', 'send-progress', { clientId, payload: { task, status: 'ERROR', taskId } });
       container.stderr.setEncoding('utf8');
       reject(new Error(container.stderr.read()));
     } else {
@@ -203,7 +203,7 @@ function handleContainerExit(container, spec, metadata) {
   });
 
   container.on('error', (e) => {
-    request('clustering', 'send-progress', { clientId, payload: { task, status: 'ERROR' } });
+    request('clustering', 'send-progress', { clientId, payload: { task, status: 'ERROR', taskId } });
     reject(e);
   });
 

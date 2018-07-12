@@ -1,5 +1,6 @@
 const Genome = require('../../models/genome');
 const { enqueue, queues, Queue } = require('../taskQueue');
+const rand = require('rand-token');
 
 const { getClusteringTask } = require('../../manifest');
 
@@ -22,6 +23,7 @@ module.exports = async function ({ user, genomeId, clientId }) {
     throw new ServiceRequestError('Already queued this job');
   }
 
-  await enqueue(queues.clustering, { spec, metadata: { user, scheme, clientId } });
-  return { ok: 1 };
+  const taskId = rand.generate(16);
+  await enqueue(queues.clustering, { spec, metadata: { user, scheme, clientId, taskId } });
+  return { ok: 1, taskId };
 };
