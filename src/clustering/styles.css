@@ -1,0 +1,26 @@
+.pw-network-cover-message {
+  position: absolute;
+  top: 0px;
+  z-index: 2;
+  background-color: rgba(255, 255, 255, 0.87);
+  padding-bottom: 4px;
+  padding-right: 4px;
+}
+
+.pw-cluster-view {
+  position: relative;
+}
+
+.pw-cluster-buttons {
+  position: absolute;
+  right: 0px;
+}
+
+.pw-cluster-buttons-view {
+  margin-left: 10px;
+}
+
+.pw-cluster-chart-intro {
+  margin-top: 16px;
+  margin-bottom: 5px;
+}

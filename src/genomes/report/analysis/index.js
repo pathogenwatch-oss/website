@@ -6,14 +6,14 @@ import Metrics from './Metrics.react';
 import Core from './Core.react';
 import MLST from './MLST.react';
 import PAARSNP from './PAARSNP.react';
-import Clustering from './Clustering.react';
 import Speciator from './Speciator.react';
 import Genotyphi from './Genotyphi.react';
 import NgMast from './NgMast.react';
 import renderGenericResults from './Generic.react';
+import Clustering from '../../../clustering';
 
 export default (genome) => {
-  const { analysis = {}, id } = genome;
+  const { analysis = {} } = genome;
   const { metrics, core, mlst, paarsnp, genotyphi, ngmast, speciator, cgmlst, ...rest } = analysis;
 
   const tabs = [];
@@ -45,7 +45,7 @@ export default (genome) => {
   if (cgmlst) {
     tabs.push({
       key: 'Clustering',
-      component: <Clustering genomeId={id} scheme={cgmlst.scheme} />,
+      component: <Clustering />,
     });
   }
   if (core) {
