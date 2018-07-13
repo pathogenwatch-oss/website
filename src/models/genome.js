@@ -1,9 +1,15 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
+const path = require('path');
 
 const geocoding = require('geocoding');
 
-const { setToObjectOptions, addPreSaveHook, getSummary, getBinExpiryDate } = require('./utils');
+const {
+  setToObjectOptions,
+  addPreSaveHook,
+  getSummary,
+  getBinExpiryDate,
+} = require('./utils');
 
 function getDate(year, month = 1, day = 1) {
   if (year) {
@@ -23,14 +29,15 @@ const schema = new Schema({
   day: Number,
   errored: { type: Array, default: null },
   fileId: { type: String, index: true },
+  filename: { type: String, maxLength: 256, set: filename => path.basename(filename) },
   lastAccessedAt: Date,
   lastUpdatedAt: Date,
   latitude: Number,
   longitude: Number,
   month: Number,
-  name: { type: String, required: true, index: 'text' },
+  name: { type: String, required: true, index: 'text', maxLength: 256, trim: true },
   pending: { type: Array, default: null },
-  pmid: String,
+  pmid: { type: String, maxLength: 16 },
   population: { type: Boolean, default: false, index: true },
   public: { type: Boolean, default: false, index: true },
   reference: { type: Boolean, default: false },
@@ -132,7 +139,9 @@ schema.statics.updateMetadata = function (_id, { user }, metadata) {
     latitude = null,
     longitude = null,
     pmid,
-    userDefined } = metadata;
+    userDefined,
+  } = metadata;
+
   const country = getCountryCode(latitude, longitude);
 
   const query = { _id };
@@ -151,7 +160,8 @@ schema.statics.updateMetadata = function (_id, { user }, metadata) {
     country,
     pmid,
     userDefined,
-  }).then(({ nModified }) => ({ nModified, country }));
+  })
+  .then(({ nModified }) => ({ nModified, country }));
 };
 
 schema.statics.getPrefilterCondition = function ({ user, query = {} }) {
