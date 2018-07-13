@@ -7,7 +7,7 @@ module.exports = function validateMetadata(row) {
     latitude = null,
     longitude = null,
     pmid = '',
-    ...userDefined } = row; // Node errors if there is a comma at the end of list
+    ...userDefined } = row; // Node errors if the final key has a comma ¯\_(ツ)_/¯
 
   let error;
 
@@ -33,8 +33,8 @@ module.exports = function validateMetadata(row) {
     error = 'more than 64 user-defined columns';
   } else {
     for (const [ key, value ] of Object.entries(userDefined)) {
-      if (typeof value !== 'string') {
-        error = 'user-defined value is not a string';
+      if (typeof value === 'object') {
+        error = 'user-defined value is wrong type';
         break;
       }
       if (value.length > 256) {
