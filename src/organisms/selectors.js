@@ -10,9 +10,9 @@ const compareStrings = (a, b) => {
   return 0;
 };
 
-export const getWgsaOrganisms = createSelector(
+export const getSupportedOrganisms = createSelector(
   getOrganisms,
-  ({ wgsaOrganisms }) => wgsaOrganisms.sort(
+  ({ supportedOrganisms }) => supportedOrganisms.sort(
     (a, b) => compareStrings(
       taxIdMap.get(a.organismId).name,
       taxIdMap.get(b.organismId).name
@@ -20,12 +20,9 @@ export const getWgsaOrganisms = createSelector(
   )
 );
 
-export const getOtherOrganisms = createSelector(
+export const getAllSpecies = createSelector(
   getOrganisms,
-  ({ otherOrganisms }) => {
-    window.otherOrganisms = otherOrganisms;
-    return otherOrganisms.sort(
-      (a, b) => compareStrings(a.organismName, b.organismName)
-    );
-  }
+  ({ allSpecies }) => allSpecies.sort(
+    (a, b) => compareStrings(a.speciesName, b.speciesName)
+  )
 );

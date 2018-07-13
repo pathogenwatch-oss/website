@@ -7,14 +7,14 @@ import DocumentTitle from '../../branding/DocumentTitle.react';
 
 import { taxIdMap } from '../index';
 
-import { getWgsaOrganisms } from '../selectors';
+import { getSupportedOrganisms } from '../selectors';
 
 import { fetchSummary } from '../actions';
 
 function mapStateToProps(state, { organismId }) {
   return {
     ...(
-      getWgsaOrganisms(state).find(_ => _.organismId === organismId.toString())
+      getSupportedOrganisms(state).find(_ => _.organismId === organismId.toString())
     ),
   };
 }
@@ -39,7 +39,7 @@ const Details = React.createClass({
         <DocumentTitle>{name}</DocumentTitle>
         <div className="mdl-cell mdl-cell--12-col">
           <Breadcrumb>
-            <Link to="/organisms">All Organisms</Link>
+            <Link to="/organisms">Organisms</Link>
             {formattedName}
           </Breadcrumb>
           <h1 className="wgsa-page-divider wgsa-page-title">{formattedName}</h1>

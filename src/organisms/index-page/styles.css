@@ -1,16 +1,20 @@
 .wgsa-organism-card {
-  text-decoration: none !important;
+  text-decoration: none;
 }
 
-.wgsa-organism-card h3 {
-  color: #3c7383;
-  font-family: inherit !important;
+.wgsa-organism-card[href] h3 {
+  text-decoration: underline;
 }
 
 .wgsa-organism-card[href]:hover h3,
 .wgsa-organism-card[href]:focus h3,
 .wgsa-organism-card[href]:active h3 {
-  text-decoration: underline !important;
+  text-decoration: none;
+}
+
+.wgsa-organism-card h3 {
+  color: #3c7383;
+  font-family: inherit !important;
 }
 
 .wgsa-organism-card .material-icons {
