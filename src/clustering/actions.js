@@ -15,7 +15,12 @@ export function build(genomeId) {
   return {
     type: REQUEST_BUILD_CLUSTERS,
     payload: {
-      promise: api.requestClustering(genomeId).then(([ { taskId }, , { status } ]) => ({ taskId, statusCode: status })),
+      promise:
+        api.requestClustering(genomeId)
+          .then(([ data, , { status } ]) => {
+            if (!data) return { statusCode: status };
+            return { taskId: data.taskId, statusCode: status };
+          }),
       genomeId,
     },
   };

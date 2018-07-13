@@ -106,7 +106,7 @@ const Clustering = React.createClass({
       default:
         return errorMessage;
     }
-  
+
     const overNode = ({ data }) => {
       data.node.label = data.node._label;
       this.network.refresh();
@@ -161,13 +161,13 @@ const Clustering = React.createClass({
               const { progress = 0 } = this.props;
               if (progress > 0) {
                 return (
-                  <Notify topic="clustering" onMessage={this.props.updateProgress}>
+                  <Notify room={this.props.taskId} topic="clustering" onMessage={this.props.updateProgress}>
                     <p>Running ({progress.toFixed(1)}%)</p>
                   </Notify>
                 );
               }
               return (
-                <Notify topic="clustering" onMessage={this.props.updateProgress}>
+                <Notify room={this.props.taskId} topic="clustering" onMessage={this.props.updateProgress}>
                   <p>Job queued, please wait <span className="wgsa-blink">⏳</span></p>
                 </Notify>
               );
@@ -205,28 +205,29 @@ const Clustering = React.createClass({
 
 function mapStateToProps(state) {
   return {
-    selectedGenomeId: selectors.getSelectedGenomeId(state),
-    status: selectors.getStatus(state),
-    threshold: selectors.getThreshold(state),
-    triedBuilding: selectors.getTriedBuilding(state),
-    edgesMatrix: selectors.getEdgeMatrix(state),
-    progress: selectors.getProgress(state),
-    skipMessage: selectors.getSkipMessage(state),
-    nodeCoordinates: selectors.getNodeCoordinates(state),
+    chartClusterSizes: selectors.getChartClusterSizes(state),
+    chartThresholds: selectors.getChartThresholds(state),
+    clusterNodeColors: selectors.getClusterNodeColors(state),
+    clusterNodeDegrees: selectors.getClusterNodeDegrees(state),
+    clusterNodeLabels: selectors.getClusterNodeLabels(state),
+    clusterNodeSizes: selectors.getClusterNodeSizes(state),
+    clusterSts: selectors.getClusterSts(state),
+    edgeColors: selectors.getEdgeColors(state),
     edgesCount: selectors.getEdgesCount(state),
     edgesExist: selectors.getEdgesExist(state),
-    clusterSts: selectors.getClusterSts(state),
-    numberOfNodesInCluster: selectors.getNumberOfNodesInCluster(state),
-    indexOfSelectedInCluster: selectors.getIndexOfSelectedInCluster(state),
-    clusterNodeLabels: selectors.getClusterNodeLabels(state),
-    clusterNodeDegrees: selectors.getClusterNodeDegrees(state),
-    clusterNodeColors: selectors.getClusterNodeColors(state),
-    clusterNodeSizes: selectors.getClusterNodeSizes(state),
-    minDegreeForEdge: selectors.getMinDegreeForEdge(state),
-    edgeColors: selectors.getEdgeColors(state),
-    chartThresholds: selectors.getChartThresholds(state),
-    chartClusterSizes: selectors.getChartClusterSizes(state),
+    edgesMatrix: selectors.getEdgeMatrix(state),
     graph: selectors.getGraph(state),
+    indexOfSelectedInCluster: selectors.getIndexOfSelectedInCluster(state),
+    minDegreeForEdge: selectors.getMinDegreeForEdge(state),
+    nodeCoordinates: selectors.getNodeCoordinates(state),
+    numberOfNodesInCluster: selectors.getNumberOfNodesInCluster(state),
+    progress: selectors.getProgress(state),
+    selectedGenomeId: selectors.getSelectedGenomeId(state),
+    skipMessage: selectors.getSkipMessage(state),
+    status: selectors.getStatus(state),
+    taskId: selectors.getTaskId(state),
+    threshold: selectors.getThreshold(state),
+    triedBuilding: selectors.getTriedBuilding(state),
   };
 }
 

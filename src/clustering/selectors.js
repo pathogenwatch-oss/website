@@ -113,6 +113,7 @@ export const getIndexOfSelectedInAll = state => getClusterState(state).indexOfSe
 const getNames = state => getClusterState(state).names;
 export const getSkipMessage = state => getClusterState(state).skipMessage;
 export const getNodeCoordinates = state => getClusterState(state).nodeCoordinates || [];
+export const getTaskId = state => getClusterState(state).taskId;
 
 export const getEdgesCount = createSelector(
   getEdgeMatrix,
@@ -137,7 +138,7 @@ export const getClusterSts = createSelector(
   getClusters,
   (indexOfSelectedInAll, allSts, clusters) => {
     if (!clusters) return undefined;
-    return allSts.filter((_, i) => clusters[i] === clusters[indexOfSelectedInAll])
+    return allSts.filter((_, i) => clusters[i] === clusters[indexOfSelectedInAll]);
   }
 );
 export const getNumberOfNodesInCluster = createSelector(
