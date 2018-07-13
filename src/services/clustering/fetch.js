@@ -50,7 +50,10 @@ module.exports = async function ({ user, genomeId }) {
   if (!clusters) return {};
 
   const { results } = clusters;
-  const { pi, lambda, sts = [] } = results.find(_ => _.pi); // Ignore old fashioned results with fixed thresholds
+  const result = results.find(_ => _.pi); // Ignore old fashioned results with fixed thresholds
+  if (!result) return {};
+
+  const { pi, lambda, sts = [] } = result;
   const { names, genomeIdx } = await mapStsToGenomeNames({ genomeId, sts, user });
 
   return {

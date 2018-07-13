@@ -1,7 +1,7 @@
 const notificationDispatcher = require('services/notificationDispatcher');
 
-module.exports = function ({ clientId, payload }) {
+module.exports = function ({ taskId, payload }) {
   notificationDispatcher.publishNotification(
-    clientId, 'clustering', Object.assign({ timestamp: Date.now() }, payload)
+    taskId, 'clustering', Object.assign({ timestamp: Date.now() }, payload)
   );
 };
