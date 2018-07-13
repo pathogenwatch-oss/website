@@ -63,6 +63,7 @@ const Content = React.createClass({
               </a>
             </li>) }
           </ScrollSpy>
+          <RemoveButton key="remove" genome={genome} onRemove={close} />
         </nav>
         { sections.map(({ key, component }) =>
           <section
@@ -94,7 +95,6 @@ const Report = ({ name, genome, loading, close }) => {
           onClose={close}
           animationKey="genome-report"
           containerClassName="wgsa-genome-report"
-          actions={genome ? <RemoveButton key="remove" genome={genome} onRemove={close} /> : null}
         >
           { loading ?
             <div className="wgsa-genome-report-loader">

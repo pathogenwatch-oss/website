@@ -20,26 +20,29 @@ export default ({ genome }) => {
       <header>
         <Logo />
       </header>
-      <section className="wgsa-genome-report-summary-content">
+      <h1 title={genome.name}>{genome.name}</h1>
+      <div className="h5">
+        { speciator ?
+          <FormattedName fullName
+            organismId={speciator.organismId}
+            title={speciator.organismName}
+          /> :
+          <em>Pending speciation</em> }
+      </div>
+      <dl>
         <div>
-          <h1 title={genome.name}>{genome.name}</h1>
-          <div className="h5">
-            { speciator ?
-              <FormattedName fullName
-                organismId={speciator.organismId}
-                title={speciator.organismName}
-              /> :
-              <em>Pending speciation</em> }
-          </div>
+          <dt>Date</dt>
+          <dd>{date}</dd>
         </div>
-        <p>
-          {date}
-          { date && <br /> }
-          {country && getCountryName(country)}
-          { country && <br /> }
-          { pmid && <span>PMID: <PubMedLink pmid={pmid}>{pmid}</PubMedLink></span> }
-        </p>
-      </section>
+        <div>
+          <dt>Country</dt>
+          <dd>{getCountryName(country)}</dd>
+        </div>
+        <div>
+          <dt>PMID</dt>
+          <dd><PubMedLink pmid={pmid}>{pmid}</PubMedLink></dd>
+        </div>
+      </dl>
     </div>
   );
 };
