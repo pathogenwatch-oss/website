@@ -45,6 +45,7 @@ export default function (state = initialState, { type, payload }) {
         status: 'BUILDING_CLUSTERS',
         progress: 0.0,
         triedBuilding: true,
+        taskId: null,
       };
     case REQUEST_BUILD_CLUSTERS.FAILURE: {
       if (
@@ -68,7 +69,7 @@ export default function (state = initialState, { type, payload }) {
     }
 
     case SET_CLUSTERING_PROGRESS: {
-      if (state.status === 'BUILDING_CLUSTERS' && state.taskId === payload.taskId) {
+      if (state.status === 'BUILDING_CLUSTERS') {
         if (payload.status === 'READY') {
           return {
             ...state,

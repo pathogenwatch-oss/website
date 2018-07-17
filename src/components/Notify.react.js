@@ -7,13 +7,27 @@ import config from '../app/config';
 export default React.createClass({
 
   componentWillMount() {
-    const { room = config.clientId, topic, onMessage } = this.props;
-    subscribe(room, topic, onMessage);
+    this.subscribe();
+  },
+
+  componentDidUpdate() {
+    if (this.isSubscribed) return;
+    this.subscribe();
   },
 
   componentWillUnmount() {
     const { room = config.clientId } = this.props;
+    if (!room || !this.isSubscribed) return;
     unsubscribe(room);
+  },
+
+  isSubscribed: false,
+
+  subscribe() {
+    const { room = config.clientId, topic, onMessage } = this.props;
+    if (!room) return;
+    subscribe(room, topic, onMessage);
+    this.isSubscribed = true;
   },
 
   render() {
