@@ -16,5 +16,6 @@ const schema = new Schema({
 addPreSaveHook(schema);
 
 schema.index({ user: 1, scheme: 1 });
+schema.index({ public: 1, scheme: 1 });
 
 module.exports = mongoose.model('Clustering', schema);
