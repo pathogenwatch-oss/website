@@ -19,15 +19,15 @@ module.exports = function validateMetadata(row) {
     error = 'pmid is wrong type';
   } else if (pmid && pmid.length > 16) {
     error = 'pmid is too long';
-  } else if (isNaN(latitude) || typeof latitude === 'object') {
+  } else if (latitude !== null && (isNaN(latitude) || typeof latitude === 'object')) {
     error = 'latitude is not a number';
-  } else if (isNaN(longitude) || typeof longitude === 'object') {
+  } else if (longitude !== null && (isNaN(longitude) || typeof longitude === 'object')) {
     error = 'longitude is not a number';
-  } else if (isNaN(year) || typeof year === 'object') {
+  } else if (year !== null && (isNaN(year) || typeof year === 'object')) {
     error = 'year is not a number';
-  } else if (isNaN(month) || typeof month === 'object') {
+  } else if (month !== null && (isNaN(month) || typeof month === 'object')) {
     error = 'month is not a number';
-  } else if (isNaN(day) || typeof day === 'object') {
+  } else if (day !== null && (isNaN(day) || typeof day === 'object')) {
     error = 'day is not a number';
   } else if (Object.keys(userDefined).length > 64) {
     error = 'more than 64 user-defined columns';
