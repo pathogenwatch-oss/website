@@ -5,21 +5,34 @@ import { Link } from 'react-router-dom';
 import ActivityList from './ActivityList.react';
 import AccountImage from './AccountImage.react';
 
+import { getAccount } from './selectors';
 import { getSummary } from '../summary/selectors';
+
+import { statuses } from './constants';
 
 import config from '../app/config';
 
-const Profile = ({ userCollections, userGenomes }) => {
-  const { user } = config;
-  if (!user) return null;
+const renderProfileContent = ({ status, summary }) => {
+  if (status === statuses.LOADING) return null;
+
+  const { userCollections = 0, userGenomes = 0 } = summary;
+  if (userCollections === 0 && userGenomes === 0) {
+    return (
+      <div className="wgsa-profile-section wgsa-profile-onboarding">
+        <p>Welcome to <strong>Pathogenwatch</strong>!</p>
+        <p>This is your account page, here you'll be able to see:</p>
+        <ul>
+          <li>The number of genomes you've uploaded</li>
+          <li>The number of collections you've created</li>
+          <li>A list of your recent activity</li>
+        </ul>
+        <p>To get started, <Link to="/upload">upload genomes</Link> or <Link to="/genomes">browse the public dataset</Link>.</p>
+      </div>
+    );
+  }
 
   return (
-    <div className="wgsa-hipster-style">
-      <div className="cgps-avatar cgps-avatar--centered wgsa-profile-avatar">
-        <AccountImage />
-        <div className="cgps-avatar__name title-font" title={user.name}>{user.name}</div>
-        <div className="cgps-avatar__contact" title={user.email}>{user.email}</div>
-      </div>
+    <React.Fragment>
       <div className="wgsa-hub-stats-group wgsa-profile-section">
         <Link className="wgsa-hub-stats-section wgsa-profile-counter" to="/genomes/user" title="Click to view genomes">
           <h3 className="wgsa-hub-stats-heading">Genomes</h3>
@@ -36,12 +49,33 @@ const Profile = ({ userCollections, userGenomes }) => {
           <ActivityList />
         </div>
       </div>
-    </div>
+    </React.Fragment>
   );
 };
 
 function mapStateToProps(state) {
-  return getSummary(state);
+  return {
+    status: getAccount(state),
+    summary: getSummary(state),
+  };
 }
 
-export default connect(mapStateToProps)(Profile);
+const ProfileContent = connect(mapStateToProps)(renderProfileContent);
+
+const Profile = () => {
+  const { user } = config;
+  if (!user) return null;
+
+  return (
+    <div className="wgsa-hipster-style">
+      <div className="cgps-avatar cgps-avatar--centered wgsa-profile-avatar">
+        <AccountImage />
+        <div className="cgps-avatar__name title-font" title={user.name}>{user.name}</div>
+        <div className="cgps-avatar__contact" title={user.email}>{user.email}</div>
+      </div>
+      <ProfileContent />
+    </div>
+  );
+};
+
+export default Profile;
