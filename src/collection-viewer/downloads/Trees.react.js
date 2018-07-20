@@ -1,12 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { getDownloadPrefix } from './selectors';
+import { getDownloadPrefix, getTreeName } from './selectors';
 import { getActiveGenomeIds, getCollection } from '../selectors';
 
 import { formatCollectionFilename } from './utils';
+import { isSubtree } from '../tree/utils';
+import { POPULATION } from '../../app/stateKeys/tree';
 
-const DownloadForm = ({ link, filename, title, genomeIds, children }) => (
+const DownloadForm = ({ link, filename, title, genomeIds, tree, children }) => (
   <form
     action={`${link}?filename=${filename}`}
     method="POST"
@@ -16,10 +18,12 @@ const DownloadForm = ({ link, filename, title, genomeIds, children }) => (
       download={filename}
       title={title}
       className="mdl-button"
+      disabled={tree === POPULATION}
     >
       {children}
     </button>
     { genomeIds && <input type="hidden" name="ids" value={genomeIds} /> }
+    { isSubtree(tree) && <input type="hidden" name="subtree" value={tree} /> }
   </form>
 );
 
@@ -35,7 +39,7 @@ const DownloadButton = ({ link, filename, title, children }) => (
   </a>
 );
 
-const DownloadsMenu = ({ collection, genomeIds, prefix }) => (
+const DownloadsMenu = ({ collection, genomeIds, prefix, tree }) => (
   <li>
     <h4>Trees</h4>
     <ul>
@@ -44,21 +48,30 @@ const DownloadsMenu = ({ collection, genomeIds, prefix }) => (
           link={`${prefix}/core-allele-distribution`}
           filename={formatCollectionFilename(collection, 'core-allele-distribution.csv')}
           genomeIds={genomeIds}
-        >Core Allele Distribution</DownloadForm>
+          tree={tree}
+        >
+          Core Allele Distribution
+        </DownloadForm>
       </li>
       <li>
         <DownloadForm
           link={`${prefix}/score-matrix`}
           filename={formatCollectionFilename(collection, 'score-matrix.csv')}
           genomeIds={genomeIds}
-        >Score Matrix</DownloadForm>
+          tree={tree}
+        >
+          Score Matrix
+        </DownloadForm>
       </li>
       <li>
         <DownloadForm
           link={`${prefix}/difference-matrix`}
           filename={formatCollectionFilename(collection, 'difference-matrix.csv')}
           genomeIds={genomeIds}
-        >Difference Matrix</DownloadForm>
+          tree={tree}
+        >
+          Difference Matrix
+        </DownloadForm>
       </li>
       <li>
         <DownloadButton
@@ -76,6 +89,7 @@ DownloadsMenu.propTypes = {
   collection: React.PropTypes.object,
   genomeIds: React.PropTypes.array,
   prefix: React.PropTypes.string,
+  tree: React.PropTypes.string,
 };
 
 function mapStateToProps(state) {
@@ -83,6 +97,7 @@ function mapStateToProps(state) {
     collection: getCollection(state),
     genomeIds: getActiveGenomeIds(state),
     prefix: getDownloadPrefix(state),
+    tree: getTreeName(state),
   };
 }
 
