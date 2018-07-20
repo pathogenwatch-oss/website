@@ -226,7 +226,7 @@ async function generateTreeData(tree, treeGenomeIds, collectionGenomeIds) {
   const stats = generateTreeStats(genomeSummaries, cache);
 
   const genomes = createGenomeStream(genomeSummaries, tree.versions);
-  const sites = generateTreeSites(genomes, collectionGenomeIds);
+  const sites = await generateTreeSites(genomes, collectionGenomeIds);
 
   const result = {
     label: tree.name,
