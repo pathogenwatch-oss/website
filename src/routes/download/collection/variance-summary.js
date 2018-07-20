@@ -292,14 +292,16 @@ function writeMatrixFooter(stream) {
 
 async function generateData({ genomes, tree, subtrees }, stream) {
   const collectionGenomeIds = new Set(genomes.map(id => id.toString()));
-  const collectionTree = {
-    name: 'collection',
-    size: collectionGenomeIds.size,
-    populationSize: 0,
-    versions: tree.versions,
-  };
-  const collectionData = await generateTreeData(collectionTree, Array.from(collectionGenomeIds), collectionGenomeIds);
-  writeMatrixLine(collectionData, stream);
+  if (tree) {
+    const collectionTree = {
+      name: 'collection',
+      size: collectionGenomeIds.size,
+      populationSize: 0,
+      versions: tree.versions,
+    };
+    const collectionData = await generateTreeData(collectionTree, Array.from(collectionGenomeIds), collectionGenomeIds);
+    writeMatrixLine(collectionData, stream);
+  }
 
   for (const subtree of subtrees) {
     if (subtree.status === 'READY' && (subtree.size || 0) >= 3) {
