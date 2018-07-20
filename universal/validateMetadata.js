@@ -7,7 +7,8 @@ module.exports = function validateMetadata(row) {
     latitude = null,
     longitude = null,
     pmid = '',
-    ...userDefined } = row; // Node errors if the final key has a comma ¯\_(ツ)_/¯
+    userDefined,
+  } = row;
 
   let error;
 
@@ -23,12 +24,22 @@ module.exports = function validateMetadata(row) {
     error = 'latitude is not a number';
   } else if (longitude !== null && (isNaN(longitude) || typeof longitude === 'object')) {
     error = 'longitude is not a number';
+  } else if (latitude !== null && longitude === null) {
+    error = 'latitude without longitude';
+  } else if (latitude === null && longitude !== null) {
+    error = 'longitude without latitude';
   } else if (year !== null && (isNaN(year) || typeof year === 'object')) {
     error = 'year is not a number';
   } else if (month !== null && (isNaN(month) || typeof month === 'object')) {
     error = 'month is not a number';
   } else if (day !== null && (isNaN(day) || typeof day === 'object')) {
     error = 'day is not a number';
+  } else if (day !== null && month === null) {
+    error = 'day provided without month';
+  } else if (day !== null && year === null) {
+    error = 'day provided without year';
+  } else if (month !== null && year === null) {
+    error = 'month provided without year';
   } else if (Object.keys(userDefined).length > 64) {
     error = 'more than 64 user-defined columns';
   } else {

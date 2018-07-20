@@ -44,7 +44,7 @@ export const UPLOAD_GENOME = createAsyncConstants('UPLOAD_GENOME');
 
 export function uploadGenome(genome, data) {
   return dispatch => {
-    const { id, hasMetadata, ...metadata } = genome;
+    const { id, metadata } = genome;
     const progressFn =
       percent => dispatch(genomeUploadProgress(id, percent));
 
@@ -55,7 +55,7 @@ export function uploadGenome(genome, data) {
         promise:
           api.upload(genome, data, progressFn)
             .then(uploadResult => {
-              if (hasMetadata) {
+              if (metadata) {
                 return api.update(uploadResult.id, metadata)
                   .then(updateResult => ({ ...uploadResult, ...updateResult }));
               }
