@@ -228,6 +228,8 @@ function mapStateToProps(state) {
     taskId: selectors.getTaskId(state),
     threshold: selectors.getThreshold(state),
     triedBuilding: selectors.getTriedBuilding(state),
+    scheme: selectors.getScheme(state),
+    version: selectors.getVersion(state),
   };
 }
 
@@ -237,8 +239,8 @@ function mapDispatchToProps(dispatch) {
     fetch: (selectedGenomeId) => dispatch(actions.fetch(selectedGenomeId)),
     build: (selectedGenomeId) => dispatch(actions.build(selectedGenomeId)),
     setThreshold: (threshold) => dispatch(actions.setThreshold(threshold)),
-    fetchEdgeMatrix: ({ selectedGenomeId, threshold, clusterSts }) =>
-      dispatch(actions.fetchEdgeMatrix(selectedGenomeId, threshold, clusterSts)),
+    fetchEdgeMatrix: ({ selectedGenomeId, scheme, version, threshold, clusterSts }) =>
+      dispatch(actions.fetchEdgeMatrix(selectedGenomeId, scheme, version, threshold, clusterSts)),
     runLayout: (nEdges, network, options) => dispatch(actions.runLayout(nEdges, network, options)),
     skipLayout: (network) => dispatch(actions.skipLayout(network)),
   };

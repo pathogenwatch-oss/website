@@ -43,14 +43,16 @@ export function fetch(genomeId) {
   };
 }
 
-export function fetchEdgeMatrix(genomeId, threshold, sts) {
+export function fetchEdgeMatrix(genomeId, scheme, version, threshold, sts) {
   return {
     type: FETCH_CLUSTER_EDGES,
     payload: {
-      promise: api.fetchClusterEdges(genomeId, threshold, sts),
+      promise: api.fetchClusterEdges(genomeId, scheme, version, threshold, sts),
       genomeId,
       threshold,
       sts,
+      scheme,
+      version,
     },
   };
 }
