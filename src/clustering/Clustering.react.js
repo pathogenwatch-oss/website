@@ -78,7 +78,16 @@ const Clustering = React.createClass({
       clickable = true;
     }
     const onClick = clickable ? ({ label }) => this.props.setThreshold(label) : () => {};
-    return <SimpleBarChart width={584} height={100} labels={this.props.chartThresholds} values={this.props.chartClusterSizes} onClick={onClick} toolTipFunc={toolTipFunc} />;
+    return (
+      <SimpleBarChart
+        width={584}
+        height={100}
+        labels={this.props.chartThresholds}
+        values={this.props.chartClusterSizes}
+        onClick={onClick}
+        toolTipFunc={toolTipFunc}
+      />
+    );
   },
 
   renderNetwork() {
@@ -127,12 +136,23 @@ const Clustering = React.createClass({
       opacity: this.props.status === 'RUNNING_LAYOUT' ? 0.3 : 1,
     };
 
-    return (<div style={{ position: 'relative' }}>
-      <SimpleNetwork ref={ el => { this.network = (el ? el.network : undefined); }} style={style} width={width} height={height} graph={this.props.graph} events={events} />
-      <p className="pw-network-cover-message">
-        { this.props.status === 'RUNNING_LAYOUT' ? <span className="wgsa-blink">Rendering cluster...</span> : `Clustered at threshold of ${this.props.threshold}` }
-      </p>
-    </div>);
+    return (
+      <div style={{ position: 'relative' }}>
+        <SimpleNetwork
+          ref={ el => { this.network = (el ? el.network : undefined); }}
+          style={style}
+          width={width}
+          height={height}
+          graph={this.props.graph}
+          events={events}
+        />
+        <p className="pw-network-cover-message">
+          { this.props.status === 'RUNNING_LAYOUT' ?
+            <span className="wgsa-blink">Rendering cluster...</span> :
+            `Clustered at threshold of ${this.props.threshold}` }
+        </p>
+      </div>
+    );
   },
 
   render() {
@@ -207,23 +227,13 @@ function mapStateToProps(state) {
   return {
     chartClusterSizes: selectors.getChartClusterSizes(state),
     chartThresholds: selectors.getChartThresholds(state),
-    clusterNodeColors: selectors.getClusterNodeColors(state),
-    clusterNodeDegrees: selectors.getClusterNodeDegrees(state),
-    clusterNodeLabels: selectors.getClusterNodeLabels(state),
-    clusterNodeSizes: selectors.getClusterNodeSizes(state),
     clusterSts: selectors.getClusterSts(state),
-    edgeColors: selectors.getEdgeColors(state),
     edgesCount: selectors.getEdgesCount(state),
-    edgesExist: selectors.getEdgesExist(state),
-    edgesMatrix: selectors.getEdgeMatrix(state),
     graph: selectors.getGraph(state),
     indexOfSelectedInCluster: selectors.getIndexOfSelectedInCluster(state),
-    minDegreeForEdge: selectors.getMinDegreeForEdge(state),
-    nodeCoordinates: selectors.getNodeCoordinates(state),
     numberOfNodesInCluster: selectors.getNumberOfNodesInCluster(state),
     progress: selectors.getProgress(state),
     selectedGenomeId: selectors.getSelectedGenomeId(state),
-    skipMessage: selectors.getSkipMessage(state),
     status: selectors.getStatus(state),
     taskId: selectors.getTaskId(state),
     threshold: selectors.getThreshold(state),
