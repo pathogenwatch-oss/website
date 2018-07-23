@@ -9,12 +9,18 @@ import * as selectors from './selectors';
 import * as actions from './actions';
 
 import SimpleBarChart from './SimpleBarChart.react';
-import SimpleNetwork from './SimpleNetwork.react';
+import Network from 'libmicroreact/network';
 
 const LAYOUT_OPTIONS = {
   iterationsPerRender: 100,
   worker: true,
   barnesHutOptimize: false,
+};
+
+const NETWORK_SETTINGS = {
+  edgeColor: 'default',
+  labelColor: 'node',
+  labelThreshold: 0, // hack so that nodes with labels are always shown
 };
 
 const Clustering = React.createClass({
@@ -44,6 +50,17 @@ const Clustering = React.createClass({
     ) {
       props.build(this.props.selectedGenomeId);
     }
+  },
+
+  overNode({ data }) {
+    data.node.label = data.node._label;
+    this.network.refresh();
+  },
+
+  outNode({ data }) {
+    if (data.node.id === `n${this.props.indexOfSelectedInCluster}`) return;
+    data.node.label = undefined;
+    this.network.refresh();
   },
 
   renderClusterButton(label = 'Cluster Now', primary = false) {
@@ -116,35 +133,22 @@ const Clustering = React.createClass({
         return errorMessage;
     }
 
-    const overNode = ({ data }) => {
-      data.node.label = data.node._label;
-      this.network.refresh();
-    };
-    const outNode = ({ data }) => {
-      if (data.node.id === `n${this.props.indexOfSelectedInCluster}`) return;
-      data.node.label = undefined;
-      this.network.refresh();
-    };
-
-    const events = {
-      overNode: overNode.bind(this),
-      outNode: outNode.bind(this),
-    };
-
     const style = {
+      width,
+      height,
       zIndex: 1,
       opacity: this.props.status === 'RUNNING_LAYOUT' ? 0.3 : 1,
     };
 
     return (
       <div style={{ position: 'relative' }}>
-        <SimpleNetwork
+        <Network
           ref={ el => { this.network = (el ? el.network : undefined); }}
           style={style}
-          width={width}
-          height={height}
           graph={this.props.graph}
-          events={events}
+          onNodeHover={this.overNode}
+          onNodeLeave={this.outNode}
+          settings={NETWORK_SETTINGS}
         />
         <p className="pw-network-cover-message">
           { this.props.status === 'RUNNING_LAYOUT' ?
