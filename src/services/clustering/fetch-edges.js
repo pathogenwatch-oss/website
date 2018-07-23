@@ -1,59 +1,54 @@
-const Clustering = require('../../models/clustering');
+const ClusteringCache = require('../../models/clusteringCache');
 const Genome = require('../../models/genome');
+const { NotFoundError } = require('../../utils/errors');
 
-async function getClusteringData({ scheme, user }) {
-  const query = { scheme };
-  if (user) {
-    query.user = user._id;
-  } else {
-    query.public = true;
+async function getClusteringData({ scheme, version, sts }) {
+  const query = { scheme, version, st: { $in: sts } };
+  const projection = { st: 1 };
+  for (const st of sts) {
+    projection[`alleleDifferences.${st}`] = 1;
   }
-  const projection = {
-    'results.sts': 1,
-    'results.distances': 1,
-  };
-  return await Clustering.findOne(query, projection);
-}
-
-const createDistanceLookup = (distances, sts) => {
-  const stMap = {};
-  for (let i = 0; i < sts.length; i++) {
-    const st = sts[i];
-    stMap[st] = sts.indexOf(st);
+  const docs = await ClusteringCache.find(query, projection).lean();
+  const lookup = {};
+  for (const doc of docs) {
+    for (const otherSt of Object.keys(doc.alleleDifferences || {})) {
+      const distance = doc.alleleDifferences[otherSt];
+      const [ stA, stB ] = doc.st < otherSt ? [ doc.st, otherSt ] : [ otherSt, doc.st ];
+      lookup[stA] = lookup[stA] || {};
+      lookup[stA][stB] = distance;
+    }
   }
   return (stA, stB) => {
-    const [ _a, _b ] = [ stMap[stA], stMap[stB] ];
-    const [ a, b ] = _a < _b ? [ _a, _b ] : [ _b, _a ];
-    if (a === -1 || b === -1 || a === b) throw new Error(`Distance between ${stA} and ${stB} is missing`);
-    const startOffset = b * (b - 1) / 2;
-    const offset = startOffset + a;
-    return distances[offset];
+    if (stA === stB) return 0;
+    try {
+      return stA < stB ? lookup[stA][stB] : lookup[stB][stA];
+    } catch (e) {
+      throw new NotFoundError('Problem getting edges');
+    }
   };
-};
+}
 
-module.exports = async function ({ user, genomeId, sts, threshold }) {
-  const scheme = await Genome.lookupCgMlstScheme(genomeId, user);
-  if (!scheme) return {};
-  const clusters = await getClusteringData({ scheme, user });
-  if (!clusters) return {};
 
-  const { results } = clusters;
-  const { distances: allDistances, sts: allSts = null } = results.find(_ => _.distances) || {}; // Ignore old fashioned results with fixed thresholds
-  if (!allSts) return {};
+module.exports = async function ({ user, scheme, version, sts, threshold }) {
+  // We need to check that the user is allowed to get the edges for these STs
+  const hasAccess = await Genome.checkAuthorisedForSts(user, sts);
+  // We return a 404 so that we don't leak whether an ST exists for another user
+  if (!hasAccess) throw new NotFoundError('Problem getting edges');
 
-  // distances contains the distance between 2 CGMLST STs. If the STs are [A, B, C, D] the distances are
-  // ordered [AB, AC, BC, AD, BD, CD].  The frontend is generally only interested in a subset of distances
-  // for a selection of sts.
+  // We have the distances between pairs of CGMLST STs and want to return an array showing
+  // which pairs are withing `threshold` of each other.
+  // If the STs are [A, B, C, D] the edges should be  ordered [AB, AC, BC, AD, BD, CD].
 
   // We create a function to lookup the distance between any pair of STs
-  const distanceLookup = createDistanceLookup(allDistances, allSts);
+  const lookup = await getClusteringData({ scheme, version, sts });
+
   const edges = [];
   for (let a = 1; a < sts.length; a++) {
     const stA = sts[a];
     for (let b = 0; b < a; b++) {
       const stB = sts[b];
       // We're just going to return 1 if there's an edge between two STs or 0 if there isn't
-      edges.push(distanceLookup(stA, stB) <= threshold ? 1 : 0);
+      edges.push(lookup(stA, stB) <= threshold ? 1 : 0);
     }
   }
 

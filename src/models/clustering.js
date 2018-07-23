@@ -11,6 +11,7 @@ const schema = new Schema({
   lastUpdatedAt: Date,
   createdAt: Date,
   public: { type: Boolean, default: false },
+  version: String,
 });
 
 addPreSaveHook(schema);

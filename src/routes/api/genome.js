@@ -88,13 +88,13 @@ router.post('/genome/:id/clusters', async (req, res, next) => {
 
 router.post('/genome/:id/clusters/edges', async (req, res, next) => {
   const { user, body } = req;
-  const { threshold, sts } = body;
+  const { threshold, sts, version, scheme } = body;
   const { id } = req.params;
 
   LOGGER.info('Received request for cluster edges', id);
 
   try {
-    const response = await services.request('clustering', 'fetch-edges', { user, genomeId: id, threshold, sts });
+    const response = await services.request('clustering', 'fetch-edges', { user, genomeId: id, threshold, sts, version, scheme });
     const { edges = [] } = response;
     if (edges.length <= 0) throw new NotFoundError(`No cluster edges found for ${id} at threshold ${threshold}`);
     res.json(response);

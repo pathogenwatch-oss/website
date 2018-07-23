@@ -333,4 +333,15 @@ schema.statics.lookupCgMlstScheme = async function (genomeId, user) {
   return genome ? genome.analysis.cgmlst.scheme : undefined;
 };
 
+schema.statics.checkAuthorisedForSts = async function (user, sts) {
+  // A user says they want info about a list of cgmlst sts
+  // Do they have access to at least one genome with those sts?
+  const query = {
+    'analysis.cgmlst.st': { $in: sts },
+    ...this.getPrefilterCondition({ user }),
+  };
+  const userSts = await this.distinct('analysis.cgmlst.st', query);
+  return userSts.length === new Set(sts).size;
+};
+
 module.exports = mongoose.model('Genome', schema);

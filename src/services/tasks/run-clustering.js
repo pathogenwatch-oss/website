@@ -118,8 +118,8 @@ function attachInputStream(container, spec, metadata, genomes, uncachedSTs) {
 }
 
 function handleContainerOutput(container, spec, metadata) {
-  const { task } = spec;
-  const { taskId } = metadata;
+  const { task, version } = spec;
+  const { taskId, scheme } = metadata;
   let resolve;
   let reject;
   const output = new Promise((_resolve, _reject) => {
@@ -137,21 +137,11 @@ function handleContainerOutput(container, spec, metadata) {
       try {
         const doc = JSON.parse(data);
         if (doc.st && doc.alleleDifferences) {
-          // const update = {};
-          // for (const key of Object.keys(doc.alleleDifferences)) {
-          //   update[`alleleDifferences.${key}`] = doc.alleleDifferences[key];
-          // }
-          // cache.push({
-          //   updateOne: {
-          //     filter: { st: doc.st, version, scheme },
-          //     update,
-          //     upsert: true,
-          //   },
-          // });
-          // if (cache.length > 1000) {
-          //   ClusteringCache.bulkWrite(cache).catch(() => LOGGER.info('Ignoring caching error'));
-          //   cache.splice(0, cache.length);
-          // }
+          const update = {};
+          for (const key of Object.keys(doc.alleleDifferences)) {
+            update[`alleleDifferences.${key}`] = doc.alleleDifferences[key];
+          }
+          ClusteringCache.update({ st: doc.st, version, scheme }, update, { upsert: true }).exec();
         } else if (doc.progress) {
           const progress = doc.progress * 0.99;
           if ((progress - lastProgress) >= 1) {
@@ -172,7 +162,7 @@ function handleContainerOutput(container, spec, metadata) {
 
 function handleContainerExit(container, spec, metadata) {
   const { task, version } = spec;
-  const { user, scheme, clientId, taskId } = metadata;
+  const { user, scheme, taskId } = metadata;
   let startTime = process.hrtime();
   let resolve;
   let reject;
@@ -232,8 +222,7 @@ async function runTask(spec, metadata) {
   attachInputStream(container, spec, metadata, genomes, uncachedFileIds);
 
   await whenExit;
-  const { results, cache } = await whenOutput;
-  // ClusteringCache.bulkWrite(cache).catch(() => LOGGER.info('Ignoring caching error'));
+  const { results } = await whenOutput;
   return results;
 }
 

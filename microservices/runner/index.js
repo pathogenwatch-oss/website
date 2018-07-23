@@ -56,7 +56,7 @@ function subscribeToQueue(queueName) {
         request('tasks', 'run-clustering', { spec, metadata, timeout$: timeout * 1000 })
           .then(results => {
             LOGGER.info('Got result', spec.task, spec.version, metadata);
-            return request('clustering', 'upsert', { results, metadata });
+            return request('clustering', 'upsert', { results, metadata, version: spec.version });
           }),
       message => request('clustering', 'error', message)
     );

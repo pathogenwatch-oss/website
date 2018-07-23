@@ -12,6 +12,7 @@ async function getClusteringData({ scheme, user }) {
     'results.pi': 1,
     'results.lambda': 1,
     'results.sts': 1,
+    version: 1,
   };
   return await Clustering.findOne(query, projection);
 }
@@ -49,7 +50,7 @@ module.exports = async function ({ user, genomeId }) {
   const clusters = await getClusteringData({ scheme, user });
   if (!clusters) return {};
 
-  const { results } = clusters;
+  const { results, version } = clusters;
   const result = results.find(_ => _.pi); // Ignore old fashioned results with fixed thresholds
   if (!result) return {};
 
@@ -62,5 +63,6 @@ module.exports = async function ({ user, genomeId }) {
     genomeIdx,
     sts,
     scheme,
+    version,
   };
 };
