@@ -42,7 +42,7 @@ const Clustering = React.createClass({
       if (props.numberOfNodesInCluster > 1) props.fetchEdgeMatrix(props);
       else props.skipLayout(this.props.graph.nodes);
     } else if (props.status === 'FETCHED_EDGES' && prevProps.status !== 'FETCHED_EDGES') {
-      props.runLayout(props.edgesCount, this.network, LAYOUT_OPTIONS);
+      this.runLayout();
     } else if (
       props.status === 'FAILED_FETCHING_CLUSTERS' &&
       prevProps.status !== 'FAILED_FETCHING_CLUSTERS' &&
@@ -50,6 +50,11 @@ const Clustering = React.createClass({
     ) {
       props.build(this.props.selectedGenomeId);
     }
+  },
+
+  runLayout() {
+    const { runLayout, edgesCount } = this.props;
+    runLayout(edgesCount, this.network, LAYOUT_OPTIONS);
   },
 
   overNode({ data }) {
@@ -149,6 +154,7 @@ const Clustering = React.createClass({
           onNodeHover={this.overNode}
           onNodeLeave={this.outNode}
           settings={NETWORK_SETTINGS}
+          shuffleNodes={this.runLayout}
         />
         <p className="pw-network-cover-message">
           { this.props.status === 'RUNNING_LAYOUT' ?
