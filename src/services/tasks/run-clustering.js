@@ -222,12 +222,7 @@ async function runTask(spec, metadata) {
   attachInputStream(container, spec, metadata, genomes, uncachedFileIds);
 
   await whenExit;
-<<<<<<< HEAD
   const { results } = await whenOutput;
-=======
-  const { results /* , cache */ } = await whenOutput;
-  // ClusteringCache.bulkWrite(cache).catch(() => LOGGER.info('Ignoring caching error'));
->>>>>>> edge
   return results;
 }
 
