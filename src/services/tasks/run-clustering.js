@@ -18,10 +18,10 @@ const LOGGER = require('../../utils/logging').createLogger('runner');
 const bson = new BSON();
 
 async function getGenomes(spec, metadata) {
-  const { user, scheme } = metadata;
+  const { userId, scheme } = metadata;
 
   const query = {
-    ...Genome.getPrefilterCondition({ user }),
+    ...Genome.getPrefilterCondition({ user: userId ? { _id: userId } : null }),
     'analysis.cgmlst.scheme': scheme,
   };
 
@@ -162,7 +162,7 @@ function handleContainerOutput(container, spec, metadata) {
 
 function handleContainerExit(container, spec, metadata) {
   const { task, version } = spec;
-  const { user, scheme, taskId } = metadata;
+  const { userId, scheme, taskId } = metadata;
   let startTime = process.hrtime();
   let resolve;
   let reject;
@@ -181,7 +181,7 @@ function handleContainerExit(container, spec, metadata) {
 
     const [ durationS, durationNs ] = process.hrtime(startTime);
     const duration = Math.round(durationS * 1000 + durationNs / 1e6);
-    TaskLog.create({ task, version, user, scheme, duration, exitCode });
+    TaskLog.create({ task, version, userId, scheme, duration, exitCode });
 
     if (exitCode !== 0) {
       request('clustering', 'send-progress', { taskId, payload: { task, status: 'ERROR' } });
@@ -222,7 +222,12 @@ async function runTask(spec, metadata) {
   attachInputStream(container, spec, metadata, genomes, uncachedFileIds);
 
   await whenExit;
+<<<<<<< HEAD
   const { results } = await whenOutput;
+=======
+  const { results /* , cache */ } = await whenOutput;
+  // ClusteringCache.bulkWrite(cache).catch(() => LOGGER.info('Ignoring caching error'));
+>>>>>>> edge
   return results;
 }
 

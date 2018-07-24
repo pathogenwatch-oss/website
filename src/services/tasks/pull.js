@@ -14,6 +14,8 @@ const LIMIT = 5;
 function getImageNames(queue) {
   const speciator = getSpeciatorTask();
   const speciatorImage = getImageName(speciator.task, speciator.version);
+  const clustering = getClusteringTask();
+  const clusteringImage = getImageName(clustering.task, clustering.version);
 
   if (queue === queues.genome) {
     return [ speciatorImage ];
@@ -24,12 +26,12 @@ function getImageNames(queue) {
   if (queue === queues.task) return getImages('genome');
 
   if (queue === queues.clustering) {
-    const { task, version } = getClusteringTask();
-    return [ getImageName(task, version) ];
+    return [ clusteringImage ];
   }
 
   return [
     speciatorImage,
+    clusteringImage,
     ...getImages('genome'),
     ...getImages('collection'),
   ];
