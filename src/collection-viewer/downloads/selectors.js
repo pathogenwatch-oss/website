@@ -3,6 +3,8 @@ import { createSelector } from 'reselect';
 import { getServerPath } from '../../utils/Api';
 import { getViewer, getCollection, getGenomes, getActiveGenomeIds } from '../selectors';
 
+import { getVisibleTree } from '../tree/selectors';
+
 export const isMenuOpen = state =>
   getViewer(state).downloads.menuOpen;
 
@@ -31,4 +33,9 @@ export const getCounts = createSelector(
 export const getDownloadPrefix = createSelector(
   getCollection,
   collection => getServerPath(`/download/collection/${collection.uuid}`)
+);
+
+export const getTreeName = createSelector(
+  getVisibleTree,
+  tree => tree.name
 );
