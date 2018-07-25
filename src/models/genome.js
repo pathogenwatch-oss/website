@@ -3,6 +3,7 @@ const { Schema } = mongoose;
 const path = require('path');
 
 const geocoding = require('geocoding');
+const { summariseAnalysis } = require('../utils/analysis');
 
 const {
   setToObjectOptions,
@@ -94,28 +95,12 @@ schema.statics.addPendingTasks = function (_id, tasks) {
   return this.update({ _id }, { $pushAll: { pending: tasks } });
 };
 
-function summariseAnalysis(analysis) {
-  const { task, version, results } = analysis;
-  let summary;
-  // core and cgmlst documents are big so don't store them all on the genome record
-  if (task === 'core') {
-    const { fp = {}, summary: coreSummary = {} } = results;
-    summary = { __v: version, fp, summary: coreSummary };
-  } else if (task === 'cgmlst') {
-    const { st, scheme, source } = results;
-    summary = { __v: version, st, scheme, source };
-  } else {
-    summary = { __v: version, ...results };
-  }
-  return { task, summary };
-}
-
 schema.statics.addAnalysisResults = function (_id, ...analyses) {
   const update = { $set: {}, $pullAll: { pending: [] } };
 
   for (const analysis of analyses) {
-    const { task, summary } = summariseAnalysis(analysis);
-    update.$set[`analysis.${task.toLowerCase()}`] = summary;
+    const { task } = analysis;
+    update.$set[`analysis.${task.toLowerCase()}`] = summariseAnalysis(analysis);
     update.$pullAll.pending.push(task);
   }
 
