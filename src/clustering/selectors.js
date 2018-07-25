@@ -114,6 +114,8 @@ const getNames = state => getClusterState(state).names;
 export const getSkipMessage = state => getClusterState(state).skipMessage;
 export const getNodeCoordinates = state => getClusterState(state).nodeCoordinates || [];
 export const getTaskId = state => getClusterState(state).taskId;
+export const getScheme = state => getClusterState(state).scheme;
+export const getVersion = state => getClusterState(state).version;
 
 export const getEdgesCount = createSelector(
   getEdgeMatrix,
