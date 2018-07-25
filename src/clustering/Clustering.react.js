@@ -23,6 +23,10 @@ const NETWORK_SETTINGS = {
   labelThreshold: 0, // hack so that nodes with labels are always shown
 };
 
+function getClusterDescription(numberOfNodes, threshold) {
+  return `${numberOfNodes} genome${numberOfNodes === 1 ? '' : 's'} at threshold of ${threshold}`;
+}
+
 const Clustering = React.createClass({
   componentDidMount() {
     this.update();
@@ -93,7 +97,7 @@ const Clustering = React.createClass({
   },
 
   renderChart() {
-    const toolTipFunc = (data) => `Cluster of ${data.yLabel} at threshold of ${data.xLabel}`;
+    const toolTipFunc = (data) => getClusterDescription(data.yLabel, data.xLabel);
     let clickable = false;
     const { status } = this.props;
     if ([ 'FAILED_BUILDING_CLUSTERS', 'FAILED_FETCHING_CLUSTERS', 'FAILED_FETCHING_EDGES', 'COMPLETED_LAYOUT' ].indexOf(status) >= 0) {
@@ -145,6 +149,8 @@ const Clustering = React.createClass({
       opacity: this.props.status === 'RUNNING_LAYOUT' ? 0.3 : 1,
     };
 
+    const { numberOfNodesInCluster, threshold } = this.props;
+
     return (
       <div style={{ position: 'relative' }}>
         <Network
@@ -159,7 +165,7 @@ const Clustering = React.createClass({
         <p className="pw-network-cover-message">
           { this.props.status === 'RUNNING_LAYOUT' ?
             <span className="wgsa-blink">Rendering cluster...</span> :
-            `Clustered at threshold of ${this.props.threshold}` }
+            getClusterDescription(numberOfNodesInCluster, threshold) }
         </p>
       </div>
     );
