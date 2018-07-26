@@ -8,25 +8,6 @@ export function getServerPath(path) {
   );
 }
 
-export function fetchJsonXhr(method, path, data) {
-  const config = {
-    type: method,
-    url: getServerPath(path),
-    contentType: 'application/json; charset=UTF-8',
-    data: method === 'GET' ? data : JSON.stringify(data),
-    dataType: 'json',
-  };
-  return new Promise((resolve, reject) => {
-    $.ajax(
-      process.env.NODE_ENV === 'production' ?
-        config :
-        { ...config, xhrFields: { withCredentials: true } }
-    )
-    .done((...args) => resolve(args))
-    .fail((...args) => reject(args));
-  });
-}
-
 function ajax(config) {
   return new Promise((resolve, reject) => {
     $.ajax(
