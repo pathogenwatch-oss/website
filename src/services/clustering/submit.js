@@ -9,14 +9,21 @@ module.exports = async function ({ user, genomeId, clientId }) {
 
   const spec = getClusteringTask(scheme);
 
-  const doc = await Queue.findOne({
+  const queueQuery = {
     type: queues.clustering,
     'message.spec.task': spec.task,
-    'message.metadata.user': user,
     'message.metadata.scheme': scheme,
     rejectionReason: { $exists: false },
     'message.metadata.taskId': { $exists: 1 },
-  }, {
+  };
+
+  if (user) {
+    queueQuery['message.metadata.userId'] = user._id;
+  } else {
+    queueQuery['message.metadata.public'] = true;
+  }
+
+  const doc = await Queue.findOne(queueQuery, {
     'message.metadata.taskId': 1,
   }).lean();
 
@@ -25,6 +32,13 @@ module.exports = async function ({ user, genomeId, clientId }) {
   }
 
   const taskId = rand.generate(16);
-  await enqueue(queues.clustering, { spec, metadata: { user, scheme, clientId, taskId } });
+  const metadata = { scheme, clientId, taskId };
+  if (user) {
+    metadata.userId = user._id;
+  } else {
+    metadata.public = true;
+  }
+
+  await enqueue(queues.clustering, { spec, metadata });
   return { ok: 1, taskId };
 };

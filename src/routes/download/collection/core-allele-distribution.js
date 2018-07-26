@@ -132,20 +132,29 @@ function getGenomeSummaries(query) {
 module.exports = async (req, res, next) => {
   const { user } = req;
   const { token } = req.params;
-  const { ids } = req.body;
+  const { ids, subtree } = req.body;
 
   const { filename: rawFilename = '' } = req.query;
   const filename = sanitize(rawFilename) || 'core-allele-distribution.csv';
   const genomeIds = ids ? ids.split(',') : null;
+
+  if (subtree && typeof subtree !== 'string') {
+    res.status(400).send('Invalid `subtree`.');
+    return;
+  }
 
   res.set({
     'Content-Disposition': `attachment; filename="${filename}"`,
     'Content-type': 'text/csv',
   });
 
-  const collection = await request('collection', 'authorise', { user, token, projection: { genomes: 1, 'tree.versions': 1 } });
+  const collection = await request('collection', 'authorise', { user, token, projection: { genomes: 1, 'tree.versions': 1, 'subtrees.versions': 1, 'subtrees.name': 1 } });
   try {
-    const coreVersion = ((collection.tree || {}).versions || {}).core || null;
+    const tree = subtree ?
+        collection.subtrees.find(_ => _.name === subtree) :
+        collection.tree;
+
+    const coreVersion = tree && tree.versions && tree.versions.core;
     if (!coreVersion) throw new Error("Couldn't create download without core version");
 
     const genomesQuery = {

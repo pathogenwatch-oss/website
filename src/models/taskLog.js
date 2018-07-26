@@ -19,7 +19,7 @@ const schema = new Schema({
   collectionId: String,
 
   // clustering
-  user: String,
+  userId: String,
   scheme: String,
 });
 

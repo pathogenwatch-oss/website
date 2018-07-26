@@ -19,7 +19,7 @@ function getCollectionGenomes({ genomes }, genomeIds) {
     .lean();
 }
 
-function getCache({ tree }, genomes, type) {
+function getCache(tree, genomes, type) {
   const fieldName = (type === 'score') ? 'scores' : 'differences';
   const { versions } = tree;
   return ScoreCache.find(
@@ -72,7 +72,7 @@ function generateMatrix({ genomes, cache }, stream) {
 module.exports = (req, res, next) => {
   const { user } = req;
   const { token, type } = req.params;
-  const { ids } = req.body;
+  const { ids, subtree } = req.body;
 
   if (!type || typeof type !== 'string') {
     res.status(400).send('`type` parameter is required.');
@@ -81,6 +81,11 @@ module.exports = (req, res, next) => {
 
   if (type !== 'score' && type !== 'difference') {
     res.status(400).send('Invalid `type` parameter value.');
+    return;
+  }
+
+  if (subtree && typeof subtree !== 'string') {
+    res.status(400).send('Invalid `subtree`.');
     return;
   }
 
@@ -97,11 +102,21 @@ module.exports = (req, res, next) => {
   const stream = transform(data => data.join(',') + '\n');
   stream.pipe(res);
 
-  request('collection', 'authorise', { user, token, projection: { genomes: 1, 'tree.versions': 1 } })
+  request('collection', 'authorise', { user, token, projection: { genomes: 1, 'tree.versions': 1, 'subtrees.versions': 1, 'subtrees.name': 1 } })
     .then(async (collection) => {
       const genomes = await getCollectionGenomes(collection, genomeIds);
+
       writeMatrixHeader(genomes, stream);
-      const cache = await getCache(collection, genomes, type);
+
+      const tree = subtree ?
+        collection.subtrees.find(_ => _.name === subtree) :
+        collection.tree;
+
+      if (!tree) {
+        throw new ServiceRequestError('Tree not found');
+      }
+
+      const cache = await getCache(tree, genomes, type);
       return { genomes, cache };
     })
     .then(data => generateMatrix(data, stream))

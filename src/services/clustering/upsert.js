@@ -2,13 +2,13 @@ const { request } = require('services/bus');
 const Clustering = require('../../models/clustering');
 
 module.exports = async function ({ metadata, results, version }) {
-  const { user, scheme, taskId } = metadata;
+  const { userId, scheme, taskId } = metadata;
 
   const query = { scheme };
   const update = { scheme, results, version };
-  if (user) {
-    query.user = user._id;
-    update.user = user._id;
+  if (userId) {
+    query.user = userId;
+    update.user = userId;
   } else {
     query.public = true;
     update.public = true;
