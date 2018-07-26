@@ -4,23 +4,24 @@ const rand = require('rand-token');
 
 const { getClusteringTask } = require('../../manifest');
 
-const { ServiceRequestError } = require('../../utils/errors');
-
 module.exports = async function ({ user, genomeId, clientId }) {
   const scheme = await Genome.lookupCgMlstScheme(genomeId, user);
 
   const spec = getClusteringTask(scheme);
 
-  const count = await Queue.count({
+  const doc = await Queue.findOne({
     type: queues.clustering,
     'message.spec.task': spec.task,
     'message.metadata.user': user,
     'message.metadata.scheme': scheme,
     rejectionReason: { $exists: false },
-  });
+    'message.metadata.taskId': { $exists: 1 },
+  }, {
+    'message.metadata.taskId': 1,
+  }).lean();
 
-  if (count > 0) {
-    throw new ServiceRequestError('Already queued this job');
+  if (doc) {
+    return { ok: 1, taskId: doc.message.metadata.taskId };
   }
 
   const taskId = rand.generate(16);
