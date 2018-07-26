@@ -29,20 +29,24 @@ export default ({ genome }) => {
           /> :
           <em>Pending speciation</em> }
       </div>
-      <dl>
-        <div>
-          <dt>Date</dt>
-          <dd>{date}</dd>
-        </div>
-        <div>
-          <dt>Country</dt>
-          <dd>{getCountryName(country)}</dd>
-        </div>
-        <div>
-          <dt>PMID</dt>
-          <dd><PubMedLink pmid={pmid}>{pmid}</PubMedLink></dd>
-        </div>
-      </dl>
+      { (date || country || pmid) &&
+        <dl>
+          { country &&
+            <div>
+              <dt>Country</dt>
+              <dd>{getCountryName(country)}</dd>
+            </div> }
+          { date &&
+            <div>
+              <dt>Date</dt>
+              <dd>{date}</dd>
+            </div> }
+          { pmid &&
+            <div>
+              <dt>PMID</dt>
+              <dd><PubMedLink pmid={pmid}>{pmid}</PubMedLink></dd>
+            </div> }
+        </dl> }
     </div>
   );
 };

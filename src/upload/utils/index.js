@@ -9,8 +9,6 @@ import { DEFAULT } from '../../app/constants';
 import getCompressWorker from 'worker-loader?name=compress-worker.[hash].js!./compressWorker';
 
 function parseMetadata(row) {
-  if (!row) return undefined;
-
   const {
     displayname,
     id,
@@ -20,8 +18,6 @@ function parseMetadata(row) {
   } = row;
 
   const genomeName = displayname || id || name || filename;
-
-  validateMetadata({ name: genomeName, ...columns });
 
   const {
     year,
@@ -33,8 +29,11 @@ function parseMetadata(row) {
     ...userDefined,
   } = columns;
 
+  validateMetadata({
+    name: genomeName, year, month, day, latitude, longitude, pmid, userDefined,
+  });
+
   return {
-    hasMetadata: true,
     name: genomeName,
     year: year ? parseInt(year, 10) : null,
     month: month ? parseInt(month, 10) : null,
@@ -78,7 +77,7 @@ export function mapCSVsToGenomes(files, uploadedAt) {
           name: file.name,
           file,
           uploadedAt,
-          ...parseMetadata(row),
+          metadata: row ? parseMetadata(row) : null,
           owner: 'me',
           uploaded: true,
         };

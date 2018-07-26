@@ -1,7 +1,7 @@
 import { utils } from 'phylocanvas';
 
 import Organisms from '../../organisms';
-import { leafStyles } from './constants';
+import { leafStyles, simpleTrees } from './constants';
 
 export function collapseTreeBranches(node, leafPredicate) {
   if (node.leaf) {
@@ -70,4 +70,8 @@ export function getLinearStep({ step, treeType }) {
     return step * 2 * Math.PI;
   }
   return step;
+}
+
+export function isSubtree(treeName) {
+  return !(simpleTrees.has(treeName));
 }
