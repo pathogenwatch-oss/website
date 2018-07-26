@@ -4,6 +4,8 @@ const seneca = require('seneca')({
   },
 });
 
+exports.DEFAULT_TIMEOUT = seneca.options().timeout;
+
 exports.request = function (role, cmd, message) {
   return new Promise((resolve, reject) => {
     seneca.act(Object.assign({ role, cmd }, message), (error, response) => {

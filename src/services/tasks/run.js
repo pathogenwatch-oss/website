@@ -1,5 +1,4 @@
 const fs = require('fs');
-const docker = require('docker-run');
 const fastaStorage = require('wgsa-fasta-store');
 
 const Analysis = require('models/analysis');
@@ -7,12 +6,14 @@ const TaskLog = require('models/taskLog');
 const Genome = require('models/genome');
 
 const notify = require('services/genome/notify');
+const docker = require('../docker');
+const { DEFAULT_TIMEOUT } = require('../bus');
 const { fastaStoragePath } = require('configuration');
 const { getImageName } = require('manifest.js');
 
 const LOGGER = require('utils/logging').createLogger('runner');
 
-function runTask(fileId, task, version, organismId, speciesId, genusId) {
+function runTask({ fileId, task, version, organismId, speciesId, genusId, timeout }) {
   return new Promise((resolve, reject) => {
     const startTime = process.hrtime();
     const container = docker(getImageName(task, version), {
@@ -22,7 +23,7 @@ function runTask(fileId, task, version, organismId, speciesId, genusId) {
         WGSA_GENUS_TAXID: genusId,
         WGSA_FILE_ID: fileId,
       },
-    });
+    }, timeout);
     const stream = fs.createReadStream(fastaStorage.getFilePath(fastaStoragePath, fileId));
     stream.pipe(container.stdin);
     const buffer = [];
@@ -58,11 +59,11 @@ function runTask(fileId, task, version, organismId, speciesId, genusId) {
   });
 }
 
-module.exports = async function ({ task, version, metadata }) {
+module.exports = async function ({ task, version, metadata, timeout$: timeout = DEFAULT_TIMEOUT }) {
   const { organismId, speciesId, genusId, fileId, genomeId, uploadedAt, clientId } = metadata;
   let doc = await Analysis.findOne({ fileId, task, version }).lean();
   if (!doc) { // The results weren't in the cache
-    const results = await runTask(fileId, task, version, organismId, speciesId, genusId);
+    const results = await runTask({ fileId, task, version, organismId, speciesId, genusId, timeout });
     await Analysis.update(
       { fileId, task, version },
       { fileId, task, version, results },

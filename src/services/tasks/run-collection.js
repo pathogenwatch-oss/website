@@ -2,7 +2,6 @@
 /* eslint no-params: 0 */
 /* eslint max-params: 0 */
 
-const docker = require('docker-run');
 const es = require('event-stream');
 const BSON = require('bson');
 
@@ -11,6 +10,8 @@ const Collection = require('../../models/collection');
 const Genome = require('../../models/genome');
 const ScoreCache = require('../../models/scoreCache');
 const TaskLog = require('../../models/taskLog');
+const docker = require('../docker');
+const { DEFAULT_TIMEOUT } = require('../bus');
 
 const { getImageName } = require('../../manifest.js');
 const { request } = require('../../services');
@@ -238,7 +239,7 @@ function handleContainerExit(container, task, versions, metadata, reject) {
   });
 }
 
-function createContainer(spec, metadata) {
+function createContainer(spec, metadata, timeout) {
   const { task, version, workers } = spec;
   const { organismId, collectionId } = metadata;
 
@@ -248,7 +249,7 @@ function createContainer(spec, metadata) {
       WGSA_COLLECTION_ID: collectionId,
       WGSA_WORKERS: workers,
     },
-  });
+  }, timeout);
 
   return container;
 }
@@ -273,7 +274,7 @@ async function runTask(spec, metadata) {
   const uncachedFileIds = await getGenomesInCache(genomes, versions);
 
   return new Promise((resolve, reject) => {
-    const container = createContainer(spec, metadata);
+    const container = createContainer(spec, metadata, timeout);
 
     handleContainerOutput(container, task, versions, metadata, genomes, resolve, reject);
 
@@ -283,6 +284,6 @@ async function runTask(spec, metadata) {
   });
 }
 
-module.exports = function handleMessage({ spec, metadata }) {
-  return runTask(spec, metadata);
+module.exports = function handleMessage({ spec, metadata, timeout$: timeout = DEFAULT_TIMEOUT }) {
+  return runTask(spec, metadata, timeout);
 };
