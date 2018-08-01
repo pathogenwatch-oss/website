@@ -107,13 +107,9 @@ function handleContainerOutput(container, spec, metadata) {
       try {
         const doc = JSON.parse(data);
         if (doc.st && doc.alleleDifferences) {
-          const update = {};
-          for (const key of Object.keys(doc.alleleDifferences)) {
-            update[`alleleDifferences.${key}`] = doc.alleleDifferences[key];
-          }
-          return ClusteringCache.update({ st: doc.st, version, scheme }, update, { upsert: true })
-            .then(() => Object.keys(update).forEach(k => (update[k] = undefined)))
-            .then(() => callback());
+          return ClusteringCache.create({ st: doc.st, version, scheme, alleleDifferences: doc.alleleDifferences })
+            .then(() => callback())
+            .catch(error => reject(error));
         } else if (doc.progress) {
           const progress = doc.progress * 0.99;
           if ((progress - lastProgress) >= 1) {
