@@ -4,7 +4,8 @@
 
 const es = require('event-stream');
 const BSON = require('bson');
-const { Writable } = require('stream');
+const mongoose = require('mongoose');
+const Grid = require('gridfs-stream');
 
 const Genome = require('../../models/genome');
 const Analysis = require('../../models/analysis');
@@ -92,55 +93,58 @@ function handleContainerOutput(container, spec, metadata) {
   const { taskId, scheme } = metadata;
   let resolve;
   let reject;
+  request('clustering', 'send-progress', { taskId, payload: { task, status: 'IN PROGRESS' } });
+  let lastProgress = 0;
+  const results = [];
   const output = new Promise((_resolve, _reject) => {
     resolve = _resolve;
     reject = _reject;
   });
-  request('clustering', 'send-progress', { taskId, payload: { task, status: 'IN PROGRESS' } });
-  let lastProgress = 0;
-  const results = [];
-  const cache = [];
-  const consumer = new Writable({
-    objectMode: true,
-    write(data, _, callback) {
-      if (!data) return callback();
-      try {
-        const doc = JSON.parse(data);
-        if (doc.st && doc.alleleDifferences) {
-          const update = {};
-          for (const key of Object.keys(doc.alleleDifferences)) {
-            update[`alleleDifferences.${key}`] = doc.alleleDifferences[key];
-          }
-          return ClusteringCache.update({ st: doc.st, version, scheme }, update, { upsert: true })
-            .then(() => Object.keys(update).forEach(k => (update[k] = undefined)))
-            .then(() => callback());
-        } else if (doc.progress) {
-          const progress = doc.progress * 0.99;
-          if ((progress - lastProgress) >= 1) {
-            return request('clustering', 'send-progress', { taskId, payload: { task, status: 'IN PROGRESS', progress } })
-              .then(() => (lastProgress = progress))
-              .then(() => callback());
-          }
-        } else {
-          results.push(doc);
-          return callback();
+
+  const gfs = Grid(mongoose.connection.db, mongoose.mongo);
+  const clusteringcache = gfs.createWriteStream({
+    filename: 'clusteringcache',
+  });
+
+  clusteringcache.on('error', error => {
+    reject(error);
+  }).on('close', () => {
+    resolve({ results });
+  });
+
+  const handler = es.map((data, callback) => {
+    if (!data) return callback();
+    try {
+      const doc = JSON.parse(data);
+      if (doc.st && doc.alleleDifferences) {
+        const update = {};
+        for (const key of Object.keys(doc.alleleDifferences)) {
+          update[`alleleDifferences.${key}`] = doc.alleleDifferences[key];
         }
-      } catch (e) {
-        LOGGER.error(e);
-        console.log({ data, type: typeof(data) });
-        return request('clustering', 'send-progress', { taskId, payload: { task, status: 'ERROR' } })
-          .then(() => reject(e));
+        return callback(null, { st: doc.st, version, scheme, ...update });
+      } else if (doc.progress) {
+        const progress = doc.progress * 0.99;
+        if ((progress - lastProgress) >= 1) {
+          return request('clustering', 'send-progress', { taskId, payload: { task, status: 'IN PROGRESS', progress } })
+            .then(() => (lastProgress = progress))
+            .then(() => callback());
+        }
+      } else {
+        results.push(doc);
+        return callback();
       }
-      return callback();
-    },
-    final(callback) {
-      resolve({ results, cache });
-      callback();
-    },
+    } catch (e) {
+      LOGGER.error(e);
+      return request('clustering', 'send-progress', { taskId, payload: { task, status: 'ERROR' } })
+        .then(() => reject(e));
+    }
+    return callback();
   });
   container.stdout
     .pipe(es.split())
-    .pipe(consumer);
+    .pipe(handler)
+    .pipe(es.stringify())
+    .pipe(clusteringcache);
   return output;
 }
 
