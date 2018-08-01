@@ -247,8 +247,8 @@ function calcGraph(status, numberOfNodes, selectedIdx, labels, sizes, nodeColors
       size: sizes[i],
       color: nodeColors[i],
       zIndex: nodeZIndex[i],
-      x: (coordinates[id] || {}).x,
-      y: (coordinates[id] || {}).y,
+      x: id in coordinates ? coordinates[id].x : Math.cos(2 * i * Math.PI / numberOfNodes),
+      y: id in coordinates ? coordinates[id].y : Math.sin(2 * i * Math.PI / numberOfNodes),
     });
     for (let j = 0; j < i; j++) {
       if (edgesMatrix[idx]) {
@@ -263,6 +263,9 @@ function calcGraph(status, numberOfNodes, selectedIdx, labels, sizes, nodeColors
       idx++;
     }
   }
+  // Hack to implement something a bit like a zIndex.
+  nodes.sort((a, b) => b.zIndex - a.zIndex);
+  edges.sort((a, b) => b.zIndex - a.zIndex);
   return { nodes, edges };
 }
 

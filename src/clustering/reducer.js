@@ -161,6 +161,7 @@ export default function (state = initialState, { type, payload }) {
     case RUN_CLUSTER_LAYOUT.ATTEMPT:
       return {
         ...state,
+        nodeCoordinates: null,
         status: 'RUNNING_LAYOUT',
       };
     case RUN_CLUSTER_LAYOUT.SUCCESS: {

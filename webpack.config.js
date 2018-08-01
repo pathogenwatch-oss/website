@@ -13,6 +13,10 @@ const resolve = {
     '^': srcFolder,
     react: path.join(srcFolder, 'react-shim.js'),
   },
+  modules: [
+    'node_modules',
+    path.join(__dirname, 'node_modules'),
+  ],
   unsafeCache: true,
 };
 
