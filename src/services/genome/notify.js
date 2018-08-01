@@ -1,9 +1,12 @@
 const { request } = require('services');
 
-function getNotification({ task, version, results }) {
+const { summariseAnalysis } = require('../../utils/analysis');
+
+function getNotification(analysis) {
+  const { task, version, results } = analysis;
   switch (task) {
     case 'speciator':
-      return { task, version, result: results };
+      return { task, version, result: summariseAnalysis(analysis) };
     case 'mlst':
       return { task, version, result: { st: results.st } };
     default:
