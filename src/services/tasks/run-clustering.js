@@ -37,39 +37,7 @@ async function getGenomes(spec, metadata) {
   return docs;
 }
 
-async function getGenomesInCache(genomes, { version }, { scheme }) {
-  const sts = genomes.map(_ => _.analysis.cgmlst.st);
-
-  const projection = { st: 1 };
-  for (const st of sts) {
-    projection[`alleleDifferences.${st}`] = 1;
-  }
-
-  const docs = await ClusteringCache.find(
-    { st: { $in: sts }, version, scheme },
-    projection
-  );
-
-  const cacheBySt = {};
-  for (const doc of docs) {
-    cacheBySt[doc.st] = doc.alleleDifferences;
-  }
-
-  const missingSTs = new Set();
-  for (let a = sts.length - 1; a > 0; a--) {
-    const stA = sts[a];
-    for (let b = 0; b < a; b++) {
-      const stB = sts[b];
-      if ((cacheBySt[stA] || {})[stB]) continue;
-      if ((cacheBySt[stB] || {})[stA]) continue;
-      missingSTs.add(stA);
-      missingSTs.add(stB);
-    }
-  }
-  return Array.from(missingSTs);
-}
-
-function attachInputStream(container, spec, metadata, genomes, uncachedSTs) {
+function attachInputStream(container, spec, metadata, genomes, allSts) {
   const { version } = spec;
 
   const reformatAsGenomeDoc = es.map((doc, cb) => cb(null, { analysis: { cgmlst: doc.results } }));
@@ -77,7 +45,7 @@ function attachInputStream(container, spec, metadata, genomes, uncachedSTs) {
 
   const docsStream = Analysis
     .find(
-      { task: 'cgmlst', 'results.st': { $in: uncachedSTs } },
+      { task: 'cgmlst', 'results.st': { $in: allSts } },
       { results: 1 }
     )
     .lean()
@@ -215,12 +183,12 @@ function createContainer(spec, timeout) {
 
 async function runTask(spec, metadata, timeout) {
   const genomes = await getGenomes(spec, metadata);
-  const uncachedFileIds = await getGenomesInCache(genomes, spec, metadata);
+  const allSts = genomes.map(_ => _.analysis.cgmlst.st);
 
   const container = createContainer(spec, timeout);
   const whenOutput = handleContainerOutput(container, spec, metadata);
   const whenExit = handleContainerExit(container, spec, metadata);
-  attachInputStream(container, spec, metadata, genomes, uncachedFileIds);
+  attachInputStream(container, spec, metadata, genomes, allSts);
 
   await whenExit;
   const { results } = await whenOutput;
