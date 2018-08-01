@@ -30,7 +30,10 @@ function connect(callback) {
   return mongoose.connect(dbUrl);
 }
 
-mongoose.set('debug', (...args) => LOGGER.debug(args));
+mongoose.set('debug', (collection, ...args) => {
+  if (collection === 'clusteringcaches') LOGGER.debug([ collection, args[0] ]);
+  else LOGGER.debug([ collection, ...args ]);
+});
 
 module.exports.connect = connect;
 module.exports.dbUrl = dbUrl;
