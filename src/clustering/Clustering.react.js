@@ -77,7 +77,12 @@ const Clustering = React.createClass({
     if ([ 'FAILED_BUILDING_CLUSTERS', 'FAILED_FETCHING_CLUSTERS', 'FAILED_FETCHING_EDGES', 'COMPLETED_LAYOUT' ].indexOf(status) >= 0) {
       clickable = true;
     }
-    const onClick = clickable ? ({ label }) => this.props.setThreshold(label) : () => {};
+    const onClick = ({ label }) => {
+      if (!clickable) return;
+      const clusterSize = this.props.chartClusterSizes[this.props.chartThresholds.indexOf(label)];
+      if (clusterSize > 1000) return;
+      this.props.setThreshold(label);
+    };
     return <SimpleBarChart width={584} height={100} labels={this.props.chartThresholds} values={this.props.chartClusterSizes} onClick={onClick} toolTipFunc={toolTipFunc} />;
   },
 
@@ -130,7 +135,7 @@ const Clustering = React.createClass({
     return (<div style={{ position: 'relative' }}>
       <SimpleNetwork ref={ el => { this.network = (el ? el.network : undefined); }} style={style} width={width} height={height} graph={this.props.graph} events={events} />
       <p className="pw-network-cover-message">
-        { this.props.status === 'RUNNING_LAYOUT' ? <span className="wgsa-blink">Rendering cluster...</span> : `Clustered at threshold of ${this.props.threshold}` }
+        { this.props.status === 'RUNNING_LAYOUT' ? <span className="wgsa-blink">Rendering cluster...</span> : `${this.props.numberOfNodesInCluster} clustered at threshold of ${this.props.threshold}` }
       </p>
     </div>);
   },

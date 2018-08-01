@@ -29,7 +29,7 @@ const initialState = {
   indexOfSelectedInAll: null,
   scheme: null,
   version: null,
-  threshold: 30,
+  threshold: 5,
   edgeMatrix: null,
   triedBuilding: false,
   skipMessage: null,

@@ -162,7 +162,15 @@ const getClusterNodeNames = createSelector(
 );
 export const getClusterNodeLabels = createSelector(
   getClusterNodeNames,
-  nodeNames => (!nodeNames ? undefined : nodeNames.map(_ => _.join('|')))
+  nodeNames => {
+    if (!nodeNames) return undefined;
+    return nodeNames.map(names => {
+      if (names.length === 0) return 'Unnamed';
+      else if (names.length === 1) return names[0];
+      else if (names.length === 2) return `${names[0]} and one other`;
+      return `${names[0]} and ${names.length - 1} others`;
+    });
+  }
 );
 export const getClusterNodeDegrees = createSelector(
   getEdgeMatrix,
@@ -192,7 +200,7 @@ export const getEdgeColors = createSelector(
   degrees =>
     (!degrees ? undefined : degrees.map(d => EDGE_COLORS[d] || EDGE_COLORS[-1]))
 );
-export const getChartThresholds = _ => [ ...Array(100) ].map((__, i) => i);
+export const getChartThresholds = _ => [ ...Array(50) ].map((__, i) => i);
 export const getChartClusterSizes = createSelector(
   getIndexOfSelectedInAll,
   getChartThresholds,
