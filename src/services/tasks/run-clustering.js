@@ -4,6 +4,7 @@
 
 const es = require('event-stream');
 const BSON = require('bson');
+const { Writable } = require('stream');
 
 const Genome = require('../../models/genome');
 const Analysis = require('../../models/analysis');
@@ -99,10 +100,10 @@ function handleContainerOutput(container, spec, metadata) {
   let lastProgress = 0;
   const results = [];
   const cache = [];
-  container.stdout
-    .pipe(es.split())
-    .on('data', (data) => {
-      if (!data) return;
+  const consumer = new Writable({
+    objectMode: true,
+    write(data, _, callback) {
+      if (!data) return callback();
       try {
         const doc = JSON.parse(data);
         if (doc.st && doc.alleleDifferences) {
@@ -110,22 +111,36 @@ function handleContainerOutput(container, spec, metadata) {
           for (const key of Object.keys(doc.alleleDifferences)) {
             update[`alleleDifferences.${key}`] = doc.alleleDifferences[key];
           }
-          ClusteringCache.update({ st: doc.st, version, scheme }, update, { upsert: true }).exec();
+          return ClusteringCache.update({ st: doc.st, version, scheme }, update, { upsert: true })
+            .then(() => Object.keys(update).forEach(k => (update[k] = undefined)))
+            .then(() => callback());
         } else if (doc.progress) {
           const progress = doc.progress * 0.99;
           if ((progress - lastProgress) >= 1) {
-            request('clustering', 'send-progress', { taskId, payload: { task, status: 'IN PROGRESS', progress } });
-            lastProgress = progress;
+            return request('clustering', 'send-progress', { taskId, payload: { task, status: 'IN PROGRESS', progress } })
+              .then(() => (lastProgress = progress))
+              .then(() => callback());
           }
         } else {
           results.push(doc);
+          return callback();
         }
       } catch (e) {
-        request('clustering', 'send-progress', { taskId, payload: { task, status: 'ERROR' } });
-        reject(e);
+        LOGGER.error(e);
+        console.log({ data, type: typeof(data) });
+        return request('clustering', 'send-progress', { taskId, payload: { task, status: 'ERROR' } })
+          .then(() => reject(e));
       }
-    })
-    .on('end', () => resolve({ results, cache }));
+      return callback();
+    },
+    final(callback) {
+      resolve({ results, cache });
+      callback();
+    },
+  });
+  container.stdout
+    .pipe(es.split())
+    .pipe(consumer);
   return output;
 }
 
