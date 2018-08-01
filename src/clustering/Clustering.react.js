@@ -7,24 +7,15 @@ import Notify from '../components/Notify.react';
 
 import * as selectors from './selectors';
 import * as actions from './actions';
+import { showToast } from '../toast';
 
 import SimpleBarChart from './SimpleBarChart.react';
 import Network from 'libmicroreact/network';
 
-const LAYOUT_OPTIONS = {
-  iterationsPerRender: 100,
-  worker: true,
-  barnesHutOptimize: false,
-};
-
-const NETWORK_SETTINGS = {
-  edgeColor: 'default',
-  labelColor: 'node',
-  labelThreshold: 0, // hack so that nodes with labels are always shown
-};
+import * as constants from './constants';
 
 function getClusterDescription(numberOfNodes, threshold) {
-  return `${numberOfNodes} genome${numberOfNodes === 1 ? '' : 's'} at threshold of ${threshold}`;
+  return `Cluster of ${numberOfNodes} at threshold of ${threshold}`;
 }
 
 const Clustering = React.createClass({
@@ -58,7 +49,7 @@ const Clustering = React.createClass({
 
   runLayout() {
     const { runLayout, edgesCount } = this.props;
-    runLayout(edgesCount, this.network, LAYOUT_OPTIONS);
+    runLayout(edgesCount, this.network, constants.LAYOUT_OPTIONS);
   },
 
   overNode({ data }) {
@@ -106,7 +97,10 @@ const Clustering = React.createClass({
     const onClick = ({ label }) => {
       if (!clickable) return;
       const clusterSize = this.props.chartClusterSizes[this.props.chartThresholds.indexOf(label)];
-      if (clusterSize > 1000) return;
+      if (clusterSize > constants.MAX_CLUSTER_SIZE) {
+        this.props.showToast('This cluster is too large to display, please select a lower threshold.');
+        return;
+      }
       this.props.setThreshold(label);
     };
     return (
@@ -117,6 +111,8 @@ const Clustering = React.createClass({
         values={this.props.chartClusterSizes}
         onClick={onClick}
         toolTipFunc={toolTipFunc}
+        backgroundColor={this.props.chartColours.status}
+        hoverBackgroundColor={this.props.chartColours.hover}
       />
     );
   },
@@ -164,7 +160,7 @@ const Clustering = React.createClass({
           graph={this.props.graph}
           onNodeHover={this.overNode}
           onNodeLeave={this.outNode}
-          settings={NETWORK_SETTINGS}
+          settings={constants.NETWORK_SETTINGS}
           shuffleNodes={this.runLayout}
         />
         <p className="pw-network-cover-message">
@@ -248,6 +244,7 @@ function mapStateToProps(state) {
   return {
     chartClusterSizes: selectors.getChartClusterSizes(state),
     chartThresholds: selectors.getChartThresholds(state),
+    chartColours: selectors.getChartColours(state),
     clusterSts: selectors.getClusterSts(state),
     edgesCount: selectors.getEdgesCount(state),
     graph: selectors.getGraph(state),
@@ -274,6 +271,7 @@ function mapDispatchToProps(dispatch) {
       dispatch(actions.fetchEdgeMatrix(selectedGenomeId, scheme, version, threshold, clusterSts)),
     runLayout: (nEdges, network, options) => dispatch(actions.runLayout(nEdges, network, options)),
     skipLayout: (network) => dispatch(actions.skipLayout(network)),
+    showToast: (message) => dispatch(showToast({ message })),
   };
 }
 

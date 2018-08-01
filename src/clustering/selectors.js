@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect';
 
 import { cluster } from './util';
+import { MAX_CLUSTER_SIZE } from './constants';
 
 const NODE_COLORS = {
   0: '#673c90',
@@ -211,6 +212,30 @@ export const getChartClusterSizes = createSelector(
       const thresholdCluster = cluster(t, pi, lambda);
       return thresholdCluster.filter(_ => _ === thresholdCluster[indexOfSelectedInAll]).length;
     });
+  }
+);
+
+const colors = {
+  disabled: '#ccc',
+  active: '#b199c7',
+  hover: '#673c90',
+};
+export const getChartColours = createSelector(
+  getChartClusterSizes,
+  sizes => {
+    if (!sizes) return undefined;
+    const status = [];
+    const hover = [];
+    for (const size of sizes) {
+      if (size > MAX_CLUSTER_SIZE) {
+        status.push(colors.disabled);
+        hover.push(colors.disabled);
+      } else {
+        status.push(colors.active);
+        hover.push(colors.hover);
+      }
+    }
+    return { status, hover };
   }
 );
 
