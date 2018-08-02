@@ -11,3 +11,5 @@ export const NETWORK_SETTINGS = {
 };
 
 export const MAX_CLUSTER_SIZE = 1000;
+export const MAX_DEFAULT_THRESHOLD = 10;
+export const MAX_THRESHOLD = 50;

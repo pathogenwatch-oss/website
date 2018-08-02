@@ -1,5 +1,7 @@
 import { REQUEST_BUILD_CLUSTERS, FETCH_CLUSTERS, FETCH_CLUSTER_EDGES, RUN_CLUSTER_LAYOUT, SET_CLUSTER_THRESHOLD, SET_CLUSTER_GENOME, SET_CLUSTERING_PROGRESS, SKIP_LAYOUT } from './actions';
 import { SHOW_GENOME_REPORT } from '../genomes/report/actions';
+import { cluster } from './util';
+import { MAX_CLUSTER_SIZE, MAX_DEFAULT_THRESHOLD } from './constants';
 
 // States:
 //  INITIAL_STATUS
@@ -29,13 +31,23 @@ const initialState = {
   indexOfSelectedInAll: null,
   scheme: null,
   version: null,
-  threshold: 5,
+  threshold: null,
   edgeMatrix: null,
   triedBuilding: false,
   skipMessage: null,
   nodeCoordinates: null,
   taskId: null,
 };
+
+function calculateDefaultThreshold(pi, lambda, indexOfSelected) {
+  for (let t = 1; t <= MAX_DEFAULT_THRESHOLD; t++) {
+    const clustering = cluster(t, pi, lambda);
+    const clusterId = clustering[indexOfSelected];
+    const clusterSize = clustering.filter(id => id === clusterId).length;
+    if (clusterSize > MAX_CLUSTER_SIZE) return t - 1;
+  }
+  return MAX_DEFAULT_THRESHOLD;
+}
 
 export default function (state = initialState, { type, payload }) {
   switch (type) {
@@ -126,6 +138,7 @@ export default function (state = initialState, { type, payload }) {
         indexOfSelectedInAll: genomeIdx,
         scheme,
         version,
+        threshold: calculateDefaultThreshold(pi, lambda, genomeIdx),
       };
     }
 

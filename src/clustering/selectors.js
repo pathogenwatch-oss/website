@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 
 import { cluster } from './util';
-import { MAX_CLUSTER_SIZE } from './constants';
+import { MAX_CLUSTER_SIZE, MAX_THRESHOLD } from './constants';
 
 const NODE_COLORS = {
   0: '#673c90',
@@ -179,7 +179,7 @@ export const getEdgeColors = createSelector(
   degrees =>
     (!degrees ? undefined : degrees.map(d => EDGE_COLORS[d] || EDGE_COLORS[-1]))
 );
-export const getChartThresholds = _ => [ ...Array(50) ].map((__, i) => i);
+export const getChartThresholds = _ => [ ...Array(MAX_THRESHOLD) ].map((__, i) => i);
 const getNodeGenomeCounts = createSelector(
   getNames,
   names => (!names ? undefined : names.map(n => n.length))
