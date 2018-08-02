@@ -12,11 +12,13 @@ const summaryFields = [
   },
   { field: 'speciesId',
     aggregation: ({ query }) => {
-      if (!query.genusId) return null;
-      return [
-        { $match: { 'analysis.speciator.speciesId': { $exists: true } } },
-        { $group: { _id: { label: '$analysis.speciator.speciesName', key: '$analysis.speciator.speciesId' }, count: { $sum: 1 } } },
-      ];
+      if (query.genusId || query.organismId) {
+        return [
+          { $match: { 'analysis.speciator.speciesId': { $exists: true } } },
+          { $group: { _id: { label: '$analysis.speciator.speciesName', key: '$analysis.speciator.speciesId' }, count: { $sum: 1 } } },
+        ];
+      }
+      return null;
     },
   },
   { field: 'genusId',
