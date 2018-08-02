@@ -10,4 +10,4 @@ export const NETWORK_SETTINGS = {
   labelThreshold: 0, // hack so that nodes with labels are always shown
 };
 
-export const MAX_CLUSTER_SIZE = 500;
+export const MAX_CLUSTER_SIZE = 1000;

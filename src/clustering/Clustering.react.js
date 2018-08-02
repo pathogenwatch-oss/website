@@ -96,7 +96,7 @@ const Clustering = React.createClass({
     }
     const onClick = ({ label }) => {
       if (!clickable) return;
-      const clusterSize = this.props.chartClusterSizes[this.props.chartThresholds.indexOf(label)];
+      const clusterSize = this.props.numberOfNodesAtThreshold[this.props.chartThresholds.indexOf(label)];
       if (clusterSize > constants.MAX_CLUSTER_SIZE) {
         this.props.showToast('This cluster is too large to display, please select a lower threshold.');
         return;
@@ -108,7 +108,7 @@ const Clustering = React.createClass({
         width={584}
         height={100}
         labels={this.props.chartThresholds}
-        values={this.props.chartClusterSizes}
+        values={this.props.chartValues}
         onClick={onClick}
         toolTipFunc={toolTipFunc}
         backgroundColor={this.props.chartColours.status}
@@ -242,8 +242,9 @@ const Clustering = React.createClass({
 
 function mapStateToProps(state) {
   return {
-    chartClusterSizes: selectors.getClusterSizes(state),
+    chartValues: selectors.getNumberOfGenomesAtThreshold(state),
     chartThresholds: selectors.getChartThresholds(state),
+    numberOfNodesAtThreshold: selectors.getNumberOfNodesAtThreshold(state),
     chartColours: selectors.getChartColours(state),
     clusterSts: selectors.getClusterSts(state),
     edgesCount: selectors.getEdgesCount(state),

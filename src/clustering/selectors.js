@@ -184,7 +184,7 @@ const getNodeGenomeCounts = createSelector(
   getNames,
   names => (!names ? undefined : names.map(n => n.length))
 );
-export const getClusterSizes = createSelector(
+export const getNumberOfGenomesAtThreshold = createSelector(
   getIndexOfSelectedInAll,
   getChartThresholds,
   getIndex,
@@ -204,11 +204,28 @@ export const getClusterSizes = createSelector(
     });
   }
 );
+export const getNumberOfNodesAtThreshold = createSelector(
+  getIndexOfSelectedInAll,
+  getChartThresholds,
+  getIndex,
+  (indexOfSelectedInAll, thresholds, { pi, lambda }) => {
+    if (!pi) return undefined;
+    return thresholds.map(t => {
+      const thresholdCluster = cluster(t, pi, lambda);
+      const clusterId = thresholdCluster[indexOfSelectedInAll];
+      let size = 0;
+      for (const id of thresholdCluster) {
+        if (id === clusterId) size++;
+      }
+      return size;
+    });
+  }
+);
 
 export const getNumberOfGenomesInCluster = createSelector(
   getChartThresholds,
   getThreshold,
-  getClusterSizes,
+  getNumberOfGenomesAtThreshold,
   (thresholds = [], threshold, sizes = []) => {
     if (threshold in thresholds) {
       return sizes[thresholds.indexOf(threshold)];
@@ -223,7 +240,7 @@ const colors = {
   hover: '#673c90',
 };
 export const getChartColours = createSelector(
-  getClusterSizes,
+  getNumberOfNodesAtThreshold,
   sizes => {
     if (!sizes) return undefined;
     const status = [];
