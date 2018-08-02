@@ -35,8 +35,6 @@ module.exports = async ({ user, genomeId, threshold }) => {
   const { speciator = {} } = genome.analysis;
   const { organismId = null } = speciator;
 
-  const organism = await Organism.getLatest(organismId, { resistance: 1 });
-
   const description = `Clusters for ${name} at threshold ${threshold}`;
   return {
     threshold,
@@ -49,6 +47,5 @@ module.exports = async ({ user, genomeId, threshold }) => {
     title: 'Clusters',
     status: 'READY',
     organismId,
-    organism,
   };
 };
