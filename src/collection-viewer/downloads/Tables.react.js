@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { getGenomes, getActiveGenomeIds, getCollection } from '../selectors';
-import { getTables, hasMetadata, hasTyping } from '../table/selectors';
+import { getTables, hasMetadata, hasTyping, hasAMR } from '../table/selectors';
 
 import { formatCollectionFilename } from './utils';
 import {
@@ -94,27 +94,24 @@ const items = [
     description: 'AMR Profile',
     filenameSegment: 'amr-profile.csv',
     getFileContents: generateAMRProfile,
-    hideFromMenu() {
-      const { uiOptions = {} } = Organisms.current;
-      return uiOptions.noAMR;
+    hideFromMenu({ hasAMRTables }) {
+      return !hasAMRTables;
     },
   },
   {
     description: 'AMR SNPs',
     filenameSegment: 'amr-snps.csv',
     getFileContents: generateAMRSNPs,
-    hideFromMenu() {
-      const { uiOptions = {} } = Organisms.current;
-      return uiOptions.noAMR;
+    hideFromMenu({ hasAMRTables }) {
+      return !hasAMRTables;
     },
   },
   {
     description: 'AMR Genes',
     filenameSegment: 'amr-genes.csv',
     getFileContents: generateAMRGenes,
-    hideFromMenu() {
-      const { uiOptions = {} } = Organisms.current;
-      return uiOptions.noAMR;
+    hideFromMenu({ hasAMRTables }) {
+      return !hasAMRTables;
     },
   },
 ];
@@ -153,6 +150,7 @@ function mapStateToProps(state) {
     genomeIds: getActiveGenomeIds(state),
     hasMetadataTable: hasMetadata(state),
     hasTypingTable: hasTyping(state),
+    hasAMR: hasAMR(state),
     tables: getTables(state),
   };
 }

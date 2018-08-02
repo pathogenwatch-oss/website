@@ -10,6 +10,7 @@ export const getViewer = ({ viewer }) => viewer;
 
 export const getCollection = state => getViewer(state).entities.collection;
 export const getGenomes = state => getViewer(state).entities.genomes;
+export const isClusterView = state => getCollection(state).isClusterView;
 
 export const getCollectionTitle = createSelector(
   getCollection,

@@ -4,10 +4,9 @@ import classnames from 'classnames';
 
 import Multi from './Multi.react';
 
-import { getVisibleTableName, hasMetadata, hasTyping } from './selectors';
+import { getVisibleTableName, hasMetadata, hasTyping, hasAMR } from './selectors';
 import { setTable } from './actions';
 import { tableKeys, tableDisplayNames } from '../constants';
-import Organisms from '../../organisms';
 
 function mapStateToProps(state, { table }) {
   return {
@@ -43,7 +42,7 @@ const TableSwitcher =
   connect(state => ({
     hasMetadata: hasMetadata(state),
     hasTyping: hasTyping(state),
-    hasAMR: !Organisms.uiOptions.noAMR,
+    hasAMR: hasAMR(state),
   }))(
   props => (
     <div

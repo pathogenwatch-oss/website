@@ -35,8 +35,8 @@ export const systemDataColumns = {
       );
     },
   },
-  __wgsa_reference: {
-    columnKey: '__wgsa_reference',
+  __reference: {
+    columnKey: '__reference',
     valueGetter({ analysis }) {
       if (!analysis.core || !analysis.core.fp) return null;
       return analysis.core.fp.reference;

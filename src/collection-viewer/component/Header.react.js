@@ -6,9 +6,11 @@ import AboutCollection from '../about-collection';
 
 import { isMenuOpen } from '../downloads/selectors';
 import { setMenuActive } from '../downloads/actions';
+import { isClusterView } from '../selectors';
 
 function mapStateToProps(state) {
   return {
+    clusterView: isClusterView(state),
     menuOpen: isMenuOpen(state),
   };
 }
@@ -21,7 +23,7 @@ function mergeProps({ menuOpen, ...props }, { dispatch }) {
 }
 
 export default connect(mapStateToProps, null, mergeProps)(
-  ({ downloadMenuButtonClick }) => (
+  ({ downloadMenuButtonClick, clusterView }) => (
     <span className="mdl-layout-spacer mdl-layout-spacer--flex">
       <Search />
       <nav className="wgsa-header-collection-options mdl-navigation" onClick={e => e.stopPropagation()}>
@@ -29,7 +31,7 @@ export default connect(mapStateToProps, null, mergeProps)(
           <i className="wgsa-button-icon material-icons">file_download</i>
           <span>Downloads</span>
         </button>
-        <AboutCollection />
+        { !clusterView && <AboutCollection /> }
       </nav>
     </span>
   )
