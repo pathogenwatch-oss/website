@@ -72,23 +72,6 @@ function calcDistanceFromSelected(edgeMatrix, indexOfSelectedInCluster) {
   return nodes.map(_ => _.degrees);
 }
 
-function calcEdgesPerNode(edgeMatrix) {
-  if (!edgeMatrix) return undefined;
-  let idx = 0;
-  const connections = [];
-  for (let i = 0; idx < edgeMatrix.length; i++) {
-    connections.push(0);
-    for (let j = 0; j < i; j++) {
-      if (edgeMatrix[idx]) {
-        connections[i]++;
-        connections[j]++;
-      }
-      idx++;
-    }
-  }
-  return connections;
-}
-
 function calcMinEdgeDistance(degrees) {
   if (!degrees) return undefined;
   const edgeDegrees = [];
@@ -182,15 +165,10 @@ export const getClusterNodeColors = createSelector(
   getClusterNodeDegrees,
   degrees => (!degrees ? undefined : degrees.map(d => NODE_COLORS[d] || NODE_COLORS[-1]))
 );
-// Nodes should be sized according to the number of edges they have
-const getEdgesPerClusterNode = createSelector(
-  getEdgeMatrix,
-  calcEdgesPerNode
-);
 // They're scaled and normalized to make them look nicer.
 export const getClusterNodeSizes = createSelector(
-  getEdgesPerClusterNode,
-  counts => (!counts ? undefined : normalize(counts.map(n => n ** 0.3)))
+  getClusterNodeNames,
+  names => (!names ? undefined : normalize(names.map(n => n.length ** 0.3)))
 );
 export const getMinDegreeForEdge = createSelector(
   getClusterNodeDegrees,
@@ -202,16 +180,40 @@ export const getEdgeColors = createSelector(
     (!degrees ? undefined : degrees.map(d => EDGE_COLORS[d] || EDGE_COLORS[-1]))
 );
 export const getChartThresholds = _ => [ ...Array(50) ].map((__, i) => i);
-export const getChartClusterSizes = createSelector(
+const getNodeGenomeCounts = createSelector(
+  getNames,
+  names => (!names ? undefined : names.map(n => n.length))
+);
+export const getClusterSizes = createSelector(
   getIndexOfSelectedInAll,
   getChartThresholds,
   getIndex,
-  (indexOfSelectedInAll, thresholds, { pi, lambda }) => {
+  getNodeGenomeCounts,
+  (indexOfSelectedInAll, thresholds, { pi, lambda }, genomeCounts) => {
     if (!pi) return undefined;
     return thresholds.map(t => {
       const thresholdCluster = cluster(t, pi, lambda);
-      return thresholdCluster.filter(_ => _ === thresholdCluster[indexOfSelectedInAll]).length;
+      const clusterId = thresholdCluster[indexOfSelectedInAll];
+      let size = 0;
+      for (let i = 0; i < genomeCounts.length; i++) {
+        if (thresholdCluster[i] === clusterId) {
+          size += genomeCounts[i];
+        }
+      }
+      return size;
     });
+  }
+);
+
+export const getNumberOfGenomesInCluster = createSelector(
+  getChartThresholds,
+  getThreshold,
+  getClusterSizes,
+  (thresholds = [], threshold, sizes = []) => {
+    if (threshold in thresholds) {
+      return sizes[thresholds.indexOf(threshold)];
+    }
+    return undefined;
   }
 );
 
@@ -221,7 +223,7 @@ const colors = {
   hover: '#673c90',
 };
 export const getChartColours = createSelector(
-  getChartClusterSizes,
+  getClusterSizes,
   sizes => {
     if (!sizes) return undefined;
     const status = [];

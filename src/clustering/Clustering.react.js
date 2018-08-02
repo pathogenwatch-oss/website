@@ -150,7 +150,7 @@ const Clustering = React.createClass({
       opacity: this.props.status === 'RUNNING_LAYOUT' ? 0.3 : 1,
     };
 
-    const { numberOfNodesInCluster, threshold } = this.props;
+    const { numberOfGenomesInCluster, threshold } = this.props;
 
     return (
       <div style={{ position: 'relative' }}>
@@ -166,7 +166,7 @@ const Clustering = React.createClass({
         <p className="pw-network-cover-message">
           { this.props.status === 'RUNNING_LAYOUT' ?
             <span className="wgsa-blink">Rendering cluster...</span> :
-            getClusterDescription(numberOfNodesInCluster, threshold) }
+            getClusterDescription(numberOfGenomesInCluster, threshold) }
         </p>
       </div>
     );
@@ -242,7 +242,7 @@ const Clustering = React.createClass({
 
 function mapStateToProps(state) {
   return {
-    chartClusterSizes: selectors.getChartClusterSizes(state),
+    chartClusterSizes: selectors.getClusterSizes(state),
     chartThresholds: selectors.getChartThresholds(state),
     chartColours: selectors.getChartColours(state),
     clusterSts: selectors.getClusterSts(state),
@@ -250,6 +250,7 @@ function mapStateToProps(state) {
     graph: selectors.getGraph(state),
     indexOfSelectedInCluster: selectors.getIndexOfSelectedInCluster(state),
     numberOfNodesInCluster: selectors.getNumberOfNodesInCluster(state),
+    numberOfGenomesInCluster: selectors.getNumberOfGenomesInCluster(state),
     progress: selectors.getProgress(state),
     selectedGenomeId: selectors.getSelectedGenomeId(state),
     status: selectors.getStatus(state),
