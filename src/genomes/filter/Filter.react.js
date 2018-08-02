@@ -14,7 +14,6 @@ import { stateKey } from './index';
 import * as actions from './actions';
 
 const Filter = ({ isActive, filterSummary, textValue, updateFilter, updateMulti, clearFilter, prefilter }) => {
-  const hasActiveGenus = filterSummary.genusId.some(_ => _.active);
   return (
     <FilterAside
       loading={filterSummary.loading}
@@ -55,7 +54,7 @@ const Filter = ({ isActive, filterSummary, textValue, updateFilter, updateMulti,
         summary={filterSummary.speciesId}
         updateFilter={updateFilter}
         hidden={!filterSummary.genusId.length}
-        disabled={!filterSummary.speciesId.length || !hasActiveGenus}
+        disabled={!filterSummary.speciesId.length}
         disabledText="Select a genus to filter by species."
       />
       <FilterSection
@@ -65,7 +64,7 @@ const Filter = ({ isActive, filterSummary, textValue, updateFilter, updateMulti,
         summary={filterSummary.sequenceTypes}
         updateFilter={updateFilter}
         hidden={!filterSummary.genusId.length}
-        disabled={!filterSummary.sequenceTypes.length || !hasActiveGenus}
+        disabled={!filterSummary.sequenceTypes.length}
         disabledText="Select an organism, species, or genus to filter by sequence type."
       />
       <FilterSection
