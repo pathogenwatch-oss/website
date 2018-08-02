@@ -1,7 +1,6 @@
 const express = require('express');
 const zlib = require('zlib');
 const contentLength = require('express-content-length-validator');
-const { NotFoundError } = require('../../utils/errors');
 
 const services = require('services');
 
@@ -56,12 +55,7 @@ router.get('/genome/:id/clusters', (req, res, next) => {
 
   LOGGER.info(`Received request to get clusters for genome ${id}`);
   services.request('genome', 'fetch-clusters', { user, id })
-    .then(response => {
-      if (!response.genomeIdx) {
-        throw new NotFoundError(`${id} was not found in clusters`);
-      }
-      res.json(response);
-    })
+    .then(response => res.json(response))
     .catch(next);
 });
 

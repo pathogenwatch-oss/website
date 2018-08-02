@@ -1,5 +1,6 @@
 const Clustering = require('../../models/clustering');
 const Genome = require('../../models/genome');
+const { NotFoundError } = require('../../utils/errors');
 
 async function getClusteringData({ scheme, user }) {
   const query = { scheme };
@@ -27,6 +28,7 @@ async function mapStsToGenomeNames({ genomeId, sts, user }) {
     name: 1,
   };
   const stsAndNames = await Genome.find(namesQuery, projection).lean();
+
   const stNamesMap = {};
   for (const r of stsAndNames) {
     const st = r.analysis.cgmlst.st;
@@ -35,13 +37,17 @@ async function mapStsToGenomeNames({ genomeId, sts, user }) {
     stNamesMap[st].push(name);
   }
 
-  const genome = stsAndNames.find(_ => '' + _._id === genomeId);
+  const genome = stsAndNames.find(_ => _._id.toString() === genomeId);
   const genomeSt = genome ? genome.analysis.cgmlst.st : null;
   const genomeIdx = sts.indexOf(genomeSt);
 
+  if (genomeIdx === -1) {
+    throw new NotFoundError(`Genome ${genomeId} was not found in clusters`);
+  }
+
   return {
     names: sts.map(st => stNamesMap[st] || [ 'Unnamed' ]),
-    genomeIdx: genomeIdx === -1 ? null : genomeIdx,
+    genomeIdx,
   };
 }
 

@@ -1025,7 +1025,7 @@
   },
   "clustering": {
     "task": "clustering",
-    "version": "v1.5.1",
+    "version": "v1.5.3",
     "timeout": 1200000
   }
 }
