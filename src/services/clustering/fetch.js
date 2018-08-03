@@ -54,11 +54,15 @@ async function mapStsToGenomeNames({ genomeId, sts, user }) {
 module.exports = async function ({ user, genomeId }) {
   const scheme = await Genome.lookupCgMlstScheme(genomeId, user);
   const clusters = await getClusteringData({ scheme, user });
-  if (!clusters) return {};
+  if (!clusters) {
+    throw new NotFoundError('No matching clustering result');
+  }
 
   const { results, version } = clusters;
   const result = results.find(_ => _.pi); // Ignore old fashioned results with fixed thresholds
-  if (!result) return {};
+  if (!result) {
+    throw new NotFoundError('No matching clustering result');
+  }
 
   const { pi, lambda, sts = [] } = result;
   const { names, genomeIdx } = await mapStsToGenomeNames({ genomeId, sts, user });
