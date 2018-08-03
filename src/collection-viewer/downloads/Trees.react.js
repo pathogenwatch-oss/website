@@ -40,6 +40,7 @@ const DownloadButton = ({ link, filename, title, children }) => (
 );
 
 const DownloadsMenu = ({ collection, genomeIds, prefix, tree }) => (
+  tree ?
   <li>
     <h4>Trees</h4>
     <ul>
@@ -82,7 +83,7 @@ const DownloadsMenu = ({ collection, genomeIds, prefix, tree }) => (
         </DownloadButton>
       </li>
     </ul>
-  </li>
+  </li> : null
 );
 
 DownloadsMenu.propTypes = {

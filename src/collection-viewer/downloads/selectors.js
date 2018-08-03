@@ -37,5 +37,5 @@ export const getDownloadPrefix = createSelector(
 
 export const getTreeName = createSelector(
   getVisibleTree,
-  tree => tree.name
+  tree => (tree ? tree.name : null)
 );
