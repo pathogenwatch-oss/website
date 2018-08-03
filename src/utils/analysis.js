@@ -4,20 +4,21 @@ function summariseAnalysis(analysis) {
   const { task, version, results } = analysis;
 
   if (task === 'speciator') {
-    const subspecies = getSubspecies(results.taxId);
+    const { taxId, ...rest } = results;
+    const subspecies = getSubspecies(taxId);
     if (subspecies !== null) {
       return {
         __v: version,
+        ...rest,
         organismId: subspecies.taxId,
         organismName: subspecies.name,
-        ...results,
       };
     }
     return {
       __v: version,
+      ...rest,
       organismId: results.speciesId,
       organismName: results.speciesName,
-      ...results,
     };
   }
 
