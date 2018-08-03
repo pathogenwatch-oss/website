@@ -254,7 +254,7 @@ function createContainer(spec, metadata, timeout) {
   return container;
 }
 
-async function runTask(spec, metadata) {
+async function runTask(spec, metadata, timeout) {
   const { task, version, requires: taskRequres = [] } = spec;
   const coreVersion = taskRequres.find(_ => _.task === 'core').version;
   const versions = { tree: version, core: coreVersion };
