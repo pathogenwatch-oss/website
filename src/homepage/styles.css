@@ -71,10 +71,10 @@
 
 .jumbotron h1 {
   color: #673c90;
-  font-size: 51.5px;
+  font-size: 45px;
   line-height: 1.2;
-  font-weight: 400;
-  text-shadow: 1px 1px 1px #bbb;
+  font-weight: 300;
+  text-shadow: 1px 1px 1px #efefef;
   margin: 16px 0;
 }
 
@@ -85,6 +85,5 @@
 
 .jumbotron h1 > strong {
   font-weight: 500;
-  font-size: 51.5px;
   letter-spacing: 0.01em;
 }

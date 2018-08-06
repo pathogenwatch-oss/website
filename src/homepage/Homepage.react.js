@@ -12,11 +12,11 @@ const { maxCollectionSize = 1000 } = CONFIG;
 
 export default ({ deployedOrganisms }) => (
   <div className="wgsa-homepage">
-    <DocumentTitle>Global Pathogen Surveillance through Whole Genome Sequencing</DocumentTitle>
+    <DocumentTitle>A Global Platform for Genomic Surveillance</DocumentTitle>
     <section className="jumbotron">
       <div className="jumbotron-content">
         <Logo />
-        <h1><strong>Global Pathogen Surveillance</strong><br /> <span>through</span> Whole Genome Sequencing.</h1>
+        <h1>A <strong>Global Platform</strong> for <strong>Genomic&nbsp;Surveillance</strong>.</h1>
       </div>
     </section>
     <Showcase />
