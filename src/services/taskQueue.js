@@ -31,10 +31,10 @@ const queues = {
 module.exports.Queue = Queue;
 module.exports.queues = queues;
 
-module.exports.enqueue = function (queue, message) {
-  if (!(queue in queues)) {
-    LOGGER.error(`Queue ${queue} not recognised.`);
-    throw new Error(`Queue ${queue} not recognised.`);
+module.exports.enqueue = function (queue, message, type = queue) {
+  if (!(type in queues)) {
+    LOGGER.error(`Queue type ${type} not recognised.`);
+    throw new Error(`Queue type ${type} not recognised.`);
   }
   LOGGER.info('Adding message', message, 'to', queue);
   const { spec = {} } = message;

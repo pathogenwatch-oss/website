@@ -7,10 +7,10 @@ const pullTaskImages = require('services/tasks/pull');
 const taskQueue = require('services/taskQueue');
 
 const { queues } = taskQueue;
-const { queue, pull = 1 } = argv.opts;
+const { queue, type = queue, pull = 1 } = argv.opts;
 
-if (queue && !(queue in queues)) {
-  LOGGER.error(`Queue ${queue} not recognised, exiting...`);
+if (type && !(type in queues)) {
+  LOGGER.error(`Queue type ${type} not recognised, exiting...`);
   process.exit(1);
 }
 
@@ -18,8 +18,8 @@ process.on('uncaughtException', err => console.error('uncaught', err));
 
 taskQueue.setMaxWorkers(argv.opts.workers || 1);
 
-function subscribeToQueue(queueName) {
-  if (queueName === queues.genome) {
+function subscribeToQueue(queueName, queueType = queueName) {
+  if (queueType === queues.genome) {
     taskQueue.dequeue(
       queueName,
       ({ metadata, timeout }) => request('genome', 'speciate', { timeout$: timeout * 1000, metadata }),
@@ -27,7 +27,7 @@ function subscribeToQueue(queueName) {
     );
   }
 
-  if (queueName === queues.task) {
+  if (queueType === queues.task) {
     taskQueue.dequeue(
       queueName,
       ({ task, version, timeout, metadata }) =>
@@ -36,7 +36,7 @@ function subscribeToQueue(queueName) {
     );
   }
 
-  if (queueName === queues.collection) {
+  if (queueType === queues.collection) {
     taskQueue.dequeue(
       queueName,
       ({ spec, metadata, timeout }) =>
@@ -49,7 +49,7 @@ function subscribeToQueue(queueName) {
     );
   }
 
-  if (queueName === queues.clustering) {
+  if (queueType === queues.clustering) {
     taskQueue.dequeue(
       queueName,
       ({ spec, metadata, timeout }) =>
@@ -65,7 +65,7 @@ function subscribeToQueue(queueName) {
 
 function pullImages() {
   if (pull === '0') return Promise.resolve();
-  return pullTaskImages({ queue })
+  return pullTaskImages({ queue: type })
     .catch(err => {
       LOGGER.error(err);
       process.exit(1);
@@ -75,7 +75,7 @@ function pullImages() {
 module.exports = function () {
   pullImages()
     .then(() => {
-      if (queue) subscribeToQueue(queue);
+      if (queue) subscribeToQueue(queue, type);
       else Object.keys(queues).map(subscribeToQueue);
     });
 };
