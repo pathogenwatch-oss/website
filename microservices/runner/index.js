@@ -76,6 +76,6 @@ module.exports = function () {
   pullImages()
     .then(() => {
       if (queue) subscribeToQueue(queue, type);
-      else Object.keys(queues).map(subscribeToQueue);
+      else Object.keys(queues).map(queueName => subscribeToQueue(queueName));
     });
 };
