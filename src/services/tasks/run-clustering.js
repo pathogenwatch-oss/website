@@ -40,14 +40,21 @@ async function getGenomes(spec, metadata) {
 
 function attachInputStream(container, spec, metadata, genomes, allSts) {
   const { version } = spec;
+  const { scheme } = metadata;
 
-  const reformatAsGenomeDoc = es.map((doc, cb) => cb(null, { analysis: { cgmlst: doc.results } }));
+  let previousSt = null;
+  const reformatAsGenomeDoc = es.map((doc, cb) => {
+    if (doc.results.st === previousSt) return cb();
+    previousSt = doc.results.st;
+    cb(null, { analysis: { cgmlst: doc.results } });
+  });
   const toRaw = es.map((doc, cb) => cb(null, bson.serialize(doc)));
 
   const docsStream = Analysis
     .find(
-      { task: 'cgmlst', 'results.st': { $in: allSts } },
-      { results: 1 }
+      { task: 'cgmlst', 'results.st': { $in: allSts }, 'results.scheme': scheme },
+      { results: 1 },
+      { sort: { 'results.st': 1 } },
     )
     .lean()
     .cursor()
@@ -55,16 +62,13 @@ function attachInputStream(container, spec, metadata, genomes, allSts) {
     .pipe(toRaw);
   docsStream.pause();
 
-  const sts = genomes.map(_ => _.analysis.cgmlst.st);
-
   const projection = { st: 1 };
-  for (const st of sts) {
+  for (const st of allSts) {
     projection[`alleleDifferences.${st}`] = 1;
   }
 
-  const { scheme } = metadata;
   const scoresStream = ClusteringCache.collection.find(
-    { st: { $in: sts }, version, scheme },
+    { st: { $in: allSts }, version, scheme },
     projection,
     { raw: true }
   ).stream();
@@ -194,7 +198,7 @@ function createContainer(spec, timeout) {
 
 async function runTask(spec, metadata, timeout) {
   const genomes = await getGenomes(spec, metadata);
-  const allSts = genomes.map(_ => _.analysis.cgmlst.st);
+  const allSts = [ new Set(genomes.map(_ => _.analysis.cgmlst.st)) ];
 
   const container = createContainer(spec, timeout);
   const whenOutput = handleContainerOutput(container, spec, metadata);
