@@ -48,7 +48,7 @@ function attachInputStream(container, spec, metadata, genomes, allSts) {
     seenSts.add(doc.results.st);
     cb(null, { analysis: { cgmlst: doc.results } });
   });
-  const toRaw = es.map((doc, cb) => cb(null, bson.serialize(doc)));
+  const toRaw = es.mapSync((doc, cb) => cb(null, bson.serialize(doc)));
 
   const docsStream = Analysis
     .find(
