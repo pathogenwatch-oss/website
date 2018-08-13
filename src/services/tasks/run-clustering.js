@@ -28,7 +28,7 @@ async function getGenomes(spec, metadata) {
   };
 
   const docs = await Genome
-    .find(query, { 'analysis.cgmlst.st': 1 }, { sort: { 'analysis.cgmlst.st': 1 } })
+    .find(query, { 'analysis.cgmlst.st': 1 })
     .lean();
 
   if (docs.length < 2) {
@@ -42,10 +42,10 @@ function attachInputStream(container, spec, metadata, genomes, allSts) {
   const { version } = spec;
   const { scheme } = metadata;
 
-  let previousSt = null;
-  const reformatAsGenomeDoc = es.map((doc, cb) => {
-    if (doc.results.st === previousSt) return cb();
-    previousSt = doc.results.st;
+  const seenSts = new Set();
+  const reformatAsGenomeDoc = es.mapSync((doc, cb) => {
+    if (seenSts.has(doc.results.st)) return cb();
+    seenSts.add(doc.results.st);
     cb(null, { analysis: { cgmlst: doc.results } });
   });
   const toRaw = es.map((doc, cb) => cb(null, bson.serialize(doc)));
@@ -54,7 +54,6 @@ function attachInputStream(container, spec, metadata, genomes, allSts) {
     .find(
       { task: 'cgmlst', 'results.st': { $in: allSts }, 'results.scheme': scheme },
       { results: 1 },
-      { sort: { 'results.st': 1 } },
     )
     .lean()
     .cursor()
@@ -198,7 +197,7 @@ function createContainer(spec, timeout) {
 
 async function runTask(spec, metadata, timeout) {
   const genomes = await getGenomes(spec, metadata);
-  const allSts = [ new Set(genomes.map(_ => _.analysis.cgmlst.st)) ];
+  const allSts = [ ...new Set(genomes.map(_ => _.analysis.cgmlst.st)) ];
 
   const container = createContainer(spec, timeout);
   const whenOutput = handleContainerOutput(container, spec, metadata);
