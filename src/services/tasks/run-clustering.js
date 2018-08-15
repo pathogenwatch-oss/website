@@ -42,23 +42,14 @@ function attachInputStream(container, spec, metadata, genomes, allSts) {
   const { version } = spec;
   const { scheme } = metadata;
 
-  const seenSts = new Set();
-  const reformatAsGenomeDoc = es.mapSync((doc, cb) => {
-    if (seenSts.has(doc.results.st)) return cb();
-    seenSts.add(doc.results.st);
-    cb(null, { analysis: { cgmlst: doc.results } });
-  });
-  const toRaw = es.mapSync((doc, cb) => cb(null, bson.serialize(doc)));
-
   const docsStream = Analysis
     .find(
       { task: 'cgmlst', 'results.st': { $in: allSts }, 'results.scheme': scheme },
       { results: 1 },
+      { raw: true },
     )
     .lean()
-    .cursor()
-    .pipe(reformatAsGenomeDoc)
-    .pipe(toRaw);
+    .cursor();
   docsStream.pause();
 
   const projection = { st: 1 };
@@ -70,7 +61,7 @@ function attachInputStream(container, spec, metadata, genomes, allSts) {
     { st: { $in: allSts }, version, scheme },
     projection,
     { raw: true }
-  ).stream();
+  );
   scoresStream.pause();
   scoresStream.on('end', () => docsStream.resume());
 
@@ -87,7 +78,7 @@ function attachInputStream(container, spec, metadata, genomes, allSts) {
     // .pipe(require('fs').createWriteStream('input.bson'));
 
   const genomeList = genomes.map(g => ({ _id: g._id, st: g.analysis.cgmlst.st }));
-  genomesStream.end(bson.serialize({ genomes: genomeList, thresholds: [ 20, 50, 75, 100, 150, 200 ] }), () => scoresStream.resume());
+  genomesStream.end(bson.serialize({ genomes: genomeList, thresholds: [ 1, 2, 3, 5, 10, 20, 50 ] }), () => scoresStream.resume());
 }
 
 function handleContainerOutput(container, spec, metadata) {
@@ -126,7 +117,6 @@ function handleContainerOutput(container, spec, metadata) {
         }
       } catch (e) {
         LOGGER.error(e);
-        console.log({ data, type: typeof(data) });
         return request('clustering', 'send-progress', { taskId, payload: { task, status: 'ERROR' } })
           .then(() => reject(e));
       }
@@ -184,13 +174,10 @@ function handleContainerExit(container, spec, metadata) {
 }
 
 function createContainer(spec, timeout) {
-  const { task, version, workers } = spec;
+  const { task, version } = spec;
 
-  const container = docker(getImageName(task, version), {
-    env: {
-      WGSA_WORKERS: workers,
-    },
-  }, timeout);
+  LOGGER.debug(`Starting container of ${task}:${version}`);
+  const container = docker(getImageName(task, version), {}, timeout);
 
   return container;
 }
