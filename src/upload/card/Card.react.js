@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Card from '../../card';
-import ProgressBar from '../../progress-bar';
+import ProgressBar from '../../components/progress-bar';
 
 import Header from './Header.react';
 import GenomeTasks from './GenomeTasks.react';

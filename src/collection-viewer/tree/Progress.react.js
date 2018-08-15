@@ -29,8 +29,8 @@ const Progress = React.createClass({
     if (status === 'PENDING') {
       return (
         <div className="wgsa-tree-progress mdl-shadow--2dp">
-          <p className="wgsa-blink">Tree pending</p>
-          <p className="wgsa-muted">{this.renderQueuePosition()}</p>
+          <p>Tree pending</p>
+          <p className="wgsa-muted wgsa-blink">{this.renderQueuePosition()}</p>
           <Poll interval={10} fn={this.props.fetchPosition} />
         </div>
       );

@@ -17,7 +17,7 @@ export default ({ result }) => (
         </a>
       </Metadata>
       <Metadata label="Organism Name">{result.organismName}</Metadata>
-      <Metadata label="Reference">
+      <Metadata label="RefSeq Reference">
         <a href={`http://www.ncbi.nlm.nih.gov/assembly/${result.referenceId}/`} target="_blank" rel="noopener">
           {result.referenceId}
         </a>

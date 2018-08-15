@@ -12,8 +12,8 @@
 }
 
 .pw-cluster-buttons {
-  position: absolute;
-  right: 0px;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .pw-cluster-buttons-view {
@@ -23,4 +23,32 @@
 .pw-cluster-chart-intro {
   margin-top: 16px;
   margin-bottom: 4px;
+}
+
+#clustering .wgsa-progress-bar {
+  width: 75%;
+  flex-direction: column;
+}
+
+#clustering .wgsa-progress-bar__label {
+  white-space: nowrap;
+  margin-bottom: 8px;
+}
+
+.pw-cluster-content {
+  height: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.pw-cluster-progress p {
+  font-weight: 500;
+}
+
+.pw-cluster-progress strong {
+  text-transform: uppercase;
+  color: rgba(0, 0, 0, 0.87);
 }

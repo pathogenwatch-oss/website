@@ -3,14 +3,13 @@ import { connect } from 'react-redux';
 import classnames from 'classnames';
 import { Link } from 'react-router-dom';
 
-import Notify from '../components/Notify.react';
+import Network from 'libmicroreact/network';
+import SimpleBarChart from './SimpleBarChart.react';
+import Progress from './Progress.react';
 
 import * as selectors from './selectors';
 import * as actions from './actions';
 import { showToast } from '../toast';
-
-import SimpleBarChart from './SimpleBarChart.react';
-import Network from 'libmicroreact/network';
 
 import * as constants from './constants';
 
@@ -174,16 +173,16 @@ const Clustering = React.createClass({
 
   render() {
     const trySomeClustering = (
-      <React.Fragment>
+      <div className="pw-cluster-content">
         <p>Clusters have not yet been determined for this genome.</p>
         {this.renderClusterButton('Cluster Now', true)}
-      </React.Fragment>
+      </div>
     );
     const somethingWentWrong = (
-      <React.Fragment>
-        <p>Something went wrong :(</p>
+      <div className="pw-cluster-content">
+        <p>Something went wrong 😞</p>
         {this.renderClusterButton('Try Again', false)}
-      </React.Fragment>
+      </div>
     );
     return (
       <React.Fragment>
@@ -194,21 +193,8 @@ const Clustering = React.createClass({
               return trySomeClustering;
             case 'FETCHING_CLUSTERS':
             case 'BUILDING_CLUSTERS':
-            case 'BUILT_CLUSTERS': {
-              const { progress = 0 } = this.props;
-              if (progress > 0) {
-                return (
-                  <Notify room={this.props.taskId} topic="clustering" onMessage={this.props.updateProgress}>
-                    <p>Running ({progress.toFixed(1)}%)</p>
-                  </Notify>
-                );
-              }
-              return (
-                <Notify room={this.props.taskId} topic="clustering" onMessage={this.props.updateProgress}>
-                  <p>Job queued, please wait <span className="wgsa-blink">⏳</span></p>
-                </Notify>
-              );
-            }
+            case 'BUILT_CLUSTERS':
+              return <Progress />;
             case 'FETCHED_CLUSTERS':
             case 'FETCHING_EDGES':
             case 'FETCHED_EDGES':
@@ -252,10 +238,8 @@ function mapStateToProps(state) {
     indexOfSelectedInCluster: selectors.getIndexOfSelectedInCluster(state),
     numberOfNodesInCluster: selectors.getNumberOfNodesInCluster(state),
     numberOfGenomesInCluster: selectors.getNumberOfGenomesInCluster(state),
-    progress: selectors.getProgress(state),
     selectedGenomeId: selectors.getSelectedGenomeId(state),
     status: selectors.getStatus(state),
-    taskId: selectors.getTaskId(state),
     threshold: selectors.getThreshold(state),
     triedBuilding: selectors.getTriedBuilding(state),
     scheme: selectors.getScheme(state),
@@ -265,7 +249,6 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    updateProgress: (payload) => dispatch(actions.updateProgress(payload)),
     fetch: (selectedGenomeId) => dispatch(actions.fetch(selectedGenomeId)),
     build: (selectedGenomeId) => dispatch(actions.build(selectedGenomeId)),
     setThreshold: (threshold) => dispatch(actions.setThreshold(threshold)),
