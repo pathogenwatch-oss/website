@@ -28,7 +28,7 @@ export default ({ result, genome }) => {
           <tr>
             <th>Agent</th>
             <th>Full Name</th>
-            <th>State</th>
+            <th>Genotype</th>
             <th>SNPs/Genes</th>
           </tr>
         </thead>
