@@ -49,6 +49,17 @@ router.get('/genome/:id', (req, res, next) => {
     .catch(next);
 });
 
+router.get('/genome/:id/clusters/position', (req, res, next) => {
+  const { user, params, query } = req;
+  const { id } = params;
+  const { date } = query;
+
+  LOGGER.info(`Received request to get cluster queue position for genome ${id}`);
+  services.request('clustering', 'fetch-position', { user, genomeId: id, date })
+    .then(response => res.json(response))
+    .catch(e => next(e));
+});
+
 router.get('/genome/:id/clusters', (req, res, next) => {
   const { user, params } = req;
   const { id } = params;
