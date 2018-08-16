@@ -6,7 +6,7 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 import FileCard from '../card/Card.react';
 import AnalysisChart from './AnalysisChart.react';
-import ProgressBar from '../../progress-bar';
+import ProgressBar from '../../components/progress-bar';
 
 import * as upload from './selectors';
 
