@@ -25,16 +25,6 @@
   margin-bottom: 4px;
 }
 
-#clustering .wgsa-progress-bar {
-  width: 75%;
-  flex-direction: column;
-}
-
-#clustering .wgsa-progress-bar__label {
-  white-space: nowrap;
-  margin-bottom: 8px;
-}
-
 .pw-cluster-content {
   height: 500px;
   display: flex;
@@ -42,7 +32,6 @@
   justify-content: center;
   align-items: center;
 }
-
 
 .pw-cluster-progress p {
   font-weight: 500;
