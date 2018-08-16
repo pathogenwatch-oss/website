@@ -164,7 +164,7 @@ export const StatsView = React.createClass({
                 <dl className="wgsa-hub-stats-section">
                   <dt className="wgsa-hub-stats-heading">Range</dt>
                   <dd className="wgsa-hub-stats-value">
-                    {`${range.min} - ${range.max}`}
+                    {range.min} &ndash; {range.max}
                   </dd>
                 </dl>
               </div>
