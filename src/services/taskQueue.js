@@ -49,10 +49,24 @@ module.exports.enqueue = function (queue, message, type = queue) {
   );
 };
 
+async function updateReceivableTime(queueItem) {
+  const { timeout } = (queueItem.message || {});
+  if (!timeout) return;
+  const db = await mQueue.databasePromise();
+  const collection = db.collection(mQueue.collectionName);
+  const nextReceivableTime = new Date(queueItem.receivedTime.getTime() + (timeout * 1000));
+  try {
+    await collection.update({ _id: queueItem._id }, { $set: { nextReceivableTime } });
+  } catch (err) {
+    return;
+  }
+}
+
 module.exports.dequeue = function (queue, callback, reject) {
   mQueue.registerWorker(queue, (queueItem) => {
     LOGGER.info('Handling message', queueItem, 'from', queue);
-    return callback(queueItem.message)
+    return updateReceivableTime(queueItem)
+      .then(() => callback(queueItem.message))
       .then(() => 'Completed')
       .catch(err => {
         LOGGER.error(err);
