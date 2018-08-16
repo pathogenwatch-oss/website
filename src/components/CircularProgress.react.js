@@ -47,7 +47,7 @@ export default class CircularProgress extends React.Component {
           dy=".4em"
           textAnchor="middle"
         >
-          {`${this.props.percentage.toFixed(0)}%`}
+          {`${this.props.percentage.toFixed(this.props.decimalPlaces)}%`}
         </text>
       </svg>
     );
@@ -55,13 +55,15 @@ export default class CircularProgress extends React.Component {
 }
 
 CircularProgress.propTypes = {
-  radius: React.PropTypes.number,
+  decimalPlaces: React.PropTypes.number,
   percentage: React.PropTypes.number,
+  radius: React.PropTypes.number,
   strokeWidth: React.PropTypes.number,
 };
 
 CircularProgress.defaultProps = {
-  radius: 50,
+  decimalPlaces: 0,
   percentage: 50,
+  radius: 50,
   strokeWidth: 1,
 };

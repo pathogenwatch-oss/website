@@ -41,3 +41,12 @@
   text-transform: uppercase;
   color: rgba(0, 0, 0, 0.87);
 }
+
+.pw-cluster-progress .CircularProgress {
+  margin-bottom: 8px;
+}
+
+.pw-cluster-progress .CircularProgress-Bg,
+.pw-cluster-progress .CircularProgress-Fg {
+  stroke-width: 12px;
+}

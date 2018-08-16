@@ -45,7 +45,8 @@ class QueuePosition extends React.Component {
               <CircularProgress
                 percentage={this.props.progress}
                 radius="64"
-                strokeWidth="16"
+                strokeWidth="12"
+                decimalPlaces={1}
               />
               <p className="wgsa-blink"><strong>Running</strong></p>
             </React.Fragment> :
