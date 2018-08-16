@@ -179,7 +179,9 @@ export const getEdgeColors = createSelector(
   degrees =>
     (!degrees ? undefined : degrees.map(d => EDGE_COLORS[d] || EDGE_COLORS[-1]))
 );
-export const getChartThresholds = _ => [ ...Array(MAX_THRESHOLD) ].map((__, i) => i);
+
+const chartThresholds = [ ...Array(MAX_THRESHOLD + 1) ].map((__, i) => i);
+export const getChartThresholds = () => chartThresholds;
 const getNodeGenomeCounts = createSelector(
   getNames,
   names => (!names ? undefined : names.map(n => n.length))
