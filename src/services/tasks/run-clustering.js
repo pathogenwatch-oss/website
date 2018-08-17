@@ -116,7 +116,7 @@ function handleContainerOutput(container, spec, metadata) {
           return callback();
         } else if (doc.progress) {
           const progress = doc.progress * 0.99;
-          if ((progress - lastProgress) >= 1) {
+          if ((progress - lastProgress) >= 0.1) {
             return request('clustering', 'send-progress', { taskId, payload: { task, status: 'IN PROGRESS', progress } })
               .then(() => (lastProgress = progress))
               .then(() => callback());
