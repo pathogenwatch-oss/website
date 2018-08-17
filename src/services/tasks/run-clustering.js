@@ -93,7 +93,7 @@ function handleContainerOutput(container, spec, metadata) {
   request('clustering', 'send-progress', { taskId, payload: { task, status: 'IN PROGRESS' } });
   let lastProgress = 0;
   const results = [];
-  const cache = [];
+  let cache = [];
   const consumer = new Writable({
     objectMode: true,
     write(data, _, callback) {
@@ -101,9 +101,19 @@ function handleContainerOutput(container, spec, metadata) {
       try {
         const doc = JSON.parse(data);
         if (doc.st && doc.alleleDifferences) {
-          return ClusteringCache.create({ st: doc.st, version, scheme, alleleDifferences: doc.alleleDifferences })
-            .then(() => callback())
-            .catch(error => reject(error));
+          cache.push({ st: doc.st, version, scheme, alleleDifferences: doc.alleleDifferences });
+          if (cache.length >= 100) {
+            return ClusteringCache.collection.insert(cache)
+              .then(() => {
+                for (let i = 0; i < cache.length; i++) {
+                  cache[i] = null;
+                }
+                cache = [];
+              })
+              .then(() => callback())
+              .catch(error => reject(error));
+          }
+          return callback();
         } else if (doc.progress) {
           const progress = doc.progress * 0.99;
           if ((progress - lastProgress) >= 1) {
@@ -123,8 +133,9 @@ function handleContainerOutput(container, spec, metadata) {
       return callback();
     },
     final(callback) {
-      resolve({ results, cache });
-      callback();
+      return (cache.length > 0 ? ClusteringCache.collection.insert(cache) : Promise.resolve())
+        .then(() => resolve({ results }))
+        .then(() => callback());
     },
   });
   container.stdout
