@@ -24,6 +24,6 @@ module.exports = function handleErrors(app) {
     }
 
     res.sendStatus(500);
-    req.socket.destroy();
+    process.nextTick(() => req.socket.destroy());
   });
 };
