@@ -1,4 +1,4 @@
-import './styles.css';
+import './styles/index.css';
 
 import { connect } from 'react-redux';
 

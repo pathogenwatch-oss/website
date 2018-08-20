@@ -18,17 +18,19 @@ export default ({ genome }) => {
   return (
     <div className="wgsa-genome-report-summary">
       <header>
+        <div>
+          <h1 title={genome.name} className="h2">{genome.name}</h1>
+          <p className="h6">
+            { speciator ?
+              <FormattedName fullName
+                organismId={speciator.organismId}
+                title={speciator.organismName}
+              /> :
+              <em>Pending speciation</em> }
+          </p>
+        </div>
         <Logo />
       </header>
-      <h1 title={genome.name}>{genome.name}</h1>
-      <div className="h5">
-        { speciator ?
-          <FormattedName fullName
-            organismId={speciator.organismId}
-            title={speciator.organismName}
-          /> :
-          <em>Pending speciation</em> }
-      </div>
       { (date || country || pmid) &&
         <dl>
           { country &&
