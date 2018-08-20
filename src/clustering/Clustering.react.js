@@ -192,6 +192,13 @@ const Clustering = React.createClass({
             case 'INITIAL_STATUS':
               return trySomeClustering;
             case 'FETCHING_CLUSTERS':
+              return (
+                <div className="pw-cluster-content">
+                  <p className="wgsa-blink">
+                    Checking Status
+                  </p>
+                </div>
+              );
             case 'BUILDING_CLUSTERS':
             case 'BUILT_CLUSTERS':
               return <Progress />;
