@@ -3,7 +3,7 @@ import { Name } from '../../../branding';
 
 export default ({ result: { fp, summary } }) => (
   <React.Fragment>
-    <h2>Core</h2>
+    <h2>Core Metrics</h2>
     <dl>
       <div>
         <dt>Core Matches</dt>

@@ -2,76 +2,62 @@ import React from 'react';
 
 import { VersionSwitcher } from '../components';
 
-import Metrics from './Metrics.react';
+import Clustering from '../../../clustering';
 import Core from './Core.react';
-import MLST from './MLST.react';
+import Metrics from './Metrics.react';
 import PAARSNP from './PAARSNP.react';
 import Speciator from './Speciator.react';
-import Genotyphi from './Genotyphi.react';
-import NgMast from './NgMast.react';
-import renderGenericResults from './Generic.react';
-import Clustering from '../../../clustering';
+import Typing from './Typing.react';
+// import renderGenericResults from './Generic.react';
 
 export default (genome) => {
   const { analysis = {} } = genome;
-  const { metrics, core, mlst, paarsnp, genotyphi, ngmast, speciator, cgmlst, ...rest } = analysis;
+  const { metrics, core, mlst, genotyphi, ngmast, paarsnp, speciator, cgmlst } = analysis;
 
-  const tabs = [];
+  const sections = [];
 
   if (mlst) {
-    tabs.push({
-      key: 'MLST',
-      component: <VersionSwitcher taskName="mlst" component={MLST} genome={genome} />,
-    });
-  }
-  if (genotyphi) {
-    tabs.push({
-      key: 'Genotyphi',
-      component: <VersionSwitcher taskName="genotyphi" component={Genotyphi} genome={genome} />,
-    });
-  }
-  if (ngmast) {
-    tabs.push({
-      key: 'NG-MAST',
-      component: <VersionSwitcher taskName="ngmast" component={NgMast} genome={genome} />,
+    sections.push({
+      key: (genotyphi || ngmast) ? 'Typing' : 'MLST',
+      component: <Typing genome={genome} />,
     });
   }
   if (paarsnp) {
-    tabs.push({
+    sections.push({
       key: 'AMR',
       component: <VersionSwitcher taskName="paarsnp" component={PAARSNP} genome={genome} />,
     });
   }
   if (cgmlst) {
-    tabs.push({
+    sections.push({
       key: 'Clustering',
       component: <Clustering />,
     });
   }
   if (core) {
-    tabs.push({
+    sections.push({
       key: 'Core',
       component: <VersionSwitcher taskName="core" component={Core} genome={genome} />,
     });
   }
   if (metrics) {
-    tabs.push({
-      key: 'Metrics',
+    sections.push({
+      key: 'Assembly',
       component: <VersionSwitcher taskName="metrics" component={Metrics} genome={genome} />,
     });
   }
   if (speciator) {
-    tabs.push({
+    sections.push({
       key: 'Organism',
       component: <VersionSwitcher taskName="speciator" component={Speciator} genome={genome} />,
     });
   }
-  if (Object.keys(rest).length) {
-    tabs.push({
-      key: 'Other',
-      component: renderGenericResults(rest),
-    });
-  }
+  // if (Object.keys(rest).length) {
+  //   sections.push({
+  //     key: 'Other',
+  //     component: renderGenericResults(rest),
+  //   });
+  // }
 
-  return tabs;
+  return sections;
 };

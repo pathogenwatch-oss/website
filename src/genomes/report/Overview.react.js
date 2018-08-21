@@ -18,33 +18,31 @@ export default ({ genome }) => {
   return (
     <div className="wgsa-genome-report-summary">
       <header>
-        <div>
-          <h1 title={genome.name} className="h2">{genome.name}</h1>
-          <p className="h6">
-            { speciator ?
-              <FormattedName fullName
-                organismId={speciator.organismId}
-                title={speciator.organismName}
-              /> :
-              <em>Pending speciation</em> }
-          </p>
-        </div>
+        <h1 title={genome.name} className="h2">{genome.name}</h1>
         <Logo />
       </header>
+      <p className="h6 pw-genome-report-summary-subtitle">
+        { speciator ?
+          <FormattedName fullName
+            organismId={speciator.organismId}
+            title={speciator.organismName}
+          /> :
+          <em>Pending speciation</em> }
+      </p>
       { (date || country || pmid) &&
         <dl>
           { country &&
-            <div>
+            <div className="pw-genome-report-metadata inline">
               <dt>Country</dt>
               <dd>{getCountryName(country)}</dd>
             </div> }
           { date &&
-            <div>
+            <div className="pw-genome-report-metadata inline">
               <dt>Date</dt>
               <dd>{date}</dd>
             </div> }
           { pmid &&
-            <div>
+            <div className="pw-genome-report-metadata inline">
               <dt>PMID</dt>
               <dd><PubMedLink pmid={pmid}>{pmid}</PubMedLink></dd>
             </div> }

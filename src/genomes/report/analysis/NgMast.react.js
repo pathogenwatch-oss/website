@@ -3,7 +3,7 @@ import React from 'react';
 export default ({ result }) => (
   <React.Fragment>
     <h2>NG-MAST</h2>
-    <dl className="wgsa-genome-report-stats-compact">
+    <dl>
       <div>
         <dt>NG-MAST</dt>
         <dd>{result.ngmast}</dd>

@@ -1,4 +1,5 @@
 import React from 'react';
+import classnames from 'classnames';
 
 import { taxIdMap } from '../../../organisms';
 
@@ -22,7 +23,7 @@ export default ({ result, genome }) => {
   return (
     <React.Fragment>
       <h2>Antimicrobial Resistance (AMR)</h2>
-      <table cellSpacing="0" className="wgsa-genome-report-amr">
+      <table cellSpacing="0" className="wgsa-genome-report-amr bordered">
         <caption>Resistance Profile</caption>
         <thead>
           <tr>
@@ -34,11 +35,18 @@ export default ({ result, genome }) => {
         </thead>
         <tbody>
           { filteredAntibiotics.map(({ name, fullName, state, mechanisms }) =>
-            <tr key={name} className={state !== 'NOT_FOUND' ? 'wgsa-genome-report-amr-present' : ''}>
+            <tr key={name}
+              className={classnames({
+                'pw-genome-report-amr-present': state !== 'NOT_FOUND',
+                'pw-genome-report-amr-resistant': state === 'RESISTANT',
+              })}
+            >
               <td>{name}</td>
               <td>{fullName}</td>
               <td className="wgsa-genome-report-amr-state">{state.replace(/_/g, ' ').toLowerCase()}</td>
-              <td>{mechanisms.join(', ')}</td>
+              <td className="pw-genome-report-amr-mechanisms">
+                { mechanisms.join(', ') }
+              </td>
             </tr>
           ) }
         </tbody>
