@@ -92,7 +92,7 @@ function getCountryCode(latitude, longitude) {
 }
 
 schema.statics.addPendingTasks = function (_id, tasks) {
-  return this.update({ _id }, { $pushAll: { pending: tasks } });
+  return this.update({ _id }, { $push: { pending: { $each: tasks } } });
 };
 
 schema.statics.addAnalysisResults = function (_id, ...analyses) {
