@@ -1,6 +1,8 @@
 .wgsa-genome-report-content {
-  padding: 0 40px 40px;
+  background: #fff;
   box-sizing: border-box;
+  margin-bottom: 100vh;
+  padding: 0 40px 40px;
 }
 
 .wgsa-genome-report-content h2 {

@@ -46,7 +46,7 @@ const Content = React.createClass({
       sections.push({ key: `+${pending.length} Pending`, component: <ul>{pending.map(task => <li>{task}</li>)}</ul> });
     }
     return (
-      <div className="wgsa-genome-report-content">
+      <React.Fragment>
         <nav>
           <ScrollSpy
             items={sections.map(_ => _.key.toLowerCase())}
@@ -65,15 +65,17 @@ const Content = React.createClass({
           </ScrollSpy>
           <RemoveButton key="remove" genome={genome} onRemove={close} />
         </nav>
-        { sections.map(({ key, component }) =>
-          <section
-            key={key}
-            ref={el => { this.sections[key] = el; }}
-            id={`${key.toLowerCase()}`}
-          >
-            {component}
-          </section>) }
-      </div>
+        <div className="wgsa-genome-report-content">
+          { sections.map(({ key, component }) =>
+            <section
+              key={key}
+              ref={el => { this.sections[key] = el; }}
+              id={`${key.toLowerCase()}`}
+            >
+              {component}
+            </section>) }
+        </div>
+      </React.Fragment>
     );
   },
 

@@ -13,9 +13,10 @@
 }
 
 .wgsa-genome-report .wgsa-modal {
+  align-self: flex-start;
+  background: none;
   height: auto;
   max-height: none;
-  align-self: flex-start;
 }
 
 @media (max-width: 1200px) {
