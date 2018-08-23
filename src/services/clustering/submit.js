@@ -3,10 +3,10 @@ const { enqueue, queues } = require('../taskQueue');
 const rand = require('rand-token');
 
 module.exports = async function ({ user, genomeId, clientId }) {
-  const { doc, scheme, spec } =
+  const { doc, status, scheme, spec } =
     await request('clustering', 'fetch-queue-message', { user, genomeId });
 
-  if (doc) {
+  if (status === 'QUEUED') {
     return { ok: 1, taskId: doc.message.metadata.taskId };
   }
 

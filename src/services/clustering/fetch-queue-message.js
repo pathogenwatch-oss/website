@@ -3,17 +3,26 @@ const { queues, Queue } = require('../taskQueue');
 
 const { getClusteringTask } = require('../../manifest');
 
-module.exports = async function ({ user, genomeId, projection = {} }) {
-  const scheme = await Genome.lookupCgMlstScheme(genomeId, user);
-  const spec = getClusteringTask(scheme);
+function getJobStatus(doc) {
+  if (!doc) return 'NOT_QUEUED';
+  if (doc.rejectionReason) return 'FAILED';
+  return 'QUEUED';
+}
 
+module.exports = async function ({ taskId, user, genomeId, projection = {} }) {
+  let scheme;
+  let spec;
   const queueQuery = {
     type: queues.clustering,
-    'message.spec.task': spec.task,
-    'message.metadata.scheme': scheme,
-    rejectionReason: { $exists: false },
-    'message.metadata.taskId': { $exists: 1 },
   };
+  if (taskId) {
+    queueQuery['message.metadata.taskId'] = taskId;
+  } else {
+    scheme = await Genome.lookupCgMlstScheme(genomeId, user);
+    spec = getClusteringTask(scheme);
+    queueQuery['message.spec.task'] = spec.task;
+    queueQuery['message.metadata.scheme'] = scheme;
+  }
 
   if (user) {
     queueQuery['message.metadata.userId'] = user._id;
@@ -22,6 +31,7 @@ module.exports = async function ({ user, genomeId, projection = {} }) {
   }
 
   const doc = await Queue.findOne(queueQuery, projection).lean();
+  const status = getJobStatus(doc);
 
-  return { doc, scheme, spec };
+  return { doc, status, scheme, spec };
 };

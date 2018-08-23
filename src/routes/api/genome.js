@@ -52,10 +52,10 @@ router.get('/genome/:id', (req, res, next) => {
 router.get('/genome/:id/clusters/position', (req, res, next) => {
   const { user, params, query } = req;
   const { id } = params;
-  const { date } = query;
+  const { taskId } = query;
 
   LOGGER.info(`Received request to get cluster queue position for genome ${id}`);
-  services.request('clustering', 'fetch-position', { user, genomeId: id, date })
+  services.request('clustering', 'fetch-position', { user, genomeId: id, taskId })
     .then(response => res.json(response))
     .catch(e => next(e));
 });
