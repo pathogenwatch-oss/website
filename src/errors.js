@@ -11,6 +11,9 @@ module.exports = function handleErrors(app) {
   app.use((error, req, res, next) => {
     LOGGER.error(error);
 
+    // destroy request socket for all errors
+    res.on('end', () => req.socket.destroy());
+
     if (errors.ServiceRequestErrorJSON.is(error)) {
       return res.status(400).json(error.format());
     }
@@ -24,6 +27,5 @@ module.exports = function handleErrors(app) {
     }
 
     res.sendStatus(500);
-    process.nextTick(() => req.socket.destroy());
   });
 };
