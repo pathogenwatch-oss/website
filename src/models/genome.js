@@ -20,7 +20,7 @@ function getDate(year, month = 1, day = 1) {
 }
 
 const schema = new Schema({
-  _user: { type: Schema.Types.ObjectId, ref: 'User' },
+  _user: { type: Schema.Types.ObjectId, ref: 'User', index: true },
   analysis: Object,
   binned: { type: Boolean, default: false },
   binnedDate: Date,
@@ -49,13 +49,15 @@ const schema = new Schema({
 
 schema.index({ name: 1 });
 schema.index({ public: 1, reference: 1 });
-
+schema.index({ _user: 1, binned: 1 });
 schema.index({ 'analysis.mlst.st': 1 });
 schema.index({ 'analysis.cgmlst.st': 1 });
+schema.index({ 'analysis.paarsnp.antibiotics.state': 1 });
 schema.index({ 'analysis.speciator.organismId': 1 });
 schema.index({ 'analysis.speciator.speciesId': 1 });
 schema.index({ 'analysis.speciator.genusId': 1 });
 schema.index({ 'analysis.speciator.organismName': 1 });
+schema.index({ 'analysis.speciator.organismId': 1, 'analysis.speciator.organismName': 1 });
 
 function toObject(genome, user = {}) {
   const { id } = user;

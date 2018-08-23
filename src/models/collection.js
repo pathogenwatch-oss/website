@@ -28,7 +28,7 @@ const randGenerator = rand.generator({
 const getDefaultToken = () => randGenerator.generate(12);
 
 const schema = new Schema({
-  _user: { type: Schema.Types.ObjectId, ref: 'User' },
+  _user: { type: Schema.Types.ObjectId, ref: 'User', index: true },
   _organism: { type: Schema.Types.ObjectId, ref: 'Organism' },
   access: { type: String, enum: accessLevels, default: 'private' },
   createdAt: { type: Date, index: true },
@@ -45,7 +45,7 @@ const schema = new Schema({
   published: { type: Boolean, default: false },
   publicationYear: { type: Number, index: true },
   reference: Boolean,
-  showcase: Boolean,
+  showcase: { type: Boolean, index: true },
   size: Number,
   subtrees: [ Tree ],
   title: { type: String, index: 'text' },

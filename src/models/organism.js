@@ -4,7 +4,7 @@ const { Schema } = mongoose;
 const { setToObjectOptions } = require('./utils');
 
 const schema = new Schema({
-  taxId: { type: String, required: true },
+  taxId: { type: String, required: true, index: true },
   name: String,
   shortName: String,
   deployed: { type: Date },
