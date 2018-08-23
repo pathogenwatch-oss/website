@@ -37,12 +37,6 @@ const Clustering = React.createClass({
       else props.skipLayout(this.props.graph.nodes);
     } else if (props.status === 'FETCHED_EDGES' && prevProps.status !== 'FETCHED_EDGES') {
       this.runLayout();
-    } else if (
-      props.status === 'FAILED_FETCHING_CLUSTERS' &&
-      prevProps.status !== 'FAILED_FETCHING_CLUSTERS' &&
-      props.triedBuilding === false
-    ) {
-      props.build(this.props.selectedGenomeId);
     }
   },
 
@@ -174,8 +168,8 @@ const Clustering = React.createClass({
   render() {
     const trySomeClustering = (
       <div className="pw-cluster-content">
-        <p>Clusters have not yet been determined for this genome.</p>
-        {this.renderClusterButton('Cluster Now', true)}
+        <p>Clusters have not been calculated for this genome.</p>
+        {this.renderClusterButton('Run Clustering', true)}
       </div>
     );
     const somethingWentWrong = (

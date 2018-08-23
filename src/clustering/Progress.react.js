@@ -15,14 +15,17 @@ class QueuePosition extends React.Component {
     super();
     this.state = {
       position: null,
-      date: null,
     };
   }
 
   getQueuePosition = () => {
-    fetchJson('GET', `/api/genome/${this.props.genomeId}/clusters/position`, { date: this.state.date })
-      .then(({ position, date }) => this.setState({ position, date }))
-      .catch(console.error);
+    if (!this.props.taskId) return;
+    fetchJson('GET', `/api/genome/${this.props.genomeId}/clusters/position`, { taskId: this.props.taskId })
+      .then(({ position }) => this.setState({ position }))
+      .catch(e => {
+        console.error(e);
+        this.props.updateProgress({ status: 'FAILED' });
+      });
   }
 
   renderQueuePosition = () => {
@@ -37,8 +40,9 @@ class QueuePosition extends React.Component {
   }
 
   render() {
+    const { taskId } = this.props;
     return (
-      <Notify room={this.props.taskId} topic="clustering" onMessage={this.props.updateProgress}>
+      <Notify room={taskId} topic="clustering" onMessage={this.props.updateProgress}>
         <div className="pw-cluster-content pw-cluster-progress">
           { this.props.progress > 0 ?
             <React.Fragment>
@@ -50,12 +54,13 @@ class QueuePosition extends React.Component {
               />
               <p className="wgsa-blink"><strong>Running</strong></p>
             </React.Fragment> :
-            <Poll interval={10} fn={this.getQueuePosition}>
+            <React.Fragment>
+              { taskId && <Poll interval={10} fn={() => this.getQueuePosition()} /> }
               <strong>Job Queued</strong>
               <p className="wgsa-blink">
                 { this.renderQueuePosition() }
               </p>
-            </Poll> }
+            </React.Fragment> }
         </div>
       </Notify>
     );
