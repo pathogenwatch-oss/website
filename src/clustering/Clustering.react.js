@@ -111,7 +111,7 @@ const Clustering = React.createClass({
   },
 
   renderNetwork() {
-    const width = 584;
+    const width = '100%';
     const height = 320;
 
     const fetchingMessage = <div style={{ width, height }}><p className="wgsa-blink">Fetching cluster...</p></div>;
