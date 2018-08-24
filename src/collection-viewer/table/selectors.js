@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 
-import { getViewer, isClusterView } from '../selectors';
+import { getViewer, getCollection } from '../selectors';
 
 import Organisms from '../../organisms';
 
@@ -41,8 +41,9 @@ export const hasTyping = createSelector(
 );
 
 export const hasAMR = createSelector(
-  state => (isClusterView ? isClusterView(state) : false),
-  clusterView => !clusterView && !Organisms.uiOptions.noAMR
+  // do not use `isClusterView` selector here, it will get stuck
+  state => (getCollection ? getCollection(state) : {}),
+  collection => !collection.isClusterView && !Organisms.uiOptions.noAMR
 );
 
 export const isAMRTable = createSelector(

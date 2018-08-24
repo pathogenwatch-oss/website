@@ -3,13 +3,20 @@ import { createAsyncConstants } from '../actions';
 import { getCollection } from './api';
 import { fetchQueuePosition } from '../upload/api';
 
+import Organisms from '../organisms';
+
 export const FETCH_COLLECTION = createAsyncConstants('FETCH_COLLECTION');
 
 export function fetchCollection(collectionId) {
   return {
     type: FETCH_COLLECTION,
     payload: {
-      promise: getCollection(collectionId),
+      promise:
+        getCollection(collectionId)
+          .then(result => {
+            Organisms.current = result.organismId;
+            return result;
+          }),
     },
   };
 }

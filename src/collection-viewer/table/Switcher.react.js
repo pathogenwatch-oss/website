@@ -38,37 +38,38 @@ const ButtonGroup = ({ children }) => (
   </div>
 );
 
-const TableSwitcher =
-  connect(state => ({
-    hasMetadata: hasMetadata(state),
-    hasTyping: hasTyping(state),
-    hasAMR: hasAMR(state),
-  }))(
-  props => (
-    <div
-      className="wgsa-table-switcher"
-      onClick={event => event.stopPropagation()}
-    >
+const TableSwitcher = props => (
+  <div
+    className="wgsa-table-switcher"
+    onClick={event => event.stopPropagation()}
+  >
+    <ButtonGroup>
+      <i className="material-icons" title="Data">list</i>
+      { props.hasMetadata &&
+        <Button table={tableKeys.metadata} /> }
+      { props.hasTyping &&
+        <Button table={tableKeys.typing} /> }
+      <Button table={tableKeys.stats} />
+    </ButtonGroup>
+    { props.hasAMR &&
       <ButtonGroup>
-        <i className="material-icons" title="Data">list</i>
-        { props.hasMetadata &&
-          <Button table={tableKeys.metadata} /> }
-        { props.hasTyping &&
-          <Button table={tableKeys.typing} /> }
-        <Button table={tableKeys.stats} />
-      </ButtonGroup>
-      { props.hasAMR &&
-        <ButtonGroup>
-          <i className="material-icons" title="AMR">local_pharmacy</i>
-          <Button table={tableKeys.antibiotics} />
-          <Button table={tableKeys.snps} />
-          <Button table={tableKeys.genes} />
-        </ButtonGroup> }
-      <Multi />
-    </div>
-  )
+        <i className="material-icons" title="AMR">local_pharmacy</i>
+        <Button table={tableKeys.antibiotics} />
+        <Button table={tableKeys.snps} />
+        <Button table={tableKeys.genes} />
+      </ButtonGroup> }
+    <Multi />
+  </div>
 );
 
 TableSwitcher.displayName = 'TableSwitcher';
 
-export default TableSwitcher;
+function mapSwitcherStateToProps(state) {
+  return {
+    hasMetadata: hasMetadata(state),
+    hasTyping: hasTyping(state),
+    hasAMR: hasAMR(state),
+  };
+}
+
+export default connect(mapSwitcherStateToProps)(TableSwitcher);

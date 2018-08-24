@@ -14,8 +14,6 @@ import {
   generateAMRGenes,
   createCSVLink } from './client-side';
 
-import Organisms from '../../organisms';
-
 const DownloadButton = React.createClass({
   getInitialState() {
     return {
@@ -150,7 +148,7 @@ function mapStateToProps(state) {
     genomeIds: getActiveGenomeIds(state),
     hasMetadataTable: hasMetadata(state),
     hasTypingTable: hasTyping(state),
-    hasAMR: hasAMR(state),
+    hasAMRTables: hasAMR(state),
     tables: getTables(state),
   };
 }
