@@ -28,11 +28,11 @@ function getColumnNames(genomes) {
   const trailing = new Set();
   genomes.forEach(genome => {
     if (genome.userDefined) {
-      Object.keys(genome.userDefined).
-        filter(name => name.length && !/__colou?r$/.test(name)).
-        forEach(name => userDefined.add(name));
+      Object.keys(genome.userDefined)
+        .filter(name => name.length && !/__colou?r$/.test(name))
+        .forEach(name => userDefined.add(name));
     }
-    if (genome.date) {
+    if (genome.year) {
       leading.add('__date');
     }
     if (genome.pmid) {

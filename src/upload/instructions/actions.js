@@ -1,7 +1,7 @@
 import * as utils from '../utils';
 
 import { showToast } from '../../toast';
-import { history } from '../../app';
+import { history } from '../../app/router';
 
 import { addGenomes } from '../progress/actions';
 
@@ -16,6 +16,13 @@ export function addFiles(newFiles) {
       .catch(error => {
         if (error.toast) {
           dispatch(showToast(error.toast));
+        } else if (error.message) {
+          dispatch(showToast({
+            message: `🚫 ${error.message}. Please try again.`,
+            autohide: false,
+          }));
+        } else {
+          dispatch(showToast({ message: 'Sorry, something went wrong 😞' }));
         }
       });
 }

@@ -1,8 +1,10 @@
 import { createSelector } from 'reselect';
 import sortBy from 'lodash.sortby';
 
-import { getGenomeList } from '../selectors';
+import { getGenomeList, getTotalGenomes } from '../selectors';
+import { getVisible } from '../summary/selectors';
 import { getDeployedOrganismIds } from '../../summary/selectors';
+import { getPrefilter } from '../filter/selectors';
 
 import { isOverSelectionLimit } from './utils';
 
@@ -12,10 +14,16 @@ export const getSelection = ({ genomes }) => genomes.selection;
 export const getSelectedGenomes = state => getSelection(state).genomes;
 export const getSelectionDropdownView = state => getSelection(state).dropdown;
 export const getSelectionDownloads = state => getSelection(state).download;
+export const getLastSelectedIndex = state => getSelection(state).lastSelectedIndex;
 
 export const getSelectedGenomeIds = createSelector(
   getSelectedGenomes,
-  selection => Object.keys(selection)
+  getPrefilter,
+  (selection, prefilter) => {
+    const ids = Object.keys(selection);
+    if (prefilter === 'bin') return ids.filter(id => selection[id].binned);
+    return ids;
+  }
 );
 
 export const getSelectedGenomeList = createSelector(
@@ -38,10 +46,15 @@ export const isSelectionLimitReached = createSelector(
   ids => isOverSelectionLimit(ids.length)
 );
 
-export const areAllSelected = createSelector(
-  getSelectedGenomes,
+export const getSelectionStatus = createSelector(
+  getSelectedGenomeIds,
   getGenomeList,
-  (selection, genomes) => genomes.every(({ id }) => (id in selection))
+  getVisible,
+  (selection, genomes, total) => {
+    if (selection.length === 0) return 'UNCHECKED';
+    if (genomes.length === total && genomes.every(({ id }) => (selection.indexOf(id) !== -1))) return 'CHECKED';
+    return 'INDETERMINATE';
+  }
 );
 
 export const getDownloadSummary = createSelector(
@@ -64,10 +77,18 @@ export const getDownloadSummary = createSelector(
         }
       }
       return {
-        ...item,
+        speciesId: item.speciesId,
+        speciesName: item.speciesName,
+        total: item.total,
         ids: Array.from(allIds),
         tasks: sortBy(tasks, _ => _.label.toUpperCase()),
       };
     });
   }
+);
+
+export const isSelectAllDisabled = createSelector(
+  getVisible,
+  getTotalGenomes,
+  (total, totalDownloaded) => total > totalDownloaded
 );

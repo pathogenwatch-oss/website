@@ -8,7 +8,7 @@ import * as selectors from './selectors';
 import { createCollection, changeCollectionMetadata } from './actions';
 
 import { taxIdMap } from '../../organisms';
-import { history } from '../../app';
+import { history } from '../../app/router';
 
 const CreateCollectionForm = React.createClass({
 
@@ -67,7 +67,10 @@ const CreateCollectionForm = React.createClass({
           />
           <label className="mdl-textfield__label" htmlFor="collection-description">Description</label>
         </div>
-        <div ref={this.addToFormElements} className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <div
+          ref={this.addToFormElements}
+          className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-textfield--small"
+        >
           <input
             className="mdl-textfield__input"
             type="text"
@@ -79,14 +82,14 @@ const CreateCollectionForm = React.createClass({
           />
           <label className="mdl-textfield__label" htmlFor="collection-pmid">PMID</label>
         </div>
-        <div className="mdl-typography--text-center">
+        <footer>
           <button
             className="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
             disabled={!canCreateCollection}
           >
             Create Now
           </button>
-        </div>
+        </footer>
       </form>
     );
   },
@@ -107,9 +110,9 @@ function mapDispatchToProps(dispatch) {
       (e) => {
         e.preventDefault();
         dispatch(createCollection())
-          .then(({ slug }) => {
-            if (slug) {
-              history.push(`/collection/${slug}`);
+          .then(({ token }) => {
+            if (token) {
+              history.push(`/collection/${token}`);
             } else {
               console.error('Failed to create collection');
             }

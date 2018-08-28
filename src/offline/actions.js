@@ -17,11 +17,11 @@ export function loadCollections() {
 export const OFFLINE_REMOVE_COLLECTION =
   createAsyncConstants('OFFLINE_REMOVE_COLLECTION');
 
-export function removeOfflineCollection(uuid) {
+export function removeOfflineCollection(token) {
   return {
     type: OFFLINE_REMOVE_COLLECTION,
     payload: {
-      promise: removeItem(uuid).then(getOfflineList),
+      promise: removeItem(token).then(getOfflineList),
     },
   };
 }

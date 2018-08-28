@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect';
+import removeMarkdown from 'remove-markdown';
 
-import { getTables, getAMRTableName } from './table/selectors';
+import { getTableState, getAMRTableName } from './table/selectors';
 
 import { createColourGetter } from './amr-utils';
 import { filterKeys } from './filter/constants';
@@ -9,6 +10,12 @@ export const getViewer = ({ viewer }) => viewer;
 
 export const getCollection = state => getViewer(state).entities.collection;
 export const getGenomes = state => getViewer(state).entities.genomes;
+export const isClusterView = state => getCollection(state).isClusterView;
+
+export const getCollectionTitle = createSelector(
+  getCollection,
+  ({ title }) => (title ? removeMarkdown(title) : null)
+);
 
 const getSearchIds = createSelector(
   state => getViewer(state).search.intersections,
@@ -71,9 +78,9 @@ export const getActiveGenomes = createSelector(
 );
 
 export const getColourGetter = createSelector(
-  getTables,
+  getTableState,
   getAMRTableName,
-  (tables, name) => createColourGetter(name, tables[name].activeColumns)
+  (tables, name) => createColourGetter(tables.entities[name], tables.multi)
 );
 
 export const getCollectionMetadata = createSelector(
@@ -83,5 +90,20 @@ export const getCollectionMetadata = createSelector(
     description: collection.description,
     dateCreated: new Date(collection.createdAt).toLocaleDateString(),
     pmid: collection.pmid,
+    owner: collection.owner,
+    access: collection.access,
   })
+);
+
+export const getCollectionGenomeIds = createSelector(
+  getGenomes,
+  genomes => {
+    const collectionGenomes = [];
+    for (const id of Object.keys(genomes)) {
+      if (genomes[id].__isCollection) {
+        collectionGenomes.push(id);
+      }
+    }
+    return collectionGenomes;
+  }
 );

@@ -65,6 +65,7 @@ export default React.createClass({
     onInternalNodeSelected: React.PropTypes.func,
     loading: React.PropTypes.bool,
     filenames: React.PropTypes.object,
+    resetTreeRoot: React.PropTypes.func,
   },
 
   getInitialState() {
@@ -112,9 +113,6 @@ export default React.createClass({
 
     // must be native event to for body click cancellation to work
     this.refs.menuButton.addEventListener('click', e => this.toggleContextMenu(e));
-    // must be native event for timing to work :/
-    this.refs.redrawOriginalTreeButton.addEventListener('click', () => phylocanvas.redrawOriginalTree());
-
     this.loadTree();
   },
 
@@ -133,7 +131,8 @@ export default React.createClass({
     }
 
     if (root !== previous.root && root !== this.phylocanvas.root.id) {
-      this.changeRoot();
+      const drawn = this.changeRoot();
+      if (drawn) return;
     }
 
     if (type && (type !== this.phylocanvas.treeType || !previous.loaded)) {
@@ -144,7 +143,11 @@ export default React.createClass({
   },
 
   componentWillUnmount() {
-    this.phylocanvas.cleanup();
+    try {
+      this.phylocanvas.cleanup();
+    } catch (e) {
+      console.error(e);
+    }
   },
 
   phylocanvas: null,
@@ -154,12 +157,17 @@ export default React.createClass({
   },
 
   changeRoot() {
+    if (this.props.root === 'root') {
+      this.phylocanvas.redrawOriginalTree();
+      return true;
+    }
     const newRoot = this.phylocanvas.originalTree.branches[this.props.root];
     if (newRoot) {
       this.phylocanvas.redrawFromBranch(newRoot);
-    } else {
-      this.phylocanvas.redrawOriginalTree();
+      return false;
     }
+    this.phylocanvas.redrawOriginalTree();
+    return true;
   },
 
   toggleContextMenu(event) {
@@ -170,7 +178,7 @@ export default React.createClass({
       return;
     }
     const { top, left } = $(event.target).offset();
-    this.phylocanvas.contextMenu.open(left - 128, top + 32); // magic numbers to position the menu "bottom-right"
+    this.phylocanvas.contextMenu.open(left - 156, top + 32); // magic numbers to position the menu "bottom-right"
     this.phylocanvas.contextMenu.closed = false;
     this.phylocanvas.tooltip.close();
   },
@@ -194,16 +202,15 @@ export default React.createClass({
         >
           <i className="material-icons">tune</i>
         </button>
-        <button
-          ref="redrawOriginalTreeButton"
-          className={classnames(
-            'wgsa-pane-overlay wgsa-redraw-original-tree-button mdl-button mdl-button--icon',
-            { 'wgsa-redraw-original-tree-button--visible': this.props.root !== 'root' }
-          )}
-          title="Redraw Original Tree"
-        >
-          <i className="material-icons">replay</i>
-        </button>
+        { this.props.root !== 'root' &&
+          <button
+            ref="redrawOriginalTreeButton"
+            className="wgsa-pane-overlay wgsa-redraw-original-tree-button mdl-button mdl-button--icon"
+            title="Redraw Original Tree"
+            onClick={this.props.resetTreeRoot}
+          >
+            <i className="material-icons">replay</i>
+          </button> }
         <button
           ref="menuButton"
           className="mdl-button mdl-js-button mdl-button--icon wgsa-tree-menu-button wgsa-pane-button wgsa-pane-overlay"

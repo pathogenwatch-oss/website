@@ -1,14 +1,51 @@
+/* global localforage */
 import config from '../../app/config';
 
-export function getSelectionLimit() {
-  const { user, maxCollectionSize } = config;
-  if (!maxCollectionSize || (user && user.admin)) return null;
+const storageKey = 'selected-genomes';
 
-  const { anonymous, loggedIn } = maxCollectionSize;
-  return user ? loggedIn : anonymous;
+export function getSelectionLimit() {
+  const { pagination = { max: 2500 } } = config;
+  return pagination.max;
 }
 
 export function isOverSelectionLimit(amount) {
   const limit = getSelectionLimit();
-  return limit ? amount > limit : false;
+  return amount > limit;
+}
+
+export function getStoredSelection() {
+  return localforage.getItem(storageKey)
+    .then(list => Object.values(list || {}));
+}
+
+export function setStoredSelection(genomes = []) {
+  const selection = {};
+  for (const { id, name, organismId, binned } of genomes) {
+    selection[id] = { id, name, organismId, binned };
+  }
+  return localforage.setItem(storageKey, selection);
+}
+
+export function addToStoredSelection(genomes) {
+  return (
+    localforage.getItem(storageKey)
+      .then(selection => {
+        for (const { id, name, organismId, binned } of genomes) {
+          selection[id] = { id, name, organismId, binned };
+        }
+        return localforage.setItem(storageKey, selection);
+      })
+  );
+}
+
+export function removeFromStoredSelection(genomes) {
+  return (
+    localforage.getItem(storageKey)
+      .then(selection => {
+        for (const { id } of genomes) {
+          delete selection[id];
+        }
+        return localforage.setItem(storageKey, selection);
+      })
+  );
 }

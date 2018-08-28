@@ -6,6 +6,7 @@ import {
 } from './actions';
 import { TREE_LOADED } from '../tree/actions';
 import { SEARCH_TERM_ADDED } from '../search/actions';
+import { FETCH_COLLECTION } from '../actions';
 
 import { filterKeys } from '../filter/constants';
 
@@ -26,16 +27,27 @@ const initialState = {
 export default function (state = initialState, { type, payload = {} }) {
   const { ids } = payload;
   switch (type) {
+    case FETCH_COLLECTION.SUCCESS: {
+      const { genomes = [] } = payload.result;
+      return {
+        ...state,
+        [filterKeys.VISIBILITY]: {
+          unfilteredIds: genomes.map(_ => _.uuid),
+          ids: new Set(),
+          active: false,
+        },
+      };
+    }
     case TREE_LOADED: {
       const { leafIds } = payload;
       const filter = state[filterKeys.VISIBILITY];
-      const reset = filter.active && !leafIds.some(id => filter.ids.has(id));
+      const shouldClearFilter = filter.active && !leafIds.some(id => filter.ids.has(id));
       return {
         ...state,
         [filterKeys.VISIBILITY]: {
           unfilteredIds: leafIds,
-          ids: reset ? new Set() : filter.ids,
-          active: reset ? false : filter.active,
+          ids: shouldClearFilter ? new Set() : filter.ids,
+          active: shouldClearFilter ? false : filter.active,
         },
       };
     }

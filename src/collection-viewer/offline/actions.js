@@ -32,7 +32,10 @@ export function checkStatus() {
       .then(isSaved =>
         dispatch(setStatus(isSaved ? statuses.SAVED : statuses.UNSAVED))
       )
-      .catch(() => dispatch(setStatus(statuses.ERRORED)))
+      .catch(err => {
+        console.error(err);
+        dispatch(setStatus(statuses.ERRORED));
+      })
     );
   };
 }
@@ -58,7 +61,7 @@ export function saveForOffline() {
   return (dispatch, getState) => {
     const state = getState();
     const collection = getCollection(state);
-    const { uuid } = collection;
+    const { uuid, token } = collection;
     const subtrees = getSubtreeNames(state);
 
     const cacheKey = createCacheKey(uuid);
@@ -67,9 +70,9 @@ export function saveForOffline() {
     registerServiceWorker()
       .then(() => caches.open(cacheKey))
       .then(cache => Promise.all([
-        cacheCollectionRequest(cache, uuid),
+        cacheCollectionRequest(cache, token),
         cache.addAll(subtrees.map(subtree =>
-          getServerPath(`/api/collection/${uuid}/subtree/${subtree}`))
+          getServerPath(`/api/collection/${token}/tree/${subtree}`))
         ),
       ]))
       .then(() => saveToOfflineList(collection))

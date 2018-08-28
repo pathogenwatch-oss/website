@@ -3,14 +3,16 @@ import '../css/menu.css';
 import '../css/forms.css';
 
 import React from 'react';
+import { hot } from 'react-hot-loader';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
 
 import Toast from '../toast';
-import GenomeDrawer from '../genomes/detail';
-
+import GenomeDetail from '../genomes/report';
+import LocalStorage from './LocalStorage.react';
 import Header from './Header.react';
 import Content from './Content.react';
+import Cookies from './Cookies.react';
 
 import { fetchSummary } from '../summary/actions';
 import { locationChange } from '../location';
@@ -31,7 +33,7 @@ function mapDispatchToProps(dispatch, { location }) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(React.createClass({
+const App = connect(mapStateToProps, mapDispatchToProps)(React.createClass({
 
   propTypes: {
     children: React.PropTypes.element,
@@ -42,7 +44,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(React.createClass({
     this.menuButton = document.querySelector('.mdl-layout__drawer-button');
     this.onLocationChange();
     this.props.fetchSummary();
-    this.props.showIntroToast();
+    // this.props.showIntroToast();
   },
 
   componentDidUpdate(previous) {
@@ -60,6 +62,10 @@ export default connect(mapStateToProps, mapDispatchToProps)(React.createClass({
     }
   },
 
+  componentDidCatch(e) {
+    console.log(e);
+  },
+
   render() {
     const { pageSlug, userDrawerVisible } = this.props;
     return (
@@ -68,7 +74,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(React.createClass({
           className={classnames(
             'mdl-layout',
             `wgsa-page--${pageSlug}`,
-            { 'user-drawer-visible': userDrawerVisible }
+            { 'user-drawer-visible': userDrawerVisible },
           )}
         >
           <Header />
@@ -76,10 +82,14 @@ export default connect(mapStateToProps, mapDispatchToProps)(React.createClass({
             <Content />
           </main>
           <Toast />
-          <GenomeDrawer />
+          <GenomeDetail />
+          <LocalStorage />
+          <Cookies />
         </div>
       </div>
     );
   },
 
 }));
+
+export default hot(module)(App);

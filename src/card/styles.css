@@ -18,7 +18,7 @@
 
 .wgsa-card-title {
   color: #673c90;
-  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif !important;
   font-size: 14px;
   font-weight: 500;
   line-height: 20px;

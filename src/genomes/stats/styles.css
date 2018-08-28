@@ -40,13 +40,13 @@
 }
 
 .wgsa-hub-stats-heading {
-  font-family: "Roboto Condensed", "Helvetica", "Arial", sans-serif;
+  font-family: "Saira Semi Condensed", "Helvetica", "Arial", sans-serif !important;
   font-size: 14px;
   line-height: 1.5;
   margin: 0 0 16px;
   padding-top: 6px;
   color: #673c90;
-  font-weight: 400;
+  font-weight: 500;
   border-top: 1px solid #673c90;
   text-align: left;
 }
@@ -82,6 +82,7 @@
   font-size: 34px;
   font-weight: 300;
   color: rgba(0, 0, 0, 0.54);
+  line-height: 28px;
 }
 
 .wgsa-hub-stats-value--large:hover {

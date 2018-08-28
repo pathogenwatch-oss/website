@@ -1,6 +1,8 @@
 import { createSelector } from 'reselect';
 
-import { getViewer } from '../../collection-viewer/selectors';
+import { getViewer, getCollection } from '../selectors';
+
+import Organisms from '../../organisms';
 
 export const getTableState = state => getViewer(state).table;
 
@@ -36,4 +38,28 @@ export const hasMetadata = createSelector(
 export const hasTyping = createSelector(
   getTables,
   tables => tables.typing.active
+);
+
+export const hasAMR = createSelector(
+  // do not use `isClusterView` selector here, it will get stuck
+  state => (getCollection ? getCollection(state) : {}),
+  collection => !collection.isClusterView && !Organisms.uiOptions.noAMR
+);
+
+export const isAMRTable = createSelector(
+  getVisibleTableName,
+  getAMRTableName,
+  (visible, amr) => visible === amr
+);
+
+export const getFixedGroupWidth = createSelector(
+  hasMetadata,
+  hasTyping,
+  isAMRTable,
+  (metadata, typing, isAMR) => {
+    let width = isAMR ? 404 : 348; // acount for multi button
+    if (!metadata) width -= 68;
+    if (!typing) width -= 53;
+    return width;
+  }
 );

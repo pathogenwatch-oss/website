@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import CreateCollectionForm from './Form.react';
 import { FormattedName, taxIdMap } from '../../organisms';
+import Verify from './Verify.react';
 
 import { getSelectedGenomeSummary } from './selectors';
 import { getDeployedOrganismIds } from '../../summary/selectors';
@@ -10,10 +11,9 @@ import { getDeployedOrganismIds } from '../../summary/selectors';
 import { setSelection } from '../selection/actions';
 
 const NoSupportedOrganism = ({ deployedOrganisms }) => (
-  <div>
+  <div className="wgsa-create-collection-message">
     <p>
-      Please select a supported organism to create a collection.<br />
-      Supported organisms are:
+      To create a collection, please select genomes identified as one of the following organisms:
     </p>
     <ul className="wgsa-supported-organism-list">
       { Array.from(deployedOrganisms).map(organismId =>
@@ -26,7 +26,7 @@ const NoSupportedOrganism = ({ deployedOrganisms }) => (
 );
 
 const NotEnoughGenomes = ({ organismId, deficit }) => (
-  <div className="wgsa-not-enough-genomes">
+  <div className="wgsa-create-collection-message">
     <p>
       Population search is not currently supported for <strong><FormattedName fullName organismId={organismId} /></strong>.
     </p>
@@ -38,7 +38,7 @@ const NotEnoughGenomes = ({ organismId, deficit }) => (
 );
 
 const SelectOrganism = ({ summary, onClick }) => (
-  <div>
+  <div className="wgsa-create-collection-message">
     <p>To create a collection, please select <strong>one organism</strong> below:</p>
     <p>
       { Object.keys(summary).map(id =>
@@ -67,13 +67,18 @@ const CreateCollection = ({ selectedGenomeSummary, deployedOrganisms, onClick })
 
   if (organismIds.length === 1) {
     const organismId = organismIds[0];
-    const count = selectedGenomeSummary[organismId].length;
+    const genomes = selectedGenomeSummary[organismId];
+    const count = genomes.length;
     const { uiOptions = {} } = taxIdMap.get(organismId);
 
     if (uiOptions.noPopulation && count < 3) {
       return <NotEnoughGenomes organismId={organismId} deficit={3 - count} />;
     }
-    return <CreateCollectionForm />;
+    return (
+      <Verify organismId={organismId} genomes={genomes}>
+        <CreateCollectionForm />
+      </Verify>
+    );
   }
 
   return <SelectOrganism summary={selectedGenomeSummary} onClick={onClick} />;

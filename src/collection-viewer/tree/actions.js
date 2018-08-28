@@ -1,5 +1,6 @@
 import { createAsyncConstants } from '../../actions';
 
+import * as api from './api';
 import { takeSnapshot, getLinearStep } from './utils';
 
 export const SET_TREE = 'SET_TREE';
@@ -108,6 +109,31 @@ export function internalNodeSelected(stateKey, nodeId) {
     payload: {
       stateKey,
       nodeId,
+    },
+  };
+}
+
+
+export const FETCH_TREE_POSITION = createAsyncConstants('FETCH_TREE_POSITION');
+
+export function fetchTreePosition(stateKey, date) {
+  return {
+    type: FETCH_TREE_POSITION,
+    payload: {
+      stateKey,
+      promise: api.fetchTreePosition(date),
+    },
+  };
+}
+
+
+export const RESET_TREE_ROOT = 'RESET_TREE_ROOT';
+
+export function resetTreeRoot(stateKey) {
+  return {
+    type: RESET_TREE_ROOT,
+    payload: {
+      stateKey,
     },
   };
 }

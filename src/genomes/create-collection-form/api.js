@@ -7,3 +7,10 @@ export function createCollectionRequest(genomes, organismId, metadata) {
     genomeIds: genomes.map(_ => _.id),
   });
 }
+
+export function verify(genomes, organismId) {
+  return fetchJson('POST', '/api/collection/verify', {
+    organismId,
+    genomeIds: genomes.map(_ => _.id),
+  });
+}

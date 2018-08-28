@@ -11,7 +11,7 @@ export function undoMoveToBin({ title, binned }, onClick) {
     message: (
       <span>
         {title ? <MarkdownInline tag="strong">{title}</MarkdownInline> : 'Collection'}&nbsp;
-        {binned ? 'restored' : 'moved to bin'}.
+        {binned ? 'restored from' : 'moved to'} bin.
       </span>
     ),
   };

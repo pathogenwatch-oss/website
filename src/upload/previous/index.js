@@ -9,6 +9,7 @@ import Summary from '../Summary.react';
 import Grid from '../../grid';
 
 import { fetchUploads } from './actions';
+import DocumentTitle from '../../branding/DocumentTitle.react';
 
 const ListItem = ({ item }) => {
   const { uploadedAt, total } = item;
@@ -27,17 +28,17 @@ const Header = () => (
   </header>
 );
 
-const Previous = React.createClass({
+class Previous extends React.Component {
 
-  componentWillMount() {
+  componentDidMount() {
     this.props.fetch();
-    document.title = 'WGSA | Previous Uploads';
-  },
+  }
 
   render() {
     const { loading, error, uploads } = this.props;
     return (
       <div className="wgsa-hipster-style wgsa-previous-uploads">
+        <DocumentTitle>Previous Uploads</DocumentTitle>
         <Summary previous />
         { !!uploads.length ?
           <Grid
@@ -56,9 +57,9 @@ const Previous = React.createClass({
           </div> }
       </div>
     );
-  },
+  }
 
-});
+}
 
 function mapStateToProps(state) {
   return state.upload.previous;

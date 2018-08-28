@@ -8,6 +8,7 @@ import Filter from '../filter';
 import Header from '../header';
 
 import { statuses } from '../constants';
+import DocumentTitle from '../../branding/DocumentTitle.react';
 
 export default React.createClass({
 
@@ -54,10 +55,17 @@ export default React.createClass({
               Nothing in the bin 👍
             </p>
           );
+        case 'user':
+          return (
+            <div className="pw-flex-center pw-expand pw-onboarding-message">
+              <p>You haven't uploaded any genomes yet 😮</p>
+              <p><Link to="/upload" className="mdl-button mdl-button--raised mdl-button--colored">Upload now</Link></p>
+            </div>
+          );
         default:
           return (
             <p className="wgsa-hub-big-message">
-              <Link to="/upload">Upload some genomes first. 🙂</Link>
+              Nothing to show  ¯\_(ツ)_/¯
             </p>
           );
       }
@@ -65,7 +73,7 @@ export default React.createClass({
 
     return (
       <p className="wgsa-hub-big-message">
-        Something went wrong. 😞
+        Nothing to show  ¯\_(ツ)_/¯
       </p>
     );
   },
@@ -100,14 +108,15 @@ export default React.createClass({
           { 'has-filter': this.props.isFilterOpen }
         )}
       >
+        <DocumentTitle title="Genomes" />
         <Filter />
         <div className="wgsa-filter-content">
-          <Header />
+          <Header prefilter={this.props.prefilter} />
           {this.renderContent()}
         </div>
         <Overlay visible={this.props.status === statuses.LOADING}>
           <p className="wgsa-big-message">
-            Loading... ⌛
+            Loading... ⏳
           </p>
         </Overlay>
       </div>

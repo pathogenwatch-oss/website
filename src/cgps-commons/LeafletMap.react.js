@@ -1,9 +1,9 @@
 import React from 'react';
 import classnames from 'classnames';
 import Leaflet from 'leaflet';
-import { Map, TileLayer, Marker, ZoomControl, PropTypes } from 'react-leaflet';
-import MarkerLayer from 'react-leaflet-marker-layer';
+import { Map, TileLayer, Marker, ZoomControl, PropTypes as LeafletPropTypes } from 'react-leaflet';
 
+import MarkerLayer from './LeafletMarkerLayer.react';
 import MapCluster from './LeafletMapCluster.react';
 import Lasso from './LeafletMapLasso.react';
 import DefaultIcon from './LeafletMarkerDefaultIcon';
@@ -29,7 +29,7 @@ export default React.createClass({
     markerSize: React.PropTypes.number,
     cluster: React.PropTypes.bool,
     clusterOptions: React.PropTypes.object,
-    center: PropTypes.latlng,
+    center: LeafletPropTypes.latlng,
     zoom: React.PropTypes.number,
     highlightedColour: React.PropTypes.string,
     lassoPath: React.PropTypes.array,
@@ -48,6 +48,10 @@ export default React.createClass({
       markerIds: [],
       refitOnMarkerChange: true,
     };
+  },
+
+  componentDidMount() {
+    this.refitMapBounds();
   },
 
   componentDidUpdate(previous) {
@@ -206,7 +210,7 @@ export default React.createClass({
             onPathChange={this.props.onLassoPathChange}
           />
           <ZoomControl
-            position="bottomleft"
+            position="bottomright"
           />
         </Map>
         {this.props.children}

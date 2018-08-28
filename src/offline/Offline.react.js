@@ -13,6 +13,7 @@ import { loadCollections } from './actions';
 import { isSupported, isOffline } from './utils';
 
 import { statuses } from './constants';
+import DocumentTitle from '../branding/DocumentTitle.react';
 
 const Supported = () => (
   <div className="wgsa-page wgsa-compact-page">
@@ -42,7 +43,7 @@ const Intro = () => (isSupported() ? <Supported /> : <NotSupported />);
 
 const template = props => (
   <CollectionCard {...props}
-    footerLink={<RemoveOfflineCollection uuid={props.item.uuid} />}
+    footerLink={<RemoveOfflineCollection token={props.item.token} />}
   />
 );
 
@@ -53,22 +54,18 @@ const CollectionList = ({ collections }) => (
     <StaticGrid
       items={collections}
       template={template}
-      keyProp="uuid"
+      keyProp="token"
     />
   </div>
 );
 
 const Offline = React.createClass({
 
-  componentWillMount() {
-    document.title = 'WGSA | Offline';
-  },
-
   componentDidMount() {
     this.props.loadCollections();
   },
 
-  render() {
+  renderContent() {
     const { status, collections } = this.props;
     if (status === statuses.LOADING) {
       return (
@@ -81,6 +78,15 @@ const Offline = React.createClass({
       collections.length ?
         <CollectionList collections={collections} /> :
         <Intro />
+    );
+  },
+
+  render() {
+    return (
+      <React.Fragment>
+        <DocumentTitle>Offline</DocumentTitle>
+        {this.renderContent()}
+      </React.Fragment>
     );
   },
 

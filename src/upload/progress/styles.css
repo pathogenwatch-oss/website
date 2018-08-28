@@ -107,3 +107,7 @@
   display: flex;
   flex-direction: column;
 }
+
+.wgsa-upload-progress .wgsa-section-title {
+  font-family: Roboto, Helvetica, Arial, sans-serif !important;
+}

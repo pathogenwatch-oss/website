@@ -1,5 +1,6 @@
 import * as actions from './actions';
-import { FETCH_GENOME_LIST } from '../actions';
+import { FETCH_GENOME_LIST, FETCH_GENOME_SUMMARY } from '../actions';
+import { CREATE_COLLECTION } from '../create-collection-form/actions';
 
 import { statuses } from '../../app/constants';
 
@@ -10,10 +11,11 @@ const initialState = {
     status: null,
     summary: null,
   },
+  lastSelectedIndex: null,
 };
 
-const addToSelection = (memo, { id, name, organismId }) => {
-  memo[id] = { id, name, organismId };
+const addToSelection = (memo, { id, name, organismId, binned }) => {
+  memo[id] = { id, name, organismId, binned };
   return memo;
 };
 
@@ -24,13 +26,15 @@ const removeFromSelection = (memo, { id }) => {
 
 export default function (state = initialState, { type, payload }) {
   switch (type) {
-    case actions.SELECT_GENOMES: {
+    case actions.APPEND_GENOME_SELECTION:
       return {
         ...state,
         genomes: payload.genomes.reduce(addToSelection, { ...state.genomes }),
+        lastSelectedIndex: typeof payload.index === 'number' ?
+          payload.index :
+          state.lastSelectedIndex,
       };
-    }
-    case actions.UNSELECT_GENOMES:
+    case actions.REMOVE_GENOME_SELECTION:
       return {
         ...state,
         genomes: payload.genomes.reduce(removeFromSelection, { ...state.genomes }),
@@ -48,6 +52,7 @@ export default function (state = initialState, { type, payload }) {
       };
     case FETCH_GENOME_LIST.SUCCESS:
     case FETCH_GENOME_LIST.ERROR:
+    case CREATE_COLLECTION.SUCCESS:
       return {
         ...state,
         dropdown: null,
@@ -78,6 +83,11 @@ export default function (state = initialState, { type, payload }) {
           status: statuses.SUCCESS,
           summary: payload.result,
         },
+      };
+    case FETCH_GENOME_SUMMARY.ATTEMPT:
+      return {
+        ...state,
+        lastSelectedIndex: null,
       };
     default:
       return state;

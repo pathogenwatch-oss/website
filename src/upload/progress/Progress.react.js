@@ -6,7 +6,7 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 import FileCard from '../card/Card.react';
 import AnalysisChart from './AnalysisChart.react';
-import ProgressBar from '../../progress-bar';
+import ProgressBar from '../../components/progress-bar';
 
 import * as upload from './selectors';
 
@@ -76,7 +76,7 @@ const Overview = connect(
         <ProgressBar label="Tasks" progress={tasksPct} /> }
       { position > 0 ?
         <p>{position} job{position === 1 ? '' : 's'} till next result.</p> :
-        <p>Results processing.</p> }
+        <p className="wgsa-blink">Results processing.</p> }
     </div>
   );
 });

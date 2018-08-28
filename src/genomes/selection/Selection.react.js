@@ -1,12 +1,18 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import classnames from 'classnames';
 
 import SelectionDropdown from './dropdown';
 
 import { getSelectionSize, getSelectionDropdownView } from './selectors';
 
 import { toggleDropdown } from './actions';
+
+function formatCount(count) {
+  if (count > 9999) {
+    return `${Math.round(count / 1000)}K`;
+  }
+  return count;
+}
 
 const Summary = React.createClass({
 
@@ -21,43 +27,30 @@ const Summary = React.createClass({
     }
   },
 
-  animating: false,
-
   onKeyUp(e) {
     if (e.key === 'Escape') this.props.toggle();
   },
+
+  animating: false,
 
   render() {
     const { size, toggle, view } = this.props;
     return (
       <div className="wgsa-selection-summary" onKeyUp={this.onKeyUp}>
-        <span className={classnames(
-            'mdl-chip mdl-chip--contact wgsa-selection-tabs',
-            view && `wgsa-selection-tabs-${view}`
-          )}
+        <button
+          className="mdl-chip mdl-chip--contact mdl-chip--active wgsa-selection"
+          onClick={() => toggle(view || 'selection')}
           title={size === 0 ? 'No Genomes Selected' : undefined}
         >
-          <button
+          <span
             ref={el => { this.sonarEl = el; }}
             className="mdl-chip__contact"
-            onClick={() => toggle('selection')}
             title={size > 0 ? 'View Selection' : undefined}
           >
-            {size}
-          </button>
-          <button
-            className="mdl-chip__text"
-            onClick={() => toggle('collection')}
-          >
-            Create Collection
-          </button>
-          <button
-            className="mdl-chip__text"
-            onClick={() => toggle('download')}
-          >
-            Download
-          </button>
-        </span>
+            {formatCount(size)}
+          </span>
+          <span className="mdl-chip__text">Selected Genomes</span>
+        </button>
         <SelectionDropdown />
       </div>
     );

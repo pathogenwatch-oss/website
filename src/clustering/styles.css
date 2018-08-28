@@ -1,0 +1,52 @@
+.pw-network-cover-message {
+  position: absolute;
+  top: 0px;
+  z-index: 2;
+  background-color: rgba(255, 255, 255, 0.87);
+  padding-bottom: 4px;
+  padding-right: 4px;
+}
+
+.pw-cluster-view {
+  position: relative;
+}
+
+.pw-cluster-buttons {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.pw-cluster-buttons-view {
+  margin-left: 8px;
+}
+
+.pw-cluster-chart-intro {
+  margin-top: 16px;
+  margin-bottom: 4px;
+}
+
+.pw-cluster-content {
+  height: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.pw-cluster-progress p {
+  font-weight: 500;
+}
+
+.pw-cluster-progress strong {
+  text-transform: uppercase;
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.pw-cluster-progress .CircularProgress {
+  margin-bottom: 8px;
+}
+
+.pw-cluster-progress .CircularProgress-Bg,
+.pw-cluster-progress .CircularProgress-Fg {
+  stroke-width: 12px;
+}

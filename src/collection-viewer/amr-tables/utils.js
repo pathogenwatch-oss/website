@@ -99,8 +99,8 @@ export function createReducer({ name, buildColumns }) {
   return function (state = initialState, { type, payload }) {
     switch (type) {
       case FETCH_COLLECTION.SUCCESS: {
-        const { genomes, organism, status } = payload.result;
-        if (status !== statuses.READY) return state;
+        const { genomes, organism, status, isClusterView } = payload.result;
+        if (status !== statuses.READY || isClusterView) return state;
 
         const paarsnpResults = getPaarsnpResults(genomes);
         const columns = buildColumns(organism.resistance, paarsnpResults);

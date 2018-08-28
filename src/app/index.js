@@ -4,21 +4,16 @@ import './utils.css';
 import 'phylocanvas/polyfill';
 
 import React from 'react';
-import { render } from 'react-dom';
-import { Provider } from 'react-redux';
-import { Router, Route } from 'react-router-dom';
-import createBrowserHistory from 'history/createBrowserHistory';
+import Provider from 'react-redux/lib/components/Provider';
 
-import App from './App.react';
-
+import Router from './router';
 import store from './store';
 
-export const history = createBrowserHistory();
-
-render((
+const App = () => (
   <Provider store={store}>
-    <Router history={history}>
-      <Route component={App} />
-    </Router>
+    <Router />
   </Provider>
-), document.getElementById('wgsa'));
+);
+
+export default App;
+

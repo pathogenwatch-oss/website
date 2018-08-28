@@ -5,7 +5,6 @@ import Progress from './Progress.react';
 import Summary from './Summary.react';
 
 import {
-  getUploadedFileList,
   isUploadPending,
   isSpecieationComplete,
   getQueuePosition,
@@ -29,8 +28,8 @@ const Component = React.createClass({
   componentWillMount() {
     const { uploadedAt } = this.props;
     subscribe(config.clientId, `analysis-${uploadedAt}`, this.props.receiveAnalysis);
-    const { hasFiles, startUpload, fetch } = this.props;
-    if (hasFiles) {
+    const { isUploading, startUpload, fetch } = this.props;
+    if (isUploading) {
       startUpload();
     } else {
       fetch();
@@ -97,7 +96,6 @@ function mapStateToProps(state, { match }) {
     isUploading: isUploadPending(state),
     isSpecieationComplete: isSpecieationComplete(state),
     isAnalysisComplete: isAnalysisComplete(state),
-    hasFiles: getUploadedFileList(state).length > 0,
     position: getQueuePosition(state),
     lastMessageReceived: getLastMessageReceived(state),
   };

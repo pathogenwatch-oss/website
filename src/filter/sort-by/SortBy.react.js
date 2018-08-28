@@ -17,7 +17,7 @@ const SortBy = ({ className, onClick, children, active, sortOrder }) => (
   </button>
 );
 
-SortBy.PropTypes = {
+SortBy.propTypes = {
   stateKey: React.PropTypes.string.isRequired,
   sortKey: React.PropTypes.string.isRequired,
   sortOrder: React.PropTypes.bool,

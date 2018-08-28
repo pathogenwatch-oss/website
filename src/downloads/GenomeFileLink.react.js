@@ -14,15 +14,9 @@ function formatGenomeFilename(genomeName) {
   return `${genomeName}.fasta`;
 }
 
-function createLink(type, id) {
-  const link = getServerPath(`/download/genome/${id}`);
-  if (type) return `${link}?type=${type}`;
-  return link;
-}
-
-export default ({ type, id, name }) => (
+export default ({ id, name }) => (
   <a
-    href={createLink(type, id)}
+    href={getServerPath(`/download/genome/${id}/fasta`)}
     download={formatGenomeFilename(name)}
     target="_blank" rel="noopener"
     title="Download Genome"

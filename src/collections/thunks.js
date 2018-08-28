@@ -12,7 +12,7 @@ export function setBinnedStatus(collection, status, undoable = true) {
     const currentFilter = getFilter(getState());
     const undo = () => dispatch(setBinnedStatus(collection, !status, false));
     return (
-      binCollection(collection.id, status)
+      binCollection(collection.token, status)
         .then(() => Promise.all([
           dispatch(actions.fetchCollections(currentFilter)),
           dispatch(actions.fetchSummary(currentFilter)),

@@ -1,6 +1,6 @@
 import PromiseWorker from 'promise-worker';
 
-import getCSVWorker from 'worker?name=csv.worker.js!./CsvWorker';
+import getCSVWorker from 'worker-loader?name=csv-worker.[hash].js!./CsvWorker';
 
 import { getColumnLabel } from '../table/utils';
 import { tableKeys } from '../constants';

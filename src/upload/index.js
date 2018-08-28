@@ -4,6 +4,7 @@ import React from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
+import AuthRoute from '../sign-in/AuthRoute.react';
 import Progress from './progress';
 import Instructions from './instructions';
 import Previous from './previous';
@@ -35,5 +36,10 @@ const Router = connect(mapStateToProps)(
   }
 );
 
-export reducer from './reducer';
-export default <Route path={path} component={Router} />;
+export default (
+  <AuthRoute
+    authMessage="Please sign in to upload genomes."
+    path={path}
+    component={Router}
+  />
+);

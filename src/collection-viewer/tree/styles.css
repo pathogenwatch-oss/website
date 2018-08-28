@@ -1,8 +1,22 @@
+@keyframes fade-in {
+  from {
+    opacity: 0
+  }
+  to {
+    opacity: 1
+  }
+}
+
+.wgsa-blink {
+  animation: fade-in 0.75s alternate ease-out infinite;
+}
+
 .wgsa-tree {
   width: 100%;
   height: 100%;
   position: absolute;
   background: #fff;
+  animation: fade-in 0.25s normal forwards ease-in-out;
 }
 
 #phylocanvas-container {
@@ -53,11 +67,6 @@ div.wgsa-tree-icon:active {
   position: absolute;
   top: 16px;
   right: 84px;
-  visibility: hidden;
-}
-
-.wgsa-redraw-original-tree-button--visible {
-  visibility: visible;
 }
 
 .wgsa-tree-toggle-controls-button {
@@ -226,4 +235,43 @@ div.wgsa-tree-icon:active {
 
 .wgsa-tree-scalebar__bar::after {
   right: 0;
+}
+
+.wgsa-tree-progress {
+  position: absolute;
+  bottom: 40px;
+  background: #fff;
+  padding: 16px 24px;
+  /* height: 160px; */
+  width: 200px;
+  box-sizing: border-box;
+  user-select: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.wgsa-tree-progress > :first-child {
+  margin-top: auto;
+}
+
+.wgsa-tree-progress > :last-child {
+  margin-bottom: auto;
+}
+
+.wgsa-tree-progress p {
+  font-weight: 500;
+  margin-bottom: 0;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.wgsa-tree-progress p.wgsa-muted {
+  font-weight: 500;
+  text-transform: capitalize;
+  color: rgba(0, 0, 0, 0.54);
+}
+
+.wgsa-tree-progress .CircularProgress {
+  margin: auto auto 8px;
 }

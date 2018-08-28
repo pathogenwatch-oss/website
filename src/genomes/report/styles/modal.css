@@ -1,0 +1,74 @@
+.wgsa-modal-container.wgsa-genome-report {
+  height: auto;
+  max-height: none;
+  top: 48px;
+  bottom: unset;
+}
+
+.wgsa-genome-report .wgsa-overlay {
+  background: rgba(0, 0, 0, 0.87);
+  top: 48px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.wgsa-genome-report .wgsa-modal {
+  align-self: flex-start;
+  background: none;
+  height: auto;
+  max-height: none;
+}
+
+@media (max-width: 1200px) {
+  .wgsa-genome-report .wgsa-modal {
+    left: -5%;
+  }
+}
+
+.wgsa-genome-report .wgsa-modal > header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 0;
+  background: transparent;
+  background: rgba(0, 0, 0, 0.87);
+  z-index: 1;
+}
+
+.wgsa-genome-report-title {
+  width: 100%;
+  text-align: center;
+}
+
+@media (max-width: 1200px) {
+  .wgsa-genome-report-title {
+    margin-right: 10%;
+  }
+}
+
+.wgsa-genome-report .wgsa-modal-actions {
+  position: absolute;
+  right: 8px;
+}
+
+.wgsa-genome-report-title .material-icons {
+  color: #fff !important;
+}
+
+.wgsa-genome-report-title .wgsa-download-label {
+  color: #222 !important;
+}
+
+.wgsa-genome-report-loader {
+  height: calc(100vh - 48px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.wgsa-genome-report-loader p {
+  margin-top: 16px;
+  font-weight: 500;
+}

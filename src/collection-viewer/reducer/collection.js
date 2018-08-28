@@ -1,7 +1,8 @@
 import { CREATE_COLLECTION } from '../../genomes/create-collection-form';
 import * as actions from '../actions';
+import { COLLECTION_CHANGE_ACCESS_LEVEL } from '../access/actions';
 
-import { sortGenomes, getUuidFromSlug } from '../utils';
+import { sortGenomes } from '../utils';
 import { statuses } from '../../collection-viewer/constants';
 
 import Organisms from '../../organisms';
@@ -15,11 +16,9 @@ export default function (state = initialState, { type, payload }) {
       Organisms.current = organismId;
       return {
         ...state,
-        slug: result.slug,
-        uuid: getUuidFromSlug(result.slug),
+        token: result.token,
         organismId,
         metadata,
-        status: statuses.PROCESSING,
       };
     }
     case actions.FETCH_COLLECTION.FAILURE: {
@@ -36,26 +35,37 @@ export default function (state = initialState, { type, payload }) {
       return {
         ...state,
         genomeIds: new Set(sortGenomes(genomes).map(_ => _.uuid)),
-        uuid: result.uuid,
-        slug: result.slug,
+        access: result.access,
+        createdAt: result.createdAt,
+        description: result.description,
         size: result.size,
         organismId: result.organismId,
-        title: result.title,
-        description: result.description,
-        createdAt: result.createdAt,
+        owner: result.owner,
         pmid: result.pmid,
         progress: result.progress,
-        status: result.status,
+        status: statuses.READY,
+        title: result.title,
+        token: result.token,
+        uuid: result.uuid,
+        isClusterView: result.isClusterView || false,
       };
     }
-    case actions.UPDATE_COLLECTION_PROGRESS: {
-      const { status, progress } = payload;
+    case COLLECTION_CHANGE_ACCESS_LEVEL.ATTEMPT:
       return {
         ...state,
-        status,
-        progress,
+        access_status: 'LOADING',
+        access: payload.access,
       };
-    }
+    case COLLECTION_CHANGE_ACCESS_LEVEL.SUCCESS:
+      return {
+        ...state,
+        access_status: 'OK',
+      };
+    case COLLECTION_CHANGE_ACCESS_LEVEL.FAILURE:
+      return {
+        ...state,
+        access_status: 'ERROR',
+      };
     default:
       return state;
   }

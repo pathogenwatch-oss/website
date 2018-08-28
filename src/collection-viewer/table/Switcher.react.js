@@ -2,33 +2,32 @@ import React from 'react';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
 
-import { getVisibleTableName, hasMetadata, hasTyping } from './selectors';
+import Multi from './Multi.react';
+
+import { getVisibleTableName, hasMetadata, hasTyping, hasAMR } from './selectors';
 import { setTable } from './actions';
 import { tableKeys, tableDisplayNames } from '../constants';
-import Organisms from '../../organisms';
 
-function mapStateToProps(state) {
+function mapStateToProps(state, { table }) {
   return {
-    displayedTable: getVisibleTableName(state),
+    displayName: tableDisplayNames[table],
+    active: getVisibleTableName(state) === table,
   };
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch, { table }) {
   return {
-    showTable: tableKey => dispatch(setTable(tableKey)),
+    showTable: () => dispatch(setTable(table)),
   };
 }
 
 const Button = connect(mapStateToProps, mapDispatchToProps)(
-  ({ table, displayedTable, showTable }) => (
+  ({ displayName, active, showTable }) => (
     <button
-      className={classnames(
-        'wgsa-button-group__item',
-        { active: displayedTable === table }
-      )}
-      onClick={() => showTable(table)}
+      className={classnames('wgsa-button-group__item', { active })}
+      onClick={showTable}
     >
-      {tableDisplayNames[table]}
+      {displayName}
     </button>
   )
 );
@@ -39,36 +38,38 @@ const ButtonGroup = ({ children }) => (
   </div>
 );
 
-const TableSwitcher =
-  connect(state => ({
-    hasMetadata: hasMetadata(state),
-    hasTyping: hasTyping(state),
-    hasAMR: !Organisms.uiOptions.noAMR,
-  }))(
-  props => (
-    <div
-      className="wgsa-table-switcher"
-      onClick={event => event.stopPropagation()}
-    >
+const TableSwitcher = props => (
+  <div
+    className="wgsa-table-switcher"
+    onClick={event => event.stopPropagation()}
+  >
+    <ButtonGroup>
+      <i className="material-icons" title="Data">list</i>
+      { props.hasMetadata &&
+        <Button table={tableKeys.metadata} /> }
+      { props.hasTyping &&
+        <Button table={tableKeys.typing} /> }
+      <Button table={tableKeys.stats} />
+    </ButtonGroup>
+    { props.hasAMR &&
       <ButtonGroup>
-        <i className="material-icons" title="Data">list</i>
-        { props.hasMetadata &&
-          <Button table={tableKeys.metadata} /> }
-        { props.hasTyping &&
-          <Button table={tableKeys.typing} /> }
-        <Button table={tableKeys.stats} />
-      </ButtonGroup>
-      { props.hasAMR &&
-        <ButtonGroup>
-          <i className="material-icons" title="AMR">local_pharmacy</i>
-          <Button table={tableKeys.antibiotics} />
-          <Button table={tableKeys.snps} />
-          <Button table={tableKeys.genes} />
-        </ButtonGroup> }
-    </div>
-  )
+        <i className="material-icons" title="AMR">local_pharmacy</i>
+        <Button table={tableKeys.antibiotics} />
+        <Button table={tableKeys.snps} />
+        <Button table={tableKeys.genes} />
+      </ButtonGroup> }
+    <Multi />
+  </div>
 );
 
 TableSwitcher.displayName = 'TableSwitcher';
 
-export default TableSwitcher;
+function mapSwitcherStateToProps(state) {
+  return {
+    hasMetadata: hasMetadata(state),
+    hasTyping: hasTyping(state),
+    hasAMR: hasAMR(state),
+  };
+}
+
+export default connect(mapSwitcherStateToProps)(TableSwitcher);

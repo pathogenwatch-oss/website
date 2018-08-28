@@ -4,8 +4,9 @@ import classnames from 'classnames';
 import { Link } from 'react-router-dom';
 
 import UserDrawer from './UserDrawer.react';
-import AccountLink from './AccountLink.react';
+import MenuButton from './MenuButton.react';
 import DefaultContent from './DefaultContent.react';
+import { Logo } from '../branding';
 
 import { getHeader } from './selectors';
 
@@ -14,12 +15,10 @@ import { isOffline } from '../offline';
 const OfflineLink = () => (
   <Link
     to="/offline"
-    className="cgps-avatar wgsa-account-link"
+    className="wgsa-main-menu-button"
     title="View Saved Collections"
   >
-    <span className="cgps-avatar__image">
-      <i className="material-icons">signal_wifi_off</i>
-    </span>
+    <i className="material-icons">signal_wifi_off</i>
   </Link>
 );
 
@@ -36,9 +35,9 @@ const Header = ({
   >
     <UserDrawer visible={userDrawerVisible} />
     <div className="mdl-layout__header-row">
-      { offline ? <OfflineLink /> : <AccountLink />}
+      { offline ? <OfflineLink /> : <MenuButton />}
       <Link to="/" className="mdl-layout-title">
-        <img src="/images/WGSA.FINAL.svg" className="wgsa-header-logo" />
+        <Logo className="wgsa-header-logo" />
       </Link>
       {children}
     </div>

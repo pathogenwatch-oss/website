@@ -12,6 +12,3 @@ export function sortGenomes(genomes) {
   });
 }
 
-export function getUuidFromSlug(slug) {
-  return slug.split('-')[0];
-}

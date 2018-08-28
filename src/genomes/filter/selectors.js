@@ -33,8 +33,8 @@ export const getFilterSummary = createSelector(
     const {
       loading, organismId, speciesId, genusId, country, type, uploadedAt, date,
     } = summary;
-    const sequenceType = summary['analysis.mlst.st'] || {};
-    const antibiotics = summary['analysis.paarsnp.antibiotics.fullName'] || {};
+    const sequenceType = summary.st || {};
+    const antibiotics = summary.amr || {};
 
     const wgsaOrganisms = [];
 
@@ -109,7 +109,7 @@ export const getFilterSummary = createSelector(
         Object.keys(type).map(
           value => ({
             value,
-            label: value,
+            label: `${value[0].toUpperCase()}${value.slice(1)}`,
             count: type[value].count,
             active: filterState.type === value,
           })

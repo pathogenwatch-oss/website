@@ -1,4 +1,4 @@
-import { FETCH_COLLECTION } from '../../collection-viewer/actions';
+import { FETCH_COLLECTION } from '../actions';
 import { SET_LABEL_COLUMN } from '../table/actions';
 import { onHeaderClick } from './thunks';
 
@@ -43,7 +43,7 @@ export const trailingSystemGroup = {
 const referenceGroup = {
   columnKey: 'reference',
   group: true,
-  columns: [ '__wgsa_reference' ],
+  columns: [ '__reference' ],
   getHeaderContent: () => {},
 };
 
@@ -74,9 +74,9 @@ function fillColumnDefs({ columns, ...group }) {
   };
 }
 
-export function getTypingColumnGroups(uiOptions) {
+export function getTypingColumnGroups({ isClusterView }, uiOptions) {
   return [
-    uiOptions.noPopulation ? null : referenceGroup,
+    isClusterView || uiOptions.noPopulation ? null : referenceGroup,
     uiOptions.noMLST ? null : mlstGroup,
     uiOptions.ngMast ? ngMastGroup : null,
     uiOptions.genotyphi ? genotyphigroup : null,
@@ -102,7 +102,7 @@ export default function (state = initialState, { type, payload }) {
         active,
         columns: [
           leadingSystemGroup,
-          ...getTypingColumnGroups(Organisms.uiOptions),
+          ...getTypingColumnGroups(payload.result, Organisms.uiOptions),
           trailingSystemGroup,
         ],
       };

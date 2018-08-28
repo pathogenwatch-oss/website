@@ -4,7 +4,13 @@ const storageKey = 'offline-collections';
 
 export function getOfflineList() {
   return localforage.getItem(storageKey)
-    .then(list => list || []);
+    .then(list => list || [])
+    .then(list =>
+      list.map(collection => ({
+        ...collection,
+        token: collection.token || collection.slug,
+      }))
+    );
 }
 
 export function setOfflineList(list) {
@@ -16,8 +22,7 @@ export function saveToOfflineList(collection) {
     getOfflineList()
       .then(collections =>
         collections.concat({
-          uuid: collection.uuid,
-          slug: collection.slug,
+          token: collection.token,
           size: collection.size,
           title: collection.title,
           description: collection.description,
@@ -37,15 +42,15 @@ export function isOffline() {
   return !navigator.onLine;
 }
 
-export function createCacheKey(uuid) {
-  return `wgsa-collection-${uuid}`;
+export function createCacheKey(token) {
+  return `wgsa-collection-${token}`;
 }
 
-export function removeItem(uuid) {
+export function removeItem(token) {
   return Promise.all([
     getOfflineList()
-      .then(collections => collections.filter(_ => _.uuid !== uuid))
+      .then(collections => collections.filter(_ => _.token !== token))
       .then(setOfflineList),
-    caches.delete(createCacheKey(uuid)),
+    caches.delete(createCacheKey(token)),
   ]);
 }

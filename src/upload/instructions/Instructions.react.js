@@ -38,7 +38,7 @@ export default () => (
     <div>
       <h2>Genomic Data</h2>
       <p>
-        Genomic data should be in <a href="https://en.wikipedia.org/wiki/FASTA_format" target="_blank" rel="noopener">multi-FASTA format</a> with one of the following extensions:
+        One or more <strong>assemblies</strong> in <a href="https://en.wikipedia.org/wiki/FASTA_format" target="_blank" rel="noopener">multi-FASTA format</a> with one of the following extensions:
       </p>
       <ul className="inline">
         {DEFAULT.GENOME_FILE_EXTENSIONS.map(ext => <li key={ext}>{ext}</li>)}
@@ -60,7 +60,7 @@ export default () => (
     </div>
     <div>
       <h2>Metadata</h2>
-      <p>Metadata should be provided in <a href="https://en.wikipedia.org/wiki/Comma-separated_values" target="_blank" rel="noopener">CSV format</a> with the extension <strong>.csv</strong>.</p>
+      <p>Files in <a href="https://en.wikipedia.org/wiki/Comma-separated_values" target="_blank" rel="noopener">CSV format</a> with the extension <strong>.csv</strong>.</p>
       <p>Files should contain a column <strong>filename</strong> containing the names of genome files uploaded at the same time.</p>
       <p>To make full use of metadata, we strongly recommend including the following columns:</p>
       <ul className="inline">
@@ -74,12 +74,12 @@ export default () => (
       <h3>CSV Templates</h3>
       <ul>
         <li>
-          <a href="/wgsa-general-metadata-template.csv" download="wgsa-general-metadata-template.csv">
+          <a href="/pathogenwatch-general-metadata-template.csv" download="pathogenwatch-general-metadata-template.csv">
             General
           </a>
         </li>
         <li>
-          <a href="/wgsa-typhi-metadata-template.csv" download="wgsa-typhi-metadata-template.csv">
+          <a href="/pathogenwatch-typhi-metadata-template.csv" download="pathogenwatch-typhi-metadata-template.csv">
             <FormattedName organismId="90370" fullName />
           </a>
         </li>

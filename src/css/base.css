@@ -1,3 +1,5 @@
+@import "./utils.css";
+
 html, body {
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
   text-rendering: optimizeLegibility;
@@ -6,8 +8,8 @@ html, body {
 }
 
 h1, h2, h3, h4, .title-font {
-  font-family: "Roboto Condensed", "Helvetica", "Arial", sans-serif;
-  font-weight: 400;
+  font-family: "Saira Semi Condensed", "Helvetica", Arial, sans-serif;
+  font-weight: 500;
   color: rgba(0, 0, 0, .54);
 }
 
@@ -51,6 +53,10 @@ button {
 button, select {
   cursor: pointer;
   font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  text-align: inherit;
+  line-height: inherit;
 }
 
 select {
@@ -70,13 +76,13 @@ select:active {
 a {
   font-weight: 400;
   color: #673c90;
-  text-decoration: none;
+  text-decoration: underline;
 }
 
 a[href]:hover,
 a[href]:focus,
 a[href]:active {
-  text-decoration: underline;
+  text-decoration: none;
 }
 
 strong, b {
@@ -100,4 +106,8 @@ ul.bulleted {
 
 sup {
   color: #673c90;
+}
+
+.danger {
+  color: #d11b1b;
 }

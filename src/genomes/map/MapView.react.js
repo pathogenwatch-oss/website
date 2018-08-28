@@ -7,7 +7,7 @@ import { FormattedName } from '../../organisms';
 import AddToSelection from '../selection/AddToSelection.react';
 import Spinner from '../../components/Spinner.react';
 
-import { showGenomeDrawer } from '../../genomes/detail';
+import { showGenomeReport } from '../../genomes/report';
 import { selectByArea, showMarkerPopup, closeMarkerPopup } from './actions';
 import { fetchGenomeMap } from '../actions';
 
@@ -25,13 +25,14 @@ const Marker = React.createClass({
         'wgsa-marker-cluster',
         { 'has-popup': hasPopup }
       )}
+        ref={el => { this.ref = el; }}
         style={style}
         onClick={event => {
           event.stopPropagation();
           event.nativeEvent.stopImmediatePropagation();
           if (hasPopup) this.props.closePopup();
           else if (marker.genomes.length === 1) {
-            this.props.showGenomeDrawer(marker.genomes[0]);
+            this.props.showGenomeReport(marker.genomes[0]);
           } else {
             this.props.showMarkerPopup(marker);
           }
@@ -117,7 +118,7 @@ const MapView = React.createClass({
           markerProps={{
             popup,
             closePopup: this.props.closePopup,
-            showGenomeDrawer: this.props.showGenomeDrawer,
+            showGenomeReport: this.props.showGenomeReport,
             showMarkerPopup: this.props.showMarkerPopup,
           }}
           onClick={() => {
@@ -131,7 +132,7 @@ const MapView = React.createClass({
         { popup.position &&
           <Popup
             list={popupList}
-            onItemClick={this.props.showGenomeDrawer}
+            onItemClick={this.props.showGenomeReport}
             close={this.props.closePopup}
           /> }
       </div>
@@ -156,7 +157,7 @@ function mapStateToProps(state, props) {
 function mapDispatchToProps(dispatch, { stateKey }) {
   return {
     onLassoPathChange: path => dispatch(selectByArea(stateKey, path)),
-    showGenomeDrawer: (id) => dispatch(showGenomeDrawer(id)),
+    showGenomeReport: (id) => dispatch(showGenomeReport(id)),
     showMarkerPopup: ({ genomes, position }) =>
       dispatch(showMarkerPopup(genomes, position)),
     fetch: () => dispatch(fetchGenomeMap()),

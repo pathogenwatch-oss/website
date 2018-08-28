@@ -10,16 +10,17 @@ import {
   resetFilter,
 } from '../filter/actions';
 
-import { getSubtree } from './api';
+import { getTree } from './api';
 
-import { POPULATION, COLLECTION } from '../../app/stateKeys/tree';
+import { POPULATION } from '../../app/stateKeys/tree';
 import { filterKeys } from '../filter/constants';
+import { updateProgress } from '../actions';
 
 function fetchTree(name) {
   return (dispatch, getState) => {
     const collection = getCollection(getState());
     return dispatch(
-      actions.fetchTree(name, getSubtree(collection.uuid, name))
+      actions.fetchTree(name, getTree(collection.uuid, name))
     );
   };
 }
@@ -47,16 +48,15 @@ export function displayTree(name) {
 export function treeLoaded(phylocanvas) {
   return (dispatch, getState) => {
     const state = getState();
-    const stateKey = getVisibleTree(state).name;
+    const tree = getVisibleTree(state);
+    if (!tree) return;
+    const stateKey = tree.name;
 
     if (stateKey === POPULATION) {
       phylocanvas.root.cascadeFlag('interactive', false);
     }
 
-    const leafIds = getLeafIds(state, {
-      stateKey: stateKey === POPULATION ? COLLECTION : stateKey,
-    });
-
+    const leafIds = getLeafIds(state, { stateKey });
     dispatch(actions.treeLoaded(stateKey, phylocanvas, leafIds));
   };
 }
@@ -66,7 +66,8 @@ export function subtreeLoaded(phylocanvas) {
     const state = getState();
     const stateKey = getVisibleTree(state).name;
 
-    dispatch(actions.treeLoaded(stateKey, phylocanvas));
+    const leafIds = phylocanvas.leaves.map(_ => _.id);
+    dispatch(actions.treeLoaded(stateKey, phylocanvas, leafIds));
     dispatch(actions.addHistorySnapshot(stateKey, phylocanvas));
   };
 }
@@ -126,5 +127,22 @@ export function internalNodeSelected(node) {
     const state = getState();
     const stateKey = getVisibleTree(state).name;
     dispatch(actions.internalNodeSelected(stateKey, node ? node.id : null));
+  };
+}
+
+export function handleTreeProgress(payload = {}) {
+  return (dispatch) => {
+    if (payload.task === 'tree' && payload.status === 'READY') {
+      return dispatch(fetchTree(payload.name));
+    }
+    return dispatch(updateProgress(payload));
+  };
+}
+
+export function resetTreeRoot() {
+  return (dispatch, getState) => {
+    const state = getState();
+    const stateKey = getVisibleTree(state).name;
+    dispatch(actions.resetTreeRoot(stateKey));
   };
 }

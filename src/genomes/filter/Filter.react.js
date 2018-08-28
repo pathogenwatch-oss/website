@@ -8,85 +8,99 @@ import DateSection from '../../filter/date-section';
 
 import { selectors } from '../../filter';
 
-import { getFilterSummary, getSearchText, isFilterOpen } from './selectors';
+import { getFilterSummary, getSearchText, isFilterOpen, getPrefilter } from './selectors';
 
 import { stateKey } from './index';
 import * as actions from './actions';
 
-
-
-const Filter = ({ isActive, filterSummary, textValue, updateFilter, clearFilter }) => (
-  <FilterAside
-    loading={filterSummary.loading}
-    active={isActive}
-    clear={clearFilter}
-    textValue={textValue}
-    textOnChange={e => updateFilter('searchText', e.target.value)}
-  >
-    <FilterSection
-      filterKey="organismId"
-      heading="WGSA Organism"
-      icon="bug_report"
-      summary={filterSummary.wgsaOrganisms}
-      updateFilter={updateFilter}
-    />
-    <FilterSection
-      filterKey="speciesId"
-      heading="Species"
-      icon="bug_report"
-      summary={filterSummary.speciesId}
-      updateFilter={updateFilter}
-    />
-    <FilterSection
-      filterKey="genusId"
-      heading="Genus"
-      icon="bug_report"
-      summary={filterSummary.genusId}
-      updateFilter={updateFilter}
-    />
-    <FilterSection
-      filterKey="sequenceType"
-      heading="Sequence Type"
-      icon="new_releases"
-      summary={filterSummary.sequenceTypes}
-      updateFilter={updateFilter}
+const Filter = ({ isActive, filterSummary, textValue, updateFilter, updateMulti, clearFilter, prefilter }) => {
+  return (
+    <FilterAside
+      loading={filterSummary.loading}
+      active={isActive}
+      clear={clearFilter}
+      textValue={textValue}
+      textOnChange={e => updateFilter('searchText', e.target.value)}
+      prefilter={prefilter}
     >
-      { (filterSummary.wgsaOrganisms.length || filterSummary.speciesId.length || filterSummary.genusId.length) && !filterSummary.sequenceTypes.length ?
-        <p>Select an organism, species, or genus to filter by sequence type.</p> : null }
-    </FilterSection>
-    <FilterSection
-      filterKey="resistance"
-      heading="Resistance"
-      icon="local_pharmacy"
-      summary={filterSummary.antibiotics}
-      updateFilter={updateFilter}
-    />
-    <FilterSection
-      filterKey="country"
-      heading="Country"
-      icon="language"
-      summary={filterSummary.country}
-      updateFilter={updateFilter}
-    />
-    <DateSection summary={filterSummary.date} updateFilter={updateFilter} />
-    <FilterSection
-      className="capitalised"
-      filterKey="type"
-      heading="Type"
-      icon="label"
-      summary={filterSummary.type}
-      updateFilter={updateFilter}
-    />
-    <FilterSection
-      filterKey="uploadedAt"
-      heading="Uploaded At"
-      icon="cloud_upload"
-      summary={filterSummary.uploadedAt}
-      updateFilter={updateFilter}
-    />
-    <LocationListener update={updateFilter} />
-  </FilterAside>
-);
+      <FilterSection
+        filterKey="organismId"
+        heading="Supported Organism"
+        icon="bug_report"
+        summary={filterSummary.wgsaOrganisms}
+        updateFilter={updateFilter}
+      />
+      <FilterSection
+        filterKey="genusId"
+        heading="Genus"
+        icon="bug_report"
+        summary={filterSummary.genusId}
+        updateFilter={(key, value) => {
+          const speciesItem = filterSummary.speciesId.find(_ => _.active);
+          if (speciesItem) {
+            updateMulti({
+              genusId: value,
+              speciesId: speciesItem.value,
+            });
+          } else {
+            updateFilter('genusId', value);
+          }
+        }}
+      />
+      <FilterSection
+        filterKey="speciesId"
+        heading="Species"
+        icon="bug_report"
+        summary={filterSummary.speciesId}
+        updateFilter={updateFilter}
+        hidden={!filterSummary.genusId.length}
+        disabled={!filterSummary.speciesId.length}
+        disabledText="Select a genus to filter by species."
+      />
+      <FilterSection
+        filterKey="sequenceType"
+        heading="Sequence Type"
+        icon="new_releases"
+        summary={filterSummary.sequenceTypes}
+        updateFilter={updateFilter}
+        hidden={!filterSummary.genusId.length}
+        disabled={!filterSummary.sequenceTypes.length}
+        disabledText="Select an organism, species, or genus to filter by sequence type."
+      />
+      <FilterSection
+        filterKey="resistance"
+        heading="Resistance"
+        icon="local_pharmacy"
+        summary={filterSummary.antibiotics}
+        updateFilter={updateFilter}
+      />
+      <FilterSection
+        filterKey="country"
+        heading="Country"
+        icon="language"
+        summary={filterSummary.country}
+        updateFilter={updateFilter}
+      />
+      <DateSection summary={filterSummary.date} updateFilter={updateFilter} />
+      <FilterSection
+        className="capitalised"
+        filterKey="type"
+        heading="Type"
+        icon="label"
+        summary={filterSummary.type}
+        updateFilter={updateFilter}
+      />
+      <FilterSection
+        filterKey="uploadedAt"
+        heading="Uploaded At"
+        icon="cloud_upload"
+        summary={filterSummary.uploadedAt}
+        updateFilter={updateFilter}
+      />
+      <LocationListener update={updateFilter} />
+    </FilterAside>
+  );
+};
 
 
 function mapStateToProps(state) {
@@ -95,6 +109,7 @@ function mapStateToProps(state) {
     filterSummary: getFilterSummary(state, { stateKey }),
     textValue: getSearchText(state),
     isOpen: isFilterOpen(state),
+    prefilter: getPrefilter(state),
   };
 }
 
@@ -103,6 +118,8 @@ function mapDispatchToProps(dispatch) {
     clearFilter: () => dispatch(actions.clearFilter()),
     updateFilter: (filterKey, value) =>
       dispatch(actions.updateFilter({ [filterKey]: value })),
+    updateMulti: filterMap =>
+      dispatch(actions.updateFilter(filterMap)),
   };
 }
 

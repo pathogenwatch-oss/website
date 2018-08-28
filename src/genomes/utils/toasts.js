@@ -1,6 +1,6 @@
 import React from 'react';
 
-export function undoMoveToBin(genome, onClick) {
+export function undoMoveToBin(total, binned, onClick) {
   return {
     action: {
       label: 'Undo',
@@ -8,8 +8,8 @@ export function undoMoveToBin(genome, onClick) {
     },
     message: (
       <span>
-        <strong>{genome.name}</strong>&nbsp;
-        {genome.binned ? 'restored' : 'moved to bin'}.
+        <strong>{total} genome{total === 1 ? '' : 's'}</strong>&nbsp;
+        {binned ? 'restored from' : 'moved to'} bin.
       </span>
     ),
   };

@@ -1,22 +1,26 @@
 import { combineReducers } from 'redux';
 
-import { reducer as account } from '../account';
-import { reducer as collections } from '../collections';
-import { reducer as downloads } from '../downloads';
-import { reducer as filters } from '../filter';
-import { reducer as genomes } from '../genomes';
-import { reducer as header } from '../header';
-import { reducer as location } from '../location/';
-import { reducer as maps } from '../map';
-import { reducer as offline } from '../offline';
-import { reducer as organisms } from '../organisms';
-import { reducer as toast } from '../toast';
-import { reducer as summary } from '../summary';
-import { reducer as viewer } from '../collection-viewer';
-import { reducer as upload } from '../upload';
+import account from '../account/reducer';
+import branding from '../branding/reducer';
+import clustering from '../clustering/reducer';
+import collections from '../collections/reducer';
+import downloads from '../downloads/reducer';
+import filters from '../filter/reducer';
+import genomes from '../genomes/reducer';
+import header from '../header/reducer';
+import location from '../location/reducer';
+import maps from '../map/reducer';
+import offline from '../offline/reducer';
+import organisms from '../organisms/reducer';
+import toast from '../toast/reducer';
+import summary from '../summary/reducer';
+import viewer from '../collection-viewer/reducer';
+import upload from '../upload/reducer';
 
 export default combineReducers({
   account,
+  branding,
+  clustering,
   collections,
   downloads,
   filters,

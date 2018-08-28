@@ -6,8 +6,6 @@ import { Route } from 'react-router-dom';
 import { Header } from '../header';
 import Collections from './Collections.react';
 
-export reducer from './reducer';
-
 const path = '/collections';
 
 export const HeaderRoute = (

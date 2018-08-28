@@ -33,6 +33,7 @@
   padding: 0 16px;
   outline: none;
   font-size: 15px;
+  background: transparent;
 }
 
 .wgsa-filter__search i {
@@ -72,4 +73,13 @@
 
 .wgsa-filter--active .wgsa-filter__footer {
   transform: translateY(0);
+}
+
+.pw-bin-notice {
+  font-style: italic;
+  margin: 16px 0;
+  padding: 0;
+  line-height: 1.5;
+  font-size: 13px;
+  text-align: center;
 }

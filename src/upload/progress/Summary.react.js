@@ -5,24 +5,19 @@ import Summary from '../Summary.react';
 import ErrorSummary from './ErrorSummary.react';
 
 import * as upload from './selectors';
+import DocumentTitle from '../../branding/DocumentTitle.react';
 
 const Component = React.createClass({
 
-  componentDidMount() {
-    document.title = 'WGSA | Upload';
-  },
-
-  componentDidUpdate() {
+  getTitle() {
     const { summary } = this.props;
-    document.title = [
-      'WGSA',
-      '|',
+    return [
       summary.total ? `(${summary.completed}/${summary.total})` : '',
       'Upload',
     ].join(' ');
   },
 
-  render() {
+  renderContent() {
     const { isUploading, summary, uploadedAt } = this.props;
 
     const uploadedAtDisplay = (
@@ -37,6 +32,15 @@ const Component = React.createClass({
 
     return (
       <Summary>{uploadedAtDisplay}</Summary>
+    );
+  },
+
+  render() {
+    return (
+      <React.Fragment>
+        <DocumentTitle>{this.getTitle()}</DocumentTitle>
+        {this.renderContent()}
+      </React.Fragment>
     );
   },
 

@@ -1,10 +1,10 @@
 import React from 'react';
 import { Map, TileLayer } from 'react-leaflet';
-import MarkerLayer from 'react-leaflet-marker-layer';
 import classnames from 'classnames';
 import { Link } from 'react-router-dom';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
+import MarkerLayer from '../cgps-commons/LeafletMarkerLayer.react';
 import MarkdownHeading from '../components/MarkdownHeading.react';
 import Spinner from '../components/Spinner.react';
 import { FormattedName } from '../organisms';
@@ -24,9 +24,10 @@ const Marker = React.createClass({
 
   render() {
     const { style, marker, selectedCollection, setCollection } = this.props;
-    const { uuid } = marker.collection;
+    const { token, uuid = token } = marker.collection;
     return (
       <Link
+        ref={el => { this.ref = el; }}
         style={{
           ...style,
           animationDelay: `${0.125 * marker.index}s`,
@@ -63,17 +64,27 @@ export default React.createClass({
     };
   },
 
-  componentWillMount() {
+  componentDidMount() {
     getShowcaseCollections()
       .then(collections => this.setState({
         locations: collections.reduce((memo, { locations, ...collection }) => {
           for (const [ index, [ lat, lon ] ] of locations.entries()) {
-            memo.push({ lat, lon, collection, index });
+            if (lat !== null && lon !== null) {
+              memo.push({ lat, lon, collection, index });
+            }
           }
           return memo;
         }, []),
         collections,
       }));
+  },
+
+  componentDidUpdate(_, previous) {
+    const { collections } = this.state;
+    if (previous.collections.length === 0 && collections.length > 0) {
+      this.setCollection();
+      this.startCarousel();
+    }
   },
 
   componentWillUnmount() {
@@ -82,7 +93,7 @@ export default React.createClass({
 
   setCollection() {
     const { collections } = this.state;
-    const { uuid } = collections[Math.floor(Math.random() * collections.length)];
+    const { token, uuid = token } = collections[Math.floor(Math.random() * collections.length)];
     this.setState({ uuid });
   },
 
@@ -92,15 +103,6 @@ export default React.createClass({
 
   stopCarousel() {
     clearInterval(this._interval);
-  },
-
-  componentDidUpdate(_, previous) {
-    const { collections } = this.state;
-
-    if (previous.collections.length === 0 && collections.length > 0) {
-      this.setCollection();
-      this.startCarousel();
-    }
   },
 
   renderCollectionLinks() {
@@ -143,6 +145,7 @@ export default React.createClass({
           >
             <TileLayer
               noWrap
+              bounds={[ [ -90, -180 ], [ 90, 180 ] ]}
               attribution={ATTRIBUTION}
               url={`https://api.mapbox.com/styles/v1/cgpsdev/cj5y3b7aq0rru2spdrcdnjxsm/tiles/256/{z}/{x}/{y}?access_token=${CONFIG.mapboxKey}`}
             />
@@ -156,7 +159,7 @@ export default React.createClass({
             transitionLeaveTimeout={280}
           >
             { !!uuid &&
-              <SelectedCollection key={uuid} collection={collections.find(_ => _.uuid === uuid)} /> }
+              <SelectedCollection key={uuid} collection={collections.find(_ => _.token === uuid)} /> }
           </ReactCSSTransitionGroup>
         </div>
       </section>

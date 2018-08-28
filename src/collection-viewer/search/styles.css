@@ -4,9 +4,9 @@
   flex-grow: 1;
   margin: 0 auto;
   min-width: 320px;
-  max-width: 560px;
+  max-width: 496px;
   @media (min-width: 1024px) {
-    max-width: 640px;
+    max-width: 560px;
   }
 }
 
@@ -127,6 +127,13 @@
   top: 8px;
   right: 8px;
   color: inherit;
+  height: 28px;
+  width: 28px;
+  min-width: 28px;
+}
+
+.wgsa-search-dropdown > :first-child > i {
+  font-size: 18px !important;
 }
 
 .wgsa-search-dropdown p {
@@ -136,8 +143,11 @@
 
 .wgsa-search-dropdown__heading {
   margin: 0;
-  font-size: 14px;
+  font-size: 12px;
   line-height: 1;
+  font-family: 'Roboto', Arial, sans-serif !important;
+  font-weight: 500 !important;
+  text-transform: uppercase;
 }
 
 .wgsa-search-dropdown__heading + .mdl-chip {

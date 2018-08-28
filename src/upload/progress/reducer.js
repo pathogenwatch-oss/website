@@ -30,7 +30,6 @@ const initialState = {
 
   uploadedAt: null,
   genomes: {},
-  analyses: {},
   selectedOrganism: null,
 };
 
@@ -96,11 +95,17 @@ export default function (state = initialState, { type, payload }) {
     case actions.UPLOAD_GENOME.SUCCESS: {
       const { id, result } = payload;
       const { files } = state;
-
+      const genome = state.genomes[result.id] || { analysis: {} };
       return {
         ...state,
         files: updateFile(files, id, { status: statuses.SUCCESS }),
-        genomes: { ...state.genomes, [result.id]: result },
+        genomes: {
+          ...state.genomes,
+          [result.id]: {
+            ...genome,
+            ...result,
+          },
+        },
       };
     }
     case actions.UPDATE_GENOME.SUCCESS: {
@@ -144,17 +149,26 @@ export default function (state = initialState, { type, payload }) {
       };
     }
     case actions.UPLOAD_ANALYSIS_RECEIVED: {
-      const { analyses } = state;
-      const { id } = payload;
-      const analysis = analyses[id] || {};
+      const { genomes } = state;
+      const { genomeId, results } = payload;
+      const genome = genomes[genomeId] || {};
+      const nextGenome = {
+        ...genome,
+        analysis: {
+          ...genome.analysis || {},
+        },
+      };
+      for (const { task, version, result, error } of results) {
+        nextGenome.analysis[task] = error ? false : version;
+        if (result) {
+          Object.assign(nextGenome, result);
+        }
+      }
       return {
         ...state,
-        analyses: {
-          ...analyses,
-          [id]: {
-            ...analysis,
-            [payload.task]: payload.error ? false : payload.result,
-          },
+        genomes: {
+          ...genomes,
+          [genomeId]: nextGenome,
         },
         lastMessageReceived: new Date(),
         position: 0,
@@ -169,20 +183,8 @@ export default function (state = initialState, { type, payload }) {
     }
     case actions.UPLOAD_FETCH_GENOMES.SUCCESS: {
       const nextGenomes = {};
-      const nextAnalyses = {};
       const { files, position } = payload.result;
       for (const genome of files) {
-        nextGenomes[genome.id] = {
-          ...genome,
-          status: statuses.SUCCESS,
-          speciated:
-            (genome.analysis && !!genome.analysis.speciator) ||
-            genome.errored.indexOf('speciator') !== -1,
-          genomeId: genome.id,
-          analysis: undefined,
-          pending: undefined,
-          errored: undefined,
-        };
         const pendingAnalysis = {};
         if (genome.pending) {
           for (const task of genome.pending) {
@@ -194,10 +196,18 @@ export default function (state = initialState, { type, payload }) {
             pendingAnalysis[task] = false;
           }
         }
-        nextAnalyses[genome.id] = {
-          ...pendingAnalysis,
-          ...genome.analysis,
-          ...(state.analyses[genome.id] || {}),
+
+        nextGenomes[genome.id] = {
+          ...genome,
+          status: statuses.SUCCESS,
+          speciated:
+            (genome.analysis && !!genome.analysis.speciator) ||
+            genome.errored.indexOf('speciator') !== -1,
+          genomeId: genome.id,
+          analysis: {
+            ...genome.analysis,
+            ...pendingAnalysis,
+          },
         };
       }
 
@@ -206,7 +216,6 @@ export default function (state = initialState, { type, payload }) {
         position,
         selectedOrganism: null,
         genomes: nextGenomes,
-        analyses: nextAnalyses,
       };
     }
     case actions.UPLOAD_ORGANISM_SELECTED:

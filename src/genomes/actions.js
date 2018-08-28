@@ -10,6 +10,7 @@ export function fetchGenomeSummary(filter) {
   return {
     type: FETCH_GENOME_SUMMARY,
     payload: {
+      filter,
       promise: fetchSummary(filter),
     },
   };
@@ -17,10 +18,21 @@ export function fetchGenomeSummary(filter) {
 
 export const FETCH_GENOME_LIST = createAsyncConstants('FETCH_GENOME_LIST');
 
-export function fetchGenomeList(options = {}) {
+const isDefined = value => (typeof value !== 'undefined' && value !== null);
+
+export function fetchGenomeList(startIndex, stopIndex) {
+  let skip = undefined;
+  let limit = undefined;
+  if (isDefined(startIndex)) {
+    skip = startIndex;
+    if (isDefined(stopIndex)) {
+      limit = stopIndex - startIndex + 1;
+    }
+  }
+  const options = { skip, limit };
   return (dispatch, getState) => {
     const filter = getFilter(getState());
-    dispatch({
+    return dispatch({
       type: FETCH_GENOME_LIST,
       payload: {
         filter,

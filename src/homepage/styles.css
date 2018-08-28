@@ -39,45 +39,51 @@
 .wgsa-homepage > section footer {
   display: flex;
   justify-content: center;
-}
-
-.wgsa-homepage .mdl-button {
-  text-decoration: none !important;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: auto;
-}
-
-.wgsa-homepage .mdl-button > i {
-  margin-top: 8px;
-  font-size: 32px;
+  margin-bottom: 24px;
 }
 
 
 /* Jumbotron */
 
 .jumbotron {
-  padding: 32px 32px 0 !important;
-  margin: 0 auto;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 2;
   background: linear-gradient(to top, rgba(255,255,255,0) 0%, rgb(255,255,255) 75%);
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 2;
+}
+
+.jumbotron-content {
+  margin: 16px auto;
+  max-width: 1280px;
+  padding: 0 16px;
+  box-sizing: border-box;
+  @media (min-width: 1024px) { /* 1280 - 64 */
+    padding: 0 64px;
+  }
 }
 
 .jumbotron img {
-  width: 400px;
-  margin: 0 auto;
   display: block;
-  transform: translateX(-12.5%);
+  width: 240px;
 }
 
 .jumbotron h1 {
   color: #673c90;
-  font-size: 24px;
-  text-align: center;
-  margin-bottom: 0;
+  font-size: 45px;
+  line-height: 1.2;
+  font-weight: 300;
+  text-shadow: 1px 1px 1px #efefef;
+  margin: 16px 0;
+}
+
+.jumbotron h1 > em,
+.jumbotron h1 > span {
+  font-weight: 300;
+}
+
+.jumbotron h1 > strong {
+  font-weight: 500;
+  letter-spacing: 0.01em;
 }

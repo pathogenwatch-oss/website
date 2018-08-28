@@ -3,17 +3,18 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import Breadcrumb from '../../components/Breadcrumb.react';
+import DocumentTitle from '../../branding/DocumentTitle.react';
 
 import { taxIdMap } from '../index';
 
-import { getWgsaOrganisms } from '../selectors';
+import { getSupportedOrganisms } from '../selectors';
 
 import { fetchSummary } from '../actions';
 
 function mapStateToProps(state, { organismId }) {
   return {
     ...(
-      getWgsaOrganisms(state).find(_ => _.organismId === organismId.toString())
+      getSupportedOrganisms(state).find(_ => _.organismId === organismId.toString())
     ),
   };
 }
@@ -32,12 +33,13 @@ const Details = React.createClass({
 
   render() {
     const { organismId, totalGenomes, totalCollections } = this.props;
-    const { nickname, formattedName, definitionText, desc, imageCredit, taxonomy } = taxIdMap.get(organismId);
+    const { nickname, formattedName, definitionText, desc, imageCredit, taxonomy, name } = taxIdMap.get(organismId);
     return (
       <div className="wgsa-page mdl-grid">
+        <DocumentTitle>{name}</DocumentTitle>
         <div className="mdl-cell mdl-cell--12-col">
           <Breadcrumb>
-            <Link to="/organisms">All Organisms</Link>
+            <Link to="/organisms">Organisms</Link>
             {formattedName}
           </Breadcrumb>
           <h1 className="wgsa-page-divider wgsa-page-title">{formattedName}</h1>

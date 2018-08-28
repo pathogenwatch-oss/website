@@ -6,7 +6,7 @@ import selection from './selection/reducer';
 import stats from './stats/reducer';
 import collectionMetadata from './create-collection-form/reducer';
 import map from './map/reducer';
-import detail from './detail/reducer';
+import report from './report/reducer';
 
 import { CREATE_COLLECTION } from './create-collection-form';
 import * as actions from './actions';
@@ -14,13 +14,17 @@ import * as actions from './actions';
 function entities(state = {}, { type, payload }) {
   switch (type) {
     case actions.FETCH_GENOME_LIST.SUCCESS: {
+      const { prefilter } = payload.filter;
       return payload.result.reduce((memo, genome) => {
+        if (prefilter === 'bin') genome.binned = true;
         memo[genome.id] = genome;
         return memo;
       }, { ...state });
     }
     case actions.FETCH_GENOME_SUMMARY.SUCCESS: {
+      const { prefilter } = payload.filter;
       return payload.result.genomes.reduce((memo, genome) => {
+        if (prefilter === 'bin') genome.binned = true;
         memo[genome.id] = genome;
         return memo;
       }, {});
@@ -42,7 +46,7 @@ function indices(state = {}, { type, payload }) {
       const { skip = 0, limit = 0 } = payload.options;
       const nextState = { ... state };
       for (let i = skip; i < skip + limit; i++) {
-        nextState[i] = true;
+        nextState[i] = state[i] || true;
       }
       return nextState;
     }
@@ -111,5 +115,5 @@ export default combineReducers({
   summary,
   waiting,
   map,
-  detail,
+  report,
 });

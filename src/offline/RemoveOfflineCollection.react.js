@@ -26,7 +26,7 @@ const RemoveOfflineCollection = React.createClass({
 
     if (this.state.confirming) {
       return (
-        <div className="wgsa-confirm-action" onMouseLeave={this.cancel}>
+        <div className="wgsa-confirm-action">
           <p>This cannot be undone.</p>
           <button className="mdl-button wgsa-button--text" onClick={this.cancel}>
             Cancel
@@ -45,7 +45,7 @@ const RemoveOfflineCollection = React.createClass({
         disabled={disabled}
         title={disabled ?
           'Remove this collection when you are online again 🙂' :
-          'Requires confirmation.'
+          'Requires Confirmation'
         }
       >
         Remove
@@ -55,9 +55,9 @@ const RemoveOfflineCollection = React.createClass({
 
 });
 
-function mapDispatchToProps(dispatch, { uuid }) {
+function mapDispatchToProps(dispatch, { token }) {
   return {
-    onConfirm: () => dispatch(removeOfflineCollection(uuid)),
+    onConfirm: () => dispatch(removeOfflineCollection(token)),
     disabled: isOffline(),
   };
 }

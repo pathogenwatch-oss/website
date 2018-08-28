@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import Spinner from '../../components/Spinner.react';
+import { Logo, DocumentTitle } from '../../branding';
 
 import { statuses } from '../constants';
 
@@ -22,10 +23,11 @@ const Background = connect()(React.createClass({
   },
 
   render() {
+    const { logo = true } = this.props;
     return (
       <div style={backgroundStyle} className="wgsa-loading-container">
         <div className="wgsa-loading-content">
-          <img src="/images/WGSA.FINAL.svg" className="wgsa-loading-logo" />
+          { logo && <Logo className="wgsa-loading-logo" /> }
           { this.props.children }
         </div>
       </div>
@@ -38,13 +40,10 @@ export const LoadSpinner = React.createClass({
 
   displayName: 'LoadSpinner',
 
-  componentWillMount() {
-    document.title = 'WGSA | Loading...';
-  },
-
   render() {
     return (
-      <Background>
+      <Background logo={false}>
+        <DocumentTitle>Loading...</DocumentTitle>
         <Spinner />
         <h1>Loading collection...</h1>
       </Background>
@@ -90,13 +89,10 @@ function getStatusMessage({ collection, location }) {
 
 export const LoadError = React.createClass({
 
-  componentWillMount() {
-    document.title = 'WGSA | Error';
-  },
-
   render() {
     return (
       <Background>
+        <DocumentTitle>Error</DocumentTitle>
         { getStatusMessage(this.props) }
         <p>Please contact <a href="mailto:cgps@sanger.ac.uk">cgps@sanger.ac.uk</a> if problems persist.</p>
       </Background>

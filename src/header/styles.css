@@ -7,7 +7,7 @@
 }
 
 .wgsa-header-logo {
-  width: 88px;
+  width: 160px
 }
 
 .wgsa-header--inverse {
@@ -43,15 +43,26 @@
   color: #673c90;
 }
 
-.wgsa-account-link {
-  position: absolute;
-  left: 16px;
-  top: 12px;
+.wgsa-main-menu-button {
   background: none;
-  color: #673c90;
   border: none;
+  color: #673c90;
+  height: 64px;
+  width: 64px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   outline: none;
   padding: 0;
+}
+
+.wgsa-account-link {
+  padding: 0 16px;
+}
+
+.mdl-layout__header--primary .wgsa-main-menu-button,
+.wgsa-header--inverse .wgsa-main-menu-button {
+  color: #fff;
 }
 
 .cgps-avatar > :first-child {
@@ -88,6 +99,10 @@
   letter-spacing: normal;
 }
 
+a.wgsa-account-header {
+  text-decoration: underline;
+}
+
 .cgps-avatar > * {
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -96,7 +111,7 @@
 
 .wgsa-navigation-header {
   font-size: inherit;
-  font-family: inherit;
+  font-family: inherit !important;
   font-weight: 500;
   line-height: 40px;
   margin: inherit;

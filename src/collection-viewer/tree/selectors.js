@@ -1,6 +1,11 @@
 import { createSelector } from 'reselect';
 
-import { getCollection, getGenomes, getViewer } from '../../collection-viewer/selectors';
+import {
+  getCollection,
+  getGenomes,
+  getViewer,
+  getCollectionGenomeIds,
+} from '../selectors';
 import { getActiveDataTable } from '../table/selectors';
 
 import { titles, simpleTrees } from './constants';
@@ -12,17 +17,29 @@ import Organisms from '../../organisms';
 export const getTreeState = state => getViewer(state).tree;
 
 export const getTrees = state => getTreeState(state).entities;
+export const hasTrees = state => Object.keys(getTrees(state)).length > 0;
 export const isLoading = state => getTreeState(state).loading;
 
-export const getLeafIds = (state, { stateKey }) =>
-  getTrees(state)[stateKey].leafIds;
+export const getLeafIds = (state, { stateKey }) => {
+  const trees = getTrees(state);
+
+  if (stateKey === POPULATION) {
+    if (COLLECTION in trees) {
+      return trees[COLLECTION].leafIds;
+    }
+    return getCollectionGenomeIds(state);
+  }
+
+  if (stateKey in trees) {
+    return trees[stateKey].leafIds;
+  }
+
+  return [];
+};
 
 export const getVisibleTree = createSelector(
   getTreeState,
-  ({ visible, entities }) => {
-    const visibleTree = entities[visible];
-    return visibleTree.newick ? visibleTree : entities[POPULATION];
-  }
+  ({ visible, entities }) => (visible ? entities[visible] : null)
 );
 
 export const isLoaded = state => getVisibleTree(state).loaded;
@@ -40,7 +57,7 @@ export const getSingleTree = createSelector(
 export const getTitle = createSelector(
   getVisibleTree,
   getGenomes,
-  (tree, genomes) => titles[tree.name] || genomes[tree.name].name
+  (tree, genomes) => tree ? (titles[tree.name] || genomes[tree.name].name) : null
 );
 
 export const getFilenames = createSelector(
@@ -68,4 +85,16 @@ export const getSubtreeNames = createSelector(
 export const getSelectedInternalNode = createSelector(
   state => getTreeState(state).selectedInternalNode,
   ({ trees, active }) => trees[active]
+);
+
+export const areTreesComplete = createSelector(
+  getTrees,
+  trees => {
+    for (const key of Object.keys(trees)) {
+      if (trees[key].status !== 'READY') {
+        return false;
+      }
+    }
+    return true;
+  }
 );

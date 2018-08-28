@@ -22,17 +22,22 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 }
 
 .mdl-layout__drawer .mdl-layout-title > img {
-  width: 160px;
   position: absolute;
-  top: -50%;
-  right: -48px;
+  right: calc(16px * -2.375);
+  top: calc(16px * -3);
+  width: calc(16px * 8.75);
 }
 
 .mdl-layout__drawer .mdl-navigation {
-  padding-top: 8px;
+  padding-top: 0;
+}
+
+.mdl-layout__drawer hr {
+  margin: 8px 0;
 }
 
 .mdl-layout__drawer .mdl-navigation .mdl-navigation__link {

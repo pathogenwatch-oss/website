@@ -9,6 +9,7 @@ import Filter from './filter';
 import Header from './header';
 import CollectionCard from './CollectionCard.react';
 import Overlay from '../overlay';
+import { DocumentTitle } from '../branding';
 
 import { getCollectionList, getTotal, getStatus } from './selectors';
 import { isFilterOpen, isActive } from './filter/selectors';
@@ -20,7 +21,6 @@ import { statuses } from './constants';
 const Collections = React.createClass({
 
   componentWillMount() {
-    document.title = 'WGSA | Collections';
     this.props.filter();
   },
 
@@ -34,14 +34,6 @@ const Collections = React.createClass({
     const { total, match, filterActive } = this.props;
     const { prefilter } = match.params;
 
-    if (prefilter === 'bin' && total === 0) {
-      return (
-        <p className="wgsa-hub-big-message">
-          Nothing in the bin 👍
-        </p>
-      );
-    }
-
     if (filterActive) {
       return (
         <p className="wgsa-hub-big-message">
@@ -50,9 +42,33 @@ const Collections = React.createClass({
       );
     }
 
+    if (total === 0) {
+      switch (prefilter) {
+        case 'bin':
+          return (
+            <p className="wgsa-hub-big-message">
+              Nothing in the bin 👍
+            </p>
+          );
+        case 'user':
+          return (
+            <div className="pw-flex-center pw-expand pw-onboarding-message">
+              <p>You haven't created any collections yet 😮</p>
+              <p><Link to="/genomes" className="mdl-button mdl-button--raised mdl-button--colored">Browse Genomes</Link></p>
+            </div>
+          );
+        default:
+          return (
+            <p className="wgsa-hub-big-message">
+              Nothing to show  ¯\_(ツ)_/¯
+            </p>
+          );
+      }
+    }
+
     return (
       <p className="wgsa-hub-big-message">
-        <Link to="/genomes">Create a collection first. 🙂</Link>
+        Nothing to show  ¯\_(ツ)_/¯
       </p>
     );
   },
@@ -100,6 +116,7 @@ const Collections = React.createClass({
           { 'has-filter': this.props.isFilterOpen }
         )}
       >
+        <DocumentTitle>Collections</DocumentTitle>
         <Filter />
         <div className="wgsa-filter-content">
           <Header />
@@ -107,7 +124,7 @@ const Collections = React.createClass({
         </div>
         <Overlay visible={status === statuses.LOADING}>
           <p className="wgsa-big-message">
-            Loading... ⌛
+            Loading... ⏳
           </p>
         </Overlay>
       </div>

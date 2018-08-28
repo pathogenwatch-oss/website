@@ -1,5 +1,26 @@
-.wgsa-genome-selection-dropdown ul:first-child {
-  margin-top: 0;
+.wgsa-genome-downloads {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.wgsa-genome-downloads__content {
+  overflow-y: auto;
+  margin: 0;
+  flex-grow: 1;
+}
+
+.wgsa-genome-downloads__content .mdl-spinner {
+  margin: 8px 16px;
+}
+
+.wgsa-genome-downloads__content > ul {
+  margin: 0;
+  padding: 8px 0;
+}
+
+.wgsa-genome-downloads__content > ul > li {
+  padding: 0 16px;
 }
 
 .wgsa-genome-download-list {
@@ -9,4 +30,20 @@
 .wgsa-genome-download-list li {
   display: flex;
   justify-content: space-between;
+}
+
+.wgsa-genome-download-list button {
+  padding: 0;
+  font-size: inherit;
+  color: #673c90;
+  font-weight: 700;
+}
+
+.wgsa-genome-download-list button:hover,
+.wgsa-genome-download-list button:focus {
+  text-decoration: underline;
+}
+
+.wgsa-genome-download-list small {
+  font-weight: 400;
 }

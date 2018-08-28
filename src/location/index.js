@@ -1,6 +1,6 @@
 import queryString from 'query-string';
 
-import { history } from '../app';
+import { history } from '../app/router';
 
 function push(nextString = '') {
   history.push({
@@ -35,27 +35,6 @@ export function locationChange(location) {
       location,
     },
   };
-}
-
-function createSlug({ pathname }) {
-  if (pathname === '/') {
-    return 'home';
-  }
-  return pathname.split('/')[1];
-}
-
-export function reducer(state = {}, { type, payload }) {
-  switch (type) {
-    case LOCATION_CHANGE: {
-      const { location } = payload;
-      return {
-        slug: createSlug(payload.location),
-        ...location,
-      };
-    }
-    default:
-      return state;
-  }
 }
 
 export LocationListener from './LocationListener.react';
