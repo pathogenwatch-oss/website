@@ -10,16 +10,16 @@ module.exports = function (props) {
     Collection
       .find(findQuery, {
         _user: 1,
+        access: 1,
+        binned: 1,
+        createdAt: 1,
         description: 1,
-        pmid: 1,
-        public: 1,
-        size: 1,
         organismId: 1,
+        pmid: 1,
+        size: 1,
         status: 1,
         title: 1,
-        uuid: 1,
-        createdAt: 1,
-        binned: 1,
+        token: 1,
       }, {
         skip: Number(skip),
         limit: Number(limit),

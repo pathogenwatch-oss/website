@@ -1,29 +1,40 @@
 const LOGGER = require('utils/logging').createLogger('runner');
 
-const { getImages, getImageName, getSpeciatorTask } = require('manifest.js');
+const { getImages, getImageName, getSpeciatorTask, getClusteringTask } = require('manifest.js');
 const { tasks } = require('configuration.js');
 const { username = 'anon', password = '' } = tasks.registry || {};
 
 const dockerPull = require('docker-pull');
-
 const mapLimit = require('promise-map-limit');
+
+const { queues } = require('../taskQueue');
 
 const LIMIT = 5;
 
-const speciatorQueue = 'speciator';
-
 function getImageNames(queue) {
-  if (!queue) {
-    const { task, version } = getSpeciatorTask();
-    return getImages().concat(getImageName(task, version));
+  const speciator = getSpeciatorTask();
+  const speciatorImage = getImageName(speciator.task, speciator.version);
+  const clustering = getClusteringTask();
+  const clusteringImage = getImageName(clustering.task, clustering.version);
+
+  if (queue === queues.genome) {
+    return [ speciatorImage ];
   }
 
-  if (queue === speciatorQueue) {
-    const { task, version } = getSpeciatorTask();
-    return [ getImageName(task, version) ];
+  if (queue === queues.collection) return getImages('collection');
+
+  if (queue === queues.task) return getImages('genome');
+
+  if (queue === queues.clustering) {
+    return [ clusteringImage ];
   }
 
-  return getImages();
+  return [
+    speciatorImage,
+    clusteringImage,
+    ...getImages('genome'),
+    ...getImages('collection'),
+  ];
 }
 
 const options = { host: null, version: 'v2', username, password };

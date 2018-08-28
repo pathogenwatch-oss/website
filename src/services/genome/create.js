@@ -4,34 +4,27 @@ const Genome = require('models/genome');
 
 const { ServiceRequestError } = require('utils/errors');
 
-function createGenomeDocument({ name, uploadedAt }, { fileId, reference, user, sessionID }) {
-  return (
-    Genome.create({
-      _user: user,
-      _session: sessionID,
-      fileId,
-      name,
-      reference,
-      public: reference,
-      uploadedAt,
-    })
-    .then(({ _id }) => _id.toString())
-  );
+async function createGenomeDocument({ name, filename = name, uploadedAt }, { fileId, reference, user }) {
+  const doc = await Genome.create({
+    _user: user,
+    fileId,
+    name,
+    filename,
+    reference,
+    public: reference,
+    uploadedAt,
+  });
+
+  return doc._id.toString();
 }
 
-module.exports = ({ timeout$, stream, metadata, reference, user, sessionID, clientId }) => {
+module.exports = async ({ timeout$, stream, metadata, reference, user, clientId }) => {
   if (!stream) {
     return Promise.reject(new ServiceRequestError('No stream provided'));
   }
 
-  return (
-    request('genome', 'store', { timeout$, stream })
-      .then(({ fileId }) =>
-        createGenomeDocument(metadata, { fileId, reference, user, sessionID })
-          .then(genomeId => {
-            request('genome', 'speciate', { genomeId, fileId, uploadedAt: metadata.uploadedAt, clientId });
-            return { id: genomeId };
-          })
-      )
-  );
+  const { fileId } = await request('genome', 'store', { timeout$, stream });
+  const genomeId = await createGenomeDocument(metadata, { fileId, reference, user });
+  await request('tasks', 'submit-genome', { genomeId, fileId, uploadedAt: metadata.uploadedAt, clientId });
+  return { id: genomeId };
 };

@@ -1,17 +1,18 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
-const CollectionGenome = require('models/collectionGenome');
-
 const { setToObjectOptions } = require('./utils');
 
 const schema = new Schema({
-  taxId: { type: String, required: true },
+  taxId: { type: String, required: true, index: true },
   name: String,
   shortName: String,
   deployed: { type: Date },
   tree: String,
-  references: [ CollectionGenome.schema ],
+  references: [ {
+    name: String,
+    uuid: String,
+  } ],
   resistance: {
     antibiotics: Schema.Types.Mixed,
     paar: Schema.Types.Mixed,
@@ -21,34 +22,10 @@ const schema = new Schema({
 
 setToObjectOptions(schema);
 
-schema.statics.deploy = function (collection) {
-  const taxId = collection.uuid;
-  const amr = require('models/amr'); // sync require so couchbase is not loaded in web-api
-  return Promise.all([
-    amr.fetchAntibiotics(taxId),
-    amr.fetchPaarsnpLibrary(taxId),
-    CollectionGenome.find({ _collection: collection._id }),
-  ]).
-  then(([ antibiotics, { paar, snp }, references ]) =>
-    Promise.all([
-      this.create({
-        deployed: new Date(),
-        references,
-        resistance: { antibiotics, paar, snp },
-        taxId,
-        tree: collection.tree,
-      }),
-      collection.remove(),
-      CollectionGenome.remove({ _collection: collection._id }),
-    ])
-  ).
-  then(() => collection);
-};
-
-schema.statics.getLatest = function (taxId) {
+schema.statics.getLatest = function (taxId, projection = {}) {
   return (
     this.
-      find({ taxId }).
+      find({ taxId }, projection).
       sort({ deployed: -1 }).
       limit(1).
       then(([ doc ]) => doc)

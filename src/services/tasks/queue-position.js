@@ -1,10 +1,13 @@
 const db = require('mongoose').connection;
 
-module.exports = function ({ uploadedAt }) {
+const defaultTypeClause = { $in: [ 'genome', 'task' ] };
+
+module.exports = function ({ uploadedAt, until = uploadedAt, type = defaultTypeClause }) {
   return new Promise((resolve, reject) => {
     db.collection('_queue').count({
-      'message.uploadedAt': { $lt: new Date(uploadedAt) },
+      dateCreated: { $lt: new Date(until) },
       rejectionReason: { $exists: false },
+      type,
     },
       (err, position) => {
         if (err) {

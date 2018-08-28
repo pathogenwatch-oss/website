@@ -2,20 +2,7 @@ const { request } = require('services/bus');
 
 const Genome = require('models/genome');
 
-module.exports = function ({ genomeId, collectionId, uploadedAt, task, clientId }) {
-  if (collectionId) {
-    return (
-      request('collection', 'progress-error', {
-        collectionId,
-        assemblyId: genomeId,
-        taskType: task,
-      })
-      .then(() => {
-        request('collection', 'send-progress', { collectionId });
-      })
-    );
-  }
-
+module.exports = function ({ task, metadata: { genomeId, uploadedAt, clientId } }) {
   return (
     Genome.addAnalysisError(genomeId, task)
       .then(() => {

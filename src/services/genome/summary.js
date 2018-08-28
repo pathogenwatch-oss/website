@@ -6,15 +6,20 @@ const wgsaOrganisms = organisms.map(_ => _.id);
 const summaryFields = [
   { field: 'organismId',
     aggregation: () => [
-      { $match: { organismId: { $in: wgsaOrganisms } } },
-      { $group: { _id: { label: '$analysis.speciator.organismName', key: '$organismId' }, count: { $sum: 1 } } },
+      { $match: { 'analysis.speciator.organismId': { $in: wgsaOrganisms } } },
+      { $group: { _id: { label: '$analysis.speciator.organismName', key: '$analysis.speciator.organismId' }, count: { $sum: 1 } } },
     ],
   },
   { field: 'speciesId',
-    aggregation: () => [
-      { $match: { 'analysis.speciator.speciesId': { $exists: true } } },
-      { $group: { _id: { label: '$analysis.speciator.speciesName', key: '$analysis.speciator.speciesId' }, count: { $sum: 1 } } },
-    ],
+    aggregation: ({ query }) => {
+      if (query.genusId || query.organismId) {
+        return [
+          { $match: { 'analysis.speciator.speciesId': { $exists: true } } },
+          { $group: { _id: { label: '$analysis.speciator.speciesName', key: '$analysis.speciator.speciesId' }, count: { $sum: 1 } } },
+        ];
+      }
+      return null;
+    },
   },
   { field: 'genusId',
     aggregation: () => [
@@ -40,11 +45,9 @@ const summaryFields = [
     ],
   },
   { field: 'uploadedAt',
-    aggregation: ({ user, sessionID }) => {
-      if (!user && !sessionID) return null;
-      const $match = { $or: [] };
-      if (user) $match.$or.push({ _user: user._id });
-      if (sessionID) $match.$or.push({ _session: sessionID });
+    aggregation: ({ user }) => {
+      if (!user) return null;
+      const $match = { _user: user._id };
       return [
         { $match },
         { $group: { _id: '$uploadedAt', count: { $sum: 1 } } },
@@ -52,23 +55,21 @@ const summaryFields = [
     },
   },
   { field: 'date', range: true, queryKeys: [ 'minDate', 'maxDate' ] },
-  { field: 'analysis.mlst.st',
+  { field: 'st',
     aggregation: ({ query = {} }) => {
       if (!query.organismId && !query.speciesId && !query.genusId) return null;
       return [
         { $group: { _id: '$analysis.mlst.st', count: { $sum: 1 } } },
       ];
     },
-    queryKeys: [ 'sequenceType' ],
   },
-  { field: 'analysis.paarsnp.antibiotics.fullName',
+  { field: 'amr',
     aggregation: () => [
       { $project: { 'analysis.paarsnp.antibiotics': 1 } },
       { $unwind: '$analysis.paarsnp.antibiotics' },
       { $match: { 'analysis.paarsnp.antibiotics.state': 'RESISTANT' } },
       { $group: { _id: '$analysis.paarsnp.antibiotics.fullName', count: { $sum: 1 } } },
     ],
-    queryKeys: [ 'resistance' ],
   },
 ];
 

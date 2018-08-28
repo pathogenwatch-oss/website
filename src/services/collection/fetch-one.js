@@ -1,38 +1,46 @@
-const services = require('services');
-const CollectionGenome = require('models/collectionGenome');
+const Genome = require('models/genome');
 
-function addGenomes(collection) {
-  if (collection.status !== 'READY') {
-    collection.genomes = [];
-    return collection;
-  }
+const { request } = require('services');
 
-  return CollectionGenome
-    .find({ _collection: collection.id }, {
-      _collection: 0,
-      fileId: 0,
-      'analysis.core.matches': 0,
-      'analysis.mlst.matches': 0,
-      'analysis.paarsnp.matches': 0,
-    })
-    .lean()
-    .then(genomes => {
-      collection.genomes = genomes;
-      return collection;
-    });
-}
+const projection = {
+  _user: 1,
+  _organism: 1,
+  access: 1,
+  createdAt: 1,
+  description: 1,
+  genomes: 1,
+  organismId: 1,
+  pmid: 1,
+  size: 1,
+  tree: 1,
+  'subtrees.name': 1,
+  'subtrees.size': 1,
+  'subtrees.populationSize': 1,
+  'subtrees.status': 1,
+  'subtrees.task': 1,
+  'subtrees.version': 1,
+  title: 1,
+  token: 1,
+};
 
-module.exports = ({ user, uuid, withIds = false }) =>
-  services.request('collection', 'fetch-progress', { user, uuid, withIds })
-    .then(collection => collection.ensureAccess(user))
-    .then(collection => {
-      if (collection.status === 'READY') {
-        return (
-          collection
-            .populate('_organism')
-            .execPopulate()
-            .then(_ => addGenomes(_.toObject()))
-        );
-      }
-      return collection;
-    });
+module.exports = ({ user, token }) =>
+  request('collection', 'authorise', { user, token, projection })
+    .then(collection =>
+      collection
+        .populate('_organism', {
+          tree: 1,
+          resistance: 1,
+          'references.name': 1,
+          'references.uuid': 1,
+        })
+        .execPopulate()
+        .then(() => Genome.getForCollection({ _id: { $in: collection.genomes } }))
+        .then(genomes => {
+          const doc = collection.toObject({ user });
+          doc.genomes = genomes;
+          doc.status = 'READY';
+          doc.subtrees = doc.subtrees || [];
+          doc.uuid = doc.token;
+          return doc;
+        })
+    );

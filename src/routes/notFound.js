@@ -1,7 +1,7 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
-router.use(function (req, res) {
+router.use((req, res) => {
   res.sendStatus(404);
 });
 

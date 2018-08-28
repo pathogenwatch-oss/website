@@ -1,15 +1,10 @@
 const express = require('express');
 const router = express.Router();
 
-const services = require('services');
-
 const LOGGER = require('utils/logging').createLogger('Redirects');
 
 function redirectFromAlias(res, alias) {
-  return (
-    services.request('collection', 'alias', { alias })
-      .then(uuid => res.redirect(`/collection/${uuid || alias}`))
-  );
+  return res.redirect(`/collection/${alias}`);
 }
 
 router.use('/zika', (req, res) => redirectFromAlias(res, 'zika'));

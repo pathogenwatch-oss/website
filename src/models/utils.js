@@ -1,3 +1,6 @@
+const slug = require('slug');
+const removeMarkdown = require('remove-markdown');
+
 exports.setToObjectOptions = (schema, optionalTransform) =>
   schema.set('toObject', {
     transform(doc, ret, options) {
@@ -30,7 +33,7 @@ const sumAggregation = field => [
 ];
 
 function aggregateSummaryFields(model, summaryFields, props) {
-  const aggregations = summaryFields.reduce((memo, { field, aggregation, range, queryKeys = [ field ] }) => {
+  const aggregations = summaryFields.reduce((memo, { field, aggregation, range, queryKeys = [] }) => {
     let aggregationStage = null;
 
     if (aggregation) {
@@ -44,11 +47,16 @@ function aggregateSummaryFields(model, summaryFields, props) {
     if (!aggregationStage) {
       memo.push(Promise.resolve([]));
     } else {
-      const query = {};
-      for (const key of Object.keys(props.query)) {
-        if (!queryKeys.includes(key)) {
-          query[key] = props.query[key];
+      let query;
+      if (queryKeys.length) { // this is retained to support range aggregations e.g. date
+        query = {};
+        for (const key of Object.keys(props.query)) {
+          if (!queryKeys.includes(key)) {
+            query[key] = props.query[key];
+          }
         }
+      } else {
+        query = props.query;
       }
       const $match = model.getFilterQuery(Object.assign({}, props, { query }));
       const prefilterStage = [ { $match }, ...aggregationStage ];
@@ -96,4 +104,18 @@ exports.getSummary = function (model, summaryFields, props) {
 
       return summary;
     });
+};
+
+exports.toSlug = function (text) {
+  if (!text) return '';
+  const slugText = slug(removeMarkdown(text), { lower: true });
+  return slugText.length > 64 ?
+    slugText.slice(0, 64) :
+    slugText;
+};
+
+exports.getBinExpiryDate = function () {
+  const date = new Date();
+  date.setDate(date.getDate() - 30);
+  return date;
 };

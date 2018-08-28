@@ -1,125 +1,104 @@
+
 const { request } = require('services/bus');
-const { ServiceRequestError } = require('utils/errors');
+const { getCollectionTask } = require('manifest');
 
 const Collection = require('models/collection');
 const Genome = require('models/genome');
 const Organism = require('models/organism');
 
-const { maxCollectionSize = { anonymous: 0, loggedIn: 0 } } = require('configuration');
-
-function getMaxCollectionSize(user) {
-  if (user) {
-    return user.admin ? null : maxCollectionSize.loggedIn;
-  }
-  return maxCollectionSize.anonymous;
+async function validate({ genomeIds, organismId, user }) {
+  await request('collection', 'verify', { genomeIds, organismId, user });
+  return genomeIds;
 }
 
-function createCollection({ organismId, genomeIds, title, description, pmid, user, sessionID }) {
-  if (!organismId) {
-    return Promise.reject(new ServiceRequestError('No organism ID provided'));
-  }
-
-  if (!genomeIds || !genomeIds.length) {
-    return Promise.reject(new ServiceRequestError('No genome IDs provided'));
-  }
-
-  const maxSize = getMaxCollectionSize(user);
-  if (maxSize && genomeIds.length > maxSize) {
-    return Promise.reject(new ServiceRequestError('Too many genome IDs provided'));
-  }
-
-  const size = genomeIds.length;
-  return (
-    Organism.getLatest(organismId).
-      then(organism =>
-        Collection.create({
-          _organism: organism,
-          _user: user,
-          _session: !user ? sessionID : undefined,
-          description,
-          organismId,
-          pmid,
-          size,
-          title,
-        })
-      )
-  );
+function getGenomes(genomeIds) {
+  return Genome.find(
+    { _id: { $in: genomeIds } },
+    { latitude: 1, longitude: 1, 'analysis.core.fp.reference': 1 }
+  )
+  .lean();
 }
 
-function getGenomes(ids) {
-  return Genome.find({ _id: { $in: ids } }, {
-    fileId: 1,
-    name: 1,
-    year: 1,
-    month: 1,
-    day: 1,
-    latitude: 1,
-    longitude: 1,
-    country: 1,
-    pmid: 1,
-    userDefined: 1,
-    organismId: 1,
-    'analysis.speciator': 1,
-  });
-}
-
-function getCollectionAndGenomes(message) {
-  return Promise.all([
-    createCollection(message),
-    getGenomes(message.genomeIds),
-  ]);
-}
-
-function checkGenomeOrganismIds([ collection, genomes ]) {
-  for (const genome of genomes) {
-    if (genome.organismId !== collection.organismId) {
-      throw new ServiceRequestError(`A ${collection.organismId} collection cannot include genome (id: ${genome.id}, organismId ${genome.organismId})`);
+function getLocations(genomes) {
+  const locations = {};
+  for (const { latitude, longitude } of genomes) {
+    if (latitude && longitude) {
+      locations[`${latitude}_${longitude}`] = [ latitude, longitude ];
     }
   }
-  return [ collection, genomes ];
+  return Object.values(locations);
 }
 
-function getCollectionUUID(genomes, organismId) {
-  return (
-    request('backend', 'new-collection', { genomes, organismId })
-  );
+function getSubtrees(organismId, genomes, genomeIds) {
+  const spec = getCollectionTask(organismId, 'subtree');
+  if (!spec) return null;
+
+  const fps = new Set();
+  for (const { analysis = {} } of genomes) {
+    if (analysis.core && analysis.core.fp && analysis.core.fp.reference) {
+      fps.add(analysis.core.fp.reference);
+    }
+  }
+
+  return Promise.all(
+    Array.from(fps).map(async (name) => {
+      const count = await Genome.count({
+        $or: [ { population: true }, { _id: { $in: genomeIds } } ],
+        'analysis.core.fp.reference': name,
+        'analysis.speciator.organismId': organismId,
+      });
+      if (count > 1) {
+        return {
+          name,
+          status: 'PENDING',
+        };
+      }
+      return null;
+    })
+  ).then(subtrees => subtrees.filter(_ => _ !== null));
 }
 
-function saveCollectionUUID({ collection, ids }) {
-  const { collectionId, uuidToGenome } = ids;
-  return (
-    Promise.all([
-      collection.addUUID(collectionId),
-      request('collection', 'add-genomes', { collection, uuidToGenome }),
-    ])
-    .then(() => ({ collection, uuidToGenome }))
-  );
-}
+async function createCollection(genomes, { organismId, title, description, pmid, user }) {
+  const size = genomes.length;
+  const tree = genomes.length >= 3 ? { name: 'collection' } : null;
 
-function submitCollection({ collection, uuidToGenome }) {
-  const { uuid, organismId } = collection;
-  const uploadedAt = collection.progress.started;
-  return request('collection', 'submit', {
+  const genomeIds = genomes.map(_ => _._id);
+  const organism = await Organism.getLatest(organismId);
+  const subtrees = await getSubtrees(organismId, genomes, genomeIds);
+
+  return Collection.create({
+    _organism: organism,
+    _user: user,
+    access: user ? 'private' : 'shared',
+    description,
+    genomes: genomeIds,
+    locations: getLocations(genomes),
     organismId,
-    uuidToGenome,
-    uploadedAt,
-    collectionId: uuid,
+    pmid,
+    size,
+    subtrees,
+    title,
+    token: Collection.generateToken(title),
+    tree,
   });
+}
+
+function submitCollection(collection) {
+  const { _id, token, organismId } = collection;
+  const submitType = collection.tree ? 'submit-tree' : 'submit-subtrees';
+  return request('collection', submitType, {
+    organismId,
+    collectionId: _id,
+    clientId: token,
+  })
+  .then(() => collection);
 }
 
 module.exports = function (message) {
   return Promise.resolve(message)
-    .then(getCollectionAndGenomes)
-    .then(checkGenomeOrganismIds)
-    .then(([ collection, genomes ]) =>
-      getCollectionUUID(genomes, message.organismId)
-        .then(ids => ({ collection, ids }))
-        .then(saveCollectionUUID)
-        .then(submitCollection)
-        .then(() => ({ slug: collection.slug, uuid: collection.uuid }))
-        .catch(error => {
-          collection.failed(error);
-          throw error;
-        })
-    );
+    .then(validate)
+    .then(getGenomes)
+    .then(genomes => createCollection(genomes, message))
+    .then(submitCollection)
+    .then(({ token }) => ({ token }));
 };

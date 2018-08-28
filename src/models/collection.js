@@ -1,64 +1,68 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
-const slug = require('slug');
+const rand = require('rand-token');
 
-const { setToObjectOptions, addPreSaveHook, getSummary } = require('./utils');
-const { NotFoundError } = require('../utils/errors');
+const { setToObjectOptions, addPreSaveHook, getSummary, toSlug, getBinExpiryDate } = require('./utils');
+
+const isLeafId = /[0-9a-f]{24}/g;
+
+const Tree = {
+  name: String,
+  newick: String,
+  size: Number,
+  populationSize: Number,
+  status: { type: String, default: 'PENDING' },
+  task: String,
+  versions: {
+    core: String,
+    tree: String,
+  },
+};
+
+const accessLevels = [ 'private', 'shared', 'public' ];
+
+const randGenerator = rand.generator({
+  chars: 'abcdefghijklmnopqrstuvwxyz1234567890',
+});
+
+const getDefaultToken = () => randGenerator.generate(12);
 
 const schema = new Schema({
-  _user: { type: Schema.Types.ObjectId, ref: 'User' },
-  _organism: {
-    type: Schema.Types.ObjectId, ref: 'Organism',
-    required() {
-      return !this.reference;
-    },
-  },
-  _session: String,
-  alias: { type: String, index: true },
+  _user: { type: Schema.Types.ObjectId, ref: 'User', index: true },
+  _organism: { type: Schema.Types.ObjectId, ref: 'Organism' },
+  access: { type: String, enum: accessLevels, default: 'private' },
   createdAt: { type: Date, index: true },
   binned: { type: Boolean, default: false },
   binnedDate: Date,
   description: String,
   error: String,
+  genomes: [ { type: Schema.Types.ObjectId, ref: 'Genome' } ],
   lastAccessedAt: Date,
   lastUpdatedAt: Date,
   locations: Array,
   organismId: String,
-  progress: {
-    completed: Date,
-    errors: [ { taskType: String, name: String } ],
-    started: { type: Date, default: Date.now },
-    results: Object,
-    percent: Number,
-  },
   pmid: String,
-  public: { type: Boolean, default: false },
   published: { type: Boolean, default: false },
   publicationYear: { type: Number, index: true },
-  private: { type: Boolean, default: false },
   reference: Boolean,
-  showcase: Boolean,
+  showcase: { type: Boolean, index: true },
   size: Number,
-  status: { type: String, default: 'PENDING' },
-  subtrees: [ {
-    name: String,
-    tree: String,
-    collectionIds: [ String ],
-    publicIds: [ String ],
-    totalCollection: Number,
-    totalPublic: Number,
-  } ],
+  subtrees: [ Tree ],
   title: { type: String, index: 'text' },
-  tree: String,
-  uuid: { type: String, index: true },
+  token: { type: String, index: true, unique: true, default: getDefaultToken },
+  tree: { type: Tree, default: null },
 });
 
 setToObjectOptions(schema, (doc, collection, { user }) => {
   const { _user } = collection;
   const { id } = user || {};
-  collection.owner = _user && _user.toString() === id ? 'me' : 'other';
+  if (_user && _user.toString() === id) {
+    collection.owner = 'me';
+  } else {
+    collection.owner = 'other';
+    delete collection.access;
+  }
   collection.id = doc._id.toString();
-  collection.slug = doc.slug;
   delete collection._user;
   delete collection._id;
   if (typeof collection._organism === 'object') {
@@ -69,19 +73,6 @@ setToObjectOptions(schema, (doc, collection, { user }) => {
 });
 addPreSaveHook(schema);
 
-schema.methods.addUUID = function (uuid) {
-  this.uuid = uuid;
-  this.status = 'PROCESSING';
-  return this.save();
-};
-
-schema.methods.failed = function (error) {
-  this.status = 'FAILED';
-  this.error = error;
-  this.progress.completed = new Date();
-  return this.save().then(() => error);
-};
-
 schema.methods.ready = function () {
   this.status = 'READY';
   this.progress.completed = new Date();
@@ -89,7 +80,7 @@ schema.methods.ready = function () {
 };
 
 const commonResults = new Set([ 'core', 'metrics' ]);
-const nonReferenceResults = new Set([ 'fp' ]);
+const nonReferenceResults = new Set([ ]);
 const standardAnalyses = new Set([ 'mlst', 'paarsnp' ]);
 const standardOrganisms = new Set([ '1280', '90370', '485', '1313' ]);
 const organismSpecificResults = {
@@ -117,59 +108,11 @@ schema.methods.resultRequired = function (type) {
   return false;
 };
 
-schema.methods.ensureAccess = function (user) {
-  if (!this.private) {
-    return this;
-  }
-
-  if (user && this._user && this._user.equals(user._id)) {
-    return this;
-  }
-
-  throw new NotFoundError('No collection found for this user');
-};
-
-schema.virtual('isProcessing').get(function () {
-  return this.status === 'PROCESSING';
-});
-
-schema.virtual('totalGenomeResults').get(function () {
-  return (
-    commonResults.size +
-    (this.reference ? 0 : nonReferenceResults.size) +
-    (standardOrganisms.has(this.organismId) ? standardAnalyses.size : 0) +
-    (this.organismId in organismSpecificResults ?
-      organismSpecificResults[this.organismId].size : 0)
-  );
-});
-
-const totalTreeResults = 2;
-schema.virtual('totalResultsExpected').get(function () {
-  return this.size * this.totalGenomeResults + totalTreeResults;
-});
-
-function toSlug(text) {
-  if (!text) return '';
-
-  const slugText = `-${slug(text, { lower: true })}`;
-  return slugText.length > 64 ?
-    slugText.slice(0, 64) :
-    slugText;
-}
-
-schema.virtual('slug').get(function () {
-  return `${this.uuid}${toSlug(this.title)}`;
-});
-
-schema.statics.findByUuid = function (uuid, projection) {
-  return this.findOne({ uuid }, projection);
-};
-
 schema.statics.getPrefilterCondition = function ({ user, query = {} }) {
   const { prefilter = 'all' } = query;
 
   if (prefilter === 'all') {
-    const hasAccess = { $or: [ { public: true } ] };
+    const hasAccess = { $or: [ { access: 'public' } ] };
     if (user) {
       hasAccess.$or.push({ _user: user._id });
     }
@@ -181,7 +124,7 @@ schema.statics.getPrefilterCondition = function ({ user, query = {} }) {
   }
 
   if (prefilter === 'bin') {
-    return { binned: true, _user: user._id };
+    return { binned: true, _user: user._id, binnedDate: { $gt: getBinExpiryDate() } };
   }
 
   throw new Error(`Invalid collection prefilter: '${prefilter}'`);
@@ -189,10 +132,6 @@ schema.statics.getPrefilterCondition = function ({ user, query = {} }) {
 
 schema.statics.getSummary = function (fields, props) {
   return getSummary(this, fields, props);
-};
-
-schema.statics.alias = function (uuid, alias) {
-  return this.update({ uuid }, { $set: { alias } });
 };
 
 schema.statics.getFilterQuery = function (props) {
@@ -212,9 +151,9 @@ schema.statics.getFilterQuery = function (props) {
   }
 
   if (type === 'public') {
-    findQuery.public = true;
+    findQuery.access = 'public';
   } else if (type === 'private') {
-    findQuery.public = false;
+    findQuery.access = { $in: [ 'private', 'shared' ] };
   }
 
   if (minDate) {
@@ -245,6 +184,44 @@ schema.statics.getSort = function (sort = 'createdAt-') {
   if (!sortKeys.has(sortKey)) return null;
 
   return { [sortKey]: sortOrder };
+};
+
+schema.statics.addAnalysisResult = function (_id, task, result) {
+  const { name, size, newick, populationSize, versions } = result;
+
+  const tree = {
+    task,
+    versions,
+    name,
+    status: 'READY',
+    newick,
+    size,
+    populationSize,
+  };
+
+  if (task === 'tree') {
+    tree.name = 'collection';
+    return this.update({ _id }, { tree });
+  }
+
+  if (task === 'subtree') {
+    return this.update({ _id, 'subtrees.name': name }, {
+      $set: {
+        'subtrees.$': tree,
+      },
+    });
+  }
+};
+
+schema.statics.getSubtreeIds = function (subtree) {
+  const { newick } = subtree;
+  return newick.match(isLeafId) || [];
+};
+
+schema.statics.generateToken = function (title) {
+  const sections = [ getDefaultToken() ];
+  if (title) sections.push(toSlug(title));
+  return sections.join('-');
 };
 
 module.exports = mongoose.model('Collection', schema);

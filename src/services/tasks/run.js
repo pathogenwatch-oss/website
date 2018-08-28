@@ -1,16 +1,21 @@
 const fs = require('fs');
-const docker = require('docker-run');
+const fastaStorage = require('wgsa-fasta-store');
 
 const Analysis = require('models/analysis');
-const fastaStorage = require('wgsa-fasta-store');
-const { fastaStoragePath } = require('configuration');
+const TaskLog = require('models/taskLog');
+const Genome = require('models/genome');
 
+const notify = require('services/genome/notify');
+const docker = require('../docker');
+const { DEFAULT_TIMEOUT } = require('../bus');
+const { fastaStoragePath } = require('configuration');
 const { getImageName } = require('manifest.js');
 
 const LOGGER = require('utils/logging').createLogger('runner');
 
-function runTask(fileId, task, version, organismId, speciesId, genusId) {
+function runTask({ fileId, task, version, organismId, speciesId, genusId, timeout }) {
   return new Promise((resolve, reject) => {
+    const startTime = process.hrtime();
     const container = docker(getImageName(task, version), {
       env: {
         WGSA_ORGANISM_TAXID: organismId,
@@ -18,7 +23,7 @@ function runTask(fileId, task, version, organismId, speciesId, genusId) {
         WGSA_GENUS_TAXID: genusId,
         WGSA_FILE_ID: fileId,
       },
-    });
+    }, timeout);
     const stream = fs.createReadStream(fastaStorage.getFilePath(fastaStoragePath, fileId));
     stream.pipe(container.stdin);
     const buffer = [];
@@ -27,6 +32,11 @@ function runTask(fileId, task, version, organismId, speciesId, genusId) {
     });
     container.on('exit', (exitCode) => {
       LOGGER.info('exit', exitCode);
+
+      const [ durationS, durationNs ] = process.hrtime(startTime);
+      const duration = Math.round(durationS * 1000 + durationNs / 1e6);
+      TaskLog.create({ fileId, task, version, organismId, speciesId, genusId, duration, exitCode });
+
       if (exitCode !== 0) {
         container.stderr.setEncoding('utf8');
         reject(new Error(container.stderr.read()));
@@ -43,22 +53,25 @@ function runTask(fileId, task, version, organismId, speciesId, genusId) {
       }
     });
     container.on('spawn', (containerId) => {
-      LOGGER.info('spawn', containerId, 'for file', fileId);
+      LOGGER.info('spawn', containerId, 'for task', task, 'file', fileId);
     });
     container.on('error', reject);
   });
 }
 
-module.exports = function handleMessage({ fileId, task, version, organismId, speciesId, genusId }) {
-  return Analysis.findOne({ fileId, task, version })
-    .then(model => {
-      if (model) return model.results;
-      return (
-        runTask(fileId, task, version, organismId, speciesId, genusId)
-          .then(results => {
-            Analysis.create({ fileId, task, version, results });
-            return results;
-          })
-      );
-    });
+module.exports = async function ({ task, version, metadata, timeout$: timeout = DEFAULT_TIMEOUT }) {
+  const { organismId, speciesId, genusId, fileId, genomeId, uploadedAt, clientId } = metadata;
+  let doc = await Analysis.findOne({ fileId, task, version }).lean();
+  if (!doc) { // The results weren't in the cache
+    const results = await runTask({ fileId, task, version, organismId, speciesId, genusId, timeout });
+    await Analysis.update(
+      { fileId, task, version },
+      { fileId, task, version, results },
+      { upsert: true }
+    ).exec();
+    doc = { fileId, task, version, results };
+  }
+
+  await Genome.addAnalysisResults(genomeId, doc);
+  notify({ genomeId, clientId, uploadedAt, tasks: [ doc ] });
 };

@@ -11,7 +11,6 @@ const crypto = require('crypto');
 
 const config = require('configuration.js');
 const logging = require('utils/logging');
-const messageQueueConnection = require('utils/messageQueueConnection');
 const mongoConnection = require('utils/mongoConnection');
 
 const LOGGER = logging.getBaseLogger();
@@ -39,19 +38,17 @@ app.use((req, res, next) => {
 });
 
 // http://stackoverflow.com/a/19965089
-app.use(bodyParser.json({ limit: '500mb' }));
+app.use(bodyParser.json({ limit: '8mb' }));
 app.use(bodyParser.urlencoded({
   extended: true,
-  limit: '50mb',
+  limit: '8mb',
 }));
 
 logging.initHttpLogging(app, process.env.NODE_ENV || 'none');
 
 module.exports = () =>
-  Promise.all([
-    messageQueueConnection.connect(),
-    mongoConnection.connect(),
-  ]).then(() => {
+  mongoConnection.connect()
+  .then(() => {
     // security
     app.use((req, res, next) => {
       res.header('X-Frame-Options', 'SAMEORIGIN');
@@ -89,7 +86,6 @@ module.exports = () =>
       })
     );
 
-    const services = require('services');
     // user accounts
     userAccounts(app, {
       userStore,
@@ -99,17 +95,16 @@ module.exports = () =>
       failureRedirect: '/',
       logoutPath: '/signout',
       strategies: config.passport.strategies,
-      onLogin: (req) =>
-        services.request('account', 'claim-data', { session: req.sessionID, user: req.user }),
     });
 
     app.use(express.static(path.join(clientPath, 'public')));
 
-    require('routes.js')(app);
+    require('routes')(app);
 
     app.set('view engine', 'ejs');
     app.set('views', path.join(clientPath, 'views'));
 
+    const files = require(path.join(clientPath, 'assets.js'))();
     app.use('/', (req, res, next) => {
       // crude file matching
       if (req.path !== '/index.html' && req.path.match(/\.[a-z]{1,4}$/) || req.xhr) {
@@ -123,21 +118,28 @@ module.exports = () =>
         } :
         undefined;
 
-      const hash = crypto.createHash('sha1');
-      hash.update(req.user ? req.user.id : req.sessionID);
+      let clientId = null;
+      if (req.user) {
+        const hash = crypto.createHash('sha1');
+        hash.update(req.user.id);
+        clientId = hash.digest('hex');
+      }
 
       return res.render('index', {
-        googleMapsKey: config.googleMapsKey,
+        files,
+        gaTrackingId: config.gaTrackingId,
         frontEndConfig: {
           pusherKey: config.pusher.key,
           mapboxKey: config.mapboxKey,
           maxCollectionSize: config.maxCollectionSize,
-          maxFastaFileSize: config.maxFastaFileSize,
+          maxDownloadSize: config.maxDownloadSize,
+          maxGenomeFileSize: config.maxGenomeFileSize,
+          pagination: config.pagination,
           wiki: config.wikiLocation,
           strategies: Object.keys(config.passport.strategies || {}),
           user,
           version,
-          clientId: hash.digest('hex'),
+          clientId,
         },
       });
     });

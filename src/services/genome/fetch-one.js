@@ -1,27 +1,60 @@
-const Genome = require('models/genome');
-const CollectionGenome = require('models/collectionGenome');
-const { ServiceRequestError, NotFoundError } = require('utils/errors');
+// const Analysis = require('models/analysis');
+const { ServiceRequestError } = require('utils/errors');
+const { request } = require('services');
 
-const fetch = {
-  genome: ({ user, sessionID }, _id, projection = {}) => {
-    const $or = [ { public: true } ];
-
-    if (user) $or.push({ _user: user._id });
-    else if (sessionID) $or.push({ _session: sessionID });
-
-    return Genome.findOne({ _id, $or }, projection);
-  },
-  collection: (_, id, projection = {}) =>
-    CollectionGenome.findOne({ _id: id }, projection),
+const projection = {
+  _user: 1,
+  binned: 1,
+  country: 1,
+  createdAt: 1,
+  date: 1,
+  day: 1,
+  fileId: 1,
+  month: 1,
+  name: 1,
+  pmid: 1,
+  population: 1,
+  public: 1,
+  reference: 1,
+  userDefined: 1,
+  year: 1,
+  'analysis.metrics': 1,
+  'analysis.speciator': 1,
+  'analysis.genotyphi': 1,
+  'analysis.ngmast': 1,
+  'analysis.mlst.__v': 1,
+  'analysis.mlst.st': 1,
+  'analysis.mlst.url': 1,
+  'analysis.mlst.alleles': 1,
+  'analysis.core.__v': 1,
+  'analysis.core.summary': 1,
+  'analysis.core.fp': 1,
+  'analysis.paarsnp.__v': 1,
+  'analysis.paarsnp.antibiotics': 1,
+  'analysis.paarsnp.paar': 1,
+  'analysis.paarsnp.snp': 1,
+  'analysis.cgmlst.scheme': 1,
 };
 
-module.exports = ({ user, sessionID, type = 'genome', id, projection }) => {
-  if (!(type in fetch)) throw new ServiceRequestError('Invalid type');
+// const taskNames = [
+//   'speciator', 'metrics', 'mlst', 'paarsnp', 'genotyphi', 'ngmast', 'core',
+// ];
+
+module.exports = async ({ user, id }) => {
   if (!id) throw new ServiceRequestError('Missing Id');
 
-  return fetch[type]({ user, sessionID }, id, projection)
-    .then(record => {
-      if (!record) throw new NotFoundError('Not found or access denied');
-      return record.toObject({ user });
-    });
+  const genome = await request('genome', 'authorise', { user, id, projection });
+
+  // TODO: Add task versions back when version-switching added to front-end
+  return genome;
+  // const promises = [
+    // Analysis.find(
+    //   { fileId: genome.fileId, task: { $in: taskNames } },
+    //   { _id: 0, task: 1, version: 1 }
+    // ).lean(),
+  // ];
+
+  // const [ /* tasks,*/ clustering = null ] = await Promise.all(promises);
+
+  // return Object.assign(genome, { tasks });
 };

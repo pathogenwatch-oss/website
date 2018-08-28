@@ -1,25 +1,15 @@
-const LOGGER = require('utils/logging').createLogger('runner');
+const { enqueue, queues } = require('../taskQueue');
 
-const { request } = require('services/bus');
+const { getSpeciatorTask } = require('../../manifest');
 
-const { getTasksByOrganism } = require('manifest.js');
-const Genome = require('models/genome');
-
-module.exports = function ({ genomeId, collectionId, fileId, organismId, speciesId, genusId, uploadedAt, clientId }) {
-  const tasks = getTasksByOrganism(organismId, speciesId, genusId, collectionId);
-
-  if (tasks.length === 0) {
-    return Promise.resolve();
-  }
-
-  const taskNames = tasks.map(_ => _.task);
-  const type = collectionId ? 'collectiongenome' : 'genome';
-  LOGGER.info(`Submitting tasks [${taskNames}] for ${type} ${genomeId}`);
-
-  return (
-    (collectionId ? Promise.resolve() : Genome.addPendingTasks(genomeId, taskNames))
-    .then(() => request(
-      'tasks', 'enqueue', { genomeId, collectionId, fileId, organismId, speciesId, genusId, uploadedAt, clientId, tasks }
-    ))
-  );
+module.exports = function ({ genomeId, fileId, uploadedAt, clientId }) {
+  const speciatorTask = getSpeciatorTask();
+  const { task, version } = speciatorTask;
+  const metadata = {
+    genomeId,
+    fileId,
+    uploadedAt: new Date(uploadedAt),
+    clientId,
+  };
+  return enqueue(queues.genome, { task, version, metadata });
 };

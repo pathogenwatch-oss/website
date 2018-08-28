@@ -4,7 +4,7 @@ const mapLimit = require('promise-map-limit');
 
 require('services');
 const Genome = require('models/genome');
-const submit = require('services/genome/speciate');
+const submit = require('services/tasks/submit-genome');
 
 const limit = 1000;
 

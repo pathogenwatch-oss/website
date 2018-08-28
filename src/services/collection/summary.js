@@ -7,7 +7,7 @@ const summaryFields = [
       {
         $group: {
           _id: {
-            $cond: [ { $eq: [ '$public', true ] }, 'public', 'private' ],
+            $cond: [ { $eq: [ '$access', 'public' ] }, 'public', 'private' ],
           },
           count: { $sum: 1 },
         },
