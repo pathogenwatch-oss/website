@@ -12,13 +12,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/ImperialCollegeLondon/wgsa_front-end.git"
+    "url": "https://gitlab.com/cgps/wgsa-front-end.git"
   },
   "author": "The Centre for Genomic Pathogen Surveillance",
   "bugs": {
-    "url": "https://github.com/ImperialCollegeLondon/wgsa_front-end/issues"
+    "url": "https://gitlab.com/cgps/wgsa-front-end/issues"
   },
-  "homepage": "https://github.com/ImperialCollegeLondon/wgsa_front-end",
+  "homepage": "https://pathogen.watch",
   "devDependencies": {
     "ava": "^0.17.0",
     "babel-core": "^6.26.0",
@@ -46,16 +46,10 @@
     "fixed-data-table": "^0.6.0",
     "geocoding": "gitlab:cgps/geocoding",
     "json-loader": "^0.5.3",
-<<<<<<< HEAD
-    "leaflet": "0.7.7",
-    "leaflet-lassoselect": "github:imperialcollegelondon/leaflet-lassoselect#87768417d3289bfdd2709ead2b94697a12f16b49",
-    "leaflet.markercluster": "github:leaflet/leaflet.markercluster#leaflet-0.7",
-=======
     "leaflet": "^1.2.0",
     "leaflet-lassoselect": "gitlab:cgps/leaflet-lassoselect#leaflet-1.x",
     "leaflet.markercluster": "^1.2.0",
     "libmicroreact": "gitlab:cgps/libmicroreact#37d0367b475b3d9e637f96f696ad6218fe42b1d6",
->>>>>>> edge
     "lodash.sortby": "^4.7.0",
     "name-all-modules-plugin": "^1.0.1",
     "pako": "^1.0.5",
