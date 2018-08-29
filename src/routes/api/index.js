@@ -19,6 +19,7 @@ function prefilterValidation(req, res, next) {
 router.use([
   prefilterValidation,
   require('./genome'),
+  require('./upload'),
   require('./collection'),
   require('./download'),
   require('./summary'),

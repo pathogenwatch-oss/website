@@ -5,7 +5,7 @@ const contentLength = require('express-content-length-validator');
 const services = require('services');
 
 const router = express.Router();
-const LOGGER = require('utils/logging').createLogger('Upload');
+const LOGGER = require('utils/logging').createLogger('Genome');
 
 const config = require('configuration');
 
@@ -100,14 +100,20 @@ router.post('/genome/:id/clusters/edges', async (req, res, next) => {
 
   try {
     const response = await services.request('clustering', 'fetch-edges', { user, genomeId: id, threshold, sts, version, scheme });
-    const { edges = [] } = response;
-    if (edges.length <= 0) throw new NotFoundError(`No cluster edges found for ${id} at threshold ${threshold}`);
     res.json(response);
   } catch (e) {
     next(e);
   }
 });
 
+router.post('/genome/selection', (req, res, next) => {
+  LOGGER.info('Received request to get selection');
+  const { user } = req;
+  const ids = req.body;
+  services.request('genome', 'selection', { user, ids })
+    .then(response => res.json(response))
+    .catch(next);
+});
 
 router.get('/genome', (req, res, next) => {
   LOGGER.info('Received request to get genomes');
@@ -116,6 +122,20 @@ router.get('/genome', (req, res, next) => {
   services.request('genome', 'fetch-list', { user, query }).
     then(response => res.json(response)).
     catch(next);
+});
+
+
+/* Requires Auth */
+
+router.use('/genome', (req, res, next) => {
+  const { user } = req;
+
+  if (!user || !user._id) {
+    res.sendStatus(401);
+    return;
+  }
+
+  next();
 });
 
 function getStream(req) {
@@ -146,15 +166,6 @@ router.put(
   }
 );
 
-router.post('/genome/selection', (req, res, next) => {
-  LOGGER.info('Received request to get selection');
-  const { user } = req;
-  const ids = req.body;
-  services.request('genome', 'selection', { user, ids })
-    .then(response => res.json(response))
-    .catch(next);
-});
-
 router.post('/genome/bin', (req, res, next) => {
   const { user, body } = req;
   const { status, ids } = body;
@@ -172,34 +183,6 @@ router.post('/genome/:id', (req, res, next) => {
   const { id } = req.params;
   const { body, user } = req;
   services.request('genome', 'edit', { id, user, metadata: body })
-    .then(response => res.json(response))
-    .catch(next);
-});
-
-router.get('/upload/:uploadedAt/position', (req, res, next) => {
-  LOGGER.info('Received request to get upload position');
-  const { uploadedAt } = req.params;
-  services.request('tasks', 'queue-position', { uploadedAt })
-    .then(result => res.json(result))
-    .catch(next);
-});
-
-router.get('/upload/:uploadedAt', (req, res, next) => {
-  LOGGER.info('Received request to get upload session');
-  const { user } = req;
-  const { uploadedAt } = req.params;
-  Promise.all([
-    services.request('genome', 'fetch-upload', { user, query: { uploadedAt } }),
-    services.request('tasks', 'queue-position', { uploadedAt }),
-  ])
-  .then(([ files, { position } ]) => res.json({ files, position }))
-  .catch(next);
-});
-
-router.get('/upload', (req, res, next) => {
-  LOGGER.info('Received request to get upload sessions');
-  const { user } = req;
-  services.request('genome', 'fetch-upload-list', { user })
     .then(response => res.json(response))
     .catch(next);
 });

@@ -29,7 +29,7 @@ async function getClusteringData({ scheme, version, sts }) {
 }
 
 
-module.exports = async function ({ user, scheme, version, sts, threshold }) {
+module.exports = async function ({ user, genomeId, scheme, version, sts, threshold }) {
   // We need to check that the user is allowed to get the edges for these STs
   const hasAccess = await Genome.checkAuthorisedForSts(user, sts);
   // We return a 404 so that we don't leak whether an ST exists for another user
@@ -50,6 +50,10 @@ module.exports = async function ({ user, scheme, version, sts, threshold }) {
       // We're just going to return 1 if there's an edge between two STs or 0 if there isn't
       edges.push(lookup(stA, stB) <= threshold ? 1 : 0);
     }
+  }
+
+  if (edges.length <= 0) {
+    throw new NotFoundError(`No cluster edges found for ${genomeId} at threshold ${threshold}`);
   }
 
   return {
