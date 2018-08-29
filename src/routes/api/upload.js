@@ -18,9 +18,8 @@ router.use('/upload', (req, res, next) => {
 
 router.get('/upload/:uploadedAt/position', (req, res, next) => {
   LOGGER.info('Received request to get upload position');
-  const { user } = req;
   const { uploadedAt } = req.params;
-  services.request('tasks', 'queue-position', { user, uploadedAt })
+  services.request('tasks', 'queue-position', { uploadedAt })
     .then(result => res.json(result))
     .catch(next);
 });
