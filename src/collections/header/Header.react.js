@@ -10,6 +10,7 @@ import { getActiveSort } from '../filter/selectors';
 import { updateFilter } from '../filter/actions';
 
 const Header = ({ visibleCollections, totalCollections, activeSort = 'createdAt-', onSortChange }) => {
+  console.log(totalCollections);
   if (totalCollections === 0) return <header></header>;
   return (
     <header>

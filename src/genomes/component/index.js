@@ -7,7 +7,7 @@ import { getTotalGenomes, getGridItems, getStatus } from '../selectors';
 import { isFilterOpen, isActive } from '../filter/selectors';
 import { getTotal } from '../summary/selectors';
 
-import { updateFilter } from '../filter/actions';
+import { updateFilter, clearFilter } from '../filter/actions';
 
 function mapStateToProps(state, { match }) {
   const { prefilter } = match.params;
@@ -28,6 +28,7 @@ function mapDispatchToProps(dispatch, { match, location }) {
   return {
     fetch: () =>
       dispatch(updateFilter({ prefilter, ...query }, false)),
+    clearFilter: () => dispatch(clearFilter()),
   };
 }
 

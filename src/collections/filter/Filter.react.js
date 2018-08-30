@@ -24,18 +24,23 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     clearFilter: () => dispatch(actions.clearFilter()),
+    updateFilterValue: (filterKey, value) =>
+      dispatch(actions.updateFilterValue({ [filterKey]: value })),
+    applyFilter: () =>
+      dispatch(actions.applyFilter()),
     updateFilter: (filterKey, value) =>
       dispatch(actions.updateFilter({ [filterKey]: value })),
   };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(
-  ({ active, searchText, filterSummary, updateFilter, clearFilter, prefilter }) => (
+  ({ active, searchText, filterSummary, updateFilterValue, applyFilter, updateFilter, clearFilter, prefilter }) => (
     <FilterAside
       active={active}
       clear={clearFilter}
       textValue={searchText}
-      textOnChange={e => updateFilter('searchText', e.target.value)}
+      textOnChange={value => updateFilterValue('searchText', value)}
+      textOnChangeEffect={applyFilter}
       prefilter={prefilter}
     >
       <FilterSection

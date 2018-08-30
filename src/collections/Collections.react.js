@@ -52,7 +52,7 @@ const Collections = React.createClass({
           );
         case 'user':
           return (
-            <div className="pw-flex-center pw-expand pw-onboarding-message">
+            <div className="pw-flex-center pw-onboarding-message">
               <p>You haven't created any collections yet 😮</p>
               <p><Link to="/genomes" className="mdl-button mdl-button--raised mdl-button--colored">Browse Genomes</Link></p>
             </div>
@@ -60,17 +60,13 @@ const Collections = React.createClass({
         default:
           return (
             <p className="wgsa-hub-big-message">
-              Nothing to show  ¯\_(ツ)_/¯
+              Nothing to show ¯\_(ツ)_/¯
             </p>
           );
       }
     }
 
-    return (
-      <p className="wgsa-hub-big-message">
-        Nothing to show  ¯\_(ツ)_/¯
-      </p>
-    );
+    return null;
   },
 
   getContent() {
@@ -84,7 +80,8 @@ const Collections = React.createClass({
       );
     }
 
-    if (collections.length === 0 && status === statuses.LOADING) {
+    // Initial load
+    if (this.props.total === 0 && status === statuses.LOADING) {
       return null;
     }
 

@@ -1,3 +1,5 @@
+export const STALE_RESULT = Symbol('STALE_RESULT');
+
 export const promiseToThunk = () => next => action => {
   const { type, payload } = action;
 
@@ -11,7 +13,9 @@ export const promiseToThunk = () => next => action => {
     dispatch({ type: type.ATTEMPT, payload: { ...props } });
     return promise.then(
       result => {
-        dispatch({ type: type.SUCCESS, payload: { result, ...props } });
+        if (result !== STALE_RESULT) {
+          dispatch({ type: type.SUCCESS, payload: { result, ...props } });
+        }
         return result;
       },
       error => {

@@ -5,13 +5,25 @@ import { fetchSummary } from '../actions';
 
 import { getFilter } from './selectors';
 
-export function updateFilter(query, updateQueryString = true) {
-  return (dispatch, getState) => {
-    const update = updateQueryString ? actions.update : actions.setFilter;
-    dispatch(update(stateKey, query));
+import { checkStale } from '../../actions';
 
-    const currentFilter = getFilter(getState());
-    dispatch(fetchSummary(currentFilter));
+export function updateFilterValue(filterMap) {
+  return actions.update(stateKey, filterMap);
+}
+
+export function applyFilter() {
+  return (dispatch, getState) =>
+    dispatch(checkStale(fetchSummary, getState, getFilter));
+}
+
+export function updateFilter(query, updateQueryString = true) {
+  return (dispatch) => {
+    if (updateQueryString) {
+      dispatch(updateFilterValue(query));
+    } else {
+      dispatch(actions.setFilter(stateKey, query));
+    }
+    dispatch(applyFilter());
   };
 }
 
