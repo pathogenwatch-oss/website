@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 const rand = require('rand-token');
+const escapeRegex = require('escape-string-regexp');
 
 const { setToObjectOptions, addPreSaveHook, getSummary, toSlug, getBinExpiryDate } = require('./utils');
 
@@ -48,7 +49,7 @@ const schema = new Schema({
   showcase: { type: Boolean, index: true },
   size: Number,
   subtrees: [ Tree ],
-  title: { type: String, index: 'text' },
+  title: { type: String, index: true },
   token: { type: String, index: true, unique: true, default: getDefaultToken },
   tree: { type: Tree, default: null },
 });
@@ -137,13 +138,18 @@ schema.statics.getSummary = function (fields, props) {
 schema.statics.getFilterQuery = function (props) {
   const { query = {} } = props;
   const {
-    searchText, organismId, type, minDate, maxDate, publicationYear,
+    maxDate,
+    minDate,
+    organismId,
+    publicationYear,
+    searchText,
+    type,
   } = query;
 
   const findQuery = this.getPrefilterCondition(props);
 
   if (searchText) {
-    findQuery.$text = { $search: searchText };
+    findQuery.title = { $regex: escapeRegex(searchText), $options: 'i' };
   }
 
   if (organismId) {
