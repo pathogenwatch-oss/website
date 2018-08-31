@@ -47,3 +47,35 @@
   flex-grow: 1;
   position: relative;
 }
+
+.pw-filter-view-loading {
+  font-size: 24px;
+  line-height: 1.5;
+  color: #a386bd;
+  font-weight: 400;
+  margin-bottom: 0;
+  background: rgba(255, 255, 255, 0.87);
+  padding: 16px;
+  border-radius: 4px;
+}
+
+.pw-filter-view-message {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  justify-content: center;
+  padding-bottom: calc(64px + 48px); /* header + summary */
+}
+
+.pw-filter-view-message > * + * {
+  margin-top: 16px;
+}
+
+p.pw-filter-view-message,
+.pw-filter-view-message > p {
+  color: #a386bd;
+  font-size: 20px;
+  line-height: 1.5;
+  margin-bottom: 0;
+}

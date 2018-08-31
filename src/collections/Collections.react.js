@@ -14,7 +14,7 @@ import { DocumentTitle } from '../branding';
 import { getCollectionList, getTotal, getStatus } from './selectors';
 import { isFilterOpen, isActive } from './filter/selectors';
 
-import { updateFilter } from './filter/actions';
+import { updateFilter, clearFilter } from './filter/actions';
 
 import { statuses } from './constants';
 
@@ -36,9 +36,15 @@ const Collections = React.createClass({
 
     if (filterActive) {
       return (
-        <p className="wgsa-hub-big-message">
-          No matches, please refine your search.
-        </p>
+        <div className="pw-filter-view-message">
+          <p>No matches, please refine your search.</p>
+          <button
+            className="mdl-button mdl-button--raised mdl-button--colored"
+            onClick={this.props.clear}
+          >
+            Clear Filters
+          </button>
+        </div>
       );
     }
 
@@ -46,21 +52,21 @@ const Collections = React.createClass({
       switch (prefilter) {
         case 'bin':
           return (
-            <p className="wgsa-hub-big-message">
+            <p className="pw-filter-view-message">
               Nothing in the bin 👍
             </p>
           );
         case 'user':
           return (
-            <div className="pw-flex-center pw-onboarding-message">
-              <p>You haven't created any collections yet 😮</p>
+            <div className="pw-filter-view-message">
+              <p>You haven't created any collections.</p>
               <p><Link to="/genomes" className="mdl-button mdl-button--raised mdl-button--colored">Browse Genomes</Link></p>
             </div>
           );
         default:
           return (
-            <p className="wgsa-hub-big-message">
-              Nothing to show ¯\_(ツ)_/¯
+            <p className="pw-filter-view-message">
+              Nothing to see here.
             </p>
           );
       }
@@ -74,7 +80,7 @@ const Collections = React.createClass({
 
     if (status === statuses.ERROR) {
       return (
-        <p className="wgsa-hub-big-message">
+        <p className="pw-filter-view-message">
           Something went wrong. 😞
         </p>
       );
@@ -120,7 +126,7 @@ const Collections = React.createClass({
           { this.getContent() }
         </div>
         <Overlay visible={status === statuses.LOADING}>
-          <p className="wgsa-big-message">
+          <p className="pw-filter-view-loading">
             Loading... ⏳
           </p>
         </Overlay>
@@ -146,8 +152,8 @@ function mapDispatchToProps(dispatch, { match, location }) {
   const { prefilter } = match.params;
   const query = parse(location.search);
   return {
-    filter: () =>
-      dispatch(updateFilter({ prefilter, ...query }, false)),
+    filter: () => dispatch(updateFilter({ prefilter, ...query }, false)),
+    clear: () => dispatch(clearFilter()),
   };
 }
 

@@ -41,7 +41,7 @@ export default React.createClass({
     const { total, prefilter, filterActive } = this.props;
     if (filterActive) {
       return (
-        <div className="wgsa-hub-big-message">
+        <div className="pw-filter-view-message">
           <p>No matches, please refine your search.</p>
           <button
             className="mdl-button mdl-button--raised mdl-button--colored"
@@ -57,21 +57,21 @@ export default React.createClass({
       switch (prefilter) {
         case 'bin':
           return (
-            <p className="wgsa-hub-big-message">
+            <p className="pw-filter-view-message">
               Nothing in the bin 👍
             </p>
           );
         case 'user':
           return (
-            <div className="pw-flex-center pw-onboarding-message">
-              <p>You haven't uploaded any genomes yet 😞</p>
+            <div className="pw-filter-view-message">
+              <p>You haven't uploaded any genomes.</p>
               <p><Link to="/upload" className="mdl-button mdl-button--raised mdl-button--colored">Upload now</Link></p>
             </div>
           );
         default:
           return (
-            <p className="wgsa-hub-big-message">
-              Nothing to show ¯\_(ツ)_/¯
+            <p className="pw-filter-view-message">
+              Nothing to see here.
             </p>
           );
       }
@@ -85,7 +85,7 @@ export default React.createClass({
 
     if (status === statuses.ERROR) {
       return (
-        <p className="wgsa-hub-big-message">
+        <p className="pw-filter-view-message">
           Something went wrong. 😞
         </p>
       );
@@ -118,7 +118,7 @@ export default React.createClass({
           {this.renderContent()}
         </div>
         <Overlay visible={this.props.status === statuses.LOADING}>
-          <p className="wgsa-big-message">
+          <p className="pw-filter-view-loading">
             Loading... ⏳
           </p>
         </Overlay>
