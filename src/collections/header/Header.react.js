@@ -10,7 +10,6 @@ import { getActiveSort } from '../filter/selectors';
 import { updateFilter } from '../filter/actions';
 
 const Header = ({ visibleCollections, totalCollections, activeSort = 'createdAt-', onSortChange }) => {
-  console.log(totalCollections);
   if (totalCollections === 0) return <header></header>;
   return (
     <header>
@@ -22,7 +21,7 @@ const Header = ({ visibleCollections, totalCollections, activeSort = 'createdAt-
       />
       <label className="wgsa-select-box">
         Sort by
-      <select value={activeSort} onChange={onSortChange}>
+        <select value={activeSort} onChange={onSortChange}>
           <option value="createdAt-">Created: Most Recent</option>
           <option value="createdAt">Created: Least Recent</option>
           <option value="size">Size: Low to High</option>
