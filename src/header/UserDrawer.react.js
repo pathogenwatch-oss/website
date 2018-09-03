@@ -80,16 +80,6 @@ const UserDrawer = React.createClass({
             </nav>
             <hr />
             <nav className="mdl-navigation">
-              <h2 className="wgsa-navigation-header">Collections</h2>
-              <NavLink to="/collections/all" badge={allCollections} icon="collections">
-                { user ? 'All' : 'Public' } Collections
-              </NavLink>
-              { user && <NavLink to="/collections/user" badge={userCollections} icon="person">My Collections</NavLink> }
-              <NavLink to="/offline" badge={offlineCollections} icon="signal_wifi_off">Offline Collections</NavLink>
-              { user && <NavLink to="/collections/bin" badge={binnedCollections} icon="delete">Bin</NavLink> }
-            </nav>
-            <hr />
-            <nav className="mdl-navigation">
               <h2 className="wgsa-navigation-header">Genomes</h2>
               <NavLink to="/genomes/all" badge={allGenomes} icon={<GenomeIcon />}>
                 { user ? 'All' : 'Public' } Genomes
@@ -97,6 +87,16 @@ const UserDrawer = React.createClass({
               { user && <NavLink to="/genomes/user" badge={userGenomes} icon="person">My Genomes</NavLink> }
               { user && <NavLink to="/genomes/bin" badge={binnedGenomes} icon="delete">Bin</NavLink> }
               <NavLink to="/upload" icon="cloud_upload">Upload</NavLink>
+            </nav>
+            <hr />
+            <nav className="mdl-navigation">
+              <h2 className="wgsa-navigation-header">Collections</h2>
+              <NavLink to="/collections/all" badge={allCollections} icon="collections">
+                { user ? 'All' : 'Public' } Collections
+              </NavLink>
+              { user && <NavLink to="/collections/user" badge={userCollections} icon="person">My Collections</NavLink> }
+              <NavLink to="/offline" badge={offlineCollections} icon="signal_wifi_off">Offline Collections</NavLink>
+              { user && <NavLink to="/collections/bin" badge={binnedCollections} icon="delete">Bin</NavLink> }
             </nav>
             <hr />
             <nav className="mdl-navigation">

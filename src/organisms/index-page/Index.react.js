@@ -39,14 +39,14 @@ const SupportedOrganism =
       <h3 className="wgsa-section-title">
         <FormattedName organismId={organismId} fullName />
       </h3>
-      <CardMetadata icon="collections">
-        <Link to={`/collections?organismId=${organismId}`} title="Browse Collections">
-          {totalCollections} Collection{totalCollections === 1 ? '' : 's'}
-        </Link>
-      </CardMetadata>
       <CardMetadata icon="wgsa_genome">
         <Link to={`/genomes?organismId=${organismId}`} title="Browse Genomes">
           {totalGenomes} Genome{totalGenomes === 1 ? '' : 's'}
+        </Link>
+      </CardMetadata>
+      <CardMetadata icon="collections">
+        <Link to={`/collections?organismId=${organismId}`} title="Browse Collections">
+          {totalCollections} Collection{totalCollections === 1 ? '' : 's'}
         </Link>
       </CardMetadata>
     </Link>
