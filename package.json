@@ -41,7 +41,7 @@
     "slug": "^0.9.1",
     "stream-transform": "^0.1.2",
     "wgsa-fasta-store": "gitlab:cgps/wgsa-fasta-store#v4.1.0",
-    "wgsa-front-end": "gitlab:cgps/wgsa-front-end#v7.1.0",
+    "wgsa-front-end": "gitlab:cgps/wgsa-front-end#v7.1.1",
     "zip-stream": "^1.2.0"
   },
   "devDependencies": {
