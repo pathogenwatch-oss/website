@@ -13,7 +13,7 @@ module.exports = function (props) {
       Genome.count(Genome.getPrefilterCondition(props)),
       user ? Genome.count({ binned: false, _user: user }) : Promise.resolve(0),
       user ? Genome.count(Genome.getPrefilterCondition(binPrefilter)) : Promise.resolve(0),
-      Genome.distinct('organismId', Genome.getPrefilterCondition(props))
+      Genome.distinct('analysis.speciator.organismId', Genome.getPrefilterCondition(props))
         .then(result => result.length),
       Organism.distinct('taxId'),
     ]).
