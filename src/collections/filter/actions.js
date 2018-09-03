@@ -12,8 +12,7 @@ export function updateFilterValue(filterMap) {
 }
 
 export function applyFilter() {
-  return (dispatch, getState) =>
-    dispatch(checkStale(fetchSummary, getState, getFilter));
+  return checkStale(fetchSummary, getFilter);
 }
 
 export function updateFilter(query, updateQueryString = true) {
