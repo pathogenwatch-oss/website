@@ -5,22 +5,30 @@ import { fetchGenomeSummary, fetchGenomeList } from '../actions';
 
 import { getFilter } from './selectors';
 
+import { checkStale } from '../../actions';
+
+export function updateFilterValue(filterMap) {
+  return actions.update(stateKey, filterMap);
+}
+
+export function applyFilter() {
+  return checkStale(fetchGenomeSummary, getFilter);
+}
+
 export function updateFilter(query, updateQueryString = true) {
-  return (dispatch, getState) => {
-    const update = updateQueryString ? actions.update : actions.setFilter;
-    dispatch(update(stateKey, query));
-
-    const state = getState();
-    const currentFilter = getFilter(state);
-
-    const filterQuery = { ...currentFilter };
+  return (dispatch) => {
+    if (updateQueryString) {
+      dispatch(updateFilterValue(query));
+    } else {
+      dispatch(actions.setFilter(stateKey, query));
+    }
 
     const queryKeys = Object.keys(query);
     if (queryKeys.length === 1 && queryKeys[0] === 'sort') {
-      return dispatch(fetchGenomeList());
+      dispatch(fetchGenomeList());
+    } else {
+      dispatch(applyFilter());
     }
-
-    return dispatch(fetchGenomeSummary(filterQuery));
   };
 }
 
