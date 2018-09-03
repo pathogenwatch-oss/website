@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 const path = require('path');
+const escapeRegex = require('escape-string-regexp');
 
 const geocoding = require('geocoding');
 const { summariseAnalysis } = require('../utils/analysis');
@@ -36,7 +37,7 @@ const schema = new Schema({
   latitude: Number,
   longitude: Number,
   month: Number,
-  name: { type: String, required: true, index: 'text', maxLength: 256, trim: true },
+  name: { type: String, required: true, maxLength: 256, trim: true },
   pending: { type: Array, default: null },
   pmid: { type: String, maxLength: 16 },
   population: { type: Boolean, default: false, index: true },
@@ -175,24 +176,24 @@ schema.statics.getPrefilterCondition = function ({ user, query = {} }) {
 
 schema.statics.getFilterQuery = function (props) {
   const { user, query = {} } = props;
-  const { searchText } = query;
   const {
-    organismId,
-    speciesId,
-    genusId,
-    type,
     country,
-    minDate,
+    genusId,
     maxDate,
-    uploadedAt,
-    sequenceType,
+    minDate,
+    organismId,
     resistance,
+    searchText,
+    sequenceType,
+    speciesId,
+    type,
+    uploadedAt,
   } = query;
 
   const findQuery = this.getPrefilterCondition(props);
 
   if (searchText) {
-    findQuery.$text = { $search: searchText };
+    findQuery.name = { $regex: escapeRegex(searchText), $options: 'i' };
   }
 
   if (country) {
@@ -209,7 +210,7 @@ schema.statics.getFilterQuery = function (props) {
     findQuery.reference = false;
   }
 
-  if (uploadedAt && (user)) {
+  if (uploadedAt && (user && user._id)) {
     findQuery.uploadedAt = new Date(uploadedAt);
   }
 

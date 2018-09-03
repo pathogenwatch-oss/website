@@ -17,6 +17,7 @@
     "docker-pull": "github:imperialcollegelondon/docker-pull",
     "docker-run": "^3.0.0",
     "ejs": "^2.5.1",
+    "escape-string-regexp": "^1.0.5",
     "event-stream": "^3.3.4",
     "express": "^4.10.7",
     "express-content-length-validator": "^1.0.0",
@@ -40,7 +41,7 @@
     "slug": "^0.9.1",
     "stream-transform": "^0.1.2",
     "wgsa-fasta-store": "gitlab:cgps/wgsa-fasta-store#v4.1.0",
-    "wgsa-front-end": "gitlab:cgps/wgsa-front-end#v7.0.2",
+    "wgsa-front-end": "gitlab:cgps/wgsa-front-end#v7.1.0",
     "zip-stream": "^1.2.0"
   },
   "devDependencies": {
