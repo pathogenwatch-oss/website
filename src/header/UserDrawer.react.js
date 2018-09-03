@@ -14,6 +14,8 @@ import { toggleUserDrawer } from './actions';
 import config from '../app/config';
 const { user } = config;
 
+const documentationURL = 'https://cgps.gitbook.io/pathogenwatch';
+
 const UserDrawer = React.createClass({
 
   propTypes: {
@@ -63,9 +65,13 @@ const UserDrawer = React.createClass({
               <AccountHeader user={user} />
               <Icon />
               { config.version &&
-                <small className="wgsa-version">
+                <a
+                  href={`${documentationURL}/release-notes/#${config.version}`}
+                  target="_blank" rel="noopener"
+                  className="wgsa-version"
+                >
                   {config.version}
-                </small> }
+                </a> }
             </span>
             <nav className="mdl-navigation">
               { user ?
@@ -95,7 +101,7 @@ const UserDrawer = React.createClass({
             <hr />
             <nav className="mdl-navigation">
               <NavLink to="/organisms" icon="bug_report" badge={numOrganisms} activeOnIndexOnly>All Organisms</NavLink>
-              <NavLink to="https://cgps.gitbook.io/pathogenwatch/" external icon="help">Documentation</NavLink>
+              <NavLink to={documentationURL} external icon="help">Documentation</NavLink>
               <NavLink to="https://gitlab.com/cgps/pathogenwatch/roadmap" external icon="feedback">Feedback</NavLink>
             </nav>
             { user &&
