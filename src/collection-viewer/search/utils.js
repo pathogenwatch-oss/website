@@ -79,11 +79,18 @@ export function getValueLabel(value, table) {
 
 const flags = 'i';
 export function getTextMatcher(text, isExact = false) {
-  const cleanText = text.replace('?', '\\?');
-  if (isExact) {
-    return new RegExp(`^${cleanText}$`, flags);
+  try {
+    const cleanText = text.replace('?', '\\?');
+    if (isExact) {
+      return new RegExp(`^${cleanText}$`, flags);
+    }
+    return new RegExp(cleanText, flags);
+  } catch (e) {
+    if (process.env.NODE_ENV !== 'production') {
+      console.error(e);
+    }
+    return null;
   }
-  return new RegExp(cleanText, flags);
 }
 
 const comparators = {
