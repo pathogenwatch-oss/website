@@ -18,10 +18,10 @@ function mapStateToProps(state, { organismId, title }) {
 }
 
 export default connect(mapStateToProps)(
-  ({ isDeployed, organismId, title, fullName = false }) => (
+  ({ isDeployed, organismId, title, shortName = false }) => (
     <span title={title}>
       { isDeployed ?
-        taxIdMap.get(organismId)[fullName ? 'formattedName' : 'formattedShortName'] :
+        taxIdMap.get(organismId)[shortName ? 'formattedShortName' : 'formattedName'] :
         title }
     </span>
   )

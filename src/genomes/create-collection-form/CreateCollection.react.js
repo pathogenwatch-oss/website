@@ -28,7 +28,7 @@ const NoSupportedOrganism = ({ deployedOrganisms }) => (
 const NotEnoughGenomes = ({ organismId, deficit }) => (
   <div className="wgsa-create-collection-message">
     <p>
-      Population search is not currently supported for <strong><FormattedName fullName organismId={organismId} /></strong>.
+      Population search is not currently supported for <strong><FormattedName organismId={organismId} /></strong>.
     </p>
     <p>
       At least 3 genomes are required to produce a tree for collections without population search.
@@ -51,7 +51,7 @@ const SelectOrganism = ({ summary, onClick }) => (
               { summary[id].length }
             </span>
             <span className="mdl-chip__text">
-              <FormattedName fullName organismId={id} />
+              <FormattedName organismId={id} />
             </span>
           </button>
         ) }

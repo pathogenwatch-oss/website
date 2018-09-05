@@ -23,7 +23,7 @@ export default ({ genome }) => {
       </header>
       <p className="h6 pw-genome-report-summary-subtitle">
         { speciator ?
-          <FormattedName fullName
+          <FormattedName
             organismId={speciator.organismId}
             title={speciator.organismName}
           /> :

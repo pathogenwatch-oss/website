@@ -68,7 +68,6 @@ const Popup = ({ list, onItemClick, close }) => (
               {genome.name}
             </button>
             <FormattedName
-              fullName
               organismId={genome.organismId}
               title={genome.organismName}
             />

@@ -80,7 +80,7 @@ export default () => (
         </li>
         <li>
           <a href="/pathogenwatch-typhi-metadata-template.csv" download="pathogenwatch-typhi-metadata-template.csv">
-            <FormattedName organismId="90370" fullName />
+            <FormattedName organismId="90370" />
           </a>
         </li>
       </ul>

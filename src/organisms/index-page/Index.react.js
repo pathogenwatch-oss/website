@@ -37,7 +37,7 @@ const SupportedOrganism =
       title={`${organism.name} Homepage`}
     >
       <h3 className="wgsa-section-title">
-        <FormattedName organismId={organismId} fullName />
+        <FormattedName organismId={organismId} />
       </h3>
       <CardMetadata icon="wgsa_genome">
         <Link to={`/genomes?organismId=${organismId}`} title="Browse Genomes">

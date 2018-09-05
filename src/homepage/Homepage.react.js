@@ -94,7 +94,7 @@ export default ({ deployedOrganisms }) => (
           </thead>
           <tbody>
             <tr>
-              <td><FormattedName organismId="485" fullName /></td>
+              <td><FormattedName organismId="485" /></td>
               <td><i className="material-icons">check</i></td>
               <td>
                 { deployedOrganisms.has('485') &&
@@ -105,14 +105,14 @@ export default ({ deployedOrganisms }) => (
             </tr>
             { deployedOrganisms.has('1646') &&
               <tr>
-                <td><FormattedName organismId="1646" fullName /></td>
+                <td><FormattedName organismId="1646" /></td>
                 <td></td>
                 <td><i className="material-icons">check</i></td>
                 <td><i className="material-icons">check</i></td>
                 <td></td>
               </tr> }
             <tr>
-              <td><FormattedName organismId="90370" fullName /></td>
+              <td><FormattedName organismId="90370" /></td>
               <td><i className="material-icons">check</i></td>
               <td>
                 { deployedOrganisms.has('90370') &&
@@ -125,7 +125,7 @@ export default ({ deployedOrganisms }) => (
               <td><small>Genotyphi</small></td>
             </tr>
             <tr>
-              <td><FormattedName organismId="1280" fullName /></td>
+              <td><FormattedName organismId="1280" /></td>
               <td><i className="material-icons">check</i></td>
               <td>
                 { deployedOrganisms.has('1280') &&
@@ -137,8 +137,16 @@ export default ({ deployedOrganisms }) => (
               </td>
               <td></td>
             </tr>
+            { deployedOrganisms.has('1336') &&
+              <tr>
+                <td><FormattedName organismId="1336" /></td>
+                <td></td>
+                <td><i className="material-icons">check</i></td>
+                <td></td>
+                <td></td>
+              </tr> }
             <tr>
-              <td><FormattedName organismId="1313" fullName /></td>
+              <td><FormattedName organismId="1313" /></td>
               <td><i className="material-icons">check</i></td>
               <td>
                 { deployedOrganisms.has('1313') &&
@@ -152,7 +160,7 @@ export default ({ deployedOrganisms }) => (
             </tr>
             { deployedOrganisms.has('64320') &&
               <tr>
-                <td><FormattedName organismId="64320" fullName /></td>
+                <td><FormattedName organismId="64320" /></td>
                 <td></td>
                 <td><i className="material-icons">check</i></td>
                 <td></td>

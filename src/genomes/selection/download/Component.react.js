@@ -32,7 +32,7 @@ const Section = ({ speciesId, speciesName, total, tasks, ids }) => {
   if (!speciesId) return null;
   return (
     <li>
-      <FormattedName fullName organismId={speciesId} title={speciesName} />
+      <FormattedName organismId={speciesId} title={speciesName} />
       <ul className="wgsa-genome-download-list">
         <li>
           <DownloadLink link={getServerPath('/download/genome/fasta')} ids={ids}>

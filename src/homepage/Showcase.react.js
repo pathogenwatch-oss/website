@@ -50,7 +50,7 @@ const Marker = React.createClass({
 const SelectedCollection = ({ collection }) => (
   <div className="wgsa-showcase-tooltip">
     <MarkdownHeading level="3">{collection.title}</MarkdownHeading>
-    <p>{collection.size} <FormattedName fullName organismId={collection.organismId} /> genomes</p>
+    <p>{collection.size} <FormattedName organismId={collection.organismId} /> genomes</p>
   </div>
 );
 

@@ -76,7 +76,6 @@ const ListItem = ({ index, genome, onClick, style, onViewGenome, className, onMo
             <FormattedName
               organismId={organismId}
               title={organismName}
-              fullName
             /> :
             <span>&nbsp;</span> }
       </Cell>

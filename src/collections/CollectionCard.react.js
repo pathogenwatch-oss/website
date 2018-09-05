@@ -61,7 +61,7 @@ export default ({ item, footerLink }) => {
         <h2 className="wgsa-card-title">{'(Untitled Collection)'}</h2>
       }
       <p className="wgsa-card-subtitle">
-        <FormattedName organismId={item.organismId} fullName />
+        <FormattedName organismId={item.organismId} />
       </p>
       { item.description ?
         <Markdown className="wgsa-card-description" source={item.description} /> :
