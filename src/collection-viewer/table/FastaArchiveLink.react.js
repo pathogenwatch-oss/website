@@ -3,14 +3,12 @@ import React from 'react';
 import DownloadLink from './DownloadLink.react';
 import DownloadIcon from '../../downloads/DownloadIcon.react.js';
 
-import { getServerPath } from '../../utils/Api';
-
 import { CGPS } from '../../app/constants';
 const { COLOURS } = CGPS;
 
-export default ({ uuid, ids, filename }) => (
+export default ({ url, ids }) => (
   <DownloadLink
-    action={getServerPath(`/download/collection/${uuid}/fastas?filename=${filename}`)}
+    action={url}
     title="Download Genomes"
     ids={ids}
   >
