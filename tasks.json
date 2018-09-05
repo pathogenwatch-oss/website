@@ -116,6 +116,10 @@
       {
         "task": "mlst",
         "version": "20180806174658-v1.6.10"
+      },
+      {
+        "task": "core",
+        "version": "v1"
       }
     ],
     "1349": [
@@ -945,6 +949,20 @@
       },
       {
         "task": "subtree",
+        "version": "v1",
+        "requires": [
+          {
+            "task": "core",
+            "version": "v1"
+          }
+        ],
+        "timeout": 900,
+        "workers": 16
+      }
+    ],
+    "1336": [
+      {
+        "task": "tree",
         "version": "v1",
         "requires": [
           {
