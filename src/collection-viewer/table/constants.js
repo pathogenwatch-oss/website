@@ -76,7 +76,6 @@ export const downloadColumnProps = {
     );
   },
   cellClasses: 'wgsa-table-cell--skinny',
-  fixedWidth: 68,
   flexGrow: 0,
   getCellContents({ collection }, { id, _id = id, name }) {
     const { uuid, isClusterView } = collection;
@@ -99,6 +98,7 @@ export const downloadColumnProps = {
     return {
       ...this,
       collection,
+      width: collection.isClusterView ? 44 : 68,
       archiveDownloads: {
         ids: data.map(_ => _.id || _._id),
         filenames: {
