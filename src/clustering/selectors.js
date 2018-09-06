@@ -272,7 +272,10 @@ function calcGraph(status, numberOfNodes, selectedIdx, labels, sizes, nodeColors
           _label: labels[0],
           id: 'n0',
           size: 1,
-          color: NODE_COLORS[0],
+          style: {
+            colour: NODE_COLORS[0],
+            shape: 'circle',
+          },
           zIndex: 0,
           x: 0,
           y: 0,
@@ -288,10 +291,14 @@ function calcGraph(status, numberOfNodes, selectedIdx, labels, sizes, nodeColors
     const id = `n${i}`;
     nodes.push({
       label: showLabel ? labels[i] : undefined,
+      color: showLabel ? nodeColors[i] : undefined,
       _label: labels[i],
       id,
       size: sizes[i],
-      color: nodeColors[i],
+      style: {
+        colour: nodeColors[i],
+        shape: 'circle',
+      },
       zIndex: nodeZIndex[i],
       x: id in coordinates ? coordinates[id].x : Math.cos(2 * i * Math.PI / numberOfNodes),
       y: id in coordinates ? coordinates[id].y : Math.sin(2 * i * Math.PI / numberOfNodes),
@@ -302,7 +309,9 @@ function calcGraph(status, numberOfNodes, selectedIdx, labels, sizes, nodeColors
           id: `e${idx}`,
           source: `n${j}`,
           target: `n${i}`,
-          color: edgeColors[idx],
+          style: {
+            colour: edgeColors[idx],
+          },
           zIndex: edgeZIndex[idx],
         });
       }

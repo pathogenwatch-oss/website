@@ -75,25 +75,20 @@ function getNodeCoordinates(nodes) {
   return locations;
 }
 
-export function runLayout(nEdges, network, options) {
+export function startLayout() {
   return {
-    type: RUN_CLUSTER_LAYOUT,
+    type: RUN_CLUSTER_LAYOUT.ATTEMPT,
+    payload: {},
+  };
+}
+
+export function stopLayout(layout) {
+  return {
+    type: RUN_CLUSTER_LAYOUT.SUCCESS,
     payload: {
-      promise: new Promise((resolve, reject) => {
-        if (!network) reject('Need a network object to start layout');
-        if (!network.isForceAtlas2Running()) network.startForceAtlas2(options);
-        const timeout = Math.min(Math.max(1000, nEdges / 5), 10000);
-        setTimeout(() => {
-          if (!network) reject('Need a network object to stop layout');
-          try {
-            network.stopForceAtlas2();
-            const nodes = network.graph.nodes();
-            resolve({ coordinates: getNodeCoordinates(nodes) });
-          } catch (e) {
-            resolve({ skip: true });
-          }
-        }, timeout);
-      }),
+      result: {
+        coordinates: layout,
+      },
     },
   };
 }

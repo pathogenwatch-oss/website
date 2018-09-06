@@ -22,6 +22,7 @@ const resolve = {
 
 const babelSettings = {
   extends: path.join(__dirname, '/.babelrc'),
+  cacheDirectory: true,
 };
 
 const cssLoaders = [

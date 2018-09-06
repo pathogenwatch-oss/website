@@ -18,6 +18,13 @@ function getClusterDescription(numberOfNodes, threshold) {
 }
 
 const Clustering = React.createClass({
+
+  getInitialState() {
+    return {
+      controlsVisible: false,
+    };
+  },
+
   componentDidMount() {
     this.update();
   },
@@ -35,8 +42,6 @@ const Clustering = React.createClass({
     } else if (props.status === 'FETCHED_CLUSTERS' && prevProps.status !== 'FETCHED_CLUSTERS') {
       if (props.numberOfNodesInCluster > 1) props.fetchEdgeMatrix(props);
       else props.skipLayout(this.props.graph.nodes);
-    } else if (props.status === 'FETCHED_EDGES' && prevProps.status !== 'FETCHED_EDGES') {
-      this.runLayout();
     }
   },
 
@@ -45,15 +50,15 @@ const Clustering = React.createClass({
     runLayout(edgesCount, this.network, constants.LAYOUT_OPTIONS);
   },
 
-  overNode({ data }) {
+  overNode({ data, target }) {
     data.node.label = data.node._label;
-    this.network.refresh();
+    target.supervisor.sigInst.refresh();
   },
 
-  outNode({ data }) {
+  outNode({ data, target }) {
     if (data.node.id === `n${this.props.indexOfSelectedInCluster}`) return;
     data.node.label = undefined;
-    this.network.refresh();
+    target.supervisor.sigInst.refresh();
   },
 
   renderClusterButton(label = 'Cluster Now', primary = false) {
@@ -140,21 +145,27 @@ const Clustering = React.createClass({
       width,
       height,
       zIndex: 1,
-      opacity: this.props.status === 'RUNNING_LAYOUT' ? 0.3 : 1,
+      opacity: this.props.status === 'RUNNING_LAYOUT' ? 0.5 : 1,
     };
 
-    const { numberOfGenomesInCluster, threshold } = this.props;
-
+    const { numberOfGenomesInCluster, threshold, edgesCount } = this.props;
+    const { controlsVisible } = this.state;
     return (
       <div style={{ position: 'relative' }}>
         <Network
-          ref={ el => { this.network = (el ? el.network : undefined); }}
           style={style}
           graph={this.props.graph}
           onNodeHover={this.overNode}
           onNodeLeave={this.outNode}
+          controlsVisible={controlsVisible}
+          onControlsVisibleChange={() => this.setState({ controlsVisible: !controlsVisible })}
           settings={constants.NETWORK_SETTINGS}
-          shuffleNodes={this.runLayout}
+          layoutDuration={Math.min(Math.max(1000, edgesCount / 5), 10000)}
+          layoutSettings={constants.LAYOUT_OPTIONS}
+          recomputeLayout={this.props.status === 'FETCHED_EDGES'}
+          onLayoutStart={this.props.startLayout}
+          onLayoutChange={this.props.stopLayout}
+          theme="purple"
         />
         <p className="pw-network-cover-message">
           { this.props.status === 'RUNNING_LAYOUT' ?
@@ -255,7 +266,8 @@ function mapDispatchToProps(dispatch) {
     setThreshold: (threshold) => dispatch(actions.setThreshold(threshold)),
     fetchEdgeMatrix: ({ selectedGenomeId, scheme, version, threshold, clusterSts }) =>
       dispatch(actions.fetchEdgeMatrix(selectedGenomeId, scheme, version, threshold, clusterSts)),
-    runLayout: (nEdges, network, options) => dispatch(actions.runLayout(nEdges, network, options)),
+    startLayout: () => dispatch(actions.startLayout()),
+    stopLayout: (layout) => dispatch(actions.stopLayout(layout)),
     skipLayout: (network) => dispatch(actions.skipLayout(network)),
     showToast: (message) => dispatch(showToast({ message })),
   };
