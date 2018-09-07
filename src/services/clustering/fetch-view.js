@@ -35,17 +35,16 @@ module.exports = async ({ user, genomeId, threshold }) => {
   const { speciator = {} } = genome.analysis;
   const { organismId = null } = speciator;
 
-  const description = `Clusters for ${name} at threshold ${threshold}`;
+  const title = `Clusters for ${name}`;
   return {
-    threshold,
     createdAt: now,
-    description,
     genomes,
-    size: genomes.length,
-    tree: null,
-    subtrees: [],
-    title: 'Clusters',
-    status: 'READY',
     organismId,
+    size: genomes.length,
+    status: 'READY',
+    subtrees: [],
+    threshold,
+    title,
+    tree: null,
   };
 };
