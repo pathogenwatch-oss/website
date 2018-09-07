@@ -11,7 +11,7 @@ module.exports = function ({ user, ids }) {
       { _id: { $in }, 'analysis.speciator': { $exists: true } },
       Genome.getPrefilterCondition({ user })
     ) },
-    { $group: { _id: { organismId: '$organismId', organismName: '$analysis.speciator.organismName' }, genomes: { $push: { id: '$_id', name: '$name' } } } },
+    { $group: { _id: { organismId: '$analysis.speciator.organismId', organismName: '$analysis.speciator.organismName' }, genomes: { $push: { id: '$_id', name: '$name' } } } },
     { $project: { organismId: '$_id.organismId', organismName: '$_id.organismName', genomes: 1, _id: 0 } },
   ]);
 };
