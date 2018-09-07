@@ -78,19 +78,19 @@
   min-width: calc(100% - 24px);
 }
 
-.wgsa-checklist-content button {
-  display: block;
+.wgsa-checklist-content > * {
   text-overflow: ellipsis;
-  overflow-x: hidden;
-  max-width: 100%;
-  padding: 0;
+  overflow: hidden;
 }
 
-.wgsa-checklist-content > :first-child {
+.wgsa-checklist-content > button {
+  display: block;
+  max-width: 100%;
+  padding: 0;
   line-height: 24px;
 }
 
-.wgsa-checklist-content > :last-child {
+.wgsa-checklist-content > span {
   font-size: 13px;
   display: block;
   line-height: 1;
