@@ -6,8 +6,8 @@ import AnnotationFileLink from './AnnotationFileLink.react';
 import AnnotationArchiveLink from './AnnotationArchiveLink.react';
 
 import { formatCollectionFilename } from '../downloads/utils';
-
 import { defaultWidthGetter } from './columnWidth';
+import { getServerPath } from '../../utils/Api';
 
 import { tableKeys } from '../constants';
 import { CGPS } from '../../app/constants';
@@ -56,23 +56,39 @@ export const downloadColumnProps = {
   system: true,
   fixed: true,
   headerClasses: 'wgsa-table-cell--skinny',
-  getHeaderContent({ archiveDownloads }) {
-    const { uuid, ids, filenames } = archiveDownloads;
+  getHeaderContent({ collection, archiveDownloads }) {
+    const { ids, filenames } = archiveDownloads;
+    const { uuid, isClusterView } = collection;
+
+    if (isClusterView) {
+      return (
+        <span className="wgsa-table-downloads" onClick={(e) => e.stopPropagation()}>
+          <FastaArchiveLink url={getServerPath(`/download/genome/fasta?filename=${filenames.genome}`)} ids={ids} />
+        </span>
+      );
+    }
+
     return (
       <span className="wgsa-table-downloads" onClick={(e) => e.stopPropagation()}>
-        <FastaArchiveLink uuid={uuid} ids={ids} filename={filenames.genome} />
+        <FastaArchiveLink url={getServerPath(`/download/collection/${uuid}/fastas?filename=${filenames.genome}`)} ids={ids} />
         <AnnotationArchiveLink uuid={uuid} ids={ids} filename={filenames.annotation} />
       </span>
     );
   },
   cellClasses: 'wgsa-table-cell--skinny',
-  fixedWidth: 68,
   flexGrow: 0,
-  getCellContents({ archiveDownloads }, { id, _id, name }) {
-    const { uuid } = archiveDownloads;
+  getCellContents({ collection }, { id, _id = id, name }) {
+    const { uuid, isClusterView } = collection;
+    if (isClusterView) {
+      return (
+        <span className="wgsa-table-downloads" onClick={(e) => e.stopPropagation()}>
+          <FastaFileLink url={getServerPath(`/download/genome/${_id}/fasta`)} name={name} />
+        </span>
+      );
+    }
     return (
       <span className="wgsa-table-downloads" onClick={(e) => e.stopPropagation()}>
-        <FastaFileLink uuid={uuid} id={id || _id} name={name} type="collection" />
+        <FastaFileLink url={getServerPath(`/download/collection/${uuid}/fastas?ids=${_id}`)} name={name} />
         <AnnotationFileLink uuid={uuid} id={id || _id} name={name} />
       </span>
     );
@@ -81,13 +97,14 @@ export const downloadColumnProps = {
     const { collection, data } = state; // not full state :/
     return {
       ...this,
+      collection,
+      width: collection.isClusterView ? 44 : 68,
       archiveDownloads: {
         ids: data.map(_ => _.id || _._id),
         filenames: {
           genome: formatCollectionFilename(collection, 'genomes.zip'),
           annotation: formatCollectionFilename(collection, 'annotations.zip'),
         },
-        uuid: collection.uuid,
       },
     };
   },

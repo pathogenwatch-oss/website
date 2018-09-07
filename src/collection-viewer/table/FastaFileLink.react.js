@@ -3,11 +3,10 @@ import React from 'react';
 import DownloadIcon from '../../downloads/DownloadIcon.react';
 
 import { CGPS } from '../../app/constants';
-import { getServerPath } from '../../utils/Api';
 
-export default ({ uuid, id, name }) => (
+export default ({ url, name }) => (
   <a
-    href={getServerPath(`/download/collection/${uuid}/fastas?ids=${id}`)}
+    href={url}
     download={`${name}.fa`}
     target="_blank" rel="noopener"
     title="Download Genome"
