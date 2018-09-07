@@ -29,8 +29,10 @@ function getGenomeSummaries(query) {
       const { fileId, analysis: { core } } = genome;
       genomeLookup[fileId] = genomeLookup[fileId] || [];
       genomeLookup[fileId].push(genome);
-      coreVersionMap[core.__v] = coreVersionMap[core.__v] || [];
-      coreVersionMap[core.__v].push(fileId);
+      if (core) {
+        coreVersionMap[core.__v] = coreVersionMap[core.__v] || [];
+        coreVersionMap[core.__v].push(fileId);
+      }
       fileIds.add(fileId);
     });
     genomes.on('error', err => reject(err));
