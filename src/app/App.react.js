@@ -13,6 +13,7 @@ import LocalStorage from './LocalStorage.react';
 import Header from './Header.react';
 import Content from './Content.react';
 import Cookies from './Cookies.react';
+import UserDrawer from '../header/UserDrawer.react';
 
 import { fetchSummary } from '../summary/actions';
 import { locationChange } from '../location';
@@ -81,6 +82,7 @@ const App = connect(mapStateToProps, mapDispatchToProps)(React.createClass({
           <main className="mdl-layout__content">
             <Content />
           </main>
+          <UserDrawer visible={userDrawerVisible} />
           <Toast />
           <GenomeDetail />
           <LocalStorage />

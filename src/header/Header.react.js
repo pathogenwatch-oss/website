@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import classnames from 'classnames';
 import { Link } from 'react-router-dom';
 
-import UserDrawer from './UserDrawer.react';
 import MenuButton from './MenuButton.react';
 import DefaultContent from './DefaultContent.react';
 import { Logo } from '../branding';
@@ -23,7 +22,7 @@ const OfflineLink = () => (
 );
 
 const Header = ({
-  asideEnabled, userDrawerVisible, className, offline,
+  asideEnabled, className, offline,
   children = <DefaultContent asideEnabled={asideEnabled} />,
 }) => (
   <header className={
@@ -33,7 +32,6 @@ const Header = ({
       className,
     )}
   >
-    <UserDrawer visible={userDrawerVisible} />
     <div className="mdl-layout__header-row">
       { offline ? <OfflineLink /> : <MenuButton />}
       <Link to="/" className="mdl-layout-title">

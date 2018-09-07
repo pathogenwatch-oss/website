@@ -17,13 +17,9 @@
 }
 
 .wgsa-selection-summary {
-  position: fixed;
+  position: fixed; /* allows sonar to appear on top of header in Firefox */
   right: 16px;
-  z-index: 1;
-}
-
-.mdl-layout:not(.user-drawer-visible) .wgsa-selection-summary {
-  z-index: 3;
+  z-index: 3; /* same z-index as header */
 }
 
 .wgsa-selection-summary .wgsa-sonar-effect {
