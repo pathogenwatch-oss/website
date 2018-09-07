@@ -31,9 +31,7 @@ const Marker = React.createClass({
           event.stopPropagation();
           event.nativeEvent.stopImmediatePropagation();
           if (hasPopup) this.props.closePopup();
-          else if (marker.genomes.length === 1) {
-            this.props.showGenomeReport(marker.genomes[0]);
-          } else {
+          else {
             this.props.showMarkerPopup(marker);
           }
         }}
@@ -61,7 +59,7 @@ const Popup = ({ list, onItemClick, close }) => (
           <AddToSelection genomes={[ genome ]} />
           <span className="wgsa-checklist-content">
             <button
-              title="View Details"
+              title={`${genome.name} - View Report`}
               className="wgsa-link-button"
               onClick={() => onItemClick(genome.id)}
             >
