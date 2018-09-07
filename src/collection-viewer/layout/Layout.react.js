@@ -11,7 +11,9 @@ import Map from '../map';
 import Summary from '../summary';
 import Table from '../table';
 
-import { getVisibleTree, hasTrees } from '../tree/selectors';
+import Clustering from '../../clustering';
+
+import { getVisibleTree } from '../tree/selectors';
 import { getCollection } from '../selectors';
 
 const Layout = React.createClass({
@@ -24,12 +26,23 @@ const Layout = React.createClass({
   },
 
   renderNorthSection() {
-    if (this.props.treeNeverComing) {
+    if (this.props.isClusterView) {
       return (
-        <Map>
-          <Summary />
-          {/* <ThresholdChart /> */}
-        </Map>
+        <SplitPane
+          split="vertical"
+          defaultSize="50%"
+          className="wgsa-no-overflow-pane"
+          resizerClassName="wgsa-resizer"
+          onChange={(verticalSize) => this.setState({ verticalSize })}
+        >
+          <Clustering
+            height={this.state.horizontalSize}
+            width={this.state.verticalSize}
+          />
+          <Map>
+            <Summary />
+          </Map>
+        </SplitPane>
       );
     }
 
@@ -80,10 +93,11 @@ const Layout = React.createClass({
 });
 
 function mapStateToProps(state) {
+  const collection = getCollection(state);
   return {
-    treeNeverComing: !hasTrees(state),
+    createdAt: collection.createdAt,
+    isClusterView: collection.isClusterView,
     showTree: getVisibleTree(state) !== null,
-    createdAt: getCollection(state).createdAt,
   };
 }
 

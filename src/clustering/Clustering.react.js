@@ -189,51 +189,44 @@ const Clustering = React.createClass({
         {this.renderClusterButton('Try Again', false)}
       </div>
     );
-    return (
-      <React.Fragment>
-        <h2>Core Genome Clustering</h2>
-        {(() => {
-          switch (this.props.status) {
-            case 'INITIAL_STATUS':
-              return trySomeClustering;
-            case 'FETCHING_CLUSTERS':
-              return (
-                <div className="pw-cluster-content">
-                  <p className="wgsa-blink">
-                    Checking Status
-                  </p>
-                </div>
-              );
-            case 'BUILDING_CLUSTERS':
-            case 'BUILT_CLUSTERS':
-              return <Progress />;
-            case 'FETCHED_CLUSTERS':
-            case 'FETCHING_EDGES':
-            case 'FETCHED_EDGES':
-            case 'RUNNING_LAYOUT':
-            case 'COMPLETED_LAYOUT':
-            case 'SKIP_NETWORK':
-              return (
-                <div className="pw-cluster-view">
-                  {this.renderNetwork()}
-                  <p className="pw-cluster-chart-intro">Pick a threshold by clicking on the chart below</p>
-                  {this.renderChart()}
-                  <div className="pw-cluster-buttons">
-                    {this.renderClusterButton('Recluster')}
-                    {this.renderViewButton()}
-                  </div>
-                </div>
-              );
-            case 'FAILED_FETCHING_CLUSTERS':
-              return this.props.triedBuilding ? somethingWentWrong : trySomeClustering;
-            case 'FAILED_BUILDING_CLUSTERS':
-            case 'FAILED_FETCHING_EDGES':
-            default:
-              return somethingWentWrong;
-          }
-        })()}
-      </React.Fragment>
-    );
+    switch (this.props.status) {
+      case 'INITIAL_STATUS':
+        return trySomeClustering;
+      case 'FETCHING_CLUSTERS':
+        return (
+          <div className="pw-cluster-content">
+            <p className="wgsa-blink">
+              Checking Status
+            </p>
+          </div>
+        );
+      case 'BUILDING_CLUSTERS':
+      case 'BUILT_CLUSTERS':
+        return <Progress />;
+      case 'FETCHED_CLUSTERS':
+      case 'FETCHING_EDGES':
+      case 'FETCHED_EDGES':
+      case 'RUNNING_LAYOUT':
+      case 'COMPLETED_LAYOUT':
+      case 'SKIP_NETWORK':
+        return (
+          <div className="pw-cluster-view">
+            {this.renderNetwork()}
+            <p className="pw-cluster-chart-intro">Pick a threshold by clicking on the chart below</p>
+            {this.renderChart()}
+            <div className="pw-cluster-buttons">
+              {this.renderClusterButton('Recluster')}
+              {this.renderViewButton()}
+            </div>
+          </div>
+        );
+      case 'FAILED_FETCHING_CLUSTERS':
+        return this.props.triedBuilding ? somethingWentWrong : trySomeClustering;
+      case 'FAILED_BUILDING_CLUSTERS':
+      case 'FAILED_FETCHING_EDGES':
+      default:
+        return somethingWentWrong;
+    }
   },
 
 });

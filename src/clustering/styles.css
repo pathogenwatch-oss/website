@@ -26,11 +26,18 @@
 }
 
 .pw-cluster-content {
-  height: 500px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.wgsa-genome-report .pw-cluster-content {
+  height: 500px;
+}
+
+.Pane .pw-cluster-content {
+  height: 100%;
 }
 
 .pw-cluster-progress p {

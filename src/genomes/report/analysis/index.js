@@ -2,7 +2,7 @@ import React from 'react';
 
 import { VersionSwitcher } from '../components';
 
-import Clustering from '../../../clustering';
+import Clustering from './Clustering.react';
 import Core from './Core.react';
 import Metrics from './Metrics.react';
 import PAARSNP from './PAARSNP.react';
@@ -31,7 +31,7 @@ export default (genome) => {
   if (cgmlst) {
     sections.push({
       key: 'Clustering',
-      component: <Clustering />,
+      component: <Clustering result={cgmlst} />,
     });
   }
   if (core) {
