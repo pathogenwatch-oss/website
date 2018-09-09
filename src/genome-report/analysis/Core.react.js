@@ -1,5 +1,5 @@
 import React from 'react';
-import { Name } from '../../../branding';
+import { Name } from '../../branding';
 
 export default ({ result: { fp, summary } }) => (
   <React.Fragment>

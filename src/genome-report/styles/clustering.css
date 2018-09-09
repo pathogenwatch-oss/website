@@ -1,0 +1,8 @@
+.wgsa-genome-report .pw-cluster-content {
+  height: 500px;
+}
+
+.wgsa-genome-report .pw-cluster-status,
+.wgsa-genome-report .pw-cluster-network {
+  height: 320px;
+}

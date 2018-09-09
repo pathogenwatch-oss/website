@@ -6,6 +6,9 @@ export function fetchCluster(genomeId, threshold) {
   return {
     type: FETCH_COLLECTION,
     payload: {
+      isClusterView: true,
+      genomeId,
+      threshold,
       promise:
         api.fetchCluster(genomeId, threshold)
           .then(result => ({ ...result, isClusterView: true })),

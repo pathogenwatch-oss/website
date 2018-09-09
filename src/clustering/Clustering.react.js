@@ -1,29 +1,29 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import classnames from 'classnames';
-import { Link } from 'react-router-dom';
 
-import Network from 'libmicroreact/network';
-import SimpleBarChart from './SimpleBarChart.react';
+import Network from './Network.react';
+import ThresholdChart from './ThresholdChart.react';
 import Progress from './Progress.react';
+import ClusterButton from './ClusterButton.react';
 
 import * as selectors from './selectors';
 import * as actions from './actions';
-import { showToast } from '../toast';
 
-import * as constants from './constants';
+const TrySomeClustering = () => (
+  <div className="pw-cluster-content">
+    <p>Clusters have not been calculated for this genome.</p>
+    <ClusterButton primary>Run Clustering</ClusterButton>
+  </div>
+);
 
-function getClusterDescription(numberOfNodes, threshold) {
-  return `Cluster of ${numberOfNodes} at threshold of ${threshold}`;
-}
+const SomethingWentWrong = () => (
+  <div className="pw-cluster-content">
+    <p>Something went wrong 😞</p>
+    <ClusterButton>Try Again</ClusterButton>
+  </div>
+);
 
 const Clustering = React.createClass({
-
-  getInitialState() {
-    return {
-      controlsVisible: false,
-    };
-  },
 
   componentDidMount() {
     this.update();
@@ -45,153 +45,11 @@ const Clustering = React.createClass({
     }
   },
 
-  runLayout() {
-    const { runLayout, edgesCount } = this.props;
-    runLayout(edgesCount, this.network, constants.LAYOUT_OPTIONS);
-  },
-
-  overNode({ data, target }) {
-    data.node.label = data.node._label;
-    target.supervisor.sigInst.refresh();
-  },
-
-  outNode({ data, target }) {
-    if (data.node.id === `n${this.props.indexOfSelectedInCluster}`) return;
-    data.node.label = undefined;
-    target.supervisor.sigInst.refresh();
-  },
-
-  renderClusterButton(label = 'Cluster Now', primary = false) {
-    return (
-      <button
-        className={classnames('mdl-button mdl-button--raised', { 'mdl-button--colored': primary })}
-        onClick={() => this.props.build(this.props.selectedGenomeId)}
-      >
-        {label}
-      </button>
-    );
-  },
-
-  renderViewButton(label = 'View cluster') {
-    const { selectedGenomeId, threshold } = this.props;
-    const link = `/clustering/${selectedGenomeId}?threshold=${threshold}`;
-    return (
-      <Link
-        to={link}
-        className="mdl-button mdl-button--raised mdl-button--colored pw-cluster-buttons-view"
-      >
-        {label}
-      </Link>
-    );
-  },
-
-  renderChart() {
-    const toolTipFunc = (data) => getClusterDescription(data.yLabel, data.xLabel);
-    let clickable = false;
-    const { status } = this.props;
-    if ([ 'FAILED_BUILDING_CLUSTERS', 'FAILED_FETCHING_CLUSTERS', 'FAILED_FETCHING_EDGES', 'COMPLETED_LAYOUT' ].indexOf(status) >= 0) {
-      clickable = true;
-    }
-    const onClick = ({ label }) => {
-      if (!clickable) return;
-      const clusterSize = this.props.numberOfNodesAtThreshold[this.props.chartThresholds.indexOf(label)];
-      if (clusterSize > constants.MAX_CLUSTER_SIZE) {
-        this.props.showToast('This cluster is too large to display, please select a lower threshold.');
-        return;
-      }
-      this.props.setThreshold(label);
-    };
-    return (
-      <SimpleBarChart
-        width={584}
-        height={100}
-        labels={this.props.chartThresholds}
-        values={this.props.chartValues}
-        onClick={onClick}
-        toolTipFunc={toolTipFunc}
-        backgroundColor={this.props.chartColours.status}
-        hoverBackgroundColor={this.props.chartColours.hover}
-      />
-    );
-  },
-
-  renderNetwork() {
-    const width = '100%';
-    const height = 320;
-
-    const fetchingMessage = <div style={{ width, height }}><p className="wgsa-blink">Fetching cluster...</p></div>;
-    const errorMessage = <div style={{ width, height }}><p>Couldn't fetch the cluster, try another threshold</p></div>;
-
-    switch (this.props.status) {
-      case 'INITIAL_STATUS':
-      case 'BUILDING_CLUSTERS':
-      case 'BUILT_CLUSTERS':
-      case 'FETCHING_CLUSTERS':
-      case 'FETCHING_EDGES':
-      case 'FETCHED_CLUSTERS':
-        return fetchingMessage;
-      case 'FETCHED_EDGES':
-      case 'RUNNING_LAYOUT':
-      case 'COMPLETED_LAYOUT':
-        break;
-      case 'FAILED_BUILDING_CLUSTERS':
-      case 'FAILED_FETCHING_CLUSTERS':
-      case 'FAILED_FETCHING_EDGES':
-      default:
-        return errorMessage;
-    }
-
-    const style = {
-      width,
-      height,
-      zIndex: 1,
-      opacity: this.props.status === 'RUNNING_LAYOUT' ? 0.5 : 1,
-    };
-
-    const { numberOfGenomesInCluster, threshold, edgesCount } = this.props;
-    const { controlsVisible } = this.state;
-    return (
-      <div style={{ position: 'relative' }}>
-        <Network
-          style={style}
-          graph={this.props.graph}
-          onNodeHover={this.overNode}
-          onNodeLeave={this.outNode}
-          controlsVisible={controlsVisible}
-          onControlsVisibleChange={() => this.setState({ controlsVisible: !controlsVisible })}
-          settings={constants.NETWORK_SETTINGS}
-          layoutDuration={Math.min(Math.max(1000, edgesCount / 5), 10000)}
-          layoutSettings={constants.LAYOUT_OPTIONS}
-          recomputeLayout={this.props.status === 'FETCHED_EDGES'}
-          onLayoutStart={this.props.startLayout}
-          onLayoutChange={this.props.stopLayout}
-          theme="purple"
-        />
-        <p className="pw-network-cover-message">
-          { this.props.status === 'RUNNING_LAYOUT' ?
-            <span className="wgsa-blink">Rendering cluster...</span> :
-            getClusterDescription(numberOfGenomesInCluster, threshold) }
-        </p>
-      </div>
-    );
-  },
-
   render() {
-    const trySomeClustering = (
-      <div className="pw-cluster-content">
-        <p>Clusters have not been calculated for this genome.</p>
-        {this.renderClusterButton('Run Clustering', true)}
-      </div>
-    );
-    const somethingWentWrong = (
-      <div className="pw-cluster-content">
-        <p>Something went wrong 😞</p>
-        {this.renderClusterButton('Try Again', false)}
-      </div>
-    );
-    switch (this.props.status) {
+    const { status } = this.props;
+    switch (status) {
       case 'INITIAL_STATUS':
-        return trySomeClustering;
+        return <TrySomeClustering />;
       case 'FETCHING_CLUSTERS':
         return (
           <div className="pw-cluster-content">
@@ -211,21 +69,19 @@ const Clustering = React.createClass({
       case 'SKIP_NETWORK':
         return (
           <div className="pw-cluster-view">
-            {this.renderNetwork()}
+            <Network />
             <p className="pw-cluster-chart-intro">Pick a threshold by clicking on the chart below</p>
-            {this.renderChart()}
-            <div className="pw-cluster-buttons">
-              {this.renderClusterButton('Recluster')}
-              {this.renderViewButton()}
-            </div>
+            <ThresholdChart setThreshold={this.props.setThreshold} width={this.props.width} />
           </div>
         );
       case 'FAILED_FETCHING_CLUSTERS':
-        return this.props.triedBuilding ? somethingWentWrong : trySomeClustering;
+        return this.props.triedBuilding ?
+          <SomethingWentWrong /> :
+          <TrySomeClustering />;
       case 'FAILED_BUILDING_CLUSTERS':
       case 'FAILED_FETCHING_EDGES':
       default:
-        return somethingWentWrong;
+        return <SomethingWentWrong />;
     }
   },
 
@@ -233,16 +89,8 @@ const Clustering = React.createClass({
 
 function mapStateToProps(state) {
   return {
-    chartValues: selectors.getNumberOfGenomesAtThreshold(state),
-    chartThresholds: selectors.getChartThresholds(state),
-    numberOfNodesAtThreshold: selectors.getNumberOfNodesAtThreshold(state),
-    chartColours: selectors.getChartColours(state),
     clusterSts: selectors.getClusterSts(state),
-    edgesCount: selectors.getEdgesCount(state),
-    graph: selectors.getGraph(state),
-    indexOfSelectedInCluster: selectors.getIndexOfSelectedInCluster(state),
     numberOfNodesInCluster: selectors.getNumberOfNodesInCluster(state),
-    numberOfGenomesInCluster: selectors.getNumberOfGenomesInCluster(state),
     selectedGenomeId: selectors.getSelectedGenomeId(state),
     status: selectors.getStatus(state),
     threshold: selectors.getThreshold(state),
@@ -254,15 +102,11 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetch: (selectedGenomeId) => dispatch(actions.fetch(selectedGenomeId)),
     build: (selectedGenomeId) => dispatch(actions.build(selectedGenomeId)),
-    setThreshold: (threshold) => dispatch(actions.setThreshold(threshold)),
+    fetch: (selectedGenomeId) => dispatch(actions.fetch(selectedGenomeId)),
     fetchEdgeMatrix: ({ selectedGenomeId, scheme, version, threshold, clusterSts }) =>
       dispatch(actions.fetchEdgeMatrix(selectedGenomeId, scheme, version, threshold, clusterSts)),
-    startLayout: () => dispatch(actions.startLayout()),
-    stopLayout: (layout) => dispatch(actions.stopLayout(layout)),
     skipLayout: (network) => dispatch(actions.skipLayout(network)),
-    showToast: (message) => dispatch(showToast({ message })),
   };
 }
 

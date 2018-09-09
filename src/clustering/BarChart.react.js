@@ -2,6 +2,8 @@
 
 import React, { Component } from 'react';
 
+import ChartResizer from '../components/chart-resizer';
+
 class SimpleBarChart extends Component {
   componentDidMount() {
     const {
@@ -32,6 +34,7 @@ class SimpleBarChart extends Component {
         } ],
       },
       options: {
+        responsive: false,
         legend: {
           display: false,
         },
@@ -45,6 +48,7 @@ class SimpleBarChart extends Component {
           } ],
           yAxes: [ {
             ticks: {
+              beginAtZero: true,
               display: false,
             },
           } ],
@@ -58,10 +62,14 @@ class SimpleBarChart extends Component {
     const {
       labels = [],
       values = [],
+      backgroundColor,
+      hoverBackgroundColor,
     } = this.props;
 
     const dataset = this.chart.data.datasets[0];
     dataset.data = values;
+    dataset.backgroundColor = backgroundColor;
+    dataset.hoverBackgroundColor = hoverBackgroundColor;
     this.chart.data.labels = labels;
 
     this.chart.update();
@@ -83,7 +91,15 @@ class SimpleBarChart extends Component {
   }
 
   render() {
-    return <canvas onClick={(e) => this.onClick(e)} ref={ el => { this.canvas = el; } } width={ this.props.width } height={ this.props.height } />;
+    return (
+      <ChartResizer
+        width={this.props.width}
+        height={this.props.height}
+        chart={this.chart}
+      >
+        <canvas onClick={(e) => this.onClick(e)} ref={el => { this.canvas = el; }} />;
+      </ChartResizer>
+    );
   }
 }
 

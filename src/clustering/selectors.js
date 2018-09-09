@@ -243,16 +243,18 @@ const colors = {
 };
 export const getChartColours = createSelector(
   getNumberOfNodesAtThreshold,
-  sizes => {
+  getThreshold,
+  (sizes, threshold) => {
     if (!sizes) return undefined;
     const status = [];
     const hover = [];
-    for (const size of sizes) {
+    for (let i = 0; i < sizes.length; i++) {
+      const size = sizes[i];
       if (size > MAX_CLUSTER_SIZE) {
         status.push(colors.disabled);
         hover.push(colors.disabled);
       } else {
-        status.push(colors.active);
+        status.push(i === threshold ? colors.hover : colors.active);
         hover.push(colors.hover);
       }
     }
@@ -270,6 +272,7 @@ function calcGraph(status, numberOfNodes, selectedIdx, labels, sizes, nodeColors
         {
           label: labels[0],
           _label: labels[0],
+          color: NODE_COLORS[0],
           id: 'n0',
           size: 1,
           style: {

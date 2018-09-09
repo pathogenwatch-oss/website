@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import classnames from 'classnames';
 
 import Toast from '../toast';
-import GenomeDetail from '../genomes/report';
+import GenomeReport from '../genome-report';
 import LocalStorage from './LocalStorage.react';
 import Header from './Header.react';
 import Content from './Content.react';
@@ -84,7 +84,7 @@ const App = connect(mapStateToProps, mapDispatchToProps)(React.createClass({
           </main>
           <UserDrawer visible={userDrawerVisible} />
           <Toast />
-          <GenomeDetail />
+          <GenomeReport />
           <LocalStorage />
           <Cookies />
         </div>

@@ -4,4 +4,7 @@
 @import "./elements.css";
 @import "./summary.css";
 @import "./version.css";
-@import "./analyses.css";
+
+@import "./amr.css";
+@import "./mlst.css";
+@import "./clustering.css";

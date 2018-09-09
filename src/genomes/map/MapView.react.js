@@ -7,7 +7,7 @@ import { FormattedName } from '../../organisms';
 import AddToSelection from '../selection/AddToSelection.react';
 import Spinner from '../../components/Spinner.react';
 
-import { showGenomeReport } from '../../genomes/report';
+import { showGenomeReport } from '../../genome-report';
 import { selectByArea, showMarkerPopup, closeMarkerPopup } from './actions';
 import { fetchGenomeMap } from '../actions';
 

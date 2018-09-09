@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Metadata } from '../components';
 
-import { ST, Hit } from '../../../mlst';
+import { ST, Hit } from '../../mlst';
 
 export default ({ result, leftaligned = false }) => (
   <React.Fragment>

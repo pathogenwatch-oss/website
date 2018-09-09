@@ -1,12 +1,12 @@
 import React from 'react';
 import ScrollSpy from 'react-scrollspy';
 
-import Modal from '../../components/modal';
-import Fade from '../../components/fade';
+import Modal from '../components/modal';
+import Fade from '../components/fade';
 import RemoveButton from './RemoveButton.react';
 
-import DownloadLink from '../../downloads/GenomeFileLink.react';
-import Spinner from '../../components/Spinner.react';
+import DownloadLink from '../downloads/GenomeFileLink.react';
+import Spinner from '../components/Spinner.react';
 
 import Overview from './Overview.react';
 import Metadata from './Metadata.react';

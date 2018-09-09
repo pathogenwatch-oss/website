@@ -1,9 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import RemoveButton from '../../components/RemoveButton.react';
+import RemoveButton from '../components/RemoveButton.react';
 
-import { setBinnedFlag } from '../bin/actions';
+import { setBinnedFlag } from '../genomes/bin/actions';
 
 
 function mapDispatchToProps(dispatch, { genome }) {

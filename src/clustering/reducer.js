@@ -1,7 +1,11 @@
 import { REQUEST_BUILD_CLUSTERS, FETCH_CLUSTERS, FETCH_CLUSTER_EDGES, RUN_CLUSTER_LAYOUT, SET_CLUSTER_THRESHOLD, SET_CLUSTER_GENOME, SET_CLUSTERING_PROGRESS, SKIP_LAYOUT } from './actions';
-import { SHOW_GENOME_REPORT } from '../genomes/report/actions';
+import { SHOW_GENOME_REPORT } from '../genome-report/actions';
+import { FETCH_COLLECTION } from '../collection-viewer/actions';
+
 import { cluster } from './util';
+
 import { MAX_CLUSTER_SIZE, MAX_DEFAULT_THRESHOLD } from './constants';
+
 
 // States:
 //  INITIAL_STATUS
@@ -19,24 +23,24 @@ import { MAX_CLUSTER_SIZE, MAX_DEFAULT_THRESHOLD } from './constants';
 //  FAILED_FETCHING_EDGES
 
 const initialState = {
-  status: 'INITIAL_STATUS',
-  progress: null,
-  index: {
-    pi: null,
-    lambda: null,
-  },
-  names: null,
   allSchemeSts: null,
-  selectedGenomeId: null,
-  indexOfSelectedInAll: null,
-  scheme: null,
-  version: null,
-  threshold: null,
   edgeMatrix: null,
-  triedBuilding: false,
-  skipMessage: null,
+  index: {
+    lambda: null,
+    pi: null,
+  },
+  indexOfSelectedInAll: null,
+  names: null,
   nodeCoordinates: null,
+  progress: null,
+  scheme: null,
+  selectedGenomeId: null,
+  skipMessage: null,
+  status: 'INITIAL_STATUS',
   taskId: null,
+  threshold: null,
+  triedBuilding: false,
+  version: null,
 };
 
 function calculateDefaultThreshold(pi, lambda, indexOfSelected) {
@@ -98,6 +102,17 @@ export default function (state = initialState, { type, payload }) {
         return {
           ...state,
           status: 'FAILED_BUILDING_CLUSTERS',
+        };
+      }
+      return state;
+    }
+
+    case FETCH_COLLECTION.ATTEMPT: {
+      if (payload.isClusterView) {
+        return {
+          ...state,
+          selectedGenomeId: payload.genomeId,
+          threshold: payload.threshold,
         };
       }
       return state;

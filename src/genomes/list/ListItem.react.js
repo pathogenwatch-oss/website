@@ -12,7 +12,7 @@ import { FormattedName } from '../../organisms';
 import { formatDate } from '../../utils/Date';
 import { getCountryName } from '../../utils/country';
 
-import { showGenomeReport } from '../../genomes/report';
+import { showGenomeReport } from '../../genome-report';
 import { ST } from '../../mlst';
 
 const Cell = ({ title, icon, children, onClick }) => (

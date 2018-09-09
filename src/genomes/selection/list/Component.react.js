@@ -7,7 +7,7 @@ import SignInLink from '../../../sign-in/SignInLink.react';
 import { getSelectedGenomeIds, getSelectedGenomeList } from '../selectors';
 
 import { removeFromSelection, clearSelection, toggleDropdown } from '../actions';
-import { showGenomeReport } from '../../report/actions';
+import { showGenomeReport } from '../../../genome-report/actions';
 import { setBinnedFlag } from '../../bin/actions';
 
 import config from '../../../app/config';

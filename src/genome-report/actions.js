@@ -1,4 +1,4 @@
-import { createAsyncConstants } from '../../actions';
+import { createAsyncConstants } from '../actions';
 
 import * as api from './api';
 

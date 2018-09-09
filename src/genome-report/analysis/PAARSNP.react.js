@@ -1,7 +1,7 @@
 import React from 'react';
 import classnames from 'classnames';
 
-import { taxIdMap } from '../../../organisms';
+import { taxIdMap } from '../../organisms';
 
 export default ({ result, genome }) => {
   const { antibiotics } = result;

@@ -1,6 +1,6 @@
 import { SHOW_GENOME_REPORT, CLOSE_GENOME_REPORT } from './actions';
-import { FETCH_GENOME_LIST } from '../actions';
-import { LOCATION_CHANGE } from '../../location';
+import { FETCH_GENOME_LIST } from '../genomes/actions';
+import { LOCATION_CHANGE } from '../location';
 
 const initialState = {
   name: null,

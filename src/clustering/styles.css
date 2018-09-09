@@ -21,7 +21,7 @@
 }
 
 .pw-cluster-chart-intro {
-  margin-top: 16px;
+  margin-top: 8px;
   margin-bottom: 4px;
 }
 
@@ -30,14 +30,6 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-}
-
-.wgsa-genome-report .pw-cluster-content {
-  height: 500px;
-}
-
-.Pane .pw-cluster-content {
-  height: 100%;
 }
 
 .pw-cluster-progress p {
@@ -56,4 +48,14 @@
 .pw-cluster-progress .CircularProgress-Bg,
 .pw-cluster-progress .CircularProgress-Fg {
   stroke-width: 12px;
+}
+
+.pw-cluster-network {
+  position: relative;
+}
+
+.pw-cluster-network .libmr-Panel,
+.pw-cluster-network .libmr-Network {
+  z-index: 1;
+  height: 100%;
 }

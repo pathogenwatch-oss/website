@@ -1,11 +1,11 @@
 import React from 'react';
 
-import { FormattedName } from '../../organisms';
-import PubMedLink from '../../components/PubMedLink.react';
+import { FormattedName } from '../organisms';
+import PubMedLink from '../components/PubMedLink.react';
 
-import { getFormattedDateString } from '../../utils/Date';
-import { getCountryName } from '../../utils/country';
-import { Logo } from '../../branding';
+import { getFormattedDateString } from '../utils/Date';
+import { getCountryName } from '../utils/country';
+import { Logo } from '../branding';
 
 function getTask({ analysis = {}, tasks = [] }, taskName) {
   return analysis[taskName];

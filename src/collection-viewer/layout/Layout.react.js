@@ -25,6 +25,13 @@ const Layout = React.createClass({
     };
   },
 
+  componentDidMount() {
+    if (document.querySelector) {
+      const divider = document.querySelector('wgsa-resizer Resizer vertical');
+      console.log(divider);
+    }
+  },
+
   renderNorthSection() {
     if (this.props.isClusterView) {
       return (
