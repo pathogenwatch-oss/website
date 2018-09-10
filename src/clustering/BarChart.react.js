@@ -2,9 +2,14 @@
 
 import React, { Component } from 'react';
 
-import ChartResizer from '../components/chart-resizer';
+const cursorStyle = { cursor: 'pointer' };
 
 class SimpleBarChart extends Component {
+
+  state = {
+    hovering: false,
+  }
+
   componentDidMount() {
     const {
       labels = [],
@@ -34,10 +39,12 @@ class SimpleBarChart extends Component {
         } ],
       },
       options: {
-        responsive: false,
         legend: {
           display: false,
         },
+        // onHover: (e, items) => {
+        //   this.setState({ hovering: items.length > 0 });
+        // },
         scales: {
           xAxes: [ {
             barPercentage: 1,
@@ -92,13 +99,13 @@ class SimpleBarChart extends Component {
 
   render() {
     return (
-      <ChartResizer
+      <canvas
+        style={cursorStyle}
+        onClick={(e) => this.onClick(e)}
+        ref={el => { this.canvas = el; }}
         width={this.props.width}
         height={this.props.height}
-        chart={this.chart}
-      >
-        <canvas onClick={(e) => this.onClick(e)} ref={el => { this.canvas = el; }} />;
-      </ChartResizer>
+      />
     );
   }
 }

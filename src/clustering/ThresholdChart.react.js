@@ -30,15 +30,13 @@ class ThresholdChart extends Component {
   }
 
   render() {
-    if (!this.props.width) return null;
-
     return (
       <BarChart
-        width={this.props.width || '100%'}
+        width={584}
         height={100}
         labels={this.props.chartThresholds}
         values={this.props.chartValues}
-        onClick={this.onClick}
+        onClick={(data) => this.onClick(data)}
         toolTipFunc={renderTooltip}
         backgroundColor={this.props.chartColours.status}
         hoverBackgroundColor={this.props.chartColours.hover}
@@ -53,6 +51,7 @@ function mapStateToProps(state) {
     chartThresholds: selectors.getChartThresholds(state),
     chartValues: selectors.getNumberOfGenomesAtThreshold(state),
     numberOfNodesAtThreshold: selectors.getNumberOfNodesAtThreshold(state),
+    status: selectors.getStatus(state),
   };
 }
 

@@ -31,11 +31,6 @@ const lookupIndexOfSelectedInCluster = (indexOfSelectedInAll, clusters, allSts, 
   return clusterSts.indexOf(rootSt);
 };
 
-const lookupNamesOfClusterNodes = (indexOfSelectedInAll, clusters, allNames) => {
-  if (!clusters) return undefined;
-  return allNames.filter((_, i) => clusters[i] === clusters[indexOfSelectedInAll]);
-};
-
 function calcDistanceFromSelected(edgeMatrix, indexOfSelectedInCluster) {
   if (!edgeMatrix) return undefined;
   const nodes = [];
@@ -94,12 +89,12 @@ export const getEdgeMatrix = state => getClusterState(state).edgeMatrix;
 export const getProgress = state => getClusterState(state).progress;
 const getAllSts = state => getClusterState(state).allSchemeSts;
 export const getIndexOfSelectedInAll = state => getClusterState(state).indexOfSelectedInAll;
-const getNames = state => getClusterState(state).names;
 export const getSkipMessage = state => getClusterState(state).skipMessage;
 export const getNodeCoordinates = state => getClusterState(state).nodeCoordinates || [];
 export const getTaskId = state => getClusterState(state).taskId;
 export const getScheme = state => getClusterState(state).scheme;
 export const getVersion = state => getClusterState(state).version;
+export const getNodeData = state => getClusterState(state).nodes;
 
 export const getEdgesCount = createSelector(
   getEdgeMatrix,
@@ -127,6 +122,11 @@ export const getClusterSts = createSelector(
     return allSts.filter((_, i) => clusters[i] === clusters[indexOfSelectedInAll]);
   }
 );
+export const getClusterNodes = createSelector(
+  getClusterSts,
+  getNodeData,
+  (sts = [], nodes) => sts.map(st => nodes[st])
+);
 export const getNumberOfNodesInCluster = createSelector(
   getClusterSts,
   sts => (sts || []).length
@@ -138,21 +138,32 @@ export const getIndexOfSelectedInCluster = createSelector(
   getClusterSts,
   lookupIndexOfSelectedInCluster
 );
-const getClusterNodeNames = createSelector(
+
+const getClusterNodeIds = createSelector(
   getIndexOfSelectedInAll,
   getClusters,
-  getNames,
-  lookupNamesOfClusterNodes
+  getClusterNodes,
+  (indexOfSelectedInAll, clusters, nodes) => {
+    if (!clusters) return undefined;
+    const nodeIds = [];
+    for (let i = 0; i < nodes.length; i++) {
+      // if (clusters[i] === clusters[indexOfSelectedInAll]) {
+      const { ids } = nodes[i];
+      nodeIds.push(ids);
+      // }
+    }
+    return nodeIds;
+  }
 );
 export const getClusterNodeLabels = createSelector(
-  getClusterNodeNames,
-  nodeNames => {
-    if (!nodeNames) return undefined;
-    return nodeNames.map(names => {
-      if (names.length === 0) return 'Unnamed';
-      else if (names.length === 1) return names[0];
-      else if (names.length === 2) return `${names[0]} and one other`;
-      return `${names[0]} and ${names.length - 1} others`;
+  getClusterNodes,
+  (nodes) => {
+    if (!nodes) return undefined;
+    return nodes.map((node) => {
+      if (node.ids.length === 0) return 'Unnamed';
+      else if (node.ids.length === 1) return node.label;
+      else if (node.ids.length === 2) return `${node.label} and one other`;
+      return `${node.label} and ${node.ids.length - 1} others`;
     });
   }
 );
@@ -167,7 +178,7 @@ export const getClusterNodeColors = createSelector(
 );
 // They're scaled and normalized to make them look nicer.
 export const getClusterNodeSizes = createSelector(
-  getClusterNodeNames,
+  getClusterNodeIds,
   names => (!names ? undefined : normalize(names.map(n => n.length ** 0.3)))
 );
 export const getMinDegreeForEdge = createSelector(
@@ -183,8 +194,8 @@ export const getEdgeColors = createSelector(
 const chartThresholds = [ ...Array(MAX_THRESHOLD + 1) ].map((__, i) => i);
 export const getChartThresholds = () => chartThresholds;
 const getNodeGenomeCounts = createSelector(
-  getNames,
-  names => (!names ? undefined : names.map(n => n.length))
+  getNodeData,
+  nodes => (!nodes ? undefined : nodes.map(n => n.ids.length))
 );
 export const getNumberOfGenomesAtThreshold = createSelector(
   getIndexOfSelectedInAll,
@@ -262,9 +273,11 @@ export const getChartColours = createSelector(
   }
 );
 
-function calcGraph(status, numberOfNodes, selectedIdx, labels, sizes, nodeColors, nodeZIndex, coordinates, edgesMatrix, edgeColors, edgeZIndex) {
+function calcGraph(status, sts, nodeData, selectedIdx, labels, sizes, nodeColors, nodeZIndex, coordinates, edgesMatrix, edgeColors, edgeZIndex) {
   const nodes = [];
   const edges = [];
+  if (!sts) return { nodes, edges };
+  const numberOfNodes = sts.length;
   if (numberOfNodes === 0) return { nodes: [], edges: [] };
   if (numberOfNodes === 1) {
     return {
@@ -287,16 +300,18 @@ function calcGraph(status, numberOfNodes, selectedIdx, labels, sizes, nodeColors
       edges: [],
     };
   }
-  if (!edgesMatrix) return undefined;
+  if (!edgesMatrix) return { nodes, edges };
   let idx = 0;
   for (let i = 0; i < numberOfNodes; i++) {
     const showLabel = status === 'COMPLETED_LAYOUT' && i === selectedIdx;
-    const id = `n${i}`;
+    const id = sts[i];
     nodes.push({
+      showLabel,
       label: showLabel ? labels[i] : undefined,
       color: showLabel ? nodeColors[i] : undefined,
       _label: labels[i],
       id,
+      genomeIds: nodeData[id].ids,
       size: sizes[i],
       style: {
         colour: nodeColors[i],
@@ -310,8 +325,8 @@ function calcGraph(status, numberOfNodes, selectedIdx, labels, sizes, nodeColors
       if (edgesMatrix[idx]) {
         edges.push({
           id: `e${idx}`,
-          source: `n${j}`,
-          target: `n${i}`,
+          source: sts[j],
+          target: sts[i],
           style: {
             colour: edgeColors[idx],
           },
@@ -329,7 +344,8 @@ function calcGraph(status, numberOfNodes, selectedIdx, labels, sizes, nodeColors
 
 export const getGraph = createSelector(
   getStatus,
-  getNumberOfNodesInCluster,
+  getClusterSts,
+  getNodeData,
   getIndexOfSelectedInCluster,
   getClusterNodeLabels,
   getClusterNodeSizes,

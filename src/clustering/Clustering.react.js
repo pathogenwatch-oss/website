@@ -67,13 +67,7 @@ const Clustering = React.createClass({
       case 'RUNNING_LAYOUT':
       case 'COMPLETED_LAYOUT':
       case 'SKIP_NETWORK':
-        return (
-          <div className="pw-cluster-view">
-            <Network />
-            <p className="pw-cluster-chart-intro">Pick a threshold by clicking on the chart below</p>
-            <ThresholdChart setThreshold={this.props.setThreshold} width={this.props.width} />
-          </div>
-        );
+        return this.props.children;
       case 'FAILED_FETCHING_CLUSTERS':
         return this.props.triedBuilding ?
           <SomethingWentWrong /> :

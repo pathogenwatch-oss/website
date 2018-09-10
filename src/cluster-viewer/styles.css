@@ -1,26 +1,10 @@
 .Pane .pw-cluster-content,
-.Pane .pw-cluster-view {
-  height: 100%;
-}
-
-.Pane .pw-cluster-view {
-  display: flex;
-  flex-direction: column;
-}
-
-.Pane .pw-cluster-status {
-  height: 100%;
-}
-
+.Pane .pw-cluster-status,
 .Pane .pw-cluster-network {
-  flex-grow: 1;
+  height: 100%;
 }
 
-.Pane .pw-cluster-network > .libmr-Panel {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+.Pane .pw-network-cover-message {
+  color: rgba(0, 0, 0, 0.54);
+  padding: 4px 8px;
 }
-

@@ -11,7 +11,7 @@ import Map from '../map';
 import Summary from '../summary';
 import Table from '../table';
 
-import Clustering from '../../clustering';
+import ClusterViewNetwork from '../../cluster-viewer/Network.react';
 
 import { getVisibleTree } from '../tree/selectors';
 import { getCollection } from '../selectors';
@@ -25,13 +25,6 @@ const Layout = React.createClass({
     };
   },
 
-  componentDidMount() {
-    if (document.querySelector) {
-      const divider = document.querySelector('wgsa-resizer Resizer vertical');
-      console.log(divider);
-    }
-  },
-
   renderNorthSection() {
     if (this.props.isClusterView) {
       return (
@@ -42,10 +35,7 @@ const Layout = React.createClass({
           resizerClassName="wgsa-resizer"
           onChange={(verticalSize) => this.setState({ verticalSize })}
         >
-          <Clustering
-            height={this.state.horizontalSize}
-            width={this.state.verticalSize}
-          />
+          <ClusterViewNetwork />
           <Map>
             <Summary />
           </Map>

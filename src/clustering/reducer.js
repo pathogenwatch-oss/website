@@ -23,7 +23,7 @@ import { MAX_CLUSTER_SIZE, MAX_DEFAULT_THRESHOLD } from './constants';
 //  FAILED_FETCHING_EDGES
 
 const initialState = {
-  allSchemeSts: null,
+  allSchemeSts: [],
   edgeMatrix: null,
   index: {
     lambda: null,
@@ -139,21 +139,21 @@ export default function (state = initialState, { type, payload }) {
         state.status !== 'FETCHING_CLUSTERS'
       ) return state;
       const { result = {} } = payload;
-      const { names, sts, genomeIdx, scheme, version } = result;
+      const { nodes, sts, genomeIdx, scheme, version } = result;
       const { pi, lambda } = result.clusterIndex;
       return {
         ...state,
         status: 'FETCHED_CLUSTERS',
+        nodes,
         index: {
           pi,
           lambda,
         },
-        names,
         allSchemeSts: sts,
         indexOfSelectedInAll: genomeIdx,
         scheme,
         version,
-        threshold: calculateDefaultThreshold(pi, lambda, genomeIdx),
+        threshold: state.threshold || calculateDefaultThreshold(pi, lambda, genomeIdx),
       };
     }
 

@@ -12,6 +12,8 @@ import table from '../table/reducer';
 import offline from '../offline/reducer';
 import search from '../search/reducer';
 
+import clusterView from '../../cluster-viewer/reducer';
+
 import { RESET_COLLECTION_VIEW } from '../actions';
 
 const reducer = combineReducers({
@@ -27,6 +29,7 @@ const reducer = combineReducers({
   table,
   offline,
   search,
+  clusterView,
 });
 
 const initialState = reducer(undefined, {});

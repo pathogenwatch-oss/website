@@ -2,6 +2,11 @@ import { createSelector } from 'reselect';
 import removeMarkdown from 'remove-markdown';
 
 import { getTableState, getAMRTableName } from './table/selectors';
+import {
+  getNetworkHighlightedIds,
+  getNetworkFilteredIds,
+} from '../cluster-viewer/selectors';
+
 
 import { createColourGetter } from './amr-utils';
 import { filterKeys } from './filter/constants';
@@ -34,11 +39,12 @@ export const getFilter = createSelector(
   state => getViewer(state).filter[filterKeys.VISIBILITY],
   state => getViewer(state).search.intersections,
   getSearchIds,
-  (filter, searchTerms, searchIds) => {
-    if (searchTerms.length) {
+  getNetworkFilteredIds,
+  (filter, searchTerms, searchIds, networkIds = []) => {
+    if (searchTerms.length || networkIds.length) {
       return {
         ...filter,
-        ids: new Set(searchIds),
+        ids: new Set([ ...searchIds, ...networkIds ]),
         active: true,
       };
     }
@@ -61,7 +67,14 @@ export const getFilteredGenomeIds = createSelector(
 
 export const getHighlightedIds = createSelector(
   getFilterState,
-  filter => filter[filterKeys.HIGHLIGHT].ids
+  getNetworkHighlightedIds,
+  (filter, idsFromNetwork) => {
+    const idsFromFilter = filter[filterKeys.HIGHLIGHT].ids;
+    if (idsFromNetwork.length === 0) {
+      return idsFromFilter;
+    }
+    return new Set([ ...idsFromFilter, ...idsFromNetwork ]);
+  }
 );
 
 export const getActiveGenomeIds = createSelector(

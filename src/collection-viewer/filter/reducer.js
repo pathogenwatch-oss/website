@@ -25,7 +25,7 @@ const initialState = {
 };
 
 export default function (state = initialState, { type, payload = {} }) {
-  const { ids } = payload;
+  const { ids } = payload || {};
   switch (type) {
     case FETCH_COLLECTION.SUCCESS: {
       const { genomes = [] } = payload.result;

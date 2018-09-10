@@ -26,6 +26,7 @@ const ClusterNetwork = React.createClass({
   getInitialState() {
     return {
       controlsVisible: false,
+      lassoActive: false,
     };
   },
 
@@ -35,7 +36,7 @@ const ClusterNetwork = React.createClass({
   },
 
   outNode({ data, target }) {
-    if (data.node.id === `n${this.props.indexOfSelectedInCluster}`) return;
+    if (data.node.showLabel) return;
     data.node.label = undefined;
     target.supervisor.sigInst.refresh();
   },
@@ -70,35 +71,42 @@ const ClusterNetwork = React.createClass({
     return (
       <div className="pw-cluster-network">
         <Network
-          style={style}
-          graph={this.props.graph}
-          onNodeHover={this.overNode}
-          onNodeLeave={this.outNode}
           controlsVisible={controlsVisible}
-          onControlsVisibleChange={() => this.setState({ controlsVisible: !controlsVisible })}
-          settings={constants.NETWORK_SETTINGS}
+          graph={this.props.graph}
+          hasLasso={this.props.hasLasso}
+          lassoActive={this.state.lassoActive}
+          lassoPath={this.props.lassoPath}
+          onLassoPathChange={this.props.onLassoPathChange}
+          onLassoActiveChange={() => this.setState({ lassoActive: !this.state.lassoActive })}
           layoutDuration={Math.min(Math.max(1000, edgesCount / 5), 10000)}
           layoutSettings={constants.LAYOUT_OPTIONS}
-          recomputeLayout={this.props.status === 'FETCHED_EDGES'}
-          onLayoutStart={this.props.startLayout}
+          onControlsVisibleChange={() => this.setState({ controlsVisible: !controlsVisible })}
           onLayoutChange={this.props.stopLayout}
+          onLayoutStart={this.props.startLayout}
+          onNodeHover={this.overNode}
+          onNodeLeave={this.outNode}
+          onNodeSelect={this.props.onNodeSelect}
+          recomputeLayout={this.props.status === 'FETCHED_EDGES'}
+          settings={constants.NETWORK_SETTINGS}
+          style={style}
           theme="purple"
         />
-        <p className="pw-network-cover-message">
-          { this.props.status === 'RUNNING_LAYOUT' ?
-            <span className="wgsa-blink">Rendering cluster...</span> :
-            <ClusterDescription /> }
-        </p>
+        { this.props.coverMessage !== false &&
+          <p className="pw-network-cover-message">
+            { this.props.status === 'RUNNING_LAYOUT' ?
+              <span className="wgsa-blink">Rendering cluster...</span> :
+              <ClusterDescription /> }
+          </p> }
       </div>
     );
   },
 
 });
 
-function mapStateToProps(state) {
+function mapStateToProps(state, props) {
   return {
     edgesCount: selectors.getEdgesCount(state),
-    graph: selectors.getGraph(state),
+    graph: props.graph || selectors.getGraph(state),
     status: selectors.getStatus(state),
   };
 }
