@@ -27,26 +27,31 @@ async function mapStsToGenomeNames({ genomeId, sts, user }) {
     'analysis.cgmlst.st': 1,
     name: 1,
   };
-  const stsAndNames = await Genome.find(namesQuery, projection).lean();
+  const genomes = await Genome.find(namesQuery, projection).lean();
 
-  const stNamesMap = {};
-  for (const r of stsAndNames) {
+  const nodes = {};
+  for (const r of genomes) {
     const st = r.analysis.cgmlst.st;
-    const { name } = r;
-    stNamesMap[st] = stNamesMap[st] || [];
-    stNamesMap[st].push(name);
+    const { _id, name } = r;
+
+    if (!(st in nodes)) {
+      nodes[st] = { label: name, ids: [] };
+    }
+    nodes[st].ids.push(_id);
   }
 
-  const genome = stsAndNames.find(_ => _._id.toString() === genomeId);
+  const genome = genomes.find(_ => _._id.toString() === genomeId);
   const genomeSt = genome ? genome.analysis.cgmlst.st : null;
   const genomeIdx = sts.indexOf(genomeSt);
+
+  nodes[genomeSt].label = genome.name;
 
   if (genomeIdx === -1) {
     throw new NotFoundError(`Genome ${genomeId} was not found in clusters`);
   }
 
   return {
-    names: sts.map(st => stNamesMap[st] || [ 'Unnamed' ]),
+    nodes,
     genomeIdx,
   };
 }
@@ -65,11 +70,11 @@ module.exports = async function ({ user, genomeId }) {
   }
 
   const { pi, lambda, sts = [] } = result;
-  const { names, genomeIdx } = await mapStsToGenomeNames({ genomeId, sts, user });
+  const { nodes, genomeIdx } = await mapStsToGenomeNames({ genomeId, sts, user });
 
   return {
     clusterIndex: { pi, lambda },
-    names,
+    nodes,
     genomeIdx,
     sts,
     scheme,
