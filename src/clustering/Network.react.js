@@ -30,15 +30,15 @@ const ClusterNetwork = React.createClass({
     };
   },
 
-  overNode({ data, target }) {
+  overNode({ data }, network) {
     data.node.label = data.node._label;
-    target.supervisor.sigInst.refresh();
+    // network.refresh();
   },
 
-  outNode({ data, target }) {
+  outNode({ data }, network) {
     if (data.node.showLabel) return;
     data.node.label = undefined;
-    target.supervisor.sigInst.refresh();
+    // network.refresh();
   },
 
   render() {

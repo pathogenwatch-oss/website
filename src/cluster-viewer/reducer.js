@@ -1,4 +1,5 @@
 import { CLUSTER_SET_LASSO_PATH, CLUSTER_SELECT_NODES } from './actions';
+import { RESET_FILTER } from '../collection-viewer/filter/actions';
 
 const initialState = {
   lassoPath: null,
@@ -28,6 +29,13 @@ export default function (state = initialState, { type, payload }) {
       return {
         ...state,
         selectedNodes: payload.ids || [],
+      };
+    }
+
+    case RESET_FILTER: {
+      return {
+        ...state,
+        selectedNodes: initialState.selectedNodes,
       };
     }
 

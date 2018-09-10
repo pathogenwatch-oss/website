@@ -10,6 +10,9 @@ import { getHighlightedIds, getFilter } from '../collection-viewer/selectors';
 import { getGraph } from '../clustering/selectors';
 
 import { setLassoPath, selectNodes } from './actions';
+import { resetFilter } from '../collection-viewer/filter/actions';
+
+import { filterKeys } from '../collection-viewer/filter/constants';
 
 const getViewerGraph = createSelector(
   getGraph,
@@ -37,9 +40,11 @@ const ClusterViewNetwork = (props) => (
       coverMessage={false}
       graph={props.graph}
       hasLasso
+      height={props.height}
       lassoPath={props.lassoPath}
       onLassoPathChange={props.onLassoPathChange}
       onNodeSelect={props.onNodeSelect}
+      width={props.width}
     />
   </Clustering>
 );
@@ -53,7 +58,13 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    onNodeSelect: (ids, append) => dispatch(selectNodes(ids, append)),
+    onNodeSelect: (ids, append) => {
+      if (ids) {
+        dispatch(selectNodes(ids, append));
+      } else {
+        dispatch(resetFilter(filterKeys.HIGHLIGHT));
+      }
+    },
     onLassoPathChange: path => dispatch(setLassoPath(path)),
   };
 }

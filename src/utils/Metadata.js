@@ -25,7 +25,7 @@ function parseCsvToJson(csv) {
   });
 
   if (results.errors.length > 0) {
-    console.error('[WGSA] Errors during CSV to JSON conversion:');
+    console.error('[Pathogenwatch] Errors during CSV to JSON conversion:');
     console.dir(results.errors);
   }
 

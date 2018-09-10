@@ -1,7 +1,7 @@
 import { fetchJson } from '../utils/Api';
 
 export function getCollection(collectionId) {
-  console.log(`[WGSA] Getting collection ${collectionId}`);
+  console.log(`[Pathogenwatch] Getting collection ${collectionId}`);
   return fetchJson('GET', `/api/collection/${collectionId}`)
     .then(result => result.collection || result);
 }

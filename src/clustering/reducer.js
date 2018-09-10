@@ -30,8 +30,8 @@ const initialState = {
     pi: null,
   },
   indexOfSelectedInAll: null,
-  names: null,
   nodeCoordinates: null,
+  nodes: null,
   progress: null,
   scheme: null,
   selectedGenomeId: null,
@@ -205,7 +205,7 @@ export default function (state = initialState, { type, payload }) {
       return payload === state.threshold ? state : {
         ...state,
         threshold: payload,
-        status: (state.names || []).length > 0 ? 'FETCHED_CLUSTERS' : 'INITIAL_STATUS',
+        status: state.nodes ? 'FETCHED_CLUSTERS' : 'INITIAL_STATUS',
         edgeMatrix: null,
         nodeCoordinates: null,
       };

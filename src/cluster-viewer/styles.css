@@ -8,3 +8,10 @@
   color: rgba(0, 0, 0, 0.54);
   padding: 4px 8px;
 }
+
+.Pane .pw-cluster-network .libmr-controls-toggler,
+.Pane .pw-cluster-network .libmr-secondary-controls {
+  transform: translate(-8px, 8px);
+}
+
+/* .Pane .pw-cluster-network .libmr-control-toggler */

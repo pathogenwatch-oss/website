@@ -1,8 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import Network from './Network.react';
-import ThresholdChart from './ThresholdChart.react';
 import Progress from './Progress.react';
 import ClusterButton from './ClusterButton.react';
 
@@ -84,6 +82,7 @@ const Clustering = React.createClass({
 function mapStateToProps(state) {
   return {
     clusterSts: selectors.getClusterSts(state),
+    graph: selectors.getGraph(state),
     numberOfNodesInCluster: selectors.getNumberOfNodesInCluster(state),
     selectedGenomeId: selectors.getSelectedGenomeId(state),
     status: selectors.getStatus(state),

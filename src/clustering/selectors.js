@@ -194,8 +194,9 @@ export const getEdgeColors = createSelector(
 const chartThresholds = [ ...Array(MAX_THRESHOLD + 1) ].map((__, i) => i);
 export const getChartThresholds = () => chartThresholds;
 const getNodeGenomeCounts = createSelector(
+  getAllSts,
   getNodeData,
-  nodes => (!nodes ? undefined : nodes.map(n => n.ids.length))
+  (sts, nodes) => (!nodes ? undefined : sts.map(st => nodes[st].ids.length))
 );
 export const getNumberOfGenomesAtThreshold = createSelector(
   getIndexOfSelectedInAll,
@@ -280,13 +281,15 @@ function calcGraph(status, sts, nodeData, selectedIdx, labels, sizes, nodeColors
   const numberOfNodes = sts.length;
   if (numberOfNodes === 0) return { nodes: [], edges: [] };
   if (numberOfNodes === 1) {
+    const id = sts[0];
     return {
       nodes: [
         {
           label: labels[0],
           _label: labels[0],
           color: NODE_COLORS[0],
-          id: 'n0',
+          genomeIds: nodeData[id].ids,
+          id,
           size: 1,
           style: {
             colour: NODE_COLORS[0],

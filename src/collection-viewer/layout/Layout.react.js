@@ -20,8 +20,8 @@ const Layout = React.createClass({
 
   getInitialState() {
     return {
-      horizontalSize: 0,
-      verticalSize: 0,
+      horizontalSize: null,
+      verticalSize: null,
     };
   },
 
@@ -35,7 +35,10 @@ const Layout = React.createClass({
           resizerClassName="wgsa-resizer"
           onChange={(verticalSize) => this.setState({ verticalSize })}
         >
-          <ClusterViewNetwork />
+          <ClusterViewNetwork
+            width={this.state.verticalSize}
+            height={this.state.horizontalSize}
+          />
           <Map>
             <Summary />
           </Map>
