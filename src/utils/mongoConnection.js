@@ -31,8 +31,9 @@ function connect(callback) {
 }
 
 mongoose.set('debug', (collection, ...args) => {
-  if (collection === 'clusteringcaches') LOGGER.debug([ collection, args[0] ]);
-  else LOGGER.debug([ collection, ...args ]);
+  if (collection === 'clustering' && args[0] === 'update') {
+    LOGGER.debug([ collection, ...args.slice(0, 2), 'TOO_LONG', ...args.slice(3) ]);
+  } else LOGGER.debug([ collection, ...args ]);
 });
 
 module.exports.connect = connect;

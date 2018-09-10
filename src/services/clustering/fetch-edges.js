@@ -1,30 +1,52 @@
-const ClusteringCache = require('../../models/clusteringCache');
+const Clustering = require('../../models/clustering');
 const Genome = require('../../models/genome');
 const { NotFoundError } = require('../../utils/errors');
 
-async function getClusteringData({ scheme, version, sts }) {
-  const query = { scheme, version, st: { $in: sts } };
-  const projection = { st: 1 };
-  for (const st of sts) {
-    projection[`alleleDifferences.${st}`] = 1;
+async function getClusteringData({ userId, scheme, version, sts, threshold }) {
+  const query = { scheme, version, $or: [ { user: userId }, { public: true } ], threshold: { $gte: threshold } };
+  const projection = { STs: 1, edges: 1, public: 1 };
+
+  const [ clusteringDoc ] = await Clustering
+    .find(
+      query,
+      projection,
+    )
+    .sort({ public: 1 })
+    .limit(1)
+    .lean();
+
+  if (!clusteringDoc) {
+    throw new NotFoundError(`No cluster edges at threshold ${threshold}`);
   }
-  const docs = await ClusteringCache.find(query, projection).lean();
-  const lookup = {};
-  for (const doc of docs) {
-    for (const otherSt of Object.keys(doc.alleleDifferences || {})) {
-      const distance = doc.alleleDifferences[otherSt];
-      const [ stA, stB ] = doc.st < otherSt ? [ doc.st, otherSt ] : [ otherSt, doc.st ];
-      lookup[stA] = lookup[stA] || {};
-      lookup[stA][stB] = distance;
+  const clusterSts = new Set(clusteringDoc.STs);
+  for (const st of sts) {
+    if (!clusterSts.has(st)) {
+      throw new NotFoundError(`No cluster edges found for st ${st} at threshold ${threshold}`);
     }
   }
+
+  const stLookup = {};
+  for (let i = 0; i < clusteringDoc.STs.length; i++) {
+    stLookup[clusteringDoc.STs[i]] = i;
+  }
+
+  const hasEdge = {};
+  for (const dist of Object.keys(clusteringDoc.edges)) {
+    for (const [ a, b ] of clusteringDoc.edges[dist]) {
+      const [ min_, max_ ] = a < b ? [ a, b ] : [ b, a ];
+      hasEdge[min_] = hasEdge[min_] || {};
+      hasEdge[min_][max_] = true;
+    }
+  }
+
   return (stA, stB) => {
     if (stA === stB) return 0;
-    try {
-      return stA < stB ? lookup[stA][stB] : lookup[stB][stA];
-    } catch (e) {
-      throw new NotFoundError('Problem getting edges');
-    }
+    const a = stLookup[stA];
+    const b = stLookup[stB];
+    if (a === undefined) throw new NotFoundError(`No cluster for st ${stA}`);
+    if (b === undefined) throw new NotFoundError(`No cluster for st ${stB}`);
+    const [ min_, max_ ] = a < b ? [ a, b ] : [ b, a ];
+    return !!hasEdge[min_][max_];
   };
 }
 
@@ -40,7 +62,7 @@ module.exports = async function ({ user, genomeId, scheme, version, sts, thresho
   // If the STs are [A, B, C, D] the edges should be  ordered [AB, AC, BC, AD, BD, CD].
 
   // We create a function to lookup the distance between any pair of STs
-  const lookup = await getClusteringData({ scheme, version, sts });
+  const lookup = await getClusteringData({ userId: user._id, scheme, version, sts, threshold });
 
   const edges = [];
   for (let a = 1; a < sts.length; a++) {
@@ -48,7 +70,7 @@ module.exports = async function ({ user, genomeId, scheme, version, sts, thresho
     for (let b = 0; b < a; b++) {
       const stB = sts[b];
       // We're just going to return 1 if there's an edge between two STs or 0 if there isn't
-      edges.push(lookup(stA, stB) <= threshold ? 1 : 0);
+      edges.push(lookup(stA, stB));
     }
   }
 

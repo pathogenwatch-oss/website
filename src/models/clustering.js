@@ -6,7 +6,11 @@ const { addPreSaveHook } = require('./utils');
 const schema = new Schema({
   user: String,
   scheme: String,
-  results: Array,
+  pi: Array,
+  lambda: Array,
+  STs: Array,
+  threshold: Number,
+  edges: Object,
   lastAccessedAt: Date,
   lastUpdatedAt: Date,
   createdAt: Date,

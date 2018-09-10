@@ -10,9 +10,9 @@ async function getClusteringData({ scheme, user }) {
     query.public = true;
   }
   const projection = {
-    'results.pi': 1,
-    'results.lambda': 1,
-    'results.sts': 1,
+    pi: 1,
+    lambda: 1,
+    STs: 1,
     version: 1,
   };
   return await Clustering.findOne(query, projection);
@@ -63,13 +63,11 @@ module.exports = async function ({ user, genomeId }) {
     throw new NotFoundError('No matching clustering result');
   }
 
-  const { results, version } = clusters;
-  const result = results.find(_ => _.pi); // Ignore old fashioned results with fixed thresholds
-  if (!result) {
+  const { pi, lambda, STs: sts = [], threshold, version } = clusters;
+  if (sts.length === 0) {
     throw new NotFoundError('No matching clustering result');
   }
 
-  const { pi, lambda, sts = [] } = result;
   const { nodes, genomeIdx } = await mapStsToGenomeNames({ genomeId, sts, user });
 
   return {
@@ -79,5 +77,6 @@ module.exports = async function ({ user, genomeId }) {
     sts,
     scheme,
     version,
+    threshold,
   };
 };

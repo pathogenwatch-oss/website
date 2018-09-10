@@ -8,7 +8,7 @@ const { Writable } = require('stream');
 
 const Genome = require('../../models/genome');
 const Analysis = require('../../models/analysis');
-const ClusteringCache = require('../../models/clusteringCache');
+const Clustering = require('../../models/clustering');
 const TaskLog = require('../../models/taskLog');
 const docker = require('../docker');
 const { DEFAULT_TIMEOUT } = require('../bus');
@@ -18,6 +18,8 @@ const { request } = require('../../services');
 
 const LOGGER = require('../../utils/logging').createLogger('runner');
 const bson = new BSON();
+
+const DEFAULT_THRESHOLD = 50;
 
 async function getGenomes(spec, metadata) {
   const { userId, scheme } = metadata;
@@ -38,11 +40,11 @@ async function getGenomes(spec, metadata) {
   return docs;
 }
 
-function attachInputStream(container, spec, metadata, genomes, allSts) {
+function attachInputStream(container, spec, metadata, allSts) {
   const { version } = spec;
-  const { scheme } = metadata;
+  const { userId, scheme } = metadata;
 
-  const docsStream = Analysis
+  const profilesStream = Analysis
     .find(
       { task: 'cgmlst', 'results.st': { $in: allSts }, 'results.scheme': scheme },
       { results: 1 },
@@ -50,40 +52,40 @@ function attachInputStream(container, spec, metadata, genomes, allSts) {
     )
     .lean()
     .cursor();
-  docsStream.pause();
+  profilesStream.pause();
 
-  const projection = { st: 1 };
-  for (const st of allSts) {
-    projection[`alleleDifferences.${st}`] = 1;
-  }
+  const clusteringStream = Clustering
+    .find(
+      { scheme, version, $or: [ { user: userId }, { public: true } ] },
+      { pi: 1, lambda: 1, STs: 1, threshold: 1, edges: 1 },
+      { sort: { public: 1 }, limit: 1, raw: true }
+    )
+    .lean()
+    .cursor();
+  clusteringStream.on('end', () => profilesStream.resume());
 
-  const scoresStream = ClusteringCache.collection.find(
-    { st: { $in: allSts }, version, scheme },
-    projection,
-    { raw: true }
-  );
-  scoresStream.pause();
-  scoresStream.on('end', () => docsStream.resume());
-
-  const genomesStream = es.through();
+  const requestStream = es.through();
 
   const stream = es.merge(
-    genomesStream,
-    scoresStream,
-    docsStream
+    requestStream,
+    clusteringStream,
+    profilesStream
   );
 
   stream
     .pipe(container.stdin);
     // .pipe(require('fs').createWriteStream('input.bson'));
 
-  const genomeList = genomes.map(g => ({ _id: g._id, st: g.analysis.cgmlst.st }));
-  genomesStream.end(bson.serialize({ genomes: genomeList, thresholds: [ 1, 2, 3, 5, 10, 20, 50 ] }), () => scoresStream.resume());
+  const clusteringRequest = {
+    STs: allSts,
+    maxThreshold: DEFAULT_THRESHOLD,
+  };
+  requestStream.end(bson.serialize(clusteringRequest), () => clusteringStream.resume());
 }
 
 function handleContainerOutput(container, spec, metadata) {
   const { task, version } = spec;
-  const { taskId, scheme } = metadata;
+  const { taskId, scheme, userId } = metadata;
   let resolve;
   let reject;
   const output = new Promise((_resolve, _reject) => {
@@ -92,37 +94,23 @@ function handleContainerOutput(container, spec, metadata) {
   });
   request('clustering', 'send-progress', { taskId, payload: { task, status: 'IN PROGRESS' } });
   let lastProgress = 0;
-  const results = [];
-  let cache = [];
+  let results;
   const consumer = new Writable({
     objectMode: true,
     write(data, _, callback) {
       if (!data) return callback();
+      if (data.indexOf('progress') === -1 && data.indexOf('lambda') === -1) return callback();
       try {
         const doc = JSON.parse(data);
-        if (doc.st && doc.alleleDifferences) {
-          cache.push({ st: doc.st, version, scheme, alleleDifferences: doc.alleleDifferences });
-          if (cache.length >= 100) {
-            return ClusteringCache.collection.insert(cache)
-              .then(() => {
-                for (let i = 0; i < cache.length; i++) {
-                  cache[i] = null;
-                }
-                cache = [];
-              })
-              .then(() => callback())
-              .catch(error => reject(error));
-          }
-          return callback();
-        } else if (doc.progress) {
+        if (doc.progress) {
           const progress = doc.progress * 0.99;
           if ((progress - lastProgress) >= 0.1) {
             return request('clustering', 'send-progress', { taskId, payload: { task, status: 'IN PROGRESS', progress } })
               .then(() => (lastProgress = progress))
               .then(() => callback());
           }
-        } else {
-          results.push(doc);
+        } else if (doc.lambda) {
+          results = doc;
           return callback();
         }
       } catch (e) {
@@ -133,9 +121,8 @@ function handleContainerOutput(container, spec, metadata) {
       return callback();
     },
     final(callback) {
-      return (cache.length > 0 ? ClusteringCache.collection.insert(cache) : Promise.resolve())
-        .then(() => resolve({ results }))
-        .then(() => callback());
+      resolve(results);
+      return callback();
     },
   });
   container.stdout
@@ -200,10 +187,10 @@ async function runTask(spec, metadata, timeout) {
   const container = createContainer(spec, timeout);
   const whenOutput = handleContainerOutput(container, spec, metadata);
   const whenExit = handleContainerExit(container, spec, metadata);
-  attachInputStream(container, spec, metadata, genomes, allSts);
+  attachInputStream(container, spec, metadata, allSts);
 
   await whenExit;
-  const { results } = await whenOutput;
+  const results = await whenOutput;
   return results;
 }
 

@@ -5,7 +5,7 @@ module.exports = async function ({ metadata, results, version }) {
   const { userId, scheme, taskId } = metadata;
 
   const query = { scheme };
-  const update = { scheme, results, version };
+  const update = { scheme, version, ...results };
   if (userId) {
     query.user = userId;
     update.user = userId;
