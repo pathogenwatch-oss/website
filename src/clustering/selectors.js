@@ -309,10 +309,9 @@ function calcGraph(status, sts, nodeData, selectedIdx, labels, sizes, nodeColors
     const showLabel = status === 'COMPLETED_LAYOUT' && i === selectedIdx;
     const id = sts[i];
     nodes.push({
-      showLabel,
       label: showLabel ? labels[i] : undefined,
       color: showLabel ? nodeColors[i] : undefined,
-      _label: labels[i],
+      hoverLabel: showLabel ? undefined : labels[i],
       id,
       genomeIds: nodeData[id].ids,
       size: sizes[i],

@@ -29,17 +29,6 @@ const ClusterNetwork = React.createClass({
     };
   },
 
-  overNode({ data }, network) {
-    data.node.label = data.node._label;
-    network.refresh();
-  },
-
-  outNode({ data }, network) {
-    if (data.node.showLabel) return;
-    data.node.label = undefined;
-    network.refresh();
-  },
-
   render() {
     switch (this.props.status) {
       case 'INITIAL_STATUS':
@@ -82,8 +71,6 @@ const ClusterNetwork = React.createClass({
           onControlsVisibleChange={() => this.setState({ controlsVisible: !controlsVisible })}
           onLayoutChange={this.props.stopLayout}
           onLayoutStart={this.props.startLayout}
-          onNodeHover={this.overNode}
-          onNodeLeave={this.outNode}
           onNodeSelect={this.props.onNodeSelect}
           recomputeLayout={this.props.status === 'FETCHED_EDGES'}
           settings={constants.NETWORK_SETTINGS}
