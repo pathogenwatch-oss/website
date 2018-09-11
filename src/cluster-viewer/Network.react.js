@@ -24,10 +24,17 @@ const getViewerGraph = createSelector(
       if (filter.active) {
         const isActive = node.genomeIds.some(id => filter.ids.has(id));
         node.isActive = isActive;
-        if (node.showLabel) node.label = isActive ? node._label : undefined;
+        if (node.label && !isActive) {
+          node.hiddenLabel = node.label;
+          node.label = undefined;
+        } else if (node.hiddenLabel && isActive) {
+          node.label = node.hiddenLabel;
+        }
       } else {
         node.isActive = true;
-        if (node.showLabel) node.label = node._label;
+        if (node.hiddenLabel) {
+          node.label = node.hiddenLabel;
+        }
       }
     }
     return { ...graph };

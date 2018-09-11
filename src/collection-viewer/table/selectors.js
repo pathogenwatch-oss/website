@@ -53,11 +53,13 @@ export const isAMRTable = createSelector(
 );
 
 export const getFixedGroupWidth = createSelector(
+  hasAMR,
   hasMetadata,
   hasTyping,
   isAMRTable,
-  (metadata, typing, isAMR) => {
-    let width = isAMR ? 404 : 348; // acount for multi button
+  (amr, metadata, typing, amrVisible) => {
+    if (!amr) return null; // no need for fixed width without AMR tables
+    let width = amrVisible ? 404 : 348; // acount for multi button
     if (!metadata) width -= 68;
     if (!typing) width -= 53;
     return width;
