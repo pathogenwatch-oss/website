@@ -16,6 +16,15 @@ export function fetchCluster(genomeId, threshold) {
   };
 }
 
+export const CLUSTER_TOGGLE_LASSO_ACTIVE = 'CLUSTER_TOGGLE_LASSO_ACTIVE';
+
+export function toggleLassoActive() {
+  return {
+    type: CLUSTER_TOGGLE_LASSO_ACTIVE,
+    payload: {},
+  };
+}
+
 export const CLUSTER_SET_LASSO_PATH = 'CLUSTER_SET_LASSO_PATH';
 
 export function setLassoPath(path = []) {

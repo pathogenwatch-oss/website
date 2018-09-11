@@ -9,6 +9,11 @@ export const getLassoPath = createSelector(
   view => view.lassoPath
 );
 
+export const isLassoActive = createSelector(
+  getClusterView,
+  view => view.lassoActive
+);
+
 const getSelectedNodes = state => getClusterView(state).selectedNodes;
 
 export const getNetworkHighlightedIds = createSelector(

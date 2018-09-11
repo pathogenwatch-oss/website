@@ -26,19 +26,18 @@ const ClusterNetwork = React.createClass({
   getInitialState() {
     return {
       controlsVisible: false,
-      lassoActive: false,
     };
   },
 
   overNode({ data }, network) {
     data.node.label = data.node._label;
-    // network.refresh();
+    network.refresh();
   },
 
   outNode({ data }, network) {
     if (data.node.showLabel) return;
     data.node.label = undefined;
-    // network.refresh();
+    network.refresh();
   },
 
   render() {
@@ -74,10 +73,10 @@ const ClusterNetwork = React.createClass({
           controlsVisible={controlsVisible}
           graph={this.props.graph}
           hasLasso={this.props.hasLasso}
-          lassoActive={this.state.lassoActive}
+          lassoActive={this.props.lassoActive}
           lassoPath={this.props.lassoPath}
           onLassoPathChange={this.props.onLassoPathChange}
-          onLassoActiveChange={() => this.setState({ lassoActive: !this.state.lassoActive })}
+          onLassoActiveChange={this.props.onLassoActiveChange}
           layoutDuration={Math.min(Math.max(1000, edgesCount / 5), 10000)}
           layoutSettings={constants.LAYOUT_OPTIONS}
           onControlsVisibleChange={() => this.setState({ controlsVisible: !controlsVisible })}

@@ -5,11 +5,11 @@ import { createSelector } from 'reselect';
 import Clustering from '../clustering';
 import Network from '../clustering/Network.react';
 
-import { getLassoPath } from './selectors';
+import { getLassoPath, isLassoActive } from './selectors';
 import { getHighlightedIds, getFilter } from '../collection-viewer/selectors';
 import { getGraph } from '../clustering/selectors';
 
-import { setLassoPath, selectNodes } from './actions';
+import { setLassoPath, selectNodes, toggleLassoActive } from './actions';
 import { resetFilter } from '../collection-viewer/filter/actions';
 
 import { filterKeys } from '../collection-viewer/filter/constants';
@@ -41,7 +41,9 @@ const ClusterViewNetwork = (props) => (
       graph={props.graph}
       hasLasso
       height={props.height}
+      lassoActive={props.lassoActive}
       lassoPath={props.lassoPath}
+      onLassoActiveChange={props.onLassoActiveChange}
       onLassoPathChange={props.onLassoPathChange}
       onNodeSelect={props.onNodeSelect}
       width={props.width}
@@ -51,6 +53,7 @@ const ClusterViewNetwork = (props) => (
 
 function mapStateToProps(state) {
   return {
+    lassoActive: isLassoActive(state),
     lassoPath: getLassoPath(state),
     graph: getViewerGraph(state),
   };
@@ -58,6 +61,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
+    onLassoActiveChange: () => dispatch(toggleLassoActive()),
+    onLassoPathChange: path => dispatch(setLassoPath(path)),
     onNodeSelect: (ids, append) => {
       if (ids) {
         dispatch(selectNodes(ids, append));
@@ -65,7 +70,6 @@ function mapDispatchToProps(dispatch) {
         dispatch(resetFilter(filterKeys.HIGHLIGHT));
       }
     },
-    onLassoPathChange: path => dispatch(setLassoPath(path)),
   };
 }
 
