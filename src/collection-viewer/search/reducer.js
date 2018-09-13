@@ -40,10 +40,18 @@ function addToRecent(state, terms) {
 
 function applyBasicSearchTerm(state, term) {
   if (!term || state.advanced) return state;
+  const text = term.value.label;
+  if (text.length) {
+    return {
+      ...state,
+      text,
+      intersections: [ [ term ] ],
+    };
+  }
   return {
     ...state,
-    intersections: [ [ term ] ],
-    text: term.value.label,
+    text: initialState.text,
+    intersections: initialState.intersections,
   };
 }
 

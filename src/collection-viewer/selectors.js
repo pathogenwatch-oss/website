@@ -41,14 +41,35 @@ export const getFilter = createSelector(
   getSearchIds,
   getNetworkFilteredIds,
   (filter, searchTerms, searchIds, networkIds = []) => {
-    if (searchTerms.length || networkIds.length) {
-      return {
-        ...filter,
-        ids: new Set([ ...searchIds, ...networkIds ]),
-        active: true,
-      };
+    if (searchTerms.length === 0 && networkIds.length === 0) {
+      return filter;
     }
-    return filter;
+
+    const intersections = [];
+    if (filter.active) {
+      intersections.push(filter.ids);
+    }
+    if (searchTerms.length) {
+      intersections.push(new Set(searchIds));
+    }
+    if (networkIds.length) {
+      intersections.push(new Set(networkIds));
+    }
+
+    const ids = new Set(intersections[0]);
+    for (const intersection of intersections.slice(1)) {
+      for (const id of ids) {
+        if (!intersection.has(id)) {
+          ids.delete(id);
+        }
+      }
+    }
+
+    return {
+      ...filter,
+      ids: new Set(ids),
+      active: true,
+    };
   }
 );
 

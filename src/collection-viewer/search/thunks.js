@@ -49,8 +49,6 @@ export function searchTextChanged(text) {
     const { advanced, exact } = search;
     if (advanced) {
       dispatch(changeSearchText(text));
-    } else if (text.length === 0) {
-      dispatch(resetFilter());
     } else {
       const term = getBasicSearchTerm(state, text, exact);
       dispatch(addSearchTerm(term));

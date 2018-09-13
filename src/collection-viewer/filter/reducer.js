@@ -99,7 +99,6 @@ export default function (state = initialState, { type, payload = {} }) {
       };
     }
     case RESET_FILTER:
-    case SEARCH_TERM_ADDED:
       return {
         ...state,
         [payload.key]: {
