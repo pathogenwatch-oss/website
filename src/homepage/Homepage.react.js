@@ -55,24 +55,24 @@ export default ({ deployedOrganisms }) => (
           <strong>cgMLST</strong> calling and clustering is available for the following schemes:
         </p>
         <ul className="pw-homepage-cgmlst-organisms">
-          <li>Acinetobacter baumannii</li>
-          <li>Campylobacter coli</li>
-          <li>Campylobacter jejuni</li>
-          <li>Enterococcus faecium</li>
-          <li>Escherichia</li>
-          <li>Klebsiella pneumoniae</li>
-          <li>Klebsiella quasipneumoniae</li>
-          <li>Klebsiella variicola</li>
-          <li>Listeria</li>
-          <li>Mycobacterium africanum</li>
-          <li>Mycobacterium bovis</li>
-          <li>Mycobacterium canettii</li>
-          <li>Mycobacterium tuberculosis</li>
-          <li>Neisseria gonorrhoeae</li>
-          <li>Neisseria meningitidis</li>
-          <li>Salmonella enterica</li>
-          <li>Shigella</li>
-          <li>Staphylococcus aureus</li>
+          <li><Link to="/genomes?genusId=469&speciesId=470">Acinetobacter baumannii</Link></li>
+          <li><Link to="/genomes?genusId=194&speciesId=195">Campylobacter coli</Link></li>
+          <li><Link to="/genomes?genusId=194&speciesId=197">Campylobacter jejuni</Link></li>
+          <li><Link to="/genomes?genusId=1350&speciesId=1352">Enterococcus faecium</Link></li>
+          <li><Link to="/genomes?genusId=561">Escherichia</Link></li>
+          <li><Link to="/genomes?genusId=570&speciesId=573">Klebsiella pneumoniae</Link></li>
+          <li><Link to="/genomes?genusId=570&speciesId=1463165">Klebsiella quasipneumoniae</Link></li>
+          <li><Link to="/genomes?genusId=570&speciesId=244366">Klebsiella variicola</Link></li>
+          <li><Link to="/genomes?genusId=1637">Listeria</Link></li>
+          <li><Link to="/genomes?genusId=1763&speciesId=33894">Mycobacterium africanum</Link></li>
+          <li><Link to="/genomes?genusId=1763&speciesId=1765">Mycobacterium bovis</Link></li>
+          <li><Link to="/genomes?genusId=1763&speciesId=78331">Mycobacterium canettii</Link></li>
+          <li><Link to="/genomes?genusId=1763&speciesId=1773">Mycobacterium tuberculosis</Link></li>
+          <li><Link to="/genomes?genusId=482&speciesId=485">Neisseria gonorrhoeae</Link></li>
+          <li><Link to="/genomes?genusId=482&speciesId=487">Neisseria meningitidis</Link></li>
+          <li><Link to="/genomes?genusId=590&speciesId=28901">Salmonella enterica</Link></li>
+          <li><Link to="/genomes?genusId=620">Shigella</Link></li>
+          <li><Link to="/genomes?genusId=1279&speciesId=1280">Staphylococcus aureus</Link></li>
         </ul>
         <table className="wgsa-organism-table">
           <caption>Further Analyses</caption>
