@@ -52,7 +52,7 @@ const ClusterViewNetwork = (props) => (
       lassoPath={props.lassoPath}
       onLassoActiveChange={props.onLassoActiveChange}
       onLassoPathChange={props.onLassoPathChange}
-      onNodeSelect={props.onNodeSelect}
+      onNodeSelect={(ids, append) => props.onNodeSelect(props.lassoActive, ids, append)}
       width={props.width}
     />
   </Clustering>
@@ -70,7 +70,8 @@ function mapDispatchToProps(dispatch) {
   return {
     onLassoActiveChange: () => dispatch(toggleLassoActive()),
     onLassoPathChange: path => dispatch(setLassoPath(path)),
-    onNodeSelect: (ids, append) => {
+    onNodeSelect: (lassoActive, ids, append) => {
+      if (lassoActive) return;
       if (ids) {
         dispatch(selectNodes(ids, append));
       } else {

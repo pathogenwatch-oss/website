@@ -19,6 +19,7 @@ export default function (state = initialState, { type, payload }) {
       return {
         ...state,
         lassoActive: !state.lassoActive,
+        lassoPath: initialState.lassoPath,
       };
 
     case CLUSTER_SET_LASSO_PATH:
