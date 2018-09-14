@@ -8,6 +8,7 @@ export const NETWORK_SETTINGS = {
   edgeColor: 'default',
   labelColor: 'node',
   labelThreshold: 0, // hack so that nodes with labels are always shown
+  hideEdgesOnMove: true,
 };
 
 export const MAX_CLUSTER_SIZE = 1000;
