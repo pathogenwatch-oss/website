@@ -52,7 +52,8 @@ const ClusterViewNetwork = (props) => (
       lassoPath={props.lassoPath}
       onLassoActiveChange={props.onLassoActiveChange}
       onLassoPathChange={props.onLassoPathChange}
-      onNodeSelect={(ids, append) => props.onNodeSelect(props.lassoActive, ids, append)}
+      onNodeSelect={(ids, append) =>
+        props.onNodeSelect(props.lassoActive && !props.lassoPath, ids, append)}
       width={props.width}
     />
   </Clustering>
