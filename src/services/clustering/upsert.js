@@ -2,7 +2,7 @@ const { request } = require('services/bus');
 const Clustering = require('../../models/clustering');
 
 module.exports = async function ({ metadata, results, version }) {
-  const { userId, scheme, taskId } = metadata;
+  const { userId, scheme } = metadata;
 
   const query = { scheme };
   const update = { scheme, version, ...results };
@@ -14,7 +14,11 @@ module.exports = async function ({ metadata, results, version }) {
     update.public = true;
   }
 
-  await Clustering.update(query, update, { upsert: true });
-
-  return request('clustering', 'send-progress', { taskId, payload: { status: 'READY' } });
+  if ((results.lambda || []).length > 0) {
+    console.log('FIXME: Updating the cluster');
+    await Clustering.update(query, update, { upsert: true });
+  } else {
+    console.log('FIXME: Adding some edges');
+    await Clustering.create(update);
+  }
 };

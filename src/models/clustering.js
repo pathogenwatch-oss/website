@@ -16,6 +16,7 @@ const schema = new Schema({
   createdAt: Date,
   public: { type: Boolean, default: false },
   version: String,
+  relatedBy: { type: Schema.Types.ObjectId },
 });
 
 addPreSaveHook(schema);

@@ -54,9 +54,12 @@ function subscribeToQueue(queueName, queueType = queueName) {
       queueName,
       ({ spec, metadata, timeout }) =>
         request('tasks', 'run-clustering', { spec, metadata, timeout$: timeout * 1000 })
-          .then(results => {
+          .then(async ({ relatedBy }) => {
+            const { taskId } = metadata;
+            const { version } = spec;
             LOGGER.info('Got result', spec.task, spec.version, metadata);
-            return request('clustering', 'upsert', { results, metadata, version: spec.version, timeout$: 60000 });
+            await request('clustering', 'delete-prior', { relatedBy, metadata, version });
+            return request('clustering', 'send-progress', { taskId, payload: { status: 'READY' } });
           }),
       message => request('clustering', 'error', message)
     );

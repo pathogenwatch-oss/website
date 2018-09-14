@@ -5,6 +5,7 @@
 const es = require('event-stream');
 const BSON = require('bson');
 const { Writable } = require('stream');
+const { ObjectId } = require('mongoose').Types;
 
 const Genome = require('../../models/genome');
 const Analysis = require('../../models/analysis');
@@ -40,7 +41,7 @@ async function getGenomes(spec, metadata) {
   return docs;
 }
 
-function attachInputStream(container, spec, metadata, allSts) {
+async function attachInputStream(container, spec, metadata, allSts) {
   const { version } = spec;
   const { userId, scheme } = metadata;
 
@@ -54,11 +55,26 @@ function attachInputStream(container, spec, metadata, allSts) {
     .cursor();
   profilesStream.pause();
 
-  const clusteringStream = Clustering
+  const cluster = await Clustering
     .find(
       { scheme, version, $or: [ { user: userId }, { public: true } ] },
+      { _id: 1 }
+    )
+    .sort({ public: 1 })
+    .limit(1);
+
+  let clusterId;
+  if (cluster.length > 0) {
+    clusterId = cluster[0]._id;
+  } else {
+    clusterId = new ObjectId();
+  }
+
+  const clusteringStream = Clustering
+    .find(
+      { $or: [ { _id: clusterId }, { parent: clusterId } ] },
       { pi: 1, lambda: 1, STs: 1, threshold: 1, edges: 1 },
-      { sort: { public: 1 }, limit: 1, raw: true }
+      { raw: true }
     )
     .lean()
     .cursor();
@@ -85,16 +101,16 @@ function attachInputStream(container, spec, metadata, allSts) {
 
 function handleContainerOutput(container, spec, metadata) {
   const { task, version } = spec;
-  const { taskId, scheme, userId } = metadata;
+  const { taskId } = metadata;
   let resolve;
   let reject;
   const output = new Promise((_resolve, _reject) => {
     resolve = _resolve;
     reject = _reject;
   });
+  const relatedBy = new ObjectId();
   request('clustering', 'send-progress', { taskId, payload: { task, status: 'IN PROGRESS' } });
   let lastProgress = 0;
-  let results;
   const consumer = new Writable({
     objectMode: true,
     write(data, _, callback) {
@@ -109,9 +125,10 @@ function handleContainerOutput(container, spec, metadata) {
               .then(() => (lastProgress = progress))
               .then(() => callback());
           }
-        } else if (doc.lambda) {
-          results = doc;
-          return callback();
+        } else if (doc.STs) {
+          doc.relatedBy = relatedBy;
+          return request('clustering', 'upsert', { results: doc, metadata, version })
+            .then(() => callback());
         }
       } catch (e) {
         LOGGER.error(e);
@@ -121,7 +138,7 @@ function handleContainerOutput(container, spec, metadata) {
       return callback();
     },
     final(callback) {
-      resolve(results);
+      resolve({ relatedBy });
       return callback();
     },
   });
@@ -187,7 +204,7 @@ async function runTask(spec, metadata, timeout) {
   const container = createContainer(spec, timeout);
   const whenOutput = handleContainerOutput(container, spec, metadata);
   const whenExit = handleContainerExit(container, spec, metadata);
-  attachInputStream(container, spec, metadata, allSts);
+  await attachInputStream(container, spec, metadata, allSts);
 
   await whenExit;
   const results = await whenOutput;
