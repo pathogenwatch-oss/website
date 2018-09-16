@@ -8,50 +8,67 @@ import AccountImage from './AccountImage.react';
 import { getAccount } from './selectors';
 import { getSummary } from '../summary/selectors';
 
+import { fetchSummary } from '../summary/actions';
+
 import { statuses } from './constants';
 
 import config from '../app/config';
 
-const renderProfileContent = ({ status, summary }) => {
-  if (status === statuses.LOADING) return null;
+const ProfileContentComponent = React.createClass({
 
-  const { userCollections = 0, userGenomes = 0 } = summary;
-  if (userCollections === 0 && userGenomes === 0) {
-    return (
-      <div className="wgsa-profile-section wgsa-profile-onboarding">
-        <p>Welcome to <strong>Pathogenwatch</strong>!</p>
-        <p>This is your account page, here you'll be able to see:</p>
-        <ul>
-          <li>The number of genomes you've uploaded</li>
-          <li>The number of collections you've created</li>
-          <li>A list of your recent activity</li>
-        </ul>
-        <p>To get started, <Link to="/upload">upload genomes</Link> or <Link to="/genomes">browse the public dataset</Link>.</p>
-      </div>
-    );
-  }
+  componentDidMount() {
+    const { summary } = this.props;
+    if (summary.loaded) { // summary could be stale
+      this.props.fetch();
+    }
+  },
 
-  return (
-    <React.Fragment>
-      <div className="wgsa-hub-stats-group wgsa-profile-section">
-        <Link className="wgsa-hub-stats-section wgsa-profile-counter" to="/genomes/user" title="Click to view genomes">
-          <h3 className="wgsa-hub-stats-heading">Genomes</h3>
-          <p className="wgsa-hub-stats-value wgsa-hub-stats-value--large">{userGenomes}</p>
-        </Link>
-        <Link className="wgsa-hub-stats-section wgsa-profile-counter" to="/collections/user" title="Click to view collections">
-          <h3 className="wgsa-hub-stats-heading">Collections</h3>
-          <p className="wgsa-hub-stats-value wgsa-hub-stats-value--large">{userCollections}</p>
-        </Link>
-      </div>
-      <div className="wgsa-hub-stats-group wgsa-profile-section">
-        <div className="wgsa-hub-stats-section">
-          <div className="wgsa-hub-stats-heading">Recent Activity</div>
-          <ActivityList />
+  render() {
+    const { status, summary } = this.props;
+
+    if (status === statuses.LOADING || !summary.loaded) {
+      return null;
+    }
+
+    const { userCollections, userGenomes } = summary;
+    if (userCollections === 0 && userGenomes === 0) {
+      return (
+        <div className="wgsa-profile-section wgsa-profile-onboarding">
+          <p>Welcome to <strong>Pathogenwatch</strong>!</p>
+          <p>This is your account page, here you'll be able to see:</p>
+          <ul>
+            <li>The number of genomes you've uploaded</li>
+            <li>The number of collections you've created</li>
+            <li>A list of your recent activity</li>
+          </ul>
+          <p>To get started, <Link to="/upload">upload genomes</Link> or <Link to="/genomes">browse the public dataset</Link>.</p>
         </div>
-      </div>
-    </React.Fragment>
-  );
-};
+      );
+    }
+
+    return (
+      <React.Fragment>
+        <div className="wgsa-hub-stats-group wgsa-profile-section">
+          <Link className="wgsa-hub-stats-section wgsa-profile-counter" to="/genomes/user" title="Click to view genomes">
+            <h3 className="wgsa-hub-stats-heading">Genomes</h3>
+            <p className="wgsa-hub-stats-value wgsa-hub-stats-value--large">{userGenomes}</p>
+          </Link>
+          <Link className="wgsa-hub-stats-section wgsa-profile-counter" to="/collections/user" title="Click to view collections">
+            <h3 className="wgsa-hub-stats-heading">Collections</h3>
+            <p className="wgsa-hub-stats-value wgsa-hub-stats-value--large">{userCollections}</p>
+          </Link>
+        </div>
+        <div className="wgsa-hub-stats-group wgsa-profile-section">
+          <div className="wgsa-hub-stats-section">
+            <div className="wgsa-hub-stats-heading">Recent Activity</div>
+            <ActivityList />
+          </div>
+        </div>
+      </React.Fragment>
+    );
+  },
+
+});
 
 function mapStateToProps(state) {
   return {
@@ -60,7 +77,13 @@ function mapStateToProps(state) {
   };
 }
 
-const ProfileContent = connect(mapStateToProps)(renderProfileContent);
+function mapDispatchToProps(dispatch) {
+  return {
+    fetch: () => dispatch(fetchSummary()),
+  };
+}
+
+const ProfileContent = connect(mapStateToProps, mapDispatchToProps)(ProfileContentComponent);
 
 const Profile = () => {
   const { user } = config;

@@ -8,11 +8,16 @@ const prefilterToKey = {
   bin: 'binnedGenomes',
 };
 
-export default function (state = {}, { type, payload }) {
+export default function (state = { loaded: false }, { type, payload }) {
   switch (type) {
+    case FETCH_SUMMARY.ATTEMPT:
+      return {
+        loaded: false,
+      };
     case FETCH_SUMMARY.SUCCESS:
       return {
         ...state,
+        loaded: true,
         ...payload.result,
       };
     case FETCH_GENOME_SUMMARY.SUCCESS: {
