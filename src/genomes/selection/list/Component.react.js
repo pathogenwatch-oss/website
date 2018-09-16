@@ -36,12 +36,10 @@ const Selection = ({ selectedGenomes, showGenome, removeGenome, clearAll, sendTo
         return (
           <li
             key={key}
-            title="Click to View"
             className="wgsa-list-item"
-            onClick={() => showGenome(genome)}
             style={{ ...style, width: 440, top: style.top + 8 }}
           >
-            <span>{genome.name}</span>
+            <button className="wgsa-link-button" title="View Details" onClick={() => showGenome(genome)}>{genome.name}</button>
             <button
               title="Remove from Selection"
               onClick={e => {

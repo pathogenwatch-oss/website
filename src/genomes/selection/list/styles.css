@@ -44,6 +44,12 @@
   padding-top: 16px;
 }
 
+
+.wgsa-genome-selection-list .wgsa-link-button {
+  padding: 0;
+  color: inherit;
+}
+
 .wgsa-list-item {
   display: flex;
   justify-content: space-between;
