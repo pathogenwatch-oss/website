@@ -35,11 +35,7 @@ export function mapColumnsToSearchCategories(columns, tableName, matcher) {
     });
     columnKeys.add(columnKey);
   }
-  return categories.sort((a, b) => {
-    if (a.label > b.label) return 1;
-    if (a.label < b.label) return -1;
-    return 0;
-  });
+  return categories;
 }
 
 export function getNameCategory(tableName, matcher) {
