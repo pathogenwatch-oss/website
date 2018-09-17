@@ -41,8 +41,8 @@ const getViewerGraph = createSelector(
   }
 );
 
-const onNodeSelect = (sts, append) => {
-  return (dispatch, getState) => {
+const onNodeSelect = (sts, append) =>
+  (dispatch, getState) => {
     let ids;
     if (sts && sts.length) {
       ids = [];
@@ -58,7 +58,6 @@ const onNodeSelect = (sts, append) => {
       dispatch(resetFilter(filterKeys.HIGHLIGHT));
     }
   };
-};
 
 const ClusterViewNetwork = (props) => (
   <Clustering>

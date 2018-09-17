@@ -5,7 +5,6 @@ import {
   RESET_FILTER,
 } from './actions';
 import { TREE_LOADED } from '../tree/actions';
-import { SEARCH_TERM_ADDED } from '../search/actions';
 import { FETCH_COLLECTION } from '../actions';
 
 import { filterKeys } from '../filter/constants';
