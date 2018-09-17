@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 
-import { getViewer, getGenomeList } from '../selectors';
+import { getViewer, getFilteredGenomes } from '../selectors';
 import {
   getTables,
   getActiveDataTable,
@@ -105,7 +105,7 @@ const getColumnValues = createSelector(
   getTables,
   getSearchText,
   getSearchTextMatcher,
-  getGenomeList,
+  getFilteredGenomes,
   getSearchSort,
   getCurrentIntersection,
   (category, tables, text, matcher, genomes, sort, currentTerms = []) => {

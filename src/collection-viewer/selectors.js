@@ -4,7 +4,6 @@ import removeMarkdown from 'remove-markdown';
 import { getTableState, getAMRTableName } from './table/selectors';
 import { getNetworkFilteredIds } from '../cluster-viewer/selectors';
 
-
 import { createColourGetter } from './amr-utils';
 import { filterKeys } from './filter/constants';
 
@@ -81,6 +80,15 @@ export const getGenomeList = createSelector(
 export const getFilteredGenomeIds = createSelector(
   getFilterState,
   filter => filter[filterKeys.VISIBILITY].ids
+);
+
+export const getFilteredGenomes = createSelector(
+  getGenomes,
+  getFilterState,
+  (genomes, filter) => {
+    const { active, ids, unfilteredIds } = filter[filterKeys.VISIBILITY];
+    return Array.from(active ? ids : unfilteredIds).map(id => genomes[id]);
+  }
 );
 
 export const getHighlightedIds = createSelector(
