@@ -71,6 +71,15 @@ export const getFilter = createSelector(
 
 export const getUnfilteredGenomeIds = state => getFilter(state).unfilteredIds;
 
+export const getFilteredGenomes = createSelector(
+  getGenomes,
+  getFilter,
+  (genomes, filter) => {
+    const { active, ids, unfilteredIds } = filter;
+    return Array.from(active ? ids : unfilteredIds).map(id => genomes[id]);
+  }
+);
+
 export const getGenomeList = createSelector(
   getGenomes,
   getUnfilteredGenomeIds,
@@ -80,15 +89,6 @@ export const getGenomeList = createSelector(
 export const getFilteredGenomeIds = createSelector(
   getFilterState,
   filter => filter[filterKeys.VISIBILITY].ids
-);
-
-export const getFilteredGenomes = createSelector(
-  getGenomes,
-  getFilterState,
-  (genomes, filter) => {
-    const { active, ids, unfilteredIds } = filter[filterKeys.VISIBILITY];
-    return Array.from(active ? ids : unfilteredIds).map(id => genomes[id]);
-  }
 );
 
 export const getHighlightedIds = createSelector(
