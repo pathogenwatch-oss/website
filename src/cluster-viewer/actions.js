@@ -33,14 +33,3 @@ export function setLassoPath(path = []) {
     payload: path,
   };
 }
-
-export const CLUSTER_SELECT_NODES = 'CLUSTER_SELECT_NODES';
-
-export function selectNodes(ids, append) {
-  return {
-    type: CLUSTER_SELECT_NODES,
-    payload: {
-      ids, append,
-    },
-  };
-}

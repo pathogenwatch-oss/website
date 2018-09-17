@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 
-import { getNodeData, getGraph } from '../clustering/selectors';
+import { getGraph } from '../clustering/selectors';
 
 const getClusterView = state => state.viewer.clusterView;
 
@@ -12,20 +12,6 @@ export const getLassoPath = createSelector(
 export const isLassoActive = createSelector(
   getClusterView,
   view => view.lassoActive
-);
-
-const getSelectedNodes = state => getClusterView(state).selectedNodes;
-
-export const getNetworkHighlightedIds = createSelector(
-  getSelectedNodes,
-  getNodeData,
-  (selectedNodes, nodeData) => {
-    const ids = [];
-    for (const node of selectedNodes) {
-      ids.push(...nodeData[node].ids);
-    }
-    return ids;
-  }
 );
 
 function pointInsidePolygon(vectors, point) {

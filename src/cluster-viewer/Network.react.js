@@ -7,10 +7,10 @@ import Network from '../clustering/Network.react';
 
 import { getLassoPath, isLassoActive } from './selectors';
 import { getHighlightedIds, getFilter } from '../collection-viewer/selectors';
-import { getGraph } from '../clustering/selectors';
+import { getGraph, getNodeData } from '../clustering/selectors';
 
-import { setLassoPath, selectNodes, toggleLassoActive } from './actions';
-import { resetFilter } from '../collection-viewer/filter/actions';
+import { setLassoPath, toggleLassoActive } from './actions';
+import { resetFilter, appendToFilter, activateFilter } from '../collection-viewer/filter/actions';
 
 import { filterKeys } from '../collection-viewer/filter/constants';
 
@@ -41,6 +41,25 @@ const getViewerGraph = createSelector(
   }
 );
 
+const onNodeSelect = (sts, append) => {
+  return (dispatch, getState) => {
+    let ids;
+    if (sts && sts.length) {
+      ids = [];
+      const state = getState();
+      const nodeData = getNodeData(state);
+      for (const st of sts) {
+        ids.push(...nodeData[st].ids);
+      }
+    }
+    if (ids) {
+      dispatch((append ? appendToFilter : activateFilter)(ids, filterKeys.HIGHLIGHT));
+    } else {
+      dispatch(resetFilter(filterKeys.HIGHLIGHT));
+    }
+  };
+};
+
 const ClusterViewNetwork = (props) => (
   <Clustering>
     <Network
@@ -52,8 +71,8 @@ const ClusterViewNetwork = (props) => (
       lassoPath={props.lassoPath}
       onLassoActiveChange={props.onLassoActiveChange}
       onLassoPathChange={props.onLassoPathChange}
-      onNodeSelect={(ids, append) =>
-        props.onNodeSelect(props.lassoActive && !props.lassoPath, ids, append)}
+      onNodeSelect={(sts, append) =>
+        props.onNodeSelect(props.lassoActive && !props.lassoPath, sts, append)}
       width={props.width}
     />
   </Clustering>
@@ -71,13 +90,9 @@ function mapDispatchToProps(dispatch) {
   return {
     onLassoActiveChange: () => dispatch(toggleLassoActive()),
     onLassoPathChange: path => dispatch(setLassoPath(path)),
-    onNodeSelect: (lassoActive, ids, append) => {
+    onNodeSelect: (lassoActive, sts, append) => {
       if (lassoActive) return;
-      if (ids) {
-        dispatch(selectNodes(ids, append));
-      } else {
-        dispatch(resetFilter(filterKeys.HIGHLIGHT));
-      }
+      dispatch(onNodeSelect(sts, append));
     },
   };
 }
