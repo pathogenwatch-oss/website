@@ -31,25 +31,38 @@ const getSearchIds = createSelector(
 
 export const getFilterState = state => getViewer(state).filter;
 
-export const getFilter = createSelector(
-  state => getViewer(state).filter[filterKeys.VISIBILITY],
-  state => getViewer(state).search.intersections,
-  getSearchIds,
+export const getNonSearchFilterIntersections = createSelector(
+  state => getViewer(state).filter,
   getNetworkFilteredIds,
-  (filter, searchTerms, searchIds, networkIds = []) => {
-    if (searchTerms.length === 0 && networkIds.length === 0) {
-      return filter;
-    }
-
+  (filterState, searchTerms, searchIds, networkIds = []) => {
     const intersections = [];
-    if (filter.active) {
-      intersections.push(filter.ids);
+
+    if (filterState[filterKeys.VISIBILITY].active) {
+      intersections.push(filterState[filterKeys.VISIBILITY].ids);
     }
-    if (searchTerms.length) {
-      intersections.push(new Set(searchIds));
+    if (filterState[filterKeys.TREE].active) {
+      intersections.push(filterState[filterKeys.TREE].ids);
+    }
+    if (filterState[filterKeys.MAP].active) {
+      intersections.push(filterState[filterKeys.MAP].ids);
     }
     if (networkIds.length) {
       intersections.push(new Set(networkIds));
+    }
+
+    return intersections;
+  }
+);
+
+export const getFilter = createSelector(
+  getFilterState,
+  getNonSearchFilterIntersections,
+  state => getViewer(state).search.intersections,
+  getSearchIds,
+  (filterState, nonSearchIntersections, searchTerms, searchIds) => {
+    const intersections = [ ...nonSearchIntersections ];
+    if (searchTerms.length) {
+      intersections.push(new Set(searchIds));
     }
 
     const ids = new Set(intersections[0]);
@@ -62,9 +75,9 @@ export const getFilter = createSelector(
     }
 
     return {
-      ...filter,
+      unfilteredIds: filterState.unfilteredIds,
       ids: new Set(ids),
-      active: true,
+      active: intersections.length,
     };
   }
 );
@@ -84,11 +97,6 @@ export const getGenomeList = createSelector(
   getGenomes,
   getUnfilteredGenomeIds,
   (genomes, ids) => Array.from(ids).map(id => genomes[id])
-);
-
-export const getFilteredGenomeIds = createSelector(
-  getFilterState,
-  filter => filter[filterKeys.VISIBILITY].ids
 );
 
 export const getHighlightedIds = createSelector(

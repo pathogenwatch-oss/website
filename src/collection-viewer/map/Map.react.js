@@ -62,7 +62,7 @@ function mergeProps(mappedState, { dispatch, ...mappedDispatch }, ownProps) {
     onClick: ({ originalEvent }) => {
       if (isMarker(originalEvent.target)) return;
       if (mappedState.lassoPath) {
-        dispatch(filterByLassoPath(stateKey, null));
+        dispatch(filterByLassoPath(stateKey, undefined));
       }
       dispatch(resetFilter(filterKeys.HIGHLIGHT));
     },

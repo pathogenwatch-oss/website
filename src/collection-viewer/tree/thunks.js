@@ -9,12 +9,12 @@ import {
   appendToFilter,
   resetFilter,
 } from '../filter/actions';
+import { updateProgress } from '../actions';
 
 import { getTree } from './api';
 
 import { POPULATION } from '../../app/stateKeys/tree';
 import { filterKeys } from '../filter/constants';
-import { updateProgress } from '../actions';
 
 function fetchTree(name) {
   return (dispatch, getState) => {
@@ -100,13 +100,13 @@ export function treeClicked(event, phylocanvas) {
         if (filterState[filterKeys.HIGHLIGHT].active) {
           dispatch(resetFilter(filterKeys.HIGHLIGHT));
         } else {
-          dispatch(resetFilter(filterKeys.VISIBILITY));
+          dispatch(resetFilter(filterKeys.TREE));
         }
       } else {
         dispatch(
           event.append ?
             appendToFilter(nodeIds, filterKeys.HIGHLIGHT) :
-            activateFilter(nodeIds, filterKeys.VISIBILITY)
+            activateFilter(nodeIds, filterKeys.TREE)
         );
       }
     }

@@ -1,4 +1,5 @@
 import * as actions from './actions';
+import { CLEAR_FILTERS } from '../collection-viewer/filter/actions';
 
 export default function (state = {}, { type, payload }) {
   switch (type) {
@@ -10,6 +11,7 @@ export default function (state = {}, { type, payload }) {
           bounds: payload.bounds,
         },
       };
+
     case actions.MAP_LASSO_CHANGE:
       return {
         ...state,
@@ -18,6 +20,7 @@ export default function (state = {}, { type, payload }) {
           lassoPath: payload.path,
         },
       };
+
     case actions.MAP_VIEW_BY_COUNTRY:
       return {
         ...state,
@@ -26,6 +29,7 @@ export default function (state = {}, { type, payload }) {
           viewByCountry: payload.active,
         },
       };
+
     case actions.MAP_MARKER_SIZE_CHANGED:
       return {
         ...state,
@@ -34,6 +38,7 @@ export default function (state = {}, { type, payload }) {
           markerSize: payload.size,
         },
       };
+
     case 'SET_GENOME_SELECTION':
       if (payload.genomes.length) return state;
       return Object.keys(state).reduce((memo, stateKey) => {
@@ -45,6 +50,13 @@ export default function (state = {}, { type, payload }) {
           } : currentState;
         return memo;
       }, {});
+
+    case CLEAR_FILTERS:
+      return {
+        ...state,
+        COLLECTION: {},
+      };
+
     default:
       return state;
   }

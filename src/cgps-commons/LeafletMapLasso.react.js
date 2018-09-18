@@ -55,26 +55,31 @@ export default React.createClass({
     });
   },
 
+  componentWillReceiveProps(nextProps) {
+    if (this.props.initialPath && !nextProps.initialPath) {
+      this.setState({ isActive: false });
+    }
+  },
+
   componentDidUpdate(prevProps, prevState) {
-    const { onPathChange, initialPath } = this.props;
-    const { isActive } = this.state;
+    const { initialPath } = this.props;
 
     if (initialPath === null) {
       this.lasso.reset();
     }
 
     // clear the lasso filter when lasso flag has changed
-    if (prevState.isActive !== isActive) {
-      if (isActive) {
+    if (prevState.isActive !== this.state.isActive) {
+      if (this.state.isActive) {
         this.lasso.enable();
       } else {
         this.lasso.disable();
-        if (onPathChange) onPathChange(null);
+        this.lasso.reset();
       }
     }
   },
 
-  onLassoToogleButtonClick() {
+  onLassoToggleButtonClick() {
     // toggle the filter state
     this.setState({ isActive: !this.state.isActive });
   },
@@ -93,7 +98,7 @@ export default React.createClass({
           )
         }
         title={isActive ? activeFilterTooltip : filterTooltip}
-        onClick={this.onLassoToogleButtonClick}
+        onClick={this.onLassoToggleButtonClick}
       >
         <i className="material-icons mr-lasso-icon" style={iconStyle}></i>
       </button>
