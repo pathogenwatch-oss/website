@@ -4,8 +4,9 @@ import { createSelector } from 'reselect';
 
 import Clustering from '../clustering';
 import Network from '../clustering/Network.react';
+import ThresholdSlider from './ThresholdSlider.react';
 
-import { getLassoPath, isLassoActive } from './selectors';
+import { getLassoPath, isLassoActive, getLocationThreshold } from './selectors';
 import { getHighlightedIds, getFilter } from '../collection-viewer/selectors';
 import { getGraph, getNodeData } from '../clustering/selectors';
 
@@ -74,6 +75,8 @@ const ClusterViewNetwork = (props) => (
         props.onNodeSelect(props.lassoActive && !props.lassoPath, sts, append)}
       width={props.width}
     />
+    <h2 className="pw-cluster-view-current-threshold wgsa-pane-overlay">Threshold of {props.threshold}</h2>
+    <ThresholdSlider />
   </Clustering>
 );
 
@@ -82,6 +85,7 @@ function mapStateToProps(state) {
     lassoActive: isLassoActive(state),
     lassoPath: getLassoPath(state),
     graph: getViewerGraph(state),
+    threshold: getLocationThreshold(state),
   };
 }
 

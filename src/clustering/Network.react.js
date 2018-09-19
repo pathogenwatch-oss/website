@@ -72,6 +72,7 @@ const ClusterNetwork = React.createClass({
           onLayoutChange={this.props.stopLayout}
           onLayoutStart={this.props.startLayout}
           onNodeSelect={this.props.onNodeSelect}
+          primaryControls={this.props.primaryControls}
           recomputeLayout={this.props.status === 'FETCHED_EDGES'}
           settings={constants.NETWORK_SETTINGS}
           style={style}

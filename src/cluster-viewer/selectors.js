@@ -1,6 +1,14 @@
 import { createSelector } from 'reselect';
+import { parse } from 'query-string';
 
-import { getGraph } from '../clustering/selectors';
+import {
+  getGraph,
+  getChartThresholds,
+  getNumberOfNodesAtThreshold,
+  getNumberOfGenomesAtThreshold,
+} from '../clustering/selectors';
+
+import { MAX_CLUSTER_SIZE } from '../clustering/constants';
 
 const getClusterView = state => state.viewer.clusterView;
 
@@ -42,5 +50,30 @@ export const getNetworkFilteredIds = createSelector(
       return ids;
     }
     return undefined;
+  }
+);
+
+export const getThresholdMarks = createSelector(
+  getChartThresholds,
+  getNumberOfNodesAtThreshold,
+  getNumberOfGenomesAtThreshold,
+  (thresholds, nodeTotals, genomeTotals) => {
+    const marks = {};
+    let lastMark = null;
+    for (let i = 0; i < nodeTotals.length; i++) {
+      if (nodeTotals[i] > MAX_CLUSTER_SIZE) break;
+      if (lastMark !== genomeTotals[i]) {
+        marks[thresholds[i]] = lastMark = genomeTotals[i];
+      }
+    }
+    return marks;
+  }
+);
+
+export const getLocationThreshold = createSelector(
+  state => state.location,
+  location => {
+    const query = parse(location.search);
+    return query.threshold;
   }
 );
