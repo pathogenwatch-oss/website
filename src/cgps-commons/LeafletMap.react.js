@@ -87,7 +87,7 @@ export default React.createClass({
 
   onClick(event) {
     if (this.props.onClick) {
-      this.props.onClick(event);
+      this.props.onClick(event, this.map);
     }
   },
 

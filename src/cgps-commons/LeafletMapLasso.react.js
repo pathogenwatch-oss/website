@@ -1,7 +1,7 @@
 import React from 'react';
 import classnames from 'classnames';
 import Leaflet from 'leaflet';
-import 'leaflet-lassoselect';
+import './lassoselect';
 
 const filterTooltip = 'Activate map region filter';
 const activeFilterTooltip = 'Disable map region filter';
@@ -49,6 +49,8 @@ export default React.createClass({
       initialPath: this.props.initialPath,
     }).addTo(this.context.map);
 
+    this.context.map.lasso = this.lasso;
+
     this.lasso.on('pathchange', () => {
       const { onPathChange } = this.props;
       if (onPathChange) onPathChange(this.lasso.getPath());
@@ -79,7 +81,8 @@ export default React.createClass({
     }
   },
 
-  onLassoToggleButtonClick() {
+  onLassoToggleButtonClick(e) {
+    e.stopPropagation();
     // toggle the filter state
     this.setState({ isActive: !this.state.isActive });
   },

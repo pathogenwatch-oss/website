@@ -23,15 +23,16 @@ import {
 } from '../filter/actions';
 
 import { filterKeys } from '../filter/constants';
+import { getFilterState } from '../selectors';
 
 function mapStateToProps(state) {
-  const props = {
+  return {
     markerIds: getMarkerIds(state, { stateKey }),
     markerSize: getMarkerSize(state, { stateKey }),
     lassoPath: getLassoPath(state, { stateKey }),
     markers: getMarkers(state, { stateKey }),
+    hasHighlight: getFilterState(state)[filterKeys.HIGHLIGHT].active,
   };
-  return props;
 }
 
 function mapDispatchToProps(dispatch) {
@@ -60,11 +61,14 @@ function mergeProps(mappedState, { dispatch, ...mappedDispatch }, ownProps) {
     ...mappedState,
     ...mappedDispatch,
     onClick: ({ originalEvent }) => {
-      if (isMarker(originalEvent.target)) return;
-      if (mappedState.lassoPath) {
+      if (isMarker(originalEvent.target)) {
+        return;
+      }
+      if (mappedState.hasHighlight) {
+        dispatch(resetFilter(filterKeys.HIGHLIGHT));
+      } else if (mappedState.lassoPath) {
         dispatch(filterByLassoPath(stateKey, undefined));
       }
-      dispatch(resetFilter(filterKeys.HIGHLIGHT));
     },
   };
 }
