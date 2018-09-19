@@ -34,7 +34,7 @@ export const getFilterState = state => getViewer(state).filter;
 export const getNonSearchFilterIntersections = createSelector(
   state => getViewer(state).filter,
   getNetworkFilteredIds,
-  (filterState, searchTerms, searchIds, networkIds = []) => {
+  (filterState, networkIds = []) => {
     const intersections = [];
 
     if (filterState[filterKeys.VISIBILITY].active) {
