@@ -2,9 +2,7 @@ import {
   CLUSTER_TOGGLE_LASSO_ACTIVE,
   CLUSTER_SET_LASSO_PATH,
 } from './actions';
-import { RESET_FILTER } from '../collection-viewer/filter/actions';
-
-import { filterKeys } from '../collection-viewer/filter/constants';
+import { CLEAR_FILTERS } from '../collection-viewer/filter/actions';
 
 const initialState = {
   lassoActive: false,
@@ -27,16 +25,12 @@ export default function (state = initialState, { type, payload }) {
         lassoActive: payload !== null,
       };
 
-    case RESET_FILTER: {
-      if (payload.key === filterKeys.VISIBILITY) {
-        return {
-          ...state,
-          lassoPath: initialState.lassoPath,
-          lassoActive: initialState.lassoActive,
-        };
-      }
-      return state;
-    }
+    case CLEAR_FILTERS:
+      return {
+        ...state,
+        lassoPath: initialState.lassoPath,
+        lassoActive: initialState.lassoActive,
+      };
 
     default:
       return state;

@@ -111,6 +111,7 @@ export default function (state = initialState, { type, payload }) {
       if (payload.isClusterView) {
         return {
           ...state,
+          status: state.status === 'COMPLETED_LAYOUT' ? 'FETCHED_CLUSTERS' : state.status,
           selectedGenomeId: payload.genomeId,
           threshold: payload.threshold,
         };

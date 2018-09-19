@@ -59,6 +59,7 @@ export const getThresholdMarks = createSelector(
   getNumberOfGenomesAtThreshold,
   (thresholds, nodeTotals, genomeTotals) => {
     const marks = {};
+    if (!nodeTotals) return marks;
     let lastMark = null;
     for (let i = 0; i < nodeTotals.length; i++) {
       if (nodeTotals[i] > MAX_CLUSTER_SIZE) break;

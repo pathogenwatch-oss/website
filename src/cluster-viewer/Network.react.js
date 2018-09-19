@@ -7,10 +7,10 @@ import Network from '../clustering/Network.react';
 import ThresholdSlider from './ThresholdSlider.react';
 
 import { getLassoPath, isLassoActive, getLocationThreshold } from './selectors';
-import { getHighlightedIds, getFilter } from '../collection-viewer/selectors';
+import { getHighlightedIds, getFilter, getCollection } from '../collection-viewer/selectors';
 import { getGraph, getNodeData } from '../clustering/selectors';
 
-import { setLassoPath, toggleLassoActive } from './actions';
+import { setLassoPath, toggleLassoActive, fetchCluster } from './actions';
 import { resetFilter, appendToFilter, activateFilter } from '../collection-viewer/filter/actions';
 
 import { filterKeys } from '../collection-viewer/filter/constants';
@@ -60,25 +60,40 @@ const onNodeSelect = (sts, append) =>
     }
   };
 
-const ClusterViewNetwork = (props) => (
-  <Clustering>
-    <Network
-      coverMessage={false}
-      graph={props.graph}
-      hasLasso
-      height={props.height}
-      lassoActive={props.lassoActive}
-      lassoPath={props.lassoPath}
-      onLassoActiveChange={props.onLassoActiveChange}
-      onLassoPathChange={props.onLassoPathChange}
-      onNodeSelect={(sts, append) =>
-        props.onNodeSelect(props.lassoActive && !props.lassoPath, sts, append)}
-      width={props.width}
-    />
-    <h2 className="pw-cluster-view-current-threshold wgsa-pane-overlay">Threshold of {props.threshold}</h2>
-    <ThresholdSlider />
-  </Clustering>
-);
+const ClusterViewNetwork = React.createClass({
+
+  componentDidUpdate(previous) {
+    if (previous.threshold !== this.props.threshold) {
+      this.props.fetch(this.props.genomeId, this.props.threshold);
+    }
+  },
+
+  render() {
+    const { props } = this;
+    return (
+      <React.Fragment>
+        <Clustering>
+          <Network
+            coverMessage={false}
+            graph={props.graph}
+            hasLasso
+            height={props.height}
+            lassoActive={props.lassoActive}
+            lassoPath={props.lassoPath}
+            onLassoActiveChange={props.onLassoActiveChange}
+            onLassoPathChange={props.onLassoPathChange}
+            onNodeSelect={(sts, append) =>
+              props.onNodeSelect(props.lassoActive && !props.lassoPath, sts, append)}
+            width={props.width}
+          />
+        </Clustering>
+        <h2 className="pw-cluster-view-current-threshold wgsa-pane-overlay">Threshold of {props.threshold}</h2>
+        <ThresholdSlider />
+      </React.Fragment>
+    );
+  },
+
+});
 
 function mapStateToProps(state) {
   return {
@@ -86,11 +101,13 @@ function mapStateToProps(state) {
     lassoPath: getLassoPath(state),
     graph: getViewerGraph(state),
     threshold: getLocationThreshold(state),
+    genomeId: getCollection(state).genomeId,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
+    fetch: (genomeId, threshold) => dispatch(fetchCluster(genomeId, threshold)),
     onLassoActiveChange: () => dispatch(toggleLassoActive()),
     onLassoPathChange: path => dispatch(setLassoPath(path)),
     onNodeSelect: (lassoActive, sts, append) => {
