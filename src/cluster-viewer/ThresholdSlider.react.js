@@ -11,7 +11,7 @@ import { updateQueryString } from '../location';
 
 const SliderWithTooltip = createSliderWithTooltip(Slider);
 
-const ThresholdSlider = ({ marks, currentThreshold, genomeTotals }) => (
+const ThresholdSlider = ({ marks, currentThreshold, genomeTotals = [] }) => (
   <AutoSizer>
     {({ width }) => (
       <div className="pw-cluster-threshold-slider wgsa-pane-overlay" style={{ width }}>
