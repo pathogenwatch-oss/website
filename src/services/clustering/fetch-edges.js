@@ -11,6 +11,7 @@ async function getClusteringData({ userId, scheme, version, sts, threshold }) {
     threshold: { $gte: threshold },
     'STs.1': { $exists: 1 },
   };
+
   const projection = { STs: 1, public: 1, relatedBy: 1 };
 
   const [ clusteringDoc ] = await Clustering
@@ -107,7 +108,7 @@ module.exports = async function ({ user, genomeId, scheme, version, sts, thresho
   // If the STs are [A, B, C, D] the edges should be  ordered [AB, AC, BC, AD, BD, CD].
 
   // We create a function to lookup the distance between any pair of STs
-  const lookup = await getClusteringData({ userId: user._id, scheme, version, sts, threshold });
+  const lookup = await getClusteringData({ userId: user ? user._id : undefined, scheme, version, sts, threshold });
 
   const edges = [];
   for (let a = 1; a < sts.length; a++) {
