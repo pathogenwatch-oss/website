@@ -107,18 +107,6 @@ export default function (state = initialState, { type, payload }) {
       return state;
     }
 
-    case FETCH_COLLECTION.ATTEMPT: {
-      if (payload.isClusterView) {
-        return {
-          ...state,
-          status: state.status === 'COMPLETED_LAYOUT' ? 'FETCHED_CLUSTERS' : state.status,
-          selectedGenomeId: payload.genomeId,
-          threshold: payload.threshold,
-        };
-      }
-      return state;
-    }
-
     case FETCH_CLUSTERS.ATTEMPT:
       return {
         ...state,
@@ -202,14 +190,19 @@ export default function (state = initialState, { type, payload }) {
       };
     }
 
-    case SET_CLUSTER_THRESHOLD:
-      return payload === state.threshold ? state : {
+    case FETCH_COLLECTION.ATTEMPT:
+    case SET_CLUSTER_THRESHOLD: {
+      const threshold = typeof(payload) === 'number' ? payload : payload.threshold;
+      const genomeId = typeof(payload) === 'number' ? state.selectedGenomeId : payload.genomeId;
+      return threshold === state.threshold ? state : {
         ...state,
-        threshold: payload,
+        threshold,
         status: state.nodes ? 'FETCHED_CLUSTERS' : 'INITIAL_STATUS',
         edgeMatrix: null,
         nodeCoordinates: null,
+        selectedGenomeId: genomeId,
       };
+    }
 
     case SKIP_LAYOUT:
       return {
