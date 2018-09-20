@@ -1,4 +1,3 @@
-const { request } = require('services/bus');
 const Clustering = require('../../models/clustering');
 
 module.exports = async function ({ metadata, results, version }) {
@@ -14,11 +13,10 @@ module.exports = async function ({ metadata, results, version }) {
     update.public = true;
   }
 
-  if ((results.lambda || []).length > 0) {
-    console.log('FIXME: Updating the cluster');
+  if ((results.STs || []).length > 0) {
+    query['STs.1'] = { $exists: true };
     await Clustering.update(query, update, { upsert: true });
   } else {
-    console.log('FIXME: Adding some edges');
     await Clustering.create(update);
   }
 };

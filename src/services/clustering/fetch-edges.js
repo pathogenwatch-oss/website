@@ -1,10 +1,17 @@
 const Clustering = require('../../models/clustering');
 const Genome = require('../../models/genome');
 const { NotFoundError } = require('../../utils/errors');
+const { Writable } = require('stream');
 
 async function getClusteringData({ userId, scheme, version, sts, threshold }) {
-  const query = { scheme, version, $or: [ { user: userId }, { public: true } ], threshold: { $gte: threshold } };
-  const projection = { STs: 1, edges: 1, public: 1 };
+  const query = {
+    scheme,
+    version,
+    $or: [ { user: userId }, { public: true } ],
+    threshold: { $gte: threshold },
+    'STs.1': { $exists: 1 },
+  };
+  const projection = { STs: 1, public: 1, relatedBy: 1 };
 
   const [ clusteringDoc ] = await Clustering
     .find(
@@ -31,11 +38,49 @@ async function getClusteringData({ userId, scheme, version, sts, threshold }) {
   }
 
   const hasEdge = {};
-  for (const dist of Object.keys(clusteringDoc.edges)) {
-    for (const [ a, b ] of clusteringDoc.edges[dist]) {
-      const [ min_, max_ ] = a < b ? [ a, b ] : [ b, a ];
-      hasEdge[min_] = hasEdge[min_] || {};
-      hasEdge[min_][max_] = true;
+  const seen = new Set();
+
+  let onGotEdges;
+  let onFailedEdges;
+  const whenGotEdges = new Promise((resolve, reject) => {
+    onGotEdges = resolve;
+    onFailedEdges = reject;
+  });
+  const consumer = new Writable({
+    objectMode: true,
+    write(doc, _, callback) {
+      if (!doc) return callback();
+      for (const dist of Object.keys(doc.edges)) {
+        if (dist > threshold) continue;
+        if (seen.has(dist)) {
+          return callback(new Error(`Already seen distances of ${dist}`));
+        }
+        for (const [ a, b ] of doc.edges[dist]) {
+          const [ min_, max_ ] = a < b ? [ a, b ] : [ b, a ];
+          hasEdge[min_] = hasEdge[min_] || {};
+          hasEdge[min_][max_] = true;
+        }
+        seen.add(dist);
+      }
+      return callback();
+    },
+    final(callback) {
+      onGotEdges();
+      return callback();
+    },
+  });
+
+  Clustering
+    .find({ relatedBy: clusteringDoc.relatedBy }, { edges: 1 })
+    .lean()
+    .cursor()
+    .pipe(consumer)
+    .on('error', err => onFailedEdges(err));
+
+  await whenGotEdges;
+  for (let t = 0; t <= threshold; t++) {
+    if (!seen.has(t.toString())) {
+      throw new Error(`Edges are missing for threshold of ${t}`);
     }
   }
 
@@ -46,7 +91,7 @@ async function getClusteringData({ userId, scheme, version, sts, threshold }) {
     if (a === undefined) throw new NotFoundError(`No cluster for st ${stA}`);
     if (b === undefined) throw new NotFoundError(`No cluster for st ${stB}`);
     const [ min_, max_ ] = a < b ? [ a, b ] : [ b, a ];
-    return !!hasEdge[min_][max_];
+    return !!(hasEdge[min_] || {})[max_];
   };
 }
 
@@ -55,7 +100,7 @@ module.exports = async function ({ user, genomeId, scheme, version, sts, thresho
   // We need to check that the user is allowed to get the edges for these STs
   const hasAccess = await Genome.checkAuthorisedForSts(user, sts);
   // We return a 404 so that we don't leak whether an ST exists for another user
-  if (!hasAccess) throw new NotFoundError('Problem getting edges');
+  if (!hasAccess) throw new NotFoundError('Problem getting edges, maybe they binned a genome');
 
   // We have the distances between pairs of CGMLST STs and want to return an array showing
   // which pairs are withing `threshold` of each other.

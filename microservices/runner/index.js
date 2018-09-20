@@ -52,15 +52,14 @@ function subscribeToQueue(queueName, queueType = queueName) {
   if (queueType === queues.clustering) {
     taskQueue.dequeue(
       queueName,
-      ({ spec, metadata, timeout }) =>
-        request('tasks', 'run-clustering', { spec, metadata, timeout$: timeout * 1000 })
-          .then(async ({ relatedBy }) => {
-            const { taskId } = metadata;
-            const { version } = spec;
-            LOGGER.info('Got result', spec.task, spec.version, metadata);
-            await request('clustering', 'delete-prior', { relatedBy, metadata, version });
-            return request('clustering', 'send-progress', { taskId, payload: { status: 'READY' } });
-          }),
+      async ({ spec, metadata, timeout }) => {
+        const { relatedBy } = await request('tasks', 'run-clustering', { spec, metadata, timeout$: timeout * 1000 });
+        const { taskId } = metadata;
+        const { version } = spec;
+        LOGGER.info('Got result', spec.task, spec.version, metadata);
+        await request('clustering', 'delete-prior', { relatedBy, metadata, version });
+        return await request('clustering', 'send-progress', { taskId, payload: { status: 'READY' } });
+      },
       message => request('clustering', 'error', message)
     );
   }

@@ -58,21 +58,21 @@ async function attachInputStream(container, spec, metadata, allSts) {
   const cluster = await Clustering
     .find(
       { scheme, version, $or: [ { user: userId }, { public: true } ] },
-      { _id: 1 }
+      { _id: 1, relatedBy: 1 }
     )
     .sort({ public: 1 })
     .limit(1);
 
-  let clusterId;
+  let relatedBy;
   if (cluster.length > 0) {
-    clusterId = cluster[0]._id;
+    relatedBy = cluster[0].relatedBy;
   } else {
-    clusterId = new ObjectId();
+    relatedBy = new ObjectId();
   }
 
   const clusteringStream = Clustering
     .find(
-      { $or: [ { _id: clusterId }, { parent: clusterId } ] },
+      { relatedBy },
       { pi: 1, lambda: 1, STs: 1, threshold: 1, edges: 1 },
       { raw: true }
     )
@@ -99,7 +99,7 @@ async function attachInputStream(container, spec, metadata, allSts) {
   requestStream.end(bson.serialize(clusteringRequest), () => clusteringStream.resume());
 }
 
-function handleContainerOutput(container, spec, metadata) {
+async function handleContainerOutput(container, spec, metadata) {
   const { task, version } = spec;
   const { taskId } = metadata;
   let resolve;
@@ -109,11 +109,11 @@ function handleContainerOutput(container, spec, metadata) {
     reject = _reject;
   });
   const relatedBy = new ObjectId();
-  request('clustering', 'send-progress', { taskId, payload: { task, status: 'IN PROGRESS' } });
+  await request('clustering', 'send-progress', { taskId, payload: { task, status: 'IN PROGRESS' } });
   let lastProgress = 0;
   const consumer = new Writable({
     objectMode: true,
-    write(data, _, callback) {
+    async write(data, _, callback) {
       if (!data) return callback();
       if (data.indexOf('progress') === -1 && data.indexOf('lambda') === -1) return callback();
       try {
@@ -121,19 +121,20 @@ function handleContainerOutput(container, spec, metadata) {
         if (doc.progress) {
           const progress = doc.progress * 0.99;
           if ((progress - lastProgress) >= 0.1) {
-            return request('clustering', 'send-progress', { taskId, payload: { task, status: 'IN PROGRESS', progress } })
-              .then(() => (lastProgress = progress))
-              .then(() => callback());
+            await request('clustering', 'send-progress', { taskId, payload: { task, status: 'IN PROGRESS', message: doc.message, progress } });
+            lastProgress = progress;
+            return callback();
           }
         } else if (doc.STs) {
           doc.relatedBy = relatedBy;
-          return request('clustering', 'upsert', { results: doc, metadata, version })
-            .then(() => callback());
+          await request('clustering', 'save-results', { results: doc, metadata, version });
+          return callback();
         }
       } catch (e) {
         LOGGER.error(e);
-        return request('clustering', 'send-progress', { taskId, payload: { task, status: 'ERROR' } })
-          .then(() => reject(e));
+        await request('clustering', 'send-progress', { taskId, payload: { task, status: 'ERROR' } });
+        reject(e);
+        return callback(e);
       }
       return callback();
     },

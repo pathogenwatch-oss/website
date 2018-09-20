@@ -3,7 +3,7 @@ const Genome = require('../../models/genome');
 const { NotFoundError } = require('../../utils/errors');
 
 async function getClusteringData({ scheme, user }) {
-  const query = { scheme };
+  const query = { scheme, 'STs.1': { $exists: true } };
   if (user) {
     query.user = user._id;
   } else {
@@ -14,6 +14,7 @@ async function getClusteringData({ scheme, user }) {
     lambda: 1,
     STs: 1,
     version: 1,
+    threshold: 1,
   };
   return await Clustering.findOne(query, projection);
 }
@@ -38,6 +39,11 @@ async function mapStsToGenomeNames({ genomeId, sts, user }) {
       nodes[st] = { label: name, ids: [] };
     }
     nodes[st].ids.push(_id);
+  }
+
+  const foundSts = new Set(Object.keys(nodes));
+  for (const st of sts) {
+    if (!foundSts.has(st)) throw new NotFoundError(`User nolonger has a genome with st ${st}`);
   }
 
   const genome = genomes.find(_ => _._id.toString() === genomeId);
