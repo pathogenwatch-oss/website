@@ -7,7 +7,7 @@ import Network from '../clustering/Network.react';
 import ThresholdSlider from './ThresholdSlider.react';
 
 import { getLassoPath, isLassoActive, getLocationThreshold } from './selectors';
-import { getHighlightedIds, getFilter, getCollection } from '../collection-viewer/selectors';
+import { getHighlightedIds, getFilter, getCollection, getFilterState } from '../collection-viewer/selectors';
 import { getGraph, getNodeData } from '../clustering/selectors';
 
 import { setLassoPath, toggleLassoActive, fetchCluster } from './actions';
@@ -82,9 +82,8 @@ const ClusterViewNetwork = React.createClass({
             lassoActive={props.lassoActive}
             lassoPath={props.lassoPath}
             onLassoActiveChange={props.onLassoActiveChange}
-            onLassoPathChange={props.onLassoPathChange}
-            onNodeSelect={(sts, append) =>
-              props.onNodeSelect(props.lassoActive && !props.lassoPath, sts, append)}
+            onLassoPathChange={path => props.onLassoPathChange(path, props.hasHighlight)}
+            onNodeSelect={(sts, append) => props.onNodeSelect(props.lassoActive, sts, append)}
             width={props.width}
           />
         </Clustering>
@@ -105,6 +104,7 @@ function mapStateToProps(state) {
     threshold: getLocationThreshold(state),
     genomeId: collection.genomeId,
     collectionStatus: collection.status,
+    hasHighlight: getFilterState(state)[filterKeys.HIGHLIGHT].active,
   };
 }
 
@@ -112,7 +112,13 @@ function mapDispatchToProps(dispatch) {
   return {
     fetch: (genomeId, threshold) => dispatch(fetchCluster(genomeId, threshold)),
     onLassoActiveChange: () => dispatch(toggleLassoActive()),
-    onLassoPathChange: path => dispatch(setLassoPath(path)),
+    onLassoPathChange: (path, hasHighlight) => {
+      if (path === null && hasHighlight) {
+        dispatch(resetFilter(filterKeys.HIGHLIGHT));
+        return;
+      }
+      dispatch(setLassoPath(path));
+    },
     onNodeSelect: (lassoActive, sts, append) => {
       if (lassoActive) return;
       dispatch(onNodeSelect(sts, append));
