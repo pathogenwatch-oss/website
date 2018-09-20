@@ -192,7 +192,7 @@ export default function (state = initialState, { type, payload }) {
 
     case FETCH_COLLECTION.ATTEMPT:
     case SET_CLUSTER_THRESHOLD: {
-      const threshold = typeof(payload) === 'number' ? payload : payload.threshold;
+      const threshold = typeof(payload) === 'number' ? payload : Number(payload.threshold);
       const genomeId = typeof(payload) === 'number' ? state.selectedGenomeId : payload.genomeId;
       return threshold === state.threshold ? state : {
         ...state,

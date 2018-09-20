@@ -70,6 +70,7 @@ const ClusterViewNetwork = React.createClass({
 
   render() {
     const { props } = this;
+    if (props.collectionStatus !== 'READY') return null;
     return (
       <React.Fragment>
         <Clustering>
@@ -96,12 +97,14 @@ const ClusterViewNetwork = React.createClass({
 });
 
 function mapStateToProps(state) {
+  const collection = getCollection(state);
   return {
     lassoActive: isLassoActive(state),
     lassoPath: getLassoPath(state),
     graph: getViewerGraph(state),
     threshold: getLocationThreshold(state),
-    genomeId: getCollection(state).genomeId,
+    genomeId: collection.genomeId,
+    collectionStatus: collection.status,
   };
 }
 
