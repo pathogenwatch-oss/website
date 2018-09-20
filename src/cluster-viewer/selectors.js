@@ -65,13 +65,13 @@ export const getThresholdMarks = createSelector(
     let maxThreshold = 0;
     for (let i = 0; i < nodeTotals.length; i++) {
       if (nodeTotals[i] > MAX_CLUSTER_SIZE) {
-        maxThreshold = thresholds[i];
         break;
       }
       if (lastMark !== genomeTotals[i]) {
         lastMark = genomeTotals[i];
         marks[thresholds[i]] = '';
       }
+      maxThreshold = thresholds[i];
     }
     return {
       max: maxThreshold || thresholds[genomeTotals.indexOf(lastMark)],
