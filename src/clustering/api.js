@@ -15,5 +15,5 @@ export function fetchClusters(id) {
 }
 
 export function fetchClusterEdges(id, scheme, version, threshold, sts) {
-  return fetchJson('POST', `/api/genome/${id}/clusters/edges`, { scheme, version, threshold, sts });
+  return fetchJson('POST', `/api/genome/${id}/clusters/edges`, { scheme, version, threshold: Number(threshold), sts });
 }
