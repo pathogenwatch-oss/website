@@ -15,6 +15,14 @@ const ATTRIBUTION = `
   Imagery © <a href='http://mapbox.com'>Mapbox</a>
 `;
 
+function arrayEqual(a, b) {
+  if (a.length !== b.length) return false;
+  for (let i = 0; i < a.length; i++) {
+    if (a[i] !== b[i]) return false;
+  }
+  return true;
+}
+
 export default React.createClass({
 
   displayName: 'LeafletMap',
@@ -56,7 +64,7 @@ export default React.createClass({
 
   componentDidUpdate(previous) {
     if (this.props.refitOnMarkerChange) {
-      if (previous.markerIds !== this.props.markerIds) {
+      if (!arrayEqual(previous.markerIds, this.props.markerIds)) {
         this.refitMapBounds();
       }
     } else if (previous.markers.length === 0 && this.props.markers) {
