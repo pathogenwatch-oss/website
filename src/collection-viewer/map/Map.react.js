@@ -15,15 +15,8 @@ import { buttonClassname, activeButtonClassname } from '../../map/Map.react';
 
 import { COLLECTION as stateKey } from '../../app/stateKeys/map';
 
-import {
-  activateFilter,
-  appendToFilter,
-  removeFromFilter,
-  resetFilter,
-} from '../filter/actions';
-
-import { filterKeys } from '../filter/constants';
-import { getFilterState } from '../selectors';
+import { hasHighlightedIds } from '../selectors';
+import { removeFromHighlight, setHighlight, clearHighlight } from '../highlight/actions';
 
 function mapStateToProps(state) {
   return {
@@ -31,7 +24,7 @@ function mapStateToProps(state) {
     markerSize: getMarkerSize(state, { stateKey }),
     lassoPath: getLassoPath(state, { stateKey }),
     markers: getMarkers(state, { stateKey }),
-    hasHighlight: getFilterState(state)[filterKeys.HIGHLIGHT].active,
+    hasHighlight: hasHighlightedIds(state),
   };
 }
 
@@ -42,10 +35,9 @@ function mapDispatchToProps(dispatch) {
     onMarkerClick: ({ id, highlighted }, event) => {
       event.stopPropagation();
       if (event.metaKey || event.ctrlKey) {
-        const action = highlighted ? removeFromFilter : appendToFilter;
-        dispatch(action(id, filterKeys.HIGHLIGHT));
+        dispatch(highlighted ? removeFromHighlight(id) : setHighlight(id, true));
       } else {
-        dispatch(activateFilter(id, filterKeys.HIGHLIGHT));
+        dispatch(setHighlight(id));
       }
     },
     onMarkerSizeChange:
@@ -65,7 +57,7 @@ function mergeProps(mappedState, { dispatch, ...mappedDispatch }, ownProps) {
         return;
       }
       if (mappedState.hasHighlight) {
-        dispatch(resetFilter(filterKeys.HIGHLIGHT));
+        dispatch(clearHighlight());
       } else if (mappedState.lassoPath) {
         dispatch(filterByLassoPath(stateKey, undefined));
       }

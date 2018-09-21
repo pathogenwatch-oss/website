@@ -1,4 +1,4 @@
-import { getCollection } from '../../collection-viewer/selectors';
+import { getCollection, getHighlightedIds } from '../../collection-viewer/selectors';
 import { getTrees, getVisibleTree, getLeafIds } from './selectors';
 import { getFilterState } from '../selectors';
 
@@ -9,6 +9,7 @@ import {
   appendToFilter,
   resetFilter,
 } from '../filter/actions';
+import { setHighlight, clearHighlight } from '../highlight/actions';
 import { updateProgress } from '../actions';
 
 import { getTree } from './api';
@@ -93,19 +94,18 @@ export function treeClicked(event, phylocanvas) {
 
       if (nodeIds.length === 1) {
         const [ id ] = nodeIds;
-        const action = event.append ? appendToFilter : activateFilter;
-        dispatch(action([ id ], filterKeys.HIGHLIGHT));
+        dispatch(setHighlight([ id ], event.append));
       } else if (nodeIds.length === 0) {
-        const filterState = getFilterState(state);
-        if (filterState[filterKeys.HIGHLIGHT].active) {
-          dispatch(resetFilter(filterKeys.HIGHLIGHT));
+        const highlightedIds = getHighlightedIds(state);
+        if (highlightedIds.size > 1) {
+          dispatch(clearHighlight());
         } else {
           dispatch(resetFilter(filterKeys.TREE));
         }
       } else {
         dispatch(
           event.append ?
-            appendToFilter(nodeIds, filterKeys.HIGHLIGHT) :
+            setHighlight(nodeIds, true) :
             activateFilter(nodeIds, filterKeys.TREE)
         );
       }

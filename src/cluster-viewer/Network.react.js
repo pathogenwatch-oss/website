@@ -7,13 +7,11 @@ import Network from '../clustering/Network.react';
 import ThresholdSlider from './ThresholdSlider.react';
 
 import { getLassoPath, isLassoActive, getLocationThreshold } from './selectors';
-import { getHighlightedIds, getFilter, getCollection, getFilterState } from '../collection-viewer/selectors';
+import { getHighlightedIds, getFilter, getCollection, hasHighlightedIds } from '../collection-viewer/selectors';
 import { getGraph, getNodeData } from '../clustering/selectors';
 
 import { setLassoPath, toggleLassoActive, fetchCluster } from './actions';
-import { resetFilter, appendToFilter, activateFilter } from '../collection-viewer/filter/actions';
-
-import { filterKeys } from '../collection-viewer/filter/constants';
+import { setHighlight, clearHighlight } from '../collection-viewer/highlight/actions';
 
 const getViewerGraph = createSelector(
   getGraph,
@@ -42,8 +40,10 @@ const getViewerGraph = createSelector(
   }
 );
 
-const onNodeSelect = (sts, append) =>
+const onNodeSelect = (props, sts, append) =>
   (dispatch, getState) => {
+    if (props.lassoActive && !props.lassoPath) return;
+
     let ids;
     if (sts && sts.length) {
       ids = [];
@@ -54,9 +54,9 @@ const onNodeSelect = (sts, append) =>
       }
     }
     if (ids) {
-      dispatch((append ? appendToFilter : activateFilter)(ids, filterKeys.HIGHLIGHT));
-    } else {
-      dispatch(resetFilter(filterKeys.HIGHLIGHT));
+      dispatch(setHighlight(ids, append));
+    } else if (!props.lassoPath) {
+      dispatch(clearHighlight());
     }
   };
 
@@ -83,7 +83,7 @@ const ClusterViewNetwork = React.createClass({
             lassoPath={props.lassoPath}
             onLassoActiveChange={props.onLassoActiveChange}
             onLassoPathChange={path => props.onLassoPathChange(path, props.hasHighlight)}
-            onNodeSelect={(sts, append) => props.onNodeSelect(props.lassoActive, sts, append)}
+            onNodeSelect={(sts, append) => props.onNodeSelect(props, sts, append)}
             width={props.width}
           />
         </Clustering>
@@ -104,7 +104,7 @@ function mapStateToProps(state) {
     threshold: getLocationThreshold(state),
     genomeId: collection.genomeId,
     collectionStatus: collection.status,
-    hasHighlight: getFilterState(state)[filterKeys.HIGHLIGHT].active,
+    hasHighlight: hasHighlightedIds(state),
   };
 }
 
@@ -114,14 +114,13 @@ function mapDispatchToProps(dispatch) {
     onLassoActiveChange: () => dispatch(toggleLassoActive()),
     onLassoPathChange: (path, hasHighlight) => {
       if (path === null && hasHighlight) {
-        dispatch(resetFilter(filterKeys.HIGHLIGHT));
+        dispatch(clearHighlight());
         return;
       }
       dispatch(setLassoPath(path));
     },
-    onNodeSelect: (lassoActive, sts, append) => {
-      if (lassoActive) return;
-      dispatch(onNodeSelect(sts, append));
+    onNodeSelect: (props, sts, append) => {
+      dispatch(onNodeSelect(props, sts, append));
     },
   };
 }

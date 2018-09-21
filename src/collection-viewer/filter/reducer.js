@@ -19,10 +19,6 @@ const initialState = {
     ids: emptySet,
     active: false,
   },
-  [filterKeys.HIGHLIGHT]: {
-    ids: emptySet,
-    active: false,
-  },
   [filterKeys.TREE]: {
     ids: emptySet,
     active: false,

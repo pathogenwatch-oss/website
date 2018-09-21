@@ -32,7 +32,7 @@ const getSearchIds = createSelector(
 export const getFilterState = state => getViewer(state).filter;
 
 export const getNonSearchFilterIntersections = createSelector(
-  state => getViewer(state).filter,
+  getFilterState,
   getNetworkFilteredIds,
   (filterState, networkIds = []) => {
     const intersections = [];
@@ -99,9 +99,16 @@ export const getGenomeList = createSelector(
   (genomes, ids) => Array.from(ids).map(id => genomes[id])
 );
 
+const getHighlightState = state => getViewer(state).highlight;
+
 export const getHighlightedIds = createSelector(
-  getFilterState,
-  filter => filter[filterKeys.HIGHLIGHT].ids
+  getHighlightState,
+  highlight => highlight.ids
+);
+
+export const hasHighlightedIds = createSelector(
+  getHighlightedIds,
+  ids => ids.size > 0
 );
 
 export const getActiveGenomeIds = createSelector(
