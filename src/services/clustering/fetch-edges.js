@@ -43,9 +43,16 @@ async function getEdges({ userId, scheme, version, sts, threshold }) {
     throw new NotFoundError('No cluster edges some of the query sts');
   }
 
+  const offsets = Array(nSts);
+  for (let i = 1; i < nSts; i++) {
+    offsets[i] = (i * (i - 1) / 2);
+  }
+
   function edgeIndex(a, b) {
-    const [ min_, max_ ] = a < b ? [ a, b ] : [ b, a ];
-    return (max_ * (max_ - 1) / 2) + min_;
+    if (a > b) {
+      return offsets[a] + b;
+    }
+    return offsets[b] + a;
   }
 
   const edges = new Array(nSts * (nSts - 1) / 2).fill(false);
