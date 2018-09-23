@@ -3,7 +3,7 @@ const Genome = require('../../models/genome');
 const { NotFoundError } = require('../../utils/errors');
 const { Writable } = require('stream');
 
-async function getClusteringData({ userId, scheme, version, sts, threshold }) {
+async function getEdges({ userId, scheme, version, sts, threshold }) {
   const query = {
     scheme,
     version,
@@ -26,19 +26,29 @@ async function getClusteringData({ userId, scheme, version, sts, threshold }) {
   if (!clusteringDoc) {
     throw new NotFoundError(`No cluster edges at threshold ${threshold}`);
   }
-  const clusterSts = new Set(clusteringDoc.STs);
-  for (const st of sts) {
-    if (!clusterSts.has(st)) {
-      throw new NotFoundError(`No cluster edges found for st ${st} at threshold ${threshold}`);
-    }
+  const clusterToQueryMap = {};
+  let checkCount = 0;
+  let checkSum = 0;
+  for (let clusterIdx = 0; clusterIdx < clusteringDoc.STs.length; clusterIdx++) {
+    const st = clusteringDoc.STs[clusterIdx];
+    const queryIdx = sts.indexOf(st);
+    if (queryIdx === -1) continue;
+    clusterToQueryMap[clusterIdx] = queryIdx;
+    checkCount++;
+    checkSum += queryIdx;
   }
 
-  const stLookup = {};
-  for (let i = 0; i < clusteringDoc.STs.length; i++) {
-    stLookup[clusteringDoc.STs[i]] = i;
+  const nSts = sts.length;
+  if (checkCount !== nSts || checkSum !== (nSts * (nSts - 1) / 2)) {
+    throw new NotFoundError('No cluster edges some of the query sts');
   }
 
-  const hasEdge = {};
+  function edgeIndex(a, b) {
+    const [ min_, max_ ] = a < b ? [ a, b ] : [ b, a ];
+    return (max_ * (max_ - 1) / 2) + min_;
+  }
+
+  const edges = new Array(nSts * (nSts - 1) / 2).fill(false);
   const seen = new Set();
 
   let onGotEdges;
@@ -56,10 +66,12 @@ async function getClusteringData({ userId, scheme, version, sts, threshold }) {
         if (seen.has(dist)) {
           return callback(new Error(`Already seen distances of ${dist}`));
         }
-        for (const [ a, b ] of doc.edges[dist]) {
-          const [ min_, max_ ] = a < b ? [ a, b ] : [ b, a ];
-          hasEdge[min_] = hasEdge[min_] || {};
-          hasEdge[min_][max_] = true;
+        for (const [ clustA, clustB ] of doc.edges[dist]) {
+          const queryA = clusterToQueryMap[clustA];
+          if (queryA === undefined) continue;
+          const queryB = clusterToQueryMap[clustB];
+          if (queryB === undefined) continue;
+          edges[edgeIndex(queryA, queryB)] = true;
         }
         seen.add(dist);
       }
@@ -85,15 +97,7 @@ async function getClusteringData({ userId, scheme, version, sts, threshold }) {
     }
   }
 
-  return (stA, stB) => {
-    if (stA === stB) return 0;
-    const a = stLookup[stA];
-    const b = stLookup[stB];
-    if (a === undefined) throw new NotFoundError(`No cluster for st ${stA}`);
-    if (b === undefined) throw new NotFoundError(`No cluster for st ${stB}`);
-    const [ min_, max_ ] = a < b ? [ a, b ] : [ b, a ];
-    return !!(hasEdge[min_] || {})[max_];
-  };
+  return edges;
 }
 
 
@@ -108,17 +112,7 @@ module.exports = async function ({ user, genomeId, scheme, version, sts, thresho
   // If the STs are [A, B, C, D] the edges should be  ordered [AB, AC, BC, AD, BD, CD].
 
   // We create a function to lookup the distance between any pair of STs
-  const lookup = await getClusteringData({ userId: user ? user._id : undefined, scheme, version, sts, threshold });
-
-  const edges = [];
-  for (let a = 1; a < sts.length; a++) {
-    const stA = sts[a];
-    for (let b = 0; b < a; b++) {
-      const stB = sts[b];
-      // We're just going to return 1 if there's an edge between two STs or 0 if there isn't
-      edges.push(lookup(stA, stB));
-    }
-  }
+  const edges = await getEdges({ userId: user ? user._id : undefined, scheme, version, sts, threshold });
 
   if (edges.length <= 0) {
     throw new NotFoundError(`No cluster edges found for ${genomeId} at threshold ${threshold}`);
