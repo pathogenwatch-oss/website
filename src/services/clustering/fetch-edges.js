@@ -90,8 +90,14 @@ async function getEdges({ userId, scheme, version, sts, threshold }) {
     },
   });
 
+  const thresholdsQuery = [];
+  const thresholdProjection = {};
+  for (let t = 0; t <= threshold; t++) {
+    thresholdsQuery.push({ [`edges.${t}`]: { $exists: true } });
+    thresholdProjection[`edges.${t}`] = 1;
+  }
   Clustering
-    .find({ relatedBy: clusteringDoc.relatedBy }, { edges: 1 })
+    .find({ relatedBy: clusteringDoc.relatedBy, $or: thresholdsQuery }, thresholdProjection)
     .lean()
     .cursor()
     .pipe(consumer)
