@@ -48,6 +48,7 @@ export default function (state = initialState, { type, payload }) {
         token: result.token,
         uuid: result.uuid,
         isClusterView: result.isClusterView || false,
+        genomeId: payload.genomeId,
       };
     }
     case COLLECTION_CHANGE_ACCESS_LEVEL.ATTEMPT:

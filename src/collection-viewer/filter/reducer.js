@@ -3,22 +3,27 @@ import {
   APPEND_TO_FILTER,
   REMOVE_FROM_FILTER,
   RESET_FILTER,
+  CLEAR_FILTERS,
 } from './actions';
 import { TREE_LOADED } from '../tree/actions';
-import { SEARCH_TERM_ADDED } from '../search/actions';
 import { FETCH_COLLECTION } from '../actions';
 
-import { filterKeys } from '../filter/constants';
+import { filterKeys } from './constants';
 
 const emptySet = new Set();
 
 const initialState = {
+  unfilteredIds: [],
   [filterKeys.VISIBILITY]: {
     unfilteredIds: [],
     ids: emptySet,
     active: false,
   },
-  [filterKeys.HIGHLIGHT]: {
+  [filterKeys.TREE]: {
+    ids: emptySet,
+    active: false,
+  },
+  [filterKeys.MAP]: {
     ids: emptySet,
     active: false,
   },
@@ -29,35 +34,63 @@ export default function (state = initialState, { type, payload = {} }) {
   switch (type) {
     case FETCH_COLLECTION.SUCCESS: {
       const { genomes = [] } = payload.result;
+      const unfilteredIds = genomes.map(_ => _.uuid);
       return {
         ...state,
         [filterKeys.VISIBILITY]: {
-          unfilteredIds: genomes.map(_ => _.uuid),
-          ids: new Set(),
+          unfilteredIds,
+          ids: emptySet,
+          active: false,
+        },
+
+        unfilteredIds,
+        [filterKeys.TREE]: {
+          ids: emptySet,
+          active: false,
+        },
+        [filterKeys.MAP]: {
+          ids: emptySet,
           active: false,
         },
       };
     }
     case TREE_LOADED: {
       const { leafIds } = payload;
-      const filter = state[filterKeys.VISIBILITY];
-      const shouldClearFilter = filter.active && !leafIds.some(id => filter.ids.has(id));
+
+      const isActive =
+        state[filterKeys.VISIBILITY].isActive ||
+        state[filterKeys.TREE].isActive ||
+        state[filterKeys.MAP].isActive;
+
+      const existingIds = new Set([
+        ...state[filterKeys.VISIBILITY].ids,
+        ...state[filterKeys.TREE].ids,
+        ...state[filterKeys.MAP].ids,
+      ]);
+
+      const shouldClearFilter = isActive && !leafIds.some(id => existingIds.has(id));
       return {
         ...state,
         [filterKeys.VISIBILITY]: {
           unfilteredIds: leafIds,
-          ids: shouldClearFilter ? new Set() : filter.ids,
-          active: shouldClearFilter ? false : filter.active,
+          ids: shouldClearFilter ? emptySet : state[filterKeys.VISIBILITY].ids,
+          active: shouldClearFilter ? false : state[filterKeys.VISIBILITY].active,
+        },
+
+        unfilteredIds: leafIds,
+        [filterKeys.TREE]: {
+          ids: shouldClearFilter ? emptySet : state[filterKeys.TREE].ids,
+          active: shouldClearFilter ? false : state[filterKeys.TREE].active,
+        },
+        [filterKeys.MAP]: {
+          ids: shouldClearFilter ? emptySet : state[filterKeys.MAP].ids,
+          active: shouldClearFilter ? false : state[filterKeys.MAP].active,
         },
       };
     }
     case ACTIVATE_FILTER: {
       return {
         ...state,
-        [filterKeys.HIGHLIGHT]:
-          payload.key === filterKeys.VISIBILITY ?
-            initialState[filterKeys.HIGHLIGHT] : // reset highlight when visibility changes
-            state[filterKeys.HIGHLIGHT],
         [payload.key]: {
           ...state[payload.key],
           ids,
@@ -103,6 +136,24 @@ export default function (state = initialState, { type, payload = {} }) {
         ...state,
         [payload.key]: {
           ...state[payload.key],
+          ids: emptySet,
+          active: false,
+        },
+      };
+    case CLEAR_FILTERS:
+      return {
+        ...state,
+        [filterKeys.VISIBILITY]: {
+          ...state[filterKeys.VISIBILITY],
+          ids: emptySet,
+          active: false,
+        },
+
+        [filterKeys.TREE]: {
+          ids: emptySet,
+          active: false,
+        },
+        [filterKeys.MAP]: {
           ids: emptySet,
           active: false,
         },

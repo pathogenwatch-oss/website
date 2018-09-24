@@ -4,15 +4,14 @@ import { createSelector } from 'reselect';
 
 import Clustering from '../clustering';
 import Network from '../clustering/Network.react';
+import ThresholdSlider from './ThresholdSlider.react';
 
-import { getLassoPath, isLassoActive } from './selectors';
-import { getHighlightedIds, getFilter } from '../collection-viewer/selectors';
-import { getGraph } from '../clustering/selectors';
+import { getLassoPath, isLassoActive, getLocationThreshold } from './selectors';
+import { getHighlightedIds, getFilter, getCollection, hasHighlightedIds } from '../collection-viewer/selectors';
+import { getGraph, getNodeData } from '../clustering/selectors';
 
-import { setLassoPath, selectNodes, toggleLassoActive } from './actions';
-import { resetFilter } from '../collection-viewer/filter/actions';
-
-import { filterKeys } from '../collection-viewer/filter/constants';
+import { setLassoPath, toggleLassoActive, fetchCluster } from './actions';
+import { setHighlight, clearHighlight } from '../collection-viewer/highlight/actions';
 
 const getViewerGraph = createSelector(
   getGraph,
@@ -41,43 +40,87 @@ const getViewerGraph = createSelector(
   }
 );
 
-const ClusterViewNetwork = (props) => (
-  <Clustering>
-    <Network
-      coverMessage={false}
-      graph={props.graph}
-      hasLasso
-      height={props.height}
-      lassoActive={props.lassoActive}
-      lassoPath={props.lassoPath}
-      onLassoActiveChange={props.onLassoActiveChange}
-      onLassoPathChange={props.onLassoPathChange}
-      onNodeSelect={(ids, append) =>
-        props.onNodeSelect(props.lassoActive && !props.lassoPath, ids, append)}
-      width={props.width}
-    />
-  </Clustering>
-);
+const onNodeSelect = (props, sts, append) =>
+  (dispatch, getState) => {
+    if (props.lassoActive && !props.lassoPath) return;
+
+    let ids;
+    if (sts && sts.length) {
+      ids = [];
+      const state = getState();
+      const nodeData = getNodeData(state);
+      for (const st of sts) {
+        ids.push(...nodeData[st].ids);
+      }
+    }
+    if (ids) {
+      dispatch(setHighlight(ids, append));
+    } else if (!props.lassoPath) {
+      dispatch(clearHighlight());
+    }
+  };
+
+const ClusterViewNetwork = React.createClass({
+
+  componentDidUpdate(previous) {
+    if (previous.threshold !== this.props.threshold) {
+      this.props.fetch(this.props.genomeId, this.props.threshold);
+    }
+  },
+
+  render() {
+    const { props } = this;
+    if (props.collectionStatus !== 'READY') return null;
+    return (
+      <React.Fragment>
+        <Clustering>
+          <Network
+            coverMessage={false}
+            graph={props.graph}
+            hasLasso
+            height={props.height}
+            lassoActive={props.lassoActive}
+            lassoPath={props.lassoPath}
+            onLassoActiveChange={props.onLassoActiveChange}
+            onLassoPathChange={path => props.onLassoPathChange(path, props.hasHighlight)}
+            onNodeSelect={(sts, append) => props.onNodeSelect(props, sts, append)}
+            width={props.width}
+          />
+        </Clustering>
+        <h2 className="pw-cluster-view-current-threshold wgsa-pane-overlay">Threshold of {props.threshold}</h2>
+        <ThresholdSlider />
+      </React.Fragment>
+    );
+  },
+
+});
 
 function mapStateToProps(state) {
+  const collection = getCollection(state);
   return {
     lassoActive: isLassoActive(state),
     lassoPath: getLassoPath(state),
     graph: getViewerGraph(state),
+    threshold: getLocationThreshold(state),
+    genomeId: collection.genomeId,
+    collectionStatus: collection.status,
+    hasHighlight: hasHighlightedIds(state),
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
+    fetch: (genomeId, threshold) => dispatch(fetchCluster(genomeId, threshold)),
     onLassoActiveChange: () => dispatch(toggleLassoActive()),
-    onLassoPathChange: path => dispatch(setLassoPath(path)),
-    onNodeSelect: (lassoActive, ids, append) => {
-      if (lassoActive) return;
-      if (ids) {
-        dispatch(selectNodes(ids, append));
-      } else {
-        dispatch(resetFilter(filterKeys.HIGHLIGHT));
+    onLassoPathChange: (path, hasHighlight) => {
+      if (path === null && hasHighlight) {
+        dispatch(clearHighlight());
+        return;
       }
+      dispatch(setLassoPath(path));
+    },
+    onNodeSelect: (props, sts, append) => {
+      dispatch(onNodeSelect(props, sts, append));
     },
   };
 }

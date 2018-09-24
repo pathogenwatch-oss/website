@@ -14,8 +14,7 @@ import {
 import { doesNotIntersect } from './utils';
 import { sortKeys } from './constants';
 
-import { RESET_FILTER, ACTIVATE_FILTER } from '../filter/actions';
-import { filterKeys } from '../filter/constants';
+import { CLEAR_FILTERS } from '../filter/actions';
 
 const initialState = {
   advanced: false,
@@ -159,9 +158,7 @@ export default function (state = initialState, { type, payload }) {
         currentIntersection: payload,
       };
     }
-    case ACTIVATE_FILTER:
-    case RESET_FILTER: {
-      if (payload.key !== filterKeys.VISIBILITY) return state;
+    case CLEAR_FILTERS: {
       return {
         ...initialState,
         recent: state.recent,

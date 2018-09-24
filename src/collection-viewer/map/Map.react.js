@@ -15,23 +15,17 @@ import { buttonClassname, activeButtonClassname } from '../../map/Map.react';
 
 import { COLLECTION as stateKey } from '../../app/stateKeys/map';
 
-import {
-  activateFilter,
-  appendToFilter,
-  removeFromFilter,
-  resetFilter,
-} from '../filter/actions';
-
-import { filterKeys } from '../filter/constants';
+import { hasHighlightedIds } from '../selectors';
+import { removeFromHighlight, setHighlight, clearHighlight } from '../highlight/actions';
 
 function mapStateToProps(state) {
-  const props = {
+  return {
     markerIds: getMarkerIds(state, { stateKey }),
     markerSize: getMarkerSize(state, { stateKey }),
     lassoPath: getLassoPath(state, { stateKey }),
     markers: getMarkers(state, { stateKey }),
+    hasHighlight: hasHighlightedIds(state),
   };
-  return props;
 }
 
 function mapDispatchToProps(dispatch) {
@@ -41,10 +35,9 @@ function mapDispatchToProps(dispatch) {
     onMarkerClick: ({ id, highlighted }, event) => {
       event.stopPropagation();
       if (event.metaKey || event.ctrlKey) {
-        const action = highlighted ? removeFromFilter : appendToFilter;
-        dispatch(action(id, filterKeys.HIGHLIGHT));
+        dispatch(highlighted ? removeFromHighlight(id) : setHighlight(id, true));
       } else {
-        dispatch(activateFilter(id, filterKeys.HIGHLIGHT));
+        dispatch(setHighlight(id));
       }
     },
     onMarkerSizeChange:
@@ -60,11 +53,14 @@ function mergeProps(mappedState, { dispatch, ...mappedDispatch }, ownProps) {
     ...mappedState,
     ...mappedDispatch,
     onClick: ({ originalEvent }) => {
-      if (isMarker(originalEvent.target)) return;
-      if (mappedState.lassoPath) {
-        dispatch(filterByLassoPath(stateKey, null));
+      if (isMarker(originalEvent.target)) {
+        return;
       }
-      dispatch(resetFilter(filterKeys.HIGHLIGHT));
+      if (mappedState.hasHighlight) {
+        dispatch(clearHighlight());
+      } else if (mappedState.lassoPath) {
+        dispatch(filterByLassoPath(stateKey, undefined));
+      }
     },
   };
 }

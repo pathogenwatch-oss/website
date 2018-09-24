@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 
-import { getViewer, getGenomeList } from '../selectors';
+import { getViewer, getGenomes, getGenomeList, getNonSearchFilterIntersections } from '../selectors';
 import {
   getTables,
   getActiveDataTable,
@@ -100,12 +100,40 @@ function getContainsSection(category, text, ids) {
   };
 }
 
+const getGenomesForColumnValues = createSelector(
+  getGenomes,
+  getGenomeList,
+  getCurrentIntersection,
+  getNonSearchFilterIntersections,
+  (genomes, genomeList, currentIntersection, nonSearchIntersections) => {
+    const intersections = [ ...nonSearchIntersections ];
+    if (currentIntersection) {
+      for (const term of currentIntersection) {
+        intersections.push(new Set(term.value.ids));
+      }
+    }
+
+    if (!intersections.length) return genomeList;
+
+    const ids = new Set(intersections[0]);
+    for (const intersection of intersections.slice(1)) {
+      for (const id of ids) {
+        if (!intersection.has(id)) {
+          ids.delete(id);
+        }
+      }
+    }
+
+    return Array.from(ids).map(id => genomes[id]);
+  }
+);
+
 const getColumnValues = createSelector(
   getSelectedCategory,
   getTables,
   getSearchText,
   getSearchTextMatcher,
-  getGenomeList,
+  getGenomesForColumnValues,
   getSearchSort,
   getCurrentIntersection,
   (category, tables, text, matcher, genomes, sort, currentTerms = []) => {

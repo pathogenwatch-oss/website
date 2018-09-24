@@ -33,7 +33,7 @@ const AdvancedMode = React.createClass({
     if (!current.length) return null;
     return (
       <section>
-        <h2 className="wgsa-search-dropdown__heading">Current Filter &ndash; Use up and down arrow keys to change section</h2>
+        <h2 className="wgsa-search-dropdown__heading">Current Filter</h2>
         {current.map((terms, index) =>
           <ul key={index}>
             {terms.map((term, termIndex) =>
@@ -99,14 +99,14 @@ const AdvancedMode = React.createClass({
     if (category) {
       return (
         <h2 className="wgsa-search-dropdown__heading">
-          Choose Value &ndash; Use left and right arrow keys to navigate, use backspace to cancel
+          Choose Value
         </h2>
       );
     }
     if (sections.length) {
       return (
         <h2 className="wgsa-search-dropdown__heading">
-          Choose Column &ndash; Use left and right arrow keys to navigate
+          Choose Column
         </h2>
       );
     }

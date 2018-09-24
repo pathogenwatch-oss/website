@@ -147,6 +147,9 @@
   line-height: 1;
   font-family: 'Roboto', Arial, sans-serif !important;
   font-weight: 500 !important;
+}
+
+h2.wgsa-search-dropdown__heading {
   text-transform: uppercase;
 }
 
@@ -191,6 +194,7 @@
   flex-grow: 1;
   display: flex;
   flex-direction: column;
+  overflow-y: hidden;
 }
 
 .wgsa-search-dropdown__values {

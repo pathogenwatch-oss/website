@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import { getFilter } from '../selectors';
 
-import { resetFilter } from './actions';
+import { clearFilters } from './actions';
 
 const FilterStatus = ({ active, filteredAmount, totalAmount, clear, children }) => (
   <span className="wgsa-filter-status" onClick={e => e.stopPropagation()}>
@@ -32,7 +32,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    clear: () => dispatch(resetFilter()),
+    clear: () => dispatch(clearFilters()),
   };
 }
 

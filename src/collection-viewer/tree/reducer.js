@@ -2,8 +2,7 @@ import { combineReducers } from 'redux';
 
 import { FETCH_COLLECTION, UPDATE_COLLECTION_PROGRESS }
   from '../actions';
-import { RESET_FILTER, ACTIVATE_FILTER } from '../filter/actions';
-import { SEARCH_TERM_ADDED } from '../search/actions';
+import { RESET_FILTER, ACTIVATE_FILTER, CLEAR_FILTERS } from '../filter/actions';
 import * as ACTIONS from './actions';
 
 import { simpleTrees } from './constants';
@@ -322,12 +321,12 @@ function selectedInternalNode(state = { active: COLLECTION, trees: {} }, { type,
         },
       };
     case ACTIVATE_FILTER:
-    case RESET_FILTER: {
-      if (payload.key !== 'VISIBILITY') return state;
+    case RESET_FILTER:
+    case CLEAR_FILTERS: {
+      if (payload.key && payload.key !== 'TREE') return state;
       return clearSelected(state);
     }
-    case SEARCH_TERM_ADDED:
-      return clearSelected(state);
+
     default:
       return state;
   }

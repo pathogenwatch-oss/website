@@ -2,11 +2,7 @@ import { createSelector } from 'reselect';
 import removeMarkdown from 'remove-markdown';
 
 import { getTableState, getAMRTableName } from './table/selectors';
-import {
-  getNetworkHighlightedIds,
-  getNetworkFilteredIds,
-} from '../cluster-viewer/selectors';
-
+import { getNetworkFilteredIds } from '../cluster-viewer/selectors';
 
 import { createColourGetter } from './amr-utils';
 import { filterKeys } from './filter/constants';
@@ -35,25 +31,38 @@ const getSearchIds = createSelector(
 
 export const getFilterState = state => getViewer(state).filter;
 
-export const getFilter = createSelector(
-  state => getViewer(state).filter[filterKeys.VISIBILITY],
-  state => getViewer(state).search.intersections,
-  getSearchIds,
+export const getNonSearchFilterIntersections = createSelector(
+  getFilterState,
   getNetworkFilteredIds,
-  (filter, searchTerms, searchIds, networkIds = []) => {
-    if (searchTerms.length === 0 && networkIds.length === 0) {
-      return filter;
-    }
-
+  (filterState, networkIds = []) => {
     const intersections = [];
-    if (filter.active) {
-      intersections.push(filter.ids);
+
+    if (filterState[filterKeys.VISIBILITY].active) {
+      intersections.push(filterState[filterKeys.VISIBILITY].ids);
     }
-    if (searchTerms.length) {
-      intersections.push(new Set(searchIds));
+    if (filterState[filterKeys.TREE].active) {
+      intersections.push(filterState[filterKeys.TREE].ids);
+    }
+    if (filterState[filterKeys.MAP].active) {
+      intersections.push(filterState[filterKeys.MAP].ids);
     }
     if (networkIds.length) {
       intersections.push(new Set(networkIds));
+    }
+
+    return intersections;
+  }
+);
+
+export const getFilter = createSelector(
+  getFilterState,
+  getNonSearchFilterIntersections,
+  state => getViewer(state).search.intersections,
+  getSearchIds,
+  (filterState, nonSearchIntersections, searchTerms, searchIds) => {
+    const intersections = [ ...nonSearchIntersections ];
+    if (searchTerms.length) {
+      intersections.push(new Set(searchIds));
     }
 
     const ids = new Set(intersections[0]);
@@ -66,14 +75,23 @@ export const getFilter = createSelector(
     }
 
     return {
-      ...filter,
+      unfilteredIds: filterState.unfilteredIds,
       ids: new Set(ids),
-      active: true,
+      active: intersections.length,
     };
   }
 );
 
 export const getUnfilteredGenomeIds = state => getFilter(state).unfilteredIds;
+
+export const getFilteredGenomes = createSelector(
+  getGenomes,
+  getFilter,
+  (genomes, filter) => {
+    const { active, ids, unfilteredIds } = filter;
+    return Array.from(active ? ids : unfilteredIds).map(id => genomes[id]);
+  }
+);
 
 export const getGenomeList = createSelector(
   getGenomes,
@@ -81,21 +99,16 @@ export const getGenomeList = createSelector(
   (genomes, ids) => Array.from(ids).map(id => genomes[id])
 );
 
-export const getFilteredGenomeIds = createSelector(
-  getFilterState,
-  filter => filter[filterKeys.VISIBILITY].ids
-);
+const getHighlightState = state => getViewer(state).highlight;
 
 export const getHighlightedIds = createSelector(
-  getFilterState,
-  getNetworkHighlightedIds,
-  (filter, idsFromNetwork) => {
-    const idsFromFilter = filter[filterKeys.HIGHLIGHT].ids;
-    if (idsFromNetwork.length === 0) {
-      return idsFromFilter;
-    }
-    return new Set([ ...idsFromFilter, ...idsFromNetwork ]);
-  }
+  getHighlightState,
+  highlight => highlight.ids
+);
+
+export const hasHighlightedIds = createSelector(
+  getHighlightedIds,
+  ids => ids.size > 0
 );
 
 export const getActiveGenomeIds = createSelector(

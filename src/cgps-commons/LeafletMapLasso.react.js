@@ -1,7 +1,7 @@
 import React from 'react';
 import classnames from 'classnames';
 import Leaflet from 'leaflet';
-import 'leaflet-lassoselect';
+import './lassoselect';
 
 const filterTooltip = 'Activate map region filter';
 const activeFilterTooltip = 'Disable map region filter';
@@ -49,32 +49,40 @@ export default React.createClass({
       initialPath: this.props.initialPath,
     }).addTo(this.context.map);
 
+    this.context.map.lasso = this.lasso;
+
     this.lasso.on('pathchange', () => {
       const { onPathChange } = this.props;
       if (onPathChange) onPathChange(this.lasso.getPath());
     });
   },
 
+  componentWillReceiveProps(nextProps) {
+    if (this.props.initialPath && !nextProps.initialPath) {
+      this.setState({ isActive: false });
+    }
+  },
+
   componentDidUpdate(prevProps, prevState) {
-    const { onPathChange, initialPath } = this.props;
-    const { isActive } = this.state;
+    const { initialPath } = this.props;
 
     if (initialPath === null) {
       this.lasso.reset();
     }
 
     // clear the lasso filter when lasso flag has changed
-    if (prevState.isActive !== isActive) {
-      if (isActive) {
+    if (prevState.isActive !== this.state.isActive) {
+      if (this.state.isActive) {
         this.lasso.enable();
       } else {
         this.lasso.disable();
-        if (onPathChange) onPathChange(null);
+        this.lasso.reset();
       }
     }
   },
 
-  onLassoToogleButtonClick() {
+  onLassoToggleButtonClick(e) {
+    e.stopPropagation();
     // toggle the filter state
     this.setState({ isActive: !this.state.isActive });
   },
@@ -93,7 +101,7 @@ export default React.createClass({
           )
         }
         title={isActive ? activeFilterTooltip : filterTooltip}
-        onClick={this.onLassoToogleButtonClick}
+        onClick={this.onLassoToggleButtonClick}
       >
         <i className="material-icons mr-lasso-icon" style={iconStyle}></i>
       </button>

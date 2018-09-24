@@ -1,6 +1,14 @@
 import { createSelector } from 'reselect';
+import { parse } from 'query-string';
 
-import { getNodeData, getGraph } from '../clustering/selectors';
+import {
+  getGraph,
+  getChartThresholds,
+  getNumberOfNodesAtThreshold,
+  getNumberOfGenomesAtThreshold,
+} from '../clustering/selectors';
+
+import { MAX_CLUSTER_SIZE } from '../clustering/constants';
 
 const getClusterView = state => state.viewer.clusterView;
 
@@ -12,20 +20,6 @@ export const getLassoPath = createSelector(
 export const isLassoActive = createSelector(
   getClusterView,
   view => view.lassoActive
-);
-
-const getSelectedNodes = state => getClusterView(state).selectedNodes;
-
-export const getNetworkHighlightedIds = createSelector(
-  getSelectedNodes,
-  getNodeData,
-  (selectedNodes, nodeData) => {
-    const ids = [];
-    for (const node of selectedNodes) {
-      ids.push(...nodeData[node].ids);
-    }
-    return ids;
-  }
 );
 
 function pointInsidePolygon(vectors, point) {
@@ -56,5 +50,40 @@ export const getNetworkFilteredIds = createSelector(
       return ids;
     }
     return undefined;
+  }
+);
+
+export const getThresholdMarks = createSelector(
+  getChartThresholds,
+  getNumberOfNodesAtThreshold,
+  getNumberOfGenomesAtThreshold,
+  (thresholds, nodeTotals, genomeTotals) => {
+    const marks = {};
+    if (!nodeTotals) return { items: marks };
+
+    let lastMark = null;
+    let maxThreshold = 0;
+    for (let i = 0; i < nodeTotals.length; i++) {
+      if (nodeTotals[i] > MAX_CLUSTER_SIZE) {
+        break;
+      }
+      if (lastMark !== genomeTotals[i]) {
+        lastMark = genomeTotals[i];
+        marks[thresholds[i]] = '';
+      }
+      maxThreshold = thresholds[i];
+    }
+    return {
+      max: maxThreshold || thresholds[genomeTotals.indexOf(lastMark)],
+      items: marks,
+    };
+  }
+);
+
+export const getLocationThreshold = createSelector(
+  state => state.location,
+  location => {
+    const query = parse(location.search);
+    return query.threshold;
   }
 );

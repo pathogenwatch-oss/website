@@ -6,6 +6,7 @@ import genomes from './genomes';
 import aboutCollectionOpen from '../about-collection/reducer';
 import downloads from '../downloads/reducer';
 import filter from '../filter/reducer';
+import highlight from '../highlight/reducer';
 import summary from '../summary/reducer';
 import tree from '../tree/reducer';
 import table from '../table/reducer';
@@ -24,6 +25,7 @@ const reducer = combineReducers({
   aboutCollectionOpen,
   downloads,
   filter,
+  highlight,
   summary,
   tree,
   table,
