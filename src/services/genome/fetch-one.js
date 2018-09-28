@@ -34,6 +34,8 @@ const projection = {
   'analysis.paarsnp.paar': 1,
   'analysis.paarsnp.snp': 1,
   'analysis.cgmlst.scheme': 1,
+  'analysis.kleborate.ST': 1,
+  'analysis.kleborate.virulence_score': 1
 };
 
 // const taskNames = [
