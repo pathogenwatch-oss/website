@@ -9,7 +9,7 @@ export default ({ result }) => (
         .filter(prop => ![ '__v', '', 'ST' ].includes(prop))
         .sort()
         .map(prop =>
-          <Metadata key={prop} label={prop.replace('_', '')}>
+          <Metadata key={prop} label={prop.replace(/_/g, ' ')}>
             {result[prop]}
           </Metadata>,
         )}
