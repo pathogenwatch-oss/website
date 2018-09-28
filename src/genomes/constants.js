@@ -12,4 +12,5 @@ export const analysisLabels = {
   ngmast: 'NG-MAST',
   genotyphi: 'Genotyphi',
   cgmlst: 'cgMLST',
+  kleborate: 'Kleborate',
 };
