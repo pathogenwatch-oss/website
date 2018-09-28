@@ -23,6 +23,12 @@ export default (genome) => {
       component: <Typing genome={genome} />,
     });
   }
+  if (kleborate) {
+    sections.push({
+      key: 'Kleborate',
+      component: <VersionSwitcher taskName="kleborate" component={Kleborate} genome={genome} />,
+    });
+  }
   if (paarsnp) {
     sections.push({
       key: 'AMR',
@@ -51,12 +57,6 @@ export default (genome) => {
     sections.push({
       key: 'Organism',
       component: <VersionSwitcher taskName="speciator" component={Speciator} genome={genome} />,
-    });
-  }
-  if (kleborate) {
-    sections.push({
-      key: 'Kleborate',
-      component: <VersionSwitcher taskName="kleborate" component={Kleborate} genome={genome} />,
     });
   }
   // if (Object.keys(rest).length) {
