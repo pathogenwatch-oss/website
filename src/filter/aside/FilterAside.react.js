@@ -14,7 +14,7 @@ class FilterAside extends React.Component {
   onChange = (value) => {
     this.props.textOnChange(value);
     this.textOnChangeEffect(value);
-  }
+  };
 
   render() {
     const {
