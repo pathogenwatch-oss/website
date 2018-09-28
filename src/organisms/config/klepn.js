@@ -29,4 +29,7 @@ export default {
   ],
   publicMetadataColumnNames: [],
   collections: [],
+  uiOptions: {
+    kleborate: true,
+  },
 };
