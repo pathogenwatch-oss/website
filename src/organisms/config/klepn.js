@@ -1,6 +1,6 @@
 import React from 'react';
 
-const name = 'Klebsiella pneumoniae sensu stricto';
+const name = 'Klebsiella pneumoniae';
 const formattedName = (<em>{name}</em>);
 
 const shortName = 'K. pneumoniae';
