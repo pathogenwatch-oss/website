@@ -68,7 +68,7 @@ const genotyphigroup = {
 const kleborateGroup = {
   group: true,
   columnKey: 'kleborate',
-  columns: [ '__virulence_score', '__K_locus', '__K_locus_confidence' ],
+  columns: [ '__virulence_score', '__K_locus', '__K_locus_confidence', '__O_locus', '__O_locus_confidence' ],
 };
 
 function fillColumnDefs({ columns, ...group }) {

@@ -98,6 +98,22 @@ export const systemDataColumns = {
       return analysis.kleborate.K_locus_confidence;
     },
   },
+  __O_locus: {
+    columnKey: '__O_locus',
+    displayName: ') Locus',
+    valueGetter({ analysis }) {
+      if (!analysis.kleborate) return null;
+      return analysis.kleborate.O_locus;
+    },
+  },
+  __O_locus_confidence: {
+    columnKey: '__O_locus_confidence',
+    displayName: 'O Locus Confidence',
+    valueGetter({ analysis }) {
+      if (!analysis.kleborate) return null;
+      return analysis.kleborate.O_locus_confidence;
+    },
+  },
   '__ng-mast': {
     columnKey: '__ng-mast',
     displayName: 'NG-MAST TYPE',
