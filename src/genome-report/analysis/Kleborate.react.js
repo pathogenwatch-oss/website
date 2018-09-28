@@ -1,18 +1,19 @@
 import React from 'react';
+
+import { Section, Metadata } from '../components';
+
 export default ({ result }) => (
-  <React.Fragment>
-    <h2>Kleborate</h2>
+  <Section key={'Kleborate'} heading={'Kleborate'} version={result.__v}>
     <dl>
-      <div>
-        <dt>ST</dt>
-        <dd>{result.ST}</dd>
-      </div>
-      <div>
-        <dt>Virulence Score</dt>
-        <dd>{result.virulence_score}</dd>
-      </div>
+      {result && Object.keys(result)
+        .map(prop =>
+          <Metadata key={prop} label={prop}>
+            {result[prop]}
+          </Metadata>,
+        )}
     </dl>
-  </React.Fragment>
+  </Section>
 );
+
 
 
