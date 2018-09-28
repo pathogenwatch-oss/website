@@ -65,6 +65,12 @@ const genotyphigroup = {
   columns: [ '__genotyphi_type', '__genotyphi_snps_called' ],
 };
 
+const kleborateGroup = {
+  group: true,
+  columnKey: 'kleborate',
+  columns: [ '__virulence_score', '__K_locus', '__K_locus_confidence' ],
+};
+
 function fillColumnDefs({ columns, ...group }) {
   return {
     ...group,
@@ -80,6 +86,7 @@ export function getTypingColumnGroups({ isClusterView }, uiOptions) {
     uiOptions.noMLST ? null : mlstGroup,
     uiOptions.ngMast ? ngMastGroup : null,
     uiOptions.genotyphi ? genotyphigroup : null,
+    uiOptions.kleborate ? kleborateGroup : null,
   ]
   .filter(_ => _)
   .map(fillColumnDefs);
