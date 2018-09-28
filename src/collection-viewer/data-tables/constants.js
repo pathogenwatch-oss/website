@@ -74,6 +74,30 @@ export const systemDataColumns = {
       return <Profile alleles={alleles} textOnly />;
     },
   },
+  __virulence_score: {
+    columnKey: '__virulence_score',
+    displayName: 'Virulence Score',
+    valueGetter({ analysis }) {
+      if (!analysis.kleborate) return null;
+      return analysis.kleborate.virulence_score;
+    },
+  },
+  __K_locus: {
+    columnKey: '__K_locus',
+    displayName: 'K Locus',
+    valueGetter({ analysis }) {
+      if (!analysis.kleborate) return null;
+      return analysis.kleborate.K_locus;
+    },
+  },
+  __K_locus_confidence: {
+    columnKey: '__K_locus_confidence',
+    displayName: 'K Locus Confidence',
+    valueGetter({ analysis }) {
+      if (!analysis.kleborate) return null;
+      return analysis.kleborate.K_locus_confidence;
+    },
+  },
   '__ng-mast': {
     columnKey: '__ng-mast',
     displayName: 'NG-MAST TYPE',
