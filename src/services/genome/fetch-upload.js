@@ -20,6 +20,7 @@ module.exports = function (props) {
           'analysis.metrics.__v': 1,
           'analysis.ngmast.__v': 1,
           'analysis.genotyphi.__v': 1,
+          'analysis.kleborate.__v': 1,
         },
       )
       .lean()
