@@ -1,4 +1,4 @@
-# Pathogewatch Front-end
+# Pathogenwatch Front-end
 
 The money-maker.
 
