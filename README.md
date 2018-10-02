@@ -1,6 +1,6 @@
-# WGSA Front End
+# Pathogewatch Front-end
 
-The User-facing portion of WGSA.
+The money-maker.
 
 ## Example configuration
 ```json
@@ -10,8 +10,7 @@ The User-facing portion of WGSA.
   },
   "pusherKey": "...",
   "mapboxKey": "...",
-  "maxFastaFlieSize": 4,
-  "wiki": "https://raw.githubusercontent.com/wiki/ImperialCollegeLondon/wgsa-documentation",
+  "maxGenomeFileSize": 20,
   "strategies": [ "facebook", "google", "twitter" ],
   "whyDidYouUpdate": false
 }
