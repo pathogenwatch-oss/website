@@ -22,8 +22,7 @@ export const leadingSystemGroup = {
   system: true,
   fixed: true,
   columnKey: 'leadingSystemGroup',
-  getHeaderContent() {
-  },
+  getHeaderContent() {},
   columns: [
     constants.leftSpacerColumn,
     constants.downloadColumnProps,
@@ -35,8 +34,7 @@ export const trailingSystemGroup = {
   group: true,
   system: true,
   columnKey: 'trailingSystemGroup',
-  getHeaderContent() {
-  },
+  getHeaderContent() {},
   columns: [
     constants.rightSpacerColumn,
   ],
@@ -46,8 +44,7 @@ const referenceGroup = {
   columnKey: 'reference',
   group: true,
   columns: [ '__reference' ],
-  getHeaderContent: () => {
-  },
+  getHeaderContent: () => {},
 };
 
 const mlstGroup = {
@@ -91,8 +88,8 @@ export function getTypingColumnGroups({ isClusterView }, uiOptions) {
     uiOptions.genotyphi ? genotyphigroup : null,
     uiOptions.kleborate ? kleborateGroup : null,
   ]
-    .filter(_ => _)
-    .map(fillColumnDefs);
+  .filter(_ => _)
+  .map(fillColumnDefs);
 }
 
 export default function (state = initialState, { type, payload }) {
