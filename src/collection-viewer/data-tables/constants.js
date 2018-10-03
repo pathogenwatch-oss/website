@@ -114,6 +114,86 @@ export const systemDataColumns = {
       return analysis.kleborate.O_locus_confidence;
     },
   },
+  __hypermucoidy: {
+    columnKey: '__hypermucoidy',
+    displayName: 'Hypermucoidy',
+    valueGetter({ analysis }) {
+      if (!analysis.kleborate) return null;
+      return analysis.kleborate.hypermucoidy;
+    },
+  },
+  __Aerobactin: {
+    columnKey: '__Aerobactin',
+    displayName: 'Aerobactin',
+    valueGetter({ analysis }) {
+      if (!analysis.kleborate) return null;
+      return analysis.kleborate.Aerobactin;
+    },
+  },
+  __AbST: {
+    columnKey: '__AbST',
+    displayName: 'AbST',
+    valueGetter({ analysis }) {
+      if (!analysis.kleborate) return null;
+      return analysis.kleborate.AbST;
+    },
+  },
+  __Colibactin: {
+    columnKey: '__Colibactin',
+    displayName: 'Colibactin',
+    valueGetter({ analysis }) {
+      if (!analysis.kleborate) return null;
+      return analysis.kleborate.Colibactin;
+    },
+  },
+  __CbST: {
+    columnKey: '__CbST',
+    displayName: 'CbST',
+    valueGetter({ analysis }) {
+      if (!analysis.kleborate) return null;
+      return analysis.kleborate.CbST;
+    },
+  },
+  __Salmochelin: {
+    columnKey: '__Salmochelin',
+    displayName: 'Salmochelin',
+    valueGetter({ analysis }) {
+      if (!analysis.kleborate) return null;
+      return analysis.kleborate.Salmochelin;
+    },
+  },
+  __SmST: {
+    columnKey: '__SmST',
+    displayName: 'SmST',
+    valueGetter({ analysis }) {
+      if (!analysis.kleborate) return null;
+      return analysis.kleborate.SmST;
+    },
+  },
+  __Yersiniabactin: {
+    columnKey: '__Yersiniabactin',
+    displayName: 'Yersiniabactin',
+    valueGetter({ analysis }) {
+      if (!analysis.kleborate) return null;
+      return analysis.kleborate.Yersiniabactin;
+    },
+  },
+  __YbST: {
+    columnKey: '__YbST',
+    displayName: 'YbST',
+    valueGetter({ analysis }) {
+      if (!analysis.kleborate) return null;
+      return analysis.kleborate.YbST;
+    },
+  },
+  __wzi: {
+    columnKey: '__wzi',
+    displayName: 'wzi',
+    valueGetter({ analysis }) {
+      if (!analysis.kleborate) return null;
+      return analysis.kleborate.wzi;
+    },
+  },
   '__ng-mast': {
     columnKey: '__ng-mast',
     displayName: 'NG-MAST TYPE',

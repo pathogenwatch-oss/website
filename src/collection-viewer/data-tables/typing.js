@@ -22,7 +22,8 @@ export const leadingSystemGroup = {
   system: true,
   fixed: true,
   columnKey: 'leadingSystemGroup',
-  getHeaderContent() {},
+  getHeaderContent() {
+  },
   columns: [
     constants.leftSpacerColumn,
     constants.downloadColumnProps,
@@ -34,7 +35,8 @@ export const trailingSystemGroup = {
   group: true,
   system: true,
   columnKey: 'trailingSystemGroup',
-  getHeaderContent() {},
+  getHeaderContent() {
+  },
   columns: [
     constants.rightSpacerColumn,
   ],
@@ -44,7 +46,8 @@ const referenceGroup = {
   columnKey: 'reference',
   group: true,
   columns: [ '__reference' ],
-  getHeaderContent: () => {},
+  getHeaderContent: () => {
+  },
 };
 
 const mlstGroup = {
@@ -68,7 +71,7 @@ const genotyphigroup = {
 const kleborateGroup = {
   group: true,
   columnKey: 'kleborate',
-  columns: [ '__virulence_score', '__K_locus', '__K_locus_confidence', '__O_locus', '__O_locus_confidence' ],
+  columns: [ '__virulence_score', '__K_locus', '__K_locus_confidence', '__O_locus', '__O_locus_confidence', '__hypermucoidy', '__Aerobactin', '__AbST', '__Colibactin', '__CbST', '__Salmochelin', '__SmST', '__Yersiniabactin', '__YbST', '__wzi' ],
 };
 
 function fillColumnDefs({ columns, ...group }) {
@@ -88,8 +91,8 @@ export function getTypingColumnGroups({ isClusterView }, uiOptions) {
     uiOptions.genotyphi ? genotyphigroup : null,
     uiOptions.kleborate ? kleborateGroup : null,
   ]
-  .filter(_ => _)
-  .map(fillColumnDefs);
+    .filter(_ => _)
+    .map(fillColumnDefs);
 }
 
 export default function (state = initialState, { type, payload }) {
