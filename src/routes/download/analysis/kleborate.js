@@ -10,7 +10,7 @@ const transformer = function (doc) {
 
   Object.keys(doc.analysis.kleborate)
       .forEach(prop =>
-          record[prop.replace('__v', 'Version').replace(/_/g, ' ')] = doc.analysis.kleborate.prop
+          record[prop.replace('__v', 'Version').replace(/_/g, ' ')] = doc.analysis.kleborate[prop]
       );
   return record;
 };
