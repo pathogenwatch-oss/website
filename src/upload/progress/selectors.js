@@ -1,4 +1,3 @@
-/* eslint-disable no-trailing-spaces */
 import { createSelector } from 'reselect';
 
 import { isInvalidUpload, isFailedUpload } from '../utils/validation';
@@ -30,26 +29,23 @@ export const getLastMessageReceived = state => getProgress(state).lastMessageRec
 
 export const getUploadedFileList = createSelector(
   getUploadedFiles,
-  files => Object.keys(files)
-    .map(id => files[id]),
+  files => Object.keys(files).map(id => files[id])
 );
 
 export const getUploadedGenomeList = createSelector(
   getUploadedGenomes,
-  genomes => Object.keys(genomes)
-    .map(id => genomes[id]),
+  genomes => Object.keys(genomes).map(id => genomes[id])
 );
 
 export const getBatchSize = createSelector(
   getUploadedFileList,
-  list => list.length,
+  list => list.length
 );
 
 export const getFilesInProgress = createSelector(
   getProcessing,
   getUploadedFiles,
-  (processing, files) => Array.from(processing)
-    .map(id => files[id]),
+  (processing, files) => Array.from(processing).map(id => files[id])
 );
 
 export const getNumRemainingUploads = createSelector(
@@ -65,7 +61,7 @@ export const isUploading = createSelector(
 
 export const isUploadPending = createSelector(
   getNumRemainingUploads,
-  remaining => remaining > 0,
+  remaining => remaining > 0
 );
 
 export const getNumCompletedUploads = createSelector(
@@ -76,38 +72,38 @@ export const getNumCompletedUploads = createSelector(
 
 export const getFailedUploads = createSelector(
   getUploadedFileList,
-  genomes => genomes.filter(genome => isFailedUpload(genome)),
+  genomes => genomes.filter(genome => isFailedUpload(genome))
 );
 
 export const getTotalFailures = createSelector(
   getFailedUploads,
-  failedUploads => failedUploads.length,
+  failedUploads => failedUploads.length
 );
 
 export const getInvalidUploads = createSelector(
   getUploadedFileList,
-  genomes => genomes.filter(genome => isInvalidUpload(genome)),
+  genomes => genomes.filter(genome => isInvalidUpload(genome))
 );
 
 export const getTotalInvalid = createSelector(
   getInvalidUploads,
-  invalidUploads => invalidUploads.length,
+  invalidUploads => invalidUploads.length
 );
 
 export const getErroredUploads = createSelector(
   getUploadedFileList,
-  genomes => genomes.filter(genome => genome.status === statuses.ERROR),
+  genomes => genomes.filter(genome => genome.status === statuses.ERROR)
 );
 
 export const getTotalErrors = createSelector(
   getErroredUploads,
-  erroredUploads => erroredUploads.length,
+  erroredUploads => erroredUploads.length
 );
 
 export const isRetryable = createSelector(
   isUploading,
   getFailedUploads,
-  (uploading, failures) => !uploading && !!failures.length,
+  (uploading, failures) => !uploading && !!failures.length
 );
 
 export const getFileSummary = createSelector(
@@ -125,7 +121,7 @@ export const getFileSummary = createSelector(
       uploading: summary[statuses.UPLOADING] || 0,
       compressing: summary[statuses.COMPRESSING] || 0,
     };
-  },
+  }
 );
 
 function getAnalysisBreakdown(genomes) {
@@ -155,10 +151,9 @@ function getAnalysisBreakdown(genomes) {
   }
 
   breakdown.mlst.sequenceTypes =
-    Object.keys(sts)
-      .map(st => ({
-        label: `ST ${st}`, total: sts[st],
-      }));
+    Object.keys(sts).map(st => ({
+      label: `ST ${st}`, total: sts[st],
+    }));
 
   if (breakdown.mlst.errors) {
     breakdown.mlst.sequenceTypes.push({
@@ -203,24 +198,10 @@ export const getAnalysisSummary = createSelector(
         ...getAnalysisBreakdown(organismGenomes),
       });
     }
-    if (pending) {
-      result.push({
-        key: 'pending',
-        label: 'Pending',
-        total: pending,
-        colour: '#ccc',
-      });
-    }
-    if (errored) {
-      result.push({
-        key: 'error',
-        label: 'Error',
-        total: errored,
-        colour: DEFAULT.DANGER_COLOUR,
-      });
-    }
+    if (pending) result.push({ key: 'pending', label: 'Pending', total: pending, colour: '#ccc' });
+    if (errored) result.push({ key: 'error', label: 'Error', total: errored, colour: DEFAULT.DANGER_COLOUR });
     return result;
-  },
+  }
 );
 
 function getSpeciesCode(organismName) {
@@ -235,23 +216,8 @@ function getSpeciesCode(organismName) {
 export const getChartData = createSelector(
   getAnalysisSummary,
   data => {
-    const organisms = {
-      label: 'Organism',
-      data: [],
-      backgroundColor: [],
-      labels: [],
-      organismIds: [],
-      shortLabels: [],
-      total: 0,
-    };
-    const stData = {
-      label: 'Sequence Type',
-      data: [],
-      backgroundColor: [],
-      labels: [],
-      parents: [],
-      total: 0,
-    };
+    const organisms = { label: 'Organism', data: [], backgroundColor: [], labels: [], organismIds: [], shortLabels: [], total: 0 };
+    const stData = { label: 'Sequence Type', data: [], backgroundColor: [], labels: [], parents: [], total: 0 };
 
     let organismIndex = 0;
     for (const { label, colour, total, key, mlst = {} } of data) {
@@ -287,7 +253,7 @@ export const getChartData = createSelector(
         organisms,
       ],
     };
-  },
+  }
 );
 
 export const getOverallProgress = createSelector(
@@ -324,7 +290,7 @@ export const getOverallProgress = createSelector(
       tasks,
       errors,
     };
-  },
+  }
 );
 
 export const isSpecieationComplete = createSelector(
@@ -335,7 +301,7 @@ export const isSpecieationComplete = createSelector(
     if (uploadPending) return null;
     if (genomes.length === 0) return null;
     return speciation.done === genomes.length;
-  },
+  }
 );
 
 export const isAnalysisComplete = createSelector(
@@ -347,5 +313,5 @@ export const isAnalysisComplete = createSelector(
 
 export const hasErrors = createSelector(
   getOverallProgress,
-  ({ errors }) => errors > 0,
+  ({ errors }) => errors > 0
 );
