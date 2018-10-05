@@ -1,6 +1,7 @@
 const Collection = require('models/collection');
 const Genome = require('models/genome');
 const Organism = require('models/organism');
+const { getFlagsForUser } = require('utils/flags');
 
 module.exports = async function (props) {
   const { user } = props;
@@ -38,5 +39,9 @@ module.exports = async function (props) {
     deployedOrganisms,
   };
 
+  const flags = getFlagsForUser(user);
+  if (!flags.showKlebExperiment()) {
+    output.deployedOrganisms = output.deployedOrganisms.filter(_ => _ !== '573');
+  }
   return output;
 };

@@ -14,6 +14,7 @@ const schema = new Schema({
   providerType: String,
   providerId: String,
   admin: { type: Boolean, default: undefined },
+  flags: Object,
 });
 
 addPreSaveHook(schema);

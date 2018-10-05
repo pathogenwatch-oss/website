@@ -1,6 +1,7 @@
 const Genome = require('models/genome');
 const manifest = require('../../manifest');
 const { ServiceRequestError, ServiceRequestErrorJSON } = require('utils/errors');
+const { getFlagsForUser } = require('utils/flags');
 
 const { maxCollectionSize = 1000 } = require('configuration');
 
@@ -13,6 +14,11 @@ module.exports = async function ({ genomeIds, organismId, user }) {
   }
   if (!genomeIds || !genomeIds.length) {
     throw new ServiceRequestError('No genome IDs provided');
+  }
+
+  const flags = getFlagsForUser(user);
+  if (organismId === '573' && !flags.showKlebExperiment()) {
+    throw new ServiceRequestError('Unsupported organism');
   }
 
   const task = manifest.getCollectionTask(organismId, 'tree');

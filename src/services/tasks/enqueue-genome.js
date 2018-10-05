@@ -3,7 +3,7 @@ const Genome = require('../../models/genome');
 
 const LOGGER = require('../../utils/logging').createLogger('runner');
 
-module.exports = function ({ genomeId, fileId, organismId, speciesId, genusId, tasks, uploadedAt, clientId }) {
+module.exports = function ({ genomeId, fileId, organismId, speciesId, genusId, tasks, uploadedAt, clientId, userId }) {
   const taskNames = tasks.map(_ => _.task);
   LOGGER.info(`Submitting tasks [${taskNames}] for ${genomeId}`);
 
@@ -15,6 +15,7 @@ module.exports = function ({ genomeId, fileId, organismId, speciesId, genusId, t
     genusId,
     uploadedAt: new Date(uploadedAt),
     clientId,
+    userId,
   };
 
   return Genome.addPendingTasks(genomeId, taskNames)

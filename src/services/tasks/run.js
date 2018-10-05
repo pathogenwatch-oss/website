@@ -60,7 +60,7 @@ function runTask({ fileId, task, version, organismId, speciesId, genusId, timeou
 }
 
 module.exports = async function ({ task, version, metadata, timeout$: timeout = DEFAULT_TIMEOUT }) {
-  const { organismId, speciesId, genusId, fileId, genomeId, uploadedAt, clientId } = metadata;
+  const { organismId, speciesId, genusId, fileId, genomeId, uploadedAt, clientId, userId } = metadata;
   let doc = await Analysis.findOne({ fileId, task, version }).lean();
   if (!doc) { // The results weren't in the cache
     const results = await runTask({ fileId, task, version, organismId, speciesId, genusId, timeout });
@@ -73,5 +73,5 @@ module.exports = async function ({ task, version, metadata, timeout$: timeout = 
   }
 
   await Genome.addAnalysisResults(genomeId, doc);
-  notify({ genomeId, clientId, uploadedAt, tasks: [ doc ] });
+  notify({ genomeId, clientId, userId, uploadedAt, tasks: [ doc ] });
 };

@@ -7,7 +7,7 @@ const { getSpeciatorTask, getTasksByOrganism } = require('manifest');
 const notify = require('services/genome/notify');
 const { summariseAnalysis } = require('../../utils/analysis');
 
-function submitTasks({ genomeId, fileId, uploadedAt, clientId }, doc) {
+function submitTasks({ genomeId, fileId, uploadedAt, clientId, userId }, doc) {
   const { organismId, speciesId, genusId } = summariseAnalysis(doc);
   const tasks = getTasksByOrganism(organismId, speciesId, genusId);
   return Analysis.find({
@@ -37,6 +37,7 @@ function submitTasks({ genomeId, fileId, uploadedAt, clientId }, doc) {
           tasks: missingTasks,
           uploadedAt,
           clientId,
+          userId,
         });
       })
   );
