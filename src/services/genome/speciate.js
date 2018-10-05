@@ -12,7 +12,7 @@ function submitTasks({ genomeId, fileId, uploadedAt, clientId }, doc) {
   const tasks = getTasksByOrganism(organismId, speciesId, genusId);
   return Analysis.find({
     fileId,
-    $or: tasks,
+    $or: tasks.map(({ task, version }) => ({ task, version })),
   })
   .lean()
   .then(cachedResults =>

@@ -14,12 +14,11 @@ function getNotification(analysis) {
   }
 }
 
-module.exports = function ({ genomeId, clientId, uploadedAt, tasks }) {
-  if (clientId) {
-    request('notification', 'send', {
-      channel: clientId,
-      topic: `analysis-${uploadedAt.toISOString()}`,
-      message: { genomeId, results: tasks.map(getNotification) },
-    });
-  }
+module.exports = async function ({ genomeId, clientId, uploadedAt, tasks, task, error }) {
+  if (!clientId) return Promise.resolve();
+  return request('notification', 'send', {
+    channel: clientId,
+    topic: `analysis-${uploadedAt.toISOString()}`,
+    message: { genomeId, results: tasks.map(getNotification), task, error },
+  });
 };
