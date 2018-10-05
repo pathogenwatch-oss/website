@@ -727,7 +727,8 @@
     "570": [
       {
         "task": "kleborate",
-        "version": "v0.0.2"
+        "version": "v0.0.2",
+        "timeout": 600
       }
     ],
     "571": [

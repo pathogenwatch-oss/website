@@ -22,7 +22,7 @@ module.exports = function ({ genomeId, fileId, organismId, speciesId, genusId, t
       tasks.map(({ task, version, retries, timeout }) =>
         enqueue(
           task in queues ? task : queues.task,
-          { task, version, retries, timeout, metadata }
+          { task, version, spec: { retries, timeout }, metadata }
         )
       )
     ));
