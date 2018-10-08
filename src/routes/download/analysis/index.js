@@ -18,6 +18,8 @@ router.post('/speciator', require('./speciator'));
 
 router.post('/paarsnp', require('./paarsnp'));
 
+router.post('/paarsnp-snps-genes', require('./paarsnp-snps-genes'));
+
 router.post('/genotyphi', require('./genotyphi'));
 
 router.post('/metrics', require('./metrics'));
