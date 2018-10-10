@@ -1,5 +1,7 @@
 const csv = require('csv');
 const sanitize = require('sanitize-filename');
+const sort = require('natsort')({ insensitive: true });
+
 const Genome = require('models/genome');
 
 const transformer = function (doc) {
@@ -7,8 +9,8 @@ const transformer = function (doc) {
     'Genome ID': doc._id.toString(),
     'Genome Name': doc.name,
     Version: doc.analysis.paarsnp.__v,
-    SNPs: doc.analysis.paarsnp.snp.sort().join(','),
-    Genes: doc.analysis.paarsnp.paar.sort().join(','),
+    SNPs: doc.analysis.paarsnp.snp.sort(sort).join(','),
+    Genes: doc.analysis.paarsnp.paar.sort(sort).join(','),
   };
   return result;
 };
