@@ -1,7 +1,6 @@
 // const Analysis = require('models/analysis');
 const { ServiceRequestError } = require('utils/errors');
 const { request } = require('services');
-const { getFlagsForUser } = require('utils/flags');
 
 const projection = {
   _user: 1,
@@ -47,8 +46,7 @@ module.exports = async ({ user, id }) => {
 
   const genome = await request('genome', 'authorise', { user, id, projection });
 
-  const flags = getFlagsForUser(user);
-  if (!flags.showKlebExperiment()) {
+  if (!user.showKlebExperiment) {
     genome.analysis.kleborate = undefined;
     if ((genome.analysis.speciator || {}).organismId === '573') {
       genome.analysis.core = undefined;

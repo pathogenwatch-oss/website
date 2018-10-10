@@ -1,13 +1,11 @@
 const Organism = require('models/organism');
 const Collection = require('models/collection');
 const Genome = require('models/genome');
-const { getFlagsForUser } = require('utils/flags');
 
 async function getSupportedGenomeSummary(props) {
   const { user } = props;
-  const flags = getFlagsForUser(user);
 
-  const deployedOrganisms = flags.showKlebExperiment() ?
+  const deployedOrganisms = user.showKlebExperiment ?
     await Organism.distinct('taxId') :
     await Organism.distinct('taxId').filter(_ => _ !== '573');
   return Genome.getSummary([

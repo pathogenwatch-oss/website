@@ -1,5 +1,4 @@
 const Genome = require('models/genome');
-const { getFlagsForUser } = require('utils/flags');
 
 module.exports = async function (props) {
   const { user } = props;
@@ -28,7 +27,6 @@ module.exports = async function (props) {
     )
     .lean();
 
-  const flags = getFlagsForUser(user);
   return genomes.map(genome => {
     const { analysis = {} } = genome;
     const { mlst = {}, speciator = {} } = analysis;
@@ -40,7 +38,7 @@ module.exports = async function (props) {
     for (const task of Object.keys(analysis)) {
       analysis[task] = analysis[task].__v;
     }
-    if (!flags.showKlebExperiment() && genome.organismId === '573') {
+    if (!user.showKlebExperiment && genome.organismId === '573') {
       genome.pending = (genome.pending || []).filter(t => !([ 'core', 'kleborate' ].includes(t)));
       genome.analysis.kleborate = undefined;
       genome.analysis.core = undefined;

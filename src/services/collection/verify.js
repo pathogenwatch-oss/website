@@ -1,7 +1,6 @@
 const Genome = require('models/genome');
 const manifest = require('../../manifest');
 const { ServiceRequestError, ServiceRequestErrorJSON } = require('utils/errors');
-const { getFlagsForUser } = require('utils/flags');
 
 const { maxCollectionSize = 1000 } = require('configuration');
 
@@ -16,8 +15,7 @@ module.exports = async function ({ genomeIds, organismId, user }) {
     throw new ServiceRequestError('No genome IDs provided');
   }
 
-  const flags = getFlagsForUser(user);
-  if (organismId === '573' && !flags.showKlebExperiment()) {
+  if (organismId === '573' && !user.showKlebExperiment) {
     throw new ServiceRequestError('Unsupported organism');
   }
 

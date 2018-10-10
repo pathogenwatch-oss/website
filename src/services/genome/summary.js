@@ -1,6 +1,5 @@
 const Genome = require('models/genome');
 const Organism = require('models/organism');
-const { getFlagsForUser } = require('../../utils/flags');
 
 async function getWgsaOrganisms() {
   const docs = await Organism
@@ -87,8 +86,7 @@ module.exports = async function (props) {
   const summaryFields = getSummaryFields(wgsaOrganisms);
   const summary = await Genome.getSummary(summaryFields, props);
 
-  const flags = getFlagsForUser(user);
-  if (summary.organismId['573'] && !flags.showKlebExperiment()) {
+  if (summary.organismId['573'] && !user.showKlebExperiment) {
     delete summary.organismId['573'];
   }
 
