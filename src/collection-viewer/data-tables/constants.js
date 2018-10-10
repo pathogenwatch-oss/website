@@ -74,6 +74,126 @@ export const systemDataColumns = {
       return <Profile alleles={alleles} textOnly />;
     },
   },
+  __virulence_score: {
+    columnKey: '__virulence_score',
+    displayName: 'Virulence Score',
+    valueGetter({ analysis }) {
+      if (!analysis.kleborate) return null;
+      return analysis.kleborate.virulence_score;
+    },
+  },
+  __K_locus: {
+    columnKey: '__K_locus',
+    displayName: 'K Locus',
+    valueGetter({ analysis }) {
+      if (!analysis.kleborate) return null;
+      return analysis.kleborate.K_locus;
+    },
+  },
+  __K_locus_confidence: {
+    columnKey: '__K_locus_confidence',
+    displayName: 'K Locus Confidence',
+    valueGetter({ analysis }) {
+      if (!analysis.kleborate) return null;
+      return analysis.kleborate.K_locus_confidence;
+    },
+  },
+  __O_locus: {
+    columnKey: '__O_locus',
+    displayName: ') Locus',
+    valueGetter({ analysis }) {
+      if (!analysis.kleborate) return null;
+      return analysis.kleborate.O_locus;
+    },
+  },
+  __O_locus_confidence: {
+    columnKey: '__O_locus_confidence',
+    displayName: 'O Locus Confidence',
+    valueGetter({ analysis }) {
+      if (!analysis.kleborate) return null;
+      return analysis.kleborate.O_locus_confidence;
+    },
+  },
+  __hypermucoidy: {
+    columnKey: '__hypermucoidy',
+    displayName: 'Hypermucoidy',
+    valueGetter({ analysis }) {
+      if (!analysis.kleborate) return null;
+      return analysis.kleborate.hypermucoidy;
+    },
+  },
+  __Aerobactin: {
+    columnKey: '__Aerobactin',
+    displayName: 'Aerobactin',
+    valueGetter({ analysis }) {
+      if (!analysis.kleborate) return null;
+      return analysis.kleborate.Aerobactin;
+    },
+  },
+  __AbST: {
+    columnKey: '__AbST',
+    displayName: 'AbST',
+    valueGetter({ analysis }) {
+      if (!analysis.kleborate) return null;
+      return analysis.kleborate.AbST;
+    },
+  },
+  __Colibactin: {
+    columnKey: '__Colibactin',
+    displayName: 'Colibactin',
+    valueGetter({ analysis }) {
+      if (!analysis.kleborate) return null;
+      return analysis.kleborate.Colibactin;
+    },
+  },
+  __CbST: {
+    columnKey: '__CbST',
+    displayName: 'CbST',
+    valueGetter({ analysis }) {
+      if (!analysis.kleborate) return null;
+      return analysis.kleborate.CbST;
+    },
+  },
+  __Salmochelin: {
+    columnKey: '__Salmochelin',
+    displayName: 'Salmochelin',
+    valueGetter({ analysis }) {
+      if (!analysis.kleborate) return null;
+      return analysis.kleborate.Salmochelin;
+    },
+  },
+  __SmST: {
+    columnKey: '__SmST',
+    displayName: 'SmST',
+    valueGetter({ analysis }) {
+      if (!analysis.kleborate) return null;
+      return analysis.kleborate.SmST;
+    },
+  },
+  __Yersiniabactin: {
+    columnKey: '__Yersiniabactin',
+    displayName: 'Yersiniabactin',
+    valueGetter({ analysis }) {
+      if (!analysis.kleborate) return null;
+      return analysis.kleborate.Yersiniabactin;
+    },
+  },
+  __YbST: {
+    columnKey: '__YbST',
+    displayName: 'YbST',
+    valueGetter({ analysis }) {
+      if (!analysis.kleborate) return null;
+      return analysis.kleborate.YbST;
+    },
+  },
+  __wzi: {
+    columnKey: '__wzi',
+    displayName: 'wzi',
+    valueGetter({ analysis }) {
+      if (!analysis.kleborate) return null;
+      return analysis.kleborate.wzi;
+    },
+  },
   '__ng-mast': {
     columnKey: '__ng-mast',
     displayName: 'NG-MAST TYPE',
