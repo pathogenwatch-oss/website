@@ -41,7 +41,7 @@ module.exports = async function (props) {
       analysis[task] = analysis[task].__v;
     }
     if (!flags.showKlebExperiment() && genome.organismId === '573') {
-      genome.pending = (genome.pending || []).filter(t => !(t in [ 'core', 'kleborate' ]));
+      genome.pending = (genome.pending || []).filter(t => !([ 'core', 'kleborate' ].includes(t)));
       genome.analysis.kleborate = undefined;
       genome.analysis.core = undefined;
     }

@@ -4,11 +4,8 @@ const { getFlagsForUser } = require('../../utils/flags');
 
 module.exports = function ({ user, ids }) {
   const flags = getFlagsForUser(user);
-  const taskNames = flags.showKlebExperiment() ? [
-    'mlst', 'speciator', 'paarsnp', 'genotyphi', 'ngmast', 'cgmlst', 'metrics', 'kleborate',
-  ] : [
-    'mlst', 'speciator', 'paarsnp', 'genotyphi', 'ngmast', 'cgmlst', 'metrics',
-  ];
+  const taskNames = [ 'mlst', 'speciator', 'paarsnp', 'genotyphi', 'ngmast', 'cgmlst', 'metrics' ];
+  if (flags.showKlebExperiment()) taskNames.push('kleborate');
   const $in = ids.map(id => new ObjectId(id));
   return Promise.all([
     Genome.aggregate([
