@@ -34,6 +34,7 @@ const projection = {
   'analysis.paarsnp.paar': 1,
   'analysis.paarsnp.snp': 1,
   'analysis.cgmlst.scheme': 1,
+  'analysis.kleborate': 1,
 };
 
 // const taskNames = [
@@ -45,7 +46,15 @@ module.exports = async ({ user, id }) => {
 
   const genome = await request('genome', 'authorise', { user, id, projection });
 
+  if (!user.showKlebExperiment) {
+    genome.analysis.kleborate = undefined;
+    if ((genome.analysis.speciator || {}).organismId === '573') {
+      genome.analysis.core = undefined;
+    }
+  }
+
   // TODO: Add task versions back when version-switching added to front-end
+  // TODO: Check if there are any relevant flags which disable tasks.
   return genome;
   // const promises = [
     // Analysis.find(

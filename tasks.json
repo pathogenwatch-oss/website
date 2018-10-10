@@ -29,7 +29,7 @@
       },
       {
         "task": "paarsnp",
-        "version": "v2"
+        "version": "v2.1"
       },
       {
         "task": "core",
@@ -91,7 +91,7 @@
       },
       {
         "task": "paarsnp",
-        "version": "v2"
+        "version": "v2.1"
       }
     ],
     "1314": [
@@ -172,6 +172,10 @@
       {
         "task": "cgmlst",
         "version": "20180806174658-v1.6.10"
+      },
+      {
+        "task": "paarsnp",
+        "version": "v2.1.1"
       }
     ],
     "1464": [
@@ -316,6 +320,12 @@
         "version": "20180806174658-v1.6.10"
       }
     ],
+    "2026240": [
+      {
+        "task": "paarsnp",
+        "version": "v2.1.1"
+      }
+    ],
     "206": [
       {
         "task": "mlst",
@@ -392,6 +402,10 @@
       {
         "task": "cgmlst",
         "version": "20180806174658-v1.6.10"
+      },
+      {
+        "task": "paarsnp",
+        "version": "v2.1.1"
       }
     ],
     "260714": [
@@ -468,6 +482,10 @@
       {
         "task": "cgmlst",
         "version": "20180806174658-v1.6.10"
+      },
+      {
+        "task": "paarsnp",
+        "version": "v2.1.1"
       }
     ],
     "28903": [
@@ -595,7 +613,7 @@
       },
       {
         "task": "paarsnp",
-        "version": "v2"
+        "version": "v2.1"
       },
       {
         "task": "ngmast",
@@ -616,6 +634,12 @@
       {
         "task": "mlst",
         "version": "20180806174658-v1.6.10"
+      }
+    ],
+    "498019": [
+      {
+        "task": "paarsnp",
+        "version": "v2.1.1"
       }
     ],
     "504": [
@@ -694,6 +718,17 @@
       {
         "task": "mlst",
         "version": "20180806174658-v1.6.10"
+      },
+      {
+        "task": "paarsnp",
+        "version": "v2.1.1"
+      }
+    ],
+    "570": [
+      {
+        "task": "kleborate",
+        "version": "v0.0.2",
+        "timeout": 600
       }
     ],
     "571": [
@@ -716,6 +751,20 @@
       {
         "task": "cgmlst",
         "version": "20180806174658-v1.6.10"
+      },
+      {
+        "task": "core",
+        "version": "v1.0.2"
+      },
+      {
+        "task": "paarsnp",
+        "version": "v2.1.1"
+      }
+    ],
+    "590": [
+      {
+        "task": "paarsnp",
+        "version": "v2.1.1"
       }
     ],
     "620": [
@@ -883,7 +932,7 @@
     "90370": [
       {
         "task": "paarsnp",
-        "version": "v2"
+        "version": "v2.1"
       },
       {
         "task": "genotyphi",
@@ -994,6 +1043,32 @@
           {
             "task": "core",
             "version": "v1"
+          }
+        ],
+        "timeout": 900,
+        "workers": 16
+      }
+    ],
+    "573": [
+      {
+        "task": "tree",
+        "version": "v1.0.2",
+        "requires": [
+          {
+            "task": "core",
+            "version": "v1.0.2"
+          }
+        ],
+        "timeout": 900,
+        "workers": 16
+      },
+      {
+        "task": "subtree",
+        "version": "v1.0.2",
+        "requires": [
+          {
+            "task": "core",
+            "version": "v1.0.2"
           }
         ],
         "timeout": 900,

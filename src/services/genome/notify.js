@@ -1,6 +1,7 @@
 const { request } = require('services');
 
 const { summariseAnalysis } = require('../../utils/analysis');
+const User = require('models/user');
 
 function getNotification(analysis) {
   const { task, version, results } = analysis;
@@ -14,12 +15,18 @@ function getNotification(analysis) {
   }
 }
 
-module.exports = function ({ genomeId, clientId, uploadedAt, tasks }) {
-  if (clientId) {
-    request('notification', 'send', {
-      channel: clientId,
-      topic: `analysis-${uploadedAt.toISOString()}`,
-      message: { genomeId, results: tasks.map(getNotification) },
-    });
+module.exports = async function ({ genomeId, clientId, userId, uploadedAt, tasks, task, error }) {
+  if (!clientId) return Promise.resolve();
+  if (userId) {
+    const user = await User.findById(userId, { flags: 1 });
+    if (!user.showKlebExperiment) {
+      tasks = tasks.filter(_ => _.task !== 'kleborate');
+      if (task === 'kleborate') return Promise.resolve();
+    }
   }
+  return request('notification', 'send', {
+    channel: clientId,
+    topic: `analysis-${uploadedAt.toISOString()}`,
+    message: { genomeId, results: tasks.map(getNotification), task, error },
+  });
 };

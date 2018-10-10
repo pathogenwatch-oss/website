@@ -14,8 +14,13 @@ const schema = new Schema({
   providerType: String,
   providerId: String,
   admin: { type: Boolean, default: undefined },
+  flags: Object,
 });
 
 addPreSaveHook(schema);
+
+schema.virtual('showKlebExperiment').get(function () {
+  return !!this.flags.KLEB_EXPERIMENT_USER;
+});
 
 module.exports = mongoose.model('User', schema);

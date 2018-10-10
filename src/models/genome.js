@@ -292,6 +292,7 @@ schema.statics.getForCollection = function (query) {
       'analysis.paarsnp.paar': 1,
       'analysis.paarsnp.snp': 1,
       'analysis.speciator.organismId': 1,
+      'analysis.kleborate': 1,
       country: 1,
       createdAt: 1,
       day: 1,

@@ -1,11 +1,9 @@
 const Genome = require('../../models/genome');
 const { ObjectId } = require('mongoose').Types;
 
-const taskNames = [
-  'mlst', 'speciator', 'paarsnp', 'genotyphi', 'ngmast', 'cgmlst', 'metrics',
-];
-
 module.exports = function ({ user, ids }) {
+  const taskNames = [ 'mlst', 'speciator', 'paarsnp', 'genotyphi', 'ngmast', 'cgmlst', 'metrics' ];
+  if (user.showKlebExperiment) taskNames.push('kleborate');
   const $in = ids.map(id => new ObjectId(id));
   return Promise.all([
     Genome.aggregate([

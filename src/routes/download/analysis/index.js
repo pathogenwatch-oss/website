@@ -30,4 +30,6 @@ router.post('/cgmlst', require('./cgmlst'));
 
 router.post('/mlst', require('./mlst'));
 
+router.post('/kleborate', require('./kleborate'));
+
 module.exports = router;
