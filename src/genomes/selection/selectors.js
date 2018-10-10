@@ -77,7 +77,7 @@ export const getDownloadSummary = createSelector(
             ids,
             sources,
             name: 'paarsnp-snps-genes',
-            label: 'AMR SNPs/Genes',
+            label: 'AMR SNPs/genes',
           });
         }
         for (const id of ids) {

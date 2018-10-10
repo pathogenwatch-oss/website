@@ -8,7 +8,7 @@ export const analysisLabels = {
   metrics: 'Stats',
   mlst: 'MLST',
   speciator: 'Speciation',
-  paarsnp: 'AMR',
+  paarsnp: 'AMR antibiogram',
   ngmast: 'NG-MAST',
   genotyphi: 'Genotyphi',
   cgmlst: 'cgMLST',
