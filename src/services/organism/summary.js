@@ -5,7 +5,7 @@ const Genome = require('models/genome');
 async function getSupportedGenomeSummary(props) {
   const { user } = props;
 
-  const deployedOrganisms = user.showKlebExperiment ?
+  const deployedOrganisms = (user && user.showKlebExperiment) ?
     await Organism.distinct('taxId') :
     await Organism.distinct('taxId').filter(_ => _ !== '573');
   return Genome.getSummary([

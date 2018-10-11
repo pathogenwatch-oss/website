@@ -86,7 +86,7 @@ module.exports = async function (props) {
   const summaryFields = getSummaryFields(wgsaOrganisms);
   const summary = await Genome.getSummary(summaryFields, props);
 
-  if (summary.organismId['573'] && !user.showKlebExperiment) {
+  if (summary.organismId['573'] && (!user || !user.showKlebExperiment)) {
     delete summary.organismId['573'];
   }
 
