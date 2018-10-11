@@ -46,7 +46,7 @@ module.exports = async ({ user, id }) => {
 
   const genome = await request('genome', 'authorise', { user, id, projection });
 
-  if (!user.showKlebExperiment) {
+  if (!user || !user.showKlebExperiment) {
     genome.analysis.kleborate = undefined;
     if ((genome.analysis.speciator || {}).organismId === '573') {
       genome.analysis.core = undefined;

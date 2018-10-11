@@ -38,7 +38,7 @@ module.exports = async function (props) {
     deployedOrganisms,
   };
 
-  if (!user.showKlebExperiment) {
+  if (!user || !user.showKlebExperiment) {
     output.deployedOrganisms = output.deployedOrganisms.filter(_ => _ !== '573');
   }
   return output;

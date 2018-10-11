@@ -15,7 +15,7 @@ module.exports = async function ({ genomeIds, organismId, user }) {
     throw new ServiceRequestError('No genome IDs provided');
   }
 
-  if (organismId === '573' && !user.showKlebExperiment) {
+  if (organismId === '573' && (!user || !user.showKlebExperiment)) {
     throw new ServiceRequestError('Unsupported organism');
   }
 
