@@ -20,7 +20,7 @@ const schema = new Schema({
 addPreSaveHook(schema);
 
 schema.virtual('showKlebExperiment').get(function () {
-  return !!this.flags.KLEB_EXPERIMENT_USER;
+  return this.flags && this.flags.KLEB_EXPERIMENT_USER;
 });
 
 module.exports = mongoose.model('User', schema);
