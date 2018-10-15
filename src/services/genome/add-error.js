@@ -8,5 +8,5 @@ module.exports = function ({ task, metadata }) {
   const speciator = { organismId, speciesId, genusId };
   return Genome
     .addAnalysisError(genomeId, task)
-    .then(() => request('genome', 'notify', { genomeId, clientId, userId, uploadedAt, task, error: true }));
+    .then(() => request('genome', 'notify', { speciator, genomeId, clientId, userId, uploadedAt, tasks: [ { task, error: true } ] }));
 };

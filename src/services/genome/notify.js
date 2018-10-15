@@ -6,18 +6,18 @@ const { ESBL_CPE_EXPERIMENT_TAXIDS, ESBL_CPE_EXPERIMENT_TASKS } = require('model
 const Genome = require('models/genome');
 
 function getNotification(analysis) {
-  const { task, version, results } = analysis;
+  const { task, version, results, error } = analysis;
   switch (task) {
     case 'speciator':
-      return { task, version, result: summariseAnalysis(analysis) };
+      return { task, version, result: summariseAnalysis(analysis), error };
     case 'mlst':
-      return { task, version, result: { st: results.st } };
+      return { task, version, result: { st: results.st }, error };
     default:
-      return { task, version };
+      return { task, version, error };
   }
 }
 
-module.exports = async function ({ genomeId, clientId, userId, uploadedAt, tasks, task, error }) {
+module.exports = async function ({ speciator, genomeId, clientId, userId, uploadedAt, tasks = [] }) {
   if (!clientId) return Promise.resolve();
   if (userId) {
     const user = await User.findById(userId, { flags: 1 });
@@ -31,6 +31,6 @@ module.exports = async function ({ genomeId, clientId, userId, uploadedAt, tasks
   return request('notification', 'send', {
     channel: clientId,
     topic: `analysis-${uploadedAt.toISOString()}`,
-    message: { genomeId, results: tasks.map(getNotification), task, error },
+    message: { genomeId, results: tasks.map(getNotification) },
   });
 };
