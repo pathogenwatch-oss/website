@@ -2,7 +2,7 @@
 const { ServiceRequestError } = require('utils/errors');
 const { request } = require('services');
 const Genome = require('models/genome');
-const { ESBL_CPE_EXPERIMENT_TAXIDS } = require('models/user');
+const { ESBL_CPE_EXPERIMENT_TAXIDS, ESBL_CPE_EXPERIMENT_TASKS } = require('models/user');
 
 const projection = {
   _user: 1,
@@ -48,11 +48,13 @@ module.exports = async ({ user, id }) => {
 
   const genome = await request('genome', 'authorise', { user, id, projection });
 
-  if (genome.analysis && (!user || !user.showEsblCpeExperiment)) {
-    genome.analysis.kleborate = undefined;
-    if (Genome.taxonomy(genome).isIn(ESBL_CPE_EXPERIMENT_TAXIDS)) {
-      genome.analysis.paarsnp = undefined;
-      genome.analysis.core = undefined;
+  if (
+    genome.analysis &&
+    (!user || !user.showEsblCpeExperiment) &&
+    Genome.taxonomy(genome).isIn(ESBL_CPE_EXPERIMENT_TAXIDS)
+  ) {
+    for (const task of ESBL_CPE_EXPERIMENT_TASKS) {
+      genome.analysis[task] = undefined;
     }
   }
 
