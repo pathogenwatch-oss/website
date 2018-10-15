@@ -1,6 +1,8 @@
 // const Analysis = require('models/analysis');
 const { ServiceRequestError } = require('utils/errors');
 const { request } = require('services');
+const Genome = require('models/genome');
+const { KLEB_EXPERIMENT_TAXIDS } = require('models/user');
 
 const projection = {
   _user: 1,
@@ -48,7 +50,8 @@ module.exports = async ({ user, id }) => {
 
   if (genome.analysis && (!user || !user.showKlebExperiment)) {
     genome.analysis.kleborate = undefined;
-    if ((genome.analysis.speciator || {}).organismId === '573') {
+    if (Genome.taxonomy(genome).isIn(KLEB_EXPERIMENT_TAXIDS)) {
+      genome.analysis.paarsnp = undefined;
       genome.analysis.core = undefined;
     }
   }

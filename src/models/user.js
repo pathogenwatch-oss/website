@@ -24,3 +24,4 @@ schema.virtual('showKlebExperiment').get(function () {
 });
 
 module.exports = mongoose.model('User', schema);
+module.exports.KLEB_EXPERIMENT_TAXIDS = [ '1463165', '2026240', '244366', '28901', '498019', '562', '570', '573', '590' ];
