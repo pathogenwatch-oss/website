@@ -38,7 +38,7 @@ module.exports = async function (props) {
     deployedOrganisms,
   };
 
-  if (!user || !user.showKlebExperiment) {
+  if (!user || !user.showEsblCpeExperiment) {
     output.deployedOrganisms = output.deployedOrganisms.filter(_ => _ !== '573');
   }
   return output;

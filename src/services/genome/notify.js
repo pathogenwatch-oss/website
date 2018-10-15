@@ -19,7 +19,7 @@ module.exports = async function ({ genomeId, clientId, userId, uploadedAt, tasks
   if (!clientId) return Promise.resolve();
   if (userId) {
     const user = await User.findById(userId, { flags: 1 });
-    if (!user || !user.showKlebExperiment) {
+    if (!user || !user.showEsblCpeExperiment) {
       tasks = tasks.filter(_ => _.task !== 'kleborate');
       if (task === 'kleborate') return Promise.resolve();
     }

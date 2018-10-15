@@ -38,7 +38,7 @@ module.exports = async function (props) {
     for (const task of Object.keys(analysis)) {
       analysis[task] = analysis[task].__v;
     }
-    if (Genome.taxonomy(genome).isIn([ '570', '573' ]) && (!user || !user.showKlebExperiment)) {
+    if (Genome.taxonomy(genome).isIn([ '570', '573' ]) && (!user || !user.showEsblCpeExperiment)) {
       genome.pending = (genome.pending || []).filter(t => !([ 'core', 'kleborate' ].includes(t)));
       genome.analysis.kleborate = undefined;
       genome.analysis.core = undefined;

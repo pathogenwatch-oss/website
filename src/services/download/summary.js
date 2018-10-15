@@ -1,5 +1,5 @@
 const Genome = require('../../models/genome');
-const { KLEB_EXPERIMENT_TAXIDS } = require('../../models/user');
+const { ESBL_CPE_EXPERIMENT_TAXIDS } = require('../../models/user');
 const { ObjectId } = require('mongoose').Types;
 
 module.exports = function ({ user, ids }) {
@@ -37,8 +37,8 @@ module.exports = function ({ user, ids }) {
       for (const { _id, genomeIds, sources } of organismsByTask[task]) {
         if (_id.speciesId in summary) {
           if (
-            (!user || !user.showKlebExperiment) &&
-            (KLEB_EXPERIMENT_TAXIDS.includes(_id.speciesId) || KLEB_EXPERIMENT_TAXIDS.includes(_id.genusId)) &&
+            (!user || !user.showEsblCpeExperiment) &&
+            (ESBL_CPE_EXPERIMENT_TAXIDS.includes(_id.speciesId) || ESBL_CPE_EXPERIMENT_TAXIDS.includes(_id.genusId)) &&
             [ 'paarsnp', 'kleborate' ].includes(task)
           ) continue;
           summary[_id.speciesId].tasks.push({ ids: genomeIds, sources, task });

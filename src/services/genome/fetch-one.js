@@ -2,7 +2,7 @@
 const { ServiceRequestError } = require('utils/errors');
 const { request } = require('services');
 const Genome = require('models/genome');
-const { KLEB_EXPERIMENT_TAXIDS } = require('models/user');
+const { ESBL_CPE_EXPERIMENT_TAXIDS } = require('models/user');
 
 const projection = {
   _user: 1,
@@ -48,9 +48,9 @@ module.exports = async ({ user, id }) => {
 
   const genome = await request('genome', 'authorise', { user, id, projection });
 
-  if (genome.analysis && (!user || !user.showKlebExperiment)) {
+  if (genome.analysis && (!user || !user.showEsblCpeExperiment)) {
     genome.analysis.kleborate = undefined;
-    if (Genome.taxonomy(genome).isIn(KLEB_EXPERIMENT_TAXIDS)) {
+    if (Genome.taxonomy(genome).isIn(ESBL_CPE_EXPERIMENT_TAXIDS)) {
       genome.analysis.paarsnp = undefined;
       genome.analysis.core = undefined;
     }
