@@ -22,7 +22,7 @@ module.exports = function ({ user, ids }) {
       { $facet: taskNames.reduce((memo, task) => {
         memo[task] = [
           { $match: { [`analysis.${task}`]: { $exists: true } } },
-          { $group: { _id: { genusId: '$analysis.speciator.speciesId', speciesId: '$analysis.speciator.speciesId' }, genomeIds: { $push: '$_id' }, sources: { $addToSet: `$analysis.${task}.source` } } },
+          { $group: { _id: { genusId: '$analysis.speciator.genusId', speciesId: '$analysis.speciator.speciesId' }, genomeIds: { $push: '$_id' }, sources: { $addToSet: `$analysis.${task}.source` } } },
         ];
         return memo;
       }, {}) },
