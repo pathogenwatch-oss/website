@@ -1,9 +1,9 @@
 const Genome = require('../../models/genome');
+const { ESBL_CPE_EXPERIMENT_TAXIDS, ESBL_CPE_EXPERIMENT_TASKS } = require('../../models/user');
 const { ObjectId } = require('mongoose').Types;
 
 module.exports = function ({ user, ids }) {
-  const taskNames = [ 'mlst', 'speciator', 'paarsnp', 'genotyphi', 'ngmast', 'cgmlst', 'metrics' ];
-  if (user && user.showKlebExperiment) taskNames.push('kleborate');
+  const taskNames = [ 'mlst', 'speciator', 'paarsnp', 'genotyphi', 'ngmast', 'cgmlst', 'metrics', 'kleborate' ];
   const $in = ids.map(id => new ObjectId(id));
   return Promise.all([
     Genome.aggregate([
@@ -22,7 +22,7 @@ module.exports = function ({ user, ids }) {
       { $facet: taskNames.reduce((memo, task) => {
         memo[task] = [
           { $match: { [`analysis.${task}`]: { $exists: true } } },
-          { $group: { _id: { speciesId: '$analysis.speciator.speciesId' }, genomeIds: { $push: '$_id' }, sources: { $addToSet: `$analysis.${task}.source` } } },
+          { $group: { _id: { genusId: '$analysis.speciator.genusId', speciesId: '$analysis.speciator.speciesId' }, genomeIds: { $push: '$_id' }, sources: { $addToSet: `$analysis.${task}.source` } } },
         ];
         return memo;
       }, {}) },
@@ -36,10 +36,17 @@ module.exports = function ({ user, ids }) {
     for (const task of Object.keys(organismsByTask)) {
       for (const { _id, genomeIds, sources } of organismsByTask[task]) {
         if (_id.speciesId in summary) {
+          if (
+            (!user || !user.showEsblCpeExperiment) &&
+            (ESBL_CPE_EXPERIMENT_TAXIDS.includes(_id.speciesId) || ESBL_CPE_EXPERIMENT_TAXIDS.includes(_id.genusId)) &&
+            ESBL_CPE_EXPERIMENT_TASKS.includes(task)
+          ) continue;
           summary[_id.speciesId].tasks.push({ ids: genomeIds, sources, task });
         }
       }
     }
-    return Object.keys(summary).map(key => summary[key]);
+    return Object.keys(summary)
+      .map(key => summary[key])
+      .filter(_ => _.tasks && _.tasks.length > 0);
   });
 };

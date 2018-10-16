@@ -73,5 +73,5 @@ module.exports = async function ({ task, version, metadata, timeout$: timeout = 
   }
 
   await Genome.addAnalysisResults(genomeId, doc);
-  notify({ genomeId, clientId, userId, uploadedAt, tasks: [ doc ] });
+  notify({ speciator: { organismId, speciesId, genusId }, genomeId, clientId, userId, uploadedAt, tasks: [ doc ] });
 };
