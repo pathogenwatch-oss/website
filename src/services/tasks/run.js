@@ -24,8 +24,13 @@ function runTask({ fileId, task, version, organismId, speciesId, genusId, timeou
         WGSA_FILE_ID: fileId,
       },
     }, timeout);
-    const stream = fs.createReadStream(fastaStorage.getFilePath(fastaStoragePath, fileId));
-    stream.pipe(container.stdin);
+    try {
+      const stream = fs.createReadStream(fastaStorage.getFilePath(fastaStoragePath, fileId));
+      stream.pipe(container.stdin);
+      stream.on('error', err => reject(err));
+    } catch (err) {
+      return reject(err);
+    }
     const buffer = [];
     container.stdout.on('data', (data) => {
       buffer.push(data.toString());
