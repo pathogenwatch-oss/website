@@ -1,5 +1,4 @@
 const Genome = require('models/genome');
-const { ESBL_CPE_EXPERIMENT_TAXIDS, ESBL_CPE_EXPERIMENT_TASKS } = require('models/user');
 
 module.exports = async function (props) {
   const { user } = props;
@@ -40,15 +39,6 @@ module.exports = async function (props) {
     genome.organismName = speciator.organismName;
     for (const task of Object.keys(analysis)) {
       analysis[task] = analysis[task].__v;
-    }
-    if (
-      (!user || !user.showEsblCpeExperiment) &&
-      Genome.taxonomy({ analysis: { speciator } }).isIn(ESBL_CPE_EXPERIMENT_TAXIDS)
-    ) {
-      genome.pending = (genome.pending || []).filter(t => !(ESBL_CPE_EXPERIMENT_TASKS.includes(t)));
-      for (const task of ESBL_CPE_EXPERIMENT_TASKS) {
-        analysis[task] = undefined;
-      }
     }
     return genome;
   });

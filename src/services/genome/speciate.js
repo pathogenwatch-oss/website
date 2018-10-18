@@ -1,5 +1,6 @@
 const Analysis = require('models/analysis');
 const Genome = require('models/genome');
+const User = require('models/user');
 
 const { request } = require('services');
 const { getSpeciatorTask, getTasksByOrganism } = require('manifest');
@@ -9,7 +10,8 @@ const { summariseAnalysis } = require('../../utils/analysis');
 
 async function submitTasks({ genomeId, fileId, uploadedAt, clientId, userId }, doc) {
   const { organismId, speciesId, genusId } = summariseAnalysis(doc);
-  const tasks = getTasksByOrganism(organismId, speciesId, genusId);
+  const user = await User.findById(userId, { flags: 1 });
+  const tasks = getTasksByOrganism(organismId, speciesId, genusId, user);
   const cachedResults = await Analysis.find({
     fileId,
     $or: tasks.map(({ task, version }) => ({ task, version })),

@@ -23,6 +23,17 @@ schema.virtual('showEsblCpeExperiment').get(function () {
   return !!(this.flags && this.flags.ESBL_CPE_EXPERIMENT_USER);
 });
 
+schema.virtual('canRun').get(function () {
+  const userFlags = this.flags || {};
+  const experiments = Object.keys(userFlags).filter(_ => userFlags[_]);
+  return (task) => {
+    const { flags = {} } = task;
+    if (Object.keys(flags).length === 0) return true;
+    for (const flag of Object.keys(flags)) {
+      if (experiments.includes(flag)) return true;
+    }
+    return false;
+  };
+});
+
 module.exports = mongoose.model('User', schema);
-module.exports.ESBL_CPE_EXPERIMENT_TAXIDS = [ '1463165', '2026240', '244366', '28901', '498019', '562', '570', '573', '590' ];
-module.exports.ESBL_CPE_EXPERIMENT_TASKS = [ 'kleborate', 'core', 'paarsnp' ];
