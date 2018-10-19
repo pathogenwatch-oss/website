@@ -175,7 +175,10 @@
       },
       {
         "task": "paarsnp",
-        "version": "v2.1.1"
+        "version": "v2.1.2",
+        "flags": {
+          "ESBL_CPE_EXPERIMENT_USER": true
+        }
       }
     ],
     "1464": [
@@ -323,7 +326,10 @@
     "2026240": [
       {
         "task": "paarsnp",
-        "version": "v2.1.1"
+        "version": "v2.1.2",
+        "flags": {
+          "ESBL_CPE_EXPERIMENT_USER": true
+        }
       }
     ],
     "206": [
@@ -405,7 +411,10 @@
       },
       {
         "task": "paarsnp",
-        "version": "v2.1.1"
+        "version": "v2.1.2",
+        "flags": {
+          "ESBL_CPE_EXPERIMENT_USER": true
+        }
       }
     ],
     "260714": [
@@ -485,7 +494,10 @@
       },
       {
         "task": "paarsnp",
-        "version": "v2.1.1"
+        "version": "v2.1.2",
+        "flags": {
+          "ESBL_CPE_EXPERIMENT_USER": true
+        }
       }
     ],
     "28903": [
@@ -639,7 +651,17 @@
     "498019": [
       {
         "task": "paarsnp",
-        "version": "v2.1.1"
+        "version": "v2.1.2",
+        "flags": {
+          "C_AURIS_EXPERIMENT_USER": true
+        }
+      },
+      {
+        "task": "core",
+        "version": "v1.0.2",
+        "flags": {
+          "C_AURIS_EXPERIMENT_USER": true
+        }
       }
     ],
     "504": [
@@ -721,14 +743,20 @@
       },
       {
         "task": "paarsnp",
-        "version": "v2.1.1"
+        "version": "v2.1.2",
+        "flags": {
+          "ESBL_CPE_EXPERIMENT_USER": true
+        }
       }
     ],
     "570": [
       {
         "task": "kleborate",
         "version": "v0.0.2",
-        "timeout": 600
+        "timeout": 600,
+        "flags": {
+          "ESBL_CPE_EXPERIMENT_USER": true
+        }
       }
     ],
     "571": [
@@ -754,17 +782,26 @@
       },
       {
         "task": "core",
-        "version": "v1.0.2"
+        "version": "v1.0.2",
+        "flags": {
+          "ESBL_CPE_EXPERIMENT_USER": true
+        }
       },
       {
         "task": "paarsnp",
-        "version": "v2.1.1"
+        "version": "v2.1.2",
+        "flags": {
+          "ESBL_CPE_EXPERIMENT_USER": true
+        }
       }
     ],
     "590": [
       {
         "task": "paarsnp",
-        "version": "v2.1.1"
+        "version": "v2.1.2",
+        "flags": {
+          "ESBL_CPE_EXPERIMENT_USER": true
+        }
       }
     ],
     "620": [
@@ -1049,7 +1086,7 @@
         "workers": 16
       }
     ],
-    "573": [
+    "498019": [
       {
         "task": "tree",
         "version": "v1.0.2",
@@ -1060,7 +1097,10 @@
           }
         ],
         "timeout": 900,
-        "workers": 16
+        "workers": 16,
+        "flags": {
+          "C_AURIS_EXPERIMENT_USER": true
+        }
       },
       {
         "task": "subtree",
@@ -1072,7 +1112,42 @@
           }
         ],
         "timeout": 900,
-        "workers": 16
+        "workers": 16,
+        "flags": {
+          "C_AURIS_EXPERIMENT_USER": true
+        }
+      }
+    ],
+    "573": [
+      {
+        "task": "tree",
+        "version": "v1.0.2",
+        "requires": [
+          {
+            "task": "core",
+            "version": "v1.0.2"
+          }
+        ],
+        "timeout": 900,
+        "workers": 16,
+        "flags": {
+          "ESBL_CPE_EXPERIMENT_USER": true
+        }
+      },
+      {
+        "task": "subtree",
+        "version": "v1.0.2",
+        "requires": [
+          {
+            "task": "core",
+            "version": "v1.0.2"
+          }
+        ],
+        "timeout": 900,
+        "workers": 16,
+        "flags": {
+          "ESBL_CPE_EXPERIMENT_USER": true
+        }
       }
     ],
     "64320": [

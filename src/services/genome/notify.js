@@ -17,17 +17,8 @@ function getNotification(analysis) {
   }
 }
 
-module.exports = async function ({ speciator, genomeId, clientId, userId, uploadedAt, tasks = [] }) {
+module.exports = async function ({ genomeId, clientId, uploadedAt, tasks = [] }) {
   if (!clientId) return Promise.resolve();
-  if (userId) {
-    const user = await User.findById(userId, { flags: 1 });
-    if (
-      (!user || !user.showEsblCpeExperiment) &&
-      Genome.taxonomy({ analysis: { speciator } }).isIn(ESBL_CPE_EXPERIMENT_TAXIDS)
-    ) {
-      tasks = tasks.filter(_ => !ESBL_CPE_EXPERIMENT_TASKS.includes(_.task));
-    }
-  }
   return request('notification', 'send', {
     channel: clientId,
     topic: `analysis-${uploadedAt.toISOString()}`,

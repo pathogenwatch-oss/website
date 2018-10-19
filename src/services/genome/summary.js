@@ -81,14 +81,9 @@ function getSummaryFields(wgsaOrganisms) {
 }
 
 module.exports = async function (props) {
-  const { user } = props;
   const wgsaOrganisms = await getWgsaOrganisms();
   const summaryFields = getSummaryFields(wgsaOrganisms);
   const summary = await Genome.getSummary(summaryFields, props);
-
-  if (summary.organismId['573'] && (!user || !user.showEsblCpeExperiment)) {
-    delete summary.organismId['573'];
-  }
 
   return summary;
 };

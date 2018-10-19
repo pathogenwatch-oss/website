@@ -31,27 +31,47 @@ module.exports.getSpeciatorTask = function () {
   return { task, version };
 };
 
-module.exports.getTasksByOrganism = function (organismId, speciesId, genusId) {
+function hasFlags(task) {
+  const { flags = {} } = task;
+  return Object.keys(flags).length > 0;
+}
+
+const defaultUser = {
+  canRun: (task) => !hasFlags(task),
+};
+
+
+module.exports.getTasksByOrganism = function (organismId, speciesId, genusId, user = defaultUser) {
   const genomeTasks = tasks.genome;
-  const taskLists = [ genomeTasks.all ];
+  const uniqueTasks = {};
 
-  if (organismId in genomeTasks) taskLists.push(genomeTasks[organismId]);
-  if (speciesId in genomeTasks) taskLists.push(genomeTasks[speciesId]);
-  if (genusId in genomeTasks) taskLists.push(genomeTasks[genusId]);
+  // We want to find the versions of tasks we should run
+  // We want to run the version for the most specific taxid provided (e.g. species tasks trump genus tasks)
+  // If there are multiple versions at the most specific level, we pick the one with an experimental flag
+  // or the first one listed.
+  // If there isn't a user specified, we assume they're not part of any experiments.
 
-  const uniqueTasks = [];
-  const keys = new Set();
-  for (const taskList of taskLists) {
-    for (const task of taskList) {
-      const taskKey = task.task + task.version;
-      if (!keys.has(taskKey)) {
-        keys.add(taskKey);
-        uniqueTasks.push(task);
+  for (const id of [ 'all', genusId, speciesId, organismId ]) {
+    if (!id) continue;
+    // There is probably a better method than looping twice but it's not obvious and this seems clear
+    for (const task of (genomeTasks[id] || [])) {
+      if (!user.canRun(task)) continue;
+      // We know we're using a more specific version of a task but we don't know which yet
+      uniqueTasks[task.task] = undefined;
+    }
+    for (const task of (genomeTasks[id] || [])) {
+      if (!user.canRun(task)) continue;
+      // If there isn't already a version of a task, add one
+      if (!uniqueTasks[task.task]) {
+        uniqueTasks[task.task] = task;
+      } else if (hasFlags(task) && !hasFlags(uniqueTasks[task.task])) {
+        // There is a previous version but there is also one with a corresponding feature flag so we'll run that instead
+        uniqueTasks[task.task] = task;
       }
     }
   }
 
-  return uniqueTasks;
+  return Object.keys(uniqueTasks).map(_ => uniqueTasks[_]);
 };
 
 module.exports.getCollectionTask = function (organismId, task) {

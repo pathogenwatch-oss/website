@@ -19,6 +19,10 @@ module.exports = async function ({ genomeIds, organismId, user }) {
     throw new ServiceRequestError('Unsupported organism');
   }
 
+  if (organismId === '498019' && (!user || !user.showCandidaExperiment)) {
+    throw new ServiceRequestError('Unsupported organism');
+  }
+
   const task = manifest.getCollectionTask(organismId, 'tree');
   if (!task) throw new ServiceRequestError('Unsupported organism');
 
