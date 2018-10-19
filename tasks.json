@@ -185,7 +185,7 @@
       },
       {
         "task": "paarsnp",
-        "version": "v2.1.1",
+        "version": "v2.1.2",
         "flags": {
           "ESBL_CPE_EXPERIMENT_USER": true
         }
@@ -336,7 +336,7 @@
     "2026240": [
       {
         "task": "paarsnp",
-        "version": "v2.1.1",
+        "version": "v2.1.2",
         "flags": {
           "ESBL_CPE_EXPERIMENT_USER": true
         }
@@ -421,7 +421,7 @@
       },
       {
         "task": "paarsnp",
-        "version": "v2.1.1",
+        "version": "v2.1.2",
         "flags": {
           "ESBL_CPE_EXPERIMENT_USER": true
         }
@@ -504,7 +504,7 @@
       },
       {
         "task": "paarsnp",
-        "version": "v2.1.1",
+        "version": "v2.1.2",
         "flags": {
           "ESBL_CPE_EXPERIMENT_USER": true
         }
@@ -668,7 +668,7 @@
     "498019": [
       {
         "task": "paarsnp",
-        "version": "v2.1.1",
+        "version": "v2.1.2",
         "flags": {
           "ESBL_CPE_EXPERIMENT_USER": true
         }
@@ -753,7 +753,7 @@
       },
       {
         "task": "paarsnp",
-        "version": "v2.1.1",
+        "version": "v2.1.2",
         "flags": {
           "ESBL_CPE_EXPERIMENT_USER": true
         }
@@ -799,7 +799,7 @@
       },
       {
         "task": "paarsnp",
-        "version": "v2.1.1",
+        "version": "v2.1.2",
         "flags": {
           "ESBL_CPE_EXPERIMENT_USER": true
         }
@@ -808,7 +808,7 @@
     "590": [
       {
         "task": "paarsnp",
-        "version": "v2.1.1",
+        "version": "v2.1.2",
         "flags": {
           "ESBL_CPE_EXPERIMENT_USER": true
         }
