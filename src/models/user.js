@@ -23,6 +23,10 @@ schema.virtual('showEsblCpeExperiment').get(function () {
   return !!(this.flags && this.flags.ESBL_CPE_EXPERIMENT_USER);
 });
 
+schema.virtual('showCandidaExperiment').get(function () {
+  return !!(this.flags && this.flags.C_AURIS_EXPERIMENT_USER);
+});
+
 schema.virtual('canRun').get(function () {
   const userFlags = this.flags || {};
   const experiments = Object.keys(userFlags).filter(_ => userFlags[_]);

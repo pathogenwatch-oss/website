@@ -38,8 +38,11 @@ module.exports = async function (props) {
     deployedOrganisms,
   };
 
-  if (!user || !user.showEsblCpeExperiment) {
-    output.deployedOrganisms = output.deployedOrganisms.filter(_ => _ !== '573');
-  }
+  output.deployedOrganisms = output.deployedOrganisms.filter(taxId => {
+    if (taxId === '573' && (!user || !user.showEsblCpeExperiment)) return false;
+    if (taxId === '498019' && (!user || !user.showCandidaExperiment)) return false;
+    return true;
+  });
+
   return output;
 };
