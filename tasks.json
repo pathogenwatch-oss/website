@@ -29,10 +29,7 @@
       },
       {
         "task": "paarsnp",
-        "version": "v2.1",
-        "flags": {
-          "ESBL_CPE_EXPERIMENT_USER": true
-        }
+        "version": "v2.1"
       },
       {
         "task": "core",
@@ -94,14 +91,7 @@
       },
       {
         "task": "paarsnp",
-        "version": "v2"
-      },
-      {
-        "task": "paarsnp",
-        "version": "v2.1",
-        "flags": {
-          "ESBL_CPE_EXPERIMENT_USER": true
-        }
+        "version": "v2.1"
       }
     ],
     "1314": [
@@ -635,14 +625,7 @@
       },
       {
         "task": "paarsnp",
-        "version": "v2"
-      },
-      {
-        "task": "paarsnp",
-        "version": "v2.1",
-        "flags": {
-          "ESBL_CPE_EXPERIMENT_USER": true
-        }
+        "version": "v2.1"
       },
       {
         "task": "ngmast",
@@ -986,14 +969,7 @@
     "90370": [
       {
         "task": "paarsnp",
-        "version": "v2"
-      },
-      {
-        "task": "paarsnp",
-        "version": "v2.1",
-        "flags": {
-          "ESBL_CPE_EXPERIMENT_USER": true
-        }
+        "version": "v2.1"
       },
       {
         "task": "genotyphi",
