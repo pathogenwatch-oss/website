@@ -651,7 +651,7 @@
     "498019": [
       {
         "task": "paarsnp",
-        "version": "v2.1.2",
+        "version": "v2.1.3",
         "flags": {
           "C_AURIS_EXPERIMENT_USER": true
         }
