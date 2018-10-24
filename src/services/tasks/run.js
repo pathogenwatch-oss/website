@@ -27,8 +27,12 @@ function runTask({ fileId, task, version, organismId, speciesId, genusId, timeou
     try {
       const stream = fs.createReadStream(fastaStorage.getFilePath(fastaStoragePath, fileId));
       stream.pipe(container.stdin);
-      stream.on('error', err => reject(err));
+      stream.on('error', err => {
+        container.destroy();
+        reject(err);
+      });
     } catch (err) {
+      container.destroy();
       return reject(err);
     }
     const buffer = [];
