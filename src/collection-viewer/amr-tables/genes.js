@@ -22,7 +22,7 @@ function applyPaarOverrides(paar) {
 
 export const name = tableKeys.genes;
 
-export function buildColumns({ paar, antibiotics }, profiles) {
+export function buildColumns({ paar = {}, antibiotics }, profiles) {
   applyPaarOverrides(paar);
 
   return antibiotics.reduce((groups, antibiotic) => {

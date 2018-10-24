@@ -72,6 +72,14 @@ export const getDownloadSummary = createSelector(
           name: task,
           label: analysisLabels[task] || task,
         });
+        if (task === 'paarsnp') {
+          tasks.push({
+            ids,
+            sources,
+            name: 'paarsnp-snps-genes',
+            label: 'AMR SNPs/genes',
+          });
+        }
         for (const id of ids) {
           allIds.add(id);
         }

@@ -12,6 +12,7 @@ import { getSummary } from '../summary/selectors';
 import { toggleUserDrawer } from './actions';
 
 import config from '../app/config';
+import { setStoredSelection } from '../genomes/selection/utils';
 const { user } = config;
 
 const documentationURL = 'https://cgps.gitbook.io/pathogenwatch';
@@ -41,6 +42,14 @@ const UserDrawer = React.createClass({
     if (e.keyCode === 27 && this.props.visible) {
       this.props.closeMenu();
     }
+  },
+
+  handleSignOut(e) {
+    e.preventDefault();
+    setStoredSelection()
+      .then(() => {
+        window.location.pathname = '/signout';
+      });
   },
 
   render() {
@@ -106,7 +115,7 @@ const UserDrawer = React.createClass({
             </nav>
             { user &&
               <nav className="mdl-navigation">
-                <a href="/signout" className="mdl-navigation__link">
+                <a href="/signout" className="mdl-navigation__link" onClick={this.handleSignOut}>
                   <i className="material-icons">exit_to_app</i>
                   <span>Sign Out</span>
                 </a>

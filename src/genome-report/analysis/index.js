@@ -8,11 +8,12 @@ import Metrics from './Metrics.react';
 import PAARSNP from './PAARSNP.react';
 import Speciator from './Speciator.react';
 import Typing from './Typing.react';
+import Kleborate from './Kleborate.react';
 // import renderGenericResults from './Generic.react';
 
 export default (genome) => {
   const { analysis = {} } = genome;
-  const { metrics, core, mlst, genotyphi, ngmast, paarsnp, speciator, cgmlst } = analysis;
+  const { metrics, core, mlst, genotyphi, ngmast, paarsnp, speciator, cgmlst, kleborate } = analysis;
 
   const sections = [];
 
@@ -20,6 +21,12 @@ export default (genome) => {
     sections.push({
       key: (genotyphi || ngmast) ? 'Typing' : 'MLST',
       component: <Typing genome={genome} />,
+    });
+  }
+  if (kleborate) {
+    sections.push({
+      key: 'Kleborate',
+      component: <VersionSwitcher taskName="kleborate" component={Kleborate} genome={genome} />,
     });
   }
   if (paarsnp) {
