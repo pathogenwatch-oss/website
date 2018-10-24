@@ -1,5 +1,4 @@
 const Genome = require('models/genome');
-const Organism = require('models/organism');
 
 const { request } = require('services');
 

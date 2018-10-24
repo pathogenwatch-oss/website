@@ -18,6 +18,8 @@ router.post('/speciator', require('./speciator'));
 
 router.post('/paarsnp', require('./paarsnp'));
 
+router.post('/paarsnp-snps-genes', require('./paarsnp-snps-genes'));
+
 router.post('/genotyphi', require('./genotyphi'));
 
 router.post('/metrics', require('./metrics'));
@@ -27,5 +29,7 @@ router.post('/ngmast', require('./ngmast'));
 router.post('/cgmlst', require('./cgmlst'));
 
 router.post('/mlst', require('./mlst'));
+
+router.post('/kleborate', require('./kleborate'));
 
 module.exports = router;

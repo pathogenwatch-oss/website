@@ -60,6 +60,20 @@ schema.index({ 'analysis.speciator.genusId': 1 });
 schema.index({ 'analysis.speciator.organismName': 1 });
 schema.index({ 'analysis.speciator.organismId': 1, 'analysis.speciator.organismName': 1 });
 
+schema.statics.taxonomy = genome => {
+  const speciator = (genome.analysis || {}).speciator || {};
+  const includes = (taxid) => taxid && [ speciator.organismId, speciator.speciesId, speciator.genusId ].includes(taxid);
+  return {
+    includes,
+    isIn(taxids) {
+      for (const taxid of taxids) {
+        if (includes(taxid)) return true;
+      }
+      return false;
+    },
+  };
+};
+
 function toObject(genome, user = {}) {
   const { id } = user;
   const { _user } = genome;
@@ -292,6 +306,7 @@ schema.statics.getForCollection = function (query) {
       'analysis.paarsnp.paar': 1,
       'analysis.paarsnp.snp': 1,
       'analysis.speciator.organismId': 1,
+      'analysis.kleborate': 1,
       country: 1,
       createdAt: 1,
       day: 1,

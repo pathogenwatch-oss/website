@@ -1,6 +1,6 @@
 {
   "name": "wgsa-middle-end",
-  "version": "7.2.4",
+  "version": "7.3.0-8",
   "description": "Web API for WGSA",
   "main": "app.js",
   "engines": {
@@ -41,7 +41,7 @@
     "slug": "^0.9.1",
     "stream-transform": "^0.1.2",
     "wgsa-fasta-store": "gitlab:cgps/wgsa-fasta-store#v4.1.0",
-    "wgsa-front-end": "gitlab:cgps/wgsa-front-end#v7.2.3",
+    "wgsa-front-end": "gitlab:cgps/wgsa-front-end#v7.3.0",
     "zip-stream": "^1.2.0"
   },
   "devDependencies": {
@@ -76,7 +76,8 @@
     "migrate-collection": "eval $npm_package_startcmd microservices/bootstrap.js migrator",
     "rerun-collection": "eval $npm_package_startcmd microservices/bootstrap.js rerunner",
     "publish-collection": "eval $npm_package_startcmd microservices/bootstrap.js publisher",
-    "centroids": "eval $npm_package_startcmd bin/add-centroids.js"
+    "centroids": "eval $npm_package_startcmd bin/add-centroids.js",
+    "submit-genomes": "NODE_PATH=$npm_package_nodepath node ./bin/submit-genomes.js"
   },
   "repository": {
     "type": "git",

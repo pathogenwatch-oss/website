@@ -29,7 +29,7 @@
       },
       {
         "task": "paarsnp",
-        "version": "v2"
+        "version": "v2.1"
       },
       {
         "task": "core",
@@ -91,7 +91,7 @@
       },
       {
         "task": "paarsnp",
-        "version": "v2"
+        "version": "v2.1"
       }
     ],
     "1314": [
@@ -172,6 +172,13 @@
       {
         "task": "cgmlst",
         "version": "20180806174658-v1.6.10"
+      },
+      {
+        "task": "paarsnp",
+        "version": "v2.1.2",
+        "flags": {
+          "ESBL_CPE_EXPERIMENT_USER": true
+        }
       }
     ],
     "1464": [
@@ -316,6 +323,15 @@
         "version": "20180806174658-v1.6.10"
       }
     ],
+    "2026240": [
+      {
+        "task": "paarsnp",
+        "version": "v2.1.2",
+        "flags": {
+          "ESBL_CPE_EXPERIMENT_USER": true
+        }
+      }
+    ],
     "206": [
       {
         "task": "mlst",
@@ -392,6 +408,13 @@
       {
         "task": "cgmlst",
         "version": "20180806174658-v1.6.10"
+      },
+      {
+        "task": "paarsnp",
+        "version": "v2.1.2",
+        "flags": {
+          "ESBL_CPE_EXPERIMENT_USER": true
+        }
       }
     ],
     "260714": [
@@ -468,6 +491,13 @@
       {
         "task": "cgmlst",
         "version": "20180806174658-v1.6.10"
+      },
+      {
+        "task": "paarsnp",
+        "version": "v2.1.2",
+        "flags": {
+          "ESBL_CPE_EXPERIMENT_USER": true
+        }
       }
     ],
     "28903": [
@@ -595,7 +625,7 @@
       },
       {
         "task": "paarsnp",
-        "version": "v2"
+        "version": "v2.1"
       },
       {
         "task": "ngmast",
@@ -616,6 +646,22 @@
       {
         "task": "mlst",
         "version": "20180806174658-v1.6.10"
+      }
+    ],
+    "498019": [
+      {
+        "task": "paarsnp",
+        "version": "v2.1.3",
+        "flags": {
+          "C_AURIS_EXPERIMENT_USER": true
+        }
+      },
+      {
+        "task": "core",
+        "version": "v1.0.3",
+        "flags": {
+          "C_AURIS_EXPERIMENT_USER": true
+        }
       }
     ],
     "504": [
@@ -694,6 +740,23 @@
       {
         "task": "mlst",
         "version": "20180806174658-v1.6.10"
+      },
+      {
+        "task": "paarsnp",
+        "version": "v2.1.2",
+        "flags": {
+          "ESBL_CPE_EXPERIMENT_USER": true
+        }
+      }
+    ],
+    "570": [
+      {
+        "task": "kleborate",
+        "version": "v0.0.2",
+        "timeout": 600,
+        "flags": {
+          "ESBL_CPE_EXPERIMENT_USER": true
+        }
       }
     ],
     "571": [
@@ -716,6 +779,29 @@
       {
         "task": "cgmlst",
         "version": "20180806174658-v1.6.10"
+      },
+      {
+        "task": "core",
+        "version": "v1.0.2",
+        "flags": {
+          "ESBL_CPE_EXPERIMENT_USER": true
+        }
+      },
+      {
+        "task": "paarsnp",
+        "version": "v2.1.2",
+        "flags": {
+          "ESBL_CPE_EXPERIMENT_USER": true
+        }
+      }
+    ],
+    "590": [
+      {
+        "task": "paarsnp",
+        "version": "v2.1.2",
+        "flags": {
+          "ESBL_CPE_EXPERIMENT_USER": true
+        }
       }
     ],
     "620": [
@@ -883,7 +969,7 @@
     "90370": [
       {
         "task": "paarsnp",
-        "version": "v2"
+        "version": "v2.1"
       },
       {
         "task": "genotyphi",
@@ -998,6 +1084,70 @@
         ],
         "timeout": 900,
         "workers": 16
+      }
+    ],
+    "498019": [
+      {
+        "task": "tree",
+        "version": "v1.0.3",
+        "requires": [
+          {
+            "task": "core",
+            "version": "v1.0.3"
+          }
+        ],
+        "timeout": 900,
+        "workers": 16,
+        "flags": {
+          "C_AURIS_EXPERIMENT_USER": true
+        }
+      },
+      {
+        "task": "subtree",
+        "version": "v1.0.3",
+        "requires": [
+          {
+            "task": "core",
+            "version": "v1.0.3"
+          }
+        ],
+        "timeout": 900,
+        "workers": 16,
+        "flags": {
+          "C_AURIS_EXPERIMENT_USER": true
+        }
+      }
+    ],
+    "573": [
+      {
+        "task": "tree",
+        "version": "v1.0.2",
+        "requires": [
+          {
+            "task": "core",
+            "version": "v1.0.2"
+          }
+        ],
+        "timeout": 900,
+        "workers": 16,
+        "flags": {
+          "ESBL_CPE_EXPERIMENT_USER": true
+        }
+      },
+      {
+        "task": "subtree",
+        "version": "v1.0.2",
+        "requires": [
+          {
+            "task": "core",
+            "version": "v1.0.2"
+          }
+        ],
+        "timeout": 900,
+        "workers": 16,
+        "flags": {
+          "ESBL_CPE_EXPERIMENT_USER": true
+        }
       }
     ],
     "64320": [

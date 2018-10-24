@@ -3,7 +3,14 @@ const Collection = require('models/collection');
 const Genome = require('models/genome');
 
 async function getSupportedGenomeSummary(props) {
-  const deployedOrganisms = await Organism.distinct('taxId');
+  const { user } = props;
+
+  const deployedOrganisms = await Organism.distinct('taxId')
+    .filter(taxId => {
+      if (taxId === '573' && (!user || !user.showEsblCpeExperiment)) return false;
+      if (taxId === '498019' && (!user || !user.showCandidaExperiment)) return false;
+      return true;
+    });
   return Genome.getSummary([
     { field: 'organismId',
       aggregation: () => [

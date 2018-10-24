@@ -24,8 +24,17 @@ function runTask({ fileId, task, version, organismId, speciesId, genusId, timeou
         WGSA_FILE_ID: fileId,
       },
     }, timeout);
-    const stream = fs.createReadStream(fastaStorage.getFilePath(fastaStoragePath, fileId));
-    stream.pipe(container.stdin);
+    try {
+      const stream = fs.createReadStream(fastaStorage.getFilePath(fastaStoragePath, fileId));
+      stream.pipe(container.stdin);
+      stream.on('error', err => {
+        container.destroy();
+        reject(err);
+      });
+    } catch (err) {
+      container.destroy();
+      return reject(err);
+    }
     const buffer = [];
     container.stdout.on('data', (data) => {
       buffer.push(data.toString());
@@ -60,7 +69,7 @@ function runTask({ fileId, task, version, organismId, speciesId, genusId, timeou
 }
 
 module.exports = async function ({ task, version, metadata, timeout$: timeout = DEFAULT_TIMEOUT }) {
-  const { organismId, speciesId, genusId, fileId, genomeId, uploadedAt, clientId } = metadata;
+  const { organismId, speciesId, genusId, fileId, genomeId, uploadedAt, clientId, userId } = metadata;
   let doc = await Analysis.findOne({ fileId, task, version }).lean();
   if (!doc) { // The results weren't in the cache
     const results = await runTask({ fileId, task, version, organismId, speciesId, genusId, timeout });
@@ -73,5 +82,5 @@ module.exports = async function ({ task, version, metadata, timeout$: timeout = 
   }
 
   await Genome.addAnalysisResults(genomeId, doc);
-  notify({ genomeId, clientId, uploadedAt, tasks: [ doc ] });
+  notify({ speciator: { organismId, speciesId, genusId }, genomeId, clientId, userId, uploadedAt, tasks: [ doc ] });
 };
