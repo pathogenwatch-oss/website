@@ -1,6 +1,8 @@
 const Genome = require('models/genome');
 const Organism = require('models/organism');
 
+const { getCollectionSchemes } = require('manifest');
+
 async function getWgsaOrganisms() {
   const docs = await Organism
     .find({}, { taxId: 1 })
@@ -35,20 +37,26 @@ function getSummaryFields(wgsaOrganisms) {
     },
     { field: 'country' },
     { field: 'type',
-      aggregation: ({}) => [
-        {
-          $group: {
-            _id: {
-              $cond: [
-                { $eq: [ '$reference', true ] },
-                'reference',
-                { $cond: [ { $eq: [ '$public', true ] }, 'public', 'private' ] },
-              ],
+      aggregation: ({ user }) => {
+        const schemes = getCollectionSchemes(user);
+        return [
+          {
+            $group: {
+              _id: {
+                $cond: [
+                  { $and: [
+                    { $eq: [ '$reference', true ] },
+                    { $in: [ '$analysis.speciator.organismId', schemes ] },
+                  ] },
+                  'reference',
+                  { $cond: [ { $eq: [ '$public', true ] }, 'public', 'private' ] },
+                ],
+              },
+              count: { $sum: 1 },
             },
-            count: { $sum: 1 },
           },
-        },
-      ],
+        ];
+      },
     },
     { field: 'uploadedAt',
       aggregation: ({ user }) => {
