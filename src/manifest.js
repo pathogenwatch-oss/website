@@ -91,10 +91,9 @@ module.exports.getClusteringTask = function () {
 
 module.exports.getCollectionSchemes = function (user = defaultUser) {
   const schemes = [];
-  for (const taxId of Object.keys(tasks.collection)) {
-    const genomeTasks = tasks.genome[taxId];
-    const coreTask = genomeTasks.find(_ => _.task === 'core');
-    if (coreTask && user.canRun(coreTask)) {
+  for (const [ taxId, collectionTasks ] of Object.entries(tasks.collection)) {
+    const treeTask = collectionTasks.find(_ => _.task === 'tree');
+    if (treeTask && user.canRun(treeTask)) {
       schemes.push(taxId);
     }
   }

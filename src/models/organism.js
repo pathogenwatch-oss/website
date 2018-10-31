@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
+const { getCollectionSchemes } = require('manifest');
 const { setToObjectOptions } = require('./utils');
 
 const schema = new Schema({
@@ -32,15 +33,10 @@ schema.statics.getLatest = function (taxId, projection = {}) {
   );
 };
 
-schema.statics.deployedOrganismIds = function (user = { flags: {} }) {
+schema.statics.deployedOrganismIds = function (user) {
+  const schemes = new Set(getCollectionSchemes(user));
   return this.distinct('taxId')
-    .then(taxIds =>
-      taxIds.filter(taxId => {
-        if (taxId === '573' && (!user || !user.showEsblCpeExperiment)) return false;
-        if (taxId === '498019' && (!user || !user.showCandidaExperiment)) return false;
-        return true;
-      })
-    );
+    .then(taxIds => taxIds.filter(taxId => schemes.has(taxId)));
 };
 
 module.exports = mongoose.model('Organism', schema);
