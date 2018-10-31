@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import WGSAMap from '../../map';
+import PWMap from '../../map';
 import LeafletPieChartMarker, { isMarker } from '../../cgps-commons/LeafletPieChartMarker.react';
 import MarkerControls from '../../cgps-commons/LeafletMarkerControls.react';
 
@@ -67,7 +67,7 @@ function mergeProps(mappedState, { dispatch, ...mappedDispatch }, ownProps) {
 
 export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(
   (props) => (
-    <WGSAMap
+    <PWMap
       className="wgsa-collection-viewer-map"
       stateKey={stateKey}
       lassoPath={props.lassoPath}
@@ -87,6 +87,6 @@ export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(
         onMarkerSizeChange={props.onMarkerSizeChange}
         onViewByCountryChange={props.onViewByCountryChange}
       />
-    </WGSAMap>
+    </PWMap>
   )
 );

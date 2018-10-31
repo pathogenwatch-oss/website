@@ -28,7 +28,7 @@ const Filter = ({ isActive, filterSummary, textValue, updateFilterValue, applyFi
         filterKey="organismId"
         heading="Supported Organism"
         icon="bug_report"
-        summary={filterSummary.wgsaOrganisms}
+        summary={filterSummary.supportedOrganisms}
         updateFilter={updateFilter}
       />
       <FilterSection

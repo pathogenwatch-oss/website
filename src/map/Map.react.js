@@ -18,7 +18,7 @@ export const buttonClassname =
 
 export const activeButtonClassname = 'wgsa-pane-button--active';
 
-const WGSAMap = props => (
+const PWMap = props => (
   <LeafletMap
     center={props.bounds.center}
     className={props.className}
@@ -60,4 +60,4 @@ function mapDispatchToProps(dispatch, { stateKey, onLassoPathChange }) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(WGSAMap);
+export default connect(mapStateToProps, mapDispatchToProps)(PWMap);

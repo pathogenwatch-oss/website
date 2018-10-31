@@ -36,12 +36,12 @@ export const getFilterSummary = createSelector(
     const sequenceType = summary.st || {};
     const antibiotics = summary.amr || {};
 
-    const wgsaOrganisms = [];
+    const supportedOrganisms = [];
 
     for (const value of Object.keys(organismId)) {
       if (deployedOrganisms.has(value)) {
         const organism = taxIdMap.get(value);
-        wgsaOrganisms.push({
+        supportedOrganisms.push({
           value,
           label: organism.formattedName,
           title: organism.name,
@@ -57,7 +57,7 @@ export const getFilterSummary = createSelector(
         bounds: [ date.min, date.max ],
         values: [ filterState.minDate, filterState.maxDate ],
       } : null,
-      wgsaOrganisms: sortBy(wgsaOrganisms, 'title'),
+      supportedOrganisms: sortBy(supportedOrganisms, 'title'),
       sequenceTypes: sortBy(
         Object.keys(sequenceType).map(
           value => ({

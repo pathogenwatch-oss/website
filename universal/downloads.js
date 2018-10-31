@@ -1,6 +1,6 @@
 
 function getFileName(speciesNickname, fileName) {
-  return `wgsa_${speciesNickname}_${fileName}`;
+  return `pathogenwatch_${speciesNickname}_${fileName}`;
 }
 
 module.exports = {

@@ -1,7 +1,7 @@
 {
-  "name": "wgsa-front-end",
+  "name": "pathogenwatch-front-end",
   "version": "7.3.0",
-  "description": "Web client for WGSA",
+  "description": "Web client for Pathogenwatch",
   "main": "index.js",
   "scripts": {
     "start": "node dev-server.js",
@@ -12,11 +12,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://gitlab.com/cgps/wgsa-front-end.git"
+    "url": "https://gitlab.com/cgps/pathogenwatch-front-end.git"
   },
   "author": "The Centre for Genomic Pathogen Surveillance",
   "bugs": {
-    "url": "https://gitlab.com/cgps/wgsa-front-end/issues"
+    "url": "https://gitlab.com/cgps/pathogenwatch-front-end/issues"
   },
   "homepage": "https://pathogen.watch",
   "devDependencies": {

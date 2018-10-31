@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
 
-import WGSAMap from '../../map';
+import PWMap from '../../map';
 import { FormattedName } from '../../organisms';
 import AddToSelection from '../selection/AddToSelection.react';
 import Spinner from '../../components/Spinner.react';
@@ -106,7 +106,7 @@ const MapView = React.createClass({
     const { stateKey, lassoPath, markers, onLassoPathChange, popup, popupList } = this.props;
     return (
       <div className="wgsa-genomes-map">
-        <WGSAMap
+        <PWMap
           className="wgsa-hub-map-view"
           lassoPath={lassoPath}
           markers={markers}
