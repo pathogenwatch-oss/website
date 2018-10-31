@@ -15,11 +15,8 @@ module.exports = async function ({ genomeIds, organismId, user }) {
     throw new ServiceRequestError('No genome IDs provided');
   }
 
-  if (organismId === '573' && (!user || !user.showEsblCpeExperiment)) {
-    throw new ServiceRequestError('Unsupported organism');
-  }
-
-  if (organismId === '498019' && (!user || !user.showCandidaExperiment)) {
+  const schemes = manifest.getCollectionSchemes(user);
+  if (!schemes.includes(organismId)) {
     throw new ServiceRequestError('Unsupported organism');
   }
 

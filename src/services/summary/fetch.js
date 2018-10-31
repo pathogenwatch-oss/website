@@ -24,7 +24,7 @@ module.exports = async function (props) {
     user ? Genome.count(Genome.getPrefilterCondition(binPrefilter)) : Promise.resolve(0),
     Genome.distinct('analysis.speciator.organismId', Genome.getPrefilterCondition(props))
       .then(result => result.length),
-    Organism.distinct('taxId'),
+    Organism.deployedOrganismIds(user),
   ]);
 
   const output = {
@@ -37,12 +37,6 @@ module.exports = async function (props) {
     numOrganisms,
     deployedOrganisms,
   };
-
-  output.deployedOrganisms = output.deployedOrganisms.filter(taxId => {
-    if (taxId === '573' && (!user || !user.showEsblCpeExperiment)) return false;
-    if (taxId === '498019' && (!user || !user.showCandidaExperiment)) return false;
-    return true;
-  });
 
   return output;
 };

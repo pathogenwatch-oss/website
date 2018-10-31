@@ -32,8 +32,15 @@ schema.statics.getLatest = function (taxId, projection = {}) {
   );
 };
 
-schema.statics.deployedOrganismIds = function () {
-  return this.distinct('taxId');
+schema.statics.deployedOrganismIds = function (user = { flags: {} }) {
+  return this.distinct('taxId')
+    .then(taxIds =>
+      taxIds.filter(taxId => {
+        if (taxId === '573' && (!user || !user.showEsblCpeExperiment)) return false;
+        if (taxId === '498019' && (!user || !user.showCandidaExperiment)) return false;
+        return true;
+      })
+    );
 };
 
 module.exports = mongoose.model('Organism', schema);
