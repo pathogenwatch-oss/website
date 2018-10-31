@@ -74,10 +74,10 @@ function checkGenomeMetadata([ csvRows, genomes ]) {
       console.log({ genome, csv });
       continue;
     }
-    const wgsaFields = [ 'displayname', 'name', 'filename', 'year', 'month', 'day', 'latitude', 'longitude', 'pmid' ];
+    const pathogenwatchFields = [ 'displayname', 'name', 'filename', 'year', 'month', 'day', 'latitude', 'longitude', 'pmid' ];
     const userDefined = {};
     for (const key of Object.keys(csv)) {
-      if (!wgsaFields.includes(key)) {
+      if (!pathogenwatchFields.includes(key)) {
         userDefined[key] = csv[key];
       }
     }

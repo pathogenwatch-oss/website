@@ -7,7 +7,7 @@ const Collection = require('../src/models/collection');
 const CollectionGenome = require('../src/models/collectionGenome');
 const { request } = require('services/bus');
 
-const organisms = require('wgsa-front-end/universal/organisms');
+const organisms = require('pathogenwatch-front-end/universal/organisms');
 
 const limit = 1000;
 

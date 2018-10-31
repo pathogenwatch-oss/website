@@ -4,7 +4,7 @@ const router = express.Router();
 const { request } = require('services');
 
 const downloads = require('utils/organismDownloads');
-const downloadUtils = require('wgsa-front-end/universal/downloads');
+const downloadUtils = require('pathogenwatch-front-end/universal/downloads');
 
 const LOGGER = require('utils/logging').createLogger('Organism Downloads');
 

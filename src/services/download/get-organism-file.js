@@ -4,7 +4,7 @@ const sanitize = require('sanitize-filename');
 
 const config = require('configuration.js');
 const downloads = require('utils/organismDownloads');
-const organisms = require('wgsa-front-end/universal/organisms');
+const organisms = require('pathogenwatch-front-end/universal/organisms');
 
 const { ServiceRequestError } = require('utils/errors');
 

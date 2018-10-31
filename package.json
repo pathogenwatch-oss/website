@@ -1,7 +1,7 @@
 {
-  "name": "wgsa-middle-end",
+  "name": "pathogenwatch-middle-end",
   "version": "7.3.0",
-  "description": "Web API for WGSA",
+  "description": "Server-side code for Pathogenwatch",
   "main": "app.js",
   "engines": {
     "node": ">=6.x"
@@ -40,8 +40,8 @@
     "seneca": "^3.5.0",
     "slug": "^0.9.1",
     "stream-transform": "^0.1.2",
-    "wgsa-fasta-store": "gitlab:cgps/wgsa-fasta-store#v4.1.0",
-    "wgsa-front-end": "gitlab:cgps/wgsa-front-end#v7.3.0",
+    "pathogenwatch-fasta-store": "gitlab:cgps/pathogenwatch-fasta-store#v4.1.0",
+    "pathogenwatch-front-end": "gitlab:cgps/pathogenwatch-front-end#v7.3.0",
     "zip-stream": "^1.2.0"
   },
   "devDependencies": {
@@ -81,13 +81,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://gitlab.com/cgps/wgsa-middle-end.git"
+    "url": "https://gitlab.com/cgps/pathogenwatch-middle-end.git"
   },
   "author": "The Centre for Genomic Pathogen Surveillance",
   "bugs": {
-    "url": "https://gitlab.com/cgps/wgsa-central/issues"
+    "url": "https://gitlab.com/cgps/pathogenwatch/roadmap"
   },
-  "homepage": "https://www.wgsa.net",
+  "homepage": "https://pathogen.watch",
   "moduleRoots": [
     "src"
   ]

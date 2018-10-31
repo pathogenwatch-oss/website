@@ -1,4 +1,4 @@
-const fastaStorage = require('wgsa-fasta-store');
+const fastaStorage = require('pathogenwatch-fasta-store');
 const { fastaStoragePath } = require('configuration');
 
 const { ServiceRequestError } = require('utils/errors');

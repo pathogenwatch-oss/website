@@ -245,9 +245,9 @@ function createContainer(spec, metadata, timeout) {
 
   const container = docker(getImageName(task, version), {
     env: {
-      WGSA_ORGANISM_TAXID: organismId,
-      WGSA_COLLECTION_ID: collectionId,
-      WGSA_WORKERS: workers,
+      PW_ORGANISM_TAXID: organismId,
+      PW_COLLECTION_ID: collectionId,
+      PW_WORKERS: workers,
     },
   }, timeout);
 
