@@ -6,6 +6,7 @@ import { CardMetadata } from '../../card';
 import * as selectors from './selectors';
 
 import { createCollection, changeCollectionMetadata } from './actions';
+import { clearSelection } from '../selection/actions';
 
 import { taxIdMap } from '../../organisms';
 import { history } from '../../app/router';
@@ -112,6 +113,7 @@ function mapDispatchToProps(dispatch) {
         dispatch(createCollection())
           .then(({ token }) => {
             if (token) {
+              dispatch(clearSelection());
               history.push(`/collection/${token}`);
             } else {
               console.error('Failed to create collection');

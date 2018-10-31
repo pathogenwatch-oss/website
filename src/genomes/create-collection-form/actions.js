@@ -2,9 +2,9 @@ import { getSelectedSupportedGenomesList } from '../selection/selectors';
 import { getCollectionSummary, getCollectionMetadata } from './selectors';
 
 import { createAsyncConstants } from '../../actions';
-import { createCollectionRequest } from './api';
-
 import { showToast } from '../../toast';
+
+import { createCollectionRequest } from './api';
 
 export const CREATE_COLLECTION = createAsyncConstants('CREATE_COLLECTION');
 

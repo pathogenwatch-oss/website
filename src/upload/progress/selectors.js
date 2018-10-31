@@ -133,6 +133,7 @@ function getAnalysisBreakdown(genomes) {
     metrics: { active: false, label: 'Metrics', total: 0, errors: 0 },
     mlst: { active: false, label: 'MLST', total: 0, errors: 0 },
     ngmast: { active: false, label: 'NG-MAST', total: 0, errors: 0 },
+    kleborate: { active: false, label: 'Kleborate', total: 0, errors: 0 },
   };
   const sts = {};
 
