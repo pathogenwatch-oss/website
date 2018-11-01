@@ -89,7 +89,7 @@ function getSummaryFields(pwOrganisms) {
 }
 
 module.exports = async function (props) {
-  const pwOrganisms = await getPwOrganisms();
+  const pwOrganisms = await getPWOrganisms();
   const summaryFields = getSummaryFields(pwOrganisms);
   const summary = await Genome.getSummary(summaryFields, props);
 
