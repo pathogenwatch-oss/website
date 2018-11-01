@@ -10,7 +10,7 @@
     "body-parser": "^1.10.1",
     "boundingbox": "^0.1.0",
     "bunyan": "^1.3.2",
-    "cgps-user-accounts": "gitlab:cgps/cgps-user-accounts#v1.6.0",
+    "cgps-user-accounts": "https://gitlab.com/cgps/cgps-user-accounts#v1.6.0",
     "connect-mongo": "^1.3.2",
     "cookie-parser": "^1.4.3",
     "csv": "^1.1.1",
@@ -22,7 +22,7 @@
     "express": "^4.10.7",
     "express-content-length-validator": "^1.0.0",
     "express-session": "^1.14.2",
-    "geocoding": "gitlab:cgps/geocoding#v2.0.0",
+    "geocoding": "https://gitlab.com/cgps/geocoding#v2.0.0",
     "http-auth": "^3.1.1",
     "longjohn": "^0.2.4",
     "mongo-message-queue": "^0.1.3",
@@ -40,8 +40,8 @@
     "seneca": "^3.5.0",
     "slug": "^0.9.1",
     "stream-transform": "^0.1.2",
-    "pathogenwatch-fasta-store": "gitlab:cgps/pathogenwatch-fasta-store#v4.1.0",
-    "pathogenwatch-front-end": "gitlab:cgps/pathogenwatch-front-end#v7.3.0",
+    "pathogenwatch-fasta-store": "https://gitlab.com/cgps/pathogenwatch-fasta-store#v4.1.0",
+    "pathogenwatch-front-end": "https://gitlab.com/cgps/pathogenwatch-front-end#v7.3.0",
     "zip-stream": "^1.2.0"
   },
   "devDependencies": {
