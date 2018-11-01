@@ -88,3 +88,14 @@ module.exports.getCollectionTask = function (organismId, task) {
 module.exports.getClusteringTask = function () {
   return tasks.clustering;
 };
+
+module.exports.getCollectionSchemes = function (user = defaultUser) {
+  const schemes = [];
+  for (const [ taxId, collectionTasks ] of Object.entries(tasks.collection)) {
+    const treeTask = collectionTasks.find(_ => _.task === 'tree');
+    if (treeTask && user.canRun(treeTask)) {
+      schemes.push(taxId);
+    }
+  }
+  return schemes;
+};

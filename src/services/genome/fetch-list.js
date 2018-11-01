@@ -1,4 +1,5 @@
 const Genome = require('models/genome');
+const { getCollectionSchemes } = require('manifest');
 
 const config = require('configuration');
 const { pagination = { min: 100, max: 2500 } } = config;
@@ -14,6 +15,7 @@ function shouldLimit(filters) {
 module.exports = function (props) {
   const { user, query = {} } = props;
   const { skip = 0, limit = pagination.max, sort, ...filters } = query;
+  const schemes = new Set(getCollectionSchemes(user));
   return (
     Genome
       .find(
@@ -42,6 +44,9 @@ module.exports = function (props) {
         formattedGenome.st = mlst.st;
         formattedGenome.organismId = speciator.organismId;
         formattedGenome.organismName = speciator.organismName;
+        if (genome.reference && !schemes.has(speciator.organismId)) {
+          genome.reference = false;
+        }
         return formattedGenome;
       }))
   );
