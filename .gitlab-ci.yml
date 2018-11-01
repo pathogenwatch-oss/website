@@ -11,5 +11,6 @@ build:
     - apk add --update git bash docker
     - git config --global url.https://gitlab-ci-token:$CI_JOB_TOKEN@gitlab.com/.insteadOf git://gitlab.com/
     - git config --global url.https://gitlab-ci-token:$CI_JOB_TOKEN@gitlab.com/cgps.insteadOf git@gitlab.com:cgps
+    - git config --global url.https://gitlab-ci-token:$CI_JOB_TOKEN@gitlab.com/cgps.insteadOf https://gitlab.com/cgps
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
     - ./bin/build-image.sh $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
