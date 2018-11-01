@@ -3,18 +3,11 @@ const Organism = require('models/organism');
 
 const { getCollectionSchemes } = require('manifest');
 
-async function getPWOrganisms() {
-  const docs = await Organism
-    .find({}, { taxId: 1 })
-    .lean();
-  return docs.map(_ => _.taxId);
-}
-
-function getSummaryFields(pwOrganisms) {
+function getSummaryFields(deployedOrganisms) {
   return [
     { field: 'organismId',
       aggregation: () => [
-        { $match: { 'analysis.speciator.organismId': { $in: pwOrganisms } } },
+        { $match: { 'analysis.speciator.organismId': { $in: deployedOrganisms } } },
         { $group: { _id: { label: '$analysis.speciator.organismName', key: '$analysis.speciator.organismId' }, count: { $sum: 1 } } },
       ],
     },
@@ -89,8 +82,8 @@ function getSummaryFields(pwOrganisms) {
 }
 
 module.exports = async function (props) {
-  const pwOrganisms = await getPWOrganisms();
-  const summaryFields = getSummaryFields(pwOrganisms);
+  const deployedOrganisms = await Organism.deployedOrganismIds();
+  const summaryFields = getSummaryFields(deployedOrganisms);
   const summary = await Genome.getSummary(summaryFields, props);
 
   return summary;
