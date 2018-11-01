@@ -7,7 +7,7 @@ fi
 
 tag=${1:-"registry.gitlab.com/cgps/pathogenwatch-middle-end:v$(yaml get package.json version)"}
 
-yarn --production --ignore-scripts
+yarn --production --ignore-scripts --ignore-engines
 
 echo Building docker image $tag
 
