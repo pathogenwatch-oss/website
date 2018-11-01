@@ -5,10 +5,10 @@ LEVEL=${1:-"minor"}
 
 echo Creating new $LEVEL release...
 
-npm run build
+yarn build
 
 git add public views monitor.json assets.json
 git commit -m "Build" --allow-empty
 
-npm version $LEVEL
+npm version $LEVEL # `yarn version` works differently
 git push && git push --tags
