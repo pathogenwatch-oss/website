@@ -44,7 +44,7 @@ const kleborateAmrFields = [ 'AGly',
 ];
 
 export default ({ result }) => (
-  <Section key={'Kleborate'} heading={'Kleborate'} version={''}>
+  <Section key={'Kleborate'} heading={'Kleborate'} version={result.__v}>
     <div className="kleborate-url">
       <a href="https://github.com/katholt/Kleborate" target="_blank" rel="noopener">Source: github.com/katholt/Kleborate</a>
     </div>
@@ -59,8 +59,7 @@ export default ({ result }) => (
       <tbody>
       <tr>
         {kleborateTypingFields.map((klebType) =>
-          <td key={klebType}>{result[klebType]}</td>,
-        )}
+          <td key={klebType}>{result[klebType]}</td>)}
       </tr>
       </tbody>
     </table>
@@ -75,8 +74,7 @@ export default ({ result }) => (
       <tbody>
       <tr>
         {kleborateTypingFields.map((klebAmr) =>
-          <td key={klebAmr}>{result[klebAmr]}</td>,
-        )}
+          <td key={klebAmr}>{result[klebAmr]}</td>)}
       </tr>
       </tbody>
     </table>
