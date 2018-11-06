@@ -74,12 +74,36 @@ export const systemDataColumns = {
       return <Profile alleles={alleles} textOnly />;
     },
   },
+  __kleborate_species: {
+    columnKey: '__kleborate_species',
+    displayName: 'Species',
+    valueGetter({ analysis }) {
+      if (!analysis.kleborate) return null;
+      return analysis.kleborate.species;
+    },
+  },
+  __kleborate_mlst: {
+    columnKey: '__kleborate_mlst',
+    displayName: 'MLST',
+    valueGetter({ analysis }) {
+      if (!analysis.kleborate) return null;
+      return analysis.kleborate.mlst;
+    },
+  },
   __virulence_score: {
     columnKey: '__virulence_score',
     displayName: 'Virulence Score',
     valueGetter({ analysis }) {
       if (!analysis.kleborate) return null;
       return analysis.kleborate.virulence_score;
+    },
+  },
+  __resistance_score: {
+    columnKey: '__resistance_score',
+    displayName: 'Resistance Score',
+    valueGetter({ analysis }) {
+      if (!analysis.kleborate) return null;
+      return analysis.kleborate.resistance_score;
     },
   },
   __K_locus: {
@@ -114,12 +138,13 @@ export const systemDataColumns = {
       return analysis.kleborate.O_locus_confidence;
     },
   },
-  __hypermucoidy: {
-    columnKey: '__hypermucoidy',
-    displayName: 'Hypermucoidy',
+
+  __wzi: {
+    columnKey: '__wzi',
+    displayName: 'wzi',
     valueGetter({ analysis }) {
       if (!analysis.kleborate) return null;
-      return analysis.kleborate.hypermucoidy;
+      return analysis.kleborate.wzi;
     },
   },
   __Aerobactin: {
@@ -186,12 +211,163 @@ export const systemDataColumns = {
       return analysis.kleborate.YbST;
     },
   },
-  __wzi: {
-    columnKey: '__wzi',
-    displayName: 'wzi',
+  __rmpA: {
+    columnKey: '__rmpA',
+    displayName: 'rmpA',
     valueGetter({ analysis }) {
       if (!analysis.kleborate) return null;
-      return analysis.kleborate.wzi;
+      return analysis.kleborate.rmpA;
+    },
+  },
+  __rmpA2: {
+    columnKey: '__rmpA2',
+    displayName: 'rmpA2',
+    valueGetter({ analysis }) {
+      if (!analysis.kleborate) return null;
+      return analysis.kleborate.rmpA2;
+    },
+  },
+  __AGly: {
+    columnKey: '__AGly',
+    displayName: 'AGly',
+    valueGetter({ analysis }) {
+      if (!analysis.kleborate) return null;
+      return analysis.kleborate.AGly;
+    },
+  },
+  __Col: {
+    columnKey: '__Col',
+    displayName: 'Col',
+    valueGetter({ analysis }) {
+      if (!analysis.kleborate) return null;
+      return analysis.kleborate.Col;
+    },
+  },
+  __Fcyn: {
+    columnKey: '__Fcyn',
+    displayName: 'Fcyn',
+    valueGetter({ analysis }) {
+      if (!analysis.kleborate) return null;
+      return analysis.kleborate.Fcyn;
+    },
+  },
+  __Flq: {
+    columnKey: '__Flq',
+    displayName: 'Flq',
+    valueGetter({ analysis }) {
+      if (!analysis.kleborate) return null;
+      return analysis.kleborate.Flq;
+    },
+  },
+  __Gly: {
+    columnKey: '__Gly',
+    displayName: 'Gly',
+    valueGetter({ analysis }) {
+      if (!analysis.kleborate) return null;
+      return analysis.kleborate.Gly;
+    },
+  },
+  __MLS: {
+    columnKey: '__MLS',
+    displayName: 'MLS',
+    valueGetter({ analysis }) {
+      if (!analysis.kleborate) return null;
+      return analysis.kleborate.MLS;
+    },
+  },
+  __Ntmdz: {
+    columnKey: '__Ntmdz',
+    displayName: 'Ntmdz',
+    valueGetter({ analysis }) {
+      if (!analysis.kleborate) return null;
+      return analysis.kleborate.Ntmdz;
+    },
+  },
+  __Phe: {
+    columnKey: '__Phe',
+    displayName: 'Phe',
+    valueGetter({ analysis }) {
+      if (!analysis.kleborate) return null;
+      return analysis.kleborate.Phe;
+    },
+  },
+  __Rif: {
+    columnKey: '__Rif',
+    displayName: 'Rif',
+    valueGetter({ analysis }) {
+      if (!analysis.kleborate) return null;
+      return analysis.kleborate.Rif;
+    },
+  },
+  __Sul: {
+    columnKey: '__Sul',
+    displayName: 'Sul',
+    valueGetter({ analysis }) {
+      if (!analysis.kleborate) return null;
+      return analysis.kleborate.Sul;
+    },
+  },
+  __Tet: {
+    columnKey: '__Tet',
+    displayName: 'Tet',
+    valueGetter({ analysis }) {
+      if (!analysis.kleborate) return null;
+      return analysis.kleborate.Tet;
+    },
+  },
+  __Tmt: {
+    columnKey: '__Tmt',
+    displayName: 'Tmt',
+    valueGetter({ analysis }) {
+      if (!analysis.kleborate) return null;
+      return analysis.kleborate.Tmt;
+    },
+  },
+  __Bla: {
+    columnKey: '__Bla',
+    displayName: 'Bla',
+    valueGetter({ analysis }) {
+      if (!analysis.kleborate) return null;
+      return analysis.kleborate.Bla;
+    },
+  },
+  __Bla_Carb: {
+    columnKey: '__Bla_Carb',
+    displayName: 'Bla_Carb',
+    valueGetter({ analysis }) {
+      if (!analysis.kleborate) return null;
+      return analysis.kleborate.Bla_Carb;
+    },
+  },
+  __Bla_ESBL: {
+    columnKey: '__Bla_ESBL',
+    displayName: 'Bla_ESBL',
+    valueGetter({ analysis }) {
+      if (!analysis.kleborate) return null;
+      return analysis.kleborate.Bla_ESBL;
+    },
+  },
+  __Bla_ESBL_inhR: {
+    columnKey: '__Bla_ESBL_inhR',
+    displayName: 'Bla_ESBL_inhR',
+    valueGetter({ analysis }) {
+      if (!analysis.kleborate) return null;
+      return analysis.kleborate.Bla_ESBL_inhR;
+    },
+  }, __Bla_broad: {
+    columnKey: '__Bla_broad',
+    displayName: 'Bla_broad',
+    valueGetter({ analysis }) {
+      if (!analysis.kleborate) return null;
+      return analysis.kleborate.Bla_broad;
+    },
+  },
+  __Bla_broad_inhR: {
+    columnKey: '__Bla_broad_inhR',
+    displayName: 'Bla_broad_inhR',
+    valueGetter({ analysis }) {
+      if (!analysis.kleborate) return null;
+      return analysis.kleborate.Bla_broad_inhR;
     },
   },
   '__ng-mast': {
