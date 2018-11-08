@@ -6,10 +6,17 @@
     margin-left: 0;
 }
 
-.pw-kleborate-typing td {
+.pw-kleborate-typing1 td {
     font-weight: 500;
 }
 
+.pw-kleborate-typing2 td {
+    font-weight: 500;
+}
 .pw-kleborate-amr td {
+    font-weight: 500;
+}
+
+.pw-kleborate-bla td {
     font-weight: 500;
 }
