@@ -54,7 +54,7 @@ export const systemDataColumns = {
     },
     display({ analysis }) {
       if (!analysis.mlst) return null;
-      return <ST id={analysis.mlst.st} textOnly />;
+      return <ST id={analysis.mlst.st} textOnly/>;
     },
   },
   __mlst_profile: {
@@ -71,7 +71,7 @@ export const systemDataColumns = {
       if (!analysis.mlst) return null;
       const { code, alleles } = analysis.mlst;
       if (code) return code;
-      return <Profile alleles={alleles} textOnly />;
+      return <Profile alleles={alleles} textOnly/>;
     },
   },
   __kleborate_species: {
@@ -84,10 +84,10 @@ export const systemDataColumns = {
   },
   __kleborate_mlst: {
     columnKey: '__kleborate_mlst',
-    displayName: 'MLST',
+    displayName: 'ST',
     valueGetter({ analysis }) {
       if (!analysis.kleborate) return null;
-      return analysis.kleborate.ST;
+      return analysis.kleborate.ST.replace('ST', '');
     },
   },
   __virulence_score: {
