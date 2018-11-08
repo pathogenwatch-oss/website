@@ -87,7 +87,7 @@ export const systemDataColumns = {
     displayName: 'MLST',
     valueGetter({ analysis }) {
       if (!analysis.kleborate) return null;
-      return analysis.kleborate.mlst;
+      return analysis.kleborate.ST;
     },
   },
   __virulence_score: {
