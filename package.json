@@ -30,7 +30,7 @@
     "babel-preset-react": "^6.24.1",
     "body-parser": "^1.14.1",
     "cgps-commons": "gitlab:cgps/commons",
-    "cgps-user-accounts": "gitlab:cgps/cgps-user-accounts#v1.10.0",
+    "cgps-user-accounts": "gitlab:cgps/cgps-user-accounts#v1.10.1",
     "chart.piecelabel.js": "gitlab:cgps/chart.piecelabel.js",
     "classnames": "^2.2.5",
     "clean-webpack-plugin": "^0.1.19",
