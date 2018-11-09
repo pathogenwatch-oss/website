@@ -752,7 +752,7 @@
     "570": [
       {
         "task": "kleborate",
-        "version": "v0.0.2",
+        "version": "v1.0.1",
         "timeout": 600,
         "flags": {
           "ESBL_CPE_EXPERIMENT_USER": true

@@ -3,13 +3,6 @@ const Organism = require('models/organism');
 
 const { getCollectionSchemes } = require('manifest');
 
-async function getWgsaOrganisms() {
-  const docs = await Organism
-    .find({}, { taxId: 1 })
-    .lean();
-  return docs.map(_ => _.taxId);
-}
-
 function getSummaryFields(wgsaOrganisms) {
   return [
     { field: 'organismId',
@@ -89,7 +82,7 @@ function getSummaryFields(wgsaOrganisms) {
 }
 
 module.exports = async function (props) {
-  const wgsaOrganisms = await getWgsaOrganisms();
+  const wgsaOrganisms = await Organism.getDeployedOrganisms(props.user);
   const summaryFields = getSummaryFields(wgsaOrganisms);
   const summary = await Genome.getSummary(summaryFields, props);
 
