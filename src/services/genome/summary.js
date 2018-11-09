@@ -82,7 +82,7 @@ function getSummaryFields(wgsaOrganisms) {
 }
 
 module.exports = async function (props) {
-  const wgsaOrganisms = await Organism.getDeployedOrganisms(props.user);
+  const wgsaOrganisms = await Organism.deployedOrganismIds(props.user);
   const summaryFields = getSummaryFields(wgsaOrganisms);
   const summary = await Genome.getSummary(summaryFields, props);
 
