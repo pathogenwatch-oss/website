@@ -1,26 +1,13 @@
-.pw-genome-report-column .pw-kleborate-typing {
-    margin-left: 0;
+.wgsa-genome-report table.pw-kleborate-table,
+.wgsa-genome-report table.pw-kleborate-table table {
+  margin-left: 0;
+  width: 100%;
 }
 
-.pw-genome-report-column .pw-kleborate-amr {
-    margin-left: 0;
+.wgsa-genome-report table.pw-kleborate-table table {
+  margin-top: 0;
 }
 
-.pw-kleborate-typing1 td {
-    font-weight: 500;
-}
-
-.pw-kleborate-typing1 td {
-    font-weight: 500;
-}
-
-.pw-kleborate-typing2 td {
-    font-weight: 500;
-}
-.pw-kleborate-amr td {
-    font-weight: 500;
-}
-
-.pw-kleborate-bla td {
-    font-weight: 500;
+.wgsa-genome-report table.pw-kleborate-table td {
+  font-weight: 500;
 }

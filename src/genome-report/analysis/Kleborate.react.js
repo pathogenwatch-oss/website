@@ -1,7 +1,5 @@
 import React from 'react';
 
-import { Section } from '../components';
-
 const kleborateTypingFields2 = [
   'Yersiniabactin',
   'YbST',
@@ -49,42 +47,44 @@ const klebBlaFields = [
   'Bla_broad_inhR',
 ];
 export default ({ result }) => (
-  <Section key={'Kleborate'} heading={'Kleborate'} version={''}>
-    <div className="kleborate-url">
-      <a href="https://github.com/katholt/Kleborate" target="_blank" rel="noopener">Source: github.com/katholt/Kleborate</a>
-    </div>
-    <table className="pw-kleborate-typing1" cellSpacing="0">
-      <caption>Kleborate Typing</caption>
-      <thead>
-      <tr>
-        {kleborateTypingFields1.map((klebType) =>
-          <th key={klebType}>{klebType.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</th>)}
-      </tr>
-      </thead>
-      <tbody>
-      <tr>
-        {kleborateTypingFields1.map((klebType) =>
-          <td key={klebType}>{result[klebType]}</td>)}
-      </tr>
-      </tbody>
+  <React.Fragment>
+    <header className="pw-genome-report-section-header">
+      <h2>Kleborate</h2>
+      <a href="https://github.com/katholt/Kleborate" target="_blank" rel="noopener">https://github.com/katholt/Kleborate</a>
+    </header>
+    <table className="pw-kleborate-table" cellSpacing="0">
+      <caption>Typing</caption>
+      <table cellSpacing="0">
+        <thead>
+        <tr>
+          {kleborateTypingFields1.map((klebType) =>
+            <th key={klebType}>{klebType.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</th>)}
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          {kleborateTypingFields1.map((klebType) =>
+            <td key={klebType}>{result[klebType]}</td>)}
+        </tr>
+        </tbody>
+      </table>
+      <table cellSpacing="0">
+        <thead>
+        <tr>
+          {kleborateTypingFields2.map((klebType) =>
+            <th key={klebType}>{klebType.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</th>)}
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          {kleborateTypingFields2.map((klebType) =>
+            <td key={klebType}>{result[klebType]}</td>)}
+        </tr>
+        </tbody>
+      </table>
     </table>
-    <table className="pw-kleborate-typing2" cellSpacing="0">
-      <caption>Kleborate Typing</caption>
-      <thead>
-      <tr>
-        {kleborateTypingFields2.map((klebType) =>
-          <th key={klebType}>{klebType.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</th>)}
-      </tr>
-      </thead>
-      <tbody>
-      <tr>
-        {kleborateTypingFields2.map((klebType) =>
-          <td key={klebType}>{result[klebType]}</td>)}
-      </tr>
-      </tbody>
-    </table>
-    <table className="pw-kleborate-amr" cellSpacing="0">
-      <caption>Kleborate Predicted AMR</caption>
+    <table className="pw-kleborate-table" cellSpacing="0">
+      <caption>Predicted AMR</caption>
       <thead>
       <tr>
         {kleborateAmrFields.map((klebAmr) =>
@@ -98,8 +98,8 @@ export default ({ result }) => (
       </tr>
       </tbody>
     </table>
-    <table className="pw-kleborate-bla" cellSpacing="0">
-      <caption>Kleborate BLA Genes</caption>
+    <table className="pw-kleborate-table" cellSpacing="0">
+      <caption>BLA Genes</caption>
       <thead>
       <tr>
         {klebBlaFields.map((klebBa) =>
@@ -113,7 +113,7 @@ export default ({ result }) => (
       </tr>
       </tbody>
     </table>
-  </Section>
+  </React.Fragment>
 );
 
 
