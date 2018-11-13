@@ -247,7 +247,7 @@ export default ({ deployedOrganisms }) => (
           <img className="cgps-supporting-logo" src="images/wellcome-logo-white.png" />
           <img className="cgps-supporting-logo" src="images/bdi.png" />
           <a href="http://www.pathogensurveillance.net" target="_blank" rel="noopener">
-            <img className="cgps-supporting-logo cgps-supporting-logo--cgps" src="images/cgps_logo.png" />
+            <img className="cgps-supporting-logo cgps-supporting-logo--cgps" src="images/cgps-long-white.svg" />
           </a>
         </div>
         <div className="mdl-mega-footer--right-section">

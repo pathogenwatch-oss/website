@@ -12,8 +12,11 @@ export default (
   <Route
     path="/sign-in"
     render={({ location = {} }) => {
+      const { message, redirect = '/account' } = queryString.parse(location.search);
+      if (message) {
+        return <SignIn message={message} />;
+      }
       if (config.user) {
-        const { redirect = '/account' } = queryString.parse(location.search);
         return <Redirect to={redirect} />;
       }
       return <SignIn message={location.state && location.state.message} />;

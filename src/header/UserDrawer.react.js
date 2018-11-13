@@ -122,7 +122,7 @@ const UserDrawer = React.createClass({
               </nav> }
             <footer className="wgsa-menu-footer">
               <a className="cgps-logo" target="_blank" rel="noopener" href="http://www.pathogensurveillance.net">
-                <img src="/images/CGPS.SHORT.FINAL.svg" />
+                <img src="/images/cgps-short.svg" />
               </a>
               <a className="contact-email" href="mailto:cgps@sanger.ac.uk">cgps@sanger.ac.uk</a>
             </footer>
