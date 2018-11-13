@@ -22,6 +22,11 @@ function runTask({ fileId, task, version, organismId, speciesId, genusId, timeou
         PW_SPECIES_TAXID: speciesId,
         PW_GENUS_TAXID: genusId,
         PW_FILE_ID: fileId,
+        // TODO: remove old API
+        WGSA_ORGANISM_TAXID: organismId,
+        WGSA_SPECIES_TAXID: speciesId,
+        WGSA_GENUS_TAXID: genusId,
+        WGSA_FILE_ID: fileId,
       },
     }, timeout);
     try {
