@@ -3,7 +3,7 @@ const tasks = require('../tasks.json');
 const config = require('configuration');
 
 function getImageName(task, version) {
-  return `registry.gitlab.com/cgps/wgsa-tasks/${task}:${version}`;
+  return `registry.gitlab.com/cgps/pathogenwatch-tasks/${task}:${version}`;
 }
 
 module.exports.getImageName = getImageName;

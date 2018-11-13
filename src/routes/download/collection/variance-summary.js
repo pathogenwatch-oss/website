@@ -254,8 +254,8 @@ function writeMatrixHeader(stream) {
     'Variant Sites (including public data)',
     'Unfiltered Variant Sites (user-only)',
     'Unfiltered Variant Sites (including public data)',
-    'WGSA Gene Representative Variant Sites (user-only)',
-    'WGSA Gene Representative Variant Sites (including public data)',
+    'Pathogenwatch Gene Representative Variant Sites (user-only)',
+    'Pathogenwatch Gene Representative Variant Sites (including public data)',
   ];
   stream.write(header.join(','));
   stream.write('\n');
@@ -286,7 +286,7 @@ function writeMatrixLine(result, stream) {
 
 function writeMatrixFooter(stream) {
   stream.write('\n');
-  stream.write('Notes:1. WGSA Gene Representative Sites includes sites that vary when compared to the WGSA family reference alleles');
+  stream.write('Notes:1. Pathogenwatch Gene Representative Sites includes sites that vary when compared to the Pathogenwatch family reference alleles');
   stream.write('\n');
 }
 

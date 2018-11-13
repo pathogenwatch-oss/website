@@ -6,7 +6,7 @@ const LOGGER = require('utils/logging').createLogger('Mongo');
 
 const DEFAULT_HOSTNAME = '127.0.0.1';
 const DEFAULT_PORT = '27017';
-const DEFAULT_DATABASE = 'wgsa';
+const DEFAULT_DATABASE = 'pw';
 const hostname = mongoConfig.host || DEFAULT_HOSTNAME;
 const port = mongoConfig.port || DEFAULT_PORT;
 const database = mongoConfig.database || DEFAULT_DATABASE;

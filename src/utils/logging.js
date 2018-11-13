@@ -1,7 +1,7 @@
 var bunyan = require('bunyan');
 var morgan = require('morgan');
 
-var BASE_LOGGER_NAME = 'WGSA';
+var BASE_LOGGER_NAME = 'PW';
 
 function getDefaultLevel() {
   return process.env.LOG_LEVEL || bunyan.TRACE;

@@ -12,7 +12,7 @@ const mongoConnection = require('utils/mongoConnection');
 const readCsv = require('../utils/read-csv');
 const storeGenomes = require('../utils/store-genomes');
 
-const organisms = require('wgsa-front-end/universal/organisms');
+const organisms = require('pathogenwatch-front-end/universal/organisms');
 
 const { organismId, csvFile, fastaDir } = argv.opts;
 

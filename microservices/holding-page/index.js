@@ -6,7 +6,7 @@ const app = express();
 app.use(express.static(__dirname));
 
 app.use(express.static(
-  path.join(__dirname, '..', '..', 'node_modules', 'wgsa-front-end', 'public')
+  path.join(__dirname, '..', '..', 'node_modules', 'pathogenwatch-front-end', 'public')
 ));
 
 app.use('/', (req, res) => res.redirect('/'));

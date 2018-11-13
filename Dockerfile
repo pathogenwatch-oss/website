@@ -1,18 +1,18 @@
-FROM node:8.11.1-alpine
+FROM node:8.12.0-alpine
 
-COPY . /opt/wgsa/middle-end
+COPY . /opt/pathogenwatch/middle-end
 
-RUN apk add --update --no-cache --virtual wgsa-build-deps \
+RUN apk add --update --no-cache --virtual pathogenwatch-build-deps \
       g++ \
       make \
       python && \
-    cd /opt/wgsa/middle-end/ && \
+    cd /opt/pathogenwatch/middle-end/ && \
       npm rebuild && \
-    apk del --purge wgsa-build-deps
+    apk del --purge pathogenwatch-build-deps
 
-ENV NODE_PATH=/opt/wgsa/middle-end/src \
+ENV NODE_PATH=/opt/pathogenwatch/middle-end/src \
     NODE_ENV=production
 
-WORKDIR /opt/wgsa/middle-end
+WORKDIR /opt/pathogenwatch/middle-end
 
 CMD [ "node", "start.js", "--seneca.log.quiet" ]

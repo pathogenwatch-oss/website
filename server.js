@@ -16,11 +16,11 @@ const mongoConnection = require('utils/mongoConnection');
 const LOGGER = logging.getBaseLogger();
 const app = express();
 
-const clientPath = path.join(__dirname, 'node_modules', 'wgsa-front-end');
+const clientPath = path.join(__dirname, 'node_modules', 'pathogenwatch-front-end');
 
 let version = '';
 if (process.env.NODE_ENV === 'production') {
-  version = process.env.WGSA_VERSION;
+  version = process.env.PW_VERSION;
 } else {
   version = require('./package.json').version;
 }

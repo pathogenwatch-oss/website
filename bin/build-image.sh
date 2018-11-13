@@ -5,9 +5,9 @@ if [ $# -eq 0 ]; then
   echo "No tag supplied, using version in package.json as a tag"
 fi
 
-tag=${1:-"registry.gitlab.com/cgps/wgsa-middle-end:v$(yaml get package.json version)"}
+tag=${1:-"registry.gitlab.com/cgps/pathogenwatch-middle-end:v$(yaml get package.json version)"}
 
-npm install --production --ignore-scripts
+yarn --production --ignore-scripts --ignore-engines
 
 echo Building docker image $tag
 

@@ -1,4 +1,4 @@
-const fastaStorage = require('wgsa-fasta-store');
+const fastaStorage = require('pathogenwatch-fasta-store');
 const { fastaStoragePath, maxGenomeFileSize = 10 } = require('configuration');
 fastaStorage.setup(fastaStoragePath);
 

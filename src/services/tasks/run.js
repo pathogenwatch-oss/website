@@ -1,5 +1,5 @@
 const fs = require('fs');
-const fastaStorage = require('wgsa-fasta-store');
+const fastaStorage = require('pathogenwatch-fasta-store');
 
 const Analysis = require('models/analysis');
 const TaskLog = require('models/taskLog');
@@ -18,10 +18,10 @@ function runTask({ fileId, task, version, organismId, speciesId, genusId, timeou
     const startTime = process.hrtime();
     const container = docker(getImageName(task, version), {
       env: {
-        WGSA_ORGANISM_TAXID: organismId,
-        WGSA_SPECIES_TAXID: speciesId,
-        WGSA_GENUS_TAXID: genusId,
-        WGSA_FILE_ID: fileId,
+        PW_ORGANISM_TAXID: organismId,
+        PW_SPECIES_TAXID: speciesId,
+        PW_GENUS_TAXID: genusId,
+        PW_FILE_ID: fileId,
       },
     }, timeout);
     try {

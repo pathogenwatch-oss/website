@@ -13,7 +13,7 @@ const storeGenomes = require('../../utils/store-genomes');
 const {
   organismId,
   collectionId,
-  apiUrl = 'http://www.wgsa.net/api',
+  apiUrl = 'http://pathogen.watch/api',
 } = argv.opts;
 
 console.log({ organismId, collectionId, apiUrl });

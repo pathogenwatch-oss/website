@@ -1,4 +1,4 @@
-# WGSA Middle End
+# Pathogenwatch Middle End
 
 ## Entities
 

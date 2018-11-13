@@ -3,11 +3,11 @@ const Organism = require('models/organism');
 
 const { getCollectionSchemes } = require('manifest');
 
-function getSummaryFields(wgsaOrganisms) {
+function getSummaryFields(deployedOrganisms) {
   return [
     { field: 'organismId',
       aggregation: () => [
-        { $match: { 'analysis.speciator.organismId': { $in: wgsaOrganisms } } },
+        { $match: { 'analysis.speciator.organismId': { $in: deployedOrganisms } } },
         { $group: { _id: { label: '$analysis.speciator.organismName', key: '$analysis.speciator.organismId' }, count: { $sum: 1 } } },
       ],
     },
@@ -82,8 +82,8 @@ function getSummaryFields(wgsaOrganisms) {
 }
 
 module.exports = async function (props) {
-  const wgsaOrganisms = await Organism.deployedOrganismIds(props.user);
-  const summaryFields = getSummaryFields(wgsaOrganisms);
+  const deployedOrganisms = await Organism.deployedOrganismIds(props.user);
+  const summaryFields = getSummaryFields(deployedOrganisms);
   const summary = await Genome.getSummary(summaryFields, props);
 
   return summary;
