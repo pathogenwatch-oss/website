@@ -1746,9 +1746,9 @@ center-align@^0.1.1:
   dependencies:
     eslint-config-cgps "github:imperialcollegelondon/eslint-config-cgps"
 
-"cgps-user-accounts@https://gitlab.com/cgps/cgps-user-accounts#v1.10.0":
-  version "1.10.0"
-  resolved "https://gitlab.com/cgps/cgps-user-accounts#1a8d9c8fb76324a5e1a0e6dc198da15e17d9432a"
+"cgps-user-accounts@https://gitlab.com/cgps/cgps-user-accounts#v1.10.3":
+  version "1.10.3"
+  resolved "https://gitlab.com/cgps/cgps-user-accounts#002d132615efec9a9014b44e87d3f668ce5272ff"
   dependencies:
     emailjs "^1.0.8"
     passport "^0.2.1"
