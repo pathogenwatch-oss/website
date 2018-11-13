@@ -1,0 +1,13 @@
+.wgsa-genome-report table.pw-kleborate-table,
+.wgsa-genome-report table.pw-kleborate-table table {
+  margin-left: 0;
+  width: 100%;
+}
+
+.wgsa-genome-report table.pw-kleborate-table table {
+  margin-top: 0;
+}
+
+.wgsa-genome-report table.pw-kleborate-table td {
+  font-weight: 500;
+}
