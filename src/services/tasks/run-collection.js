@@ -248,6 +248,10 @@ function createContainer(spec, metadata, timeout) {
       PW_ORGANISM_TAXID: organismId,
       PW_COLLECTION_ID: collectionId,
       PW_WORKERS: workers,
+      // TODO: remove old API
+      WGSA_ORGANISM_TAXID: organismId,
+      WGSA_COLLECTION_ID: collectionId,
+      WGSA_WORKERS: workers,
     },
   }, timeout);
 
