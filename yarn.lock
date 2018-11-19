@@ -47,6 +47,13 @@ addressparser@~0.2.0:
   resolved "https://registry.yarnpkg.com/addressparser/-/addressparser-0.2.1.tgz#d11a5b2eeda04cfefebdf3196c10ae13db6cd607"
   integrity sha1-0RpbLu2gTP7+vfMZbBCuE9ts1gc=
 
+agent-base@^4.1.0:
+  version "4.2.1"
+  resolved "https://registry.yarnpkg.com/agent-base/-/agent-base-4.2.1.tgz#d89e5999f797875674c07d87f260fc41e83e8ca9"
+  integrity sha512-JVwXMr9nHYTUXsBFKUqhJwvlcYU/blreOEUkhNR2eXZIvwd+c+o5V4MgDPKWnMS/56awN3TRzIP+KoPn+roQtg==
+  dependencies:
+    es6-promisify "^5.0.0"
+
 ajv-keywords@^1.0.0:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/ajv-keywords/-/ajv-keywords-1.5.1.tgz#314dd0a4b3368fad3dfcdc54ede6171b886daf3c"
@@ -673,11 +680,12 @@ caseless@~0.12.0:
   resolved "https://registry.yarnpkg.com/caseless/-/caseless-0.12.0.tgz#1b681c21ff84033c826543090689420d187151dc"
   integrity sha1-G2gcIf+EAzyCZUMJBolCDRhxUdw=
 
-"cgps-user-accounts@https://gitlab.com/cgps/cgps-user-accounts#v1.10.3":
-  version "1.10.3"
-  resolved "https://gitlab.com/cgps/cgps-user-accounts#002d132615efec9a9014b44e87d3f668ce5272ff"
+"cgps-user-accounts@https://gitlab.com/cgps/cgps-user-accounts#v1.10.5":
+  version "1.10.5"
+  resolved "https://gitlab.com/cgps/cgps-user-accounts#a051fe90cdde6777ad6e93657cb9436b8348297d"
   dependencies:
     emailjs "^1.0.8"
+    https-proxy-agent "^2.2.1"
     passport "^0.2.1"
     passport-facebook "^2.0.0"
     passport-google-oauth20 "^1.0.0"
@@ -685,7 +693,7 @@ caseless@~0.12.0:
     passport-passwordless "github:imperialcollegelondon/passport-passwordless"
     passport-twitter "^1.0.3"
     passwordless-mongostore "^0.1.4"
-    request "^2.87.0"
+    request "^2.79.0"
 
 chalk@^1.0.0, chalk@^1.1.0, chalk@^1.1.1, chalk@^1.1.3:
   version "1.1.3"
@@ -1171,9 +1179,9 @@ docker-parse-image@^3.0.1:
   resolved "https://registry.yarnpkg.com/docker-parse-image/-/docker-parse-image-3.0.1.tgz#33dc69291eac3414f84871f2d59d77b6f6948be4"
   integrity sha1-M9xpKR6sNBT4SHHy1Z13tvaUi+Q=
 
-"docker-pull@github:imperialcollegelondon/docker-pull":
+"docker-pull@github:cgps-dev/docker-pull":
   version "1.1.0"
-  resolved "https://codeload.github.com/imperialcollegelondon/docker-pull/tar.gz/54cf4fe3c12c0f8ac5052e1456dc05daa271a3d0"
+  resolved "https://codeload.github.com/cgps-dev/docker-pull/tar.gz/54cf4fe3c12c0f8ac5052e1456dc05daa271a3d0"
   dependencies:
     docker-parse-image "^3.0.1"
     docker-remote-api "^4.4.0"
@@ -1343,6 +1351,18 @@ es6-promise@3.2.1:
   resolved "https://registry.yarnpkg.com/es6-promise/-/es6-promise-3.2.1.tgz#ec56233868032909207170c39448e24449dd1fc4"
   integrity sha1-7FYjOGgDKQkgcXDDlEjiREndH8Q=
 
+es6-promise@^4.0.3:
+  version "4.2.5"
+  resolved "https://registry.yarnpkg.com/es6-promise/-/es6-promise-4.2.5.tgz#da6d0d5692efb461e082c14817fe2427d8f5d054"
+  integrity sha512-n6wvpdE43VFtJq+lUDYDBFUwV8TZbuGXLV4D6wKafg13ldznKsyEvatubnmUe31zcvelSzOHF+XbaT+Bl9ObDg==
+
+es6-promisify@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/es6-promisify/-/es6-promisify-5.0.0.tgz#5109d62f3e56ea967c4b63505aef08291c8a5203"
+  integrity sha1-UQnWLz5W6pZ8S2NQWu8IKRyKUgM=
+  dependencies:
+    es6-promise "^4.0.3"
+
 es6-set@~0.1.5:
   version "0.1.5"
   resolved "https://registry.yarnpkg.com/es6-set/-/es6-set-0.1.5.tgz#d2b3ec5d4d800ced818db538d28974db0a73ccb1"
@@ -1402,9 +1422,9 @@ eslint-config-airbnb@^6.2.0:
   resolved "https://registry.yarnpkg.com/eslint-config-airbnb/-/eslint-config-airbnb-6.2.0.tgz#4a28196aa4617de01b8c914e992a82e5d0886a6e"
   integrity sha1-SigZaqRhfeAbjJFOmSqC5dCIam4=
 
-"eslint-config-cgps@github:imperialcollegelondon/eslint-config-cgps":
+"eslint-config-cgps@github:cgps-dev/eslint-config-cgps":
   version "1.1.1"
-  resolved "https://codeload.github.com/imperialcollegelondon/eslint-config-cgps/tar.gz/30d95ccb4dac28a18607f383e50d8d3daebcf83a"
+  resolved "https://codeload.github.com/cgps-dev/eslint-config-cgps/tar.gz/30d95ccb4dac28a18607f383e50d8d3daebcf83a"
   dependencies:
     babel-eslint "^6.0.2"
     eslint "^2.7.0"
@@ -2192,6 +2212,14 @@ http-signature@~1.2.0:
     assert-plus "^1.0.0"
     jsprim "^1.2.2"
     sshpk "^1.7.0"
+
+https-proxy-agent@^2.2.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/https-proxy-agent/-/https-proxy-agent-2.2.1.tgz#51552970fa04d723e04c56d04178c3f92592bbc0"
+  integrity sha512-HPCTS1LW51bcyMYbxUIOO4HEOlQ1/1qRaFWcyxvwaqUS9TY88aoEuHUY33kuAh1YhVVaDQhLZsnPd+XNARWZlQ==
+  dependencies:
+    agent-base "^4.1.0"
+    debug "^3.1.0"
 
 iconv-lite@0.4.23:
   version "0.4.23"
@@ -3703,9 +3731,9 @@ path-type@^2.0.0:
     writers-digest "^1.0.0"
     zip-stream "^1.2.0"
 
-"pathogenwatch-front-end@https://gitlab.com/cgps/pathogenwatch-front-end#v7.3.1-1":
-  version "7.3.1-1"
-  resolved "https://gitlab.com/cgps/pathogenwatch-front-end#ed754b54b78816f6e70ac66d1a01af55d9c2a561"
+"pathogenwatch-front-end@https://gitlab.com/cgps/pathogenwatch-front-end#v7.3.1":
+  version "7.3.1"
+  resolved "https://gitlab.com/cgps/pathogenwatch-front-end#0d305badc019062e1aadd2090a4767c0e652bae4"
 
 patrun@1.0:
   version "1.0.0"
@@ -4156,7 +4184,7 @@ request@2.74.0:
     tough-cookie "~2.3.0"
     tunnel-agent "~0.4.1"
 
-request@^2.87.0:
+request@^2.79.0:
   version "2.88.0"
   resolved "https://registry.yarnpkg.com/request/-/request-2.88.0.tgz#9c2fca4f7d35b592efe57c7f0a55e81052124fef"
   integrity sha512-NAqBSrijGLZdM0WZNsInLJpkJokL72XYjUpnB0iwsRgxh7dB6COrHnTBNwN0E+lHDAJzu7kLAkDeY08z2/A0hg==
