@@ -9,11 +9,13 @@ import PAARSNP from './PAARSNP.react';
 import Speciator from './Speciator.react';
 import Typing from './Typing.react';
 import Kleborate from './Kleborate.react';
+import Inctyper from './Inctyper.react';
+
 // import renderGenericResults from './Generic.react';
 
 export default (genome) => {
   const { analysis = {} } = genome;
-  const { metrics, core, mlst, genotyphi, ngmast, paarsnp, speciator, cgmlst, kleborate } = analysis;
+  const { metrics, core, mlst, genotyphi, ngmast, paarsnp, speciator, cgmlst, kleborate, inctyper } = analysis;
 
   const sections = [];
 
@@ -33,6 +35,12 @@ export default (genome) => {
     sections.push({
       key: 'AMR',
       component: <VersionSwitcher taskName="paarsnp" component={PAARSNP} genome={genome} />,
+    });
+  }
+  if (inctyper) {
+    sections.push({
+      key: 'Inc Typing',
+      component: <Inctyper taskName="inctyper" component={Inctyper} genome={genome} />,
     });
   }
   if (cgmlst) {
