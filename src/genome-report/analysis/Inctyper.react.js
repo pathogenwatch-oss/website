@@ -21,7 +21,7 @@ export default ({ result }) => (
       <a href="" target="_blank" rel="noopener">Database sourced from
         https://cge.cbs.dtu.dk/services/PlasmidFinder/</a>
     </header>
-    <table>
+    <table className="inctyper-table" cellSpacing="0">
       <thead>
       <tr>
         {[ 'Inc Match', 'Contig', 'Percent Identity', 'Coverage' ]
