@@ -1,8 +1,8 @@
 import React from 'react';
 
 // Example record.
-// [
-//   {
+// "Inc Matches": [
+//     {
 //     "Contig": "tig00000033|quiver",
 //     "Inc Match": "IncA/C_1__FJ705807",
 //     "Percent Identity": 98.321,
@@ -11,7 +11,7 @@ import React from 'react';
 //     "Contig End": 89535,
 //     "Reference Start": 1,
 //     "Reference End": 417
-//   }
+//    }
 // ]
 
 export default ({ result }) => (
