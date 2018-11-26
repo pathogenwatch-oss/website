@@ -6,7 +6,7 @@ const transformer = (doc, callback) => {
 
   const records = [];
 
-  for (const match of doc.analysis.inctyper) {
+  for (const match of doc.analysis.inctyper['Inc Matches']) {
     const record = {
       'Genome ID': doc._id.toString(),
       'Genome Name': doc.name,
