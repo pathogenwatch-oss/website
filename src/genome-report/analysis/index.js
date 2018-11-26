@@ -40,7 +40,7 @@ export default (genome) => {
   if (inctyper) {
     sections.push({
       key: 'Inc Typing',
-      component: <Inctyper taskName="inctyper" component={Inctyper} genome={genome} />,
+      component: <VersionSwitcher taskName="inctyper" component={Inctyper} genome={genome} />,
     });
   }
   if (cgmlst) {
