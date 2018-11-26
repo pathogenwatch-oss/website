@@ -31,5 +31,6 @@ export default {
   collections: [],
   uiOptions: {
     kleborate: true,
+    inctyper: true,
   },
 };
