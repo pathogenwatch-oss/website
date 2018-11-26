@@ -30,7 +30,7 @@ export default ({ result }) => (
       </tr>
       </thead>
       <tbody>
-      {result.map((incMatch) =>
+      {result['Inc Matches'].map((incMatch) =>
         <tr>
           {[ 'Inc Match', 'Contig', 'Percent Identity', 'Coverage' ]
             .map((fieldName) =>

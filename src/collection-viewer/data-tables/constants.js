@@ -1,10 +1,9 @@
 import React from 'react';
-
 // imports must not include css to remain compatible with csv generator
 import ST from '../../mlst/ST.react';
 import Profile from '../../mlst/Profile.react';
 
-import { isNovel, createCode } from '../../mlst/utils';
+import { createCode, isNovel } from '../../mlst/utils';
 import { getFormattedDateString } from '../table/utils';
 
 export const systemDataColumns = {
@@ -54,7 +53,7 @@ export const systemDataColumns = {
     },
     display({ analysis }) {
       if (!analysis.mlst) return null;
-      return <ST id={analysis.mlst.st} textOnly/>;
+      return <ST id={analysis.mlst.st} textOnly />;
     },
   },
   __mlst_profile: {
@@ -71,7 +70,18 @@ export const systemDataColumns = {
       if (!analysis.mlst) return null;
       const { code, alleles } = analysis.mlst;
       if (code) return code;
-      return <Profile alleles={alleles} textOnly/>;
+      return <Profile alleles={alleles} textOnly />;
+    },
+  },
+  __inc_types: {
+    columnKey: '__inc_types',
+    displayName: 'Inc Types',
+    valueGetter({ analysis }) {
+      if (!analysis.inctyper) return null;
+      if (Object.keys(analysis.inctyper).length === 0 && analysis.inctyper.constructor === Object) return null;
+      return analysis.inctyper['Inc Matches']
+        .map(match => match['Inc Match'])
+        .join('; ');
     },
   },
   __kleborate_species: {
