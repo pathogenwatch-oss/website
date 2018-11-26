@@ -1,8 +1,9 @@
 {
-  "extends": "cgps",
+//  "extends": "cgps",
   "env": {
     "node": true,
-    "browser": false
+    "browser": false,
+    "es6": true
   },
   "rules": {
     "no-multiple-empty-lines": 0,
