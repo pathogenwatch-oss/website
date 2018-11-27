@@ -1,5 +1,5 @@
 {
-//  "extends": "cgps",
+  "extends": "cgps",
   "env": {
     "node": true,
     "browser": false,
