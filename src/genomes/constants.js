@@ -13,4 +13,5 @@ export const analysisLabels = {
   genotyphi: 'Genotyphi',
   cgmlst: 'cgMLST',
   kleborate: 'Kleborate',
+  inctyper: 'IncTyper',
 };

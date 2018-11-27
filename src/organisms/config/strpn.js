@@ -32,4 +32,7 @@ export default {
   maxGenomeSize: 3 * Math.pow(10, 6),
   publicMetadataColumnNames: [],
   collections: [],
+  uiOptions: {
+    inctyper: true,
+  },
 };

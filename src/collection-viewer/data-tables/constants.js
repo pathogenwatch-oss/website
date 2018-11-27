@@ -74,6 +74,19 @@ export const systemDataColumns = {
       return <Profile alleles={alleles} textOnly/>;
     },
   },
+  __inc_types: {
+    columnKey: '__inc_types',
+    displayName: 'Inc Types',
+    valueGetter({ analysis }) {
+      if (!analysis.inctyper) return null;
+      if (Object.keys(analysis.inctyper).length === 0 && analysis.inctyper.constructor === Object) return null;
+      return analysis.inctyper['Inc Matches']
+        .map(match => match['Inc Match'])
+        .map(fullName => fullName.split('_'))
+        .map(parts => `${parts[0]}_${parts[1]}`)
+        .join('; ');
+    },
+  },
   __kleborate_species: {
     columnKey: '__kleborate_species',
     displayName: 'Species',

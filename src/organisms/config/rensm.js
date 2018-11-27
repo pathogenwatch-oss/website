@@ -34,5 +34,6 @@ export default {
   uiOptions: {
     noMLST: true,
     noAMR: true,
+    inctyper: true,
   },
 };
