@@ -37,7 +37,7 @@ export default (genome) => {
       component: <VersionSwitcher taskName="paarsnp" component={PAARSNP} genome={genome} />,
     });
   }
-  if (inctyper) {
+  if (inctyper && Object.keys(inctyper).includes('Inc Matches')) {
     sections.push({
       key: 'Inc Typing',
       component: <VersionSwitcher taskName="inctyper" component={Inctyper} genome={genome} />,
