@@ -18,7 +18,7 @@
     "docker-run": "^3.0.0",
     "ejs": "^2.5.1",
     "escape-string-regexp": "^1.0.5",
-    "event-stream": "^3.3.4",
+    "event-stream": "3.3.4",
     "express": "^4.10.7",
     "express-content-length-validator": "^1.0.0",
     "express-session": "^1.14.2",
@@ -46,8 +46,8 @@
   },
   "devDependencies": {
     "eslint-config-cgps": "github:cgps-dev/eslint-config-cgps",
-    "mocha": "^2.1.0",
-    "nodemon": "^1.17.5",
+    "mocha": "^2.5.3",
+    "nodemon": "^1.18.7",
     "rewire": "^2.1.4",
     "sinon": "^1.12.2",
     "supertest": "^1.0.1"
