@@ -2,7 +2,7 @@
   "extends": "cgps",
   "env": {
     "node": true,
-    "browser": false,
+    "browser": false
   },
   "rules": {
     "no-multiple-empty-lines": 0,
