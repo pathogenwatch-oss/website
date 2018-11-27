@@ -35,7 +35,6 @@ const projection = {
   'analysis.paarsnp.snp': 1,
   'analysis.cgmlst.scheme': 1,
   'analysis.kleborate': 1,
-  'analysis.inctyper': 1,
 };
 
 // const taskNames = [

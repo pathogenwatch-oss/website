@@ -1002,10 +1002,6 @@
       {
         "task": "metrics",
         "version": "v2"
-      },
-      {
-        "task": "inctyper",
-        "version": "v0.0.2"
       }
     ]
   },
