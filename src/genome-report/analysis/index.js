@@ -10,7 +10,6 @@ import Speciator from './Speciator.react';
 import Typing from './Typing.react';
 import Kleborate from './Kleborate.react';
 import Inctyper from './Inctyper.react';
-
 // import renderGenericResults from './Generic.react';
 
 export default (genome) => {
