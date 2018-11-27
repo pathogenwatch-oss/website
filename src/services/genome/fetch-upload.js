@@ -21,6 +21,7 @@ module.exports = async function (props) {
     'analysis.ngmast.__v': 1,
     'analysis.genotyphi.__v': 1,
     'analysis.kleborate.__v': 1,
+    'analysis.inctyper.__v': 1,
   };
   const genomes = await Genome
     .find(
