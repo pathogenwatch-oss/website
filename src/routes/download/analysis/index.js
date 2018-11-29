@@ -32,4 +32,6 @@ router.post('/mlst', require('./mlst'));
 
 router.post('/kleborate', require('./kleborate'));
 
+router.post('/inctyper', require('./inctyper'));
+
 module.exports = router;
