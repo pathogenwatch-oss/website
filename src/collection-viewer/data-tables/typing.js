@@ -62,10 +62,16 @@ const ngMastGroup = {
   columns: [ '__ng-mast', '__por', '__tbpb' ],
 };
 
-const genotyphigroup = {
+const genotyphiGroup = {
   group: true,
   columnKey: 'genotyphi',
   columns: [ '__genotyphi_type', '__genotyphi_snps_called' ],
+};
+
+const inctyperGroup = {
+  group: true,
+  columnKey: 'inctyper',
+  columns: [ '__inc_types' ],
 };
 
 const kleborateGroup = {
@@ -94,7 +100,8 @@ export function getTypingColumnGroups({ isClusterView }, uiOptions) {
     isClusterView || uiOptions.noPopulation ? null : referenceGroup,
     uiOptions.noMLST ? null : mlstGroup,
     uiOptions.ngMast ? ngMastGroup : null,
-    uiOptions.genotyphi ? genotyphigroup : null,
+    uiOptions.genotyphi ? genotyphiGroup : null,
+    uiOptions.inctyper ? inctyperGroup : null,
     uiOptions.kleborate ? kleborateGroup : null,
     uiOptions.kleborate ? kleborateAmrGroup : null,
   ]

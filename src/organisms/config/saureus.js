@@ -31,6 +31,8 @@ export default {
     min: 31,
     max: 35,
   },
+  uiOptions: {
+  },
   publicMetadataColumnNames: [
     'ena study',
     'ena run',
