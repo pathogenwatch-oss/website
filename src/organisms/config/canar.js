@@ -29,5 +29,8 @@ export default {
   ],
   publicMetadataColumnNames: [],
   collections: [],
-  uiOptions: {},
+  uiOptions: {
+    noMLST: true,
+    noAMR: true,
+  },
 };
