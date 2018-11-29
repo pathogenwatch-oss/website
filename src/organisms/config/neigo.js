@@ -32,6 +32,5 @@ export default {
   uiOptions: {
     ngMast: true,
     noPopulation: true,
-    inctyper: true,
   },
 };

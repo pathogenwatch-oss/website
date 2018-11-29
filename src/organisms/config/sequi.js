@@ -34,6 +34,5 @@ export default {
   uiOptions: {
     noPopulation: true,
     noAMR: true,
-    inctyper: true,
   },
 };

@@ -32,7 +32,6 @@ export default {
     max: 35,
   },
   uiOptions: {
-    inctyper: true,
   },
   publicMetadataColumnNames: [
     'ena study',
