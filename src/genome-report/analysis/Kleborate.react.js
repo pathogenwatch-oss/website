@@ -54,34 +54,40 @@ export default ({ result }) => (
     </header>
     <table className="pw-kleborate-table" cellSpacing="0">
       <caption>Typing</caption>
-      <table cellSpacing="0">
-        <thead>
-        <tr>
-          {kleborateTypingFields1.map((klebType) =>
-            <th key={klebType}>{klebType.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</th>)}
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-          {kleborateTypingFields1.map((klebType) =>
-            <td key={klebType}>{result[klebType]}</td>)}
-        </tr>
-        </tbody>
-      </table>
-      <table cellSpacing="0">
-        <thead>
-        <tr>
-          {kleborateTypingFields2.map((klebType) =>
-            <th key={klebType}>{klebType.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</th>)}
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-          {kleborateTypingFields2.map((klebType) =>
-            <td key={klebType}>{result[klebType]}</td>)}
-        </tr>
-        </tbody>
-      </table>
+      <thead>
+      <tr>
+        {kleborateTypingFields1.map((klebType) =>
+          <th key={klebType}>{
+            klebType.replace(/_/g, ' ')
+              .replace(/\b\w/g, l => l.toUpperCase())
+              .replace('Wzi', '<i>wzi</i>')
+              .replace('K Locus', 'K Locus Best Match')
+              .replace('O Locus', 'O Locus Best Match')
+          }</th>)}
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        {kleborateTypingFields1.map((klebType) =>
+          <td key={klebType}>{result[klebType]}</td>)}
+      </tr>
+      </tbody>
+    </table>
+    <table className="pw-kleborate-table" cellSpacing="0">
+      <caption>Virulence Locus Typing</caption>
+      <thead>
+      <tr>
+        {kleborateTypingFields2.map((klebType) =>
+          <th key={klebType}>{klebType.replace(/_/g, ' ')
+            .replace(/\b\w/g, l => l.toUpperCase())}</th>)}
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        {kleborateTypingFields2.map((klebType) =>
+          <td key={klebType}>{result[klebType]}</td>)}
+      </tr>
+      </tbody>
     </table>
     <table className="pw-kleborate-table" cellSpacing="0">
       <caption>Predicted AMR</caption>
@@ -99,11 +105,11 @@ export default ({ result }) => (
       </tbody>
     </table>
     <table className="pw-kleborate-table" cellSpacing="0">
-      <caption>BLA Genes</caption>
+      <caption>Beta-lactamase Genes by Class</caption>
       <thead>
       <tr>
-        {klebBlaFields.map((klebBa) =>
-          <th key={klebBa}>{klebBa}</th>)}
+        {klebBlaFields.map((klebBla) =>
+          <th key={klebBla}>{klebBla}</th>)}
       </tr>
       </thead>
       <tbody>
