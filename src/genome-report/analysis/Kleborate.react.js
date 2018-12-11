@@ -24,7 +24,7 @@ const kleborateTypingFields1 = [
   'O_locus_confidence',
   'wzi',
 ];
-const kleborateAmrFields = [ 'AGly',
+const kleborateAmrFields = ['AGly',
   'Col',
   'Fcyn',
   'Flq',
@@ -46,24 +46,29 @@ const klebBlaFields = [
   'Bla_broad',
   'Bla_broad_inhR',
 ];
-export default ({ result }) => (
+export default ({result}) => (
   <React.Fragment>
     <header className="pw-genome-report-section-header">
       <h2>Kleborate</h2>
-      <a href="https://github.com/katholt/Kleborate" target="_blank" rel="noopener">https://github.com/katholt/Kleborate</a>
+      <a href="https://github.com/katholt/Kleborate" target="_blank"
+         rel="noopener">https://github.com/katholt/Kleborate</a>
     </header>
     <table className="pw-kleborate-table" cellSpacing="0">
       <caption>Typing</caption>
       <thead>
       <tr>
-        {kleborateTypingFields1.map((klebType) =>
-          <th key={klebType}>{
-            klebType.replace(/_/g, ' ')
-              .replace(/\b\w/g, l => l.toUpperCase())
-              .replace('Wzi', 'wzi')
-              .replace(/^K Locus$/, 'K Locus Best Match')
-              .replace(/^O Locus$/, 'O Locus Best Match')
-          }</th>)}
+        {kleborateTypingFields1
+          .filter(field => field !== 'wzi')
+          .map((klebType) =>
+            <th key={klebType}>{
+              klebType
+                .replace(/_/g, ' ')
+                .replace(/\b\w/g, l => l.toUpperCase())
+                .replace(/^K Locus$/, 'K Locus Best Match')
+                .replace(/^O Locus$/, 'O Locus Best Match')
+            }</th>)
+        }
+        <td key={'wzi'}><i>wzi</i></td>
       </tr>
       </thead>
       <tbody>
