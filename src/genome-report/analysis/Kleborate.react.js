@@ -68,7 +68,7 @@ export default ({result}) => (
                 .replace(/^O Locus$/, 'O Locus Best Match')
             }</th>)
         }
-        <td key={'wzi'}><i>wzi</i></td>
+        <th key={'wzi'}><i>wzi</i></th>
       </tr>
       </thead>
       <tbody>
