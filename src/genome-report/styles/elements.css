@@ -99,6 +99,10 @@ dl.pw-genome-report-comfortable > div {
   font-size: 13px;
 }
 
+.wgsa-genome-report th.italic {
+  font-style: italic;
+}
+
 .wgsa-genome-report tr:hover > td {
   background-color: rgba(0, 0, 0, 0.07);
 }

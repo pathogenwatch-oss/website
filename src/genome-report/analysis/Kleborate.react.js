@@ -24,7 +24,7 @@ const kleborateTypingFields1 = [
   'O_locus_confidence',
   'wzi',
 ];
-const kleborateAmrFields = [ 'AGly',
+const kleborateAmrFields = ['AGly',
   'Col',
   'Fcyn',
   'Flq',
@@ -46,42 +46,53 @@ const klebBlaFields = [
   'Bla_broad',
   'Bla_broad_inhR',
 ];
-export default ({ result }) => (
+export default ({result}) => (
   <React.Fragment>
     <header className="pw-genome-report-section-header">
       <h2>Kleborate</h2>
-      <a href="https://github.com/katholt/Kleborate" target="_blank" rel="noopener">https://github.com/katholt/Kleborate</a>
+      <a href="https://github.com/katholt/Kleborate" target="_blank"
+         rel="noopener">https://github.com/katholt/Kleborate</a>
     </header>
     <table className="pw-kleborate-table" cellSpacing="0">
       <caption>Typing</caption>
-      <table cellSpacing="0">
-        <thead>
-        <tr>
-          {kleborateTypingFields1.map((klebType) =>
-            <th key={klebType}>{klebType.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</th>)}
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-          {kleborateTypingFields1.map((klebType) =>
-            <td key={klebType}>{result[klebType]}</td>)}
-        </tr>
-        </tbody>
-      </table>
-      <table cellSpacing="0">
-        <thead>
-        <tr>
-          {kleborateTypingFields2.map((klebType) =>
-            <th key={klebType}>{klebType.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</th>)}
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-          {kleborateTypingFields2.map((klebType) =>
-            <td key={klebType}>{result[klebType]}</td>)}
-        </tr>
-        </tbody>
-      </table>
+      <thead>
+      <tr>
+        {kleborateTypingFields1
+          .filter(field => field !== 'wzi')
+          .map((klebType) =>
+            <th key={klebType}>{
+              klebType
+                .replace(/_/g, ' ')
+                .replace(/\b\w/g, l => l.toUpperCase())
+                .replace(/^K Locus$/, 'K Locus Best Match')
+                .replace(/^O Locus$/, 'O Locus Best Match')
+            }</th>)
+        }
+        <th key="wzi" className="italic">wzi</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        {kleborateTypingFields1.map((klebType) =>
+          <td key={klebType}>{result[klebType]}</td>)}
+      </tr>
+      </tbody>
+    </table>
+    <table className="pw-kleborate-table" cellSpacing="0">
+      <caption>Virulence Locus Typing</caption>
+      <thead>
+      <tr>
+        {kleborateTypingFields2.map((klebType) =>
+          <th key={klebType}>{klebType.replace(/_/g, ' ')
+            .replace(/\b\w/g, l => l.toUpperCase())}</th>)}
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        {kleborateTypingFields2.map((klebType) =>
+          <td key={klebType}>{result[klebType]}</td>)}
+      </tr>
+      </tbody>
     </table>
     <table className="pw-kleborate-table" cellSpacing="0">
       <caption>Predicted AMR</caption>
@@ -99,11 +110,11 @@ export default ({ result }) => (
       </tbody>
     </table>
     <table className="pw-kleborate-table" cellSpacing="0">
-      <caption>BLA Genes</caption>
+      <caption>Beta-lactamase Genes by Class</caption>
       <thead>
       <tr>
-        {klebBlaFields.map((klebBa) =>
-          <th key={klebBa}>{klebBa}</th>)}
+        {klebBlaFields.map((klebBla) =>
+          <th key={klebBla}>{klebBla}</th>)}
       </tr>
       </thead>
       <tbody>
