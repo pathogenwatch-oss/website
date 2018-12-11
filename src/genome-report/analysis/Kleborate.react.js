@@ -60,9 +60,9 @@ export default ({ result }) => (
           <th key={klebType}>{
             klebType.replace(/_/g, ' ')
               .replace(/\b\w/g, l => l.toUpperCase())
-              .replace('Wzi', '<i>wzi</i>')
-              .replace('K Locus', 'K Locus Best Match')
-              .replace('O Locus', 'O Locus Best Match')
+              .replace('Wzi', 'wzi')
+              .replace(/^K Locus$/, 'K Locus Best Match')
+              .replace(/^O Locus$/, 'O Locus Best Match')
           }</th>)}
       </tr>
       </thead>
