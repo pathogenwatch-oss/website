@@ -111,7 +111,7 @@ export default ({result}) => (
       <tbody>
       <tr>
         {kleborateAmrFields.map((klebAmr) =>
-          <td key={klebAmr}>{result[klebAmr]}</td>)}
+          <td key={klebAmr}>{result[klebAmr].replace(/;/g, '; ')}</td>)}
       </tr>
       </tbody>
     </table>
@@ -126,7 +126,7 @@ export default ({result}) => (
       <tbody>
       <tr>
         {klebBlaFields.map((klebBla) =>
-          <td key={klebBla}>{result[klebBla]}</td>)}
+          <td key={klebBla}>{result[klebBla].replace(/;/g, '; ')}</td>)}
       </tr>
       </tbody>
     </table>
