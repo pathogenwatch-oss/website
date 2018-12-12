@@ -24,7 +24,9 @@ const kleborateTypingFields1 = [
   'O_locus_confidence',
   'wzi',
 ];
-const kleborateAmrFields = ['AGly',
+
+const kleborateAmrFields = [
+  'AGly',
   'Col',
   'Fcyn',
   'Flq',
@@ -50,8 +52,7 @@ export default ({result}) => (
   <React.Fragment>
     <header className="pw-genome-report-section-header">
       <h2>Kleborate</h2>
-      <a href="https://github.com/katholt/Kleborate" target="_blank"
-         rel="noopener">https://github.com/katholt/Kleborate</a>
+      <a href="https://github.com/katholt/Kleborate" target="_blank" rel="noopener">https://github.com/katholt/Kleborate</a>
     </header>
     <table className="pw-kleborate-table" cellSpacing="0">
       <caption>Typing</caption>
@@ -73,8 +74,13 @@ export default ({result}) => (
       </thead>
       <tbody>
       <tr>
-        {kleborateTypingFields1.map((klebType) =>
-          <td key={klebType}>{result[klebType]}</td>)}
+        <td key="species" className="italic">{result.species}</td>
+        {kleborateTypingFields1
+          .filter(field => field !== 'species')
+          .filter(field => field !== 'wzi')
+          .map((klebType) =>
+            <td key={klebType}>{result[klebType]}</td>)}
+        <td key="wzi" className="italic">{result.wzi}</td>
       </tr>
       </tbody>
     </table>
