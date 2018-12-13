@@ -77,7 +77,8 @@
     "rerun-collection": "eval $npm_package_startcmd microservices/bootstrap.js rerunner",
     "publish-collection": "eval $npm_package_startcmd microservices/bootstrap.js publisher",
     "centroids": "eval $npm_package_startcmd bin/add-centroids.js",
-    "submit-genomes": "NODE_PATH=$npm_package_nodepath node ./bin/submit-genomes.js"
+    "submit-genomes": "NODE_PATH=$npm_package_nodepath node ./bin/submit-genomes.js",
+    "submit-task": "NODE_PATH=$npm_package_nodepath node ./bin/submit-task.js"
   },
   "repository": {
     "type": "git",
