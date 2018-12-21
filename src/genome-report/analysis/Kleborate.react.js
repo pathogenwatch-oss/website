@@ -15,7 +15,6 @@ const kleborateTypingFields2 = [
 
 const kleborateTypingFields1 = [
   'species',
-  'ST',
   'virulence_score',
   'resistance_score',
   'K_locus',
