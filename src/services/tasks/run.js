@@ -16,35 +16,39 @@ const LOGGER = require('utils/logging').createLogger('runner');
 function runTask({ fileId, task, version, organismId, speciesId, genusId, timeout }) {
   return new Promise((resolve, reject) => {
     const startTime = process.hrtime();
-    const container = docker(getImageName(task, version), {
-      env: {
-        PW_ORGANISM_TAXID: organismId,
-        PW_SPECIES_TAXID: speciesId,
-        PW_GENUS_TAXID: genusId,
-        PW_FILE_ID: fileId,
-        // TODO: remove old API
-        WGSA_ORGANISM_TAXID: organismId,
-        WGSA_SPECIES_TAXID: speciesId,
-        WGSA_GENUS_TAXID: genusId,
-        WGSA_FILE_ID: fileId,
+    const container = docker(
+      getImageName(task, version),
+      {
+        env: {
+          PW_ORGANISM_TAXID: organismId,
+          PW_SPECIES_TAXID: speciesId,
+          PW_GENUS_TAXID: genusId,
+          PW_FILE_ID: fileId,
+          // TODO: remove old API
+          WGSA_ORGANISM_TAXID: organismId,
+          WGSA_SPECIES_TAXID: speciesId,
+          WGSA_GENUS_TAXID: genusId,
+          WGSA_FILE_ID: fileId,
+        },
       },
-    }, timeout);
+      timeout
+    );
     try {
       const stream = fs.createReadStream(fastaStorage.getFilePath(fastaStoragePath, fileId));
-      stream.pipe(container.stdin);
       stream.on('error', err => {
-        container.destroy();
-        reject(err);
+        LOGGER.info('Error in input stream, destroying container.');
+        container.destroy(() => reject(err));
       });
+      stream.pipe(container.stdin);
     } catch (err) {
-      container.destroy();
-      return reject(err);
+      LOGGER.info('Error at input stage, destroying container.');
+      return container.destroy(() => reject(err));
     }
     const buffer = [];
-    container.stdout.on('data', (data) => {
+    container.stdout.on('data', data => {
       buffer.push(data.toString());
     });
-    container.on('exit', (exitCode) => {
+    container.on('exit', exitCode => {
       LOGGER.info('exit', exitCode);
 
       const [ durationS, durationNs ] = process.hrtime(startTime);
@@ -66,18 +70,36 @@ function runTask({ fileId, task, version, organismId, speciesId, genusId, timeou
         resolve(output);
       }
     });
-    container.on('spawn', (containerId) => {
+    container.on('spawn', containerId => {
       LOGGER.info('spawn', containerId, 'for task', task, 'file', fileId);
     });
     container.on('error', reject);
   });
 }
 
-module.exports = async function ({ task, version, metadata, timeout$: timeout = DEFAULT_TIMEOUT }) {
-  const { organismId, speciesId, genusId, fileId, genomeId, uploadedAt, clientId, userId } = metadata;
+module.exports = async function({ task, version, metadata, timeout$: timeout = DEFAULT_TIMEOUT }) {
+  const {
+    organismId,
+    speciesId,
+    genusId,
+    fileId,
+    genomeId,
+    uploadedAt,
+    clientId,
+    userId,
+  } = metadata;
   let doc = await Analysis.findOne({ fileId, task, version }).lean();
-  if (!doc) { // The results weren't in the cache
-    const results = await runTask({ fileId, task, version, organismId, speciesId, genusId, timeout });
+  if (!doc) {
+    // The results weren't in the cache
+    const results = await runTask({
+      fileId,
+      task,
+      version,
+      organismId,
+      speciesId,
+      genusId,
+      timeout,
+    });
     await Analysis.update(
       { fileId, task, version },
       { fileId, task, version, results },
@@ -87,5 +109,12 @@ module.exports = async function ({ task, version, metadata, timeout$: timeout = 
   }
 
   await Genome.addAnalysisResults(genomeId, doc);
-  notify({ speciator: { organismId, speciesId, genusId }, genomeId, clientId, userId, uploadedAt, tasks: [ doc ] });
+  notify({
+    speciator: { organismId, speciesId, genusId },
+    genomeId,
+    clientId,
+    userId,
+    uploadedAt,
+    tasks: [ doc ],
+  });
 };
