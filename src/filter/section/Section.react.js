@@ -8,21 +8,20 @@ function formatCount(count) {
   return count;
 }
 
-const FilterItem = ({ value, title, label, count, active, onClick }) =>
+const FilterItem = ({ value, title, label, count, active, onClick }) => (
   <button
     title={title || label}
-    className={classnames(
-      'mdl-chip mdl-chip--contact',
-      { 'mdl-chip--active': active }
-    )}
+    className={classnames('mdl-chip mdl-chip--contact', {
+      'mdl-chip--active': active,
+    })}
     onClick={() => onClick(value)}
   >
     <span className="mdl-chip__contact">{formatCount(count)}</span>
     <span className="mdl-chip__text">{label || value}</span>
-  </button>;
+  </button>
+);
 
 const FilterSection = React.createClass({
-
   getInitialState() {
     const { summary, expanded = summary.some(_ => _.active) } = this.props;
     return {
@@ -32,7 +31,8 @@ const FilterSection = React.createClass({
   },
 
   componentWillReceiveProps(nextProps) {
-    const activeItem = nextProps.summary && nextProps.summary.find(_ => _.active);
+    const activeItem =
+      nextProps.summary && nextProps.summary.find(_ => _.active);
 
     if (activeItem) {
       this.setState({
@@ -42,7 +42,11 @@ const FilterSection = React.createClass({
       this.setState({
         isOpen: false,
       });
-    } else if (this.state.isActive && this.props.isLoading && !nextProps.isLoading) {
+    } else if (
+      this.state.isActive &&
+      this.props.isLoading &&
+      !nextProps.isLoading
+    ) {
       this.setState({
         isActive: false,
         isOpen: true,
@@ -55,17 +59,27 @@ const FilterSection = React.createClass({
   },
 
   render() {
-    const { heading, icon, summary = [], updateFilter, filterKey, children } = this.props;
+    const {
+      heading,
+      icon,
+      summary = [],
+      updateFilter,
+      filterKey,
+      children,
+    } = this.props;
     const { isOpen } = this.state;
 
     const activeItem = summary.find(_ => _.active);
-    const onClick = (value) => updateFilter(filterKey, value);
+    const onClick = value => updateFilter(filterKey, value);
 
     if (activeItem) {
       const { title, label, value } = activeItem;
       return (
         <section className="wgsa-filter-section is-active">
-          <h3 title={`${heading}: ${title || label}`} onClick={() => onClick(value)}>
+          <h3
+            title={`${heading}: ${title || label}`}
+            onClick={() => onClick(value)}
+          >
             <i className="material-icons">{icon}</i>
             <span>{label}</span>
             <i className="material-icons">filter_list</i>
@@ -89,29 +103,40 @@ const FilterSection = React.createClass({
     }
 
     return (
-      <section className={classnames('wgsa-filter-section', className, { 'is-open': isOpen })}>
+      <section
+        className={classnames('wgsa-filter-section', className, {
+          'is-open': isOpen,
+        })}
+      >
         <h3 onClick={() => this.toggle(isOpen)}>
           <i className="material-icons">{icon}</i>
           <span>{heading}</span>
-          <i className="material-icons">{isOpen ? 'expand_less' : 'expand_more'}</i>
+          <i className="material-icons">
+            {isOpen ? 'expand_less' : 'expand_more'}
+          </i>
         </h3>
-        { isOpen && (
+        {isOpen && (
           <React.Fragment>
-            { children ||
+            {children ||
               summary.map(props => {
                 if (props.active) return null;
-                return <FilterItem key={props.value} {...props} onClick={onClick} />;
-              }) }
+                return (
+                  <FilterItem key={props.value} {...props} onClick={onClick} />
+                );
+              })}
           </React.Fragment>
         )}
       </section>
     );
   },
-
 });
 
 export default props => {
-  if (props.children || (props.disabled && !props.hidden) || (props.summary && props.summary.length)) {
+  if (
+    props.children ||
+    (props.disabled && !props.hidden) ||
+    (props.summary && props.summary.length)
+  ) {
     return <FilterSection {...props} />;
   }
   return null;

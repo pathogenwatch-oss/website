@@ -8,7 +8,7 @@ import validateMetadata from '../../../universal/validateMetadata.js';
 import { DEFAULT } from '../../app/constants';
 import getCompressWorker from 'worker-loader?name=compress-worker.[hash].js!./compressWorker';
 
-function parseMetadata(row) {
+export function parseMetadata(row) {
   const {
     displayname,
     id,
@@ -50,7 +50,7 @@ function flattenCSVs(files) {
 }
 
 const GENOME_FILE_NAME_REGEX = new RegExp(`(${DEFAULT.GENOME_FILE_EXTENSIONS.join('|')})$`, 'i');
-const CSV_FILE_NAME_REGEX = /(.csv)$/i;
+export const CSV_FILE_NAME_REGEX = /(.csv)$/i;
 
 export function mapCSVsToGenomes(files, uploadedAt) {
   const csvFiles = files.filter(({ name }) => CSV_FILE_NAME_REGEX.test(name));

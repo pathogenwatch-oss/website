@@ -13,7 +13,6 @@ import Metadata from './Metadata.react';
 import getAnalysisTabs from './analysis';
 
 const Content = React.createClass({
-
   getInitialState() {
     return {
       active: 'Overview',
@@ -35,15 +34,25 @@ const Content = React.createClass({
   render() {
     const { genome } = this.props;
     const { pending = [], userDefined = null } = genome;
-    const sections = [
-      { key: 'Top', component: <Overview genome={genome} /> },
-    ];
+    const sections = [ { key: 'Top', component: <Overview genome={genome} /> } ];
     if (userDefined && Object.keys(userDefined).length > 0) {
-      sections.push({ key: 'Metadata', component: <Metadata genome={genome} /> });
+      sections.push({
+        key: 'Metadata',
+        component: <Metadata genome={genome} />,
+      });
     }
     sections.push(...getAnalysisTabs(genome));
     if (pending.length) {
-      sections.push({ key: `+${pending.length} Pending`, component: <ul>{pending.map(task => <li>{task}</li>)}</ul> });
+      sections.push({
+        key: `+${pending.length} Pending`,
+        component: (
+          <ul>
+            {pending.map(task => (
+              <li>{task}</li>
+            ))}
+          </ul>
+        ),
+      });
     }
     return (
       <React.Fragment>
@@ -53,58 +62,70 @@ const Content = React.createClass({
             currentClassName="active"
             rootEl=".wgsa-genome-report > .wgsa-overlay"
           >
-          { sections.map(({ key }) =>
-            <li key={key}>
-              <a
-                href={`#${key.toLowerCase()}`}
-                onClick={e => e.preventDefault() || this.scrollTo(key)}
-              >
-                {key}
-              </a>
-            </li>) }
+            {sections.map(({ key }) => (
+              <li key={key}>
+                <a
+                  href={`#${key.toLowerCase()}`}
+                  onClick={e => e.preventDefault() || this.scrollTo(key)}
+                >
+                  {key}
+                </a>
+              </li>
+            ))}
           </ScrollSpy>
           <RemoveButton key="remove" genome={genome} onRemove={close} />
         </nav>
         <div className="wgsa-genome-report-content">
-          { sections.map(({ key, component }) =>
+          {sections.map(({ key, component }) => (
             <section
               key={key}
-              ref={el => { this.sections[key] = el; }}
+              ref={el => {
+                this.sections[key] = el;
+              }}
               id={`${key.toLowerCase()}`}
             >
               {component}
-            </section>) }
+            </section>
+          ))}
         </div>
       </React.Fragment>
     );
   },
-
 });
 
 const Report = ({ name, genome, loading, close }) => {
   const isOpen = !!loading || !!genome;
   return (
     <Fade>
-      { isOpen &&
+      {isOpen && (
         <Modal
           title={
             <span className="wgsa-genome-report-title">
-              Genome Report: {genome ? genome.name : name} { genome && <DownloadLink key="download" id={genome.id} name={genome.name} /> }
+              Genome Report: {genome ? genome.name : name}{' '}
+              {genome && (
+                <DownloadLink
+                  key="download"
+                  id={genome.id}
+                  name={genome.name}
+                />
+              )}
             </span>
           }
-          modal
           isOpen={isOpen}
           onClose={close}
           animationKey="genome-report"
           containerClassName="wgsa-genome-report"
         >
-          { loading ?
+          {loading ? (
             <div className="wgsa-genome-report-loader">
               <Spinner />
               <p>Loading Report</p>
-            </div> :
-            <Content genome={genome} /> }
-        </Modal> }
+            </div>
+          ) : (
+            <Content genome={genome} />
+          )}
+        </Modal>
+      )}
     </Fade>
   );
 };

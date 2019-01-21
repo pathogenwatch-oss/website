@@ -5,6 +5,7 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import Selection from '../list';
 import Collection from '../collection';
 import Download from '../download';
+import Update from '../update';
 import Fade from '../../../components/fade';
 
 import { getSelectionDropdownView, getSelectionSize } from '../selectors';
@@ -14,18 +15,24 @@ const EmptySelection = (
     <h3>No Genomes Selected</h3>
     <p>You can select genomes with the following methods:</p>
     <ul className="bulleted">
-      <li><strong>Checkboxes</strong> in the List view</li>
-      <li><strong>Lasso</strong> in the Map view</li>
-      <li><strong>Checkbox</strong> in the Detail view</li>
+      <li>
+        <strong>Checkboxes</strong> in the List view
+      </li>
+      <li>
+        <strong>Lasso</strong> in the Map view
+      </li>
+      <li>
+        <strong>Checkbox</strong> in the Detail view
+      </li>
     </ul>
   </div>
 );
 
 const Dropdown = ({ view, hasSelection }) => (
   <Fade>
-    { view ?
+    {view ? (
       <div className="wgsa-genome-selection-dropdown mdl-shadow--2dp">
-        { hasSelection ?
+        {hasSelection ? (
           <ReactCSSTransitionGroup
             transitionName={view === 'selection' ? 'slide-right' : 'slide-left'}
             transitionEnterTimeout={280}
@@ -34,10 +41,13 @@ const Dropdown = ({ view, hasSelection }) => (
             {view === 'selection' && <Selection />}
             {view === 'collection' && <Collection />}
             {view === 'download' && <Download />}
-          </ ReactCSSTransitionGroup> :
-          EmptySelection }
-      </div> :
-      null }
+            {view === 'update' && <Update />}
+          </ReactCSSTransitionGroup>
+        ) : (
+          EmptySelection
+        )}
+      </div>
+    ) : null}
   </Fade>
 );
 

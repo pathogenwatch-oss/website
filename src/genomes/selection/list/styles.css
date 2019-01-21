@@ -24,9 +24,13 @@
   margin-right: auto;
 }
 
-.wgsa-genome-selection > footer > button,
-.wgsa-genome-selection > footer > a {
+.wgsa-genome-selection > footer > .mdl-button--raised {
   margin-left: 8px;
+}
+
+.wgsa-genome-selection > footer > button {
+  text-transform: capitalize;
+  line-height: 20px;
 }
 
 .wgsa-genome-selection > header > button {
@@ -43,7 +47,6 @@
 .wgsa-genome-selection-list .ReactVirtualized__Grid__innerScrollContainer {
   padding-top: 16px;
 }
-
 
 .wgsa-genome-selection-list .wgsa-link-button {
   padding: 0;

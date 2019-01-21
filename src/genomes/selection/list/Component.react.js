@@ -6,14 +6,25 @@ import SignInLink from '../../../sign-in/SignInLink.react';
 
 import { getSelectedGenomeIds, getSelectedGenomeList } from '../selectors';
 
-import { removeFromSelection, clearSelection, toggleDropdown } from '../actions';
+import {
+  removeFromSelection,
+  clearSelection,
+  toggleDropdown,
+} from '../actions';
 import { showGenomeReport } from '../../../genome-report/actions';
 import { setBinnedFlag } from '../../bin/actions';
 
 import config from '../../../app/config';
 const { user } = config;
 
-const Selection = ({ selectedGenomes, showGenome, removeGenome, clearAll, sendToBin, toggle }) => (
+const Selection = ({
+  selectedGenomes,
+  showGenome,
+  removeGenome,
+  clearAll,
+  sendToBin,
+  toggle,
+}) => (
   <div className="wgsa-genome-selection">
     <header className="wgsa-dropdown-header">
       Selection
@@ -39,7 +50,13 @@ const Selection = ({ selectedGenomes, showGenome, removeGenome, clearAll, sendTo
             className="wgsa-list-item"
             style={{ ...style, width: 440, top: style.top + 8 }}
           >
-            <button className="wgsa-link-button" title="View Details" onClick={() => showGenome(genome)}>{genome.name}</button>
+            <button
+              className="wgsa-link-button"
+              title="View Details"
+              onClick={() => showGenome(genome)}
+            >
+              {genome.name}
+            </button>
             <button
               title="Remove from Selection"
               onClick={e => {
@@ -56,7 +73,7 @@ const Selection = ({ selectedGenomes, showGenome, removeGenome, clearAll, sendTo
     />
     <footer className="wgsa-dropdown-footer">
       <div>
-        { user &&
+        {!!user && (
           <button
             title="Send Selection to Bin"
             className="mdl-button mdl-button--icon"
@@ -64,24 +81,27 @@ const Selection = ({ selectedGenomes, showGenome, removeGenome, clearAll, sendTo
             title="Send to Bin"
           >
             <i className="material-icons">delete_sweep</i>
-          </button> }
+          </button>
+        )}
       </div>
-      <button
-        className="mdl-button"
-        onClick={() => toggle('download')}
-      >
-        Download
+      <button className="mdl-button" onClick={() => toggle('update')}>
+        Update
       </button>
-      { !!user ?
+      <button className="mdl-button" onClick={() => toggle('download')}>
+        download
+      </button>
+      {!!user ? (
         <button
           className="mdl-button mdl-button--raised mdl-button--colored"
           onClick={() => toggle('collection')}
         >
           Create Collection
-        </button> :
+        </button>
+      ) : (
         <SignInLink className="mdl-button mdl-button--raised mdl-button--colored">
           Sign in to Create Collection
-        </SignInLink> }
+        </SignInLink>
+      )}
     </footer>
   </div>
 );
@@ -100,8 +120,11 @@ function mapDispatchToProps(dispatch) {
     removeGenome: genome => dispatch(removeFromSelection([ genome ])),
     showGenome: genome => dispatch(showGenomeReport(genome.id, genome.name)),
     sendToBin: genomes => dispatch(setBinnedFlag(genomes, true)),
-    toggle: (view) => dispatch(toggleDropdown(view)),
+    toggle: view => dispatch(toggleDropdown(view)),
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Selection);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Selection);
