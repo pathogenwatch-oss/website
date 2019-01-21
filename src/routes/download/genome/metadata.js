@@ -25,7 +25,7 @@ const transformer = function (doc) {
 module.exports = (req, res) => {
   const { user } = req;
   const { filename: rawFilename = '' } = req.query;
-  const filename = sanitize(rawFilename) || 'mlst.csv';
+  const filename = sanitize(rawFilename) || 'metadata.csv';
   const { ids } = req.body;
 
   if (!ids || !ids.length) return res.sendStatus(400);
