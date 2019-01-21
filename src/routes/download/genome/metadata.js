@@ -15,8 +15,10 @@ const transformer = function (doc) {
     PMID: doc.pmid,
   };
 
-  for (const [ key, value ] of Object.entries(doc.userDefined)) {
-    result[`${key[0].toUpperCase()}${key.slice(1)}`] = value;
+  if (doc.userDefined) {
+    for (const [ key, value ] of Object.entries(doc.userDefined)) {
+      result[`${key[0].toUpperCase()}${key.slice(1)}`] = value;
+    }
   }
 
   return result;
