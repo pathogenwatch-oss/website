@@ -14,6 +14,10 @@ const UpdateMetadata = ({ ids, goBack, update }) => (
   <div className="wgsa-dropdown">
     <header className="wgsa-dropdown-header">Update Metadata</header>
     <div className="wgsa-dropdown-content pw-update-metadata">
+      <p className="pw-update-metadata-warning">
+        <i className="material-icons">warning</i>
+        This will overwrite existing data
+      </p>
       <DownloadLink
         className="pw-update-metadata-link"
         link={getServerPath('/download/genome/metadata')}

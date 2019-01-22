@@ -24,15 +24,6 @@
   margin-right: auto;
 }
 
-.wgsa-genome-selection > footer > .mdl-button--raised {
-  margin-left: 8px;
-}
-
-.wgsa-genome-selection > footer > button {
-  text-transform: capitalize;
-  line-height: 20px;
-}
-
 .wgsa-genome-selection > header > button {
   white-space: nowrap;
 }

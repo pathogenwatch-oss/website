@@ -2,10 +2,20 @@
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+  align-items: center;
 }
 
 .pw-update-metadata ol {
   margin-top: 0;
+}
+
+.pw-update-metadata-warning {
+  display: flex;
+  font-weight: 500;
+}
+
+.pw-update-metadata-warning .material-icons {
+  margin-right: 4px;
 }
 
 .pw-update-metadata-form {
@@ -17,6 +27,7 @@
   flex-grow: 1;
   justify-content: center;
   padding: 16px;
+  align-self: stretch;
 }
 
 .pw-update-metadata-form input {

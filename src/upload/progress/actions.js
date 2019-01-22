@@ -45,22 +45,20 @@ export const UPLOAD_GENOME = createAsyncConstants('UPLOAD_GENOME');
 export function uploadGenome(genome, data) {
   return dispatch => {
     const { id, metadata } = genome;
-    const progressFn =
-      percent => dispatch(genomeUploadProgress(id, percent));
+    const progressFn = percent => dispatch(genomeUploadProgress(id, percent));
 
     return dispatch({
       type: UPLOAD_GENOME,
       payload: {
         id,
-        promise:
-          api.upload(genome, data, progressFn)
-            .then(uploadResult => {
-              if (metadata) {
-                return api.update(uploadResult.id, metadata)
-                  .then(updateResult => ({ ...uploadResult, ...updateResult }));
-              }
-              return uploadResult;
-            }),
+        promise: api.upload(genome, data, progressFn).then(uploadResult => {
+          if (metadata) {
+            return api
+              .update(uploadResult.id, metadata)
+              .then(updateResult => ({ ...uploadResult, ...updateResult }));
+          }
+          return uploadResult;
+        }),
       },
     });
   };
@@ -73,6 +71,7 @@ export function updateGenome(id, metadata) {
     type: UPDATE_GENOME,
     payload: {
       id,
+      name: metadata.name,
       promise: api.update(id, metadata),
     },
   };
@@ -87,17 +86,17 @@ function processGenome(id) {
       type: PROCESS_GENOME,
       payload: {
         id,
-        promise:
-          utils.validate(genome)
-            .then(data => {
-              if (getSettingValue(getState(), 'compression')) {
-                return dispatch(compressGenome(id, data));
-              }
-              return data;
-            })
-            .then(data => dispatch(uploadGenome(genome, data))),
+        promise: utils
+          .validate(genome)
+          .then(data => {
+            if (getSettingValue(getState(), 'compression')) {
+              return dispatch(compressGenome(id, data));
+            }
+            return data;
+          })
+          .then(data => dispatch(uploadGenome(genome, data))),
       },
-    }).catch((error) => error);
+    }).catch(error => error);
   };
 }
 
@@ -114,19 +113,17 @@ export function processFiles() {
     (function processNext() {
       const { queue, processing } = selectors.getProgress(getState());
       if (queue.length && processing.size < processLimit) {
-        dispatch(processGenome(queue[0]))
-          .then(() => {
-            if (queue.length > processLimit) {
-              processNext();
-              return;
-            }
-          });
+        dispatch(processGenome(queue[0])).then(() => {
+          if (queue.length > processLimit) {
+            processNext();
+            return;
+          }
+        });
         processNext();
       }
-    }());
+    })();
   };
 }
-
 
 export const UPLOAD_ANALYSIS_RECEIVED = 'UPLOAD_ANALYSIS_RECEIVED';
 
@@ -137,7 +134,9 @@ export function receiveUploadAnalysis(msg) {
   };
 }
 
-export const UPLOAD_FETCH_GENOMES = createAsyncConstants('UPLOAD_FETCH_GENOMES');
+export const UPLOAD_FETCH_GENOMES = createAsyncConstants(
+  'UPLOAD_FETCH_GENOMES'
+);
 
 export function fetchGenomes(uploadedAt) {
   return {
@@ -207,7 +206,9 @@ export function removeAll() {
   };
 }
 
-export const UPLOAD_FETCH_POSITION = createAsyncConstants('UPLOAD_FETCH_POSITION');
+export const UPLOAD_FETCH_POSITION = createAsyncConstants(
+  'UPLOAD_FETCH_POSITION'
+);
 
 export function fetchQueuePosition(uploadedAt) {
   return {

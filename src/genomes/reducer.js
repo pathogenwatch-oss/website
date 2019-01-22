@@ -15,11 +15,14 @@ function entities(state = {}, { type, payload }) {
   switch (type) {
     case actions.FETCH_GENOME_LIST.SUCCESS: {
       const { prefilter } = payload.filter;
-      return payload.result.reduce((memo, genome) => {
-        if (prefilter === 'bin') genome.binned = true;
-        memo[genome.id] = genome;
-        return memo;
-      }, { ...state });
+      return payload.result.reduce(
+        (memo, genome) => {
+          if (prefilter === 'bin') genome.binned = true;
+          memo[genome.id] = genome;
+          return memo;
+        },
+        { ...state }
+      );
     }
     case actions.FETCH_GENOME_SUMMARY.SUCCESS: {
       const { prefilter } = payload.filter;
@@ -28,6 +31,19 @@ function entities(state = {}, { type, payload }) {
         memo[genome.id] = genome;
         return memo;
       }, {});
+    }
+    case 'UPDATE_GENOME::SUCCESS': {
+      const { id, name } = payload;
+      if (id in state) {
+        return {
+          ...state,
+          [id]: {
+            ...state[id],
+            name,
+          },
+        };
+      }
+      return state;
     }
     default:
       return state;
@@ -44,7 +60,7 @@ function indices(state = {}, { type, payload }) {
     }
     case actions.FETCH_GENOME_LIST.ATTEMPT: {
       const { skip = 0, limit = 0 } = payload.options;
-      const nextState = { ... state };
+      const nextState = { ...state };
       for (let i = skip; i < skip + limit; i++) {
         nextState[i] = state[i] || true;
       }
@@ -52,7 +68,7 @@ function indices(state = {}, { type, payload }) {
     }
     case actions.FETCH_GENOME_LIST.FAILURE: {
       const { skip = 0, limit = 0 } = payload.options;
-      const nextState = { ... state };
+      const nextState = { ...state };
       for (let i = skip; i < skip + limit; i++) {
         nextState[i] = undefined;
       }
@@ -60,10 +76,13 @@ function indices(state = {}, { type, payload }) {
     }
     case actions.FETCH_GENOME_LIST.SUCCESS: {
       const { skip = 0 } = payload.options;
-      return payload.result.reduce((memo, genome, index) => {
-        memo[index + skip] = genome.id;
-        return memo;
-      }, { ...state });
+      return payload.result.reduce(
+        (memo, genome, index) => {
+          memo[index + skip] = genome.id;
+          return memo;
+        },
+        { ...state }
+      );
     }
     default:
       return state;

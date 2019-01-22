@@ -50,6 +50,7 @@
 
 .wgsa-dropdown-footer button {
   text-transform: capitalize;
+  margin-left: 8px;
 }
 
 .wgsa-dropdown-content {

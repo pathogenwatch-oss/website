@@ -83,10 +83,10 @@ const Selection = ({
             <i className="material-icons">delete_sweep</i>
           </button>
         )}
+        <button className="mdl-button" onClick={() => toggle('update')}>
+          Update
+        </button>
       </div>
-      <button className="mdl-button" onClick={() => toggle('update')}>
-        Update
-      </button>
       <button className="mdl-button" onClick={() => toggle('download')}>
         download
       </button>

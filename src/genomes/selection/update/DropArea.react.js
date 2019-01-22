@@ -1,9 +1,12 @@
 import React from 'react';
 import classnames from 'classnames';
+import { readAsText } from 'promise-file-reader';
+
+import Fade from '../../../components/fade';
+import CircularProgress from '../../../components/CircularProgress.react';
 
 import { CSV_FILE_NAME_REGEX, parseMetadata } from '../../../upload/utils';
 import MetadataUtils from '../../../utils/Metadata';
-import { readAsText } from 'promise-file-reader';
 
 export default React.createClass({
   displayName: 'DropArea',
@@ -19,20 +22,27 @@ export default React.createClass({
       uploading: false,
       rows: 0,
       completed: 0,
+      error: null,
     };
   },
 
-  upload({ id, ...row }) {
+  upload(data, index) {
+    const { id, ...row } = data[index];
     if (!id) {
-      throw new Error(
-        'Rows must contain IDs, please download existing metadata in step 1.'
-      );
+      this.setState({
+        error: 'Rows must contain IDs, please download existing metadata.',
+      });
+      return;
     }
     const metadata = parseMetadata(row);
-    return this.props
+    this.props
       .update(id, metadata)
       .then(() => {
-        this.setState({ completed: this.state.completed + 1 });
+        this.setState({ completed: this.state.completed + 1 }, () => {
+          if (this.state.completed < this.state.rows && !this.state.error) {
+            this.upload(data, index + 1);
+          }
+        });
       })
       .catch(e => {
         this.setState({ error: e.message });
@@ -48,12 +58,7 @@ export default React.createClass({
       .then(contents => MetadataUtils.parseCsvToJson(contents))
       .then(({ data }) =>
         this.setState({ uploading: true, rows: data.length }, () =>
-          this.upload(data[0]).then(() => {
-            if (this.state.completed < this.state.rows && !this.state.error) {
-              return this.upload(data[this.state.completed]);
-            }
-            return null;
-          })
+          this.upload(data, 0)
         )
       );
   },
@@ -92,8 +97,29 @@ export default React.createClass({
   },
 
   render() {
-    if (this.state.totalFiles > 0) {
-      return <div className="pw-update-metadata-progress" />;
+    if (this.state.error) {
+      return <p>{this.state.error}</p>;
+    }
+
+    if (this.state.uploading) {
+      const progress = Math.ceil(
+        (this.state.completed / this.state.rows) * 100
+      );
+      return (
+        <React.Fragment>
+          <CircularProgress
+            percentage={progress}
+            radius="64"
+            strokeWidth="12"
+            decimalPlaces={0}
+          />
+          <Fade>
+            {progress === 100 && (
+              <p>{this.state.rows} genomes updated successfully.</p>
+            )}
+          </Fade>
+        </React.Fragment>
+      );
     }
 
     return (
@@ -110,10 +136,8 @@ export default React.createClass({
           <p>Drop to upload</p>
         ) : (
           <React.Fragment>
-            <p>2. Drag updated CSV here to update.</p>
-            <p>
-              <small>or click to select file.</small>
-            </p>
+            <p>2. Drag updated CSV here to update</p>
+            <p>or click to select file</p>
           </React.Fragment>
         )}
         <input

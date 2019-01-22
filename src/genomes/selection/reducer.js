@@ -30,14 +30,17 @@ export default function (state = initialState, { type, payload }) {
       return {
         ...state,
         genomes: payload.genomes.reduce(addToSelection, { ...state.genomes }),
-        lastSelectedIndex: typeof payload.index === 'number' ?
-          payload.index :
-          state.lastSelectedIndex,
+        lastSelectedIndex:
+          typeof payload.index === 'number'
+            ? payload.index
+            : state.lastSelectedIndex,
       };
     case actions.REMOVE_GENOME_SELECTION:
       return {
         ...state,
-        genomes: payload.genomes.reduce(removeFromSelection, { ...state.genomes }),
+        genomes: payload.genomes.reduce(removeFromSelection, {
+          ...state.genomes,
+        }),
       };
     case actions.SET_GENOME_SELECTION: {
       return {
@@ -89,6 +92,22 @@ export default function (state = initialState, { type, payload }) {
         ...state,
         lastSelectedIndex: null,
       };
+    case 'UPDATE_GENOME::SUCCESS': {
+      const { id, name } = payload;
+      if (id in state.genomes) {
+        return {
+          ...state,
+          genomes: {
+            ...state.genomes,
+            [id]: {
+              ...state.genomes[id],
+              name,
+            },
+          },
+        };
+      }
+      return state;
+    }
     default:
       return state;
   }
