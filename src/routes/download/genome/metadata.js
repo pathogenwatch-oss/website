@@ -36,7 +36,7 @@ module.exports = (req, res) => {
   res.setHeader('Content-Type', 'text/csv');
 
   const query = Object.assign(
-    { _id: { $in: ids.split(',') }, 'analysis.mlst': { $exists: true } },
+    { _id: { $in: ids.split(',') } },
     Genome.getPrefilterCondition({ user })
   );
   const projection = {
