@@ -6,12 +6,7 @@ const escapeRegex = require('escape-string-regexp');
 const geocoding = require('geocoding');
 const { summariseAnalysis } = require('../utils/analysis');
 
-const {
-  setToObjectOptions,
-  addPreSaveHook,
-  getSummary,
-  getBinExpiryDate,
-} = require('./utils');
+const { setToObjectOptions, addPreSaveHook, getSummary, getBinExpiryDate } = require('./utils');
 
 function getDate(year, month = 1, day = 1) {
   if (year) {
@@ -62,7 +57,8 @@ schema.index({ 'analysis.speciator.organismId': 1, 'analysis.speciator.organismN
 
 schema.statics.taxonomy = genome => {
   const speciator = (genome.analysis || {}).speciator || {};
-  const includes = (taxid) => taxid && [ speciator.organismId, speciator.speciesId, speciator.genusId ].includes(taxid);
+  const includes = taxid =>
+    taxid && [ speciator.organismId, speciator.speciesId, speciator.genusId ].includes(taxid);
   return {
     includes,
     isIn(taxids) {
@@ -77,7 +73,7 @@ schema.statics.taxonomy = genome => {
 function toObject(genome, user = {}) {
   const { id } = user;
   const { _user } = genome;
-  genome.owner = (_user && id && _user.toString() === id) ? 'me' : 'other';
+  genome.owner = _user && id && _user.toString() === id ? 'me' : 'other';
   delete genome._user;
   if (!genome.id) {
     genome.id = genome._id;
@@ -100,10 +96,7 @@ schema.pre('save', function (next) {
 
 function getCountryCode(latitude, longitude) {
   if (latitude && longitude) {
-    return geocoding.getCountryCode(
-      Number.parseFloat(latitude),
-      Number.parseFloat(longitude)
-    );
+    return geocoding.getCountryCode(Number.parseFloat(latitude), Number.parseFloat(longitude));
   }
   return null;
 }
@@ -124,25 +117,18 @@ schema.statics.addAnalysisResults = function (_id, ...analyses) {
   return this.update({ _id }, update);
 };
 
-
 schema.statics.addAnalysisError = function (_id, task) {
-  return this.update({ _id }, {
-    $addToSet: { errored: task },
-    $pull: { pending: task },
-  });
+  return this.update(
+    { _id },
+    {
+      $addToSet: { errored: task },
+      $pull: { pending: task },
+    }
+  );
 };
 
 schema.statics.updateMetadata = function (_id, { user }, metadata) {
-  const {
-    name,
-    year,
-    month,
-    day,
-    latitude = null,
-    longitude = null,
-    pmid,
-    userDefined,
-  } = metadata;
+  const { name, year, month, day, latitude = null, longitude = null, pmid, userDefined } = metadata;
 
   const country = getCountryCode(latitude, longitude);
 
@@ -162,8 +148,7 @@ schema.statics.updateMetadata = function (_id, { user }, metadata) {
     country,
     pmid,
     userDefined,
-  })
-  .then(({ nModified }) => ({ nModified, country }));
+  }).then(() => ({ country }));
 };
 
 schema.statics.getPrefilterCondition = function ({ user, query = {} }) {
@@ -233,10 +218,10 @@ schema.statics.getFilterQuery = function (props) {
   }
 
   if (maxDate) {
-    findQuery.date = Object.assign(
-      findQuery.date || {},
-      { $exists: true, $lte: new Date(maxDate) }
-    );
+    findQuery.date = Object.assign(findQuery.date || {}, {
+      $exists: true,
+      $lte: new Date(maxDate),
+    });
   }
 
   if (organismId) {
@@ -268,11 +253,9 @@ schema.statics.getSummary = function (fields, props) {
   return getSummary(this, fields, props);
 };
 
-const sortKeys = new Set([
-  'createdAt', 'name', 'organism', 'country', 'date', 'type', 'st',
-]);
+const sortKeys = new Set([ 'createdAt', 'name', 'organism', 'country', 'date', 'type', 'st' ]);
 schema.statics.getSort = function (sort = 'createdAt-') {
-  const sortOrder = (sort.slice(-1) === '-') ? -1 : 1;
+  const sortOrder = sort.slice(-1) === '-' ? -1 : 1;
   const sortKey = sortOrder === 1 ? sort : sort.substr(0, sort.length - 1);
 
   if (!sortKeys.has(sortKey)) return null;
@@ -293,40 +276,38 @@ schema.statics.getSort = function (sort = 'createdAt-') {
 };
 
 schema.statics.getForCollection = function (query) {
-  return this.find(
-    query, {
-      'analysis.core.fp.reference': 1,
-      'analysis.core.summary': 1,
-      'analysis.genotyphi': 1,
-      'analysis.metrics': 1,
-      'analysis.mlst.alleles': 1,
-      'analysis.mlst.st': 1,
-      'analysis.ngmast': 1,
-      'analysis.paarsnp.antibiotics': 1,
-      'analysis.paarsnp.paar': 1,
-      'analysis.paarsnp.snp': 1,
-      'analysis.speciator.organismId': 1,
-      'analysis.kleborate': 1,
-      'analysis.inctyper': 1,
-      country: 1,
-      createdAt: 1,
-      day: 1,
-      latitude: 1,
-      longitude: 1,
-      month: 1,
-      name: 1,
-      pmid: 1,
-      public: 1,
-      reference: 1,
-      userDefined: 1,
-      year: 1,
-    }
-  )
-  .lean()
-  .then(genomes => genomes.map(doc => Object.assign(doc, { uuid: doc._id })));
+  return this.find(query, {
+    'analysis.core.fp.reference': 1,
+    'analysis.core.summary': 1,
+    'analysis.genotyphi': 1,
+    'analysis.metrics': 1,
+    'analysis.mlst.alleles': 1,
+    'analysis.mlst.st': 1,
+    'analysis.ngmast': 1,
+    'analysis.paarsnp.antibiotics': 1,
+    'analysis.paarsnp.paar': 1,
+    'analysis.paarsnp.snp': 1,
+    'analysis.speciator.organismId': 1,
+    'analysis.kleborate': 1,
+    'analysis.inctyper': 1,
+    country: 1,
+    createdAt: 1,
+    day: 1,
+    latitude: 1,
+    longitude: 1,
+    month: 1,
+    name: 1,
+    pmid: 1,
+    public: 1,
+    reference: 1,
+    userDefined: 1,
+    year: 1,
+  })
+    .lean()
+    .then(genomes => genomes.map(doc => Object.assign(doc, { uuid: doc._id })));
 };
 
-schema.statics.lookupCgMlstScheme = async function (genomeId, user) {
+schema.statics.lookupCgMlstScheme = async function(genomeId, user) {
   const query = {
     _id: genomeId,
     'analysis.cgmlst.scheme': { $exists: true },
@@ -337,7 +318,7 @@ schema.statics.lookupCgMlstScheme = async function (genomeId, user) {
   return genome ? genome.analysis.cgmlst.scheme : undefined;
 };
 
-schema.statics.checkAuthorisedForSts = async function (user, sts) {
+schema.statics.checkAuthorisedForSts = async function(user, sts) {
   // A user says they want info about a list of cgmlst sts
   // Do they have access to at least one genome with those sts?
   const query = {
