@@ -39,16 +39,17 @@ app.use((req, res, next) => {
 
 // http://stackoverflow.com/a/19965089
 app.use(bodyParser.json({ limit: '8mb' }));
-app.use(bodyParser.urlencoded({
-  extended: true,
-  limit: '8mb',
-}));
+app.use(
+  bodyParser.urlencoded({
+    extended: true,
+    limit: '8mb',
+  })
+);
 
 logging.initHttpLogging(app, process.env.NODE_ENV || 'none');
 
 module.exports = () =>
-  mongoConnection.connect()
-  .then(() => {
+  mongoConnection.connect().then(() => {
     // security
     app.use((req, res, next) => {
       res.header('X-Frame-Options', 'SAMEORIGIN');
@@ -95,6 +96,7 @@ module.exports = () =>
       failureRedirect: '/',
       logoutPath: '/signout',
       strategies: config.passport.strategies,
+      mongoDbUrl: mongoConnection.dbUrl,
     });
 
     app.use(express.static(path.join(clientPath, 'public')));
@@ -107,16 +109,17 @@ module.exports = () =>
     const files = require(path.join(clientPath, 'assets.js'))();
     app.use('/', (req, res, next) => {
       // crude file matching
-      if (req.path !== '/index.html' && req.path.match(/\.[a-z]{1,4}$/) || req.xhr) {
+      if ((req.path !== '/index.html' && req.path.match(/\.[a-z]{1,4}$/)) || req.xhr) {
         return next();
       }
-      const user = req.user ?
-        { name: req.user.name,
+      const user = req.user
+        ? {
+          name: req.user.name,
           email: req.user.email,
           photo: req.user.photo,
           admin: req.user.admin || undefined,
-        } :
-        undefined;
+        }
+        : undefined;
 
       let clientId = null;
       if (req.user) {
@@ -154,13 +157,12 @@ module.exports = () =>
       process.on('SIGTERM', () => {
         shuttingDown = true;
         LOGGER.info('Received stop signal (SIGTERM), shutting down gracefully');
-        Promise.all([
-          mongoConnection.close(),
-          new Promise((resolve) => server.close(resolve)),
-        ]).then(() => {
-          LOGGER.info('Closed out remaining connections');
-          process.exit();
-        });
+        Promise.all([ mongoConnection.close(), new Promise(resolve => server.close(resolve)) ]).then(
+          () => {
+            LOGGER.info('Closed out remaining connections');
+            process.exit();
+          }
+        );
       });
 
       return app;
