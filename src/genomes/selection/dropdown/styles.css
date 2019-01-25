@@ -48,7 +48,8 @@
   padding: 8px;
 }
 
-.wgsa-dropdown-footer button {
+.wgsa-dropdown-footer button,
+.wgsa-dropdown-footer a {
   text-transform: capitalize;
   margin-left: 8px;
 }
