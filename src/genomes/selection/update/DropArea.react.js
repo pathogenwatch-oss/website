@@ -30,7 +30,11 @@ export default React.createClass({
     const { id, ...row } = data[index];
     if (!id) {
       this.setState({
-        error: 'Rows must contain IDs, please download existing metadata.',
+        error: {
+          row: index + 1,
+          message:
+            'This row does not contain an ID, please download existing metadata.',
+        },
       });
       return;
     }
@@ -44,8 +48,15 @@ export default React.createClass({
           }
         });
       })
-      .catch(e => {
-        this.setState({ error: e.message });
+      .catch(() => {
+        this.setState({
+          error: {
+            row: index + 1,
+            message: `This row could not be uploaded, please make sure you are the owner of ${
+              metadata.name
+            }.`,
+          },
+        });
       });
   },
 
@@ -56,11 +67,16 @@ export default React.createClass({
 
     readAsText(file)
       .then(contents => MetadataUtils.parseCsvToJson(contents))
-      .then(({ data }) =>
-        this.setState({ uploading: true, rows: data.length }, () =>
-          this.upload(data, 0)
-        )
-      );
+      .then(({ data, errors }) => {
+        if (errors.length > 0) {
+          const [ { row, message } ] = errors;
+          this.setState({ error: { row: row + 1, message } });
+        } else {
+          this.setState({ uploading: true, rows: data.length }, () =>
+            this.upload(data, 0)
+          );
+        }
+      });
   },
 
   handleDrop(event) {
@@ -98,7 +114,22 @@ export default React.createClass({
 
   render() {
     if (this.state.error) {
-      return <p>{this.state.error}</p>;
+      const { row, message } = this.state.error;
+      return (
+        <div className="pw-update-metadata-progress">
+          <p>
+            We're sorry! There was a problem with <strong>row {row}</strong>:
+            <br />
+            {message}
+          </p>
+          <button
+            className="mdl-button mdl-button--raised mdl-button--colored"
+            onClick={() => this.setState(this.getInitialState())}
+          >
+            Try Again
+          </button>
+        </div>
+      );
     }
 
     if (this.state.uploading) {
@@ -106,19 +137,23 @@ export default React.createClass({
         (this.state.completed / this.state.rows) * 100
       );
       return (
-        <React.Fragment>
+        <div className="pw-update-metadata-progress">
           <CircularProgress
             percentage={progress}
-            radius="64"
+            radius="48"
             strokeWidth="12"
             decimalPlaces={0}
           />
           <Fade>
             {progress === 100 && (
-              <p>{this.state.rows} genomes updated successfully.</p>
+              <p>
+                <i className="material-icons">check_circle_outline</i>
+                {this.state.rows} genome{this.state.rows === 1 ? ' ' : 's '}
+                updated successfully.
+              </p>
             )}
           </Fade>
-        </React.Fragment>
+        </div>
       );
     }
 

@@ -4,7 +4,7 @@ import sortBy from 'lodash.sortby';
 import { getGenomeList, getTotalGenomes } from '../selectors';
 import { getVisible } from '../summary/selectors';
 import { getDeployedOrganismIds } from '../../summary/selectors';
-import { getPrefilter } from '../filter/selectors';
+import { getPrefilter, getFilter } from '../filter/selectors';
 
 import { isOverSelectionLimit } from './utils';
 
@@ -14,7 +14,8 @@ export const getSelection = ({ genomes }) => genomes.selection;
 export const getSelectedGenomes = state => getSelection(state).genomes;
 export const getSelectionDropdownView = state => getSelection(state).dropdown;
 export const getSelectionDownloads = state => getSelection(state).download;
-export const getLastSelectedIndex = state => getSelection(state).lastSelectedIndex;
+export const getLastSelectedIndex = state =>
+  getSelection(state).lastSelectedIndex;
 
 export const getSelectedGenomeIds = createSelector(
   getSelectedGenomes,
@@ -52,7 +53,12 @@ export const getSelectionStatus = createSelector(
   getVisible,
   (selection, genomes, total) => {
     if (selection.length === 0) return 'UNCHECKED';
-    if (genomes.length === total && genomes.every(({ id }) => (selection.indexOf(id) !== -1))) return 'CHECKED';
+    if (
+      genomes.length === total &&
+      genomes.every(({ id }) => selection.indexOf(id) !== -1)
+    ) {
+      return 'CHECKED';
+    }
     return 'INDETERMINATE';
   }
 );

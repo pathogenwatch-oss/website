@@ -18,11 +18,11 @@ import config from '../../../app/config';
 const { user } = config;
 
 const Selection = ({
-  selectedGenomes,
-  showGenome,
-  removeGenome,
   clearAll,
+  removeGenome,
+  selectedGenomes,
   sendToBin,
+  showGenome,
   toggle,
 }) => (
   <div className="wgsa-genome-selection">
@@ -72,8 +72,8 @@ const Selection = ({
       }}
     />
     <footer className="wgsa-dropdown-footer">
-      <div>
-        {!!user && (
+      {!!user && (
+        <div>
           <button
             title="Send Selection to Bin"
             className="mdl-button mdl-button--icon"
@@ -82,11 +82,11 @@ const Selection = ({
           >
             <i className="material-icons">delete_sweep</i>
           </button>
-        )}
-        <button className="mdl-button" onClick={() => toggle('update')}>
-          Update
-        </button>
-      </div>
+          <button className="mdl-button" onClick={() => toggle('update')}>
+            Update
+          </button>
+        </div>
+      )}
       <button className="mdl-button" onClick={() => toggle('download')}>
         download
       </button>
@@ -107,9 +107,8 @@ const Selection = ({
 );
 
 function mapStateToProps(state) {
-  const selectedGenomes = getSelectedGenomeList(state);
   return {
-    selectedGenomes,
+    selectedGenomes: getSelectedGenomeList(state),
     selectedGenomeIds: getSelectedGenomeIds(state),
   };
 }

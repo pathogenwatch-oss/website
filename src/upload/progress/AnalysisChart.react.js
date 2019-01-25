@@ -34,11 +34,12 @@ function toggleOrganism(index, chart) {
     stMeta.data[i].hidden = organismsMeta.data[sts.parents[i]].hidden;
   }
   chart.update();
-  return organismsMeta.data[index].selected ? organisms.organismIds[index] : null;
+  return organismsMeta.data[index].selected
+    ? organisms.organismIds[index]
+    : null;
 }
 
 const AnalysisChart = React.createClass({
-
   componentDidMount() {
     this.chart = new Chart(this.canvas, {
       type: 'doughnut',
@@ -54,18 +55,28 @@ const AnalysisChart = React.createClass({
           displayColors: false,
           callbacks: {
             title: (points, { datasets }) =>
-              points.map(({ index, datasetIndex }) =>
-                datasets[datasetIndex].labels[index]
-            ).join(', '),
+              points
+                .map(
+                  ({ index, datasetIndex }) =>
+                    datasets[datasetIndex].labels[index]
+                )
+                .join(', '),
             label: ({ index, datasetIndex }, { datasets }) => {
               const dataset = datasets[datasetIndex];
-              const total = datasetIndex === 1 ? dataset.total : datasets[1].data[dataset.parents[index]];
-              return `${dataset.data[index]} / ${total}, ${(100 * dataset.data[index] / total).toFixed(1)}%`;
+              const total =
+                datasetIndex === 1
+                  ? dataset.total
+                  : datasets[1].data[dataset.parents[index]];
+              return `${dataset.data[index]} / ${total}, ${(
+                (100 * dataset.data[index]) /
+                total
+              ).toFixed(1)}%`;
             },
           },
         },
         pieceLabel: {
-          render: ({ dataset, index }) => ((dataset.shortLabels || dataset.labels)[index]),
+          render: ({ dataset, index }) =>
+            (dataset.shortLabels || dataset.labels)[index],
           precision: 2,
           fontColor: '#fff',
           fontSize: 13,
@@ -82,7 +93,9 @@ const AnalysisChart = React.createClass({
             return;
           }
           if (item._datasetIndex === 0) {
-            this.toggleOrganism(this.chart.data.datasets[0].parents[item._index]);
+            this.toggleOrganism(
+              this.chart.data.datasets[0].parents[item._index]
+            );
           } else {
             this.toggleOrganism(item._index);
           }
@@ -94,7 +107,9 @@ const AnalysisChart = React.createClass({
   componentDidUpdate() {
     const { datasets } = this.props.data;
     for (const dataset of datasets) {
-      const current = this.chart.data.datasets.find(_ => _.label === dataset.label);
+      const current = this.chart.data.datasets.find(
+        _ => _.label === dataset.label
+      );
       if (current) {
         current.data = dataset.data;
         current.backgroundColor = dataset.backgroundColor;
@@ -112,7 +127,7 @@ const AnalysisChart = React.createClass({
 
   getGenomesLink() {
     const { uploadedAt, selectedOrganism } = this.props;
-    let link = `/genomes?uploadedAt=${uploadedAt}`;
+    let link = `/genomes/user?uploadedAt=${uploadedAt}`;
     if (selectedOrganism) link += `&organismId=${selectedOrganism}`;
     return link;
   },
@@ -127,29 +142,28 @@ const AnalysisChart = React.createClass({
       <div className="wgsa-analysis-chart">
         <AutoSizer>
           {({ width, height }) => (
-            <ChartResizer
-              height={height}
-              width={width}
-              chart={this.chart}
-            >
-              <canvas ref={el => { this.canvas = el; }} />
+            <ChartResizer height={height} width={width} chart={this.chart}>
+              <canvas
+                ref={el => {
+                  this.canvas = el;
+                }}
+              />
             </ChartResizer>
           )}
         </AutoSizer>
-        { this.props.specieationComplete &&
+        {this.props.specieationComplete && (
           <Link
-            className={classnames(
-              'mdl-shadow--2dp wgsa-view-genomes-button',
-              { 'wgsa-sonar-effect': this.props.sonar }
-            )}
+            className={classnames('mdl-shadow--2dp wgsa-view-genomes-button', {
+              'wgsa-sonar-effect': this.props.sonar,
+            })}
             to={this.getGenomesLink()}
           >
             View Genomes
-          </Link> }
+          </Link>
+        )}
       </div>
     );
   },
-
 });
 
 function mapStateToProps(state) {
@@ -167,4 +181,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AnalysisChart);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(AnalysisChart);

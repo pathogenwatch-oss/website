@@ -14,8 +14,8 @@ const initialState = {
   lastSelectedIndex: null,
 };
 
-const addToSelection = (memo, { id, name, organismId, binned }) => {
-  memo[id] = { id, name, organismId, binned };
+const addToSelection = (memo, { id, name, organismId, binned, owner }) => {
+  memo[id] = { id, name, organismId, binned, owner };
   return memo;
 };
 
