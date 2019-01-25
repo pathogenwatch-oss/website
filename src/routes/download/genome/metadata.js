@@ -81,7 +81,7 @@ module.exports = async (req, res) => {
 
   const columns = [ ...standardColumns, ...result[0].columns ];
 
-  return Genome.find(query, projection)
+  return Genome.find(query, projection, { sort: { name: 1 } })
     .cursor()
     .pipe(csv.transform(transformer))
     .pipe(csv.stringify({ header: true, quotedString: true, columns }))
