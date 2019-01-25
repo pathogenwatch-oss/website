@@ -29,7 +29,6 @@ function parseCsvToJson(csv) {
   }
 
   results.data = transformRawCsv(results.data);
-  console.log('test');
   return results;
 }
 

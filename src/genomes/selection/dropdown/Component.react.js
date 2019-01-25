@@ -28,28 +28,52 @@ const EmptySelection = (
   </div>
 );
 
-const Dropdown = ({ view, hasSelection }) => (
-  <Fade>
-    {view ? (
-      <div className="wgsa-genome-selection-dropdown mdl-shadow--2dp">
-        {hasSelection ? (
-          <ReactCSSTransitionGroup
-            transitionName={view === 'selection' ? 'slide-right' : 'slide-left'}
-            transitionEnterTimeout={280}
-            transitionLeaveTimeout={280}
-          >
-            {view === 'selection' && <Selection />}
-            {view === 'collection' && <Collection />}
-            {view === 'download' && <Download />}
-            {view === 'update' && <Update />}
-          </ReactCSSTransitionGroup>
-        ) : (
-          EmptySelection
-        )}
-      </div>
-    ) : null}
-  </Fade>
-);
+const Dropdown = React.createClass({
+  getInitialState() {
+    return {
+      slideDirection: null,
+    };
+  },
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.view === 'selection' && nextProps.view === 'update') {
+      return this.setState({ slideDirection: 'right' });
+    }
+    if (this.props.view === 'update' && nextProps.view === 'selection') {
+      return this.setState({ slideDirection: 'left' });
+    }
+    if (nextProps.view === 'selection') {
+      return this.setState({ slideDirection: 'right' });
+    }
+    return this.setState({ slideDirection: 'left' });
+  },
+
+  render() {
+    const { view, hasSelection } = this.props;
+    return (
+      <Fade>
+        {view ? (
+          <div className="wgsa-genome-selection-dropdown mdl-shadow--2dp">
+            {hasSelection ? (
+              <ReactCSSTransitionGroup
+                transitionName={`slide-${this.state.slideDirection}`}
+                transitionEnterTimeout={280}
+                transitionLeaveTimeout={280}
+              >
+                {view === 'selection' && <Selection />}
+                {view === 'collection' && <Collection />}
+                {view === 'download' && <Download />}
+                {view === 'update' && <Update />}
+              </ReactCSSTransitionGroup>
+            ) : (
+              EmptySelection
+            )}
+          </div>
+        ) : null}
+      </Fade>
+    );
+  },
+});
 
 function mapStateToProps(state) {
   return {

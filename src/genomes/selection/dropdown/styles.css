@@ -53,6 +53,10 @@
   margin-left: 8px;
 }
 
+.wgsa-dropdown-footer--right {
+  flex-direction: row-reverse;
+}
+
 .wgsa-dropdown-content {
   padding: 16px;
 }
