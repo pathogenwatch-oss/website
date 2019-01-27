@@ -9,28 +9,27 @@ import { DEFAULT } from '../../app/constants';
 import getCompressWorker from 'worker-loader?name=compress-worker.[hash].js!./compressWorker';
 
 export function parseMetadata(row) {
-  const {
-    displayname,
-    id,
-    name,
-    filename,
-    ...columns,
-  } = row;
+  const { displayname, id, name, filename, ...columns } = row;
 
   const genomeName = displayname || id || name || filename;
 
-  const {
+  const { year, month, day, latitude, longitude, pmid, ...rest } = columns;
+
+  const userDefined = {};
+  for (const [ key, value ] of Object.entries(rest)) {
+    if (!value.length) continue;
+    userDefined[key] = value;
+  }
+
+  validateMetadata({
+    name: genomeName,
     year,
     month,
     day,
     latitude,
     longitude,
     pmid,
-    ...userDefined,
-  } = columns;
-
-  validateMetadata({
-    name: genomeName, year, month, day, latitude, longitude, pmid, userDefined,
+    userDefined,
   });
 
   return {
@@ -49,17 +48,23 @@ function flattenCSVs(files) {
   return files.reduce((memo, { data = {} }) => memo.concat(data), []);
 }
 
-const GENOME_FILE_NAME_REGEX = new RegExp(`(${DEFAULT.GENOME_FILE_EXTENSIONS.join('|')})$`, 'i');
+const GENOME_FILE_NAME_REGEX = new RegExp(
+  `(${DEFAULT.GENOME_FILE_EXTENSIONS.join('|')})$`,
+  'i'
+);
 export const CSV_FILE_NAME_REGEX = /(.csv)$/i;
 
 export function mapCSVsToGenomes(files, uploadedAt) {
   const csvFiles = files.filter(({ name }) => CSV_FILE_NAME_REGEX.test(name));
-  const genomeFiles = files.filter(({ name }) => GENOME_FILE_NAME_REGEX.test(name));
+  const genomeFiles = files.filter(({ name }) =>
+    GENOME_FILE_NAME_REGEX.test(name)
+  );
 
   if (genomeFiles.length === 0) {
     return Promise.reject({
       toast: {
-        message: 'Could not process these files. Please ensure that your files include at least one genome and have supported file extensions.',
+        message:
+          'Could not process these files. Please ensure that your files include at least one genome and have supported file extensions.',
       },
     });
   }
@@ -68,8 +73,9 @@ export function mapCSVsToGenomes(files, uploadedAt) {
     csvFiles.map(file =>
       readAsText(file).then(contents => MetadataUtils.parseCsvToJson(contents))
     )
-  ).then(parsedFiles => flattenCSVs(parsedFiles))
-   .then(rows =>
+  )
+    .then(parsedFiles => flattenCSVs(parsedFiles))
+    .then(rows =>
       genomeFiles.map((file, index) => {
         const row = rows.find(({ filename }) => filename === file.name);
         return {
@@ -97,9 +103,7 @@ export function compress(text) {
 }
 
 export function validate(genome) {
-  return (
-    validateGenomeSize(genome.file)
-      .then(readAsText)
-      .then(validateGenomeContent)
-  );
+  return validateGenomeSize(genome.file)
+    .then(readAsText)
+    .then(validateGenomeContent);
 }

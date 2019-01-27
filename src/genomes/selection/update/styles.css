@@ -66,6 +66,7 @@
 }
 
 .pw-update-metadata-progress {
+  width: 100%;
   text-align: center;
 }
 
@@ -73,18 +74,28 @@
   line-height: 1.5;
 }
 
-.pw-update-metadata-progress svg {
+.pw-update-metadata-progress p:first-child {
+  font-weight: 500;
   margin-bottom: 8px;
 }
 
-.pw-update-metadata-success {
-  display: flex;
-  align-items: center;
+.pw-update-metadata-progress button {
+  display: block;
+  margin-right: auto;
+  margin-top: auto;
 }
 
-.pw-update-metadata-success .material-icons {
-  vertical-align: middle;
-  font-size: 20px;
-  margin-right: 4px;
+.pw-update-metadata-progress.error {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  margin-bottom: auto;
+  text-align: left;
+}
+
+.pw-update-metadata-progress.success .material-icons {
   color: #48996f;
+  display: block;
+  font-size: 32px;
+  margin-bottom: 4px;
 }

@@ -92,17 +92,23 @@ export default function (state = initialState, { type, payload }) {
         ...state,
         lastSelectedIndex: null,
       };
-    case 'UPDATE_GENOME::SUCCESS': {
-      const { id, name } = payload;
-      if (id in state.genomes) {
+    case 'SEND_METADATA_UPDATE::SUCCESS': {
+      const { data } = payload;
+      const updates = {};
+      for (const { id, name } of data) {
+        if (id in state.genomes && state.genomes[id].name !== name) {
+          updates[id] = {
+            ...state[id],
+            name,
+          };
+        }
+      }
+      if (Object.keys(updates).length) {
         return {
           ...state,
           genomes: {
             ...state.genomes,
-            [id]: {
-              ...state.genomes[id],
-              name,
-            },
+            ...updates,
           },
         };
       }

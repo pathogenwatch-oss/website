@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Fade from '../../../components/fade';
-import CircularProgress from '../../../components/CircularProgress.react';
 
 export default React.createClass({
   displayName: 'Progress',
@@ -12,44 +11,32 @@ export default React.createClass({
       row: PropTypes.number,
       message: PropTypes.string,
     }),
-    reset: PropTypes.func,
     progress: PropTypes.number,
     rows: PropTypes.number,
   },
 
   render() {
     if (this.props.error) {
-      const { row, message } = this.props.error;
+      const { row = null, message } = this.props.error;
       return (
-        <div className="pw-update-metadata-progress">
+        <div className="pw-update-metadata-progress error">
           <p>
-            <strong>We're sorry! There was a problem with row {row}:</strong>
+            Sorry! There was a problem
+            {row !== null ? ` with row ${row}` : ''}:
           </p>
           <p>{message}</p>
-          <button
-            className="mdl-button mdl-button--raised mdl-button--colored"
-            onClick={this.props.reset}
-          >
-            Try Again
-          </button>
         </div>
       );
     }
 
-    const { progress } = this.props;
+    const { result } = this.props;
     return (
-      <div className="pw-update-metadata-progress">
-        <CircularProgress
-          percentage={progress}
-          radius="48"
-          strokeWidth="12"
-          decimalPlaces={0}
-        />
+      <div className="pw-update-metadata-progress success">
         <Fade out={false}>
-          {progress === 100 ? (
-            <p key="complete" className=" pw-update-metadata-success">
+          {result ? (
+            <p key="complete">
               <i className="material-icons">check_circle</i>
-              {this.props.rows} genome{this.props.rows === 1 ? ' ' : 's '}
+              {result.matched} genome{result.matched === 1 ? ' ' : 's '}
               updated successfully
             </p>
           ) : (

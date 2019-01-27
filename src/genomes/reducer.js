@@ -32,15 +32,21 @@ function entities(state = {}, { type, payload }) {
         return memo;
       }, {});
     }
-    case 'UPDATE_GENOME::SUCCESS': {
-      const { id, name } = payload;
-      if (id in state) {
-        return {
-          ...state,
-          [id]: {
+    case 'SEND_METADATA_UPDATE::SUCCESS': {
+      const { data } = payload;
+      const updates = {};
+      for (const { id, name } of data) {
+        if (id in state && state[id].name !== name) {
+          updates[id] = {
             ...state[id],
             name,
-          },
+          };
+        }
+      }
+      if (Object.keys(updates).length) {
+        return {
+          ...state,
+          ...updates,
         };
       }
       return state;

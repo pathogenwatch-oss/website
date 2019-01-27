@@ -11,7 +11,7 @@ import Fade from '../../../components/fade';
 import { getSelectedGenomeIds } from '../selectors';
 
 import { toggleDropdown } from '../actions';
-import { updateGenome } from '../../../upload/progress/actions';
+import { sendMetadataUpdate } from './actions';
 
 import { getServerPath } from '../../../utils/Api';
 import { CSV_FILE_NAME_REGEX, parseMetadata } from '../../../upload/utils';
@@ -31,41 +31,6 @@ class UpdateMetadata extends React.Component {
     super();
     this.state = getInitialState();
     this.handleFiles = this.handleFiles.bind(this);
-    this.upload = this.upload.bind(this);
-  }
-
-  upload(data, index) {
-    const { id, ...row } = data[index];
-    if (!id) {
-      this.setState({
-        error: {
-          row: index + 1,
-          message:
-            'This row does not contain an ID, please download existing metadata before attempting to upload',
-        },
-      });
-      return;
-    }
-    const metadata = parseMetadata(row);
-    this.props
-      .update(id, metadata)
-      .then(() => {
-        this.setState({ completed: this.state.completed + 1 }, () => {
-          if (this.state.completed < this.state.rows && !this.state.error) {
-            this.upload(data, index + 1);
-          }
-        });
-      })
-      .catch(() => {
-        this.setState({
-          error: {
-            row: index + 1,
-            message: `This row could not be uploaded, please make sure you are the owner of ${
-              metadata.name
-            }`,
-          },
-        });
-      });
   }
 
   handleFiles(fileList) {
@@ -73,18 +38,47 @@ class UpdateMetadata extends React.Component {
 
     if (!CSV_FILE_NAME_REGEX.test(file.name)) return;
 
-    readAsText(file)
-      .then(contents => MetadataUtils.parseCsvToJson(contents))
-      .then(({ data, errors }) => {
-        if (errors.length > 0) {
-          const [ { row, message } ] = errors;
-          this.setState({ error: { row: row + 1, message } });
-        } else {
-          this.setState({ uploading: true, rows: data.length }, () =>
-            this.upload(data, 0)
-          );
-        }
-      });
+    this.setState({ uploading: true }, () =>
+      readAsText(file)
+        .then(contents => MetadataUtils.parseCsvToJson(contents))
+        .then(({ data, errors }) => {
+          if (errors.length > 0) {
+            const [ { row, message } ] = errors;
+            this.setState({ error: { row: row + 1, message } });
+            return;
+          }
+          this.props
+            .update(
+              data.map(row => {
+                if (!row.id) {
+                  throw new Error(
+                    'Every row must contain an ID, please download existing metadata before attempting to upload.'
+                  );
+                }
+                return {
+                  id: row.id,
+                  ...parseMetadata(row),
+                };
+              })
+            )
+            .then(result => this.setState({ result }))
+            .catch(() =>
+              this.setState({
+                error: {
+                  message:
+                    'Failed to update, please make sure you are the owner of the genomes in the file.',
+                },
+              })
+            );
+        })
+        .catch(e =>
+          this.setState({
+            error: {
+              message: e.message,
+            },
+          })
+        )
+    );
   }
 
   render() {
@@ -100,9 +94,7 @@ class UpdateMetadata extends React.Component {
           {this.state.uploading ? (
             <Progress
               key="progress"
-              rows={this.state.rows}
-              progress={progress}
-              reset={() => this.setState(getInitialState())}
+              result={this.state.result}
               error={this.state.error}
             />
           ) : (
@@ -131,6 +123,16 @@ class UpdateMetadata extends React.Component {
           >
             Go back
           </button>
+          <Fade out={false}>
+            {this.state.error && (
+              <button
+                className="mdl-button mdl-button--raised mdl-button--colored"
+                onClick={() => this.setState(getInitialState())}
+              >
+                Try Again
+              </button>
+            )}
+          </Fade>
         </footer>
       </div>
     );
@@ -146,7 +148,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     goBack: () => dispatch(toggleDropdown('selection')),
-    update: (id, metadata) => dispatch(updateGenome(id, metadata)),
+    update: data => dispatch(sendMetadataUpdate(data)),
   };
 }
 
