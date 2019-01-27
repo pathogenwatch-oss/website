@@ -3,7 +3,7 @@ const Genome = require('models/genome');
 const { ServiceRequestError } = require('utils/errors');
 const validateMetadata = require('pathogenwatch-front-end/universal/validateMetadata');
 
-module.exports = async function({ id, user, metadata, reference }) {
+module.exports = async function ({ id, user, metadata, reference }) {
   if (!reference && !user) {
     throw new ServiceRequestError('Not authenticated');
   }

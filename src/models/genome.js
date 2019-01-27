@@ -127,17 +127,10 @@ schema.statics.addAnalysisError = function (_id, task) {
   );
 };
 
-schema.statics.updateMetadata = function (_id, { user }, metadata) {
+schema.statics.getMetadataUpdate = function (metadata) {
   const { name, year, month, day, latitude = null, longitude = null, pmid, userDefined } = metadata;
-
   const country = getCountryCode(latitude, longitude);
-
-  const query = { _id };
-  if (user) {
-    query._user = user;
-  }
-
-  return this.update(query, {
+  return {
     name,
     year,
     month,
@@ -148,7 +141,17 @@ schema.statics.updateMetadata = function (_id, { user }, metadata) {
     country,
     pmid,
     userDefined,
-  }).then(() => ({ country }));
+  };
+};
+
+schema.statics.updateMetadata = async function (_id, { user }, metadata) {
+  const query = { _id };
+  if (user) {
+    query._user = user;
+  }
+  const update = this.getMetadataUpdate(metadata);
+  await this.update(query, update);
+  return { country: update.country };
 };
 
 schema.statics.getPrefilterCondition = function ({ user, query = {} }) {
@@ -307,7 +310,7 @@ schema.statics.getForCollection = function (query) {
     .then(genomes => genomes.map(doc => Object.assign(doc, { uuid: doc._id })));
 };
 
-schema.statics.lookupCgMlstScheme = async function(genomeId, user) {
+schema.statics.lookupCgMlstScheme = async function (genomeId, user) {
   const query = {
     _id: genomeId,
     'analysis.cgmlst.scheme': { $exists: true },
@@ -318,7 +321,7 @@ schema.statics.lookupCgMlstScheme = async function(genomeId, user) {
   return genome ? genome.analysis.cgmlst.scheme : undefined;
 };
 
-schema.statics.checkAuthorisedForSts = async function(user, sts) {
+schema.statics.checkAuthorisedForSts = async function (user, sts) {
   // A user says they want info about a list of cgmlst sts
   // Do they have access to at least one genome with those sts?
   const query = {
