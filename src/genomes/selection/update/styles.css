@@ -1,0 +1,101 @@
+.pw-update-metadata {
+  flex-grow: 1;
+}
+
+.pw-update-metadata-section {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  justify-content: center;
+}
+
+.pw-update-metadata ol {
+  margin-top: 0;
+}
+
+.pw-update-metadata-instructions {
+  width: 100%;
+}
+
+.pw-update-metadata-warning {
+  display: flex;
+  font-weight: 500;
+}
+
+.pw-update-metadata-warning .material-icons {
+  margin-right: 4px;
+}
+
+.pw-update-metadata-form {
+  border: 2px dashed rgba(0, 0, 0, 0.28);
+  cursor: pointer;
+  padding: 16px;
+  align-self: stretch;
+  margin-left: 0;
+  margin-right: 0;
+  transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition-property: border-color;
+  text-align: center;
+}
+
+.pw-update-metadata-form > * {
+  pointer-events: none;
+}
+
+.pw-update-metadata-form input {
+  position: absolute;
+  z-index: -1;
+  opacity: 0;
+}
+
+.pw-update-metadata-form p {
+  margin: 0;
+}
+
+.pw-update-metadata-link {
+  color: #673c90;
+  font-weight: 500;
+  margin-bottom: 8px;
+  text-decoration: underline;
+}
+
+.pw-update-metadata-form.indicating {
+  color: #3c7383;
+  border-color: currentColor;
+}
+
+.pw-update-metadata-progress {
+  width: 100%;
+  text-align: center;
+}
+
+.pw-update-metadata-progress p {
+  line-height: 1.5;
+}
+
+.pw-update-metadata-progress p:first-child {
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.pw-update-metadata-progress button {
+  display: block;
+  margin-right: auto;
+  margin-top: auto;
+}
+
+.pw-update-metadata-progress.error {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  margin-bottom: auto;
+  text-align: left;
+}
+
+.pw-update-metadata-progress.success .material-icons {
+  color: #48996f;
+  display: block;
+  font-size: 32px;
+  margin-bottom: 4px;
+}

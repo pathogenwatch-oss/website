@@ -11,7 +11,6 @@ import { statuses } from '../constants';
 import DocumentTitle from '../../branding/DocumentTitle.react';
 
 export default React.createClass({
-
   propTypes: {
     hasGenomes: React.PropTypes.bool,
     uploads: React.PropTypes.object,
@@ -57,23 +56,24 @@ export default React.createClass({
       switch (prefilter) {
         case 'bin':
           return (
-            <p className="pw-filter-view-message">
-              Nothing in the bin 👍
-            </p>
+            <p className="pw-filter-view-message">Nothing in the bin 👍</p>
           );
         case 'user':
           return (
             <div className="pw-filter-view-message">
               <p>You haven't uploaded any genomes.</p>
-              <p><Link to="/upload" className="mdl-button mdl-button--raised mdl-button--colored">Upload now</Link></p>
+              <p>
+                <Link
+                  to="/upload"
+                  className="mdl-button mdl-button--raised mdl-button--colored"
+                >
+                  Upload now
+                </Link>
+              </p>
             </div>
           );
         default:
-          return (
-            <p className="pw-filter-view-message">
-              Nothing to see here.
-            </p>
-          );
+          return <p className="pw-filter-view-message">Nothing to see here.</p>;
       }
     }
 
@@ -84,11 +84,7 @@ export default React.createClass({
     const { items, total, status } = this.props;
 
     if (status === statuses.ERROR) {
-      return (
-        <p className="pw-filter-view-message">
-          Something went wrong. 😞
-        </p>
-      );
+      return <p className="pw-filter-view-message">Something went wrong. 😞</p>;
     }
 
     // Initial load
@@ -106,10 +102,9 @@ export default React.createClass({
   render() {
     return (
       <div
-        className={classnames(
-          'wgsa-genomes wgsa-filter-container',
-          { 'has-filter': this.props.isFilterOpen }
-        )}
+        className={classnames('wgsa-genomes wgsa-filter-container', {
+          'has-filter': this.props.isFilterOpen,
+        })}
       >
         <DocumentTitle title="Genomes" />
         <Filter />
@@ -118,12 +113,9 @@ export default React.createClass({
           {this.renderContent()}
         </div>
         <Overlay visible={this.props.status === statuses.LOADING}>
-          <p className="pw-filter-view-loading">
-            Loading... ⏳
-          </p>
+          <p className="pw-filter-view-loading">Loading... ⏳</p>
         </Overlay>
       </div>
     );
   },
-
 });

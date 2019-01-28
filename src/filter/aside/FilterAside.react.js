@@ -5,16 +5,15 @@ import classnames from 'classnames';
 import debounce from 'lodash/debounce';
 
 class FilterAside extends React.Component {
-
   constructor(props) {
     super(props);
     this.textOnChangeEffect = debounce(props.textOnChangeEffect, 250);
   }
 
-  onChange = (value) => {
+  onChange = value => {
     this.props.textOnChange(value);
     this.textOnChangeEffect(value);
-  }
+  };
 
   render() {
     const {
@@ -27,7 +26,9 @@ class FilterAside extends React.Component {
     } = this.props;
 
     return (
-      <aside className={classnames('wgsa-filter', { 'wgsa-filter--active': active })}>
+      <aside
+        className={classnames('wgsa-filter', { 'wgsa-filter--active': active })}
+      >
         <header className="wgsa-filter__header">
           <label className="wgsa-filter__search">
             <i className="material-icons">search</i>
@@ -35,16 +36,20 @@ class FilterAside extends React.Component {
               type="text"
               placeholder="Search"
               value={textValue}
-              onChange={(e) => this.onChange(e.target.value)}
+              onChange={e => this.onChange(e.target.value)}
             />
           </label>
         </header>
         <div className="wgsa-filter__content">
-          { children.map(c => React.cloneElement(c, { isLoading: loading })) }
-          { prefilter === 'bin' &&
+          {children.map(c => {
+            if (c) return React.cloneElement(c, { isLoading: loading });
+            return null;
+          })}
+          {prefilter === 'bin' && (
             <p className="pw-bin-notice">
               Binned items are removed after 30 days.
-            </p> }
+            </p>
+          )}
         </div>
         <footer className="wgsa-filter__footer">
           <button
@@ -57,7 +62,6 @@ class FilterAside extends React.Component {
       </aside>
     );
   }
-
 }
 
 export default FilterAside;

@@ -3,11 +3,10 @@
 import Papa from 'papaparse';
 
 function convertFieldNamesToLowerCase(row) {
-  const fieldNames = Object.keys(row);
   const cleanRow = {};
-  for (const fieldName of fieldNames) {
-    if (fieldName.length) {
-      cleanRow[fieldName.toLowerCase().trim()] = row[fieldName].trim().replace(/^=*/, '');
+  for (const [ key, value ] of Object.entries(row)) {
+    if (key.length && typeof value === 'string') {
+      cleanRow[key.toLowerCase().trim()] = value.trim().replace(/^=*/, '');
     }
   }
   return cleanRow;

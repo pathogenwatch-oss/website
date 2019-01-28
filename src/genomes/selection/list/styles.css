@@ -24,11 +24,6 @@
   margin-right: auto;
 }
 
-.wgsa-genome-selection > footer > button,
-.wgsa-genome-selection > footer > a {
-  margin-left: 8px;
-}
-
 .wgsa-genome-selection > header > button {
   white-space: nowrap;
 }
@@ -43,7 +38,6 @@
 .wgsa-genome-selection-list .ReactVirtualized__Grid__innerScrollContainer {
   padding-top: 16px;
 }
-
 
 .wgsa-genome-selection-list .wgsa-link-button {
   padding: 0;

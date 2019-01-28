@@ -14,8 +14,8 @@ const initialState = {
   lastSelectedIndex: null,
 };
 
-const addToSelection = (memo, { id, name, organismId, binned }) => {
-  memo[id] = { id, name, organismId, binned };
+const addToSelection = (memo, { id, name, organismId, binned, owner }) => {
+  memo[id] = { id, name, organismId, binned, owner };
   return memo;
 };
 
@@ -30,14 +30,17 @@ export default function (state = initialState, { type, payload }) {
       return {
         ...state,
         genomes: payload.genomes.reduce(addToSelection, { ...state.genomes }),
-        lastSelectedIndex: typeof payload.index === 'number' ?
-          payload.index :
-          state.lastSelectedIndex,
+        lastSelectedIndex:
+          typeof payload.index === 'number'
+            ? payload.index
+            : state.lastSelectedIndex,
       };
     case actions.REMOVE_GENOME_SELECTION:
       return {
         ...state,
-        genomes: payload.genomes.reduce(removeFromSelection, { ...state.genomes }),
+        genomes: payload.genomes.reduce(removeFromSelection, {
+          ...state.genomes,
+        }),
       };
     case actions.SET_GENOME_SELECTION: {
       return {
@@ -89,6 +92,28 @@ export default function (state = initialState, { type, payload }) {
         ...state,
         lastSelectedIndex: null,
       };
+    case 'SEND_METADATA_UPDATE::SUCCESS': {
+      const { data } = payload;
+      const updates = {};
+      for (const { id, name } of data) {
+        if (id in state.genomes && state.genomes[id].name !== name) {
+          updates[id] = {
+            ...state.genomes[id],
+            name,
+          };
+        }
+      }
+      if (Object.keys(updates).length) {
+        return {
+          ...state,
+          genomes: {
+            ...state.genomes,
+            ...updates,
+          },
+        };
+      }
+      return state;
+    }
     default:
       return state;
   }

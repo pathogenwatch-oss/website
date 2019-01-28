@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import Spinner from '../../../components/Spinner.react';
 import { FormattedName } from '../../../organisms';
 import Limiter from '../Limiter.react';
+import DownloadLink from './DownloadLink.react';
 
 import {
   getSelectionDownloads,
@@ -17,17 +18,6 @@ import { statuses } from '../../../app/constants';
 
 import { getServerPath } from '../../../utils/Api';
 
-const DownloadLink = ({ link, ids, children }) => (
-    <form
-      action={link}
-      method="POST"
-      target="_blank"
-    >
-      <button>{children}</button>
-      <input type="hidden" name="ids" value={ids} />
-    </form>
-  );
-
 const Section = ({ speciesId, speciesName, total, tasks, ids }) => {
   if (!speciesId) return null;
   return (
@@ -35,26 +25,43 @@ const Section = ({ speciesId, speciesName, total, tasks, ids }) => {
       <FormattedName organismId={speciesId} title={speciesName} />
       <ul className="wgsa-genome-download-list">
         <li>
-          <DownloadLink link={getServerPath('/download/genome/fasta')} ids={ids}>
+          <DownloadLink
+            link={getServerPath('/download/genome/fasta')}
+            ids={ids}
+          >
             FASTA files
           </DownloadLink>
         </li>
-        {tasks.map(task =>
+        <li>
+          <DownloadLink
+            link={getServerPath('/download/genome/metadata')}
+            ids={ids}
+          >
+            Metadata
+          </DownloadLink>
+        </li>
+        {tasks.map(task => (
           <li key={task.name}>
-            <DownloadLink link={getServerPath(`/download/analysis/${task.name}`)} ids={task.ids}>
+            <DownloadLink
+              link={getServerPath(`/download/analysis/${task.name}`)}
+              ids={task.ids}
+            >
               {task.label}
-              {task.sources.length > 0 && <small>&nbsp;({task.sources.join(', ')})</small>}
+              {task.sources.length > 0 && (
+                <small>&nbsp;({task.sources.join(', ')})</small>
+              )}
             </DownloadLink>
-            <span>{task.ids.length}/{total}</span>
+            <span>
+              {task.ids.length}/{total}
+            </span>
           </li>
-        )}
+        ))}
       </ul>
     </li>
   );
 };
 
 const Content = React.createClass({
-
   componentDidMount() {
     this.props.fetch();
   },
@@ -69,7 +76,7 @@ const Content = React.createClass({
   showAllOrganisms(summary, ids) {
     return (
       summary.length === 0 ||
-      summary.length === 1 && summary[0].ids.length !== ids.length ||
+      (summary.length === 1 && summary[0].ids.length !== ids.length) ||
       summary.length > 1
     );
   },
@@ -89,47 +96,57 @@ const Content = React.createClass({
       const ids = selection.map(_ => _.id);
       return (
         <ul>
-          { this.showAllOrganisms(summary, ids) &&
+          {this.showAllOrganisms(summary, ids) && (
             <li>
               All Organisms
               <ul className="wgsa-genome-download-list">
                 <li>
-                  <DownloadLink link={getServerPath('/download/genome/fasta')} ids={ids}>
+                  <DownloadLink
+                    link={getServerPath('/download/genome/fasta')}
+                    ids={ids}
+                  >
                     FASTA files
                   </DownloadLink>
                 </li>
                 <li>
-                  <DownloadLink link={getServerPath('/download/analysis/speciator')} ids={ids}>
+                  <DownloadLink
+                    link={getServerPath('/download/genome/metadata')}
+                    ids={ids}
+                  >
+                    Metadata
+                  </DownloadLink>
+                </li>
+                <li>
+                  <DownloadLink
+                    link={getServerPath('/download/analysis/speciator')}
+                    ids={ids}
+                  >
                     <strong>Speciation</strong>
                   </DownloadLink>
                 </li>
               </ul>
-            </li> }
-          { summary.map(item => <Section key={item.speciesId} {...item} />) }
+            </li>
+          )}
+          {summary.map(item => (
+            <Section key={item.speciesId} {...item} />
+          ))}
         </ul>
       );
     }
     return null;
   },
-
 });
-
 
 const Download = ({ goBack, ...props }) => (
   <div className="wgsa-genome-downloads">
-    <header className="wgsa-dropdown-header">
-      Download
-    </header>
+    <header className="wgsa-dropdown-header">Download</header>
     <div className="wgsa-genome-downloads__content">
       <Limiter type="maxDownloadSize">
         <Content {...props} />
       </Limiter>
     </div>
     <footer className="wgsa-dropdown-footer">
-      <button
-        className="mdl-button"
-        onClick={goBack}
-      >
+      <button className="mdl-button" onClick={goBack}>
         Go back
       </button>
     </footer>
@@ -151,4 +168,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Download);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Download);
