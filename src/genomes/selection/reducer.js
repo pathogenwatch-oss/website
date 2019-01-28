@@ -98,7 +98,7 @@ export default function (state = initialState, { type, payload }) {
       for (const { id, name } of data) {
         if (id in state.genomes && state.genomes[id].name !== name) {
           updates[id] = {
-            ...state[id],
+            ...state.genomes[id],
             name,
           };
         }
