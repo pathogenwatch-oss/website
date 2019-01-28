@@ -8,6 +8,7 @@ import DropArea from './DropArea.react';
 import Progress from './Progress.react';
 import Fade from '../../../components/fade';
 import Limiter from '../Limiter.react';
+import { Link } from 'react-router-dom';
 
 import { getSelectedGenomeIds } from '../selectors';
 
@@ -71,8 +72,16 @@ class UpdateMetadata extends React.Component {
             .catch(() =>
               this.setState({
                 error: {
-                  message:
-                    'Failed to update, please make sure you are the owner of the genomes in the file.',
+                  message: (
+                    <React.Fragment>
+                      Failed to update, please make sure you are the owner of
+                      the genomes in the file.
+                      <br />
+                      {window.location.pathname !== '/genomes/user' && (
+                        <Link to="/genomes/user">View genomes owned by me</Link>
+                      )}
+                    </React.Fragment>
+                  ),
                 },
               })
             );
