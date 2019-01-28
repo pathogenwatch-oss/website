@@ -1,9 +1,6 @@
 const { request } = require('services');
 
 const { summariseAnalysis } = require('../../utils/analysis');
-const User = require('models/user');
-const { ESBL_CPE_EXPERIMENT_TAXIDS, ESBL_CPE_EXPERIMENT_TASKS } = require('models/user');
-const Genome = require('models/genome');
 
 function getNotification(analysis) {
   const { task, version, results, error } = analysis;
@@ -22,6 +19,10 @@ module.exports = async function ({ genomeId, clientId, uploadedAt, tasks = [] })
   return request('notification', 'send', {
     channel: clientId,
     topic: `analysis-${uploadedAt.toISOString()}`,
-    message: { genomeId, results: tasks.map(getNotification) },
+    message: {
+      genomeId,
+      // empty results are not notified
+      results: tasks.filter(_ => Object.keys(_.results).length > 0).map(getNotification),
+    },
   });
 };
