@@ -34,12 +34,15 @@ function entities(state = {}, { type, payload }) {
     }
     case 'SEND_METADATA_UPDATE::SUCCESS': {
       const { data } = payload;
+      const { computedData } = payload.result;
       const updates = {};
       for (const { id, name } of data) {
-        if (id in state && state[id].name !== name) {
+        if (id in state) {
           updates[id] = {
             ...state[id],
             name,
+            country: computedData[id].country,
+            date: computedData[id].date,
           };
         }
       }
