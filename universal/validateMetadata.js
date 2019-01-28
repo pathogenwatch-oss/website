@@ -20,9 +20,15 @@ module.exports = function validateMetadata(row) {
     error = 'pmid is wrong type';
   } else if (pmid && pmid.length > 16) {
     error = 'pmid is too long';
-  } else if (latitude !== null && (isNaN(latitude) || typeof latitude === 'object')) {
+  } else if (
+    latitude !== null &&
+    (isNaN(latitude) || typeof latitude === 'object')
+  ) {
     error = 'latitude is not a number';
-  } else if (longitude !== null && (isNaN(longitude) || typeof longitude === 'object')) {
+  } else if (
+    longitude !== null &&
+    (isNaN(longitude) || typeof longitude === 'object')
+  ) {
     error = 'longitude is not a number';
   } else if (latitude !== null && longitude === null) {
     error = 'latitude without longitude';

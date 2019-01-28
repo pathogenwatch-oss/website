@@ -69,10 +69,7 @@ export default React.createClass({
               <strong>Drop to upload</strong>
             </p>
           ) : (
-            <p key="instructions">
-              2. Drag updated CSV here to update <br />
-              or click to select file
-            </p>
+            this.props.children
           )}
         </Fade>
         <input

@@ -127,7 +127,7 @@ const AnalysisChart = React.createClass({
 
   getGenomesLink() {
     const { uploadedAt, selectedOrganism } = this.props;
-    let link = `/genomes/user?uploadedAt=${uploadedAt}`;
+    let link = `/genomes?uploadedAt=${uploadedAt}`;
     if (selectedOrganism) link += `&organismId=${selectedOrganism}`;
     return link;
   },

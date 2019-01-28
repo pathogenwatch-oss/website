@@ -21,18 +21,7 @@ export function parseMetadata(row) {
     userDefined[key] = value;
   }
 
-  validateMetadata({
-    name: genomeName,
-    year,
-    month,
-    day,
-    latitude,
-    longitude,
-    pmid,
-    userDefined,
-  });
-
-  return {
+  const values = {
     name: genomeName,
     year: year ? parseInt(year, 10) : null,
     month: month ? parseInt(month, 10) : null,
@@ -42,6 +31,10 @@ export function parseMetadata(row) {
     pmid: pmid || null,
     userDefined,
   };
+
+  validateMetadata(values);
+
+  return values;
 }
 
 function flattenCSVs(files) {

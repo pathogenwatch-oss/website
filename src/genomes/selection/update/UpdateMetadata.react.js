@@ -7,6 +7,7 @@ import DownloadLink from '../download/DownloadLink.react';
 import DropArea from './DropArea.react';
 import Progress from './Progress.react';
 import Fade from '../../../components/fade';
+import Limiter from '../Limiter.react';
 
 import { getSelectedGenomeIds } from '../selectors';
 
@@ -49,16 +50,21 @@ class UpdateMetadata extends React.Component {
           }
           this.props
             .update(
-              data.map(row => {
+              data.map((row, i) => {
                 if (!row.id) {
                   throw new Error(
                     'Every row must contain an ID, please download existing metadata before attempting to upload.'
                   );
                 }
-                return {
-                  id: row.id,
-                  ...parseMetadata(row),
-                };
+                try {
+                  return {
+                    id: row.id,
+                    ...parseMetadata(row),
+                  };
+                } catch (e) {
+                  e.message = `${e.message} (row ${i + 1})`;
+                  throw e;
+                }
               })
             )
             .then(result => this.setState({ result }))
@@ -87,33 +93,41 @@ class UpdateMetadata extends React.Component {
     return (
       <div className="wgsa-dropdown">
         <header className="wgsa-dropdown-header">Update Metadata</header>
-        <Fade
-          className="wgsa-dropdown-content pw-update-metadata-section"
-          out={false}
-        >
-          {this.state.uploading ? (
-            <Progress
-              key="progress"
-              result={this.state.result}
-              error={this.state.error}
-            />
-          ) : (
-            <div className="pw-update-metadata-instructions pw-update-metadata-section">
-              <p className="pw-update-metadata-warning">
-                <i className="material-icons">warning</i>
-                This will overwrite existing data
-              </p>
-              <DownloadLink
-                className="pw-update-metadata-link"
-                link={getServerPath('/download/genome/metadata')}
-                ids={ids}
-              >
-                1. Download existing metadata for selected genomes
-              </DownloadLink>
-              <DropArea update={update} onFiles={this.handleFiles} />
-            </div>
-          )}
-        </Fade>
+        <Limiter type="maxDownloadSize">
+          <Fade
+            className="wgsa-dropdown-content pw-update-metadata-section"
+            out={false}
+          >
+            {this.state.uploading ? (
+              <Progress
+                key="progress"
+                result={this.state.result}
+                error={this.state.error}
+              />
+            ) : (
+              <div className="pw-update-metadata-instructions pw-update-metadata-section">
+                <p className="pw-update-metadata-warning">
+                  <i className="material-icons">warning</i>
+                  This will overwrite existing data
+                </p>
+                <DownloadLink
+                  className="pw-update-metadata-link"
+                  link={getServerPath('/download/genome/metadata')}
+                  ids={ids}
+                >
+                  1. Download existing metadata for selected genomes
+                </DownloadLink>
+                <p>2. Edit the downloaded spreadsheet (e.g. in Excel)</p>
+                <DropArea update={update} onFiles={this.handleFiles}>
+                  <p key="instructions">
+                    3. Drag file here to update <br />
+                    or click to select file
+                  </p>
+                </DropArea>
+              </div>
+            )}
+          </Fade>
+        </Limiter>
         <footer className="wgsa-dropdown-footer wgsa-dropdown-footer--right">
           <button
             className={classnames('mdl-button', {
