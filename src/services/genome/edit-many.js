@@ -4,7 +4,7 @@ const { ObjectId } = require('mongoose').Types;
 const { ServiceRequestError } = require('utils/errors');
 const validateMetadata = require('pathogenwatch-front-end/universal/validateMetadata');
 
-module.exports = async function ({ user, data }) {
+module.exports = async function({ user, data }) {
   if (!user) {
     throw new ServiceRequestError('Not authenticated');
   }
@@ -32,12 +32,25 @@ module.exports = async function ({ user, data }) {
     throw new ServiceRequestError('Permissions mismatch.');
   }
 
+  const computedData = {};
+
   return Genome.bulkWrite(
-    data.map((row, i) => ({
-      updateOne: {
-        filter: queries[i],
-        update: Genome.getMetadataUpdate(row),
-      },
-    }))
-  ).then(result => ({ matched: result.matchedCount, modified: result.modifiedCount }));
+    data.map((row, i) => {
+      const update = Genome.getMetadataUpdate(row);
+      computedData[row.id] = {
+        country: update.country,
+        date: update.date,
+      };
+      return {
+        updateOne: {
+          filter: queries[i],
+          update,
+        },
+      };
+    })
+  ).then(result => ({
+    matched: result.matchedCount,
+    modified: result.modifiedCount,
+    computedData,
+  }));
 };
