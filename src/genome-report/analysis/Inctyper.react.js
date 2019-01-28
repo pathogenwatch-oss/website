@@ -18,25 +18,35 @@ export default ({ result }) => (
   <React.Fragment>
     <header className="pw-genome-report-section-header">
       <h2>Plasmid Inc Types</h2>
-      <a href="" target="_blank" rel="noopener">Database sourced from
-        https://cge.cbs.dtu.dk/services/PlasmidFinder/</a>
+      <span>
+        Database sourced from{' '}
+        <a
+          href="https://cge.cbs.dtu.dk/services/PlasmidFinder/"
+          target="_blank"
+          rel="noopener"
+        >
+          https://cge.cbs.dtu.dk/services/PlasmidFinder/
+        </a>
+      </span>
     </header>
-    <table className="inctyper-table" cellSpacing="0">
+    <table className="bordered wide" cellSpacing="0">
       <thead>
-      <tr>
-        {[ 'Inc Match', 'Contig', 'Percent Identity', 'Coverage' ]
-          .map((fieldName) =>
-            <th key={fieldName}>{fieldName}</th>)}
-      </tr>
+        <tr>
+          <th>Inc Match</th>
+          <th>Contig</th>
+          <th>% Identity</th>
+          <th>Coverage</th>
+        </tr>
       </thead>
       <tbody>
-      {result['Inc Matches'].map((incMatch) =>
-        <tr>
-          {[ 'Inc Match', 'Contig', 'Percent Identity', 'Match Coverage' ]
-            .map((fieldName) =>
-              <td key={fieldName}>{incMatch[fieldName]}</td>)}
-        </tr>,
-      )}
+        {result['Inc Matches'].map(incMatch => (
+          <tr>
+            <td>{incMatch['Inc Match']}</td>
+            <td>{incMatch.Contig}</td>
+            <td>{incMatch['% Identity']}</td>
+            <td>{incMatch.Coverage}</td>
+          </tr>
+        ))}
       </tbody>
     </table>
   </React.Fragment>

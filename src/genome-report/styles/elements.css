@@ -44,9 +44,8 @@ dl.pw-genome-report-comfortable > div {
 }
 
 .wgsa-genome-report dd:empty:before {
-  content: '(none)';
+  content: "(none)";
 }
-
 
 .pw-genome-report-metadata.inline {
   display: inline-flex;
@@ -58,7 +57,6 @@ dl.pw-genome-report-comfortable > div {
   margin-left: 8px;
 }
 
-
 .wgsa-genome-report table {
   margin: 16px auto 0;
   font-size: 14px;
@@ -66,6 +64,10 @@ dl.pw-genome-report-comfortable > div {
 
 .wgsa-genome-report table.bordered {
   border: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.wgsa-genome-report table.wide {
+  width: 100%;
 }
 
 .wgsa-genome-report table caption,
