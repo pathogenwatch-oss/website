@@ -44,7 +44,7 @@ export default ({ result }) => (
             <td>{incMatch['Inc Match']}</td>
             <td>{incMatch.Contig}</td>
             <td>{incMatch['Percent Identity']}</td>
-            <td>{incMatch.Coverage}</td>
+            <td>{incMatch['Match Coverage']}</td>
           </tr>
         ))}
       </tbody>
