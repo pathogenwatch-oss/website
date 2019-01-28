@@ -23,7 +23,7 @@
 
 .wgsa-upload-card-enter.wgsa-upload-card-enter-active {
   opacity: 1;
-  transition: .28s cubic-bezier(.4,0,.2,1);
+  transition: 0.28s cubic-bezier(0.4, 0, 0.2, 1);
   transition-property: opacity;
 }
 
@@ -33,7 +33,7 @@
 
 .wgsa-upload-card-leave.wgsa-upload-card-leave-active {
   transform: translateX(-100%);
-  transition: .28s cubic-bezier(.4,0,.2,1);
+  transition: 0.28s cubic-bezier(0.4, 0, 0.2, 1);
   transition-property: transform;
 }
 
@@ -60,7 +60,7 @@
   top: calc(50% + 4.5px);
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: #3C7383;
+  background-color: #3c7383;
   color: #fff;
   padding: 8px;
   border-radius: 50%;
@@ -74,21 +74,27 @@
 
 .wgsa-view-genomes-button:hover {
   text-decoration: none !important;
-  background-color: #975FAA;
-}
-
-.wgsa-upload-legend > li > .material-icons {
-  vertical-align: middle;
+  background-color: #975faa;
 }
 
 .wgsa-upload-legend li {
-  line-height: 1.25;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  line-height: 24px;
   margin-bottom: 8px;
 }
 
 .wgsa-upload-legend li > ul {
+  width: 100%;
   margin-top: 8px;
-  margin-left: 24px;
+  padding-left: 24px;
+}
+
+.wgsa-upload-legend ul .material-icons {
+  font-size: 18px;
+  margin-left: 4px;
+  color: #48996f;
 }
 
 .wgsa-upload-progress-overview p {

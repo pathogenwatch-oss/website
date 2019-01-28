@@ -12,76 +12,99 @@ import * as upload from './selectors';
 
 const Analysis = ({ data, showBreakdown }) => (
   <ul className="wgsa-upload-legend">
-    { data.map(({ key, label, total, colour, ...analyses }) =>
+    {data.map(({ key, label, total, colour, ...analyses }) => (
       <li key={key}>
-        <i className="material-icons" style={{ color: colour }}>stop</i>
+        <i className="material-icons" style={{ color: colour }}>
+          stop
+        </i>
         <strong>{label}</strong>: {total}
-        { showBreakdown &&
+        {showBreakdown && (
           <ul>
             {Object.keys(analyses).map(analysisKey => {
               const analysis = analyses[analysisKey];
               if (analysis.active) {
                 return (
                   <li key={analysisKey}>
-                    { analysis.total === total ?
-                      `${analysis.label} ✔️` :
-                      `${analysis.label}: ${analysis.total} / ${total}` }
-                    { analysis.errors > 0 &&
+                    {analysis.total === total ? (
+                      <React.Fragment>
+                        {analysis.label}
+                        <i className="material-icons">check_circle</i>
+                      </React.Fragment>
+                    ) : (
+                      `${analysis.label}: ${analysis.total} / ${total}`
+                    )}
+                    {analysis.errors > 0 && (
                       <small>
-                        &nbsp;{analysis.errors} error{analysis.errors === 1 ? '' : 's'}
-                      </small>}
+                        &nbsp;{analysis.errors} error
+                        {analysis.errors === 1 ? '' : 's'}
+                      </small>
+                    )}
                   </li>
                 );
               }
               return null;
             })}
-          </ul> }
+          </ul>
+        )}
       </li>
-    ) }
+    ))}
   </ul>
 );
 
-const Overview = connect(
-  state => ({
-    isUploading: upload.isUploading(state),
-    totalGenomes: upload.getUploadedGenomeList(state).length,
-    progress: upload.getOverallProgress(state),
-    complete: upload.isAnalysisComplete(state),
-    position: upload.getQueuePosition(state),
-    hasErrors: upload.hasErrors(state),
-  })
-)(({ isUploading, totalGenomes, progress, complete, position, hasErrors }) => {
-  if (isUploading || totalGenomes === 0) return null;
+const Overview = connect(state => ({
+  isUploading: upload.isUploading(state),
+  totalGenomes: upload.getUploadedGenomeList(state).length,
+  progress: upload.getOverallProgress(state),
+  complete: upload.isAnalysisComplete(state),
+  position: upload.getQueuePosition(state),
+  hasErrors: upload.hasErrors(state),
+}))(
+  ({ isUploading, totalGenomes, progress, complete, position, hasErrors }) => {
+    if (isUploading || totalGenomes === 0) return null;
 
-  const { speciation, tasks } = progress;
+    const { speciation, tasks } = progress;
 
-  const speciationPct = speciation.done / totalGenomes * 100;
-  const tasksPct = tasks.done / tasks.total * 100;
+    const speciationPct = (speciation.done / totalGenomes) * 100;
+    const tasksPct = (tasks.done / tasks.total) * 100;
 
-  if (complete && hasErrors) {
-    return <strong>Analysis complete, with errors.</strong>;
+    if (complete && hasErrors) {
+      return <strong>Analysis complete, with errors.</strong>;
+    }
+
+    if (complete) {
+      return <strong>Analysis complete 🎉</strong>;
+    }
+
+    return (
+      <div className="wgsa-upload-progress-overview">
+        <p>
+          {totalGenomes} file{totalGenomes === 1 ? '' : 's'} uploaded
+          successfully.
+        </p>
+        <ProgressBar label="Speciation" progress={speciationPct} />
+        {speciationPct === 100 && (
+          <ProgressBar label="Tasks" progress={tasksPct} />
+        )}
+        {position > 0 ? (
+          <p>
+            {position} job{position === 1 ? '' : 's'} till next result.
+          </p>
+        ) : (
+          <p className="wgsa-blink">Results processing.</p>
+        )}
+      </div>
+    );
   }
+);
 
-  if (complete) {
-    return <strong>Analysis complete 🎉</strong>;
-  }
-
-  return (
-    <div className="wgsa-upload-progress-overview">
-      <p>
-        {totalGenomes} file{totalGenomes === 1 ? '' : 's'} uploaded successfully.
-      </p>
-      <ProgressBar label="Speciation" progress={speciationPct} />
-      { speciationPct === 100 &&
-        <ProgressBar label="Tasks" progress={tasksPct} /> }
-      { position > 0 ?
-        <p>{position} job{position === 1 ? '' : 's'} till next result.</p> :
-        <p className="wgsa-blink">Results processing.</p> }
-    </div>
-  );
-});
-
-const Progress = ({ inProgress, errored, files, analysis, uploadedAt, specieationComplete }) => (
+const Progress = ({
+  inProgress,
+  errored,
+  files,
+  analysis,
+  uploadedAt,
+  specieationComplete,
+}) => (
   <div className="wgsa-content-margin wgsa-upload-progress">
     <div>
       <div className="wgsa-section-divider">
@@ -92,24 +115,31 @@ const Progress = ({ inProgress, errored, files, analysis, uploadedAt, specieatio
           transitionEnterTimeout={280}
           transitionLeave={false}
         >
-          { inProgress.map(file => <FileCard key={file.id} item={file} />) }
+          {inProgress.map(file => (
+            <FileCard key={file.id} item={file} />
+          ))}
         </ReactCSSTransitionGroup>
-        { files.pending > 0 &&
+        {files.pending > 0 && (
           <p>
             +{files.pending} file{files.pending === 1 ? '' : 's'}.
-          </p> }
+          </p>
+        )}
         <Overview />
       </div>
-      { files.errored > 0 &&
+      {files.errored > 0 && (
         <div className="wgsa-section-divider">
           <h2 className="wgsa-section-title">Validation Errors</h2>
-          { errored.map(file => <FileCard key={file.id} item={file} />) }
-        </div> }
-      { (!!analysis.length && analysis[0].key !== 'pending') &&
+          {errored.map(file => (
+            <FileCard key={file.id} item={file} />
+          ))}
+        </div>
+      )}
+      {!!analysis.length && analysis[0].key !== 'pending' && (
         <div className="wgsa-section-divider">
           <h2 className="wgsa-section-title">Organisms</h2>
           <Analysis data={analysis} showBreakdown={specieationComplete} />
-        </div> }
+        </div>
+      )}
     </div>
     <div className="wgsa-section-divider wgsa-flex-section">
       <h2 className="wgsa-section-title">Analysis</h2>
