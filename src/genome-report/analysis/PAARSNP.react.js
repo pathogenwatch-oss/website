@@ -15,15 +15,14 @@ export default ({ result, genome }) => {
     }
   }
 
-  const filteredAntibiotics =
-    hiddenColumns.size ?
-      antibiotics.filter(({ name }) => !hiddenColumns.has(name)) :
-      antibiotics;
+  const filteredAntibiotics = hiddenColumns.size
+    ? antibiotics.filter(({ name }) => !hiddenColumns.has(name))
+    : antibiotics;
 
   return (
     <React.Fragment>
       <h2>Antimicrobial Resistance (AMR)</h2>
-      <table cellSpacing="0" className="wgsa-genome-report-amr bordered">
+      <table cellSpacing="0" className="wgsa-genome-report-amr wide bordered">
         <caption>Resistance Profile</caption>
         <thead>
           <tr>
@@ -34,8 +33,9 @@ export default ({ result, genome }) => {
           </tr>
         </thead>
         <tbody>
-          { filteredAntibiotics.map(({ name, fullName, state, mechanisms }) =>
-            <tr key={name}
+          {filteredAntibiotics.map(({ name, fullName, state, mechanisms }) => (
+            <tr
+              key={name}
               className={classnames({
                 'pw-genome-report-amr-present': state !== 'NOT_FOUND',
                 'pw-genome-report-amr-resistant': state === 'RESISTANT',
@@ -43,12 +43,14 @@ export default ({ result, genome }) => {
             >
               <td>{name}</td>
               <td>{fullName}</td>
-              <td className="wgsa-genome-report-amr-state">{state.replace(/_/g, ' ').toLowerCase()}</td>
+              <td className="wgsa-genome-report-amr-state">
+                {state.replace(/_/g, ' ').toLowerCase()}
+              </td>
               <td className="pw-genome-report-amr-mechanisms">
-                { mechanisms.join(', ') }
+                {mechanisms.join(', ')}
               </td>
             </tr>
-          ) }
+          ))}
         </tbody>
       </table>
     </React.Fragment>
