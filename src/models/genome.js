@@ -109,8 +109,6 @@ schema.statics.addAnalysisResults = function (_id, ...analyses) {
   const update = { $set: {}, $pullAll: { pending: [] } };
 
   for (const analysis of analyses) {
-    // do not write empty results
-    if (Object.keys(analysis.results).length === 0) continue;
     const { task } = analysis;
     update.$set[`analysis.${task.toLowerCase()}`] = summariseAnalysis(analysis);
     update.$pullAll.pending.push(task);
