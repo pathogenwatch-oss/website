@@ -78,11 +78,26 @@
 }
 
 .wgsa-upload-legend li {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
   line-height: 24px;
   margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.wgsa-upload-legend > li > span {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+  overflow-x: hidden;
+}
+
+.wgsa-upload-legend-organism {
+  text-overflow: ellipsis;
+  flex-shrink: 1;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .wgsa-upload-legend li > ul {
