@@ -14,40 +14,51 @@ import React from 'react';
 //    }
 // ]
 
-export default ({ result }) => (
-  <React.Fragment>
-    <header className="pw-genome-report-section-header">
-      <h2>Plasmid Inc Types</h2>
-      <span>
-        Database sourced from{' '}
-        <a
-          href="https://cge.cbs.dtu.dk/services/PlasmidFinder/"
-          target="_blank"
-          rel="noopener"
-        >
-          https://cge.cbs.dtu.dk/services/PlasmidFinder/
-        </a>
-      </span>
-    </header>
-    <table className="bordered wide" cellSpacing="0">
-      <thead>
-        <tr>
-          <th>Inc Match</th>
-          <th>Contig</th>
-          <th>% Identity</th>
-          <th>Coverage</th>
-        </tr>
-      </thead>
-      <tbody>
-        {result['Inc Matches'].map(incMatch => (
+export default ({ result }) => {
+  const matches = result['Inc Matches'];
+  return (
+    <React.Fragment>
+      <header className="pw-genome-report-section-header">
+        <h2>Plasmid Inc Types</h2>
+        <span>
+          Database sourced from{' '}
+          <a
+            href="https://cge.cbs.dtu.dk/services/PlasmidFinder/"
+            target="_blank"
+            rel="noopener"
+          >
+            https://cge.cbs.dtu.dk/services/PlasmidFinder/
+          </a>
+        </span>
+      </header>
+      <table className="bordered wide" cellSpacing="0">
+        <thead>
           <tr>
-            <td>{incMatch['Inc Match']}</td>
-            <td>{incMatch.Contig}</td>
-            <td>{incMatch['Percent Identity']}</td>
-            <td>{incMatch['Match Coverage']}</td>
+            <th>Inc Match</th>
+            <th>Contig</th>
+            <th>% Identity</th>
+            <th>Coverage</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
-  </React.Fragment>
-);
+        </thead>
+        <tbody>
+          {matches.length ? (
+            matches.map(incMatch => (
+              <tr>
+                <td>{incMatch['Inc Match']}</td>
+                <td>{incMatch.Contig}</td>
+                <td>{incMatch['Percent Identity']}</td>
+                <td>{incMatch['Match Coverage']}</td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="4" className="muted">
+                No matches
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </table>
+    </React.Fragment>
+  );
+};

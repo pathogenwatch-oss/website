@@ -100,12 +100,14 @@ dl.pw-genome-report-comfortable > div {
   font-size: 13px;
 }
 
-.wgsa-genome-report th.italic {
+.wgsa-genome-report th.italic,
+.wgsa-genome-report td.italic {
   font-style: italic;
 }
 
-.wgsa-genome-report td.italic {
-  font-style: italic;
+.wgsa-genome-report td.muted {
+  font-size: 13px;
+  color: rgba(0, 0, 0, 0.54);
 }
 
 .wgsa-genome-report tr:hover > td {
