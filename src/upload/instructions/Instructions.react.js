@@ -12,7 +12,8 @@ export default () => (
     <div>
       <h2>Genomic Data</h2>
       <p>
-        Please ensure that there is <strong>one file per genome</strong>.
+        Please upload <strong>single samples/isolates</strong>, results from
+        metagenomic samples are not supported.
       </p>
       <h3>
         Reads <i className="material-icons">fiber_new</i>
