@@ -16,7 +16,7 @@ import { toggleDropdown } from '../actions';
 import { sendMetadataUpdate } from './actions';
 
 import { getServerPath } from '../../../utils/Api';
-import { CSV_FILE_NAME_REGEX, parseMetadata } from '../../../upload/utils';
+import { CSV_FILENAME_REGEX, parseMetadata } from '../../../upload/utils';
 import MetadataUtils from '../../../utils/Metadata';
 
 function getInitialState() {
@@ -38,7 +38,7 @@ class UpdateMetadata extends React.Component {
   handleFiles(fileList) {
     const file = Array.from(fileList)[0];
 
-    if (!CSV_FILE_NAME_REGEX.test(file.name)) return;
+    if (!CSV_FILENAME_REGEX.test(file.name)) return;
 
     this.setState({ uploading: true }, () =>
       readAsText(file)

@@ -13,9 +13,22 @@ export const CGPS = {
   },
 };
 
-const GENOME_FILE_EXTENSIONS = [
-  '.fa', '.fas', '.fna', '.ffn', '.faa', '.frn', '.fasta', '.genome', '.contig', '.dna',
+export const ASSEMBLY_FILE_EXTENSIONS = [
+  '.fa',
+  '.fas',
+  '.fna',
+  '.ffn',
+  '.faa',
+  '.frn',
+  '.fasta',
+  '.genome',
+  '.contig',
+  '.dna',
 ];
+
+export const SUPPORTED_FILE_EXTENSIONS = [ '.csv', '.fastq.gz' ].concat(
+  ASSEMBLY_FILE_EXTENSIONS
+);
 
 export const DEFAULT = {
   SHAPE: 'circle',
@@ -36,8 +49,6 @@ export const DEFAULT = {
       LONGITUDE: 5.85082183,
     },
   },
-  GENOME_FILE_EXTENSIONS,
-  SUPPORTED_FILE_EXTENSIONS: [ '.csv' ].concat(GENOME_FILE_EXTENSIONS),
 };
 
 export const statuses = {

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { CGPS, DEFAULT } from '../app/constants';
+import { CGPS, SUPPORTED_FILE_EXTENSIONS } from '../app/constants';
 import { Name } from '../branding';
 
 const fileInputStyle = {
@@ -10,7 +10,6 @@ const fileInputStyle = {
 };
 
 export default React.createClass({
-
   displayName: 'DragAndDrop',
 
   propTypes: {
@@ -73,39 +72,65 @@ export default React.createClass({
   render() {
     return (
       <div
-        className={`wgsa-drag-and-drop ${this.state.indicatorVisible ? 'is-dragover' : ''}`}
+        className={`wgsa-drag-and-drop ${
+          this.state.indicatorVisible ? 'is-dragover' : ''
+        }`}
         onDragOver={this.showDropIndicator}
         onDrop={this.handleDrop}
         style={this.style}
         onClick={this.props.noAddButton ? this.handleClick : () => {}}
       >
         <div
-          className={`wgsa-drop-indicator wgsa-overlay ${this.state.indicatorVisible ? 'wgsa-overlay--is-visible' : ''}`}
+          className={`wgsa-drop-indicator wgsa-overlay ${
+            this.state.indicatorVisible ? 'wgsa-overlay--is-visible' : ''
+          }`}
           onDragLeave={this.hideDropIndicator}
         >
           <div className="wgsa-drop-indicator__message">
             <div className="wgsa-drop-indicator__icons">
               <span className="wgsa-file-icon">
-                <i className="material-icons" style={{ color: CGPS.COLOURS.PURPLE }}>insert_drive_file</i>
+                <i
+                  className="material-icons"
+                  style={{ color: CGPS.COLOURS.PURPLE }}
+                >
+                  insert_drive_file
+                </i>
                 <span className="wgsa-file-icon__label">.fasta</span>
               </span>
               <span className="wgsa-file-icon">
-                <i className="material-icons" style={{ color: CGPS.COLOURS.GREEN }}>insert_drive_file</i>
+                <i
+                  className="material-icons"
+                  style={{ color: CGPS.COLOURS.GREEN }}
+                >
+                  insert_drive_file
+                </i>
                 <span className="wgsa-file-icon__label">.csv</span>
               </span>
             </div>
-            <h3 className="wgsa-drop-indicator__title">Drop to add to <Name /></h3>
+            <h3 className="wgsa-drop-indicator__title">
+              Drop to add to <Name />
+            </h3>
           </div>
         </div>
         {this.props.children}
-        { this.props.noAddButton ? null :
-            <button className="mdl-button mdl-js-button mdl-button--fab wgsa-drag-and-drop__button mdl-shadow--3dp" title="Add files" onClick={this.handleClick}>
-              <i className="material-icons">add</i>
-            </button>
-        }
-        <input type="file" multiple="multiple" accept={DEFAULT.SUPPORTED_FILE_EXTENSIONS.join(',')} ref="fileInput" style={fileInputStyle} onChange={this.handleFileInputChange} />
+        {this.props.noAddButton ? null : (
+          <button
+            className="mdl-button mdl-js-button mdl-button--fab wgsa-drag-and-drop__button mdl-shadow--3dp"
+            title="Add files"
+            onClick={this.handleClick}
+          >
+            <i className="material-icons">add</i>
+          </button>
+        )}
+        <input
+          type="file"
+          multiple="multiple"
+          accept={SUPPORTED_FILE_EXTENSIONS.join(',')}
+          ref="fileInput"
+          style={fileInputStyle}
+          onChange={this.handleFileInputChange}
+        />
       </div>
     );
   },
-
 });

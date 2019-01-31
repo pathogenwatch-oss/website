@@ -61,7 +61,7 @@
 }
 
 .wgsa-page {
-  color: rgba(0, 0, 0, .54);
+  color: rgba(0, 0, 0, 0.54);
   margin: 0 auto;
   max-width: 960px;
   padding: 40px 64px;
@@ -82,7 +82,7 @@
 
 .wgsa-page-title {
   margin-top: 8px;
-  color: #AC65A6;
+  color: #ac65a6;
 }
 
 .wgsa-page-divider {

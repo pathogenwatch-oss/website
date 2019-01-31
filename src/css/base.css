@@ -1,44 +1,55 @@
 @import "./utils.css";
 
-html, body {
+html,
+body {
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-h1, h2, h3, h4, .title-font {
+h1,
+h2,
+h3,
+h4,
+.title-font {
   font-family: "Saira Semi Condensed", "Helvetica", Arial, sans-serif;
   font-weight: 500;
-  color: rgba(0, 0, 0, .54);
+  color: rgba(0, 0, 0, 0.54);
 }
 
-h1, .h1 {
+h1,
+.h1 {
   font-size: 45px;
   line-height: 48px;
 }
 
-h2, .h2 {
+h2,
+.h2 {
   font-size: 34px;
-  line-height: 40px;
+  line-height: 48px;
 }
 
-h3, .h3 {
+h3,
+.h3 {
   font-size: 24px;
-  line-height: 32px;
+  line-height: 1;
 }
 
-h4, .h4 {
+h4,
+.h4 {
   font-size: 20px;
   line-height: 1;
 }
 
-h5, .h5 {
+h5,
+.h5 {
   font-size: 18px;
   line-height: 1;
 }
 
-h6, .h6 {
+h6,
+.h6 {
   font-size: 16px;
   line-height: 1;
 }
@@ -50,7 +61,8 @@ button {
   /* padding: 0; */
 }
 
-button, select {
+button,
+select {
   cursor: pointer;
   font-family: inherit;
   font-size: inherit;
@@ -85,7 +97,8 @@ a[href]:active {
   text-decoration: none;
 }
 
-strong, b {
+strong,
+b {
   font-weight: 700;
 }
 

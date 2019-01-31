@@ -1,23 +1,50 @@
-.wgsa-upload-instuctions {
+.wgsa-upload-instructions {
   display: flex;
   flex-wrap: wrap;
   align-content: flex-start;
   justify-content: space-between;
   min-height: 540px;
-  max-width: 800px;
+  max-width: 1000px;
 }
 
-.wgsa-upload-instuctions > h1 {
+.wgsa-upload-instructions > h1 {
   width: 100%;
+  margin: 20px 0;
+  line-height: 60px;
 }
 
-.wgsa-upload-instuctions > div {
+.wgsa-upload-instructions h2 {
+  margin: 20px 0;
+  line-height: 40px;
+}
+
+.wgsa-upload-instructions h3 {
+  line-height: 40px;
+  margin-top: 0;
+  margin-bottom: 0px;
+}
+
+.wgsa-upload-instructions h3 > .material-icons {
+  color: #673c90;
+}
+
+.wgsa-upload-instructions > div {
   width: calc(50% - 16px);
   box-sizing: border-box;
 }
 
-.wgsa-upload-instuctions li,
-.wgsa-upload-instuctions strong {
+.wgsa-upload-instructions ul {
+  line-height: 20px;
+  margin: 0 0 20px;
+}
+
+.wgsa-upload-instructions li {
+  line-height: 20px;
+}
+
+.wgsa-upload-instructions ul.inline li,
+.wgsa-upload-instructions strong,
+.wgsa-upload-instructions td {
   color: #673c90;
   font-weight: 500;
 }
@@ -25,16 +52,38 @@
 ul.inline li {
   display: inline-block;
   margin-right: 0.333em;
+  margin-bottom: 0;
 }
 
 ul.inline li::after {
-  content: ','
+  content: ",";
 }
 
 ul.inline li:last-child::after {
   display: none;
 }
 
-.wgsa-upload-instuctions h3 {
-  margin-bottom: 8px;
+.wgsa-upload-instructions p {
+  line-height: 20px;
+  margin-bottom: 20px;
 }
+
+.wgsa-upload-instructions table {
+  width: 50%;
+  margin-bottom: 20px;
+}
+
+.wgsa-upload-instructions td {
+  line-height: 20px;
+}
+
+/* .baseline-grid {
+  background-image: linear-gradient(
+    to bottom,
+    rgba(0, 170, 255, 0.3) 1px,
+    transparent 1px
+  );
+  background-position: left top;
+  background-repeat: repeat;
+  background-size: 100% 20px;
+} */
