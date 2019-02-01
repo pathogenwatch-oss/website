@@ -6,3 +6,8 @@ export const statuses = {
   SUCCESS: 3,
   PENDING: 4,
 };
+
+export const types = {
+  READS: 'READS',
+  ASSEMBLY: 'ASSEMBLY',
+};

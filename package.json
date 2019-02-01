@@ -89,5 +89,10 @@
     "webpack-monitor": "^1.0.13",
     "why-did-you-update": "^0.1.1",
     "worker-loader": "^1.1.0"
+  },
+  "dependencies": {
+    "node-forge": "^0.8.0",
+    "resumablejs": "^1.1.0",
+    "workerize-loader": "^1.0.4"
   }
 }

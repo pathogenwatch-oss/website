@@ -4385,6 +4385,11 @@ node-fetch@^1.0.1:
     encoding "^0.1.11"
     is-stream "^1.0.1"
 
+node-forge@^0.8.0:
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/node-forge/-/node-forge-0.8.0.tgz#b897a89f25fe85ed7d0e3bd0c744c62931254dca"
+  integrity sha512-DVrvVeXwnSSX0Bgi9jy8p4IXQKLhGRQltG+UTR3Oci3Wb/zIROMoxw9im/K5s6KnNMheSWgG8K4qz8Njccdj3g==
+
 node-libs-browser@^2.0.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/node-libs-browser/-/node-libs-browser-2.2.0.tgz#c72f60d9d46de08a940dedbb25f3ffa2f9bbaa77"
@@ -6246,6 +6251,11 @@ restore-cursor@^2.0.0:
     onetime "^2.0.0"
     signal-exit "^3.0.2"
 
+resumablejs@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/resumablejs/-/resumablejs-1.1.0.tgz#3160633688ac35bc2a0f119803c190ec369ef4d2"
+  integrity sha512-gUTWTtJ2aheRb5svHDGHMtQsBkGxTILpZApT11ODoxEe5D75GhYL7Nc/WYgCcJXY+5RVmm2BEsp2qriCkKWRRg==
+
 ret@~0.1.10:
   version "0.1.15"
   resolved "https://registry.yarnpkg.com/ret/-/ret-0.1.15.tgz#b8a4825d5bdb1fc3f6f53c2bc33f81388681c7bc"
@@ -7344,6 +7354,13 @@ worker-loader@^1.1.0:
   dependencies:
     loader-utils "^1.0.0"
     schema-utils "^0.4.0"
+
+workerize-loader@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/workerize-loader/-/workerize-loader-1.0.4.tgz#5e7d1b7775e842399be50a761e0c4dd902ff42f1"
+  integrity sha512-HMTr/zpuZhm8dbhcK52cMYmn57uf7IJeMZJil+5lL/vC5+AO9wzxZ0FISkGVj78No7HcpaINwAWHGCYx3dnsTw==
+  dependencies:
+    loader-utils "^1.1.0"
 
 wrap-ansi@^2.0.0:
   version "2.1.0"

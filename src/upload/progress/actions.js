@@ -5,7 +5,11 @@ import * as api from '../api';
 import * as selectors from './selectors';
 import { getSettingValue } from '../instructions/selectors';
 
+import { getAuthToken } from '../../auth/actions';
+
+import { types } from '../constants';
 import * as utils from '../utils';
+import { processReads } from '../utils/resumable';
 
 export const ADD_GENOMES = 'ADD_GENOMES';
 
@@ -77,30 +81,39 @@ export function updateGenome(id, metadata) {
   };
 }
 
+function processAssembly(dispatch, getState, genome) {
+  return utils
+    .validate(genome)
+    .then(data => {
+      if (getSettingValue(getState(), 'compression')) {
+        return dispatch(compressGenome(genome.id, data));
+      }
+      return data;
+    })
+    .then(data => dispatch(uploadGenome(genome, data)));
+}
+
 export const PROCESS_GENOME = createAsyncConstants('PROCESS_GENOME');
 
 function processGenome(id) {
   return (dispatch, getState) => {
+    const state = getState();
     const genome = selectors.getGenome(getState(), id);
+    const token = state.auth.token;
     return dispatch({
       type: PROCESS_GENOME,
       payload: {
         id,
-        promise: utils
-          .validate(genome)
-          .then(data => {
-            if (getSettingValue(getState(), 'compression')) {
-              return dispatch(compressGenome(id, data));
-            }
-            return data;
-          })
-          .then(data => dispatch(uploadGenome(genome, data))),
+        promise:
+          genome.type === types.READS
+            ? processReads(genome, token, dispatch)
+            : processAssembly(dispatch, getState, genome),
       },
     }).catch(error => error);
   };
 }
 
-const defaultProcessLimit = 5;
+const defaultProcessLimit = 1;
 
 export function processFiles() {
   return (dispatch, getState) => {
@@ -110,6 +123,7 @@ export function processFiles() {
     const isIndividual = getSettingValue(state, 'individual');
     const processLimit = isIndividual ? 1 : defaultProcessLimit;
 
+    // dispatch(getAuthToken()).then(() =>
     (function processNext() {
       const { queue, processing } = selectors.getProgress(getState());
       if (queue.length && processing.size < processLimit) {
@@ -121,7 +135,8 @@ export function processFiles() {
         });
         processNext();
       }
-    })();
+    }());
+    // );
   };
 }
 

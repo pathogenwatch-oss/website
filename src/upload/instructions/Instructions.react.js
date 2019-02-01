@@ -30,22 +30,24 @@ export default () => (
         with one of the following extensions:
       </p>
       <table cellPadding="0" cellSpacing="0">
-        <tr>
-          <td>_1.fastq.gz</td>
-          <td>_2.fastq.gz</td>
-        </tr>
-        <tr>
-          <td>.1.fastq.gz</td>
-          <td>.2.fastq.gz</td>
-        </tr>
-        <tr>
-          <td>_R1.fastq.gz</td>
-          <td>_R2.fastq.gz</td>
-        </tr>
-        <tr>
-          <td>.R1.fastq.gz</td>
-          <td>.R2.fastq.gz</td>
-        </tr>
+        <tbody>
+          <tr>
+            <td>_1.fastq.gz</td>
+            <td>_2.fastq.gz</td>
+          </tr>
+          <tr>
+            <td>.1.fastq.gz</td>
+            <td>.2.fastq.gz</td>
+          </tr>
+          <tr>
+            <td>_R1.fastq.gz</td>
+            <td>_R2.fastq.gz</td>
+          </tr>
+          <tr>
+            <td>.R1.fastq.gz</td>
+            <td>.R2.fastq.gz</td>
+          </tr>
+        </tbody>
       </table>
       <h3>Assemblies</h3>
       <p>

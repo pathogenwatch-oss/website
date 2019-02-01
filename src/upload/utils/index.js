@@ -5,6 +5,7 @@ import MetadataUtils from '../../utils/Metadata';
 import { validateGenomeSize, validateGenomeContent } from './validation';
 import validateMetadata from '../../../universal/validateMetadata.js';
 
+import { types } from '../constants';
 import { ASSEMBLY_FILE_EXTENSIONS } from '../../app/constants';
 import getCompressWorker from 'worker-loader?name=compress-worker.[hash].js!./compressWorker';
 
@@ -116,24 +117,26 @@ export function mapCSVsToGenomes(files, uploadedAt) {
     )
   )
     .then(parsedFiles => flattenCSVs(parsedFiles))
-    .then(rows => ({
-      reads: Object.entries(pairedReads).map(([ id, filesByName ], index) => {
+    .then(rows => [
+      ...Object.entries(pairedReads).map(([ id, filesByName ], index) => {
         const fileNames = Object.keys(filesByName);
         const row = rows.find(
           r => r.filename === id || fileNames.includes(r.filename)
         );
         return {
           id: `${id}__${Date.now()}_${index}`,
+          type: types.READS,
           name: id,
-          files: Object.values(filesByName),
+          files: filesByName,
           uploadedAt,
           metadata: row ? parseMetadata(row) : null,
         };
       }),
-      assemblies: assemblies.map((file, index) => {
+      ...assemblies.map((file, index) => {
         const row = rows.find(r => r.filename === file.name);
         return {
           id: `${file.name}__${Date.now()}_${index}`,
+          type: types.ASSEMBLY,
           name: file.name,
           file,
           uploadedAt,
@@ -142,7 +145,7 @@ export function mapCSVsToGenomes(files, uploadedAt) {
           uploaded: true,
         };
       }),
-    }));
+    ]);
 }
 
 export function compress(text) {
