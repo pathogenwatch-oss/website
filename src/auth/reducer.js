@@ -1,7 +1,7 @@
 import { GET_AUTH_TOKEN } from './actions';
 
 const initialState = {
-  token: '123',
+  token: null,
 };
 
 export default function (state = initialState, { payload, type }) {

@@ -123,20 +123,20 @@ export function processFiles() {
     const isIndividual = getSettingValue(state, 'individual');
     const processLimit = isIndividual ? 1 : defaultProcessLimit;
 
-    // dispatch(getAuthToken()).then(() =>
-    (function processNext() {
-      const { queue, processing } = selectors.getProgress(getState());
-      if (queue.length && processing.size < processLimit) {
-        dispatch(processGenome(queue[0])).then(() => {
-          if (queue.length > processLimit) {
-            processNext();
-            return;
-          }
-        });
-        processNext();
-      }
-    }());
-    // );
+    dispatch(getAuthToken()).then(() =>
+      (function processNext() {
+        const { queue, processing } = selectors.getProgress(getState());
+        if (queue.length && processing.size < processLimit) {
+          dispatch(processGenome(queue[0])).then(() => {
+            if (queue.length > processLimit) {
+              processNext();
+              return;
+            }
+          });
+          processNext();
+        }
+      }())
+    );
   };
 }
 
