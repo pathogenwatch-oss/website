@@ -87,7 +87,6 @@ module.exports = () =>
       })
     );
 
-    // user accounts
     userAccounts(app, {
       userStore,
       url: config.passport.url,
@@ -96,6 +95,7 @@ module.exports = () =>
       failureRedirect: '/',
       logoutPath: '/signout',
       strategies: config.passport.strategies,
+      tokens: config.passport.tokens,
       mongoDbUrl: mongoConnection.dbUrl,
     });
 
