@@ -12,8 +12,10 @@ export default () => (
     <div>
       <h2>Genomic Data</h2>
       <p>
-        Please upload <strong>single samples/isolates</strong>, results from
-        metagenomic samples are not supported.
+        DNA sequences of whole genomes only. Please ensure that there are{' '}
+        <strong>two paired-end reads</strong> files or{' '}
+        <strong>one assembly</strong> file <strong>per genome</strong>.
+        Metagenomic samples are not supported.
       </p>
       <h3>
         Reads <i className="material-icons">fiber_new</i>
@@ -81,10 +83,20 @@ export default () => (
         with the extension <strong>.csv</strong>.
       </p>
       <p>
-        Files should have a <strong>filename</strong> column. For{' '}
-        <strong>reads</strong>, use the prefix or one of the names of the files.
-        For <strong>assemblies</strong>, use the name of the file exactly.
+        Files should have a <strong>filename</strong> column to match each row
+        to its respective genomic data:
       </p>
+      <ul className="bulleted">
+        <li>
+          For <strong>assemblies</strong>, use the name of the file including
+          extension.
+        </li>
+        <li>
+          For <strong>reads</strong>, use either the common prefix (e.g. the
+          lane ID or the strain name), or <strong>one of</strong> the names of
+          the files including extension.
+        </li>
+      </ul>
       <p>
         To make full use of metadata, we strongly recommend including the
         following columns:
