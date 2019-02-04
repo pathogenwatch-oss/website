@@ -1,5 +1,4 @@
 const User = require('../models/user');
-const Organisation = require('../models/organisation');
 
 module.exports = {
   serialize(user, done) {
@@ -7,8 +6,8 @@ module.exports = {
   },
   deserialize(id, done) {
     User.findById(id)
-    .populate('organisation')
-    .exec((err, user) => done(err, user));
+      // .populate('organisation')
+      .exec((err, user) => done(err, user));
   },
   save({ type, id, name, email, photo }, done) {
     User.findOne({ providerType: type, providerId: id })
