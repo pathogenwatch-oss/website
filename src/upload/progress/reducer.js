@@ -111,11 +111,10 @@ export default function (state = initialState, { type, payload }) {
     case actions.UPDATE_GENOME.SUCCESS: {
       const { id, result } = payload;
       const { files } = state;
-      const status = statuses.SUCCESS;
 
       return {
         ...state,
-        files: updateFile(files, id, { ...result, status }),
+        files: updateFile(files, id, result),
       };
     }
     case actions.PROCESS_GENOME.SUCCESS:
@@ -129,10 +128,9 @@ export default function (state = initialState, { type, payload }) {
       return {
         ...state,
         processing,
-        files:
-          error ?
-            updateFile(files, id, { error, status: statuses.ERROR }) :
-            state.files,
+        files: error
+          ? updateFile(files, id, { status: statuses.ERROR, error })
+          : updateFile(files, id, { status: statuses.SUCCESS }),
       };
     }
     case actions.REMOVE_GENOMES: {
@@ -155,7 +153,7 @@ export default function (state = initialState, { type, payload }) {
       const nextGenome = {
         ...genome,
         analysis: {
-          ...genome.analysis || {},
+          ...(genome.analysis || {}),
         },
       };
       for (const { task, version, result, error } of results) {
@@ -228,6 +226,27 @@ export default function (state = initialState, { type, payload }) {
         ...state,
         position: payload.result.position,
       };
+    case 'UPLOAD_READS_PROGRESS': {
+      const upload = state.files[payload.id];
+      const file = upload.files[payload.file];
+      return {
+        ...state,
+        files: {
+          ...state.files,
+          [payload.id]: {
+            ...upload,
+            status: statuses.UPLOADING,
+            files: {
+              ...upload.files,
+              [payload.file]: {
+                stage: payload.stage,
+                progress: file.stage !== payload.stage ? 0 : payload.progress,
+              },
+            },
+          },
+        },
+      };
+    }
     default:
       return state;
   }

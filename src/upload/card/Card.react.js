@@ -1,58 +1,63 @@
 import React from 'react';
 
-import Card from '../../card';
 import ProgressBar from '../../components/progress-bar';
 
 import Header from './Header.react';
-import GenomeTasks from './GenomeTasks.react';
+// import GenomeTasks from './GenomeTasks.react';
 import GenomeError from './GenomeError.react';
 
 import { statuses } from '../constants';
 
-function getCardComponents(genome, analysis) {
+const stages = {
+  IDENTIFY: 'Identifying',
+  PREPARE: 'Preparing',
+  UPLOAD: 'Uploading',
+};
+
+function renderReadsProgress(genome) {
+  return Object.values(genome.files).map(file => (
+    <React.Fragment key={file.name}>
+      <ProgressBar key={file.stage} progress={file.progress || 0} />
+      <small>{stages[file.stage] || 'Pending'}</small>
+    </React.Fragment>
+  ));
+}
+
+function renderAssemblyProgress(genome) {
   switch (genome.status) {
     case statuses.ERROR:
-      return {
-        content: <GenomeError genome={genome} />,
-      };
+      return <GenomeError genome={genome} />;
     case statuses.COMPRESSING:
-      return {
-        content: (
-          <div>
-            <ProgressBar indeterminate />
-            <small>Compressing</small>
-          </div>
-        ),
-      };
+      return (
+        <React.Fragment>
+          <ProgressBar indeterminate />
+          <small>Compressing</small>
+        </React.Fragment>
+      );
     case statuses.UPLOADING:
     case statuses.PENDING:
-      return {
-        content: (
-          <div>
-            <ProgressBar progress={genome.progress || 0} />
-            <small>Uploading</small>
-          </div>
-        ),
-      };
+      return (
+        <React.Fragment>
+          <ProgressBar progress={genome.progress || 0} />
+          <small>Uploading</small>
+        </React.Fragment>
+      );
     case statuses.SUCCESS:
-      return {
-        content: <small>Succeeded 👍</small>,
-      };
+      return <small>Succeeded 👍</small>;
     default:
-      return {
-        content: <GenomeTasks analysis={analysis} />,
-      };
+      return null;
   }
 }
 
-
-export default ({ item, analysis }) => {
-  const { content, footer = null } = getCardComponents(item, analysis);
+export default ({ item }) => {
+  const content =
+    item.type === 'READS'
+      ? renderReadsProgress(item)
+      : renderAssemblyProgress(item);
   return (
-    <Card className="wgsa-genome-card">
+    <div className="wgsa-genome-card">
       <Header genome={item} />
-      { content }
-      { footer }
-    </Card>
+      {content}
+    </div>
   );
 };

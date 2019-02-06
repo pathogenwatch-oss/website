@@ -8,7 +8,6 @@ import * as upload from './selectors';
 import DocumentTitle from '../../branding/DocumentTitle.react';
 
 const Component = React.createClass({
-
   getTitle() {
     const { summary } = this.props;
     return [
@@ -22,7 +21,7 @@ const Component = React.createClass({
 
     const uploadedAtDisplay = (
       <p style={{ marginLeft: 'auto' }}>
-        Uploaded: <strong>{new Date(uploadedAt).toLocaleString()}</strong>
+        Uploaded <strong>{new Date(uploadedAt).toLocaleString()}</strong>
       </p>
     );
 
@@ -30,9 +29,7 @@ const Component = React.createClass({
       return <ErrorSummary>{uploadedAtDisplay}</ErrorSummary>;
     }
 
-    return (
-      <Summary>{uploadedAtDisplay}</Summary>
-    );
+    return <Summary>{uploadedAtDisplay}</Summary>;
   },
 
   render() {
@@ -43,7 +40,6 @@ const Component = React.createClass({
       </React.Fragment>
     );
   },
-
 });
 
 function mapStateToProps(state) {
