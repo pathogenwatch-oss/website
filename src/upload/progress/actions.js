@@ -10,6 +10,7 @@ import { getAuthToken } from '../../auth/actions';
 import { types } from '../constants';
 import * as utils from '../utils';
 import { processReads } from '../utils/resumable';
+import { create } from 'domain';
 
 export const ADD_GENOMES = 'ADD_GENOMES';
 
@@ -231,6 +232,17 @@ export function fetchQueuePosition(uploadedAt) {
     payload: {
       uploadedAt,
       promise: api.fetchQueuePosition(uploadedAt),
+    },
+  };
+}
+
+export const SET_PROGRESS_VIEW = 'SET_PROGRESS_VIEW';
+
+export function setProgressView(view) {
+  return {
+    type: SET_PROGRESS_VIEW,
+    payload: {
+      view,
     },
   };
 }

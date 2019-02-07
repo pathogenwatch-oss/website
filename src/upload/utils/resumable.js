@@ -1,6 +1,6 @@
 import Resumable from 'resumablejs';
 
-import hashWorker from 'workerize-loader?name=hash-worker.[hash].js!./hashWorker';
+import hashWorker from 'workerize-loader?name=hash.[hash]!./hashWorker';
 
 import config from '../../app/config';
 

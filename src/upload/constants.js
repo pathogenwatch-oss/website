@@ -11,3 +11,8 @@ export const types = {
   READS: 'READS',
   ASSEMBLY: 'ASSEMBLY',
 };
+
+export const views = {
+  ASSEMBLY: 0,
+  ANALYSIS: 1,
+};

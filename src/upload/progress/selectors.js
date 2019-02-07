@@ -8,15 +8,16 @@ import { getOrganismName } from '../../organisms';
 import { DEFAULT } from '../../app/constants';
 
 export const getProgress = ({ upload }) => upload.progress;
+export const getProgressView = state => getProgress(state).view;
 
 const getUploadQueue = createSelector(
   getProgress,
-  uploads => uploads.queue,
+  uploads => uploads.queue
 );
 
 const getProcessing = createSelector(
   getProgress,
-  uploads => uploads.processing,
+  uploads => uploads.processing
 );
 
 export const getUploadedFiles = state => getProgress(state).files;
@@ -25,7 +26,8 @@ export const getGenome = (state, id) => getUploadedFiles(state)[id];
 export const getUploadedGenomes = state => getProgress(state).genomes;
 export const getSelectedOrganism = state => getProgress(state).selectedOrganism;
 export const getQueuePosition = state => getProgress(state).position;
-export const getLastMessageReceived = state => getProgress(state).lastMessageReceived;
+export const getLastMessageReceived = state =>
+  getProgress(state).lastMessageReceived;
 
 export const getUploadedFileList = createSelector(
   getUploadedFiles,
@@ -51,12 +53,12 @@ export const getFilesInProgress = createSelector(
 export const getNumRemainingUploads = createSelector(
   getUploadQueue,
   getProcessing,
-  (queue, processing) => queue.length + processing.size,
+  (queue, processing) => queue.length + processing.size
 );
 
 export const isUploading = createSelector(
   getProcessing,
-  processing => processing.size > 0,
+  processing => processing.size > 0
 );
 
 export const isUploadPending = createSelector(
@@ -67,7 +69,7 @@ export const isUploadPending = createSelector(
 export const getNumCompletedUploads = createSelector(
   getBatchSize,
   getNumRemainingUploads,
-  (batchSize, numRemaining) => batchSize - numRemaining,
+  (batchSize, numRemaining) => batchSize - numRemaining
 );
 
 export const getFailedUploads = createSelector(
@@ -151,10 +153,10 @@ function getAnalysisBreakdown(genomes) {
     }
   }
 
-  breakdown.mlst.sequenceTypes =
-    Object.keys(sts).map(st => ({
-      label: `ST ${st}`, total: sts[st],
-    }));
+  breakdown.mlst.sequenceTypes = Object.keys(sts).map(st => ({
+    label: `ST ${st}`,
+    total: sts[st],
+  }));
 
   if (breakdown.mlst.errors) {
     breakdown.mlst.sequenceTypes.push({
@@ -181,15 +183,17 @@ export const getAnalysisSummary = createSelector(
       } else if (analysis.speciator === false) {
         errored++;
       } else {
-        summary[organismId] =
-          (summary[organismId] || []).concat(genome);
+        summary[organismId] = (summary[organismId] || []).concat(genome);
       }
     }
     const getColour = getColourGenerator();
     const result = [];
     for (const organismId of Object.keys(summary)) {
       const organismGenomes = summary[organismId];
-      const label = getOrganismName(organismId, organismGenomes[0].organismName);
+      const label = getOrganismName(
+        organismId,
+        organismGenomes[0].organismName
+      );
       const colour = getColour(label);
       result.push({
         key: organismId,
@@ -199,8 +203,22 @@ export const getAnalysisSummary = createSelector(
         ...getAnalysisBreakdown(organismGenomes),
       });
     }
-    if (pending) result.push({ key: 'pending', label: 'Pending', total: pending, colour: '#ccc' });
-    if (errored) result.push({ key: 'error', label: 'Error', total: errored, colour: DEFAULT.DANGER_COLOUR });
+    if (pending) {
+      result.push({
+        key: 'pending',
+        label: 'Pending',
+        total: pending,
+        colour: '#ccc',
+      });
+    }
+    if (errored) {
+      result.push({
+        key: 'error',
+        label: 'Error',
+        total: errored,
+        colour: DEFAULT.DANGER_COLOUR,
+      });
+    }
     return result;
   }
 );
@@ -217,8 +235,23 @@ function getSpeciesCode(organismName) {
 export const getChartData = createSelector(
   getAnalysisSummary,
   data => {
-    const organisms = { label: 'Organism', data: [], backgroundColor: [], labels: [], organismIds: [], shortLabels: [], total: 0 };
-    const stData = { label: 'Sequence Type', data: [], backgroundColor: [], labels: [], parents: [], total: 0 };
+    const organisms = {
+      label: 'Organism',
+      data: [],
+      backgroundColor: [],
+      labels: [],
+      organismIds: [],
+      shortLabels: [],
+      total: 0,
+    };
+    const stData = {
+      label: 'Sequence Type',
+      data: [],
+      backgroundColor: [],
+      labels: [],
+      parents: [],
+      total: 0,
+    };
 
     let organismIndex = 0;
     for (const { label, colour, total, key, mlst = {} } of data) {
@@ -249,17 +282,14 @@ export const getChartData = createSelector(
     }
 
     return {
-      datasets: [
-        stData,
-        organisms,
-      ],
+      datasets: [ stData, organisms ],
     };
   }
 );
 
 export const getOverallProgress = createSelector(
   getUploadedGenomes,
-  (genomes) => {
+  genomes => {
     const speciation = { pending: 0, done: 0, total: 0 };
     const tasks = { pending: 0, done: 0, total: 0 };
     let errors = 0;
@@ -309,7 +339,7 @@ export const isAnalysisComplete = createSelector(
   isSpecieationComplete,
   getOverallProgress,
   (speciationComplete, { tasks }) =>
-    speciationComplete && tasks.total > 0 && tasks.done === tasks.total,
+    speciationComplete && tasks.total > 0 && tasks.done === tasks.total
 );
 
 export const hasErrors = createSelector(

@@ -1,6 +1,6 @@
 import * as actions from './actions';
 
-import { statuses } from '../constants';
+import { statuses, types, views } from '../constants';
 
 function updateFile(state, id, update) {
   const file = state[id];
@@ -31,17 +31,21 @@ const initialState = {
   uploadedAt: null,
   genomes: {},
   selectedOrganism: null,
+  view: views.ANALYSIS,
 };
 
 export default function (state = initialState, { type, payload }) {
   switch (type) {
     case actions.ADD_GENOMES: {
       const ids = payload.genomes.map(_ => _.id);
+      const [ first ] = payload.genomes;
+      console.log(first);
       return {
         ...initialState,
         queue: ids,
         uploadedAt: payload.uploadedAt,
         files: initialiseFiles({}, payload.genomes),
+        view: first.type === types.READS ? views.ASSEMBLY : views.ANALYSIS,
       };
     }
     case actions.UPLOAD_REQUEUE_FILES: {
@@ -245,6 +249,12 @@ export default function (state = initialState, { type, payload }) {
             },
           },
         },
+      };
+    }
+    case 'SET_PROGRESS_VIEW': {
+      return {
+        ...state,
+        view: payload.view,
       };
     }
     default:

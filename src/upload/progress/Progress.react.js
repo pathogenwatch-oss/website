@@ -4,103 +4,18 @@ import React from 'react';
 import { connect } from 'react-redux';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
+import Fade from '../../components/fade';
+
+import Overview from './Overview.react';
+import SpeciesBreakdown from './SpeciesBreakdown.react';
 import FileCard from '../card/Card.react';
 import AnalysisChart from './AnalysisChart.react';
-import ProgressBar from '../../components/progress-bar';
+import ViewSwitcher from './ViewSwitcher.react';
+import AssemblyPipeline from './assembly-pipeline';
 
 import * as upload from './selectors';
 
-const Analysis = ({ data, showBreakdown }) => (
-  <ul className="wgsa-upload-legend">
-    {data.map(({ key, label, total, colour, ...analyses }) => (
-      <li key={key}>
-        <span>
-          <i className="material-icons" style={{ color: colour }}>
-            stop
-          </i>
-          <strong className="wgsa-upload-legend-organism" title={label}>
-            {label}
-          </strong>
-          &nbsp;({total})
-        </span>
-        {showBreakdown && (
-          <ul>
-            {Object.keys(analyses).map(analysisKey => {
-              const analysis = analyses[analysisKey];
-              if (analysis.active) {
-                return (
-                  <li key={analysisKey}>
-                    {analysis.total === total ? (
-                      <React.Fragment>
-                        {analysis.label}
-                        <i className="material-icons">check_circle</i>
-                      </React.Fragment>
-                    ) : (
-                      `${analysis.label}: ${analysis.total} / ${total}`
-                    )}
-                    {analysis.errors > 0 && (
-                      <small>
-                        &nbsp;{analysis.errors} error
-                        {analysis.errors === 1 ? '' : 's'}
-                      </small>
-                    )}
-                  </li>
-                );
-              }
-              return null;
-            })}
-          </ul>
-        )}
-      </li>
-    ))}
-  </ul>
-);
-
-const Overview = connect(state => ({
-  isUploading: upload.isUploading(state),
-  totalGenomes: upload.getUploadedGenomeList(state).length,
-  progress: upload.getOverallProgress(state),
-  complete: upload.isAnalysisComplete(state),
-  position: upload.getQueuePosition(state),
-  hasErrors: upload.hasErrors(state),
-}))(
-  ({ isUploading, totalGenomes, progress, complete, position, hasErrors }) => {
-    if (isUploading || totalGenomes === 0) return null;
-
-    const { speciation, tasks } = progress;
-
-    const speciationPct = (speciation.done / totalGenomes) * 100;
-    const tasksPct = (tasks.done / tasks.total) * 100;
-
-    if (complete && hasErrors) {
-      return <strong>Analysis complete, with errors.</strong>;
-    }
-
-    if (complete) {
-      return <strong>Analysis complete 🎉</strong>;
-    }
-
-    return (
-      <div className="wgsa-upload-progress-overview">
-        <p>
-          {totalGenomes} file{totalGenomes === 1 ? '' : 's'} uploaded
-          successfully.
-        </p>
-        <ProgressBar label="Speciation" progress={speciationPct} />
-        {speciationPct === 100 && (
-          <ProgressBar label="Tasks" progress={tasksPct} />
-        )}
-        {position > 0 ? (
-          <p>
-            {position} job{position === 1 ? '' : 's'} till next result.
-          </p>
-        ) : (
-          <p className="wgsa-blink">Results processing.</p>
-        )}
-      </div>
-    );
-  }
-);
+import { views } from '../constants';
 
 const Progress = ({
   inProgress,
@@ -109,6 +24,7 @@ const Progress = ({
   analysis,
   uploadedAt,
   specieationComplete,
+  view,
 }) => (
   <div className="wgsa-content-margin wgsa-upload-progress">
     <div>
@@ -142,13 +58,22 @@ const Progress = ({
       {!!analysis.length && analysis[0].key !== 'pending' && (
         <div className="wgsa-section-divider">
           <h2 className="wgsa-section-title">Organisms</h2>
-          <Analysis data={analysis} showBreakdown={specieationComplete} />
+          <SpeciesBreakdown
+            data={analysis}
+            showBreakdown={specieationComplete}
+          />
         </div>
       )}
     </div>
     <div className="wgsa-section-divider wgsa-flex-section">
-      <h2 className="wgsa-section-title">Analysis</h2>
-      <AnalysisChart uploadedAt={uploadedAt} />
+      <ViewSwitcher view={view} />
+      <Fade out={false} className="pw-upload-progress-view">
+        {view === views.ASSEMBLY ? (
+          <AssemblyPipeline key={views.ASSEMBLY} />
+        ) : (
+          <AnalysisChart key={views.ANALYSIS} uploadedAt={uploadedAt} />
+        )}
+      </Fade>
     </div>
   </div>
 );
@@ -160,6 +85,7 @@ function mapStateToProps(state) {
     files: upload.getFileSummary(state),
     analysis: upload.getAnalysisSummary(state),
     specieationComplete: upload.isSpecieationComplete(state),
+    view: upload.getProgressView(state),
   };
 }
 

@@ -49,8 +49,12 @@
   height: auto;
 }
 
-.wgsa-analysis-chart {
+.pw-upload-progress-view {
   flex-grow: 1;
+}
+
+.wgsa-analysis-chart {
+  height: 100%;
   max-height: 640px;
   position: relative;
 }
@@ -131,4 +135,14 @@
 
 .wgsa-upload-progress .wgsa-section-title {
   font-family: Roboto, Helvetica, Arial, sans-serif !important;
+}
+
+.wgsa-upload-progress .wgsa-section-title.active {
+  color: #673c90;
+}
+
+.wgsa-upload-progress-switcher .wgsa-section-title {
+  transition: var(--transition);
+  transition-property: color;
+  color: rgba(0, 0, 0, 0.54);
 }
