@@ -14,7 +14,21 @@ export default class CircularProgress extends React.Component {
     const height = this.props.radius * 2;
     const viewBox = `0 0 ${width} ${height}`;
     const dashArray = radius * Math.PI * 2;
-    const dashOffset = dashArray - (dashArray * this.props.percentage) / 100;
+
+    const segments = [];
+    let percentAcc = 0;
+    for (const segment of this.props.segments || []) {
+      segments.unshift({
+        colour: segment.colour,
+        name: segment.name,
+        dashOffset:
+          dashArray - (dashArray * (segment.percentage + percentAcc)) / 100,
+      });
+      percentAcc += segment.percentage;
+    }
+
+    const { progress = 0 } = this.props;
+
     return (
       <svg
         className={`CircularProgress ${
@@ -31,18 +45,21 @@ export default class CircularProgress extends React.Component {
           r={radius}
           strokeWidth={`${this.props.strokeWidth}px`}
         />
-        <circle
-          className="CircularProgress-Fg"
-          cx={this.props.radius}
-          cy={this.props.radius}
-          r={radius}
-          stroke={this.props.colour || '#673c90'}
-          strokeWidth={`${this.props.strokeWidth}px`}
-          style={{
-            strokeDasharray: dashArray,
-            strokeDashoffset: dashOffset,
-          }}
-        />
+        {segments.map(s => (
+          <circle
+            key={s.name}
+            className="CircularProgress-Fg"
+            cx={this.props.radius}
+            cy={this.props.radius}
+            r={radius}
+            strokeWidth={`${this.props.strokeWidth}px`}
+            stroke={s.colour}
+            style={{
+              strokeDasharray: dashArray,
+              strokeDashoffset: s.dashOffset,
+            }}
+          />
+        ))}
         <text
           className="CircularProgress-Text"
           x={this.props.radius}
@@ -50,7 +67,7 @@ export default class CircularProgress extends React.Component {
           dy=".4em"
           textAnchor="middle"
         >
-          {`${this.props.percentage.toFixed(this.props.decimalPlaces)}%`}
+          {`${progress.toFixed(this.props.decimalPlaces)}%`}
         </text>
       </svg>
     );

@@ -146,7 +146,7 @@ class UpdateMetadata extends React.Component {
           >
             Go back
           </button>
-          <Fade out={false}>
+          <Fade>
             {this.state.error && (
               <button
                 className="mdl-button mdl-button--raised mdl-button--colored"

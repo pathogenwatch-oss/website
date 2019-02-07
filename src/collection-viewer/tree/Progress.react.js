@@ -11,7 +11,6 @@ import { fetchTreePosition, setTree } from './actions';
 import { COLLECTION } from '../../app/stateKeys/tree';
 
 const Progress = React.createClass({
-
   renderQueuePosition() {
     const { position } = this.props;
     if (position === 0) {
@@ -85,12 +84,11 @@ const Progress = React.createClass({
 
   render() {
     return (
-      <Fade>
-        { React.cloneElement(this.renderStatus(), { key: this.props.status }) }
+      <Fade out>
+        {React.cloneElement(this.renderStatus(), { key: this.props.status })}
       </Fade>
     );
   },
-
 });
 
 function mapStateToProps(state) {
@@ -109,4 +107,7 @@ function mapDispatchToProps(dispatch, { date }) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Progress);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Progress);

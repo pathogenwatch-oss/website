@@ -46,7 +46,7 @@ const Dropdown = React.createClass({
   render() {
     const { view, hasSelection } = this.props;
     return (
-      <Fade>
+      <Fade out>
         {view ? (
           <div className="wgsa-genome-selection-dropdown mdl-shadow--2dp">
             {hasSelection ? (

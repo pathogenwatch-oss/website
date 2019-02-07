@@ -2436,6 +2436,16 @@ escope@^3.6.0:
     eslint-plugin-import "^2.14.0"
     eslint-plugin-react "^7.11.1"
 
+"eslint-config-cgps@github:cgps-dev/eslint-config-cgps#v2.1.1":
+  version "2.1.1"
+  resolved "https://codeload.github.com/cgps-dev/eslint-config-cgps/tar.gz/779e33e45f420d89d15a454afa2745ae401f42ce"
+  dependencies:
+    babel-eslint "^10.0.1"
+    eslint "^5.9.0"
+    eslint-plugin-import "^2.14.0"
+    eslint-plugin-react "^7.11.1"
+    eslint-plugin-react-hooks "^1.0.1"
+
 eslint-import-resolver-node@^0.3.2:
   version "0.3.2"
   resolved "https://registry.yarnpkg.com/eslint-import-resolver-node/-/eslint-import-resolver-node-0.3.2.tgz#58f15fb839b8d0576ca980413476aab2472db66a"
@@ -2467,6 +2477,11 @@ eslint-plugin-import@^2.14.0:
     minimatch "^3.0.4"
     read-pkg-up "^2.0.0"
     resolve "^1.9.0"
+
+eslint-plugin-react-hooks@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-react-hooks/-/eslint-plugin-react-hooks-1.0.1.tgz#76b6fb4edafab02eab0090078977687157605dd9"
+  integrity sha512-yNhvY7EFBp0mq0Bt8BHoS57GwJ4e1qSYdvDFSfPnjmiSmyGUfQFQGcQs4K0JQFDGopWkURWq58psbUJIhWZ2Kg==
 
 eslint-plugin-react@^7.11.1:
   version "7.12.4"
@@ -5802,15 +5817,15 @@ react-addons-shallow-compare@^15.3.2:
     fbjs "^0.8.4"
     object-assign "^4.1.0"
 
-react-dom@^16.0.0, react-dom@^16.6.3:
-  version "16.7.0"
-  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.7.0.tgz#a17b2a7ca89ee7390bc1ed5eb81783c7461748b8"
-  integrity sha512-D0Ufv1ExCAmF38P2Uh1lwpminZFRXEINJe53zRAbm4KPwSyd6DY/uDoS0Blj9jvPpn1+wivKpZYc8aAAN/nAkg==
+react-dom@^16.8.0:
+  version "16.8.1"
+  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.8.1.tgz#ec860f98853d09d39bafd3a6f1e12389d283dbb4"
+  integrity sha512-N74IZUrPt6UiDjXaO7UbDDFXeUXnVhZzeRLy/6iqqN1ipfjrhR60Bp5NuBK+rv3GMdqdIuwIl22u1SYwf330bg==
   dependencies:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
     prop-types "^15.6.2"
-    scheduler "^0.12.0"
+    scheduler "^0.13.1"
 
 react-hot-loader@^4.3.3:
   version "4.6.3"
@@ -5911,14 +5926,10 @@ react-scrollspy@^3.3.5:
     classnames "^2.2.5"
     prop-types "^15.5.10"
 
-react-split-pane@^0.1.66:
+"react-split-pane@github:cgps-dev/react-split-pane#2e1faabb7ab50704eb48af0b227c5ce51d6282ab":
   version "0.1.85"
-  resolved "https://registry.yarnpkg.com/react-split-pane/-/react-split-pane-0.1.85.tgz#64819946a99b617ffa2d20f6f45a0056b6ee4faa"
-  integrity sha512-3GhaYs6+eVNrewgN4eQKJoNMQ4pcegNMTMhR5bO/NFO91K6/98qdD1sCuWPpsefCjzxNTjkvVYWQC0bMaC45mA==
+  resolved "https://codeload.github.com/cgps-dev/react-split-pane/tar.gz/2e1faabb7ab50704eb48af0b227c5ce51d6282ab"
   dependencies:
-    prop-types "^15.5.10"
-    react "^16.6.3"
-    react-dom "^16.6.3"
     react-lifecycles-compat "^3.0.4"
     react-style-proptype "^3.0.0"
 
@@ -5962,15 +5973,15 @@ react-virtualized@^9.12.0:
     prop-types "^15.6.0"
     react-lifecycles-compat "^3.0.4"
 
-react@^16.0.0, react@^16.6.3:
-  version "16.7.0"
-  resolved "https://registry.yarnpkg.com/react/-/react-16.7.0.tgz#b674ec396b0a5715873b350446f7ea0802ab6381"
-  integrity sha512-StCz3QY8lxTb5cl2HJxjwLFOXPIFQp+p+hxQfc8WE0QiLfCtIlKj8/+5tjjKm8uSTlAW+fCPaavGFS06V9Ar3A==
+react@^16.8.0:
+  version "16.8.1"
+  resolved "https://registry.yarnpkg.com/react/-/react-16.8.1.tgz#ae11831f6cb2a05d58603a976afc8a558e852c4a"
+  integrity sha512-wLw5CFGPdo7p/AgteFz7GblI2JPOos0+biSoxf1FPsGxWQZdN/pj6oToJs1crn61DL3Ln7mN86uZ4j74p31ELQ==
   dependencies:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
     prop-types "^15.6.2"
-    scheduler "^0.12.0"
+    scheduler "^0.13.1"
 
 read-pkg-up@^2.0.0:
   version "2.0.0"
@@ -6349,10 +6360,10 @@ sax@^1.2.4, sax@~1.2.1:
   resolved "https://registry.yarnpkg.com/sax/-/sax-1.2.4.tgz#2816234e2378bddc4e5354fab5caa895df7100d9"
   integrity sha512-NqVDv9TpANUjFm0N8uM5GxL36UgKi9/atZw+x7YFnQ8ckwFGKrl4xX4yWtrey3UJm5nP1kUbnYgLopqWNSRhWw==
 
-scheduler@^0.12.0:
-  version "0.12.0"
-  resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.12.0.tgz#8ab17699939c0aedc5a196a657743c496538647b"
-  integrity sha512-t7MBR28Akcp4Jm+QoR63XgAi9YgCUmgvDHqf5otgAj4QvdoBE4ImCX0ffehefePPG+aitiYHp0g/mW6s4Tp+dw==
+scheduler@^0.13.1:
+  version "0.13.1"
+  resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.13.1.tgz#1a217df1bfaabaf4f1b92a9127d5d732d85a9591"
+  integrity sha512-VJKOkiKIN2/6NOoexuypwSrybx13MY7NSy9RNt8wPvZDMRT1CW6qlpF5jXRToXNHz3uWzbm2elNpZfXfGPqP9A==
   dependencies:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"

@@ -67,7 +67,7 @@ const Progress = ({
     </div>
     <div className="wgsa-section-divider wgsa-flex-section">
       <ViewSwitcher view={view} />
-      <Fade out={false} className="pw-upload-progress-view">
+      <Fade className="pw-upload-progress-view">
         {view === views.ASSEMBLY ? (
           <AssemblyPipeline key={views.ASSEMBLY} />
         ) : (

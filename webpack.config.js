@@ -13,10 +13,7 @@ const resolve = {
     '^': srcFolder,
     react: path.join(srcFolder, 'react-shim.js'),
   },
-  modules: [
-    'node_modules',
-    path.join(__dirname, 'node_modules'),
-  ],
+  modules: [ 'node_modules', path.join(__dirname, 'node_modules') ],
   unsafeCache: true,
 };
 
@@ -27,7 +24,8 @@ const babelSettings = {
 
 const cssLoaders = [
   { loader: 'css-loader', options: { importLoaders: 1 } },
-  { loader: 'postcss-loader',
+  {
+    loader: 'postcss-loader',
     options: {
       ident: 'postcss',
       plugins: () => [
@@ -50,7 +48,8 @@ const cssLoaders = [
 const commonRules = [
   { test: /\.json$/, use: [ 'json-loader' ] },
   { test: /\.(png|jpg|jpeg|gif)$/, use: 'file' },
-  { test: /\.js$/,
+  {
+    test: /\.js$/,
     // loader: (process.env.NODE_ENV === 'production' ? '' : 'react-hot-loader!').concat(`babel-loader?${JSON.stringify(babelSettings)}`),
     loader: `babel-loader?${JSON.stringify(babelSettings)}`,
     include: [
@@ -62,17 +61,11 @@ const commonRules = [
   },
 ];
 
-const commonPlugins = [
-  new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-];
+const commonPlugins = [ new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/) ];
 
 const devConfig = {
   devtool: '#eval-source-map',
-  entry: [
-    'react-hot-loader/patch',
-    'webpack-hot-middleware/client',
-    './src',
-  ],
+  entry: [ 'react-hot-loader/patch', 'webpack-hot-middleware/client', './src' ],
   output: {
     path: __dirname,
     filename: 'dev.js',
@@ -136,11 +129,13 @@ const prodConfig = {
       name: 'manifest',
     }),
     new webpack.NamedModulesPlugin(),
-    new webpack.NamedChunksPlugin((chunk) => {
+    new webpack.NamedChunksPlugin(chunk => {
       if (chunk.name) {
         return chunk.name;
       }
-      return chunk.mapModules(m => path.relative(m.context, m.request)).join('_');
+      return chunk
+        .mapModules(m => path.relative(m.context, m.request))
+        .join('_');
     }),
     new NameAllModulesPlugin(),
     new WebpackMonitor({
@@ -158,8 +153,12 @@ const prodConfig = {
   module: {
     rules: [
       ...commonRules,
-      { test: /\.css$/,
-        use: ExtractTextPlugin.extract({ fallback: 'style-loader', use: cssLoaders }),
+      {
+        test: /\.css$/,
+        use: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: cssLoaders,
+        }),
       },
     ],
   },

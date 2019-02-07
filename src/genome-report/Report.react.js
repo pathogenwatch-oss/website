@@ -96,7 +96,7 @@ const Content = React.createClass({
 const Report = ({ name, genome, loading, close }) => {
   const isOpen = !!loading || !!genome;
   return (
-    <Fade>
+    <Fade out>
       {isOpen && (
         <Modal
           title={

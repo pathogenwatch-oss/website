@@ -32,7 +32,7 @@ export default React.createClass({
     const { result } = this.props;
     return (
       <div className="pw-update-metadata-progress success">
-        <Fade out={false}>
+        <Fade>
           {result ? (
             <p key="complete">
               <i className="material-icons">check_circle</i>

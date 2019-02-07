@@ -39,7 +39,6 @@ export default function (state = initialState, { type, payload }) {
     case actions.ADD_GENOMES: {
       const ids = payload.genomes.map(_ => _.id);
       const [ first ] = payload.genomes;
-      console.log(first);
       return {
         ...initialState,
         queue: ids,
