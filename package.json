@@ -41,7 +41,7 @@
     "slug": "^0.9.1",
     "stream-transform": "^0.1.2",
     "pathogenwatch-fasta-store": "https://gitlab.com/cgps/pathogenwatch-fasta-store#v4.1.0",
-    "pathogenwatch-front-end": "https://gitlab.com/cgps/pathogenwatch-front-end#v7.4.0",
+    "pathogenwatch-front-end": "https://gitlab.com/cgps/pathogenwatch-front-end#v7.4.1",
     "zip-stream": "^1.2.0"
   },
   "devDependencies": {
