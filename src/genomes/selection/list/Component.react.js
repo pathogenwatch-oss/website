@@ -82,8 +82,12 @@ const Selection = ({
           >
             <i className="material-icons">delete_sweep</i>
           </button>
-          <button className="mdl-button" onClick={() => toggle('update')}>
-            Update
+          <button
+            title="Edit Metadata"
+            className="mdl-button mdl-button--icon"
+            onClick={() => toggle('edit')}
+          >
+            <i className="material-icons">edit</i>
           </button>
         </div>
       )}

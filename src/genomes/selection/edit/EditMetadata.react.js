@@ -35,6 +35,12 @@ class UpdateMetadata extends React.Component {
     this.handleFiles = this.handleFiles.bind(this);
   }
 
+  componentDidUpdate(_, previous) {
+    if (!previous.result && this.state.result) {
+      setTimeout(this.props.goBack, 1000);
+    }
+  }
+
   handleFiles(fileList) {
     const file = Array.from(fileList)[0];
 
@@ -101,10 +107,10 @@ class UpdateMetadata extends React.Component {
     const progress = (this.state.completed / this.state.rows) * 100;
     return (
       <div className="wgsa-dropdown">
-        <header className="wgsa-dropdown-header">Update Metadata</header>
+        <header className="wgsa-dropdown-header">Edit Metadata</header>
         <Limiter type="maxDownloadSize">
           <Fade
-            className="wgsa-dropdown-content pw-update-metadata-section"
+            className="wgsa-dropdown-content pw-edit-metadata-section"
             out={false}
           >
             {this.state.uploading ? (
@@ -114,22 +120,22 @@ class UpdateMetadata extends React.Component {
                 error={this.state.error}
               />
             ) : (
-              <div className="pw-update-metadata-instructions pw-update-metadata-section">
-                <p className="pw-update-metadata-warning">
-                  <i className="material-icons">warning</i>
+              <div className="pw-edit-metadata-instructions pw-edit-metadata-section">
+                <p className="pw-edit-metadata-warning">
+                  <i className="material-icons danger">warning</i>
                   This will overwrite existing data
                 </p>
                 <DownloadLink
-                  className="pw-update-metadata-link"
+                  className="pw-edit-metadata-link"
                   link={getServerPath('/download/genome/metadata')}
                   ids={ids}
                 >
                   1. Download existing metadata for selected genomes
                 </DownloadLink>
-                <p>2. Edit the downloaded spreadsheet (e.g. in Excel)</p>
+                <p>2. Make changes to the spreadsheet (e.g. in Excel)</p>
                 <DropArea update={update} onFiles={this.handleFiles}>
                   <p key="instructions">
-                    3. Drag file here to update <br />
+                    3. Drag file here to upload <br />
                     or click to select file
                   </p>
                 </DropArea>
@@ -138,14 +144,16 @@ class UpdateMetadata extends React.Component {
           </Fade>
         </Limiter>
         <footer className="wgsa-dropdown-footer wgsa-dropdown-footer--right">
-          <button
-            className={classnames('mdl-button', {
-              'mdl-button--raised mdl-button--colored': progress === 100,
-            })}
-            onClick={goBack}
-          >
-            Go back
-          </button>
+          {!this.state.uploading && (
+            <button
+              className={classnames('mdl-button', {
+                'mdl-button--raised mdl-button--colored': progress === 100,
+              })}
+              onClick={goBack}
+            >
+              Go back
+            </button>
+          )}
           <Fade out={false}>
             {this.state.error && (
               <button

@@ -5,7 +5,7 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import Selection from '../list';
 import Collection from '../collection';
 import Download from '../download';
-import Update from '../update';
+import Edit from '../edit';
 import Fade from '../../../components/fade';
 
 import { getSelectionDropdownView, getSelectionSize } from '../selectors';
@@ -36,10 +36,10 @@ const Dropdown = React.createClass({
   },
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.view === 'selection' && nextProps.view === 'update') {
+    if (this.props.view === 'selection' && nextProps.view === 'edit') {
       return this.setState({ slideDirection: 'right' });
     }
-    if (this.props.view === 'update' && nextProps.view === 'selection') {
+    if (this.props.view === 'edit' && nextProps.view === 'selection') {
       return this.setState({ slideDirection: 'left' });
     }
     if (nextProps.view === 'selection') {
@@ -63,7 +63,7 @@ const Dropdown = React.createClass({
                 {view === 'selection' && <Selection />}
                 {view === 'collection' && <Collection />}
                 {view === 'download' && <Download />}
-                {view === 'update' && <Update />}
+                {view === 'edit' && <Edit />}
               </ReactCSSTransitionGroup>
             ) : (
               EmptySelection

@@ -53,7 +53,7 @@ export default React.createClass({
     return (
       <form
         className={classnames(
-          'pw-update-metadata-form pw-update-metadata-section',
+          'pw-edit-metadata-form pw-edit-metadata-section',
           {
             indicating: this.state.indicatorVisible,
           }

@@ -19,7 +19,7 @@ export default React.createClass({
     if (this.props.error) {
       const { row = null, message } = this.props.error;
       return (
-        <div className="pw-update-metadata-progress error">
+        <div className="pw-edit-metadata-progress error">
           <p>
             Sorry! There was a problem
             {row !== null ? ` with row ${row}` : ''}:
@@ -31,7 +31,7 @@ export default React.createClass({
 
     const { result } = this.props;
     return (
-      <div className="pw-update-metadata-progress success">
+      <div className="pw-edit-metadata-progress success">
         <Fade out={false}>
           {result ? (
             <p key="complete">
