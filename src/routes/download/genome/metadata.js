@@ -7,7 +7,6 @@ const Genome = require('models/genome');
 const standardColumns = [
   'id',
   'displayname',
-  'filename',
   'latitude',
   'longitude',
   'day',
@@ -20,7 +19,6 @@ const transformer = function (doc) {
   const result = {
     id: doc._id.toString(),
     displayname: doc.name,
-    filename: doc.filename,
     latitude: doc.latitude,
     longitude: doc.longitude,
     day: doc.day,
@@ -56,7 +54,6 @@ module.exports = async (req, res) => {
   const projection = {
     country: 1,
     day: 1,
-    filename: 1,
     latitude: 1,
     longitude: 1,
     month: 1,
