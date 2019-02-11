@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
-const path = require('path');
 const escapeRegex = require('escape-string-regexp');
 
 const geocoding = require('geocoding');
@@ -26,7 +25,6 @@ const schema = new Schema({
   day: Number,
   errored: { type: Array, default: null },
   fileId: { type: String, index: true },
-  filename: { type: String, maxLength: 256, set: filename => path.basename(filename) },
   lastAccessedAt: Date,
   lastUpdatedAt: Date,
   latitude: Number,
