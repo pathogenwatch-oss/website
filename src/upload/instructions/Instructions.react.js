@@ -116,16 +116,24 @@ export default () => (
       <ul>
         <li>
           <a
-            href="/pathogenwatch-general-metadata-template.csv"
-            download="pathogenwatch-general-metadata-template.csv"
+            href="/pathogenwatch-metadata-template-reads.csv"
+            download="pathogenwatch-metadata-template-reads.csv"
           >
-            General
+            Reads
           </a>
         </li>
         <li>
           <a
-            href="/pathogenwatch-typhi-metadata-template.csv"
-            download="pathogenwatch-typhi-metadata-template.csv"
+            href="/pathogenwatch-metadata-template-assemblies.csv"
+            download="pathogenwatch-metadata-template-assemblies.csv"
+          >
+            Assemblies
+          </a>
+        </li>
+        <li>
+          <a
+            href="/pathogenwatch-metadata-template-typhi.csv"
+            download="pathogenwatch-metadata-template-typhi.csv"
           >
             <FormattedName organismId="90370" />
           </a>
