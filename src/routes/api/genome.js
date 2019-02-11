@@ -155,6 +155,17 @@ router.use('/genome', (req, res, next) => {
   next();
 });
 
+router.put('/genome', (req, res, next) => {
+  LOGGER.info('Received request to create genome records');
+
+  const { user, body } = req;
+
+  services
+    .request('genome', 'initialise', { user, data: body })
+    .then(response => res.json(response))
+    .catch(next);
+});
+
 function getStream(req) {
   if (req.headers['content-type'] === 'application/zip') {
     return req.pipe(zlib.createInflate());
@@ -163,19 +174,20 @@ function getStream(req) {
 }
 
 router.put(
-  '/genome',
+  '/genome/:id/assembly',
   contentLength.validateMax({ max: (config.maxGenomeFileSize || 10) * 1048576 }),
   (req, res, next) => {
-    LOGGER.info('Received request to create genome');
+    LOGGER.info('Received request to add genome assembly');
 
     const { user } = req;
-    const { name, uploadedAt, clientId } = req.query;
+    const { clientId } = req.query;
+    const { id } = req.params;
 
     services
-      .request('genome', 'create', {
+      .request('genome', 'upload', {
         timeout$: 1000 * 60 * 5,
         stream: getStream(req),
-        metadata: { name, uploadedAt },
+        id,
         user,
         clientId,
       })
