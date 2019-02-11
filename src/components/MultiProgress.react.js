@@ -21,8 +21,8 @@ export default class CircularProgress extends React.Component {
       segments.unshift({
         colour: segment.colour,
         name: segment.name,
-        dashOffset:
-          dashArray - (dashArray * (segment.percentage + percentAcc)) / 100,
+        dashOffset: dashArray - (dashArray * segment.percentage) / 100,
+        rotate: (360 / 100) * percentAcc - 90,
       });
       percentAcc += segment.percentage;
     }
@@ -57,6 +57,7 @@ export default class CircularProgress extends React.Component {
             style={{
               strokeDasharray: dashArray,
               strokeDashoffset: s.dashOffset,
+              transform: `rotate(${s.rotate}deg)`,
             }}
           />
         ))}

@@ -13,12 +13,12 @@
 
 .CircularProgress-Fg,
 .CircularProgress-Text {
-  transition-duration: 500ms;
+  transition-duration: 280ms;
   transition-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
 .CircularProgress-Fg {
-  transition-property: stroke-dashoffset, stroke;
+  transition-property: stroke-dashoffset, stroke, transform;
   /* stroke: #673c90; */
 }
 
