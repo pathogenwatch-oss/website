@@ -3,16 +3,35 @@ import classnames from 'classnames';
 
 import MultiProgress from '../../../components/MultiProgress.react';
 import ProgressBar from '../../../components/progress-bar';
-
 import Fade from '../../../components/fade';
 
 const exampleData = {
   1: {
     label: 'Stage 1',
-    statuses: [
-      { name: 'Complete', colour: '#673c90', percentage: 40, count: 2 },
-      { name: 'Running', colour: '#6cc2de', percentage: 20, count: 1 },
-    ],
+    progress: 0,
+    statuses: [],
+    // [
+    //   { name: 'Running', colour: '#6cc2de', percentage: 100, count: 1 },
+    //   { name: 'Complete', colour: '#673c90', percentage: 100, count: 1 },
+    // ],
+    // [
+    //   { name: 'Complete', colour: '#48996F', percentage: 100, count: 5 },
+    //   // { name: 'Running', colour: '#673c90', percentage: 20, count: 1 },
+    // ],
+  },
+  2: {
+    label: 'Stage 2',
+    progress: 0,
+    statuses: [],
+    // [
+    //   { name: 'Error', colour: '#d11b1b', percentage: 20, count: 1 },
+    //   { name: 'Complete', colour: '#48996F', percentage: 20, count: 1 },
+    //   { name: 'Running', colour: '#673c90', percentage: 20, count: 1 },
+    // ],
+    // [
+    //   { name: 'Running', colour: '#6cc2de', percentage: 20, count: 1 },
+    //   { name: 'Complete', colour: '#673c90', percentage: 40, count: 2 },
+    // ],
   },
 };
 
@@ -50,7 +69,12 @@ const Stage = ({
 }) => (
   <div className={classnames('pw-assembly-pipeline-stage', length)}>
     <Fade out>{showingDetails && <Details statuses={statuses} />}</Fade>
-    <header onClick={showDetails}>
+    <header
+      onClick={e => {
+        e.stopPropagation();
+        showDetails();
+      }}
+    >
       <MultiProgress
         radius="32"
         strokeWidth="8"
@@ -66,16 +90,18 @@ const Stage = ({
 export default () => {
   const [ stage, setStageDetail ] = React.useState(null);
   return (
-    <div className="pw-assembly-pipeline">
+    <div className="pw-assembly-pipeline" onClick={() => setStageDetail(null)}>
       <Stage
         statuses={exampleData[1].statuses}
-        progress={40}
+        progress={exampleData[1].progress}
         showDetails={() => setStageDetail('1')}
         showingDetails={stage === '1'}
       >
         Stage 1
       </Stage>
       <Stage
+        statuses={exampleData[2].statuses}
+        progress={exampleData[2].progress}
         showDetails={() => setStageDetail('2')}
         showingDetails={stage === '2'}
       >

@@ -10,7 +10,6 @@ import { getAuthToken } from '../../auth/actions';
 import { types } from '../constants';
 import * as utils from '../utils';
 import { processReads } from '../utils/resumable';
-import { create } from 'domain';
 
 export const ADD_GENOMES = 'ADD_GENOMES';
 
