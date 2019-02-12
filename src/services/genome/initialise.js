@@ -30,6 +30,7 @@ module.exports = async function ({ user, data, uploadedAt }) {
             ...metadata,
             uploadedAt,
             createdAt: new Date(),
+            _user: user._id,
           },
         },
       };

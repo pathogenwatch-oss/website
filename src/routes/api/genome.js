@@ -159,9 +159,10 @@ router.put('/genome', (req, res, next) => {
   LOGGER.info('Received request to create genome records');
 
   const { user, body } = req;
+  const { uploadedAt } = req.query;
 
   services
-    .request('genome', 'initialise', { user, data: body })
+    .request('genome', 'initialise', { user, data: body, uploadedAt })
     .then(response => res.json(response))
     .catch(next);
 });
