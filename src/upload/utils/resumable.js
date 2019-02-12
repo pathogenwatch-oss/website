@@ -70,7 +70,6 @@ export function processReads(genome, token, uploadedAt, dispatch) {
         }
       });
     });
-    const files = Object.values(genome.files);
     r.on('filesAdded', addedFiles => {
       send('POST', '/api/pipelines', headers, {
         session: uploadedAt,
@@ -78,6 +77,7 @@ export function processReads(genome, token, uploadedAt, dispatch) {
         files: addedFiles.map(f => ({
           filename: f.fileName,
           fileId: f.uniqueIdentifier,
+          totalChunks: f.chunks.length,
         })),
       })
         .then(response => {
@@ -89,6 +89,6 @@ export function processReads(genome, token, uploadedAt, dispatch) {
         })
         .catch(e => reject({ message: e.message }));
     });
-    r.addFiles(files);
+    r.addFiles(Object.values(genome.files));
   });
 }

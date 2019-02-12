@@ -19,7 +19,7 @@ export default ({ data, showBreakdown }) => (
               const analysis = analyses[analysisKey];
               if (analysis.active) {
                 return (
-                  <li key={analysisKey}>
+                  <li key={analysisKey} className="pw-with-success-icon">
                     {analysis.total === total ? (
                       <React.Fragment>
                         {analysis.label}

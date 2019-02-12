@@ -110,7 +110,12 @@
   padding-left: 24px;
 }
 
-.wgsa-upload-legend ul .material-icons {
+.pw-with-success-icon {
+  display: flex;
+  align-items: center;
+}
+
+.pw-with-success-icon i {
   font-size: 18px;
   margin-left: 4px;
   color: #48996f;

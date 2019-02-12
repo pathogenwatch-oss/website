@@ -290,6 +290,7 @@ export const getChartData = createSelector(
 export const getOverallProgress = createSelector(
   getUploadedGenomes,
   genomes => {
+    const assembly = { pending: 0, done: 0, total: 0 };
     const speciation = { pending: 0, done: 0, total: 0 };
     const tasks = { pending: 0, done: 0, total: 0 };
     let errors = 0;
@@ -313,10 +314,12 @@ export const getOverallProgress = createSelector(
       }
     }
 
+    assembly.done = assembly.total - assembly.pending;
     speciation.done = speciation.total - speciation.pending;
     tasks.done = tasks.total - tasks.pending;
 
     return {
+      assembly,
       speciation,
       tasks,
       errors,
@@ -346,3 +349,5 @@ export const hasErrors = createSelector(
   getOverallProgress,
   ({ errors }) => errors > 0
 );
+
+export const hasReads = createSelector(getUploadedFileList);

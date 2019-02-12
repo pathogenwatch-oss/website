@@ -12,43 +12,55 @@ export default connect(state => ({
   complete: upload.isAnalysisComplete(state),
   position: upload.getQueuePosition(state),
   hasErrors: upload.hasErrors(state),
-}))(
-  ({ isUploading, totalGenomes, progress, complete, position, hasErrors }) => {
-    if (isUploading || totalGenomes === 0) return null;
 
-    const { speciation, tasks } = progress;
+  // hasReads: upload.hasReads(state),
+}))(props => {
+  const {
+    isUploading,
+    totalGenomes,
+    progress,
+    complete,
+    position,
+    hasErrors,
 
-    const speciationPct = (speciation.done / totalGenomes) * 100;
-    const tasksPct = (tasks.done / tasks.total) * 100;
+    hasReads,
+  } = props;
+  if (isUploading || totalGenomes === 0) return null;
 
-    if (complete && hasErrors) {
-      return <strong>Analysis complete, with errors.</strong>;
-    }
+  const { assembly, speciation, tasks } = progress;
 
-    if (complete) {
-      return <strong>Analysis complete 🎉</strong>;
-    }
+  const assemblyPct = hasReads ? (assembly.done / totalGenomes) * 100 : 100;
+  const speciationPct = (speciation.done / totalGenomes) * 100;
+  const tasksPct = (tasks.done / tasks.total) * 100;
 
-    console.log('success');
-
-    return (
-      <div className="wgsa-upload-progress-overview">
-        <p>
-          {totalGenomes} genome{totalGenomes === 1 ? '' : 's'} uploaded
-          successfully.
-        </p>
-        <ProgressBar label="Speciation" progress={speciationPct} />
-        {speciationPct === 100 && (
-          <ProgressBar label="Tasks" progress={tasksPct} />
-        )}
-        {position > 0 ? (
-          <p>
-            {position} job{position === 1 ? '' : 's'} till next result.
-          </p>
-        ) : (
-          <p className="wgsa-blink">Results processing.</p>
-        )}
-      </div>
-    );
+  if (complete && hasErrors) {
+    return <strong>Analysis complete, with errors.</strong>;
   }
-);
+
+  if (complete) {
+    return <strong>Analysis complete 🎉</strong>;
+  }
+
+  return (
+    <div className="wgsa-upload-progress-overview">
+      <p className="pw-with-success-icon">
+        Uploaded {totalGenomes} genome{totalGenomes === 1 ? '' : 's'}
+        <i className="material-icons">check_circle</i>
+      </p>
+      {hasReads && <ProgressBar label="Assembly" progress={assemblyPct} />}
+      {assemblyPct === 100 && (
+        <ProgressBar label="Speciation" progress={speciationPct} />
+      )}
+      {speciationPct === 100 && (
+        <ProgressBar label="Analysis" progress={tasksPct} />
+      )}
+      {position > 0 ? (
+        <p>
+          {position} job{position === 1 ? '' : 's'} in analysis queue.
+        </p>
+      ) : (
+        <p className="wgsa-blink">Results processing.</p>
+      )}
+    </div>
+  );
+});
