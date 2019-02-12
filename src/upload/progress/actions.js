@@ -11,12 +11,16 @@ import { types } from '../constants';
 import * as utils from '../utils';
 import { processReads } from '../utils/resumable';
 
-export const ADD_GENOMES = 'ADD_GENOMES';
+export const ADD_GENOMES = createAsyncConstants('ADD_GENOMES');
 
 export function addGenomes(genomes, uploadedAt) {
   return {
     type: ADD_GENOMES,
-    payload: { genomes, uploadedAt },
+    payload: {
+      genomes,
+      uploadedAt,
+      promise: api.initialise(genomes, uploadedAt),
+    },
   };
 }
 
@@ -98,7 +102,8 @@ export const PROCESS_GENOME = createAsyncConstants('PROCESS_GENOME');
 function processGenome(id) {
   return (dispatch, getState) => {
     const state = getState();
-    const genome = selectors.getGenome(getState(), id);
+    const genome = selectors.getGenome(state, id);
+    const uploadedAt = selectors.getUploadedAt(state);
     const token = state.auth.token;
     return dispatch({
       type: PROCESS_GENOME,
@@ -106,7 +111,7 @@ function processGenome(id) {
         id,
         promise:
           genome.type === types.READS
-            ? processReads(genome, token, dispatch)
+            ? processReads(genome, token, uploadedAt, dispatch)
             : processAssembly(dispatch, getState, genome),
       },
     }).catch(error => error);

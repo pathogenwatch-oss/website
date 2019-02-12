@@ -2,6 +2,20 @@ import { fetchJson, fetchRaw } from '../utils/Api';
 
 import config from '../app/config';
 
+export function initialise(genomes, uploadedAt) {
+  // console.log({ genomes });
+  // throw new Error();
+  return fetchJson(
+    'PUT',
+    `/api/genome?uploadedAt=${uploadedAt}`,
+    genomes.map(_ => ({
+      id: _.id,
+      name: _.name,
+      ..._.metadata,
+    }))
+  );
+}
+
 export function upload({ file, uploadedAt }, data, progressFn) {
   return fetchRaw(
     'PUT',

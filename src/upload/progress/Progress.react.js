@@ -42,7 +42,7 @@ const Progress = ({
         </ReactCSSTransitionGroup>
         {files.pending > 0 && (
           <p>
-            +{files.pending} file{files.pending === 1 ? '' : 's'}.
+            +{files.pending} genome{files.pending === 1 ? '' : 's'}.
           </p>
         )}
         <Overview />

@@ -1,10 +1,20 @@
 import Resumable from 'resumablejs';
-
 import hashWorker from 'workerize-loader?name=hash.[hash]!./hashWorker';
-
 import config from '../../app/config';
 
-export function processReads(genome, token, dispatch) {
+function send(method, path, headers, data) {
+  return fetch(`${config.assemblerAddress}${path}`, {
+    method,
+    mode: 'cors',
+    headers: {
+      ...headers,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+}
+
+export function processReads(genome, token, uploadedAt, dispatch) {
   const worker = hashWorker();
   worker.onmessage = ({ data }) => {
     if (data.type === 'UPLOAD_READS_PROGRESS') {
@@ -12,13 +22,14 @@ export function processReads(genome, token, dispatch) {
       dispatch(data);
     }
   };
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
   const r = new Resumable({
-    target: `${config.assemblerAddress}/upload`,
+    target: `${config.assemblerAddress}/chunks`,
     simultaneousUploads: 5,
     generateUniqueIdentifier: file => worker.hash(file),
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+    headers,
   });
   r.on('chunkingProgress', (file, message) => {
     dispatch({
@@ -46,9 +57,38 @@ export function processReads(genome, token, dispatch) {
     r.on('error', (message, file) => {
       reject({ message, file });
     });
-    r.on('complete', resolve);
+    r.on('complete', () => {
+      send('PATCH', '/api/pipelines', headers, {
+        session: uploadedAt,
+        genomeId: genome.id,
+        status: 'READS_UPLOADED',
+      }).then(response => {
+        if (response.status !== 200) {
+          reject({ message: response.statusText });
+        } else {
+          resolve();
+        }
+      });
+    });
     const files = Object.values(genome.files);
-    r.on('filesAdded', () => r.upload());
+    r.on('filesAdded', addedFiles => {
+      send('POST', '/api/pipelines', headers, {
+        session: uploadedAt,
+        genomeId: genome.id,
+        files: addedFiles.map(f => ({
+          filename: f.fileName,
+          fileId: f.uniqueIdentifier,
+        })),
+      })
+        .then(response => {
+          if (response.status !== 201) {
+            reject({ message: response.statusText });
+          } else {
+            r.upload();
+          }
+        })
+        .catch(e => reject({ message: e.message }));
+    });
     r.addFiles(files);
   });
 }

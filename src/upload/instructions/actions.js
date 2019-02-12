@@ -7,20 +7,24 @@ import { addGenomes } from '../progress/actions';
 
 export function addFiles(newFiles) {
   const uploadedAt = new Date().toISOString();
-  return (dispatch) =>
-    utils.mapCSVsToGenomes(newFiles, uploadedAt)
+  return dispatch =>
+    utils
+      .mapCSVsToGenomes(newFiles, uploadedAt)
       .then(parsedFiles => {
-        dispatch(addGenomes(parsedFiles, uploadedAt));
-        history.push(`/upload/${uploadedAt}`);
+        dispatch(addGenomes(parsedFiles, uploadedAt)).then(() =>
+          history.push(`/upload/${uploadedAt}`)
+        );
       })
       .catch(error => {
         if (error.toast) {
           dispatch(showToast(error.toast));
         } else if (error.message) {
-          dispatch(showToast({
-            message: `🚫 ${error.message}. Please try again.`,
-            autohide: false,
-          }));
+          dispatch(
+            showToast({
+              message: `🚫 ${error.message}. Please try again.`,
+              autohide: false,
+            })
+          );
         } else {
           dispatch(showToast({ message: 'Sorry, something went wrong 😞' }));
         }

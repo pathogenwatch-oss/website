@@ -23,6 +23,16 @@ function initialiseFiles(state, files) {
   }, state);
 }
 
+function replaceIds(genomes, idPairs) {
+  const idMap = {};
+  for (const { serverId, clientId } of idPairs) {
+    idMap[clientId] = serverId;
+  }
+  for (const genome of genomes) {
+    genome.id = idMap[genome.id];
+  }
+}
+
 const initialState = {
   files: {},
   queue: [],
@@ -36,7 +46,8 @@ const initialState = {
 
 export default function (state = initialState, { type, payload }) {
   switch (type) {
-    case actions.ADD_GENOMES: {
+    case actions.ADD_GENOMES.SUCCESS: {
+      replaceIds(payload.genomes, payload.result);
       const ids = payload.genomes.map(_ => _.id);
       const [ first ] = payload.genomes;
       return {

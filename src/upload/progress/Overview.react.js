@@ -29,10 +29,12 @@ export default connect(state => ({
       return <strong>Analysis complete 🎉</strong>;
     }
 
+    console.log('success');
+
     return (
       <div className="wgsa-upload-progress-overview">
         <p>
-          {totalGenomes} file{totalGenomes === 1 ? '' : 's'} uploaded
+          {totalGenomes} genome{totalGenomes === 1 ? '' : 's'} uploaded
           successfully.
         </p>
         <ProgressBar label="Speciation" progress={speciationPct} />
