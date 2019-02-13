@@ -9,12 +9,15 @@ module.exports = async function ({ user, data, uploadedAt }) {
   }
 
   if (!Array.isArray(data)) {
-    throw new ServiceRequestError('Data is not an array.');
+    throw new ServiceRequestError('Data is not an array');
   }
 
   try {
     for (const row of data) {
-      validateMetadata(row);
+      if (!row.id) {
+        throw new Error('Missing client id');
+      }
+      validateMetadata(row.metadata);
     }
   } catch (e) {
     console.error(e);
@@ -22,19 +25,21 @@ module.exports = async function ({ user, data, uploadedAt }) {
   }
 
   return Genome.bulkWrite(
-    data.map(row => {
-      const metadata = Genome.getMetadataUpdate(row);
-      return {
-        insertOne: {
-          document: {
-            ...metadata,
-            uploadedAt,
-            createdAt: new Date(),
-            _user: user._id,
+    data.map(row => ({
+      insertOne: {
+        document: {
+          name: row.id,
+          ...row.metadata,
+          _user: user._id,
+          createdAt: new Date(),
+          upload: {
+            type: row.type,
+            files: row.files,
           },
+          uploadedAt,
         },
-      };
-    })
+      },
+    }))
   ).then(result =>
     data.map((_, i) => ({
       clientId: _.id,

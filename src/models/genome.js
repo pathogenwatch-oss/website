@@ -35,9 +35,10 @@ const schema = new Schema({
   pmid: { type: String, maxLength: 16 },
   population: { type: Boolean, default: false, index: true },
   public: { type: Boolean, default: false, index: true },
-  reads: {
-    files: Object,
-    uploaded: { type: Boolean, default: false },
+  upload: {
+    type: { type: String, enum: [ 'reads', 'assembly' ] },
+    files: { type: [ String ] },
+    completed: { type: Boolean, default: false },
   },
   reference: { type: Boolean, default: false },
   uploadedAt: Date,
