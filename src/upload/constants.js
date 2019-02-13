@@ -8,8 +8,8 @@ export const statuses = {
 };
 
 export const types = {
-  READS: 'READS',
-  ASSEMBLY: 'ASSEMBLY',
+  READS: 'reads',
+  ASSEMBLY: 'assembly',
 };
 
 export const views = {

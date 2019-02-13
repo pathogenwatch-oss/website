@@ -1,28 +1,26 @@
 import { fetchJson, fetchRaw } from '../utils/Api';
 
-import config from '../app/config';
-
 export function initialise(genomes, uploadedAt) {
-  // console.log({ genomes });
-  // throw new Error();
   return fetchJson(
     'PUT',
     `/api/genome?uploadedAt=${uploadedAt}`,
     genomes.map(_ => ({
       id: _.id,
-      name: _.name,
-      ..._.metadata,
+      type: _.type,
+      files: _.file ? [ _.file.name ] : _.files.map(f => f.name),
+      metadata: {
+        name: _.name,
+        ..._.metadata,
+      },
     }))
   );
 }
 
-export function upload({ file, uploadedAt }, data, progressFn) {
+export function upload({ id, uploadedAt }, data, progressFn) {
   return fetchRaw(
     'PUT',
-    `/api/genome?${$.param({
-      name: file.name,
-      uploadedAt,
-      clientId: config.clientId,
+    `/api/genome/${id}/assembly?${$.param({
+      clientId: uploadedAt,
     })}`,
     data instanceof Uint8Array ? 'application/zip' : 'text/plain',
     data,
