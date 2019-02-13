@@ -721,9 +721,9 @@ caseless@~0.12.0:
   resolved "https://registry.yarnpkg.com/caseless/-/caseless-0.12.0.tgz#1b681c21ff84033c826543090689420d187151dc"
   integrity sha1-G2gcIf+EAzyCZUMJBolCDRhxUdw=
 
-"cgps-user-accounts@https://gitlab.com/cgps/cgps-user-accounts#v2.1.0":
-  version "2.1.0"
-  resolved "https://gitlab.com/cgps/cgps-user-accounts#4469f9ec3c51f01bc6421f5b989cd179965c9ac1"
+"cgps-user-accounts@https://gitlab.com/cgps/cgps-user-accounts#v2.1.1":
+  version "2.1.1"
+  resolved "https://gitlab.com/cgps/cgps-user-accounts#e8695fef7121c5866f9abfecfb4425af5bee50fc"
   dependencies:
     emailjs "^1.0.8"
     https-proxy-agent "^2.2.1"
@@ -3978,9 +3978,9 @@ path-type@^2.0.0:
     writers-digest "^1.0.0"
     zip-stream "^1.2.0"
 
-"pathogenwatch-front-end@https://gitlab.com/cgps/pathogenwatch-front-end#v7.4.0":
-  version "7.4.0"
-  resolved "https://gitlab.com/cgps/pathogenwatch-front-end#be0c1d77bdeeb9f1fc7e20fb376965ebafd6e38e"
+"pathogenwatch-front-end@https://gitlab.com/cgps/pathogenwatch-front-end#v7.4.1":
+  version "7.4.1"
+  resolved "https://gitlab.com/cgps/pathogenwatch-front-end#61744f65d9f1a693ca60fd1e51cc24e4821b50a7"
 
 patrun@1.0:
   version "1.0.0"
