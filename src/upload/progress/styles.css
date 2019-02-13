@@ -4,12 +4,15 @@
 }
 
 .wgsa-upload-progress > :first-child {
-  width: 25%;
+  width: 320px;
 }
 
 .wgsa-upload-progress > :last-child {
-  width: calc(75% - 16px);
+  margin-left: 16px;
+  flex-grow: 1;
   position: relative;
+  flex-basis: 320px;
+  min-width: 560px;
 }
 
 .wgsa-upload-card-list {

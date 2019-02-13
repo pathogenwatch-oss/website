@@ -42,7 +42,7 @@ function flattenCSVs(files) {
   return files.reduce((memo, { data = {} }) => memo.concat(data), []);
 }
 
-const READS_FILENAME_REGEX = /^(\w*)[_\.]R?[12]\.fastq\.gz$/;
+const READS_FILENAME_REGEX = /^(.*)[_\.]R?[12]\.fastq\.gz$/;
 const ASSEMBLY_FILENAME_REGEX = new RegExp(
   `(${ASSEMBLY_FILE_EXTENSIONS.join('|')})$`,
   'i'

@@ -2,6 +2,8 @@ import Resumable from 'resumablejs';
 import hashWorker from 'workerize-loader?name=hash.[hash]!./hashWorker';
 import config from '../../app/config';
 
+const { origin = window.location.origin } = config;
+
 function send(method, path, headers, data) {
   return fetch(`${config.assemblerAddress}${path}`, {
     method,
@@ -74,6 +76,9 @@ export function processReads(genome, token, uploadedAt, dispatch) {
       send('POST', '/api/pipelines', headers, {
         session: uploadedAt,
         genomeId: genome.id,
+        callback: `${origin}/api/genome/${
+          genome.id
+        }/assembly?clientId=${uploadedAt}`,
         files: addedFiles.map(f => ({
           filename: f.fileName,
           fileId: f.uniqueIdentifier,

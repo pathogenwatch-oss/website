@@ -1,9 +1,12 @@
 import React from 'react';
-import classnames from 'classnames';
+import { connect } from 'react-redux';
+import 'eventsource/lib/eventsource-polyfill';
 
-import MultiProgress from '../../../components/MultiProgress.react';
-import ProgressBar from '../../../components/progress-bar';
-import Fade from '../../../components/fade';
+import Stage from './Stage.react';
+
+import { getAuthToken } from '../../../auth/actions';
+
+import config from '../../../app/config';
 
 const exampleData = {
   1: {
@@ -35,73 +38,46 @@ const exampleData = {
   },
 };
 
-const Details = ({ statuses = [] }) => (
-  <div className="pw-assembly-pipeline-details mdl-shadow--2dp">
-    {statuses.length ? (
-      <table>
-        <tbody>
-          {statuses.map(status => (
-            <tr>
-              <td>
-                <i className="material-icons" style={{ color: status.colour }}>
-                  stop
-                </i>
-                <span>{status.name}</span>
-              </td>
-              <td>{status.count}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    ) : (
-      <p>No progress</p>
-    )}
-  </div>
-);
-
-const Stage = ({
-  children,
-  length,
-  progress,
-  statuses,
-  showDetails,
-  showingDetails,
-}) => (
-  <div className={classnames('pw-assembly-pipeline-stage', length)}>
-    <Fade out>{showingDetails && <Details statuses={statuses} />}</Fade>
-    <header
-      onClick={e => {
-        e.stopPropagation();
-        showDetails();
-      }}
-    >
-      <MultiProgress
-        radius="32"
-        strokeWidth="8"
-        segments={statuses}
-        progress={progress}
-      />
-      <p>{children}</p>
-    </header>
-    <ProgressBar progress={progress} />
-  </div>
-);
-
-export default () => {
+const Pipeline = ({
+  getToken,
+  status = exampleData,
+  token,
+  updateStatus = msg => console.log(msg),
+  uploadedAt,
+}) => {
   const [ stage, setStageDetail ] = React.useState(null);
+  React.useEffect(() => {
+    if (!token) {
+      getToken();
+    }
+  }, []);
+  React.useEffect(() => {
+    if (token) {
+      const eventSource = new window.EventSourcePolyfill(
+        `${config.assemblerAddress}/api/sessions/${uploadedAt}`,
+        { headers: { Authorization: `Bearer ${token}`, 'cache-control': null } }
+      );
+      eventSource.onmessage = e => {
+        updateStatus(e.data);
+      };
+      return () => {
+        eventSource.close();
+      };
+    }
+  }, [ token, uploadedAt ]);
   return (
     <div className="pw-assembly-pipeline" onClick={() => setStageDetail(null)}>
       <Stage
-        statuses={exampleData[1].statuses}
-        progress={exampleData[1].progress}
+        statuses={status[1].statuses}
+        progress={status[1].progress}
         showDetails={() => setStageDetail('1')}
         showingDetails={stage === '1'}
       >
         Stage 1
       </Stage>
       <Stage
-        statuses={exampleData[2].statuses}
-        progress={exampleData[2].progress}
+        statuses={status[2].statuses}
+        progress={status[2].progress}
         showDetails={() => setStageDetail('2')}
         showingDetails={stage === '2'}
       >
@@ -118,3 +94,22 @@ export default () => {
     </div>
   );
 };
+
+function mapStateToProps(state) {
+  return {
+    token: state.auth.token,
+    // status: getAssemblyStatus(state),
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    getToken: () => dispatch(getAuthToken()),
+    // updateStatus: data => dispatch(updateAssemblyStatus(data)),
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Pipeline);

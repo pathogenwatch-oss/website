@@ -69,7 +69,7 @@ const Progress = ({
       <ViewSwitcher view={view} />
       <Fade className="pw-upload-progress-view">
         {view === views.ASSEMBLY ? (
-          <AssemblyPipeline key={views.ASSEMBLY} />
+          <AssemblyPipeline key={views.ASSEMBLY} uploadedAt={uploadedAt} />
         ) : (
           <AnalysisChart key={views.ANALYSIS} uploadedAt={uploadedAt} />
         )}

@@ -39,6 +39,7 @@
     "ejs": "^2.5.1",
     "ejs-loader": "^0.3.0",
     "eslint-config-cgps": "github:cgps-dev/eslint-config-cgps#v2.1.1",
+    "eventsource": "^1.0.7",
     "express": "^4.12.2",
     "extract-text-webpack-plugin": "^3.0.2",
     "file-loader": "^0.10.0",
