@@ -2,7 +2,6 @@ import React from 'react';
 import classnames from 'classnames';
 
 export default React.createClass({
-
   propTypes: {
     isVisible: React.PropTypes.bool.isRequired,
     hide: React.PropTypes.func.isRequired,
@@ -33,11 +32,8 @@ export default React.createClass({
           { 'wgsa-overlay--no-content': !this.props.children }
         )}
       >
-        {React.cloneElement(
-          this.props.children, { onClick: e => e.stopPropagation() }
-        )}
+        {this.props.children}
       </div>
     );
   },
-
 });

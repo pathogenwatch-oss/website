@@ -56,7 +56,7 @@ const Content = React.createClass({
     }
     return (
       <React.Fragment>
-        <nav>
+        <nav onClick={this.props.onClick}>
           <ScrollSpy
             items={sections.map(_ => _.key.toLowerCase())}
             currentClassName="active"
@@ -75,7 +75,10 @@ const Content = React.createClass({
           </ScrollSpy>
           <RemoveButton key="remove" genome={genome} onRemove={close} />
         </nav>
-        <div className="wgsa-genome-report-content">
+        <div
+          className="wgsa-genome-report-content"
+          onClick={this.props.onClick}
+        >
           {sections.map(({ key, component }) => (
             <section
               key={key}

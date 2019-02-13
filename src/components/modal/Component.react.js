@@ -4,7 +4,6 @@ import classnames from 'classnames';
 import Overlay from '../overlay';
 
 export default React.createClass({
-
   propTypes: {
     actions: React.PropTypes.array,
     children: React.PropTypes.node,
@@ -20,12 +19,17 @@ export default React.createClass({
 
   render() {
     return (
-      <div className={classnames('wgsa-modal-container', this.props.containerClassName)}>
+      <div
+        className={classnames(
+          'wgsa-modal-container',
+          this.props.containerClassName
+        )}
+      >
         <Overlay isVisible hide={this.props.onClose}>
           <aside className={classnames('wgsa-modal', this.props.className)}>
-            <header>
+            <header onClick={e => e.stopPropagation()}>
               {this.props.title}
-              <div className="wgsa-modal-actions" onClick={e => e.stopPropagation()}>
+              <div className="wgsa-modal-actions">
                 {this.props.actions}
                 <button
                   className="mdl-button mdl-button--icon"
@@ -36,11 +40,12 @@ export default React.createClass({
                 </button>
               </div>
             </header>
-            { this.props.children }
+            {React.cloneElement(this.props.children, {
+              onClick: e => e.stopPropagation(),
+            })}
           </aside>
         </Overlay>
       </div>
     );
   },
-
 });
