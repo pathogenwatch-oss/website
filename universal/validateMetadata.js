@@ -7,7 +7,7 @@ module.exports = function validateMetadata(row) {
     latitude = null,
     longitude = null,
     pmid = '',
-    userDefined,
+    userDefined = {},
   } = row;
 
   let error;
