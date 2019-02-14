@@ -4,14 +4,14 @@ import CONFIG from '../app/config';
 
 let pusher = null;
 
-export function subscribe(channelId, message, callback) {
-  console.log('[Pusher] Subscribing to', channelId, message);
+export function subscribe(channelId, topic, callback) {
+  console.log('[Pusher] Subscribing to', channelId, topic);
   if (pusher === null) {
     pusher = new Pusher(CONFIG.pusherKey, { encrypted: true });
   }
 
   const channel = pusher.subscribe(channelId);
-  return channel.bind(message, callback);
+  return channel.bind(topic, callback);
 }
 
 export function unsubscribe(channelId) {
