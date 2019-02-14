@@ -2,7 +2,7 @@ import { createSelector } from 'reselect';
 
 import { isInvalidUpload, isFailedUpload } from '../utils/validation';
 import { getColourGenerator, getLightColour } from '../../utils/colours';
-import { statuses } from '../constants';
+import { statuses, types } from '../constants';
 
 import { getOrganismName } from '../../organisms';
 import { DEFAULT } from '../../app/constants';
@@ -344,4 +344,14 @@ export const hasErrors = createSelector(
   ({ errors }) => errors > 0
 );
 
-export const hasReads = createSelector(getUploadedGenomeList);
+export const hasReads = createSelector(
+  getUploadedGenomeList,
+  genomes => {
+    for (const genome of genomes) {
+      if (genome.type === types.READS) return true;
+    }
+    return false;
+  }
+);
+
+export const getAssemblyStatus = state => getProgress(state).assembly;

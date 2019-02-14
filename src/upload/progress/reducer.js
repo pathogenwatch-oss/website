@@ -31,7 +31,8 @@ const initialState = {
   genomes: {},
   uploadedAt: null,
   selectedOrganism: null,
-  view: views.ANALYSIS,
+  view: null,
+  assembly: {},
 };
 
 export default function (state = initialState, { type, payload }) {
@@ -59,10 +60,13 @@ export default function (state = initialState, { type, payload }) {
       };
     }
     case actions.PROCESS_GENOME.ATTEMPT: {
+      const { id } = payload;
+      const { genomes } = state;
       return {
         ...state,
         queue: state.queue.slice(1),
-        processing: new Set([ ...state.processing, payload.id ]),
+        processing: new Set([ ...state.processing, id ]),
+        genomes: updateGenome(genomes, id, { status: statuses.QUEUED }),
       };
     }
     case actions.COMPRESS_GENOME.ATTEMPT: {
@@ -183,6 +187,8 @@ export default function (state = initialState, { type, payload }) {
     case actions.UPLOAD_FETCH_GENOMES.SUCCESS: {
       const nextGenomes = {};
       const { files, position } = payload.result;
+      let hasReads = false;
+      let incomplete = false;
       for (const genome of files) {
         const pendingAnalysis = {};
         if (genome.pending) {
@@ -195,7 +201,12 @@ export default function (state = initialState, { type, payload }) {
             pendingAnalysis[task] = false;
           }
         }
-
+        if (genome.type === types.READS) {
+          hasReads = true;
+        }
+        if (genome.files) {
+          incomplete = true;
+        }
         nextGenomes[genome.id] = {
           ...state.genomes[genome.id],
           ...genome,
@@ -209,10 +220,20 @@ export default function (state = initialState, { type, payload }) {
           },
         };
       }
-
+      let view;
+      if (state.view !== null) {
+        view = state.view;
+      } else if (incomplete) {
+        view = views.RECOVERY;
+      } else if (hasReads) {
+        view = views.ASSEMBLY;
+      } else {
+        view = views.ANALYSIS;
+      }
       return {
         ...state,
         position,
+        view,
         selectedOrganism: null,
         genomes: nextGenomes,
       };
@@ -236,7 +257,6 @@ export default function (state = initialState, { type, payload }) {
           ...state.genomes,
           [payload.id]: {
             ...genome,
-            status: statuses.UPLOADING,
             files: {
               ...genome.files,
               [payload.file]: {
@@ -248,12 +268,16 @@ export default function (state = initialState, { type, payload }) {
         },
       };
     }
-    case 'SET_PROGRESS_VIEW': {
+    case 'SET_PROGRESS_VIEW':
       return {
         ...state,
         view: payload.view,
       };
-    }
+    case 'ASSEMBLY_PIPELINE_STATUS':
+      return {
+        ...state,
+        assembly: payload,
+      };
     default:
       return state;
   }

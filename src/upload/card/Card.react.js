@@ -3,10 +3,9 @@ import React from 'react';
 import ProgressBar from '../../components/progress-bar';
 
 import Header from './Header.react';
-// import GenomeTasks from './GenomeTasks.react';
 import GenomeError from './GenomeError.react';
 
-import { statuses } from '../constants';
+import { statuses, types } from '../constants';
 
 const stages = {
   IDENTIFY: 'Identifying',
@@ -51,7 +50,7 @@ function renderAssemblyProgress(genome) {
 
 export default ({ item }) => {
   const content =
-    item.type === 'READS'
+    item.type === types.READS
       ? renderReadsProgress(item)
       : renderAssemblyProgress(item);
   return (

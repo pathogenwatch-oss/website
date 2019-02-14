@@ -4,7 +4,10 @@ import 'eventsource/lib/eventsource-polyfill';
 
 import Stage from './Stage.react';
 
+import { getAssemblyStatus } from '../selectors';
+
 import { getAuthToken } from '../../../auth/actions';
+import { updateAssemblyStatus } from './actions';
 
 import config from '../../../app/config';
 
@@ -38,19 +41,8 @@ const exampleData = {
   },
 };
 
-const Pipeline = ({
-  getToken,
-  status = exampleData,
-  token,
-  updateStatus = msg => console.log(msg),
-  uploadedAt,
-}) => {
+const Pipeline = ({ getToken, status, token, updateStatus, uploadedAt }) => {
   const [ stage, setStageDetail ] = React.useState(null);
-  React.useEffect(() => {
-    if (!token) {
-      getToken();
-    }
-  }, []);
   React.useEffect(() => {
     if (token) {
       const eventSource = new window.EventSourcePolyfill(
@@ -64,20 +56,21 @@ const Pipeline = ({
         eventSource.close();
       };
     }
+    getToken();
   }, [ token, uploadedAt ]);
   return (
     <div className="pw-assembly-pipeline" onClick={() => setStageDetail(null)}>
       <Stage
-        statuses={status[1].statuses}
-        progress={status[1].progress}
+        // statuses={status[1].statuses}
+        // progress={status[1].progress}
         showDetails={() => setStageDetail('1')}
         showingDetails={stage === '1'}
       >
         Stage 1
       </Stage>
       <Stage
-        statuses={status[2].statuses}
-        progress={status[2].progress}
+        // statuses={status[2].statuses}
+        // progress={status[2].progress}
         showDetails={() => setStageDetail('2')}
         showingDetails={stage === '2'}
       >
@@ -98,14 +91,14 @@ const Pipeline = ({
 function mapStateToProps(state) {
   return {
     token: state.auth.token,
-    // status: getAssemblyStatus(state),
+    status: getAssemblyStatus(state),
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     getToken: () => dispatch(getAuthToken()),
-    // updateStatus: data => dispatch(updateAssemblyStatus(data)),
+    updateStatus: data => dispatch(updateAssemblyStatus(data)),
   };
 }
 

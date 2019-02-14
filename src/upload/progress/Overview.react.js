@@ -6,24 +6,22 @@ import ProgressBar from '../../components/progress-bar';
 import * as upload from './selectors';
 
 export default connect(state => ({
-  isUploading: upload.isUploading(state),
-  totalGenomes: upload.getUploadedGenomeList(state).length,
-  progress: upload.getOverallProgress(state),
   complete: upload.isAnalysisComplete(state),
-  position: upload.getQueuePosition(state),
   hasErrors: upload.hasErrors(state),
-
-  // hasReads: upload.hasReads(state),
+  hasReads: upload.hasReads(state),
+  isUploading: upload.isUploading(state),
+  position: upload.getQueuePosition(state),
+  progress: upload.getOverallProgress(state),
+  totalGenomes: upload.getUploadedGenomeList(state).length,
 }))(props => {
   const {
-    isUploading,
-    totalGenomes,
-    progress,
     complete,
-    position,
     hasErrors,
-
     hasReads,
+    isUploading,
+    position,
+    progress,
+    totalGenomes,
   } = props;
   if (isUploading || totalGenomes === 0) return null;
 
@@ -48,17 +46,14 @@ export default connect(state => ({
         <i className="material-icons">check_circle</i>
       </p>
       {hasReads && <ProgressBar label="Assembly" progress={assemblyPct} />}
-      {assemblyPct === 100 && (
-        <ProgressBar label="Speciation" progress={speciationPct} />
-      )}
-      {speciationPct === 100 && (
-        <ProgressBar label="Analysis" progress={tasksPct} />
-      )}
-      {position > 0 ? (
+      <ProgressBar label="Speciation" progress={speciationPct} />
+      <ProgressBar label="Analysis" progress={tasksPct} />
+      {assemblyPct === 100 && position > 0 && (
         <p>
-          {position} job{position === 1 ? '' : 's'} in analysis queue.
+          {position} job{position === 1 ? '' : 's'} till next result.
         </p>
-      ) : (
+      )}
+      {assemblyPct === 100 && position === 0 && (
         <p className="wgsa-blink">Results processing.</p>
       )}
     </div>

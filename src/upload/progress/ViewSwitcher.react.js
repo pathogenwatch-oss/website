@@ -2,6 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
 
+import { hasReads } from './selectors';
+
 import { setProgressView } from './actions';
 
 import { views } from '../constants';
@@ -15,23 +17,32 @@ const Button = ({ active, children, onClick }) => (
   </button>
 );
 
-const Switcher = ({ view, setView }) => (
-  <header className="wgsa-upload-progress-switcher">
-    <Button
-      active={view === views.ASSEMBLY}
-      onClick={() => setView(views.ASSEMBLY)}
-    >
-      Assembly
-    </Button>
-    |
-    <Button
-      active={view === views.ANALYSIS}
-      onClick={() => setView(views.ANALYSIS)}
-    >
-      Analysis
-    </Button>
-  </header>
-);
+const Switcher = ({ view, setView, sessionHasReads }) =>
+  (sessionHasReads ? (
+    <header className="wgsa-upload-progress-switcher">
+      <Button
+        active={view === views.ASSEMBLY}
+        onClick={() => setView(views.ASSEMBLY)}
+      >
+        Assembly
+      </Button>
+      |
+      <Button
+        active={view === views.ANALYSIS}
+        onClick={() => setView(views.ANALYSIS)}
+      >
+        Analysis
+      </Button>
+    </header>
+  ) : (
+    <h2 className="wgsa-section-title">Analysis</h2>
+  ));
+
+function mapStateToProps(state) {
+  return {
+    sessionHasReads: hasReads(state),
+  };
+}
 
 function mapDispatchToProps(dispatch) {
   return {
@@ -40,6 +51,6 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(Switcher);

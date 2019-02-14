@@ -8,7 +8,7 @@ export function hash(file) {
   const fileReader = new FileReaderSync();
   const messageDigest = sha1.create().start();
 
-  const chunkSize = 1024 * 64;
+  const chunkSize = 1024 * 50;
   const chunks = Math.ceil(file.size / chunkSize);
   let currentChunk = 0;
 
@@ -23,12 +23,8 @@ export function hash(file) {
     currentChunk++;
     if (currentChunk % 100 === 0) {
       self.postMessage({
-        type: 'UPLOAD_READS_PROGRESS',
-        payload: {
-          file: file.name,
-          stage: 'IDENTIFY',
-          progress: (currentChunk / chunks) * 100,
-        },
+        file: file.name,
+        progress: (currentChunk / chunks) * 100,
       });
     }
   }

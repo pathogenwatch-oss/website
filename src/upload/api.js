@@ -10,7 +10,7 @@ export function initialise(genomes, uploadedAt) {
     genomes.map(_ => ({
       id: _.id,
       type: _.type,
-      files: _.file ? [ _.file.name ] : _.files.map(f => f.name),
+      files: _.file ? [ _.file.name ] : Object.keys(_.files),
       metadata: {
         name: _.name,
         ..._.metadata,
@@ -27,6 +27,10 @@ export function upload({ id }, data, progressFn) {
     data,
     progressFn
   );
+}
+
+export function uploadComplete(id) {
+  return fetchJson('POST', `/api/genome/${id}/uploaded`);
 }
 
 export function update(id, metadata) {

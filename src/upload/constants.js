@@ -1,10 +1,11 @@
 // N.B. this defines the sort order!
 export const statuses = {
-  UPLOADING: 0,
-  COMPRESSING: 1,
-  ERROR: 2,
-  SUCCESS: 3,
-  PENDING: 4,
+  PENDING: 0,
+  QUEUED: 1,
+  UPLOADING: 2,
+  COMPRESSING: 3,
+  ERROR: 4,
+  SUCCESS: 5,
 };
 
 export const types = {
@@ -13,6 +14,7 @@ export const types = {
 };
 
 export const views = {
-  ASSEMBLY: 0,
-  ANALYSIS: 1,
+  RECOVERY: 1,
+  ASSEMBLY: 2,
+  ANALYSIS: 3,
 };

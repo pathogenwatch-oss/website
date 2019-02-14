@@ -146,11 +146,23 @@
 }
 
 .wgsa-upload-progress .wgsa-section-title.active {
-  color: #673c90;
+  color: #673c90 !important;
+}
+
+.wgsa-upload-progress-switcher {
+  margin: 0 -4px;
 }
 
 .wgsa-upload-progress-switcher .wgsa-section-title {
   transition: var(--transition);
-  transition-property: color;
+  transition-property: color, background-color;
   color: rgba(0, 0, 0, 0.54);
+  outline: none;
+  margin: 0 4px;
+}
+
+.wgsa-upload-progress-switcher .wgsa-section-title:hover,
+.wgsa-upload-progress-switcher .wgsa-section-title:focus {
+  background-color: rgba(158, 158, 158, 0.2);
+  color: rgba(0, 0, 0, 0.87);
 }
