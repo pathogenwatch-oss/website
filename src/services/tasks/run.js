@@ -77,7 +77,7 @@ function runTask({ fileId, task, version, organismId, speciesId, genusId, timeou
   });
 }
 
-module.exports = async function({ task, version, metadata, timeout$: timeout = DEFAULT_TIMEOUT }) {
+module.exports = async function ({ task, version, metadata, timeout$: timeout = DEFAULT_TIMEOUT }) {
   const {
     organismId,
     speciesId,
