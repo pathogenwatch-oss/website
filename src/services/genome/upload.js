@@ -19,7 +19,7 @@ module.exports = async ({ timeout$, stream, user, id, clientId }) => {
   }
 
   const { fileId } = await request('genome', 'store', { timeout$, stream });
-  const doc = await Genome.findOneAndUpdate(id, { fileId }, { fields: { uploadedAt: 1 } });
+  const doc = await Genome.findByIdAndUpdate(id, { fileId }, { fields: { uploadedAt: 1 } });
   await request('tasks', 'submit-genome', {
     clientId,
     fileId,
