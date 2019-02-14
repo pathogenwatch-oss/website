@@ -40,10 +40,11 @@ module.exports = async function ({ user, data, uploadedAt }) {
         },
       },
     }))
-  ).then(result =>
-    data.map((_, i) => ({
-      clientId: _.id,
-      serverId: result.insertedIds[i],
-    }))
-  );
+  ).then(result => {
+    const idMap = {};
+    for (let i = 0; i < data.length; i++) {
+      idMap[data[i].id] = result.insertedIds[i];
+    }
+    return idMap;
+  });
 };
