@@ -14,7 +14,10 @@ import DocumentTitle from '../../branding/DocumentTitle.react';
 const ListItem = ({ item }) => {
   const { uploadedAt, total } = item;
   return (
-    <Link className="wgsa-genome-list-item wgsa-genome-list-item--selectable wgsa-card--bordered" to={`/upload/${uploadedAt}`}>
+    <Link
+      className="wgsa-genome-list-item wgsa-genome-list-item--selectable"
+      to={`/upload/${uploadedAt}`}
+    >
       <span>{new Date(uploadedAt).toLocaleString()}</span>
       <span>{total}</span>
     </Link>
@@ -24,12 +27,11 @@ const ListItem = ({ item }) => {
 const Header = () => (
   <header className="wgsa-genome-list-item wgsa-genome-list-header">
     <h3 className="wgsa-list-header-cell">Date Uploaded</h3>
-    <h3 className="wgsa-list-header-cell">Files</h3>
+    <h3 className="wgsa-list-header-cell">Genomes</h3>
   </header>
 );
 
 class Previous extends React.Component {
-
   componentDidMount() {
     this.props.fetch();
   }
@@ -40,7 +42,7 @@ class Previous extends React.Component {
       <div className="wgsa-hipster-style wgsa-previous-uploads">
         <DocumentTitle>Previous Uploads</DocumentTitle>
         <Summary previous />
-        { !!uploads.length ?
+        {!!uploads.length ? (
           <Grid
             className="wgsa-genome-list-view"
             template={ListItem}
@@ -49,16 +51,19 @@ class Previous extends React.Component {
             rowHeight={40}
             header={<Header />}
             headerHeight={25}
-          /> :
+          />
+        ) : (
           <div className="wgsa-content-margin">
-            { loading && <Spinner /> }
-            { error && <p>Failed to fetch previous uploads 😞</p> }
-            { !loading && uploads.length === 0 && <p>No previous uploads found.</p> }
-          </div> }
+            {loading && <Spinner />}
+            {error && <p>Failed to fetch previous uploads 😞</p>}
+            {!loading && uploads.length === 0 && (
+              <p>No previous uploads found.</p>
+            )}
+          </div>
+        )}
       </div>
     );
   }
-
 }
 
 function mapStateToProps(state) {
@@ -71,4 +76,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Previous);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Previous);

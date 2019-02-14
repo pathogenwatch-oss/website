@@ -14,12 +14,16 @@
   padding-right: 80px;
 }
 
+.wgsa-previous-uploads .wgsa-genome-list-item {
+  text-decoration: none;
+}
+
 .wgsa-previous-uploads .wgsa-genome-list-item > * {
   width: 50%;
   text-align: center;
 }
 
-@media(min-width: 960px) {
+@media (min-width: 960px) {
   .wgsa-previous-uploads .wgsa-genome-list-view {
     margin-left: calc(50vw - 400px);
   }
