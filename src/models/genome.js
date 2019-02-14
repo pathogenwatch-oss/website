@@ -14,6 +14,11 @@ function getDate(year, month = 1, day = 1) {
   return undefined;
 }
 
+const uploadTypes = {
+  READS: 'reads',
+  ASSEMBLY: 'assembly',
+};
+
 const schema = new Schema({
   _user: { type: Schema.Types.ObjectId, ref: 'User', index: true },
   analysis: Object,
@@ -36,9 +41,9 @@ const schema = new Schema({
   population: { type: Boolean, default: false, index: true },
   public: { type: Boolean, default: false, index: true },
   upload: {
-    type: { type: String, enum: [ 'reads', 'assembly' ] },
+    type: { type: String, enum: Object.values(uploadTypes) },
     files: { type: [ String ] },
-    completed: { type: Boolean, default: false },
+    complete: { type: Boolean, default: false },
   },
   reference: { type: Boolean, default: false },
   uploadedAt: Date,
@@ -57,6 +62,9 @@ schema.index({ 'analysis.speciator.speciesId': 1 });
 schema.index({ 'analysis.speciator.genusId': 1 });
 schema.index({ 'analysis.speciator.organismName': 1 });
 schema.index({ 'analysis.speciator.organismId': 1, 'analysis.speciator.organismName': 1 });
+schema.index({ 'upload.type': 1, 'upload.completed': 1 });
+
+schema.statics.uploadTypes = uploadTypes;
 
 schema.statics.taxonomy = genome => {
   const speciator = (genome.analysis || {}).speciator || {};

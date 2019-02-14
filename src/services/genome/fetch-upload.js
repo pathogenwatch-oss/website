@@ -6,6 +6,7 @@ module.exports = async function (props) {
     uploadedAt: 1,
     pending: 1,
     errored: 1,
+    upload: 1,
     'analysis.speciator.organismId': 1,
     'analysis.speciator.speciesId': 1,
     'analysis.speciator.genusId': 1,
@@ -23,17 +24,25 @@ module.exports = async function (props) {
     'analysis.inctyper.__v': 1,
   };
   const genomes = await Genome.find(Genome.getFilterQuery(props), projection).lean();
-
-  return genomes.map(genome => {
-    const { analysis = {} } = genome;
+  return genomes.map(doc => {
+    const { analysis = {}, upload = { complete: true, type: Genome.uploadTypes.ASSEMBLY } } = doc;
     const { mlst = {}, speciator = {} } = analysis;
-    genome.id = genome._id;
-    genome._id = undefined;
-    genome.st = mlst.st;
-    genome.organismId = speciator.organismId;
-    genome.organismName = speciator.organismName;
+    const genome = {
+      analysis: {},
+      errored: doc.errored,
+      id: doc._id,
+      organismId: speciator.organismId,
+      organismName: speciator.organismName,
+      pending: doc.pending,
+      st: mlst.st,
+      type: upload.type,
+      uploadedAt: doc.uploadedAt,
+    };
+    if (!upload.complete) {
+      genome.files = upload.files;
+    }
     for (const task of Object.keys(analysis)) {
-      analysis[task] = analysis[task].__v;
+      genome.analysis[task] = analysis[task].__v;
     }
     return genome;
   });

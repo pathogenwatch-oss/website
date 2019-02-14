@@ -209,6 +209,17 @@ router.post('/genome/bin', (req, res, next) => {
     .catch(next);
 });
 
+router.post('/genome/:id/uploaded', (req, res, next) => {
+  LOGGER.info('Received request to confirm genome uploaded');
+  const { id } = req.params;
+  const { user } = req;
+
+  services
+    .request('genome', 'uploaded', { id, user })
+    .then(response => res.json(response))
+    .catch(next);
+});
+
 router.post('/genome/:id', (req, res, next) => {
   LOGGER.info('Received request to edit genome');
 
