@@ -2,7 +2,7 @@ import Resumable from 'resumablejs';
 import hashWorker from 'workerize-loader?name=hash.[hash]!./hashWorker';
 import config from '../../app/config';
 
-const { origin = window.location.origin } = config;
+const { origin = window.location.origin, clientId } = config;
 
 function send(method, path, headers, data) {
   return fetch(`${config.assemblerAddress}${path}`, {
@@ -78,7 +78,7 @@ export function processReads(genome, token, uploadedAt, dispatch) {
         genomeId: genome.id,
         callback: `${origin}/api/genome/${
           genome.id
-        }/assembly?clientId=${uploadedAt}`,
+        }/assembly?clientId=${clientId}`,
         files: addedFiles.map(f => ({
           filename: f.fileName,
           fileId: f.uniqueIdentifier,
