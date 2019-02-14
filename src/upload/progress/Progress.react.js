@@ -80,7 +80,7 @@ const Progress = ({
 
 function mapStateToProps(state) {
   return {
-    inProgress: upload.getFilesInProgress(state),
+    inProgress: upload.getGenomesInProgress(state),
     errored: upload.getInvalidUploads(state),
     files: upload.getFileSummary(state),
     analysis: upload.getAnalysisSummary(state),

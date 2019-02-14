@@ -20,19 +20,13 @@ const getProcessing = createSelector(
   uploads => uploads.processing
 );
 
-export const getUploadedFiles = state => getProgress(state).files;
 export const getUploadedAt = state => getProgress(state).uploadedAt;
-export const getGenome = (state, id) => getUploadedFiles(state)[id];
 export const getUploadedGenomes = state => getProgress(state).genomes;
+export const getGenome = (state, id) => getUploadedGenomes(state)[id];
 export const getSelectedOrganism = state => getProgress(state).selectedOrganism;
 export const getQueuePosition = state => getProgress(state).position;
 export const getLastMessageReceived = state =>
   getProgress(state).lastMessageReceived;
-
-export const getUploadedFileList = createSelector(
-  getUploadedFiles,
-  files => Object.keys(files).map(id => files[id])
-);
 
 export const getUploadedGenomeList = createSelector(
   getUploadedGenomes,
@@ -40,14 +34,14 @@ export const getUploadedGenomeList = createSelector(
 );
 
 export const getBatchSize = createSelector(
-  getUploadedFileList,
+  getUploadedGenomeList,
   list => list.length
 );
 
-export const getFilesInProgress = createSelector(
+export const getGenomesInProgress = createSelector(
   getProcessing,
-  getUploadedFiles,
-  (processing, files) => Array.from(processing).map(id => files[id])
+  getUploadedGenomes,
+  (processing, genomes) => Array.from(processing).map(id => genomes[id])
 );
 
 export const getNumRemainingUploads = createSelector(
@@ -73,7 +67,7 @@ export const getNumCompletedUploads = createSelector(
 );
 
 export const getFailedUploads = createSelector(
-  getUploadedFileList,
+  getUploadedGenomeList,
   genomes => genomes.filter(genome => isFailedUpload(genome))
 );
 
@@ -83,7 +77,7 @@ export const getTotalFailures = createSelector(
 );
 
 export const getInvalidUploads = createSelector(
-  getUploadedFileList,
+  getUploadedGenomeList,
   genomes => genomes.filter(genome => isInvalidUpload(genome))
 );
 
@@ -93,7 +87,7 @@ export const getTotalInvalid = createSelector(
 );
 
 export const getErroredUploads = createSelector(
-  getUploadedFileList,
+  getUploadedGenomeList,
   genomes => genomes.filter(genome => genome.status === statuses.ERROR)
 );
 
@@ -109,7 +103,7 @@ export const isRetryable = createSelector(
 );
 
 export const getFileSummary = createSelector(
-  getUploadedFileList,
+  getUploadedGenomeList,
   files => {
     const summary = {};
     for (const file of files) {
@@ -350,4 +344,4 @@ export const hasErrors = createSelector(
   ({ errors }) => errors > 0
 );
 
-export const hasReads = createSelector(getUploadedFileList);
+export const hasReads = createSelector(getUploadedGenomeList);
