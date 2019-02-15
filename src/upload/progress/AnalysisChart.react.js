@@ -63,13 +63,9 @@ const AnalysisChart = React.createClass({
                 .join(', '),
             label: ({ index, datasetIndex }, { datasets }) => {
               const dataset = datasets[datasetIndex];
-              const total =
-                datasetIndex === 1
-                  ? dataset.total
-                  : datasets[1].data[dataset.parents[index]];
-              return `${dataset.data[index]} / ${total}, ${(
+              return `${dataset.data[index]} / ${dataset.total}, ${(
                 (100 * dataset.data[index]) /
-                total
+                dataset.total
               ).toFixed(1)}%`;
             },
           },
@@ -107,19 +103,19 @@ const AnalysisChart = React.createClass({
   componentDidUpdate() {
     const { datasets } = this.props.data;
     for (const dataset of datasets) {
-      const current = this.chart.data.datasets.find(
+      const existing = this.chart.data.datasets.find(
         _ => _.label === dataset.label
       );
-      if (current) {
-        current.data = dataset.data;
-        current.backgroundColor = dataset.backgroundColor;
-        current.organismIds = dataset.organismIds;
-        current.labels = dataset.labels;
-        current.shortLabels = dataset.shortLabels;
-        current.parents = dataset.parents;
-        current.total = dataset.total;
+      if (existing) {
+        existing.data = dataset.data;
+        existing.backgroundColor = dataset.backgroundColor;
+        existing.organismIds = dataset.organismIds;
+        existing.labels = dataset.labels;
+        existing.shortLabels = dataset.shortLabels;
+        existing.parents = dataset.parents;
+        existing.total = dataset.total;
       } else {
-        this.chart.data.datasets.push(dataset);
+        this.chart.data.datasets.unshift(dataset);
       }
     }
     this.chart.update();

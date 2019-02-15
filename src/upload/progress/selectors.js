@@ -247,6 +247,19 @@ export const getChartData = createSelector(
       parents: [],
       total: 0,
     };
+    const assembly = {
+      label: 'Assembly progress',
+      data: [ 1, 2, 2, 6 ],
+      backgroundColor: [
+        DEFAULT.DANGER_COLOUR,
+        '#3c7383',
+        'blue',
+        'rgba(0, 0, 0, 0.14)',
+      ],
+      labels: [ 'Failed', 'Assembled', 'Assembling', 'Pending' ],
+      parents: [],
+      total: 10,
+    };
 
     let organismIndex = 0;
     for (const { label, colour, total, key, mlst = {} } of data) {
@@ -265,6 +278,7 @@ export const getChartData = createSelector(
         stData.backgroundColor.push(st.colour || getLightColour(colour));
         stData.labels.push(st.label);
         stData.parents.push(organismIndex);
+        stData.total = total;
         sum -= st.total;
       }
       if (sum > 0) {
@@ -277,6 +291,8 @@ export const getChartData = createSelector(
     }
 
     return {
+      // datasets: [ assembly ],
+      // datasets: [ organisms, assembly ],
       datasets: [ stData, organisms ],
     };
   }
