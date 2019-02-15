@@ -90,6 +90,13 @@
         "version": "20180806174658-v1.6.10"
       },
       {
+        "task": "cgmlst",
+        "version": "bj4_pneumo_t1",
+        "flags": {
+          "PNEUMO_CGMLST_EXPERIMENT_USER": true
+        }
+      },
+      {
         "task": "paarsnp",
         "version": "v2.1"
       }
@@ -142,6 +149,13 @@
       {
         "task": "cgmlst",
         "version": "20180806174658-v1.6.10"
+      },
+      {
+        "task": "paarsnp",
+        "version": "v2.2.3",
+        "flags": {
+          "E_FAECIUM_EXPERIMENT_USER": true
+        }
       }
     ],
     "138": [
@@ -269,6 +283,13 @@
       {
         "task": "cgmlst",
         "version": "20180806174658-v1.6.10"
+      },
+      {
+        "task": "paarsnp",
+        "version": "v2.2.3",
+        "flags": {
+          "MTB_EXPERIMENT_USER": true
+        }
       }
     ],
     "1827": [
@@ -281,6 +302,15 @@
       {
         "task": "mlst",
         "version": "20180806174658-v1.6.10"
+      }
+    ],
+    "194": [
+      {
+        "task": "paarsnp",
+        "version": "v2.2.4",
+        "flags": {
+          "CAMPYLOBACTER_EXPERIMENT_USER": true
+        }
       }
     ],
     "195": [
@@ -348,6 +378,13 @@
       {
         "task": "mlst",
         "version": "20180806174658-v1.6.10"
+      },
+      {
+        "task": "paarsnp",
+        "version": "v2.2.4",
+        "flags": {
+          "H_PYLORI_EXPERIMENT_USER": true
+        }
       }
     ],
     "2100": [
@@ -658,7 +695,7 @@
       },
       {
         "task": "core",
-        "version": "v1.0.3",
+        "version": "v1.0.6",
         "flags": {
           "C_AURIS_EXPERIMENT_USER": true
         }
@@ -743,7 +780,7 @@
       },
       {
         "task": "paarsnp",
-        "version": "v2.1.2",
+        "version": "v2.2.3",
         "flags": {
           "ESBL_CPE_EXPERIMENT_USER": true
         }
@@ -753,10 +790,7 @@
       {
         "task": "kleborate",
         "version": "v1.0.1",
-        "timeout": 600,
-        "flags": {
-          "ESBL_CPE_EXPERIMENT_USER": true
-        }
+        "timeout": 600
       }
     ],
     "571": [
@@ -789,7 +823,7 @@
       },
       {
         "task": "paarsnp",
-        "version": "v2.1.2",
+        "version": "v2.2.3",
         "flags": {
           "ESBL_CPE_EXPERIMENT_USER": true
         }
@@ -798,7 +832,7 @@
     "590": [
       {
         "task": "paarsnp",
-        "version": "v2.1.2",
+        "version": "v2.2.3",
         "flags": {
           "ESBL_CPE_EXPERIMENT_USER": true
         }
@@ -874,6 +908,13 @@
       {
         "task": "mlst",
         "version": "20180806174658-v1.6.10"
+      },
+      {
+        "task": "paarsnp",
+        "version": "v2.2.4",
+        "flags": {
+          "H_INFLUENZA_EXPERIMENT_USER": true
+        }
       }
     ],
     "738": [
@@ -973,7 +1014,7 @@
       },
       {
         "task": "genotyphi",
-        "version": "v2"
+        "version": "v2.0.3"
       },
       {
         "task": "core",
@@ -1005,7 +1046,10 @@
       },
       {
         "task": "inctyper",
-        "version": "v0.0.2"
+        "version": "v0.0.2",
+        "flags": {
+          "INCTYPER_EXPERIMENT_USER": true
+        }
       }
     ]
   },
@@ -1093,11 +1137,11 @@
     "498019": [
       {
         "task": "tree",
-        "version": "v1.0.3",
+        "version": "v1.0.5",
         "requires": [
           {
             "task": "core",
-            "version": "v1.0.3"
+            "version": "v1.0.6"
           }
         ],
         "timeout": 900,
@@ -1108,11 +1152,11 @@
       },
       {
         "task": "subtree",
-        "version": "v1.0.3",
+        "version": "v1.0.5",
         "requires": [
           {
             "task": "core",
-            "version": "v1.0.3"
+            "version": "v1.0.6"
           }
         ],
         "timeout": 900,
