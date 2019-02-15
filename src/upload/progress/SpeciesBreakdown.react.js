@@ -4,14 +4,14 @@ export default ({ data, showBreakdown }) => (
   <ul className="wgsa-upload-legend">
     {data.map(({ key, label, total, colour, ...analyses }) => (
       <li key={key}>
-        <span>
+        <span className="wgsa-upload-legend-header">
           <i className="material-icons" style={{ color: colour }}>
             stop
           </i>
           <strong className="wgsa-upload-legend-organism" title={label}>
             {label}
           </strong>
-          &nbsp;({total})
+          <span className="wgsa-upload-legend-count">{total}</span>
         </span>
         {showBreakdown && (
           <ul>
@@ -26,7 +26,12 @@ export default ({ data, showBreakdown }) => (
                         {analysis.label}
                       </React.Fragment>
                     ) : (
-                      `${analysis.label}: ${analysis.total} / ${total}`
+                      <React.Fragment>
+                        {analysis.label}
+                        <span className="wgsa-upload-legend-count">
+                          {analysis.total}
+                        </span>
+                      </React.Fragment>
                     )}
                     {analysis.errors > 0 && (
                       <small>

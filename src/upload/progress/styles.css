@@ -84,21 +84,26 @@
   background-color: #975faa;
 }
 
+.wgsa-upload-legend {
+  padding-right: 8px;
+}
+
 .wgsa-upload-legend li {
   line-height: 24px;
-  /* margin-bottom: 8px; */
   display: flex;
   align-items: center;
   flex-wrap: wrap;
 }
 
-.wgsa-upload-legend > li > span {
+.wgsa-upload-legend-header {
   display: flex;
   align-items: center;
   flex-wrap: nowrap;
   white-space: nowrap;
   overflow-x: hidden;
   margin-left: -2px;
+  font-weight: 700;
+  width: 100%;
 }
 
 .wgsa-upload-legend-organism {
@@ -113,19 +118,27 @@
   margin-top: 8px;
 }
 
+.wgsa-upload-legend-count {
+  margin-left: auto;
+}
+
 .pw-with-success-icon {
   display: flex;
   align-items: center;
+  position: relative;
+  padding-left: 24px;
 }
 
 .pw-with-success-icon i {
   font-size: 18px;
-  margin-right: 4px;
   color: #48996f;
+  position: absolute;
+  left: 0;
 }
 
-.wgsa-upload-progress-overview p {
+.wgsa-upload-progress-overview > * {
   margin-bottom: 0;
+  padding-left: 24px;
 }
 
 .wgsa-upload-progress-overview .wgsa-progress-bar {
@@ -133,7 +146,7 @@
 }
 
 .wgsa-upload-progress-overview .wgsa-progress-bar > label {
-  width: 120px;
+  width: 96px;
 }
 
 .wgsa-flex-section {

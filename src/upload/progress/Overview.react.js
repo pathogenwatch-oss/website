@@ -17,14 +17,14 @@ const AssemblyStage = ({ percentage, totalGenomes }) => {
   return <ProgressBar label="Assembly" progress={percentage} />;
 };
 
-const AnalysisStage = ({ percentage, hasErrors }) => {
+const AnalysisStage = ({ percentage, totalAnalyses, hasErrors }) => {
   if (percentage === 100) {
     return (
       <p className="pw-with-success-icon">
         <i className="material-icons">
           {hasErrors ? 'warning' : 'check_circle'}
         </i>
-        Analysis complete{hasErrors && ', with errors'}
+        {totalAnalyses} analyses completed{hasErrors && ', with errors'}
       </p>
     );
   }
@@ -33,11 +33,11 @@ const AnalysisStage = ({ percentage, hasErrors }) => {
 
 const QueuePosition = ({ position }) => {
   if (position === 0) {
-    return <p className="wgsa-blink">Results processing.</p>;
+    return <p className="wgsa-blink">Results processing</p>;
   }
   return (
     <p>
-      {position} job{position === 1 ? '' : 's'} till next result.
+      {position} job{position === 1 ? '' : 's'} till next result
     </p>
   );
 };
@@ -68,7 +68,11 @@ const Overview = props => {
       {hasReads && (
         <AssemblyStage percentage={assemblyPct} totalGenomes={totalGenomes} />
       )}
-      <AnalysisStage percentage={analysisPct} hasErrors={hasErrors} />
+      <AnalysisStage
+        percentage={analysisPct}
+        totalAnalyses={analyses.total}
+        hasErrors={hasErrors}
+      />
       {assemblyPct === 100 && analysisPct < 100 && (
         <QueuePosition position={position} />
       )}
