@@ -357,16 +357,32 @@ const colours = {
   FAILURE: '#d11b1b',
 };
 
-const skip = new Set([ 'check_for_contamination', 'write_assembly_to_dir' ]);
+const stages = [
+  'determine_min_read_length',
+  'count_number_of_bases',
+  'qc_pre_trimming',
+  'trimming',
+  'qc_post_trimming',
+  'genome_size_estimation',
+  'read_correction',
+  // 'fastqc_multiqc',
+  'merge_reads',
+  'spades_assembly',
+  'filter_scaffolds',
+  'quast',
+  // 'quast_summary',
+];
 
 export const getAssemblyStatus = createSelector(
   state => getProgress(state).assembly,
   getBatchSize,
-  (stages, total) => {
+  (rawStatus, total) => {
     const memo = [];
-    if (typeof stages !== 'object') return memo;
-    for (const [ stage, counts ] of Object.entries(stages)) {
-      if (skip.has(stage)) continue;
+    if (typeof rawStatus !== 'object') {
+      return memo;
+    }
+    for (const stage of stages) {
+      const counts = rawStatus[stage] || {};
       let progress = 0;
       const statusList = [];
       for (const [ status, count ] of Object.entries(counts)) {
@@ -385,8 +401,20 @@ export const getAssemblyStatus = createSelector(
         label: stage.replace(/_/g, ' '),
         progress,
         statuses: statusList,
+        length: stage === 'spades_assembly' ? 'long' : null,
       });
     }
     return memo;
+  }
+);
+
+export const getAssemblyProgress = createSelector(
+  getAssemblyStatus,
+  status => {
+    let completed = 0;
+    for (const { progress } of status) {
+      if (progress === 100) completed++;
+    }
+    return (completed / status.length) * 100;
   }
 );

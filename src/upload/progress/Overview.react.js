@@ -5,55 +5,87 @@ import ProgressBar from '../../components/progress-bar';
 
 import * as upload from './selectors';
 
-export default connect(state => ({
-  complete: upload.isAnalysisComplete(state),
-  hasErrors: upload.hasErrors(state),
-  hasReads: upload.hasReads(state),
-  isUploading: upload.isUploading(state),
-  position: upload.getQueuePosition(state),
-  progress: upload.getOverallProgress(state),
-  totalGenomes: upload.getUploadedGenomeList(state).length,
-}))(props => {
+const AssemblyStage = ({ percentage, totalGenomes }) => {
+  if (percentage === 100) {
+    return (
+      <p className="pw-with-success-icon">
+        <i className="material-icons">check_circle</i>
+        {totalGenomes} genome{totalGenomes === 1 ? '' : 's'} assembled
+      </p>
+    );
+  }
+  return <ProgressBar label="Assembly" progress={percentage} />;
+};
+
+const AnalysisStage = ({ percentage, hasErrors }) => {
+  if (percentage === 100) {
+    return (
+      <p className="pw-with-success-icon">
+        <i className="material-icons">
+          {hasErrors ? 'warning' : 'check_circle'}
+        </i>
+        Analysis complete{hasErrors && ', with errors'}
+      </p>
+    );
+  }
+  return <ProgressBar label="Analysis" progress={percentage} />;
+};
+
+const QueuePosition = ({ position }) => {
+  if (position === 0) {
+    return <p className="wgsa-blink">Results processing.</p>;
+  }
+  return (
+    <p>
+      {position} job{position === 1 ? '' : 's'} till next result.
+    </p>
+  );
+};
+
+const Overview = props => {
   const {
-    complete,
     hasErrors,
     hasReads,
     isUploading,
     position,
     progress,
     totalGenomes,
+    assemblyProgress,
   } = props;
   if (isUploading || totalGenomes === 0) return null;
 
-  const { assembly, analyses } = progress;
+  const { analyses } = progress;
 
-  const assemblyPct = hasReads ? (assembly.done / totalGenomes) * 100 : 100;
+  const assemblyPct = hasReads ? assemblyProgress : 100;
   const analysisPct = (analyses.done / analyses.total) * 100;
-
-  if (complete && hasErrors) {
-    return <strong>Analysis complete, with errors.</strong>;
-  }
-
-  if (complete) {
-    return <strong>Analysis complete 🎉</strong>;
-  }
 
   return (
     <div className="wgsa-upload-progress-overview">
       <p className="pw-with-success-icon">
-        Uploaded {totalGenomes} genome{totalGenomes === 1 ? '' : 's'}
         <i className="material-icons">check_circle</i>
+        {totalGenomes} genome{totalGenomes === 1 ? '' : 's'} uploaded
       </p>
-      {hasReads && <ProgressBar label="Assembly" progress={assemblyPct} />}
-      <ProgressBar label="Analysis" progress={analysisPct} />
-      {assemblyPct === 100 && position > 0 && (
-        <p>
-          {position} job{position === 1 ? '' : 's'} till next result.
-        </p>
+      {hasReads && (
+        <AssemblyStage percentage={assemblyPct} totalGenomes={totalGenomes} />
       )}
-      {assemblyPct === 100 && position === 0 && (
-        <p className="wgsa-blink">Results processing.</p>
+      <AnalysisStage percentage={analysisPct} hasErrors={hasErrors} />
+      {assemblyPct === 100 && analysisPct < 100 && (
+        <QueuePosition position={position} />
       )}
     </div>
   );
-});
+};
+
+function mapStateToProps(state) {
+  return {
+    hasErrors: upload.hasErrors(state),
+    hasReads: upload.hasReads(state),
+    isUploading: upload.isUploading(state),
+    position: upload.getQueuePosition(state),
+    progress: upload.getOverallProgress(state),
+    totalGenomes: upload.getUploadedGenomeList(state).length,
+    assemblyProgress: upload.getAssemblyProgress(state),
+  };
+}
+
+export default connect(mapStateToProps)(Overview);

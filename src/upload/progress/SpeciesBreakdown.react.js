@@ -22,8 +22,8 @@ export default ({ data, showBreakdown }) => (
                   <li key={analysisKey} className="pw-with-success-icon">
                     {analysis.total === total ? (
                       <React.Fragment>
-                        {analysis.label}
                         <i className="material-icons">check_circle</i>
+                        {analysis.label}
                       </React.Fragment>
                     ) : (
                       `${analysis.label}: ${analysis.total} / ${total}`

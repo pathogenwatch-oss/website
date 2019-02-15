@@ -4,16 +4,16 @@ import 'eventsource/lib/eventsource-polyfill';
 
 import Stage from './Stage.react';
 
-import { getAssemblyStatus } from '../selectors';
+import { getAssemblyStatus, getAssemblyProgress } from '../selectors';
 
 import { updateAssemblyStatus } from './actions';
 
 import config from '../../../app/config';
 
-const Pipeline = ({ status, token, updateStatus, uploadedAt }) => {
+const Pipeline = ({ status, token, updateStatus, uploadedAt, complete }) => {
   const [ stage, setStageDetail ] = React.useState(null);
   React.useEffect(() => {
-    if (token) {
+    if (token && !complete) {
       console.log('connecting to event source');
       const eventSource = new window.EventSourcePolyfill(
         `${config.assemblerAddress}/api/sessions/${uploadedAt}`,
@@ -27,7 +27,7 @@ const Pipeline = ({ status, token, updateStatus, uploadedAt }) => {
         eventSource.close();
       };
     }
-  }, [ token, uploadedAt ]);
+  }, [ token, uploadedAt, complete ]);
   return (
     <div className="pw-assembly-pipeline" onClick={() => setStageDetail(null)}>
       {status.map(({ label, ...props }) => (
@@ -40,7 +40,6 @@ const Pipeline = ({ status, token, updateStatus, uploadedAt }) => {
           {label}
         </Stage>
       ))}
-      {/* <Stage length="long">Stage 5</Stage> */}
     </div>
   );
 };
@@ -49,6 +48,7 @@ function mapStateToProps(state) {
   return {
     token: state.auth.token,
     status: getAssemblyStatus(state),
+    complete: getAssemblyProgress(state) === 100,
   };
 }
 
