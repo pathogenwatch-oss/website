@@ -159,6 +159,7 @@
   color: rgba(0, 0, 0, 0.54);
   outline: none;
   margin: 0 4px;
+  border-radius: 2px;
 }
 
 .wgsa-upload-progress-switcher .wgsa-section-title:hover,

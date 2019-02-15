@@ -37,7 +37,11 @@ const Stage = ({
   showDetails,
   showingDetails,
 }) => (
-  <div className={classnames('pw-assembly-pipeline-stage', length)}>
+  <div
+    className={classnames('pw-assembly-pipeline-stage', length, {
+      complete: progress === 100,
+    })}
+  >
     <Fade out>{showingDetails && <Details statuses={statuses} />}</Fade>
     <header
       onClick={e => {

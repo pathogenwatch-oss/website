@@ -1,7 +1,20 @@
 import { fetchJson, fetchRaw } from '../utils/Api';
 
 import config from '../app/config';
-const { clientId } = config;
+const { clientId, assemblerAddress } = config;
+
+export function fetchLimits(token) {
+  return fetch(`${assemblerAddress}/api/account`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }).then(response => {
+    if (response.status === 200) {
+      return response.json();
+    }
+    throw new Error(response.statusText);
+  });
+}
 
 export function initialise(genomes, uploadedAt) {
   return fetchJson(

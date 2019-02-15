@@ -10,6 +10,7 @@ import Instructions from './instructions';
 import Previous from './previous';
 
 import { isUploading, getUploadedAt } from './progress/selectors';
+import { useAuthToken } from '../auth/hooks';
 
 const path = '/upload';
 
@@ -20,21 +21,21 @@ function mapStateToProps(state) {
   };
 }
 
-const Router = connect(mapStateToProps)(
-  ({ uploading, uploadedAt, match }) => {
-    if (match.isExact && uploading) {
-      return <Redirect to={`${path}/${uploadedAt}`} />;
-    }
+const Router = connect(mapStateToProps)(({ uploading, uploadedAt, match }) => {
+  useAuthToken();
 
-    return (
-      <Switch>
-        <Route path={`${path}/previous`} component={Previous} />
-        <Route path={`${path}/:uploadedAt`} component={Progress} />
-        <Route component={Instructions} />
-      </Switch>
-    );
+  if (match.isExact && uploading) {
+    return <Redirect to={`${path}/${uploadedAt}`} />;
   }
-);
+
+  return (
+    <Switch>
+      <Route path={`${path}/previous`} component={Previous} />
+      <Route path={`${path}/:uploadedAt`} component={Progress} />
+      <Route component={Instructions} />
+    </Switch>
+  );
+});
 
 export default (
   <AuthRoute

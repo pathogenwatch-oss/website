@@ -4,6 +4,9 @@ import { showToast } from '../../toast';
 import { history } from '../../app/router';
 
 import { addGenomes } from '../progress/actions';
+import { createAsyncConstants } from '../../actions';
+
+import * as api from '../api';
 
 export function addFiles(newFiles) {
   const uploadedAt = new Date().toISOString();
@@ -39,6 +42,19 @@ export function changeUploadSetting(setting, value) {
     payload: {
       setting,
       value,
+    },
+  };
+}
+
+export const FETCH_ASSEMBLY_LIMITS = createAsyncConstants(
+  'FETCH_ASSEMBLY_LIMITS'
+);
+
+export function fetchAssemblyLimits(token) {
+  return {
+    type: FETCH_ASSEMBLY_LIMITS,
+    payload: {
+      promise: api.fetchLimits(token),
     },
   };
 }

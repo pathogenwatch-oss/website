@@ -25,11 +25,10 @@ export default connect(state => ({
   } = props;
   if (isUploading || totalGenomes === 0) return null;
 
-  const { assembly, speciation, tasks } = progress;
+  const { assembly, analyses } = progress;
 
   const assemblyPct = hasReads ? (assembly.done / totalGenomes) * 100 : 100;
-  const speciationPct = (speciation.done / totalGenomes) * 100;
-  const tasksPct = (tasks.done / tasks.total) * 100;
+  const analysisPct = (analyses.done / analyses.total) * 100;
 
   if (complete && hasErrors) {
     return <strong>Analysis complete, with errors.</strong>;
@@ -46,8 +45,7 @@ export default connect(state => ({
         <i className="material-icons">check_circle</i>
       </p>
       {hasReads && <ProgressBar label="Assembly" progress={assemblyPct} />}
-      <ProgressBar label="Speciation" progress={speciationPct} />
-      <ProgressBar label="Analysis" progress={tasksPct} />
+      <ProgressBar label="Analysis" progress={analysisPct} />
       {assemblyPct === 100 && position > 0 && (
         <p>
           {position} job{position === 1 ? '' : 's'} till next result.

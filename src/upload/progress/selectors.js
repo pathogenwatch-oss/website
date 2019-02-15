@@ -6,6 +6,7 @@ import { statuses, types } from '../constants';
 
 import { getOrganismName } from '../../organisms';
 import { DEFAULT } from '../../app/constants';
+import { skipLayout } from '../../clustering/actions';
 
 export const getProgress = ({ upload }) => upload.progress;
 export const getProgressView = state => getProgress(state).view;
@@ -286,7 +287,7 @@ export const getOverallProgress = createSelector(
   genomes => {
     const assembly = { pending: 0, done: 0, total: 0 };
     const speciation = { pending: 0, done: 0, total: 0 };
-    const tasks = { pending: 0, done: 0, total: 0 };
+    const analyses = { pending: 0, done: 0, total: 0 };
     let errors = 0;
 
     for (const id of Object.keys(genomes)) {
@@ -300,22 +301,20 @@ export const getOverallProgress = createSelector(
         if (task === 'speciator') {
           speciation.total++;
           if (isPending) speciation.pending++;
-          if (isError) tasks.total++;
-        } else if (id in genomes && genomes[id].speciated) {
-          tasks.total++;
-          if (isPending) tasks.pending++;
         }
+        analyses.total++;
+        if (isPending) analyses.pending++;
       }
     }
 
     assembly.done = assembly.total - assembly.pending;
     speciation.done = speciation.total - speciation.pending;
-    tasks.done = tasks.total - tasks.pending;
+    analyses.done = analyses.total - analyses.pending;
 
     return {
       assembly,
       speciation,
-      tasks,
+      analyses,
       errors,
     };
   }
@@ -333,10 +332,8 @@ export const isSpecieationComplete = createSelector(
 );
 
 export const isAnalysisComplete = createSelector(
-  isSpecieationComplete,
   getOverallProgress,
-  (speciationComplete, { tasks }) =>
-    speciationComplete && tasks.total > 0 && tasks.done === tasks.total
+  ({ analyses }) => analyses.total > 0 && analyses.done === analyses.total
 );
 
 export const hasErrors = createSelector(
@@ -354,4 +351,42 @@ export const hasReads = createSelector(
   }
 );
 
-export const getAssemblyStatus = state => getProgress(state).assembly;
+const colours = {
+  RUNNING: '#673c90',
+  COMPLETED: '#48996F',
+  FAILURE: '#d11b1b',
+};
+
+const skip = new Set([ 'check_for_contamination', 'write_assembly_to_dir' ]);
+
+export const getAssemblyStatus = createSelector(
+  state => getProgress(state).assembly,
+  getBatchSize,
+  (stages, total) => {
+    const memo = [];
+    if (typeof stages !== 'object') return memo;
+    for (const [ stage, counts ] of Object.entries(stages)) {
+      if (skip.has(stage)) continue;
+      let progress = 0;
+      const statusList = [];
+      for (const [ status, count ] of Object.entries(counts)) {
+        const percentage = (count / total) * 100;
+        statusList.push({
+          name: status.toLowerCase(),
+          colour: colours[status],
+          count,
+          percentage,
+        });
+        if (status !== 'RUNNING') {
+          progress += percentage;
+        }
+      }
+      memo.push({
+        label: stage.replace(/_/g, ' '),
+        progress,
+        statuses: statusList,
+      });
+    }
+    return memo;
+  }
+);
